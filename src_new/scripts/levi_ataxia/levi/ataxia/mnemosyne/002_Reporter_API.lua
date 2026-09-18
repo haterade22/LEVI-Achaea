@@ -204,7 +204,9 @@ end
 -- The API errors if ripple < current and no-ops if ==, so guard locally too.
 function M.setRipple(n)
   n = tonumber(n)
-  if not n then return end
+  -- WHOLE NUMBERS ONLY (review, v4.7.322): the schema's `ripple` is an integer, and `mnem ripple
+  -- 2.5` went straight through to a 422. The trigger path (`\d+`) could never send one.
+  if not n or n ~= math.floor(n) then return end
   if not M._hasToken() then return end
   if M.run.ripple and n <= M.run.ripple then
     return M.decho("Ripple " .. n .. " <= current " .. tostring(M.run.ripple) .. ", skipping")
@@ -274,7 +276,7 @@ end
 
 -- WHAT THE SCHEMA TAKES THAT THE OFFER SCREEN DOES NOT PRINT (v4.7.298).
 --
--- `BoonInfo` has eight fields. The offer screen supplies two -- name and description -- and we
+-- `BoonInfo` had eight fields (nine since the tracker added `combo_boon`; see below). The offer screen supplies two -- name and description -- and we
 -- were sending only those. The other six were not missing data: we HOLD them, in the local
 -- catalogue (`M.history.boonLibrary`), which learns rarity from the BOONS list and
 -- description/quote/category/unlocked-by/conflicts from `mnem boonfill` and the per-screen
@@ -324,6 +326,12 @@ function M._enrichOffer(list)
         for j, name in ipairs(known.conflictsWith) do cw[j] = name end
         rec.conflicts_with = cw
       end
+      -- THE NINTH FIELD (v4.7.322): `combo_boon`, a boolean the tracker added to BoonInfo. Sent
+      -- when the catalogue knows EITHER answer; omitted when it knows neither -- the server
+      -- defaults to false, and an unknown posted as false would be a guess that looks like data.
+      if rec.combo_boon == nil and type(known.comboBoon) == "boolean" then
+        rec.combo_boon = known.comboBoon
+      end
     end
     out[i] = rec
   end
@@ -331,7 +339,7 @@ function M._enrichOffer(list)
 end
 
 -- list: array of { name, description?, quote?, rarity?, category?, unlocked_by?,
---                  conflicts_with?, num_echoes_possible? }
+--                  conflicts_with?, num_echoes_possible?, combo_boon? }
 --
 -- `rerolls` is the count SNAPSHOTTED when this screen was captured (see `_offerAfterRipple`).
 -- It is a parameter rather than a live read because the POST is deferred, and a claim landing

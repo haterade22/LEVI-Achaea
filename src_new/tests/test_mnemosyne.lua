@@ -1295,24 +1295,6 @@ describe("M._parseContemplate()", function()
   end)
 end)
 
--- ─── Contemplate merge keeps the offered description ──────────────────────────
-
-describe("M._applyContemplate()", function()
-  it("applies rarity/quote/echoes but never overwrites the offered description", function()
-    local boon = { name = "Fae-Lapse", description = "There is a 5% chance you give the denizen amnesia." }
-    -- Even if contemplate mis-parsed a description (e.g. the BOON CLAIM footer),
-    -- the offered description must be preserved.
-    M._applyContemplate(boon, {
-      rarity = "common", quote = "q", num_echoes_possible = 1,
-      description = "BOON CLAIM <boon name> to pick one of the options.",
-    })
-    expect(boon.description).toBe("There is a 5% chance you give the denizen amnesia.")
-    expect(boon.rarity).toBe("common")
-    expect(boon.quote).toBe("q")
-    expect(boon.num_echoes_possible).toBe(1)
-  end)
-end)
-
 -- ─── startRun failure recovery (#1) ──────────────────────────────────────────
 
 describe("startRun failure handling", function()
@@ -5505,7 +5487,7 @@ end)
 
 -- --- v4.7.298: the rest of the tracker's schema -----------------------------
 --
--- `BoonInfo` has eight fields and we were sending two; `BoonsOfferedRequest` has a
+-- `BoonInfo` had eight fields (nine since v4.7.322) and we were sending two; `BoonsOfferedRequest` has a
 -- `reroll_count` we had never sent; `/run_pause` existed and was never called. These cover the
 -- three, plus the catalogue plumbing that had been parsing fields and dropping them.
 
@@ -6017,6 +5999,523 @@ describe("_enrichOffer does not overwrite non-string fields either", function()
     M.history.boonLibrary = saved
     posted[1] = "MUTATED"
     expect(shared[1]).toBe("Glass Jaw")
+  end)
+end)
+
+-- ---------------------------------------------------------------------------
+-- v4.7.322: `combo_boon`, the ninth BoonInfo field. The only sample of the game's wording is the
+-- corruption it left in the tracker's catalogue (GET /boons/export, 2026-09-18):
+--   "Combo Boon?:        Yes Gain 25% resistance to cold damage."
+-- Every test that swaps shared state restores it BEFORE its assertions and under pcall, so a
+-- throwing body cannot leak into the rest of this file.
+-- ---------------------------------------------------------------------------
+local function withLibrary(lib, fn)
+  local saved = M.history.boonLibrary
+  M.history.boonLibrary = lib
+  local ok, err = pcall(fn)
+  local after = M.history.boonLibrary
+  M.history.boonLibrary = saved
+  if not ok then error(err, 0) end
+  return after
+end
+
+-- Stubs the contemplate machinery for one `_boonFillNext` run; restores everything it touched.
+local function withContemplate(lines, fn)
+  local realCap, realTimer, realSend, realSave, realEcho = M._captureContemplate, tempTimer, send, M._historySave, M.echo
+  local realContemplating = ataxiaTemp and ataxiaTemp.contemplating
+  local echoes = {}
+  M._captureContemplate = function(cb) cb(type(lines) == "table" and M._parseContemplate(lines) or lines) end
+  tempTimer = function(_, f) f(); return 1 end -- run the next step at once
+  send = function() end
+  M._historySave = function() end
+  M.echo = function(m) echoes[#echoes + 1] = tostring(m) end
+  local ok, err = pcall(fn)
+  M._captureContemplate, tempTimer, send, M._historySave, M.echo = realCap, realTimer, realSend, realSave, realEcho
+  ataxiaTemp.contemplating = realContemplating
+  if not ok then error(err, 0) end
+  return echoes
+end
+
+local AZURE = {
+  "Rarity:                 common",
+  "Can echo:               Yes",
+  "Combo Boon?:        Yes",
+  "Gain 25% resistance to cold damage.",
+  "",
+  '"A line of flavour."',
+}
+
+describe("Combo Boon?: -- a label that ends in a question mark", function()
+  it("is meta, not the start of the description (the tracker's corruption, reproduced)", function()
+    local info = M._parseContemplate({
+      "Rarity:                 common",
+      "Can echo:               Yes",
+      "Maximum echoes:         2",
+      "Combo Boon?:        Yes",
+      "Gain 25% resistance to cold damage.",
+      "",
+      '"A line of flavour."',
+    })
+    expect(info.description).toBe("Gain 25% resistance to cold damage.")
+    expect(info.comboBoon).toBeTrue()
+    expect(info.meta["Combo Boon?"]).toBe("Yes")
+    expect(info.num_echoes_possible).toBe(2)
+    expect(info.quote).toBe("A line of flavour.")
+  end)
+
+  it("reads No as false -- an answer, not an absence", function()
+    local info = M._parseContemplate({ "Rarity: rare", "Combo Boon?: No", "Desc.", "", '"Q."' })
+    expect(info.comboBoon).toBeFalse()
+    expect(info.description).toBe("Desc.")
+  end)
+
+  it("promotes only a spelled-out yes/no", function()
+    expect(M._promoteMeta({ meta = { ["Combo Boon?"] = "Sometimes" } }).comboBoon).toBeNil()
+    expect(M._promoteMeta({ meta = { ["Combo Boon?"] = "yes." } }).comboBoon).toBeTrue()
+    expect(M._promoteMeta({ meta = { ["Combo Boon?"] = " NO " } }).comboBoon).toBeFalse()
+    expect(M._promoteMeta({ meta = { ["Combo Boon?"] = "Y" } }).comboBoon).toBeNil()
+    expect(M._promoteMeta({ meta = { ["Combo Boon?"] = "true" } }).comboBoon).toBeNil()
+  end)
+
+  it("keeps a value already set, and ignores a label never seen", function()
+    expect(M._promoteMeta({ comboBoon = false, meta = { ["Combo Boon?"] = "Yes" } }).comboBoon).toBeFalse()
+    -- "Combo Boon" (no ?) sorts first; were it promoted it would override the real label.
+    expect(M._promoteMeta({ meta = { ["Combo Boon?"] = "Yes", ["Combo Boon"] = "No" } }).comboBoon).toBeTrue()
+    expect(M._promoteMeta({ meta = { ["Combo Boon"] = "Yes" } }).comboBoon).toBeNil()
+  end)
+
+  it("still refuses prose that merely contains a question mark", function()
+    local info = M._parseContemplate({ "Rarity: rare", "Ready? Your crits: doubled.", "", '"Q."' })
+    expect(info.description).toBe("Ready? Your crits: doubled.")
+    expect(info.meta).toBeNil()
+  end)
+
+  it("allows ONE '?' before the colon and no other punctuation", function()
+    for _, ln in ipairs({ "Hark!: the tide turns.", "Why??: Because.", "Mr.: Nobody." }) do
+      local info = M._parseContemplate({ "Rarity: rare", ln, "", '"Q."' })
+      expect(info.description).toBe(ln)
+      expect(info.meta).toBeNil()
+    end
+  end)
+
+  it("keeps the word bound for '?' labels: three words is a label, four is prose", function()
+    local three = M._parseContemplate({ "Rarity: rare", "Is Combo Boon?: Yes", "Desc.", "", '"Q."' })
+    expect(three.meta["Is Combo Boon?"]).toBe("Yes")
+    expect(three.description).toBe("Desc.")
+    local four = M._parseContemplate({ "Rarity: rare", "Is This Combo Boon?: Yes", "", '"Q."' })
+    expect(four.description).toBe("Is This Combo Boon?: Yes")
+    expect(four.meta).toBeNil()
+  end)
+
+  -- Unseen, but nothing rules it out: the line printed AFTER the text must not be glued onto it.
+  it("a padded label printed after the description is meta too", function()
+    local info = M._parseContemplate({ "Rarity: common", "Gain 25% resistance to cold damage.",
+      "Combo Boon?:        Yes", "", '"Q."' })
+    expect(info.description).toBe("Gain 25% resistance to cold damage.")
+    expect(info.comboBoon).toBeTrue()
+  end)
+
+  it("...while an unpadded 'Label: text' line in the description stays prose", function()
+    local info = M._parseContemplate({ "Rarity: common", "Your blows land harder.",
+      "Note: this stays prose.", "", '"Q."' })
+    expect(info.description).toBe("Your blows land harder. Note: this stays prose.")
+    expect(info.meta).toBeNil()
+  end)
+
+  it("does not store the game's 'Unset' as a category", function()
+    local info = M._parseContemplate({ "Category:           Unset", "Desc.", "", '"Q."' })
+    expect(info.category).toBeNil()
+    expect(info.description).toBe("Desc.")
+  end)
+end)
+
+describe("a screen line glued onto a description", function()
+  it("peels the tracker's exact corruptions and our own", function()
+    local rest, meta = M._splitGluedMeta("Combo Boon?:        Yes Gain 25% resistance to cold damage.")
+    expect(rest).toBe("Gain 25% resistance to cold damage.")
+    expect(meta["Combo Boon?"]).toBe("Yes")
+    rest, meta = M._splitGluedMeta("Category:           Unset Your aeonics aeon ability can target denizens.")
+    expect(rest).toBe("Your aeonics aeon ability can target denizens.")
+    expect(meta["Category"]).toBe("Unset")
+    -- Deadly Finesse, in the user's catalogue: two WADE STATUS lines and no text at all.
+    rest, meta = M._splitGluedMeta("Denizen levels increased by:  70 Denizen speed increased by:   2")
+    expect(rest).toBe("")
+    expect(meta["Denizen levels increased by"]).toBe("70")
+    expect(meta["Denizen speed increased by"]).toBe("2")
+  end)
+
+  it("leaves real prose alone -- a single space after a colon is not padding", function()
+    for _, d in ipairs({ "Your options are simple: hit harder.", "Gain 25% resistance to cold damage.",
+                         "Your fire damage: increased by 15%.", "Warning: this hurts." }) do
+      local rest, meta = M._splitGluedMeta(d)
+      expect(rest).toBe(d)
+      expect(meta).toBeNil()
+    end
+  end)
+
+  it("_learnBoon never stores it, and keeps what the label said", function()
+    local lib = withLibrary({ ["Deadly Finesse"] = { description = "Good text." } }, function()
+      M._learnBoon("Azure Scales", "Combo Boon?:        Yes Gain 25% resistance to cold damage.")
+      M._learnBoon("Curse of Time", "Category:           Unset Your aeonics aeon ability can target denizens.")
+      M._learnBoon("Deadly Finesse", "Denizen levels increased by:  70 Denizen speed increased by:   2")
+    end)
+    expect(lib["Azure Scales"].description).toBe("Gain 25% resistance to cold damage.")
+    expect(lib["Azure Scales"].comboBoon).toBeTrue()
+    expect(lib["Curse of Time"].description).toBe("Your aeonics aeon ability can target denizens.")
+    expect(lib["Curse of Time"].category).toBeNil()                  -- "Unset" is a placeholder
+    expect(lib["Deadly Finesse"].description).toBe("Good text.")      -- garbage never overwrites
+  end)
+
+  it("repairs a catalogue saved before this version, once, and says what it did", function()
+    local realSave = M._historySave
+    M._historySave = function() end
+    local n1, names, n2
+    local lib = withLibrary({
+      ["Deadly Finesse"] = { description = "Denizen levels increased by:  70 Denizen speed increased by:   2" },
+      ["Azure Scales"] = { description = "Combo Boon?:        Yes Gain 25% resistance to cold damage." },
+      ["Iron Throat"] = { description = "Gain 25% resistance to asphyxiation damage." },
+    }, function()
+      n1, names = M._boonDbRepair()
+      n2 = M._boonDbRepair()
+    end)
+    M._historySave = realSave
+    expect(n1).toBe(2)
+    expect(names[1]).toBe("Azure Scales")
+    expect(names[2]).toBe("Deadly Finesse")
+    expect(n2).toBe(0)                                               -- idempotent
+    expect(lib["Deadly Finesse"].description).toBeNil()               -- a gap again, re-learnable
+    expect(lib["Azure Scales"].description).toBe("Gain 25% resistance to cold damage.")
+    expect(lib["Azure Scales"].comboBoon).toBeTrue()
+    expect(lib["Iron Throat"].description).toBe("Gain 25% resistance to asphyxiation damage.")
+  end)
+end)
+
+describe("the offer screen cannot learn a label as a boon", function()
+  it("drops a meta line printed on its own row, and splits one glued to a boon", function()
+    local out = M._cleanOfferList({
+      { name = "Azure Scales", description = "Combo Boon?:        Yes Gain 25% resistance to cold damage." },
+      { name = "Combo Boon?", description = "Yes" },
+      { name = "Category", description = "Defence" },
+      { name = "Iron Throat", description = "Gain 25% resistance to asphyxiation damage." },
+    })
+    expect(#out).toBe(2)
+    expect(out[1].name).toBe("Azure Scales")
+    expect(out[1].description).toBe("Gain 25% resistance to cold damage.")
+    expect(out[1].combo_boon).toBeTrue()
+    expect(out[2].name).toBe("Iron Throat")
+    expect(out[2].combo_boon).toBeNil()
+  end)
+
+  -- Through the REAL offer capture, as the game would print it (the v4.7.279 seam test's shape).
+  it("the live screen: no fake boon reaches the reroll list or the catalogue", function()
+    reset(true)
+    local mock = require("mock_mudlet")
+    local lib = withLibrary({}, function()
+      M._capturing = false
+      M.onBoonsOffered()
+      for _, ln in ipairs({
+        "----------------------------------------",
+        "Azure Scales:   Gain 25% resistance to cold damage.",
+        "Combo Boon?:        Yes",
+        "Iron Throat:    Gain 25% resistance to asphyxiation damage.",
+        "Type BOON CLAIM <name> to choose.",
+      }) do
+        line = ln
+        for _, t in pairs(mock.active_triggers) do
+          if t.regex and t.pattern == "^.*$" and type(t.callback) == "function" then t.callback() end
+        end
+      end
+    end)
+    M._pendingOffer = nil
+    expect(#M.run.lastOffered).toBe(2)
+    expect(M.run.lastOffered[1]).toBe("Azure Scales")
+    expect(M.run.lastOffered[2]).toBe("Iron Throat")
+    expect(lib["Combo Boon?"]).toBeNil()
+    expect(lib["Azure Scales"].description).toBe("Gain 25% resistance to cold damage.")
+  end)
+end)
+
+describe("the offer screen: a meta line glued onto a boon", function()
+  it("reaches the catalogue as combo status, not as text", function()
+    reset(true)
+    local mock = require("mock_mudlet")
+    local lib = withLibrary({}, function()
+      M._capturing = false
+      M.onBoonsOffered()
+      for _, ln in ipairs({
+        "----------------------------------------",
+        "Azure Scales:   Combo Boon?:        Yes",
+        "Gain 25% resistance to cold damage.",
+        "Type BOON CLAIM <name> to choose.",
+      }) do
+        line = ln
+        for _, t in pairs(mock.active_triggers) do
+          if t.regex and t.pattern == "^.*$" and type(t.callback) == "function" then t.callback() end
+        end
+      end
+    end)
+    M._pendingOffer = nil
+    expect(lib["Azure Scales"].description).toBe("Gain 25% resistance to cold damage.")
+    expect(lib["Azure Scales"].comboBoon).toBeTrue()
+  end)
+end)
+
+-- The repair must run on its own at load: nothing else would ever fix a stored corruption.
+describe("the catalogue repairs itself when it loads", function()
+  it("peels a glued description on load", function()
+    local lib = withLibrary({
+      ["Deadly Finesse"] = { description = "Denizen levels increased by:  70 Denizen speed increased by:   2" },
+    }, function()
+      dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/007_History.lua")
+    end)
+    expect(lib["Deadly Finesse"].description).toBeNil()
+    expect(M._repairedBoons ~= nil and M._repairedBoons[1]).toBe("Deadly Finesse")
+    M._repairedBoons = nil
+  end)
+end)
+
+describe("comboBoon in the catalogue", function()
+  it("_learnBoon stores false as well as true, and nothing else", function()
+    local lib = withLibrary({}, function()
+      M._learnBoon("Azure Scales", "d", nil, nil, { comboBoon = true })
+      M._learnBoon("Iron Throat", "d", nil, nil, { comboBoon = false })
+      M._learnBoon("Glass Jaw", "d", nil, nil, { comboBoon = "Yes" })
+    end)
+    expect(lib["Azure Scales"].comboBoon).toBeTrue()
+    expect(lib["Iron Throat"].comboBoon).toBeFalse()
+    expect(lib["Glass Jaw"].comboBoon).toBeNil()
+  end)
+
+  it("a known No survives a merge and is never overwritten by an import", function()
+    local lib = withLibrary({ ["Iron Throat"] = { description = "d", comboBoon = false } }, function()
+      M._boonDbMerge({
+        ["Iron Throat"] = { description = "d", comboBoon = true },
+        ["Azure Scales"] = { description = "d", comboBoon = false },
+      })
+    end)
+    expect(lib["Iron Throat"].comboBoon).toBeFalse()
+    expect(lib["Azure Scales"].comboBoon).toBeFalse()
+  end)
+
+  it("an import's No fills a record that had no answer", function()
+    local enriched
+    local lib = withLibrary({ ["Iron Throat"] = { description = "d" } }, function()
+      local _, e = M._boonDbMerge({ ["Iron Throat"] = { comboBoon = false } })
+      enriched = e
+    end)
+    expect(lib["Iron Throat"].comboBoon).toBeFalse()
+    expect(enriched).toBe(1)
+  end)
+
+  it("an import of the wrong type is no value -- and does not block a real one later", function()
+    local lib = withLibrary({ ["Stale"] = { description = "d", comboBoon = "yes" } }, function()
+      M._boonDbMerge({
+        ["Fresh"] = { description = "d", comboBoon = "yes", conflictsWith = { "Glass Jaw", 7, "" } },
+        ["Stale"] = { comboBoon = true },
+      })
+    end)
+    expect(lib["Fresh"].comboBoon).toBeNil()
+    expect(#lib["Fresh"].conflictsWith).toBe(1)                     -- names only
+    expect(lib["Fresh"].conflictsWith[1]).toBe("Glass Jaw")
+    expect(lib["Stale"].comboBoon).toBeTrue()                        -- the wrong-typed value was no answer
+  end)
+
+  it("the seed marks the ten combo boons, and the merge carries it into the catalogue", function()
+    local saveSeed, saveCombo = M.BOON_SEED, M.BOON_COMBO
+    local lib = withLibrary({}, function()
+      dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/010_Boon_Seed.lua")
+    end)
+    local combo, seed = M.BOON_COMBO, M.BOON_SEED
+    M.BOON_SEED, M.BOON_COMBO = saveSeed or seed, saveCombo or combo
+    expect(#combo).toBe(10)
+    for _, name in ipairs(combo) do
+      expect(seed[name] ~= nil and seed[name].comboBoon).toBeTrue()
+      expect(lib[name] ~= nil and lib[name].comboBoon).toBeTrue()
+    end
+    local n = 0
+    for _, rec in pairs(seed) do if rec.comboBoon ~= nil then n = n + 1 end end
+    expect(n).toBe(10)                                               -- no boon is seeded as NOT combo
+  end)
+
+  it("mnem boondb counts them", function()
+    local st
+    withLibrary({ A = { comboBoon = true, comboChecked = true }, B = { comboBoon = false }, C = {} },
+      function() st = M.boonDbStats() end)
+    expect(st.combo).toBe(1)
+    expect(st.checked).toBe(1)
+  end)
+end)
+
+describe("mnem boonfill learns combo status", function()
+  it("keeps a contemplate's answer in the catalogue", function()
+    local lib = withLibrary({}, function()
+      withContemplate({ "Rarity: common", "Combo Boon?: No", "d", "", '"Q."' }, function()
+        M._boonFillNext({ "Iron Throat" }, 1, 0)
+      end)
+    end)
+    expect(lib["Iron Throat"] ~= nil).toBeTrue()
+    expect(lib["Iron Throat"].comboBoon).toBeFalse()
+    expect(lib["Iron Throat"].comboChecked).toBeTrue()
+  end)
+
+  -- The root cause of Deadly Finesse: the capture caught a WADE STATUS block.
+  it("learns nothing from a block that is not a contemplate", function()
+    local lib = withLibrary({}, function()
+      withContemplate({ "Denizen levels increased by:  70", "Denizen speed increased by:   2" }, function()
+        M._boonFillNext({ "Deadly Finesse" }, 1, 0)
+      end)
+    end)
+    expect(lib["Deadly Finesse"]).toBeNil()
+  end)
+
+  it("never touches the text of a boon it already describes", function()
+    local lib = withLibrary({ ["Azure Scales"] = { description = "From the offer screen." } }, function()
+      withContemplate(AZURE, function()
+        M._boonFillNext({ "Azure Scales" }, 1, 0,
+          { meta = { ["Azure Scales"] = true }, checked = 0, lines = 0, noLine = {} })
+      end)
+    end)
+    expect(lib["Azure Scales"].description).toBe("From the offer screen.")
+    expect(lib["Azure Scales"].comboBoon).toBeTrue()
+    expect(lib["Azure Scales"].quote).toBe("A line of flavour.")
+    expect(lib["Azure Scales"].comboChecked).toBeTrue()
+  end)
+
+  it("queues described, unchecked boons -- seeded combo boons first", function()
+    local gaps
+    withLibrary({
+      ["Zeal"] = { description = "d" },
+      ["Azure Scales"] = { description = "d", comboBoon = true },
+      ["Alpha"] = { description = "d" },
+      ["Done"] = { description = "d", comboChecked = true },
+      ["(ECHO) Zeal"] = { description = "d" },
+      ["No Text"] = {},
+    }, function() gaps = M.boonMetaGaps() end)
+    expect(#gaps).toBe(3)
+    expect(gaps[1]).toBe("Azure Scales")
+    expect(gaps[2]).toBe("Alpha")
+    expect(gaps[3]).toBe("Zeal")
+  end)
+
+  it("takes description gaps first and fills the batch from the combo pass", function()
+    local realNext, realGaps, realEcho = M._boonFillNext, M.boonGaps, M.echo
+    local got
+    M._boonFillNext = function(todo, i, learned, ctx) got = { todo = todo, ctx = ctx } end
+    M.boonGaps = function() return { "Hole One", "Hole Two" } end
+    M.echo = function() end
+    local ok, err = pcall(function()
+      withLibrary({ ["Alpha"] = { description = "d" }, ["Beta"] = { description = "d" } },
+        function() M.boonFill(3) end)
+    end)
+    M._boonFillNext, M.boonGaps, M.echo = realNext, realGaps, realEcho
+    if not ok then error(err, 0) end
+    expect(#got.todo).toBe(3)
+    expect(got.todo[1]).toBe("Hole One")
+    expect(got.todo[2]).toBe("Hole Two")
+    expect(got.todo[3]).toBe("Alpha")
+    expect(got.ctx.meta["Alpha"]).toBeTrue()
+    expect(got.ctx.meta["Hole One"]).toBeNil()
+  end)
+
+  -- The open question the pass exists to settle: does CONTEMPLATE print the line at all?
+  it("says so when a seeded combo boon's contemplate had no combo line", function()
+    local echoes
+    withLibrary({ ["Azure Scales"] = { description = "d", comboBoon = true } }, function()
+      echoes = withContemplate({ "Rarity: common", "Gain 25% resistance to cold damage.", "", '"Q."' },
+        function()
+          M._boonFillNext({ "Azure Scales" }, 1, 0,
+            { meta = { ["Azure Scales"] = true }, checked = 0, lines = 0, noLine = {} })
+        end)
+    end)
+    local said = table.concat(echoes, "\n")
+    expect(said:find("No 'Combo Boon?' line on Azure Scales", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("end to end: raw CONTEMPLATE lines -> catalogue -> /boons_offered carries combo_boon", function()
+    reset(true)
+    withLibrary({}, function()
+      withContemplate(AZURE, function() M._boonFillNext({ "Azure Scales" }, 1, 0) end)
+      M.reportBoonsOffered({ { name = "Azure Scales", description = "Gain 25% resistance to cold damage." } })
+    end)
+    expect(sent[1].payload.offered[1].combo_boon).toBeTrue()
+  end)
+end)
+
+describe("mnem boonfill recheck", function()
+  it("clears the contemplated mark so the pass asks again, and keeps the answers", function()
+    local realSoon = M._historySaveSoon
+    M._historySaveSoon = function() end
+    local n, gaps
+    local lib = withLibrary({
+      ["Azure Scales"] = { description = "d", comboBoon = true, comboChecked = true },
+      ["Iron Throat"] = { description = "d", comboChecked = true },
+      ["Glass Jaw"] = { description = "d" },
+    }, function()
+      n = M.boonRecheck()
+      gaps = M.boonMetaGaps()
+    end)
+    M._historySaveSoon = realSoon
+    expect(n).toBe(2)
+    expect(lib["Azure Scales"].comboChecked).toBeNil()
+    expect(lib["Azure Scales"].comboBoon).toBeTrue()                   -- the answer stays
+    expect(#gaps).toBe(3)
+  end)
+
+  it("is reachable as a command", function()
+    local realEcho, realSoon, said = M.echo, M._historySaveSoon, nil
+    M.echo = function(m) said = tostring(m) end
+    M._historySaveSoon = function() end
+    local lib = withLibrary({ ["Iron Throat"] = { description = "d", comboChecked = true } }, function()
+      M.command("boonfill recheck")
+    end)
+    M.echo, M._historySaveSoon = realEcho, realSoon
+    expect(lib["Iron Throat"].comboChecked).toBeNil()
+    expect(said ~= nil and said:find("1", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
+describe("combo_boon on /boons_offered", function()
+  local function offer(lib, entry)
+    reset(true)
+    withLibrary(lib, function() M.reportBoonsOffered({ entry }) end)
+    return sent[1].payload.offered[1]
+  end
+
+  it("sends true and false when the catalogue knows", function()
+    expect(offer({ ["Azure Scales"] = { comboBoon = true } }, { name = "Azure Scales" }).combo_boon).toBeTrue()
+    expect(offer({ ["Iron Throat"] = { comboBoon = false } }, { name = "Iron Throat" }).combo_boon).toBeFalse()
+  end)
+
+  it("omits it when the catalogue does not know -- never a guessed false", function()
+    expect(offer({ ["Iron Throat"] = { description = "d" } }, { name = "Iron Throat" }).combo_boon).toBeNil()
+    expect(offer({}, { name = "Unheard Of" }).combo_boon).toBeNil()
+    expect(offer({ ["Iron Throat"] = { comboBoon = "yes" } }, { name = "Iron Throat" }).combo_boon).toBeNil()
+  end)
+
+  it("never overwrites a value the offer already carried", function()
+    expect(offer({ ["Iron Throat"] = { comboBoon = true } },
+      { name = "Iron Throat", combo_boon = false }).combo_boon).toBeFalse()
+  end)
+end)
+
+describe("/ripple_level takes whole numbers only", function()
+  it("setRipple refuses 2.5 and still sends 3", function()
+    reset(true)
+    M.setRipple(2.5)
+    expect(#sent).toBe(0)
+    M.setRipple(3)
+    expect(sent[1].url).toContain("/ripple_level")
+  end)
+
+  it("mnem ripple 2.5 says how to use it instead of sending", function()
+    reset(true)
+    local realEcho, said = M.echo, nil
+    M.echo = function(m) said = tostring(m) end
+    local ok, err = pcall(M.command, "ripple 2.5")
+    M.echo = realEcho
+    if not ok then error(err, 0) end
+    expect(#sent).toBe(0)
+    expect(said ~= nil and said:find("whole number", 1, true) ~= nil).toBeTrue()
   end)
 end)
 

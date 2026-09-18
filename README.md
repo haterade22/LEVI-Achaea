@@ -434,7 +434,7 @@ The Mnemosyne ("tides of memory") is Achaea's endless tower-climb PvE challenge:
 
 ### Run Telemetry (Community Run Tracker)
 
-Reports run progress to an external community run tracker as you play: ripple depth, monster waves, bosses, ongoing effects (affixes), boons offered and selected, and deaths. **Opt-in and off by default** — nothing is sent until you set a token and enable it:
+Reports run progress to an external community run tracker as you play: ripple depth, monster waves, bosses, ongoing effects (affixes), boons offered (with the rarity, quote, category and combo status your local boon catalogue knows) and selected, and deaths. **Opt-in and off by default** — nothing is sent until you set a token and enable it:
 
 ```
 mnem token <your-token>
@@ -473,6 +473,8 @@ A local, persisted record of everything each run surfaces — no server required
 | `mnem boons` | This run's claimed boons with rarity, echo counts, ripple, and description |
 | `mnem affixes` | This run's active affixes (ongoing effects) |
 | `mnem library` | The all-time affix catalogue — every affix ever seen, with descriptions |
+| `mnem boondb [filter]` | The all-time boon catalogue — every boon ever seen with its effect, rarity, echo cap and combo status (`export` / `import` for backup) |
+| `mnem boonfill` | Fill the catalogue's gaps via `BOON CONTEMPLATE`, 8 at a time: boons with no effect text first, then each boon's combo status, quote and category (`all` for everything, `recheck` to ask again) |
 
 History lives in its own profile file (`mnemosyne_history.lua`) and survives package updates. `mnem quiet` silences the automatic per-claim/per-affix echoes while still recording.
 

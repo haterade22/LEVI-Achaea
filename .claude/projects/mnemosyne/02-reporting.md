@@ -9,7 +9,7 @@ Two files: `001_HTTP_Client.lua` (transport — a serial POST queue) and `002_Re
 | Key | Default | Purpose |
 |-----|---------|---------|
 | `enabled` | false | Master auto-report toggle (`mnem on/off`) |
-| `contemplate` | true | **Legacy; controls nothing on the reporting path.** It once gated `/boons_offered` behind a per-boon `BOON CONTEMPLATE` chain (`_contemplateNext`, now dead code). Since v4.7.279 offers post without it, and since v4.7.298 the optional `BoonInfo` fields are filled from the local catalogue by `M._enrichOffer` — a mechanism with no relationship to this toggle. Reading it as "does boon detail get sent" gives the wrong answer |
+| `contemplate` | true | **Legacy; controls nothing on the reporting path.** It once gated `/boons_offered` behind a per-boon `BOON CONTEMPLATE` chain (`_contemplateNext`, dead since v4.7.279 and removed in v4.7.322). Since v4.7.279 offers post without it, and since v4.7.298 the optional `BoonInfo` fields are filled from the local catalogue by `M._enrichOffer` — a mechanism with no relationship to this toggle. Reading it as "does boon detail get sent" gives the wrong answer |
 | `url` | `M.DEFAULT_URL` | Tracker base URL |
 | `token` | nil | API token (`mnem token <t>`) |
 | `debug` | nil | Verbose `M.decho` echoes |
@@ -93,7 +93,7 @@ Each function guards on `M._hasToken()` and enqueues. Payload shapes:
 | `reportMonsters(str)` | `POST /monsters` | `{ monsters = str }` | — |
 | `reportBoss(name)` | `POST /boss` | `{ boss = name }` | — |
 | `reportEffects(list)` | `POST /effects` | `{ effects = [{name, description}, …] }` | — |
-| `reportBoonsOffered(list)` | `POST /boons_offered` | `{ offered = [{name, description?, quote?, rarity?, category?, unlocked_by?, conflicts_with?, num_echoes_possible?}, …], class?, race?, reroll_count }` | `class`/`race` from `M._charInfo()` (v4.7.220); the six optional `BoonInfo` fields filled from the local catalogue and `reroll_count` inferred (v4.7.298) |
+| `reportBoonsOffered(list)` | `POST /boons_offered` | `{ offered = [{name, description?, quote?, rarity?, category?, unlocked_by?, conflicts_with?, num_echoes_possible?, combo_boon?}, …], class?, race?, reroll_count }` | `class`/`race` from `M._charInfo()` (v4.7.220); the seven optional `BoonInfo` fields filled from the local catalogue (six since v4.7.298, `combo_boon` since v4.7.322) and `reroll_count` inferred (v4.7.298) |
 | `reportBoonsSelected(names)` | `POST /boons_selected` | `{ selected = [name, …] }` | — |
 | `reportDeath(killer)` | `POST /death` | `{ killer = <name or "unknown"> }` | — |
 
@@ -136,9 +136,9 @@ Each function guards on `M._hasToken()` and enqueues. Payload shapes:
     `"unknown"` would appear in the queries as its own cohort — worse than a smaller honest
     sample.
 
-  Both branches of `_reportBoonsOfferedEnriched` (the immediate post and the
-  contemplate-enriched one) route through `reportBoonsOffered`, so the tagging lands on the
-  real path either way. Source path: `gmcp.Char.Status.class` / `gmcp.Char.Status.race` —
+  `_reportBoonsOfferedEnriched` posts through `reportBoonsOffered`, so the tagging lands on the
+  real path. (It once had a second, contemplate-enriched branch; that chain was removed in
+  v4.7.322.) Source path: `gmcp.Char.Status.class` / `gmcp.Char.Status.race` —
   `Char.Status` is pushed on login and on change, NOT every prompt like `Char.Vitals`.
   Note that a dragon reports race `Dragon` with class `<colour> Dragon`, so dragons appear as
   several classes sharing one race; `Undead` is a race, not a modifier.
@@ -177,6 +177,17 @@ Each function guards on `M._hasToken()` and enqueues. Payload shapes:
     `_parseContemplate` reads raw physical lines, so a wrap both truncates the value and turns its
     tail into the opening words of the description. See
     [03-parsing-triggers.md](03-parsing-triggers.md#why-conflicts-with-is-not-promoted-deep-review-v47298).
+  * **`combo_boon` is the ninth field (v4.7.322)** -- a BOOLEAN the tracker added (default false).
+    The catalogue's `comboBoon` comes from two places: the seed (`M.BOON_COMBO`, the ten boons the
+    tracker's export shows as combo) and a `Combo Boon?: Yes/No` line on any CONTEMPLATE that
+    `mnem boonfill` runs -- which now also contemplates DESCRIBED boons it has never checked,
+    because a mature catalogue has no description gaps and would otherwise never learn it. Sent
+    when the catalogue knows **either** answer; **omitted** when it knows neither, because an
+    unknown posted as `false` is a guess that looks like data. Unlike the string fields, `false` is
+    information: every store and merge on the way tests the TYPE, never truthiness. **Open
+    question for the tracker's author:** the server defaults the field to false, so an omission
+    may be stored as false -- and if it keeps the latest value, every client that omits it could
+    overwrite another's true.
 
 - **`reroll_count` is INFERRED from the screen, never from a command (v4.7.298).** Rerolls are real
   — `Negotiator`'s own text grants "5 additional rerolls" — but the command that spends one has
@@ -290,6 +301,17 @@ unverified vocabulary corrupts data more quietly than leaving it alone. **A miss
 cohort in the queries -- and because that omission is silent, `mnem status` now prints what would be
 sent (`unread` in red when the read fails). A field that is correct and invisible is
 indistinguishable from one that is broken.
+
+## Read-only: `GET /boons/export` (seen 2026-09-18, not consumed)
+
+The tracker's whole catalogue: per boon, description, quote, rarity, category, unlocked-by,
+conflicts, echo counts, and `classes_seen` / `races_seen` / `min_ripple` / `max_ripple` / `echoes`.
+Nothing reads it. It could fill the quotes and categories our catalogue lacks (which `mnem boonfill`
+now gathers itself through its combo-status pass, v4.7.322), but it would need **filtering before any
+import**: on 2026-09-18 it held ten descriptions beginning `Combo Boon?:        Yes` and one beginning
+`Category:           Unset` -- screen meta lines some client glued onto the text. It has no
+`combo_boon` field of its own. That corruption is also the only sample we have of the
+`Combo Boon?` wording. Echoing its values back to the tracker would add nothing.
 
 ## Not reported, deliberately
 

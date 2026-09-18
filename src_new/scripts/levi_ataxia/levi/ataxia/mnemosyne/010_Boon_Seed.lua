@@ -30,7 +30,9 @@ packageName: ''
 
     Descriptions and rarity only. The flavour quotes are ~50% of the source
     file's bulk and nothing reads them; echoDescription is kept where present
-    because it says what a second copy of the boon does.
+    because it says what a second copy of the boon does. Plus (v4.7.322) the
+    ten combo boons, from the Mnemosyne run tracker's own catalogue -- see
+    M.BOON_COMBO below.
     ============================================================================
 ]]--
 
@@ -490,6 +492,21 @@ function M._boonSeedRetcon()
   h.boonSeedEpoch = M.BOON_SEED_EPOCH
   if M._historySave then pcall(M._historySave) end
   return fixed, dropped
+end
+
+-- COMBO BOONS (v4.7.322, user-directed). The tracker added `combo_boon` to its schema, and the only
+-- evidence anywhere of which boons are combo boons is its own catalogue (GET /boons/export,
+-- 2026-09-18): these ten have "Combo Boon?:        Yes" glued onto their descriptions. Seeded so
+-- the field is sent from day one; fill-only like every seed field, so anything CONTEMPLATE shows
+-- wins, and `mnem boonfill` contemplates these ten first to confirm them. No boon is seeded as NOT
+-- a combo: the export never shows "No", so absence is not an answer.
+M.BOON_COMBO = {
+  "Abundance", "Azure Scales", "Cold Mastery", "Corrupted Blood", "Hyperfixate",
+  "Indomitable", "Ogre's Defence", "Searing Light", "Serpent's Grace", "Sinuosity",
+}
+for _, name in ipairs(M.BOON_COMBO) do
+  M.BOON_SEED[name] = M.BOON_SEED[name] or {}
+  M.BOON_SEED[name].comboBoon = true
 end
 
 -- Merge at load. Guarded: the merge lives in 007, and a load-order change must degrade to
