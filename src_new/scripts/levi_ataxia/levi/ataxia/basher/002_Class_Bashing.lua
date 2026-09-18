@@ -2486,10 +2486,27 @@ function ataxiaBasher_monkBashing2()
   -- `sipbal == false` and NOT `not sipbal`: ataxia.vitals is reset to {} on login and only the
   -- sip triggers (balances/002,003) ever set it, so it is nil until the first sip of a session
   -- -- nil must not read as "off balance" or we would transmute with sip balance in hand.
+  --
+  -- SHARP MIND MAKES MANA CHEAP (v4.7.320, Mnemosyne boon, user-directed). "Critical strikes
+  -- restore 5% of your mana" (15% echoed), and the Monk round is a three-strike combo -- three
+  -- chances to crit every balance. The reason this block is stingy is that transmute burns mana
+  -- we would otherwise keep; with the boon the crits refill it, so it becomes a plain top-up:
+  -- fire whenever HP is at or below `sharpmindat` (90), WITH OR WITHOUT sip balance, still
+  -- topping to `transmuteto` and still never past the `manause` floor. Tower-only as well as
+  -- boon-gated: the registry flag (004 M.BOON_FLAGS) is cleared on a confirmed run end but not
+  -- at run start, and outside the tower there are no crits refilling anything.
+  --
+  -- AB Transmute (Kaido 893): TRANSMUTE <amount>, "Extra Information: Balance", self --
+  -- "instantly turn the specified amount of mana into health, minus a bit that is lost in the
+  -- transfer." It REQUIRES balance but does not consume it (user), so it can only execute when
+  -- the round actually fires -- once per swing, never on every 0.3s rebuild (the v4.7.270
+  -- shin-augment trap) -- and it costs the combo nothing.
   local sip = ataxia.settings.sipping or {}
   local maxhp, maxmp = ataxia.vitals.maxhp or 0, ataxia.vitals.maxmp or 0
-  if ataxia.vitals.sipbal == false and maxhp > 0
-     and (ataxia.vitals.hp / maxhp * 100) <= (sip.transmuteat or 70) then
+  local sharpMind = mnemSharpMind and ataxiaBasher.inMnemosyne and true or false
+  local xmuteAt = sharpMind and (sip.sharpmindat or 90) or (sip.transmuteat or 70)
+  if (sharpMind or ataxia.vitals.sipbal == false) and maxhp > 0
+     and (ataxia.vitals.hp / maxhp * 100) <= xmuteAt then
     local xmute = math.ceil(maxhp * ((sip.transmuteto or 99) / 100))
     local mpl = ataxia.vitals.mp - (maxmp * ((sip.manause or 30) / 100))
     local hpl = xmute - ataxia.vitals.hp
