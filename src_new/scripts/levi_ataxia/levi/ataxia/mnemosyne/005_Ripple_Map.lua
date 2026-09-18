@@ -739,8 +739,18 @@ end
 -- send ".. <dir>"). Only while in Mnemosyne; self-correcting (the actual move is
 -- the last movement command before the room changes).
 if MAP._sendHandler then killAnonymousEventHandler(MAP._sendHandler) end
+-- A LOOK IS NOT A MOVE (v4.7.319, deep review, reproduced). `glance south` ends in a direction,
+-- and this capture took the last word of EVERY command -- so a glance left `_lastMoveDir` =
+-- "south" until the next arrival, and a room change with no move of ours inside that window (a
+-- drag, a forced move, a fight that starts between the glance and the step) recorded a phantom
+-- walked edge on the glanced door, took it out of `unexploredExits`, and -- if that room was
+-- lava -- wrote a phantom `lavaEdges` refusal: the v4.7.262 class with a new writer. Only a
+-- command that can MOVE us may set this.
+local LOOK_VERBS = { glance = true, squint = true, observe = true, look = true, l = true }
 MAP._sendHandler = registerAnonymousEventHandler("sysDataSendRequest", function(_, cmd)
   if not MAP.inMnem() or type(cmd) ~= "string" then return end
+  local first = cmd:match("^%s*(%a+)")
+  if first and LOOK_VERBS[first:lower()] then return end
   local last = cmd:match("(%a+)%s*$")
   if last and MAP.normDir(last) then MAP._lastMoveDir = MAP.normDir(last) end
 end)

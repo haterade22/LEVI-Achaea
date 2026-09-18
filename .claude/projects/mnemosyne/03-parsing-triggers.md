@@ -288,8 +288,9 @@ Burst count lives on `ataxiaTemp.phialBursts`, PER RIPPLE (cleared in `onRipple`
 | `mnemosyne/064_Lava` | the splash + the struggle line | `M.onLava(line)` | Passes `line` since v4.7.262 so entry and tick are distinguishable — a buffered tick can be processed *after* the escape's `gmcp.Room` has already moved us. Since v4.7.318 consumes `ataxiaTemp.mnemLavaPlan` (the door a GLANCE chose) on a matching splash |
 | `mnemosyne/090_Lava_Seen` | `Molten lava bubbles and churns.` (substring; one sample, 2026-09-18) | `M.onLavaSeen()` | The lava room's DESCRIPTION, seen through a GLANCE before we step. Counts only while the glance header token (071) is armed for the pending direction — the same line prints for our own room on arrival/LOOK/ql and would otherwise mark the neighbour. Decides nothing alone; `_glanceResolve` plans the pass-through door from the exits line that follows |
 
-All four use `triggerType: 0` with per-pattern `type: 1` (anchored perl regex). **Never `type: 3`**
-— exact-whole-line has silently killed triggers in this tree before.
+The first four use `triggerType: 0` with per-pattern `type: 1` (anchored perl regex); `090` is
+`type: 0` (substring) because a room description wraps at the player's width and the phrase opens
+the line. **Never `type: 3`** — exact-whole-line has silently killed triggers in this tree before.
 
 Gating lives in the **module**, not the trigger: `There are no obvious exits.` occurs all over
 Achaea, so `MAP.onNoExits` opens with `MAP.inMnem()` exactly as `MAP.onExitsLine` does. One gate,

@@ -867,11 +867,25 @@ GLANCE is free and prints the neighbour's description AND exits line before we s
 | Block proof | `onLavaSeen` counts the line only while the header token (`MAP._glanceSkip`, armed by 071, spent by the exits line) is armed for the pending direction -- the same line prints for OUR room on arrival/LOOK/ql |
 | The exits reach 008 | 005's glance token existed to DISCARD a neighbour's exits line (v4.7.262); it now also publishes it (`M._onGlanceExits`, guarded) |
 | Re-tick | only if still in the room we glanced from: `_scheduleTick` is last-call-wins and would otherwise kill an arrival settle if something moved us mid-glance |
-| Off | `ataxia.settings.reporting.glance = false` (a field; there is no alias) |
+| Off | `mnem explore glance off` (v4.7.319; persisted as `ataxia.settings.reporting.glance`) |
+| Blind | skipped while `ataxia.defences.blindness` is up (v4.7.319) -- the Monk/BM keeper holds it, and a blind glance cost the full timeout for nothing |
+| Left the room | a glance still pending for a room we have left is DROPPED at the gate (v4.7.319) -- not waited for, which stalled the sweep until the 30s watchdog |
 
 Not parsed: denizens in the glanced prose (the corpse lines make that a parser with its own
 failure modes). Not used: SQUINT. Open: a boss that spawns in lava is unreachable by the patrol
 (honest MOVE MANUALLY); a denizen that does not follow us out is never cleared.
+
+**v4.7.319 -- what the full review found in the above.** (1) **Livelock.** A lava room with its own
+unwalked exit was still a sweep *backtrack target*, refused only at the first step; the sweep walked
+adjacent, refused, the patrol stepped away, the sweep step reset the patrol counters -- forever.
+The backtrack now never targets a lava room, and backtrack AND patrol check the whole route
+(`M._pathIsLavaFree`), since a clean target whose only route crosses lava is the same loop one hop
+further out. (2) **The plan skipped itself.** It was gated on `first` (episode timing), so a second
+lava room entered within `LAVA_EPISODE_GAP` ignored its plan and inherited the first room's
+remembered door -- the way we came. Gated on `entry` now; the remembered door is scoped to the
+episode's anchor room. (3) **Neither door was lava-checked** -- the plan cannot know at glance
+time; both are `edgeIsLava`-checked at the splash. (4) **A look moved us** -- 005's send capture
+took `glance south`'s last word as the last move direction; look verbs are excluded now.
 
 ### A boss that runs away (v4.7.255)
 

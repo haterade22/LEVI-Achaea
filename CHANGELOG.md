@@ -2,6 +2,123 @@
 
 ---
 
+## 2026-09-18 - The v4.7.318 review, run properly: a livelock, a plan that skipped itself, and a look that moved us (v4.7.319)
+
+The v4.7.318 multi-agent review died at the weekly API limit and was finished by hand. With the
+limit lifted, six agents ran against the released code -- told which four things the hand review
+had already fixed, so they would verify those rather than re-report them. They found what the
+hand review missed, most of it probe-confirmed against the real modules.
+
+### HIGH -- the patrol filter created a LIVELOCK
+
+A lava room with an unwalked exit of its own was still a valid **backtrack target** for the sweep,
+refused only at the FIRST step. From two rooms away the sweep walked adjacent, refused, fell into
+the patrol -- which v4.7.318 had just taught to skip lava -- stepped away, and the sweep step reset
+the patrol counters. Probe: 24 ticks of `E -n-> NE -s-> E -n-> ...`, no HP lost, no stop,
+`MAX_PATROL_LOOPS` never accruing. Before v4.7.318 the patrol would walk in and pay once;
+**v4.7.318 made "never finish" the only outcome.** Fixed twice over: the backtrack never targets a
+known lava room (the lava room's own doors are not the sweep's to finish), and both the backtrack
+and the patrol now check the WHOLE route with `M._pathIsLavaFree`, not just `steps[1]` -- a clean
+target whose only route runs through lava is the same oscillation one hop further away.
+
+### HIGH -- the plan skipped itself inside a lava episode
+
+`onLava`'s plan branch was gated on `first` -- "no lava tick in the last 6s", episode TIMING --
+not on the splash. Escape lava room X, arrive clean, glance B, enter B within 6s of X's last
+tick: the plan for B was silently skipped and left unconsumed, and X's **remembered** door was sent
+into B, validated only by "that exit exists". The probe sent `n`: the way we came. The plan is now
+gated on `entry` (the splash IS a room entry), and the remembered door is restricted to the
+episode's own anchor room -- it exists for the same room's struggle ticks and nothing else.
+
+### HIGH -- the planned door was never lava-checked
+
+At glance time the neighbour's exits line carries no ids, so the plan cannot know where its door
+leads; `onLava` validated it only for existence and bypassed `_lavaExit`. Two agents independently
+reproduced it sending us from one lava room into a KNOWN second one where `_lavaExit` would have
+chosen `w` -- reopening exactly the adjacent-lava hole v4.7.318's own hardening had closed. The
+splash is the first moment `edgeIsLava` can be asked; it is asked now, for the remembered door too.
+
+### MEDIUM
+
+- **A look moved us.** 005 captures the last word of EVERY outgoing command as the last move
+  direction, and `glance south` ends in a direction -- so an unarmed room change before our next
+  move (a drag, a forced move, a fight starting between the glance and the step) recorded a
+  phantom walked edge on the glanced door, took it out of `unexploredExits`, and -- if that room
+  was lava -- wrote a phantom `lavaEdges` refusal. The v4.7.262 phantom-edge class with a new
+  writer. `glance`/`squint`/`observe`/`look` no longer set it.
+- **v4.7.318's own settle fix caused a 30s stall.** The resolve stopped re-ticking after a room
+  change so it could not kill the arrival settle -- correct -- but the settle tick then hit the gate,
+  saw the pending glance, and returned with nothing scheduled; only the 30s watchdog was left. A
+  glance pending for a room we have LEFT is now dropped at the gate, not waited for.
+- **Glance while BLIND bought nothing and cost a second per door.** The Monk/BM keeper (v4.7.315)
+  holds BLIND up in the tower, so every never-walked door paid the full timeout for a glance that
+  printed nothing -- ~16-24 seconds a ripple, silently. `_glanceWanted` skips while
+  `ataxia.defences.blindness` is up.
+- **The config had no writer, and a held sweep was invisible.** `ataxia.settings.reporting.glance`
+  could only be set from the Lua prompt, and the `glance` send is echo-suppressed, so a sweep held
+  by a pending glance looked identical to a stalled one. **`mnem explore glance [on|off]`** now
+  exists (persisted, in `mnem help`), and `mnem explore status` / `why` print the glance state.
+  The status helper was DEFINED in the first cut of this fix and called from nowhere -- a test now
+  pins that both commands print it.
+
+### LOW
+
+- `_onGlanceExits` accepted a header word that is not a direction (`nd` nil skipped the check)
+  while `onLavaSeen` rejected it; both reject it now.
+- A timeout-resolved glance was indistinguishable from one that never happened; it now says so
+  once (`glance s gave nothing (...) -- moving anyway.`).
+- The unexplored pass used the room-only lava test while the documented rule says `edgeIsLava`
+  always. Harmless (an unexplored door cannot carry a lava edge) but inconsistent; now uniform.
+- 008's `sysLoadEvent` handler clears the glance, its timer and the plan, like every other
+  transient it owns.
+- Test-only state (`swarmSaved`) moved off the production `ataxia.mnemosyne` table to
+  describe-locals.
+
+### Tests: mutation review
+
+The mutation agent ran 24 deliberate regressions against v4.7.318's 18 tests: **8 survived.** A
+surviving mutant is a test restating the implementation. Every one is now killed, and four of this
+release's own fixes also survived their first break-back run -- each because a sibling check
+covered the same scenario -- until a discriminating fixture was written: a lava room reached by a
+link only it reported (target test), lava as the SECOND hop (whole-path test), a planned door that
+`_lavaExit` would NOT have chosen (entry test), a non-direction header word. Also fixed: the
+v4.7.318 patrol test's fixture put two rooms south of room 1, so the second `onRoom` overwrote the
+edge and it passed by walking straight into the lava. **22 new tests; every fix in this release
+break-back verified.**
+
+### Docs corrected
+
+`03-parsing-triggers.md` said "All four use ... `type: 1`" under a table that now has five rows,
+the fifth `type: 0` -- the doc contradicted itself two lines apart. Memory's v4.7.254 section still
+stated the pre-v4.7.297 exit order as current. v4.7.318's CHANGELOG "Files" list omitted the three
+`.claude/projects/mnemosyne/*.md` docs and CLAUDE.md it changed.
+
+### Files
+
+- `mnemosyne/008_Explorer.lua` -- `_nextExploreStep` target exclusion + `M._pathIsLavaFree`;
+  `_nextPatrolStep` whole-path test; `onLava` entry gate, lava-checked plan and remembered door,
+  anchor-scoped remembered door; tick gate drops a glance for a room we left; `_glanceWanted` blind
+  skip; `_onGlanceExits` nil-direction reject; `_glanceResolve` reason echo; unexplored pass
+  `edgeIsLava`; `sysLoadEvent` clears; `M._glanceLine` in `exploreStatus`/`exploreWhy`.
+- `mnemosyne/005_Ripple_Map.lua` -- the send capture ignores look verbs.
+- `mnemosyne/003_Commands.lua` -- `mnem explore glance [on|off]`, help row.
+- `tests/test_mnemosyne.lua` -- 22 new tests; v4.7.318's patrol test fixture corrected.
+- `CLAUDE.md`, `.claude/projects/mnemosyne/03-parsing-triggers.md`, `05-commands.md`,
+  `07-explorer.md`; memory `mnemosyne.md`, `bug-patterns.md`.
+
+### Known, not fixed
+
+Five pre-existing `getEpoch` test leaks (`test_basher_jester`, `test_curingset_state`,
+`test_denizen_parry`, `test_serpent_helpers`, `test_swarm_tactics`). The Single Minded Focus boon
+("you can no longer squint, glance, or observe") has no latch, so it is not consulted. What GLANCE
+prints under dementia is uncaptured -- LOOK hallucinates there, so a glanced plan is probably an
+invention too; harmless, as the splash-time checks validate it. A larger open question from the
+review: BLIND may also suppress the prose exits line and `gmcp.Room.Info` that the tower sweep
+depends on -- if so, the Monk/BM sweep is impaired while the keeper holds BLIND; verify live
+(`ataxia.settings.senseKeep.blindness = false` is the switch).
+
+---
+
 ## 2026-09-18 - Lava: forward beats back, and the patrol learns what the sweep knew (v4.7.318)
 
 User, from a death: *"Once we enter the room, we already take the damage. So there is no point in
@@ -123,6 +240,8 @@ second room's exits instead -- pre-existing shape, usually "keep going the same 
   `onLavaSeen`, `GLANCE_TIMEOUT`) and the plan consumed by `onLava`.
 - `mnemosyne/005_Ripple_Map.lua` -- the glance token now publishes the glanced exits.
 - `mnemosyne/090_Lava_Seen.lua` -- new.
+- `CLAUDE.md`, `.claude/projects/mnemosyne/03-parsing-triggers.md`, `04-ripple-map.md`,
+  `07-explorer.md` (added v4.7.319 -- this list originally omitted them).
 - `tests/test_mnemosyne.lua` -- 18 new tests. **All break-back verified**, including that the
   patrol target-skip is defended by a scenario the edge check cannot see, that the walked-door
   exemption is defended by a backtrack (the only path that returns a walked door), and one test
