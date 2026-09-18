@@ -2885,6 +2885,43 @@ describe("mnem explore", function()
     for _, num in ipairs(M.explore.patrolQueue) do expect(num).toBe(2) end
   end)
 
+  -- THE DEATH (v4.7.318): the patrol had no lava filter at all. Once the grid was swept it
+  -- round-robined every visited room INCLUDING the lava one, and a denizen left standing in it
+  -- made that room the one the patrol kept returning to -- 5,890 on every entry, until dead.
+  it("never patrols INTO a lava room -- even through a door the edge check cannot see", function()
+    MAP.reset()
+    -- The exits are PROSE-sourced (destination 0, the v4.7.260 backfill), so `_exitTarget`
+    -- returns nil for them and the first-step edge check cannot resolve the destination. And
+    -- `lavaEdges` only knows the door we SPLASHED through -- here we entered the lava room from
+    -- room 3, so A's east door carries no lava edge. Only the TARGET being a known lava room
+    -- can stop this walk, and that is the check the patrol never had.
+    MAP.onRoom(1, "A", { east = 0, south = 0 }, nil)
+    MAP.onRoom(3, "C", { north = 0, east = 0 }, "south")
+    MAP.onRoom(2, "LAVA", { west = 0, north = 0 }, "east") -- splashed in FROM 3, via east
+    MAP.onRoom(1, "A", { east = 0, south = 0 }, "north")   -- ... and out to A; standing in A
+    M.explore.lavaRooms = { [2] = { at = 1 } }
+    M.explore.lavaEdges = { [3] = { east = { at = 1 } } }  -- the door we came in by, not A's
+    M.explore.patrolQueue = nil
+    M.explore.patrolLoops = 0
+    -- Sorted queue puts 2 (lava) ahead of 3. Without the target check the first step to 2 is
+    -- "e" and nothing refuses it.
+    local step = M._nextPatrolStep()
+    expect(step).toBe("s")           -- to room 3, never "e" into the lava
+    for _, num in ipairs(M.explore.patrolQueue) do expect(num ~= 2).toBeTrue() end
+  end)
+
+  it("never patrols across a known lava EDGE either", function()
+    MAP.reset()
+    MAP.onRoom(1, "A", { east = 2 }, nil)
+    MAP.onRoom(2, "B", { west = 1 }, "east")
+    MAP.onRoom(1, "A", { east = 2 }, "west") -- standing in A
+    M.explore.lavaRooms = {}
+    M.explore.lavaEdges = { [1] = { east = { at = 1 } } } -- the door itself is condemned
+    M.explore.patrolQueue = nil
+    M.explore.patrolLoops = 0
+    expect(M._nextPatrolStep()).toBeNil() -- 2 is the only target and its only route is the lava door
+  end)
+
   it("backtracks toward unexplored via a planar step, never `up`", function()
     MAP.reset()
     MAP.onRoom(1, "holding", { down = 2 }, nil)
@@ -3955,6 +3992,37 @@ describe("boiling lava", function()
     expect(M._lavaExit()).toBe("nw")
     M.explore.fromDir = nil -- clearing the explorer's OWN bookkeeping changes nothing here --
     expect(M._lavaExit()).toBe("nw") -- the map already recorded "w" as walked, not this field
+    restore()
+  end)
+
+  -- THE DEATH (v4.7.318). Enter a well-trodden lava room -- dozens of corpses, every door
+  -- already walked -- with a denizen in it. Nothing is unexplored, so the old chooser fell to
+  -- "back", the way we came. The entry damage was already paid; retreating bought nothing and
+  -- guaranteed paying it again, because the denizen drew the patrol straight back in. Forward
+  -- passes through ONCE. From the log: exits north (back) and east (walked, forward) -> east.
+  it("ranks a WALKED forward door above the room we just left", function()
+    room({ north = 0, east = 0 }, "s") -- came in from the north; both doors already walked
+    MAP.rooms[50].edges.east = 99      -- east was walked on an earlier pass -- NOT unexplored
+    expect(M._lavaExit()).toBe("e")    -- not "n"
+    restore()
+  end)
+
+  -- Deep review (v4.7.318): a prose-sourced exit stores destination 0, so `_exitTarget` cannot
+  -- resolve it and the room test is blind -- but `lavaEdges[cur][d]` remembers the door we once
+  -- splashed through from HERE. Two adjacent lava rooms is exactly this.
+  it("refuses a forward door that is a known lava EDGE even with no destination id", function()
+    room({ north = 0, east = 0 }, "s")
+    MAP.rooms[50].edges.east = 99
+    M.explore.lavaEdges[50] = { east = { at = 1 } } -- we splashed east from here once
+    expect(M._lavaExit()).toBe("n")    -- back, not into the lava we remember
+    restore()
+  end)
+
+  it("still refuses a forward door that leads into KNOWN lava", function()
+    room({ north = 0, east = 77 }, "s")
+    MAP.rooms[50].edges.east = 77
+    M.explore.lavaRooms[77] = { at = 1 } -- east is lava too
+    expect(M._lavaExit()).toBe("n")    -- back is the only door that is not lava
     restore()
   end)
 
@@ -5975,5 +6043,239 @@ describe("_clearStaleRun -- run state must not survive a reload", function()
     M.run.boss = "Seasone the Industrious"
     M._clearStaleRun()
     expect(M.run.boss).toBeNil()
+  end)
+end)
+
+-- ---------------------------------------------------------------------------
+-- GLANCE RECON before stepping into a never-walked room (v4.7.318, user-directed)
+--
+--   Glancing to the south, you see:
+--   Molten lava bubbles and churns. The nebulous form of a phantom grizzly bear lumbers here.
+--   You see exits leading north and east.
+--
+-- The rule is "enter and pass through": entry damage is sunk, a denizen in the lava is drawn out
+-- by us moving on. So the glance never refuses -- it PLANS the forward door so onLava fires it on
+-- the splash rather than deriving one under fire.
+-- ---------------------------------------------------------------------------
+describe("glance recon before a never-walked door", function()
+  local M = ataxia.mnemosyne
+  local MAP = ataxia.mnemosyne.map
+  local sent, realSend, realTimer, realKill, timers
+
+  local function setup()
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.inMnemosyne = true
+    ataxiaBasher.enabled = true
+    MAP.drForce = false
+    MAP.reset()
+    MAP.onRoom(1, "A long corridor.", { south = 0 }, nil) -- south never walked
+    M.explore.on = true
+    M.explore.moving = false
+    M.explore.pausedAtBoon = false
+    M.explore.glance = nil
+    M.explore.lavaRooms, M.explore.lavaEdges, M.explore.failed = {}, {}, {}
+    ataxia.denizensHere = {}
+    ataxia.settings = ataxia.settings or {}
+    ataxia.settings.reporting = ataxia.settings.reporting or {}
+    ataxia.settings.reporting.glance = nil
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.mnemLavaPlan, ataxiaTemp.mnemLavaAt, ataxiaTemp.mnemLavaRoom = nil, nil, nil
+    ataxiaTemp.mnemLavaStray, ataxiaTemp.mnemLavaDir = nil, nil
+    MAP._lastArrival, MAP._glanceSkip = nil, nil
+    realSend, realTimer, realKill = send, tempTimer, killTimer
+    sent, timers = {}, {}
+    send = function(c) table.insert(sent, c) end
+    tempTimer = function(d, f) table.insert(timers, { d = d, f = f }); return #timers end
+    killTimer = function() return true end
+    -- the tick decides nothing while the swarm claims it; make the swarm silent
+    M._swarmSaved, M._swarmSavedFlag = M.swarm, true
+    M.swarm = { onTick = function() return false end, moveLocked = function() return false end,
+                escapeOn = function() end, reset = function() end, state = "idle" }
+  end
+  -- IDEMPOTENT: the it-wrapper below calls this after every body, so a second call must be a
+  -- no-op -- a bare `M.swarm = M._swarmSaved` on the second pass would nil the real swarm.
+  local function restore()
+    if not M._swarmSavedFlag then return end
+    send, tempTimer, killTimer = realSend, realTimer, realKill
+    M.swarm = M._swarmSaved; M._swarmSaved, M._swarmSavedFlag = nil, nil
+    M.explore.on = false; M.explore.moving = false; M.explore.glance = nil
+    MAP.drForce = nil
+  end
+  -- Every test runs its body under pcall so restore() is unconditional: a failed assertion
+  -- otherwise leaves the timer/send mocks and the stubbed swarm installed for every file loaded
+  -- after this one (the v4.7.316 leak, in a new hat).
+  local rawIt = it
+  local function it(name, fn)
+    rawIt(name, function()
+      local ok, err = pcall(fn)
+      restore()
+      if not ok then error(err, 0) end
+    end)
+  end
+  local function has(frag)
+    for _, c in ipairs(sent) do if c:find(frag, 1, true) then return true end end
+    return false
+  end
+
+  it("glances a never-walked door instead of walking it, and holds while pending", function()
+    setup()
+    M._exploreTick()
+    expect(has("glance south")).toBeTrue()
+    expect(has("stand")).toBeFalse()          -- no move yet
+    M._exploreTick()                            -- pending: still no move, no second glance
+    local glances = 0
+    for _, c in ipairs(sent) do if c:find("glance", 1, true) then glances = glances + 1 end end
+    expect(glances).toBe(1)
+    expect(has("stand")).toBeFalse()
+  end)
+
+  it("moves once the glanced exits line lands, and does not glance that door twice", function()
+    setup()
+    M._exploreTick()                            -- glance south
+    MAP.onGlance("south")                       -- trigger 071: the header arms the token
+    MAP.onExitsLine("You see exits leading north and east.") -- spends it -> published
+    expect(M.explore.glance.done).toBeTrue()
+    expect(ataxiaTemp.mnemLavaPlan).toBeNil()   -- no lava line: nothing to plan
+    M._exploreTick()
+    expect(has("stand;s")).toBeTrue()           -- now it walks (short dir on the wire)
+  end)
+
+  it("plans the forward door when the glance shows lava", function()
+    setup()
+    M._exploreTick()
+    MAP.onGlance("south")
+    M.onLavaSeen()                              -- trigger 090, inside the glance
+    MAP.onExitsLine("You see exits leading north and east.")
+    local plan = ataxiaTemp.mnemLavaPlan
+    expect(plan ~= nil).toBeTrue()
+    expect(plan.room).toBe(1)
+    expect(plan.dir).toBe("south")
+    expect(plan.fwd).toBe("east")               -- not "north": that is the door we enter by
+    M._exploreTick()
+    expect(has("stand;s")).toBeTrue()           -- STILL enters -- the user's rule
+  end)
+
+  it("a dead-end lava room yields an empty plan, and is still entered", function()
+    setup()
+    M._exploreTick()
+    MAP.onGlance("south")
+    M.onLavaSeen()
+    MAP.onExitsLine("You see a single exit leading north.")
+    expect(ataxiaTemp.mnemLavaPlan.fwd).toBeNil()
+    M._exploreTick()
+    expect(has("stand;s")).toBeTrue()
+  end)
+
+  it("onLava fires the PLANNED door on the splash, and spends the plan", function()
+    setup()
+    M._exploreTick()
+    MAP.onGlance("south")
+    M.onLavaSeen()
+    MAP.onExitsLine("You see exits leading north and east.")
+    M._exploreTick()                            -- walks south
+    -- Arrive in the lava room the way the map would record it (from 1, via south).
+    MAP.onRoom(2, "A long corridor.", { north = 1, east = 0 }, "south")
+    M.explore.moving = false
+    sent = {}
+    M.onLava("You splash into boiling lava!")
+    expect(has("stand;e")).toBeTrue()           -- the planned door, not "n" (back)
+    expect(ataxiaTemp.mnemLavaPlan).toBeNil()   -- spent
+  end)
+
+  it("a plan for a DIFFERENT entry is ignored", function()
+    setup()
+    ataxiaTemp.mnemLavaPlan = { room = 99, dir = "west", fwd = "east", at = 0 }
+    MAP.onRoom(2, "A long corridor.", { north = 1, east = 0 }, "south")
+    M.explore.moving = false
+    sent = {}
+    M.onLava("You splash into boiling lava!")
+    -- No matching plan -> the ordinary chooser (forward beats back): east anyway here, but the
+    -- stale plan must be left alone, not consumed.
+    expect(ataxiaTemp.mnemLavaPlan ~= nil).toBeTrue()
+  end)
+
+  it("times out and walks anyway when the glance yields nothing (blind / darkness)", function()
+    setup()
+    M._exploreTick()
+    expect(has("glance south")).toBeTrue()
+    expect(#timers).toBe(1)
+    timers[1].f()                               -- GLANCE_TIMEOUT fires
+    expect(M.explore.glance.done).toBeTrue()
+    M._exploreTick()
+    expect(has("stand;s")).toBeTrue()
+  end)
+
+  -- A BACKTRACK step is over a door we already walked; it needs no recon. (The sweep's own
+  -- selector only ever returns a walked door when backtracking, so that is the case to pin.)
+  it("does not glance a door it has already walked -- a backtrack moves at once", function()
+    setup()
+    MAP.onRoom(2, "B", { west = 1, north = 0 }, "east") -- walked 1 -> 2; 2 keeps an unexplored north
+    MAP.onRoom(1, "A dead end.", { east = 2 }, "west")    -- back in 1; nothing unexplored here
+    M.explore.moving = false
+    sent = {}
+    M._exploreTick()                            -- backtrack toward 2 via the walked east door
+    expect(has("glance")).toBeFalse()
+    expect(has("stand;e")).toBeTrue()
+  end)
+
+  -- Deep review (v4.7.318): the description line prints for OUR room too (arrival, LOOK, the
+  -- watchdog's ql). Only a line inside the glanced BLOCK -- header token armed for this
+  -- direction -- may mark the neighbour as lava.
+  it("ignores a lava description line that is not inside the glanced block", function()
+    setup()
+    M._exploreTick()                            -- glance south pending; no header yet
+    M.onLavaSeen()                              -- our own room's description, say
+    expect(M.explore.glance.lava).toBeFalse()
+    MAP.onGlance("east")                        -- a header for some OTHER direction
+    M.onLavaSeen()
+    expect(M.explore.glance.lava).toBeFalse()
+    MAP.onGlance("south")                       -- now the right block
+    M.onLavaSeen()
+    expect(M.explore.glance.lava).toBeTrue()
+  end)
+
+  -- Deep review (v4.7.318): _scheduleTick is last-call-wins. If we were moved mid-glance the
+  -- arrival owns the clock; the resolve must not kill its settle with a 0.1s re-tick.
+  it("does not re-tick on resolve if we are no longer in the room we glanced from", function()
+    setup()
+    M._exploreTick()                            -- glance from room 1
+    timers = {}                                 -- forget the timeout timer for the count below
+    MAP.onRoom(7, "Somewhere else.", { north = 1 }, "south") -- moved mid-glance
+    MAP.onGlance("south")
+    MAP.onExitsLine("You see exits leading north and east.")
+    expect(M.explore.glance.done).toBeTrue()
+    local reticked = false
+    for _, tm in ipairs(timers) do if tm.d == 0.1 then reticked = true end end
+    expect(reticked).toBeFalse()
+  end)
+
+  it("re-ticks on resolve when still in the room we glanced from", function()
+    setup()
+    M._exploreTick()
+    timers = {}
+    MAP.onGlance("south")
+    MAP.onExitsLine("You see exits leading north and east.")
+    local reticked = false
+    for _, tm in ipairs(timers) do if tm.d == 0.1 then reticked = true end end
+    expect(reticked).toBeTrue()
+  end)
+
+  -- Deep review (v4.7.318): a glance whose timer was lost must not hold the sweep forever.
+  it("force-resolves a wedged glance at the gate instead of holding forever", function()
+    setup()
+    M._exploreTick()                            -- glance pending, timer armed (mock: never fires)
+    M.explore.glance.at = M.explore.glance.at - 100 -- pretend it is 100s old
+    sent = {}
+    M._exploreTick()                            -- gate: stale -> resolve -> proceed
+    expect(M.explore.glance.done).toBeTrue()
+    expect(has("stand;s")).toBeTrue()
+  end)
+
+  it("can be switched off", function()
+    setup()
+    ataxia.settings.reporting.glance = false
+    M._exploreTick()
+    expect(has("glance")).toBeFalse()
+    expect(has("stand;s")).toBeTrue()
   end)
 end)

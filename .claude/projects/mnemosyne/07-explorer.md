@@ -735,7 +735,7 @@ half the pool per tick, so any door beats the floor - including one we have neve
 
 | | |
 |---|---|
-| Exit order | back the way we came (provably safe - we just stood there) -> any planar exit not into a known lava room -> any planar -> `down` |
+| Exit order | any UNEXPLORED planar exit not into known lava (v4.7.297) -> any FORWARD planar exit not a known lava edge (v4.7.318) -> back the way we came (last resort) -> any planar -> `down` |
 | Attack hold | escape mode, so the next `queue addclearfull` cannot wipe the move |
 | Tactics | any swarm tactic in flight is reset - a funnel is a plan for a room we can survive |
 | Repeat | re-sends every tick; an eaten move must be retried against a two-tick death |
@@ -825,6 +825,53 @@ something, and clear it there.**
 
 **Residual, by design:** if a lava room is the only route to unexplored territory the sweep
 refuses and returns nil, so a ripple can end partially swept. That is the intended trade.
+
+#### v4.7.318 - the entry damage is sunk, so forward beats back; the patrol; GLANCE recon
+
+User, from a death: *"Once we enter the room, we already take the damage. So there is no point
+in leaving immediately... We died because we kept leaving, and going back into the room."*
+
+```
+Molten lava bubbles and churns. The nebulous form of a phantom grizzly bear lumbers here.
+[dozens of corpses]
+You see exits leading north and east.
+You splash into boiling lava!
+(MNEM): [explore] BOILING LAVA (5890/tick, unblockable) -- leaving by n immediately.
+```
+
+**Forward beats back, walked or not.** v4.7.297 ranked *unexplored* doors ahead of the way we
+came; in a well-fought room every door has a walked edge, so it found nothing and fell to
+"back" -- and the entry hit was already paid. Retreating buys nothing against it and guarantees
+paying it again, because whatever drew us in (the denizen, an exit beyond) is still there and
+the sweep or patrol routes straight back. Passing THROUGH pays once. `_lavaExit` now has a
+forward pass between the unexplored pass and back; both it and the final fallback use
+`edgeIsLava` (edge OR room), because `_exitTarget` is nil for a prose exit and only the EDGE
+remembers a neighbour we splashed into from here.
+
+**The patrol had no lava filter at all.** The sweep and backtrack learned it in v4.7.256;
+`_nextPatrolStep`'s only test was `planarStep`, so once the grid was swept it round-robined the
+lava room forever. It now skips a known lava TARGET and a known lava first-step EDGE. The target
+check is not redundant: a prose exit stores `0`, unresolvable by `_exitTarget`, and `lavaEdges`
+only knows the door we SPLASHED through -- a lava room reached by any other door is invisible to
+the edge check (the room-keyed complement of "remember the EDGE").
+
+**GLANCE recon** (user-directed: glance every never-walked door; always enter and pass through).
+GLANCE is free and prints the neighbour's description AND exits line before we step:
+
+| | |
+|---|---|
+| When | before any door we have never walked (a backtrack is over a known edge and gets none) |
+| Hold | the step waits for the glanced exits line, or `GLANCE_TIMEOUT` (1s) -- BLIND is up on Monk/BM now, and a glance that prints nothing must not stall the sweep; a glance older than 3x the timeout is force-resolved at the gate |
+| Never refuses | entry damage is sunk either way, and a denizen in the lava is drawn out by us moving on -- a dead-end lava room is still entered, then we step straight back out (the user's choice) |
+| Plans | "Molten lava bubbles and churns." inside the glanced block (trigger `mnemosyne/090`, one sample) -> `ataxiaTemp.mnemLavaPlan = {room, dir, fwd}`, `fwd` = any planar exit of the glanced room other than the one we enter by, sorted; `onLava` fires it on the splash instead of deriving a door under fire |
+| Block proof | `onLavaSeen` counts the line only while the header token (`MAP._glanceSkip`, armed by 071, spent by the exits line) is armed for the pending direction -- the same line prints for OUR room on arrival/LOOK/ql |
+| The exits reach 008 | 005's glance token existed to DISCARD a neighbour's exits line (v4.7.262); it now also publishes it (`M._onGlanceExits`, guarded) |
+| Re-tick | only if still in the room we glanced from: `_scheduleTick` is last-call-wins and would otherwise kill an arrival settle if something moved us mid-glance |
+| Off | `ataxia.settings.reporting.glance = false` (a field; there is no alias) |
+
+Not parsed: denizens in the glanced prose (the corpse lines make that a parser with its own
+failure modes). Not used: SQUINT. Open: a boss that spawns in lava is unreachable by the patrol
+(honest MOVE MANUALLY); a denizen that does not follow us out is never cleared.
 
 ### A boss that runs away (v4.7.255)
 

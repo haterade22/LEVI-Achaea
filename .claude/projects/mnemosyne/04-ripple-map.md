@@ -204,6 +204,12 @@ spend it. Expires at 3s and is cleared on arrival so a stale token cannot eat ou
 Deliberately **not** used to populate the glanced room: tempting, and a separate change with its
 own failure modes (a glanced room has no id at all under dementia).
 
+**v4.7.318 -- the token now also PUBLISHES.** The exits line a glance prints is information as
+well as noise: it says which doors the neighbour has, and the explorer's lava recon needs exactly
+that (the door it will leave by after entering). When `onExitsLine`/`onNoExits` spend the token
+they call `publishGlance(dir, exits)` -> `ataxia.mnemosyne._onGlanceExits` (guarded, so 005 stays
+independent of 008). `parseExitsLine` returns a SET keyed by long direction, not a list.
+
 ### 6. The empty push is silence, not a denial (v4.7.263)
 
 `MAP.onRoom` rebuilt `room.exits` from the gmcp table on **every** push, and 005's handler runs
