@@ -271,12 +271,25 @@ end
 -- Spends the same one-shot glance token as onExitsLine: a glanced neighbour that is a dead end
 -- prints this line inside the GLANCED block, and marking our own room from it is exactly the
 -- v4.7.262 regression in a new hat.
+-- THE GLANCED ROOM'S EXITS ARE INFORMATION, NOT JUST NOISE TO SKIP (v4.7.318). The token
+-- exists so a neighbour's exits line is never grafted onto OUR room; but the line still says
+-- which doors the neighbour has, and the explorer's lava recon needs exactly that -- the door it
+-- will leave by after entering. Published to the explorer, guarded, so 005 stays independent of
+-- 008 (008 loads later and is the consumer).
+local function publishGlance(dir, exits)
+  local M = ataxia and ataxia.mnemosyne
+  if M and M._onGlanceExits then pcall(M._onGlanceExits, dir, exits) end
+end
+
 function MAP.onNoExits()
   if not MAP.inMnem() then return false end
   if MAP._glanceSkip then
     local g = MAP._glanceSkip
     MAP._glanceSkip = nil
-    if ((getEpoch and getEpoch()) or 0) - (tonumber(g.at) or 0) <= 3 then return false end
+    if ((getEpoch and getEpoch()) or 0) - (tonumber(g.at) or 0) <= 3 then
+      publishGlance(g.dir, {})
+      return false
+    end
   end
   local key = MAP.drActive() and MAP.drHereKey() or MAP.current
   if key == nil then return false end
@@ -295,7 +308,10 @@ function MAP.onExitsLine(text)
     MAP._glanceSkip = nil
     -- Belt as well as braces. A stale token -- the glanced block printed no exits line at all --
     -- must never eat OUR next one, so it expires as well as being consumed.
-    if ((getEpoch and getEpoch()) or 0) - (tonumber(g.at) or 0) <= 3 then return false end
+    if ((getEpoch and getEpoch()) or 0) - (tonumber(g.at) or 0) <= 3 then
+      publishGlance(g.dir, MAP.parseExitsLine(text))
+      return false
+    end
   end
   local dirs = MAP.parseExitsLine(text)
   if not dirs then return false end

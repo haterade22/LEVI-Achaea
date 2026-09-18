@@ -2,6 +2,134 @@
 
 ---
 
+## 2026-09-18 - Lava: forward beats back, and the patrol learns what the sweep knew (v4.7.318)
+
+User, from a death: *"Once we enter the room, we already take the damage. So there is no point in
+leaving immediately as it only damages us as we enter and then on a timer. Therefore when we enter
+a lava room and there is a denizen in that room, we need to move to the NEXT room. We died
+because we kept leaving, and going back into the room."*
+
+```
+Molten lava bubbles and churns. The nebulous form of a phantom grizzly bear lumbers here.
+[dozens of corpses]
+You see exits leading north and east.
+You splash into boiling lava!
+(MNEM): [explore] BOILING LAVA (5890/tick, unblockable) -- leaving by n immediately.
+```
+
+### Two things had to be true
+
+**The chooser picked "back".** v4.7.297 ranked UNEXPLORED doors ahead of the way we came -- but
+this room had been fought in many times (the corpse count says so), so every door had a walked
+edge, nothing was unexplored, and `_lavaExit` fell through to "back": north, the room we had just
+left. The entry damage was already SUNK. Retreating bought nothing against it and guaranteed
+paying it again, because the thing that drew us in -- a denizen standing in the lava -- was still
+there. **Any forward door now outranks back, walked or not.** Passing through pays once. Back is
+the last resort before the blind fallback: still provably not lava, but the door most likely to
+bring us straight back.
+
+**The patrol had no lava check at all.** The sweep and the backtrack learned to refuse lava in
+v4.7.256; `_nextPatrolStep` never did -- its only filter was `planarStep`. Once the grid is swept
+it round-robins every visited room, and a lava room with a denizen in it is exactly the room it
+kept walking back into, 5,890 on every entry before a single swing. It now skips a known lava
+TARGET and a known lava first-step EDGE, the same two tests the sweep applies.
+
+The target check is not redundant with the edge check, and the test pins why: a prose-sourced
+exit stores destination `0`, so `_exitTarget` cannot resolve it, and `lavaEdges` only knows the
+door we SPLASHED through -- a lava room reached by any other door is invisible to both. Only the
+target being a known lava room can refuse that walk. (The room-keyed complement of v4.7.256's
+"remember the EDGE".)
+
+### GLANCE before stepping into a room we have never walked into (user-directed)
+
+*"Additionally we can GLANCE and SQUINT directions before moving into a room to see what is in
+that room."* GLANCE is free and prints the neighbour's description AND its exits line:
+
+```
+Glancing to the south, you see:
+A long corridor. (indoors)
+Molten lava bubbles and churns. The nebulous form of a phantom grizzly bear lumbers here. ...
+You see exits leading north and east.
+```
+
+That is everything the pass-through needs to know BEFORE paying the entry damage. The sweep now
+glances every door it has never walked (a backtrack is over a known edge and gets none), holds the
+step until the glanced exits line lands or `GLANCE_TIMEOUT` (1s) expires, then moves. **The
+glance never refuses a room** -- the user's rule is enter and pass through, since entry damage is
+sunk either way and a denizen in the lava is drawn out by us moving on. What it does is PLAN: if
+the description carried "Molten lava bubbles and churns." (trigger `mnemosyne/090`, live-captured
+2026-09-18), `ataxiaTemp.mnemLavaPlan` records the forward door -- any planar exit of the glanced
+room other than the one we enter by, sorted -- and `onLava` fires that door on the splash line
+instead of deriving one under fire. A dead-end lava room yields an empty plan and is still entered;
+the chooser then picks back, which the user accepted.
+
+The exits line reaches the explorer through the same one-shot glance token 005 already spends to
+keep a neighbour's exits off our own room (v4.7.262) -- the token existed to DISCARD that line; it
+now also PUBLISHES it, guarded so 005 stays independent of 008. Bounded by the timeout because
+BLIND is up on Monk/BM now (v4.7.315) and a glance that prints nothing must not stall the sweep.
+Off switch: `ataxia.settings.reporting.glance = false` (no alias; it is a field). Denizens are
+deliberately NOT parsed out of the glanced prose in this version -- the corpse lines alone make
+that a parser with its own failure modes.
+
+### Deep review: four hardenings, each break-back verified
+
+The six-agent review hit the weekly API limit before any agent reported; the review was completed
+by hand against the same priorities. Four real defects, all in the new code:
+
+- **Trigger 090 could mark the neighbour as lava from OUR room's description.** The description
+  line prints for our own room too -- on arrival, on LOOK, on the watchdog's `ql` -- and
+  `onLavaSeen` set `g.lava` on ANY pending glance. It now requires the glance header's one-shot
+  token (`MAP._glanceSkip`, armed by trigger 071 and spent by the exits line) to be armed for the
+  pending direction: the description sits between those two lines, so an armed matching token is
+  the proof the line is the neighbour's.
+- **The 0.1s re-tick on resolve could kill an arrival settle.** `_scheduleTick` is last-call-wins
+  (v4.7.282). If a tumble, a drag or a denizen moved us mid-glance, the arrival had already
+  scheduled its `TICK_DELAY` settle; the resolve's re-tick would replace it and let the tick close
+  the settle before the new room's denizens loaded -- the v4.7.125/245 "landing settles, never
+  decides" class. The resolve now re-ticks only if we are still in the room we glanced from;
+  otherwise the arrival owns the clock.
+- **A wedged glance held the sweep forever.** The tick gate returned while `done` was false, and
+  the only release was the timeout timer -- lost, and nothing (not even the watchdog's tick) could
+  clear it. The gate now force-resolves a glance older than three times `GLANCE_TIMEOUT`.
+- **`_lavaExit`'s forward pass was blind to a known lava EDGE.** It tested `lavaRooms[_exitTarget]`,
+  and `_exitTarget` is nil for a prose-sourced exit -- so a neighbour we had previously splashed
+  into FROM THIS ROOM (remembered in `lavaEdges[cur][d]`, invisible to the room test) was a
+  candidate. `edgeIsLava` is the OR of both facts and is now used by the forward pass and by the
+  final fallback pass, which had carried the room-only test since v4.7.254. Two adjacent lava rooms
+  is exactly the case.
+
+Also verified by hand: `_inbound()` returns a LONG direction and the recorded origin key, so the
+plan match is like-for-like including under dead reckoning; `edgeIsLava` normalises its direction
+argument, so the patrol's short `steps[1]` is fine; a probe replicating the runner's load order
+shows `send`/`tempTimer`/`killTimer` leak from NO file after this change (the pcall it-wrapper
+holds). Five pre-existing `getEpoch` leaks exist in files this change does not touch
+(`test_basher_jester`, `test_curingset_state`, `test_denizen_parry`, `test_serpent_helpers`,
+`test_swarm_tactics`) -- recorded, not fixed here.
+
+### Known, not fixed
+
+If the boss spawns in a lava room, the patrol can no longer reach it -- that is the honest
+"MOVE MANUALLY" case, not a room to keep dying in. And a denizen that stays in the lava rather
+than following us out cannot be cleared by the sweep; the user's plan is that roaming denizens
+chase, so we fight it in the next room. The lava description wording is one sample. Two adjacent
+lava rooms entered within `LAVA_EPISODE_GAP` share one episode, so the second room's plan is not
+consulted (`first` is false) and the remembered door from the first is re-validated against the
+second room's exits instead -- pre-existing shape, usually "keep going the same way".
+
+### Files
+
+- `mnemosyne/008_Explorer.lua` -- `_lavaExit` forward pass; `_nextPatrolStep` lava target + edge
+  checks; glance recon (`_glanceWanted`/`_glanceStart`/`_glanceResolve`/`_onGlanceExits`/
+  `onLavaSeen`, `GLANCE_TIMEOUT`) and the plan consumed by `onLava`.
+- `mnemosyne/005_Ripple_Map.lua` -- the glance token now publishes the glanced exits.
+- `mnemosyne/090_Lava_Seen.lua` -- new.
+- `tests/test_mnemosyne.lua` -- 18 new tests. **All break-back verified**, including that the
+  patrol target-skip is defended by a scenario the edge check cannot see, that the walked-door
+  exemption is defended by a backtrack (the only path that returns a walked door), and one test
+  per review hardening.
+
+---
+
 ## 2026-09-17 - The trance is measured, and the landed lines are captured (v4.7.317)
 
 User pasted a live BLIND capture, which closes the last two open items on the sense keepers.
