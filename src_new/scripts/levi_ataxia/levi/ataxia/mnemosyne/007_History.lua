@@ -182,7 +182,17 @@ function M._learnBoon(name, description, rarity, maxEchoes, extra)
   local rec = M.history.boonLibrary[name] or {}
   if type(description) == "string" and description ~= "" then rec.description = description end
   if type(rarity) == "string" and rarity ~= "" then rec.rarity = rarity:lower() end
-  if tonumber(maxEchoes) then rec.maxEchoes = tonumber(maxEchoes) end
+  if tonumber(maxEchoes) then
+    -- ECHO FLOOR (v4.7.326 review). "Can echo: Yes" with no "Maximum echoes" line parses as 1: a
+    -- floor, not a count. Flagged so the offer screen says "can echo" rather than "(max 1)", and
+    -- never allowed to replace a real count we already hold.
+    local floor = type(extra) == "table" and extra.echoFloor == true
+    if not floor then
+      rec.maxEchoes, rec.echoFloor = tonumber(maxEchoes), nil
+    elseif rec.maxEchoes == nil or rec.echoFloor == true then
+      rec.maxEchoes, rec.echoFloor = tonumber(maxEchoes), true
+    end
+  end
   if type(extra) == "table" then
     for _, f in ipairs(EXTRA_STRINGS) do
       if type(extra[f]) == "string" and extra[f] ~= "" then rec[f] = extra[f] end
@@ -360,7 +370,7 @@ end
 -- catalogue would round-trip through save/load LOSING them. A merge that enumerates its fields
 -- inline is a merge that goes stale the next time the record grows.
 M.BOON_DB_FIELDS = { "description", "rarity", "maxEchoes", "quote", "category",
-                     "unlockedBy", "conflictsWith", "comboBoon" }
+                     "unlockedBy", "conflictsWith", "comboBoon", "echoFloor" }
 -- `comboBoon` (v4.7.322) is a boolean. The merge below already treats `false` as FILLED (it is not
 -- nil, "" or an empty table) and `mergeValue` passes it through, so a known "No" survives
 -- save/load and is never overwritten by an import.
@@ -392,7 +402,7 @@ end
 -- only `_enrichOffer`'s own type test kept it off the wire. A value of the wrong type is now no
 -- value -- not merged, and an existing one does not count as filled. Only the non-string fields
 -- are listed; the rest keep their existing behaviour.
-local FIELD_TYPE = { comboBoon = "boolean", conflictsWith = "table" }
+local FIELD_TYPE = { comboBoon = "boolean", conflictsWith = "table", echoFloor = "boolean" }
 local function typed(f, v)
   local want = FIELD_TYPE[f]
   if want and v ~= nil and type(v) ~= want then return nil end

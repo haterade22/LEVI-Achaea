@@ -50,7 +50,7 @@ A description is shown once, on a screen gone a second later, so the catalogue c
 
 | Command | Effect |
 |---|---|
-| `mnem boonfill` | contemplate `BOON_FILL_BATCH` (8) boons: undescribed ones first, then the rest of the catalogue, never-contemplated first then STALEST (v4.7.324: a cycle -- the game keeps changing boons). A whole contemplate updates text, combo status, quote and category and echoes `<name> changed`. Offered boons are contemplated automatically after every offer screen |
+| `mnem boonfill` | contemplate `BOON_FILL_BATCH` (8) boons: undescribed ones first, then the rest of the catalogue, never-contemplated first then STALEST (v4.7.324: a cycle -- the game keeps changing boons). A whole contemplate updates text, combo status, quote and category and echoes `<name> changed`. Offered boons are contemplated automatically after every offer screen. Every contemplate -- these, the automatic ones, or one typed by hand -- gets a one-line call-out beneath it: COMBO boon, can echo (max N), conflicts (v4.7.326). Refused while another contemplation is running (one chain at a time) |
 | `mnem boonfill all` | all of them -- opt-in, for a quiet moment (~350 on a mature catalogue) |
 | `mnem boonfill gaps` | name what is missing and count the contemplate cycle, spending no command |
 | `mnem boonfill recheck` | restart the contemplate cycle; answers already learned are kept |

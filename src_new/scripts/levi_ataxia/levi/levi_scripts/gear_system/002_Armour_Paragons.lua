@@ -170,9 +170,10 @@ end
 function ataxia.armour.seedDefaults()
   if next(ataxia.armour.config.profiles) then return end
 
-  -- Slots are paragon TYPE NAMES (v4.7.323): inserts go by name, so the defaults work for any
-  -- character that owns the paragons. They used to be one character's item ids, which named
-  -- nothing on anyone else's account.
+  -- Slots are paragon TYPE NAMES (v4.7.323), so the defaults work for any character that owns
+  -- the paragons: the swap inserts the id `ii paragon` shows for a paragon of that type (v4.7.326 --
+  -- the bare word is refused for two-word paragons). They used to be one character's item ids,
+  -- which named nothing on anyone else's account.
   ataxia.armour.config.profiles = {
     bash = {
       slots = {"icosagon", "serendipitous", "crucious"},
@@ -237,7 +238,8 @@ end
 --------------------------------------------------------------------------------
 
 -- v4.7.205: Achaea now accepts paragons BY NAME -- "INSERT CRUCIOUS INTO FULLPLATE" works
--- without knowing the ID. So a profile slot may now hold either a registered id
+-- without knowing the ID. (v4.7.326: only where the TYPE word is the item's keyword -- "insert
+-- icosagon" and "insert metalliferous" are refused, so inserts use ids; see planSwap.) So a profile slot may now hold either a registered id
 -- (`paragon514466`) or a bare type keyword (`crucious`), and every reader has to cope with
 -- both. Resolution order: a registered id wins (it is proven to exist on this character),
 -- then a known type keyword, then the raw string.
@@ -476,6 +478,23 @@ function ataxia.armour.finishRefresh(ok)
   if cb then cb(ok) end
 end
 
+-- A registered id of this paragon TYPE (from `ii paragon` or a probe), lowest NUMBER first so the
+-- choice is stable ("paragon99" before "paragon100"). `busy` is a set of ids to pass over -- the ones
+-- still sitting in an embrasure this swap keeps, which cannot be inserted anywhere else. nil when we
+-- have registered none that is free.
+function ataxia.armour.idForType(k, busy)
+  if not k then return nil end
+  local ids = {}
+  for id in pairs(ataxia.armour.config.paragons or {}) do
+    local s = tostring(id)
+    if s:match("^paragon%d+$") and not (busy and busy[s]) and ataxia.armour.paragonKey(s) == k then
+      ids[#ids + 1] = s
+    end
+  end
+  table.sort(ids, function(a, b) return tonumber(a:match("%d+")) < tonumber(b:match("%d+")) end)
+  return ids[1]
+end
+
 -- WHAT A SWAP WILL DO, AS DATA (v4.7.323). Pure, so the suite tests the real decision -- the
 -- v4.7.212 tests had to copy this logic into the test file, and a copy cannot catch a regression.
 --
@@ -493,20 +512,24 @@ end
 --     this swap -- is MISSING: that embrasure is not touched at all, so it keeps its paragon
 --     instead of being emptied. Resolved to a fixed point, because keeping one slot can take away
 --     the paragon another slot was counting on.
---   * Inserts go BY NAME -- `insert crucious into armour embrasure 3` (user, v4.7.323; the game
---     has accepted names since v4.7.205). Any paragon of that type we hold will do, so a profile
---     is a list of TYPES rather than of one character's item ids, and an id the registry can
---     resolve inserts as its type. Only a paragon of a type we do not recognise falls back to its
---     id.
+--   * A profile is a list of TYPES: any paragon of that type we hold will do. But the INSERT
+--     names an ID (v4.7.326, from a live failure). v4.7.323 sent the type word -- "insert icosagon
+--     into armour embrasure 1" -- and the game refused it ("That is not a valid paragon.") for "an
+--     auspicious icosagon paragon" and "a resonate metalliferous paragon" while both sat in the
+--     inventory: the type word is the item's keyword only when the name IS one word ("a crucious
+--     paragon", v4.7.205's example). The swap had already pried, so the embrasures were left
+--     EMPTY. The id `ii paragon` lists always works, so the insert uses the id of the paragon of
+--     that type we actually HOLD; with no inventory answer, the profile's own id, else a
+--     registered id of that type, and only as a last resort the bare word.
 --   * Every pry goes out before every insert, so a paragon can move between embrasures.
 --   * Slots past the armour's embrasure count are skipped and reported.
 function ataxia.armour.planSwap(slots, cur, known, inventory, capacity)
   slots, cur = slots or {}, cur or {}
   local key = ataxia.armour.paragonKey
-  local function byName(want, fallback)
-    local k = key(want)
-    if k and ataxia.armour.PARAGON_TYPES[k] then return k end
-    return fallback or want
+  local function insertRef(want, pick, busy)
+    if pick then return pick end
+    if not ataxia.armour.isParagonTypeName(want) then return want end -- an id, or unrecognised
+    return ataxia.armour.idForType(key(want), busy) or want
   end
   local rows = {}
   for i = 1, 3 do
@@ -557,7 +580,7 @@ function ataxia.armour.planSwap(slots, cur, known, inventory, capacity)
             if not pick and #list > 0 then pick = table.remove(list, 1) end
           end
           if pick then
-            r.insert = byName(r.want, pick)
+            r.insert = insertRef(r.want, pick)
           else
             r.action, r.insert = "missing", nil
             settled = false
@@ -569,7 +592,13 @@ function ataxia.armour.planSwap(slots, cur, known, inventory, capacity)
       for i = 1, 3 do if rows[i].action == "change" then rows[i].insert = nil end end
     end
   else
-    for i = 1, 3 do if rows[i].action == "change" then rows[i].insert = byName(rows[i].want) end end
+    -- No inventory answer: a paragon still sitting in an embrasure we keep is not ours to insert.
+    local busy = {}
+    for i = 1, 3 do
+      local r = rows[i]
+      if r.have and not (r.action == "change" or r.action == "clear") then busy[tostring(r.have)] = true end
+    end
+    for i = 1, 3 do if rows[i].action == "change" then rows[i].insert = insertRef(rows[i].want, nil, busy) end end
   end
 
   local pries, inserts, missing, after = {}, {}, {}, {}
@@ -740,10 +769,16 @@ function ataxia.armour.swap(profileName)
       if planned or not (waited and answered) then return end
       planned = true
       local st = ataxia.armour.state
-      -- The inventory is only trusted from a refresh that ANSWERED: an unanswered `ii` is empty
-      -- for want of a reply, and reading it as "you own nothing" would refuse every insert.
+      -- No answer, no pries (v4.7.326 review). A pry goes out BEFORE its insert, so a swap planned
+      -- blind -- from an old probe, with ids that may since have moved or been sold -- is exactly
+      -- how v4.7.323 left embrasures EMPTY. Better to change nothing and say so.
+      if not freshOk then
+        st.swapping = false
+        return ataxia.armour.echo("<yellow>No answer from the armour probe -- not swapping paragons"
+          .. " (traits sent). Are you wearing it? Try again, or <white>armour probe<yellow>.")
+      end
       local plan = ataxia.armour.planSwap(profile.slots, st.currentSlots, st.slotsKnown == true,
-        freshOk and st.inventory or nil, freshOk and st.embrasures or nil)
+        st.inventory, st.embrasures)
       ataxia.armour.planReport(profileName, plan)
       if #plan.cmds > 0 then
         send(table.concat(plan.cmds, ";"))
