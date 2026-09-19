@@ -81,7 +81,9 @@ function M.help()
     { "mnem boonfill", "BOON CONTEMPLATE boons with no description, then every other boon, stalest first" },
     { "mnem affixes", "This run's active affixes (ongoing effects)" },
     { "mnem library", "All-time affix catalogue" },
-    { "mnem boondb [filter|export|import]", "All-time BOON catalogue (own file; filter matches name or effect)" },
+    { "mnem boondb [filter|export|import]", "All-time BOON catalogue (own file; filter matches name, effect or category)" },
+    { "mnem advise", "Score the last boon offer against what you hold (defence first) and recommend one" },
+    { "mnem boonweights", "Show the advisor's weights for your class" },
     { "mnem boonfill [gaps|all|<n>|unknown|retry <name>|recheck]", "Keep the boon catalogue current via BOON CONTEMPLATE: text, combo status, quote, category (offered boons are contemplated automatically); `unknown` lists names the game refused; `recheck` restarts the cycle" },
     { "mnem quiet [on|off]", "Silence auto boon/affix echoes (still records)" },
     { "mnem start | end", "Manually start / end a run" },
@@ -149,6 +151,32 @@ function M.command(rest)
       if M.auditSend then M.auditSend(true) end
     else
       if M.auditSend then M.auditSend(false) end
+    end
+  elseif cmd == "advise" or cmd == "recommend" then
+    -- The offer summary on demand (v4.7.327): it also prints by itself after every offer screen.
+    local list = (M._lastAdvice and M._lastAdvice.list) or (M.run and M.run.lastOffered)
+    if type(list) ~= "table" or #list == 0 then
+      M.echo("No boon offer to judge yet.")
+    elseif not M.offerSummary(list) then
+      M.echo("Nothing to score in the last offer.")
+    end
+  elseif cmd == "boonweights" or cmd == "weights" then
+    local W, class = M.boonWeights()
+    local keys = {}
+    for k in pairs(W) do keys[#keys + 1] = k end
+    table.sort(keys)
+    M.echo("<gold>Boon advisor weights<reset> -- " .. (class or "no class")
+      .. ((class and M.BOON_CLASS_WEIGHTS[class]) and " (class overrides on)" or " (default: defence first)"))
+    for _, k in ipairs(keys) do
+      local v = W[k]
+      if type(v) == "table" then
+        local sub = {}
+        for sk in pairs(v) do sub[#sub + 1] = sk end
+        table.sort(sub)
+        for i, sk in ipairs(sub) do sub[i] = sk .. "=" .. tostring(v[sk]) end
+        v = table.concat(sub, " ")
+      end
+      cecho("\n  <cyan>" .. k .. "<reset>  " .. tostring(v))
     end
   elseif cmd == "bonuses" or cmd == "bonus" then
     -- Bare `mnem bonuses` REPORTS rather than toggling, unlike `mnem map`. The panel is a

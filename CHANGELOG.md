@@ -2,6 +2,75 @@
 
 ---
 
+## 2026-09-19 - The boon advisor: every offer summarised, one recommended; categories in the boon database (v4.7.327)
+
+### The offer, summarised and judged
+
+User, after an offer screen and its contemplates: *"After it boon contemplates the boon selection, it
+should give us a summary of the options and information it collected. I would even want it to start
+recommending some boons."* Then: *"Defensive boons are a priority. To survive more"*, *"It depends on
+the boons we have"*, *"Each class will be different."*
+
+Once the offer's boons have been contemplated, one block (the user's live screen):
+
+```
+(MNEM): Boon options -- defence first:
+  1. Ashaxei's Mirror  Defence uncommon combo  score 36
+      When taking elemental damage greater than 20% of your health, gain 1 reflections.
+  2. Fae-Lapse  Utility rare echo x5  score 28
+      5% amnesia on hit
+  3. Haskor's Bravado  Offence uncommon echo x5  score 28
+      5% recklessness on hit
+  4. Restoration    score 8
+      restores your resources
+(MNEM): RECOMMEND Ashaxei's Mirror -- Defence; uncommon; combo (ahead of Fae-Lapse by 8).
+```
+
+- **Each option** shows its category, rarity, combo and echo status, what it does in short
+  (resistances, immunities, stats, damage, procs), and in red anything wrong with it: already
+  immune, conflicts with a boon you hold, inert without a Shaman spirit, a drawback.
+- **The score is a sum of named parts**, and the RECOMMEND line gives the biggest ones as its
+  reason. The default weighs **Defence first**. It is judged against **what you already hold**:
+  a resistance counts for less where you already resist that type, an immunity you already have
+  counts for nothing, and a category you hold fewer of gets a push.
+- **Restoration** wins when you are under half health.
+- **A reroll is suggested** only when every option is weak and the footer says one is left (new
+  trigger `mnemosyne/094` reads `(N remaining)`).
+- **Per class:** the weights are `M.BOON_WEIGHTS`, and `M.BOON_CLASS_WEIGHTS.<class>` overrides
+  only what differs. None are filled in yet -- class numbers should come from play.
+- **`mnem advise`** prints it again for the last offer; **`mnem boonweights`** shows the weights
+  in use for your class.
+- **It never claims.** An auto-picker is a later, opt-in step once these recommendations have
+  earned trust.
+
+It prints at the end of the offer's contemplate run (after its catalogue line, if any), or at
+once when no run starts.
+
+### Boon categories in the boon database
+
+User: *"For our boon database we should also capture the boons category! Offence, Defence, etc."*
+It was already saved from every contemplate (and sent to the tracker) -- it just never showed.
+`mnem boondb` now prints each boon's category, counts them in the header (with how many are not
+yet contemplated -- only CONTEMPLATE says), and its filter matches it: `mnem boondb offence`.
+
+### Verification
+
+2149 tests pass (15 new), including the user's live offer and Ashaxei's Mirror's real block. Every
+change was break-back verified: 19 mutants, all caught (one survived at first -- nothing tested
+that the offer screen's own chain carries the offer; a test now does).
+
+### Files
+
+- `mnemosyne/014_Boon_Advisor.lua`: new -- weights, `scoreBoon`, `rankOffer`, `offerSummary`.
+- `mnemosyne/004_Parsers.lua`: the chain carries `ctx.offered` and prints the summary at its end;
+  the offer flush prints it when no chain starts; a new screen resets the reroll count.
+- `mnemosyne/003_Commands.lua`: `mnem advise`, `mnem boonweights`.
+- `mnemosyne/007_History.lua`: categories in `mnem boondb`.
+- `triggers/.../mnemosyne/094_Boon_Rerolls_Left.lua`: new.
+- `tests/test_mnemosyne.lua`; docs; memory.
+
+---
+
 ## 2026-09-19 - The armour inserted by a name the game refuses; combo and echo called out (v4.7.326)
 
 ### The armour swap emptied two embrasures

@@ -2328,6 +2328,38 @@ describe("boon database", function()
     expect(blob:find("Plasmatic", 1, true) ~= nil).toBeTrue()
     expect(blob:find("Beeline", 1, true)).toBe(nil)
   end)
+
+  -- v4.7.327, user: "For our boon database we should also capture the boons category! Offence,
+  -- Defence, etc." It was stored since v4.7.298 but never shown, counted or searchable.
+  it("shows each boon's category, counts them, and filters on it", function()
+    lib({
+      ["Elder Wisdom"]      = { description = "The Jade Empress increases your intelligence by 1.", category = "Offence" },
+      ["Ashaxei's Mirror"]  = { description = "Gain 1 reflections.", category = "Defence" },
+      ["Fae-Lapse"]         = { description = "Amnesia.", category = "Utility" },
+      ["Unseen"]            = { description = "Never contemplated." },
+    })
+    local shown, said = {}, {}
+    local realEcho, realCecho = M.echo, cecho
+    M.echo = function(m) said[#said + 1] = tostring(m) end
+    cecho = function(s) shown[#shown + 1] = tostring(s) end
+    local ok, err = pcall(function()
+      M.reportBoonDb()
+      local all = table.concat(shown, " ")
+      expect(all:find("Elder Wisdom<reset>", 1, true) ~= nil).toBeTrue()
+      expect(all:find("<white>Offence", 1, true) ~= nil).toBeTrue()
+      local header = table.concat(said, " ")
+      expect(header:find("<white>Defence<grey> 1", 1, true) ~= nil).toBeTrue()
+      expect(header:find("1 not yet contemplated", 1, true) ~= nil).toBeTrue()
+      shown = {}
+      M.reportBoonDb("offence")
+      local only = table.concat(shown, " ")
+      expect(only:find("Elder Wisdom", 1, true) ~= nil).toBeTrue()
+      expect(only:find("Mirror", 1, true)).toBe(nil)
+      expect(M.boonDbStats().categories.Utility).toBe(1)
+    end)
+    M.echo, cecho = realEcho, realCecho
+    if not ok then error(err, 0) end
+  end)
 end)
 
 -- THE SEED CATALOGUE (v4.7.240): 294 boons from the community database at
@@ -7909,5 +7941,245 @@ describe("Sharp Mind latches through the boon registry", function()
     M.clearBoonFlags()
     expect(mnemSharpMind).toBeFalse()
     mnemSharpMind = nil
+  end)
+end)
+
+-- ---------------------------------------------------------------------------
+-- v4.7.327: the boon advisor. User: "After it boon contemplates the boon selection, it should give
+-- us a summary ... start recommending some boons" -- "Defensive boons are a priority" -- "It
+-- depends on the boons we have" -- "Each class will be different."
+-- ---------------------------------------------------------------------------
+dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/011_Bonuses.lua")
+dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/014_Boon_Advisor.lua")
+
+-- The user's live screen (2026-09-19), as the catalogue knew it after the contemplates.
+local LIVE_LIB = {
+  ["Haskor's Bravado"] = { description = "Your attacks have a 5% chance to afflict the target with recklessness. This may only occur every 5 seconds.",
+                           category = "Offence", rarity = "uncommon", maxEchoes = 5 },
+  ["Fae-Lapse"] = { description = "There is a 5% chance you give the denizen you are attacking amnesia. This may only occur every 5 seconds.",
+                    category = "Utility", rarity = "rare", maxEchoes = 5 },
+  ["Ashaxei's Mirror"] = { description = "When taking elemental damage greater than 20% of your health, gain 1 reflections.",
+                           category = "Defence", rarity = "uncommon", comboBoon = true, maxEchoes = 0 },
+  ["Restoration"] = { description = "Restore your resources instead." },
+}
+local LIVE_OFFER = { { name = "Haskor's Bravado" }, { name = "Fae-Lapse" }, { name = "Ashaxei's Mirror" }, { name = "Restoration" } }
+
+-- Ashaxei's Mirror's real contemplate block (the same screenshot).
+local MIRROR = {
+  "Rarity:             uncommon",
+  "Category:           Defence",
+  "Combo Boon?:        Yes",
+  "Can echo:           No",
+  "",
+  "When taking elemental damage greater than 20% of your health, gain 1 reflections.",
+  "",
+  "\"In the seventh century after Seleucar's fall, the White Dragon fell to the machinations of the vile Dala'myrr,",
+  "perishing over desert sands.\"",
+}
+
+-- A fresh copy per test: a contemplate WRITES into the library, and a shared fixture would carry
+-- one test's learning into the next.
+local function copyLib(lib)
+  local out = {}
+  for name, rec in pairs(lib) do
+    local r = {}
+    for k, v in pairs(rec) do r[k] = v end
+    out[name] = r
+  end
+  return out
+end
+
+describe("the boon advisor", function()
+  -- Every piece of shared state these tests touch, put back even if a test throws.
+  local function advising(opts, fn)
+    local saved = { claims = M.history.claims, run = M.history.run, active = M.run and M.run.active,
+                    gmcp = gmcp, rerolls = M._rerollsLeft, classW = M.BOON_CLASS_WEIGHTS,
+                    echo = M.echo, cecho = cecho, advice = M._lastAdvice }
+    local said = {}
+    M.history.claims = opts.claims or {}
+    M.history.run = 9
+    M.run = M.run or {}
+    M.run.active = true
+    gmcp = { Char = { Status = { class = opts.class }, Vitals = opts.vitals or { hp = "100", maxhp = "100" } } }
+    M._rerollsLeft = opts.rerolls
+    M.BOON_CLASS_WEIGHTS = opts.classWeights or {}
+    M.echo = function(m) said[#said + 1] = tostring(m) end
+    cecho = function(m) said[#said + 1] = tostring(m) end
+    local ok, res = pcall(function()
+      local out
+      withLibrary(copyLib(opts.lib or LIVE_LIB), function()
+        withSeed(opts.seed or {}, function() out = fn() end)
+      end)
+      return out
+    end)
+    M.history.claims, M.history.run, M.run.active = saved.claims, saved.run, saved.active
+    gmcp, M._rerollsLeft, M.BOON_CLASS_WEIGHTS = saved.gmcp, saved.rerolls, saved.classW
+    M.echo, cecho, M._lastAdvice = saved.echo, saved.cecho, saved.advice
+    if not ok then error(res, 0) end
+    return res, table.concat(said, "\n")
+  end
+  local function claim(name) return { name = name, run = 9 } end
+
+  it("the user's live screen: defence first recommends Ashaxei's Mirror, and says why", function()
+    local ranked, out = advising({}, function() return M.offerSummary(LIVE_OFFER) end)
+    expect(ranked[1].name).toBe("Ashaxei's Mirror")
+    expect(out:find("RECOMMEND<reset> <gold>Ashaxei's Mirror", 1, true) ~= nil).toBeTrue()
+    expect(out:find("Defence", 1, true) ~= nil).toBeTrue()
+    expect(out:find("5% recklessness on hit", 1, true) ~= nil).toBeTrue() -- what Bravado does, in short
+    expect(out:find("5% amnesia on hit", 1, true) ~= nil).toBeTrue() -- Fae-Lapse's other wording
+    expect(out:find("<pale_green>combo", 1, true) ~= nil).toBeTrue()
+    expect(#ranked).toBe(4)
+  end)
+
+  it("an immunity we already have is worth nothing, and says so", function()
+    local lib = { ["Plasmatic"] = { description = "You are immune to the haemophilia affliction.", category = "Defence" },
+                  ["Held Blood"] = { description = "You are immune to the haemophilia affliction." },
+                  ["Quill"] = { description = "You are immune to the amnesia affliction.", category = "Defence" } }
+    local ranked = advising({ lib = lib, claims = { claim("Held Blood") } }, function()
+      return M.rankOffer({ "Plasmatic", "Quill" })
+    end)
+    expect(ranked[1].name).toBe("Quill")
+    expect(table.concat(ranked[2].flags, " "):find("already immune to haemophilia", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("a boon that conflicts with one we hold goes to the bottom, flagged", function()
+    local lib = { ["Careless Whisperer"] = { description = "d", category = "Defence", conflictsWith = { "Truther" } },
+                  ["Truther"] = { description = "d" }, ["Plain Offence"] = { description = "d", category = "Offence" } }
+    local ranked = advising({ lib = lib, claims = { claim("Truther") } }, function()
+      return M.rankOffer({ "Careless Whisperer", "Plain Offence" })
+    end)
+    expect(ranked[2].name).toBe("Careless Whisperer")
+    expect(table.concat(ranked[2].flags, " "):find("CONFLICTS with Truther", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("a resistance counts for less where we already resist that type", function()
+    local lib = { ["Fire Held"] = { description = "Gain 30% resistance to fire damage." },
+                  ["More Fire"] = { description = "Gain 20% resistance to fire damage.", category = "Defence" },
+                  ["Some Cold"] = { description = "Gain 20% resistance to cold damage.", category = "Defence" } }
+    local seed = { ["Fire Held"] = { description = "Gain 30% resistance to fire damage." } }
+    local ranked = advising({ lib = lib, seed = seed, claims = { claim("Fire Held") } }, function()
+      return M.rankOffer({ "More Fire", "Some Cold" })
+    end)
+    expect(ranked[1].name).toBe("Some Cold")
+    expect(ranked[1].score > ranked[2].score).toBeTrue()
+  end)
+
+  it("a category we are short of gets a push", function()
+    local lib = { ["O1"] = { description = "d", category = "Offence" }, ["O2"] = { description = "d", category = "Offence" },
+                  ["Shield"] = { description = "d", category = "Defence" } }
+    local ranked = advising({ lib = lib, claims = { claim("O1"), claim("O2") } }, function()
+      return M.rankOffer({ "Shield" })
+    end)
+    local why = {}
+    for _, p in ipairs(ranked[1].parts) do why[#why + 1] = p.why end
+    expect(table.concat(why, "; "):find("you hold fewer Defence boons", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("each class can weigh it differently: a class override wins over the default", function()
+    local lib = { ["Hit Hard"] = { description = "d", category = "Offence" }, ["Stand Firm"] = { description = "d", category = "Defence" } }
+    local def = advising({ lib = lib, class = "Bard" }, function() return M.rankOffer({ "Hit Hard", "Stand Firm" }) end)
+    local bard = advising({ lib = lib, class = "Bard", classWeights = { bard = { category = { offence = 60 } } } },
+      function() return M.rankOffer({ "Hit Hard", "Stand Firm" }) end)
+    expect(def[1].name).toBe("Stand Firm")
+    expect(bard[1].name).toBe("Hit Hard")
+    -- only what the class changes: the rest of the table is still the default
+    local W = advising({ class = "Bard", classWeights = { bard = { category = { offence = 60 } } } },
+      function() return M.boonWeights() end)
+    expect(W.category.defence).toBe(M.BOON_WEIGHTS.category.defence)
+    expect(W.drawback).toBe(M.BOON_WEIGHTS.drawback)
+  end)
+
+  it("Restoration wins when we are hurt, and not when we are healthy", function()
+    local healthy = advising({}, function() return M.rankOffer(LIVE_OFFER) end)
+    local hurt = advising({ vitals = { hp = "3000", maxhp = "10000" } }, function() return M.rankOffer(LIVE_OFFER) end)
+    expect(healthy[1].name ~= "Restoration").toBeTrue()
+    expect(hurt[1].name).toBe("Restoration")
+  end)
+
+  it("suggests a reroll only when every option is weak AND one is left", function()
+    local lib = { ["Meh"] = { description = "You may now utilise prism tattoos." } }
+    local _, withOne = advising({ lib = lib, rerolls = 1 }, function() return M.offerSummary({ "Meh" }) end)
+    local _, none = advising({ lib = lib, rerolls = 0 }, function() return M.offerSummary({ "Meh" }) end)
+    local _, strong = advising({ rerolls = 1 }, function() return M.offerSummary(LIVE_OFFER) end)
+    expect(withOne:find("BOON REROLL", 1, true) ~= nil).toBeTrue()
+    expect(none:find("BOON REROLL", 1, true)).toBeNil()
+    expect(strong:find("BOON REROLL", 1, true)).toBeNil()
+  end)
+
+  it("prints when the offer's contemplate chain ends, quiet chain or not", function()
+    local _, out = advising({}, function()
+      local collect = M.echo
+      withContemplate(MIRROR, function()
+        M.echo = collect -- withContemplate installs its own collector; read everything in one place
+        local ctx = M._fillCtx({ ["Ashaxei's Mirror"] = true }, true)
+        ctx.offered = LIVE_OFFER
+        M._boonFillNext({ "Ashaxei's Mirror" }, 1, 0, ctx)
+      end)
+    end)
+    expect(out:find("RECOMMEND<reset> <gold>Ashaxei's Mirror", 1, true) ~= nil).toBeTrue()
+    expect(out:find("Boon catalogue updated", 1, true)).toBeNil() -- a quiet chain: only the summary
+  end)
+
+  it("the offer screen's own chain carries the offer to its end", function()
+    local realGaps, realBusy = M.boonGaps, M._fillBusyAt
+    local _, out = advising({}, function()
+      local collect = M.echo
+      M.boonGaps = function() return {} end
+      M._fillBusyAt, M._capturing = nil, false
+      withContemplate(MIRROR, function()
+        M.echo = collect
+        expect(M._boonScreenContemplate(LIVE_OFFER)).toBeTrue()
+      end)
+    end)
+    M.boonGaps, M._fillBusyAt = realGaps, realBusy
+    expect(out:find("RECOMMEND", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("prints at once when no contemplate chain starts", function()
+    local realScreen, realPost, realTimer, realIdle = M._boonScreenContemplate, M._reportBoonsOfferedEnriched, tempTimer, M.BOON_FILL_IDLE
+    local _, out = advising({}, function()
+      M._boonScreenContemplate = function() return false end -- the slot was busy
+      M._reportBoonsOfferedEnriched = function() end
+      tempTimer = function(_, f) f(); return 1 end
+      M.BOON_FILL_IDLE = 1
+      M._pendingOffer = LIVE_OFFER
+      local ok, err = pcall(M._flushPendingOffer, "test")
+      M._boonScreenContemplate, M._reportBoonsOfferedEnriched, tempTimer, M.BOON_FILL_IDLE = realScreen, realPost, realTimer, realIdle
+      if not ok then error(err, 0) end
+    end)
+    expect(out:find("RECOMMEND<reset> <gold>Ashaxei's Mirror", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("mnem advise re-prints the last offer", function()
+    local _, out = advising({}, function()
+      M._lastAdvice = { list = LIVE_OFFER }
+      M.command("advise")
+    end)
+    expect(out:find("RECOMMEND", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("trigger 094 reads the reroll count off the footer", function()
+    local f = io.open("src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/094_Boon_Rerolls_Left.lua")
+    local src = f:read("*a"); f:close()
+    expect(src:find("- pattern: ^BOON REROLL to discard these options and see new ones \\((\\d+) remaining\\)", 1, true) ~= nil).toBeTrue()
+    local savedMatches, savedAtaxia, savedLeft = matches, ataxia, M._rerollsLeft
+    ataxia = { mnemosyne = M }
+    matches = { "BOON REROLL to discard these options and see new ones (1 remaining)", "1" }
+    local ok, err = pcall(dofile, "src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/094_Boon_Rerolls_Left.lua")
+    local got = M._rerollsLeft
+    matches, ataxia, M._rerollsLeft = savedMatches, savedAtaxia, savedLeft
+    if not ok then error(err, 0) end
+    expect(got).toBe(1)
+  end)
+
+  it("a new offer screen forgets the last screen's count", function()
+    local saved = M._rerollsLeft
+    M._rerollsLeft = 3
+    local ok, err = pcall(M.onBoonsOffered)
+    local got = M._rerollsLeft
+    if M._captureForceFinish then pcall(M._captureForceFinish) end
+    M._pendingOffer, M._rerollsLeft = nil, saved
+    if not ok then error(err, 0) end
+    expect(got).toBeNil()
   end)
 end)

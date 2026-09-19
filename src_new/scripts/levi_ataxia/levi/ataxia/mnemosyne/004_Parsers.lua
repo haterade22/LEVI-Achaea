@@ -1979,6 +1979,7 @@ function M._rerollBump(list)
 end
 
 function M.onBoonsOffered()
+  M._rerollsLeft = nil -- this screen's footer says it again (trigger 094)
   local seenDash = false
   M._captureLines({
     timeout = 3,
@@ -2293,7 +2294,10 @@ function M._flushPendingOffer(why)
   -- refuses if anything has taken the slot in the meantime and stops at GO!.
   if tempTimer and M.BOON_FILL_IDLE then
     tempTimer(M.BOON_FILL_IDLE, function()
-      if M._boonScreenContemplate then pcall(M._boonScreenContemplate, list) end
+      local ok, started = false, false
+      if M._boonScreenContemplate then ok, started = pcall(M._boonScreenContemplate, list) end
+      -- No chain means no chain END to print the summary at (v4.7.327): print it now.
+      if not (ok and started) and M.offerSummary then pcall(M.offerSummary, list) end
     end)
   end
   return true
@@ -2514,7 +2518,9 @@ function M._boonScreenContemplate(list)
     if not queued[gap] then todo[#todo + 1] = gap; break end
   end
   if #todo == 0 then return false end
-  M._boonFillNext(todo, 1, 0, M._fillCtx(meta, true))
+  local ctx = M._fillCtx(meta, true)
+  ctx.offered = list -- the advisor's summary prints when this chain ends (v4.7.327)
+  M._boonFillNext(todo, 1, 0, ctx)
   return true
 end
 
@@ -2545,8 +2551,13 @@ function M._boonFillNext(todo, i, learned, ctx)
   if i > #todo then
     M._fillBusyAt = nil
     M._historySave()
+    -- THE OFFER'S SUMMARY (v4.7.327): everything the chain just learned, judged. After the
+    -- catalogue line when there is one, and even when the chain itself had nothing to say.
+    local function advise()
+      if ctx and ctx.offered and M.offerSummary then pcall(M.offerSummary, ctx.offered) end
+    end
     local quiet = ctx and ctx.auto and learned == 0 and #ctx.changed == 0
-    if quiet then return end
+    if quiet then return advise() end
     local msg = "Boon catalogue updated: <cyan>" .. learned .. "<grey> learned."
     if ctx and ctx.checked > 0 then
       msg = msg .. " Contemplated <cyan>" .. ctx.checked .. "<grey>; <cyan>" .. #ctx.changed
@@ -2557,7 +2568,8 @@ function M._boonFillNext(todo, i, learned, ctx)
           .. " offer screen rather than CONTEMPLATE."
       end
     end
-    return M.echo(msg .. " Run <cyan>BOONS<grey> to see them.")
+    M.echo(msg .. " Run <cyan>BOONS<grey> to see them.")
+    return advise()
   end
   -- NEVER TAKE THE SLOT FROM ANOTHER CAPTURE (v4.7.324). `_captureLines` force-finishes whatever
   -- holds it, so a contemplate started mid-WADE-STATUS would cut that capture short. Wait for it;
