@@ -1402,30 +1402,9 @@ function M._fmtConflicts(names, held, offered)
   return table.concat(parts, ", ")
 end
 
--- The OFFER screen: for each offered boon with a known conflict, say so -- loudly when we hold the
--- other side, since that is the one that decides the pick.
-function M._echoConflicts(list)
-  local held = M._heldBoons()
-  local offered = {}
-  for _, b in ipairs(list or {}) do
-    local n = M._baseBoonName(type(b) == "table" and b.name or nil)
-    if n then offered[n] = true end
-  end
-  for _, b in ipairs(list or {}) do
-    local name = M._baseBoonName(type(b) == "table" and b.name or nil)
-    local cw = name and M._conflictsFor(name, held) or {}
-    if #cw > 0 then
-      local others, hit = {}, false
-      for n in pairs(offered) do if n ~= name then others[n] = true end end
-      for _, n in ipairs(cw) do if held[n] then hit = true end end
-      M.echo((hit and "<indian_red>CONFLICT<reset> -- " or "") .. "<gold>" .. name
-        .. "<reset> conflicts with " .. M._fmtConflicts(cw, held, others) .. ".")
-    end
-  end
-end
-
 -- The CONTEMPLATE line itself (trigger mnemosyne/092), for any contemplate -- ours or typed by hand.
--- Highlights each conflicting name in the line and echoes the list beneath it.
+-- Highlights each conflicting name in the line -- red if we hold it, gold otherwise, the same
+-- colours the summary uses -- and adds the list to the block's summary line.
 function M.onConflictsLine(value)
   if type(value) ~= "string" then return end
   local low = value:gsub("[%s%.]+$", ""):lower()
@@ -1436,7 +1415,7 @@ function M.onConflictsLine(value)
   if selectString and fg then
     for _, n in ipairs(names) do
       if selectString(n, 1) > -1 then
-        fg(held[n] and "red" or "yellow")
+        fg(held[n] and "red" or "gold")
         if setBold then setBold(true) end
         if deselect then deselect() end
         if resetFormat then resetFormat() end
@@ -1445,9 +1424,148 @@ function M.onConflictsLine(value)
   end
   local hit = false
   for _, n in ipairs(names) do if held[n] then hit = true end end
-  M.echo((hit and "<indian_red>CONFLICT<reset> -- " or "") .. "conflicts with "
-    .. M._fmtConflicts(names, held) .. ".")
+  -- Into the block's one summary line (v4.7.326), beside its combo and echo call-outs.
+  M._calloutAdd("conflicts", "conflicts with " .. M._fmtConflicts(names, held), hit)
 end
+
+-- ---------------------------------------------------------------------------
+-- CONTEMPLATE CALL-OUTS: combo, echo, conflicts (v4.7.326, user-directed)
+-- ---------------------------------------------------------------------------
+-- User, with Flameheart's block: "Also should called out if the boon can combo and echo."
+--
+--   Rarity:             uncommon
+--   Category:           Utility
+--   Combo Boon?:        Yes
+--   Can echo:           No
+--
+-- (Which also PROVES "Combo Boon?" is a CONTEMPLATE line -- v4.7.322 only had the tracker's glued
+-- text to go on.) Each meta line is highlighted where it stands, and the block gets ONE summary
+-- line beneath it, printed when the block ENDS: at its closing divider, or at the `Rarity:` line
+-- that opens the next block. Both boundaries matter because the call-outs are module-global and a
+-- contemplate chain sends the next block 0.5s after the last one closed -- without a boundary, two
+-- blocks could merge into one summary under the wrong boon (review, v4.7.326). The quiet timer is
+-- only the backstop for a block that never closes; it stays under the chain's 0.5s spacing.
+local CALLOUT_ORDER = { "combo", "echo", "conflicts" }
+local CALLOUT_QUIET = 0.4
+
+-- A reload must not inherit a half-gathered block or a timer from the old copy of this file.
+if M._calloutT and killTimer then pcall(killTimer, M._calloutT) end
+M._callout, M._calloutT = nil, nil
+
+function M._calloutAdd(key, text, hit)
+  M._callout = M._callout or {}
+  M._callout[key] = text
+  if hit then M._callout.hit = true end
+  if M._calloutT then pcall(killTimer, M._calloutT) end
+  M._calloutT = tempTimer(CALLOUT_QUIET, function()
+    M._calloutT = nil
+    M._calloutFlush()
+  end)
+end
+
+function M._calloutFlush()
+  if M._calloutT then
+    if killTimer then pcall(killTimer, M._calloutT) end
+    M._calloutT = nil
+  end
+  local c = M._callout
+  M._callout = nil
+  if not c then return end
+  local parts = {}
+  for _, k in ipairs(CALLOUT_ORDER) do if c[k] then parts[#parts + 1] = c[k] end end
+  if #parts == 0 then return end
+  M.echo((c.hit and "<indian_red>CONFLICT<reset> -- " or "") .. table.concat(parts, "<reset>; ") .. "<reset>.")
+end
+
+-- Colour one word of the line being printed, if the game's line holds it.
+local function highlight(word, colour)
+  if not (selectString and fg) then return end
+  if selectString(word, 1) > -1 then
+    fg(colour)
+    if setBold then setBold(true) end
+    if deselect then deselect() end
+    if resetFormat then resetFormat() end
+  end
+end
+
+local YES = { yes = true }
+
+-- One meta line of a contemplate (trigger mnemosyne/093), classified here.
+function M.onCalloutLine(ln)
+  if type(ln) ~= "string" then return end
+  -- A block boundary: whatever the last block gathered is printed now, under that block.
+  if ln:match("^%-%-%-") or ln:match("^Rarity:") then
+    if M._callout or M._calloutT then M._calloutFlush() end
+    return
+  end
+  local v = ln:match("^Combo Boon%?:%s+(%a+)")
+  if v then
+    if YES[v:lower()] then
+      highlight(v, "green")
+      M._calloutAdd("combo", "<pale_green>COMBO boon")
+    end
+    return
+  end
+  v = ln:match("^Can echo:%s+(%a+)")
+  if v then
+    if YES[v:lower()] then
+      highlight(v, "cyan")
+      -- A "Maximum echoes: N" line, if one follows, refines this.
+      if not (M._callout and M._callout.echo) then M._calloutAdd("echo", "<cyan>can echo") end
+    end
+    return
+  end
+  v = ln:match("^Maximum echoes:%s+(%d+)")
+  if v then
+    highlight(v, "cyan")
+    M._calloutAdd("echo", "<cyan>can echo (max " .. v .. ")")
+  end
+end
+
+-- The same call-outs for the OFFER screen, from what the catalogue knows: combo status, how many
+-- echoes the boon allows (or the seed's echo text), and its conflicts -- with a boon we hold in
+-- red and one also on this screen in yellow. One line per offered boon that has anything to say.
+function M._echoBoonCallouts(list)
+  local held = M._heldBoons()
+  local offered = {}
+  for _, b in ipairs(list or {}) do
+    local n = M._baseBoonName(type(b) == "table" and b.name or nil)
+    if n then offered[n] = true end
+  end
+  for _, b in ipairs(list or {}) do
+    local name = M._baseBoonName(type(b) == "table" and b.name or nil)
+    if name then
+      local rec = M.boonInfo and M.boonInfo(name)
+      rec = type(rec) == "table" and rec or {}
+      local parts, hit = {}, false
+      if rec.comboBoon == true then parts[#parts + 1] = "<pale_green>COMBO boon<reset>" end
+      local maxE = tonumber(rec.maxEchoes)
+      local seed = M.BOON_SEED and M.BOON_SEED[name]
+      if maxE and maxE > 0 then
+        -- A 1 learned from a bare "Can echo: Yes" is a floor, not a count (`echoFloor`).
+        if rec.echoFloor == true and maxE == 1 then
+          parts[#parts + 1] = "<cyan>can echo<reset>"
+        else
+          parts[#parts + 1] = "<cyan>can echo (max " .. maxE .. ")<reset>"
+        end
+      elseif maxE == nil and type(seed) == "table" and type(seed.echo) == "string" and seed.echo ~= "" then
+        parts[#parts + 1] = "<cyan>can echo<reset>"
+      end
+      local cw = M._conflictsFor(name, held)
+      if #cw > 0 then
+        local others = {}
+        for n in pairs(offered) do if n ~= name then others[n] = true end end
+        for _, n in ipairs(cw) do if held[n] then hit = true end end
+        parts[#parts + 1] = "conflicts with " .. M._fmtConflicts(cw, held, others)
+      end
+      if #parts > 0 then
+        M.echo((hit and "<indian_red>CONFLICT<reset> -- " or "") .. "<gold>" .. name .. "<reset> -- "
+          .. table.concat(parts, "; ") .. ".")
+      end
+    end
+  end
+end
+
 
 -- { [affliction] = <boon that granted it> } for the CURRENT run. Empty table when none.
 function M.runImmunities()
@@ -1895,7 +2013,7 @@ function M.onBoonsOffered()
       -- the capture that feeds the catalogue and the API.
       if M._echoImmunities then pcall(M._echoImmunities, list) end
       if M._echoAttuneGated then pcall(M._echoAttuneGated, list) end
-      if M._echoConflicts then pcall(M._echoConflicts, list) end -- v4.7.325
+      if M._echoBoonCallouts then pcall(M._echoBoonCallouts, list) end -- v4.7.325/326: conflicts, combo, echo
 
       -- Everything below is telemetry.
       if not M._inRun() then return end
@@ -2332,6 +2450,9 @@ end
 M.BOON_FILL_BATCH = 8
 
 function M.boonFill(limit)
+  if M._fillBusy() then
+    return M.echo("A boon contemplation is already running -- <cyan>mnem boonfill<grey> again once it finishes.")
+  end
   local gaps = M.boonGaps()
   local metaGaps = M.boonMetaGaps()
   if #gaps == 0 and #metaGaps == 0 then
@@ -2352,6 +2473,18 @@ function M.boonFill(limit)
   M._boonFillNext(todo, 1, 0, M._fillCtx(meta))
 end
 
+-- ONE CHAIN AT A TIME (review, v4.7.326). Two chains -- the per-offer run and a `mnem boonfill`
+-- typed while it goes -- would take turns at the capture slot and interleave their contemplates.
+-- Every step stamps the lock and every exit clears it; a step that never comes back (an error in a
+-- callback) cannot hold it past FILL_STALE, which is longer than any real step (a 2s capture, the
+-- 0.5s spacing, and at most five 1s waits for the slot).
+local FILL_STALE = 15
+local function fillNow() return (getEpoch and getEpoch()) or os.time() end
+
+function M._fillBusy()
+  return M._fillBusyAt ~= nil and fillNow() - M._fillBusyAt < FILL_STALE
+end
+
 -- The bookkeeping one run of `_boonFillNext` carries. `gen` ties it to the wave it started in: GO!
 -- bumps `M._fillGen`, and a run from an earlier wave stops rather than race that wave's captures.
 function M._fillCtx(meta, auto)
@@ -2366,7 +2499,7 @@ end
 -- Never starts while another capture holds the slot, and stops at GO!.
 function M._boonScreenContemplate(list)
   if not (M.history and M.history.boonLibrary) then return false end
-  if M._capturing then return false end
+  if M._capturing or M._fillBusy() then return false end
   local todo, meta, queued = {}, {}, {}
   for _, b in ipairs(type(list) == "table" and list or {}) do
     local name = baseName(type(b) == "table" and b.name or b)
@@ -2398,8 +2531,10 @@ function M._boonFillNext(todo, i, learned, ctx)
     ctx.checked, ctx.lines = ctx.checked or 0, ctx.lines or 0
     ctx.noLine, ctx.changed = ctx.noLine or {}, ctx.changed or {}
   end
+  M._fillBusyAt = fillNow()
   if ctx and ctx.gen and ctx.gen ~= (M._fillGen or 0) then
     -- A wave started. Its captures own the slot now; what is left waits for the next boon screen.
+    M._fillBusyAt = nil
     M._historySave()
     if not ctx.auto then
       M.echo("Boon contemplation paused at <cyan>" .. (i - 1) .. "/" .. #todo
@@ -2408,6 +2543,7 @@ function M._boonFillNext(todo, i, learned, ctx)
     return
   end
   if i > #todo then
+    M._fillBusyAt = nil
     M._historySave()
     local quiet = ctx and ctx.auto and learned == 0 and #ctx.changed == 0
     if quiet then return end
@@ -2434,6 +2570,7 @@ function M._boonFillNext(todo, i, learned, ctx)
         return
       end
     end
+    M._fillBusyAt = nil
     M._historySave()
     return
   end
@@ -2460,6 +2597,7 @@ function M._boonFillNext(todo, i, learned, ctx)
         unlockedBy = info.unlockedBy,
         comboBoon = info.comboBoon, -- v4.7.322: a boolean, so `false` is passed too
         conflictsWith = info.conflictsWith,
+        echoFloor = info.echoFloor, -- v4.7.326: the 1 is "can echo", not "echoes once"
       }
       local text = (info.description and info.description ~= "") and info.description or nil
       -- The game rewrites boons (user, v4.7.324), so a whole contemplate's text replaces ours --
@@ -2752,6 +2890,7 @@ function M._parseContemplate(lines)
   local descParts, quoteParts = {}, {}
   local section = "meta" -- meta -> desc -> quote
   local consumed = {} -- lines already taken as the tail of a wrapped conflicts list (v4.7.325)
+  local sawYes, sawMax = false, false -- "Can echo: Yes" with no count is a floor (v4.7.326)
   for idx, ln in ipairs(lines) do
    if not consumed[idx] then
     local rar = ln:match("^Rarity:%s+(.+)$")
@@ -2763,6 +2902,7 @@ function M._parseContemplate(lines)
       -- Authoritative echo count (printed only for echo-capable boons); overrides
       -- the "Can echo: Yes" floor of 1 regardless of which line arrives first.
       info.num_echoes_possible = tonumber(maxe)
+      sawMax = true
     elseif echo then
       echo = echo:gsub("%s+$", ""):lower()
       if echo == "no" then
@@ -2770,6 +2910,7 @@ function M._parseContemplate(lines)
       elseif echo == "yes" then
         -- Floor of 1; a "Maximum echoes: N" line, if present, refines this to N.
         info.num_echoes_possible = info.num_echoes_possible or 1
+        sawYes = true
       else
         info.num_echoes_possible = tonumber(echo)
       end
@@ -2812,5 +2953,6 @@ function M._parseContemplate(lines)
   if #quoteParts > 0 then
     info.quote = (table.concat(quoteParts, " "):gsub('^"', ""):gsub('"$', ""))
   end
+  if sawYes and not sawMax then info.echoFloor = true end
   return M._promoteMeta(info)
 end

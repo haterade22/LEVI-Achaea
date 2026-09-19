@@ -66,6 +66,15 @@ local function fire(delay)
   return #due
 end
 
+-- Register extra paragons for the length of fn, and take them back out even if it throws.
+local function withParagons(extra, fn)
+  for id, name in pairs(extra) do A.config.paragons[id] = name end
+  local ok, res = pcall(fn)
+  for id in pairs(extra) do A.config.paragons[id] = nil end
+  if not ok then error(res, 0) end
+  return res
+end
+
 local function said(needle)
   for _, m in ipairs(echoes) do if m:find(needle, 1, true) then return true end end
   return false
@@ -159,7 +168,7 @@ describe("the plan: only what changes, only what we can supply", function()
     local p = plan({ ICO, METAL, SER }, { ICO, METAL, CRUC }, true)
     expect(#p.cmds).toBe(2)
     expect(p.cmds[1]).toBe("pry armour embrasure 3")
-    expect(p.cmds[2]).toBe("insert serendipitous into armour embrasure 3")
+    expect(p.cmds[2]).toBe("insert " .. SER .. " into armour embrasure 3")
   end)
 
   it("an identical profile sends NOTHING", function()
@@ -179,7 +188,7 @@ describe("the plan: only what changes, only what we can supply", function()
   it("a KNOWN-empty slot is filled without a pointless pry", function()
     local p = plan({ ICO, METAL, SER }, { ICO, METAL, nil }, true)
     expect(#p.cmds).toBe(1)
-    expect(p.cmds[1]).toBe("insert serendipitous into armour embrasure 3")
+    expect(p.cmds[1]).toBe("insert " .. SER .. " into armour embrasure 3")
   end)
 
   it("clearing a slot pries without inserting", function()
@@ -195,8 +204,8 @@ describe("the plan: only what changes, only what we can supply", function()
     expect(#p.cmds).toBe(4)
     expect(p.cmds[1]).toBe("pry armour embrasure 1")
     expect(p.cmds[2]).toBe("pry armour embrasure 2")
-    expect(p.cmds[3]).toBe("insert crucious into armour embrasure 1")
-    expect(p.cmds[4]).toBe("insert icosagon into armour embrasure 2")
+    expect(p.cmds[3]).toBe("insert " .. CRUC .. " into armour embrasure 1")
+    expect(p.cmds[4]).toBe("insert " .. ICO .. " into armour embrasure 2")
   end)
 
   it("a paragon we do not have leaves its embrasure ALONE -- never emptied", function()
@@ -205,7 +214,7 @@ describe("the plan: only what changes, only what we can supply", function()
     expect(p.missing[1]).toBe(1)
     for _, c in ipairs(p.cmds) do expect(c:find("embrasure 1", 1, true)).toBeNil() end
     expect(p.cmds[1]).toBe("pry armour embrasure 3")
-    expect(p.cmds[2]).toBe("insert aeneaous into armour embrasure 3")
+    expect(p.cmds[2]).toBe("insert " .. AEN .. " into armour embrasure 3")
     expect(p.after[1]).toBe(ICO) -- kept
   end)
 
@@ -217,21 +226,87 @@ describe("the plan: only what changes, only what we can supply", function()
     expect(#p.cmds).toBe(0)
   end)
 
-  -- User: "insert by name the ones they need". A profile is a list of TYPES.
-  it("inserts by NAME, so any paragon of that type we hold will do", function()
+  -- A profile is a list of TYPES: any paragon of that type we hold will do -- inserted by the id
+  -- `ii paragon` showed for it.
+  it("inserts the paragon of that type we HOLD, by its id", function()
     local SPARE_AEN = "paragon999999"
-    A.config.paragons[SPARE_AEN] = "aeneaous (absorption)"
-    local p = plan({ ICO, DELTA, AEN }, { ICO, DELTA, CRUC }, true, { [SPARE_AEN] = true })
-    A.config.paragons[SPARE_AEN] = nil
-    expect(p.cmds[2]).toBe("insert aeneaous into armour embrasure 3")
+    local p = withParagons({ [SPARE_AEN] = "aeneaous (absorption)" }, function()
+      return plan({ ICO, DELTA, AEN }, { ICO, DELTA, CRUC }, true, { [SPARE_AEN] = true })
+    end)
+    expect(p.cmds[2]).toBe("insert " .. SPARE_AEN .. " into armour embrasure 3")
+  end)
+
+  -- v4.7.326, the user's log: "insert icosagon" / "insert metalliferous" -> "That is not a valid
+  -- paragon." with both in the inventory, after the pry had already emptied embrasure 2.
+  it("never sends the bare type word when the inventory shows an id (the live failure)", function()
+    local inv = { [SER] = true, [DELTA] = true, [ICO] = true, [METAL] = true } -- the user's `ii paragon`
+    for _, slots in ipairs({ { ICO, METAL, CRUC }, { "icosagon", "metalliferous", "crucious" } }) do
+      local p = plan(slots, { nil, AEN, CRUC }, true, inv)
+      expect(#p.cmds).toBe(3)
+      expect(p.cmds[1]).toBe("pry armour embrasure 2")
+      expect(p.cmds[2]).toBe("insert " .. ICO .. " into armour embrasure 1")
+      expect(p.cmds[3]).toBe("insert " .. METAL .. " into armour embrasure 2")
+    end
+  end)
+
+  it("with no inventory answer, a slot naming an id inserts THAT id, not another of its type", function()
+    local p = withParagons({ ["paragon100000"] = "icosagon (20% crit)" }, function() -- a second, lower id
+      return plan({ ICO }, { nil }, true, nil)
+    end)
+    expect(p.cmds[1]).toBe("insert " .. ICO .. " into armour embrasure 1")
+  end)
+
+  it("with no inventory answer, a named slot uses a registered id of that type", function()
+    local p = plan({ "icosagon" }, { nil }, true, nil)
+    expect(p.cmds[1]).toBe("insert " .. ICO .. " into armour embrasure 1")
+  end)
+
+  -- idForType's choice is pinned: the LOWEST id by number, so it is the same every time.
+  it("with two of a type registered, a named slot takes the lowest id", function()
+    local p = withParagons({ ["paragon999998"] = "icosagon (20% crit)" }, function()
+      return plan({ "icosagon" }, { nil }, true, nil)
+    end)
+    expect(p.cmds[1]).toBe("insert " .. ICO .. " into armour embrasure 1")
+  end)
+
+  it("lowest by NUMBER, not by spelling: paragon99999 comes before paragon361796", function()
+    local p = withParagons({ ["paragon99999"] = "icosagon (20% crit)" }, function()
+      return plan({ "icosagon" }, { nil }, true, nil)
+    end)
+    expect(p.cmds[1]).toBe("insert paragon99999 into armour embrasure 1")
+  end)
+
+  -- The review's case: the registry's icosagon may be the one sitting in an embrasure we keep, and
+  -- the game cannot insert a paragon that is still in the armour.
+  it("never picks a paragon still sitting in an embrasure this swap keeps", function()
+    local SPARE = "paragon999998"
+    local p = withParagons({ [SPARE] = "icosagon (20% crit)" }, function()
+      return plan({ ICO, "icosagon" }, { ICO, AEN }, true, nil)
+    end)
+    expect(p.rows[1].action).toBe("keep")
+    expect(p.cmds[#p.cmds]).toBe("insert " .. SPARE .. " into armour embrasure 2")
+    -- ...but one coming OUT of an embrasure this swap is free to move
+    local q = plan({ "crucious", "icosagon" }, { ICO, CRUC }, true, nil)
+    expect(q.cmds[3]).toBe("insert " .. CRUC .. " into armour embrasure 1")
+    expect(q.cmds[4]).toBe("insert " .. ICO .. " into armour embrasure 2")
+  end)
+
+  -- The unknown-contents branch pries all three, so a refused bare word there empties the
+  -- embrasure -- and the seeded default profiles are all type words.
+  it("contents UNKNOWN, no inventory: a type-word profile still inserts registered ids", function()
+    local p = plan({ "icosagon", "metalliferous", "crucious" }, {}, false, nil)
+    expect(#p.cmds).toBe(6)
+    expect(p.cmds[4]).toBe("insert " .. ICO .. " into armour embrasure 1")
+    expect(p.cmds[5]).toBe("insert " .. METAL .. " into armour embrasure 2")
+    expect(p.cmds[6]).toBe("insert " .. CRUC .. " into armour embrasure 3")
   end)
 
   it("a profile written in names works the same as one written in ids", function()
     local p = plan({ "metalliferous", "deltahedral", "aeneaous" }, { ICO, DELTA, CRUC }, true,
       { [METAL] = true, [AEN] = true })
     expect(#p.cmds).toBe(4)
-    expect(p.cmds[3]).toBe("insert metalliferous into armour embrasure 1")
-    expect(p.cmds[4]).toBe("insert aeneaous into armour embrasure 3")
+    expect(p.cmds[3]).toBe("insert " .. METAL .. " into armour embrasure 1")
+    expect(p.cmds[4]).toBe("insert " .. AEN .. " into armour embrasure 3")
   end)
 
   it("only a paragon of a type we do not recognise falls back to its id", function()
@@ -251,7 +326,7 @@ describe("the plan: only what changes, only what we can supply", function()
 
   it("with no inventory answer it inserts as asked, like before", function()
     local p = plan({ METAL, DELTA, CRUC }, { ICO, DELTA, CRUC }, true, nil)
-    expect(p.cmds[2]).toBe("insert metalliferous into armour embrasure 1")
+    expect(p.cmds[2]).toBe("insert " .. METAL .. " into armour embrasure 1")
   end)
 end)
 
@@ -267,7 +342,7 @@ describe("armour <profile> probes, plans, swaps and verifies", function()
     feedProbe(USER_PROBE)
     sent = {}
     fire(2)
-    expect(sentHas("pry armour embrasure 3;insert aeneaous into armour embrasure 3")).toBeTrue()
+    expect(sentHas("pry armour embrasure 3;insert " .. AEN .. " into armour embrasure 3")).toBeTrue()
     expect(sentHas("embrasure 1")).toBeFalse()          -- icosagon stays in: we have no metalliferous
     expect(said("NEED metalliferous")).toBeTrue()
     expect(A.state.swapping).toBeFalse()
@@ -291,28 +366,37 @@ describe("armour <profile> probes, plans, swaps and verifies", function()
     expect(said("did not fully take")).toBeTrue()
   end)
 
-  it("no probe answer: falls back to rebuilding every slot, and trusts no empty inventory", function()
-    reset(); pvp()
-    A.swap("pvp")
-    fire(3) -- the refresh times out
-    sent = {}
-    fire(2)
-    local cmds = sent[1] or ""
-    expect(cmds:find("pry armour embrasure 1", 1, true) ~= nil).toBeTrue()
-    expect(cmds:find("insert metalliferous", 1, true) ~= nil).toBeTrue()
+  -- v4.7.326 review: a swap planned without an answer pries blind, and a pry whose insert is then
+  -- refused is how v4.7.323 left embrasures EMPTY. No answer now means no pries and no inserts.
+  it("no probe answer on a fresh session: nothing is pried or inserted, and it says so", function()
+    reset()
+    A.config.profiles.words = { slots = { "icosagon", "metalliferous", "crucious" }, traits = { "x" } }
+    local ok, err = pcall(function()
+      A.swap("words")
+      expect(sentHas("trait select x confirm")).toBeTrue() -- the traits still went
+      fire(3) -- the refresh times out
+      sent = {}
+      fire(2)
+      expect(sentHas("pry")).toBeFalse()
+      expect(sentHas("insert")).toBeFalse()
+      expect(said("No answer from the armour probe")).toBeTrue()
+      expect(A.state.swapping).toBeFalse()
+      expect(fire(1.5)).toBe(0) -- nothing to verify
+    end)
+    A.config.profiles.words = nil
+    if not ok then error(err, 0) end
   end)
 
-  -- An unanswered `ii` is empty for want of a reply; read as "you own nothing" it would refuse
-  -- every insert of a swap planned from an earlier, still-valid picture of the armour.
-  it("an unanswered refresh does not read as 'you own nothing'", function()
+  it("an old picture of the armour is not an answer: still no swap", function()
     reset(); pvp()
     A.state.currentSlots, A.state.slotsKnown = { ICO, DELTA, CRUC }, true -- from an earlier swap
     A.swap("pvp")
     fire(3) -- no answer
     sent = {}
     fire(2)
-    expect(sentHas("insert metalliferous into armour embrasure 1")).toBeTrue()
+    expect(#sent).toBe(0)
     expect(said("NEED")).toBeFalse()
+    expect(A.state.currentSlots[1]).toBe(ICO) -- the picture is not rewritten either
   end)
 
   it("nothing to change sends nothing and does not verify", function()

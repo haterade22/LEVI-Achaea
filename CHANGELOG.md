@@ -2,6 +2,115 @@
 
 ---
 
+## 2026-09-19 - The armour inserted by a name the game refuses; combo and echo called out (v4.7.326)
+
+### The armour swap emptied two embrasures
+
+User, with a log: *"Not working properly."*
+
+```
+[Armour]: Swapping to 'serppve':
+[Armour]:   1: (empty) -> icosagon (20% crit boost)
+[Armour]:   2: aeneaous (absorption) -> metalliferous (7.5% shifting resist)
+[Armour]:   3: crucious (crit multiplier) (already in)
+You pry out an aeneaous paragon and retrieve it from the armour.
+That is not a valid paragon.
+That is not a valid paragon.
+```
+
+The plan was right; the inserts were not. v4.7.323 sent the TYPE word -- `insert icosagon into armour
+embrasure 1`, `insert metalliferous into armour embrasure 2` -- and the game refused both, while
+`ii paragon` showed `paragon361796 an auspicious icosagon paragon` and `paragon500167 a resonate
+metalliferous paragon` in the inventory. **The type word is the item's keyword only when the name
+is one word** ("a crucious paragon", v4.7.205's example); "an auspicious icosagon paragon" is not
+found by "icosagon". The pry had already gone out, so embrasure 2 was left empty. Embrasure 1 was
+empty before this swap began (the probe said `1: Empty.`) -- most likely an earlier swap that failed
+the same way, though the log does not show it.
+
+**Fix:** a profile is still a list of TYPES, but the insert now names the **id** `ii paragon` showed for
+the paragon of that type we hold (`insert paragon361796 into armour embrasure 1`). With no inventory
+answer it uses the profile's own id, else a registered id of that type, and only as a last resort the
+bare word. A new test replays the user's exact armour and inventory.
+
+**If your armour has empty embrasures from this, run your profile again** (`armour <profile>`): it
+probes, sees the empty slots, and fills them.
+
+**And if the game does not answer the probe, the swap now changes nothing** (see the review fixes
+below): the traits still go, the paragons are left alone, and it says so.
+
+### Combo and echo are called out
+
+User, with Flameheart's block: *"Also should called out if the boon can combo and echo."*
+
+```
+Rarity:             uncommon
+Category:           Utility
+Combo Boon?:        Yes
+Can echo:           No
+```
+
+- **On any contemplate** (new trigger `mnemosyne/093`): a `Combo Boon?: Yes` and a `Can echo: Yes`
+  (with its `Maximum echoes` count) are highlighted where they stand, and the block gets **one
+  summary line** beneath it -- `COMBO boon; can echo (max 3); conflicts with ...` -- printed when the
+  block ends instead of one echo per line. The v4.7.325 conflicts echo joined it.
+- **On the offer screen**, each offered boon gets the same call-outs from the catalogue: combo, how
+  many echoes it allows, and its conflicts.
+- **This block also PROVES "Combo Boon?" is a CONTEMPLATE line.** v4.7.322 had only the tracker's glued
+  text to go on, and v4.7.325 inferred it from column alignment.
+
+### Fixed after a deep review
+
+- **No answer, no swap.** When `ii paragon` / `probe armour` timed out, the swap still planned from
+  whatever it last believed and sent pries -- and a pry whose insert is then refused is exactly how
+  embrasures were emptied. Now an unanswered probe means no pries and no inserts: the traits still
+  go, and it says *"No answer from the armour probe -- not swapping paragons"*. This replaces
+  v4.7.323's rule of planning from the earlier picture.
+- **`idForType` never picks a paragon that is still in the armour.** With no inventory to go on, the
+  lowest registered id of a type could be the one sitting in an embrasure the swap keeps, which
+  the game cannot insert anywhere else. Those are passed over now (one coming *out* this swap is
+  still free to move), and "lowest" is by number, not spelling.
+- **Two contemplates close together no longer merge into one summary.** The call-outs are
+  gathered in one place for the whole module, and a contemplate chain sends the next block 0.5s
+  after the last one closes. Each block's summary is now printed at a **block boundary**: its
+  closing divider, or the `Rarity:` line that opens the next block (trigger 093 gained both
+  patterns; with nothing gathered they do nothing). The quiet timer is now only a backstop (0.4s,
+  under the chain's 0.5s spacing), a flush cancels its timer, and a reload starts clean.
+- **One contemplate chain at a time.** `mnem boonfill` typed while the per-offer chain runs said
+  nothing and interleaved the two. Now it says a contemplation is already running, and the
+  per-offer chain does not start over a running one. Each step refreshes the lock and each exit
+  clears it. A chain that dies without clearing it frees the lock after 15s.
+- **"Can echo: Yes" with no count is not "max 1".** It parses as 1 because the game gave no number.
+  That 1 is now flagged (`echoFloor`), so the offer screen says *can echo* instead of *(max 1)*, and
+  a floor never replaces a real count already learned.
+- **One colour per meaning.** A conflicting boon you do not hold was yellow in the contemplate line
+  and gold in the summary beneath it; it is gold in both. Yellow still means "also offered" on the
+  offer screen.
+
+### Verification
+
+2134 tests pass (32 more than v4.7.325's 2102). They include the user's Flameheart and Elder Wisdom
+blocks verbatim and the user's exact armour and inventory. The two tests that pinned the old "swap
+from the earlier picture" rule now pin the new one. Every change was break-back verified: 43
+mutants, all caught. That is 3 on the insert fix, 13 on the call-outs, and 27 on the review fixes,
+re-run together against the final code. One review-fix mutant survived at first: a test whose
+helper put the lock back before it was read, so it could not fail. It was rewritten and now catches
+that mutant. Test hygiene: shared state these tests swap (the seed, extra paragons, the call-out
+aggregator, the chain lock) is now restored even when a test throws.
+
+### Files
+
+- `levi_scripts/gear_system/002_Armour_Paragons.lua`: `planSwap` inserts the held id; `idForType`
+  (skips kept embrasures, numeric order); the swap refuses to pry without an answer.
+- `mnemosyne/004_Parsers.lua`: `_calloutAdd`/`_calloutFlush`, `onCalloutLine` (block boundaries),
+  `_echoBoonCallouts` (the offer screen; replaces `_echoConflicts`); `onConflictsLine` joins the
+  summary; `echoFloor` parsed; `_fillBusy` (one chain at a time).
+- `mnemosyne/007_History.lua`: `_learnBoon` stores `echoFloor`; `echoFloor` in `BOON_DB_FIELDS`.
+- `triggers/.../mnemosyne/093_Boon_Callouts.lua`: new.
+- `tests/test_armour_swap_diff.lua`, `tests/test_mnemosyne.lua`, `tests/test_borrowed_power.lua` (a comment).
+- `README.md`, `CLAUDE.md`, `.claude/projects/mnemosyne/03-parsing-triggers.md`, `05-commands.md`; memory.
+
+---
+
 ## 2026-09-19 - Boon conflicts: parsed, highlighted, and warned about on the offer screen (v4.7.325)
 
 User, with a `BOON CONTEMPLATE` block: *"This should be echo the conflicts and highlight them."*

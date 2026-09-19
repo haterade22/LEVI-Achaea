@@ -1395,6 +1395,7 @@ describe("a boon name the game refuses is remembered, skipped, and retryable", f
     send = function(c) table.insert(sentCmds, c) end
     M._boonFillNext({ "Ogre's Speed" }, 1, 0)
     send = realSend
+    M._fillBusyAt = nil -- its next step is queued and never runs; it must not hold the lock
     expect(ataxiaTemp.contemplating).toBe("Ogre's Speed")
     expect(sentCmds[#sentCmds]).toBe("boon contemplate Ogre's Speed")
     if M._captureForceFinish then pcall(M._captureForceFinish) end
@@ -6020,6 +6021,8 @@ end
 local function withContemplate(lines, fn)
   local realCap, realTimer, realSend, realSave, realEcho = M._captureContemplate, tempTimer, send, M._historySave, M.echo
   local realContemplating = ataxiaTemp and ataxiaTemp.contemplating
+  local realBusy = M._fillBusyAt
+  M._fillBusyAt = nil -- a chain another test left half-run must not hold the v4.7.326 lock
   local echoes = {}
   M._captureContemplate = function(cb) cb(type(lines) == "table" and M._parseContemplate(lines) or lines) end
   tempTimer = function(_, f) f(); return 1 end -- run the next step at once
@@ -6029,6 +6032,7 @@ local function withContemplate(lines, fn)
   local ok, err = pcall(fn)
   M._captureContemplate, tempTimer, send, M._historySave, M.echo = realCap, realTimer, realSend, realSave, realEcho
   ataxiaTemp.contemplating = realContemplating
+  M._fillBusyAt = realBusy
   if not ok then error(err, 0) end
   return echoes
 end
@@ -6441,11 +6445,13 @@ describe("mnem boonfill learns combo status", function()
     M._boonFillNext = function(todo, i, learned, ctx) got = { todo = todo, ctx = ctx } end
     M.boonGaps = function() return { "Hole One", "Hole Two" } end
     M.echo = function() end
+    local realBusy = M._fillBusyAt
+    M._fillBusyAt = nil
     local ok, err = pcall(function()
       withLibrary({ ["Alpha"] = { description = "d" }, ["Beta"] = { description = "d" } },
         function() M.boonFill(3) end)
     end)
-    M._boonFillNext, M.boonGaps, M.echo = realNext, realGaps, realEcho
+    M._boonFillNext, M.boonGaps, M.echo, M._fillBusyAt = realNext, realGaps, realEcho, realBusy
     if not ok then error(err, 0) end
     expect(#got.todo).toBe(3)
     expect(got.todo[1]).toBe("Hole One")
@@ -6520,6 +6526,8 @@ describe("every offered boon is contemplated, every screen (v4.7.324)", function
     local asked, queue, said, delays = {}, {}, {}, {}
     local realCap, realTimer, realSend, realSave, realEcho = M._captureContemplate, tempTimer, send, M._historySave, M.echo
     local realContemplating = ataxiaTemp and ataxiaTemp.contemplating
+    local realBusy = M._fillBusyAt
+    M._fillBusyAt = nil
     M._captureContemplate = function(cb)
       cb(M._parseContemplate({ "Rarity: common", "Some text.", "", '"Q."' }))
     end
@@ -6537,6 +6545,7 @@ describe("every offered boon is contemplated, every screen (v4.7.324)", function
     end)
     M._captureContemplate, tempTimer, send, M._historySave, M.echo = realCap, realTimer, realSend, realSave, realEcho
     ataxiaTemp.contemplating = realContemplating
+    M._fillBusyAt = realBusy
     if not ok then error(err, 0) end
     return asked, out, said, delays
   end
@@ -6737,6 +6746,15 @@ describe("the Conflicts With line", function()
   end)
 end)
 
+-- Swap the seed for one test; put it back even if the body throws.
+local function withSeed(seed, fn)
+  local saved = M.BOON_SEED
+  M.BOON_SEED = seed
+  local ok, err = pcall(fn)
+  M.BOON_SEED = saved
+  if not ok then error(err, 0) end
+end
+
 describe("conflicts are echoed and highlighted", function()
   -- A run in which we claimed Truther.
   local function holding(fn)
@@ -6766,12 +6784,12 @@ describe("conflicts are echoed and highlighted", function()
     fg = function(c) picked[current] = c end
     local out
     local ok, err = pcall(function()
-      holding(function() out = capture(function() M.onConflictsLine("Self-Preservation and Truther") end) end)
+      holding(function() out = capture(function() M.onConflictsLine("Self-Preservation and Truther"); M._calloutFlush() end) end)
     end)
     selectString, fg = realSel, realFg
     if not ok then error(err, 0) end
     expect(picked["Truther"]).toBe("red")
-    expect(picked["Self-Preservation"]).toBe("yellow")
+    expect(picked["Self-Preservation"]).toBe("gold") -- the summary's colour for a name we do not hold
     expect(out:find("CONFLICT", 1, true) ~= nil).toBeTrue()
     expect(out:find("Truther<reset> (you have it)", 1, true) ~= nil).toBeTrue()
   end)
@@ -6780,10 +6798,10 @@ describe("conflicts are echoed and highlighted", function()
     local outside, earlier
     holding(function()
       M.run.active = false -- the claim is this run's, but no run is going
-      outside = capture(function() M.onConflictsLine("Self-Preservation and Truther") end)
+      outside = capture(function() M.onConflictsLine("Self-Preservation and Truther"); M._calloutFlush() end)
       M.run.active = true
       M.history.claims = { { name = "Truther", run = 6 } } -- claimed in an earlier run
-      earlier = capture(function() M.onConflictsLine("Self-Preservation and Truther") end)
+      earlier = capture(function() M.onConflictsLine("Self-Preservation and Truther"); M._calloutFlush() end)
     end)
     expect(outside:find("you have it", 1, true)).toBeNil()
     expect(outside:find("conflicts with", 1, true) ~= nil).toBeTrue()
@@ -6791,7 +6809,7 @@ describe("conflicts are echoed and highlighted", function()
   end)
 
   it("says nothing for 'None'", function()
-    expect(capture(function() M.onConflictsLine("None.") end)).toBe("")
+    expect(capture(function() M.onConflictsLine("None."); M._calloutFlush() end)).toBe("")
   end)
 
   it("the offer screen warns, from either side of the pair", function()
@@ -6801,8 +6819,10 @@ describe("conflicts are echoed and highlighted", function()
                   ["Glass Jaw"] = { description = "d" },
                   ["Iron Throat"] = { description = "d", conflictsWith = { "Glass Jaw" } } }, function()
       holding(function()
-        out = capture(function()
-          M._echoConflicts({ { name = "Careless Whisperer" }, { name = "Self-Preservation" }, { name = "Glass Jaw" } })
+        withSeed({}, function() -- no seed echo text, so only conflicts are called out
+          out = capture(function()
+            M._echoBoonCallouts({ { name = "Careless Whisperer" }, { name = "Self-Preservation" }, { name = "Glass Jaw" } })
+          end)
         end)
       end)
     end)
@@ -6816,7 +6836,7 @@ describe("conflicts are echoed and highlighted", function()
     withLibrary({ ["Truther"] = { description = "d", conflictsWith = { "Careless Whisperer" } },
                   ["Careless Whisperer"] = { description = "d" } }, function()
       holding(function()
-        out = capture(function() M._echoConflicts({ { name = "Careless Whisperer" } }) end)
+        withSeed({}, function() out = capture(function() M._echoBoonCallouts({ { name = "Careless Whisperer" } }) end) end)
       end)
     end)
     expect(out:find("Truther<reset> (you have it)", 1, true) ~= nil).toBeTrue()
@@ -6851,6 +6871,410 @@ describe("conflicts are echoed and highlighted", function()
     local src = f:read("*a"); f:close()
     expect(src:find("- pattern: ^Conflicts [Ww]ith:\\s+(.+)$", 1, true) ~= nil).toBeTrue()
     expect(src:find("M.onConflictsLine(matches[2])", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
+-- ---------------------------------------------------------------------------
+-- v4.7.326: combo and echo called out. User, with Flameheart's block: "Also should called out if
+-- the boon can combo and echo."
+-- ---------------------------------------------------------------------------
+local FLAMEHEART = {
+  "Rarity:             uncommon",
+  "Category:           Utility",
+  "Combo Boon?:        Yes",
+  "Can echo:           No",
+  "",
+  "You are immune to the frozen affliction.",
+  "",
+  '"His hatred burned like fire, swathing the icy loathing in his heart."',
+}
+
+describe("contemplate call-outs: combo, echo, conflicts", function()
+  local function capture(fn)
+    local said, realEcho = {}, M.echo
+    M.echo = function(m) said[#said + 1] = tostring(m) end
+    local ok, err = pcall(fn)
+    M.echo = realEcho
+    if not ok then error(err, 0) end
+    return table.concat(said, "\n")
+  end
+  local function feed(lines)
+    M._callout, M._calloutT = nil, nil -- nothing left over from another test
+    for _, ln in ipairs(lines) do
+      if ln:find("^Conflicts") then M.onConflictsLine(ln:match(":%s+(.+)$")) else M.onCalloutLine(ln) end
+    end
+    M._calloutFlush()
+  end
+
+  it("parses Flameheart: the Combo Boon? line is CONTEMPLATE's", function()
+    local info = M._parseContemplate(FLAMEHEART)
+    expect(info.comboBoon).toBeTrue()
+    expect(info.category).toBe("Utility")
+    expect(info.num_echoes_possible).toBe(0)
+    expect(info.description).toBe("You are immune to the frozen affliction.")
+  end)
+
+  it("a combo boon that cannot echo: one line, says COMBO, says nothing about echoing", function()
+    local out = capture(function() feed(FLAMEHEART) end)
+    expect(out:find("COMBO boon", 1, true) ~= nil).toBeTrue()
+    expect(out:find("echo", 1, true)).toBeNil()
+    local lines = 0
+    for _ in out:gmatch("[^\n]+") do lines = lines + 1 end
+    expect(lines).toBe(1)
+  end)
+
+  it("an echoing boon with conflicts: every call-out, in one line, in a fixed order", function()
+    local out = capture(function()
+      feed({ "Rarity: rare", "Combo Boon?:        Yes", "Can echo:           Yes", "Maximum echoes:     3",
+             "Conflicts With:     Self-Preservation and Truther" })
+    end)
+    local c, e, x = out:find("COMBO", 1, true), out:find("can echo (max 3)", 1, true), out:find("conflicts with", 1, true)
+    expect(c ~= nil and e ~= nil and x ~= nil).toBeTrue()
+    expect(c < e and e < x).toBeTrue()
+  end)
+
+  -- The user's Elder Wisdom block (2026-09-19): "maxiumum echos also".
+  it("Elder Wisdom: combo, and the maximum echo count, from the real block", function()
+    local ELDER = {
+      "Rarity:             common",
+      "Category:           Offence",
+      "Combo Boon?:        Yes",
+      "Can echo:           Yes",
+      "Maximum echoes:     5",
+      "",
+      "The Jade Empress increases your intelligence by 1.",
+      "",
+      '"It is the curse of the wise to be correct while the oblivious ignore your words."',
+    }
+    local info = M._parseContemplate(ELDER)
+    expect(info.comboBoon).toBeTrue()
+    expect(info.num_echoes_possible).toBe(5)
+    expect(info.category).toBe("Offence")
+    expect(info.description).toBe("The Jade Empress increases your intelligence by 1.")
+    local picked = {}
+    local realSel, realFg, current = selectString, fg, nil
+    selectString = function(s) current = s; return 1 end
+    fg = function(c) picked[current] = c end
+    local out
+    local ok, err = pcall(function() out = capture(function() feed(ELDER) end) end)
+    selectString, fg = realSel, realFg
+    if not ok then error(err, 0) end
+    expect(out:find("COMBO boon<reset>; <cyan>can echo (max 5)", 1, true) ~= nil).toBeTrue()
+    expect(picked["5"]).toBe("cyan")
+    -- ...and once contemplated, the offer screen says the same
+    local offer
+    withLibrary({}, function()
+      M._learnBoon("Elder Wisdom", info.description, info.rarity, info.num_echoes_possible,
+        { comboBoon = info.comboBoon })
+      offer = capture(function() M._echoBoonCallouts({ { name = "Elder Wisdom" } }) end)
+    end)
+    expect(offer:find("COMBO boon<reset>; <cyan>can echo (max 5)", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("'Can echo: Yes' alone still says so", function()
+    expect(capture(function() feed({ "Can echo:           Yes" }) end):find("can echo", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("nothing to call out prints nothing", function()
+    expect(capture(function() feed({ "Rarity: common", "Combo Boon?:        No", "Can echo:           No" }) end)).toBe("")
+  end)
+
+  it("highlights the Yes and the echo count in place", function()
+    local picked = {}
+    local realSel, realFg, current = selectString, fg, nil
+    selectString = function(s) current = s; return 1 end
+    fg = function(c) picked[current] = c end
+    local ok, err = pcall(function()
+      capture(function() feed({ "Combo Boon?:        Yes", "Maximum echoes:     3" }) end)
+    end)
+    selectString, fg = realSel, realFg
+    if not ok then error(err, 0) end
+    expect(picked["Yes"]).toBe("green")
+    expect(picked["3"]).toBe("cyan")
+  end)
+
+  it("the offer screen calls them out from the catalogue", function()
+    local out
+    withLibrary({ ["Flameheart"] = { description = "d", comboBoon = true, maxEchoes = 0 },
+                  ["Iron Throat"] = { description = "d", maxEchoes = 2 },
+                  ["Plain"] = { description = "d" } }, function()
+      withSeed({}, function()
+        out = capture(function()
+          M._echoBoonCallouts({ { name = "Flameheart" }, { name = "Iron Throat" }, { name = "Plain" } })
+        end)
+      end)
+    end)
+    expect(out:find("<gold>Flameheart<reset> -- <pale_green>COMBO boon", 1, true) ~= nil).toBeTrue()
+    expect(out:find("<gold>Iron Throat<reset> -- <cyan>can echo (max 2)", 1, true) ~= nil).toBeTrue()
+    expect(out:find("Plain", 1, true)).toBeNil()
+    expect(out:find("Flameheart<reset> -- <pale_green>COMBO boon<reset>; <cyan>can echo", 1, true)).toBeNil()
+  end)
+
+  it("trigger 093 feeds the three meta lines and both block boundaries to the module", function()
+    local f = io.open("src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/093_Boon_Callouts.lua")
+    local src = f:read("*a"); f:close()
+    expect(src:find("- pattern: ^Combo Boon\\?:\\s+(\\w+)", 1, true) ~= nil).toBeTrue()
+    expect(src:find("- pattern: ^Can echo:\\s+(\\w+)", 1, true) ~= nil).toBeTrue()
+    expect(src:find("- pattern: ^Maximum echoes:\\s+(\\d+)", 1, true) ~= nil).toBeTrue()
+    expect(src:find("M.onCalloutLine(line)", 1, true) ~= nil).toBeTrue()
+    expect(src:find("- pattern: ^Rarity:\\s+", 1, true) ~= nil).toBeTrue()
+    expect(src:find("- pattern: ^-{3,}", 1, true) ~= nil).toBeTrue()
+  end)
+
+  -- The grep above passes a commented-out call; this runs the trigger body.
+  it("trigger 093's body really hands `line` to M.onCalloutLine", function()
+    local got, realOn, savedLine, savedAtaxia = {}, M.onCalloutLine, line, ataxia
+    M.onCalloutLine = function(ln) got[#got + 1] = ln end
+    ataxia = { mnemosyne = M }
+    line = "Combo Boon?:        Yes"
+    local ok, err = pcall(dofile, "src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/093_Boon_Callouts.lua")
+    M.onCalloutLine, line, ataxia = realOn, savedLine, savedAtaxia
+    if not ok then error(err, 0) end
+    expect(#got).toBe(1)
+    expect(got[1]).toBe("Combo Boon?:        Yes")
+  end)
+
+  -- The review's worry: the call-outs are module-global, and a chain sends the next contemplate
+  -- 0.5s after the last one closed. Each block must get its own line, under its own boon.
+  it("two blocks back to back: the divider and the next Rarity keep their summaries apart", function()
+    local realT = tempTimer
+    tempTimer = function() return 1 end -- the quiet timer never fires: only the boundaries print
+    local out
+    local ok, err = pcall(function()
+      M._callout, M._calloutT = nil, nil
+      out = capture(function()
+        for _, ln in ipairs({ "Rarity:             uncommon", "Combo Boon?:        Yes", "Can echo:           No",
+                              "--------------------------------------------------------------------------------",
+                              "Rarity:             common", "Combo Boon?:        No", "Can echo:           Yes",
+                              "Maximum echoes:     2" }) do
+          M.onCalloutLine(ln)
+        end
+        -- no closing divider on the second: the next block's Rarity line closes it
+        M.onCalloutLine("Rarity:             rare")
+      end)
+    end)
+    tempTimer = realT
+    M._callout, M._calloutT = nil, nil
+    if not ok then error(err, 0) end
+    local lines = {}
+    for l in out:gmatch("[^\n]+") do lines[#lines + 1] = l end
+    expect(#lines).toBe(2)
+    expect(lines[1]:find("COMBO", 1, true) ~= nil and lines[1]:find("echo", 1, true) == nil).toBeTrue()
+    expect(lines[2]:find("can echo (max 2)", 1, true) ~= nil and lines[2]:find("COMBO", 1, true) == nil).toBeTrue()
+  end)
+
+  it("a boundary with nothing gathered prints nothing, and a flush takes its timer with it", function()
+    M._callout, M._calloutT = nil, nil
+    expect(capture(function() M.onCalloutLine("----------------------------------------") end)).toBe("")
+    expect(capture(function() M.onCalloutLine("Rarity:             common") end)).toBe("")
+    local killed, realK = {}, killTimer
+    killTimer = function(id) killed[#killed + 1] = id end
+    local ok, err = pcall(function()
+      capture(function()
+        M.onCalloutLine("Combo Boon?:        Yes")
+        local id = M._calloutT
+        M.onCalloutLine("----------------------------------------")
+        expect(M._calloutT).toBeNil()
+        expect(killed[#killed]).toBe(id)
+      end)
+    end)
+    killTimer = realK
+    M._callout, M._calloutT = nil, nil
+    if not ok then error(err, 0) end
+  end)
+
+  -- The backstop, on a virtual clock: blocks at the chain's pace with no boundary lines at all.
+  it("the quiet window alone still gives one summary per block at the chain's pace", function()
+    local now, q, delays = 0, {}, {}
+    local realT, realK = tempTimer, killTimer
+    tempTimer = function(d, f) delays[#delays + 1] = d; q[#q + 1] = { at = now + d, f = f }; return #q end
+    killTimer = function(id) if q[id] then q[id].dead = true end end
+    local function advance(dt)
+      now = now + dt
+      for _, tm in ipairs(q) do if not tm.dead and not tm.done and tm.at <= now then tm.done = true; tm.f() end end
+    end
+    local out
+    local ok, err = pcall(function()
+      M._callout, M._calloutT = nil, nil
+      out = capture(function()
+        M.onCalloutLine("Combo Boon?:        Yes"); M.onCalloutLine("Can echo:           No")
+        advance(0.6)
+        M.onCalloutLine("Combo Boon?:        No"); M.onCalloutLine("Can echo:           Yes")
+        M.onCalloutLine("Maximum echoes:     2")
+        advance(0.6)
+      end)
+    end)
+    tempTimer, killTimer = realT, realK
+    M._callout, M._calloutT = nil, nil
+    if not ok then error(err, 0) end
+    local lines = {}
+    for l in out:gmatch("[^\n]+") do lines[#lines + 1] = l end
+    expect(#lines).toBe(2)
+    expect(lines[1]:find("COMBO", 1, true) ~= nil and lines[1]:find("echo", 1, true) == nil).toBeTrue()
+    expect(lines[2]:find("can echo (max 2)", 1, true) ~= nil and lines[2]:find("COMBO", 1, true) == nil).toBeTrue()
+    for _, d in ipairs(delays) do expect(d > 0 and d < 0.5).toBeTrue() end
+  end)
+
+  it("'Maximum echoes' first, then 'Can echo: Yes' -- the count survives", function()
+    local out = capture(function()
+      M._callout, M._calloutT = nil, nil
+      M.onCalloutLine("Maximum echoes:     4"); M.onCalloutLine("Can echo:           Yes"); M._calloutFlush()
+    end)
+    expect(out:find("can echo (max 4)", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("no echo count in the catalogue: the seed's echo text still says 'can echo'", function()
+    local out, zero
+    withLibrary({ ["Argent Scales"] = { description = "d" }, ["Bare"] = { description = "d", maxEchoes = 0 } }, function()
+      withSeed({ ["Argent Scales"] = { description = "d", echo = "Gain 50% resistance to electric damage." },
+                 ["Bare"] = { description = "d", echo = "x" } }, function()
+        out = capture(function() M._echoBoonCallouts({ { name = "Argent Scales" } }) end)
+        zero = capture(function() M._echoBoonCallouts({ { name = "Bare" } }) end)
+      end)
+    end)
+    expect(out:find("<gold>Argent Scales<reset> -- <cyan>can echo<reset>.", 1, true) ~= nil).toBeTrue()
+    expect(zero).toBe("") -- a contemplated "Can echo: No" (maxEchoes 0) outranks the seed's text
+  end)
+
+  it("an '(ECHO) Name' offer is called out from its base boon's record", function()
+    local out
+    withLibrary({ ["Elder Wisdom"] = { description = "d", comboBoon = true, maxEchoes = 5 } }, function()
+      out = capture(function() M._echoBoonCallouts({ { name = "(ECHO) Elder Wisdom" } }) end)
+    end)
+    expect(out:find("<gold>Elder Wisdom<reset> -- <pale_green>COMBO boon<reset>; <cyan>can echo (max 5)", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
+-- ---------------------------------------------------------------------------
+-- v4.7.326 review: "Can echo: Yes" with no "Maximum echoes" line parses as 1 -- a FLOOR, which the
+-- offer screen then printed as "(max 1)", a count the game never gave.
+-- ---------------------------------------------------------------------------
+describe("the echo floor", function()
+  local function capture(fn)
+    local said, realEcho = {}, M.echo
+    M.echo = function(m) said[#said + 1] = tostring(m) end
+    local ok, err = pcall(fn)
+    M.echo = realEcho
+    if not ok then error(err, 0) end
+    return table.concat(said, "\n")
+  end
+
+  it("is marked only when no count was printed, whichever line comes first", function()
+    local bare = M._parseContemplate({ "Rarity:             common", "Can echo:           Yes", "", "Desc." })
+    expect(bare.num_echoes_possible).toBe(1)
+    expect(bare.echoFloor).toBeTrue()
+    local counted = M._parseContemplate({ "Rarity: common", "Can echo:           Yes", "Maximum echoes:     3", "", "D." })
+    expect(counted.num_echoes_possible).toBe(3)
+    expect(counted.echoFloor).toBeNil()
+    local first = M._parseContemplate({ "Rarity: common", "Maximum echoes:     3", "Can echo:           Yes", "", "D." })
+    expect(first.echoFloor).toBeNil()
+    expect(M._parseContemplate({ "Rarity: common", "Can echo:           No", "", "D." }).echoFloor).toBeNil()
+  end)
+
+  it("a contemplate stores it, and the offer screen says 'can echo', not '(max 1)'", function()
+    local lib, out
+    lib = withLibrary({}, function()
+      withContemplate({ "Rarity:             common", "Can echo:           Yes", "", "Desc." }, function()
+        M._boonFillNext({ "Floor Boon" }, 1, 0)
+      end)
+      withSeed({}, function()
+        out = capture(function() M._echoBoonCallouts({ { name = "Floor Boon" } }) end)
+      end)
+    end)
+    expect(lib["Floor Boon"].maxEchoes).toBe(1)
+    expect(lib["Floor Boon"].echoFloor).toBeTrue()
+    expect(out:find("<cyan>can echo<reset>.", 1, true) ~= nil).toBeTrue()
+    expect(out:find("max 1", 1, true)).toBeNil()
+  end)
+
+  it("never replaces a real count, and a real count clears it", function()
+    local lib = withLibrary({}, function()
+      M._learnBoon("Real", "d", nil, 5)
+      M._learnBoon("Real", "d", nil, 1, { echoFloor = true })
+      M._learnBoon("Later", "d", nil, 1, { echoFloor = true })
+      M._learnBoon("Later", "d", nil, 4)
+    end)
+    expect(lib["Real"].maxEchoes).toBe(5)
+    expect(lib["Real"].echoFloor).toBeNil()
+    expect(lib["Later"].maxEchoes).toBe(4)
+    expect(lib["Later"].echoFloor).toBeNil()
+  end)
+
+  it("a stray flag beside a real count is ignored on the offer screen", function()
+    local out
+    withLibrary({ ["Odd"] = { description = "d", maxEchoes = 3, echoFloor = true } }, function()
+      withSeed({}, function() out = capture(function() M._echoBoonCallouts({ { name = "Odd" } }) end) end)
+    end)
+    expect(out:find("can echo (max 3)", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("survives the boon database round trip, and only as a boolean", function()
+    local lib = withLibrary({}, function()
+      M._boonDbMerge({ ["A"] = { description = "d", maxEchoes = 1, echoFloor = true },
+                       ["B"] = { description = "d", maxEchoes = 1, echoFloor = "yes" } })
+    end)
+    expect(lib["A"].echoFloor).toBeTrue()
+    expect(lib["B"].echoFloor).toBeNil()
+  end)
+end)
+
+-- ---------------------------------------------------------------------------
+-- v4.7.326 review: one contemplate chain at a time. The per-offer chain and a `mnem boonfill` typed
+-- while it runs would take turns at the capture slot and interleave their contemplates.
+-- ---------------------------------------------------------------------------
+describe("one contemplate chain at a time", function()
+  local function busy(at, fn)
+    local saved = M._fillBusyAt
+    M._fillBusyAt = at
+    local ok, err = pcall(fn)
+    M._fillBusyAt = saved
+    if not ok then error(err, 0) end
+  end
+  local function now() return (getEpoch and getEpoch()) or os.time() end
+
+  it("mnem boonfill refuses while a chain runs, and sends nothing", function()
+    local said, realEcho, realSend, sends = {}, M.echo, send, 0
+    M.echo = function(m) said[#said + 1] = tostring(m) end
+    send = function() sends = sends + 1 end
+    local ok, err = pcall(function()
+      busy(now(), function()
+        withLibrary({ ["Gap"] = {} }, function() M.boonFill() end)
+      end)
+    end)
+    M.echo, send = realEcho, realSend
+    if not ok then error(err, 0) end
+    expect(table.concat(said, " "):find("already running", 1, true) ~= nil).toBeTrue()
+    expect(sends).toBe(0)
+  end)
+
+  it("the per-offer chain does not start while one runs", function()
+    local started
+    busy(now(), function()
+      withLibrary({ ["Elder Wisdom"] = { description = "d" } }, function()
+        started = M._boonScreenContemplate({ { name = "Elder Wisdom" } })
+      end)
+    end)
+    expect(started).toBeFalse()
+  end)
+
+  it("a lock nobody has touched for a while is stale, not held", function()
+    local held
+    busy(now() - 100, function() held = M._fillBusy() end)
+    expect(held).toBeFalse()
+  end)
+
+  it("a chain holds the lock while it runs and lets go when it finishes", function()
+    local during, after
+    withLibrary({}, function()
+      withContemplate(FLAMEHEART, function()
+        local realCap = M._captureContemplate
+        M._captureContemplate = function(cb) during = M._fillBusy(); realCap(cb) end
+        M._boonFillNext({ "Flameheart" }, 1, 0, M._fillCtx({}, true))
+        after = M._fillBusyAt -- read before withContemplate puts the old value back
+      end)
+    end)
+    expect(during).toBeTrue()
+    expect(after).toBeNil()
   end)
 end)
 

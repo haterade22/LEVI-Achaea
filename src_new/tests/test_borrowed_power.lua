@@ -97,9 +97,10 @@ describe("what goes in its place", function()
     expect(ataxia.armour.borrowedReplacementId()).toBe("p_serendip")
   end)
 
-  -- v4.7.205 (game change): Achaea now accepts paragons BY NAME --
-  -- "INSERT CRUCIOUS INTO FULLPLATE" -- so not having scanned is no longer a dead end.
-  -- This assertion used to expect nil, which encoded a limitation that no longer exists.
+  -- v4.7.205 (game change): Achaea accepts paragons BY NAME -- "INSERT CRUCIOUS INTO FULLPLATE" --
+  -- so not having scanned is no longer a dead end. This assertion used to expect nil.
+  -- v4.7.326: only a ONE-WORD name works ("insert metalliferous" was refused live), so the word
+  -- returned here goes into a PROFILE, and the swap resolves it to an id before inserting.
   it("falls back to the bare TYPE NAME when nothing is registered", function()
     reset()
     ataxia.armour.config.paragons = { ["p_crucious"] = "crucious (crit multiplier)" }
