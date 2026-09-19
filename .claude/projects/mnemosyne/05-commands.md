@@ -125,7 +125,9 @@ capture is contending for at the same instant.
 | `mnem boons` | `M.reportBoons()` — this run's claimed boons (rarity, echoes, ripple, description) |
 | `mnem affixes` | `M.reportAffixes()` — this run's active affixes (ongoing effects) |
 | `mnem library` | `M.reportLibrary()` — the all-time affix catalogue |
-| `mnem boondb [filter\|export\|import]` | All-time BOON catalogue -- its own file, filter matches name **or** effect text, entries annotated with parsed immunities/costs (v4.7.239); shows combo/contemplated counts, tags combo boons, and lists any description repaired at load (v4.7.322) |
+| `mnem advise` | The boon ADVISOR on demand (v4.7.327; it also prints by itself after every offer screen's contemplates): each option with category, rarity, combo/echo, what it does in short and red flags, scored against what you hold -- defence first -- and a RECOMMEND line with the reason; a reroll hint when every option is weak and one is left. Never claims |
+| `mnem boonweights` | The advisor's weights for your class: `M.BOON_WEIGHTS`, with `M.BOON_CLASS_WEIGHTS.<class>` merged over it |
+| `mnem boondb [filter\|export\|import]` | All-time BOON catalogue -- its own file, filter matches name, effect text **or category** (`mnem boondb offence`; v4.7.327 -- each row shows its category and the header counts them, plus how many are not yet contemplated), entries annotated with parsed immunities/costs (v4.7.239); shows combo/contemplated counts, tags combo boons, and lists any description repaired at load (v4.7.322) |
 
 ### Auto-explorer (see [07-explorer.md](07-explorer.md))
 

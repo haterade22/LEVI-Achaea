@@ -458,9 +458,13 @@ end
 -- What do we actually have? Counts, not a dump -- the dump is the report below.
 function M.boonDbStats()
   local total, described, rarity, echoes, combo, checked = 0, 0, 0, 0, 0, 0
+  local categories = {} -- "Offence" -> count (v4.7.327); only CONTEMPLATE prints a category
   for _, rec in pairs(M.history.boonLibrary or {}) do
     total = total + 1
     if type(rec) == "table" then
+      if type(rec.category) == "string" and rec.category ~= "" then
+        categories[rec.category] = (categories[rec.category] or 0) + 1
+      end
       if rec.description and rec.description ~= "" then described = described + 1 end
       if rec.rarity and rec.rarity ~= "" then rarity = rarity + 1 end
       if rec.maxEchoes then echoes = echoes + 1 end
@@ -469,18 +473,20 @@ function M.boonDbStats()
     end
   end
   return { total = total, described = described, rarity = rarity, echoes = echoes,
-           combo = combo, checked = checked }
+           combo = combo, checked = checked, categories = categories }
 end
 
--- The viewer. `filter` matches the name OR the description, so "immune" finds every immunity
--- boon and "battlerage" finds everything that touches rage -- which is the question you
--- actually have when you are staring at an offer screen.
+-- The viewer. `filter` matches the name, the description OR the category, so "immune" finds
+-- every immunity boon, "battlerage" everything that touches rage, and "offence" every Offence
+-- boon (v4.7.327) -- which is the question you actually have when you are staring at an offer
+-- screen.
 function M.reportBoonDb(filter)
   local lib = M.history.boonLibrary or {}
   local names = {}
   local f = (type(filter) == "string" and filter ~= "") and filter:lower() or nil
   for name, rec in pairs(lib) do
-    local hay = (name .. " " .. tostring(type(rec) == "table" and rec.description or "")):lower()
+    local hay = (name .. " " .. tostring(type(rec) == "table" and rec.description or "")
+      .. " " .. tostring(type(rec) == "table" and rec.category or "")):lower()
     if not f or hay:find(f, 1, true) then names[#names + 1] = name end
   end
   table.sort(names)
@@ -490,6 +496,16 @@ function M.reportBoonDb(filter)
     .. " described, " .. st.rarity .. " with rarity, " .. st.combo .. " combo, "
     .. st.checked .. " contemplated"
     .. (f and ("  <grey>(filter: " .. filter .. " -> " .. #names .. ")<reset>") or ""))
+  -- By category (v4.7.327). The rest have not been contemplated yet: only CONTEMPLATE says.
+  local cats, nCat = {}, 0
+  for c, n in pairs(st.categories or {}) do cats[#cats + 1] = c; nCat = nCat + n end
+  table.sort(cats)
+  if #cats > 0 then
+    local parts = {}
+    for _, c in ipairs(cats) do parts[#parts + 1] = "<white>" .. c .. "<grey> " .. st.categories[c] end
+    M.echo("<grey>By category: " .. table.concat(parts, "<grey>, ") .. "<grey>; "
+      .. (st.total - nCat) .. " not yet contemplated.")
+  end
   -- Say what the load-time repair changed (v4.7.322): a description it emptied is text the user
   -- used to see, and a silent change to the catalogue is indistinguishable from data loss.
   if M._repairedBoons and #M._repairedBoons > 0 then
@@ -503,6 +519,7 @@ function M.reportBoonDb(filter)
     local col = (M.RARITY_COLOUR and rec.rarity and M.RARITY_COLOUR[rec.rarity]) or "cyan"
     cecho("\n  <" .. col .. ">" .. name .. "<reset>"
       .. (rec.rarity and ("  <grey>" .. rec.rarity) or "")
+      .. ((type(rec.category) == "string" and rec.category ~= "") and ("  <white>" .. rec.category) or "")
       .. (rec.maxEchoes and ("  <grey>x" .. rec.maxEchoes) or "")
       .. ((rec.comboBoon == true) and "  <cyan>combo" or "") .. "<reset>")
     if rec.description and rec.description ~= "" then

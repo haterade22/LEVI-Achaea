@@ -848,6 +848,19 @@ floor -- flagged so the offer screen says "can echo", never "(max 1)", and never
 real count. **One contemplate chain at a time** (`M._fillBusy()`, stamped by every
 `_boonFillNext` step, cleared on every exit, stale after 15s): `mnem boonfill` refuses and the
 per-offer chain does not start while one runs.
+**THE BOON ADVISOR (v4.7.327, `014_Boon_Advisor.lua`; user: "defensive boons are a priority" /
+"it depends on the boons we have" / "each class will be different").** `M.offerSummary(list)` prints
+every option (category, rarity, combo/echo, parsed effects, red flags) and a RECOMMEND line; it runs
+at the END of the offer's contemplate chain (`ctx.offered`, set by `_boonScreenContemplate`) -- quiet
+chain or not -- or straight from `_flushPendingOffer` when no chain starts. `M.scoreBoon` is a SUM OF
+NAMED PARTS (each part is a printed reason) built on the existing parsers (`_resistFrom`,
+`_immunitiesFrom`, `_statFrom`, `_dmgGenericFrom`, `_dmgBoostFrom`, `_procFrom` + Fae-Lapse's "chance you
+give the denizen you are attacking X", `_boonDrawbacks`, `_conflictsFor`, `_spiritGate`), relative to
+what we hold (`bonusTotals` resists/immunities, held categories). Weights: `M.BOON_WEIGHTS` (defence
+first), `M.BOON_CLASS_WEIGHTS[<gmcp class lower>]` merged over it (deep; empty until play says).
+Reroll hint needs `M._rerollsLeft` > 0 (trigger 094; reset per screen). It NEVER claims -- the
+auto-picker is a later, opt-in step. `mnem advise` / `mnem boonweights`. `mnem boondb` shows,
+counts and filters by category.
 `GET /boons/export` is documented in
 02-reporting and deliberately not consumed.
 
