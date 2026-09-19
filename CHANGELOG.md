@@ -2,6 +2,193 @@
 
 ---
 
+## 2026-09-19 - Boon conflicts: parsed, highlighted, and warned about on the offer screen (v4.7.325)
+
+User, with a `BOON CONTEMPLATE` block: *"This should be echo the conflicts and highlight them."*
+
+```
+Careless Whisperer:
+--------------------------------------------------------------------------------
+Rarity:             rare
+Category:           Utility
+Can echo:           No
+Conflicts With:     Self-Preservation and Truther
+
+You are immune to masochism, hallucinations, and paranoia, and you always walk with a zealous ...
+```
+
+### What it does now
+
+- **The contemplate line is highlighted** (new trigger `mnemosyne/092`): each conflicting boon in
+  `Conflicts With:` is coloured -- **red** if we hold it this run, yellow otherwise -- and a line
+  beneath echoes the list, marked `CONFLICT` when we hold one. It works for a contemplate typed by
+  hand as well as the automatic ones.
+- **The offer screen warns** (`M._echoConflicts`, beside the immunity and attune annotations): every
+  offered boon with a known conflict gets a line naming it, with a boon we hold in red
+  ("you have it") and one also on this screen in yellow ("also offered"). It reads the pair from
+  **either side**: if a boon we hold lists the offered one, that counts too.
+- **The list is parsed and kept** (`conflictsWith`), stored in the catalogue and sent to the tracker
+  as `conflicts_with` -- a field we had transport for since v4.7.298 but never filled.
+
+### Why it was not parsed before, and what changed
+
+v4.7.298 deliberately left `Conflicts with` unparsed: its value is a list of names, the one value
+that can wrap, and a wrapped tail with no colon would have become the first words of the
+description. The real block answers that: the list is joined with **" and "**, and the meta block
+ends in a **blank line** before the description. So a following line is taken as a wrapped tail only
+before that blank line and only while the whole list still splits into **known** boon names -- a
+description line never does. " and " also appears **inside** real names ("Hammer and Anvil"), so the
+list is split into fragments and adjacent fragments are re-joined wherever they make a known name,
+longest first. "Held" means this run's claims, and only while a run is going
+(`ataxiaTemp.boonsOwned` is never cleared, so it can still list the last run's boons).
+
+**And it settles v4.7.322's open question.** Every value in this real block starts at **column 21**
+-- the same column as the glued `Combo Boon?:        Yes` and `Category:           Unset` in the
+tracker's data. The "Combo Boon?" line is almost certainly CONTEMPLATE's, as the parser assumed.
+
+### Verification
+
+2102 tests pass (12 new, one v4.7.298 test updated). 19 mutants of the new code, all caught.
+
+### Files
+
+- `mnemosyne/004_Parsers.lua`: `_splitBoonList`, `_allKnownBoons`, `_knownBoonNames`, `_heldBoons`,
+  `_conflictsFor`, `_fmtConflicts`, `_echoConflicts`, `onConflictsLine`; `_parseContemplate` takes a
+  wrapped conflicts tail; `_promoteMeta` promotes the list; `_boonFillNext` stores it.
+- `triggers/.../mnemosyne/092_Boon_Conflicts.lua`: new.
+- `tests/test_mnemosyne.lua`.
+- `README.md`, `CLAUDE.md`, `.claude/projects/mnemosyne/02-reporting.md`, `03-parsing-triggers.md`;
+  memory.
+
+---
+
+## 2026-09-19 - Contemplate every boon, every time: the game keeps changing them (v4.7.324)
+
+User, with an offer screen (Robust Restoration, Desperation, Berkana Surround, Restoration): *"We
+should boon contemplate all boons no matter what as they constantly change these to be different or
+add things to them."*
+
+### What was wrong
+
+A boon was contemplated **at most once**. `boonGaps` only queued boons with no description, v4.7.322's
+combo pass marked each one `comboChecked` and never asked again, and that pass deliberately never
+touched the text. So a boon the game later rewrote kept its old text, quote, category and combo
+status in our catalogue indefinitely.
+
+### Now contemplation is a cycle
+
+- **Every offered boon is contemplated, every boon screen** (`M._boonScreenContemplate`), plus one
+  catalogue gap as the old one-per-screen trickle did. Echo rows contemplate as their base boon.
+- **It runs only after the offer has posted**, so the report never waits on it -- the reason v4.7.279
+  took contemplation off the offer path (it raced the next ripple's captures and dropped whole
+  reports). What it learns feeds the next post of that boon. **It never takes the capture slot from
+  another capture** (it waits up to 5s, then gives up), and **it stops at GO!**: `M.onGo` moves a wave
+  counter, and a run from an earlier wave ends rather than race that wave's captures.
+- **`mnem boonfill` works through the whole catalogue**: description gaps first, then every described
+  boon -- never-contemplated first (the ten seeded combo boons first among those), then the oldest
+  `contemplatedAt`. A full cycle just starts over; `mnem boonfill recheck` restarts it by hand.
+- **A contemplate updates the text as well**, and says so: `Robust Restoration changed: ...`. That is
+  only safe from a block that is provably whole, so the capture now records whether it ended on its
+  **closing divider** -- a block cut short by a timeout or by another capture changes nothing and is
+  not counted as contemplated. The v4.7.322 guards still apply (a block needs `Rarity:` or
+  `Can echo:`, and `_learnBoon` refuses a glued screen line).
+- **Quiet when nothing changed.** The per-screen run prints a summary only when it learned or changed
+  something; `mnem boonfill` always reports.
+
+### Verification
+
+2090 tests pass (10 new; 4 existing tests updated to the new behaviour). 22 mutants of the new code,
+all caught.
+
+### Files
+
+- `mnemosyne/004_Parsers.lua`: `_boonScreenContemplate`, `_fillCtx`, `boonMetaGaps` (the whole
+  catalogue, stalest first), `boonRecheck`, `_boonFillNext` (wave check, waits for the slot, text
+  updates, change report), `_captureContemplate` (`complete`), `_flushPendingOffer`, `onGo`.
+- `mnemosyne/007_History.lua`: `boonDbStats` counts `contemplatedAt`.
+- `mnemosyne/003_Commands.lua`: help and `boonfill gaps`/`recheck` wording.
+- `tests/test_mnemosyne.lua`.
+- `README.md`, `CLAUDE.md`, `.claude/projects/mnemosyne/02-reporting.md`, `03-parsing-triggers.md`,
+  `05-commands.md`; memory.
+
+---
+
+## 2026-09-19 - The armour asks before it swaps: probe, `ii paragon`, insert by name, verify (v4.7.323)
+
+User: *"we should be probing the armour to see what paragons we have and what we need when we do
+armour pvp"* -- and then: *"the armour system is a bit old and could use a refresh to probe armour,
+identify paragons through ii paragons and insert by name the ones they need. This will become more
+complex the more we go."*
+
+### What was wrong with the old swap
+
+- **It acted on a belief, not on the armour.** `state.currentSlots` is runtime-only, so on a fresh
+  session every `armour <profile>` pried and re-inserted all three embrasures blind; v4.7.212's
+  "only pry what changes" worked only after a swap or an `armour scan` in the same session.
+- **It never knew what we own.** `ii paragon` lists the inventory, so a paragon sitting in an
+  embrasure was invisible to the registry -- and a profile naming a paragon we do not have pried the
+  old one out and left the embrasure **empty** (the v4.7.211 failure mode).
+- **"Pry all first" was a comment, not the code.** The loop alternated pry and insert slot by slot,
+  so a paragon could not move from one embrasure to another: its insert went out before the pry that
+  freed it.
+- **Default profiles held one character's item ids**, which name nothing on anyone else's account.
+
+### How it works now
+
+Every swap sends `ii paragon` and `probe armour`, and plans from the answers:
+
+```
+This armour has 3 embrasures.
+The following paragons have been inserted:
+1: an auspicious icosagon paragon (paragon361796)     critical level increase chance
+2: a nacreous deltahedral paragon (paragon424404)     morphing (level 3)
+3: a crucious paragon (paragon514466)     critical level gambling
+```
+
+- **The probe is a snapshot.** The header (new trigger `gear_system/003`) opens it, the embrasure
+  lines fill it, and it commits half a second later -- so an embrasure the probe does not list (or
+  lists as `3: Empty.`) reads as EMPTY, never as whatever we believed. Only probes the module sent
+  are read, so probing some other armour cannot overwrite the state of the one we wear. Each probed
+  paragon is registered with the game's own effect text, since `ii` never shows it.
+- **`M.planSwap` is the plan, as data** (pure, and now tested directly -- the old test had to copy
+  the logic into the test file, and a copy cannot catch a regression):
+  - a slot that already holds the right TYPE is left alone;
+  - a paragon we cannot supply -- not in the inventory, not coming out of another embrasure -- is
+    reported as **NEED** and its embrasure is **not touched**, so it keeps what it has instead of
+    being emptied (resolved to a fixed point: keeping one slot can take away the paragon another
+    was counting on);
+  - **inserts go by name** (`insert crucious into armour embrasure 3`), so any paragon of that type
+    we hold will do and a profile is a list of TYPES; only a paragon of a type we do not recognise
+    falls back to its id;
+  - every pry goes out before every insert; slots past the armour's embrasure count are skipped.
+- **It says what it is doing**, one line per embrasure: kept / old -> new / `NEED <paragon>`.
+- **It verifies.** Pry and insert answer at once (the v4.7.211 log shows the whole burst back to
+  back), so 1.5s later it probes again and says `Verified` -- or exactly which embrasure did not take.
+- **No answer, no guessing.** If the refresh gets no reply, the inventory is not read as "you own
+  nothing" (that would refuse every insert); the swap falls back to the old behaviour.
+
+New: **`armour probe [profile]`** -- what is in the armour, what is in the inventory, and (given a
+profile) what it would take, without prying anything. `armour scan` now uses the same refresh, so
+it registers the paragons in the armour as well as those in the pack. Default profiles for a new
+install are written in paragon names.
+
+### Verification
+
+2080 tests pass (23 new, all loading the real script). 30 mutants of the new code, all caught.
+
+### Files
+
+- `levi_scripts/gear_system/002_Armour_Paragons.lua`: `onProbeHeader`/`onProbeLine`/`commitProbe`,
+  `onInventoryParagon`, `refresh`/`finishRefresh`, `planSwap`, `planReport`, `verifySwap`,
+  `inspect`; `swap` and `scan` rebuilt on them; `registerParagon` keeps the effect text; defaults in
+  names; `armour probe`.
+- `triggers/.../gear_system/001_Paragon_Inventory.lua`, `002_Armour_Probe.lua` (now also `N: Empty.`),
+  `003_Armour_Probe_Header.lua` (new).
+- `tests/test_armour_swap_diff.lua` (rewritten against the real script).
+- `README.md`, `CLAUDE.md`.
+
+---
+
 ## 2026-09-18 - `combo_boon`: the tracker's ninth boon field, and the corrupted descriptions it exposed (v4.7.322)
 
 User: *"He updated what we can send over to the API so we may as well update ours to match what we

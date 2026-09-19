@@ -624,12 +624,13 @@ Configurable profile system for armour paragon slots, traits, and morphing. Auto
 | `src_new/scripts/.../gear_system/002_Armour_Paragons.lua` | Main system (`ataxia.armour` namespace) |
 | `src_new/aliases/.../gear_system/002_Armour_Paragons.lua` | `armour` alias dispatcher |
 | `src_new/triggers/.../gear_system/001_Paragon_Inventory.lua` | Auto-detect paragons from `ii paragon` |
-| `src_new/triggers/.../gear_system/002_Armour_Probe.lua` | Detect current embrasures from `probe armour` |
+| `src_new/triggers/.../gear_system/002_Armour_Probe.lua` | Embrasure lines of `probe armour` (incl. `N: Empty.`) -> `onProbeLine` |
+| `src_new/triggers/.../gear_system/003_Armour_Probe_Header.lua` | `This armour has N embrasures.` -> `onProbeHeader` (opens the snapshot, v4.7.323) |
 
 **Profile Structure:**
 ```lua
 ataxia.armour.config.profiles["bash"] = {
-  slots = {"paragon361796", "paragon343178", "paragon514466"},
+  slots = {"icosagon", "serendipitous", "crucious"},  -- TYPE names (v4.7.323); ids still accepted
   traits = {"quick-witted", "fully fit", "marksman", ...},
   armourType = nil,  -- nil/string/"auto"
 }
@@ -643,9 +644,11 @@ ataxia.armour.config.profiles["bash"] = {
 
 **Paragon Lookup:** `PARAGON_TYPES` table maps 24 paragon type keywords to clean display names with effects. `registerParagon()` resolves raw game names (e.g., "an aeneaous paragon") to display names (e.g., "aeneaous (absorption)"). Stale names re-resolved on load.
 
+**THE SWAP ASKS BEFORE IT ACTS (v4.7.323, user-directed).** Every `armour <profile>` sends `ii paragon` + `probe armour` (`ataxia.armour.refresh`), and plans from the answers with the pure `ataxia.armour.planSwap(slots, cur, known, inventory, capacity)`. The probe is a SNAPSHOT: the header opens it, embrasure lines fill it, it commits `PROBE_SETTLE` later, so an unlisted or `N: Empty.` embrasure reads EMPTY -- and only probes the module sent are read (`state.probing`), so probing another armour cannot corrupt the worn one's state. Plan rules: a slot already holding the right TYPE (`paragonKey`) is kept; a want we cannot supply (not in the inventory, not released by another embrasure this swap -- resolved to a fixed point) is reported `NEED` and its embrasure is NOT TOUCHED, never emptied; **inserts go BY NAME** (`insert crucious into armour embrasure 3`), so a profile is a list of TYPES and only an unrecognised type falls back to its id; all pries before all inserts (the old loop interleaved them, so a paragon could not move between embrasures); slots past the armour's capacity are skipped. `planReport` prints one line per embrasure, and `verifySwap` probes again `VERIFY_DELAY` (1.5s) later -- pry/insert answer instantly (v4.7.211 log) -- and reports `Verified` or the embrasure that did not take. An unanswered refresh is NOT read as "you own nothing" (the inventory is only trusted from a refresh that answered). `armour probe [profile]` is the dry run; `armour scan` uses the same refresh, so it registers paragons IN the armour, which `ii paragon` never lists. Probed paragons keep the game's effect text (`config.paragonEffects`). Tests load the real script (`test_armour_swap_diff.lua`); the old test copied the planning logic, and a copy cannot catch a regression.
+
 **Persistence:** Self-contained `table.save/load` to `getMudletHomeDir()/armourconfig` with `_ataxia_backup` fallback.
 
-**Commands:** `armour`, `armour <name>`, `armour add/remove/set/show/auto/bash/pvp/morph/scan/paragons/types/help`
+**Commands:** `armour`, `armour <name>`, `armour add/remove/set/show/auto/bash/pvp/morph/scan/probe/paragons/types/help`
 
 ### Item Catalog (`itemCatalog`)
 Catalogs artefacts, talismans, promo items, and special equipment. Cross-references against a knowledge base to identify what each item does. Auto-probes unknowns and flags them for review.
@@ -792,11 +795,10 @@ added a boolean `combo_boon`; everything else still matched. The wording is know
 tracker's `GET /boons/export`, where ten descriptions carry `Combo Boon?:        Yes` GLUED ON --
 which screen prints it (CONTEMPLATE or the offer screen) is unproven, and "No" has never been seen.
 **Sources:** `M.BOON_COMBO` seeds those ten (fill-only; nothing seeded as NOT combo), and `mnem
-boonfill` now fills its batch after the description gaps with DESCRIBED boons never contemplated
-(`M.boonMetaGaps`, seeded combo boons first, `(ECHO)` rows excluded, each marked `comboChecked` once a
-real block returns) -- because `boonGaps` only ever queued boons with NO description, a mature
-catalogue (402 boons, 0 gaps) would never have learned anything. The combo pass takes quote/category/
-combo only and NEVER the text. `_enrichOffer` sends `combo_boon` when either answer is known and OMITS
+boonfill` now fills its batch after the description gaps with DESCRIBED boons (`M.boonMetaGaps`,
+seeded combo boons first, `(ECHO)` rows excluded) -- because `boonGaps` only ever queued boons with NO
+description, a mature catalogue (402 boons, 0 gaps) would never have learned anything. **Since
+v4.7.324 that is a CYCLE, not a one-off** (user: "they constantly change these"): see below. `_enrichOffer` sends `combo_boon` when either answer is known and OMITS
 it otherwise (TYPE tests, never truthiness, all the way down: `false` is an answer). **Glued screen
 lines were already in OUR catalogue** (Deadly Finesse's "description" = two WADE STATUS lines a
 contemplate capture swallowed), so they are now refused at every door: `M._splitGluedMeta` (the tell
@@ -805,11 +807,34 @@ across ~1,100 descriptions), `_learnBoon` never stores one, `M._boonDbRepair` fi
 load (reported by `mnem boondb`), `M._cleanOfferList` stops a meta row becoming a fake boon on the
 offer screen, a captured "contemplate" with neither `Rarity:` nor `Can echo:` is ignored, and a
 column-padded label printed AFTER the text is meta too (a single-space `Note: x` line stays prose).
-`mnem boonfill recheck` clears the `comboChecked` marks so the pass asks again after a game change
-(answers kept). Also:
+`mnem boonfill recheck` restarts the contemplate cycle (answers kept). Also:
 meta labels may end in ONE `?` (`META_KEY`), only the seen label promotes, `Unset` is a placeholder,
 `_boonDbMerge` type-checks the non-string fields, `/ripple_level` takes whole numbers only, and the
-dead `_contemplateNext`/`_applyContemplate` chain is gone. `GET /boons/export` is documented in
+dead `_contemplateNext`/`_applyContemplate` chain is gone.
+
+**CONTEMPLATE EVERY BOON, EVERY TIME (v4.7.324, user: "we should boon contemplate all boons no
+matter what as they constantly change these").** A boon used to be contemplated at most once. Now:
+every OFFERED boon is contemplated on every boon screen (`M._boonScreenContemplate`, plus one catalogue
+gap) -- scheduled from `_flushPendingOffer`, i.e. AFTER the offer has posted, so it cannot recreate
+v4.7.279's dropped reports; it never takes the capture slot from another capture (waits up to 5s, then
+gives up) and stops at GO! (`M.onGo` bumps `M._fillGen`; a run from an older wave ends). `mnem
+boonfill` cycles the whole catalogue, never-contemplated first then oldest `contemplatedAt` (legacy
+`comboChecked` counts as long ago). A contemplate now UPDATES the text and echoes `<name> changed`,
+which is only safe from a whole block: `_captureContemplate` sets `info.complete` from whether the
+block ended on its CLOSING divider, and a partial one (timeout / force-finished) teaches nothing. The
+per-screen run is silent unless it learned or changed something.
+
+**BOON CONFLICTS (v4.7.325, user: "echo the conflicts and highlight them").** CONTEMPLATE prints
+`Conflicts With:     Self-Preservation and Truther` (joined with " and "; the meta block ends in a
+BLANK line). Parsed into `conflictsWith` (stored, and sent as `conflicts_with`): `M._splitBoonList`
+splits on commas and " and " then re-joins fragments that form a KNOWN boon name, longest first
+("Hammer and Anvil" survives); a following line counts as a wrapped tail only before the blank line
+and only while the whole list still splits into known names. Trigger `mnemosyne/092` highlights each
+name in the line (red if HELD this run -- `M._heldBoons()` = this run's claims, only while a run is
+active; `ataxiaTemp.boonsOwned` is never cleared so it is not used) and echoes the list; the offer
+screen's `M._echoConflicts` warns per offered boon, reading the pair from either side. The real
+block's values sit at column 21, like the glued "Combo Boon?" lines -- so that line is CONTEMPLATE's.
+`GET /boons/export` is documented in
 02-reporting and deliberately not consumed.
 
 **THE DEEP REVIEW OF v4.7.298 (four parallel agents; every finding verified before acting, two

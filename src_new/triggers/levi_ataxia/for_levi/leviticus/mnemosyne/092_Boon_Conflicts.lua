@@ -1,13 +1,12 @@
 --[[mudlet
 type: trigger
-name: Paragon Inventory
+name: Boon Conflicts
 hierarchy:
 - Levi_Ataxia
 - For Levi
 - leviticus
-- LeviAtax
-- Leviticus
-- Gear System
+- Ataxia
+- Mnemosyne
 attributes:
   isActive: 'yes'
   isFolder: 'no'
@@ -31,14 +30,13 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^\s+(paragon\d+)\s+(.+)$
+- pattern: ^Conflicts [Ww]ith:\s+(.+)$
   type: 1
 ]]--
 
--- Parses "ii paragon" output lines like:
---     paragon514466           a crucious paragon
--- ataxia.armour.onInventoryParagon registers it and, during a refresh, records it as something
--- we could insert (v4.7.323).
-if ataxia and ataxia.armour and ataxia.armour.onInventoryParagon then
-  ataxia.armour.onInventoryParagon(matches[2], matches[3])
-end
+-- BOON CONTEMPLATE's conflicts line (v4.7.325, user: "echo the conflicts and highlight them"):
+--   Conflicts With:     Self-Preservation and Truther
+-- Highlights each conflicting boon in the line -- red if we hold it this run -- and echoes the list.
+-- Ungated on purpose: it helps a contemplate typed by hand just as much as the automatic ones.
+local M = ataxia and ataxia.mnemosyne
+if M and M.onConflictsLine then M.onConflictsLine(matches[2]) end

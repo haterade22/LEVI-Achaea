@@ -56,6 +56,7 @@ Patterns are Mudlet regex (`type: 1`), quoted verbatim from each trigger file.
 | 087 | Searing Light | `^Searing Light\s+\d+\s+\w+` (BOONS-list row) | sets `mnemSearingLight = true` (Serpent basher conjures a lightwall FIRST in the round at 2+ denizens, once per room, first free planar exit -- `ataxiaBasher_searingLightwall`, basher/002) | none (flag set unconditionally; reset on run start/end) |
 | 088 | Searing Light Proc | `^You form a ball of light in your palm and hurl it \w+\.$` / `searing the location with solar force` (substring) | `ataxiaBasher_searingLightConfirm(proc)` -- the conjure releases the replay and restamps the room from the landed moment; the detonation (boon-only, self-proving) also re-latches the flag | none |
 | 089 | Contemplate Unknown | `^You consider for a time, but no information comes to you on such a boon\.$` | `onContemplateUnknown()` -- the name in flight is recorded in `M.history.boonUnknown`, dropped from `boonGaps()`, announced; the capture is force-finished so a batch moves on | none |
+| 092 | Boon Conflicts | `^Conflicts [Ww]ith:\s+(.+)$` (BOON CONTEMPLATE's conflicts line; real sample 2026-09-19) | `onConflictsLine(value)` (v4.7.325) -- highlights each conflicting boon in the line (red if held this run) and echoes the list; works for a contemplate typed by hand too | none (a highlight; "held" needs an active run) |
 | 091 | Flight Truth | `flies up to your level from below.` / `swoops down from the skies to land beside you.` / `You are not flying, my friend.` (**substrings**, `type: 0` -- on the TAIL of each line, so any denizen name fits; live 2026-09-18) | `swarm.onFlightTruth(line)` (v4.7.321) -- the two FLYER lines latch `S.grounded` (a flyer lives on this ripple), end a recovery hover via `_hoverCompromisedTick`, and end a KITE properly via `S.reset` (which lands). "Not flying" is the reply to OUR `land`: it clears `S.flightConfirmed` and nothing else, because it can be stale (the death's reply arrived after a NEW hover had begun) and `S.flying` is the kite's mode flag. **Accelerators, not the guard**: the recovery tick checks the premise itself, denizen-agnostically (see 07-explorer) | handler self-gates on `ataxiaBasher.inMnemosyne` |
 
 The gate is enforced *inside* each handler (see the gating model in [01-architecture.md](01-architecture.md)); only trigger 007 does its `_inRun()` check in the trigger body before calling the API directly. `onRipple` is the exception to the auto-gate: it first drives the mini-map (`map.onRipple(n)`, unconditional) and only then gates telemetry on `_auto()`.
@@ -140,7 +141,7 @@ The old design gated this POST behind a slow (~2.5s/boon) per-boon `BOON CONTEMP
 
 ### The `BOON CONTEMPLATE` enrichment state machine (now backfill-only)
 
-The sequential contemplate walk **is no longer on the offer path** — `_reportBoonsOfferedEnriched` posts immediately (above). The offer-path chain (`_contemplateNext` / `_applyContemplate`) was dead from v4.7.279 and **removed in v4.7.322**. Contemplate now drives only `boonFill` (`mnem boonfill`, and the one-per-screen trickle): strictly sequential — one contemplate block in flight at a time, matching the `_captureLines` guard — `_boonFillNext` walking `send("boon contemplate <name>")` → `_captureContemplate(cb)` → `_learnBoon` → `tempTimer(0.5, next)`. Since v4.7.322 it also contemplates DESCRIBED boons never checked (combo status, quote, category -- never the text), and ignores a captured block with neither `Rarity:` nor `Can echo:`.
+The sequential contemplate walk **is no longer on the offer path** — `_reportBoonsOfferedEnriched` posts immediately (above). The offer-path chain (`_contemplateNext` / `_applyContemplate`) was dead from v4.7.279 and **removed in v4.7.322**. Contemplate now runs from `mnem boonfill` and -- since v4.7.324 -- after every posted offer (`_boonScreenContemplate`, every offered boon plus one gap): strictly sequential — one contemplate block in flight at a time, matching the `_captureLines` guard — `_boonFillNext` walking `send("boon contemplate <name>")` → `_captureContemplate(cb)` → `_learnBoon` → `tempTimer(0.5, next)`. Since v4.7.322 it contemplates DESCRIBED boons too, and ignores a captured block with neither `Rarity:` nor `Can echo:`; since v4.7.324 it is a cycle over the whole catalogue (stalest first), it UPDATES the text from a whole block (`info.complete`: the capture ended on its closing divider) and echoes what changed, it waits for another capture rather than force-finishing it, and it stops at GO!.
 
 > **"Immediately" means "not behind the contemplate chain", not "synchronously".** Text below
 > describing `_reportBoonsOfferedEnriched` as posting *right away* predates v4.7.279's ripple
@@ -418,7 +419,18 @@ increased by:  70 Denizen speed increased by:   2"), was a CONTEMPLATE capture t
 STATUS block instead, so `_boonFillNext` now ignores a captured block with neither `Rarity:` nor
 `Can echo:` -- every real contemplate opens with them.
 
-### Why `Conflicts with` is NOT promoted (deep review, v4.7.298)
+### `Conflicts With` IS promoted now (v4.7.325) -- the v4.7.298 reasoning, and what answered it
+
+**Superseded in v4.7.325.** A real block (the user's Careless Whisperer, 2026-09-19) showed the label
+is `Conflicts With`, the list is joined with " and ", and the meta block ends in a **blank line**
+before the description. So `_parseContemplate` takes a following line as the list's wrapped tail only
+before that blank line and only while the whole list still splits into KNOWN boon names (a
+description line never does), and `_splitBoonList` re-joins fragments into known names so
+"Hammer and Anvil" is not cut in two. The same block settles the "Combo Boon?" question: its values
+sit at column 21, exactly like the glued lines in the tracker's data. The v4.7.298 reasoning follows,
+unchanged, because the hazard it names is real and is what the tail rule guards against.
+
+#### Why `Conflicts with` was NOT promoted (deep review, v4.7.298)
 
 It was, in the first cut of this change, on the strength of the schema having the field. That was
 wrong, and the reasoning generalises to any future long-valued label.
@@ -488,7 +500,9 @@ longer print, and its documentation stays true-looking. Reaper is the worked exa
   the swarm thresholds pre-arm on arrival instead of learning on the first hit. Not taken because it
   is a data import we do not have the data for, and a name table is the shape our own rule
   (v4.7.264) says goes stale on the entry after the last one someone added.
-* **Contemplating every offered slot.** We moved off that in v4.7.91; the enrichment chain raced the
-  next ripple for the single `_capturing` slot and dropped whole reports. `M._contemplateNext`
-  was dead code from then and was removed in v4.7.322; `mnem status` still advertises
-  "Contemplate: ON", which no longer describes anything on the offer path.
+* **Contemplating every offered slot BEFORE posting.** We moved off that in v4.7.91; the enrichment
+  chain raced the next ripple for the single `_capturing` slot and dropped whole reports.
+  `M._contemplateNext` was dead code from then and was removed in v4.7.322. **Adopted differently in
+  v4.7.324:** every offered slot IS contemplated now, but only AFTER the offer has posted, never
+  taking the slot from another capture, and stopping at GO!. `mnem status` still advertises
+  "Contemplate: ON", which describes nothing on the offer path.

@@ -33,19 +33,15 @@ colorTriggerBgColor: '#000000'
 patterns:
 - pattern: ^(\d+): .+ \((paragon\d+)\)
   type: 1
+- pattern: ^(\d+): Empty\.
+  type: 1
 ]]--
 
--- Parses "probe armour" embrasure lines like:
--- 1: a resonate metalliferous paragon (paragon500167)     shifting damage protection (physical blunt)
--- Populates current slot state for skip-swap optimization
-
-if ataxia and ataxia.armour and ataxia.armour.state and ataxia.armour.state.probing then
-  local slotNum = tonumber(matches[2])
-  local paragonId = matches[3]
-  if slotNum and paragonId and slotNum >= 1 and slotNum <= 3 then
-    ataxia.armour.state.currentSlots[slotNum] = paragonId
-    -- A probe is ground truth, so the next swap can diff instead of prying every slot
-    -- (v4.7.212). Without this the diff has no baseline on a fresh session.
-    ataxia.armour.state.slotsKnown = true
-  end
+-- One embrasure line of `probe armour`:
+--   1: an auspicious icosagon paragon (paragon361796)     critical level increase chance
+--   3: Empty.
+-- Classified by ataxia.armour.onProbeLine (v4.7.323), which reads only probes the armour module
+-- sent itself and builds a snapshot the header (003) opened.
+if ataxia and ataxia.armour and ataxia.armour.onProbeLine then
+  ataxia.armour.onProbeLine(line)
 end

@@ -171,17 +171,18 @@ Each function guards on `M._hasToken()` and enqueues. Payload shapes:
     `conflictsWith` → `conflicts_with`, `maxEchoes` → `num_echoes_possible`).
   * **`conflicts_with` is omitted when empty**, never sent as `{}`: an empty Lua table has no
     array/object distinction for yajl, and omitting the key already says "no known conflicts".
-  * **`conflicts_with` currently has no parser** — the transport and storage exist, but nothing
-    populates it from game text. `Conflicts with` was promoted in this change's first cut and the
-    deep review removed it: its value is a *list of boon names*, the one shape that wraps, and
-    `_parseContemplate` reads raw physical lines, so a wrap both truncates the value and turns its
-    tail into the opening words of the description. See
-    [03-parsing-triggers.md](03-parsing-triggers.md#why-conflicts-with-is-not-promoted-deep-review-v47298).
+  * **`conflicts_with` is parsed since v4.7.325** from CONTEMPLATE's `Conflicts With:` line (a real
+    sample finally showed the format: " and "-joined, and a blank line before the description), so
+    the transport and storage built in v4.7.298 now carry data. v4.7.298 had held it back because a
+    wrapped list would truncate and leak into the description; the tail rule that answers that is
+    in [03-parsing-triggers.md](03-parsing-triggers.md).
   * **`combo_boon` is the ninth field (v4.7.322)** -- a BOOLEAN the tracker added (default false).
     The catalogue's `comboBoon` comes from two places: the seed (`M.BOON_COMBO`, the ten boons the
     tracker's export shows as combo) and a `Combo Boon?: Yes/No` line on any CONTEMPLATE that
-    `mnem boonfill` runs -- which now also contemplates DESCRIBED boons it has never checked,
-    because a mature catalogue has no description gaps and would otherwise never learn it. Sent
+    `mnem boonfill` runs -- which now also contemplates DESCRIBED boons, because a mature catalogue
+    has no description gaps and would otherwise never learn it -- and, since v4.7.324, on the
+    contemplate of every boon an offer screen shows (after that offer has posted, so it feeds the
+    boon's NEXT post). Sent
     when the catalogue knows **either** answer; **omitted** when it knows neither, because an
     unknown posted as `false` is a guess that looks like data. Unlike the string fields, `false` is
     information: every store and merge on the way tests the TYPE, never truthiness. **Open

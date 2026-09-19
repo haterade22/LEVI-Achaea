@@ -117,16 +117,17 @@ Configurable profile system for armour paragon slots (1-3), trait selections, an
 | Command | Action |
 |---------|--------|
 | `armour` | Show all profiles and auto-swap status |
-| `armour <name>` | Swap to a named profile (e.g., `armour bash`, `armour pvp`) |
+| `armour <name>` | Swap to a named profile (e.g., `armour bash`, `armour pvp`): probes the armour and `ii paragon` first, swaps only the embrasures that change, inserts by paragon name, reports any paragon you don't have (that embrasure is left alone, never emptied), then probes again to verify |
+| `armour probe [profile]` | Show what's in the armour and your inventory, and what a profile would need — without changing anything |
 | `armour add <name>` | Create a new profile |
-| `armour set <n> slot1 <id>` | Set paragon in embrasure slot 1 (slot1/slot2/slot3) |
+| `armour set <n> slot1 <paragon>` | Set the paragon for embrasure 1 (slot1/slot2/slot3) — a type name like `crucious`, or an id |
 | `armour set <n> traits <...>` | Set trait list (space-separated) |
 | `armour set <n> armourtype <t>` | Set morph target (`fullplate`, `cloth`, `auto`, `none`) |
 | `armour auto on/off` | Toggle auto-swap on basher enable/disable |
 | `armour bash <name>` | Set which profile activates when basher starts |
 | `armour pvp <name>` | Set which profile activates when basher stops |
 | `armour morph <type/auto>` | Manually morph armour type (10min cooldown) |
-| `armour scan` | Auto-detect owned paragons via `ii paragon` + current embrasures via `probe armour` |
+| `armour scan` | Register every paragon you own: the inventory via `ii paragon` and the ones in the armour via `probe armour` |
 | `armour paragons` | Show all known paragons |
 | `armour types` | Show all 24 paragon types with effects |
 
@@ -474,7 +475,7 @@ A local, persisted record of everything each run surfaces — no server required
 | `mnem affixes` | This run's active affixes (ongoing effects) |
 | `mnem library` | The all-time affix catalogue — every affix ever seen, with descriptions |
 | `mnem boondb [filter]` | The all-time boon catalogue — every boon ever seen with its effect, rarity, echo cap and combo status (`export` / `import` for backup) |
-| `mnem boonfill` | Fill the catalogue's gaps via `BOON CONTEMPLATE`, 8 at a time: boons with no effect text first, then each boon's combo status, quote and category (`all` for everything, `recheck` to ask again) |
+| `mnem boonfill` | Keep the boon catalogue current via `BOON CONTEMPLATE`, 8 at a time: boons with no effect text first, then the rest, stalest first — the game keeps changing boons, and any text that changed is updated and called out (`all` for everything, `recheck` to start the cycle over). Every boon on an offer screen is also contemplated automatically once the offer is reported |
 
 History lives in its own profile file (`mnemosyne_history.lua`) and survives package updates. `mnem quiet` silences the automatic per-claim/per-affix echoes while still recording.
 
@@ -490,7 +491,7 @@ than worked out under fire.
 
 ### Boon → Class Integration
 
-A passthrough intercept of `BOON CLAIM <name>` forwards your command, auto-reports the selection, and flips combat flags so the basher adapts to the boons you take — Bard **Warmarch**, Blademaster **Shattered Star** / **Bladed Reflexes** (keeps the Shindo augment up for 20% damage reduction), and Magi **Aspect of Kkractle** / **Hot Springs** reshape their class's attack logic, and the class-agnostic **Hammer and Anvil** (attacks bypass denizen shields) turns off razing and shield-swapping entirely for the rest of the run. **Bloodscent** turns each ripple entry into parsed recon (below). Monk/Shikudo gets two more: **Kai Unleashed** fires a room-wide KAI CHOKE burst (25k+ magical observed) alongside the combo in crowded rooms on its 30-second cooldown — confirmed by the burst's own game line, so an eaten choke never wastes the window — and **Senseless Flurry** keeps the numbness defence up in thin rooms for 30% faster balance (crowd-gated: numbness defers damage and would blind the safety nets in a swarm). Any Monk holding **Sharp Mind** (critical strikes restore mana, and the Monk strikes three times a balance) transmutes mana into health as a top-up at 90% HP rather than a 70% gap-filler. Psion's **Panoply** swaps the bash to WEAVE FLURRY (60–200% scaling per strike). The **Haemophiliac** affix (kills bleed thousands) automatically slows the sweep: after each room clears, movement holds until the bleed is clotted and HP recovers. **Boss tactics** are per-boss scripted: against Seasone the Industrious the tree tattoo is held in reserve from the moment her objective appears and released the instant her phial truelock lands — a fresh tree breaks the lock immediately.
+A passthrough intercept of `BOON CLAIM <name>` forwards your command, auto-reports the selection, and flips combat flags so the basher adapts to the boons you take — Bard **Warmarch**, Blademaster **Shattered Star** / **Bladed Reflexes** (keeps the Shindo augment up for 20% damage reduction), and Magi **Aspect of Kkractle** / **Hot Springs** reshape their class's attack logic, and the class-agnostic **Hammer and Anvil** (attacks bypass denizen shields) turns off razing and shield-swapping entirely for the rest of the run. **Bloodscent** turns each ripple entry into parsed recon (below). Boons that **conflict** are called out: the offer screen warns when an offered boon conflicts with one you already hold (or with another on the same screen), and `BOON CONTEMPLATE`'s *Conflicts With* line is highlighted — red for a boon you hold. Monk/Shikudo gets two more: **Kai Unleashed** fires a room-wide KAI CHOKE burst (25k+ magical observed) alongside the combo in crowded rooms on its 30-second cooldown — confirmed by the burst's own game line, so an eaten choke never wastes the window — and **Senseless Flurry** keeps the numbness defence up in thin rooms for 30% faster balance (crowd-gated: numbness defers damage and would blind the safety nets in a swarm). Any Monk holding **Sharp Mind** (critical strikes restore mana, and the Monk strikes three times a balance) transmutes mana into health as a top-up at 90% HP rather than a 70% gap-filler. Psion's **Panoply** swaps the bash to WEAVE FLURRY (60–200% scaling per strike). The **Haemophiliac** affix (kills bleed thousands) automatically slows the sweep: after each room clears, movement holds until the bleed is clotted and HP recovers. **Boss tactics** are per-boss scripted: against Seasone the Industrious the tree tattoo is held in reserve from the moment her objective appears and released the instant her phial truelock lands — a fresh tree breaks the lock immediately.
 
 ### Swarm Tactics & Low-HP Escape (`mnem swarm`)
 

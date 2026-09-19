@@ -5754,15 +5754,12 @@ describe("M._promoteMeta() -- contemplate labels we now know the name of", funct
     expect(info.category).toBe("Defensive")
   end)
 
-  -- CONFLICTS IS DELIBERATELY NOT PROMOTED (deep review). Its value is a LIST OF BOON NAMES --
-  -- long, and this parser reads raw physical lines with no continuation-joining while Achaea
-  -- wraps server-side. A wrapped meta value truncates AND, having no colon on its continuation
-  -- line, flips the state machine into `desc`, so the tail becomes the opening words of the
-  -- description that gets written to the catalogue. We have never seen the line, so there is
-  -- nothing to lose by waiting and a corrupted description to lose by guessing.
-  it("does not promote Conflicts with -- it stays in meta until we have seen the line", function()
+  -- v4.7.298 kept Conflicts unpromoted until we had seen the line. v4.7.325: we have (the user's
+  -- Careless Whisperer block), so it promotes -- as a LIST -- and meta keeps the raw value.
+  it("promotes Conflicts with as a list, and meta keeps the raw value", function()
     local info = M._promoteMeta({ meta = { ["Conflicts with"] = "Glass Jaw, Iron Throat." } })
-    expect(info.conflictsWith).toBeNil()
+    expect(info.conflictsWith[1]).toBe("Glass Jaw")
+    expect(info.conflictsWith[2]).toBe("Iron Throat")
     expect(info.meta["Conflicts with"]).toBe("Glass Jaw, Iron Throat.")
   end)
 
@@ -6339,10 +6336,11 @@ describe("comboBoon in the catalogue", function()
 
   it("mnem boondb counts them", function()
     local st
-    withLibrary({ A = { comboBoon = true, comboChecked = true }, B = { comboBoon = false }, C = {} },
+    withLibrary({ A = { comboBoon = true, comboChecked = true }, B = { comboBoon = false }, C = {},
+                  D = { contemplatedAt = 5 } },
       function() st = M.boonDbStats() end)
     expect(st.combo).toBe(1)
-    expect(st.checked).toBe(1)
+    expect(st.checked).toBe(2)
   end)
 end)
 
@@ -6355,7 +6353,7 @@ describe("mnem boonfill learns combo status", function()
     end)
     expect(lib["Iron Throat"] ~= nil).toBeTrue()
     expect(lib["Iron Throat"].comboBoon).toBeFalse()
-    expect(lib["Iron Throat"].comboChecked).toBeTrue()
+    expect(lib["Iron Throat"].contemplatedAt ~= nil).toBeTrue()
   end)
 
   -- The root cause of Deadly Finesse: the capture caught a WADE STATUS block.
@@ -6368,33 +6366,73 @@ describe("mnem boonfill learns combo status", function()
     expect(lib["Deadly Finesse"]).toBeNil()
   end)
 
-  it("never touches the text of a boon it already describes", function()
-    local lib = withLibrary({ ["Azure Scales"] = { description = "From the offer screen." } }, function()
-      withContemplate(AZURE, function()
-        M._boonFillNext({ "Azure Scales" }, 1, 0,
-          { meta = { ["Azure Scales"] = true }, checked = 0, lines = 0, noLine = {} })
+  -- v4.7.324 (user: "they constantly change these to be different or add things to them"): a
+  -- whole contemplate's text replaces ours, and the change is said out loud.
+  it("a whole contemplate rewrites a described boon's text, and says it changed", function()
+    local echoes
+    local lib = withLibrary({ ["Azure Scales"] = { description = "Gain 10% resistance to cold damage." } }, function()
+      echoes = withContemplate(AZURE, function()
+        M._boonFillNext({ "Azure Scales" }, 1, 0, M._fillCtx({ ["Azure Scales"] = true }))
       end)
     end)
-    expect(lib["Azure Scales"].description).toBe("From the offer screen.")
+    expect(lib["Azure Scales"].description).toBe("Gain 25% resistance to cold damage.")
     expect(lib["Azure Scales"].comboBoon).toBeTrue()
     expect(lib["Azure Scales"].quote).toBe("A line of flavour.")
-    expect(lib["Azure Scales"].comboChecked).toBeTrue()
+    expect(lib["Azure Scales"].contemplatedAt ~= nil).toBeTrue()
+    expect(table.concat(echoes, "\n"):find("Azure Scales changed", 1, true) ~= nil).toBeTrue()
   end)
 
-  it("queues described, unchecked boons -- seeded combo boons first", function()
+  it("an unchanged text is not reported as a change", function()
+    local echoes
+    withLibrary({ ["Azure Scales"] = { description = "Gain 25%  resistance to cold damage." } }, function()
+      echoes = withContemplate(AZURE, function()
+        M._boonFillNext({ "Azure Scales" }, 1, 0, M._fillCtx({ ["Azure Scales"] = true }))
+      end)
+    end)
+    expect(table.concat(echoes, "\n"):find("Azure Scales changed", 1, true)).toBeNil()
+  end)
+
+  -- A block cut short (a timeout, or another capture force-finishing it) is not the whole text.
+  it("a contemplate that did not end on its closing divider changes nothing", function()
+    local realCap = M._captureContemplate
+    local lib
+    local ok, err = pcall(function()
+      lib = withLibrary({ ["Azure Scales"] = { description = "Old text." } }, function()
+        withContemplate(AZURE, function()
+          M._captureContemplate = function(cb)
+            local info = M._parseContemplate({ "Rarity: common", "Gain 25% resistance" })
+            info.complete = false
+            cb(info)
+          end
+          M._boonFillNext({ "Azure Scales" }, 1, 0, M._fillCtx({ ["Azure Scales"] = true }))
+        end)
+      end)
+    end)
+    M._captureContemplate = realCap
+    if not ok then error(err, 0) end
+    expect(lib["Azure Scales"].description).toBe("Old text.")
+    expect(lib["Azure Scales"].contemplatedAt).toBeNil()
+  end)
+
+  it("the whole catalogue is the queue: never-contemplated first (seeded combo first), then the stalest", function()
     local gaps
     withLibrary({
       ["Zeal"] = { description = "d" },
       ["Azure Scales"] = { description = "d", comboBoon = true },
       ["Alpha"] = { description = "d" },
-      ["Done"] = { description = "d", comboChecked = true },
+      ["Recent"] = { description = "d", contemplatedAt = 2000 },
+      ["Stale"] = { description = "d", contemplatedAt = 1000 },
+      ["Legacy"] = { description = "d", comboChecked = true },   -- v4.7.322's mark: long ago
       ["(ECHO) Zeal"] = { description = "d" },
       ["No Text"] = {},
     }, function() gaps = M.boonMetaGaps() end)
-    expect(#gaps).toBe(3)
+    expect(#gaps).toBe(6)
     expect(gaps[1]).toBe("Azure Scales")
     expect(gaps[2]).toBe("Alpha")
     expect(gaps[3]).toBe("Zeal")
+    expect(gaps[4]).toBe("Legacy")
+    expect(gaps[5]).toBe("Stale")
+    expect(gaps[6]).toBe("Recent")
   end)
 
   it("takes description gaps first and fills the batch from the combo pass", function()
@@ -6423,8 +6461,7 @@ describe("mnem boonfill learns combo status", function()
     withLibrary({ ["Azure Scales"] = { description = "d", comboBoon = true } }, function()
       echoes = withContemplate({ "Rarity: common", "Gain 25% resistance to cold damage.", "", '"Q."' },
         function()
-          M._boonFillNext({ "Azure Scales" }, 1, 0,
-            { meta = { ["Azure Scales"] = true }, checked = 0, lines = 0, noLine = {} })
+          M._boonFillNext({ "Azure Scales" }, 1, 0, M._fillCtx({ ["Azure Scales"] = true }))
         end)
     end)
     local said = table.concat(echoes, "\n")
@@ -6448,7 +6485,7 @@ describe("mnem boonfill recheck", function()
     local n, gaps
     local lib = withLibrary({
       ["Azure Scales"] = { description = "d", comboBoon = true, comboChecked = true },
-      ["Iron Throat"] = { description = "d", comboChecked = true },
+      ["Iron Throat"] = { description = "d", contemplatedAt = 5 },
       ["Glass Jaw"] = { description = "d" },
     }, function()
       n = M.boonRecheck()
@@ -6457,6 +6494,7 @@ describe("mnem boonfill recheck", function()
     M._historySaveSoon = realSoon
     expect(n).toBe(2)
     expect(lib["Azure Scales"].comboChecked).toBeNil()
+    expect(lib["Iron Throat"].contemplatedAt).toBeNil()                 -- the cycle starts over
     expect(lib["Azure Scales"].comboBoon).toBeTrue()                   -- the answer stays
     expect(#gaps).toBe(3)
   end)
@@ -6471,6 +6509,348 @@ describe("mnem boonfill recheck", function()
     M.echo, M._historySaveSoon = realEcho, realSoon
     expect(lib["Iron Throat"].comboChecked).toBeNil()
     expect(said ~= nil and said:find("1", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
+describe("every offered boon is contemplated, every screen (v4.7.324)", function()
+  -- Records the contemplates a run sends; each capture answers with a whole block. Timers are
+  -- QUEUED and run in order after the call returns, as Mudlet runs them -- firing them inline would
+  -- reverse the order of the sends and hide the wait-for-the-slot path.
+  local function run(lib, fn)
+    local asked, queue, said, delays = {}, {}, {}, {}
+    local realCap, realTimer, realSend, realSave, realEcho = M._captureContemplate, tempTimer, send, M._historySave, M.echo
+    local realContemplating = ataxiaTemp and ataxiaTemp.contemplating
+    M._captureContemplate = function(cb)
+      cb(M._parseContemplate({ "Rarity: common", "Some text.", "", '"Q."' }))
+    end
+    tempTimer = function(d, f) queue[#queue + 1] = f; delays[#delays + 1] = d; return #queue end
+    send = function(c) local n = c:match("^boon contemplate (.+)$"); if n then asked[#asked + 1] = n end end
+    M._historySave = function() end
+    M.echo = function(m) said[#said + 1] = tostring(m) end
+    local out
+    local ok, err = pcall(function()
+      out = withLibrary(lib, function()
+        fn()
+        local guard = 0
+        while #queue > 0 and guard < 200 do guard = guard + 1; table.remove(queue, 1)() end
+      end)
+    end)
+    M._captureContemplate, tempTimer, send, M._historySave, M.echo = realCap, realTimer, realSend, realSave, realEcho
+    ataxiaTemp.contemplating = realContemplating
+    if not ok then error(err, 0) end
+    return asked, out, said, delays
+  end
+
+  it("contemplates each offered boon -- echoes as their base boon -- plus one gap", function()
+    local realGaps = M.boonGaps
+    M.boonGaps = function() return { "Hole" } end
+    local asked
+    local ok, err = pcall(function()
+      asked = run({ ["Desperation"] = { description = "d" }, ["Restoration"] = { description = "d" } }, function()
+        M._capturing = false
+        M._boonScreenContemplate({ { name = "Desperation" }, { name = "(ECHO) Restoration" },
+                                   { name = "Berkana Surround" }, { name = "Desperation" } })
+      end)
+    end)
+    M.boonGaps = realGaps
+    if not ok then error(err, 0) end
+    expect(#asked).toBe(4)
+    expect(asked[1]).toBe("Desperation")
+    expect(asked[2]).toBe("Restoration")
+    expect(asked[3]).toBe("Berkana Surround")
+    expect(asked[4]).toBe("Hole")
+  end)
+
+  -- It runs after EVERY offer screen, so it must not narrate a run that found nothing new.
+  it("stays quiet when nothing changed, and speaks when something did", function()
+    local realGaps = M.boonGaps
+    M.boonGaps = function() return {} end -- no description gap rides along this time
+    local ok, err = pcall(function()
+      local _, _, said = run({ ["Desperation"] = { description = "Some text." } }, function()
+        M._capturing = false
+        M._boonScreenContemplate({ { name = "Desperation" } })
+      end)
+      local _, _, said2 = run({ ["Desperation"] = { description = "Old text." } }, function()
+        M._capturing = false
+        M._boonScreenContemplate({ { name = "Desperation" } })
+      end)
+      local quiet, loud = table.concat(said, "\n"), table.concat(said2, "\n")
+      expect(quiet:find("Boon catalogue updated", 1, true)).toBeNil()
+      expect(loud:find("Desperation changed", 1, true) ~= nil).toBeTrue()
+      expect(loud:find("Boon catalogue updated", 1, true) ~= nil).toBeTrue()
+    end)
+    M.boonGaps = realGaps
+    if not ok then error(err, 0) end
+  end)
+
+  it("never starts while another capture holds the slot", function()
+    local asked = run({}, function()
+      M._capturing = true
+      expect(M._boonScreenContemplate({ { name = "Desperation" } })).toBeFalse()
+      M._capturing = false
+    end)
+    expect(#asked).toBe(0)
+  end)
+
+  it("stops at GO! -- the next wave's captures own the slot", function()
+    local asked = run({}, function()
+      M._capturing = false
+      local realCap = M._captureContemplate
+      M._captureContemplate = function(cb)
+        M._fillGen = (M._fillGen or 0) + 1 -- GO! lands while the first block is being read
+        realCap(cb)
+      end
+      M._boonScreenContemplate({ { name = "A" }, { name = "B" }, { name = "C" } })
+    end)
+    expect(#asked).toBe(1)
+  end)
+
+  it("waits for another capture rather than cutting it short, then gives up", function()
+    local asked, _, _, delays = run({}, function()
+      M._capturing = false
+      local realCap = M._captureContemplate
+      M._captureContemplate = function(cb)
+        realCap(cb)
+        M._capturing = true -- a WADE STATUS capture takes the slot after the first block
+      end
+      M._boonScreenContemplate({ { name = "A" }, { name = "B" } })
+    end)
+    M._capturing = false
+    expect(#asked).toBe(1)
+    local waits = 0
+    for _, d in ipairs(delays) do if d == 1 then waits = waits + 1 end end
+    expect(waits).toBe(5) -- five one-second waits, then it stops rather than spin
+  end)
+
+  it("GO! moves the wave counter", function()
+    local before = M._fillGen or 0
+    M.onGo()
+    expect(M._fillGen).toBe(before + 1)
+  end)
+
+  it("the posted offer schedules it, with that offer's boons", function()
+    reset(true)
+    local realScreen, realTimer = M._boonScreenContemplate, tempTimer
+    local got
+    M._boonScreenContemplate = function(list) got = list end
+    tempTimer = function(_, f) f(); return 1 end
+    local ok, err = pcall(function()
+      M._pendingOffer = { { name = "Desperation", description = "d" } }
+      M._flushPendingOffer("test")
+    end)
+    M._boonScreenContemplate, tempTimer = realScreen, realTimer
+    if not ok then error(err, 0) end
+    expect(got ~= nil and got[1].name).toBe("Desperation")
+  end)
+
+  it("the capture says whether the block ended on its closing divider", function()
+    local mock = require("mock_mudlet")
+    local function feed(lines)
+      for _, ln in ipairs(lines) do
+        line = ln
+        for _, t in pairs(mock.active_triggers) do
+          if t.regex and t.pattern == "^.*$" and type(t.callback) == "function" then t.callback() end
+        end
+      end
+    end
+    M._capturing = false
+    local whole
+    M._captureContemplate(function(info) whole = info end)
+    feed({ "Azure Scales:", "----------", "Rarity: common", "Gain 25% resistance.", "----------" })
+    expect(whole ~= nil and whole.complete).toBeTrue()
+    local cut
+    M._captureContemplate(function(info) cut = info end)
+    feed({ "Azure Scales:", "----------", "Rarity: common", "Gain 25%" })
+    M._captureForceFinish()
+    expect(cut ~= nil and cut.complete).toBeFalse()
+  end)
+end)
+
+-- ---------------------------------------------------------------------------
+-- v4.7.325: boon conflicts. User, with a BOON CONTEMPLATE block: "This should be echo the
+-- conflicts and highlight them."
+-- ---------------------------------------------------------------------------
+local CARELESS = {
+  "Rarity:             rare",
+  "Category:           Utility",
+  "Can echo:           No",
+  "Conflicts With:     Self-Preservation and Truther",
+  "",
+  "You are immune to masochism, hallucinations, and paranoia, and you always walk with a zealous warding against the Outer ",
+  "Cold.",
+  "",
+  '"With a whisper, the blaze lit up the heavens, and all that dwelt in dark beneath the sky was scourged clean."',
+}
+
+describe("the Conflicts With line", function()
+  it("parses the user's Careless Whisperer block", function()
+    local info = M._parseContemplate(CARELESS)
+    expect(info.rarity).toBe("rare")
+    expect(info.category).toBe("Utility")
+    expect(info.num_echoes_possible).toBe(0)
+    expect(#info.conflictsWith).toBe(2)
+    expect(info.conflictsWith[1]).toBe("Self-Preservation")
+    expect(info.conflictsWith[2]).toBe("Truther")
+    expect(info.description).toBe("You are immune to masochism, hallucinations, and paranoia, and you always walk "
+      .. "with a zealous warding against the Outer Cold.")
+    expect(info.quote:find("With a whisper", 1, true) == 1).toBeTrue()
+  end)
+
+  it("keeps a boon name that has ' and ' inside it", function()
+    local known = { ["Hammer and Anvil"] = true, ["Truther"] = true }
+    local names = M._splitBoonList("Hammer and Anvil and Truther", known)
+    expect(#names).toBe(2)
+    expect(names[1]).toBe("Hammer and Anvil")
+    expect(names[2]).toBe("Truther")
+    local oxford = M._splitBoonList("Brute Force, Deadly Finesse, and Mental Prowess.", {})
+    expect(#oxford).toBe(3)
+    expect(oxford[3]).toBe("Mental Prowess")
+  end)
+
+  it("takes a wrapped list's tail only while it is still boon names", function()
+    local lib = withLibrary({ Alpha = { description = "d" }, Beta = { description = "d" },
+                              ["Gamma Ray"] = { description = "d" } }, function()
+      local info = M._parseContemplate({ "Rarity: rare", "Conflicts With:     Alpha, Beta and", "Gamma Ray",
+        "", "Your blows land harder.", "", '"Q."' })
+      expect(#info.conflictsWith).toBe(3)
+      expect(info.conflictsWith[3]).toBe("Gamma Ray")
+      expect(info.description).toBe("Your blows land harder.")
+      -- the older layout, with no blank line: the description is NOT swallowed into the list
+      local old = M._parseContemplate({ "Rarity: rare", "Conflicts With:     Alpha", "Your blows land harder." })
+      expect(#old.conflictsWith).toBe(1)
+      expect(old.description).toBe("Your blows land harder.")
+    end)
+  end)
+
+  it("reads 'None' as no conflicts", function()
+    expect(M._parseContemplate({ "Rarity: rare", "Conflicts With: None", "Desc." }).conflictsWith).toBeNil()
+  end)
+
+  it("mnem boonfill stores the list, and the tracker gets it", function()
+    reset(true)
+    local lib = withLibrary({}, function()
+      withContemplate(CARELESS, function() M._boonFillNext({ "Careless Whisperer" }, 1, 0) end)
+      M.reportBoonsOffered({ { name = "Careless Whisperer" } })
+    end)
+    expect(lib["Careless Whisperer"].conflictsWith[2]).toBe("Truther")
+    expect(sent[1].payload.offered[1].conflicts_with[1]).toBe("Self-Preservation")
+  end)
+end)
+
+describe("conflicts are echoed and highlighted", function()
+  -- A run in which we claimed Truther.
+  local function holding(fn)
+    local savedClaims, savedRun, savedActive = M.history.claims, M.history.run, M.run and M.run.active
+    M.history.claims = { { name = "Truther", run = 7 } }
+    M.history.run = 7
+    M.run = M.run or {}
+    M.run.active = true
+    local ok, err = pcall(fn)
+    M.history.claims, M.history.run, M.run.active = savedClaims, savedRun, savedActive
+    if not ok then error(err, 0) end
+  end
+  local function capture(fn)
+    local said, realEcho = {}, M.echo
+    M.echo = function(m) said[#said + 1] = tostring(m) end
+    local ok, err = pcall(fn)
+    M.echo = realEcho
+    if not ok then error(err, 0) end
+    return table.concat(said, "\n")
+  end
+
+  it("the contemplate line: every name highlighted, the one we hold in red", function()
+    local picked = {}
+    local realSel, realFg = selectString, fg
+    local current
+    selectString = function(s) current = s; return 1 end
+    fg = function(c) picked[current] = c end
+    local out
+    local ok, err = pcall(function()
+      holding(function() out = capture(function() M.onConflictsLine("Self-Preservation and Truther") end) end)
+    end)
+    selectString, fg = realSel, realFg
+    if not ok then error(err, 0) end
+    expect(picked["Truther"]).toBe("red")
+    expect(picked["Self-Preservation"]).toBe("yellow")
+    expect(out:find("CONFLICT", 1, true) ~= nil).toBeTrue()
+    expect(out:find("Truther<reset> (you have it)", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("only THIS run's claims count as held -- not an earlier run's, not outside a run", function()
+    local outside, earlier
+    holding(function()
+      M.run.active = false -- the claim is this run's, but no run is going
+      outside = capture(function() M.onConflictsLine("Self-Preservation and Truther") end)
+      M.run.active = true
+      M.history.claims = { { name = "Truther", run = 6 } } -- claimed in an earlier run
+      earlier = capture(function() M.onConflictsLine("Self-Preservation and Truther") end)
+    end)
+    expect(outside:find("you have it", 1, true)).toBeNil()
+    expect(outside:find("conflicts with", 1, true) ~= nil).toBeTrue()
+    expect(earlier:find("you have it", 1, true)).toBeNil()
+  end)
+
+  it("says nothing for 'None'", function()
+    expect(capture(function() M.onConflictsLine("None.") end)).toBe("")
+  end)
+
+  it("the offer screen warns, from either side of the pair", function()
+    local out
+    withLibrary({ ["Careless Whisperer"] = { description = "d", conflictsWith = { "Self-Preservation", "Truther" } },
+                  ["Truther"] = { description = "d" },
+                  ["Glass Jaw"] = { description = "d" },
+                  ["Iron Throat"] = { description = "d", conflictsWith = { "Glass Jaw" } } }, function()
+      holding(function()
+        out = capture(function()
+          M._echoConflicts({ { name = "Careless Whisperer" }, { name = "Self-Preservation" }, { name = "Glass Jaw" } })
+        end)
+      end)
+    end)
+    expect(out:find("CONFLICT<reset> -- <gold>Careless Whisperer", 1, true) ~= nil).toBeTrue()
+    expect(out:find("Self-Preservation<reset> (also offered)", 1, true) ~= nil).toBeTrue()
+    expect(out:find("Glass Jaw", 1, true) == nil).toBeTrue() -- Iron Throat is not held or offered
+  end)
+
+  it("a held boon's own list warns about an offered one the catalogue has no list for", function()
+    local out
+    withLibrary({ ["Truther"] = { description = "d", conflictsWith = { "Careless Whisperer" } },
+                  ["Careless Whisperer"] = { description = "d" } }, function()
+      holding(function()
+        out = capture(function() M._echoConflicts({ { name = "Careless Whisperer" } }) end)
+      end)
+    end)
+    expect(out:find("Truther<reset> (you have it)", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("the live offer screen runs it", function()
+    reset(true)
+    local mock = require("mock_mudlet")
+    local out
+    withLibrary({ ["Careless Whisperer"] = { description = "d", conflictsWith = { "Truther" } } }, function()
+      holding(function()
+        out = capture(function()
+          M._capturing = false
+          M.onBoonsOffered()
+          for _, ln in ipairs({ "----------------------------------------",
+                                "Careless Whisperer:   You are immune to masochism.",
+                                "Type BOON CLAIM <name> to choose." }) do
+            line = ln
+            for _, tr in pairs(mock.active_triggers) do
+              if tr.regex and tr.pattern == "^.*$" and type(tr.callback) == "function" then tr.callback() end
+            end
+          end
+        end)
+      end)
+    end)
+    M._pendingOffer = nil
+    expect(out:find("CONFLICT", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("trigger 092 feeds the line to the module", function()
+    local f = io.open("src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/092_Boon_Conflicts.lua")
+    local src = f:read("*a"); f:close()
+    expect(src:find("- pattern: ^Conflicts [Ww]ith:\\s+(.+)$", 1, true) ~= nil).toBeTrue()
+    expect(src:find("M.onConflictsLine(matches[2])", 1, true) ~= nil).toBeTrue()
   end)
 end)
 

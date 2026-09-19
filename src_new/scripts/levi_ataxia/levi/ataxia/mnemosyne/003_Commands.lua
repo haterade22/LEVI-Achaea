@@ -78,11 +78,11 @@ function M.help()
     { "mnem sense", "Fullsense recon of the ripple (Sleuth boon reveals all denizens)" },
     { "mnem cards [on|off|maran <hp%>|seasone <hp%>|matic <n>]", "Legend deck auto-draw (maran/seasone/morimbuul/matic/covenant/xylthus)" },
     { "mnem boons", "This run's claimed boons (local history)" },
-    { "mnem boonfill", "BOON CONTEMPLATE boons with no description, then boons not yet checked for combo status" },
+    { "mnem boonfill", "BOON CONTEMPLATE boons with no description, then every other boon, stalest first" },
     { "mnem affixes", "This run's active affixes (ongoing effects)" },
     { "mnem library", "All-time affix catalogue" },
     { "mnem boondb [filter|export|import]", "All-time BOON catalogue (own file; filter matches name or effect)" },
-    { "mnem boonfill [gaps|all|<n>|unknown|retry <name>|recheck]", "Learn what undescribed boons do, and each boon's combo status/quote/category, via BOON CONTEMPLATE; `unknown` lists names the game refused; `recheck` asks every boon again" },
+    { "mnem boonfill [gaps|all|<n>|unknown|retry <name>|recheck]", "Keep the boon catalogue current via BOON CONTEMPLATE: text, combo status, quote, category (offered boons are contemplated automatically); `unknown` lists names the game refused; `recheck` restarts the cycle" },
     { "mnem quiet [on|off]", "Silence auto boon/affix echoes (still records)" },
     { "mnem start | end", "Manually start / end a run" },
     { "mnem check", "Re-sync with an in-progress run (/run_exists)" },
@@ -311,7 +311,7 @@ function M.command(rest)
     -- contemplate says otherwise.
     if arg == "recheck" then
       local n = M.boonRecheck and M.boonRecheck() or 0
-      return M.echo("Cleared the contemplated mark on <cyan>" .. n .. "<grey> boon(s); <cyan>mnem boonfill<grey> will ask them again.")
+      return M.echo("Restarted the contemplate cycle for <cyan>" .. n .. "<grey> boon(s); <cyan>mnem boonfill<grey> asks them again.")
     end
     if arg == "gaps" or arg == "list" then
       local gaps = M.boonGaps and M.boonGaps() or {}
@@ -323,12 +323,17 @@ function M.command(rest)
         cecho("\n  <grey>mnem boonfill<reset> takes the first " .. (M.BOON_FILL_BATCH or 8)
           .. "; <grey>mnem boonfill all<reset> takes them all.\n")
       end
-      -- The combo-status pass (v4.7.322): described boons never contemplated. Counted, not
-      -- listed -- on a mature catalogue it is most of the library.
+      -- The contemplate cycle (v4.7.322, v4.7.324): every described boon, stalest first. Counted,
+      -- not listed -- it is the whole library.
       local metaGaps = M.boonMetaGaps and M.boonMetaGaps() or {}
       if #metaGaps > 0 then
-        M.echo(#metaGaps .. " described boon(s) not yet contemplated for combo status/quote/category"
-          .. " -- queued after any gaps above.")
+        local never = 0
+        for _, n in ipairs(metaGaps) do
+          local rec = M.boonInfo and M.boonInfo(n)
+          if type(rec) == "table" and not rec.contemplatedAt and not rec.comboChecked then never = never + 1 end
+        end
+        M.echo(#metaGaps .. " described boon(s) in the contemplate cycle, " .. never
+          .. " never contemplated -- queued after any gaps above, stalest first.")
       end
       local unk = {}
       for n in pairs((M.history and M.history.boonUnknown) or {}) do unk[#unk + 1] = n end

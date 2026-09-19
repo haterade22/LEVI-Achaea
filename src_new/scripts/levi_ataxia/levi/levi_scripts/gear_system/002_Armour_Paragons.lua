@@ -117,8 +117,11 @@ ataxia.armour.state = ataxia.armour.state or {
   currentSlots = {nil, nil, nil},
   eventHandlers = {},
   scanning = false,     -- true during ii paragon scan
-  probing = false,      -- true during probe armour scan
+  probing = false,      -- true while a probe WE sent is being read
   probeSlotIndex = 0,   -- tracks which embrasure line we're on
+  -- v4.7.323 (all set by `refresh` / the probe): probeBuf (the snapshot being read),
+  -- embrasures (the armour's capacity), inventory (ids `ii paragon` just listed), refreshToken,
+  -- refreshCb.
 }
 
 --------------------------------------------------------------------------------
@@ -167,32 +170,35 @@ end
 function ataxia.armour.seedDefaults()
   if next(ataxia.armour.config.profiles) then return end
 
+  -- Slots are paragon TYPE NAMES (v4.7.323): inserts go by name, so the defaults work for any
+  -- character that owns the paragons. They used to be one character's item ids, which named
+  -- nothing on anyone else's account.
   ataxia.armour.config.profiles = {
     bash = {
-      slots = {"paragon361796", "paragon343178", "paragon514466"},
+      slots = {"icosagon", "serendipitous", "crucious"},
       traits = {"quick-witted", "fully fit", "marksman", "lucky",
                 "master contemplator", "decorated", "brilliance", "in service"},
       armourType = nil,
     },
     magepve = {
-      slots = {"paragon361796", "paragon343178", "paragon514466"},
+      slots = {"icosagon", "serendipitous", "crucious"},
       traits = {"quick-witted", "fully fit", "marksman", "lucky",
                 "master contemplator", "decorated", "brilliance", "in service"},
       armourType = nil,
     },
     serppve = {
-      slots = {"paragon361796", "paragon500167", "paragon514466"},
+      slots = {"icosagon", "metalliferous", "crucious"},
       traits = {},
       armourType = nil,
     },
     stickpve = {
-      slots = {"paragon361796", "paragon417591", "paragon514466"},
+      slots = {"icosagon", "aeneaous", "crucious"},
       traits = {"nimble", "fully fit", "marksman", "lucky",
                 "master contemplator", "decorated", "improved physique", "in service"},
       armourType = nil,
     },
     pariahpve = {
-      slots = {"paragon361796", "paragon500167", "paragon514466"},
+      slots = {"icosagon", "metalliferous", "crucious"},
       traits = {"nimble", "fully fit", "marksman", "lucky",
                 "master contemplator", "decorated", "brilliance", "in service"},
       armourType = nil,
@@ -204,30 +210,21 @@ function ataxia.armour.seedDefaults()
       armourType = nil,
     },
     pvp = {
-      slots = {"paragon500167", "paragon424404", "paragon417591"},
+      slots = {"metalliferous", "deltahedral", "aeneaous"},
       traits = {"quick-witted", "fully fit", "marksman", "health inspector",
                 "master contemplator", "decorated", "brilliance", "in service"},
       armourType = nil,
     },
     stickpvp = {
-      slots = {"paragon500167", "paragon514466", "paragon417591"},
+      slots = {"metalliferous", "crucious", "aeneaous"},
       traits = {"nimble", "fully fit", "marksman", "health inspector",
                 "master contemplator", "decorated", "improved physique", "in service"},
       armourType = nil,
     },
   }
 
-  -- Seed default paragon names
-  if not next(ataxia.armour.config.paragons) then
-    ataxia.armour.config.paragons = {
-      ["paragon417591"] = "aeneaous (absorption)",
-      ["paragon361796"] = "icosagon (20% crit)",
-      ["paragon514466"] = "crucious (crit multiplier)",
-      ["paragon500167"] = "metalliferous (7.5% resist)",
-      ["paragon343178"] = "serendipitous (5% dmg->WP)",
-      ["paragon424404"] = "deltahedral (morphing)",
-    }
-  end
+  -- No seeded id registry any more (v4.7.323): it held one character's ids. `armour scan`, and
+  -- every swap's refresh, register what this character actually owns.
 
   ataxia.armour.config.bashProfile = "bash"
   ataxia.armour.config.pvpProfile = "pvp"
@@ -293,9 +290,15 @@ function ataxia.armour.resolveParagonName(rawName)
   return rawName  -- fallback to raw name if no match
 end
 
-function ataxia.armour.registerParagon(id, name)
+function ataxia.armour.registerParagon(id, name, effect)
   if not id or not name then return end
   ataxia.armour.config.paragons[id] = ataxia.armour.resolveParagonName(name)
+  -- The game's own wording from `probe armour` ("critical level increase chance"), kept beside
+  -- our short display name (v4.7.323).
+  if type(effect) == "string" and effect ~= "" then
+    ataxia.armour.config.paragonEffects = ataxia.armour.config.paragonEffects or {}
+    ataxia.armour.config.paragonEffects[id] = effect
+  end
   ataxia.armour.save()
 end
 
@@ -366,6 +369,305 @@ end
 -- SWAP EXECUTION
 --------------------------------------------------------------------------------
 
+--------------------------------------------------------------------------------
+-- PROBE THE ARMOUR -- WHAT IS ACTUALLY IN IT (v4.7.323, user-directed)
+--------------------------------------------------------------------------------
+-- User: "we should be probing the armour to see what paragons we have and what we need when we
+-- do armour pvp for example." A swap used to trust `state.currentSlots`, which is runtime-only:
+-- on a fresh session it knew NOTHING and pried and re-inserted all three embrasures, and after
+-- anything that changed the armour outside this module it acted on a stale belief. It also had
+-- no idea what we OWN: `ii paragon` lists the inventory only, so a paragon sitting in an
+-- embrasure was invisible to the registry, and a profile asking for a paragon we do not have
+-- pried the old one out and left the embrasure EMPTY (the v4.7.211 failure mode).
+--
+-- Now every swap asks the game first -- `ii paragon` (what we could insert) and `probe armour`
+-- (what is in it) -- plans from those answers, and probes again afterwards to verify.
+--
+-- The probe prints, in one burst:
+--   This armour has 3 embrasures.
+--   The following paragons have been inserted:
+--   1: an auspicious icosagon paragon (paragon361796)     critical level increase chance
+--   2: a nacreous deltahedral paragon (paragon424404)     morphing (level 3)
+--   3: a crucious paragon (paragon514466)     critical level gambling
+-- and an empty embrasure prints as "3: Empty." (live log, v4.7.211). The header opens a SNAPSHOT;
+-- the slot lines fill it; it commits PROBE_SETTLE later, so an embrasure the probe did not list
+-- is EMPTY rather than whatever we believed before. Pry and insert answer at once too (the same
+-- log: six lines back to back), which is what makes the verification probe safe to schedule.
+--
+-- Only probes WE sent are read (`state.probing`): a PROBE of some other armour in the inventory
+-- would otherwise overwrite the state of the one we wear.
+local PROBE_SETTLE = 0.5  -- the burst is one packet; commit shortly after its header
+local PROBE_TIMEOUT = 3   -- no header by then: the probe was refused or lost
+local VERIFY_DELAY = 1.5  -- after the pry/insert burst, probe again to confirm
+
+function ataxia.armour.onProbeHeader(n)
+  local st = ataxia.armour.state
+  if not st.probing then return end
+  st.probeBuf = { embrasures = tonumber(n), slots = {} }
+  tempTimer(PROBE_SETTLE, function() ataxia.armour.commitProbe() end)
+end
+
+-- One embrasure line, classified here rather than in the trigger (a guard inside a trigger is a
+-- guard the suite cannot see).
+function ataxia.armour.onProbeLine(ln)
+  local st = ataxia.armour.state
+  if not st.probing or type(ln) ~= "string" then return end
+  local n, name, id, effect = ln:match("^(%d+): (.-) %((paragon%d+)%)%s*(.-)%s*$")
+  if not n then n = ln:match("^(%d+): Empty%.?%s*$") end
+  n = tonumber(n)
+  if not n or n < 1 or n > 3 then return end
+  if not st.probeBuf then
+    -- Slot lines with no header: still a snapshot, just without a capacity.
+    st.probeBuf = { slots = {} }
+    tempTimer(PROBE_SETTLE, function() ataxia.armour.commitProbe() end)
+  end
+  if id then
+    st.probeBuf.slots[n] = id
+    -- An inserted paragon is not in the inventory, so `ii paragon` never registers it.
+    ataxia.armour.registerParagon(id, name, effect)
+  end
+end
+
+function ataxia.armour.commitProbe()
+  local st = ataxia.armour.state
+  local buf = st.probeBuf
+  if not buf then return end
+  st.probeBuf = nil
+  st.currentSlots = { buf.slots[1], buf.slots[2], buf.slots[3] }
+  st.slotsKnown = true
+  if buf.embrasures then st.embrasures = buf.embrasures end
+  ataxia.armour.finishRefresh(true)
+end
+
+-- `ii paragon` rows ("    paragon514466           a crucious paragon") while a refresh is running.
+function ataxia.armour.onInventoryParagon(id, name)
+  local st = ataxia.armour.state
+  if not st.scanning or not id or not name then return end
+  ataxia.armour.registerParagon(id, (name:gsub("^%s+", ""):gsub("%s+$", "")))
+  if st.inventory then st.inventory[id] = true end
+end
+
+-- Ask the game what we have: `ii paragon` (inventory, skipped with withInventory == false) and
+-- `probe armour`. `cb(ok)` runs once, when the probe commits or times out.
+function ataxia.armour.refresh(cb, withInventory)
+  local st = ataxia.armour.state
+  st.refreshToken = (st.refreshToken or 0) + 1
+  local token = st.refreshToken
+  st.refreshCb = cb
+  st.probeBuf = nil
+  st.probing = true
+  if withInventory ~= false then
+    st.inventory = {}
+    st.scanning = true
+    send("ii paragon")
+  end
+  send("probe armour")
+  tempTimer(PROBE_TIMEOUT, function()
+    if st.refreshToken == token and st.probing then ataxia.armour.finishRefresh(false) end
+  end)
+end
+
+function ataxia.armour.finishRefresh(ok)
+  local st = ataxia.armour.state
+  st.probing = false
+  st.scanning = false
+  local cb = st.refreshCb
+  st.refreshCb = nil
+  if cb then cb(ok) end
+end
+
+-- WHAT A SWAP WILL DO, AS DATA (v4.7.323). Pure, so the suite tests the real decision -- the
+-- v4.7.212 tests had to copy this logic into the test file, and a copy cannot catch a regression.
+--
+--   slots      the profile's three wants (ids or bare type names; "" or nil = leave empty)
+--   cur        what the armour holds, by slot
+--   known      whether `cur` is ground truth (a probe or a swap told us)
+--   inventory  set of paragon ids `ii paragon` just showed, or nil when we did not ask
+--   capacity   the armour's embrasure count, or nil when unknown
+--
+-- Rules, in order:
+--   * Unknown contents: every wanted slot is pried and inserted (the old behaviour) -- skipping on
+--     an assumption would leave the wrong paragon in place silently.
+--   * A slot whose paragon already matches (by TYPE, `paragonKey`) is left alone.
+--   * A want we cannot supply -- not in the inventory and not coming out of another embrasure
+--     this swap -- is MISSING: that embrasure is not touched at all, so it keeps its paragon
+--     instead of being emptied. Resolved to a fixed point, because keeping one slot can take away
+--     the paragon another slot was counting on.
+--   * Inserts go BY NAME -- `insert crucious into armour embrasure 3` (user, v4.7.323; the game
+--     has accepted names since v4.7.205). Any paragon of that type we hold will do, so a profile
+--     is a list of TYPES rather than of one character's item ids, and an id the registry can
+--     resolve inserts as its type. Only a paragon of a type we do not recognise falls back to its
+--     id.
+--   * Every pry goes out before every insert, so a paragon can move between embrasures.
+--   * Slots past the armour's embrasure count are skipped and reported.
+function ataxia.armour.planSwap(slots, cur, known, inventory, capacity)
+  slots, cur = slots or {}, cur or {}
+  local key = ataxia.armour.paragonKey
+  local function byName(want, fallback)
+    local k = key(want)
+    if k and ataxia.armour.PARAGON_TYPES[k] then return k end
+    return fallback or want
+  end
+  local rows = {}
+  for i = 1, 3 do
+    local want = slots[i]
+    if want == "" then want = nil end
+    local have = known and cur[i] or nil
+    local row = { slot = i, want = want, have = have, known = known }
+    if capacity and i > capacity then
+      row.action = want and "noslot" or "none"
+    elseif known and want and have and key(want) == key(have) then
+      row.action = "keep"
+    elseif known and not want and not have then
+      row.action = "none"
+    elseif not want then
+      row.action = "clear"
+    else
+      row.action = "change"
+    end
+    rows[i] = row
+  end
+
+  if known and inventory then
+    for _ = 1, 4 do -- each unsettled pass removes a slot; the 4th always settles
+      -- What can be inserted: the inventory, plus whatever the slots still changing will release.
+      local pool = {}
+      local function add(id)
+        local k = key(id)
+        if k then pool[k] = pool[k] or {}; table.insert(pool[k], id) end
+      end
+      local ids = {}
+      for id in pairs(inventory) do ids[#ids + 1] = id end
+      table.sort(ids) -- a substitute is chosen the same way every time
+      for _, id in ipairs(ids) do add(id) end
+      for i = 1, 3 do
+        local r = rows[i]
+        if (r.action == "change" or r.action == "clear") and r.have then add(r.have) end
+      end
+      local settled = true
+      for i = 1, 3 do
+        local r = rows[i]
+        if r.action == "change" then
+          local list = pool[key(r.want)]
+          local pick
+          if list then
+            for j, id in ipairs(list) do
+              if id == r.want then pick = table.remove(list, j); break end
+            end
+            if not pick and #list > 0 then pick = table.remove(list, 1) end
+          end
+          if pick then
+            r.insert = byName(r.want, pick)
+          else
+            r.action, r.insert = "missing", nil
+            settled = false
+          end
+        end
+      end
+      if settled then break end
+      -- A slot just turned MISSING keeps its paragon, so re-plan the rest without it.
+      for i = 1, 3 do if rows[i].action == "change" then rows[i].insert = nil end end
+    end
+  else
+    for i = 1, 3 do if rows[i].action == "change" then rows[i].insert = byName(rows[i].want) end end
+  end
+
+  local pries, inserts, missing, after = {}, {}, {}, {}
+  for i = 1, 3 do
+    local r = rows[i]
+    if r.action == "change" or r.action == "clear" then
+      if (not known) or r.have then table.insert(pries, "pry armour embrasure " .. i) end
+      if r.insert then table.insert(inserts, "insert " .. r.insert .. " into armour embrasure " .. i) end
+      after[i] = r.insert
+    else
+      after[i] = known and cur[i] or nil
+      if r.action == "missing" then table.insert(missing, i) end
+    end
+  end
+  local cmds = {}
+  for _, c in ipairs(pries) do cmds[#cmds + 1] = c end
+  for _, c in ipairs(inserts) do cmds[#cmds + 1] = c end
+  return { cmds = cmds, rows = rows, missing = missing, after = after }
+end
+
+-- One line per embrasure: what is there, what the profile wants, and what happens.
+function ataxia.armour.planReport(profileName, plan, dryRun)
+  local nm = ataxia.armour.paragonName
+  ataxia.armour.echo((dryRun and "Profile " or "Swapping to ") .. "'<white>" .. profileName
+    .. "<plum>'" .. (dryRun and " against what the armour holds:" or ":"))
+  for i = 1, 3 do
+    local r = plan.rows[i]
+    local line
+    if r.action == "keep" then
+      line = "<green>" .. nm(r.have) .. " <grey>(already in)"
+    elseif r.action == "none" then
+      line = "<grey>(empty, stays empty)"
+    elseif r.action == "clear" then
+      line = "<yellow>" .. nm(r.have) .. " <grey>-> (empty)"
+    elseif r.action == "change" then
+      line = "<yellow>" .. (r.have and nm(r.have) or (r.known and "(empty)" or "(unknown)"))
+        .. " <grey>-> <white>" .. nm(r.insert)
+    elseif r.action == "missing" then
+      line = "<red>NEED " .. nm(r.want) .. "<grey> -- not in your inventory; "
+        .. (r.have and ("keeping " .. nm(r.have)) or "leaving it empty")
+    elseif r.action == "noslot" then
+      line = "<red>no embrasure " .. i .. "<grey> -- this armour has " .. tostring(ataxia.armour.state.embrasures)
+        .. "; " .. nm(r.want) .. " cannot go in"
+    end
+    ataxia.armour.echo("  " .. i .. ": " .. line)
+  end
+end
+
+-- After the burst, probe again: the game's own answer is the only proof the swap took.
+function ataxia.armour.verifySwap(profileName, expected)
+  ataxia.armour.refresh(function(ok)
+    if not ok then
+      return ataxia.armour.echo("<yellow>Could not verify '" .. profileName .. "' -- the probe got no answer.")
+    end
+    local cur = ataxia.armour.state.currentSlots or {}
+    local key = ataxia.armour.paragonKey
+    local wrong = {}
+    for i = 1, 3 do
+      if key(cur[i]) ~= key(expected[i]) then
+        wrong[#wrong + 1] = i .. ": has " .. ataxia.armour.paragonName(cur[i])
+          .. ", expected " .. ataxia.armour.paragonName(expected[i])
+      end
+    end
+    if #wrong == 0 then
+      ataxia.armour.echo("<green>Verified<plum> '" .. profileName .. "' -- the probe matches.")
+    else
+      ataxia.armour.echo("<red>Swap did not fully take<plum> -- " .. table.concat(wrong, "; ") .. ".")
+    end
+  end, false)
+end
+
+-- `armour probe [profile]`: what is in the armour, and -- given a profile -- what it would take.
+function ataxia.armour.inspect(profileName)
+  local profile = profileName and profileName ~= "" and ataxia.armour.config.profiles[profileName:lower()]
+  if profileName and profileName ~= "" and not profile then
+    return ataxia.armour.echo("Profile '" .. profileName .. "' not found.")
+  end
+  ataxia.armour.refresh(function(ok)
+    local st = ataxia.armour.state
+    if not ok then return ataxia.armour.echo("<yellow>No answer from the probe -- are you wearing the armour?") end
+    ataxia.armour.echo("Armour: <white>" .. tostring(st.embrasures or "?") .. "<plum> embrasure(s).")
+    for i = 1, (st.embrasures or 3) do
+      local id = st.currentSlots[i]
+      local eff = id and ataxia.armour.config.paragonEffects and ataxia.armour.config.paragonEffects[id]
+      ataxia.armour.echo("  " .. i .. ": " .. (id and ("<white>" .. ataxia.armour.paragonName(id)
+        .. (eff and (" <grey>-- " .. eff) or "")) or "<grey>(empty)"))
+    end
+    local spare = {}
+    for id in pairs(st.inventory or {}) do spare[#spare + 1] = ataxia.armour.paragonName(id) end
+    table.sort(spare)
+    ataxia.armour.echo("In your inventory: " .. (#spare > 0 and ("<white>" .. table.concat(spare, "<plum>, <white>")) or "<grey>(none)"))
+    if profile then
+      ataxia.armour.planReport(profileName:lower(), ataxia.armour.planSwap(profile.slots, st.currentSlots,
+        st.slotsKnown == true, st.inventory, st.embrasures), true)
+    end
+  end)
+end
+
 -- Max seconds a swap may hold the `swapping` guard before it is treated as
 -- stuck. Comfortably above the 2s insert timer + command round-trip; os.time()
 -- has 1s granularity so a 5s window is safe.
@@ -416,11 +718,13 @@ function ataxia.armour.swap(profileName)
     end
   end
 
-  -- 3. Pry + insert with 2s delay (always send -- can't verify game state without probe)
+  -- 3. Pry + insert, planned from what the game says is in the armour (v4.7.323). This used to
+  -- act on `state.currentSlots` alone -- runtime-only, so on a fresh session every swap pried and
+  -- re-inserted all three blind (v4.7.212's diff only ever worked after a swap or `armour scan`).
   if profile.slots and #profile.slots > 0 then
-    -- Watchdog: force-clear the guard if the insert timer never clears it (e.g. an
-    -- error inside its callback). Keyed on swapStartTime so a later legitimate swap
-    -- is never cancelled by an earlier swap's watchdog.
+    -- Watchdog: force-clear the guard if the plan never runs (e.g. an error inside its
+    -- callback). Keyed on swapStartTime so a later legitimate swap is never cancelled by an
+    -- earlier swap's watchdog.
     local startedAt = ataxia.armour.state.swapStartTime
     tempTimer(SWAP_TIMEOUT, function()
       if ataxia.armour.state.swapping and ataxia.armour.state.swapStartTime == startedAt then
@@ -429,63 +733,33 @@ function ataxia.armour.swap(profileName)
       end
     end)
 
-    tempTimer(2, function()
-      local cmds = {}
-      -- Pry all first
-      -- ONLY TOUCH THE SLOTS THAT CHANGE (v4.7.212, user: "we only need to pry out the one
-      -- paragon and replace it, not all of them").
-      --
-      -- This used to pry all three and re-insert all three on every swap, because the original
-      -- comment reasoned "can't verify game state without probe". But we DO track it:
-      -- `state.currentSlots` is written both by this function and by the `probe armour`
-      -- trigger. Borrowed Power changes exactly ONE slot, so five of the six commands were
-      -- pure churn -- and every needless pry is another chance to half-apply and leave an
-      -- embrasure empty, which is precisely the failure v4.7.211 fixed.
-      --
-      -- Comparison is by `paragonKey`, so an id and a bare type name for the same physical
-      -- paragon do not read as a change (the v4.7.211 lesson).
-      --
-      -- `slotsKnown` is the honesty guard: until a swap or a probe has told us what is
-      -- actually in the armour, every slot is UNKNOWN and gets the old pry+insert treatment.
-      -- Skipping on an assumption would leave the wrong paragon in place silently.
-      local cur = ataxia.armour.state.currentSlots or {}
-      local known = ataxia.armour.state.slotsKnown == true
-      local changed = 0
-      for i = 1, 3 do
-        local want = profile.slots[i]
-        if want == "" then want = nil end
-        local have = known and cur[i] or nil
-        local same = known and want ~= nil and have ~= nil
-          and ataxia.armour.paragonKey(want) == ataxia.armour.paragonKey(have)
-        if not same then
-          changed = changed + 1
-          -- Pry unless we KNOW the slot is already empty -- prying an empty embrasure is a
-          -- wasted command and a refusal line.
-          if (not known) or have ~= nil then
-            table.insert(cmds, "pry armour embrasure " .. i)
-          end
-          if want then
-            table.insert(cmds, "insert " .. want .. " into armour embrasure " .. i)
-          end
-        end
-      end
-      if #cmds > 0 then send(table.concat(cmds, ";")) end
-      if changed == 0 then
+    -- Ask first, then plan. The plan waits for BOTH the answer and the old 2s settle (traits and
+    -- the morph go out first); the refresh times out on its own, so this cannot wait forever.
+    local waited, answered, freshOk, planned = false, false, false, false
+    local function go()
+      if planned or not (waited and answered) then return end
+      planned = true
+      local st = ataxia.armour.state
+      -- The inventory is only trusted from a refresh that ANSWERED: an unanswered `ii` is empty
+      -- for want of a reply, and reading it as "you own nothing" would refuse every insert.
+      local plan = ataxia.armour.planSwap(profile.slots, st.currentSlots, st.slotsKnown == true,
+        freshOk and st.inventory or nil, freshOk and st.embrasures or nil)
+      ataxia.armour.planReport(profileName, plan)
+      if #plan.cmds > 0 then
+        send(table.concat(plan.cmds, ";"))
+      else
         ataxia.armour.echo("<grey>Paragons already correct -- nothing to swap.")
       end
-
-      -- Update state
-      ataxia.armour.state.currentSlots = {
-        profile.slots[1] or nil,
-        profile.slots[2] or nil,
-        profile.slots[3] or nil,
-      }
-      -- We now know what is in the armour, so the next swap can diff instead of rebuilding.
-      ataxia.armour.state.slotsKnown = true
-      ataxia.armour.state.swapping = false
+      st.currentSlots = plan.after
+      st.slotsKnown = true
+      st.swapping = false
       ataxia.armour.save()
-      ataxia.armour.echo("Swapped to profile: <white>" .. profileName)
-    end)
+      if #plan.cmds > 0 then
+        tempTimer(VERIFY_DELAY, function() ataxia.armour.verifySwap(profileName, plan.after) end)
+      end
+    end
+    ataxia.armour.refresh(function(ok) answered, freshOk = true, ok; go() end)
+    tempTimer(2, function() waited = true; go() end)
   else
     ataxia.armour.state.swapping = false
     ataxia.armour.echo("Profile '<white>" .. profileName .. "<plum>' has no paragon slots. Traits sent.")
@@ -821,9 +1095,17 @@ end
 function ataxia.armour.showParagons()
   cecho("\n<cyan>===== Known Paragons =====")
   local count = 0
+  local slotOf = {}
+  for i = 1, 3 do
+    local id = ataxia.armour.state.currentSlots and ataxia.armour.state.currentSlots[i]
+    if id then slotOf[id] = i end
+  end
+  local effects = ataxia.armour.config.paragonEffects or {}
   for id, name in pairs(ataxia.armour.config.paragons) do
     count = count + 1
-    cecho("\n<yellow>  " .. id .. " <grey>- <white>" .. name)
+    cecho("\n<yellow>  " .. id .. " <grey>- <white>" .. name
+      .. (effects[id] and (" <grey>(" .. effects[id] .. ")") or "")
+      .. (slotOf[id] and (" <green>[in embrasure " .. slotOf[id] .. "]") or ""))
   end
   if count == 0 then
     cecho("\n<dark_grey>  No paragons detected. Use 'armour scan' to detect.")
@@ -857,21 +1139,16 @@ end
 --------------------------------------------------------------------------------
 
 function ataxia.armour.scan()
-  ataxia.armour.state.scanning = true
-  ataxia.armour.state.probing = false
-  ataxia.armour.state.probeSlotIndex = 0
-  send("ii paragon")
-  -- probe armour after a short delay to let ii finish
-  tempTimer(2, function()
-    ataxia.armour.state.scanning = false
-    ataxia.armour.state.probing = true
-    ataxia.armour.state.probeSlotIndex = 0
-    send("probe armour")
-    tempTimer(2, function()
-      ataxia.armour.state.probing = false
-      ataxia.armour.save()
-      ataxia.armour.echo("Scan complete. Found " .. ataxia.armour.tableSize(ataxia.armour.config.paragons) .. " paragons.")
-    end)
+  -- One refresh does both halves now (v4.7.323): `ii paragon` registers what is in the inventory,
+  -- and the probe registers what is IN the armour -- which `ii` never lists.
+  ataxia.armour.refresh(function(ok)
+    ataxia.armour.save()
+    local inArmour = 0
+    for i = 1, 3 do
+      if ataxia.armour.state.currentSlots and ataxia.armour.state.currentSlots[i] then inArmour = inArmour + 1 end
+    end
+    ataxia.armour.echo("Scan complete. " .. ataxia.armour.tableSize(ataxia.armour.config.paragons)
+      .. " paragon(s) known" .. (ok and ("; " .. inArmour .. " in the armour.") or "; the probe got no answer."))
   end)
 end
 
@@ -945,6 +1222,7 @@ function ataxia.armour.help()
   cecho("\n<cyan>| <green>armour show <name><cyan>           - Show profile details                 |")
   cecho("\n<cyan>| <green>armour morph <type|auto><cyan>     - Manually morph armour now            |")
   cecho("\n<cyan>| <green>armour scan<cyan>                  - Detect paragons (ii paragon + probe) |")
+  cecho("\n<cyan>| <green>armour probe [profile]<cyan>       - What's in the armour; what a profile needs |")
   cecho("\n<cyan>| <green>armour paragons<cyan>              - Show known paragons                  |")
   cecho("\n<cyan>| <green>armour types<cyan>                 - Show all paragon types & effects     |")
   cecho("\n<cyan>| <green>armour help<cyan>                  - Show this help                       |")
@@ -1078,6 +1356,8 @@ function ataxia.armour.dispatch(args)
     ataxia.armour.morph(rest:lower())
   elseif cmd == "scan" then
     ataxia.armour.scan()
+  elseif cmd == "probe" or cmd == "need" then
+    ataxia.armour.inspect(rest)
   elseif cmd == "paragons" then
     ataxia.armour.showParagons()
   elseif cmd == "types" then

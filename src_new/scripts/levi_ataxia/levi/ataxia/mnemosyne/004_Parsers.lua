@@ -779,6 +779,9 @@ function M.onGo()
   -- offer screens of the same chain. Keying the chain on it would miss exactly the reroll it
   -- exists to count.
   M._rerollReset()
+  -- ...and any contemplate run still going stops at its next step (v4.7.324): this wave's captures
+  -- own the single slot now, and `_captureLines` would force-finish whichever came first.
+  M._fillGen = (M._fillGen or 0) + 1
   -- Fire for telemetry OR just for the ripple map (so WADE STATUS -> the ripple
   -- line drives the per-ripple map reset even with reporting off).
   local mnem = ataxiaBasher and ataxiaBasher.inMnemosyne
@@ -1270,6 +1273,182 @@ function M._immunityFrom(desc)
   return list[1]
 end
 
+-- ---------------------------------------------------------------------------
+-- BOON CONFLICTS (v4.7.325, user-directed)
+-- ---------------------------------------------------------------------------
+-- User, with a BOON CONTEMPLATE block: "This should be echo the conflicts and highlight them."
+--
+--   Careless Whisperer:
+--   --------------------------------------------------------------------------------
+--   Rarity:             rare
+--   Category:           Utility
+--   Can echo:           No
+--   Conflicts With:     Self-Preservation and Truther
+--
+--   You are immune to masochism, hallucinations, and paranoia, and you always walk ...
+--
+-- The list is joined with " and " (and presumably commas for three or more). " and " also occurs
+-- INSIDE real boon names ("Hammer and Anvil", "Hammer and Nail"), so a list is split into fragments
+-- and adjacent fragments are re-joined wherever that makes a KNOWN boon name, longest first.
+
+function M._baseBoonName(name)
+  if type(name) ~= "string" then return nil end
+  local clean = name:gsub("^%(ECHO%)%s*", ""):gsub("^%s+", ""):gsub("%s+$", "")
+  return clean ~= "" and clean or nil
+end
+
+-- Every boon name we know of: the catalogue and the seed.
+function M._knownBoonNames()
+  local set = {}
+  for n in pairs((M.history and M.history.boonLibrary) or {}) do
+    local b = M._baseBoonName(n)
+    if b then set[b] = true end
+  end
+  for n in pairs(M.BOON_SEED or {}) do set[n] = true end
+  return set
+end
+
+-- "Self-Preservation and Truther" -> { "Self-Preservation", "Truther" };
+-- "Hammer and Anvil and Truther" -> { "Hammer and Anvil", "Truther" } when "Hammer and Anvil" is known;
+-- "A, B, and C" -> { "A", "B", "C" }. A trailing full stop is ignored.
+function M._splitBoonList(s, known)
+  if type(s) ~= "string" then return {} end
+  known = known or M._knownBoonNames()
+  s = s:gsub("^%s+", ""):gsub("[%s%.]+$", "")
+  local frags = {}
+  for part in (s .. ","):gmatch("([^,]*),") do
+    part = part:gsub("^%s+", ""):gsub("%s+$", ""):gsub("^and%s+", "")
+    local rest = part
+    while true do
+      local a, b = rest:find(" and ", 1, true)
+      if not a then break end
+      frags[#frags + 1] = rest:sub(1, a - 1)
+      rest = rest:sub(b + 1)
+    end
+    if rest ~= "" then frags[#frags + 1] = rest end
+  end
+  local out, i = {}, 1
+  while i <= #frags do
+    local take = 1
+    for j = #frags, i + 1, -1 do
+      if known[table.concat(frags, " and ", i, j)] then take = j - i + 1; break end
+    end
+    out[#out + 1] = table.concat(frags, " and ", i, i + take - 1)
+    i = i + take
+  end
+  return out
+end
+
+-- Is every name in this list one we know? Used to tell a WRAPPED conflicts list's tail from the
+-- first line of the description: a description line never splits into known boon names.
+function M._allKnownBoons(s, known)
+  known = known or M._knownBoonNames()
+  local names = M._splitBoonList(s, known)
+  if #names == 0 then return false end
+  for _, n in ipairs(names) do if not known[n] then return false end end
+  return true
+end
+
+-- The boons we hold THIS run: the run's claims. (`ataxiaTemp.boonsOwned` is never cleared, so it
+-- can still list the last run's boons.) Empty outside a run.
+function M._heldBoons()
+  local held = {}
+  local h = M.history
+  if not (M.run and M.run.active) or not h or type(h.claims) ~= "table" then return held end
+  for _, c in ipairs(h.claims) do
+    if c.run == h.run then
+      local b = M._baseBoonName(c.name)
+      if b then held[b] = true end
+    end
+  end
+  return held
+end
+
+-- What `name` conflicts with: its own list, plus any held boon whose list names it (the game
+-- prints the pair from both sides, but our catalogue may have seen only one).
+function M._conflictsFor(name, held)
+  local out, seen = {}, {}
+  local rec = M.boonInfo and M.boonInfo(name)
+  for _, n in ipairs((type(rec) == "table" and type(rec.conflictsWith) == "table") and rec.conflictsWith or {}) do
+    if not seen[n] then seen[n] = true; out[#out + 1] = n end
+  end
+  local heldNames = {}
+  for h in pairs(held or {}) do heldNames[#heldNames + 1] = h end
+  table.sort(heldNames)
+  for _, h in ipairs(heldNames) do
+    local hr = M.boonInfo and M.boonInfo(h)
+    if type(hr) == "table" and type(hr.conflictsWith) == "table" and not seen[h] then
+      for _, n in ipairs(hr.conflictsWith) do
+        if n == name then seen[h] = true; out[#out + 1] = h; break end
+      end
+    end
+  end
+  return out
+end
+
+-- One colour per meaning: a boon we HOLD is the one that matters (red), one also on this screen is
+-- the other half of a choice (yellow), the rest are just named (gold).
+function M._fmtConflicts(names, held, offered)
+  local parts = {}
+  for _, n in ipairs(names or {}) do
+    if held and held[n] then
+      parts[#parts + 1] = "<red>" .. n .. "<reset> (you have it)"
+    elseif offered and offered[n] then
+      parts[#parts + 1] = "<yellow>" .. n .. "<reset> (also offered)"
+    else
+      parts[#parts + 1] = "<gold>" .. n .. "<reset>"
+    end
+  end
+  return table.concat(parts, ", ")
+end
+
+-- The OFFER screen: for each offered boon with a known conflict, say so -- loudly when we hold the
+-- other side, since that is the one that decides the pick.
+function M._echoConflicts(list)
+  local held = M._heldBoons()
+  local offered = {}
+  for _, b in ipairs(list or {}) do
+    local n = M._baseBoonName(type(b) == "table" and b.name or nil)
+    if n then offered[n] = true end
+  end
+  for _, b in ipairs(list or {}) do
+    local name = M._baseBoonName(type(b) == "table" and b.name or nil)
+    local cw = name and M._conflictsFor(name, held) or {}
+    if #cw > 0 then
+      local others, hit = {}, false
+      for n in pairs(offered) do if n ~= name then others[n] = true end end
+      for _, n in ipairs(cw) do if held[n] then hit = true end end
+      M.echo((hit and "<indian_red>CONFLICT<reset> -- " or "") .. "<gold>" .. name
+        .. "<reset> conflicts with " .. M._fmtConflicts(cw, held, others) .. ".")
+    end
+  end
+end
+
+-- The CONTEMPLATE line itself (trigger mnemosyne/092), for any contemplate -- ours or typed by hand.
+-- Highlights each conflicting name in the line and echoes the list beneath it.
+function M.onConflictsLine(value)
+  if type(value) ~= "string" then return end
+  local low = value:gsub("[%s%.]+$", ""):lower()
+  if low == "" or low == "none" or low == "nothing" then return end
+  local names = M._splitBoonList(value)
+  if #names == 0 then return end
+  local held = M._heldBoons()
+  if selectString and fg then
+    for _, n in ipairs(names) do
+      if selectString(n, 1) > -1 then
+        fg(held[n] and "red" or "yellow")
+        if setBold then setBold(true) end
+        if deselect then deselect() end
+        if resetFormat then resetFormat() end
+      end
+    end
+  end
+  local hit = false
+  for _, n in ipairs(names) do if held[n] then hit = true end end
+  M.echo((hit and "<indian_red>CONFLICT<reset> -- " or "") .. "conflicts with "
+    .. M._fmtConflicts(names, held) .. ".")
+end
+
 -- { [affliction] = <boon that granted it> } for the CURRENT run. Empty table when none.
 function M.runImmunities()
   local out = {}
@@ -1716,6 +1895,7 @@ function M.onBoonsOffered()
       -- the capture that feeds the catalogue and the API.
       if M._echoImmunities then pcall(M._echoImmunities, list) end
       if M._echoAttuneGated then pcall(M._echoAttuneGated, list) end
+      if M._echoConflicts then pcall(M._echoConflicts, list) end -- v4.7.325
 
       -- Everything below is telemetry.
       if not M._inRun() then return end
@@ -1990,11 +2170,12 @@ function M._flushPendingOffer(why)
     .. tostring(M.run and M.run.ripple))
   M._reportBoonsOfferedEnriched(list, rerolls)
   -- The offer is off our hands, so the capture slot is free and the boon screen is the quietest
-  -- stretch of a run. Trickle ONE catalogue gap after a pause -- see `M._boonFillTrickle`, which
-  -- refuses again if anything has taken the slot in the meantime.
+  -- stretch of a run. After a pause, CONTEMPLATE EVERY OFFERED BOON (v4.7.324, user: "they
+  -- constantly change these") plus one catalogue gap -- see `M._boonScreenContemplate`, which
+  -- refuses if anything has taken the slot in the meantime and stops at GO!.
   if tempTimer and M.BOON_FILL_IDLE then
     tempTimer(M.BOON_FILL_IDLE, function()
-      if M._boonFillTrickle then pcall(M._boonFillTrickle) end
+      if M._boonScreenContemplate then pcall(M._boonScreenContemplate, list) end
     end)
   end
   return true
@@ -2074,41 +2255,70 @@ function M.boonGaps()
   return gaps
 end
 
--- BOONS WE CAN DESCRIBE BUT HAVE NEVER CONTEMPLATED (v4.7.322, user-directed).
+-- CONTEMPLATE EVERY BOON, NO MATTER WHAT (v4.7.324, user-directed).
 --
--- `combo_boon` -- and the quote and category the tracker also takes -- are printed only by
--- CONTEMPLATE, and `boonGaps` only ever queues boons with NO description. Every boon in a mature
--- catalogue has one, so on the user's install (402 boons, 0 gaps) nothing would ever have been
--- learned and `combo_boon` would never have been sent. So `mnem boonfill` also contemplates
--- described boons it has not yet checked, marking each `comboChecked` once a real block comes back
--- -- whether or not it printed a combo line, so a boon is asked once, not forever.
+-- User, with an offer screen: "We should boon contemplate all boons no matter what as they
+-- constantly change these to be different or add things to them." Until now a boon was contemplated
+-- at most ONCE -- `boonGaps` only queued boons with no description, and v4.7.322's combo pass marked
+-- each one `comboChecked` and never asked again -- so a boon the game later rewrote kept its old text
+-- and its old quote, category and combo status for good.
 --
--- Boons SEEDED as combo (`M.BOON_COMBO`, from the tracker's data) go FIRST: seeing -- or not seeing
--- -- "Combo Boon?" on their contemplate is what settles which screen prints the line, the one thing
--- no log of ours has shown. Echoes ("(ECHO) Name") and names the game refused are skipped. Only
--- `mnem boonfill` runs this pass; the automatic trickle stays on description gaps.
+-- So contemplation is now a CYCLE, and nothing leaves it:
+--   * every boon on an offer screen is contemplated once that offer has posted (`_boonScreenContemplate`);
+--   * `mnem boonfill` works through the WHOLE catalogue, never-contemplated first (seeded combo boons
+--     first among those), then oldest `contemplatedAt` -- so a full cycle simply starts over;
+--   * a complete, validated contemplate UPDATES the text as well as the rest, and says when it changed.
+-- Echo rows ("(ECHO) Name") contemplate as their base boon; names the game refused are skipped.
+local function baseName(name)
+  if type(name) ~= "string" then return nil end
+  local clean = name:gsub("^%(ECHO%)%s*", ""):gsub("^%s+", ""):gsub("%s+$", "")
+  return clean ~= "" and clean or nil
+end
+
+-- When a boon was last contemplated: nil = never; a legacy v4.7.322 `comboChecked` counts as long ago.
+local function contemplatedAt(rec)
+  if type(rec) ~= "table" then return nil end
+  if tonumber(rec.contemplatedAt) then return tonumber(rec.contemplatedAt) end
+  if rec.comboChecked then return 0 end
+  return nil
+end
+
 function M.boonMetaGaps()
-  local combo, rest = {}, {}
+  local never, seen = {}, {}
   for name, rec in pairs((M.history and M.history.boonLibrary) or {}) do
     if type(name) == "string" and type(rec) == "table"
        and type(rec.description) == "string" and rec.description ~= ""
-       and not rec.comboChecked and not name:find("^%(ECHO%)") and not M.boonUnknown(name) then
-      if rec.comboBoon == true then combo[#combo + 1] = name else rest[#rest + 1] = name end
+       and not name:find("^%(ECHO%)") and not M.boonUnknown(name) then
+      if contemplatedAt(rec) == nil then never[#never + 1] = name else seen[#seen + 1] = name end
     end
   end
-  table.sort(combo)
-  table.sort(rest)
-  for _, name in ipairs(rest) do combo[#combo + 1] = name end
-  return combo
+  local lib = M.history.boonLibrary
+  -- Never-contemplated first, the seeded combo boons first among them: seeing -- or not seeing --
+  -- "Combo Boon?" on their contemplate is what settles which screen prints that line.
+  table.sort(never, function(a, b)
+    local ca, cb = lib[a].comboBoon == true, lib[b].comboBoon == true
+    if ca ~= cb then return ca end
+    return a < b
+  end)
+  -- Then the stalest.
+  table.sort(seen, function(a, b)
+    local ta, tb = contemplatedAt(lib[a]), contemplatedAt(lib[b])
+    if ta ~= tb then return ta < tb end
+    return a < b
+  end)
+  for _, name in ipairs(seen) do never[#never + 1] = name end
+  return never
 end
 
--- Forget which boons were contemplated, so the combo pass asks them all again (`mnem boonfill
--- recheck`). The ANSWERS stay: nothing here can tell a stale value from a current one, and a
--- contemplate that prints the line overwrites it (`_learnBoon`).
+-- Start the cycle over (`mnem boonfill recheck`). The ANSWERS stay: nothing here can tell a stale
+-- value from a current one, and the next contemplate overwrites what it shows.
 function M.boonRecheck()
   local n = 0
   for _, rec in pairs((M.history and M.history.boonLibrary) or {}) do
-    if type(rec) == "table" and rec.comboChecked then rec.comboChecked = nil; n = n + 1 end
+    if type(rec) == "table" and (rec.comboChecked or rec.contemplatedAt) then
+      rec.comboChecked, rec.contemplatedAt = nil, nil
+      n = n + 1
+    end
   end
   if n > 0 and M._historySaveSoon then M._historySaveSoon() end
   return n
@@ -2118,14 +2328,14 @@ end
 -- is shared with the offer and effects parsers -- so filling all of them in one burst is the same
 -- race v4.7.279 had to unpick. `mnem boonfill` takes a handful; `mnem boonfill all` is the
 -- deliberate opt-in for a quiet moment on the riverbank. Description gaps are queued first; the
--- rest of the batch goes to the combo-status pass (v4.7.322).
+-- rest of the batch goes to the contemplate cycle (v4.7.322, v4.7.324).
 M.BOON_FILL_BATCH = 8
 
 function M.boonFill(limit)
   local gaps = M.boonGaps()
   local metaGaps = M.boonMetaGaps()
   if #gaps == 0 and #metaGaps == 0 then
-    return M.echo("Boon catalogue has no gaps -- every boon has its text and has been contemplated.")
+    return M.echo("Boon catalogue is empty -- nothing to contemplate yet.")
   end
   local n = (limit == "all") and (#gaps + #metaGaps) or (tonumber(limit) or M.BOON_FILL_BATCH)
   local todo, meta, nMeta = {}, {}, 0
@@ -2138,21 +2348,73 @@ function M.boonFill(limit)
   end
   M.echo("Contemplating <cyan>" .. #todo .. "<grey> boon(s): <cyan>" .. nDesc .. "<grey> of <cyan>"
     .. #gaps .. "<grey> undescribed, <cyan>" .. nMeta .. "<grey> of <cyan>" .. #metaGaps
-    .. "<grey> to check for combo status (~" .. string.format("%.0f", #todo * 0.6) .. "s)...")
-  M._boonFillNext(todo, 1, 0, { meta = meta, checked = 0, lines = 0, noLine = {} })
+    .. "<grey> in the refresh cycle, stalest first (~" .. string.format("%.0f", #todo * 0.6) .. "s)...")
+  M._boonFillNext(todo, 1, 0, M._fillCtx(meta))
 end
 
--- `ctx` (v4.7.322) is nil for the trickle's single description gap, and carries the combo-status
--- pass's bookkeeping for `mnem boonfill`: which names are `meta` (described already -- their text
--- must not be touched), how many were checked, how many printed the combo line, and which boons
--- SEEDED as combo came back without it.
+-- The bookkeeping one run of `_boonFillNext` carries. `gen` ties it to the wave it started in: GO!
+-- bumps `M._fillGen`, and a run from an earlier wave stops rather than race that wave's captures.
+function M._fillCtx(meta, auto)
+  return { meta = meta or {}, checked = 0, lines = 0, noLine = {}, changed = {},
+           gen = M._fillGen or 0, auto = auto and true or false, waits = 0 }
+end
+
+-- EVERY OFFERED BOON, EVERY SCREEN (v4.7.324). Runs once the offer has POSTED (`_flushPendingOffer`),
+-- so the report never waits on it -- the exact reason v4.7.279 took contemplation off the offer
+-- path, where it raced the next ripple's captures and dropped whole reports. What it contemplates
+-- feeds the NEXT post of that boon. Plus one description gap, as the old one-per-screen trickle did.
+-- Never starts while another capture holds the slot, and stops at GO!.
+function M._boonScreenContemplate(list)
+  if not (M.history and M.history.boonLibrary) then return false end
+  if M._capturing then return false end
+  local todo, meta, queued = {}, {}, {}
+  for _, b in ipairs(type(list) == "table" and list or {}) do
+    local name = baseName(type(b) == "table" and b.name or b)
+    if name and not queued[name] and not M.boonUnknown(name) then
+      queued[name] = true
+      todo[#todo + 1] = name
+      local rec = M.boonInfo and M.boonInfo(name)
+      if type(rec) == "table" and rec.description and rec.description ~= "" then meta[name] = true end
+    end
+  end
+  for _, gap in ipairs(M.boonGaps()) do
+    if not queued[gap] then todo[#todo + 1] = gap; break end
+  end
+  if #todo == 0 then return false end
+  M._boonFillNext(todo, 1, 0, M._fillCtx(meta, true))
+  return true
+end
+
+local function sameText(a, b)
+  local function norm(s) return (tostring(s or ""):gsub("%s+", " "):gsub("^ ", ""):gsub(" $", "")) end
+  return norm(a) == norm(b)
+end
+
+-- `ctx` is nil for the automatic trickle's single description gap; otherwise it carries a run's
+-- bookkeeping (`M._fillCtx`): which names are already described (`meta`), what was checked, which
+-- printed the combo line, which SEEDED combo boons came back without it, and which texts changed.
 function M._boonFillNext(todo, i, learned, ctx)
+  if ctx then
+    ctx.checked, ctx.lines = ctx.checked or 0, ctx.lines or 0
+    ctx.noLine, ctx.changed = ctx.noLine or {}, ctx.changed or {}
+  end
+  if ctx and ctx.gen and ctx.gen ~= (M._fillGen or 0) then
+    -- A wave started. Its captures own the slot now; what is left waits for the next boon screen.
+    M._historySave()
+    if not ctx.auto then
+      M.echo("Boon contemplation paused at <cyan>" .. (i - 1) .. "/" .. #todo
+        .. "<grey> -- the next wave started. <cyan>mnem boonfill<grey> resumes with the stalest.")
+    end
+    return
+  end
   if i > #todo then
     M._historySave()
+    local quiet = ctx and ctx.auto and learned == 0 and #ctx.changed == 0
+    if quiet then return end
     local msg = "Boon catalogue updated: <cyan>" .. learned .. "<grey> learned."
     if ctx and ctx.checked > 0 then
-      msg = msg .. " Contemplated <cyan>" .. ctx.checked .. "<grey> for combo status; the "
-        .. "'Combo Boon?' line appeared on <cyan>" .. ctx.lines .. "<grey>."
+      msg = msg .. " Contemplated <cyan>" .. ctx.checked .. "<grey>; <cyan>" .. #ctx.changed
+        .. "<grey> changed; the 'Combo Boon?' line appeared on <cyan>" .. ctx.lines .. "<grey>."
       if #ctx.noLine > 0 then
         msg = msg .. " <yellow>No 'Combo Boon?' line on " .. table.concat(ctx.noLine, ", ")
           .. "<grey> (seeded as combo from the tracker's data) -- that line may be printed by the"
@@ -2161,40 +2423,63 @@ function M._boonFillNext(todo, i, learned, ctx)
     end
     return M.echo(msg .. " Run <cyan>BOONS<grey> to see them.")
   end
+  -- NEVER TAKE THE SLOT FROM ANOTHER CAPTURE (v4.7.324). `_captureLines` force-finishes whatever
+  -- holds it, so a contemplate started mid-WADE-STATUS would cut that capture short. Wait for it;
+  -- give up after a few tries rather than spin.
+  if M._capturing then
+    if ctx then
+      ctx.waits = (ctx.waits or 0) + 1
+      if ctx.waits <= 5 then
+        tempTimer(1, function() M._boonFillNext(todo, i, learned, ctx) end)
+        return
+      end
+    end
+    M._historySave()
+    return
+  end
   local name = todo[i]
   local metaOnly = ctx and ctx.meta and ctx.meta[name] or false
   local before = M.boonInfo and M.boonInfo(name)
+  local oldText = type(before) == "table" and before.description or nil
   local seededCombo = type(before) == "table" and before.comboBoon == true
   M._captureContemplate(function(info)
-    -- A REAL CONTEMPLATE BLOCK OPENS WITH ITS META (review, v4.7.322). Every one we have seen
-    -- prints `Rarity:` and `Can echo:` before the text. The capture is divider-bounded and shares
-    -- one slot, so it can catch the wrong block -- which is how Deadly Finesse's "description"
-    -- became two WADE STATUS lines. A block with neither line is not a contemplate: learn nothing
-    -- from it, and do not mark the boon checked.
-    local real = type(info) == "table" and (info.rarity ~= nil or info.num_echoes_possible ~= nil)
+    -- A REAL, WHOLE CONTEMPLATE BLOCK (v4.7.322, v4.7.324). Every one we have seen prints `Rarity:`
+    -- or `Can echo:` before the text, and ends on its closing divider. The capture is
+    -- divider-bounded and shares one slot, so it can catch the wrong block (Deadly Finesse's
+    -- "description" became two WADE STATUS lines) or be cut short by a timeout or another capture.
+    -- Now that a contemplate may REWRITE a description, a block that is not provably whole is
+    -- worth nothing: learn nothing from it, and do not mark the boon contemplated.
+    local real = type(info) == "table" and info.complete ~= false
+      and (info.rarity ~= nil or info.num_echoes_possible ~= nil)
     if real and M._learnBoon then
       -- A CONTEMPLATE IS A COMMAND SPENT AND A CAPTURE SLOT HELD, so take everything it printed
-      -- (v4.7.298). `conflictsWith` is not passed: nothing parses it (see META_PROMOTE above).
+      -- (v4.7.298), and the conflicts list since v4.7.325.
       local extra = {
         quote = info.quote,
         category = info.category,
         unlockedBy = info.unlockedBy,
         comboBoon = info.comboBoon, -- v4.7.322: a boolean, so `false` is passed too
+        conflictsWith = info.conflictsWith,
       }
-      if metaOnly then
-        -- An already-described boon: its text came from the offer screen, which owns it. The
-        -- contemplate only adds what the offer screen never prints.
-        M._learnBoon(name, nil, info.rarity, info.num_echoes_possible, extra)
-      elseif info.description and info.description ~= "" then
-        M._learnBoon(name, info.description, info.rarity, info.num_echoes_possible, extra)
-        learned = learned + 1
-      end
+      local text = (info.description and info.description ~= "") and info.description or nil
+      -- The game rewrites boons (user, v4.7.324), so a whole contemplate's text replaces ours --
+      -- for a described boon too. `_learnBoon` still refuses a glued screen line.
+      M._learnBoon(name, text, info.rarity, info.num_echoes_possible, extra)
+      if text and not metaOnly then learned = learned + 1 end
       local rec = M.boonInfo and M.boonInfo(name)
-      if type(rec) == "table" then rec.comboChecked = true end
+      if type(rec) == "table" then
+        rec.contemplatedAt = os.time()
+        rec.comboChecked = nil -- superseded by the timestamp
+      end
       if ctx then
         ctx.checked = ctx.checked + 1
         if info.comboBoon ~= nil then ctx.lines = ctx.lines + 1 end
         if seededCombo and info.comboBoon == nil then ctx.noLine[#ctx.noLine + 1] = name end
+        local newText = type(rec) == "table" and rec.description or nil
+        if oldText and newText and not sameText(oldText, newText) then
+          ctx.changed[#ctx.changed + 1] = name
+          M.echo("<yellow>" .. name .. " changed<grey>: " .. newText)
+        end
       end
     end
     tempTimer(0.5, function() M._boonFillNext(todo, i + 1, learned, ctx) end)
@@ -2238,13 +2523,16 @@ end
 -- Capture one BOON CONTEMPLATE block (skip the "<name>:" header + opening
 -- divider; stop at the closing divider) and hand parsed detail to cb.
 function M._captureContemplate(cb)
-  local seenDash, called = false, false
+  -- `closed` (v4.7.324): did the block end on its CLOSING divider? A timeout or another capture
+  -- force-finishing this one hands over a partial block, and now that a contemplate may rewrite a
+  -- description, a partial block must never be read as the whole text.
+  local seenDash, called, closed = false, false, false
   M._captureLines({
     timeout = 2,
     onLine = function(ln)
       if ln:find("BOON CLAIM", 1, true) then return "skip" end -- never capture the offered footer
       if isDivider(ln) then
-        if seenDash then return "stop" end
+        if seenDash then closed = true; return "stop" end
         seenDash = true
         return "skip"
       end
@@ -2254,7 +2542,9 @@ function M._captureContemplate(cb)
     onDone = function(lines)
       if called then return end
       called = true
-      cb(M._parseContemplate(lines))
+      local info = M._parseContemplate(lines)
+      if type(info) == "table" then info.complete = closed end
+      cb(info)
     end,
   })
 end
@@ -2320,27 +2610,14 @@ end
 -- SAFE-FAIL. A label we never see promotes nothing; the value simply stays in `meta`, which is
 -- where the next reader will find it.
 --
--- `Conflicts with` IS DELIBERATELY ABSENT (deep review, v4.7.298). It was promoted in the first
--- cut of this change, on the strength of the tracker schema having a `conflicts_with` field --
--- but that line has never appeared in one of our own logs, and unlike every other label here its
--- value is a LIST OF BOON NAMES, i.e. long. That matters because this parser reads RAW PHYSICAL
--- LINES with no continuation-joining, and Achaea wraps server-side at the player's width (the
--- v4.7.286/297 rule). A wrapped meta value does two bad things at once: the stored value is
--- silently TRUNCATED, and the continuation line -- having no colon, so not a label -- flips the
--- state machine into `desc` and becomes THE FIRST WORDS OF THE DESCRIPTION. That description is
--- then written to the catalogue, and `boonGaps` only ever re-contemplates a boon whose
--- description is MISSING, so a corrupted-but-present one is never revisited. The bonuses panel
--- reads it.
+-- `Conflicts With` WAS ABSENT until v4.7.325 (deep review, v4.7.298): its value is a LIST of boon
+-- names, the one shape that wraps, and a wrapped tail with no colon would have become the first
+-- words of the description. The user then pasted a real block (2026-09-19): the label is
+-- "Conflicts With", the list is joined with " and ", and the meta block ends in a BLANK LINE before
+-- the description. So it is now promoted by its own path (below, and `_parseContemplate`), which
+-- takes a following line as a wrapped tail only while the list still splits into KNOWN boon names.
 --
--- The wrap is not hypothetical: the real captured block in `test_mnemosyne.lua`'s own fixture
--- wraps its description mid-sentence, and its continuation line is FLUSH-LEFT -- so there is no
--- indentation to distinguish a wrapped meta tail from the description's opening line, and no
--- honest way to parse one without having seen it. Promoting a label we have never read, whose
--- value is the one shape most likely to wrap, buys nothing today (no line means no value) and
--- risks the catalogue's most irreplaceable field. `info.meta` still records it verbatim if it
--- ever appears -- which is exactly what v4.7.288 built `meta` for.
---
--- The two that remain are promoted because their values PROVABLY cannot wrap: a category is a
+-- The two in this table are promoted because their values PROVABLY cannot wrap: a category is a
 -- single word, and an unlocking boon is one name (the longest in the seed is ~30 characters,
 -- versus the ~115-column wrap seen in the fixture). `META_VALUE_MAX` enforces that rather than
 -- assuming it -- a value long enough to have wrapped is refused and left in `meta`.
@@ -2392,6 +2669,14 @@ function M._promoteMeta(info)
       local bare = trimmed:gsub("%s*%.%s*$", ""):lower()
       if #trimmed <= META_VALUE_MAX and not META_PLACEHOLDER[bare] then
         info[field] = trimmed
+      end
+    end
+    -- CONFLICTS (v4.7.325): a LIST, split against the names we know (see `_splitBoonList`).
+    if tostring(label):lower() == "conflicts with" and type(value) == "string" and info.conflictsWith == nil then
+      local bare = value:gsub("[%s%.]+$", ""):lower()
+      if not META_PLACEHOLDER[bare] then
+        local names = M._splitBoonList(value)
+        if #names > 0 then info.conflictsWith = names end
       end
     end
     local flag = META_FLAG[tostring(label):lower()]
@@ -2466,7 +2751,9 @@ function M._parseContemplate(lines)
   local info = {}
   local descParts, quoteParts = {}, {}
   local section = "meta" -- meta -> desc -> quote
-  for _, ln in ipairs(lines) do
+  local consumed = {} -- lines already taken as the tail of a wrapped conflicts list (v4.7.325)
+  for idx, ln in ipairs(lines) do
+   if not consumed[idx] then
     local rar = ln:match("^Rarity:%s+(.+)$")
     local echo = ln:match("^Can echo:%s+(.+)$")
     local maxe = ln:match("^Maximum echoes:%s+(%d+)")
@@ -2495,8 +2782,21 @@ function M._parseContemplate(lines)
       -- An unrecognised `Label: value` while still in the meta block -- category, unlocked-by, or
       -- whatever is added next. Record it and do NOT let it start the description.
       local k, v = ln:match(META_KEY_VALUE)
+      v = v:gsub("%s+$", "")
+      -- A CONFLICTS LIST MAY WRAP (v4.7.325). It is the one label whose value is long, and a wrapped
+      -- tail prints flush-left like the description does. Take the following lines as its tail
+      -- only while the whole list still splits into KNOWN boon names -- a description line never
+      -- does -- and never past the blank line that ends the meta block.
+      if k:lower() == "conflicts with" then
+        local j = idx + 1
+        while lines[j] and not lines[j]:match("^%s*$") and not metaLabel(lines[j]) do
+          local cand = v .. " " .. lines[j]:gsub("^%s+", ""):gsub("%s+$", "")
+          if not M._allKnownBoons(cand) then break end
+          v, consumed[j], j = cand, true, j + 1
+        end
+      end
       info.meta = info.meta or {}
-      info.meta[k] = (v:gsub("%s+$", ""))
+      info.meta[k] = v
     else
       local t = ln:gsub("^%s+", ""):gsub("%s+$", "")
       if section == "meta" then section = "desc" end
@@ -2506,6 +2806,7 @@ function M._parseContemplate(lines)
         table.insert(quoteParts, t)
       end
     end
+   end
   end
   if #descParts > 0 then info.description = table.concat(descParts, " ") end
   if #quoteParts > 0 then
