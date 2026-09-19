@@ -455,7 +455,7 @@ function M.boonDbStats()
       if rec.rarity and rec.rarity ~= "" then rarity = rarity + 1 end
       if rec.maxEchoes then echoes = echoes + 1 end
       if rec.comboBoon == true then combo = combo + 1 end        -- v4.7.322
-      if rec.comboChecked then checked = checked + 1 end
+      if rec.contemplatedAt or rec.comboChecked then checked = checked + 1 end
     end
   end
   return { total = total, described = described, rarity = rarity, echoes = echoes,

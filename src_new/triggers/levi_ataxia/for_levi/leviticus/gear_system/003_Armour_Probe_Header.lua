@@ -1,6 +1,6 @@
 --[[mudlet
 type: trigger
-name: Paragon Inventory
+name: Armour Probe Header
 hierarchy:
 - Levi_Ataxia
 - For Levi
@@ -31,14 +31,13 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^\s+(paragon\d+)\s+(.+)$
+- pattern: ^This armour has (\d+) embrasures?\.$
   type: 1
 ]]--
 
--- Parses "ii paragon" output lines like:
---     paragon514466           a crucious paragon
--- ataxia.armour.onInventoryParagon registers it and, during a refresh, records it as something
--- we could insert (v4.7.323).
-if ataxia and ataxia.armour and ataxia.armour.onInventoryParagon then
-  ataxia.armour.onInventoryParagon(matches[2], matches[3])
+-- "This armour has 3 embrasures." opens a `probe armour` block (v4.7.323). It starts the snapshot
+-- the embrasure lines (002) fill, and records the armour's capacity, so a slot the probe does not
+-- list reads as EMPTY rather than as whatever we believed before.
+if ataxia and ataxia.armour and ataxia.armour.onProbeHeader then
+  ataxia.armour.onProbeHeader(matches[2])
 end

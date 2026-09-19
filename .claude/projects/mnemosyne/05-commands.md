@@ -50,10 +50,10 @@ A description is shown once, on a screen gone a second later, so the catalogue c
 
 | Command | Effect |
 |---|---|
-| `mnem boonfill` | contemplate `BOON_FILL_BATCH` (8) boons: undescribed ones first, then described ones never contemplated -- for combo status, quote and category (v4.7.322; seeded combo boons first; the text is never touched). The summary says whether the `Combo Boon?` line appeared |
+| `mnem boonfill` | contemplate `BOON_FILL_BATCH` (8) boons: undescribed ones first, then the rest of the catalogue, never-contemplated first then STALEST (v4.7.324: a cycle -- the game keeps changing boons). A whole contemplate updates text, combo status, quote and category and echoes `<name> changed`. Offered boons are contemplated automatically after every offer screen |
 | `mnem boonfill all` | all of them -- opt-in, for a quiet moment (~350 on a mature catalogue) |
-| `mnem boonfill gaps` | name what is missing and count the combo-status queue, spending no command |
-| `mnem boonfill recheck` | clear every boon's "contemplated" mark so the combo pass asks again (after a game change); answers already learned are kept (v4.7.322) |
+| `mnem boonfill gaps` | name what is missing and count the contemplate cycle, spending no command |
+| `mnem boonfill recheck` | restart the contemplate cycle; answers already learned are kept |
 
 `M.boonGaps()` unions the SEED (which carries every name-only hole), the LIBRARY and the last BOONS
 list, then dedupes and sorts. The old version read `boonsOwned` alone, which could only ever reach
