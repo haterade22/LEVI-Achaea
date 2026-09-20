@@ -8679,6 +8679,99 @@ describe("boon combos", function()
     expect(gaps[1]).toBe("Lightning Soul")
   end)
 
+  -- v4.7.329, user: "Combo Boons we can add manually to our database" (22 reward blocks pasted from
+  -- the game). A recipe is only printed on a block we must spend a contemplate to see, and a combo
+  -- reward is never offered -- so without seeding, a chain is invisible until the reward is already
+  -- in hand.
+  it("the seeded recipes reach the catalogue and the chain index", function()
+    local saved = M.history.boonLibrary
+    M.history.boonLibrary = {}
+    local ok, err = pcall(function()
+      dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/010_Boon_Seed.lua")
+      local chains = M.comboChains()
+      local n = 0
+      for _ in pairs(chains) do n = n + 1 end
+      expect(n >= 22).toBeTrue()
+      expect(table.concat(chains["Lightning Soul"], ", ")).toBe("Argent Scales, Electric Mastery, Energetic")
+      expect(#chains["Ivory Scales"]).toBe(6)                     -- the longest recipe seen
+      expect(#chains["Ancient Will"]).toBe(2)                     -- ...and the shortest
+      -- TWO components: "Wrath and Righteousness" is itself a boon, which is why the game printed
+      -- the line with no commas at all.
+      expect(table.concat(chains["Bloodsworn Gods"], ", ")).toBe("Candour, Wrath and Righteousness")
+      expect(M.comboFeeds("Azure Scales")[1] ~= nil).toBeTrue()   -- a component feeds its reward
+      local rec = M.boonInfo("It All Ogre Now")
+      expect(rec.rarity).toBe("legendary")
+      expect(rec.category).toBeNil()   -- the game prints "Unset", which is not a category
+      expect(M.boonInfo("Roaring Laughter").category).toBe("Offence")
+      expect(M.boonInfo("Sea and Sky").maxEchoes).toBe(0)         -- every one says "Can echo: No"
+      -- the seed literal must not be aliased into the saved catalogue
+      expect(M.BOON_SEED["Lightning Soul"].unlocksFrom ~= M.BOON_COMBO_RECIPES["Lightning Soul"].unlocksFrom).toBeTrue()
+      expect(M.boonInfo("Lightning Soul").unlocksFrom ~= M.BOON_COMBO_RECIPES["Lightning Soul"].unlocksFrom).toBeTrue()
+    end)
+    M.history.boonLibrary = saved
+    if not ok then error(err, 0) end
+  end)
+
+  it("a seeded recipe never overwrites what a contemplate learnt", function()
+    local saved = M.history.boonLibrary
+    M.history.boonLibrary = { ["Lightning Soul"] = { description = "The game says something else now.",
+      unlocksFrom = { "Something Else" }, category = "Offence" } }
+    local ok, err = pcall(function()
+      dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/010_Boon_Seed.lua")
+      local rec = M.boonInfo("Lightning Soul")
+      expect(rec.description).toBe("The game says something else now.")
+      expect(#rec.unlocksFrom).toBe(1)
+      expect(rec.category).toBe("Offence")
+    end)
+    M.history.boonLibrary = saved
+    if not ok then error(err, 0) end
+  end)
+
+  -- Bloodsworn Gods prints "Candour and Wrath and Righteousness" -- no commas at all. Read against
+  -- names we know, that is TWO boons, because "Wrath and Righteousness" is one of them.
+  it("reads a recipe whose names are joined by 'and' alone", function()
+    local info
+    withLibrary({ ["Candour"] = { description = "d" }, ["Wrath and Righteousness"] = { description = "d" } }, function()
+      info = M._parseContemplate({ "Rarity:             rare", "Category:           Offence",
+        "Can echo:           No", "Unlocked By:        Candour and Wrath and Righteousness",
+        "", "You gain the dawnhand defence and deal 10% more fire damage.", "", '"Bloodsworn."' })
+    end)
+    expect(#info.unlocksFrom).toBe(2)
+    expect(info.unlocksFrom[2]).toBe("Wrath and Righteousness")
+    expect(info.description).toBe("You gain the dawnhand defence and deal 10% more fire damage.")
+  end)
+
+  -- "Sea and Sky" is a boon NAME containing " and ", and it is a recipe's reward: seeding it is
+  -- what lets the splitter put it back together when it appears inside a list.
+  it("keeps a boon name that contains ' and ' once the seed knows it", function()
+    local saved = M.history.boonLibrary
+    M.history.boonLibrary = {}
+    local ok, err = pcall(function()
+      dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/010_Boon_Seed.lua")
+      local names = M._splitBoonList("Sea and Sky and Impetuous")
+      expect(#names).toBe(2)
+      expect(names[1]).toBe("Sea and Sky")
+    end)
+    M.history.boonLibrary = saved
+    if not ok then error(err, 0) end
+  end)
+
+  -- Most components have no description of ours: scoring them only when we had their text meant the
+  -- seeded recipes paid nothing for exactly the boons they name (found live, v4.7.329).
+  it("a component with no description of ours still earns its combo credit", function()
+    local r
+    withLibrary({ ["Frost Soul"] = { description = "d", contemplatedAt = 1,
+                    unlocksFrom = { "Azure Scales", "Cold Mastery", "Nightwalker" } },
+                  ["Azure Scales"] = { description = "d" } }, function()
+      withSeed({}, function()
+        r = holding({ "Azure Scales" }, function() return M.scoreBoon("Cold Mastery") end)
+      end)
+    end)
+    expect(table.concat(r.effects, " "):find("2/3 toward Frost Soul", 1, true) ~= nil).toBeTrue()
+    expect(r.score > 10).toBeTrue()
+    expect(table.concat(r.flags, " "):find("not in the catalogue", 1, true) ~= nil).toBeTrue()
+  end)
+
   it("mnem boondb shows a reward's recipe", function()
     local out
     withLibrary(WITH_CHAIN, function()

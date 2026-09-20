@@ -2,6 +2,60 @@
 
 ---
 
+## 2026-09-20 - 22 combo recipes seeded, so a chain is visible before the reward is (v4.7.329)
+
+User, with twenty-two `BOON CONTEMPLATE` blocks pasted from the game (their own and other players'):
+*"Combo Boons we can add manually to our database."*
+
+A recipe is printed only on the REWARD's own contemplate -- and a combo reward is never offered, so
+without seeding, a chain stays invisible until the reward is already in hand, which is exactly too
+late to aim for it. All 22 are now in the seed, verbatim: rarity, category, echo answer, the
+`Unlocked By` line, the description and the quote.
+
+```
+(MNEM): Boon combos -- 5 recipe(s) known (filter: soul)...
+  2/3 Lightning Soul  Defence  rare
+      needs: Argent Scales, Electric Mastery, Energetic
+  1/3 Frost Soul  Defence  rare
+      needs: Azure Scales, Cold Mastery, Nightwalker
+```
+
+Seeded fill-only, like everything else in the seed: the game's own contemplate always wins, and
+none is marked contemplated, so the refresh cycle still asks and a rewritten recipe corrects itself.
+
+**Two things the 22 blocks taught us, beyond the recipes:**
+
+- **"Candour and Wrath and Righteousness" is TWO boons, not three.** Bloodsworn Gods prints its
+  recipe with no commas at all, and `Wrath and Righteousness` is itself a boon in the catalogue.
+  The splitter re-joins fragments against the names it knows and read the line correctly while the
+  table I had written said three -- so **the table was corrected, not the splitter**. It is also
+  why seeding these names matters: `Sea and Sky` is a reward whose own name contains " and ".
+- **A recipe is not always three components.** `Ancient Will` and `Sea and Sky` take two,
+  `Ragestrike` and `Trainwreck` four, and `Ivory Scales` takes six (every Scales boon in the game).
+  A four- or six-name line also runs past the 60-character meta cap and wraps -- both handled by
+  v4.7.328's list parsing and dangling-connector rule, and both now covered by a seeded example.
+- `It All Ogre Now` prints its category as `Unset`, which is a placeholder rather than a category,
+  so none is recorded for it.
+
+**A component with no description of ours now earns its combo credit.** The advisor scored the combo
+only after it had text to read, and returned early for a boon it had never seen -- which is most
+components of a seeded recipe. `Cold Mastery` scored 13 and said nothing; it now scores 25 and says
+`2/3 toward Frost Soul`. An option with nothing at all to say no longer prints a blank line.
+
+### Verification
+
+2195 tests pass (5 new). Break-back verified: 4 mutants, 3 caught. The fourth guards a seed entry
+that does not exist yet (none of the 22 names is in the seed table above it), so it is unobservable
+by design -- and now says so in its own comment rather than pretending to be covered.
+
+### Files
+
+- `mnemosyne/010_Boon_Seed.lua`: `M.BOON_COMBO_RECIPES` -- the 22 blocks, merged into the seed.
+- `mnemosyne/014_Boon_Advisor.lua`: combo credit no longer needs a description; no blank line.
+- `tests/test_mnemosyne.lua`; `CHANGELOG.md`, `CLAUDE.md`, `README.md`; memory.
+
+---
+
 ## 2026-09-19 - Boon combos: which boons unlock which, and how far along the run is (v4.7.328)
 
 User, holding the reward: *"With every required boon now in hand, the mist of the Mnemosyne parts
