@@ -880,7 +880,14 @@ components never contemplated; the offer chain takes ONE per screen). The adviso
 inside a run, and asks for its contemplate with a RETRY (`_contemplateGranted`), because the offer
 chain usually still holds the capture slot; `comboGaps` also names a boon we HOLD but never
 contemplated, so the reward cannot fall through. Recipes come only from the game's text -- never
-guessed from names. **The advisor pays ONE chain's worth** (the best) however many a boon feeds, and
+guessed from names. **22 RECIPES ARE SEEDED** (v4.7.329, `M.BOON_COMBO_RECIPES` in 010_Boon_Seed,
+from contemplate blocks the user and other players pasted): fill-only, uncontemplated, so the game
+still corrects them -- without them a chain is invisible until its reward is already in hand.
+Evidence they carry: a recipe takes 2 to 6 components; `Candour and Wrath and Righteousness` is TWO
+names (`Wrath and Righteousness` is a boon), which is why `_splitBoonList` re-joins against known
+names and why seeding those names matters; `It All Ogre Now`'s category is `Unset` (a placeholder).
+The advisor scores a component's combo credit even with no description of our own -- most components
+have none, and returning early cost exactly the boons a seeded recipe names. **The advisor pays ONE chain's worth** (the best) however many a boon feeds, and
 a boon that conflicts with a held one or is inert never takes the RECOMMEND line while a usable
 option exists (`r.blocked`). **A WRAPPED list's tail is taken when the value ends in a dangling
 comma or "and"** -- the all-known-names test alone lost a recipe's newest component AND turned the

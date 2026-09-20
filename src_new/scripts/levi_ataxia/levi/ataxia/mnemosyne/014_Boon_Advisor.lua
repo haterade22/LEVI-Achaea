@@ -178,6 +178,33 @@ function M.scoreBoon(offerName, ctx, W)
   if rec.comboBoon == true then add(r, W.combo, "combo") end
   if isEcho and ctx.held[name] then add(r, W.echoHeld, "strengthens a boon you hold") end
 
+  -- COMBO CREDIT DOES NOT NEED A DESCRIPTION (v4.7.329). A recipe names its components, and most of
+  -- those we have never contemplated -- so scoring them only when we hold their text meant the
+  -- seeded recipes paid nothing for exactly the boons they name.
+  -- COMBO RECIPES (v4.7.328). A component is worth more than itself: several of them buy another
+  -- boon outright. Only recipes the game has shown us (see 015_Boon_Combos).
+  --
+  -- ONLY THE BEST CHAIN COUNTS (review). Scoring every recipe a boon feeds made combo credit
+  -- unbounded -- two near-complete chains paid 35 + 35, enough to outweigh the -100 for a boon we
+  -- cannot even hold beside one we have. You can only claim the boon once, so it earns one
+  -- chain's worth; the rest are named in the summary without adding to the score.
+  local bestCombo, bestPts = nil, 0
+  for _, reward in ipairs((M.comboFeeds and M.comboFeeds(name)) or {}) do
+    local prog = M.comboProgress and M.comboProgress(reward, ctx.held)
+    if prog and not prog.complete and not ctx.held[name] then
+      local completes = (prog.have + 1 >= prog.need)
+      local pts = completes and W.comboCompletes or W.comboStep
+      local text = completes and ("completes " .. reward)
+        or ((prog.have + 1) .. "/" .. prog.need .. " toward " .. reward)
+      r.effects[#r.effects + 1] = text
+      if pts > bestPts then
+        bestPts, bestCombo = pts, (completes and ("COMPLETES the " .. reward .. " combo") or text)
+      end
+    end
+  end
+  if bestCombo then add(r, bestPts, bestCombo) end
+
+
   if not desc then
     r.flags[#r.flags + 1] = "not in the catalogue"
     return r
@@ -258,29 +285,6 @@ function M.scoreBoon(offerName, ctx, W)
     r.flags[#r.flags + 1] = "cost: " .. c
   end
 
-  -- COMBO RECIPES (v4.7.328). A component is worth more than itself: several of them buy another
-  -- boon outright. Only recipes the game has shown us (see 015_Boon_Combos).
-  --
-  -- ONLY THE BEST CHAIN COUNTS (review). Scoring every recipe a boon feeds made combo credit
-  -- unbounded -- two near-complete chains paid 35 + 35, enough to outweigh the -100 for a boon we
-  -- cannot even hold beside one we have. You can only claim the boon once, so it earns one
-  -- chain's worth; the rest are named in the summary without adding to the score.
-  local bestCombo, bestPts = nil, 0
-  for _, reward in ipairs((M.comboFeeds and M.comboFeeds(name)) or {}) do
-    local p = M.comboProgress and M.comboProgress(reward, ctx.held)
-    if p and not p.complete and not ctx.held[name] then
-      local completes = (p.have + 1 >= p.need)
-      local pts = completes and W.comboCompletes or W.comboStep
-      local text = completes and ("completes " .. reward)
-        or ((p.have + 1) .. "/" .. p.need .. " toward " .. reward)
-      r.effects[#r.effects + 1] = text
-      if pts > bestPts then
-        bestPts, bestCombo = pts, (completes and ("COMPLETES the " .. reward .. " combo") or text)
-      end
-    end
-  end
-  if bestCombo then add(r, bestPts, bestCombo) end
-
   local cw = (M._conflictsFor and M._conflictsFor(name, ctx.held)) or {}
   for _, n in ipairs(cw) do
     if ctx.held[n] then
@@ -360,7 +364,7 @@ function M.offerSummary(list)
       .. "  <grey>score <white>" .. r.score .. "<reset>")
     local effects = table.concat(r.effects, ", ")
     if #effects > 160 then effects = effects:sub(1, 157) .. "..." end
-    cecho("\n      <grey>" .. effects .. "<reset>")
+    if effects ~= "" then cecho("\n      <grey>" .. effects .. "<reset>") end
     if #r.flags > 0 then
       cecho("\n      <indian_red>" .. table.concat(r.flags, "; ") .. "<reset>")
     end

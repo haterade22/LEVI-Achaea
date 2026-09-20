@@ -509,6 +509,228 @@ for _, name in ipairs(M.BOON_COMBO) do
   M.BOON_SEED[name].comboBoon = true
 end
 
+-- COMBO RECIPES (v4.7.329, user: "Combo Boons we can add manually to our database"). Every entry
+-- below is a REWARD's own contemplate block, pasted from the game by the user and by other players
+-- (2026-09-19/20): the `Unlocked By` line, the rarity, the category, the echo answer, the
+-- description and the quote, verbatim.
+--
+-- WHY SEED THEM AT ALL. A recipe is only printed on a block we have to SPEND a contemplate to see,
+-- and a combo reward is never offered -- so without this, a chain stays invisible until the reward
+-- is already in hand, which is exactly too late to aim for it. Seeded, `mnem combos` can show what
+-- is worth chasing from the first ripple, and the advisor can pay for a component that carries one
+-- forward.
+--
+-- Fill-only, like every seed (`_boonDbMerge` merges field by field and never blanks): the game's
+-- own contemplate always wins, and none of these is marked `contemplatedAt`, so the refresh cycle
+-- still asks and a rewritten recipe corrects itself.
+--
+-- WHAT THESE 22 BLOCKS TAUGHT US, beyond the recipes:
+--   * the separator is not always a comma -- Bloodsworn Gods prints "Candour and Wrath and
+--     Righteousness", which is TWO names, not three: "Wrath and Righteousness" is itself a boon
+--     (seeded, line ~377). The splitter re-joins fragments against the names it knows and read it
+--     correctly while this table said three -- so the table was corrected, not the splitter;
+--   * a recipe can name TWO components (Ancient Will, Sea and Sky) or SIX (Ivory Scales);
+--   * a boon NAME can contain " and " -- "Sea and Sky" -- which is why `_splitBoonList` re-joins
+--     fragments against the names it knows, and why seeding these names makes that work;
+--   * a category can be "Unset" (It All Ogre Now), which `META_PLACEHOLDER` already refuses, so
+--     none is recorded here either;
+--   * every one of the 22 answers "Can echo: No", so a combo reward appears not to echo.
+M.BOON_COMBO_RECIPES = {
+  ["Lightning Soul"] = {
+    rarity = "rare",
+    category = "Defence",
+    maxEchoes = 0,
+    unlocksFrom = { "Argent Scales", "Electric Mastery", "Energetic" },
+    description = "Gain immunity to electric damage for 60 seconds at the start of each new ripple.",
+    quote = "Thunderstruck!",
+  },
+  ["Flame Soul"] = {
+    rarity = "rare",
+    category = "Defence",
+    maxEchoes = 0,
+    unlocksFrom = { "Crimson Scales", "Fire Mastery", "Flameheart" },
+    description = "Gain immunity to fire damage for 60 seconds at the start of each new ripple.",
+    quote = "Hotter!",
+  },
+  ["Frost Soul"] = {
+    rarity = "rare",
+    category = "Defence",
+    maxEchoes = 0,
+    unlocksFrom = { "Azure Scales", "Cold Mastery", "Nightwalker" },
+    description = "Gain immunity to cold damage for 60 seconds at the start of each new ripple.",
+    quote = "It can always be colder.",
+  },
+  ["Psychic Soul"] = {
+    rarity = "rare",
+    category = "Defence",
+    maxEchoes = 0,
+    unlocksFrom = { "Aurum Scales", "Hyperfixate", "Psychic Mastery" },
+    description = "Gain immunity to psychic damage for 60 seconds at the start of each new ripple.",
+    quote = "I've long since learned to ignore the horrors of my own mind.",
+  },
+  ["Vapour Soul"] = {
+    rarity = "rare",
+    category = "Defence",
+    maxEchoes = 0,
+    unlocksFrom = { "Asphyxiation Mastery", "Iron Throat", "Oxygenated" },
+    description = "Gain immunity to asphyxiation damage for 60 seconds at the start of each new ripple.",
+    quote = "One. Two. Three. Breathe!",
+  },
+  ["Ivory Scales"] = {
+    rarity = "legendary",
+    category = "Defence",
+    maxEchoes = 0,
+    unlocksFrom = { "Argent Scales", "Aurum Scales", "Azure Scales", "Crimson Scales", "Onyx Scales", "Verdant Scales" },
+    description = "You take 25% less damage from attacks that deal UNBLOCKABLE damage.",
+    quote = "The most ancient lineage of Krenindala.",
+  },
+  ["Chiliad"] = {
+    rarity = "rare",
+    category = "Defence",
+    maxEchoes = 0,
+    unlocksFrom = { "Aeonic Wisdom", "Herald of Infirmity", "Old as Humanity" },
+    description = "While you have aged yourself over a thousand years, you gain 20% bonus damage and 10% bonus resistance to all damage.",
+    quote = "History is in your hands, now. Live it. There is no more Logos to guide it. Dwell not upon failed Seleucar.",
+  },
+  ["Mental Stimulant"] = {
+    rarity = "rare",
+    category = "Defence",
+    maxEchoes = 0,
+    unlocksFrom = { "Expansive Mind", "Sharp Mind", "Thirst for Power" },
+    description = "When sipping mana, you will cure yourself of a random mental affliction.",
+    quote = "I normally prefer kawhe to focus my mind.",
+  },
+  ["Lifebloom"] = {
+    rarity = "rare",
+    category = "Defence",
+    maxEchoes = 0,
+    unlocksFrom = { "Abundance", "Font of Life", "Vigorous" },
+    description = "While you possess the panacea defence your health elixirs will be 10% more effective.",
+    quote = "With every footfall of the beast, every twitch of the vine, and every turn of the season does the world thrum in perfect unison with Her pulse.",
+  },
+  ["Mirror Calm"] = {
+    rarity = "rare",
+    category = "Defence",
+    maxEchoes = 0,
+    unlocksFrom = { "Ashaxei's Mirror", "Crystal Blue Protection", "Shattered Glass" },
+    description = "Gain a bubble of serenity for 10 seconds when you enter a ripple for the first time.",
+    quote = "Not a ripple upon the lake's surface.",
+  },
+  ["Bloodsworn Gods"] = {
+    rarity = "rare",
+    category = "Offence",
+    maxEchoes = 0,
+    unlocksFrom = { "Candour", "Wrath and Righteousness" },
+    description = "You gain the dawnhand defence and deal 10% more fire damage.",
+    quote = "I grant You My strength. I grant You a measure of My power. I take in return the blows of Your enemies. I bind Myself to You and name You Bloodsworn.",
+  },
+  ["Murderous"] = {
+    rarity = "rare",
+    category = "Offence",
+    maxEchoes = 0,
+    unlocksFrom = { "Conqueror", "Revel in Slaughter", "Violent Impulse" },
+    description = "You deal 50% bonus damage to humanoid denizens.",
+    quote = "Do not let weakness and mercy plague you.",
+  },
+  ["Alacrity of the Genesis"] = {
+    rarity = "rare",
+    category = "Offence",
+    maxEchoes = 0,
+    unlocksFrom = { "Alacritous", "Temporal Anomaly", "Timeless Speed" },
+    description = "While you possess the blur defence you will recover balance and equilibrium 10% faster.",
+    quote = "Forged from an amalgamation of Tsol'teth and essence harvested from the murder of the God of Death, Tlalaiad serves no Divine realm and has no grand design that spans all the planes of existence.",
+  },
+  ["Roaring Laughter"] = {
+    rarity = "legendary",
+    category = "Offence",
+    maxEchoes = 0,
+    unlocksFrom = { "Elusive Foolery", "Morbid Comedian", "Tough Crowd" },
+    description = "Your bad jokes will now resonate with another round of uproarious laughter, dealing psychic damage again and stunning all denizens in your location for 3 seconds. This bonus hit can only trigger every 20 seconds.",
+    quote = "Hahahahaha!",
+  },
+  ["Ragestrike"] = {
+    rarity = "legendary",
+    category = "Offence",
+    maxEchoes = 0,
+    unlocksFrom = { "Battle Frenzy", "Rage Within", "Rage-Fuelled", "Reckless Rage" },
+    description = "You can now use the RAGESTRIKE battlerage attack which consumes your entire reserves of battlerage to damage all denizens in your location. It requires at least 15 battlerage and does more damage the more rage is consumed.",
+    quote = "RAAAAAARGGH!",
+  },
+  ["Coda"] = {
+    rarity = "legendary",
+    category = "Offence",
+    maxEchoes = 0,
+    unlocksFrom = { "Deadly Flourish", "Shadow Tempo", "Songstep" },
+    description = "Your bladedance will carry you in a much more lethal tempo around your foe. (Front: 1 Side: 1 Back: 4)",
+    quote = "A final note to usher them into Ugrach's arms.",
+  },
+  ["Sea and Sky"] = {
+    rarity = "legendary",
+    category = "Offence",
+    maxEchoes = 0,
+    unlocksFrom = { "Furious Speed", "Impetuous" },
+    description = "For 60 seconds after commencing a new ripple, the Divine conflict between Sea and Sky will empower you with 2% additional critical strike chance and 25% bonus critical strike damage.",
+    quote = "Sky and Sea have been locked in a hate-filled conflict since the demise of Caspian - the original Elder God of Oceans and twin to Vastar.",
+  },
+  ["Trainwreck"] = {
+    rarity = "legendary",
+    category = "Offence",
+    maxEchoes = 0,
+    unlocksFrom = { "Meathead", "Poindexter", "Snowflake", "Sprightly" },
+    description = "You gain 2% bonus damage for each point of strength, intelligence and dexterity you have, but you suffer from permanent stuttering.",
+  },
+  ["Ancient Will"] = {
+    rarity = "rare",
+    category = "Utility",
+    maxEchoes = 0,
+    unlocksFrom = { "Arcane Will", "Earthen Will" },
+    description = "Your willpower reserves are increased to 150% of their maximum.",
+    quote = "The endless hatred and will of Parni deSangre both terrifying and pitiable. Such is the burden of his curse.",
+  },
+  ["Luck of Spades"] = {
+    rarity = "rare",
+    category = "Utility",
+    maxEchoes = 0,
+    unlocksFrom = { "Hidden Gem", "Lady Luck's Legacy", "Prodigy" },
+    description = "When you first enter a ripple, you have a 10% chance to gain a free boon reroll up to your maximum of 3.",
+    quote = "Winning the bet, He gained her godhood and took over her realm of Wanderers and Rogues - and now Luck more than ever.",
+  },
+  ["Spiritborn"] = {
+    rarity = "legendary",
+    category = "Utility",
+    maxEchoes = 0,
+    unlocksFrom = { "Full Mettle Alchemist", "Knight's Resolve", "Viridian Balm" },
+    description = "You gain all the benefits of attunement for each spirit in Spiritlore.",
+    quote = "By the Warrior, I call you! Ai-e al spiritas, I summon you! By the Wolf, I command you! Be here! Be of earth and sky, fire and ice. Be! I command you, BE!",
+  },
+  ["It All Ogre Now"] = {
+    rarity = "legendary",
+    maxEchoes = 0,
+    unlocksFrom = { "Ogre's Defence", "Ogre's Speed", "Ogre's Strike" },
+    description = "Your critical strikes deal 100% more damage.",
+    quote = "Strength and idiocy, married in perfect union.",
+  },
+}
+
+for name, rec in pairs(M.BOON_COMBO_RECIPES) do
+  local seed = M.BOON_SEED[name] or {}
+  for k, v in pairs(rec) do
+    -- `== nil` is belt-and-braces: none of these 22 names is in the seed table above today, so it
+    -- changes nothing now. It is here so that adding one of them there later cannot be silently
+    -- overwritten from here. (Unobservable by design: no test can distinguish it until that day.)
+    if seed[k] == nil then
+      if k == "unlocksFrom" then
+        local copy = {}
+        for i, n in ipairs(v) do copy[i] = n end
+        seed[k] = copy   -- copied: the seed literal must not be aliased into the saved catalogue
+      else
+        seed[k] = v
+      end
+    end
+  end
+  M.BOON_SEED[name] = seed
+end
+
 -- Merge at load. Guarded: the merge lives in 007, and a load-order change must degrade to
 -- "no seed" rather than an error on every startup.
 if M._boonDbMerge then
