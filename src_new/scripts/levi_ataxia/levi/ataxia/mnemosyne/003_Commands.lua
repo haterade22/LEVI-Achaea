@@ -83,6 +83,7 @@ function M.help()
     { "mnem library", "All-time affix catalogue" },
     { "mnem boondb [filter|export|import]", "All-time BOON catalogue (own file; filter matches name, effect or category)" },
     { "mnem advise", "Score the last boon offer against what you hold (defence first) and recommend one" },
+    { "mnem combos [filter]", "Boon COMBO recipes: which boons unlock which, and how far along this run is" },
     { "mnem boonweights", "Show the advisor's weights for your class" },
     { "mnem boonfill [gaps|all|<n>|unknown|retry <name>|recheck]", "Keep the boon catalogue current via BOON CONTEMPLATE: text, combo status, quote, category (offered boons are contemplated automatically); `unknown` lists names the game refused; `recheck` restarts the cycle" },
     { "mnem quiet [on|off]", "Silence auto boon/affix echoes (still records)" },
@@ -152,6 +153,8 @@ function M.command(rest)
     else
       if M.auditSend then M.auditSend(false) end
     end
+  elseif cmd == "combos" or cmd == "combo" then
+    M.reportCombos(arg)
   elseif cmd == "advise" or cmd == "recommend" then
     -- The offer summary on demand (v4.7.327): it also prints by itself after every offer screen.
     local list = (M._lastAdvice and M._lastAdvice.list) or (M.run and M.run.lastOffered)
@@ -375,6 +378,13 @@ function M.command(rest)
       local unk = {}
       for n in pairs((M.history and M.history.boonUnknown) or {}) do unk[#unk + 1] = n end
       table.sort(unk)
+      -- The v4.7.328 repair, said out loud once: a silent change to this list is
+      -- indistinguishable from data loss.
+      if M._boonUnknownCleared then
+        M.echo("<grey>Cleared <cyan>" .. M._boonUnknownCleared .. "<grey> name(s) recorded under the"
+          .. " old rule, which blacklisted a boon whenever the offer screen closed before we could"
+          .. " contemplate it. They will be asked about again.")
+      end
       if #unk == 0 then
         M.echo("No boon names refused by the game.")
       else

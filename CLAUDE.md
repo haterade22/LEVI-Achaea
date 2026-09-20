@@ -858,7 +858,33 @@ NAMED PARTS (each part is a printed reason) built on the existing parsers (`_res
 give the denizen you are attacking X", `_boonDrawbacks`, `_conflictsFor`, `_spiritGate`), relative to
 what we hold (`bonusTotals` resists/immunities, held categories). Weights: `M.BOON_WEIGHTS` (defence
 first), `M.BOON_CLASS_WEIGHTS[<gmcp class lower>]` merged over it (deep; empty until play says).
-Reroll hint needs `M._rerollsLeft` > 0 (trigger 094; reset per screen). It NEVER claims -- the
+Reroll hint needs `M._rerollsLeft` > 0 (trigger 094; reset per screen). **A REFUSED CONTEMPLATE IS
+NOT ALWAYS A BAD NAME (v4.7.328, user: "I picked it before the skill had time to look"):** claiming
+closes the offer screen, so the chain's next contemplate is refused for a name the game itself
+printed. `_wasOffered(name)` (against `run.lastOffered`) decides: printed by the game = right
+spelling = the screen closed (`offerScreenGone`, which also stops the chain asking for that
+screen's other boons; `onBoonClaim` sets it too, so the refusal usually never happens). Only a name
+we never saw offered is blacklisted. Any name the game prints clears an old mark, and the list
+built under the old rule is cleared once at load (`boonUnknownFix = 328`). **BOON COMBOS (v4.7.328,
+`015_Boon_Combos.lua`, `mnem combos`; user: "tie which boons combo together to get to the end path
+of the boon"):** the recipe prints on the REWARD's contemplate (`Unlocked By: Argent Scales,
+Electric Mastery, and Energetic`; whether a COMPONENT's block also carries it is unproven -- none
+has been read), read as a LIST into `unlocksFrom` -- NOT through `META_PROMOTE`,
+whose 60-char cap drops a recipe over 60 characters -- the real 3-name one is 46 and fits, a 4-name one does not (the string is still promoted, and `_enrichOffer` falls back to the LIST so the tracker still gets it)
+-- with the conflicts line's wrapped-tail handling. `comboChains` (reward -> parts, rebuilt per
+call), `comboFeeds(name)`, `comboProgress(reward, held)` (this run's claims), `comboGaps()` (named
+components never contemplated; the offer chain takes ONE per screen). The advisor scores
+`comboStep` / `comboCompletes`. The reward is GRANTED, never offered or claimed, so trigger 095
+(`bestows upon you another: X`) does what the claim path does -- `_recordClaim`, `latchBoonFlag`,
+`bonuses.refresh`, `reportBoonsSelected` -- once (a held reward means the line is a replay), only
+inside a run, and asks for its contemplate with a RETRY (`_contemplateGranted`), because the offer
+chain usually still holds the capture slot; `comboGaps` also names a boon we HOLD but never
+contemplated, so the reward cannot fall through. Recipes come only from the game's text -- never
+guessed from names. **The advisor pays ONE chain's worth** (the best) however many a boon feeds, and
+a boon that conflicts with a held one or is inert never takes the RECOMMEND line while a usable
+option exists (`r.blocked`). **A WRAPPED list's tail is taken when the value ends in a dangling
+comma or "and"** -- the all-known-names test alone lost a recipe's newest component AND turned the
+orphaned line into the boon's description. It NEVER claims -- the
 auto-picker is a later, opt-in step. `mnem advise` / `mnem boonweights`. `mnem boondb` shows,
 counts and filters by category.
 `GET /boons/export` is documented in

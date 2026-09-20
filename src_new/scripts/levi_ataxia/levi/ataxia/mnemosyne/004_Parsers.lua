@@ -1327,6 +1327,13 @@ function M._splitBoonList(s, known)
     end
     if rest ~= "" then frags[#frags + 1] = rest end
   end
+  -- A TRAILING CONNECTOR IS NOT A NAME (v4.7.328 review). "A, B, and" (a list whose tail wrapped,
+  -- or one the game ended oddly) produced a phantom boon literally called "and", which then sat in
+  -- a recipe as a component nobody can ever hold.
+  for k = #frags, 1, -1 do
+    local f = frags[k]:gsub("^%s+", ""):gsub("%s+$", "")
+    if f == "" or f:lower() == "and" then table.remove(frags, k) end
+  end
   local out, i = {}, 1
   while i <= #frags do
     local take = 1
@@ -1980,6 +1987,7 @@ end
 
 function M.onBoonsOffered()
   M._rerollsLeft = nil -- this screen's footer says it again (trigger 094)
+  M._offerGoneAt, M._offerGoneWhy = nil, nil -- a new screen: its boons can be contemplated again
   local seenDash = false
   M._captureLines({
     timeout = 3,
@@ -2033,7 +2041,13 @@ function M.onBoonsOffered()
       -- Remember canonical names so a later BOON CLAIM can be reported
       -- with the exact spelling the game used.
       M.run.lastOffered = {}
-      for _, b in ipairs(list) do table.insert(M.run.lastOffered, b.name) end
+      for _, b in ipairs(list) do
+        table.insert(M.run.lastOffered, b.name)
+        -- PROOF THE NAME EXISTS (v4.7.328): the game just printed it. If an old refusal
+        -- blacklisted it (see `onContemplateUnknown`), clear that -- otherwise a boon wrongly
+        -- marked once would never be contemplated again.
+        if M.boonUnknownRetry then pcall(M.boonUnknownRetry, (M._baseBoonName and M._baseBoonName(b.name)) or b.name) end
+      end
       if reprint then
         return M.decho("Identical offer re-printed -- not re-reporting.")
       end
@@ -2073,6 +2087,9 @@ function M.onBoonClaim(name)
   -- Negotiator's every-fifth-claim second pick opens another offer screen, but a claim
   -- intervened, so the screen that follows starts a fresh chain rather than reading as a reroll.
   M._rerollReset()
+  -- The other options are gone the moment we claim, so the contemplate chain must stop asking
+  -- for them (v4.7.328): this is what keeps the refusal from happening at all.
+  if M.offerScreenGone then M.offerScreenGone("claim") end
   if M._recordClaim then M._recordClaim(canonical) end -- local history (#6)
   if M.latchBoonFlag then M.latchBoonFlag(canonical) end -- generic flags (v4.7.241)
   -- The bonuses panel is derived from the claim history, so it is stale the instant a claim
@@ -2515,7 +2532,13 @@ function M._boonScreenContemplate(list)
     end
   end
   for _, gap in ipairs(M.boonGaps()) do
-    if not queued[gap] then todo[#todo + 1] = gap; break end
+    if not queued[gap] then queued[gap] = true; todo[#todo + 1] = gap; break end
+  end
+  -- ...and one COMBO component we have never contemplated (v4.7.328, user: "we need to boon
+  -- contemplate those and add them to the database"). One per screen, like the gap above: a recipe
+  -- fills itself in over a few offers without spending a command on it.
+  for _, gap in ipairs((M.comboGaps and M.comboGaps()) or {}) do
+    if not queued[gap] then queued[gap] = true; todo[#todo + 1] = gap; break end
   end
   if #todo == 0 then return false end
   local ctx = M._fillCtx(meta, true)
@@ -2587,6 +2610,10 @@ function M._boonFillNext(todo, i, learned, ctx)
     return
   end
   local name = todo[i]
+  -- The screen these came from has closed (v4.7.328): asking would only collect a refusal.
+  if ctx and ctx.offered and M._offerGone and M._offerGone() and M._wasOffered(name) then
+    return M._boonFillNext(todo, i + 1, learned, ctx)
+  end
   local metaOnly = ctx and ctx.meta and ctx.meta[name] or false
   local before = M.boonInfo and M.boonInfo(name)
   local oldText = type(before) == "table" and before.description or nil
@@ -2607,6 +2634,7 @@ function M._boonFillNext(todo, i, learned, ctx)
         quote = info.quote,
         category = info.category,
         unlockedBy = info.unlockedBy,
+        unlocksFrom = info.unlocksFrom, -- v4.7.328: the combo recipe, as a list
         comboBoon = info.comboBoon, -- v4.7.322: a boolean, so `false` is passed too
         conflictsWith = info.conflictsWith,
         echoFloor = info.echoFloor, -- v4.7.326: the 1 is "can echo", not "echoes once"
@@ -2646,11 +2674,49 @@ end
 -- The refusal (trigger mnemosyne/089). Marks the name in flight as unknown to the game -- so it
 -- is never asked again until `mnem boonfill retry <name>` -- and finishes the capture at once so
 -- a batch moves on instead of waiting out the 2s silence timeout.
+-- Was this name on the boon screen we just had? The GAME printed it there, so its spelling is
+-- right by construction -- which is the whole discriminator below.
+function M._wasOffered(name)
+  local base = (M._baseBoonName and M._baseBoonName(name)) or name
+  for _, n in ipairs((M.run and M.run.lastOffered) or {}) do
+    if ((M._baseBoonName and M._baseBoonName(n)) or n) == base then return true end
+  end
+  return false
+end
+
+-- The offer screen is gone (a claim, a reroll, a wave): its boons cannot be contemplated any
+-- more. Remembered so the rest of the chain skips that screen's names instead of spending a
+-- command on each and collecting a refusal.
+function M.offerScreenGone(why)
+  M._offerGoneAt = (getEpoch and getEpoch()) or os.time()
+  M._offerGoneWhy = why
+end
+local OFFER_GONE_STALE = 120 -- a chain never runs this long; after it, treat a refusal as real
+
+function M._offerGone()
+  return M._offerGoneAt ~= nil
+    and (((getEpoch and getEpoch()) or os.time()) - M._offerGoneAt) < OFFER_GONE_STALE
+end
+
 function M.onContemplateUnknown()
   ataxiaTemp = ataxiaTemp or {}
   local name = ataxiaTemp.contemplating
   ataxiaTemp.contemplating = nil
   if type(name) ~= "string" or name == "" then return false end
+  -- NOT A BAD NAME -- A CLOSED SCREEN (user, 2026-09-19: "When I pick a boon before it gets
+  -- contemplated, this pops up. It is wrong. It just means I picked it before the skill had time
+  -- to look and the option isnt there anymore"). v4.7.308 read every refusal as "no such boon"
+  -- and blacklisted the name FOREVER, so claiming quickly cost a real boon out of the catalogue.
+  -- A name the game printed on the offer screen is spelt right, so the refusal means the screen
+  -- closed under us: say so, skip the rest of that screen, and mark NOTHING unknown.
+  if M._wasOffered(name) then
+    M.offerScreenGone("refused")
+    M.echo("<grey>'<cyan>" .. name .. "<grey>' is no longer on the screen -- the offer closed"
+      .. " before it could be contemplated. Skipping the rest of that screen; nothing is marked"
+      .. " unknown.")
+    if M._capturing and M._captureForceFinish then pcall(M._captureForceFinish) end
+    return true
+  end
   M.history = M.history or {}
   M.history.boonUnknown = M.history.boonUnknown or {}
   M.history.boonUnknown[name] = (getEpoch and getEpoch()) or os.time()
@@ -2767,10 +2833,12 @@ end
 -- the description. So it is now promoted by its own path (below, and `_parseContemplate`), which
 -- takes a following line as a wrapped tail only while the list still splits into KNOWN boon names.
 --
--- The two in this table are promoted because their values PROVABLY cannot wrap: a category is a
--- single word, and an unlocking boon is one name (the longest in the seed is ~30 characters,
--- versus the ~115-column wrap seen in the fixture). `META_VALUE_MAX` enforces that rather than
--- assuming it -- a value long enough to have wrapped is refused and left in `meta`.
+-- The two in this table are promoted as STRINGS because a category is a single word, and
+-- `unlocked by` was believed to be one name (the longest in the seed is ~30 characters, versus the
+-- ~115-column wrap seen in the fixture). **v4.7.328 disproved the second half**: the user's
+-- Lightning Soul prints `Unlocked By: Argent Scales, Electric Mastery, and Energetic` -- a LIST,
+-- which can wrap and can exceed `META_VALUE_MAX`. The cap stays (it is what stops a wrapped value
+-- being stored as though whole), and the recipe is read separately, as a list, below.
 local META_PROMOTE = {
   ["category"] = "category",
   ["unlocked by"] = "unlockedBy",
@@ -2819,6 +2887,22 @@ function M._promoteMeta(info)
       local bare = trimmed:gsub("%s*%.%s*$", ""):lower()
       if #trimmed <= META_VALUE_MAX and not META_PLACEHOLDER[bare] then
         info[field] = trimmed
+      end
+    end
+    -- UNLOCKED BY (v4.7.328): the COMBO recipe -- "Unlocked By: Argent Scales, Electric Mastery,
+    -- and Energetic" on the reward's own contemplate (user's Lightning Soul, 2026-09-19). Read as a
+    -- LIST like the conflicts line, and deliberately NOT through META_PROMOTE above, whose
+    -- `META_VALUE_MAX` (60) a longer recipe runs past: the real 3-name Lightning Soul value is 46
+    -- characters and fits, but a 4-name one is ~74 and the STRING form is dropped -- silently, and
+    -- for exactly the biggest recipes. The list has no cap. The string is still promoted, and
+    -- `_enrichOffer` falls back to this list so the tracker is not left with nothing.
+    local lowLabel = tostring(label):lower()
+    if (lowLabel == "unlocked by" or lowLabel == "unlocks from") and type(value) == "string"
+      and info.unlocksFrom == nil then
+      local bare = value:gsub("[%s%.]+$", ""):lower()
+      if not META_PLACEHOLDER[bare] then
+        local names = M._splitBoonList(value)
+        if #names > 0 then info.unlocksFrom = names end
       end
     end
     -- CONFLICTS (v4.7.325): a LIST, split against the names we know (see `_splitBoonList`).
@@ -2940,11 +3024,20 @@ function M._parseContemplate(lines)
       -- tail prints flush-left like the description does. Take the following lines as its tail
       -- only while the whole list still splits into KNOWN boon names -- a description line never
       -- does -- and never past the blank line that ends the meta block.
-      if k:lower() == "conflicts with" then
+      if k:lower() == "conflicts with" or k:lower() == "unlocked by" or k:lower() == "unlocks from" then
         local j = idx + 1
         while lines[j] and not lines[j]:match("^%s*$") and not metaLabel(lines[j]) do
           local cand = v .. " " .. lines[j]:gsub("^%s+", ""):gsub("%s+$", "")
-          if not M._allKnownBoons(cand) then break end
+          -- TAKE THE TAIL WHEN THE LINE CANNOT STAND ALONE (v4.7.328 review). The all-known-names
+          -- test below is the safe rule for a tail we could already name -- but a RECIPE's tail is
+          -- exactly where an unknown boon appears (that is what `comboGaps` exists to fetch), and
+          -- refusing it there was destructive: the list kept a phantom "and", the real component
+          -- was lost, and the orphaned line became the boon's DESCRIPTION, overwriting the
+          -- catalogue. A value ending in a comma or a bare "and" is unfinished by the game's own
+          -- punctuation -- no list ends that way -- so the next line belongs to it whether or not
+          -- we recognise the name.
+          local dangling = v:match(",%s*$") ~= nil or v:match("%s+and%s*$") ~= nil or v:match(",%s*and%s*$") ~= nil
+          if not (dangling or M._allKnownBoons(cand)) then break end
           v, consumed[j], j = cand, true, j + 1
         end
       end
