@@ -314,6 +314,13 @@ function M._enrichOffer(list)
         and type(known.unlockedBy) == "string" and known.unlockedBy ~= "" then
         rec.unlocked_by = known.unlockedBy
       end
+      -- ...and from the LIST when the string never made it (v4.7.328). `unlockedBy` is promoted
+      -- through META_VALUE_MAX (60 chars), which a four-name combo recipe runs past -- so the
+      -- tracker was sent nothing at all for exactly the longest recipes. `unlocksFrom` has no cap.
+      if (rec.unlocked_by == nil or rec.unlocked_by == "")
+        and type(known.unlocksFrom) == "table" and #known.unlocksFrom > 0 then
+        rec.unlocked_by = table.concat(known.unlocksFrom, ", ")
+      end
       if rec.num_echoes_possible == nil and tonumber(known.maxEchoes) then
         rec.num_echoes_possible = math.floor(tonumber(known.maxEchoes))
       end

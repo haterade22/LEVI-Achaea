@@ -1379,6 +1379,164 @@ describe("a boon name the game refuses is remembered, skipped, and retryable", f
     expect(next(M.history.boonUnknown or {})).toBeNil()
   end)
 
+  -- v4.7.328, user: "When I pick a boon before it gets contemplated, this pops up. It is wrong.
+  -- It just means I picked it before the skill had time to look and the option isnt there
+  -- anymore." The name was on the OFFER SCREEN, so the game printed it: the spelling is right and
+  -- the refusal means the screen closed. Blacklisting it cost a real boon out of the catalogue.
+  it("a refused name the game itself just offered is NOT blacklisted", function()
+    reset(true)
+    M.history.boonUnknown = nil
+    M.run = M.run or {}
+    M.run.lastOffered = { "Hawk Eyes", "Fae-Lapse", "(ECHO) Restoration" }
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.contemplating = "Hawk Eyes"
+    local said, realEcho = {}, M.echo
+    M.echo = function(m) said[#said + 1] = tostring(m) end
+    local ok, err = pcall(function()
+      expect(M.onContemplateUnknown()).toBeTrue()
+      expect(M.boonUnknown("Hawk Eyes")).toBeFalse()
+      expect(next(M.history.boonUnknown or {})).toBeNil()
+      expect(M._offerGone()).toBeTrue()
+      -- an echo offer of an offered boon counts as offered too
+      ataxiaTemp.contemplating = "Restoration"
+      expect(M.onContemplateUnknown()).toBeTrue()
+      expect(M.boonUnknown("Restoration")).toBeFalse()
+    end)
+    M.echo = realEcho
+    M.run.lastOffered, M._offerGoneAt = {}, nil
+    if not ok then error(err, 0) end
+    expect(table.concat(said, " "):find("no longer on the screen", 1, true) ~= nil).toBeTrue()
+    expect(table.concat(said, " "):find("does not recognise", 1, true)).toBeNil()
+  end)
+
+  it("a name we never saw offered is still blacklisted -- that one IS our spelling", function()
+    reset(true)
+    M.history.boonUnknown = nil
+    M.run = M.run or {}
+    M.run.lastOffered = { "Fae-Lapse" }
+    M._offerGoneAt = nil
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.contemplating = "Antimagic Shell"
+    local realEcho = M.echo
+    M.echo = function() end
+    local ok, err = pcall(function()
+      expect(M.onContemplateUnknown()).toBeTrue()
+      expect(M.boonUnknown("Antimagic Shell")).toBeTrue()
+    end)
+    M.echo = realEcho
+    M.run.lastOffered = {}
+    if not ok then error(err, 0) end
+  end)
+
+  it("a claim closes the screen, so the chain stops asking for that screen's boons", function()
+    reset(true)
+    M.run = M.run or {}
+    M.run.lastOffered = { "Hawk Eyes", "Fae-Lapse" }
+    M.offerScreenGone("claim")
+    local asked, realSend, realCapture = {}, send, M._captureContemplate
+    send = function(c) local n = c:match("^boon contemplate (.+)$"); if n then asked[#asked + 1] = n end end
+    M._captureContemplate = function(cb) cb({ rarity = "common", description = "d" }) end
+    local realTimer = tempTimer
+    tempTimer = function(_, f) f(); return 1 end
+    local realSave, realEcho = M._historySave, M.echo
+    M._historySave, M.echo = function() end, function() end
+    local ok, err = pcall(function()
+      local ctx = M._fillCtx({}, true)
+      ctx.offered = { { name = "Hawk Eyes" }, { name = "Fae-Lapse" } }
+      M._boonFillNext({ "Hawk Eyes", "Fae-Lapse", "Some Gap" }, 1, 0, ctx)
+    end)
+    send, M._captureContemplate, tempTimer = realSend, realCapture, realTimer
+    M._historySave, M.echo = realSave, realEcho
+    M.run.lastOffered, M._offerGoneAt = {}, nil
+    if not ok then error(err, 0) end
+    expect(#asked).toBe(1)          -- only the unrelated gap
+    expect(asked[1]).toBe("Some Gap")
+  end)
+
+  it("a new offer screen re-opens the window, and clears an old wrong blacklist", function()
+    reset(true)
+    M.history.boonUnknown = { ["Hawk Eyes"] = 1 }
+    M.offerScreenGone("claim")
+    expect(M._offerGone()).toBeTrue()
+    local mock = require("mock_mudlet")
+    local realAuto = M._auto
+    M._auto = function() return true end
+    M.run = M.run or {}
+    M.run.active, M.history.run = true, M.history.run or 1
+    local goneAfter
+    local ok, err = pcall(function()
+      M._capturing = false
+      M.onBoonsOffered()
+      goneAfter = M._offerGone() -- read BEFORE the cleanup below, or it proves nothing
+      for _, ln in ipairs({ "----------------------------------------",
+                            "Hawk Eyes:   You see further.",
+                            "Type BOON CLAIM <name> to choose." }) do
+        line = ln
+        for _, tr in pairs(mock.active_triggers) do
+          if tr.regex and tr.pattern == "^.*$" and type(tr.callback) == "function" then tr.callback() end
+        end
+      end
+    end)
+    M._auto = realAuto
+    M._pendingOffer, M._offerGoneAt = nil, nil
+    if not ok then error(err, 0) end
+    expect(M.boonUnknown("Hawk Eyes")).toBeFalse() -- the game printed it: it exists
+    expect(goneAfter).toBeFalse()                  -- a fresh screen: its boons are askable again
+  end)
+
+  it("BOON CLAIM itself closes the screen -- before any refusal can happen", function()
+    reset(true)
+    M.run = M.run or {}
+    M.run.active, M.run.lastOffered = true, { "Hawk Eyes", "Fae-Lapse" }
+    M._offerGoneAt = nil
+    local realAuto, realReport, realRecord, realArm, realFlag, realEcho =
+      M._auto, M.reportBoonsSelected, M._recordClaim, M._armClaimVerify, M.latchBoonFlag, M.echo
+    M._auto = function() return true end
+    M.reportBoonsSelected, M._recordClaim, M._armClaimVerify = function() end, function() end, function() end
+    M.latchBoonFlag, M.echo = function() end, function() end
+    local gone
+    local ok, err = pcall(function()
+      M.onBoonClaim("Hawk Eyes")
+      gone = M._offerGone()
+    end)
+    M._auto, M.reportBoonsSelected, M._recordClaim = realAuto, realReport, realRecord
+    M._armClaimVerify, M.latchBoonFlag, M.echo = realArm, realFlag, realEcho
+    M.run.lastOffered, M._offerGoneAt = {}, nil
+    if not ok then error(err, 0) end
+    expect(gone).toBeTrue()
+  end)
+
+  it("the closed-screen window goes stale, so a later refusal is read as a real one", function()
+    local saved = M._offerGoneAt
+    M._offerGoneAt = ((getEpoch and getEpoch()) or os.time()) - 300
+    local stale = M._offerGone()
+    M._offerGoneAt = saved
+    expect(stale).toBeFalse()
+  end)
+
+  it("the one-time repair clears a list built under the old rule, once", function()
+    local saved = { u = M.history.boonUnknown, f = M.history.boonUnknownFix, c = M._boonUnknownCleared }
+    M.history.boonUnknown = { ["Hawk Eyes"] = 1, ["Fae-Lapse"] = 2 }
+    M.history.boonUnknownFix = nil
+    M._boonUnknownCleared = nil
+    local realFile, realLoad = getMudletHomeDir, table.load
+    getMudletHomeDir = function() return "/nowhere" end
+    table.load = function() return false end
+    local ok, err = pcall(function()
+      M._historyLoad()
+      expect(next(M.history.boonUnknown)).toBeNil()
+      expect(M.history.boonUnknownFix).toBe(328)
+      expect(M._boonUnknownCleared).toBe(2)
+      -- ...and only once: a name refused later must stick
+      M.history.boonUnknown = { ["Real Typo"] = 1 }
+      M._historyLoad()
+      expect(M.boonUnknown("Real Typo")).toBeTrue()
+    end)
+    getMudletHomeDir, table.load = realFile, realLoad
+    M.history.boonUnknown, M.history.boonUnknownFix, M._boonUnknownCleared = saved.u, saved.f, saved.c
+    if not ok then error(err, 0) end
+  end)
+
   it("retry clears the mark so a corrected spelling is asked again", function()
     reset(true)
     M.history.boonUnknown = { ["Antimagic Shell"] = 1 }
@@ -8181,5 +8339,565 @@ describe("the boon advisor", function()
     M._pendingOffer, M._rerollsLeft = nil, saved
     if not ok then error(err, 0) end
     expect(got).toBeNil()
+  end)
+end)
+
+-- ---------------------------------------------------------------------------
+-- v4.7.328: BOON COMBOS. User, with the reward in hand: "With every required boon now in hand, the
+-- mist of the Mnemosyne parts and bestows upon you another: Lightning Soul." -- "I got that for
+-- finishing the boon combo. We need to boon contemplate those and add them to the database and
+-- also start to tie which boons combo together to get to the end path of the boon."
+-- ---------------------------------------------------------------------------
+dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/015_Boon_Combos.lua")
+
+-- The user's block, verbatim.
+local LIGHTNING = {
+  "Rarity:             rare",
+  "Category:           Defence",
+  "Can echo:           No",
+  "Unlocked By:        Argent Scales, Electric Mastery, and Energetic",
+  "",
+  "Gain immunity to electric damage for 60 seconds at the start of each new ripple.",
+  "",
+  '"Thunderstruck!"',
+}
+
+describe("boon combos", function()
+  local function holding(names, fn)
+    local saved = { claims = M.history.claims, run = M.history.run, active = M.run and M.run.active }
+    M.history.claims = {}
+    for _, n in ipairs(names) do table.insert(M.history.claims, { name = n, run = 11 }) end
+    M.history.run = 11
+    M.run = M.run or {}
+    M.run.active = true
+    local ok, res = pcall(fn)
+    M.history.claims, M.history.run, M.run.active = saved.claims, saved.run, saved.active
+    if not ok then error(res, 0) end
+    return res
+  end
+  local function capture(fn)
+    local said, realEcho, realCecho = {}, M.echo, cecho
+    M.echo = function(m) said[#said + 1] = tostring(m) end
+    cecho = function(m) said[#said + 1] = tostring(m) end
+    local ok, err = pcall(fn)
+    M.echo, cecho = realEcho, realCecho
+    if not ok then error(err, 0) end
+    return table.concat(said, "\n")
+  end
+  local WITH_CHAIN = {
+    ["Lightning Soul"] = { description = "Gain immunity to electric damage for 60 seconds at the start of each new ripple.",
+      category = "Defence", rarity = "rare",
+      unlocksFrom = { "Argent Scales", "Electric Mastery", "Energetic" }, contemplatedAt = 1 },
+    ["Argent Scales"] = { description = "Gain 25% resistance to electric damage.", contemplatedAt = 1 },
+    ["Electric Mastery"] = { description = "d", contemplatedAt = 1 },
+    ["Energetic"] = { description = "d", contemplatedAt = 1 },
+  }
+
+  it("reads the recipe off the reward's own block -- a list, not a 60-character string", function()
+    local info = M._parseContemplate(LIGHTNING)
+    expect(info.category).toBe("Defence")
+    expect(info.num_echoes_possible).toBe(0)
+    expect(#info.unlocksFrom).toBe(3)
+    expect(info.unlocksFrom[1]).toBe("Argent Scales")
+    expect(info.unlocksFrom[3]).toBe("Energetic")
+    expect(info.description).toBe("Gain immunity to electric damage for 60 seconds at the start of each new ripple.")
+    expect(info.unlockedBy).toBe("Argent Scales, Electric Mastery, and Energetic") -- still a string, for the tracker
+  end)
+
+  it("keeps a recipe too long for the meta string cap", function()
+    local long = { "Rarity: rare",
+      "Unlocked By:        Argent Scales, Ashaxei's Mirror, Ephemeral Guardian, and Silvestri's Grace",
+      "", "Desc." }
+    local info
+    withLibrary({ ["Argent Scales"] = { description = "d" }, ["Ashaxei's Mirror"] = { description = "d" },
+                  ["Ephemeral Guardian"] = { description = "d" },
+                  ["Silvestri's Grace"] = { description = "d" } }, function()
+      info = M._parseContemplate(long)
+    end)
+    expect(#info.unlocksFrom).toBe(4)
+    expect(info.unlockedBy).toBeNil() -- over META_VALUE_MAX: the STRING is dropped, the list is not
+  end)
+
+  it("takes a wrapped recipe's tail, like the conflicts line", function()
+    local info
+    withLibrary({ Alpha = { description = "d" }, Beta = { description = "d" },
+                  ["Gamma Ray"] = { description = "d" } }, function()
+      info = M._parseContemplate({ "Rarity: rare", "Unlocked By:        Alpha, Beta and", "Gamma Ray",
+        "", "Your blows land harder.", "", '"Q."' })
+    end)
+    expect(#info.unlocksFrom).toBe(3)
+    expect(info.unlocksFrom[3]).toBe("Gamma Ray")
+    expect(info.description).toBe("Your blows land harder.")
+  end)
+
+  it("a contemplate stores the recipe, and the chain index reads it back", function()
+    local lib = withLibrary({}, function()
+      withContemplate(LIGHTNING, function() M._boonFillNext({ "Lightning Soul" }, 1, 0) end)
+      expect(#M.comboChains()["Lightning Soul"]).toBe(3)
+      expect(M.comboFeeds("Electric Mastery")[1]).toBe("Lightning Soul")
+      expect(M.comboFeeds("(ECHO) Argent Scales")[1]).toBe("Lightning Soul") -- an echo offer is its base boon
+      expect(#M.comboFeeds("Unrelated")).toBe(0)
+    end)
+    expect(lib["Lightning Soul"].unlocksFrom[2]).toBe("Electric Mastery")
+    expect(lib["Lightning Soul"].category).toBe("Defence")
+  end)
+
+  it("tracks this run's progress toward the reward", function()
+    withLibrary(WITH_CHAIN, function()
+      holding({ "Argent Scales", "Energetic" }, function()
+        local p = M.comboProgress("Lightning Soul")
+        expect(p.have).toBe(2)
+        expect(p.need).toBe(3)
+        expect(p.missing[1]).toBe("Electric Mastery")
+        expect(p.complete).toBeFalse()
+      end)
+      holding({ "Argent Scales", "Energetic", "Electric Mastery", "Lightning Soul" }, function()
+        expect(M.comboProgress("Lightning Soul").complete).toBeTrue()
+      end)
+      expect(M.comboProgress("No Such Boon")).toBeNil()
+    end)
+  end)
+
+  it("mnem combos shows how far along each recipe is, closest first", function()
+    local out
+    withLibrary(WITH_CHAIN, function()
+      holding({ "Argent Scales" }, function()
+        out = capture(function() M.reportCombos() end)
+      end)
+    end)
+    expect(out:find("1/3", 1, true) ~= nil).toBeTrue()
+    expect(out:find("Lightning Soul", 1, true) ~= nil).toBeTrue()
+    expect(out:find("<green>Argent Scales", 1, true) ~= nil).toBeTrue()   -- held
+    expect(out:find("<grey>Electric Mastery", 1, true) ~= nil).toBeTrue() -- still needed
+  end)
+
+  it("names the components it has never contemplated, so the chain asks about them", function()
+    local lib = { ["Lightning Soul"] = { description = "d", unlocksFrom = { "Argent Scales", "Electric Mastery", "Energetic" }, contemplatedAt = 1 },
+                  ["Argent Scales"] = { description = "d", contemplatedAt = 1 },
+                  ["Electric Mastery"] = { description = "d" } } -- described, never contemplated
+    local gaps
+    withLibrary(lib, function() gaps = M.comboGaps() end)
+    expect(#gaps).toBe(2)
+    expect(gaps[1]).toBe("Electric Mastery")
+    expect(gaps[2]).toBe("Energetic")
+  end)
+
+  it("the offer screen's chain picks up one component per screen", function()
+    local lib = { ["Offered"] = { description = "d" },
+                  ["Lightning Soul"] = { description = "d", unlocksFrom = { "Energetic" }, contemplatedAt = 1 } }
+    local asked, realGaps = {}, M.boonGaps
+    local realNext, realCap, realBusy = M._boonFillNext, M._capturing, M._fillBusyAt
+    M.boonGaps = function() return {} end
+    M._boonFillNext = function(todo) asked = todo end
+    local ok, err = pcall(function()
+      withLibrary(lib, function()
+        M._capturing, M._fillBusyAt = false, nil
+        M._boonScreenContemplate({ { name = "Offered" } })
+      end)
+    end)
+    M.boonGaps, M._boonFillNext = realGaps, realNext
+    M._capturing, M._fillBusyAt = realCap, realBusy
+    if not ok then error(err, 0) end
+    expect(#asked).toBe(2)
+    expect(asked[2]).toBe("Energetic")
+  end)
+
+  it("the advisor pays for a component, and pays more for the one that completes it", function()
+    local lib = copyLib(WITH_CHAIN) -- deep: a contemplate writes into these records
+    lib["Electric Mastery"] = { description = "d", category = "Utility", contemplatedAt = 1 }
+    lib["Plain"] = { description = "d", category = "Utility" }
+    withLibrary(lib, function()
+      local one = holding({}, function() return M.scoreBoon("Electric Mastery") end) -- holding DOES return
+      local two = holding({ "Argent Scales", "Energetic" }, function() return M.scoreBoon("Electric Mastery") end)
+      local plain = holding({}, function() return M.scoreBoon("Plain") end)
+      expect(one.score > plain.score).toBeTrue()
+      expect(two.score > one.score).toBeTrue()
+      expect(table.concat(two.effects, " "):find("completes Lightning Soul", 1, true) ~= nil).toBeTrue()
+      expect(table.concat(one.effects, " "):find("1/3 toward Lightning Soul", 1, true) ~= nil).toBeTrue()
+      -- ...and nothing for a chain we have already finished
+      local done = holding({ "Argent Scales", "Energetic", "Electric Mastery", "Lightning Soul" },
+        function() return M.scoreBoon("Electric Mastery") end)
+      expect(table.concat(done.effects, " "):find("toward", 1, true)).toBeNil()
+      expect(table.concat(done.effects, " "):find("completes", 1, true)).toBeNil()
+      expect(done.score).toBe(plain.score) -- a recipe already in hand is worth nothing extra
+    end)
+  end)
+
+  it("the bestowal records the free boon and says which recipe finished", function()
+    local out, claimed
+    withLibrary(WITH_CHAIN, function()
+      holding({ "Argent Scales", "Electric Mastery", "Energetic" }, function()
+        local realRecord, realTimer = M._recordClaim, tempTimer
+        M._recordClaim = function(n) claimed = n end
+        tempTimer = function() return 1 end
+        local ok, err = pcall(function()
+          out = capture(function() M.onComboBoonGranted("Lightning Soul") end)
+        end)
+        M._recordClaim, tempTimer = realRecord, realTimer
+        if not ok then error(err, 0) end
+      end)
+    end)
+    expect(claimed).toBe("Lightning Soul")
+    expect(out:find("COMBO COMPLETE", 1, true) ~= nil).toBeTrue()
+    expect(out:find("Argent Scales, Electric Mastery, Energetic", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("a recipe survives the boon database round trip, and only as a list", function()
+    local lib
+    lib = withLibrary({}, function()
+      M._boonDbMerge({ ["Reward"] = { description = "d", unlocksFrom = { "A", "B" } },
+                       ["Junk"] = { description = "d", unlocksFrom = "A and B" } })
+    end)
+    expect(#lib["Reward"].unlocksFrom).toBe(2)
+    expect(lib["Junk"].unlocksFrom).toBeNil() -- a string is not a recipe
+  end)
+
+  it("the gap queue is in a stable order, so the same component is asked about first", function()
+    local lib = { ["Reward"] = { description = "d", contemplatedAt = 1,
+      unlocksFrom = { "Zephyr", "Quill", "Amber", "Mistral", "Basalt", "Nadir" } } }
+    local gaps
+    withLibrary(lib, function() gaps = M.comboGaps() end)
+    expect(#gaps).toBe(6)
+    local sorted = {}
+    for i, n in ipairs(gaps) do sorted[i] = n end
+    table.sort(sorted)
+    expect(table.concat(gaps, ",")).toBe(table.concat(sorted, ","))
+  end)
+
+  it("mnem combos puts the recipe closest to done first", function()
+    local lib = { ["Nearly"] = { description = "d", contemplatedAt = 1, unlocksFrom = { "A", "B", "C" } },
+                  ["Barely"] = { description = "d", contemplatedAt = 1, unlocksFrom = { "D", "E" } },
+                  ["A"] = { description = "d" }, ["B"] = { description = "d" } }
+    local out
+    withLibrary(lib, function()
+      holding({ "A", "B" }, function() out = capture(function() M.command("combos") end) end)
+    end)
+    expect(out:find("Nearly", 1, true) < out:find("Barely", 1, true)).toBeTrue()
+    expect(out:find("2/3", 1, true) ~= nil).toBeTrue()
+    expect(out:find("0/2", 1, true) ~= nil).toBeTrue()
+  end)
+
+  -- The guard is on `_histBoonInfo`, which the ADVISOR never calls -- the earlier version of this
+  -- test passed with or without it (review, v4.7.328). Call the guarded function itself; the path
+  -- that reaches it live is the combo grant's `_recordClaim`.
+  it("_histBoonInfo tolerates history.offers not yet loaded", function()
+    local saved = M.history.offers
+    M.history.offers = nil
+    local ok, rarity, desc = pcall(M._histBoonInfo, "Argent Scales")
+    M.history.offers = saved
+    expect(ok).toBeTrue()
+    expect(rarity).toBe("")
+    expect(desc).toBe("")
+  end)
+
+  it("trigger 095 hands the granted boon's name to the module", function()
+    local f = io.open("src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/095_Boon_Combo_Granted.lua")
+    local src = f:read("*a"); f:close()
+    expect(src:find("bestows upon you another: (.+)\\.$", 1, true) ~= nil).toBeTrue()
+    local got, realOn, savedMatches, savedAtaxia = nil, M.onComboBoonGranted, matches, ataxia
+    M.onComboBoonGranted = function(n) got = n end
+    ataxia = { mnemosyne = M }
+    matches = { "whole line", "Lightning Soul" }
+    local ok, err = pcall(dofile, "src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/095_Boon_Combo_Granted.lua")
+    M.onComboBoonGranted, matches, ataxia = realOn, savedMatches, savedAtaxia
+    if not ok then error(err, 0) end
+    expect(got).toBe("Lightning Soul")
+  end)
+
+  -- v4.7.328 REVIEW: the wrapped recipe naming a boon we have never heard of. The tail was only
+  -- taken when every name was already known -- exactly false for a recipe's newest component -- so
+  -- the list kept a phantom "and", the real component was lost, and the orphaned line became the
+  -- boon's DESCRIPTION and overwrote the catalogue.
+  it("takes a wrapped recipe's tail even when the component is one we have never heard of", function()
+    local info
+    withLibrary({ ["Argent Scales"] = { description = "d" }, ["Electric Mastery"] = { description = "d" } }, function()
+      info = M._parseContemplate({
+        "Rarity:             rare",
+        "Category:           Defence",
+        "Can echo:           No",
+        "Unlocked By:        Argent Scales, Electric Mastery, and",
+        "Zzyzx Ward",
+        "",
+        "Gain immunity to electric damage for 60 seconds at the start of each new ripple.",
+        "",
+        '"Thunderstruck!"',
+      })
+    end)
+    expect(#info.unlocksFrom).toBe(3)
+    expect(info.unlocksFrom[3]).toBe("Zzyzx Ward")     -- the new component survives
+    for _, n in ipairs(info.unlocksFrom) do expect(n ~= "and").toBeTrue() end
+    expect(info.description).toBe("Gain immunity to electric damage for 60 seconds at the start of each new ripple.")
+    expect(info.quote:find("Thunderstruck", 1, true) ~= nil).toBeTrue()
+    expect(info.category).toBe("Defence")
+  end)
+
+  it("a list ending in a bare 'and' never yields a boon called 'and'", function()
+    local names = M._splitBoonList("Argent Scales, Electric Mastery, and", {})
+    expect(#names).toBe(2)
+    expect(names[2]).toBe("Electric Mastery")
+  end)
+
+  -- A description line still must not be swallowed: the dangling-connector rule only fires when the
+  -- value itself is unfinished.
+  it("a finished value does not swallow the description line", function()
+    local info
+    withLibrary({ ["Argent Scales"] = { description = "d" } }, function()
+      info = M._parseContemplate({ "Rarity: rare", "Unlocked By:        Argent Scales",
+        "", "Gain immunity to electric damage.", "", '"Q."' })
+    end)
+    expect(#info.unlocksFrom).toBe(1)
+    expect(info.description).toBe("Gain immunity to electric damage.")
+  end)
+
+  it("the tracker gets a recipe too long for the meta string, from the list", function()
+    reset(true)
+    withLibrary({ ["Lightning Soul"] = { description = "d",
+      unlocksFrom = { "Argent Scales", "Ashaxei's Mirror", "Ephemeral Guardian", "Silvestri's Grace" } } }, function()
+      M.reportBoonsOffered({ { name = "Lightning Soul" } })
+    end)
+    expect(sent[1].payload.offered[1].unlocked_by)
+      .toBe("Argent Scales, Ashaxei's Mirror, Ephemeral Guardian, Silvestri's Grace")
+  end)
+
+  it("the chain index is cached, and a learnt recipe invalidates it", function()
+    withLibrary({ ["R"] = { description = "d", unlocksFrom = { "A" }, contemplatedAt = 1 } }, function()
+      local first = M.comboChains()
+      expect(M.comboChains()).toBe(first)            -- same table: not rebuilt
+      M._learnBoon("R2", "d", nil, nil, { unlocksFrom = { "B", "C" } })
+      local after = M.comboChains()
+      expect(after ~= first).toBeTrue()              -- a learn invalidates it
+      expect(#after["R2"]).toBe(2)
+    end)
+  end)
+
+  it("names a boon we HOLD but never contemplated -- which is what a granted reward is", function()
+    local gaps
+    withLibrary({ ["Lightning Soul"] = { description = "d" } }, function() -- granted, never contemplated
+      holding({ "Lightning Soul" }, function() gaps = M.comboGaps() end)
+    end)
+    expect(#gaps).toBe(1)
+    expect(gaps[1]).toBe("Lightning Soul")
+  end)
+
+  it("mnem boondb shows a reward's recipe", function()
+    local out
+    withLibrary(WITH_CHAIN, function()
+      out = capture(function() M.reportBoonDb("lightning") end)
+    end)
+    expect(out:find("combo: <grey>needs Argent Scales, Electric Mastery, Energetic", 1, true) ~= nil).toBeTrue()
+  end)
+
+  -- v4.7.328 REVIEW: a granted reward is never offered and never claimed, so the whole claim path
+  -- was skipped for it -- combat flags, the bonuses panel and the tracker all missed a boon we hold.
+  it("the bestowal does everything a claim does", function()
+    local did = {}
+    withLibrary(copyLib(WITH_CHAIN), function()
+      holding({ "Argent Scales", "Electric Mastery", "Energetic" }, function()
+        local real = { rec = M._recordClaim, flag = M.latchBoonFlag, bon = M.bonuses,
+                       rep = M.reportBoonsSelected, auto = M._auto, timer = tempTimer, echo = M.echo }
+        M._recordClaim = function(n) did.claim = n end
+        M.latchBoonFlag = function(n) did.flag = n end
+        M.bonuses = { refresh = function() did.panel = true end }
+        M.reportBoonsSelected = function(n) did.posted = n end
+        M._auto = function() return true end
+        tempTimer = function() return 1 end
+        M.echo = function() end
+        local ok, err = pcall(function() M.onComboBoonGranted("Lightning Soul") end)
+        M._recordClaim, M.latchBoonFlag, M.bonuses = real.rec, real.flag, real.bon
+        M.reportBoonsSelected, M._auto, tempTimer, M.echo = real.rep, real.auto, real.timer, real.echo
+        if not ok then error(err, 0) end
+      end)
+    end)
+    expect(did.claim).toBe("Lightning Soul")
+    expect(did.flag).toBe("Lightning Soul")
+    expect(did.panel).toBeTrue()
+    expect(did.posted).toBe("Lightning Soul")
+  end)
+
+  it("a repeated grant line records nothing the second time", function()
+    local claims = 0
+    withLibrary(copyLib(WITH_CHAIN), function()
+      holding({ "Argent Scales", "Electric Mastery", "Energetic", "Lightning Soul" }, function()
+        local realRec, realTimer, realEcho = M._recordClaim, tempTimer, M.echo
+        M._recordClaim = function() claims = claims + 1 end
+        tempTimer = function() return 1 end
+        M.echo = function() end
+        local again
+        local ok, err = pcall(function() again = M.onComboBoonGranted("Lightning Soul") end)
+        M._recordClaim, tempTimer, M.echo = realRec, realTimer, realEcho
+        if not ok then error(err, 0) end
+        expect(again).toBeFalse() -- already held this run: the line is a replay
+      end)
+    end)
+    expect(claims).toBe(0)
+  end)
+
+  it("with no run being tracked it records nothing and says so", function()
+    local claims, out = 0, nil
+    withLibrary(copyLib(WITH_CHAIN), function()
+      local savedActive = M.run and M.run.active
+      M.run = M.run or {}
+      M.run.active = false
+      local realRec, realTimer = M._recordClaim, tempTimer
+      M._recordClaim = function() claims = claims + 1 end
+      tempTimer = function() return 1 end
+      local ok, err = pcall(function()
+        out = capture(function() M.onComboBoonGranted("Lightning Soul") end)
+      end)
+      M._recordClaim, tempTimer, M.run.active = realRec, realTimer, savedActive
+      if not ok then error(err, 0) end
+    end)
+    expect(claims).toBe(0)
+    expect(out:find("no run is being tracked", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("queues the granted boon's own contemplate, and retries when the slot is busy", function()
+    local delays, tries, screenArg = {}, 0, nil
+    withLibrary(copyLib(WITH_CHAIN), function()
+      holding({ "Argent Scales", "Electric Mastery", "Energetic" }, function()
+        local real = { rec = M._recordClaim, timer = tempTimer, screen = M._boonScreenContemplate, echo = M.echo }
+        M._recordClaim, M.echo = function() end, function() end
+        M._boonScreenContemplate = function(list)
+          tries = tries + 1
+          screenArg = list
+          return tries >= 3 -- the offer chain holds the slot for the first two attempts
+        end
+        tempTimer = function(d, fn) delays[#delays + 1] = d; fn(); return 1 end
+        local ok, err = pcall(function() M.onComboBoonGranted("Lightning Soul") end)
+        M._recordClaim, tempTimer, M._boonScreenContemplate, M.echo = real.rec, real.timer, real.screen, real.echo
+        if not ok then error(err, 0) end
+      end)
+    end)
+    expect(tries).toBe(3)                    -- retried until it got the slot
+    expect(delays[1]).toBe(1)
+    expect(delays[2] > delays[1]).toBeTrue() -- and waited longer before trying again
+    expect(screenArg[1].name).toBe("Lightning Soul")
+  end)
+
+  it("mnem combos says when no run is being tracked, and flags a held reward it never learnt", function()
+    local out
+    withLibrary({ ["Lightning Soul"] = { unlocksFrom = { "A", "B" }, contemplatedAt = 1 } }, function()
+      local savedActive = M.run and M.run.active
+      M.run = M.run or {}
+      M.run.active = false
+      local ok, err = pcall(function() out = capture(function() M.reportCombos() end) end)
+      M.run.active = savedActive
+      if not ok then error(err, 0) end
+    end)
+    expect(out:find("No run is being tracked", 1, true) ~= nil).toBeTrue()
+    expect(out:find("not contemplated yet", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("a boon that is inert without a spirit is not recommended either", function()
+    local lib = { ["Spirit Gift"] = { description = "While attuned to Ourania, gain 20% resistance to all damage.",
+                    category = "Defence", rarity = "rare", contemplatedAt = 1 },
+                  ["Plain Utility"] = { description = "You may now utilise prism tattoos.",
+                    category = "Utility", contemplatedAt = 1 } }
+    local out
+    local realAttuned = M._attuned
+    M._attuned = function() return false end -- we are not attuned to it
+    local ok, err = pcall(function()
+      withLibrary(lib, function()
+        holding({}, function()
+          withSeed({}, function()
+            out = capture(function() M.offerSummary({ "Spirit Gift", "Plain Utility" }) end)
+          end)
+        end)
+      end)
+    end)
+    M._attuned = realAttuned
+    if not ok then error(err, 0) end
+    expect(out:find("inert: needs Ourania", 1, true) ~= nil).toBeTrue()
+    expect(out:find("RECOMMEND<reset> <gold>Plain Utility", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("says a reward we HOLD was never contemplated, instead of showing nothing", function()
+    local out
+    withLibrary({ ["Lightning Soul"] = { unlocksFrom = { "A", "B" }, contemplatedAt = 1 },
+                  ["A"] = { description = "d" }, ["B"] = { description = "d" } }, function()
+      holding({ "A", "B", "Lightning Soul" }, function()
+        out = capture(function() M.reportCombos() end)
+      end)
+    end)
+    expect(out:find("HELD", 1, true) ~= nil).toBeTrue()
+    expect(out:find("not contemplated yet", 1, true) ~= nil).toBeTrue()
+  end)
+
+  -- The review's two isolated guards: each was covered only by a case where the OTHER one also
+  -- blocked the score, so deleting either alone changed nothing.
+  it("pays nothing for a component of a chain already finished, even offered again", function()
+    withLibrary(copyLib(WITH_CHAIN), function()
+      local done = holding({ "Argent Scales", "Energetic", "Lightning Soul" }, function()
+        return M.scoreBoon("Electric Mastery")
+      end)
+      expect(table.concat(done.effects, " "):find("toward", 1, true)).toBeNil()
+      expect(table.concat(done.effects, " "):find("completes", 1, true)).toBeNil()
+    end)
+  end)
+
+  it("pays nothing for a component we already hold, even offered again", function()
+    withLibrary(copyLib(WITH_CHAIN), function()
+      local r = holding({ "Argent Scales", "Electric Mastery" }, function()
+        return M.scoreBoon("Electric Mastery")
+      end)
+      expect(table.concat(r.effects, " "):find("toward", 1, true)).toBeNil()
+      expect(table.concat(r.effects, " "):find("completes", 1, true)).toBeNil()
+    end)
+  end)
+
+  -- v4.7.328 REVIEW: combo credit was paid per chain, so two near-complete recipes could outweigh
+  -- the penalty for a boon we cannot even hold.
+  it("a boon feeding two chains earns one chain's worth, not both", function()
+    local lib = copyLib(WITH_CHAIN)
+    lib["Twin Reward"] = { description = "d", category = "Defence",
+      unlocksFrom = { "Argent Scales", "Electric Mastery" }, contemplatedAt = 1 }
+    lib["Electric Mastery"] = { description = "d", category = "Utility", contemplatedAt = 1 }
+    local two, one
+    withLibrary(lib, function()
+      two = holding({ "Argent Scales", "Energetic" }, function() return M.scoreBoon("Electric Mastery") end)
+    end)
+    local solo = copyLib(lib)
+    solo["Twin Reward"] = nil
+    withLibrary(solo, function()
+      one = holding({ "Argent Scales", "Energetic" }, function() return M.scoreBoon("Electric Mastery") end)
+    end)
+    expect(two.score).toBe(one.score)                       -- the second chain adds no points...
+    expect(#two.effects > #one.effects).toBeTrue()          -- ...but is still named
+    expect(table.concat(two.effects, " "):find("Twin Reward", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("never recommends a boon we cannot use while a usable one is on the screen", function()
+    local lib = copyLib(WITH_CHAIN)
+    lib["Electric Mastery"] = { description = "d", category = "Utility", contemplatedAt = 1,
+      conflictsWith = { "Argent Scales" } } -- we hold Argent Scales
+    lib["Plain Defence"] = { description = "d", category = "Defence", contemplatedAt = 1 }
+    local out
+    withLibrary(lib, function()
+      holding({ "Argent Scales", "Energetic" }, function()
+        withSeed({}, function()
+          out = capture(function() M.offerSummary({ "Electric Mastery", "Plain Defence" }) end)
+        end)
+      end)
+    end)
+    expect(out:find("RECOMMEND<reset> <gold>Plain Defence", 1, true) ~= nil).toBeTrue()
+    expect(out:find("CONFLICTS with Argent Scales", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("when every option has a problem it says so, and says what is wrong with its pick", function()
+    local lib = { ["Bad One"] = { description = "d", category = "Defence", contemplatedAt = 1,
+                    conflictsWith = { "Argent Scales" } },
+                  ["Bad Two"] = { description = "d", category = "Utility", contemplatedAt = 1,
+                    conflictsWith = { "Argent Scales" } },
+                  ["Argent Scales"] = { description = "d" } }
+    local out
+    withLibrary(lib, function()
+      holding({ "Argent Scales" }, function()
+        withSeed({}, function()
+          out = capture(function() M.offerSummary({ "Bad One", "Bad Two" }) end)
+        end)
+      end)
+    end)
+    expect(out:find("but <indian_red>conflicts with Argent Scales", 1, true) ~= nil).toBeTrue()
+    expect(out:find("Every option has a problem", 1, true) ~= nil).toBeTrue()
   end)
 end)

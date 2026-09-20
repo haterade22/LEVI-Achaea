@@ -68,6 +68,18 @@ function M._historyLoad()
   M.history.affixes = M.history.affixes or {}
   M.history.library = M.history.library or {}
   M.history.boonLibrary = M.history.boonLibrary or {} -- name -> {description, rarity, maxEchoes}
+  -- ONE-TIME REPAIR (v4.7.328). Until now EVERY refused contemplate blacklisted the name for good,
+  -- including the common case of claiming a boon before the chain reached it -- the refusal then
+  -- means "that screen is gone", not "no such boon" (user: "It is wrong. It just means I picked it
+  -- before the skill had time to look"). The list we hold was built under that rule, so it cannot
+  -- be trusted; clear it once. A name that really is misspelt costs one contemplate to re-learn.
+  if M.history.boonUnknownFix ~= 328 then
+    local n = 0
+    for _ in pairs(M.history.boonUnknown or {}) do n = n + 1 end
+    M.history.boonUnknown = {}
+    M.history.boonUnknownFix = 328
+    if n > 0 then M._boonUnknownCleared = n end -- reported once, by the loader's echo
+  end
 end
 
 function M._historySave()
@@ -111,7 +123,11 @@ end
 -- descriptions + rarity; a later claim borrows them).
 function M._histBoonInfo(name)
   local rarity, description = "", ""
-  for _, o in ipairs(M.history.offers) do
+  -- `or {}` (v4.7.328): `_recordClaim` and the bonuses panel read this, and the combo GRANT path
+  -- records a claim from a game line that can land at any moment -- including before a reload has
+  -- finished. Every one of those callers sits behind a pcall, so a nil here would not error: it
+  -- would silently lose the claim. (It is NOT read by the advisor, which reads `boonLibrary`.)
+  for _, o in ipairs((M.history and M.history.offers) or {}) do
     if o.name == name then
       if o.rarity and o.rarity ~= "" then rarity = o.rarity end
       if o.description and o.description ~= "" then description = o.description end
@@ -204,11 +220,19 @@ function M._learnBoon(name, description, rarity, maxEchoes, extra)
       for i, n in ipairs(extra.conflictsWith) do cw[i] = n end
       rec.conflictsWith = cw
     end
+    -- The combo recipe (v4.7.328), copied for the same reason as the line above.
+    if type(extra.unlocksFrom) == "table" and #extra.unlocksFrom > 0 then
+      local uf = {}
+      for i, n in ipairs(extra.unlocksFrom) do uf[i] = n end
+      rec.unlocksFrom = uf
+    end
     -- A BOOLEAN (v4.7.322): `false` is an answer ("Combo Boon?: No"), so it is stored like `true`.
     -- A truthiness test here would silently drop every "No".
     if type(extra.comboBoon) == "boolean" then rec.comboBoon = extra.comboBoon end
   end
   M.history.boonLibrary[name] = rec
+  -- The combo index caches on this (v4.7.328): a learnt recipe must invalidate it.
+  M._boonLibGen = (M._boonLibGen or 0) + 1
   return rec
 end
 
@@ -370,7 +394,7 @@ end
 -- catalogue would round-trip through save/load LOSING them. A merge that enumerates its fields
 -- inline is a merge that goes stale the next time the record grows.
 M.BOON_DB_FIELDS = { "description", "rarity", "maxEchoes", "quote", "category",
-                     "unlockedBy", "conflictsWith", "comboBoon", "echoFloor" }
+                     "unlockedBy", "conflictsWith", "comboBoon", "echoFloor", "unlocksFrom" }
 -- `comboBoon` (v4.7.322) is a boolean. The merge below already treats `false` as FILLED (it is not
 -- nil, "" or an empty table) and `mergeValue` passes it through, so a known "No" survives
 -- save/load and is never overwritten by an import.
@@ -402,7 +426,8 @@ end
 -- only `_enrichOffer`'s own type test kept it off the wire. A value of the wrong type is now no
 -- value -- not merged, and an existing one does not count as filled. Only the non-string fields
 -- are listed; the rest keep their existing behaviour.
-local FIELD_TYPE = { comboBoon = "boolean", conflictsWith = "table", echoFloor = "boolean" }
+local FIELD_TYPE = { comboBoon = "boolean", conflictsWith = "table", echoFloor = "boolean",
+                     unlocksFrom = "table" }
 local function typed(f, v)
   local want = FIELD_TYPE[f]
   if want and v ~= nil and type(v) ~= want then return nil end
@@ -522,6 +547,9 @@ function M.reportBoonDb(filter)
       .. ((type(rec.category) == "string" and rec.category ~= "") and ("  <white>" .. rec.category) or "")
       .. (rec.maxEchoes and ("  <grey>x" .. rec.maxEchoes) or "")
       .. ((rec.comboBoon == true) and "  <cyan>combo" or "") .. "<reset>")
+    if type(rec.unlocksFrom) == "table" and #rec.unlocksFrom > 0 then
+      cecho("\n      <cyan>combo: <grey>needs " .. table.concat(rec.unlocksFrom, ", ") .. "<reset>")
+    end
     if rec.description and rec.description ~= "" then
       cecho("\n      <grey>" .. rec.description)
       -- Annotate with what we parse out of it, so the database answers the question the

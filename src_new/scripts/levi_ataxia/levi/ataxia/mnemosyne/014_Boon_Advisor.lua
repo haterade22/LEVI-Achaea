@@ -66,6 +66,8 @@ M.BOON_WEIGHTS = {
   combo = 3,
   echoHeld = 5,             -- an (ECHO) offer strengthens a boon we already hold
   categoryShort = 10,       -- a category we hold fewer of than the others this run
+  comboStep = 12,           -- carries a COMBO recipe forward (v4.7.328)
+  comboCompletes = 35,      -- ...and this one finishes it: the reward is free
   restoration = 8,          -- "Restore your resources instead."
   restorationLowHealth = 40, -- ...worth more than a permanent boon when we are hurt
   restorationLowAt = 50,    -- health percent
@@ -256,11 +258,35 @@ function M.scoreBoon(offerName, ctx, W)
     r.flags[#r.flags + 1] = "cost: " .. c
   end
 
+  -- COMBO RECIPES (v4.7.328). A component is worth more than itself: several of them buy another
+  -- boon outright. Only recipes the game has shown us (see 015_Boon_Combos).
+  --
+  -- ONLY THE BEST CHAIN COUNTS (review). Scoring every recipe a boon feeds made combo credit
+  -- unbounded -- two near-complete chains paid 35 + 35, enough to outweigh the -100 for a boon we
+  -- cannot even hold beside one we have. You can only claim the boon once, so it earns one
+  -- chain's worth; the rest are named in the summary without adding to the score.
+  local bestCombo, bestPts = nil, 0
+  for _, reward in ipairs((M.comboFeeds and M.comboFeeds(name)) or {}) do
+    local p = M.comboProgress and M.comboProgress(reward, ctx.held)
+    if p and not p.complete and not ctx.held[name] then
+      local completes = (p.have + 1 >= p.need)
+      local pts = completes and W.comboCompletes or W.comboStep
+      local text = completes and ("completes " .. reward)
+        or ((p.have + 1) .. "/" .. p.need .. " toward " .. reward)
+      r.effects[#r.effects + 1] = text
+      if pts > bestPts then
+        bestPts, bestCombo = pts, (completes and ("COMPLETES the " .. reward .. " combo") or text)
+      end
+    end
+  end
+  if bestCombo then add(r, bestPts, bestCombo) end
+
   local cw = (M._conflictsFor and M._conflictsFor(name, ctx.held)) or {}
   for _, n in ipairs(cw) do
     if ctx.held[n] then
       add(r, W.conflictsHeld, "conflicts with " .. n)
       r.flags[#r.flags + 1] = "CONFLICTS with " .. n .. " (you have it)"
+      r.blocked = "conflicts with " .. n
     end
   end
 
@@ -268,6 +294,7 @@ function M.scoreBoon(offerName, ctx, W)
   if spirit and M._attuned and M._attuned(spirit) == false then
     add(r, W.inert, "inert without " .. spirit)
     r.flags[#r.flags + 1] = "inert: needs " .. spirit
+    r.blocked = r.blocked or ("it needs " .. spirit)
   end
 
   -- Nothing parsed: say what it does in the game's own words, shortened.
@@ -331,15 +358,32 @@ function M.offerSummary(list)
     if r.echo then tags[#tags + 1] = "<cyan>(ECHO)" end
     cecho("\n  <grey>" .. i .. ". <gold>" .. r.name .. "<reset>  " .. table.concat(tags, " ")
       .. "  <grey>score <white>" .. r.score .. "<reset>")
-    cecho("\n      <grey>" .. table.concat(r.effects, ", ") .. "<reset>")
+    local effects = table.concat(r.effects, ", ")
+    if #effects > 160 then effects = effects:sub(1, 157) .. "..." end
+    cecho("\n      <grey>" .. effects .. "<reset>")
     if #r.flags > 0 then
       cecho("\n      <indian_red>" .. table.concat(r.flags, "; ") .. "<reset>")
     end
   end
-  local best, second = ranked[1], ranked[2]
+  -- A BOON WE CANNOT USE NEVER TAKES THE RECOMMENDATION (review, v4.7.328). A conflict with a boon
+  -- we hold, or a spirit we are not attuned to, is a fact no score should be able to outvote --
+  -- and combo credit could: the old arithmetic recommended a boon we could not hold. Rank still
+  -- decides among the usable ones; when every option is blocked, we say so rather than pretend.
+  local best, second
+  for _, r in ipairs(ranked) do
+    if not r.blocked then
+      if not best then best = r elseif not second then second = r; break end
+    end
+  end
+  local allBlocked = best == nil
+  if allBlocked then best, second = ranked[1], ranked[2] end
   local margin = second and (best.score - second.score) or best.score
   M.echo("<green>RECOMMEND<reset> <gold>" .. best.name .. "<reset> -- " .. reasons(best, 3)
+    .. (best.blocked and ("<grey>, but <indian_red>" .. best.blocked) or "")
     .. (second and ("<grey> (ahead of " .. second.name .. " by " .. margin .. ")") or "") .. "<reset>.")
+  if allBlocked then
+    M.echo("<yellow>Every option has a problem<reset> -- there is no clean pick on this screen.")
+  end
   if best.score < W.rerollBelow and (M._rerollsLeft or 0) > 0 then
     M.echo("<yellow>Every option is weak<reset> -- consider <white>BOON REROLL<reset> ("
       .. M._rerollsLeft .. " left).")

@@ -2,6 +2,134 @@
 
 ---
 
+## 2026-09-19 - Boon combos: which boons unlock which, and how far along the run is (v4.7.328)
+
+User, holding the reward: *"With every required boon now in hand, the mist of the Mnemosyne parts
+and bestows upon you another: Lightning Soul."* -- *"I got that for finishing the boon combo. We
+need to boon contemplate those and add them to the database and also start to tie which boons
+combo together to get to the end path of the boon."*
+
+```
+Lightning Soul:
+Rarity:             rare
+Category:           Defence
+Can echo:           No
+Unlocked By:        Argent Scales, Electric Mastery, and Energetic
+```
+
+**The recipe is printed on the REWARD's contemplate** -- on the one sample we have, the user's
+block above. Whether a component's own block also carries the line is unproven: none has been read
+yet. Either way a chain is learnt the moment a block carrying it is contemplated, which the
+per-offer chain already does for everything we are offered.
+
+- **`Unlocked By` is now read as a LIST** (`unlocksFrom`), stored, and merged like the conflicts
+  list. It also takes a wrapped second line. **The string form was silently dropping longer
+  recipes:** it goes through the 60-character meta cap, and four boon names run past it. The
+  string is still kept and still posted to the tracker; the list is what the chains read.
+- **`mnem combos`** shows every recipe we know, closest to done first: `1/3 Lightning Soul  Defence
+  rare`, the components (green for held this run, grey for still needed), and what the reward does.
+- **The components get contemplated.** One component we have never contemplated rides along with
+  each offer screen's chain, so a recipe fills itself in over a few screens without a command.
+- **The advisor counts it.** A boon that carries a recipe forward is worth more, and the one that
+  finishes it is worth much more -- an option now reads `+15% Electric damage, 2/3 toward Lightning
+  Soul`, and the recommendation says so. A recipe already in hand is worth nothing extra.
+- **The bestowal is recorded** (new trigger `mnemosyne/095`). A combo reward is never offered and
+  never claimed, so nothing saw it: it reached neither the run's claims nor the bonuses panel.
+  Now it prints `COMBO COMPLETE -- the Mnemosyne grants Lightning Soul (Argent Scales, Electric
+  Mastery, Energetic)`, records the claim, and asks for its contemplate -- which carries the recipe
+  for the next chain.
+
+Also hardened: `_histBoonInfo` no longer assumes `history.offers` exists. `_recordClaim` and the
+bonuses panel read it -- including from the new grant path, which records a claim from a game line
+that can arrive before a reload has finished -- and every caller is inside a `pcall`, so a nil
+would not have errored: it would have silently lost the claim.
+
+### A boon claimed quickly was blacklisted for good
+
+User: *"When I pick a boon before it gets contemplated, this pops up. It is wrong. It just means I
+picked it before the skill had time to look and the option isnt there anymore."*
+
+```
+(MNEM): the game does not recognise the boon name 'Hawk Eyes' -- skipping it from now on.
+```
+
+Since v4.7.308, EVERY refused contemplate was read as "no such boon" and the name was skipped
+forever. But claiming closes the offer screen, and the chain contemplating that screen's boons then
+gets refused for a name that is perfectly real -- so a fast claim quietly cost a boon out of the
+catalogue.
+
+- **A refused name the game itself printed on that screen is never blacklisted.** The game spelled
+  it, so the spelling is right; the refusal means the screen closed. It says so instead.
+- **Claiming closes the screen for the chain**, which stops it asking about the other options at
+  all -- so the message does not happen in the first place.
+- A name we never saw offered is still blacklisted: that one really is our spelling (the reason
+  v4.7.308 exists).
+- **A name the game prints on any offer screen is un-blacklisted on sight**, and the list built
+  under the old rule is **cleared once on update** -- `mnem boonfill unknown` says how many and
+  why. A genuinely misspelt name costs one contemplate to re-mark.
+
+### Fixed after a deep review
+
+- **A wrapped recipe naming a boon we had never heard of corrupted three fields.** The tail of a
+  wrapped list was only accepted when every name was already known -- which is exactly false for a
+  recipe's newest component, the very thing the feature fetches. The recipe kept a phantom entry
+  called "and", the real component was lost, and the orphaned line became the boon's DESCRIPTION,
+  overwriting the catalogue (the quote swallowed the real description too). Now a value ending in a
+  dangling comma or "and" is taken as unfinished -- the game's own punctuation says the line cannot
+  stand alone -- so the tail is joined whether or not we recognise the names, and a trailing
+  connector never becomes a boon name. This failure existed for the `Conflicts With` line since
+  v4.7.325; recipes are simply where unknown names actually turn up.
+- **The advisor could recommend a boon you cannot use.** Combo credit was paid for EVERY chain a
+  boon feeds, so two near-complete recipes (+35 each) outweighed the -100 for a boon that conflicts
+  with one you hold. A boon can only be claimed once, so it now earns ONE chain's worth (the best),
+  and the others are still named. Beyond that, a boon that conflicts with a held boon or is inert
+  without a spirit **never takes the recommendation** while a usable option is on the screen; when
+  every option has a problem it says so, and the RECOMMEND line ends with "but <what is wrong>".
+- **The granted reward now does everything a claim does.** It was recorded in local history and
+  nowhere else: no combat flags latched (a combo reward can be a flag boon), no bonuses-panel
+  refresh, and nothing posted to the tracker -- whose run record was permanently missing a boon you
+  hold. It also had no run gate (a stray line could write into the PREVIOUS run's history) and no
+  double-fire guard (a reconnect replay logged "now 2 echo(es)" for a reward whose own block says
+  it cannot echo).
+- **The reward's own contemplate is no longer a single silent attempt.** It fired one second after
+  the grant, when the offer screen's own chain is usually still holding the capture slot -- so it
+  did nothing, silently, in the common case. It retries, and `mnem combos`/`comboGaps` now also
+  name a boon we HOLD but have never contemplated, so a granted reward cannot fall through the
+  cracks (nothing else would ever ask about it: it is never offered).
+- **`mnem combos` says when nothing counts as held** (progress is read from the run's claims, so
+  between runs every recipe would otherwise read 0/3 with no explanation), and flags a reward you
+  hold but never learnt instead of printing nothing.
+- **The tracker gets a long recipe.** `unlocked_by` is promoted through a 60-character cap, which a
+  four-name recipe exceeds, so the tracker received nothing for exactly the biggest ones; it now
+  falls back to the list.
+- **The chain index is cached** on the catalogue rather than rebuilt on every call (the advisor
+  called it once per offered boon, each a full scan of ~400 entries).
+
+### Verification
+
+2190 tests pass (41 new). Every change was break-back verified: 51 mutants, all caught. Ten
+survived a first pass across the three rounds -- each named a test that did not exist, or one that
+could not fail (a helper restored the state before the assertion read it; a "does the advisor
+survive a half-loaded history" test that never reached the guarded function), and each got the test
+it was missing.
+
+### Files
+
+- `mnemosyne/015_Boon_Combos.lua`: new -- `comboChains` (cached), `comboFeeds`, `comboProgress`,
+  `comboGaps`, `reportCombos`, `onComboBoonGranted` (+ `_contemplateGranted`'s retry).
+- `mnemosyne/004_Parsers.lua`: `Unlocked By` as a list (+ the dangling-connector wrap rule, which
+  also fixes `Conflicts With`); one combo gap per offer chain; `_wasOffered`/`offerScreenGone` and
+  the refusal fix.
+- `mnemosyne/007_History.lua`: `unlocksFrom` stored and merged; the recipe on `mnem boondb`;
+  `_histBoonInfo` guard; `_boonLibGen`; the one-time repair of the refused-names list.
+- `mnemosyne/014_Boon_Advisor.lua`: combo scored once per boon, blocked options never recommended.
+- `mnemosyne/002_Reporter_API.lua`: `unlocked_by` falls back to the list.
+- `mnemosyne/003_Commands.lua`: `mnem combos`; the repair notice on `mnem boonfill unknown`.
+- `triggers/.../mnemosyne/095_Boon_Combo_Granted.lua`: new.
+- `tests/test_mnemosyne.lua`; docs; memory.
+
+---
+
 ## 2026-09-19 - The boon advisor: every offer summarised, one recommended; categories in the boon database (v4.7.327)
 
 ### The offer, summarised and judged
