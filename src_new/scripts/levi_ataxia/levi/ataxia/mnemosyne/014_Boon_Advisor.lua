@@ -60,7 +60,16 @@ M.BOON_WEIGHTS = {
   damageConditionalPerPct = 0.3,
   damageTypePerPct = 0.3,   -- one damage type only
   procPerPct = 2,           -- 5% on-hit affliction = 10
-  drawback = -12,           -- per parsed cost
+  -- A COST IS ONLY CHEAP IF WE CAN TAKE IT (v4.7.331, user: "if a boon gives us something but
+  -- costs an affliction or something we dont have immunity for, it should be scored significantly
+  -- lower as the cost isn't worth it for the benefit"). A permanent affliction we cannot cure runs
+  -- for the rest of the run, so it is not a small deduction from a big benefit -- it devalues the
+  -- benefit itself. Hence a HAIRCUT on everything the boon earned, plus a flat charge; and hence
+  -- next to nothing when we are already immune to exactly that affliction.
+  drawbackKeep = 0.5,       -- how much of the boon's own score survives an un-immune cost
+  drawbackAffFlat = 35,     -- ...and a flat charge on top, per affliction
+  drawbackImmune = -2,      -- we are immune to it: all but free, and still worth naming
+  drawback = -12,           -- a cost we cannot classify (kept for callers outside this file)
   conflictsHeld = -100,     -- cannot be taken alongside a boon we hold
   inert = -60,              -- needs a spirit we are not attuned to
   combo = 3,
@@ -280,9 +289,18 @@ function M.scoreBoon(offerName, ctx, W)
     r.effects[#r.effects + 1] = p.chance .. "% " .. p.aff .. " on hit"
   end
 
+  -- THE COSTS, CLASSIFIED BY WHETHER WE CAN SHRUG THEM OFF. `_boonDrawbacks` returns the
+  -- affliction names a boon inflicts on us, so each one can be checked against what this run has
+  -- made us immune to. The charge itself is applied at the end, once the boon's own worth is known.
+  local costsOpen = {}
   for _, c in ipairs((M._boonDrawbacks and M._boonDrawbacks(desc)) or {}) do
-    add(r, W.drawback, "cost: " .. c)
-    r.flags[#r.flags + 1] = "cost: " .. c
+    if ctx.immune[c] then
+      add(r, W.drawbackImmune, "cost: " .. c .. ", which you are immune to")
+      r.effects[#r.effects + 1] = "cost: " .. c .. " (immune)"
+    else
+      costsOpen[#costsOpen + 1] = c
+      r.flags[#r.flags + 1] = "cost: " .. c .. " -- NOT immune"
+    end
   end
 
   local cw = (M._conflictsFor and M._conflictsFor(name, ctx.held)) or {}
@@ -299,6 +317,16 @@ function M.scoreBoon(offerName, ctx, W)
     add(r, W.inert, "inert without " .. spirit)
     r.flags[#r.flags + 1] = "inert: needs " .. spirit
     r.blocked = r.blocked or ("it needs " .. spirit)
+  end
+
+  -- THE UN-IMMUNE COST, CHARGED LAST (v4.7.331). Half of what the boon earned, plus a flat charge
+  -- per affliction: a permanent affliction devalues the benefit it is attached to rather than
+  -- subtracting a fixed amount from it, so a big enough number could otherwise buy any price.
+  -- Only ever a deduction -- a boon already scoring at or below zero is not "improved" by a cost.
+  if #costsOpen > 0 then
+    local cut = (r.score > 0) and math.floor(r.score * (1 - W.drawbackKeep) + 0.5) or 0
+    add(r, -(cut + W.drawbackAffFlat * #costsOpen),
+      "costs " .. table.concat(costsOpen, ", ") .. " and you are not immune")
   end
 
   -- Nothing parsed: say what it does in the game's own words, shortened.

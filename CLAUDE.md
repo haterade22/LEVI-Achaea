@@ -888,7 +888,13 @@ still corrects them -- without them a chain is invisible until its reward is alr
 Evidence they carry: a recipe takes 2 to 6 components; `Candour and Wrath and Righteousness` is TWO
 names (`Wrath and Righteousness` is a boon), which is why `_splitBoonList` re-joins against known
 names and why seeding those names matters; `It All Ogre Now`'s category is `Unset` (a placeholder).
-The advisor scores a component's combo credit even with no description of our own -- most components
+**A COST IS WEIGHED AGAINST OUR IMMUNITIES** (v4.7.331, user: a boon costing an affliction we cannot
+block "should be scored significantly lower as the cost isn't worth it for the benefit"): each
+affliction `_boonDrawbacks` finds is checked against `ctx.immune`; an un-immune one takes
+`drawbackKeep` (half the boon's own score) plus `drawbackAffFlat` (35) per affliction, charged AFTER
+the rest of the scoring and never as a gain on a negative score; an immune one is `drawbackImmune`
+(-2) and is listed as an effect, not a flag. The advisor scores a component's combo credit even with
+no description of our own -- most components
 have none, and returning early cost exactly the boons a seeded recipe names. **The advisor pays ONE chain's worth** (the best) however many a boon feeds, and
 a boon that conflicts with a held one or is inert never takes the RECOMMEND line while a usable
 option exists (`r.blocked`). **A WRAPPED list's tail is taken when the value ends in a dangling
