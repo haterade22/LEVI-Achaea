@@ -2,6 +2,55 @@
 
 ---
 
+## 2026-09-21 - A price you cannot pay: costs are weighed against your immunities (v4.7.331)
+
+User, from a live offer screen: *"if a boon gives us something but costs an affliction or something
+we dont have immunity for, it should be scored significantly lower as the cost isn't worth it for
+the benefit."*
+
+```
+1. Corrupted Breath   Defence common combo   score 97
+     +66% Asphyxiation resist
+     cost: manaleech
+```
+
++66% resistance for permanent manaleech was scoring 97 and taking the recommendation: the cost was
+a flat -12 against a benefit worth 66, so a big enough number could buy any price.
+
+**A permanent affliction runs for the rest of the run and cannot be cured, so it devalues the
+benefit rather than deducting from it.** An un-immune cost now takes **half of everything the boon
+earned, plus a flat 35 per affliction**. The same screen now reads:
+
+```
+1. Hoarder            Utility uncommon echo x2 (ECHO)   score 15
+2. Corrupted Breath   Defence common combo              score 14
+     +66% Asphyxiation resist
+     cost: manaleech -- NOT immune
+```
+
+**And it is judged against what you actually hold.** The cost is checked against this run's
+immunities, affliction by affliction: hold a boon granting immunity to manaleech and Corrupted
+Breath is back to **97**, with `cost: manaleech (immune)` listed among its effects rather than as a
+warning. Two afflictions cost more than one. A boon already scoring at or below zero is never
+*improved* by carrying a cost -- the haircut only ever subtracts.
+
+This is why `mnem advise` prints the reasons: the same boon can be the best pick or the worst on the
+same screen, depending on one immunity you happen to hold.
+
+### Verification
+
+2203 tests pass (5 new, built on the user's screen). Break-back verified: 6 mutants, all caught. One
+survived at first -- a test asserting the costly boon merely scored LOWER, which an unguarded
+haircut satisfies by handing back fewer points on a negative score; it now pins the minimum charge.
+
+### Files
+
+- `mnemosyne/014_Boon_Advisor.lua`: `drawbackKeep` / `drawbackAffFlat` / `drawbackImmune`, costs
+  classified against `ctx.immune` and charged after the boon's own worth is known.
+- `tests/test_mnemosyne.lua`; `CHANGELOG.md`, `CLAUDE.md`, `README.md`; memory.
+
+---
+
 ## 2026-09-21 - A granted boon is REPORTED as granted: /boon_received (v4.7.330)
 
 The tracker's author, after we asked which meaning `combo_boon` carries:

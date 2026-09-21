@@ -8942,6 +8942,89 @@ describe("boon combos", function()
     expect(out:find("not contemplated yet", 1, true) ~= nil).toBeTrue()
   end)
 
+  -- v4.7.331, user: "if a boon gives us something but costs an affliction or something we dont
+  -- have immunity for, it should be scored significantly lower as the cost isn't worth it for the
+  -- benefit". From their live screen: Corrupted Breath, +66% asphyxiation resist for permanent
+  -- manaleech, was scoring 97 and being recommended.
+  local COSTLY = { description = "Your asphyxiation resistance is increased by 66% but you suffer permanent manaleech.",
+                   category = "Defence", rarity = "common", comboBoon = true }
+
+  it("a cost we cannot shrug off guts the score, and says which affliction", function()
+    local open, clean
+    withLibrary({ ["Corrupted Breath"] = COSTLY,
+                  ["Free Gift"] = { description = "Your asphyxiation resistance is increased by 66%.",
+                                    category = "Defence", rarity = "common", comboBoon = true } }, function()
+      withSeed({}, function()
+        open = holding({}, function() return M.scoreBoon("Corrupted Breath") end)
+        clean = holding({}, function() return M.scoreBoon("Free Gift") end)
+      end)
+    end)
+    expect(open.score < clean.score / 2).toBeTrue()  -- significantly lower, not a small deduction
+    expect(table.concat(open.flags, " "):find("cost: manaleech -- NOT immune", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("...and costs nothing worth speaking of once we are immune to that affliction", function()
+    local immune, notImmune
+    withLibrary({ ["Corrupted Breath"] = COSTLY,
+                  ["Clear Mind"] = { description = "You are immune to the manaleech affliction." } }, function()
+      withSeed({}, function()
+        notImmune = holding({}, function() return M.scoreBoon("Corrupted Breath") end)
+        immune = holding({ "Clear Mind" }, function() return M.scoreBoon("Corrupted Breath") end)
+      end)
+    end)
+    expect(immune.score > notImmune.score * 3).toBeTrue()
+    expect(table.concat(immune.effects, " "):find("cost: manaleech (immune)", 1, true) ~= nil).toBeTrue()
+    expect(table.concat(immune.flags, " "):find("NOT immune", 1, true)).toBeNil()
+  end)
+
+  it("two afflictions cost more than one", function()
+    local one, two
+    withLibrary({ ["One"] = { description = "Your cold resistance is increased by 66%, but you suffer permanent dehydration.",
+                              category = "Defence" },
+                  ["Two"] = { description = "Your cold resistance is increased by 66%, but you suffer permanent dehydration and tenderskin.",
+                              category = "Defence" } }, function()
+      withSeed({}, function()
+        one = holding({}, function() return M.scoreBoon("One") end)
+        two = holding({}, function() return M.scoreBoon("Two") end)
+      end)
+    end)
+    expect(two.score < one.score).toBeTrue()
+  end)
+
+  it("a boon already worth nothing is not IMPROVED by having a cost", function()
+    -- The haircut is a FRACTION of the score, so on a boon already below zero an unguarded
+    -- version would hand points back -- a cost making a bad boon look better.
+    local costly, plain
+    withLibrary({ ["Awful"] = { description = "Gain 5% resistance to fire damage, but you suffer permanent stuttering.",
+                                category = "Defence", conflictsWith = { "Held Thing" } },
+                  ["Awful Free"] = { description = "Gain 5% resistance to fire damage.",
+                                     category = "Defence", conflictsWith = { "Held Thing" } },
+                  ["Held Thing"] = { description = "d" } }, function()
+      withSeed({}, function()
+        costly = holding({ "Held Thing" }, function() return M.scoreBoon("Awful") end)
+        plain = holding({ "Held Thing" }, function() return M.scoreBoon("Awful Free") end)
+      end)
+    end)
+    expect(costly.score < 0).toBeTrue() -- the conflict still dominates...
+    -- ...and the cost costs AT LEAST the flat charge. `<` alone would pass an unguarded haircut,
+    -- which on a negative score hands back points and merely subtracts fewer of them.
+    expect(costly.score <= plain.score - M.BOON_WEIGHTS.drawbackAffFlat).toBeTrue()
+  end)
+
+  it("the costly boon does not take the recommendation from a clean one", function()
+    local out
+    withLibrary({ ["Corrupted Breath"] = COSTLY,
+                  ["Plain Utility"] = { description = "All scaling gear effects are magnified by 30%.",
+                                        category = "Utility", rarity = "uncommon" } }, function()
+      holding({}, function()
+        withSeed({}, function()
+          out = capture(function() M.offerSummary({ "Corrupted Breath", "Plain Utility" }) end)
+        end)
+      end)
+    end)
+    expect(out:find("RECOMMEND<reset> <gold>Plain Utility", 1, true) ~= nil).toBeTrue()
+  end)
+
   it("a boon that is inert without a spirit is not recommended either", function()
     local lib = { ["Spirit Gift"] = { description = "While attuned to Ourania, gain 20% resistance to all damage.",
                     category = "Defence", rarity = "rare", contemplatedAt = 1 },
