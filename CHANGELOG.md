@@ -2,6 +2,49 @@
 
 ---
 
+## 2026-09-21 - A stat traded away is a trade, not a price (v4.7.332)
+
+User: *"Ogre is a bit different. Because it is giving us something for removing a stat. I would
+rate those higher than corrupted breath for example. Or losing a stat but gaining X is a lot
+better."*
+
+Right -- and the numbers a boon takes back were **invisible and free**. `Ogre's Defence` ("You lose
+2% critical strike chance, but you gain 10% resistance to all damage") listed only the gain;
+`Silvestri's Grace` ("lose 1 constitution") and `Earthen Will` ("lose 10% magical resistance") said
+nothing about the loss at all.
+
+Now they are read, named and charged **in the same currency as the gain** -- a straight subtraction,
+with none of the haircut an affliction carries, so a trade still ranks far above the same gain
+bought with a permanent affliction:
+
+```
+Ogre's Defence     73   +10% resistance to all damage, -2% critical strike chance
+Earthen Will       50   +15% Physical resist, -10% magical resistance
+Silvestri's Grace  33   +25% damage, -1 constitution
+Corrupted Breath   13   +66% Asphyxiation resist    cost: manaleech -- NOT immune
+```
+
+A lost stat costs exactly what the same stat would have earned, so losing constitution (health, and
+health is survival) costs more than losing dexterity. A traded number is listed as an EFFECT, not a
+red warning: it is part of the deal, not a problem with it.
+
+**Still not priced:** a cost with no number in it -- `Blood Pact`'s "all mana costs now cost health",
+or "you can no longer benefit from moss". Those read as free, and the description is printed so you
+can see them. Send one that ranks too high and it can be taught.
+
+### Verification
+
+2206 tests pass (3 new). Break-back verified: 8 mutants, all caught. One survived at first: the
+clause-trim only matters when no comma ends the name ("lose 10% magical resistance and gain..."),
+which the test did not cover.
+
+### Files
+
+- `mnemosyne/014_Boon_Advisor.lua`: `M._costLosses`, `lossPerPct`, charged before the affliction pass.
+- `tests/test_mnemosyne.lua`; `CHANGELOG.md`, `CLAUDE.md`; memory.
+
+---
+
 ## 2026-09-21 - A price you cannot pay: costs are weighed against your immunities (v4.7.331)
 
 User, from a live offer screen: *"if a boon gives us something but costs an affliction or something
