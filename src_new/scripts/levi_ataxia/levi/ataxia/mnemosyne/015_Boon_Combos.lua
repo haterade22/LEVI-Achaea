@@ -213,9 +213,10 @@ function M.onComboBoonGranted(name)
   if M._recordClaim then pcall(M._recordClaim, name) end
   if M.latchBoonFlag then pcall(M.latchBoonFlag, name) end
   if M.bonuses and M.bonuses.refresh then pcall(M.bonuses.refresh) end
-  -- The tracker only hears about boons we CLAIM; a granted one is still a boon we hold, and the
-  -- run record is wrong without it. Gated like every other report.
-  if M._inRun and M._inRun() and M.reportBoonsSelected then pcall(M.reportBoonsSelected, name) end
+  -- The tracker's own endpoint for this (v4.7.330): `/boon_received`, not `/boons_selected` --
+  -- a combo reward is never offered and never chosen, so reporting it as a selection described an
+  -- event that did not happen. Gated like every other report.
+  if M._inRun and M._inRun() and M.reportBoonReceived then pcall(M.reportBoonReceived, name) end
   -- Its own contemplate carries the recipe (and the category, and the text), and we have never
   -- seen this boon on an offer screen. The offer chain usually still holds the capture slot right
   -- after a claim, so ONE attempt would quietly do nothing: retry a few times, and `comboGaps`

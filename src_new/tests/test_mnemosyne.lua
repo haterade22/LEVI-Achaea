@@ -7486,6 +7486,33 @@ describe("combo_boon on /boons_offered", function()
     expect(offer({ ["Iron Throat"] = { comboBoon = "yes" } }, { name = "Iron Throat" }).combo_boon).toBeNil()
   end)
 
+  -- The tracker's author settled the definition (2026-09-21): "combo_boon argument in
+  -- boons_offered endpoint should be set to true if the boon contemplate block has Combo Boon? Yes
+  -- in it". This traces that end to end -- the block's own line, through the catalogue, onto the
+  -- wire -- rather than trusting the field in isolation.
+  it("is the CONTEMPLATE block's own answer, from the block to the payload", function()
+    local yes, no
+    reset(true) -- one POST per reset: the queue is serial, so a second would still be waiting
+    withLibrary({}, function()
+      withContemplate(FLAMEHEART, function() M._boonFillNext({ "Flameheart" }, 1, 0) end)
+      M.reportBoonsOffered({ { name = "Flameheart" } })
+      yes = sent[1].payload.offered[1].combo_boon
+    end)
+    -- "Combo Boon?: No" has never been seen in the wild (a non-combo block appears to omit the
+    -- line entirely); this pins what we would send if it ever prints.
+    reset(true)
+    withLibrary({}, function()
+      withContemplate({ "Rarity:             common", "Combo Boon?:        No", "Can echo:           No",
+                        "", "Plain text.", "", '"Q."' }, function()
+        M._boonFillNext({ "Plain Boon" }, 1, 0)
+      end)
+      M.reportBoonsOffered({ { name = "Plain Boon" } })
+      no = sent[1].payload.offered[1].combo_boon
+    end)
+    expect(yes).toBeTrue()
+    expect(no).toBeFalse()
+  end)
+
   it("never overwrites a value the offer already carried", function()
     expect(offer({ ["Iron Throat"] = { comboBoon = true } },
       { name = "Iron Throat", combo_boon = false }).combo_boon).toBeFalse()
@@ -8787,24 +8814,55 @@ describe("boon combos", function()
     withLibrary(copyLib(WITH_CHAIN), function()
       holding({ "Argent Scales", "Electric Mastery", "Energetic" }, function()
         local real = { rec = M._recordClaim, flag = M.latchBoonFlag, bon = M.bonuses,
-                       rep = M.reportBoonsSelected, auto = M._auto, timer = tempTimer, echo = M.echo }
+                       rep = M.reportBoonReceived, sel = M.reportBoonsSelected,
+                       auto = M._auto, timer = tempTimer, echo = M.echo }
         M._recordClaim = function(n) did.claim = n end
         M.latchBoonFlag = function(n) did.flag = n end
         M.bonuses = { refresh = function() did.panel = true end }
-        M.reportBoonsSelected = function(n) did.posted = n end
+        M.reportBoonReceived = function(n) did.posted = n end
+        M.reportBoonsSelected = function(n) did.selected = n end -- a grant is NOT a selection
         M._auto = function() return true end
         tempTimer = function() return 1 end
         M.echo = function() end
         local ok, err = pcall(function() M.onComboBoonGranted("Lightning Soul") end)
         M._recordClaim, M.latchBoonFlag, M.bonuses = real.rec, real.flag, real.bon
-        M.reportBoonsSelected, M._auto, tempTimer, M.echo = real.rep, real.auto, real.timer, real.echo
+        M.reportBoonReceived, M.reportBoonsSelected = real.rep, real.sel
+        M._auto, tempTimer, M.echo = real.auto, real.timer, real.echo
         if not ok then error(err, 0) end
       end)
     end)
     expect(did.claim).toBe("Lightning Soul")
     expect(did.flag).toBe("Lightning Soul")
     expect(did.panel).toBeTrue()
-    expect(did.posted).toBe("Lightning Soul")
+    expect(did.posted).toBe("Lightning Soul")   -- /boon_received
+    expect(did.selected).toBeNil()               -- never /boons_selected: we did not choose it
+  end)
+
+  -- The tracker's author (2026-09-21): "added a boons_received endpoint. If you can, use this
+  -- instead of boons_offered endpoint to send the combo boons that are granted." The live schema
+  -- calls it `/boon_received` and takes ONE BoonInfo.
+  it("a granted boon is posted to /boon_received as a whole BoonInfo", function()
+    reset(true)
+    withLibrary({ ["Lightning Soul"] = { description = "Gain immunity to electric damage for 60 seconds at the start of each new ripple.",
+      rarity = "rare", category = "Defence", maxEchoes = 0, comboBoon = nil,
+      unlocksFrom = { "Argent Scales", "Electric Mastery", "Energetic" } } }, function()
+      M.reportBoonReceived("Lightning Soul")
+    end)
+    expect(sent[1].url:find("/boon_received", 1, true) ~= nil).toBeTrue()
+    local b = sent[1].payload.boon
+    expect(b.name).toBe("Lightning Soul")
+    expect(b.rarity).toBe("rare")
+    expect(b.category).toBe("Defence")
+    expect(b.unlocked_by).toBe("Argent Scales, Electric Mastery, Energetic")
+    expect(b.num_echoes_possible).toBe(0)
+    expect(sent[1].payload.selected).toBeNil()
+  end)
+
+  it("reports nothing for an empty name", function()
+    reset(true)
+    M.reportBoonReceived("")
+    M.reportBoonReceived(nil)
+    expect(#sent).toBe(0)
   end)
 
   it("a repeated grant line records nothing the second time", function()
@@ -8848,8 +8906,10 @@ describe("boon combos", function()
     local delays, tries, screenArg = {}, 0, nil
     withLibrary(copyLib(WITH_CHAIN), function()
       holding({ "Argent Scales", "Electric Mastery", "Energetic" }, function()
-        local real = { rec = M._recordClaim, timer = tempTimer, screen = M._boonScreenContemplate, echo = M.echo }
+        local real = { rec = M._recordClaim, timer = tempTimer, screen = M._boonScreenContemplate,
+                       echo = M.echo, rep = M.reportBoonReceived }
         M._recordClaim, M.echo = function() end, function() end
+        M.reportBoonReceived = function() end -- its queue arms timers of its own; not what this tests
         M._boonScreenContemplate = function(list)
           tries = tries + 1
           screenArg = list
@@ -8858,6 +8918,7 @@ describe("boon combos", function()
         tempTimer = function(d, fn) delays[#delays + 1] = d; fn(); return 1 end
         local ok, err = pcall(function() M.onComboBoonGranted("Lightning Soul") end)
         M._recordClaim, tempTimer, M._boonScreenContemplate, M.echo = real.rec, real.timer, real.screen, real.echo
+        M.reportBoonReceived = real.rep
         if not ok then error(err, 0) end
       end)
     end)
