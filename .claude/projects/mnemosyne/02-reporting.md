@@ -95,6 +95,7 @@ Each function guards on `M._hasToken()` and enqueues. Payload shapes:
 | `reportEffects(list)` | `POST /effects` | `{ effects = [{name, description}, …] }` | — |
 | `reportBoonsOffered(list)` | `POST /boons_offered` | `{ offered = [{name, description?, quote?, rarity?, category?, unlocked_by?, conflicts_with?, num_echoes_possible?, combo_boon?}, …], class?, race?, reroll_count }` | `class`/`race` from `M._charInfo()` (v4.7.220); the seven optional `BoonInfo` fields filled from the local catalogue (six since v4.7.298, `combo_boon` since v4.7.322) and `reroll_count` inferred (v4.7.298) |
 | `reportBoonsSelected(names)` | `POST /boons_selected` | `{ selected = [name, …] }` | — |
+| `reportBoonReceived(name)` | `POST /boon_received` | `{ boon = {name, description?, …, unlocked_by?, combo_boon?}, class?, race? }` | v4.7.330, the author's own endpoint for a boon we were GIVEN ("use this instead of boons_offered endpoint to send the combo boons that are granted"). **SINGULAR** `/boon_received` and ONE `BoonInfo` — verified against the live `/openapi.json`, 2026-09-21. Sent from the combo-grant path (trigger 095) through `_enrichOffer`, so it carries the recipe (`unlocked_by`) and `combo_boon`. A granted reward is no longer posted to `/boons_selected`: we never selected it |
 | `reportDeath(killer)` | `POST /death` | `{ killer = <name or "unknown"> }` | — |
 
 ### Notable behaviours

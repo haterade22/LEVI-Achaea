@@ -378,6 +378,28 @@ function M.reportBoonsSelected(names)
   M._enqueue("/boons_selected", { selected = names })
 end
 
+-- A BOON WE WERE GIVEN, NOT ONE WE CHOSE (v4.7.330, the tracker's author: "added a boons_received
+-- endpoint. If you can, use this instead of boons_offered endpoint to send the combo boons that
+-- are granted").
+--
+-- The endpoint is `/boon_received` (singular, verified against the live OpenAPI schema on
+-- 2026-09-21) and it takes ONE `BoonInfo` -- the same shape an offer sends, so it goes through
+-- `_enrichOffer` and carries everything the catalogue knows: description, quote, rarity, category,
+-- `unlocked_by` (the recipe), `conflicts_with`, `num_echoes_possible` and `combo_boon`.
+--
+-- This replaces the `/boons_selected` post v4.7.328 made for a granted boon: a combo reward is
+-- never offered and never chosen, so reporting it as a SELECTION said something that did not
+-- happen. The tracker now has a name for the event.
+function M.reportBoonReceived(name)
+  if not M._hasToken() then return end
+  if type(name) ~= "string" or name == "" then return end
+  local enriched = M._enrichOffer({ { name = name } })
+  local boon = enriched and enriched[1]
+  if type(boon) ~= "table" then return end
+  local class, race = M._charInfo()
+  M._enqueue("/boon_received", { boon = boon, class = class, race = race })
+end
+
 function M.reportDeath(killer)
   if not M._hasToken() then return end
   M._enqueue("/death", { killer = (type(killer) == "string" and killer ~= "") and killer or "unknown" })

@@ -876,7 +876,9 @@ call), `comboFeeds(name)`, `comboProgress(reward, held)` (this run's claims), `c
 components never contemplated; the offer chain takes ONE per screen). The advisor scores
 `comboStep` / `comboCompletes`. The reward is GRANTED, never offered or claimed, so trigger 095
 (`bestows upon you another: X`) does what the claim path does -- `_recordClaim`, `latchBoonFlag`,
-`bonuses.refresh`, `reportBoonsSelected` -- once (a held reward means the line is a replay), only
+`bonuses.refresh`, and `reportBoonReceived` -> **`/boon_received`** (v4.7.330, the tracker's own
+endpoint for this; singular, one whole `BoonInfo`; NOT `/boons_selected`, which would claim we chose
+it) -- once (a held reward means the line is a replay), only
 inside a run, and asks for its contemplate with a RETRY (`_contemplateGranted`), because the offer
 chain usually still holds the capture slot; `comboGaps` also names a boon we HOLD but never
 contemplated, so the reward cannot fall through. Recipes come only from the game's text -- never

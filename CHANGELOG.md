@@ -2,6 +2,44 @@
 
 ---
 
+## 2026-09-21 - A granted boon is REPORTED as granted: /boon_received (v4.7.330)
+
+The tracker's author, after we asked which meaning `combo_boon` carries:
+
+> *"combo_boon argument in boons_offered endpoint should be set to true if the boon contemplate
+> block has Combo Boon? Yes in it"* -- *"added a boons_received endpoint. If you can, use this
+> instead of boons_offered endpoint to send the combo boons that are granted"*
+
+- **`combo_boon` already means exactly that** and needed no change: it is set from the
+  `Combo Boon?:` line of a CONTEMPLATE block (`Yes` -> true, `No` -> false), and omitted entirely
+  when we have never seen the line -- a guessed `false` would be indistinguishable from an answer.
+  A new test traces it from the block's own lines through the catalogue onto the wire, including
+  the `No` case, which no sample has ever shown.
+- **A granted combo reward now posts to `/boon_received`.** The endpoint is singular -- verified
+  against the live OpenAPI schema -- and takes one whole `BoonInfo`, so it carries the description,
+  quote, rarity, category, `unlocked_by` (the recipe), `conflicts_with`, `num_echoes_possible` and
+  `combo_boon` that the catalogue holds.
+- **It no longer posts to `/boons_selected`.** v4.7.328 reported a granted reward as a SELECTION
+  because that was the only endpoint that existed for "a boon we now hold" -- but a combo reward is
+  never offered and never chosen, so that described an event that did not happen.
+
+Unchanged: the local history still records it as a claim (that is what the bonuses panel, `mnem
+boons` and combo progress read), the combat flags still latch, and the panel still refreshes.
+
+### Verification
+
+2198 tests pass (3 new). Break-back verified: 8 mutants, all caught -- including posting to the old
+endpoint, sending a bare name instead of the enriched `BoonInfo`, and guessing `combo_boon` when the
+catalogue does not know.
+
+### Files
+
+- `mnemosyne/002_Reporter_API.lua`: `M.reportBoonReceived(name)` -> `/boon_received`.
+- `mnemosyne/015_Boon_Combos.lua`: the grant path reports received, not selected.
+- `tests/test_mnemosyne.lua`; `CHANGELOG.md`, `CLAUDE.md`, `.claude/projects/mnemosyne/02-reporting.md`; memory.
+
+---
+
 ## 2026-09-20 - 22 combo recipes seeded, so a chain is visible before the reward is (v4.7.329)
 
 User, with twenty-two `BOON CONTEMPLATE` blocks pasted from the game (their own and other players'):
