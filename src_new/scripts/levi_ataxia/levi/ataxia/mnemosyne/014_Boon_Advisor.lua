@@ -70,6 +70,13 @@ M.BOON_WEIGHTS = {
   drawbackAffFlat = 35,     -- ...and a flat charge on top, per affliction
   drawbackImmune = -2,      -- we are immune to it: all but free, and still worth naming
   drawback = -12,           -- a cost we cannot classify (kept for callers outside this file)
+  -- A STAT TRADED AWAY IS NOT AN AFFLICTION (v4.7.332, user: "Ogre is a bit different. Because it
+  -- is giving us something for removing a stat. I would rate those higher than corrupted breath
+  -- for example. Or losing a stat but gaining X is a lot better"). Losing 2% critical strike for
+  -- 10% resistance to all damage is a TRADE -- both sides are numbers, and the loss is bounded.
+  -- So it is charged in the same currency as the gain (a straight subtraction, no haircut) and
+  -- named in the summary, where before it was invisible and free.
+  lossPerPct = 1.0,         -- "lose 2% critical strike chance" -> -2
   conflictsHeld = -100,     -- cannot be taken alongside a boon we hold
   inert = -60,              -- needs a spirit we are not attuned to
   combo = 3,
@@ -140,6 +147,38 @@ function M._advisorContext()
   end
   ctx.hp = healthPct()
   return ctx
+end
+
+-- WHAT A BOON TAKES BACK IN NUMBERS (v4.7.332): "You lose 2% critical strike chance", "but lose
+-- 10% magical resistance", "but lose 1 constitution". Returns a list of { pct | stat, amount, what }.
+--
+-- Deliberately NOT "reduced by"/"weakness to": `_resistFrom` already reads those as negative
+-- resistances and the advisor already charges them, so matching them here would bill the same
+-- clause twice. This reads the word LOSE, which no benefit clause uses.
+function M._costLosses(desc)
+  local out = {}
+  if type(desc) ~= "string" then return out end
+  local low = desc:lower()
+  for n, what in low:gmatch("lose%s+(%d+)%%%s+([%a][%a%s]*)") do
+    -- The name runs to the end of its clause: "2% critical strike chance, but you gain..." is
+    -- three words, not one, and a comma or full stop ends it. A greedy capture can still run into
+    -- the next clause when it is joined by a conjunction, so cut there too.
+    for _, joiner in ipairs({ " and ", " but ", " while ", " however" }) do
+      local at = what:find(joiner, 1, true)
+      if at then what = what:sub(1, at - 1) end
+    end
+    what = what:gsub("%s+$", "")
+    if what ~= "" then out[#out + 1] = { kind = "pct", amount = tonumber(n), what = what } end
+  end
+  for n, what in low:gmatch("lose%s+(%d+)%s+points?%s+of%s+(%a+)") do
+    out[#out + 1] = { kind = "stat", amount = tonumber(n), what = what }
+  end
+  for n, what in low:gmatch("lose%s+(%d+)%s+(%a+)") do
+    if what ~= "points" and what ~= "point" then
+      out[#out + 1] = { kind = "stat", amount = tonumber(n), what = what }
+    end
+  end
+  return out
 end
 
 -- Is `cat` the category we hold fewest of (and are we short of it at all)?
@@ -287,6 +326,19 @@ function M.scoreBoon(offerName, ctx, W)
   if p then
     add(r, p.chance * W.procPerPct, p.chance .. "% " .. p.aff .. " on hit")
     r.effects[#r.effects + 1] = p.chance .. "% " .. p.aff .. " on hit"
+  end
+
+  -- WHAT IT TAKES BACK IN NUMBERS: charged like a gain, not like an affliction (v4.7.332).
+  for _, loss in ipairs((M._costLosses and M._costLosses(desc)) or {}) do
+    local pts, text
+    if loss.kind == "pct" then
+      pts, text = loss.amount * W.lossPerPct, "-" .. loss.amount .. "% " .. loss.what
+    else
+      local per = (loss.what == "constitution") and W.constitutionPerPoint or W.statPerPoint
+      pts, text = loss.amount * per, "-" .. loss.amount .. " " .. loss.what
+    end
+    add(r, -pts, "costs " .. text:gsub("^%-", ""))
+    r.effects[#r.effects + 1] = text
   end
 
   -- THE COSTS, CLASSIFIED BY WHETHER WE CAN SHRUG THEM OFF. `_boonDrawbacks` returns the

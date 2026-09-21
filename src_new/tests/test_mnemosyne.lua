@@ -9025,6 +9025,57 @@ describe("boon combos", function()
     expect(out:find("RECOMMEND<reset> <gold>Plain Utility", 1, true) ~= nil).toBeTrue()
   end)
 
+  -- v4.7.332, user: "Ogre is a bit different. Because it is giving us something for removing a
+  -- stat. I would rate those higher than corrupted breath for example. Or losing a stat but
+  -- gaining X is a lot better." A number traded for a number is a TRADE; a permanent affliction
+  -- is a price. Before this, the numbers given back were invisible AND free.
+  it("reads what a boon takes back in numbers", function()
+    local pct = M._costLosses("You lose 2% critical strike chance, but you gain 10% resistance to all damage.")
+    expect(#pct).toBe(1)
+    expect(pct[1].kind).toBe("pct")
+    expect(pct[1].amount).toBe(2)
+    expect(pct[1].what).toBe("critical strike chance") -- the whole name, not its first word
+    expect(M._costLosses("Gain 15% physical resistance, but lose 10% magical resistance.")[1].what).toBe("magical resistance")
+    -- ...and the name still ends at its clause when no comma marks the join
+    expect(M._costLosses("You lose 10% magical resistance and gain 5% fire resistance.")[1].what).toBe("magical resistance")
+    local stat = M._costLosses("You deal 25% more damage but lose 1 constitution.")
+    expect(stat[1].kind).toBe("stat")
+    expect(stat[1].what).toBe("constitution")
+    expect(M._costLosses("Gain 3 points of strength but lose 2 points of dexterity.")[1].what).toBe("dexterity")
+    expect(#M._costLosses("You are immune to nausea.")).toBe(0)
+    -- "reduced by" belongs to `_resistFrom`, which the advisor already charges: reading it here
+    -- too would bill the same clause twice.
+    expect(#M._costLosses("Your fire resistance is reduced by 20%.")).toBe(0)
+  end)
+
+  it("a stat traded away is charged, shown, and still beats an affliction", function()
+    local ogre, corrupted
+    withLibrary({ ["Ogre's Defence"] = { description = "You lose 2% critical strike chance, but you gain 10% resistance to all damage.",
+                    category = "Defence", rarity = "uncommon" },
+                  ["Corrupted Breath"] = { description = "Your asphyxiation resistance is increased by 66% but you suffer permanent manaleech.",
+                    category = "Defence", rarity = "uncommon" } }, function()
+      withSeed({}, function()
+        ogre = holding({}, function() return M.scoreBoon("Ogre's Defence") end)
+        corrupted = holding({}, function() return M.scoreBoon("Corrupted Breath") end)
+      end)
+    end)
+    expect(table.concat(ogre.effects, " "):find("-2% critical strike chance", 1, true) ~= nil).toBeTrue()
+    expect(#ogre.flags).toBe(0)                    -- a trade is not a warning
+    expect(ogre.score > corrupted.score).toBeTrue() -- ...and it beats the same gain bought with an affliction
+  end)
+
+  it("a lost stat costs what the same stat would have earned", function()
+    local con, dex
+    withLibrary({ ["Con Cost"] = { description = "You deal 25% more damage but lose 1 constitution.", category = "Offence" },
+                  ["Dex Cost"] = { description = "You deal 25% more damage but lose 1 dexterity.", category = "Offence" } }, function()
+      withSeed({}, function()
+        con = holding({}, function() return M.scoreBoon("Con Cost") end)
+        dex = holding({}, function() return M.scoreBoon("Dex Cost") end)
+      end)
+    end)
+    expect(con.score < dex.score).toBeTrue() -- constitution is health, and health is survival
+  end)
+
   it("a boon that is inert without a spirit is not recommended either", function()
     local lib = { ["Spirit Gift"] = { description = "While attuned to Ourania, gain 20% resistance to all damage.",
                     category = "Defence", rarity = "rare", contemplatedAt = 1 },

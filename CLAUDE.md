@@ -888,7 +888,12 @@ still corrects them -- without them a chain is invisible until its reward is alr
 Evidence they carry: a recipe takes 2 to 6 components; `Candour and Wrath and Righteousness` is TWO
 names (`Wrath and Righteousness` is a boon), which is why `_splitBoonList` re-joins against known
 names and why seeding those names matters; `It All Ogre Now`'s category is `Unset` (a placeholder).
-**A COST IS WEIGHED AGAINST OUR IMMUNITIES** (v4.7.331, user: a boon costing an affliction we cannot
+**A NUMBER TRADED AWAY IS NOT A PRICE** (v4.7.332, user: "Ogre is a bit different... losing a stat
+but gaining X is a lot better"): `M._costLosses` reads "lose N% <thing>" / "lose N <stat>" (never
+"reduced by", which `_resistFrom` already charges) and subtracts it in the same currency as the gain
+-- `lossPerPct`, or the stat's own weight, so losing constitution costs more than losing dexterity --
+with NO haircut, and listed as an effect rather than a red flag. A cost with no number in it
+("all mana costs now cost health") is still unpriced. **A COST IS WEIGHED AGAINST OUR IMMUNITIES** (v4.7.331, user: a boon costing an affliction we cannot
 block "should be scored significantly lower as the cost isn't worth it for the benefit"): each
 affliction `_boonDrawbacks` finds is checked against `ctx.immune`; an un-immune one takes
 `drawbackKeep` (half the boon's own score) plus `drawbackAffFlat` (35) per affliction, charged AFTER
