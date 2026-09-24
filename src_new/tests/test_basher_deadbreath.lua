@@ -204,6 +204,27 @@ describe("SOULSTORM profanes a soul once", function()
     target = 77001
   end)
 
+  -- v4.7.342, user: "Necromantic essence still profanes a bloated cabin boy's soul." -- "This is
+  -- soulstorm already active on the target btw". The refusal carries the same fact as the landing.
+  it("'still profanes' marks the soul too -- the retry must not grind on it", function()
+    stormReset()
+    expect(ataxiaBasher_deathtempestStorm(";")).toBe("soulstorm 77001;")
+    NOW = NOW + 8                                        -- the confirmation never arrived...
+    expect(ataxiaBasher_deathtempestStorm(";")).toBe("soulstorm 77001;") -- ...so it tries again
+    ataxiaBasher_soulstormAlready()                      -- and the game says it was already done
+    NOW = NOW + 8
+    expect(ataxiaBasher_deathtempestStorm(";")).toBe("")  -- no more equilibrium on this mob
+    expect(ataxiaTemp.profaned[77001]).toBeTrue()
+  end)
+
+  it("the already-profaned trigger routes to it", function()
+    local f = io.open("src_new/triggers/levi_ataxia/for_levi/leviticus/781_Soulstorm_Already.lua")
+    local src = f:read("*a"); f:close()
+    expect(src:find("Necromantic essence still profanes", 1, true) ~= nil).toBeTrue()
+    expect(src:find("type: 0", 1, true) ~= nil).toBeTrue()  -- substring: the mob's name is inside it
+    expect(src:find("ataxiaBasher_soulstormAlready()", 1, true) ~= nil).toBeTrue()
+  end)
+
   it("the round asks for it, and the room read forgets the old souls", function()
     local f = io.open("src_new/scripts/levi_ataxia/levi/ataxia/basher/001_Bashing_Functions.lua")
     local src = f:read("*a"); f:close()

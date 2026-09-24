@@ -195,6 +195,17 @@ function ataxiaBasher_soulstormLanded()
   return true
 end
 
+-- "Necromantic essence still profanes a bloated cabin boy's soul." (live 2026-09-24, user: "This
+-- is soulstorm already active on the target btw").
+--
+-- The game refusing a second storm is the same fact as the first one landing: THIS SOUL IS
+-- PROFANED. It matters because it is the only way to learn it when the confirmation never
+-- arrived -- a reload between the send and the reply, a line eaten by a burst -- and without it
+-- the retry would spend equilibrium on that mob every six seconds for as long as it lived.
+function ataxiaBasher_soulstormAlready()
+  return ataxiaBasher_soulstormLanded()
+end
+
 -- A room's worth of profaned ids is dead weight once we leave; ids never repeat, so this is
 -- housekeeping rather than correctness. Called from the room read.
 function ataxiaBasher_profanedForget()

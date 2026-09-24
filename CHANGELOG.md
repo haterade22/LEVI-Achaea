@@ -2,6 +2,36 @@
 
 ---
 
+## 2026-09-24 - "Still profanes" is how we learn a soul was already done (v4.7.342)
+
+User: *"Necromantic essence still profanes a bloated cabin boy's soul."* -- *"This is soulstorm
+already active on the target btw"*.
+
+The game refusing a second storm carries the same fact as the first one landing: **this soul is
+profaned**. It is now read as such.
+
+That matters for the case the landing line cannot cover. The rider retries after six seconds when
+it never saw a confirmation -- a reload between the send and the reply, a line lost in a burst --
+and without this the retry would spend equilibrium on that mob every six seconds for as long as it
+lived, while the profane was already up and paying.
+
+Matched as a SUBSTRING: the denizen's name sits in the middle of the line, is of arbitrary length,
+and Achaea wraps server-side -- the same rule the landing line and the Kai Choke confirmation beside
+it follow.
+
+### Verification
+
+2282 tests pass (2 new). Break-back verified: 3 mutants, all caught -- including anchoring the
+pattern, which a wrapped line would slip past.
+
+### Files
+
+- `basher/014_Dead_Breath.lua`: `ataxiaBasher_soulstormAlready`.
+- `triggers/.../781_Soulstorm_Already.lua`: new.
+- `tests/test_basher_deadbreath.lua`; `CHANGELOG.md`; memory.
+
+---
+
 ## 2026-09-24 - The eq riders and the balance swing share a round, pinned (v4.7.341)
 
 User: *"It seems like you can soulstorm target and then deadeyes bleed bleed on the same balance"*
