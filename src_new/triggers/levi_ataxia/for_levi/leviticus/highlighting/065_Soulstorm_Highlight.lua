@@ -47,13 +47,15 @@ patterns:
 --
 -- Highlight only; `780_Soulstorm_Landed` owns the once-per-denizen bookkeeping.
 --
--- `goldenrod` bold -- the amber the user asked for ("orange or a like colour"). NOT `orange`
--- itself: `tools/check_colours.py` holds the whole orange family in reserve, and goldenrod is the
--- palette's amber that this package already uses for a loud-but-not-alarming state (the starving
--- box echo). Distinct from `chartreuse`, which means "an attack LANDED on the target", because
--- these two lines mean "the boon-driven rider fired at all" -- which is what is being confirmed.
+-- `medium_orchid` bold (v4.7.344, user: "make this a different colour highlight please"). The two
+-- riders were both goldenrod, which made them one indistinguishable amber block in a busy room --
+-- and the whole point of colouring them was telling them apart at a glance. The belch keeps the
+-- amber; the soulstorm takes the violet, which is this palette's magical/necromantic family
+-- (`medium_orchid` is the Magical resistance colour on the bonuses panel) and is as far from
+-- goldenrod as the palette gets without stealing a colour that already means something:
+-- `chartreuse` is "an attack landed", red is damage, `dark_violet` is the `rare` rarity.
 selectString(line, 1)
-fg("goldenrod")
+fg("medium_orchid")
 setBold(true)
 deselect()
 resetFormat()

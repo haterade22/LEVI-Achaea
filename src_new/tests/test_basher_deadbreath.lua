@@ -262,10 +262,14 @@ describe("the riders are visible when they fire", function()
     expect(storm:find("form withers as the necromantic storm eats away at", 1, true) ~= nil).toBeTrue()
   end)
 
-  it("uses the palette's amber, never the reserved orange family", function()
-    for _, name in ipairs({ "064_Belch_Highlight.lua", "065_Soulstorm_Highlight.lua" }) do
-      local src = hl(name)
-      expect(src:find('fg("goldenrod")', 1, true) ~= nil).toBeTrue()
+  -- v4.7.344, user: "make this a different colour highlight please". One amber for both riders
+  -- read as a single block in a busy room, which defeats the point of colouring them.
+  it("gives each rider its own colour, and never the reserved orange family", function()
+    local belch, storm = hl("064_Belch_Highlight.lua"), hl("065_Soulstorm_Highlight.lua")
+    expect(belch:find('fg("goldenrod")', 1, true) ~= nil).toBeTrue()
+    expect(storm:find('fg("medium_orchid")', 1, true) ~= nil).toBeTrue()
+    expect(storm:find('fg("goldenrod")', 1, true)).toBeNil() -- they must not match each other
+    for _, src in ipairs({ belch, storm }) do
       expect(src:lower():find("fg(\"orange", 1, true)).toBeNil()
       expect(src:find("selectString(line, 1)", 1, true) ~= nil).toBeTrue()
       expect(src:find("resetFormat()", 1, true) ~= nil).toBeTrue()
