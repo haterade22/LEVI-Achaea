@@ -2305,6 +2305,61 @@ describe("Rimewrought affix -- the tattoos that stop working", function()
     if not ok then error(err, 0) end
   end)
 
+  -- v4.7.334, user: "We need to not keepup mindseye, cloak, (anything else that is a tattoo)
+  -- because it will just spam. So take off defences keepup and we can reput it back on when that
+  -- affix is gone."
+  it("takes the tattoo defences off keep-up, and puts back exactly those at run end", function()
+    reset(true)
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.inMnemosyne = true
+    mnemRimewrought, M._treeCuringOff, M._rimeTattoosOff = false, nil, nil
+    local savedDefs, savedTables = ataxia.settings.defences, ataxiaTables
+    ataxia.settings.defences = { current = "bash",
+      defup = { bash = { mindseye = true, cloak = true, insomnia = true } }, keepup = { bash = {} } }
+    ataxiaTables = { classDefences = { tattoos = { mindseye = "mindseye", cloak = "cloak",
+      mosstattoo = "mosstattoo" } } }
+    local realSend, sends = send, {}
+    send = function(c) sends[#sends + 1] = tostring(c) end
+    local ok, err = pcall(function()
+      M.onRimewroughtSeen()
+      local all = table.concat(sends, " | ")
+      expect(all:find("cloak reset", 1, true) ~= nil).toBeTrue()
+      expect(all:find("mindseye reset", 1, true) ~= nil).toBeTrue()
+      expect(all:find("insomnia", 1, true)).toBeNil()   -- not a tattoo: left alone
+      expect(all:find("mosstattoo", 1, true)).toBeNil() -- a tattoo we never asked to keep up
+      expect(#M._rimeTattoosOff).toBe(2)
+      -- the saved profile itself is untouched: an affix must not edit config that outlives it
+      expect(ataxia.settings.defences.defup.bash.cloak).toBeTrue()
+      sends = {}
+      M.onRunEnd()
+      local back = table.concat(sends, " | ")
+      expect(back:find("cloak 25", 1, true) ~= nil).toBeTrue()
+      expect(back:find("mindseye 25", 1, true) ~= nil).toBeTrue()
+      expect(M._rimeTattoosOff).toBeNil()
+      expect(M.restoreTattooKeepup()).toBeFalse() -- nothing owed twice
+    end)
+    send = realSend
+    ataxia.settings.defences, ataxiaTables = savedDefs, savedTables
+    ataxiaBasher.inMnemosyne = false
+    mnemRimewrought, M._treeCuringOff, M._rimeTattoosOff = false, nil, nil
+    if not ok then error(err, 0) end
+  end)
+
+  it("says nothing to SSC when no tattoo is on keep-up", function()
+    local savedDefs, savedTables = ataxia.settings.defences, ataxiaTables
+    ataxia.settings.defences = { current = "bash", defup = { bash = { insomnia = true } }, keepup = {} }
+    ataxiaTables = { classDefences = { tattoos = { cloak = "cloak" } } }
+    local realSend, sends = send, {}
+    send = function(c) sends[#sends + 1] = tostring(c) end
+    local ok, err = pcall(function()
+      expect(M.stripTattooKeepup()).toBeFalse()
+      expect(#sends).toBe(0)
+    end)
+    send = realSend
+    ataxia.settings.defences, ataxiaTables = savedDefs, savedTables
+    if not ok then error(err, 0) end
+  end)
+
   it("the basher stops spending actions on a shield that cannot work", function()
     local saved = mnemRimewrought
     mnemRimewrought = false

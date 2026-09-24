@@ -2,6 +2,39 @@
 
 ---
 
+## 2026-09-24 - Rimewrought also stops SSC re-raising dead tattoos (v4.7.334)
+
+User: *"Also with rimewrought - We need to not keepup mindseye, cloak, (anything else that is a
+tattoo) because it will just spam. So take off defences keepup and we can reput it back on when
+that affix is gone."*
+
+v4.7.333 gated every tattoo WE send. It left the layer above: a defence on keep-up sits at
+`curing priority defence <def> 25`, which is a standing order to SSC to raise it the moment it
+lapses -- so under Rimewrought it retried mindseye, cloak and the rest forever.
+
+Now `onRimewroughtSeen` resets the priority for exactly the tattoo defences the CURRENT profile
+asks for (read from `ataxiaTables.classDefences.tattoos`, so a tattoo added there is covered
+without editing the affix code), remembers which, and `onRunEnd` puts back exactly those.
+
+**The saved profile is never edited.** `ataxia.settings.defences` is written to disk, and a config
+an affix edits is a config that stays edited when a session ends the wrong way -- the user would
+find their keep-up list quietly shortened and no affix to blame. The priority is a game-side
+setting, like the tree curing beside it, so this is the Splinterbark shape: turn it off, restore
+what we turned off, restore nothing else.
+
+### Verification
+
+2219 tests pass (2 new). Break-back verified: 6 mutants, all caught -- including one that edits the
+saved profile and one that restores every tattoo rather than the ones we took off.
+
+### Files
+
+- `mnemosyne/004_Parsers.lua`: `stripTattooKeepup`, `restoreTattooKeepup`, called from the affix
+  and from `onRunEnd`.
+- `tests/test_mnemosyne.lua`; `CHANGELOG.md`, `CLAUDE.md`; memory.
+
+---
+
 ## 2026-09-24 - Two affixes that take an answer away: Rimewrought and Famine (v4.7.333)
 
 ### Rimewrought -- every tattoo is inert
