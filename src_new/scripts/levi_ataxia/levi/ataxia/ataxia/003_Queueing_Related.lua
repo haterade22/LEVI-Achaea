@@ -52,6 +52,8 @@ function combatQueue()
       ataxiaEcho("CLASS CHEESE INCOMMING")
       if gmcp.Char.Status.class == "Magi" then
         send("cq all;cast reflection at me")
+      elseif mnemRimewrought then
+        send("cq all") -- v4.7.333: the shield tattoo is inert under Rimewrought
       else
         send("cq all;touch shield")
       end
@@ -59,7 +61,7 @@ function combatQueue()
   end
  if gmcp.Char.Status.class == "Psion" then 
  if affed("asthma") and (affed("slickness") or affed("bloodfire")) and affed("anorexia") and affed("paralysis") and affed("impatience") or affed("sandfever") then
-  send("cq all;psi manipulate touch tree")
+  send(mnemRimewrought and "cq all" or "cq all;psi manipulate touch tree") -- tattoo inert: v4.7.333
  end
  end
    

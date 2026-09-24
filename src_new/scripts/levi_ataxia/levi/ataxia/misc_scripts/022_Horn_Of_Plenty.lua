@@ -248,8 +248,22 @@ end
 -- get back mid-fight. Fired on a KILL because that is when a corpse exists AND the fight is
 -- ending -- eating mid-round would contend with cure-herbs for the eating balance.
 function ataxia_carnivoreTopUp()
-  if not (mnemObligateCarnivore and mnemHealingMetabolism) then return false end
+  -- Famine (v4.7.333) counts like Healing Metabolism here: a corpse is free food, and under the
+  -- affix we want it eaten whether or not the elixir-multiplier boon is what makes it worth doing.
+  if not (mnemObligateCarnivore and (mnemHealingMetabolism or mnemFamine)) then return false end
   return ataxia_carnivoreEat("satiation upkeep")
+end
+
+-- FAMINE's per-room top-up (v4.7.333, user: "we need to eat to full every room"). Called from the
+-- kill trigger beside the two boon paths, which is the tower's own per-room clock: the last kill
+-- in a room is the moment the fight is ending. Does nothing unless the affix is up; the throttles
+-- inside the feed do the rest, so a five-kill room still feeds at most once.
+--
+-- Corpse-first is inherited from `ataxia_hornSatiate`, so with Obligate Carnivore this costs
+-- nothing at all; without it, a horn charge per room is the price of not passing out.
+function ataxia_famineTopUp()
+  if not mnemFamine then return false end
+  return ataxia_hornSatiate("famine -- room cleared")
 end
 
 -- Called by the hunger triggers. Kept separate from the feed itself so the "are we
@@ -322,8 +336,12 @@ local function satiateVerifyCleanup()
 end
 
 -- Upkeep feed. Returns true when something was sent.
+--
+-- FAMINE (v4.7.333) opens this path without the boon: the affix makes damage itself the source of
+-- hunger, so the upkeep is needed exactly when no boon is guaranteeing it. Everything below --
+-- corpse first, chain bound, SCORE verify -- is unchanged; only the door is wider.
 function ataxia_hornSatiate(state)
-  if not mnemHealingMetabolism then return false end
+  if not (mnemHealingMetabolism or mnemFamine) then return false end
   ataxiaTemp = ataxiaTemp or {}
   local nowT = getEpoch()
   if (nowT - (tonumber(ataxiaTemp.satiateChainAt) or 0)) > SATIATE_EPISODE_GAP then
@@ -344,7 +362,7 @@ function ataxia_hornSatiate(state)
   satiateVerifyCleanup()
   ataxiaTemp.satiateVerifyTimer = tempTimer(SATIATE_VERIFY, function()
     ataxiaTemp.satiateVerifyTimer = nil
-    if mnemHealingMetabolism then send("score", false) end
+    if mnemHealingMetabolism or mnemFamine then send("score", false) end
   end)
   return true
 end

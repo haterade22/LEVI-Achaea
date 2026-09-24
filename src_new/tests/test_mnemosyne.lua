@@ -2277,6 +2277,85 @@ describe("bard PERFORMANCE probe after the boon screen", function()
   end)
 end)
 
+-- v4.7.333, user: "Rimewrought: Perpetual ice coats your body, rendering tattoos ineffective..."
+-- -- "When we have this ongoing effect or affix. We cannot use tattoos."
+describe("Rimewrought affix -- the tattoos that stop working", function()
+  it("arms only inside the tower, once, and turns the game's tree curing off", function()
+    reset(true)
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.inMnemosyne = false
+    mnemRimewrought, M._treeCuringOff = false, nil
+    local realSend, sends = send, {}
+    send = function(c) sends[#sends + 1] = tostring(c) end
+    local ok, err = pcall(function()
+      M.onRimewroughtSeen()
+      expect(mnemRimewrought).toBeFalse()   -- outside the tower it does nothing
+      ataxiaBasher.inMnemosyne = true
+      M.onRimewroughtSeen()
+      expect(mnemRimewrought).toBeTrue()
+      expect(M._treeCuringOff).toBeTrue()   -- the tree is a tattoo too
+      expect(table.concat(sends, " "):find("curing tree off", 1, true) ~= nil).toBeTrue()
+      local n = #sends
+      M.onRimewroughtSeen()                 -- a status re-read sends nothing more
+      expect(#sends).toBe(n)
+    end)
+    send = realSend
+    ataxiaBasher.inMnemosyne = false
+    mnemRimewrought, M._treeCuringOff = false, nil
+    if not ok then error(err, 0) end
+  end)
+
+  it("the basher stops spending actions on a shield that cannot work", function()
+    local saved = mnemRimewrought
+    mnemRimewrought = false
+    expect(ataxiaBasher_tattoosDead()).toBeFalse()
+    mnemRimewrought = true
+    expect(ataxiaBasher_tattoosDead()).toBeTrue()
+    mnemRimewrought = saved
+  end)
+
+  it("the lock-breaker drops the shield half, and the tree with it", function()
+    reset(true)
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.usedTree, ataxiaTemp.phialHold = nil, nil
+    ataxia.afflictions = ataxia.afflictions or {}
+    ataxia.defences = ataxia.defences or {}
+    local realSend, sends = send, {}
+    send = function(c) sends[#sends + 1] = tostring(c) end
+    mnemRimewrought, M._treeCuringOff = true, true -- as onRimewroughtSeen leaves them
+    local ok, err = pcall(function()
+      local fired = M._lockBreak and M._lockBreak() or false
+      expect(fired).toBeFalse() -- nothing left to send: both halves are tattoos
+      expect(table.concat(sends, " "):find("touch", 1, true)).toBeNil()
+    end)
+    send = realSend
+    mnemRimewrought, M._treeCuringOff = false, nil
+    if ataxiaTemp then ataxiaTemp.phialHold = nil end
+    if not ok then error(err, 0) end
+  end)
+
+  it("clears on the confirmed run end -- tattoos work again outside", function()
+    reset(true)
+    mnemRimewrought = true
+    M.onRunEnd()
+    expect(mnemRimewrought).toBeFalse()
+  end)
+
+  it("trigger 096 hands the status line to the module", function()
+    local f = io.open("src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/096_Rimewrought.lua")
+    local src = f:read("*a"); f:close()
+    expect(src:find("Perpetual ice coats your body", 1, true) ~= nil).toBeTrue()
+    expect(src:find("ataxia.mnemosyne.onRimewroughtSeen()", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("trigger 097 hands the Famine line to the module", function()
+    local f = io.open("src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/097_Famine.lua")
+    local src = f:read("*a"); f:close()
+    expect(src:find("Taking damage has a chance to make you more hungry", 1, true) ~= nil).toBeTrue()
+    expect(src:find("ataxia.mnemosyne.onFamineSeen()", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
 describe("Bravado affix -- the mitigations that stop working", function()
   it("onBravadoSeen arms the flag only inside the tower", function()
     reset(true)

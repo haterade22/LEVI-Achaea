@@ -268,7 +268,9 @@ function gotAff()
   -- Handle Blackout
 	elseif aff == "blackout" then
   
-		if ataxiaBasher.enabled and ataxiaBasher.treeblackout then
+		-- v4.7.333: under Rimewrought the tree tattoo is inert, so a blackout touch is a wasted
+		-- command; fall through to whatever else the chain offers.
+		if ataxiaBasher.enabled and ataxiaBasher.treeblackout and not mnemRimewrought then
 			send("touch tree")
 		elseif type(target) == "string" and ataxiaNDB_getClass(target) == ("Runewarden" or "Infernal" or "Paladin") then
 			tempTimer(2.5, [[send("curing predict impaled",false)]])

@@ -75,6 +75,9 @@ if type(target) == "number" and ataxiaBasher.enabled then
 	-- horn if it reads below "utterly satiated". A kill is the moment the fight is ending, and it
 	-- is the only clock this needs.
 	if ataxia_satiateKillCheck then ataxia_satiateKillCheck() end
+	-- FAMINE (v4.7.333): the affix feeds hunger off damage taken, so the upkeep runs on the room's
+	-- own clock rather than on a boon being held. No-op unless the affix is up.
+	if ataxia_famineTopUp then ataxia_famineTopUp() end
 end
 
 if ataxiaBasher.enabled and matches[2] then

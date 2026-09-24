@@ -278,6 +278,8 @@ function M.onRunEnd()
   mnemHaemophiliac = false -- affixes gone on a confirmed run-end (pacing back to normal)
   mnemLastWord = false -- affixes gone on a confirmed run-end (pacing back to normal)
   mnemBravado = false -- affixes gone on a confirmed run-end (barriers work again)
+  mnemRimewrought = false -- ...and tattoos work again (v4.7.333)
+  mnemFamine = false -- ...and food is worth what it says again (v4.7.333)
   mnemTantrum = false -- boons gone on a confirmed run-end
   if M.clearBoonFlags then M.clearBoonFlags() end -- ...and every generically-latched boon
   if ataxiaTemp then
@@ -423,6 +425,64 @@ end
 -- covered. Gated at their spend sites on `ataxiaBasher_bravado()`; the swarm hit-and-run
 -- threshold clamps to 2 (user rule -- with no mitigations left, "we will never know our
 -- health pool"). Same shape as the other affixes.
+-- RIMEWROUGHT affix (v4.7.333, user: "When we have this ongoing effect or affix. We cannot use
+-- tattoos"):
+--
+--   Rimewrought:   Perpetual ice coats your body, rendering tattoos ineffective, and denizens
+--                  cause additional freezing on their attacks.
+--
+-- The same shape as Bravado -- it takes an answer away rather than adding a threat, which is the
+-- dangerous kind: `touch shield` and `touch tree` keep costing a command and a balance while
+-- returning nothing, and the basher goes on believing it shielded. Every tattoo we SEND is gated
+-- on `ataxiaBasher_tattoosDead()`; the game's own tree curing is turned off here, because SSC
+-- would otherwise spend the tattoo on every burst for no cure (the Splinterbark machinery, reused
+-- wholesale -- `restoreTreeCuring` on run end already puts it back).
+--
+-- Not covered, and deliberately: tattoo DEFENCES kept up by SSC (`keepadd` moss/boar/cloak). They
+-- are raised server-side, we never send them, and stripping the keep-up list would have to be
+-- undone exactly on run end -- worth doing only with a live sample of what the game actually
+-- refuses.
+-- FAMINE affix (v4.7.333, user: "When we have this we need to eat to full every room"):
+--
+--   Famine:   Taking damage has a chance to make you more hungry, and your healing received from
+--             elixirs, moss, and potash is reduced by 20%.
+--
+-- Hunger normally arrives on its own slow clock, so feeding has been an emergency (the horn) or a
+-- boon upkeep (Obligate Carnivore / Healing Metabolism). This affix drives hunger off DAMAGE
+-- TAKEN, which in a wade is continuous -- so the same upkeep has to run whether or not those
+-- boons are held, and it has to run on the tower's own rhythm rather than waiting for the game to
+-- say we are starving. Starvation ends in unconsciousness, and unconscious in a swarm is a death.
+--
+-- The feed itself is the existing one (`ataxia_hornSatiate`): corpse first when Obligate Carnivore
+-- makes corpses edible, the horn otherwise, chained and verified by a SCORE read until the row
+-- says "utterly satiated". What this affix changes is only WHEN it is allowed to run.
+function M.onFamineSeen()
+  if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return end
+  if mnemFamine then return end
+  mnemFamine = true
+  if not M._quiet() then
+    M.echo("<red>Famine<reset> active -- damage makes us hungry and elixirs/moss/potash heal 20% "
+      .. "less; <green>topping food up every room<reset>")
+  end
+  -- Start full rather than waiting for the first room to end.
+  if ataxia_hornSatiate then pcall(ataxia_hornSatiate, "famine seen") end
+end
+
+function M.onRimewroughtSeen()
+  if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return end
+  if mnemRimewrought then return end
+  mnemRimewrought = true
+  -- The tree of life is a tattoo: while this is up, every SSC tree touch is a wasted cure.
+  if not M._treeCuringOff then
+    M._treeCuringOff = true
+    send("curing tree off")
+  end
+  if not M._quiet() then
+    M.echo("<red>Rimewrought<reset> active -- <red>tattoos do NOTHING<reset> (shield, tree); "
+      .. "curing tree off, and denizens add freezing")
+  end
+end
+
 function M.onBravadoSeen()
   if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return end
   if mnemBravado then return end
@@ -948,9 +1008,11 @@ function M._phialLockResponse()
   if not M._treeCuringOff and not ataxiaTemp.usedTree then
     parts[#parts + 1] = "touch tree"
   end
-  -- 3. Shield, unless paralysed (no free action) or already up.
+  -- 3. Shield, unless paralysed (no free action), already up, or iced over (v4.7.333: under
+  -- Rimewrought the shield tattoo is inert, and the lock is the worst moment to spend a command
+  -- on nothing).
   local shielded = ataxia and ataxia.defences and ataxia.defences.shield
-  if not a.paralysis and not shielded then
+  if not a.paralysis and not shielded and not mnemRimewrought then
     parts[#parts + 1] = "touch shield"
   end
   if #parts == 0 then return false end
