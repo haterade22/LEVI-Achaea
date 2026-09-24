@@ -188,6 +188,18 @@ function ataxiaCheckForMissing()
 		end
 	end
 
+	-- ...and take them off any list they were learned into BEFORE that seeding existed
+	-- (v4.7.335, user: "These need to be not on the kill list as they are our mounts"). The
+	-- keyword above stops them being ATTACKED; it never cleaned the saved list, so they sat
+	-- there in `bash list` looking like targets. `bash mine add` has always purged on add --
+	-- the backfill simply never did.
+	if ataxiaBasher_purgeOwnFromTargets then
+		local gone = ataxiaBasher_purgeOwnFromTargets()
+		if gone > 0 then
+			ataxiaEcho("Removed <white>" .. gone .. "<NavajoWhite> own-denizen entr(ies) from the saved target lists.")
+		end
+	end
+
 	-- ...and the INVERSE list. The own-denizen match is a case-insensitive SUBSTRING,
 	-- which is what makes "falcon" cover "a razor-beaked falcon" -- but it also means a
 	-- real denizen sharing a word with a pet is silently shielded. "a slope-backed
