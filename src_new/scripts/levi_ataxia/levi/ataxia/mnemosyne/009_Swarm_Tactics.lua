@@ -346,10 +346,17 @@ end
 -- the conservative answer is the one that still moves us.
 function S.moveVerb(dirShort)
   -- MOUNTED OUTRANKS BOTH (v4.7.345, user: "When mounted, we should use mountjump instead of
-  -- LEAP"). From the saddle the game refuses the leap AND the backflip -- "You cannot do that
-  -- while mounted." -- so the wall reasoning below never gets its chance: the only verb that
-  -- crosses anything while mounted is MOUNTJUMP, which is what this package's own wall handler
-  -- (trigger 766) has sent while mounted since long before this module existed.
+  -- LEAP"). From the saddle the game refuses the leap -- "You cannot do that while mounted." --
+  -- so the wall reasoning below never gets its chance. MOUNTJUMP is the verb that does cross from
+  -- the saddle, which is what this package's own wall handler (trigger 766) has sent while
+  -- mounted since long before this module existed.
+  --
+  -- The BACKFLIP is taken here too, and that is a deliberate default rather than a confirmed
+  -- rule: we have never seen it refused from a mount. Mountjump works either way, while a
+  -- backflip that turns out to be refused is a silent no-op in the escape -- and the user has
+  -- since shown the class of guess this is (v4.7.346: TUMBLE goes through while mounted, which
+  -- v4.7.345 had assumed it would not). If the backflip proves fine mounted, the Bard keeps its
+  -- faster balance by moving this check below the class branch.
   if ataxiaBasher_isMounted and ataxiaBasher_isMounted() then return "mountjump" end
   local MAP = M.map
   local walled = S.wallRaised and MAP and MAP.current and S.wallRaised[MAP.current]

@@ -109,7 +109,7 @@ describe("\"You cannot do that while mounted.\"", function()
     expect(sentAll():find("mountjump s", 1, true)).toBeNil()
   end)
 
-  it("recovers a Bard's refused BACKFLIP too -- the line is not leap-specific", function()
+  it("recovers a Bard's refused BACKFLIP too -- the recovery is not leap-specific", function()
     reset()
     ataxiaBasher_jumpSent("e", "backflip")
     expect(ataxiaBasher_jumpRefusedMounted()).toBeTrue()
@@ -126,7 +126,7 @@ describe("\"You cannot do that while mounted.\"", function()
   end)
 
   it("still latches mounted when there is no jump of ours to recover", function()
-    reset() -- e.g. the user typed the leap by hand, or something else acrobatic was refused
+    reset() -- e.g. the user typed the leap by hand, or some other command earned the same line
     expect(ataxiaBasher_jumpRefusedMounted()).toBeFalse()
     expect(ataxiaBasher_isMounted()).toBeTrue()
     expect(#mock.sent_commands).toBe(0)

@@ -2,6 +2,44 @@
 
 ---
 
+## 2026-09-24 - Tumble goes through mounted (v4.7.346)
+
+User: *"tumble goes through while on a mount, by the way."*
+
+That closes the follow-up v4.7.345 left open, and corrects a claim I made in the same breath.
+Shipping v4.7.345 I wrote that the refusal line is "not leap-specific -- anything acrobatic earns
+it", and flagged Roll Hide's panic tumble as a livelock waiting to happen: refused from the
+saddle, `_tumbleRetry` would spend its whole budget re-sending a command that could never land.
+
+**It would not.** The tumble is fine mounted, the four tumble sites need no conversion, and the
+recovery's bounds were never load-bearing for it.
+
+### What actually changes
+
+Nothing executable. The bounds on `ataxiaBasher_jumpRefusedMounted` are unchanged and still
+right, but for a better-stated reason: we do not know the full set of commands that earn
+`You cannot do that while mounted.`, and bounding the recovery to a jump of OUR OWN means an
+unknown sibling refusal costs the latch and nothing else.
+
+The same correction reaches a second guess in that release. `S.moveVerb` takes the Bard's
+**backflip** onto the mountjump path as well, and the comment asserted the game refuses it. We
+have never seen that. It stays on the mountjump path -- mountjump works either way, and a
+backflip that turns out to be refused is a silent no-op in exactly the escape this exists to fix
+-- but it is now written down as a **deliberate default, not a confirmed rule**, with the note
+that if the backflip proves fine mounted the Bard keeps its faster balance by moving the mounted
+check below the class branch.
+
+*"Acrobatic" was our word, not the game's* -- which is the whole lesson, and the reason the two
+comments now say which parts are observed and which are assumed.
+
+### Files
+
+- `basher/013_Mounts.lua`, `mnemosyne/009_Swarm_Tactics.lua` (comments);
+  `tests/test_basher_mountjump.lua`, `tests/test_swarm_tactics.lua` (comments and one test name);
+  `CHANGELOG.md`, `CLAUDE.md`, `.claude/projects/mnemosyne/07-explorer.md`, memory.
+
+---
+
 ## 2026-09-24 - Mounted, we MOUNTJUMP (v4.7.345)
 
 User: *"When mounted, we should use mountjump instead of LEAP."* -- *"mountjump direction or MJ

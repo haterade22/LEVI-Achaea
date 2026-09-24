@@ -278,11 +278,17 @@ end
 -- queued it is still waiting on an arrival that will never come -- so without the re-issue the
 -- ladder stalls until its timeout, which at crash HP is the death this verb exists to avoid.
 --
--- IT ONLY RE-ISSUES A JUMP WE SENT, FROM THE ROOM WE SENT IT IN, WITHIN THE ROUND. The line is
--- not leap-specific -- anything acrobatic earns it -- so a recovery aimed at a direction left
--- over from an older command would be a move nobody asked for. A record already spent, stale, or
--- belonging to a room we have since left is dropped: the mounted latch alone is the fix then,
--- and the next jump this system plans is a mountjump anyway.
+-- IT ONLY RE-ISSUES A JUMP WE SENT, FROM THE ROOM WE SENT IT IN, WITHIN THE ROUND. We do not
+-- know the full set of commands that earn this line, and we do not need to: bounding the recovery
+-- to a jump of OUR OWN means an unknown sibling refusal costs the latch and nothing else, where a
+-- recovery aimed at a direction left over from an older command would be a move nobody asked for.
+-- A record already spent, stale, or belonging to a room we have since left is dropped -- the
+-- mounted latch alone is the fix then, and the next jump this system plans is a mountjump anyway.
+--
+-- TUMBLE IS NOT ONE OF THEM (user, v4.7.346: "tumble goes through while on a mount, by the way").
+-- v4.7.345 guessed the opposite and flagged Roll Hide's panic tumble as a livelock waiting to
+-- happen; it is not, the tumble sites need no conversion, and the guards above were never load-
+-- bearing for it. Worth keeping as a reminder that "acrobatic" is our word, not the game's.
 function ataxiaBasher_jumpRefusedMounted()
   ataxiaBasher_mountedSet(true, "the game refused a jump")
   ataxiaTemp = ataxiaTemp or {}
