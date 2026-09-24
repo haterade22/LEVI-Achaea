@@ -2,6 +2,43 @@
 
 ---
 
+## 2026-09-24 - VAULT now sets the mount it put you on (v4.7.339)
+
+User: *"When I use VAULT (mount) ... It doesnt set that mount as my mount, which it should always
+revault."*
+
+```
+You easily vault onto the back of a lean grizzly bear.
+The warm body of a lean grizzly bear shifts beneath you as she adapts to your weight upon her back.
+That is not a valid mount that belongs to you.
+```
+
+**That refusal was ours.** The vault trigger sent `curing mount <descriptive name>` straight off the
+line, and a name is not a handle -- so nothing was set, and every later `VAULT`, `SPUR` and
+`TELL <mount> COME HERE` still pointed at whatever had been configured before.
+
+The name is now resolved to the **id** learned from the mounts listing (v4.7.335), which is what
+every command that acts on a mount actually wants. Vaulting onto one makes it the active mount for
+`ataxia.getMount()` -- the flying, urn and no-steed paths all read that -- tells the curing system
+`curing mount <id>`, and saves. With no listing read yet there is no id to use, and sending the
+name again would only repeat the refusal, so it says what to do instead and changes nothing.
+
+The match is **exact**: "a grizzly bear" is a different creature from "a lean grizzly bear", and a
+loose one would hand a wild denizen's name our mount's id.
+
+### Verification
+
+2272 tests pass (4 new, on the user's lines). Break-back verified: 7 mutants, all caught --
+including sending the name again, matching loosely, and the trigger bypassing the resolver.
+
+### Files
+
+- `basher/013_Mounts.lua`: `ataxiaBasher_mountIdByName`, `ataxiaBasher_vaultedOnto`.
+- `triggers/.../025_MOUNT.lua`: routes through it, keeping the old `omount` global.
+- `tests/test_basher_mounts.lua`; `CHANGELOG.md`, `CLAUDE.md`; memory.
+
+---
+
 ## 2026-09-24 - Deathtempest: SOULSTORM once per denizen (v4.7.338)
 
 User: *"We should use this once"* -- *"If we have the boon deathtempest"*.

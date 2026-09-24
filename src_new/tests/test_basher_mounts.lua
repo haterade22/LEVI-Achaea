@@ -135,6 +135,67 @@ describe("learning the mounts listing", function()
   end)
 end)
 
+-- v4.7.339, user: "When I use VAULT (mount) ... It doesnt set that mount as my mount, which it
+-- should always revault". The old trigger sent `curing mount <descriptive name>` and the game
+-- answered "That is not a valid mount that belongs to you."
+describe("vaulting sets the mount", function()
+  local function vaultReset()
+    reset()
+    ataxia.settings = ataxia.settings or {}
+    ataxia.settings.user = { mount = "oldmount1" }
+    listMounts()
+  end
+
+  it("resolves the name off the vault line to the id we learned", function()
+    vaultReset()
+    expect(ataxiaBasher_mountIdByName("a lean grizzly bear")).toBe(135599)
+    expect(ataxiaBasher_mountIdByName("A lean grizzly bear.")).toBe(135599) -- article/stop are noise
+    expect(ataxiaBasher_mountIdByName("a wild grizzly bear")).toBeNil()
+    -- EXACT, not "contains": "a grizzly bear" is a different creature from "a lean grizzly bear",
+    -- and a loose match would hand a wild one's name our mount's id.
+    expect(ataxiaBasher_mountIdByName("a grizzly bear")).toBeNil()
+    expect(ataxiaBasher_mountIdByName("bear")).toBeNil()
+  end)
+
+  it("makes it the active mount and tells the curing system, by ID", function()
+    vaultReset()
+    local sends = {}
+    local realSend, realSave = send, ataxia_saveSettings
+    send = function(c) sends[#sends + 1] = tostring(c) end
+    ataxia_saveSettings = function() end
+    local ok, err = pcall(function()
+      expect(ataxiaBasher_vaultedOnto("a lean grizzly bear")).toBe(135599)
+      expect(ataxia.settings.user.mount).toBe("135599")
+      expect(table.concat(sends, " ")).toBe("curing mount 135599")
+      expect(omount).toBe("a lean grizzly bear") -- the old global still carries the name
+    end)
+    send, ataxia_saveSettings = realSend, realSave
+    if not ok then error(err, 0) end
+  end)
+
+  it("changes nothing, and never repeats the refusal, when no id is known", function()
+    reset()                                   -- no listing read: nothing to resolve
+    ataxia.settings.user = { mount = "oldmount1" }
+    local sends = {}
+    local realSend = send
+    send = function(c) sends[#sends + 1] = tostring(c) end
+    local ok, err = pcall(function()
+      expect(ataxiaBasher_vaultedOnto("a lean grizzly bear")).toBeFalse()
+      expect(#sends).toBe(0)                  -- the name is what the game refused
+      expect(ataxia.settings.user.mount).toBe("oldmount1")
+    end)
+    send = realSend
+    if not ok then error(err, 0) end
+  end)
+
+  it("the vault trigger routes through it", function()
+    local f = io.open("src_new/triggers/levi_ataxia/for_levi/leviticus/025_MOUNT.lua")
+    local src = f:read("*a"); f:close()
+    expect(src:find("ataxiaBasher_vaultedOnto(matches[2])", 1, true) ~= nil).toBeTrue()
+    expect(src:find('send("curing mount " ..matches[2])', 1, true)).toBeNil() -- the refused form
+  end)
+end)
+
 describe("the room read skips a mount", function()
   -- The exclusion lives in `ataxia_RoomContents_Update`; this drives the same decision the way
   -- that loop makes it, so the contract ("mounts never reach denizensHere") is pinned here even
@@ -185,5 +246,5 @@ end)
 
 -- Restore shared state for whoever runs after us (test files share one Lua state).
 getEpoch = realEpoch
-ataxiaBasher.mountIds = nil
+ataxiaBasher.mountIds, omount = nil, nil
 ataxiaTemp.mountListUntil, ataxiaTemp.mountListSeen = nil, nil

@@ -113,6 +113,54 @@ function ataxiaBasher_isMount(id)
   return (ataxiaBasher.mountIds and ataxiaBasher.mountIds[id]) and true or false
 end
 
+-- The id we learned for this descriptive name, or nil. The vault line names the creature
+-- ("a lean grizzly bear"); the game wants the ID for anything that acts on it.
+function ataxiaBasher_mountIdByName(name)
+  local want = tostring(name or ""):lower():gsub("^%s*an?%s+", ""):gsub("^%s*the%s+", "")
+  want = want:gsub("[%s%.]+$", ""):gsub("^%s+", "")
+  if want == "" then return nil end
+  for id, known in pairs(ataxiaBasher.mountIds or {}) do
+    local k = tostring(known or ""):lower():gsub("^%s*an?%s+", ""):gsub("^%s*the%s+", "")
+    k = k:gsub("[%s%.]+$", ""):gsub("^%s+", "")
+    if k == want then return id end
+  end
+  return nil
+end
+
+-- WE JUST VAULTED ONTO ONE, SO THAT IS THE MOUNT (v4.7.339, user: "When I use VAULT (mount) ... It
+-- doesnt set that mount as my mount, which it should always revault").
+--
+-- The old vault trigger sent `curing mount <descriptive name>` straight from the line, and the
+-- game refused it: "That is not a valid mount that belongs to you." A name is not a handle --
+-- every command that acts on the mount (CURING MOUNT, TELL <mount> COME HERE, VAULT, SPUR) wants
+-- the id, which is exactly what the mounts listing gave us.
+--
+-- So: resolve the name we were just told to the id we learned, make it the ACTIVE mount for
+-- `ataxia.getMount()` (which the flying, urn and no-steed paths all read), and tell the curing
+-- system about it. With no listing read yet there is no id to use -- and sending the name again
+-- would only repeat the refusal -- so it says what to do instead and changes nothing.
+function ataxiaBasher_vaultedOnto(name)
+  if type(name) ~= "string" or name == "" then return false end
+  omount = name -- kept: the old global, still read elsewhere
+  local id = ataxiaBasher_mountIdByName(name)
+  if not id then
+    ataxiaEcho("Vaulted onto <white>" .. name .. "<reset>, but no id is known for it -- list your "
+      .. "mounts in game once and it becomes your mount automatically (<white>bash mounts<reset>).")
+    return false
+  end
+  ataxia.settings = ataxia.settings or {}
+  ataxia.settings.user = ataxia.settings.user or {}
+  local was = ataxia.settings.user.mount
+  ataxia.settings.user.mount = tostring(id)
+  send("curing mount " .. id, false)
+  if was ~= tostring(id) then
+    ataxiaEcho("Mount set to <white>" .. name .. "<reset> (" .. id .. ") -- vault, spur and "
+      .. "\"come here\" now use it.")
+    if ataxia_saveSettings then pcall(ataxia_saveSettings) end
+  end
+  return id
+end
+
 -- `bash mounts` -- what we know, and how it was learned.
 function ataxiaBasher_mountsReport()
   local ids = {}
