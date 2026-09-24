@@ -58,6 +58,11 @@ local function reset()
   ataxia.vitals.mp = 5000
   ataxiaTemp.belchAt, ataxiaTemp.belchFouledRoom, ataxiaTemp.belchFouledAt = nil, nil, nil
   ataxiaTemp.profaned, ataxiaTemp.soulstormAt, ataxiaTemp.soulstormTarget = {}, nil, nil
+  infArmyOfDead, mnemResourceful = false, false
+  ataxiaTemp.infTyrannyRoom = nil
+  ataxiaTemp.gravehandsAt, ataxiaTemp.gravehandsSeen, ataxiaTemp.gravehandsRetried = nil, nil, nil
+  ataxia.vitals.essence = 80
+  gmcp.Room.Info.num = 1234
 end
 
 describe("one round, two resources", function()
@@ -115,8 +120,259 @@ describe("one round, two resources", function()
   end)
 end)
 
+
+-- =====================================================================================
+-- ARMY OF THE DEAD on the APOSTATE (v4.7.347, user: "For Apostate")
+--
+--   Army of the Dead  1  rare
+--     When summoning the hands of the grave, you will deal damage to all denizens in the location.
+--
+--   Gravehands (Necromancy)  ABADMIN ID: 144
+--   Syntax:    SUMMON HANDS OF THE GRAVE
+--   Cooldown:  3.00 seconds of EQUILIBRIUM
+--   Resource:  1.50% life essence and 350 mana
+--
+-- The helper has carried the Apostate command since v4.7.149 and nothing ever called it from
+-- this class's round, so the boon did nothing at all here. These pin the two things that make
+-- the Apostate's copy different from the Infernal's: it RIDES the swing (equilibrium against
+-- deadeyes' balance) rather than taking the round, and it costs MANA.
+describe("Army of the Dead rides the Apostate round", function()
+  local function graves(cmd) return cmd:find("summon hands of the grave", 1, true) end
+
+  it("goes out WITH the swing, not instead of it", function()
+    reset()
+    infArmyOfDead = true
+    local cmd = round()
+    expect(graves(cmd) ~= nil).toBeTrue()
+    expect(cmd:find("deadeyes 77001 bleed bleed", 1, true) ~= nil).toBeTrue()
+    -- ...and ahead of it: the eq cast never delays the balance swing
+    expect(graves(cmd) < cmd:find("deadeyes", 1, true)).toBeTrue()
+  end)
+
+  it("does nothing without the boon", function()
+    reset()
+    expect(graves(round())).toBeNil()
+  end)
+
+  it("needs a crowd -- one denizen is not worth the essence", function()
+    reset()
+    infArmyOfDead = true; denizens = 1
+    expect(graves(round())).toBeNil()
+  end)
+
+  it("is a ONE-TIME summon: the hands persist, so the room gets one", function()
+    reset()
+    infArmyOfDead = true
+    expect(graves(round()) ~= nil).toBeTrue()
+    ataxiaBasher_gravehandsUp()          -- the game confirms them
+    clock = clock + 30
+    expect(graves(round())).toBeNil()
+    -- ...but the swing still goes every round
+    expect(round():find("deadeyes 77001 bleed bleed", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("a new room gets its own", function()
+    reset()
+    infArmyOfDead = true
+    expect(graves(round()) ~= nil).toBeTrue()
+    ataxiaBasher_gravehandsUp()
+    gmcp.Room.Info.num = 1235
+    expect(graves(round()) ~= nil).toBeTrue()
+  end)
+
+  it("stands down shielded -- break the shield first, every rider's rule", function()
+    reset()
+    infArmyOfDead = true
+    ataxiaBasher.shielded = true
+    ataxiaBasher.rageraze, ataxia.vitals.rage = true, 20
+    local cmd = round()
+    expect(graves(cmd)).toBeNil()
+    expect(cmd:find("shiver 77001", 1, true) ~= nil).toBeTrue()          -- the raze
+    expect(cmd:find("deadeyes 77001 bleed bleed", 1, true) ~= nil).toBeTrue()
+    -- and the room was NOT burned by the refusal: unshielded, it still fires
+    ataxiaBasher.shielded = false
+    expect(graves(round()) ~= nil).toBeTrue()
+  end)
+
+  it("all four in one round: gravehands, belch, soulstorm and the swing", function()
+    reset()
+    infArmyOfDead, mnemDeadBreath, mnemDeathtempest = true, true, true
+    local cmd = round()
+    expect(graves(cmd) ~= nil).toBeTrue()
+    expect(cmd:find("belch", 1, true) ~= nil).toBeTrue()
+    expect(cmd:find("soulstorm 77001", 1, true) ~= nil).toBeTrue()
+    expect(cmd:find("deadeyes 77001 bleed bleed", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
+-- 350 MANA is the cost the Infernal's TYRANNY never had to think about, and mana is the curing
+-- pool as well as the ammunition.
+describe("the gravehands mana floor", function()
+  local function graves(cmd) return cmd:find("summon hands of the grave", 1, true) end
+
+  it("refuses outright below the flat cost", function()
+    reset()
+    infArmyOfDead = true
+    ataxia.vitals.mp = 300
+    expect(graves(round())).toBeNil()
+  end)
+
+  it("refuses when paying it would drop us under the floor", function()
+    reset()
+    infArmyOfDead = true
+    ataxia.vitals.mp = 2500 -- 41.7% of 6000; paying 350 lands under the 40% floor
+    expect(graves(round())).toBeNil()
+    ataxia.vitals.mp = 5000
+    expect(graves(round()) ~= nil).toBeTrue()
+  end)
+
+  -- The flat check is not redundant with the floor: the floor is CONFIGURABLE (and silently
+  -- inert when the client has told us no maxmp), and 350 mana we do not have is a refusal
+  -- whatever the percentage says.
+  it("refuses below the flat cost even with the floor turned off", function()
+    reset()
+    infArmyOfDead = true
+    ataxia.vitals.mp = 300
+    ataxiaBasher.gravehandsManaFloor = 0
+    expect(graves(round())).toBeNil()
+    ataxiaBasher.gravehandsManaFloor = nil
+  end)
+
+  it("refuses below the flat cost when maxmp is unknown", function()
+    reset()
+    infArmyOfDead = true
+    ataxia.vitals.mp = 300
+    gmcp.Char.Vitals.maxmp = nil          -- the floor cannot be computed at all
+    expect(graves(round())).toBeNil()
+    ataxia.vitals.mp = 5000
+    expect(graves(round()) ~= nil).toBeTrue()  -- ...and plenty still fires
+    gmcp.Char.Vitals.maxmp = 6000
+  end)
+
+  it("takes the floor from config when it is set", function()
+    reset()
+    infArmyOfDead = true
+    ataxia.vitals.mp = 2500
+    ataxiaBasher.gravehandsManaFloor = 5 -- the user wants it spent
+    expect(graves(round()) ~= nil).toBeTrue()
+    ataxiaBasher.gravehandsManaFloor = nil
+  end)
+end)
+
+-- The stamp is written when we SEND. Without a confirmation the room is burned for the visit --
+-- and this round already carries two other equilibrium riders that could have taken the beat.
+describe("a summon that was never confirmed retries ONCE", function()
+  local function graves(cmd) return cmd:find("summon hands of the grave", 1, true) end
+
+  it("holds while the confirmation could still arrive", function()
+    reset()
+    infArmyOfDead = true
+    expect(graves(round()) ~= nil).toBeTrue()
+    clock = clock + 2 -- inside the window
+    expect(graves(round())).toBeNil()
+  end)
+
+  it("retries once the window passes with no line", function()
+    reset()
+    infArmyOfDead = true
+    expect(graves(round()) ~= nil).toBeTrue()
+    clock = clock + 10
+    expect(graves(round()) ~= nil).toBeTrue()
+  end)
+
+  it("...but only once -- a room that never answers is not a loop", function()
+    reset()
+    infArmyOfDead = true
+    round()
+    clock = clock + 10
+    expect(graves(round()) ~= nil).toBeTrue()
+    clock = clock + 10
+    expect(graves(round())).toBeNil()
+    clock = clock + 100
+    expect(graves(round())).toBeNil()
+  end)
+
+  it("never retries once the game has shown us the hands", function()
+    reset()
+    infArmyOfDead = true
+    round()
+    ataxiaBasher_gravehandsUp()
+    clock = clock + 60
+    expect(graves(round())).toBeNil()
+  end)
+
+  it("the retry budget is per ROOM, not per session", function()
+    reset()
+    infArmyOfDead = true
+    round(); clock = clock + 10; round()      -- summon + its one retry, both unconfirmed
+    clock = clock + 10
+    expect(graves(round())).toBeNil()
+    gmcp.Room.Info.num = 1240                  -- somewhere new
+    expect(graves(round()) ~= nil).toBeTrue()
+    clock = clock + 10
+    expect(graves(round()) ~= nil).toBeTrue()  -- and its own retry
+  end)
+
+  -- The Infernal is deliberately excluded: TYRANNY's confirmation line has never been captured,
+  -- so "unconfirmed" would be its permanent state and this would re-cast every few seconds --
+  -- the v4.7.148 bug that burned 3% life essence a go.
+  it("does NOT apply to the Infernal's TYRANNY", function()
+    reset()
+    infArmyOfDead = true
+    gmcp.Char.Status.class = "Infernal"
+    expect(ataxiaBasher_infGravehands(";")).toBe("tyranny;")
+    clock = clock + 600
+    expect(ataxiaBasher_infGravehands(";")).toBe("")
+    gmcp.Char.Status.class = "Apostate"
+  end)
+
+  -- 350 mana is the GRAVEHANDS cost (ABADMIN 144). TYRANNY is a different ability and its cost
+  -- is not this one, so the mana gate must not follow the boon across the class line.
+  it("and the Apostate's 350-mana cost does not follow it either", function()
+    reset()
+    infArmyOfDead = true
+    gmcp.Char.Status.class = "Infernal"
+    ataxia.vitals.mp = 10                       -- nowhere near 350
+    expect(ataxiaBasher_infGravehands(";")).toBe("tyranny;")
+    gmcp.Char.Status.class = "Apostate"
+  end)
+end)
+
+describe("the gravehands lines", function()
+  local function slurp(p) local f = io.open(p); local s = f:read("*a"); f:close(); return s end
+
+  it("the summon line confirms the hands, and does NOT latch the boon", function()
+    local t = slurp("src_new/triggers/levi_ataxia/for_levi/leviticus/782_Gravehands_Up.lua")
+    expect(t:find("hands of rotting flesh and white bone push out of the ground", 1, true) ~= nil).toBeTrue()
+    expect(t:find("if ataxiaBasher_gravehandsUp then", 1, true) ~= nil).toBeTrue()
+    -- the base ability prints it with or without the boon; a wrong latch is paid for every room
+    expect(t:find("infArmyOfDead = true", 1, true)).toBeNil()
+  end)
+
+  it("both lines are highlighted, in a colour neither sibling rider uses", function()
+    local t = slurp("src_new/triggers/levi_ataxia/for_levi/leviticus/highlighting/066_Gravehands_Highlight.lua")
+    expect(t:find("hands of rotting flesh and white bone push out of the ground", 1, true) ~= nil).toBeTrue()
+    expect(t:find("the chill of the grave striking out amidst a rasping chorus of death", 1, true) ~= nil).toBeTrue()
+    -- Read the COLOURS the file chooses, not the words it contains: the comment explains why
+    -- the orange family is off-limits, and a bare text search for "orange" matches that prose.
+    -- Same trap as v4.7.346's trigger-wiring assertion, which matched a name in a comment.
+    local chosen = {}
+    for c in t:gmatch('fg%("([%w_]+)"%)') do chosen[#chosen + 1] = c end
+    expect(#chosen > 0).toBeTrue()
+    for _, c in ipairs(chosen) do
+      expect(c).toBe("cadet_blue")         -- never the belch's goldenrod or the storm's orchid
+      expect(c:find("orange", 1, true)).toBeNil()  -- reserved family
+    end
+    expect(t:find("selectString(line, 1)", 1, true) ~= nil).toBeTrue()
+    expect(t:find("resetFormat()", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (test files share one Lua state).
 getEpoch = _epoch
 mnemDeadBreath, mnemDeathtempest, target = nil, nil, nil
+infArmyOfDead, mnemResourceful = nil, nil
+ataxiaTemp.infTyrannyRoom = nil
+ataxiaTemp.gravehandsAt, ataxiaTemp.gravehandsSeen, ataxiaTemp.gravehandsRetried = nil, nil, nil
 ataxiaTemp.profaned, ataxiaTemp.soulstormAt, ataxiaTemp.soulstormTarget = nil, nil, nil
 ataxiaTemp.belchAt, ataxiaTemp.belchFouledRoom, ataxiaTemp.belchFouledAt = nil, nil, nil

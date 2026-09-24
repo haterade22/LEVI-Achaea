@@ -344,10 +344,22 @@ function ataxiaBasher_alchemistBashing()
 	return command  
 end
 
+-- How long a gravehands summon has to show its line before we treat it as lost (v4.7.347).
+-- Its cooldown is 3s of equilibrium, so this outlasts the action it guards -- the rule the
+-- tumble confirmation had to learn the hard way (a retry window shorter than the action
+-- re-sends something that was working).
+GRAVEHANDS_CONFIRM = 6
+
 function ataxiaBasher_apostateBashing()
 	local command, sp = "", ataxia.settings.separator 
 	local brage = ataxiaBasher_assembleBattlerage()
 	local raze = ataxiaBasher.battlerage.Apostate.raze
+	-- ARMY OF THE DEAD (v4.7.347, user: "For Apostate"). SUMMON HANDS OF THE GRAVE spends
+	-- EQUILIBRIUM while `deadeyes` spends BALANCE, so it RIDES the round the way the belch
+	-- and the soulstorm do -- the Infernal's TYRANNY replaces the swing because that one is
+	-- a balance ability. The helper self-guards on `shielded`, returning "" there, so the
+	-- shielded branch below is unchanged: break the shield first is every rider's rule.
+	local graveHands = ataxiaBasher_infGravehands(sp)
 	
 	if ataxiaBasher.shielded then
 		if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
@@ -356,7 +368,7 @@ function ataxiaBasher_apostateBashing()
 			command = "deadeyes "..target.." bleed bleed; "
 		end
 	else
-		command = brage..sp.."deadeyes "..target.." bleed bleed; "
+		command = graveHands..brage..sp.."deadeyes "..target.." bleed bleed; "
 	end
 	    
 	return command	
@@ -1530,6 +1542,33 @@ end
 -- So: cast once, gated on a crowd being present (the boon's damage wants targets), an
 -- essence floor, and a long re-arm that only exists as a backstop in case the summon is
 -- lost. Capture the "hands expire/die" line to make the re-arm precise.
+--
+-- ============================================================================
+-- IT SERVES THE APOSTATE TOO  (v4.7.347, user: "For Apostate")
+-- ============================================================================
+--
+-- The class branch at the bottom has always known the Apostate command; nothing ever
+-- CALLED the function from the Apostate round, so on that class the boon did nothing at
+-- all. `ataxiaBasher_apostateBashing` now asks for it.
+--
+-- TWO THINGS DIFFER ON THIS CLASS, and both come from the user's ABADMIN paste:
+--
+--     Gravehands (Necromancy)  ABADMIN ID: 144
+--     Syntax:     SUMMON HANDS OF THE GRAVE
+--     Cooldown:   3.00 seconds of EQUILIBRIUM
+--     Resource:   1.50% life essence and 350 mana
+--
+--   * IT RIDES, IT DOES NOT REPLACE. The Infernal's TYRANNY takes the primary slot
+--     (see `infernalBashing`), because that ability spends the round. Gravehands spends
+--     EQUILIBRIUM, and the Apostate swing (`deadeyes <t> bleed bleed`) spends BALANCE --
+--     the same split the user confirmed for the other two necromancy riders: "Soulstorm
+--     takes eq and deadeyes take balance." So it is prepended beside the belch and the
+--     soulstorm, not instead of the swing.
+--   * IT COSTS MANA -- 350 of it, which the Infernal path never had to think about. Mana
+--     is the curing pool as well as the ammunition, so there is a floor.
+--
+-- The 1.5% life essence is covered by the essence floor already below (the Infernal's 3%
+-- is the more expensive of the two, so a floor sized for that is safe for this).
 function ataxiaBasher_infGravehands(sp)
 	if not infArmyOfDead then return "" end
 	-- SHIELDED SELF-GUARD (v4.7.193, Codex). This is not a nicety, it is what keeps the
@@ -1568,10 +1607,65 @@ function ataxiaBasher_infGravehands(sp)
 	-- A nil room (gmcp blind) collapses to one "unknown" slot rather than casting every
 	-- round while we cannot tell rooms apart.
 	local room = (gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.num) or "unknown"
-	if ataxiaTemp.infTyrannyRoom == room then return "" end
+	local isApostate = (gmcp.Char.Status.class == "Apostate")
+	local cmd = isApostate and "summon hands of the grave" or "tyranny"
+
+	-- 350 MANA on the Apostate command (ABADMIN 144). Only that branch is gated: TYRANNY
+	-- is a different ability and its cost is not this one. Mana is the curing pool as well
+	-- as the ammunition, so the floor is what stops a bashing nicety emptying it -- but
+	-- this is a ONCE-PER-ROOM cast rather than the belch's every-five-seconds, so it can
+	-- afford to sit lower than the belch's 50.
+	if isApostate then
+		local mp = tonumber(ataxia.vitals and ataxia.vitals.mp)
+		local maxmp = tonumber(gmcp.Char and gmcp.Char.Vitals and gmcp.Char.Vitals.maxmp)
+		if mp then
+			if mp < 350 then return "" end
+			local mfloor = tonumber(ataxiaBasher.gravehandsManaFloor) or 40
+			if mfloor > 0 and maxmp and maxmp > 0 and ((mp - 350) / maxmp) * 100 < mfloor then
+				return ""
+			end
+		end
+	end
+
+	local nowT = (getEpoch and getEpoch()) or os.time()
+	if ataxiaTemp.infTyrannyRoom == room then
+		-- ONE RETRY FOR A SUMMON THAT WAS NEVER CONFIRMED (v4.7.347, Apostate only). The
+		-- stamp above is optimistic -- it is written at SEND time -- so a refused cast
+		-- burns the room for good, and this round already carries two other equilibrium
+		-- riders that could have taken the beat. The Apostate cast has a line we can see
+		-- ("You mutter words of death and decay..." -> trigger 782), so here, and only
+		-- here, silence is evidence. The Infernal is deliberately excluded: TYRANNY's own
+		-- confirmation line has never been captured, so "unconfirmed" would be its
+		-- permanent state and this would re-cast every few seconds -- the v4.7.148 bug
+		-- that burned 3% essence a go.
+		if not isApostate then return "" end
+		if ataxiaTemp.gravehandsSeen or ataxiaTemp.gravehandsRetried then return "" end
+		if (nowT - (tonumber(ataxiaTemp.gravehandsAt) or 0)) < GRAVEHANDS_CONFIRM then return "" end
+		ataxiaTemp.gravehandsRetried = true
+	else
+		ataxiaTemp.gravehandsRetried = false
+	end
 	ataxiaTemp.infTyrannyRoom = room
-	local cmd = (gmcp.Char.Status.class == "Apostate") and "summon hands of the grave" or "tyranny"
+	ataxiaTemp.gravehandsAt, ataxiaTemp.gravehandsSeen = nowT, false
 	return cmd..sp
+end
+
+-- "You mutter words of death and decay, and suddenly the ground breaks open all around as
+-- hands of rotting flesh and white bone push out of the ground." (live, 2026-09-24)
+--
+-- The hands are up. That is all this records -- the once-per-room latch is already set
+-- optimistically at send time, and this is what turns it from a guess into a fact so the
+-- retry above knows not to fire.
+--
+-- It does NOT latch the boon. The base ability prints this line with or without Army of
+-- the Dead, and the boon is what costs us 1.5% life essence and 350 mana a room -- a
+-- wrong latch is paid for in every room after it. The BOONS row (mnemosyne/039) and the
+-- claim line own that fact, and both are unambiguous.
+function ataxiaBasher_gravehandsUp()
+	ataxiaTemp = ataxiaTemp or {}
+	ataxiaTemp.gravehandsSeen = true
+	ataxiaTemp.gravehandsAt = (getEpoch and getEpoch()) or os.time()
+	return true
 end
 
 -- Fury of Ages (Mnemosyne boon): "You can now use your fury ability for 45 minutes out of
