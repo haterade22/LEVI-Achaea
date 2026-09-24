@@ -2,6 +2,56 @@
 
 ---
 
+## 2026-09-24 - Dead Breath: BELCH as a room attack (v4.7.336)
+
+User, with the boon, the ability and a live log. The boon:
+
+```
+Dead Breath    1    rare
+  Your belch will now cause significant damage to all denizens in the location, but drains
+  10% of your mana in the process.
+```
+
+The ability (ABADMIN 136): `BELCH`, works on the **Room**, 4.00 seconds of **equilibrium**,
+200 mana. And what that buys, from the log -- one belch, three corpses:
+
+```
+You belch a cloud of stinking gas out of your lungs and into your surroundings.
+Your rotten breath befouls the air, plaguing all who stand before you with choking filth.
+Damage dealt: 2121 (asphyxiation).   ... 15372 ...   ... 18000 ...
+```
+
+- **It rides the round rather than replacing it.** BELCH spends EQUILIBRIUM, which the class combo
+  leaves idle while it spends balance -- the same channel Death Stare and Kai Choke use -- so it
+  goes into the chain beside them and the swing still lands.
+- **Two denizens or more** (the user's rule): a room attack earns its mana in a crowd, and on one
+  target the same 200 mana plus a tenth of the pool buys one extra hit.
+- **It keeps a curing pool.** Mana is ammunition and cure both, so the cost is read properly --
+  200 flat *plus* the boon's 10% of maximum -- and it will not drop below
+  `ataxiaBasher.deadBreathManaFloor` percent (default 50). A belch that leaves us dry in a swarm
+  trades damage for a death.
+- **The refusal is a ROOM state, not a cooldown.** *"You take in a deep breath in preparation for
+  your belch, but cough and sputter as you inhale the noxious air that surrounds you."* is the gas
+  we just laid, so it is remembered per ROOM and cleared by moving -- a flat cooldown would either
+  waste the equilibrium in a fresh room or keep retrying in a fouled one.
+- **The boon is self-proving:** the "rotten breath befouls the air" line cannot print without Dead
+  Breath, so it latches the flag as well as stamping the send (the Kai Unleashed shape).
+
+### Verification
+
+2261 tests pass (12 new, on the user's log and ability text). Break-back verified: 12 mutants, all
+caught -- including firing solo, ignoring the 10% drain, and treating the fouled room as global.
+
+### Files
+
+- `basher/014_Dead_Breath.lua`: new -- the rider, the landed/refused handlers.
+- `basher/001_Bashing_Functions.lua`: the rider joins the chain beside Death Stare.
+- `mnemosyne/004_Parsers.lua`: `Dead Breath` -> `mnemDeadBreath` in `BOON_FLAGS`, cleared on run end.
+- `triggers/.../778_Belch_Landed.lua`, `779_Belch_Fouled.lua`, `mnemosyne/001_Run_Start.lua`.
+- `tests/test_basher_deadbreath.lua`: new; `CHANGELOG.md`, `CLAUDE.md`; memory.
+
+---
+
 ## 2026-09-24 - The tracker queue had been wedged for nine runs; a reload now resumes it (v4.7.336)
 
 User: *"Our API didnt send?"* -- a wade started and no `Run started (id: ...)` followed.

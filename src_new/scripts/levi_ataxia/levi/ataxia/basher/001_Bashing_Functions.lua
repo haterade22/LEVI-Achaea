@@ -1091,7 +1091,17 @@ function ataxiaBasher_assembleAttack()
       if ok and type(res) == "string" then stareCmd = res end
     end
     if ataxiaBasher_considerRecon then pcall(ataxiaBasher_considerRecon) end
-    command = command..ldeckCmd..stareCmd.._G[ataxiaBasher_bashingFuncs[class]]()
+    -- DEAD BREATH (v4.7.336): BELCH is a ROOM attack on EQUILIBRIUM, so it rides the round like
+    -- the stare above rather than replacing it -- the class combo still spends its balance. The
+    -- boon makes it hit every denizen (user log: 2121 + 15372 + 18000 asphyxiation, three dead in
+    -- one belch), and it is gated on 2+ denizens because that is where a room attack earns its
+    -- mana. pcall'd like its neighbours: a rider must never take the round down with it.
+    local belchCmd = ""
+    if ataxiaBasher_deadBreathBelch then
+      local okB, resB = pcall(ataxiaBasher_deadBreathBelch, sp)
+      if okB and type(resB) == "string" then belchCmd = resB end
+    end
+    command = command..ldeckCmd..stareCmd..belchCmd.._G[ataxiaBasher_bashingFuncs[class]]()
     -- Mnemosyne swarm tactics (mnemosyne/009): one-shot decorators ride the assembled
     -- chain (e.g. the pull appends ";<backdir>" so the swing and the step out are ONE
     -- queued line). Consumption also arms the swarmHold gate -- see S.decorate.
