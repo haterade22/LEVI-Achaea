@@ -220,6 +220,43 @@ describe("ataxia_loadSettings()", function()
     expect(ataxia.mnemosyne.run.boss).toBeNil()
   end)
 
+  -- ...AND THE TRACKER QUEUE MUST BE RESUMED AFTER THE MERGE (v4.7.336).
+  --
+  -- The seam again, for the HTTP client: `_resumeQueue` has its own tests in test_mnemosyne.lua,
+  -- and none of them prove the loader calls it. The live save carried `_busy = true` with 711
+  -- queued requests; the stub must SEE both when it runs, which is what proves it runs after
+  -- deepMerge (the script body's own call already ran, on an empty queue, before the merge).
+  it("resumes the Mnemosyne HTTP queue that came back from disk", function()
+    freshLoadState()
+    local sawBusy, sawQueued, why
+    ataxia.mnemosyne = {
+      run = { active = false, ripple = 0 },
+      _queue = {},
+      _busy = false,
+      _resumeQueue = function(w)
+        why = w
+        sawBusy = ataxia.mnemosyne._busy
+        sawQueued = #ataxia.mnemosyne._queue
+        ataxia.mnemosyne._busy = false
+      end,
+    }
+    _saved[ATAXIA] = {
+      settings = { class = "Bard" },
+      mnemosyne = {
+        _busy = true,
+        _queue = { { endpoint = "/death", payload = { killer = "a fairy" } },
+                   { endpoint = "/run_start", payload = {} } },
+      },
+    }
+
+    ataxia_loadSettings()
+
+    expect(sawBusy).toBeTrue()          -- the premise: the wedge really does come back
+    expect(sawQueued).toBe(2)
+    expect(why).toBe("restored from disk")
+    expect(ataxia.mnemosyne._busy).toBeFalse()
+  end)
+
   it("still loads the name database when an earlier sub-load throws", function()
     freshLoadState()
     _saved[ATAXIA] = { settings = { class = "Serpent" } }

@@ -29,10 +29,14 @@ M._enqueue(endpoint, payload, onOk, onError)
   ├─ table.insert(M._queue, {endpoint, payload, onOk, onError, tries=0})
   └─ M._pump()
 
-M._pump()                    (no-op if M._busy or queue empty)
+M._pump()                    (no-op if queue empty)
+  ├─ if M._busy: no send stamp      → M._resumeQueue("queue was stuck")   (restored wedge)
+  │              stamp > STALE_BUSY → M._onTimeout("watchdog lost")       (backstop)
+  │              else               → return (genuinely in flight)
+  ├─ re-stamp payload.token with the CURRENT token
   ├─ yajl.to_string(payload)  (drop request on encode failure)
-  ├─ M._busy = true
-  ├─ arm watchdog: tempTimer(REQUEST_TIMEOUT=20s, → M._onTimeout)
+  ├─ M._busy = true, ataxiaTemp.mnemHttp.sentAt = now
+  ├─ arm watchdog: tempTimer(REQUEST_TIMEOUT=20s, → M._onTimeout)  (id on ataxiaTemp.mnemHttp)
   └─ postHTTP(json, baseUrl..endpoint, {Content-Type: application/json})
 
 sysPostHttpDone  → M._onDone(_, url, body)
@@ -57,9 +61,49 @@ M._onTimeout()               (watchdog fired: dropped response / POST→GET)
 | Feature | Function | Why |
 |---------|----------|-----|
 | Endpoint matching | `M._matchesHead(url)` | A done/error event is accepted only if its URL equals the exact endpoint of the queue head — stray/duplicate events or ad-hoc `postHTTP` to the same host can't be misattributed |
-| Watchdog | `M._watchdog` timer, `REQUEST_TIMEOUT = 20` | Force-advances a stuck request (e.g. a POST silently redirected to GET, or a dropped response) so the queue never stalls permanently |
+| Watchdog | `ataxiaTemp.mnemHttp.watchdog` timer, `REQUEST_TIMEOUT = 20` | Force-advances a stuck request (e.g. a POST silently redirected to GET, or a dropped response) so the queue never stalls permanently. The id lives on `ataxiaTemp` (never saved) since v4.7.336 -- it used to be `M._watchdog`, on the saved namespace |
+| Busy backstop | `_pump`, `STALE_BUSY = 2 x REQUEST_TIMEOUT` | A busy flag must be accounted for by a send stamp from THIS session: no stamp = a restored wedge (resume it); a stamp older than `STALE_BUSY` = the watchdog was lost (time the head out exactly as the watchdog would). Strictly beyond the watchdog so the backstop never overrules it |
 | Idempotent-only retry | `M._IDEMPOTENT = { ["/ripple_level"]=true, ["/run_exists"]=true }` | Only endpoints safe to repeat are auto-retried; everything else is left alone to avoid double-posting a run/death/etc. |
-| Handler survival | `registerAnonymousEventHandler` for all 4 http events | Handlers survive `uninstallPackage` (same reasoning as `ataxia.updater`); prior handlers are `killAnonymousEventHandler`'d on reload |
+| Handler survival | `registerAnonymousEventHandler` for all 4 http events | Handlers survive `uninstallPackage` (same reasoning as `ataxia.updater`); prior handlers are `killAnonymousEventHandler`'d on reload. Their ids live on `ataxiaTemp.mnemHttp` (v4.7.336): as `M._hPostDone` etc. a restart restored the PREVIOUS session's ids, the next reinstall killed those instead of ours, and the live handler survived beside the new one |
+
+### The queue is saved, so a reload RESUMES it (v4.7.336)
+
+**What broke.** `M._queue` and `M._busy` hang off `ataxia.mnemosyne`, and `ataxia_saveSettings`
+writes `ataxia` wholesale (`sanitizeForSave` keeps plain tables and booleans). One save landed
+while a POST was in flight, so `_busy = true` went to disk. On the next start `deepMerge` restored
+it -- with no request on the wire and no watchdog timer to clear it -- and `_pump` returned early
+forever. Every later report appended silently: nothing failed, so nothing echoed; nothing was sent.
+The live save (2026-09-24) held **711 requests, about nine runs**, headed by a `/death`. The only
+visible tell was `mnem status` showing `ripple 0` on an active run (a `/ripple_level` never
+completed, so its `onOk` never advanced `run.ripple`). Each later save wrote the wedge out again,
+so it survived every restart.
+
+**What it does now.** `M._resumeQueue(why)`:
+- clears `_busy` (after a reload nothing is waiting on a response) and the send stamp,
+- kills a live watchdog (ours, on `ataxiaTemp`) and only FORGETS a legacy `M._watchdog` (restored
+  from disk, it names whatever timer inherited that id),
+- keeps well-formed entries in order and marks them `replay = true`,
+- echoes `Resuming N unsent tracker requests (<why>)` and pumps.
+
+It runs in two places, and both are needed: at the **end of 001's body** (reinstall, SYSUPDATE, XML
+reimport -- a queue already in memory) and from **`ataxia_loadSettings` right after the merge**
+(a restart -- on a fresh start the script body runs FIRST on an empty queue, then the loader merges
+the saved wedge on top). An XML reimport on a fresh start takes the second path:
+`sysInstallPackage -> ataxia_updateApplied -> ataxia_loadSettings`.
+
+**Replay, not drop** -- the user's call. Delivery is **at-least-once**: the request that was in
+flight when the save happened may already have reached the server and is sent again, and every
+replayed row carries the time it was replayed. The current token is stamped at send time, so a
+backlog from before a `mnem token` change goes out as us.
+
+**One summary, not one line per request.** A replayed entry's outcome (ok / refused / failed) is
+tallied on `ataxiaTemp.mnemHttp.replay` instead of echoed; when the last one leaves the queue a
+single `Backlog replay done: X sent OK, Y refused, Z failed` prints, naming the first problem. A
+request made in the current session still echoes as before.
+
+**Visible.** `mnem status` has a `Queue:` line (pending count, what is in flight and for how
+long, red when older than the watchdog or busy with no send on record, `replaying backlog (k
+left)`). `mnem queue` groups pending requests by endpoint; `mnem queue clear` drops them.
 
 ### Reading the response (v4.7.298)
 

@@ -326,6 +326,16 @@ function ataxia_loadSettings()
   if ataxia.mnemosyne and ataxia.mnemosyne._clearStaleRun then
     pcall(ataxia.mnemosyne._clearStaleRun)
   end
+  -- ...AND ITS HTTP QUEUE CAME BACK TOO (v4.7.336). `ataxia.mnemosyne._busy`/`_queue` are merged
+  -- back by the same deepMerge. A save that caught a POST in flight restored `_busy = true` with
+  -- no request and no watchdog behind it, so `_pump` returned early forever and every report after
+  -- it queued silently (711 of them, about nine runs, in the live save). `_resumeQueue` clears the
+  -- flag and sends the restored requests in order. It has to run HERE, after the merge: the script
+  -- body's own call ran first, on an empty queue. This is also the path an XML reimport takes on a
+  -- fresh start (sysInstallPackage -> ataxia_updateApplied -> ataxia_loadSettings).
+  if ataxia.mnemosyne and ataxia.mnemosyne._resumeQueue then
+    pcall(ataxia.mnemosyne._resumeQueue, "restored from disk")
+  end
 
 	ataxia_Echo("I suppose I can lend you my aid. Go and annihilate our foes.")
 

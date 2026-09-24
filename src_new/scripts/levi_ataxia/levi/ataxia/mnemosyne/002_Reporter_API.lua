@@ -38,6 +38,11 @@ packageName: ''
     first sentence true. Anything transient added here must be cleared there, or moved to
     `ataxiaTemp`, which is never serialized.
 
+    The HTTP client's queue (`M._queue`/`M._busy`, 001) is the same trap and is handled by its own
+    `M._resumeQueue`, called from the loader right after this: its answer is REPLAY, not reset --
+    a queued request is unsent work, not stale belief. A saved `_busy = true` wedged every report
+    for about nine runs before v4.7.336.
+
     Depends on 001_HTTP_Client.lua (loads first).
 
     Also calls FORWARD into 007_History.lua (`M.boonInfo`, `M._rerollCount`/`M._rerollReset` in
@@ -113,6 +118,12 @@ function M._clearStaleRun()
   M.run.active = false
   M.run.boss = nil
   M._resetRun()
+  -- The capture slot's lock is the same shape as the HTTP client's `_busy` (v4.7.336): a boolean
+  -- that is only true while something of THIS session holds it. Saved mid-capture it comes back
+  -- true with no capture behind it, and `_boonFillTrickle` / the per-screen contemplate refuse
+  -- forever. (`_captureLines` itself copes -- it force-finishes a stale capture -- but nothing
+  -- else would ever clear the flag.)
+  M._capturing = false
 end
 
 -- Send any buffered monster spawns as one combined string, then clear.

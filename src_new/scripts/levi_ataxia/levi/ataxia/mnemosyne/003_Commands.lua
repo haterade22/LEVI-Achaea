@@ -45,6 +45,22 @@ function M.status()
       .. "<grey> / " .. (race and race or "<indian_red>unread")
       .. "  <DimGrey>(sent with /boons_offered)")
   end
+  -- THE QUEUE, BECAUSE A SILENT QUEUE IS WHAT HID A NINE-RUN OUTAGE (v4.7.336). A saved
+  -- `_busy = true` held 711 requests with no error to show for it -- nothing failed, nothing was
+  -- sent. The only visible tell was `ripple 0` on the Run line below. This line makes it direct.
+  if M.queueInfo then
+    local qi = M.queueInfo()
+    local line = (qi.pending == 0) and "<green>empty" or ("<white>" .. qi.pending .. "<grey> pending")
+    if qi.busy then
+      line = line .. "<grey>, " .. tostring(qi.head or "?") .. " in flight "
+        .. (qi.stale and "<indian_red>" or "<grey>")
+        .. (qi.age and string.format("%.1fs", qi.age) or "(no send on record)")
+    end
+    if qi.replayLeft and qi.replayLeft > 0 then
+      line = line .. "<gold>  replaying backlog (" .. qi.replayLeft .. " left)"
+    end
+    cecho("\n  <NavajoWhite>Queue:      " .. line)
+  end
   local r = M.run or {}
   cecho("\n  <NavajoWhite>Run:        "
     .. (r.active and ("<green>active <grey>(ripple " .. tostring(r.ripple or 0)
@@ -67,6 +83,7 @@ function M.help()
     { "mnem on | off", "Toggle automatic reporting" },
     { "mnem contemplate", "Legacy toggle -- does NOT control what is sent (see mnem status)" },
     { "mnem test", "Ping /health to check connectivity" },
+    { "mnem queue [clear]", "Unsent tracker requests by endpoint; `clear` drops them all" },
     { "mnem debug", "Toggle verbose debug echoes" },
     { "mnem map [on|off|status]", "Toggle / diagnose the per-ripple mini-map" },
     { "mnem bonuses [on|off]", "Panel: what this run's boons are actually giving us" },
@@ -138,6 +155,25 @@ function M.command(rest)
     c.contemplate = not c.contemplate
     ataxia_saveSettings(false)
     M.echo("Auto-contemplate " .. (c.contemplate and "<green>ON" or "<grey>off") .. ".")
+  elseif cmd == "queue" then
+    -- v4.7.336. Bare `mnem queue` shows what is waiting; `clear` is the escape hatch for a backlog
+    -- you would rather not send (the default after a reload is to REPLAY it -- see 001).
+    if arg == "clear" then
+      local n = M.queueClear()
+      M.echo("Dropped <white>" .. n .. "<reset> unsent tracker request" .. (n == 1 and "" or "s") .. ".")
+    else
+      local qi = M.queueInfo()
+      if qi.pending == 0 then
+        M.echo("Tracker queue is <green>empty<reset>.")
+      else
+        M.echo("<gold>Tracker queue<reset> -- " .. qi.pending .. " pending"
+          .. (qi.busy and (", " .. tostring(qi.head) .. " in flight") or ""))
+        local order, counts = M.queueCounts()
+        for _, ep in ipairs(order) do
+          cecho("\n  <white>" .. string.format("%5d", counts[ep]) .. "  <grey>" .. ep)
+        end
+      end
+    end
   elseif cmd == "debug" then
     c.debug = not c.debug
     M.echo("Debug " .. (c.debug and "<green>ON" or "<grey>off") .. ".")
