@@ -546,7 +546,16 @@ state: `ataxiaBasher_jumpRefusedMounted` **re-issues the lost move as a mountjum
 the escape which queued the leap is still waiting on an arrival that will never come, and the
 ladder stalls until its timeout — at crash HP, the death the jump exists to avoid. It re-issues
 only a jump we sent, from the room we sent it in, within 4s, and never one already a mountjump:
-the line is not leap-specific, so an older direction would be a move nobody asked for.
+the full set of commands that earn the line is unknown, so an older direction would be a move
+nobody asked for, while an unknown sibling refusal costs the latch and nothing else.
+
+**TUMBLE goes through while mounted** (v4.7.346, user-corrected). v4.7.345 assumed the opposite
+and flagged Roll Hide's panic tumble as a livelock waiting to happen — refused from the saddle,
+`_tumbleRetry` would spend its budget on a command that could never land. It would not; the four
+tumble sites need no conversion. The Bard's BACKFLIP is on the mountjump path as a **deliberate
+default, not a confirmed refusal** — never observed either way, and mountjump works regardless,
+whereas a refused backflip is a silent no-op in exactly this escape. *"Acrobatic" was our word,
+not the game's.*
 
 **Hit-and-run continuation (v4.7.117)**: the pull budget (`MAX_PULLS` 3) exists to stop
 POINTLESS ping-pong — but the Putoran-wildcat log showed non-chasing mobs ("peak

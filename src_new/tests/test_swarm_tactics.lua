@@ -1484,8 +1484,9 @@ describe("which jump -- Bard backflips, everyone leaps", function()
 end)
 
 -- MOUNTED OUTRANKS ALL OF IT (v4.7.345). User: "When mounted, we should use mountjump instead of
--- LEAP." From the saddle the game refuses the leap AND the backflip -- "You cannot do that while
--- mounted." -- so every branch above is moot: the only verb that crosses anything is MOUNTJUMP.
+-- LEAP." From the saddle the game refuses the leap -- "You cannot do that while mounted." -- so
+-- every branch above is moot: MOUNTJUMP is the verb that crosses. (The backflip is taken on the
+-- same path by default, not because it has been seen refused -- see S.moveVerb.)
 -- These load the REAL mount module rather than stubbing it, because what is being pinned is that
 -- these two files agree about the belief.
 describe("mounted: every jump in this module becomes a mountjump", function()
