@@ -2,6 +2,60 @@
 
 ---
 
+## 2026-09-24 - Deathtempest: SOULSTORM once per denizen (v4.7.338)
+
+User: *"We should use this once"* -- *"If we have the boon deathtempest"*.
+
+```
+Deathtempest:   rare, Offence
+  Your necromancy soulstorm ability deals additional cold damage when it profanes a denizen.
+
+Soulstorm (Necromancy, ABADMIN 142)
+  Syntax:     SOULSTORM <target>      Cooldown: 4.00 seconds of equilibrium
+  "Against denizens, you will instead profane their soul with malign energy, causing them to
+   take ten percent more damage from necromantic abilities, the curses of evileye, and the
+   weaponmastery attacks of your fellow Infernals. In this case, the equilibrium and essence
+   costs of this dark art shall be greatly reduced."
+```
+
+**Once per denizen is the whole rule.** Profane is a DEBUFF that sits on the mob, not damage we
+repeat -- a second storm on the same soul buys nothing and costs the equilibrium the round's real
+attacks want. So it is tracked by **target id** (ids are unique per creature and never come back
+once it dies) and marked by the game's own line:
+
+```
+You call forth an unholy tide of necromantic essence and release it, engulfing an acolyte of
+Life in a profane soulstorm.
+```
+
+- **It stands down for the belch.** Both ride equilibrium and only one eq spend lands at a time;
+  a room attack that hits every denizen outranks +10% on one of them, so on a round the belch
+  takes, the storm waits.
+- **It marks the target it was SENT for**, not whatever is in front of us when the line arrives --
+  the round moves on, and marking the wrong mob would cost a storm on the right one.
+- **A storm the server ate is retried** after six seconds rather than forfeited, and the 0.3s
+  round rebuild cannot respam it in the meantime.
+- **Boon-gated** (the user's condition): without Deathtempest the profane is not worth the
+  equilibrium here. The confirmation line prints with or without the boon, so it proves nothing
+  about Deathtempest and does not latch it -- that comes from the claim.
+
+### Verification
+
+2268 tests pass (7 new). Break-back verified: 9 mutants, all caught -- including storming twice,
+ignoring the belch's claim on the equilibrium, and marking the current target instead of the sent
+one.
+
+### Files
+
+- `basher/014_Dead_Breath.lua`: `ataxiaBasher_deathtempestStorm`, `soulstormLanded`, `profanedForget`.
+- `basher/001_Bashing_Functions.lua`: the rider joins the chain and hands equilibrium to the belch.
+- `mnemosyne/004_Parsers.lua`: `Deathtempest` -> `mnemDeathtempest`, cleared on run end.
+- `update_stuff/003_ataxia_RoomContents_Update.lua`: the profaned set goes with the room.
+- `triggers/.../780_Soulstorm_Landed.lua`, `mnemosyne/001_Run_Start.lua`.
+- `tests/test_basher_deadbreath.lua`; `CHANGELOG.md`, `CLAUDE.md`; memory.
+
+---
+
 ## 2026-09-24 - Dead Breath: BELCH as a room attack (v4.7.337)
 
 User, with the boon, the ability and a live log. The boon:

@@ -14,7 +14,7 @@ packageName: ''
 
 --[[
     ============================================================================
-    DEAD BREATH -- BELCH AS AN AoE  (v4.7.337, user-directed)
+    NECROMANCY BOON RIDERS -- BELCH (Dead Breath) and SOULSTORM (Deathtempest)
     ============================================================================
 
     The boon (Mnemosyne, rare):
@@ -131,4 +131,72 @@ function ataxiaBasher_belchFouled()
   ataxiaTemp.belchFouledRoom = roomKey()
   ataxiaTemp.belchFouledAt = (getEpoch and getEpoch()) or os.time()
   return true
+end
+
+-- ---------------------------------------------------------------------------
+-- DEATHTEMPEST -- SOULSTORM, ONCE PER DENIZEN  (v4.7.338, user-directed)
+-- ---------------------------------------------------------------------------
+--
+-- The boon (rare, Offence): "Your necromancy soulstorm ability deals additional cold damage when
+-- it profanes a denizen."  The ability (ABADMIN 142):
+--
+--     Syntax:            SOULSTORM <target>
+--     Cooldown:          4.00 seconds of equilibrium   (greatly reduced against a denizen)
+--     Resource:          1% life essence               (likewise)
+--     "Against denizens, you will instead profane their soul with malign energy, causing them to
+--      take ten percent more damage from necromantic abilities, the curses of evileye, and the
+--      weaponmastery attacks of your fellow Infernals."
+--
+-- USER'S RULE: "We should use this once" -- "If we have the boon deathtempest".
+--
+-- ONCE PER DENIZEN IS THE WHOLE POINT. Profane is a DEBUFF that sits on the mob, not damage we
+-- repeat: a second storm on the same soul buys nothing and costs the equilibrium the round's real
+-- attacks want. So it is tracked by TARGET ID -- ids are unique per creature and never return
+-- once it dies -- and confirmed by the game's own line rather than by the send.
+--
+-- IT STANDS DOWN FOR THE BELCH. Both ride equilibrium, and only one eq spend can land at a time;
+-- a room attack that hits every denizen outranks +10% on one of them (the caller passes `busy`).
+local SOULSTORM_RETRY = 6 -- a send we never saw confirmed is tried again after this
+
+function ataxiaBasher_deathtempestStorm(sp, busy)
+  if not mnemDeathtempest then return "" end
+  if busy then return "" end -- the belch has this round's equilibrium
+  if not (ataxiaBasher and ataxiaBasher.enabled) then return "" end
+  if ataxiaBasher.shielded then return "" end
+  if type(target) ~= "number" then return "" end
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.profaned = ataxiaTemp.profaned or {}
+  if ataxiaTemp.profaned[target] then return "" end -- this soul is already profaned
+
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  if ataxiaTemp.soulstormTarget == target
+     and (nowT - (tonumber(ataxiaTemp.soulstormAt) or 0)) < SOULSTORM_RETRY then
+    return "" -- waiting on the confirmation line for this target
+  end
+  ataxiaTemp.soulstormAt, ataxiaTemp.soulstormTarget = nowT, target
+  sp = sp or ((ataxia.settings and ataxia.settings.separator) or ";")
+  return "soulstorm " .. target .. sp
+end
+
+-- "You call forth an unholy tide of necromantic essence and release it, engulfing <mob> in a
+-- profane soulstorm." (live 2026-09-24). The soul is profaned: never storm this one again.
+--
+-- Stamped against the target we SENT for, not whatever is in front of us now -- the round may
+-- have moved on, and marking the wrong mob would cost a storm on the right one. The base ability
+-- prints this line with or without the boon, so it proves nothing about Deathtempest and does not
+-- latch it: that comes from the claim.
+function ataxiaBasher_soulstormLanded()
+  ataxiaTemp = ataxiaTemp or {}
+  local id = ataxiaTemp.soulstormTarget or (type(target) == "number" and target or nil)
+  if not id then return false end
+  ataxiaTemp.profaned = ataxiaTemp.profaned or {}
+  ataxiaTemp.profaned[id] = true
+  ataxiaTemp.soulstormAt, ataxiaTemp.soulstormTarget = nil, nil
+  return true
+end
+
+-- A room's worth of profaned ids is dead weight once we leave; ids never repeat, so this is
+-- housekeeping rather than correctness. Called from the room read.
+function ataxiaBasher_profanedForget()
+  if type(ataxiaTemp) == "table" then ataxiaTemp.profaned = {} end
 end
