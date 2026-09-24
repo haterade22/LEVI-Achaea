@@ -171,10 +171,13 @@ describe("SOULSTORM profanes a soul once", function()
     expect(ataxiaBasher_deathtempestStorm(";")).toBe("")
   end)
 
-  it("stands down for the belch -- one equilibrium, and the room attack outranks it", function()
+  -- v4.7.343, user: "For soulstorm, belch doesnt matter, shouldnt be a criteria. They are two
+  -- seperate attacks." v4.7.338 held the storm back on any round the belch fired; that was my
+  -- inference about one equilibrium, and the ability text agrees with the user -- against a
+  -- denizen the storm's eq and essence costs are "greatly reduced".
+  it("does not care what the belch did", function()
     stormReset()
-    expect(ataxiaBasher_deathtempestStorm(";", true)).toBe("")
-    expect(ataxiaBasher_deathtempestStorm(";", false)).toBe("soulstorm 77001;")
+    expect(ataxiaBasher_deathtempestStorm(";", true)).toBe("soulstorm 77001;")
   end)
 
   it("waits for the confirmation rather than re-sending every round", function()
@@ -229,7 +232,7 @@ describe("SOULSTORM profanes a soul once", function()
     local f = io.open("src_new/scripts/levi_ataxia/levi/ataxia/basher/001_Bashing_Functions.lua")
     local src = f:read("*a"); f:close()
     expect(src:find("belchCmd..stormCmd", 1, true) ~= nil).toBeTrue()
-    expect(src:find("belchCmd ~= \"\"", 1, true) ~= nil).toBeTrue() -- the eq hand-off
+    expect(src:find("belchCmd ~= \"\"", 1, true)).toBeNil() -- no eq hand-off: they are separate
     f = io.open("src_new/scripts/levi_ataxia/levi/ataxia/update_stuff/003_ataxia_RoomContents_Update.lua")
     local room = f:read("*a"); f:close()
     expect(room:find("ataxiaBasher_profanedForget()", 1, true) ~= nil).toBeTrue()

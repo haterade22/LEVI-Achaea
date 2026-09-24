@@ -2,6 +2,33 @@
 
 ---
 
+## 2026-09-24 - Correction: the soulstorm never had to wait for the belch (v4.7.343)
+
+User: *"For soulstorm, belch doesnt matter, shouldnt be a criteria. They are two seperate
+attacks."*
+
+v4.7.338 held the storm back on any round the belch fired, reasoning that one equilibrium cannot
+buy two abilities. **That was my inference, not the game's rule** -- and the ability text says as
+much: against a denizen soulstorm's *"equilibrium and essence costs shall be greatly reduced"*. The
+gate cost a debuff on every mob in every crowded room, which is exactly where the +10% was worth
+most.
+
+A round can now carry all three: `belch;soulstorm <t>;deadeyes <t> bleed bleed`. Everything else
+about the storm is unchanged -- once per denizen, by target id, confirmed by the game's own line.
+
+### Verification
+
+2282 tests pass. The three tests that asserted the old rule failed on the change, which is what
+they were for; they now pin the corrected one, including all three commands in a single round.
+
+### Files
+
+- `basher/014_Dead_Breath.lua`, `basher/001_Bashing_Functions.lua`: the `busy` gate is gone.
+- `tests/test_basher_deadbreath.lua`, `tests/test_basher_apostate_riders.lua`; `CHANGELOG.md`,
+  `CLAUDE.md`; memory.
+
+---
+
 ## 2026-09-24 - "Still profanes" is how we learn a soul was already done (v4.7.342)
 
 User: *"Necromantic essence still profanes a bloated cabin boy's soul."* -- *"This is soulstorm

@@ -1103,11 +1103,13 @@ function ataxiaBasher_assembleAttack()
     end
     -- DEATHTEMPEST (v4.7.338): SOULSTORM profanes a denizen's soul -- a DEBUFF worth exactly one
     -- cast per mob (+10% from our necromancy, evileye and weaponmastery), so it is tracked by
-    -- target id and confirmed by the game's line. It rides equilibrium like the belch above, and
-    -- only one eq spend lands at a time, so it stands down on a round the belch took.
+    -- target id and confirmed by the game's line. It rides BESIDE the belch, not behind it
+    -- (v4.7.343, user: "belch doesnt matter ... They are two seperate attacks") -- soulstorm's
+    -- equilibrium cost is "greatly reduced" against a denizen, so holding it back cost a debuff
+    -- for nothing.
     local stormCmd = ""
     if ataxiaBasher_deathtempestStorm then
-      local okS, resS = pcall(ataxiaBasher_deathtempestStorm, sp, belchCmd ~= "")
+      local okS, resS = pcall(ataxiaBasher_deathtempestStorm, sp)
       if okS and type(resS) == "string" then stormCmd = resS end
     end
     command = command..ldeckCmd..stareCmd..belchCmd..stormCmd.._G[ataxiaBasher_bashingFuncs[class]]()

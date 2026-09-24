@@ -154,13 +154,15 @@ end
 -- attacks want. So it is tracked by TARGET ID -- ids are unique per creature and never return
 -- once it dies -- and confirmed by the game's own line rather than by the send.
 --
--- IT STANDS DOWN FOR THE BELCH. Both ride equilibrium, and only one eq spend can land at a time;
--- a room attack that hits every denizen outranks +10% on one of them (the caller passes `busy`).
+-- IT DOES NOT STAND DOWN FOR THE BELCH (corrected v4.7.343, user: "For soulstorm, belch doesnt
+-- matter, shouldnt be a criteria. They are two seperate attacks"). v4.7.338 held the storm back on
+-- any round the belch fired, reasoning that one equilibrium cannot buy two abilities. That was my
+-- inference, not the game's rule -- and the ability text supports the user: against a denizen
+-- soulstorm's "equilibrium and essence costs shall be greatly reduced". Both go out.
 local SOULSTORM_RETRY = 6 -- a send we never saw confirmed is tried again after this
 
-function ataxiaBasher_deathtempestStorm(sp, busy)
+function ataxiaBasher_deathtempestStorm(sp)
   if not mnemDeathtempest then return "" end
-  if busy then return "" end -- the belch has this round's equilibrium
   if not (ataxiaBasher and ataxiaBasher.enabled) then return "" end
   if ataxiaBasher.shielded then return "" end
   if type(target) ~= "number" then return "" end

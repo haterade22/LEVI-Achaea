@@ -9,8 +9,9 @@
 -- so a later change that makes a rider replace the swing -- or the swing drop a rider -- fails
 -- here rather than in a swarm.
 --
--- The one exception is the pair of riders themselves: BELCH is also equilibrium, so only one of
--- the two can land in a round, and the room attack wins.
+-- The two riders do NOT compete with each other either (v4.7.343, user: "belch doesnt matter,
+-- shouldnt be a criteria. They are two seperate attacks") -- against a denizen the storm's
+-- equilibrium cost is "greatly reduced", so a round can carry the belch, the storm and the swing.
 
 require("mock_mudlet")
 
@@ -45,7 +46,7 @@ end
 local function round()
   local sp = ataxia.settings.separator
   local belch = ataxiaBasher_deadBreathBelch(sp)
-  local storm = ataxiaBasher_deathtempestStorm(sp, belch ~= "")
+  local storm = ataxiaBasher_deathtempestStorm(sp)
   return belch .. storm .. ataxiaBasher_apostateBashing()
 end
 
@@ -86,25 +87,19 @@ describe("one round, two resources", function()
     expect(cmd:find("deadeyes 77001 bleed bleed", 1, true) ~= nil).toBeTrue()
   end)
 
-  it("but never both riders: one equilibrium, and the room attack takes it", function()
+  it("all three together: belch, soulstorm and the swing", function()
     reset()
     mnemDeadBreath, mnemDeathtempest = true, true
     local cmd = round()
     expect(cmd:find("belch", 1, true) ~= nil).toBeTrue()
-    expect(cmd:find("soulstorm", 1, true)).toBeNil()
+    expect(cmd:find("soulstorm 77001", 1, true) ~= nil).toBeTrue()
     expect(cmd:find("deadeyes 77001 bleed bleed", 1, true) ~= nil).toBeTrue()
-    -- The belch keeps the equilibrium for as long as it can USE it -- after its cooldown it
-    -- simply fires again, which is right: a room attack beats +10% on one mob every time.
-    clock = clock + 10
-    expect(round():find("belch", 1, true) ~= nil).toBeTrue()
-    -- The storm gets the round when the belch cannot take it: here the room is still full of our
-    -- own gas (the game refused the last one), which is the common case in a room we are clearing.
-    ataxiaBasher_belchFouled()
+    -- ...and the storm is still once per soul: the next round carries the belch, not a second one
+    ataxiaBasher_soulstormLanded()
     clock = clock + 10
     local later = round()
-    expect(later:find("belch", 1, true)).toBeNil()
-    expect(later:find("soulstorm 77001", 1, true) ~= nil).toBeTrue()
-    expect(later:find("deadeyes 77001 bleed bleed", 1, true) ~= nil).toBeTrue()
+    expect(later:find("belch", 1, true) ~= nil).toBeTrue()
+    expect(later:find("soulstorm", 1, true)).toBeNil()
   end)
 
   it("a shielded target still swings -- the riders stand down, the raze does not", function()
