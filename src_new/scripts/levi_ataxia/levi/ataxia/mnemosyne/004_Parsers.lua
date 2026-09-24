@@ -342,6 +342,7 @@ function M.onRunEnd()
   M.run.boss = nil
   if ataxiaBasher_mnemLdeckReset then ataxiaBasher_mnemLdeckReset() end
   M.restoreTreeCuring() -- Splinterbark over -> tattoo untainted, turn game tree curing back on
+  M.restoreTattooKeepup() -- Rimewrought over -> tattoos work again, keep them up again (v4.7.334)
   if M._inRun() then M.endRun() end
 end
 
@@ -468,6 +469,64 @@ function M.onFamineSeen()
   if ataxia_hornSatiate then pcall(ataxia_hornSatiate, "famine seen") end
 end
 
+-- Every defence the deffing tables call a TATTOO (`ataxiaTables.classDefences.tattoos`:
+-- mindseye, cloak, moss, boar, moon, megalith). Read from that table rather than listed here, so a
+-- tattoo added there is covered without touching this file.
+local function tattooDefences()
+  local t = ataxiaTables and ataxiaTables.classDefences and ataxiaTables.classDefences.tattoos
+  if not t and sortedDefenceShow then
+    pcall(sortedDefenceShow)
+    t = ataxiaTables and ataxiaTables.classDefences and ataxiaTables.classDefences.tattoos
+  end
+  local out = {}
+  for def in pairs(t or {}) do out[#out + 1] = def end
+  table.sort(out) -- a stable command, and a stable test
+  return out
+end
+
+-- KEEP-UP IS A STANDING ORDER TO SSC (v4.7.334, user: "We need to not keepup mindseye, cloak,
+-- (anything else that is a tattoo) because it will just spam"). A defence in the profile sits at
+-- `curing priority defence <def> 25`, which is what makes SSC re-raise it the moment it lapses --
+-- so under Rimewrought it retries a tattoo that cannot work, forever. Reset exactly the tattoos
+-- the CURRENT profile asks for, remember which, and put those back on run end.
+--
+-- The profile itself is never edited. `ataxia.settings.defences` is saved to disk, and a config
+-- edited by an affix is a config that stays edited when a session ends the wrong way -- the user
+-- would find their keep-up list quietly shortened. The priority is a game-side setting, like the
+-- tree curing above, so this is the same shape as Splinterbark: turn it off, restore what we
+-- turned off.
+function M.stripTattooKeepup()
+  local d = ataxia and ataxia.settings and ataxia.settings.defences
+  local cur = d and d.current
+  local prof = (cur and cur ~= "" and d.defup) and d.defup[cur] or nil
+  if not prof then return false end
+  local off = {}
+  for _, def in ipairs(tattooDefences()) do
+    if prof[def] then off[#off + 1] = def end
+  end
+  if #off == 0 then return false end
+  local cmd = "curing priority defence"
+  for _, def in ipairs(off) do cmd = cmd .. " " .. def .. " reset" end
+  send(cmd, false)
+  M._rimeTattoosOff = off
+  return off
+end
+
+-- Put back exactly what `stripTattooKeepup` took off -- never a tattoo the profile did not ask
+-- for. Called from onRunEnd beside `restoreTreeCuring`.
+function M.restoreTattooKeepup()
+  local off = M._rimeTattoosOff
+  M._rimeTattoosOff = nil
+  if type(off) ~= "table" or #off == 0 then return false end
+  local cmd = "curing priority defence"
+  for _, def in ipairs(off) do cmd = cmd .. " " .. def .. " 25" end
+  send(cmd, false)
+  if not M._quiet() then
+    M.echo("Rimewrought over -- <green>keep-up restored<reset> for " .. table.concat(off, ", "))
+  end
+  return true
+end
+
 function M.onRimewroughtSeen()
   if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return end
   if mnemRimewrought then return end
@@ -477,9 +536,12 @@ function M.onRimewroughtSeen()
     M._treeCuringOff = true
     send("curing tree off")
   end
+  -- ...and stop SSC re-raising the tattoo DEFENCES, which is the same waste one layer out.
+  local stripped = M.stripTattooKeepup()
   if not M._quiet() then
     M.echo("<red>Rimewrought<reset> active -- <red>tattoos do NOTHING<reset> (shield, tree); "
-      .. "curing tree off, and denizens add freezing")
+      .. "curing tree off, and denizens add freezing"
+      .. (stripped and (". <grey>Keep-up off for <white>" .. table.concat(stripped, ", ")) or ""))
   end
 end
 
