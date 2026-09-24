@@ -44,6 +44,7 @@ mnemRollHide = false  -- boons reset each run
 mnemBloodscent = false  -- boons reset each run
 mnemKaiUnleashed = false  -- boons reset each run
 mnemDeadBreath = false    -- ...including Dead Breath (v4.7.337)
+mnemDeathtempest = false  -- ...and Deathtempest (v4.7.338)
 mnemSenselessFlurry = false  -- boons reset each run
 mnemSpiritRend = false  -- boons reset each run
 mnemObligateCarnivore = false  -- boons reset each run

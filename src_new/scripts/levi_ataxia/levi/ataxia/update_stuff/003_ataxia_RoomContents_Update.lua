@@ -53,6 +53,9 @@ function ataxia_RoomContents_Update(event)
 
 	--For QL/Entering a room.
 	if event == "gmcp.Char.Items.List" and gmcp.Char.Items.List.location ~= "inv" then
+		-- The profaned-soul set (v4.7.338) belongs to the room we just left: ids never repeat, so
+		-- this is housekeeping, not correctness.
+		if ataxiaBasher_profanedForget then ataxiaBasher_profanedForget() end
 		ataxia.denizensHere = {}
 		atempDenizens = {}
 		ataxiaTemp.goldInRoom = false

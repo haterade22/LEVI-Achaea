@@ -143,8 +143,85 @@ describe("the boon's own line proves the boon", function()
   end)
 end)
 
+-- ---------------------------------------------------------------------------
+-- DEATHTEMPEST: SOULSTORM once per denizen (v4.7.338). User: "We should use this once" -- "If we
+-- have the boon deathtempest". The boon's value is the PROFANE debuff sitting on that mob
+-- (+10% from necromancy, evileye and Infernal weaponmastery), so a second cast buys nothing.
+-- ---------------------------------------------------------------------------
+describe("SOULSTORM profanes a soul once", function()
+  local function stormReset()
+    reset()
+    mnemDeathtempest = true
+    target = 77001
+    ataxiaTemp.profaned, ataxiaTemp.soulstormAt, ataxiaTemp.soulstormTarget = {}, nil, nil
+  end
+
+  it("storms the target, then never that one again", function()
+    stormReset()
+    expect(ataxiaBasher_deathtempestStorm(";")).toBe("soulstorm 77001;")
+    ataxiaBasher_soulstormLanded()                     -- the game confirms the profane
+    expect(ataxiaBasher_deathtempestStorm(";")).toBe("")
+    target = 77002                                      -- a different soul is fair game
+    expect(ataxiaBasher_deathtempestStorm(";")).toBe("soulstorm 77002;")
+  end)
+
+  it("does nothing without the boon", function()
+    stormReset()
+    mnemDeathtempest = false
+    expect(ataxiaBasher_deathtempestStorm(";")).toBe("")
+  end)
+
+  it("stands down for the belch -- one equilibrium, and the room attack outranks it", function()
+    stormReset()
+    expect(ataxiaBasher_deathtempestStorm(";", true)).toBe("")
+    expect(ataxiaBasher_deathtempestStorm(";", false)).toBe("soulstorm 77001;")
+  end)
+
+  it("waits for the confirmation rather than re-sending every round", function()
+    stormReset()
+    expect(ataxiaBasher_deathtempestStorm(";")).toBe("soulstorm 77001;")
+    expect(ataxiaBasher_deathtempestStorm(";")).toBe("") -- the 0.3s rebuild must not respam it
+    NOW = NOW + 8                                        -- ...but a storm the server ate retries
+    expect(ataxiaBasher_deathtempestStorm(";")).toBe("soulstorm 77001;")
+  end)
+
+  it("marks the target it was SENT for, not whatever is in front of us now", function()
+    stormReset()
+    ataxiaBasher_deathtempestStorm(";")                  -- sent for 77001
+    target = 77002                                       -- the round moved on
+    ataxiaBasher_soulstormLanded()
+    expect(ataxiaTemp.profaned[77001]).toBeTrue()
+    expect(ataxiaTemp.profaned[77002]).toBeNil()
+  end)
+
+  it("breaks the shield first, and needs a real target", function()
+    stormReset()
+    ataxiaBasher.shielded = true
+    expect(ataxiaBasher_deathtempestStorm(";")).toBe("")
+    ataxiaBasher.shielded = false
+    target = nil
+    expect(ataxiaBasher_deathtempestStorm(";")).toBe("")
+    target = 77001
+  end)
+
+  it("the round asks for it, and the room read forgets the old souls", function()
+    local f = io.open("src_new/scripts/levi_ataxia/levi/ataxia/basher/001_Bashing_Functions.lua")
+    local src = f:read("*a"); f:close()
+    expect(src:find("belchCmd..stormCmd", 1, true) ~= nil).toBeTrue()
+    expect(src:find("belchCmd ~= \"\"", 1, true) ~= nil).toBeTrue() -- the eq hand-off
+    f = io.open("src_new/scripts/levi_ataxia/levi/ataxia/update_stuff/003_ataxia_RoomContents_Update.lua")
+    local room = f:read("*a"); f:close()
+    expect(room:find("ataxiaBasher_profanedForget()", 1, true) ~= nil).toBeTrue()
+    f = io.open("src_new/triggers/levi_ataxia/for_levi/leviticus/780_Soulstorm_Landed.lua")
+    local trig = f:read("*a"); f:close()
+    expect(trig:find("engulfing .+ in a profane soulstorm", 1, true) ~= nil).toBeTrue()
+    expect(trig:find("ataxiaBasher_soulstormLanded()", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
 -- Restore shared state for whoever runs after us.
 getEpoch = realEpoch
 ataxia.mnemosyne._denizenCount = realCount
-mnemDeadBreath = nil
+mnemDeadBreath, mnemDeathtempest, target = nil, nil, nil
+ataxiaTemp.profaned, ataxiaTemp.soulstormAt, ataxiaTemp.soulstormTarget = nil, nil, nil
 ataxiaTemp.belchAt, ataxiaTemp.belchFouledRoom, ataxiaTemp.belchFouledAt = nil, nil, nil
