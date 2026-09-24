@@ -2,6 +2,96 @@
 
 ---
 
+## 2026-09-24 - Army of the Dead reaches the Apostate (v4.7.347)
+
+User, pasting the boon, the ability and the two lines it prints: *"For Apostate"*.
+
+```
+Army of the Dead               1          rare
+  When summoning the hands of the grave, you will deal damage to all denizens in the location.
+
+Gravehands (Necromancy)  ABADMIN ID: 144
+Syntax:            SUMMON HANDS OF THE GRAVE
+Cooldown:          3.00 seconds of equilibrium
+Resource:          1.50% life essence and 350 mana
+```
+
+**The boon did nothing at all on this class.** `ataxiaBasher_infGravehands` has carried the
+Apostate command since v4.7.149 -- `(class == "Apostate") and "summon hands of the grave" or
+"tyranny"` -- and nothing ever called it from the Apostate round. Only
+`ataxiaBasher_infernalBashing` asked for it. So the helper was right and unreachable, which is the
+worst way for a feature to be wrong: nothing errors, nothing echoes, the boon is simply inert.
+
+### Two things differ on this class, and both come from the ABADMIN block
+
+**It RIDES, it does not replace.** The Infernal's TYRANNY takes the primary slot because that
+ability spends the round. Gravehands spends **equilibrium**, and the Apostate swing
+(`deadeyes <t> bleed bleed`) spends **balance** -- the same split the user established for the
+other two necromancy riders (*"Soulstorm takes eq and deadeyes take balance"*). So it is prepended
+beside the belch and the soulstorm. Four things now go out on one round, and they cost three
+different resources.
+
+**It costs 350 mana**, which the Infernal path never had to think about. Mana is the curing pool
+as well as the ammunition, so there is a floor -- but this is a ONCE-PER-ROOM cast rather than the
+belch's every-five-seconds, so it sits at 40% rather than the belch's 50. The flat 350 check is
+*not* redundant with the floor: the floor is configurable and is silently inert when the client
+has told us no maxmp, and 350 mana we do not have is a refusal whatever the percentage says. (A
+mutant proved that: deleting the flat check passed until a test turned the floor off.)
+
+The 1.5% life essence is already covered by the essence floor -- the Infernal's 3% is the more
+expensive of the two, so a floor sized for that is safe for this.
+
+### The room latch is a guess until the game answers
+
+The once-per-room stamp is written at SEND time, so a refused cast burns the room for the rest of
+the visit -- and this round already carries two other equilibrium riders that could have taken the
+beat. The Apostate cast prints a line, so here silence is evidence:
+
+```
+You mutter words of death and decay, and suddenly the ground breaks open all around as hands
+of rotting flesh and white bone push out of the ground.
+```
+
+Trigger `782` stamps that as confirmation; an unconfirmed summon retries **once** after 6s, per
+room. **The Infernal is deliberately excluded**: TYRANNY's confirmation line has never been
+captured, so "unconfirmed" would be its permanent state and this would re-cast every few seconds
+-- the v4.7.148 bug that burned 3% life essence a go.
+
+That line does **not** latch the boon. The base ability prints it with or without Army of the
+Dead, and the boon is what costs 1.5% essence and 350 mana *per room* -- a wrong latch is paid for
+in every room after it. The BOONS row (`mnemosyne/039`) and the claim line already own that fact
+unambiguously. This is the opposite call to the belch's, and deliberately: `Your rotten breath
+befouls the air...` cannot print without Dead Breath, and the belch costs no HP.
+
+### Both lines are highlighted, in a third colour
+
+`cadet_blue` -- the belch is goldenrod, the soulstorm medium_orchid, and a shared colour is what
+v4.7.344 was raised to fix. Seeing the summon line **without** the second line is the tell that
+the hands went up and the boon did not:
+
+```
+Putrescent flesh and rotting dermis grasp in vain at all present, the chill of the grave
+striking out amidst a rasping chorus of death.
+```
+
+### Verification
+
+2328 tests pass (21 new). **15 mutants, all killed.** Three survived the first pass: one was a bad
+anchor, and the two real ones were untested guards -- the flat mana check (redundant with the
+floor until the floor is turned off) and the Infernal's exclusion from that mana gate (its fixture
+never set mana low enough to trip it). A fourth finding worth recording: the highlight test's
+"never an orange" assertion matched the word in the file's own comment, the same trap v4.7.346 had
+just fixed elsewhere -- it now parses the `fg()` calls instead of searching the text.
+
+### Files
+
+- `basher/002_Class_Bashing.lua` (`ataxiaBasher_apostateBashing`, `ataxiaBasher_infGravehands`,
+  `ataxiaBasher_gravehandsUp`, `GRAVEHANDS_CONFIRM`); triggers `782_Gravehands_Up.lua` and
+  `highlighting/066_Gravehands_Highlight.lua` (new); `tests/test_basher_apostate_riders.lua`;
+  `CHANGELOG.md`, `CLAUDE.md`, memory.
+
+---
+
 ## 2026-09-24 - Tumble goes through mounted (v4.7.346)
 
 User: *"tumble goes through while on a mount, by the way."*
