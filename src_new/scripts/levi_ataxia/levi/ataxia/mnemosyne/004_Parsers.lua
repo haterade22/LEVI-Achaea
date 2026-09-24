@@ -236,7 +236,7 @@ function M.onRunEnd()
   mnemObligateCarnivore = false -- boons gone on a confirmed run-end
   mnemDeadlyFlourish = false -- boons gone on a confirmed run-end
   mnemDeathStare = false -- boons gone on a confirmed run-end
-  mnemDeadBreath = false -- ...and BELCH goes back to being a single-target nuisance (v4.7.336)
+  mnemDeadBreath = false -- ...and BELCH goes back to being a single-target nuisance (v4.7.337)
   mnemSearingLight = false -- boons gone on a confirmed run-end
   mnemHealingMetabolism = false -- boons gone on a confirmed run-end
   -- Berserker's Edge pinned the rage floor to 100 (basher/001). Putting it back is the half that

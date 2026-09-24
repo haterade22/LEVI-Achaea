@@ -1091,7 +1091,7 @@ function ataxiaBasher_assembleAttack()
       if ok and type(res) == "string" then stareCmd = res end
     end
     if ataxiaBasher_considerRecon then pcall(ataxiaBasher_considerRecon) end
-    -- DEAD BREATH (v4.7.336): BELCH is a ROOM attack on EQUILIBRIUM, so it rides the round like
+    -- DEAD BREATH (v4.7.337): BELCH is a ROOM attack on EQUILIBRIUM, so it rides the round like
     -- the stare above rather than replacing it -- the class combo still spends its balance. The
     -- boon makes it hit every denizen (user log: 2121 + 15372 + 18000 asphyxiation, three dead in
     -- one belch), and it is gated on 2+ denizens because that is where a room attack earns its
