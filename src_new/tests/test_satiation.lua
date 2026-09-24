@@ -18,6 +18,7 @@ local _saved = {
   tempRegexTrigger = tempRegexTrigger, tempTimer = tempTimer,
   killTrigger = killTrigger, killTimer = killTimer, matches = matches, gmcp = gmcp,
   mnemObligateCarnivore = mnemObligateCarnivore, mnemHealingMetabolism = mnemHealingMetabolism,
+  mnemFamine = mnemFamine,
   ataxiaTemp = ataxiaTemp, ataxiaSettings = ataxia and ataxia.settings,
 }
 
@@ -45,7 +46,7 @@ local function reset()
   sent, NOW, armed, timers, timerId = {}, 1000, nil, {}, 0
   ataxiaTemp = {}
   ataxia.settings.satiatePoll = nil
-  mnemObligateCarnivore, mnemHealingMetabolism = false, false
+  mnemObligateCarnivore, mnemHealingMetabolism, mnemFamine = false, false, false
   gmcp = { Char = { Defences = { Remove = {} } } }
 end
 
@@ -254,11 +255,59 @@ describe("the starvation path's 5s re-fire throttle now lives in ataxia_hornOnHu
   end)
 end)
 
+-- ---------------------------------------------------------------------------
+-- FAMINE (v4.7.333). User, from a live status screen: "Famine: Taking damage has a chance to make
+-- you more hungry, and your healing received from elixirs, moss, and potash is reduced by 20%." --
+-- "When we have this we need to eat to full every room."
+-- ---------------------------------------------------------------------------
+describe("the Famine affix feeds on the room's clock, boon or no boon", function()
+  it("opens the upkeep feed with no boon held at all", function()
+    reset()
+    expect(ataxia_hornSatiate("no affix")).toBeFalse() -- nothing holds it open...
+    mnemFamine = true
+    expect(ataxia_hornSatiate("famine")).toBeTrue()    -- ...the affix does
+    expect(sentAny("probe horn")).toBeTrue()
+  end)
+
+  it("tops up per room, and does nothing when the affix is down", function()
+    reset()
+    expect(ataxia_famineTopUp()).toBeFalse()
+    mnemFamine = true
+    expect(ataxia_famineTopUp()).toBeTrue()
+    expect(sentAny("probe horn")).toBeTrue()
+  end)
+
+  it("eats the corpse instead of a horn charge when corpses are edible", function()
+    reset()
+    mnemFamine, mnemObligateCarnivore = true, true
+    expect(ataxia_famineTopUp()).toBeTrue()
+    expect(sentAny("ii corpse")).toBeTrue()    -- free food first
+    expect(sentAny("probe horn")).toBeFalse()
+  end)
+
+  it("still verifies with SCORE, so it can chain until full", function()
+    reset()
+    mnemFamine = true
+    expect(ataxia_hornSatiate("famine")).toBeTrue()
+    for _, t in pairs(timers) do t.fn() end
+    expect(sentAny("score")).toBeTrue()
+  end)
+
+  it("a kill under Famine takes a corpse even without Healing Metabolism", function()
+    reset()
+    mnemObligateCarnivore = true
+    expect(ataxia_carnivoreTopUp()).toBeFalse() -- the boon pair is what normally opens this
+    mnemFamine = true
+    expect(ataxia_carnivoreTopUp()).toBeTrue()
+  end)
+end)
+
 -- Restore shared state for whoever runs after us.
 send, getEpoch, ataxiaEcho = _saved.send, _saved.getEpoch, _saved.ataxiaEcho
 tempRegexTrigger, tempTimer = _saved.tempRegexTrigger, _saved.tempTimer
 killTrigger, killTimer, matches, gmcp = _saved.killTrigger, _saved.killTimer, _saved.matches, _saved.gmcp
 mnemObligateCarnivore, mnemHealingMetabolism = _saved.mnemObligateCarnivore, _saved.mnemHealingMetabolism
+mnemFamine = _saved.mnemFamine
 ataxiaTemp = _saved.ataxiaTemp or {}
 if _saved.ataxiaSettings then ataxia.settings = _saved.ataxiaSettings end
 mock.reset()

@@ -181,7 +181,7 @@ function ataxiaBasher_attack()
   -- Under BRAVADO a shield does nothing (v4.7.206), so spending the action on one is strictly
   -- worse than swinging: it costs a round AND leaves us believing we are covered. Fall
   -- through to the attack -- clearing the room is the only mitigation the affix leaves us.
-  if danger == "shield" and not ataxiaBasher_bravado() then
+  if danger == "shield" and not ataxiaBasher_bravado() and not ataxiaBasher_tattoosDead() then
     send("queue addclear freestand touch shield")
     return
   end
@@ -222,6 +222,13 @@ end
 -- (2 denizens, not 3): the swarm tactics become the ONLY mitigation left.
 function ataxiaBasher_bravado()
   return mnemBravado == true
+end
+
+-- RIMEWROUGHT (v4.7.333): "Perpetual ice coats your body, rendering tattoos ineffective". Same
+-- reading as `ataxiaBasher_bravado` above -- a `touch shield` that cannot work is worse than
+-- doing nothing, because it costs the action AND leaves us believing we are covered.
+function ataxiaBasher_tattoosDead()
+  return mnemRimewrought == true
 end
 
 -- CONTROL-FIRST DENIZENS (v4.7.198, user-directed: "a manifested nightmare -- when facing
@@ -823,8 +830,14 @@ function ataxiaBasher_executeFlee()
     or ataxia.afflictions.stun
 
   if cantMove then
-    ataxiaEcho("FLEE: Can't move (afflicted). Shielding and waiting for cures.")
-    send("touch shield")
+    -- Under Rimewrought the shield tattoo is inert (v4.7.333), so there is nothing to send: say
+    -- what is actually happening rather than claiming a shield we will not get.
+    if ataxiaBasher_tattoosDead() then
+      ataxiaEcho("FLEE: Can't move (afflicted) and tattoos are dead (Rimewrought) -- waiting for cures.")
+    else
+      ataxiaEcho("FLEE: Can't move (afflicted). Shielding and waiting for cures.")
+      send("touch shield")
+    end
     return
   end
 
@@ -846,8 +859,12 @@ function ataxiaBasher_executeFlee()
         return
       end
     end
-    ataxiaEcho("FLEE: No escape route. Shielding.")
-    send("touch shield")
+    if ataxiaBasher_tattoosDead() then
+      ataxiaEcho("FLEE: No escape route, and tattoos are dead (Rimewrought) -- nothing to shield with.")
+    else
+      ataxiaEcho("FLEE: No escape route. Shielding.")
+      send("touch shield")
+    end
   end
 end
 
@@ -912,7 +929,7 @@ function ataxiaBasher_checkPlayerFlee()
       ataxiaBasher.paused = true
       expandAlias("mstop")
       send("cq all")
-      send("touch shield")
+      if not ataxiaBasher_tattoosDead() then send("touch shield") end -- inert under Rimewrought
       ataxiaEcho("Hostile player detected: " .. player .. "! Fleeing and disabling basher.")
       return true
     end

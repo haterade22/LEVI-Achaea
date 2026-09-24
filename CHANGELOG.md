@@ -2,6 +2,71 @@
 
 ---
 
+## 2026-09-24 - Two affixes that take an answer away: Rimewrought and Famine (v4.7.333)
+
+### Rimewrought -- every tattoo is inert
+
+User, with the status screen: *"When we have this ongoing effect or affix. We cannot use tattoos."*
+
+```
+Rimewrought:   Perpetual ice coats your body, rendering tattoos ineffective, and denizens
+               cause additional freezing on their attacks.
+```
+
+The same shape as Bravado, and the dangerous kind: `touch shield` and `touch tree` keep costing a
+command and a balance while returning nothing, and the basher goes on believing it shielded.
+
+- **Every tattoo we send is gated** on `ataxiaBasher_tattoosDead()`: the danger-ladder shield, the
+  two flee fallbacks, the hostile-player exit, the class-cheese `touch shield`, the Psion's
+  `psi manipulate touch tree`, the blackout tree touch, and the lock-breaker's tree/shield pair.
+  Where a shield WAS the whole answer the echo now says so ("tattoos are dead (Rimewrought)")
+  rather than claiming a shield we will not get.
+- **The game's own tree curing is turned off**, because the tree of life is a tattoo too and SSC
+  would otherwise spend it on every burst for no cure. This reuses the Splinterbark machinery
+  wholesale, including the restore on run end.
+
+Not covered, deliberately: tattoo DEFENCES that SSC keeps up server-side (`keepadd` moss, boar,
+cloak). We never send those, and stripping the keep-up list would have to be undone exactly on run
+end -- worth doing only with a live sample of what the game actually refuses.
+
+### Famine -- eat on the room's clock, not the game's
+
+User: *"When we have this we need to eat to full every room."*
+
+```
+Famine:   Taking damage has a chance to make you more hungry, and your healing received from
+          elixirs, moss, and potash is reduced by 20%.
+```
+
+Hunger normally arrives on its own slow clock, so feeding has been either an emergency (the horn,
+because starvation ends in unconsciousness) or a boon upkeep (Obligate Carnivore / Healing
+Metabolism). This affix drives hunger off DAMAGE TAKEN, which in a wade never stops.
+
+- **The upkeep feed now runs without any boon** while the affix is up, and **tops up on every
+  room's last kill** -- the tower's own per-room clock, and the moment a fight is ending rather
+  than peaking, which matters because eating contends with cure-herbs for the eating balance.
+- **Corpses still come first** where Obligate Carnivore makes them edible, so with that boon the
+  upkeep is free; without it, a horn charge per room is the price of not passing out.
+- The existing chain still applies: a feed is followed by a verifying read, and it stops at
+  "utterly satiated" -- so the affix cannot make us eat in circles.
+
+### Verification
+
+2217 tests pass (11 new). Both affixes latch only inside the tower, are transition-guarded against
+a status re-read, and clear on the confirmed run end.
+
+### Files
+
+- `mnemosyne/004_Parsers.lua`: `onRimewroughtSeen`, `onFamineSeen`, the lock-breaker's shield gate.
+- `basher/001_Bashing_Functions.lua`: `ataxiaBasher_tattoosDead()` and its four spend sites.
+- `004_Aff_gains_losses.lua`, `ataxia/003_Queueing_Related.lua`: the other tattoo senders.
+- `misc_scripts/022_Horn_Of_Plenty.lua`: `ataxia_famineTopUp`, and the affix opens the upkeep feed.
+- `triggers/.../mnemosyne/096_Rimewrought.lua`, `097_Famine.lua`: new; `340_Slain.lua`,
+  `mnemosyne/001_Run_Start.lua`.
+- `tests/test_mnemosyne.lua`, `tests/test_satiation.lua`; `CHANGELOG.md`, `CLAUDE.md`; memory.
+
+---
+
 ## 2026-09-21 - A stat traded away is a trade, not a price (v4.7.332)
 
 User: *"Ogre is a bit different. Because it is giving us something for removing a stat. I would
