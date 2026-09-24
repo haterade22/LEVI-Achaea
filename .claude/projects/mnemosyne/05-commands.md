@@ -22,7 +22,7 @@ Every row below is a branch that `M.command` actually dispatches — nothing els
 
 | Command | Effect |
 |---------|--------|
-| `mnem status` (or bare `mnem`) | `M.status()` — echoes URL, token set?, auto on/off, contemplate on/off, and current run state (active, ripple, id) |
+| `mnem status` (or bare `mnem`) | `M.status()` — echoes URL, token set?, auto on/off, contemplate on/off, the tracker **Queue** (pending, what is in flight and for how long, red when stale, backlog replay progress -- v4.7.336), and current run state (active, ripple, id) |
 | `mnem token <token>` | Save `cfg.token`; persists via `ataxia_saveSettings(false)`. Empty arg prints usage |
 | `mnem on` | `cfg.enabled = true`, save, then `M.runExists()` to resync in case you enabled mid-run |
 | `mnem off` | `cfg.enabled = false`, save |
@@ -30,6 +30,7 @@ Every row below is a branch that `M.command` actually dispatches — nothing els
 | `mnem debug` | Toggle `cfg.debug` (verbose `M.decho` echoes) — **not persisted** |
 | `mnem quiet [on\|off]` | Toggle/force `cfg.quiet` (silences the automatic boon/affix history echoes; still records), save. See [06-history.md](06-history.md) |
 | `mnem test` (or `mnem health`) | `M.testHealth()` — ping `GET /health` for connectivity |
+| `mnem queue [clear]` | `M.queueInfo()`/`M.queueCounts()` — unsent tracker requests grouped by endpoint; `clear` → `M.queueClear()` drops them all and says how many (v4.7.336). A reload RESUMES the queue by default ([02-reporting.md](02-reporting.md)); `clear` is for a backlog you would rather not send |
 | `mnem help` | Any unknown subcommand also lands here — prints the command reference |
 
 `on`/`off`/`quiet` (and the map/explore toggles below) resolve their argument through `M._toggleState(arg, current)` — `"on"→true`, `"off"→false`, anything else → a plain toggle — so `mnem quiet off` genuinely forces off rather than toggling.

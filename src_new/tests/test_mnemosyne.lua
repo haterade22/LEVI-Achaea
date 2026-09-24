@@ -43,6 +43,9 @@ local function reset(active)
   M._queue = {}
   M._busy = false
   M._watchdog = nil
+  -- The client's transient state (watchdog id, send stamp, replay tally) lives here since v4.7.336.
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.mnemHttp = nil
   M._capturing = false
   M.run = { active = active and true or false, publicId = nil, ripple = 0,
             pendingMonsters = {}, lastOffered = {} }
@@ -174,6 +177,249 @@ describe("serial POST queue", function()
     M.reportBoss("a dragon")
     expect(sent[1].payload.token).toBe("TESTTOKEN")
     expect(sent[1].payload.boss).toBe("a dragon")
+  end)
+end)
+
+-- ─── A queue that came back from disk (v4.7.336) ─────────────────────────────
+--
+-- The live save held `_busy = true` and 711 unsent requests: one save caught a POST in flight,
+-- deepMerge restored the flag on the next start with no request and no watchdog behind it, and
+-- `_pump` returned early forever. These rebuild that state exactly -- plain request tables with
+-- no callbacks (functions are stripped on save), a busy flag, no send stamp.
+
+describe("a queue restored from disk (the nine-run wedge)", function()
+  -- What deepMerge hands back: data only.
+  local function restored(endpoints)
+    local q = {}
+    for i, ep in ipairs(endpoints) do
+      q[i] = { endpoint = ep, payload = { token = "OLDTOKEN", n = i }, tries = 0 }
+    end
+    return q
+  end
+
+  local function quietly(fn)
+    local real, said = M.echo, {}
+    M.echo = function(m) said[#said + 1] = tostring(m) end
+    local ok, err = pcall(fn, said)
+    M.echo = real
+    if not ok then error(err, 0) end
+    return said
+  end
+
+  local function joined(said) return table.concat(said, "\n") end
+
+  it("resumes and drains the restored queue in order, then the new request", function()
+    reset(true)
+    M._queue = restored({ "/death", "/run_start", "/ripple_level" })
+    M._busy = true
+    local said = quietly(function()
+      M._resumeQueue("restored from disk")
+      expect(#sent).toBe(1)
+      expect(sent[1].url).toContain("/death")      -- the head that was in flight is sent again
+      M.reportBoss("a dragon")                      -- a new request queues BEHIND the backlog
+      expect(#sent).toBe(1)
+      completeHead({ ok = true })
+      completeHead({ ok = true })
+      completeHead({ ok = true })
+      expect(#sent).toBe(4)
+      expect(sent[2].url).toContain("/run_start")
+      expect(sent[3].url).toContain("/ripple_level")
+      expect(sent[4].url).toContain("/boss")
+    end)
+    expect(joined(said)).toContain("Resuming")
+    expect(joined(said)).toContain("3")
+  end)
+
+  it("a restored busy flag cannot wedge the queue even without the loader's call", function()
+    -- The seam the bug lived in: `_enqueue` -> `_pump` with `_busy` true and nothing on the wire.
+    -- Before v4.7.336 this returned early forever and sent nothing.
+    reset(true)
+    M._queue = restored({ "/death" })
+    M._busy = true
+    quietly(function() M.reportBoss("a dragon") end)
+    expect(#sent).toBe(1)
+    expect(sent[1].url).toContain("/death")
+  end)
+
+  it("sends the CURRENT token, not the one saved with the request", function()
+    reset(true)
+    M._queue = restored({ "/death" })
+    M._busy = true
+    quietly(function() M._resumeQueue("restored from disk") end)
+    expect(sent[1].payload.token).toBe("TESTTOKEN")
+  end)
+
+  it("keeps timer ids OFF the saved namespace", function()
+    reset(true)
+    M.reportBoss("a dragon")
+    expect(M._watchdog).toBeNil()
+    expect(ataxiaTemp.mnemHttp.watchdog ~= nil).toBeTrue()
+    expect(type(ataxiaTemp.mnemHttp.sentAt)).toBe("number")
+  end)
+
+  it("forgets, but never kills, a legacy watchdog id that came back from disk", function()
+    reset(true)
+    local mock = require("mock_mudlet")
+    local stranger = tempTimer(99, function() end) -- whatever inherited the saved id
+    M._watchdog = stranger
+    M._queue = restored({ "/death" })
+    M._busy = true
+    quietly(function() M._resumeQueue("restored from disk") end)
+    expect(M._watchdog).toBeNil()
+    expect(mock.active_timers[stranger] ~= nil).toBeTrue()
+    killTimer(stranger)
+  end)
+
+  it("aggregates a replay's refusals and failures into ONE summary", function()
+    reset(true)
+    M._queue = restored({ "/ripple_level", "/death", "/boss" })
+    M._busy = true
+    local said = quietly(function()
+      M._resumeQueue("restored from disk")
+      completeHead({ ok = false, message = "ripple lower than current" })
+      completeHead({ ok = true })
+      M._onError(nil, "Bad Request", M._baseUrl() .. "/boss")
+    end)
+    local text = joined(said)
+    expect(text).toContain("Backlog replay done")
+    expect(text).toContain("1 sent OK")
+    expect(text).toContain("1 refused")
+    expect(text).toContain("1 failed")
+    expect(text).toContain("ripple lower than current") -- the first problem is named
+    expect(text:find("Request failed", 1, true) == nil).toBeTrue()
+    expect(text:find("refused<reset>", 1, true) == nil).toBeTrue()
+    local summaries = 0
+    for _, s in ipairs(said) do if s:find("Backlog replay done", 1, true) then summaries = summaries + 1 end end
+    expect(summaries).toBe(1)
+    expect(ataxiaTemp.mnemHttp.replayLeft).toBeNil()
+  end)
+
+  it("still echoes a failure for a request made THIS session", function()
+    reset(true)
+    local said = quietly(function()
+      M.reportBoss("a dragon")
+      M._onError(nil, "Bad Request", M._baseUrl() .. "/boss")
+    end)
+    expect(joined(said)).toContain("Request failed")
+  end)
+
+  it("a second resume mid-replay keeps the tally and does not double the summary", function()
+    -- The reinstall path and the loader path can both run in one session.
+    reset(true)
+    M._queue = restored({ "/death", "/boss" })
+    M._busy = true
+    local said = quietly(function()
+      M._resumeQueue("package reloaded")
+      completeHead({ ok = true })
+      M._resumeQueue("restored from disk")  -- the /boss in flight is sent again
+      completeHead({ ok = true })
+    end)
+    local summaries = 0
+    for _, s in ipairs(said) do if s:find("Backlog replay done", 1, true) then summaries = summaries + 1 end end
+    expect(summaries).toBe(1)
+    expect(joined(said)).toContain("2 sent OK")
+  end)
+
+  it("drops malformed restored entries instead of wedging on them", function()
+    reset(true)
+    M._queue = { "junk", { payload = {} }, { endpoint = "/boss", payload = { boss = "x" } } }
+    M._busy = true
+    quietly(function() M._resumeQueue("restored from disk") end)
+    expect(#M._queue).toBe(1)
+    expect(sent[1].url).toContain("/boss")
+  end)
+
+  it("an empty queue resumes silently", function()
+    reset(true)
+    local said = quietly(function() expect(M._resumeQueue("package reloaded")).toBe(0) end)
+    expect(#said).toBe(0)
+    expect(M._busy).toBeFalse()
+  end)
+end)
+
+describe("the busy backstop (a lost watchdog)", function()
+  it("times the head out when the send is older than STALE_BUSY", function()
+    reset(true)
+    local real = M.echo
+    M.echo = function() end
+    local ok, err = pcall(function()
+      M.reportMonsters("orcs")
+      expect(#sent).toBe(1)
+      -- The watchdog was killed by someone else's killTimer; the send is long past due.
+      ataxiaTemp.mnemHttp.watchdog = nil
+      ataxiaTemp.mnemHttp.sentAt = getEpoch() - (M.STALE_BUSY + 5)
+      M.reportBoss("a dragon")
+      expect(#sent).toBe(2)
+      expect(sent[2].url).toContain("/boss")
+      expect(M._queue[1].endpoint).toBe("/boss")
+    end)
+    M.echo = real
+    if not ok then error(err, 0) end
+  end)
+
+  it("does NOT overrule the watchdog while the request is still young", function()
+    reset(true)
+    M.reportMonsters("orcs")
+    ataxiaTemp.mnemHttp.sentAt = getEpoch() - (M.REQUEST_TIMEOUT - 5)
+    M.reportBoss("a dragon")
+    expect(#sent).toBe(1)                          -- still waiting on /monsters
+    expect(M._queue[1].endpoint).toBe("/monsters")
+  end)
+
+  it("runs the timed-out head's onError, exactly as the watchdog would", function()
+    reset(false)
+    local real = M.echo
+    M.echo = function() end
+    local ok, err = pcall(function()
+      M.startRun()
+      expect(M.run.active).toBeTrue()
+      ataxiaTemp.mnemHttp.sentAt = getEpoch() - (M.STALE_BUSY + 5)
+      M.reportBoss("a dragon")
+      expect(M.run.active).toBeFalse()             -- startRun's onError undid the optimism
+    end)
+    M.echo = real
+    if not ok then error(err, 0) end
+  end)
+end)
+
+describe("mnem queue", function()
+  it("groups pending requests by endpoint, most first", function()
+    reset(true)
+    M._queue = {
+      { endpoint = "/ripple_level", payload = {} }, { endpoint = "/boss", payload = {} },
+      { endpoint = "/ripple_level", payload = {} },
+    }
+    local order, counts = M.queueCounts()
+    expect(order[1]).toBe("/ripple_level")
+    expect(counts["/ripple_level"]).toBe(2)
+    expect(counts["/boss"]).toBe(1)
+  end)
+
+  it("queueInfo reports a busy flag with no send behind it as stale", function()
+    reset(true)
+    M._queue = { { endpoint = "/death", payload = {} } }
+    M._busy = true
+    local qi = M.queueInfo()
+    expect(qi.pending).toBe(1)
+    expect(qi.head).toBe("/death")
+    expect(qi.stale).toBeTrue()
+    M._busy = false
+  end)
+
+  it("`mnem queue clear` drops everything and says how many", function()
+    reset(true)
+    M._queue = {
+      { endpoint = "/death", payload = {} }, { endpoint = "/boss", payload = {} },
+    }
+    M._busy = true
+    local real, said = M.echo, {}
+    M.echo = function(m) said[#said + 1] = tostring(m) end
+    local ok, err = pcall(M.command, "queue clear")
+    M.echo = real
+    if not ok then error(err, 0) end
+    expect(#M._queue).toBe(0)
+    expect(M._busy).toBeFalse()
+    expect(table.concat(said, "\n")).toContain("Dropped <white>2")
   end)
 end)
 

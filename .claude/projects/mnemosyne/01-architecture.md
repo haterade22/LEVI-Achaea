@@ -115,6 +115,7 @@ boons offer: "...flickers of power that may aide you..."   [trig 004]
 - **Monsters after ripple.** Spawn lines arrive just before `GO!`, which triggers `WADE STATUS`; monsters are buffered and only flushed inside `onRipple()` *after* `setRipple()` enqueues `/ripple_level`. Because the HTTP queue is serial (see [02-reporting.md](02-reporting.md)), `/ripple_level` lands before `/monsters`.
 - **Boss/effects after ripple.** `Objective:` and `Ongoing effects:` are lines *within* the same `WADE STATUS` output, printed after the ripple line, so `/boss` and `/effects` naturally follow `/ripple_level`.
 - **Offered before selected.** `/boons_offered` is enqueued when the offer block closes; `/boons_selected` only on the user's `BOON CLAIM`, necessarily later.
+- **The queue outlives a reload, and is resumed (v4.7.336).** `M._queue`/`M._busy` are on the saved namespace, so a restart brings them back. `M._resumeQueue` (end of 001, and `ataxia_loadSettings` after the merge) clears the restored `_busy` and sends the queue in order -- at-least-once. Before this, a save that caught a POST in flight wedged the queue permanently and silently (711 requests in the live save). Timer and handler ids live on `ataxiaTemp.mnemHttp`, never on `ataxia`. See [02-reporting.md](02-reporting.md).
 
 ## Death vs. Run End
 

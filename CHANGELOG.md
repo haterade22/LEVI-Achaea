@@ -2,6 +2,82 @@
 
 ---
 
+## 2026-09-24 - The tracker queue had been wedged for nine runs; a reload now resumes it (v4.7.336)
+
+User: *"Our API didnt send?"* -- a wade started and no `Run started (id: ...)` followed.
+
+**Nothing had been sent for about nine runs.** The saved profile (`ataxia`, written minutes after
+the paste) held `ataxia.mnemosyne._busy = true`, `_watchdog = 62209`, and **711 unsent requests**
+in `_queue` -- nine `run_start ... run_end` cycles, headed by a `/death` for "a fairy Lady of
+Sidhe". The server was fine (`/health` 200 in 0.18s); reporting was on and the token set.
+
+**How.** `_queue`/`_busy`/`_watchdog` hang off `ataxia.mnemosyne`, and `ataxia_saveSettings` writes
+`ataxia` wholesale -- `sanitizeForSave` keeps plain tables and booleans. One save landed while that
+`/death` POST was in flight, so `_busy = true` went to disk. On the next start `deepMerge` restored
+it with no request on the wire and no watchdog timer to clear it: `_pump()` returned early forever,
+and every report after it appended to the queue without a sound. Nothing failed, so nothing
+echoed. Each save wrote the wedge out again, so it survived every restart -- and every XML reimport,
+which reaches the same loader (`sysInstallPackage -> ataxia_updateApplied -> ataxia_loadSettings`).
+The only tell was `mnem status` showing `ripple 0` on an active run. This is the fourth system
+caught by the persisted-namespace rule (v4.7.192-194, v4.7.299); v4.7.299 fixed `M.run` one file
+over and did not look at the client.
+
+**The fix -- replay, not drop (the user's call):**
+- **`M._resumeQueue(why)`** clears a restored `_busy`, keeps well-formed entries in order, marks
+  them `replay`, says `Resuming N unsent tracker requests (<why>)`, and sends them. It runs at the
+  end of `001_HTTP_Client.lua` (reinstall / SYSUPDATE / reimport) AND from `ataxia_loadSettings`
+  right after the merge (a restart: the script body ran first, on an empty queue). Delivery is
+  **at-least-once** -- the request in flight at the save may already have landed -- and every
+  replayed row carries the time it was replayed.
+- **`_pump` accounts for its busy flag.** Busy with no send stamp from this session = a restored
+  wedge (resume it); busy with a stamp older than `STALE_BUSY` (2 x the 20s watchdog) = the
+  watchdog was lost (time the head out exactly as the watchdog would). Strictly beyond the
+  watchdog, so the backstop never overrules it (v4.7.280).
+- **Timer and handler ids moved to `ataxiaTemp.mnemHttp`** (never saved). A restored
+  `_watchdog` named whatever timer inherited that id; restored handler ids made the next reinstall
+  kill the wrong handlers and leave ours registered twice (every response handled twice). The
+  legacy handler keys are killed once for the install that brings this in; the legacy
+  `_watchdog` is only forgotten, never killed.
+- **The current token is stamped at send time**, so a backlog from before a `mnem token` change
+  goes out as us.
+- **A replay reports ONCE**: outcomes are tallied instead of echoed, then a single
+  `Backlog replay done: X sent OK, Y refused, Z failed` names the first problem. Requests made in
+  the current session still echo normally.
+- **Visible**: `mnem status` has a `Queue:` line (pending, in flight and for how long, red when
+  stale, replay progress); `mnem queue` groups pending requests by endpoint; `mnem queue clear`
+  drops them.
+- `_clearStaleRun` also clears `M._capturing` -- the same shape: saved mid-capture, it came back
+  true and would have stopped the boon-fill trickle and per-screen contemplate for good.
+
+**Open, same class, not touched here:** handler ids still persisted under
+`ataxia.mnemosyne.map`, the explorer's `_expl*H` (008), 002's `_loadHandler`, and `ataxia.updater`
+-- an audit of every `registerAnonymousEventHandler`/`tempTimer` id stored under `ataxia` is the
+follow-up. Also unexamined: why the user's Mudlet profile never saves; the `ataxia` file is 7 MB,
+much of it Mnemosyne constants and history mirrored under `ataxia`.
+
+### Verification
+
+2249 tests pass (17 new). Break-back: six mutants, all caught -- resume not clearing `_busy` (7
+tests), `_pump` trusting an unstamped busy flag, the loader not calling resume (the seam test in
+`test_settings.lua`), no replay aggregation, a backstop that never fires, and one that fires
+before the watchdog. **Dry run against the user's real save** (734 entries by then, decoded with
+the token stripped, mock responses, nothing on the network): a single enqueue self-healed the
+wedge, all 735 went out in the original order with the current token, one resume line and one
+summary.
+
+### Files
+
+- `mnemosyne/001_HTTP_Client.lua`: `_resumeQueue`, the busy backstop, ids on `ataxiaTemp.mnemHttp`,
+  token re-stamp, replay tally, `queueInfo`/`queueCounts`/`queueClear`.
+- `mnemosyne/002_Reporter_API.lua`: `_clearStaleRun` clears `_capturing`; header.
+- `mnemosyne/003_Commands.lua`: `Queue:` status line, `mnem queue [clear]`, help row.
+- `ataxia/001_Save_Load_Settings.lua`: loader calls `_resumeQueue` after the merge.
+- `tests/test_mnemosyne.lua`, `tests/test_settings.lua`.
+- `CHANGELOG.md`, `CLAUDE.md`, `.claude/projects/mnemosyne/01-architecture.md`, `02-reporting.md`,
+  `05-commands.md`; memory.
+
+---
+
 ## 2026-09-24 - Your own mounts are not targets (v4.7.335)
 
 User, pasting the listing: *"These need to be not on the kill list as they are our mounts."*
