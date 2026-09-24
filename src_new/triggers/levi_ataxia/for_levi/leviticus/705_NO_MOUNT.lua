@@ -38,4 +38,9 @@ patterns:
   type: 3
 ]]--
 
+-- THE GAME SAYS WE ARE NOT MOUNTED (v4.7.345). All three lines are refusals of something that
+-- needs a mount -- MOUNTJUMP, TRAMPLE, GALLOP -- so each is authoritative in the direction a
+-- stale belief is most expensive: it stops us re-sending mountjumps that can never land.
+if ataxiaBasher_mountedSet then ataxiaBasher_mountedSet(false, "the game says we have no mount") end
+
 --expandAlias("mi")

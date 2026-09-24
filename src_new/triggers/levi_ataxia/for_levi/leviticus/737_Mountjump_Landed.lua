@@ -1,6 +1,6 @@
 --[[mudlet
 type: trigger
-name: Dismounted
+name: Mountjump Landed
 hierarchy:
 - Levi_Ataxia
 - For Levi
@@ -30,17 +30,12 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^You step down off of (.+).$
-  type: 1
-- pattern: ^You lose purchase on (.+).$
+- pattern: ^You pull back the reins on your mount and jump off to the (\w+)\.$
   type: 1
 ]]--
 
-if ataxia.settings.autogallop and mmp.settings.gallop then
-	mmp.settings:setOption("gallop", false)
-end
-
--- ...and jumps go back to LEAP (v4.7.345). Both patterns count: "You step down off of ..." is us
--- choosing to, "You lose purchase on ..." is being thrown -- and the one we did not choose is
--- exactly the one a stale belief would get wrong.
-if ataxiaBasher_mountedSet then ataxiaBasher_mountedSet(false, "off the mount") end
+-- THE MOUNTJUMP LANDED (v4.7.345, user, live: "You pull back the reins on your mount and jump off
+-- to the east."). Proof of both facts at once: we are mounted, and the move we were recovering is
+-- spent. Arrival itself is the room read's business -- this line only settles the belief that
+-- decides the verb.
+if ataxiaBasher_mountjumpLanded then ataxiaBasher_mountjumpLanded(matches[2]) end
