@@ -2,6 +2,40 @@
 
 ---
 
+## 2026-09-24 - The soulstorm gets its own colour (v4.7.344)
+
+User, with the pair of lines: *"make this a different colour highlight please"*.
+
+Both riders were goldenrod, which in a busy room read as one amber block -- and telling them apart
+at a glance is the whole reason for colouring them. The belch keeps the amber; the soulstorm takes
+**medium_orchid**:
+
+```
+You belch a cloud of stinking gas out of your lungs and into your surroundings.       (goldenrod)
+Your rotten breath befouls the air, plaguing all who stand before you with choking filth.
+
+You call forth an unholy tide of necromantic essence and release it, engulfing Duke    (orchid)
+Semiro in a profane soulstorm.
+Duke Semiro's form withers as the necromantic storm eats away at his lifeforce, draining him.
+```
+
+Violet is this palette's magical/necromantic family -- `medium_orchid` is the Magical resistance
+colour on the bonuses panel -- and it is as far from goldenrod as the palette gets without taking a
+colour that already means something else: `chartreuse` is "an attack landed", red is damage, and
+`dark_violet` is the `rare` rarity.
+
+### Verification
+
+2282 tests pass; the test now asserts the two riders do NOT share a colour, rather than that each
+is the one colour it happened to have. Colour lint passes.
+
+### Files
+
+- `triggers/.../highlighting/065_Soulstorm_Highlight.lua`; `tests/test_basher_deadbreath.lua`;
+  `CHANGELOG.md`.
+
+---
+
 ## 2026-09-24 - Correction: the soulstorm never had to wait for the belch (v4.7.343)
 
 User: *"For soulstorm, belch doesnt matter, shouldnt be a criteria. They are two seperate
