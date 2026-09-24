@@ -1248,8 +1248,13 @@ function M.onWallBlocked()
   local nd = (MAP.normDir and MAP.normDir(M.explore.fromDir)) or M.explore.fromDir
   local short = (MAP.shortDir and MAP.shortDir(nd)) or M.explore.fromDir
   local sep = (ataxia.settings and ataxia.settings.separator) or ";"
-  send("queue addclear free stand" .. sep .. "leap " .. short)
-  M._exploreEcho("<grey>a wall blocks the way -- <cyan>leaping it<reset>.")
+  -- MOUNTJUMP while mounted (v4.7.345): the leap is refused from the saddle, and a refused
+  -- wall-crossing here spends an ice-slip and then condemns a REAL exit. basher/013 owns which.
+  local verb = (ataxiaBasher_mountVerb and ataxiaBasher_mountVerb("leap")) or "leap"
+  send("queue addclear free stand" .. sep .. verb .. " " .. short)
+  if ataxiaBasher_jumpSent then ataxiaBasher_jumpSent(short, verb) end
+  M._exploreEcho("<grey>a wall blocks the way -- <cyan>" ..
+    (verb == "mountjump" and "mountjumping" or "leaping") .. " it<reset>.")
 end
 
 -- gmcp Room.WrongDir: the server tells us the direction we just tried does not exist -- an

@@ -2,6 +2,104 @@
 
 ---
 
+## 2026-09-24 - Mounted, we MOUNTJUMP (v4.7.345)
+
+User: *"When mounted, we should use mountjump instead of LEAP."* -- *"mountjump direction or MJ
+direction."* Then, live, the two lines that settle it:
+
+```
+You cannot do that while mounted.
+You pull back the reins on your mount and jump off to the east.
+```
+
+**This was never cosmetic.** From the saddle the game refuses the leap outright -- and the jump is
+the movement this package *escapes* with. Every leap in the Mnemosyne tactics exists to cross
+something: our own icewall, an affix wall, a swarm at the door. A refused leap is therefore a
+silent no-op in the anti-death ladder: the banner prints, the ladder waits on an arrival that
+never comes, and the room keeps hitting. The same shape as the wall-walk of v4.7.243 and the
+never-true escape banner of v4.7.314, with a different cause.
+
+### The belief
+
+`ataxiaBasher_isMounted()` / `ataxiaBasher_mountVerb(fallback)` in `basher/013_Mounts.lua`.
+**Nine lines teach it, and seven already had triggers** -- nothing here is guessed:
+
+| says | line | trigger |
+|---|---|---|
+| mounted | `You easily vault onto the back of <mount>.` | 025 / 735 |
+| mounted | `You climb up on <mount>.` | 735 |
+| mounted | `You pull back the reins on your mount and jump off to the east.` | **737 (new)** |
+| mounted | `You cannot do that while mounted.` | **738 (new)** |
+| on foot | `You step down off of <mount>.` | 736 |
+| on foot | `You lose purchase on <mount>.` (thrown) | 736 |
+| on foot | `You have no mount on which to jump.` | 705 |
+| on foot | `You need to be riding a proper mount to gallop.` | 705 |
+| on foot | `You must be mounted to trample.` | 705 |
+
+Each direction is taught by a **refusal** as well as by a success, which is what makes the belief
+safe to act on: being wrong costs one refused command, after which the state is right. No polling,
+no command we have never seen answered.
+
+It lives in `ataxiaTemp`, **not** `ataxiaBasher`. `ataxiaBasher` is saved to disk, and a saved
+`mounted = true` would outlive the reload that put us back on our feet -- the same shape as the
+HTTP queue that wedged for nine runs on a saved `_busy = true` (v4.7.336). Unknown reads as on
+foot, which is the conservative answer.
+
+### The five jump sites
+
+`S.moveVerb` answers `mountjump` **before** it looks at the wall or the class, because from the
+saddle both the leap and the Bard's backflip are refused. The four wall-crossing jumps
+(`_escapeSuffix` x2, the wall-mode re-entry, the explorer's wall reflex) ask
+`ataxiaBasher_mountVerb("leap")` rather than `S.moveVerb` **deliberately**: those jumps cross a
+wall we know stands, where LEAP is the confirmed ability and the backflip is not, so on foot the
+verb has to stay exactly what it was.
+
+`766_Wall`, the legacy manual-walk handler, has sent `mountjump` while mounted since long before
+any of this existed -- which is the in-game evidence that mountjump crosses a wall.
+
+### The refusal recovers the move, not just the belief
+
+`ataxiaBasher_jumpRefusedMounted` does two things, and the second is the one that saves a run: it
+latches MOUNTED, and **re-issues the jump we just lost as a mountjump**. Without that the escape
+which queued the leap is still waiting on an arrival that will never come, and the ladder stalls
+until its timeout -- at crash HP, the death this verb exists to avoid.
+
+It re-issues only a jump *we* sent, from the room we sent it in, within the round (4s). The line
+is not leap-specific -- anything acrobatic earns it -- so a recovery aimed at a direction left
+over from an older command would be a move nobody asked for. A record that is stale, spent, from
+another room, or already a mountjump is dropped: the latch alone is the fix then, and the next
+jump this system plans is a mountjump anyway.
+
+`bash mounts` now opens with which verb is live, including "not known yet".
+
+### Verification
+
+2307 tests pass (25 new: `tests/test_basher_mountjump.lua`, plus the mounted branch of every jump
+site in `test_swarm_tactics.lua`, which loads the real mount module rather than stubbing it).
+**19 mutants, all killed.** Two survived the first pass and both were real weaknesses in the
+tests, not in the code:
+
+- *the record is never consumed* -- "recovers ONCE" was actually being defended by the
+  already-a-mountjump guard. Now pinned by leaving the room, coming back, and refusing something
+  else: had the record survived, that would have fired a move nobody asked for.
+- *the refusal trigger is unwired* -- the assertion matched the function NAME, which also appears
+  in the trigger's own explanatory comment, so emptying the body passed. It now matches the
+  guarded call.
+
+A third mutant is worth recording because it was killed by a test written for something else: the
+**re-entry jump was a fifth site I had missed**, and `tests/test_basher_mountjump.lua`'s "no jump
+site still hardcodes the leap" assertion failed on the first full run.
+
+### Files
+
+- `basher/013_Mounts.lua` (the belief, the verb, the ledger, the recovery); `mnemosyne/009`
+  (`moveVerb`, `_tacticalGo`, both `_escapeSuffix` wall branches, the wall-mode re-entry);
+  `mnemosyne/008` (`onWallBlocked`); triggers `735`, `736`, `705` (wired), `737`, `738` (new);
+  alias `lists/013_Mounts.lua`; `tests/test_basher_mountjump.lua`, `tests/test_swarm_tactics.lua`;
+  `CHANGELOG.md`, `CLAUDE.md`, `.claude/projects/mnemosyne/07-explorer.md`, memory.
+
+---
+
 ## 2026-09-24 - The soulstorm gets its own colour (v4.7.344)
 
 User, with the pair of lines: *"make this a different colour highlight please"*.

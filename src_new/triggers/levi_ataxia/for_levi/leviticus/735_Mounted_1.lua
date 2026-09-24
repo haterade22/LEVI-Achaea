@@ -39,3 +39,7 @@ patterns:
 if ataxia.settings.autogallop and not mmp.settings.gallop then
 	mmp.settings:setOption("gallop", true)
 end
+
+-- ...and jumps become MOUNTJUMPs (v4.7.345). From the saddle the game refuses a leap outright,
+-- and in a Mnemosyne escape that refusal is a silent no-op. basher/013 owns the belief.
+if ataxiaBasher_mountedSet then ataxiaBasher_mountedSet(true, "vaulted on") end

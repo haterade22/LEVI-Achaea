@@ -345,6 +345,12 @@ end
 -- same field to avoid tumbling into our own ice). Unresolvable wall state falls back to LEAP:
 -- the conservative answer is the one that still moves us.
 function S.moveVerb(dirShort)
+  -- MOUNTED OUTRANKS BOTH (v4.7.345, user: "When mounted, we should use mountjump instead of
+  -- LEAP"). From the saddle the game refuses the leap AND the backflip -- "You cannot do that
+  -- while mounted." -- so the wall reasoning below never gets its chance: the only verb that
+  -- crosses anything while mounted is MOUNTJUMP, which is what this package's own wall handler
+  -- (trigger 766) has sent while mounted since long before this module existed.
+  if ataxiaBasher_isMounted and ataxiaBasher_isMounted() then return "mountjump" end
   local MAP = M.map
   local walled = S.wallRaised and MAP and MAP.current and S.wallRaised[MAP.current]
   if walled then
@@ -389,7 +395,11 @@ function S._tacticalGo(dirShort, why)
   -- swing carrying the step-out -- a pull never reaches _tacticalGo, so that is satisfied by
   -- construction, but do not merge the two paths later without re-reading this.
   if not (M.roomLava and M.roomLava()) then send("cq all") end
-  send("queue addclear free stand" .. sep .. S.moveVerb(dirShort) .. " " .. dirShort)
+  local verb = S.moveVerb(dirShort)
+  send("queue addclear free stand" .. sep .. verb .. " " .. dirShort)
+  -- Record it so "You cannot do that while mounted." can re-issue this exact move as a mountjump
+  -- (basher/013). A tactical move that is silently refused is the ladder stalling at crash HP.
+  if ataxiaBasher_jumpSent then ataxiaBasher_jumpSent(dirShort, verb) end
   if why then S._echo(why .. " -> <cyan>" .. dirShort .. "<reset>.") end
 end
 
@@ -411,7 +421,12 @@ function S._escapeSuffix(sep)
   if S.mode == "wall" then
     S.wallRaised = S.wallRaised or {}
     if S.swarmRoom and S.wallRaised[S.swarmRoom] then
-      return sep .. "leap " .. S.backShort
+      -- MOUNTJUMP from the saddle (v4.7.345). Deliberately NOT S.moveVerb: this branch is
+      -- crossing a wall we know stands, where leap is the confirmed ability and the backflip is
+      -- not -- so on foot the verb must stay exactly what it was.
+      local verb = ataxiaBasher_mountVerb and ataxiaBasher_mountVerb("leap") or "leap"
+      if ataxiaBasher_jumpSent then ataxiaBasher_jumpSent(S.backShort, verb) end
+      return sep .. verb .. " " .. S.backShort
     end
     if S.swarmRoom then
       -- Remember WHICH edge is walled (the LONG back dir): the panic tumble
@@ -419,7 +434,9 @@ function S._escapeSuffix(sep)
       S.wallRaised[S.swarmRoom] = S.backLong
       S._wallsRipple = (M.run and tonumber(M.run.ripple)) or 0
     end
-    return sep .. "point " .. s.bracersId .. " " .. S.backLong .. sep .. "leap " .. S.backShort
+    local verb = ataxiaBasher_mountVerb and ataxiaBasher_mountVerb("leap") or "leap" -- v4.7.345
+    if ataxiaBasher_jumpSent then ataxiaBasher_jumpSent(S.backShort, verb) end
+    return sep .. "point " .. s.bracersId .. " " .. S.backLong .. sep .. verb .. " " .. S.backShort
   end
   -- ROLL HIDE: tumble instead of stepping (v4.7.223). A plain step-out is what lets the swarm
   -- follow us into the funnel room -- the whole reason the funnel branch and the fly-kite
@@ -651,8 +668,15 @@ function S._beginReenter()
     S.escapeOn() -- v4.7.243: hold the swing until the leap has actually landed us back in
     M._tacticalArm(S.fwdShort)
     local sep = (ataxia.settings and ataxia.settings.separator) or ";"
-    send("queue addclear free stand" .. sep .. "leap " .. S.fwdShort)
-    S._echo("trickle over (peak followers: " .. followers .. ") -- leaping our wall back in -> <cyan>" .. S.fwdShort .. "<reset>.")
+    -- MOUNTJUMP from the saddle (v4.7.345). Deliberately NOT S.moveVerb: this jump crosses the
+    -- wall we raised ourselves, where leap is the confirmed ability and the backflip is not -- so
+    -- on foot the verb stays exactly what it was.
+    local verb = (ataxiaBasher_mountVerb and ataxiaBasher_mountVerb("leap")) or "leap"
+    send("queue addclear free stand" .. sep .. verb .. " " .. S.fwdShort)
+    if ataxiaBasher_jumpSent then ataxiaBasher_jumpSent(S.fwdShort, verb) end
+    S._echo("trickle over (peak followers: " .. followers .. ") -- "
+      .. (verb == "mountjump" and "mountjumping" or "leaping")
+      .. " our wall back in -> <cyan>" .. S.fwdShort .. "<reset>.")
     return true
   end
   S._tacticalGo(S.fwdShort, "trickle over (peak followers: " .. followers .. ") -- re-entering")

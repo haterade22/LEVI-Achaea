@@ -1483,6 +1483,76 @@ describe("which jump -- Bard backflips, everyone leaps", function()
   end)
 end)
 
+-- MOUNTED OUTRANKS ALL OF IT (v4.7.345). User: "When mounted, we should use mountjump instead of
+-- LEAP." From the saddle the game refuses the leap AND the backflip -- "You cannot do that while
+-- mounted." -- so every branch above is moot: the only verb that crosses anything is MOUNTJUMP.
+-- These load the REAL mount module rather than stubbing it, because what is being pinned is that
+-- these two files agree about the belief.
+describe("mounted: every jump in this module becomes a mountjump", function()
+  local loaded = pcall(dofile, "src_new/scripts/levi_ataxia/levi/ataxia/basher/013_Mounts.lua")
+
+  local function asBard()
+    gmcp.Char = { Status = { class = "Bard" } }
+  end
+  local function lastJump()
+    for i = #sent, 1, -1 do
+      if sent[i]:find("stand;", 1, true) then return sent[i] end
+    end
+  end
+
+  it("loads the mount module", function()
+    expect(loaded).toBeTrue()
+    expect(type(ataxiaBasher_mountVerb)).toBe("function")
+  end)
+
+  it("moveVerb answers mountjump before it looks at the wall or the class", function()
+    fixture(1); ataxiaBasher.inMnemosyne = true
+    asBard()
+    S.wallRaised[200] = "south"            -- our own wall, which would force a leap on foot
+    expect(S.moveVerb("s")).toBe("leap")
+    ataxiaBasher_mountedSet(true)
+    expect(S.moveVerb("s")).toBe("mountjump")
+    expect(S.moveVerb("n")).toBe("mountjump") -- ...and where a Bard would have backflipped
+  end)
+
+  it("the tactical move goes out as a mountjump, and is recorded for the refusal", function()
+    fixture(1); ataxiaBasher.inMnemosyne = true
+    ataxiaBasher_mountedSet(true)
+    S._tacticalGo("s", nil)
+    expect(lastJump()).toBe("queue addclear free stand;mountjump s")
+    expect(ataxiaTemp.lastJump.dir).toBe("s")
+    expect(ataxiaTemp.lastJump.verb).toBe("mountjump")
+  end)
+
+  it("...and is still a plain leap on foot", function()
+    fixture(1); ataxiaBasher.inMnemosyne = true
+    S._tacticalGo("s", nil)
+    expect(lastJump()).toBe("queue addclear free stand;leap s")
+    expect(ataxiaTemp.lastJump.verb).toBe("leap") -- recorded either way: that is what recovers it
+  end)
+
+  it("the wall escape suffix -- both the first (point + jump) and the follow-ups", function()
+    fixture(4); ataxiaBasher.inMnemosyne = true
+    ataxiaBasher_mountedSet(true)
+    S.mode, S.swarmRoom, S.backShort, S.backLong = "wall", 200, "s", "south"
+    S.wallRaised = {}
+    local first = S._escapeSuffix(";")
+    expect(first:find("mountjump s", 1, true) ~= nil).toBeTrue()
+    expect(first:find("point ", 1, true) ~= nil).toBeTrue()   -- the wall still goes up
+    expect(first:find(";leap ", 1, true)).toBeNil()
+    local again = S._escapeSuffix(";")                         -- the wall stands now
+    expect(again).toBe(";mountjump s")
+  end)
+
+  it("the re-entry jump back over our own wall", function()
+    fixture(0); ataxiaBasher.inMnemosyne = true
+    ataxiaBasher_mountedSet(true)
+    S.state, S.mode, S.fwdShort, S.swarmRoom = "funnel", "wall", "n", 200
+    S._beginReenter()
+    expect((lastJump() or ""):find("mountjump n", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
 -- ROLL HIDE OUTRANKS THE ICEWALL (v4.7.223). User: "if we have roll hide boon, we dont need to
 -- icewall, just tumble out." The wall was never a barrier -- denizens walk through icewalls
 -- without Maklak's Promise, so it only PACED the swarm -- and it costs a balance-gated `point`,
@@ -3034,3 +3104,11 @@ describe("v4.7.314 -- escape mode arms only when it can actually leave", functio
     expect(#cmds).toBe(1) -- the move still goes out
   end)
 end)
+
+-- v4.7.345: the mount module was loaded above for the mountjump tests.
+ataxiaBasher_isMounted, ataxiaBasher_mountVerb = nil, nil
+ataxiaBasher_mountedSet, ataxiaBasher_jumpSent = nil, nil
+ataxiaBasher_jumpRefusedMounted, ataxiaBasher_mountjumpLanded = nil, nil
+ataxiaBasher_onMountsHeader, ataxiaBasher_onMountRow = nil, nil
+ataxiaBasher_isMount, ataxiaBasher_mountIdByName, ataxiaBasher_vaultedOnto = nil, nil, nil
+ataxiaBasher_mountsReport, ataxiaBasher_mountsClear = nil, nil

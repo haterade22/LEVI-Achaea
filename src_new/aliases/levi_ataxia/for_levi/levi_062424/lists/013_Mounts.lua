@@ -15,7 +15,7 @@ packageName: ''
 ]]--
 
 -- Our own mounts, which the basher must never treat as denizens (v4.7.335).
---   bash mounts        - what has been learned, by id
+--   bash mounts        - what has been learned, by id (and which jump verb is live)
 --   bash mounts clear  - forget them all (a sold mount, or a bad reading)
 -- Learned passively: list your mounts in game and the rows are read. They are skipped BY ID, so a
 -- wild denizen of the same species is still a target.

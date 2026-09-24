@@ -530,6 +530,24 @@ crash HP, the exact failure the LEAP was introduced to fix. `moveVerb` disambigu
 to LEAP when the wall state cannot be resolved — the conservative answer is the one that still
 moves us. *If backflip turns out to clear icewalls, the wall branch can be dropped.*
 
+**MOUNTED OUTRANKS ALL OF IT — `mountjump` (v4.7.345, user-directed)**: *"When mounted, we should
+use mountjump instead of LEAP."* From the saddle the game refuses the leap **and** the backflip —
+`You cannot do that while mounted.` — so the reasoning above never gets its chance. `S.moveVerb`
+answers `mountjump` before it looks at the wall or the class; the four wall-crossing jumps ask
+`ataxiaBasher_mountVerb("leap")` instead, deliberately, so that on foot the verb stays exactly
+what it was. `766_Wall`, the legacy manual-walk handler, has sent `mountjump` while mounted since
+long before this module existed — that is the in-game evidence that mountjump crosses a wall.
+
+The belief lives in `basher/013_Mounts.lua` (`ataxiaBasher_isMounted`), taught by nine lines whose
+triggers mostly already existed, and **taught in both directions by refusals as well as
+successes** — so being wrong costs one refused command rather than a run. Every jump site also
+records what it sent (`ataxiaBasher_jumpSent`), because the refusal does not merely latch the
+state: `ataxiaBasher_jumpRefusedMounted` **re-issues the lost move as a mountjump**. Without that
+the escape which queued the leap is still waiting on an arrival that will never come, and the
+ladder stalls until its timeout — at crash HP, the death the jump exists to avoid. It re-issues
+only a jump we sent, from the room we sent it in, within 4s, and never one already a mountjump:
+the line is not leap-specific, so an older direction would be a move nobody asked for.
+
 **Hit-and-run continuation (v4.7.117)**: the pull budget (`MAX_PULLS` 3) exists to stop
 POINTLESS ping-pong — but the Putoran-wildcat log showed non-chasing mobs ("peak
 followers: 0" every cycle) where each cycle was one free swing chipping the soldier
