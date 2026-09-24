@@ -2,6 +2,40 @@
 
 ---
 
+## 2026-09-24 - The eq riders and the balance swing share a round, pinned (v4.7.341)
+
+User: *"It seems like you can soulstorm target and then deadeyes bleed bleed on the same balance"*
+-- *"Soulstorm takes eq and deadeyes take balance"*.
+
+Correct, and that is why both necromancy boon abilities were built as RIDERS rather than as rounds
+of their own: SOULSTORM and BELCH spend EQUILIBRIUM, which the Apostate's `deadeyes <t> bleed bleed`
+leaves idle while it spends balance. The assembled line is already
+`soulstorm <t>;deadeyes <t> bleed bleed`.
+
+Nothing changed in behaviour -- what changed is that **the pairing is now a test**, driving the real
+Apostate attack builder beside the real riders, so a later edit that makes a rider replace the swing
+(or the swing drop a rider) fails here rather than in a swarm. It also pins the two exceptions:
+
+- **Only one rider per round.** Belch is equilibrium too, so it and the storm cannot both land -- the
+  room attack wins, and it keeps winning for as long as it can be used. The storm takes the round
+  when the belch cannot: a room still full of our own gas, a thin room, or not enough mana.
+- **A shielded target still swings.** The riders stand down (break the shield first), the raze and
+  the bleed do not.
+
+Writing this found one thing worth correcting -- my own assumption, not the code: after its
+cooldown the belch simply fires again, so "the storm gets the next round" was wrong. The storm gets
+the rounds the belch is *refused*, which in a room we are clearing is most of them.
+
+### Verification
+
+2280 tests pass (5 new).
+
+### Files
+
+- `tests/test_basher_apostate_riders.lua`: new. `CHANGELOG.md`.
+
+---
+
 ## 2026-09-24 - The belch and the soulstorm are visible when they fire (v4.7.340)
 
 User: *"Can you also highlight the belch and soulstorm a specific color (orange or a like color) so
