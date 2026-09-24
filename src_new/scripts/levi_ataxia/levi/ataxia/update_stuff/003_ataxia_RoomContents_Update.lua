@@ -67,6 +67,12 @@ function ataxia_RoomContents_Update(event)
 			-- (protected/loyal NPCs -- attacking them draws aggro/bounties and the auto-learn block
 			-- below would write them to the persistent targetList) and d (corpses). `not find("d")`
 			-- supersedes the old exact `~= "mdt"`, which missed d/md/dt combos.
+			-- OUR OWN MOUNTS ARE NOT DENIZENS (v4.7.335, user: "These need to be not on the kill
+			-- list as they are our mounts"). Excluded BY ID, learned from the mounts listing --
+			-- never by name, because "a massive dire wolf" and "a lean grizzly bear" are real
+			-- denizens and a keyword would blacklist every wild one. See basher/013_Mounts.
+			elseif ataxiaBasher_isMount and ataxiaBasher_isMount(v.id) then
+				-- skipped: not a target, not auto-learned, not counted as a denizen in the room
 			elseif v.attrib and not v.attrib:find("x") and not v.attrib:find("d")
 			   and v.attrib ~= "t" and v.icon ~= "guard" then
 				ataxia.denizensHere[tonumber(v.id)] = v.name

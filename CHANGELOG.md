@@ -2,6 +2,60 @@
 
 ---
 
+## 2026-09-24 - Your own mounts are not targets (v4.7.335)
+
+User, pasting the listing: *"These need to be not on the kill list as they are our mounts."*
+
+```
+Your loyal mounts are:
+A black Dardanic stallion22638 is at your fingertips.
+A lean grizzly bear135599 is at your feet.
+A war elephant193142 is at your fingertips.
+A massive dire wolf397877 is at your fingertips.
+A withered crypt worm651017 is at your fingertips.
+```
+
+A mount in the room is an ordinary GMCP item carrying the monster attribute, so the basher read it
+as a denizen, learned its name into the area's target list, and swung at it.
+
+**Excluded BY ID, never by name -- that is the whole design.** `ataxiaBasher.ownDenizens` already
+skips pets by keyword, and a keyword is exactly wrong here: **"a massive dire wolf", "a lean
+grizzly bear" and "a war elephant" are real denizens**. Adding those words would blacklist every
+wild one in Achaea, the target list would quietly lose its best rooms, and nothing would say why.
+The number in the listing is the item id GMCP reports for that one creature, so the mount is
+dropped where the room contents are read and a wild one beside it is still a target.
+
+- **Learned passively** (triggers 776/777): list your mounts in game and the rows are read. No
+  command is sent, because the command that prints this has never been captured in a log and this
+  tree does not guess game syntax. The ids persist -- `ataxiaBasher` is saved to disk -- so this is
+  a once-per-new-mount thing, not once per session.
+- **`bash mounts`** shows what is skipped and why; **`bash mounts clear`** forgets them.
+- Rows are only read while the header has armed the parser (3s), so a lookalike line elsewhere
+  cannot poison the list.
+
+**And they are taken OFF the saved list.** v4.7.174 already seeded these five as own-denizen
+KEYWORDS, so nothing attacked them -- but that seeding never cleaned the lists they had already
+been learned into, so there they sat in `bash list`, which is what the user was looking at. Reading
+the listing now removes the mount's name from every area list (**exact name only** -- "a war
+elephant trainer" is a real denizen and keeps its place), and the keyword backfill purges once on
+load. If a wild one of the same species turns up later, auto-learn puts the name back from THAT
+denizen, which is the right reason for it to be there.
+
+### Verification
+
+2232 tests pass (13 new, on the user's listing verbatim). Break-back verified: 11 mutants, all
+caught -- including one that skips every id, one that reads rows with no header, and one that
+purges by substring (which would have taken "a war elephant trainer" with it).
+
+### Files
+
+- `basher/013_Mounts.lua`: new -- learn, query, report, clear.
+- `update_stuff/003_ataxia_RoomContents_Update.lua`: mounts never reach `denizensHere`.
+- `triggers/.../776_Mounts_Header.lua`, `777_Mount_Row.lua`, `aliases/.../lists/013_Mounts.lua`: new.
+- `tests/test_basher_mounts.lua`: new; `CHANGELOG.md`, `CLAUDE.md`; memory.
+
+---
+
 ## 2026-09-24 - Rimewrought also stops SSC re-raising dead tattoos (v4.7.334)
 
 User: *"Also with rimewrought - We need to not keepup mindseye, cloak, (anything else that is a
