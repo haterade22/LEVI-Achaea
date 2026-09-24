@@ -219,6 +219,45 @@ describe("SOULSTORM profanes a soul once", function()
   end)
 end)
 
+-- v4.7.340, user: "Can you also highlight the belch and soulstorm a specific color (orange or a
+-- like color) so I can confirm working". `orange` itself is held in reserve by the colour lint,
+-- so this is goldenrod -- the palette's amber.
+describe("the riders are visible when they fire", function()
+  local function hl(name)
+    local f = io.open("src_new/triggers/levi_ataxia/for_levi/leviticus/highlighting/" .. name)
+    local src = f:read("*a"); f:close()
+    return src
+  end
+
+  it("colours both belch lines, and both soulstorm lines", function()
+    local belch = hl("064_Belch_Highlight.lua")
+    expect(belch:find("You belch a cloud of stinking gas", 1, true) ~= nil).toBeTrue()
+    expect(belch:find("Your rotten breath befouls the air", 1, true) ~= nil).toBeTrue()
+    local storm = hl("065_Soulstorm_Highlight.lua")
+    expect(storm:find("in a profane soulstorm", 1, true) ~= nil).toBeTrue()
+    expect(storm:find("form withers as the necromantic storm eats away at", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("uses the palette's amber, never the reserved orange family", function()
+    for _, name in ipairs({ "064_Belch_Highlight.lua", "065_Soulstorm_Highlight.lua" }) do
+      local src = hl(name)
+      expect(src:find('fg("goldenrod")', 1, true) ~= nil).toBeTrue()
+      expect(src:lower():find("fg(\"orange", 1, true)).toBeNil()
+      expect(src:find("selectString(line, 1)", 1, true) ~= nil).toBeTrue()
+      expect(src:find("resetFormat()", 1, true) ~= nil).toBeTrue()
+    end
+  end)
+
+  it("they only paint -- the bookkeeping stays with its own trigger", function()
+    for _, name in ipairs({ "064_Belch_Highlight.lua", "065_Soulstorm_Highlight.lua" }) do
+      local src = hl(name)
+      expect(src:find("ataxiaBasher_belchLanded", 1, true)).toBeNil()
+      expect(src:find("ataxiaBasher_soulstormLanded", 1, true)).toBeNil()
+      expect(src:find("send(", 1, true)).toBeNil()
+    end
+  end)
+end)
+
 -- Restore shared state for whoever runs after us.
 getEpoch = realEpoch
 ataxia.mnemosyne._denizenCount = realCount

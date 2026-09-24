@@ -2,6 +2,48 @@
 
 ---
 
+## 2026-09-24 - The belch and the soulstorm are visible when they fire (v4.7.340)
+
+User: *"Can you also highlight the belch and soulstorm a specific color (orange or a like color) so
+I can confirm working"*.
+
+Both abilities now paint their lines **goldenrod** and bold -- the cast AND its effect, so seeing
+the pair confirms the rider ran *and* the boon is up:
+
+```
+You belch a cloud of stinking gas out of your lungs and into your surroundings.
+Your rotten breath befouls the air, plaguing all who stand before you with choking filth.
+
+You call forth an unholy tide of necromantic essence and release it, engulfing an acolyte of
+Life in a profane soulstorm.
+An acolyte of Life's form withers as the necromantic storm eats away at his lifeforce, draining him.
+```
+
+**Goldenrod rather than orange, and that is not a substitution made quietly:** `check_colours.py`
+holds the whole orange family in reserve, so an `orange` highlight would fail the palette gate the
+next time anyone ran it. Goldenrod is the palette's amber and is already this package's colour for
+a loud-but-not-alarming state (the starving box echo). It is also deliberately NOT `chartreuse`,
+which means "an attack LANDED on the target" -- these lines mean "the boon-driven rider fired",
+which is the different thing being confirmed.
+
+The soulstorm's landing line is matched on a SUBSTRING because the denizen's name opens it, is of
+arbitrary length, and Achaea wraps server-side -- the same reason the Kai Choke landing beside it
+is matched on fragments.
+
+Highlights only: the state these lines drive stays with the triggers that already own it, because
+two triggers stamping one fact is two owners for it.
+
+### Verification
+
+2275 tests pass (3 new). The colour lint passes on both files.
+
+### Files
+
+- `triggers/.../highlighting/064_Belch_Highlight.lua`, `065_Soulstorm_Highlight.lua`: new.
+- `tests/test_basher_deadbreath.lua`; `CHANGELOG.md`.
+
+---
+
 ## 2026-09-24 - VAULT now sets the mount it put you on (v4.7.339)
 
 User: *"When I use VAULT (mount) ... It doesnt set that mount as my mount, which it should always
