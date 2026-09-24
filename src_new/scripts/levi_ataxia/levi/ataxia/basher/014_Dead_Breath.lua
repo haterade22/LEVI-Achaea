@@ -14,7 +14,7 @@ packageName: ''
 
 --[[
     ============================================================================
-    DEAD BREATH -- BELCH AS AN AoE  (v4.7.336, user-directed)
+    DEAD BREATH -- BELCH AS AN AoE  (v4.7.337, user-directed)
     ============================================================================
 
     The boon (Mnemosyne, rare):
