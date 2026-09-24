@@ -236,6 +236,7 @@ function M.onRunEnd()
   mnemObligateCarnivore = false -- boons gone on a confirmed run-end
   mnemDeadlyFlourish = false -- boons gone on a confirmed run-end
   mnemDeathStare = false -- boons gone on a confirmed run-end
+  mnemDeadBreath = false -- ...and BELCH goes back to being a single-target nuisance (v4.7.336)
   mnemSearingLight = false -- boons gone on a confirmed run-end
   mnemHealingMetabolism = false -- boons gone on a confirmed run-end
   -- Berserker's Edge pinned the rage floor to 100 (basher/001). Putting it back is the half that
@@ -1275,6 +1276,7 @@ end
 -- abilities below do not exist without it, and sending them is a refusal that costs a round.
 -- That is the whole contract of this table.
 M.BOON_FLAGS = {
+  ["Dead Breath"]          = "mnemDeadBreath",
   ["Vitalising Tincture"]  = "mnemVitalisingTincture",
   ["Font of Life"]         = "mnemFontOfLife",
   ["Shadow Tempo"]         = "mnemShadowTempo",
