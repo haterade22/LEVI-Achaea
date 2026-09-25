@@ -245,11 +245,20 @@ describe("Mindbreak: latched, and deliberately inert", function()
     expect(with).toBe(without)
   end)
 
-  it("and the boon does not conjure a shatter below full transcendence", function()
+  -- v4.7.352: shatter goes out on idle equilibrium below full transcendence too -- WITH OR
+  -- WITHOUT the boon. What was pinned here ("the boon does not conjure a shatter below full") was
+  -- a consequence of shatter being full-transcendence-only; the user's AB paste retired that.
+  -- What still holds is that the boon changes nothing about WHEN shatter goes out.
+  it("and below full transcendence the boon changes nothing either", function()
+    reset()
+    ataxiaTemp.transcendence = 90
+    local without = ataxiaBasher_psionBashing()
     reset()
     psionMindbreak = true
     ataxiaTemp.transcendence = 90
-    expect(ataxiaBasher_psionBashing():find("psi shatter", 1, true)).toBeNil()
+    local with = ataxiaBasher_psionBashing()
+    expect(without:find("psi shatter 44001", 1, true) ~= nil).toBeTrue()
+    expect(with).toBe(without)
   end)
 end)
 
@@ -350,7 +359,9 @@ describe("one equilibrium action per Psion round", function()
     end
   end
   local function eqActions(cmd)
-    return count(cmd, "enact ") + count(cmd, "psi transcend")
+    local n = count(cmd, "enact ") + count(cmd, "psi transcend")
+    if (tonumber(ataxiaTemp.transcendence) or 0) < 100 then n = n + count(cmd, "psi shatter") end
+    return n
   end
 
   it("psi transcend outranks the keepers, and they follow on the next round", function()
@@ -386,6 +397,143 @@ describe("one equilibrium action per Psion round", function()
         expect(eqActions(ataxiaBasher_psionBashing()) <= 1).toBeTrue()
       end
     end
+  end)
+end)
+
+
+-- =====================================================================================
+-- PSI SHATTER IS THE MAIN TOOL (v4.7.352). User, pasting AB PSIONICS SHATTER (3.10s of
+-- equilibrium, works on denizens): "We can use", then "Psi Shatter is the main tool to use unless we
+-- have other boons with full transcendence." Their log had it at 12,992 against deathblows of
+-- 921 and 1,934 -- and it was only ever sent at full transcendence.
+describe("psi shatter on every idle equilibrium", function()
+  local function has(cmd, s) return cmd:find(s, 1, true) ~= nil end
+
+  it("rides the weave whenever equilibrium is idle, ahead of it in the chain", function()
+    reset()
+    local cmd = ataxiaBasher_psionBashing()
+    expect(has(cmd, "psi shatter 44001")).toBeTrue()
+    expect(has(cmd, "weave deathblow 44001")).toBeTrue()
+    expect(cmd:find("psi shatter", 1, true) < cmd:find("weave deathblow", 1, true)).toBeTrue()
+  end)
+
+  it("yields to a keeper that round -- one equilibrium action", function()
+    reset()
+    psionRazorClarity = true
+    local cmd = ataxiaBasher_psionBashing()
+    expect(has(cmd, "enact clarity")).toBeTrue()
+    expect(has(cmd, "psi shatter")).toBeFalse()
+  end)
+
+  it("at FULL transcendence it is free, so it rides even when a keeper took the equilibrium", function()
+    reset()
+    psionRazorClarity = true
+    ataxiaTemp.transcendence = 100
+    local cmd = ataxiaBasher_psionBashing()
+    expect(has(cmd, "enact clarity")).toBeTrue()
+    expect(has(cmd, "psi shatter 44001")).toBeTrue()
+  end)
+
+  it("a roth round carries no paid shatter -- but a free one still goes", function()
+    reset()
+    ataxia.vitals.hpp = 30
+    expect(has(ataxiaBasher_psionBashing(), "psi shatter")).toBeFalse()
+    reset()
+    ataxia.vitals.hpp = 30
+    ataxiaTemp.transcendence = 100
+    expect(has(ataxiaBasher_psionBashing(), "psi shatter")).toBeTrue()
+  end)
+
+  it("never on a shielded round -- the shield comes first", function()
+    reset()
+    ataxiaBasher.shielded = true
+    expect(has(ataxiaBasher_psionBashing(), "psi shatter")).toBeFalse()
+  end)
+
+  it("rides a secondskin round -- secondskin spends balance, shatter equilibrium", function()
+    reset()
+    ataxia.defences.secondskin = nil
+    ataxiaTemp.psionSecondskinAttempted = nil
+    local cmd = ataxiaBasher_psionBashing()
+    expect(has(cmd, "weave secondskin")).toBeTrue()
+    expect(has(cmd, "psi shatter 44001")).toBeTrue()
+  end)
+
+  it("exactly one shatter a round", function()
+    for _, t in ipairs({ 0, 50, 100 }) do
+      reset()
+      ataxiaTemp.transcendence = t
+      local _, n = ataxiaBasher_psionBashing():gsub("psi shatter", "")
+      expect(n).toBe(1)
+    end
+  end)
+end)
+
+-- =====================================================================================
+-- BEHIND BY ONE ROUND AT FULL TRANSCENDENCE (v4.7.352). User: "Seems like we are behind one
+-- attack on the transcendance, maybe a clearqueue is needed when we are at full." The round is
+-- rebuilt on prompt/vitals events behind a 0.3s anti-spam flag, so the "achieved transcendence"
+-- line could land after the last rebuild and the stale entry fired without the free shatter.
+describe("the round is re-queued the moment transcendence fills", function()
+  local AUTO = "src_new/scripts/levi_ataxia/levi/ataxia/genrunning/004_Autobashing_Functions.lua"
+  local FULL = "src_new/triggers/levi_ataxia/for_levi/leviticus/psion/002_Transcendence_Full.lua"
+  -- Globals the autobashing file defines; restored afterwards (one shared Lua state).
+  local NAMES = { "ataxiaBasher_tryAttack", "ataxiaBasher_patterns", "ataxiaBasher_gmcpDispatch",
+                  "ataxiaBasher_throttleCheck", "ataxiaBasher_requeueNow", "ataxiaBasher_gmcpDispatchHandler",
+                  "ataxiaBasher_atk", "ataxiaBasher_atkTimer", "found_target" }
+
+  local function withAuto(fn)
+    local saved = {}
+    for _, n in ipairs(NAMES) do saved[n] = _G[n] end
+    local savedEnabled = ataxiaBasher.enabled
+    local ok, err = pcall(function()
+      dofile(AUTO)
+      fn()
+    end)
+    for _, n in ipairs(NAMES) do _G[n] = saved[n] end
+    ataxiaBasher.enabled = savedEnabled
+    if not ok then error(err, 0) end
+  end
+
+  it("clears the anti-spam flag and re-queues through the normal gates", function()
+    withAuto(function()
+      local called = 0
+      ataxiaBasher_tryAttack = function() called = called + 1; return true end
+      ataxiaBasher.enabled, found_target, ataxiaBasher_atk = true, true, true
+      expect(ataxiaBasher_requeueNow("test")).toBeTrue()
+      expect(called).toBe(1)
+      expect(ataxiaBasher_atk).toBeFalse()
+    end)
+  end)
+
+  it("does nothing with no target, or with the basher off", function()
+    withAuto(function()
+      local called = 0
+      ataxiaBasher_tryAttack = function() called = called + 1; return true end
+      ataxiaBasher.enabled, found_target = true, false
+      expect(ataxiaBasher_requeueNow("test")).toBeFalse()
+      ataxiaBasher.enabled, found_target = false, true
+      expect(ataxiaBasher_requeueNow("test")).toBeFalse()
+      expect(called).toBe(0)
+    end)
+  end)
+
+  it("the full-transcendence line re-queues -- once, on the change", function()
+    local savedRq, savedDF, savedManual = ataxiaBasher_requeueNow, deleteFull, ataxiaBasher.manual
+    local rq = 0
+    ataxiaBasher_requeueNow = function() rq = rq + 1 end
+    deleteFull = function() end
+    ataxiaBasher.manual = true
+    local ok, err = pcall(function()
+      ataxiaTemp.transcendence = 70
+      dofile(FULL)
+      expect(ataxiaTemp.transcendence).toBe(100)
+      expect(rq).toBe(1)
+      dofile(FULL)                 -- "...transcendence is yours." again, already at 100
+      expect(rq).toBe(1)
+    end)
+    ataxiaBasher_requeueNow, deleteFull, ataxiaBasher.manual = savedRq, savedDF, savedManual
+    if not ok then error(err, 0) end
   end)
 end)
 

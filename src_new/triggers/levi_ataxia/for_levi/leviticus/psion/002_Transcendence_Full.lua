@@ -37,7 +37,14 @@ patterns:
   type: 3
 ]]--
 
+local was = tonumber(ataxiaTemp.transcendence) or 0
 ataxiaTemp.transcendence = 100
+
+-- The round already queued was built BEFORE this line, so it has no free shatter in it; without
+-- this it fired as a plain deathblow and the shatter came a round late (v4.7.352, user: "Seems
+-- like we are behind one attack on the transcendance, maybe a clearqueue is needed when we are
+-- at full"). Only on the change: "...transcendence is yours." repeats on every weave at 100.
+if was < 100 and ataxiaBasher_requeueNow then ataxiaBasher_requeueNow("transcendence full") end
 
 if ataxiaBasher.enabled and not ataxiaBasher.manual then
 	deleteFull()

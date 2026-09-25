@@ -2916,6 +2916,14 @@ function ataxiaBasher_psionEmulationKeepers(sp, eqSpent)
   return ""
 end
 
+-- WHAT FULL TRANSCENDENCE IS SPENT ON (v4.7.352). At full harmony one psionics action is free
+-- and off-equilibrium; the user: "Psi Shatter is the main tool to use unless we have other boons
+-- with full transcendence." So it is shatter -- and this is the ONE place a future boon that makes
+-- another psionics action better at full transcendence would change it.
+local function psionTranscendSpend(sp)
+  return "psi shatter " .. target .. sp
+end
+
 function ataxiaBasher_psionBashing()
   local command, sp = "", ataxia.settings.separator
   -- NOTE: the battlerage is computed LAZILY below, after the shielded early-return
@@ -2962,7 +2970,12 @@ function ataxiaBasher_psionBashing()
   -- shielded branch on purpose: raising a defence is not an attack, and a shield on the denizen
   -- has nothing to do with whether our own clarity is up. They wait whenever roth or transcend
   -- took this round's equilibrium -- and roth hands us both of them free anyway.
-  command = command..ataxiaBasher_psionEmulationKeepers(sp, eqSpent)
+  -- ...and a keeper that went DOES spend it (v4.7.352): with shatter now the last call on idle
+  -- equilibrium, a keeper that did not mark the round would have been chained with a shatter --
+  -- the very collision v4.7.351 removed. The shatter tests caught it on the first run.
+  local keep = ataxiaBasher_psionEmulationKeepers(sp, eqSpent)
+  if keep ~= "" then eqSpent = true end
+  command = command..keep
 
   if ataxiaBasher.shielded then
     -- Review fix: this branch could build an EMPTY command (no cleave fallback
@@ -2981,22 +2994,45 @@ function ataxiaBasher_psionBashing()
   -- cooldown stamp can no longer burn unsent.
   local brage = ataxiaBasher_brCommit(ataxiaBasher_psionBattlerage(sp))
 
+  -- PSI SHATTER IS THE MAIN TOOL (v4.7.352, user: "Psi Shatter is the main tool to use unless we
+  -- have other boons with full transcendence"). The AB block the user pasted:
+  --
+  --     Shatter (Psionics)  ABADMIN ID: 2750
+  --     Syntax:            PSI SHATTER <target>
+  --     Works on/against:  Adventurers and denizens
+  --     Cooldown:          3.10 seconds of equilibrium
+  --
+  -- It was only ever sent at FULL transcendence, where it is free -- the one case this package
+  -- had evidence for. It is an ordinary equilibrium action the rest of the time, and equilibrium
+  -- is the channel every weave leaves idle. The user's log: shatter 12,992 psychic (Mindbreak,
+  -- +500%) against 921 and 1,934 for the deathblows around it. Even a sixth of that is more than
+  -- a deathblow, on a channel that was doing nothing.
+  --
+  -- So: at FULL transcendence it goes out free (spends transcendence, not equilibrium, so it
+  -- rides even when a keeper took the equilibrium this round); otherwise it is the LAST call on
+  -- idle equilibrium, after roth, the transcend keeper and the boon keepers -- which fire only
+  -- when their defence has dropped, and clarity itself buys shatter +50% and faster equilibrium.
+  -- Unshielded rounds only: the shielded branch above returned, breaking the shield first.
+  local shatter = ""
+  if (tonumber(ataxiaTemp.transcendence) or 0) >= 100 then
+    shatter = psionTranscendSpend(sp)            -- free, off-equilibrium
+  elseif not eqSpent then
+    shatter = "psi shatter "..target..sp          -- 3.10s of equilibrium
+    eqSpent = true
+  end
+
   -- Secondskin keeper: resistance to ALL damage types; it drops rarely, so spending
   -- one round's balance re-weaving it (3.00s bal -- it REPLACES the swing) is cheap
-  -- insurance. Skipped on shielded rounds above (break the shield first).
+  -- insurance. Skipped on shielded rounds above (break the shield first). Shatter still
+  -- rides: secondskin spends BALANCE, shatter EQUILIBRIUM.
   if not (ataxia.defences and ataxia.defences.secondskin)
      and not ataxiaTemp.psionSecondskinAttempted then
     ataxiaTemp.psionSecondskinAttempted = true
     tempTimer(10, [[ataxiaTemp.psionSecondskinAttempted = nil]])
-    return command..brage.."weave secondskin"
+    return command..brage..shatter.."weave secondskin"
   end
 
-  if ataxiaTemp.transcendence and ataxiaTemp.transcendence == 100 then
-    command = command..brage.."psi shatter "..target..sp..weave
-  else
-    command = command..brage..weave
-    --Deathblow does 3 percent to elite mhun keeper
-  end
+  command = command..brage..shatter..weave
   return command
 end
 

@@ -38,16 +38,14 @@ patterns:
 --
 --   "Your psionics shatter ability deals 500% increased damage."
 --
--- NO ROTATION CHANGE, and that is the finding rather than an omission. `psi shatter <target>`
--- already fires on every FULL transcendence, which is precisely when a psionics action costs no
--- equilibrium ("once at full harmony, you can perform a psionics action while off equilibrium
--- and for no incurred equilibrium cost"). The gate is about when shatter is FREE, not about
--- whether it is worth it -- so multiplying its damage does not move it.
+-- It changes no ROTATION, and since v4.7.352 that is for a better reason. v4.7.349 sent shatter
+-- only at full transcendence and noted that if it turned out usable below that at an equilibrium
+-- price, this flag would be the switch. The user then pasted the AB block (3.10s of
+-- equilibrium, works on denizens) and the answer was not a switch: shatter is the main
+-- equilibrium tool WITH OR WITHOUT this boon -- it out-damages a deathblow on a channel the weaves
+-- leave idle. Mindbreak multiplies what is already on every idle equilibrium.
 --
--- The flag is still worth latching: the boon advisor scores what we hold, and if SHATTER turns
--- out to be usable BELOW full transcendence at an equilibrium price, this is the switch that
--- would decide to pay it. That needs the ability block captured first -- this tree does not
--- guess game syntax.
+-- The flag is still worth latching: the boon advisor scores what we hold.
 --
 -- Cleared on Mnemosyne run start/end. Type BOONS to re-sync if needed.
 -- Only inside the tower (v4.7.351, deep review) -- the same gate the generic row trigger

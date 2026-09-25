@@ -218,6 +218,31 @@ function ataxiaBasher_tryAttack()
 end
 
 -- ============================================================================
+-- RE-QUEUE NOW: the state the queued round was built from has just changed (v4.7.352).
+-- ============================================================================
+-- User: "Seems like we are behind one attack on the transcendance, maybe a clearqueue is needed
+-- when we are at full." Their log: a deathblow, "You have achieved transcendence", then ANOTHER
+-- plain deathblow, and only the round after that the shatter.
+--
+-- The round is rebuilt on prompt and vitals events, rate-limited by ANTI_SPAM_DELAY -- so a line
+-- that changes what the round SHOULD be can land just after the last rebuild, and if no further
+-- event arrives before balance returns, the stale entry fires. A `cq` alone would leave nothing
+-- queued until the next event; re-queuing with `queue addclearfull` both clears the stale entry and
+-- replaces it, which is what the user was asking for.
+--
+-- Clearing the anti-spam flag for this one call is not spam: it is the one re-queue that is not
+-- redundant. Every other gate still applies -- tryAttack checks the holds, escape mode, afflictions
+-- and the throttle exactly as it always does. No target means nothing to re-queue, and returning
+-- before tryAttack keeps its no-target branch (which moves on to the next room) where it was.
+function ataxiaBasher_requeueNow(why)
+  if not (ataxiaBasher and ataxiaBasher.enabled) then return false end
+  if not found_target then return false end
+  if ataxiaBasher_atkTimer then pcall(killTimer, ataxiaBasher_atkTimer); ataxiaBasher_atkTimer = nil end
+  ataxiaBasher_atk = false
+  return ataxiaBasher_tryAttack()
+end
+
+-- ============================================================================
 -- GMCP-triggered dispatch: attempt attack on any vitals change (not just prompts).
 -- Complements the prompt-based dispatch in ataxiaBasher_patterns().
 -- The anti-spam timer prevents excessive firing.

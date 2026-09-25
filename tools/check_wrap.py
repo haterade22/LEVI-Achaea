@@ -76,7 +76,7 @@ def offenders(path):
         if typ == '1':
             if raw.startswith('^') and raw.endswith('$') and min_len(raw) > WIDTH:
                 out.append((min_len(raw), raw))
-        elif typ in ('0', '3') and len(raw) > WIDTH:
+        elif typ in ('0', '2', '3') and len(raw) > WIDTH:  # substring, startOfLine, exactMatch
             out.append((len(raw), raw))
     return out
 
