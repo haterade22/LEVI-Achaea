@@ -1303,8 +1303,9 @@ mnemosyne_boons:
       ("while standing in gravehands, your attacks will command them to ravage your enemies
       ... every 15 seconds") -- does the same from the other direction and applies to this
       TYRANNY path too: need 1, essence floor 10% (Maliceborn is in the recipe). The helper
-      `ataxiaBasher_infGravehands` is shared with the Apostate, where the summon RIDES the
-      round (it spends equilibrium) and costs 350 mana; the mana gate and the one-shot
+      `ataxiaBasher_infGravehands` is shared with the Apostate, where the summon ALSO
+      replaces the swing -- it takes balance (user, v4.7.354; its AB block says equilibrium,
+      and v4.7.347-353 had it riding) -- and costs 350 mana; the mana gate and the one-shot
       unconfirmed-summon retry are Apostate-only -- Tyranny's own cast line was never
       captured, so "unconfirmed" would be its permanent state. The per-room record is
       cleared at each ripple (v4.7.351): the tower reuses room numbers.

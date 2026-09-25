@@ -345,7 +345,7 @@ function ataxiaBasher_alchemistBashing()
 end
 
 -- How long a gravehands summon has to show its line before we treat it as lost (v4.7.347).
--- Its cooldown is 3s of equilibrium, so this outlasts the action it guards -- the rule the
+-- Its cooldown is 3s (of BALANCE, v4.7.354), so this outlasts the action it guards -- the rule the
 -- tumble confirmation had to learn the hard way (a retry window shorter than the action
 -- re-sends something that was working).
 local GRAVEHANDS_CONFIRM = 6
@@ -354,10 +354,11 @@ function ataxiaBasher_apostateBashing()
 	local command, sp = "", ataxia.settings.separator 
 	local brage = ataxiaBasher_assembleBattlerage()
 	local raze = ataxiaBasher.battlerage.Apostate.raze
-	-- ARMY OF THE DEAD (v4.7.347, user: "For Apostate"). SUMMON HANDS OF THE GRAVE spends
-	-- EQUILIBRIUM while `deadeyes` spends BALANCE, so it RIDES the round the way the belch
-	-- and the soulstorm do -- the Infernal's TYRANNY replaces the swing because that one is
-	-- a balance ability. The helper self-guards on `shielded`, returning "" there, so the
+	-- ARMY OF THE DEAD (v4.7.347, user: "For Apostate"). SUMMON HANDS OF THE GRAVE takes
+	-- BALANCE (user, v4.7.354: "Gravehands takes balance" -- the AB block says equilibrium),
+	-- the same resource as `deadeyes`, so on its round it REPLACES the swing, exactly like the
+	-- Infernal's TYRANNY. v4.7.347 had it riding beside the swing, and the swing behind it was
+	-- refused every time. The helper self-guards on `shielded`, returning "" there, so the
 	-- shielded branch below is unchanged: break the shield first is every rider's rule.
 	local graveHands = ataxiaBasher_infGravehands(sp)
 	-- NECROTIC AURA, same story (v4.7.348). `ataxiaBasher_infDeathaura` gates on its own boon
@@ -381,7 +382,16 @@ function ataxiaBasher_apostateBashing()
 		-- No empty command when there is no battlerage (v4.7.351, deep review): `brage..sp` put a
 		-- bare separator in front of the swing, and with a rider ahead of it that became ";;".
 		-- Harmless to the server, but it is our command and it should say what it means.
-		command = aura..graveHands..(brage ~= "" and (brage..sp) or "").."deadeyes "..target.." bleed bleed; "
+		local lead = aura..(brage ~= "" and (brage..sp) or "")
+		if graveHands ~= "" then
+			-- The summon IS this round's balance action (v4.7.354). It takes the primary slot, so
+			-- it carries no trailing separator -- the same shape as the Infernal's Tyranny round.
+			local summon = graveHands
+			if summon:sub(-#sp) == sp then summon = summon:sub(1, -#sp - 1) end
+			command = lead..summon
+		else
+			command = lead.."deadeyes "..target.." bleed bleed; "
+		end
 	end
 	    
 	return command	
@@ -1571,12 +1581,13 @@ end
 --     Cooldown:   3.00 seconds of EQUILIBRIUM
 --     Resource:   1.50% life essence and 350 mana
 --
---   * IT RIDES, IT DOES NOT REPLACE. The Infernal's TYRANNY takes the primary slot
---     (see `infernalBashing`), because that ability spends the round. Gravehands spends
---     EQUILIBRIUM, and the Apostate swing (`deadeyes <t> bleed bleed`) spends BALANCE --
---     the same split the user confirmed for the other two necromancy riders: "Soulstorm
---     takes eq and deadeyes take balance." So it is prepended beside the belch and the
---     soulstorm, not instead of the swing.
+--   * IT REPLACES THE SWING (corrected v4.7.354). v4.7.347 read the AB block above --
+--     "3.00 seconds of EQUILIBRIUM" -- and prepended the summon beside the belch and the
+--     soulstorm. The user, in game: "Gravehands takes balance." So it collides with
+--     `deadeyes <t> bleed bleed` (also balance): chained, the summon went first and the
+--     swing behind it was refused on every gravehands round. Now, exactly like the
+--     Infernal's TYRANNY, the summon takes that round's balance and the swing waits for the
+--     next one. The AB block's resource line is wrong, and the player's is the evidence.
 --   * IT COSTS MANA -- 350 of it, which the Infernal path never had to think about. Mana
 --     is the curing pool as well as the ammunition, so there is a floor.
 --
@@ -1666,8 +1677,8 @@ function ataxiaBasher_infGravehands(sp)
 	if ataxiaTemp.infTyrannyRoom == room then
 		-- ONE RETRY FOR A SUMMON THAT WAS NEVER CONFIRMED (v4.7.347, Apostate only). The
 		-- stamp above is optimistic -- it is written at SEND time -- so a refused cast
-		-- burns the room for good, and this round already carries two other equilibrium
-		-- riders that could have taken the beat. The Apostate cast has a line we can see
+		-- burns the room for good -- a refusal, a lost line in a burst, a reload between the
+		-- send and the answer. The Apostate cast has a line we can see
 		-- ("You mutter words of death and decay..." -> trigger 782), so here, and only
 		-- here, silence is evidence. The Infernal is deliberately excluded: TYRANNY's own
 		-- confirmation line has never been captured, so "unconfirmed" would be its
