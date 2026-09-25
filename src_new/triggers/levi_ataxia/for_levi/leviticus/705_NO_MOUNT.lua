@@ -41,6 +41,13 @@ patterns:
 -- THE GAME SAYS WE ARE NOT MOUNTED (v4.7.345). All three lines are refusals of something that
 -- needs a mount -- MOUNTJUMP, TRAMPLE, GALLOP -- so each is authoritative in the direction a
 -- stale belief is most expensive: it stops us re-sending mountjumps that can never land.
-if ataxiaBasher_mountedSet then ataxiaBasher_mountedSet(false, "the game says we have no mount") end
+--
+-- ...and if the refused command was a MOUNTJUMP we sent, re-send it as a leap (v4.7.351, deep
+-- review): the belief was stale, and before this the escape it drove was simply lost.
+if ataxiaBasher_jumpRefusedOnFoot then
+  ataxiaBasher_jumpRefusedOnFoot()
+elseif ataxiaBasher_mountedSet then
+  ataxiaBasher_mountedSet(false, "the game says we have no mount")
+end
 
 --expandAlias("mi")

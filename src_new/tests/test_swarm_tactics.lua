@@ -1545,6 +1545,17 @@ describe("mounted: every jump in this module becomes a mountjump", function()
     expect(again).toBe(";mountjump s")
   end)
 
+  -- The ledger belongs to the tactic that wrote it (v4.7.351, deep review): a refusal arriving
+  -- after S.reset must not re-send a move nobody still wants.
+  it("S.reset forgets the jump ledger", function()
+    fixture(1); ataxiaBasher.inMnemosyne = true
+    ataxiaBasher_mountedSet(true)
+    S._tacticalGo("s", nil)
+    expect(ataxiaTemp.lastJump ~= nil).toBeTrue()
+    S.reset("test")
+    expect(ataxiaTemp.lastJump).toBeNil()
+  end)
+
   it("the re-entry jump back over our own wall", function()
     fixture(0); ataxiaBasher.inMnemosyne = true
     ataxiaBasher_mountedSet(true)
@@ -3110,6 +3121,7 @@ end)
 ataxiaBasher_isMounted, ataxiaBasher_mountVerb = nil, nil
 ataxiaBasher_mountedSet, ataxiaBasher_jumpSent = nil, nil
 ataxiaBasher_jumpRefusedMounted, ataxiaBasher_mountjumpLanded = nil, nil
+ataxiaBasher_jumpRefusedOnFoot, ataxiaBasher_mountForget = nil, nil
 ataxiaBasher_onMountsHeader, ataxiaBasher_onMountRow = nil, nil
 ataxiaBasher_isMount, ataxiaBasher_mountIdByName, ataxiaBasher_vaultedOnto = nil, nil, nil
 ataxiaBasher_mountsReport, ataxiaBasher_mountsClear = nil, nil

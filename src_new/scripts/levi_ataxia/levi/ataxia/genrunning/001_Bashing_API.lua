@@ -129,6 +129,9 @@ end
 -- Death recovery: fully disable basher, clear all queues, and retreat after resurrection.
 -- Saves the room we died in so we can move back one room to heal up safely.
 function ataxiaBasher_onDeath()
+  -- The mount belief is session scratch and survives death; afterwards we honestly do not know
+  -- (v4.7.351, deep review). ABOVE the early return: that is true whether or not we were bashing.
+  if ataxiaBasher_mountForget then ataxiaBasher_mountForget("died") end
   if not ataxiaBasher.enabled then return end
 
   -- Save safe room before anything else

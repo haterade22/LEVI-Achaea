@@ -346,18 +346,30 @@ end)
 describe("the gravehands lines", function()
   local function slurp(p) local f = io.open(p); local s = f:read("*a"); f:close(); return s end
 
+  -- The PATTERN, not the file: v4.7.347's assertion passed on a fragment that could never match
+  -- (the server wraps the line through it), and after the fix it still passed -- on the comment
+  -- that explains the fix. Whether the pattern survives the wrap is test_trigger_wrap's job.
+  local TL = dofile("src_new/tests/trigger_lib.lua")
+
   it("the summon line confirms the hands, and does NOT latch the boon", function()
-    local t = slurp("src_new/triggers/levi_ataxia/for_levi/leviticus/782_Gravehands_Up.lua")
-    expect(t:find("hands of rotting flesh and white bone push out of the ground", 1, true) ~= nil).toBeTrue()
+    local file = "src_new/triggers/levi_ataxia/for_levi/leviticus/782_Gravehands_Up.lua"
+    local t = slurp(file)
+    local pats = TL.patterns(file)
+    expect(#pats).toBe(1)
+    expect(pats[1].pat:sub(1, 37)).toBe("^You mutter words of death and decay,")
     expect(t:find("if ataxiaBasher_gravehandsUp then", 1, true) ~= nil).toBeTrue()
     -- the base ability prints it with or without the boon; a wrong latch is paid for every room
     expect(t:find("infArmyOfDead = true", 1, true)).toBeNil()
   end)
 
   it("both lines are highlighted, in a colour neither sibling rider uses", function()
-    local t = slurp("src_new/triggers/levi_ataxia/for_levi/leviticus/highlighting/066_Gravehands_Highlight.lua")
-    expect(t:find("hands of rotting flesh and white bone push out of the ground", 1, true) ~= nil).toBeTrue()
-    expect(t:find("the chill of the grave striking out amidst a rasping chorus of death", 1, true) ~= nil).toBeTrue()
+    local file = "src_new/triggers/levi_ataxia/for_levi/leviticus/highlighting/066_Gravehands_Highlight.lua"
+    local t = slurp(file)
+    local heads = {}
+    for _, p in ipairs(TL.patterns(file)) do heads[#heads + 1] = p.pat:sub(1, 20) end
+    local joined = table.concat(heads, "|")
+    expect(joined:find("^You mutter words of", 1, true) ~= nil).toBeTrue()
+    expect(joined:find("^Putrescent flesh an", 1, true) ~= nil).toBeTrue()
     -- Read the COLOURS the file chooses, not the words it contains: the comment explains why
     -- the orange family is off-limits, and a bare text search for "orange" matches that prose.
     -- Same trap as v4.7.346's trigger-wiring assertion, which matched a name in a comment.
@@ -550,6 +562,26 @@ describe("the Graveborn boon flag is wired everywhere a boon flag must be", func
     expect(rec:find('rarity = "rare"', 1, true) ~= nil).toBeTrue()
     expect(rec:find('category = "Offence"', 1, true) ~= nil).toBeTrue()
     expect(rec:find("maxEchoes = 0", 1, true) ~= nil).toBeTrue()   -- "Can echo: No"
+  end)
+end)
+
+-- No empty command when there is no battlerage (v4.7.351, deep review). `brage..sp` put a bare
+-- separator ahead of the swing, and with a rider in front of it that read ";;". Harmless to the
+-- server, but it is our command and it should say what it means.
+describe("the Apostate round says exactly what it means", function()
+  it("no empty command between the riders and the swing", function()
+    reset()
+    infArmyOfDead, infNecroticAura = true, true
+    local cmd = round()
+    expect(cmd:find("summon hands of the grave", 1, true) ~= nil).toBeTrue()
+    expect(cmd:find(";;", 1, true)).toBeNil()
+  end)
+
+  it("and no leading separator when there is nothing ahead of the swing", function()
+    reset()
+    local cmd = ataxiaBasher_apostateBashing()
+    expect(cmd:sub(1, 1) ~= ";").toBeTrue()
+    expect(cmd:find("deadeyes 77001 bleed bleed", 1, true)).toBe(1)
   end)
 end)
 

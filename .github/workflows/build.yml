@@ -37,6 +37,9 @@ jobs:
       - name: Check for orphaned calls into disabled scripts
         run: python3 tools/check_orphans.py
 
+      - name: Check trigger patterns fit on one wrapped line
+        run: python3 tools/check_wrap.py
+
       - name: Check version consistency
         run: |
           echo "=== Checking version sync ==="

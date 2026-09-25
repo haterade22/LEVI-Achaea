@@ -30,11 +30,22 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^You call forth an unholy tide of necromantic essence and release it, engulfing .+ in a profane soulstorm\.$
+- pattern: ^You call forth an unholy tide of necromantic essence and release it, engulfing
   type: 1
-- pattern: form withers as the necromantic storm eats away at
+- pattern: '^.{0,60}soulstorm\.$'
+  type: 1
+- pattern: form withers as the necromantic storm
   type: 0
 ]]--
+
+-- MATCHED EARLY, BECAUSE THE SERVER WRAPS (v4.7.351, deep review). This user's Achaea wraps
+-- at 119-124 columns (measured from the break points in their pastes), and the full line is
+-- longer than that. A pattern that runs past the break -- or a fragment that straddles it --
+-- can never match, and this one did exactly that from the day it shipped.
+--
+-- Two patterns for the cast now, one per physical line: the opening words colour the first row,
+-- and a SHORT line ending in "soulstorm." colours the wrapped remainder -- wherever the break
+-- falls, which moves with the length of the mob's name (the Baron's Bro technique, v4.7.286).
 
 -- DEATHTEMPEST's SOULSTORM fired (v4.7.340, same request). Two lines again: the cast, and the
 -- profane landing on the denizen ("An acolyte of Life's form withers as the necromantic storm eats

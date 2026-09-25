@@ -45,4 +45,6 @@ patterns:
 -- idle (`ataxiaBasher_psionEmulationKeepers`, basher/002).
 --
 -- Cleared on Mnemosyne run start/end. Type BOONS to re-sync if needed.
-psionBloodletter = true
+-- Only inside the tower (v4.7.351, deep review) -- the same gate the generic row trigger
+-- (mnemosyne/013) applies, so a list printed outside a run arms nothing.
+if ataxiaBasher and ataxiaBasher.inMnemosyne then psionBloodletter = true end

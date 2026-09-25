@@ -32,8 +32,8 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: hands of rotting flesh and white bone push out of the ground
-  type: 0
+- pattern: ^You mutter words of death and decay, and suddenly the ground breaks open
+  type: 1
 ]]--
 
 -- THE HANDS ARE UP (v4.7.347, user, live: "You mutter words of death and decay, and suddenly the
@@ -42,7 +42,17 @@ patterns:
 -- The once-per-room latch is stamped optimistically when we SEND, so without this line a refused
 -- summon burns the room for the rest of the visit. This is what turns the stamp into a fact.
 --
--- A SUBSTRING, because the line is long enough that Achaea wraps it server-side -- the same
--- reason the soulstorm landing beside this one is matched on a fragment (v4.7.286). The fragment
--- is the distinctive half and carries no name or pronoun to vary.
+-- MATCHED EARLY, BECAUSE THE SERVER WRAPS (v4.7.351, deep review). This user's Achaea wraps
+-- at 119-124 columns (measured from the break points in their pastes), and the full line is
+-- longer than that. A pattern that runs past the break -- or a fragment that straddles it --
+-- can never match, and this one did exactly that from the day it shipped.
+--
+-- The line is 148 characters and the old fragment ("hands of rotting flesh and white bone push
+-- out of the ground") began at column 88 -- so the break fell THROUGH it and the confirmation
+-- never arrived. Every room's summon then read as lost and was re-cast six seconds later: an
+-- extra 350 mana and 1.5% life essence per room, every room once Graveborn made that the rule.
+--
+-- The opening words fix a second fault for free: they are FIRST-PERSON. The old fragment would
+-- have matched another necromancer's gravehands in the room just as well, and a false
+-- confirmation spends our one retry.
 if ataxiaBasher_gravehandsUp then ataxiaBasher_gravehandsUp() end

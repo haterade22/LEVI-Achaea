@@ -30,10 +30,14 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: hands of rotting flesh and white bone push out of the ground
-  type: 0
-- pattern: the chill of the grave striking out amidst a rasping chorus of death
-  type: 0
+- pattern: ^You mutter words of death and decay, and suddenly the ground breaks open
+  type: 1
+- pattern: '^.{0,60}push out of the ground\.$'
+  type: 1
+- pattern: ^Putrescent flesh and rotting dermis grasp in vain at all present
+  type: 1
+- pattern: '^.{0,60}chorus of death\.$'
+  type: 1
 ]]--
 
 -- ARMY OF THE DEAD fired (v4.7.347). Both halves are coloured, and the pair is the confirmation:
@@ -49,6 +53,15 @@ patterns:
 --
 -- Highlight only. The state lives in `782_Gravehands_Up` (basher/002); a second trigger stamping
 -- the same fact would be two owners for one thing.
+--
+-- MATCHED EARLY, BECAUSE THE SERVER WRAPS (v4.7.351, deep review). This user's Achaea wraps
+-- at 119-124 columns (measured from the break points in their pastes), and the full line is
+-- longer than that. A pattern that runs past the break -- or a fragment that straddles it --
+-- can never match, and this one did exactly that from the day it shipped.
+--
+-- Both lines are longer than the wrap (148 and 135 characters), and BOTH old fragments straddled
+-- the break -- so neither line was ever coloured, while this release's notes said they were. Now
+-- each message has an opening pattern for its first row and a short anchored tail for the rest.
 --
 -- `cadet_blue` bold -- the third necromancy rider, and the third colour (v4.7.347). The belch is
 -- goldenrod and the soulstorm medium_orchid; a shared colour is what v4.7.344 was raised to fix,

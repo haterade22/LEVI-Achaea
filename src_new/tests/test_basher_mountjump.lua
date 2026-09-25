@@ -229,14 +229,141 @@ describe("every jump site asks for the verb", function()
     expect(slurp(TD .. "735_Mounted_1.lua"):find("ataxiaBasher_mountedSet(true", 1, true) ~= nil).toBeTrue()
     expect(slurp(TD .. "736_Dismounted.lua"):find("ataxiaBasher_mountedSet(false", 1, true) ~= nil).toBeTrue()
     expect(slurp(TD .. "705_NO_MOUNT.lua"):find("ataxiaBasher_mountedSet(false", 1, true) ~= nil).toBeTrue()
+    expect(slurp(TD .. "705_NO_MOUNT.lua"):find("if ataxiaBasher_jumpRefusedOnFoot then", 1, true) ~= nil).toBeTrue()
     -- The guarded CALL, not the name: both files explain themselves in comments that mention the
     -- function, so a looser match passed against a trigger whose body had been emptied.
-    local land = slurp(TD .. "737_Mountjump_Landed.lua")
+    local land = slurp(TD .. "783_Mountjump_Landed.lua")
     expect(land:find("You pull back the reins on your mount and jump off to the", 1, true) ~= nil).toBeTrue()
     expect(land:find("if ataxiaBasher_mountjumpLanded then", 1, true) ~= nil).toBeTrue()
-    local ref = slurp(TD .. "738_Mounted_Refusal.lua")
+    local ref = slurp(TD .. "784_Mounted_Refusal.lua")
     expect(ref:find("You cannot do that while mounted", 1, true) ~= nil).toBeTrue()
     expect(ref:find("if ataxiaBasher_jumpRefusedMounted then", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
+-- =====================================================================================
+-- THE OTHER DIRECTION (v4.7.351, deep review). A belief that we are MOUNTED can go stale -- we
+-- die in the saddle, the mount is killed, a denizen throws us with a line we have never seen --
+-- and then the escape sends `mountjump`, the game answers "You have no mount on which to jump.",
+-- 705 corrected the belief, and the move itself was lost. Same bounds as the mounted recovery.
+describe("\"You have no mount on which to jump.\"", function()
+  it("re-sends a refused MOUNTJUMP of ours as a leap, and learns we are on foot", function()
+    reset()
+    ataxiaBasher_mountedSet(true)
+    ataxiaBasher_jumpSent("s", "mountjump")
+    expect(ataxiaBasher_jumpRefusedOnFoot()).toBeTrue()
+    expect(ataxiaBasher_isMounted()).toBeFalse()
+    expect(sentAll():find("queue addclear free stand;leap s", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("leaves a LEAP record alone -- that refusal cannot be about it", function()
+    reset()
+    ataxiaBasher_jumpSent("s", "leap")
+    expect(ataxiaBasher_jumpRefusedOnFoot()).toBeFalse()
+    expect(#mock.sent_commands).toBe(0)
+    expect(ataxiaTemp.lastJump.verb).toBe("leap")
+  end)
+
+  it("drops a stale record, and one from a room we have left", function()
+    reset()
+    ataxiaBasher_jumpSent("s", "mountjump")
+    NOW = NOW + 30
+    expect(ataxiaBasher_jumpRefusedOnFoot()).toBeFalse()
+    reset(200)
+    ataxiaBasher_jumpSent("s", "mountjump")
+    gmcp.Room.Info.num = 201
+    expect(ataxiaBasher_jumpRefusedOnFoot()).toBeFalse()
+    expect(#mock.sent_commands).toBe(0)
+  end)
+
+  it("recovers once, and still latches with nothing to recover", function()
+    reset()
+    ataxiaBasher_mountedSet(true)
+    ataxiaBasher_jumpSent("s", "mountjump")
+    ataxiaBasher_jumpRefusedOnFoot()
+    mock.sent_commands = {}
+    expect(ataxiaBasher_jumpRefusedOnFoot()).toBeFalse()   -- the record is now the leap we sent
+    expect(#mock.sent_commands).toBe(0)
+    reset()
+    ataxiaBasher_mountedSet(true)
+    expect(ataxiaBasher_jumpRefusedOnFoot()).toBeFalse()
+    expect(ataxiaBasher_isMounted()).toBeFalse()
+  end)
+end)
+
+-- A recovered jump never goes out into a move that already owns the room (v4.7.351, deep
+-- review): a TUMBLE in flight (a jump cancels it) or LAVA (M.onLava owns movement there).
+describe("the recovery defers to a tumble and to lava", function()
+  local savedM
+  local locked, lava = false, false
+  local function world()
+    savedM = ataxia.mnemosyne
+    ataxia.mnemosyne = { swarm = { moveLocked = function() return locked end },
+                         roomLava = function() return lava end }
+  end
+  local function unworld() ataxia.mnemosyne = savedM; locked, lava = false, false end
+
+  it("holds the mountjump while a tumble is in flight -- but still learns we are mounted", function()
+    reset(); world(); locked = true
+    ataxiaBasher_jumpSent("s", "leap")
+    local did = ataxiaBasher_jumpRefusedMounted()
+    unworld()
+    expect(did).toBeFalse()
+    expect(#mock.sent_commands).toBe(0)
+    expect(ataxiaBasher_isMounted()).toBeTrue()
+  end)
+
+  it("holds it in lava", function()
+    reset(); world(); lava = true
+    ataxiaBasher_jumpSent("s", "leap")
+    local did = ataxiaBasher_jumpRefusedMounted()
+    unworld()
+    expect(did).toBeFalse()
+    expect(#mock.sent_commands).toBe(0)
+  end)
+
+  it("and the leap recovery holds for both too", function()
+    reset(); world(); locked = true
+    ataxiaBasher_jumpSent("s", "mountjump")
+    local a = ataxiaBasher_jumpRefusedOnFoot()
+    reset(); lava = true
+    ataxiaBasher_jumpSent("s", "mountjump")
+    local b = ataxiaBasher_jumpRefusedOnFoot()
+    unworld()
+    expect(a).toBeFalse()
+    expect(b).toBeFalse()
+    expect(#mock.sent_commands).toBe(0)
+  end)
+
+  it("goes out as normal when neither holds", function()
+    reset(); world()
+    ataxiaBasher_jumpSent("s", "leap")
+    local did = ataxiaBasher_jumpRefusedMounted()
+    unworld()
+    expect(did).toBeTrue()
+  end)
+end)
+
+-- The belief is session scratch and survived death (v4.7.351, deep review).
+describe("death forgets the saddle", function()
+  it("unknown, not on foot -- and the ledger goes with it", function()
+    reset()
+    ataxiaBasher_mountedSet(true)
+    ataxiaBasher_jumpSent("s", "mountjump")
+    ataxiaBasher_mountForget("died")
+    expect(ataxiaTemp.mounted).toBeNil()
+    expect(ataxiaBasher_isMounted()).toBeFalse()
+    expect(ataxiaTemp.lastJump).toBeNil()
+  end)
+
+  it("is called from the death handler ABOVE its basher-enabled early return", function()
+    local f = io.open("src_new/scripts/levi_ataxia/levi/ataxia/genrunning/001_Bashing_API.lua")
+    local src = f:read("*a"); f:close()
+    local body = src:match("function ataxiaBasher_onDeath%(%)(.-)\nend")
+    expect(body ~= nil).toBeTrue()
+    local forget = body:find("ataxiaBasher_mountForget(\"died\")", 1, true)
+    local early = body:find("if not ataxiaBasher.enabled then return end", 1, true)
+    expect(forget ~= nil and early ~= nil and forget < early).toBeTrue()
   end)
 end)
 
