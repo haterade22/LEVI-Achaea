@@ -507,6 +507,7 @@ ever makes another psionics action better at full harmony.
 | Bloodletter's Fury | `psionBloodletter` | keep `rupturesight` up (`enact rupture`): weaves unblockable, +50% base, 20% faster balance |
 | Razor Clarity | `psionRazorClarity` | keep `clarity` up (`enact clarity`): +50% damage, +2% crit; clarity also speeds equilibrium |
 | Mindbreak | `psionMindbreak` | none -- shatter +500%, and shatter is the main tool with or without it |
+| Psiwave | `psionPsiwave` | **`psi radiate` replaces `psi shatter` everywhere** (v4.7.355): the paid equilibrium attack (4.00s, no target, hits every denizen with magic damage) AND the free full-transcendence action -- so full transcendence is two radiates. Wins over Mindbreak by the user's word |
 
 Keeper holds are TIMESTAMPS (`ataxiaTemp.psionKeepAt[def]`): clarity 12s, rupturesight 4s (rupture's
 text reads like a three-blow charge, so its guard is shorter). A keeper that fires marks the round's

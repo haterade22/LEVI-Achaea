@@ -79,6 +79,9 @@ if matches[2]:lower():find("razor clarity") then psionRazorClarity = true end
 -- full transcendence, which is when it is free -- the flag is for the boon advisor and for
 -- whatever a captured AB block lets us do with it later.
 if matches[2]:lower():find("mindbreak") then psionMindbreak = true end
+-- Psiwave: PSI RADIATE hits every denizen in the room with magic damage -- the Psion's equilibrium
+-- attack becomes radiate instead of shatter (user: "use this instead of shatter").
+if matches[2]:lower():find("psiwave") then psionPsiwave = true end
 -- Might of Sycaerunax: draconic BLAST +25% damage and the breath weapon PERSISTS;
 -- the dragon basher drops the re-summon from its blast weave while it's up.
 if matches[2]:lower():find("sycaerunax") then dragonMightSycaerunax = true end
