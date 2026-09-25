@@ -2835,6 +2835,67 @@ function ataxiaBasher_psionBattlerage(sp)
   return ""
 end
 
+-- ---------------------------------------------------------------------------
+-- PSION EMULATION KEEPERS -- Razor Clarity and Bloodletter's Fury (v4.7.349)
+-- ---------------------------------------------------------------------------
+--
+-- Two Mnemosyne boons that pay out for as long as a DEFENCE is standing, which makes them
+-- keepers rather than attacks (user, pasting both):
+--
+--   Razor Clarity        "You deal 50% bonus damage and have 2% bonus critical chance while
+--                         benefitting from the emulation clarity defence."
+--   Bloodletter's Fury   "Your emulation rupture ability is now effective against denizens.
+--                         While you possess the rupturesight defence, your weaving attacks
+--                         against denizens will now deal unblockable damage and 50% increased
+--                         base damage, and you will recover balance 20% faster."
+--
+-- THEY RIDE THE ROUND, because ENACT costs EQUILIBRIUM (2.30s, wiki) and every Psion weave
+-- spends BALANCE -- the idle-channel rule this file already applies to `psi transcend` and
+-- `enact roth` directly above. A defence worth 50% damage is worth an equilibrium we were not
+-- spending.
+--
+-- BOTH COMMANDS ARE CONFIRMED, not guessed: `enact clarity` and `enact rupture` are the
+-- package's own long-standing aliases (aliases/.../emulation/004, 005), and the wiki agrees.
+-- The defence NAMES come from the game rather than from us as well -- `rupturesight` and
+-- `clarity` are both already in `ataxiaTables.defences`, and the boon text the user pasted
+-- names `rupturesight` itself.
+--
+-- THE HOLDS DIFFER, AND THE SHORT ONE IS DELIBERATE. `clarity` reads as an ordinary lasting
+-- defence. `rupture` may not be: the ability text is "your next three blows shall all deal
+-- significantly increased bleeding", which would make `rupturesight` a CHARGE that expires
+-- after three swings rather than a defence that sits there. This code does not need to know
+-- which: it asks gmcp every round and re-enacts whenever the defence is down. The hold is only
+-- an anti-spam guard for the seconds between sending and seeing, so the uncertain one gets the
+-- shorter guard -- a redundant `enact` costs one equilibrium we were not using, while a missed
+-- re-up costs 50% of the round's damage.
+local PSION_KEEP_HOLD = { clarity = 12, rupturesight = 4 }
+
+-- "" when the defence is already up or an attempt is still in flight, else the command plus the
+-- separator, so the caller can concatenate it blind.
+local function psionKeep(def, cmd, sp)
+  if ataxia.defences and ataxia.defences[def] then return "" end
+  ataxiaTemp = ataxiaTemp or {}
+  local key = "psionKeep_" .. def
+  if ataxiaTemp[key] then return "" end
+  ataxiaTemp[key] = true
+  local hold = tonumber(ataxiaBasher.psionKeepHold) or PSION_KEEP_HOLD[def] or 10
+  tempTimer(hold, "ataxiaTemp." .. key .. " = nil")
+  return cmd .. sp
+end
+
+-- The pair, boon-gated. `rothFired` is not a nicety: ENACT ROTH "grants clarity + rupture free"
+-- (the emergency-heal comment above says so, and the wiki agrees), so a round that just spent
+-- roth is about to be handed both defences -- enacting them alongside it would burn equilibrium
+-- for something already arriving.
+function ataxiaBasher_psionEmulationKeepers(sp, rothFired)
+  if rothFired then return "" end
+  sp = sp or ((ataxia.settings and ataxia.settings.separator) or ";")
+  local out = ""
+  if psionRazorClarity then out = out .. psionKeep("clarity", "enact clarity", sp) end
+  if psionBloodletter then out = out .. psionKeep("rupturesight", "enact rupture", sp) end
+  return out
+end
+
 function ataxiaBasher_psionBashing()
   local command, sp = "", ataxia.settings.separator
   -- NOTE: the battlerage is computed LAZILY below, after the shielded early-return
@@ -2855,11 +2916,18 @@ function ataxiaBasher_psionBashing()
   -- rupture free) -- it belongs BEFORE any shield/flee response fires.
   ataxiaTemp.psionRothAt = ataxiaTemp.psionRothAt or 0
   local nowT = (getEpoch and getEpoch()) or os.time()
+  local rothFired = false
   if (tonumber(ataxia.vitals.hpp) or 100) < 50
      and (nowT - (tonumber(ataxiaTemp.psionRothAt) or 0)) >= 185 then
     ataxiaTemp.psionRothAt = nowT
+    rothFired = true
     command = command.."enact roth"..sp
   end
+  -- Boon-gated emulation keepers (v4.7.349). Placed with the other equilibrium riders and
+  -- BEFORE the shielded branch on purpose: raising a defence is not an attack, and a shield on
+  -- the denizen has nothing to do with whether our own clarity is up. They stand down when roth
+  -- just fired, which hands us both of them free.
+  command = command..ataxiaBasher_psionEmulationKeepers(sp, rothFired)
   -- Transcendence keeper: the shatter loop assumes PSI TRANSCEND is active, but
   -- nothing ever re-upped it after a drop/death. The psitranscend defence is
   -- GMCP-tracked; re-up on eq (rides the swing) with a 10s attempt-hold.

@@ -69,6 +69,16 @@ end
 -- Panoply: WEAVE FLURRY scales with strikes landed (60-200% per attack); the Psion
 -- basher swaps its deathblow bash to flurry while it's up.
 if matches[2]:lower():find("panoply") then psionPanoply = true end
+-- Bloodletter's Fury: while the RUPTURESIGHT defence stands, weaving attacks on denizens are
+-- unblockable, hit 50% harder and give balance back 20% faster -- so the basher keeps it up.
+if matches[2]:lower():find("bloodletter") then psionBloodletter = true end
+-- Razor Clarity: +50% damage and +2% crit while the emulation CLARITY defence stands; same
+-- deal, an equilibrium rider that keeps a defence worth half again the round's damage.
+if matches[2]:lower():find("razor clarity") then psionRazorClarity = true end
+-- Mindbreak: PSI SHATTER deals 500% more. No rotation change -- shatter already fires at every
+-- full transcendence, which is when it is free -- the flag is for the boon advisor and for
+-- whatever a captured AB block lets us do with it later.
+if matches[2]:lower():find("mindbreak") then psionMindbreak = true end
 -- Might of Sycaerunax: draconic BLAST +25% damage and the breath weapon PERSISTS;
 -- the dragon basher drops the re-summon from its blast weave while it's up.
 if matches[2]:lower():find("sycaerunax") then dragonMightSycaerunax = true end

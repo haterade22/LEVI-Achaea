@@ -2,6 +2,99 @@
 
 ---
 
+## 2026-09-25 - Psion boons, and the transcendence counter that only went up (v4.7.349)
+
+User: *"Psion is another class we need to add."* Three boons pasted, plus the Psion/Weaving/
+Psionics/Emulation wiki pages. Then, separately, the transcendence decay ladder -- which turned
+out to be the more valuable paste of the two.
+
+### The two boons that are KEEPERS, not attacks
+
+```
+Bloodletter's Fury:  Your emulation rupture ability is now effective against denizens. While you
+                     possess the rupturesight defence, your weaving attacks against denizens will
+                     now deal unblockable damage and 50% increased base damage, and you will
+                     recover balance 20% faster.
+Razor Clarity:       You deal 50% bonus damage and have 2% bonus critical chance while
+                     benefitting from the emulation clarity defence.
+```
+
+Both pay out *for as long as a defence stands*, so the work is maintenance, not a rotation
+change. And ENACT costs **equilibrium** (2.30s), which every Psion weave leaves idle -- the same
+channel this file already rides for `psi transcend` and `enact roth`. A defence worth 50% damage
+is worth an equilibrium we were not spending.
+
+Neither command is guessed: `enact clarity` and `enact rupture` are the package's own
+long-standing aliases (`emulation/004`, `005`), the wiki agrees, and the defence names come from
+the game -- `rupturesight` and `clarity` are already in `ataxiaTables.defences`, and the boon text
+names `rupturesight` itself.
+
+**The two holds differ, deliberately.** `clarity` reads as an ordinary lasting defence. `rupture`
+may not be: its ability text is *"your next three blows shall all deal significantly increased
+bleeding"*, which would make `rupturesight` a **charge** that expires after three swings. The
+keeper does not need to know which -- it asks gmcp every round and re-enacts whenever the defence
+is down. The hold is only an anti-spam guard for the seconds between sending and seeing, so the
+uncertain one gets the shorter guard (4s vs 12s): a redundant `enact` costs one equilibrium we
+were not using, a missed re-up costs half the round's damage.
+
+**They stand down on a round that fired ROTH**, which grants clarity *and* rupture free --
+enacting them alongside it would spend equilibrium on something already arriving.
+
+### Mindbreak needs no rotation change, and that is the finding
+
+*"Your psionics shatter ability deals 500% increased damage."*
+
+`psi shatter <target>` already fires on every **full** transcendence, which is precisely when a
+psionics action is free (*"once at full harmony, you can perform a psionics action while off
+equilibrium and for no incurred equilibrium cost"*). The gate is about when shatter is **free**,
+not whether it is worth it -- so multiplying its damage does not move it. The flag is latched
+anyway, for the boon advisor and as the switch a future change would read; a test pins the
+no-change as a decision so nobody later "fixes" it.
+
+If SHATTER turns out to be usable *below* full transcendence at an equilibrium price, that is
+what would change -- and it needs the ability block captured first. This tree does not guess game
+syntax.
+
+### THE DECAY LINE COULD NEVER HAVE MATCHED
+
+User pasted the ladder: `60 -> 50 -> 40 -> 30 -> 20 -> 10` percent, then *"Your body and mind are
+no longer in harmony."*
+
+`psion/001_Transcendence_Set` watched both directions with `$`-anchored patterns. The decay line
+is **128 characters**; Achaea wraps server-side and the paste breaks after *"of the way to"* at
+column 114, identically on all six. **An anchored pattern cannot match a line that is only ever
+delivered in halves.** The build line is 94 characters, fits, and matched fine -- which is exactly
+what hid this: transcendence counted **up** correctly and simply never counted back **down**.
+
+The cost was not cosmetic. `ataxiaBasher_psionBashing` sends `psi shatter <target>` when it
+believes transcendence is 100, so a value that could rise but never fall meant the round kept
+spending on a shatter the game had long since taken away.
+
+Both patterns now stop at the captured number, well before any wrap, keeping only the `^` anchor
+-- the opening words are distinctive enough that nothing else can match them. And the bottom of
+the ladder is wired: *"Your body and mind are no longer in harmony."* now zeroes the counter,
+which nothing was listening for.
+
+*An anchored pattern is a bet that the line is short enough, and the lines that break it are
+exactly the informative ones.* Same lesson as v4.7.286's soulstorm landing, reached from the
+opposite direction: there the fix was to match a fragment, here it is to stop before the wrap.
+
+### Verification
+
+2372 tests pass (23 new, `tests/test_basher_psion_boons.lua`). **19 mutants, all killed, no
+survivors** -- including re-anchoring each transcendence pattern, swapping the short hold for the
+long one, and making Mindbreak move the shatter gate.
+
+### Files
+
+- `basher/002_Class_Bashing.lua` (`ataxiaBasher_psionEmulationKeepers`, `psionKeep`, the round),
+  `mnemosyne/004_Parsers.lua`, `mnemosyne/010_Boon_Seed.lua`; triggers
+  `psion/001_Transcendence_Set.lua`, `psion/003_Transcendence_Dropped.lua`,
+  `mnemosyne/001_Run_Start.lua`, `mnemosyne/099`-`101` (new); alias `mnemosyne/002_Boon_Claim.lua`;
+  `tests/test_basher_psion_boons.lua`; `CHANGELOG.md`, `CLAUDE.md`, memory.
+
+---
+
 ## 2026-09-25 - Graveborn, and the Baalzadeen that read as a swarm (v4.7.348)
 
 Three changes, all Apostate PvE, and two of them are the same defect twice.
