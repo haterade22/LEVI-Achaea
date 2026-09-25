@@ -60,6 +60,12 @@ Patterns are Mudlet regex (`type: 1`), quoted verbatim from each trigger file.
 | 095 | Boon Combo Granted | `^With every required boon now in hand, the mist of the Mnemosyne parts and bestows upon you another: (.+)\.$` (live 2026-09-19) | `onComboBoonGranted(matches[2])` (v4.7.328) -- a COMBO reward is granted, never offered or claimed, so nothing else recorded it: echoes `COMBO COMPLETE` with the recipe, records the claim, and queues its contemplate (which carries the next recipe) | none |
 | 094 | Boon Rerolls Left | `^BOON REROLL to discard these options and see new ones \((\d+) remaining\)` (the offer footer; live 2026-09-19) | `onRerollsRemaining(matches[2])` (v4.7.327) -- sets `M._rerollsLeft` for the advisor's reroll hint; `onBoonsOffered` clears it for each new screen | none |
 | 093 | Boon Callouts | `^Combo Boon\?:\s+(\w+)` / `^Can echo:\s+(\w+)` / `^Maximum echoes:\s+(\d+)` (BOON CONTEMPLATE meta lines; Flameheart sample 2026-09-19), plus the block boundaries `^Rarity:\s+` and `^-{3,}` | `onCalloutLine(line)` (v4.7.326) -- highlights a Yes / the echo count in place and adds it to the block's ONE summary line (`_calloutAdd`/`_calloutFlush`, with 092's conflicts); a boundary line prints what was gathered (the aggregator is module-global and chained contemplates arrive 0.5s apart), and does nothing when nothing was | none (a highlight) |
+| 096 | Rimewrought | `^Rimewrought:\s+Perpetual ice coats your body` (Ongoing effects row) | `onRimewroughtSeen()` (v4.7.333/334) -- tattoos cannot be used, so the tattoo defences are taken off keep-up (they would only spam) and restored when the affix is gone | none |
+| 097 | Famine | `^Famine:\s+Taking damage has a chance to make you more hungry` (Ongoing effects row) | `onFamineSeen()` (v4.7.333) -- eat to full every room (the Horn of Plenty path opens without its boons; corpse top-ups with Obligate Carnivore) | none |
+| 098 | Graveborn | `^Graveborn\s+\d+\s+\w+` (BOONS-list row) | sets `mnemGraveborn` -- **only while `ataxiaBasher.inMnemosyne`** (v4.7.351) -- gravehands in every room | none |
+| 099 | Bloodletter's Fury | `^Bloodletter's Fury\s+\d+\s+\w+` | sets `psionBloodletter` (in the tower only) -- keep `rupturesight` up | none |
+| 100 | Razor Clarity | `^Razor Clarity\s+\d+\s+\w+` | sets `psionRazorClarity` (in the tower only) -- keep `clarity` up | none |
+| 101 | Mindbreak | `^Mindbreak\s+\d+\s+\w+` | sets `psionMindbreak` (in the tower only) -- no rotation change; shatter is the main tool regardless | none |
 | 092 | Boon Conflicts | `^Conflicts [Ww]ith:\s+(.+)$` (BOON CONTEMPLATE's conflicts line; real sample 2026-09-19) | `onConflictsLine(value)` (v4.7.325) -- highlights each conflicting boon in the line (red if held this run, gold otherwise -- the summary's colours); the list joins the block's summary line (v4.7.326); works for a contemplate typed by hand too | none (a highlight; "held" needs an active run) |
 | 091 | Flight Truth | `flies up to your level from below.` / `swoops down from the skies to land beside you.` / `You are not flying, my friend.` (**substrings**, `type: 0` -- on the TAIL of each line, so any denizen name fits; live 2026-09-18) | `swarm.onFlightTruth(line)` (v4.7.321) -- the two FLYER lines latch `S.grounded` (a flyer lives on this ripple), end a recovery hover via `_hoverCompromisedTick`, and end a KITE properly via `S.reset` (which lands). "Not flying" is the reply to OUR `land`: it clears `S.flightConfirmed` and nothing else, because it can be stale (the death's reply arrived after a NEW hover had begun) and `S.flying` is the kite's mode flag. **Accelerators, not the guard**: the recovery tick checks the premise itself, denizen-agnostically (see 07-explorer) | handler self-gates on `ataxiaBasher.inMnemosyne` |
 
@@ -210,7 +216,10 @@ Both walks are word-capped (6 left, 5 right) so a runaway sentence can't blow up
 
 Sixty-odd boons own a hand-written trigger each. Reasonable when each needed bespoke parsing;
 not reasonable for the next ten, which only need a flag. `M.BOON_FLAGS` maps boon NAME to a
-global flag, latched from the BOON CLAIM and cleared by `M.clearBoonFlags()` on run end.
+global flag, latched from the BOON CLAIM, the combo grant (trigger 095) and -- since v4.7.350 -- every
+row of the BOONS list (the generic row trigger 013), which is what the once-per-run `boon claimed`
+re-latch after a reload relies on; that row latch runs **only while `ataxiaBasher.inMnemosyne`**
+(v4.7.351). Cleared by `M.clearBoonFlags()` at BOTH ends of a run (run start since v4.7.351).
 `(ECHO)` is stripped -- a second copy of a boon is the same boon, and a live export carries 37
 of them.
 
@@ -472,19 +481,22 @@ long enough to have wrapped is refused and left in `meta`. `META_PLACEHOLDER` se
 `None`/`N/A`/`-`/`nothing`, so a game rendering "no value" as a word cannot become a boon named
 `None` that fill-never-blank then locks in ahead of the real answer.
 
-## Boon churn and the half-wired registry (audited 2026-09-02, corrected 2026-09-03, UNFIXED)
+## Boon churn and the registry (audited 2026-09-02; BOTH halves wired as of v4.7.351)
 
 Boons are added and removed every season, and the cost of that lands here. `M.BOON_FLAGS`
 (`004_Parsers`) exists to absorb it -- a NAME -> FLAG table so a new boon needs a row rather than a
-trigger -- but only one END of the reset is connected:
+trigger:
 
 | Half | State |
 |---|---|
-| `M.latchBoonFlag(name)` | wired, called from the claim path (`004:1608`) |
-| `M.clearBoonFlags()` | wired at run-END (`004:264`, inside `M.onRunEnd()`), **called nowhere at run-START** |
+| `M.latchBoonFlag(name)` | the claim path, the combo grant, and the BOONS row (trigger 013, v4.7.350) -- the row latch **in the tower only** (v4.7.351) |
+| `M.clearBoonFlags()` | run END (inside `M.onRunEnd()`) and run START (trigger 001, v4.7.351) |
 
-(A prior pass of this doc read `clearBoonFlags()` as dead everywhere, which understated the gap by
-half -- it runs on every CONFIRMED run end, just not defensively at the next run's start.)
+**Adding a boon to `BOON_FLAGS` no longer needs its own row trigger** (v4.7.350): before, the row
+trigger recorded ownership and never latched, so a boon came back after a reimport only if it ALSO had
+a hand-written trigger -- 15 of the 20 did not, Dead Breath and Deathtempest among them. A test feeds
+a row for every name in the table and requires every flag back. Run START used to clear only a
+hand-written list missing 13 of the 20. Status below is the 2026-09-02 audit, kept for history.
 
 So 13 boons use the registry, ~29 remain hand-wired across four files each, and three flags are
 asymmetric as a result: `dwTimequake` / `dwHeraldInfirmity` (run-end reset, no run-start) and

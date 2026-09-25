@@ -62,6 +62,25 @@ lua5.1 src_new/tests/test_runner.lua
 
 Write tests for new logic where feasible. At minimum, new public functions should have a happy-path test. `mock_mudlet.lua` stubs the Mudlet API so tests run outside the client.
 
+Conventions the suite relies on (each learned from a real bug):
+
+- **All test files share ONE Lua state**, and discovery order differs between Windows and CI.
+  Restore every global you replace (`send`, `tempTimer`, `getEpoch`, `ataxiaEcho`, module stubs),
+  ideally under `pcall` so a failing assertion cannot skip the restore. Do not depend on a flag an
+  earlier file left set -- one row-latch test passed only because an earlier test left
+  `inMnemosyne` true.
+- **Break-back every fix**: revert it alone and confirm a test fails. A test that still passes
+  against the reverted code defends nothing (sorted-pair assertions and hand-copied logic both
+  survived mutation runs here).
+- **Test a trigger's PATTERN, never the file text.** A text search matched the trigger's own comment
+  after its pattern had been fixed. `tests/trigger_lib.lua` reads a trigger's patterns, wraps a line
+  the way the server does, and evaluates each pattern per physical row (`tests/test_trigger_wrap.lua`).
+- **Long game lines wrap server-side** (the author's width: 119-124 columns). Match an EARLY phrase
+  of any line near or over ~110 characters; a paste in chat arrives unwrapped and is not evidence of
+  length.
+- **Run the real code**: dofile the real module or trigger rather than re-implementing its logic in
+  the test.
+
 ## Commit messages
 
 No strict format required. Be descriptive about *why*, not just *what*:
@@ -78,8 +97,10 @@ causing the second definition to silently shadow the first.
 GitHub Actions (`.github/workflows/build.yml`) runs on every push and PR:
 
 1. Lua syntax check (all `src_new/**/*.lua`)
-2. Version consistency check (version.txt / mfile / _groups.yaml)
-3. Unit tests (`lua5.1 src_new/tests/test_runner.lua`)
-4. YAML validation
+2. `tools/check_orphans.py` -- no active item calls a global defined only by a disabled script
+3. `tools/check_wrap.py` -- no trigger pattern is wider than a server-wrapped row (v4.7.351)
+4. Version consistency check (version.txt / mfile / _groups.yaml)
+5. Unit tests (`lua5.1 src_new/tests/test_runner.lua`)
+6. YAML validation
 
 Tagged pushes (`v*`) additionally build the `.mpackage` and create a GitHub Release.

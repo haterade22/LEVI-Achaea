@@ -2916,10 +2916,12 @@ function ataxiaBasher_psionEmulationKeepers(sp, eqSpent)
   return ""
 end
 
--- WHAT FULL TRANSCENDENCE IS SPENT ON (v4.7.352). At full harmony one psionics action is free
--- and off-equilibrium; the user: "Psi Shatter is the main tool to use unless we have other boons
--- with full transcendence." So it is shatter -- and this is the ONE place a future boon that makes
--- another psionics action better at full transcendence would change it.
+-- WHAT FULL TRANSCENDENCE IS SPENT ON (v4.7.352). At full harmony one psionics action costs no
+-- equilibrium -- though it still REQUIRES equilibrium and balance to execute (user, v4.7.353: "it
+-- does need EQ and Balance to execute but costs no EQ. Just requires it"; the wiki's "while off
+-- equilibrium" was wrong). The user: "Psi Shatter is the main tool to use unless we have other
+-- boons with full transcendence." So it is shatter -- and this is the ONE place a future boon that
+-- makes another psionics action better at full transcendence would change it.
 local function psionTranscendSpend(sp)
   return "psi shatter " .. target .. sp
 end
@@ -2938,6 +2940,23 @@ function ataxiaBasher_psionBashing()
   -- bash, so it becomes the primary (user-directed). Straight verb swap mirroring
   -- bmShatteredStar; psi shatter keeps its transcendence slot.
   local weave = psionPanoply and ("weave flurry "..target) or ("weave deathblow "..target)
+
+  -- THE FREE SHATTER GOES FIRST (v4.7.353). User: "it does need EQ and Balance to execute but
+  -- costs no EQ. Just requires it." A queued chain runs back to back, so anything ahead of it that
+  -- SPENDS equilibrium (roth, psi transcend, a keeper) would leave it none to require -- and
+  -- v4.7.352 put it after all of them, believing the wiki's "while off equilibrium". At the FRONT it
+  -- needs the equilibrium, leaves it, and whatever comes next can still spend it.
+  --
+  -- Which is also the second shatter: at full transcendence with nothing else wanting equilibrium,
+  -- the paid shatter below follows this one on the same round -- the first plain `psi shatter`
+  -- takes the transcendence (the user's log: "Your body and mind fall out of their transcendent
+  -- state" right after it), so the second is an ordinary 3.10s-equilibrium cast.
+  --
+  -- Held on a shielded round: the shield comes first, and transcendence waits for the round that
+  -- can use it.
+  if (tonumber(ataxiaTemp.transcendence) or 0) >= 100 and not ataxiaBasher.shielded then
+    command = command..psionTranscendSpend(sp)
+  end
 
   -- EQ riders (equilibrium is idle while weaves spend balance -- the Kai Choke lesson):
   -- Roth is the sub-50% emergency heal (AB: 1.30s eq, 3-min cooldown, grants clarity +
@@ -3008,15 +3027,13 @@ function ataxiaBasher_psionBashing()
   -- +500%) against 921 and 1,934 for the deathblows around it. Even a sixth of that is more than
   -- a deathblow, on a channel that was doing nothing.
   --
-  -- So: at FULL transcendence it goes out free (spends transcendence, not equilibrium, so it
-  -- rides even when a keeper took the equilibrium this round); otherwise it is the LAST call on
-  -- idle equilibrium, after roth, the transcend keeper and the boon keepers -- which fire only
-  -- when their defence has dropped, and clarity itself buys shatter +50% and faster equilibrium.
-  -- Unshielded rounds only: the shielded branch above returned, breaking the shield first.
+  -- So it is the LAST call on idle equilibrium, after roth, the transcend keeper and the boon
+  -- keepers -- which fire only when their defence has dropped, and clarity itself buys shatter
+  -- +50% and faster equilibrium. At full transcendence the FREE one already went at the front of
+  -- the chain (above), so this is the paid one -- and on a round nothing else wanted equilibrium,
+  -- that makes two. Unshielded rounds only: the shielded branch above returned.
   local shatter = ""
-  if (tonumber(ataxiaTemp.transcendence) or 0) >= 100 then
-    shatter = psionTranscendSpend(sp)            -- free, off-equilibrium
-  elseif not eqSpent then
+  if not eqSpent then
     shatter = "psi shatter "..target..sp          -- 3.10s of equilibrium
     eqSpent = true
   end

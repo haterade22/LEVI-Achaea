@@ -58,8 +58,41 @@ Prompt (GMCP vitals)
                  ├─ Gold pickup
                  ├─ Legend deck draws
                  ├─ Blood maiden cloak
+                 ├─ Equilibrium riders (legend deck, Death Stare, belch, soulstorm -- boon-gated)
                  └─ Class-specific bashing function
 ```
+
+**The queued round is ONE entry** (`queue addclearfull freestand stand;<a>;<b>;...`): it needs balance
+AND equilibrium to fire, and its commands run back to back. So only ONE equilibrium-SPENDING action
+can pay per round -- a second one is refused after its cooldown was stamped (CLAUDE.md "One resource
+spender per assembled round"; the Psion keepers repeated it in v4.7.349, fixed v4.7.351). An action
+that REQUIRES equilibrium without spending it (the Psion's free transcendence shatter) must go
+BEFORE the ones that spend it.
+
+**Check the pair, not the rule, when adding a rider.** The rule comes from three live collisions
+(shin augment + thunderstorm, intone keeper + boinad, the Psion keepers). But the Apostate's belch and
+soulstorm DO land in the same round (user, 2026-09-24) -- soulstorm's equilibrium cost against
+denizens is "greatly reduced" -- so the rule holds per ability pair, and a log settles it. Open: the
+Apostate round can also carry `summon hands of the grave` (3.00s of equilibrium) behind a belch;
+whether both land is unconfirmed, and the gravehands unconfirmed-summon retry would mask a refusal.
+
+**Re-queue on a state change** (`ataxiaBasher_requeueNow`, genrunning/004, v4.7.352): the round is
+rebuilt on prompt/vitals events behind the 0.3s anti-spam flag, so a line that changes what the round
+SHOULD be can land after the last rebuild and the stale entry fires. The Psion's full-transcendence
+trigger calls it; it clears the flag for one call and goes through `tryAttack`'s gates.
+
+## Mounts and the jump verb (basher/013)
+
+- **Not targets, by ID.** The mounts listing ("Your loyal mounts are:") is parsed passively (triggers
+  776/777); `ataxiaBasher_isMount(id)` drops them in the room-contents read. VAULT makes that mount
+  the active one (`curing mount <id>`).
+- **The jump verb follows the saddle.** `ataxiaTemp.mounted` (session scratch -- a saved flag would
+  outlive the reload that dismounted us) is taught by nine lines, each direction by a REFUSAL as well
+  as a success. `ataxiaBasher_mountVerb(fallback)` returns `mountjump` from the saddle.
+- **Both refusals recover the lost move**: "You cannot do that while mounted." re-sends the jump as
+  `mountjump`; "You have no mount on which to jump." re-sends a mountjump as `leap` -- bounded to a
+  jump WE sent (`ataxiaTemp.lastJump`), from this room, within 4s, and never during a tumble or in
+  lava (they own the move). `S.reset` clears the ledger; death sets the belief to unknown.
 
 ## Gate Sequence (tryAttack)
 

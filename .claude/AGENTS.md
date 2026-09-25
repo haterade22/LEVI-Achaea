@@ -1,5 +1,41 @@
 # Agent Instructions for LEVI-Achaea Combat System
 
+## Pitfalls learned 2026-09-19 -- 2026-09-25 (v4.7.326 -- v4.7.353)
+
+- **Count a game line before you anchor on it.** The author's server wraps at 119-124 columns;
+  a longer line reaches Mudlet as separate rows, and a pattern that runs past the break -- or a
+  SHORT fragment that happens to straddle it -- never matches, silently. Three triggers from one week
+  did it (the gravehands confirmation cast every Apostate room's summon twice). **Chat pastes arrive
+  UNWRAPPED**, so a paste is not evidence of a line's length. Match an early phrase;
+  `tools/check_wrap.py` (CI) and `tests/test_trigger_wrap.lua` now guard it.
+- **Assert on the pattern, not the file.** A test that searches a trigger FILE for a phrase passes on
+  the comment -- the gravehands test kept passing on the comment that explained its own fix.
+- **A helper named for one class, whose body is not, is gated by its CALL SITE.**
+  `ataxiaBasher_infGravehands` had the Apostate branch from day one and only the Infernal round
+  called it; `ataxiaBasher_infDeathaura` likewise. Two boons were inert on a class for months. Grep
+  the callers, not the branch.
+- **A seeded default is not a backfill.** A default list only runs on a fresh install; the backfill
+  is what reaches existing saves. `baalzadeen` sat in the default for months and no user got it -- and
+  its absence inflated the swarm count.
+- **A table whose comment names two sources, with a caller for one, reads as complete from either
+  end.** `M.BOON_FLAGS` "latched from the claim and the BOONS list" -- only the claim was wired, so 15
+  boons were lost on every reimport.
+- **Latch state in the context it belongs to.** The row latch had no in-tower check and 19 of 20
+  consumers do not check either; gate at the latch.
+- **One equilibrium-spending action per queued round** -- the chain runs back to back. And an action
+  that REQUIRES equilibrium without spending it must go BEFORE the ones that spend it.
+- **A flag that nothing downstream reads is tested by nothing.** A Psion keeper never marked the
+  round's equilibrium spent; harmless until shatter came after it.
+- **If one refusal recovers the lost move, its mirror must too.** The mounted refusal re-sent the jump;
+  the "no mount" refusal did not, so a stale mounted belief lost an escape.
+- **Trust the captured behaviour (and the player) over the wiki.** The wiki says the free transcendence
+  action works "while off equilibrium"; in game it requires equilibrium. The AB block said shatter was
+  a 3.10s-equilibrium action usable any time; the package had only ever used it at full transcendence.
+- **A belief that must not survive a reload lives in `ataxiaTemp`.** `ataxiaBasher` and `ataxia` are
+  saved; a saved `mounted = true` would outlive the reload that dismounted us.
+- **Pick a free version number AFTER fetching main.** A concurrent PR took v4.7.336 while a feature was
+  in flight; merging the duplicate published a package without the feature (fixed as v4.7.337).
+
 ## Pitfalls learned 2026-07-31 / 2026-08-02
 
 - **Do not overload an existing flag key with a second meaning.** `control` already meant

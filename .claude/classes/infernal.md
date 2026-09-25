@@ -1299,6 +1299,15 @@ mnemosyne_boons:
       essence economy that justified saving it for a crowd stops applying, so the crowd
       gate drops to **1 denizen** (every room with anything in it) and the essence floor
       drops from 20% to 10%. `ataxiaBasher.infTyrannyAt` overrides both if set.
+      **GRAVEBORN (v4.7.348)** -- the combo of Army of the Dead + Maliceborn + Necrotic Aura
+      ("while standing in gravehands, your attacks will command them to ravage your enemies
+      ... every 15 seconds") -- does the same from the other direction and applies to this
+      TYRANNY path too: need 1, essence floor 10% (Maliceborn is in the recipe). The helper
+      `ataxiaBasher_infGravehands` is shared with the Apostate, where the summon RIDES the
+      round (it spends equilibrium) and costs 350 mana; the mana gate and the one-shot
+      unconfirmed-summon retry are Apostate-only -- Tyranny's own cast line was never
+      captured, so "unconfirmed" would be its permanent state. The per-room record is
+      cleared at each ripple (v4.7.351): the tower reuses room numbers.
       Cadence, corrected again in v4.7.161: **ONCE PER ROOM**. The gravehands belong to the
       room they were summoned in, so every new room can have its own -- neither once per
       session (the v4.7.149 cut used a 600s timer and skipped rooms) nor per-cooldown. The
