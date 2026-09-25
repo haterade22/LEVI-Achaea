@@ -229,3 +229,13 @@ describe("the transcendence tail gag runs only on OUR tail", function()
     if not ok then error(err, 0) end
   end)
 end)
+
+-- Mudlet's pattern types (tools/convert_to_muddler.py): 2 startOfLine, 3 exactMatch. v4.7.351's
+-- evaluator had 3 as "starts with" -- nothing tested depended on it yet, and now nothing can.
+describe("the evaluator's pattern types match Mudlet's", function()
+  it("2 is start-of-line, 3 is exact", function()
+    expect(TL.matches("You have", 2, "You have achieved transcendence.")).toBeTrue()
+    expect(TL.matches("You have", 3, "You have achieved transcendence.")).toBeFalse()
+    expect(TL.matches("You cannot do that while mounted.", 3, "You cannot do that while mounted.")).toBeTrue()
+  end)
+end)

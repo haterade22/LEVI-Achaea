@@ -151,8 +151,11 @@ end
 
 -- Does the pattern match this ONE physical line (as Mudlet would see it)?
 function L.matches(pat, typ, line)
+  -- Mudlet's numbering (tools/convert_to_muddler.py PATTERN_TYPE_MAP): 0 substring, 1 regex,
+  -- 2 startOfLine, 3 exactMatch. v4.7.351 had 3 as "starts with" -- corrected v4.7.352.
   if typ == 0 then return line:find(pat, 1, true) ~= nil end
-  if typ == 3 then return line:sub(1, #pat) == pat end
+  if typ == 2 then return line:sub(1, #pat) == pat end
+  if typ == 3 then return line == pat end
   assert(typ == 1, "unknown trigger pattern type " .. tostring(typ))
   if pat:sub(1, 1) ~= "^" then
     error("trigger_lib: only ^-anchored regex patterns are supported, got " .. pat)

@@ -2,6 +2,75 @@
 
 ---
 
+## 2026-09-25 - Psi shatter is the main tool, and the round catches transcendence (v4.7.352)
+
+The user asked for a recommended Psion rotation, then pasted a log and two lines that changed it:
+
+> *"Seems like we are behind one attack on the transcendance, maybe a clearqueue is needed when we
+> are at full"* -- then the AB block for PSI SHATTER -- *"We can use"* -- and *"Psi Shatter is the
+> main tool to use unless we have other boons with full transcendence."*
+
+```
+Shatter (Psionics)  ABADMIN ID: 2750
+Syntax:            PSI SHATTER <target>
+Works on/against:  Adventurers and denizens
+Cooldown:          3.10 seconds of equilibrium
+```
+
+### Shatter on every idle equilibrium
+
+Shatter was only ever sent at FULL transcendence, where it is free -- the one case this package had
+evidence for. It is an ordinary **equilibrium** action the rest of the time, and equilibrium is the
+channel every weave leaves idle. The user's log: **12,992** psychic with Mindbreak, against
+deathblows of 921 and 1,934 in the same fight. Even a sixth of that beats a deathblow.
+
+The equilibrium order is now: roth (below 50%) -> psi transcend (if its defence dropped) -> ONE boon
+keeper (rupture, then clarity) -> **psi shatter**. The keepers fire only when their defence is down,
+and clarity buys shatter itself +50% and faster equilibrium, so they are worth an occasional round;
+shatter takes every other one. At **full transcendence** shatter is free and off-equilibrium, so it
+rides even on a round a keeper took. It never goes out on a shielded round (the shield comes first),
+and it does ride a secondskin round (secondskin spends balance). The full-transcendence spend lives
+in one small function, `psionTranscendSpend`, so a future boon that prefers another action there is
+a one-line change.
+
+**The shatter tests caught a bug on their first run:** a boon keeper that fired never marked the
+round's equilibrium as spent -- harmless while nothing came after it, but with shatter as the last
+call it would have chained a keeper and a shatter together, the very collision v4.7.351 removed.
+
+Mindbreak still changes no rotation, now for a better reason: shatter is the main equilibrium tool
+with or without it. The test that pinned "no shatter below full transcendence" was pinning the old
+design and was rewritten.
+
+### Behind by one round at full transcendence
+
+The log: a deathblow, *"You have achieved transcendence"*, then ANOTHER plain deathblow, and only the
+round after that the shatter. The round is rebuilt on prompt and vitals events behind a 0.3s
+anti-spam flag, so the line can land just after the last rebuild -- and if nothing else arrives
+before balance returns, the stale entry fires. `ataxiaBasher_requeueNow` clears that flag for one
+call and re-queues through `tryAttack`'s normal gates (holds, escape, afflictions, throttle);
+`queue addclearfull` both clears the stale entry and replaces it, which is the "clearqueue" the user
+suggested. `psion/002` calls it only when transcendence CHANGES to 100 -- "...transcendence is
+yours." repeats on every weave at full. With no target it does nothing, leaving tryAttack's
+no-target branch (which moves to the next room) where it was.
+
+### Also
+
+- **Mudlet's pattern type 3 is EXACT match, not "starts with"** (`tools/convert_to_muddler.py`: 2 is
+  startOfLine). v4.7.351's test evaluator had it wrong -- nothing tested depended on it -- and
+  `tools/check_wrap.py` now also checks type 2.
+
+### Verification
+
+2454 tests pass (11 new). **11 mutants, all killed.**
+
+### Files
+
+- `basher/002_Class_Bashing.lua`, `genrunning/004_Autobashing_Functions.lua`; triggers `psion/002`,
+  `mnemosyne/101`; `tests/test_basher_psion_boons.lua`, `tests/test_trigger_wrap.lua`,
+  `tests/trigger_lib.lua`; `tools/check_wrap.py`; `CHANGELOG.md`, `CLAUDE.md`, memory.
+
+---
+
 ## 2026-09-25 - Deep review of v4.7.344-350, every finding fixed (v4.7.351)
 
 User: *"conduct a deep review"*, then *"implement all fixes"*. Eight review agents over the week's
