@@ -246,11 +246,9 @@ describe("Mindbreak: latched, and deliberately inert", function()
     expect(with).toBe(without)
   end)
 
-  -- v4.7.352: shatter goes out on idle equilibrium below full transcendence too -- WITH OR
-  -- WITHOUT the boon. What was pinned here ("the boon does not conjure a shatter below full") was
-  -- a consequence of shatter being full-transcendence-only; the user's AB paste retired that.
-  -- What still holds is that the boon changes nothing about WHEN shatter goes out.
-  it("and below full transcendence the boon changes nothing either", function()
+  -- v4.7.356: shatter goes out ONLY at full transcendence ("we should only use PSI Shatter when at
+  -- 100 transcendence!") -- with or without the boon.
+  it("and below full transcendence there is no shatter, boon or not", function()
     reset()
     ataxiaTemp.transcendence = 90
     local without = ataxiaBasher_psionBashing()
@@ -258,7 +256,7 @@ describe("Mindbreak: latched, and deliberately inert", function()
     psionMindbreak = true
     ataxiaTemp.transcendence = 90
     local with = ataxiaBasher_psionBashing()
-    expect(without:find("psi shatter 44001", 1, true) ~= nil).toBeTrue()
+    expect(without:find("psi shatter", 1, true)).toBeNil()
     expect(with).toBe(without)
   end)
 end)
@@ -404,47 +402,45 @@ end)
 
 
 -- =====================================================================================
--- PSI SHATTER IS THE MAIN TOOL (v4.7.352). User, pasting AB PSIONICS SHATTER (3.10s of
--- equilibrium, works on denizens): "We can use", then "Psi Shatter is the main tool to use unless we
--- have other boons with full transcendence." Their log had it at 12,992 against deathblows of
--- 921 and 1,934 -- and it was only ever sent at full transcendence.
-describe("psi shatter on every idle equilibrium", function()
+-- SHATTER ONLY AT FULL TRANSCENDENCE (v4.7.356). User: "Sorry, you keep using Psi shatter when we
+-- should be using weavings. Therefore, we should only use PSI Shatter when at 100 transcendence!
+-- PSI Shatter target;Weave deathblow target". v4.7.352-355 also sent a PAID shatter on idle
+-- equilibrium; the queued round waits for equilibrium AND balance, so that held every weave back --
+-- and weaves are what build transcendence.
+describe("psi shatter only at full transcendence", function()
   local function has(cmd, s) return cmd:find(s, 1, true) ~= nil end
+  local function count(cmd, s) local _, n = cmd:gsub(s, ""); return n end
 
-  it("rides the weave whenever equilibrium is idle, ahead of it in the chain", function()
-    reset()
-    local cmd = ataxiaBasher_psionBashing()
-    expect(has(cmd, "psi shatter 44001")).toBeTrue()
-    expect(has(cmd, "weave deathblow 44001")).toBeTrue()
-    expect(cmd:find("psi shatter", 1, true) < cmd:find("weave deathblow", 1, true)).toBeTrue()
+  it("below full transcendence the round is the weave -- no shatter at all", function()
+    for _, tr in ipairs({ 0, 50, 99 }) do
+      reset()
+      ataxiaTemp.transcendence = tr
+      local cmd = ataxiaBasher_psionBashing()
+      expect(has(cmd, "psi shatter")).toBeFalse()
+      expect(has(cmd, "weave deathblow 44001")).toBeTrue()
+    end
   end)
 
-  it("yields to a keeper that round -- one equilibrium action", function()
+  it("at full transcendence: exactly the user's round -- shatter, then the weave", function()
     reset()
-    psionRazorClarity = true
+    ataxiaTemp.transcendence = 100
     local cmd = ataxiaBasher_psionBashing()
-    expect(has(cmd, "enact clarity")).toBeTrue()
-    expect(has(cmd, "psi shatter")).toBeFalse()
+    expect(cmd:find("psi shatter 44001", 1, true)).toBe(1)
+    expect(count(cmd, "psi shatter")).toBe(1)
+    expect(cmd:find("psi shatter", 1, true) < cmd:find("weave deathblow 44001", 1, true)).toBeTrue()
   end)
 
-  -- v4.7.353, user: "it does need EQ and Balance to execute but costs no EQ. Just requires it."
-  -- So the free shatter must come BEFORE anything that spends equilibrium -- v4.7.352 put it after
-  -- the keeper, where it would have found none.
-  it("at FULL transcendence the free shatter goes FIRST, ahead of what spends equilibrium", function()
+  -- It needs equilibrium but spends none (v4.7.353), so it goes FIRST, ahead of what spends it.
+  it("the free shatter goes ahead of a keeper that spends equilibrium", function()
     reset()
     psionRazorClarity = true
     ataxiaTemp.transcendence = 100
     local cmd = ataxiaBasher_psionBashing()
-    expect(cmd:find("psi shatter 44001", 1, true)).toBe(1)
+    expect(cmd:find("psi shatter", 1, true)).toBe(1)
     expect(cmd:find("psi shatter", 1, true) < cmd:find("enact clarity", 1, true)).toBeTrue()
-    local _, n = cmd:gsub("psi shatter", "")
-    expect(n).toBe(1)             -- the keeper took the equilibrium: no paid one this round
   end)
 
-  it("a roth round carries no paid shatter -- but a free one still goes, ahead of roth", function()
-    reset()
-    ataxia.vitals.hpp = 30
-    expect(has(ataxiaBasher_psionBashing(), "psi shatter")).toBeFalse()
+  it("and ahead of roth", function()
     reset()
     ataxia.vitals.hpp = 30
     ataxiaTemp.transcendence = 100
@@ -452,42 +448,29 @@ describe("psi shatter on every idle equilibrium", function()
     expect(cmd:find("psi shatter", 1, true) < cmd:find("enact roth", 1, true)).toBeTrue()
   end)
 
-  -- The first plain shatter takes the transcendence; the second is an ordinary equilibrium cast.
-  it("full transcendence with idle equilibrium is TWO shatters: free, then paid", function()
-    reset()
-    ataxiaTemp.transcendence = 100
-    local cmd = ataxiaBasher_psionBashing()
-    local _, n = cmd:gsub("psi shatter 44001", "")
-    expect(n).toBe(2)
-    expect(cmd:find("psi shatter", 1, true)).toBe(1)
-  end)
-
   it("never on a shielded round -- the shield comes first, and transcendence waits", function()
     reset()
     ataxiaBasher.shielded = true
-    expect(has(ataxiaBasher_psionBashing(), "psi shatter")).toBeFalse()
-    reset()
-    ataxiaBasher.shielded = true
     ataxiaTemp.transcendence = 100
     expect(has(ataxiaBasher_psionBashing(), "psi shatter")).toBeFalse()
   end)
 
-  it("rides a secondskin round -- secondskin spends balance, shatter equilibrium", function()
+  it("rides a secondskin round -- secondskin spends balance", function()
     reset()
     ataxia.defences.secondskin = nil
     ataxiaTemp.psionSecondskinAttempted = nil
+    ataxiaTemp.transcendence = 100
     local cmd = ataxiaBasher_psionBashing()
     expect(has(cmd, "weave secondskin")).toBeTrue()
     expect(has(cmd, "psi shatter 44001")).toBeTrue()
   end)
 
-  it("one shatter below full transcendence, two at it (with equilibrium idle)", function()
-    for _, c in ipairs({ { 0, 1 }, { 50, 1 }, { 99, 1 }, { 100, 2 } }) do
-      reset()
-      ataxiaTemp.transcendence = c[1]
-      local _, n = ataxiaBasher_psionBashing():gsub("psi shatter", "")
-      expect(n).toBe(c[2])
-    end
+  it("a keeper still gets a round below full transcendence -- and nothing rides it", function()
+    reset()
+    psionRazorClarity = true
+    local cmd = ataxiaBasher_psionBashing()
+    expect(has(cmd, "enact clarity")).toBeTrue()
+    expect(has(cmd, "psi shatter")).toBeFalse()
   end)
 end)
 
@@ -561,45 +544,42 @@ end)
 
 -- =====================================================================================
 -- PSIWAVE (v4.7.355). "Your psionics radiate ability now deals magic damage to all denizens in your
--- location." -- and the user: "When we have this boon please use this instead of shatter." One
--- switch covers the paid equilibrium attack and the free full-transcendence action.
-describe("Psiwave: psi radiate instead of shatter", function()
+-- location." -- "When we have this boon please use this instead of shatter." Since v4.7.356, like
+-- shatter, only at full transcendence.
+describe("Psiwave: psi radiate instead of shatter, at full transcendence", function()
   local function count(cmd, s) local _, n = cmd:gsub(s, ""); return n end
 
-  it("the equilibrium attack is radiate -- and there is no shatter at all", function()
-    reset()
-    psionPsiwave = true
-    local cmd = ataxiaBasher_psionBashing()
-    expect(cmd:find("psi radiate", 1, true) ~= nil).toBeTrue()
-    expect(cmd:find("psi shatter", 1, true)).toBeNil()
-    expect(cmd:find("psi radiate", 1, true) < cmd:find("weave deathblow", 1, true)).toBeTrue()
-  end)
-
-  it("radiate takes no target", function()
-    reset()
-    psionPsiwave = true
-    expect(ataxiaBasher_psionBashing():find("psi radiate 44001", 1, true)).toBeNil()
-  end)
-
-  it("at full transcendence: the free radiate FIRST, then the paid one", function()
+  it("at full transcendence the free action is radiate, first, then the weave", function()
     reset()
     psionPsiwave = true
     ataxiaTemp.transcendence = 100
     local cmd = ataxiaBasher_psionBashing()
     expect(cmd:find("psi radiate", 1, true)).toBe(1)
-    expect(count(cmd, "psi radiate")).toBe(2)
+    expect(count(cmd, "psi radiate")).toBe(1)
     expect(count(cmd, "psi shatter")).toBe(0)
+    expect(cmd:find("weave deathblow 44001", 1, true) ~= nil).toBeTrue()
   end)
 
-  it("keeps every rule shatter had: a keeper takes the round, a shield holds it", function()
+  it("radiate takes no target", function()
     reset()
-    psionPsiwave, psionRazorClarity = true, true
+    psionPsiwave = true
+    ataxiaTemp.transcendence = 100
+    expect(ataxiaBasher_psionBashing():find("psi radiate 44001", 1, true)).toBeNil()
+  end)
+
+  it("below full transcendence, neither radiate nor shatter", function()
+    reset()
+    psionPsiwave = true
     local cmd = ataxiaBasher_psionBashing()
-    expect(cmd:find("enact clarity", 1, true) ~= nil).toBeTrue()
     expect(cmd:find("psi radiate", 1, true)).toBeNil()
+    expect(cmd:find("psi shatter", 1, true)).toBeNil()
+  end)
+
+  it("held on a shielded round, like shatter", function()
     reset()
     psionPsiwave = true
     ataxiaBasher.shielded = true
+    ataxiaTemp.transcendence = 100
     expect(ataxiaBasher_psionBashing():find("psi radiate", 1, true)).toBeNil()
   end)
 
@@ -607,13 +587,15 @@ describe("Psiwave: psi radiate instead of shatter", function()
   it("wins over Mindbreak", function()
     reset()
     psionPsiwave, psionMindbreak = true, true
+    ataxiaTemp.transcendence = 100
     local cmd = ataxiaBasher_psionBashing()
     expect(cmd:find("psi radiate", 1, true) ~= nil).toBeTrue()
     expect(cmd:find("psi shatter", 1, true)).toBeNil()
   end)
 
-  it("without the boon, shatter as before", function()
+  it("without the boon, shatter", function()
     reset()
+    ataxiaTemp.transcendence = 100
     local cmd = ataxiaBasher_psionBashing()
     expect(cmd:find("psi shatter 44001", 1, true) ~= nil).toBeTrue()
     expect(cmd:find("psi radiate", 1, true)).toBeNil()

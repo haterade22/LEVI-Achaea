@@ -67,7 +67,9 @@ AND equilibrium to fire, and its commands run back to back. So only ONE equilibr
 can pay per round -- a second one is refused after its cooldown was stamped (CLAUDE.md "One resource
 spender per assembled round"; the Psion keepers repeated it in v4.7.349, fixed v4.7.351). An action
 that REQUIRES equilibrium without spending it (the Psion's free transcendence shatter) must go
-BEFORE the ones that spend it.
+BEFORE the ones that spend it. And since the round waits for BOTH, a paid equilibrium action added to
+a balance class's round slows every swing to its cooldown -- the Psion's paid shatter did, and was
+removed in v4.7.356 (the weaves it delayed were what built transcendence).
 
 **Check the pair, not the rule, when adding a rider.** The rule comes from three live collisions
 (shin augment + thunderstorm, intone keeper + boinad, the Psion keepers). But the Apostate's belch and

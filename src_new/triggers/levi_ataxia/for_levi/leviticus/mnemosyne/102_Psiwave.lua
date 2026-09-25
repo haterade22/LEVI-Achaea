@@ -38,9 +38,9 @@ patterns:
 --
 --   "Your psionics radiate ability now deals magic damage to all denizens in your location."
 --
--- PSI RADIATE (AB 2714, 4.00s of equilibrium) then replaces PSI SHATTER as the Psion's equilibrium
--- attack -- the paid one and the free full-transcendence one (user: "When we have this boon please
--- use this instead of shatter"). `psionEqAttack`, basher/002.
+-- PSI RADIATE (AB 2714) then replaces PSI SHATTER as the full-transcendence action (user: "When we
+-- have this boon please use this instead of shatter") -- and like shatter, ONLY then (v4.7.356).
+-- `psionTranscendSpend`, basher/002.
 --
 -- Only inside the tower (the gate every boon row carries since v4.7.351). Cleared on Mnemosyne run
 -- start/end. Type BOONS to re-sync if needed.
