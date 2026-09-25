@@ -2,6 +2,44 @@
 
 ---
 
+## 2026-09-25 - Psiwave: psi radiate instead of shatter (v4.7.355)
+
+User, pasting the boon and the ability:
+
+```
+Psiwave:  Your psionics radiate ability now deals magic damage to all denizens in your location.
+
+Radiate (Psionics)  ABADMIN ID: 2714
+Syntax:            PSI RADIATE
+Cooldown:          4.00 seconds of equilibrium
+Details:           Radiate a circle of psychic force outwards, knocking all that stand in your
+                   location off their feet: friend and foe alike.
+```
+
+*"When we have this boon please use this instead of shatter."*
+
+Shatter's two roles already went through one place (`psionTranscendSpend`, v4.7.352 -- built for
+exactly "unless we have other boons"). Now both go through `psionEqAttack(sp)`: with `psionPsiwave`
+it returns `psi radiate` (no target) for the **paid** equilibrium attack AND the **free**
+full-transcendence action, which still goes first in the chain -- so full transcendence is two
+radiates. Every rule shatter had carries over: one equilibrium action per round (a keeper takes the
+round), held on a shielded round, rides a secondskin round. Unconditional, by the user's word --
+including a lone denizen, and over Mindbreak.
+
+Flag wired in all five places (BOON_FLAGS, run start, run end, claim line, BOONS row 102 with the
+in-tower gate), plus the seed description.
+
+2 mutants, both killed (the switch ignored; the free action left as shatter).
+
+### Files
+
+- `basher/002_Class_Bashing.lua`, `mnemosyne/004_Parsers.lua`, `mnemosyne/010_Boon_Seed.lua`; triggers
+  `mnemosyne/001_Run_Start.lua`, `mnemosyne/102_Psiwave.lua` (new); alias `mnemosyne/002_Boon_Claim.lua`;
+  `tests/test_basher_psion_boons.lua`, `tests/test_mnemosyne.lua`; `.claude/classes/psion.md`,
+  `.claude/projects/mnemosyne/03-parsing-triggers.md`, `README.md`, `CLAUDE.md`, memory.
+
+---
+
 ## 2026-09-25 - Gravehands takes balance: the summon replaces the swing (v4.7.354)
 
 User: *"Gravehands takes balance."*

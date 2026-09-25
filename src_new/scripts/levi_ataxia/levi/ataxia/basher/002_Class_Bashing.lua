@@ -2933,8 +2933,24 @@ end
 -- equilibrium" was wrong). The user: "Psi Shatter is the main tool to use unless we have other
 -- boons with full transcendence." So it is shatter -- and this is the ONE place a future boon that
 -- makes another psionics action better at full transcendence would change it.
-local function psionTranscendSpend(sp)
+-- THE PSION'S EQUILIBRIUM ATTACK (v4.7.355): psi shatter -- or PSI RADIATE with PSIWAVE.
+--
+--   Psiwave:  "Your psionics radiate ability now deals magic damage to all denizens in your
+--              location."
+--   Radiate (Psionics)  ABADMIN ID: 2714 -- Syntax: PSI RADIATE  -- 4.00 seconds of equilibrium
+--              "knocking all that stand in your location off their feet: friend and foe alike."
+--
+-- User: "When we have this boon please use this instead of shatter." So one switch covers every
+-- place shatter goes: the paid equilibrium attack AND the free full-transcendence action (radiate is
+-- a psionics ability too). Unconditional by the user's word -- including a single denizen, and even
+-- with Mindbreak held (which multiplies shatter, now unused).
+local function psionEqAttack(sp)
+  if psionPsiwave then return "psi radiate" .. sp end
   return "psi shatter " .. target .. sp
+end
+
+local function psionTranscendSpend(sp)
+  return psionEqAttack(sp)
 end
 
 function ataxiaBasher_psionBashing()
@@ -3045,7 +3061,7 @@ function ataxiaBasher_psionBashing()
   -- that makes two. Unshielded rounds only: the shielded branch above returned.
   local shatter = ""
   if not eqSpent then
-    shatter = "psi shatter "..target..sp          -- 3.10s of equilibrium
+    shatter = psionEqAttack(sp)                   -- shatter 3.10s / radiate 4.00s of equilibrium
     eqSpent = true
   end
 

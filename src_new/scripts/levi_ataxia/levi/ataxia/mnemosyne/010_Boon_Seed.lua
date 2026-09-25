@@ -215,6 +215,7 @@ M.BOON_SEED = {
   ["Bloodletter's Fury"] = { description = "Your emulation rupture ability is now effective against denizens. While you possess the rupturesight defence, your weaving attacks against denizens will now deal unblockable damage and 50% increased base damage, and you will recover balance 20% faster." },
   ["Razor Clarity"] = { description = "You deal 50% bonus damage and have 2% bonus critical chance while benefitting from the emulation clarity defence." },
   ["Mindbreak"] = { description = "Your psionics shatter ability deals 500% increased damage." },
+  ["Psiwave"] = { description = "Your psionics radiate ability now deals magic damage to all denizens in your location." },
   ["Maliceborn"] = { description = "Slaying a denizen will now restore 5% of your life essence.", rarity = "common" },
   ["Master of Four"] = { description = "Casting simultaneity deals four elemental bursts of damage to all denizens in your location as fire, cold, electric, and blunt damage. There is a 30 seconds cooldown before this effect can occur again.", rarity = "legendary" },
   ["Master of Harmony"] = { description = "When you defeat a denizen, you will gain a bubble of serenity for 10 seconds. It cannot proc again for 10 seconds.", rarity = "legendary" },

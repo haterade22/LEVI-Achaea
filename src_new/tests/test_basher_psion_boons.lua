@@ -70,6 +70,7 @@ local function reset()
   ataxiaBasher.shielded, ataxiaBasher.rageraze = false, false
   ataxiaBasher.psionKeepHold = nil
   psionBloodletter, psionRazorClarity, psionMindbreak = false, false, false
+  psionPsiwave = false
   psionPanoply = false
   ataxiaTemp.psionKeepAt, ataxiaTemp.psionTranscendAt = nil, nil
   ataxiaTemp.psionRothAt = nil
@@ -308,13 +309,14 @@ end)
 describe("all three flags are wired where a boon flag must be", function()
   local function slurp(p) local f = io.open(p); local s = f:read("*a"); f:close(); return s end
   local S = "src_new/scripts/levi_ataxia/levi/ataxia/"
-  local FLAGS = { "psionBloodletter", "psionRazorClarity", "psionMindbreak" }
+  local FLAGS = { "psionBloodletter", "psionRazorClarity", "psionMindbreak", "psionPsiwave" }
 
   it("the catalogue, under the names the game prints", function()
     local t = slurp(S .. "mnemosyne/004_Parsers.lua")
     expect(t:find('["Bloodletter\'s Fury"]', 1, true) ~= nil).toBeTrue()
     expect(t:find('["Razor Clarity"]', 1, true) ~= nil).toBeTrue()
     expect(t:find('["Mindbreak"]', 1, true) ~= nil).toBeTrue()
+    expect(t:find('["Psiwave"]', 1, true) ~= nil).toBeTrue()
   end)
 
   it("both resets, for every one of them", function()
@@ -557,10 +559,80 @@ describe("the round is re-queued the moment transcendence fills", function()
   end)
 end)
 
+-- =====================================================================================
+-- PSIWAVE (v4.7.355). "Your psionics radiate ability now deals magic damage to all denizens in your
+-- location." -- and the user: "When we have this boon please use this instead of shatter." One
+-- switch covers the paid equilibrium attack and the free full-transcendence action.
+describe("Psiwave: psi radiate instead of shatter", function()
+  local function count(cmd, s) local _, n = cmd:gsub(s, ""); return n end
+
+  it("the equilibrium attack is radiate -- and there is no shatter at all", function()
+    reset()
+    psionPsiwave = true
+    local cmd = ataxiaBasher_psionBashing()
+    expect(cmd:find("psi radiate", 1, true) ~= nil).toBeTrue()
+    expect(cmd:find("psi shatter", 1, true)).toBeNil()
+    expect(cmd:find("psi radiate", 1, true) < cmd:find("weave deathblow", 1, true)).toBeTrue()
+  end)
+
+  it("radiate takes no target", function()
+    reset()
+    psionPsiwave = true
+    expect(ataxiaBasher_psionBashing():find("psi radiate 44001", 1, true)).toBeNil()
+  end)
+
+  it("at full transcendence: the free radiate FIRST, then the paid one", function()
+    reset()
+    psionPsiwave = true
+    ataxiaTemp.transcendence = 100
+    local cmd = ataxiaBasher_psionBashing()
+    expect(cmd:find("psi radiate", 1, true)).toBe(1)
+    expect(count(cmd, "psi radiate")).toBe(2)
+    expect(count(cmd, "psi shatter")).toBe(0)
+  end)
+
+  it("keeps every rule shatter had: a keeper takes the round, a shield holds it", function()
+    reset()
+    psionPsiwave, psionRazorClarity = true, true
+    local cmd = ataxiaBasher_psionBashing()
+    expect(cmd:find("enact clarity", 1, true) ~= nil).toBeTrue()
+    expect(cmd:find("psi radiate", 1, true)).toBeNil()
+    reset()
+    psionPsiwave = true
+    ataxiaBasher.shielded = true
+    expect(ataxiaBasher_psionBashing():find("psi radiate", 1, true)).toBeNil()
+  end)
+
+  -- The user's word is unconditional: radiate even with Mindbreak held.
+  it("wins over Mindbreak", function()
+    reset()
+    psionPsiwave, psionMindbreak = true, true
+    local cmd = ataxiaBasher_psionBashing()
+    expect(cmd:find("psi radiate", 1, true) ~= nil).toBeTrue()
+    expect(cmd:find("psi shatter", 1, true)).toBeNil()
+  end)
+
+  it("without the boon, shatter as before", function()
+    reset()
+    local cmd = ataxiaBasher_psionBashing()
+    expect(cmd:find("psi shatter 44001", 1, true) ~= nil).toBeTrue()
+    expect(cmd:find("psi radiate", 1, true)).toBeNil()
+  end)
+
+  it("the BOONS row carries the in-tower gate, and the seed knows the boon", function()
+    local function slurp(p) local f = io.open(p); local s = f:read("*a"); f:close(); return s end
+    local row = slurp("src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/102_Psiwave.lua")
+    expect(row:find("if ataxiaBasher and ataxiaBasher.inMnemosyne then psionPsiwave = true end", 1, true) ~= nil).toBeTrue()
+    expect(slurp("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/010_Boon_Seed.lua")
+      :find("radiate ability now deals magic damage", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (test files share one Lua state).
 getEpoch = realEpoch
 tempTimer = realTempTimer
 psionBloodletter, psionRazorClarity, psionMindbreak, psionPanoply = nil, nil, nil, nil
+psionPsiwave = nil
 ataxiaTemp.psionKeepAt, ataxiaTemp.psionTranscendAt = nil, nil
 ataxiaTemp.psionRothAt, ataxiaTemp.transcendence = nil, nil
 ataxiaTemp.psionSecondskinAttempted = nil
