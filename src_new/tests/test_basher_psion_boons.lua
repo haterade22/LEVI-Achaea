@@ -78,6 +78,7 @@ local function reset()
   psionBloodletter, psionRazorClarity, psionMindbreak = false, false, false
   psionPsiwave = false
   psionEarthquake = false
+  psionProphet = false
   ataxiaBasher.upheavalAt = nil
   denizens = 0
   psionPanoply = false
@@ -720,7 +721,37 @@ describe("Earthquake: enact upheaval on idle equilibrium, in a crowd", function(
   end)
 end)
 
+-- =====================================================================================
+-- PROPHET OF CREATION (v4.7.358). "Your foresight ability now works against denizens and causes
+-- the next attack against you to miss." A foresight that does not come true STUNS us (AB), and
+-- against a denizen the only real prediction is SHIELD. User: latch it, change nothing, until
+-- foresight has been tried on a denizen in game. Pinned so it reads as a decision.
+describe("Prophet of Creation: latched, no rotation change (yet)", function()
+  it("the round is identical with or without the boon -- no foresight is ever sent", function()
+    for _, c in ipairs({ { 0, 1 }, { 100, 4 } }) do
+      reset()
+      ataxiaTemp.transcendence, denizens = c[1], c[2]
+      local without = ataxiaBasher_psionBashing()
+      reset()
+      psionProphet = true
+      ataxiaTemp.transcendence, denizens = c[1], c[2]
+      local with = ataxiaBasher_psionBashing()
+      expect(with).toBe(without)
+      expect(with:find("foresight", 1, true)).toBeNil()
+    end
+  end)
+
+  it("the BOONS row carries the in-tower gate, and the seed knows the boon", function()
+    local function slurp(p) local f = io.open(p); local s = f:read("*a"); f:close(); return s end
+    local row = slurp("src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/105_Prophet_of_Creation.lua")
+    expect(row:find("if ataxiaBasher and ataxiaBasher.inMnemosyne then psionProphet = true end", 1, true) ~= nil).toBeTrue()
+    expect(slurp("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/010_Boon_Seed.lua")
+      :find("foresight ability now works against denizens", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (test files share one Lua state).
+psionProphet = nil
 ataxia.mnemosyne._denizenCount = realDenizenCount
 denizens = nil
 psionEarthquake = nil

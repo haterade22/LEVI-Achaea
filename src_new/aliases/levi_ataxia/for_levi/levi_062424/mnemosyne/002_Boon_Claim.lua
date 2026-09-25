@@ -84,6 +84,9 @@ if matches[2]:lower():find("psiwave") then psionPsiwave = true end
 -- Earthquake: ENACT UPHEAVAL hits every denizen with blunt damage when it summons rubble -- the
 -- Psion round adds it on idle equilibrium in a crowd, above half health (v4.7.357).
 if matches[2]:lower():find("earthquake") then psionEarthquake = true end
+-- Prophet of Creation: PSI FORESIGHT works against denizens and makes the next attack against us
+-- miss (v4.7.358).
+if matches[2]:lower():find("prophet of creation") then psionProphet = true end
 -- Might of Sycaerunax: draconic BLAST +25% damage and the breath weapon PERSISTS;
 -- the dragon basher drops the re-summon from its blast weave while it's up.
 if matches[2]:lower():find("sycaerunax") then dragonMightSycaerunax = true end

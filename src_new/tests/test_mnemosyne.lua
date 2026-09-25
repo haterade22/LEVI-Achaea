@@ -9742,11 +9742,12 @@ describe("the BOONS row arms the generic boon flags", function()
   end)
 
   -- The per-boon row triggers carry the same gate (v4.7.351): run each one's body both ways.
-  it("the per-boon rows (098-103) arm only inside the tower", function()
+  it("the per-boon rows (098-105) arm only inside the tower", function()
     local T = "src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/"
     local cases = { { "098_Graveborn.lua", "mnemGraveborn" }, { "099_Bloodletters_Fury.lua", "psionBloodletter" },
                     { "100_Razor_Clarity.lua", "psionRazorClarity" }, { "101_Mindbreak.lua", "psionMindbreak" },
-                    { "102_Psiwave.lua", "psionPsiwave" }, { "103_Earthquake.lua", "psionEarthquake" } }
+                    { "102_Psiwave.lua", "psionPsiwave" }, { "103_Earthquake.lua", "psionEarthquake" },
+                    { "105_Prophet_of_Creation.lua", "psionProphet" } }
     local wasIn = ataxiaBasher.inMnemosyne
     local ok, err = pcall(function()
       for _, c in ipairs(cases) do

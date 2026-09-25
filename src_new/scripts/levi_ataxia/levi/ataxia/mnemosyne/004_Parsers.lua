@@ -253,6 +253,7 @@ function M.onRunEnd()
   psionMindbreak = false -- ...and shatter goes back to ordinary damage (v4.7.349)
   psionPsiwave = false -- ...and the equilibrium attack goes back to shatter (v4.7.355)
   psionEarthquake = false -- ...and upheaval leaves the round (v4.7.357)
+  psionProphet = false -- ...and foresight is PvP-only again (v4.7.358)
   dragonMightSycaerunax = false -- boons gone on a confirmed run-end
   dragonRampage = false -- boons gone on a confirmed run-end
   dwFlashforward = false -- boons gone on a confirmed run-end
@@ -1291,6 +1292,7 @@ M.BOON_FLAGS = {
   ["Mindbreak"]            = "psionMindbreak",
   ["Psiwave"]              = "psionPsiwave",
   ["Earthquake"]           = "psionEarthquake",
+  ["Prophet of Creation"]  = "psionProphet",
   ["Vitalising Tincture"]  = "mnemVitalisingTincture",
   ["Font of Life"]         = "mnemFontOfLife",
   ["Shadow Tempo"]         = "mnemShadowTempo",

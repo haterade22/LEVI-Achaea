@@ -513,6 +513,7 @@ Psiwave.
 | Mindbreak | `psionMindbreak` | none -- multiplies the one free shatter per full transcendence (+500%) |
 | Psiwave | `psionPsiwave` | **`psi radiate` replaces `psi shatter`** as the full-transcendence action (v4.7.355; no target, hits every denizen with magic damage). Wins over Mindbreak by the user's word |
 | Earthquake | `psionEarthquake` | **`enact upheaval`** (AB 2730, 2.30s eq) on idle equilibrium: blunt damage to every denizen "when it summons rubble" (v4.7.357). Only with 2+ denizens (`ataxiaBasher.upheavalAt`), at 50%+ HP, unshielded -- the rubble blocks our own exits. Costs a deathblow round 0.10s, flurry nothing |
+| Prophet of Creation | `psionProphet` | **none yet** (v4.7.358, the user's call) -- `psi foresight <t> <tree|shield>` works on denizens and makes the next attack against us miss, but a prediction that does not come true STUNS us, and denizens only ever SHIELD. Free, per the user. **Tested in game:** the prediction is the denizen's next attack -- "Your prediction comes to pass, and you effortlessly avoid the attack from <denizen>." -- came true in under 0.3s, no stun. Unknown: what happens when the denizen dies or never swings (the AB's stun), and the window |
 
 **Earthquake and our own rubble.** Leaving over rubble is a slow clamber ("You begin to slowly clamber
 over the rubble that blocks your way."). The explorer's 5s move timeout used to read that as a failed
@@ -587,7 +588,7 @@ panic teleport — last resort only), `PSI EXPUNGE` (self mental-cure, impatienc
 All affliction weaves (overhand, backhand, hamstring, entwine, lightsteal, puncture,
 sever, exsanguinate, launch, prepare's affliction modes), the entire unweave kill route
 (unweave, invert, deconstruct, sensitivity), the mana-kill chain (psi blast, excise,
-contemplation), psi combustion/foresight/muddle/radiate/link/perception/insertion/
+contemplation), psi combustion/foresight (see Prophet of Creation above)/muddle/radiate/link/perception/insertion/
 ironwill/breakthrough, and Emulation's destruction/imposition/painshift (all flagged
 adventurers-only), lightbind, lifebond, soulmark, reprise, discordance, upheaval
 (blocks our own escape routes -- EXCEPT with the Earthquake boon, v4.7.357, which makes it room-wide
