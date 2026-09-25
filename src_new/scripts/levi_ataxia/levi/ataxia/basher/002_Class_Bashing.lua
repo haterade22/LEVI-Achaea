@@ -360,15 +360,25 @@ function ataxiaBasher_apostateBashing()
 	-- a balance ability. The helper self-guards on `shielded`, returning "" there, so the
 	-- shielded branch below is unchanged: break the shield first is every rider's rule.
 	local graveHands = ataxiaBasher_infGravehands(sp)
+	-- NECROTIC AURA, same story (v4.7.348). `ataxiaBasher_infDeathaura` gates on its own boon
+	-- flag and on the defence being down, and DEATHAURA is a Necromancy defence the Apostate
+	-- has -- nothing in it is Infernal. It was simply never called from this round, so the boon
+	-- was inert here exactly as Army of the Dead was (v4.7.347). It matters more than it looks:
+	-- Necrotic Aura is one of the three components GRAVEBORN is unlocked by, so an Apostate on
+	-- the combo path is holding it by definition.
+	--
+	-- It rides BOTH branches, shielded or not: raising a defence is not an attack, and a shield
+	-- on the denizen has nothing to do with whether our own aura is up.
+	local aura = ataxiaBasher_infDeathaura(sp)
 	
 	if ataxiaBasher.shielded then
 		if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
-			command = raze..sp.."deadeyes "..target.." bleed bleed; "
+			command = aura..raze..sp.."deadeyes "..target.." bleed bleed; "
 		else
-			command = "deadeyes "..target.." bleed bleed; "
+			command = aura.."deadeyes "..target.." bleed bleed; "
 		end
 	else
-		command = graveHands..brage..sp.."deadeyes "..target.." bleed bleed; "
+		command = aura..graveHands..brage..sp.."deadeyes "..target.." bleed bleed; "
 	end
 	    
 	return command	
@@ -1589,13 +1599,30 @@ function ataxiaBasher_infGravehands(sp)
 	-- resources" -- for Infernal that resource is LIFE ESSENCE, so every kill refunds more
 	-- than three Tyrannies cost. The essence economy that justified holding back for a
 	-- crowd stops applying: cast in EVERY room that has a denizen at all.
+	--
+	-- GRAVEBORN does the same thing from the other direction (v4.7.348, user: "We need to
+	-- ensure we gravehands every room to maximize this"):
+	--
+	--   Graveborn -- rare, Offence, unlocked by Army of the Dead, Maliceborn and Necrotic Aura
+	--   "While standing in gravehands, your attacks will command them to ravage your enemies,
+	--    damaging all denizens in your location. This can only trigger every 15 seconds."
+	--
+	-- The crowd gate existed because the summon was ONE AoE hit -- one denizen did not repay
+	-- the cast. Graveborn makes the hands an ENGINE instead: every 15 seconds, for as long as
+	-- we stand in them and keep swinging. A single denizen that takes 30 seconds to kill is
+	-- two free room-wide hits, and a room we skip is an engine we never built. So: one denizen
+	-- is enough, which is what "every room" means here.
 	local need = tonumber(ataxiaBasher.infTyrannyAt)
-		or ((infArmyOfDead and mnemResourceful) and 1 or 2)
+		or ((infArmyOfDead and (mnemResourceful or mnemGraveborn)) and 1 or 2)
 	if n < need then return "" end
 	-- 3% life essence a cast: never dip below the floor for a bashing nicety. Resourceful
-	-- pays that back on every kill, so the floor drops with it.
+	-- pays that back on every kill, so the floor drops with it -- and so does GRAVEBORN, for
+	-- a reason built into the combo itself: it is UNLOCKED BY Maliceborn ("Slaying a denizen
+	-- will now restore 5% of your life essence"), so holding Graveborn means holding the
+	-- refund. A kill pays back more than three Apostate casts.
 	local essence = tonumber(ataxia.vitals and ataxia.vitals.essence)
-	local floor = tonumber(ataxiaBasher.infEssenceFloor) or (mnemResourceful and 10 or 20)
+	local floor = tonumber(ataxiaBasher.infEssenceFloor)
+		or ((mnemResourceful or mnemGraveborn) and 10 or 20)
 	if essence and essence < floor then return "" end
 	ataxiaTemp = ataxiaTemp or {}
 	-- ONCE PER ROOM (user, v4.7.161): the gravehands belong to the room they were summoned
@@ -1620,7 +1647,12 @@ function ataxiaBasher_infGravehands(sp)
 		local maxmp = tonumber(gmcp.Char and gmcp.Char.Vitals and gmcp.Char.Vitals.maxmp)
 		if mp then
 			if mp < 350 then return "" end
-			local mfloor = tonumber(ataxiaBasher.gravehandsManaFloor) or 40
+			-- The floor drops with GRAVEBORN (v4.7.348). Skipping a room used to cost one
+			-- AoE hit; with the engine up it costs every proc that room would have fired,
+			-- which is the whole point of the boon. Still a floor, not a waiver -- mana is
+			-- the curing pool, and no bashing nicety is worth arriving at the next room dry.
+			local mfloor = tonumber(ataxiaBasher.gravehandsManaFloor)
+				or (mnemGraveborn and 25 or 40)
 			if mfloor > 0 and maxmp and maxmp > 0 and ((mp - 350) / maxmp) * 100 < mfloor then
 				return ""
 			end

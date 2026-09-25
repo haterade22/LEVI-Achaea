@@ -536,6 +536,16 @@ end
 --     none is recorded here either;
 --   * every one of the 22 answers "Can echo: No", so a combo reward appears not to echo.
 M.BOON_COMBO_RECIPES = {
+  -- Contemplated live by the user, 2026-09-25. The end of the necromancy path: it turns the
+  -- gravehands from a one-off cast into a room engine that fires while we stand in them.
+  ["Graveborn"] = {
+    rarity = "rare",
+    category = "Offence",
+    maxEchoes = 0,
+    unlocksFrom = { "Army of the Dead", "Maliceborn", "Necrotic Aura" },
+    description = "While standing in gravehands, your attacks will command them to ravage your enemies, damaging all denizens in your location. This can only trigger every 15 seconds.",
+    quote = "Without your failure. Without your weakness. With pain.",
+  },
   ["Lightning Soul"] = {
     rarity = "rare",
     category = "Defence",

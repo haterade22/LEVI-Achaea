@@ -58,7 +58,12 @@ local function reset()
   ataxia.vitals.mp = 5000
   ataxiaTemp.belchAt, ataxiaTemp.belchFouledRoom, ataxiaTemp.belchFouledAt = nil, nil, nil
   ataxiaTemp.profaned, ataxiaTemp.soulstormAt, ataxiaTemp.soulstormTarget = {}, nil, nil
-  infArmyOfDead, mnemResourceful = false, false
+  infArmyOfDead, mnemResourceful, mnemGraveborn = false, false, false
+  infNecroticAura = false
+  ataxia.defences = {}
+  ataxiaTemp.infDeathauraAt = nil
+  ataxiaBasher.gravehandsManaFloor, ataxiaBasher.infEssenceFloor = nil, nil
+  ataxiaBasher.infTyrannyAt = nil
   ataxiaTemp.infTyrannyRoom = nil
   ataxiaTemp.gravehandsAt, ataxiaTemp.gravehandsSeen, ataxiaTemp.gravehandsRetried = nil, nil, nil
   ataxia.vitals.essence = 80
@@ -368,10 +373,192 @@ describe("the gravehands lines", function()
   end)
 end)
 
+
+-- =====================================================================================
+-- GRAVEBORN -- the combo that turns the hands into an engine (v4.7.348)
+--
+--   Graveborn:  rare / Offence / Can echo: No
+--   Unlocked By: Army of the Dead, Maliceborn, and Necrotic Aura
+--   "While standing in gravehands, your attacks will command them to ravage your enemies,
+--    damaging all denizens in your location. This can only trigger every 15 seconds."
+--
+-- User: "We need to ensure we gravehands every room to maximize this."
+--
+-- The crowd gate existed because the summon was ONE AoE hit, and one denizen did not repay the
+-- cast. Graveborn changes what is being bought: the hands fire every 15 seconds for as long as
+-- we stand in them and keep swinging, so a room we skip is an engine we never built. These pin
+-- the three gates that decide whether "every room" is true -- the crowd, the essence and the
+-- mana -- because any one of them silently skipping a room defeats the boon.
+describe("Graveborn: gravehands in EVERY room", function()
+  local function graves(cmd) return cmd:find("summon hands of the grave", 1, true) end
+
+  it("one denizen is enough", function()
+    reset()
+    infArmyOfDead, mnemGraveborn = true, true
+    denizens = 1
+    expect(graves(round()) ~= nil).toBeTrue()
+  end)
+
+  it("...where without it, one denizen is not", function()
+    reset()
+    infArmyOfDead = true
+    denizens = 1
+    expect(graves(round())).toBeNil()
+  end)
+
+  it("does nothing on its own -- the summon still needs Army of the Dead", function()
+    reset()
+    mnemGraveborn = true
+    denizens = 3
+    expect(graves(round())).toBeNil()
+  end)
+
+  -- Graveborn is UNLOCKED BY Maliceborn ("Slaying a denizen will now restore 5% of your life
+  -- essence"), so holding it means holding the refund -- a kill pays back more than three casts.
+  it("drops the essence floor, because the combo contains the refund", function()
+    reset()
+    infArmyOfDead = true
+    ataxia.vitals.essence = 12          -- under the standing 20% floor
+    expect(graves(round())).toBeNil()
+    reset()
+    infArmyOfDead, mnemGraveborn = true, true
+    ataxia.vitals.essence = 12          -- ...but above the 10% one Graveborn allows
+    expect(graves(round()) ~= nil).toBeTrue()
+  end)
+
+  it("drops the mana floor -- skipping a room now costs every proc it would have fired", function()
+    reset()
+    infArmyOfDead = true
+    ataxia.vitals.mp = 2500             -- 41.7%; paying 350 lands under the standing 40% floor
+    expect(graves(round())).toBeNil()
+    reset()
+    infArmyOfDead, mnemGraveborn = true, true
+    ataxia.vitals.mp = 2500             -- ...but clear of the 25% one Graveborn allows
+    expect(graves(round()) ~= nil).toBeTrue()
+  end)
+
+  it("never waives the floors, only lowers them", function()
+    reset()
+    infArmyOfDead, mnemGraveborn = true, true
+    ataxia.vitals.mp = 1000             -- 16.7%: under even the Graveborn floor
+    expect(graves(round())).toBeNil()
+    reset()
+    infArmyOfDead, mnemGraveborn = true, true
+    ataxia.vitals.essence = 4
+    expect(graves(round())).toBeNil()
+  end)
+
+  it("an explicit setting still beats the boon, both ways", function()
+    reset()
+    infArmyOfDead, mnemGraveborn = true, true
+    ataxiaBasher.infTyrannyAt = 3       -- the user wants a real crowd regardless
+    denizens = 1
+    expect(graves(round())).toBeNil()
+    reset()
+    infArmyOfDead = true                -- ...and without the boon, they can ask for every room
+    ataxiaBasher.infTyrannyAt = 1
+    denizens = 1
+    expect(graves(round()) ~= nil).toBeTrue()
+  end)
+end)
+
+-- NECROTIC AURA was inert on this class for the same reason Army of the Dead was: the helper is
+-- class-agnostic (DEATHAURA is a Necromancy defence) and only the Infernal round ever called it.
+-- It is one of the three boons GRAVEBORN is unlocked by, so an Apostate on the combo path holds
+-- it by definition.
+describe("Necrotic Aura keeps the deathaura up on the Apostate", function()
+  it("raises it when the boon is held and the defence is down", function()
+    reset()
+    infNecroticAura = true
+    expect(round():find("deathaura", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("does nothing without the boon", function()
+    reset()
+    expect(round():find("deathaura", 1, true)).toBeNil()
+  end)
+
+  it("does nothing while the defence is already up", function()
+    reset()
+    infNecroticAura = true
+    ataxia.defences.deathaura = true
+    expect(round():find("deathaura", 1, true)).toBeNil()
+  end)
+
+  it("rides the shielded branch too -- raising a defence is not an attack", function()
+    reset()
+    infNecroticAura = true
+    ataxiaBasher.shielded = true
+    ataxiaBasher.rageraze, ataxia.vitals.rage = true, 20
+    local cmd = round()
+    expect(cmd:find("deathaura", 1, true) ~= nil).toBeTrue()
+    expect(cmd:find("shiver 77001", 1, true) ~= nil).toBeTrue()
+    expect(cmd:find("deadeyes 77001 bleed bleed", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("and on the shielded branch WITHOUT rageraze, which has no raze to hide behind", function()
+    reset()
+    infNecroticAura = true
+    ataxiaBasher.shielded = true
+    ataxiaBasher.rageraze = false
+    local cmd = round()
+    expect(cmd:find("deathaura", 1, true) ~= nil).toBeTrue()
+    expect(cmd:find("deadeyes 77001 bleed bleed", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("re-raises no more than once every ten seconds", function()
+    reset()
+    infNecroticAura = true
+    expect(round():find("deathaura", 1, true) ~= nil).toBeTrue()
+    clock = clock + 2
+    expect(round():find("deathaura", 1, true)).toBeNil()
+    clock = clock + 20
+    expect(round():find("deathaura", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
+describe("the Graveborn boon flag is wired everywhere a boon flag must be", function()
+  local function slurp(p) local f = io.open(p); local s = f:read("*a"); f:close(); return s end
+  local S = "src_new/scripts/levi_ataxia/levi/ataxia/"
+
+  it("the catalogue, so a claim or a contemplate latches it", function()
+    local t = slurp(S .. "mnemosyne/004_Parsers.lua")
+    expect(t:find('["Graveborn"]            = "mnemGraveborn"', 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("both resets -- a boon that outlives its run is a boon that lies", function()
+    expect(slurp(S .. "mnemosyne/004_Parsers.lua"):find("mnemGraveborn = false", 1, true) ~= nil).toBeTrue()
+    expect(slurp("src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/001_Run_Start.lua")
+      :find("mnemGraveborn = false", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("the claim line and the BOONS row", function()
+    expect(slurp("src_new/aliases/levi_ataxia/for_levi/levi_062424/mnemosyne/002_Boon_Claim.lua")
+      :find('find("graveborn")', 1, true) ~= nil).toBeTrue()
+    local row = slurp("src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/098_Graveborn.lua")
+    expect(row:find("^Graveborn", 1, true) ~= nil).toBeTrue()
+    expect(row:find("mnemGraveborn = true", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("the combo recipe, with all three components the game named", function()
+    local t = slurp(S .. "mnemosyne/010_Boon_Seed.lua")
+    local rec = t:match('%["Graveborn"%] = %b{}')
+    expect(rec ~= nil).toBeTrue()
+    expect(rec:find("Army of the Dead", 1, true) ~= nil).toBeTrue()
+    expect(rec:find("Maliceborn", 1, true) ~= nil).toBeTrue()
+    expect(rec:find("Necrotic Aura", 1, true) ~= nil).toBeTrue()
+    expect(rec:find('rarity = "rare"', 1, true) ~= nil).toBeTrue()
+    expect(rec:find('category = "Offence"', 1, true) ~= nil).toBeTrue()
+    expect(rec:find("maxEchoes = 0", 1, true) ~= nil).toBeTrue()   -- "Can echo: No"
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (test files share one Lua state).
 getEpoch = _epoch
 mnemDeadBreath, mnemDeathtempest, target = nil, nil, nil
-infArmyOfDead, mnemResourceful = nil, nil
+infArmyOfDead, mnemResourceful, mnemGraveborn = nil, nil, nil
+infNecroticAura = nil
+ataxiaTemp.infDeathauraAt = nil
 ataxiaTemp.infTyrannyRoom = nil
 ataxiaTemp.gravehandsAt, ataxiaTemp.gravehandsSeen, ataxiaTemp.gravehandsRetried = nil, nil, nil
 ataxiaTemp.profaned, ataxiaTemp.soulstormAt, ataxiaTemp.soulstormTarget = nil, nil, nil
