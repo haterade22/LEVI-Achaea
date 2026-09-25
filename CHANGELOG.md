@@ -2,6 +2,47 @@
 
 ---
 
+## 2026-09-25 - Prophet of Creation: latched, no rotation change yet (v4.7.358)
+
+The user pasted the Psion boon and the foresight AB text:
+
+> **Prophet of Creation** (legendary) -- "Your foresight ability now works against denizens and causes
+> the next attack against you to miss."
+>
+> `PSI FORESIGHT <target> <TREE|SHIELD>` -- "If your foresight fails however, and the action is not
+> performed, you will be stunned." Tree extends the tree-touch recovery; Shield extends the
+> equilibrium recovery of a shield tattoo.
+
+Asked how to use it (denizens do not touch trees, so the only real prediction is SHIELD, and a wrong
+one stuns us): **latch only for now** -- the user will try foresight on a denizen in game first. The
+cost, per the user: *"It is free it seems."* (the AB paste had no cooldown line; the wiki lists none).
+
+`psionProphet` is wired like every boon flag -- `M.BOON_FLAGS`, the claim alias, run start/end, and a
+BOONS row trigger `mnemosyne/105_Prophet_of_Creation` (in-tower gate) -- and nothing reads it. A test
+pins that the Psion round is identical with and without it, so the absence reads as a decision.
+
+**First in-game test (the user's log, same day).** Foresight on a denizen WORKS with the boon, and
+the "action" it predicts is simply the denizen's next attack:
+
+    You direct your formidable mental might towards the task of piercing the very fabric of time
+    itself, seeking out a situation in the near future where a halfling semi-soldier will act as you
+    predict.
+    ...
+    Your prediction comes to pass, and you effortlessly avoid the attack from a halfling semi-soldier.
+
+It came true in under 0.3s (the next prompt), cost nothing visible, and did not stun. **Still
+unknown:** what happens when the denizen does NOT attack -- it dies first, or never swings -- which
+is where the AB's stun would bite, and how long a prediction waits before it counts as failed. Those
+decide whether the rotation should use it, so it stays latch-only in this release.
+
+### Files
+
+- `mnemosyne/004_Parsers.lua`; triggers `mnemosyne/001`, `105_Prophet_of_Creation` (new); alias
+  `mnemosyne/002_Boon_Claim.lua`; `tests/test_basher_psion_boons.lua`, `tests/test_mnemosyne.lua`;
+  `.claude/classes/psion.md`, `.claude/projects/mnemosyne/03-parsing-triggers.md`, `CLAUDE.md`, memory.
+
+---
+
 ## 2026-09-25 - Earthquake: upheaval on idle equilibrium, and time to clamber over our own rubble (v4.7.357)
 
 The user pasted the Psion boon and the AB block:
