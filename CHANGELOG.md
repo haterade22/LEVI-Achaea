@@ -2,6 +2,68 @@
 
 ---
 
+## 2026-09-25 - A reload now brings every boon back (v4.7.350)
+
+User: *"Panoply: The damage dealt by your weaving flurry ability scales directly to the number of
+strikes landed... We can use weaving flurry with this boon."*
+
+**Panoply already does that**, and has since it shipped: `ataxiaBasher_psionBashing` swaps
+`weave deathblow` for `weave flurry` while `psionPanoply` is set, and a test pins it. But the
+user's earlier log showed deathblow (*"Striking like coiled lightning... lays open the throat"* is
+the deathblow line), and chasing *why a held boon might not be set* found something much larger
+than Panoply.
+
+### Fifteen boons could not survive a reload
+
+Boon flags are bare globals, so a reimport -- which this user does every session -- clears them
+all. `M._relatchBoons` exists for exactly that: once per run it sends `boon claimed`, whose rows
+(`<name>  <echoes>  <rarity>`) say what we own, and every boon's trigger re-latches off its row.
+
+`M.BOON_FLAGS` documented itself as latched from *"the BOON CLAIM (as it happens) and the BOONS
+list (on demand, and after a reload)"*. **Only the first half was ever true.** Those rows arrive
+at the generic row trigger `mnemosyne/013_Boons_List_Row`, which learned the boon, recorded it as
+owned, coloured it and printed its description -- and never called `latchBoonFlag`.
+
+So a boon came back after a reload only if someone had also hand-written a row trigger for it.
+Five of the table's twenty had one. **The other fifteen stayed inert for the rest of the run**:
+
+```
+Dead Breath, Deathtempest, Vitalising Tincture, Font of Life, Shadow Tempo, Revel in Slaughter,
+Morudai, Timequake, Herald of Infirmity, Convocation, Mutated Jaws, Wrath and Righteousness,
+Pyrrhic Victory, Razor Leaf, Sharp Mind
+```
+
+The first two are this user's Apostate boons from this week. **A reimport mid-run silently
+stopped the belch and the soulstorm** -- and Dead Breath cannot rescue itself from its own boon
+line, because that line only prints when the belch fires, and the belch never fires without the
+flag.
+
+### The fix is one call
+
+The row trigger now calls `latchBoonFlag(name)`. It is safe to latch from: the pattern demands an
+echo count **and** a rarity word, which is the shape of what we *own* -- the offer screen prints
+`Name:   description` with neither, so an offered-but-declined boon cannot reach it. The call is
+pcall'd, so arming a flag can never break the listing.
+
+*A table whose comment names two sources, with a caller for only one, reads as complete from
+either end.* The claim path and the row trigger each looked right on their own; the bug was the
+missing line between them. That is why the tests run the **real trigger file** against the
+**real table** rather than stubbing either.
+
+### Verification
+
+2376 tests pass (4 new in `tests/test_mnemosyne.lua`), including one that feeds a row for
+**every** name in `BOON_FLAGS` and requires every flag to come back, so the next table-only boon is
+covered the day it is added. Four mutants, all killed: the bug itself, latching the rarity instead
+of the name, dropping the ownership record, and Panoply no longer swapping to flurry.
+
+### Files
+
+- trigger `mnemosyne/013_Boons_List_Row.lua`; `tests/test_mnemosyne.lua`; `CHANGELOG.md`,
+  `CLAUDE.md`, memory.
+
+---
+
 ## 2026-09-25 - Psion boons, and the transcendence counter that only went up (v4.7.349)
 
 User: *"Psion is another class we need to add."* Three boons pasted, plus the Psion/Weaving/
