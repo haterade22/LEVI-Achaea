@@ -348,7 +348,7 @@ end
 -- Its cooldown is 3s of equilibrium, so this outlasts the action it guards -- the rule the
 -- tumble confirmation had to learn the hard way (a retry window shorter than the action
 -- re-sends something that was working).
-GRAVEHANDS_CONFIRM = 6
+local GRAVEHANDS_CONFIRM = 6
 
 function ataxiaBasher_apostateBashing()
 	local command, sp = "", ataxia.settings.separator 
@@ -378,7 +378,10 @@ function ataxiaBasher_apostateBashing()
 			command = aura.."deadeyes "..target.." bleed bleed; "
 		end
 	else
-		command = aura..graveHands..brage..sp.."deadeyes "..target.." bleed bleed; "
+		-- No empty command when there is no battlerage (v4.7.351, deep review): `brage..sp` put a
+		-- bare separator in front of the swing, and with a rider ahead of it that became ";;".
+		-- Harmless to the server, but it is our command and it should say what it means.
+		command = aura..graveHands..(brage ~= "" and (brage..sp) or "").."deadeyes "..target.." bleed bleed; "
 	end
 	    
 	return command	
@@ -2872,28 +2875,45 @@ local PSION_KEEP_HOLD = { clarity = 12, rupturesight = 4 }
 
 -- "" when the defence is already up or an attempt is still in flight, else the command plus the
 -- separator, so the caller can concatenate it blind.
+--
+-- A TIMESTAMP HOLD, NOT A TIMER (v4.7.351, deep review). The hold used to be a flag cleared by a
+-- tempTimer, and a timer that never fired -- a profile reset mid-hold -- left the flag set and the
+-- keeper silently OFF for the rest of the session, while a boon worth 50% sat unused. A stamp
+-- expires on its own; nothing has to remember to clear it.
 local function psionKeep(def, cmd, sp)
   if ataxia.defences and ataxia.defences[def] then return "" end
   ataxiaTemp = ataxiaTemp or {}
-  local key = "psionKeep_" .. def
-  if ataxiaTemp[key] then return "" end
-  ataxiaTemp[key] = true
+  ataxiaTemp.psionKeepAt = ataxiaTemp.psionKeepAt or {}
   local hold = tonumber(ataxiaBasher.psionKeepHold) or PSION_KEEP_HOLD[def] or 10
-  tempTimer(hold, "ataxiaTemp." .. key .. " = nil")
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  if (nowT - (tonumber(ataxiaTemp.psionKeepAt[def]) or 0)) < hold then return "" end
+  ataxiaTemp.psionKeepAt[def] = nowT
   return cmd .. sp
 end
 
--- The pair, boon-gated. `rothFired` is not a nicety: ENACT ROTH "grants clarity + rupture free"
--- (the emergency-heal comment above says so, and the wiki agrees), so a round that just spent
--- roth is about to be handed both defences -- enacting them alongside it would burn equilibrium
--- for something already arriving.
-function ataxiaBasher_psionEmulationKeepers(sp, rothFired)
-  if rothFired then return "" end
+-- At most ONE keeper per round, and none when the round's equilibrium is already spent.
+--
+-- ONE EQUILIBRIUM ACTION PER ROUND (v4.7.351, deep review). v4.7.349 could send `enact clarity;
+-- enact rupture;` together, and a queued chain runs its commands back to back: the second
+-- ENACT (2.30s of equilibrium, like the first) is refused, while its hold is stamped as if it
+-- had been sent -- the collision CLAUDE.md records three times already (shin augment + shin
+-- thunderstorm, intone keeper + intone boinad). The test for it asserted the colliding pair as
+-- correct. Now the caller says whether equilibrium is spent (`eqSpent` -- roth or psi transcend
+-- already went this round), and this sends one or nothing.
+--
+-- RUPTURE FIRST. Bloodletter's Fury is the larger of the two (unblockable, +50% base damage AND
+-- balance 20% faster, which compounds every round it holds), and `rupturesight` may be a
+-- three-blow charge that needs re-upping more often -- so on a round where both are down it
+-- goes first, and clarity follows on the next idle equilibrium.
+function ataxiaBasher_psionEmulationKeepers(sp, eqSpent)
+  if eqSpent then return "" end
   sp = sp or ((ataxia.settings and ataxia.settings.separator) or ";")
-  local out = ""
-  if psionRazorClarity then out = out .. psionKeep("clarity", "enact clarity", sp) end
-  if psionBloodletter then out = out .. psionKeep("rupturesight", "enact rupture", sp) end
-  return out
+  if psionBloodletter then
+    local c = psionKeep("rupturesight", "enact rupture", sp)
+    if c ~= "" then return c end
+  end
+  if psionRazorClarity then return psionKeep("clarity", "enact clarity", sp) end
+  return ""
 end
 
 function ataxiaBasher_psionBashing()
@@ -2923,20 +2943,26 @@ function ataxiaBasher_psionBashing()
     rothFired = true
     command = command.."enact roth"..sp
   end
-  -- Boon-gated emulation keepers (v4.7.349). Placed with the other equilibrium riders and
-  -- BEFORE the shielded branch on purpose: raising a defence is not an attack, and a shield on
-  -- the denizen has nothing to do with whether our own clarity is up. They stand down when roth
-  -- just fired, which hands us both of them free.
-  command = command..ataxiaBasher_psionEmulationKeepers(sp, rothFired)
+  -- ONE EQUILIBRIUM ACTION PER ROUND (v4.7.351, deep review). Roth, psi transcend and the two
+  -- emulation keepers all spend EQUILIBRIUM, and a queued chain runs back to back -- so a second
+  -- one in the same round is refused while its hold is stamped as if it went. Priority: roth
+  -- (the emergency heal), then transcend (the shatter loop needs it), then the boon keepers.
+  local eqSpent = rothFired
   -- Transcendence keeper: the shatter loop assumes PSI TRANSCEND is active, but
   -- nothing ever re-upped it after a drop/death. The psitranscend defence is
-  -- GMCP-tracked; re-up on eq (rides the swing) with a 10s attempt-hold.
-  if not (ataxia.defences and ataxia.defences.psitranscend)
-     and not ataxiaTemp.psionTranscendAttempted then
-    ataxiaTemp.psionTranscendAttempted = true
-    tempTimer(10, [[ataxiaTemp.psionTranscendAttempted = nil]])
+  -- GMCP-tracked; re-up on eq (rides the swing) with a 10s attempt-hold -- a TIMESTAMP
+  -- since v4.7.351, for the same reason as psionKeep's: a lost timer wedged it off.
+  if not eqSpent and not (ataxia.defences and ataxia.defences.psitranscend)
+     and (nowT - (tonumber(ataxiaTemp.psionTranscendAt) or 0)) >= 10 then
+    ataxiaTemp.psionTranscendAt = nowT
+    eqSpent = true
     command = command.."psi transcend"..sp
   end
+  -- Boon-gated emulation keepers (v4.7.349). With the other equilibrium riders and BEFORE the
+  -- shielded branch on purpose: raising a defence is not an attack, and a shield on the denizen
+  -- has nothing to do with whether our own clarity is up. They wait whenever roth or transcend
+  -- took this round's equilibrium -- and roth hands us both of them free anyway.
+  command = command..ataxiaBasher_psionEmulationKeepers(sp, eqSpent)
 
   if ataxiaBasher.shielded then
     -- Review fix: this branch could build an EMPTY command (no cleave fallback

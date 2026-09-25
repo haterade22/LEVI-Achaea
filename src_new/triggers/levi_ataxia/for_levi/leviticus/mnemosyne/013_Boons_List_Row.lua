@@ -68,7 +68,16 @@ ataxiaTemp.boonsOwned[name] = rarity
 -- Safe to latch from: this pattern demands the echo count AND a rarity word, which is the shape
 -- of what we OWN. The offer screen prints `Name:   description` with neither, so an offered-
 -- but-declined boon cannot arrive here. pcall'd: arming a flag must never break the listing.
-if mnem.latchBoonFlag then pcall(mnem.latchBoonFlag, name) end
+--
+-- ONLY INSIDE THE TOWER (v4.7.351, deep review). Neither this trigger nor latchBoonFlag checked,
+-- and of the table's twenty consumers exactly one (Sharp Mind) checks for itself -- so a list
+-- printed outside a run would have armed the belch, the soulstorm, the Psion keepers and
+-- Timequake for ordinary bashing. `inMnemosyne` is owned by the wade lifecycle and is already TRUE
+-- when the reload re-latch runs: the wade-status trigger asserts it before onRipple sends
+-- `boon claimed`. The library learning above stays ungated on purpose.
+if mnem.latchBoonFlag and ataxiaBasher and ataxiaBasher.inMnemosyne then
+  pcall(mnem.latchBoonFlag, name)
+end
 -- _learnBoon only mutates the in-memory table; every other _historySave caller sits behind a
 -- telemetry gate, so without this the back-filled rarity would die with the session. Debounced,
 -- because this trigger fires once per row of the list.

@@ -2,6 +2,131 @@
 
 ---
 
+## 2026-09-25 - Deep review of v4.7.344-350, every finding fixed (v4.7.351)
+
+User: *"conduct a deep review"*, then *"implement all fixes"*. Eight review agents over the week's
+seven releases; every action item they raised is fixed here. The headline is one I should have
+caught when I wrote the triggers.
+
+### 1. Three necromancy triggers could never see their line
+
+The user's Achaea **wraps at 119-124 columns** -- measured from the break points in their own
+pastes (the transcendence decay line breaks after "of the way to" at 114; the deathblow line after
+"translucent" at 119). I wrote these triggers from chat pastes, where long lines arrive in one piece,
+and never checked a single length. The repo already had this lesson three times over (Baron's Bro,
+Kai Choke, the corpse-eating lines).
+
+| trigger | line | what went wrong | cost |
+|---|---|---|---|
+| `782` gravehands confirmation | 148 chars | the fragment began at column 88 -- the break went through it | every Apostate room's summon read as lost and was **cast twice**: +350 mana, +1.5% essence per room, every room under Graveborn |
+| `779` belch "room is fouled" | 128 chars | anchored at both ends | the foul-room hold never engaged; belch re-sent into its own gas every 5s |
+| `780` soulstorm landing | 114-150+ | anchored full line; the MOB sets the length | "Duke Semiro" fit, "a bloated cabin boy" did not -- the storm was re-sent, which is the **"still profanes a bloated cabin boy's soul"** the user reported |
+| `065`/`066` highlights | same lines | same | the gravehands highlight coloured **neither** line, though v4.7.347's notes said both |
+
+Each now matches an **early** phrase that survives any break, and the highlights add a short
+anchored pattern for the wrapped remainder (`^.{0,60}<tail>\.$`), so both rows are coloured
+wherever the break falls. For `782` the early phrase is also **first-person** ("You mutter words of
+death and decay..."), which closes a second finding: the old fragment would have matched another
+necromancer's gravehands and spent our one retry.
+
+**So it cannot happen quietly again:**
+
+- `tools/check_wrap.py` (**in CI**): fails any trigger pattern whose shortest match is wider than
+  118 columns. Eight pre-existing triggers are allowlisted -- several look real (Meteorite, Calcify,
+  the Aeonic distortion proc) and are a separate job -- and a stale allowlist entry fails the check,
+  so the list cannot rot. It found one false positive of its own (Tekura's alternation) on the first
+  run and was corrected.
+- `tests/test_trigger_wrap.lua` + `tests/trigger_lib.lua`: the class the lint cannot see -- a SHORT
+  fragment that straddles the break. It wraps each known line at 100, 119 and 124 columns and runs
+  the trigger's **real patterns** against each physical row, through a small evaluator that refuses
+  any regex shape it cannot judge rather than passing it. It also reproduces the bug: the old
+  patterns demonstrably fail on the wrapped rows.
+- The old tests passed throughout because they searched the trigger FILE for a phrase -- and after
+  the first fix, `782`'s still passed on the **comment explaining the fix**. Pattern assertions now
+  read the patterns.
+
+### 2. Mountjump recovers in both directions, and defers to what owns the room
+
+- **The other direction was missing.** A stale MOUNTED belief (die in the saddle, mount killed,
+  thrown by a line we have never seen) sent `mountjump`; the game answered "You have no mount on
+  which to jump."; 705 corrected the belief and **the escape was lost**. `ataxiaBasher_jumpRefusedOnFoot`
+  now re-sends it as `leap`, under the same bounds as the mounted recovery.
+- **The recovery never checked a tumble or lava.** A jump sent during an in-flight tumble cancels it
+  (the rule every other move site obeys); in lava, `M.onLava` owns movement and our `queue addclear
+  free` would overwrite its queued escape. Both recoveries now latch the belief but hold the send.
+- **The ledger outlived its tactic.** `S.reset` now clears `ataxiaTemp.lastJump`.
+- **Death forgets the saddle.** The belief is session scratch and survived death; `ataxiaBasher_onDeath`
+  now sets it to *unknown* (nil, not false -- no claim about the game), above its basher-enabled
+  early return.
+- Triggers `737`/`738` renamed **`783`/`784`**: the folder already used those numbers.
+- A comment claimed an unknown sibling refusal "costs the latch and nothing else". With a live
+  record it also fires the re-issue -- still the right move, since the line proves we are mounted --
+  and the comment now says so.
+
+### 3. Psion: one equilibrium action per round
+
+v4.7.349 could send `enact clarity;enact rupture;` together. Both are 2.30s of equilibrium and a
+queued chain runs back to back, so the second was refused while its hold was stamped as sent -- the
+collision CLAUDE.md already records three times. **The test asserted the colliding pair as correct.**
+Now: roth, then psi transcend, then **one** keeper, **rupture first** (Bloodletter's Fury is the
+larger boon, and `rupturesight` may be a three-blow charge). Roth + transcend -- the same collision,
+pre-existing -- is fixed with it.
+
+Both holds are **timestamps** now, not flags cleared by a `tempTimer`: a lost timer (a profile reset
+mid-hold) wedged a keeper off for the session with no symptom.
+
+### 4. Boon flags
+
+- **Only inside the tower.** v4.7.350's row latch had no run check, and only one of the twenty
+  consumers (Sharp Mind) checks for itself -- a list printed outside a run would have armed the
+  belch and the soulstorm for ordinary bashing. Gated on `ataxiaBasher.inMnemosyne`, which the
+  wade-status trigger sets *before* the reload re-latch sends `boon claimed`. The per-boon rows
+  098-101 carry the same gate.
+- **Run start clears the whole registry.** The confirmed run end always called `M.clearBoonFlags`;
+  run start cleared only a hand-written list missing 13 of the 20, so a run that ended without its
+  confirmation line left those boons live into normal bashing.
+
+### 5. The rest
+
+- **The gravehands room is forgotten at each ripple.** The tower reuses room numbers across ripples,
+  so a reused room read as already summoned-in and was skipped -- in exactly the rooms Graveborn wants.
+- **The transcendence tail.** v4.7.349's decay fix made `deleteFull()` gag the first row of a wrapped
+  line and leave "transcendence." alone on screen every tick. `psion/004` gags the tail, but only
+  straight after `psion/001` fired (it stamps the moment).
+- `GRAVEHANDS_CONFIRM` is local. The Apostate round no longer sends an empty command (`;;`, or a
+  leading separator with no battlerage). The dead `transcend/002` trigger lost the same broken anchor.
+
+### Tests
+
+The real pet backfill (`ataxiaCheckForMissing`) is now **executed** -- the review's mutation run gated
+it off entirely and the suite stayed green. The keeper-hold test checks each defence's own period
+(a swap survived the old sorted-pair assertion). The explorer's mounted wall jump is tested by
+behaviour, not source text.
+
+### Verification
+
+2443 tests pass (67 new). `check_wrap`, `check_orphans` and the colour lint pass. **37 mutants, all
+killed, no survivors**, two of them caught by `check_wrap` rather than the Lua suite. Reversed test
+order gives exactly the 5 failures the review found in older test files and none from this release.
+
+### Left alone, deliberately
+
+Older jump paths that ignore the mount belief (766_Wall, the movement aliases, the chase triggers,
+ragepull), the 5 reverse-order leaks in older test files, and the 8 allowlisted wide patterns. None
+is a regression from this week; each is its own change.
+
+### Files
+
+- `basher/013_Mounts.lua`, `basher/002_Class_Bashing.lua`, `genrunning/001_Bashing_API.lua`,
+  `mnemosyne/008_Explorer.lua`, `mnemosyne/009_Swarm_Tactics.lua`; triggers `705`, `779`, `780`,
+  `782`, `783`/`784` (renamed), `highlighting/065`, `066`, `psion/001`, `psion/004` (new),
+  `transcend/002`, `mnemosyne/001`, `013`, `098`-`101`; `tools/check_wrap.py` (new),
+  `.github/workflows/build.yml`; `tests/trigger_lib.lua`, `tests/test_trigger_wrap.lua` (new) and
+  eight updated test files; `CHANGELOG.md`, `CLAUDE.md`, `.claude/projects/mnemosyne/07-explorer.md`,
+  memory.
+
+---
+
 ## 2026-09-25 - A reload now brings every boon back (v4.7.350)
 
 User: *"Panoply: The damage dealt by your weaving flurry ability scales directly to the number of

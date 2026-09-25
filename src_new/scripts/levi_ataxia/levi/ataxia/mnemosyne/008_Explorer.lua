@@ -532,6 +532,11 @@ function M.onRippleReset()
   -- All three are about a specific room on a specific level, so they die with the ripple too.
   ataxiaTemp.mnemLavaAt, ataxiaTemp.mnemLavaRoom = nil, nil
   ataxiaTemp.mnemLavaStray, ataxiaTemp.mnemLavaDir = nil, nil
+  -- The gravehands once-per-room record is keyed on a room NUMBER, and the tower reuses numbers
+  -- across ripples (MAP.reset says so) -- a reused room read as already summoned-in and was
+  -- skipped, in exactly the rooms Graveborn wants covered (v4.7.351, deep review).
+  ataxiaTemp.infTyrannyRoom, ataxiaTemp.gravehandsAt = nil, nil
+  ataxiaTemp.gravehandsSeen, ataxiaTemp.gravehandsRetried = nil, nil
 end
 
 -- A MARK MUST CARRY ITS REASON (v4.7.262). Both lava tables stored a bare `true`, so when a

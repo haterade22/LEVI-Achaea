@@ -33,6 +33,11 @@ patterns:
 ]]--
 
 ataxia.mnemosyne.onRunStart()
+-- EVERY generically-latched boon goes too (v4.7.351, deep review). The confirmed run END has
+-- always cleared the whole registry (M.clearBoonFlags); run START cleared only the hand-written
+-- list below, which is missing 13 of the table's 20. A run that ended without its confirmation
+-- line -- a disconnect, a crash -- left those boons live into normal bashing until a reimport.
+if ataxia.mnemosyne.clearBoonFlags then ataxia.mnemosyne.clearBoonFlags() end
 bardWarmarch = false  -- boons reset each run
 bmShatteredStar = false  -- boons reset each run
 magiKkractle = false  -- boons reset each run

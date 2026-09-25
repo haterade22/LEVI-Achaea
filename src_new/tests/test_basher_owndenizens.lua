@@ -171,3 +171,30 @@ describe("the pet backfill repairs a legacy save", function()
     expect(table.contains(saved, "baalzadeen")).toBeTrue()
   end)
 end)
+
+-- THE REAL LOOP, RUN (v4.7.351, deep review). The tests above read the shipped LIST and replay
+-- the loop's logic by hand -- and the deep review's mutation run gated the real loop off entirely
+-- (`if false and ...`) and the whole suite still passed. The fix this file exists to pin had no
+-- coverage of its own execution. This runs the real ataxiaCheckForMissing() against a save from
+-- before the seed, in FRESH tables: it writes dozens of defaults, and test files share one state.
+describe("the real backfill repairs a legacy save", function()
+  it("adds baalzadeen to a save that only had ashbeast and hyena", function()
+    local savedA, savedB, savedT, savedEcho = ataxia, ataxiaBasher, ataxiaTemp, ataxiaEcho
+    ataxia = { settings = {}, vitals = {} }
+    ataxiaBasher = { ownDenizens = { "ashbeast", "hyena" } }
+    ataxiaTemp = {}
+    ataxiaEcho = function() end
+    local ok, err = pcall(function()
+      dofile("src_new/scripts/levi_ataxia/levi/ataxia/002_Check_For_Any_Missing_Variables.lua")
+      ataxiaCheckForMissing()
+    end)
+    local owned = ataxiaBasher.ownDenizens
+    ataxia, ataxiaBasher, ataxiaTemp, ataxiaEcho = savedA, savedB, savedT, savedEcho
+    if not ok then error(err, 0) end
+    expect(table.contains(owned, "baalzadeen")).toBeTrue()
+    expect(table.contains(owned, "falcon")).toBeTrue()
+    local n = 0
+    for _, p in ipairs(owned) do if p == "hyena" then n = n + 1 end end
+    expect(n).toBe(1) -- and it did not duplicate what was already there
+  end)
+end)

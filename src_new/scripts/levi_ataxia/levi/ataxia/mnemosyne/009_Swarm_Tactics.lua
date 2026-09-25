@@ -2046,6 +2046,9 @@ function S.reset(reason)
   S.swarmRoom, S.funnelRoom, S.funnelAt = nil, nil, nil
   S.backShort, S.backLong, S.fwdShort = nil, nil, nil
   S.peakFollowers, S.announcedFollow = nil, nil
+  -- The jump ledger belongs to the tactic that wrote it (v4.7.351, deep review). A refusal that
+  -- arrives after the tactic was abandoned must not re-send a move nobody still wants.
+  if ataxiaTemp then ataxiaTemp.lastJump = nil end
 end
 
 -- Fresh ripple / sweep (re)start: new pull budgets. Called both at GENUINE ripple

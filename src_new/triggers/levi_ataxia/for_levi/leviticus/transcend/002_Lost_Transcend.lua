@@ -32,8 +32,7 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: '^Your inaction causes the harmonisation of your body and mind to falter: you are now only (\d+) percent of the
-    way to transcendence.$'
+- pattern: '^Your inaction causes the harmonisation of your body and mind to falter: you are now only (\d+) percent'
   type: 1
 - pattern: ^Your body and mind fall out of their transcendent state.$
   type: 1

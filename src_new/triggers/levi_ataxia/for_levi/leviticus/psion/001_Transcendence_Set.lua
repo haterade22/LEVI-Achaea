@@ -55,6 +55,9 @@ patterns:
 -- this keeps relearning: an anchored pattern is a bet that the line is short enough, and the
 -- lines that break it are exactly the informative ones (v4.7.286, the soulstorm landing).
 ataxiaTemp.transcendence = tonumber(matches[2])
+-- The decay line wraps, so its tail arrives as a line of its own; psion/004 gags it, but only
+-- straight after one of these (v4.7.351, deep review).
+ataxiaTemp.transcendLineAt = (getEpoch and getEpoch()) or os.time()
 if ataxiaBasher.enabled and not ataxiaBasher.manual then
 	deleteFull()
 end

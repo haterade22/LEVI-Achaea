@@ -549,6 +549,12 @@ only a jump we sent, from the room we sent it in, within 4s, and never one alrea
 the full set of commands that earn the line is unknown, so an older direction would be a move
 nobody asked for, while an unknown sibling refusal costs the latch and nothing else.
 
+**Both directions recover, and both defer (v4.7.351).** "You have no mount on which to jump."
+re-sends a recorded MOUNTJUMP as `leap` -- a stale mounted belief (died in the saddle, the mount
+killed) used to lose that escape. Neither recovery sends while a tumble is in flight (a jump
+cancels it) or in lava (`M.onLava` owns the move); both still latch. `S.reset` clears the ledger,
+and death sets the belief to *unknown*. The triggers are `783`/`784` now.
+
 **TUMBLE goes through while mounted** (v4.7.346, user-corrected). v4.7.345 assumed the opposite
 and flagged Roll Hide's panic tumble as a livelock waiting to happen — refused from the saddle,
 `_tumbleRetry` would spend its budget on a command that could never land. It would not; the four

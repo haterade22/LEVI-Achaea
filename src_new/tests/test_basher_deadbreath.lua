@@ -131,7 +131,12 @@ describe("the boon's own line proves the boon", function()
     expect(landed:find("ataxiaBasher_belchLanded(", 1, true) ~= nil).toBeTrue()
     f = io.open("src_new/triggers/levi_ataxia/for_levi/leviticus/779_Belch_Fouled.lua")
     local fouled = f:read("*a"); f:close()
-    expect(fouled:find("cough and sputter as you inhale the noxious air", 1, true) ~= nil).toBeTrue()
+    -- The PATTERN (v4.7.351): the full line is 128 characters, so a pattern anchored at both ends
+    -- could never match the wrapped rows. It must stop early and must not carry a `$`.
+    local TL = dofile("src_new/tests/trigger_lib.lua")
+    local pats = TL.patterns("src_new/triggers/levi_ataxia/for_levi/leviticus/779_Belch_Fouled.lua")
+    expect(pats[1].pat:sub(1, 26)).toBe("^You take in a deep breath")
+    expect(pats[1].pat:find("$", 1, true)).toBeNil()
     expect(fouled:find("ataxiaBasher_belchFouled()", 1, true) ~= nil).toBeTrue()
   end)
 
@@ -238,7 +243,10 @@ describe("SOULSTORM profanes a soul once", function()
     expect(room:find("ataxiaBasher_profanedForget()", 1, true) ~= nil).toBeTrue()
     f = io.open("src_new/triggers/levi_ataxia/for_levi/leviticus/780_Soulstorm_Landed.lua")
     local trig = f:read("*a"); f:close()
-    expect(trig:find("engulfing .+ in a profane soulstorm", 1, true) ~= nil).toBeTrue()
+    local TL = dofile("src_new/tests/trigger_lib.lua")
+    local pats = TL.patterns("src_new/triggers/levi_ataxia/for_levi/leviticus/780_Soulstorm_Landed.lua")
+    expect(pats[1].pat:sub(1, 30)).toBe("^You call forth an unholy tide")
+    expect(pats[1].pat:find("$", 1, true)).toBeNil() -- the mob's name sets the length (v4.7.351)
     expect(trig:find("ataxiaBasher_soulstormLanded()", 1, true) ~= nil).toBeTrue()
   end)
 end)
@@ -257,9 +265,15 @@ describe("the riders are visible when they fire", function()
     local belch = hl("064_Belch_Highlight.lua")
     expect(belch:find("You belch a cloud of stinking gas", 1, true) ~= nil).toBeTrue()
     expect(belch:find("Your rotten breath befouls the air", 1, true) ~= nil).toBeTrue()
-    local storm = hl("065_Soulstorm_Highlight.lua")
-    expect(storm:find("in a profane soulstorm", 1, true) ~= nil).toBeTrue()
-    expect(storm:find("form withers as the necromantic storm eats away at", 1, true) ~= nil).toBeTrue()
+    local TL = dofile("src_new/tests/trigger_lib.lua")
+    local heads = {}
+    for _, p in ipairs(TL.patterns("src_new/triggers/levi_ataxia/for_levi/leviticus/highlighting/065_Soulstorm_Highlight.lua")) do
+      heads[#heads + 1] = p.pat
+    end
+    local joined = table.concat(heads, "|")
+    expect(joined:find("^You call forth an unholy tide", 1, true) ~= nil).toBeTrue()
+    expect(joined:find("soulstorm", 1, true) ~= nil).toBeTrue()
+    expect(joined:find("form withers as the necromantic storm", 1, true) ~= nil).toBeTrue()
   end)
 
   -- v4.7.344, user: "make this a different colour highlight please". One amber for both riders

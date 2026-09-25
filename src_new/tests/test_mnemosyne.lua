@@ -4068,6 +4068,31 @@ describe("ice-slip recovery during a tactical retreat (v4.7.243)", function()
   end
   local function restore() send = realSend; M.swarm = realSwarm end
 
+  -- The explorer's wall reflex follows the saddle (v4.7.345) -- tested by BEHAVIOUR since
+  -- v4.7.351: the deep review's mutation run found only a source-text search guarding it.
+  it("a wall is mountjumped from the saddle, leapt on foot", function()
+    local realVerb, realSent = ataxiaBasher_mountVerb, ataxiaBasher_jumpSent
+    local mounted, recorded = true, nil
+    ataxiaBasher_mountVerb = function(fallback) return mounted and "mountjump" or fallback end
+    ataxiaBasher_jumpSent = function(dir, verb) recorded = verb end
+    local out = {}
+    local ok, err = pcall(function()
+      slipping(false) -- ONCE: it captures the real `send`, and a second call would capture our stub
+      send = function(c) out[#out + 1] = c end
+      M.swarm = { moveLocked = function() return false end }
+      M.onWallBlocked()
+      mounted = false
+      M.explore.moving, M.explore.iceSlips = true, 0
+      M.onWallBlocked()
+    end)
+    restore()
+    ataxiaBasher_mountVerb, ataxiaBasher_jumpSent = realVerb, realSent
+    if not ok then error(err, 0) end
+    expect((out[1] or ""):find("mountjump s", 1, true) ~= nil).toBeTrue()
+    expect((out[2] or ""):find("leap s", 1, true) ~= nil).toBeTrue()
+    expect(recorded).toBe("leap") -- and it recorded what it sent, for the refusal to recover
+  end)
+
   it("hands a TACTICAL slip back to the swarm instead of walking", function()
     slipping(true)
     local walked, handed = 0, 0
@@ -9585,14 +9610,19 @@ describe("the BOONS row arms the generic boon flags", function()
 
   -- The row also teaches the boon LIBRARY, which other tests in this file read. Stub that side
   -- so twenty synthetic rows cannot leak into their fixtures (the v4.7.328 shared-fixture lesson).
-  local function withRows(fn)
+  -- `inside` defaults to TRUE: the row only arms inside the tower (v4.7.351), and these tests
+  -- used to pass only because an EARLIER test in this file had left inMnemosyne set.
+  local function withRows(fn, inside)
     local learn, save = M._learnBoon, M._historySaveSoon
     local owned = ataxiaTemp.boonsOwned
+    local wasIn = ataxiaBasher.inMnemosyne
+    ataxiaBasher.inMnemosyne = (inside ~= false)
     M._learnBoon = function() return {} end
     M._historySaveSoon = function() end
     local ok, err = pcall(fn)
     M._learnBoon, M._historySaveSoon = learn, save
     ataxiaTemp.boonsOwned = owned
+    ataxiaBasher.inMnemosyne = wasIn
     matches, line = nil, nil
     if not ok then error(err, 0) end
   end
@@ -9631,6 +9661,41 @@ describe("the BOONS row arms the generic boon flags", function()
     clearFlags()
   end)
 
+  -- ONLY INSIDE THE TOWER (v4.7.351, deep review). Of the table's twenty consumers exactly one
+  -- checks for itself, so a list printed outside a run would have armed the belch and the
+  -- soulstorm for ordinary bashing.
+  it("arms nothing outside the tower", function()
+    clearFlags()
+    withRows(function()
+      row("Dead Breath", 1, "rare")
+      row("Deathtempest", 1, "rare")
+    end, false)
+    expect(mnemDeadBreath).toBeNil()
+    expect(mnemDeathtempest).toBeNil()
+  end)
+
+  -- The per-boon row triggers carry the same gate (v4.7.351): run each one's body both ways.
+  it("the per-boon rows (098-101) arm only inside the tower", function()
+    local T = "src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/"
+    local cases = { { "098_Graveborn.lua", "mnemGraveborn" }, { "099_Bloodletters_Fury.lua", "psionBloodletter" },
+                    { "100_Razor_Clarity.lua", "psionRazorClarity" }, { "101_Mindbreak.lua", "psionMindbreak" } }
+    local wasIn = ataxiaBasher.inMnemosyne
+    local ok, err = pcall(function()
+      for _, c in ipairs(cases) do
+        _G[c[2]] = nil
+        ataxiaBasher.inMnemosyne = false
+        dofile(T .. c[1])
+        expect(_G[c[2]]).toBeNil()
+        ataxiaBasher.inMnemosyne = true
+        dofile(T .. c[1])
+        expect(_G[c[2]]).toBeTrue()
+        _G[c[2]] = nil
+      end
+    end)
+    ataxiaBasher.inMnemosyne = wasIn
+    if not ok then error(err, 0) end
+  end)
+
   it("a row for a boon outside the table arms nothing and breaks nothing", function()
     clearFlags()
     withRows(function() row("Some Boon Nobody Wired", 2, "common") end)
@@ -9655,5 +9720,40 @@ describe("the BOONS row arms the generic boon flags", function()
     expect(seen[2]).toBe("rare")
     expect(ownedNow).toBe("rare")
     clearFlags()
+  end)
+end)
+
+-- =====================================================================================
+-- RUN START CLEARS THE WHOLE REGISTRY, and a ripple forgets the gravehands room (v4.7.351).
+describe("run and ripple boundaries", function()
+  -- The confirmed run END always cleared all of M.BOON_FLAGS; run START cleared only a
+  -- hand-written list missing 13 of the 20. A run that ended without its confirmation line left
+  -- those boons live into normal bashing. This runs the REAL run-start trigger.
+  it("the run-start trigger clears every generically-latched boon", function()
+    local realStart, realHere, realRevert = M.onRunStart, ataxiaBasher_mnemHere, ataxiaBasher_berserkersEdgeRevert
+    M.onRunStart = function() end
+    ataxiaBasher_mnemHere, ataxiaBasher_berserkersEdgeRevert = nil, nil
+    for _, flag in pairs(M.BOON_FLAGS) do _G[flag] = true end
+    local ok, err = pcall(dofile, "src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/001_Run_Start.lua")
+    M.onRunStart, ataxiaBasher_mnemHere, ataxiaBasher_berserkersEdgeRevert = realStart, realHere, realRevert
+    local still = {}
+    for name, flag in pairs(M.BOON_FLAGS) do
+      if _G[flag] then still[#still + 1] = name end
+      _G[flag] = nil
+    end
+    if not ok then error(err, 0) end
+    expect(#still).toBe(0)
+  end)
+
+  -- The tower reuses room numbers across ripples; the once-per-room gravehands record is keyed on
+  -- one, so a reused room read as already summoned-in and was skipped.
+  it("a new ripple forgets which room had its gravehands", function()
+    ataxiaTemp.infTyrannyRoom, ataxiaTemp.gravehandsAt = 1234, 999
+    ataxiaTemp.gravehandsSeen, ataxiaTemp.gravehandsRetried = true, true
+    M.onRippleReset()
+    expect(ataxiaTemp.infTyrannyRoom).toBeNil()
+    expect(ataxiaTemp.gravehandsAt).toBeNil()
+    expect(ataxiaTemp.gravehandsSeen).toBeNil()
+    expect(ataxiaTemp.gravehandsRetried).toBeNil()
   end)
 end)

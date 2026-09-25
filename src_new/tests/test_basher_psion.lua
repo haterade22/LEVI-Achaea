@@ -164,6 +164,17 @@ describe("ataxiaBasher_psionBashing -- eq riders and keepers", function()
     expect(has(cmd, "weave cleave")).toBeTrue()
   end)
 
+  -- Roth and transcend both spend equilibrium; chained, the second was refused while its hold
+  -- burned (v4.7.351, deep review). Roth is the emergency: transcend waits one round.
+  it("a Roth round leaves PSI TRANSCEND for the next one", function()
+    reset(); ataxia.vitals.hpp = 40; ataxia.defences.psitranscend = nil
+    local cmd = ataxiaBasher_psionBashing()
+    expect(has(cmd, "enact roth")).toBeTrue()
+    expect(has(cmd, "psi transcend")).toBeFalse()
+    ataxia.vitals.hpp = 100
+    expect(has(ataxiaBasher_psionBashing(), "psi transcend;")).toBeTrue()
+  end)
+
   it("re-ups PSI TRANSCEND when its defence drops (attempt-held)", function()
     reset(); ataxia.defences.psitranscend = nil
     expect(has(ataxiaBasher_psionBashing(), "psi transcend;")).toBeTrue()

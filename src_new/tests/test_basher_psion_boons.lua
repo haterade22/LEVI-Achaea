@@ -71,9 +71,9 @@ local function reset()
   ataxiaBasher.psionKeepHold = nil
   psionBloodletter, psionRazorClarity, psionMindbreak = false, false, false
   psionPanoply = false
-  ataxiaTemp.psionKeep_clarity, ataxiaTemp.psionKeep_rupturesight = nil, nil
+  ataxiaTemp.psionKeepAt, ataxiaTemp.psionTranscendAt = nil, nil
   ataxiaTemp.psionRothAt = nil
-  ataxiaTemp.psionTranscendAttempted, ataxiaTemp.psionSecondskinAttempted = true, true
+  ataxiaTemp.psionSecondskinAttempted = true
   ataxiaTemp.transcendence = 0
   ataxia.defences.psitranscend, ataxia.defences.secondskin = true, true
 end
@@ -117,11 +117,16 @@ describe("Bloodletter's Fury keeps rupturesight up", function()
     expect(keepers(false)).toBe("")
   end)
 
-  it("both boons together enact both, clarity first", function()
+  -- ONE EQUILIBRIUM ACTION PER ROUND (v4.7.351, deep review). This test used to assert
+  -- "enact clarity;enact rupture;" -- the collision itself. Both ENACTs cost 2.30s of
+  -- equilibrium and a queued chain runs back to back, so the second was refused while its hold
+  -- was stamped as if it had gone.
+  it("both boons: ONE per round, rupture first, clarity on the next idle equilibrium", function()
     reset()
     psionBloodletter, psionRazorClarity = true, true
-    local out = keepers(false)
-    expect(out).toBe("enact clarity;enact rupture;")
+    expect(keepers(false)).toBe("enact rupture;")   -- the larger boon, alone
+    clock = clock + 3                                -- rupture still held; eq free again
+    expect(keepers(false)).toBe("enact clarity;")
   end)
 end)
 
@@ -131,38 +136,55 @@ describe("the keepers do not spam, and do not waste roth's free grant", function
     psionRazorClarity = true
     expect(keepers(false)).toBe("enact clarity;")
     expect(keepers(false)).toBe("")          -- still in flight
-    fireTimers()
+    clock = clock + 12
     expect(keepers(false)).toBe("enact clarity;")
   end)
 
-  it("gives rupturesight a SHORTER hold -- it may be a three-blow charge, not a defence", function()
+  -- Per defence, not "two different numbers exist": the deep review's mutation run swapped the
+  -- two values and the old sorted-pair assertion could not tell.
+  it("holds each defence for ITS OWN period: clarity 12s, rupturesight 4s", function()
     reset()
-    local holds = {}
-    psionBloodletter, psionRazorClarity = true, true
+    psionRazorClarity = true
     keepers(false)
-    for _, t in ipairs(timers) do
-      holds[#holds + 1] = t.at
-    end
-    table.sort(holds)
-    expect(#holds).toBe(2)
-    expect(holds[1] < holds[2]).toBeTrue()   -- the uncertain one is guarded for less time
+    clock = clock + 5
+    expect(keepers(false)).toBe("")                  -- clarity still held at 5s
+    clock = clock + 7
+    expect(keepers(false)).toBe("enact clarity;")    -- ...released at 12s
+    reset()
+    psionBloodletter = true
+    keepers(false)
+    clock = clock + 3
+    expect(keepers(false)).toBe("")                  -- rupture held at 3s
+    clock = clock + 1
+    expect(keepers(false)).toBe("enact rupture;")    -- ...released at 4s
   end)
 
   it("an explicit hold overrides both", function()
     reset()
-    psionBloodletter, psionRazorClarity = true, true
+    psionRazorClarity = true
     ataxiaBasher.psionKeepHold = 3
     keepers(false)
-    for _, t in ipairs(timers) do expect(t.at).toBe(3) end
+    clock = clock + 2
+    expect(keepers(false)).toBe("")
+    clock = clock + 1
+    expect(keepers(false)).toBe("enact clarity;")
+    ataxiaBasher.psionKeepHold = nil
   end)
 
-  -- ENACT ROTH grants clarity AND rupture free. Enacting them beside it spends equilibrium on
-  -- something already on its way.
-  it("stands down entirely on a round that fired roth", function()
+  -- A TIMESTAMP, not a timer (v4.7.351): a lost tempTimer wedged the old flag on for the session.
+  it("arms no timer -- the hold expires on its own", function()
+    reset()
+    psionBloodletter, psionRazorClarity = true, true
+    keepers(false)
+    expect(#timers).toBe(0)
+  end)
+
+  -- Roth grants clarity AND rupture free, and transcend takes the eq too: either way, nothing.
+  it("stands down entirely when the round's equilibrium is already spent", function()
     reset()
     psionBloodletter, psionRazorClarity = true, true
     expect(keepers(true)).toBe("")
-    expect(ataxiaTemp.psionKeep_clarity).toBeNil()   -- and burns no hold doing it
+    expect(ataxiaTemp.psionKeepAt).toBeNil()          -- and burns no hold doing it
   end)
 end)
 
@@ -314,11 +336,64 @@ describe("all three flags are wired where a boon flag must be", function()
   end)
 end)
 
+-- =====================================================================================
+-- ONE EQUILIBRIUM ACTION PER ROUND, across the whole Psion round (v4.7.351, deep review).
+-- Roth, psi transcend and the two keepers all spend equilibrium; the priority is roth (the
+-- emergency heal), then transcend (the shatter loop needs it), then the boon keepers.
+describe("one equilibrium action per Psion round", function()
+  local function count(s, needle)
+    local n, i = 0, 1
+    while true do
+      local a = s:find(needle, i, true)
+      if not a then return n end
+      n, i = n + 1, a + 1
+    end
+  end
+  local function eqActions(cmd)
+    return count(cmd, "enact ") + count(cmd, "psi transcend")
+  end
+
+  it("psi transcend outranks the keepers, and they follow on the next round", function()
+    reset()
+    psionRazorClarity = true
+    ataxia.defences.psitranscend = nil
+    local first = ataxiaBasher_psionBashing()
+    expect(first:find("psi transcend", 1, true) ~= nil).toBeTrue()
+    expect(first:find("enact clarity", 1, true)).toBeNil()
+    clock = clock + 3
+    local second = ataxiaBasher_psionBashing()
+    expect(second:find("enact clarity", 1, true) ~= nil).toBeTrue()
+    expect(second:find("psi transcend", 1, true)).toBeNil()   -- still in its own hold
+  end)
+
+  it("a roth round spends nothing else, even with transcend and both boons down", function()
+    reset()
+    psionBloodletter, psionRazorClarity = true, true
+    ataxia.defences.psitranscend = nil
+    ataxia.vitals.hpp = 30
+    local cmd = ataxiaBasher_psionBashing()
+    expect(cmd:find("enact roth", 1, true) ~= nil).toBeTrue()
+    expect(eqActions(cmd)).toBe(1)
+  end)
+
+  it("never more than one, whatever is down", function()
+    for _, hp in ipairs({ 100, 30 }) do
+      for _, ts in ipairs({ true, false }) do
+        reset()
+        psionBloodletter, psionRazorClarity = true, true
+        ataxia.vitals.hpp = hp
+        ataxia.defences.psitranscend = ts or nil
+        expect(eqActions(ataxiaBasher_psionBashing()) <= 1).toBeTrue()
+      end
+    end
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (test files share one Lua state).
 getEpoch = realEpoch
 tempTimer = realTempTimer
 psionBloodletter, psionRazorClarity, psionMindbreak, psionPanoply = nil, nil, nil, nil
-ataxiaTemp.psionKeep_clarity, ataxiaTemp.psionKeep_rupturesight = nil, nil
+ataxiaTemp.psionKeepAt, ataxiaTemp.psionTranscendAt = nil, nil
 ataxiaTemp.psionRothAt, ataxiaTemp.transcendence = nil, nil
-ataxiaTemp.psionTranscendAttempted, ataxiaTemp.psionSecondskinAttempted = nil, nil
+ataxiaTemp.psionSecondskinAttempted = nil
 target = nil

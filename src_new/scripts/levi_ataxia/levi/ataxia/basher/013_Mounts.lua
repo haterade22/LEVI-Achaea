@@ -204,8 +204,8 @@ end
 --
 --   mounted    "You easily vault onto the back of <mount>."                  (025 / 735)
 --              "You climb up on <mount>."                                    (735)
---              "You pull back the reins on your mount and jump off to the east."   (737, new)
---              "You cannot do that while mounted."                           (738, new)
+--              "You pull back the reins on your mount and jump off to the east."   (783, new)
+--              "You cannot do that while mounted."                           (784, new)
 --   on foot    "You step down off of <mount>."                               (736)
 --              "You lose purchase on <mount>."                               (736 -- thrown off)
 --              "You have no mount on which to jump."                         (705)
@@ -279,16 +279,33 @@ end
 -- ladder stalls until its timeout, which at crash HP is the death this verb exists to avoid.
 --
 -- IT ONLY RE-ISSUES A JUMP WE SENT, FROM THE ROOM WE SENT IT IN, WITHIN THE ROUND. We do not
--- know the full set of commands that earn this line, and we do not need to: bounding the recovery
--- to a jump of OUR OWN means an unknown sibling refusal costs the latch and nothing else, where a
--- recovery aimed at a direction left over from an older command would be a move nobody asked for.
--- A record already spent, stale, or belonging to a room we have since left is dropped -- the
--- mounted latch alone is the fix then, and the next jump this system plans is a mountjump anyway.
+-- know the full set of commands that earn this line. With no live record of our own, an unknown
+-- sibling refusal costs the latch and nothing else. WITH one, the sibling does fire the re-issue
+-- (worded precisely in v4.7.351; v4.7.346 claimed "the latch and nothing else" outright) -- and
+-- that is still the right move rather than a stray one: the line says we are MOUNTED, so the leap
+-- we recorded is refused too, or already was. A record already spent, stale, or belonging to a
+-- room we have since left is dropped -- the latch alone is the fix then.
+--
+-- AND NEVER INTO A MOVE THAT OWNS THE ROOM (v4.7.351, deep review). Two things already hold
+-- movement, and the re-issue defers to both. A TUMBLE in flight (`S.moveLocked`): a jump sent now
+-- cancels it -- the rule every other move site in the swarm module already obeys, and the one
+-- place that did not was this one. And LAVA: `M.onLava` owns movement there and re-sends its own
+-- escape every struggle tick, while our `queue addclear free` would overwrite that queued escape
+-- with a direction chosen for some other reason. The latch still happens; only the send waits.
 --
 -- TUMBLE IS NOT ONE OF THEM (user, v4.7.346: "tumble goes through while on a mount, by the way").
 -- v4.7.345 guessed the opposite and flagged Roll Hide's panic tumble as a livelock waiting to
 -- happen; it is not, the tumble sites need no conversion, and the guards above were never load-
 -- bearing for it. Worth keeping as a reminder that "acrobatic" is our word, not the game's.
+-- Why a recovered jump must not go out right now, or nil when it may. See above.
+local function recoveryHeld()
+  local M = ataxia and ataxia.mnemosyne
+  local S = M and M.swarm
+  if S and S.moveLocked and S.moveLocked() then return "a tumble is in flight" end
+  if M and M.roomLava and M.roomLava() then return "standing in lava" end
+  return nil
+end
+
 function ataxiaBasher_jumpRefusedMounted()
   ataxiaBasher_mountedSet(true, "the game refused a jump")
   ataxiaTemp = ataxiaTemp or {}
@@ -300,12 +317,58 @@ function ataxiaBasher_jumpRefusedMounted()
   if (nowT - (tonumber(rec.at) or 0)) > JUMP_REFUSED_WINDOW then return false end
   local here = roomNow()
   if rec.room and here and rec.room ~= here then return false end -- it landed after all
+  if recoveryHeld() then return false end -- a tumble or lava owns the move (v4.7.351)
   local sp = (ataxia and ataxia.settings and ataxia.settings.separator) or ";"
   send("queue addclear free stand" .. sp .. "mountjump " .. rec.dir)
   ataxiaBasher_jumpSent(rec.dir, "mountjump")
   if ataxiaEcho then
     ataxiaEcho("Jump refused while mounted -- re-sent as <white>mountjump " .. rec.dir .. "<reset>.")
   end
+  return true
+end
+
+-- "You have no mount on which to jump." -- the MOUNTJUMP was refused (v4.7.351, deep review).
+--
+-- The mirror of the recovery above, and it was missing. A belief that we are mounted can go stale
+-- -- we die in the saddle (the belief is session scratch, and it survived death until this same
+-- release), the mount is killed, a denizen throws us with a line we have never captured -- and
+-- then the escape that believed it sends `mountjump`, the game refuses it, 705 corrected the
+-- belief, and the move itself was simply lost. At crash HP that is one escape too many.
+--
+-- Same bounds as the other direction: a MOUNTJUMP we sent, from this room, within the round, not
+-- into a tumble or lava, consumed. Re-sent as LEAP, which every class has on foot and which still
+-- crosses a wall; the Bard's quicker backflip is not worth a second guess at a moment like this.
+-- All three 705 lines route here -- a trample or gallop refusal proves we are on foot just as
+-- well -- and with no recorded mountjump the function only latches.
+function ataxiaBasher_jumpRefusedOnFoot()
+  ataxiaBasher_mountedSet(false, "the game says we have no mount")
+  ataxiaTemp = ataxiaTemp or {}
+  local rec = ataxiaTemp.lastJump
+  if type(rec) ~= "table" or rec.verb ~= "mountjump" then return false end
+  ataxiaTemp.lastJump = nil -- one refusal, one recovery
+  if type(rec.dir) ~= "string" then return false end
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  if (nowT - (tonumber(rec.at) or 0)) > JUMP_REFUSED_WINDOW then return false end
+  local here = roomNow()
+  if rec.room and here and rec.room ~= here then return false end
+  if recoveryHeld() then return false end
+  local sp = (ataxia and ataxia.settings and ataxia.settings.separator) or ";"
+  send("queue addclear free stand" .. sp .. "leap " .. rec.dir)
+  ataxiaBasher_jumpSent(rec.dir, "leap")
+  if ataxiaEcho then
+    ataxiaEcho("Mountjump refused -- no mount under us; re-sent as <white>leap " .. rec.dir .. "<reset>.")
+  end
+  return true
+end
+
+-- Death, and anything else after which we honestly do not know (v4.7.351, deep review). NIL, not
+-- false: "unknown" reads as on foot, and BOTH refusals now recover, so the first jump afterwards
+-- teaches the truth for the price of one round trip rather than one escape. Deliberately makes no
+-- claim about the game -- only that our knowledge did not survive the death.
+function ataxiaBasher_mountForget(why)
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.mounted = nil
+  ataxiaTemp.lastJump = nil
   return true
 end
 
