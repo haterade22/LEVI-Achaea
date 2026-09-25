@@ -252,6 +252,7 @@ function M.onRunEnd()
   psionRazorClarity = false -- ...and the clarity keeper with it (v4.7.349)
   psionMindbreak = false -- ...and shatter goes back to ordinary damage (v4.7.349)
   psionPsiwave = false -- ...and the equilibrium attack goes back to shatter (v4.7.355)
+  psionEarthquake = false -- ...and upheaval leaves the round (v4.7.357)
   dragonMightSycaerunax = false -- boons gone on a confirmed run-end
   dragonRampage = false -- boons gone on a confirmed run-end
   dwFlashforward = false -- boons gone on a confirmed run-end
@@ -1289,6 +1290,7 @@ M.BOON_FLAGS = {
   ["Razor Clarity"]        = "psionRazorClarity",
   ["Mindbreak"]            = "psionMindbreak",
   ["Psiwave"]              = "psionPsiwave",
+  ["Earthquake"]           = "psionEarthquake",
   ["Vitalising Tincture"]  = "mnemVitalisingTincture",
   ["Font of Life"]         = "mnemFontOfLife",
   ["Shadow Tempo"]         = "mnemShadowTempo",

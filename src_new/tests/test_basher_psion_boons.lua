@@ -62,6 +62,12 @@ getEpoch = function() return clock end
 local ok, err = pcall(dofile, "src_new/scripts/levi_ataxia/levi/ataxia/basher/002_Class_Bashing.lua")
 if not ok then error("failed to load class bashing: " .. tostring(err)) end
 
+-- The room count every AoE rider reads (M._denizenCount, 008). Stubbed; restored at file end.
+denizens = 0
+ataxia.mnemosyne = ataxia.mnemosyne or {}
+local realDenizenCount = ataxia.mnemosyne._denizenCount
+ataxia.mnemosyne._denizenCount = function() return denizens end
+
 local function reset()
   clock = clock + 500
   timers = {}
@@ -71,6 +77,9 @@ local function reset()
   ataxiaBasher.psionKeepHold = nil
   psionBloodletter, psionRazorClarity, psionMindbreak = false, false, false
   psionPsiwave = false
+  psionEarthquake = false
+  ataxiaBasher.upheavalAt = nil
+  denizens = 0
   psionPanoply = false
   ataxiaTemp.psionKeepAt, ataxiaTemp.psionTranscendAt = nil, nil
   ataxiaTemp.psionRothAt = nil
@@ -610,7 +619,112 @@ describe("Psiwave: psi radiate instead of shatter, at full transcendence", funct
   end)
 end)
 
+-- =====================================================================================
+-- EARTHQUAKE (v4.7.357). "Your emulation upheaval ability deals significant blunt damage to all
+-- denizens in the location when it summons rubble." ENACT UPHEAVAL: 2.30s of equilibrium, and it
+-- piles rubble on some of our own exits.
+describe("Earthquake: enact upheaval on idle equilibrium, in a crowd", function()
+  local function has(cmd, s) return cmd:find(s, 1, true) ~= nil end
+  local function count(cmd, s) local _, n = cmd:gsub(s, ""); return n end
+
+  it("with the boon and a crowd, upheaval rides beside the weave -- once", function()
+    reset()
+    psionEarthquake, denizens = true, 3
+    local cmd = ataxiaBasher_psionBashing()
+    expect(count(cmd, "enact upheaval")).toBe(1)
+    expect(has(cmd, "weave deathblow 44001")).toBeTrue()
+  end)
+
+  it("never without the boon", function()
+    reset()
+    denizens = 5
+    expect(has(ataxiaBasher_psionBashing(), "enact upheaval")).toBeFalse()
+  end)
+
+  it("not for a single denizen -- the weave's job -- unless the threshold says so", function()
+    reset()
+    psionEarthquake, denizens = true, 1
+    expect(has(ataxiaBasher_psionBashing(), "enact upheaval")).toBeFalse()
+    reset()
+    psionEarthquake, denizens = true, 1
+    ataxiaBasher.upheavalAt = 1
+    expect(has(ataxiaBasher_psionBashing(), "enact upheaval")).toBeTrue()
+  end)
+
+  -- Rubble blocks our own exits; the escape ladder fires at 35%.
+  it("not below half health -- no more rubble on the doors we may need", function()
+    reset()
+    psionEarthquake, denizens = true, 4
+    ataxia.vitals.hpp = 49
+    ataxiaTemp.psionRothAt = clock -- roth on cooldown, so the equilibrium really is idle
+    expect(has(ataxiaBasher_psionBashing(), "enact upheaval")).toBeFalse()
+    reset()
+    psionEarthquake, denizens = true, 4
+    ataxia.vitals.hpp = 50
+    expect(has(ataxiaBasher_psionBashing(), "enact upheaval")).toBeTrue()
+  end)
+
+  -- One equilibrium spender per round: whatever went first keeps it.
+  it("waits for a keeper, transcend or roth that took the equilibrium", function()
+    reset()
+    psionEarthquake, denizens = true, 4
+    psionRazorClarity = true
+    local cmd = ataxiaBasher_psionBashing()
+    expect(has(cmd, "enact clarity")).toBeTrue()
+    expect(has(cmd, "enact upheaval")).toBeFalse()
+    reset()
+    psionEarthquake, denizens = true, 4
+    ataxia.defences.psitranscend = nil
+    cmd = ataxiaBasher_psionBashing()
+    expect(has(cmd, "psi transcend")).toBeTrue()
+    expect(has(cmd, "enact upheaval")).toBeFalse()
+  end)
+
+  it("not on a shielded round", function()
+    reset()
+    psionEarthquake, denizens = true, 4
+    ataxiaBasher.shielded = true
+    expect(has(ataxiaBasher_psionBashing(), "enact upheaval")).toBeFalse()
+  end)
+
+  -- The free shatter REQUIRES equilibrium without spending it, so it goes first and upheaval can
+  -- still spend what is left on the same round.
+  it("at full transcendence: the free shatter first, then upheaval, then the weave", function()
+    reset()
+    psionEarthquake, denizens = true, 4
+    ataxiaTemp.transcendence = 100
+    local cmd = ataxiaBasher_psionBashing()
+    expect(cmd:find("psi shatter 44001", 1, true)).toBe(1)
+    local u = cmd:find("enact upheaval", 1, true)
+    expect(u ~= nil).toBeTrue()
+    expect(cmd:find("psi shatter", 1, true) < u).toBeTrue()
+    expect(u < cmd:find("weave deathblow 44001", 1, true)).toBeTrue()
+  end)
+
+  it("rides a secondskin round -- secondskin spends balance", function()
+    reset()
+    psionEarthquake, denizens = true, 4
+    ataxia.defences.secondskin = nil
+    ataxiaTemp.psionSecondskinAttempted = nil
+    local cmd = ataxiaBasher_psionBashing()
+    expect(has(cmd, "weave secondskin")).toBeTrue()
+    expect(has(cmd, "enact upheaval")).toBeTrue()
+  end)
+
+  it("the BOONS row carries the in-tower gate, and the seed knows the boon", function()
+    local function slurp(p) local f = io.open(p); local s = f:read("*a"); f:close(); return s end
+    local row = slurp("src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/103_Earthquake.lua")
+    expect(row:find("if ataxiaBasher and ataxiaBasher.inMnemosyne then psionEarthquake = true end", 1, true) ~= nil).toBeTrue()
+    expect(slurp("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/010_Boon_Seed.lua")
+      :find("upheaval ability deals significant blunt damage", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (test files share one Lua state).
+ataxia.mnemosyne._denizenCount = realDenizenCount
+denizens = nil
+psionEarthquake = nil
+ataxiaBasher.upheavalAt = nil
 getEpoch = realEpoch
 tempTimer = realTempTimer
 psionBloodletter, psionRazorClarity, psionMindbreak, psionPanoply = nil, nil, nil, nil

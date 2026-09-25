@@ -49,6 +49,7 @@ local TICK_DELAY = 0.5 -- on ARRIVAL: let the new room's denizens (Char.Items) l
 local FAST_TICK = 0.15 -- on a DENIZEN change (a kill): denizensHere is already current, so react quickly -- snappier "killed the last mob -> move on"
 local MOVE_TIMEOUT = 5 -- a move that produces no arrival -> retry / unstick
 local MOVE_RETRIES = 1 -- re-send a stalled move this many times before condemning the exit
+local CLAMBER_GRACE = 10 -- a move that started a slow clamber over rubble: wait this long, do not re-send (v4.7.357)
 local GLANCE_TIMEOUT = 1.0 -- a glance that yields no exits line (blind, darkness) -> move anyway
 local WATCHDOG = 30 -- seconds of no progress (no arrival / no denizen change) before a soft nudge
 local HAEMO_MOVE_HP = 90 -- Haemophiliac affix: hold navigation below this HP% (kills bleed thousands)
@@ -1114,7 +1115,8 @@ function M._exploreMove(dir, isRetry)
   -- events arrive inside one move's window; without arming, each advanced the position again.
   if MAP.drArm and MAP.drActive and MAP.drActive() then MAP.drArm(dir) end
   if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
-  M._explMoveT = tempTimer(MOVE_TIMEOUT, function()
+  M.explore.clambered = false
+  M._explMoveOnTimeout = function()
     M._explMoveT = nil
     if not (M.explore.on and M.explore.moving) then return end
     -- Still in the room we left -> the move didn't take.
@@ -1138,7 +1140,8 @@ function M._exploreMove(dir, isRetry)
       if M.swarm and M.swarm.onMoveFailed then pcall(M.swarm.onMoveFailed) end
     end
     M._exploreTick()
-  end)
+  end
+  M._explMoveT = tempTimer(MOVE_TIMEOUT, M._explMoveOnTimeout)
 end
 
 -- Arm the in-flight machinery for a SWARM-TACTICS move whose actual send rides the
@@ -1154,14 +1157,16 @@ function M._tacticalArm(dir, timeout)
   M.explore.tries = 0
   M.explore.iceSlips = 0
   if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
-  M._explMoveT = tempTimer(timeout or MOVE_TIMEOUT, function()
+  M.explore.clambered = false
+  M._explMoveOnTimeout = function()
     M._explMoveT = nil
     if not M.explore.moving then return end
     M.explore.moving = false
     M.explore.tacticalMove = false
     if M.swarm and M.swarm.onMoveFailed then pcall(M.swarm.onMoveFailed) end
     M._scheduleTick()
-  end)
+  end
+  M._explMoveT = tempTimer(timeout or MOVE_TIMEOUT, M._explMoveOnTimeout)
 end
 
 -- Cancel an in-flight move WITHOUT any failure/condemn callback: the swarm module is
@@ -1172,6 +1177,22 @@ function M._disarmMove()
   if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
   M.explore.moving = false
   M.explore.tacticalMove = false
+end
+
+-- RUBBLE: "You begin to slowly clamber over the rubble that blocks your way." (v4.7.357,
+-- trigger mnemosyne/104). Unlike the ice slip the move has NOT failed -- it is happening, slowly --
+-- and the Psion's Earthquake boon now piles rubble on our own exits in every crowded room. Left
+-- alone, MOVE_TIMEOUT (5s) would read a long clamber as a move that never took and RE-SEND it,
+-- restarting the clamber, and after MOVE_RETRIES condemn a real exit (a tactical move would be
+-- handed back to the swarm as failed instead). So the clamber line re-arms the pending timeout for
+-- CLAMBER_GRACE: once per sent move (each arm resets `clambered`), and only for a move of ours in
+-- flight. The timeout itself is unchanged -- if the grace runs out, it does what it always did.
+function M.onClamber()
+  if not (M.explore.moving and M._explMoveT and M._explMoveOnTimeout) then return end
+  if M.explore.clambered then return end
+  M.explore.clambered = true
+  pcall(killTimer, M._explMoveT)
+  M._explMoveT = tempTimer(CLAMBER_GRACE, M._explMoveOnTimeout)
 end
 
 -- "You slip and fall on the ice as you try to leave." An icy room fails the move

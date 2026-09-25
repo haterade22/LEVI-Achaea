@@ -2927,6 +2927,43 @@ function ataxiaBasher_psionEmulationKeepers(sp, eqSpent)
   return ""
 end
 
+-- EARTHQUAKE (v4.7.357, Mnemosyne rare boon, `psionEarthquake`):
+--
+--   "Your emulation upheaval ability deals significant blunt damage to all denizens in the
+--    location when it summons rubble."
+--   Upheaval (Emulation)  ABADMIN ID: 2730 -- Syntax: ENACT UPHEAVAL -- 2.30 seconds of equilibrium
+--   "cracks opening and forming great piles of rubble to block some of the exits from your
+--    location."
+--
+-- A room-wide hit on EQUILIBRIUM, so it rides the round on the equilibrium nothing else took --
+-- after roth, the transcend keeper and the boon keepers (one equilibrium spender per round).
+--
+-- WHAT IT COSTS, counted first this time (v4.7.356's lesson: a per-cast damage number is not a
+-- rotation comparison -- count what the new action delays):
+--   * The round fires when equilibrium AND balance are both back. Upheaval's 2.30s against
+--     deathblow's 2.20s stretches a deathblow round by 0.10s (~5%); flurry (2.60s) not at all.
+--   * RUBBLE ON OUR OWN EXITS. The PvE audit (.claude/classes/psion.md) filed upheaval under "blocks
+--     our own escape routes", and leaving over rubble is a slow clamber ("You begin to slowly
+--     clamber over the rubble that blocks your way."). So only in a CROWD (2+ denizens by default,
+--     `ataxiaBasher.upheavalAt`; one mob is the weave's job), and never below HALF health: the
+--     escape ladder fires at 35%, and piling more rubble on the doors we may need is the last thing
+--     to do on the way down. The explorer gives a clamber time to finish (008 M.onClamber) instead
+--     of re-sending the move.
+--   * Not on a shielded round -- the caller's shielded branch has already returned.
+--
+-- Every round while that holds: the damage comes "when it summons rubble", and there is no captured
+-- line yet saying when a cast stops summoning any.
+local UPHEAVAL_MIN_HP = 50
+
+function ataxiaBasher_psionUpheaval(sp, eqSpent)
+  if not psionEarthquake or eqSpent then return "" end
+  if (tonumber(ataxia.vitals and ataxia.vitals.hpp) or 100) < UPHEAVAL_MIN_HP then return "" end
+  local M = ataxia.mnemosyne
+  local n = (M and M._denizenCount and M._denizenCount()) or 0
+  if n < (tonumber(ataxiaBasher.upheavalAt) or 2) then return "" end
+  return "enact upheaval" .. (sp or ";")
+end
+
 -- WHAT FULL TRANSCENDENCE IS SPENT ON -- and the ONLY time a shatter goes out (v4.7.356).
 --
 -- At full harmony one psionics action costs no equilibrium, though it still REQUIRES equilibrium
@@ -3034,6 +3071,12 @@ function ataxiaBasher_psionBashing()
   -- weavings. Therefore, we should only use PSI Shatter when at 100 transcendence!"). The free one
   -- at full transcendence went at the front of the chain above; that is the only shatter. See
   -- psionTranscendSpend for why the paid one cost more than it earned.
+
+  -- EARTHQUAKE (v4.7.357): the room-wide upheaval on whatever equilibrium is still idle. Rides a
+  -- secondskin round too (secondskin spends balance).
+  local quake = ataxiaBasher_psionUpheaval(sp, eqSpent)
+  if quake ~= "" then eqSpent = true end
+  command = command..quake
 
   -- Secondskin keeper: resistance to ALL damage types; it drops rarely, so spending
   -- one round's balance re-weaving it (3.00s bal -- it REPLACES the swing) is cheap

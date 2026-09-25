@@ -76,6 +76,14 @@ after MOVE_TIMEOUT:
 
 A condemned exit is recorded per-room in `explore.failed` (keyed by canonical `MAP.normDir`) so the sweep never retries a wall forever and never re-picks it.
 
+**Rubble (v4.7.357).** "You begin to slowly clamber over the rubble that blocks your way." means the
+move is happening, slowly -- and the Psion's Earthquake boon now piles rubble on our own exits. Trigger
+`mnemosyne/104_Rubble_Clamber` calls `M.onClamber()`, which kills the pending timeout and re-arms the
+SAME callback for `CLAMBER_GRACE` (10s), once per sent move (`explore.clambered`, reset at each arm),
+and only while a move of ours is in flight. Both `_exploreMove` and `_tacticalArm` store their callback
+in `M._explMoveOnTimeout` for this. Without it the 5s timeout re-sent the step (restarting the clamber)
+and, after `MOVE_RETRIES`, condemned a real exit; a tactical retreat was handed back as failed.
+
 ### `Room.WrongDir` — server-authoritative wall (v4.7.99)
 
 The `MOVE_TIMEOUT` path above is the *fallback*. When the server knows the direction doesn't exist it sends `gmcp.Room.WrongDir` (body = the direction), and `M.onWrongDir(dir)` condemns it **instantly** instead of eating the ~10s timeout+retry: it marks `explore.failed[fromRoom][normDir(dir)] = true`, **prunes the exit from `MAP.rooms[fromRoom].exits`** (so `pathKnown`/relayout stop routing through a dementia-faked exit — the fragmentation behind "nowhere left to patrol"), kills `_explMoveT`, clears `moving`, and `_scheduleTick`s. It only acts on an in-flight explorer move (`explore.on and explore.moving`) and normalises the server's short-form direction (`"n"` → `"north"`). Because `WrongDir` fires *only* for a genuinely nonexistent exit, it never fires for an ice-slip/prone/lag (which keep `onIceSlip`/`MOVE_TIMEOUT`), so condemning outright is safe. Handler registered reload-safe (`M._explWrongDirH`, kill-before-register).

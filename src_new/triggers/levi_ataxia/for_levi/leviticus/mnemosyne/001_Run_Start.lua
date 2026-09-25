@@ -67,6 +67,7 @@ psionBloodletter = false  -- boons reset each run
 psionRazorClarity = false  -- boons reset each run
 psionMindbreak = false  -- boons reset each run
 psionPsiwave = false  -- boons reset each run
+psionEarthquake = false  -- boons reset each run
 dragonMightSycaerunax = false  -- boons reset each run
 dragonRampage = false  -- boons reset each run
 dwFlashforward = false  -- boons reset each run
