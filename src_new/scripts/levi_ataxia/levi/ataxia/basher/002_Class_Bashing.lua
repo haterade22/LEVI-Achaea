@@ -2964,6 +2964,59 @@ function ataxiaBasher_psionUpheaval(sp, eqSpent)
   return "enact upheaval" .. (sp or ";")
 end
 
+-- PROPHET OF CREATION (v4.7.359, legendary boon, `psionProphet`) -- FORESIGHT ON DENIZENS:
+--
+--   "Your foresight ability now works against denizens and causes the next attack against you to
+--    miss."
+--   User: "It should be psi foresight target. No tree or shield that is optional."
+--
+-- In game (the user's log, 2026-09-25) the prediction is simply the denizen's NEXT ATTACK:
+--   "Your prediction comes to pass, and you effortlessly avoid the attack from a halfling
+--    semi-soldier." -- true in under 0.3s, no balance or equilibrium spent, and a cooldown of
+--   "maybe 30 seconds" (refused with "Your mind has not yet recovered enough to pierce the fabric of
+--   time once again.").
+--
+-- So: one free dodge every ~30s, at the FRONT of the round (like the free shatter, in case it
+-- needs equilibrium to execute), shielded rounds included -- a shielded denizen still swings.
+--
+-- THE STUN. The AB: "If your foresight fails however, and the action is not performed, you will be
+-- stunned." Against a denizen the action is its attack, so the risk is a target that dies before it
+-- swings. Hence only while the target is at half health or more, and never when that is unreadable
+-- (`ataxiaBasher_targetHpPct` returns nil rather than guess).
+--
+-- THE COOLDOWN IS STAMPED BY THE GAME, NOT AT BUILD. Rounds are rebuilt every 0.3s and each `queue
+-- addclearfull` REPLACES the entry before it, so a 30s stamp at build would lose the dodge for 30s
+-- whenever the round carrying it was replaced before it fired. The cast line (psion/005) starts the
+-- cooldown; the refusal (psion/006) retries in FORESIGHT_RETRY. The build only takes a short
+-- in-flight hold, so the rounds rebuilt while the cast line is on its way do not repeat it.
+local FORESIGHT_CD, FORESIGHT_RETRY, FORESIGHT_INFLIGHT, FORESIGHT_MIN_HP = 30, 5, 2, 50
+
+function ataxiaBasher_psionForesight(sp)
+  if not psionProphet then return "" end
+  ataxiaTemp = ataxiaTemp or {}
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  if (nowT - (tonumber(ataxiaTemp.psionForesightAt) or 0)) < FORESIGHT_CD then return "" end
+  if (nowT - (tonumber(ataxiaTemp.psionForesightTry) or 0)) < FORESIGHT_INFLIGHT then return "" end
+  local hp = ataxiaBasher_targetHpPct and ataxiaBasher_targetHpPct()
+  if not hp or hp < FORESIGHT_MIN_HP then return "" end
+  ataxiaTemp.psionForesightTry = nowT
+  return "psi foresight " .. target .. (sp or ";")
+end
+
+-- The cast line (trigger psion/005): the cooldown starts now.
+function ataxiaBasher_psionForesightCast()
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.psionForesightAt = (getEpoch and getEpoch()) or os.time()
+end
+
+-- The refusal (trigger psion/006): still recovering, for an unknown remainder -- try again in
+-- FORESIGHT_RETRY rather than waiting out a whole fresh cooldown.
+function ataxiaBasher_psionForesightRefused()
+  ataxiaTemp = ataxiaTemp or {}
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  ataxiaTemp.psionForesightAt = nowT - FORESIGHT_CD + FORESIGHT_RETRY
+end
+
 -- WHAT FULL TRANSCENDENCE IS SPENT ON -- and the ONLY time a shatter goes out (v4.7.356).
 --
 -- At full harmony one psionics action costs no equilibrium, though it still REQUIRES equilibrium
@@ -2997,6 +3050,10 @@ function ataxiaBasher_psionBashing()
   -- bash, so it becomes the primary (user-directed). Straight verb swap mirroring
   -- bmShatteredStar; psi shatter keeps its transcendence slot.
   local weave = psionPanoply and ("weave flurry "..target) or ("weave deathblow "..target)
+
+  -- PROPHET OF CREATION (v4.7.359): the free foresight dodge goes at the very front -- see
+  -- ataxiaBasher_psionForesight.
+  command = command..ataxiaBasher_psionForesight(sp)
 
   -- THE FREE SHATTER GOES FIRST (v4.7.353). User: "it does need EQ and Balance to execute but
   -- costs no EQ. Just requires it." A queued chain runs back to back, so anything ahead of it that

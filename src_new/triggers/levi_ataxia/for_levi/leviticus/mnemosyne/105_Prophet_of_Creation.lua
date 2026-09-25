@@ -39,6 +39,8 @@ patterns:
 --   "Your foresight ability now works against denizens and causes the next attack against you to
 --    miss."
 --
--- PSI FORESIGHT <target> <TREE|SHIELD>. Only inside the tower (the gate every boon row carries since
+-- The Psion round then opens with `psi foresight <target>` whenever it is off its ~30s cooldown and
+-- the target is at half health or more (v4.7.359, `ataxiaBasher_psionForesight`, basher/002).
+-- Only inside the tower (the gate every boon row carries since
 -- v4.7.351). Cleared on Mnemosyne run start/end. Type BOONS to re-sync if needed.
 if ataxiaBasher and ataxiaBasher.inMnemosyne then psionProphet = true end
