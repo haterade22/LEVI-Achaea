@@ -267,13 +267,43 @@ notes: "Apostate is affliction/mana-based, not limb-based"
 ```
 
 ## Bashing (PvE)
-```yaml
-attack_command: "ORDER BAALZADEEN ATTACK <target>"
-attack_skill: Apostasy
-battlerage_abilities:
-  - baalzadeen_attack: "Demon damage"
-  - soulspear: "Magic damage"
+
+The basher's round (`ataxiaBasher_apostateBashing`, basher/002; the riders are prepended by
+`ataxiaBasher_assembleAttack`, basher/001):
+
 ```
+[belch;] [soulstorm <t>;]               <- equilibrium riders, boon-gated (basher/014)
+[deathaura;] [summon hands of the grave;] <- boon-gated (Necrotic Aura / Army of the Dead)
+[<battlerage>;] deadeyes <t> bleed bleed  <- the balance swing
+```
+
+**Balance vs equilibrium** (user, 2026-09-24: *"Soulstorm takes eq and deadeyes take balance"*): the
+swing spends balance; every necromancy rider spends equilibrium, so they ride the SAME round. They do
+not gate each other either (user: *"belch doesnt matter, shouldnt be a criteria. They are two seperate
+attacks"*).
+
+| Boon | Flag | What the basher does |
+|---|---|---|
+| Dead Breath | `mnemDeadBreath` | `belch` at 2+ denizens, 5s; 200 mana + 10% max, 50% mana floor; a FOULED room ("...cough and sputter...", trigger 779) is held 15s and forgotten on leaving |
+| Deathtempest | `mnemDeathtempest` | `soulstorm <t>` ONCE PER DENIZEN (profane is a debuff on the mob); confirmed by 780, "still profanes" (781) = already done |
+| Army of the Dead | `infArmyOfDead` | `summon hands of the grave` once per room at 2+ denizens (1 with Resourceful/Graveborn); 350 mana + 40% floor (25% with Graveborn); ONE retry if the cast line (782) never confirmed; the room record is cleared at each ripple (room numbers are reused) |
+| Graveborn (combo: AotD + Maliceborn + Necrotic Aura) | `mnemGraveborn` | gravehands in EVERY room: the hands become a 15s engine while we stand in them; essence floor 10% (Maliceborn refunds 5% per kill) |
+| Necrotic Aura | `infNecroticAura` | keeps the `deathaura` defence up, every branch (a defence is not an attack) |
+
+**Open question:** the round can carry `summon hands of the grave` (3.00s of equilibrium) behind a
+`belch` (4.00s). Belch + soulstorm are confirmed to land together; belch + gravehands is not. If the
+summon is refused on a belch round, its one-shot retry (6s later) hides it -- a log of a crowded room
+with both boons would settle it.
+
+**The lines all wrap.** The user's server wraps at 119-124 columns, and three of these lines are
+longer: the gravehands cast (148), the belch refusal (128), the soulstorm cast (114 + the mob's name).
+Each trigger matches an EARLY first-person phrase (v4.7.351); the gravehands one never fired before
+that, so every room's summon was cast twice. Highlights: belch goldenrod, soulstorm medium_orchid,
+gravehands cadet_blue, each with a short anchored tail pattern so the wrapped row is coloured too.
+
+**Our Baalzadeen** is an own-denizen (`ataxiaBasher.ownDenizens`) -- it was in the default seed but not
+the backfill until v4.7.348, and it inflated the swarm count. Tests: `test_basher_apostate_riders.lua`,
+`test_basher_deadbreath.lua`, `test_trigger_wrap.lua`.
 
 ## Fighting Against This Class
 ```yaml

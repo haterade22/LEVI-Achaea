@@ -15,10 +15,12 @@ Automated PvE hunting system for Achaea. Handles target selection, auto-learning
 | `basher/006_Pariah_Cooldown.lua` | Pariah swarm devour cooldown |
 | `basher/007_Mob_Damage_DB.lua` | SQLite per-mob damage tracking |
 | `basher/008_Denizen_State.lua` | Per-denizen combat state (`ataxiaTemp.denizenState[id]`) + `ataxiaBasher_BR_AFFS` battlerage-affliction model; PvP-inert. Fed by `denizen_attacks_misc_lines/011-020` (charm/recklessness/aeon/weakness/stun applied+ended), the `010` HP feed / `003` sync. Drives the `ataxiaBasher_blademasterBattlerage` rotation (in `001`). Stages 1-2 of the [basher overhaul](denizen-lines-catalog.md) |
-| `genrunning/001_Bashing_API.lua` | Path generation, death/PvP handlers, events |
+| `basher/013_Mounts.lua` | Our mounts: learned by ID from the mounts listing and skipped as targets (never by name -- "a massive dire wolf" is also a real denizen); VAULT makes that mount active; the MOUNTED belief (`ataxiaTemp.mounted`) and the jump verb (`mountjump` vs `leap`), with both refusal recoveries (v4.7.335-351) |
+| `basher/014_Dead_Breath.lua` | The necromancy boon riders: BELCH (Dead Breath) and SOULSTORM (Deathtempest), both equilibrium riders on any class's round (v4.7.336-343) |
+| `genrunning/001_Bashing_API.lua` | Path generation, death/PvP handlers, events; `onDeath` also forgets the mount belief (v4.7.351) |
 | `genrunning/002_search_targets.lua` | Target selection, stormhammer, legend deck |
 | `genrunning/003_Engaged_Disengage.lua` | Enable/disable handlers, auto-rotation |
-| `genrunning/004_Autobashing_Functions.lua` | Attack gates, throttle, patterns loop, manual/areabash toggle |
+| `genrunning/004_Autobashing_Functions.lua` | Attack gates, throttle, patterns loop, manual/areabash toggle; `ataxiaBasher_requeueNow` re-queues the round when the state it was built from changes (v4.7.352) |
 | `010_Prompt_Running.lua` | Prompt dispatch (calls basher functions) |
 | `update_stuff/002_ataxia_Room_Update.lua` | Room change handler, flee return detection, Mnemosyne no-flee flag clear |
 | `update_stuff/003_ataxia_RoomContents_Update.lua` | Denizen list population, auto-learn (skips own denizens) |

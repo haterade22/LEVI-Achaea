@@ -2,6 +2,47 @@
 
 ---
 
+## 2026-09-25 - The free shatter goes first; every document brought up to date (v4.7.353)
+
+### The free shatter requires equilibrium
+
+User: *"it does need EQ and Balance to execute but costs no EQ. Just requires it."*
+
+v4.7.352 believed the wiki -- a psionics action at full transcendence works "while off
+equilibrium" -- and put the free shatter AFTER the round's equilibrium spender (roth, psi transcend,
+a keeper). A queued chain runs back to back, so the free shatter would have found no equilibrium to
+require. It now goes FIRST: it needs the equilibrium, leaves it, and whatever follows can still spend
+it. Which also makes the double shatter real: at full transcendence with nothing else wanting
+equilibrium, the paid shatter follows the free one -- the first plain `psi shatter` takes the
+transcendence (the user's log shows "fall out of their transcendent state" right after it), the second
+is an ordinary 3.10s cast. On a shielded round the free shatter is held, and transcendence waits.
+
+3 mutants, all killed: the v4.7.352 order, ignoring the shield, and no paid shatter at full.
+
+### Every document brought up to date
+
+User: *"update all documentation with everything we did and found and learned in this massive
+session."* The CHANGELOG, CLAUDE.md and memory had been kept current release by release (v4.7.326 to
+here); what lagged were the per-class knowledge base, the project docs and the contributor docs.
+
+| Document | What it gained |
+|---|---|
+| `.claude/classes/psion.md` | "The round today": chain order, one-equilibrium rule, shatter as the main tool, the free shatter first, boons table, keeper holds, transcendence tracking and its triggers; audit status |
+| `.claude/classes/apostate.md` | The PvE section rewritten from a stale three-line stub: the round, balance vs equilibrium, the five necromancy boons, the wrapped lines, the Baalzadeen |
+| `.claude/classes/infernal.md` | Graveborn on the Tyranny path, and why the retry and mana gate are Apostate-only |
+| `.claude/projects/basher/README.md`, `01-architecture.md` | `013_Mounts`, `014_Dead_Breath`, `requeueNow`; the one-entry round and its equilibrium rule; mounts and the jump verb |
+| `.claude/projects/mnemosyne/03-parsing-triggers.md` | Triggers 096-101; the boon registry now wired at both ends (the "half-wired" section is history) |
+| `README.md` | Mounts, the Baalzadeen, the Psion and Apostate boons, Rimewrought/Famine, the reload re-latch |
+| `GETTING_STARTED.md`, `CONTRIBUTING.md` | The two CI lint checks; the test conventions, each learned from a bug this week (shared Lua state, break-back, patterns not file text, the wrap) |
+| `.claude/AGENTS.md` | "Pitfalls learned 2026-09-19 -- 2026-09-25": twelve cross-cutting lessons |
+| memory | `psion.md`, `build-system.md`, `bug-patterns.md`, the index |
+
+### Files
+
+- `basher/002_Class_Bashing.lua`; `tests/test_basher_psion_boons.lua`; the documents above.
+
+---
+
 ## 2026-09-25 - Psi shatter is the main tool, and the round catches transcendence (v4.7.352)
 
 The user asked for a recommended Psion rotation, then pasted a log and two lines that changed it:

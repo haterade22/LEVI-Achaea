@@ -425,28 +425,48 @@ describe("psi shatter on every idle equilibrium", function()
     expect(has(cmd, "psi shatter")).toBeFalse()
   end)
 
-  it("at FULL transcendence it is free, so it rides even when a keeper took the equilibrium", function()
+  -- v4.7.353, user: "it does need EQ and Balance to execute but costs no EQ. Just requires it."
+  -- So the free shatter must come BEFORE anything that spends equilibrium -- v4.7.352 put it after
+  -- the keeper, where it would have found none.
+  it("at FULL transcendence the free shatter goes FIRST, ahead of what spends equilibrium", function()
     reset()
     psionRazorClarity = true
     ataxiaTemp.transcendence = 100
     local cmd = ataxiaBasher_psionBashing()
-    expect(has(cmd, "enact clarity")).toBeTrue()
-    expect(has(cmd, "psi shatter 44001")).toBeTrue()
+    expect(cmd:find("psi shatter 44001", 1, true)).toBe(1)
+    expect(cmd:find("psi shatter", 1, true) < cmd:find("enact clarity", 1, true)).toBeTrue()
+    local _, n = cmd:gsub("psi shatter", "")
+    expect(n).toBe(1)             -- the keeper took the equilibrium: no paid one this round
   end)
 
-  it("a roth round carries no paid shatter -- but a free one still goes", function()
+  it("a roth round carries no paid shatter -- but a free one still goes, ahead of roth", function()
     reset()
     ataxia.vitals.hpp = 30
     expect(has(ataxiaBasher_psionBashing(), "psi shatter")).toBeFalse()
     reset()
     ataxia.vitals.hpp = 30
     ataxiaTemp.transcendence = 100
-    expect(has(ataxiaBasher_psionBashing(), "psi shatter")).toBeTrue()
+    local cmd = ataxiaBasher_psionBashing()
+    expect(cmd:find("psi shatter", 1, true) < cmd:find("enact roth", 1, true)).toBeTrue()
   end)
 
-  it("never on a shielded round -- the shield comes first", function()
+  -- The first plain shatter takes the transcendence; the second is an ordinary equilibrium cast.
+  it("full transcendence with idle equilibrium is TWO shatters: free, then paid", function()
+    reset()
+    ataxiaTemp.transcendence = 100
+    local cmd = ataxiaBasher_psionBashing()
+    local _, n = cmd:gsub("psi shatter 44001", "")
+    expect(n).toBe(2)
+    expect(cmd:find("psi shatter", 1, true)).toBe(1)
+  end)
+
+  it("never on a shielded round -- the shield comes first, and transcendence waits", function()
     reset()
     ataxiaBasher.shielded = true
+    expect(has(ataxiaBasher_psionBashing(), "psi shatter")).toBeFalse()
+    reset()
+    ataxiaBasher.shielded = true
+    ataxiaTemp.transcendence = 100
     expect(has(ataxiaBasher_psionBashing(), "psi shatter")).toBeFalse()
   end)
 
@@ -459,12 +479,12 @@ describe("psi shatter on every idle equilibrium", function()
     expect(has(cmd, "psi shatter 44001")).toBeTrue()
   end)
 
-  it("exactly one shatter a round", function()
-    for _, t in ipairs({ 0, 50, 100 }) do
+  it("one shatter below full transcendence, two at it (with equilibrium idle)", function()
+    for _, c in ipairs({ { 0, 1 }, { 50, 1 }, { 99, 1 }, { 100, 2 } }) do
       reset()
-      ataxiaTemp.transcendence = t
+      ataxiaTemp.transcendence = c[1]
       local _, n = ataxiaBasher_psionBashing():gsub("psi shatter", "")
-      expect(n).toBe(1)
+      expect(n).toBe(c[2])
     end
   end)
 end)
