@@ -33,8 +33,15 @@ colorTriggerBgColor: '#000000'
 patterns:
 - pattern: Your body and mind fall out of their transcendent state.
   type: 3
+- pattern: Your body and mind are no longer in harmony.
+  type: 3
 ]]--
 
+-- THE BOTTOM OF THE DECAY LADDER (v4.7.349, user's paste). "Your body and mind are no longer in
+-- harmony." is what the game prints after the last 10-percent step, and nothing was listening --
+-- so the local count stopped at whatever the final decay line said instead of reaching zero.
+-- Harmless next to the wrap bug fixed in 001 (the value was low either way), but a counter that
+-- never reaches the state it is counting towards is a counter we cannot reason about.
 ataxiaTemp.transcendence = 0
 if ataxiaBasher.enabled and not ataxiaBasher.manual then
 	deleteFull()

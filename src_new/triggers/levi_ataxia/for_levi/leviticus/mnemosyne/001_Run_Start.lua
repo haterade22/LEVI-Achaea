@@ -58,6 +58,9 @@ mnemBerserkersEdge = false  -- boons reset each run
 -- put it back, whether or not the boon's own confirmed-end revert already ran.
 if ataxiaBasher_berserkersEdgeRevert then ataxiaBasher_berserkersEdgeRevert() end
 psionPanoply = false  -- boons reset each run
+psionBloodletter = false  -- boons reset each run
+psionRazorClarity = false  -- boons reset each run
+psionMindbreak = false  -- boons reset each run
 dragonMightSycaerunax = false  -- boons reset each run
 dragonRampage = false  -- boons reset each run
 dwFlashforward = false  -- boons reset each run
