@@ -110,3 +110,64 @@ describe("ataxiaBasher_addOwnDenizen — add + auto-purge", function()
   end)
 
 end)
+
+-- =====================================================================================
+-- THE SEEDED DEFAULT WAS NEVER BACKFILLED (v4.7.348)
+--
+-- User: "the denizens in the room should not count our Baalzadeen as Apostate! It is thinking
+-- it is a swarm."
+--
+-- `baalzadeen` and `falcon` have been in the DEFAULT list for as long as it has existed -- and
+-- the default only runs when `ownDenizens` is nil, i.e. on a fresh install. Every save older
+-- than the seed kept a list without them and nothing ever repaired it, because the backfill loop
+-- beside it only ever carried `ashbeast` and `hyena`.
+--
+-- The cost is not "our demon might get hit". `isOwnDenizen` is what `M._denizenCount` and
+-- `M._roomHasDenizens` filter through, so a missing keyword INFLATES the swarm count -- and the
+-- threshold it inflates past is what fires the pull, the funnel and the icewall. One pet beside
+-- two denizens reads as three, which is the default threshold exactly.
+describe("the pet backfill repairs a legacy save", function()
+  -- The shipped list, read from the file rather than restated here: a test that keeps its own
+  -- copy of the list cannot notice the copy in the source going stale.
+  local function shippedPets()
+    local f = io.open("src_new/scripts/levi_ataxia/levi/ataxia/002_Check_For_Any_Missing_Variables.lua")
+    local src = f:read("*a"); f:close()
+    local list = src:match('for _, pet in ipairs%(%{(.-)%}%)')
+    local pets = {}
+    for w in (list or ""):gmatch('"([%w_ ]+)"') do pets[#pets + 1] = w end
+    return pets
+  end
+
+  -- What the loop does, run against a save from before the seed existed.
+  local function backfill(saved)
+    for _, pet in ipairs(shippedPets()) do
+      if not table.contains(saved, pet) then table.insert(saved, pet) end
+    end
+    return saved
+  end
+
+  it("ships baalzadeen in the backfill, not only in the seed", function()
+    expect(table.contains(shippedPets(), "baalzadeen")).toBeTrue()
+    expect(table.contains(shippedPets(), "falcon")).toBeTrue()
+  end)
+
+  it("adds it to a save that predates the seed", function()
+    local saved = backfill({ "ashbeast", "hyena" })
+    expect(table.contains(saved, "baalzadeen")).toBeTrue()
+    ataxiaBasher.ownDenizens = saved
+    expect(ataxiaBasher_isOwnDenizen("a towering baalzadeen")).toBeTrue()
+  end)
+
+  it("is idempotent -- a repaired save does not grow every load", function()
+    local saved = backfill(backfill({ "ashbeast", "hyena" }))
+    local n = 0
+    for _, p in ipairs(saved) do if p == "baalzadeen" then n = n + 1 end end
+    expect(n).toBe(1)
+  end)
+
+  it("keeps whatever the user added themselves", function()
+    local saved = backfill({ "my war hound" })
+    expect(table.contains(saved, "my war hound")).toBeTrue()
+    expect(table.contains(saved, "baalzadeen")).toBeTrue()
+  end)
+end)

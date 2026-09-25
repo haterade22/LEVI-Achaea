@@ -154,13 +154,28 @@ function ataxiaCheckForMissing()
 
 	-- Backfill pets that appear in "Denizens Here" and must never be attacked or
 	-- auto-learned. New entries land here because existing saves keep the old default:
-	--   ashbeast -- the Magi Artificing summon ("a blazing ashbeast")
-	--   hyena    -- the Infernal pet ("a daemonic hyena"). It was being TARGETED (seen
-	--              live at 4% health on the mob bar), and a mauled pet turns on its
-	--              owner: "A daemonic hyena snarls as she hurls herself at you...".
-	for _, pet in ipairs({"ashbeast", "hyena"}) do
+	--   ashbeast   -- the Magi Artificing summon ("a blazing ashbeast")
+	--   hyena      -- the Infernal pet ("a daemonic hyena"). It was being TARGETED (seen
+	--                live at 4% health on the mob bar), and a mauled pet turns on its
+	--                owner: "A daemonic hyena snarls as she hurls herself at you...".
+	--   baalzadeen -- the Apostate/Infernal demon, and falcon the knightly bird.
+	--
+	-- THOSE LAST TWO WERE IN THE DEFAULT SEED AND NEVER IN THIS LOOP (v4.7.348, user: "the
+	-- denizens in the room should not count our Baalzadeen as Apostate! It is thinking it is
+	-- a swarm"). The seed only runs when `ownDenizens` is nil -- a fresh install -- so every
+	-- save older than it kept a list without them, and nothing ever repaired it. The list is
+	-- read by `isOwnDenizen`, which `M._denizenCount` and `M._roomHasDenizens` both filter
+	-- through, so a missing keyword is not merely "our demon might get hit": it INFLATES the
+	-- swarm count, and the swarm threshold is what fires the pull, the funnel and the icewall.
+	-- One pet standing beside two denizens reads as three, which is the default threshold.
+	--
+	-- A real denizen that ever collides with one of these is exempted with
+	-- `bash notmine add <name>` rather than by loosening the keyword.
+	for _, pet in ipairs({"ashbeast", "hyena", "baalzadeen", "falcon"}) do
 		if ataxiaBasher.ownDenizens and not table.contains(ataxiaBasher.ownDenizens, pet) then
 			table.insert(ataxiaBasher.ownDenizens, pet)
+			ataxiaEcho("Pet <white>" .. pet .. "<NavajoWhite> added to your own denizens -- never "
+				.. "targeted, and never counted toward a swarm.")
 		end
 	end
 

@@ -62,6 +62,7 @@ dragonMightSycaerunax = false  -- boons reset each run
 dragonRampage = false  -- boons reset each run
 dwFlashforward = false  -- boons reset each run
 infArmyOfDead = false  -- boons reset each run
+mnemGraveborn = false  -- boons reset each run
 infDaemonJaws = false  -- boons reset each run
 infIndiscriminate = false  -- boons reset each run
 infNecroticAura = false  -- boons reset each run

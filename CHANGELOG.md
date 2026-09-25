@@ -2,6 +2,102 @@
 
 ---
 
+## 2026-09-25 - Graveborn, and the Baalzadeen that read as a swarm (v4.7.348)
+
+Three changes, all Apostate PvE, and two of them are the same defect twice.
+
+### 1. Graveborn -- gravehands in EVERY room
+
+```
+Graveborn:
+Rarity:       rare        Category: Offence        Can echo: No
+Unlocked By:  Army of the Dead, Maliceborn, and Necrotic Aura
+
+While standing in gravehands, your attacks will command them to ravage your enemies,
+damaging all denizens in your location. This can only trigger every 15 seconds.
+
+"Without your failure. Without your weakness. With pain."
+```
+
+User: *"We need to ensure we gravehands every room to maximize this."*
+
+The crowd gate existed because the summon was **one AoE hit** -- a single denizen did not repay
+the cast. Graveborn changes what is being bought: the hands become an **engine** that fires every
+15 seconds for as long as we stand in them and keep swinging. A single denizen that takes 30
+seconds to kill is two free room-wide hits, and a room we skip is an engine we never built.
+
+So with Graveborn held, one denizen is enough. Two other gates could still silently skip a room,
+and both move with it:
+
+| gate | standing | with Graveborn | why |
+|---|---|---|---|
+| denizens | 2 | **1** | the hands repay themselves over the fight, not on the cast |
+| life essence | 20% | **10%** | Graveborn is *unlocked by* **Maliceborn** ("slaying a denizen will now restore 5% of your life essence") -- holding the combo means holding the refund, and a kill pays back more than three casts |
+| mana | 40% | **25%** | skipping a room used to cost one hit; it now costs every proc that room would have fired |
+
+**Lowered, never waived.** Mana is the curing pool and essence is the survival buffer; no bashing
+nicety is worth arriving at the next room dry, and a test pins that. An explicit
+`ataxiaBasher.infTyrannyAt` / `infEssenceFloor` / `gravehandsManaFloor` still beats the boon in
+both directions.
+
+Flag `mnemGraveborn`, wired in all five places a boon flag has to be: the `BOON_FLAGS` catalogue,
+the run-start reset, the confirmed run-end reset, the claim line, and a BOONS-list row (trigger
+`mnemosyne/098`). Plus the combo recipe -- rare / Offence / `maxEchoes = 0` / the three components
+the game named -- which the fill-only merge also turns into its seed entry.
+
+### 2. Necrotic Aura was inert on the Apostate too
+
+The identical defect to v4.7.347, found by reading what Graveborn is unlocked by.
+`ataxiaBasher_infDeathaura` gates on its own boon flag and on the defence being down, and
+DEATHAURA is a Necromancy defence the Apostate has -- **nothing in it is Infernal**. It was simply
+never called from `ataxiaBasher_apostateBashing`. An Apostate on this combo path holds Necrotic
+Aura *by definition*, so the boon the combo requires was doing nothing on the class that needs it.
+
+It rides **both** branches, shielded or not: raising a defence is not an attack, and a shield on
+the denizen has nothing to do with whether our own aura is up.
+
+*Two for two. When a helper is named for one class but its body is not, check every round that
+should be calling it -- the name is not the gate, the call site is.*
+
+### 3. The Baalzadeen was being counted as a swarm
+
+User: *"the denizens in the room should not count our Baalzadeen as Apostate! It is thinking it
+is a swarm."*
+
+`baalzadeen` and `falcon` have been in the **default** `ownDenizens` list for as long as it has
+existed. The default only runs when `ownDenizens` is nil -- a fresh install -- and the backfill
+loop beside it, which exists precisely because *"existing saves keep the old default"*, only ever
+carried `ashbeast` and `hyena`. So every save older than the seed kept a list without them and
+nothing ever repaired it.
+
+**The cost is not "our demon might get hit".** `isOwnDenizen` is what `M._denizenCount` and
+`M._roomHasDenizens` filter through, so a missing keyword **inflates the swarm count** -- and the
+threshold it inflates past is what fires the pull, the funnel and the icewall. One pet standing
+beside two denizens reads as three, which is the default threshold exactly. The user was watching
+a two-mob room run the full swarm tactic.
+
+Both are now in the backfill, with a one-time echo so the repair is visible. A real denizen that
+ever collides is exempted with `bash notmine add <name>` rather than by loosening the keyword.
+
+*A seeded default and a backfill are two different lists, and only one of them runs for an
+existing user. Adding to the seed alone ships a fix nobody receives.*
+
+### Verification
+
+2349 tests pass (21 new). **19 mutants, all killed, no survivors** -- including one for each
+direction of every floor (not dropped / dropped to zero), one per branch of the Apostate round,
+and one per wiring site of the boon flag.
+
+### Files
+
+- `basher/002_Class_Bashing.lua`, `002_Check_For_Any_Missing_Variables.lua`,
+  `mnemosyne/004_Parsers.lua`, `mnemosyne/010_Boon_Seed.lua`;
+  triggers `mnemosyne/001_Run_Start.lua`, `mnemosyne/098_Graveborn.lua` (new);
+  alias `mnemosyne/002_Boon_Claim.lua`; `tests/test_basher_apostate_riders.lua`,
+  `tests/test_basher_owndenizens.lua`; `CHANGELOG.md`, `CLAUDE.md`, memory.
+
+---
+
 ## 2026-09-24 - Army of the Dead reaches the Apostate (v4.7.347)
 
 User, pasting the boon, the ability and the two lines it prints: *"For Apostate"*.

@@ -252,6 +252,7 @@ function M.onRunEnd()
   dragonRampage = false -- boons gone on a confirmed run-end
   dwFlashforward = false -- boons gone on a confirmed run-end
   infArmyOfDead = false -- boons gone on a confirmed run-end
+  mnemGraveborn = false -- ...and the gravehands go back to being worth a crowd (v4.7.348)
   infDaemonJaws = false -- boons gone on a confirmed run-end
   infIndiscriminate = false -- boons gone on a confirmed run-end
   infNecroticAura = false -- boons gone on a confirmed run-end
@@ -1279,6 +1280,7 @@ end
 M.BOON_FLAGS = {
   ["Dead Breath"]          = "mnemDeadBreath",
   ["Deathtempest"]         = "mnemDeathtempest",
+  ["Graveborn"]            = "mnemGraveborn",
   ["Vitalising Tincture"]  = "mnemVitalisingTincture",
   ["Font of Life"]         = "mnemFontOfLife",
   ["Shadow Tempo"]         = "mnemShadowTempo",

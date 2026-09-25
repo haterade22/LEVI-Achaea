@@ -81,6 +81,10 @@ if matches[2]:lower():find("flashforward") then dwFlashforward = true end
 -- Army of the Dead: SUMMON HANDS OF THE GRAVE also damages every denizen in the room;
 -- the Infernal basher casts it at 2+ denizens.
 if matches[2]:lower():find("army of the dead") then infArmyOfDead = true end
+-- Graveborn (the combo of Army of the Dead + Maliceborn + Necrotic Aura): while we STAND in
+-- gravehands our attacks make them ravage the room every 15s. That turns the summon from a
+-- one-off nuke into a per-room engine, so the basher stops holding it back for a crowd.
+if matches[2]:lower():find("graveborn") then mnemGraveborn = true end
 -- Daemon Jaws: hyena maul cooldown -66%; shrinks the maul safety timer to match.
 if matches[2]:lower():find("daemon jaws") then infDaemonJaws = true end
 -- Indiscriminate: ARC works on denizens; the Infernal basher swings the room-wide arc
