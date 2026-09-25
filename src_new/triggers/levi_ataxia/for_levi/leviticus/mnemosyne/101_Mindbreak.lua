@@ -38,12 +38,10 @@ patterns:
 --
 --   "Your psionics shatter ability deals 500% increased damage."
 --
--- It changes no ROTATION, and since v4.7.352 that is for a better reason. v4.7.349 sent shatter
--- only at full transcendence and noted that if it turned out usable below that at an equilibrium
--- price, this flag would be the switch. The user then pasted the AB block (3.10s of
--- equilibrium, works on denizens) and the answer was not a switch: shatter is the main
--- equilibrium tool WITH OR WITHOUT this boon -- it out-damages a deathblow on a channel the weaves
--- leave idle. Mindbreak multiplies what is already on every idle equilibrium.
+-- It changes no ROTATION. Shatter goes out once per full transcendence, free, at the front of the
+-- round -- and only then (v4.7.356, user: "we should only use PSI Shatter when at 100
+-- transcendence!"; v4.7.352-355 also spent idle equilibrium on it, which held the weaves back).
+-- Mindbreak multiplies that one shatter.
 --
 -- The flag is still worth latching: the boon advisor scores what we hold.
 --

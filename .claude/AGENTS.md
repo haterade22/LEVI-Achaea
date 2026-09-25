@@ -1,6 +1,6 @@
 # Agent Instructions for LEVI-Achaea Combat System
 
-## Pitfalls learned 2026-09-19 -- 2026-09-25 (v4.7.326 -- v4.7.353)
+## Pitfalls learned 2026-09-19 -- 2026-09-25 (v4.7.326 -- v4.7.356)
 
 - **Count a game line before you anchor on it.** The author's server wraps at 119-124 columns;
   a longer line reaches Mudlet as separate rows, and a pattern that runs past the break -- or a
@@ -33,6 +33,12 @@
   Gravehands' AB block says "3.00 seconds of equilibrium"; in game it takes BALANCE, so the Apostate
   summon collided with the deadeyes swing for seven releases (v4.7.354). The AB block said shatter was
   a 3.10s-equilibrium action usable any time; the package had only ever used it at full transcendence.
+- **A per-cast damage comparison is not a rotation comparison.** v4.7.352 made a paid Psion shatter
+  "the main tool" on every idle equilibrium because one Mindbreak shatter out-hit single deathblows.
+  But the queued round waits for equilibrium AND balance, so the 3.10s shatter held every weave back
+  -- and the weaves are what BUILD transcendence, which paid for the free shatters. The user: *"you
+  keep using Psi shatter when we should be using weavings"* (reversed v4.7.356). Before adding an
+  action to the round, count what it delays and what the delayed action was feeding.
 - **A belief that must not survive a reload lives in `ataxiaTemp`.** `ataxiaBasher` and `ataxia` are
   saved; a saved `mounted = true` would outlive the reload that dismounted us.
 - **Pick a free version number AFTER fetching main.** A concurrent PR took v4.7.336 while a feature was

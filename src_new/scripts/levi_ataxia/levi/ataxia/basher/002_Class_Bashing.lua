@@ -2927,30 +2927,23 @@ function ataxiaBasher_psionEmulationKeepers(sp, eqSpent)
   return ""
 end
 
--- WHAT FULL TRANSCENDENCE IS SPENT ON (v4.7.352). At full harmony one psionics action costs no
--- equilibrium -- though it still REQUIRES equilibrium and balance to execute (user, v4.7.353: "it
--- does need EQ and Balance to execute but costs no EQ. Just requires it"; the wiki's "while off
--- equilibrium" was wrong). The user: "Psi Shatter is the main tool to use unless we have other
--- boons with full transcendence." So it is shatter -- and this is the ONE place a future boon that
--- makes another psionics action better at full transcendence would change it.
--- THE PSION'S EQUILIBRIUM ATTACK (v4.7.355): psi shatter -- or PSI RADIATE with PSIWAVE.
+-- WHAT FULL TRANSCENDENCE IS SPENT ON -- and the ONLY time a shatter goes out (v4.7.356).
 --
---   Psiwave:  "Your psionics radiate ability now deals magic damage to all denizens in your
---              location."
---   Radiate (Psionics)  ABADMIN ID: 2714 -- Syntax: PSI RADIATE  -- 4.00 seconds of equilibrium
---              "knocking all that stand in your location off their feet: friend and foe alike."
+-- At full harmony one psionics action costs no equilibrium, though it still REQUIRES equilibrium
+-- and balance to execute (user, v4.7.353: "it does need EQ and Balance to execute but costs no EQ.
+-- Just requires it"). That action is `psi shatter <target>` -- or, with PSIWAVE ("Your psionics
+-- radiate ability now deals magic damage to all denizens in your location"), `psi radiate` (AB 2714,
+-- no target; user, v4.7.355: "When we have this boon please use this instead of shatter").
 --
--- User: "When we have this boon please use this instead of shatter." So one switch covers every
--- place shatter goes: the paid equilibrium attack AND the free full-transcendence action (radiate is
--- a psionics ability too). Unconditional by the user's word -- including a single denizen, and even
--- with Mindbreak held (which multiplies shatter, now unused).
-local function psionEqAttack(sp)
+-- ONLY here. v4.7.352-355 also sent a PAID shatter (3.10s of equilibrium) on every idle
+-- equilibrium, and the user: "you keep using Psi shatter when we should be using weavings.
+-- Therefore, we should only use PSI Shatter when at 100 transcendence!" The queued round needs
+-- equilibrium AND balance to fire, so a paid shatter every round held every weave back to
+-- shatter's equilibrium -- and the weaves are what BUILD transcendence, so it slowed the free
+-- shatters too. The weave is the rotation; this is the reward for keeping it going.
+local function psionTranscendSpend(sp)
   if psionPsiwave then return "psi radiate" .. sp end
   return "psi shatter " .. target .. sp
-end
-
-local function psionTranscendSpend(sp)
-  return psionEqAttack(sp)
 end
 
 function ataxiaBasher_psionBashing()
@@ -2974,10 +2967,7 @@ function ataxiaBasher_psionBashing()
   -- v4.7.352 put it after all of them, believing the wiki's "while off equilibrium". At the FRONT it
   -- needs the equilibrium, leaves it, and whatever comes next can still spend it.
   --
-  -- Which is also the second shatter: at full transcendence with nothing else wanting equilibrium,
-  -- the paid shatter below follows this one on the same round -- the first plain `psi shatter`
-  -- takes the transcendence (the user's log: "Your body and mind fall out of their transcendent
-  -- state" right after it), so the second is an ordinary 3.10s-equilibrium cast.
+  -- The round is then exactly the user's: "PSI Shatter target;Weave deathblow target".
   --
   -- Held on a shielded round: the shield comes first, and transcendence waits for the round that
   -- can use it.
@@ -3016,9 +3006,9 @@ function ataxiaBasher_psionBashing()
   -- shielded branch on purpose: raising a defence is not an attack, and a shield on the denizen
   -- has nothing to do with whether our own clarity is up. They wait whenever roth or transcend
   -- took this round's equilibrium -- and roth hands us both of them free anyway.
-  -- ...and a keeper that went DOES spend it (v4.7.352): with shatter now the last call on idle
-  -- equilibrium, a keeper that did not mark the round would have been chained with a shatter --
-  -- the very collision v4.7.351 removed. The shatter tests caught it on the first run.
+  -- ...and a keeper that went DOES spend it (v4.7.352, when a paid shatter followed). Nothing
+  -- below reads eqSpent since v4.7.356 dropped that shatter -- but anything added later that
+  -- spends equilibrium must, or it collides with the keeper the way v4.7.351 fixed.
   local keep = ataxiaBasher_psionEmulationKeepers(sp, eqSpent)
   if keep ~= "" then eqSpent = true end
   command = command..keep
@@ -3040,43 +3030,23 @@ function ataxiaBasher_psionBashing()
   -- cooldown stamp can no longer burn unsent.
   local brage = ataxiaBasher_brCommit(ataxiaBasher_psionBattlerage(sp))
 
-  -- PSI SHATTER IS THE MAIN TOOL (v4.7.352, user: "Psi Shatter is the main tool to use unless we
-  -- have other boons with full transcendence"). The AB block the user pasted:
-  --
-  --     Shatter (Psionics)  ABADMIN ID: 2750
-  --     Syntax:            PSI SHATTER <target>
-  --     Works on/against:  Adventurers and denizens
-  --     Cooldown:          3.10 seconds of equilibrium
-  --
-  -- It was only ever sent at FULL transcendence, where it is free -- the one case this package
-  -- had evidence for. It is an ordinary equilibrium action the rest of the time, and equilibrium
-  -- is the channel every weave leaves idle. The user's log: shatter 12,992 psychic (Mindbreak,
-  -- +500%) against 921 and 1,934 for the deathblows around it. Even a sixth of that is more than
-  -- a deathblow, on a channel that was doing nothing.
-  --
-  -- So it is the LAST call on idle equilibrium, after roth, the transcend keeper and the boon
-  -- keepers -- which fire only when their defence has dropped, and clarity itself buys shatter
-  -- +50% and faster equilibrium. At full transcendence the FREE one already went at the front of
-  -- the chain (above), so this is the paid one -- and on a round nothing else wanted equilibrium,
-  -- that makes two. Unshielded rounds only: the shielded branch above returned.
-  local shatter = ""
-  if not eqSpent then
-    shatter = psionEqAttack(sp)                   -- shatter 3.10s / radiate 4.00s of equilibrium
-    eqSpent = true
-  end
+  -- NO PAID SHATTER (v4.7.356, user: "you keep using Psi shatter when we should be using
+  -- weavings. Therefore, we should only use PSI Shatter when at 100 transcendence!"). The free one
+  -- at full transcendence went at the front of the chain above; that is the only shatter. See
+  -- psionTranscendSpend for why the paid one cost more than it earned.
 
   -- Secondskin keeper: resistance to ALL damage types; it drops rarely, so spending
   -- one round's balance re-weaving it (3.00s bal -- it REPLACES the swing) is cheap
-  -- insurance. Skipped on shielded rounds above (break the shield first). Shatter still
-  -- rides: secondskin spends BALANCE, shatter EQUILIBRIUM.
+  -- insurance. Skipped on shielded rounds above (break the shield first). A free shatter at the
+  -- front of the chain still rides: secondskin spends BALANCE.
   if not (ataxia.defences and ataxia.defences.secondskin)
      and not ataxiaTemp.psionSecondskinAttempted then
     ataxiaTemp.psionSecondskinAttempted = true
     tempTimer(10, [[ataxiaTemp.psionSecondskinAttempted = nil]])
-    return command..brage..shatter.."weave secondskin"
+    return command..brage.."weave secondskin"
   end
 
-  command = command..brage..shatter..weave
+  command = command..brage..weave
   return command
 end
 

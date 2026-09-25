@@ -435,7 +435,7 @@ notes: |
 attack_command: "weave deathblow <target>"
 attack_skill: Weaving
 panoply_boon: "weave flurry <target> replaces deathblow while psionPanoply (Mnemosyne, v4.7.126 — flurry damage scales 60-200% per strike landed)"
-psi_shatter: "the MAIN equilibrium tool since v4.7.352 -- see 'The round today' below"
+psi_shatter: "ONLY at full transcendence, free, first in the round (v4.7.356) -- see 'The round today' below"
 
 shielded: |
   rageraze + rage>=17: "weave pulverise <t>;<weave>" — pulverise breaks on RAGE (no
@@ -468,7 +468,7 @@ eq_riders: |
   psi transcend — re-upped when the GMCP psitranscend defence drops (10s TIMESTAMP hold,
                 v4.7.351; it was a tempTimer-cleared flag that could wedge).
   enact rupture / enact clarity — boon keepers (Bloodletter's Fury / Razor Clarity).
-  psi shatter — whatever equilibrium is left (v4.7.352).
+  (no paid shatter since v4.7.356 -- shatter goes out free at full transcendence only)
 
 keepers: |
   weave secondskin — re-woven when the defence drops; BALANCE-based (3.0s) so it
@@ -476,7 +476,7 @@ keepers: |
   Defence name map (v4.7.128) also recognizes indomitability + clarity now.
 ```
 
-### The round today (v4.7.353)
+### The round today (v4.7.356)
 
 **Chain order** (one queued `freestand` entry; the commands run back to back):
 
@@ -484,20 +484,21 @@ keepers: |
    equilibrium but REQUIRES equilibrium and balance to execute (user, 2026-09-25: *"it does need EQ
    and Balance to execute but costs no EQ. Just requires it"* -- the wiki's "while off equilibrium"
    is wrong). Anything ahead of it that spent equilibrium would leave it none, so it goes first.
-2. **One equilibrium-spending action**, the first that applies: `enact roth` (below 50% HP) >
-   `psi transcend` (defence dropped) > one boon keeper (`enact rupture` for Bloodletter's Fury, then
-   `enact clarity` for Razor Clarity) > **`psi shatter <t>`** (AB 2750: 3.10s of equilibrium, works on
-   denizens). At full transcendence with nothing else wanting equilibrium, that makes TWO shatters.
+2. **At most one equilibrium-spending action**, the first that applies: `enact roth` (below 50% HP)
+   > `psi transcend` (defence dropped) > one boon keeper (`enact rupture` for Bloodletter's Fury, then
+   `enact clarity` for Razor Clarity). **No paid shatter** (v4.7.356) -- see below.
 3. Battlerage (`ataxiaBasher_psionBattlerage`) -- its own resource.
 4. The weave: `weave flurry` with Panoply, else `weave deathblow` (2.20s, the fastest weave).
    Shielded: `weave pulverise` (rage) + the weave, else `weave cleave`. Secondskin down: `weave
    secondskin` replaces the weave, and shatter still rides (it spends equilibrium, not balance).
 
-**Why shatter is the main tool** (user: *"Psi Shatter is the main tool to use unless we have other
-boons with full transcendence"*): 12,992 psychic with Mindbreak in the user's log, against deathblows
-of 921 and 1,934. It was only ever sent at full transcendence until the AB block was pasted. The
-full-transcendence spend lives in `psionTranscendSpend(sp)` (basher/002) -- change it there if a boon
-ever makes another psionics action better at full harmony.
+**Weaves are the rotation; shatter is the reward** (user, v4.7.356: *"you keep using Psi shatter
+when we should be using weavings. Therefore, we should only use PSI Shatter when at 100 transcendence!
+PSI Shatter target;Weave deathblow target"*). v4.7.352-355 also spent idle equilibrium on a PAID
+shatter (AB 2750: 3.10s of equilibrium) -- but the queued round needs equilibrium AND balance, so
+that held every weave back to shatter's equilibrium, and weaves are what build transcendence. The
+full-transcendence spend lives in `psionTranscendSpend(sp)` (basher/002): shatter, or radiate with
+Psiwave.
 
 **Boons** (Mnemosyne; all latched by BOONS row, claim line, and the generic row re-latch):
 
@@ -506,8 +507,8 @@ ever makes another psionics action better at full harmony.
 | Panoply | `psionPanoply` | `weave flurry` replaces `weave deathblow` |
 | Bloodletter's Fury | `psionBloodletter` | keep `rupturesight` up (`enact rupture`): weaves unblockable, +50% base, 20% faster balance |
 | Razor Clarity | `psionRazorClarity` | keep `clarity` up (`enact clarity`): +50% damage, +2% crit; clarity also speeds equilibrium |
-| Mindbreak | `psionMindbreak` | none -- shatter +500%, and shatter is the main tool with or without it |
-| Psiwave | `psionPsiwave` | **`psi radiate` replaces `psi shatter` everywhere** (v4.7.355): the paid equilibrium attack (4.00s, no target, hits every denizen with magic damage) AND the free full-transcendence action -- so full transcendence is two radiates. Wins over Mindbreak by the user's word |
+| Mindbreak | `psionMindbreak` | none -- multiplies the one free shatter per full transcendence (+500%) |
+| Psiwave | `psionPsiwave` | **`psi radiate` replaces `psi shatter`** as the full-transcendence action (v4.7.355; no target, hits every denizen with magic damage). Wins over Mindbreak by the user's word |
 
 Keeper holds are TIMESTAMPS (`ataxiaTemp.psionKeepAt[def]`): clarity 12s, rupturesight 4s (rupture's
 text reads like a three-blow charge, so its guard is shorter). A keeper that fires marks the round's
@@ -537,7 +538,7 @@ fires off-eq at zero cost.
 | `WEAVE DEATHBLOW` (2.20s bal) | Fastest single-target damage weave — the default bash |
 | `WEAVE FLURRY` (2.60s bal) | The bash under the Panoply boon (60–200% per strike) |
 | `WEAVE CLEAVE` (2.30s bal) | Strips shield AND rebounding, prones — the shield answer |
-| `PSI TRANSCEND` / `PSI SHATTER` | Weaves charge transcendence; **shatter is the main equilibrium tool** (3.10s eq, AB 2750) since v4.7.352, and free at full transcendence (costs no eq but REQUIRES it -- goes first in the chain) |
+| `PSI TRANSCEND` / `PSI SHATTER` | Weaves charge transcendence; at FULL transcendence `psi shatter <t>` goes out free, first in the round (costs no eq but REQUIRES it), and ONLY then (v4.7.356 -- a paid shatter every round held the weaves back) |
 | Battlerage raze | Shielded targets only |
 
 ### Should wire next (priority order)

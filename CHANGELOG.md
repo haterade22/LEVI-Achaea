@@ -2,6 +2,43 @@
 
 ---
 
+## 2026-09-25 - Weaves are the rotation: shatter only at full transcendence (v4.7.356)
+
+User: *"Sorry, you keep using Psi shatter when we should be using weavings. Therefore, we should only
+use PSI Shatter when at 100 transcendence! PSI Shatter target;Weave deathblow target (or whatever it
+is)"*
+
+This reverses the headline of v4.7.352. That release read the AB block (shatter: 3.10s of
+equilibrium, usable any time), compared one Mindbreak shatter (12,992) against single deathblows,
+and made shatter the "main tool" on every idle equilibrium. What that comparison missed:
+
+- **The queued round needs equilibrium AND balance to fire** (v4.7.353 established it). A 3.10s
+  paid shatter every round -- 4.00s for radiate under Psiwave -- held every weave back to shatter's
+  equilibrium, not the weave's 2.2s balance.
+- **The weaves are what build transcendence.** Slowing them slowed the free shatters as well.
+
+Now the round is the user's: `psi shatter <target>;weave deathblow <target>` at full transcendence
+(the free shatter first, since it needs equilibrium but spends none), the weave on every other round.
+With Psiwave the full-transcendence action is `psi radiate` instead -- the v4.7.355 swap, now
+full-transcendence-only too. The re-queue on full transcendence (v4.7.352) stays: it is what makes that
+free shatter land on the round it should.
+
+v4.7.355's release notes now say it is superseded.
+
+**Tests:** the shatter and Psiwave blocks in `test_basher_psion_boons.lua` are rewritten around "only at
+100" (none at 0/50/99; exactly one at 100, first, then the weave; ahead of keepers and roth; held when
+shielded; rides secondskin). Seven break-back mutants (paid filler restored, the 100 gate dropped, the
+shield guard dropped, Psiwave ignored, radiate given a target, secondskin dropping the free action,
+the weave dropped at 100) each fail their tests. Suite: 2462 pass.
+
+### Files
+
+- `basher/002_Class_Bashing.lua`; triggers `mnemosyne/101`, `mnemosyne/102`; alias
+  `mnemosyne/002_Boon_Claim.lua`; `tests/test_basher_psion_boons.lua`; `.claude/classes/psion.md`,
+  `.claude/projects/mnemosyne/03-parsing-triggers.md`, `README.md`, `CLAUDE.md`, memory.
+
+---
+
 ## 2026-09-25 - Psiwave: psi radiate instead of shatter (v4.7.355)
 
 User, pasting the boon and the ability:
