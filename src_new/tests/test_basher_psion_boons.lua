@@ -79,6 +79,8 @@ local function reset()
   psionPsiwave = false
   psionEarthquake = false
   psionProphet = false
+  ataxiaTemp.psionForesightAt, ataxiaTemp.psionForesightTry = nil, nil
+  gmcp.IRE.Target.Info = {}
   ataxiaBasher.upheavalAt = nil
   denizens = 0
   psionPanoply = false
@@ -722,23 +724,92 @@ describe("Earthquake: enact upheaval on idle equilibrium, in a crowd", function(
 end)
 
 -- =====================================================================================
--- PROPHET OF CREATION (v4.7.358). "Your foresight ability now works against denizens and causes
--- the next attack against you to miss." A foresight that does not come true STUNS us (AB), and
--- against a denizen the only real prediction is SHIELD. User: latch it, change nothing, until
--- foresight has been tried on a denizen in game. Pinned so it reads as a decision.
-describe("Prophet of Creation: latched, no rotation change (yet)", function()
-  it("the round is identical with or without the boon -- no foresight is ever sent", function()
-    for _, c in ipairs({ { 0, 1 }, { 100, 4 } }) do
-      reset()
-      ataxiaTemp.transcendence, denizens = c[1], c[2]
-      local without = ataxiaBasher_psionBashing()
-      reset()
-      psionProphet = true
-      ataxiaTemp.transcendence, denizens = c[1], c[2]
-      local with = ataxiaBasher_psionBashing()
-      expect(with).toBe(without)
-      expect(with:find("foresight", 1, true)).toBeNil()
-    end
+-- PROPHET OF CREATION (v4.7.359). "Your foresight ability now works against denizens and causes
+-- the next attack against you to miss." User: "It should be psi foresight target." In game: the
+-- prediction is the denizen's next attack, true in <0.3s, free, ~30s cooldown. A foresight that
+-- does not come true STUNS us (AB), so only on a target at half health or more.
+describe("Prophet of Creation: psi foresight <target>, one free dodge per cooldown", function()
+  local TL = dofile("src_new/tests/trigger_lib.lua")
+  local P = "src_new/triggers/levi_ataxia/for_levi/leviticus/psion/"
+  local function has(cmd, s) return cmd:find(s, 1, true) ~= nil end
+  local function ready(hp)
+    reset()
+    psionProphet = true
+    gmcp.IRE.Target.Info = { hpperc = hp or "100%" }
+  end
+
+  it("never without the boon", function()
+    reset()
+    gmcp.IRE.Target.Info = { hpperc = "100%" }
+    expect(has(ataxiaBasher_psionBashing(), "foresight")).toBeFalse()
+  end)
+
+  it("with the boon: `psi foresight <target>` -- no tree/shield -- first, and the weave still goes", function()
+    ready()
+    local cmd = ataxiaBasher_psionBashing()
+    expect(cmd:find("psi foresight 44001;", 1, true)).toBe(1)
+    expect(has(cmd, "shield")).toBeFalse()
+    expect(has(cmd, "weave deathblow 44001")).toBeTrue()
+  end)
+
+  it("ahead of the free shatter at full transcendence", function()
+    ready()
+    ataxiaTemp.transcendence = 100
+    local cmd = ataxiaBasher_psionBashing()
+    expect(cmd:find("psi foresight", 1, true)).toBe(1)
+    expect(cmd:find("psi foresight", 1, true) < cmd:find("psi shatter", 1, true)).toBeTrue()
+  end)
+
+  it("on a shielded round too -- a shielded denizen still swings", function()
+    ready()
+    ataxiaBasher.shielded = true
+    expect(has(ataxiaBasher_psionBashing(), "psi foresight 44001")).toBeTrue()
+  end)
+
+  -- The stun: a target that dies before it swings leaves the prediction unfulfilled.
+  it("only while the target is at half health or more, and never when that is unreadable", function()
+    ready("49%")
+    expect(has(ataxiaBasher_psionBashing(), "foresight")).toBeFalse()
+    ready("50%")
+    expect(has(ataxiaBasher_psionBashing(), "foresight")).toBeTrue()
+    ready()
+    gmcp.IRE.Target.Info = {}
+    expect(has(ataxiaBasher_psionBashing(), "foresight")).toBeFalse()
+  end)
+
+  -- Rounds are rebuilt every 0.3s; the ones built while the cast line is on its way must not repeat it.
+  it("a short in-flight hold, not the cooldown, until the game confirms the cast", function()
+    ready()
+    expect(has(ataxiaBasher_psionBashing(), "foresight")).toBeTrue()
+    clock = clock + 1
+    expect(has(ataxiaBasher_psionBashing(), "foresight")).toBeFalse()
+    clock = clock + 1            -- the round carrying it was replaced before it fired: try again
+    expect(has(ataxiaBasher_psionBashing(), "foresight")).toBeTrue()
+  end)
+
+  it("the cast line starts the ~30s cooldown", function()
+    ready()
+    ataxiaBasher_psionBashing()
+    local line = "You direct your formidable mental might towards the task of piercing the very fabric of time "
+      .. "itself, seeking out a situation in the near future where a halfling semi-soldier will act as you predict."
+    local row = TL.wrap(line, 119)[1]
+    expect(TL.anyMatches(TL.patterns(P .. "005_Foresight_Cast.lua"), row)).toBeTrue()
+    dofile(P .. "005_Foresight_Cast.lua")
+    clock = clock + 29
+    expect(has(ataxiaBasher_psionBashing(), "foresight")).toBeFalse()
+    clock = clock + 1
+    expect(has(ataxiaBasher_psionBashing(), "foresight")).toBeTrue()
+  end)
+
+  it("the refusal retries in 5s instead of a whole fresh cooldown", function()
+    ready()
+    local line = "Your mind has not yet recovered enough to pierce the fabric of time once again."
+    expect(TL.anyMatches(TL.patterns(P .. "006_Foresight_Refused.lua"), line)).toBeTrue()
+    dofile(P .. "006_Foresight_Refused.lua")
+    clock = clock + 4
+    expect(has(ataxiaBasher_psionBashing(), "foresight")).toBeFalse()
+    clock = clock + 1
+    expect(has(ataxiaBasher_psionBashing(), "foresight")).toBeTrue()
   end)
 
   it("the BOONS row carries the in-tower gate, and the seed knows the boon", function()
@@ -752,6 +823,8 @@ end)
 
 -- Restore shared state for whoever runs after us (test files share one Lua state).
 psionProphet = nil
+ataxiaTemp.psionForesightAt, ataxiaTemp.psionForesightTry = nil, nil
+gmcp.IRE.Target.Info = {}
 ataxia.mnemosyne._denizenCount = realDenizenCount
 denizens = nil
 psionEarthquake = nil

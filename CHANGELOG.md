@@ -2,6 +2,55 @@
 
 ---
 
+## 2026-09-25 - Prophet of Creation: psi foresight <target>, one free dodge per cooldown (v4.7.359)
+
+v4.7.358 latched the boon and changed nothing, pending an in-game test. The user then tested it,
+found the cooldown, and gave the syntax: *"It should be psi foresight target. No tree or shield that
+is optional."*
+
+What the test showed: against a denizen the prediction is its next attack --
+`Your prediction comes to pass, and you effortlessly avoid the attack from a halfling semi-soldier.`
+-- true in under 0.3s, no balance or equilibrium spent, and a cooldown of "maybe 30 seconds"
+(`Your mind has not yet recovered enough to pierce the fabric of time once again.`).
+
+**The rotation.** `ataxiaBasher_psionForesight(sp)` (basher/002) puts `psi foresight <target>` at the
+very FRONT of the Psion round -- ahead of the free shatter, in case it too needs equilibrium to
+execute -- whenever it is off cooldown. Shielded rounds included: a shielded denizen still swings.
+
+**The stun.** The AB: a foresight whose action "is not performed" stuns us. Against a denizen that
+means a target that dies before it swings, so foresight goes out only while the target is at **half
+health or more**, and never when `ataxiaBasher_targetHpPct()` cannot read it.
+
+**The cooldown is stamped by the game, not at build.** Rounds are rebuilt every 0.3s and each `queue
+addclearfull` replaces the queued entry, so a 30s stamp when the round is built would lose the dodge
+for 30s whenever that round was replaced before it fired. Instead:
+
+- building the round takes only a 2s in-flight hold (the rounds rebuilt while the cast line is on its
+  way do not repeat it);
+- new trigger `psion/005_Foresight_Cast` (start of line `You direct your formidable mental might
+  towards the task of piercing` -- the full line is ~160 characters and wraps) starts the 30s
+  cooldown;
+- new trigger `psion/006_Foresight_Refused` (the exact refusal) retries in 5s rather than waiting out
+  a fresh 30s, since the remainder is unknown.
+
+**Tests:** the v4.7.358 "no rotation change" pin is replaced by 9 tests (boon gate, syntax without
+tree/shield, first in the round and ahead of the shatter, shielded rounds, the HP gate and the
+unreadable case, the in-flight hold, the cast line against its WRAPPED first row and the cooldown it
+starts, the refusal's 5s retry). 12 break-back mutants: 11 killed; the 12th -- a longer cast pattern
+-- turned out equivalent (it still fits the first wrapped row), and a pattern that really runs past
+the wrap is killed. Suite: 2483 pass.
+
+**Still unknown:** whether a target dying before it swings really stuns (the HP gate is there so we do
+not find out the hard way), and the exact cooldown.
+
+### Files
+
+- `basher/002_Class_Bashing.lua`; triggers `psion/005_Foresight_Cast`, `psion/006_Foresight_Refused`
+  (new), `mnemosyne/105` comment; `tests/test_basher_psion_boons.lua`; `.claude/classes/psion.md`,
+  `.claude/projects/mnemosyne/03-parsing-triggers.md`, `README.md`, `CLAUDE.md`, memory.
+
+---
+
 ## 2026-09-25 - Prophet of Creation: latched, no rotation change yet (v4.7.358)
 
 The user pasted the Psion boon and the foresight AB text:
