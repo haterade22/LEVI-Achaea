@@ -35,6 +35,10 @@ unknown:** what happens when the denizen does NOT attack -- it dies first, or ne
 is where the AB's stun would bite, and how long a prediction waits before it counts as failed. Those
 decide whether the rotation should use it, so it stays latch-only in this release.
 
+**Addendum (after release, docs only).** Foresight has a COOLDOWN, "maybe 30 seconds" per the user,
+refused with: `Your mind has not yet recovered enough to pierce the fabric of time once again.` So
+"free" means no balance or equilibrium spent, not unlimited -- one avoided attack per ~30s.
+
 ### Files
 
 - `mnemosyne/004_Parsers.lua`; triggers `mnemosyne/001`, `105_Prophet_of_Creation` (new); alias
