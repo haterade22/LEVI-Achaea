@@ -144,14 +144,26 @@ end)
 describe("Army of the Dead rides the Apostate round", function()
   local function graves(cmd) return cmd:find("summon hands of the grave", 1, true) end
 
-  it("goes out WITH the swing, not instead of it", function()
+  -- v4.7.354, user: "Gravehands takes balance." (The AB block says equilibrium; v4.7.347
+  -- believed it and chained the summon ahead of the swing, which was then refused every time.)
+  -- Same resource as deadeyes, so on its round it REPLACES the swing -- the Infernal's shape.
+  it("takes the round's BALANCE: the summon replaces the swing on its round", function()
     reset()
     infArmyOfDead = true
     local cmd = round()
     expect(graves(cmd) ~= nil).toBeTrue()
-    expect(cmd:find("deadeyes 77001 bleed bleed", 1, true) ~= nil).toBeTrue()
-    -- ...and ahead of it: the eq cast never delays the balance swing
-    expect(graves(cmd) < cmd:find("deadeyes", 1, true)).toBeTrue()
+    expect(cmd:find("deadeyes", 1, true)).toBeNil()
+    -- and the swing is back on the next round, once the room has its hands
+    ataxiaBasher_gravehandsUp()
+    clock = clock + 3
+    expect(round():find("deadeyes 77001 bleed bleed", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("the summon carries no trailing separator -- it is the round's primary action", function()
+    reset()
+    infArmyOfDead = true
+    local cmd = ataxiaBasher_apostateBashing()
+    expect(cmd:sub(-#"summon hands of the grave")).toBe("summon hands of the grave")
   end)
 
   it("does nothing without the boon", function()
@@ -199,14 +211,16 @@ describe("Army of the Dead rides the Apostate round", function()
     expect(graves(round()) ~= nil).toBeTrue()
   end)
 
-  it("all four in one round: gravehands, belch, soulstorm and the swing", function()
+  -- Belch and soulstorm spend EQUILIBRIUM, so they still ride the gravehands round; the summon
+  -- takes the balance the swing would have used.
+  it("the gravehands round still carries the belch and the soulstorm -- not the swing", function()
     reset()
     infArmyOfDead, mnemDeadBreath, mnemDeathtempest = true, true, true
     local cmd = round()
     expect(graves(cmd) ~= nil).toBeTrue()
     expect(cmd:find("belch", 1, true) ~= nil).toBeTrue()
     expect(cmd:find("soulstorm 77001", 1, true) ~= nil).toBeTrue()
-    expect(cmd:find("deadeyes 77001 bleed bleed", 1, true) ~= nil).toBeTrue()
+    expect(cmd:find("deadeyes", 1, true)).toBeNil()
   end)
 end)
 

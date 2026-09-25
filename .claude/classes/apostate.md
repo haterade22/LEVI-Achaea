@@ -273,12 +273,15 @@ The basher's round (`ataxiaBasher_apostateBashing`, basher/002; the riders are p
 
 ```
 [belch;] [soulstorm <t>;]               <- equilibrium riders, boon-gated (basher/014)
-[deathaura;] [summon hands of the grave;] <- boon-gated (Necrotic Aura / Army of the Dead)
-[<battlerage>;] deadeyes <t> bleed bleed  <- the balance swing
+[deathaura;]                             <- boon-gated (Necrotic Aura)
+[<battlerage>;] deadeyes <t> bleed bleed  <- the balance swing -- OR, on its round,
+[<battlerage>;] summon hands of the grave <- Army of the Dead, which takes the balance instead
 ```
 
 **Balance vs equilibrium** (user, 2026-09-24: *"Soulstorm takes eq and deadeyes take balance"*): the
-swing spends balance; every necromancy rider spends equilibrium, so they ride the SAME round. They do
+swing spends balance; the belch and the soulstorm spend equilibrium, so they ride the SAME round.
+**Gravehands takes BALANCE** (user, 2026-09-25 -- its AB block says equilibrium, and v4.7.347 believed
+it), so on its round the summon REPLACES the swing, exactly like the Infernal's Tyranny. They do
 not gate each other either (user: *"belch doesnt matter, shouldnt be a criteria. They are two seperate
 attacks"*).
 
@@ -290,10 +293,10 @@ attacks"*).
 | Graveborn (combo: AotD + Maliceborn + Necrotic Aura) | `mnemGraveborn` | gravehands in EVERY room: the hands become a 15s engine while we stand in them; essence floor 10% (Maliceborn refunds 5% per kill) |
 | Necrotic Aura | `infNecroticAura` | keeps the `deathaura` defence up, every branch (a defence is not an attack) |
 
-**Open question:** the round can carry `summon hands of the grave` (3.00s of equilibrium) behind a
-`belch` (4.00s). Belch + soulstorm are confirmed to land together; belch + gravehands is not. If the
-summon is refused on a belch round, its one-shot retry (6s later) hides it -- a log of a crowded room
-with both boons would settle it.
+**Settled (v4.7.354):** the question here was whether a belch round could also carry the summon.
+It can -- they spend different resources. The real collision was the one nobody asked about: the
+summon and `deadeyes` both spend balance, so v4.7.347-353 chained the summon ahead of the swing and the
+swing was refused on every gravehands round.
 
 **The lines all wrap.** The user's server wraps at 119-124 columns, and three of these lines are
 longer: the gravehands cast (148), the belch refusal (128), the soulstorm cast (114 + the mob's name).

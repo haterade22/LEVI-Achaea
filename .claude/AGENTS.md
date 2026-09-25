@@ -28,8 +28,10 @@
   round's equilibrium spent; harmless until shatter came after it.
 - **If one refusal recovers the lost move, its mirror must too.** The mounted refusal re-sent the jump;
   the "no mount" refusal did not, so a stale mounted belief lost an escape.
-- **Trust the captured behaviour (and the player) over the wiki.** The wiki says the free transcendence
-  action works "while off equilibrium"; in game it requires equilibrium. The AB block said shatter was
+- **Trust the captured behaviour (and the player) over the wiki -- and over the AB block.** The wiki
+  says the free transcendence action works "while off equilibrium"; in game it requires equilibrium.
+  Gravehands' AB block says "3.00 seconds of equilibrium"; in game it takes BALANCE, so the Apostate
+  summon collided with the deadeyes swing for seven releases (v4.7.354). The AB block said shatter was
   a 3.10s-equilibrium action usable any time; the package had only ever used it at full transcendence.
 - **A belief that must not survive a reload lives in `ataxiaTemp`.** `ataxiaBasher` and `ataxia` are
   saved; a saved `mounted = true` would outlive the reload that dismounted us.

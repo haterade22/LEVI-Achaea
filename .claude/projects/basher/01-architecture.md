@@ -72,8 +72,11 @@ BEFORE the ones that spend it.
 **Check the pair, not the rule, when adding a rider.** The rule comes from three live collisions
 (shin augment + thunderstorm, intone keeper + boinad, the Psion keepers). But the Apostate's belch and
 soulstorm DO land in the same round (user, 2026-09-24) -- soulstorm's equilibrium cost against
-denizens is "greatly reduced" -- so the rule holds per ability pair, and a log settles it. Open: the
-Apostate round can also carry `summon hands of the grave` (3.00s of equilibrium) behind a belch;
+denizens is "greatly reduced" -- so the rule holds per ability pair, and a log settles it. And check
+the RESOURCE itself, not just the AB block's word for it: Gravehands' AB says "3.00 seconds of
+equilibrium", but in game it takes BALANCE (user, v4.7.354) -- so the Apostate summon collided with the
+deadeyes swing, not with the belch; it now replaces the swing on its round. (Previously open here: the
+Apostate round can also carry `summon hands of the grave` behind a belch;
 whether both land is unconfirmed, and the gravehands unconfirmed-summon retry would mask a refusal.
 
 **Re-queue on a state change** (`ataxiaBasher_requeueNow`, genrunning/004, v4.7.352): the round is

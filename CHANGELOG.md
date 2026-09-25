@@ -2,6 +2,38 @@
 
 ---
 
+## 2026-09-25 - Gravehands takes balance: the summon replaces the swing (v4.7.354)
+
+User: *"Gravehands takes balance."*
+
+Its AB block says otherwise -- `Cooldown: 3.00 seconds of equilibrium` -- and v4.7.347 believed it,
+prepending `summon hands of the grave` beside the belch and the soulstorm as an equilibrium rider. It
+takes **balance**, the same resource as the Apostate's `deadeyes <t> bleed bleed`. A queued chain runs
+back to back, so the summon went first and **the swing behind it was refused on every gravehands
+round**, for seven releases.
+
+Now it is shaped like the Infernal's TYRANNY, which has always replaced the swing: on its round the
+summon takes the primary slot (no trailing separator), and the swing returns on the next round. The
+belch and the soulstorm still ride that round -- they spend equilibrium. Once per room, the crowd
+gate, the floors, the retry and Graveborn's every-room rule are unchanged.
+
+**It also answers v4.7.353's open question the other way round.** That release asked whether a belch
+round could also carry the summon; it can -- different resources. The collision nobody asked about
+was summon + swing.
+
+*The AB block's resource line was wrong, and the player's account is the evidence.* That joins the
+wiki's "while off equilibrium" (v4.7.353) on the list of reference text this week contradicted in game.
+
+2 mutants, both killed (the summon riding beside the swing again; the summon keeping its separator).
+
+### Files
+
+- `basher/002_Class_Bashing.lua`; `tests/test_basher_apostate_riders.lua`; `.claude/classes/apostate.md`,
+  `.claude/classes/infernal.md`, `.claude/projects/basher/01-architecture.md`, `README.md`,
+  `CLAUDE.md`, `CHANGELOG.md`, memory.
+
+---
+
 ## 2026-09-25 - The free shatter goes first; every document brought up to date (v4.7.353)
 
 ### The free shatter requires equilibrium
