@@ -54,6 +54,21 @@ local rec = mnem._learnBoon(name, nil, rarity) or {}
 -- serialized, rebuilt every time BOONS scrolls past.
 ataxiaTemp.boonsOwned = ataxiaTemp.boonsOwned or {}
 ataxiaTemp.boonsOwned[name] = rarity
+
+-- ...and ARM IT (v4.7.350). `M.BOON_FLAGS` has always said it latches from "the BOON CLAIM (as it
+-- happens) and the BOONS list (on demand, and after a reload)" -- and only the first half was
+-- ever true. This row is the BOONS list: `M._relatchBoons` sends `boon claimed` once per run
+-- precisely so a reload mid-run can put every owned boon back, and the rows arrived here, were
+-- recorded as owned, coloured, annotated... and never latched. The boons with a hand-written
+-- row trigger of their own (Panoply, Army of the Dead, ...) came back; the fifteen that live
+-- ONLY in the table did not. Dead Breath and Deathtempest are two of them, so a reimport
+-- mid-run silently stopped the belch and the soulstorm -- and a belch cannot re-latch its own
+-- flag from its boon line, because the rider never fires without the flag.
+--
+-- Safe to latch from: this pattern demands the echo count AND a rarity word, which is the shape
+-- of what we OWN. The offer screen prints `Name:   description` with neither, so an offered-
+-- but-declined boon cannot arrive here. pcall'd: arming a flag must never break the listing.
+if mnem.latchBoonFlag then pcall(mnem.latchBoonFlag, name) end
 -- _learnBoon only mutates the in-memory table; every other _historySave caller sits behind a
 -- telemetry gate, so without this the back-filled rarity would die with the session. Debounced,
 -- because this trigger fires once per row of the list.

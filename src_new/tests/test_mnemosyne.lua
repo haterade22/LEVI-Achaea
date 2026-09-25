@@ -9569,3 +9569,91 @@ describe("boon combos", function()
     expect(out:find("Every option has a problem", 1, true) ~= nil).toBeTrue()
   end)
 end)
+
+-- =====================================================================================
+-- THE BOONS ROW ARMS THE GENERIC FLAGS (v4.7.350)
+--
+-- `M.BOON_FLAGS` claimed it latched from "the BOON CLAIM ... and the BOONS list (on demand, and
+-- after a reload)". Only the claim half was real. `M._relatchBoons` sends `boon claimed` once per
+-- run so a mid-run reimport can put owned boons back; the rows arrived at trigger
+-- `mnemosyne/013_Boons_List_Row`, were recorded, coloured and annotated -- and never latched. The
+-- boons with a hand-written row trigger came back; the fifteen that live only in the table did
+-- not, Dead Breath and Deathtempest among them. These run the REAL trigger file against the REAL
+-- table, because the bug was a missing call between two pieces that each looked correct alone.
+describe("the BOONS row arms the generic boon flags", function()
+  local ROW = "src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/013_Boons_List_Row.lua"
+
+  -- The row also teaches the boon LIBRARY, which other tests in this file read. Stub that side
+  -- so twenty synthetic rows cannot leak into their fixtures (the v4.7.328 shared-fixture lesson).
+  local function withRows(fn)
+    local learn, save = M._learnBoon, M._historySaveSoon
+    local owned = ataxiaTemp.boonsOwned
+    M._learnBoon = function() return {} end
+    M._historySaveSoon = function() end
+    local ok, err = pcall(fn)
+    M._learnBoon, M._historySaveSoon = learn, save
+    ataxiaTemp.boonsOwned = owned
+    matches, line = nil, nil
+    if not ok then error(err, 0) end
+  end
+
+  local function row(name, echoes, rarity)
+    line = name .. "               " .. echoes .. "          " .. rarity
+    matches = { line, name, tostring(echoes), rarity }
+    dofile(ROW)
+  end
+
+  local function clearFlags()
+    for _, flag in pairs(M.BOON_FLAGS) do _G[flag] = nil end
+  end
+
+  it("a reload's `boon claimed` puts Dead Breath and Deathtempest back", function()
+    clearFlags()
+    withRows(function()
+      row("Dead Breath", 1, "rare")
+      row("Deathtempest", 1, "rare")
+    end)
+    expect(mnemDeadBreath).toBeTrue()
+    expect(mnemDeathtempest).toBeTrue()
+    clearFlags()
+  end)
+
+  it("every boon in the table comes back, not just the two that were noticed", function()
+    clearFlags()
+    withRows(function()
+      for name in pairs(M.BOON_FLAGS) do row(name, 1, "rare") end
+    end)
+    local missing = {}
+    for name, flag in pairs(M.BOON_FLAGS) do
+      if _G[flag] ~= true then missing[#missing + 1] = name end
+    end
+    expect(#missing).toBe(0)
+    clearFlags()
+  end)
+
+  it("a row for a boon outside the table arms nothing and breaks nothing", function()
+    clearFlags()
+    withRows(function() row("Some Boon Nobody Wired", 2, "common") end)
+    for _, flag in pairs(M.BOON_FLAGS) do expect(_G[flag]).toBeNil() end
+  end)
+
+  it("still records ownership exactly as before -- the latch is an addition, not a swap", function()
+    clearFlags()
+    local seen
+    local learn, save = M._learnBoon, M._historySaveSoon
+    local owned = ataxiaTemp.boonsOwned
+    M._learnBoon = function(n, _, r) seen = { n, r }; return {} end
+    M._historySaveSoon = function() end
+    ataxiaTemp.boonsOwned = {}
+    local ok, err = pcall(function() row("Deathtempest", 1, "rare") end)
+    local ownedNow = ataxiaTemp.boonsOwned["Deathtempest"]
+    M._learnBoon, M._historySaveSoon = learn, save
+    ataxiaTemp.boonsOwned = owned
+    matches, line = nil, nil
+    if not ok then error(err, 0) end
+    expect(seen[1]).toBe("Deathtempest")
+    expect(seen[2]).toBe("rare")
+    expect(ownedNow).toBe("rare")
+    clearFlags()
+  end)
+end)
