@@ -4156,6 +4156,73 @@ describe("ice-slip recovery during a tactical retreat (v4.7.243)", function()
     restore()
   end)
 
+  -- RUBBLE (v4.7.357): a slow clamber is a move in progress, not a failed one. Without the grace
+  -- the 5s timeout re-sends the step (restarting the clamber) and, after MOVE_RETRIES, condemns a
+  -- real exit.
+  it("a clamber over rubble re-arms the move timeout instead of re-sending", function()
+    local mock = require("mock_mudlet")
+    local realSend2, realSwarm2 = send, M.swarm
+    local sent = 0
+    local ok, err = pcall(function()
+      send = function() sent = sent + 1 end
+      M.swarm = { moveLocked = function() return false end }
+      M.explore.on = true
+      M._exploreMove("s")
+      expect(sent).toBe(1)
+      local first = M._explMoveT
+      expect(mock.active_timers[first].delay).toBe(5)
+      M.onClamber()
+      expect(mock.active_timers[first]).toBeNil()       -- the 5s timeout is gone...
+      expect(mock.active_timers[M._explMoveT].delay).toBe(10) -- ...replaced by the grace
+      expect(sent).toBe(1)                               -- and nothing was re-sent
+      local second = M._explMoveT
+      M.onClamber()                                      -- once per sent move
+      expect(M._explMoveT).toBe(second)
+    end)
+    if M._explMoveT then killTimer(M._explMoveT); M._explMoveT = nil end
+    M.explore.moving, M.explore.on = false, false
+    send, M.swarm = realSend2, realSwarm2
+    if not ok then error(err, 0) end
+  end)
+
+  -- The realistic stale state: the last move's callback is still stored, its timer already gone,
+  -- and nothing in flight (a manual walk over rubble). Must not conjure a timeout from it.
+  it("a clamber with no move of ours in flight does nothing", function()
+    local realCb = M._explMoveOnTimeout
+    M.explore.moving, M.explore.clambered, M._explMoveT = false, false, nil
+    M._explMoveOnTimeout = function() end
+    M.onClamber()
+    local armed = M._explMoveT
+    if armed then killTimer(armed); M._explMoveT = nil end
+    M._explMoveOnTimeout = realCb
+    expect(armed).toBeNil()
+  end)
+
+  it("a tactical move gets the same grace, and the grace still ends in the old failure path", function()
+    local mock = require("mock_mudlet")
+    local realSwarm2, realTick = M.swarm, M._scheduleTick
+    local failed = 0
+    local ok, err = pcall(function()
+      M.swarm = { onMoveFailed = function() failed = failed + 1 end }
+      M._scheduleTick = function() end
+      M._tacticalArm("e", 3)
+      expect(mock.active_timers[M._explMoveT].delay).toBe(3)
+      M.onClamber()
+      local id = M._explMoveT
+      local t = mock.active_timers[id]
+      expect(t.delay).toBe(10)
+      expect(failed).toBe(0)
+      t.callback()                                       -- the grace runs out, still in the room
+      killTimer(id)
+      expect(failed).toBe(1)
+      expect(M.explore.moving).toBeFalse()
+    end)
+    if M._explMoveT then killTimer(M._explMoveT); M._explMoveT = nil end
+    M.explore.moving, M.explore.tacticalMove = false, false
+    M.swarm, M._scheduleTick = realSwarm2, realTick
+    if not ok then error(err, 0) end
+  end)
+
   it("_exploreMove refuses to move under the tumble lock", function()
     slipping(false)
     local walked = 0
@@ -9675,11 +9742,11 @@ describe("the BOONS row arms the generic boon flags", function()
   end)
 
   -- The per-boon row triggers carry the same gate (v4.7.351): run each one's body both ways.
-  it("the per-boon rows (098-101) arm only inside the tower", function()
+  it("the per-boon rows (098-103) arm only inside the tower", function()
     local T = "src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/"
     local cases = { { "098_Graveborn.lua", "mnemGraveborn" }, { "099_Bloodletters_Fury.lua", "psionBloodletter" },
                     { "100_Razor_Clarity.lua", "psionRazorClarity" }, { "101_Mindbreak.lua", "psionMindbreak" },
-                    { "102_Psiwave.lua", "psionPsiwave" } }
+                    { "102_Psiwave.lua", "psionPsiwave" }, { "103_Earthquake.lua", "psionEarthquake" } }
     local wasIn = ataxiaBasher.inMnemosyne
     local ok, err = pcall(function()
       for _, c in ipairs(cases) do

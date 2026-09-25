@@ -2,6 +2,62 @@
 
 ---
 
+## 2026-09-25 - Earthquake: upheaval on idle equilibrium, and time to clamber over our own rubble (v4.7.357)
+
+The user pasted the Psion boon and the AB block:
+
+> **Earthquake** -- "Your emulation upheaval ability deals significant blunt damage to all denizens in
+> the location when it summons rubble."
+>
+> **Upheaval (Emulation)** ABADMIN ID 2730 -- `ENACT UPHEAVAL`, 2.30 seconds of equilibrium -- "cracks
+> opening and forming great piles of rubble to block some of the exits from your location."
+
+**The rotation.** `ataxiaBasher_psionUpheaval(sp, eqSpent)` (basher/002) adds `enact upheaval` to the
+Psion round on the equilibrium nothing else took: after roth, the transcend keeper and the boon
+keepers (still one equilibrium spender per round), after the free full-transcendence shatter (which
+needs equilibrium but spends none), and beside the weave. It also rides a secondskin round.
+
+What it costs was counted first this time (v4.7.356's lesson):
+
+- **Tempo:** the round fires when equilibrium and balance are both back. 2.30s against deathblow's
+  2.20s stretches a deathblow round by 0.10s (~5%); flurry (2.60s) is not slowed at all.
+- **Rubble on our own exits.** The PvE audit had upheaval as "blocks our own escape routes", and
+  leaving over rubble is a slow clamber. So upheaval goes out only in a **crowd** (2+ denizens,
+  `ataxiaBasher.upheavalAt`), never **below half health** (the escape ladder fires at 35%), and
+  never on a shielded round.
+
+**The explorer.** A clamber is a move in progress, not a failed one, but the explorer's 5s
+`MOVE_TIMEOUT` could not tell the difference: it would re-send the step (restarting the clamber) and,
+after `MOVE_RETRIES`, condemn a real exit -- or hand a tactical retreat back to the swarm as failed.
+New trigger `mnemosyne/104_Rubble_Clamber` (`You begin to slowly clamber over`, start of line) calls
+`M.onClamber()`, which re-arms the pending move timeout for `CLAMBER_GRACE` (10s): once per sent move,
+only for a move of ours in flight. Both arm sites now store their timeout callback in
+`M._explMoveOnTimeout` so it can be re-armed rather than duplicated; what happens when the grace runs
+out is unchanged.
+
+**Flag wiring:** `psionEarthquake` in `M.BOON_FLAGS`, the claim alias, run start/end, and a BOONS row
+trigger `mnemosyne/103_Earthquake` (in-tower gate). The seed already knew the boon.
+
+**Not known yet:** the cast line, the damage line, and whether a cast with every exit already
+rubbled still summons any (and so still does damage). Paste them when they appear.
+
+**Tests:** 9 in `test_basher_psion_boons.lua` (crowd, knob, HP floor, boon gate, one eq spender,
+shield, order at full transcendence, secondskin, the row's gate), 3 in `test_mnemosyne.lua` (the
+grace replaces the timeout without a re-send and only once; nothing without a move in flight; a
+tactical move gets the grace and still fails the old way when it runs out), and the per-boon row
+case. 13 break-back mutants, all killed -- one survived the first run (the "no move in flight" test
+passed on state left by the test before it) and the test was tightened. Suite: 2474 pass.
+
+### Files
+
+- `basher/002_Class_Bashing.lua`, `mnemosyne/008_Explorer.lua`, `mnemosyne/004_Parsers.lua`;
+  triggers `mnemosyne/001`, `103_Earthquake` (new), `104_Rubble_Clamber` (new); alias
+  `mnemosyne/002_Boon_Claim.lua`; tests; `.claude/classes/psion.md`,
+  `.claude/projects/mnemosyne/03-parsing-triggers.md`, `07-explorer.md`, `README.md`, `CLAUDE.md`,
+  memory.
+
+---
+
 ## 2026-09-25 - Weaves are the rotation: shatter only at full transcendence (v4.7.356)
 
 User: *"Sorry, you keep using Psi shatter when we should be using weavings. Therefore, we should only

@@ -486,11 +486,14 @@ keepers: |
    is wrong). Anything ahead of it that spent equilibrium would leave it none, so it goes first.
 2. **At most one equilibrium-spending action**, the first that applies: `enact roth` (below 50% HP)
    > `psi transcend` (defence dropped) > one boon keeper (`enact rupture` for Bloodletter's Fury, then
-   `enact clarity` for Razor Clarity). **No paid shatter** (v4.7.356) -- see below.
+   `enact clarity` for Razor Clarity). **No paid shatter** (v4.7.356) -- see below. If none of
+   those went and **Earthquake** is held: `enact upheaval` (v4.7.357; 2+ denizens, 50%+ HP,
+   unshielded).
 3. Battlerage (`ataxiaBasher_psionBattlerage`) -- its own resource.
 4. The weave: `weave flurry` with Panoply, else `weave deathblow` (2.20s, the fastest weave).
    Shielded: `weave pulverise` (rage) + the weave, else `weave cleave`. Secondskin down: `weave
-   secondskin` replaces the weave, and shatter still rides (it spends equilibrium, not balance).
+   secondskin` replaces the weave, and the free shatter and upheaval still ride (secondskin spends
+   balance).
 
 **Weaves are the rotation; shatter is the reward** (user, v4.7.356: *"you keep using Psi shatter
 when we should be using weavings. Therefore, we should only use PSI Shatter when at 100 transcendence!
@@ -509,6 +512,13 @@ Psiwave.
 | Razor Clarity | `psionRazorClarity` | keep `clarity` up (`enact clarity`): +50% damage, +2% crit; clarity also speeds equilibrium |
 | Mindbreak | `psionMindbreak` | none -- multiplies the one free shatter per full transcendence (+500%) |
 | Psiwave | `psionPsiwave` | **`psi radiate` replaces `psi shatter`** as the full-transcendence action (v4.7.355; no target, hits every denizen with magic damage). Wins over Mindbreak by the user's word |
+| Earthquake | `psionEarthquake` | **`enact upheaval`** (AB 2730, 2.30s eq) on idle equilibrium: blunt damage to every denizen "when it summons rubble" (v4.7.357). Only with 2+ denizens (`ataxiaBasher.upheavalAt`), at 50%+ HP, unshielded -- the rubble blocks our own exits. Costs a deathblow round 0.10s, flurry nothing |
+
+**Earthquake and our own rubble.** Leaving over rubble is a slow clamber ("You begin to slowly clamber
+over the rubble that blocks your way."). The explorer's 5s move timeout used to read that as a failed
+move; trigger `mnemosyne/104` now calls `M.onClamber()`, which gives the move 10s instead (once per
+move). Still unknown: the cast and damage lines, and whether a cast with every exit already rubbled
+does anything.
 
 Keeper holds are TIMESTAMPS (`ataxiaTemp.psionKeepAt[def]`): clarity 12s, rupturesight 4s (rupture's
 text reads like a three-blow charge, so its guard is shorter). A keeper that fires marks the round's
@@ -580,7 +590,8 @@ sever, exsanguinate, launch, prepare's affliction modes), the entire unweave kil
 contemplation), psi combustion/foresight/muddle/radiate/link/perception/insertion/
 ironwill/breakthrough, and Emulation's destruction/imposition/painshift (all flagged
 adventurers-only), lightbind, lifebond, soulmark, reprise, discordance, upheaval
-(blocks our own escape routes), rupture (denizen bleed value marginal; Roth grants it
+(blocks our own escape routes -- EXCEPT with the Earthquake boon, v4.7.357, which makes it room-wide
+damage; see the boons table), rupture (denizen bleed value marginal; Roth grants it
 free anyway).
 
 ## Fighting Against This Class
