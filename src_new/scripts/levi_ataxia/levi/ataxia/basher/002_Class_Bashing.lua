@@ -2903,6 +2903,43 @@ local function psionKeep(def, cmd, sp)
   return cmd .. sp
 end
 
+-- RUPTURE, BY THE GAME'S OWN LINES (v4.7.361). User: "With bloodletter we should be using enact
+-- rupture every time it is available", with the three lines:
+--
+--   up       "Your vision sharpens, allowing you to perceive the locations of every vein and artery
+--             that lies beneath the skin."                                     (psion/007)
+--   already  "Your blows will already rupture veins and arteries."             (psion/007)
+--   down     "Distractions reassert themselves, your mental clarity returning to mundane levels."
+--                                                                              (psion/008)
+--
+-- The keeper used to read only gmcp's `rupturesight` defence. Rupture is a four-blow CHARGE, and
+-- there is no evidence gmcp lists it under that name -- if it does not, the keeper re-enacted every
+-- 4s whether the charge stood or not. Now the lines are the belief: up/already mark it standing,
+-- down clears it AND the anti-spam hold, so the very next round re-enacts ("every time it is
+-- available"). The belief EXPIRES after RUPTURE_BELIEF seconds, because a four-blow charge is gone
+-- in a few swings and a missed down line must not park the keeper forever; the worst an early
+-- expiry costs is one `enact rupture` answered by "already".
+--
+-- The down line reads like CLARITY's ("your mental clarity returning to mundane levels"). Taken as
+-- the user gave it: if it is clarity's too, all it costs is a rupture answered by "already".
+local RUPTURE_BELIEF = 20
+
+function ataxiaBasher_psionRuptureUp()
+  ataxiaTemp = ataxiaTemp or {}
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  return (nowT - (tonumber(ataxiaTemp.psionRuptureUpAt) or -1e9)) < RUPTURE_BELIEF
+end
+
+function ataxiaBasher_psionRuptureSeen(up)
+  ataxiaTemp = ataxiaTemp or {}
+  if up then
+    ataxiaTemp.psionRuptureUpAt = (getEpoch and getEpoch()) or os.time()
+  else
+    ataxiaTemp.psionRuptureUpAt = nil
+    if ataxiaTemp.psionKeepAt then ataxiaTemp.psionKeepAt.rupturesight = nil end
+  end
+end
+
 -- At most ONE keeper per round, and none when the round's equilibrium is already spent.
 --
 -- ONE EQUILIBRIUM ACTION PER ROUND (v4.7.351, deep review). v4.7.349 could send `enact clarity;
@@ -2920,7 +2957,7 @@ end
 function ataxiaBasher_psionEmulationKeepers(sp, eqSpent)
   if eqSpent then return "" end
   sp = sp or ((ataxia.settings and ataxia.settings.separator) or ";")
-  if psionBloodletter then
+  if psionBloodletter and not ataxiaBasher_psionRuptureUp() then
     local c = psionKeep("rupturesight", "enact rupture", sp)
     if c ~= "" then return c end
   end
@@ -3084,15 +3121,19 @@ function ataxiaBasher_psionBashing()
   --
   -- ROTH, the combo boon (Razor Clarity + Bloodletter's Fury): "Your emulation wrath ability now
   -- has a cooldown of 30 seconds, and only requires you to be under 75% of your maximum health."
-  -- With it, wrath is a 30s heal-plus-both-defences, not a 3-minute emergency. The lockout keeps
-  -- the old 5s margin (185 for 180, 35 for 30): stamped when the round is BUILT, and a round that
-  -- is replaced before it fires loses the cast for that long -- no wrath line is captured yet to
-  -- stamp from instead.
+  -- With it, wrath is a 30s heal-plus-both-defences, not a 3-minute emergency.
+  --
+  -- THE LOCKOUTS ARE THE USER'S (v4.7.361): "below 50 percent health we should be using enact
+  -- wrath (Normally). Put the cooldown for this probably at 2 minutes" -- and with Roth, "below 75
+  -- percent health ... on a 30 second cooldown". (v4.7.360 had 185s / 35s: the AB's three minutes
+  -- and the boon's 30s, each plus a 5s margin.) Stamped when the round is BUILT, and a round that is
+  -- replaced before it fires loses the cast for that long -- no wrath line is captured yet to stamp
+  -- from instead.
   ataxiaTemp.psionRothAt = ataxiaTemp.psionRothAt or 0
   local nowT = (getEpoch and getEpoch()) or os.time()
   local rothFired = false
   local wrathBelow = psionRoth and 75 or 50
-  local wrathLockout = psionRoth and 35 or 185
+  local wrathLockout = psionRoth and 30 or 120
   if (tonumber(ataxia.vitals.hpp) or 100) < wrathBelow
      and (nowT - (tonumber(ataxiaTemp.psionRothAt) or 0)) >= wrathLockout then
     ataxiaTemp.psionRothAt = nowT

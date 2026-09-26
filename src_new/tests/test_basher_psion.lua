@@ -154,7 +154,7 @@ describe("ataxiaBasher_psionBashing -- eq riders and keepers", function()
     expect(has(cmd, "enact wrath;")).toBeTrue()
     expect(has(cmd, "weave deathblow")).toBeTrue() -- the swing still happens
     local cmd2 = ataxiaBasher_psionBashing()
-    expect(has(cmd2, "enact wrath")).toBeFalse() -- stamped: 185s lockout
+    expect(has(cmd2, "enact wrath")).toBeFalse() -- stamped: 120s lockout (v4.7.361)
     clock = clock + 190
     expect(has(ataxiaBasher_psionBashing(), "enact wrath")).toBeTrue()
   end)

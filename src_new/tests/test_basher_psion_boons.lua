@@ -80,6 +80,7 @@ local function reset()
   psionEarthquake = false
   psionProphet = false
   psionRoth = false
+  ataxiaTemp.psionRuptureUpAt = nil
   ataxiaTemp.psionForesightAt, ataxiaTemp.psionForesightTry = nil, nil
   gmcp.IRE.Target.Info = {}
   ataxiaBasher.upheavalAt = nil
@@ -858,22 +859,22 @@ describe("wrath, and the Roth combo boon", function()
     expect(has(ataxiaBasher_psionBashing(), "enact wrath")).toBeFalse()
   end)
 
-  it("with Roth: again after ~30s (35 with the margin), not 3 minutes", function()
+  it("with Roth: again after 30s, not 2 minutes (user)", function()
     reset()
     psionRoth = true
     ataxia.vitals.hpp = 60
     expect(has(ataxiaBasher_psionBashing(), "enact wrath")).toBeTrue()
-    clock = clock + 34
+    clock = clock + 29
     expect(has(ataxiaBasher_psionBashing(), "enact wrath")).toBeFalse()
     clock = clock + 1
     expect(has(ataxiaBasher_psionBashing(), "enact wrath")).toBeTrue()
   end)
 
-  it("without it the lockout is still 185s", function()
+  it("without it the lockout is 2 minutes (user: \"probably at 2 minutes\")", function()
     reset()
     ataxia.vitals.hpp = 40
     ataxiaBasher_psionBashing()
-    clock = clock + 184
+    clock = clock + 119
     expect(has(ataxiaBasher_psionBashing(), "enact wrath")).toBeFalse()
     clock = clock + 1
     expect(has(ataxiaBasher_psionBashing(), "enact wrath")).toBeTrue()
@@ -894,7 +895,55 @@ describe("wrath, and the Roth combo boon", function()
   end)
 end)
 
+-- =====================================================================================
+-- RUPTURE BY THE GAME'S LINES (v4.7.361). User: "With bloodletter we should be using enact rupture
+-- every time it is available."
+describe("Bloodletter's Fury: rupture tracked from its own lines", function()
+  local TL = dofile("src_new/tests/trigger_lib.lua")
+  local P = "src_new/triggers/levi_ataxia/for_levi/leviticus/psion/"
+  local UP = "Your vision sharpens, allowing you to perceive the locations of every vein and artery that lies beneath the skin."
+  local ALREADY = "Your blows will already rupture veins and arteries."
+  local DOWN = "Distractions reassert themselves, your mental clarity returning to mundane levels."
+  local function rupture() return keepers(false) == "enact rupture;" end
+
+  it("the three lines match their triggers, as the server wraps them", function()
+    expect(TL.anyMatches(TL.patterns(P .. "007_Rupture_Up.lua"), TL.wrap(UP, 119)[1])).toBeTrue()
+    expect(TL.anyMatches(TL.patterns(P .. "007_Rupture_Up.lua"), ALREADY)).toBeTrue()
+    expect(TL.anyMatches(TL.patterns(P .. "008_Rupture_Down.lua"), DOWN)).toBeTrue()
+  end)
+
+  it("the up line stands the keeper down even with no gmcp defence", function()
+    reset(); psionBloodletter = true
+    dofile(P .. "007_Rupture_Up.lua")
+    expect(rupture()).toBeFalse()
+  end)
+
+  it("the down line re-enacts on the very next round -- no hold left over", function()
+    reset(); psionBloodletter = true
+    expect(rupture()).toBeTrue()          -- sent; the 4s hold is stamped
+    dofile(P .. "007_Rupture_Up.lua")
+    dofile(P .. "008_Rupture_Down.lua")
+    expect(rupture()).toBeTrue()          -- same second: the hold was cleared with the belief
+  end)
+
+  it("the belief expires, so a missed down line cannot park the keeper", function()
+    reset(); psionBloodletter = true
+    dofile(P .. "007_Rupture_Up.lua")
+    clock = clock + 19
+    expect(rupture()).toBeFalse()
+    clock = clock + 1
+    expect(rupture()).toBeTrue()
+  end)
+
+  it("without the boon, the lines change nothing", function()
+    reset()
+    dofile(P .. "008_Rupture_Down.lua")
+    expect(keepers(false)).toBe("")
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (test files share one Lua state).
+ataxiaTemp.psionRuptureUpAt = nil
 psionRoth = nil
 psionProphet = nil
 ataxiaTemp.psionForesightAt, ataxiaTemp.psionForesightTry = nil, nil

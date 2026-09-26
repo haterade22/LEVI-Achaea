@@ -2,6 +2,42 @@
 
 ---
 
+## 2026-09-26 - Psion: wrath on the user's cooldowns, and rupture tracked from its own lines (v4.7.361)
+
+User: *"When in Psion and below 50 percent health we should be using enact wrath. (Normally). Put the
+cooldown for this probably at 2 minutes. With the roth boon, and below 75 percent health, we should be
+using enact wrath on a 30 second cooldown. With bloodletter we should be using enact rupture every
+time it is available."*
+
+**Wrath.** Lockout 120s below 50% HP (was 185s), 30s below 75% with Roth (was 35s).
+
+**Rupture.** The Bloodletter's Fury keeper read only gmcp's `rupturesight` defence, and there is no
+evidence gmcp lists the four-blow charge under that name. It now believes the game's lines, which the
+user gave:
+
+| Line | Trigger | Meaning |
+|---|---|---|
+| `Your vision sharpens, allowing you to perceive the locations of every vein and artery that lies beneath the skin.` | `psion/007_Rupture_Up` (start of line) | up |
+| `Your blows will already rupture veins and arteries.` | `psion/007_Rupture_Up` (exact) | already up |
+| `Distractions reassert themselves, your mental clarity returning to mundane levels.` | `psion/008_Rupture_Down` (exact) | down |
+
+Up/already stand the keeper down (`ataxiaBasher_psionRuptureSeen(true)`); down clears the belief AND
+the 4s anti-spam hold, so the next round re-enacts -- "every time it is available". The belief expires
+after 20s so a missed down line cannot park the keeper; an early expiry costs one rupture answered by
+"already". The down line's wording reads like clarity's; taken as given, and harmless if shared.
+
+**Tests:** 5 new (the three lines against their triggers as wrapped, up stands down with no gmcp
+defence, down re-enacts at once, the belief expires, no boon = nothing), the two lockout tests moved to
+120/30. 7 break-back mutants, all killed. Suite: 2494 pass.
+
+### Files
+
+- `basher/002_Class_Bashing.lua`; triggers `psion/007_Rupture_Up`, `psion/008_Rupture_Down` (new);
+  `tests/test_basher_psion_boons.lua`, `tests/test_basher_psion.lua`; `.claude/classes/psion.md`,
+  `CLAUDE.md`, memory.
+
+---
+
 ## 2026-09-26 - Psion: the emergency heal is ENACT WRATH (it never fired), and the Roth combo boon (v4.7.360)
 
 The user pasted the Psion combo -- *"Razor Clarity - Bloodletter's -> Roth"* -- with the Roth boon,

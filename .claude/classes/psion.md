@@ -463,7 +463,7 @@ battlerage: |
 
 eq_riders: |
   ONE equilibrium-SPENDING action per round (v4.7.351), in this order -- see below:
-  enact wrath — below 50% HP (75% with the Roth boon), 185s send stamp (35s with Roth);
+  enact wrath — below 50% HP (75% with the Roth boon), 120s send stamp (30s with Roth; user, v4.7.361);
                 fires even on shielded rounds (heal first). Grants clarity+rupture. It sent
                 `enact roth` -- the BOON's name -- until v4.7.360, and never fired.
   psi transcend — re-upped when the GMCP psitranscend defence drops (10s TIMESTAMP hold,
@@ -511,11 +511,11 @@ Psiwave.
 | Boon | Flag | Effect on the round |
 |---|---|---|
 | Panoply | `psionPanoply` | `weave flurry` replaces `weave deathblow` |
-| Bloodletter's Fury | `psionBloodletter` | keep `rupturesight` up (`enact rupture`): weaves unblockable, +50% base, 20% faster balance |
+| Bloodletter's Fury | `psionBloodletter` | keep rupture up (`enact rupture`) "every time it is available": weaves unblockable, +50% base, 20% faster balance. Since v4.7.361 the keeper believes the game's lines -- up "Your vision sharpens, allowing you to perceive the locations of every vein...", already "Your blows will already rupture veins and arteries." (psion/007), down "Distractions reassert themselves, your mental clarity returning to mundane levels." (psion/008; the user's, though it reads like clarity's) -- down clears the hold so the next round re-enacts; the belief expires after 20s |
 | Razor Clarity | `psionRazorClarity` | keep `clarity` up (`enact clarity`): +50% damage, +2% crit; clarity also speeds equilibrium |
 | Mindbreak | `psionMindbreak` | none -- multiplies the one free shatter per full transcendence (+500%) |
 | Psiwave | `psionPsiwave` | **`psi radiate` replaces `psi shatter`** as the full-transcendence action (v4.7.355; no target, hits every denizen with magic damage). Wins over Mindbreak by the user's word |
-| Roth (combo: Razor Clarity + Bloodletter's Fury) | `psionRoth` | `enact wrath` below **75%** HP (not 50%) on a 35s lockout (30s cooldown + margin) instead of 185s (v4.7.360). Wrath grants clarity and rupture, so with Roth the keepers rarely need to buy them |
+| Roth (combo: Razor Clarity + Bloodletter's Fury) | `psionRoth` | `enact wrath` below **75%** HP (not 50%) on a 30s lockout instead of 120s (v4.7.360; lockouts set by the user in v4.7.361). Wrath grants clarity and rupture, so with Roth the keepers rarely need to buy them |
 | Earthquake | `psionEarthquake` | **`enact upheaval`** (AB 2730, 2.30s eq) on idle equilibrium: blunt damage to every denizen "when it summons rubble" (v4.7.357). Only with 2+ denizens (`ataxiaBasher.upheavalAt`), at 50%+ HP, unshielded -- the rubble blocks our own exits. Costs a deathblow round 0.10s, flurry nothing |
 | Prophet of Creation | `psionProphet` | **`psi foresight <target>` first in the round** (v4.7.359; no tree/shield -- "that is optional") whenever off cooldown and the target is at 50%+ HP (a denizen that dies before it swings would leave the prediction unfulfilled, which the AB says stuns). The cast line starts the 30s cooldown (psion/005), the refusal retries in 5s (psion/006); building a round only takes a 2s hold, because a rebuilt round replaces the queued one. v4.7.358 had it latch-only: `psi foresight <t> <tree|shield>` works on denizens and makes the next attack against us miss, but a prediction that does not come true STUNS us, and denizens only ever SHIELD. Free, per the user. **Tested in game:** the prediction is the denizen's next attack -- "Your prediction comes to pass, and you effortlessly avoid the attack from <denizen>." -- came true in under 0.3s, no stun. **Cooldown ~30s** (user's estimate), refused with "Your mind has not yet recovered enough to pierce the fabric of time once again." -- one avoided attack per ~30s. Unknown: what happens when the denizen dies or never swings (the AB's stun), and the window |
 
