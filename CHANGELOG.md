@@ -2,6 +2,16 @@
 
 ---
 
+## 2026-09-26 - Rupture lines highlighted (v4.7.364)
+
+User: *"Please highlight the enact rupture lines with a bold bright color"*. New
+`highlighting/067_Rupture_Highlight` colours all three -- up ("Your vision sharpens, ... every vein
+and artery that lies beneath the skin.", with a tail pattern for when it wraps), already ("Your blows
+will already rupture veins and arteries.") and down ("Distractions reassert themselves, ...") -- in
+bold `deep_pink`. Highlight only; the state stays in psion/007-008. 1 new test (every row, as wrapped).
+
+---
+
 ## 2026-09-26 - Boon advisor: Death's Demise and Gravedigger top every offer (v4.7.363)
 
 User: *"Death's Demise  Defence common echo x4 (ECHO)  score 35 -- the best boon or gravedigger
