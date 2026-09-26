@@ -254,6 +254,7 @@ function M.onRunEnd()
   psionPsiwave = false -- ...and the equilibrium attack goes back to shatter (v4.7.355)
   psionEarthquake = false -- ...and upheaval leaves the round (v4.7.357)
   psionProphet = false -- ...and foresight is PvP-only again (v4.7.358)
+  psionRoth = false -- ...and wrath is a 3-minute, under-half-health heal again (v4.7.360)
   dragonMightSycaerunax = false -- boons gone on a confirmed run-end
   dragonRampage = false -- boons gone on a confirmed run-end
   dwFlashforward = false -- boons gone on a confirmed run-end
@@ -1293,6 +1294,7 @@ M.BOON_FLAGS = {
   ["Psiwave"]              = "psionPsiwave",
   ["Earthquake"]           = "psionEarthquake",
   ["Prophet of Creation"]  = "psionProphet",
+  ["Roth"]                 = "psionRoth",
   ["Vitalising Tincture"]  = "mnemVitalisingTincture",
   ["Font of Life"]         = "mnemFontOfLife",
   ["Shadow Tempo"]         = "mnemShadowTempo",

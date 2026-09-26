@@ -509,6 +509,9 @@ end
 M.BOON_COMBO = {
   "Abundance", "Azure Scales", "Cold Mastery", "Corrupted Blood", "Hyperfixate",
   "Indomitable", "Ogre's Defence", "Searing Light", "Serpent's Grace", "Sinuosity",
+  -- The Psion pair (v4.7.360): the user's contemplate of Bloodletter's Fury reads "Combo Boon?: Yes",
+  -- and the user names both as the parts of Roth.
+  "Bloodletter's Fury", "Razor Clarity",
 }
 for _, name in ipairs(M.BOON_COMBO) do
   M.BOON_SEED[name] = M.BOON_SEED[name] or {}
@@ -542,6 +545,15 @@ end
 --     none is recorded here either;
 --   * every one of the 22 answers "Can echo: No", so a combo reward appears not to echo.
 M.BOON_COMBO_RECIPES = {
+  -- The user, 2026-09-26: "This is Psion's Combo Boons (Roth being the last one). Razor Clarity -
+  -- Bloodletter's -> Roth". Rarity from the BOONS row ("Roth  1  legendary"); the category and the
+  -- quote were not pasted, so they are not recorded (fill-only: the contemplate block fills them).
+  ["Roth"] = {
+    rarity = "legendary",
+    maxEchoes = 0,
+    unlocksFrom = { "Razor Clarity", "Bloodletter's Fury" },
+    description = "Your emulation wrath ability now has a cooldown of 30 seconds, and only requires you to be under 75% of your maximum health.",
+  },
   -- Contemplated live by the user, 2026-09-25. The end of the necromancy path: it turns the
   -- gravehands from a one-off cast into a room engine that fires while we stand in them.
   ["Graveborn"] = {

@@ -33,6 +33,10 @@
   Gravehands' AB block says "3.00 seconds of equilibrium"; in game it takes BALANCE, so the Apostate
   summon collided with the deadeyes swing for seven releases (v4.7.354). The AB block said shatter was
   a 3.10s-equilibrium action usable any time; the package had only ever used it at full transcendence.
+- **A boon's name is not an ability's syntax.** The Psion heal sent `enact roth` for its whole life
+  -- Roth is the Mnemosyne boon; the ability is WRATH, and the package's own alias said so. Every test
+  asserted `enact roth`, so every test agreed with the bug (v4.7.360). When a command comes from a
+  boon or wiki text, check it against the AB block's Syntax line or an existing alias.
 - **A per-cast damage comparison is not a rotation comparison.** v4.7.352 made a paid Psion shatter
   "the main tool" on every idle equilibrium because one Mindbreak shatter out-hit single deathblows.
   But the queued round waits for equilibrium AND balance, so the 3.10s shatter held every weave back

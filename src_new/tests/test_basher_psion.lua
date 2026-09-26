@@ -146,21 +146,23 @@ describe("ataxiaBasher_psionBattlerage -- timer-free rotation", function()
 end)
 
 describe("ataxiaBasher_psionBashing -- eq riders and keepers", function()
+  -- v4.7.360: the command is ENACT WRATH (AB 2739). `enact roth` -- the boon's name -- was sent
+  -- until then, and this test asserted it.
   it("fires Roth below 50% HP on its 3-minute stamp, riding eq beside the weave", function()
     reset(); ataxia.vitals.hpp = 40
     local cmd = ataxiaBasher_psionBashing()
-    expect(has(cmd, "enact roth;")).toBeTrue()
+    expect(has(cmd, "enact wrath;")).toBeTrue()
     expect(has(cmd, "weave deathblow")).toBeTrue() -- the swing still happens
     local cmd2 = ataxiaBasher_psionBashing()
-    expect(has(cmd2, "enact roth")).toBeFalse() -- stamped: 185s lockout
+    expect(has(cmd2, "enact wrath")).toBeFalse() -- stamped: 185s lockout
     clock = clock + 190
-    expect(has(ataxiaBasher_psionBashing(), "enact roth")).toBeTrue()
+    expect(has(ataxiaBasher_psionBashing(), "enact wrath")).toBeTrue()
   end)
 
   it("Roth still fires on shielded rounds (heal first, break shield same round)", function()
     reset(); ataxia.vitals.hpp = 40; ataxiaBasher.shielded = true
     local cmd = ataxiaBasher_psionBashing()
-    expect(has(cmd, "enact roth")).toBeTrue()
+    expect(has(cmd, "enact wrath")).toBeTrue()
     expect(has(cmd, "weave cleave")).toBeTrue()
   end)
 
@@ -169,7 +171,7 @@ describe("ataxiaBasher_psionBashing -- eq riders and keepers", function()
   it("a Roth round leaves PSI TRANSCEND for the next one", function()
     reset(); ataxia.vitals.hpp = 40; ataxia.defences.psitranscend = nil
     local cmd = ataxiaBasher_psionBashing()
-    expect(has(cmd, "enact roth")).toBeTrue()
+    expect(has(cmd, "enact wrath")).toBeTrue()
     expect(has(cmd, "psi transcend")).toBeFalse()
     ataxia.vitals.hpp = 100
     expect(has(ataxiaBasher_psionBashing(), "psi transcend;")).toBeTrue()
