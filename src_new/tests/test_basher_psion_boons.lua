@@ -935,6 +935,17 @@ describe("Bloodletter's Fury: rupture tracked from its own lines", function()
     expect(rupture()).toBeTrue()
   end)
 
+  -- v4.7.364: "Please highlight the enact rupture lines with a bold bright color"
+  it("all three lines are highlighted, both rows of the wrapped one included", function()
+    local H = TL.patterns("src_new/triggers/levi_ataxia/for_levi/leviticus/highlighting/067_Rupture_Highlight.lua")
+    for _, w in ipairs({ 80, 100, 119 }) do
+      for _, row in ipairs(TL.wrap(UP, w)) do expect(TL.anyMatches(H, row)).toBeTrue() end
+    end
+    expect(TL.anyMatches(H, UP)).toBeTrue()
+    expect(TL.anyMatches(H, ALREADY)).toBeTrue()
+    expect(TL.anyMatches(H, DOWN)).toBeTrue()
+  end)
+
   it("without the boon, the lines change nothing", function()
     reset()
     dofile(P .. "008_Rupture_Down.lua")
