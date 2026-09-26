@@ -2,6 +2,30 @@
 
 ---
 
+## 2026-09-26 - Boon advisor: Death's Demise and Gravedigger top every offer (v4.7.363)
+
+User: *"Death's Demise  Defence common echo x4 (ECHO)  score 35 -- the best boon or gravedigger
+should be highest in score"*.
+
+New weight `topTier = 150` and table `M.BOON_TOP_TIER`, applied by name before anything else can
+outrank it:
+
+- **Death's Demise** -- "Your health is increased to 133% of its normal maximum" (177% echoed).
+- **Gravedigger** -- "Your death cape can now stack up to 200% of your health."
+
+They undo each other: Death's Demise removes the death cape's life-steal, which is what Gravedigger
+builds on. So neither gets the bonus while we hold the other, and the summary flags it as "pointless
+beside <the other> (you have it)".
+
+**Tests:** 1 new -- each tops an offer against a +10% resist-all legendary combo and Mental Prowess,
+and holding the rival removes exactly the bonus.
+
+### Files
+
+- `mnemosyne/014_Boon_Advisor.lua`, `tests/test_mnemosyne.lua`, `CLAUDE.md`, memory.
+
+---
+
 ## 2026-09-26 - Boon advisor: stat-scaling damage boons weighted high (v4.7.362)
 
 User: *"Mental Prowess  Offence legendary  score 38  +4% damage. These should be weighted high. There

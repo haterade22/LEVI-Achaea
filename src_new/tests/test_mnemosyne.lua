@@ -9049,6 +9049,32 @@ describe("boon combos", function()
     end)
   end)
 
+  -- v4.7.363, user: "the best boon or gravedigger should be highest in score"
+  it("Death's Demise and Gravedigger top any offer -- unless we hold the other", function()
+    local lib = {
+      ["Death's Demise"] = { description = "Your health is increased to 133% of its normal maximum, but you can no longer benefit from the life-stealing effect of a death cape.",
+                             category = "Defence", rarity = "common" },
+      ["Gravedigger"] = { description = "Your death cape can now stack up to 200% of your health.",
+                          category = "Defence", rarity = "legendary" },
+      ["Big Shield"] = { description = "You gain 10% resistance to all damage.", category = "Defence",
+                         rarity = "legendary", comboBoon = true },
+      ["Mental Prowess"] = { description = "You deal 4% increased damage for each point of intelligence.",
+                             category = "Offence", rarity = "legendary" },
+    }
+    withLibrary(lib, function()
+      local ranked = holding({}, function()
+        return M.rankOffer({ "Big Shield", "Mental Prowess", "(ECHO) Death's Demise" })
+      end)
+      expect(ranked[1].name).toBe("Death's Demise")
+      ranked = holding({}, function() return M.rankOffer({ "Big Shield", "Mental Prowess", "Gravedigger" }) end)
+      expect(ranked[1].name).toBe("Gravedigger")
+      local voided = holding({ "Death's Demise" }, function() return M.scoreBoon("Gravedigger") end)
+      local fresh = holding({}, function() return M.scoreBoon("Gravedigger") end)
+      expect(fresh.score - voided.score).toBe(M.BOON_WEIGHTS.topTier)
+      expect(table.concat(voided.flags, " "):find("pointless beside Death's Demise", 1, true) ~= nil).toBeTrue()
+    end)
+  end)
+
   it("the bestowal records the free boon and says which recipe finished", function()
     local out, claimed
     withLibrary(WITH_CHAIN, function()

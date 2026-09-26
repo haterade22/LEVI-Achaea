@@ -860,7 +860,7 @@ chain or not -- or straight from `_flushPendingOffer` when no chain starts. `M.s
 NAMED PARTS (each part is a printed reason) built on the existing parsers (`_resistFrom`,
 `_immunitiesFrom`, `_statFrom`, `_dmgGenericFrom`, `_dmgBoostFrom`, `_procFrom` + Fae-Lapse's "chance you
 give the denizen you are attacking X", `_boonDrawbacks`, `_conflictsFor`, `_spiritGate`), relative to
-what we hold (`bonusTotals` resists/immunities, held categories). Stat-scaling damage boons (Brute Force / Mental Prowess / Deadly Finesse via `M.BOON_STAT_DAMAGE`, or "for each point of <stat>") get `statScalingDamage` +40 (v4.7.362, user: "These should be weighted high"). Weights: `M.BOON_WEIGHTS` (defence
+what we hold (`bonusTotals` resists/immunities, held categories). Stat-scaling damage boons (Brute Force / Mental Prowess / Deadly Finesse via `M.BOON_STAT_DAMAGE`, or "for each point of <stat>") get `statScalingDamage` +40 (v4.7.362, user: "These should be weighted high"). **Death's Demise and Gravedigger** get `topTier` +150 via `M.BOON_TOP_TIER` (v4.7.363, user: "should be highest in score") -- except while holding the other, since Death's Demise removes the death-cape life-steal Gravedigger builds on. Weights: `M.BOON_WEIGHTS` (defence
 first), `M.BOON_CLASS_WEIGHTS[<gmcp class lower>]` merged over it (deep; empty until play says).
 Reroll hint needs `M._rerollsLeft` > 0 (trigger 094; reset per screen). **A REFUSED CONTEMPLATE IS
 NOT ALWAYS A BAD NAME (v4.7.328, user: "I picked it before the skill had time to look"):** claiming
