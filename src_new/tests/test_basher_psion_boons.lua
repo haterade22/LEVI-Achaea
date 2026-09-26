@@ -79,6 +79,7 @@ local function reset()
   psionPsiwave = false
   psionEarthquake = false
   psionProphet = false
+  psionRoth = false
   ataxiaTemp.psionForesightAt, ataxiaTemp.psionForesightTry = nil, nil
   gmcp.IRE.Target.Info = {}
   ataxiaBasher.upheavalAt = nil
@@ -226,7 +227,7 @@ describe("the keepers ride the Psion round", function()
     psionBloodletter, psionRazorClarity = true, true
     ataxia.vitals.hpp = 30
     local cmd = ataxiaBasher_psionBashing()
-    expect(cmd:find("enact roth", 1, true) ~= nil).toBeTrue()
+    expect(cmd:find("enact wrath", 1, true) ~= nil).toBeTrue()
     expect(cmd:find("enact clarity", 1, true)).toBeNil()
     expect(cmd:find("enact rupture", 1, true)).toBeNil()
   end)
@@ -395,7 +396,7 @@ describe("one equilibrium action per Psion round", function()
     ataxia.defences.psitranscend = nil
     ataxia.vitals.hpp = 30
     local cmd = ataxiaBasher_psionBashing()
-    expect(cmd:find("enact roth", 1, true) ~= nil).toBeTrue()
+    expect(cmd:find("enact wrath", 1, true) ~= nil).toBeTrue()
     expect(eqActions(cmd)).toBe(1)
   end)
 
@@ -457,7 +458,7 @@ describe("psi shatter only at full transcendence", function()
     ataxia.vitals.hpp = 30
     ataxiaTemp.transcendence = 100
     local cmd = ataxiaBasher_psionBashing()
-    expect(cmd:find("psi shatter", 1, true) < cmd:find("enact roth", 1, true)).toBeTrue()
+    expect(cmd:find("psi shatter", 1, true) < cmd:find("enact wrath", 1, true)).toBeTrue()
   end)
 
   it("never on a shielded round -- the shield comes first, and transcendence waits", function()
@@ -821,7 +822,80 @@ describe("Prophet of Creation: psi foresight <target>, one free dodge per cooldo
   end)
 end)
 
+-- =====================================================================================
+-- ROTH (v4.7.360), the Psion combo boon (Razor Clarity + Bloodletter's Fury): "Your emulation
+-- wrath ability now has a cooldown of 30 seconds, and only requires you to be under 75% of your
+-- maximum health." And the command is ENACT WRATH -- the package sent `enact roth` until now.
+describe("wrath, and the Roth combo boon", function()
+  local function has(cmd, s) return cmd:find(s, 1, true) ~= nil end
+
+  it("the command is `enact wrath` -- never the boon's name", function()
+    reset()
+    ataxia.vitals.hpp = 40
+    local cmd = ataxiaBasher_psionBashing()
+    expect(has(cmd, "enact wrath;")).toBeTrue()
+    expect(has(cmd, "enact roth")).toBeFalse()
+    -- and it is what the package's own alias sends
+    local f = io.open("src_new/aliases/levi_ataxia/for_levi/levi_062424/emulation/007_Wrath.lua")
+    local s = f:read("*a"); f:close()
+    expect(s:find('send("enact wrath")', 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("without the boon: only below half health", function()
+    reset()
+    ataxia.vitals.hpp = 60
+    expect(has(ataxiaBasher_psionBashing(), "enact wrath")).toBeFalse()
+  end)
+
+  it("with Roth: below 75% health", function()
+    reset()
+    psionRoth = true
+    ataxia.vitals.hpp = 74
+    expect(has(ataxiaBasher_psionBashing(), "enact wrath")).toBeTrue()
+    reset()
+    psionRoth = true
+    ataxia.vitals.hpp = 75
+    expect(has(ataxiaBasher_psionBashing(), "enact wrath")).toBeFalse()
+  end)
+
+  it("with Roth: again after ~30s (35 with the margin), not 3 minutes", function()
+    reset()
+    psionRoth = true
+    ataxia.vitals.hpp = 60
+    expect(has(ataxiaBasher_psionBashing(), "enact wrath")).toBeTrue()
+    clock = clock + 34
+    expect(has(ataxiaBasher_psionBashing(), "enact wrath")).toBeFalse()
+    clock = clock + 1
+    expect(has(ataxiaBasher_psionBashing(), "enact wrath")).toBeTrue()
+  end)
+
+  it("without it the lockout is still 185s", function()
+    reset()
+    ataxia.vitals.hpp = 40
+    ataxiaBasher_psionBashing()
+    clock = clock + 184
+    expect(has(ataxiaBasher_psionBashing(), "enact wrath")).toBeFalse()
+    clock = clock + 1
+    expect(has(ataxiaBasher_psionBashing(), "enact wrath")).toBeTrue()
+  end)
+
+  it("the recipe, the combo marks and the BOONS row are wired", function()
+    local M = ataxia.mnemosyne
+    if M and M.BOON_COMBO_RECIPES then
+      local r = M.BOON_COMBO_RECIPES["Roth"]
+      expect(r ~= nil).toBeTrue()
+      expect(table.concat(r.unlocksFrom, ",")).toBe("Razor Clarity,Bloodletter's Fury")
+    end
+    local function slurp(p) local f = io.open(p); local s = f:read("*a"); f:close(); return s end
+    local seed = slurp("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/010_Boon_Seed.lua")
+    expect(seed:find('"Bloodletter\'s Fury", "Razor Clarity",', 1, true) ~= nil).toBeTrue()
+    local row = slurp("src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/106_Roth.lua")
+    expect(row:find("if ataxiaBasher and ataxiaBasher.inMnemosyne then psionRoth = true end", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (test files share one Lua state).
+psionRoth = nil
 psionProphet = nil
 ataxiaTemp.psionForesightAt, ataxiaTemp.psionForesightTry = nil, nil
 gmcp.IRE.Target.Info = {}

@@ -87,6 +87,9 @@ if matches[2]:lower():find("earthquake") then psionEarthquake = true end
 -- Prophet of Creation: PSI FORESIGHT works against denizens and makes the next attack against us
 -- miss (v4.7.358).
 if matches[2]:lower():find("prophet of creation") then psionProphet = true end
+-- Roth (combo: Razor Clarity + Bloodletter's Fury): ENACT WRATH on a 30s cooldown below 75% health
+-- (v4.7.360). The whole name, anchored -- "roth" is a substring of other words.
+if matches[2]:lower():match("^%s*roth%s*$") then psionRoth = true end
 -- Might of Sycaerunax: draconic BLAST +25% damage and the breath weapon PERSISTS;
 -- the dragon basher drops the re-summon from its blast weave while it's up.
 if matches[2]:lower():find("sycaerunax") then dragonMightSycaerunax = true end

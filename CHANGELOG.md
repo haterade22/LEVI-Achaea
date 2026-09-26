@@ -2,6 +2,55 @@
 
 ---
 
+## 2026-09-26 - Psion: the emergency heal is ENACT WRATH (it never fired), and the Roth combo boon (v4.7.360)
+
+The user pasted the Psion combo -- *"Razor Clarity - Bloodletter's -> Roth"* -- with the Roth boon,
+Bloodletter's Fury's contemplate block, and the AB blocks for Rupture and Wrath:
+
+> **Roth** (legendary, combo) -- "Your emulation wrath ability now has a cooldown of 30 seconds, and
+> only requires you to be under 75% of your maximum health."
+>
+> **Wrath (Emulation)** ABADMIN ID 2739 -- `ENACT WRATH`, 1.30s of equilibrium -- "bolstering your
+> health and granting you both the clarity and rupture defences" -- below half health, every three
+> minutes.
+
+**The bug.** The Psion round's emergency heal has sent `enact roth` since it was written. *Roth* is
+the Mnemosyne boon's name; the ability is WRATH -- the package's own alias (`emulation/007_Wrath`)
+always sent `enact wrath`. So the heal never fired, in any release, and every test that asserted it
+asserted `enact roth`: the tests agreed with the bug. Now `enact wrath`.
+
+**Roth.** With `psionRoth`, wrath goes out below **75%** health (not 50%) on a **35s** lockout (the 30s
+cooldown plus the old 5s margin; 185s for 180 without the boon). It rides the round on equilibrium
+exactly as before -- first of the spenders, shielded rounds included -- and hands over clarity and
+rupture, which the keepers then do not need to buy.
+
+**Wiring.** `psionRoth` in `M.BOON_FLAGS`, run start/end, the claim alias (matched as the WHOLE name --
+"roth" is a substring of other words), and a BOONS row `mnemosyne/106_Roth` (in-tower gate). The
+recipe is seeded in `M.BOON_COMBO_RECIPES` (Razor Clarity + Bloodletter's Fury; legendary; category
+and quote not pasted, so not recorded), and both parts join `M.BOON_COMBO` (Bloodletter's Fury's
+block reads "Combo Boon?: Yes").
+
+**Also corrected:** RUPTURE's charge is "your next **four** blows" (the AB; the wiki said three) --
+comments and docs; the keeper already re-checks the defence every round, so no behaviour change. The
+README's "22 recipes ship known" was stale since Graveborn (23); it is 24 now.
+
+**Still open:** wrath is stamped when the round is BUILT, and rounds are rebuilt every 0.3s -- a round
+replaced before it fires loses the heal for the lockout. The fix is to stamp from the game's wrath line
+(as foresight now does), and that line has not been captured yet.
+
+**Tests:** 6 new (the command, never the boon's name, and the alias agrees; 50% without the boon; 75%
+with it; 35s with, 185s without; the recipe, combo marks and row), the 8 existing `enact roth`
+assertions renamed, and the combo-marks count 10 -> 12. 6 break-back mutants, all killed (restoring
+`enact roth` alone fails 10 tests). Suite: 2489 pass.
+
+### Files
+
+- `basher/002_Class_Bashing.lua`, `mnemosyne/004_Parsers.lua`, `mnemosyne/010_Boon_Seed.lua`; triggers
+  `mnemosyne/001`, `106_Roth` (new); alias `mnemosyne/002_Boon_Claim.lua`; tests; `.claude/classes/psion.md`,
+  `.claude/projects/mnemosyne/03-parsing-triggers.md`, `README.md`, `CLAUDE.md`, `.claude/AGENTS.md`, memory.
+
+---
+
 ## 2026-09-25 - Prophet of Creation: psi foresight <target>, one free dodge per cooldown (v4.7.359)
 
 v4.7.358 latched the boon and changed nothing, pending an in-game test. The user then tested it,

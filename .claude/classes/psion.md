@@ -463,8 +463,9 @@ battlerage: |
 
 eq_riders: |
   ONE equilibrium-SPENDING action per round (v4.7.351), in this order -- see below:
-  enact roth  — below 50% HP, 185s send stamp; fires even on shielded rounds (heal
-                first). Grants clarity+rupture.
+  enact wrath — below 50% HP (75% with the Roth boon), 185s send stamp (35s with Roth);
+                fires even on shielded rounds (heal first). Grants clarity+rupture. It sent
+                `enact roth` -- the BOON's name -- until v4.7.360, and never fired.
   psi transcend — re-upped when the GMCP psitranscend defence drops (10s TIMESTAMP hold,
                 v4.7.351; it was a tempTimer-cleared flag that could wedge).
   enact rupture / enact clarity — boon keepers (Bloodletter's Fury / Razor Clarity).
@@ -486,7 +487,7 @@ keepers: |
    equilibrium but REQUIRES equilibrium and balance to execute (user, 2026-09-25: *"it does need EQ
    and Balance to execute but costs no EQ. Just requires it"* -- the wiki's "while off equilibrium"
    is wrong). Anything ahead of it that spent equilibrium would leave it none, so it goes first.
-2. **At most one equilibrium-spending action**, the first that applies: `enact roth` (below 50% HP)
+2. **At most one equilibrium-spending action**, the first that applies: `enact wrath` (below 50% HP; 75% and every ~35s with Roth)
    > `psi transcend` (defence dropped) > one boon keeper (`enact rupture` for Bloodletter's Fury, then
    `enact clarity` for Razor Clarity). **No paid shatter** (v4.7.356) -- see below. If none of
    those went and **Earthquake** is held: `enact upheaval` (v4.7.357; 2+ denizens, 50%+ HP,
@@ -514,6 +515,7 @@ Psiwave.
 | Razor Clarity | `psionRazorClarity` | keep `clarity` up (`enact clarity`): +50% damage, +2% crit; clarity also speeds equilibrium |
 | Mindbreak | `psionMindbreak` | none -- multiplies the one free shatter per full transcendence (+500%) |
 | Psiwave | `psionPsiwave` | **`psi radiate` replaces `psi shatter`** as the full-transcendence action (v4.7.355; no target, hits every denizen with magic damage). Wins over Mindbreak by the user's word |
+| Roth (combo: Razor Clarity + Bloodletter's Fury) | `psionRoth` | `enact wrath` below **75%** HP (not 50%) on a 35s lockout (30s cooldown + margin) instead of 185s (v4.7.360). Wrath grants clarity and rupture, so with Roth the keepers rarely need to buy them |
 | Earthquake | `psionEarthquake` | **`enact upheaval`** (AB 2730, 2.30s eq) on idle equilibrium: blunt damage to every denizen "when it summons rubble" (v4.7.357). Only with 2+ denizens (`ataxiaBasher.upheavalAt`), at 50%+ HP, unshielded -- the rubble blocks our own exits. Costs a deathblow round 0.10s, flurry nothing |
 | Prophet of Creation | `psionProphet` | **`psi foresight <target>` first in the round** (v4.7.359; no tree/shield -- "that is optional") whenever off cooldown and the target is at 50%+ HP (a denizen that dies before it swings would leave the prediction unfulfilled, which the AB says stuns). The cast line starts the 30s cooldown (psion/005), the refusal retries in 5s (psion/006); building a round only takes a 2s hold, because a rebuilt round replaces the queued one. v4.7.358 had it latch-only: `psi foresight <t> <tree|shield>` works on denizens and makes the next attack against us miss, but a prediction that does not come true STUNS us, and denizens only ever SHIELD. Free, per the user. **Tested in game:** the prediction is the denizen's next attack -- "Your prediction comes to pass, and you effortlessly avoid the attack from <denizen>." -- came true in under 0.3s, no stun. **Cooldown ~30s** (user's estimate), refused with "Your mind has not yet recovered enough to pierce the fabric of time once again." -- one avoided attack per ~30s. Unknown: what happens when the denizen dies or never swings (the AB's stun), and the window |
 
@@ -524,7 +526,7 @@ move). Still unknown: the cast and damage lines, and whether a cast with every e
 does anything.
 
 Keeper holds are TIMESTAMPS (`ataxiaTemp.psionKeepAt[def]`): clarity 12s, rupturesight 4s (rupture's
-text reads like a three-blow charge, so its guard is shorter). A keeper that fires marks the round's
+AB text is "your next four blows", so it reads like a charge and gets the shorter guard). A keeper that fires marks the round's
 equilibrium spent -- it did not until v4.7.352, which would have chained keeper + shatter.
 
 **Transcendence tracking** (`ataxiaTemp.transcendence`): `psion/001` reads the build line ("...you are

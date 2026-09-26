@@ -6983,21 +6983,21 @@ describe("comboBoon in the catalogue", function()
     expect(lib["Stale"].comboBoon).toBeTrue()                        -- the wrong-typed value was no answer
   end)
 
-  it("the seed marks the ten combo boons, and the merge carries it into the catalogue", function()
+  it("the seed marks the twelve combo boons, and the merge carries it into the catalogue", function()
     local saveSeed, saveCombo = M.BOON_SEED, M.BOON_COMBO
     local lib = withLibrary({}, function()
       dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/010_Boon_Seed.lua")
     end)
     local combo, seed = M.BOON_COMBO, M.BOON_SEED
     M.BOON_SEED, M.BOON_COMBO = saveSeed or seed, saveCombo or combo
-    expect(#combo).toBe(10)
+    expect(#combo).toBe(12)                                          -- ten from the export + the Psion pair (v4.7.360)
     for _, name in ipairs(combo) do
       expect(seed[name] ~= nil and seed[name].comboBoon).toBeTrue()
       expect(lib[name] ~= nil and lib[name].comboBoon).toBeTrue()
     end
     local n = 0
     for _, rec in pairs(seed) do if rec.comboBoon ~= nil then n = n + 1 end end
-    expect(n).toBe(10)                                               -- no boon is seeded as NOT combo
+    expect(n).toBe(12)                                               -- no boon is seeded as NOT combo
   end)
 
   it("mnem boondb counts them", function()
@@ -9742,12 +9742,13 @@ describe("the BOONS row arms the generic boon flags", function()
   end)
 
   -- The per-boon row triggers carry the same gate (v4.7.351): run each one's body both ways.
-  it("the per-boon rows (098-105) arm only inside the tower", function()
+  it("the per-boon rows (098-106) arm only inside the tower", function()
     local T = "src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/"
     local cases = { { "098_Graveborn.lua", "mnemGraveborn" }, { "099_Bloodletters_Fury.lua", "psionBloodletter" },
                     { "100_Razor_Clarity.lua", "psionRazorClarity" }, { "101_Mindbreak.lua", "psionMindbreak" },
                     { "102_Psiwave.lua", "psionPsiwave" }, { "103_Earthquake.lua", "psionEarthquake" },
-                    { "105_Prophet_of_Creation.lua", "psionProphet" } }
+                    { "105_Prophet_of_Creation.lua", "psionProphet" },
+                    { "106_Roth.lua", "psionRoth" } }
     local wasIn = ataxiaBasher.inMnemosyne
     local ok, err = pcall(function()
       for _, c in ipairs(cases) do

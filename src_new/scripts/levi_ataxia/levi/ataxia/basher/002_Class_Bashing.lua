@@ -2865,7 +2865,7 @@ end
 --
 -- THEY RIDE THE ROUND, because ENACT costs EQUILIBRIUM (2.30s, wiki) and every Psion weave
 -- spends BALANCE -- the idle-channel rule this file already applies to `psi transcend` and
--- `enact roth` directly above. A defence worth 50% damage is worth an equilibrium we were not
+-- `enact wrath` directly above. A defence worth 50% damage is worth an equilibrium we were not
 -- spending.
 --
 -- BOTH COMMANDS ARE CONFIRMED, not guessed: `enact clarity` and `enact rupture` are the
@@ -2875,9 +2875,10 @@ end
 -- names `rupturesight` itself.
 --
 -- THE HOLDS DIFFER, AND THE SHORT ONE IS DELIBERATE. `clarity` reads as an ordinary lasting
--- defence. `rupture` may not be: the ability text is "your next three blows shall all deal
--- significantly increased bleeding", which would make `rupturesight` a CHARGE that expires
--- after three swings rather than a defence that sits there. This code does not need to know
+-- defence. `rupture` may not be: the ability text is "Your next four blows shall all deal
+-- significantly increased bleeding" (AB 2736, pasted 2026-09-26; the wiki had "three"), which
+-- would make `rupturesight` a CHARGE that expires after four swings rather than a defence that
+-- sits there. This code does not need to know
 -- which: it asks gmcp every round and re-enacts whenever the defence is down. The hold is only
 -- an anti-spam guard for the seconds between sending and seeing, so the uncertain one gets the
 -- shorter guard -- a redundant `enact` costs one equilibrium we were not using, while a missed
@@ -2914,7 +2915,7 @@ end
 --
 -- RUPTURE FIRST. Bloodletter's Fury is the larger of the two (unblockable, +50% base damage AND
 -- balance 20% faster, which compounds every round it holds), and `rupturesight` may be a
--- three-blow charge that needs re-upping more often -- so on a round where both are down it
+-- four-blow charge that needs re-upping more often -- so on a round where both are down it
 -- goes first, and clarity follows on the next idle equilibrium.
 function ataxiaBasher_psionEmulationKeepers(sp, eqSpent)
   if eqSpent then return "" end
@@ -3070,16 +3071,33 @@ function ataxiaBasher_psionBashing()
   end
 
   -- EQ riders (equilibrium is idle while weaves spend balance -- the Kai Choke lesson):
-  -- Roth is the sub-50% emergency heal (AB: 1.30s eq, 3-min cooldown, grants clarity +
-  -- rupture free) -- it belongs BEFORE any shield/flee response fires.
+  -- WRATH is the emergency heal -- it belongs BEFORE any shield/flee response fires.
+  --
+  --   Wrath (Emulation)  ABADMIN ID: 2739 -- Syntax: ENACT WRATH -- 1.30 seconds of equilibrium
+  --   "bolstering your health and granting you both the clarity and rupture defences" -- only
+  --   "below half of your maximum health", and only "every three minutes".
+  --
+  -- THE COMMAND WAS WRONG UNTIL v4.7.360. This sent `enact roth` -- "Roth" is the MNEMOSYNE BOON's
+  -- name, not the ability's -- so the heal never fired in any release; the package's own alias
+  -- (emulation/007_Wrath) always sent `enact wrath`. Every test asserted `enact roth`, so every
+  -- test agreed with the bug. The variable names (psionRothAt, rothFired) keep the old word.
+  --
+  -- ROTH, the combo boon (Razor Clarity + Bloodletter's Fury): "Your emulation wrath ability now
+  -- has a cooldown of 30 seconds, and only requires you to be under 75% of your maximum health."
+  -- With it, wrath is a 30s heal-plus-both-defences, not a 3-minute emergency. The lockout keeps
+  -- the old 5s margin (185 for 180, 35 for 30): stamped when the round is BUILT, and a round that
+  -- is replaced before it fires loses the cast for that long -- no wrath line is captured yet to
+  -- stamp from instead.
   ataxiaTemp.psionRothAt = ataxiaTemp.psionRothAt or 0
   local nowT = (getEpoch and getEpoch()) or os.time()
   local rothFired = false
-  if (tonumber(ataxia.vitals.hpp) or 100) < 50
-     and (nowT - (tonumber(ataxiaTemp.psionRothAt) or 0)) >= 185 then
+  local wrathBelow = psionRoth and 75 or 50
+  local wrathLockout = psionRoth and 35 or 185
+  if (tonumber(ataxia.vitals.hpp) or 100) < wrathBelow
+     and (nowT - (tonumber(ataxiaTemp.psionRothAt) or 0)) >= wrathLockout then
     ataxiaTemp.psionRothAt = nowT
     rothFired = true
-    command = command.."enact roth"..sp
+    command = command.."enact wrath"..sp
   end
   -- ONE EQUILIBRIUM ACTION PER ROUND (v4.7.351, deep review). Roth, psi transcend and the two
   -- emulation keepers all spend EQUILIBRIUM, and a queued chain runs back to back -- so a second
