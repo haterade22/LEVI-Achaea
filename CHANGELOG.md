@@ -2,6 +2,33 @@
 
 ---
 
+## 2026-09-26 - Boon advisor: stat-scaling damage boons weighted high (v4.7.362)
+
+User: *"Mental Prowess  Offence legendary  score 38  +4% damage. These should be weighted high. There
+is also another one called brute force and another one based on dex. This is free damage based on
+your str, int or dex stat."*
+
+The advisor read only the one percentage in the sentence (0.8 a point -> ~3 points), but the bonus
+multiplies by a stat we already have. New weight `statScalingDamage = 40`, added on top whenever:
+
+- the boon is named in `M.BOON_STAT_DAMAGE` -- **Brute Force** (strength), **Mental Prowess**
+  (intelligence), **Deadly Finesse** (dexterity) -- scored before the description check, because all
+  three are still in `M.BOON_UNDESCRIBED` and an uncontemplated boon otherwise earns only category and
+  rarity; or
+- a contemplated description says "for each point of <stat>" (catches Trainwreck and anything like it).
+
+Mental Prowess goes from 38 to ~78, above a +10% resist-all defence boon of the same rarity. The
+reason prints as "damage scales with your intelligence".
+
+**Tests:** 1 new (named + undescribed, worded, the exact +40 over a plain damage boon). 3 break-back
+mutants killed (weight zeroed, name table emptied, description match removed).
+
+### Files
+
+- `mnemosyne/014_Boon_Advisor.lua`, `tests/test_mnemosyne.lua`, `CLAUDE.md`, memory.
+
+---
+
 ## 2026-09-26 - Psion: wrath on the user's cooldowns, and rupture tracked from its own lines (v4.7.361)
 
 User: *"When in Psion and below 50 percent health we should be using enact wrath. (Normally). Put the
