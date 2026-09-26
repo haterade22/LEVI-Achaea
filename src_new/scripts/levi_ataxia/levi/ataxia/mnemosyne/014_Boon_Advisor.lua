@@ -66,6 +66,9 @@ M.BOON_WEIGHTS = {
   -- the one percentage in the sentence (0.8 a point -> 3), but the bonus multiplies by a stat we
   -- already have, so it is always-on damage many times that size. A flat, high bonus on top.
   statScalingDamage = 40,
+  -- THE BEST BOONS (v4.7.363, user: "Death's Demise  Defence common echo x4 (ECHO)  score 35 --
+  -- the best boon or gravedigger should be highest in score"). Big enough to top any offer.
+  topTier = 150,
   -- A COST IS ONLY CHEAP IF WE CAN TAKE IT (v4.7.331, user: "if a boon gives us something but
   -- costs an affliction or something we dont have immunity for, it should be scored significantly
   -- lower as the cost isn't worth it for the benefit"). A permanent affliction we cannot cure runs
@@ -104,6 +107,15 @@ M.BOON_CLASS_WEIGHTS = M.BOON_CLASS_WEIGHTS or {}
 -- contemplated -- all three are in M.BOON_UNDESCRIBED, and an undescribed boon otherwise earns only
 -- its category and rarity. A contemplated description that says "for each point of <stat>" is caught
 -- as well (Trainwreck: "2% bonus damage for each point of strength, intelligence and dexterity").
+-- The boons the user ranks above everything (v4.7.363). Each names the boon that makes it pointless:
+-- Death's Demise ("health is increased to 133% of its normal maximum", 177% echoed) removes the death
+-- cape's life-steal, which is exactly what Gravedigger ("Your death cape can now stack up to 200% of
+-- your health") builds on -- so neither gets the bonus while we hold the other.
+M.BOON_TOP_TIER = {
+  ["Death's Demise"] = { why = "max health up to 133% (echoes further)", voidedBy = "Gravedigger" },
+  ["Gravedigger"] = { why = "death cape stacks to 200% health", voidedBy = "Death's Demise" },
+}
+
 M.BOON_STAT_DAMAGE = {
   ["Brute Force"] = "strength",
   ["Mental Prowess"] = "intelligence",
@@ -267,6 +279,17 @@ function M.scoreBoon(offerName, ctx, W)
     end
   end
   if bestCombo then add(r, bestPts, bestCombo) end
+
+  -- The best boons (v4.7.363) -- by name, before the description check.
+  local top = M.BOON_TOP_TIER[name]
+  if top then
+    if top.voidedBy and ctx.held[top.voidedBy] then
+      r.flags[#r.flags + 1] = "pointless beside " .. top.voidedBy .. " (you have it)"
+    else
+      add(r, W.topTier, "top tier: " .. top.why)
+      r.effects[#r.effects + 1] = top.why
+    end
+  end
 
   -- Free damage from a stat we already have (v4.7.362) -- before the description check, because the
   -- named ones score whether or not we have contemplated them.
