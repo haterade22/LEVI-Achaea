@@ -2920,8 +2920,8 @@ end
 -- in a few swings and a missed down line must not park the keeper forever; the worst an early
 -- expiry costs is one `enact rupture` answered by "already".
 --
--- The down line reads like CLARITY's ("your mental clarity returning to mundane levels"). Taken as
--- the user gave it: if it is clarity's too, all it costs is a rupture answered by "already".
+-- The down line reads like CLARITY's ("your mental clarity returning to mundane levels"), but the
+-- user confirmed it: "It is rupture dropping" (2026-09-26).
 local RUPTURE_BELIEF = 20
 
 function ataxiaBasher_psionRuptureUp()

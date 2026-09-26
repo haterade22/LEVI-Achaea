@@ -24,7 +24,8 @@ user gave:
 Up/already stand the keeper down (`ataxiaBasher_psionRuptureSeen(true)`); down clears the belief AND
 the 4s anti-spam hold, so the next round re-enacts -- "every time it is available". The belief expires
 after 20s so a missed down line cannot park the keeper; an early expiry costs one rupture answered by
-"already". The down line's wording reads like clarity's; taken as given, and harmless if shared.
+"already". The down line's wording reads like clarity's; the user confirmed after release: *"It is rupture
+dropping."*
 
 **Tests:** 5 new (the three lines against their triggers as wrapped, up stands down with no gmcp
 defence, down re-enacts at once, the belief expires, no boon = nothing), the two lockout tests moved to

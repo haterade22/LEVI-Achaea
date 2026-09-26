@@ -36,6 +36,6 @@ patterns:
 ]]--
 
 -- The user gave this as the Bloodletter/rupture DOWN line (2026-09-26). The charge is gone: the
--- keeper re-enacts rupture on the next round (v4.7.361, basher/002). The wording reads like clarity's;
--- if it is, a spare `enact rupture` is answered by "already" and the belief is restored.
+-- keeper re-enacts rupture on the next round (v4.7.361, basher/002). The wording reads like clarity's,
+-- but the user confirmed: "It is rupture dropping."
 if ataxiaBasher_psionRuptureSeen then ataxiaBasher_psionRuptureSeen(false) end
