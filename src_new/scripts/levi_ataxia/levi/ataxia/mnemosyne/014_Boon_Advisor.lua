@@ -60,6 +60,12 @@ M.BOON_WEIGHTS = {
   damageConditionalPerPct = 0.3,
   damageTypePerPct = 0.3,   -- one damage type only
   procPerPct = 2,           -- 5% on-hit affliction = 10
+  -- DAMAGE THAT SCALES WITH A STAT (v4.7.362, user: "Mental Prowess ... score 38, +4% damage. These
+  -- should be weighted high. There is also another one called brute force and another one based on
+  -- dex. This is free damage based on your str, int or dex stat."). The generic parser reads only
+  -- the one percentage in the sentence (0.8 a point -> 3), but the bonus multiplies by a stat we
+  -- already have, so it is always-on damage many times that size. A flat, high bonus on top.
+  statScalingDamage = 40,
   -- A COST IS ONLY CHEAP IF WE CAN TAKE IT (v4.7.331, user: "if a boon gives us something but
   -- costs an affliction or something we dont have immunity for, it should be scored significantly
   -- lower as the cost isn't worth it for the benefit"). A permanent affliction we cannot cure runs
@@ -93,6 +99,16 @@ M.BOON_WEIGHTS = {
 -- Per class, only what DIFFERS from the default (merged over it). Empty until play says otherwise;
 -- e.g. `M.BOON_CLASS_WEIGHTS.bard = { category = { offence = 20 } }`.
 M.BOON_CLASS_WEIGHTS = M.BOON_CLASS_WEIGHTS or {}
+
+-- The stat-scaling damage boons by NAME (v4.7.362), so they score high even before they have been
+-- contemplated -- all three are in M.BOON_UNDESCRIBED, and an undescribed boon otherwise earns only
+-- its category and rarity. A contemplated description that says "for each point of <stat>" is caught
+-- as well (Trainwreck: "2% bonus damage for each point of strength, intelligence and dexterity").
+M.BOON_STAT_DAMAGE = {
+  ["Brute Force"] = "strength",
+  ["Mental Prowess"] = "intelligence",
+  ["Deadly Finesse"] = "dexterity",
+}
 
 local function merged(base, over)
   local out = {}
@@ -251,6 +267,16 @@ function M.scoreBoon(offerName, ctx, W)
     end
   end
   if bestCombo then add(r, bestPts, bestCombo) end
+
+  -- Free damage from a stat we already have (v4.7.362) -- before the description check, because the
+  -- named ones score whether or not we have contemplated them.
+  local statDmg = M.BOON_STAT_DAMAGE[name]
+    or (desc and desc:lower():match("for each point of ([%a, ]-%a)%s+you have"))
+    or (desc and desc:lower():match("for each point of (%a+)"))
+  if statDmg then
+    add(r, W.statScalingDamage, "damage scales with your " .. statDmg)
+    r.effects[#r.effects + 1] = "damage scales with " .. statDmg
+  end
 
 
   if not desc then

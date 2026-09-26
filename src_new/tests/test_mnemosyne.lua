@@ -9022,6 +9022,33 @@ describe("boon combos", function()
     end)
   end)
 
+  -- v4.7.362, user: "Mental Prowess ... score 38 ... These should be weighted high ... brute force
+  -- and another one based on dex. This is free damage based on your str, int or dex stat."
+  it("stat-scaling damage boons score high -- named ones even undescribed", function()
+    local lib = {
+      ["Mental Prowess"] = { description = "You deal 4% increased damage for each point of intelligence.",
+                             category = "Offence", rarity = "legendary" },
+      ["Brute Force"] = { category = "Offence", rarity = "legendary" },         -- never contemplated
+      ["Plain Offence"] = { description = "You deal 4% increased damage.", category = "Offence",
+                            rarity = "legendary" },
+      ["Stat Worded"] = { description = "Gain 1% bonus damage for each point of dexterity you have.",
+                          category = "Offence", rarity = "legendary" },
+    }
+    withLibrary(lib, function()
+      local mp = holding({}, function() return M.scoreBoon("Mental Prowess") end)
+      local bf = holding({}, function() return M.scoreBoon("Brute Force") end)
+      local plain = holding({}, function() return M.scoreBoon("Plain Offence") end)
+      local worded = holding({}, function() return M.scoreBoon("Stat Worded") end)
+      expect(mp.score - plain.score).toBe(M.BOON_WEIGHTS.statScalingDamage)
+      expect(table.concat(mp.effects, " "):find("damage scales with intelligence", 1, true) ~= nil).toBeTrue()
+      expect(table.concat(bf.effects, " "):find("damage scales with strength", 1, true) ~= nil).toBeTrue()
+      expect(bf.score > plain.score).toBeTrue()                 -- named: high before any contemplate
+      expect(table.concat(worded.effects, " "):find("damage scales with dexterity", 1, true) ~= nil).toBeTrue()
+      expect(M.BOON_STAT_DAMAGE["Deadly Finesse"]).toBe("dexterity")
+      expect(M.BOON_WEIGHTS.statScalingDamage >= 40).toBeTrue()
+    end)
+  end)
+
   it("the bestowal records the free boon and says which recipe finished", function()
     local out, claimed
     withLibrary(WITH_CHAIN, function()
