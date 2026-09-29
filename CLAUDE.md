@@ -333,7 +333,7 @@ All combat systems in `src_new/scripts/levi_ataxia/levi/levi_scripts/`:
 | **apostate** | 1 (015) | **Documented** | Lock, corrupt, vivisect, sleep, mental | `apostate/` |
 | **bard** | 10 | **Documented** | Voyria lock; Composition/Bladedance affliction; PvE footwork bashing | `bard/` |
 | **blademaster** | ~10 | **Documented** | Lightning/Ice, Brokenstar | `blademaster/` |
-| **depthswalker** | 1 | **Documented** | Shadow/time; PvE = owned battlerage (all 6 abilities denizen-legal) + Terminus word-balance keepers | `depthswalker/` |
+| **depthswalker** | 1 | **Documented** | Shadow/time; PvE = owned battlerage (all 6 abilities denizen-legal) + Terminus word-balance keepers; PvP capstones are PER INSTILL (`capstoneReady(instill)`, v4.7.365 -- never a global DW-aff count), and `impatience` is not an instill | `depthswalker/` |
 
 **DEPTHSWALKER AEONIC CASH-IN (v4.7.265, NOT boon-gated).** `CHRONO DETERIORATE <t>` (AB 2425,
 **300 age**) deals significant magical damage to a MIND-ADDLED denizen -- recklessness, charm,

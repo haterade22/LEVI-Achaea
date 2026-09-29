@@ -34,12 +34,16 @@ packageName: ''
 --   Venom slot:   1 standard venom aff (curare=paralysis, kalmia=asthma, etc.)
 --   With Timeloop: 2 DW affs but NO venom (trades venom for double instill)
 --
--- Capstones fire automatically at 5 DW afflictions. The capstone type matches
--- the instill affliction, so capstone selection IS the instill selection.
+-- Capstones are PER INSTILL (v4.7.365). Each Instill has its own ladder: the
+-- first three applications give its three afflictions in order, the next one
+-- gives THAT Instill's capstone. So "is the depression capstone ready?" is
+-- "does the target carry every rung of the depression ladder?" -- never a
+-- total of unrelated DW afflictions (the old `5 DW affs` rule fired capstones
+-- that were not ready and missed ones that were). See INSTILL_STACKS.
 --
--- DW Afflictions (count toward capstones and Dictate threshold):
---   depression, retribution, parasite, madness, degeneration,
---   healthleech, manaleech, justice, timeloop
+-- DW Afflictions (Dictate threshold only; every name here is one a rung
+-- trigger actually records -- "madness"/"degeneration" never were):
+--   the rungs of INSTILL_STACKS + timeloop
 --
 -- Dictate threshold: 40% mana + 5% per DW affliction on target
 -- Mutilate threshold: 40% HP + 30% mana + shadow claimed
@@ -54,7 +58,9 @@ depthswalker = depthswalker or {}
 depthswalker.state = {
     mode = "lock",              -- "lock", "damage", "dictate", "madpression", "group"
     haveShadow = false,         -- shadow claimed from target
-    canClaimShadow = false,     -- leach capstone fired, shadow available to claim
+    canClaimShadow = false,     -- leach capstone sent, shadow available to claim
+    claimReadyAt = nil,         -- when the leach capstone went out (claimWindow)
+    madCapAt = nil,             -- when the madness capstone landed (trigger 483)
     distorted = false,          -- distort active in room
     partyrelay = true,          -- relay to party
     bellwortComplete = false,   -- bellwort phase done (timeloop applied), skip to finisher
@@ -69,6 +75,14 @@ depthswalker.config = {
     mutilateHealthThreshold = 40,   -- hp% for mutilate execute
     mutilateManaThreshold = 30,     -- mana% for mutilate execute
     debugEcho = false,              -- echo debug info per attack
+    -- Seconds after the madness capstone line (trigger 483) during which
+    -- MADPRESSION treats the target as stunned. UNCONFIRMED: the stun's
+    -- length has never been measured.
+    madStunWindow = 3,
+    -- Seconds after sending the leach capstone during which we may SHADOW
+    -- CLAIM. UNCONFIRMED: the leach capstone's line is uncaptured, so claim
+    -- readiness is inferred from the send (478's claim line clears it).
+    claimWindow = 10,
 }
 
 -- Current attack selections (set each dispatch cycle)
@@ -80,10 +94,36 @@ depthswalker.selections = {
     phase = "init",       -- "shadow", "bellwort", or mode name (set by selectInstill)
 }
 
--- The 9 DW-specific afflictions tracked on the target
+-- Each Instill's ladder, in application order. The rung triggers (468/469/472/
+-- 473/474, 479 under timeloop) apply the FIRST MISSING rung, so the stage is
+-- read from the target's afflictions by the same rule -- the offense and the
+-- tracker agree by construction. Once every rung is up, the NEXT application
+-- of that Instill is its capstone.
+--   degeneration -> damage burst (halved without a shadow)
+--   depression   -> depression + anorexia + masochism
+--   madness      -> stun
+--   leach        -> enables SHADOW CLAIM
+--   retribution  -> mana sap (its ladder is two rungs, per the class doc)
+-- This table is also the whitelist of valid instills: "impatience" is NOT one
+-- (the game refuses `shadow instill scythe with impatience`, leaving the old
+-- instill on the scythe).
+depthswalker.INSTILL_STACKS = {
+    degeneration = { "clumsiness", "weariness", "paralysis" },
+    depression   = { "depression", "nausea", "hypochondria" },
+    madness      = { "shadowmadness", "vertigo", "hallucinations" },
+    leach        = { "parasite", "healthleech", "manaleech" },
+    retribution  = { "justice", "retribution" },
+}
+depthswalker.INSTILL_ORDER = { "depression", "degeneration", "madness", "leach", "retribution" }
+
+-- DW afflictions counted by the Dictate threshold (40% + 5% each). Which
+-- afflictions the game actually counts is UNCONFIRMED, so this list is kept to
+-- exactly what was counted before v4.7.365: the old list also named "madness"
+-- and "degeneration", which no trigger ever records -- they never counted, and
+-- dropping them changes nothing. Capstones do NOT use this list.
 depthswalker.DW_AFFS = {
-    "depression", "retribution", "parasite", "madness",
-    "degeneration", "healthleech", "manaleech", "justice", "timeloop",
+    "depression", "retribution", "parasite", "healthleech",
+    "manaleech", "justice", "timeloop",
 }
 
 --------------------------------------------------------------------------------
@@ -153,9 +193,52 @@ function depthswalker.countDWAffsInt()
     return count
 end
 
--- Returns true if target has 5+ DW afflictions (capstone fires on next instill)
-function depthswalker.capstoneReady()
-    return depthswalker.countDWAffsInt() >= 5
+-- Is this a real Shadowmancy instill?
+function depthswalker.validInstill(instill)
+    return instill ~= nil and depthswalker.INSTILL_STACKS[instill] ~= nil
+end
+
+-- Rungs of this Instill already on the target, counted up to the first missing
+-- one (the rung triggers' own rule). 0..#stack; nil for an invalid instill.
+function depthswalker.instillStage(instill)
+    local stack = depthswalker.INSTILL_STACKS[instill]
+    if not stack then return nil end
+    for i, aff in ipairs(stack) do
+        if not depthswalker.hasAff(aff) then return i - 1 end
+    end
+    return #stack
+end
+
+-- True when the NEXT application of this Instill is its capstone. The
+-- argument is required: capstones are per Instill, never a global count.
+function depthswalker.capstoneReady(instill)
+    local stack = depthswalker.INSTILL_STACKS[instill]
+    if not stack then return false end
+    return depthswalker.instillStage(instill) == #stack
+end
+
+-- Applications of this Instill needed to land its capstone (1 = next hit).
+function depthswalker.hitsToCapstone(instill)
+    local stack = depthswalker.INSTILL_STACKS[instill]
+    if not stack then return nil end
+    return #stack - depthswalker.instillStage(instill) + 1
+end
+
+-- Compact per-Instill readout for the echoes: "Dep 2/3 Degen 3/3* ..."
+-- (* = capstone on the next application).
+depthswalker.INSTILL_SHORT = {
+    depression = "Dep", degeneration = "Degen", madness = "Mad",
+    leach = "Leach", retribution = "Ret",
+}
+function depthswalker.stageSummary()
+    local parts = {}
+    for _, instill in ipairs(depthswalker.INSTILL_ORDER) do
+        local stage = depthswalker.instillStage(instill)
+        local n = #depthswalker.INSTILL_STACKS[instill]
+        parts[#parts + 1] = depthswalker.INSTILL_SHORT[instill] .. " " .. stage .. "/" .. n
+            .. (stage == n and "*" or "")
+    end
+    return table.concat(parts, " ")
 end
 
 -- Dictate threshold: 40% base + 5% per DW affliction on target
@@ -207,14 +290,17 @@ function depthswalker.shouldTimeloop()
     -- Don't timeloop if target already has the timeloop aff
     if depthswalker.hasAff("timeloop") then return false end
 
-    local dwCount = depthswalker.countDWAffsInt()
     local mode = depthswalker.state.mode
     local phase = depthswalker.selections.phase
+    local instill = depthswalker.selections.instill
+
+    -- Never loop a capstone hit: the loop trades the venom for a second rung,
+    -- and a capstone application has no rung left to double.
+    if depthswalker.capstoneReady(instill) then return false end
 
     -- CRITICAL: When healthleech stuck but not manaleech, use chrono loop boost
     -- ONLY during shadow phase - double-apply leach to get manaleech before they cure healthleech
     -- Don't let this trigger during bellwort/lock phases!
-    local phase = depthswalker.selections.phase
     if phase == "shadow" and depthswalker.hasAff("healthleech") and not depthswalker.hasAff("manaleech") then
         return true
     end
@@ -228,7 +314,6 @@ function depthswalker.shouldTimeloop()
     -- BELLWORT PHASE: Only use chrono loop AFTER first bellwort aff is CONFIRMED stuck
     -- Strategy: (1) retribution+curare → justice, (2) retribution+chrono loop → retribution+timeloop
     -- This maximizes bellwort pressure: all 3 bellwort affs stuck, they can only cure 1 per balance
-    local phase = depthswalker.selections.phase
     if phase == "bellwort" then
         -- Use probability threshold to ensure bellwort aff is actually stuck (not just V3 branching)
         local justiceProb = depthswalker.getAffProb("justice")
@@ -242,20 +327,12 @@ function depthswalker.shouldTimeloop()
         return false  -- Don't use chrono loop until first bellwort aff is CONFIRMED stuck
     end
 
-    -- LOCK/DICTATE/MADPRESSION: use timeloop more aggressively to build DW aff count
-    -- High-value: 3-4 DW affs, rushing to capstone threshold (5)
-    if dwCount >= 3 and dwCount < 5 then return true end
-
-    -- Lock mode: double affliction pressure when building
-    if mode == "lock" and dwCount >= 2 then return true end
-
-    -- Madpression: rush to capstone
-    if mode == "madpression" and dwCount >= 2 then return true end
-
-    -- Dictate: maximize DW aff count for lower threshold
-    if mode == "dictate" and dwCount >= 2 then return true end
-
-    return false
+    -- LOCK/DICTATE/MADPRESSION: loop when the selected Instill still needs two
+    -- or more rungs before its capstone, so the doubled instill lands two rungs
+    -- instead of one. (Replaces the old "3-4 of 5 DW affs" rule, which counted
+    -- unrelated afflictions toward a capstone that does not exist.)
+    local toCap = depthswalker.hitsToCapstone(instill)
+    return toCap ~= nil and toCap >= 3
 end
 
 -- Get the chrono command based on timeloop decision
@@ -294,8 +371,9 @@ end
 --      so with 3 bellwort affs, 2 remain stuck at all times.
 --   4. MODE-SPECIFIC: After opening completes, enter mode finisher
 --
--- Capstone note: When 5+ DW affs are present, capstone fires matching the
--- instill type. Mode finishers handle capstone selection.
+-- Capstone note: capstones are PER INSTILL -- the application after an
+-- Instill's full ladder is its capstone (depthswalker.capstoneReady(instill)).
+-- Mode finishers pick which Instill to finish.
 --------------------------------------------------------------------------------
 
 -- Universal opening: kelp pressure -> shadow -> bellwort stack
@@ -329,19 +407,15 @@ function depthswalker.selectInstillOpening()
         return "degeneration"
     end
 
-    -- Phase 2: SHADOW - get leach affs for shadow claim (kelp is now pressured)
-    -- LOCK MODE: Skip shadow phase entirely - go straight to bellwort for mental stacking
-    -- Shadow is only needed for damage/dictate modes (mutilate execute, enhanced damage)
-    local mode = depthswalker.state.mode
-    if mode ~= "lock" and not depthswalker.state.haveShadow then
+    -- Phase 2: SHADOW - climb the leach ladder and fire its capstone, which is
+    -- what makes the shadow claimable (kelp is now pressured, so the kelp-cured
+    -- leach affs stick). EVERY mode takes it, LOCK included (v4.7.365): LOCK used
+    -- to skip this phase, and in live spars it built kelp/bellwort pressure
+    -- indefinitely without ever converting it into a shadow.
+    if not depthswalker.state.haveShadow then
         depthswalker.selections.phase = "shadow"
-        if not depthswalker.hasAff("parasite") then return "leach" end
-        if not depthswalker.hasAff("healthleech") then return "leach" end
-        if not depthswalker.hasAff("manaleech") then return "leach" end
-        -- All leach affs present but no shadow yet: if capstone ready, fire leach
-        -- capstone to enable shadow claim. If not ready, fall through to bellwort
-        -- stacking to build DW aff count toward capstone.
-        if depthswalker.capstoneReady() then return "leach" end
+        -- Rungs 1-3 and then the capstone are all the same instill.
+        return "leach"
     end
 
     -- Phase 3: BELLWORT STACK - bury target with bellwort affs
@@ -356,29 +430,24 @@ function depthswalker.selectInstillOpening()
     return nil
 end
 
--- Lock finisher: impatience (only via instill!), depression capstone for anorexia+masochism
+-- Lock finisher: the depression capstone (depression + anorexia + masochism)
+-- is the lock's Shadowmancy contribution, so LOCK climbs the depression ladder
+-- and fires its capstone -- the application AFTER its three rungs, never on a
+-- total of unrelated DW affs. Once anorexia is stuck, the next ladder worth
+-- climbing is degeneration, whose rungs and capstone include paralysis.
+--
+-- There is NO impatience branch: "impatience" is not a Shadowmancy instill
+-- (v4.7.365; the game refuses it and leaves the previous instill on the
+-- scythe, desyncing the venom and rung triggers after it).
 function depthswalker.selectInstillLock()
-    local capReady = depthswalker.capstoneReady()
-
-    -- Capstone ready: depression gives anorexia + masochism (lock components)
-    if capReady then
-        return "depression"
+    if not depthswalker.hasAff("anorexia") then
+        return "depression"   -- a rung, or the capstone when capstoneReady
     end
-
-    -- Impatience is ONLY deliverable via instill - prioritize when asthma is stuck
-    if not depthswalker.hasAff("impatience") and depthswalker.hasAff("asthma") then
-        return "impatience"
+    if not depthswalker.hasAff("paralysis") or depthswalker.capstoneReady("degeneration") then
+        return "degeneration"
     end
-
-    -- Build remaining DW affs toward capstone (bellwort affs already stuck from opening)
-    if not depthswalker.hasAff("depression") then return "depression" end
-    if not depthswalker.hasAff("madness") then return "madness" end
-    if not depthswalker.hasAff("degeneration") then return "degeneration" end
-    if not depthswalker.hasAff("parasite") then return "leach" end
-    if not depthswalker.hasAff("healthleech") then return "leach" end
-    if not depthswalker.hasAff("manaleech") then return "leach" end
-
-    -- All DW affs applied, keep cycling depression for capstone
+    -- Anorexia and paralysis both stuck: keep the depression ladder cycling so
+    -- its capstone is re-armed for the moment they cure anorexia.
     return "depression"
 end
 
@@ -400,14 +469,12 @@ function depthswalker.selectInstillDamage()
         return "degeneration"
     end
 
-    -- Priority 2: Clumsiness stuck, now build leach toward shadow
+    -- Priority 2: Clumsiness stuck, now climb the leach ladder toward shadow.
+    -- With all three rungs up (capstoneReady("leach")) the next leach IS the
+    -- capstone, which makes the shadow claimable (see needClaimShadow).
     -- Continue degeneration pressure (weariness/paralysis) via the venom slot
     if not depthswalker.state.haveShadow then
         depthswalker.selections.phase = "shadow"
-        if not depthswalker.hasAff("parasite") then return "leach" end
-        if not depthswalker.hasAff("healthleech") then return "leach" end
-        if not depthswalker.hasAff("manaleech") then return "leach" end
-        -- All leach affs present: capstone will fire and claim shadow
         return "leach"
     end
 
@@ -416,48 +483,49 @@ function depthswalker.selectInstillDamage()
     return "degeneration"
 end
 
--- Dictate finisher: retribution capstone for mana sap (retribution already stuck from opening)
+-- Dictate finisher: the retribution capstone saps mana toward the dictate
+-- threshold. Its ladder is justice -> retribution, so the application after
+-- both are up is the capstone; while a rung is missing, retribution climbs it.
 function depthswalker.selectInstillDictate()
-    local capReady = depthswalker.capstoneReady()
-
-    -- Capstone ready: retribution saps mana toward dictate threshold
-    if capReady then
-        return "retribution"
-    end
-
-    -- Build DW aff count (bellwort affs already stuck, each lowers dictate threshold by 5%)
-    if not depthswalker.hasAff("depression") then return "depression" end
-    if not depthswalker.hasAff("madness") then return "madness" end
-    if not depthswalker.hasAff("degeneration") then return "degeneration" end
-    if not depthswalker.hasAff("parasite") then return "leach" end
-    if not depthswalker.hasAff("healthleech") then return "leach" end
-    if not depthswalker.hasAff("manaleech") then return "leach" end
-
     return "retribution"
 end
 
--- Madpression finisher: madness capstone (stun) then depression capstone (anorexia+masochism)
-function depthswalker.selectInstillMadpression()
-    local capReady = depthswalker.capstoneReady()
+-- Is the target inside the stun window of our madness capstone? Stamped by
+-- trigger 483 (the capstone line); nothing records "stun" as an affliction.
+function depthswalker.madnessStunned()
+    local at = depthswalker.state.madCapAt
+    if not at then return false end
+    return (getEpoch() - at) <= depthswalker.config.madStunWindow
+end
 
-    -- Capstone ready: alternate madness then depression
-    if capReady then
-        -- Fire madness first for stun, then depression while stunned
-        if not depthswalker.hasAff("stun") then
-            return "madness"
-        end
-        -- Target stunned: depression gives anorexia + masochism
+function depthswalker.onMadnessCapstone()
+    depthswalker.state.madCapAt = getEpoch()
+end
+
+-- Madpression finisher: madness capstone (stun), then the depression capstone
+-- (anorexia + masochism) while they are stunned. Each fires only when ITS
+-- ladder is complete; the two ladders are climbed together so both capstones
+-- are armed at once.
+function depthswalker.selectInstillMadpression()
+    local madReady = depthswalker.capstoneReady("madness")
+    local depReady = depthswalker.capstoneReady("depression")
+
+    -- Stunned by our madness capstone: cash in depression while it lasts.
+    if depthswalker.madnessStunned() then
         return "depression"
     end
-
-    -- Build remaining DW affs toward capstone (bellwort affs already stuck)
-    if not depthswalker.hasAff("depression") then return "depression" end
-    if not depthswalker.hasAff("madness") then return "madness" end
-    if not depthswalker.hasAff("degeneration") then return "degeneration" end
-    if not depthswalker.hasAff("parasite") then return "leach" end
-    if not depthswalker.hasAff("healthleech") then return "leach" end
-
-    return "madness"
+    -- Both armed: open with the madness stun.
+    if madReady and depReady then
+        return "madness"
+    end
+    -- Arm whichever ladder is not yet complete (the one further behind first;
+    -- depression on a tie).
+    if depReady then return "madness" end
+    if madReady then return "depression" end
+    if depthswalker.instillStage("madness") < depthswalker.instillStage("depression") then
+        return "madness"
+    end
+    return "depression"
 end
 
 -- Unified instill selector: damage skips opening, others use opening first
@@ -631,8 +699,29 @@ function depthswalker.needShieldStrip()
     return depthswalker.hasAff("shield")
 end
 
+-- The leach capstone makes the shadow claimable. Its own line is UNCAPTURED,
+-- so trigger 474 calls this when a leach lands on a target that already had
+-- all three rungs -- i.e. the application that WAS the capstone. The window
+-- (config.claimWindow) bounds a wrong inference to a few wasted claims, and
+-- the claim line (478 -> onShadowClaimed) closes it.
+function depthswalker.onLeachCapstone()
+    depthswalker.state.canClaimShadow = true
+    depthswalker.state.claimReadyAt = getEpoch()
+end
+
+function depthswalker.onShadowClaimed()
+    depthswalker.state.canClaimShadow = false
+    depthswalker.state.claimReadyAt = nil
+end
+
 function depthswalker.needClaimShadow()
-    return depthswalker.state.canClaimShadow and not depthswalker.state.haveShadow
+    local st = depthswalker.state
+    if not st.canClaimShadow or st.haveShadow then return false end
+    if not st.claimReadyAt or (getEpoch() - st.claimReadyAt) > depthswalker.config.claimWindow then
+        st.canClaimShadow = false
+        return false
+    end
+    return true
 end
 
 --------------------------------------------------------------------------------
@@ -693,6 +782,14 @@ function depthswalker.buildAttack()
     end
 
     -- 5. Normal attack: attune + instill + chrono + reap [+ venom]
+    -- Never send an instill the game will refuse: a refused instill leaves the
+    -- previous one on the scythe and the rung/venom triggers fall out of step.
+    if not depthswalker.validInstill(sel.instill) then
+        if ataxiaEcho then
+            ataxiaEcho("[DW] Refusing invalid instill '" .. tostring(sel.instill) .. "' -- using degeneration")
+        end
+        sel.instill = "degeneration"
+    end
     local chrono = depthswalker.getChronoCommand()
 
     atk = atk .. "shadow attune " .. target .. " to " .. sel.attune .. sp
@@ -751,6 +848,8 @@ function depthswalker.dispatch()
     if depthswalker.state.lastTarget ~= target then
         depthswalker.state.bellwortComplete = false
         depthswalker.state.lastTarget = target
+        depthswalker.state.madCapAt = nil
+        depthswalker.onShadowClaimed()   -- a claim window belongs to one target
     end
     -- Also reset if no DW affs on target (fresh fight, they reset or new target)
     if depthswalker.countDWAffsInt() == 0 then
@@ -858,6 +957,9 @@ function depthswalker.attackEcho()
         local ml = depthswalker.hasAff("manaleech") and "<green>m<reset>" or "<red>-<reset>"
         local shad = depthswalker.state.haveShadow and "<green>SHADOW<reset>" or "<red>no shadow<reset>"
         dwInfo = " | Degen:[" .. clum .. wear .. para .. "] Leach:[" .. par .. hl .. ml .. "] " .. shad
+    else
+        -- Per-Instill ladders (* = capstone next) for the capstone routes
+        dwInfo = " | " .. depthswalker.stageSummary()
     end
 
     cecho("\n<cyan>[DW:" .. mode .. "]<reset> " .. phaseColor .. phase:upper() .. "<reset>"
@@ -870,10 +972,9 @@ end
 function depthswalker.debugEcho()
     if not depthswalker.config.debugEcho then return end
 
-    local sel = depthswalker.selections
-    local dwCount = depthswalker.countDWAffsInt()
     local sys = depthswalker.getTrackingSystem()
-    local capStr = depthswalker.capstoneReady() and "<green>READY<reset>" or (tostring(dwCount) .. "/5")
+    -- Per-Instill ladders; * = that Instill's capstone is the next application
+    local capStr = depthswalker.stageSummary()
 
     -- Key lock affs
     local lockAffs = {"asthma", "slickness", "paralysis", "impatience", "anorexia", "recklessness"}
@@ -901,7 +1002,8 @@ function depthswalker.status()
     echo("  Tracking: " .. sys .. "\n")
     echo("  Age: " .. age .. "\n")
     echo("  Shadow: " .. tostring(depthswalker.state.haveShadow) .. "\n")
-    echo("  DW Affs: " .. dwCount .. "/5 (capstone " .. (depthswalker.capstoneReady() and "READY" or "building") .. ")\n")
+    echo("  DW Affs (dictate count): " .. dwCount .. "\n")
+    echo("  Instill ladders (* = capstone next): " .. depthswalker.stageSummary() .. "\n")
     echo("  Dictate Threshold: " .. dictThresh .. "% (target mana: " .. (pm or "?") .. "%)\n")
     echo("  Can Dictate: " .. tostring(depthswalker.canDictate()) .. "\n")
     echo("  Softlock: " .. string.format("%.0f%%", locks.softlock * 100) .. "\n")

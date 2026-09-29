@@ -42,13 +42,13 @@ valid_instills:
   - retribution
   - madness
   - leach
-  - impatience
 
 IMPORTANT: "timeloop is NOT an instill - it comes from chrono loop command"
+NOT_AN_INSTILL: "impatience -- the game REFUSES `shadow instill scythe with impatience` (live spar, reported 2026-09-29), leaving the previous instill on the scythe. Removed from the offense in v4.7.365; `depthswalker.validInstill()` guards every send. Earlier versions of this doc listed it as valid, with no capture behind it."
 ```
 
 ### Instill Stacks (Affliction Progression)
-Each instill type gives afflictions in a specific order. If target already has an affliction, the next one in the stack is applied:
+Each instill type gives afflictions in a specific order. If target already has an affliction, the next one in the stack is applied. **The application after the full stack is THAT Instill's capstone** -- capstones are per Instill, never a count of DW afflictions across Instills (v4.7.365; code: `depthswalker.INSTILL_STACKS`, `instillStage`, `capstoneReady(instill)` in `015_CC_Depthswalker.lua`). None of these stacks is from a captured AB; the order matches what the rung triggers 468/469/472/473/474 apply.
 
 ```yaml
 degeneration:
@@ -80,13 +80,9 @@ leach:
   cure: kelp (healthleech, manaleech) / goldenseal (parasite)
   capstone: "Enables shadow claim"
   notes: "healthleech and manaleech are kelp-cured - need kelp pressure first!"
-
-impatience:
-  stack: [impatience]
-  cure: goldenseal
-  capstone: none
-  notes: "Direct affliction, no stack. ONLY way DW can give impatience"
 ```
+
+Unconfirmed in this table: retribution's stack is TWO rungs here, where the other Instills have three; and the madness cure (ash here, goldenseal in a code comment). Both want an AB capture.
 
 ### Chrono Commands
 ```yaml
@@ -112,8 +108,8 @@ description: "Timeloop doubles the instill affliction delivery"
 
 when_to_use:
   - "CRITICAL: When healthleech stuck but not manaleech - use chrono loop boost"
-  - "Building toward capstone (3-4 DW affs)"
-  - "Lock mode when rushing affliction count"
+  - "LOCK/DICTATE/MADPRESSION: when the selected Instill still needs 2+ rungs before its capstone (v4.7.365)"
+  - "NEVER on a capstone hit -- there is no rung left to double"
   - "Bellwort phase to apply timeloop affliction"
 
 important: |
@@ -148,8 +144,9 @@ description: "Critical resource for executes and damage"
 
 how_to_claim:
   - "Stack leach afflictions: parasite → healthleech → manaleech"
-  - "When all 3 present + capstone ready (5 DW affs): leach capstone fires"
+  - "When all 3 are present, the NEXT leach is the leach capstone"
   - "After leach capstone: SHADOW CLAIM <target>"
+  - "The leach capstone's own line is UNCAPTURED: trigger 474 treats a leach landing on a full stack as the capstone and calls depthswalker.onLeachCapstone(), opening a claim window (config.claimWindow, 10s); 478 closes it (v4.7.365). Before that, canClaimShadow was never set and the claim never fired."
 
 trigger_pattern: "^You claim the shadow of (\\w+), storing it within your phylactery.$"
 trigger_message: "You claim the shadow of <target>, storing it within your phylactery."
@@ -192,16 +189,16 @@ phases:
 
   4_lock:
     description: "Standard lock progression"
-    instill: depression/impatience
+    instill: "depression ladder -> its capstone (anorexia + masochism); then degeneration toward paralysis"
     venom: kalmia → gecko → curare → slike
-    notes: "Impatience ONLY via instill"
+    notes: "LOCK takes the shadow phase since v4.7.365 (it used to skip it and never converted pressure into a shadow)"
 
 required_afflictions:
   - asthma: "blocks smoking"
   - anorexia: "blocks eating"
   - slickness: "blocks applying"
   - paralysis: "blocks tree"
-  - impatience: "blocks focus (ONLY via instill)"
+  - impatience: "blocks focus -- NOT deliverable by instill (the game refuses it); no current DW source in the offense, OPEN"
   - recklessness: "blocks Accelerate passive cure"
 ```
 
@@ -268,7 +265,7 @@ type: combo
 summary: "Madness capstone (stun) → Depression capstone (anorexia + masochism)"
 
 strategy:
-  1: "Build to 5 DW afflictions"
+  1: "Complete BOTH the madness and depression stacks (each capstone is armed by its own full stack)"
   2: "Fire madness capstone → target stunned"
   3: "Fire depression capstone → target gets masochism"
   4: "Target cures while stunned → takes masochism damage"
@@ -388,11 +385,15 @@ if applyAffV3 then applyAffV3("affliction") end
 
 ## Capstones
 ```yaml
-description: "When 5+ DW afflictions present, next instill triggers capstone"
+description: "PER INSTILL: 3 applications give that Instill's 3 afflictions, the next application gives its capstone (retribution: 2 + capstone)"
 
-trigger_condition: "depthswalker.capstoneReady() returns true when 5+ DW affs"
+trigger_condition: "depthswalker.capstoneReady(instill) -- true when every rung of THAT Instill's stack is on the target (v4.7.365)"
+
+history: "Before v4.7.365 this read 'when 5+ DW afflictions present' across all Instills. That fired capstones that were not ready (five unrelated DW affs) and missed ones that were (a full ladder with a global count under 5)."
 
 capstone_type: "Matches the instill type being used"
+
+madness_stun: "Trigger 483 stamps depthswalker.onMadnessCapstone(); MADPRESSION treats the target as stunned for config.madStunWindow (3s, UNCONFIRMED)"
 
 capstones:
   degeneration: "Damage burst (HALVED without shadow!)"
@@ -459,11 +460,11 @@ dangerous_abilities:
   - dictate: "Mana kill at 40% + 5% per DW aff"
   - aeon: "Slows ALL actions significantly"
   - chrono_loop_boost: "Doubles affliction application"
-  - madness_capstone: "Stun at 5 DW affs"
-  - depression_capstone: "Anorexia + masochism at 5 DW affs"
+  - madness_capstone: "Stun on the 4th madness application"
+  - depression_capstone: "Anorexia + masochism on the 4th depression application"
 
 watch_for:
-  - "5+ DW afflictions = capstone ready"
+  - "A full stack of one Instill = that capstone is next"
   - "Shadow claimed = Mutilate possible"
   - "High DW aff count = lower Dictate threshold"
   - "Bellwort stack (timeloop+justice+retribution) = sustained pressure"

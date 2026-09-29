@@ -2,6 +2,53 @@
 
 ---
 
+## 2026-09-29 - Depthswalker: per-Instill capstones, LOCK takes a shadow, no impatience instill (v4.7.365)
+
+From a user's audit of the DW PvP offense (`depthswalker/015_CC_Depthswalker.lua`).
+
+**Capstones are per Instill.** `capstoneReady()` was `countDWAffsInt() >= 5` across nine mixed DW
+afflictions. Shadowmancy capstones do not work that way: each Instill's first three applications
+give its three afflictions, and the next application gives THAT Instill's capstone. So five
+unrelated DW affs read as "depression capstone ready", and a full ladder with a global count under
+five read as "not ready". LOCK, DICTATE and MADPRESSION all asked that one global question.
+Now `depthswalker.INSTILL_STACKS` holds each ladder, and `instillStage(instill)` reads it with the
+rung triggers' own first-missing rule (468/469/472/473/474), so the offense and the tracker agree
+by construction. `capstoneReady(instill)` takes the Instill it asks about. `hitsToCapstone` and
+`stageSummary` (`Dep 2/3 Degen 3/3* ...`, `*` = capstone next) feed the attack echo, `dwd` and `dws`.
+
+**LOCK takes the shadow phase.** `selectInstillOpening` skipped it when `mode == "lock"`, so LOCK
+built kelp/bellwort pressure without ever converting it into a shadow. Every route now climbs the
+leach ladder once clumsiness is stuck, then fires its capstone.
+
+**"impatience" is never sent.** `selectInstillLock` returned it when asthma was stuck. It is not a
+Shadowmancy instill: the game refuses it, the previous instill stays on the scythe, and the venom
+and rung triggers fall out of step. LOCK now climbs depression to its capstone (anorexia +
+masochism), then degeneration toward paralysis. `buildAttack` refuses any instill not in
+`INSTILL_STACKS` and falls back to degeneration with an echo.
+
+**Found on the way:**
+- `DW_AFFS` named "madness" and "degeneration", which no trigger records. Every
+  `hasAff("madness"/"degeneration")` in the selectors was always false. Both names are dropped;
+  the Dictate count is otherwise unchanged, because the game's counting rule is unconfirmed.
+- `canClaimShadow` was never set, so the shadow claim never fired. Trigger 474 now calls
+  `depthswalker.onLeachCapstone()` when a leach lands on a full stack (the leach capstone's own line
+  is uncaptured). That opens a 10s claim window (`config.claimWindow`), which 478 closes.
+- MADPRESSION checked `hasAff("stun")`, which nothing records. Trigger 483 (the madness capstone)
+  now stamps `onMadnessCapstone()`, and depression is cashed in inside `config.madStunWindow` (3s,
+  UNCONFIRMED). The two ladders are climbed together so both capstones are armed at once.
+- `shouldTimeloop` used the "3-4 of 5 DW affs" rule. It now loops only when the selected Instill
+  still needs two or more rungs, and never on a capstone hit.
+
+**Open:** the leach capstone line, the madness stun length, and retribution's ladder length (two
+rungs, per the class doc) all want a combat log. LOCK has no impatience source now that the instill
+is gone.
+
+**Tests:** new `test_cc_depthswalker.lua` (18). It is the first test that loads 015. It covers the
+reporter's case both ways, a sweep in which no route in any state returns an invalid instill, LOCK's
+shadow pivot, the stun and claim windows, and timeloop on a capstone hit.
+
+---
+
 ## 2026-09-26 - Rupture lines highlighted (v4.7.364)
 
 User: *"Please highlight the enact rupture lines with a bold bright color"*. New

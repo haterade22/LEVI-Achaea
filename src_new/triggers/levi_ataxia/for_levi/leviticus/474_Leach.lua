@@ -55,6 +55,9 @@ if isTargeted(matches[2]) then
         if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " manaleech") end
         if partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop manaleech") end
     else
+        -- All three rungs were already up, so this application was the leach
+        -- CAPSTONE: the shadow is now claimable (its own line is uncaptured).
         tarAffed("parasite", "healthleech", "manaleech")
+        if depthswalker and depthswalker.onLeachCapstone then depthswalker.onLeachCapstone() end
     end
 end

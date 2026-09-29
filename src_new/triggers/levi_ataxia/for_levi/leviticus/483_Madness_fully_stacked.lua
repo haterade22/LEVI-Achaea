@@ -43,4 +43,6 @@ if isTargeted(matches[2]) then
 	setBold(true)
 	resetFormat()
 	tarAffed("shadowmadness", "vertigo", "hallucinations")
+	-- The madness capstone stuns: MADPRESSION cashes in depression inside the window
+	if depthswalker and depthswalker.onMadnessCapstone then depthswalker.onMadnessCapstone() end
 end
