@@ -2,6 +2,52 @@
 
 ---
 
+## 2026-09-29 - Depthswalker audit: no SHADOW CLAIM, Dictate counts four afflictions, latch and Assess (v4.7.366)
+
+Source: the written audit of `CC_Depthswalker` ("CC_Depthswalker Logic Audit for Haterade").
+Its author live-tested the findings in spars and captured AB DICTATE.
+
+**v4.7.365 could send a command that does not exist.** Achaea has no `SHADOW CLAIM`. The claim is
+the leach capstone strike itself: once parasite, healthleech and manaleech are up, keep leach
+instilled and reap again. The offense had always carried a synthetic
+`shadow instill scythe with degeneration;chrono assert;shadow claim <target>` packet behind
+`canClaimShadow`. That flag was never set, so the packet was dead. v4.7.365 wired it from trigger
+474, so v4.7.365 sent it after every leach capstone. The whole claim path is gone now: config
+`claimWindow`, `onLeachCapstone`/`onShadowClaimed`/`needClaimShadow`, and the `buildAttack` branch.
+The shadow phase already keeps leach selected on a full stack, and trigger 478's claim line is the
+only authority for `haveshadow`.
+
+**Dictate counted the wrong afflictions.** AB DICTATE raises the 40% base by 5% for each of
+depression, madness, retribution and parasite, and nothing else. The code counted seven afflictions
+(healthleech, manaleech, justice and timeloop as well), reaching 75% where the real cap is 60%. So
+Dictate fired while the target's mana was still too high. `DICTATE_AFFS` now holds the four, with
+madness as `shadowmadness` (the name the tracker records for the first madness rung). They are
+counted at `highConfidence` (0.7) because the count gates a kill.
+
+**The opening-complete latch revalidates.** `bellwortComplete` used to latch for good once timeloop
+was seen, so a target that cured the kelp/bellwort foundation kept eating finishers with nothing
+behind them. It now holds only while 2 of `FOUNDATION_AFFS` (clumsiness, justice, retribution,
+timeloop) are up, and it sets only on a high-confidence timeloop. `depthswalker.hasAffConfident()`
+is the helper.
+
+**Assess is configurable.** Every packet ended `assess <target>`. ASSESS is balanceless only with
+the Health Inspector trait. Every PvP trait set in this package selects that trait, so it stays on
+by default. New alias `dwassess [on|off]` (`depthswalker/026`) sets `config.assess` for a
+character without the trait. `dws` shows the setting. Contemplate always stays, because Dictate and
+Mutilate read the target's mana from it.
+
+**Still open:**
+- Retribution's ladder length. The audit's shape gives every Instill stages 0-3, but we only know
+  two retribution rungs.
+- The madness stun window.
+- LOCK has no impatience source.
+
+**Tests:** `test_cc_depthswalker.lua` 18 -> 23. The claim-window test is replaced by "no packet in
+any mode contains `shadow claim`, and leach stays selected". New tests: the Dictate four,
+low-confidence Dictate, latch drop, latch hold, and Assess gating.
+
+---
+
 ## 2026-09-29 - Depthswalker: per-Instill capstones, LOCK takes a shadow, no impatience instill (v4.7.365)
 
 From a user's audit of the DW PvP offense (`depthswalker/015_CC_Depthswalker.lua`).

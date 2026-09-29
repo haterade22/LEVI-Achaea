@@ -49,4 +49,3 @@ patterns:
 	tarAffed("healthleech")
 	tarAffed("manaleech")
   haveshadow = true
-  if depthswalker and depthswalker.onShadowClaimed then depthswalker.onShadowClaimed() end

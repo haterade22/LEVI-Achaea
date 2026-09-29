@@ -41,12 +41,11 @@ packageName: ''
 -- total of unrelated DW afflictions (the old `5 DW affs` rule fired capstones
 -- that were not ready and missed ones that were). See INSTILL_STACKS.
 --
--- DW Afflictions (Dictate threshold only; every name here is one a rung
--- trigger actually records -- "madness"/"degeneration" never were):
---   the rungs of INSTILL_STACKS + timeloop
---
--- Dictate threshold: 40% mana + 5% per DW affliction on target
+-- Dictate threshold (AB DICTATE): 40% mana + 5% for EACH of depression,
+--   madness, retribution and parasite -- those four only (v4.7.366).
 -- Mutilate threshold: 40% HP + 30% mana + shadow claimed
+-- The shadow is claimed by the leach CAPSTONE strike itself: there is no
+--   SHADOW CLAIM command (live-tested by the auditor, v4.7.366).
 --------------------------------------------------------------------------------
 
 depthswalker = depthswalker or {}
@@ -58,8 +57,6 @@ depthswalker = depthswalker or {}
 depthswalker.state = {
     mode = "lock",              -- "lock", "damage", "dictate", "madpression", "group"
     haveShadow = false,         -- shadow claimed from target
-    canClaimShadow = false,     -- leach capstone sent, shadow available to claim
-    claimReadyAt = nil,         -- when the leach capstone went out (claimWindow)
     madCapAt = nil,             -- when the madness capstone landed (trigger 483)
     distorted = false,          -- distort active in room
     partyrelay = true,          -- relay to party
@@ -79,10 +76,11 @@ depthswalker.config = {
     -- MADPRESSION treats the target as stunned. UNCONFIRMED: the stun's
     -- length has never been measured.
     madStunWindow = 3,
-    -- Seconds after sending the leach capstone during which we may SHADOW
-    -- CLAIM. UNCONFIRMED: the leach capstone's line is uncaptured, so claim
-    -- readiness is inferred from the send (478's claim line clears it).
-    claimWindow = 10,
+    -- Append `assess <target>` to every attack. ASSESS is balanceless only
+    -- with the HEALTH INSPECTOR trait; without it, every attack pays for it.
+    -- Cull/Mutilate read the target's health (php) from these assesses.
+    -- Toggle with `dwassess on|off`.
+    assess = true,
 }
 
 -- Current attack selections (set each dispatch cycle)
@@ -102,7 +100,8 @@ depthswalker.selections = {
 --   degeneration -> damage burst (halved without a shadow)
 --   depression   -> depression + anorexia + masochism
 --   madness      -> stun
---   leach        -> enables SHADOW CLAIM
+--   leach        -> claims the target's shadow (the capstone strike IS the
+--                   claim; there is no SHADOW CLAIM command)
 --   retribution  -> mana sap (its ladder is two rungs, per the class doc)
 -- This table is also the whitelist of valid instills: "impatience" is NOT one
 -- (the game refuses `shadow instill scythe with impatience`, leaving the old
@@ -116,15 +115,25 @@ depthswalker.INSTILL_STACKS = {
 }
 depthswalker.INSTILL_ORDER = { "depression", "degeneration", "madness", "leach", "retribution" }
 
--- DW afflictions counted by the Dictate threshold (40% + 5% each). Which
--- afflictions the game actually counts is UNCONFIRMED, so this list is kept to
--- exactly what was counted before v4.7.365: the old list also named "madness"
--- and "degeneration", which no trigger ever records -- they never counted, and
--- dropping them changes nothing. Capstones do NOT use this list.
+-- DW-specific afflictions on the target: the "is this a fresh fight?" reset
+-- and the status readout. Neither capstones nor Dictate use this list.
 depthswalker.DW_AFFS = {
     "depression", "retribution", "parasite", "healthleech",
-    "manaleech", "justice", "timeloop",
+    "manaleech", "justice", "timeloop", "shadowmadness",
 }
+
+-- The four afflictions AB DICTATE names as raising its threshold, 5% each
+-- (v4.7.366; captured AB via the auditor). "madness" there is our first
+-- madness rung, which the tracker records as shadowmadness. Before this, the
+-- threshold counted seven affs (healthleech/manaleech/justice/timeloop too)
+-- and could reach 75% where the real cap is 60% -- Dictate fired early.
+depthswalker.DICTATE_AFFS = { "depression", "shadowmadness", "retribution", "parasite" }
+
+-- The pressure foundation the opening builds (kelp + bellwort). The
+-- opening-complete latch holds only while at least FOUNDATION_MIN of these are
+-- still up (v4.7.366); below that the route rebuilds instead of finishing.
+depthswalker.FOUNDATION_AFFS = { "clumsiness", "justice", "retribution", "timeloop" }
+depthswalker.FOUNDATION_MIN = 2
 
 --------------------------------------------------------------------------------
 -- V3 ROUTING HELPERS
@@ -133,6 +142,17 @@ depthswalker.DW_AFFS = {
 -- Check if target has an affliction (V3 is always on, routes through global haveAff)
 function depthswalker.hasAff(aff)
     return haveAff(aff)
+end
+
+-- Affliction present at a STRICTER confidence than haveAff's 30% default.
+-- For decisions that commit something -- the Dictate kill threshold, the
+-- opening-complete latch -- a 30% V3 branch is not enough (v4.7.366). With no
+-- V3 probability available it falls back to haveAff.
+function depthswalker.hasAffConfident(aff)
+    if getAffProbabilityV3 then
+        return getAffProbabilityV3(aff) >= depthswalker.config.highConfidence
+    end
+    return depthswalker.hasAff(aff)
 end
 
 -- Get affliction probability (0.0-1.0).
@@ -242,9 +262,14 @@ function depthswalker.stageSummary()
 end
 
 -- Dictate threshold: 40% base + 5% per DW affliction on target
+-- Only the four AB-named afflictions count, each at high confidence: an
+-- overestimated threshold sends Dictate while their mana is still too high.
 function depthswalker.getDictateThreshold()
-    local dwAffCount = depthswalker.countDWAffsInt()
-    return 40 + (dwAffCount * 5)
+    local n = 0
+    for _, aff in ipairs(depthswalker.DICTATE_AFFS) do
+        if depthswalker.hasAffConfident(aff) then n = n + 1 end
+    end
+    return 40 + (n * 5)
 end
 
 -- Check if dictate conditions are met
@@ -376,6 +401,15 @@ end
 -- Mode finishers pick which Instill to finish.
 --------------------------------------------------------------------------------
 
+-- How much of the kelp/bellwort foundation is still on the target.
+function depthswalker.foundationCount()
+    local n = 0
+    for _, aff in ipairs(depthswalker.FOUNDATION_AFFS) do
+        if depthswalker.hasAff(aff) then n = n + 1 end
+    end
+    return n
+end
+
 -- Universal opening: kelp pressure -> shadow -> bellwort stack
 -- Returns the next instill for the opening phase, or nil if opening is complete.
 --
@@ -386,16 +420,22 @@ end
 -- to opening phases. The bellwortComplete flag ensures we move to finisher (depression)
 -- even if target cures bellwort affs. This prevents the kelp->bellwort loop.
 function depthswalker.selectInstillOpening()
-    -- BELLWORT COMPLETE: Skip opening entirely, go straight to mode finisher
-    -- This is set when timeloop is first applied during bellwort phase.
-    -- Even if target cures bellwort affs, we stay in finisher (depression/madness).
+    -- BELLWORT COMPLETE: skip the opening and go to the mode finisher -- but
+    -- only while the foundation it built still stands. The latch used to be
+    -- permanent once timeloop was seen, so a target that cured the kelp/
+    -- bellwort stack down kept eating finishers with no pressure behind them
+    -- (v4.7.366). Below FOUNDATION_MIN the latch drops and the opening rebuilds.
     if depthswalker.state.bellwortComplete then
-        return nil
+        if depthswalker.foundationCount() >= depthswalker.FOUNDATION_MIN then
+            return nil
+        end
+        depthswalker.state.bellwortComplete = false
     end
 
-    -- Check if timeloop is present - if so, bellwort phase is complete
-    -- This catches the case where timeloop was applied but bellwortComplete wasn't set yet
-    if depthswalker.hasAff("timeloop") then
+    -- Timeloop present (at high confidence -- this latches a phase change)
+    -- with the foundation standing: the bellwort phase is complete.
+    if depthswalker.hasAffConfident("timeloop")
+        and depthswalker.foundationCount() >= depthswalker.FOUNDATION_MIN then
         depthswalker.state.bellwortComplete = true
         return nil
     end
@@ -407,9 +447,10 @@ function depthswalker.selectInstillOpening()
         return "degeneration"
     end
 
-    -- Phase 2: SHADOW - climb the leach ladder and fire its capstone, which is
-    -- what makes the shadow claimable (kelp is now pressured, so the kelp-cured
-    -- leach affs stick). EVERY mode takes it, LOCK included (v4.7.365): LOCK used
+    -- Phase 2: SHADOW - climb the leach ladder and fire its capstone; the
+    -- capstone strike IS the claim (there is no SHADOW CLAIM command), and
+    -- trigger 478 confirms it (kelp is now pressured, so the kelp-cured leach
+    -- affs stick). EVERY mode takes it, LOCK included (v4.7.365): LOCK used
     -- to skip this phase, and in live spars it built kelp/bellwort pressure
     -- indefinitely without ever converting it into a shadow.
     if not depthswalker.state.haveShadow then
@@ -471,7 +512,7 @@ function depthswalker.selectInstillDamage()
 
     -- Priority 2: Clumsiness stuck, now climb the leach ladder toward shadow.
     -- With all three rungs up (capstoneReady("leach")) the next leach IS the
-    -- capstone, which makes the shadow claimable (see needClaimShadow).
+    -- capstone, and that strike claims the shadow (478 confirms it).
     -- Continue degeneration pressure (weariness/paralysis) via the venom slot
     if not depthswalker.state.haveShadow then
         depthswalker.selections.phase = "shadow"
@@ -699,44 +740,33 @@ function depthswalker.needShieldStrip()
     return depthswalker.hasAff("shield")
 end
 
--- The leach capstone makes the shadow claimable. Its own line is UNCAPTURED,
--- so trigger 474 calls this when a leach lands on a target that already had
--- all three rungs -- i.e. the application that WAS the capstone. The window
--- (config.claimWindow) bounds a wrong inference to a few wasted claims, and
--- the claim line (478 -> onShadowClaimed) closes it.
-function depthswalker.onLeachCapstone()
-    depthswalker.state.canClaimShadow = true
-    depthswalker.state.claimReadyAt = getEpoch()
-end
-
-function depthswalker.onShadowClaimed()
-    depthswalker.state.canClaimShadow = false
-    depthswalker.state.claimReadyAt = nil
-end
-
-function depthswalker.needClaimShadow()
-    local st = depthswalker.state
-    if not st.canClaimShadow or st.haveShadow then return false end
-    if not st.claimReadyAt or (getEpoch() - st.claimReadyAt) > depthswalker.config.claimWindow then
-        st.canClaimShadow = false
-        return false
-    end
-    return true
-end
 
 --------------------------------------------------------------------------------
 -- ATTACK BUILDER
 --
--- Priority: Dictate > Mutilate > Cull > Claim Shadow > Shield Strip > Normal
+-- Priority: Dictate > Mutilate > Cull > Shield Strip > Normal
+-- (No claim step: the leach capstone strike claims the shadow. v4.7.365 wired
+-- a synthetic `shadow claim <target>`, which is not a command.)
 --
 -- Normal attack pattern:
 --   shadow attune <target> to <attune>;
 --   shadow instill scythe with <dw_aff>;
 --   chrono assert|chrono loop [boost];
 --   shadow reap <target> [venom];
---   assess <target>;
+--   [assess <target>;]   (config.assess -- Health Inspector makes it free)
 --   contemplate <target>
 --------------------------------------------------------------------------------
+
+-- The info tail every packet ends with. ASSESS only when configured (it is
+-- balanceless only with the Health Inspector trait); CONTEMPLATE always, since
+-- Dictate and Mutilate read the target's mana (pm) from it.
+function depthswalker.infoTail(sp)
+    local tail = ""
+    if depthswalker.config.assess then
+        tail = "assess " .. target .. sp
+    end
+    return tail .. "contemplate " .. target
+end
 
 function depthswalker.buildAttack()
     local sp = ataxia.settings.separator
@@ -754,8 +784,7 @@ function depthswalker.buildAttack()
     if depthswalker.needMutilate() then
         atk = atk .. "wield right dagger" .. sp
             .. "shadow mutilate " .. target .. " curare" .. sp
-            .. "assess " .. target .. sp
-            .. "contemplate " .. target
+            .. depthswalker.infoTail(sp)
         return atk
     end
 
@@ -765,19 +794,7 @@ function depthswalker.buildAttack()
             .. "intone tooros" .. sp
             .. "chrono assert" .. sp
             .. "shadow cull " .. target .. " curare" .. sp
-            .. "assess " .. target .. sp
-            .. "contemplate " .. target
-        return atk
-    end
-
-    -- 4. Claim shadow (after leach capstone)
-    if depthswalker.needClaimShadow() then
-        atk = atk .. "shadow attune " .. target .. " to " .. sel.attune .. sp
-            .. "shadow instill scythe with degeneration" .. sp
-            .. "chrono assert" .. sp
-            .. "shadow claim " .. target .. sp
-            .. "assess " .. target .. sp
-            .. "contemplate " .. target
+            .. depthswalker.infoTail(sp)
         return atk
     end
 
@@ -804,7 +821,7 @@ function depthswalker.buildAttack()
         atk = atk .. "shadow reap " .. target .. " " .. sel.venom .. sp
     end
 
-    atk = atk .. "assess " .. target .. sp .. "contemplate " .. target
+    atk = atk .. depthswalker.infoTail(sp)
 
     return atk
 end
@@ -814,8 +831,7 @@ function depthswalker.handleShield()
     local sp = ataxia.settings.separator
     local atk = depthswalkerQueue()
     atk = atk .. "shadow strike " .. target .. sp
-        .. "assess " .. target .. sp
-        .. "contemplate " .. target
+        .. depthswalker.infoTail(sp)
     return atk
 end
 
@@ -849,7 +865,6 @@ function depthswalker.dispatch()
         depthswalker.state.bellwortComplete = false
         depthswalker.state.lastTarget = target
         depthswalker.state.madCapAt = nil
-        depthswalker.onShadowClaimed()   -- a claim window belongs to one target
     end
     -- Also reset if no DW affs on target (fresh fight, they reset or new target)
     if depthswalker.countDWAffsInt() == 0 then
@@ -1002,7 +1017,8 @@ function depthswalker.status()
     echo("  Tracking: " .. sys .. "\n")
     echo("  Age: " .. age .. "\n")
     echo("  Shadow: " .. tostring(depthswalker.state.haveShadow) .. "\n")
-    echo("  DW Affs (dictate count): " .. dwCount .. "\n")
+    echo("  DW Affs: " .. dwCount .. "\n")
+    echo("  Assess per attack: " .. tostring(depthswalker.config.assess) .. " (dwassess on|off)\n")
     echo("  Instill ladders (* = capstone next): " .. depthswalker.stageSummary() .. "\n")
     echo("  Dictate Threshold: " .. dictThresh .. "% (target mana: " .. (pm or "?") .. "%)\n")
     echo("  Can Dictate: " .. tostring(depthswalker.canDictate()) .. "\n")
