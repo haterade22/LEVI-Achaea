@@ -1,15 +1,12 @@
 --[[mudlet
 type: trigger
-name: Shadow Stolen
+name: Glass Lily Dropped
 hierarchy:
 - Levi_Ataxia
 - For Levi
 - leviticus
 - Ataxia
-- Combat/Aff Tracking
-- Add Afflictions
-- Classes A-J
-- Depthwalker
+- Misc Triggers
 attributes:
   isActive: 'yes'
   isFolder: 'no'
@@ -33,19 +30,11 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^You claim the shadow of (\w+), storing it within your phylactery.$
-  type: 1
+- pattern: You let a clouded glass lily fall to the ground
+  type: 2
 ]]--
 
-
-	selectString(line,1)
-	fg("white")
-	bg("SeaGreen")
-	setBold(true)
-	resetFormat()
-	ataxia_boxEcho(target:upper().."'S SHADOW HAS BEEN STOLEN", "purple")
-  ataxia_boxEcho(target:upper().."'S SHADOW HAS BEEN STOLEN", "purple")
-	tarAffed("parasite")
-	tarAffed("healthleech")
-	tarAffed("manaleech")
-  haveshadow = true
+-- "You let a clouded glass lily fall to the ground, its fragile form crumbling into dust upon
+-- impact." (the user's log, 2026-09-30). The lily went down: its hour starts now (v4.7.367,
+-- misc_scripts/024). Start of line -- the full line is ~100 characters and could wrap.
+if ataxia_lilyDropped then ataxia_lilyDropped() end

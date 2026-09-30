@@ -188,7 +188,9 @@ function basher_engaged()
   if ataxiaBasher.gemCloaking and gmcp.Room.Info.area == "Moghedu" then
     send("say Tulahuar")
   end
-  send("drop lily;drop lily;drop lily")
+  -- Glass lilies (v4.7.367): only when one is DUE -- the hourly clock in misc_scripts/024 owns this
+  -- now. It used to drop three here unconditionally, and nowhere else.
+  if ataxia_lilyDrop then ataxia_lilyDrop("bashing") end
   if gmcp.Char.Status.class == "Pariah" then
     --sendAll("epitaph focus serpent nest bear scarab jackal serpent", "crux let me",false)
     send("epitaph focus serpent nest scales skein scarab jackal serpent;crux let me",false)

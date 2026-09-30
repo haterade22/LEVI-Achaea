@@ -216,18 +216,20 @@ describe("CC_Depthswalker -- timeloop and shadow claim", function()
     if not okT then error(errT) end
   end)
 
-  it("a leach capstone opens a bounded claim window that the claim closes", function()
-    fresh("damage")
-    now = 1000
-    expect(dw.needClaimShadow()).toBeFalse()
-    dw.onLeachCapstone()
-    expect(dw.needClaimShadow()).toBeTrue()
-    dw.onShadowClaimed()
-    expect(dw.needClaimShadow()).toBeFalse()
-    dw.onLeachCapstone()
-    now = 1000 + dw.config.claimWindow + 1
-    expect(dw.needClaimShadow()).toBeFalse()
-    now = 1000
+  it("no packet ever contains SHADOW CLAIM; the leach capstone stays selected", function()
+    -- SHADOW CLAIM is not a command: the leach capstone strike claims the
+    -- shadow. v4.7.365 briefly wired a synthetic claim packet.
+    expect(dw.needClaimShadow).toBeNil()
+    for _, mode in ipairs({ "lock", "damage", "dictate", "madpression", "group" }) do
+      fresh(mode)
+      php, pm = 100, 100
+      affs({ "clumsiness", "parasite", "healthleech", "manaleech" })
+      dw.selections.instill = dw.selectInstill()
+      expect(dw.selections.instill).toBe("leach")
+      dw.selections.venom = dw.selectVenom()
+      dw.selections.useTimeloop = false
+      expect(dw.buildAttack():find("shadow claim", 1, true) == nil).toBeTrue()
+    end
   end)
 
   it("buildAttack never sends an invalid instill", function()
@@ -242,6 +244,70 @@ describe("CC_Depthswalker -- timeloop and shadow claim", function()
     expect(atk:find("with impatience", 1, true) == nil).toBeTrue()
     expect(atk).toContain("shadow instill scythe with degeneration")
     expect(#echoes).toBe(1)
+  end)
+end)
+
+describe("CC_Depthswalker -- Dictate, the opening latch, Assess (v4.7.366)", function()
+
+  it("Dictate's threshold counts only depression, madness, retribution, parasite", function()
+    affs({ "healthleech", "manaleech", "justice", "timeloop", "clumsiness" })
+    expect(dw.getDictateThreshold()).toBe(40)
+    affs({ "depression", "shadowmadness", "retribution", "parasite",
+      "healthleech", "manaleech", "justice", "timeloop" })
+    expect(dw.getDictateThreshold()).toBe(60)
+  end)
+
+  it("a low-confidence affliction does not raise the Dictate threshold", function()
+    affs({ "depression" })
+    local oldP = getAffProbabilityV3
+    getAffProbabilityV3 = function(aff) return aff == "depression" and 0.4 or 0 end
+    local okT, errT = pcall(function()
+      expect(dw.getDictateThreshold()).toBe(40)
+    end)
+    getAffProbabilityV3 = oldP
+    if not okT then error(errT) end
+  end)
+
+  it("the opening latch drops when the foundation is cured down", function()
+    fresh("lock")
+    dw.state.haveShadow = true
+    affs({ "clumsiness", "justice", "retribution", "timeloop" })
+    expect(dw.selectInstillOpening()).toBeNil()
+    expect(dw.state.bellwortComplete).toBeTrue()
+    -- They cure three of the four: rebuild rather than keep finishing.
+    affs({ "timeloop" })
+    expect(dw.selectInstillOpening()).toBe("degeneration")
+    expect(dw.state.bellwortComplete).toBeFalse()
+  end)
+
+  it("the latch holds while two of the foundation remain", function()
+    fresh("lock")
+    dw.state.haveShadow = true
+    dw.state.bellwortComplete = true
+    affs({ "clumsiness", "justice" })
+    expect(dw.selectInstillOpening()).toBeNil()
+    expect(dw.state.bellwortComplete).toBeTrue()
+  end)
+
+  it("assess is appended only when configured", function()
+    fresh("lock")
+    php, pm = 100, 100
+    affs({})
+    dw.selections.instill = "degeneration"
+    dw.selections.venom = "curare"
+    dw.selections.useTimeloop = false
+    local was = dw.config.assess
+    local okT, errT = pcall(function()
+      dw.config.assess = true
+      expect(dw.buildAttack()).toContain("assess Victim")
+      dw.config.assess = false
+      local atk = dw.buildAttack()
+      expect(atk:find("assess", 1, true) == nil).toBeTrue()
+      expect(atk).toContain("contemplate Victim")
+      expect(dw.handleShield():find("assess", 1, true) == nil).toBeTrue()
+    end)
+    dw.config.assess = was
+    if not okT then error(errT) end
   end)
 end)
 

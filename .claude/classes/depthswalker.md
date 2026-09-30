@@ -145,8 +145,8 @@ description: "Critical resource for executes and damage"
 how_to_claim:
   - "Stack leach afflictions: parasite → healthleech → manaleech"
   - "When all 3 are present, the NEXT leach is the leach capstone"
-  - "After leach capstone: SHADOW CLAIM <target>"
-  - "The leach capstone's own line is UNCAPTURED: trigger 474 treats a leach landing on a full stack as the capstone and calls depthswalker.onLeachCapstone(), opening a claim window (config.claimWindow, 10s); 478 closes it (v4.7.365). Before that, canClaimShadow was never set and the claim never fired."
+  - "The leach capstone strike ITSELF claims the shadow -- keep leach instilled and reap again. There is NO `SHADOW CLAIM` command (live-tested by an outside auditor, 2026-08-30)."
+  - "History: the offense carried a synthetic `shadow claim <target>` packet behind canClaimShadow. It was dead until v4.7.365 wired it (so v4.7.365 could SEND it); v4.7.366 deleted the claim path entirely. Trigger 478 (the claim line) is the only authority for `haveshadow`."
 
 trigger_pattern: "^You claim the shadow of (\\w+), storing it within your phylactery.$"
 trigger_message: "You claim the shadow of <target>, storing it within your phylactery."
@@ -244,17 +244,18 @@ venom_strategy: |
 type: execute
 summary: "Drain mana with retribution capstone, execute with dictate"
 
-threshold_formula: "40% + (5% × DW_affliction_count)"
+threshold_formula: "40% + 5% for EACH of depression, madness, retribution, parasite (AB DICTATE -- those four only; cap 60%)"
+code: "depthswalker.DICTATE_AFFS = {depression, shadowmadness, retribution, parasite} -- 'madness' is the first madness rung, recorded as shadowmadness. Counted at config.highConfidence (0.7), not haveAff's 30%, since it gates a kill (v4.7.366)."
+history: "Until v4.7.366 the code counted healthleech, manaleech, justice and timeloop as well (up to 75%), so Dictate fired while mana was still too high."
 
 threshold_examples:
   0_affs: "40% mana"
-  3_affs: "55% mana"
-  5_affs: "65% mana"
-  7_affs: "75% mana"
+  2_affs: "50% mana"
+  4_affs: "60% mana (maximum)"
 
 strategy:
-  1: "Build bellwort stack (adds 3 DW affs)"
-  2: "Stack additional DW affs (depression, madness, degeneration)"
+  1: "Build the retribution ladder (justice -> retribution); retribution counts"
+  2: "Keep depression, madness and parasite up -- each raises the threshold 5%"
   3: "Use retribution capstone for mana sap"
   4: "When mana below threshold: SHADOW DICTATE <target>"
 ```
@@ -403,6 +404,13 @@ capstones:
   leach: "Enables shadow claim"
 ```
 
+## Route state and packet (v4.7.366, from the outside audit)
+```yaml
+opening_latch: "bellwortComplete (skip the kelp/shadow/bellwort opening, go to the finisher) now holds only while 2+ of FOUNDATION_AFFS (clumsiness, justice, retribution, timeloop) are up. It used to latch for good once timeloop was seen, so a target that cured the foundation kept eating finishers with nothing behind them. The latch is SET only on a high-confidence (0.7) timeloop."
+confidence: "depthswalker.hasAffConfident(aff) = V3 probability >= config.highConfidence. Used where a decision commits something: the Dictate threshold and the opening latch. Everything else still uses haveAff's 30%."
+assess: "Every packet used to end `assess <target>;contemplate <target>`. ASSESS is balanceless only with the HEALTH INSPECTOR trait (every PvP trait set in this package selects it). config.assess (default true) / `dwassess on|off` turns it off for a character without the trait; contemplate always stays, since Dictate/Mutilate read mana from it. Without assess, cull/mutilate have no fresh health reading."
+```
+
 ## Room Hinder Abilities
 ```yaml
 distort:
@@ -457,7 +465,7 @@ priority_cures:
 
 dangerous_abilities:
   - mutilate: "Instant kill at 40% HP / 30% MP with shadow"
-  - dictate: "Mana kill at 40% + 5% per DW aff"
+  - dictate: "Mana kill at 40% + 5% each for depression/madness/retribution/parasite (max 60%)"
   - aeon: "Slows ALL actions significantly"
   - chrono_loop_boost: "Doubles affliction application"
   - madness_capstone: "Stun on the 4th madness application"
@@ -466,7 +474,7 @@ dangerous_abilities:
 watch_for:
   - "A full stack of one Instill = that capstone is next"
   - "Shadow claimed = Mutilate possible"
-  - "High DW aff count = lower Dictate threshold"
+  - "Depression/madness/retribution/parasite up = Dictate kills at higher mana (cure these to push it back to 40%)"
   - "Bellwort stack (timeloop+justice+retribution) = sustained pressure"
 ```
 
