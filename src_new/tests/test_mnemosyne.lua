@@ -9075,6 +9075,48 @@ describe("boon combos", function()
     end)
   end)
 
+  -- v4.7.368, the user's offer screen: Elixir Addict / Healing Metabolism / Second Wind all 36, and
+  -- the advisor recommended Elixir Addict. "I would lower Elixir Addict as the downsides of not using
+  -- potash is not worth it. Plus if we have the boon where we can eat corpses it makes healing
+  -- metabolism a higher pick by a lot."
+  it("Elixir Addict pays for its potash; Healing Metabolism pays more beside Obligate Carnivore", function()
+    local lib = {
+      ["Elixir Addict"] = { description = "Your health and mana elixirs are 20% more effective but you gain no health or mana from moss or potash.",
+                            category = "Defence", rarity = "uncommon", comboBoon = true },
+      ["Healing Metabolism"] = { description = "Your health elixirs are 50% more effective while you possess the satiation defence.",
+                                 category = "Defence", rarity = "uncommon", comboBoon = true },
+      ["Second Wind"] = { description = "Gain 1 extra life when selecting this boon, up to the maximum.",
+                          category = "Defence", rarity = "rare" },
+      ["Obligate Carnivore"] = { description = "You can EAT corpses, restoring hunger and small amounts of endurance and willpower.",
+                                 category = "Utility", rarity = "common" },
+      -- same-category stand-ins, so holding the partner is compared with holding something else
+      ["Plain Utility"] = { description = "d", category = "Utility", rarity = "common" },
+      ["Plain Defence"] = { description = "d", category = "Defence", rarity = "common" },
+    }
+    withLibrary(lib, function()
+      local offer = { "Elixir Addict", "Healing Metabolism", "Second Wind", "Restoration" }
+      local plain = holding({}, function() return M.rankOffer(offer) end)
+      expect(plain[1].name ~= "Elixir Addict").toBeTrue()
+      local ea, hm
+      for _, r in ipairs(plain) do
+        if r.name == "Elixir Addict" then ea = r elseif r.name == "Healing Metabolism" then hm = r end
+      end
+      expect(hm.score - ea.score).toBe(M.BOON_WEIGHTS.herbHealingLost)
+      expect(table.concat(ea.effects, " "):find("no healing from moss/potash", 1, true) ~= nil).toBeTrue()
+
+      local fed = holding({ "Obligate Carnivore" }, function() return M.rankOffer(offer) end)
+      expect(fed[1].name).toBe("Healing Metabolism")
+      local hm2
+      for _, r in ipairs(fed) do if r.name == "Healing Metabolism" then hm2 = r end end
+      local hm1 = holding({ "Plain Utility" }, function() return M.scoreBoon("Healing Metabolism") end)
+      expect(hm2.score - hm1.score).toBe(M.BOON_WEIGHTS.synergyHeld)
+      -- and the other way round
+      local oc0 = holding({ "Plain Defence" }, function() return M.scoreBoon("Obligate Carnivore") end)
+      local oc1 = holding({ "Healing Metabolism" }, function() return M.scoreBoon("Obligate Carnivore") end)
+      expect(oc1.score - oc0.score).toBe(M.BOON_WEIGHTS.synergyHeld)
+    end)
+  end)
+
   it("the bestowal records the free boon and says which recipe finished", function()
     local out, claimed
     withLibrary(WITH_CHAIN, function()

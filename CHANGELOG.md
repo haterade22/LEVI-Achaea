@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-09-30 - Boon advisor: Elixir Addict pays for its potash; Healing Metabolism pairs with Obligate Carnivore (v4.7.368)
+
+The user's offer screen, runewarden: Elixir Addict, Healing Metabolism and Second Wind all scored 36,
+and the advisor recommended Elixir Addict "ahead of Healing Metabolism by 0". User: *"I would lower
+Elixir Addict as the downsides of not using potash is not worth it. Plus if we have the boon where we
+can eat corpses it makes healing metabolism a higher pick by a lot."*
+
+- **`herbHealingLost = 30`**, charged whenever a boon says "gain no health" -- Elixir Addict's "you gain
+  no health or mana from moss or potash" was invisible to the parser. 36 -> 6.
+- **`synergyHeld = 40`** and **`M.BOON_SYNERGY`**: Healing Metabolism pays only while we are satiated,
+  and Obligate Carnivore makes satiation free off every kill (without it, satiation costs horn
+  charges). Each scores +40 when we already hold the other: Healing Metabolism goes from 36 to 76 or more
+beside Carnivore.
+
+**Tests:** 1 new (the user's four-boon offer: Elixir Addict is not recommended and sits exactly 30
+under Healing Metabolism; with Carnivore held, Healing Metabolism wins by the synergy; and the reverse
+pairing). 3 break-back mutants killed.
+
+---
+
 ## 2026-09-30 - DROP LILY every hour (v4.7.367)
 
 User: *"We need to DROP LILY every hour"*, with TALISMAN INFO LILY (a clouded glass lily: dropping it
