@@ -69,6 +69,14 @@ M.BOON_WEIGHTS = {
   -- THE BEST BOONS (v4.7.363, user: "Death's Demise  Defence common echo x4 (ECHO)  score 35 --
   -- the best boon or gravedigger should be highest in score"). Big enough to top any offer.
   topTier = 150,
+  -- NO HEALING FROM MOSS OR POTASH (v4.7.368, user: "I would lower Elixir Addict as the downsides
+  -- of not using potash is not worth it"). Elixir Addict: "Your health and mana elixirs are 20% more
+  -- effective but you gain no health or mana from moss or potash" -- it tied Healing Metabolism at
+  -- 36 because the cost was invisible to the parser. Charged whenever a boon says "gain no health".
+  herbHealingLost = 30,
+  -- A BOON THAT FEEDS ONE WE HOLD (v4.7.368, user: "if we have the boon where we can eat corpses it
+  -- makes healing metabolism a higher pick by a lot"). See M.BOON_SYNERGY.
+  synergyHeld = 40,
   -- A COST IS ONLY CHEAP IF WE CAN TAKE IT (v4.7.331, user: "if a boon gives us something but
   -- costs an affliction or something we dont have immunity for, it should be scored significantly
   -- lower as the cost isn't worth it for the benefit"). A permanent affliction we cannot cure runs
@@ -114,6 +122,15 @@ M.BOON_CLASS_WEIGHTS = M.BOON_CLASS_WEIGHTS or {}
 M.BOON_TOP_TIER = {
   ["Death's Demise"] = { why = "max health up to 133% (echoes further)", voidedBy = "Gravedigger" },
   ["Gravedigger"] = { why = "death cape stacks to 200% health", voidedBy = "Death's Demise" },
+}
+
+-- Pairs that make each other better (v4.7.368). Healing Metabolism pays only "while you possess the
+-- satiation defence", and Obligate Carnivore ("You can EAT corpses, restoring hunger") makes that
+-- defence free off every kill (ataxia_carnivoreEat, misc_scripts/022) -- without it, satiation costs
+-- horn charges. Scored on the offered boon when we already hold its partner.
+M.BOON_SYNERGY = {
+  ["Healing Metabolism"] = { with = "Obligate Carnivore", why = "you eat corpses: satiation is free" },
+  ["Obligate Carnivore"] = { with = "Healing Metabolism", why = "keeps Healing Metabolism's satiation up" },
 }
 
 M.BOON_STAT_DAMAGE = {
@@ -291,6 +308,13 @@ function M.scoreBoon(offerName, ctx, W)
     end
   end
 
+  -- A partner we already hold (v4.7.368) -- by name, before the description check.
+  local syn = M.BOON_SYNERGY[name]
+  if syn and ctx.held[syn.with] and not ctx.held[name] then
+    add(r, W.synergyHeld, "pairs with " .. syn.with .. " (you have it): " .. syn.why)
+    r.effects[#r.effects + 1] = "pairs with " .. syn.with
+  end
+
   -- Free damage from a stat we already have (v4.7.362) -- before the description check, because the
   -- named ones score whether or not we have contemplated them.
   local statDmg = M.BOON_STAT_DAMAGE[name]
@@ -375,6 +399,12 @@ function M.scoreBoon(offerName, ctx, W)
   if p then
     add(r, p.chance * W.procPerPct, p.chance .. "% " .. p.aff .. " on hit")
     r.effects[#r.effects + 1] = p.chance .. "% " .. p.aff .. " on hit"
+  end
+
+  -- No healing from moss or potash (v4.7.368): the user's "not worth it".
+  if desc:lower():find("gain no health", 1, true) then
+    add(r, -W.herbHealingLost, "costs healing from moss and potash")
+    r.effects[#r.effects + 1] = "no healing from moss/potash"
   end
 
   -- WHAT IT TAKES BACK IN NUMBERS: charged like a gain, not like an affliction (v4.7.332).
