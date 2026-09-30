@@ -2,6 +2,24 @@
 
 ---
 
+## 2026-09-30 - Mounted ice slips are retried (v4.7.369)
+
+User: *"With ice in the room, and riding mount, we need to keep trying it doesnt cost balance to move
+on ice"* -- `Your mount slips and falls on the ice as you try to leave.`
+
+The ice-slip trigger (`mnemosyne/011`) matched only the on-foot line, `You slip and fall on the ice`.
+Mounted, the slip went unseen: the explorer waited out its 5s move timeout, re-sent once, and then
+CONDEMNED a perfectly good exit. The mount line is now a second pattern and gets the same handling
+(`M.onIceSlip`: an immediate re-send, the exit never counted as failed; a tactical retreat handed back
+to the swarm). It also confirms the mounted belief (`ataxiaBasher_mountedSet(true)`), so the jump verb
+is `mountjump`.
+
+**Tests:** 1 new (both lines match; the mount line re-sends and sets mounted; the on-foot line
+re-sends and says nothing about the mount). 2 break-back mutants killed (pattern removed, mounted
+latch removed).
+
+---
+
 ## 2026-09-30 - Boon advisor: Elixir Addict pays for its potash; Healing Metabolism pairs with Obligate Carnivore (v4.7.368)
 
 The user's offer screen, runewarden: Elixir Addict, Healing Metabolism and Second Wind all scored 36,

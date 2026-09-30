@@ -1195,7 +1195,8 @@ function M.onClamber()
   M._explMoveT = tempTimer(CLAMBER_GRACE, M._explMoveOnTimeout)
 end
 
--- "You slip and fall on the ice as you try to leave." An icy room fails the move
+-- "You slip and fall on the ice as you try to leave." -- or, mounted (v4.7.368), "Your mount
+-- slips and falls on the ice as you try to leave." An icy room fails the move
 -- (you fall prone) but the EXIT is fine, so keep re-sending the stand+move until we
 -- actually leave -- never count it against the exit as failed, and re-arm the move
 -- timeout so it doesn't fire mid-struggle. Capped at MAX_ICE_SLIPS so a permanently

@@ -4093,6 +4093,33 @@ describe("ice-slip recovery during a tactical retreat (v4.7.243)", function()
     expect(recorded).toBe("leap") -- and it recorded what it sent, for the refusal to recover
   end)
 
+  -- v4.7.368, user: "With ice in the room, and riding mount, we need to keep trying it doesnt cost
+  -- balance to move on ice" -- "Your mount slips and falls on the ice as you try to leave."
+  it("a MOUNTED slip is the same slip: re-sent, and it proves we are in the saddle", function()
+    local TL = dofile("src_new/tests/trigger_lib.lua")
+    local P = "src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/011_Ice_Slip.lua"
+    local MOUNT = "Your mount slips and falls on the ice as you try to leave."
+    expect(TL.anyMatches(TL.patterns(P), MOUNT)).toBeTrue()
+    expect(TL.anyMatches(TL.patterns(P), "You slip and fall on the ice as you try to leave.")).toBeTrue()
+    local realSlip, realSet, realLine = M.onIceSlip, ataxiaBasher_mountedSet, line
+    local slips, saddle = 0, nil
+    local ok, err = pcall(function()
+      M.onIceSlip = function() slips = slips + 1 end
+      ataxiaBasher_mountedSet = function(on) saddle = on end
+      line = MOUNT
+      dofile(P)
+      expect(slips).toBe(1)
+      expect(saddle).toBeTrue()
+      saddle = nil
+      line = "You slip and fall on the ice as you try to leave."
+      dofile(P)
+      expect(slips).toBe(2)
+      expect(saddle).toBeNil()                 -- on foot says nothing about the mount
+    end)
+    M.onIceSlip, ataxiaBasher_mountedSet, line = realSlip, realSet, realLine
+    if not ok then error(err, 0) end
+  end)
+
   it("hands a TACTICAL slip back to the swarm instead of walking", function()
     slipping(true)
     local walked, handed = 0, 0
