@@ -69,6 +69,7 @@ The GUI system (zGUI Redux) was originally created by **Zulah**. It has been enh
 | **Stormhammer** | Dirty-flag cached AoE target list for multi-target rooms |
 | **Legend Deck** | Data-driven pre-combat card draws for dangerous rooms |
 | **Shield Retarget** | Per-mob configurable shield durations with target swapping |
+| **Glass Lilies** | `lily` -- DROP LILY every hour (crit-severity boost), timed from the game's own drop line so a missed drop retries in 5 minutes; `lily on/off/now`, `lily count <n>` (default 3) |
 | **Armour Paragons** | Profile-based paragon/trait swapping with auto-swap on basher enable/disable |
 
 ### Mnemosyne Suite (`mnem`)

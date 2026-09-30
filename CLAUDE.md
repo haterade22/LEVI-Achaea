@@ -485,6 +485,8 @@ shielding.
 - **PvP auto-flee**: On `"attacker class detected"` event, disables basher and navigates to Mhaldor (`genrunning/001_Bashing_API.lua`)
 - **PvE target switching**: `switchTarget()` skips all PvP state resets when basher is enabled
 
+**Glass lilies (v4.7.367, `misc_scripts/024_Glass_Lily`, user: "We need to DROP LILY every hour").** `ataxia_lilyTick` on every `gmcp.Char.Vitals` sends `drop lily` x `ataxia.settings.lilyCount` (default 3) DIRECTLY (never queued -- `addclearfull` would delete it) once an hour. The hour is stamped by the game's drop line (trigger `785_Glass_Lily_Dropped`), not the attempt; an unconfirmed attempt retries after 5 min. `basher_engaged` used to drop three unconditionally; it now calls `ataxia_lilyDrop("bashing")`, which asks the same clock. Alias `lily [on|off|now|count <n>]`.
+
 **Defence tables: three of them, different meanings (v4.7.209).** `ataxiaTables.classDefences` is class MEMBERSHIP (only its keys are read; values are raising commands). `ataxiaTables.defenceWords` is what `ashow defs` DISPLAYS beside a defence, via `ataxia_defenceWord()` -- list a defence here only when its command differs from its name (bard: `acrobatics on`, `blade tune`, `dance harrying`). `ataxiaTables.defences` (inline in `_groups.yaml`) maps client-side name -> **SERVER-SIDE NAME** and is read as `csd, ssd` by `supportedDefence()` -- its values are NOT commands, and changing one to a command breaks every `ataxia.defences[actual]` lookup. Defences are raised by SSC (`curing priority defence <def> 25`), never by sending the ability command, so these tables are membership and documentation. **Before changing any table's values, find who reads them.**
 
 ### Bashing DPS & damage-taken tracking (`bashStats`, v4.7.207)

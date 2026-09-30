@@ -2,6 +2,36 @@
 
 ---
 
+## 2026-09-30 - DROP LILY every hour (v4.7.367)
+
+User: *"We need to DROP LILY every hour"*, with TALISMAN INFO LILY (a clouded glass lily: dropping it
+gives "a short-term boost or hindrance to critical hit severity") and the drop, three at once:
+
+    You let a clouded glass lily fall to the ground, its fragile form crumbling into dust upon impact.
+    A feeling of superiority washes over you.
+
+Until now the lilies went down only when the basher was switched on (`basher_engaged` sent
+`drop lily;drop lily;drop lily`), so a long session got one boost. New `misc_scripts/024_Glass_Lily`:
+
+- **Due once an hour, counted from the game's drop line** (new trigger `785_Glass_Lily_Dropped`, start
+  of line), never from the command -- a drop that did not happen is retried after 5 minutes instead of
+  waiting out the hour.
+- **Checked on every prompt** (`gmcp.Char.Vitals`), bashing or not.
+- **Sent directly, not queued** -- the basher's `queue addclearfull` would delete a queued drop.
+- **As many as we carry:** `ataxia.settings.lilyCount`, default 3.
+- `basher_engaged` now asks the same clock (`ataxia_lilyDrop("bashing")`) instead of dropping every time.
+
+Command (`aliases/configs/024`): `lily` (status and time to the next drop), `lily on|off`, `lily now`,
+`lily count <n>`.
+
+Not known yet: the hindrance line, and what the game says to a lily dropped too soon.
+
+**Tests:** new `test_glass_lily.lua` (7): fresh session drops all three directly; the drop line holds
+the next for exactly 60 minutes; an unconfirmed attempt retries at 5 minutes; off / `lily now`; the
+count; the trigger against the wrapped line; the engage path asks the clock.
+
+---
+
 ## 2026-09-29 - Depthswalker audit: no SHADOW CLAIM, Dictate counts four afflictions, latch and Assess (v4.7.366)
 
 Source: the written audit of `CC_Depthswalker` ("CC_Depthswalker Logic Audit for Haterade").
