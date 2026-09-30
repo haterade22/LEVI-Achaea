@@ -1198,6 +1198,8 @@ end
 -- "You slip and fall on the ice as you try to leave." -- or, mounted (v4.7.368), "Your mount
 -- slips and falls on the ice as you try to leave." An icy room fails the move
 -- (you fall prone) but the EXIT is fine, so keep re-sending the stand+move until we
+-- actually leave. Moving REQUIRES balance but a slip does not TAKE it (user, 2026-09-30), so the
+-- re-send -- on the free queue, which waits for balance -- goes out at once. Keep re-sending until we
 -- actually leave -- never count it against the exit as failed, and re-arm the move
 -- timeout so it doesn't fire mid-struggle. Capped at MAX_ICE_SLIPS so a permanently
 -- stuck exit still yields eventually.

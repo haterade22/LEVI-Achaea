@@ -18,6 +18,11 @@ is `mountjump`.
 re-sends and says nothing about the mount). 2 break-back mutants killed (pattern removed, mounted
 latch removed).
 
+**Addendum (after release, comments only).** The user's precise rule: *"On ice, regardless of mount or
+not, moving requires balance but doesnt take balance if we slip."* The re-send rides the free queue,
+which waits for balance, and a slip leaves balance intact -- so it goes out on the slip line. No code
+change was needed; the comments that said moving on ice "doesn't cost balance" were corrected.
+
 ---
 
 ## 2026-09-30 - Boon advisor: Elixir Addict pays for its potash; Healing Metabolism pairs with Obligate Carnivore (v4.7.368)
