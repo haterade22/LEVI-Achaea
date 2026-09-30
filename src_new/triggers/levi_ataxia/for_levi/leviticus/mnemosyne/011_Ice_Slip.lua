@@ -39,8 +39,13 @@ patterns:
 --
 -- MOUNTED (v4.7.369): "Your mount slips and falls on the ice as you try to leave." was not matched,
 -- so a mounted slip waited out the 5s move timeout, retried once, and then CONDEMNED a good exit.
--- User: "we need to keep trying, it doesn't cost balance to move on ice." It is the same event, so
--- it gets the same re-send -- and it proves we are in the saddle, so the jump verb learns it too.
+-- It is the same event, so it gets the same re-send -- and it proves we are in the saddle, so the
+-- jump verb learns it too.
+--
+-- THE BALANCE RULE (user, 2026-09-30): "On ice, regardless of mount or not, moving requires balance
+-- but doesnt take balance if we slip." So the re-send can go straight back out: it rides the FREE
+-- queue (`queue addclear free stand;<dir>`), which waits for balance, and a slip leaves us holding
+-- it -- the retry fires on the slip line, not a balance later.
 if line and line:find("^Your mount slips") and ataxiaBasher_mountedSet then
   ataxiaBasher_mountedSet(true, "your mount slipped on the ice")
 end
