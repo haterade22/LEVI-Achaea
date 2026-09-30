@@ -82,6 +82,29 @@ S.FLY_CONFIRM_MAX = 10
 -- `_beginEscape` ran from a clobbered anchor, either failing or leaping straight back in).
 S.ESCAPE_OWN = 8
 
+-- ---------------------------------------------------------------------------
+-- THE SWARM THAT FOLLOWS (v4.7.370, from a death)
+-- ---------------------------------------------------------------------------
+-- A Runewarden died in 30 seconds on an icy ripple against pit demons, claw fiends and giant
+-- centipedes. Every retreat -- three low-HP retreats and a disengage -- was followed by the whole
+-- swarm within 0.3-1s, so no retreat ever reached a room to recover in; and every retreat held
+-- the attacks while it tried to leave. Fifteen of those thirty seconds were spent attack-held.
+-- The one stretch spent fighting (~7s) killed three of them.
+--
+-- So a retreat now watches what happens after it lands. If the room we landed in holds a swarm
+-- again once the denizen list has settled, the retreat did not shake them: S.pursuedAt is
+-- stamped, and while it is fresh no GROUND retreat or pull starts -- we fight where we stand.
+-- The sky is not a ground retreat (the hover still flies), and the Roll Hide panic tumble sheds
+-- pursuers outright, so neither is touched. User: "Agreed."
+S.PURSUIT_SETTLE = 1.5   -- after landing, before the denizen list is the new room's (ARRIVE_SETTLE)
+S.PURSUIT_WINDOW = 4     -- a swarm in the new room within this long of landing = we were followed
+S.PURSUIT_MEMORY = 45    -- how long a followed retreat means "fight here" (refreshed on re-detection)
+S.FLED_MEMORY = 30       -- how long the room we fled counts as "the room we just fled"
+S.BOUND_PENDING = 12     -- a move refused while entangled waits this long for us to be free
+S.TUMBLE_ARM = 8         -- explorer move timeout for a tumble (the tumble itself takes ~4s)
+S.SAY_EVERY = 5          -- the same "not leaving because ..." line at most this often
+
+
 -- Reload-safety: ataxiaTemp persists across a SYSUPDATE reload; a stranded hold or
 -- armed decorator would silently gate the whole basher / decorate a random attack.
 ataxiaTemp = ataxiaTemp or {}
@@ -137,6 +160,10 @@ function S._cfg()
   s.escapeAt = tonumber(s.escapeAt) or 35       -- HP% that triggers the escape
   s.recoverAt = tonumber(s.recoverAt) or 95     -- HP% at which a recovery hover may land (also needs aff-free)
   if s.recoverAt == 75 then s.recoverAt = 95 end -- migrate the short-lived v4.7.114 default
+  -- GOING BACK IN (v4.7.370, user: "if we are cured and roughly 85 percent health we should
+  -- return"). The bar for re-entering a room we fled -- by the funnel's re-entry or by an escape
+  -- whose only door leads back. Affliction-free as well, always.
+  s.returnAt = tonumber(s.returnAt) or 85
   s.bracersId = s.bracersId or "bracers417868"  -- Bracers of Frost (ICEWALL)
   s.meltId = s.meltId or "bracers151113"        -- Bracers of Flame (melt own wall)
   return s
@@ -281,6 +308,139 @@ end
 -- adjacency-verified against the reported-exit graph (a stale fromDir after a
 -- non-explorer move must not route us somewhere random). Pure; unit-tested.
 -- Returns shortBack, longBack, shortForward (funnel->swarm re-entry dir), or nil.
+-- ---------------------------------------------------------------------------
+-- The swarm that follows, the U-turn, ice and entanglement (v4.7.370) -- see the constants above
+-- ---------------------------------------------------------------------------
+-- One line per reason, not one per prompt: an alarm nobody can read past is not an alarm.
+function S._sayOnce(key, msg)
+  local last = S._said
+  if last and last.key == key and (now() - last.at) < (tonumber(S.SAY_EVERY) or 5) then return end
+  S._said = { key = key, at = now() }
+  S._echo(msg)
+end
+
+-- Record the room a retreat (or a pull) is leaving, so we can see afterwards whether it worked.
+function S._noteRetreat(from)
+  if not from then return end
+  S._retreat = { from = from, at = now() }
+end
+
+-- On every prompt and tick: did the retreat we made shake them?
+function S._checkPursuit()
+  local r = S._retreat
+  if not r then return end
+  local cur = M.map and M.map.current
+  if not cur or cur == r.from then
+    if (now() - r.at) > 15 then S._retreat = nil end -- never left: forget it
+    return
+  end
+  r.landedAt = r.landedAt or now()
+  local since = now() - r.landedAt
+  if since < (tonumber(S.PURSUIT_SETTLE) or 1.5) then return end
+  local n = (M._denizenCount and M._denizenCount()) or 0
+  if n >= S.threshold() then
+    S._retreat = nil
+    S.pursuedAt = now()
+    S._echo("<indian_red>the swarm followed the retreat<reset> (" .. n .. " here) -- another retreat "
+      .. "will not shake them; <cyan>fighting here<reset>.")
+  elseif since > (tonumber(S.PURSUIT_WINDOW) or 4) then
+    S._retreat = nil -- it worked: we landed somewhere quiet
+  end
+end
+
+function S._pursued()
+  local at = tonumber(S.pursuedAt)
+  return at ~= nil and (now() - at) >= 0 and (now() - at) < (tonumber(S.PURSUIT_MEMORY) or 45)
+end
+
+-- Where does this exit of the current room lead, if the map knows?
+local function exitDest(dirShort)
+  local MAP = M.map
+  local cur = MAP and MAP.current
+  local r = cur and MAP.rooms and MAP.rooms[cur]
+  local long = dirShort and MAP.normDir and MAP.normDir(dirShort)
+  if not (r and long) then return nil end
+  local v = (r.edges and r.edges[long]) or (r.exits and r.exits[long])
+  if v == nil or v == 0 or v == true then return nil end
+  return v
+end
+
+-- GOING BACK INTO THE ROOM WE JUST FLED (v4.7.370). The death log's disengage, 0.4s after a
+-- retreat landed, went straight back through the door we had come in by -- the swarm followed
+-- both ways and two groups became one. The user's rule for going back: "if we are cured and
+-- roughly 85 percent health we should return" -- and not otherwise.
+function S._mayReturn()
+  local s = S._cfg()
+  return hpp() >= (tonumber(s.returnAt) or 85) and not S._afflicted()
+end
+
+function S._isUTurn(dirShort)
+  local f = S._fled
+  if not (f and f.room) then return false end
+  if (now() - (tonumber(f.at) or 0)) >= (tonumber(S.FLED_MEMORY) or 30) then return false end
+  local dest = exitDest(dirShort)
+  return dest ~= nil and dest == f.room
+end
+
+-- Why a GROUND retreat must not start right now, or nil. Side-effect-free, so the callers ask
+-- before they tear anything down (the v4.7.314 rule). The hover is not a ground retreat.
+function S._retreatBlock(dirShort)
+  if not S._indoors() and S._canHover() then return nil end
+  if S._pursued() then return "the swarm follows every retreat -- fighting here" end
+  local dir = dirShort or S._backDir() or S._escapeLastResort()
+  if dir and S._isUTurn(dir) and not S._mayReturn() then
+    return "the only way out is back into the room we just fled (going back needs "
+      .. (tonumber(S._cfg().returnAt) or 85) .. "% and cured)"
+  end
+  return nil
+end
+
+-- ICE (v4.7.370, user: "With ice, try tumbling instead"). A slip -- mounted or on foot -- proves
+-- the room we are standing in is icy (the slip happens as we try to LEAVE, so MAP.current is
+-- still that room; the room description is not used, because gmcp and the text can arrive in
+-- either order). From then on, for this ripple, a tactical move out of it is a TUMBLE.
+S.icyRooms = S.icyRooms or {}
+function S.noteIce(room)
+  if room == nil then return end
+  if not S.icyRooms[room] then
+    S.icyRooms[room] = true
+    S._echo("<grey>icy room -- tactical moves out of it tumble from now on.")
+  end
+end
+
+-- ENTANGLED (v4.7.370, user: "retry the command when we are free"). "You are too tangled up to
+-- do that." -- the tactical move we queued was refused. The old path waited out the move timeout
+-- and re-sent into the same refusal, spending the retries on nothing; the death log lost a pull
+-- and later an escape exactly that way. Now the refusal parks the move, and the first prompt on
+-- which we are no longer bound re-sends it -- if we are still where it was meant to leave from.
+function S.onMoveRefusedBound()
+  if S._pendingFree then return end -- the rest of the same refused chain (point + leap)
+  local cur = M.map and M.map.current
+  local dir
+  if S.state == "pulling" and cur and cur == S.swarmRoom then dir = S.backShort
+  elseif S.state == "reenter" and cur and cur == S.funnelRoom then dir = S.fwdShort end
+  if not dir then return end
+  S._pendingFree = { dir = dir, room = cur, at = now() }
+  if M._disarmMove then M._disarmMove() end -- no timeout-driven re-send into the same refusal
+  S._echo("<indian_red>move refused -- entangled<reset>; re-sending <cyan>" .. dir
+    .. "<reset> the moment we are free.")
+end
+
+function S._resendWhenFree()
+  local p = S._pendingFree
+  if not p then return end
+  if (now() - (tonumber(p.at) or 0)) > (tonumber(S.BOUND_PENDING) or 12) then
+    S._pendingFree = nil
+    return
+  end
+  if S._bound() then return end
+  S._pendingFree = nil
+  local cur = M.map and M.map.current
+  if cur ~= p.room then return end -- the move happened some other way
+  if S.state ~= "pulling" and S.state ~= "reenter" then return end
+  S._tacticalGo(p.dir, "<green>free again<reset> -- re-sending the move")
+end
+
 function S._backDir()
   local MAP = M.map
   local e = M.explore
@@ -357,14 +517,19 @@ function S.moveVerb(dirShort)
   -- since shown the class of guess this is (v4.7.346: TUMBLE goes through while mounted, which
   -- v4.7.345 had assumed it would not). If the backflip proves fine mounted, the Bard keeps its
   -- faster balance by moving this check below the class branch.
-  if ataxiaBasher_isMounted and ataxiaBasher_isMounted() then return "mountjump" end
+  local mounted = ataxiaBasher_isMounted and ataxiaBasher_isMounted()
   local MAP = M.map
   local walled = S.wallRaised and MAP and MAP.current and S.wallRaised[MAP.current]
   if walled then
     local ws = (type(walled) == "string" and MAP.normDir and MAP.shortDir
       and MAP.shortDir(MAP.normDir(walled))) or nil
-    if ws == nil or ws == dirShort then return "leap" end
+    if ws == nil or ws == dirShort then return mounted and "mountjump" or "leap" end
   end
+  -- ICE: tumble (v4.7.370, user). Below the wall -- the panic tumble already refuses to tumble
+  -- into our own icewall -- and above the mount, because the tumble goes through from the saddle
+  -- (user, v4.7.346).
+  if MAP and MAP.current and S.icyRooms and S.icyRooms[MAP.current] then return "tumble" end
+  if mounted then return "mountjump" end
   local class = gmcp and gmcp.Char and gmcp.Char.Status and gmcp.Char.Status.class
   if class == "Bard" then return "backflip" end
   return "leap"
@@ -380,7 +545,10 @@ function S._tacticalGo(dirShort, why)
   -- is not a retreat, but holding the swing until we have actually ARRIVED is right there too,
   -- and the arrival itself clears the flag.
   S.escapeOn()
-  M._tacticalArm(dirShort)
+  local verb = S.moveVerb(dirShort)
+  -- A tumble takes ~4s to land; the default 5s move timeout would call it lost mid-roll. The
+  -- tumble's own lifecycle (misc_alerts/003-005 -> S.onTumbleStart/Done/Canceled) owns it.
+  M._tacticalArm(dirShort, verb == "tumble" and (tonumber(S.TUMBLE_ARM) or 8) or nil)
   local sep = (ataxia.settings and ataxia.settings.separator) or ";"
   -- JUMP, never walk (review CRITICAL): a tactical retreat can cross our OWN
   -- standing icewall -- the indoor low-HP escape retreats through the walled
@@ -402,11 +570,11 @@ function S._tacticalGo(dirShort, why)
   -- swing carrying the step-out -- a pull never reaches _tacticalGo, so that is satisfied by
   -- construction, but do not merge the two paths later without re-reading this.
   if not (M.roomLava and M.roomLava()) then send("cq all") end
-  local verb = S.moveVerb(dirShort)
   send("queue addclear free stand" .. sep .. verb .. " " .. dirShort)
   -- Record it so "You cannot do that while mounted." can re-issue this exact move as a mountjump
   -- (basher/013). A tactical move that is silently refused is the ladder stalling at crash HP.
-  if ataxiaBasher_jumpSent then ataxiaBasher_jumpSent(dirShort, verb) end
+  -- Not a tumble: it goes through from the saddle, and it is not a jump to recover.
+  if verb ~= "tumble" and ataxiaBasher_jumpSent then ataxiaBasher_jumpSent(dirShort, verb) end
   if why then S._echo(why .. " -> <cyan>" .. dirShort .. "<reset>.") end
 end
 
@@ -455,10 +623,13 @@ function S._escapeSuffix(sep)
   -- `leap` on equilibrium, draining across ~7s. So a balance-gated tumble is HELD by the queue
   -- until balance returns rather than being rejected, exactly like the point is.
   if mnemRollHide then return sep .. "tumble " .. S.backShort end
+  -- An icy swarm room: tumble the step-out too (v4.7.370).
+  if S.swarmRoom and S.icyRooms and S.icyRooms[S.swarmRoom] then return sep .. "tumble " .. S.backShort end
   return sep .. S.backShort
 end
 
 function S._beginPull(shortBack, longBack, shortFwd, count, mode)
+  S._noteRetreat(M.map and M.map.current) -- v4.7.370: did the pull shake them?
   S._escapeStartedAt = nil -- a pull is a tactic, not an escape: onVitals may still replace it
   local MAP = M.map
   local cur = MAP and MAP.current
@@ -641,10 +812,9 @@ end
 -- tumble on if company arrives, and give up after RECOVER_MAX. Reusing it means this path
 -- inherits every fix those made rather than repeating their bugs.
 function S._reenterReady()
-  local s = S._cfg()
-  if hpp() < (tonumber(s.recoverAt) or 95) then return false end
-  if S._afflicted() then return false end
-  return true
+  -- returnAt, not recoverAt (v4.7.370, user: "if we are cured and roughly 85 percent health we
+  -- should return"). recoverAt stays the bar for landing a HOVER and for a tumble recovery.
+  return S._mayReturn()
 end
 
 function S._beginReenter()
@@ -653,6 +823,8 @@ function S._beginReenter()
     S.recoverGround = true
     S.recoverStarted = now()
     S.recoverDiagnosed = nil
+    -- This recovery exists to get us back in, so it ends at the bar for going back in.
+    S.recoverTarget = tonumber(S._cfg().returnAt) or 85
     S._armRecoverHold()
     if M._scheduleTick then M._scheduleTick(RECOVER_TICK) end
     S._echo("<indian_red>NOT going back in<reset> at " .. hpp() .. "%"
@@ -1183,6 +1355,7 @@ end
 function S._escapeRouteReady()
   if S._bound() then return false end -- bound: no fly AND no leap (deep review, v4.7.321)
   if not S._indoors() and S._canHover() then return not S.moveLocked() end
+  if S._retreatBlock() then return false end -- v4.7.370: followed, or a U-turn we are not fit for
   if S._backDir() then return true end
   return S._escapeLastResort() ~= nil
 end
@@ -1201,7 +1374,7 @@ function S._beginEscape(why)
   -- as the fly: the first cut routed a bound character from a refused hover into a refused ground
   -- retreat, announcing and arming a hold on a path that could not leave (the v4.7.314 pattern).
   -- While bound: arm nothing, announce nothing; curing frees us and the next vitals re-decides.
-  if S._bound() then return false end
+  if S._bound() then S._escapeNo = "bound"; return false end
   if not S._indoors() and S._canHover() then
     if S.moveLocked() then return false end -- v4.7.243
     S.escapeOn(why or "low HP")
@@ -1237,8 +1410,19 @@ function S._beginEscape(why)
     -- Indoors with no route and not dying fast: shield-in-place remains the fallback, and
     -- fighting in place is exactly when the basher must NOT be muted (v4.7.243). Hand the round
     -- back -- WITHOUT having armed or announced anything (v4.7.314).
+    S._escapeNo = "no route out"
     return false
   end
+  -- FOLLOWED, OR A U-TURN WE ARE NOT FIT FOR (v4.7.370): fight here instead. Same rule -- arm and
+  -- announce nothing on a path that is not leaving.
+  local block = S._retreatBlock(shortBack)
+  if block then
+    S._escapeNo = block
+    return false
+  end
+  S._escapeNo = nil
+  S._fled = { room = M.map and M.map.current, at = now() }
+  S._noteRetreat(M.map and M.map.current)
   S.escapeOn(why or "low HP")
   S._escapeStartedAt = now()
   S.state = "pulling"
@@ -1349,6 +1533,7 @@ function S.onTick()
     if S.state ~= "idle" then S.reset("disabled") end
     return false
   end
+  S._checkPursuit() -- v4.7.370
 
   -- AIRBORNE WITH NOTHING THAT WILL LAND US (deep review, v4.7.321). No hover, no kite, and gmcp
   -- says "Flying above": the explorer is reading the SKY as the room (v4.7.125) and every `land` in
@@ -1450,6 +1635,7 @@ function S.onTick()
         return true
       end
       S.recoverGround = nil
+      S.recoverTarget = nil -- v4.7.370
       S._clearHold()
       S.state = "idle"
       S._echo("<grey>company arrived mid-recovery (" .. hpp() .. "%) and "
@@ -1509,7 +1695,7 @@ function S.onTick()
     -- are clean, send one DIAGNOSE and require the NEXT tick to still agree; the existing
     -- affliction triggers fold its output back into ataxia.afflictions. One extra tick, once
     -- per recovery, and it is the difference between "we think we are clean" and "we are".
-    local healed = hpp() >= s.recoverAt and not S._afflicted()
+    local healed = hpp() >= (tonumber(S.recoverTarget) or s.recoverAt) and not S._afflicted()
     if healed and not S.recoverDiagnosed then
       S.recoverDiagnosed = true
       send("diagnose")
@@ -1519,6 +1705,7 @@ function S.onTick()
     end
     if healed or (now() - (S.recoverStarted or 0)) > RECOVER_MAX then
       S.recoverDiagnosed = nil
+      S.recoverTarget = nil -- v4.7.370
       -- Only land if we are actually up: a ground recovery sending "land" every time is
       -- noise, and noise in the escape path is how a real refusal gets missed.
       if S.flying then send("land") end
@@ -1568,13 +1755,16 @@ function S.onTick()
       if S._lastEmergencyAt and (now() - S._lastEmergencyAt) < EMERGENCY_COOLDOWN then
         return false
       end
+      -- Bound: no stamp, so the first free moment acts at once (v4.7.370). onVitals says so.
+      if S._bound() then return false end     -- bound: nothing to do but cure and fight
       S._lastEmergencyAt = now()
       if S._escapeOwns() then return true end -- v4.7.321 review: an escape is already in flight
-      if S._bound() then return false end     -- bound: nothing to do but cure and fight
       if S.flying then
         S._convertToHover(hpp())
         return true
       end
+      -- Followed / U-turn: fight here, and do not tear down what we have first (v4.7.370).
+      if S._retreatBlock() then return false end
       if S.state ~= "idle" then S.reset("low-hp escape") end
       if S._beginEscape() then return true end
     end
@@ -1666,6 +1856,7 @@ function S.onTick()
 
   -- idle: assess the room we're standing in
   if not (M._roomHasDenizens and M._roomHasDenizens()) then
+    S.pursuedAt = nil -- v4.7.370: the fight that followed us is over
     -- Room done. If our icewall from the wall tactic still stands on the funnel
     -- edge, melt it before handing the tick back -- an intact wall makes every
     -- later plain walk on that edge fail (the 008 wall-leap reflex recovers, but
@@ -1701,6 +1892,11 @@ function S.onTick()
   if cur and S.noTactics[cur] then return false end
   local n = (M._denizenCount and M._denizenCount()) or 0
   if n < S.threshold() then return false end
+  -- A swarm that follows every retreat follows a pull too (v4.7.370): fight in place.
+  if S._pursued() then
+    S._sayOnce("pursued-pull", n .. " denizens, and this swarm follows -- <grey>no pull<reset>, fighting in place.")
+    return false
+  end
   -- Hit-and-run continuation (user doctrine, Putoran-wildcat log 2026-07-26: nothing
   -- follows, so each cycle is one safe swing -- "continue hit and run until the room
   -- is cleared or below 3 denizens"). A re-entry showing PROGRESS since the last pull
@@ -1738,7 +1934,10 @@ function S.onTick()
   -- balance-gated `point <bracers>`, a wall-memory entry, and a melt cycle when the room
   -- empties. The boon sheds every pursuer outright, which is strictly better than pacing them
   -- and free of all three costs. So when it is up we take the plain pull and tumble out of it.
-  local mode = (S._indoors() and S._cfg().icewall and not mnemRollHide) and "wall" or "pull"
+  -- ICE OUTRANKS THE ICEWALL TOO (v4.7.370, user: "With ice, try tumbling instead"). The wall is
+  -- crossed by a jump, and the jump is what slips; the plain pull's step-out tumbles instead.
+  local icy = cur and S.icyRooms and S.icyRooms[cur]
+  local mode = (S._indoors() and S._cfg().icewall and not mnemRollHide and not icy) and "wall" or "pull"
   return S._beginPull(shortBack, longBack, shortFwd, n, mode)
 end
 
@@ -1749,8 +1948,10 @@ end
 -- on every prompt instead, and unlike the tick path it acts even while a pull is in
 -- flight (the explorer `moving` guard blinded the old path for the pull's full 8s).
 function S.onVitals()
-  if S.state == "recovering" then return end -- the hover loop owns it (self-ticking)
   if not S._enabled() then return end
+  S._checkPursuit()  -- v4.7.370
+  S._resendWhenFree() -- v4.7.370
+  if S.state == "recovering" then return end -- the hover loop owns it (self-ticking)
   local s = S._cfg()
   local hp = hppFresh()
   if hp <= 0 then return end -- blackout sentinel: vitals unknown, never "dying"
@@ -1783,16 +1984,19 @@ function S.onVitals()
   end
   if not (wantPanic or wantEscape) then return end
   if S._lastEmergencyAt and (now() - S._lastEmergencyAt) < EMERGENCY_COOLDOWN then return end
-  S._lastEmergencyAt = now()
-  -- ECHO ONLY WHEN WE ACT (v4.7.253). This sat ABOVE the emergency cooldown, so it printed on
-  -- every prompt the watchdog was tripped on -- the live log has it twice per prompt for
-  -- dozens of prompts, burying the lines that actually mattered. An alarm nobody can read
-  -- past is not an alarm.
-  if byRate then
-    S._echo("<indian_red>DYING FAST<reset> -- " .. hp .. "% and ~"
-      .. string.format("%.1f", (ataxiaBasher_secondsToLive and ataxiaBasher_secondsToLive()) or 0)
-      .. "s to live at this rate; leaving.")
+  -- THE LINE SAYS WHAT WE DO (v4.7.370). "DYING FAST ... leaving." printed five times in the death
+  -- log on prompts where nothing left: entangled or paralysed, or an escape already under way.
+  -- It is now printed only when an escape actually starts, and otherwise says why not.
+  local head = "<indian_red>" .. (byRate and "DYING FAST" or "LOW HP") .. "<reset> -- " .. hp .. "%"
+    .. (byRate and (" and ~" .. string.format("%.1f",
+      (ataxiaBasher_secondsToLive and ataxiaBasher_secondsToLive()) or 0) .. "s to live at this rate") or "")
+  -- BOUND: wait for it WITHOUT the cooldown stamp, so the first free prompt leaves at once
+  -- (v4.7.370, user: "retry the command when we are free").
+  if S._bound() then
+    S._sayOnce("bound", head .. ", but <grey>bound<reset> -- leaving the moment we are free.")
+    return
   end
+  S._lastEmergencyAt = now()
   if wantPanic and S._maybePanic(hp) then
     if M._disarmMove then M._disarmMove() end -- a stale in-flight move must not gate the aftermath
     return
@@ -1804,12 +2008,25 @@ function S.onVitals()
   -- flushed (`cq all`), and the second `_beginEscape` either found no route (fight in place at low
   -- HP) or found one straight BACK into the room we fled. Pre-existing; v4.7.321's hover exit made
   -- it immediate. Bounded by S.ESCAPE_OWN so a stuck escape cannot wedge the ladder.
-  if S._escapeOwns() then return end
-  if S._bound() then return end -- bound: neither the fly nor the leap will take
-  if M._disarmMove then M._disarmMove() end -- an in-flight pull dies with the escape's reset
+  if S._escapeOwns() then
+    if byRate then S._sayOnce("owns", head .. " -- the escape already under way has it.") end
+    return
+  end
   if S.flying then return S._convertToHover(hp) end
+  -- Followed, or the only door is a U-turn we are not fit for: fight here -- and ask BEFORE the
+  -- reset, which would flush the round and drop the tactic for nothing (v4.7.314's rule).
+  local block = S._retreatBlock()
+  if block then
+    S._sayOnce("block", head .. " -- NOT leaving: " .. block .. ".")
+    return
+  end
+  if M._disarmMove then M._disarmMove() end -- an in-flight pull dies with the escape's reset
   if S.state ~= "idle" then S.reset("low-hp escape") end
-  S._beginEscape()
+  if S._beginEscape() then
+    if byRate then S._echo(head .. "; leaving.") end
+  elseif byRate then
+    S._sayOnce("noescape", head .. " -- NOT leaving: " .. (S._escapeNo or "no route out") .. ".")
+  end
 end
 
 -- The explorer's tactical-move timeout gave up (arrival never came).
@@ -2040,6 +2257,8 @@ function S.reset(reason)
   S._recoverTumbles = nil
   S.recoverGround = nil
   S.recoverDiagnosed = nil
+  S.recoverTarget = nil -- v4.7.370
+  S._pendingFree = nil  -- v4.7.370: the tactic that owned the refused move is gone
   S.hoverSeenUpAt = nil -- v4.7.321: per-hover evidence
   S._pullRetries = nil
   if S.onTumbleDone then S.onTumbleDone() end
@@ -2063,6 +2282,9 @@ function S.onRipple()
   S.pulls = {}
   S.noTactics = {}
   S.entrySnap = {}
+  -- v4.7.370: a new ripple is a new swarm and new floors
+  S.icyRooms = {}
+  S.pursuedAt, S._retreat, S._fled, S._said = nil, nil, nil, nil
   S.grounded = nil -- the denizen that dragged us down is left behind with its ripple
   local ripple = (M.run and tonumber(M.run.ripple)) or 0
   if S._wallsRipple ~= ripple then

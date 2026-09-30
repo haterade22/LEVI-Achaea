@@ -1204,6 +1204,9 @@ end
 -- timeout so it doesn't fire mid-struggle. Capped at MAX_ICE_SLIPS so a permanently
 -- stuck exit still yields eventually.
 function M.onIceSlip()
+  -- Any slip proves THIS room is icy (we slip leaving it): tactical moves out of it tumble from
+  -- now on (v4.7.370, user: "With ice, try tumbling instead").
+  if M.swarm and M.swarm.noteIce then pcall(M.swarm.noteIce, MAP and MAP.current) end
   if not (M.explore.on and M.explore.moving and M.explore.fromDir) then return end
   -- A tumble in flight owns the movement (v4.7.243) -- do not count its slip or re-send under it.
   if M.swarm and M.swarm.moveLocked and M.swarm.moveLocked() then return end

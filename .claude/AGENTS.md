@@ -33,6 +33,14 @@
   Gravehands' AB block says "3.00 seconds of equilibrium"; in game it takes BALANCE, so the Apostate
   summon collided with the deadeyes swing for seven releases (v4.7.354). The AB block said shatter was
   a 3.10s-equilibrium action usable any time; the package had only ever used it at full transcendence.
+- **A retreat must check that it worked.** The escape ladder retreated from a swarm that followed
+  every time, and each retreat held the attacks while it tried to leave -- half the fight spent
+  attack-held, while the fighting that did happen was winning (v4.7.370). An action whose premise
+  is "this gets us somewhere better" has to look at where it got us, and stop repeating when it
+  didn't.
+- **A status line printed before its gates is a lie on every prompt a gate stops it.** "DYING FAST
+  ... leaving." printed five times with nothing leaving (v4.7.370; the same shape as v4.7.314's
+  escape banner). Print after the decision, or say what stopped it.
 - **A boon's name is not an ability's syntax.** The Psion heal sent `enact roth` for its whole life
   -- Roth is the Mnemosyne boon; the ability is WRATH, and the package's own alias said so. Every test
   asserted `enact roth`, so every test agreed with the bug (v4.7.360). When a command comes from a

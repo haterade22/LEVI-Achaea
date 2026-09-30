@@ -757,6 +757,33 @@ Pure logic (threshold, `_backDir`, the state machine, decorator, resets) is unit
 See also: [04-ripple-map.md](04-ripple-map.md) (the `MAP` graph API this reuses), [05-commands.md](05-commands.md) (`mnem` dispatch), [01-architecture.md](01-architecture.md) (run lifecycle / gating).
 
 
+### The swarm that follows, the U-turn, ice, and entanglement (v4.7.370)
+
+From a death: every retreat was followed within a second, 15 of 30 seconds were spent attack-held,
+the fighting that did happen was winning, and ice turned each retreat into several slips.
+
+- **Pursuit.** `S._noteRetreat(room)` at every ground escape and pull; `S._checkPursuit()` on every
+  prompt/tick: after landing, wait `PURSUIT_SETTLE` (1.5s, the denizen list lags the room change),
+  then a swarm (>= threshold) within `PURSUIT_WINDOW` (4s) stamps `S.pursuedAt`. While
+  `S._pursued()` (`PURSUIT_MEMORY` 45s, cleared when the room empties or on a new ripple) the
+  ground retreat, last resort, disengage and pulls are refused -- `S._retreatBlock()` says why. The
+  hover (outdoors) is not a ground retreat and the Roll Hide panic tumble sheds pursuers; both stay.
+- **The U-turn.** `S._fled = { room, at }` at every ground escape. For `FLED_MEMORY` (30s), a
+  retreat whose door leads back into that room (`exitDest`: `room.edges` / `room.exits`) needs
+  `S._mayReturn()` = `returnAt` (85) AND aff-free. `_reenterReady` uses the same test; when not ready
+  the ground recovery ends at `S.recoverTarget` (85), not `recoverAt` (95).
+- **Ice.** `M.onIceSlip` calls `S.noteIce(MAP.current)` on any slip (before its own guards).
+  `S.moveVerb` then answers `tumble` out of that room (below the own-wall check, above the mount);
+  `_tacticalGo` arms `TUMBLE_ARM` (8s) and records no jump; `_escapeSuffix` tumbles the pull's
+  step-out; the assess chooses the plain pull over the wall in an icy room. `S.icyRooms` resets
+  per ripple.
+- **Bound.** onVitals: bound -> one line ("leaving the moment we are free"), no cooldown stamp;
+  the first unbound prompt acts. "DYING FAST ... leaving." only when `_beginEscape` succeeds.
+- **Refused move.** Trigger `mnemosyne/107` -> `S.onMoveRefusedBound()` parks `{dir, room}` (state
+  pulling in the swarm room, or reenter in the funnel room), `M._disarmMove()`s the timeout, and
+  `S._resendWhenFree()` re-sends via `_tacticalGo` on the first unbound prompt if we are still in
+  that room, within `BOUND_PENDING` (12s).
+
 ### The movement lock (v4.7.243)
 
 > "If we tumble and then leap or walk in a direction it cancels the tumble." — user, 2026-08-10
