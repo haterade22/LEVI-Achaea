@@ -4120,6 +4120,20 @@ describe("ice-slip recovery during a tactical retreat (v4.7.243)", function()
     if not ok then error(err, 0) end
   end)
 
+  -- v4.7.370, user: "With ice, try tumbling instead" -- a slip tells the swarm the room is icy.
+  it("any slip marks the room icy for the swarm, moving or not", function()
+    local realSwarm, noted = M.swarm, {}
+    local ok, err = pcall(function()
+      M.swarm = { noteIce = function(r) noted[#noted + 1] = r end, moveLocked = function() return false end }
+      M.map.current = 4242
+      M.explore.moving = false
+      M.onIceSlip()
+    end)
+    M.swarm = realSwarm
+    if not ok then error(err, 0) end
+    expect(noted[1]).toBe(4242)
+  end)
+
   it("hands a TACTICAL slip back to the swarm instead of walking", function()
     slipping(true)
     local walked, handed = 0, 0

@@ -3117,6 +3117,339 @@ describe("v4.7.314 -- escape mode arms only when it can actually leave", functio
   end)
 end)
 
+-- =====================================================================================
+-- v4.7.370, from a death: a Runewarden on an icy ripple, 30 seconds, every retreat followed by the
+-- whole swarm within a second, fifteen of the thirty seconds spent attack-held, and the one stretch
+-- spent fighting killing three of them. The user's calls: stop fleeing a swarm that follows; go
+-- back into a room we fled only "cured and roughly 85 percent"; "With ice, try tumbling instead";
+-- say why we are not leaving, and "retry the command when we are free".
+-- An earlier test in this file replaces the global `send` and does not put it back (a known leak),
+-- so by here it no longer records into `sent`. Re-install the recorder for this block; the file's
+-- tail restores the mock's own `send` as before.
+send = function(cmd) table.insert(sent, cmd) end
+local function lowHp(hp) gmcp.Char = { Vitals = { hp = tostring(hp), maxhp = "10000" } } end
+local function count(pat)
+  local n = 0
+  for _, c in ipairs(sent) do if c:find(pat, 1, true) then n = n + 1 end end
+  return n
+end
+local function capture(fn)
+  local said, realEcho = {}, S._echo
+  S._echo = function(m) said[#said + 1] = tostring(m) end
+  local ok, err = pcall(fn)
+  S._echo = realEcho
+  if not ok then error(err, 0) end
+  return table.concat(said, "\n")
+end
+
+describe("v4.7.370 -- a swarm that follows every retreat is fought, not fled", function()
+  local function retreatAndLand(mobsThere)
+    fixture(4)
+    gmcp.Room.Info.details = { "indoors" }
+    lowHp(3000)
+    S.onVitals()
+    expect(S.state).toBe("pulling")          -- the first retreat is fine: no evidence yet
+    expect(count("leap s")).toBe(1)
+    MAP.current = 100                        -- landed
+    mobs = mobsThere
+    S._checkPursuit()                        -- the first look after landing stamps the landing
+  end
+
+  it("waits for the denizen list to settle before judging", function()
+    retreatAndLand(4)
+    clock = clock + 1
+    S._checkPursuit()
+    expect(S._pursued()).toBeFalse()         -- 1s: may still be the old room's list
+    clock = clock + 1
+    S._checkPursuit()
+    expect(S._pursued()).toBeTrue()
+  end)
+
+  it("a retreat that lands somewhere quiet is not 'followed'", function()
+    retreatAndLand(0)
+    clock = clock + 5
+    S._checkPursuit()
+    expect(S._pursued()).toBeFalse()
+    expect(S._retreat).toBeNil()             -- judged and forgotten
+  end)
+
+  it("once followed, a low-HP retreat does not start -- we fight here, nothing torn down", function()
+    retreatAndLand(4)
+    clock = clock + 2
+    S._checkPursuit()
+    S.state, S._escapeStartedAt = "idle", nil -- the tactic has handed back
+    clock = clock + 3
+    sent = {}
+    local said = capture(function() S.onVitals() end)
+    expect(count("leap")).toBe(0)
+    expect(count("cq all")).toBe(0)
+    expect(S.state).toBe("idle")
+    expect(said:find("follows every retreat", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("...and no new pull either", function()
+    fixture(4)
+    S.pursuedAt = clock
+    S.onTick()
+    expect(S.state).toBe("idle")
+    expect(#armed).toBe(0)
+  end)
+
+  it("the sky is not a ground retreat: outdoors, the hover still flies", function()
+    fixture(4)
+    S.pursuedAt = clock
+    lowHp(3000)
+    S.onVitals()
+    expect(S.state).toBe("recovering")
+    expect(S.flying).toBeTrue()
+  end)
+
+  it("an empty room ends the pursuit", function()
+    fixture(0)
+    S.pursuedAt = clock
+    S.onTick()
+    expect(S._pursued()).toBeFalse()
+  end)
+
+  it("a followed PULL counts as well", function()
+    fixture(4)
+    gmcp.Room.Info.details = { "indoors" }
+    S.onTick()                               -- starts the pull, notes the room
+    expect(S._retreat ~= nil).toBeTrue()
+    MAP.current = 100
+    S._checkPursuit()
+    clock = clock + 2
+    S._checkPursuit()
+    expect(S._pursued()).toBeTrue()
+  end)
+end)
+
+describe("v4.7.370 -- back into the room we just fled only cured and at 85%", function()
+  local function fledFrom100()
+    fixture(3)
+    ataxiaBasher.inMnemosyne = true
+    gmcp.Room.Info.details = { "indoors" }
+    S._lastDisengageAt = nil
+    S._fled = { room = 100, at = clock }     -- the fixture's back route leads to 100
+  end
+
+  it("refuses the U-turn hurt", function()
+    fledFrom100()
+    ataxia.vitals = { hpp = 68 }
+    expect(S.disengage("incoming damage")).toBeFalse()
+    expect(count("leap")).toBe(0)
+  end)
+
+  it("takes it cured at 85%", function()
+    fledFrom100()
+    ataxia.vitals = { hpp = 85 }
+    expect(S.disengage("incoming damage")).toBeTrue()
+    expect(count("leap s")).toBe(1)
+  end)
+
+  it("refuses it afflicted, whatever the health", function()
+    fledFrom100()
+    ataxia.vitals = { hpp = 100 }
+    ataxia.afflictions = { asthma = true }
+    expect(S.disengage("incoming damage")).toBeFalse()
+  end)
+
+  it("forgets the fled room after FLED_MEMORY", function()
+    fledFrom100()
+    ataxia.vitals = { hpp = 40 }
+    clock = clock + S.FLED_MEMORY
+    expect(S.disengage("incoming damage")).toBeTrue()
+  end)
+
+  it("the funnel's re-entry uses the same bar, and heals to it rather than to 95", function()
+    fixture(3)
+    ataxiaBasher.inMnemosyne = true
+    S.onTick(); S.decorate("attack", ";")
+    MAP.current = 100
+    S.state, S.fwdShort, S.peakFollowers = "funnel", "n", 0
+    ataxia.vitals = { hpp = 85 }
+    expect(S._reenterReady()).toBeTrue()
+    ataxia.vitals = { hpp = 84 }
+    mobs = 0                                 -- nothing followed us out
+    S._beginReenter()
+    expect(S.state).toBe("recovering")
+    expect(S.recoverTarget).toBe(85)
+    ataxia.vitals = { hpp = 86 }
+    S.onTick()                               -- clean at 86: one DIAGNOSE to confirm
+    S.onTick()
+    expect(S.state).toBe("idle")
+    expect(S.recoverTarget).toBeNil()
+  end)
+end)
+
+describe("v4.7.370 -- ice: tactical moves out of an icy room tumble", function()
+  local realMounted
+  local function iced()
+    fixture(4)
+    gmcp.Room.Info.details = { "indoors" }
+    S.noteIce(200)
+  end
+
+  it("a slip makes the room icy; the verb becomes tumble -- mounted too", function()
+    iced()
+    expect(S.moveVerb("s")).toBe("tumble")
+    realMounted = ataxiaBasher_isMounted
+    ataxiaBasher_isMounted = function() return true end
+    local v = S.moveVerb("s")
+    ataxiaBasher_isMounted = realMounted
+    expect(v).toBe("tumble")
+    MAP.current = 100
+    expect(S.moveVerb("n")).toBe("leap")     -- other rooms are not icy
+  end)
+
+  it("never tumbles into our own icewall", function()
+    iced()
+    S.wallRaised[200] = "south"
+    expect(S.moveVerb("s")).toBe("leap")
+  end)
+
+  it("the escape tumbles, arms a tumble-length timeout, and records no jump", function()
+    iced()
+    local timeouts, realArm = {}, M._tacticalArm
+    M._tacticalArm = function(dir, to) table.insert(armed, dir); timeouts[#timeouts + 1] = to end
+    local realJump, jumps = ataxiaBasher_jumpSent, 0
+    ataxiaBasher_jumpSent = function() jumps = jumps + 1 end
+    lowHp(3000)
+    local ok, err = pcall(S.onVitals)
+    M._tacticalArm, ataxiaBasher_jumpSent = realArm, realJump
+    if not ok then error(err, 0) end
+    expect(count("queue addclear free stand;tumble s")).toBe(1)
+    expect(timeouts[1]).toBe(S.TUMBLE_ARM)
+    expect(jumps).toBe(0)
+  end)
+
+  it("a pull out of an icy room takes the plain pull (no wall to jump) and tumbles the step-out", function()
+    iced()
+    S.onTick()
+    expect(S.mode).toBe("pull")               -- indoors, but the wall would be crossed by a jump
+    local cmd = S.decorate("attack", ";")
+    expect(cmd:find("tumble s", 1, true) ~= nil).toBeTrue()
+    expect(cmd:find("point", 1, true)).toBeNil()
+  end)
+
+  it("a new ripple forgets the ice", function()
+    iced()
+    S.onRipple()
+    expect(S.moveVerb("s")).toBe("leap")
+  end)
+end)
+
+describe("v4.7.370 -- bound: say so, and leave the moment we are free", function()
+  it("does not stamp the emergency clock while bound, so the first free prompt leaves", function()
+    fixture(4)
+    gmcp.Room.Info.details = { "indoors" }
+    ataxia.afflictions = { entangled = true }
+    lowHp(3000)
+    local said = capture(function() S.onVitals() end)
+    expect(count("leap")).toBe(0)
+    expect(S._lastEmergencyAt).toBeNil()
+    expect(said:find("leaving the moment we are free", 1, true) ~= nil).toBeTrue()
+    ataxia.afflictions = {}
+    S.onVitals()                             -- same second: no 2s wait
+    expect(count("leap s")).toBe(1)
+  end)
+
+  it("DYING FAST says 'leaving' only when it leaves, and why not otherwise", function()
+    fixture(4)
+    gmcp.Room.Info.details = { "indoors" }
+    local realX, realT = ataxiaBasher_isDamageRateExtreme, ataxiaBasher_secondsToLive
+    ataxiaBasher_isDamageRateExtreme = function() return true end
+    ataxiaBasher_secondsToLive = function() return 3.9 end
+    lowHp(8000)
+    S.pursuedAt = clock
+    local blocked = capture(function() S.onVitals() end)
+    clock = clock + 3
+    S.pursuedAt = nil
+    local left = capture(function() S.onVitals() end)
+    ataxiaBasher_isDamageRateExtreme, ataxiaBasher_secondsToLive = realX, realT
+    expect(blocked:find("NOT leaving", 1, true) ~= nil).toBeTrue()
+    expect(blocked:find("; leaving.", 1, true)).toBeNil()
+    expect(left:find("; leaving.", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
+describe("v4.7.370 -- 'leaving' is never printed over an escape that did not start", function()
+  it("a room with no way out says so instead", function()
+    fixture(4)
+    gmcp.Room.Info.details = { "indoors" }
+    MAP.rooms[200].exits = {}                -- nowhere to go at all
+    M.explore.fromRoom = nil
+    local realX, realT = ataxiaBasher_isDamageRateExtreme, ataxiaBasher_secondsToLive
+    ataxiaBasher_isDamageRateExtreme = function() return true end
+    ataxiaBasher_secondsToLive = function() return 2.6 end
+    lowHp(4300)
+    local said = capture(function() S.onVitals() end)
+    ataxiaBasher_isDamageRateExtreme, ataxiaBasher_secondsToLive = realX, realT
+    expect(said:find("; leaving.", 1, true)).toBeNil()
+    expect(said:find("NOT leaving: no route out", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
+describe("v4.7.370 -- a move refused while entangled is re-sent when we are free", function()
+  local function escaping()
+    fixture(4)
+    gmcp.Room.Info.details = { "indoors" }
+    lowHp(3000)
+    S.onVitals()
+    expect(S.state).toBe("pulling")
+    ataxia.afflictions = { entangled = true }
+    disarmed = 0
+  end
+
+  it("parks the move, drops the timeout, and re-sends on the first free prompt", function()
+    escaping()
+    S.onMoveRefusedBound()
+    S.onMoveRefusedBound()                   -- the second refusal of the same chain
+    expect(disarmed).toBe(1)
+    S.onVitals()
+    expect(count("leap s")).toBe(1)          -- still bound: nothing yet
+    ataxia.afflictions = {}
+    S.onVitals()
+    expect(count("leap s")).toBe(2)
+    expect(S._pendingFree).toBeNil()
+  end)
+
+  it("does nothing if we already got out some other way", function()
+    escaping()
+    S.onMoveRefusedBound()
+    MAP.current = 100
+    ataxia.afflictions = {}
+    S.onVitals()
+    expect(count("leap s")).toBe(1)
+  end)
+
+  it("gives up waiting after BOUND_PENDING", function()
+    escaping()
+    S.onMoveRefusedBound()
+    clock = clock + S.BOUND_PENDING + 1
+    S.onVitals()
+    expect(S._pendingFree).toBeNil()
+  end)
+
+  it("ignores the line when no tactical move is waiting", function()
+    fixture(4)
+    S.onMoveRefusedBound()
+    expect(S._pendingFree).toBeNil()
+  end)
+
+  it("the trigger matches the line and calls it", function()
+    local TL = dofile("src_new/tests/trigger_lib.lua")
+    local P = "src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/107_Tangled_Refusal.lua"
+    expect(TL.anyMatches(TL.patterns(P), "You are too tangled up to do that.")).toBeTrue()
+    local real, called = S.onMoveRefusedBound, 0
+    S.onMoveRefusedBound = function() called = called + 1 end
+    local ok, err = pcall(dofile, P)
+    S.onMoveRefusedBound = real
+    if not ok then error(err, 0) end
+    expect(called).toBe(1)
+  end)
+end)
+
 -- v4.7.345: the mount module was loaded above for the mountjump tests.
 ataxiaBasher_isMounted, ataxiaBasher_mountVerb = nil, nil
 ataxiaBasher_mountedSet, ataxiaBasher_jumpSent = nil, nil

@@ -515,6 +515,12 @@ explorer fights on chosen ground:
 - **Outdoors swarm-followed**: **fly-kite** — `FLY`, then every attack becomes
   `land;attack;fly`, touching ground only for the swing; lands when the pack thins.
 - **Roll Hide panic** (boon): at panic HP, tumble out — sheds all pursuers.
+- **A swarm that follows is fought, not fled**: if a retreat lands in a swarm again, no more ground
+  retreats or pulls for that fight — standing and swinging beats spending the fight attack-held in
+  doorways. Going back into a room you just fled needs 85% health and no afflictions.
+- **Ice**: once you slip in a room, tactical moves out of it **tumble** instead of jumping.
+- **Entangled**: a move the game refuses ("too tangled up") is re-sent the moment you are free, and
+  the escape messages say why you are *not* leaving rather than claiming you are.
 - **Low-HP escape ladder** (any mob count, default 35%): outdoors fly and hover — works
   with every limb broken, unlike `touch shield` — landing only when FULLY healed (95%+ and
   affliction-free). The hover re-checks its own premise every tick: knocked out of the sky,

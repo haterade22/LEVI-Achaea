@@ -2,6 +2,80 @@
 
 ---
 
+## 2026-09-30 - The swarm that follows: fight it; back in only cured at 85%; tumble on ice; say why (v4.7.370)
+
+**The death.** A Runewarden, mounted, on an icy ripple against pit demons, claw fiends and giant
+centipedes (plus Necromantic thralls), died in 30 seconds. Read against the code:
+
+- **Every retreat was followed** -- three low-HP retreats and a disengage, the whole swarm arriving
+  within 0.3-1s each time -- so no retreat ever reached a room to recover in.
+- **Fifteen of the thirty seconds were attack-held** (escape mode) while the retreats tried to leave.
+  The one ~7s stretch spent fighting killed three of them.
+- **Ice + mount:** 13 slips against 5 jumps. After `PULL_RETRIES` the ladder reassessed and started
+  the same retreat again.
+- **A U-turn:** a last-resort retreat landed in a room holding two more denizens; 0.4s later a
+  disengage went straight back through the door we had come in by. Both groups followed: 4 became 6.
+- **"DYING FAST ... leaving." five times on prompts where nothing left** -- entangled or paralysed, or
+  an escape already under way -- because the line printed before the gates.
+- A claw fiend's entanglement refused the pull's move ("You are too tangled up to do that.") and later
+  an escape's; the move timeout re-sent into the same refusal.
+
+The user: sipping is gagged (healing was not the gap); ice slips are random chance, mounted or not.
+Their calls on the proposed fixes, all built:
+
+1. **A swarm that follows is fought, not fled** (agreed). A retreat -- or a pull -- now records the room
+   it leaves (`S._noteRetreat`); `S._checkPursuit` (every prompt and tick) waits `PURSUIT_SETTLE` 1.5s
+   after landing for the denizen list to be the new room's, and if a swarm (>= threshold) is there
+   within `PURSUIT_WINDOW` 4s, stamps `S.pursuedAt`. For `PURSUIT_MEMORY` 45s -- or until the room is
+   empty -- no GROUND retreat (low-HP escape, last resort, disengage) and no new pull starts; we fight
+   where we stand. The hover (outdoors) and the Roll Hide panic tumble are untouched: neither can be
+   followed.
+2. **Back into the room we just fled only "cured and roughly 85 percent"** (the user's rule, replacing
+   my "never within 10s"). `S._fled` records the room an escape leaves; for `FLED_MEMORY` 30s a
+   retreat whose only door leads back into it needs `returnAt` (85, new config) AND affliction-free.
+   The funnel's RE-ENTRY uses the same bar (`_reenterReady`, was `recoverAt` 95), and the ground
+   recovery it falls into when not ready heals to 85 (`S.recoverTarget`) instead of 95. The hover and
+   the tumble recovery still land at `recoverAt` 95.
+3. **Ice: tumble** (user: "With ice, try tumbling instead"). Any slip -- mounted or on foot -- marks the
+   room icy for the ripple (`S.noteIce`, from `M.onIceSlip`; the slip happens as we try to LEAVE, so
+   `MAP.current` is that room -- the room description is not used, because gmcp and the text arrive
+   in either order). From then on `S.moveVerb` answers `tumble` for moves out of it (mounted too --
+   tumble goes through from the saddle; never into our own icewall), `_tacticalGo` arms a tumble-length
+   move timeout (`TUMBLE_ARM` 8s) and records no jump, the pull's step-out tumbles, and an icy swarm
+   room takes the plain pull rather than the wall (the wall is crossed by a jump, which is what slips).
+4. **The line says what we do** (yes), **and we leave the moment we are free** (user: "retry the
+   command when we are free"). Bound, onVitals says "... but bound -- leaving the moment we are free"
+   and does NOT stamp the emergency cooldown, so the first free prompt acts at once. "DYING FAST ...
+   leaving." prints only when an escape actually starts; otherwise "NOT leaving: <why>" (followed /
+   U-turn / no route) or "the escape already under way has it" -- once per reason per 5s
+   (`S._sayOnce`). The block is asked BEFORE the reset, so a refused retreat no longer flushes the
+   round or drops the tactic.
+5. **A move refused while entangled is re-sent when we are free.** New trigger
+   `mnemosyne/107_Tangled_Refusal` (`You are too tangled up to do that.`, exact) ->
+   `S.onMoveRefusedBound`: with a tactical move waiting (pulling, still in the swarm room; or
+   re-entering), it parks the move, drops the explorer's move timeout, and `S._resendWhenFree` (every
+   prompt) re-sends it the first time we are not bound -- if we are still in that room -- within
+   `BOUND_PENDING` 12s.
+
+**Tests:** 26 new (25 in `test_swarm_tactics.lua`, 1 in `test_mnemosyne.lua`) across the
+five blocks: pursuit settle / quiet landing / fight-not-flee / no pull / the sky / empty room / a
+followed pull; the U-turn hurt / at 85 / afflicted / forgotten; re-entry at 85 healing to 85; ice verb
+(mounted, never into our wall), the tumble timeout and no ledger, the icy pull, a new ripple; bound
+leaves on the first free prompt; "leaving" only when leaving, including a room with no way out; the
+refused move parked / re-sent / not re-sent elsewhere / expired / ignored; the trigger. **29 break-back
+mutants, all killed** -- one survived the first run ("leaving" printed before a no-route attempt) and a
+test for exactly that was added. Also: this block re-installs the file's recording `send`, because an
+earlier test leaks its replacement (known; noted in the file). Suite: 2555 pass.
+
+### Files
+
+- `mnemosyne/009_Swarm_Tactics.lua`, `mnemosyne/008_Explorer.lua`; trigger
+  `mnemosyne/107_Tangled_Refusal` (new); `tests/test_swarm_tactics.lua`, `tests/test_mnemosyne.lua`;
+  `.claude/projects/mnemosyne/07-explorer.md`, `03-parsing-triggers.md`, `README.md`, `CLAUDE.md`,
+  `.claude/AGENTS.md`, memory.
+
+---
+
 ## 2026-09-30 - Mounted ice slips are retried (v4.7.369)
 
 User: *"With ice in the room, and riding mount, we need to keep trying it doesnt cost balance to move
