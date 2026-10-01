@@ -122,6 +122,9 @@ M.BOON_CLASS_WEIGHTS = M.BOON_CLASS_WEIGHTS or {}
 M.BOON_TOP_TIER = {
   ["Death's Demise"] = { why = "max health up to 133% (echoes further)", voidedBy = "Gravedigger" },
   ["Gravedigger"] = { why = "death cape stacks to 200% health", voidedBy = "Death's Demise" },
+  -- v4.7.371, user: "One of the best boons in game, should be scored as such." -- "Entering a new
+  -- ripple invokes a memory of Lifegiver, granting you 1 additional life, up to the maximum."
+  ["Star of Winter"] = { why = "an extra life every new ripple" },
 }
 
 -- Pairs that make each other better (v4.7.368). Healing Metabolism pays only "while you possess the

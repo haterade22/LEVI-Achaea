@@ -2,6 +2,15 @@
 
 ---
 
+## 2026-10-01 - Boon advisor: Star of Winter is top tier (v4.7.371)
+
+User: *"Star of Winter: Entering a new ripple invokes a memory of Lifegiver, granting you 1 additional
+life, up to the maximum. One of the best boons in game, should be scored as such."* Added to
+`M.BOON_TOP_TIER` (`topTier` +150, beside Death's Demise and Gravedigger; nothing voids it), so it tops
+any offer. 1 new test; the mutant (entry removed) is killed.
+
+---
+
 ## 2026-09-30 - The swarm that follows: fight it; back in only cured at 85%; tumble on ice; say why (v4.7.370)
 
 **The death.** A Runewarden, mounted, on an icy ripple against pit demons, claw fiends and giant
