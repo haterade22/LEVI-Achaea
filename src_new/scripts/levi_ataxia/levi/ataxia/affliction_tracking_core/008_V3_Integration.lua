@@ -272,11 +272,17 @@ treeCurableAffsV3 = {
 treeCurableAffsV2 = treeCurableAffsV3
 
 -- Canonical focus-curable affliction list (was focusCurableAffsV2, now owned by V3)
+-- What FOCUS can cure, per the game's WHATCURES (v4.7.371). Removed:
+-- impatience (it BLOCKS focus -- a focus that happened proves it absent, which
+-- onTargetFocusV3 applies to every branch instead of letting impatience soak
+-- up a share of the cure), addiction (ginseng), hypersomnia (ash) and feeble
+-- (not in the game's list). Added: agoraphobia, claustrophobia, lovers,
+-- pacified, peace. The first entries keep their old order.
 focusCurableAffsV3 = {
-    "impatience", "stupidity", "anorexia", "epilepsy", "masochism",
+    "stupidity", "anorexia", "epilepsy", "masochism",
     "recklessness", "dizziness", "shyness", "confusion", "dementia",
-    "paranoia", "hallucinations", "loneliness", "vertigo", "feeble",
-    "addiction", "hypersomnia", "stuttering"
+    "paranoia", "hallucinations", "loneliness", "vertigo", "stuttering",
+    "agoraphobia", "claustrophobia", "lovers", "pacified", "peace",
 }
 -- Backward compat alias
 focusCurableAffsV2 = focusCurableAffsV3
@@ -349,6 +355,9 @@ function onTargetFocusV3()
     local newStates = {}
 
     for _, state in ipairs(afflictionStatesV3) do
+        -- Impatience blocks focus, so a focus that happened proves it absent
+        -- in every branch -- it is not one of the things the focus cured.
+        state.affs.impatience = nil
         local candidates = {}
         for _, aff in ipairs(focusCurable) do
             if state.affs[aff] then

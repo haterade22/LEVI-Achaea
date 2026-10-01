@@ -53,7 +53,7 @@ tdeliverance = false
 	
 	if multimatches[3][1] == name .. " gives a sigh of relief." then
 		erAff("retribution")
-		erAff("earworm")
+		-- (earworm is NOT a bellwort cure -- it is smoked, elm; WHATCURES, v4.7.372)
 		-- V3: Definite cure (we know exactly what was cured)
 	elseif multimatches[3][1] == name .. " shakes his head and a look of clarity returns to his eyes."
 		or multimatches[3][1] == name .. " shakes her head and a look of clarity returns to her eyes." then

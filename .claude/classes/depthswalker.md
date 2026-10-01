@@ -50,39 +50,47 @@ NOT_AN_INSTILL: "impatience -- the game REFUSES `shadow instill scythe with impa
 ### Instill Stacks (Affliction Progression)
 Each instill type gives afflictions in a specific order. If target already has an affliction, the next one in the stack is applied. **The application after the full stack is THAT Instill's capstone** -- capstones are per Instill, never a count of DW afflictions across Instills (v4.7.365; code: `depthswalker.INSTILL_STACKS`, `instillStage`, `capstoneReady(instill)` in `015_CC_Depthswalker.lua`). None of these stacks is from a captured AB; the order matches what the rung triggers 468/469/472/473/474 apply.
 
+The ladders are **MIXED-LANE**: each rung has its own cure. The cures below are the game's own WHATCURES output, captured by the outside DW audit (v1.1, 2026-10-01). They replace this doc's old one-cure-per-Instill claims, several of which were wrong (manaleech is NOT kelp, and the madness ladder is not single-lane).
+
 ```yaml
 degeneration:
   stack: [clumsiness, weariness, paralysis]
-  cure: kelp
+  cures: "clumsiness, weariness = kelp/aurum; paralysis = bloodroot/magnesium"
   capstone: "Damage burst"
   notes: "Capstone damage is HALVED without shadow claimed"
 
 depression:
   stack: [depression, nausea, hypochondria]
-  cure: goldenseal
+  cures: "depression = goldenseal/plumbum; nausea = ginseng/ferrum; hypochondria = lobelia/argentum. Capstone's anorexia = epidermal (or focus); masochism = lobelia/argentum."
   capstone: "depression + anorexia + masochism (all three)"
-  notes: "Masochism causes self-damage when target cures"
+  notes: "Masochism causes self-damage when target cures. HYPOCHONDRIA IS THE DEPTHSWALKER'S IMPATIENCE SOURCE -- see Impatience below."
 
 retribution:
   stack: [justice, retribution]
-  cure: bellwort
-  capstone: "Mana sap"
-  notes: "Both justice and retribution are bellwort-cured"
+  cures: "justice, retribution = bellwort/cuprum (as is timeloop -- the bellwort phase is genuine same-balance pressure)"
+  capstone: "Mana sap; the burn increases with depression, madness, retribution and parasite on the target"
+  notes: "Two rungs, strongly supported by triggers, ability text and logs; a live AB capture would close provenance"
 
 madness:
   stack: [shadowmadness, vertigo, hallucinations]
-  cure: ash
-  capstone: "Stun"
-  notes: "Stun provides window for depression capstone"
+  cures: "shadowmadness = goldenseal/plumbum; vertigo = lobelia/argentum; hallucinations = ash/stannum"
+  capstone: "Stun (duration UNMEASURED; the code assumes 3s)"
+  notes: "Stun provides window for depression capstone. Aconite (stupidity) adds goldenseal pressure against the FIRST rung only."
 
 leach:
   stack: [parasite, healthleech, manaleech]
-  cure: kelp (healthleech, manaleech) / goldenseal (parasite)
-  capstone: "Enables shadow claim"
-  notes: "healthleech and manaleech are kelp-cured - need kelp pressure first!"
+  cures: "parasite, healthleech = kelp/aurum; manaleech = SMOKE valerian/realgar"
+  capstone: "The capstone strike CLAIMS the shadow"
+  notes: "Shadow acquisition crosses herb AND smoke resources. With parasite+healthleech up, a BOOSTED-loop leach lands manaleech and then the capstone on the same reap (live Ulvin and Mumin captures); the code requires 0.7 confidence in healthleech before spending that loop (v4.7.372)."
 ```
 
-Unconfirmed in this table: retribution's stack is TWO rungs here, where the other Instills have three; and the madness cure (ash here, goldenseal in a code comment). Both want an AB capture.
+### Impatience: from hypochondria, never from an instill
+```yaml
+source: "HYPOCHONDRIA's symptoms fire on their own, in order nausea -> lethargy -> impatience (official Classleads #154, 31 July 2025). So a target holding hypochondria from the depression ladder gets impatience LATER, without any instill. Live: Ulvin and Mumin captures show the boredom line arriving after a depression reap."
+not_an_instill: "`shadow instill ... with impatience` is refused by the game (see NOT_AN_INSTILL above)."
+lock_selector: "selectInstillLock (v4.7.372): while impatience is missing, keep hypochondria up -- if it is cured before the symptom lands, the depression ladder rebuilds it; while it is up, the wait goes to paralysis (degeneration). Once paralysis is up too, it cycles depression -- never degeneration capstones (fixed in the v4.7.372 deep review: a full degeneration ladder used to fire a capstone every round)."
+trigger_414: "The boredom line ('<t> shuffles his feet in boredom.') records IMPATIENCE ONLY. Until v4.7.372 it also back-filled hypochondria, nausea, addiction and lethargy for a Depthswalker; addiction is not in the current order, and the parent and earlier symptoms may already be cured, so the back-fill corrupted tracking."
+```
 
 ### Chrono Commands
 ```yaml
@@ -155,7 +163,7 @@ usage:
   - "Required for Mutilate execute"
   - "Enhances damage (degeneration capstone HALVED without shadow)"
 
-global_variable: "haveshadow (set by triggers)"
+global_variable: "haveshadow -- set by trigger 478 (isTargeted-gated since v4.7.372), cleared by mutilate (488), login, target death (401) and any target change in dispatch (v4.7.372; it used to survive a kill or switch, so the next target skipped its shadow phase and could be mutilated with no shadow)"
 ```
 
 ## Kill Routes
@@ -178,7 +186,7 @@ phases:
     instill: leach
     venom: curare
     chrono: "loop boost when healthleech stuck"
-    notes: "healthleech/manaleech are kelp-cured - need kelp pressure first!"
+    notes: "parasite/healthleech are kelp-cured (kelp pressure first!); manaleech is valerian SMOKE"
 
   3_bellwort:
     description: "Bury target with bellwort affs"
@@ -198,7 +206,7 @@ required_afflictions:
   - anorexia: "blocks eating"
   - slickness: "blocks applying"
   - paralysis: "blocks tree"
-  - impatience: "blocks focus -- NOT deliverable by instill (the game refuses it); no current DW source in the offense, OPEN"
+  - impatience: "blocks focus -- NOT deliverable by instill (the game refuses it); arrives as a delayed HYPOCHONDRIA symptom, which LOCK keeps up until it lands (v4.7.372)"
   - recklessness: "blocks Accelerate passive cure"
 ```
 
@@ -256,8 +264,10 @@ threshold_examples:
 strategy:
   1: "Build the retribution ladder (justice -> retribution); retribution counts"
   2: "Keep depression, madness and parasite up -- each raises the threshold 5%"
-  3: "Use retribution capstone for mana sap"
+  3: "Use retribution capstone for mana sap -- only once all four amplifiers are up"
   4: "When mana below threshold: SHADOW DICTATE <target>"
+
+selector: "selectInstillDictate (v4.7.372): depression, then madness (for shadowmadness), then leach (for parasite) -- whichever is not up by haveAff (30%, the same test the rung triggers use; the first cut used 0.7 and made the triggers record the NEXT rung on a re-send) -- else retribution (its rungs, then the capstone). The same four afflictions raise the kill threshold AND the retribution capstone's mana burn, so letting one fall off loses both. It used to send retribution every round."
 ```
 
 ### Madpression Route
@@ -349,6 +359,10 @@ dw          - depthswalker.dispatch()
 dwm <mode>  - depthswalker.setMode(matches[2])
 dws         - depthswalker.status()
 dwd         - toggle debugEcho
+dwscythe <id>        - set the scythe item id (config.scytheId)
+dw setup [force|stop] - intone the one-time Terminus buffs, one per word balance
+dwassess [on|off]    - append `assess <t>` to every attack (free only with Health Inspector)
+dwattune [on|off]    - re-send `shadow attune` every attack (free only with Gattan'lier)
 ```
 
 ### Global Variables Used
@@ -406,9 +420,11 @@ capstones:
 
 ## Route state and packet (v4.7.366, from the outside audit)
 ```yaml
-opening_latch: "bellwortComplete (skip the kelp/shadow/bellwort opening, go to the finisher) now holds only while 2+ of FOUNDATION_AFFS (clumsiness, justice, retribution, timeloop) are up. It used to latch for good once timeloop was seen, so a target that cured the foundation kept eating finishers with nothing behind them. The latch is SET only on a high-confidence (0.7) timeloop."
+opening_latch: "bellwortComplete (skip the kelp/shadow/bellwort opening, go to the finisher) now holds only while 2+ of FOUNDATION_AFFS (clumsiness, justice, retribution, timeloop) are up. It used to latch for good once timeloop was seen, so a target that cured the foundation kept eating finishers with nothing behind them. The latch is SET only on a high-confidence (0.7) timeloop, and setting OR holding it requires the SHADOW (v4.7.372 deep review: with the kelp-phase timeloop, clumsiness + timeloop alone used to latch on round 2 and skip the shadow and bellwort phases). No timeloop fires in the kelp or shadow phase except the boosted leach conversion."
 confidence: "depthswalker.hasAffConfident(aff) = V3 probability >= config.highConfidence. Used where a decision commits something: the Dictate threshold and the opening latch. Everything else still uses haveAff's 30%."
 assess: "Every packet used to end `assess <target>;contemplate <target>`. ASSESS is balanceless only with the HEALTH INSPECTOR trait (every PvP trait set in this package selects it). config.assess (default true) / `dwassess on|off` turns it off for a character without the trait; contemplate always stays, since Dictate/Mutilate read mana from it. Without assess, cull/mutilate have no fresh health reading."
+attune: "Every attack re-sends `shadow attune <t> to <directive>`. Free with Gattan'lier (trigger 487's line is the Gattan'lier one); otherwise ATTUNE costs ~2.2s of equilibrium (audit, Oloi capture). config.attuneEvery (default true) / `dwattune on|off`. Off: re-attune only when the target or the directive changes, or every attuneRefresh (30s). The attune is believed only once our reap LANDS (trigger 481 -> onReapLanded), never when a packet is built -- dispatch rebuilds and `queue addclear` replaces the packet before it fires (v4.7.372)."
+timing_baselines: "From the audit's captures: reap ~2.10s balance; contemplate ~1.00s eq; non-free attune ~2.20s eq; target herb balance ~1.5s; focus 2.5s with Survival Efficiency (5.0s base); tree 14.0s with Survival Efficiency (28s base). These are the GAME's timings; the tracker's cure-balance windows are deliberately padded and must not be replaced with them."
 ```
 
 ## Room Hinder Abilities
@@ -464,7 +480,7 @@ priority_cures:
   - masochism: "Prevents self-damage when curing"
 
 dangerous_abilities:
-  - mutilate: "Instant kill at 40% HP / 30% MP with shadow"
+  - mutilate: "Instant kill at 40% HP / 30% MP with shadow. NOTE (our offense): buildAttack checks Dictate (<=40% mana, more with amplifiers) first, so our own mutilate branch is unreachable -- every mana state that arms it already chose Dictate. Reported in v4.7.372, not changed."
   - dictate: "Mana kill at 40% + 5% each for depression/madness/retribution/parasite (max 60%)"
   - aeon: "Slows ALL actions significantly"
   - chrono_loop_boost: "Doubles affliction application"

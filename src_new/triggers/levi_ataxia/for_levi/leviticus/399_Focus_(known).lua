@@ -42,14 +42,17 @@ patterns:
 
 local name = multimatches[1][2]
 if isTargeted(multimatches[1][2]) and tBals.focus then
-onTargetFocusV3()
   if passiveFailsafe then restorePassiveCure() end
 	if multimatches[3][1] == name .. " shakes his head and a look of clarity returns to his eyes."
 		or multimatches[3][1] == name .. " shakes her head and a look of clarity returns to her eyes." then
+			-- Known cure: lovers. Not a random V3 removal on top of it.
 			erAff("lovers")
 			erAff("impatience")
+	elseif onTargetFocusV3 then
+		-- V3 owns the unknown cure (see 398): one removal, impatience cleared,
+		-- illusions refused. No second removal via tFocused (v4.7.372).
+		onTargetFocusV3()
 	else
-		-- Focus cured something other than impatience -> target doesn't have impatience
 		erAff("impatience")
 		tFocused()
 	end

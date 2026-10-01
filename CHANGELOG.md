@@ -2,6 +2,158 @@
 
 ---
 
+## 2026-10-01 - Depthswalker audit v1.1: impatience comes from hypochondria; target cure tables match WHATCURES (v4.7.372)
+
+Source: the outside "Depthswalker PvP Mechanics and CC_Depthswalker Logic Audit v1.1". It audited
+v4.7.366 against official Classleads #154, the game's own WHATCURES output for the whole affliction
+catalogue, and live Depthswalker captures.
+
+**Depthswalker does have an impatience source.** Impatience is not an instill, but HYPOCHONDRIA
+(the depression ladder's third rung) produces it as a delayed symptom: nausea, then lethargy, then
+impatience (Classleads #154). `selectInstillLock` now keeps hypochondria up while impatience is
+missing. If the target cures it before the symptom lands, depression rebuilds it; while it is up,
+the wait goes to paralysis.
+
+**Trigger 414 back-filled what it could not prove.** On a Depthswalker, the boredom line also
+`tarAffed` hypochondria, nausea, addiction and lethargy. Addiction is not in the current symptom
+order, and the parent affliction and its earlier symptoms may already be cured by then (a Mumin
+capture shows exactly that). It now records impatience only.
+
+**The Dictate finisher keeps its amplifiers up.** Depression, madness (`shadowmadness`), parasite
+and retribution each raise Dictate's kill threshold AND the retribution capstone's mana burn. The
+finisher sent retribution every round. It now rebuilds whichever of depression, madness or leach is
+not up at 0.7 confidence, and only then climbs and cashes retribution.
+
+**The boosted leach conversion needs 0.7 confidence in healthleech.** That loop spends the venom
+slot and the boost, so a 30% V3 branch is not enough to commit to it.
+
+**Attune is configurable.** Every attack re-sends `shadow attune`, which is free with Gattan'lier
+and about 2.2s of equilibrium without it. New `dwattune [on|off]` (`depthswalker/027`, default on).
+When off, Attune is re-sent only when the target or the directive changes, or every 30s. The attune
+is believed only once our reap LANDS (481 -> `onReapLanded`). Dispatch rebuilds the packet and
+`queue addclear` replaces it before it fires, so stamping at build would drop an attune that never
+went out. The first draft did exactly that, and a test pins the rebuild case.
+
+**Target cure tables now match WHATCURES (every class).** `getCurableAffs` reads the global
+`curingTable` (`curing/002_Wide_Groups.lua`) first and falls back to `curingTableV3` only for a
+herb `curingTable` does not list. So a gap in `curingTable` was a gap in tracking, whatever V3 said.
+Missing until now:
+
+| Herb | Added |
+|---|---|
+| goldenseal | `shadowmadness` (DW's own madness rung; a goldenseal eat could never cure it), `mycalium` |
+| bellwort | `retribution`, `diminished`, `pyre`, `stridulating` |
+| lobelia | `guilt`, `horror`, `whisperingmadness` |
+| kelp | `rebbies` |
+| ash | `crescendo` |
+
+- New entries are APPENDED, because V3 weights cure candidates 4/2/1 by list position. The top of
+  every list, and so every class's existing tracking, is unchanged.
+- `curingTableV3` gets the same additions, plus `unweavingbody`, `unweavingmind` and bloodroot
+  `pyramides`, so neither table can mask the other.
+- The smoke table and trigger 390 gain `dazed` and `earworm` (the elm pipe).
+- `insomnia` is deliberately left out of goldenseal: the tracker models it as a target DEFENCE.
+- Focus:
+  - `focusCurableAffsV3` now lists exactly the game's focus cures. Removed: impatience, addiction,
+    hypersomnia, feeble. Added: agoraphobia, claustrophobia, lovers, pacified, peace.
+  - `onTargetFocusV3` clears impatience from every branch: impatience blocks focus, so a focus that
+    happened proves it absent. Before, it took a share of the cure.
+  - `tFocused` drops generosity (bellwort only) and adds peace.
+
+**Comments corrected:** the "healthleech/manaleech are kelp-cured" claims (manaleech is valerian
+SMOKE), and the "all madness affs are goldenseal" rationale for madness + aconite (the ladder is
+goldenseal / lobelia / ash). The aconite pick itself stays.
+
+Also unchanged: the inline `curingTable` in `_groups.yaml` (the Curing folder's script). It runs
+first and is overwritten by `002_Wide_Groups`, so it only wins after someone re-saves that folder in
+the Mudlet editor.
+
+### Deep review of v4.7.365-372 (six parallel agents; every finding checked against the code)
+
+**Two regressions from v4.7.365/366, already in released builds:**
+
+- **LOCK, DICTATE and MADPRESSION could skip the shadow and bellwort phases.**
+  - Since v4.7.365, `shouldTimeloop`'s "two or more rungs to go" rule also fired in the kelp and
+    shadow opening phases. The old rule never looped on a fresh target.
+  - Round 1 therefore looped degeneration and put timeloop on the target. From v4.7.366, the
+    opening latch read clumsiness + timeloop as a standing foundation, and the route jumped to its
+    finisher with no shadow and no bellwort stack. That is the tester's original "LOCK never takes
+    a shadow", returned by a new route.
+  - It also spent the loop the leach conversion needs.
+  - Fix: no loop in the kelp or shadow phase except that conversion, and the latch (setting and
+    holding) now requires the shadow.
+- **LOCK fired degeneration CAPSTONES every round** once paralysis was up. That is a damage burst,
+  halved without a shadow, that does nothing for the lock. It now climbs degeneration only while
+  paralysis is missing, so the "keep depression cycling" branch is finally reachable.
+
+**Introduced in this release, fixed before merge:**
+
+- **Dictate maintenance tested its amplifiers at 0.7 while the rung triggers decide at 0.3.** An
+  amplifier at 30-70% was re-sent, and the trigger, seeing it present, recorded the NEXT rung:
+  nausea, then hypochondria, then a phantom capstone with anorexia + masochism. Maintenance now
+  uses `haveAff` (30%). The kill threshold still counts at 0.7.
+
+**Older bugs that now matter more:**
+
+- **`haveshadow` was never cleared on a kill or a target switch** (only mutilate and login cleared
+  it). The next target skipped its shadow phase and could be mutilated with no shadow. It is now
+  cleared on target change (015) and on death (trigger 401); stale `php`/`pm` are reset with it.
+  Trigger 478 also set it on ANY claim line; it is now `isTargeted`-gated, and the duplicated
+  banner is gone.
+- **Trigger 476 (depression capstone) re-added hypochondria and nausea.** It now records
+  depression, anorexia and masochism, as 468's capstone branch does. A phantom hypochondria had
+  hidden LOCK's "rebuild the impatience source" branch.
+- **Every goldenseal eat ran the V3 cure twice** (triggers 001 and 002 match the same line).
+  - 001 is now disabled.
+  - 002 no longer erases shadowmadness on every eat; the V3 cure weighs it with the rest now that
+    it is in `curingTable`.
+  - 004's mycalium pattern was type 0 (SUBSTRING), so its regex never matched, and its body re-ran
+    the whole eat (a third cure) and erased mycalium for any target. It is now a regex that only
+    records the known mycalium cure.
+  - Remaining limitation: on that known line, 002 has already made a random V3 cure on the eat line,
+    so the eat removes two afflictions. Fixing it needs 002 to defer to the next line, as the
+    bellwort trigger 009 does.
+- **Each target smoke or focus removed TWO afflictions.**
+  - 390 ran `onSmokeCureV3()` and then its own legacy loop, an `erAff` from every branch. 398/399
+    did the same with `onTargetFocusV3()` and then `erAff("impatience")` + `tFocused()`.
+  - The unconditional `erAff("impatience")` also overrode V3's refusal of an illusion focus.
+  - The legacy paths now run only when V3 is not loaded. 399's known "clarity" line (lovers) no
+    longer gets a random V3 removal on top.
+  - `tFocused` no longer erases sandfever, which is goldenseal-cured.
+  - V3's smoke cure does not know the old hellsight-under-inquisition exception, so a hellsight
+    branch can be cured under inquisition. That is minor and pre-existing in V3.
+
+**Minor:**
+
+- Cull/mutilate record the curare they send (`envenomList`), not the dispatch venom.
+- Cull's follow-up (486) honours `dwassess` (it sent ASSESS unconditionally) and commits a pending
+  attune.
+- `chrono loop boost` is chosen only in the shadow phase.
+- 491 (full retribution) is `isTargeted`-gated and survives an empty venom list.
+- Bellwort's known "sigh of relief" line no longer erases earworm (it is smoked).
+- The dead `config.lockThreshold` is gone.
+- The class doc lists all eight DW aliases.
+
+**Reported, not changed (a design call):** MUTILATE is unreachable. It needs the target at <=30%
+mana, but Dictate is checked first and fires at <=40% (more with its amplifiers). Every mana state
+that arms mutilate has already chosen Dictate.
+
+**Tests:**
+- New `test_target_cure_tables.lua` (7), the first test to load the real V3 tracker. It covers the
+  WHATCURES sets, the smoke and focus lists, goldenseal curing shadowmadness, bellwort curing
+  retribution, and focus clearing an impatience branch.
+- `test_cc_depthswalker.lua` 23 -> 31: LOCK's hypochondria rebuild, Dictate's maintenance, the
+  leach confidence gate, attune off/rebuild/commit/refresh, and the 414 body run as a Depthswalker.
+  That last test was checked by reverting the trigger: it fails 5-for-1.
+- Deep review: 14 more in `test_cc_depthswalker.lua` (31 -> 45).
+  - They cover the opening-phase loop and latch, LOCK's degeneration capstones, the Dictate 30%
+    maintenance, boost only in the shadow phase, the cull/mutilate venom, and the target-change
+    reset.
+  - They also run the bodies of triggers 476, 478, 390, 398, 491 and 486.
+  - All 14 fail with the fixed files reverted to the pre-review commit.
+
+---
+
 ## 2026-10-01 - Boon advisor: Star of Winter is top tier (v4.7.371)
 
 User: *"Star of Winter: Entering a new ripple invokes a memory of Lifegiver, granting you 1 additional

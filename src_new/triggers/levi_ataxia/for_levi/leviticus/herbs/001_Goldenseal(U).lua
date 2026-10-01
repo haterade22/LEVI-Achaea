@@ -10,7 +10,7 @@ hierarchy:
 - Remove Afflictions
 - Herbs
 attributes:
-  isActive: 'yes'
+  isActive: 'no'
   isFolder: 'no'
   isTempTrigger: 'no'
   isMultiline: 'no'
@@ -36,7 +36,9 @@ patterns:
   type: 1
 ]]--
 
-
+-- DISABLED (v4.7.372, deep review): 002_Goldenseal_(Madness) matches the SAME
+-- line and does the same work, so every goldenseal eat ran the V3 cure twice.
+-- 002 is the one handler.
 if matches[2] == target then
 tdeliverance = false
     if anorexiaFailsafe then
