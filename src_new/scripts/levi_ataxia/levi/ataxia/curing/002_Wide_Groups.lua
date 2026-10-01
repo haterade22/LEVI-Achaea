@@ -14,12 +14,23 @@ attributes:
 packageName: ''
 ]]--
 
+-- THE target herb-cure table V3 reads first (getCurableAffs in
+-- affliction_tracking_core/007 prefers this over curingTableV3, so a herb listed
+-- here MASKS the V3 row -- an affliction missing here is never cured by that
+-- herb in tracking, whatever V3 says). This file is the runtime winner: the
+-- Curing folder's inline copy in _groups.yaml runs first and is overwritten.
+-- Reconciled with the game's own WHATCURES output (v4.7.371, via the outside
+-- DW audit). Additions are APPENDED: V3 weights candidates 4/2/1 by position,
+-- so the existing order -- and every class's tracking -- is unchanged at the
+-- top. Deliberately absent: insomnia (goldenseal strips it, but the tracker
+-- models it as a target DEFENCE, setTargetDefenseV3), and bloodroot, which
+-- falls through to curingTableV3.
 curingTable = {
-    goldenseal = {"depression", "sandfever", "stupidity", "epilepsy", "dizziness", "dissonance", "shyness", "impatience", "unweavingmind", "fulminated"},
-    lobelia = {"hypochondria", "recklessness", "fratricide", "vertigo", "spiritburn", "tenderskin", "loneliness", "claustrophobia", "masochism", "agoraphobia"},
-    bellwort = {"timeloop", "justice", "lovers", "peace", "pacified", "generosity", "indifference"},
-    kelp = {"parasite", "weariness",  "asthma", "healthleech", "clumsiness", "sensitivity"},
-    ash = {"confusion", "hypersomnia", "hallucinations", "paranoia", "dementia"},
+    goldenseal = {"depression", "sandfever", "stupidity", "epilepsy", "dizziness", "dissonance", "shyness", "impatience", "unweavingmind", "fulminated", "shadowmadness", "mycalium"},
+    lobelia = {"hypochondria", "recklessness", "fratricide", "vertigo", "spiritburn", "tenderskin", "loneliness", "claustrophobia", "masochism", "agoraphobia", "guilt", "horror", "whisperingmadness"},
+    bellwort = {"timeloop", "justice", "lovers", "peace", "pacified", "generosity", "indifference", "retribution", "diminished", "pyre", "stridulating"},
+    kelp = {"parasite", "weariness",  "asthma", "healthleech", "clumsiness", "sensitivity", "rebbies"},
+    ash = {"confusion", "hypersomnia", "hallucinations", "paranoia", "dementia", "crescendo"},
     ginseng = {"flushings", "lethargy", "haemophilia", "addiction", "nausea", "scytherus", "darkshade", "unweavingbody"},
 }
 
@@ -82,11 +93,12 @@ end
 
 function tFocused()
 	local gAffs = {"stuttering", "stupidity", "recklessness", "hallucinations", "epilepsy", "confusion", "dizziness", "vertigo", "anorexia",  
-		"earthdisrupt", "masochism", "agoraphobia", "airdisrupt", "claustrophobia", "dementia", "firedisrupt", "generosity", "loneliness", "lovers", 
-		"pacified", "paranoia", "shyness", "stuttering", "waterdisrupt",}
+		"earthdisrupt", "masochism", "agoraphobia", "airdisrupt", "claustrophobia", "dementia", "firedisrupt", "loneliness", "lovers",
+		"pacified", "paranoia", "peace", "shyness", "waterdisrupt",}
+	-- v4.7.371 (WHATCURES): generosity is bellwort-only, not focus; peace IS focus.
 
 	erAff("impatience")
-  erAff("sandfever")
+	-- (sandfever is goldenseal-cured, not focus -- WHATCURES; no longer erased here, v4.7.372)
 	
 	--Readd last goldenseal, if there was any.
 	if lastGoldenseal and lastGoldenseal ~= "impatience" then

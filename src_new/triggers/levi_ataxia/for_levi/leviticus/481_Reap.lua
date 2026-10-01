@@ -51,6 +51,8 @@ if type(target) ~= "number" and isTargeted(matches[2]) then
     end
     targetIshere = true
     disableTimer("TargetOutOfRoom")
+    -- The packet this reap rode in executed: commit its attune (dwattune off).
+    if depthswalker and depthswalker.onReapLanded then depthswalker.onReapLanded() end
 end
 	if haveAff("timeloop") then
 		checkTimeloop = false

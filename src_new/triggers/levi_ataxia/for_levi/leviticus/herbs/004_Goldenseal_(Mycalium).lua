@@ -35,32 +35,15 @@ patterns:
 - pattern: ^(\w+) eats a (goldenseal root|plumbum flake).$
   type: 1
 - pattern: ^(\w+) ceases \w+ violent trembling.$
-  type: 0
+  type: 1
 ]]--
 
-if matches[2] == target then
-tdeliverance = false
-    if anorexiaFailsafe then
-        tAffs[lastFocus] = true
-        ataxiaEcho("Backtracked anorexia being cured with last focus.")
-        anorexiaFailsafe = nil
-        lastFocus = nil
-    end
-    targetAteWrapper("goldenseal")
-if passiveFailsafe then restorePassiveCure() end
-    tBals.plant = false
-  if tBals.timers.plant then killTimer(tBals.timers.plant) end
-    if tAffs.mercury then
-        erAff("mercury")
-        tBals.timers.plant = tempTimer(1.9, [[tBals.plant = true; tBals.timers.plant = nil]])
-    else
-        tBals.timers.plant = tempTimer(1.3, [[tBals.plant = true; tBals.timers.plant = nil]])
-    end
-    targetIshere = true
-end
-  if passiveFailsafe then restorePassiveCure() end
+-- Known-line goldenseal cure: the eat followed by "ceases <his/her> violent
+-- trembling" means the eat cured MYCALIUM. The eat line itself is handled by
+-- 002_Goldenseal_(Madness) (V3 cure, plant balance), so this only records
+-- the known cure. (v4.7.372, deep review: the second pattern was type 0 --
+-- SUBSTRING -- so its regex never matched; and the body re-ran the whole eat
+-- handling, a third V3 cure per eat, then erAff'd mycalium for ANY target.)
+if isTargeted(multimatches[1][2]) then
 	erAff("mycalium")
-
-selectString(line, 1)
-fg("PeachPuff")
-resetFormat()
+end

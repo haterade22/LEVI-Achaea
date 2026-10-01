@@ -48,7 +48,16 @@ if type(target) ~= "number" and isTargeted(matches[2]) and #envenomList > 0 then
 		enableTrigger("Timeloop Failsafe Update")
 	end
 end
-if type(target) ~= "number" and isTargeted(matches[2]) then	
-  send("assess "..target..(ataxia.settings.separator or "::").."contemplate "..target) 
+if type(target) ~= "number" and isTargeted(matches[2]) then
+  -- The cull packet executed: commit its attune (dwattune off), as 481 does
+  -- for a reap. And honour dwassess -- this follow-up used to send ASSESS
+  -- unconditionally, which costs equilibrium without Health Inspector.
+  if depthswalker and depthswalker.onReapLanded then depthswalker.onReapLanded() end
+  local sep = ataxia.settings.separator or "::"
+  if depthswalker and depthswalker.config and depthswalker.config.assess == false then
+    send("contemplate "..target)
+  else
+    send("assess "..target..sep.."contemplate "..target)
+  end
 end
 tcull = false

@@ -56,6 +56,7 @@ if type(target) == "string" then
 
 		tAffs = {blindness = false, deafness = false, shield = false, rebounding = false, curseward = false}
 		if resetStatesV3 then resetStatesV3() end
+		haveshadow = false   -- a claimed shadow does not outlive its owner (Depthswalker)
 		tBals = {tree = true, focus = true, plant = true, timers = {}}
     if ataxiaTemp.lastAssess then ataxiaTemp.lastAssess = 100 end
     twohanded_resetFractures()

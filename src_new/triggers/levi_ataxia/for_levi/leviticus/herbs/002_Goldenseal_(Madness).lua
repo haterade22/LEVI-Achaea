@@ -47,7 +47,9 @@ tdeliverance = false
 	end
 	targetAteWrapper("goldenseal")
   if passiveFailsafe then restorePassiveCure() end
-	erAff("shadowmadness")
+	-- (Used to erAff("shadowmadness") on EVERY goldenseal eat, whatever was
+	-- cured. shadowmadness is now in curingTable.goldenseal, so the V3 cure
+	-- above weighs it with the rest -- v4.7.372, deep review.)
 
 	tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end
