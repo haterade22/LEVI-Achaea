@@ -519,6 +519,8 @@ explorer fights on chosen ground:
   retreats or pulls for that fight — standing and swinging beats spending the fight attack-held in
   doorways. Going back into a room you just fled needs 85% health and no afflictions.
 - **Ice**: once you slip in a room, tactical moves out of it **tumble** instead of jumping.
+- **Wrath and Righteousness** (boon): when it saves you from death, the package re-raises your
+  defences and leaves the room.
 - **Entangled**: a move the game refuses ("too tangled up") is re-sent the moment you are free, and
   the escape messages say why you are *not* leaving rather than claiming you are.
 - **Low-HP escape ladder** (any mob count, default 35%): outdoors fly and hover — works

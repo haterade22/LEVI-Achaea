@@ -784,6 +784,16 @@ the fighting that did happen was winning, and ice turned each retreat into sever
   `S._resendWhenFree()` re-sends via `_tacticalGo` on the first unbound prompt if we are still in
   that room, within `BOUND_PENDING` (12s).
 
+### Wrath and Righteousness: def up and leave (v4.7.373)
+
+"When you would die, the power of Righteous Fire will allow you to restore yourself to full health and
+instantly slay the non-boss denizen that defeated you" (1h cooldown). User: escape the room and def
+up. `S.onRighteousFire(how)` -> `systemDefup(ataxia.settings.defences.current)` and `S.disengage`,
+with `S.pursuedAt` and `S._lastDisengageAt` cleared so the exit is not refused by the fight that just
+killed us. Detected by `S._checkRighteousFire(hp)` at the top of `S.onVitals` until the proc line is
+captured: `mnemWrathRighteousness`, `RF_COOLDOWN` 3600s since the last, denizens present, and health
+up by `RF_JUMP` (45) points to `RF_FULL` (95%) or more in one prompt.
+
 ### The movement lock (v4.7.243)
 
 > "If we tumble and then leap or walk in a direction it cancels the tumble." — user, 2026-08-10
