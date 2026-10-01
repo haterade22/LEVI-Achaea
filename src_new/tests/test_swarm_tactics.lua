@@ -3451,9 +3451,9 @@ describe("v4.7.370 -- a move refused while entangled is re-sent when we are free
 end)
 
 -- =====================================================================================
--- v4.7.373, user: "When we have this and die, we should escape the room. and def up."
+-- v4.7.372, user: "When we have this and die, we should escape the room. and def up."
 -- Wrath and Righteousness restores us to full health instead of dying, once an hour.
-describe("v4.7.373 -- Wrath and Righteousness: def up and leave", function()
+describe("v4.7.372 -- Wrath and Righteousness: def up and leave", function()
   local realDefup, realDefs, defups
   local function setup(n)
     fixture(n or 4)

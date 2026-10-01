@@ -1948,7 +1948,7 @@ end
 -- on every prompt instead, and unlike the tick path it acts even while a pull is in
 -- flight (the explorer `moving` guard blinded the old path for the pull's full 8s).
 -- ---------------------------------------------------------------------------
--- WRATH AND RIGHTEOUSNESS (v4.7.373, user-directed)
+-- WRATH AND RIGHTEOUSNESS (v4.7.372, user-directed)
 -- ---------------------------------------------------------------------------
 --   "When you would die, the power of Righteous Fire will allow you to restore yourself to full
 --    health and instantly slay the non-boss denizen that defeated you. This effect carries a
@@ -1997,7 +1997,7 @@ function S.onVitals()
   if not S._enabled() then return end
   S._checkPursuit()  -- v4.7.370
   S._resendWhenFree() -- v4.7.370
-  if S._checkRighteousFire(hppFresh()) then return end -- v4.7.373
+  if S._checkRighteousFire(hppFresh()) then return end -- v4.7.372
   if S.state == "recovering" then return end -- the hover loop owns it (self-ticking)
   local s = S._cfg()
   local hp = hppFresh()
