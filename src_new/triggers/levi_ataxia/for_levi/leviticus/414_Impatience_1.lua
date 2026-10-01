@@ -49,9 +49,9 @@ if isTargeted(matches[2]) then
 	selectString(line, 1)
 	fg("goldenrod")
 	resetFormat()
-	if ataxia_isClass("depthswalker") then
-		if matches[1]:find("in boredom") then
-			tarAffed("hypochondria", "nausea", "addiction", "lethargy")
-		end
-	end
+	-- The boredom line proves IMPATIENCE only. A Depthswalker's impatience
+	-- usually arrives as a delayed HYPOCHONDRIA symptom (Classleads #154:
+	-- nausea -> lethargy -> impatience), but by now hypochondria and its earlier
+	-- symptoms may already be cured, so they are NOT re-added (v4.7.371). The
+	-- old back-fill also added addiction, which is not in the current order.
 end

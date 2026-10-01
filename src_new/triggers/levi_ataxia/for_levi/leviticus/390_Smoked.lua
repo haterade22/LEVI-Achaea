@@ -77,7 +77,7 @@ tdeliverance = false
 	end
 
 	local sAffs = {"aeon", "deadening", "tension",
-		"disloyalty","manaleech", "slickness", "unweavingspirit"}
+		"disloyalty","manaleech", "slickness", "unweavingspirit", "dazed", "earworm"}
 
 
 	if haveAff("hellsight") and not haveAff("inquisition") then

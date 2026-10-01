@@ -158,10 +158,26 @@ describe("CC_Depthswalker -- route selectors", function()
     expect(dw.capstoneReady("depression")).toBeTrue()
   end)
 
-  it("LOCK climbs degeneration toward paralysis once anorexia is stuck", function()
+  it("LOCK climbs degeneration toward paralysis while hypochondria waits on impatience", function()
+    fresh("lock")
+    dw.state.haveShadow = true
+    affs({ "clumsiness", "timeloop", "anorexia", "hypochondria" })
+    expect(dw.selectInstill()).toBe("degeneration")
+  end)
+
+  it("LOCK rebuilds hypochondria when it is cured before impatience lands (v4.7.371)", function()
+    -- Impatience is a delayed HYPOCHONDRIA symptom; lose hypochondria and the
+    -- route's only impatience source is gone.
     fresh("lock")
     dw.state.haveShadow = true
     affs({ "clumsiness", "timeloop", "anorexia" })
+    expect(dw.selectInstill()).toBe("depression")
+  end)
+
+  it("LOCK stops guarding hypochondria once impatience has landed", function()
+    fresh("lock")
+    dw.state.haveShadow = true
+    affs({ "clumsiness", "timeloop", "anorexia", "impatience" })
     expect(dw.selectInstill()).toBe("degeneration")
   end)
 
@@ -187,11 +203,31 @@ describe("CC_Depthswalker -- route selectors", function()
     now = 1000
   end)
 
-  it("DICTATE fires retribution on its complete ladder", function()
+  it("DICTATE fires retribution once its four amplifiers are up", function()
     fresh("dictate")
     dw.state.haveShadow = true
-    affs({ "clumsiness", "timeloop", "justice", "retribution" })
+    affs({ "clumsiness", "timeloop", "justice", "retribution",
+      "depression", "shadowmadness", "parasite" })
     expect(dw.selectInstill()).toBe("retribution")
+    expect(dw.capstoneReady("retribution")).toBeTrue()
+  end)
+
+  it("DICTATE rebuilds a fallen amplifier before cashing retribution (v4.7.371)", function()
+    fresh("dictate")
+    dw.state.haveShadow = true
+    local base = { "clumsiness", "timeloop", "justice", "retribution" }
+    local function with(extra)
+      local l = {}
+      for _, a in ipairs(base) do l[#l + 1] = a end
+      for _, a in ipairs(extra) do l[#l + 1] = a end
+      return l
+    end
+    affs(with({ "shadowmadness", "parasite" }))
+    expect(dw.selectInstill()).toBe("depression")
+    affs(with({ "depression", "parasite" }))
+    expect(dw.selectInstill()).toBe("madness")
+    affs(with({ "depression", "shadowmadness" }))
+    expect(dw.selectInstill()).toBe("leach")
   end)
 end)
 
@@ -307,6 +343,91 @@ describe("CC_Depthswalker -- Dictate, the opening latch, Assess (v4.7.366)", fun
       expect(dw.handleShield():find("assess", 1, true) == nil).toBeTrue()
     end)
     dw.config.assess = was
+    if not okT then error(errT) end
+  end)
+end)
+
+describe("CC_Depthswalker -- audit v1.1 (v4.7.371)", function()
+
+  it("the boosted leach conversion needs high confidence in healthleech", function()
+    fresh("lock")
+    affs({ "clumsiness", "parasite", "healthleech" })
+    dw.selections.instill = "leach"
+    dw.selections.phase = "shadow"
+    local oldCan, oldP = dw.canTimeloop, getAffProbabilityV3
+    dw.canTimeloop = function() return true end
+    local okT, errT = pcall(function()
+      expect(dw.shouldTimeloop()).toBeTrue()
+      -- Healthleech only a 40% branch: do not spend the venom slot on it.
+      getAffProbabilityV3 = function(aff)
+        if aff == "healthleech" then return 0.4 end
+        return _affs[aff] and 1 or 0
+      end
+      expect(dw.shouldTimeloop()).toBeFalse()
+    end)
+    dw.canTimeloop, getAffProbabilityV3 = oldCan, oldP
+    if not okT then error(errT) end
+  end)
+
+  it("the boredom line (414) records impatience only -- no back-filled hypochondria chain", function()
+    local fh = assert(io.open("src_new/triggers/levi_ataxia/for_levi/leviticus/414_Impatience_1.lua", "r"))
+    local src = fh:read("*a")
+    fh:close()
+    local body = src:match("%]%]%-%-\r?\n(.*)$")
+    local chunk = assert((loadstring or load)(body))
+    local added = {}
+    local stubs = {
+      matches = { "Victim shuffles his feet in boredom.", "Victim" },
+      isTargeted = function() return true end,
+      tarAffed = function(...) for _, a in ipairs({ ... }) do added[#added + 1] = a end end,
+      onTargetImpatienceV3 = function() end,
+      selectString = function() end, fg = function() end, resetFormat = function() end,
+      ataxia_isClass = function(c) return c == "depthswalker" end,   -- the old branch's gate
+      line = "Victim shuffles his feet in boredom.",
+    }
+    local saved = {}
+    for k, v in pairs(stubs) do saved[k] = _G[k]; _G[k] = v end
+    local okT, errT = pcall(chunk)
+    for k in pairs(stubs) do _G[k] = saved[k] end
+    if not okT then error(errT) end
+    expect(#added).toBe(1)
+    expect(added[1]).toBe("impatience")
+  end)
+
+  it("with dwattune off, attune is sent once and committed only when the reap lands", function()
+    fresh("lock")
+    php, pm = 100, 100
+    affs({})
+    dw.selections.instill = "degeneration"
+    dw.selections.venom = "curare"
+    dw.selections.useTimeloop = false
+    dw.selections.attune = "degeneration"
+    dw.state.attunedTo, dw.state.attunedAt, dw.state.attunePending = nil, nil, nil
+    local was = dw.config.attuneEvery
+    local okT, errT = pcall(function()
+      dw.config.attuneEvery = false
+      now = 1000
+      expect(dw.buildAttack()).toContain("shadow attune Victim to degeneration")
+      -- A rebuild before the packet fired must STILL carry the attune.
+      expect(dw.buildAttack()).toContain("shadow attune Victim to degeneration")
+      dw.onReapLanded()
+      expect(dw.buildAttack():find("shadow attune", 1, true) == nil).toBeTrue()
+      -- A different directive re-attunes.
+      dw.selections.attune = "madness"
+      expect(dw.buildAttack()).toContain("shadow attune Victim to madness")
+      dw.onReapLanded()
+      -- The refresh backstop re-attunes after attuneRefresh seconds.
+      now = 1000 + dw.config.attuneRefresh + 1
+      expect(dw.buildAttack()).toContain("shadow attune Victim to madness")
+      -- And the default re-sends every time.
+      dw.config.attuneEvery = true
+      now = 1000
+      dw.onReapLanded()
+      expect(dw.buildAttack()).toContain("shadow attune Victim to madness")
+    end)
+    dw.config.attuneEvery = was
+    dw.selections.attune = "degeneration"
+    now = 1000
     if not okT then error(errT) end
   end)
 end)

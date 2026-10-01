@@ -58,6 +58,8 @@ depthswalker.state = {
     mode = "lock",              -- "lock", "damage", "dictate", "madpression", "group"
     haveShadow = false,         -- shadow claimed from target
     madCapAt = nil,             -- when the madness capstone landed (trigger 483)
+    attunedTo = nil,            -- directive last sent to lastTarget (attuneEvery off)
+    attunedAt = nil,            -- when it was sent
     distorted = false,          -- distort active in room
     partyrelay = true,          -- relay to party
     bellwortComplete = false,   -- bellwort phase done (timeloop applied), skip to finisher
@@ -81,6 +83,13 @@ depthswalker.config = {
     -- Cull/Mutilate read the target's health (php) from these assesses.
     -- Toggle with `dwassess on|off`.
     assess = true,
+    -- Re-send `shadow attune` on every attack. Free with Gattan'lier; without
+    -- it ATTUNE costs ~2.2s of equilibrium (audit, Oloi capture). When false,
+    -- attune is sent only when the target or the wanted directive changes, or
+    -- attuneRefresh seconds have passed (a backstop: nothing confirms a
+    -- non-Gattan'lier attune landed). Toggle with `dwattune on|off`.
+    attuneEvery = true,
+    attuneRefresh = 30,
 }
 
 -- Current attack selections (set each dispatch cycle)
@@ -326,7 +335,10 @@ function depthswalker.shouldTimeloop()
     -- CRITICAL: When healthleech stuck but not manaleech, use chrono loop boost
     -- ONLY during shadow phase - double-apply leach to get manaleech before they cure healthleech
     -- Don't let this trigger during bellwort/lock phases!
-    if phase == "shadow" and depthswalker.hasAff("healthleech") and not depthswalker.hasAff("manaleech") then
+    -- The loop spends the venom slot (and boost, age), so require HIGH
+    -- confidence that healthleech is really up (v4.7.371): a 30% V3 branch is
+    -- too speculative to commit the conversion on.
+    if phase == "shadow" and depthswalker.hasAffConfident("healthleech") and not depthswalker.hasAff("manaleech") then
         return true
     end
 
@@ -389,7 +401,8 @@ end
 --   3. Shadow claimed = spam degeneration for capstone damage
 --
 -- LOCK/DICTATE/MADPRESSION: Use universal opening (kelp -> shadow -> bellwort)
---   1. KELP: Stick clumsiness with degeneration (healthleech/manaleech are kelp-cured!)
+--   1. KELP: Stick clumsiness with degeneration (parasite/healthleech are kelp-cured;
+--      manaleech is VALERIAN SMOKE -- shadow acquisition spans herb and smoke)
 --   2. SHADOW: Instill leach until shadow claimed (parasite/healthleech/manaleech)
 --   3. BELLWORT STACK: Stick timeloop -> retribution -> justice
 --      All 3 are bellwort-cured. Target can only eat bellwort once per balance,
@@ -413,8 +426,9 @@ end
 -- Universal opening: kelp pressure -> shadow -> bellwort stack
 -- Returns the next instill for the opening phase, or nil if opening is complete.
 --
--- ALL modes need kelp pressure first! healthleech/manaleech are kelp-cured,
+-- ALL modes need kelp pressure first! parasite/healthleech are kelp-cured,
 -- so without clumsiness stuck, they just cure the leach affs immediately.
+-- (Manaleech is cured by SMOKING valerian/realgar, not kelp -- WHATCURES.)
 --
 -- CRITICAL: Once bellwort phase is complete (timeloop applied), we NEVER go back
 -- to opening phases. The bellwortComplete flag ensures we move to finisher (depression)
@@ -477,12 +491,19 @@ end
 -- total of unrelated DW affs. Once anorexia is stuck, the next ladder worth
 -- climbing is degeneration, whose rungs and capstone include paralysis.
 --
--- There is NO impatience branch: "impatience" is not a Shadowmancy instill
--- (v4.7.365; the game refuses it and leaves the previous instill on the
--- scythe, desyncing the venom and rung triggers after it).
+-- IMPATIENCE comes from HYPOCHONDRIA, the depression ladder's third rung: its
+-- symptoms are nausea -> lethargy -> impatience (Classleads #154), so
+-- impatience arrives LATER, on its own, while hypochondria is up. "impatience"
+-- is not an instill (the game refuses it). So while impatience is missing, the
+-- route must keep hypochondria on the target -- if they cure it before the
+-- symptom lands, the only impatience source is gone and depression rebuilds
+-- it (v4.7.371). While hypochondria IS up, the wait is spent on paralysis.
 function depthswalker.selectInstillLock()
     if not depthswalker.hasAff("anorexia") then
         return "depression"   -- a rung, or the capstone when capstoneReady
+    end
+    if not depthswalker.hasAff("impatience") and not depthswalker.hasAff("hypochondria") then
+        return "depression"   -- rebuild the impatience source
     end
     if not depthswalker.hasAff("paralysis") or depthswalker.capstoneReady("degeneration") then
         return "degeneration"
@@ -498,7 +519,7 @@ end
 -- Goal: Claim shadow to amplify degeneration damage (halved without shadow)
 -- Strategy:
 --   1. Spam degeneration + curare until clumsiness sticks (establishes kelp pressure)
---   2. Once clumsiness stuck, switch to leach for shadow (healthleech/manaleech are kelp-cured)
+--   2. Once clumsiness stuck, switch to leach for shadow (parasite/healthleech are kelp-cured)
 --   3. When healthleech stuck: use kalmia venom or chrono loop boost to get manaleech
 --   4. Shadow claimed = spam degeneration for full capstone damage
 function depthswalker.selectInstillDamage()
@@ -524,11 +545,25 @@ function depthswalker.selectInstillDamage()
     return "degeneration"
 end
 
--- Dictate finisher: the retribution capstone saps mana toward the dictate
--- threshold. Its ladder is justice -> retribution, so the application after
--- both are up is the capstone; while a rung is missing, retribution climbs it.
+-- Dictate finisher. The same four afflictions -- depression, madness
+-- (shadowmadness), parasite, retribution -- raise Dictate's kill threshold 5%
+-- each AND increase the retribution capstone's mana burn. So the finisher keeps
+-- all four up (each at the high confidence the threshold counts them at) and
+-- cashes the retribution capstone only once they are (v4.7.371; it used to
+-- send retribution every round, leaving both bonuses on the table whenever one
+-- fell off). Each instill applies its FIRST missing rung, which for depression,
+-- madness and leach is exactly the amplifier; retribution's ladder is
+-- justice -> retribution -> capstone.
+depthswalker.DICTATE_MAINTAIN = {
+    { aff = "depression",    instill = "depression" },
+    { aff = "shadowmadness", instill = "madness" },
+    { aff = "parasite",      instill = "leach" },
+}
 function depthswalker.selectInstillDictate()
-    return "retribution"
+    for _, m in ipairs(depthswalker.DICTATE_MAINTAIN) do
+        if not depthswalker.hasAffConfident(m.aff) then return m.instill end
+    end
+    return "retribution"   -- climbs justice/retribution, then the capstone
 end
 
 -- Is the target inside the stun window of our madness capstone? Stamped by
@@ -622,9 +657,11 @@ function depthswalker.selectVenomSpecial()
         -- Nausea present: fall through to mode-specific logic
     end
 
-    -- Madness: aconite (stupidity) for goldenseal stacking
-    -- All madness affs are goldenseal-cured, stupidity is also goldenseal-cured
-    -- Stacking goldenseal affs creates cure pressure (only 1 goldenseal per balance)
+    -- Madness: aconite (stupidity) for goldenseal stacking. The madness
+    -- ladder is MIXED-lane (WHATCURES): shadowmadness is goldenseal, vertigo
+    -- lobelia, hallucinations ash -- so aconite stacks goldenseal against the
+    -- first rung only. Kept as goldenseal pressure; the old "all madness affs
+    -- are goldenseal" rationale was wrong (v4.7.371).
     if instill == "madness" then
         if not depthswalker.hasAff("stupidity") then return "aconite" end
         -- Stupidity present: fall through to mode-specific logic
@@ -768,6 +805,34 @@ function depthswalker.infoTail(sp)
     return tail .. "contemplate " .. target
 end
 
+-- `shadow attune <target> to <directive>;` -- or "" when attuneEvery is off
+-- and this target was attuned to this directive within attuneRefresh seconds.
+-- The attune is only BELIEVED once the packet carrying it executed: building a
+-- packet proves nothing, because dispatch rebuilds and `queue addclear`
+-- replaces it before it fires -- stamping here would let the next rebuild drop
+-- an attune that never went out. So the build records it as pending and
+-- onReapLanded (trigger 481, our reap executing) commits it.
+function depthswalker.attuneCmd(sp)
+    local st, cfg = depthswalker.state, depthswalker.config
+    local want = depthswalker.selections.attune
+    if not cfg.attuneEvery and st.attunedTo == want and st.attunedAt
+        and (getEpoch() - st.attunedAt) < cfg.attuneRefresh then
+        st.attunePending = nil
+        return ""
+    end
+    st.attunePending = want
+    return "shadow attune " .. target .. " to " .. want .. sp
+end
+
+-- Our reap landed, so the packet it rode in (attune included) executed.
+function depthswalker.onReapLanded()
+    local st = depthswalker.state
+    if st.attunePending then
+        st.attunedTo, st.attunedAt = st.attunePending, getEpoch()
+        st.attunePending = nil
+    end
+end
+
 function depthswalker.buildAttack()
     local sp = ataxia.settings.separator
     local atk = depthswalkerQueue()
@@ -790,7 +855,7 @@ function depthswalker.buildAttack()
 
     -- 3. Cull (low HP finisher)
     if depthswalker.needCull() then
-        atk = atk .. "shadow attune " .. target .. " to " .. sel.attune .. sp
+        atk = atk .. depthswalker.attuneCmd(sp)
             .. "intone tooros" .. sp
             .. "chrono assert" .. sp
             .. "shadow cull " .. target .. " curare" .. sp
@@ -809,7 +874,7 @@ function depthswalker.buildAttack()
     end
     local chrono = depthswalker.getChronoCommand()
 
-    atk = atk .. "shadow attune " .. target .. " to " .. sel.attune .. sp
+    atk = atk .. depthswalker.attuneCmd(sp)
         .. "shadow instill scythe with " .. sel.instill .. sp
         .. chrono .. sp
 
@@ -865,6 +930,7 @@ function depthswalker.dispatch()
         depthswalker.state.bellwortComplete = false
         depthswalker.state.lastTarget = target
         depthswalker.state.madCapAt = nil
+        depthswalker.state.attunedTo = nil   -- an attunement belongs to one target
     end
     -- Also reset if no DW affs on target (fresh fight, they reset or new target)
     if depthswalker.countDWAffsInt() == 0 then
@@ -1019,6 +1085,7 @@ function depthswalker.status()
     echo("  Shadow: " .. tostring(depthswalker.state.haveShadow) .. "\n")
     echo("  DW Affs: " .. dwCount .. "\n")
     echo("  Assess per attack: " .. tostring(depthswalker.config.assess) .. " (dwassess on|off)\n")
+    echo("  Attune per attack: " .. tostring(depthswalker.config.attuneEvery) .. " (dwattune on|off)\n")
     echo("  Instill ladders (* = capstone next): " .. depthswalker.stageSummary() .. "\n")
     echo("  Dictate Threshold: " .. dictThresh .. "% (target mana: " .. (pm or "?") .. "%)\n")
     echo("  Can Dictate: " .. tostring(depthswalker.canDictate()) .. "\n")

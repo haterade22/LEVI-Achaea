@@ -111,19 +111,26 @@ affLastConfirmedV3 = affLastConfirmedV3 or {}
 targetDefensesV3 = targetDefensesV3 or {}
 
 -- V3 cure tables (fallback if curingTable doesn't have an entry)
+-- NOTE: getCurableAffs reads the global curingTable FIRST (curing/
+-- 002_Wide_Groups.lua), so for every herb it lists, this row is never read;
+-- only bloodroot is live here. Both are kept matching the game's WHATCURES
+-- output (v4.7.371) so neither can mask the other.
 curingTableV3 = {
     kelp = {"parasite", "weariness", "asthma", "healthleech", "clumsiness", "sensitivity", "rebbies"},
-    ginseng = {"flushings", "lethargy", "haemophilia", "addiction", "nausea", "scytherus", "darkshade"},
-    goldenseal = {"depression", "sandfever", "stupidity", "epilepsy", "dizziness", "dissonance", "shyness", "impatience", "fulminated"},
+    ginseng = {"flushings", "lethargy", "haemophilia", "addiction", "nausea", "scytherus", "darkshade", "unweavingbody"},
+    goldenseal = {"depression", "sandfever", "stupidity", "epilepsy", "dizziness", "dissonance", "shyness", "impatience", "fulminated", "unweavingmind", "shadowmadness", "mycalium"},
     ash = {"confusion", "hypersomnia", "hallucinations", "paranoia", "dementia", "crescendo"},
-    lobelia = {"fratricide", "recklessness", "vertigo", "spiritburn", "tenderskin", "loneliness", "claustrophobia", "masochism", "agoraphobia", "guilt", "horror", "hypochondria"},
-    bellwort = {"timeloop", "justice", "retribution", "lovers", "peace", "pacified", "generosity", "indifference", "diminished", "pyre"},
-    bloodroot = {"paralysis", "slickness"},
+    lobelia = {"fratricide", "recklessness", "vertigo", "spiritburn", "tenderskin", "loneliness", "claustrophobia", "masochism", "agoraphobia", "guilt", "horror", "hypochondria", "whisperingmadness"},
+    bellwort = {"timeloop", "justice", "retribution", "lovers", "peace", "pacified", "generosity", "indifference", "diminished", "pyre", "stridulating"},
+    bloodroot = {"paralysis", "slickness", "pyramides"},
 }
 
 -- V3 smoke cure table (priority order)
--- Smoking cures one of these (in order if multiple present)
-smokeCureTableV3 = {"aeon", "deadening", "hellsight", "tension", "disloyalty", "manaleech", "slickness", "unweavingspirit"}
+-- Smoking cures one of these (in order if multiple present). One table covers
+-- both pipes: elm (aeon, dazed, deadening, earworm, tension, unweavingspirit)
+-- and valerian (disloyalty, hellsight, manaleech, slickness) -- the smoke
+-- trigger does not say which herb was smoked. dazed/earworm added v4.7.371.
+smokeCureTableV3 = {"aeon", "deadening", "hellsight", "tension", "disloyalty", "manaleech", "slickness", "unweavingspirit", "dazed", "earworm"}
 
 -- V3 salve cure tables (by body part)
 -- Applying salve always proves slickness absent, then cures one affliction from the list
