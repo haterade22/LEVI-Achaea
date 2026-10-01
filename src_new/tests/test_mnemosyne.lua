@@ -9158,6 +9158,23 @@ describe("boon combos", function()
     end)
   end)
 
+  -- v4.7.371, user: "One of the best boons in game, should be scored as such."
+  it("Star of Winter tops an offer too", function()
+    local lib = {
+      ["Star of Winter"] = { description = "Entering a new ripple invokes a memory of Lifegiver, granting you 1 additional life, up to the maximum.",
+                             category = "Defence", rarity = "legendary" },
+      ["Big Shield"] = { description = "You gain 10% resistance to all damage.", category = "Defence",
+                         rarity = "legendary", comboBoon = true },
+      ["Mental Prowess"] = { description = "You deal 4% increased damage for each point of intelligence.",
+                             category = "Offence", rarity = "legendary" },
+    }
+    withLibrary(lib, function()
+      local ranked = holding({}, function() return M.rankOffer({ "Big Shield", "Mental Prowess", "Star of Winter" }) end)
+      expect(ranked[1].name).toBe("Star of Winter")
+      expect(table.concat(ranked[1].effects, " "):find("an extra life every new ripple", 1, true) ~= nil).toBeTrue()
+    end)
+  end)
+
   it("the bestowal records the free boon and says which recipe finished", function()
     local out, claimed
     withLibrary(WITH_CHAIN, function()
