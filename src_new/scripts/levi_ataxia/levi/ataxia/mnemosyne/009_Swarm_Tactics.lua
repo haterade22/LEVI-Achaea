@@ -1947,10 +1947,57 @@ end
 -- single evaluation in the final seconds landed on a potash heal bounce. This runs
 -- on every prompt instead, and unlike the tick path it acts even while a pull is in
 -- flight (the explorer `moving` guard blinded the old path for the pull's full 8s).
+-- ---------------------------------------------------------------------------
+-- WRATH AND RIGHTEOUSNESS (v4.7.373, user-directed)
+-- ---------------------------------------------------------------------------
+--   "When you would die, the power of Righteous Fire will allow you to restore yourself to full
+--    health and instantly slay the non-boss denizen that defeated you. This effect carries a
+--    cooldown of 1 hours."
+-- User: "When we have this and die, we should escape the room. and def up."
+--
+-- The boon saved us; the room that nearly killed us is still there, and the next death is real for
+-- an hour. So: re-raise the current defence profile (systemDefup -- the `defup` alias's own path)
+-- and DISENGAGE. The fight's pursuit memory and the disengage cooldown are cleared first: they
+-- belong to the fight that just killed us, and this exit must not be refused by them.
+--
+-- NO PROC LINE IS CAPTURED YET, so the detector reads the prompt: holding the boon, off its hour,
+-- denizens in the room, health jumping by RF_JUMP points or more to RF_FULL% or more in one prompt.
+-- A lethal hit can land and the restore apply before the next prompt, so the "before" reading is
+-- not required to be low -- only far below full. Heals that size do not otherwise happen mid-fight;
+-- the full restores we do know of (Homebound's raido) move us out of the room first. When the
+-- game's own line is pasted, a trigger calls S.onRighteousFire directly and this stays a backstop.
+S.RF_JUMP = 45
+S.RF_FULL = 95
+S.RF_COOLDOWN = 3600
+
+function S.onRighteousFire(how)
+  S._rfAt = now()
+  S._echo("<gold>RIGHTEOUS FIRE<reset> -- saved from death" .. (how and (" (" .. how .. ")") or "")
+    .. "; defences up and leaving the room.")
+  local d = ataxia and ataxia.settings and ataxia.settings.defences
+  if systemDefup and d and type(d.current) == "string" and d.current ~= "" then
+    pcall(systemDefup, d.current)
+  end
+  S.pursuedAt, S._lastDisengageAt = nil, nil
+  return S.disengage("Righteous Fire")
+end
+
+function S._checkRighteousFire(hp)
+  local prev = tonumber(S._prevHp)
+  if hp and hp > 0 then S._prevHp = hp end
+  if not mnemWrathRighteousness then return false end
+  if not (prev and hp and hp >= S.RF_FULL and (hp - prev) >= S.RF_JUMP) then return false end
+  if (now() - (tonumber(S._rfAt) or -1e9)) < S.RF_COOLDOWN then return false end
+  if not (M._roomHasDenizens and M._roomHasDenizens()) then return false end
+  S.onRighteousFire("health " .. prev .. "% -> " .. hp .. "% in one prompt")
+  return true
+end
+
 function S.onVitals()
   if not S._enabled() then return end
   S._checkPursuit()  -- v4.7.370
   S._resendWhenFree() -- v4.7.370
+  if S._checkRighteousFire(hppFresh()) then return end -- v4.7.373
   if S.state == "recovering" then return end -- the hover loop owns it (self-ticking)
   local s = S._cfg()
   local hp = hppFresh()

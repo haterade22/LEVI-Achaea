@@ -3450,6 +3450,106 @@ describe("v4.7.370 -- a move refused while entangled is re-sent when we are free
   end)
 end)
 
+-- =====================================================================================
+-- v4.7.373, user: "When we have this and die, we should escape the room. and def up."
+-- Wrath and Righteousness restores us to full health instead of dying, once an hour.
+describe("v4.7.373 -- Wrath and Righteousness: def up and leave", function()
+  local realDefup, realDefs, defups
+  local function setup(n)
+    fixture(n or 4)
+    send = function(cmd) table.insert(sent, cmd) end -- see the v4.7.370 note: a leaked `send`
+    gmcp.Room.Info.details = { "indoors" }
+    mnemWrathRighteousness = true
+    S._rfAt, S._prevHp = nil, nil
+    defups = {}
+    realDefup, realDefs = systemDefup, ataxia.settings.defences
+    systemDefup = function(p) defups[#defups + 1] = p end
+    ataxia.settings.defences = { current = "bash" }
+  end
+  local function teardown()
+    systemDefup, ataxia.settings.defences = realDefup, realDefs
+    mnemWrathRighteousness = nil
+  end
+  local function run(fn)
+    local ok, err = pcall(fn)
+    teardown()
+    if not ok then error(err, 0) end
+  end
+
+  it("a near-death restore defs up and disengages", function()
+    setup()
+    run(function()
+      S._prevHp = 20
+      expect(S._checkRighteousFire(100)).toBeTrue()
+      expect(defups[1]).toBe("bash")
+      expect(S.state).toBe("pulling")
+      local left = false
+      for _, c in ipairs(sent) do if c:find("leap s", 1, true) then left = true end end
+      expect(left).toBeTrue()
+    end)
+  end)
+
+  it("the 'before' need not be low -- a lethal hit and the restore can share a prompt", function()
+    setup()
+    run(function()
+      S._prevHp = 50
+      expect(S._checkRighteousFire(96)).toBeTrue()
+    end)
+  end)
+
+  it("not without the boon, not for a smaller jump, not in an empty room", function()
+    setup()
+    run(function()
+      mnemWrathRighteousness = nil
+      S._prevHp = 20
+      expect(S._checkRighteousFire(100)).toBeFalse()
+      mnemWrathRighteousness = true
+      S._prevHp = 60
+      expect(S._checkRighteousFire(100)).toBeFalse()
+      mobs = 0
+      S._prevHp = 20
+      expect(S._checkRighteousFire(100)).toBeFalse()
+    end)
+  end)
+
+  it("once an hour", function()
+    setup()
+    run(function()
+      S._prevHp = 20
+      expect(S._checkRighteousFire(100)).toBeTrue()
+      S.reset("test")
+      clock = clock + 3599
+      S._prevHp = 20
+      expect(S._checkRighteousFire(100)).toBeFalse()
+      clock = clock + 1
+      S._prevHp = 20
+      expect(S._checkRighteousFire(100)).toBeTrue()
+    end)
+  end)
+
+  it("leaves even from a swarm that has been following us", function()
+    setup()
+    run(function()
+      S.pursuedAt = clock
+      S._lastDisengageAt = clock
+      S._prevHp = 20
+      S._checkRighteousFire(100)
+      expect(S.state).toBe("pulling")
+    end)
+  end)
+
+  it("runs from the prompt handler", function()
+    setup()
+    run(function()
+      S._prevHp = 20
+      gmcp.Char = { Vitals = { hp = "10000", maxhp = "10000" } }
+      S.onVitals()
+      expect(defups[1]).toBe("bash")
+      expect(S.state).toBe("pulling")
+    end)
+  end)
+end)
+
 -- v4.7.345: the mount module was loaded above for the mountjump tests.
 ataxiaBasher_isMounted, ataxiaBasher_mountVerb = nil, nil
 ataxiaBasher_mountedSet, ataxiaBasher_jumpSent = nil, nil
