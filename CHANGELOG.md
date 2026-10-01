@@ -2,6 +2,27 @@
 
 ---
 
+## 2026-10-01 - Wrath and Righteousness: def up and leave (shipped in v4.7.372)
+
+User: *"When we have this and die, we should escape the room. and def up."* The boon: "When you would
+die, the power of Righteous Fire will allow you to restore yourself to full health and instantly slay
+the non-boss denizen that defeated you. This effect carries a cooldown of 1 hours."
+
+`S.onRighteousFire` (mnemosyne/009) re-raises the current defence profile (`systemDefup` -- the
+`defup` alias's path) and disengages, clearing the fight's pursuit memory and disengage cooldown first
+so the exit is not refused by them. No proc line is captured yet, so `S._checkRighteousFire` (first in
+`S.onVitals`) detects it: `mnemWrathRighteousness` held, off its 1h cooldown, denizens present, and
+health up by `RF_JUMP` (45) points to `RF_FULL` (95%) or more in one prompt -- the "before" reading need
+not be low, since the lethal hit and the restore can share a prompt. 6 tests; 8 break-back mutants
+killed.
+
+**How it shipped.** Built in a separate worktree while v4.7.372 (PR #65, another session's Depthswalker
+audit) was open, so as not to release out of order. The work-in-progress commit reached main directly
+(not via a PR) before #65 merged; #65 was then merged on top of it, so the feature is in the v4.7.372
+package. This entry is docs only -- no version bump.
+
+---
+
 ## 2026-10-01 - Depthswalker audit v1.1: impatience comes from hypochondria; target cure tables match WHATCURES (v4.7.372)
 
 Source: the outside "Depthswalker PvP Mechanics and CC_Depthswalker Logic Audit v1.1". It audited

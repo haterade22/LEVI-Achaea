@@ -784,7 +784,7 @@ the fighting that did happen was winning, and ice turned each retreat into sever
   `S._resendWhenFree()` re-sends via `_tacticalGo` on the first unbound prompt if we are still in
   that room, within `BOUND_PENDING` (12s).
 
-### Wrath and Righteousness: def up and leave (v4.7.373)
+### Wrath and Righteousness: def up and leave (v4.7.372)
 
 "When you would die, the power of Righteous Fire will allow you to restore yourself to full health and
 instantly slay the non-boss denizen that defeated you" (1h cooldown). User: escape the room and def
