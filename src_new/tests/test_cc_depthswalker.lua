@@ -432,5 +432,252 @@ describe("CC_Depthswalker -- audit v1.1 (v4.7.371)", function()
   end)
 end)
 
+-- Run a trigger file's Lua body with the given globals stubbed (restored after).
+local TRG = "src_new/triggers/levi_ataxia/for_levi/leviticus/"
+local function runTrigger(path, stubs)
+  local fh = assert(io.open(path, "r"))
+  local src = fh:read("*a")
+  fh:close()
+  local body = src:match("%]%]%-%-\r?\n(.*)$")
+  local chunk = assert((loadstring or load)(body))
+  local saved = {}
+  for k, v in pairs(stubs) do saved[k] = _G[k]; _G[k] = v end
+  local okT, errT = pcall(chunk)
+  for k in pairs(stubs) do _G[k] = saved[k] end
+  if not okT then error(errT) end
+end
+local function noop() end
+
+describe("CC_Depthswalker -- deep review fixes (v4.7.372)", function()
+
+  it("no timeloop in the kelp or shadow phase, so the opening latch cannot fire early", function()
+    -- The regression: round 1 looped degeneration, timeloop + clumsiness then
+    -- read as a standing foundation and LOCK skipped the shadow entirely.
+    local oldCan = dw.canTimeloop
+    dw.canTimeloop = function() return true end
+    local okT, errT = pcall(function()
+      for _, mode in ipairs({ "lock", "dictate", "madpression" }) do
+        fresh(mode)
+        affs({})
+        dw.selections.instill = dw.selectInstill()
+        expect(dw.selections.phase).toBe("kelp")
+        expect(dw.shouldTimeloop()).toBeFalse()
+        affs({ "clumsiness" })
+        dw.selections.instill = dw.selectInstill()
+        expect(dw.selections.phase).toBe("shadow")
+        expect(dw.shouldTimeloop()).toBeFalse()
+      end
+    end)
+    dw.canTimeloop = oldCan
+    if not okT then error(errT) end
+  end)
+
+  it("clumsiness + timeloop with no shadow still goes to the shadow phase", function()
+    fresh("lock")
+    affs({ "clumsiness", "timeloop" })
+    expect(dw.selectInstill()).toBe("leach")
+    expect(dw.state.bellwortComplete).toBeFalse()
+  end)
+
+  it("a latched opening re-opens when the shadow is gone", function()
+    fresh("lock")
+    dw.state.bellwortComplete = true
+    dw.state.haveShadow = false
+    affs({ "clumsiness", "justice", "retribution", "timeloop" })
+    expect(dw.selectInstill()).toBe("leach")
+    expect(dw.state.bellwortComplete).toBeFalse()
+  end)
+
+  it("LOCK cycles depression, not degeneration capstones, once paralysis is up", function()
+    fresh("lock")
+    dw.state.haveShadow = true
+    affs({ "clumsiness", "weariness", "paralysis", "timeloop", "anorexia", "impatience" })
+    expect(dw.capstoneReady("degeneration")).toBeTrue()
+    expect(dw.selectInstill()).toBe("depression")
+  end)
+
+  it("Dictate maintenance uses the rung triggers' 30% test, not 0.7", function()
+    -- At 0.5, the trigger would record the NEXT rung on a re-sent depression.
+    fresh("dictate")
+    dw.state.haveShadow = true
+    affs({ "clumsiness", "timeloop", "justice", "retribution", "depression", "shadowmadness", "parasite" })
+    local oldP = getAffProbabilityV3
+    getAffProbabilityV3 = function(aff)
+      if aff == "depression" then return 0.5 end
+      return _affs[aff] and 1 or 0
+    end
+    local okT, errT = pcall(function()
+      expect(dw.selectInstill()).toBe("retribution")
+      expect(dw.getDictateThreshold()).toBe(55)   -- the threshold still counts at 0.7
+    end)
+    getAffProbabilityV3 = oldP
+    if not okT then error(errT) end
+  end)
+
+  it("boosted chrono only in the shadow phase", function()
+    affs({ "parasite", "healthleech" })
+    dw.selections.useTimeloop = true
+    local oldU = dw.canUnboostedLoop
+    dw.canUnboostedLoop = function() return true end
+    local okT, errT = pcall(function()
+      dw.selections.phase = "shadow"
+      expect(dw.getChronoCommand()).toBe("chrono loop boost")
+      dw.selections.phase = "bellwort"
+      expect(dw.getChronoCommand()).toBe("chrono loop")
+    end)
+    dw.canUnboostedLoop = oldU
+    dw.selections.useTimeloop = false
+    if not okT then error(errT) end
+  end)
+
+  it("cull and mutilate record the curare they actually send", function()
+    fresh("lock")
+    affs({})
+    dw.selections.instill = "degeneration"
+    dw.selections.venom = "kalmia"
+    envenomList = { "kalmia" }
+    php, pm = 30, 100
+    expect(dw.buildAttack()).toContain("shadow cull Victim curare")
+    expect(envenomList[1]).toBe("curare")
+    -- Mutilate needs pm <= 30, but Dictate (checked first) fires at <= 40, so
+    -- in play mutilate is unreachable (pre-existing ordering, reported); stub
+    -- Dictate off to exercise the mutilate packet itself.
+    dw.state.haveShadow = true
+    envenomList = { "kalmia" }
+    php, pm = 35, 25
+    local oldD = dw.needDictate
+    dw.needDictate = function() return false end
+    local okT, errT = pcall(function()
+      expect(dw.buildAttack()).toContain("shadow mutilate Victim curare")
+      expect(envenomList[1]).toBe("curare")
+    end)
+    dw.needDictate = oldD
+    php, pm = 100, 100
+    if not okT then error(errT) end
+  end)
+
+  it("a target change clears the shadow and the stale mana/health readings", function()
+    local oldSend, oldQ, oldHold = send, depthswalkerQueue, reboundHold
+    send = noop
+    reboundHold = nil
+    local okT, errT = pcall(function()
+      fresh("lock")
+      affs({})
+      dw.state.lastTarget = "Previous"
+      haveshadow = true
+      php, pm = 20, 20
+      dw.dispatch()
+      expect(haveshadow).toBeFalse()
+      expect(dw.state.haveShadow).toBeFalse()
+      expect(pm).toBe(100)
+    end)
+    send, depthswalkerQueue, reboundHold = oldSend, oldQ, oldHold
+    if not okT then error(errT) end
+  end)
+
+  it("trigger 476 (depression capstone) does not re-add hypochondria or nausea", function()
+    local added = {}
+    runTrigger(TRG .. "476_Depression_Fully_Stacked!.lua", {
+      matches = { "A look of total despair crosses the face of Victim.", "Victim" },
+      isTargeted = function() return true end,
+      tarAffed = function(...) for _, a in ipairs({ ... }) do added[a] = true end end,
+      selectString = noop, fg = noop, bg = noop, setBold = noop, resetFormat = noop,
+    })
+    expect(added.anorexia).toBeTrue()
+    expect(added.masochism).toBeTrue()
+    expect(added.hypochondria).toBeNil()
+    expect(added.nausea).toBeNil()
+  end)
+
+  it("trigger 478 sets haveshadow only for our target, and echoes once", function()
+    local echoes, prev = 0, haveshadow
+    local stubs = {
+      matches = { "You claim the shadow of Other, storing it within your phylactery.", "Other" },
+      isTargeted = function(n) return n == "Victim" end,
+      tarAffed = noop, selectString = noop, fg = noop, bg = noop, setBold = noop, resetFormat = noop,
+      ataxia_boxEcho = function() echoes = echoes + 1 end,
+    }
+    haveshadow = false
+    runTrigger(TRG .. "478_Shadow_Stolen.lua", stubs)
+    expect(haveshadow).toBeFalse()
+    stubs.matches = { "You claim the shadow of Victim, storing it within your phylactery.", "Victim" }
+    runTrigger(TRG .. "478_Shadow_Stolen.lua", stubs)
+    expect(haveshadow).toBeTrue()
+    expect(echoes).toBe(1)
+    haveshadow = prev
+  end)
+
+  it("trigger 390 (smoke) leaves the cure to V3 -- no second legacy removal", function()
+    local erased = {}
+    runTrigger(TRG .. "390_Smoked.lua", {
+      matches = { "Victim takes a long drag off his pipe.", "Victim" },
+      isTargeted = function() return true end,
+      onSmokeCureV3 = noop, onTargetSmokeV2 = false,
+      erAff = function(a) erased[#erased + 1] = a end,
+      haveAff = function() return false end,
+      tAffs = { aeon = true, slickness = true },
+      tempTimer = noop, ataxiaEcho = noop, ataxiaTemp = {},
+    })
+    -- Only the asthma proof; aeon/slickness are V3's to branch over.
+    expect(#erased).toBe(1)
+    expect(erased[1]).toBe("asthma")
+  end)
+
+  it("trigger 398 (focus) leaves the cure to V3 -- no erAff/tFocused on top", function()
+    local erased, v3 = {}, 0
+    runTrigger(TRG .. "398_Focus_(UNK).lua", {
+      matches = { "A look of extreme focus crosses the face of Victim.", "Victim" },
+      isTargeted = function() return true end,
+      tBals = { focus = true, timers = {} },
+      onTargetFocusV3 = function() v3 = v3 + 1 end,
+      erAff = function(a) erased[#erased + 1] = a end,
+      tFocused = function() erased[#erased + 1] = "tFocused" end,
+      haveAff = function() return false end,
+      tempTimer = noop, killTimer = noop,
+    })
+    expect(v3).toBe(1)
+    expect(#erased).toBe(0)
+  end)
+
+  it("trigger 491 (full retribution) survives an empty venom list and ignores other targets", function()
+    local added, sent = 0, 0
+    local stubs = {
+      matches = { "line", "Victim" },
+      isTargeted = function(n) return n == "Victim" end,
+      tarAffed = function() added = added + 1 end,
+      send = function() sent = sent + 1 end,
+      envenomList = {}, partyrelay = true, tloop = false, tloop2 = false,
+    }
+    runTrigger(TRG .. "491_Full_Retribution.lua", stubs)
+    expect(added).toBe(2)
+    expect(sent).toBe(1)
+    stubs.matches = { "line", "Other" }
+    runTrigger(TRG .. "491_Full_Retribution.lua", stubs)
+    expect(added).toBe(2)
+  end)
+
+  it("trigger 486 (cull) honours dwassess", function()
+    local sent = {}
+    local stubs = {
+      matches = { "line", "Victim" },
+      isTargeted = function() return true end,
+      envenomList = {}, tarAffed = noop, disableTimer = noop,
+      haveAff = function() return false end,
+      send = function(c) sent[#sent + 1] = c end,
+    }
+    local was = dw.config.assess
+    local okT, errT = pcall(function()
+      dw.config.assess = false
+      runTrigger(TRG .. "486_Cull.lua", stubs)
+      expect(sent[1]).toBe("contemplate Victim")
+      dw.config.assess = true
+      runTrigger(TRG .. "486_Cull.lua", stubs)
+      expect(sent[2]).toContain("assess Victim")
+    end)
+    dw.config.assess = was
+    if not okT then error(errT) end
+  end)
+end)
+
 -- Restore every global this file replaced (one shared Lua state).
 for k, v in pairs(saved) do _G[k] = v end

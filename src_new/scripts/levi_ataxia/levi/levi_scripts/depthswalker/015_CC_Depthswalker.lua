@@ -67,7 +67,6 @@ depthswalker.state = {
 }
 
 depthswalker.config = {
-    lockThreshold = 0.3,            -- V3 probability threshold for "has affliction"
     highConfidence = 0.7,           -- V3 threshold for high-confidence decisions
     scytheId = "scythe20431",       -- configurable weapon ID
     cullHealthThreshold = 35,       -- hp% below which to cull
@@ -342,6 +341,16 @@ function depthswalker.shouldTimeloop()
         return true
     end
 
+    -- KELP and SHADOW phases: no other loop (v4.7.372, deep review). The
+    -- generic "two rungs to go" rule below used to fire here from the very
+    -- first round -- looping degeneration put timeloop on a fresh target, the
+    -- opening latch then read clumsiness + timeloop as a standing foundation,
+    -- and LOCK/DICTATE/MADPRESSION skipped the shadow and bellwort phases.
+    -- It also spent the one loop the leach conversion above exists for.
+    if phase == "kelp" or phase == "shadow" then
+        return false
+    end
+
     -- DAMAGE/GROUP MODE: only use timeloop for the healthleech->manaleech transition (above)
     -- All other damage situations: chrono assert (keep venom pressure)
     if mode == "damage" or mode == "group" then
@@ -377,7 +386,10 @@ function depthswalker.getChronoCommand()
     if depthswalker.selections.useTimeloop then
         -- CRITICAL: For healthleech->manaleech transition, MUST use boost to double-apply leach
         -- Boost doubles the instill effect, which is what gets manaleech in one hit
-        if depthswalker.hasAff("healthleech") and not depthswalker.hasAff("manaleech") then
+        -- Only in the shadow phase: a loop chosen for another reason (bellwort,
+        -- a finisher ladder) with half-built leach affs must not burn boost.
+        if depthswalker.selections.phase == "shadow"
+            and depthswalker.hasAff("healthleech") and not depthswalker.hasAff("manaleech") then
             return "chrono loop boost"
         end
         -- Otherwise prefer unboosted if available (saves age resource)
@@ -439,16 +451,22 @@ function depthswalker.selectInstillOpening()
     -- permanent once timeloop was seen, so a target that cured the kelp/
     -- bellwort stack down kept eating finishers with no pressure behind them
     -- (v4.7.366). Below FOUNDATION_MIN the latch drops and the opening rebuilds.
+    -- The latch also requires the SHADOW (v4.7.372, deep review): the opening
+    -- is kelp -> shadow -> bellwort, so it cannot be complete without its
+    -- middle phase, whatever the foundation count says.
     if depthswalker.state.bellwortComplete then
-        if depthswalker.foundationCount() >= depthswalker.FOUNDATION_MIN then
+        if depthswalker.state.haveShadow
+            and depthswalker.foundationCount() >= depthswalker.FOUNDATION_MIN then
             return nil
         end
         depthswalker.state.bellwortComplete = false
     end
 
     -- Timeloop present (at high confidence -- this latches a phase change)
-    -- with the foundation standing: the bellwort phase is complete.
-    if depthswalker.hasAffConfident("timeloop")
+    -- with the shadow taken and the foundation standing: the bellwort phase
+    -- is complete.
+    if depthswalker.state.haveShadow
+        and depthswalker.hasAffConfident("timeloop")
         and depthswalker.foundationCount() >= depthswalker.FOUNDATION_MIN then
         depthswalker.state.bellwortComplete = true
         return nil
@@ -505,11 +523,14 @@ function depthswalker.selectInstillLock()
     if not depthswalker.hasAff("impatience") and not depthswalker.hasAff("hypochondria") then
         return "depression"   -- rebuild the impatience source
     end
-    if not depthswalker.hasAff("paralysis") or depthswalker.capstoneReady("degeneration") then
+    if not depthswalker.hasAff("paralysis") then
         return "degeneration"
     end
     -- Anorexia and paralysis both stuck: keep the depression ladder cycling so
-    -- its capstone is re-armed for the moment they cure anorexia.
+    -- its capstone is re-armed for the moment they cure anorexia. (Until the
+    -- v4.7.372 deep review this branch was unreachable: a full degeneration
+    -- ladder made LOCK fire degeneration CAPSTONES every round -- a damage
+    -- burst, halved without a shadow, that does nothing for the lock.)
     return "depression"
 end
 
@@ -548,12 +569,16 @@ end
 -- Dictate finisher. The same four afflictions -- depression, madness
 -- (shadowmadness), parasite, retribution -- raise Dictate's kill threshold 5%
 -- each AND increase the retribution capstone's mana burn. So the finisher keeps
--- all four up (each at the high confidence the threshold counts them at) and
--- cashes the retribution capstone only once they are (v4.7.371; it used to
--- send retribution every round, leaving both bonuses on the table whenever one
--- fell off). Each instill applies its FIRST missing rung, which for depression,
--- madness and leach is exactly the amplifier; retribution's ladder is
--- justice -> retribution -> capstone.
+-- all four up and cashes the retribution capstone only once they are
+-- (v4.7.372; it used to send retribution every round, leaving both bonuses on
+-- the table whenever one fell off). Each instill applies its FIRST missing
+-- rung, which for depression, madness and leach is exactly the amplifier;
+-- retribution's ladder is justice -> retribution -> capstone.
+-- "Up" here is haveAff's 30%, the SAME test the rung triggers use to decide
+-- which rung a hit applied. The deep review caught the first cut using 0.7:
+-- an amplifier at 30-70% was re-sent, and the trigger -- seeing it present --
+-- recorded the NEXT rung (nausea, then hypochondria, then a phantom capstone
+-- with anorexia + masochism). The kill THRESHOLD still counts at 0.7.
 depthswalker.DICTATE_MAINTAIN = {
     { aff = "depression",    instill = "depression" },
     { aff = "shadowmadness", instill = "madness" },
@@ -561,7 +586,7 @@ depthswalker.DICTATE_MAINTAIN = {
 }
 function depthswalker.selectInstillDictate()
     for _, m in ipairs(depthswalker.DICTATE_MAINTAIN) do
-        if not depthswalker.hasAffConfident(m.aff) then return m.instill end
+        if not depthswalker.hasAff(m.aff) then return m.instill end
     end
     return "retribution"   -- climbs justice/retribution, then the capstone
 end
@@ -846,7 +871,10 @@ function depthswalker.buildAttack()
     end
 
     -- 2. Mutilate (shadow execute)
+    -- Mutilate and cull carry CURARE, not the selected venom: record what is
+    -- actually sent, since the cull/reap triggers tarAffed envenomList[1].
     if depthswalker.needMutilate() then
+        envenomList = { "curare" }
         atk = atk .. "wield right dagger" .. sp
             .. "shadow mutilate " .. target .. " curare" .. sp
             .. depthswalker.infoTail(sp)
@@ -855,6 +883,7 @@ function depthswalker.buildAttack()
 
     -- 3. Cull (low HP finisher)
     if depthswalker.needCull() then
+        envenomList = { "curare" }
         atk = atk .. depthswalker.attuneCmd(sp)
             .. "intone tooros" .. sp
             .. "chrono assert" .. sp
@@ -931,6 +960,12 @@ function depthswalker.dispatch()
         depthswalker.state.lastTarget = target
         depthswalker.state.madCapAt = nil
         depthswalker.state.attunedTo = nil   -- an attunement belongs to one target
+        -- A shadow, and the mana/health readings, belong to one target too.
+        -- haveshadow used to survive a kill or a switch (only mutilate and
+        -- login cleared it), so the next target skipped its shadow phase and
+        -- could be MUTILATED with no shadow taken (v4.7.372, deep review).
+        haveshadow = false
+        php, pm = 100, 100
     end
     -- Also reset if no DW affs on target (fresh fight, they reset or new target)
     if depthswalker.countDWAffsInt() == 0 then

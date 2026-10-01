@@ -37,10 +37,14 @@ patterns:
   type: 1
 ]]--
 
-tarAffed("justice")
-tarAffed("retribution")
-
-if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..envenomList[1].. " retribution justice") end
-if partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop retribution justice") end
+-- Guarded (v4.7.372, deep review): no target check, and envenomList[1] is
+-- nil on a timeloop or cull round -- the concatenation threw.
+if isTargeted(matches[2]) then
+	tarAffed("justice")
+	tarAffed("retribution")
+	local venomName = (envenomList and envenomList[1]) or "unknown"
+	if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " retribution justice") end
+	if partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop retribution justice") end
+end
 
 		

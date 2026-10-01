@@ -98,7 +98,7 @@ function tFocused()
 	-- v4.7.371 (WHATCURES): generosity is bellwort-only, not focus; peace IS focus.
 
 	erAff("impatience")
-  erAff("sandfever")
+	-- (sandfever is goldenseal-cured, not focus -- WHATCURES; no longer erased here, v4.7.372)
 	
 	--Readd last goldenseal, if there was any.
 	if lastGoldenseal and lastGoldenseal ~= "impatience" then

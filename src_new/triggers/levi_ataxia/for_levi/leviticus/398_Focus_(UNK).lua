@@ -36,13 +36,18 @@ patterns:
 ]]--
 
 if isTargeted(matches[2]) and tBals.focus then
-	-- V3 integration: handle branching state tracker
-	if onTargetFocusV3 then onTargetFocusV3() end
-
-	-- Focus used -> target doesn't have impatience (focus would cure it first if present)
-	erAff("impatience")
-
-	tFocused()
+	-- V3 owns the focus cure when it is loaded: onTargetFocusV3 clears
+	-- impatience from every branch (a focus proves it absent) and removes ONE
+	-- focus-curable aff -- and it refuses an illusion focus (off focus balance,
+	-- or impatience confirmed). The unconditional erAff + tFocused below used
+	-- to run as well, overriding those guards and removing a SECOND aff from
+	-- every branch (v4.7.372, deep review). They remain the non-V3 path.
+	if onTargetFocusV3 then
+		onTargetFocusV3()
+	else
+		erAff("impatience")
+		tFocused()
+	end
 end
 	tBals.focus = false
 	tBals.focusUsedAt = getEpoch()

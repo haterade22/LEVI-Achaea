@@ -43,5 +43,10 @@ if isTargeted(matches[2]) then
 	bg("red")
 	setBold(true)
 	resetFormat()
-	tarAffed("anorexia", "hypochondria", "nausea", "masochism")
+	-- The depression capstone gives depression + anorexia + masochism (468's
+	-- capstone branch records the same). It used to also re-add hypochondria
+	-- and nausea, which the target may already have cured -- a phantom
+	-- hypochondria then hid LOCK's "rebuild the impatience source" branch
+	-- (v4.7.372, deep review).
+	tarAffed("depression", "anorexia", "masochism")
 end

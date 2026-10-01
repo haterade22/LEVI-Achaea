@@ -43,9 +43,12 @@ patterns:
 	bg("SeaGreen")
 	setBold(true)
 	resetFormat()
-	ataxia_boxEcho(target:upper().."'S SHADOW HAS BEEN STOLEN", "purple")
-  ataxia_boxEcho(target:upper().."'S SHADOW HAS BEEN STOLEN", "purple")
+-- Only OUR target's shadow arms the offense (v4.7.372, deep review: this used
+-- to set haveshadow on any claim line, and printed the banner twice).
+if isTargeted(matches[2]) then
+	ataxia_boxEcho(matches[2]:upper().."'S SHADOW HAS BEEN STOLEN", "purple")
 	tarAffed("parasite")
 	tarAffed("healthleech")
 	tarAffed("manaleech")
-  haveshadow = true
+	haveshadow = true
+end

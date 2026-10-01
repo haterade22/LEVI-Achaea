@@ -76,19 +76,24 @@ tdeliverance = false
 		lastKelp = nil
 	end
 
-	local sAffs = {"aeon", "deadening", "tension",
-		"disloyalty","manaleech", "slickness", "unweavingspirit", "dazed", "earworm"}
+	-- Legacy single-cure removal: ONLY when V3 is not handling the smoke.
+	-- onSmokeCureV3 above already removed (or branched over) the one affliction
+	-- the smoke cured; this loop then erAff'd ANOTHER one from every branch, so
+	-- each smoke cured two (v4.7.372, deep review).
+	if not onSmokeCureV3 then
+		local sAffs = {"aeon", "deadening", "tension",
+			"disloyalty","manaleech", "slickness", "unweavingspirit", "dazed", "earworm"}
 
-
-	if haveAff("hellsight") and not haveAff("inquisition") then
-		erAff("hellsight")		
-	else	
-		for i=1, #sAffs do
-			if tAffs[sAffs[i]] then
-				erAff(sAffs[i])
-				break
+		if haveAff("hellsight") and not haveAff("inquisition") then
+			erAff("hellsight")
+		else
+			for i=1, #sAffs do
+				if tAffs[sAffs[i]] then
+					erAff(sAffs[i])
+					break
+				end
 			end
-		end	
+		end
 	end
 	
 	if ataxiaTemp.snapTimer then killTimer(ataxiaTemp.snapTimer); ataxiaTemp.snapTimer = nil end
