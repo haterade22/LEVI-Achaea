@@ -7,7 +7,7 @@ hierarchy:
 - leviticus
 - LeviAtax
 attributes:
-  isActive: 'yes'
+  isActive: 'no'
   isFolder: 'no'
   isTempTrigger: 'no'
   isMultiline: 'no'
@@ -32,6 +32,8 @@ patterns:
 - pattern: ^(\w+) moves with the grace of the wind, \w+ stance the epitome of perfection beneath the flurry of blows\.$
   type: 1
 ]]--
+-- DISABLED v4.7.376: duplicate of 703_Epitome on the same line (both fired, both threw on an
+-- unassigned `epitomiser`). 703 is the fixed owner.
 
 -- Highlight the line
 selectString(line, 1)

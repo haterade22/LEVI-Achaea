@@ -213,7 +213,10 @@ end
 --------------------------------------------------------------------------------
 
 function shikudo_checkForms()
-  local k = ataxia.vitals.kata
+  -- v4.7.376: the vitals update calls this while it is still reading the Form charstat, before
+  -- Kata has been parsed, so on the first prompt kata is nil and `k > 5` threw.
+  if not ataxia.vitals.form then return end
+  local k = ataxia.vitals.kata or 0
   local f = ataxia.vitals.form:lower()
   local nextForm = {
     tykonos = {"Willow"},
@@ -224,6 +227,7 @@ function shikudo_checkForms()
     maelstrom = {"Oak"},
   }
   if k > 5 or k == 0 then
+    if not nextForm[f] then return end
     cecho("\n<orange>[<green>" .. ataxia.vitals.form .. "<orange>]: <NavajoWhite>" .. table.concat(nextForm[f], " -- ") .. "")
   end
 end
@@ -859,6 +863,15 @@ function shikudo.dispatch()
   cecho("\n<cyan>[Shikudo:" .. mode:upper() .. "] Target: <yellow>" .. tostring(target))
   cecho(" <cyan>| Form: <yellow>" .. form)
   cecho(" <cyan>| Kata: <yellow>" .. kata)
+
+  -- v4.7.376: show what the tracker believes we have applied. Achaea never prints the affliction on
+  -- the attacker's screen, so without this a lock round showed only limb damage (007 already does it).
+  if mode == "lock" or mode == "riftlock" then
+    cecho("\n<cyan>[Shikudo:" .. mode:upper() .. "] Affs:")
+    for _, a in ipairs({"asthma", "anorexia", "slickness", "paralysis", "impatience", "weariness", "lethargy", "clumsiness"}) do
+      cecho((tAffs[a] and " <green>" or " <red>") .. a)
+    end
+  end
 
   -- Safety check
   if not target or target == "" then

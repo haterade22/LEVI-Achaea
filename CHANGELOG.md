@@ -2,6 +2,46 @@
 
 ---
 
+## 2026-10-04 - Shikudo `sr`, Epitome, and a first-prompt kata error (v4.7.376)
+
+User: *"When in Shikudo and pressing SR, it isnt doing anything"*, with an error dump, and then a
+paste of an `sr` round (`frontkick right`, `kuro right`, `kuro left`) asking why no afflictions
+were given.
+
+**`sr` named no owner.** The Monk branch of `154_Group_(All_Classes)` called the global
+`shikudolock()`. Two scripts define it: `007_CC_Shikudo_Lock` (prints `[LOCK]`) and
+`008_CC_Shikudo_Offense_ALL` (prints `[Shikudo:LOCK]`), so whichever loaded last answered. The build
+ships 008 inactive, yet the user's paste is 008's output. The error dump points the same way (SLC
+`hit` triggers erroring at line 1, `lb`/`tAffs` nil): the running profile holds items that don't match
+the build. `sr` now calls `shikudoLock.dispatch()` by name. It also needs a Shikudo Form charstat,
+so a Tekura monk no longer fires a staff lock (it echoes why).
+
+**Afflictions were being tracked, just not shown.** Achaea never prints the affliction on the
+attacker's screen. Trigger `573_2Kuro` matches the pasted line pair (checked against the exact text)
+and records weariness, then lethargy. 008's lock output now prints an `Affs:` line, as 007's already
+did. **Not verified:** whether kuro really applies weariness/lethargy. `monk.md` states it with no AB
+behind it, and the lock leans on it (Rain keeps choosing kuro until weariness is set).
+
+**Epitome threw on every Epitomise.** `703_Epitome` used `epitomiser`, which nothing assigned. It
+now reads `matches[2]` and uses a function timer, not a string built around the name.
+`314_Epitome` matched the same line and is disabled, so the alert and party tell go out once.
+
+**`attempt to compare number with nil` on the first prompt.** `004_ataxia_Vitals_Update` calls
+`shikudo_checkForms()` while it is still reading the `Form` charstat, before `Kata` has been parsed.
+Both copies (`monk/003_Shikudo_Extras`, `shikudo/008`) now default kata to 0 and return early with no
+form or an unknown form.
+
+**Guards:** `401_Target_Has_Died` (bare `tAffs.bleed` writes) and `276_Limb_Prompt` (`lb.prompt()`
+every prompt) no longer throw when those globals are missing.
+
+**Not ours:** `JSON decoder error ... Char.Afflictions.List` is malformed GMCP from the server, parsed
+by Mudlet core.
+
+Tests: `test_shikudo_sr_epitome.lua` (nil kata/form, Epitome body, `sr` routing, the kuro trigger
+body). 2622 pass.
+
+---
+
 ## 2026-10-04 - Chat window: the game's colours, on the right channel (v4.7.375)
 
 User: *"My text chat is still not color coordinated"*, with a screenshot of the All tab: two clan
