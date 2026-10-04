@@ -19,8 +19,9 @@ so a Tekura monk no longer fires a staff lock (it echoes why).
 **Afflictions were being tracked, just not shown.** Achaea never prints the affliction on the
 attacker's screen. Trigger `573_2Kuro` matches the pasted line pair (checked against the exact text)
 and records weariness, then lethargy. 008's lock output now prints an `Affs:` line, as 007's already
-did. **Not verified:** whether kuro really applies weariness/lethargy. `monk.md` states it with no AB
-behind it, and the lock leans on it (Rain keeps choosing kuro until weariness is set).
+did. **Confirmed from the ABs** (Kuro 2501, Ruku 2499, Hiru 2498): kuro gives weariness, then
+lethargy; ruku arms gives clumsiness, then healthleech; ruku torso gives slickness; hiru gives
+dizziness. The trackers already matched all of these.
 
 **Epitome threw on every Epitomise.** `703_Epitome` used `epitomiser`, which nothing assigned. It
 now reads `matches[2]` and uses a function timer, not a string built around the name.

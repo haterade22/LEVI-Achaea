@@ -84,9 +84,10 @@ lock_progression:
 shikudo_afflictions:
   hiraku: "anorexia + stuttering (Willow form)"
   livestrike: "asthma (Oak/Maelstrom)"
-  ruku_torso: "slickness (Rain/Oak/Gaital/Maelstrom)"
+  ruku_torso: "slickness (Rain/Oak/Gaital/Maelstrom)"  # AB 2499
+  ruku_arms: "clumsiness, or healthleech if already clumsy"  # AB 2499; triggers 578/584
   nervestrike: "paralysis (Oak)"
-  kuro: "weariness/lethargy (Rain/Oak/Gaital)"  # UNVERIFIED -- no AB capture; trigger 573 records weariness then lethargy on the strike+leg-damage pair (v4.7.376)
+  kuro: "weariness, or lethargy if already weary (Rain/Oak/Gaital)"  # AB 2501 confirmed 2026-10-04; trigger 573 records exactly this
 
 telepathy_afflictions:
   mindlock: "Required for Telepathy abilities"
@@ -256,7 +257,7 @@ needle:
 kuro:
   skill: Shikudo
   balance: bal
-  effect: "Leg damage + weariness/lethargy affliction"  # UNVERIFIED, see AB SHIKUDO KURO
+  effect: "Weariness; lethargy if the target is already weary"  # AB 2501 (KURO <LEFT|RIGHT>, adventurers and denizens)
   syntax: "COMBO <target> <kick> kuro left/right"
   forms: [Rain, Oak, Gaital]
   notes: "Primary leg prep attack"
@@ -271,7 +272,7 @@ nervestrike:
 ruku:
   skill: Shikudo
   balance: bal
-  effect: "Arm/torso damage + clumsiness (arms) or slickness (torso)"
+  effect: "Arms: clumsiness, or healthleech if already clumsy. Torso: slickness"  # AB 2499
   syntax: "COMBO <target> <kick> ruku left/right/torso"
   forms: [Rain, Oak, Gaital, Maelstrom]
   notes: "Clumsiness is highly valuable - makes enemy miss attacks"
@@ -279,7 +280,7 @@ ruku:
 hiru:
   skill: Shikudo
   balance: bal
-  effect: "Head damage + dizziness (confusion if prone)"
+  effect: "Dizziness; if prone it MAY also give confusion (not tracked -- a maybe)"  # AB 2498
   syntax: "COMBO <target> <kick> hiru"
   forms: [Willow, Rain]
 
