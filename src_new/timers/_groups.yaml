@@ -20,17 +20,6 @@ groups:
     isOffsetTimer: 'no'
   directory: levi_ataxia
   children:
-  - name: mudlet-mapper
-    packageName: mudlet-mapper
-    attributes:
-      isTempTimer: 'no'
-      isOffsetTimer: 'no'
-    children:
-    - name: Mudlet Mapper
-      attributes:
-        isTempTimer: 'no'
-        isOffsetTimer: 'no'
-      directory: levi_ataxia/for_levi/levi_062424/mudlet_mapper
   - name: MY TIMERS
     attributes:
       isTempTimer: 'no'
@@ -57,39 +46,3 @@ groups:
       isTempTimer: 'no'
       isOffsetTimer: 'no'
     directory: levi_ataxia/for_levi/levi_062424/apo
-  - name: mudlet-mapper_24
-    packageName: mudlet-mapper_24
-    attributes:
-      isTempTimer: 'no'
-      isOffsetTimer: 'no'
-    directory: levi_ataxia/for_levi/levi_062424/mudlet-mapper_24
-    children:
-    - name: Mudlet Mapper
-      attributes:
-        isTempTimer: 'no'
-        isOffsetTimer: 'no'
-      directory: levi_ataxia/for_levi/levi_062424/mudlet_mapper
-  - name: mudlet-mapper
-    packageName: mudlet-mapper
-    attributes:
-      isTempTimer: 'no'
-      isOffsetTimer: 'no'
-    directory: levi_ataxia/for_levi/mudlet-mapper
-    children:
-    - name: Mudlet Mapper
-      attributes:
-        isTempTimer: 'no'
-        isOffsetTimer: 'no'
-      directory: levi_ataxia/for_levi/mudlet-mapper/mudlet_mapper
-  - name: mudlet-mapper
-    packageName: mudlet-mapper
-    attributes:
-      isTempTimer: 'no'
-      isOffsetTimer: 'no'
-    directory: levi_ataxia/mudlet-mapper
-    children:
-    - name: Mudlet Mapper
-      attributes:
-        isTempTimer: 'no'
-        isOffsetTimer: 'no'
-      directory: levi_ataxia/mudlet-mapper/mudlet_mapper

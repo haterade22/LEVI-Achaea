@@ -2,6 +2,39 @@
 
 ---
 
+## 2026-10-04 - Mapper `mapsource` update: audited; our leftover update timers removed (v4.7.374)
+
+The IRE mudlet-mapper replaced `mconfig crowdmap on|off` with `mconfig mapsource
+game|published|service` and added an experimental live Crowdmap service (`crowdmapservicesend`) and
+`gmcpmapupdates`. User: *"Anything we need to do?"*
+
+**Audit against upstream `mudlet-mapper.xml` (master): nothing breaks.** Every `mmp.*` name this
+package calls still exists (`checkforupdate`, `startup`, `settings:setOption`, `gotoRoom`,
+`pause`/`paused`, `speedWalkCounter`/`speedWalkDir`, `autowalking`, `failpath`,
+`previousroom`/`currentroom`, `locateAndEcho(Side)`, `searchRoomExact`, `filterRooms`, `cleanAreaName`,
+`cleanroomname`, `areatabler`, `getnums`, `pdb`, `pdb_lastupdate`). Nothing outside
+`src_new/scripts/mudlet-mapper/` reads `mmp.settings.crowdmap`, and that tree is an unbuilt snapshot
+(`INCLUDE_ROOTS = {"Levi_Ataxia"}`); upstream keeps `crowdmap` as a deprecated alias anyway (true ->
+`published`, false -> `game`).
+
+**Removed: four copies of the mapper's own `Check for updates periodically` timer** (`timers/levi_ataxia/...`,
+plus their four stale `mudlet-mapper` / `mudlet-mapper_24` groups in `timers/_groups.yaml`), left over
+from an old profile extraction. v4.7.373 shipped two of them, active and hourly, beside the mapper's own
+timer, so the mapper checked for updates up to three times an hour. Under `mapsource service` each check
+also polls the shared, volunteer-run service. Three of the copies shared one name inside one group and
+Muddler merged them into a single timer, and the merged result was not stable between builds: a local
+build had it firing every **7.5 seconds** (the BLOODWORMS timer's interval) while the CI release came out
+hourly. The mapper package's own timer does this job; none of ours is needed.
+
+**Documented, no code:** with `gmcpmapupdates on`, upstream writes `gmcp.Room.Info`'s name, environment,
+indoor/outdoor flag and area onto the mapped room of that number, unchecked. Mnemosyne dementia sends a
+real room number with hallucinated details over that same channel, so keep `gmcpmapupdates` off in the
+tower. With `crowdmapservicesend on`, upstream also wraps Mudlet's global map-write API (`setRoomName`,
+`addRoom`, `setRoomUserData`, `addSpecialExit`, ...) and reports any package's writes to the service;
+our only map write is `lockRoom`, which is not wrapped.
+
+---
+
 ## 2026-10-04 - Confused and disrupted: cure confusion first, then concentrate (v4.7.373)
 
 User: *"When we have the affliction confusion and are disrupted. We need to priority cure confusion and
