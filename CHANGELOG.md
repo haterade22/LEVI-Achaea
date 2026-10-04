@@ -2,6 +2,33 @@
 
 ---
 
+## 2026-10-04 - Confused and disrupted: cure confusion first, then concentrate (v4.7.373)
+
+User: *"When we have the affliction confusion and are disrupted. We need to priority cure confusion and
+concentrate right after curing it. Or else we never get EQ back."* -- *"CURING PRIOAFF <aff>"*. The live
+prompt (a ravening bainligor): `[ bld(959) REB slashedthroat sen prone PYR con crackedribs (2) AST diz
+disrupted ]`.
+
+Disrupted takes our equilibrium and only CONCENTRATE gives it back, and concentrating does not work
+while confused. SSC holds disrupted at priority 2 but confusion far lower (8 in the defaults, 12 in the
+PvE `bash` curingset), so with both up it kept attempting the blocked concentrate while confusion
+waited -- and equilibrium never came back.
+
+New `curing/004_Confusion_Disrupted.lua`, on the existing "aff gained" / "aff cured" events (raised by
+004_Aff_gains_losses after the affliction table updates, so neither of its chains is edited):
+
+- **Both up** -> `curing prioaff confusion` -- the one-shot server-side bump the user named; it writes no
+  stored priority, so it is safe against the curingset write hazard.
+- **Confusion cured while still disrupted** -> `concentrate`.
+- Each throttled 1.5s, because the full affliction list re-raises "aff gained" for everything we carry.
+
+The older `conDis` swap (swaps/002) aims at the same pair, but it is off by default, also requires
+impatience, and rewrites the stored confusion priority; it is left as it was.
+
+**Tests:** new `test_confusion_disrupted.lua` (9). 8 break-back mutants, all killed.
+
+---
+
 ## 2026-10-01 - Wrath and Righteousness: def up and leave (shipped in v4.7.372)
 
 User: *"When we have this and die, we should escape the room. and def up."* The boon: "When you would

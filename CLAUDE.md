@@ -2300,6 +2300,8 @@ send("curingset switch ataxia", false)
 send("curing priority defence list reset", false)
 ```
 
+**Confused AND disrupted (v4.7.373, `curing/004_Confusion_Disrupted.lua`, user-directed).** Disrupted takes equilibrium and only CONCENTRATE returns it, and concentrate fails while confused -- but SSC holds disrupted at 2 and confusion at 8 (12 in the `bash` set), so with both up it never got equilibrium back. On "aff gained" with both up: `curing prioaff confusion` (one-shot, no stored-priority write); on "aff cured" confusion while still disrupted: `concentrate`. Each throttled 1.5s. The older `conDis` swap (swaps/002) is off by default, also needs impatience, and rewrites the stored priority.
+
 ### Queue System
 - Achaea has built-in ability queuing
 - Commands: `QUEUE ADD`, `QUEUE INSERT`, `QUEUE PREPEND`
