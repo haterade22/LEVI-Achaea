@@ -390,6 +390,28 @@ v4.7.265 documented `bash dwaeonic off`, which was never a real command.
 - Balance-aware movement with GMCP integration
 - Multi-game support (Achaea, Aetolia, Lusternia, Imperian)
 
+**The mapper is a SEPARATE, self-updating package** (IRE mudlet-mapper, its own "Check for updates"
+prompt). `src_new/scripts/mudlet-mapper/` is a stale reference snapshot that the build never ships
+(`INCLUDE_ROOTS = {"Levi_Ataxia"}`), so its code is not what runs. **Never ship copies of mapper items
+inside Levi_Ataxia** -- v4.7.374 removed four copies of its hourly update timer that had been doubling
+its polling, and that Muddler had merged into one timer (same name, same group) at an unstable
+interval. Before relying on an `mmp.*` name, check it against upstream `mudlet-mapper.xml`, not the
+snapshot.
+
+**Map source (upstream, 2026-10):** `mconfig crowdmap on|off` became `mconfig mapsource
+game|published|service` (`crowdmap` survives as a deprecated alias; `mmp.settings.crowdmap` is gone,
+read `mmp.settings.mapsource`). `service` is an experimental live Crowdmap; `crowdmapservicesend`
+(default off) reports local map changes to it. Two consequences for this package:
+- **Upstream wraps Mudlet's global map-write API** (`setRoomName`, `addRoom`, `deleteRoom`,
+  `setRoomUserData`, `addSpecialExit`, `setRoomEnv`, `setDoor`, `createMapLabel`, ...). With sending on,
+  ANY call from ANY package is reported to the shared service. Our only map write today is `lockRoom`
+  (`genrunning/003`), which is not wrapped. Think twice before adding a map write, and never write
+  Mnemosyne/dementia-derived data into the Mudlet map.
+- **`gmcpmapupdates` + Mnemosyne dementia:** with it on, `mmp.syncSafeRoomInfo` writes every
+  `gmcp.Room.Info`'s name, environment, indoor/outdoor flag and area onto the mapped room of that
+  number, unchecked. Dementia (Creville's Legacy) sends a real room number with hallucinated details on
+  that channel (see the v4.7.249 dead-reckoning note), so keep `gmcpmapupdates` OFF in the tower.
+
 ### Ataxia Combat System
 - **Affliction Tracking**: 100+ afflictions with color-coded display
 - **Target Affliction Tracking**: V3 branching probability engine — single source of truth (see below)
