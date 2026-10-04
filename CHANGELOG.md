@@ -2,6 +2,41 @@
 
 ---
 
+## 2026-10-04 - Chat window: the game's colours, on the right channel (v4.7.375)
+
+User: *"My text chat is still not color coordinated"*, with a screenshot of the All tab: two clan
+lines in orange, then `You say in Mhaldorian ...` **also orange**, then the next clan line in
+**cyan**. Each line had the colour of the channel BEFORE it.
+
+**Root cause, a regression from v4.7.100.** That release moved `zgui.showChat`
+(`update_windows/001_showChat.lua`) from the `gmcp.Comm.Channel.Start` event to
+`gmcp.Comm.Channel.Text`, but kept reading the channel as `Start or Text.channel`. The game sends a
+message's `Text` BEFORE its `Start`, so on the Text event `Start` still names the PREVIOUS message's
+channel. v4.7.100 called the change "byte-identical while the server still sends Start". It was
+not, because the server does still send Start, so the stale value was used on every message. Colour
+**and tab routing** both read that channel, so a line could also land in the wrong tab (a
+`You say` filed under Clans). `ataxiagui_chatChannel()` now reads `Text.channel`, which arrives in
+the same payload as the talker and the text. `Start` is only a fallback for a Text with no channel.
+
+**Colours now come from the game (user's choice).** `Comm.Channel.Text.text` carries the ANSI of
+the player's CONFIG COLOUR (clans: CONFIG COLOUR CLANS). The handler stripped it with
+`ansi2string()` and repainted from a fixed `channelColors` table that matched nothing in the game.
+That table and `getChannelColor` are deleted. `ataxiagui_chatAnsiToDecho()` converts the game's
+codes to decho tags: 16 colours with bold for the bright half, `38;5;n` / `38;2;r;g;b`, and
+`0`/`22`/`39` resets. Background codes and any non-colour escape are dropped, never printed. So the
+chat matches the main window, and changing a colour in-game changes both. Channels left at 7 are
+grey in both. The v4.5.1 note "GMCP only sends white" was the same mistake from the other side: the
+channels it was checked on are SET to 7. A local converter rather than Mudlet's `ansi2decho`,
+because `007_Custom_Colour_Table.lua` replaces `color_table` wholesale with no `ansi_*` names. The
+palette is Mudlet's default 16. If a custom Mudlet ANSI palette makes the chat look slightly off
+from the main window, that table is the one place to change.
+
+**Tests:** `test_chat_colours.lua` loads the real script and drives the real handler through the
+screenshot's sequence (clan after say, say after clan, tell, muted talker), plus the converter's
+cases. Break-back: putting the `Start`-first read back fails 4 of the 16.
+
+---
+
 ## 2026-10-04 - Mapper `mapsource` update: audited; our leftover update timers removed (v4.7.374)
 
 The IRE mudlet-mapper replaced `mconfig crowdmap on|off` with `mconfig mapsource
@@ -14998,7 +15033,7 @@ Wiring these into the manual-cure branches / a `def info`-style display is a fol
 A batch of GMCP-audit items, all additive/low-risk data plumbing.
 
 - **New `030_GMCP_Consumers.lua`** registers passive handlers (reload-safe, kill-before-register) that stash server data into `ataxia.*`, none changing combat: **`Core.Goodbye`** → `ataxia.lastGoodbye` + a loud echo, so an unattended basher records *why* it dropped (idle-kick vs death vs boot); **`IRE.Time`** → `ataxia.time` (was negotiated but never read); **`Char.StatusVars`** → `ataxia.statusVars` caption map; **`Char.Skills.Groups`** → `ataxia.skills` `{skillset = rank}` (requested once at login via `Char.Skills.Get {}`) so future gating can check real skill rank; **`Comm.Channel.List`** → `ataxia.channels` authoritative channel→caption map.
-- **Chat off the deprecated `Comm.Channel.Start` event.** The active handler (`update_windows/001_showChat`) now registers on the non-deprecated `Comm.Channel.Text` and reads the channel as `Start or Text.channel` — byte-identical behaviour while the server still sends `Start`, and it survives if the server drops it. (The legacy `003_Chat_Capture_Things` handler was already disabled dead code, left untouched.)
+- **Chat off the deprecated `Comm.Channel.Start` event.** The active handler (`update_windows/001_showChat`) now registers on the non-deprecated `Comm.Channel.Text` and reads the channel as `Start or Text.channel` — byte-identical behaviour while the server still sends `Start`, and it survives if the server drops it. **[Wrong -- corrected v4.7.375: Text arrives BEFORE its Start, so reading Start on the Text event coloured and routed every chat line as the previous message's channel.]** (The legacy `003_Chat_Capture_Things` handler was already disabled dead code, left untouched.)
 
 **Deliberately skipped:** `Comm.Channel.Players[].channels` for NDB citizenship — it only lists orgs *shared with you*, mixed city/guild/clan with no reliable way to tell which is the city, and the NDB drives enemy highlighting/targeting, so the corruption risk outweighed the marginal gain. Stays in the backlog.
 
