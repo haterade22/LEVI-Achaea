@@ -410,7 +410,18 @@ read `mmp.settings.mapsource`). `service` is an experimental live Crowdmap; `cro
 - **`gmcpmapupdates` + Mnemosyne dementia:** with it on, `mmp.syncSafeRoomInfo` writes every
   `gmcp.Room.Info`'s name, environment, indoor/outdoor flag and area onto the mapped room of that
   number, unchecked. Dementia (Creville's Legacy) sends a real room number with hallucinated details on
-  that channel (see the v4.7.249 dead-reckoning note), so keep `gmcpmapupdates` OFF in the tower.
+  that channel (see the v4.7.249 dead-reckoning note), so it must be OFF in the tower.
+  **The package enforces that (v4.7.377, `mnemosyne/016_Mapper_GMCP_Guard.lua`):**
+  - "mnemosyne entered" switches it off (silent `setOption`, read back), but only if it was on.
+  - "mnemosyne left" switches it back on, but only if WE switched it off.
+  - A `gmcp.Char.Vitals` check covers the three paths that raise no event: a reload mid-climb (the
+    restored `inMnemosyne` makes `mnemHere`'s transition guard silent), the user re-enabling it
+    mid-climb, and a restore owed from an earlier session.
+  - The debt marker `ataxiaBasher.mapperGmcpOwed` is DELIBERATELY saved. The mapper writes its options
+    only on sysExitEvent and we save on disconnect, so a clean exit stores both "off" and "owed",
+    while a crash stores neither.
+  - `ataxia_loadSettings` does not restore: on a fresh start it can run before the mapper's own
+    option load, which would overwrite the restore after the marker was already cleared.
 
 ### Ataxia Combat System
 - **Affliction Tracking**: 100+ afflictions with color-coded display
