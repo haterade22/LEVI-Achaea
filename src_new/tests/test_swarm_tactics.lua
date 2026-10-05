@@ -3550,6 +3550,205 @@ describe("v4.7.372 -- Wrath and Righteousness: def up and leave", function()
   end)
 end)
 
+-- =====================================================================================
+-- v4.7.378, from a Monk death: an escape landed in a quiet room and the sweep walked on, blind and
+-- chased, into a monstrosity of flesh; the last-resort exit picked doors alphabetically; a pull
+-- overwrote an unjudged pursuit record; a leap refused for broken legs left a false "funnel" and
+-- 8s of "escape under way"; and the retreat line said "LOW HP (100%)" for a damage-rate escape.
+describe("v4.7.378 -- after an escape, and when the legs give out", function()
+  send = function(cmd) table.insert(sent, cmd) end -- the leaked `send` (see v4.7.370)
+  local function cnt(pat)
+    local n = 0
+    for _, c in ipairs(sent) do if c:find(pat, 1, true) then n = n + 1 end end
+    return n
+  end
+  local function said(fn)
+    local out, real = {}, S._echo
+    S._echo = function(m) out[#out + 1] = tostring(m) end
+    local ok, err = pcall(fn)
+    S._echo = real
+    if not ok then error(err, 0) end
+    return table.concat(out, "\n")
+  end
+  local function dyingFast(fn)
+    local rx, rt = ataxiaBasher_isDamageRateExtreme, ataxiaBasher_secondsToLive
+    ataxiaBasher_isDamageRateExtreme = function() return true end
+    ataxiaBasher_secondsToLive = function() return 4.4 end
+    local ok, err = pcall(fn)
+    ataxiaBasher_isDamageRateExtreme, ataxiaBasher_secondsToLive = rx, rt
+    if not ok then error(err, 0) end
+  end
+  local function escapeOut()
+    fixture(4)
+    gmcp.Room.Info.details = { "indoors" }
+    gmcp.Char = { Vitals = { hp = "3000", maxhp = "10000" } }
+    S.onVitals()
+    expect(S.state).toBe("pulling")
+  end
+
+  -- 1. an escape heals where it lands
+  it("an escape that lands somewhere new heals there instead of handing back to the sweep", function()
+    escapeOut()
+    MAP.current, mobs = 300, 0
+    ataxia.vitals = { hpp = 40 }
+    local out = said(function() S.onTick() end)
+    expect(S.state).toBe("recovering")
+    expect(S.recoverGround).toBeTrue()
+    expect(S.recoverTarget).toBe(85)
+    expect(out:find("lost mid-pull", 1, true)).toBeNil()
+    expect(S.onTick()).toBeTrue()            -- and the tick stays consumed: no sweep step
+  end)
+
+  it("...unless we are already fit to go on", function()
+    escapeOut()
+    MAP.current, mobs = 300, 0
+    ataxia.vitals = { hpp = 90 }
+    ataxia.afflictions = {}
+    S.onTick()
+    expect(S.state).toBe("idle")
+  end)
+
+  it("a planned pull that ends up in a third room still just resets", function()
+    fixture(4)
+    S.onTick()                               -- the pull, not an escape
+    expect(S.state).toBe("pulling")
+    MAP.current, mobs = 300, 0
+    ataxia.vitals = { hpp = 40 }
+    S.onTick()
+    expect(S.state).toBe("idle")
+  end)
+
+  -- 2. the last resort ranks its doors
+  it("the last resort prefers a cleared room to an unexplored one", function()
+    fixture(4)
+    M.explore.fromRoom = nil                 -- no validated back route
+    MAP.rooms[200].exits = { south = 100, east = 300 }
+    MAP.rooms[300] = nil                     -- east: never seen
+    expect(S._panicDir()).toBe("s")          -- alphabetically it was "e"
+    expect(S._exitRankLabel("s")).toBe("a cleared room")
+    expect(S._exitRankLabel("e")).toBe("unexplored")
+  end)
+
+  it("a room we just fled ranks below a cleared one, above the unknown", function()
+    fixture(4)
+    M.explore.fromRoom = nil
+    MAP.rooms[200].exits = { south = 100, east = 300, west = 400 }
+    MAP.rooms[300] = { visited = true, exits = {} }
+    MAP.rooms[400] = nil
+    S._fled = { room = 100, at = clock }
+    expect(S._panicDir()).toBe("e")          -- 300: cleared
+    MAP.rooms[300] = nil
+    expect(S._panicDir()).toBe("s")          -- 100 (just fled) still beats unexplored 400
+    -- and a cleared room that sorts LATER still beats the room we just fled
+    MAP.rooms[200].exits = { east = 100, south = 300 }
+    MAP.rooms[300] = { visited = true, exits = {} }
+    expect(S._panicDir()).toBe("s")
+  end)
+
+  it("pulling out of a room is never 'arriving in the funnel' of that same room", function()
+    fixture(4)
+    S.state, S.swarmRoom, S.funnelRoom = "pulling", 200, 200
+    local out = said(function() S.onTick() end)
+    expect(out:find("in the funnel room", 1, true)).toBeNil()
+    expect(S.state).toBe("pulling")
+  end)
+
+  it("the escape line says which kind of door it took", function()
+    fixture(4)
+    gmcp.Room.Info.details = { "indoors" }
+    M.explore.fromRoom = nil
+    MAP.rooms[200].exits = { south = 100, east = 300 }
+    gmcp.Char = { Vitals = { hp = "8000", maxhp = "10000" } }
+    local out
+    dyingFast(function() out = said(function() S.onVitals() end) end)
+    expect(out:find("taking the best exit: a cleared room", 1, true) ~= nil).toBeTrue()
+    expect(cnt("leap s")).toBe(1)
+  end)
+
+  -- 4 (part): a last resort has no funnel room
+  it("a last resort has no funnel room -- a refused leap is never 'arriving in the funnel'", function()
+    fixture(4)
+    gmcp.Room.Info.details = { "indoors" }
+    M.explore.fromRoom = 200                 -- what an earlier pull's arm leaves behind
+    M.explore.fromDir = nil
+    MAP.rooms[200].exits = { south = 100 }
+    gmcp.Char = { Vitals = { hp = "8000", maxhp = "10000" } }
+    dyingFast(function() S.onVitals() end)
+    expect(S.state).toBe("pulling")
+    expect(S.funnelRoom).toBeNil()
+    local out = said(function() S.onTick() end) -- still standing in 200: the leap never went
+    expect(out:find("in the funnel room", 1, true)).toBeNil()
+    expect(S.state).toBe("pulling")
+  end)
+
+  -- 3. keep the pursuit judgement
+  it("a pull does not overwrite a retreat that has landed but not been judged", function()
+    fixture(4)
+    S._retreat = { from = 100, at = clock, landedAt = clock }
+    S._noteRetreat(200)
+    expect(S._retreat.from).toBe(100)
+    S._retreat = { from = 100, at = clock }  -- not landed yet: replaced as before
+    S._noteRetreat(200)
+    expect(S._retreat.from).toBe(200)
+  end)
+
+  -- 4. both legs broken
+  it("both legs broken: say so, no stamp, leave the moment one is mended", function()
+    fixture(4)
+    gmcp.Room.Info.details = { "indoors" }
+    ataxia.afflictions = { brokenleftleg = true, brokenrightleg = true }
+    gmcp.Char = { Vitals = { hp = "3000", maxhp = "10000" } }
+    local out = said(function() S.onVitals() end)
+    expect(cnt("leap")).toBe(0)
+    expect(S._lastEmergencyAt).toBeNil()
+    expect(out:find("both legs are broken", 1, true) ~= nil).toBeTrue()
+    ataxia.afflictions = { brokenleftleg = true } -- one leg is enough to leap
+    S.onVitals()
+    expect(cnt("leap s")).toBe(1)
+  end)
+
+  it("outdoors the hover still flies on broken legs", function()
+    fixture(4)
+    ataxia.afflictions = { brokenleftleg = true, damagedrightleg = true }
+    gmcp.Char = { Vitals = { hp = "3000", maxhp = "10000" } }
+    S.onVitals()
+    expect(S.state).toBe("recovering")
+    expect(S.flying).toBeTrue()
+  end)
+
+  it("a leap refused for broken legs is parked and re-sent when they mend", function()
+    escapeOut()
+    ataxia.afflictions = { brokenleftleg = true, brokenrightleg = true }
+    S.onMoveRefusedBound("both legs broken")
+    S.onVitals()
+    expect(cnt("leap s")).toBe(1)
+    ataxia.afflictions = { brokenrightleg = true }
+    S.onVitals()
+    expect(cnt("leap s")).toBe(2)
+  end)
+
+  it("the leg-refusal trigger tells the swarm", function()
+    local real, why = S.onMoveRefusedBound, nil
+    S.onMoveRefusedBound = function(w) why = w end
+    local ok, err = pcall(dofile, "src_new/triggers/levi_ataxia/for_levi/leviticus/345_Broken_Legs_Block.lua")
+    S.onMoveRefusedBound = real
+    if not ok then error(err, 0) end
+    expect(why).toBe("both legs broken")
+  end)
+
+  -- 5. the real reason
+  it("a damage-rate escape says DYING FAST at the real health, not LOW HP from stale vitals", function()
+    fixture(4)
+    gmcp.Room.Info.details = { "indoors" }
+    ataxia.vitals = { hpp = 100 }            -- the shared table, behind the gmcp payload
+    gmcp.Char = { Vitals = { hp = "8000", maxhp = "10000" } }
+    local out
+    dyingFast(function() out = said(function() S.onVitals() end) end)
+    expect(out:find("DYING FAST (80%)<reset> -- retreating to recover", 1, true) ~= nil).toBeTrue()
+    expect(out:find("LOW HP (100%)", 1, true)).toBeNil()
+  end)
+end)
+
 -- v4.7.345: the mount module was loaded above for the mountjump tests.
 ataxiaBasher_isMounted, ataxiaBasher_mountVerb = nil, nil
 ataxiaBasher_mountedSet, ataxiaBasher_jumpSent = nil, nil

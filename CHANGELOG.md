@@ -2,6 +2,67 @@
 
 ---
 
+## 2026-10-05 - After an escape, heal where you land; best door first; legs like bindings; mindseye (v4.7.378)
+
+**The death** (a Monk, blind, against chimeric specimens, a monstrosity of flesh and a burning
+mutant), read against the code:
+
+- **The sweep walked on after an escape.** A take-any-exit escape landed in an empty room, reset as
+  "lost mid-pull", and the explorer read the room as cleared and moved -- twice, at 71%, blind and
+  chased -- into rooms it had never seen.
+- **The take-any-exit door was chosen alphabetically.** Both last-resort escapes went `e`, into
+  uncleared rooms; the second held the monstrosity of flesh (1,515 asphyxiation and prone on arrival).
+- **Locked by broken legs.** The monstrosity and the mutant broke legs about 6 times in 10s, alongside
+  paralysis, prone, impatience, confusion, burning and haemophilia. No leap or tumble possible.
+- **The pursuit judgement was overwritten.** The v4.7.370 rule should have caught the swarm after the
+  36.5s escape; a pull started 1.2s later replaced the unjudged record, so the final escape -- all four
+  followed inside 0.35s -- was not blocked.
+- **A false funnel.** The leap refused for broken legs left the state machine "in the funnel room" it
+  never left ("the swarm followed (4) -- holding this room"), and for 8s every DYING FAST was answered
+  "the escape already under way has it".
+- **"LOW HP (100%) -- retreating to recover"** was the damage-rate watchdog firing at full health.
+- **Blind**, the room hid its occupants ("A mysterious entity abides") from the look-ahead.
+
+User: *"please build 1-5"*, and mid-build: *"touch mindseye, thralls tend to strip defences"*.
+
+1. **An escape heals where it lands.** `S._escaping` marks a ground escape; when it lands anywhere but
+   the room it left (and not in its funnel), `S._recoverHere` holds there in ground recovery until
+   `returnAt` (85%) and cured -- unless already that fit -- instead of handing back to the sweep. A
+   planned pull that ends up in a third room still just resets.
+2. **The last resort takes the best door.** `S._panicDir` ranks candidate exits with `S._exitRank`: a
+   visited room we did not just flee (cleared -- the sweep only leaves a room once it is clear) beats a
+   room we just fled or are fighting in, and both beat an unexplored one; sorted order breaks ties. The
+   escape line names the kind: "taking the best exit: a cleared room / a room we just left / unexplored".
+   (The Roll Hide panic and the recovery tumble use the same picker.)
+3. **A landed, unjudged retreat is not overwritten** by `S._noteRetreat` (a pull's record waits).
+4. **Both legs broken is treated like being bound, for the ground.** `S._legsOut()` (broken / damaged /
+   mangled, both sides): onVitals says "both legs are broken -- leaving the moment they are mended" with
+   no emergency-cooldown stamp; `_beginEscape`, `_escapeRouteReady` and the tick's low-HP branch refuse a
+   ground escape; the hover (outdoors) still flies. Trigger `345_Broken_Legs_Block` now calls
+   `S.onMoveRefusedBound("both legs broken")`, which parks the move and `S._resendWhenFree` re-sends it
+   once a leg is mended. **A last resort has no funnel room** (`S.funnelRoom = nil`), and the pulling
+   branch never treats the room we are pulling out of as the funnel -- no more false "holding this
+   room" / "escape under way". While a move is parked, the line says "the escape is parked until we can
+   move".
+5. **The real reason at the real health.** onVitals passes the retreat line itself: "DYING FAST (80%)"
+   or "LOW HP (30%)", from the fresh gmcp reading, not the shared vitals.
+6. **Mindseye** (`deffing/007_Sense_Keepers.lua`): a third keeper beside deaf and blind -- any class,
+   whenever we are BLIND (`ataxia.defences.blindness`) and `mindseye` is down, `touch mindseye`, with a
+   4s hold (a touch is not a trance; GMCP's Add confirms). Skipped under Rimewrought; off with
+   `ataxia.settings.senseKeep.mindseye = false`. The keepers now carry `anyClass` / `when` / `hold`.
+
+**Tests:** 20 new (14 in `test_swarm_tactics.lua`, 6 in `test_sense_keepers.lua`); one existing
+sense-keeper test now also has mindseye up (its point is "all up -> nothing sent"). **23 break-back
+mutants, all killed** -- two survived the first run (a just-fled room against a cleared one that sorts
+later; the funnel-is-not-the-swarm-room guard on its own) and got tests of their own. Suite: 2648 pass.
+
+### Files
+
+- `mnemosyne/009_Swarm_Tactics.lua`, `deffing/007_Sense_Keepers.lua`, trigger `345_Broken_Legs_Block`;
+  tests; `CLAUDE.md`, `README.md`, `.claude/projects/mnemosyne/07-explorer.md`, memory.
+
+---
+
 ## 2026-10-05 - Mnemosyne keeps the mapper's `gmcpmapupdates` off (v4.7.377)
 
 User, on the v4.7.374 finding: *"you can code that in, if in mnemosyne, keep that off"*.

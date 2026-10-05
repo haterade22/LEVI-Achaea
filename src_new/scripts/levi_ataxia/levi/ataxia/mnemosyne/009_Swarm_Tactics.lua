@@ -322,8 +322,28 @@ end
 -- Record the room a retreat (or a pull) is leaving, so we can see afterwards whether it worked.
 function S._noteRetreat(from)
   if not from then return end
+  -- A RETREAT THAT HAS LANDED BUT NOT BEEN JUDGED IS NOT OVERWRITTEN (v4.7.378). From a death: an
+  -- escape landed among four denizens, and a pull started in that room 1.2s later -- before the
+  -- 1.5s settle had let _checkPursuit judge the escape. The pull's record replaced it, the judgement
+  -- never happened, and the final escape (all four followed it inside 0.35s) went unblocked.
+  -- _checkPursuit clears the record within PURSUIT_WINDOW of landing either way.
+  if S._retreat and S._retreat.landedAt then return end
   S._retreat = { from = from, at = now() }
 end
+
+-- BOTH LEGS BROKEN (v4.7.378). "Both of your legs must be free and unhindered to do that." -- the
+-- leap is refused, and so is the tumble: no ground escape can happen. Like being bound, but only
+-- for the ground (the hover does not need legs). One leg is fine: Achaea lets you walk on one.
+local function legOut(side)
+  local a = ataxia and ataxia.afflictions
+  if not a then return false end
+  for _, k in ipairs({ "broken" .. side .. "leg", "damaged" .. side .. "leg", "mangled" .. side .. "leg" }) do
+    local v = a[k]
+    if v and v ~= 0 then return true end
+  end
+  return false
+end
+function S._legsOut() return legOut("left") and legOut("right") end
 
 -- On every prompt and tick: did the retreat we made shake them?
 function S._checkPursuit()
@@ -413,7 +433,7 @@ end
 -- and re-sent into the same refusal, spending the retries on nothing; the death log lost a pull
 -- and later an escape exactly that way. Now the refusal parks the move, and the first prompt on
 -- which we are no longer bound re-sends it -- if we are still where it was meant to leave from.
-function S.onMoveRefusedBound()
+function S.onMoveRefusedBound(why)
   if S._pendingFree then return end -- the rest of the same refused chain (point + leap)
   local cur = M.map and M.map.current
   local dir
@@ -422,8 +442,8 @@ function S.onMoveRefusedBound()
   if not dir then return end
   S._pendingFree = { dir = dir, room = cur, at = now() }
   if M._disarmMove then M._disarmMove() end -- no timeout-driven re-send into the same refusal
-  S._echo("<indian_red>move refused -- entangled<reset>; re-sending <cyan>" .. dir
-    .. "<reset> the moment we are free.")
+  S._echo("<indian_red>move refused -- " .. (why or "entangled") .. "<reset>; re-sending <cyan>" .. dir
+    .. "<reset> the moment we can move.")
 end
 
 function S._resendWhenFree()
@@ -433,7 +453,7 @@ function S._resendWhenFree()
     S._pendingFree = nil
     return
   end
-  if S._bound() then return end
+  if S._bound() or S._legsOut() then return end -- v4.7.378: legs as well as bindings
   S._pendingFree = nil
   local cur = M.map and M.map.current
   if cur ~= p.room then return end -- the move happened some other way
@@ -817,6 +837,25 @@ function S._reenterReady()
   return S._mayReturn()
 end
 
+-- Heal on the ground, here, to returnAt and cured (v4.7.378). The same recovery the funnel's
+-- not-ready re-entry uses: attacks held while the room is quiet, company hands back to the basher
+-- (or Roll Hide tumbles on), and the sweep resumes only once we are fit.
+function S._recoverHere(why)
+  local s = S._cfg()
+  S._clearFunnelTimer()
+  S.state = "recovering"
+  S.recoverGround = true
+  S.recoverStarted = now()
+  S.recoverDiagnosed = nil
+  S.recoverTarget = tonumber(s.returnAt) or 85
+  S._escaping, S._pullRetries = nil, nil
+  S._armRecoverHold()
+  if M._scheduleTick then M._scheduleTick(RECOVER_TICK) end
+  S._echo("<indian_red>" .. (why or "escaped") .. "<reset> -- healing here to " .. S.recoverTarget
+    .. "% and cured before moving on (" .. hpp() .. "% now).")
+  return true
+end
+
 function S._beginReenter()
   if not S._reenterReady() then
     S.state = "recovering"
@@ -903,17 +942,41 @@ function S._panicDir()
   for d in pairs(room.exits) do dirs[#dirs + 1] = d end
   table.sort(dirs)
 
-  local fallback
+  -- THE BEST DOOR, NOT THE FIRST ONE (v4.7.378). This used to return the first acceptable exit in
+  -- sorted order. From a death: two last-resort escapes both went `e`, alphabetically, into rooms
+  -- we had never cleared -- the second held a monstrosity of flesh that flattened us on arrival.
+  -- Now a room we have cleared beats a room we have only seen, and both beat an unexplored one
+  -- (S._exitRank). Sorted order still breaks ties, so the same room still picks the same door.
+  local fallback, best, bestRank
   for _, d in ipairs(dirs) do
     -- Lava is excluded OUTRIGHT, not merely deprioritised like the forward and walled edges:
     -- tumbling into 6,874 unblockable is worse than any fight we are fleeing (v4.7.256).
     if MAP.OFFSETS and MAP.OFFSETS[d] and not (M.edgeIsLava and M.edgeIsLava(MAP.current, d)) then
-      if d ~= fwd and d ~= walled then return MAP.shortDir(d) end
-      fallback = MAP.shortDir(d)
+      if d ~= fwd and d ~= walled then
+        local rank = S._exitRank(MAP.shortDir(d))
+        if not best or rank < bestRank then best, bestRank = MAP.shortDir(d), rank end
+      else
+        fallback = MAP.shortDir(d)
+      end
     end
   end
-  return fallback
+  return best or fallback
 end
+
+-- 1 = a visited room we did not just flee (cleared: the sweep leaves a room only once it is
+-- clear), 2 = a visited room we just fled or are fighting in, 3 = unexplored (anything at all).
+local RANK_LABEL = { "a cleared room", "a room we just left", "unexplored" }
+function S._exitRank(dirShort)
+  local MAP = M.map
+  local dest = exitDest(dirShort)
+  local r = dest and MAP and MAP.rooms and MAP.rooms[dest]
+  if not (r and r.visited) then return 3 end
+  local f = S._fled
+  local fledHere = f and f.room == dest and (now() - (tonumber(f.at) or 0)) < (tonumber(S.FLED_MEMORY) or 30)
+  if fledHere or dest == S.swarmRoom then return 2 end
+  return 1
+end
+function S._exitRankLabel(dirShort) return RANK_LABEL[S._exitRank(dirShort)] end
 
 -- Is HP into panic territory? EITHER line triggers -- see the panicHp note in _cfg.
 -- `hp` is a percentage; `ataxia.vitals.hp` is the absolute reading the floor compares.
@@ -1355,6 +1418,7 @@ end
 function S._escapeRouteReady()
   if S._bound() then return false end -- bound: no fly AND no leap (deep review, v4.7.321)
   if not S._indoors() and S._canHover() then return not S.moveLocked() end
+  if S._legsOut() then return false end -- v4.7.378: no leap, no tumble
   if S._retreatBlock() then return false end -- v4.7.370: followed, or a U-turn we are not fit for
   if S._backDir() then return true end
   return S._escapeLastResort() ~= nil
@@ -1399,6 +1463,8 @@ function S._beginEscape(why)
     S._echo("<indian_red>LOW HP (" .. hpp() .. "%)<reset> -- <cyan>flying to recover<reset> (land at " .. s.recoverAt .. "%).")
     return true
   end
+  -- Both legs broken: no leap and no tumble (v4.7.378). Arm and announce nothing.
+  if S._legsOut() then S._escapeNo = "both legs broken"; return false end
   local shortBack, longBack, shortFwd = S._backDir()
   local lastResort = false
   if not shortBack then
@@ -1423,6 +1489,7 @@ function S._beginEscape(why)
   S._escapeNo = nil
   S._fled = { room = M.map and M.map.current, at = now() }
   S._noteRetreat(M.map and M.map.current)
+  S._escaping = true -- v4.7.378: wherever this lands, we heal there before moving on
   S.escapeOn(why or "low HP")
   S._escapeStartedAt = now()
   S.state = "pulling"
@@ -1430,7 +1497,12 @@ function S._beginEscape(why)
   -- through, so mode "escape" keeps onTick's pull/funnel bookkeeping from trying to re-enter a
   -- room we never deliberately left. longBack/shortFwd are nil on this path by construction.
   S.mode = lastResort and "escape" or "pull"
-  S.swarmRoom, S.funnelRoom = (M.map and M.map.current), M.explore.fromRoom
+  -- A LAST RESORT HAS NO FUNNEL ROOM (v4.7.378). It used to inherit `explore.fromRoom`, which an
+  -- earlier pull's arm had set to the room we were standing in. When the leap was then refused
+  -- (both legs broken), the next tick found us "in the funnel room" we never left, printed "the
+  -- swarm followed (4) -- holding this room", and for ESCAPE_OWN 8s answered every DYING FAST with
+  -- "the escape already under way has it" while nothing was under way.
+  S.swarmRoom, S.funnelRoom = (M.map and M.map.current), (not lastResort) and M.explore.fromRoom or nil
   S.backShort, S.backLong, S.fwdShort = shortBack, longBack, shortFwd
   S.peakFollowers, S.announcedFollow = 0, false
   -- HOLD THE ATTACK (v4.7.235). This is what killed us against Seasone: the hover branch above
@@ -1447,8 +1519,10 @@ function S._beginEscape(why)
   local reason = why or ("<indian_red>LOW HP (" .. hpp() .. "%)<reset> -- retreating to recover")
   if lastResort then
     -- Say it plainly. A deliberate rule-break that looks identical to a normal retreat is
-    -- indistinguishable from a bug the next time this log is read (v4.7.314).
-    reason = reason .. " <indian_red>[NO VALIDATED ROUTE -- dying fast, taking any exit]<reset>"
+    -- indistinguishable from a bug the next time this log is read (v4.7.314). And say which kind
+    -- of door it took (v4.7.378).
+    reason = reason .. " <indian_red>[NO VALIDATED ROUTE -- dying fast, taking the best exit: "
+      .. S._exitRankLabel(shortBack) .. "]<reset>"
   end
   S._tacticalGo(shortBack, reason)
   return true
@@ -1757,6 +1831,8 @@ function S.onTick()
       end
       -- Bound: no stamp, so the first free moment acts at once (v4.7.370). onVitals says so.
       if S._bound() then return false end     -- bound: nothing to do but cure and fight
+      -- v4.7.378: both legs broken is the same for a ground escape
+      if S._legsOut() and (S._indoors() or not S._canHover()) then return false end
       S._lastEmergencyAt = now()
       if S._escapeOwns() then return true end -- v4.7.321 review: an escape is already in flight
       if S.flying then
@@ -1771,10 +1847,16 @@ function S.onTick()
   end
 
   if S.state == "pulling" then
-    if cur == S.funnelRoom then
+    -- A funnel room is somewhere we went TO: never the room we are pulling out of (v4.7.378).
+    if cur ~= nil and cur == S.funnelRoom and S.funnelRoom ~= S.swarmRoom then
       S._enterFunnel()
       return true
     elseif cur ~= S.swarmRoom then
+      -- AN ESCAPE HEALS WHERE IT LANDS (v4.7.378). This reset and handed the tick back, and the
+      -- sweep read the quiet room as cleared and walked on -- at 71%, blind and chased, into two
+      -- rooms we had never seen and onto the monstrosity that killed us. Now we stay until we are
+      -- fit to go on (the same bar as going back into a room we fled: returnAt and cured).
+      if S._escaping and not S._mayReturn() then return S._recoverHere("escaped") end
       S.reset("lost mid-pull")
       return false
     end
@@ -2043,6 +2125,12 @@ function S.onVitals()
     S._sayOnce("bound", head .. ", but <grey>bound<reset> -- leaving the moment we are free.")
     return
   end
+  -- BOTH LEGS BROKEN (v4.7.378): the same wait, for a ground escape -- no stamp, so the first prompt
+  -- with a leg mended acts at once. The hover needs no legs, so outdoors it still flies.
+  if S._legsOut() and (S._indoors() or not S._canHover()) then
+    S._sayOnce("legs", head .. ", but <grey>both legs are broken<reset> -- leaving the moment they are mended.")
+    return
+  end
   S._lastEmergencyAt = now()
   if wantPanic and S._maybePanic(hp) then
     if M._disarmMove then M._disarmMove() end -- a stale in-flight move must not gate the aftermath
@@ -2056,7 +2144,10 @@ function S.onVitals()
   -- HP) or found one straight BACK into the room we fled. Pre-existing; v4.7.321's hover exit made
   -- it immediate. Bounded by S.ESCAPE_OWN so a stuck escape cannot wedge the ladder.
   if S._escapeOwns() then
-    if byRate then S._sayOnce("owns", head .. " -- the escape already under way has it.") end
+    if byRate then
+      S._sayOnce("owns", head .. (S._pendingFree and " -- the escape is parked until we can move."
+        or " -- the escape already under way has it."))
+    end
     return
   end
   if S.flying then return S._convertToHover(hp) end
@@ -2069,7 +2160,11 @@ function S.onVitals()
   end
   if M._disarmMove then M._disarmMove() end -- an in-flight pull dies with the escape's reset
   if S.state ~= "idle" then S.reset("low-hp escape") end
-  if S._beginEscape() then
+  -- THE REAL REASON, AT THE REAL HEALTH (v4.7.378). The retreat line read the shared vitals
+  -- (`hpp()`) and always said LOW HP -- the death log has "LOW HP (100%) -- retreating to recover",
+  -- which was the damage-rate watchdog firing at full health.
+  if S._beginEscape("<indian_red>" .. (byRate and "DYING FAST" or "LOW HP") .. " (" .. hp
+      .. "%)<reset> -- retreating to recover") then
     if byRate then S._echo(head .. "; leaving.") end
   elseif byRate then
     S._sayOnce("noescape", head .. " -- NOT leaving: " .. (S._escapeNo or "no route out") .. ".")
@@ -2306,6 +2401,7 @@ function S.reset(reason)
   S.recoverDiagnosed = nil
   S.recoverTarget = nil -- v4.7.370
   S._pendingFree = nil  -- v4.7.370: the tactic that owned the refused move is gone
+  S._escaping = nil     -- v4.7.378
   S.hoverSeenUpAt = nil -- v4.7.321: per-hover evidence
   S._pullRetries = nil
   if S.onTumbleDone then S.onTumbleDone() end

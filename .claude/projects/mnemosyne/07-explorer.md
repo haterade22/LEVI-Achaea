@@ -784,6 +784,27 @@ the fighting that did happen was winning, and ice turned each retreat into sever
   `S._resendWhenFree()` re-sends via `_tacticalGo` on the first unbound prompt if we are still in
   that room, within `BOUND_PENDING` (12s).
 
+### After an escape, and when the legs give out (v4.7.378)
+
+From a Monk death: the sweep walked on after an escape (twice, at 71%, blind, chased), the last
+resort picked doors alphabetically into uncleared rooms, a pull overwrote the unjudged pursuit record,
+a leap refused for broken legs left a false funnel and 8s of "escape under way", and the retreat line
+said "LOW HP (100%)" for a damage-rate escape.
+
+- **Heal where it lands.** `_beginEscape` (ground) sets `S._escaping`; the pulling branch, on landing
+  anywhere but the swarm room or a real funnel, calls `S._recoverHere(why)` -- ground recovery with
+  `S.recoverTarget = returnAt` -- unless `S._mayReturn()` already holds. Pulls are unaffected.
+- **Best door.** `S._exitRank(dir)`: 1 visited and not just fled, 2 just fled / the swarm room, 3
+  unexplored (`exitDest` -> `MAP.rooms[dest].visited`). `_panicDir` takes the lowest rank, sorted
+  order breaking ties; `S._exitRankLabel` names it in the escape line.
+- **Pursuit record.** `S._noteRetreat` returns early while the current record has `landedAt`.
+- **Legs.** `S._legsOut()`: broken/damaged/mangled, both sides. Blocks ground escapes in
+  `_beginEscape`, `_escapeRouteReady`, the tick's low-HP branch and onVitals (no stamp, one line).
+  Trigger 345 -> `S.onMoveRefusedBound("both legs broken")`; `S._resendWhenFree` waits on bindings
+  and legs. A last resort sets `S.funnelRoom = nil`; the pulling branch requires
+  `funnelRoom ~= swarmRoom`.
+- **Reason.** onVitals hands `_beginEscape` "DYING FAST (n%)" or "LOW HP (n%)" from `hppFresh`.
+
 ### Wrath and Righteousness: def up and leave (v4.7.372)
 
 "When you would die, the power of Righteous Fire will allow you to restore yourself to full health and

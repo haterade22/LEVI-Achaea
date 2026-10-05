@@ -62,9 +62,16 @@ for _, k in ipairs({"rwBrPending", "dwBrPending", "psionBrPending", "gdragonBrPe
 	ataxiaTemp[k] = nil
 end
 
+-- A SWARM ESCAPE OR PULL: park the move and re-send it the moment both legs work again (v4.7.378,
+-- the entanglement rule of v4.7.370). Only acts when the swarm has a move waiting; it disarms the
+-- explorer's timeout itself, so the generic release below then finds nothing in flight.
+local M = ataxia and ataxia.mnemosyne
+if M and M.swarm and M.swarm.onMoveRefusedBound then
+	pcall(M.swarm.onMoveRefusedBound, "both legs broken")
+end
+
 -- If a tactical/explorer move was in flight, it was this command -- release it so the
 -- next tick re-decides instead of burning the move timeout.
-local M = ataxia and ataxia.mnemosyne
 if M and M.explore and M.explore.moving and M._disarmMove then
 	M._disarmMove()
 	if M.echo then M.echo("<indian_red>legs broken<reset> -- the leap was refused; re-deciding.") end
