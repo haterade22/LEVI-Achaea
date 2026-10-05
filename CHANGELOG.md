@@ -2,6 +2,27 @@
 
 ---
 
+## 2026-10-05 - Serpent: the venom bite and Toxicologist's relapse are highlighted (v4.7.384)
+
+User: *"You sink your fangs into a greater earth elemental, injecting just the proper amount of camus.
+Highlight this attack as our attack (orange or something bright)"*, then *"Also this, is the relapse --
+An enormous two-headed ettin screams out in agony, struck by the effects of a vicious venom. -- from that
+toxic boon"*.
+
+- **`highlighting/068_Camus_Bite_Highlight`** -- our fang bite, any venom, in bold `chartreuse` (this
+  package's attack-landed colour; the orange family is reserved by `tools/check_colours.py`). Start of
+  line for the first row, plus one anchored tail per place a long denizen name can make the server wrap
+  it (down to "proper amount of <venom>.").
+- **`mnemosyne/108_Toxicologist_Relapse`** -- the relapse line in bold `yellow`, distinct from the bite so
+  the boon working is visible at a glance. The line prints only with the boon, so it also re-latches
+  `mnemToxicologist` (in the tower only), keeping the camus bite on after a reimport.
+
+**Tests:** 5 new in `test_searing_light.lua` (both lines as pasted and every row at the 119-124 wrap
+widths with long names; someone else's line does not match; the colour; the latch, in the tower only).
+7 break-back mutants killed.
+
+---
+
 ## 2026-10-05 - Serpent venom bite purges first (v4.7.383)
 
 User: *"It should be purge;secrete camus;bite target"*. Under Serpent's Maw or Toxicologist the Serpent

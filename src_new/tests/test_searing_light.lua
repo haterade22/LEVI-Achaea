@@ -246,6 +246,73 @@ describe("Serpent venom boons: bite with camus instead of garrote", function()
   end)
 end)
 
+-- v4.7.384, user: "Highlight this attack as our attack (orange or something bright)"
+describe("our venom bite is highlighted", function()
+  local TL = dofile("src_new/tests/trigger_lib.lua")
+  local P = TL.patterns("src_new/triggers/levi_ataxia/for_levi/leviticus/highlighting/068_Camus_Bite_Highlight.lua")
+  local LINE = "You sink your fangs into a greater earth elemental, injecting just the proper amount of camus."
+
+  it("the line as pasted, and every row of it however the server wraps", function()
+    expect(TL.anyMatches(P, LINE)).toBeTrue()
+    for w = 119, 124 do                      -- the server wraps at 119-124
+      for _, row in ipairs(TL.wrap(LINE, w)) do expect(TL.anyMatches(P, row)).toBeTrue() end
+    end
+    local long = "You sink your fangs into an enormous, ancient and terribly well-armoured guardian of the deep wastes, injecting just the proper amount of camus."
+    for w = 119, 124 do
+      for _, row in ipairs(TL.wrap(long, w)) do expect(TL.anyMatches(P, row)).toBeTrue() end
+    end
+  end)
+
+  it("not someone else's line", function()
+    expect(TL.anyMatches(P, "A death adder sinks its fangs into you.")).toBeFalse()
+    expect(TL.anyMatches(P, "You sink into the mud.")).toBeFalse()
+  end)
+
+  it("bright, bold, and not the reserved orange family", function()
+    local f = io.open("src_new/triggers/levi_ataxia/for_levi/leviticus/highlighting/068_Camus_Bite_Highlight.lua")
+    local s = f:read("*a"); f:close()
+    expect(s:find('fg("chartreuse")', 1, true) ~= nil).toBeTrue()
+    expect(s:find("setBold(true)", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
+-- v4.7.384, user: "Also this, is the relapse ... from that toxic boon"
+describe("Toxicologist's relapse line", function()
+  local TL = dofile("src_new/tests/trigger_lib.lua")
+  local F = "src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/108_Toxicologist_Relapse.lua"
+  local P = TL.patterns(F)
+  local LINE = "An enormous two-headed ettin screams out in agony, struck by the effects of a vicious venom."
+
+  it("matches as pasted, and every row however a long name wraps it", function()
+    expect(TL.anyMatches(P, LINE)).toBeTrue()
+    local long = "An immense, ancient and thoroughly bad-tempered two-headed ettin of the eastern wastes screams out in agony, struck by the effects of a vicious venom."
+    for w = 119, 124 do
+      for _, row in ipairs(TL.wrap(long, w)) do expect(TL.anyMatches(P, row)).toBeTrue() end
+    end
+  end)
+
+  it("re-latches Toxicologist -- in the tower only", function()
+    local stubs = { selectString = selectString, fg = fg, setBold = setBold, deselect = deselect,
+                    resetFormat = resetFormat }
+    selectString, fg, setBold, deselect, resetFormat = function() return 1 end, function() end,
+      function() end, function() end, function() end
+    line = LINE
+    local ok, err = pcall(function()
+      mnemToxicologist = nil
+      ataxiaBasher.inMnemosyne = false
+      dofile(F)
+      expect(mnemToxicologist).toBeNil()
+      ataxiaBasher.inMnemosyne = true
+      dofile(F)
+      expect(mnemToxicologist).toBeTrue()
+    end)
+    selectString, fg, setBold, deselect, resetFormat = stubs.selectString, stubs.fg, stubs.setBold,
+      stubs.deselect, stubs.resetFormat
+    mnemToxicologist, line = nil, nil
+    if not ok then error(err, 0) end
+  end)
+end)
+
 -- Restore shared state for whoever runs after us.
 target, ataxia, ataxiaBasher, ataxiaTemp, gmcp = saved.target, saved.ataxia, saved.ataxiaBasher, saved.ataxiaTemp, saved.gmcp
 getEpoch, mnemSearingLight, ataxiaEcho = saved.getEpoch, saved.mnemSearingLight, saved.ataxiaEcho
