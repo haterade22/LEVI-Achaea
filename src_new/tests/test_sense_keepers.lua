@@ -54,6 +54,62 @@ local function countOf(cmd)
   return n
 end
 
+-- v4.7.378, user: "touch mindseye, thralls tend to strip defences". Blind hides the room's
+-- occupants; mindseye lets us perceive anyway, and the Necromantic thralls strip it.
+describe("mindseye keeper (v4.7.378)", function()
+  it("blind without mindseye: touch it -- any class", function()
+    reset("Runewarden")
+    ataxia.defences.blindness = true
+    ataxia_senseKeepTick()
+    expect(countOf("touch mindseye")).toBe(1)
+  end)
+
+  it("not blind: leave it alone", function()
+    reset()
+    ataxia.defences.deafness = true
+    ataxia_senseKeepTick()
+    expect(countOf("touch mindseye")).toBe(0)
+  end)
+
+  it("already up: nothing", function()
+    reset()
+    ataxia.defences.blindness, ataxia.defences.deafness, ataxia.defences.mindseye = true, true, true
+    ataxia_senseKeepTick()
+    expect(#sent).toBe(0)
+  end)
+
+  it("stripped again: re-touched after a short hold, not the trance hold", function()
+    reset("Runewarden")
+    ataxia.defences.blindness = true
+    ataxia_senseKeepTick()
+    clock = clock + 3
+    ataxia_senseKeepTick()
+    expect(countOf("touch mindseye")).toBe(1)
+    clock = clock + 1
+    ataxia_senseKeepTick()
+    expect(countOf("touch mindseye")).toBe(2)
+  end)
+
+  it("never under Rimewrought -- tattoos do nothing", function()
+    reset("Runewarden")
+    ataxia.defences.blindness = true
+    mnemRimewrought = true
+    ataxia_senseKeepTick()
+    mnemRimewrought = nil
+    expect(countOf("touch mindseye")).toBe(0)
+  end)
+
+  it("can be switched off like the others", function()
+    reset("Runewarden")
+    ataxia.defences.blindness = true
+    local real = ataxia.settings
+    ataxia.settings = { senseKeep = { mindseye = false } }
+    ataxia_senseKeepTick()
+    ataxia.settings = real
+    expect(countOf("touch mindseye")).toBe(0)
+  end)
+end)
+
 describe("Monk/BM sense keepers", function()
   it("raises both senses when neither is up", function()
     reset()
@@ -90,6 +146,7 @@ describe("Monk/BM sense keepers", function()
     reset()
     ataxia.defences.deafness = true
     ataxia.defences.blindness = true
+    ataxia.defences.mindseye = true      -- v4.7.378: blind also keeps mindseye
     clock = clock + 100
     ataxia_senseKeepTick()
     expect(#sent).toBe(0)
