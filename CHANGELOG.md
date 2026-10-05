@@ -2,6 +2,21 @@
 
 ---
 
+## 2026-10-05 - The Serpent's death adder is not a target (v4.7.379)
+
+User: *"Also when I am serpent - a death adder is our mount and shouldnt be targeted"*.
+
+`ataxiaBasher_isOwnDenizen` (basher/001) gains **class pets**: `ataxiaBasher_CLASS_PETS = { Serpent =
+{ "death adder" } }`, consulted for the CURRENT class only (`ataxiaBasher_classPets()`). The death adder
+is the creature the Serpent offense already orders (`order adder kill <target>`). Keyed by class rather
+than added to the saved keyword list, because that list applies on every class and would protect a wild
+death adder met as a Monk. Everything that skips our own creatures goes through this one check: target
+selection, auto-learn, the kill line, and the Mnemosyne swarm count -- so the adder no longer inflates a
+swarm either. `bash notmine` exceptions still win; `bash mine` lists the class pets for the current class.
+4 new tests; 4 break-back mutants killed.
+
+---
+
 ## 2026-10-05 - After an escape, heal where you land; best door first; legs like bindings; mindseye (v4.7.378)
 
 **The death** (a Monk, blind, against chimeric specimens, a monstrosity of flesh and a burning
