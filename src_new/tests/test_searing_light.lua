@@ -198,6 +198,52 @@ describe("Searing Light -- the landed lines", function()
   end)
 end)
 
+-- v4.7.381, user: "we should use venom instead of garrote with these boons" -- "secrete camus;bite
+-- target". Serpent's Maw (unblockable +50% venom damage on denizens) and Toxicologist (venoms relapse).
+describe("Serpent venom boons: bite with camus instead of garrote", function()
+  local function bash(opts)
+    reset({ boon = false })
+    mnemSerpentsMaw, mnemToxicologist = opts.maw, opts.tox
+    ataxiaBasher.shielded = opts.shielded or false
+    local cmd = ataxiaBasher_serpentBashing()
+    mnemSerpentsMaw, mnemToxicologist = nil, nil
+    return cmd
+  end
+
+  it("without either boon: garrote, as before", function()
+    local cmd = bash({})
+    expect(has(cmd, "garrote 7")).toBeTrue()
+    expect(has(cmd, "bite")).toBeFalse()
+  end)
+
+  it("with Serpent's Maw: secrete camus, then bite", function()
+    local cmd = bash({ maw = true })
+    expect(has(cmd, "secrete camus;bite 7")).toBeTrue()
+    expect(has(cmd, "garrote")).toBeFalse()
+  end)
+
+  it("with Toxicologist: the same", function()
+    expect(has(bash({ tox = true }), "secrete camus;bite 7")).toBeTrue()
+  end)
+
+  it("a shielded round still flays the shield, and bites nothing", function()
+    local cmd = bash({ maw = true, shielded = true })
+    expect(has(cmd, "flay 7 shield")).toBeTrue()
+    expect(has(cmd, "bite")).toBeFalse()
+  end)
+
+  it("the boons are wired: flags, claim alias, catalogue", function()
+    local function slurp(p) local f = io.open(p); local s = f:read("*a"); f:close(); return s end
+    local parsers = slurp("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/004_Parsers.lua")
+    expect(parsers:find('["Serpent\'s Maw"]        = "mnemSerpentsMaw"', 1, true) ~= nil).toBeTrue()
+    expect(parsers:find('["Toxicologist"]         = "mnemToxicologist"', 1, true) ~= nil).toBeTrue()
+    local claim = slurp("src_new/aliases/levi_ataxia/for_levi/levi_062424/mnemosyne/002_Boon_Claim.lua")
+    expect(claim:find('find("serpent\'s maw", 1, true) then mnemSerpentsMaw = true', 1, true) ~= nil).toBeTrue()
+    expect(slurp("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/010_Boon_Seed.lua")
+      :find("Your venoms now deal unblockable damage against denizens", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
 -- Restore shared state for whoever runs after us.
 target, ataxia, ataxiaBasher, ataxiaTemp, gmcp = saved.target, saved.ataxia, saved.ataxiaBasher, saved.ataxiaTemp, saved.gmcp
 getEpoch, mnemSearingLight, ataxiaEcho = saved.getEpoch, saved.mnemSearingLight, saved.ataxiaEcho

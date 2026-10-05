@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-10-05 - Serpent: bite with camus instead of garrote under the venom boons (v4.7.381)
+
+User: *"for Serpent. we should use venom instead of garrote with these boons"* -- *"secrete camus;bite
+target"*:
+
+- **Serpent's Maw** -- "Your venoms now deal unblockable damage against denizens and their base damage is
+  increased by 50%. Unlocks additional common boons that increase the potency of your venoms."
+- **Toxicologist** -- "Your venoms now relapse against denizens, dealing damage again after a delay."
+- **Camus (Venom)** ABADMIN ID 1292 -- `SECRETE CAMUS` / `BITE <target>`, works on denizens; "can not be
+  used to envenom a weapon".
+
+With either boon, `ataxiaBasher_serpentBashing` (basher/002) swings `secrete camus;bite <target>`
+instead of `garrote <target>`; a shielded round still flays the shield and bites nothing. Wiring:
+`mnemSerpentsMaw` / `mnemToxicologist` in `M.BOON_FLAGS` (so the generic BOONS row re-latches them after a
+reimport), the claim alias, run start and run end; Serpent's Maw added to the boon seed (Toxicologist was
+already there). 5 new tests (in `test_searing_light.lua`, which loads the real Serpent basher); 4
+break-back mutants killed.
+
+---
+
 ## 2026-10-05 - METABOLISE PARALYSIS on every defup (v4.7.380)
 
 User: *"We need to add this into our defence list for all. We should do it against paralysis"*, with
