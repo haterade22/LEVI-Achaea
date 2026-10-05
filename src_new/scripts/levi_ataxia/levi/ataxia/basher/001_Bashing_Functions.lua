@@ -683,8 +683,23 @@ end
 -- `ataxiaBasher.notOwnDenizens` is the escape hatch and it WINS: any denizen whose
 -- name matches an entry here is a legitimate target no matter which pet keyword it
 -- also happens to contain. Managed via `bash notmine`.
+-- CLASS PETS (v4.7.379, user: "when I am serpent - a death adder is our mount and shouldnt be
+-- targeted"). Creatures that are OURS only while we play that class: the Serpent's death adder is
+-- the creature the Serpent offense already orders ("order adder kill <target>", serpent/002). Keyed
+-- by class so a wild death adder met on any other class is still a target -- the reason the plain
+-- keyword list (which applies to every class) is the wrong home for it. `bash notmine` exceptions
+-- still win, and `bash mine` lists these for the current class.
+ataxiaBasher_CLASS_PETS = {
+  Serpent = { "death adder" },
+}
+
+function ataxiaBasher_classPets()
+  local c = gmcp and gmcp.Char and gmcp.Char.Status and gmcp.Char.Status.class
+  return (c and ataxiaBasher_CLASS_PETS[c]) or {}
+end
+
 function ataxiaBasher_isOwnDenizen(name)
-  if type(name) ~= "string" or not ataxiaBasher.ownDenizens then return false end
+  if type(name) ~= "string" then return false end
   local lname = name:lower()
   -- Exceptions first: a real denizen that merely shares a pet's word.
   for _, ex in pairs(ataxiaBasher.notOwnDenizens or {}) do
@@ -692,6 +707,10 @@ function ataxiaBasher_isOwnDenizen(name)
       return false
     end
   end
+  for _, kw in ipairs(ataxiaBasher_classPets()) do
+    if lname:find(kw, 1, true) then return true end
+  end
+  if not ataxiaBasher.ownDenizens then return false end
   for _, kw in pairs(ataxiaBasher.ownDenizens) do
     if type(kw) == "string" and kw ~= "" and lname:find(kw:lower(), 1, true) then
       return true

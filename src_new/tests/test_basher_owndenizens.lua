@@ -27,6 +27,51 @@ local ok, err = pcall(dofile, basher_file)
 if not ok then error("Failed to load basher functions file: " .. tostring(err)) end
 
 -- ----------------------------------------------------------------------------
+-- v4.7.379, user: "when I am serpent - a death adder is our mount and shouldnt be targeted"
+describe("class pets: the Serpent's death adder", function()
+  local function as(class, fn)
+    local saved = gmcp.Char
+    gmcp.Char = { Status = { class = class } }
+    local ok, err = pcall(fn)
+    gmcp.Char = saved
+    if not ok then error(err, 0) end
+  end
+
+  it("is ours when we are a Serpent", function()
+    ataxiaBasher.ownDenizens, ataxiaBasher.notOwnDenizens = {}, {}
+    as("Serpent", function()
+      expect(ataxiaBasher_isOwnDenizen("a death adder")).toBeTrue()
+      expect(ataxiaBasher_isOwnDenizen("A Death Adder")).toBeTrue()
+    end)
+  end)
+
+  it("is a normal target on any other class", function()
+    ataxiaBasher.ownDenizens, ataxiaBasher.notOwnDenizens = {}, {}
+    as("Monk", function()
+      expect(ataxiaBasher_isOwnDenizen("a death adder")).toBeFalse()
+    end)
+    gmcp.Char = nil
+    expect(ataxiaBasher_isOwnDenizen("a death adder")).toBeFalse()
+  end)
+
+  it("works with no saved keyword list at all", function()
+    ataxiaBasher.ownDenizens = nil
+    as("Serpent", function()
+      expect(ataxiaBasher_isOwnDenizen("a death adder")).toBeTrue()
+      expect(ataxiaBasher_isOwnDenizen("a giant rat")).toBeFalse()
+    end)
+  end)
+
+  it("a `bash notmine` exception still wins", function()
+    ataxiaBasher.ownDenizens, ataxiaBasher.notOwnDenizens = {}, { "venomous death adder" }
+    as("Serpent", function()
+      expect(ataxiaBasher_isOwnDenizen("a venomous death adder")).toBeFalse()
+      expect(ataxiaBasher_isOwnDenizen("a death adder")).toBeTrue()
+    end)
+    ataxiaBasher.notOwnDenizens = {}
+  end)
+end)
+
 describe("ataxiaBasher_isOwnDenizen — keyword substring match", function()
 
   it("matches 'a razor-beaked falcon' via the 'falcon' keyword", function()
