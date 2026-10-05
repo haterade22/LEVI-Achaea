@@ -35,7 +35,8 @@ patterns:
   type: 7
 ]]--
 
-cecho(" " ..lb.prompt())
+-- v4.7.382: guarded -- this runs on every prompt, so an unloaded limb tracker flooded errors.
+if lb and lb.prompt then cecho(" " .. lb.prompt()) end
 
 if gmcp.Char and gmcp.Char.Status and (gmcp.Char.Status.class == "Runewarden" or gmcp.Char.Status.class == "Infernal") and ataxia.vitals and ataxia.vitals.knight == "Dual Blunt" then
 mymomentum = ataxia.vitals.class or 0

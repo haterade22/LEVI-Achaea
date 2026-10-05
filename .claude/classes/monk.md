@@ -84,9 +84,10 @@ lock_progression:
 shikudo_afflictions:
   hiraku: "anorexia + stuttering (Willow form)"
   livestrike: "asthma (Oak/Maelstrom)"
-  ruku_torso: "slickness (Rain/Oak/Gaital/Maelstrom)"
+  ruku_torso: "slickness (Rain/Oak/Gaital/Maelstrom)"  # AB 2499
+  ruku_arms: "clumsiness, or healthleech if already clumsy"  # AB 2499; triggers 578/584
   nervestrike: "paralysis (Oak)"
-  kuro: "weariness/lethargy (Rain/Oak/Gaital)"
+  kuro: "weariness, or lethargy if already weary (Rain/Oak/Gaital)"  # AB 2501 confirmed 2026-10-04; trigger 573 records exactly this
 
 telepathy_afflictions:
   mindlock: "Required for Telepathy abilities"
@@ -256,7 +257,7 @@ needle:
 kuro:
   skill: Shikudo
   balance: bal
-  effect: "Leg damage + weariness/lethargy affliction"
+  effect: "Weariness; lethargy if the target is already weary"  # AB 2501 (KURO <LEFT|RIGHT>, adventurers and denizens)
   syntax: "COMBO <target> <kick> kuro left/right"
   forms: [Rain, Oak, Gaital]
   notes: "Primary leg prep attack"
@@ -271,7 +272,7 @@ nervestrike:
 ruku:
   skill: Shikudo
   balance: bal
-  effect: "Arm/torso damage + clumsiness (arms) or slickness (torso)"
+  effect: "Arms: clumsiness, or healthleech if already clumsy. Torso: slickness"  # AB 2499
   syntax: "COMBO <target> <kick> ruku left/right/torso"
   forms: [Rain, Oak, Gaital, Maelstrom]
   notes: "Clumsiness is highly valuable - makes enemy miss attacks"
@@ -279,7 +280,7 @@ ruku:
 hiru:
   skill: Shikudo
   balance: bal
-  effect: "Head damage + dizziness (confusion if prone)"
+  effect: "Dizziness; if prone it MAY also give confusion (not tracked -- a maybe)"  # AB 2498
   syntax: "COMBO <target> <kick> hiru"
   forms: [Willow, Rain]
 
@@ -1348,3 +1349,8 @@ Flag `mnemSharpMind`, latched through the generic boon registry (`004 M.BOON_FLA
 BOONS row or an `(ECHO)` row. **Tower-gated as well as boon-gated** because the registry clears its
 flags on a confirmed run END but not at run START (a known registry gap), and outside the tower
 there are no crits refilling anything. `ataxia.settings.sipping.sharpmindat` tunes the threshold.
+
+## `sr` routing (v4.7.382)
+`sr` (alias `154_Group_(All_Classes)`) as a Monk calls `shikudoLock.dispatch()` (007_CC_Shikudo_Lock)
+by name. The global `shikudolock()` is defined by both 007 and 008, and the last script loaded wins.
+It requires a Shikudo `Form` charstat. With none (Tekura) it echoes and does nothing.

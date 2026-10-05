@@ -34,6 +34,10 @@ patterns:
   type: 1
 ]]--
 
+-- v4.7.382: `epitomiser` was never assigned, so this threw on every Epitomise. 314_Epitome
+-- matched the same line and is now disabled, so the alert and party tell go out once.
+local epitomiser = matches[2]
+
 -- Highlight the line
 selectString(line, 1)
 fg("orange_red")
@@ -51,9 +55,8 @@ if ataxiaTemp.epitomiseTimer then
   killTimer(ataxiaTemp.epitomiseTimer)
 end
 
-ataxiaTemp.epitomiseTimer = tempTimer(6, [[
+ataxiaTemp.epitomiseTimer = tempTimer(6, function()
   ataxia_boxEcho("EPITOMISE ENDED - Resume attacking!", "green:a_darkgreen")
-  cecho("\n<green>-= " .. "]] .. epitomiser .. [[" .. "'s EPITOMISE has ended! =-")
-  killTimer(ataxiaTemp.epitomiseTimer)
+  cecho("\n<green>-= " .. epitomiser .. "'s EPITOMISE has ended! =-")
   ataxiaTemp.epitomiseTimer = nil
-]])
+end)
