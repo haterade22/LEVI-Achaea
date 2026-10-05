@@ -10,8 +10,10 @@ packages/
 # IDE state
 .vs/
 
-# Python cache
-tools/__pycache__/
+# Python cache -- every level, not just tools/ (tools/lib/__pycache__ was tracked, so each build
+# rewrote five .pyc files and they rode into release commits and blocked `git pull`)
+__pycache__/
+*.py[cod]
 
 # Legacy backups
 old_structure_backup/

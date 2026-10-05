@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-10-05 - Python caches are no longer tracked (repo housekeeping, no package change)
+
+`tools/lib/__pycache__/*.pyc` (five files) had been tracked since 2025-12-27, while `.gitignore` only
+covered `tools/__pycache__/`. Every build rewrites them, so they rode into release commits and blocked
+`git pull` on a clean checkout. They are now untracked, and `.gitignore` ignores `__pycache__/` and
+`*.py[cod]` everywhere. Their contents were checked before removal: compiled copies of the public
+`tools/lib/*.py`, plus the local source paths baked in at compile time -- no tokens, keys, passwords or
+email addresses, in the current files or in any of the 11 commits that touched them.
+
+---
+
 ## 2026-10-05 - Serpent: the venom bite and Toxicologist's relapse are highlighted (v4.7.384)
 
 User: *"You sink your fangs into a greater earth elemental, injecting just the proper amount of camus.
