@@ -715,7 +715,7 @@ sequence:
   - "If shielded: flay <target> shield"   # strip shield first
   - "Assembled battlerage (ataxiaBasher_assembleBattlerage)"
   - "If not shielded: garrote <target>"
-  - "...or, with Serpent's Maw or Toxicologist (Mnemosyne boons, v4.7.381): secrete camus;bite <target>"
+  - "...or, with Serpent's Maw or Toxicologist (Mnemosyne boons, v4.7.381): purge;secrete camus;bite <target> (purge added v4.7.383)"
 notes: "There is no BATTLERAGE BITE and no 'envenom' battlerage ability."
 venom_boons: |
   User (v4.7.381): "we should use venom instead of garrote with these boons" -- "secrete camus;bite target".

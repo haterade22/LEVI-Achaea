@@ -1326,7 +1326,7 @@ dealt: N (type)" line trigger 350 already captures is the honest way to LEARN ea
 rather than hand-maintaining a table. `bash resist [<name>|forget <name>|clear]` shows the
 database.
 
-**SERPENT VENOM BOONS (v4.7.381, user: "we should use venom instead of garrote with these boons" -- "secrete camus;bite target").** With Serpent's Maw (`mnemSerpentsMaw`: venoms unblockable vs denizens, +50% base) or Toxicologist (`mnemToxicologist`: venoms relapse against denizens) the basher's swing is `secrete camus;bite <target>` (Camus, AB 1292 -- cannot envenom a weapon, so it is secreted and bitten) instead of `garrote`; a shielded round still flays. Both in `M.BOON_FLAGS` (so the generic BOONS row re-latches them), the claim alias, run start/end; Serpent's Maw added to the seed.
+**SERPENT VENOM BOONS (v4.7.381, user: "we should use venom instead of garrote with these boons" -- "secrete camus;bite target").** With Serpent's Maw (`mnemSerpentsMaw`: venoms unblockable vs denizens, +50% base) or Toxicologist (`mnemToxicologist`: venoms relapse against denizens) the basher's swing is `purge;secrete camus;bite <target>` (Camus, AB 1292 -- cannot envenom a weapon, so it is secreted and bitten; `purge` first since v4.7.383, user: "It should be purge;secrete camus;bite target") instead of `garrote`; a shielded round still flays. Both in `M.BOON_FLAGS` (so the generic BOONS row re-latches them), the claim alias, run start/end; Serpent's Maw added to the seed.
 
 **SEARING LIGHT -- THE SERPENT'S LIGHTWALL AS A ROOM NUKE, FIRST IN THE ROUND (v4.7.307,
 `ataxiaBasher_searingLightwall`, basher/002).** "Conjuring a lightwall now deals fire damage to

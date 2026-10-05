@@ -3772,8 +3772,12 @@ function ataxiaBasher_serpentBashing()
       --
       -- Either boon makes the venom the damage, so the swing becomes the bite. A shielded round
       -- still flays the shield instead (above).
+      --
+      -- PURGE FIRST (v4.7.383, user: "It should be purge;secrete camus;bite target"): clear
+      -- whatever is already secreted, so the bite always carries camus.
       if mnemSerpentsMaw or mnemToxicologist then
-         command = command.."secrete camus"..ataxia.settings.separator.."bite "..target
+         local sp = ataxia.settings.separator
+         command = command.."purge"..sp.."secrete camus"..sp.."bite "..target
       else
          command = command.."garrote "..target
       end

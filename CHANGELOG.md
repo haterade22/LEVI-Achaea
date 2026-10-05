@@ -2,6 +2,15 @@
 
 ---
 
+## 2026-10-05 - Serpent venom bite purges first (v4.7.383)
+
+User: *"It should be purge;secrete camus;bite target"*. Under Serpent's Maw or Toxicologist the Serpent
+basher now sends `purge;secrete camus;bite <target>` (was `secrete camus;bite <target>`, v4.7.381), so
+whatever was already secreted is cleared and the bite always carries camus. A shielded round still flays
+and sends neither. Tests updated (and a shielded round must not purge); the purge-dropped mutant is killed.
+
+---
+
 ## 2026-10-04 - Shikudo `sr`, Epitome, and a first-prompt kata error (v4.7.382; opened as v4.7.376)
 
 User: *"When in Shikudo and pressing SR, it isnt doing anything"*, with an error dump, and then a
