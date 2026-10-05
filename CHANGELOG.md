@@ -2,6 +2,33 @@
 
 ---
 
+## 2026-10-05 - METABOLISE PARALYSIS on every defup (v4.7.380)
+
+User: *"We need to add this into our defence list for all. We should do it against paralysis"*, with
+AB Metabolise (Avoidance, ABADMIN 3275): `METABOLISE <affliction>`, 3.00s of equilibrium; a second
+delivery of that affliction from a DIFFERENT player within ~2s is resisted (players only).
+
+**It is not a defence.** The user's full DEF (35 defences) does not list it, so SSC cannot keep it
+and GMCP never reports it. Putting it in `ataxiaTables.classDefences` would have batched an unknown
+name into `systemDefup`'s single `curing priority defence ...` command. It follows the AVOID
+precedent instead and is sent directly.
+
+- `deffing/001_Defence_API.lua`: `ataxia_metabolise(why)` sends `queue add eq metabolise <aff>`,
+  throttled 10s so login + defup send it once. Also `ataxia_metaboliseAff()`,
+  `ataxia_metaboliseConfirmed(aff)` (state on `ataxiaTemp`) and `ataxia_setMetabolise(arg)`.
+- `deffing/002_Deffing_Up.lua`: `systemDefup` sends it for every profile, so every class gets it.
+- `login/001_Login_Function.lua`: a 16s login send for classes with no defup at login.
+- `001_Save_Load_Settings.lua`: `ataxia.settings.metaboliseAff = "paralysis"` (false = off; nil
+  reads as paralysis, so existing saves need nothing).
+- Trigger `786_Metabolise_Focus`: "You begin to focus upon advanced metabolisation of the
+  <aff> affliction." (the user's log) records the confirmation.
+- Alias `aconfig metabolise [<aff>|off]`. Not a bare `metabolise`, which would swallow the game command.
+- Test `test_metabolise.lua` (6).
+
+**Open:** whether death or logout clears it is unknown. It is re-sent on every defup and login rather
+than trusted. A basher `queue addclearfull` can wipe a queued metabolise mid-fight; the next defup
+re-sends it.
+
 ## 2026-10-05 - The Serpent's death adder is not a target (v4.7.379)
 
 User: *"Also when I am serpent - a death adder is our mount and shouldnt be targeted"*.
