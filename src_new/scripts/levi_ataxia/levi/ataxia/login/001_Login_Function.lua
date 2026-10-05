@@ -67,6 +67,8 @@ tempTimer(12, [[send("queue add inr all")]])
 tempTimer(30, [[setafflictionstackslevi()]])
 tempTimer(30, [[targetresetafflictionslevi()]])
 tempTimer(15, [[send("queue add freestand avoid physical")]])
+-- For classes with no defup at login; the 10s throttle drops it after a defup.
+tempTimer(16, [[if ataxia_metabolise then ataxia_metabolise("login") end]])
 
 
 slow = 0

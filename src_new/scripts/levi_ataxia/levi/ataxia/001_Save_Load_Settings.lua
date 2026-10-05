@@ -594,6 +594,7 @@ function ataxia_defaultSettings()
 		roomshorten = "normal",
 		autogallop = false,
     avoidType = "physical",  -- Options: physical, mental, arcane, aoe
+    metaboliseAff = "paralysis",  -- METABOLISE <aff> on every defup; false = off (deffing/001)
     raid = {enabled = false},
     fishing = {
       bait = "shrimp",

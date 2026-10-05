@@ -522,6 +522,14 @@ shielding.
 
 **Defence tables: three of them, different meanings (v4.7.209).** `ataxiaTables.classDefences` is class MEMBERSHIP (only its keys are read; values are raising commands). `ataxiaTables.defenceWords` is what `ashow defs` DISPLAYS beside a defence, via `ataxia_defenceWord()` -- list a defence here only when its command differs from its name (bard: `acrobatics on`, `blade tune`, `dance harrying`). `ataxiaTables.defences` (inline in `_groups.yaml`) maps client-side name -> **SERVER-SIDE NAME** and is read as `csd, ssd` by `supportedDefence()` -- its values are NOT commands, and changing one to a command breaks every `ataxia.defences[actual]` lookup. Defences are raised by SSC (`curing priority defence <def> 25`), never by sending the ability command, so these tables are membership and documentation. **Before changing any table's values, find who reads them.**
 
+**METABOLISE is NOT a defence (v4.7.380).** DEF does not list it, so it is in none of the three tables:
+SSC cannot keep it and GMCP never reports it, and an unknown name would ride `systemDefup`'s single
+batched `curing priority defence ...` command. Like AVOID (sent directly at login), `ataxia_metabolise()`
+(`deffing/001`) sends `queue add eq metabolise <aff>` on every defup (every profile, every class) and at
+login, 10s-throttled. Default `paralysis` (`ataxia.settings.metaboliseAff`, false = off,
+`aconfig metabolise [<aff>|off]`), confirmed by trigger 786 ("You begin to focus upon advanced
+metabolisation of the <aff> affliction."). Whether death clears it is unknown, so it is re-sent, never trusted.
+
 ### Bashing DPS & damage-taken tracking (`bashStats`, v4.7.207)
 
 `bashStats_getDPS()` returns **Now** and **Avg**, both reworked because each was misleading. *Avg* was `totalDamage / wall clock since reset` -- idle time (walking, resting, hovering, the boon screen) divided it down, so it measured how long the client had been open rather than how hard we hit; it now divides by `bashStats.combatTime`, which accumulates only gaps between hits shorter than `bashStats_COMBAT_GAP` (10s). *Now* was a SINGLE balance's damage over that balance -- a crit spiked it, a miss zeroed it; it is now a rolling `bashStats_DPS_WINDOW` (10s), reusing the `ataxiaBasher_dmgSamples` shape from the incoming-damage watchdog, and divides by the whole window so it decays to 0 rather than showing the last burst forever. Fed by `bashStats_recordDamage()` from trigger 350.

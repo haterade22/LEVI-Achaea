@@ -181,3 +181,57 @@ end
 function getAvoidType()
   return ataxia.settings.avoidType or "physical"
 end
+
+-- METABOLISE <affliction> (Avoidance, ABADMIN 3275, 3.00s of equilibrium): a second delivery of
+-- that affliction from a DIFFERENT player within ~2s is resisted. Players only.
+-- It is NOT a defence -- DEF does not list it, so SSC cannot keep it and GMCP never reports it.
+-- Like AVOID, we send it ourselves: on every defup (all profiles, all classes) and at login.
+-- Confirmed by "You begin to focus upon advanced metabolisation of the <aff> affliction."
+-- (trigger 786). Whether death clears it is unknown, so it is re-asserted, never trusted.
+ataxiaTemp = ataxiaTemp or {}
+ataxia_METABOLISE_THROTTLE = 10
+
+function ataxia_metaboliseAff()
+  local aff = ataxia.settings and ataxia.settings.metaboliseAff
+  if aff == false then return nil end
+  if type(aff) ~= "string" or aff == "" then return "paralysis" end
+  return aff
+end
+
+function ataxia_metabolise(why)
+  local aff = ataxia_metaboliseAff()
+  if not aff then return false end
+  local now = getEpoch()
+  local last = ataxiaTemp.metaboliseSentAt
+  if last and now - last >= 0 and now - last < ataxia_METABOLISE_THROTTLE then return false end
+  ataxiaTemp.metaboliseSentAt = now
+  send("queue add eq metabolise " .. aff, false)
+  return true
+end
+
+function ataxia_metaboliseConfirmed(aff)
+  aff = (aff or ""):lower()
+  ataxiaTemp.metabolised = aff
+  ataxiaTemp.metabolisedAt = getEpoch()
+  ataxiaEcho("Metabolising " .. aff .. ".")
+end
+
+function ataxia_setMetabolise(arg)
+  arg = arg and arg:lower() or nil
+  if arg == nil or arg == "" then
+    local aff = ataxia_metaboliseAff()
+    local got = ataxiaTemp.metabolised
+    ataxiaEcho("Metabolise: " .. (aff or "OFF")
+      .. (aff and (got == aff and " (confirmed)" or " (not confirmed this session)") or ""))
+    return
+  end
+  if arg == "off" then
+    ataxia.settings.metaboliseAff = false
+    ataxiaEcho("Metabolise OFF -- defup will no longer send it.")
+    return
+  end
+  ataxia.settings.metaboliseAff = arg
+  ataxiaTemp.metaboliseSentAt = nil
+  ataxiaEcho("Metabolise set to: " .. arg:upper())
+  ataxia_metabolise("set")
+end

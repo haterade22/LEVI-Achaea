@@ -37,7 +37,9 @@ function systemDefup(profile)
 			end
 
 			send(command,false)
-	
+			-- Not a defence (SSC cannot keep it), so every profile sends it directly.
+			if ataxia_metabolise then ataxia_metabolise("defup") end
+
 			if deffingFailsafe then killTimer(deffingFailsafe) end
 			deffingFailsafe = tempTimer(60, [[defupFailsafe(); deffingFailsafe = nil]])
 			
