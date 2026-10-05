@@ -2,6 +2,43 @@
 
 ---
 
+## 2026-10-05 - Mnemosyne keeps the mapper's `gmcpmapupdates` off (v4.7.377)
+
+User, on the v4.7.374 finding: *"you can code that in, if in mnemosyne, keep that off"*.
+
+The IRE mapper's new `gmcpmapupdates` writes every `gmcp.Room.Info`'s name, environment,
+indoor/outdoor flag and area onto the mapped room of that number, unchecked. Mnemosyne dementia
+(Creville's Legacy) sends a real room number with hallucinated details over that channel, so with the
+option on, the tower would rewrite real rooms in the local map. With `crowdmapservicesend on`,
+upstream would also report those writes to the shared Crowdmap service.
+
+New `mnemosyne/016_Mapper_GMCP_Guard.lua`:
+
+- **"mnemosyne entered"** -> if the option is ON, set it off silently (`setOption(..., true)`), read it
+  back, and record `ataxiaBasher.mapperGmcpOwed`. One echo. A user who never turned it on is never
+  touched, and an older mapper without the option gets no `setOption` call (upstream would print "No
+  such option!").
+- **"mnemosyne left"** -> if we owe a restore and are out, set it back on. One echo.
+- **Every prompt** (`gmcp.Char.Vitals`): in the tower, re-assert off; out of it with a debt, restore.
+  This covers the three paths that raise no event:
+  - a reload mid-climb (`inMnemosyne` comes back from disk, so `mnemHere` stays silent);
+  - `mconfig gmcpmapupdates on` typed mid-climb;
+  - a restore owed from an earlier session.
+
+  Outside the tower with nothing owed it is one table read.
+- **The debt marker is saved on purpose.** The mapper writes its options to disk only on
+  `sysExitEvent`, and we save on disconnect. A clean exit inside the tower therefore stores "off" and
+  "owed" together, while a crash stores neither and the user's own value comes back. Losing the marker
+  would leave the setting off for good, silently.
+- **No restore in `ataxia_loadSettings`.** On a fresh start it can run before the mapper's one-time
+  option load, which would overwrite the restore after the marker was already cleared. The first
+  prompt is the first moment both values are real.
+- Handlers use kill-before-register and keep their ids on `ataxiaTemp`.
+
+**Tests:** new `test_mnem_mapper_guard.lua` (14). 8 break-back mutants, all killed.
+
+---
+
 ## 2026-10-04 - Chat window: the game's colours, on the right channel (v4.7.375)
 
 User: *"My text chat is still not color coordinated"*, with a screenshot of the All tab: two clan
