@@ -722,6 +722,9 @@ venom_boons: |
   Serpent's Maw (mnemSerpentsMaw): venoms deal unblockable damage to denizens, base damage +50%.
   Toxicologist (mnemToxicologist): venoms relapse against denizens, dealing damage again after a delay.
   Camus (AB 1292): SECRETE CAMUS / BITE <target>, works on denizens; "can not be used to envenom a weapon".
+  Highlights (v4.7.384): our bite ("You sink your fangs into <x>, injecting just the proper amount of <venom>.")
+  in bold chartreuse (highlighting/068); Toxicologist's relapse ("<x> screams out in agony, struck by the
+  effects of a vicious venom.") in bold yellow (mnemosyne/108), which also re-latches mnemToxicologist.
 ```
 
 ## Fighting Against This Class
