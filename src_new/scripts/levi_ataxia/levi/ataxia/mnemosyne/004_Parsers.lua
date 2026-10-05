@@ -239,6 +239,8 @@ function M.onRunEnd()
   mnemDeadBreath = false -- ...and BELCH goes back to being a single-target nuisance (v4.7.337)
   mnemDeathtempest = false -- ...and SOULSTORM stops being worth the equilibrium (v4.7.338)
   mnemSearingLight = false -- boons gone on a confirmed run-end
+  mnemSerpentsMaw = false -- ...and the Serpent bites with garrote again (v4.7.381)
+  mnemToxicologist = false -- (v4.7.381)
   mnemHealingMetabolism = false -- boons gone on a confirmed run-end
   -- Berserker's Edge pinned the rage floor to 100 (basher/001). Putting it back is the half that
   -- matters -- left alone we would quietly hoard battlerage the whole rest of the day for a bonus
@@ -1292,6 +1294,8 @@ M.BOON_FLAGS = {
   ["Razor Clarity"]        = "psionRazorClarity",
   ["Mindbreak"]            = "psionMindbreak",
   ["Psiwave"]              = "psionPsiwave",
+  ["Serpent's Maw"]        = "mnemSerpentsMaw",
+  ["Toxicologist"]         = "mnemToxicologist",
   ["Earthquake"]           = "psionEarthquake",
   ["Prophet of Creation"]  = "psionProphet",
   ["Roth"]                 = "psionRoth",

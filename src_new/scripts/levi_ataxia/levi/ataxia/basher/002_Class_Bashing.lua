@@ -3759,7 +3759,24 @@ function ataxiaBasher_serpentBashing()
    command = command..brage
 
    if not ataxiaBasher.shielded then
-      command = command.."garrote "..target
+      -- VENOM, NOT GARROTE, WITH THE VENOM BOONS (v4.7.381, user: "we should use venom instead of
+      -- garrote with these boons" -- "secrete camus;bite target").
+      --
+      --   Serpent's Maw  "Your venoms now deal unblockable damage against denizens and their base
+      --                   damage is increased by 50%."
+      --   Toxicologist   "Your venoms now relapse against denizens, dealing damage again after a
+      --                   delay."
+      --   Camus (Venom)  ABADMIN ID 1292 -- SECRETE CAMUS / BITE <target>, works on denizens --
+      --                  "A more powerful version of Sumac poison. This venom can not be used to
+      --                   envenom a weapon." -- so it is secreted and BITTEN, never envenomed.
+      --
+      -- Either boon makes the venom the damage, so the swing becomes the bite. A shielded round
+      -- still flays the shield instead (above).
+      if mnemSerpentsMaw or mnemToxicologist then
+         command = command.."secrete camus"..ataxia.settings.separator.."bite "..target
+      else
+         command = command.."garrote "..target
+      end
    end
 
    return command
