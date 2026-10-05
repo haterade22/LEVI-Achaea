@@ -216,20 +216,22 @@ describe("Serpent venom boons: bite with camus instead of garrote", function()
     expect(has(cmd, "bite")).toBeFalse()
   end)
 
-  it("with Serpent's Maw: secrete camus, then bite", function()
+  -- v4.7.383, user: "It should be purge;secrete camus;bite target"
+  it("with Serpent's Maw: purge, secrete camus, then bite", function()
     local cmd = bash({ maw = true })
-    expect(has(cmd, "secrete camus;bite 7")).toBeTrue()
+    expect(has(cmd, "purge;secrete camus;bite 7")).toBeTrue()
     expect(has(cmd, "garrote")).toBeFalse()
   end)
 
   it("with Toxicologist: the same", function()
-    expect(has(bash({ tox = true }), "secrete camus;bite 7")).toBeTrue()
+    expect(has(bash({ tox = true }), "purge;secrete camus;bite 7")).toBeTrue()
   end)
 
   it("a shielded round still flays the shield, and bites nothing", function()
     local cmd = bash({ maw = true, shielded = true })
     expect(has(cmd, "flay 7 shield")).toBeTrue()
     expect(has(cmd, "bite")).toBeFalse()
+    expect(has(cmd, "purge")).toBeFalse()
   end)
 
   it("the boons are wired: flags, claim alias, catalogue", function()
