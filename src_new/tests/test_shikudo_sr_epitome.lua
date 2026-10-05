@@ -1,4 +1,4 @@
---- test_shikudo_sr_epitome.lua -- v4.7.376 fixes from one error dump.
+--- test_shikudo_sr_epitome.lua -- v4.7.382 fixes from one error dump.
 -- (1) shikudo_checkForms threw `attempt to compare number with nil` on the first prompt: the vitals
 --     update calls it while still reading the Form charstat, before Kata is parsed.
 -- (2) The Epitome trigger used `epitomiser`, which nothing ever assigned; its duplicate is disabled.
@@ -23,7 +23,7 @@ cecho = function(s) echoed[#echoed + 1] = s end
 ataxiaEcho = function(s) echoed[#echoed + 1] = s end
 local function clear() sent, echoed = {}, {} end
 
-describe("shikudo_checkForms -- nil kata/form (v4.7.376)", function()
+describe("shikudo_checkForms -- nil kata/form (v4.7.382)", function()
   ataxia = ataxia or {}
   ataxia.vitals = {}
   dofile(EXTRAS)
@@ -46,7 +46,7 @@ describe("shikudo_checkForms -- nil kata/form (v4.7.376)", function()
   end)
 end)
 
-describe("Epitome trigger (v4.7.376)", function()
+describe("Epitome trigger (v4.7.382)", function()
   it("names the epitomiser and tells the party exactly once", function()
     clear()
     ataxiaTemp = {}
@@ -69,7 +69,7 @@ describe("Epitome trigger (v4.7.376)", function()
   end)
 end)
 
-describe("sr as a Monk (v4.7.376)", function()
+describe("sr as a Monk (v4.7.382)", function()
   local routed
   local function setup(form)
     routed = nil

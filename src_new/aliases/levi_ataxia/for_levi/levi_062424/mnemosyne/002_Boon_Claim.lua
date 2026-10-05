@@ -56,6 +56,10 @@ if matches[2]:lower():find("death stare") then mnemDeathStare = true end
 -- Searing Light: conjuring a lightwall deals fire to every denizen in the room; the Serpent basher
 -- conjures one first in the round at 2+ denizens, once per room.
 if matches[2]:lower():find("searing light") then mnemSearingLight = true end
+-- Serpent's Maw / Toxicologist: venoms hit denizens (unblockable +50% / relapse), so the Serpent
+-- bashes with `secrete camus;bite <target>` instead of garrote (v4.7.381, user-directed).
+if matches[2]:lower():find("serpent's maw", 1, true) then mnemSerpentsMaw = true end
+if matches[2]:lower():find("toxicologist", 1, true) then mnemToxicologist = true end
 -- Healing Metabolism: satiation is worth 50% on every health elixir, so it becomes upkeep
 -- rather than a hunger floor -- off a corpse when Obligate Carnivore is also held, off the horn
 -- of plenty otherwise (v4.7.303), whenever hunger reads below "utterly satiated".

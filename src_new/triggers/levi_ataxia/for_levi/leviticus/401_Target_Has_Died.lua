@@ -73,7 +73,7 @@ end
 mindlocked = false
 wantmindlock = true
 lightbind = false
--- v4.7.376: tAffs is only rebuilt above when the dead player was OUR target; guard the bare
+-- v4.7.382: tAffs is only rebuilt above when the dead player was OUR target; guard the bare
 -- field writes below so a half-loaded profile does not throw on every death line.
 tAffs = tAffs or {}
 tAffs.bleed = 0

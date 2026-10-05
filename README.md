@@ -523,6 +523,10 @@ explorer fights on chosen ground:
   defences and leaves the room.
 - **Entangled**: a move the game refuses ("too tangled up") is re-sent the moment you are free, and
   the escape messages say why you are *not* leaving rather than claiming you are.
+- **After an escape, heal where you land** (to 85% and cured) instead of exploring on; a last-resort
+  escape takes a room you've cleared before an unexplored one; **both legs broken** is treated like
+  being bound (wait, then leave the moment a leg is mended).
+- **Mindseye**: while you're blind, the mindseye tattoo is kept up so you can still see the room.
 - **Low-HP escape ladder** (any mob count, default 35%): outdoors fly and hover — works
   with every limb broken, unlike `touch shield` — landing only when FULLY healed (95%+ and
   affliction-free). The hover re-checks its own premise every tick: knocked out of the sky,

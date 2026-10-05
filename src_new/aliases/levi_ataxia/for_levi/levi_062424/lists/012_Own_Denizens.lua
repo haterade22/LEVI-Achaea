@@ -36,6 +36,11 @@ if arg == "" then
     end
     send(" ")
   end
+  -- v4.7.379: creatures that are ours only on this class (ataxiaBasher_CLASS_PETS)
+  local cp = ataxiaBasher_classPets and ataxiaBasher_classPets() or {}
+  if #cp > 0 then
+    ataxiaEcho("Also yours on this class (built in): <white>" .. table.concat(cp, ", ") .. "<reset>.")
+  end
   return
 end
 

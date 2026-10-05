@@ -2,7 +2,7 @@
 
 ---
 
-## 2026-10-04 - Shikudo `sr`, Epitome, and a first-prompt kata error (v4.7.376)
+## 2026-10-04 - Shikudo `sr`, Epitome, and a first-prompt kata error (v4.7.382; opened as v4.7.376)
 
 User: *"When in Shikudo and pressing SR, it isnt doing anything"*, with an error dump, and then a
 paste of an `sr` round (`frontkick right`, `kuro right`, `kuro left`) asking why no afflictions
@@ -40,6 +40,163 @@ by Mudlet core.
 
 Tests: `test_shikudo_sr_epitome.lua` (nil kata/form, Epitome body, `sr` routing, the kuro trigger
 body). 2622 pass.
+## 2026-10-05 - Serpent: bite with camus instead of garrote under the venom boons (v4.7.381)
+
+User: *"for Serpent. we should use venom instead of garrote with these boons"* -- *"secrete camus;bite
+target"*:
+
+- **Serpent's Maw** -- "Your venoms now deal unblockable damage against denizens and their base damage is
+  increased by 50%. Unlocks additional common boons that increase the potency of your venoms."
+- **Toxicologist** -- "Your venoms now relapse against denizens, dealing damage again after a delay."
+- **Camus (Venom)** ABADMIN ID 1292 -- `SECRETE CAMUS` / `BITE <target>`, works on denizens; "can not be
+  used to envenom a weapon".
+
+With either boon, `ataxiaBasher_serpentBashing` (basher/002) swings `secrete camus;bite <target>`
+instead of `garrote <target>`; a shielded round still flays the shield and bites nothing. Wiring:
+`mnemSerpentsMaw` / `mnemToxicologist` in `M.BOON_FLAGS` (so the generic BOONS row re-latches them after a
+reimport), the claim alias, run start and run end; Serpent's Maw added to the boon seed (Toxicologist was
+already there). 5 new tests (in `test_searing_light.lua`, which loads the real Serpent basher); 4
+break-back mutants killed.
+
+---
+
+## 2026-10-05 - METABOLISE PARALYSIS on every defup (v4.7.380)
+
+User: *"We need to add this into our defence list for all. We should do it against paralysis"*, with
+AB Metabolise (Avoidance, ABADMIN 3275): `METABOLISE <affliction>`, 3.00s of equilibrium; a second
+delivery of that affliction from a DIFFERENT player within ~2s is resisted (players only).
+
+**It is not a defence.** The user's full DEF (35 defences) does not list it, so SSC cannot keep it
+and GMCP never reports it. Putting it in `ataxiaTables.classDefences` would have batched an unknown
+name into `systemDefup`'s single `curing priority defence ...` command. It follows the AVOID
+precedent instead and is sent directly.
+
+- `deffing/001_Defence_API.lua`: `ataxia_metabolise(why)` sends `queue add eq metabolise <aff>`,
+  throttled 10s so login + defup send it once. Also `ataxia_metaboliseAff()`,
+  `ataxia_metaboliseConfirmed(aff)` (state on `ataxiaTemp`) and `ataxia_setMetabolise(arg)`.
+- `deffing/002_Deffing_Up.lua`: `systemDefup` sends it for every profile, so every class gets it.
+- `login/001_Login_Function.lua`: a 16s login send for classes with no defup at login.
+- `001_Save_Load_Settings.lua`: `ataxia.settings.metaboliseAff = "paralysis"` (false = off; nil
+  reads as paralysis, so existing saves need nothing).
+- Trigger `786_Metabolise_Focus`: "You begin to focus upon advanced metabolisation of the
+  <aff> affliction." (the user's log) records the confirmation.
+- Alias `aconfig metabolise [<aff>|off]`. Not a bare `metabolise`, which would swallow the game command.
+- Test `test_metabolise.lua` (6).
+
+**Open:** whether death or logout clears it is unknown. It is re-sent on every defup and login rather
+than trusted. A basher `queue addclearfull` can wipe a queued metabolise mid-fight; the next defup
+re-sends it.
+
+## 2026-10-05 - The Serpent's death adder is not a target (v4.7.379)
+
+User: *"Also when I am serpent - a death adder is our mount and shouldnt be targeted"*.
+
+`ataxiaBasher_isOwnDenizen` (basher/001) gains **class pets**: `ataxiaBasher_CLASS_PETS = { Serpent =
+{ "death adder" } }`, consulted for the CURRENT class only (`ataxiaBasher_classPets()`). The death adder
+is the creature the Serpent offense already orders (`order adder kill <target>`). Keyed by class rather
+than added to the saved keyword list, because that list applies on every class and would protect a wild
+death adder met as a Monk. Everything that skips our own creatures goes through this one check: target
+selection, auto-learn, the kill line, and the Mnemosyne swarm count -- so the adder no longer inflates a
+swarm either. `bash notmine` exceptions still win; `bash mine` lists the class pets for the current class.
+4 new tests; 4 break-back mutants killed.
+
+---
+
+## 2026-10-05 - After an escape, heal where you land; best door first; legs like bindings; mindseye (v4.7.378)
+
+**The death** (a Monk, blind, against chimeric specimens, a monstrosity of flesh and a burning
+mutant), read against the code:
+
+- **The sweep walked on after an escape.** A take-any-exit escape landed in an empty room, reset as
+  "lost mid-pull", and the explorer read the room as cleared and moved -- twice, at 71%, blind and
+  chased -- into rooms it had never seen.
+- **The take-any-exit door was chosen alphabetically.** Both last-resort escapes went `e`, into
+  uncleared rooms; the second held the monstrosity of flesh (1,515 asphyxiation and prone on arrival).
+- **Locked by broken legs.** The monstrosity and the mutant broke legs about 6 times in 10s, alongside
+  paralysis, prone, impatience, confusion, burning and haemophilia. No leap or tumble possible.
+- **The pursuit judgement was overwritten.** The v4.7.370 rule should have caught the swarm after the
+  36.5s escape; a pull started 1.2s later replaced the unjudged record, so the final escape -- all four
+  followed inside 0.35s -- was not blocked.
+- **A false funnel.** The leap refused for broken legs left the state machine "in the funnel room" it
+  never left ("the swarm followed (4) -- holding this room"), and for 8s every DYING FAST was answered
+  "the escape already under way has it".
+- **"LOW HP (100%) -- retreating to recover"** was the damage-rate watchdog firing at full health.
+- **Blind**, the room hid its occupants ("A mysterious entity abides") from the look-ahead.
+
+User: *"please build 1-5"*, and mid-build: *"touch mindseye, thralls tend to strip defences"*.
+
+1. **An escape heals where it lands.** `S._escaping` marks a ground escape; when it lands anywhere but
+   the room it left (and not in its funnel), `S._recoverHere` holds there in ground recovery until
+   `returnAt` (85%) and cured -- unless already that fit -- instead of handing back to the sweep. A
+   planned pull that ends up in a third room still just resets.
+2. **The last resort takes the best door.** `S._panicDir` ranks candidate exits with `S._exitRank`: a
+   visited room we did not just flee (cleared -- the sweep only leaves a room once it is clear) beats a
+   room we just fled or are fighting in, and both beat an unexplored one; sorted order breaks ties. The
+   escape line names the kind: "taking the best exit: a cleared room / a room we just left / unexplored".
+   (The Roll Hide panic and the recovery tumble use the same picker.)
+3. **A landed, unjudged retreat is not overwritten** by `S._noteRetreat` (a pull's record waits).
+4. **Both legs broken is treated like being bound, for the ground.** `S._legsOut()` (broken / damaged /
+   mangled, both sides): onVitals says "both legs are broken -- leaving the moment they are mended" with
+   no emergency-cooldown stamp; `_beginEscape`, `_escapeRouteReady` and the tick's low-HP branch refuse a
+   ground escape; the hover (outdoors) still flies. Trigger `345_Broken_Legs_Block` now calls
+   `S.onMoveRefusedBound("both legs broken")`, which parks the move and `S._resendWhenFree` re-sends it
+   once a leg is mended. **A last resort has no funnel room** (`S.funnelRoom = nil`), and the pulling
+   branch never treats the room we are pulling out of as the funnel -- no more false "holding this
+   room" / "escape under way". While a move is parked, the line says "the escape is parked until we can
+   move".
+5. **The real reason at the real health.** onVitals passes the retreat line itself: "DYING FAST (80%)"
+   or "LOW HP (30%)", from the fresh gmcp reading, not the shared vitals.
+6. **Mindseye** (`deffing/007_Sense_Keepers.lua`): a third keeper beside deaf and blind -- any class,
+   whenever we are BLIND (`ataxia.defences.blindness`) and `mindseye` is down, `touch mindseye`, with a
+   4s hold (a touch is not a trance; GMCP's Add confirms). Skipped under Rimewrought; off with
+   `ataxia.settings.senseKeep.mindseye = false`. The keepers now carry `anyClass` / `when` / `hold`.
+
+**Tests:** 20 new (14 in `test_swarm_tactics.lua`, 6 in `test_sense_keepers.lua`); one existing
+sense-keeper test now also has mindseye up (its point is "all up -> nothing sent"). **23 break-back
+mutants, all killed** -- two survived the first run (a just-fled room against a cleared one that sorts
+later; the funnel-is-not-the-swarm-room guard on its own) and got tests of their own. Suite: 2648 pass.
+
+### Files
+
+- `mnemosyne/009_Swarm_Tactics.lua`, `deffing/007_Sense_Keepers.lua`, trigger `345_Broken_Legs_Block`;
+  tests; `CLAUDE.md`, `README.md`, `.claude/projects/mnemosyne/07-explorer.md`, memory.
+
+---
+
+## 2026-10-05 - Mnemosyne keeps the mapper's `gmcpmapupdates` off (v4.7.377)
+
+User, on the v4.7.374 finding: *"you can code that in, if in mnemosyne, keep that off"*.
+
+The IRE mapper's new `gmcpmapupdates` writes every `gmcp.Room.Info`'s name, environment,
+indoor/outdoor flag and area onto the mapped room of that number, unchecked. Mnemosyne dementia
+(Creville's Legacy) sends a real room number with hallucinated details over that channel, so with the
+option on, the tower would rewrite real rooms in the local map. With `crowdmapservicesend on`,
+upstream would also report those writes to the shared Crowdmap service.
+
+New `mnemosyne/016_Mapper_GMCP_Guard.lua`:
+
+- **"mnemosyne entered"** -> if the option is ON, set it off silently (`setOption(..., true)`), read it
+  back, and record `ataxiaBasher.mapperGmcpOwed`. One echo. A user who never turned it on is never
+  touched, and an older mapper without the option gets no `setOption` call (upstream would print "No
+  such option!").
+- **"mnemosyne left"** -> if we owe a restore and are out, set it back on. One echo.
+- **Every prompt** (`gmcp.Char.Vitals`): in the tower, re-assert off; out of it with a debt, restore.
+  This covers the three paths that raise no event:
+  - a reload mid-climb (`inMnemosyne` comes back from disk, so `mnemHere` stays silent);
+  - `mconfig gmcpmapupdates on` typed mid-climb;
+  - a restore owed from an earlier session.
+
+  Outside the tower with nothing owed it is one table read.
+- **The debt marker is saved on purpose.** The mapper writes its options to disk only on
+  `sysExitEvent`, and we save on disconnect. A clean exit inside the tower therefore stores "off" and
+  "owed" together, while a crash stores neither and the user's own value comes back. Losing the marker
+  would leave the setting off for good, silently.
+- **No restore in `ataxia_loadSettings`.** On a fresh start it can run before the mapper's one-time
+  option load, which would overwrite the restore after the marker was already cleared. The first
+  prompt is the first moment both values are real.
+- Handlers use kill-before-register and keep their ids on `ataxiaTemp`.
+
+**Tests:** new `test_mnem_mapper_guard.lua` (14). 8 break-back mutants, all killed.
 
 ---
 

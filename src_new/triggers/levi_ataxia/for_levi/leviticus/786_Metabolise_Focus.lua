@@ -1,13 +1,12 @@
 --[[mudlet
 type: trigger
-name: Limb Prompt
+name: Metabolise Focus
 hierarchy:
 - Levi_Ataxia
 - For Levi
 - leviticus
-- LeviAtax
-- Leviticus
-- Defence
+- Ataxia
+- Misc Triggers
 attributes:
   isActive: 'yes'
   isFolder: 'no'
@@ -31,15 +30,11 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ''
-  type: 7
+- pattern: ^You begin to focus upon advanced metabolisation of the (\w+) affliction\.
+  type: 1
 ]]--
 
--- v4.7.382: guarded -- this runs on every prompt, so an unloaded limb tracker flooded errors.
-if lb and lb.prompt then cecho(" " .. lb.prompt()) end
-
-if gmcp.Char and gmcp.Char.Status and (gmcp.Char.Status.class == "Runewarden" or gmcp.Char.Status.class == "Infernal") and ataxia.vitals and ataxia.vitals.knight == "Dual Blunt" then
-mymomentum = ataxia.vitals.class or 0
-end
-
-tarc.write()
+-- "You begin to focus upon advanced metabolisation of the paralysis affliction." (the user's
+-- log, 2026-10-05). METABOLISE is not a DEF line and GMCP never reports it, so this is the only
+-- proof the send landed (deffing/001).
+if ataxia_metaboliseConfirmed then ataxia_metaboliseConfirmed(matches[2]) end

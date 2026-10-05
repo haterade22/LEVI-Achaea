@@ -1350,7 +1350,7 @@ BOONS row or an `(ECHO)` row. **Tower-gated as well as boon-gated** because the 
 flags on a confirmed run END but not at run START (a known registry gap), and outside the tower
 there are no crits refilling anything. `ataxia.settings.sipping.sharpmindat` tunes the threshold.
 
-## `sr` routing (v4.7.376)
+## `sr` routing (v4.7.382)
 `sr` (alias `154_Group_(All_Classes)`) as a Monk calls `shikudoLock.dispatch()` (007_CC_Shikudo_Lock)
 by name. The global `shikudolock()` is defined by both 007 and 008, and the last script loaded wins.
 It requires a Shikudo `Form` charstat. With none (Tekura) it echoes and does nothing.

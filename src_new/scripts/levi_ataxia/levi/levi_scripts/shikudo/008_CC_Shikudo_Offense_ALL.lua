@@ -213,7 +213,7 @@ end
 --------------------------------------------------------------------------------
 
 function shikudo_checkForms()
-  -- v4.7.376: the vitals update calls this while it is still reading the Form charstat, before
+  -- v4.7.382: the vitals update calls this while it is still reading the Form charstat, before
   -- Kata has been parsed, so on the first prompt kata is nil and `k > 5` threw.
   if not ataxia.vitals.form then return end
   local k = ataxia.vitals.kata or 0
@@ -864,7 +864,7 @@ function shikudo.dispatch()
   cecho(" <cyan>| Form: <yellow>" .. form)
   cecho(" <cyan>| Kata: <yellow>" .. kata)
 
-  -- v4.7.376: show what the tracker believes we have applied. Achaea never prints the affliction on
+  -- v4.7.382: show what the tracker believes we have applied. Achaea never prints the affliction on
   -- the attacker's screen, so without this a lock round showed only limb damage (007 already does it).
   if mode == "lock" or mode == "riftlock" then
     cecho("\n<cyan>[Shikudo:" .. mode:upper() .. "] Affs:")

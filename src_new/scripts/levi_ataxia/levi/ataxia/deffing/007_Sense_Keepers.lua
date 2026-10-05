@@ -97,9 +97,21 @@ ataxia_SENSE_LANDED_GRACE = 1.5
 -- def   = the key in `ataxia.defences` (GMCP's own name, lowercased)
 -- cmd   = what we send to raise it
 -- stamp = where the in-flight hold lives on ataxiaTemp
+--
+-- MINDSEYE (v4.7.378, user: "touch mindseye, thralls tend to strip defences"). Blind, the room
+-- hides its occupants ("A mysterious entity abides") and the explorer's look-ahead sees nothing --
+-- a death log walked into a monstrosity of flesh that way. The mindseye tattoo lets us perceive
+-- while blind, but it only stays up if the defence profile keeps it, and the Necromantic thralls
+-- strip defences. So: any class, whenever we are BLIND and mindseye is down, touch it -- except
+-- under Rimewrought, where tattoos do nothing. A short hold: the touch is not a trance, and GMCP's
+-- Char.Defences Add is the confirmation.
 ataxia_SENSE_KEEPERS = {
   { def = "deafness",  cmd = "deaf",  stamp = "deafAttemptAt" },
   { def = "blindness", cmd = "blind", stamp = "blindAttemptAt" },
+  { def = "mindseye",  cmd = "touch mindseye", stamp = "mindseyeAttemptAt", anyClass = true, hold = 4,
+    when = function()
+      return ataxia.defences and ataxia.defences.blindness and not mnemRimewrought
+    end },
 }
 
 local function senseNow()
@@ -140,7 +152,7 @@ function ataxia_senseKeepNeeded(k)
   local since = senseNow() - at
   -- `since >= 0` guards a future-dated stamp (the v4.7.245 tumble-settle rule): a stamp
   -- ahead of the clock must not disable the keeper permanently.
-  if since >= 0 and since < ataxia_SENSE_HOLD then return false end
+  if since >= 0 and since < (tonumber(k.hold) or ataxia_SENSE_HOLD) then return false end
   return true
 end
 
@@ -211,10 +223,11 @@ end
 
 -- Called once per prompt. Sends at most one command per sense per hold window.
 function ataxia_senseKeepTick()
-  if not ataxia_senseKeepClass() then return end
+  local classOk = ataxia_senseKeepClass()
   ataxiaTemp = ataxiaTemp or {}
   for _, k in ipairs(ataxia_SENSE_KEEPERS) do
-    if ataxia_senseKeepNeeded(k) then
+    -- deaf/blind are Monk/BM self-senses; mindseye is a tattoo anyone can touch (v4.7.378)
+    if (classOk or k.anyClass) and (not k.when or k.when()) and ataxia_senseKeepNeeded(k) then
       ataxiaTemp[k.stamp] = senseNow() -- stamp BEFORE the send; see the header
       send(k.cmd, false) -- quiet: a keeper firing every few seconds should not echo (CLAUDE.md)
     end

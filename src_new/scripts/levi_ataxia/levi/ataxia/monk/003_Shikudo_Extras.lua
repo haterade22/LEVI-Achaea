@@ -16,7 +16,7 @@ packageName: ''
 ]]--
 
 function shikudo_checkForms()
-  -- v4.7.376: the vitals update calls this while it is still reading the Form charstat, before
+  -- v4.7.382: the vitals update calls this while it is still reading the Form charstat, before
   -- Kata has been parsed, so on the first prompt kata is nil and `k > 5` threw.
   if not ataxia.vitals.form then return end
   local k = ataxia.vitals.kata or 0

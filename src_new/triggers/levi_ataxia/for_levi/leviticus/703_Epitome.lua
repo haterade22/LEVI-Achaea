@@ -34,7 +34,7 @@ patterns:
   type: 1
 ]]--
 
--- v4.7.376: `epitomiser` was never assigned, so this threw on every Epitomise. 314_Epitome
+-- v4.7.382: `epitomiser` was never assigned, so this threw on every Epitomise. 314_Epitome
 -- matched the same line and is now disabled, so the alert and party tell go out once.
 local epitomiser = matches[2]
 

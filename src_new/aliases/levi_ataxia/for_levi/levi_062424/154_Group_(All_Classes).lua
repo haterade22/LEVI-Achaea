@@ -17,7 +17,7 @@ if gmcp.Char.Status.class == "Apostate" then
 end
 
 if gmcp.Char.Status.class == "Monk" then
-  -- v4.7.376: `shikudolock()` is a GLOBAL defined by two scripts (007_CC_Shikudo_Lock and the
+  -- v4.7.382: `shikudolock()` is a GLOBAL defined by two scripts (007_CC_Shikudo_Lock and the
   -- shipped-inactive 008_CC_Shikudo_Offense_ALL), so whichever loaded last answered `sr`. Name the
   -- owner. A Form charstat is Shikudo's (Tekura has none), so a Tekura monk no longer fires a staff lock.
   if not (ataxia.vitals and ataxia.vitals.form) then
