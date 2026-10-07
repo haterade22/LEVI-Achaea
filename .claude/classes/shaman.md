@@ -170,6 +170,11 @@ thrice_cursed: |
   v4.7.387: jinx/001 is start-of-line (the live line may have no full stop), and in the tower, as a
   Shaman on the swiftcurse bashtype, the charge line itself re-latches mnemThriceCursed -- only the
   boon lets a swiftcurse build a charge.
+highlight: |
+  v4.7.388: highlighting/071 paints our swiftcurse ("You point an imperious finger at ...") and jinx
+  ("Summoning your malign power, you direct a twin assault of the curses ...") bold chartreuse. A
+  wrapped first row (no closing full stop) paints the next row too, via tempLineTrigger -- the jinx
+  ends with the denizen's name, so its tail has nothing fixed to anchor a pattern on.
 battlerage:
   - "invoke korkma <3rd target>: crowd-control on 3+ mobs (001_Bashing_Functions.lua:1013-1015)"
 ```
