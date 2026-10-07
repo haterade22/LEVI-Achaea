@@ -334,6 +334,8 @@ M.BOON_SEED = {
   ["Tireless"] = { description = "Defeating a denizen will restore 2% of your willpower and 2% of your endurance.", rarity = "common" },
   -- v4.7.381, from the user's boon screen. Rarity not shown there, so not recorded.
   ["Serpent's Maw"] = { description = "Your venoms now deal unblockable damage against denizens and their base damage is increased by 50%. Unlocks additional common boons that increase the potency of your venoms." },
+  -- v4.7.386, from the user's boon screen. Rarity not shown there, so not recorded.
+  ["Thrice Cursed"] = { description = "Your swiftcurses now build jinx charges, and your jinxes deal one extra bleed curse when used." },
   ["Toxicologist"] = { description = "Your venoms now relapse against denizens, dealing damage again after a delay.", rarity = "rare" },
   -- CAPTURED LIVE 2026-09-02 from the boon screen. `Healing Metabolism` and `Thick Skull` were
   -- name-only holes declared in M.BOON_UNDESCRIBED; `Obligate Carnivore` and `Power Up` were not

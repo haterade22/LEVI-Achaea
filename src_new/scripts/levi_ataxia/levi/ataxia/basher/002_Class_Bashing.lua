@@ -3804,6 +3804,40 @@ function ataxiaBasher_serpentBashing()
    return command
 end
 
+-- THRICE CURSED (Mnemosyne boon, v4.7.386): "Your swiftcurses now build jinx charges, and your
+-- jinxes deal one extra bleed curse when used."
+--
+-- User: "swiftcurse target, get jinx charge, then jinx target to use jinx charge and then
+-- swiftcurse". Without the boon only a REGULAR curse charges a jinx, so the swiftcurse rotation never
+-- had one to spend; with it, every swiftcurse banks one, and the basher spends it on the very next
+-- round. The charge is the one jinx/001 latches ("Your malign power may be unleashed in the form of a
+-- jinx against your victim.") and jinx/002 spends (the jinx line itself, or "You have not built up
+-- enough malign power").
+--
+-- A jinx that is refused with any OTHER line would leave `canJinx` up and the basher jinxing every
+-- round for ever, never swiftcursing again. So the first send is stamped, and a charge still
+-- unspent THRICE_JINX_STALE seconds later is treated as not there: back to swiftcurse, whose next
+-- charge line re-arms it. jinx/002 clears the stamp when a jinx resolves.
+--
+-- Returns the jinx command, or nil when there is no charge to spend.
+THRICE_JINX_STALE = 6
+function ataxiaBasher_shamanThriceJinx()
+  if not mnemThriceCursed then return nil end
+  ataxiaTemp = ataxiaTemp or {}
+  if not ataxiaTemp.canJinx then
+    ataxiaTemp.thriceJinxAt = nil
+    return nil
+  end
+  local nowT = getEpoch()
+  local sent = ataxiaTemp.thriceJinxAt
+  if sent and nowT - sent >= THRICE_JINX_STALE then
+    ataxiaTemp.canJinx, ataxiaTemp.jinxCharge, ataxiaTemp.thriceJinxAt = false, 0, nil
+    return nil
+  end
+  ataxiaTemp.thriceJinxAt = sent or nowT
+  return "stand;wield shield;jinx bleed bleed "..target
+end
+
 function ataxiaBasher_shamanBashing()	
 local healhealth = tonumber(math.floor((ataxia.vitals.hp/ataxia.vitals.maxhp)*100))
 
@@ -3818,11 +3852,17 @@ local healhealth = tonumber(math.floor((ataxia.vitals.hp/ataxia.vitals.maxhp)*10
   if not shaman.spiritlore.bashType then shaman.spiritlore.bashType = "swiftcurse" end
 	local bash_type = shaman.spiritlore.bashType
 
+  -- Thrice Cursed: a swiftcurse banked a jinx charge -- spend it, then swiftcurse again. Asked only
+  -- on a round that would otherwise swiftcurse, so a regeneration round does not start its clock.
+  local thrice = (healhealth >= 60 and bash_type == "swiftcurse") and ataxiaBasher_shamanThriceJinx() or nil
+
   local atk
   if healhealth < 60 then
     atk = "stand;wield shield;invoke regeneration"
   elseif bash_type == "arius" and shaman.spiritisbound("arius") then
     atk = "invoke roar "..target
+  elseif thrice then
+    atk = thrice
   elseif bash_type == "swiftcurse" then
     -- No spirit-binding check: swiftcurse is used regardless of whether aelkesh is bound.
     --
