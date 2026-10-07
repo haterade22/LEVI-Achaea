@@ -2055,22 +2055,22 @@ function ataxiaBasher_jesterBadjoke(sp, shielded)
 end
 
 -- APOSTATIC (Mnemosyne boon): "Your priestess tarot now deals magic damage to denizens instead
--- of healing them." So a card that was actively counterproductive while bashing becomes damage.
+-- of healing them."
 --
--- The FLING syntax is not invented: `fling fool at me` is already sent by this package's
--- lock-breakers (can(x)/003_Lock_breakers), so `fling <card> at <target>` is the confirmed form.
+-- AB 605 (captured 2026-10-07): `FLING PRIESTESS AT <target>`, works on denizens, **3.00 seconds
+-- of BALANCE**. That is the same balance as BOP, so the card can only ever REPLACE the swing on
+-- its round. Until v4.7.385 it was appended BESIDE the bop (the old comment guessed equilibrium),
+-- which made one of the two a refusal on every card round.
 --
--- TWO THINGS ARE GENUINELY UNKNOWN and the defaults are conservative because of it:
---   * which balance a fling spends (equilibrium is likely, but unconfirmed), so this is
---     appended rather than allowed to replace the swing -- if it turns out to take BALANCE it
---     costs a round rather than silently eating the attack;
---   * whether it consumes an INSCRIBED CARD. Tarot cards are stock a Jester has to inscribe,
---     so a fling every round could quietly empty the deck. The cooldown is therefore generous
---     (`ataxiaBasher.jesterPriestessCd`, default 20s) rather than tuned.
--- Capture the AB entry and both can be tightened; until then the failure mode is "we throw it
--- less often than we could", which costs damage rather than resources we cannot replace.
-function ataxiaBasher_jesterPriestess(sp)
+-- OFF BY DEFAULT (user, 2026-10-07: "Just account for it, dont use it for now"). Holding the boon
+-- arms nothing; `ataxiaBasher.jesterPriestess = true` opts in. Whether a fling consumes an
+-- INSCRIBED card is still unconfirmed, so the generous cooldown stays
+-- (`ataxiaBasher.jesterPriestessCd`, default 20s).
+--
+-- Returns the full replacement command (no trailing separator) or "".
+function ataxiaBasher_jesterPriestess()
 	if not mnemApostatic then return "" end
+	if not ataxiaBasher.jesterPriestess then return "" end
 	if type(target) ~= "number" then return "" end
 	if ataxiaBasher.shielded then return "" end -- break the shield first
 	local nowT = (getEpoch and getEpoch()) or os.time()
@@ -2079,7 +2079,30 @@ function ataxiaBasher_jesterPriestess(sp)
 		return ""
 	end
 	ataxiaTemp.jesterPriestessAt = nowT
-	return "fling priestess at "..target..sp
+	return "fling priestess at "..target
+end
+
+-- The balance swing: BOP or GALLOWSHUMOUR.
+--
+-- GALLOWSHUMOUR vs BOP (AB 2680, confirmed 2026-08-11). Against a denizen gallowshumour needs no
+-- puppet, deals PSYCHIC damage off the better of intellect or strength, and "the closer they are
+-- to death, the sharper your wit cuts": increased damage under 50% health, and further under 25%.
+-- So 50% is the documented breakpoint. 2.10s of balance, and it takes a TARGET.
+--
+-- MOTLEY BOP (Mnemosyne boon, v4.7.385): "Your pranks bop ability has a 50% chance to strike
+-- another denizen in your location, dealing blunt damage." (Bop, AB 661: 3.00s balance, needs a
+-- wielded blackjack.) Switching to gallowshumour throws that splash away, so with the boon and a
+-- crowd (`ataxiaBasher.jesterMotleyAt`, default 2) we keep bopping however low the target is
+-- (user: keep bopping in crowds). Alone, the execute bonus wins as before.
+function ataxiaBasher_jesterAttack(mobhp)
+	if (tonumber(mobhp) or 100) >= 50 then return "bop " end
+	if mnemMotleyBop then
+		local M = ataxia.mnemosyne
+		local n = (M and M._denizenCount and M._denizenCount())
+			or (ataxia.denizensHere and #ataxia.denizensHere) or 0
+		if n >= (tonumber(ataxiaBasher.jesterMotleyAt) or 2) then return "bop " end
+	end
+	return "gallowshumour "
 end
 
 function ataxiaBasher_jesterBashing()
@@ -2089,14 +2112,7 @@ function ataxiaBasher_jesterBashing()
 	local wield = "wield blackjack;wield shield"..sp
 	local rawhp = (gmcp.IRE.Target.Info.hpperc or "100"):gsub("%%", "")
 	local mobhp = tonumber(rawhp) or 100
-	-- GALLOWSHUMOUR vs BOP (AB 2680, confirmed 2026-08-11). Against a denizen gallowshumour
-	-- needs no puppet, deals PSYCHIC damage off the better of intellect or strength, and
-	-- "the closer they are to death, the sharper your wit cuts": increased damage under 50%
-	-- health, and increased FURTHER under 25%. So the existing 50% switch is exactly the
-	-- documented breakpoint, and the second tier needs no code -- it is the same command,
-	-- simply worth more as the target drops. 2.10s of balance, and it takes a TARGET (unlike
-	-- badjoke, which does not).
-	local attack = (mobhp < 50) and "gallowshumour " or "bop "
+	local attack = ataxiaBasher_jesterAttack(mobhp)
 	-- Keep SLIPPERY up (Elusive Foolery) ahead of everything: it is a defence, not a swing.
 	local slip = ataxiaBasher_jesterSlippery(sp)
 
@@ -2113,10 +2129,12 @@ function ataxiaBasher_jesterBashing()
 			command = slip..wield..raze..sp..brage
 		end
 	else
-		-- Both riders spend something other than the balance swing, so they ride beside it.
+		-- The joke spends equilibrium and rides beside the swing. The priestess card spends
+		-- BALANCE (AB 605) and so takes the swing's place on its round (opt-in only).
 		local joke = ataxiaBasher_jesterBadjoke(sp, false)
-		local card = ataxiaBasher_jesterPriestess(sp)
-		command = slip..wield..joke..card..brage..sp..attack..target
+		local card = ataxiaBasher_jesterPriestess()
+		local swing = (card ~= "") and card or (attack..target)
+		command = slip..wield..joke..brage..sp..swing
 	end
 
 	return command

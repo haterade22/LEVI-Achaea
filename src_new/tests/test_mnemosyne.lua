@@ -4276,6 +4276,61 @@ describe("ice-slip recovery during a tactical retreat (v4.7.243)", function()
 end)
 
 -- ============================================================================
+-- v4.7.385 -- Seclusion: ACTIVATE HERMIT in the holding room on the descent
+-- ============================================================================
+describe("Seclusion -- the hermit goes up with the descent", function()
+  local M = ataxia.mnemosyne
+  local function capture(fn)
+    local realSend, realSwarm = send, M.swarm
+    local out = {}
+    local ok, err = pcall(function()
+      send = function(c) table.insert(out, c) end
+      M.swarm = { moveLocked = function() return false end }
+      M.explore.on = true
+      fn()
+    end)
+    if M._explMoveT then killTimer(M._explMoveT); M._explMoveT = nil end
+    M.explore.moving, M.explore.on = false, false
+    send, M.swarm = realSend, realSwarm
+    if not ok then error(err, 0) end
+    return out
+  end
+
+  it("prepends activate hermit to the first down of the ripple, once", function()
+    mnemSeclusion, mnemHomebound, M._hermitRipple = true, false, nil
+    local out = capture(function()
+      M._exploreMove("down")
+      M._exploreMove("down")
+    end)
+    expect(out[1]).toBe("queue addclear free stand;activate hermit;down")
+    expect(out[2]).toBe("queue addclear free stand;down")
+    expect(M._hermitRipple).toBeTrue()
+    mnemSeclusion, M._hermitRipple = false, nil
+  end)
+
+  it("never on a planar move", function()
+    mnemSeclusion, M._hermitRipple = true, nil
+    local out = capture(function() M._exploreMove("s") end)
+    expect(out[1]).toBe("queue addclear free stand;s")
+    mnemSeclusion, M._hermitRipple = false, nil
+  end)
+
+  it("stacks with the Homebound raido", function()
+    mnemSeclusion, mnemHomebound, M._hermitRipple, M._raidoRipple = true, true, nil, nil
+    local out = capture(function() M._exploreMove("down") end)
+    expect(out[1]).toBe("queue addclear free stand;sketch raido on ground;activate hermit;down")
+    mnemSeclusion, mnemHomebound, M._hermitRipple, M._raidoRipple = false, false, nil, nil
+  end)
+
+  it("does nothing without the boon", function()
+    mnemSeclusion, M._hermitRipple = false, nil
+    local out = capture(function() M._exploreMove("down") end)
+    expect(out[1]).toBe("queue addclear free stand;down")
+    expect(M._hermitRipple).toBeNil()
+  end)
+end)
+
+-- ============================================================================
 -- v4.7.249 -- the ripple is 4x4, and that is evidence against dementia
 -- ============================================================================
 --

@@ -1313,6 +1313,8 @@ M.BOON_FLAGS = {
   ["Pyrrhic Victory"]      = "mnemPyrrhicVictory",
   ["Razor Leaf"]           = "mnemRazorLeaf",
   ["Sharp Mind"]           = "mnemSharpMind", -- v4.7.320: Monk transmute becomes a top-up (basher/002)
+  ["Seclusion"]            = "mnemSeclusion", -- v4.7.385: Jester hermit = once-per-ripple 200% heal (008/009)
+  ["Motley Bop"]           = "mnemMotleyBop", -- v4.7.385: Jester keeps bopping in a crowd (basher/002)
 }
 
 -- An (ECHO) row names the same boon; a second copy does not make it a different one.

@@ -2,6 +2,36 @@
 
 ---
 
+## 2026-10-07 - Jester tower bashing: Seclusion, Motley Bop, Priestess corrected, attack highlights (v4.7.385)
+
+User pasted the Seclusion, Motley Bop and Apostatic boons with the ABs for Bop (661), Priestess (605) and
+Hermit (608).
+
+- **Priestess was mis-wired.** AB 605: `FLING PRIESTESS AT <target>` costs 3.00s of **balance**, the same
+  as bop. `ataxiaBasher_jesterPriestess` appended it BESIDE the bop (v4.7.258 guessed equilibrium), so
+  one of the two was refused on every card round. It now replaces the swing on its round and is **off
+  by default** (user: "Just account for it, dont use it for now"); `ataxiaBasher.jesterPriestess = true`
+  opts in.
+- **Motley Bop** (`mnemMotleyBop`): bop has a 50% chance to hit a second denizen, so with 2+ denizens
+  (`ataxiaBasher.jesterMotleyAt`) the basher keeps bopping below 50% target HP instead of switching to
+  gallowshumour (`ataxiaBasher_jesterAttack`).
+- **Seclusion** (`mnemSeclusion`): returning to a hermit cures everything and restores 200% max health,
+  once per ripple. User: "do hermit in the room when we first enter the wade and go DOWN", so the explorer
+  sends `activate hermit` with the holding room's first `down` (beside the Homebound raido). At the
+  **panic floor** (user's choice: `panicAt`% or the absolute `panicHp`), `S._maybeSeclusion` sends
+  `cq all` and then `fling hermit at ground` ahead of the Roll Hide tumble, holding the dispatcher. The
+  first room event afterwards is the landing (`S.onSeclusionRoom`, called from the explorer's room
+  handler), and it walks straight back `down`. A fling that never lands is spent after 8s, and the ladder
+  takes over. The fling, arrival and no-card lines are uncaptured.
+- **Highlights** (user: "Color this the same we did the serpent attacks"): `highlighting/069` (bop) and
+  `070` (gallowshumour, which always wraps) in bold chartreuse, with anchored tails for the wrapped rows.
+- Both boons are in `M.BOON_FLAGS` and the seed.
+
+**Tests:** 28 new or rewritten (Jester rotation, explorer activation, Seclusion cash-in and landing).
+Break-back: disabling the hook and the prefix fails 5 of them.
+
+---
+
 ## 2026-10-05 - Python caches are no longer tracked (repo housekeeping, no package change)
 
 `tools/lib/__pycache__/*.pyc` (five files) had been tracked since 2025-12-27, while `.gitignore` only

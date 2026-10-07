@@ -3749,6 +3749,106 @@ describe("v4.7.378 -- after an escape, and when the legs give out", function()
   end)
 end)
 
+-- ============================================================================
+-- SECLUSION (Jester boon, v4.7.385): fling the hermit home at the panic floor.
+-- ============================================================================
+describe("Seclusion -- the hermit fling at the panic floor", function()
+  local out, moves
+  local realSend, realMove = send, M._exploreMove
+  local function setup(hp)
+    fixture(3)
+    out, moves = {}, {}
+    send = function(c) table.insert(out, c) end
+    M._exploreMove = function(d) table.insert(moves, d) end
+    mnemSeclusion, mnemRollHide = true, false
+    M._hermitRipple = true
+    ataxiaTemp.seclusionRoom = 1
+    gmcp.Char = { Vitals = { hp = tostring(hp or 3000), maxhp = "10000" } }
+  end
+  local function flung()
+    for _, c in ipairs(out) do if c:find("fling hermit at ground", 1, true) then return true end end
+    return false
+  end
+  local function teardown()
+    send, M._exploreMove = realSend, realMove
+    mnemSeclusion, mnemRollHide, M._hermitRipple = false, false, nil
+    if S._seclusionT then pcall(killTimer, S._seclusionT); S._seclusionT = nil end
+  end
+  local function run(fn) local ok, err = pcall(fn); teardown(); if not ok then error(err, 0) end end
+
+  it("flings at the panic floor", function() run(function()
+    setup(3000)
+    S.onVitals()
+    expect(flung()).toBeTrue()
+    expect(ataxiaTemp.seclusionUsed).toBeTrue()
+    expect(ataxiaTemp.swarmHold).toBeTrue()
+  end) end)
+
+  it("does not fling above the panic floor", function() run(function()
+    setup(5000)
+    S._maybeSeclusion(50)
+    expect(flung()).toBeFalse()
+  end) end)
+
+  it("needs the hermit activated this ripple", function() run(function()
+    setup(3000); M._hermitRipple = nil
+    expect(S._maybeSeclusion(30)).toBeFalse()
+  end) end)
+
+  it("needs the boon", function() run(function()
+    setup(3000); mnemSeclusion = false
+    expect(S._maybeSeclusion(30)).toBeFalse()
+  end) end)
+
+  it("is once per ripple", function() run(function()
+    setup(3000)
+    expect(S._maybeSeclusion(30)).toBeTrue()
+    ataxiaTemp.seclusionSentAt = nil -- landed or timed out
+    expect(S._maybeSeclusion(30)).toBeFalse()
+  end) end)
+
+  it("is refused while bound", function() run(function()
+    setup(3000); ataxia.afflictions = { webbed = true }
+    expect(S._maybeSeclusion(30)).toBeFalse()
+    ataxia.afflictions = nil
+  end) end)
+
+  it("is refused in the holding room itself", function() run(function()
+    setup(3000); MAP.current = 1
+    expect(S._maybeSeclusion(30)).toBeFalse()
+  end) end)
+
+  it("outranks the Roll Hide tumble", function() run(function()
+    setup(3000); mnemRollHide = true
+    MAP.rooms[200].exits.east = 60
+    S.onVitals()
+    expect(flung()).toBeTrue()
+    for _, c in ipairs(out) do expect(c:find("tumble", 1, true)).toBeNil() end
+  end) end)
+
+  it("the landing walks straight back down", function() run(function()
+    setup(3000)
+    S.onVitals()
+    MAP.current = 1 -- the holding room
+    expect(S.onSeclusionRoom()).toBeTrue()
+    expect(moves[1]).toBe("down")
+    expect(ataxiaTemp.seclusionSentAt).toBeNil()
+    expect(ataxiaTemp.swarmHold).toBeNil()
+  end) end)
+
+  it("a room event before we moved is not the landing", function() run(function()
+    setup(3000)
+    S.onVitals()
+    expect(S.onSeclusionRoom()).toBeFalse() -- still in room 200
+    expect(#moves).toBe(0)
+  end) end)
+
+  it("is inert with nothing in flight", function() run(function()
+    setup(3000)
+    expect(S.onSeclusionRoom()).toBeFalse()
+  end) end)
+end)
+
 -- v4.7.345: the mount module was loaded above for the mountjump tests.
 ataxiaBasher_isMounted, ataxiaBasher_mountVerb = nil, nil
 ataxiaBasher_mountedSet, ataxiaBasher_jumpSent = nil, nil
