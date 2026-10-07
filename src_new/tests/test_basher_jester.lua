@@ -51,6 +51,8 @@ local function reset()
   ataxia.defences, ataxia.afflictions = {}, {}
   ataxiaTemp = {}
   mnemToughCrowd, mnemElusiveFoolery, mnemApostatic = false, false, false
+  mnemMotleyBop, ataxiaBasher.jesterPriestess, ataxiaBasher.jesterMotleyAt = false, nil, nil
+  gmcp.IRE.Target.Info.hpperc = "90%"
   ataxiaBasher.jesterJokeAt, ataxiaBasher.jesterJokeCd = nil, nil
   ataxiaBasher.jesterJokeMana, ataxiaBasher.jesterPriestessCd = nil, nil
   denizens, swarmState = 0, "idle"
@@ -190,51 +192,91 @@ describe("Elusive Foolery -- keep SLIPPERY up", function()
   end)
 end)
 
-describe("Apostatic -- the priestess tarot damages instead of healing", function()
-  it("does nothing without the boon", function()
-    reset()
-    expect(ataxiaBasher_jesterPriestess(";")).toBe("")
+describe("Apostatic -- priestess is BALANCE (AB 605) and off by default", function()
+  -- User, 2026-10-07: "Just account for it, dont use it for now".
+  it("sends nothing with the boon alone", function()
+    reset(); mnemApostatic = true
+    expect(ataxiaBasher_jesterPriestess()).toBe("")
+    expect(has(ataxiaBasher_jesterBashing(), "priestess")).toBeFalse()
   end)
 
-  -- "fling <card> at <target>" is the form this package already sends for the lock-breakers.
-  it("flings it at the target", function()
-    reset(); mnemApostatic = true
-    expect(ataxiaBasher_jesterPriestess(";")).toBe("fling priestess at 7;")
+  it("needs the boon even when opted in", function()
+    reset(); ataxiaBasher.jesterPriestess = true
+    expect(ataxiaBasher_jesterPriestess()).toBe("")
+  end)
+
+  it("flings at the target when opted in", function()
+    reset(); mnemApostatic = true; ataxiaBasher.jesterPriestess = true
+    expect(ataxiaBasher_jesterPriestess()).toBe("fling priestess at 7")
   end)
 
   it("breaks the shield first", function()
-    reset(); mnemApostatic = true
+    reset(); mnemApostatic = true; ataxiaBasher.jesterPriestess = true
     ataxiaBasher.shielded = true
-    expect(ataxiaBasher_jesterPriestess(";")).toBe("")
+    expect(ataxiaBasher_jesterPriestess()).toBe("")
   end)
 
-  -- A fling may consume an inscribed card, so the default cadence is deliberately slow.
   it("is on a generous cooldown", function()
-    reset(); mnemApostatic = true
-    expect(ataxiaBasher_jesterPriestess(";")).toBe("fling priestess at 7;")
+    reset(); mnemApostatic = true; ataxiaBasher.jesterPriestess = true
+    expect(ataxiaBasher_jesterPriestess()).toBe("fling priestess at 7")
     clock = clock + 5
-    expect(ataxiaBasher_jesterPriestess(";")).toBe("")
+    expect(ataxiaBasher_jesterPriestess()).toBe("")
     clock = clock + 30
-    expect(ataxiaBasher_jesterPriestess(";")).toBe("fling priestess at 7;")
+    expect(ataxiaBasher_jesterPriestess()).toBe("fling priestess at 7")
   end)
 
   it("needs a numeric target", function()
-    reset(); mnemApostatic = true
+    reset(); mnemApostatic = true; ataxiaBasher.jesterPriestess = true
     target = "Somebody"
-    expect(ataxiaBasher_jesterPriestess(";")).toBe("")
+    expect(ataxiaBasher_jesterPriestess()).toBe("")
     target = 7
   end)
 
-  -- Both riders spend something other than the balance swing, so the swing survives.
-  it("rides beside the swing rather than replacing it", function()
-    reset(); mnemApostatic = true; mnemToughCrowd = true; denizens = 3
+  -- Both cost 3s of balance: the card takes the swing's slot, never both.
+  it("replaces the bop on its round; the equilibrium joke still rides", function()
+    reset(); mnemApostatic = true; ataxiaBasher.jesterPriestess = true
+    mnemToughCrowd = true; denizens = 3
     local cmd = ataxiaBasher_jesterBashing()
     expect(has(cmd, "fling priestess at 7")).toBeTrue()
     expect(has(cmd, "badjoke")).toBeTrue()
-    expect(has(cmd, "bop 7")).toBeTrue()
+    expect(has(cmd, "bop 7")).toBeFalse()
+    -- next round, card on cooldown: the bop is back
+    clock = clock + 3
+    expect(has(ataxiaBasher_jesterBashing(), "bop 7")).toBeTrue()
+  end)
+end)
+
+describe("Motley Bop -- keep bopping in a crowd", function()
+  it("healthy target: bop either way", function()
+    reset()
+    expect(ataxiaBasher_jesterAttack(80)).toBe("bop ")
+  end)
+
+  it("no boon: gallowshumour below 50%", function()
+    reset(); denizens = 3
+    expect(ataxiaBasher_jesterAttack(40)).toBe("gallowshumour ")
+  end)
+
+  it("boon + crowd: bop below 50% for the splash", function()
+    reset(); mnemMotleyBop = true; denizens = 2
+    expect(ataxiaBasher_jesterAttack(40)).toBe("bop ")
+  end)
+
+  it("boon alone: the execute bonus still wins", function()
+    reset(); mnemMotleyBop = true; denizens = 1
+    expect(ataxiaBasher_jesterAttack(40)).toBe("gallowshumour ")
+  end)
+
+  it("drives the assembled round", function()
+    reset(); mnemMotleyBop = true; denizens = 3
+    gmcp.IRE.Target.Info.hpperc = "20%"
+    expect(has(ataxiaBasher_jesterBashing(), "bop 7")).toBeTrue()
+    denizens = 1
+    expect(has(ataxiaBasher_jesterBashing(), "gallowshumour 7")).toBeTrue()
   end)
 end)
 
 -- Restore shared state for whoever runs after us (files share one Lua state).
 mnemToughCrowd, mnemElusiveFoolery, mnemApostatic = false, false, false
+mnemMotleyBop = false
 target = nil

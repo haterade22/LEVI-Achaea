@@ -1110,6 +1110,19 @@ function M._exploreMove(dir, isRetry)
     pre = "sketch raido on ground" .. sep
     M._exploreEcho("<cyan>Homebound<reset> -- raido sketched in the holding room.")
   end
+  -- SECLUSION boon (Jester, v4.7.385): "Returning to a hermit cures you of all afflictions and
+  -- restores you to 200% of your maximum health. Not effective in the same location. This effect
+  -- can only occur once per ripple." User: "do hermit in the room when we first enter the wade
+  -- and go DOWN". ACTIVATE HERMIT (AB 608, 2s equilibrium) remembers this room; the swarm module's
+  -- `S._maybeSeclusion` flings back to it at the panic floor. Same moment and shape as the raido.
+  if mnemSeclusion and dir == "down" and not M._hermitRipple then
+    M._hermitRipple = true
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.seclusionRoom = MAP and MAP.current
+    ataxiaTemp.seclusionUsed = nil
+    pre = pre .. "activate hermit" .. sep
+    M._exploreEcho("<cyan>Seclusion<reset> -- hermit activated in the holding room.")
+  end
   send("queue addclear free stand" .. sep .. pre .. dir)
   -- Arm the dead reckoning for exactly this one step (v4.7.251). Under dementia several room
   -- events arrive inside one move's window; without arming, each advanced the position again.
@@ -1775,6 +1788,7 @@ function M._exploreResume(reason)
   M.explore.iceSlips = 0
   M.explore.settling = true -- treat the current room like an arrival: let denizens settle first
   M._raidoRipple = nil      -- new ripple, new holding room: the Homebound raido re-arms
+  M._hermitRipple = nil     -- ...and so does the Seclusion hermit (v4.7.385)
   -- Resume is the per-RIPPLE entry point (GO calls it after every boon screen), so this is
   -- also where armour gets re-checked before each dive -- not just on the first `explore on`.
   M._wearArmour()
@@ -1952,6 +1966,8 @@ end
 -- sweep on a stuck icy exit. So treat "moving AND still in the room we left" as
 -- "not arrived yet" and leave the move/ice machinery alone.
 function M._onExploreRoom()
+  -- The Seclusion hermit landing (009, v4.7.385) owns this event: it walks us back down.
+  if M.swarm and M.swarm.onSeclusionRoom and M.swarm.onSeclusionRoom() then return end
   if not M.explore.on then return end
   -- ARRIVAL DETECTION UNDER DEMENTIA (v4.7.250). The normal test is "the room number changed",
   -- which is worthless when the number is re-invented on every look: it reads TRUE for a plain

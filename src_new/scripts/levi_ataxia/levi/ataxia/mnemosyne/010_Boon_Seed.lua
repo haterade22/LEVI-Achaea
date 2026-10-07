@@ -368,6 +368,8 @@ M.BOON_SEED = {
   ["Tough Crowd"] = { description = "Telling a bad joke will cause psychic damage to all denizens present, but your comedic flair is so horrific that doing so will cause you to become stupid and stunned." },
   ["Elusive Foolery"] = { description = "While slippery, your dexterity is increased by 2, the defence allows you to shrug off webs, ropes, and other entanglements, but your constitution is reduced by 1." },
   ["Apostatic"] = { description = "Your priestess tarot now deals magic damage to denizens instead of healing them." },
+  ["Seclusion"] = { description = "Returning to a hermit cures you of all afflictions and restores you to 200% of your maximum health. Not effective in the same location. This effect can only occur once per ripple." },
+  ["Motley Bop"] = { description = "Your pranks bop ability has a 50% chance to strike another denizen in your location, dealing blunt damage." },
   ["Truthseeker"] = { description = "The God of Darkness allows your eyes to perceive the truth of all hidden afflictions that may befall you.", rarity = "uncommon" },
   ["Unhurried"] = { description = "You are immune to the impatience affliction.", rarity = "legendary" },
   ["Verdant Scales"] = { description = "Gain 25% resistance to poison damage.", rarity = "common", echo = "Gain 50% resistance to poison damage." },

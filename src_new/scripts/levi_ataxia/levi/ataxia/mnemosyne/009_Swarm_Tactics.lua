@@ -1101,6 +1101,102 @@ function S._maybePanic(hpNow)
 end
 
 -- ---------------------------------------------------------------------------
+-- SECLUSION (Jester boon, v4.7.385)
+-- ---------------------------------------------------------------------------
+-- "Returning to a hermit cures you of all afflictions and restores you to 200% of your maximum
+-- health. Not effective in the same location. This effect can only occur once per ripple."
+--
+-- The explorer ACTIVATEs the hermit in the holding room on the descent (008, `_exploreMove`).
+-- Here we cash it in: FLING HERMIT AT GROUND (AB 608, 3.00s of BALANCE) teleports us back to the
+-- holding room, which is exactly the "leave AND heal" the ladder otherwise needs two steps for.
+-- User: at the PANIC FLOOR only (`S._panicHpHit` -- panicAt% or the absolute panicHp), so it does
+-- NOT need Roll Hide, and it outranks the tumble when both are held.
+--
+-- THE FLING AND ARRIVAL LINES ARE UNCAPTURED, so the landing is the first gmcp.Room.Info after the
+-- send (we send nothing else meanwhile; attacks are held), plus a changed room number when dead
+-- reckoning is off. A fling that never lands (no card, refused) times out after SECLUSION_WAIT and
+-- stays SPENT for the ripple, so the next prompt falls through to the tumble or the ladder rather
+-- than re-throwing a dead card.
+S.SECLUSION_WAIT = 8
+
+function S._seclusionReady()
+  local MAP = M.map
+  if not mnemSeclusion then return false end
+  if not M._hermitRipple then return false end -- never activated this ripple
+  local t = ataxiaTemp or {}
+  if t.seclusionUsed or t.seclusionSentAt then return false end
+  if S._bound() then return false end
+  -- "Not effective in the same location."
+  if t.seclusionRoom ~= nil and MAP and MAP.current == t.seclusionRoom
+     and not (MAP.drActive and MAP.drActive()) then
+    return false
+  end
+  return true
+end
+
+function S._maybeSeclusion(hpNow)
+  local MAP = M.map
+  if not S._seclusionReady() then return false end
+  local hp = tonumber(hpNow) or hpp()
+  if not S._panicHpHit(hp) then return false end
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.seclusionUsed = true
+  ataxiaTemp.seclusionSentAt = now()
+  ataxiaTemp.seclusionFrom = MAP and MAP.current
+  S._lastEmergencyAt = now()
+  send("cq all")
+  if S.flying then send("land"); S.flying = nil end
+  S.reset("seclusion")
+  -- Hold the dispatcher (the panic tumble's reasoning): the next attack's addclearfull would
+  -- otherwise wipe the queued fling while we wait for balance.
+  ataxiaTemp.swarmHold = true
+  if S._holdT then pcall(killTimer, S._holdT) end
+  S._holdT = tempTimer(HOLD_TIMEOUT, function()
+    S._holdT = nil
+    ataxiaTemp.swarmHold = nil
+  end)
+  S.escapeOn("seclusion")
+  if S._seclusionT then pcall(killTimer, S._seclusionT) end
+  S._seclusionT = tempTimer(S.SECLUSION_WAIT, function()
+    S._seclusionT = nil
+    if ataxiaTemp.seclusionSentAt then
+      ataxiaTemp.seclusionSentAt = nil
+      S._echo("<indian_red>SECLUSION<reset> -- the hermit fling never landed; spent for this ripple.")
+    end
+  end)
+  local sep = (ataxia.settings and ataxia.settings.separator) or ";"
+  send("queue addclear free stand" .. sep .. "fling hermit at ground")
+  S._echo("<indian_red>PANIC (" .. hp .. "% hp)<reset> -- <gold>SECLUSION<reset>: flinging the hermit home"
+    .. " (cure all, 200% health), then straight back down.")
+  return true
+end
+
+-- Called from the explorer's gmcp.Room.Info handler (008) BEFORE it decides anything. Returns
+-- true when this event was the hermit landing and it has been handled.
+function S.onSeclusionRoom()
+  local MAP = M.map
+  local t = ataxiaTemp
+  if not (t and t.seclusionSentAt) then return false end
+  if (now() - t.seclusionSentAt) > S.SECLUSION_WAIT then t.seclusionSentAt = nil; return false end
+  local dr = MAP and MAP.drActive and MAP.drActive()
+  if not dr and MAP and MAP.current ~= nil and MAP.current == t.seclusionFrom then return false end
+  t.seclusionSentAt = nil
+  if S._seclusionT then pcall(killTimer, S._seclusionT); S._seclusionT = nil end
+  -- Under dead reckoning the holding room sits on the origin cell (`down` carries no 2-D step).
+  -- The descent's own exits line then replaces whatever the holding room wrote there.
+  if dr and MAP.drResetPos then MAP.drResetPos() end
+  S.escapeOff()
+  ataxiaTemp.swarmHold = nil
+  if S._holdT then pcall(killTimer, S._holdT); S._holdT = nil end
+  S._echo("<gold>SECLUSION<reset> -- home, healed; going back down.")
+  if M.explore and M.explore.on and M._exploreMove then
+    M.explore.moving = false
+    M._exploreMove("down")
+  end
+  return true
+end
+
+-- ---------------------------------------------------------------------------
 -- A TUMBLE THAT NEVER LANDED (v4.7.233)
 -- ---------------------------------------------------------------------------
 -- Death log, 2026-08-07:
@@ -2095,6 +2191,12 @@ function S.onVitals()
   -- BELOW _maybeTincture on purpose: healing is not movement, and mid-tumble at crash HP is
   -- exactly when we want the tincture.
   if S.moveLocked() then return end
+  -- SECLUSION (v4.7.385): at the panic floor, the hermit fling heals AND leaves -- ahead of the
+  -- Roll Hide tumble and the ladder. Shares the emergency clock.
+  if not (S._lastEmergencyAt and (now() - S._lastEmergencyAt) < EMERGENCY_COOLDOWN)
+     and S._maybeSeclusion(hp) then
+    return
+  end
   local wantPanic = s.panic ~= false and mnemRollHide and S._panicHpHit(hp)
   local wantEscape = s.escape ~= false and hp <= s.escapeAt
   -- THE DAMAGE WATCHDOG, EVALUATED HERE (v4.7.243). It used to live only inside

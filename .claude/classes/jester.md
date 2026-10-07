@@ -176,13 +176,38 @@ notes: "Jester is affliction-based, not limb-based"
 ```
 
 ## Bashing (PvE)
+Code: `ataxiaBasher_jesterBashing` (`basher/002_Class_Bashing.lua`). Tests: `tests/test_basher_jester.lua`.
+
 ```yaml
-attack_command: "BATTLERAGE HANDSPRING <target>"
-attack_skill: Pranks
-battlerage_abilities:
-  - handspring: "Basic damage"
-  - pincushion: "Puppet damage"
+round: "<slippery;>wield blackjack;wield shield;<badjoke;><battlerage>;<swing> <target>"
+swing:
+  bop: "AB 661 -- BOP <target>, 3.00s BALANCE, needs a wielded blackjack"
+  gallowshumour: "AB 2680 -- psychic, no puppet, 2.10s balance; extra damage under 50% and 25% target HP"
+  rule: "bop at 50%+ target HP, gallowshumour below (ataxiaBasher_jesterAttack)"
+shielded: "rage raze if rageraze, else BADJOKE (AB 681: NO target, 3.00s eq, 100 mana, strips shield + rebounding)"
 ```
+
+### Ability captures
+| AB | Ability | Syntax | Cost | Notes |
+|----|---------|--------|------|-------|
+| 661 | Bop (Pranks) | `BOP <target>` | 3.00s balance | blackjack wielded; vs adventurers also amnesia/stupidity/epilepsy |
+| 605 | Priestess (Tarot) | `FLING PRIESTESS AT <target>` | 3.00s **balance** | heals by default; same balance as bop, so it can only REPLACE the swing |
+| 608 | Hermit (Tarot) | `ACTIVATE HERMIT [tag]` / `FLING HERMIT AT GROUND [tag]` / `SNIFF HERMIT` / `HERMITS` | activate 2.00s eq; fling 3.00s balance | fling teleports to the activation room, refused if adventurers are there |
+| 681 | Badjoke (Pranks) | `BADJOKE` | 3.00s eq, 100 mana | room effect, takes no target |
+| 2680 | Gallowshumour | `GALLOWSHUMOUR <target>` | 2.10s balance | |
+
+### Mnemosyne boons
+| Boon | Flag | Handling |
+|------|------|----------|
+| Tough Crowd | `mnemToughCrowd` | badjoke becomes AoE psychic but stuns+stupefies us: 2+ denizens, 12s cd, 300 mana floor, never while escaping/recovering/in lava/at escapeAt (`jesterJokeSafe`) |
+| Elusive Foolery | `mnemElusiveFoolery` | keep `slippery` up (10s attempt-hold) |
+| Apostatic | `mnemApostatic` | priestess damages denizens. **Off by default** (user, 2026-10-07: "just account for it, dont use it for now"); `ataxiaBasher.jesterPriestess = true` opts in, and the fling then REPLACES the bop on its round (20s cd, `jesterPriestessCd`). Whether a fling consumes an inscribed card is unconfirmed |
+| Motley Bop (v4.7.385) | `mnemMotleyBop` | bop 50% splashes to a second denizen, so with 2+ denizens (`jesterMotleyAt`) we keep bopping below 50% instead of switching to gallowshumour |
+| Seclusion (v4.7.385) | `mnemSeclusion` | returning to a hermit cures all + 200% max health, once per ripple, not in the same location. The explorer sends `activate hermit` with the holding room's first `down` (`mnemosyne/008`); at the PANIC FLOOR (`panicAt`% or `panicHp`) the swarm module flings `fling hermit at ground` ahead of Roll Hide (`S._maybeSeclusion`, `mnemosyne/009`), and the landing walks straight back down (`S.onSeclusionRoom`) |
+
+Uncaptured (landing is inferred from the first room event after the fling): the hermit activate/fling/arrival lines and the no-card refusal.
+
+Highlights: `highlighting/069` (bop) and `070` (gallowshumour), bold chartreuse like the Serpent bite.
 
 ## Fighting Against This Class
 ```yaml

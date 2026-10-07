@@ -1847,6 +1847,13 @@ what strands an escape); **Apostatic** (`fling priestess at <target>` -- syntax 
 from the lock-breakers' `fling fool at me`, NOT guessed -- on a deliberately generous 20s
 cooldown because whether a fling consumes an INSCRIBED CARD is unconfirmed, and it is appended
 rather than replacing the swing because its balance type is unconfirmed too).
+**v4.7.385 corrections:** AB 605 says the priestess fling costs 3.00s of BALANCE, the same as bop, so
+appending it beside the swing made one of them a refusal every card round. It now REPLACES the swing
+and is **off by default** (`ataxiaBasher.jesterPriestess = true` opts in; user: "account for it,
+dont use it for now"). **Motley Bop** keeps bopping below 50% with 2+ denizens (the splash beats the
+execute bonus). **Seclusion** (hermit = cure all + 200% health, once per ripple): `activate hermit`
+rides the holding room's first `down`, and at the panic floor `S._maybeSeclusion` flings it ahead of
+Roll Hide, then walks back down on landing. Full table in `.claude/classes/jester.md`.
 | Magi | Masters of the four elements and crystalline vibrations | Crystalism, Elementalism, Artificing |
 | Monk | Forges mind, body, and spirit into a unified whole | Tekura/Shikudo, Kaido, Telepathy |
 | Occultist | Chaos-loving summoners of extra-planar entities | Domination, Tarot, Occultism |
