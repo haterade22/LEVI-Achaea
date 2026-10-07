@@ -13,6 +13,7 @@ local saved = {
   target = target, ataxia = ataxia, ataxiaBasher = ataxiaBasher, ataxiaTemp = ataxiaTemp,
   shaman = shaman, getEpoch = getEpoch, mnemThriceCursed = mnemThriceCursed,
   curseCharge = curseCharge, swiftcursing = swiftcursing, deleteFull = deleteFull,
+  ataxia_isClass = ataxia_isClass,
   ataxiaBasher_assembleBattlerage = ataxiaBasher_assembleBattlerage,
 }
 
@@ -133,8 +134,56 @@ describe("Thrice Cursed -- a jinx that never resolves cannot strand the rotation
   end)
 end)
 
+-- v4.7.387, user pasted the live pair: "Your malign power may be unleashed in the form of a jinx
+-- against your victim" / "Your malign power dissipates back to normal levels." -- a charge built
+-- and wasted. Two causes, both closed here.
+describe("Thrice Cursed -- the charge line arms the jinx and proves the boon", function()
+  local TL = dofile("src_new/tests/trigger_lib.lua")
+  local F = "src_new/triggers/levi_ataxia/for_levi/leviticus/jinx/001_Can_Jinx.lua"
+  local P = TL.patterns(F)
+
+  local function fire(opts)
+    opts = opts or {}
+    reset({ canJinx = false, boon = false, bashType = opts.bashType })
+    ataxiaBasher.inMnemosyne = (opts.tower ~= false)
+    ataxiaBasher.manual = true
+    ataxia_isClass = function(c) return c == (opts.class or "Shaman") end
+    dofile(F)
+  end
+
+  it("matches the line with or without its full stop", function()
+    expect(TL.anyMatches(P, "Your malign power may be unleashed in the form of a jinx against your victim")).toBeTrue()
+    expect(TL.anyMatches(P, "Your malign power may be unleashed in the form of a jinx against your victim.")).toBeTrue()
+    expect(TL.anyMatches(P, "Your malign power dissipates back to normal levels.")).toBeFalse()
+  end)
+
+  it("arms the jinx and latches the boon: a Shaman swiftcursing in the tower", function()
+    fire()
+    expect(ataxiaTemp.canJinx).toBeTrue()
+    expect(mnemThriceCursed).toBeTrue()
+    expect(ataxiaBasher_shamanBashing()).toBe(JINX)
+  end)
+
+  it("does not latch outside the tower", function()
+    fire({ tower = false })
+    expect(ataxiaTemp.canJinx).toBeTrue()
+    expect(mnemThriceCursed).toBe(false)
+  end)
+
+  it("does not latch on the jinx/curse bashtype (a regular curse charges a jinx anyway)", function()
+    fire({ bashType = "jinx" })
+    expect(mnemThriceCursed).toBe(false)
+  end)
+
+  it("does not latch for another class", function()
+    fire({ class = "Serpent" })
+    expect(mnemThriceCursed).toBe(false)
+  end)
+end)
+
 -- Restore
 target, ataxia, ataxiaBasher, ataxiaTemp = saved.target, saved.ataxia, saved.ataxiaBasher, saved.ataxiaTemp
 shaman, getEpoch, mnemThriceCursed = saved.shaman, saved.getEpoch, saved.mnemThriceCursed
 curseCharge, swiftcursing, deleteFull = saved.curseCharge, saved.swiftcursing, saved.deleteFull
 ataxiaBasher_assembleBattlerage = saved.ataxiaBasher_assembleBattlerage
+ataxia_isClass = saved.ataxia_isClass

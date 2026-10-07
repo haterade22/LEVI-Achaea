@@ -167,6 +167,9 @@ thrice_cursed: |
   use jinx charge and then swiftcurse". ataxiaBasher_shamanThriceJinx spends the charge jinx/001 latches
   (canJinx) on the next round; jinx/002 spends it. A charge still unspent THRICE_JINX_STALE (6s) after the
   FIRST send is dropped, so a jinx refused with an uncaptured line cannot stop the swiftcurse rotation.
+  v4.7.387: jinx/001 is start-of-line (the live line may have no full stop), and in the tower, as a
+  Shaman on the swiftcurse bashtype, the charge line itself re-latches mnemThriceCursed -- only the
+  boon lets a swiftcurse build a charge.
 battlerage:
   - "invoke korkma <3rd target>: crowd-control on 3+ mobs (001_Bashing_Functions.lua:1013-1015)"
 ```

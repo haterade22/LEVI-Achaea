@@ -2,6 +2,24 @@
 
 ---
 
+## 2026-10-07 - Shaman: Thrice Cursed charges were built and wasted (v4.7.387)
+
+User pasted the live pair right after v4.7.386: "Your malign power may be unleashed in the form of a jinx
+against your victim" then "Your malign power dissipates back to normal levels." -- the charge expired
+unspent. Two causes, both closed:
+
+- **The charge trigger could miss the line.** jinx/001 was an exact match ending in a full stop; the pasted
+  line has none, and an exact match that disagrees by one character never fires. It is now start-of-line,
+  so it matches either way.
+- **The boon could be off after a reimport.** A reimport forgets `mnemThriceCursed`, and `_relatchBoons`
+  asks for `boon claimed` only once per run. A swiftcurse can only build a jinx charge WITH Thrice Cursed,
+  so in the tower, as a Shaman on the swiftcurse bashtype, the charge line now re-latches the flag itself.
+  (A manual `curse` typed there latches it falsely, which only means its charge is spent by a jinx.)
+
+**Tests:** 5 new; 5 break-back mutants, all killed.
+
+---
+
 ## 2026-10-07 - Shaman: Thrice Cursed jinxes between swiftcurses (v4.7.386)
 
 User pasted the boon: "Your swiftcurses now build jinx charges, and your jinxes deal one extra bleed curse
