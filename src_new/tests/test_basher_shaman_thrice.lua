@@ -181,6 +181,77 @@ describe("Thrice Cursed -- the charge line arms the jinx and proves the boon", f
   end)
 end)
 
+-- v4.7.388, user: "Please highlight these attacks" (the swiftcurse and the jinx).
+describe("Shaman curse highlight", function()
+  local TL = dofile("src_new/tests/trigger_lib.lua")
+  local F = "src_new/triggers/levi_ataxia/for_levi/leviticus/highlighting/071_Shaman_Curse_Highlight.lua"
+  local P = TL.patterns(F)
+  local CURSE = "You point an imperious finger at an avid junior detective and blood begins to flow from his pores."
+  local JINX_LINE = "Summoning your malign power, you direct a twin assault of the curses bleed and bleed at an avid junior detective."
+  local LONG = "an immensely tall and remarkably avid junior detective of the Hashan constabulary"
+
+  -- Run the trigger on `row`; report what it painted and whether it armed the next-row paint.
+  local function run(row)
+    local painted, armed = {}, nil
+    local stubs = { selectString = selectString, fg = fg, setBold = setBold, deselect = deselect,
+                    resetFormat = resetFormat, tempLineTrigger = tempLineTrigger }
+    selectString = function(s) painted[#painted + 1] = s; return 1 end
+    fg, setBold, deselect, resetFormat = function() end, function() end, function() end, function() end
+    tempLineTrigger = function(from, n, fn) armed = { from = from, n = n, fn = fn } end
+    line = row
+    local ok, err = pcall(dofile, F)
+    local nextPainted
+    if ok and armed then
+      line = "junior detective of the Hashan constabulary."
+      armed.fn()
+      nextPainted = painted[#painted]
+    end
+    selectString, fg, setBold, deselect, resetFormat, tempLineTrigger = stubs.selectString, stubs.fg,
+      stubs.setBold, stubs.deselect, stubs.resetFormat, stubs.tempLineTrigger
+    line = nil
+    if not ok then error(err, 0) end
+    return painted, armed, nextPainted
+  end
+
+  it("matches both attacks as pasted", function()
+    expect(TL.anyMatches(P, CURSE)).toBeTrue()
+    expect(TL.anyMatches(P, JINX_LINE)).toBeTrue()
+    expect(TL.anyMatches(P, "Summoning your malign power, you direct a twin assault of the curses")).toBeTrue()
+  end)
+
+  it("a whole line is painted once and arms nothing", function()
+    local painted, armed = run(CURSE)
+    expect(painted[1]).toBe(CURSE)
+    expect(armed).toBeNil()
+    painted, armed = run(JINX_LINE)
+    expect(painted[1]).toBe(JINX_LINE)
+    expect(armed).toBeNil()
+  end)
+
+  it("a wrapped first row also paints the row after it -- for both attacks", function()
+    for _, whole in ipairs({
+      "You point an imperious finger at " .. LONG .. " and blood begins to flow from his pores.",
+      "Summoning your malign power, you direct a twin assault of the curses bleed and bleed at " .. LONG .. ".",
+    }) do
+      for w = 119, 124 do
+        local rows = TL.wrap(whole, w)
+        expect(#rows > 1).toBeTrue()
+        expect(TL.anyMatches(P, rows[1])).toBeTrue()
+        local painted, armed, nextPainted = run(rows[1])
+        expect(painted[1]).toBe(rows[1])
+        expect(armed ~= nil).toBeTrue()
+        expect(armed.from).toBe(1)
+        expect(armed.n).toBe(1)
+        expect(nextPainted).toBe("junior detective of the Hashan constabulary.")
+      end
+    end
+  end)
+
+  it("does not match someone else's curse", function()
+    expect(TL.anyMatches(P, "Bob points an imperious finger at you and blood begins to flow from your pores.")).toBeFalse()
+  end)
+end)
+
 -- Restore
 target, ataxia, ataxiaBasher, ataxiaTemp = saved.target, saved.ataxia, saved.ataxiaBasher, saved.ataxiaTemp
 shaman, getEpoch, mnemThriceCursed = saved.shaman, saved.getEpoch, saved.mnemThriceCursed

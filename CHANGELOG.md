@@ -2,6 +2,23 @@
 
 ---
 
+## 2026-10-07 - Shaman: our curses highlighted (v4.7.388)
+
+User: "Please highlight these attacks" -- the swiftcurse ("You point an imperious finger at an avid junior
+detective and blood begins to flow from his pores.") and the jinx ("Summoning your malign power, you direct a
+twin assault of the curses bleed and bleed at an avid junior detective.").
+
+- `highlighting/071` paints both in bold chartreuse, the colour for our own landed attacks (as for the Serpent
+  bite and the Jester swings). Both openings are matched at the start of the row.
+- **Wrapped lines.** The jinx line is ~113 characters with that name, so a longer name wraps it, and it ENDS
+  with the denizen's name: the second row has no fixed words to anchor a pattern on. Instead, a first row that
+  does not finish its sentence also paints the row that follows (`tempLineTrigger(1, 1, ...)`). The curse
+  line uses the same rule.
+
+**Tests:** 4 new; 3 break-back mutants, all killed.
+
+---
+
 ## 2026-10-07 - Shaman: Thrice Cursed charges were built and wasted (v4.7.387)
 
 User pasted the live pair right after v4.7.386: "Your malign power may be unleashed in the form of a jinx
