@@ -2,6 +2,31 @@
 
 ---
 
+## 2026-10-07 - Shaman: Thrice Cursed jinxes between swiftcurses (v4.7.386)
+
+User pasted the boon: "Your swiftcurses now build jinx charges, and your jinxes deal one extra bleed curse
+when used." -- "we should now do swiftcurse target, get jinx charge, then jinx target to use jinx charge and
+then swiftcurse".
+
+- **The rotation.** Without the boon only a regular curse charges a jinx, so the swiftcurse bashtype never had
+  one to spend. With Thrice Cursed (`mnemThriceCursed`), `ataxiaBasher_shamanThriceJinx` sends
+  `stand;wield shield;jinx bleed bleed <target>` on any round where a charge is banked (`ataxiaTemp.canJinx`,
+  latched by jinx/001's "Your malign power may be unleashed..." and spent by jinx/002), and the swiftcurse
+  otherwise. Regeneration below 60% health still wins, and the `jinx`/`curse` bashtypes are unchanged.
+- **It cannot get stuck jinxing.** A jinx refused with a line we do not capture would leave the charge belief up
+  for ever. A charge still unspent 6s (`THRICE_JINX_STALE`) after the first send is dropped and the basher
+  swiftcurses; the next charge line re-arms it. The clock runs from the FIRST send, since the round is rebuilt
+  every 0.3s; jinx/002 stops it when a jinx resolves.
+- Wired like every boon: `M.BOON_FLAGS` (so the BOONS row re-latches it), the claim alias, run start/end, and
+  the seed.
+- The line that shows a SWIFTCURSE banking the charge is not captured yet; this relies on it being the same
+  "malign power" line a regular curse prints.
+
+**Tests:** 11 new (`test_basher_shaman_thrice.lua`); 6 break-back mutants, all killed (one survivor fixed by
+the rebuild-loop test).
+
+---
+
 ## 2026-10-07 - Jester tower bashing: Seclusion, Motley Bop, Priestess corrected, attack highlights (v4.7.385)
 
 User pasted the Seclusion, Motley Bop and Apostatic boons with the ABs for Bop (661), Priestess (605) and

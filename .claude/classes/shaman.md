@@ -86,7 +86,7 @@ swiftcurse:
   balance: eq (~0.8s)
   effect: "Fast single curse — filler between cooldowns"
   syntax: "swiftcurse <target> <curse>  (bare 'swiftcurse' recharges)"
-  notes: "Gated by curseCharge > 1; does NOT charge jinx (028:740-755)"
+  notes: "Gated by curseCharge > 1; does NOT charge jinx (028:740-755) -- except under the Mnemosyne boon Thrice Cursed (v4.7.386)"
 
 jinx:
   skill: Curses
@@ -157,9 +157,16 @@ bash_type: swiftcurse   # default; set via `aconfig bashtype <type>` (shaman.spi
 curse_used: bleed
 rotation:
   - "hp < 60%: 'stand;wield shield;invoke regeneration' (self-heal)"
+  - "swiftcurse + Thrice Cursed boon (v4.7.386) with a jinx charge banked: 'stand;wield shield;jinx bleed bleed <target>'"
   - "swiftcurse (charge>1): 'swiftcurse <target> bleed'; else recharge with bare 'swiftcurse'"
   - "arius bashType (arius bound): 'invoke roar <target>'"
   - "else canJinx: 'jinx bleed bleed <target>'; else 'curse <target> bleed'"
+thrice_cursed: |
+  Mnemosyne boon (mnemThriceCursed, v4.7.386): "Your swiftcurses now build jinx charges, and your jinxes
+  deal one extra bleed curse when used." User: "swiftcurse target, get jinx charge, then jinx target to
+  use jinx charge and then swiftcurse". ataxiaBasher_shamanThriceJinx spends the charge jinx/001 latches
+  (canJinx) on the next round; jinx/002 spends it. A charge still unspent THRICE_JINX_STALE (6s) after the
+  FIRST send is dropped, so a jinx refused with an uncaptured line cannot stop the swiftcurse rotation.
 battlerage:
   - "invoke korkma <3rd target>: crowd-control on 3+ mobs (001_Bashing_Functions.lua:1013-1015)"
 ```

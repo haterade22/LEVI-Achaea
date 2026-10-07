@@ -41,6 +41,7 @@ patterns:
 
 ataxiaTemp.jinxCharge = ataxiaTemp.jinxCharge or 0
 ataxiaTemp.jinxCharge = ataxiaTemp.jinxCharge - 1
+ataxiaTemp.thriceJinxAt = nil -- the jinx resolved: Thrice Cursed's stale-charge clock stops (v4.7.386)
 if ataxiaTemp.jinxCharge < 1 then
 	ataxiaTemp.canJinx = false
 	ataxiaTemp.jinxCharge = 0
