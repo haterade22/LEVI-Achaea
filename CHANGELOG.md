@@ -2,6 +2,25 @@
 
 ---
 
+## 2026-10-08 - Mnemosyne: contemplate only the boons we do not have (v4.7.391)
+
+User pasted an offer screen of four boons the catalogue already held (Pinpoint, Training Arc, Child of
+Chaos, Restoration): "We should only need to contemplate new boons that we dont have in the database."
+
+- **This reverses the offer-screen half of v4.7.324** ("contemplate all boons no matter what"). After each
+  offer posts, `M._boonScreenContemplate` now contemplates an offered boon only when we hold no description
+  of it, in the boon library or the seed (`M._boonDescribed`). The two one-per-screen extras (a description
+  gap and a combo component) use the same test.
+- A screen of known boons now sends no command and prints no "contemplating ..." line. The offer summary
+  (the advisor's RECOMMEND) still prints.
+- `mnem boonfill` is unchanged: it still walks the whole catalogue, stalest first, and is now the only way to
+  re-read known boons for changed text.
+
+**Tests:** 4 v4.7.324 tests rewritten to the new rule, 3 new (the live screen sends nothing; a library entry
+with no text is still new; a described combo component is skipped). 4 break-back mutants, all killed.
+
+---
+
 ## 2026-10-08 - Mnemosyne: diagnose whenever we leave (v4.7.390)
 
 User: "When we leave a room because of a swarm, etc. We can always use DIAGNOSE."

@@ -2458,8 +2458,8 @@ function M._flushPendingOffer(why)
     .. tostring(M.run and M.run.ripple))
   M._reportBoonsOfferedEnriched(list, rerolls)
   -- The offer is off our hands, so the capture slot is free and the boon screen is the quietest
-  -- stretch of a run. After a pause, CONTEMPLATE EVERY OFFERED BOON (v4.7.324, user: "they
-  -- constantly change these") plus one catalogue gap -- see `M._boonScreenContemplate`, which
+  -- stretch of a run. After a pause, CONTEMPLATE THE OFFERED BOONS WE HAVE NO TEXT FOR (v4.7.391;
+  -- v4.7.324 did every one) plus one catalogue gap -- see `M._boonScreenContemplate`, which
   -- refuses if anything has taken the slot in the meantime and stops at GO!.
   if tempTimer and M.BOON_FILL_IDLE then
     tempTimer(M.BOON_FILL_IDLE, function()
@@ -2555,7 +2555,8 @@ end
 -- and its old quote, category and combo status for good.
 --
 -- So contemplation is now a CYCLE, and nothing leaves it:
---   * every boon on an offer screen is contemplated once that offer has posted (`_boonScreenContemplate`);
+--   * an offered boon is contemplated once that offer has posted -- since v4.7.391 only when we have
+--     no description of it (`_boonScreenContemplate`; user: "only ... new boons");
 --   * `mnem boonfill` works through the WHOLE catalogue, never-contemplated first (seeded combo boons
 --     first among those), then oldest `contemplatedAt` -- so a full cycle simply starts over;
 --   * a complete, validated contemplate UPDATES the text as well as the rest, and says when it changed.
@@ -2665,35 +2666,54 @@ function M._fillCtx(meta, auto)
            gen = M._fillGen or 0, auto = auto and true or false, waits = 0 }
 end
 
--- EVERY OFFERED BOON, EVERY SCREEN (v4.7.324). Runs once the offer has POSTED (`_flushPendingOffer`),
+-- Is `name` in the database? It is when we hold its text -- in the boon library, or in the seed.
+function M._boonDescribed(name)
+  local rec = M.boonInfo and M.boonInfo(name)
+  if type(rec) == "table" and type(rec.description) == "string" and rec.description ~= "" then
+    return true
+  end
+  local sd = M.BOON_SEED and M.BOON_SEED[name]
+  return type(sd) == "table" and type(sd.description) == "string" and sd.description ~= ""
+end
+
+-- ONLY THE BOONS WE DO NOT HAVE (v4.7.391). Runs once the offer has POSTED (`_flushPendingOffer`),
 -- so the report never waits on it -- the exact reason v4.7.279 took contemplation off the offer
--- path, where it raced the next ripple's captures and dropped whole reports. What it contemplates
--- feeds the NEXT post of that boon. Plus one description gap, as the old one-per-screen trickle did.
+-- path, where it raced the next ripple's captures and dropped whole reports.
+--
+-- User, with an offer screen of four boons the catalogue already held: "We should only need to
+-- contemplate new boons that we dont have in the database." That REVERSES v4.7.324 ("contemplate
+-- all boons no matter what as they constantly change these"), which spent four commands and four
+-- "contemplating ..." lines on every screen to re-read text we already had. So an offered boon is
+-- contemplated only when we hold no description of it, and so are the two one-per-screen extras
+-- (a description gap, a combo component). Re-reading KNOWN boons for changes is now what
+-- `mnem boonfill` is for: it still walks the whole catalogue, stalest first.
+--
 -- Never starts while another capture holds the slot, and stops at GO!.
 function M._boonScreenContemplate(list)
   if not (M.history and M.history.boonLibrary) then return false end
   if M._capturing or M._fillBusy() then return false end
-  local todo, meta, queued = {}, {}, {}
+  local todo, queued = {}, {}
+  local function want(name)
+    return name and not queued[name] and not M.boonUnknown(name) and not M._boonDescribed(name)
+  end
   for _, b in ipairs(type(list) == "table" and list or {}) do
     local name = baseName(type(b) == "table" and b.name or b)
-    if name and not queued[name] and not M.boonUnknown(name) then
+    if want(name) then
       queued[name] = true
       todo[#todo + 1] = name
-      local rec = M.boonInfo and M.boonInfo(name)
-      if type(rec) == "table" and rec.description and rec.description ~= "" then meta[name] = true end
     end
   end
   for _, gap in ipairs(M.boonGaps()) do
-    if not queued[gap] then queued[gap] = true; todo[#todo + 1] = gap; break end
+    if want(gap) then queued[gap] = true; todo[#todo + 1] = gap; break end
   end
-  -- ...and one COMBO component we have never contemplated (v4.7.328, user: "we need to boon
-  -- contemplate those and add them to the database"). One per screen, like the gap above: a recipe
-  -- fills itself in over a few offers without spending a command on it.
+  -- ...and one COMBO component we have no text for (v4.7.328, user: "we need to boon contemplate
+  -- those and add them to the database"). One per screen, like the gap above: a recipe fills
+  -- itself in over a few offers.
   for _, gap in ipairs((M.comboGaps and M.comboGaps()) or {}) do
-    if not queued[gap] then queued[gap] = true; todo[#todo + 1] = gap; break end
+    if want(gap) then queued[gap] = true; todo[#todo + 1] = gap; break end
   end
   if #todo == 0 then return false end
-  local ctx = M._fillCtx(meta, true)
+  local ctx = M._fillCtx({}, true)
   ctx.offered = list -- the advisor's summary prints when this chain ends (v4.7.327)
   M._boonFillNext(todo, 1, 0, ctx)
   return true
