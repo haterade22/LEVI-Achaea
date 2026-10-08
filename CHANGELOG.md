@@ -2,6 +2,22 @@
 
 ---
 
+## 2026-10-08 - Serpent: purge when a venom tears through us (v4.7.392)
+
+User: "You scream out in agony as a vicious venom tears through your body." -- "We need to purge in this
+instance".
+
+- New trigger `serpent/019` sends `purge` on that line. It is a direct send, like `serpent/014` (the
+  "purge the venom from your blood before you may secrete another" refusal), so it does not replace a
+  queued attack or a queued escape.
+- Throttled to one purge per 2s, so several lines from the same venom send one command.
+- Start-of-line match, so the full stop is optional. A denizen's relapse line (mnemosyne/108) does not
+  match it.
+
+**Tests:** 2 new; 3 break-back mutants, all killed.
+
+---
+
 ## 2026-10-08 - Mnemosyne: contemplate only the boons we do not have (v4.7.391)
 
 User pasted an offer screen of four boons the catalogue already held (Pinpoint, Training Arc, Child of

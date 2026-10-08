@@ -717,6 +717,10 @@ sequence:
   - "If not shielded: garrote <target>"
   - "...or, with Serpent's Maw or Toxicologist (Mnemosyne boons, v4.7.381): purge;secrete camus;bite <target> (purge added v4.7.383)"
 notes: "There is no BATTLERAGE BITE and no 'envenom' battlerage ability."
+venom_agony_purge: |
+  v4.7.392, user: "We need to purge in this instance" on "You scream out in agony as a vicious venom tears
+  through your body." serpent/019 sends a direct `purge` (like serpent/014's secrete refusal), at most once
+  per 2s, so it never touches a queued attack or escape. Start-of-line match, full stop optional.
 venom_boons: |
   User (v4.7.381): "we should use venom instead of garrote with these boons" -- "secrete camus;bite target".
   Serpent's Maw (mnemSerpentsMaw): venoms deal unblockable damage to denizens, base damage +50%.
