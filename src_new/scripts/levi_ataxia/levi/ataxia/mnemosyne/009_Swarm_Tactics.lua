@@ -80,6 +80,14 @@ local RECOVER_MAX = 60      -- hard cap on a recovery hover (then land and hand 
 S.RECOVER_STALL = 8
 S.RECOVER_ECHO = 6
 S.RECOVER_QL = 5
+-- DIAGNOSE WHENEVER WE LEAVE (v4.7.390, user: "When we leave a room because of a swarm, etc. We can
+-- always use DIAGNOSE"). DIAGNOSE costs no balance, and the server answers it with a full
+-- gmcp Char.Afflictions.List, which `afflictionList()` (004) uses to REBUILD ataxia.afflictions from
+-- scratch. Our tracking is least reliable just after a chaotic fight, and one phantom affliction
+-- holds the whole recovery. So: diagnose on entering the funnel, on starting a recovery, every
+-- RECOVER_DIAG seconds while something still holds us, and fresh before any stall release.
+S.RECOVER_DIAG = 8
+S.DIAG_SETTLE = 1.5 -- the List answer must have had time to arrive before we act on it
 local EMERGENCY_COOLDOWN = 2 -- min seconds between vitals-driven emergency actions
 local DISENGAGE_COOLDOWN = 10 -- min seconds between forced tactical disengages
 -- A hover fly with no airborne evidence this long has failed. 10s, not the first cut's 4: FLY
@@ -819,6 +827,7 @@ function S._enterFunnel()
   -- Items.List, but a never-Listed spawn would be invisible to search_targets --
   -- one quicklook re-Lists the room (the watchdog's own nudge, known-safe).
   send("ql")
+  S._diagnose() -- v4.7.390: we just left a swarm; read the truth before the re-entry gate does
   -- Own the deadline from birth. The `ql` above usually produces a room event and therefore a
   -- tick, but "usually" is what made this a bug: when nothing follows us there is no combat, no
   -- arrival and no target change, so an event-driven tick has nothing to fire it.
@@ -868,6 +877,7 @@ function S._recoverHere(why)
   S.recoverTarget = tonumber(s.returnAt) or 85
   S._escaping, S._pullRetries = nil, nil
   S._armRecoverHold()
+  S._diagnose() -- v4.7.390
   if M._scheduleTick then M._scheduleTick(RECOVER_TICK) end
   S._echo("<indian_red>" .. (why or "escaped") .. "<reset> -- healing here to " .. S.recoverTarget
     .. "% and cured before moving on (" .. hpp() .. "% now).")
@@ -883,6 +893,7 @@ function S._beginReenter()
     -- This recovery exists to get us back in, so it ends at the bar for going back in.
     S.recoverTarget = tonumber(S._cfg().returnAt) or 85
     S._armRecoverHold()
+    S._diagnose() -- v4.7.390: "still afflicted" may be a phantom; ask the game
     if M._scheduleTick then M._scheduleTick(RECOVER_TICK) end
     S._echo("<indian_red>NOT going back in<reset> at " .. hpp() .. "%"
       .. (S._afflicted() and " and still afflicted" or "") .. " -- healing here first.")
@@ -1724,6 +1735,15 @@ end
 -- one cured while another lands is still curing), or HP rising while it is still below the bar.
 -- HP rising ABOVE the bar is not progress: at 92% against 85 it climbs every tick, and counting
 -- it would make the stall unreachable in exactly the case that prompted it.
+-- Send DIAGNOSE and stamp it. Never mid-tumble (anything we send can cancel it, v4.7.243) and
+-- never in lava (onLava owns the queue). Returns true when it sent.
+function S._diagnose()
+  if S.moveLocked() or (M.roomLava and M.roomLava()) then return false end
+  send("diagnose")
+  S._diagAt = now()
+  return true
+end
+
 function S._recoverWatch(s)
   local t = now()
   local hp = hpp()
@@ -1732,7 +1752,9 @@ function S._recoverWatch(s)
   local set = {}
   for _, k in ipairs(affs) do set[k] = true end
   local rp = S._rp
+  local born = false
   if not rp or rp.started ~= S.recoverStarted then
+    born = true
     rp = { started = S.recoverStarted, at = t, echoAt = t, qlAt = t }
     S._rp = rp
   else
@@ -1743,6 +1765,15 @@ function S._recoverWatch(s)
     if cured or (hp < target and hp > (rp.hp or hp)) then rp.at = t end
   end
   rp.hp, rp.affs = hp, set
+
+  -- DIAGNOSE: at the start of every recovery (unless one just went out), then every RECOVER_DIAG
+  -- while something still holds us.
+  local diagAge = S._diagAt and (t - S._diagAt) or math.huge
+  if diagAge < 0 then diagAge = math.huge end -- a stamp from the future (rewound clock) is stale
+  if (born and diagAge >= (tonumber(S.DIAG_SETTLE) or 1.5) * 2)
+     or (#affs > 0 and diagAge >= (tonumber(S.RECOVER_DIAG) or 8)) then
+    if S._diagnose() then diagAge = 0 end
+  end
 
   -- Quicklook on the GROUND, so a denizen arriving (or the room clearing) is read on fresh
   -- Char.Items rather than whatever the last push said. Never airborne (the sky), never mid-tumble
@@ -1758,7 +1789,10 @@ function S._recoverWatch(s)
   -- STALL: HP is met and nothing has cleared for RECOVER_STALL seconds. Standing here is not
   -- curing these; going back in for the next hit-and-run is. Ends the recovery the same way the
   -- `healed` exit does, settle window included.
-  if names and hp >= target and (t - rp.at) >= (tonumber(S.RECOVER_STALL) or 8) then
+  -- Only on a FRESH diagnose: one sent after the last progress, and old enough to have answered.
+  -- A phantom that the List clears never reaches this line -- the next tick reads it as cured.
+  local diagFresh = S._diagAt and S._diagAt >= rp.at and diagAge >= (tonumber(S.DIAG_SETTLE) or 1.5)
+  if names and hp >= target and diagFresh and (t - rp.at) >= (tonumber(S.RECOVER_STALL) or 8) then
     S._rp = nil
     S.recoverDiagnosed = nil
     S.recoverTarget = nil

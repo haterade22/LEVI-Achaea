@@ -122,6 +122,7 @@ local function fixture(count)
   S._wallsRipple = nil
   S.tumbleResolvedAt, S._recoverTumbles = nil, nil -- fixture rewinds the clock; these must go with it
   S._rp = nil -- v4.7.389: the recovery watch is keyed to recoverStarted, which the clock rewind reuses
+  S._diagAt = nil -- v4.7.390: same clock
   S._meltRoom, S._meltTries = nil, nil
   -- v4.7.321: the hover/escape clocks. A stamp left by an earlier test sits in this test's FUTURE
   -- once the clock rewinds, and reads as fresh evidence (a flightUpAt >= recoverStarted is "up").
@@ -255,7 +256,8 @@ describe("swarm funnel phase", function()
     pullAndArrive()
     expect(S.state).toBe("funnel")
     expect(ataxiaTemp.swarmHold).toBe(nil)
-    expect(sent[#sent]).toBe("ql")
+    expect(sent[#sent - 1]).toBe("ql")
+    expect(sent[#sent]).toBe("diagnose") -- v4.7.390: we just left a swarm
   end)
   it("holds navigation while followers are being fought", function()
     pullAndArrive()
@@ -3888,7 +3890,7 @@ describe("v4.7.389 -- a recovery never sits silent", function()
 
   it("HP met and an affliction not clearing -> names it and goes back in", function()
     groundRecovery(92, { weariness = true })
-    local said = tick(5) -- 10s of mock clock, one record tick + 4 stalled ticks
+    local said = tick(6) -- record +2 (diagnose), re-diagnose +10, release +12 on the settled answer
     expect(S.state).toBe("idle")
     expect(said:find("afflictions not clearing", 1, true) ~= nil).toBeTrue()
     expect(said:find("weariness", 1, true) ~= nil).toBeTrue()
@@ -3902,7 +3904,7 @@ describe("v4.7.389 -- a recovery never sits silent", function()
     ataxia.afflictions = { weariness = true } -- clumsiness cured: progress
     tick(3)                                  -- 12s total, only 6s since the cure
     expect(S.state).toBe("recovering")
-    tick(2)                                  -- now 10s since the cure
+    tick(2)                                  -- now 8s since the cure, diagnose from +10 settled
     expect(S.state).toBe("idle")
     ataxia.afflictions = {}
   end)
@@ -3917,7 +3919,7 @@ describe("v4.7.389 -- a recovery never sits silent", function()
 
   it("HP rising above the bar is not progress", function()
     groundRecovery(86, { weariness = true })
-    for _ = 1, 5 do
+    for _ = 1, 6 do
       ataxia.vitals.hpp = ataxia.vitals.hpp + 2
       tick(1)
     end
@@ -3946,7 +3948,82 @@ describe("v4.7.389 -- a recovery never sits silent", function()
     clock = clock + 6
     S._recoverWatch(S._cfg())
     expect(count("ql")).toBe(0)
+    expect(count("diagnose")).toBe(0) -- v4.7.390: nothing sent can cancel a tumble
     ataxiaTemp.tumbleDir = nil
+    ataxia.afflictions = {}
+  end)
+end)
+
+-- v4.7.390 -- user: "When we leave a room because of a swarm, etc. We can always use DIAGNOSE".
+-- DIAGNOSE costs no balance and the server answers with a full Char.Afflictions.List, which
+-- rebuilds ataxia.afflictions from scratch -- the cure for a phantom that holds a recovery.
+describe("v4.7.390 -- diagnose whenever we leave", function()
+  local function groundRecovery(hp, affs)
+    fixture(3); ataxiaBasher.inMnemosyne = true
+    mobs = 0
+    S.state = "recovering"
+    S.recoverGround = true
+    S.recoverStarted = clock
+    S.recoverTarget = 85
+    ataxia.vitals.hpp = hp
+    ataxia.afflictions = affs or {}
+  end
+  local function tick(n)
+    for _ = 1, n do
+      clock = clock + 2
+      capture(function() S.onTick() end)
+    end
+  end
+
+  it("diagnoses on entering the funnel room", function()
+    fixture(3)
+    capture(function() S._enterFunnel() end)
+    expect(count("diagnose")).toBe(1)
+    S.reset("test")
+  end)
+
+  it("diagnoses when a ground recovery starts", function()
+    fixture(3)
+    capture(function() S._recoverHere("escaped") end)
+    expect(count("diagnose")).toBe(1)
+    S.reset("test")
+  end)
+
+  it("diagnoses when the re-entry gate refuses for afflictions", function()
+    fixture(3)
+    ataxia.vitals.hpp = 92
+    ataxia.afflictions = { weariness = true }
+    capture(function() S._beginReenter() end)
+    expect(S.state).toBe("recovering")
+    expect(count("diagnose")).toBe(1)
+    ataxia.afflictions = {}
+    S.reset("test")
+  end)
+
+  it("re-diagnoses every 8s while something still holds us", function()
+    groundRecovery(60, { weariness = true })
+    tick(9) -- 18s: diagnoses at +2, +10, +18
+    expect(count("diagnose")).toBe(3)
+    ataxia.afflictions = {}
+  end)
+
+  it("a phantom the diagnose clears ends the recovery as healed, not as a stall", function()
+    groundRecovery(92, { weariness = true })
+    tick(1)                       -- record + diagnose
+    ataxia.afflictions = {}       -- the List answer: weariness was never there
+    local said = ""
+    for _ = 1, 3 do clock = clock + 2; said = said .. capture(function() S.onTick() end) end
+    expect(S.state).toBe("idle")
+    expect(said:find("fully recovered", 1, true) ~= nil).toBeTrue()
+    expect(said:find("not clearing", 1, true) == nil).toBeTrue()
+  end)
+
+  it("never stall-releases on a diagnose that has not answered yet", function()
+    groundRecovery(92, { weariness = true })
+    tick(5) -- +10: the cadence re-diagnoses this very tick
+    expect(S.state).toBe("recovering")
+    tick(1) -- +12: that answer has had time
+    expect(S.state).toBe("idle")
     ataxia.afflictions = {}
   end)
 end)

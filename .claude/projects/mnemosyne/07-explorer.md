@@ -784,6 +784,19 @@ the fighting that did happen was winning, and ice turned each retreat into sever
   `S._resendWhenFree()` re-sends via `_tacticalGo` on the first unbound prompt if we are still in
   that room, within `BOUND_PENDING` (12s).
 
+### Diagnose whenever we leave (v4.7.390)
+
+User: "When we leave a room because of a swarm, etc. We can always use DIAGNOSE." DIAGNOSE is free;
+the server answers with a full `Char.Afflictions.List` and `afflictionList()` (004) rebuilds
+`ataxia.afflictions` from it, so a phantom affliction cannot hold a recovery.
+
+- `S._diagnose()` sends it and stamps `S._diagAt`; it refuses while `S.moveLocked()` or in lava.
+- Sent from `_enterFunnel`, `_recoverHere`, the refusing branch of `_beginReenter`, the first
+  `_recoverWatch` tick of a recovery (unless one went out in the last 3s), and every
+  `S.RECOVER_DIAG` (8s) while `_blockingAffs()` is non-empty.
+- The stall release needs `S._diagAt >= rp.at` (sent after the last progress) and an age of at least
+  `S.DIAG_SETTLE` (1.5s). In practice the release lands at about 10s, not 8.
+
 ### A recovery never sits silent (v4.7.389)
 
 Live: "NOT going back in at 92% and still afflicted -- healing here first." then 30s of nothing until

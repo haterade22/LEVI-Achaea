@@ -2,6 +2,27 @@
 
 ---
 
+## 2026-10-08 - Mnemosyne: diagnose whenever we leave (v4.7.390)
+
+User: "When we leave a room because of a swarm, etc. We can always use DIAGNOSE."
+
+DIAGNOSE costs no balance. The server answers it with a full `gmcp.Char.Afflictions.List`, and
+`afflictionList()` (`004_Aff_gains_losses.lua`) rebuilds `ataxia.afflictions` from scratch. That removes a
+phantom affliction, and one phantom was enough to hold a whole recovery ("92% and still afflicted").
+
+- `S._diagnose()` (`mnemosyne/009`) sends `diagnose` and stamps `S._diagAt`. It sends nothing mid-tumble
+  (a send can cancel the tumble) or in lava (`onLava` owns the queue).
+- **When:** on entering the funnel room, on `S._recoverHere`, when `_beginReenter` refuses, at the first
+  recovering tick of any recovery that has not just diagnosed, and every `S.RECOVER_DIAG` (8s) while
+  afflictions still hold us.
+- **The v4.7.389 stall release now needs a FRESH diagnose:** one sent after the last progress, at least
+  `S.DIAG_SETTLE` (1.5s) old. So we never go back in "afflicted" on data the game did not confirm. A phantom
+  that the answer clears ends the recovery as healed, not as a stall.
+
+**Tests:** 6 new, 1 updated (the funnel now sends `ql` then `diagnose`). With the send disabled, 9 fail.
+
+---
+
 ## 2026-10-08 - Mnemosyne: a recovery never sits silent (v4.7.389)
 
 Live: `[swarm] NOT going back in at 92% and still afflicted -- healing here first.` and then nothing until
