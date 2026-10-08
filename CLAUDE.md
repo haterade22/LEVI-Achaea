@@ -81,7 +81,10 @@ LEVI-Achaea/
 │   ├── agents/                # Custom Claude Code subagents
 │   │   ├── offense-system.md  # Class offense development agent
 │   │   ├── build-and-version.md # Build + version management agent
-│   │   └── team-class-offense.md # Parallel team development agent
+│   │   ├── team-class-offense.md # Parallel team development agent
+│   │   ├── fast-reader.md     # Tier 1: Haiku/low -- search, read, run tests/builds
+│   │   ├── implementer.md     # Tier 2: Sonnet/medium -- everyday coding from a plan
+│   │   └── architect.md       # Tier 3: Opus/high -- design, hard debugging, review
 │   ├── skills/                # Claude Code skills (slash commands)
 │   │   ├── build/SKILL.md     # /build — full build pipeline
 │   │   └── version-bump/SKILL.md # /version-bump — sync 3 version files
@@ -309,6 +312,9 @@ Use `/reload-plugins` to pick up new or modified skills without restarting Claud
 - `offense-system` — Enforces project patterns when creating class offense systems
 - `build-and-version` — Handles version bumps and builds with validation
 - `team-class-offense` — Team agent for parallel class development
+- `fast-reader` — Tier 1 (Haiku/low): search, read, summarize, run tests/builds, fully specified small edits
+- `implementer` — Tier 2 (Sonnet/medium): everyday coding from a clear plan, tests, docs, small reviews
+- `architect` — Tier 3 (Opus/high, read-only): design, cross-cutting changes, hard debugging, plan/diff review (see *Model & Effort Selection*)
 
 ### Visual Studio 2022 (Legacy)
 
@@ -3089,14 +3095,65 @@ Different tasks benefit from different model tiers. The `build-and-version` agen
 
 **Current agent model assignments:**
 - `build-and-version`: `haiku` (configured)
-- `offense-system`: default (Sonnet recommended)
-- `team-class-offense`: default (Sonnet for workers)
+- `offense-system`: `sonnet` (configured)
+- `team-class-offense`: `sonnet` (configured)
+- `fast-reader`: `haiku`, effort `low` (configured)
+- `implementer`: `sonnet`, effort `medium` (configured)
+- `architect`: `opus`, effort `high` (configured)
 
 **When to escalate to Opus:**
 - Designing new combat system architecture from scratch
 - Debugging subtle cross-system interactions (e.g., V3 affliction tracking + class offense)
 - Refactoring shared `ataxia/` core modules
 - Planning multi-session development arcs
+
+---
+
+## Model & Effort Selection (MANDATORY)
+
+**Goal: each task runs on the cheapest model and the lowest reasoning effort that will still do it well.** Defaulting to Opus at high effort for everything is the waste this rule exists to stop. Where this section and the older *Model Routing Guidance* table disagree, this section wins.
+
+**Main session = orchestrator.** The main session plans, decides and reviews. It hands execution to subagents and picks a model and effort for each one based on the task. It does not do bulk or mechanical work itself (sweeping searches, mass reads, running builds and tests, boilerplate edits).
+
+### Routing guide
+
+| Tier | Model / effort | Agent | Use for |
+|------|----------------|-------|---------|
+| 1 | Haiku / `low` | `fast-reader` | File/code search, grepping, listing, reading and summarizing files, simple renames, formatting, boilerplate, running tests or builds and reporting results, small edits that are already well specified |
+| 2 | Sonnet / `medium` | `implementer` | Most everyday coding: implementing features from a clear plan, writing tests, normal bug fixes, refactors inside one module, docs, code review of small diffs |
+| 3 | Opus / `high` | `architect` | Architecture and design decisions, ambiguous or cross-cutting changes, hard debugging where the cause is unknown, security-sensitive code, data migrations, anything expensive to get wrong or hard to undo |
+| 4 | Fable | `architect` + per-call `model: "fable"` | Only the hardest reasoning problems, or when Opus has already failed. Don't use it routinely |
+
+**Project defaults:** combat-mechanics reasoning is tier 3 unless it is clearly mechanical. That covers lock strategy, V3 affliction tracking, SSC curingset writes, and anything in the shared `ataxia/` core. Lessons Learned is mostly a list of cheap-looking changes that weren't. The existing agents keep their tiers: `build-and-version` = Haiku, `offense-system` and `team-class-offense` = Sonnet.
+
+### How model and effort are set
+
+- **Agent definition** (`.claude/agents/*.md` frontmatter), the primary mechanism:
+  ```yaml
+  ---
+  name: fast-reader
+  description: ...
+  model: haiku      # haiku | sonnet | opus | fable | inherit | full model id
+  effort: low       # low | medium | high | xhigh | max
+  ---
+  ```
+- **Per call:** the Agent tool's `model` parameter (`haiku | sonnet | opus | fable`) overrides the frontmatter for that one spawn. The tool also takes an `effort` parameter, which may only be used when instructions explicitly ask. This section is that explicit permission: override effort per call when the task needs a different level from the agent's default.
+- **Model precedence:** per-call `model` > frontmatter `model` > `CLAUDE_CODE_SUBAGENT_MODEL` env var > the main session's model.
+- `xhigh`/`max` only matter on Opus and Fable. Use them only after `high` has visibly fallen short.
+
+### Escalation and de-escalation
+
+- **Start at the lowest tier that plausibly fits.**
+- **If a subagent's output is wrong, incomplete, or shows confusion, retry ONCE at the next tier up.** Never retry at the same tier: a second identical attempt mostly buys the same answer. An agent replying `ESCALATE: <why>` counts as a failure at its tier.
+- **De-escalate:** when an Opus task breaks into well-defined steps, hand those steps down to Sonnet or Haiku. `architect` tags every step of its plan with the tier that should run it.
+
+### Transparency
+
+Before each delegation, write one line naming the model, the effort and the reason, so the choices can be audited:
+
+    → Haiku/low: repo-wide search for ataxiaBasher_rageAfford call sites
+    → Sonnet/medium: implement step 2 of the approved plan (Psion keeper hold)
+    → Opus/high: diagnose the escape-ladder livelock, cause unknown
 
 ---
 
