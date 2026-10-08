@@ -784,6 +784,24 @@ the fighting that did happen was winning, and ice turned each retreat into sever
   `S._resendWhenFree()` re-sends via `_tacticalGo` on the first unbound prompt if we are still in
   that room, within `BOUND_PENDING` (12s).
 
+### A recovery never sits silent (v4.7.389)
+
+Live: "NOT going back in at 92% and still afflicted -- healing here first." then 30s of nothing until
+the explorer watchdog's QL. The recovery was ticking every 2s, but HP was met and one affliction SSC
+was not curing held `_mayReturn`; only "cured" or `RECOVER_MAX` (60s) could end it.
+
+- `S._recoverWatch(s)` (009), called on every recovering tick below the company and hover-premise
+  checks. Its record `S._rp` is keyed to `S.recoverStarted`, so every entry (ground, hover, tumble,
+  re-tumble) starts fresh without each entry point resetting it; `S.reset` and the fixture clear it.
+- **Progress** = an affliction from the last tick's set is gone, or HP rose while still below
+  `recoverTarget`. HP above the bar is not progress.
+- **Stall** = HP >= target, afflictions remain, no progress for `S.RECOVER_STALL` (8s): ends the
+  recovery like the healed exit (land if up, clear hold, idle, settle + tick) and names the affs.
+- **Status** every `S.RECOVER_ECHO` (6s); **ql** every `S.RECOVER_QL` (5s), ground only, not while
+  `S.moveLocked()` or in lava.
+- 008 `_exploreTick`: a consumed tick with `M.swarm.state ~= "idle"` re-arms the watchdog (not while
+  paused).
+
 ### After an escape, and when the legs give out (v4.7.378)
 
 From a Monk death: the sweep walked on after an escape (twice, at 71%, blind, chased), the last
