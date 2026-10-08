@@ -1430,7 +1430,13 @@ function M._exploreTick()
   -- the sweep must neither announce nor navigate. Loads after us, hence the guard.
   if M.swarm and M.swarm.onTick then
     local ok, consumed = pcall(M.swarm.onTick)
-    if ok and consumed then return end
+    if ok and consumed then
+      -- A swarm state that is deciding every tick IS progress (v4.7.389): a ground recovery
+      -- re-checks every 2s and quicklooks every 5s, so the "no progress for 30s" nudge firing
+      -- over it was noise. It still fires if the swarm stops ticking.
+      if M.swarm.state ~= "idle" and not M._navRefusal() then M._armWatchdog() end
+      return
+    end
   end
   -- NAVIGATION SUSPENDED -- and this gate sits BELOW the swarm delegation deliberately (v4.7.263).
   --

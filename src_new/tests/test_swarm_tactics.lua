@@ -121,6 +121,7 @@ local function fixture(count)
   M.explore.pausedAtBoon = false -- v4.7.263: the pause is per-test state
   S._wallsRipple = nil
   S.tumbleResolvedAt, S._recoverTumbles = nil, nil -- fixture rewinds the clock; these must go with it
+  S._rp = nil -- v4.7.389: the recovery watch is keyed to recoverStarted, which the clock rewind reuses
   S._meltRoom, S._meltTries = nil, nil
   -- v4.7.321: the hover/escape clocks. A stamp left by an earlier test sits in this test's FUTURE
   -- once the clock rewinds, and reads as fresh evidence (a flightUpAt >= recoverStarted is "up").
@@ -3847,6 +3848,107 @@ describe("Seclusion -- the hermit fling at the panic floor", function()
     setup(3000)
     expect(S.onSeclusionRoom()).toBeFalse()
   end) end)
+end)
+
+-- v4.7.389 -- live: "NOT going back in at 92% and still afflicted -- healing here first." and then
+-- nothing until the explorer's 30s watchdog. User: "We should never be 30 seconds and not doing
+-- anything."
+describe("v4.7.389 -- a recovery never sits silent", function()
+  local function groundRecovery(hp, affs)
+    fixture(3); ataxiaBasher.inMnemosyne = true
+    mobs = 0
+    S.state = "recovering"
+    S.recoverGround = true
+    S.recoverStarted = clock
+    S.recoverTarget = 85
+    ataxia.vitals.hpp = hp
+    ataxia.afflictions = affs or {}
+  end
+  local function tick(n)
+    local out = ""
+    for _ = 1, n do
+      clock = clock + 2
+      out = out .. capture(function() S.onTick() end) .. "\n"
+    end
+    return out
+  end
+
+  it("_blockingAffs and _afflicted agree, and skip kept defences and leeches", function()
+    fixture(3)
+    ataxia.afflictions = { blindness = true, manaleech = true, weariness = true, unknown = 2 }
+    local list = S._blockingAffs()
+    expect(#list).toBe(2)
+    expect(list[1]).toBe("unknown(2)")
+    expect(list[2]).toBe("weariness")
+    expect(S._afflicted()).toBeTrue()
+    ataxia.afflictions = { blindness = true }
+    expect(S._afflicted()).toBeFalse()
+    ataxia.afflictions = {}
+  end)
+
+  it("HP met and an affliction not clearing -> names it and goes back in", function()
+    groundRecovery(92, { weariness = true })
+    local said = tick(5) -- 10s of mock clock, one record tick + 4 stalled ticks
+    expect(S.state).toBe("idle")
+    expect(said:find("afflictions not clearing", 1, true) ~= nil).toBeTrue()
+    expect(said:find("weariness", 1, true) ~= nil).toBeTrue()
+    expect(ataxiaTemp.swarmHold).toBeNil()
+    ataxia.afflictions = {}
+  end)
+
+  it("an affliction that clears mid-wait restarts the stall clock", function()
+    groundRecovery(92, { weariness = true, clumsiness = true })
+    tick(3)                                  -- 6s
+    ataxia.afflictions = { weariness = true } -- clumsiness cured: progress
+    tick(3)                                  -- 12s total, only 6s since the cure
+    expect(S.state).toBe("recovering")
+    tick(2)                                  -- now 10s since the cure
+    expect(S.state).toBe("idle")
+    ataxia.afflictions = {}
+  end)
+
+  it("HP below the bar keeps healing, and says so", function()
+    groundRecovery(60, { weariness = true })
+    local said = tick(6)
+    expect(S.state).toBe("recovering")
+    expect(said:find("healing: 60%/85%, waiting on weariness", 1, true) ~= nil).toBeTrue()
+    ataxia.afflictions = {}
+  end)
+
+  it("HP rising above the bar is not progress", function()
+    groundRecovery(86, { weariness = true })
+    for _ = 1, 5 do
+      ataxia.vitals.hpp = ataxia.vitals.hpp + 2
+      tick(1)
+    end
+    expect(S.state).toBe("idle")
+    ataxia.afflictions = {}
+  end)
+
+  it("a ground recovery quicklooks every 5s; a hover does not", function()
+    groundRecovery(60, { weariness = true })
+    tick(9) -- 18s: the first tick records, quicklooks at +6s and +12s from it
+    expect(count("ql") >= 2).toBeTrue()
+    groundRecovery(60, { weariness = true })
+    S.recoverGround = nil
+    S.flying, S.flightConfirmed = true, true
+    sent = {}
+    tick(6)
+    expect(count("ql")).toBe(0)
+    S.flying, S.flightConfirmed = nil, nil
+    ataxia.afflictions = {}
+  end)
+
+  it("no quicklook while a tumble is in flight", function()
+    groundRecovery(60, { weariness = true })
+    ataxiaTemp.tumbleDir = "e"
+    S._recoverWatch(S._cfg())      -- record
+    clock = clock + 6
+    S._recoverWatch(S._cfg())
+    expect(count("ql")).toBe(0)
+    ataxiaTemp.tumbleDir = nil
+    ataxia.afflictions = {}
+  end)
 end)
 
 -- v4.7.345: the mount module was loaded above for the mountjump tests.

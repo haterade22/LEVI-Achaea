@@ -2,6 +2,34 @@
 
 ---
 
+## 2026-10-08 - Mnemosyne: a recovery never sits silent (v4.7.389)
+
+Live: `[swarm] NOT going back in at 92% and still afflicted -- healing here first.` and then nothing until
+`[explore] no progress for 30s -- QL to refresh the room.` User: "We should never be 30 seconds and not doing
+anything."
+
+The ground recovery was re-checking every 2s, but HP was already met and one affliction SSC was not curing
+held the gate. The only ways out were "cured" or the 60s `RECOVER_MAX`, and nothing said what it waited on.
+The explorer's watchdog, re-armed only by arrivals and denizen changes, then fired over a recovery that was
+working.
+
+- **Stall release** (`mnemosyne/009`, `S._recoverWatch`, every recovering tick). HP at the bar and no
+  holding affliction cleared for `S.RECOVER_STALL` (8s) means standing still is not curing them: it echoes
+  `afflictions not clearing (<names>) at N% -- going back in.` and ends the recovery the same way a healed
+  one ends. Progress is a SET test (an affliction gone, even if another landed) or HP rising while still
+  below the bar. HP rising above the bar does not count, or 92% climbing to 100 would hold it forever.
+  Ground and hover alike; below the bar it keeps healing (still capped by `RECOVER_MAX`).
+- **Status line every 6s** (`S.RECOVER_ECHO`): `healing: 60%/85%, waiting on weariness.`
+- **QL every 5s on a GROUND recovery** (`S.RECOVER_QL`), so company arriving or leaving is read on fresh
+  `Char.Items`. Never airborne, mid-tumble or in lava.
+- `S._blockingAffs()` is the sorted list of what holds a recovery; `S._afflicted()` is that list non-empty.
+- **Watchdog** (`mnemosyne/008`): a tick consumed by an active swarm state re-arms it, since a swarm
+  deciding every 2s is progress. It still fires if the swarm stops ticking, and never while paused.
+
+**Tests:** 8 new; with both fixes removed, 6 of them fail.
+
+---
+
 ## 2026-10-07 - Shaman: our curses highlighted (v4.7.388)
 
 User: "Please highlight these attacks" -- the swiftcurse ("You point an imperious finger at an avid junior

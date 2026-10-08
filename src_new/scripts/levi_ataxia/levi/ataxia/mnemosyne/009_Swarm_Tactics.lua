@@ -71,6 +71,15 @@ local SENSE_DELAY = 3.0     -- on GO: wait out the wade-status/look burst (their
 local PANIC_COOLDOWN = 10   -- min seconds between Roll Hide panic tumbles
 local RECOVER_TICK = 2      -- while hovering to recover, re-check HP this often
 local RECOVER_MAX = 60      -- hard cap on a recovery hover (then land and hand back)
+-- A RECOVERY MUST NEVER SIT SILENT (v4.7.389, user: "We should never be 30 seconds and not doing
+-- anything"). Live: "NOT going back in at 92% and still afflicted", then nothing for 30s until the
+-- explorer's watchdog. HP was met; one affliction SSC was not curing held the gate, and the only
+-- ways out were "cured" or RECOVER_MAX. Now: HP met and no affliction cleared for RECOVER_STALL
+-- seconds means standing still is not curing them -- name them and go back in. A status line every
+-- RECOVER_ECHO seconds says what we wait on, and a GROUND recovery quicklooks every RECOVER_QL.
+S.RECOVER_STALL = 8
+S.RECOVER_ECHO = 6
+S.RECOVER_QL = 5
 local EMERGENCY_COOLDOWN = 2 -- min seconds between vitals-driven emergency actions
 local DISENGAGE_COOLDOWN = 10 -- min seconds between forced tactical disengages
 -- A hover fly with no airborne evidence this long has failed. 10s, not the first cut's 4: FLY
@@ -242,19 +251,28 @@ local function parkedAff(k)
   return type(p) == "number" and p >= floor
 end
 
-function S._afflicted()
+-- The afflictions that hold a recovery, sorted (v4.7.389) -- so a recovery can SAY what it is
+-- waiting on, and count whether that list is shrinking. `S._afflicted()` is this list being
+-- non-empty: one definition, two readers.
+function S._blockingAffs()
+  local out = {}
   local a = ataxia and ataxia.afflictions
-  if type(a) ~= "table" then return false end
+  if type(a) ~= "table" then return out end
   for k, v in pairs(a) do
     if not AFF_IGNORE[k] and not parkedAff(k) then
       if k == "unknown" then
-        if type(v) == "number" and v > 0 then return true end
+        if type(v) == "number" and v > 0 then out[#out + 1] = "unknown(" .. v .. ")" end
       elseif v == true then
-        return true
+        out[#out + 1] = tostring(k)
       end
     end
   end
-  return false
+  table.sort(out)
+  return out
+end
+
+function S._afflicted()
+  return #S._blockingAffs() > 0
 end
 
 -- Current server target's id + live hp% for the hit-and-run progress check.
@@ -1696,6 +1714,75 @@ function S._escapeOwns()
   return since >= 0 and since < (tonumber(S.ESCAPE_OWN) or 8)
 end
 
+-- THE RECOVERY WATCH (v4.7.389). Called on every recovering tick (RECOVER_TICK, 2s), below the
+-- company and hover-premise checks. Returns true when it ENDED the recovery.
+--
+-- Progress is keyed to `S.recoverStarted`, so every way into a recovery (ground, hover, tumble,
+-- re-tumble) starts a fresh record without each entry point having to remember to.
+--
+-- What counts as progress: an affliction that was holding us is GONE (a set test, not a count --
+-- one cured while another lands is still curing), or HP rising while it is still below the bar.
+-- HP rising ABOVE the bar is not progress: at 92% against 85 it climbs every tick, and counting
+-- it would make the stall unreachable in exactly the case that prompted it.
+function S._recoverWatch(s)
+  local t = now()
+  local hp = hpp()
+  local target = tonumber(S.recoverTarget) or tonumber(s.recoverAt) or 95
+  local affs = S._blockingAffs()
+  local set = {}
+  for _, k in ipairs(affs) do set[k] = true end
+  local rp = S._rp
+  if not rp or rp.started ~= S.recoverStarted then
+    rp = { started = S.recoverStarted, at = t, echoAt = t, qlAt = t }
+    S._rp = rp
+  else
+    local cured = false
+    for k in pairs(rp.affs or {}) do
+      if not set[k] then cured = true; break end
+    end
+    if cured or (hp < target and hp > (rp.hp or hp)) then rp.at = t end
+  end
+  rp.hp, rp.affs = hp, set
+
+  -- Quicklook on the GROUND, so a denizen arriving (or the room clearing) is read on fresh
+  -- Char.Items rather than whatever the last push said. Never airborne (the sky), never mid-tumble
+  -- (anything sent cancels it, v4.7.243), never in lava (onLava owns the queue).
+  if S.recoverGround and (t - rp.qlAt) >= (tonumber(S.RECOVER_QL) or 5)
+     and not S.moveLocked() and not (M.roomLava and M.roomLava()) then
+    rp.qlAt = t
+    send("ql", false)
+  end
+
+  local names = (#affs > 0) and table.concat(affs, ", ") or nil
+
+  -- STALL: HP is met and nothing has cleared for RECOVER_STALL seconds. Standing here is not
+  -- curing these; going back in for the next hit-and-run is. Ends the recovery the same way the
+  -- `healed` exit does, settle window included.
+  if names and hp >= target and (t - rp.at) >= (tonumber(S.RECOVER_STALL) or 8) then
+    S._rp = nil
+    S.recoverDiagnosed = nil
+    S.recoverTarget = nil
+    if S.flying then send("land") end
+    S.flying = nil
+    S.flightConfirmed, S.hoverSeenUpAt = nil, nil
+    S.recoverGround = nil
+    S._clearHold()
+    S.state = "idle"
+    S._echo("<gold>afflictions not clearing<reset> (" .. names .. ") at " .. hp
+      .. "% -- going back in.")
+    if M.explore then M.explore.settling = true end
+    if M._scheduleTick then M._scheduleTick() end
+    return true
+  end
+
+  if (t - rp.echoAt) >= (tonumber(S.RECOVER_ECHO) or 6) then
+    rp.echoAt = t
+    S._echo("<grey>healing: " .. hp .. "%/" .. target .. "%"
+      .. (names and (", waiting on " .. names) or "") .. ".")
+  end
+  return false
+end
+
 function S.onTick()
   local MAP = M.map
   local cur = MAP and MAP.current
@@ -1858,6 +1945,8 @@ function S.onTick()
         return S._hoverCompromisedTick("the fly never took", false)
       end
     end
+    -- NEVER SILENT, NEVER STUCK (v4.7.389): status line, quicklook cadence, and the stall release.
+    if S._recoverWatch(s) then return true end
     -- CONFIRM WITH DIAGNOSE (v4.7.233, user: "when tumbling we should ensure we heal to full
     -- and nothing on diagnose"). `S._afflicted()` reads our CLIENT-SIDE tracking, which is
     -- exactly the thing that is unreliable after a chaotic fight -- the death log has
@@ -2502,6 +2591,7 @@ function S.reset(reason)
   S.recoverGround = nil
   S.recoverDiagnosed = nil
   S.recoverTarget = nil -- v4.7.370
+  S._rp = nil           -- v4.7.389: the recovery watch
   S._pendingFree = nil  -- v4.7.370: the tactic that owned the refused move is gone
   S._escaping = nil     -- v4.7.378
   S.hoverSeenUpAt = nil -- v4.7.321: per-hover evidence

@@ -3569,6 +3569,31 @@ describe("mnem explore", function()
     M.explore.on = false
   end)
 
+  -- v4.7.389: a swarm recovery ticking every 2s is progress; the 30s "no progress" nudge was
+  -- firing over one that was working.
+  it("a consumed tick from an ACTIVE swarm state re-arms the watchdog; idle does not", function()
+    local realSwarm, realArm, realBasher = M.swarm, M._armWatchdog, ataxiaBasher
+    local armed = 0
+    local ok, err = pcall(function()
+      ataxiaBasher = { inMnemosyne = true }
+      M.explore.on, M.explore.moving, M.explore.pausedAtBoon = true, false, false
+      M._armWatchdog = function() armed = armed + 1 end
+      M.swarm = { state = "recovering", onTick = function() return true end }
+      M._exploreTick()
+      expect(armed).toBe(1)
+      M.swarm.state = "idle"
+      M._exploreTick()
+      expect(armed).toBe(1)
+      M.swarm.state = "recovering"
+      M.explore.pausedAtBoon = true -- the watchdog is navigation-only: never armed while paused
+      M._exploreTick()
+      expect(armed).toBe(1)
+    end)
+    M.swarm, M._armWatchdog, ataxiaBasher = realSwarm, realArm, realBasher
+    M.explore.on, M.explore.pausedAtBoon = false, false
+    if not ok then error(err, 0) end
+  end)
+
   it("watchdog nudge is a no-op when the explorer is off (no stray QL)", function()
     M.explore.on = false
     local captured, realSend = {}, send
