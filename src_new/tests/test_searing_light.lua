@@ -313,6 +313,43 @@ describe("Toxicologist's relapse line", function()
   end)
 end)
 
+-- v4.7.392, user: "You scream out in agony as a vicious venom tears through your body." --
+-- "We need to purge in this instance"
+describe("a venom tearing through us sends PURGE", function()
+  local TL = dofile("src_new/tests/trigger_lib.lua")
+  local F = "src_new/triggers/levi_ataxia/for_levi/leviticus/serpent/019_Venom_Agony_Purge.lua"
+  local P = TL.patterns(F)
+  local LINE = "You scream out in agony as a vicious venom tears through your body."
+
+  local function fire()
+    local sent = {}
+    local realSend = send
+    send = function(c) sent[#sent + 1] = c end
+    local ok, err = pcall(dofile, F)
+    send = realSend
+    if not ok then error(err, 0) end
+    return sent
+  end
+
+  it("matches the line, with or without its full stop, and not a denizen's", function()
+    expect(TL.anyMatches(P, LINE)).toBeTrue()
+    expect(TL.anyMatches(P, LINE:sub(1, -2))).toBeTrue()
+    expect(TL.anyMatches(P, "An enormous two-headed ettin screams out in agony, struck by the effects of a vicious venom.")).toBeFalse()
+  end)
+
+  it("purges, once per burst", function()
+    ataxiaTemp = {}
+    clock = 800000
+    local first = fire()
+    expect(#first).toBe(1)
+    expect(first[1]).toBe("purge")
+    clock = clock + 1
+    expect(#fire()).toBe(0) -- the next tick of the same venom
+    clock = clock + 1
+    expect(fire()[1]).toBe("purge") -- 2s later it purges again
+  end)
+end)
+
 -- Restore shared state for whoever runs after us.
 target, ataxia, ataxiaBasher, ataxiaTemp, gmcp = saved.target, saved.ataxia, saved.ataxiaBasher, saved.ataxiaTemp, saved.gmcp
 getEpoch, mnemSearingLight, ataxiaEcho = saved.getEpoch, saved.mnemSearingLight, saved.ataxiaEcho
