@@ -861,10 +861,17 @@ meta labels may end in ONE `?` (`META_KEY`), only the seen label promotes, `Unse
 `_boonDbMerge` type-checks the non-string fields, `/ripple_level` takes whole numbers only, and the
 dead `_contemplateNext`/`_applyContemplate` chain is gone.
 
+**ONLY THE NEW BOONS ON A SCREEN (v4.7.391, user: "We should only need to contemplate new boons that
+we dont have in the database").** This REVERSES the offer-screen half of v4.7.324 below: the screen
+chain now contemplates an offered boon only when `M._boonDescribed(name)` is false -- no description
+in the boon library or in the seed -- and the two one-per-screen extras (a description gap, a combo
+component) obey the same test. A screen of known boons sends nothing and prints nothing; the offer
+summary still prints. Re-reading KNOWN boons for changed text is now `mnem boonfill`'s job alone.
+
 **CONTEMPLATE EVERY BOON, EVERY TIME (v4.7.324, user: "we should boon contemplate all boons no
-matter what as they constantly change these").** A boon used to be contemplated at most once. Now:
-every OFFERED boon is contemplated on every boon screen (`M._boonScreenContemplate`, plus one catalogue
-gap) -- scheduled from `_flushPendingOffer`, i.e. AFTER the offer has posted, so it cannot recreate
+matter what as they constantly change these"; offer-screen half REVERSED in v4.7.391, above).** A boon
+used to be contemplated at most once. Then: every OFFERED boon was contemplated on every boon screen
+(`M._boonScreenContemplate`, plus one catalogue gap) -- scheduled from `_flushPendingOffer`, i.e. AFTER the offer has posted, so it cannot recreate
 v4.7.279's dropped reports; it never takes the capture slot from another capture (waits up to 5s, then
 gives up) and stops at GO! (`M.onGo` bumps `M._fillGen`; a run from an older wave ends). `mnem
 boonfill` cycles the whole catalogue, never-contemplated first then oldest `contemplatedAt` (legacy

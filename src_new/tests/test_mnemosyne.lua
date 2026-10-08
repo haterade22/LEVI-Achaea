@@ -7301,7 +7301,9 @@ describe("mnem boonfill recheck", function()
   end)
 end)
 
-describe("every offered boon is contemplated, every screen (v4.7.324)", function()
+-- v4.7.391 reversed v4.7.324's "every boon, every screen". User: "We should only need to contemplate
+-- new boons that we dont have in the database."
+describe("only the offered boons we have no text for are contemplated (v4.7.391)", function()
   -- Records the contemplates a run sends; each capture answers with a whole block. Timers are
   -- QUEUED and run in order after the call returns, as Mudlet runs them -- firing them inline would
   -- reverse the order of the sends and hide the wait-for-the-slot path.
@@ -7333,7 +7335,7 @@ describe("every offered boon is contemplated, every screen (v4.7.324)", function
     return asked, out, said, delays
   end
 
-  it("contemplates each offered boon -- echoes as their base boon -- plus one gap", function()
+  it("contemplates only the new boons -- echoes as their base boon -- plus one gap", function()
     local realGaps = M.boonGaps
     M.boonGaps = function() return { "Hole" } end
     local asked
@@ -7341,35 +7343,48 @@ describe("every offered boon is contemplated, every screen (v4.7.324)", function
       asked = run({ ["Desperation"] = { description = "d" }, ["Restoration"] = { description = "d" } }, function()
         M._capturing = false
         M._boonScreenContemplate({ { name = "Desperation" }, { name = "(ECHO) Restoration" },
-                                   { name = "Berkana Surround" }, { name = "Desperation" } })
+          { name = "Berkana Surround" }, -- seeded: its text is in the seed
+          { name = "(ECHO) Novel Boon" }, { name = "Novel Boon" } })
       end)
     end)
     M.boonGaps = realGaps
     if not ok then error(err, 0) end
-    expect(#asked).toBe(4)
-    expect(asked[1]).toBe("Desperation")
-    expect(asked[2]).toBe("Restoration")
-    expect(asked[3]).toBe("Berkana Surround")
-    expect(asked[4]).toBe("Hole")
+    expect(#asked).toBe(2)
+    expect(asked[1]).toBe("Novel Boon")
+    expect(asked[2]).toBe("Hole")
   end)
 
-  -- It runs after EVERY offer screen, so it must not narrate a run that found nothing new.
-  it("stays quiet when nothing changed, and speaks when something did", function()
+  -- The live screen (v4.7.391): Pinpoint, Training Arc, Child of Chaos, Restoration -- all known.
+  it("a screen of boons we already know sends nothing and says nothing", function()
     local realGaps = M.boonGaps
-    M.boonGaps = function() return {} end -- no description gap rides along this time
+    M.boonGaps = function() return {} end
     local ok, err = pcall(function()
-      local _, _, said = run({ ["Desperation"] = { description = "Some text." } }, function()
+      local started
+      local asked, _, said = run({ ["Pinpoint"] = { description = "d" }, ["Training Arc"] = { description = "d" },
+                                   ["Child of Chaos"] = { description = "d" }, ["Restoration"] = { description = "d" } },
+        function()
+          M._capturing = false
+          started = M._boonScreenContemplate({ { name = "Pinpoint" }, { name = "Training Arc" },
+                                               { name = "Child of Chaos" }, { name = "Restoration" } })
+        end)
+      expect(started).toBe(false)
+      expect(#asked).toBe(0)
+      expect(table.concat(said, "\n")).toBe("")
+    end)
+    M.boonGaps = realGaps
+    if not ok then error(err, 0) end
+  end)
+
+  it("a boon in the library WITHOUT text is still new, and learning it says so", function()
+    local realGaps = M.boonGaps
+    M.boonGaps = function() return {} end
+    local ok, err = pcall(function()
+      local asked, _, said = run({ ["Novel Boon"] = { rarity = "common" } }, function()
         M._capturing = false
-        M._boonScreenContemplate({ { name = "Desperation" } })
+        M._boonScreenContemplate({ { name = "Novel Boon" } })
       end)
-      local _, _, said2 = run({ ["Desperation"] = { description = "Old text." } }, function()
-        M._capturing = false
-        M._boonScreenContemplate({ { name = "Desperation" } })
-      end)
-      local quiet, loud = table.concat(said, "\n"), table.concat(said2, "\n")
-      expect(quiet:find("Boon catalogue updated", 1, true)).toBeNil()
-      expect(loud:find("Desperation changed", 1, true) ~= nil).toBeTrue()
-      expect(loud:find("Boon catalogue updated", 1, true) ~= nil).toBeTrue()
+      expect(#asked).toBe(1)
+      expect(table.concat(said, "\n"):find("Boon catalogue updated", 1, true) ~= nil).toBeTrue()
     end)
     M.boonGaps = realGaps
     if not ok then error(err, 0) end
@@ -8906,7 +8921,9 @@ describe("the boon advisor", function()
       M._fillBusyAt, M._capturing = nil, false
       withContemplate(MIRROR, function()
         M.echo = collect
-        expect(M._boonScreenContemplate(LIVE_OFFER)).toBeTrue()
+        -- One boon we have no text for, so the chain has something to contemplate (v4.7.391).
+        local offer = { LIVE_OFFER[1], LIVE_OFFER[2], LIVE_OFFER[3], LIVE_OFFER[4], { name = "Novel Boon" } }
+        expect(M._boonScreenContemplate(offer)).toBeTrue()
       end)
     end)
     M.boonGaps, M._fillBusyAt = realGaps, realBusy
@@ -9103,8 +9120,8 @@ describe("boon combos", function()
   end)
 
   it("the offer screen's chain picks up one component per screen", function()
-    local lib = { ["Offered"] = { description = "d" },
-                  ["Lightning Soul"] = { description = "d", unlocksFrom = { "Energetic" }, contemplatedAt = 1 } }
+    local lib = { ["Offered"] = { rarity = "common" }, -- no text yet: new (v4.7.391)
+                  ["Lightning Soul"] = { description = "d", unlocksFrom = { "Novel Component" }, contemplatedAt = 1 } }
     local asked, realGaps = {}, M.boonGaps
     local realNext, realCap, realBusy = M._boonFillNext, M._capturing, M._fillBusyAt
     M.boonGaps = function() return {} end
@@ -9119,7 +9136,29 @@ describe("boon combos", function()
     M._capturing, M._fillBusyAt = realCap, realBusy
     if not ok then error(err, 0) end
     expect(#asked).toBe(2)
-    expect(asked[2]).toBe("Energetic")
+    expect(asked[2]).toBe("Novel Component") -- an invented name: "Energetic" has seed text (v4.7.391)
+  end)
+
+  -- v4.7.391: a component we already have text for is in the database, so the screen chain leaves it.
+  it("the offer screen's chain skips a component it already has text for", function()
+    local lib = { ["Lightning Soul"] = { description = "d", unlocksFrom = { "Electric Mastery" }, contemplatedAt = 1 },
+                  ["Electric Mastery"] = { description = "d" } } -- described, never contemplated
+    local asked, realGaps = nil, M.boonGaps
+    local realNext, realCap, realBusy = M._boonFillNext, M._capturing, M._fillBusyAt
+    M.boonGaps = function() return {} end
+    M._boonFillNext = function(todo) asked = todo end
+    local started
+    local ok, err = pcall(function()
+      withLibrary(lib, function()
+        M._capturing, M._fillBusyAt = false, nil
+        started = M._boonScreenContemplate({})
+      end)
+    end)
+    M.boonGaps, M._boonFillNext = realGaps, realNext
+    M._capturing, M._fillBusyAt = realCap, realBusy
+    if not ok then error(err, 0) end
+    expect(started).toBe(false)
+    expect(asked).toBeNil()
   end)
 
   it("the advisor pays for a component, and pays more for the one that completes it", function()

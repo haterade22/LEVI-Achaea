@@ -225,9 +225,9 @@ Each function guards on `M._hasToken()` and enqueues. Payload shapes:
     The catalogue's `comboBoon` comes from two places: the seed (`M.BOON_COMBO`, the ten boons the
     tracker's export shows as combo) and a `Combo Boon?: Yes/No` line on any CONTEMPLATE that
     `mnem boonfill` runs -- which now also contemplates DESCRIBED boons, because a mature catalogue
-    has no description gaps and would otherwise never learn it -- and, since v4.7.324, on the
-    contemplate of every boon an offer screen shows (after that offer has posted, so it feeds the
-    boon's NEXT post). Sent
+    has no description gaps and would otherwise never learn it -- and on the contemplate of each
+    boon an offer screen shows that we have NO TEXT for (after that offer has posted, so it feeds
+    the boon's NEXT post; v4.7.324 did every offered boon, v4.7.391 only the new ones). Sent
     when the catalogue knows **either** answer; **omitted** when it knows neither, because an
     unknown posted as `false` is a guess that looks like data. Unlike the string fields, `false` is
     information: every store and merge on the way tests the TYPE, never truthiness. **Open
