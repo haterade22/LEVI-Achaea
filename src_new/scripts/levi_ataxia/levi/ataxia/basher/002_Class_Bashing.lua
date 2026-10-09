@@ -3782,7 +3782,9 @@ function ataxiaBasher_serpentBashing()
       local sp = ataxia.settings.separator
       local rest = ataxiaBasher_searingLightwall(sp)..brage
       if rest:sub(-#sp) == sp then rest = rest:sub(1, -#sp - 1) end -- no bare trailing separator
-      return "backstab "..target..((rest ~= "") and (sp..rest) or "")
+      -- THE DIRK (v4.7.394, user: "backstab needs a dirk in our hand"). `wield shield dirk` is the
+      -- same command the Serpent PvP offense uses before its dirk attacks (serpent/002).
+      return "wield shield dirk"..sp.."backstab "..target..((rest ~= "") and (sp..rest) or "")
    end
 
    -- Searing Light rides FIRST (see above): an eq cast, so the balance garrote still swings.
