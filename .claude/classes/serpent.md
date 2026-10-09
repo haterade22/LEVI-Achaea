@@ -717,6 +717,13 @@ sequence:
   - "If not shielded: garrote <target>"
   - "...or, with Serpent's Maw or Toxicologist (Mnemosyne boons, v4.7.381): purge;secrete camus;bite <target> (purge added v4.7.383)"
 notes: "There is no BATTLERAGE BITE and no 'envenom' battlerage ability."
+assassins_blade: |
+  v4.7.393. Assassin's Blade (mnemAssassinsBlade): "When hidden from sight, your backstab will resolve
+  instantly without a need to channel." Darkwalker: "Defeating a denizen will render you hidden." User:
+  "with This and darkwalker it should always open with backstab". BACKSTAB (AB 1250): BACKSTAB <target>
+  [<venom>], 2.00s balance, only while hidden. With the boon and the `hiding` defence up (and no shield),
+  the round is `backstab <target>` FIRST, then the lightwall and battlerage, so neither can reveal us
+  before it lands. Darkwalker has no flag: the `hiding` defence is the gate.
 venom_agony_purge: |
   v4.7.392, user: "We need to purge in this instance" on "You scream out in agony as a vicious venom tears
   through your body." serpent/019 sends a direct `purge` (like serpent/014's secrete refusal), at most once

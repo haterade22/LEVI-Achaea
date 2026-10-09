@@ -241,6 +241,7 @@ function M.onRunEnd()
   mnemSearingLight = false -- boons gone on a confirmed run-end
   mnemSerpentsMaw = false -- ...and the Serpent bites with garrote again (v4.7.381)
   mnemToxicologist = false -- (v4.7.381)
+  mnemAssassinsBlade = false -- ...and the Serpent stops opening with a backstab (v4.7.393)
   mnemThriceCursed = false -- ...and the Shaman stops jinxing between swiftcurses (v4.7.386)
   mnemHealingMetabolism = false -- boons gone on a confirmed run-end
   -- Berserker's Edge pinned the rage floor to 100 (basher/001). Putting it back is the half that
@@ -1297,6 +1298,7 @@ M.BOON_FLAGS = {
   ["Psiwave"]              = "psionPsiwave",
   ["Serpent's Maw"]        = "mnemSerpentsMaw",
   ["Toxicologist"]         = "mnemToxicologist",
+  ["Assassin's Blade"]     = "mnemAssassinsBlade",
   ["Thrice Cursed"]        = "mnemThriceCursed",
   ["Earthquake"]           = "psionEarthquake",
   ["Prophet of Creation"]  = "psionProphet",

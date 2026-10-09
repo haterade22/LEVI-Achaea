@@ -60,6 +60,9 @@ if matches[2]:lower():find("searing light") then mnemSearingLight = true end
 -- bashes with `secrete camus;bite <target>` instead of garrote (v4.7.381, user-directed).
 if matches[2]:lower():find("serpent's maw", 1, true) then mnemSerpentsMaw = true end
 if matches[2]:lower():find("toxicologist", 1, true) then mnemToxicologist = true end
+-- Assassin's Blade: a backstab from hiding is instant, so the Serpent opens with BACKSTAB whenever
+-- the `hiding` defence is up (v4.7.393, user-directed; Darkwalker hides us on every kill).
+if matches[2]:lower():find("assassin's blade", 1, true) then mnemAssassinsBlade = true end
 -- Thrice Cursed: swiftcurses build jinx charges, so the Shaman basher jinxes whenever one is banked
 -- and swiftcurses otherwise (v4.7.386, user-directed).
 if matches[2]:lower():find("thrice cursed", 1, true) then mnemThriceCursed = true end
