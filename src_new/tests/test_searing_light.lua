@@ -15,6 +15,7 @@ local saved = {
   target = target, ataxia = ataxia, ataxiaBasher = ataxiaBasher, ataxiaTemp = ataxiaTemp,
   gmcp = gmcp, getEpoch = getEpoch, mnemSearingLight = mnemSearingLight, ataxiaEcho = ataxiaEcho,
   ataxiaBasher_assembleBattlerage = ataxiaBasher_assembleBattlerage,
+  mnemAssassinsBlade = mnemAssassinsBlade,
 }
 
 target = 7
@@ -350,7 +351,76 @@ describe("a venom tearing through us sends PURGE", function()
   end)
 end)
 
+-- v4.7.393, user: Assassin's Blade ("When hidden from sight, your backstab will resolve instantly")
+-- with Darkwalker ("Defeating a denizen will render you hidden") -- "it should always open with backstab".
+describe("Assassin's Blade: open with BACKSTAB while hidden", function()
+  local function bash(opts)
+    reset({ boon = opts.lightwall or false })
+    mnemAssassinsBlade = (opts.blade ~= false)
+    mnemSerpentsMaw = opts.maw
+    ataxia.defences = { hiding = (opts.hidden ~= false) or nil }
+    ataxiaBasher.shielded = opts.shielded or false
+    local cmd = ataxiaBasher_serpentBashing()
+    mnemAssassinsBlade, mnemSerpentsMaw = nil, nil
+    ataxia.defences = {}
+    return cmd
+  end
+
+  it("hidden: backstab FIRST, the battlerage after it, no garrote", function()
+    local cmd = bash({})
+    expect(cmd).toBe("backstab 7;BRAGE")
+  end)
+
+  it("hidden with Searing Light: backstab first, then the lightwall", function()
+    local cmd = bash({ lightwall = true })
+    expect(cmd:sub(1, #"backstab 7;conjure lightwall")).toBe("backstab 7;conjure lightwall")
+  end)
+
+  it("no bare trailing separator when nothing follows the backstab", function()
+    local real = ataxiaBasher_assembleBattlerage
+    ataxiaBasher_assembleBattlerage = function() return "" end
+    local cmd = bash({})
+    ataxiaBasher_assembleBattlerage = real
+    expect(cmd).toBe("backstab 7")
+  end)
+
+  it("hidden beats the venom bite too", function()
+    local cmd = bash({ maw = true })
+    expect(has(cmd, "backstab 7")).toBeTrue()
+    expect(has(cmd, "bite")).toBeFalse()
+  end)
+
+  it("not hidden: the normal swing", function()
+    local cmd = bash({ hidden = false })
+    expect(has(cmd, "backstab")).toBeFalse()
+    expect(has(cmd, "garrote 7")).toBeTrue()
+  end)
+
+  it("without the boon a backstab channels, so it is not used", function()
+    local cmd = bash({ blade = false })
+    expect(has(cmd, "backstab")).toBeFalse()
+    expect(has(cmd, "garrote 7")).toBeTrue()
+  end)
+
+  it("a shielded target is flayed first", function()
+    local cmd = bash({ shielded = true })
+    expect(has(cmd, "backstab")).toBeFalse()
+    expect(has(cmd, "flay 7 shield")).toBeTrue()
+  end)
+
+  it("the boon is wired: flag, claim alias, run start", function()
+    local function slurp(p) local f = io.open(p); local s = f:read("*a"); f:close(); return s end
+    expect(slurp("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/004_Parsers.lua")
+      :find([==[["Assassin's Blade"]     = "mnemAssassinsBlade"]==], 1, true) ~= nil).toBeTrue()
+    expect(slurp("src_new/aliases/levi_ataxia/for_levi/levi_062424/mnemosyne/002_Boon_Claim.lua")
+      :find([[find("assassin's blade", 1, true) then mnemAssassinsBlade = true]], 1, true) ~= nil).toBeTrue()
+    expect(slurp("src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/001_Run_Start.lua")
+      :find("mnemAssassinsBlade = false", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
 -- Restore shared state for whoever runs after us.
 target, ataxia, ataxiaBasher, ataxiaTemp, gmcp = saved.target, saved.ataxia, saved.ataxiaBasher, saved.ataxiaTemp, saved.gmcp
 getEpoch, mnemSearingLight, ataxiaEcho = saved.getEpoch, saved.mnemSearingLight, saved.ataxiaEcho
+mnemAssassinsBlade = saved.mnemAssassinsBlade
 ataxiaBasher_assembleBattlerage = saved.ataxiaBasher_assembleBattlerage

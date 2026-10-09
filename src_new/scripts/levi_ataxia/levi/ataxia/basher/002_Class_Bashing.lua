@@ -3767,6 +3767,24 @@ function ataxiaBasher_serpentBashing()
    local command = ""
 	 local brage = ataxiaBasher_assembleBattlerage()
 
+   -- ASSASSIN'S BLADE (Mnemosyne boon, v4.7.393): "When hidden from sight, your backstab will
+   -- resolve instantly without a need to channel." BACKSTAB (AB 1250): `BACKSTAB <target> [<venom>]`,
+   -- 2.00s of balance, "only useable while hidden in the shadows" -- normally a delayed, channelled
+   -- strike, which the boon makes instant. User: with Darkwalker ("Defeating a denizen will render
+   -- you hidden") "it should always open with backstab". Darkwalker needs no flag here: what gates
+   -- the backstab is the game's own `hiding` defence, however we came to be hidden.
+   --
+   -- FIRST in the round: the lightwall and the battlerage that normally lead it could bring us out
+   -- of hiding before the backstab lands. They follow it instead. A shielded target still gets its
+   -- shield flayed first (below), so no backstab then.
+   if not ataxiaBasher.shielded and mnemAssassinsBlade
+      and ataxia.defences and ataxia.defences.hiding then
+      local sp = ataxia.settings.separator
+      local rest = ataxiaBasher_searingLightwall(sp)..brage
+      if rest:sub(-#sp) == sp then rest = rest:sub(1, -#sp - 1) end -- no bare trailing separator
+      return "backstab "..target..((rest ~= "") and (sp..rest) or "")
+   end
+
    -- Searing Light rides FIRST (see above): an eq cast, so the balance garrote still swings.
    command = command..ataxiaBasher_searingLightwall(ataxia.settings.separator)
 

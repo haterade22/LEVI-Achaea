@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-10-09 - Serpent: open with an instant backstab while hidden (v4.7.393)
+
+User pasted Assassin's Blade ("When hidden from sight, your backstab will resolve instantly without a need
+to channel."), Darkwalker ("Defeating a denizen will render you hidden.") and BACKSTAB (AB 1250): "with This
+and darkwalker it should always open with backstab".
+
+- With Assassin's Blade (`mnemAssassinsBlade`), while the game's `hiding` defence is up and the target has
+  no shield, the Serpent round is `backstab <target>`. It replaces the garrote and the camus bite.
+- The backstab goes FIRST. The Searing Light lightwall and the battlerage follow it, because they led the
+  round before and could reveal us before the backstab landed. No bare trailing separator.
+- Darkwalker needs no flag: the `hiding` defence is the gate, however we got hidden.
+- A shielded target is still flayed first. Without the boon a backstab channels, so it is not used.
+- Wired: `M.BOON_FLAGS`, claim alias, run start/end.
+- Not confirmed: whether the lightwall or battlerage really reveal us, and which weapon the backstab needs
+  (AB 1250: "a dirk or dagger").
+
+**Tests:** 8 new; 5 break-back mutants, all killed.
+
+---
+
 ## 2026-10-08 - Serpent: purge when a venom tears through us (v4.7.392)
 
 User: "You scream out in agony as a vicious venom tears through your body." -- "We need to purge in this

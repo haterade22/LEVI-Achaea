@@ -58,6 +58,7 @@ mnemDeathStare = false  -- boons reset each run
 mnemSearingLight = false  -- boons reset each run
 mnemSerpentsMaw = false  -- boons reset each run
 mnemToxicologist = false  -- boons reset each run
+mnemAssassinsBlade = false  -- boons reset each run
 mnemThriceCursed = false  -- boons reset each run
 mnemHealingMetabolism = false  -- boons reset each run
 mnemBerserkersEdge = false  -- boons reset each run
