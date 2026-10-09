@@ -186,13 +186,19 @@ does not, check the tool's version against the runtime's before acting on it.
 2. **Convert** to Muddler format: `python tools/convert_to_muddler.py --src ./src_new --output ./muddler_project`
 3. **Build** with Muddler (from `muddler_project/` directory):
    ```bash
-   set JAVA_HOME=E:\Java
+   set JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-21.0.12.101-hotspot
    cd muddler_project
-   E:\muddle-shadow-1.1.0\muddle-shadow-1.1.0\bin\muddle.bat
+   C:\Tools\muddle-shadow-1.1.0\muddle-shadow-1.1.0\bin\muddle.bat
    ```
 4. **Output**: `muddler_project/build/Levi_Ataxia.mpackage` and `.xml`
 
-**Requirements**: Java 8+ (`E:\Java`), Muddler (`E:\muddle-shadow-1.1.0\muddle-shadow-1.1.0\`), Python 3.
+**Requirements**: Java 8+, Muddler 1.1.0, Python 3. `build.sh` / `dmap_build.sh` resolve both
+from candidate lists, so neither path is pinned: a valid pre-set `JAVA_HOME` / `MUDDLE_BAT` wins,
+else Java is globbed from `E:/Java`, `C:/Program Files/Java`, `Eclipse Adoptium` and `Microsoft`
+JDK dirs, and Muddler from `C:/Tools/muddle-shadow-1.1.0/...` then `E:/muddle-shadow-1.1.0/...`.
+Current dev machine (2026-10-09, no `E:` drive): Temurin 21 JDK via
+`winget install EclipseAdoptium.Temurin.21.JDK`, Muddler unzipped to `C:\Tools` from
+`gh release download 1.1.0 -R demonnic/muddler -p muddle-shadow-1.1.0.zip`.
 
 **Testing**: Run `lua5.1 src_new/tests/test_runner.lua` or use the "Run Tests" VS Code task. Tests use `mock_mudlet.lua` to stub the Mudlet API.
 

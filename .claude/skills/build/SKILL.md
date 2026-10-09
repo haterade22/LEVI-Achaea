@@ -39,8 +39,9 @@ Run the full build pipeline for the Levi_Ataxia Mudlet package.
      Push the one tag by name. See the release-flow section of `CLAUDE.md`.
 
 ## Requirements
-- Java 8+ at `E:\Java`
-- Muddler at `E:\muddle-shadow-1.1.0\muddle-shadow-1.1.0\`
+- Java 8+ (`build.sh` finds it via `JAVA_HOME` or its candidate list; currently Temurin 21 under
+  `C:\Program Files\Eclipse Adoptium\`)
+- Muddler 1.1.0 (`MUDDLE_BAT` or the candidate list; currently `C:\Tools\muddle-shadow-1.1.0\muddle-shadow-1.1.0\`)
 - Python 3 with no extra dependencies
 
 ## Important

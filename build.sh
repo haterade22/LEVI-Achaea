@@ -48,11 +48,19 @@ if ! _java_ok "$JAVA_HOME"; then
 fi
 echo "Using JAVA_HOME=$JAVA_HOME"
 
-MUDDLE_BAT="E:/muddle-shadow-1.1.0/muddle-shadow-1.1.0/bin/muddle.bat"
-if [ ! -e "$MUDDLE_BAT" ]; then
-  echo "ERROR: Muddler not found at $MUDDLE_BAT — install it or update the path in build.sh." >&2
+# Resolve Muddler: honor a valid pre-set MUDDLE_BAT, else try the known install locations
+# (C:/Tools is where this machine keeps it; E: is the original dev box).
+if [ -z "$MUDDLE_BAT" ] || [ ! -e "$MUDDLE_BAT" ]; then
+  MUDDLE_BAT=""
+  for _cand in "C:/Tools/muddle-shadow-1.1.0/muddle-shadow-1.1.0/bin/muddle.bat"                "E:/muddle-shadow-1.1.0/muddle-shadow-1.1.0/bin/muddle.bat"; do
+    if [ -e "$_cand" ]; then MUDDLE_BAT="$_cand"; break; fi
+  done
+fi
+if [ -z "$MUDDLE_BAT" ]; then
+  echo "ERROR: Muddler not found. Set MUDDLE_BAT, or add its path to the candidate list in build.sh." >&2
   exit 1
 fi
+echo "Using MUDDLE_BAT=$MUDDLE_BAT"
 
 cd muddler_project
 "$MUDDLE_BAT"

@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-10-09 - Build: find Java and Muddler without the E: drive (tooling only, no version bump)
+
+The dev machine no longer has an `E:` drive, so `build.sh` converted fine and then failed: no
+`JAVA_HOME` candidate existed and `MUDDLE_BAT` was a single hardcoded `E:` path. Installed Temurin
+21 (winget) and Muddler 1.1.0 (to `C:\Tools`). `build.sh` and `dmap_build.sh` now resolve Muddler
+from a candidate list (`C:/Tools/...` then `E:/...`, a valid pre-set `MUDDLE_BAT` wins), and
+`dmap_build.sh`'s Java list is globbed like `build.sh`'s instead of pinning `jre1.8.0_491`. Package
+contents unchanged; docs (`CLAUDE.md`, the `/build` skill) updated.
+
+---
+
 ## 2026-10-09 - Serpent: wield the dirk before the backstab (v4.7.394)
 
 User: "backstab needs a dirk in our hand." The v4.7.393 backstab round now starts with `wield shield dirk`
