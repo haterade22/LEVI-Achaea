@@ -724,6 +724,7 @@ assassins_blade: |
   [<venom>], 2.00s balance, only while hidden. With the boon and the `hiding` defence up (and no shield),
   the round is `backstab <target>` FIRST, then the lightwall and battlerage, so neither can reveal us
   before it lands. Darkwalker has no flag: the `hiding` defence is the gate.
+  v4.7.394, user: "backstab needs a dirk in our hand" -- the round starts `wield shield dirk;backstab <target>`.
 venom_agony_purge: |
   v4.7.392, user: "We need to purge in this instance" on "You scream out in agony as a vicious venom tears
   through your body." serpent/019 sends a direct `purge` (like serpent/014's secrete refusal), at most once

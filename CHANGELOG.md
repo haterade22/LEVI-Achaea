@@ -2,6 +2,16 @@
 
 ---
 
+## 2026-10-09 - Serpent: wield the dirk before the backstab (v4.7.394)
+
+User: "backstab needs a dirk in our hand." The v4.7.393 backstab round now starts with `wield shield dirk`
+(the same command the Serpent PvP offense uses before its dirk attacks): `wield shield dirk;backstab
+<target>`, then the lightwall and battlerage as before.
+
+**Tests:** 3 updated.
+
+---
+
 ## 2026-10-09 - Serpent: open with an instant backstab while hidden (v4.7.393)
 
 User pasted Assassin's Blade ("When hidden from sight, your backstab will resolve instantly without a need
