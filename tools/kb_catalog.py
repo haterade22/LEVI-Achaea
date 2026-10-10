@@ -61,6 +61,8 @@ def lua_list_table(text, name):
 
 def lua_prios(text, func):
     body = text.split("function " + func, 1)[1].split("\nend", 1)[0]
+    # Drop Lua comments first: a commented-out entry (--["rebounding"] = 18) is never sent.
+    body = "\n".join(line.split("--", 1)[0] for line in body.splitlines())
     return {k: int(v) for k, v in re.findall(r'\["(\w+)"\]\s*=\s*(\d+)', body)}
 
 

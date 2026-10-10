@@ -109,7 +109,6 @@ Paste `WHATCURES <aff>` / `AFFLICTION SHOW <aff>` output into the inbox to fill 
 | `pyramides` |  | bloodroot | 6 |  |  |
 | `pyre` |  | bellwort | 9 |  |  |
 | `rebbies` |  | kelp | 7 |  |  |
-| `rebounding` |  |  | 18 |  |  |
 | `retribution` |  | bellwort | 6 | 25 |  |
 | `sandfever` |  | goldenseal | 4 |  |  |
 | `scalded` |  | salve:head | 16 | 20 |  |

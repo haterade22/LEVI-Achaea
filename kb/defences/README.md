@@ -42,7 +42,14 @@ accursedresolve, acrobatics, affinity, agithtailegend, aiming, airpocket, alertn
 | simultaneity | `simultaneity` | (absent) | Not an SSC defence |
 | clarity | `clarity` | (absent) | Not an SSC defence |
 
-**We don't know yet whether this breaks anything.** `systemDefup` builds its batched command from
-the defup PROFILE's names, not from these values, while `supportedDefence` reads the table as
-`csd, ssd`. Which path sends which name, and whether one bad name rejects a whole batched command,
-still needs tracing (`kb/CONFLICTS.md`).
+**Traced: none of these values reaches SSC.** The table is MIXED: most values are server
+names, but four are the commands that raise the defence (`blade tune`, `acrobatics on`,
+`dance harrying`, `avoid <type>`). Every reader tries the client KEY first:
+`supportedDefence` matches either side, and `ashow defs` checks `ataxia.defences[key] or
+ataxia.defences[value]`. `systemDefup` builds its `curing priority defence ... 25` command from
+the defup PROFILE's keys. So the values above are harmless.
+
+**Still open** (`kb/CONFLICTS.md`): the defup command is ONE batched command, and some keys our
+tables accept are not SSC defences (parrying, compoundmask, simultaneity, clarity, harrying). If
+the game rejects the whole command for one bad name, a profile containing one of them keeps
+nothing up.

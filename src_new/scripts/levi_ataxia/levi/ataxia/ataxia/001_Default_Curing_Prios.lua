@@ -45,19 +45,91 @@ function ataxia_sendDefaultPrios()
   -- Send in batches of 5, staggered by 1.5s
   local batchSize = 5
   local delay = 0
+  local sig = ataxia_prioTableSig(prios)
   for i = 1, #entries, batchSize do
     local batch = {}
     for j = i, math.min(i + batchSize - 1, #entries) do
       batch[#batch + 1] = entries[j]
     end
     local cmd = table.concat(batch, ";")
-    if delay == 0 then
+    local last = (i + batchSize > #entries)
+    local function go()
       send(cmd)
+      -- Record what the server now holds only once the LAST batch is out, so a disconnect
+      -- halfway leaves the table marked unsent and the next login sends it again.
+      if last then ataxia_prioMarkSent(sig) end
+    end
+    if delay == 0 then
+      go()
     else
-      local d = delay
-      tempTimer(d, function() send(cmd) end)
+      tempTimer(delay, go)
     end
     delay = delay + 1.5
+  end
+end
+
+-- KEEPING THE SERVER IN STEP WITH THIS TABLE (v4.7.397).
+--
+-- A capture of CURING PRIORITY LIST on 2026-10-10 showed the `normal` set still holding
+-- JANUARY's values (broken arms 1 where this table says 10, legs 2 vs 7, weariness, horror,
+-- crescendo, healthleech, scytherus...). This table is only sent by `reset prios`, and
+-- ataxia_resetOnLogin has no caller, so every change made here since v4.7.276 (2026-08-19)
+-- had never reached SSC. Editing this file did nothing until someone remembered to type a
+-- command. Now a fingerprint of the table is stored when it is sent, and at login a changed
+-- table is re-sent -- but ONLY into the `normal` set, confirmed by asking the game, because
+-- a `curing priority` write lands in whichever set is active and must never overwrite a
+-- class set or the PvE bash set. In any other set it says so instead of writing.
+
+-- Order-independent fingerprint of a priority table.
+function ataxia_prioTableSig(prios)
+  prios = prios or ataxia_defaultCuringPrios()
+  local parts = {}
+  for k, v in pairs(prios) do parts[#parts + 1] = k .. "=" .. tostring(v) end
+  table.sort(parts)
+  return table.concat(parts, ",")
+end
+
+function ataxia_prioMarkSent(sig)
+  ataxia.settings = ataxia.settings or {}
+  ataxia.settings.prioSentSig = sig or ataxia_prioTableSig()
+  if ataxia_saveSettings then pcall(ataxia_saveSettings, false) end
+end
+
+-- True when this table differs from what was last sent (or nothing has ever been recorded).
+function ataxia_prioTableChanged()
+  local sent = ataxia.settings and ataxia.settings.prioSentSig
+  return sent ~= ataxia_prioTableSig()
+end
+
+-- What to do with a changed table, given the curingset the game says is active.
+-- Pure, for the tests: "send", or a reason not to.
+function ataxia_prioSyncDecide(changed, current)
+  if not changed then return "unchanged" end
+  if current == nil then return "unknown-set" end
+  if current ~= "normal" then return "other-set" end
+  return "send"
+end
+
+-- Called at login (login/001). Asks the game which set is active before writing anything.
+function ataxia_prioSyncCheck()
+  if not ataxia_prioTableChanged() then return end
+  local function decide(parsed)
+    local cur = parsed and parsed.current
+    local what = ataxia_prioSyncDecide(true, cur)
+    if what == "send" then
+      if ataxiaEcho then
+        ataxiaEcho("The curing priority table changed since it was last sent -- sending it to the <green>normal<reset> set now (about 40s).")
+      end
+      ataxia_sendDefaultPrios()
+    elseif ataxiaEcho then
+      ataxiaEcho("The curing priority table changed since it was last sent, but the active curing set is <yellow>"
+        .. tostring(cur or "unknown") .. "<reset>. Switch to <green>normal<reset> and type <cyan>reset prios<reset> to apply it.")
+    end
+  end
+  if ataxia_curingsetRefresh then
+    ataxia_curingsetRefresh(decide)
+  else
+    decide(nil)
   end
 end
 
