@@ -1,0 +1,13 @@
+# affliction show slashedthroat  (2026-10-10T23:40:50Z)
+Affliction:         Slashedthroat
+Diagnose:           bleeding from a slashed throat.
+Afflicted msg:      Blood sprays forth as the thorn-laden vine rips a deep wound in your throat.
+Cured msg:          The bleeding gash in your throat closes up completely.
+Cure(s):            Apply Epidermal To Head
+Description:        A slashed throat makes vocal work difficult and reduces the efficacy of health and mana elixirs.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

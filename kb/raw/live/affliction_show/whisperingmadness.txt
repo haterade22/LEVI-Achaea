@@ -1,0 +1,13 @@
+# affliction show whisperingmadness  (2026-10-10T23:41:26Z)
+Affliction:         Whispering madness
+Diagnose:           hearing whispers of madness.
+Afflicted msg:      You feel an invisible claw brush the back of your skull.
+Cured msg:          The whispering in your mind subsides.
+Cure(s):            Eat Lobelia / Eat Argentum
+Description:        Whispering madness increases the balance cost of focusing your mind by 60% and slightly lowers the affliction threshold required to become enlightened.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

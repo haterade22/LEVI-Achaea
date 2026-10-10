@@ -1,0 +1,13 @@
+# affliction show hypothermia  (2026-10-10T23:39:50Z)
+Affliction:         Hypothermia
+Diagnose:           suffering from hypothermia.
+Afflicted msg:      none
+Cured msg:          Though still frozen, you feel some slight remnants of heat returning to you.
+Cure(s):            Apply Restoration To Body
+Description:        Prevents curing the freezing affliction.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

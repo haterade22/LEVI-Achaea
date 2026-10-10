@@ -1,0 +1,14 @@
+# affliction show vertigo  (2026-10-10T23:41:21Z)
+Affliction:         Vertigo
+Diagnose:           afraid of heights.
+Afflicted msg:      The idea of heights makes you queasy suddenly.
+Cured msg:          Your fear of heights subsides.
+Cure(s):            Eat Lobelia / Eat Argentum
+                    Focus Mind
+Description:        People with vertigo cannot bear to leave the ground.
+NoRandomCure:       No
+WhisperingMadness:  Yes
+Enlighten:          Yes
+Tzantza:            Yes
+Accentato:          Yes
+CadmusCurse:        No

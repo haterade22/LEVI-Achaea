@@ -1,0 +1,13 @@
+# affliction show damagedrightleg  (2026-10-10T23:39:01Z)
+Affliction:         A damaged right leg
+Diagnose:           has a partially damaged right leg.
+Afflicted msg:      Your right leg is greatly damaged from the beating.
+Cured msg:          Your right leg feels stronger and healthier.
+Cure(s):            Apply Restoration To Legs
+Description:        Having a damaged right leg prevents you from using that leg in most situations.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

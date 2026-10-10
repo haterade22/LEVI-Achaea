@@ -1,0 +1,13 @@
+# affliction show torntendons  (2026-10-10T23:41:13Z)
+Affliction:         Torntendons
+Diagnose:           suffering from $(type$) torn tendons.
+Afflicted msg:      none
+Cured msg:          The burning in your lower legs fades away.
+Cure(s):            Apply Health To Legs
+Description:        This affliction will make movement attempts fail as well as giving periodic clumsiness.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

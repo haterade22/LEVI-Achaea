@@ -1,0 +1,13 @@
+# affliction show ablaze  (2026-10-10T23:38:24Z)
+Affliction:         Burning
+Diagnose:           ablaze.
+Afflicted msg:      none
+Cured msg:          The raging fire about your skin goes out.
+Cure(s):            Apply Mending To Body
+Description:        When your body is completely wrapped in flames, you will unsuprisingly find it quite painful.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

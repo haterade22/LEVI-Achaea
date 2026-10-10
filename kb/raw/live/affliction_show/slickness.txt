@@ -1,0 +1,14 @@
+# affliction show slickness  (2026-10-10T23:40:53Z)
+Affliction:         Slickness
+Diagnose:           extremely oily.
+Afflicted msg:      You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+Cured msg:          Your glands cease their oily secretion.
+Cure(s):            Smoke Valerian / Smoke Realgar
+                    Eat Bloodroot / Eat Magnesium
+Description:        Slickness coats your skin in oily secretions, blocking any attempt to apply salves or balms.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

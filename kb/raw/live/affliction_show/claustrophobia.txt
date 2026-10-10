@@ -1,0 +1,14 @@
+# affliction show claustrophobia  (2026-10-10T23:38:45Z)
+Affliction:         Claustrophobia
+Diagnose:           claustrophobic.
+Afflicted msg:      The walls close in to suffocate you - you must escape!
+Cured msg:          Small spaces no longer frighten you.
+Cure(s):            Eat Lobelia / Eat Argentum
+                    Focus Mind
+Description:        Claustrophobics cannot stand to be indoors!
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          Yes
+Tzantza:            Yes
+Accentato:          Yes
+CadmusCurse:        No

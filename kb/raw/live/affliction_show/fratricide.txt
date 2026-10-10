@@ -1,0 +1,13 @@
+# affliction show fratricide  (2026-10-10T23:39:28Z)
+Affliction:         Fratricide
+Diagnose:           plagued by an insidious venom.
+Afflicted msg:      Something subtle and yet insidious overcomes you.
+Cured msg:          You rid yourself of the insidious venom plaguing you.
+Cure(s):            Eat Lobelia / Eat Argentum
+Description:        Grants major negative poison resist and causes hypnotic impulses to relapse a short time after being first introduced.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

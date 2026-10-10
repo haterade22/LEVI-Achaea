@@ -1,0 +1,13 @@
+# affliction show haemophilia  (2026-10-10T23:39:39Z)
+Affliction:         Haemophilia
+Diagnose:           afflicted by haemophilia.
+Afflicted msg:      You sense a subtle change deep within.
+Cured msg:          Your blood regains its ability to clot.
+Cure(s):            Eat Ginseng / Eat Ferrum
+Description:        Haemophiliacs find it impossible to clot their blood.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        Yes

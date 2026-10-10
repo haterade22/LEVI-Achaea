@@ -1,0 +1,12 @@
+# affliction show tension  (2026-10-10T23:41:10Z)
+Affliction:         Tension
+Diagnose:           surrounded by heightened tension.
+Afflicted msg:      none
+Cured msg:          You suddenly find the air much easier to breathe.
+Cure(s):            Smoke Elm / Smoke Cinnabar
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

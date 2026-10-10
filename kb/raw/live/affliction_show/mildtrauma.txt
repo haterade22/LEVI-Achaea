@@ -1,0 +1,13 @@
+# affliction show mildtrauma  (2026-10-10T23:40:14Z)
+Affliction:         Mild internal trauma
+Diagnose:           has mild internal trauma.
+Afflicted msg:      Your torso is greatly damaged from the beating.
+Cured msg:          Your torso feels stronger and healthier.
+Cure(s):            Apply Restoration To Body
+Description:        Having a damaged torso will cause you to bleed profusely.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

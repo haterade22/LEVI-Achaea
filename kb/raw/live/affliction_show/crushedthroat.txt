@@ -1,0 +1,13 @@
+# affliction show crushedthroat  (2026-10-10T23:38:53Z)
+Affliction:         Crushedthroat
+Diagnose:           suffering a crushed throat.
+Afflicted msg:      none
+Cured msg:          Your crushed throat mends and you can draw breath easily once again.
+Cure(s):            Apply Mending To Head
+Description:        A crushed throat shall increase the time it takes you to recover from smoking pipes.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

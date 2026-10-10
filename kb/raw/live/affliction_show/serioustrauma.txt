@@ -1,0 +1,13 @@
+# affliction show serioustrauma  (2026-10-10T23:40:43Z)
+Affliction:         Serious internal trauma
+Diagnose:           has serious internal trauma.
+Afflicted msg:      Your internal organs have taken serious damage.
+Cured msg:          Your torso is greatly healed, but still damaged.
+Cure(s):            Apply Restoration To Body
+Description:        Serious internal trauma causes great bleeding.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

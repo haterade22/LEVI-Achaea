@@ -1,0 +1,13 @@
+# affliction show parasite  (2026-10-10T23:40:24Z)
+Affliction:         Parasite
+Diagnose:           tormented by a parasitic curse.
+Afflicted msg:      You feel your strength being leeched away.
+Cured msg:          The leeching of your strength comes to an end.
+Cure(s):            Eat Kelp / Eat Aurum
+Description:        This affliction will cause all of your natural regeneration to heal the person who afflicted you instead, and will delay the effects of the speed elixir.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

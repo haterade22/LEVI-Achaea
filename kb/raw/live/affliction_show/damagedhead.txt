@@ -1,0 +1,13 @@
+# affliction show damagedhead  (2026-10-10T23:38:56Z)
+Affliction:         A damaged head
+Diagnose:           has a partially damaged head.
+Afflicted msg:      Your head is greatly damaged from the beating.
+Cured msg:          Your head feels stronger and healthier.
+Cure(s):            Apply Restoration To Head
+Description:        Having a damaged head will cause your mind to falter.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

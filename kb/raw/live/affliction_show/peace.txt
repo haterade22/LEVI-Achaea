@@ -1,0 +1,15 @@
+# affliction show peace  (2026-10-10T23:40:25Z)
+Affliction:         Peace
+Diagnose:           pacified.
+Afflicted msg:      Your will to harm anything leaves you.
+Cured msg:          The unnatural feeling of peace leaves you.
+Expire msg:         The unnatural peace lifts from your heart.
+Cure(s):            Eat Bellwort / Eat Cuprum
+                    Focus Mind
+Description:        While peaced, you will find it almost impossible to perform aggressive actions.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

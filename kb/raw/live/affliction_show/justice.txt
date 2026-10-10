@@ -1,0 +1,13 @@
+# affliction show justice  (2026-10-10T23:39:58Z)
+Affliction:         Justice
+Diagnose:           surrounded by the aura of justice.
+Afflicted msg:      A set of scales appears over your head and one side quickly descends, as you feel an aura of justice surround you.
+Cured msg:          The curse of justice leaves you.
+Cure(s):            Eat Bellwort / Eat Cuprum
+Description:        The justice curse causes any damaging attack by you against the afflictor to be partially returned to you.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

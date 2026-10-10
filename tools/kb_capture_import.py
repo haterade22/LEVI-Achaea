@@ -36,6 +36,7 @@ LIVE = os.path.join(ROOT, "kb", "raw", "live")
 PROFILES = os.path.join(os.path.expanduser("~"), ".config", "mudlet", "profiles")
 HEAD = re.compile(r"^##### KBCAPTURE (\S+) \| (.+?)( \| TIMEOUT)?$")
 WHATCURES = re.compile(r"The affliction '.+?' is cured by: .+")
+PAGER = re.compile(r"^\[(Type MORE if you wish to continue reading|File continued via MORE)")
 
 
 def find_capture():
@@ -59,6 +60,8 @@ def parse(text):
             blocks.append(cur)
             cur = None
         elif cur is not None:
+            if PAGER.match(raw):
+                continue  # the game's MORE prompts are paging, not part of the answer
             cur["lines"].append(raw.rstrip())
     return blocks
 
@@ -148,6 +151,7 @@ def main():
         return
     if not args.keep:
         os.replace(src, os.path.join(os.path.dirname(src), f"kb_capture.imported-{when}.txt"))
+    subprocess.run([sys.executable, "-I", os.path.join(ROOT, "tools", "kb_affliction_db.py")], check=False)
     subprocess.run([sys.executable, "-I", os.path.join(ROOT, "tools", "kb_catalog.py")], check=False)
 
 

@@ -1,0 +1,13 @@
+# affliction show horror  (2026-10-10T23:39:46Z)
+Affliction:         Horror
+Diagnose:           horrified.
+Afflicted msg:      Composure deserts you; it is just too much!
+Cured msg:          You draw a relieved breath as the unnatural terror finally abates.
+Cure(s):            Eat Lobelia / Eat Argentum
+Description:        While horrified, you may not cure fear.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

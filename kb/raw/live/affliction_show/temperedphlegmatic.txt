@@ -1,0 +1,14 @@
+# affliction show temperedphlegmatic  (2026-10-10T23:41:06Z)
+Affliction:         A tempered phlegmatic humour
+Diagnose:           your phlegmatic humour has been tempered a total of $=(type$) times.
+Afflicted msg:      none
+Cured msg:          none
+Expire msg:         Your phlegmatic humour drains back to normal levels.
+Cure(s):            Eat Ginger / Eat Antimony
+Description:        A tempered phlegmatic humour fills your lungs with phlegm when you try to smoke.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

@@ -1,0 +1,14 @@
+# affliction show agoraphobia  (2026-10-10T23:38:28Z)
+Affliction:         Agoraphobia
+Diagnose:           agoraphobic.
+Afflicted msg:      Terror descends upon you and your head swims - you must find shelter!
+Cured msg:          You can handle the idea of open spaces again.
+Cure(s):            Eat Lobelia / Eat Argentum
+                    Focus Mind
+Description:        Agoraphobics cannot stand to be in wide open spaces, and seek shelter compulsively.
+NoRandomCure:       No
+WhisperingMadness:  Yes
+Enlighten:          Yes
+Tzantza:            Yes
+Accentato:          No
+CadmusCurse:        No

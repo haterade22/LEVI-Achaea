@@ -1,0 +1,14 @@
+# affliction show indifference  (2026-10-10T23:39:54Z)
+Affliction:         Indifference
+Diagnose:           indifferent to the rage of battle
+Afflicted msg:      You find yourself indifferent to the raging flow of battle.
+Cured msg:          Your blood surges as the rage of battle returns to you.
+Expire msg:         Your indifference to the rage of battle clears.
+Cure(s):            Eat Bellwort / Eat Cuprum
+Description:        Being indifferent as to the raging flow of battle, you will be unable to use any battlerage attacks or generate any battlerage.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

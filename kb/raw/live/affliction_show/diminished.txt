@@ -1,0 +1,12 @@
+# affliction show diminished  (2026-10-10T23:39:11Z)
+Affliction:         Diminished
+Diagnose:           diminished.
+Afflicted msg:      none
+Cured msg:          The enfeeblement of your spirit lifts.
+Cure(s):            Eat Bellwort / Eat Cuprum
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

@@ -1,0 +1,13 @@
+# affliction show fulminated  (2026-10-10T23:39:34Z)
+Affliction:         Fulminated
+Diagnose:           electrified by fulminous energy.
+Afflicted msg:      Your nerve endings become electrified and you begin to tremble.
+Cured msg:          You are no longer suffering from the ravages of fulminous energy.
+Cure(s):            Eat Goldenseal / Eat Plumbum
+Description:        Successful attempts to focus your mind to cure an affliction will cause you to be struck down with paralysis.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

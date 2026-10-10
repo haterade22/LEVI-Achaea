@@ -1,0 +1,13 @@
+# affliction show brokenrightleg  (2026-10-10T23:38:42Z)
+Affliction:         A broken right leg
+Diagnose:           afflicted by a crippled right leg.
+Afflicted msg:      Your right leg breaks with a loud crack.
+Cured msg:          The bones in your right leg mend.
+Cure(s):            Apply Mending To Legs
+Description:        Having a broken right leg prevents you from using that leg in most situations.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

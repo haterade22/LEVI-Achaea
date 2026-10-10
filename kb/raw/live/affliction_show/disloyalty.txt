@@ -1,0 +1,13 @@
+# affliction show disloyalty  (2026-10-10T23:39:13Z)
+Affliction:         Disloyalty
+Diagnose:           inspires disloyalty in those nearby.
+Afflicted msg:      You feel ugliness radiating from you.
+Cured msg:          You no longer will inspire disloyalty among friends.
+Cure(s):            Smoke Valerian / Smoke Realgar
+Description:        Disloyalty, often caused by disfigurement, makes creatures loyal to you consider you a beastly enemy.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

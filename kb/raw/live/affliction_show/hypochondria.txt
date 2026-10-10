@@ -1,0 +1,13 @@
+# affliction show hypochondria  (2026-10-10T23:39:48Z)
+Affliction:         Hypochondria
+Diagnose:           a certified hypochondriac.
+Afflicted msg:      A terrible sense of unease comes over you.
+Cured msg:          My, you feel healthier than you have in years.
+Cure(s):            Eat Lobelia / Eat Argentum
+Description:        Hypochondriacs often think they are suffering from afflictions they do not have.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

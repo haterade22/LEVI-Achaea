@@ -1,0 +1,13 @@
+# affliction show frostbite  (2026-10-10T23:39:31Z)
+Affliction:         Frostbite
+Diagnose:           suffering from encroaching frostbite.
+Afflicted msg:      A pervasive numbness begins to spread throughout your extremities.
+Cured msg:          The pervasive numbness in your extremities fades.
+Cure(s):            Apply Caloric
+Description:        While suffering from frostbite, the next time you are frozen if you possess the insulation defence it will be stripped and you will be struck with the freezing attack directly. Your frostbite will fade when this occurs.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

@@ -123,10 +123,18 @@ def live_text(cures, key=None):
     return text
 
 
+# Deliberate differences between live WHATCURES and the tracker, with the reason.
+KNOWN = {
+    "insomnia": "deliberate: the tracker models insomnia as a target DEFENCE (curing/002)",
+}
+
+
 def live_flags(key, cures, wide, v3):
     """Compare a live WHATCURES answer to the herb the target tracker uses."""
     if not cures:
         return []
+    if key in KNOWN:
+        return [KNOWN[key]]
     herbs = {c.replace("prickly ash", "ash") for a, c in cures if a == "eat"}
     tracked = set(wide.get(key) or v3.get(key) or [])
     live_tracked = herbs & set(TRACKED_HERBS)

@@ -1,0 +1,14 @@
+# affliction show temperedmelancholic  (2026-10-10T23:41:04Z)
+Affliction:         A tempered melancholic humour
+Diagnose:           your melancholic humour has been tempered a total of $=(type$) times.
+Afflicted msg:      none
+Cured msg:          none
+Expire msg:         Your melancholic humour drains back to normal levels.
+Cure(s):            Eat Ginger / Eat Antimony
+Description:        A tempered melancholic humour reduces the efficacy of irid moss and potash.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

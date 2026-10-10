@@ -1,0 +1,14 @@
+# affliction show dizziness  (2026-10-10T23:39:18Z)
+Affliction:         Dizziness
+Diagnose:           overcome by dizziness.
+Afflicted msg:      Your mind swims as dizziness overtakes you.
+Cured msg:          You are no longer dizzy.
+Cure(s):            Eat Goldenseal / Eat Plumbum
+                    Focus Mind
+Description:        Dizziness makes it quite hard to walk without falling over.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            Yes
+Accentato:          Yes
+CadmusCurse:        No

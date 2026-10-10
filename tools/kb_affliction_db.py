@@ -1,0 +1,152 @@
+#!/usr/bin/env python3
+"""Build the affliction database from the game's AFFLICTION SHOW answers.
+
+Reads kb/raw/live/affliction_show/<aff>.txt (filed by tools/kb_capture_import.py from the
+in-game `kbcapture afflictions`) and writes:
+
+  * kb/afflictions/afflictions.json  -- one record per affliction, for code and tools
+  * kb/afflictions/database.md       -- the same, readable, GENERATED (do not hand-edit)
+
+Each AFFLICTION SHOW answer is a fixed block of `Label:   value` lines (Affliction, Diagnose,
+Afflicted msg, Cured msg, Cure(s), Description, then yes/no flags). The parser keeps every label
+it finds, so a label the game adds later is stored rather than lost.
+
+It also checks the game's NoRandomCure flag against the target tracker's random-cure pools
+(`treeCurableAffsV3`, `passiveCurableAffsV3`): an affliction the game marks NoRandomCure should
+not be in a pool of afflictions a random cure can remove.
+
+    python tools/kb_affliction_db.py
+"""
+import json
+import os
+import re
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SHOW = os.path.join(ROOT, "kb", "raw", "live", "affliction_show")
+OUT_JSON = os.path.join(ROOT, "kb", "afflictions", "afflictions.json")
+OUT_MD = os.path.join(ROOT, "kb", "afflictions", "database.md")
+V3 = os.path.join(ROOT, "src_new", "scripts", "levi_ataxia", "levi", "ataxia",
+                  "affliction_tracking_core", "008_V3_Integration.lua")
+
+# Names our code or HELP 13.7.2 uses that AFFLICTION SHOW does not recognise, and why that is fine
+# (or what the game calls it instead). Checked against the code 2026-10-10.
+NOT_AFFLICTIONS = {
+    "nocaloric": "deliberate PSEUDO-affliction: the target has no caloric defence (Magi offense, water emanation)",
+    "epidermal": "listed in the head salve table (affliction_tracking_core/007) but never applied by any trigger: inert",
+    "bleeding": "a vital, not an affliction; cured with CLOT",
+    "temperedhumours": "HELP's umbrella name; the game has four: temperedcholeric, temperedmelancholic, temperedphlegmatic, temperedsanguine",
+    "stinky": "in HELP 13.7.2 but not a current affliction",
+    "drowning": "in HELP 13.7.2 but not a current affliction",
+    "disfigurement": "WHATCURES knows it (smoke valerian); the first capture lost its AFFLICTION SHOW to a stray room line, re-capture",
+    "damagedrightarm": "real; the first capture lost its AFFLICTION SHOW to a stray room line, re-capture",
+}
+
+LABEL = re.compile(r"^([A-Za-z()' ]+?):\s{2,}(.*)$")
+FIELD = {"Affliction": "name", "Diagnose": "diagnose", "Afflicted msg": "afflicted_msg",
+         "Cured msg": "cured_msg", "Cure(s)": "cures", "Description": "description",
+         "Default time": "default_time", "Expire msg": "expire_msg"}
+
+
+def parse_show(text):
+    rec, last = {}, None
+    for line in text.splitlines():
+        if line.startswith("#") or not line.strip():
+            continue
+        m = LABEL.match(line)
+        if m:
+            label, value = m.group(1).strip(), m.group(2).strip()
+            key = FIELD.get(label)
+            if key:
+                rec[key] = value
+            else:
+                rec.setdefault("flags", {})[label] = (value.lower() == "yes") if value.lower() in ("yes", "no") else value
+            last = key or label
+        elif last and last in FIELD.values():
+            rec[last] += " " + line.strip()  # a wrapped value continues on the next line
+    return rec
+
+
+def cure_list(text):
+    """'Eat Bloodroot / Eat Magnesium and Smoke Valerian' -> [['eat bloodroot','eat magnesium'], ['smoke valerian']]"""
+    if not text or text.lower() in ("none", ""):
+        return []
+    return [[p.strip().lower() for p in group.split(" / ")] for group in text.split(" and ")]
+
+
+def lua_list(src, name):
+    body = src.split(name + " = {", 1)[1].split("}", 1)[0]
+    body = "\n".join(l.split("--", 1)[0] for l in body.splitlines())
+    return re.findall(r'"(\w+)"', body)
+
+
+def main():
+    db, missing = {}, []
+    for fn in sorted(os.listdir(SHOW)):
+        if not fn.endswith(".txt"):
+            continue
+        key = fn[:-4]
+        text = open(os.path.join(SHOW, fn), encoding="utf-8").read()
+        rec = parse_show(text)
+        if "name" not in rec:
+            missing.append((key, next((l for l in text.splitlines()[1:] if l.strip()), "")))
+            continue
+        rec["key"] = key
+        rec["cure_options"] = cure_list(rec.get("cures"))
+        rec["source"] = f"kb/raw/live/affliction_show/{fn}"
+        db[key] = rec
+
+    with open(OUT_JSON, "w", encoding="utf-8", newline="\n") as fh:
+        json.dump(db, fh, indent=1, sort_keys=True)
+        fh.write("\n")
+
+    flags = sorted({f for r in db.values() for f in r.get("flags", {})})
+    src = open(V3, encoding="utf-8").read()
+    tree, passive = lua_list(src, "treeCurableAffsV3"), lua_list(src, "passiveCurableAffsV3")
+    norandom = {k for k, r in db.items() if r.get("flags", {}).get("NoRandomCure") is True}
+
+    md = ["# Affliction database", "",
+          "> GENERATED by `tools/kb_affliction_db.py` from the game's own `AFFLICTION SHOW` answers",
+          "> (`kb/raw/live/affliction_show/`, captured with `kbcapture afflictions`). Do not hand-edit;",
+          "> re-capture and re-run. Machine-readable copy: `afflictions.json`.",
+          "",
+          f"{len(db)} afflictions. Flags are the game's own yes/no columns: {', '.join(flags)}. "
+          "Flag meanings are the game's words; what each one does is noted only where confirmed.",
+          "",
+          "## How the tracker's random-cure pools compare with NoRandomCure",
+          "",
+          "The game marks some afflictions **NoRandomCure**. Our target tracker removes afflictions at random",
+          "from two pools when the target uses the tree or a passive cure (`affliction_tracking_core/008`).",
+          "ASSUMED meaning: a NoRandomCure affliction cannot be removed by those random cures. Not yet",
+          "confirmed in-game, so the lists below are questions, not bugs.",
+          ""]
+    for title, pool in (("Tree pool `treeCurableAffsV3`", tree), ("Passive pool `passiveCurableAffsV3`", passive)):
+        both = sorted(a for a in pool if a in norandom)
+        md.append(f"- **{title}** ({len(pool)} entries): marked NoRandomCure by the game: "
+                  + (", ".join(f"`{a}`" for a in both) if both else "none"))
+    md += ["", "## Afflictions", "",
+           "| Affliction | Cure(s) | Wears off after | Diagnose shows | When it hits you | When it is cured | Flags set |",
+           "|---|---|---|---|---|---|---|"]
+    for k, r in sorted(db.items()):
+        on = ", ".join(f for f, v in sorted(r.get("flags", {}).items()) if v is True)
+        cell = lambda s: (s or "").replace("|", "\\|")
+        md.append(f"| [`{k}`](../raw/live/affliction_show/{k}.txt) {cell(r['name'])} | {cell(r.get('cures'))} | {cell(r.get('default_time'))} | "
+                  f"{cell(r.get('diagnose'))} | {cell(r.get('afflicted_msg'))} | {cell(r.get('cured_msg'))} | {on} |")
+    md += ["", "## Descriptions", ""]
+    for k, r in sorted(db.items()):
+        md.append(f"- **{r['name']}** (`{k}`): {r.get('description', '')}")
+    if missing:
+        md += ["", "## Names the game did not recognise", "",
+               "Our code or HELP 13.7.2 uses these names, but `AFFLICTION SHOW` says there is no such affliction:", ""]
+        md += [f"- `{k}`: {NOT_AFFLICTIONS.get(k, 'game said: ' + first)}" for k, first in missing]
+    with open(OUT_MD, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write("\n".join(md) + "\n")
+
+    print(f"{len(db)} afflictions -> {os.path.relpath(OUT_JSON, ROOT)}, {os.path.relpath(OUT_MD, ROOT)}")
+    print(f"  not recognised by the game: {', '.join(k for k, _ in missing) or '-'}")
+    for title, pool in (("tree", tree), ("passive", passive)):
+        both = sorted(a for a in pool if a in norandom)
+        print(f"  {title} pool entries the game marks NoRandomCure: {', '.join(both) or '-'}")
+
+
+if __name__ == "__main__":
+    main()

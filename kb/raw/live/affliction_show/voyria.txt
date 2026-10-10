@@ -1,0 +1,13 @@
+# affliction show voyria  (2026-10-10T23:41:22Z)
+Affliction:         Voyria
+Diagnose:           suffering from voyria.
+Afflicted msg:      none
+Cured msg:          Mercifully, the voyria venom has been cleansed from your body.
+Cure(s):            Sip Immunity
+Description:        Voyria is a deadly venom that quickly causes death if not treated.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

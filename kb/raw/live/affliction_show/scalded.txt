@@ -1,0 +1,14 @@
+# affliction show scalded  (2026-10-10T23:40:37Z)
+Affliction:         Scalded
+Diagnose:           horrifically scalded.
+Afflicted msg:      none
+Cured msg:          The terrible burning of your skin fades.
+Cure(s):            Time
+Description:        Increases the recovery time of applying salves.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       20 seconds

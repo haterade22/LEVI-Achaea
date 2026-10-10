@@ -1,0 +1,15 @@
+# affliction show pacified  (2026-10-10T23:40:20Z)
+Affliction:         Pacified
+Diagnose:           feeling unnaturally tranquil.
+Afflicted msg:      A sense of deep inner calm descends on you.
+Cured msg:          The unnatural calm that filled you lifts abruptly from you.
+Cure(s):            Eat Bellwort / Eat Cuprum
+                    Focus Mind
+Description:        Pacification makes it impossible to do any aggressive actions.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       20 seconds

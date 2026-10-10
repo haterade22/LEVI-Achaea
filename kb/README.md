@@ -46,12 +46,14 @@ first time material for them arrives.
 3. **Join to the code.** If a fact is something the code depends on (a cure, a priority, a
    fire line, a cooldown), name the file and say whether the code agrees. A disagreement goes
    into [CONFLICTS.md](CONFLICTS.md).
-4. **Compare live state with the code.** `python tools/kb_prio_diff.py <captured CURING PRIORITY LIST>`
+4. **The affliction database** (`afflictions/database.md` + `afflictions.json`) is GENERATED from
+   `raw/live/affliction_show/` by `python tools/kb_affliction_db.py` (the importer runs it).
+5. **Compare live state with the code.** `python tools/kb_prio_diff.py <captured CURING PRIORITY LIST>`
    shows where the server's priorities differ from `ataxia_defaultCuringPrios()`.
-5. **Generated pages are not hand-edited.** [afflictions/catalog.md](afflictions/catalog.md)
+6. **Generated pages are not hand-edited.** [afflictions/catalog.md](afflictions/catalog.md)
    comes from `python tools/kb_catalog.py`. Re-run it after changing the raw cure table or
    the code's cure/priority tables.
-6. **Pure ASCII in anything that becomes an echo string.** KB prose can use markdown freely.
+7. **Pure ASCII in anything that becomes an echo string.** KB prose can use markdown freely.
 
 ## Adding material
 

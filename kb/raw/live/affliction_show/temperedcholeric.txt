@@ -1,0 +1,14 @@
+# affliction show temperedcholeric  (2026-10-10T23:41:01Z)
+Affliction:         A tempered choleric humour
+Diagnose:           your choleric humour has been tempered a total of $=(type$) times.
+Afflicted msg:      none
+Cured msg:          none
+Expire msg:         Your choleric humour drains back to normal levels.
+Cure(s):            Eat Ginger / Eat Antimony
+Description:        A tempered choleric humour causes random curing abilities to have a chance to fail.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

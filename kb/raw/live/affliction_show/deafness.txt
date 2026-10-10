@@ -1,0 +1,13 @@
+# affliction show deafness  (2026-10-10T23:39:07Z)
+Affliction:         Deafness
+Diagnose:           deaf.
+Afflicted msg:      Sounds fade as you lose your hearing.
+Cured msg:          You are no longer deaf.
+Cure(s):            Apply Epidermal To Head
+Description:        Deafness stops you from hearing anything.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

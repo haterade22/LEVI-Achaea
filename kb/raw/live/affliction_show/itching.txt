@@ -1,0 +1,13 @@
+# affliction show itching  (2026-10-10T23:39:56Z)
+Affliction:         Itching
+Diagnose:           afflicted with terrible itching.
+Afflicted msg:      A terrible urge to itch yourself bloody comes over you.
+Cured msg:          Thankfully, the itching subsides.
+Cure(s):            Apply Epidermal To Body
+Description:        Itching causes periodic loss of balance as you scratch yourself furiously.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

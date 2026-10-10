@@ -1,0 +1,13 @@
+# affliction show webbed  (2026-10-10T23:41:25Z)
+Affliction:         Entanglement by webs
+Diagnose:           entangled in strands of webbing.
+Afflicted msg:      none
+Cured msg:          none
+Cure(s):            Writhe
+Description:        Being webbed is restrictive on any actions you wish to make.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

@@ -1,0 +1,13 @@
+# affliction show guilt  (2026-10-10T23:39:37Z)
+Affliction:         Guilt
+Diagnose:           plagued by terrible guilt.
+Afflicted msg:      A terrible guilt descends upon you.
+Cured msg:          Your terrible guilt lifts.
+Cure(s):            Eat Lobelia / Eat Argentum
+Description:        This affliction causes mental focusing to deliver a mental affliction.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

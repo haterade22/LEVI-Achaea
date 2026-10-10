@@ -1,0 +1,14 @@
+# affliction show daeggerimpale  (2026-10-10T23:38:55Z)
+Affliction:         Impalement by a daegger
+Diagnose:           impaled by a daegger.
+Afflicted msg:      none
+Cured msg:          none
+Expire msg:         You sigh in relief as the daegger withdraws itself from your belly.
+Cure(s):            Writhe
+Description:        Impalement on a daegger restricts action and causes great pain.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

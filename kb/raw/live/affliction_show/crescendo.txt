@@ -1,0 +1,12 @@
+# affliction show crescendo  (2026-10-10T23:38:52Z)
+Affliction:         Crescendo
+Diagnose:           moving inevitably towards a grand finale.
+Afflicted msg:      none
+Cured msg:          The building crescendo about you abruptly falls silent.
+Cure(s):            Eat Ash / Eat Stannum
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

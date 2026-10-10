@@ -1,0 +1,13 @@
+# affliction show damagedleftarm  (2026-10-10T23:38:57Z)
+Affliction:         A damaged left arm
+Diagnose:           has a partially damaged left arm.
+Afflicted msg:      Your left arm is greatly damaged from the beating.
+Cured msg:          Your left arm feels stronger and healthier.
+Cure(s):            Apply Restoration To Arms
+Description:        Having a damaged left arm prevents you from using that arm in most situations.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

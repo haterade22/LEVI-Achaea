@@ -1,0 +1,13 @@
+# affliction show generosity  (2026-10-10T23:39:36Z)
+Affliction:         Generosity
+Diagnose:           extremely generous.
+Afflicted msg:      Why, you ask yourself, are you so privileged when others are so needy.
+Cured msg:          Ahhhh. The freedom to be stingy again!
+Cure(s):            Eat Bellwort / Eat Cuprum
+Description:        Generosity causes you to give away your material possessions.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          Yes
+CadmusCurse:        No

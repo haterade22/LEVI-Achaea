@@ -1,0 +1,13 @@
+# affliction show pyre  (2026-10-10T23:40:31Z)
+Affliction:         Pyre
+Diagnose:           being consigned to the flame.
+Afflicted msg:      none
+Cured msg:          The terrible burning within your chest is replaced by a soothing cool.
+Cure(s):            Eat Bellwort / Eat Cuprum
+Description:        While pyre is active, ablaze may not be cured below the intensity of the pyre's own stacks.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

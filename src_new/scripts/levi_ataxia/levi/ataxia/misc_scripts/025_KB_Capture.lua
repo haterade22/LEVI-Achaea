@@ -153,15 +153,54 @@ local function finish(timedOut)
 end
 
 -- A line arrived while capturing. Exposed for the tests.
+-- The FIRST line of the answer, for commands whose answer has a known shape. Until one of these
+-- arrives, a prompt does not close the answer. The first live run (2026-10-10) lost two answers
+-- this way: a room line ("the corpse of a giant crow turns to dust") arrived with its own prompt,
+-- closed the block, and the real answer then landed in the gap before the next command.
+ataxiaKB.EXPECT = {
+  { "^affliction show ", { "^Affliction:", "^There is no such affliction" } },
+  { "^whatcures ", { "^The affliction '", "^That is not a known affliction" } },
+}
+
+function ataxiaKB.expectFor(cmd)
+  for _, e in ipairs(ataxiaKB.EXPECT) do
+    if cmd:lower():find(e[1]) then return e[2] end
+  end
+  return nil
+end
+
+local MORE = "^%[Type MORE if you wish to continue reading"
+
+local function rearmTimeout(st)
+  if st.timer then killTimer(st.timer) end
+  st.timer = tempTimer(ataxiaKB.CAPTURE_TIMEOUT, function()
+    st.timer = nil
+    finish(true)
+  end)
+end
+
 function ataxiaKB.onLine(text, prompt)
   local st = state()
   if not st.cmd then return end
   if prompt then
     -- A prompt before any answer is the prompt for something older; keep waiting for ours.
-    if #st.lines > 0 then finish(false) end
+    -- A prompt after a MORE page belongs to that page: the next page is on its way.
+    if st.morePending then st.morePending = false; return end
+    if #st.lines > 0 and (st.answered or not st.expect) then finish(false) end
     return
   end
   st.lines[#st.lines + 1] = text
+  if st.expect and not st.answered then
+    for _, pat in ipairs(st.expect) do
+      if text:find(pat) then st.answered = true; break end
+    end
+  end
+  if text:find(MORE) then
+    -- Long answers (AFFLICTION LIST) are paged. Ask for the next page and keep recording.
+    st.morePending = true
+    send("more", false)
+    rearmTimeout(st)
+  end
   if st.gag and deleteLine then deleteLine() end
 end
 
@@ -176,13 +215,11 @@ sendNext = function()
   end
   st.i = st.i + 1
   st.cmd, st.lines, st.stamp = st.queue[st.i], {}, stamp()
+  st.expect, st.answered, st.morePending = ataxiaKB.expectFor(st.cmd), false, false
   st.trig = tempRegexTrigger("^", function()
     ataxiaKB.onLine(line, isPrompt and isPrompt() or false)
   end)
-  st.timer = tempTimer(ataxiaKB.CAPTURE_TIMEOUT, function()
-    st.timer = nil
-    finish(true)
-  end)
+  rearmTimeout(st)
   send(st.cmd, false)
 end
 

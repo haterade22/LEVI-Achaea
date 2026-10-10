@@ -1,0 +1,13 @@
+# affliction show dazed  (2026-10-10T23:39:04Z)
+Affliction:         Dazed
+Diagnose:           dazed.
+Afflicted msg:      none
+Cured msg:          You are no longer dazed.
+Cure(s):            Smoke Elm / Smoke Cinnabar
+Description:        Being dazed wipes out your ability to resist hypnotism.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

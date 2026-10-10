@@ -1,0 +1,13 @@
+# affliction show darkshade  (2026-10-10T23:39:03Z)
+Affliction:         An allergy to sunlight
+Diagnose:           allergic to sunlight.
+Afflicted msg:      Your vision is flooded with light, and your face suddenly reddens.
+Cured msg:          No longer will the sunlight harm you.
+Cure(s):            Eat Ginseng / Eat Ferrum
+Description:        Darkshade makes even the lightest ray of sunlight extremely painful. Stay outside too long and you will surely die.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        Yes

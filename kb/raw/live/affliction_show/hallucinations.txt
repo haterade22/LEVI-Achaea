@@ -1,0 +1,14 @@
+# affliction show hallucinations  (2026-10-10T23:39:40Z)
+Affliction:         Hallucinations
+Diagnose:           hallucinating.
+Afflicted msg:      An unseen being takes you to one side and whispers conspiratorially to you.
+Cured msg:          Your hallucinations cease to plague you.
+Cure(s):            Eat Ash / Eat Stannum
+                    Focus Mind
+Description:        Hallucinations cause you to see things that are not there, and occasionally act strangely because of your visions.
+NoRandomCure:       No
+WhisperingMadness:  Yes
+Enlighten:          Yes
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

@@ -1,0 +1,14 @@
+# affliction show temperedsanguine  (2026-10-10T23:41:07Z)
+Affliction:         A tempered sanguine humour
+Diagnose:           your sanguine humour has been tempered a total of $=(type$) times.
+Afflicted msg:      none
+Cured msg:          none
+Expire msg:         Your sanguine humour drains back to normal levels.
+Cure(s):            Eat Ginger / Eat Antimony
+Description:        A tempered sanguine humour causes bleeding to increase over time.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

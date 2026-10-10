@@ -1,0 +1,14 @@
+# affliction show lovers  (2026-10-10T23:40:03Z)
+Affliction:         The lover's curse
+Diagnose:           Desperately in love with $(gname$).
+Afflicted msg:      none
+Cured msg:          You shake your head, wondering what you ever saw in $(gname$).
+Cure(s):            Eat Bellwort / Eat Cuprum
+                    Focus Mind
+Description:        The lover's curse prevents you from attacking the person with whom you are in love.
+NoRandomCure:       No
+WhisperingMadness:  Yes
+Enlighten:          Yes
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

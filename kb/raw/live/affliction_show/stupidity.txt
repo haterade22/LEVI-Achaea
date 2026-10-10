@@ -1,0 +1,14 @@
+# affliction show stupidity  (2026-10-10T23:40:58Z)
+Affliction:         Stupidity
+Diagnose:           unnaturally stupid.
+Afflicted msg:      Hmmmm. Why must everything be so difficult to figure out?
+Cured msg:          You aren't such a complete idiot anymore.
+Cure(s):            Eat Goldenseal / Eat Plumbum
+                    Focus Mind
+Description:        Stupidity makes it harder to do exactly what you want to do. You may fumble some actions.
+NoRandomCure:       No
+WhisperingMadness:  Yes
+Enlighten:          Yes
+Tzantza:            Yes
+Accentato:          Yes
+CadmusCurse:        No

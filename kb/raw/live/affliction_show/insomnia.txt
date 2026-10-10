@@ -1,0 +1,13 @@
+# affliction show insomnia  (2026-10-10T23:39:55Z)
+Affliction:         Insomnia
+Diagnose:           an insomniac.
+Afflicted msg:      You suddenly feel incapable of falling asleep.
+Cured msg:          Your mind relaxes and you feel as if you could sleep.
+Cure(s):            Eat Goldenseal / Eat Plumbum
+Description:        Insomnia makes it very difficult to fall asleep.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

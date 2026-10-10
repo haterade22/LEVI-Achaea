@@ -1,0 +1,13 @@
+# affliction show addiction  (2026-10-10T23:38:25Z)
+Affliction:         Addiction to curatives
+Diagnose:           suffering from addiction.
+Afflicted msg:      You feel a terrible hunger grow within you.
+Cured msg:          Your terrible addiction seems to wane.
+Cure(s):            Eat Ginseng / Eat Ferrum
+Description:        Addiction causes you to slurp your elixirs and tonics thirstily, using twice as many sips. It also causes you to eat all of a plant in your inventory, rather than just one
+NoRandomCure:       No
+WhisperingMadness:  Yes
+Enlighten:          Yes
+Tzantza:            Yes
+Accentato:          Yes
+CadmusCurse:        No

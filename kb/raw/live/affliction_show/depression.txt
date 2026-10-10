@@ -1,0 +1,13 @@
+# affliction show depression  (2026-10-10T23:39:09Z)
+Affliction:         Depression
+Diagnose:           depressed.
+Afflicted msg:      Everything seems so pointless.
+Cured msg:          Maybe things aren't so bad after all.
+Cure(s):            Eat Goldenseal / Eat Plumbum
+Description:        Every time you suffer a symptom from a phobia or madness, you will take health and mana damage.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

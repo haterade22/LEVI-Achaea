@@ -1,0 +1,13 @@
+# affliction show fear  (2026-10-10T23:39:26Z)
+Affliction:         Fear
+Diagnose:           afflicted by fear.
+Afflicted msg:      A terrible fear comes over you.
+Cured msg:          Your fear has been cured.
+Cure(s):            Compose
+Description:        Fear is a crippling panic resulting in your running around uncontrollably.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          Yes
+CadmusCurse:        No

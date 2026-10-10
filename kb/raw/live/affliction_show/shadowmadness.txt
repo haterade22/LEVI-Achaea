@@ -1,0 +1,13 @@
+# affliction show shadowmadness  (2026-10-10T23:40:44Z)
+Affliction:         Shadowmadness
+Diagnose:           going slowly insane.
+Afflicted msg:      Your sanity begins to escape you.
+Cured msg:          Your sanity reestablishes itself.
+Cure(s):            Eat Goldenseal / Eat Plumbum
+Description:        This affliction will increased the mana cost and recovery time of focus, as well as periodically afflicting the affected person with various madnesses.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
