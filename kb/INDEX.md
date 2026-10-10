@@ -25,6 +25,7 @@ One line per page. Kept up to date by `/kb-ingest`.
 | raw/help/13.7.1_curatives-and-what-they-cure.txt | HELP 13.7.1 curatives | 2026-10-10 |
 | raw/help/13.7.8_server-side-curing.txt | HELP 13.7.8 SSC commands | 2026-10-10 |
 | raw/help/conditional-afflictions-for-the-achaean-forms.txt | HELP: class active/passive cures and blockers (old skill names) | 2026-10-10 |
+| raw/live/whatcures.txt | Live WHATCURES output, one line per affliction (read by `tools/kb_catalog.py`) | 2026-10-10 (hypochondria) |
 | raw/guides/lock-types.txt | Community guide: lock types | 2026-10-10 |
 | raw/guides/active-and-passive-cures-with-fire-lines.txt | Community guide: what each class cure looks like | 2026-10-10 |
 
