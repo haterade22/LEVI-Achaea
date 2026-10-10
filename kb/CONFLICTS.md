@@ -5,14 +5,14 @@ settle it. When it is settled, move it to **Resolved** with the answer and the c
 
 | # | Topic | Says A | Says B | Impact | How to settle |
 |---|---|---|---|---|---|
-| 1 | Disfigurement vs disloyalty | HELP 13.7.2 lists **Disfigurement** (smoke valerian) | Code tracks **`disloyalty`** in the smoke table, has no `disfigurement` key and no SSC priority for it | Probably a rename (monkshood gives disloyalty now) | `WHATCURES DISLOYALTY` / `AFFLICTION SHOW DISFIGUREMENT` |
-| 2 | Grove Cure | HELP: Druid and Sylvan Grove Cure, "hindered by nothing" | No trigger | An unblockable cure that V3 never sees | Capture its fire line, then add a trigger |
-| 3 | Trigger-wrap lint blind to folded patterns | `tools/check_wrap.py` reads only one-line plain or quoted `- pattern:` values | 131 trigger files in our package carry a pattern wider than 118 columns written as a FOLDED plain scalar (e.g. the old Slough line). Each may never match on a wrapped server. | Patterns that silently never fire | Separate project: teach the lint folded scalars, allowlist, then shorten each pattern to an early fragment |
+| 1 | Grove Cure | HELP: Druid and Sylvan Grove Cure, "hindered by nothing" | No trigger | An unblockable cure that V3 never sees | Capture its fire line, then add a trigger |
+| 2 | Trigger-wrap lint blind to folded patterns | `tools/check_wrap.py` reads only one-line plain or quoted `- pattern:` values | 131 trigger files in our package carry a pattern wider than 118 columns written as a FOLDED plain scalar (e.g. the old Slough line). Each may never match on a wrapped server. | Patterns that silently never fire | Separate project: teach the lint folded scalars, allowlist, then shorten each pattern to an early fragment |
 
 ## Resolved
 
 | Date | Topic | Answer | Change |
 |---|---|---|---|
+| 2026-10-10 | Disfigurement vs disloyalty | Live WHATCURES: they are TWO afflictions, both "Smoke Valerian / Smoke Realgar". The Serpent offense records disfigurement for monkshood, but the V3 smoke table only knew disloyalty. | v4.7.396: `disfigurement` appended to `smokeCureTableV3`. Still open: which one monkshood really gives (CLAUDE.md's venom table says disloyalty, the Serpent offense says disfigurement). Settle with `HELP MONKSHOOD` or `AB VENOM`. |
 | 2026-10-10 | Hypochondria cure (HELP 13.7.2 said kelp/aurum) | Live `WHATCURES`: **Eat Lobelia / Eat Argentum** (`kb/raw/live/whatcures.txt`). The code was right; HELP 13.7.2 is stale. | No code change. The catalog now reads live WHATCURES and flags stale HELP rows. |
 | 2026-10-10 | Magi Harmony passive never tracked | The line is Magi's (HELP + guide) | v4.7.395: new trigger `passive_active/029_Harmony_(Magi).lua`, pattern removed from 025, `passive_harmony` cooldown |
 | 2026-10-10 | Paladin Healing passive never tracked | Paladins have the Rite of Healing (HELP + guide) | v4.7.395: 024 accepts Paladin for the "gentle glow" line only |
