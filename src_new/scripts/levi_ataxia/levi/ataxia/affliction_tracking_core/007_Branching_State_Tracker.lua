@@ -1159,6 +1159,7 @@ passiveCooldownTimingsV3 = {
     passive_continuation = 12.0,
     passive_root = 12.0,
     passive_priesthealing = 12.0,
+    passive_harmony = 12.0,      -- Magi Crystalism (029). ~10s per the cure guide; 12s like the other passives
     -- 14s cooldowns
     passive_hallelujah = 14.0,
     -- 20s cooldowns

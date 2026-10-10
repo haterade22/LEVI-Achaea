@@ -33,16 +33,18 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^The fiery outer layers of (\w+) fall away\, turning to dust as they drift to the ground\. Though (\w+) seems diminished
-    for an instant\, \w+ fires soon rage with fury once more\.$
+- pattern: ^The fiery outer layers of (\w+) fall away\, turning to dust
   type: 1
 ]]--
 
 local name = matches[2]
 if isTargeted(matches[2]) then
-	-- Slough cures weariness + 1 random affliction
+	-- Slough cures 1 random affliction and is blocked by PRONE (HELP, kb/afflictions/
+	-- class-cures.md), so seeing it proves the target is not prone. Until 2026-10-10 it erased
+	-- weariness instead, which nothing supports. The pattern was also the whole ~160-column line,
+	-- which the server wraps at 119-124, so it could not match; it now stops at an early fragment.
 	ataxiaTemp.randomCure = 1
-	onClassCureV3({"weariness"}, 1)
+	onClassCureV3({"prone"}, 1)
 	if startPassiveCooldownV3 then startPassiveCooldownV3("passive_slough") end
 	selectString(line,1)
 	fg("NavajoWhite")

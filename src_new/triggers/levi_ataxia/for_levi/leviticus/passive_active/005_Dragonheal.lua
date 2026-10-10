@@ -39,9 +39,13 @@ patterns:
 
 local name = matches[2]
 
+-- Dragonheal is blocked only by weariness AND recklessness TOGETHER (HELP, kb/afflictions/
+-- class-cures.md), so seeing it proves "not both" -- never that either one is absent. Until
+-- 2026-10-10 this erased both outright. It cures three afflictions, but only ONE while prone.
 if isTargeted(matches[2]) then
-	ataxiaTemp.randomCure = 3
-	onClassCureV3({"recklessness", "weariness"}, 3)
+	local cures = haveAff("prone") and 1 or 3
+	ataxiaTemp.randomCure = cures
+	onClassCureV3(nil, cures)
 	if startPassiveCooldownV3 then startPassiveCooldownV3("passive_dragonheal") end
 	selectString(line,1)
 	fg("NavajoWhite")

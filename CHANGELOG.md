@@ -2,6 +2,79 @@
 
 ---
 
+## 2026-10-10 - Enemy class cures: Magi Harmony, Paladin Healing, Dragonheal, Slough (v4.7.395)
+
+Found by the first knowledge-base cross-check (`kb/afflictions/class-cures.md`): four class-cure
+triggers in `passive_active/` told the V3 target tracker the wrong thing. User: "please fix bugs".
+
+- **Magi Harmony was never tracked.** "A soft chiming emanates from X." was the second pattern of
+  `025_Hallelujah_(Bard)`, whose body requires `class == "Bard"`. Against a Magi, every passive cure
+  was invisible: afflictions stayed in V3 after being cured, and the voyria window was mis-timed.
+  It is now its own trigger, `029_Harmony_(Magi).lua` (Magi-gated, voyria first, new
+  `passive_harmony` 12s cooldown in `affliction_tracking_core/007`).
+- **Paladin Healing was never tracked.** "A gentle glow surrounds X." is the Rite of Healing, which
+  Paladins also have (HELP: "Healing in Devotion. PASSIVE."), but `024` was Priest-only. A Paladin
+  now counts for that line. Angel Care and the golden curtain stay Priest-only.
+- **Dragonheal erased two afflictions it does not prove absent.** It is blocked only by weariness
+  AND recklessness together, so the line proves "not both", not "neither". `005` erased both. It now
+  removes neither, and counts 1 cure instead of 3 while the dragon is prone.
+- **Slough erased weariness; its blocker is prone.** `016` now removes prone (seeing the cure
+  proves the target was not prone). Its pattern was the whole ~160-column line, which cannot arrive
+  on one row at this server's 119-124 wrap. It now matches the early fragment "The fiery outer
+  layers of X fall away, turning to dust".
+
+Tests: `src_new/tests/test_class_cure_triggers.lua` runs the real trigger bodies and patterns
+(wrapped at 100/119/124 for Slough). No local Lua interpreter on this machine; CI runs the suite.
+
+**Found, not fixed: the wrap lint cannot see FOLDED patterns.** `tools/check_wrap.py` reads only
+one-line plain or quoted `- pattern:` values, so a long plain pattern that YAML folds onto a
+continuation line (Slough's was one) is skipped entirely. Teaching it folded scalars surfaces
+**131 trigger files in this package** with a pattern wider than 118 columns, each of which may
+never match. That is a separate project (`kb/CONFLICTS.md` #4).
+
+---
+
+## 2026-10-10 - Achaea knowledge base (`kb/`) + `/kb-ingest` (docs and tooling only, no version bump)
+
+**Why.** Game knowledge was spread across CLAUDE.md, `.claude/classes`, `.claude/databases` and
+`docs/`, with no record of where each fact came from and no check against the code. The user now
+keeps a running paste file of game text. `kb/` is where that text is turned into a reference
+that both people and the AI can rely on. Per the user, **afflictions and cures are the core**.
+
+**What.**
+- `kb/raw/`: the first paste, split VERBATIM into six sources: HELP 13.7.2 (affliction cures),
+  13.7.1 (curatives), 13.7.8 (server-side curing), "Conditional afflictions for the Achaean
+  forms", and two community guides (lock types; active/passive cures with their fire lines).
+- `kb/afflictions/`: README (the give/cure loop from both sides), `cure-channels.md`,
+  `class-cures.md` (every class cure with its blocker, its line, our trigger and what the trigger
+  tells V3), `locks.md`, and `catalog.md`. The catalog is **generated** by the new
+  `tools/kb_catalog.py`, which joins the HELP cure table to `curingTable`, the V3 smoke/salve
+  tables and both SSC priority tables.
+- `kb/curing/`: `curatives.md`, `server-side-curing.md`.
+- `kb/README.md`, `INDEX.md`, `CONFLICTS.md`, `_template.md`.
+- `tools/kb_inbox.py` (status/mark): diffs the paste file against `kb/inbox/snapshot.txt`, so
+  each ingest only handles new text.
+- `.claude/skills/kb-ingest/`: classify, save raw, curate, cross-check against code, record
+  conflicts, regenerate, index, mark.
+
+**Found while cross-checking (recorded in `kb/CONFLICTS.md`; Lua NOT changed):**
+- The Magi **Harmony** passive line is the second pattern of `025_Hallelujah_(Bard)`, gated to
+  `class == "Bard"`, so a Magi's passive cures are never tracked.
+- The **Paladin** Healing passive ("A gentle glow surrounds X.") is gated to Priest in `024`.
+- **Dragonheal** (`005`) erases both weariness and recklessness, but the game blocks it only when
+  both are present. It also always counts 3 cures (1 when prone).
+- **Slough** (`016`) removes weariness; HELP gives prone as its blocker.
+- Druid/Sylvan **Grove Cure** (no blocker) has no trigger.
+- HELP 13.7.2 says hypochondria is cured by kelp; the code (reconciled to live WHATCURES) says
+  lobelia. Needs a live `WHATCURES HYPOCHONDRIA`.
+
+**Doc errors fixed** (disproved by HELP 13.7.1/13.7.2): the CLAUDE.md venom table gave slike
+(anorexia) and gecko (slickness) a kelp cure, monkshood (disloyalty) a lobelia cure, and
+oleander/colocasia (blindness) a smoke cure. `afflictions.yaml`/`venoms.yaml` named the ash
+mineral "calcium" (it is stannum) and filed disfigurement under ash (it is smoked valerian).
+
+---
+
 ## 2026-10-09 - Build: find Java and Muddler without the E: drive (tooling only, no version bump)
 
 The dev machine no longer has an `E:` drive, so `build.sh` converted fine and then failed: no
