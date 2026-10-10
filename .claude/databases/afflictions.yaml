@@ -362,7 +362,7 @@ afflictions:
     delivered_by: [larkspur, class_abilities]
     priority: 2
 
-  disfigurement:
+  disloyalty:   # old name: disfigurement (the game treats them as one)
     # HELP 13.7.2: SMOKE valerian/realgar (was wrongly listed under ash). Our code
     # tracks the valerian-smoke affliction as `disloyalty` (smokeCureTableV3).
     cure_method: smoke

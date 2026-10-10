@@ -34,9 +34,8 @@ local WHATCURES = {
   lobelia = { "agoraphobia", "claustrophobia", "fratricide", "guilt", "horror", "hypochondria",
     "loneliness", "masochism", "recklessness", "spiritburn", "tenderskin", "vertigo", "whisperingmadness" },
 }
--- disfigurement: live WHATCURES 2026-10-10 (v4.7.396), a separate affliction from disloyalty.
 local SMOKE = { "aeon", "dazed", "deadening", "earworm", "tension", "unweavingspirit",
-  "disloyalty", "hellsight", "manaleech", "slickness", "disfigurement" }
+  "disloyalty", "hellsight", "manaleech", "slickness" }
 local FOCUS = { "agoraphobia", "anorexia", "claustrophobia", "confusion", "dementia", "dizziness",
   "epilepsy", "hallucinations", "loneliness", "lovers", "masochism", "pacified", "paranoia", "peace",
   "recklessness", "shyness", "stupidity", "stuttering", "vertigo" }

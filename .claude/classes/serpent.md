@@ -502,7 +502,7 @@ aconite:
   notes: "Disrupts focus attempts, equilibrium skills"
 
 monkshood:
-  affliction: disfigurement
+  affliction: disloyalty   # old name: disfigurement (the game treats them as one)
   cure: valerian_smoke
   effect: "Horrible facial disfigurement, loyals may turn"
 
@@ -588,7 +588,7 @@ cure_groups:
   goldenseal: [dizziness, epilepsy, impatience, shyness, stupidity, dissonance]
   bloodroot: [paralysis, slickness]
   epidermal: [anorexia, blindness, deafness]
-  valerian_smoke: [disfigurement, slickness_alt]
+  valerian_smoke: [disloyalty, slickness_alt]
   caloric: [shivering, frozen]
   restoration: [crippled_limbs]
 ```
@@ -634,9 +634,9 @@ ekanelia_transformations:
 
   monkshood:
     conditionals: [asthma, masochism, weariness]
-    normal_effect: disfigurement
+    normal_effect: disloyalty
     bonus_effect: impatience
-    total: "disfigurement + impatience from single bite"
+    total: "disloyalty + impatience from single bite"
     notes: "Alternative impatience delivery without Impulse requirement"
 
   curare:

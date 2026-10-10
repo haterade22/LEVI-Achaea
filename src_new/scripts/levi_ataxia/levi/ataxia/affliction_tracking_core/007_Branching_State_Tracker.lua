@@ -130,11 +130,10 @@ curingTableV3 = {
 -- both pipes: elm (aeon, dazed, deadening, earworm, tension, unweavingspirit)
 -- and valerian (disloyalty, hellsight, manaleech, slickness) -- the smoke
 -- trigger does not say which herb was smoked. dazed/earworm added v4.7.371.
--- disfigurement added v4.7.396: live WHATCURES "Smoke Valerian / Smoke Realgar" (kb/raw/live/
--- whatcures.txt). It is a separate affliction from disloyalty, and the Serpent offense records it
--- for monkshood (serpent/002), so without it a smoked valerian could never clear it from V3.
--- Appended, so the existing candidates keep their weights.
-smokeCureTableV3 = {"aeon", "deadening", "hellsight", "tension", "disloyalty", "manaleech", "slickness", "unweavingspirit", "dazed", "earworm", "disfigurement"}
+-- No "disfigurement": it is the OLD NAME of disloyalty (`affliction show disfigurement` answers
+-- "Disloyalty", v4.7.399). v4.7.396 added it here as a separate affliction; the real fault was
+-- the Serpent offense recording the old name, now fixed at the source (serpent/002).
+smokeCureTableV3 = {"aeon", "deadening", "hellsight", "tension", "disloyalty", "manaleech", "slickness", "unweavingspirit", "dazed", "earworm"}
 
 -- V3 salve cure tables (by body part)
 -- Applying salve always proves slickness absent, then cures one affliction from the list

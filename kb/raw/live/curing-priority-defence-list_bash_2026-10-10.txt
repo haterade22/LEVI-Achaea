@@ -1,0 +1,27 @@
+Your defence priorities for curing set bash:
+insomnia       : 25
+nightsight     : 25
+ghost          : 25
+lipreading     : 25
+boartattoo     : 25
+density        : 25
+blindness      : 25
+lifevision     : 25
+speed          : 25
+coldresist     : 25
+cloak          : 25
+electricresist : 25
+weaving        : 25
+mindseye       : 25
+temperance     : 25
+groundwatch    : 25
+insulation     : 25
+fireresist     : 25
+scales         : 25
+thirdeye       : 25
+kola           : 25
+moontattoo     : 25
+deafness       : 25
+fangbarrier    : 25
+poisonresist   : 25
+magicresist    : 25

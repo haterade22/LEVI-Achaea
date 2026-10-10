@@ -1,2 +1,14 @@
-# affliction show disfigurement  (2026-10-10T23:39:12Z)
-You are dismayed as the corpse of a mature mountain wildcat turns to dust in your hands.
+# affliction show disfigurement  (2026-10-10 18:51, pasted by the user; the game answers with Disloyalty)
+Affliction:         Disloyalty
+Diagnose:           inspires disloyalty in those nearby.
+Afflicted msg:      You feel ugliness radiating from you.
+Cured msg:          You no longer will inspire disloyalty among friends.
+Cure(s):            Smoke Valerian / Smoke Realgar
+Description:        Disloyalty, often caused by disfigurement, makes creatures loyal to you consider you a beastly
+enemy.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

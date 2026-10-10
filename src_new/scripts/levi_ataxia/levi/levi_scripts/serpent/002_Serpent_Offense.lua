@@ -180,7 +180,11 @@ local VENOM_TO_AFF = {
     kalmia = "asthma", vernalius = "weariness", xentio = "clumsiness",
     curare = "paralysis", gecko = "slickness", slike = "anorexia",
     euphorbia = "nausea", vardrax = "addiction", eurypteria = "recklessness",
-    aconite = "stupidity", monkshood = "disfigurement", scytherus = "scytherus",
+    -- monkshood: "disloyalty", the name the tracker records (ataxia/001_Misc:208). Until v4.7.399
+    -- this said "disfigurement" -- the OLD name, which the game still accepts as an alias
+    -- (`affliction show disfigurement` answers "Disloyalty") but nothing ever records, so
+    -- haveAff() was always false and the offense kept re-sending a venom that had already landed.
+    aconite = "stupidity", monkshood = "disloyalty", scytherus = "scytherus",
     darkshade = "darkshade", voyria = "voyria", notechis = "haemophilia",
     loki = "random",
 }

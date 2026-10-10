@@ -4,7 +4,7 @@
 > (`kb/raw/live/affliction_show/`, captured with `kbcapture afflictions`). Do not hand-edit;
 > re-capture and re-run. Machine-readable copy: `afflictions.json`.
 
-125 afflictions. Flags are the game's own yes/no columns: Accentato, CadmusCurse, Enlighten, NoRandomCure, Tzantza, WhisperingMadness. Flag meanings are the game's words; what each one does is noted only where confirmed.
+127 afflictions. Flags are the game's own yes/no columns: Accentato, CadmusCurse, Enlighten, NoRandomCure, Tzantza, WhisperingMadness. Flag meanings are the game's words; what each one does is noted only where confirmed.
 
 ## How the tracker's random-cure pools compare with NoRandomCure
 
@@ -20,7 +20,6 @@ confirmed in-game, so the lists below are questions, not bugs.
 
 | Affliction | Cure(s) | Wears off after | Diagnose shows | When it hits you | When it is cured | Flags set |
 |---|---|---|---|---|---|---|
-| [`ablaze`](../raw/live/affliction_show/ablaze.txt) Burning | Apply Mending To Body |  | ablaze. | none | The raging fire about your skin goes out. |  |
 | [`addiction`](../raw/live/affliction_show/addiction.txt) Addiction to curatives | Eat Ginseng / Eat Ferrum |  | suffering from addiction. | You feel a terrible hunger grow within you. | Your terrible addiction seems to wane. | Accentato, Enlighten, Tzantza, WhisperingMadness |
 | [`aeon`](../raw/live/affliction_show/aeon.txt) The aeon curse | Smoke Elm / Smoke Cinnabar Time |  | afflicted with the curse of the Aeon. | Suddenly your movement through the time stream is slowed. | The curse of the Aeon wears off and you return to the normal timestream. |  |
 | [`agoraphobia`](../raw/live/affliction_show/agoraphobia.txt) Agoraphobia | Eat Lobelia / Eat Argentum Focus Mind |  | agoraphobic. | Terror descends upon you and your head swims - you must find shelter! | You can handle the idea of open spaces again. | Enlighten, Tzantza, WhisperingMadness |
@@ -45,6 +44,7 @@ confirmed in-game, so the lists below are questions, not bugs.
 | [`damagedhead`](../raw/live/affliction_show/damagedhead.txt) A damaged head | Apply Restoration To Head |  | has a partially damaged head. | Your head is greatly damaged from the beating. | Your head feels stronger and healthier. | NoRandomCure |
 | [`damagedleftarm`](../raw/live/affliction_show/damagedleftarm.txt) A damaged left arm | Apply Restoration To Arms |  | has a partially damaged left arm. | Your left arm is greatly damaged from the beating. | Your left arm feels stronger and healthier. | NoRandomCure |
 | [`damagedleftleg`](../raw/live/affliction_show/damagedleftleg.txt) A damaged left leg | Apply Restoration To Legs |  | has a partially damaged left leg. | Your left leg is greatly damaged from the beating. | Your left leg feels stronger and healthier. | NoRandomCure |
+| [`damagedrightarm`](../raw/live/affliction_show/damagedrightarm.txt) A damaged right arm | Apply Restoration To Arms |  | has a partially damaged right arm. | Your right arm is greatly damaged from the beating. | Your right arm feels stronger and healthier. | NoRandomCure |
 | [`damagedrightleg`](../raw/live/affliction_show/damagedrightleg.txt) A damaged right leg | Apply Restoration To Legs |  | has a partially damaged right leg. | Your right leg is greatly damaged from the beating. | Your right leg feels stronger and healthier. | NoRandomCure |
 | [`darkshade`](../raw/live/affliction_show/darkshade.txt) An allergy to sunlight | Eat Ginseng / Eat Ferrum |  | allergic to sunlight. | Your vision is flooded with light, and your face suddenly reddens. | No longer will the sunlight harm you. | CadmusCurse |
 | [`dazed`](../raw/live/affliction_show/dazed.txt) Dazed | Smoke Elm / Smoke Cinnabar |  | dazed. | none | You are no longer dazed. |  |
@@ -63,7 +63,6 @@ confirmed in-game, so the lists below are questions, not bugs.
 | [`fear`](../raw/live/affliction_show/fear.txt) Fear | Compose |  | afflicted by fear. | A terrible fear comes over you. | Your fear has been cured. | Accentato |
 | [`flushings`](../raw/live/affliction_show/flushings.txt) Flushings | Eat Ginseng / Eat Ferrum |  | suffering from flushings. | Your skin begins to prickle uncomfortably. | The prickling in your skin fades and you feel blessedly cool. |  |
 | [`fratricide`](../raw/live/affliction_show/fratricide.txt) Fratricide | Eat Lobelia / Eat Argentum |  | plagued by an insidious venom. | Something subtle and yet insidious overcomes you. | You rid yourself of the insidious venom plaguing you. |  |
-| [`freezing`](../raw/live/affliction_show/freezing.txt) A frozen body | Apply Caloric |  | frozen stiff. | Your body slows as it freezes in the extreme cold. | Though still shivering, you are no longer frozen solid. |  |
 | [`frostbite`](../raw/live/affliction_show/frostbite.txt) Frostbite | Apply Caloric |  | suffering from encroaching frostbite. | A pervasive numbness begins to spread throughout your extremities. | The pervasive numbness in your extremities fades. |  |
 | [`frozen`](../raw/live/affliction_show/frozen.txt) A frozen body | Apply Caloric |  | frozen stiff. | Your body slows as it freezes in the extreme cold. | Though still shivering, you are no longer frozen solid. |  |
 | [`fulminated`](../raw/live/affliction_show/fulminated.txt) Fulminated | Eat Goldenseal / Eat Plumbum |  | electrified by fulminous energy. | Your nerve endings become electrified and you begin to tremble. | You are no longer suffering from the ravages of fulminous energy. |  |
@@ -146,9 +145,16 @@ confirmed in-game, so the lists below are questions, not bugs.
 | [`whisperingmadness`](../raw/live/affliction_show/whisperingmadness.txt) Whispering madness | Eat Lobelia / Eat Argentum |  | hearing whispers of madness. | You feel an invisible claw brush the back of your skull. | The whispering in your mind subsides. | NoRandomCure |
 | [`wristfractures`](../raw/live/affliction_show/wristfractures.txt) Wristfractures | Apply Health To Arms |  | suffering from $(type$) wrist fractures. | none | You feel bones snapping back into place in your arms. |  |
 
+## Old names the game still accepts
+
+`AFFLICTION SHOW <old name>` answers with another affliction's record. Code must use the CANONICAL name: GMCP, the tracker and the cure lines all use it (v4.7.399: the Serpent offense recorded monkshood as `disfigurement` and never saw it land).
+
+- `ablaze` is `burning`
+- `disfigurement` is `disloyalty`
+- `freezing` is `frozen`
+
 ## Descriptions
 
-- **Burning** (`ablaze`): When your body is completely wrapped in flames, you will unsuprisingly find it quite painful.
 - **Addiction to curatives** (`addiction`): Addiction causes you to slurp your elixirs and tonics thirstily, using twice as many sips. It also causes you to eat all of a plant in your inventory, rather than just one
 - **The aeon curse** (`aeon`): The aeon curse slows time around you, making it impossible to do more than one thing at once, and delaying everything you do.
 - **Agoraphobia** (`agoraphobia`): Agoraphobics cannot stand to be in wide open spaces, and seek shelter compulsively.
@@ -173,6 +179,7 @@ confirmed in-game, so the lists below are questions, not bugs.
 - **A damaged head** (`damagedhead`): Having a damaged head will cause your mind to falter.
 - **A damaged left arm** (`damagedleftarm`): Having a damaged left arm prevents you from using that arm in most situations.
 - **A damaged left leg** (`damagedleftleg`): Having a damaged left leg prevents you from using that leg in most situations.
+- **A damaged right arm** (`damagedrightarm`): Having a damaged right arm prevents you from using that arm in most situations.
 - **A damaged right leg** (`damagedrightleg`): Having a damaged right leg prevents you from using that leg in most situations.
 - **An allergy to sunlight** (`darkshade`): Darkshade makes even the lightest ray of sunlight extremely painful. Stay outside too long and you will surely die.
 - **Dazed** (`dazed`): Being dazed wipes out your ability to resist hypnotism.
@@ -191,7 +198,6 @@ confirmed in-game, so the lists below are questions, not bugs.
 - **Fear** (`fear`): Fear is a crippling panic resulting in your running around uncontrollably.
 - **Flushings** (`flushings`): 
 - **Fratricide** (`fratricide`): Grants major negative poison resist and causes hypnotic impulses to relapse a short time after being first introduced.
-- **A frozen body** (`freezing`): Being frozen solid, you will find it much slower to move.
 - **Frostbite** (`frostbite`): While suffering from frostbite, the next time you are frozen if you possess the insulation defence it will be stripped and you will be struck with the freezing attack directly. Your frostbite will fade when this occurs.
 - **A frozen body** (`frozen`): Being frozen solid, you will find it much slower to move.
 - **Fulminated** (`fulminated`): Successful attempts to focus your mind to cure an affliction will cause you to be struck down with paralysis.
@@ -279,8 +285,6 @@ confirmed in-game, so the lists below are questions, not bugs.
 Our code or HELP 13.7.2 uses these names, but `AFFLICTION SHOW` says there is no such affliction:
 
 - `bleeding`: a vital, not an affliction; cured with CLOT
-- `damagedrightarm`: real; the first capture lost its AFFLICTION SHOW to a stray room line, re-capture
-- `disfigurement`: WHATCURES knows it (smoke valerian); the first capture lost its AFFLICTION SHOW to a stray room line, re-capture
 - `drowning`: in HELP 13.7.2 but not a current affliction
 - `epidermal`: listed in the head salve table (affliction_tracking_core/007) but never applied by any trigger: inert
 - `nocaloric`: deliberate PSEUDO-affliction: the target has no caloric defence (Magi offense, water emanation)
