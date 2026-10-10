@@ -1,0 +1,727 @@
+13.7.2 AFFLICTIONS AND WHAT CURES THEM
+Helpful commands for affliction information:
+
+ AFFLICTION LIST
+  - See a list of all known afflictions
+
+ AFFLICTION SHOW <affliction>
+  - See information about a specific affliction
+
+ WHATCURES <affliction>
+  - See what will cure a specific affliction
+
+(See also: HELP CURES, HELP HEAL)
+
+Affliction List
+----------------------------------------------------------------
+
+Affliction          Action      Herbal Cure      Alchemical Cure
+----------          ------      -----------      ---------------
+Ablaze:             Apply (*)   Mending          Mending
+Addiction:          Eat         Ginseng          Ferrum
+Aeon:               Smoke       Elm              Cinnabar
+Agoraphobia:        Eat         Lobelia          Argentum
+Anorexia:           Apply       Epidermal        Epidermal
+Asthma:             Eat         Kelp             Aurum
+Bleeding:           Clot
+Blindness:          Apply       Epidermal        Epidermal
+Claustrophobia:     Eat         Lobelia          Argentum
+Clumsiness:         Eat         Kelp             Aurum
+Concussion:         Apply       Restoration      Restoration
+Confusion:          Eat         Prickly Ash      Stannum
+Crippled limb:      Apply       Mending          Mending
+Damaged limb:       Apply       Restoration      Restoration
+Darkshade:          Eat         Ginseng          Ferrum
+Deadening:          Smoke       Elm              Cinnabar
+Deafness:           Apply       Epidermal        Epidermal
+Dementia:           Eat         Prickly Ash      Stannum
+Disfigurement:      Smoke       Valerian         Realgar
+Dissonance:         Eat         Goldenseal       Plumbum
+Dizziness:          Eat         Goldenseal       Plumbum
+Drowning:           Eat         Pear             Calcite
+Entangled:          Writhe
+Epilepsy:           Eat         Goldenseal       Plumbum
+Fear:               Compose
+Freezing:           Apply       Caloric          Caloric
+Generosity:         Eat         Bellwort         Cuprum
+Hallucinations:     Eat         Prickly Ash      Stannum
+Haemophilia:        Eat         Ginseng          Ferrum
+Health Leech:       Eat         Kelp             Aurum
+Hellsight:          Smoke       Valerian         Realgar
+Hypochondria:       Eat         Kelp             Aurum
+Hypersomnia:        Eat         Prickly Ash      Stannum
+Impatience:         Eat         Goldenseal       Plumbum
+Indifference:       Eat         Bellwort         Cuprum
+Internal Trauma:    Apply       Restoration      Restoration
+Justice:            Eat         Bellwort         Cuprum
+Lethargy:           Eat         Ginseng          Ferrum
+Loneliness:         Eat         Lobelia          Argentum
+Lover's Effect:     Eat         Bellwort         Cuprum
+Masochism:          Eat         Lobelia          Argentum
+Mana Leech:         Smoke       Valerian         Realgar
+Mangled limb:       Apply       Restoration      Restoration
+Nausea:             Eat         Ginseng          Ferrum
+Pacifism:           Eat         Bellwort         Cuprum
+Paralysis:          Eat         Bloodroot        Magnesium
+Paranoia:           Eat         Prickly Ash      Stannum
+Peace:              Eat         Bellwort         Cuprum
+Recklessness:       Eat         Lobelia          Argentum
+Scytherus:          Eat         Ginseng          Ferrum
+Sensitivity:        Eat         Kelp             Aurum
+Shyness:            Eat         Goldenseal       Plumbum
+Slickness:          Smoke       Valerian         Realgar 
+                    Eat         Bloodroot        Magnesium
+Stinky:             Scrub (**)
+Stupidity:          Eat         Goldenseal       Plumbum
+Stuttering:         Apply       Epidermal        Epidermal
+Tempered Humours    Eat         Ginger           Antimony
+Transfixed:         Writhe
+Vertigo:            Eat         Lobelia          Argentum
+Voyria:             Sip         Immunity         Immunity
+Weariness:          Eat         Kelp             Aurum
+Webbed:             Writhe
+
+(*)  The unfortunate state of being on fire may also be resolved by finding
+     an available source of water to swim in.
+
+(**) To scrub yourself clean, you must first go to a water location.
+
+
+13.7.1 Curatives and What They Cure or Cause.
+(See HELP CURE LIST and HELP HEAL)
+
+A listing of herbs, minerals, salves, and elixirs, and what they cure or cause.
+
+Herbs (EAT, or sometimes SMOKE)
+-------------------------------
+Ash           See Prickly Ash.
+Bayberry      Gives blindness.
+Bellwort      Cures unnatural tendencies to be excessively altruistic.
+Bloodroot     Cures paralysis and slickness.
+Cohosh        Gives you insomnia, which prevents you being put to sleep.
+Echinacea     Gives third eye.
+Elm           See Slippery Elm.
+Ginger        Reduces the fluid level in your body when artificially raised.
+Ginseng       Cure for impurities of the blood or diseases of the skin.
+Goldenseal    Cure for body or mind in disharmony.
+Hawthorn      Gives deafness.
+Irid Moss     Heals some health and mana.
+Kelp          Cure for weakened muscles or lower general fitness.
+Kola          Allows you to awaken from sleep immediately, at will.
+Lobelia       Cure relating mainly to various types of phobias or pathos.
+Moss          See Irid Moss.
+Myrrh Gum     Increases your learning lesson speed.
+Prickly Ash   When eaten, cures various afflictions relating to your sanity.
+Prickly Pear  Allows breathing underwater. Cannot be used pre-emptively.
+Sileris       (Applied) Defends against Serpent class fang attacks.
+Skullcap      (Eaten) Gives deathsight.
+Skullcap      (Smoked) Anti-weapon field that lasts until taken down by others
+              or you act aggressively. Causes weapons attacks to rebound.
+Slippery Elm  (Smoked) Cures a variety of curses and afflictions.
+Valerian      (Smoked) Cures the disfigurement and slickness afflictions.
+
+
+Minerals (EAT, or sometimes SMOKE)
+----------------------------------
+Antimony      Reduces the fluid level in your body when artificially raised.
+Argentum      Cure relating mainly to various types of phobias or pathos.
+Arsenic       Gives blindness.
+Aurum         Cure for weakened muscles or lower general fitness.
+Azurite       (Eaten) Gives deathsight.
+Bisemutum     Increases your learning lesson speed.
+Calamine      Gives deafness.
+Calcite       Allows breathing underwater. Cannot be used pre-emptively.
+Cinnabar      (Smoked) Cures a variety of curses and afflictions.
+Cuprum        Cures unnatural tendencies to be excessively altruistic.
+Dolomite      Gives third eye.
+Ferrum        Cure for impurities of the blood or diseases of the skin.
+Gypsum        Gives you insomnia, which prevents you being put to sleep.
+Magnesium     Cures paralysis and slickness.
+Malachite     (Smoked) Anti-weapon field that lasts until taken down by others
+              or you act aggressively. Causes weapons attacks to rebound.
+Plumbum       Cure for body or mind in disharmony.
+Potash        Heals some health and mana.
+Quartz        Allows you to awaken from sleep immediately, at will.
+Quicksilver   (Applied) Defends against Serpent class fang attacks.
+Realgar       (Smoked) Cures the disfigurement and slickness afflictions.
+Stannum       When eaten, cures various afflictions relating to your sanity.
+
+
+Elixirs (SIP)
+-------------
+Frost         Increases your resistance to fire-based damage.
+Health        Replenishes some of your health.
+Immunity      Cures the deadly voyria venom.
+Levitation    Will make you levitate above the ground.
+Mana          Replenishes some of your mana.
+Speed         Increases your ability to dodge some physical attacks.
+Venom         Resistance to damage from some poisons.
+
+
+Salves (APPLY)
+--------------
+Caloric       Cure for cold-based afflictions and defence for some cold
+              attacks.
+Epidermal     Cure associated with outer organs, like the eyes and ears.
+Mass          Prevents various forms of moving you against your will.
+Mending       Cures broken or shrivelled limbs as well as some other things.
+Restoration   Heals damage done to body parts. (see HELP BODY PART DAMAGE)
+
+
+13.7.8 Achaea's server-side curing
+Achaea's combat system offers an unprecedented level of depth, providing multiple layers of afflictions and ailments. While this makes it enjoyable, it can also make it difficult to get started in. 
+
+To aide in this endeavour, we provide a server-side system to aide in the curing of these ailments. This should allow all adventurers to partake in player-vs-player combat at all levels.
+
+The following commands are available with the system:
+
+CURING
+   - Brings up a list of commands available in the system.
+
+CURING STATUS
+   - Shows the status of your curing.
+
+CURING ON|OFF
+   - Enables and disables the core of the system.
+
+CURING AFFLICTIONS ON|OFF
+   - Enables and disables affliction curing.
+
+CURING DEFENCES ON|OFF
+   - Enables or disables defence upkeep.
+
+CURING SIPPING ON|OFF
+   - Enables or disables health/mana sipping.
+
+CURING TRANSMUTATION ON|OFF
+   - Enables or disables the use of Transmutation cures.
+
+CURING SIPHEALTH|SIPMANA <percent>
+   - What percentage of maximum health/mana to sip health/mana at.
+
+CURING MOSSHEALTH|MOSSMANA <percent>
+   - What percentage of maximum health/mana to eat moss/potash at.
+
+CURING PRIORITY HEALTH|MANA
+   - Prioritise health or mana regeneration.
+
+CURING FOCUS ON|OFF
+   - Toggle the use of the FOCUS ability in survival.
+
+CURING FOCUS FIRST|SECOND
+   - Toggle whether to use the focus ability before herb cures or after.
+
+CURING TREE ON|OFF [CUSTOM]
+   - Toggle the use of the TREE tattoo to cure afflictions.
+
+CURING MOUNT <mount>
+   - Set a mount for serverside curing to use.
+
+CURING USEVAULT ON|OFF
+   - Toggle usage of the vault ability.
+
+CURING USECLOT ON|OFF
+   - Toggle the use of the CLOT ability to mitigate bleeding.
+
+CURING CLOTAT <amount>
+   - Configure how much bleeding is needed before the system will CLOT.
+
+CURING TREE SCENARIO
+   - Customise when your TREE tattoo will be used.
+
+CURING FALLBACK ON|OFF
+   - Allow curing to use alternate cures when you run out of your primary.
+
+CURING KAIDOTRANSMUTE 
+   - Permit curing to use transmute automatically (for Kaido havers.)
+   - This will not transmute if you know you have recklessness.
+
+
+Advanced options
+----------------
+While the default curing priority should be suitable in most cases, we've
+provided a way to adjust the order in which you cure afflictions and keep
+defences active.
+
+CURING PRIORITY LIST
+   - List the affliction cure priority.
+
+CURING PRIORITY <aff1> <priority1> <aff2> <priority 2> 
+   - Move an affliction or list of affliction's cure priority.
+
+CURING PRIORITY INSERT <aff> <priority> [all]
+   - Inserts a priority.
+
+CURING PRIORITY RESET
+   - Reset the cure priority to the default.
+
+For more information on the various afflictions, please be sure to look at
+AFFLICTION LIST.
+
+CURING PRIORITY DEFENCE LIST
+   - List the defence upkeep priority.
+
+CURING PRIORITY DEFENCE <name> <1-25> 
+   - Move an defence's upkeep priority.
+
+CURING PRIORITY DEFENCE <name> RESET  
+   - Reset a defence's upkeep priority.
+
+No default priority for defence upkeep is provided. For more information on the various defences, please be sure to look at DEFENCE LIST.
+
+CURINGSETs allow multiple pre-configured curing and defence priority lists.
+
+These can be changed between quickly and easily without having to manually reconfigure the priorities.
+
+CURINGSET NEW <name>
+   - Create a new curingset.
+
+CURINGSET LIST
+   - List curingsets.
+
+CURINGSET SWITCH <name>
+   - Switch to a curingset.
+
+CURINGSET DELETE <name>
+   - Delete a curingset.
+
+CURINGSET RENAME <oldname> <newname>
+   - Rename a curingset.
+
+CURINGSET EXPAND
+   - Purchase an additional curing set. Costs 25 credits and is non-refundable.
+
+CURINGSET CLONE <from>
+   - Clone a set into your current setup
+
+Custom conditions for TREE tattoo usage can be setup with the CURING TREE SCENARIO command:
+
+CURING TREE SCENARIO NEW <name>
+   - Create a new Tree Scenario
+
+CURING TREE SCENARIO DELETE <name>
+   - Delete a custom Tree Scenario
+
+CURING TREE SCENARIO LIST
+   - List your custom Tree Scenarios
+
+CURING TREE SCENARIO SHOW <name>
+   - Show the details of a custom Tree Scenario
+
+CURING TREE SCENARIO ENABLE <name>
+   - Enable a custom Tree Scenario
+
+CURING TREE SCENARIO DISABLE <name>
+   - Disable a custom Tree Scenario
+
+CURING TREE SCENARIO AFFLICTIONS <name> <aff1> [aff2] [...]
+   - Add afflictions you wish to apply to the Scenario.
+
+CURING TREE SCENARIO NOBAL <name> <SALVE|HERB|SIP|FOCUS|SMOKE>
+   - Set TREE tattoo to be used if off a certain curing balance.
+
+CURING TREE SCENARIO AFFCOUNT <scenario> <count>
+   - Set TREE tattoo to be used when you have a specific number of afflictions or more.
+
+      Use CURING TREE ON CUSTOM to enable any custom scenarios.
+
+Manual manipulation
+-------------------
+Situations can change in the blink of an eye, and there may be times when you
+wish to force a command to take precedence over any other curing priority. To
+do this, simply add it to the queue, and it will be done before any other
+scheduled commands.
+
+CURING QUEUE ADD <cure>
+   - Add a manual cure into the queue.
+
+CURING QUEUE LIST
+   - List what is in your queue.
+
+CURING QUEUE INSERT <1-20> <cure>
+   - Insert a manual cure in a specific place.
+
+CURING QUEUE REMOVE <cure>
+   - Remove a cure from the queue.
+
+CURING QUEUE RESET
+   - Reset the queue.
+
+CURING PREDICT <affliction>
+   - Tell the system that you think you have an affliction.
+
+CURING UNPREDICT <affliction>
+   - Remove a predicted affliction.
+
+CURING PREDICTIONS
+   - List predicted afflictions.
+
+CURING BATCH ON|OFF
+   - Attempt to send multiple cures at once where possible.
+
+CURING HEALTHAFFSABOVE <value>
+   - Set the health threshold above which you will apply health elixir for curing.
+
+CURING PRIOAFF <affliction>
+   - Temporarily prioritise an affliction until said affliction is cured.
+
+CURING PRIOAFF NONE
+   - Remove a temporarily prioritised affliction.
+
+
+About the system and latency
+----------------------------
+The system is designed to cure your afflictions at a rate that simulates average latency, so the time it would have normally taken for Achaea to send the message to your computer and back to the game. This means:
+
+Most people will see no noticeable difference in curing efficiency using server-side or client-side... it's a matter of preference, much like which internet browser to use.
+
+For people with very high latency (if you are on dial-up internet, for instance), using Achaea's server-side curing may be much faster than using a third-party client.
+
+For someone with extremely low latency (if you are located in Chicago near the IRE servers with fiber-optic service) you might be able to cure yourself a fraction of a second faster with a local system.
+Achaea is developed and published by Iron Realms Entertain
+
+CONDITIONAL AFFLICTIONS FOR THE ACHAEAN FORMS
+
+This file pertains to the topic of toxin locks, and explains how you can
+hinder the active and passive healing abilities that each of the Achaean
+classes have, including Elemental and Dragon form, and which you must
+hinder to be able to lock your target successfully.
+
+Initially, know that there is a difference between passive and active
+healing capabilities. Active healing requires the use of a balanced
+action, like fitness, alleviate and the like. Passive healing requires
+an initial action, but then heals independently without further need for
+interaction from the person performing the action. Examples of passive
+healing are devotion rites and a Baalzadeen's syphon.
+
+The main obstacle on the road to a toxin lock are the active healing
+abilities. All passive healing abilities can be disrupted by use of the
+toxin Voyria. By design, passive healing cures Voyria before anything
+else, which means the opportunity to stack another affliction or two
+within the healing rate window, before administering Voyria again.
+
+
+ALCHEMISTS
+-------
+Salt in Alchemy.
+Hindered by Stupidity
+
+APOSTATES
+-------
+Syphon in Apostasy. PASSIVE.
+Requires the Baalzadeen to be at at least 100 health, and drains health
+from the Baalzadeen while it cures its master.
+
+BARDS
+-------
+Hallejuah in Harmonic. PASSIVE.
+
+DEPTHSWALKERS
+-------
+Accelerate in Aeonics.
+Hindered by recklessness.
+The ability can be boosted to cure two afflictions. Boosting this
+process is hindered by prone or recklessness.
+
+DRUIDS
+-------
+Fitness in Metamorphosis. Always cures asthma.
+Hindered by weariness.
+
+Might in Metamorphosis.
+Hindered by prone.
+
+Grove Cure in Groves.
+Hindered by nothing.
+
+Panacea in Groves. PASSIVE.
+
+INFERNALS
+-------
+Fitness in Chivalry. Cures asthma.
+Hindered by weariness.
+ 
+JESTERS
+-------
+Fool in Tarot.
+Hindered by paralysis or prone.
+
+Sun in Tarot.
+PASSIVE.
+
+MAGI
+-------
+Bloodboil in Elementalism.
+Hindered by Haemophilia or broken arms (both must be broken).
+
+Harmony in Crystalism. PASSIVE.
+
+MONKS
+-------
+Fitness.
+Hindered by weariness.
+
+OCCULTISTS
+-------
+See "Jesters" above.
+
+PALADINS
+-------
+Fitness in Chivalry.
+Hindered by weariness.
+
+Healing in Devotion.
+PASSIVE.
+
+PARIAH
+-------
+Leech. PASSIVE.
+Can be cast on someone else other than the target.
+
+PRIESTS
+-------
+Healing in Devotion. PASSIVE
+
+Angel Care through Guardian Angels. PASSIVE (compare Apostate Syphon).
+NOTE: These two passives do not stack, Angel Care takes priority and
+cures slightly faster.
+
+PSION
+-------
+Expunge in Psionics. Prioritizes curing impatience.
+Hindered by confusion.
+
+RUNEWARDEN
+-------
+Fitness in Chivalry.
+Hindered by weariness
+
+Dagaz in Runelore. PASSIVE.
+
+SENTINELS
+-------
+Fitness in Metamorphosis. Cures asthma.
+Hindered by weariness.
+
+Might in Metamorphosis. Hindered by prone.
+
+SERPENTS
+-------
+Shrugging in Venoms. Hindered by weariness.
+
+SHAMANS
+-------
+Daina in Spiritlore. Hindered by selarnia.
+
+SYLVANS
+-------
+Grove Cure in Groves.
+
+Panacea in Groves. PASSIVE.
+Note: Panacea procs faster for those in Viridian form.
+
+ELEMENTAL LADIES/ELEMENTAL LORDS
+-------
+Air: Susurration. PASSIVE.
+Fire: Slough. Hindered by prone.
+Water: Purify. Hindered by weariness.
+Earth: Eruption. Hindered by weariness.
+
+DRAGONS
+-------
+Heal in Dragoncraft. Hindered by weariness and recklessness
+simultaneously.
+
+Softlock
+
+Asthma - prevents smoking pipes, cured by eating Aurum/Kelp
+Anorexia - prevents eating herbs, cured by applying Epidermal/Focusing
+Slickness - prevents applying salves, cured by eating
+Magnesium/Bloodroot or smoking Realgar/Valerian
+
+
+
+Venomlock
+
+Paralysis - prevents movement and touching their Tree tattoo, cured by
+eating Magnesium/Bloodroot
+Asthma - prevents smoking pipes, cured by eating Aurum/Kelp
+Anorexia - prevents eating herbs, cured by applying Epidermal/Focusing
+Slickness - prevents applying salves, cured by eating
+Magnesium/Bloodroot or smoking Realgar/Valerian
+
+
+
+Truelock/Hardlock
+
+Paralysis - prevents Tree tattoo, cured by eating Magnesium/Bloodroot
+Asthma - prevents smoking pipes, cured by eating Aurum/Kelp
+Anorexia - prevents eating herbs, cured by applying Epidermal/Focusing
+Slickness - prevents applying salves, cured by eating
+Magnesium/Bloodroot or smoking Realgar/Valerian
+Impatience - prevents using Focus, cured by eating Plumbum/Goldenseal
+
+Also includes various other afflictions, such as Weariness, Stupidity,
+Recklessness, etc., which prevent class-specific active and passive
+cures
+
+
+
+Focuslock
+
+Paralysis - prevents Tree tattoo, cured by eating Magnesium/Bloodroot
+Asthma - prevents smoking pipes, cured by eating Aurum/Kelp
+Anorexia - prevents eating herbs, cured by applying Epidermal/Focusing
+Slickness - prevents applying salves, cured by eating
+Magnesium/Bloodroot or smoking Realgar/Valerian
+In lieu of Impatience, the user afflicts multiple mental afflictions in
+the hopes that when the opponent uses Focus it cures something other
+than anorexia
+
+
+
+Riftlock
+
+Two arm breaks - prevents out-rifting herbs, cured by apply mending to
+arms
+Slickness - prevents applying salves, cured by Magnesium/Bloodroot or
+smoking Realgar/ Valerian
+Asthma - prevents smoking pipes, cured by eating Aurum/Kelp
+Addiction (Vardrax) can help with a Riftlock, as it will force your
+opponent to eat everything already in their hands when their arms are
+broken
+
+
+
+Salvelock
+
+Two arm breaks, but at level 2 or higher - prevents out-rifting herbs,
+cured by apply mending to arms, and level 2 breaks will mean they cannot
+use Restore to heal their limbs.
+Slickness - prevents applying salves, cured by Magnesium/Bloodroot or
+smoking Realgar/Valerian
+Asthma - prevents smoking pipes, cured by eating Aurum/Kelp
+Addiction (Vardrax) can help with a Riftlock, as it will force your
+opponent to eat whatever is already in their hands when their arms are
+broken
+
+
+
+Sleeplock
+
+Sleep/Delphinium afflicted at least three times in very rapid
+succession. The first will strip the Insomnia affliction, which prevents
+falling asleep. The second strips the Gypsum/Kola defence, which allows
+a person to wake instantly. The third puts the opponent to sleep, which
+would then take long enough to wake from, that you can keep afflicting
+Sleep/Delphinium, or continue with other locking afflictions.
+
+
+
+Aeonlock
+
+Aeon - allows only one action at a time on a lengthy balance.
+Asthma - prevents curing Aeon by smoking Cinnabar/Elm
+Further Aurum based afflictions to ensure Asthma remains stuck.
+
+Active cures - These require balance or equilibrium to use, and expends
+that balance or equilibrium in most cases.
+
+Alchemists have 'Salt' which is blocked by Stupidity. It looks like
+this:
+- [ Rhalan sketches out a symbol in the air with his finger in the shape
+of a bisected circle. ]
+
+Blademasters have 'Alleviate' which is blocked by Paralysis, and
+'Phoenix' which is stopped by prone and cures all afflictions.
+Allieviate:
+- [ As he massages key pressure points, a look of relief comes over
+Mizik's face as his ailments ease. ]
+Phoenix:
+- [ Throwing back his head, Davok shouts out in defiance as blazing
+flames consume his for a single, glorious instant before dying away. ]
+
+Depthswalkers have 'Accelerate' which is blocked by Recklessness, it
+looks like:
+ - [ A look of relief comes over Xarthus as he grows less pale. ]
+If you see them grow older, they've cured two afflictions (can't be done
+prone).
+
+Druid and Sentinels both have 'Might', stopped by Prone and looks like
+this:
+ - [ Finnegan lets out a mighty roar. ]
+
+Dragons have 'Dragonheal' which cures three (1 if prone) and is blocked
+by Weariness & Recklessness:
+- [ Lii lets out a great keening, casting the impurities from her form.
+]
+
+Magi have 'Bloodboil' which is stopped by the Haemophilia affliciton,
+and will look like:
+ - [ Perspiration suddenly breaks out on Aegoth's forehead. ]
+
+Occultists and Jester both have the 'Fool' tarot which cures three
+afflictions, can be used on others, and looks like:
+- [ Grandue presses a tarot to his forehead, producing a wan smile. ]
+- [ Grandue presses a tarot to Dunn's forehead, producing a wan smile. ]
+
+Psions have 'Expunge' which prioritises Impatience, and is blocked by
+Confusion:
+- [ A slight tightening of the eyes is the only sign Ulvin makes that he
+has made a great effort of will. ]
+Will cure mentals if they do not have Impatience.
+
+Serpents have 'Shrugging' which is blocked by Weariness, and will look
+as follows:
+ - [ Cooper hunches his shoulders and lets out a soft hiss. ]
+
+Shamans have 'Purification' (Daina) which is blocked by Selarnia:
+ - [ A pale mist begins to rise from the skin of Makenna. ]
+
+Blademasters, Knights, Monks and Metamorphs all have 'Fitness' which is
+blocked by Weariness:
+ - [ Eoka draws a deep, measured breath. ]
+ This ONLY cures Asthma!
+
+-----
+
+Lastly we have 'passive' healing effects which will cure an affliction
+once every approximately 10 seconds. If the owner of the effect is
+afflicted by Voyria, then that will get cured first above everything
+else. Knowing this is paramount to truly locking targets that have
+these! Below are a bunch of rough scribbles that detail what the effects
+look like.
+
+Jester/Occultist (Sun Tarot)
+ - [ The globe of light illuminates Tikal with its brilliance. ]
+
+Bard (Hallelujah)
+- [ A song can be heard on the edge of hearing as the air distorts about
+Proficy. ]
+
+Runewarden (Dagaz)
+- [ A rune like a rising sun upon the ground flares, bathing Dunn with
+healing magic. ]
+
+Pariah (Leech)
+- [ Something pulses from within the chest of Montifarious, and he seems
+more vital. ]
+
+Apostate (Syphon)
+ - [ A demonic crimson glow emanates from Serin. ]
+
+Magi Harmony (Vibration)
+ - [ A soft chiming emanates from Aegoth. ]
+
+Priest/Paladin (Rite of Healing)
+ - [ A gentle glow surrounds Alyzar. ]
+
+Air Lord (Sussuration)
+- [ The tempestuous form of Racnole is cleansed by a purifying breeze. ]
+
+Priest (Angel Care)
+- [ The guardian angel of Atalkez shimmers and he gives a sigh of
+relief. ]
+
+Sylvan/Druid (Panacea)
+ - [ Farrah is surrounded in a cool, refreshing mist.]

@@ -288,14 +288,16 @@ venoms:
     priority: low
 
   # ============================================================================
-  # ASH/CALCIUM CURES (eating balance)
+  # ASH/STANNUM CURES (eating balance)
   # ============================================================================
 
   monkshood:
     affliction: disfigurement
-    cure_method: eat
-    cure_herb: ash
-    cure_mineral: calcium
+    # HELP 13.7.2: disfigurement is cured by SMOKING valerian/realgar, not ash.
+    # Our code tracks it as `disloyalty` (smokeCureTableV3). See kb/afflictions/catalog.md.
+    cure_method: smoke
+    cure_herb: valerian
+    cure_mineral: realgar
     effect: "Causes physical disfigurement"
     priority: low
     serpent_note: "With asthma+masochism+weariness, Ekanelia adds IMPATIENCE"
@@ -304,7 +306,7 @@ venoms:
     affliction: confusion
     cure_method: eat
     cure_herb: ash
-    cure_mineral: calcium
+    cure_mineral: stannum
     effect: "Random command substitution"
     lock_role: "Lock affliction for Psion"
     priority: high
@@ -313,7 +315,7 @@ venoms:
     affliction: hallucinations
     cure_method: eat
     cure_herb: ash
-    cure_mineral: calcium
+    cure_mineral: stannum
     effect: "Fake room descriptions and messages"
     priority: medium
 
@@ -321,7 +323,7 @@ venoms:
     affliction: paranoia
     cure_method: eat
     cure_herb: ash
-    cure_mineral: calcium
+    cure_mineral: stannum
     effect: "Sees fake enemies"
     priority: low
 
@@ -329,7 +331,7 @@ venoms:
     affliction: hypersomnia
     cure_method: eat
     cure_herb: ash
-    cure_mineral: calcium
+    cure_mineral: stannum
     effect: "Extreme drowsiness"
     priority: medium
 
@@ -337,7 +339,7 @@ venoms:
     affliction: dementia
     cure_method: eat
     cure_herb: ash
-    cure_mineral: calcium
+    cure_mineral: stannum
     effect: "Random actions"
     priority: medium
 

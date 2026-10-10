@@ -1,0 +1,101 @@
+Active cures - These require balance or equilibrium to use, and expends
+that balance or equilibrium in most cases.
+
+Alchemists have 'Salt' which is blocked by Stupidity. It looks like
+this:
+- [ Rhalan sketches out a symbol in the air with his finger in the shape
+of a bisected circle. ]
+
+Blademasters have 'Alleviate' which is blocked by Paralysis, and
+'Phoenix' which is stopped by prone and cures all afflictions.
+Allieviate:
+- [ As he massages key pressure points, a look of relief comes over
+Mizik's face as his ailments ease. ]
+Phoenix:
+- [ Throwing back his head, Davok shouts out in defiance as blazing
+flames consume his for a single, glorious instant before dying away. ]
+
+Depthswalkers have 'Accelerate' which is blocked by Recklessness, it
+looks like:
+ - [ A look of relief comes over Xarthus as he grows less pale. ]
+If you see them grow older, they've cured two afflictions (can't be done
+prone).
+
+Druid and Sentinels both have 'Might', stopped by Prone and looks like
+this:
+ - [ Finnegan lets out a mighty roar. ]
+
+Dragons have 'Dragonheal' which cures three (1 if prone) and is blocked
+by Weariness & Recklessness:
+- [ Lii lets out a great keening, casting the impurities from her form.
+]
+
+Magi have 'Bloodboil' which is stopped by the Haemophilia affliciton,
+and will look like:
+ - [ Perspiration suddenly breaks out on Aegoth's forehead. ]
+
+Occultists and Jester both have the 'Fool' tarot which cures three
+afflictions, can be used on others, and looks like:
+- [ Grandue presses a tarot to his forehead, producing a wan smile. ]
+- [ Grandue presses a tarot to Dunn's forehead, producing a wan smile. ]
+
+Psions have 'Expunge' which prioritises Impatience, and is blocked by
+Confusion:
+- [ A slight tightening of the eyes is the only sign Ulvin makes that he
+has made a great effort of will. ]
+Will cure mentals if they do not have Impatience.
+
+Serpents have 'Shrugging' which is blocked by Weariness, and will look
+as follows:
+ - [ Cooper hunches his shoulders and lets out a soft hiss. ]
+
+Shamans have 'Purification' (Daina) which is blocked by Selarnia:
+ - [ A pale mist begins to rise from the skin of Makenna. ]
+
+Blademasters, Knights, Monks and Metamorphs all have 'Fitness' which is
+blocked by Weariness:
+ - [ Eoka draws a deep, measured breath. ]
+ This ONLY cures Asthma!
+
+-----
+
+Lastly we have 'passive' healing effects which will cure an affliction
+once every approximately 10 seconds. If the owner of the effect is
+afflicted by Voyria, then that will get cured first above everything
+else. Knowing this is paramount to truly locking targets that have
+these! Below are a bunch of rough scribbles that detail what the effects
+look like.
+
+Jester/Occultist (Sun Tarot)
+ - [ The globe of light illuminates Tikal with its brilliance. ]
+
+Bard (Hallelujah)
+- [ A song can be heard on the edge of hearing as the air distorts about
+Proficy. ]
+
+Runewarden (Dagaz)
+- [ A rune like a rising sun upon the ground flares, bathing Dunn with
+healing magic. ]
+
+Pariah (Leech)
+- [ Something pulses from within the chest of Montifarious, and he seems
+more vital. ]
+
+Apostate (Syphon)
+ - [ A demonic crimson glow emanates from Serin. ]
+
+Magi Harmony (Vibration)
+ - [ A soft chiming emanates from Aegoth. ]
+
+Priest/Paladin (Rite of Healing)
+ - [ A gentle glow surrounds Alyzar. ]
+
+Air Lord (Sussuration)
+- [ The tempestuous form of Racnole is cleansed by a purifying breeze. ]
+
+Priest (Angel Care)
+- [ The guardian angel of Atalkez shimmers and he gives a sigh of
+relief. ]
+
+Sylvan/Druid (Panacea)
+ - [ Farrah is surrounded in a cool, refreshing mist.]
