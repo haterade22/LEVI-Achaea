@@ -786,7 +786,7 @@ the fighting that did happen was winning, and ice turned each retreat into sever
 
 ### Diagnose whenever we leave (v4.7.390)
 
-User: "When we leave a room because of a swarm, etc. We can always use DIAGNOSE." DIAGNOSE is free;
+User: "When we leave a room because of a swarm, etc. We can always use DIAGNOSE." DIAGNOSE costs 1.00s of equilibrium and no balance (AB 1380; this said "free" until 2026-10-10);
 the server answers with a full `Char.Afflictions.List` and `afflictionList()` (004) rebuilds
 `ataxia.afflictions` from it, so a phantom affliction cannot hold a recovery.
 

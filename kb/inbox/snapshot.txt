@@ -725,3 +725,844 @@ relief. ]
 
 Sylvan/Druid (Panacea)
  - [ Farrah is surrounded in a cool, refreshing mist.]
+
+
+WHATCURES Output
+The affliction 'hypochondria' is cured by: Eat Lobelia / Eat Argentum.
+
+All defences
+------------------------------------------------
+Accursedresolve
+Acrobatics
+Affinity
+Agithtailegend
+Aiming
+Airpocket
+Alertness
+Alligatorlegend
+Amamaalierlegend
+Antiforce
+Arcaneshield
+Arctar
+Aria
+Arrowcatching
+Astralform
+Astronomy
+Auroragrace
+Avoid
+Balancing
+Barkskin
+Basking
+Battlesong
+Bedevilaura
+Belltattoo
+Blackboarlegend
+Blackwind
+Bladefire
+Blademastery
+Blessingofthegods
+Blindness
+Blocking
+Bloodquell
+Bloodscent
+Bloodshield
+Blunder
+Blur
+Boartattoo
+Bodyaugment
+Bodyblock
+Boostedregeneration
+Brains
+Bulk
+Chameleon
+Chargeshield
+Circling
+Circulate
+Clinging
+Cloak
+Cohesion
+Coldresist
+Consciousness
+Constitution
+Curseward
+Dawnhand
+Deafness
+Deathaura
+Deathsight
+Deflect
+[Type MORE if you wish to continue reading. (21% shown)]
+18:16:12:644 [10388] [99] |(639170|93%)|[]  
+(((((((((((((((((((( BALANCE: 1.629 ))))))))))))))))))))
+You slip behind a mummified troll guardian and garrote him with your whip.
+Damage dealt: 855 (asphyxiation).
+A mummified troll guardian throws a punch at you with his massive arm, smashing into your body.
+Health lost: 746 (physical blunt).
+18:16:14:114 [9642] [99] |(639170|89%)|[]  
+[File continued via MORE]
+Deliverance
+Demonarmour
+Demonfury
+Density
+Devilmark
+Devour
+Diamondskin
+Disassociate
+Disperse
+Distortedaura
+Dodging
+Dragonarmour
+Dragonbreath
+Dreyvoslegend
+Drunkensailor
+Durability
+Dustform
+Eaglelegend
+Earthshield
+Eavesdropping
+Electricresist
+Elementalpurity
+Elusiveness
+Embattled
+Encircling
+Enduranceblessing
+Endure
+Enhancedform
+Epitomise
+Evadeblock
+Evasion
+Extispicy
+Extrusion
+Eyes
+Faith
+Fangbarrier
+Fervour
+Firefly
+Fireresist
+Fireshroud
+Firstaid
+Flailingstaff
+Fleetness
+Freedom
+Frenzied
+Frostshield
+Fury
+Ghost
+Golgothagrace
+Greased
+Gripping
+Grookbubble
+Groundwatch
+Guidedstrike
+Guisecurse
+Harmony
+Haste
+Hawkstep
+Heads
+Heartsfury
+[Type MORE if you wish to continue reading. (42% shown)]
+18:16:14:562 [9642] [99] |(639170|89%)|[]  
+[File continued via MORE]
+Heldbreath
+Heresy
+Hiding
+Hyperfocus
+Hypersense
+Hypersight
+Immunity
+Incandescence
+Indomitability
+Insomnia
+Inspiration
+Insufflate
+Insulation
+Ironform
+Ironwill
+Joints
+Kaiboost
+Kaitrance
+Karthweatherweaving
+Karthwisdom
+Knightsvigil
+Kola
+Laelegend
+Lament
+Lay
+Leechlogograph
+Levitating
+Lifebond
+Lifegiver
+Lifesteal
+Lifevision
+Lipreading
+Magicresist
+Maticlegend
+Megalithtattoo
+Mentalclarity
+Mercury
+Metawake
+Mindcloak
+Mindnet
+Mindseye
+Mindtelesense
+Mistral
+Moontattoo
+Morph
+Mosstattoo
+Mouths
+Nicatorlegend
+Nightsight
+Numbness
+Oxtattoo
+Pacing
+Painshift
+Panacea
+Phased
+Pinchblock
+Placement
+Poisonresist
+Potentiate
+Preachblessing
+[Type MORE if you wish to continue reading. (63% shown)]
+18:16:14:753 [9642] [99] |(639170|89%)|[]  
+[File continued via MORE]
+Precision
+Prismatic
+Projectiles
+Promosurcoat
+Psibreakthrough
+Psicomprehend
+Psitranscend
+Psivanish
+Putrefaction
+Rebounding
+Reflections
+Reflexes
+Regeneration
+Resistance
+Retaliation
+Retribution
+Ruin
+Rupturesight
+Satiation
+Scales
+Scholasticism
+Scouting
+Seasonelegend
+Secondsight
+Secondskin
+Seleucarianinspiration
+Seleucarianmight
+Selfishness
+Setweapon
+Shadowveil
+Shield
+Shieldlogograph
+Shikudoform
+Shinbinding
+Shinclarity
+Shinperfection
+Shinrejoinder
+Shintrance
+Shipwarning
+Shroud
+Skysight
+Skywatch
+Slippery
+Softfocusing
+Songbird
+Soulbleedarmour
+Soulbleedcling
+Soulcage
+Speed
+Spinning
+Spinningstaff
+Spiritbonded
+Spiritwalk
+Splitmind
+Standingfirm
+Starburst
+Stealth
+Stonefist
+Stoneskin
+Strata
+[Type MORE if you wish to continue reading. (85% shown)]
+18:16:14:844 [9642] [99] |(639170|89%)|[]  
+(((((((((((((((((((( BALANCE: 1.669 ))))))))))))))))))))
+You slip behind a mummified troll guardian and garrote him with your whip.
+A mummified troll guardian's form begins to atrophy as your attack kindles ethereal mist to consign him to only memory.
+Damage dealt: 3420 (asphyxiation).
+[File continued via MORE]
+Sulphur
+Susurrating
+Swiftcurse
+Sympathy
+Tekurastance
+Telesense
+Temperance
+Tempest
+Tempo
+Tentacles
+Thermalshield
+Thirdeye
+Tin
+Tongues
+Toughness
+Treewatch
+Tremorsense
+Truestare
+Tumors
+Tune
+Twoartsstance
+Unbowed
+Undeathvisage
+Unnamablepresence
+Vengeance
+Venomsacks
+Vigilance
+Vigour
+Viridian
+Vitality
+Ward
+Waterwalking
+Wavedance
+Weakvigour
+Weathering
+Weaving
+Wildgrowth
+Willpowerblessing
+Wisdomofages
+Wolflegend
+Xporb
+
+Curing Priority List
+ 
+Your affliction curing priorities for the priority set normal:
+1:  brokenrightarm, brokenleftarm, latched, icebound
+2:  brokenrightleg, brokenleftleg, aeon, entangled, peace, scytherus, bound, daeggerimpale, impaled, sleeping, 
+transfixation, voyria, webbed, heartseed, prone, disrupted, hypothermia, calcifiedskull, calcifiedtorso, 
+unweavingbody(5), unweavingbody(4), unweavingbody(3), unweavingmind(3), unweavingmind(5), unweavingmind(4)
+3:  paralysis, pacified, slickness, grievouswounds
+4:  anorexia, impatience, burning(5), timeloop, unweavingspirit, mindravaged, sandfever
+5:  itching, fear, dazed, hypochondria, crushedthroat, kkractlebrand, flushings, mycalium, pyre(3), frostbite
+6:  burning(4), retribution, shadowmadness, depression, pyramides, crescendo
+7:  asthma, weariness, clumsiness, sensitivity, parasite, tonguetied, rebbies
+8:  damagedhead, damagedrightleg, damagedleftleg, mangledhead, mangledrightleg, mangledleftleg, confusion, epilepsy, 
+nausea, recklessness, masochism, stupidity, internalbleeding, guilt, skullfractures, fulminated, earworm
+9:  dizziness, hallucinations, healthleech, addiction, vertigo, hypersomnia, burning(3), burning(2), burning, darkshade,
+crackedribs, horror(3), horror(5), horror(4), horror(2), pyre(2), pyre
+10: dementia, paranoia, torntendons, horror
+11: damagedleftarm, haemophilia, lethargy, whisperingmadness, spiritburn, tenderskin, wristfractures
+12: concussion, hellsight, shyness, diminished
+13: damagedrightarm, manaleech
+14: mangledrightarm, mangledleftarm, lovers, deadening, dissonance, temperedmelancholic, temperedcholeric, 
+temperedsanguine, temperedphlegmatic
+15: shivering, frozen, disloyalty
+16: justice, generosity, agoraphobia, loneliness, claustrophobia, scalded, tension
+17: mildtrauma, serioustrauma
+18:
+19: slashedthroat, laceratedthroat, stuttering
+20: selarnia
+21:
+22:
+23:
+24: stridulating
+25: indifference, pressure, unweavingbody(2), unweavingbody, unweavingmind(2), unweavingmind, fratricide
+26: blindness, deafness, insomnia
+Affs with priority 26 are ignored.
+
+CURING PRIORITY DEFENCE LIST OUTPUT
+Your defence priorities for curing set normal:
+insomnia       : 25
+nightsight     : 25
+ghost          : 25
+lipreading     : 25
+boartattoo     : 25
+grookbubble    : 25
+density        : 25
+blindness      : 25
+lifevision     : 25
+speed          : 25
+coldresist     : 25
+cloak          : 25
+electricresist : 25
+weaving        : 25
+mindseye       : 25
+temperance     : 25
+groundwatch    : 25
+insulation     : 25
+fireresist     : 25
+scales         : 25
+thirdeye       : 25
+kola           : 25
+moontattoo     : 25
+deafness       : 25
+fangbarrier    : 25
+poisonresist   : 25
+magicresist    : 25
+
+CURINGSET LIST
+Your current curing sets
+--------------------------------------------------------------------------------
+normal (current)
+slowcuring
+infernal
+waterlord
+general
+depthswalker
+sentinel
+occultist
+alchemist
+apostate
+bashing
+knights
+paladin
+serpent
+pariah
+druid
+shikudo
+runewarden
+priest
+unnamable
+blademaster
+You are using a total of 21 of your allowed 22 curing sets.
+
+Curing Status:
+------------------------------------------------------------------------------
+Enabled:                   Yes
+Reporting commands:        Yes
+
+Sipping:                   Yes
+Affliction Curing:         Yes
+Defence Upkeep:            Yes
+
+Curing Method:             Transmutation
+
+Fallback Curing:           Yes
+
+Custom Curing Priority:    Yes
+Custom Defence Priority:   Yes
+Health/Mana Priority:      Health
+Sip health at:             80%
+Sip mana at:               75%
+Eat moss below health:     70%
+Eat moss below mana:       70%
+Use focus:                 Yes
+Focus over herbs:          Yes
+Use tree:                  Yes
+Use clot:                  Yes
+Clot at:                   100 bleeding
+Clot to:                   0 bleeding
+Use insomnia:              Yes
+Will cure fractures above: 70% health
+Will use mana above:       45% mana
+Will clot health until:    20% health
+Batch actions:             Yes
+Use Kaido Transmute:       No
+------------------------------------------------------------------------------
+
+13.7.1 Curatives and What They Cure or Cause.
+
+       PREV |                              AFFLICTIONS AND WHAT | NEXT
+       13.7 | HEALING AND CURING                     CURES THEM | 13.7.2
+
+(See HELP CURE LIST and HELP HEAL)
+
+A listing of herbs, minerals, salves, and elixirs, and what they cure or cause.
+
+Herbs (EAT, or sometimes SMOKE)
+-------------------------------
+Ash           See Prickly Ash.
+Bayberry      Gives blindness.
+Bellwort      Cures unnatural tendencies to be excessively altruistic.
+Bloodroot     Cures paralysis and slickness.
+Cohosh        Gives you insomnia, which prevents you being put to sleep.
+Echinacea     Gives third eye.
+Elm           See Slippery Elm.
+Ginger        Reduces the fluid level in your body when artificially raised.
+Ginseng       Cure for impurities of the blood or diseases of the skin.
+Goldenseal    Cure for body or mind in disharmony.
+Hawthorn      Gives deafness.
+Irid Moss     Heals some health and mana.
+Kelp          Cure for weakened muscles or lower general fitness.
+Kola          Allows you to awaken from sleep immediately, at will.
+Lobelia       Cure relating mainly to various types of phobias or pathos.
+Moss          See Irid Moss.
+Myrrh Gum     Increases your learning lesson speed.
+Prickly Ash   When eaten, cures various afflictions relating to your sanity.
+Prickly Pear  Allows breathing underwater. Cannot be used pre-emptively.
+Sileris       (Applied) Defends against Serpent class fang attacks.
+Skullcap      (Eaten) Gives deathsight.
+Skullcap      (Smoked) Anti-weapon field that lasts until taken down by others
+              or you act aggressively. Causes weapons attacks to rebound.
+Slippery Elm  (Smoked) Cures a variety of curses and afflictions.
+Valerian      (Smoked) Cures the disfigurement and slickness afflictions.
+
+
+Minerals (EAT, or sometimes SMOKE)
+----------------------------------
+Antimony      Reduces the fluid level in your body when artificially raised.
+Argentum      Cure relating mainly to various types of phobias or pathos.
+Arsenic       Gives blindness.
+Aurum         Cure for weakened muscles or lower general fitness.
+Azurite       (Eaten) Gives deathsight.
+Bisemutum     Increases your learning lesson speed.
+Calamine      Gives deafness.
+Calcite       Allows breathing underwater. Cannot be used pre-emptively.
+Cinnabar      (Smoked) Cures a variety of curses and afflictions.
+Cuprum        Cures unnatural tendencies to be excessively altruistic.
+Dolomite      Gives third eye.
+Ferrum        Cure for impurities of the blood or diseases of the skin.
+Gypsum        Gives you insomnia, which prevents you being put to sleep.
+Magnesium     Cures paralysis and slickness.
+Malachite     (Smoked) Anti-weapon field that lasts until taken down by others
+              or you act aggressively. Causes weapons attacks to rebound.
+Plumbum       Cure for body or mind in disharmony.
+Potash        Heals some health and mana.
+Quartz        Allows you to awaken from sleep immediately, at will.
+Quicksilver   (Applied) Defends against Serpent class fang attacks.
+Realgar       (Smoked) Cures the disfigurement and slickness afflictions.
+Stannum       When eaten, cures various afflictions relating to your sanity.
+
+
+Elixirs (SIP)
+-------------
+Frost         Increases your resistance to fire-based damage.
+Health        Replenishes some of your health.
+Immunity      Cures the deadly voyria venom.
+Levitation    Will make you levitate above the ground.
+Mana          Replenishes some of your mana.
+Speed         Increases your ability to dodge some physical attacks.
+Venom         Resistance to damage from some poisons.
+
+
+Salves (APPLY)
+--------------
+Caloric       Cure for cold-based afflictions and defence for some cold
+              attacks.
+Epidermal     Cure associated with outer organs, like the eyes and ears.
+Mass          Prevents various forms of moving you against your will.
+Mending       Cures broken or shrivelled limbs as well as some other things.
+Restoration   Heals damage done to body parts. (see HELP BODY PART DAMAGE)
+
+13.7 HEALING AND CURING
+
+       PREV |                           Curatives and What They | NEXT
+       13.6 | SAFE ROOMS                         Cure or Cause. | 13.7.1
+
+(For the Priestly skill: HELP HEALING)
+(For Achaea's in-built healing system: HELP CURINGSYSTEM)
+
+Healing in Achaea may be accomplished in a number of ways, dependent upon your
+resources and what it is you wish to heal or cure.
+
+
+Sleeping and Meditating
+-----------------------
+Healing of health and endurance may be accomplished by sleeping, while mana and
+willpower may be healed via meditation. SLEEP will put you to sleep, WAKE will
+wake you up, MEDITATE will cause you to meditate and any command will cause you
+to cease meditating. These are the most basic methods of healing, but they are
+not really sufficient for an experienced adventurer, as they are slow and
+require that you do not do anything else while performing them.
+
+The other ways of healing are legion. They include abilities in various skills,
+salves, elixirs, plants, and smoking. Nothing need be said here about the
+abilities, as suitable help may be found on those within the skills. However,
+the other methods need some explanation.
+
+
+Elixirs
+-------
+Elixirs are fluids that may restore health and mana, cure afflictions, or set
+up various defences. They come in the various types of vials found throughout
+the land, and when full, can be used many times before running out.
+
+You may refer to elixirs by the vial they are in. For example, if you were
+holding mahogany vial111, you would DRINK 111. Or, as is generally
+more convenient, you may DRINK <fluid name> to drink from the first vial in
+your inventory containing that type of fluid. For example: DRINK HEALTH.
+
+You may purchase elixirs from marketplaces around Achaea. Elixirs may also be obtained from anyone with the Remedies 
+tradeskill (TRADEWHO REMEDIES), or
+from the helpful denizen Seasone (see HELP SEASONE).
+
+To determine the contents of a vial, use the PROBE command: PROBE <vial #>.
+(Or the shortcut for PROBE: P <vial #>.) There is also an ability called
+ELIXLIST in the Vision skill, which will list the contents of every single vial
+you are holding, all at once.
+
+
+Salves
+------
+Like elixirs, salves are also fluids that are stored in vials, though they are
+thicker and are able to be spread on your body.
+
+To use a salve APPLY <vial# or salve name>. For example, you can type
+APPLY MENDING and, as long as you have a vial of mending salve in your
+inventory, this will apply mending salve to a part of your body that requires
+it, if any.
+
+Mending and restoration salves may be applied more specifically to the head,
+arms, legs, or body, with the following syntax: APPLY <vial# or salve name> [to
+<body part>]. For instance, a salve of mending would cure a broken arm if
+applied to your arm, and a broken leg if applied to your legs. So if you have
+more than one part of your body that requires mending salve and you wish to
+heal them in a particular order, you can target the body part by typing APPLY
+MENDING TO ARMS, for example.
+
+Salves may be obtained from various shops all across Achaea, from anyone with the Remedies tradeskill (TRADEWHO 
+REMEDIES), or directly from the helpful denizen Seasone (see HELP SEASONE).
+
+
+Plants and Minerals
+-------------------
+Plants and minerals, in this context, are usually things that you eat. (Some
+may be smoked. See the next section.) Eating plants and minerals generally
+cures afflictions, or sets up defences for you. You may find these for sale in
+marketplaces around Achaea, or you may contact any harvester or synthesiser. (TRADEWHO HARVESTING|SYNTHESIS])
+
+Sileris berries and quicksilver droplets are exceptions. Instead of eating
+them, you may apply them to your body like a salve. This provides a coating of
+protection against bites from adventurers of the Serpent class. They are able
+to flay the coating off you, however, so it does not make you invulnerable.
+
+
+Smoking
+-------
+Some defences, such as an anti-weapon field (created by smoking the skullcap
+plant), and some cures are effected by smoking plants. To do this, you simply
+find yourself a nice pipe, PUT <whatever> IN PIPE, LIGHT PIPE (you must have a
+source of fire, such as a tinderbox in your inventory), and then SMOKE PIPE. A
+lit pipe will eventually go out if you don't smoke it now and then, but you can
+simply relight it.
+
+
+You will find a list of elixirs, salves, healing plants, minerals, and more in
+HELP HEALINGLIST and HELP CURELIST.
+
+(For Achaea's in-built healing system: HELP CURING SYSTEM)
+
+13.9 BODY PART DAMAGE
+
+       PREV | Adventurer vs. Denizen                            | NEXT
+       13.8 | Combat                        The TARGET command. | 13.9.1
+
+There are six body parts for the purposes of damage and combat in Achaea:
+Head
+Torso/Body
+Left Arm
+Right Arm
+Left Leg
+Right Leg
+
+Each of these body parts is able to take individual damage, and generally
+attacks will tell you which body part they are attacking, if any. If no body
+part is shown in an attack, then you are just taking general damage.
+
+Attacks vs. body parts do both general damage against your health, and damage
+vs. that body part. However, generally speaking, the damage to your health
+done by an attack vs. a body part will be less than if it wasn't targetted to
+a body part.
+
+Now, each body part can be at one of three states:
+
+State 0 means that your bodypart is either fully healed, or has taken only
+minor damage.
+
+State 1 means that your bodypart has sustained some damage but is still
+functional.
+
+State 2 means that your bodypart has been seriously mutilated.
+
+
+Below is a chart listing the effects of being at State 1 and State 2.
+
+Bodypart        State 1              State 2
+--------        -------              -------
+Head            Stupidity            Concussion
+Body            Minor bleeding       Serious bleeding
+Limbs           Limb breaks          Limb is mutilated and broken and cannot
+                                     be healed without first applying a
+                                     restoration salve to it.
+
+
+Some have been confused in the past by the difference between State 1 and
+State 2 damage on a limb, and a limb being broken. It should be emphasized
+that they are _not_ the same thing. To better understand how this works,
+imagine that when a limb has been damaged, as opposed to broken, the ability
+of that limb to heal has been affected, so a simple mending salve will not
+heal it without first applying a restoration salve.
+
+In order to deal out body part damage, which is possible with weapons and with
+some abilities, you must first obtain the TARGETTING ability in the Weaponry
+skill.
+
+Furthermore, if you have the PARRYING ability in Weaponry, you will, if you
+have a weapon capable of parrying wielded (Probe it to find out), be able to
+parry attacks to a body part, thus taking no damage.
+
+Diagnose (Survival)  ABADMIN ID: 1380         Known: Yes
+-------------------------------------------------------------------------------
+Syntax:            DIAGNOSE/DIAG [ME]
+Works on/against:  Self
+Cooldown:          1.00 seconds of equilibrium
+Details:
+With this ability, you may check and see a list of what ails you.
+-------------------------------------------------------------------------------
+
+4.6 EQUILIBRIUM AND BALANCE
+
+       PREV | TEACHING SKILLS TO                                | NEXT
+        4.5 | ADVENTURERS                              Queueing | 4.6.1
+
+The majority of abilities use either balance or equilibrium, which represent
+physical balance and mental equilibrium.
+
+
+BALANCE
+-------
+By physical balance, we mean that after doing certain physical things, like
+swinging a sword, you must recover your balance before doing something like
+that again.
+
+For example, if you throw a punch at someone, you must recover your balance
+before throwing another punch, or before kicking, or swinging a sword.
+
+Some abilities use other forms of balance as well, such as balance for each
+specific limb, or balance related to sipping vials, apply salves, or even using
+your voice!
+
+
+EQUILIBRIUM
+-----------
+Equilibrium applies mostly to mental activities, but is otherwise quite similar
+to balance.
+
+If you were to cast a fireball, or use a mental ability, your mind will
+temporarily reel from the strain. You must wait to recover before conducting
+another such act again.
+
+In most cases, not having balance prevents you from using an ability that
+requires equilibrium, and vice versa. There are many exceptions to this rule
+which you must discover for yourself.
+
+The time it takes to recover is generally from 2 to 5 seconds, depending on the
+ability, and taking into account some racial variations and certain powerful
+artefacts. Some very powerful abilities take longer.
+
+In order to know when you have balance and equilibrium, many players find the
+command CONFIG PROMPT STATS very helpful. HELP PROMPT will tell you more about
+this.
+
+Sometimes, you might lose equilibrium for longer than you should. In this
+instance, you should CONCENTRATE to regain your equilibrium. HELP CONCENTRATE
+will tell you more about this.
+
+
+4.6.1 Queueing
+
+       PREV |                                                   | NEXT
+        4.6 | EQUILIBRIUM AND BALANCE                    TITLES | 4.7
+
+Adventurers may have differing levels of latency (or lag), which has the
+potential to affect the outcome of a battle. To combat this, Achaea has a
+server-side queueing system that will automatically attempt to run a command
+when you recover balance.
+
+
+Automatic Queueing
+------------------
+When using automatic queueing, there are two types of queues, one for physical balance and one for mental equilibrium. 
+Items are added to this queue when they're attempted while off their respected balance. For example: You're hunting rats
+with your sword, and JAB RAT to attack it. If you attempted to JAB RAT while still off balance from the first attack, 
+it'll be added to the queue and will run automatically when you regain balance next.
+
+Queue-related commands:
+
+CONFIG USEQUEUEING <ON|OFF>             - Enable or disable the queueing
+                                          functionality.
+CONFIG SHOWQUEUEALERTS <ON|OFF>         - Enable or disable the system messages
+                                          regarding queueing.
+
+
+Manual Queueing
+---------------
+Alternatively, you may manually insert items into your queue. Manually inserted items may use any combination of the 
+queue types available below.
+
+Queue-related commands:
+
+CLEARQUEUE <queue>                      - Clear one of your queues.
+CLEARQUEUE ALL                          - Clear everything out of your queues.
+QUEUE LIST                              - List your current queue.
+QUEUE ADD <queue> <command>
+                                        - Add an item to the end of one of your
+                                          queues.
+QUEUE ADDCLEAR <queue> <command>
+                                        - Clear the specified queue and add an
+                                          item to the fresh queue.
+QUEUE ADDCLEARFULL <queue> <command>
+                                        - Clear the whole queue and add an item
+                                          to the fresh queue.
+QUEUE INSERT <queue> <index> <command>
+                                        - Add an item to a specific point in one
+                                          of your queues.
+QUEUE PREPEND <queue> <command>
+                                        - Add an item to the start of one of
+                                          your queues.
+QUEUE REPLACE <queue> <index> <command>
+                                        - Replace an item in one of your queues.
+QUEUE REMOVE <index>
+                                        - Remove an item from a queue.
+QUEUE CLEAR <queue>
+                                        - Same as CLEARQUEUE
+
+
+Queue Limits and Specifics
+--------------------------
+Queued commands are limited to a maximum of ten across ALL QUEUE TYPES. This limit is not per-queue. INSERTing or 
+PREPENDing queue commands past your queue limit will remove the last queued command across all queues. ADDCLEAR will 
+remove queued commands of the specified queue type, and if there is still not space in the queue, the command will fail.
+ADDCLEARFULL will remove all queued commands and then insert the new command at the beginning of your queue.
+
+
+Simple Queue Types
+------------------
+Eq          = Equilibrium
+Bal         = Balance
+Eqbal       = Both eq and balance
+Class       = Any of the various class balances
+Ship        = Ship command balance
+Para        = Not paralysed
+Unbound     = Not bound
+Stun        = Not stunned
+Free        = Eqbal, unbound, not paralyzed, and not stunned
+Freestand   = Free, plus standing
+Full        = Freestand, plus class balance
+
+
+Custom Queue Types
+------------------
+In addition to the simple queue types above, you may use fully custom queue types, mixing and matching the following 
+balances and statuses as you see fit.
+
+e = Have equilibrium
+b = Have balance
+c = Have class balance
+s = Have ship balance
+p = Have paralysis
+w = Are bound
+u = Is upright (not prone)
+t = Is stunned
+
+To mix and match these queues, you can use any combination of these flags, or their inverse by marking them with an 
+exclamation point. For example:
+
+QUEUE ADD c!p!tu <command>
+Would execute when you had class balance, were not paralysed, were not stunned, and were standing.
+
+QUEUE ADD eb!w!p!t <command>
+Would add something to the FREE queue.
+
+QUEUE ADD s <command>
+Would add something to your ship queue.

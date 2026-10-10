@@ -1,0 +1,97 @@
+13.7 HEALING AND CURING
+
+       PREV |                           Curatives and What They | NEXT
+       13.6 | SAFE ROOMS                         Cure or Cause. | 13.7.1
+
+(For the Priestly skill: HELP HEALING)
+(For Achaea's in-built healing system: HELP CURINGSYSTEM)
+
+Healing in Achaea may be accomplished in a number of ways, dependent upon your
+resources and what it is you wish to heal or cure.
+
+
+Sleeping and Meditating
+-----------------------
+Healing of health and endurance may be accomplished by sleeping, while mana and
+willpower may be healed via meditation. SLEEP will put you to sleep, WAKE will
+wake you up, MEDITATE will cause you to meditate and any command will cause you
+to cease meditating. These are the most basic methods of healing, but they are
+not really sufficient for an experienced adventurer, as they are slow and
+require that you do not do anything else while performing them.
+
+The other ways of healing are legion. They include abilities in various skills,
+salves, elixirs, plants, and smoking. Nothing need be said here about the
+abilities, as suitable help may be found on those within the skills. However,
+the other methods need some explanation.
+
+
+Elixirs
+-------
+Elixirs are fluids that may restore health and mana, cure afflictions, or set
+up various defences. They come in the various types of vials found throughout
+the land, and when full, can be used many times before running out.
+
+You may refer to elixirs by the vial they are in. For example, if you were
+holding mahogany vial111, you would DRINK 111. Or, as is generally
+more convenient, you may DRINK <fluid name> to drink from the first vial in
+your inventory containing that type of fluid. For example: DRINK HEALTH.
+
+You may purchase elixirs from marketplaces around Achaea. Elixirs may also be obtained from anyone with the Remedies 
+tradeskill (TRADEWHO REMEDIES), or
+from the helpful denizen Seasone (see HELP SEASONE).
+
+To determine the contents of a vial, use the PROBE command: PROBE <vial #>.
+(Or the shortcut for PROBE: P <vial #>.) There is also an ability called
+ELIXLIST in the Vision skill, which will list the contents of every single vial
+you are holding, all at once.
+
+
+Salves
+------
+Like elixirs, salves are also fluids that are stored in vials, though they are
+thicker and are able to be spread on your body.
+
+To use a salve APPLY <vial# or salve name>. For example, you can type
+APPLY MENDING and, as long as you have a vial of mending salve in your
+inventory, this will apply mending salve to a part of your body that requires
+it, if any.
+
+Mending and restoration salves may be applied more specifically to the head,
+arms, legs, or body, with the following syntax: APPLY <vial# or salve name> [to
+<body part>]. For instance, a salve of mending would cure a broken arm if
+applied to your arm, and a broken leg if applied to your legs. So if you have
+more than one part of your body that requires mending salve and you wish to
+heal them in a particular order, you can target the body part by typing APPLY
+MENDING TO ARMS, for example.
+
+Salves may be obtained from various shops all across Achaea, from anyone with the Remedies tradeskill (TRADEWHO 
+REMEDIES), or directly from the helpful denizen Seasone (see HELP SEASONE).
+
+
+Plants and Minerals
+-------------------
+Plants and minerals, in this context, are usually things that you eat. (Some
+may be smoked. See the next section.) Eating plants and minerals generally
+cures afflictions, or sets up defences for you. You may find these for sale in
+marketplaces around Achaea, or you may contact any harvester or synthesiser. (TRADEWHO HARVESTING|SYNTHESIS])
+
+Sileris berries and quicksilver droplets are exceptions. Instead of eating
+them, you may apply them to your body like a salve. This provides a coating of
+protection against bites from adventurers of the Serpent class. They are able
+to flay the coating off you, however, so it does not make you invulnerable.
+
+
+Smoking
+-------
+Some defences, such as an anti-weapon field (created by smoking the skullcap
+plant), and some cures are effected by smoking plants. To do this, you simply
+find yourself a nice pipe, PUT <whatever> IN PIPE, LIGHT PIPE (you must have a
+source of fire, such as a tinderbox in your inventory), and then SMOKE PIPE. A
+lit pipe will eventually go out if you don't smoke it now and then, but you can
+simply relight it.
+
+
+You will find a list of elixirs, salves, healing plants, minerals, and more in
+HELP HEALINGLIST and HELP CURELIST.
+
+(For Achaea's in-built healing system: HELP CURING SYSTEM)

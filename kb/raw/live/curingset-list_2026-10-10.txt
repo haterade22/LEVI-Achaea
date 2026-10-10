@@ -1,0 +1,25 @@
+CURINGSET LIST
+Your current curing sets
+--------------------------------------------------------------------------------
+normal (current)
+slowcuring
+infernal
+waterlord
+general
+depthswalker
+sentinel
+occultist
+alchemist
+apostate
+bashing
+knights
+paladin
+serpent
+pariah
+druid
+shikudo
+runewarden
+priest
+unnamable
+blademaster
+You are using a total of 21 of your allowed 22 curing sets.
