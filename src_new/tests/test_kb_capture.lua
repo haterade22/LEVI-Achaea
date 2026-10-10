@@ -152,8 +152,7 @@ describe("kbcapture: recording answers", function()
     ataxiaKB.onLine("prompt", true)
     local t = fileText()
     expect(t).toContain("turns to dust")
-    expect(t).toContain("Affliction:         Damaged right arm
-##### END")
+    expect(t).toContain("Affliction:         Damaged right arm\n##### END")
   end)
 
   it("a refusal is an answer too", function()
@@ -161,8 +160,7 @@ describe("kbcapture: recording answers", function()
     ataxiaKB.start({ "affliction show epidermal" })
     ataxiaKB.onLine("There is no such affliction.", false)
     ataxiaKB.onLine("prompt", true)
-    expect(fileText()).toContain("There is no such affliction.
-##### END")
+    expect(fileText()).toContain("There is no such affliction.\n##### END")
   end)
 
   it("pages through MORE: asks for the next page and keeps the page's prompt open", function()
@@ -177,8 +175,7 @@ describe("kbcapture: recording answers", function()
     ataxiaKB.onLine("prompt", true)
     local t = fileText()
     expect(t).toContain("Accentato")
-    expect(t).toContain("Zealotry
-##### END")
+    expect(t).toContain("Zealotry\n##### END")
   end)
 
   it("a command with no known answer shape closes at its first prompt", function()
@@ -186,9 +183,7 @@ describe("kbcapture: recording answers", function()
     ataxiaKB.start({ "help cures" })
     ataxiaKB.onLine("CURES", false)
     ataxiaKB.onLine("prompt", true)
-    expect(fileText()).toContain("| help cures
-CURES
-##### END")
+    expect(fileText()).toContain("| help cures\nCURES\n##### END")
   end)
 
   it("refuses to start while the basher is on (the gag would hide a fight)", function()
