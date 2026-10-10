@@ -110,22 +110,25 @@ Sources: `kb/raw/live/curing-status_2026-10-10.txt`, `curingset-list_2026-10-10.
 
 **Curingsets:** 21 of 22 used (`normal` current, plus slowcuring, infernal, waterlord, general,
 depthswalker, sentinel, occultist, alchemist, apostate, **bashing**, knights, paladin, serpent,
-pariah, druid, shikudo, runewarden, priest, unnamable, blademaster). The PvE bash profile
-(`ataxia/008`) defaults to a set named **`bash`**, which is not in the list. See
-[../CONFLICTS.md](../CONFLICTS.md).
+pariah, druid, shikudo, runewarden, priest, unnamable, blademaster). The PvE `bash` set was
+created after that capture: `aconfig bashcuring status` later showed it installed, existing,
+and **0 free slots (22/22)**.
 
 **Priority drift.** `python tools/kb_prio_diff.py <capture>` compares a captured
 `CURING PRIORITY LIST` with `ataxia_defaultCuringPrios()`. On 2026-10-10 the `normal` set held
 **January's table**, not the current one: broken arms at 1 (ours 10), broken legs at 2 (ours 7),
 weariness 7 (ours 6), horror 10 (ours 9), crescendo 6 (ours 9), healthleech 9 (ours 8),
 scytherus 2 (ours 3). **Why:** the table is only sent by the `reset prios` alias
-(`combat_aliases/008`). Nothing sends it at login (`ataxia_resetOnLogin` has no caller), so no
-table change since v4.7.276 (2026-08-19) has reached the server.
+(`combat_aliases/008`). Nothing sent it at login (`ataxia_resetOnLogin` has no caller), so no
+table change since v4.7.276 (2026-08-19) had reached the server. **Fixed in v4.7.397:** sending the
+table stores a fingerprint (`ataxia.settings.prioSentSig`), and 20s after login
+`ataxia_prioSyncCheck()` re-sends a changed table, but only after the game confirms the active
+set is `normal`. In any other set it tells you to `reset prios` from `normal` instead of writing.
+**Class sets** (serpent, apostate, ...) are copies and are never updated by this.
 
-**Names the server does not have.** Our table writes `rebounding` (a defence, not an affliction)
-and `unweavingspirit3/4/5`. Unweaving spirit has no per-stack priority on the server, though body
-and mind do. Those writes are rejected without a word. The server's base `unweavingspirit` is 4,
-against our intended 25.
+**Orphan per-stack rows.** The live set still holds `horror2-5`, `burning2/3`, `pyre2`,
+`unweavingbody2`, `unweavingmind2` from older tables. Deleting a key from our table never deletes
+the server row (CLAUDE.md, base + per-stack). Each one equals or is close to its base today.
 
 **Live afflictions our table does not set** (they keep the server default): latched 1,
 icebound 1, calcifiedskull 2, calcifiedtorso 2, grievouswounds 3, mindravaged 4, dazed 5,

@@ -21,6 +21,8 @@ ATAXIA = os.path.join(ROOT, "src_new", "scripts", "levi_ataxia", "levi", "ataxia
 def lua_prios(path, func):
     text = open(path, encoding="utf-8").read()
     body = text.split("function " + func, 1)[1].split("\nend", 1)[0]
+    # Drop Lua comments first: a commented-out entry (--["rebounding"] = 18) is never sent.
+    body = "\n".join(line.split("--", 1)[0] for line in body.splitlines())
     return {k: int(v) for k, v in re.findall(r'\["(\w+)"\]\s*=\s*(\d+)', body)}
 
 

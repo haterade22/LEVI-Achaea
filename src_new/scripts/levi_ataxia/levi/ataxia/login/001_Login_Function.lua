@@ -69,6 +69,8 @@ tempTimer(30, [[targetresetafflictionslevi()]])
 tempTimer(15, [[send("queue add freestand avoid physical")]])
 -- For classes with no defup at login; the 10s throttle drops it after a defup.
 tempTimer(16, [[if ataxia_metabolise then ataxia_metabolise("login") end]])
+-- Re-send the curing priority table if it changed since it was last sent (v4.7.397, normal set only).
+tempTimer(20, [[if ataxia_prioSyncCheck then ataxia_prioSyncCheck() end]])
 
 
 slow = 0

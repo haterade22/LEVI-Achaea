@@ -2,6 +2,34 @@
 
 ---
 
+## 2026-10-10 - Curing priorities reach the server when they change; two KB findings retracted (v4.7.397)
+
+User: "fix everything you see".
+
+- **The priority table re-sends itself.** A live `CURING PRIORITY LIST` showed the `normal` set
+  holding January's values: `ataxia_defaultCuringPrios()` was only ever sent by `reset prios`
+  (`ataxia_resetOnLogin` has no caller), so no change since v4.7.276 had reached SSC.
+  `ataxia_sendDefaultPrios()` now stores a fingerprint (`ataxia_prioTableSig`, saved as
+  `ataxia.settings.prioSentSig`) once its LAST batch is out, so a disconnect mid-send leaves it
+  unsent. At login +20s, `ataxia_prioSyncCheck()` compares fingerprints and, if changed, asks the
+  game for the active set (`ataxia_curingsetRefresh`). It sends ONLY when that is `normal`; a
+  priority write lands in whichever set is active, and class sets and the bash set must never be
+  overwritten. Otherwise it tells the user to `reset prios` from `normal`. A save with no
+  fingerprint counts as changed, so **the next login fixes the drift on its own**.
+- **KB tools read commented-out Lua.** `kb_catalog.py` and `kb_prio_diff.py` matched
+  `--["rebounding"] = 18`. Both now drop comments first. That, plus the spirit stack rows having
+  been added after the last `reset prios`, retracts the "rejected names" finding.
+- **Retracted: the `bash` set was missing.** It exists (22/22 sets used).
+- **Traced, no change: defence table values.** `ataxiaTables.defences` mixes server names and
+  raising commands; every reader tries the key first and SSC gets profile keys. CLAUDE.md's "values
+  are never commands" corrected. Open: whether one non-SSC name sinks the whole batched defup
+  command (`kb/CONFLICTS.md` #3, a one-line in-game test).
+
+Tests: `test_prio_sync.lua` (fingerprint, the send/other-set/unknown decision, stamping after the
+last batch, login wiring).
+
+---
+
 ## 2026-10-10 - KB: your live curing state, defences, queueing; priority drift found (docs and tooling only, no version bump)
 
 Ingested the user's second paste: the game's DEF name list, the live `CURING PRIORITY LIST` and
@@ -16,12 +44,12 @@ New tool: `tools/kb_prio_diff.py` compares a captured priority list with
   arms 1 vs 10, legs 2 vs 7, weariness, horror, crescendo, healthleech, scytherus, ...). The table
   is only sent by the `reset prios` alias (`ataxia_resetOnLogin` has no caller), so nothing changed
   since v4.7.276 has reached SSC.
-- **Four priority names the server rejects silently:** `rebounding` (a defence) and
-  `unweavingspirit3/4/5` (no per-stack rows for spirit).
-- **The PvE bash set `bash` does not exist.** The live list has `bashing` (21/22 sets used).
-- **9 of 153 server-side defence names** in `ataxiaTables.defences` are not in the game's list
-  (`blade tune`, `acrobatics on`, `dance harrying`, `avoid ` with a trailing space, `boosting`, and
-  four defences SSC does not keep). Impact not yet traced.
+- ~~Four priority names the server rejects silently~~ **Retracted in v4.7.397:** a parser bug
+  (it read a commented-out `rebounding`), and the spirit stack rows were simply never sent.
+- ~~The PvE bash set `bash` does not exist~~ **Retracted:** it was created after the list was
+  captured (`aconfig bashcuring status`: exists, 22/22).
+- **9 of 153 values** in `ataxiaTables.defences` are not in the game's list. Traced in v4.7.397:
+  the table mixes names and raising commands, and no value is ever sent to SSC.
 - **DIAGNOSE costs 1.00s of equilibrium** (AB 1380). CLAUDE.md and the explorer doc said it was
   free; both corrected.
 
