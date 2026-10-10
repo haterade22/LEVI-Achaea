@@ -1,0 +1,13 @@
+# affliction show manaleech  (2026-10-10T23:40:04Z)
+Affliction:         Manaleech
+Diagnose:           a victim of manaleech.
+Afflicted msg:      Your mana begins to drain away.
+Cured msg:          Your rapidly weakening mind is stabilized.
+Cure(s):            Smoke Valerian / Smoke Realgar
+Description:        Mana leech causes your mental faculties to slowly drain away.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

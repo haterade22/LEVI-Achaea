@@ -1,0 +1,14 @@
+# affliction show epilepsy  (2026-10-10T23:39:24Z)
+Affliction:         Epilepsy
+Diagnose:           suffering from epilepsy.
+Afflicted msg:      Your nerves feel suddenly jangled.
+Cured msg:          Your nerves suddenly calm down.
+Cure(s):            Eat Goldenseal / Eat Plumbum
+                    Focus Mind
+Description:        Epilepsy causes you to fit intermittently, using balance.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          Yes
+Tzantza:            Yes
+Accentato:          Yes
+CadmusCurse:        No

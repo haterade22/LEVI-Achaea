@@ -1,0 +1,13 @@
+# affliction show nausea  (2026-10-10T23:40:17Z)
+Affliction:         Nausea
+Diagnose:           violently ill.
+Afflicted msg:      A sense of extreme nausea washes over you.
+Cured msg:          Your stomach becalms itself.
+Cure(s):            Eat Ginseng / Eat Ferrum
+Description:        Nausea causes intermittent, painful vomiting.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        Yes

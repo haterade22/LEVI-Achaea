@@ -1,0 +1,13 @@
+# affliction show tenderskin  (2026-10-10T23:41:09Z)
+Affliction:         Tenderskin
+Diagnose:           suffering from tender skin.
+Afflicted msg:      Your skin is left tender and raw from the flames.
+Cured msg:          Your skin is no longer so tender.
+Cure(s):            Eat Lobelia / Eat Argentum
+Description:        This affliction causes applying salves to cause mana damage, more so for restoration applies.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

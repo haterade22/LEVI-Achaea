@@ -1,0 +1,14 @@
+# affliction show stuttering  (2026-10-10T23:41:00Z)
+Affliction:         Stuttering
+Diagnose:           a stuttering fool.
+Afflicted msg:      The thought of speech seems difficult all of a sudden.
+Cured msg:          Your tongue will finally obey your commands properly.
+Cure(s):            Apply Epidermal To Head
+                    Focus Mind
+Description:        With a stutter, you can barely speak a word coherently.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

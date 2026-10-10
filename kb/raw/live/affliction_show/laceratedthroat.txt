@@ -1,0 +1,13 @@
+# affliction show laceratedthroat  (2026-10-10T23:39:59Z)
+Affliction:         Laceratedthroat
+Diagnose:           bleeding profusely from a lacerated throat.
+Afflicted msg:      A torrent of blood erupts from your throat as the thorn-laden vines tear at the already wounded flesh.
+Cured msg:          The flow of blood slows as the gaping wound in your throat partially mends.
+Cure(s):            Apply Restoration To Head
+Description:        A lacerated throat makes vocal work difficult and greatly reduces the efficacy of health and mana elixirs.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

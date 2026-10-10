@@ -1,0 +1,13 @@
+# affliction show hypersomnia  (2026-10-10T23:39:47Z)
+Affliction:         Hypersomnia
+Diagnose:           hypersomnic.
+Afflicted msg:      An urge to visit the Goddess of Dreams overcomes you.
+Cured msg:          You feel a bit more alert and awake.
+Cure(s):            Eat Ash / Eat Stannum
+Description:        Hypersomniacs find sleep an urge very hard to resist.
+NoRandomCure:       No
+WhisperingMadness:  Yes
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

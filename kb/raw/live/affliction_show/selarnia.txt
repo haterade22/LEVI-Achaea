@@ -1,0 +1,13 @@
+# affliction show selarnia  (2026-10-10T23:40:40Z)
+Affliction:         A severed bond with the spirits
+Diagnose:           losing the bond with the animal spirits.
+Afflicted msg:      none
+Cured msg:          You feel the barrier that separated you from your animal consciousness has dissipated.
+Cure(s):            Apply Mending To Body
+Description:        Selarnia makes it very difficult to maintain a bond to animal spirits.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

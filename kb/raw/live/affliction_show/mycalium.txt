@@ -1,0 +1,12 @@
+# affliction show mycalium  (2026-10-10T23:40:16Z)
+Affliction:         Mycalium
+Diagnose:           plagued with a corruption of the mind.
+Afflicted msg:      Your thoughts cloud as a strange sense of displacement overcomes you.
+Cured msg:          Your thoughts suddenly crystalise, the insidious whispers falling abruptly silent.
+Cure(s):            Eat Goldenseal / Eat Plumbum
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

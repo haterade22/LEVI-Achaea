@@ -1,0 +1,13 @@
+# affliction show entangled  (2026-10-10T23:39:22Z)
+Affliction:         Entanglement by ropes
+Diagnose:           entangled in ropes.
+Afflicted msg:      none
+Cured msg:          none
+Cure(s):            Writhe
+Description:        Entangled in ropes restricts most forms of movement and action.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

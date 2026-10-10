@@ -1,0 +1,13 @@
+# affliction show concussion  (2026-10-10T23:38:48Z)
+Affliction:         Concussion
+Diagnose:           has a serious concussion.
+Afflicted msg:      The massive trauma to your head has damaged your skull and brain considerably.
+Cured msg:          Your head feels stronger and healthier.
+Cure(s):            Apply Restoration To Head
+Description:        Concussion makes it extremely difficult to act, bringing about frequent bouts of amnesia.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

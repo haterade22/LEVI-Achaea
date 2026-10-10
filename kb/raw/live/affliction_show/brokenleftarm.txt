@@ -1,0 +1,13 @@
+# affliction show brokenleftarm  (2026-10-10T23:38:38Z)
+Affliction:         A broken left arm
+Diagnose:           afflicted by a crippled left arm.
+Afflicted msg:      Your left arm breaks with a loud crack.
+Cured msg:          The bones in your left arm mend.
+Cure(s):            Apply Mending To Arms
+Description:        Having a broken left arm prevents you from using that arm in most situations.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

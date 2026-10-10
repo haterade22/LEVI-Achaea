@@ -1,0 +1,13 @@
+# affliction show brokenleftleg  (2026-10-10T23:38:40Z)
+Affliction:         A broken left leg
+Diagnose:           afflicted by a crippled left leg.
+Afflicted msg:      Your left leg breaks with a loud crack.
+Cured msg:          The bones in your left leg mend.
+Cure(s):            Apply Mending To Legs
+Description:        Having a broken left leg prevents you from using that leg in most situations.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

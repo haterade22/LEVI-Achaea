@@ -21,6 +21,7 @@ This page explains the loop. The details are in:
 
 | Page | Answers |
 |---|---|
+| [database.md](database.md) | **The game's own record** of every affliction: cures, duration, the line you see when it hits and when it is cured, flags (generated from `AFFLICTION SHOW`) |
 | [catalog.md](catalog.md) | Every affliction: how it is cured, and what our code does with it (generated) |
 | [cure-channels.md](cure-channels.md) | The cure balances, and which afflictions block which channel |
 | [class-cures.md](class-cures.md) | Each class's own cures (active and passive), what stops them, and the lines that show them |

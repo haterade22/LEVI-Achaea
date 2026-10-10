@@ -1,0 +1,13 @@
+# affliction show mangledhead  (2026-10-10T23:40:06Z)
+Affliction:         A mangled head
+Diagnose:           has a mangled head.
+Afflicted msg:      Your skull splits and caves in as your head takes serious damage.
+Cured msg:          Your head is greatly healed, but still damaged.
+Cure(s):            Apply Restoration To Head
+Description:        Having a mangled head will cause your mind to falter.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

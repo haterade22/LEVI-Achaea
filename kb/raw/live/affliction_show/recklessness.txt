@@ -1,0 +1,14 @@
+# affliction show recklessness  (2026-10-10T23:40:33Z)
+Affliction:         Recklessness
+Diagnose:           reckless.
+Afflicted msg:      None may stand in your way! You are invincible!
+Cured msg:          Prudence rules your psyche once again.
+Cure(s):            Eat Lobelia / Eat Argentum
+                    Focus Mind
+Description:        Recklessness makes you think you are completely unharmed and practically invincible.
+NoRandomCure:       No
+WhisperingMadness:  Yes
+Enlighten:          Yes
+Tzantza:            Yes
+Accentato:          No
+CadmusCurse:        No

@@ -1,0 +1,14 @@
+# affliction show loneliness  (2026-10-10T23:40:02Z)
+Affliction:         Loneliness
+Diagnose:           very lonely.
+Afflicted msg:      You glance nervously around the room.
+Cured msg:          The awful loneliness leaves you.
+Cure(s):            Eat Lobelia / Eat Argentum
+                    Focus Mind
+Description:        Lonely people simply must find company, and will move around until they do so!
+NoRandomCure:       No
+WhisperingMadness:  Yes
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

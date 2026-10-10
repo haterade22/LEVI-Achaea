@@ -1,0 +1,13 @@
+# affliction show scytherus  (2026-10-10T23:40:39Z)
+Affliction:         Thin blood
+Diagnose:           afflicted by thin blood.
+Afflicted msg:      You feel light headed and dizzy.
+Cured msg:          You feel your blood thickening.
+Cure(s):            Eat Ginseng / Eat Ferrum
+Description:        Scytherus causes any venoms you get affected by to relapse after a short delay.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

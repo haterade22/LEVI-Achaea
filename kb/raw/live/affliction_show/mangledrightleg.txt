@@ -1,0 +1,13 @@
+# affliction show mangledrightleg  (2026-10-10T23:40:12Z)
+Affliction:         A mangled right leg
+Diagnose:           has a mangled right leg.
+Afflicted msg:      To your horror, your right leg has been mutilated beyond repair by ordinary means.
+Cured msg:          Your right leg is greatly healed, but still damaged.
+Cure(s):            Apply Restoration To Legs
+Description:        Having a mangled right leg prevents you from using that leg in most situations.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

@@ -1,0 +1,13 @@
+# affliction show paralysis  (2026-10-10T23:40:21Z)
+Affliction:         Paralysis
+Diagnose:           paralysed.
+Afflicted msg:      A prickly stinging overcomes your body, fading away into numbness.
+Cured msg:          Your muscles unlock; you are no longer paralysed.
+Cure(s):            Eat Bloodroot / Eat Magnesium
+Description:        Paralysis locks up all of your muscles, preventing active physical movements.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

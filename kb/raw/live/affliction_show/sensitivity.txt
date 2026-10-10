@@ -1,0 +1,13 @@
+# affliction show sensitivity  (2026-10-10T23:40:42Z)
+Affliction:         Sensitivity
+Diagnose:           sensitive to pain.
+Afflicted msg:      A prickly, stinging sensation spreads through your body.
+Cured msg:          The stinging feeling fades.
+Cure(s):            Eat Kelp / Eat Aurum
+Description:        Sensitive skin increases the damage of any painful attacks you receive.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        Yes

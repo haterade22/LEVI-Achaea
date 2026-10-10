@@ -1,0 +1,13 @@
+# affliction show impatience  (2026-10-10T23:39:52Z)
+Affliction:         Impatience
+Diagnose:           impatient.
+Afflicted msg:      You shuffle your feet noisily, suddenly bored.
+Cured msg:          You are patient once again.
+Cure(s):            Eat Goldenseal / Eat Plumbum
+Description:        Impatience reduces the amount of mana restored by half and prevents you from focusing your mind.
+NoRandomCure:       No
+WhisperingMadness:  Yes
+Enlighten:          No
+Tzantza:            Yes
+Accentato:          Yes
+CadmusCurse:        No

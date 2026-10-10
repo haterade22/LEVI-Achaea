@@ -1,0 +1,13 @@
+# affliction show transfixation  (2026-10-10T23:41:15Z)
+Affliction:         State of transfixation
+Diagnose:           transfixed.
+Afflicted msg:      none
+Cured msg:          none
+Cure(s):            Writhe
+Description:        Being transfixed prevents many actions.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

@@ -1,0 +1,12 @@
+# affliction show pyramides  (2026-10-10T23:40:29Z)
+Affliction:         Pyramides
+Diagnose:           suffering from the blood plague.
+Afflicted msg:      Your heart skips a beat, then begins to pound.
+Cured msg:          The burning in your veins abruptly fades.
+Cure(s):            Eat Bloodroot / Eat Magnesium
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

@@ -1,0 +1,13 @@
+# affliction show retribution  (2026-10-10T23:40:35Z)
+Affliction:         Retribution
+Diagnose:           suffering the curse of retribution.
+Afflicted msg:      A terrible sense of foreboding descends upon you.
+Cured msg:          The terrible sense of foreboding lifts.
+Cure(s):            Eat Bellwort / Eat Cuprum
+Description:        Sipping mana while under the effects of retribution will cause you to lose half of what you gained in health.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

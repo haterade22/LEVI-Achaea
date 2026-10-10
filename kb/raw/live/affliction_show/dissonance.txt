@@ -1,0 +1,13 @@
+# affliction show dissonance  (2026-10-10T23:39:16Z)
+Affliction:         Dissonance
+Diagnose:           has a dissonant nature.
+Afflicted msg:      You feel your body begin to vibrate in tune with the disruptive harmonies.
+Cured msg:          Your dissonant nature becomes harmonious.
+Cure(s):            Eat Goldenseal / Eat Plumbum
+Description:        Aural dissonance causes defences to slowly peel away from you.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

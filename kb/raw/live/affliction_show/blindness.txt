@@ -1,0 +1,13 @@
+# affliction show blindness  (2026-10-10T23:38:34Z)
+Affliction:         Blindness
+Diagnose:           blind.
+Afflicted msg:      Your eyes dim as you lose your sight.
+Cured msg:          You are no longer blind.
+Cure(s):            Apply Epidermal To Head
+Description:        Blindness makes it impossible to see the world around you.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

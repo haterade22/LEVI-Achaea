@@ -1,0 +1,14 @@
+# affliction show sleeping  (2026-10-10T23:40:51Z)
+Affliction:         Sleeping
+Diagnose:           sleeping.
+Afflicted msg:      You feel incredibly tired, and fall asleep immediately.
+Cured msg:          You open your eyes and yawn mightily.
+Expire msg:         You open your eyes and stretch languidly, feeling deliciously well-rested.
+Cure(s):            Wake
+Description:        While asleep, you can do little but dream, and wake up.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

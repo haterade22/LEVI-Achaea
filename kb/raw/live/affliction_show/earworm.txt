@@ -1,0 +1,12 @@
+# affliction show earworm  (2026-10-10T23:39:20Z)
+Affliction:         Earworm
+Diagnose:           plagued by endless song.
+Afflicted msg:      none
+Cured msg:          The endlessly playing song in your mind falls silent.
+Cure(s):            Smoke Elm / Smoke Cinnabar
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

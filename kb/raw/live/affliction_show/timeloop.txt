@@ -1,0 +1,13 @@
+# affliction show timeloop  (2026-10-10T23:41:12Z)
+Affliction:         Timeloop
+Diagnose:           stuck in a feedback loop.
+Afflicted msg:      The world seems to grow distorted around you, as if through a thick fog.
+Cured msg:          You break out of the feedback loop.
+Cure(s):            Eat Bellwort / Eat Cuprum
+Description:        All instillations via Shadowmancy directed at you will be twice as effective, delivering two afflictions instead of one.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

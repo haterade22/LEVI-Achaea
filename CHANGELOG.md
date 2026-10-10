@@ -2,6 +2,36 @@
 
 ---
 
+## 2026-10-10 - The affliction database; kbcapture waits for the real answer and pages MORE (v4.7.398)
+
+The user ran `kbcapture afflictions`: 267 answers, 0 timeouts. Filed into `kb/raw/live/`.
+
+- **New: the affliction database.** `tools/kb_affliction_db.py` parses every AFFLICTION SHOW answer
+  (a fixed block of `Label:  value` lines) into `kb/afflictions/afflictions.json` and a generated
+  `database.md`. 125 afflictions with cures, the diagnose text, **the line you see when it hits and
+  when it is cured**, the description, durations (4 have one), and the game's flags (NoRandomCure,
+  Tzantza, WhisperingMadness, Enlighten, Accentato, CadmusCurse). Unknown labels are kept. The
+  importer now rebuilds it after every import.
+- **Cross-checks, all clean:** live WHATCURES for 126 afflictions agrees with the tracker's herb and
+  smoke tables (insomnia is the deliberate exception, now noted as such). The tracker's tree (21) and
+  passive (53) random-cure pools contain none of the 42 afflictions the game marks NoRandomCure.
+- **Found, not fixed (`kb/CONFLICTS.md` #4): target SALVE tracking.** WHATCURES shows head and body
+  applications cure afflictions `salveCureTableV3` lacks; triggers 391 and 393 both match a body
+  application; 391 erases five afflictions at once. Needs its own redesign.
+- **`kbcapture` waits for the answer.** Two answers were lost: a room line ("the corpse ... turns to
+  dust") came with its own prompt, closed the block, and the real answer landed in the gap before
+  the next command. Commands with a known answer shape (`affliction show`, `whatcures`) now stay open
+  until the answer's first line arrives. A stray line is kept in the block, and the timeout still
+  bounds the wait.
+- **`kbcapture` pages through MORE.** AFFLICTION LIST stopped at "(29% shown)". It now sends `more`
+  and keeps recording; the page's own prompt does not close the answer. The importer drops the MORE
+  lines.
+
+Tests: `test_kb_capture.lua` (stray line + prompt before the answer, refusals, MORE paging, commands
+with no known shape).
+
+---
+
 ## 2026-10-10 - Curing priorities reach the server when they change; two KB findings retracted (v4.7.397)
 
 User: "fix everything you see".

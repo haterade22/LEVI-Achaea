@@ -10,3 +10,121 @@ The affliction 'anorexia' is cured by: Apply Epidermal To Body and Focus Mind.
 The affliction 'asthma' is cured by: Eat Kelp / Eat Aurum.
 The affliction 'impatience' is cured by: Eat Goldenseal / Eat Plumbum.
 The affliction 'weariness' is cured by: Eat Kelp / Eat Aurum.
+# 2026-10-10 18:42 (kbcapture)
+The affliction 'ablaze' is cured by: Apply Mending To Body.
+The affliction 'addiction' is cured by: Eat Ginseng / Eat Ferrum.
+The affliction 'aeon' is cured by: Smoke Elm / Smoke Cinnabar and Time.
+The affliction 'agoraphobia' is cured by: Eat Lobelia / Eat Argentum and Focus Mind.
+The affliction 'blindness' is cured by: Apply Epidermal To Head.
+The affliction 'bound' is cured by: Writhe.
+The affliction 'brokenleftarm' is cured by: Apply Mending To Arms.
+The affliction 'brokenleftleg' is cured by: Apply Mending To Legs.
+The affliction 'brokenrightarm' is cured by: Apply Mending To Arms.
+The affliction 'brokenrightleg' is cured by: Apply Mending To Legs.
+The affliction 'burning' is cured by: Apply Mending To Body.
+The affliction 'claustrophobia' is cured by: Eat Lobelia / Eat Argentum and Focus Mind.
+The affliction 'clumsiness' is cured by: Eat Kelp / Eat Aurum.
+The affliction 'concussion' is cured by: Apply Restoration To Head.
+The affliction 'confusion' is cured by: Eat Ash / Eat Stannum and Focus Mind.
+The affliction 'crackedribs' is cured by: Apply Health To Torso.
+The affliction 'crescendo' is cured by: Eat Ash / Eat Stannum.
+The affliction 'crushedthroat' is cured by: Apply Mending To Head.
+The affliction 'daeggerimpale' is cured by: Writhe.
+The affliction 'damagedhead' is cured by: Apply Restoration To Head.
+The affliction 'damagedleftarm' is cured by: Apply Restoration To Arms.
+The affliction 'damagedleftleg' is cured by: Apply Restoration To Legs.
+The affliction 'damagedrightarm' is cured by: Apply Restoration To Arms.
+The affliction 'damagedrightleg' is cured by: Apply Restoration To Legs.
+The affliction 'darkshade' is cured by: Eat Ginseng / Eat Ferrum.
+The affliction 'dazed' is cured by: Smoke Elm / Smoke Cinnabar.
+The affliction 'deadening' is cured by: Smoke Elm / Smoke Cinnabar.
+The affliction 'deafness' is cured by: Apply Epidermal To Head.
+The affliction 'dementia' is cured by: Eat Ash / Eat Stannum and Focus Mind.
+The affliction 'depression' is cured by: Eat Goldenseal / Eat Plumbum.
+The affliction 'diminished' is cured by: Eat Bellwort / Eat Cuprum.
+The affliction 'disrupted' is cured by: Concentrate.
+The affliction 'dissonance' is cured by: Eat Goldenseal / Eat Plumbum.
+The affliction 'dizziness' is cured by: Eat Goldenseal / Eat Plumbum and Focus Mind.
+The affliction 'earworm' is cured by: Smoke Elm / Smoke Cinnabar.
+The affliction 'entangled' is cured by: Writhe.
+The affliction 'epilepsy' is cured by: Eat Goldenseal / Eat Plumbum and Focus Mind.
+The affliction 'fear' is cured by: Compose.
+The affliction 'flushings' is cured by: Eat Ginseng / Eat Ferrum.
+The affliction 'fratricide' is cured by: Eat Lobelia / Eat Argentum.
+The affliction 'freezing' is cured by: Apply Caloric.
+The affliction 'frostbite' is cured by: Apply Caloric.
+The affliction 'frozen' is cured by: Apply Caloric.
+The affliction 'fulminated' is cured by: Eat Goldenseal / Eat Plumbum.
+The affliction 'generosity' is cured by: Eat Bellwort / Eat Cuprum.
+The affliction 'guilt' is cured by: Eat Lobelia / Eat Argentum.
+The affliction 'haemophilia' is cured by: Eat Ginseng / Eat Ferrum.
+The affliction 'hallucinations' is cured by: Eat Ash / Eat Stannum and Focus Mind.
+The affliction 'healthleech' is cured by: Eat Kelp / Eat Aurum.
+The affliction 'heartseed' is cured by: Apply Restoration To Body.
+The affliction 'hellsight' is cured by: Smoke Valerian / Smoke Realgar.
+The affliction 'horror' is cured by: Eat Lobelia / Eat Argentum.
+The affliction 'hypersomnia' is cured by: Eat Ash / Eat Stannum.
+The affliction 'hypothermia' is cured by: Apply Restoration To Body.
+The affliction 'impaled' is cured by: Writhe.
+The affliction 'indifference' is cured by: Eat Bellwort / Eat Cuprum.
+The affliction 'insomnia' is cured by: Eat Goldenseal / Eat Plumbum.
+The affliction 'itching' is cured by: Apply Epidermal To Body.
+The affliction 'justice' is cured by: Eat Bellwort / Eat Cuprum.
+The affliction 'laceratedthroat' is cured by: Apply Restoration To Head.
+The affliction 'lethargy' is cured by: Eat Ginseng / Eat Ferrum.
+The affliction 'loneliness' is cured by: Eat Lobelia / Eat Argentum and Focus Mind.
+The affliction 'lovers' is cured by: Eat Bellwort / Eat Cuprum and Focus Mind.
+The affliction 'manaleech' is cured by: Smoke Valerian / Smoke Realgar.
+The affliction 'mangledhead' is cured by: Apply Restoration To Head.
+The affliction 'mangledleftarm' is cured by: Apply Restoration To Arms.
+The affliction 'mangledleftleg' is cured by: Apply Restoration To Legs.
+The affliction 'mangledrightarm' is cured by: Apply Restoration To Arms.
+The affliction 'mangledrightleg' is cured by: Apply Restoration To Legs.
+The affliction 'masochism' is cured by: Eat Lobelia / Eat Argentum and Focus Mind.
+The affliction 'mildtrauma' is cured by: Apply Restoration To Body.
+The affliction 'mycalium' is cured by: Eat Goldenseal / Eat Plumbum.
+The affliction 'nausea' is cured by: Eat Ginseng / Eat Ferrum.
+The affliction 'pacified' is cured by: Eat Bellwort / Eat Cuprum and Focus Mind.
+The affliction 'paranoia' is cured by: Eat Ash / Eat Stannum and Focus Mind.
+The affliction 'parasite' is cured by: Eat Kelp / Eat Aurum.
+The affliction 'peace' is cured by: Eat Bellwort / Eat Cuprum and Focus Mind.
+The affliction 'pressure' is cured by: Eat Pear / Eat Calcite.
+The affliction 'prone' is cured by: Stand.
+The affliction 'pyramides' is cured by: Eat Bloodroot / Eat Magnesium.
+The affliction 'pyre' is cured by: Eat Bellwort / Eat Cuprum.
+The affliction 'rebbies' is cured by: Eat Kelp / Eat Aurum.
+The affliction 'recklessness' is cured by: Eat Lobelia / Eat Argentum and Focus Mind.
+The affliction 'retribution' is cured by: Eat Bellwort / Eat Cuprum.
+The affliction 'sandfever' is cured by: Eat Goldenseal / Eat Plumbum.
+The affliction 'scalded' is cured by: Time.
+The affliction 'scytherus' is cured by: Eat Ginseng / Eat Ferrum.
+The affliction 'selarnia' is cured by: Apply Mending To Body.
+The affliction 'sensitivity' is cured by: Eat Kelp / Eat Aurum.
+The affliction 'serioustrauma' is cured by: Apply Restoration To Body.
+The affliction 'shadowmadness' is cured by: Eat Goldenseal / Eat Plumbum.
+The affliction 'shivering' is cured by: Apply Caloric.
+The affliction 'shyness' is cured by: Eat Goldenseal / Eat Plumbum and Focus Mind.
+The affliction 'skullfractures' is cured by: Apply Health To Head.
+The affliction 'slashedthroat' is cured by: Apply Epidermal To Head.
+The affliction 'sleeping' is cured by: Wake.
+The affliction 'spiritburn' is cured by: Eat Lobelia / Eat Argentum.
+The affliction 'stridulating' is cured by: Eat Bellwort / Eat Cuprum.
+The affliction 'stupidity' is cured by: Eat Goldenseal / Eat Plumbum and Focus Mind.
+The affliction 'stuttering' is cured by: Apply Epidermal To Head and Focus Mind.
+The affliction 'temperedcholeric' is cured by: Eat Ginger / Eat Antimony.
+The affliction 'temperedmelancholic' is cured by: Eat Ginger / Eat Antimony.
+The affliction 'temperedphlegmatic' is cured by: Eat Ginger / Eat Antimony.
+The affliction 'temperedsanguine' is cured by: Eat Ginger / Eat Antimony.
+The affliction 'tenderskin' is cured by: Eat Lobelia / Eat Argentum.
+The affliction 'tension' is cured by: Smoke Elm / Smoke Cinnabar.
+The affliction 'timeloop' is cured by: Eat Bellwort / Eat Cuprum.
+The affliction 'torntendons' is cured by: Apply Health To Legs.
+The affliction 'transfixation' is cured by: Writhe.
+The affliction 'unweavingbody' is cured by: Eat Ginseng / Eat Ferrum.
+The affliction 'unweavingmind' is cured by: Eat Goldenseal / Eat Plumbum.
+The affliction 'unweavingspirit' is cured by: Smoke Elm / Smoke Cinnabar.
+The affliction 'vertigo' is cured by: Eat Lobelia / Eat Argentum and Focus Mind.
+The affliction 'voyria' is cured by: Sip Immunity.
+The affliction 'webbed' is cured by: Writhe.
+The affliction 'whisperingmadness' is cured by: Eat Lobelia / Eat Argentum.
+The affliction 'wristfractures' is cured by: Apply Health To Arms.

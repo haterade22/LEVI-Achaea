@@ -1,0 +1,13 @@
+# affliction show crackedribs  (2026-10-10T23:38:50Z)
+Affliction:         Crackedribs
+Diagnose:           suffering from $(type$) cracked ribs.
+Afflicted msg:      none
+Cured msg:          You can breathe easily once again.
+Cure(s):            Apply Health To Torso
+Description:        This affliction will reduce how much health elixirs heal you for as well as giving periodic sensitivity.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

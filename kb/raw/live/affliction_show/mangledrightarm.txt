@@ -1,0 +1,13 @@
+# affliction show mangledrightarm  (2026-10-10T23:40:10Z)
+Affliction:         A mangled right arm
+Diagnose:           has a mangled right arm.
+Afflicted msg:      To your horror, your right arm has been mutilated beyond repair by ordinary means.
+Cured msg:          Your right arm is greatly healed, but still damaged.
+Cure(s):            Apply Restoration To Arms
+Description:        Having a mangled right arm prevents you from using that arm in most situations.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

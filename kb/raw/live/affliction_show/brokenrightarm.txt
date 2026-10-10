@@ -1,0 +1,13 @@
+# affliction show brokenrightarm  (2026-10-10T23:38:41Z)
+Affliction:         A broken right arm
+Diagnose:           afflicted by a crippled right arm.
+Afflicted msg:      Your right arm breaks with a loud crack.
+Cured msg:          The bones in your right arm mend.
+Cure(s):            Apply Mending To Arms
+Description:        Having a broken right arm prevents you from using that arm in most situations.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

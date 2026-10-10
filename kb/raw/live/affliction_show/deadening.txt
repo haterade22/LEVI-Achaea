@@ -1,0 +1,13 @@
+# affliction show deadening  (2026-10-10T23:39:05Z)
+Affliction:         A deadened mind
+Diagnose:           of a deadened mind.
+Afflicted msg:      A strange fog descends upon your mind.
+Cured msg:          You are no longer deadened.
+Cure(s):            Smoke Elm / Smoke Cinnabar
+Description:        Deadening makes it easier for Telepaths to lock onto you.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

@@ -1,0 +1,13 @@
+# affliction show freezing  (2026-10-10T23:39:30Z)
+Affliction:         A frozen body
+Diagnose:           frozen stiff.
+Afflicted msg:      Your body slows as it freezes in the extreme cold.
+Cured msg:          Though still shivering, you are no longer frozen solid.
+Cure(s):            Apply Caloric
+Description:        Being frozen solid, you will find it much slower to move.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

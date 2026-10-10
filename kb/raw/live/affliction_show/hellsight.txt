@@ -1,0 +1,15 @@
+# affliction show hellsight  (2026-10-10T23:39:44Z)
+Affliction:         Hellsight
+Diagnose:           catching glimpses of Hell.
+Afflicted msg:      none
+Cured msg:          Thankfully, the visions of Hell have left you.
+Expire msg:         The hellish visions that haunted you recede into the darkness from whence they came.
+Cure(s):            Smoke Valerian / Smoke Realgar
+Description:        This affliction causes you to see into Hell itself, which periodically causes a variety of afflictions.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       120 seconds

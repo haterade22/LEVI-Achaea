@@ -1,0 +1,13 @@
+# affliction show damagedleftleg  (2026-10-10T23:38:59Z)
+Affliction:         A damaged left leg
+Diagnose:           has a partially damaged left leg.
+Afflicted msg:      Your left leg is greatly damaged from the beating.
+Cured msg:          Your left leg feels stronger and healthier.
+Cure(s):            Apply Restoration To Legs
+Description:        Having a damaged left leg prevents you from using that leg in most situations.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

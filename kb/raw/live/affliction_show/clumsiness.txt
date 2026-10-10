@@ -1,0 +1,13 @@
+# affliction show clumsiness  (2026-10-10T23:38:46Z)
+Affliction:         Clumsiness
+Diagnose:           afflicted with clumsiness.
+Afflicted msg:      You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Cured msg:          Thank $(creator$)! Your clumsiness has been cured.
+Cure(s):            Eat Kelp / Eat Aurum
+Description:        Clumsiness makes it hard for you to physically hit your target.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        Yes

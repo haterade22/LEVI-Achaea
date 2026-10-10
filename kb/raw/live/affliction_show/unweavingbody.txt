@@ -1,0 +1,13 @@
+# affliction show unweavingbody  (2026-10-10T23:41:16Z)
+Affliction:         Unweavingbody
+Diagnose:           suffering from an unweaving body.
+Afflicted msg:      none
+Cured msg:          The unnatural weakness of your muscles suddenly fades, your vitality resurging.
+Cure(s):            Eat Ginseng / Eat Ferrum
+Description:        An unwoven body will sap your health as it progresses.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

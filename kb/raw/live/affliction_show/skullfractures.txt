@@ -1,0 +1,13 @@
+# affliction show skullfractures  (2026-10-10T23:40:49Z)
+Affliction:         Skullfractures
+Diagnose:           suffering from $(type$) skull fractures.
+Afflicted msg:      none
+Cured msg:          The pounding in your head disappears.
+Cure(s):            Apply Health To Head
+Description:        This affliction will extend recovery time when sipping health elixirs and give periodic nausea.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

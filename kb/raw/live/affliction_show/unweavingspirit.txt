@@ -1,0 +1,13 @@
+# affliction show unweavingspirit  (2026-10-10T23:41:19Z)
+Affliction:         Unweavingspirit
+Diagnose:           suffering from an unweaving spirit.
+Afflicted msg:      none
+Cured msg:          You feel your fundamental essence stabilise, your spiritual energy surging with new strength.
+Cure(s):            Smoke Elm / Smoke Cinnabar
+Description:        An unwoven spirit will make this affliction progressively harder to cure.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

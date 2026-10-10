@@ -1,0 +1,14 @@
+# affliction show confusion  (2026-10-10T23:38:49Z)
+Affliction:         Confusion
+Diagnose:           confused.
+Afflicted msg:      Your head spins as your mind is drowned in chaos and confusion.
+Cured msg:          The confusion lifts from your mind and it is clear once again.
+Cure(s):            Eat Ash / Eat Stannum
+                    Focus Mind
+Description:        Confusion extends your equilibrium recovery rates by 100%.
+NoRandomCure:       No
+WhisperingMadness:  Yes
+Enlighten:          Yes
+Tzantza:            Yes
+Accentato:          Yes
+CadmusCurse:        No

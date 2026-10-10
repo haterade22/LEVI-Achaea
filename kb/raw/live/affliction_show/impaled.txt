@@ -1,0 +1,13 @@
+# affliction show impaled  (2026-10-10T23:39:51Z)
+Affliction:         Impaled
+Diagnose:           impaled upon a blade.
+Afflicted msg:      none
+Cured msg:          none
+Cure(s):            Writhe
+Description:        Impalement by a weapon restricts movement and causes massive bleeding.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

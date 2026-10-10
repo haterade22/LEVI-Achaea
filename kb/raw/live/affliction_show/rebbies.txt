@@ -1,0 +1,12 @@
+# affliction show rebbies  (2026-10-10T23:40:32Z)
+Affliction:         Rebbies
+Diagnose:           your skin is secreting a vile slime.
+Afflicted msg:      You feel... odd. So very odd.
+Cured msg:          Your skin ceases secreting slime.
+Cure(s):            Eat Kelp / Eat Aurum
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

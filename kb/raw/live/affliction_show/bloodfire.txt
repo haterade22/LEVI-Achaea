@@ -1,0 +1,12 @@
+# affliction show bloodfire  (2026-10-10T23:38:35Z)
+Affliction:         Bloodfire
+Diagnose:           plagued with blood-fuelled flames.
+Afflicted msg:      none
+Cured msg:          The unnatural flames that feed upon your blood burn themselves out.
+Description:        This affliction will make it impossible to apply salves while the flames persist.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

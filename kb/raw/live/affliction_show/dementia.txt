@@ -1,0 +1,14 @@
+# affliction show dementia  (2026-10-10T23:39:08Z)
+Affliction:         Dementia
+Diagnose:           demented.
+Afflicted msg:      You look about yourself, frenzied and wild-eyed.
+Cured msg:          Sanity returns to you and you are no longer demented.
+Cure(s):            Eat Ash / Eat Stannum
+                    Focus Mind
+Description:        Demented persons struggle to see reality as it truly is, often seeing things that are not there.
+NoRandomCure:       No
+WhisperingMadness:  Yes
+Enlighten:          Yes
+Tzantza:            Yes
+Accentato:          No
+CadmusCurse:        No

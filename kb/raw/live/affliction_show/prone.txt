@@ -1,0 +1,13 @@
+# affliction show prone  (2026-10-10T23:40:28Z)
+Affliction:         Prone
+Diagnose:           seated on the ground.
+Afflicted msg:      none
+Cured msg:          none
+Cure(s):            Stand
+Description:        Being knocked prone can cause a lot of your options to be limited.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

@@ -1,0 +1,13 @@
+# affliction show shivering  (2026-10-10T23:40:46Z)
+Affliction:         The shivers
+Diagnose:           shivering.
+Afflicted msg:      You begin to shiver violently.
+Cured msg:          Your body warms up and you stop shivering.
+Cure(s):            Apply Caloric
+Description:        Shivering causes you to intermittently lose equilibrium.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

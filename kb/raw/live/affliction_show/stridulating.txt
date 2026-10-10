@@ -1,0 +1,13 @@
+# affliction show stridulating  (2026-10-10T23:40:57Z)
+Affliction:         Stridulating
+Diagnose:           stridulating.
+Afflicted msg:      Your body begins to vibrate in sympathetic resonance with a stridulation vibration.
+Cured msg:          You cease vibrating in tune with stridulation vibrations.
+Cure(s):            Eat Bellwort / Eat Cuprum
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       15 seconds

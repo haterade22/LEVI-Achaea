@@ -1,0 +1,14 @@
+# affliction show shyness  (2026-10-10T23:40:47Z)
+Affliction:         Shyness
+Diagnose:           afflicted by unbearable shyness.
+Afflicted msg:      You look about yourself nervously.
+Cured msg:          Your shyness has been cured. You can now face the world boldly.
+Cure(s):            Eat Goldenseal / Eat Plumbum
+                    Focus Mind
+Description:        Shyness causes you to run away at the sight of other people.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          Yes
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

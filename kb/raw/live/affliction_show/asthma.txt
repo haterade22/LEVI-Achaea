@@ -1,0 +1,13 @@
+# affliction show asthma  (2026-10-10T23:38:31Z)
+Affliction:         Asthma
+Diagnose:           afflicted by horrible asthma.
+Afflicted msg:      You feel a tightening sensation grow in your lungs.
+Cured msg:          Your bronchial tubes open up and your asthma is cured.
+Cure(s):            Eat Kelp / Eat Aurum
+Description:        Asthma makes it impossible to smoke anything or hold your breath.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

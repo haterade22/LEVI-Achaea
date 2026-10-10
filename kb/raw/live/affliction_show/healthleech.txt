@@ -1,0 +1,13 @@
+# affliction show healthleech  (2026-10-10T23:39:41Z)
+Affliction:         Healthleech
+Diagnose:           a victim of healthleech.
+Afflicted msg:      Your health begins to drain away.
+Cured msg:          Your aching, pain-wracked body is soothed and calmed.
+Cure(s):            Eat Kelp / Eat Aurum
+Description:        Healthleech slowly drains your health.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        Yes

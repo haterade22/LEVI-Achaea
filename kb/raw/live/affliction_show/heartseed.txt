@@ -1,0 +1,13 @@
+# affliction show heartseed  (2026-10-10T23:39:43Z)
+Affliction:         Heartseed
+Diagnose:           plagued by the rapid growth of a heartseed.
+Afflicted msg:      none
+Cured msg:          The remedy burns through your chest, eliminating the spreading tendrils of a virulent heartseed.
+Cure(s):            Apply Restoration To Body
+Description:        An elemental heart seed rapidly grows within your chest until it bursts out, ensuring a grisly death.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
