@@ -65,3 +65,21 @@ trances instead, to save the eating balance (`deffing/007_Sense_Keepers.lua`).
 | Restoration | damaged and mangled limbs, concussion, internal trauma (HELP BODY PART DAMAGE) |
 | Caloric | freezing / cold afflictions; also a defence against some cold attacks |
 | Mass | prevents being moved against your will (a defence, not a cure) |
+
+## Using curatives (HELP 13.7)
+
+Source: `kb/raw/help/13.7_healing-and-curing.txt`.
+
+- **Sleep and meditate** restore health/endurance and mana/willpower. They are slow and need
+  you to do nothing else.
+- **Elixirs:** `DRINK <fluid>` drinks from the first vial holding that fluid (or
+  `DRINK <vial#>`). `PROBE <vial>` shows the contents.
+- **Salves:** `APPLY <salve> [TO <part>]`. Mending and restoration can be aimed at the head,
+  arms, legs or body. Unaimed, they go to whatever part needs them. Aiming chooses the order
+  when several parts need the same salve.
+- **Sileris and quicksilver** are applied, not eaten, and coat you against Serpent bites
+  (fangbarrier). A Serpent can flay the coating off.
+- **Pipes:** `PUT <herb> IN PIPE`, `LIGHT PIPE` (needs a tinderbox), `SMOKE PIPE`. A lit pipe
+  goes out if left unsmoked and must be relit.
+- **DIAGNOSE** (Survival, AB 1380): `DIAGNOSE` / `DIAG [ME]` lists what ails you and costs
+  **1.00 second of equilibrium** (`kb/raw/ab/survival_diagnose_1380.txt`). It is not free.

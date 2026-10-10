@@ -23,8 +23,10 @@ kb/
 │   ├── ab/            AB <skill> output        (add as pasted)
 │   ├── announcements/ game announcements       (add as pasted)
 │   └── logs/          combat or death logs worth keeping
-├── afflictions/       THE CORE: the model, catalog, channels, class cures, locks
-└── curing/            curatives, server-side curing
+├── afflictions/       THE CORE: the model, catalog, channels, class cures, locks, limb damage
+├── curing/            curatives, server-side curing (incl. your live state)
+├── defences/          defence names and upkeep
+└── mechanics/         balance, equilibrium, the server queue
 ```
 
 New top-level topics (`classes/`, `mechanics/`, `mnemosyne/`, `items/`, ...) get created the
@@ -44,10 +46,12 @@ first time material for them arrives.
 3. **Join to the code.** If a fact is something the code depends on (a cure, a priority, a
    fire line, a cooldown), name the file and say whether the code agrees. A disagreement goes
    into [CONFLICTS.md](CONFLICTS.md).
-4. **Generated pages are not hand-edited.** [afflictions/catalog.md](afflictions/catalog.md)
+4. **Compare live state with the code.** `python tools/kb_prio_diff.py <captured CURING PRIORITY LIST>`
+   shows where the server's priorities differ from `ataxia_defaultCuringPrios()`.
+5. **Generated pages are not hand-edited.** [afflictions/catalog.md](afflictions/catalog.md)
    comes from `python tools/kb_catalog.py`. Re-run it after changing the raw cure table or
    the code's cure/priority tables.
-5. **Pure ASCII in anything that becomes an echo string.** KB prose can use markdown freely.
+6. **Pure ASCII in anything that becomes an echo string.** KB prose can use markdown freely.
 
 ## Adding material
 

@@ -69,6 +69,10 @@ TARGET responds (class cures, lines we can see), and how WE respond (SSC priorit
    Doc-only errors (CLAUDE.md, `.claude/databases`, `.claude/classes`) that a stronger source
    disproves should be corrected, and the correction logged under Resolved.
 
+   **Live curing state:** a pasted `CURING PRIORITY LIST` goes to `kb/raw/live/` and is checked
+   with `python -I tools/kb_prio_diff.py <file>` (`--bash` for the bash set). Report every
+   difference: the server's set is what SSC actually does.
+
 6. **Regenerate generated pages.** If the affliction cure table, `curingTable` or the
    priority tables were involved: `python -I tools/kb_catalog.py`.
 

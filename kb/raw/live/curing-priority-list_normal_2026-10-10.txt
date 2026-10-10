@@ -1,0 +1,35 @@
+Curing Priority List
+ 
+Your affliction curing priorities for the priority set normal:
+1:  brokenrightarm, brokenleftarm, latched, icebound
+2:  brokenrightleg, brokenleftleg, aeon, entangled, peace, scytherus, bound, daeggerimpale, impaled, sleeping, 
+transfixation, voyria, webbed, heartseed, prone, disrupted, hypothermia, calcifiedskull, calcifiedtorso, 
+unweavingbody(5), unweavingbody(4), unweavingbody(3), unweavingmind(3), unweavingmind(5), unweavingmind(4)
+3:  paralysis, pacified, slickness, grievouswounds
+4:  anorexia, impatience, burning(5), timeloop, unweavingspirit, mindravaged, sandfever
+5:  itching, fear, dazed, hypochondria, crushedthroat, kkractlebrand, flushings, mycalium, pyre(3), frostbite
+6:  burning(4), retribution, shadowmadness, depression, pyramides, crescendo
+7:  asthma, weariness, clumsiness, sensitivity, parasite, tonguetied, rebbies
+8:  damagedhead, damagedrightleg, damagedleftleg, mangledhead, mangledrightleg, mangledleftleg, confusion, epilepsy, 
+nausea, recklessness, masochism, stupidity, internalbleeding, guilt, skullfractures, fulminated, earworm
+9:  dizziness, hallucinations, healthleech, addiction, vertigo, hypersomnia, burning(3), burning(2), burning, darkshade,
+crackedribs, horror(3), horror(5), horror(4), horror(2), pyre(2), pyre
+10: dementia, paranoia, torntendons, horror
+11: damagedleftarm, haemophilia, lethargy, whisperingmadness, spiritburn, tenderskin, wristfractures
+12: concussion, hellsight, shyness, diminished
+13: damagedrightarm, manaleech
+14: mangledrightarm, mangledleftarm, lovers, deadening, dissonance, temperedmelancholic, temperedcholeric, 
+temperedsanguine, temperedphlegmatic
+15: shivering, frozen, disloyalty
+16: justice, generosity, agoraphobia, loneliness, claustrophobia, scalded, tension
+17: mildtrauma, serioustrauma
+18:
+19: slashedthroat, laceratedthroat, stuttering
+20: selarnia
+21:
+22:
+23:
+24: stridulating
+25: indifference, pressure, unweavingbody(2), unweavingbody, unweavingmind(2), unweavingmind, fratricide
+26: blindness, deafness, insomnia
+Affs with priority 26 are ignored.

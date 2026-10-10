@@ -1,0 +1,33 @@
+Curing Status:
+------------------------------------------------------------------------------
+Enabled:                   Yes
+Reporting commands:        Yes
+
+Sipping:                   Yes
+Affliction Curing:         Yes
+Defence Upkeep:            Yes
+
+Curing Method:             Transmutation
+
+Fallback Curing:           Yes
+
+Custom Curing Priority:    Yes
+Custom Defence Priority:   Yes
+Health/Mana Priority:      Health
+Sip health at:             80%
+Sip mana at:               75%
+Eat moss below health:     70%
+Eat moss below mana:       70%
+Use focus:                 Yes
+Focus over herbs:          Yes
+Use tree:                  Yes
+Use clot:                  Yes
+Clot at:                   100 bleeding
+Clot to:                   0 bleeding
+Use insomnia:              Yes
+Will cure fractures above: 70% health
+Will use mana above:       45% mana
+Will clot health until:    20% health
+Batch actions:             Yes
+Use Kaido Transmute:       No
+------------------------------------------------------------------------------

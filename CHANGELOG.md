@@ -2,6 +2,31 @@
 
 ---
 
+## 2026-10-10 - KB: your live curing state, defences, queueing; priority drift found (docs and tooling only, no version bump)
+
+Ingested the user's second paste: the game's DEF name list, the live `CURING PRIORITY LIST` and
+defence priority list (set `normal`), `CURINGSET LIST`, `CURING STATUS`, HELP 13.7, 13.9, 4.6,
+4.6.1, and AB Diagnose. New pages: `kb/defences/README.md`, `kb/mechanics/balance-and-queueing.md`,
+`kb/afflictions/limb-damage.md`, plus a live-state section in `kb/curing/server-side-curing.md`.
+New tool: `tools/kb_prio_diff.py` compares a captured priority list with
+`ataxia_defaultCuringPrios()`.
+
+**Findings (in `kb/CONFLICTS.md`; no Lua changed):**
+- **The server's `normal` set holds January's priorities.** Ten differ from our table (broken
+  arms 1 vs 10, legs 2 vs 7, weariness, horror, crescendo, healthleech, scytherus, ...). The table
+  is only sent by the `reset prios` alias (`ataxia_resetOnLogin` has no caller), so nothing changed
+  since v4.7.276 has reached SSC.
+- **Four priority names the server rejects silently:** `rebounding` (a defence) and
+  `unweavingspirit3/4/5` (no per-stack rows for spirit).
+- **The PvE bash set `bash` does not exist.** The live list has `bashing` (21/22 sets used).
+- **9 of 153 server-side defence names** in `ataxiaTables.defences` are not in the game's list
+  (`blade tune`, `acrobatics on`, `dance harrying`, `avoid ` with a trailing space, `boosting`, and
+  four defences SSC does not keep). Impact not yet traced.
+- **DIAGNOSE costs 1.00s of equilibrium** (AB 1380). CLAUDE.md and the explorer doc said it was
+  free; both corrected.
+
+---
+
 ## 2026-10-10 - `kbcapture`: record the game's own answers for the KB; disfigurement smokes (v4.7.396)
 
 User: "do a system to do affliction show <aff>, capture the output and put it into a local

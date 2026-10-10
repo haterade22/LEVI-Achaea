@@ -1,0 +1,8 @@
+Diagnose (Survival)  ABADMIN ID: 1380         Known: Yes
+-------------------------------------------------------------------------------
+Syntax:            DIAGNOSE/DIAG [ME]
+Works on/against:  Self
+Cooldown:          1.00 seconds of equilibrium
+Details:
+With this ability, you may check and see a list of what ails you.
+-------------------------------------------------------------------------------
