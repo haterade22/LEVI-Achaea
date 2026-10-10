@@ -2,6 +2,19 @@
 
 ---
 
+## 2026-10-10 - KB: live WHATCURES settles hypochondria (docs and tooling only, no version bump)
+
+User pasted `WHATCURES HYPOCHONDRIA`: "The affliction 'hypochondria' is cured by: Eat Lobelia /
+Eat Argentum." HELP 13.7.2 said kelp/aurum; the code (`curingTable`, reconciled v4.7.372) already
+said lobelia. **The code was right and HELP 13.7.2 is stale**, so there is no code change.
+
+Live output now has a home: `kb/raw/live/whatcures.txt`, one verbatim line per capture.
+`tools/kb_catalog.py` reads it into a new **Live (WHATCURES)** column (in both tables), flags a
+HELP row that live output contradicts as "HELP stale", and flags a live answer the target tracker
+disagrees with. `/kb-ingest` appends future WHATCURES lines there.
+
+---
+
 ## 2026-10-10 - Enemy class cures: Magi Harmony, Paladin Healing, Dragonheal, Slough (v4.7.395)
 
 Found by the first knowledge-base cross-check (`kb/afflictions/class-cures.md`): four class-cure
@@ -30,7 +43,7 @@ Tests: `src_new/tests/test_class_cure_triggers.lua` runs the real trigger bodies
 one-line plain or quoted `- pattern:` values, so a long plain pattern that YAML folds onto a
 continuation line (Slough's was one) is skipped entirely. Teaching it folded scalars surfaces
 **131 trigger files in this package** with a pattern wider than 118 columns, each of which may
-never match. That is a separate project (`kb/CONFLICTS.md` #4).
+never match. That is a separate project (`kb/CONFLICTS.md`, "Trigger-wrap lint").
 
 ---
 

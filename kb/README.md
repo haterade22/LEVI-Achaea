@@ -18,6 +18,7 @@ kb/
 ├── inbox/             ingest state (snapshot of the source file at the last ingest)
 ├── raw/               VERBATIM source text. Never edited. The evidence for every claim.
 │   ├── help/          HELP files (in-game)
+│   ├── live/          live command output: whatcures.txt (one WHATCURES line per capture), ...
 │   ├── guides/        community guides (lower confidence than HELP)
 │   ├── ab/            AB <skill> output        (add as pasted)
 │   ├── announcements/ game announcements       (add as pasted)

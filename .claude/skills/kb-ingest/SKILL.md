@@ -33,6 +33,10 @@ TARGET responds (class cures, lines we can see), and how WE respond (SSC priorit
    - `guides`: a community write-up (player names in examples, opinions, "rough scribbles")
    If a chunk is ambiguous, ask the user rather than guessing.
 
+   **`WHATCURES` lines are special:** append each one, verbatim, to `kb/raw/live/whatcures.txt`
+   (keep the date comment) instead of making a new file. `tools/kb_catalog.py` reads that file
+   and puts the answer in the catalog's Live column. A later line for the same affliction wins.
+
 3. **Save the raw text verbatim** to `kb/raw/<kind>/<descriptive-slug>.txt` (use
    `<skill>_<YYYY-MM-DD>` for AB output, the HELP number for HELP files). Change only line
    endings. Never edit a raw file that already exists. If the text is a newer version of a

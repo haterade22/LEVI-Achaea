@@ -7,71 +7,73 @@
 > priorities = `ataxia_defaultCuringPrios()` (PvP, `ataxia/001`) and the PvE bash DELTA
 > `ataxia_bashCuringPrios()` (`ataxia/008`; blank = keeps the PvP value). Lower = cured sooner;
 > 25 = low, 26 = never cured (kept as a defence); >= 20 is parked in the bash set.
+> **Live** = the game's own `WHATCURES` output (`kb/raw/live/whatcures.txt`). It outranks HELP,
+> which is partly stale. Paste more `WHATCURES <aff>` lines into the inbox to fill this column.
 
-| Affliction | Action | Herb | Mineral | Code key | Tracker cures with | PvP prio | Bash prio | Flags |
-|---|---|---|---|---|---|---|---|---|
-| Ablaze | Apply | Mending | Mending | `burning` | salve:body | 9 |  | name mapping ASSUMED |
-| Addiction | Eat | Ginseng | Ferrum | `addiction` | ginseng | 9 | 25 |  |
-| Aeon | Smoke | Elm | Cinnabar | `aeon` | smoke | 2 |  |  |
-| Agoraphobia | Eat | Lobelia | Argentum | `agoraphobia` | lobelia | 16 | 25 |  |
-| Anorexia | Apply | Epidermal | Epidermal | `anorexia` | salve:body | 4 | 3 |  |
-| Asthma | Eat | Kelp | Aurum | `asthma` | kelp | 7 |  |  |
-| Bleeding | Clot |  |  | `bleeding` |  |  |  | no SSC priority in our tables |
-| Blindness | Apply | Epidermal | Epidermal | `blindness` | salve:head | 26 |  |  |
-| Claustrophobia | Eat | Lobelia | Argentum | `claustrophobia` | lobelia | 16 | 25 |  |
-| Clumsiness | Eat | Kelp | Aurum | `clumsiness` | kelp | 7 | 6 |  |
-| Concussion | Apply | Restoration | Restoration | `concussion` |  | 12 | 20 |  |
-| Confusion | Eat | Prickly Ash | Stannum | `confusion` | ash | 8 | 12 |  |
-| Crippled limb | Apply | Mending | Mending | `broken*` (4 keys) | salve (limb) | per limb | per limb |  |
-| Damaged limb | Apply | Restoration | Restoration | `damaged*` (5 keys) | salve (limb) | per limb | per limb |  |
-| Darkshade | Eat | Ginseng | Ferrum | `darkshade` | ginseng | 9 |  |  |
-| Deadening | Smoke | Elm | Cinnabar | `deadening` | smoke | 14 | 25 |  |
-| Deafness | Apply | Epidermal | Epidermal | `deafness` |  | 26 |  |  |
-| Dementia | Eat | Prickly Ash | Stannum | `dementia` | ash | 10 | 25 |  |
-| Disfigurement | Smoke | Valerian | Realgar | `disfigurement` |  |  |  | no SSC priority in our tables |
-| Dissonance | Eat | Goldenseal | Plumbum | `dissonance` | goldenseal | 14 | 25 |  |
-| Dizziness | Eat | Goldenseal | Plumbum | `dizziness` | goldenseal | 9 | 25 |  |
-| Drowning | Eat | Pear | Calcite | `drowning` |  |  |  | no SSC priority in our tables |
-| Entangled | Writhe |  |  | `entangled` |  | 2 |  |  |
-| Epilepsy | Eat | Goldenseal | Plumbum | `epilepsy` | goldenseal | 8 |  |  |
-| Fear | Compose |  |  | `fear` |  | 5 |  |  |
-| Freezing | Apply | Caloric | Caloric | `frozen` | salve:skin | 15 |  | name mapping ASSUMED |
-| Generosity | Eat | Bellwort | Cuprum | `generosity` | bellwort | 16 | 25 |  |
-| Hallucinations | Eat | Prickly Ash | Stannum | `hallucinations` | ash | 9 | 25 |  |
-| Haemophilia | Eat | Ginseng | Ferrum | `haemophilia` | ginseng | 11 |  |  |
-| Health Leech | Eat | Kelp | Aurum | `healthleech` | kelp | 8 | 6 |  |
-| Hellsight | Smoke | Valerian | Realgar | `hellsight` | smoke | 12 | 25 |  |
-| Hypochondria | Eat | Kelp | Aurum | `hypochondria` | lobelia | 5 | 6 | **HELP says kelp, tracker says lobelia** |
-| Hypersomnia | Eat | Prickly Ash | Stannum | `hypersomnia` | ash | 9 | 25 |  |
-| Impatience | Eat | Goldenseal | Plumbum | `impatience` | goldenseal | 4 |  |  |
-| Indifference | Eat | Bellwort | Cuprum | `indifference` | bellwort | 25 |  |  |
-| Internal Trauma | Apply | Restoration | Restoration | `serioustrauma` |  | 17 | 20 | name mapping ASSUMED |
-| Justice | Eat | Bellwort | Cuprum | `justice` | bellwort | 16 | 25 |  |
-| Lethargy | Eat | Ginseng | Ferrum | `lethargy` | ginseng | 11 | 25 |  |
-| Loneliness | Eat | Lobelia | Argentum | `loneliness` | lobelia | 16 | 25 |  |
-| Lover's Effect | Eat | Bellwort | Cuprum | `lovers` | bellwort | 14 | 25 |  |
-| Masochism | Eat | Lobelia | Argentum | `masochism` | lobelia | 8 | 25 |  |
-| Mana Leech | Smoke | Valerian | Realgar | `manaleech` | smoke | 13 | 25 |  |
-| Mangled limb | Apply | Restoration | Restoration | `mangled*` (5 keys) | salve (limb) | per limb | per limb |  |
-| Nausea | Eat | Ginseng | Ferrum | `nausea` | ginseng | 8 |  |  |
-| Pacifism | Eat | Bellwort | Cuprum | `pacified` | bellwort | 3 |  |  |
-| Paralysis | Eat | Bloodroot | Magnesium | `paralysis` | bloodroot | 3 | 2 |  |
-| Paranoia | Eat | Prickly Ash | Stannum | `paranoia` | ash | 10 | 25 |  |
-| Peace | Eat | Bellwort | Cuprum | `peace` | bellwort | 2 |  |  |
-| Recklessness | Eat | Lobelia | Argentum | `recklessness` | lobelia | 8 | 6 |  |
-| Scytherus | Eat | Ginseng | Ferrum | `scytherus` | ginseng | 3 |  |  |
-| Sensitivity | Eat | Kelp | Aurum | `sensitivity` | kelp | 7 | 6 |  |
-| Shyness | Eat | Goldenseal | Plumbum | `shyness` | goldenseal | 12 | 25 |  |
-| Slickness | Smoke / Eat | Valerian / Bloodroot | Realgar / Magnesium | `slickness` | bloodroot, smoke | 3 |  |  |
-| Stinky | Scrub |  |  | `stinky` |  |  |  | no SSC priority in our tables |
-| Stupidity | Eat | Goldenseal | Plumbum | `stupidity` | goldenseal | 8 | 25 |  |
-| Stuttering | Apply | Epidermal | Epidermal | `stuttering` | salve:head | 19 |  |  |
-| Tempered Humours | Eat | Ginger | Antimony | `temperedhumours` |  |  |  | no SSC priority in our tables |
-| Transfixed | Writhe |  |  | `transfixation` |  | 2 |  |  |
-| Vertigo | Eat | Lobelia | Argentum | `vertigo` | lobelia | 9 | 25 |  |
-| Voyria | Sip | Immunity | Immunity | `voyria` |  | 2 |  |  |
-| Weariness | Eat | Kelp | Aurum | `weariness` | kelp | 6 |  |  |
-| Webbed | Writhe |  |  | `webbed` |  | 2 |  |  |
+| Affliction | Action | Herb | Mineral | Live (WHATCURES) | Code key | Tracker cures with | PvP prio | Bash prio | Flags |
+|---|---|---|---|---|---|---|---|---|---|
+| Ablaze | Apply | Mending | Mending |  | `burning` | salve:body | 9 |  | name mapping ASSUMED |
+| Addiction | Eat | Ginseng | Ferrum |  | `addiction` | ginseng | 9 | 25 |  |
+| Aeon | Smoke | Elm | Cinnabar |  | `aeon` | smoke | 2 |  |  |
+| Agoraphobia | Eat | Lobelia | Argentum |  | `agoraphobia` | lobelia | 16 | 25 |  |
+| Anorexia | Apply | Epidermal | Epidermal |  | `anorexia` | salve:body | 4 | 3 |  |
+| Asthma | Eat | Kelp | Aurum |  | `asthma` | kelp | 7 |  |  |
+| Bleeding | Clot |  |  |  | `bleeding` |  |  |  | no SSC priority in our tables |
+| Blindness | Apply | Epidermal | Epidermal |  | `blindness` | salve:head | 26 |  |  |
+| Claustrophobia | Eat | Lobelia | Argentum |  | `claustrophobia` | lobelia | 16 | 25 |  |
+| Clumsiness | Eat | Kelp | Aurum |  | `clumsiness` | kelp | 7 | 6 |  |
+| Concussion | Apply | Restoration | Restoration |  | `concussion` |  | 12 | 20 |  |
+| Confusion | Eat | Prickly Ash | Stannum |  | `confusion` | ash | 8 | 12 |  |
+| Crippled limb | Apply | Mending | Mending |  | `broken*` (4 keys) | salve (limb) | per limb | per limb |  |
+| Damaged limb | Apply | Restoration | Restoration |  | `damaged*` (5 keys) | salve (limb) | per limb | per limb |  |
+| Darkshade | Eat | Ginseng | Ferrum |  | `darkshade` | ginseng | 9 |  |  |
+| Deadening | Smoke | Elm | Cinnabar |  | `deadening` | smoke | 14 | 25 |  |
+| Deafness | Apply | Epidermal | Epidermal |  | `deafness` |  | 26 |  |  |
+| Dementia | Eat | Prickly Ash | Stannum |  | `dementia` | ash | 10 | 25 |  |
+| Disfigurement | Smoke | Valerian | Realgar |  | `disfigurement` |  |  |  | no SSC priority in our tables |
+| Dissonance | Eat | Goldenseal | Plumbum |  | `dissonance` | goldenseal | 14 | 25 |  |
+| Dizziness | Eat | Goldenseal | Plumbum |  | `dizziness` | goldenseal | 9 | 25 |  |
+| Drowning | Eat | Pear | Calcite |  | `drowning` |  |  |  | no SSC priority in our tables |
+| Entangled | Writhe |  |  |  | `entangled` |  | 2 |  |  |
+| Epilepsy | Eat | Goldenseal | Plumbum |  | `epilepsy` | goldenseal | 8 |  |  |
+| Fear | Compose |  |  |  | `fear` |  | 5 |  |  |
+| Freezing | Apply | Caloric | Caloric |  | `frozen` | salve:skin | 15 |  | name mapping ASSUMED |
+| Generosity | Eat | Bellwort | Cuprum |  | `generosity` | bellwort | 16 | 25 |  |
+| Hallucinations | Eat | Prickly Ash | Stannum |  | `hallucinations` | ash | 9 | 25 |  |
+| Haemophilia | Eat | Ginseng | Ferrum |  | `haemophilia` | ginseng | 11 |  |  |
+| Health Leech | Eat | Kelp | Aurum |  | `healthleech` | kelp | 8 | 6 |  |
+| Hellsight | Smoke | Valerian | Realgar |  | `hellsight` | smoke | 12 | 25 |  |
+| Hypochondria | Eat | Kelp | Aurum | eat lobelia / eat argentum | `hypochondria` | lobelia | 5 | 6 | HELP stale (kelp); live confirms argentum/lobelia |
+| Hypersomnia | Eat | Prickly Ash | Stannum |  | `hypersomnia` | ash | 9 | 25 |  |
+| Impatience | Eat | Goldenseal | Plumbum |  | `impatience` | goldenseal | 4 |  |  |
+| Indifference | Eat | Bellwort | Cuprum |  | `indifference` | bellwort | 25 |  |  |
+| Internal Trauma | Apply | Restoration | Restoration |  | `serioustrauma` |  | 17 | 20 | name mapping ASSUMED |
+| Justice | Eat | Bellwort | Cuprum |  | `justice` | bellwort | 16 | 25 |  |
+| Lethargy | Eat | Ginseng | Ferrum |  | `lethargy` | ginseng | 11 | 25 |  |
+| Loneliness | Eat | Lobelia | Argentum |  | `loneliness` | lobelia | 16 | 25 |  |
+| Lover's Effect | Eat | Bellwort | Cuprum |  | `lovers` | bellwort | 14 | 25 |  |
+| Masochism | Eat | Lobelia | Argentum |  | `masochism` | lobelia | 8 | 25 |  |
+| Mana Leech | Smoke | Valerian | Realgar |  | `manaleech` | smoke | 13 | 25 |  |
+| Mangled limb | Apply | Restoration | Restoration |  | `mangled*` (5 keys) | salve (limb) | per limb | per limb |  |
+| Nausea | Eat | Ginseng | Ferrum |  | `nausea` | ginseng | 8 |  |  |
+| Pacifism | Eat | Bellwort | Cuprum |  | `pacified` | bellwort | 3 |  |  |
+| Paralysis | Eat | Bloodroot | Magnesium |  | `paralysis` | bloodroot | 3 | 2 |  |
+| Paranoia | Eat | Prickly Ash | Stannum |  | `paranoia` | ash | 10 | 25 |  |
+| Peace | Eat | Bellwort | Cuprum |  | `peace` | bellwort | 2 |  |  |
+| Recklessness | Eat | Lobelia | Argentum |  | `recklessness` | lobelia | 8 | 6 |  |
+| Scytherus | Eat | Ginseng | Ferrum |  | `scytherus` | ginseng | 3 |  |  |
+| Sensitivity | Eat | Kelp | Aurum |  | `sensitivity` | kelp | 7 | 6 |  |
+| Shyness | Eat | Goldenseal | Plumbum |  | `shyness` | goldenseal | 12 | 25 |  |
+| Slickness | Smoke / Eat | Valerian / Bloodroot | Realgar / Magnesium |  | `slickness` | bloodroot, smoke | 3 |  |  |
+| Stinky | Scrub |  |  |  | `stinky` |  |  |  | no SSC priority in our tables |
+| Stupidity | Eat | Goldenseal | Plumbum |  | `stupidity` | goldenseal | 8 | 25 |  |
+| Stuttering | Apply | Epidermal | Epidermal |  | `stuttering` | salve:head | 19 |  |  |
+| Tempered Humours | Eat | Ginger | Antimony |  | `temperedhumours` |  |  |  | no SSC priority in our tables |
+| Transfixed | Writhe |  |  |  | `transfixation` |  | 2 |  |  |
+| Vertigo | Eat | Lobelia | Argentum |  | `vertigo` | lobelia | 9 | 25 |  |
+| Voyria | Sip | Immunity | Immunity |  | `voyria` |  | 2 |  |  |
+| Weariness | Eat | Kelp | Aurum |  | `weariness` | kelp | 6 |  |  |
+| Webbed | Writhe |  |  |  | `webbed` |  | 2 |  |  |
 
 ## In our priority table but not in HELP 13.7.2
 
@@ -79,56 +81,56 @@ HELP 13.7.2 is a short, partly stale list (see `kb/afflictions/README.md`). Thes
 real -- our curing priorities name them -- but their cures still need a source in `kb/raw/`.
 Paste `WHATCURES <aff>` / `AFFLICTION SHOW <aff>` output into the inbox to fill them in.
 
-| Code key | Tracker cures with | PvP prio | Bash prio |
-|---|---|---|---|
-| `bound` |  | 2 |  |
-| `crackedribs` |  | 9 | 20 |
-| `crescendo` | ash | 9 |  |
-| `crushedthroat` | salve:head | 5 |  |
-| `daeggerimpale` |  | 2 |  |
-| `depression` | goldenseal | 6 | 25 |
-| `disloyalty` | smoke | 15 | 25 |
-| `disrupted` |  | 2 |  |
-| `flushings` | ginseng | 5 |  |
-| `fratricide` | lobelia | 25 |  |
-| `guilt` | lobelia | 8 |  |
-| `heartseed` |  | 2 |  |
-| `horror` | lobelia | 9 | 25 |
-| `hypothermia` | salve:torso | 2 |  |
-| `impaled` |  | 2 |  |
-| `insomnia` |  | 26 |  |
-| `itching` | salve:body | 5 |  |
-| `laceratedthroat` |  | 19 |  |
-| `mildtrauma` |  | 17 | 20 |
-| `mycalium` | goldenseal | 5 |  |
-| `parasite` | kelp | 7 |  |
-| `pressure` |  | 25 |  |
-| `prone` |  | 2 |  |
-| `pyramides` | bloodroot | 6 |  |
-| `pyre` | bellwort | 9 |  |
-| `rebbies` | kelp | 7 |  |
-| `rebounding` |  | 18 |  |
-| `retribution` | bellwort | 6 | 25 |
-| `sandfever` | goldenseal | 4 |  |
-| `scalded` | salve:head | 16 | 20 |
-| `selarnia` | salve:body/skin/torso | 20 |  |
-| `shadowmadness` | goldenseal | 6 | 25 |
-| `shivering` | salve:skin | 15 |  |
-| `skullfractures` |  | 8 | 20 |
-| `slashedthroat` |  | 19 |  |
-| `sleeping` |  | 2 |  |
-| `spiritburn` | lobelia | 11 | 25 |
-| `stridulating` | bellwort | 24 |  |
-| `temperedcholeric` |  | 14 | 25 |
-| `temperedmelancholic` |  | 14 | 25 |
-| `temperedphlegmatic` |  | 14 | 25 |
-| `temperedsanguine` |  | 14 | 25 |
-| `tenderskin` | lobelia | 11 | 25 |
-| `tension` | smoke | 16 | 25 |
-| `timeloop` | bellwort | 4 |  |
-| `torntendons` |  | 10 | 20 |
-| `unweavingbody` | ginseng | 25 |  |
-| `unweavingmind` | goldenseal | 25 |  |
-| `unweavingspirit` | smoke | 25 |  |
-| `whisperingmadness` | lobelia | 11 | 25 |
-| `wristfractures` |  | 11 | 20 |
+| Code key | Live (WHATCURES) | Tracker cures with | PvP prio | Bash prio | Flags |
+|---|---|---|---|---|---|
+| `bound` |  |  | 2 |  |  |
+| `crackedribs` |  |  | 9 | 20 |  |
+| `crescendo` |  | ash | 9 |  |  |
+| `crushedthroat` |  | salve:head | 5 |  |  |
+| `daeggerimpale` |  |  | 2 |  |  |
+| `depression` |  | goldenseal | 6 | 25 |  |
+| `disloyalty` |  | smoke | 15 | 25 |  |
+| `disrupted` |  |  | 2 |  |  |
+| `flushings` |  | ginseng | 5 |  |  |
+| `fratricide` |  | lobelia | 25 |  |  |
+| `guilt` |  | lobelia | 8 |  |  |
+| `heartseed` |  |  | 2 |  |  |
+| `horror` |  | lobelia | 9 | 25 |  |
+| `hypothermia` |  | salve:torso | 2 |  |  |
+| `impaled` |  |  | 2 |  |  |
+| `insomnia` |  |  | 26 |  |  |
+| `itching` |  | salve:body | 5 |  |  |
+| `laceratedthroat` |  |  | 19 |  |  |
+| `mildtrauma` |  |  | 17 | 20 |  |
+| `mycalium` |  | goldenseal | 5 |  |  |
+| `parasite` |  | kelp | 7 |  |  |
+| `pressure` |  |  | 25 |  |  |
+| `prone` |  |  | 2 |  |  |
+| `pyramides` |  | bloodroot | 6 |  |  |
+| `pyre` |  | bellwort | 9 |  |  |
+| `rebbies` |  | kelp | 7 |  |  |
+| `rebounding` |  |  | 18 |  |  |
+| `retribution` |  | bellwort | 6 | 25 |  |
+| `sandfever` |  | goldenseal | 4 |  |  |
+| `scalded` |  | salve:head | 16 | 20 |  |
+| `selarnia` |  | salve:body/skin/torso | 20 |  |  |
+| `shadowmadness` |  | goldenseal | 6 | 25 |  |
+| `shivering` |  | salve:skin | 15 |  |  |
+| `skullfractures` |  |  | 8 | 20 |  |
+| `slashedthroat` |  |  | 19 |  |  |
+| `sleeping` |  |  | 2 |  |  |
+| `spiritburn` |  | lobelia | 11 | 25 |  |
+| `stridulating` |  | bellwort | 24 |  |  |
+| `temperedcholeric` |  |  | 14 | 25 |  |
+| `temperedmelancholic` |  |  | 14 | 25 |  |
+| `temperedphlegmatic` |  |  | 14 | 25 |  |
+| `temperedsanguine` |  |  | 14 | 25 |  |
+| `tenderskin` |  | lobelia | 11 | 25 |  |
+| `tension` |  | smoke | 16 | 25 |  |
+| `timeloop` |  | bellwort | 4 |  |  |
+| `torntendons` |  |  | 10 | 20 |  |
+| `unweavingbody` |  | ginseng | 25 |  |  |
+| `unweavingmind` |  | goldenseal | 25 |  |  |
+| `unweavingspirit` |  | smoke | 25 |  |  |
+| `whisperingmadness` |  | lobelia | 11 | 25 |  |
+| `wristfractures` |  |  | 11 | 20 |  |

@@ -137,9 +137,9 @@ that shuts *their* extra cure.
 ## 6. Known gaps and open questions
 
 These are tracked in [../CONFLICTS.md](../CONFLICTS.md). In short:
-- HELP 13.7.2 is **stale or short in places**. It says hypochondria is cured by kelp, while
-  our code (checked against live WHATCURES) says lobelia. It lists "Disfigurement" where the
-  code tracks `disloyalty`. It omits about 50 afflictions our priority table handles. **Live
+- HELP 13.7.2 is **stale or short in places**. It said hypochondria is cured by kelp, and live
+  `WHATCURES` (2026-10-10) says lobelia/argentum, as our code already did. It lists
+  "Disfigurement" where the code tracks `disloyalty`. It omits about 50 afflictions our priority table handles. **Live
   `WHATCURES <aff>` output beats any HELP file.**
 - Druid/Sylvan **Grove Cure** has no trigger (its line is uncaptured) and no blocker.
 
