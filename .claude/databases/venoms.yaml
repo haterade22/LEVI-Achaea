@@ -292,7 +292,7 @@ venoms:
   # ============================================================================
 
   monkshood:
-    affliction: disfigurement
+    affliction: disloyalty   # old name: disfigurement
     # HELP 13.7.2: disfigurement is cured by SMOKING valerian/realgar, not ash.
     # Our code tracks it as `disloyalty` (smokeCureTableV3). See kb/afflictions/catalog.md.
     cure_method: smoke
@@ -397,7 +397,7 @@ ekanelia:
 
     monkshood:
       conditionals: [asthma, masochism, weariness]
-      normal_effect: disfigurement
+      normal_effect: disloyalty
       bonus_effect: impatience
       note: "Critical - can deliver impatience without Impulse"
 

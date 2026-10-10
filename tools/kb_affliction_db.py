@@ -37,8 +37,6 @@ NOT_AFFLICTIONS = {
     "temperedhumours": "HELP's umbrella name; the game has four: temperedcholeric, temperedmelancholic, temperedphlegmatic, temperedsanguine",
     "stinky": "in HELP 13.7.2 but not a current affliction",
     "drowning": "in HELP 13.7.2 but not a current affliction",
-    "disfigurement": "WHATCURES knows it (smoke valerian); the first capture lost its AFFLICTION SHOW to a stray room line, re-capture",
-    "damagedrightarm": "real; the first capture lost its AFFLICTION SHOW to a stray room line, re-capture",
 }
 
 LABEL = re.compile(r"^([A-Za-z()' ]+?):\s{2,}(.*)$")
@@ -95,6 +93,33 @@ def main():
         rec["source"] = f"kb/raw/live/affliction_show/{fn}"
         db[key] = rec
 
+    # ALIASES: the game answers some old names with another affliction's record
+    # (`affliction show disfigurement` -> Disloyalty, `ablaze` -> Burning). Records with the same
+    # name and description are one affliction; the canonical key is the one that IS the name.
+    def squash(n):
+        n = n.lower()
+        for art in ("a ", "an "):
+            if n.startswith(art):
+                n = n[len(art):]
+        return re.sub(r"[^a-z]", "", n)
+    prio_src = open(os.path.join(ROOT, "src_new", "scripts", "levi_ataxia", "levi", "ataxia", "ataxia",
+                                 "001_Default_Curing_Prios.lua"), encoding="utf-8").read()
+    code_keys = set(re.findall(r'^\s*\["(\w+)"\]\s*=', prio_src, re.M))
+    groups = {}
+    for k, r in db.items():
+        groups.setdefault((r["name"], r.get("description", "")), []).append(k)
+    for keys in groups.values():
+        if len(keys) < 2:
+            continue
+        # The key that IS the game's name; else the one our code uses ("A frozen body" -> frozen,
+        # which ataxia_defaultCuringPrios keys); else the first alphabetically.
+        canon = (next((k for k in sorted(keys) if squash(db[k]["name"]) == k), None)
+                 or next((k for k in sorted(keys) if k in code_keys), None)
+                 or sorted(keys)[0])
+        for k in keys:
+            if k != canon:
+                db[k]["alias_of"] = canon
+
     with open(OUT_JSON, "w", encoding="utf-8", newline="\n") as fh:
         json.dump(db, fh, indent=1, sort_keys=True)
         fh.write("\n")
@@ -127,12 +152,23 @@ def main():
            "| Affliction | Cure(s) | Wears off after | Diagnose shows | When it hits you | When it is cured | Flags set |",
            "|---|---|---|---|---|---|---|"]
     for k, r in sorted(db.items()):
+        if r.get("alias_of"):
+            continue
         on = ", ".join(f for f, v in sorted(r.get("flags", {}).items()) if v is True)
         cell = lambda s: (s or "").replace("|", "\\|")
         md.append(f"| [`{k}`](../raw/live/affliction_show/{k}.txt) {cell(r['name'])} | {cell(r.get('cures'))} | {cell(r.get('default_time'))} | "
                   f"{cell(r.get('diagnose'))} | {cell(r.get('afflicted_msg'))} | {cell(r.get('cured_msg'))} | {on} |")
+    aliases = sorted((k, r["alias_of"]) for k, r in db.items() if r.get("alias_of"))
+    if aliases:
+        md += ["", "## Old names the game still accepts", "",
+               "`AFFLICTION SHOW <old name>` answers with another affliction's record. Code must use the "
+               "CANONICAL name: GMCP, the tracker and the cure lines all use it (v4.7.399: the Serpent "
+               "offense recorded monkshood as `disfigurement` and never saw it land).", ""]
+        md += [f"- `{k}` is `{c}`" for k, c in aliases]
     md += ["", "## Descriptions", ""]
     for k, r in sorted(db.items()):
+        if r.get("alias_of"):
+            continue
         md.append(f"- **{r['name']}** (`{k}`): {r.get('description', '')}")
     if missing:
         md += ["", "## Names the game did not recognise", "",

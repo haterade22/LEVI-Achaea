@@ -2023,7 +2023,7 @@ Each herb has an alchemical mineral equivalent (same cure balance):
 | **eurypteria** | recklessness | lobelia | Lock aff for Depthswalker |
 | **digitalis** | shyness | goldenseal | Mental stack |
 | **larkspur** | dizziness | goldenseal | Mental stack |
-| **monkshood** | disloyalty | smoke valerian | Hinder loyalty-based abilities (HELP 13.7.2 lists the valerian smoke cure as "Disfigurement") |
+| **monkshood** | disloyalty | smoke valerian | Hinder loyalty-based abilities. "Disfigurement" is the OLD name: the game still accepts it but answers with Disloyalty, and our code must record `disloyalty` |
 | **aconite** | stupidity | goldenseal | Mental stack, focus bait |
 | **darkshade** | darkshade (light allergy) | ginseng | Hinder targeting |
 | **notechis** | haemophilia | ginseng | Lock aff for Magi/Sylvan, Agony synergy |
@@ -2292,7 +2292,7 @@ Modern Serpent combat revolves around two key mechanics:
 | Venom | Conditionals Required | Normal + Bonus Effect |
 |-------|----------------------|----------------------|
 | kalmia | clumsiness + weariness | asthma + **slickness** |
-| monkshood | asthma + masochism + weariness | disfigurement + **impatience** |
+| monkshood | asthma + masochism + weariness | disloyalty + **impatience** |
 | curare | hypersomnia + masochism | paralysis + **hypochondria** |
 | loki | confusion + recklessness | random + **nausea + paralysis** |
 | scytherus | addiction + nausea | scytherus + **camus damage** |

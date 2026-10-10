@@ -1,2 +1,13 @@
-# affliction show damagedrightarm  (2026-10-10T23:39:00Z)
-You are dismayed as the corpse of a giant crow turns to dust in your hands.
+# affliction show damagedrightarm  (2026-10-10T23:52:05Z)
+Affliction:         A damaged right arm
+Diagnose:           has a partially damaged right arm.
+Afflicted msg:      Your right arm is greatly damaged from the beating.
+Cured msg:          Your right arm feels stronger and healthier.
+Cure(s):            Apply Restoration To Arms
+Description:        Having a damaged right arm prevents you from using that arm in most situations.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

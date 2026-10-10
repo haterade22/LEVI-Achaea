@@ -30,7 +30,7 @@
 | Deadening | Smoke | Elm | Cinnabar | smoke elm, smoke cinnabar ([show](../raw/live/affliction_show/deadening.txt)) | `deadening` | smoke | 14 | 25 |  |
 | Deafness | Apply | Epidermal | Epidermal | apply epidermal to head ([show](../raw/live/affliction_show/deafness.txt)) | `deafness` |  | 26 |  |  |
 | Dementia | Eat | Prickly Ash | Stannum | eat ash, eat stannum, focus mind ([show](../raw/live/affliction_show/dementia.txt)) | `dementia` | ash | 10 | 25 |  |
-| Disfigurement | Smoke | Valerian | Realgar | smoke valerian, smoke realgar ([show](../raw/live/affliction_show/disfigurement.txt)) | `disfigurement` | smoke |  |  | no SSC priority in our tables |
+| Disfigurement | Smoke | Valerian | Realgar | smoke valerian, smoke realgar ([show](../raw/live/affliction_show/disfigurement.txt)) | `disfigurement` |  |  |  | no SSC priority in our tables |
 | Dissonance | Eat | Goldenseal | Plumbum | eat goldenseal, eat plumbum ([show](../raw/live/affliction_show/dissonance.txt)) | `dissonance` | goldenseal | 14 | 25 |  |
 | Dizziness | Eat | Goldenseal | Plumbum | eat goldenseal, eat plumbum, focus mind ([show](../raw/live/affliction_show/dizziness.txt)) | `dizziness` | goldenseal | 9 | 25 |  |
 | Drowning | Eat | Pear | Calcite | ([show](../raw/live/affliction_show/drowning.txt)) | `drowning` |  |  |  | no SSC priority in our tables |

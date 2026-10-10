@@ -1,6 +1,7 @@
 {
  "ablaze": {
   "afflicted_msg": "none",
+  "alias_of": "burning",
   "cure_options": [
    [
     "apply mending to body"
@@ -577,6 +578,29 @@
   "name": "A damaged left leg",
   "source": "kb/raw/live/affliction_show/damagedleftleg.txt"
  },
+ "damagedrightarm": {
+  "afflicted_msg": "Your right arm is greatly damaged from the beating.",
+  "cure_options": [
+   [
+    "apply restoration to arms"
+   ]
+  ],
+  "cured_msg": "Your right arm feels stronger and healthier.",
+  "cures": "Apply Restoration To Arms",
+  "description": "Having a damaged right arm prevents you from using that arm in most situations.",
+  "diagnose": "has a partially damaged right arm.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "damagedrightarm",
+  "name": "A damaged right arm",
+  "source": "kb/raw/live/affliction_show/damagedrightarm.txt"
+ },
  "damagedrightleg": {
   "afflicted_msg": "Your right leg is greatly damaged from the beating.",
   "cure_options": [
@@ -765,6 +789,31 @@
   "key": "diminished",
   "name": "Diminished",
   "source": "kb/raw/live/affliction_show/diminished.txt"
+ },
+ "disfigurement": {
+  "afflicted_msg": "You feel ugliness radiating from you.",
+  "alias_of": "disloyalty",
+  "cure_options": [
+   [
+    "smoke valerian",
+    "smoke realgar"
+   ]
+  ],
+  "cured_msg": "You no longer will inspire disloyalty among friends.",
+  "cures": "Smoke Valerian / Smoke Realgar",
+  "description": "Disloyalty, often caused by disfigurement, makes creatures loyal to you consider you a beastly enemy.",
+  "diagnose": "inspires disloyalty in those nearby.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": false,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "disfigurement",
+  "name": "Disloyalty",
+  "source": "kb/raw/live/affliction_show/disfigurement.txt"
  },
  "disloyalty": {
   "afflicted_msg": "You feel ugliness radiating from you.",
@@ -1003,6 +1052,7 @@
  },
  "freezing": {
   "afflicted_msg": "Your body slows as it freezes in the extreme cold.",
+  "alias_of": "frozen",
   "cure_options": [
    [
     "apply caloric"

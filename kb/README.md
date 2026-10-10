@@ -70,8 +70,8 @@ copying by hand:
 
 1. In Mudlet, somewhere quiet, with the basher off: **`kbcapture afflictions`**. It sends
    `AFFLICTION LIST`, then `AFFLICTION SHOW <aff>` and `WHATCURES <aff>` for every affliction our
-   code knows (about 5 minutes, output hidden). `kbcapture help cures;help heal` captures any
-   commands you list. `kbcapture stop` ends early, and `kbcapture` shows progress.
+   code knows (about 5 minutes, output hidden). `kbcapture help cures | help heal` captures any
+   commands you list, separated by `|` (not `;`: Mudlet splits `;` before the alias sees it). `kbcapture stop` ends early, and `kbcapture` shows progress.
 2. In the repo: **`python tools/kb_capture_import.py`**. It finds `kb_capture.txt` in your Mudlet
    profile, files every answer into `kb/raw/live/` (a full copy in `captures/`, one file per
    affliction in `affliction_show/`, new lines appended to `whatcures.txt`), renames the source

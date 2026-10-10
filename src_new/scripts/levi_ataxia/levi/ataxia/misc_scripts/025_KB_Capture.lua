@@ -37,7 +37,10 @@ packageName: ''
 -- Commands (alias `kbcapture`, aliases/configs/025):
 --   kbcapture              status
 --   kbcapture afflictions  AFFLICTION LIST, then AFFLICTION SHOW + WHATCURES for every name
---   kbcapture <cmd ...>    capture any command(s), separated by ";"  (e.g. kbcapture help cures)
+--   kbcapture <cmd | cmd>  capture any command(s), separated by "|"  (e.g. kbcapture help cures | help heal)
+--                          NOT ";": Mudlet splits typed input on its command separator before any
+--                          alias runs, so `kbcapture a;b` captured only `a` and sent `b` to the game
+--                          uncaptured (2026-10-10).
 --   kbcapture stop         stop after the current answer
 
 ataxiaKB = ataxiaKB or {}
@@ -49,7 +52,7 @@ ataxiaKB.FILE = "kb_capture.txt"
 
 -- In HELP 13.7.2 but not keys in our code (or keyed differently there).
 ataxiaKB.EXTRA_AFFS = {
-  "ablaze", "bleeding", "disfigurement", "drowning", "freezing", "stinky", "temperedhumours",
+  "ablaze", "bleeding", "drowning", "freezing", "stinky", "temperedhumours",
 }
 
 local function add(set, name)

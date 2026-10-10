@@ -18,7 +18,7 @@ cured through it. See [README.md](README.md) for the overall model.
 |---|---|---|---|---|
 | **Eat** | `EAT <herb>` | kelp/aurum, ginseng/ferrum, goldenseal/plumbum, lobelia/argentum, prickly ash/stannum, bellwort/cuprum, bloodroot/magnesium, pear/calcite, ginger/antimony | **anorexia** | Most afflictions: one per eat, from that herb's group ([catalog](catalog.md)) |
 | **Apply** | `APPLY <salve> [to <part>]` | epidermal, mending, restoration, caloric | **slickness** | anorexia, blindness, deafness, stuttering (epidermal); crippled limbs, ablaze (mending); damaged/mangled limbs, concussion, internal trauma (restoration); freezing (caloric) |
-| **Smoke** | `SMOKE <pipe>` | elm/cinnabar, valerian/realgar | **asthma** | aeon, deadening (elm); disfigurement, hellsight, mana leech, slickness (valerian) |
+| **Smoke** | `SMOKE <pipe>` | elm/cinnabar, valerian/realgar | **asthma** | aeon, deadening (elm); disloyalty (old name disfigurement), hellsight, mana leech, slickness (valerian) |
 | **Sip** | `SIP <elixir>` | health, mana, immunity, ... | (none listed) | voyria (immunity) |
 | **Focus** | `FOCUS` | (none) | **impatience** | anorexia, or a mental affliction (lock guide) |
 | **Tree** | `TOUCH TREE` | tree tattoo | **paralysis** | one random affliction |

@@ -338,7 +338,7 @@ ekanelia_mechanic:
   requirement: "Only works with BITE, not DOUBLESTAB"
   transformations:
     kalmia: "clumsiness + weariness → asthma + SLICKNESS"
-    monkshood: "asthma + masochism + weariness → disfigurement + IMPATIENCE"
+    monkshood: "asthma + masochism + weariness → disloyalty + IMPATIENCE"
     curare: "hypersomnia + masochism → paralysis + HYPOCHONDRIA"
     loki: "confusion + recklessness → random + NAUSEA + PARALYSIS"
     scytherus: "addiction + nausea → scytherus + CAMUS DAMAGE"

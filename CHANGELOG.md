@@ -2,6 +2,28 @@
 
 ---
 
+## 2026-10-10 - Monkshood records disloyalty; kbcapture separates commands with `|` (v4.7.399)
+
+- **The Serpent offense never saw monkshood land.** `VENOM_TO_AFF` (serpent/002) mapped monkshood to
+  `disfigurement`, the OLD name: the game still accepts it (`affliction show disfigurement` answers
+  "Disloyalty", captured live 2026-10-10), but the tracker records `disloyalty`
+  (ataxia/001_Misc:208), so `haveAff("disfigurement")` was always false and the offense kept
+  choosing a venom that had already landed. Now `disloyalty`. v4.7.396's extra `disfigurement` entry
+  in `smokeCureTableV3` is reverted (it was an alias, not an affliction). CLAUDE.md, serpent.md,
+  lock_types.md and both YAML databases updated.
+- **`kbcapture` separates commands with `|`.** Mudlet splits typed input on its command separator
+  (`;`) BEFORE any alias runs, so `kbcapture a;b;c` captured only `a` and sent `b` and `c` to the game
+  uncaptured. Now `kbcapture help cures | help heal`.
+- **The affliction database lists old names.** Records with the same name and description are one
+  affliction: `ablaze` is `burning`, `disfigurement` is `disloyalty`, `freezing` is `frozen`. The
+  canonical key is the one that matches the game's name, else the one our code uses. Aliases are
+  kept in the JSON (`alias_of`) and listed separately.
+- `damagedrightarm` (re-captured) and `disfigurement` (pasted) filed. The bash set's defence list filed.
+
+Tests: `test_target_cure_tables.lua` smoke list restored.
+
+---
+
 ## 2026-10-10 - The affliction database; kbcapture waits for the real answer and pages MORE (v4.7.398)
 
 The user ran `kbcapture afflictions`: 267 answers, 0 timeouts. Filed into `kb/raw/live/`.
@@ -110,8 +132,8 @@ going back in-game. Raw text plus a parser in the repo can be improved and re-ru
   curatives): "Eat Bloodroot / Eat Magnesium and Smoke Valerian / Smoke Realgar". The Live column
   links each affliction's AFFLICTION SHOW capture.
 - **Eight more live WHATCURES** (disloyalty, disfigurement, paralysis, slickness, anorexia, asthma,
-  impatience, weariness). All agree with the code except one gap: **disfigurement and disloyalty
-  are two afflictions**, both smoked with valerian. The Serpent offense records disfigurement for
+  impatience, weariness). ~~**Disfigurement and disloyalty are two afflictions**~~ **Wrong,
+  corrected in v4.7.399:** they are one affliction; WHATCURES just echoes the name typed. The Serpent offense records disfigurement for
   monkshood, but `smokeCureTableV3` only listed disloyalty, so a smoke could never clear it from V3.
   It is now appended (existing candidates keep their weights).
 
