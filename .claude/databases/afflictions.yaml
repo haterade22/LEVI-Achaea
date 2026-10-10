@@ -16,7 +16,7 @@ categories:
       - ginseng_ferrum
       - goldenseal_plumbum
       - lobelia_argentum
-      - ash_calcium
+      - ash_stannum
       - bellwort_cuprum
 
   salve:
@@ -317,13 +317,13 @@ afflictions:
     priority: 5
 
   # ==========================================================================
-  # ASH/CALCIUM CURES
+  # ASH/STANNUM CURES
   # ==========================================================================
 
   confusion:
     cure_method: eat
     cure_herb: ash
-    cure_mineral: calcium
+    cure_mineral: stannum
     effect: "Random command substitution"
     delivered_by: [aconite_ash, class_abilities]
     priority: 1
@@ -332,7 +332,7 @@ afflictions:
   hallucinations:
     cure_method: eat
     cure_herb: ash
-    cure_mineral: calcium
+    cure_mineral: stannum
     effect: "Fake room descriptions and combat messages"
     delivered_by: [arsenic, class_abilities]
     priority: 2
@@ -340,7 +340,7 @@ afflictions:
   paranoia:
     cure_method: eat
     cure_herb: ash
-    cure_mineral: calcium
+    cure_mineral: stannum
     effect: "Sees fake enemies in room"
     delivered_by: [nightshade, class_abilities]
     priority: 3
@@ -348,7 +348,7 @@ afflictions:
   hypersomnia:
     cure_method: eat
     cure_herb: ash
-    cure_mineral: calcium
+    cure_mineral: stannum
     effect: "Extreme drowsiness, may fall asleep"
     delivered_by: [benzedrine, class_abilities]
     priority: 2
@@ -357,15 +357,17 @@ afflictions:
   dementia:
     cure_method: eat
     cure_herb: ash
-    cure_mineral: calcium
+    cure_mineral: stannum
     effect: "Random involuntary actions"
     delivered_by: [larkspur, class_abilities]
     priority: 2
 
   disfigurement:
-    cure_method: eat
-    cure_herb: ash
-    cure_mineral: calcium
+    # HELP 13.7.2: SMOKE valerian/realgar (was wrongly listed under ash). Our code
+    # tracks the valerian-smoke affliction as `disloyalty` (smokeCureTableV3).
+    cure_method: smoke
+    cure_herb: valerian
+    cure_mineral: realgar
     effect: "Physical disfigurement"
     delivered_by: [monkshood, class_abilities]
     priority: 4

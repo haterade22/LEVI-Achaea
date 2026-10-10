@@ -1,0 +1,151 @@
+CONDITIONAL AFFLICTIONS FOR THE ACHAEAN FORMS
+
+This file pertains to the topic of toxin locks, and explains how you can
+hinder the active and passive healing abilities that each of the Achaean
+classes have, including Elemental and Dragon form, and which you must
+hinder to be able to lock your target successfully.
+
+Initially, know that there is a difference between passive and active
+healing capabilities. Active healing requires the use of a balanced
+action, like fitness, alleviate and the like. Passive healing requires
+an initial action, but then heals independently without further need for
+interaction from the person performing the action. Examples of passive
+healing are devotion rites and a Baalzadeen's syphon.
+
+The main obstacle on the road to a toxin lock are the active healing
+abilities. All passive healing abilities can be disrupted by use of the
+toxin Voyria. By design, passive healing cures Voyria before anything
+else, which means the opportunity to stack another affliction or two
+within the healing rate window, before administering Voyria again.
+
+
+ALCHEMISTS
+-------
+Salt in Alchemy.
+Hindered by Stupidity
+
+APOSTATES
+-------
+Syphon in Apostasy. PASSIVE.
+Requires the Baalzadeen to be at at least 100 health, and drains health
+from the Baalzadeen while it cures its master.
+
+BARDS
+-------
+Hallejuah in Harmonic. PASSIVE.
+
+DEPTHSWALKERS
+-------
+Accelerate in Aeonics.
+Hindered by recklessness.
+The ability can be boosted to cure two afflictions. Boosting this
+process is hindered by prone or recklessness.
+
+DRUIDS
+-------
+Fitness in Metamorphosis. Always cures asthma.
+Hindered by weariness.
+
+Might in Metamorphosis.
+Hindered by prone.
+
+Grove Cure in Groves.
+Hindered by nothing.
+
+Panacea in Groves. PASSIVE.
+
+INFERNALS
+-------
+Fitness in Chivalry. Cures asthma.
+Hindered by weariness.
+ 
+JESTERS
+-------
+Fool in Tarot.
+Hindered by paralysis or prone.
+
+Sun in Tarot.
+PASSIVE.
+
+MAGI
+-------
+Bloodboil in Elementalism.
+Hindered by Haemophilia or broken arms (both must be broken).
+
+Harmony in Crystalism. PASSIVE.
+
+MONKS
+-------
+Fitness.
+Hindered by weariness.
+
+OCCULTISTS
+-------
+See "Jesters" above.
+
+PALADINS
+-------
+Fitness in Chivalry.
+Hindered by weariness.
+
+Healing in Devotion.
+PASSIVE.
+
+PARIAH
+-------
+Leech. PASSIVE.
+Can be cast on someone else other than the target.
+
+PRIESTS
+-------
+Healing in Devotion. PASSIVE
+
+Angel Care through Guardian Angels. PASSIVE (compare Apostate Syphon).
+NOTE: These two passives do not stack, Angel Care takes priority and
+cures slightly faster.
+
+PSION
+-------
+Expunge in Psionics. Prioritizes curing impatience.
+Hindered by confusion.
+
+RUNEWARDEN
+-------
+Fitness in Chivalry.
+Hindered by weariness
+
+Dagaz in Runelore. PASSIVE.
+
+SENTINELS
+-------
+Fitness in Metamorphosis. Cures asthma.
+Hindered by weariness.
+
+Might in Metamorphosis. Hindered by prone.
+
+SERPENTS
+-------
+Shrugging in Venoms. Hindered by weariness.
+
+SHAMANS
+-------
+Daina in Spiritlore. Hindered by selarnia.
+
+SYLVANS
+-------
+Grove Cure in Groves.
+
+Panacea in Groves. PASSIVE.
+Note: Panacea procs faster for those in Viridian form.
+
+ELEMENTAL LADIES/ELEMENTAL LORDS
+-------
+Air: Susurration. PASSIVE.
+Fire: Slough. Hindered by prone.
+Water: Purify. Hindered by weariness.
+Earth: Eruption. Hindered by weariness.
+
+DRAGONS
+-------
+Heal in Dragoncraft. Hindered by weariness and recklessness
+simultaneously.

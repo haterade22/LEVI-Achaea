@@ -144,13 +144,14 @@
 
 **You MUST read these files first:**
 
+0. **[../kb/afflictions/README.md](../kb/afflictions/README.md)** - How afflictions and cures work from both sides, the cure catalog (joined to our code), class cures with their blockers and fire lines. `kb/CONFLICTS.md` lists known mismatches.
 1. **[classes/lock_types.md](classes/lock_types.md)** - All lock type definitions (Softlock, Venomlock, Truelock, Focuslock, Riftlock, Salvelock, Sleeplock, Aeonlock)
 2. **[classes/<target_class>.md](classes/)** - Class-specific kill routes, gating requirements, lock afflictions
 3. **[classes/README.md](classes/README.md)** - Affliction stacking by herb, class-specific lock affliction table
 
 ## Before Coding Defensive Systems
 
-Read the **attacker's class documentation** in `.claude/classes/<class>.md` for kill routes to counter, gating requirements, priority cure recommendations, and class-specific lock afflictions to prevent.
+Read the **`kb/afflictions/`** (cure channels, catalog with our SSC priorities, class cures) and the **attacker's class documentation** in `.claude/classes/<class>.md` for kill routes to counter, gating requirements, priority cure recommendations, and class-specific lock afflictions to prevent.
 
 ---
 

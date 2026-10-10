@@ -46,7 +46,14 @@ local class = (ataxiaNDB_getClass(name) or "Unknown")
 
 local voyriaBlock = ((pariah and pariah.state and pariah.state.latencyTimer) and true or false)
 
-if isTargeted(name) and class == "Priest" then
+-- The gentle glow is the Rite of Healing (Devotion), which PALADINS have too ("Priest/Paladin
+-- (Rite of Healing)" -- kb/afflictions/class-cures.md). Angel Care and the golden curtain stay
+-- Priest-only. Until 2026-10-10 the whole trigger was Priest-gated, so a Paladin's passive cures
+-- never reached V3.
+local healer = (class == "Priest")
+  or (class == "Paladin" and line:find("^A gentle glow surrounds") ~= nil)
+
+if isTargeted(name) and healer then
   if haveAff("voyria") and not voyriaBlock then
     onClassCureV3({"voyria"})
   else
