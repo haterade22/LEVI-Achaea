@@ -16,8 +16,8 @@
 | Addiction | Eat | Ginseng | Ferrum |  | `addiction` | ginseng | 9 | 25 |  |
 | Aeon | Smoke | Elm | Cinnabar |  | `aeon` | smoke | 2 |  |  |
 | Agoraphobia | Eat | Lobelia | Argentum |  | `agoraphobia` | lobelia | 16 | 25 |  |
-| Anorexia | Apply | Epidermal | Epidermal |  | `anorexia` | salve:body | 4 | 3 |  |
-| Asthma | Eat | Kelp | Aurum |  | `asthma` | kelp | 7 |  |  |
+| Anorexia | Apply | Epidermal | Epidermal | apply epidermal to body, focus mind | `anorexia` | salve:body | 4 | 3 |  |
+| Asthma | Eat | Kelp | Aurum | eat kelp, eat aurum | `asthma` | kelp | 7 |  |  |
 | Bleeding | Clot |  |  |  | `bleeding` |  |  |  | no SSC priority in our tables |
 | Blindness | Apply | Epidermal | Epidermal |  | `blindness` | salve:head | 26 |  |  |
 | Claustrophobia | Eat | Lobelia | Argentum |  | `claustrophobia` | lobelia | 16 | 25 |  |
@@ -30,7 +30,7 @@
 | Deadening | Smoke | Elm | Cinnabar |  | `deadening` | smoke | 14 | 25 |  |
 | Deafness | Apply | Epidermal | Epidermal |  | `deafness` |  | 26 |  |  |
 | Dementia | Eat | Prickly Ash | Stannum |  | `dementia` | ash | 10 | 25 |  |
-| Disfigurement | Smoke | Valerian | Realgar |  | `disfigurement` |  |  |  | no SSC priority in our tables |
+| Disfigurement | Smoke | Valerian | Realgar | smoke valerian, smoke realgar | `disfigurement` | smoke |  |  | no SSC priority in our tables |
 | Dissonance | Eat | Goldenseal | Plumbum |  | `dissonance` | goldenseal | 14 | 25 |  |
 | Dizziness | Eat | Goldenseal | Plumbum |  | `dizziness` | goldenseal | 9 | 25 |  |
 | Drowning | Eat | Pear | Calcite |  | `drowning` |  |  |  | no SSC priority in our tables |
@@ -43,9 +43,9 @@
 | Haemophilia | Eat | Ginseng | Ferrum |  | `haemophilia` | ginseng | 11 |  |  |
 | Health Leech | Eat | Kelp | Aurum |  | `healthleech` | kelp | 8 | 6 |  |
 | Hellsight | Smoke | Valerian | Realgar |  | `hellsight` | smoke | 12 | 25 |  |
-| Hypochondria | Eat | Kelp | Aurum | eat lobelia / eat argentum | `hypochondria` | lobelia | 5 | 6 | HELP stale (kelp); live confirms argentum/lobelia |
+| Hypochondria | Eat | Kelp | Aurum | eat lobelia, eat argentum | `hypochondria` | lobelia | 5 | 6 | HELP stale (kelp); live confirms argentum/lobelia |
 | Hypersomnia | Eat | Prickly Ash | Stannum |  | `hypersomnia` | ash | 9 | 25 |  |
-| Impatience | Eat | Goldenseal | Plumbum |  | `impatience` | goldenseal | 4 |  |  |
+| Impatience | Eat | Goldenseal | Plumbum | eat goldenseal, eat plumbum | `impatience` | goldenseal | 4 |  |  |
 | Indifference | Eat | Bellwort | Cuprum |  | `indifference` | bellwort | 25 |  |  |
 | Internal Trauma | Apply | Restoration | Restoration |  | `serioustrauma` |  | 17 | 20 | name mapping ASSUMED |
 | Justice | Eat | Bellwort | Cuprum |  | `justice` | bellwort | 16 | 25 |  |
@@ -57,14 +57,14 @@
 | Mangled limb | Apply | Restoration | Restoration |  | `mangled*` (5 keys) | salve (limb) | per limb | per limb |  |
 | Nausea | Eat | Ginseng | Ferrum |  | `nausea` | ginseng | 8 |  |  |
 | Pacifism | Eat | Bellwort | Cuprum |  | `pacified` | bellwort | 3 |  |  |
-| Paralysis | Eat | Bloodroot | Magnesium |  | `paralysis` | bloodroot | 3 | 2 |  |
+| Paralysis | Eat | Bloodroot | Magnesium | eat bloodroot, eat magnesium | `paralysis` | bloodroot | 3 | 2 |  |
 | Paranoia | Eat | Prickly Ash | Stannum |  | `paranoia` | ash | 10 | 25 |  |
 | Peace | Eat | Bellwort | Cuprum |  | `peace` | bellwort | 2 |  |  |
 | Recklessness | Eat | Lobelia | Argentum |  | `recklessness` | lobelia | 8 | 6 |  |
 | Scytherus | Eat | Ginseng | Ferrum |  | `scytherus` | ginseng | 3 |  |  |
 | Sensitivity | Eat | Kelp | Aurum |  | `sensitivity` | kelp | 7 | 6 |  |
 | Shyness | Eat | Goldenseal | Plumbum |  | `shyness` | goldenseal | 12 | 25 |  |
-| Slickness | Smoke / Eat | Valerian / Bloodroot | Realgar / Magnesium |  | `slickness` | bloodroot, smoke | 3 |  |  |
+| Slickness | Smoke / Eat | Valerian / Bloodroot | Realgar / Magnesium | eat bloodroot, eat magnesium, smoke valerian, smoke realgar | `slickness` | bloodroot, smoke | 3 |  |  |
 | Stinky | Scrub |  |  |  | `stinky` |  |  |  | no SSC priority in our tables |
 | Stupidity | Eat | Goldenseal | Plumbum |  | `stupidity` | goldenseal | 8 | 25 |  |
 | Stuttering | Apply | Epidermal | Epidermal |  | `stuttering` | salve:head | 19 |  |  |
@@ -72,7 +72,7 @@
 | Transfixed | Writhe |  |  |  | `transfixation` |  | 2 |  |  |
 | Vertigo | Eat | Lobelia | Argentum |  | `vertigo` | lobelia | 9 | 25 |  |
 | Voyria | Sip | Immunity | Immunity |  | `voyria` |  | 2 |  |  |
-| Weariness | Eat | Kelp | Aurum |  | `weariness` | kelp | 6 |  |  |
+| Weariness | Eat | Kelp | Aurum | eat kelp, eat aurum | `weariness` | kelp | 6 |  |  |
 | Webbed | Writhe |  |  |  | `webbed` |  | 2 |  |  |
 
 ## In our priority table but not in HELP 13.7.2
@@ -89,7 +89,7 @@ Paste `WHATCURES <aff>` / `AFFLICTION SHOW <aff>` output into the inbox to fill 
 | `crushedthroat` |  | salve:head | 5 |  |  |
 | `daeggerimpale` |  |  | 2 |  |  |
 | `depression` |  | goldenseal | 6 | 25 |  |
-| `disloyalty` |  | smoke | 15 | 25 |  |
+| `disloyalty` | smoke valerian, smoke realgar | smoke | 15 | 25 |  |
 | `disrupted` |  |  | 2 |  |  |
 | `flushings` |  | ginseng | 5 |  |  |
 | `fratricide` |  | lobelia | 25 |  |  |

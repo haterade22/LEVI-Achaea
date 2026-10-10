@@ -2,6 +2,41 @@
 
 ---
 
+## 2026-10-10 - `kbcapture`: record the game's own answers for the KB; disfigurement smokes (v4.7.396)
+
+User: "do a system to do affliction show <aff>, capture the output and put it into a local
+database". Two halves, split on purpose: **Mudlet records, the repo parses.** We have never seen
+`AFFLICTION SHOW` output, so a parser written in-game would be a guess that can only be fixed by
+going back in-game. Raw text plus a parser in the repo can be improved and re-run at will.
+
+- **`kbcapture`** (alias `configs/025`, script `misc_scripts/025_KB_Capture.lua`, namespace
+  `ataxiaKB`): sends one command at a time and records every line until the next prompt
+  (`isPrompt()`), or until a 4s timeout, which marks the block `TIMEOUT`. A prompt before any answer
+  is ignored, since it belongs to something older. Each block is APPENDED to
+  `<profile>/kb_capture.txt` as soon as it ends, so a stop or disconnect keeps what was captured.
+  Output is gagged with a progress echo, and the capture refuses to start while the basher is on,
+  because a gag would hide a fight. `kbcapture afflictions` = `AFFLICTION LIST` + `AFFLICTION SHOW`
+  and `WHATCURES` for every name the code knows (curing priorities and all four cure tables, stack
+  suffixes dropped, plus HELP 13.7.2 names the code does not use). `kbcapture <cmd;cmd>` captures
+  anything. State lives on `ataxiaTemp` (a saved "running" flag would wedge the next session).
+- **`tools/kb_capture_import.py`**: finds the newest `kb_capture.txt` in any Mudlet profile, copies
+  it whole to `kb/raw/live/captures/`, files `affliction_show/<aff>.txt`, appends new WHATCURES lines,
+  renames the source, regenerates the catalog, and lists commands that got no answer (usually a name
+  the game spells differently from our code).
+- **Catalog**: the WHATCURES parser now splits " and " (separate cures) from " / " (interchangeable
+  curatives): "Eat Bloodroot / Eat Magnesium and Smoke Valerian / Smoke Realgar". The Live column
+  links each affliction's AFFLICTION SHOW capture.
+- **Eight more live WHATCURES** (disloyalty, disfigurement, paralysis, slickness, anorexia, asthma,
+  impatience, weariness). All agree with the code except one gap: **disfigurement and disloyalty
+  are two afflictions**, both smoked with valerian. The Serpent offense records disfigurement for
+  monkshood, but `smokeCureTableV3` only listed disloyalty, so a smoke could never clear it from V3.
+  It is now appended (existing candidates keep their weights).
+
+Tests: `test_kb_capture.lua` (names, commands, prompt/timeout endings, file format, stop, refusals);
+`test_target_cure_tables.lua` adds disfigurement to the smoke list.
+
+---
+
 ## 2026-10-10 - KB: live WHATCURES settles hypochondria (docs and tooling only, no version bump)
 
 User pasted `WHATCURES HYPOCHONDRIA`: "The affliction 'hypochondria' is cured by: Eat Lobelia /

@@ -1,3 +1,12 @@
 # WHATCURES output, pasted verbatim. One line per capture; newest at the bottom.
 # 2026-10-10
 The affliction 'hypochondria' is cured by: Eat Lobelia / Eat Argentum.
+# 2026-10-10 18:21 (pasted)
+The affliction 'disloyalty' is cured by: Smoke Valerian / Smoke Realgar.
+The affliction 'disfigurement' is cured by: Smoke Valerian / Smoke Realgar.
+The affliction 'paralysis' is cured by: Eat Bloodroot / Eat Magnesium.
+The affliction 'slickness' is cured by: Eat Bloodroot / Eat Magnesium and Smoke Valerian / Smoke Realgar.
+The affliction 'anorexia' is cured by: Apply Epidermal To Body and Focus Mind.
+The affliction 'asthma' is cured by: Eat Kelp / Eat Aurum.
+The affliction 'impatience' is cured by: Eat Goldenseal / Eat Plumbum.
+The affliction 'weariness' is cured by: Eat Kelp / Eat Aurum.

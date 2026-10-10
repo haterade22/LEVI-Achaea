@@ -57,6 +57,24 @@ first time material for them arrives.
    what is new since the last ingest, files the raw text, updates or creates the curated
    pages, checks them against the code, reports conflicts, and then marks the file ingested.
 
+### Capturing straight from the game (`kbcapture`)
+
+For anything the game will answer on request, let the package ask and record it instead of
+copying by hand:
+
+1. In Mudlet, somewhere quiet, with the basher off: **`kbcapture afflictions`**. It sends
+   `AFFLICTION LIST`, then `AFFLICTION SHOW <aff>` and `WHATCURES <aff>` for every affliction our
+   code knows (about 5 minutes, output hidden). `kbcapture help cures;help heal` captures any
+   commands you list. `kbcapture stop` ends early, and `kbcapture` shows progress.
+2. In the repo: **`python tools/kb_capture_import.py`**. It finds `kb_capture.txt` in your Mudlet
+   profile, files every answer into `kb/raw/live/` (a full copy in `captures/`, one file per
+   affliction in `affliction_show/`, new lines appended to `whatcures.txt`), renames the source
+   file so the next run starts clean, regenerates the catalog, and lists any command that got no
+   answer. Those are usually names the game spells differently from our code.
+
+The capture records raw text only and the importer does the understanding, so a parser can be
+improved and re-run without going back into the game.
+
 The pastes that teach the most, best first:
 - `WHATCURES <affliction>` and `AFFLICTION SHOW <affliction>` (live, beats HELP)
 - `AB <skill>` for any class we fight or play

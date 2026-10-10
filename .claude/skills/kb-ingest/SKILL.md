@@ -24,6 +24,11 @@ TARGET responds (class cures, lines we can see), and how WE respond (SSC priorit
    It prints numbered chunks of new text. If it says "Nothing new", stop and say so. If it
    reports changed or removed lines, tell the user which earlier material changed.
 
+   **Also check for an in-game capture:** if a `kb_capture.txt` exists in any Mudlet profile
+   (`~/.config/mudlet/profiles/*/`), run `python -I tools/kb_capture_import.py` first. It files
+   `kbcapture` output into `kb/raw/live/` and regenerates the catalog. Then review what it filed
+   (new AFFLICTION SHOW files are curated like any other raw source).
+
 2. **Classify each chunk.** Decide what kind of source it is:
    - `help`: starts with a HELP number or title, or reads as an in-game help file
    - `ab`: `AB <skill>` output (syntax / works on / balance lines, AB numbers)

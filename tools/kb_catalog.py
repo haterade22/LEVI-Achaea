@@ -19,6 +19,7 @@ ATAXIA = os.path.join(ROOT, "src_new", "scripts", "levi_ataxia", "levi", "ataxia
 HELP = os.path.join(ROOT, "kb", "raw", "help", "13.7.2_afflictions-and-what-cures-them.txt")
 OUT = os.path.join(ROOT, "kb", "afflictions", "catalog.md")
 LIVE = os.path.join(ROOT, "kb", "raw", "live", "whatcures.txt")
+SHOW_DIR = os.path.join(ROOT, "kb", "raw", "live", "affliction_show")
 TRACKED_HERBS = ("kelp", "ginseng", "goldenseal", "lobelia", "ash", "bellwort", "bloodroot")
 
 SRC = {
@@ -101,16 +102,23 @@ def parse_live():
         m = pat.search(line)
         if not m:
             continue
+        # "Eat Bloodroot / Eat Magnesium and Smoke Valerian / Smoke Realgar": " and " separates
+        # different CURES, " / " separates interchangeable curatives (herb / mineral) within one.
         cures = []
-        for part in m.group(2).split(" / "):
-            words = part.strip().split(" ", 1)
-            cures.append((words[0].lower(), words[1].lower() if len(words) > 1 else ""))
+        for group in m.group(2).split(" and "):
+            for part in group.split(" / "):
+                words = part.strip().split(" ", 1)
+                cures.append((words[0].lower(), words[1].lower() if len(words) > 1 else ""))
         out[m.group(1).lower().replace(" ", "")] = cures
     return out
 
 
-def live_text(cures):
-    return " / ".join(f"{a} {c}".strip() for a, c in cures) if cures else ""
+def live_text(cures, key=None):
+    """The WHATCURES answer, plus a link to the AFFLICTION SHOW capture when there is one."""
+    text = ", ".join(f"{a} {c}".strip() for a, c in cures) if cures else ""
+    if key and os.path.exists(os.path.join(SHOW_DIR, key + ".txt")):
+        text = (text + " " if text else "") + f"([show](../raw/live/affliction_show/{key}.txt))"
+    return text
 
 
 def live_flags(key, cures, wide, v3):
@@ -202,7 +210,8 @@ def main():
         action = r["action"] + "".join(f" / {a[0]}" for a in r["alts"])
         herb = r["herb"] + "".join(f" / {a[1]}" for a in r["alts"])
         mineral = r["mineral"] + "".join(f" / {a[2]}" for a in r["alts"])
-        lv_s = "" if squashed in FAMILIES else live_text(live.get(NAME_MAP.get(squashed, squashed)) or live.get(squashed))
+        k2 = NAME_MAP.get(squashed, squashed)
+        lv_s = "" if squashed in FAMILIES else live_text(live.get(k2) or live.get(squashed), k2)
         lines.append(f"| {r['name']} | {action} | {herb} | {mineral} | {lv_s} | {key_s} | {trk} | {p_s} | {b_s} | {'; '.join(flags)} |")
 
     extra = sorted(k for k in pvp if k not in covered and not re.search(r"\d$", k))
@@ -219,7 +228,7 @@ def main():
     ]
     for k in extra:
         p_s, b_s = prio(k)
-        lines.append(f"| `{k}` | {live_text(live.get(k))} | {tracker(k)} | {p_s} | {b_s} | {'; '.join(live_flags(k, live.get(k), wide, v3))} |")
+        lines.append(f"| `{k}` | {live_text(live.get(k), k)} | {tracker(k)} | {p_s} | {b_s} | {'; '.join(live_flags(k, live.get(k), wide, v3))} |")
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8", newline="\n") as fh:
