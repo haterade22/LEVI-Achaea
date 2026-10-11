@@ -40,6 +40,6 @@ patterns:
 ]]--
 
 if isTargeted(matches[2]) then
-	tarAffed("hellsight")
+	ataxia_tarAffTimed("hellsight")
 end
 

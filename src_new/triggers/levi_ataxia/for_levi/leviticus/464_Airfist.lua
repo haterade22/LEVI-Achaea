@@ -38,8 +38,6 @@ patterns:
 ]]--
 
 if isTargeted(matches[2]) then
-		tarAffed("airfist")
+		ataxia_tarAffTimed("airfist")   -- 15s (game); the old tAffs-only timer never expired it
     tparrying = "none"
-		if bmFistTimer then killTimer(bmFistTimer) end
-		bmFistTimer = tempTimer(18, [[tAffs.airfist = nil; ataxia_Echo("Airfist has faded from "..target..".")]])
 end

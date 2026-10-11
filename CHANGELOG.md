@@ -2,6 +2,34 @@
 
 ---
 
+## 2026-10-11 - Timed afflictions actually leave the target (v4.7.405)
+
+User: "there should be third party lines for hamstrung, etc. for when it comes off". Checking how
+the target's timed afflictions expire turned up broken expiry everywhere:
+
+- **Timers that could never expire anything.** hamstring, airfist and voidfist set `tAffs.x = nil`;
+  V3 copies its own belief back over `tAffs` on the next sync, so they stayed on the target forever.
+- **No expiry at all:** hellsight, dazzle, muddled, and scalded when given by Magi resonance.
+- **Fade lines that removed a name nothing sets:** vinewreathe (`vinewreathe` vs `vinewreathed`) and
+  the Water Lord bonds copy (`bonds` vs `waterbond`). The Blademaster offense checked `airfisted`
+  while `airfist` is recorded, so its "already airfisted" guard never fired.
+- **A fade line disabled after one use.** The ensorcell-broken line was skipped whenever a timer handle
+  existed, and the handle was never cleared. Now the handle clears when it fires and the line always
+  removes it.
+- **Pinshot's flag lasted 30s** against its own 21s countdown (and the game's 21s).
+- **The hamstring fade sent your party an empty message** (`pt <target>: `). Now "Hamstring faded".
+
+**New: `ataxia_tarAffTimed(aff[, seconds])` / `ataxia_tarAffFaded(aff)`** (`017_Affliction_Management.lua`).
+One clock per affliction at the game's duration (`ataxia_TARGET_AFF_SECONDS`, from AFFLICTION SHOW);
+a repeat restarts it; it removes nothing from a target you have switched away from. A fade line removes
+it immediately and cancels the clock. Used by hamstring, airfist, voidfist, dazzle, hellsight, muddled,
+scalded (both paths), vinewreathed and waterbond (with its cold-dependent duration).
+
+New KB page: `kb/afflictions/expiry-lines.md` (the third-person lines we catch, the ones still wanted
+from logs). Test: `test_target_timed_affs.lua`.
+
+---
+
 ## 2026-10-11 - Enemy salve tracking: one application, one cure (v4.7.404)
 
 User: "proceed with salve design". The game's application line ("X takes some salve from a vial and

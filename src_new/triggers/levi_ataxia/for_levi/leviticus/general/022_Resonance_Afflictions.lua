@@ -152,7 +152,7 @@ elseif line:find("should burn, and so") then
       magi.offense.ptRelay(target .. ": Resonance Fire (burning, burns:" .. magi.offense.state.burns .. ")")
     else
       -- Not scalded yet → apply scalded + 20s timer
-      tarAffed("scalded")
+      ataxia_tarAffTimed("scalded")  -- the resonance path never expired it in the tracker
       magi.offense.setScalded()
       magi.offense.ptRelay(target .. ": Resonance Fire (scalded)")
     end

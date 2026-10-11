@@ -41,9 +41,9 @@ patterns:
 ]]--
 
 if isTargeted(matches[2]) then
-		tarAffed("hamstring")
-		if hamstringTimer then killTimer(hamstringTimer) end
-		hamstringTimer = tempTimer(10, [[tAffs.hamstring = nil]])
+		-- 10s, the game's duration. The old timer set tAffs.hamstring = nil, which V3 overwrote on
+		-- its next sync, so hamstring never expired (v4.7.405).
+		ataxia_tarAffTimed("hamstring")
 
 		-- Update BM dispatch timestamp for hamstring tracking
 		if blademaster and blademaster.onHamstringApplied then

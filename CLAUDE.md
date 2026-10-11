@@ -2930,6 +2930,8 @@ fight. Parenthesise mixed `and`/`or` conditions.
 two lines when the affliction block is long, so a naive log parser silently drops exactly the
 most-afflicted (i.e. most interesting) prompts.
 
+**Timed afflictions on the target expire through `ataxia_tarAffTimed(aff[, seconds])` (v4.7.405)**, which adds the affliction and removes it after the game's `Default time` (`ataxia_TARGET_AFF_SECONDS`, `017_Affliction_Management.lua`). A third-person fade line calls `ataxia_tarAffFaded(aff)` to remove it now and cancel the clock. **Never expire a target affliction with `tAffs.x = nil`:** V3 copies its own belief back over `tAffs` on the next sync, so it never expires (hamstring, airfist and voidfist were all broken this way). And make sure the fade line removes the SAME key the add used: `vinewreathe` vs `vinewreathed`, `bonds` vs `waterbond`, and `airfisted` vs `airfist` were all silent no-ops. Lines collected in `kb/afflictions/expiry-lines.md`.
+
 **Enemy salve applications are one cure each (v4.7.404).** "X takes some salve from a vial and rubs it on his <spot>" names the spot, not the salve, so `salveCureTableV3` lists everything a salve at that spot cures (from live WHATCURES) and the tracker BRANCHES to one cure. Only PROOFS are erased outright: an application is impossible while slick or under bloodfire. A trigger that owns a cure with its own timing (393's delayed restoration for hypothermia/calcified torso, 392's head damage and crushed throat) keeps it, and the branching is skipped for that application so nothing is cured twice. `test_target_salve_tracking.lua` drives the real triggers through the real tracker.
 
 **Corollary on our own afflictions:** they come from **GMCP `Char.Afflictions.Add`** (`gotAff`

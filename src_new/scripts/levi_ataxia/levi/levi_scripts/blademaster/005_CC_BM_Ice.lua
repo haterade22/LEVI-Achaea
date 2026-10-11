@@ -652,7 +652,7 @@ function blademaster.needsAirfist(targetLimbType)
     return false, "not enough shin (" .. shin .. "/25)"
   end
 
-  if blademaster.hasAff("airfisted") then
+  if blademaster.hasAff("airfist") then  -- the key 464_Airfist records (was "airfisted", never set)
     return false, "already airfisted"
   end
 

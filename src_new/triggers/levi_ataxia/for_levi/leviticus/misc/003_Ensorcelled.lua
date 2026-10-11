@@ -43,4 +43,9 @@ pariah.state.bladePrepared = true
 tarAffed("ensorcelled")
 
 if pariah.state.ensorcellTimer then killTimer(pariah.state.ensorcellTimer) end
-pariah.state.ensorcellTimer = tempTimer(21, [[ erAff("ensorcelled") ]])
+-- The handle is cleared when it fires, so "ensorcellTimer is set" means "ensorcell is up"
+-- (TargetOutOfRoom reads it that way). It used to stay set forever after the first cast.
+pariah.state.ensorcellTimer = tempTimer(21, function()
+  pariah.state.ensorcellTimer = nil
+  erAff("ensorcelled")
+end)

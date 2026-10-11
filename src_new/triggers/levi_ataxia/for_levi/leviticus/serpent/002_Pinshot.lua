@@ -36,7 +36,7 @@ patterns:
 ]]--
 
 tpinshot = true
-tempTimer(30, [[tpinshot = false]])
+tempTimer(21, [[tpinshot = false]])  -- 21s, the game's duration and this trigger's own countdown (was 30)
 
   cecho("\n")
   ataxia_boxEcho(matches[2].." PINSHOT !!!", "black:orange")
