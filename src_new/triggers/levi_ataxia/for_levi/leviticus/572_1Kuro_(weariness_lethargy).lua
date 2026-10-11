@@ -25,7 +25,7 @@ attributes:
   isColorTriggerFg: 'no'
   isColorTriggerBg: 'no'
 triggerType: 0
-conditonLineDelta: 1
+conditonLineDelta: 2
 mStayOpen: 0
 mCommand: ''
 packageName: ''
@@ -35,7 +35,7 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^Dropping into a lower stance, you sweep .+ at the (\w+) thigh of (\w+).$
+- pattern: ^Dropping into a lower stance, you sweep
   type: 1
 - pattern: '1'
   type: 5
@@ -43,8 +43,10 @@ patterns:
     leg)\.$
   type: 1
 ]]--
-
-local person = multimatches[1][3]
+-- v4.7.413: line 1 is a START fragment and the window is 2 lines, so a strike line that wraps
+-- (it carries the staff's name; 127-147 columns against a 119-124 wrap) still pairs with its
+-- damage line. Target, damage and limb come from the damage line: 3 = name, 2 = %, 4 = limb.
+local person = multimatches[3][3]
 local maybemiss = multimatches[3][1]
 
 
@@ -79,5 +81,5 @@ partyrelay and  haveAff("weariness") then send("pt "..target..": lethargy wearin
   
 end
 
-local damage = tonumber(multimatches[3][1])
+local damage = tonumber(multimatches[3][2])
    ataxiaTables.limbData.shikKuro = damage

@@ -39,11 +39,11 @@ patterns:
     (him|her) spinning to the ground.
   type: 1
 ]]--
-
-selectCurrentLine() fg("a_yellow") bg("black") 
-replace("" ..matches[2].. " [Frontkick: Prone]")
-
-
-send("pt " ..matches[2].. ": prone")
-tarAffed("prone")
-			
+-- v4.7.413: only for OUR target (it recorded and relayed anyone's hit on anyone), and the party
+-- message only goes out with party relay on.
+if isTargeted(matches[2]) then
+  selectCurrentLine() fg("a_yellow") bg("black")
+  replace("" ..matches[2].. " [Frontkick: Prone]")
+  tarAffed("prone")
+  if partyrelay then send("pt " ..matches[2].. ": prone") end
+end

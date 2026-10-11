@@ -445,6 +445,24 @@ describe("Assassin's Blade: open with BACKSTAB while hidden", function()
     expect(src:find("pattern: Your attack has brought you out of hiding", 1, true) ~= nil).toBeTrue()
   end)
 
+  it("a refused backstab means not hidden: the next round is the garrote, re-sent at once", function()
+    reset({})
+    ataxiaBasher_serpentConcealed()
+    ataxia.defences = { hiding = true }
+    mnemAssassinsBlade = true
+    local requeued
+    local real = ataxiaBasher_requeueNow
+    ataxiaBasher_requeueNow = function(why) requeued = why end
+    ataxiaBasher_serpentBackstabRefused()
+    ataxiaBasher_requeueNow = real
+    expect(requeued).toBe("backstab refused")
+    local cmd = ataxiaBasher_serpentBashing()
+    expect(has(cmd, "backstab")).toBeFalse()
+    expect(has(cmd, "garrote 7")).toBeTrue()
+    mnemAssassinsBlade = nil
+    ataxia.defences = {}
+  end)
+
   it("a GMCP Remove of hiding cancels the concealment at once", function()
     reset({})
     ataxiaBasher_serpentConcealed()

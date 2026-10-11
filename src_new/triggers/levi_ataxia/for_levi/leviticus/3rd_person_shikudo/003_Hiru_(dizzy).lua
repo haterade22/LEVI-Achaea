@@ -40,6 +40,7 @@ patterns:
 if isTargeted(matches[2]) then
   if not ignoreThirdPerson then
     tarAffed("dizziness")
+    if haveAff("prone") then tarAffed("confusion") end  -- wiki: confusion too if prone (v4.7.413)
   else
     ignoreThirdPerson = nil
   end

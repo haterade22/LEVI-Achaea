@@ -25,7 +25,7 @@ attributes:
   isColorTriggerFg: 'no'
   isColorTriggerBg: 'no'
 triggerType: 0
-conditonLineDelta: 1
+conditonLineDelta: 2
 mStayOpen: 0
 mCommand: ''
 packageName: ''
@@ -35,15 +35,17 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^Whirling around, you bring the ball of your foot smashing into the ribs of (\w+).$
+- pattern: ^Whirling around, you bring the ball of your foot smashing into the ribs
   type: 1
 - pattern: '1'
   type: 5
 - pattern: ^As your blow lands with a crunch, you perceive that you have dealt ([0-9\.]+)\% damage to (\w+)'s torso\.$
   type: 1
 ]]--
-
-local person = multimatches[1][2]
+-- v4.7.413: line 1 is a START fragment and the window is 2 lines, so a strike line that wraps
+-- (it carries the staff's name; 127-147 columns against a 119-124 wrap) still pairs with its
+-- damage line. Target, damage and limb come from the damage line: 3 = name, 2 = %, 4 = limb.
+local person = multimatches[3][3]
 local maybemiss = multimatches[3][1]
 
 if isTargeted(person) then
@@ -52,9 +54,9 @@ if isTargeted(person) then
   ignoreThirdPerson = true
 
     lastLimbAttack = "shikSpinkickTorso"
-if  ataxiaTemp.shikCombo.attackone == "kuro" and ataxiaTemp.shikCombo.attacktwo == "kuro" then
+if  (ataxiaTemp.shikCombo or {}).attackone == "kuro" and (ataxiaTemp.shikCombo or {}).attacktwo == "kuro" then
 relaydoublekuro = true else relaydoublekuro = false  end
-if  ataxiaTemp.shikCombo.attackone == "ruku" and ataxiaTemp.shikCombo.attacktwo == "ruku" then
+if  (ataxiaTemp.shikCombo or {}).attackone == "ruku" and (ataxiaTemp.shikCombo or {}).attacktwo == "ruku" then
 relaydoubleruku = true else relaydoubleruku = false  end
 
 
@@ -65,5 +67,5 @@ elseif partyrelay and relaydoubleruku then  send("pt "..target..": clumsiness he
 end
 end
 
-local damage = tonumber(multimatches[3][1])
+local damage = tonumber(multimatches[3][2])
    ataxiaTables.limbData.shikSpinkickTorso = damage

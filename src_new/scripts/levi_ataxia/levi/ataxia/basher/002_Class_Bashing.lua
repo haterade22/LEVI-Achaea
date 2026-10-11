@@ -3810,6 +3810,18 @@ function ataxiaBasher_serpentBackstabbed()
    end
 end
 
+-- THE BACKSTAB WAS REFUSED (trigger serpent/023, v4.7.413):
+--
+--   You must be hiding or phased to backstab.
+--
+-- User: "this should mean that we are not hidden and need to continue with attacking with garrote or
+-- biting". So: not hidden (as serpentBackstabbed), and the round is re-sent at once -- the refused
+-- backstab cost nothing, and waiting for the next prompt would waste the balance we still have.
+function ataxiaBasher_serpentBackstabRefused()
+   ataxiaBasher_serpentBackstabbed()
+   if ataxiaBasher_requeueNow then ataxiaBasher_requeueNow("backstab refused") end
+end
+
 function ataxiaBasher_serpentBashing()
    local command = ""
 	 local brage = ataxiaBasher_assembleBattlerage()

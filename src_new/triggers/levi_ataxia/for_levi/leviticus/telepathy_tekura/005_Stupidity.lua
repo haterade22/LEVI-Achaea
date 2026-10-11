@@ -42,8 +42,9 @@ patterns:
 ]]--
 
 if isTargeted(matches[2]) then
-	-- Guarded v4.7.261: callee lives in a script that is switched off, so a bare call throws.
-	if tarAffedConfirmed then tarAffedConfirmed("stupidity") end
+	-- v4.7.413: tarAffedConfirmed lives only in the inactive 001_Core, so the guarded call recorded
+	-- NOTHING and Mind Stupidity was invisible to the tracker.
+	tarAffed("stupidity")
   if ataxia.settings.raid.enabled then
     send("pt stupidity on "..matches[2],false)
   end

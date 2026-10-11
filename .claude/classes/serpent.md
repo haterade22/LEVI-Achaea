@@ -735,6 +735,8 @@ assassins_blade: |
   unsuspecting back!" (serpent/021) is highlighted bold chartreuse and drops the hidden window and the
   `hiding` defence (user: "When we backstab we become unhidden"), ahead of GMCP's Remove.
   v4.7.412: "Your attack has brought you out of hiding." (serpent/022) does the same, without a highlight.
+  v4.7.413: "You must be hiding or phased to backstab." (serpent/023) marks us unhidden the same way and
+  re-sends the round at once, so the garrote / camus bite goes out instead (user-directed).
   The cycle (user): backstab once to open, kill, Darkwalker rehides us, backstab again. The wield stays
   `wield shield dirk` (user: "wield shield dirk is fine"; v4.7.408 had briefly sent `wield dirk`).
 venom_agony_purge: |
