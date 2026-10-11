@@ -3768,7 +3768,8 @@ end
 --   You swiftly return to concealment in the wake of your triumph.
 --
 -- (trigger serpent/020, user: "this rehides us also") -- and the refusal "You are already hidden."
--- (v4.7.409, same trigger: a refusal is a free state probe) -- arrives the instant the denizen dies, which
+-- (v4.7.409, same trigger: a refusal is a free state probe) -- and a successful HIDE, "You conceal
+-- yourself using all the guile you possess." (v4.7.410) -- arrives the instant the denizen dies, which
 -- is exactly when the next round is built for the next denizen -- before any Defences.Add. So the
 -- line also counts for SERPENT_CONCEAL_WINDOW seconds. A stamp, never a write to ataxia.defences:
 -- GMCP owns the state, and a belief it never confirmed is one it will never Remove. A Remove of
