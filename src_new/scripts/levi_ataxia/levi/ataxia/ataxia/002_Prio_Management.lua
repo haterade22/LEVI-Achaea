@@ -46,7 +46,9 @@ ataxia.prioThrottle = ataxia.prioThrottle or {
 local function writesStoredAffPrio(cmd)
   if type(cmd) ~= "string" then return false end
   for part in cmd:gmatch("[^;]+") do
-    local aff = part:match("^%s*curing%s+priority%s+(%a+)%d*%s+%d+%s*$")
+    -- No `$`: a multi-set command (`curing priority a 1 b 2 ...`, v4.7.403) is a stored write
+    -- too, and its first pair is enough to classify it.
+    local aff = part:match("^%s*curing%s+priority%s+(%a+)%d*%s+%d+")
     if aff then
       aff = aff:lower()
       if aff ~= "defence" and aff ~= "defense" and aff ~= "health" and aff ~= "mana" then

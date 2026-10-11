@@ -2177,6 +2177,7 @@ Paladin kill condition had never taken effect. Rules that follow:
   `CURING PRIORITY RESET`. Orphaned per-stack rows persist at their old values, so a base changed
   without accounting for them produces a value that never applies -- the same class of bug the
   base/override change fixed.
+- **Bulk writes use the MULTI-SET form** (v4.7.403): `curing priority a 1 b 2 ...`, built by `ataxia_prioMassCommands` (20 pairs a command), one command a second. One affliction per command in bursts of 5 sat exactly at Announce #5450's 5-a-second limit, and a live login drew seven "You have exceeded the spam threshold for curing priority" refusals, each a DROPPED write. Trigger 787 now catches that line: `ataxia_prioSpamRejected` forgets the recorded send and retries once (at most once a minute).
 - **The throttle counts COMMANDS, not calls** (`ataxia.prioThrottle`, v4.7.276). Semicolon batches
   are charged for every command in them; the server cap is 5/sec and several sites batch three.
 - **A swap that WRITES needs a restore designed with it.** `Algedonic.AntiPaladin` wrote stored
