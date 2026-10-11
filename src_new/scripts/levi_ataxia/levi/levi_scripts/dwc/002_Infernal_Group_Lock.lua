@@ -27,7 +27,9 @@ KILL CONDITION:
     - Slickness (gecko)     - Blocks salve cures
     - Anorexia (slike)      - Blocks eating herbs
     - Paralysis (curare)    - Blocks tree tattoo escape
-    - Impatience (euphorbia) - Blocks focus escape
+    - Impatience            - Blocks focus escape. AN INFERNAL CANNOT GIVE IT: no venom gives
+                              impatience, and infestation no longer does (user, 2026-10-11). It
+                              only counts when a teammate supplies it.
     - Class Lock Aff        - Blocks class-specific escape (via getLockingAffliction)
 
 -------------------------------------------------------------------------------
@@ -40,7 +42,7 @@ DESIGN PRINCIPLES:
     4. V3 PROBABILITY SUPPORT - Routes through existing tracking infrastructure
     5. MINIMAL STATE - Group combat needs fast, stateless execution
     6. HELLFORGE EXPLOIT - Use for 2-aff pressure when pushing weariness
-    7. CLASS-AWARE - Use getLockingAffliction(target) for final lock aff
+    7. CLASS-AWARE - getLockingAffliction("name") gives the lock aff; LOCK_DELIVERY says what gives it
 
 -------------------------------------------------------------------------------
 VENOM PRIORITY CHAIN:
@@ -50,17 +52,19 @@ VENOM PRIORITY CHAIN:
         Priority 1: If NO asthma        -> kalmia      (blocks smoke)
         Priority 2: If NO slickness     -> gecko       (blocks salve)
         Priority 3: If NO anorexia      -> slike       (blocks eat)
-        Priority 4: If NO impatience    -> euphorbia   (blocks focus)
-        Priority 5: If NO class lock    -> getLockingAffliction() venom
-        Priority 6: If all stuck        -> kalmia      (reinforce, first to drop)
+        Priority 4: If NO class lock    -> LOCK_DELIVERY[class lock aff] (venom or Hellforge)
+        Priority 5: If all stuck        -> kalmia      (reinforce, first to drop)
+        (There is no impatience step: an Infernal has no way to give it. Until 2026-10-11 this
+        step sent euphorbia, which gives NAUSEA, so a group lock without a teammate supplying
+        impatience re-sent euphorbia forever and never reached the class lock affliction.)
 
     V2 Selection (Always Paralysis):
         Always: curare (paralysis)
 
-    Hellforge Exploit Integration:
-        When pushing for class lock affliction and class needs weariness:
-        - Use `hellforge invest exploit` (gives weariness + paranoia)
-        - Otherwise use standard venom from getLockingAffliction()
+    Hellforge Integration:
+        The class lock affliction is delivered by LOCK_DELIVERY: a Hellforge investment for
+        weariness (`exploit`, weariness + paranoia) and haemophilia (`torture`), a venom otherwise.
+        Psion's confusion has no delivery, so the step reinforces asthma instead.
 
     Rebounding/Shield Override:
         If rebounding OR shield -> RSL with curare (raze + apply paralysis)
@@ -163,28 +167,29 @@ end
 -- CLASS-SPECIFIC LOCK AFFLICTION
 -------------------------------------------------------------------------------
 
--- Get class-specific lock affliction using existing getLockingAffliction()
-function infernalGroupLock.getClassLockAff()
-    if not target then return "weariness", "vernalius" end
+-- What an Infernal can use to give each class's lock affliction (2026-10-11). Hellforge
+-- investments are named like venoms in the DSL ("hellforge invest X;dsl <t> X curare").
+-- Sources: the wiki's Venom (Skill) page, our venom_to_aff, and the Hellforge table in CLAUDE.md.
+infernalGroupLock.LOCK_DELIVERY = {
+    weariness = "exploit",      -- Hellforge: weariness + paranoia
+    haemophilia = "torture",    -- Hellforge. notechis gives haemophilia but cannot envenom a weapon
+    voyria = "voyria",
+    stupidity = "aconite",
+    recklessness = "eurypteria",
+    paralysis = "curare",
+    -- confusion (Psion): no venom or investment gives it, so there is no delivery
+}
+infernalGroupLock.HELLFORGE = { exploit = true, torture = true, torment = true }
 
-    -- getLockingAffliction returns {affliction, venom} or just the venom string
-    local result = getLockingAffliction and getLockingAffliction(target)
-    if type(result) == "table" then
-        return result[1], result[2]  -- {affliction, venom}
-    elseif type(result) == "string" then
-        -- It returned just the venom name, look up the affliction
-        local venomToAff = {
-            weariness = "weariness",
-            plague = "voyria",
-            voyria = "voyria",
-            haemophilia = "haemophilia",
-            stupid = "stupidity",
-            reckless = "recklessness",
-            paralyse = "paralysis",
-        }
-        return venomToAff[result] or "weariness", result
-    end
-    return "weariness", "vernalius"  -- Default fallback
+-- The target's class lock affliction, and what delivers it (nil when nothing can).
+-- getLockingAffliction("name") returns the AFFLICTION. Called any other way it returns a
+-- shorthand ("plague", "reckless", "stupid", "paralyse"), which this function used to send AS THE
+-- VENOM -- so against a Priest, Bard, Apostate or Pariah the group lock envenomed with "plague".
+function infernalGroupLock.getClassLockAff()
+    if not target then return "weariness", "exploit" end
+    local aff = getLockingAffliction and getLockingAffliction("name")
+    if type(aff) ~= "string" or aff == "" then aff = "weariness" end
+    return aff, infernalGroupLock.LOCK_DELIVERY[aff]
 end
 
 -------------------------------------------------------------------------------
@@ -255,21 +260,15 @@ function infernalGroupLock.selectVenoms()
         v1 = "gecko"        -- Priority 2: Slickness (blocks salve)
     elseif not hasAff("anorexia") then
         v1 = "slike"        -- Priority 3: Anorexia (blocks eat)
-    elseif not hasAff("impatience") then
-        v1 = "euphorbia"    -- Priority 4: Impatience (blocks focus)
     else
-        -- Priority 5: Class-specific lock affliction
-        local lockAff, lockVenom = infernalGroupLock.getClassLockAff()
-        if lockAff and not hasAff(lockAff) then
-            -- Use hellforge exploit if class needs weariness (2-aff pressure)
-            if lockAff == "weariness" then
-                v1 = "exploit"
-                useHellforge = true
-            else
-                v1 = lockVenom or "vernalius"
-            end
+        -- Priority 4: Class-specific lock affliction. (No impatience step: see the header.)
+        local lockAff, delivery = infernalGroupLock.getClassLockAff()
+        if lockAff and delivery and not hasAff(lockAff) then
+            v1 = delivery
+            useHellforge = infernalGroupLock.HELLFORGE[delivery] or false
         else
-            v1 = "kalmia"   -- Priority 6: Reinforce asthma (first to drop)
+            -- Already there, or nothing we have can give it (Psion's confusion).
+            v1 = "kalmia"   -- Priority 5: Reinforce asthma (first to drop)
         end
     end
 
@@ -312,7 +311,7 @@ function infernalGroupLockAttack()
     envenomListTwo = envenomListTwo or {}
     envenomList = {}
     envenomListTwo = {}
-    if v1 and v1 ~= "exploit" then table.insert(envenomList, v1) end
+    if v1 and not infernalGroupLock.HELLFORGE[v1] then table.insert(envenomList, v1) end
     if v2 then table.insert(envenomListTwo, v2) end
 
     -- Build base command
@@ -333,14 +332,13 @@ function infernalGroupLockAttack()
         envenomListTwo = {v2}
         cecho("\n<yellow>[GROUP LOCK]<reset> Razing " .. (hasRebounding and "REBOUNDING" or "SHIELD"))
     else
-        -- Hellforge invest if needed (exploit gives weariness + paranoia)
+        -- Hellforge invest if needed (exploit = weariness + paranoia, torture = haemophilia).
+        -- The investment is also named as the first "venom" of the DSL.
         if useHellforge then
-            atk = atk .. ";hellforge invest exploit"
-            -- When using hellforge, v1 becomes "exploit" in DSL command
-            atk = atk .. ";dsl " .. target .. " exploit " .. v2
-            -- Update envenomLists for hellforge
-            envenomList = {"exploit"}
-            cecho("\n<magenta>[GROUP LOCK]<reset> HELLFORGE exploit/" .. v2 .. " | Lock: " .. lockLevel .. " (" .. infernalGroupLock.countLockAffs() .. "/6)")
+            atk = atk .. ";hellforge invest " .. v1
+            atk = atk .. ";dsl " .. target .. " " .. v1 .. " " .. v2
+            envenomList = {v1}
+            cecho("\n<magenta>[GROUP LOCK]<reset> HELLFORGE " .. v1 .. "/" .. v2 .. " | Lock: " .. lockLevel .. " (" .. infernalGroupLock.countLockAffs() .. "/6)")
         else
             -- Standard non-limb DSL
             atk = atk .. ";dsl " .. target .. " " .. v1 .. " " .. v2
@@ -374,7 +372,7 @@ function infernalGroupLockStatus()
     cecho("\n<cyan>====== GROUP LOCK STATUS ======<reset>")
     cecho("\n<white>Target:<reset> " .. (target or "None"))
     cecho("\n<white>Lock Level:<reset> <yellow>" .. lockLevel .. "<reset> (" .. lockCount .. "/6)")
-    cecho("\n<white>Class Lock:<reset> " .. lockAff .. " (" .. lockVenom .. ")")
+    cecho("\n<white>Class Lock:<reset> " .. lockAff .. " (" .. tostring(lockVenom or "no delivery") .. ")")
     cecho("\n")
     cecho("\n<white>Afflictions:<reset>")
     cecho("\n  Asthma:     " .. (hasAff("asthma") and "<green>YES" or "<red>NO") .. "<reset>")

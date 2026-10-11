@@ -685,7 +685,8 @@ near_break_detect: "infernalDWC.wouldBreakLimb(limb): damage + 2*slashDamage >= 
 ```yaml
 infestation:
   skill: Malignity
-  effect: "Afflicts ENEMIES with one affliction every 10 seconds"
+  effect: "Afflicts ENEMIES with one affliction every 10 seconds (wiki: 'varying ailments', never a duplicate)"
+  notes_2026_10_11: "NO LONGER GIVES IMPATIENCE (user). An Infernal has no impatience source at all now."
   usage: "Start of battle"
   notes: "Won't lock as 2H, but helps hinder opponent"
 
@@ -788,7 +789,7 @@ for_venomlock:
 
 for_truelock:
   venoms: [curare, kalmia, gecko, euphorbia, slike]   # sumac removed: damage only, no impatience
-  goal: "Venomlock + impatience blocks focus + weariness blocks Fitness"
+  goal: "Venomlock + the class lock affliction. An Infernal cannot give impatience (no venom does, and infestation no longer does), so focus stays open unless a teammate supplies it"
 
 for_limb_pressure:
   venoms: [epseth, epteth, delphinium]
@@ -837,7 +838,8 @@ for_lock_building:
 for_truelock_finish:
   combinations:
     # (Two pairs built on "sumac = impatience" were removed 2026-10-11: sumac only does damage, and
-    # no venom gives impatience. Where an Infernal gets impatience from is open: kb/CONFLICTS.md.)
+    # no venom gives impatience. An Infernal has NO impatience source -- infestation used to give it
+    # and no longer does (user, 2026-10-11).)
   timing: "When softlocked and pushing for truelock"
 
 # With Hellforge Investments
