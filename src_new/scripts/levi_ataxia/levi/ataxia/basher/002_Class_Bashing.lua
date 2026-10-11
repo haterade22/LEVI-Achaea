@@ -3792,6 +3792,23 @@ function ataxiaBasher_serpentConcealed()
    if mnemAssassinsBlade and ataxiaBasher_requeueNow then ataxiaBasher_requeueNow("concealed") end
 end
 
+-- THE BACKSTAB LANDED (trigger serpent/021, v4.7.411):
+--
+--   You leap from the shadows and plunge your dagger into a fairy Lady of Sidhe's unsuspecting back!
+--
+-- Leaping from the shadows brings us out of hiding (user: "When we backstab we become unhidden"), so
+-- the concealment stamp no longer stands AND the `hiding` defence is cleared here rather than waiting
+-- for GMCP's Remove, which can arrive after the next round is built and would send a second, refused
+-- backstab. Clearing is the safe direction: a GMCP Add re-sets it, and the worst case is one normal
+-- swing. The next round swings normally until a fresh line (Darkwalker on the kill, a HIDE) hides us.
+function ataxiaBasher_serpentBackstabbed()
+   ataxiaTemp = ataxiaTemp or {}
+   ataxiaTemp.serpentConcealAt = nil
+   if ataxia and ataxia.defences then
+      ataxia.defences.hiding, ataxia.defences.hide = nil, nil
+   end
+end
+
 function ataxiaBasher_serpentBashing()
    local command = ""
 	 local brage = ataxiaBasher_assembleBattlerage()

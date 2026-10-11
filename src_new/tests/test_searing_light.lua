@@ -429,6 +429,19 @@ describe("Assassin's Blade: open with BACKSTAB while hidden", function()
     expect(src:find("pattern: You conceal yourself using all the guile you possess", 1, true) ~= nil).toBeTrue()
   end)
 
+  it("our backstab landing ends the hidden window", function()
+    reset({})
+    ataxiaBasher_serpentConcealed()
+    ataxia.defences = { hiding = true } -- GMCP still says hidden: its Remove has not arrived yet
+    expect(ataxiaBasher_serpentHidden()).toBeTrue()
+    ataxiaBasher_serpentBackstabbed()
+    expect(ataxiaBasher_serpentHidden()).toBeFalse()
+    ataxia.defences = {}
+    local f = io.open("src_new/triggers/levi_ataxia/for_levi/leviticus/serpent/021_Backstab_Landed.lua")
+    local src = f:read("*a"); f:close()
+    expect(src:find("pattern: You leap from the shadows and plunge your dagger into", 1, true) ~= nil).toBeTrue()
+  end)
+
   it("a GMCP Remove of hiding cancels the concealment at once", function()
     reset({})
     ataxiaBasher_serpentConcealed()
