@@ -1,0 +1,13 @@
+# affliction show icebound  (2026-10-11T00:15:15Z)
+Affliction:         Restricted by frozen bonds
+Diagnose:           restricted by frozen bonds.
+Afflicted msg:      Frost covers your limbs, restricting your actions.
+Cured msg:          Your limbs thaw, freeing you from your frozen bonds.
+Cure(s):            Writhe
+Description:        Being restricted by the frozen bonds is restrictive on any actions you wish to make, including the use of curative arts.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

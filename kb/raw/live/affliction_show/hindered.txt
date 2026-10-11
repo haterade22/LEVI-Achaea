@@ -1,0 +1,13 @@
+# affliction show hindered  (2026-10-11T00:15:12Z)
+Affliction:         Hindered
+Diagnose:           hindered by the forests.
+Afflicted msg:      none
+Cured msg:          none
+Cure(s):            Time
+Description:        Being hindered by the forests may impede your movement.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

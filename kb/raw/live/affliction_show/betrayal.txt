@@ -1,0 +1,13 @@
+# affliction show betrayal  (2026-10-11T00:14:28Z)
+Affliction:         Betrayal
+Diagnose:           treacherous.
+Afflicted msg:      You determine that, for your own good, it is time to betray anyone and everyone.
+Cured msg:          You are no longer betraying everyone.
+Cure(s):            Time
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       15 seconds

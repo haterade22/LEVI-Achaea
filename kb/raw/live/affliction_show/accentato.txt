@@ -1,0 +1,13 @@
+# affliction show accentato  (2026-10-11T00:14:23Z)
+Affliction:         Accentato
+Diagnose:           transfixed by the power of the Accentato.
+Afflicted msg:      none
+Cured msg:          The power of the Accentato relinquishes its grasp upon you.
+Cure(s):            Time
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       20 seconds

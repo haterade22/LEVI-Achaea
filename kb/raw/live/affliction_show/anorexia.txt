@@ -1,4 +1,4 @@
-# affliction show anorexia  (2026-10-10T23:38:29Z)
+# affliction show anorexia  (2026-10-11T00:11:16Z)
 Affliction:         Anorexia
 Diagnose:           anorexic.
 Afflicted msg:      The idea of eating or drinking is repulsive to you.

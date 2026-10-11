@@ -1,4 +1,4 @@
-# affliction show damagedhead  (2026-10-10T23:38:56Z)
+# affliction show damagedhead  (2026-10-11T00:11:53Z)
 Affliction:         A damaged head
 Diagnose:           has a partially damaged head.
 Afflicted msg:      Your head is greatly damaged from the beating.

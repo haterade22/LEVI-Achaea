@@ -1,0 +1,14 @@
+# affliction show kaisurge  (2026-10-11T00:15:24Z)
+Affliction:         Kaisurge
+Diagnose:           greatly inhibited by a recent surge of Kai energy.
+Afflicted msg:      none
+Cured msg:          none
+Expire msg:         Your muscles stop violently spasming.
+Cure(s):            Time
+Description:        This affliction prevents mounting and adds a small extension to the broken limb penalty on tumble.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

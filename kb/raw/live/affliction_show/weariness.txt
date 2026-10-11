@@ -1,4 +1,4 @@
-# affliction show weariness  (2026-10-10T23:41:24Z)
+# affliction show weariness  (2026-10-11T00:14:18Z)
 Affliction:         Weariness
 Diagnose:           wearied in body.
 Afflicted msg:      Your limbs grow heavy and you groan feebly.

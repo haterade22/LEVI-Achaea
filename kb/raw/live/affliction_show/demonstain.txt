@@ -1,0 +1,13 @@
+# affliction show demonstain  (2026-10-11T00:14:55Z)
+Affliction:         A demonic stain
+Diagnose:           stained by evil.
+Afflicted msg:      none
+Cured msg:          none
+Cure(s):            Time
+Description:        A demonic stain on your being reduces all of your statistics by one point.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

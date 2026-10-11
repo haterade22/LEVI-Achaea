@@ -1,4 +1,4 @@
-# affliction show mildtrauma  (2026-10-10T23:40:14Z)
+# affliction show mildtrauma  (2026-10-11T00:13:11Z)
 Affliction:         Mild internal trauma
 Diagnose:           has mild internal trauma.
 Afflicted msg:      Your torso is greatly damaged from the beating.

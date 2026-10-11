@@ -1,0 +1,14 @@
+# affliction show internalbleeding  (2026-10-11T00:15:20Z)
+Affliction:         Massive internal bleeding
+Diagnose:           suffering from massive internal bleeding.
+Afflicted msg:      none
+Cured msg:          none
+Expire msg:         Your pulse strengthens as your damaged arteries clot over and your internal bleeding ceases.
+Cure(s):            Apply Restoration To Body
+Description:        This severe internal injury causes massive bleeding.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

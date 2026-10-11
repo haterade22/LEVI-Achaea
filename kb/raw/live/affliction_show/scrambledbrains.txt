@@ -1,0 +1,14 @@
+# affliction show scrambledbrains  (2026-10-11T00:15:50Z)
+Affliction:         Scrambledbrains
+Diagnose:           your brains have been scrambled by a great impact.
+Afflicted msg:      Your brains feel scrambled by the impact.
+Cured msg:          Your brains no longer feel so scrambled.
+Cure(s):            Time
+Description:        This affliction will make it impossible for you to naturally reject mental locks upon your person, as well as delaying the cure aspect of any attempt to focus your mind.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       60 seconds

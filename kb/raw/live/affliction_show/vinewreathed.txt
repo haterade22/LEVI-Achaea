@@ -1,0 +1,15 @@
+# affliction show vinewreathed  (2026-10-11T00:16:06Z)
+Affliction:         Wreathed in vines
+Diagnose:           wreathed in flailing vines.
+Afflicted msg:      none
+Cured msg:          none
+Expire msg:         The vines flailing about your form recede.
+Cure(s):            Time
+Description:        These flailing vines will make it impossible to parry a Viridian's thorn rends.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       20 seconds

@@ -1,4 +1,4 @@
-# affliction show brokenleftarm  (2026-10-10T23:38:38Z)
+# affliction show brokenleftarm  (2026-10-11T00:11:34Z)
 Affliction:         A broken left arm
 Diagnose:           afflicted by a crippled left arm.
 Afflicted msg:      Your left arm breaks with a loud crack.

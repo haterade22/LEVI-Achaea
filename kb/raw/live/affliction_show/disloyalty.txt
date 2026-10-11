@@ -1,4 +1,4 @@
-# affliction show disloyalty  (2026-10-10T23:39:13Z)
+# affliction show disloyalty  (2026-10-11T00:12:10Z)
 Affliction:         Disloyalty
 Diagnose:           inspires disloyalty in those nearby.
 Afflicted msg:      You feel ugliness radiating from you.

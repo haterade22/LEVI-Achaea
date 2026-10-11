@@ -1,0 +1,12 @@
+# affliction show latched  (2026-10-11T00:15:28Z)
+Affliction:         Latched
+Diagnose:           Moments from death.
+Afflicted msg:      You feel suddenly weak, your limbs trembling and bile rising.
+Cured msg:          Warmth floods back into your limbs, and you feel suddenly vital.
+Cure(s):            Sip Health
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

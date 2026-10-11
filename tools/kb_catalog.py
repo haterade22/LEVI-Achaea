@@ -100,7 +100,12 @@ def parse_live():
     if not os.path.exists(LIVE):
         return out
     pat = re.compile(r"The affliction '(.+?)' is cured by: (.+?)\.?\s*$")
+    none = re.compile(r"The affliction '(.+?)' has no known cures\.")
     for line in read(LIVE).splitlines():
+        n = none.search(line)
+        if n:
+            out[n.group(1).lower().replace(" ", "")] = [("none", "(no known cures)")]
+            continue
         m = pat.search(line)
         if not m:
             continue

@@ -1,0 +1,13 @@
+# affliction show bruisedribs  (2026-10-11T00:14:34Z)
+Affliction:         Bruisedribs
+Diagnose:           your ribs are severely bruised.
+Afflicted msg:      You feel your ribs give way under the blow and a burning sensation radiates outward through your chest.
+Cured msg:          none
+Cure(s):            Time
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       30 seconds

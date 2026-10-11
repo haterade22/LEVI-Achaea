@@ -1,0 +1,12 @@
+# affliction show deteriorate  (2026-10-11T00:14:56Z)
+Affliction:         Deteriorate
+Diagnose:           weakened in mind.
+Afflicted msg:      none
+Cured msg:          Your mental faculties suddenly recover.
+Cure(s):            Time
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

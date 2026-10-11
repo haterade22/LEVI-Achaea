@@ -1,0 +1,13 @@
+# affliction show breathless  (2026-10-11T00:14:33Z)
+Affliction:         Breathless
+Diagnose:           breathless.
+Afflicted msg:      none
+Cured msg:          You are no longer completely breathless.
+Cure(s):            Time
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       3 seconds

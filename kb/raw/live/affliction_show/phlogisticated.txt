@@ -1,0 +1,15 @@
+# affliction show phlogisticated  (2026-10-11T00:15:44Z)
+Affliction:         Phlogisticated
+Diagnose:           phlogisticated.
+Afflicted msg:      none
+Cured msg:          none
+Expire msg:         The internal burning sensation subsides.
+Cure(s):            Time
+Description:        Phlogisitication temporarily renders your body unable to benefit from irid moss or potash when you use equilibrium.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       45 seconds

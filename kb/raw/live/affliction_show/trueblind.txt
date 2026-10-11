@@ -1,0 +1,15 @@
+# affliction show trueblind  (2026-10-11T00:16:03Z)
+Affliction:         Trueblind
+Diagnose:           suffering from extreme loss of vision.
+Afflicted msg:      none
+Cured msg:          none
+Expire msg:         Your vision gradually returns to you.
+Cure(s):            Time
+Description:        This blindness is so potent that not even the mindseye tattoo can function to counteract it.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       7 seconds

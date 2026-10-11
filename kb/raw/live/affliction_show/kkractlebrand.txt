@@ -1,0 +1,13 @@
+# affliction show kkractlebrand  (2026-10-11T00:15:25Z)
+Affliction:         Kkractlebrand
+Diagnose:           marked by the wrath of Kkractle.
+Afflicted msg:      The mark upon your brow bursts into flame, a singular point of agony that threatens to consume you.
+Cured msg:          The burning brand upon your brow fades, leaving only tender flesh as a warning.
+Cure(s):            Sip Health
+Description:        The brand of Kkractle reduces your fire resistance. It burns more fiercely the more you are struck by a Fire Lord, and can be detonated to unleash a devastating explosion of fire.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

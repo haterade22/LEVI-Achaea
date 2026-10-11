@@ -1,4 +1,4 @@
-# affliction show wristfractures  (2026-10-10T23:41:28Z)
+# affliction show wristfractures  (2026-10-11T00:14:22Z)
 Affliction:         Wristfractures
 Diagnose:           suffering from $(type$) wrist fractures.
 Afflicted msg:      none

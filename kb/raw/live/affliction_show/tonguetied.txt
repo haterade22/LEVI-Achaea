@@ -1,0 +1,13 @@
+# affliction show tonguetied  (2026-10-11T00:16:02Z)
+Affliction:         A tongue tied
+Diagnose:           completely tongue tied.
+Afflicted msg:      Your tongue twists and writhes in your mouth as if with a will of its own.
+Cured msg:          Your tongue stops its mad twisting.
+Cure(s):            Apply Restoration To Head
+Description:        Being tongue tied will make you unable to cure the stuttering affliction until you first cure this affliction.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

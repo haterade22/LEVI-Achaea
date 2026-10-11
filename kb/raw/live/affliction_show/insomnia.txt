@@ -1,4 +1,4 @@
-# affliction show insomnia  (2026-10-10T23:39:55Z)
+# affliction show insomnia  (2026-10-11T00:12:52Z)
 Affliction:         Insomnia
 Diagnose:           an insomniac.
 Afflicted msg:      You suddenly feel incapable of falling asleep.

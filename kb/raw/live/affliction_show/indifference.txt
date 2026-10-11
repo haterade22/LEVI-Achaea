@@ -1,4 +1,4 @@
-# affliction show indifference  (2026-10-10T23:39:54Z)
+# affliction show indifference  (2026-10-11T00:12:50Z)
 Affliction:         Indifference
 Diagnose:           indifferent to the rage of battle
 Afflicted msg:      You find yourself indifferent to the raging flow of battle.

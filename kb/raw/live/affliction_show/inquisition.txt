@@ -1,0 +1,12 @@
+# affliction show inquisition  (2026-10-11T00:15:19Z)
+Affliction:         Inquisition
+Diagnose:           suffering under holy inquisition.
+Afflicted msg:      none
+Cured msg:          Clarity returns to your mind as the echoing accusations fade from memory.
+Description:        A holy inquisition can cause a variety of effects ranging from lower mental regeneration to finding it impossible to escape the sight of Hell. It cures once the victim has rid themselves of both guilt and spiritburn afflictions, and is no longer prone.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

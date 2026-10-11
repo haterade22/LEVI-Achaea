@@ -1,4 +1,4 @@
-# affliction show impaled  (2026-10-10T23:39:51Z)
+# affliction show impaled  (2026-10-11T00:12:48Z)
 Affliction:         Impaled
 Diagnose:           impaled upon a blade.
 Afflicted msg:      none

@@ -1,0 +1,13 @@
+# affliction show revealed  (2026-10-11T00:15:48Z)
+Affliction:         Revealed
+Diagnose:           revealed by the power of a star sigil.
+Afflicted msg:      A strange dust settles upon your form, illuminating your outline.
+Cured msg:          none
+Cure(s):            Time
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       60 seconds

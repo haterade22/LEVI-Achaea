@@ -1,0 +1,14 @@
+# affliction show muddled  (2026-10-11T00:15:36Z)
+Affliction:         Muddled
+Diagnose:           of a muddled mind.
+Afflicted msg:      none
+Cured msg:          Your thoughts seem less sluggish and slow.
+Cure(s):            Time
+Description:        This affliction causes mental maladies to work against you with greater potency, such as by boosting the rate of stupidity firing or the likeliness that you will be hit by dizziness.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       12 seconds

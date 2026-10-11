@@ -60,7 +60,12 @@ def parse_show(text):
                 rec.setdefault("flags", {})[label] = (value.lower() == "yes") if value.lower() in ("yes", "no") else value
             last = key or label
         elif last and last in FIELD.values():
-            rec[last] += " " + line.strip()  # a wrapped value continues on the next line
+            # An indented line continues the value above. For Cure(s) it is a SECOND cure
+            # ("Apply Epidermal To Body" / "Focus Mind"), matching WHATCURES's " and ".
+            if last == "cures" and line.startswith(" "):
+                rec[last] += " and " + line.strip()
+            elif line.startswith(" ") or last == "description":
+                rec[last] += " " + line.strip()
     return rec
 
 

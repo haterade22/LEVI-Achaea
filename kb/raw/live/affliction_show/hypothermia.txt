@@ -1,4 +1,4 @@
-# affliction show hypothermia  (2026-10-10T23:39:50Z)
+# affliction show hypothermia  (2026-10-11T00:12:46Z)
 Affliction:         Hypothermia
 Diagnose:           suffering from hypothermia.
 Afflicted msg:      none

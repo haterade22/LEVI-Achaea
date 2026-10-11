@@ -1,0 +1,13 @@
+# affliction show lovestruck  (2026-10-11T00:15:31Z)
+Affliction:         Lovestruck
+Diagnose:           behaving like a love-struck fool.
+Afflicted msg:      none
+Cured msg:          Your strange fixation on all those that surround you abruptly lifts.
+Cure(s):            Time
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       5 seconds

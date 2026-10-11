@@ -1,0 +1,13 @@
+# affliction show woeconstrained  (2026-10-11T00:16:14Z)
+Affliction:         Woeconstrained
+Diagnose:           constrained to war by the tales of Woe.
+Afflicted msg:      none
+Cured msg:          You are no longer constrained to war by the tales of Woe.
+Cure(s):            Time
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       30 seconds

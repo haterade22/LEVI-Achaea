@@ -1,0 +1,13 @@
+# affliction show calcifiedskull  (2026-10-11T00:14:35Z)
+Affliction:         Calcifiedskull
+Diagnose:           suffering from a calcifying skull.
+Afflicted msg:      none
+Cured msg:          Your skull's calcification abruptly ceases, leaving only a dull ache behind.
+Cure(s):            Apply Restoration To Head
+Description:        Calcification takes time to complete, and if not cured before then either your head shall suffer extreme damage (elevating it to the next level of damage), or if it is already at maximum head damage, you shall die instantly.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

@@ -1,0 +1,13 @@
+# affliction show snared  (2026-10-11T00:15:55Z)
+Affliction:         Snared
+Diagnose:           tangled up by a rope snare.
+Afflicted msg:      none
+Cured msg:          You manage to disentangle yourself from the rope trap which had snared your ankles.
+Cure(s):            Time
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       20 seconds

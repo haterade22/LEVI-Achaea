@@ -1,0 +1,15 @@
+# affliction show silver  (2026-10-11T00:15:52Z)
+Affliction:         Silver
+Diagnose:           shimmering with a silvery radiance.
+Afflicted msg:      none
+Cured msg:          none
+Expire msg:         The shimmering silver light about you fades away.
+Cure(s):            Time
+Description:        This shining silvery glow will negate any shroud concealing your actions.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       180 seconds

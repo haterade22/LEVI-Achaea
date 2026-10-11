@@ -1,0 +1,14 @@
+# affliction show empoweredloshre  (2026-10-11T00:14:58Z)
+Affliction:         Empoweredloshre
+Diagnose:           being sapped by the power of the Loshre rune.
+Afflicted msg:      none
+Cured msg:          The sapping power of the Loshre rune leaves you.
+Cure(s):            Time
+Description:        Eating ginseng or ferrum while suffering this affliction will cause your health and mana to be drained.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       12 seconds

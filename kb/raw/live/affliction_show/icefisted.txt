@@ -1,0 +1,15 @@
+# affliction show icefisted  (2026-10-11T00:15:16Z)
+Affliction:         Icefisted
+Diagnose:           covered in a rime of frost.
+Afflicted msg:      none
+Cured msg:          none
+Expire msg:         The rime of ice covering your body cracks and falls away in glassy shards.
+Cure(s):            Time
+Description:        This layer of frost prevents you from touching your tattoos.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       15 seconds

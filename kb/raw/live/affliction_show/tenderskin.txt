@@ -1,4 +1,4 @@
-# affliction show tenderskin  (2026-10-10T23:41:09Z)
+# affliction show tenderskin  (2026-10-11T00:14:04Z)
 Affliction:         Tenderskin
 Diagnose:           suffering from tender skin.
 Afflicted msg:      Your skin is left tender and raw from the flames.

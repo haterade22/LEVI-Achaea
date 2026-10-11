@@ -1,0 +1,13 @@
+# affliction show enmesh  (2026-10-11T00:15:02Z)
+Affliction:         Enmesh
+Diagnose:           unable to parry due to being partially bound.
+Afflicted msg:      none
+Cured msg:          You manage to free yourself of the bonds clinging to your limbs.
+Cure(s):            Time
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       6 seconds

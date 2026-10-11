@@ -1,0 +1,15 @@
+# affliction show vitrified  (2026-10-11T00:16:08Z)
+Affliction:         Vitrified
+Diagnose:           vitrified.
+Afflicted msg:      none
+Cured msg:          none
+Expire msg:         The glass shards embedded in your skin revert to flesh.
+Cure(s):            Time
+Description:        Vitrification causes your skin to partially become glass, which will result in bleeding when you do anything which uses your balance.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       45 seconds

@@ -1,0 +1,14 @@
+# affliction show empoweredmannaz  (2026-10-11T00:14:59Z)
+Affliction:         Empoweredmannaz
+Diagnose:           vitiated by the power of the Mannaz rune.
+Afflicted msg:      none
+Cured msg:          The vitiating power of the Mannaz rune leaves you.
+Cure(s):            Time
+Description:        Someone with this affliction does not regenerate mana passively.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       20 seconds

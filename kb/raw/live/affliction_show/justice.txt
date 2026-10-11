@@ -1,4 +1,4 @@
-# affliction show justice  (2026-10-10T23:39:58Z)
+# affliction show justice  (2026-10-11T00:12:54Z)
 Affliction:         Justice
 Diagnose:           surrounded by the aura of justice.
 Afflicted msg:      A set of scales appears over your head and one side quickly descends, as you feel an aura of justice surround you.

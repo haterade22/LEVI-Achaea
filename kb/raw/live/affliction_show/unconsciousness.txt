@@ -1,0 +1,13 @@
+# affliction show unconsciousness  (2026-10-11T00:16:04Z)
+Affliction:         Unconsciousness
+Diagnose:           unconscious.
+Afflicted msg:      Your legs collapse from under you and consciousness leaves you as you pass out.
+Cured msg:          You regain consciousness with a start.
+Cure(s):            Time
+Description:        Unconsciousness is a highly debilitating affliction, preventing you from doing almost anything, though it is temporary and rarely lasts more than a few seconds.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

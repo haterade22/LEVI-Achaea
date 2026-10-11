@@ -1,0 +1,13 @@
+# affliction show lapsingconsciousness  (2026-10-11T00:15:27Z)
+Affliction:         Lapses in consciousness
+Diagnose:           afflicted by lapses in consciousness.
+Afflicted msg:      You feel your brain begin to falter.
+Cured msg:          You feel your brain recover, no longer always on the verge of falling unconscious.
+Cure(s):            Time
+Description:        Lapsing consciousness causes you to periodically fall unconscious.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

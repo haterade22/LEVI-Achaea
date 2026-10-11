@@ -1,0 +1,13 @@
+# affliction show reeling  (2026-10-11T00:15:47Z)
+Affliction:         Reeling
+Diagnose:           reeling.
+Afflicted msg:      none
+Cured msg:          You recover yourself, no longer reeling wildly off balance.
+Cure(s):            Time
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       20 seconds

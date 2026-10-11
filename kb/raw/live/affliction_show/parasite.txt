@@ -1,4 +1,4 @@
-# affliction show parasite  (2026-10-10T23:40:24Z)
+# affliction show parasite  (2026-10-11T00:13:20Z)
 Affliction:         Parasite
 Diagnose:           tormented by a parasitic curse.
 Afflicted msg:      You feel your strength being leeched away.

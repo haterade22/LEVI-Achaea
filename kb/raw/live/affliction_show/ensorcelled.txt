@@ -1,0 +1,15 @@
+# affliction show ensorcelled  (2026-10-11T00:15:03Z)
+Affliction:         Ensorcelled
+Diagnose:           ensorcelled.
+Afflicted msg:      none
+Cured msg:          none
+Expire msg:         A sudden flush of heat drives out a chill that you didn't realise was there until it is gone; your limbs tingle, and you feel unburdened.
+Cure(s):            Time
+Description:        This affliction will cause various movement attempts to fail on occasion.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       20 seconds

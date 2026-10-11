@@ -1,4 +1,4 @@
-# affliction show impatience  (2026-10-10T23:39:52Z)
+# affliction show impatience  (2026-10-11T00:12:49Z)
 Affliction:         Impatience
 Diagnose:           impatient.
 Afflicted msg:      You shuffle your feet noisily, suddenly bored.

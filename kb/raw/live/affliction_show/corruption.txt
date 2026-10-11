@@ -1,0 +1,15 @@
+# affliction show corruption  (2026-10-11T00:14:46Z)
+Affliction:         Corrupt humours
+Diagnose:           suffering from corrupted humours.
+Afflicted msg:      none
+Cured msg:          none
+Expire msg:         The corruption of your humours fades.
+Cure(s):            Time
+Description:        Corrupted humours affect your blood, draining mana when you bleed and health when you clot.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       45 seconds

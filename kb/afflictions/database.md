@@ -4,7 +4,7 @@
 > (`kb/raw/live/affliction_show/`, captured with `kbcapture afflictions`). Do not hand-edit;
 > re-capture and re-run. Machine-readable copy: `afflictions.json`.
 
-127 afflictions. Flags are the game's own yes/no columns: Accentato, CadmusCurse, Enlighten, NoRandomCure, Tzantza, WhisperingMadness. Flag meanings are the game's words; what each one does is noted only where confirmed.
+206 afflictions. Flags are the game's own yes/no columns: Accentato, CadmusCurse, Enlighten, NoRandomCure, Tzantza, WhisperingMadness. Flag meanings are the game's words; what each one does is noted only where confirmed.
 
 ## How the tracker's random-cure pools compare with NoRandomCure
 
@@ -20,24 +20,42 @@ confirmed in-game, so the lists below are questions, not bugs.
 
 | Affliction | Cure(s) | Wears off after | Diagnose shows | When it hits you | When it is cured | Flags set |
 |---|---|---|---|---|---|---|
+| [`accentato`](../raw/live/affliction_show/accentato.txt) Accentato | Time | 20 seconds | transfixed by the power of the Accentato. | none | The power of the Accentato relinquishes its grasp upon you. | NoRandomCure |
 | [`addiction`](../raw/live/affliction_show/addiction.txt) Addiction to curatives | Eat Ginseng / Eat Ferrum |  | suffering from addiction. | You feel a terrible hunger grow within you. | Your terrible addiction seems to wane. | Accentato, Enlighten, Tzantza, WhisperingMadness |
-| [`aeon`](../raw/live/affliction_show/aeon.txt) The aeon curse | Smoke Elm / Smoke Cinnabar Time |  | afflicted with the curse of the Aeon. | Suddenly your movement through the time stream is slowed. | The curse of the Aeon wears off and you return to the normal timestream. |  |
-| [`agoraphobia`](../raw/live/affliction_show/agoraphobia.txt) Agoraphobia | Eat Lobelia / Eat Argentum Focus Mind |  | agoraphobic. | Terror descends upon you and your head swims - you must find shelter! | You can handle the idea of open spaces again. | Enlighten, Tzantza, WhisperingMadness |
-| [`anorexia`](../raw/live/affliction_show/anorexia.txt) Anorexia | Apply Epidermal To Body Focus Mind |  | anorexic. | The idea of eating or drinking is repulsive to you. | Food is no longer repulsive to you. | Accentato |
+| [`aeon`](../raw/live/affliction_show/aeon.txt) The aeon curse | Smoke Elm / Smoke Cinnabar and Time |  | afflicted with the curse of the Aeon. | Suddenly your movement through the time stream is slowed. | The curse of the Aeon wears off and you return to the normal timestream. |  |
+| [`agoraphobia`](../raw/live/affliction_show/agoraphobia.txt) Agoraphobia | Eat Lobelia / Eat Argentum and Focus Mind |  | agoraphobic. | Terror descends upon you and your head swims - you must find shelter! | You can handle the idea of open spaces again. | Enlighten, Tzantza, WhisperingMadness |
+| [`airfisted`](../raw/live/affliction_show/airfisted.txt) Airfisted | Time | 15 seconds | being plagued by a blustering gale. | none | none | NoRandomCure |
+| [`amnesia`](../raw/live/affliction_show/amnesia.txt) Amnesia |  |  | suffering from amnesia. | Suddenly dizzy, you clutch your head and wonder what it was you were thinking about. | none | Accentato, NoRandomCure, Tzantza |
+| [`anorexia`](../raw/live/affliction_show/anorexia.txt) Anorexia | Apply Epidermal To Body and Focus Mind |  | anorexic. | The idea of eating or drinking is repulsive to you. | Food is no longer repulsive to you. | Accentato |
+| [`asphyxiating`](../raw/live/affliction_show/asphyxiating.txt) Asphyxiating | Time |  | suffering with every breath. | none | Your breaths finally begin to come easier, the burning in your lungs subsiding. | NoRandomCure |
 | [`asthma`](../raw/live/affliction_show/asthma.txt) Asthma | Eat Kelp / Eat Aurum |  | afflicted by horrible asthma. | You feel a tightening sensation grow in your lungs. | Your bronchial tubes open up and your asthma is cured. |  |
+| [`betrayal`](../raw/live/affliction_show/betrayal.txt) Betrayal | Time | 15 seconds | treacherous. | You determine that, for your own good, it is time to betray anyone and everyone. | You are no longer betraying everyone. | NoRandomCure |
+| [`blackout`](../raw/live/affliction_show/blackout.txt) Blackout | Time | 4 seconds | devoid of senses. | none | none |  |
 | [`blindness`](../raw/live/affliction_show/blindness.txt) Blindness | Apply Epidermal To Head |  | blind. | Your eyes dim as you lose your sight. | You are no longer blind. | NoRandomCure |
+| [`blistered`](../raw/live/affliction_show/blistered.txt) Blistered | Time |  | suffering from horribly blistered skin. | none | Your horribly blistered skin has recovered somewhat, your movement no longer so limited. | NoRandomCure |
 | [`bloodfire`](../raw/live/affliction_show/bloodfire.txt) Bloodfire |  |  | plagued with blood-fuelled flames. | none | The unnatural flames that feed upon your blood burn themselves out. | NoRandomCure |
 | [`bound`](../raw/live/affliction_show/bound.txt) Entanglement by tied ropes | Writhe |  | bound and tied. | none | none | NoRandomCure |
+| [`breathless`](../raw/live/affliction_show/breathless.txt) Breathless | Time | 3 seconds | breathless. | none | You are no longer completely breathless. | NoRandomCure |
 | [`brokenleftarm`](../raw/live/affliction_show/brokenleftarm.txt) A broken left arm | Apply Mending To Arms |  | afflicted by a crippled left arm. | Your left arm breaks with a loud crack. | The bones in your left arm mend. |  |
 | [`brokenleftleg`](../raw/live/affliction_show/brokenleftleg.txt) A broken left leg | Apply Mending To Legs |  | afflicted by a crippled left leg. | Your left leg breaks with a loud crack. | The bones in your left leg mend. |  |
 | [`brokenrightarm`](../raw/live/affliction_show/brokenrightarm.txt) A broken right arm | Apply Mending To Arms |  | afflicted by a crippled right arm. | Your right arm breaks with a loud crack. | The bones in your right arm mend. |  |
 | [`brokenrightleg`](../raw/live/affliction_show/brokenrightleg.txt) A broken right leg | Apply Mending To Legs |  | afflicted by a crippled right leg. | Your right leg breaks with a loud crack. | The bones in your right leg mend. |  |
+| [`bruisedribs`](../raw/live/affliction_show/bruisedribs.txt) Bruisedribs | Time | 30 seconds | your ribs are severely bruised. | You feel your ribs give way under the blow and a burning sensation radiates outward through your chest. | none | NoRandomCure |
 | [`burning`](../raw/live/affliction_show/burning.txt) Burning | Apply Mending To Body |  | ablaze. | none | The raging fire about your skin goes out. |  |
-| [`claustrophobia`](../raw/live/affliction_show/claustrophobia.txt) Claustrophobia | Eat Lobelia / Eat Argentum Focus Mind |  | claustrophobic. | The walls close in to suffocate you - you must escape! | Small spaces no longer frighten you. | Accentato, Enlighten, Tzantza |
+| [`calcifiedskull`](../raw/live/affliction_show/calcifiedskull.txt) Calcifiedskull | Apply Restoration To Head |  | suffering from a calcifying skull. | none | Your skull's calcification abruptly ceases, leaving only a dull ache behind. | NoRandomCure |
+| [`calcifiedtorso`](../raw/live/affliction_show/calcifiedtorso.txt) Calcifiedtorso | Apply Restoration To Body |  | suffering from a calcifying ribcage. | none | Your ribs' calcification abruptly ceases, leaving only a dull ache behind. | NoRandomCure |
+| [`claustrophobia`](../raw/live/affliction_show/claustrophobia.txt) Claustrophobia | Eat Lobelia / Eat Argentum and Focus Mind |  | claustrophobic. | The walls close in to suffocate you - you must escape! | Small spaces no longer frighten you. | Accentato, Enlighten, Tzantza |
 | [`clumsiness`](../raw/live/affliction_show/clumsiness.txt) Clumsiness | Eat Kelp / Eat Aurum |  | afflicted with clumsiness. | You gasp as your fine-tuned reflexes disappear into a haze of confusion. | Thank $(creator$)! Your clumsiness has been cured. | CadmusCurse |
+| [`coldfate`](../raw/live/affliction_show/coldfate.txt) Coldfate | Time |  | cursed with a cold fate. | none | The overwhelming sense of cold that suffuses you abruptly lifts. | NoRandomCure |
 | [`concussion`](../raw/live/affliction_show/concussion.txt) Concussion | Apply Restoration To Head |  | has a serious concussion. | The massive trauma to your head has damaged your skull and brain considerably. | Your head feels stronger and healthier. | NoRandomCure |
-| [`confusion`](../raw/live/affliction_show/confusion.txt) Confusion | Eat Ash / Eat Stannum Focus Mind |  | confused. | Your head spins as your mind is drowned in chaos and confusion. | The confusion lifts from your mind and it is clear once again. | Accentato, Enlighten, Tzantza, WhisperingMadness |
+| [`condemned`](../raw/live/affliction_show/condemned.txt) Condemned | Time | 40 seconds | you are condemned to burn. | none | The righteous condemnation lifts, and you breathe more easily. | NoRandomCure |
+| [`conflagration`](../raw/live/affliction_show/conflagration.txt) Conflagration |  |  | a conflagration rages about you. | The flames plaguing you suddenly begin to rage with terrible intensity. | The conflagration raging about you sputters and dies. | NoRandomCure |
+| [`confusion`](../raw/live/affliction_show/confusion.txt) Confusion | Eat Ash / Eat Stannum and Focus Mind |  | confused. | Your head spins as your mind is drowned in chaos and confusion. | The confusion lifts from your mind and it is clear once again. | Accentato, Enlighten, Tzantza, WhisperingMadness |
+| [`constricted`](../raw/live/affliction_show/constricted.txt) Constricted | Time | 30 seconds | being constricted by vines. | none | You manage to wrestle the vines away from your limbs. | NoRandomCure |
+| [`convergence`](../raw/live/affliction_show/convergence.txt) Convergence |  |  | elemental energy is converging upon you. | none | none | NoRandomCure |
+| [`corruption`](../raw/live/affliction_show/corruption.txt) Corrupt humours | Time | 45 seconds | suffering from corrupted humours. | none | none | NoRandomCure |
 | [`crackedribs`](../raw/live/affliction_show/crackedribs.txt) Crackedribs | Apply Health To Torso |  | suffering from $(type$) cracked ribs. | none | You can breathe easily once again. |  |
+| [`cremated`](../raw/live/affliction_show/cremated.txt) Cremated | Time |  | soul seared by the might of Kkractle. | none | The spectral fires that wait to claim you sputter and die. | NoRandomCure |
 | [`crescendo`](../raw/live/affliction_show/crescendo.txt) Crescendo | Eat Ash / Eat Stannum |  | moving inevitably towards a grand finale. | none | The building crescendo about you abruptly falls silent. | NoRandomCure |
 | [`crushedthroat`](../raw/live/affliction_show/crushedthroat.txt) Crushedthroat | Apply Mending To Head |  | suffering a crushed throat. | none | Your crushed throat mends and you can draw breath easily once again. |  |
 | [`daeggerimpale`](../raw/live/affliction_show/daeggerimpale.txt) Impalement by a daegger | Writhe |  | impaled by a daegger. | none | none | NoRandomCure |
@@ -48,101 +66,162 @@ confirmed in-game, so the lists below are questions, not bugs.
 | [`damagedrightleg`](../raw/live/affliction_show/damagedrightleg.txt) A damaged right leg | Apply Restoration To Legs |  | has a partially damaged right leg. | Your right leg is greatly damaged from the beating. | Your right leg feels stronger and healthier. | NoRandomCure |
 | [`darkshade`](../raw/live/affliction_show/darkshade.txt) An allergy to sunlight | Eat Ginseng / Eat Ferrum |  | allergic to sunlight. | Your vision is flooded with light, and your face suddenly reddens. | No longer will the sunlight harm you. | CadmusCurse |
 | [`dazed`](../raw/live/affliction_show/dazed.txt) Dazed | Smoke Elm / Smoke Cinnabar |  | dazed. | none | You are no longer dazed. |  |
+| [`dazzled`](../raw/live/affliction_show/dazzled.txt) Dazzled | Apply Mending To Head and Time | 60 seconds | dazzled. | none | Your head clears and you are no longer dazzled. |  |
 | [`deadening`](../raw/live/affliction_show/deadening.txt) A deadened mind | Smoke Elm / Smoke Cinnabar |  | of a deadened mind. | A strange fog descends upon your mind. | You are no longer deadened. |  |
 | [`deafness`](../raw/live/affliction_show/deafness.txt) Deafness | Apply Epidermal To Head |  | deaf. | Sounds fade as you lose your hearing. | You are no longer deaf. | NoRandomCure |
-| [`dementia`](../raw/live/affliction_show/dementia.txt) Dementia | Eat Ash / Eat Stannum Focus Mind |  | demented. | You look about yourself, frenzied and wild-eyed. | Sanity returns to you and you are no longer demented. | Enlighten, Tzantza, WhisperingMadness |
+| [`deathsickness`](../raw/live/affliction_show/deathsickness.txt) Deathsickness | Time |  | Labouring beneath the bane of life. | An unnatural chill sweeps through your body, a numbing sensation radiating outward from your heart and into every limb. | The unnatural chill pervading your body abruptly lifts. | NoRandomCure |
+| [`deepsleep`](../raw/live/affliction_show/deepsleep.txt) Deepsleep |  |  | in an unnaturally deep sleep. | none | none | NoRandomCure |
+| [`degenerate`](../raw/live/affliction_show/degenerate.txt) Degenerate | Time |  | weakened in body. | none | You suddenly feel much less weak, strength flooding back into your limbs. | NoRandomCure |
+| [`dehydrated`](../raw/live/affliction_show/dehydrated.txt) Dehydrated | Time | 45 seconds | seriously dehydrated. | none | none | NoRandomCure |
+| [`dementia`](../raw/live/affliction_show/dementia.txt) Dementia | Eat Ash / Eat Stannum and Focus Mind |  | demented. | You look about yourself, frenzied and wild-eyed. | Sanity returns to you and you are no longer demented. | Enlighten, Tzantza, WhisperingMadness |
+| [`demonstain`](../raw/live/affliction_show/demonstain.txt) A demonic stain | Time |  | stained by evil. | none | none | NoRandomCure |
 | [`depression`](../raw/live/affliction_show/depression.txt) Depression | Eat Goldenseal / Eat Plumbum |  | depressed. | Everything seems so pointless. | Maybe things aren't so bad after all. |  |
+| [`deteriorate`](../raw/live/affliction_show/deteriorate.txt) Deteriorate | Time |  | weakened in mind. | none | Your mental faculties suddenly recover. | NoRandomCure |
 | [`diminished`](../raw/live/affliction_show/diminished.txt) Diminished | Eat Bellwort / Eat Cuprum |  | diminished. | none | The enfeeblement of your spirit lifts. |  |
 | [`disloyalty`](../raw/live/affliction_show/disloyalty.txt) Disloyalty | Smoke Valerian / Smoke Realgar |  | inspires disloyalty in those nearby. | You feel ugliness radiating from you. | You no longer will inspire disloyalty among friends. |  |
 | [`disrupted`](../raw/live/affliction_show/disrupted.txt) Disrupted | Concentrate |  | mentally disrupted. | none | none | NoRandomCure |
 | [`dissonance`](../raw/live/affliction_show/dissonance.txt) Dissonance | Eat Goldenseal / Eat Plumbum |  | has a dissonant nature. | You feel your body begin to vibrate in tune with the disruptive harmonies. | Your dissonant nature becomes harmonious. | NoRandomCure |
-| [`dizziness`](../raw/live/affliction_show/dizziness.txt) Dizziness | Eat Goldenseal / Eat Plumbum Focus Mind |  | overcome by dizziness. | Your mind swims as dizziness overtakes you. | You are no longer dizzy. | Accentato, Tzantza |
+| [`dizziness`](../raw/live/affliction_show/dizziness.txt) Dizziness | Eat Goldenseal / Eat Plumbum and Focus Mind |  | overcome by dizziness. | Your mind swims as dizziness overtakes you. | You are no longer dizzy. | Accentato, Tzantza |
 | [`earworm`](../raw/live/affliction_show/earworm.txt) Earworm | Smoke Elm / Smoke Cinnabar |  | plagued by endless song. | none | The endlessly playing song in your mind falls silent. |  |
+| [`empoweredloshre`](../raw/live/affliction_show/empoweredloshre.txt) Empoweredloshre | Time | 12 seconds | being sapped by the power of the Loshre rune. | none | The sapping power of the Loshre rune leaves you. | NoRandomCure |
+| [`empoweredmannaz`](../raw/live/affliction_show/empoweredmannaz.txt) Empoweredmannaz | Time | 20 seconds | vitiated by the power of the Mannaz rune. | none | The vitiating power of the Mannaz rune leaves you. | NoRandomCure |
+| [`enlightenment`](../raw/live/affliction_show/enlightenment.txt) Enlightenment |  |  | understanding the occult mysteries and nature of the universe as seen by $(gname$). | none | The alien and strange visions leave you, and the Chaos that permeated your mind lessens. | NoRandomCure |
+| [`enmesh`](../raw/live/affliction_show/enmesh.txt) Enmesh | Time | 6 seconds | unable to parry due to being partially bound. | none | You manage to free yourself of the bonds clinging to your limbs. | NoRandomCure |
+| [`ensorcelled`](../raw/live/affliction_show/ensorcelled.txt) Ensorcelled | Time | 20 seconds | ensorcelled. | none | none | NoRandomCure |
 | [`entangled`](../raw/live/affliction_show/entangled.txt) Entanglement by ropes | Writhe |  | entangled in ropes. | none | none | NoRandomCure |
-| [`epilepsy`](../raw/live/affliction_show/epilepsy.txt) Epilepsy | Eat Goldenseal / Eat Plumbum Focus Mind |  | suffering from epilepsy. | Your nerves feel suddenly jangled. | Your nerves suddenly calm down. | Accentato, Enlighten, Tzantza |
+| [`epilepsy`](../raw/live/affliction_show/epilepsy.txt) Epilepsy | Eat Goldenseal / Eat Plumbum and Focus Mind |  | suffering from epilepsy. | Your nerves feel suddenly jangled. | Your nerves suddenly calm down. | Accentato, Enlighten, Tzantza |
 | [`fear`](../raw/live/affliction_show/fear.txt) Fear | Compose |  | afflicted by fear. | A terrible fear comes over you. | Your fear has been cured. | Accentato |
+| [`flamefisted`](../raw/live/affliction_show/flamefisted.txt) Flamefisted | Time | 15 seconds | suffused with an aura of fire. | none | none | NoRandomCure |
 | [`flushings`](../raw/live/affliction_show/flushings.txt) Flushings | Eat Ginseng / Eat Ferrum |  | suffering from flushings. | Your skin begins to prickle uncomfortably. | The prickling in your skin fades and you feel blessedly cool. |  |
 | [`fratricide`](../raw/live/affliction_show/fratricide.txt) Fratricide | Eat Lobelia / Eat Argentum |  | plagued by an insidious venom. | Something subtle and yet insidious overcomes you. | You rid yourself of the insidious venom plaguing you. |  |
 | [`frostbite`](../raw/live/affliction_show/frostbite.txt) Frostbite | Apply Caloric |  | suffering from encroaching frostbite. | A pervasive numbness begins to spread throughout your extremities. | The pervasive numbness in your extremities fades. |  |
 | [`frozen`](../raw/live/affliction_show/frozen.txt) A frozen body | Apply Caloric |  | frozen stiff. | Your body slows as it freezes in the extreme cold. | Though still shivering, you are no longer frozen solid. |  |
 | [`fulminated`](../raw/live/affliction_show/fulminated.txt) Fulminated | Eat Goldenseal / Eat Plumbum |  | electrified by fulminous energy. | Your nerve endings become electrified and you begin to tremble. | You are no longer suffering from the ravages of fulminous energy. |  |
 | [`generosity`](../raw/live/affliction_show/generosity.txt) Generosity | Eat Bellwort / Eat Cuprum |  | extremely generous. | Why, you ask yourself, are you so privileged when others are so needy. | Ahhhh. The freedom to be stingy again! | Accentato |
+| [`grievouswounds`](../raw/live/affliction_show/grievouswounds.txt) Grievously wounded | Apply Health To Torso |  | suffering from $(type$) grievous wounds. | Blood flows freely from a grievous wound. | The flow of blood stops as your wounds close. |  |
 | [`guilt`](../raw/live/affliction_show/guilt.txt) Guilt | Eat Lobelia / Eat Argentum |  | plagued by terrible guilt. | A terrible guilt descends upon you. | Your terrible guilt lifts. |  |
 | [`haemophilia`](../raw/live/affliction_show/haemophilia.txt) Haemophilia | Eat Ginseng / Eat Ferrum |  | afflicted by haemophilia. | You sense a subtle change deep within. | Your blood regains its ability to clot. | CadmusCurse |
-| [`hallucinations`](../raw/live/affliction_show/hallucinations.txt) Hallucinations | Eat Ash / Eat Stannum Focus Mind |  | hallucinating. | An unseen being takes you to one side and whispers conspiratorially to you. | Your hallucinations cease to plague you. | Enlighten, WhisperingMadness |
+| [`hallucinations`](../raw/live/affliction_show/hallucinations.txt) Hallucinations | Eat Ash / Eat Stannum and Focus Mind |  | hallucinating. | An unseen being takes you to one side and whispers conspiratorially to you. | Your hallucinations cease to plague you. | Enlighten, WhisperingMadness |
+| [`hamstrung`](../raw/live/affliction_show/hamstrung.txt) Hamstrung | Time | 10 seconds | suffering from a crippled hamstring. | none | none | NoRandomCure |
+| [`hatred`](../raw/live/affliction_show/hatred.txt) Hatred | Time |  | inspired to great heights of loathing. | An all-consuming hatred for everyone and everything suffuses you. | Your total loathing for everything fades. | NoRandomCure |
 | [`healthleech`](../raw/live/affliction_show/healthleech.txt) Healthleech | Eat Kelp / Eat Aurum |  | a victim of healthleech. | Your health begins to drain away. | Your aching, pain-wracked body is soothed and calmed. | CadmusCurse |
 | [`heartseed`](../raw/live/affliction_show/heartseed.txt) Heartseed | Apply Restoration To Body |  | plagued by the rapid growth of a heartseed. | none | The remedy burns through your chest, eliminating the spreading tendrils of a virulent heartseed. | NoRandomCure |
+| [`hecatecurse`](../raw/live/affliction_show/hecatecurse.txt) Hecatecurse | Time | 16 seconds | Cursed with the power of Hecate. | none | none | NoRandomCure |
 | [`hellsight`](../raw/live/affliction_show/hellsight.txt) Hellsight | Smoke Valerian / Smoke Realgar | 120 seconds | catching glimpses of Hell. | none | Thankfully, the visions of Hell have left you. |  |
+| [`hindered`](../raw/live/affliction_show/hindered.txt) Hindered | Time |  | hindered by the forests. | none | none | NoRandomCure |
+| [`homunculusmercury`](../raw/live/affliction_show/homunculusmercury.txt) Homunculusmercury | Time |  | struggling to process edible curatives. | none | Eating is suddenly less difficult again. | NoRandomCure |
 | [`horror`](../raw/live/affliction_show/horror.txt) Horror | Eat Lobelia / Eat Argentum |  | horrified. | Composure deserts you; it is just too much! | You draw a relieved breath as the unnatural terror finally abates. | NoRandomCure |
 | [`hypersomnia`](../raw/live/affliction_show/hypersomnia.txt) Hypersomnia | Eat Ash / Eat Stannum |  | hypersomnic. | An urge to visit the Goddess of Dreams overcomes you. | You feel a bit more alert and awake. | WhisperingMadness |
 | [`hypochondria`](../raw/live/affliction_show/hypochondria.txt) Hypochondria | Eat Lobelia / Eat Argentum |  | a certified hypochondriac. | A terrible sense of unease comes over you. | My, you feel healthier than you have in years. |  |
 | [`hypothermia`](../raw/live/affliction_show/hypothermia.txt) Hypothermia | Apply Restoration To Body |  | suffering from hypothermia. | none | Though still frozen, you feel some slight remnants of heat returning to you. | NoRandomCure |
+| [`icebound`](../raw/live/affliction_show/icebound.txt) Restricted by frozen bonds | Writhe |  | restricted by frozen bonds. | Frost covers your limbs, restricting your actions. | Your limbs thaw, freeing you from your frozen bonds. | NoRandomCure |
+| [`icefisted`](../raw/live/affliction_show/icefisted.txt) Icefisted | Time | 15 seconds | covered in a rime of frost. | none | none | NoRandomCure |
 | [`impaled`](../raw/live/affliction_show/impaled.txt) Impaled | Writhe |  | impaled upon a blade. | none | none | NoRandomCure |
 | [`impatience`](../raw/live/affliction_show/impatience.txt) Impatience | Eat Goldenseal / Eat Plumbum |  | impatient. | You shuffle your feet noisily, suddenly bored. | You are patient once again. | Accentato, Tzantza, WhisperingMadness |
 | [`indifference`](../raw/live/affliction_show/indifference.txt) Indifference | Eat Bellwort / Eat Cuprum |  | indifferent to the rage of battle | You find yourself indifferent to the raging flow of battle. | Your blood surges as the rage of battle returns to you. |  |
+| [`inquisition`](../raw/live/affliction_show/inquisition.txt) Inquisition |  |  | suffering under holy inquisition. | none | Clarity returns to your mind as the echoing accusations fade from memory. | NoRandomCure |
 | [`insomnia`](../raw/live/affliction_show/insomnia.txt) Insomnia | Eat Goldenseal / Eat Plumbum |  | an insomniac. | You suddenly feel incapable of falling asleep. | Your mind relaxes and you feel as if you could sleep. | NoRandomCure |
+| [`internalbleeding`](../raw/live/affliction_show/internalbleeding.txt) Massive internal bleeding | Apply Restoration To Body |  | suffering from massive internal bleeding. | none | none | NoRandomCure |
+| [`isolation`](../raw/live/affliction_show/isolation.txt) Mind isolation |  |  | cut off from communication. | none | none | NoRandomCure |
 | [`itching`](../raw/live/affliction_show/itching.txt) Itching | Apply Epidermal To Body |  | afflicted with terrible itching. | A terrible urge to itch yourself bloody comes over you. | Thankfully, the itching subsides. |  |
 | [`justice`](../raw/live/affliction_show/justice.txt) Justice | Eat Bellwort / Eat Cuprum |  | surrounded by the aura of justice. | A set of scales appears over your head and one side quickly descends, as you feel an aura of justice surround you. | The curse of justice leaves you. |  |
+| [`kaisurge`](../raw/live/affliction_show/kaisurge.txt) Kaisurge | Time |  | greatly inhibited by a recent surge of Kai energy. | none | none | NoRandomCure |
+| [`kkractlebrand`](../raw/live/affliction_show/kkractlebrand.txt) Kkractlebrand | Sip Health |  | marked by the wrath of Kkractle. | The mark upon your brow bursts into flame, a singular point of agony that threatens to consume you. | The burning brand upon your brow fades, leaving only tender flesh as a warning. | NoRandomCure |
 | [`laceratedthroat`](../raw/live/affliction_show/laceratedthroat.txt) Laceratedthroat | Apply Restoration To Head |  | bleeding profusely from a lacerated throat. | A torrent of blood erupts from your throat as the thorn-laden vines tear at the already wounded flesh. | The flow of blood slows as the gaping wound in your throat partially mends. | NoRandomCure |
+| [`lapsingconsciousness`](../raw/live/affliction_show/lapsingconsciousness.txt) Lapses in consciousness | Time |  | afflicted by lapses in consciousness. | You feel your brain begin to falter. | You feel your brain recover, no longer always on the verge of falling unconscious. |  |
+| [`latched`](../raw/live/affliction_show/latched.txt) Latched | Sip Health |  | Moments from death. | You feel suddenly weak, your limbs trembling and bile rising. | Warmth floods back into your limbs, and you feel suddenly vital. | NoRandomCure |
 | [`lethargy`](../raw/live/affliction_show/lethargy.txt) Lethargy | Eat Ginseng / Eat Ferrum |  | feeling rather lethargic. | You feel your energy robbed from you as lethargy overtakes you. | The lethargy evaporates, leaving you full of energy. | CadmusCurse |
-| [`loneliness`](../raw/live/affliction_show/loneliness.txt) Loneliness | Eat Lobelia / Eat Argentum Focus Mind |  | very lonely. | You glance nervously around the room. | The awful loneliness leaves you. | WhisperingMadness |
-| [`lovers`](../raw/live/affliction_show/lovers.txt) The lover's curse | Eat Bellwort / Eat Cuprum Focus Mind |  | Desperately in love with $(gname$). | none | You shake your head, wondering what you ever saw in $(gname$). | Enlighten, WhisperingMadness |
+| [`lightbind`](../raw/live/affliction_show/lightbind.txt) Lightbind | Time | 22 seconds | bound by chains of golden light. | none | none | NoRandomCure |
+| [`loneliness`](../raw/live/affliction_show/loneliness.txt) Loneliness | Eat Lobelia / Eat Argentum and Focus Mind |  | very lonely. | You glance nervously around the room. | The awful loneliness leaves you. | WhisperingMadness |
+| [`lovers`](../raw/live/affliction_show/lovers.txt) The lover's curse | Eat Bellwort / Eat Cuprum and Focus Mind |  | Desperately in love with $(gname$). | none | You shake your head, wondering what you ever saw in $(gname$). | Enlighten, WhisperingMadness |
+| [`lovestruck`](../raw/live/affliction_show/lovestruck.txt) Lovestruck | Time | 5 seconds | behaving like a love-struck fool. | none | Your strange fixation on all those that surround you abruptly lifts. | NoRandomCure |
 | [`manaleech`](../raw/live/affliction_show/manaleech.txt) Manaleech | Smoke Valerian / Smoke Realgar |  | a victim of manaleech. | Your mana begins to drain away. | Your rapidly weakening mind is stabilized. |  |
 | [`mangledhead`](../raw/live/affliction_show/mangledhead.txt) A mangled head | Apply Restoration To Head |  | has a mangled head. | Your skull splits and caves in as your head takes serious damage. | Your head is greatly healed, but still damaged. | NoRandomCure |
 | [`mangledleftarm`](../raw/live/affliction_show/mangledleftarm.txt) A mangled left arm | Apply Restoration To Arms |  | has a mangled left arm. | To your horror, your left arm has been mutilated beyond repair by ordinary means. | Your left arm is greatly healed, but still damaged. | NoRandomCure |
 | [`mangledleftleg`](../raw/live/affliction_show/mangledleftleg.txt) A mangled left leg | Apply Restoration To Legs |  | has a mangled left leg. | To your horror, your left leg has been mutilated beyond repair by ordinary means. | Your left leg is greatly healed, but still damaged. | NoRandomCure |
 | [`mangledrightarm`](../raw/live/affliction_show/mangledrightarm.txt) A mangled right arm | Apply Restoration To Arms |  | has a mangled right arm. | To your horror, your right arm has been mutilated beyond repair by ordinary means. | Your right arm is greatly healed, but still damaged. | NoRandomCure |
 | [`mangledrightleg`](../raw/live/affliction_show/mangledrightleg.txt) A mangled right leg | Apply Restoration To Legs |  | has a mangled right leg. | To your horror, your right leg has been mutilated beyond repair by ordinary means. | Your right leg is greatly healed, but still damaged. | NoRandomCure |
-| [`masochism`](../raw/live/affliction_show/masochism.txt) Masochism | Eat Lobelia / Eat Argentum Focus Mind |  | masochistic. | An odd sensation descends upon you. | You no longer enjoy pain. | Enlighten, Tzantza, WhisperingMadness |
+| [`masochism`](../raw/live/affliction_show/masochism.txt) Masochism | Eat Lobelia / Eat Argentum and Focus Mind |  | masochistic. | An odd sensation descends upon you. | You no longer enjoy pain. | Enlighten, Tzantza, WhisperingMadness |
 | [`mildtrauma`](../raw/live/affliction_show/mildtrauma.txt) Mild internal trauma | Apply Restoration To Body |  | has mild internal trauma. | Your torso is greatly damaged from the beating. | Your torso feels stronger and healthier. | NoRandomCure |
+| [`mindclamp`](../raw/live/affliction_show/mindclamp.txt) A clamped mind |  |  | mindclamped. | none | none | NoRandomCure |
+| [`mindravaged`](../raw/live/affliction_show/mindravaged.txt) Mindravaged | Time |  | Ravaged in mind by psionic power. | none | Your ravaged mind has recovered somewhat, though phantom pain still pulses at your temples. | NoRandomCure |
+| [`muddled`](../raw/live/affliction_show/muddled.txt) Muddled | Time | 12 seconds | of a muddled mind. | none | Your thoughts seem less sluggish and slow. | NoRandomCure |
 | [`mycalium`](../raw/live/affliction_show/mycalium.txt) Mycalium | Eat Goldenseal / Eat Plumbum |  | plagued with a corruption of the mind. | Your thoughts cloud as a strange sense of displacement overcomes you. | Your thoughts suddenly crystalise, the insidious whispers falling abruptly silent. |  |
 | [`nausea`](../raw/live/affliction_show/nausea.txt) Nausea | Eat Ginseng / Eat Ferrum |  | violently ill. | A sense of extreme nausea washes over you. | Your stomach becalms itself. | CadmusCurse |
-| [`pacified`](../raw/live/affliction_show/pacified.txt) Pacified | Eat Bellwort / Eat Cuprum Focus Mind | 20 seconds | feeling unnaturally tranquil. | A sense of deep inner calm descends on you. | The unnatural calm that filled you lifts abruptly from you. |  |
+| [`numbedleftarm`](../raw/live/affliction_show/numbedleftarm.txt) Numbedleftarm | Time |  | your left arm is completely numb. | none | none | NoRandomCure |
+| [`numbedrightarm`](../raw/live/affliction_show/numbedrightarm.txt) Numbedrightarm | Time |  | your right arm is completely numb. | none | none | NoRandomCure |
+| [`pacified`](../raw/live/affliction_show/pacified.txt) Pacified | Eat Bellwort / Eat Cuprum and Focus Mind | 20 seconds | feeling unnaturally tranquil. | A sense of deep inner calm descends on you. | The unnatural calm that filled you lifts abruptly from you. |  |
+| [`palpatarfeed`](../raw/live/affliction_show/palpatarfeed.txt) Palpatarfeed | Time | 20 seconds | Being fed on by the maggots of Palpatar. | none | The maggots infesting you wither and die. | NoRandomCure |
 | [`paralysis`](../raw/live/affliction_show/paralysis.txt) Paralysis | Eat Bloodroot / Eat Magnesium |  | paralysed. | A prickly stinging overcomes your body, fading away into numbness. | Your muscles unlock; you are no longer paralysed. |  |
-| [`paranoia`](../raw/live/affliction_show/paranoia.txt) Paranoia | Eat Ash / Eat Stannum Focus Mind |  | paranoid. | Unthinking paranoia overcomes you. | Aaaahhh. No one is out to get you after all. | Accentato, Enlighten, Tzantza, WhisperingMadness |
+| [`paranoia`](../raw/live/affliction_show/paranoia.txt) Paranoia | Eat Ash / Eat Stannum and Focus Mind |  | paranoid. | Unthinking paranoia overcomes you. | Aaaahhh. No one is out to get you after all. | Accentato, Enlighten, Tzantza, WhisperingMadness |
 | [`parasite`](../raw/live/affliction_show/parasite.txt) Parasite | Eat Kelp / Eat Aurum |  | tormented by a parasitic curse. | You feel your strength being leeched away. | The leeching of your strength comes to an end. |  |
-| [`peace`](../raw/live/affliction_show/peace.txt) Peace | Eat Bellwort / Eat Cuprum Focus Mind |  | pacified. | Your will to harm anything leaves you. | The unnatural feeling of peace leaves you. |  |
+| [`peace`](../raw/live/affliction_show/peace.txt) Peace | Eat Bellwort / Eat Cuprum and Focus Mind |  | pacified. | Your will to harm anything leaves you. | The unnatural feeling of peace leaves you. |  |
+| [`penitence`](../raw/live/affliction_show/penitence.txt) Penitence |  |  | serving penance. | none | none | NoRandomCure |
+| [`petrified`](../raw/live/affliction_show/petrified.txt) Petrified | Time |  | completely petrified. | none | Sensation returns to you as the petrification ends. | NoRandomCure |
+| [`phlogisticated`](../raw/live/affliction_show/phlogisticated.txt) Phlogisticated | Time | 45 seconds | phlogisticated. | none | none |  |
+| [`pinshot`](../raw/live/affliction_show/pinshot.txt) Pinshot | Time | 21 seconds | impaled through the foot. | none | The arrow through your foot finally comes free, allowing you to move normally once again. | NoRandomCure |
 | [`pressure`](../raw/live/affliction_show/pressure.txt) Pressure | Eat Pear / Eat Calcite |  | the pressure surrounding you is $=(type$). | none | The oppressive pressure weighing down on you lifts. | NoRandomCure |
 | [`prone`](../raw/live/affliction_show/prone.txt) Prone | Stand |  | seated on the ground. | none | none | NoRandomCure |
 | [`pyramides`](../raw/live/affliction_show/pyramides.txt) Pyramides | Eat Bloodroot / Eat Magnesium |  | suffering from the blood plague. | Your heart skips a beat, then begins to pound. | The burning in your veins abruptly fades. |  |
 | [`pyre`](../raw/live/affliction_show/pyre.txt) Pyre | Eat Bellwort / Eat Cuprum |  | being consigned to the flame. | none | The terrible burning within your chest is replaced by a soothing cool. | NoRandomCure |
 | [`rebbies`](../raw/live/affliction_show/rebbies.txt) Rebbies | Eat Kelp / Eat Aurum |  | your skin is secreting a vile slime. | You feel... odd. So very odd. | Your skin ceases secreting slime. |  |
-| [`recklessness`](../raw/live/affliction_show/recklessness.txt) Recklessness | Eat Lobelia / Eat Argentum Focus Mind |  | reckless. | None may stand in your way! You are invincible! | Prudence rules your psyche once again. | Enlighten, Tzantza, WhisperingMadness |
+| [`recklessness`](../raw/live/affliction_show/recklessness.txt) Recklessness | Eat Lobelia / Eat Argentum and Focus Mind |  | reckless. | None may stand in your way! You are invincible! | Prudence rules your psyche once again. | Enlighten, Tzantza, WhisperingMadness |
+| [`reeling`](../raw/live/affliction_show/reeling.txt) Reeling | Time | 20 seconds | reeling. | none | You recover yourself, no longer reeling wildly off balance. | NoRandomCure |
 | [`retribution`](../raw/live/affliction_show/retribution.txt) Retribution | Eat Bellwort / Eat Cuprum |  | suffering the curse of retribution. | A terrible sense of foreboding descends upon you. | The terrible sense of foreboding lifts. |  |
+| [`revealed`](../raw/live/affliction_show/revealed.txt) Revealed | Time | 60 seconds | revealed by the power of a star sigil. | A strange dust settles upon your form, illuminating your outline. | none | NoRandomCure |
 | [`sandfever`](../raw/live/affliction_show/sandfever.txt) Sandfever | Eat Goldenseal / Eat Plumbum |  | labouring under a terrible fever. | You're tired. So very tired. | Your fever finally breaks, the terrible burning retreating. |  |
 | [`scalded`](../raw/live/affliction_show/scalded.txt) Scalded | Time | 20 seconds | horrifically scalded. | none | The terrible burning of your skin fades. | NoRandomCure |
+| [`scrambledbrains`](../raw/live/affliction_show/scrambledbrains.txt) Scrambledbrains | Time | 60 seconds | your brains have been scrambled by a great impact. | Your brains feel scrambled by the impact. | Your brains no longer feel so scrambled. | NoRandomCure |
 | [`scytherus`](../raw/live/affliction_show/scytherus.txt) Thin blood | Eat Ginseng / Eat Ferrum |  | afflicted by thin blood. | You feel light headed and dizzy. | You feel your blood thickening. |  |
 | [`selarnia`](../raw/live/affliction_show/selarnia.txt) A severed bond with the spirits | Apply Mending To Body |  | losing the bond with the animal spirits. | none | You feel the barrier that separated you from your animal consciousness has dissipated. |  |
 | [`sensitivity`](../raw/live/affliction_show/sensitivity.txt) Sensitivity | Eat Kelp / Eat Aurum |  | sensitive to pain. | A prickly, stinging sensation spreads through your body. | The stinging feeling fades. | CadmusCurse |
 | [`serioustrauma`](../raw/live/affliction_show/serioustrauma.txt) Serious internal trauma | Apply Restoration To Body |  | has serious internal trauma. | Your internal organs have taken serious damage. | Your torso is greatly healed, but still damaged. | NoRandomCure |
 | [`shadowmadness`](../raw/live/affliction_show/shadowmadness.txt) Shadowmadness | Eat Goldenseal / Eat Plumbum |  | going slowly insane. | Your sanity begins to escape you. | Your sanity reestablishes itself. |  |
 | [`shivering`](../raw/live/affliction_show/shivering.txt) The shivers | Apply Caloric |  | shivering. | You begin to shiver violently. | Your body warms up and you stop shivering. |  |
-| [`shyness`](../raw/live/affliction_show/shyness.txt) Shyness | Eat Goldenseal / Eat Plumbum Focus Mind |  | afflicted by unbearable shyness. | You look about yourself nervously. | Your shyness has been cured. You can now face the world boldly. | Enlighten |
+| [`shyness`](../raw/live/affliction_show/shyness.txt) Shyness | Eat Goldenseal / Eat Plumbum and Focus Mind |  | afflicted by unbearable shyness. | You look about yourself nervously. | Your shyness has been cured. You can now face the world boldly. | Enlighten |
+| [`silenced`](../raw/live/affliction_show/silenced.txt) Silenced | Time |  | enduring a terrible pervasive silence. | none | Sound suddenly rushes in, the terrible pervading silence gone as swiftly as it came. | NoRandomCure |
+| [`silver`](../raw/live/affliction_show/silver.txt) Silver | Time | 180 seconds | shimmering with a silvery radiance. | none | none |  |
 | [`skullfractures`](../raw/live/affliction_show/skullfractures.txt) Skullfractures | Apply Health To Head |  | suffering from $(type$) skull fractures. | none | The pounding in your head disappears. |  |
 | [`slashedthroat`](../raw/live/affliction_show/slashedthroat.txt) Slashedthroat | Apply Epidermal To Head |  | bleeding from a slashed throat. | Blood sprays forth as the thorn-laden vine rips a deep wound in your throat. | The bleeding gash in your throat closes up completely. |  |
 | [`sleeping`](../raw/live/affliction_show/sleeping.txt) Sleeping | Wake |  | sleeping. | You feel incredibly tired, and fall asleep immediately. | You open your eyes and yawn mightily. | NoRandomCure |
-| [`slickness`](../raw/live/affliction_show/slickness.txt) Slickness | Smoke Valerian / Smoke Realgar Eat Bloodroot / Eat Magnesium |  | extremely oily. | You notice that your sweat glands have begun to rapidly secrete a foul, oily substance. | Your glands cease their oily secretion. |  |
+| [`slickness`](../raw/live/affliction_show/slickness.txt) Slickness | Smoke Valerian / Smoke Realgar and Eat Bloodroot / Eat Magnesium |  | extremely oily. | You notice that your sweat glands have begun to rapidly secrete a foul, oily substance. | Your glands cease their oily secretion. |  |
+| [`slimeobscure`](../raw/live/affliction_show/slimeobscure.txt) Slimeobscure | Time | 60 seconds | Covered in viscous slime. | none | none | NoRandomCure |
+| [`snared`](../raw/live/affliction_show/snared.txt) Snared | Time | 20 seconds | tangled up by a rope snare. | none | You manage to disentangle yourself from the rope trap which had snared your ankles. | NoRandomCure |
+| [`solarburn`](../raw/live/affliction_show/solarburn.txt) Solarburn | Time | 5 seconds | skin seared by solar energy. | none | Your skin ceases its painful tingling. | NoRandomCure |
+| [`speechless`](../raw/live/affliction_show/speechless.txt) Speechless | Time | 300 seconds | rendered entirely unable to communicate. | none | You find your tongue will once more obey your will to speak. | NoRandomCure |
 | [`spiritburn`](../raw/live/affliction_show/spiritburn.txt) Spiritburn | Eat Lobelia / Eat Argentum |  | plagued by holy fires. | Your skin begins to grow uncomfortably hot. | The uncomfortable heat suffusing you fades. |  |
 | [`stridulating`](../raw/live/affliction_show/stridulating.txt) Stridulating | Eat Bellwort / Eat Cuprum | 15 seconds | stridulating. | Your body begins to vibrate in sympathetic resonance with a stridulation vibration. | You cease vibrating in tune with stridulation vibrations. | NoRandomCure |
-| [`stupidity`](../raw/live/affliction_show/stupidity.txt) Stupidity | Eat Goldenseal / Eat Plumbum Focus Mind |  | unnaturally stupid. | Hmmmm. Why must everything be so difficult to figure out? | You aren't such a complete idiot anymore. | Accentato, Enlighten, Tzantza, WhisperingMadness |
-| [`stuttering`](../raw/live/affliction_show/stuttering.txt) Stuttering | Apply Epidermal To Head Focus Mind |  | a stuttering fool. | The thought of speech seems difficult all of a sudden. | Your tongue will finally obey your commands properly. |  |
+| [`stupidity`](../raw/live/affliction_show/stupidity.txt) Stupidity | Eat Goldenseal / Eat Plumbum and Focus Mind |  | unnaturally stupid. | Hmmmm. Why must everything be so difficult to figure out? | You aren't such a complete idiot anymore. | Accentato, Enlighten, Tzantza, WhisperingMadness |
+| [`stuttering`](../raw/live/affliction_show/stuttering.txt) Stuttering | Apply Epidermal To Head and Focus Mind |  | a stuttering fool. | The thought of speech seems difficult all of a sudden. | Your tongue will finally obey your commands properly. |  |
+| [`succumbed`](../raw/live/affliction_show/succumbed.txt) Succumbed | Time | 30 seconds | succumbed to a love-wrought madness. | none | Your thoughts clear, your pulse steadies; love's madness has left you... for now. | NoRandomCure |
 | [`temperedcholeric`](../raw/live/affliction_show/temperedcholeric.txt) A tempered choleric humour | Eat Ginger / Eat Antimony |  | your choleric humour has been tempered a total of $=(type$) times. | none | none | NoRandomCure |
 | [`temperedmelancholic`](../raw/live/affliction_show/temperedmelancholic.txt) A tempered melancholic humour | Eat Ginger / Eat Antimony |  | your melancholic humour has been tempered a total of $=(type$) times. | none | none | NoRandomCure |
 | [`temperedphlegmatic`](../raw/live/affliction_show/temperedphlegmatic.txt) A tempered phlegmatic humour | Eat Ginger / Eat Antimony |  | your phlegmatic humour has been tempered a total of $=(type$) times. | none | none | NoRandomCure |
 | [`temperedsanguine`](../raw/live/affliction_show/temperedsanguine.txt) A tempered sanguine humour | Eat Ginger / Eat Antimony |  | your sanguine humour has been tempered a total of $=(type$) times. | none | none | NoRandomCure |
 | [`tenderskin`](../raw/live/affliction_show/tenderskin.txt) Tenderskin | Eat Lobelia / Eat Argentum |  | suffering from tender skin. | Your skin is left tender and raw from the flames. | Your skin is no longer so tender. |  |
 | [`tension`](../raw/live/affliction_show/tension.txt) Tension | Smoke Elm / Smoke Cinnabar |  | surrounded by heightened tension. | none | You suddenly find the air much easier to breathe. |  |
+| [`timeflux`](../raw/live/affliction_show/timeflux.txt) Timeflux | Time | 60 seconds | suffering from a distorted perception of time. | none | none | NoRandomCure |
 | [`timeloop`](../raw/live/affliction_show/timeloop.txt) Timeloop | Eat Bellwort / Eat Cuprum |  | stuck in a feedback loop. | The world seems to grow distorted around you, as if through a thick fog. | You break out of the feedback loop. |  |
+| [`tonguetied`](../raw/live/affliction_show/tonguetied.txt) A tongue tied | Apply Restoration To Head |  | completely tongue tied. | Your tongue twists and writhes in your mouth as if with a will of its own. | Your tongue stops its mad twisting. | NoRandomCure |
 | [`torntendons`](../raw/live/affliction_show/torntendons.txt) Torntendons | Apply Health To Legs |  | suffering from $(type$) torn tendons. | none | The burning in your lower legs fades away. |  |
 | [`transfixation`](../raw/live/affliction_show/transfixation.txt) State of transfixation | Writhe |  | transfixed. | none | none | NoRandomCure |
+| [`trueblind`](../raw/live/affliction_show/trueblind.txt) Trueblind | Time | 7 seconds | suffering from extreme loss of vision. | none | none | NoRandomCure |
+| [`unconsciousness`](../raw/live/affliction_show/unconsciousness.txt) Unconsciousness | Time |  | unconscious. | Your legs collapse from under you and consciousness leaves you as you pass out. | You regain consciousness with a start. | NoRandomCure |
 | [`unweavingbody`](../raw/live/affliction_show/unweavingbody.txt) Unweavingbody | Eat Ginseng / Eat Ferrum |  | suffering from an unweaving body. | none | The unnatural weakness of your muscles suddenly fades, your vitality resurging. | NoRandomCure |
 | [`unweavingmind`](../raw/live/affliction_show/unweavingmind.txt) Unweavingmind | Eat Goldenseal / Eat Plumbum |  | suffering from an unweaving mind. | none | Your thoughts suddenly become crystal clear, the haze over your thoughts vanishing without a trace. | NoRandomCure |
 | [`unweavingspirit`](../raw/live/affliction_show/unweavingspirit.txt) Unweavingspirit | Smoke Elm / Smoke Cinnabar |  | suffering from an unweaving spirit. | none | You feel your fundamental essence stabilise, your spiritual energy surging with new strength. |  |
-| [`vertigo`](../raw/live/affliction_show/vertigo.txt) Vertigo | Eat Lobelia / Eat Argentum Focus Mind |  | afraid of heights. | The idea of heights makes you queasy suddenly. | Your fear of heights subsides. | Accentato, Enlighten, Tzantza, WhisperingMadness |
+| [`vertigo`](../raw/live/affliction_show/vertigo.txt) Vertigo | Eat Lobelia / Eat Argentum and Focus Mind |  | afraid of heights. | The idea of heights makes you queasy suddenly. | Your fear of heights subsides. | Accentato, Enlighten, Tzantza, WhisperingMadness |
+| [`vinewreathed`](../raw/live/affliction_show/vinewreathed.txt) Wreathed in vines | Time | 20 seconds | wreathed in flailing vines. | none | none | NoRandomCure |
+| [`vitiated`](../raw/live/affliction_show/vitiated.txt) Vitiated | Time |  | vitiated by Shin energy. | none | none | NoRandomCure |
+| [`vitrified`](../raw/live/affliction_show/vitrified.txt) Vitrified | Time | 45 seconds | vitrified. | none | none | NoRandomCure |
+| [`voidfisted`](../raw/live/affliction_show/voidfisted.txt) Voidfisted | Time | 15 seconds | suffused with the void. | none | none | NoRandomCure |
 | [`voyria`](../raw/live/affliction_show/voyria.txt) Voyria | Sip Immunity |  | suffering from voyria. | none | Mercifully, the voyria venom has been cleansed from your body. |  |
+| [`waterbonds`](../raw/live/affliction_show/waterbonds.txt) Waterbonds | Time | 30 seconds | Bound by tendrils of water. | none | The tendrils of water that bind you splash into an icy puddle at your feet as they disperse. | NoRandomCure |
+| [`weakenedmind`](../raw/live/affliction_show/weakenedmind.txt) Weakenedmind |  |  | weakened in mind. | none | The power of Rixil fades from your mind. | NoRandomCure |
 | [`weariness`](../raw/live/affliction_show/weariness.txt) Weariness | Eat Kelp / Eat Aurum |  | wearied in body. | Your limbs grow heavy and you groan feebly. | Your limbs strengthen and you feel stronger. |  |
 | [`webbed`](../raw/live/affliction_show/webbed.txt) Entanglement by webs | Writhe |  | entangled in strands of webbing. | none | none | NoRandomCure |
 | [`whisperingmadness`](../raw/live/affliction_show/whisperingmadness.txt) Whispering madness | Eat Lobelia / Eat Argentum |  | hearing whispers of madness. | You feel an invisible claw brush the back of your skull. | The whispering in your mind subsides. | NoRandomCure |
+| [`woeconstrained`](../raw/live/affliction_show/woeconstrained.txt) Woeconstrained | Time | 30 seconds | constrained to war by the tales of Woe. | none | You are no longer constrained to war by the tales of Woe. | NoRandomCure |
 | [`wristfractures`](../raw/live/affliction_show/wristfractures.txt) Wristfractures | Apply Health To Arms |  | suffering from $(type$) wrist fractures. | none | You feel bones snapping back into place in your arms. |  |
 
 ## Old names the game still accepts
@@ -155,32 +234,50 @@ confirmed in-game, so the lists below are questions, not bugs.
 
 ## Coverage against the game's AFFLICTION LIST
 
-The game lists **203** afflictions (`kb/raw/live/affliction_list.txt`). 124 have a record above.
+The game lists **203** afflictions (`kb/raw/live/affliction_list.txt`). 203 have a record above.
 
-**No record yet (79)**, filled by the next `kbcapture afflictions`: `accentato`, `airfisted`, `amnesia`, `asphyxiating`, `betrayal`, `blackout`, `blistered`, `breathless`, `bruisedribs`, `calcifiedskull`, `calcifiedtorso`, `coldfate`, `condemned`, `conflagration`, `constricted`, `convergence`, `corruption`, `cremated`, `dazzled`, `deathsickness`, `deepsleep`, `degenerate`, `dehydrated`, `demonstain`, `deteriorate`, `empoweredloshre`, `empoweredmannaz`, `enlightenment`, `enmesh`, `ensorcelled`, `flamefisted`, `grievouswounds`, `hamstrung`, `hatred`, `hecatecurse`, `hindered`, `homunculusmercury`, `icebound`, `icefisted`, `inquisition`, `internalbleeding`, `isolation`, `kaisurge`, `kkractlebrand`, `lapsingconsciousness`, `latched`, `lightbind`, `lovestruck`, `mindclamp`, `mindravaged`, `muddled`, `numbedleftarm`, `numbedrightarm`, `palpatarfeed`, `penitence`, `petrified`, `phlogisticated`, `pinshot`, `reeling`, `revealed`, `scrambledbrains`, `silenced`, `silver`, `slimeobscure`, `snared`, `solarburn`, `speechless`, `succumbed`, `timeflux`, `tonguetied`, `trueblind`, `unconsciousness`, `vinewreathed`, `vitiated`, `vitrified`, `voidfisted`, `waterbonds`, `weakenedmind`, `woeconstrained`
+**No record yet (0)**, filled by the next `kbcapture afflictions`: none
 
 **Not in our curing priority table (85)**: SSC cures these at the server's own default priority. Some are not curable at all (states, curses, class marks); the ones that are deserve a decision: `accentato`, `airfisted`, `amnesia`, `asphyxiating`, `betrayal`, `blackout`, `blistered`, `bloodfire`, `breathless`, `bruisedribs`, `calcifiedskull`, `calcifiedtorso`, `coldfate`, `condemned`, `conflagration`, `constricted`, `convergence`, `corruption`, `cremated`, `dazed`, `dazzled`, `deathsickness`, `deepsleep`, `degenerate`, `dehydrated`, `demonstain`, `deteriorate`, `diminished`, `earworm`, `empoweredloshre`, `empoweredmannaz`, `enlightenment`, `enmesh`, `ensorcelled`, `flamefisted`, `frostbite`, `fulminated`, `grievouswounds`, `hamstrung`, `hatred`, `hecatecurse`, `hindered`, `homunculusmercury`, `icebound`, `icefisted`, `inquisition`, `internalbleeding`, `isolation`, `kaisurge`, `kkractlebrand`, `lapsingconsciousness`, `latched`, `lightbind`, `lovestruck`, `mindclamp`, `mindravaged`, `muddled`, `numbedleftarm`, `numbedrightarm`, `palpatarfeed`, `penitence`, `petrified`, `phlogisticated`, `pinshot`, `reeling`, `revealed`, `scrambledbrains`, `silenced`, `silver`, `slimeobscure`, `snared`, `solarburn`, `speechless`, `succumbed`, `timeflux`, `tonguetied`, `trueblind`, `unconsciousness`, `vinewreathed`, `vitiated`, `vitrified`, `voidfisted`, `waterbonds`, `weakenedmind`, `woeconstrained`
 
 ## Descriptions
 
+- **Accentato** (`accentato`): 
 - **Addiction to curatives** (`addiction`): Addiction causes you to slurp your elixirs and tonics thirstily, using twice as many sips. It also causes you to eat all of a plant in your inventory, rather than just one
 - **The aeon curse** (`aeon`): The aeon curse slows time around you, making it impossible to do more than one thing at once, and delaying everything you do.
 - **Agoraphobia** (`agoraphobia`): Agoraphobics cannot stand to be in wide open spaces, and seek shelter compulsively.
+- **Airfisted** (`airfisted`): A windy gale will hinder their attempts to parry and the movements of Chaos orbs.
+- **Amnesia** (`amnesia`): Amnesia makes you forget one action that you try to take.
 - **Anorexia** (`anorexia`): Anorexia prevents you from eating or drinking almost anything at all.
+- **Asphyxiating** (`asphyxiating`): 
 - **Asthma** (`asthma`): Asthma makes it impossible to smoke anything or hold your breath.
+- **Betrayal** (`betrayal`): 
+- **Blackout** (`blackout`): Blackout obscures your prompt and prevents you from seeing many things happening.
 - **Blindness** (`blindness`): Blindness makes it impossible to see the world around you.
+- **Blistered** (`blistered`): 
 - **Bloodfire** (`bloodfire`): This affliction will make it impossible to apply salves while the flames persist.
 - **Entanglement by tied ropes** (`bound`): When bound tightly by tied ropes, there is little you can do.
+- **Breathless** (`breathless`): 
 - **A broken left arm** (`brokenleftarm`): Having a broken left arm prevents you from using that arm in most situations.
 - **A broken left leg** (`brokenleftleg`): Having a broken left leg prevents you from using that leg in most situations.
 - **A broken right arm** (`brokenrightarm`): Having a broken right arm prevents you from using that arm in most situations.
 - **A broken right leg** (`brokenrightleg`): Having a broken right leg prevents you from using that leg in most situations.
+- **Bruisedribs** (`bruisedribs`): 
 - **Burning** (`burning`): When your body is completely wrapped in flames, you will unsuprisingly find it quite painful.
+- **Calcifiedskull** (`calcifiedskull`): Calcification takes time to complete, and if not cured before then either your head shall suffer extreme damage (elevating it to the next level of damage), or if it is already at maximum head damage, you shall die instantly.
+- **Calcifiedtorso** (`calcifiedtorso`): Calcification takes time to complete, and if not cured before then either your torso shall suffer extreme damage (elevating it to the next level of damage), or if it is already at maximum torso damage, you shall take significant damage.
 - **Claustrophobia** (`claustrophobia`): Claustrophobics cannot stand to be indoors!
 - **Clumsiness** (`clumsiness`): Clumsiness makes it hard for you to physically hit your target.
+- **Coldfate** (`coldfate`): 
 - **Concussion** (`concussion`): Concussion makes it extremely difficult to act, bringing about frequent bouts of amnesia.
+- **Condemned** (`condemned`): While condemned, you may not cure ablaze, but that burning may also not be increased by paladins.
+- **Conflagration** (`conflagration`): This affliction causes significant damage for as long as the conflagration rages. The only way to be rid of it is to attempt to extinguish the flames that feed the conflagration. This is accomplished by curing all stacks of the ablaze affliction present upon you.
 - **Confusion** (`confusion`): Confusion extends your equilibrium recovery rates by 100%.
+- **Constricted** (`constricted`): Constricted vines will disable various abilities that speed up writhing.
+- **Convergence** (`convergence`): 
+- **Corrupt humours** (`corruption`): Corrupted humours affect your blood, draining mana when you bleed and health when you clot.
 - **Crackedribs** (`crackedribs`): This affliction will reduce how much health elixirs heal you for as well as giving periodic sensitivity.
+- **Cremated** (`cremated`): 
 - **Crescendo** (`crescendo`): 
 - **Crushedthroat** (`crushedthroat`): A crushed throat shall increase the time it takes you to recover from smoking pipes.
 - **Impalement by a daegger** (`daeggerimpale`): Impalement on a daegger restricts action and causes great pain.
@@ -191,45 +288,75 @@ The game lists **203** afflictions (`kb/raw/live/affliction_list.txt`). 124 have
 - **A damaged right leg** (`damagedrightleg`): Having a damaged right leg prevents you from using that leg in most situations.
 - **An allergy to sunlight** (`darkshade`): Darkshade makes even the lightest ray of sunlight extremely painful. Stay outside too long and you will surely die.
 - **Dazed** (`dazed`): Being dazed wipes out your ability to resist hypnotism.
+- **Dazzled** (`dazzled`): Being dazzled lowers your accuracy with certain physical attacks and halves your resistance to damage.
 - **A deadened mind** (`deadening`): Deadening makes it easier for Telepaths to lock onto you.
 - **Deafness** (`deafness`): Deafness stops you from hearing anything.
+- **Deathsickness** (`deathsickness`): 
+- **Deepsleep** (`deepsleep`): A deep sleep is one from which you will never naturally wake.
+- **Degenerate** (`degenerate`): 
+- **Dehydrated** (`dehydrated`): Reduces your resistance to fire-based damage.
 - **Dementia** (`dementia`): Demented persons struggle to see reality as it truly is, often seeing things that are not there.
+- **A demonic stain** (`demonstain`): A demonic stain on your being reduces all of your statistics by one point.
 - **Depression** (`depression`): Every time you suffer a symptom from a phobia or madness, you will take health and mana damage.
+- **Deteriorate** (`deteriorate`): 
 - **Diminished** (`diminished`): 
 - **Disloyalty** (`disloyalty`): Disloyalty, often caused by disfigurement, makes creatures loyal to you consider you a beastly enemy.
 - **Disrupted** (`disrupted`): Being disrupted will keep you permanently off of equilibrium.
 - **Dissonance** (`dissonance`): Aural dissonance causes defences to slowly peel away from you.
 - **Dizziness** (`dizziness`): Dizziness makes it quite hard to walk without falling over.
 - **Earworm** (`earworm`): 
+- **Empoweredloshre** (`empoweredloshre`): Eating ginseng or ferrum while suffering this affliction will cause your health and mana to be drained.
+- **Empoweredmannaz** (`empoweredmannaz`): Someone with this affliction does not regenerate mana passively.
+- **Enlightenment** (`enlightenment`): Enlightenment opens your mind to occult revelations, and will make certain mental insanities permanent until you die.
+- **Enmesh** (`enmesh`): 
+- **Ensorcelled** (`ensorcelled`): This affliction will cause various movement attempts to fail on occasion.
 - **Entanglement by ropes** (`entangled`): Entangled in ropes restricts most forms of movement and action.
 - **Epilepsy** (`epilepsy`): Epilepsy causes you to fit intermittently, using balance.
 - **Fear** (`fear`): Fear is a crippling panic resulting in your running around uncontrollably.
+- **Flamefisted** (`flamefisted`): This fiery aura immediately burns away any aura of rebounding.
 - **Flushings** (`flushings`): 
 - **Fratricide** (`fratricide`): Grants major negative poison resist and causes hypnotic impulses to relapse a short time after being first introduced.
 - **Frostbite** (`frostbite`): While suffering from frostbite, the next time you are frozen if you possess the insulation defence it will be stripped and you will be struck with the freezing attack directly. Your frostbite will fade when this occurs.
 - **A frozen body** (`frozen`): Being frozen solid, you will find it much slower to move.
 - **Fulminated** (`fulminated`): Successful attempts to focus your mind to cure an affliction will cause you to be struck down with paralysis.
 - **Generosity** (`generosity`): Generosity causes you to give away your material possessions.
+- **Grievously wounded** (`grievouswounds`): While you can fight through a single wound, even the most stalwart adventurer will succumb to enough of them.
 - **Guilt** (`guilt`): This affliction causes mental focusing to deliver a mental affliction.
 - **Haemophilia** (`haemophilia`): Haemophiliacs find it impossible to clot their blood.
 - **Hallucinations** (`hallucinations`): Hallucinations cause you to see things that are not there, and occasionally act strangely because of your visions.
+- **Hamstrung** (`hamstrung`): A crippled hamstring greatly impedes one's ability to walk for a short time.
+- **Hatred** (`hatred`): You shall consider everyone an enemy.
 - **Healthleech** (`healthleech`): Healthleech slowly drains your health.
 - **Heartseed** (`heartseed`): An elemental heart seed rapidly grows within your chest until it bursts out, ensuring a grisly death.
+- **Hecatecurse** (`hecatecurse`): Prevents curing of the whispering madness affliction for its duration.
 - **Hellsight** (`hellsight`): This affliction causes you to see into Hell itself, which periodically causes a variety of afflictions.
+- **Hindered** (`hindered`): Being hindered by the forests may impede your movement.
+- **Homunculusmercury** (`homunculusmercury`): Extends the next herb balance.
 - **Horror** (`horror`): While horrified, you may not cure fear.
 - **Hypersomnia** (`hypersomnia`): Hypersomniacs find sleep an urge very hard to resist.
 - **Hypochondria** (`hypochondria`): Hypochondriacs often think they are suffering from afflictions they do not have.
 - **Hypothermia** (`hypothermia`): Prevents curing the freezing affliction.
+- **Restricted by frozen bonds** (`icebound`): Being restricted by the frozen bonds is restrictive on any actions you wish to make, including the use of curative arts.
+- **Icefisted** (`icefisted`): This layer of frost prevents you from touching your tattoos.
 - **Impaled** (`impaled`): Impalement by a weapon restricts movement and causes massive bleeding.
 - **Impatience** (`impatience`): Impatience reduces the amount of mana restored by half and prevents you from focusing your mind.
 - **Indifference** (`indifference`): Being indifferent as to the raging flow of battle, you will be unable to use any battlerage attacks or generate any battlerage.
+- **Inquisition** (`inquisition`): A holy inquisition can cause a variety of effects ranging from lower mental regeneration to finding it impossible to escape the sight of Hell. It cures once the victim has rid themselves of both guilt and spiritburn afflictions, and is no longer prone.
 - **Insomnia** (`insomnia`): Insomnia makes it very difficult to fall asleep.
+- **Massive internal bleeding** (`internalbleeding`): This severe internal injury causes massive bleeding.
+- **Mind isolation** (`isolation`): If your mind has been isolated by a telepath, no-one will hear you speak on telepathic channels.
 - **Itching** (`itching`): Itching causes periodic loss of balance as you scratch yourself furiously.
 - **Justice** (`justice`): The justice curse causes any damaging attack by you against the afflictor to be partially returned to you.
+- **Kaisurge** (`kaisurge`): This affliction prevents mounting and adds a small extension to the broken limb penalty on tumble.
+- **Kkractlebrand** (`kkractlebrand`): The brand of Kkractle reduces your fire resistance. It burns more fiercely the more you are struck by a Fire Lord, and can be detonated to unleash a devastating explosion of fire.
 - **Laceratedthroat** (`laceratedthroat`): A lacerated throat makes vocal work difficult and greatly reduces the efficacy of health and mana elixirs.
+- **Lapses in consciousness** (`lapsingconsciousness`): Lapsing consciousness causes you to periodically fall unconscious.
+- **Latched** (`latched`): 
 - **Lethargy** (`lethargy`): Lethargy leaves you feeling physically drained, making movement and action harder.
+- **Lightbind** (`lightbind`): This affliction will cause various movement attempts to fail on occasion.
 - **Loneliness** (`loneliness`): Lonely people simply must find company, and will move around until they do so!
 - **The lover's curse** (`lovers`): The lover's curse prevents you from attacking the person with whom you are in love.
+- **Lovestruck** (`lovestruck`): 
 - **Manaleech** (`manaleech`): Mana leech causes your mental faculties to slowly drain away.
 - **A mangled head** (`mangledhead`): Having a mangled head will cause your mind to falter.
 - **A mangled left arm** (`mangledleftarm`): Having a mangled left arm prevents you from using that arm in most situations.
@@ -238,22 +365,35 @@ The game lists **203** afflictions (`kb/raw/live/affliction_list.txt`). 124 have
 - **A mangled right leg** (`mangledrightleg`): Having a mangled right leg prevents you from using that leg in most situations.
 - **Masochism** (`masochism`): Masochism causes you to periodically harm yourself.
 - **Mild internal trauma** (`mildtrauma`): Having a damaged torso will cause you to bleed profusely.
+- **A clamped mind** (`mindclamp`): A clamped mind reduces your health and mental strength by approximately one fifth.
+- **Mindravaged** (`mindravaged`): A ravaged mind will leave you vulnerable to psychic assault.
+- **Muddled** (`muddled`): This affliction causes mental maladies to work against you with greater potency, such as by boosting the rate of stupidity firing or the likeliness that you will be hit by dizziness.
 - **Mycalium** (`mycalium`): 
 - **Nausea** (`nausea`): Nausea causes intermittent, painful vomiting.
+- **Numbedleftarm** (`numbedleftarm`): 
+- **Numbedrightarm** (`numbedrightarm`): 
 - **Pacified** (`pacified`): Pacification makes it impossible to do any aggressive actions.
+- **Palpatarfeed** (`palpatarfeed`): This affliction will periodically afflict with healthleech until it fades.
 - **Paralysis** (`paralysis`): Paralysis locks up all of your muscles, preventing active physical movements.
 - **Paranoia** (`paranoia`): Paranoid people consider everyone an enemy.
 - **Parasite** (`parasite`): This affliction will cause all of your natural regeneration to heal the person who afflicted you instead, and will delay the effects of the speed elixir.
 - **Peace** (`peace`): While peaced, you will find it almost impossible to perform aggressive actions.
+- **Penitence** (`penitence`): If you have been forced to perform penance for your crimes, any Devoted priest will earn more Devotion from killing you.
+- **Petrified** (`petrified`): 
+- **Phlogisticated** (`phlogisticated`): Phlogisitication temporarily renders your body unable to benefit from irid moss or potash when you use equilibrium.
+- **Pinshot** (`pinshot`): This affliction will cause various movement attempts to fail on occasion.
 - **Pressure** (`pressure`): 
 - **Prone** (`prone`): Being knocked prone can cause a lot of your options to be limited.
 - **Pyramides** (`pyramides`): 
 - **Pyre** (`pyre`): While pyre is active, ablaze may not be cured below the intensity of the pyre's own stacks.
 - **Rebbies** (`rebbies`): 
 - **Recklessness** (`recklessness`): Recklessness makes you think you are completely unharmed and practically invincible.
+- **Reeling** (`reeling`): 
 - **Retribution** (`retribution`): Sipping mana while under the effects of retribution will cause you to lose half of what you gained in health.
+- **Revealed** (`revealed`): 
 - **Sandfever** (`sandfever`): 
 - **Scalded** (`scalded`): Increases the recovery time of applying salves.
+- **Scrambledbrains** (`scrambledbrains`): This affliction will make it impossible for you to naturally reject mental locks upon your person, as well as delaying the cure aspect of any attempt to focus your mind.
 - **Thin blood** (`scytherus`): Scytherus causes any venoms you get affected by to relapse after a short delay.
 - **A severed bond with the spirits** (`selarnia`): Selarnia makes it very difficult to maintain a bond to animal spirits.
 - **Sensitivity** (`sensitivity`): Sensitive skin increases the damage of any painful attacks you receive.
@@ -261,31 +401,49 @@ The game lists **203** afflictions (`kb/raw/live/affliction_list.txt`). 124 have
 - **Shadowmadness** (`shadowmadness`): This affliction will increased the mana cost and recovery time of focus, as well as periodically afflicting the affected person with various madnesses.
 - **The shivers** (`shivering`): Shivering causes you to intermittently lose equilibrium.
 - **Shyness** (`shyness`): Shyness causes you to run away at the sight of other people.
+- **Silenced** (`silenced`): 
+- **Silver** (`silver`): This shining silvery glow will negate any shroud concealing your actions.
 - **Skullfractures** (`skullfractures`): This affliction will extend recovery time when sipping health elixirs and give periodic nausea.
 - **Slashedthroat** (`slashedthroat`): A slashed throat makes vocal work difficult and reduces the efficacy of health and mana elixirs.
 - **Sleeping** (`sleeping`): While asleep, you can do little but dream, and wake up.
 - **Slickness** (`slickness`): Slickness coats your skin in oily secretions, blocking any attempt to apply salves or balms.
+- **Slimeobscure** (`slimeobscure`): This affliction will obscure random cure messages.
+- **Snared** (`snared`): 
+- **Solarburn** (`solarburn`): 
+- **Speechless** (`speechless`): 
 - **Spiritburn** (`spiritburn`): This affliction causes the flames of the ablaze affliction to burn the soul as well as the body, draining mana in addition to health.
 - **Stridulating** (`stridulating`): 
 - **Stupidity** (`stupidity`): Stupidity makes it harder to do exactly what you want to do. You may fumble some actions.
 - **Stuttering** (`stuttering`): With a stutter, you can barely speak a word coherently.
+- **Succumbed** (`succumbed`): 
 - **A tempered choleric humour** (`temperedcholeric`): A tempered choleric humour causes random curing abilities to have a chance to fail.
 - **A tempered melancholic humour** (`temperedmelancholic`): A tempered melancholic humour reduces the efficacy of irid moss and potash.
 - **A tempered phlegmatic humour** (`temperedphlegmatic`): A tempered phlegmatic humour fills your lungs with phlegm when you try to smoke.
 - **A tempered sanguine humour** (`temperedsanguine`): A tempered sanguine humour causes bleeding to increase over time.
 - **Tenderskin** (`tenderskin`): This affliction causes applying salves to cause mana damage, more so for restoration applies.
 - **Tension** (`tension`): 
+- **Timeflux** (`timeflux`): 
 - **Timeloop** (`timeloop`): All instillations via Shadowmancy directed at you will be twice as effective, delivering two afflictions instead of one.
+- **A tongue tied** (`tonguetied`): Being tongue tied will make you unable to cure the stuttering affliction until you first cure this affliction.
 - **Torntendons** (`torntendons`): This affliction will make movement attempts fail as well as giving periodic clumsiness.
 - **State of transfixation** (`transfixation`): Being transfixed prevents many actions.
+- **Trueblind** (`trueblind`): This blindness is so potent that not even the mindseye tattoo can function to counteract it.
+- **Unconsciousness** (`unconsciousness`): Unconsciousness is a highly debilitating affliction, preventing you from doing almost anything, though it is temporary and rarely lasts more than a few seconds.
 - **Unweavingbody** (`unweavingbody`): An unwoven body will sap your health as it progresses.
 - **Unweavingmind** (`unweavingmind`): An unwoven mind will sap your mana as it progresses.
 - **Unweavingspirit** (`unweavingspirit`): An unwoven spirit will make this affliction progressively harder to cure.
 - **Vertigo** (`vertigo`): People with vertigo cannot bear to leave the ground.
+- **Wreathed in vines** (`vinewreathed`): These flailing vines will make it impossible to parry a Viridian's thorn rends.
+- **Vitiated** (`vitiated`): Being vitiated reduces your strength and dexterity by two points.
+- **Vitrified** (`vitrified`): Vitrification causes your skin to partially become glass, which will result in bleeding when you do anything which uses your balance.
+- **Voidfisted** (`voidfisted`): Surrounded by the void, curative herbs may not be as effective.
 - **Voyria** (`voyria`): Voyria is a deadly venom that quickly causes death if not treated.
+- **Waterbonds** (`waterbonds`): 
+- **Weakenedmind** (`weakenedmind`): Being weakened in mind will cause the next attempt to focus your mind to have a significantly increased recovery time.
 - **Weariness** (`weariness`): Weariness increases the rate at which you use endurance, decreases damage from cutting or blunt attacks you perform, and makes certain delayed movements take longer.
 - **Entanglement by webs** (`webbed`): Being webbed is restrictive on any actions you wish to make.
 - **Whispering madness** (`whisperingmadness`): Whispering madness increases the balance cost of focusing your mind by 60% and slightly lowers the affliction threshold required to become enlightened.
+- **Woeconstrained** (`woeconstrained`): 
 - **Wristfractures** (`wristfractures`): This affliction will give periodic lethargy.
 
 ## Names the game did not recognise

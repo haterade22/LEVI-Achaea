@@ -23,6 +23,29 @@
   "name": "Burning",
   "source": "kb/raw/live/affliction_show/ablaze.txt"
  },
+ "accentato": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "The power of the Accentato relinquishes its grasp upon you.",
+  "cures": "Time",
+  "default_time": "20 seconds",
+  "diagnose": "transfixed by the power of the Accentato.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "accentato",
+  "name": "Accentato",
+  "source": "kb/raw/live/affliction_show/accentato.txt"
+ },
  "addiction": {
   "afflicted_msg": "You feel a terrible hunger grow within you.",
   "cure_options": [
@@ -52,11 +75,14 @@
   "cure_options": [
    [
     "smoke elm",
-    "smoke cinnabar time"
+    "smoke cinnabar"
+   ],
+   [
+    "time"
    ]
   ],
   "cured_msg": "The curse of the Aeon wears off and you return to the normal timestream.",
-  "cures": "Smoke Elm / Smoke Cinnabar Time",
+  "cures": "Smoke Elm / Smoke Cinnabar and Time",
   "description": "The aeon curse slows time around you, making it impossible to do more than one thing at once, and delaying everything you do.",
   "diagnose": "afflicted with the curse of the Aeon.",
   "flags": {
@@ -76,11 +102,14 @@
   "cure_options": [
    [
     "eat lobelia",
-    "eat argentum focus mind"
+    "eat argentum"
+   ],
+   [
+    "focus mind"
    ]
   ],
   "cured_msg": "You can handle the idea of open spaces again.",
-  "cures": "Eat Lobelia / Eat Argentum Focus Mind",
+  "cures": "Eat Lobelia / Eat Argentum and Focus Mind",
   "description": "Agoraphobics cannot stand to be in wide open spaces, and seek shelter compulsively.",
   "diagnose": "agoraphobic.",
   "flags": {
@@ -95,15 +124,61 @@
   "name": "Agoraphobia",
   "source": "kb/raw/live/affliction_show/agoraphobia.txt"
  },
+ "airfisted": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Time",
+  "default_time": "15 seconds",
+  "description": "A windy gale will hinder their attempts to parry and the movements of Chaos orbs.",
+  "diagnose": "being plagued by a blustering gale.",
+  "expire_msg": "Clarity of form returns as the wind plaguing your mind dies down.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "airfisted",
+  "name": "Airfisted",
+  "source": "kb/raw/live/affliction_show/airfisted.txt"
+ },
+ "amnesia": {
+  "afflicted_msg": "Suddenly dizzy, you clutch your head and wonder what it was you were thinking about.",
+  "cure_options": [],
+  "cured_msg": "none",
+  "description": "Amnesia makes you forget one action that you try to take.",
+  "diagnose": "suffering from amnesia.",
+  "flags": {
+   "Accentato": true,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": true,
+   "WhisperingMadness": false
+  },
+  "key": "amnesia",
+  "name": "Amnesia",
+  "source": "kb/raw/live/affliction_show/amnesia.txt"
+ },
  "anorexia": {
   "afflicted_msg": "The idea of eating or drinking is repulsive to you.",
   "cure_options": [
    [
-    "apply epidermal to body focus mind"
+    "apply epidermal to body"
+   ],
+   [
+    "focus mind"
    ]
   ],
   "cured_msg": "Food is no longer repulsive to you.",
-  "cures": "Apply Epidermal To Body Focus Mind",
+  "cures": "Apply Epidermal To Body and Focus Mind",
   "description": "Anorexia prevents you from eating or drinking almost anything at all.",
   "diagnose": "anorexic.",
   "flags": {
@@ -117,6 +192,28 @@
   "key": "anorexia",
   "name": "Anorexia",
   "source": "kb/raw/live/affliction_show/anorexia.txt"
+ },
+ "asphyxiating": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "Your breaths finally begin to come easier, the burning in your lungs subsiding.",
+  "cures": "Time",
+  "diagnose": "suffering with every breath.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "asphyxiating",
+  "name": "Asphyxiating",
+  "source": "kb/raw/live/affliction_show/asphyxiating.txt"
  },
  "asthma": {
   "afflicted_msg": "You feel a tightening sensation grow in your lungs.",
@@ -142,6 +239,54 @@
   "name": "Asthma",
   "source": "kb/raw/live/affliction_show/asthma.txt"
  },
+ "betrayal": {
+  "afflicted_msg": "You determine that, for your own good, it is time to betray anyone and everyone.",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "You are no longer betraying everyone.",
+  "cures": "Time",
+  "default_time": "15 seconds",
+  "diagnose": "treacherous.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "betrayal",
+  "name": "Betrayal",
+  "source": "kb/raw/live/affliction_show/betrayal.txt"
+ },
+ "blackout": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Time",
+  "default_time": "4 seconds",
+  "description": "Blackout obscures your prompt and prevents you from seeing many things happening.",
+  "diagnose": "devoid of senses.",
+  "expire_msg": "Your senses return to you as the blackout ends.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": false,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "blackout",
+  "name": "Blackout",
+  "source": "kb/raw/live/affliction_show/blackout.txt"
+ },
  "blindness": {
   "afflicted_msg": "Your eyes dim as you lose your sight.",
   "cure_options": [
@@ -164,6 +309,28 @@
   "key": "blindness",
   "name": "Blindness",
   "source": "kb/raw/live/affliction_show/blindness.txt"
+ },
+ "blistered": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "Your horribly blistered skin has recovered somewhat, your movement no longer so limited.",
+  "cures": "Time",
+  "diagnose": "suffering from horribly blistered skin.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "blistered",
+  "name": "Blistered",
+  "source": "kb/raw/live/affliction_show/blistered.txt"
  },
  "bloodfire": {
   "afflicted_msg": "none",
@@ -205,6 +372,29 @@
   "key": "bound",
   "name": "Entanglement by tied ropes",
   "source": "kb/raw/live/affliction_show/bound.txt"
+ },
+ "breathless": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "You are no longer completely breathless.",
+  "cures": "Time",
+  "default_time": "3 seconds",
+  "diagnose": "breathless.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "breathless",
+  "name": "Breathless",
+  "source": "kb/raw/live/affliction_show/breathless.txt"
  },
  "brokenleftarm": {
   "afflicted_msg": "Your left arm breaks with a loud crack.",
@@ -298,6 +488,29 @@
   "name": "A broken right leg",
   "source": "kb/raw/live/affliction_show/brokenrightleg.txt"
  },
+ "bruisedribs": {
+  "afflicted_msg": "You feel your ribs give way under the blow and a burning sensation radiates outward through your chest.",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Time",
+  "default_time": "30 seconds",
+  "diagnose": "your ribs are severely bruised.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "bruisedribs",
+  "name": "Bruisedribs",
+  "source": "kb/raw/live/affliction_show/bruisedribs.txt"
+ },
  "burning": {
   "afflicted_msg": "none",
   "cure_options": [
@@ -321,16 +534,65 @@
   "name": "Burning",
   "source": "kb/raw/live/affliction_show/burning.txt"
  },
+ "calcifiedskull": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "apply restoration to head"
+   ]
+  ],
+  "cured_msg": "Your skull's calcification abruptly ceases, leaving only a dull ache behind.",
+  "cures": "Apply Restoration To Head",
+  "description": "Calcification takes time to complete, and if not cured before then either your head shall suffer extreme damage (elevating it to the next level of damage), or if it is already at maximum head damage, you shall die instantly.",
+  "diagnose": "suffering from a calcifying skull.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "calcifiedskull",
+  "name": "Calcifiedskull",
+  "source": "kb/raw/live/affliction_show/calcifiedskull.txt"
+ },
+ "calcifiedtorso": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "apply restoration to body"
+   ]
+  ],
+  "cured_msg": "Your ribs' calcification abruptly ceases, leaving only a dull ache behind.",
+  "cures": "Apply Restoration To Body",
+  "description": "Calcification takes time to complete, and if not cured before then either your torso shall suffer extreme damage (elevating it to the next level of damage), or if it is already at maximum torso damage, you shall take significant damage.",
+  "diagnose": "suffering from a calcifying ribcage.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "calcifiedtorso",
+  "name": "Calcifiedtorso",
+  "source": "kb/raw/live/affliction_show/calcifiedtorso.txt"
+ },
  "claustrophobia": {
   "afflicted_msg": "The walls close in to suffocate you - you must escape!",
   "cure_options": [
    [
     "eat lobelia",
-    "eat argentum focus mind"
+    "eat argentum"
+   ],
+   [
+    "focus mind"
    ]
   ],
   "cured_msg": "Small spaces no longer frighten you.",
-  "cures": "Eat Lobelia / Eat Argentum Focus Mind",
+  "cures": "Eat Lobelia / Eat Argentum and Focus Mind",
   "description": "Claustrophobics cannot stand to be indoors!",
   "diagnose": "claustrophobic.",
   "flags": {
@@ -369,6 +631,28 @@
   "name": "Clumsiness",
   "source": "kb/raw/live/affliction_show/clumsiness.txt"
  },
+ "coldfate": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "The overwhelming sense of cold that suffuses you abruptly lifts.",
+  "cures": "Time",
+  "diagnose": "cursed with a cold fate.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "coldfate",
+  "name": "Coldfate",
+  "source": "kb/raw/live/affliction_show/coldfate.txt"
+ },
  "concussion": {
   "afflicted_msg": "The massive trauma to your head has damaged your skull and brain considerably.",
   "cure_options": [
@@ -392,16 +676,61 @@
   "name": "Concussion",
   "source": "kb/raw/live/affliction_show/concussion.txt"
  },
+ "condemned": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "The righteous condemnation lifts, and you breathe more easily.",
+  "cures": "Time",
+  "default_time": "40 seconds",
+  "description": "While condemned, you may not cure ablaze, but that burning may also not be increased by paladins.",
+  "diagnose": "you are condemned to burn.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "condemned",
+  "name": "Condemned",
+  "source": "kb/raw/live/affliction_show/condemned.txt"
+ },
+ "conflagration": {
+  "afflicted_msg": "The flames plaguing you suddenly begin to rage with terrible intensity.",
+  "cure_options": [],
+  "cured_msg": "The conflagration raging about you sputters and dies.",
+  "description": "This affliction causes significant damage for as long as the conflagration rages. The only way to be rid of it is to attempt to extinguish the flames that feed the conflagration. This is accomplished by curing all stacks of the ablaze affliction present upon you.",
+  "diagnose": "a conflagration rages about you.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "conflagration",
+  "name": "Conflagration",
+  "source": "kb/raw/live/affliction_show/conflagration.txt"
+ },
  "confusion": {
   "afflicted_msg": "Your head spins as your mind is drowned in chaos and confusion.",
   "cure_options": [
    [
     "eat ash",
-    "eat stannum focus mind"
+    "eat stannum"
+   ],
+   [
+    "focus mind"
    ]
   ],
   "cured_msg": "The confusion lifts from your mind and it is clear once again.",
-  "cures": "Eat Ash / Eat Stannum Focus Mind",
+  "cures": "Eat Ash / Eat Stannum and Focus Mind",
   "description": "Confusion extends your equilibrium recovery rates by 100%.",
   "diagnose": "confused.",
   "flags": {
@@ -415,6 +744,72 @@
   "key": "confusion",
   "name": "Confusion",
   "source": "kb/raw/live/affliction_show/confusion.txt"
+ },
+ "constricted": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "You manage to wrestle the vines away from your limbs.",
+  "cures": "Time",
+  "default_time": "30 seconds",
+  "description": "Constricted vines will disable various abilities that speed up writhing.",
+  "diagnose": "being constricted by vines.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "constricted",
+  "name": "Constricted",
+  "source": "kb/raw/live/affliction_show/constricted.txt"
+ },
+ "convergence": {
+  "afflicted_msg": "none",
+  "cure_options": [],
+  "cured_msg": "none",
+  "diagnose": "elemental energy is converging upon you.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "convergence",
+  "name": "Convergence",
+  "source": "kb/raw/live/affliction_show/convergence.txt"
+ },
+ "corruption": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Time",
+  "default_time": "45 seconds",
+  "description": "Corrupted humours affect your blood, draining mana when you bleed and health when you clot.",
+  "diagnose": "suffering from corrupted humours.",
+  "expire_msg": "The corruption of your humours fades.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "corruption",
+  "name": "Corrupt humours",
+  "source": "kb/raw/live/affliction_show/corruption.txt"
  },
  "crackedribs": {
   "afflicted_msg": "none",
@@ -438,6 +833,28 @@
   "key": "crackedribs",
   "name": "Crackedribs",
   "source": "kb/raw/live/affliction_show/crackedribs.txt"
+ },
+ "cremated": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "The spectral fires that wait to claim you sputter and die.",
+  "cures": "Time",
+  "diagnose": "soul seared by the might of Kkractle.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "cremated",
+  "name": "Cremated",
+  "source": "kb/raw/live/affliction_show/cremated.txt"
  },
  "crescendo": {
   "afflicted_msg": "none",
@@ -672,6 +1089,34 @@
   "name": "Dazed",
   "source": "kb/raw/live/affliction_show/dazed.txt"
  },
+ "dazzled": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "apply mending to head"
+   ],
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "Your head clears and you are no longer dazzled.",
+  "cures": "Apply Mending To Head and Time",
+  "default_time": "60 seconds",
+  "description": "Being dazzled lowers your accuracy with certain physical attacks and halves your resistance to damage.",
+  "diagnose": "dazzled.",
+  "expire_msg": "The affects of the dazzling wear off.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": false,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "dazzled",
+  "name": "Dazzled",
+  "source": "kb/raw/live/affliction_show/dazzled.txt"
+ },
  "deadening": {
   "afflicted_msg": "A strange fog descends upon your mind.",
   "cure_options": [
@@ -719,16 +1164,106 @@
   "name": "Deafness",
   "source": "kb/raw/live/affliction_show/deafness.txt"
  },
+ "deathsickness": {
+  "afflicted_msg": "An unnatural chill sweeps through your body, a numbing sensation radiating outward from your heart and into every limb.",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "The unnatural chill pervading your body abruptly lifts.",
+  "cures": "Time",
+  "diagnose": "Labouring beneath the bane of life.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "deathsickness",
+  "name": "Deathsickness",
+  "source": "kb/raw/live/affliction_show/deathsickness.txt"
+ },
+ "deepsleep": {
+  "afflicted_msg": "none",
+  "cure_options": [],
+  "cured_msg": "none",
+  "description": "A deep sleep is one from which you will never naturally wake.",
+  "diagnose": "in an unnaturally deep sleep.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "deepsleep",
+  "name": "Deepsleep",
+  "source": "kb/raw/live/affliction_show/deepsleep.txt"
+ },
+ "degenerate": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "You suddenly feel much less weak, strength flooding back into your limbs.",
+  "cures": "Time",
+  "diagnose": "weakened in body.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "degenerate",
+  "name": "Degenerate",
+  "source": "kb/raw/live/affliction_show/degenerate.txt"
+ },
+ "dehydrated": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Time",
+  "default_time": "45 seconds",
+  "description": "Reduces your resistance to fire-based damage.",
+  "diagnose": "seriously dehydrated.",
+  "expire_msg": "Your skin feels less dry.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "dehydrated",
+  "name": "Dehydrated",
+  "source": "kb/raw/live/affliction_show/dehydrated.txt"
+ },
  "dementia": {
   "afflicted_msg": "You look about yourself, frenzied and wild-eyed.",
   "cure_options": [
    [
     "eat ash",
-    "eat stannum focus mind"
+    "eat stannum"
+   ],
+   [
+    "focus mind"
    ]
   ],
   "cured_msg": "Sanity returns to you and you are no longer demented.",
-  "cures": "Eat Ash / Eat Stannum Focus Mind",
+  "cures": "Eat Ash / Eat Stannum and Focus Mind",
   "description": "Demented persons struggle to see reality as it truly is, often seeing things that are not there.",
   "diagnose": "demented.",
   "flags": {
@@ -742,6 +1277,29 @@
   "key": "dementia",
   "name": "Dementia",
   "source": "kb/raw/live/affliction_show/dementia.txt"
+ },
+ "demonstain": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Time",
+  "description": "A demonic stain on your being reduces all of your statistics by one point.",
+  "diagnose": "stained by evil.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "demonstain",
+  "name": "A demonic stain",
+  "source": "kb/raw/live/affliction_show/demonstain.txt"
  },
  "depression": {
   "afflicted_msg": "Everything seems so pointless.",
@@ -766,6 +1324,28 @@
   "key": "depression",
   "name": "Depression",
   "source": "kb/raw/live/affliction_show/depression.txt"
+ },
+ "deteriorate": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "Your mental faculties suddenly recover.",
+  "cures": "Time",
+  "diagnose": "weakened in mind.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "deteriorate",
+  "name": "Deteriorate",
+  "source": "kb/raw/live/affliction_show/deteriorate.txt"
  },
  "diminished": {
   "afflicted_msg": "none",
@@ -891,11 +1471,14 @@
   "cure_options": [
    [
     "eat goldenseal",
-    "eat plumbum focus mind"
+    "eat plumbum"
+   ],
+   [
+    "focus mind"
    ]
   ],
   "cured_msg": "You are no longer dizzy.",
-  "cures": "Eat Goldenseal / Eat Plumbum Focus Mind",
+  "cures": "Eat Goldenseal / Eat Plumbum and Focus Mind",
   "description": "Dizziness makes it quite hard to walk without falling over.",
   "diagnose": "overcome by dizziness.",
   "flags": {
@@ -933,6 +1516,120 @@
   "name": "Earworm",
   "source": "kb/raw/live/affliction_show/earworm.txt"
  },
+ "empoweredloshre": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "The sapping power of the Loshre rune leaves you.",
+  "cures": "Time",
+  "default_time": "12 seconds",
+  "description": "Eating ginseng or ferrum while suffering this affliction will cause your health and mana to be drained.",
+  "diagnose": "being sapped by the power of the Loshre rune.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "empoweredloshre",
+  "name": "Empoweredloshre",
+  "source": "kb/raw/live/affliction_show/empoweredloshre.txt"
+ },
+ "empoweredmannaz": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "The vitiating power of the Mannaz rune leaves you.",
+  "cures": "Time",
+  "default_time": "20 seconds",
+  "description": "Someone with this affliction does not regenerate mana passively.",
+  "diagnose": "vitiated by the power of the Mannaz rune.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "empoweredmannaz",
+  "name": "Empoweredmannaz",
+  "source": "kb/raw/live/affliction_show/empoweredmannaz.txt"
+ },
+ "enlightenment": {
+  "afflicted_msg": "none",
+  "cure_options": [],
+  "cured_msg": "The alien and strange visions leave you, and the Chaos that permeated your mind lessens.",
+  "description": "Enlightenment opens your mind to occult revelations, and will make certain mental insanities permanent until you die.",
+  "diagnose": "understanding the occult mysteries and nature of the universe as seen by $(gname$).",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "enlightenment",
+  "name": "Enlightenment",
+  "source": "kb/raw/live/affliction_show/enlightenment.txt"
+ },
+ "enmesh": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "You manage to free yourself of the bonds clinging to your limbs.",
+  "cures": "Time",
+  "default_time": "6 seconds",
+  "diagnose": "unable to parry due to being partially bound.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "enmesh",
+  "name": "Enmesh",
+  "source": "kb/raw/live/affliction_show/enmesh.txt"
+ },
+ "ensorcelled": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Time",
+  "default_time": "20 seconds",
+  "description": "This affliction will cause various movement attempts to fail on occasion.",
+  "diagnose": "ensorcelled.",
+  "expire_msg": "A sudden flush of heat drives out a chill that you didn't realise was there until it is gone; your limbs tingle, and you feel unburdened.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "ensorcelled",
+  "name": "Ensorcelled",
+  "source": "kb/raw/live/affliction_show/ensorcelled.txt"
+ },
  "entangled": {
   "afflicted_msg": "none",
   "cure_options": [
@@ -961,11 +1658,14 @@
   "cure_options": [
    [
     "eat goldenseal",
-    "eat plumbum focus mind"
+    "eat plumbum"
+   ],
+   [
+    "focus mind"
    ]
   ],
   "cured_msg": "Your nerves suddenly calm down.",
-  "cures": "Eat Goldenseal / Eat Plumbum Focus Mind",
+  "cures": "Eat Goldenseal / Eat Plumbum and Focus Mind",
   "description": "Epilepsy causes you to fit intermittently, using balance.",
   "diagnose": "suffering from epilepsy.",
   "flags": {
@@ -1002,6 +1702,31 @@
   "key": "fear",
   "name": "Fear",
   "source": "kb/raw/live/affliction_show/fear.txt"
+ },
+ "flamefisted": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Time",
+  "default_time": "15 seconds",
+  "description": "This fiery aura immediately burns away any aura of rebounding.",
+  "diagnose": "suffused with an aura of fire.",
+  "expire_msg": "A trickle of sweat cools your scorched skin as the raging blaze abates.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "flamefisted",
+  "name": "Flamefisted",
+  "source": "kb/raw/live/affliction_show/flamefisted.txt"
  },
  "flushings": {
   "afflicted_msg": "Your skin begins to prickle uncomfortably.",
@@ -1168,6 +1893,29 @@
   "name": "Generosity",
   "source": "kb/raw/live/affliction_show/generosity.txt"
  },
+ "grievouswounds": {
+  "afflicted_msg": "Blood flows freely from a grievous wound.",
+  "cure_options": [
+   [
+    "apply health to torso"
+   ]
+  ],
+  "cured_msg": "The flow of blood stops as your wounds close.",
+  "cures": "Apply Health To Torso",
+  "description": "While you can fight through a single wound, even the most stalwart adventurer will succumb to enough of them.",
+  "diagnose": "suffering from $(type$) grievous wounds.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": false,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "grievouswounds",
+  "name": "Grievously wounded",
+  "source": "kb/raw/live/affliction_show/grievouswounds.txt"
+ },
  "guilt": {
   "afflicted_msg": "A terrible guilt descends upon you.",
   "cure_options": [
@@ -1221,11 +1969,14 @@
   "cure_options": [
    [
     "eat ash",
-    "eat stannum focus mind"
+    "eat stannum"
+   ],
+   [
+    "focus mind"
    ]
   ],
   "cured_msg": "Your hallucinations cease to plague you.",
-  "cures": "Eat Ash / Eat Stannum Focus Mind",
+  "cures": "Eat Ash / Eat Stannum and Focus Mind",
   "description": "Hallucinations cause you to see things that are not there, and occasionally act strangely because of your visions.",
   "diagnose": "hallucinating.",
   "flags": {
@@ -1239,6 +1990,54 @@
   "key": "hallucinations",
   "name": "Hallucinations",
   "source": "kb/raw/live/affliction_show/hallucinations.txt"
+ },
+ "hamstrung": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Time",
+  "default_time": "10 seconds",
+  "description": "A crippled hamstring greatly impedes one's ability to walk for a short time.",
+  "diagnose": "suffering from a crippled hamstring.",
+  "expire_msg": "You feel the tightness in your hamstring subside, allowing free movement once again.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "hamstrung",
+  "name": "Hamstrung",
+  "source": "kb/raw/live/affliction_show/hamstrung.txt"
+ },
+ "hatred": {
+  "afflicted_msg": "An all-consuming hatred for everyone and everything suffuses you.",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "Your total loathing for everything fades.",
+  "cures": "Time",
+  "description": "You shall consider everyone an enemy.",
+  "diagnose": "inspired to great heights of loathing.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "hatred",
+  "name": "Hatred",
+  "source": "kb/raw/live/affliction_show/hatred.txt"
  },
  "healthleech": {
   "afflicted_msg": "Your health begins to drain away.",
@@ -1287,6 +2086,31 @@
   "name": "Heartseed",
   "source": "kb/raw/live/affliction_show/heartseed.txt"
  },
+ "hecatecurse": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Time",
+  "default_time": "16 seconds",
+  "description": "Prevents curing of the whispering madness affliction for its duration.",
+  "diagnose": "Cursed with the power of Hecate.",
+  "expire_msg": "The crazed whispering fades from your mind.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "hecatecurse",
+  "name": "Hecatecurse",
+  "source": "kb/raw/live/affliction_show/hecatecurse.txt"
+ },
  "hellsight": {
   "afflicted_msg": "none",
   "cure_options": [
@@ -1312,6 +2136,52 @@
   "key": "hellsight",
   "name": "Hellsight",
   "source": "kb/raw/live/affliction_show/hellsight.txt"
+ },
+ "hindered": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Time",
+  "description": "Being hindered by the forests may impede your movement.",
+  "diagnose": "hindered by the forests.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "hindered",
+  "name": "Hindered",
+  "source": "kb/raw/live/affliction_show/hindered.txt"
+ },
+ "homunculusmercury": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "Eating is suddenly less difficult again.",
+  "cures": "Time",
+  "description": "Extends the next herb balance.",
+  "diagnose": "struggling to process edible curatives.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "homunculusmercury",
+  "name": "Homunculusmercury",
+  "source": "kb/raw/live/affliction_show/homunculusmercury.txt"
  },
  "horror": {
   "afflicted_msg": "Composure deserts you; it is just too much!",
@@ -1408,6 +2278,54 @@
   "name": "Hypothermia",
   "source": "kb/raw/live/affliction_show/hypothermia.txt"
  },
+ "icebound": {
+  "afflicted_msg": "Frost covers your limbs, restricting your actions.",
+  "cure_options": [
+   [
+    "writhe"
+   ]
+  ],
+  "cured_msg": "Your limbs thaw, freeing you from your frozen bonds.",
+  "cures": "Writhe",
+  "description": "Being restricted by the frozen bonds is restrictive on any actions you wish to make, including the use of curative arts.",
+  "diagnose": "restricted by frozen bonds.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "icebound",
+  "name": "Restricted by frozen bonds",
+  "source": "kb/raw/live/affliction_show/icebound.txt"
+ },
+ "icefisted": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Time",
+  "default_time": "15 seconds",
+  "description": "This layer of frost prevents you from touching your tattoos.",
+  "diagnose": "covered in a rime of frost.",
+  "expire_msg": "The rime of ice covering your body cracks and falls away in glassy shards.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "icefisted",
+  "name": "Icefisted",
+  "source": "kb/raw/live/affliction_show/icefisted.txt"
+ },
  "impaled": {
   "afflicted_msg": "none",
   "cure_options": [
@@ -1480,6 +2398,24 @@
   "name": "Indifference",
   "source": "kb/raw/live/affliction_show/indifference.txt"
  },
+ "inquisition": {
+  "afflicted_msg": "none",
+  "cure_options": [],
+  "cured_msg": "Clarity returns to your mind as the echoing accusations fade from memory.",
+  "description": "A holy inquisition can cause a variety of effects ranging from lower mental regeneration to finding it impossible to escape the sight of Hell. It cures once the victim has rid themselves of both guilt and spiritburn afflictions, and is no longer prone.",
+  "diagnose": "suffering under holy inquisition.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "inquisition",
+  "name": "Inquisition",
+  "source": "kb/raw/live/affliction_show/inquisition.txt"
+ },
  "insomnia": {
   "afflicted_msg": "You suddenly feel incapable of falling asleep.",
   "cure_options": [
@@ -1503,6 +2439,48 @@
   "key": "insomnia",
   "name": "Insomnia",
   "source": "kb/raw/live/affliction_show/insomnia.txt"
+ },
+ "internalbleeding": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "apply restoration to body"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Apply Restoration To Body",
+  "description": "This severe internal injury causes massive bleeding.",
+  "diagnose": "suffering from massive internal bleeding.",
+  "expire_msg": "Your pulse strengthens as your damaged arteries clot over and your internal bleeding ceases.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "internalbleeding",
+  "name": "Massive internal bleeding",
+  "source": "kb/raw/live/affliction_show/internalbleeding.txt"
+ },
+ "isolation": {
+  "afflicted_msg": "none",
+  "cure_options": [],
+  "cured_msg": "none",
+  "description": "If your mind has been isolated by a telepath, no-one will hear you speak on telepathic channels.",
+  "diagnose": "cut off from communication.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "isolation",
+  "name": "Mind isolation",
+  "source": "kb/raw/live/affliction_show/isolation.txt"
  },
  "itching": {
   "afflicted_msg": "A terrible urge to itch yourself bloody comes over you.",
@@ -1551,6 +2529,53 @@
   "name": "Justice",
   "source": "kb/raw/live/affliction_show/justice.txt"
  },
+ "kaisurge": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Time",
+  "description": "This affliction prevents mounting and adds a small extension to the broken limb penalty on tumble.",
+  "diagnose": "greatly inhibited by a recent surge of Kai energy.",
+  "expire_msg": "Your muscles stop violently spasming.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "kaisurge",
+  "name": "Kaisurge",
+  "source": "kb/raw/live/affliction_show/kaisurge.txt"
+ },
+ "kkractlebrand": {
+  "afflicted_msg": "The mark upon your brow bursts into flame, a singular point of agony that threatens to consume you.",
+  "cure_options": [
+   [
+    "sip health"
+   ]
+  ],
+  "cured_msg": "The burning brand upon your brow fades, leaving only tender flesh as a warning.",
+  "cures": "Sip Health",
+  "description": "The brand of Kkractle reduces your fire resistance. It burns more fiercely the more you are struck by a Fire Lord, and can be detonated to unleash a devastating explosion of fire.",
+  "diagnose": "marked by the wrath of Kkractle.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "kkractlebrand",
+  "name": "Kkractlebrand",
+  "source": "kb/raw/live/affliction_show/kkractlebrand.txt"
+ },
  "laceratedthroat": {
   "afflicted_msg": "A torrent of blood erupts from your throat as the thorn-laden vines tear at the already wounded flesh.",
   "cure_options": [
@@ -1573,6 +2598,51 @@
   "key": "laceratedthroat",
   "name": "Laceratedthroat",
   "source": "kb/raw/live/affliction_show/laceratedthroat.txt"
+ },
+ "lapsingconsciousness": {
+  "afflicted_msg": "You feel your brain begin to falter.",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "You feel your brain recover, no longer always on the verge of falling unconscious.",
+  "cures": "Time",
+  "description": "Lapsing consciousness causes you to periodically fall unconscious.",
+  "diagnose": "afflicted by lapses in consciousness.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": false,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "lapsingconsciousness",
+  "name": "Lapses in consciousness",
+  "source": "kb/raw/live/affliction_show/lapsingconsciousness.txt"
+ },
+ "latched": {
+  "afflicted_msg": "You feel suddenly weak, your limbs trembling and bile rising.",
+  "cure_options": [
+   [
+    "sip health"
+   ]
+  ],
+  "cured_msg": "Warmth floods back into your limbs, and you feel suddenly vital.",
+  "cures": "Sip Health",
+  "diagnose": "Moments from death.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "latched",
+  "name": "Latched",
+  "source": "kb/raw/live/affliction_show/latched.txt"
  },
  "lethargy": {
   "afflicted_msg": "You feel your energy robbed from you as lethargy overtakes you.",
@@ -1598,16 +2668,44 @@
   "name": "Lethargy",
   "source": "kb/raw/live/affliction_show/lethargy.txt"
  },
+ "lightbind": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Time",
+  "default_time": "22 seconds",
+  "description": "This affliction will cause various movement attempts to fail on occasion.",
+  "diagnose": "bound by chains of golden light.",
+  "expire_msg": "The golden chains of light that bind you dissipate.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "lightbind",
+  "name": "Lightbind",
+  "source": "kb/raw/live/affliction_show/lightbind.txt"
+ },
  "loneliness": {
   "afflicted_msg": "You glance nervously around the room.",
   "cure_options": [
    [
     "eat lobelia",
-    "eat argentum focus mind"
+    "eat argentum"
+   ],
+   [
+    "focus mind"
    ]
   ],
   "cured_msg": "The awful loneliness leaves you.",
-  "cures": "Eat Lobelia / Eat Argentum Focus Mind",
+  "cures": "Eat Lobelia / Eat Argentum and Focus Mind",
   "description": "Lonely people simply must find company, and will move around until they do so!",
   "diagnose": "very lonely.",
   "flags": {
@@ -1627,11 +2725,14 @@
   "cure_options": [
    [
     "eat bellwort",
-    "eat cuprum focus mind"
+    "eat cuprum"
+   ],
+   [
+    "focus mind"
    ]
   ],
   "cured_msg": "You shake your head, wondering what you ever saw in $(gname$).",
-  "cures": "Eat Bellwort / Eat Cuprum Focus Mind",
+  "cures": "Eat Bellwort / Eat Cuprum and Focus Mind",
   "description": "The lover's curse prevents you from attacking the person with whom you are in love.",
   "diagnose": "Desperately in love with $(gname$).",
   "flags": {
@@ -1645,6 +2746,29 @@
   "key": "lovers",
   "name": "The lover's curse",
   "source": "kb/raw/live/affliction_show/lovers.txt"
+ },
+ "lovestruck": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "Your strange fixation on all those that surround you abruptly lifts.",
+  "cures": "Time",
+  "default_time": "5 seconds",
+  "diagnose": "behaving like a love-struck fool.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "lovestruck",
+  "name": "Lovestruck",
+  "source": "kb/raw/live/affliction_show/lovestruck.txt"
  },
  "manaleech": {
   "afflicted_msg": "Your mana begins to drain away.",
@@ -1790,11 +2914,14 @@
   "cure_options": [
    [
     "eat lobelia",
-    "eat argentum focus mind"
+    "eat argentum"
+   ],
+   [
+    "focus mind"
    ]
   ],
   "cured_msg": "You no longer enjoy pain.",
-  "cures": "Eat Lobelia / Eat Argentum Focus Mind",
+  "cures": "Eat Lobelia / Eat Argentum and Focus Mind",
   "description": "Masochism causes you to periodically harm yourself.",
   "diagnose": "masochistic.",
   "flags": {
@@ -1831,6 +2958,71 @@
   "key": "mildtrauma",
   "name": "Mild internal trauma",
   "source": "kb/raw/live/affliction_show/mildtrauma.txt"
+ },
+ "mindclamp": {
+  "afflicted_msg": "none",
+  "cure_options": [],
+  "cured_msg": "none",
+  "description": "A clamped mind reduces your health and mental strength by approximately one fifth.",
+  "diagnose": "mindclamped.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "mindclamp",
+  "name": "A clamped mind",
+  "source": "kb/raw/live/affliction_show/mindclamp.txt"
+ },
+ "mindravaged": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "Your ravaged mind has recovered somewhat, though phantom pain still pulses at your temples.",
+  "cures": "Time",
+  "description": "A ravaged mind will leave you vulnerable to psychic assault.",
+  "diagnose": "Ravaged in mind by psionic power.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "mindravaged",
+  "name": "Mindravaged",
+  "source": "kb/raw/live/affliction_show/mindravaged.txt"
+ },
+ "muddled": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "Your thoughts seem less sluggish and slow.",
+  "cures": "Time",
+  "default_time": "12 seconds",
+  "description": "This affliction causes mental maladies to work against you with greater potency, such as by boosting the rate of stupidity firing or the likeliness that you will be hit by dizziness.",
+  "diagnose": "of a muddled mind.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "muddled",
+  "name": "Muddled",
+  "source": "kb/raw/live/affliction_show/muddled.txt"
  },
  "mycalium": {
   "afflicted_msg": "Your thoughts cloud as a strange sense of displacement overcomes you.",
@@ -1879,16 +3071,65 @@
   "name": "Nausea",
   "source": "kb/raw/live/affliction_show/nausea.txt"
  },
+ "numbedleftarm": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Time",
+  "diagnose": "your left arm is completely numb.",
+  "expire_msg": "Feeling returns to your left arm.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "numbedleftarm",
+  "name": "Numbedleftarm",
+  "source": "kb/raw/live/affliction_show/numbedleftarm.txt"
+ },
+ "numbedrightarm": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Time",
+  "diagnose": "your right arm is completely numb.",
+  "expire_msg": "Feeling returns to your right arm.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "numbedrightarm",
+  "name": "Numbedrightarm",
+  "source": "kb/raw/live/affliction_show/numbedrightarm.txt"
+ },
  "pacified": {
   "afflicted_msg": "A sense of deep inner calm descends on you.",
   "cure_options": [
    [
     "eat bellwort",
-    "eat cuprum focus mind"
+    "eat cuprum"
+   ],
+   [
+    "focus mind"
    ]
   ],
   "cured_msg": "The unnatural calm that filled you lifts abruptly from you.",
-  "cures": "Eat Bellwort / Eat Cuprum Focus Mind",
+  "cures": "Eat Bellwort / Eat Cuprum and Focus Mind",
   "default_time": "20 seconds",
   "description": "Pacification makes it impossible to do any aggressive actions.",
   "diagnose": "feeling unnaturally tranquil.",
@@ -1903,6 +3144,30 @@
   "key": "pacified",
   "name": "Pacified",
   "source": "kb/raw/live/affliction_show/pacified.txt"
+ },
+ "palpatarfeed": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "The maggots infesting you wither and die.",
+  "cures": "Time",
+  "default_time": "20 seconds",
+  "description": "This affliction will periodically afflict with healthleech until it fades.",
+  "diagnose": "Being fed on by the maggots of Palpatar.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "palpatarfeed",
+  "name": "Palpatarfeed",
+  "source": "kb/raw/live/affliction_show/palpatarfeed.txt"
  },
  "paralysis": {
   "afflicted_msg": "A prickly stinging overcomes your body, fading away into numbness.",
@@ -1933,11 +3198,14 @@
   "cure_options": [
    [
     "eat ash",
-    "eat stannum focus mind"
+    "eat stannum"
+   ],
+   [
+    "focus mind"
    ]
   ],
   "cured_msg": "Aaaahhh. No one is out to get you after all.",
-  "cures": "Eat Ash / Eat Stannum Focus Mind",
+  "cures": "Eat Ash / Eat Stannum and Focus Mind",
   "description": "Paranoid people consider everyone an enemy.",
   "diagnose": "paranoid.",
   "flags": {
@@ -1981,11 +3249,14 @@
   "cure_options": [
    [
     "eat bellwort",
-    "eat cuprum focus mind"
+    "eat cuprum"
+   ],
+   [
+    "focus mind"
    ]
   ],
   "cured_msg": "The unnatural feeling of peace leaves you.",
-  "cures": "Eat Bellwort / Eat Cuprum Focus Mind",
+  "cures": "Eat Bellwort / Eat Cuprum and Focus Mind",
   "description": "While peaced, you will find it almost impossible to perform aggressive actions.",
   "diagnose": "pacified.",
   "expire_msg": "The unnatural peace lifts from your heart.",
@@ -2000,6 +3271,95 @@
   "key": "peace",
   "name": "Peace",
   "source": "kb/raw/live/affliction_show/peace.txt"
+ },
+ "penitence": {
+  "afflicted_msg": "none",
+  "cure_options": [],
+  "cured_msg": "none",
+  "description": "If you have been forced to perform penance for your crimes, any Devoted priest will earn more Devotion from killing you.",
+  "diagnose": "serving penance.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "penitence",
+  "name": "Penitence",
+  "source": "kb/raw/live/affliction_show/penitence.txt"
+ },
+ "petrified": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "Sensation returns to you as the petrification ends.",
+  "cures": "Time",
+  "diagnose": "completely petrified.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "petrified",
+  "name": "Petrified",
+  "source": "kb/raw/live/affliction_show/petrified.txt"
+ },
+ "phlogisticated": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Time",
+  "default_time": "45 seconds",
+  "description": "Phlogisitication temporarily renders your body unable to benefit from irid moss or potash when you use equilibrium.",
+  "diagnose": "phlogisticated.",
+  "expire_msg": "The internal burning sensation subsides.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": false,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "phlogisticated",
+  "name": "Phlogisticated",
+  "source": "kb/raw/live/affliction_show/phlogisticated.txt"
+ },
+ "pinshot": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "The arrow through your foot finally comes free, allowing you to move normally once again.",
+  "cures": "Time",
+  "default_time": "21 seconds",
+  "description": "This affliction will cause various movement attempts to fail on occasion.",
+  "diagnose": "impaled through the foot.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "pinshot",
+  "name": "Pinshot",
+  "source": "kb/raw/live/affliction_show/pinshot.txt"
  },
  "pressure": {
   "afflicted_msg": "none",
@@ -2122,11 +3482,14 @@
   "cure_options": [
    [
     "eat lobelia",
-    "eat argentum focus mind"
+    "eat argentum"
+   ],
+   [
+    "focus mind"
    ]
   ],
   "cured_msg": "Prudence rules your psyche once again.",
-  "cures": "Eat Lobelia / Eat Argentum Focus Mind",
+  "cures": "Eat Lobelia / Eat Argentum and Focus Mind",
   "description": "Recklessness makes you think you are completely unharmed and practically invincible.",
   "diagnose": "reckless.",
   "flags": {
@@ -2140,6 +3503,29 @@
   "key": "recklessness",
   "name": "Recklessness",
   "source": "kb/raw/live/affliction_show/recklessness.txt"
+ },
+ "reeling": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "You recover yourself, no longer reeling wildly off balance.",
+  "cures": "Time",
+  "default_time": "20 seconds",
+  "diagnose": "reeling.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "reeling",
+  "name": "Reeling",
+  "source": "kb/raw/live/affliction_show/reeling.txt"
  },
  "retribution": {
   "afflicted_msg": "A terrible sense of foreboding descends upon you.",
@@ -2164,6 +3550,29 @@
   "key": "retribution",
   "name": "Retribution",
   "source": "kb/raw/live/affliction_show/retribution.txt"
+ },
+ "revealed": {
+  "afflicted_msg": "A strange dust settles upon your form, illuminating your outline.",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Time",
+  "default_time": "60 seconds",
+  "diagnose": "revealed by the power of a star sigil.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "revealed",
+  "name": "Revealed",
+  "source": "kb/raw/live/affliction_show/revealed.txt"
  },
  "sandfever": {
   "afflicted_msg": "You're tired. So very tired.",
@@ -2211,6 +3620,30 @@
   "key": "scalded",
   "name": "Scalded",
   "source": "kb/raw/live/affliction_show/scalded.txt"
+ },
+ "scrambledbrains": {
+  "afflicted_msg": "Your brains feel scrambled by the impact.",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "Your brains no longer feel so scrambled.",
+  "cures": "Time",
+  "default_time": "60 seconds",
+  "description": "This affliction will make it impossible for you to naturally reject mental locks upon your person, as well as delaying the cure aspect of any attempt to focus your mind.",
+  "diagnose": "your brains have been scrambled by a great impact.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "scrambledbrains",
+  "name": "Scrambledbrains",
+  "source": "kb/raw/live/affliction_show/scrambledbrains.txt"
  },
  "scytherus": {
   "afflicted_msg": "You feel light headed and dizzy.",
@@ -2358,11 +3791,14 @@
   "cure_options": [
    [
     "eat goldenseal",
-    "eat plumbum focus mind"
+    "eat plumbum"
+   ],
+   [
+    "focus mind"
    ]
   ],
   "cured_msg": "Your shyness has been cured. You can now face the world boldly.",
-  "cures": "Eat Goldenseal / Eat Plumbum Focus Mind",
+  "cures": "Eat Goldenseal / Eat Plumbum and Focus Mind",
   "description": "Shyness causes you to run away at the sight of other people.",
   "diagnose": "afflicted by unbearable shyness.",
   "flags": {
@@ -2376,6 +3812,53 @@
   "key": "shyness",
   "name": "Shyness",
   "source": "kb/raw/live/affliction_show/shyness.txt"
+ },
+ "silenced": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "Sound suddenly rushes in, the terrible pervading silence gone as swiftly as it came.",
+  "cures": "Time",
+  "diagnose": "enduring a terrible pervasive silence.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "silenced",
+  "name": "Silenced",
+  "source": "kb/raw/live/affliction_show/silenced.txt"
+ },
+ "silver": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Time",
+  "default_time": "180 seconds",
+  "description": "This shining silvery glow will negate any shroud concealing your actions.",
+  "diagnose": "shimmering with a silvery radiance.",
+  "expire_msg": "The shimmering silver light about you fades away.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": false,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "silver",
+  "name": "Silver",
+  "source": "kb/raw/live/affliction_show/silver.txt"
  },
  "skullfractures": {
   "afflicted_msg": "none",
@@ -2452,12 +3935,15 @@
   "cure_options": [
    [
     "smoke valerian",
-    "smoke realgar eat bloodroot",
+    "smoke realgar"
+   ],
+   [
+    "eat bloodroot",
     "eat magnesium"
    ]
   ],
   "cured_msg": "Your glands cease their oily secretion.",
-  "cures": "Smoke Valerian / Smoke Realgar Eat Bloodroot / Eat Magnesium",
+  "cures": "Smoke Valerian / Smoke Realgar and Eat Bloodroot / Eat Magnesium",
   "description": "Slickness coats your skin in oily secretions, blocking any attempt to apply salves or balms.",
   "diagnose": "extremely oily.",
   "flags": {
@@ -2471,6 +3957,100 @@
   "key": "slickness",
   "name": "Slickness",
   "source": "kb/raw/live/affliction_show/slickness.txt"
+ },
+ "slimeobscure": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Time",
+  "default_time": "60 seconds",
+  "description": "This affliction will obscure random cure messages.",
+  "diagnose": "Covered in viscous slime.",
+  "expire_msg": "You rid yourself of the slime coating your skin.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "slimeobscure",
+  "name": "Slimeobscure",
+  "source": "kb/raw/live/affliction_show/slimeobscure.txt"
+ },
+ "snared": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "You manage to disentangle yourself from the rope trap which had snared your ankles.",
+  "cures": "Time",
+  "default_time": "20 seconds",
+  "diagnose": "tangled up by a rope snare.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "snared",
+  "name": "Snared",
+  "source": "kb/raw/live/affliction_show/snared.txt"
+ },
+ "solarburn": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "Your skin ceases its painful tingling.",
+  "cures": "Time",
+  "default_time": "5 seconds",
+  "diagnose": "skin seared by solar energy.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "solarburn",
+  "name": "Solarburn",
+  "source": "kb/raw/live/affliction_show/solarburn.txt"
+ },
+ "speechless": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "You find your tongue will once more obey your will to speak.",
+  "cures": "Time",
+  "default_time": "300 seconds",
+  "diagnose": "rendered entirely unable to communicate.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "speechless",
+  "name": "Speechless",
+  "source": "kb/raw/live/affliction_show/speechless.txt"
  },
  "spiritburn": {
   "afflicted_msg": "Your skin begins to grow uncomfortably hot.",
@@ -2525,11 +4105,14 @@
   "cure_options": [
    [
     "eat goldenseal",
-    "eat plumbum focus mind"
+    "eat plumbum"
+   ],
+   [
+    "focus mind"
    ]
   ],
   "cured_msg": "You aren't such a complete idiot anymore.",
-  "cures": "Eat Goldenseal / Eat Plumbum Focus Mind",
+  "cures": "Eat Goldenseal / Eat Plumbum and Focus Mind",
   "description": "Stupidity makes it harder to do exactly what you want to do. You may fumble some actions.",
   "diagnose": "unnaturally stupid.",
   "flags": {
@@ -2548,11 +4131,14 @@
   "afflicted_msg": "The thought of speech seems difficult all of a sudden.",
   "cure_options": [
    [
-    "apply epidermal to head focus mind"
+    "apply epidermal to head"
+   ],
+   [
+    "focus mind"
    ]
   ],
   "cured_msg": "Your tongue will finally obey your commands properly.",
-  "cures": "Apply Epidermal To Head Focus Mind",
+  "cures": "Apply Epidermal To Head and Focus Mind",
   "description": "With a stutter, you can barely speak a word coherently.",
   "diagnose": "a stuttering fool.",
   "flags": {
@@ -2566,6 +4152,29 @@
   "key": "stuttering",
   "name": "Stuttering",
   "source": "kb/raw/live/affliction_show/stuttering.txt"
+ },
+ "succumbed": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "Your thoughts clear, your pulse steadies; love's madness has left you... for now.",
+  "cures": "Time",
+  "default_time": "30 seconds",
+  "diagnose": "succumbed to a love-wrought madness.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "succumbed",
+  "name": "Succumbed",
+  "source": "kb/raw/live/affliction_show/succumbed.txt"
  },
  "temperedcholeric": {
   "afflicted_msg": "none",
@@ -2714,6 +4323,30 @@
   "name": "Tension",
   "source": "kb/raw/live/affliction_show/tension.txt"
  },
+ "timeflux": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Time",
+  "default_time": "60 seconds",
+  "diagnose": "suffering from a distorted perception of time.",
+  "expire_msg": "You feel less sluggish all of a sudden.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "timeflux",
+  "name": "Timeflux",
+  "source": "kb/raw/live/affliction_show/timeflux.txt"
+ },
  "timeloop": {
   "afflicted_msg": "The world seems to grow distorted around you, as if through a thick fog.",
   "cure_options": [
@@ -2737,6 +4370,29 @@
   "key": "timeloop",
   "name": "Timeloop",
   "source": "kb/raw/live/affliction_show/timeloop.txt"
+ },
+ "tonguetied": {
+  "afflicted_msg": "Your tongue twists and writhes in your mouth as if with a will of its own.",
+  "cure_options": [
+   [
+    "apply restoration to head"
+   ]
+  ],
+  "cured_msg": "Your tongue stops its mad twisting.",
+  "cures": "Apply Restoration To Head",
+  "description": "Being tongue tied will make you unable to cure the stuttering affliction until you first cure this affliction.",
+  "diagnose": "completely tongue tied.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "tonguetied",
+  "name": "A tongue tied",
+  "source": "kb/raw/live/affliction_show/tonguetied.txt"
  },
  "torntendons": {
   "afflicted_msg": "none",
@@ -2783,6 +4439,54 @@
   "key": "transfixation",
   "name": "State of transfixation",
   "source": "kb/raw/live/affliction_show/transfixation.txt"
+ },
+ "trueblind": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Time",
+  "default_time": "7 seconds",
+  "description": "This blindness is so potent that not even the mindseye tattoo can function to counteract it.",
+  "diagnose": "suffering from extreme loss of vision.",
+  "expire_msg": "Your vision gradually returns to you.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "trueblind",
+  "name": "Trueblind",
+  "source": "kb/raw/live/affliction_show/trueblind.txt"
+ },
+ "unconsciousness": {
+  "afflicted_msg": "Your legs collapse from under you and consciousness leaves you as you pass out.",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "You regain consciousness with a start.",
+  "cures": "Time",
+  "description": "Unconsciousness is a highly debilitating affliction, preventing you from doing almost anything, though it is temporary and rarely lasts more than a few seconds.",
+  "diagnose": "unconscious.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "unconsciousness",
+  "name": "Unconsciousness",
+  "source": "kb/raw/live/affliction_show/unconsciousness.txt"
  },
  "unweavingbody": {
   "afflicted_msg": "none",
@@ -2861,11 +4565,14 @@
   "cure_options": [
    [
     "eat lobelia",
-    "eat argentum focus mind"
+    "eat argentum"
+   ],
+   [
+    "focus mind"
    ]
   ],
   "cured_msg": "Your fear of heights subsides.",
-  "cures": "Eat Lobelia / Eat Argentum Focus Mind",
+  "cures": "Eat Lobelia / Eat Argentum and Focus Mind",
   "description": "People with vertigo cannot bear to leave the ground.",
   "diagnose": "afraid of heights.",
   "flags": {
@@ -2879,6 +4586,104 @@
   "key": "vertigo",
   "name": "Vertigo",
   "source": "kb/raw/live/affliction_show/vertigo.txt"
+ },
+ "vinewreathed": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Time",
+  "default_time": "20 seconds",
+  "description": "These flailing vines will make it impossible to parry a Viridian's thorn rends.",
+  "diagnose": "wreathed in flailing vines.",
+  "expire_msg": "The vines flailing about your form recede.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "vinewreathed",
+  "name": "Wreathed in vines",
+  "source": "kb/raw/live/affliction_show/vinewreathed.txt"
+ },
+ "vitiated": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Time",
+  "description": "Being vitiated reduces your strength and dexterity by two points.",
+  "diagnose": "vitiated by Shin energy.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "vitiated",
+  "name": "Vitiated",
+  "source": "kb/raw/live/affliction_show/vitiated.txt"
+ },
+ "vitrified": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Time",
+  "default_time": "45 seconds",
+  "description": "Vitrification causes your skin to partially become glass, which will result in bleeding when you do anything which uses your balance.",
+  "diagnose": "vitrified.",
+  "expire_msg": "The glass shards embedded in your skin revert to flesh.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "vitrified",
+  "name": "Vitrified",
+  "source": "kb/raw/live/affliction_show/vitrified.txt"
+ },
+ "voidfisted": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "none",
+  "cures": "Time",
+  "default_time": "15 seconds",
+  "description": "Surrounded by the void, curative herbs may not be as effective.",
+  "diagnose": "suffused with the void.",
+  "expire_msg": "The empty grasp of the void retreats, and you breathe more easily.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "voidfisted",
+  "name": "Voidfisted",
+  "source": "kb/raw/live/affliction_show/voidfisted.txt"
  },
  "voyria": {
   "afflicted_msg": "none",
@@ -2902,6 +4707,47 @@
   "key": "voyria",
   "name": "Voyria",
   "source": "kb/raw/live/affliction_show/voyria.txt"
+ },
+ "waterbonds": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "The tendrils of water that bind you splash into an icy puddle at your feet as they disperse.",
+  "cures": "Time",
+  "default_time": "30 seconds",
+  "diagnose": "Bound by tendrils of water.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "waterbonds",
+  "name": "Waterbonds",
+  "source": "kb/raw/live/affliction_show/waterbonds.txt"
+ },
+ "weakenedmind": {
+  "afflicted_msg": "none",
+  "cure_options": [],
+  "cured_msg": "The power of Rixil fades from your mind.",
+  "description": "Being weakened in mind will cause the next attempt to focus your mind to have a significantly increased recovery time.",
+  "diagnose": "weakened in mind.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "weakenedmind",
+  "name": "Weakenedmind",
+  "source": "kb/raw/live/affliction_show/weakenedmind.txt"
  },
  "weariness": {
   "afflicted_msg": "Your limbs grow heavy and you groan feebly.",
@@ -2973,6 +4819,29 @@
   "key": "whisperingmadness",
   "name": "Whispering madness",
   "source": "kb/raw/live/affliction_show/whisperingmadness.txt"
+ },
+ "woeconstrained": {
+  "afflicted_msg": "none",
+  "cure_options": [
+   [
+    "time"
+   ]
+  ],
+  "cured_msg": "You are no longer constrained to war by the tales of Woe.",
+  "cures": "Time",
+  "default_time": "30 seconds",
+  "diagnose": "constrained to war by the tales of Woe.",
+  "flags": {
+   "Accentato": false,
+   "CadmusCurse": false,
+   "Enlighten": false,
+   "NoRandomCure": true,
+   "Tzantza": false,
+   "WhisperingMadness": false
+  },
+  "key": "woeconstrained",
+  "name": "Woeconstrained",
+  "source": "kb/raw/live/affliction_show/woeconstrained.txt"
  },
  "wristfractures": {
   "afflicted_msg": "none",

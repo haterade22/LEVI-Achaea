@@ -1,0 +1,12 @@
+# affliction show cremated  (2026-10-11T00:14:47Z)
+Affliction:         Cremated
+Diagnose:           soul seared by the might of Kkractle.
+Afflicted msg:      none
+Cured msg:          The spectral fires that wait to claim you sputter and die.
+Cure(s):            Time
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

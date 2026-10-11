@@ -1,0 +1,13 @@
+# affliction show mindravaged  (2026-10-11T00:15:34Z)
+Affliction:         Mindravaged
+Diagnose:           Ravaged in mind by psionic power.
+Afflicted msg:      none
+Cured msg:          Your ravaged mind has recovered somewhat, though phantom pain still pulses at your temples.
+Cure(s):            Time
+Description:        A ravaged mind will leave you vulnerable to psychic assault.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

@@ -1,4 +1,4 @@
-# affliction show whisperingmadness  (2026-10-10T23:41:26Z)
+# affliction show whisperingmadness  (2026-10-11T00:14:20Z)
 Affliction:         Whispering madness
 Diagnose:           hearing whispers of madness.
 Afflicted msg:      You feel an invisible claw brush the back of your skull.

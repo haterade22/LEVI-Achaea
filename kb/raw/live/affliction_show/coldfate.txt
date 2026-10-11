@@ -1,0 +1,12 @@
+# affliction show coldfate  (2026-10-11T00:14:39Z)
+Affliction:         Coldfate
+Diagnose:           cursed with a cold fate.
+Afflicted msg:      none
+Cured msg:          The overwhelming sense of cold that suffuses you abruptly lifts.
+Cure(s):            Time
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
