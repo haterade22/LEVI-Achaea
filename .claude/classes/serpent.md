@@ -730,7 +730,10 @@ assassins_blade: |
   arrives before GMCP's Defences.Add and the next denizen's round is built in that gap. It also
   re-queues the round at once. A GMCP Remove of `hiding` cancels it. It never writes ataxia.defences.
   v4.7.409: "You are already hidden." (the HIDE refusal) stamps the same way; v4.7.410: so does the
-  successful HIDE line "You conceal yourself using all the guile you possess." The wield stays
+  successful HIDE line "You conceal yourself using all the guile you possess."
+  v4.7.411: the backstab's landed line "You leap from the shadows and plunge your dagger into <mob>'s
+  unsuspecting back!" (serpent/021) is highlighted bold chartreuse and drops the hidden window and the
+  `hiding` defence (user: "When we backstab we become unhidden"), ahead of GMCP's Remove. The wield stays
   `wield shield dirk` (user: "wield shield dirk is fine"; v4.7.408 had briefly sent `wield dirk`).
 venom_agony_purge: |
   v4.7.392, user: "We need to purge in this instance" on "You scream out in agony as a vicious venom tears

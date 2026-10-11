@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-10-11 - Serpent: the backstab's landed line (v4.7.411)
+
+New trigger `serpent/021_Backstab_Landed.lua`: "You leap from the shadows and plunge your dagger into
+<mob>'s unsuspecting back!" (user-supplied). It is coloured bold chartreuse (our attack-landed colour),
+with an anchored tail pattern for the wrapped end of the line, and calls the new
+`ataxiaBasher_serpentBackstabbed()` (basher/002), which drops the 3s hidden window AND clears the
+`hiding` defence: leaping from the shadows reveals us (user: "When we backstab we become unhidden"),
+and GMCP's Remove can land after the next round is built, which would send a second, refused backstab.
+Test in `test_searing_light.lua`.
+
+---
+
 ## 2026-10-11 - Serpent: a successful HIDE counts as hidden too (v4.7.410)
 
 Trigger `serpent/020_Darkwalker_Concealed.lua` also matches "You conceal yourself using all the guile
