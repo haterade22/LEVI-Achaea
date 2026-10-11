@@ -3763,6 +3763,33 @@ function ataxiaBasher_searingLightConfirm(proc)
   ataxiaTemp.lightwallPendingAt = nil
 end
 
+-- WE ARE HIDDEN (v4.7.408). GMCP's `hiding` defence is the truth, but Darkwalker's own line
+--
+--   You swiftly return to concealment in the wake of your triumph.
+--
+-- (trigger serpent/020, user: "this rehides us also") arrives the instant the denizen dies, which
+-- is exactly when the next round is built for the next denizen -- before any Defences.Add. So the
+-- line also counts for SERPENT_CONCEAL_WINDOW seconds. A stamp, never a write to ataxia.defences:
+-- GMCP owns the state, and a belief it never confirmed is one it will never Remove. A Remove of
+-- `hiding` (lostDef) clears the stamp at once, so a revealed Serpent stops backstabbing.
+local SERPENT_CONCEAL_WINDOW = 3
+
+function ataxiaBasher_serpentHidden()
+   if ataxia.defences and ataxia.defences.hiding then return true end
+   local at = ataxiaTemp and tonumber(ataxiaTemp.serpentConcealAt)
+   if not at then return false end
+   local nowT = (getEpoch and getEpoch()) or os.time()
+   return nowT - at >= 0 and nowT - at <= SERPENT_CONCEAL_WINDOW
+end
+
+-- Trigger serpent/020. Stamps the concealment and re-queues the round at once, so the backstab
+-- replaces whatever was queued for the next denizen rather than waiting for the next prompt.
+function ataxiaBasher_serpentConcealed()
+   ataxiaTemp = ataxiaTemp or {}
+   ataxiaTemp.serpentConcealAt = (getEpoch and getEpoch()) or os.time()
+   if mnemAssassinsBlade and ataxiaBasher_requeueNow then ataxiaBasher_requeueNow("concealed") end
+end
+
 function ataxiaBasher_serpentBashing()
    local command = ""
 	 local brage = ataxiaBasher_assembleBattlerage()
@@ -3778,13 +3805,13 @@ function ataxiaBasher_serpentBashing()
    -- of hiding before the backstab lands. They follow it instead. A shielded target still gets its
    -- shield flayed first (below), so no backstab then.
    if not ataxiaBasher.shielded and mnemAssassinsBlade
-      and ataxia.defences and ataxia.defences.hiding then
+      and ataxiaBasher_serpentHidden() then
       local sp = ataxia.settings.separator
       local rest = ataxiaBasher_searingLightwall(sp)..brage
       if rest:sub(-#sp) == sp then rest = rest:sub(1, -#sp - 1) end -- no bare trailing separator
-      -- THE DIRK (v4.7.394, user: "backstab needs a dirk in our hand"). `wield shield dirk` is the
-      -- same command the Serpent PvP offense uses before its dirk attacks (serpent/002).
-      return "wield shield dirk"..sp.."backstab "..target..((rest ~= "") and (sp..rest) or "")
+      -- THE DIRK (v4.7.394, user: "backstab needs a dirk in our hand"; v4.7.408 the user's exact
+      -- form: "wield dirk;backstab target" -- the dirk alone, not the shield with it).
+      return "wield dirk"..sp.."backstab "..target..((rest ~= "") and (sp..rest) or "")
    end
 
    -- Searing Light rides FIRST (see above): an eq cast, so the balance garrote still swings.

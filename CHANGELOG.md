@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-10-11 - Serpent: `wield dirk;backstab`, and Darkwalker's rehide line counts as hidden (v4.7.408)
+
+User: "for serpent when i have boons darkwalker and assassins blade we should be wield dirk;backstab
+target" and, of "You swiftly return to concealment in the wake of your triumph.", "this rehides us also".
+
+- `basher/002_Class_Bashing.lua`: the Assassin's Blade opener is `wield dirk;backstab <target>` (was
+  `wield shield dirk`). The gate is the new `ataxiaBasher_serpentHidden()`: GMCP's `hiding` defence, OR
+  Darkwalker's line within the last 3s. Why: the line prints on the kill, and the next denizen's round
+  is built before GMCP's Defences.Add arrives, so that round swung a garrote instead of backstabbing.
+  A timestamp on `ataxiaTemp`, never a write to `ataxia.defences` (GMCP owns the state; a belief it
+  never confirmed is one it never Removes). `ataxiaBasher_serpentConcealed()` stamps it and, with the
+  boon, re-queues the round at once.
+- New trigger `serpent/020_Darkwalker_Concealed.lua` (start of line) calls it.
+- `deffing/001_Defence_API.lua`: `lostDef` clears the stamp on a Remove of `hiding`, so a revealed
+  Serpent stops backstabbing straight away.
+- Tests (`test_searing_light.lua`): the wield string, the line counting before GMCP, the 3s window,
+  and the Remove cancelling it.
+
+---
+
 ## 2026-10-11 - Infernal group lock: no impatience step, and real venoms for the class lock (v4.7.407)
 
 User: "Infernal doesnt have access to impatience anymore. It used to be given through infestation but
