@@ -733,7 +733,9 @@ assassins_blade: |
   successful HIDE line "You conceal yourself using all the guile you possess."
   v4.7.411: the backstab's landed line "You leap from the shadows and plunge your dagger into <mob>'s
   unsuspecting back!" (serpent/021) is highlighted bold chartreuse and drops the hidden window and the
-  `hiding` defence (user: "When we backstab we become unhidden"), ahead of GMCP's Remove. The wield stays
+  `hiding` defence (user: "When we backstab we become unhidden"), ahead of GMCP's Remove.
+  v4.7.412: "Your attack has brought you out of hiding." (serpent/022) does the same, without a highlight.
+  The cycle (user): backstab once to open, kill, Darkwalker rehides us, backstab again. The wield stays
   `wield shield dirk` (user: "wield shield dirk is fine"; v4.7.408 had briefly sent `wield dirk`).
 venom_agony_purge: |
   v4.7.392, user: "We need to purge in this instance" on "You scream out in agony as a vicious venom tears

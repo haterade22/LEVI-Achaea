@@ -2,6 +2,15 @@
 
 ---
 
+## 2026-10-11 - Serpent: "Your attack has brought you out of hiding." (v4.7.412)
+
+New trigger `serpent/022_Out_Of_Hiding.lua` (user-supplied line) calls
+`ataxiaBasher_serpentBackstabbed()`, like the landed backstab: the hidden window and the `hiding`
+defence are dropped, so the next round swings normally until Darkwalker or a HIDE hides us again.
+No highlight, since it is not an attack line.
+
+---
+
 ## 2026-10-11 - Serpent: the backstab's landed line (v4.7.411)
 
 New trigger `serpent/021_Backstab_Landed.lua`: "You leap from the shadows and plunge your dagger into
