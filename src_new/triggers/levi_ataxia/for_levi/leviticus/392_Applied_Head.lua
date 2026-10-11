@@ -89,6 +89,16 @@ if isTargeted(matches[2]) then
         target_salveBal(salvetimer)
     end
 
+    -- ==== EVERYTHING ELSE A HEAD APPLICATION CURES (v4.7.404) ====
+    -- This trigger never called the tracker, so a target curing stuttering, concussion, a slashed
+    -- or lacerated throat, dazzled, tonguetied or calcified skull on the head was never seen
+    -- (salveCureTableV3.head held those cures, but nothing read it). Skipped when this
+    -- application is already accounted for above -- a head-damage restoration (salvetimer) or a
+    -- crushed throat being mended -- so one application is one cure.
+    if not salvetimer and not haveAff("crushedthroat") then
+        if onSalveCureV3 then onSalveCureV3("head") end
+    end
+
     erAff("bloodfire")
     targetIshere = true
 end
