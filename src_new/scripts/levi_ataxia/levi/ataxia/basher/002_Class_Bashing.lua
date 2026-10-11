@@ -3792,7 +3792,8 @@ function ataxiaBasher_serpentConcealed()
    if mnemAssassinsBlade and ataxiaBasher_requeueNow then ataxiaBasher_requeueNow("concealed") end
 end
 
--- THE BACKSTAB LANDED (trigger serpent/021, v4.7.411):
+-- THE BACKSTAB LANDED (trigger serpent/021, v4.7.411), or the game says so outright (serpent/022,
+-- v4.7.412: "Your attack has brought you out of hiding."):
 --
 --   You leap from the shadows and plunge your dagger into a fairy Lady of Sidhe's unsuspecting back!
 --
