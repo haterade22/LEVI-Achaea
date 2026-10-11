@@ -51,6 +51,6 @@ cured through it. See [README.md](README.md) for the overall model.
 | Concept | Code |
 |---|---|
 | Target herb groups (tracking) | `curingTable` in `curing/002_Wide_Groups.lua` (live), with `curingTableV3` as fallback (`affliction_tracking_core/007`) |
-| Target smoke/salve cures | `smokeCureTableV3`, `salveCureTableV3` (`affliction_tracking_core/007`) |
+| Target smoke/salve cures | `smokeCureTableV3`, `salveCureTableV3` (`affliction_tracking_core/007`). The application line names the SPOT, not the salve, so `salveCureTableV3` is keyed by spot (body, skin, head, limbs) and lists everything a salve there cures, in our priority order; one application branches to ONE cure (v4.7.404). Triggers 391 (body/skin), 392 (head), 393 (body restoration timing), 395 (limbs), 153 (health elixir on fractures) |
 | Our cure order | `ataxia_defaultCuringPrios()` (`ataxia/001`), bash delta in `ataxia/008` |
 | Lock checks | `.claude/databases/locks.yaml`, `.claude/classes/lock_types.md` |

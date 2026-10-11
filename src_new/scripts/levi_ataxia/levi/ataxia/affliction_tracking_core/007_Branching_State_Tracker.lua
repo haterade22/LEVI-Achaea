@@ -138,12 +138,24 @@ smokeCureTableV3 = {"aeon", "deadening", "hellsight", "tension", "disloyalty", "
 -- V3 salve cure tables (by body part)
 -- Applying salve always proves slickness absent, then cures one affliction from the list
 -- Slickness excluded since it's handled by collapse
+-- What one salve application at each spot can cure (v4.7.404). The game's application line names
+-- the SPOT but not the SALVE, so each list is every affliction the game says a salve at that spot
+-- cures (live WHATCURES / AFFLICTION SHOW, kb/afflictions/afflictions.json), whatever the salve.
+-- ORDER IS A WEIGHT (computeCureWeightsV3 favours earlier entries), so each list is sorted by our
+-- own curing priority -- the best guess at the target's. Rebuilt from the game's data; the old
+-- lists cured frostbite and selarnia on the wrong spot, listed `scalded` (it wears off) and
+-- `epidermal` (a salve), and counted `bloodfire` as a candidate when it is a PROOF: bloodfire
+-- makes applying impossible, so any application proves it absent (the triggers erase it outright,
+-- like slickness). Deliberately NOT listed, because the triggers own them with their own timing:
+--   body: hypothermia, calcifiedtorso (393's delayed restoration)
+--   head: damagedhead, mangledhead, crushedthroat (392); blindness, deafness (kept as defences)
+--   limbs: broken/damaged/mangled limbs (395 -> target_appliedTo)
+-- `torso` was never read by anything (393 does not call onSalveCureV3) and is gone.
 salveCureTableV3 = {
-    body = {"anorexia", "itching", "burning", "bloodfire", "selarnia", "frostbite"},
-    skin = {"frozen", "shivering", "nocaloric", "bloodfire", "selarnia", "frostbite"},
-    head = {"crushedthroat", "stuttering", "damagedhead", "mangledhead", "blindness", "scalded", "epidermal", "bloodfire"},
-    torso = {"hypothermia", "bloodfire", "selarnia", "frostbite"},
-    limbs = {"bloodfire"},
+    body = {"heartseed", "anorexia", "itching", "internalbleeding", "burning", "mildtrauma", "serioustrauma", "selarnia"},
+    skin = {"frostbite", "frozen", "shivering", "nocaloric"},
+    head = {"calcifiedskull", "dazzled", "concussion", "tonguetied", "stuttering", "laceratedthroat", "slashedthroat"},
+    limbs = {},
 }
 
 -- Helper to get curable afflictions for a herb

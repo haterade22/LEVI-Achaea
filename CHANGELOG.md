@@ -2,6 +2,35 @@
 
 ---
 
+## 2026-10-11 - Enemy salve tracking: one application, one cure (v4.7.404)
+
+User: "proceed with salve design". The game's application line ("X takes some salve from a vial and
+rubs it on his body") names the SPOT but not the SALVE, so the tracker has to infer what was cured.
+Checked against the live WHATCURES/AFFLICTION SHOW data, it got that wrong in five ways:
+
+- **391 erased four afflictions on top of branching.** Every body application wiped anorexia, itching,
+  selarnia and frostbite as well as branching over the body list. A target who applied mending for a
+  burn lost their anorexia in our tracking, and the offense spent a slike re-giving it. Only PROOFS are
+  erased now: an application is impossible while slick or under bloodfire.
+- **392 never called the tracker.** Head cures (stuttering, concussion, slashed/lacerated throat,
+  dazzled, tonguetied, calcified skull) were never seen. It now branches over the head list, except
+  when its own head-damage or crushed-throat logic already accounts for the application.
+- **The lists held the wrong afflictions.** `salveCureTableV3` is rebuilt from the game's data: frostbite
+  and selarnia were on the wrong spot, `scalded` wears off, `epidermal` is a salve, `bloodfire` is a
+  proof rather than a candidate, and the restoration-to-body cures (heartseed, internal bleeding,
+  traumas) were missing. Each list is ordered by our curing priority, since order weights the branches.
+  The unused `torso` list is gone.
+- **391 and 393 both match a body application.** 393 owns the delayed restoration cures (hypothermia,
+  calcified torso). While either is up, 391 no longer also branches, so one application is one cure.
+- **The health-elixir trigger existed twice.** 590 was a copy of 153, so every "rubs it into his
+  legs/arms/torso/head" counted a fracture down twice. 590 is removed.
+
+Unchanged on purpose: 393/392's limb-damage timing, the Magi burn counter, and the V2 hooks.
+Test: `test_target_salve_tracking.lua`, the first tests of salve tracking, driving the real triggers
+through the real tracker.
+
+---
+
 ## 2026-10-11 - Curing priorities go out as multi-set commands; rate-limit refusals are caught (v4.7.403)
 
 After v4.7.402 the login re-send drew seven "You have exceeded the spam threshold for curing

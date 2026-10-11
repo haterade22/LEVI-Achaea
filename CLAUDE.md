@@ -2930,6 +2930,8 @@ fight. Parenthesise mixed `and`/`or` conditions.
 two lines when the affliction block is long, so a naive log parser silently drops exactly the
 most-afflicted (i.e. most interesting) prompts.
 
+**Enemy salve applications are one cure each (v4.7.404).** "X takes some salve from a vial and rubs it on his <spot>" names the spot, not the salve, so `salveCureTableV3` lists everything a salve at that spot cures (from live WHATCURES) and the tracker BRANCHES to one cure. Only PROOFS are erased outright: an application is impossible while slick or under bloodfire. A trigger that owns a cure with its own timing (393's delayed restoration for hypothermia/calcified torso, 392's head damage and crushed throat) keeps it, and the branching is skipped for that application so nothing is cured twice. `test_target_salve_tracking.lua` drives the real triggers through the real tracker.
+
 **Corollary on our own afflictions:** they come from **GMCP `Char.Afflictions.Add`** (`gotAff`
 in `004_Aff_gains_losses.lua`), not from text triggers. If an affliction never appears in the
 prompt, the question is whether GMCP surfaces it at all -- and adding a text trigger to "fix"
