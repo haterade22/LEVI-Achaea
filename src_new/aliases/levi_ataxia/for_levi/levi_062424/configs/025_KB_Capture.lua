@@ -28,7 +28,8 @@ if not arg or arg == "" then
 elseif arg == "stop" then
   ataxiaKB.stop()
 elseif arg == "afflictions" then
-  ataxiaKB.start(ataxiaKB.afflictionCommands())
+  -- extendFromList: once AFFLICTION LIST answers, ask about every affliction the GAME lists too.
+  ataxiaKB.start(ataxiaKB.afflictionCommands(), { extendFromList = true })
 else
   local cmds = {}
   for c in arg:gmatch("[^|]+") do

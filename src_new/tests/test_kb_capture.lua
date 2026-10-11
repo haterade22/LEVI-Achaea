@@ -186,6 +186,38 @@ describe("kbcapture: recording answers", function()
     expect(fileText()).toContain("| help cures\nCURES\n##### END")
   end)
 
+  it("reads the names out of an AFFLICTION LIST answer, MORE lines and all", function()
+    local names = ataxiaKB.parseAfflictionList({
+      "All afflictions", "------------------------------------------------",
+      "Accentato", "Aeon", "[Type MORE if you wish to continue reading. (29% shown)]", "Amnesia", "" })
+    expect(#names).toBe(3)
+    expect(names[1]).toBe("accentato")
+    expect(names[3]).toBe("amnesia")
+  end)
+
+  it("afflictions run: the game's list adds the names our code does not know, once each", function()
+    reset()
+    ataxiaKB.start({ "affliction list", "affliction show aeon", "whatcures aeon" }, { extendFromList = true })
+    ataxiaKB.onLine("All afflictions", false)
+    ataxiaKB.onLine("------------------------------------------------", false)
+    ataxiaKB.onLine("Aeon", false)
+    ataxiaKB.onLine("Amnesia", false)
+    ataxiaKB.onLine("prompt", true)
+    local q = ataxiaTemp.kbcap.queue
+    expect(#q).toBe(5)
+    expect(q[4]).toBe("affliction show amnesia")
+    expect(q[5]).toBe("whatcures amnesia")
+  end)
+
+  it("a plain capture of AFFLICTION LIST does not extend the queue", function()
+    reset()
+    ataxiaKB.start({ "affliction list" })
+    ataxiaKB.onLine("------------------------------------------------", false)
+    ataxiaKB.onLine("Amnesia", false)
+    ataxiaKB.onLine("prompt", true)
+    expect(#ataxiaTemp.kbcap.queue).toBe(1)
+  end)
+
   it("refuses to start while the basher is on (the gag would hide a fight)", function()
     reset()
     ataxiaBasher.enabled = true

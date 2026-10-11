@@ -36,7 +36,8 @@ packageName: ''
 --
 -- Commands (alias `kbcapture`, aliases/configs/025):
 --   kbcapture              status
---   kbcapture afflictions  AFFLICTION LIST, then AFFLICTION SHOW + WHATCURES for every name
+--   kbcapture afflictions  AFFLICTION LIST, then AFFLICTION SHOW + WHATCURES for every name we know
+--                          AND every name the game's list holds (about 400 commands, ~8 min)
 --   kbcapture <cmd | cmd>  capture any command(s), separated by "|"  (e.g. kbcapture help cures | help heal)
 --                          NOT ";": Mudlet splits typed input on its command separator before any
 --                          alias runs, so `kbcapture a;b` captured only `a` and sent `b` to the game
@@ -99,6 +100,42 @@ function ataxiaKB.afflictionCommands(names)
   return cmds
 end
 
+-- The names in an AFFLICTION LIST answer: one capitalised word per line, after the dashed rule.
+-- The full list (203 on 2026-10-10) holds 79 afflictions our code never names, so a run that
+-- asked only about our own names could never learn about them.
+function ataxiaKB.parseAfflictionList(lines)
+  local out, started = {}, false
+  for _, l in ipairs(lines or {}) do
+    if l:find("^%-%-%-%-") then
+      started = true
+    elseif started then
+      local name = l:match("^%s*(%a+)%s*$")
+      if name then out[#out + 1] = name:lower() end
+    end
+  end
+  return out
+end
+
+-- After AFFLICTION LIST is answered, queue SHOW + WHATCURES for every listed name not queued yet.
+-- Returns how many names were added.
+function ataxiaKB.extendFromList(st, lines)
+  st.queued = st.queued or {}
+  if not next(st.queued) then
+    for _, c in ipairs(st.queue) do st.queued[c] = true end
+  end
+  local added = 0
+  for _, name in ipairs(ataxiaKB.parseAfflictionList(lines)) do
+    local show = "affliction show " .. name
+    if not st.queued[show] then
+      st.queue[#st.queue + 1] = show
+      st.queue[#st.queue + 1] = "whatcures " .. name
+      st.queued[show] = true
+      added = added + 1
+    end
+  end
+  return added
+end
+
 -- One answer, as written to the file. The markers are what the importer splits on.
 function ataxiaKB.formatBlock(cmd, lines, stamp, timedOut)
   local out = { "##### KBCAPTURE " .. stamp .. " | " .. cmd .. (timedOut and " | TIMEOUT" or "") }
@@ -147,6 +184,11 @@ local function finish(timedOut)
   if not st.cmd then return end
   cleanup(st)
   write(ataxiaKB.formatBlock(st.cmd, st.lines, st.stamp, timedOut))
+  if st.extendFromList and st.cmd == "affliction list" then
+    local added = ataxiaKB.extendFromList(st, st.lines)
+    if added > 0 then echo("the game lists " .. added .. " affliction(s) our code does not name; asking about those too ("
+      .. #st.queue .. " commands in all).") end
+  end
   st.done = st.done + 1
   st.cmd, st.lines = nil, nil
   if st.done % 20 == 0 and st.i < #st.queue then
@@ -238,6 +280,8 @@ function ataxiaKB.start(cmds, opts)
   st.queue, st.i, st.done = cmds, 0, 0
   st.running, st.stopping = true, false
   st.gag = not (opts and opts.gag == false)
+  st.extendFromList = (opts and opts.extendFromList) or false
+  st.queued = {}
   echo("capturing " .. #cmds .. " command(s), about " .. math.ceil(#cmds * 1.2 / 60)
     .. " min. Output is hidden until it finishes. kbcapture stop to end early.")
   sendNext()
