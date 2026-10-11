@@ -2,6 +2,14 @@
 
 ---
 
+## 2026-10-11 - Serpent: a successful HIDE counts as hidden too (v4.7.410)
+
+Trigger `serpent/020_Darkwalker_Concealed.lua` also matches "You conceal yourself using all the guile
+you possess." (user-supplied), so a successful HIDE stamps the same 3s hidden window as Darkwalker's
+rehide line and the "already hidden" refusal, and re-queues the round with the backstab.
+
+---
+
 ## 2026-10-11 - Serpent: "You are already hidden." counts as hidden; back to `wield shield dirk` (v4.7.409)
 
 - Trigger `serpent/020_Darkwalker_Concealed.lua` also matches "You are already hidden." -- the game's

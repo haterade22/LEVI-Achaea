@@ -37,10 +37,13 @@ patterns:
   type: 2
 - pattern: You are already hidden
   type: 2
+- pattern: You conceal yourself using all the guile you possess
+  type: 2
 ]]--
 
 -- DARKWALKER REHIDES US (v4.7.408, user: "this rehides us also"). v4.7.409: the game's refusal
--- "You are already hidden." proves the same thing, so it stamps the same way.
+-- "You are already hidden." proves the same thing, so it stamps the same way. v4.7.410: so does a
+-- successful HIDE, "You conceal yourself using all the guile you possess."
 --
 --   You swiftly return to concealment in the wake of your triumph.
 --

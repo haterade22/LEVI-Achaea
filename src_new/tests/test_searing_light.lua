@@ -426,6 +426,7 @@ describe("Assassin's Blade: open with BACKSTAB while hidden", function()
     local src = f:read("*a"); f:close()
     expect(src:find("pattern: You swiftly return to concealment in the wake of your triumph", 1, true) ~= nil).toBeTrue()
     expect(src:find("pattern: You are already hidden", 1, true) ~= nil).toBeTrue()
+    expect(src:find("pattern: You conceal yourself using all the guile you possess", 1, true) ~= nil).toBeTrue()
   end)
 
   it("a GMCP Remove of hiding cancels the concealment at once", function()
