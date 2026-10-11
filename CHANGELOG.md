@@ -2,6 +2,76 @@
 
 ---
 
+## 2026-10-11 - Shikudo: hits on the target are recorded, checked against two real fights (v4.7.413-414)
+
+Phase 1 of the Shikudo offense rework (`docs/plans/shikudo-offense-review-2026-10-11.md`). The user
+shared two combat logs (`kb/raw/logs/`): a Shikudo killing a sword-and-board Runewarden by Dispatch
+(the monk's log) and a Runewarden killing a Shikudo (hers). Every Shikudo trigger was checked
+against their real lines; the write-up is `kb/combat/shikudo.md` and `kb/combat/runewarden-snb.md`.
+
+**Shipped in v4.7.413.** Another Claude session working in the same folder committed this half,
+still in progress, inside the Serpent release (commit dc30f2d5); that entry below does not mention
+it. Nothing in it was incomplete.
+- **Strike triggers 563-585 match the strike line by its start, over a two-row window.** The line
+  carries the staff's name and runs to 147 columns against this user's 119-124 server wrap, so the
+  full-line patterns could not match a wrapped line. The target, damage and limb now come from the
+  damage line; 577 (flashheel) records `broken<side>leg` from its limb.
+- Hiru (575, `3rd_person_shikudo/003`, `calls/011`) records **confusion too on a prone target**
+  (wiki); `calls/011` relayed "blackout".
+- **Mind Confuse and Mind Stupidity recorded nothing** (`telepathy_tekura/002`, `005`): their
+  helper `tarAffedConfirmed` lives only in a switched-off script.
+- `calls/001`, `009`, `010`, `011`, `012`, `013` act only for our target, and relay only with party
+  relay on. `calls/009` called `tarAff`, which does not exist, and threw on every jinzuku.
+- 581 recorded `mangledhead` on every spinkick, for anyone; removed (632 records the head from the
+  real damage). Kai Surge (`monk/002`): a 190-column pattern became its start, no direct `tAffs`
+  write, one `tarAffed`, and the "pt:" typo. Combo-table reads in 563, 571, 580, 581 are guarded.
+
+**v4.7.414 (what the logs showed).**
+- **The frontkick prone fallback never fired** (`calls/012`): it expected "into the underarm of X";
+  the game prints "into the left underarm of X". Now a start fragment (the line wraps).
+- **A strike line is not a hit.** A parried strike prints its strike line, then "X parries the
+  attack with a deft manoeuvre." `calls/013` (needle) recorded crushed throat from its two strike
+  lines; now only from the effect line ("...crushing cartilage."). `calls/008` recorded paralysis
+  from nervestrike's strike line, for one staff only; switched off (563 records it from the damage
+  line).
+- **New `587_Shikudo_Strike_Start` clears `ignoreThirdPerson` at every strike line.** A strike
+  trigger sets the flag and the effect-line trigger for the same hit skips once and clears it, so
+  kuro's weariness-then-lethargy is not counted twice. But strikes with no effect-line partner
+  (nervestrike, frontkick, risingkick, spinkick, ruku to the arm) left it set, and the next effect
+  line whose own strike trigger had not fired was skipped: a `light` strike or a blow a Shield of
+  Absorption absorbed (neither prints a damage line). Log 1 has the case at 12:14.
+- **14 "Start Shikudo" triggers (172-186) threw on every strike they matched.** They call
+  `monk.shikudo.limb_hit`, which no script we ship defines (kuro, risingkick, flashheel and
+  frontkick match any staff). Guarded, in case another installed package provides it. 179, 185
+  and 186 also called the undefined `isTarget` (now `isTargeted`). 183 called it, `limbhit` and a
+  `tarAff` table (none exist) and `gotAff("prone")`, which is **our own** affliction handler: a
+  temple spinkick would have recorded prone on us. Rebuilt. 169 and 171's guards completed.
+- `allies_enemies/011_Mind_Lock_Gone` also catches "You have lost your telepathic lock upon X."
+  (printed when the target dies), which never cleared `mindlocked`.
+- 583 (thrust): "you spin .+", not "you spin a .+"; a staff described "an ..." never matched.
+- **Tooling.** `tools/check_orphans.py` lists `monk`, so every call into it must stay guarded, and
+  strips `--[[ ]]` block comments (a header naming "monk.md (class mechanics)" read as a call).
+  `src_new/tests/trigger_lib.lua` reads FOLDED plain-scalar patterns (it read them half-way, with
+  no type) and understands character classes and alternation inside a group, so damage-line
+  patterns can be tested. New `tools/run_lua_tests.py` runs the suite locally through `lupa`
+  (Lua 5.1); until now CI was the first place a test ran on this machine.
+- **Tests:** `test_shikudo_tracking.lua` (30): every strike trigger's start against the first row
+  of its real line, wrapped at 100, 119 and 124 columns with three staffs; the damage-line
+  patterns; the bodies; the effect lines; the dedupe; the new lines; the guards.
+  `test_trigger_wrap.lua`'s "refuses what it cannot judge" example moved off character classes.
+  Writing them caught a bug in this change: the frontkick pattern was folded across two YAML lines
+  and only the first was replaced.
+- **Still not recorded:** a light or absorbed nervestrike (paralysis) or ruku to the arm
+  (clumsiness, healthleech), which have no target-named effect line, and dawnkick's delayed
+  epilepsy (its line was not in the log). Planned with the offense rework.
+- **Docs:** new `kb/combat/` and `kb/raw/logs/`; `kb/CONFLICTS.md` (#3-#6, four resolved), INDEX,
+  README; `docs/kill-paths.md` (Shikudo Dispatch and Runewarden disembowel, CONFIRMED from shared
+  logs); `.claude/classes/monk.md` (the lock is 007, not 008; Dispatch needs prone, a damaged head
+  and a crushed throat, not a broken leg; SWEEP + KURO is not a legal combo; flashheel breaks;
+  frontkick prones; `light` does no limb damage); the review plan's status; CLAUDE.md.
+
+---
+
 ## 2026-10-11 - README: the Achaea knowledge base (docs only, no version bump)
 
 The README gains an **Achaea Knowledge Base** section: what `kb/` holds (the affliction database,

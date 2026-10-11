@@ -42,12 +42,17 @@ patterns:
 - pattern: ^The end of the staff smashes into the exposed throat of (\w+), crushing cartilage\.$
   type: 1
 ]]--
--- v4.7.413: only for OUR target (it recorded and relayed anyone's hit on anyone), and the party
--- message only goes out with party relay on.
+-- v4.7.414: only for OUR target, and only the third pattern -- the effect line "The end of the
+-- staff smashes into the exposed throat of X, crushing cartilage." -- records crushed throat. The
+-- two strike lines print even when the needle is parried (log 2026-10-11: a strike line, then
+-- "Claes parries the attack with a deft manoeuvre."), so they only mark the line.
 if isTargeted(matches[2]) then
+  local landed = (line or ""):find("^The end of the staff smashes into the exposed throat") ~= nil
   selectCurrentLine() fg("a_yellow") bg("black")
-  replace("" ..matches[2].. " [NEEDLE: Crushed Throat]")
-  tarAffed("crushedthroat")
-  tneedle = 100
-  if partyrelay then send("pt " ..matches[2].. ": Crushed Throat") end
+  replace(matches[2] .. (landed and " [NEEDLE: Crushed Throat]" or " [NEEDLE]"))
+  if landed then
+    tarAffed("crushedthroat")
+    tneedle = 100
+    if partyrelay then send("pt " ..matches[2].. ": Crushed Throat") end
+  end
 end

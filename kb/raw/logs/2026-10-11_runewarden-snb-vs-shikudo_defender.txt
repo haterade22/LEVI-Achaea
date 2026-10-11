@@ -1,0 +1,2205 @@
+Dominius drops into a lower stance, his weapon snapping up into an aggressive guard.
+Dropping into a lower stance, Dominius sweeps a dark ash wood staff at your right thigh.
+As Dominius's blow crunches into you, you perceive that he has dealt 9.2% damage to your right
+leg.
+The staff cracks across your right thigh, the muscles suddenly becoming weak.
+[AFF]: Weariness
+Health lost: 294 (physical blunt).
+Dropping back into a low crouch, Dominius whips a dark ash wood staff at your right thigh.
+The staff cracks across your right thigh, the muscles suddenly becoming weak.
+[AFF]: Lethargy
+Your shield completely absorbs the damage.
+Dominius lashes out with a straight kick at you.
+You parry the attack with a deft manoeuvre.
+H:4360|79% M:4391|88%  15:04:09:172  [ Dominius ][0|96.8|0|0|70.8|94.6] ( -294h 5% )[wear leth]
+ 
+You may apply another salve to yourself. Head (0.965)
+H:4360|79% M:4391|88%  15:04:09:810  [ Dominius ][0|96.8|0|0|70.8|94.6][wear leth] 
+You may eat another bit of irid moss or potash.
+H:4360|79% M:4391|88%  15:04:10:029  [ Dominius ][0|96.8|0|0|70.8|94.6][wear leth] 
+You may eat another plant or mineral. Eat (1.67)
+H:4360|79% M:4391|88%  15:04:10:152  [ Dominius ][0|96.8|0|0|70.8|94.6][wear leth] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your limbs strengthen and you feel stronger.
+[AFF]: Weariness
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+Dominius eats a magnesium chip.
+You have recovered equilibrium.
+You have recovered balance on all limbs.
+Envenomed: (Curare)
+Sliced:    (Right leg) (101.7%)
+Shield:    (Prone)
+Ferocity:  [####|####|####|####]
+[HP]:      (79%/100%)..*
+[ast[37], sen, weari[56], naus[83], deaf, prn, para]
+Dominius takes some salve from a vial and rubs it on his legs.
+H:4796|87% M:4688|94%  15:04:10:362  [ Dominius ][0|96.8|0|0|70.8|101.7] ( +436h 7% +297m 5% 
+)[leth] 
+Your mind is able to focus once again. Focus (2.525)
+H:4796|87% M:4688|94%  15:04:10:568  [ Dominius ][0|96.8|0|0|70.8|101.7][leth] 
+Dominius begins to tumble towards the northeast.
+They escaped to the NORTHEAST!
+H:4796|87% M:4688|94%  15:04:11:315  [ Dominius ][0|96.8|0|0|70.8|101.7][leth] 
+You may eat another plant or mineral.
+H:4796|87% M:4638|93%  15:04:11:773  [ Dominius ][0|96.8|0|0|70.8|101.7][leth] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+The lethargy evaporates, leaving you full of energy.
+[AFF]: Lethargy
+Dominius eats an aurum flake.
+Dominius takes a long drag off his pipe.
+Processed Cures(asthma sensitivity weariness)
+[OUTR]: 1 Ginseng (572)
+A supple metallic shell of quicksilver has formed around Dominius.
+H:4796|87% M:4638|93%  15:04:12:265  [ Dominius ][0|96.8|0|0|70.8|101.7]
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Torso) (103.9%)
+Runeblade: (Nairat)
+Afflicted: (Frozen)
+Sileris stripped...
+Empower:   (Inguz)
+Shield:    (Asthma)
+Ferocity:  [####|####|####|####]
+[HP]:      (67%/100%)
+You may drink another health or mana elixir. Health (4.415).
+Afflicted: (Slickness Asthma).*
+[ast, sen[67], weari[37], naus[83], slick2, deaf, slick, frzn[200], prn, para]
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5460|100% M:4438|89%  15:04:12:523  [ Dominius ][0|103.9|0|0|70.8|101.7] ( +664h 12% -200m 4% 
+)
+Dominius takes a drink from an elegant diamond vial.
+H:5460|100% M:4438|89%  15:04:13:069  [ Dominius ][0|103.9|0|0|70.8|101.7]
+You may eat another plant or mineral. Eat (1.483)
+H:5460|100% M:4438|89%  15:04:13:396  [ Dominius ][0|103.9|0|0|70.8|101.7]
+Dominius eats an aurum flake.
+Processed Cures(asthma sensitivity weariness)
+[ast, naus[83], slick2, deaf, slick, frzn[200], prn, para]
+
+H:5460|100% M:4438|89%  15:04:13:479  [ Dominius ][0|103.9|0|0|70.8|101.7]
+You have recovered balance on all limbs.
+H:5460|100% M:4438|89%  15:04:14:427  [ Dominius ][0|103.9|0|0|70.8|101.7]
+You may utilise the tree tattoo again. Tree (13.957)
+H:5460|100% M:4438|89%  15:04:14:719  [ Dominius ][0|103.9|0|0|70.8|101.7]
+Dominius eats a magnesium chip.
+Processed Cures(paralysis slickness)
+[ast, naus[83], deaf, frzn[200], prn, para]
+
+H:5460|100% M:4438|89%  15:04:15:025  [ Dominius ][0|103.9|0|0|70.8|101.7]
+There is no exit in that direction.
+H:5460|100% M:4438|89%  15:04:15:541  [ Dominius ][0|103.9|0|0|70.8|101.7]
+Your ferocity decreases.
+H:5460|100% M:4438|89%  15:04:15:627  [ Dominius ][0|103.9|0|0|70.8|101.7]
+You lash out at Dominius as he turns to flee.
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+Dominius tumbles out to the northeast.
+They escaped to the NORTHEAST!
+H:5460|100% M:4438|89%  15:04:15:811  [ Dominius ][0|103.9|0|0|70.8|101.7]
+You may eat another bit of irid moss or potash.
+H:5460|100% M:4438|89%  15:04:16:036  [ Dominius ][0|103.9|0|0|70.8|101.7]
+There is no exit in that direction.
+H:5460|100% M:4438|89%  15:04:16:123  [ Dominius ][0|103.9|0|0|70.8|101.7]
+Empty training yard.
+--- Area 572: A secluded mansion - v52882 ---
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+             [ ]
+                                             
+                 [ ]-[ ]
+                / | x
+             [ ]-[^]-[ ]
+                \ | /
+                 [ ]
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+--- Empty training yard ----------- 0:0:0 ---
+The sky lightens with the onset of dawn. A large wall of stone stands here, blocking passage to
+the northwest. Madcap Dominius is here, sprawled on the floor. His features are obscured by a 
+terrifying sad clown face mask. He wields a dark ash wood staff in both hands.
+You see exits leading southwest and northwest.
+H:5460|100% M:4438|89%  15:04:16:412  [ Dominius ][0|103.9|0|0|70.8|101.7]
+H:5460|100% M:4438|89%  15:04:16:711  [ Dominius ][0|103.9|0|0|70.8|101.7]
+Impaled: Dominius. (Sorry, Darona)
+Failed:  Club.
+Ferocity:  [####|####|####|####]
+[HP]:      (77%/100%)
+H:5460|100% M:4338|87%  15:04:16:719  [ Dominius ][0|103.9|0|0|70.8|101.7]
+Dominius eats a magnesium chip.
+Dominius takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+Processed Cures(paralysis)
+H:5460|100% M:4338|87%  15:04:16:804  [ Dominius ][0|103.9|0|0|70.8|101.7]
+The empowerment of the inguz rune fades.
+You may drink another health or mana elixir. Health (4.518)
+H:5460|100% M:4338|87%  15:04:17:041  [ Dominius ][0|103.9|0|0|70.8|101.7]
+
+THEY CAN TOUCH TREE AGAIN!
+Dominius takes a drink from an elegant diamond vial.
+H:5460|100% M:4338|87%  15:04:17:522  [ Dominius ][0|103.9|0|0|70.8|101.7]
+Dominius takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+Dominius eats an aurum flake.
+Processed Cures(asthma)
+[naus[83], deaf, prn, IMPALED]
+
+H:5460|100% M:4413|88%  15:04:18:327  [ Dominius ][0|103.9|0|0|70.8|101.7]
+Dominius takes some salve from a vial and rubs it on his body.
+H:5460|100% M:4413|88%  15:04:18:798  [ Dominius ][0|103.9|0|0|70.8|101.7]
+Dominius looks pale and gaunt as his body shudders on the end of the weapon.
+H:5460|100% M:4413|88%  15:04:19:639  [ Dominius ][0|103.9|0|0|70.8|101.7]
+With a look of agony on his face, Dominius manages to writhe himself free of the weapon which
+impaled him.
+Dominius stands up.
+ + + + STANDING + + +
+H:5460|100% M:4413|88%  15:04:19:859  [ Dominius ][0|103.9|0|0|70.8|101.7]
+Dominius: has shielded!
+Dominius: has shielded!
+Dominius: has shielded!
+Dominius applies a quicksilver droplet to himself.
+Dominius eats a ferrum flake.
+You have recovered balance on all limbs.
+Razed: Shield
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (100%/100%).
+Afflicted: (Paralysis)
+[slick2, deaf, para]
+You suddenly perceive the vague outline of an aura of rebounding around Dominius.
+H:5460|100% M:4313|86%  15:04:20:401  [ Dominius ][0|103.9|0|0|70.8|101.7]
+Dominius eats a magnesium chip.
+Processed Cures(paralysis)
+[slick2, deaf, Reb]
+
+H:5460|100% M:4313|86%  15:04:21:654  [ Dominius ][0|103.9|0|0|70.8|101.7]
+You have recovered balance on all limbs.
+H:5460|100% M:4313|86%  15:04:22:089  [ Dominius ][0|103.9|0|0|70.8|101.7]
+Dominius: has shielded!
+Dominius: has shielded!
+Dominius: has shielded!
+Your ferocity decreases.
+H:5460|100% M:4313|86%  15:04:23:163  [ Dominius ][0|103.9|0|0|70.8|101.7]
+Dominius eats a calamine crystal.
+H:5460|100% M:4313|86%  15:04:23:282  [ Dominius ][0|103.9|0|0|70.8|101.7]
+[Limb]: Reset Dominius' torso.
+Dominius's aura of weapons rebounding disappears.
+Dominius lashes out with a straight kick at you.
+As Dominius's blow crunches into you, you perceive that he has dealt 9.2% damage to your left
+arm.
+Pain blossoms as the instep of Dominius's foot smashes into the vulnerable cluster of nerves
+beneath your left arm, sending you spinning to the ground.
+[AFF]: Prone
+Health lost: 321 (physical blunt).
+Dropping back into a low crouch, Dominius whips a dark ash wood staff at your right thigh.
+As Dominius's blow crunches into you, you perceive that he has dealt 9.2% damage to your right
+leg.
+The staff cracks across your right thigh, the muscles suddenly becoming weak.
+[AFF]: Weariness
+Health lost: 301 (physical blunt).
+Dropping back into a low crouch, Dominius whips a dark ash wood staff at your right thigh.
+The staff cracks across your right thigh, the muscles suddenly becoming weak.
+[AFF]: Lethargy
+Health lost: 301 (physical blunt).
+H:4537|83% M:4313|86%  15:04:25:581  [ Dominius ][0|0|0|0|70.8|101.7] ( -923h 16% )[wear leth 
+PR] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your limbs strengthen and you feel stronger.
+[AFF]: Weariness
+[Curing]: STAND
+You stand up.
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+The lethargy evaporates, leaving you full of energy.
+[AFF]: Lethargy
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+Dominius takes a long drag off his pipe.
+H:5460|100% M:4710|94%  15:04:25:672  [ Dominius ][0|0|0|0|70.8|101.7] ( +923h 16% +397m 7% )
+[Limb]: Reset Dominius' right leg.
+Your ferocity decreases.
+H:5460|100% M:4710|94%  15:04:26:292  [ Dominius ][0|0|0|0|70.8|0]
+H:5460|100% M:4710|94%  15:04:26:594  [ Dominius ][0|0|0|0|70.8|0]
+You cease wielding a blessed legionnaire's longsword in your left hand.
+You start to wield a mithril broadsword in your left hand.
+Envenomed: (Xentio)
+Sliced:    (Torso)
+Dominius parries the attack with a deft manoeuvre.
+
+ YOU HIT PARRY(Torso)!!
+
+
+
+ YOU HIT PARRY(Torso)!!
+
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (98%/100%).
+Afflicted: (Paralysis).*
+[para]
+Dominius eats a magnesium chip.
+Processed Cures(paralysis)
+H:5460|100% M:4610|92%  15:04:26:654  [ Dominius ][0|0|0|0|70.8|0]
+You focus on automatically empowering the isaz, sleizak, and inguz runes.
+H:5460|100% M:4610|92%  15:04:26:747  [ Dominius ][0|0|0|0|70.8|0]
+You may eat another plant or mineral.
+H:5460|100% M:4610|92%  15:04:27:170  [ Dominius ][0|0|0|0|70.8|0]
+Dominius lashes out with a straight kick at you.
+You parry the attack with a deft manoeuvre.
+Dropping back into a low crouch, Dominius whips a dark ash wood staff at your right thigh.
+As Dominius's blow crunches into you, you perceive that he has dealt 9.2% damage to your right
+leg.
+The staff cracks across your right thigh, the muscles suddenly becoming weak.
+[AFF]: Weariness
+Health lost: 303 (physical blunt).
+Dropping back into a low crouch, Dominius whips a dark ash wood staff at your right thigh.
+The staff cracks across your right thigh, the muscles suddenly becoming weak.
+[AFF]: Lethargy
+Health lost: 307 (physical blunt).
+H:4850|88% M:4610|92%  15:04:27:594  [ Dominius ][0|0|0|0|70.8|0] ( -610h 11% )[wear leth] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your limbs strengthen and you feel stronger.
+[AFF]: Weariness
+H:4850|88% M:4610|92%  15:04:27:774  [ Dominius ][0|0|0|0|70.8|0][leth] 
+You have recovered balance on all limbs.
+You cease wielding a mithril broadsword in your left hand.
+You start to wield a blessed legionnaire's longsword in your left hand.
+Envenomed: (Xentio)
+Sliced:    (Dominius)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Engage:    (Dominius)
+Equilibrium used: 2.00s..
+Afflicted: (Clumsiness Paralysis)
+[clum, para]
+You focus on automatically empowering the isaz, sleizak, and inguz runes.
+H:4959|90% M:4635|93%  15:04:28:909  [ Dominius ][0|0|0|0|70.8|0][leth] 
+Dominius eats a magnesium chip.
+Processed Cures(paralysis)
+[clum]
+
+H:4959|90% M:4635|93%  15:04:28:917  [ Dominius ][0|0|0|0|70.8|0][leth] 
+H:4959|90% M:4635|93%  15:04:29:130  [ Dominius ][0|0|0|0|70.8|0][leth] 
+You may eat another plant or mineral.
+H:4959|90% M:4635|93%  15:04:29:323  [ Dominius ][0|0|0|0|70.8|0][leth] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+The lethargy evaporates, leaving you full of energy.
+[AFF]: Lethargy
+[OUTR]: 1 Ginseng (571)
+
+[DEF]: Fangbarrier
+Dominius rises onto the balls of his feet, a look of grim certainty overcoming his face.
+Dominius lashes out with a high kick at your torso.
+As Dominius's blow crunches into you, you perceive that he has dealt 9.2% damage to your torso.
+The foot of Dominius drives into your solar plexus.
+Your shield completely absorbs the damage.
+Dominius whips a dark ash wood staff at the side of your neck.
+As Dominius's blow crunches into you, you perceive that he has dealt 6.7% damage to your head.
+Your body locks in paralysis as numbness overtakes your body below the neck.
+[AFF]: Paralysis
+Health lost: 323 (physical blunt).
+Dominius spins a full rotation, bringing a dark ash wood staff around in a blur to crash into
+your torso.
+As Dominius's blow crunches into you, you perceive that he has dealt 9.2% damage to your torso.
+Pain blossoms from your ribs as the staff makes contact, and you begin to sweat profusely.
+
+[AFF]: Slickness
+The protective covering coating your skin sloughs off.
+Health lost: 318 (physical blunt).
+H:4318|79% M:4635|93%  15:04:29:725  [ Dominius ][0|0|0|0|70.8|0] ( -641h 11% )[PAR SLCK] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your glands cease their oily secretion.
+[AFF]: Slickness
+H:4318|79% M:4635|93%  15:04:29:875  [ Dominius ][0|0|0|0|70.8|0][PAR] 
+A supple metallic shell of quicksilver has formed around Dominius.
+You may drink another health or mana elixir. Health (4.453)
+H:4318|79% M:4635|93%  15:04:30:124  [ Dominius ][0|0|0|0|70.8|0][PAR] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5442|99% M:4635|93%  15:04:30:296  [ Dominius ][0|0|0|0|70.8|0] ( +1124h 20% )[PAR] 
+Dominius eats an aurum flake.
+You have recovered equilibrium.
+H:5442|99% M:4635|93%  15:04:30:780  [ Dominius ][0|0|0|0|70.8|0][PAR] 
+You have recovered balance on all limbs.
+You may eat another plant or mineral. Eat (1.5)
+H:5442|99% M:4635|93%  15:04:31:022  [ Dominius ][0|0|0|0|70.8|0][PAR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+[Curing]: APPLY SILERIS
+You apply a sileris berry to yourself.
+Envenomed: (Xentio)
+Sliced:    (Dominius)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Sensitivity)
+[HP]:      (80%/100%).
+Afflicted: (Clumsiness Paralysis Prefarar)
+[clum, deaf, para]
+[OUTR]: 1 Bloodroot (891)
+Dominius takes a drink from an elegant diamond vial.
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.512)
+You may eat another bit of irid moss or potash.
+H:5442|99% M:4485|90%  15:04:31:630  [ Dominius ][0|0|0|0|70.8|0]
+Dominius eats a magnesium chip.
+Dominius touches a cloak tattoo.
+Processed Cures(paralysis)
+You may eat another plant or mineral. Eat (1.494)
+H:5442|99% M:4485|90%  15:04:32:553  [ Dominius ][0|0|0|0|70.8|0]
+You have recovered balance on all limbs.
+H:5442|99% M:4485|90%  15:04:32:948  [ Dominius ][0|0|0|0|70.8|0]
+H:5442|99% M:4485|90%  15:04:32:953  [ Dominius ][0|0|0|0|70.8|0]
+Envenomed: (Vernalius)
+Sliced:    (Dominius)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (89%/100%).
+Afflicted: (Weariness Paralysis)
+[clum, weari, deaf, para]
+Dominius eats a magnesium chip.
+Dominius whips a dark ash wood staff at the side of your neck.
+As Dominius's blow crunches into you, you perceive that he has dealt 6.7% damage to your head.
+Your body locks in paralysis as numbness overtakes your body below the neck.
+[AFF]: Paralysis
+Health lost: 257 (physical blunt).
+Bleeding off the momentum of his previous strike, Dominius turns and brings a dark ash wood
+staff around in a thrust at your solar plexus.
+As Dominius's blow crunches into you, you perceive that he has dealt 13.4% damage to your
+torso.
+Your breath exits your lungs in an explosive gasp as the end of the staff smashes home.
+[AFF]: Asthma
+Health lost: 257 (physical blunt).
+Dominius lashes out with a high kick at your torso.
+As Dominius's blow crunches into you, you perceive that he has dealt 9.2% damage to your torso.
+The foot of Dominius drives into your solar plexus.
+Your shield completely absorbs the damage.
+H:4928|90% M:4385|88%  15:04:33:982  [ Dominius ][0|0|0|0|70.8|0] ( -514h 9% )[AST PAR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:4928|90% M:4385|88%  15:04:34:136  [ Dominius ][0|0|0|0|70.8|0][AST] 
+You suddenly perceive the vague outline of an aura of rebounding around Dominius.
+H:4928|90% M:4385|88%  15:04:34:145  [ Dominius ][0|0|0|0|70.8|0][AST] 
+[OUTR]: 1 Bloodroot (890)
+You may drink another health or mana elixir. Health (4.554)
+H:4928|90% M:4385|88%  15:04:34:849  [ Dominius ][0|0|0|0|70.8|0][AST] 
+You have recovered balance on all limbs.
+Razed: Rebounding
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (87%/100%).
+Afflicted: (Paralysis)
+[clum, weari, deaf, para]
+Dominius takes a long drag off his pipe.
+H:4928|90% M:4285|86%  15:04:35:124  [ Dominius ][0|0|0|0|70.8|0][AST] 
+Dominius eats a magnesium chip.
+You may eat another plant or mineral. Eat (1.591)
+H:4928|90% M:4285|86%  15:04:35:726  [ Dominius ][0|0|0|0|70.8|0][AST] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+H:4928|90% M:4285|86%  15:04:35:927  [ Dominius ][0|0|0|0|70.8|0]
+Dominius whips a dark ash wood staff at the side of your neck.
+As Dominius's blow crunches into you, you perceive that he has dealt 6.7% damage to your head.
+Your body locks in paralysis as numbness overtakes your body below the neck.
+[AFF]: Paralysis
+Your shield completely absorbs the damage.
+Dropping back into a low crouch, Dominius whips a dark ash wood staff at your right thigh.
+As Dominius's blow crunches into you, you perceive that he has dealt 9.2% damage to your right
+leg.
+The staff cracks across your right thigh, the muscles suddenly becoming weak.
+[AFF]: Weariness
+Your shield completely absorbs the damage.
+Dominius lashes out with a high kick at your torso.
+As Dominius's blow crunches into you, you perceive that he has dealt 9.2% damage to your torso.
+The foot of Dominius drives into your solar plexus.
+Health lost: 298 (physical blunt).
+H:4630|84% M:4285|86%  15:04:36:022  [ Dominius ][0|0|0|0|70.8|0] ( -298h 5% )[wear PAR] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+H:5460|100% M:4682|94%  15:04:36:126  [ Dominius ][0|0|0|0|70.8|0] ( +830h 15% +397m 7% )[wear 
+PAR] 
+You have recovered balance on all limbs.
+H:5460|100% M:4632|93%  15:04:36:926  [ Dominius ][0|0|0|0|70.8|0][wear PAR] 
+Dominius eats an aurum flake.
+You may eat another plant or mineral.
+H:5460|100% M:4632|93%  15:04:37:404  [ Dominius ][0|0|0|0|70.8|0][wear PAR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+Envenomed: (Kalmia)
+Sliced:    (Dominius)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (77%/100%).
+Afflicted: (Asthma Paralysis)
+[ast, clum[50], weari[50], deaf, para]
+[OUTR]: 1 Bloodroot (889)
+Dominius takes a drink from an elegant diamond vial.
+Dominius eats a magnesium chip.
+Processed Cures(paralysis)
+[ast, clum[50], weari[50], deaf]
+
+H:5460|100% M:4607|92%  15:04:38:839  [ Dominius ][0|0|0|0|70.8|0][wear] 
+You may eat another plant or mineral. Eat (1.578)
+H:5460|100% M:4607|92%  15:04:39:056  [ Dominius ][0|0|0|0|70.8|0][wear] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your limbs strengthen and you feel stronger.
+[AFF]: Weariness
+
+====================BLACKOUT====================
+====================BLACKOUT====================
+====================BLACKOUT====================
+Dominius whips a dark ash wood staff at the side of your neck.
+As Dominius's blow crunches into you, you perceive that he has dealt 6.7% damage to your head.
+Your body locks in paralysis as numbness overtakes your body below the neck.
+[AFF]: Paralysis
+Health lost: 323 (physical blunt).
+Bleeding off the momentum of his previous strike, Dominius turns and brings a dark ash wood
+staff around in a thrust at your solar plexus.
+As Dominius's blow crunches into you, you perceive that he has dealt 13.4% damage to your
+torso.
+Your breath exits your lungs in an explosive gasp as the end of the staff smashes home.
+[AFF]: Asthma
+[AFF]: Blackout
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT  15:04:39:155  [ Dominius ][0|0|0|0|70.8|0]
+You have recovered balance on all limbs.
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT  15:04:39:368  [ Dominius ][0|0|0|0|70.8|0]
+You may utilise the tree tattoo again. Tree (13.968)
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT  15:04:39:637  [ Dominius ][0|0|0|0|70.8|0]
+You are no longer stunned.
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT  15:04:40:135  [ Dominius ][0|0|0|0|70.8|0]
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT  15:04:40:309  [ Dominius ][0|0|0|0|70.8|0]
+Dominius eats an aurum flake.
+Processed Cures(asthma clumsiness weariness)
+[ast[67], deaf]
+
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT  15:04:40:430  [ Dominius ][0|0|0|0|70.8|0]
+You may drink another health or mana elixir. Health (4.308)
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT  15:04:40:433  [ Dominius ][0|0|0|0|70.8|0]
+[Curing]: SIP HEALTH
+The elixir heals and soothes you.
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT  15:04:40:628  [ Dominius ][0|0|0|0|70.8|0]
+You may eat another plant or mineral.
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT  15:04:40:630  [ Dominius ][0|0|0|0|70.8|0]
+Your ferocity decreases.
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT  15:04:40:717  [ Dominius ][0|0|0|0|70.8|0]
+[Curing]: EAT BLOODROOT
+[AFF]: Paralysis
+Envenomed: (Gecko)
+Sileris stripped.
+Ferocity:  [####|####|####|####]
+[HP]:      (89%/100%)
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT  15:04:40:857  [ Dominius ][0|0|0|0|70.8|0]
+[Curing]: TOUCH TREE
+[AFF]: Blackout
+H:5460|100% M:4507|90%  15:04:41:006  [ Dominius ][0|0|0|0|70.8|0][AST] 
+
+[DEF]: Fangbarrier
+The sileris berry juice hardens into a supple purple shell.
+H:5460|100% M:4507|90%  15:04:41:087  [ Dominius ][0|0|0|0|70.8|0][AST] 
+Dominius twirls his staff, a look of serene calm overcoming him.
+H:5460|100% M:4507|90%  15:04:41:179  [ Dominius ][0|0|0|0|70.8|0][AST] 
+You may eat another bit of irid moss or potash.
+H:5460|100% M:4457|89%  15:04:42:007  [ Dominius ][0|0|0|0|70.8|0][AST] 
+Dominius eats a magnesium chip.
+H:5460|100% M:4457|89%  15:04:42:181  [ Dominius ][0|0|0|0|70.8|0][AST] 
+You may eat another plant or mineral.
+H:5460|100% M:4457|89%  15:04:42:368  [ Dominius ][0|0|0|0|70.8|0][AST] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+Dominius whips a dark ash wood staff in a tight arc, sweeping it at your head.
+As Dominius's blow crunches into you, you perceive that he has dealt 4.7% damage to your head.
+Stars explode in front of your eyes as the staff cracks you across the side of the head.
+[AFF]: Dizziness
+Your shield completely absorbs the damage.
+Bracing his back foot, Dominius lunges forward with a dark ash wood staff at your face.
+As Dominius's blow crunches into you, you perceive that he has dealt 4.7% damage to your head.
+The staff drives into your face, your jaw shattering under the blow.
+[AFF]: Anorexia
+[AFF]: Stuttering
+Health lost: 294 (physical blunt).
+Snapping his leg out to its full extent, Dominius drives a heel into your left knee.
+As Dominius's blow crunches into you, you perceive that he has dealt 9.2% damage to your left
+leg.
+You feel your knee crunch under the force of the kick, nausea and pain racking you.
+[AFF]: Brokenleftleg
+Health lost: 318 (physical blunt).
+H:4848|88% M:4457|89%  15:04:42:474  [ Dominius ][0|0|0|0|70.8|0] ( -612h 11% )[ll1 dizz ANO 
+stut] 
+[Curing]: APPLY MENDING TO LEGS
+You take out some salve and quickly rub it on your legs.
+The bones in your left leg mend.
+[AFF]: Brokenleftleg
+[Curing]: FOCUS MIND
+You focus your mind intently on curing your mental maladies.
+You are no longer dizzy.
+[AFF]: Dizziness
+H:4848|88% M:4207|84%  15:04:42:574  [ Dominius ][0|0|0|0|70.8|0] ( -250m 5% )[ANO stut] 
+You have recovered balance on all limbs.
+H:4848|88% M:4207|84%  15:04:42:777  [ Dominius ][0|0|0|0|70.8|0][ANO stut] 
+H:4848|88% M:4207|84%  15:04:43:345  [ Dominius ][0|0|0|0|70.8|0][ANO stut] 
+Envenomed: (Xentio)
+Sliced:    (Dominius)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (91%/100%).
+Afflicted: (Clumsiness Paralysis)
+[ast[67], clum, deaf, para]
+H:4848|88% M:4107|82%  15:04:43:423  [ Dominius ][0|0|0|0|70.8|0][ANO stut] 
+You may apply another salve to yourself. Legs (1.012)
+H:4848|88% M:4107|82%  15:04:43:584  [ Dominius ][0|0|0|0|70.8|0][ANO stut] 
+[Curing]: APPLY EPIDERMAL TO BODY
+You take out some salve and quickly rub it on your body.
+Food is no longer repulsive to you.
+[AFF]: Anorexia
+H:4848|88% M:4107|82%  15:04:43:588  [ Dominius ][0|0|0|0|70.8|0][stut] 
+You suddenly perceive the vague outline of an aura of rebounding around Dominius.
+H:4848|88% M:4107|82%  15:04:43:670  [ Dominius ][0|0|0|0|70.8|0][stut] 
+H:4848|88% M:4107|82%  15:04:43:674  [ Dominius ][0|0|0|0|70.8|0][stut] 
+Dominius eats a magnesium chip.
+Processed Cures(paralysis)
+[ast[67], clum, deaf, Reb]
+
+H:4848|88% M:4107|82%  15:04:43:762  [ Dominius ][0|0|0|0|70.8|0][stut] 
+You may eat another plant or mineral.
+H:4848|88% M:4107|82%  15:04:44:071  [ Dominius ][0|0|0|0|70.8|0][stut] 
+Dominius's aura of weapons rebounding disappears.
+Dominius whips a dark ash wood staff in a tight arc, sweeping it at your head.
+As Dominius's blow crunches into you, you perceive that he has dealt 4.7% damage to your head.
+Stars explode in front of your eyes as the staff cracks you across the side of the head.
+[AFF]: Dizziness
+Health lost: 294 (physical blunt).
+Bracing his back foot, Dominius lunges forward with a dark ash wood staff at your face.
+As Dominius's blow crunches into you, you perceive that he has dealt 4.7% damage to your head.
+The staff drives into your face, your jaw shattering under the blow.
+[AFF]: Anorexia
+Health lost: 294 (physical blunt).
+Snapping his leg out to its full extent, Dominius drives a heel into your left knee.
+As Dominius's blow crunches into you, you perceive that he has dealt 9.2% damage to your left
+leg.
+You feel your knee crunch under the force of the kick, nausea and pain racking you.
+[AFF]: Brokenleftleg
+Health lost: 318 (physical blunt).
+H:3942|72% M:4107|82%  15:04:44:399  [ Dominius ][0|0|0|0|70.8|0] ( -906h 16% )[ll1 dizz ANO 
+stut] 
+You may apply another salve to yourself. Body (0.901)
+H:3942|72% M:4107|82%  15:04:44:489  [ Dominius ][0|0|0|0|70.8|0][ll1 dizz ANO stut] 
+[Curing]: APPLY MENDING TO LEGS
+You take out some salve and quickly rub it on your legs.
+The bones in your left leg mend.
+[AFF]: Brokenleftleg
+H:3942|72% M:4107|82%  15:04:44:663  [ Dominius ][0|0|0|0|70.8|0][dizz ANO stut] 
+Dominius shivers particularly intensely.
+H:3942|72% M:4107|82%  15:04:44:881  [ Dominius ][0|0|0|0|70.8|0][dizz ANO stut] 
+Your mind is able to focus once again. Focus (2.388)
+H:3942|72% M:4107|82%  15:04:44:961  [ Dominius ][0|0|0|0|70.8|0][dizz ANO stut] 
+[Curing]: FOCUS MIND
+You focus your mind intently on curing your mental maladies.
+You are no longer dizzy.
+[AFF]: Dizziness
+Dominius's eyes lose their focus suddenly.
+Dominius touches a tree of life tattoo.
+You may drink another health or mana elixir. Health (4.45)
+H:3942|72% M:3857|77%  15:04:45:079  [ Dominius ][0|0|0|0|70.8|0] ( -250m 5% )[ANO stut] 
+You have recovered balance on all limbs.
+Envenomed: (Vernalius)
+Sliced:    (Dominius)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Sensitivity)
+[HP]:      (82%/100%).
+Afflicted: (Weariness Paralysis Prefarar)
+[ast[44], clum[67], sen, weari, deaf, frzn[67], para]
+Dominius eats a magnesium chip.
+Dominius takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+Processed Cures(paralysis)
+H:3942|72% M:3757|75%  15:04:45:420  [ Dominius ][0|0|0|0|70.8|0][ANO stut] 
+You may apply another salve to yourself. Legs (0.809)
+H:3942|72% M:3757|75%  15:04:45:470  [ Dominius ][0|0|0|0|70.8|0][ANO stut] 
+[Curing]: APPLY EPIDERMAL TO BODY
+You take out some salve and quickly rub it on your body.
+Food is no longer repulsive to you.
+[AFF]: Anorexia
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+You may apply another salve to yourself. Body (0.917)
+H:5316|97% M:4104|82%  15:04:46:573  [ Dominius ][0|0|0|0|70.8|0] ( +1374h 25% +347m 6% )[stut]
+ 
+Dominius drops into a lower stance, his weapon snapping up into an aggressive guard.
+H:5316|97% M:4104|82%  15:04:46:700  [ Dominius ][0|0|0|0|70.8|0][stut] 
+[Curing]: APPLY EPIDERMAL TO HEAD
+You take out some salve and quickly rub it on your head.
+Your tongue will finally obey your commands properly.
+[AFF]: Stuttering
+Dominius eats a magnesium chip.
+Dominius applies a quicksilver droplet to himself.
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Dominius)
+Runeblade: (Nairat)
+Afflicted: (Frozen)
+Empower:   (Sleizak)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (68%/100%).
+Afflicted: (Slickness Paralysis)
+[ast[44], clum[67], sen, weari, deaf, slick, frzn[200], para]
+Dominius takes a drink from an elegant diamond vial.
+Dominius eats a potash crystal.
+H:5316|97% M:3904|78%  15:04:47:363  [ Dominius ][0|0|0|0|70.8|0] ( -200m 4% )
+Your mind is able to focus once again. Focus (2.481)
+H:5316|97% M:3904|78%  15:04:47:509  [ Dominius ][0|0|0|0|70.8|0]
+You may apply another salve to yourself. Head (0.926)
+H:5316|97% M:3904|78%  15:04:47:709  [ Dominius ][0|0|0|0|70.8|0]
+Dominius eats a magnesium chip.
+Processed Cures(paralysis slickness)
+[ast[44], clum[67], sen, weari, deaf, slick[50], frzn[200], para[50]]
+
+H:5316|97% M:3979|80%  15:04:48:686  [ Dominius ][0|0|0|0|70.8|0]
+Dominius lashes out with a straight kick at you.
+As Dominius's blow crunches into you, you perceive that he has dealt 9.2% damage to your left
+arm.
+Pain blossoms as the instep of Dominius's foot smashes into the vulnerable cluster of nerves
+beneath your left arm, sending you spinning to the ground.
+[AFF]: Prone
+Health lost: 253 (physical blunt).
+Dropping back into a low crouch, Dominius whips a dark ash wood staff at your left thigh.
+As Dominius's blow crunches into you, you perceive that he has dealt 9.2% damage to your left
+leg.
+The staff cracks across your left thigh, the muscles suddenly becoming weak.
+[AFF]: Weariness
+Health lost: 234 (physical blunt).
+Dropping back into a low crouch, Dominius whips a dark ash wood staff at your right thigh.
+The staff cracks across your right thigh, the muscles suddenly becoming weak.
+[AFF]: Lethargy
+Health lost: 237 (physical blunt).
+H:4592|84% M:3979|80%  15:04:49:051  [ Dominius ][0|0|0|0|70.8|0] ( -724h 13% )[wear leth PR] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your limbs strengthen and you feel stronger.
+[AFF]: Weariness
+H:4592|84% M:3979|80%  15:04:49:124  [ Dominius ][0|0|0|0|70.8|0][leth PR] 
+You have recovered balance on all limbs.
+[Curing]: STAND
+You stand up.
+H:4592|84% M:3979|80%  15:04:49:211  [ Dominius ][0|0|0|0|70.8|0][leth] 
+H:4592|84% M:3979|80%  15:04:49:214  [ Dominius ][0|0|0|0|70.8|0][leth] 
+You cease wielding a blessed legionnaire's longsword in your left hand.
+You start to wield a mithril broadsword in your left hand.
+Envenomed: (Slike)
+Sliced:    (Left leg) (82.6%)
+A mithril broadsword grows warm in your hand as you feel yourself become attuned to the sleizak
+rune sketched upon it.
+Shield:    (Scrambled Brains)
+Ferocity:  [####|####|####|####]
+[HP]:      (81%/100%).
+Afflicted: (Anorexia Dizziness).*
+[diz, ast[44], clum[67], sen, weari, anor, deaf, slick[50], frzn[200], para[50]]
+A look of extreme focus crosses the face of Dominius.
+You focus on automatically empowering the isaz, sleizak, and inguz runes.
+H:4592|84% M:3879|78%  15:04:49:403  [ Dominius ][0|0|0|0|82.6|0][leth] 
+H:4701|86% M:3879|78%  15:04:49:840  [ Dominius ][0|0|0|0|82.6|0][leth] 
+You may drink another health or mana elixir. Health (4.415)
+H:4701|86% M:3879|78%  15:04:50:073  [ Dominius ][0|0|0|0|82.6|0][leth] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5460|100% M:3879|78%  15:04:50:085  [ Dominius ][0|0|0|0|82.6|0] ( +759h 13% )[leth] 
+
+Empower:   (Sleizak)
+You may eat another plant or mineral.
+H:5460|100% M:3779|76%  15:04:50:567  [ Dominius ][0|0|0|0|82.6|0][leth] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+The lethargy evaporates, leaving you full of energy.
+[AFF]: Lethargy
+[OUTR]: 1 Ginseng (570)
+Dominius lashes out with a straight kick at you.
+As Dominius's blow crunches into you, you perceive that he has dealt 9.2% damage to your left
+arm.
+Pain blossoms as the instep of Dominius's foot smashes into the vulnerable cluster of nerves
+beneath your left arm, sending you spinning to the ground.
+[AFF]: Prone
+Your shield completely absorbs the damage.
+Dropping back into a low crouch, Dominius whips a dark ash wood staff at your left thigh.
+As Dominius's blow crunches into you, you perceive that he has dealt 9.2% damage to your left
+leg.
+The staff cracks across your left thigh, the muscles suddenly becoming weak.
+[AFF]: Weariness
+Health lost: 240 (physical blunt).
+Dropping back into a low crouch, Dominius whips a dark ash wood staff at your right thigh.
+The staff cracks across your right thigh, the muscles suddenly becoming weak.
+[AFF]: Lethargy
+Health lost: 240 (physical blunt).
+H:4980|91% M:3779|76%  15:04:51:101  [ Dominius ][0|0|0|0|82.6|0] ( -480h 8% )[wear leth PR] 
+
+Processed Cures(anorexia dizziness)
+Dominius eats a magnesium chip.
+Dominius takes some salve from a vial and rubs it on his skin.
+Processed Cures(anorexia frozen)
+Processed Cures(paralysis)
+You have recovered balance on all limbs.
+[Curing]: STAND
+You stand up.
+H:4980|91% M:3729|75%  15:04:51:640  [ Dominius ][0|0|0|0|82.6|0][wear leth] 
+Envenomed: (Slike)
+Sliced:    (Left leg) (94.4%)
+Proc:      (Sleizak 1)
+Shield:    (Scrambled Brains)
+Ferocity:  [####|####|####|####]
+[HP]:      (75%/100%)
+You may eat another bit of irid moss or potash..
+Afflicted: (Anorexia Dizziness).*
+[diz, ast[44], clum[67], sen, weari, naus, anor, deaf, frzn[150]]
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+A look of extreme focus crosses the face of Dominius.
+H:5416|99% M:4026|81%  15:04:51:867  [ Dominius ][0|0|0|0|94.4|0] ( +436h 7% +297m 5% )[wear 
+leth] 
+You may eat another plant or mineral. Eat (1.503)
+H:5416|99% M:4026|81%  15:04:52:190  [ Dominius ][0|0|0|0|94.4|0][wear leth] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your limbs strengthen and you feel stronger.
+[AFF]: Weariness
+Dominius takes some salve from a vial and rubs it on his skin.
+Processed Cures(anorexia frozen)
+H:5416|99% M:4026|81%  15:04:52:649  [ Dominius ][0|0|0|0|94.4|0][leth] 
+Dominius: has shielded!
+Dominius: has shielded!
+Dominius: has shielded!
+Dominius takes some salve from a vial and rubs it on his body.
+Processed Cures(anorexia frozen)
+Dominius eats an aurum flake.
+Dominius takes a drink from an elegant diamond vial.
+Processed Cures(asthma clumsiness sensitivity weariness)
+Dominius eats a potash crystal.
+You may eat another plant or mineral.
+H:5416|99% M:4026|81%  15:04:53:771  [ Dominius ][0|0|0|0|94.4|0][leth] 
+
+Processed Cures(dizziness)
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+The lethargy evaporates, leaving you full of energy.
+[AFF]: Lethargy
+[OUTR]: 1 Ginseng (569)
+You have recovered balance on all limbs.
+Razed: Shield
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (98%/100%).
+Afflicted: (Paralysis)
+[clum[50], sen[75], weari[75], naus, deaf, frzn[50], para]
+A look of extreme focus crosses the face of Dominius.
+H:5416|99% M:3926|79%  15:04:54:368  [ Dominius ][0|0|0|0|94.4|0]
+You may drink another health or mana elixir. Health (4.562)
+H:5416|99% M:3926|79%  15:04:54:648  [ Dominius ][0|0|0|0|94.4|0]
+[Curing]: SIP MANA
+You take a drink from an oaken vial.
+Your mind feels stronger and more alert.
+H:5416|99% M:4601|92%  15:04:54:794  [ Dominius ][0|0|0|0|94.4|0] ( +675m 13% )
+You may utilise the tree tattoo again.
+You may eat another plant or mineral. Eat (1.508)
+H:5416|99% M:4601|92%  15:04:55:497  [ Dominius ][0|0|0|0|94.4|0]
+Dominius eats a magnesium chip.
+Processed Cures(paralysis)
+[clum[50], sen[75], weari[75], naus, deaf, frzn[50]]
+
+H:5416|99% M:4601|92%  15:04:55:559  [ Dominius ][0|0|0|0|94.4|0]
+You have recovered balance on all limbs.
+That is not a valid body part to parry. Choose from head, torso, left arm, right arm, left leg,
+right leg and nothing.
+Envenomed: (Kalmia)
+Sliced:    (Right leg) (11.8%)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (85%/100%).
+Afflicted: (Asthma Paralysis).*
+[ast, clum[50], sen[75], weari[75], naus, deaf, frzn[50], para]
+Dominius: has shielded!
+Dominius: has shielded!
+Dominius: has shielded!
+A supple metallic shell of quicksilver has formed around Dominius.
+Dominius eats an aurum flake.
+Dominius takes a long drag off his pipe.
+Processed Cures(asthma clumsiness sensitivity weariness)
+You may eat another bit of irid moss or potash.
+H:5416|99% M:4451|89%  15:04:57:786  [ Dominius ][0|0|0|0|94.4|11.8]
+You have recovered balance on all limbs.
+Razed: Shield
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (80%/100%).
+[clum[37], sen[56], weari[56], naus, deaf, frzn[50], para]
+
+H:5416|99% M:4351|87%  15:04:58:294  [ Dominius ][0|0|0|0|94.4|11.8]
+Dominius takes a drink from an elegant diamond vial.
+Dominius eats a magnesium chip.
+Processed Cures(paralysis)
+[clum[37], sen[56], weari[56], naus, deaf, frzn[50]]
+
+H:5416|99% M:4426|89%  15:04:58:805  [ Dominius ][0|0|0|0|94.4|11.8]
+Dominius: has shielded!
+Dominius: has shielded!
+Dominius: has shielded!
+You may drink another health or mana elixir. Mana (4.31)
+H:5416|99% M:4426|89%  15:04:59:104  [ Dominius ][0|0|0|0|94.4|11.8]
+
+THEY CAN TOUCH TREE AGAIN!
+You have recovered balance on all limbs.
+Razed: Shield
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (98%/100%).
+Afflicted: (Paralysis)
+[clum[37], sen[56], weari[56], naus, deaf, frzn[50], para]
+Dominius eats an aurum flake.
+Processed Cures(clumsiness sensitivity weariness)
+[sen[38], weari[38], naus, deaf, frzn[50], para]
+
+H:5460|100% M:4326|87%  15:05:00:858  [ Dominius ][0|0|0|0|94.4|11.8]
+You have recovered balance on all limbs.
+You cease wielding a mithril broadsword in your left hand.
+You start to wield a blessed legionnaire's longsword in your left hand.
+Envenomed: (Xentio)
+Sliced:    (Right leg) (18.9%)
+Proc:      (Sleizak 2)
+Empower:   (Inguz)
+Shield:    (Asthma)
+Ferocity:  [####|####|####|####]
+[HP]:      (89%/100%)
+Dominius: has shielded!
+Dominius: has shielded!
+Dominius: has shielded!.
+Afflicted: (Clumsiness Asthma).*
+[voyria, ast, clum, sen[38], weari, naus, deaf, frzn[50], para]
+You focus on automatically empowering the isaz, sleizak, and inguz runes.
+H:5460|100% M:4076|82%  15:05:02:005  [ Dominius ][0|0|0|0|94.4|18.9] ( -250m 5% )
+[Curing]: SIP MANA
+You take a drink from an oaken vial.
+Your mind feels stronger and more alert.
+Dominius takes a drink from an elegant diamond vial.
+Dominius eats an aurum flake.
+You have recovered balance on all limbs.
+Razed: Shield
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (90%/100%).
+[ast[75], clum[75], weari[75], naus, deaf, frzn[50], para]
+
+H:5460|100% M:4863|97%  15:05:03:879  [ Dominius ][0|0|0|0|94.4|18.9] ( +787m 15% )
+Dominius eats a magnesium chip.
+Dominius lashes out with a straight kick at you.
+As Dominius's blow crunches into you, you perceive that he has dealt 9.2% damage to your left
+arm.
+[AFF]: Brokenleftarm
+[AFF]: Damagedleftarm
+Your left arm is greatly damaged from the beating.
+Pain blossoms as the instep of Dominius's foot smashes into the vulnerable cluster of nerves
+beneath your left arm, sending you spinning to the ground.
+[AFF]: Prone
+Health lost: 328 (physical blunt).
+Dropping back into a low crouch, Dominius whips a dark ash wood staff at your left thigh.
+As Dominius's blow crunches into you, you perceive that he has dealt 9.2% damage to your left
+leg.
+The staff cracks across your left thigh, the muscles suddenly becoming weak.
+[AFF]: Weariness
+Health lost: 303 (physical blunt).
+Dropping back into a low crouch, Dominius whips a dark ash wood staff at your right thigh.
+The staff cracks across your right thigh, the muscles suddenly becoming weak.
+[AFF]: Lethargy
+Health lost: 307 (physical blunt).
+H:4522|82% M:4863|97%  15:05:04:824  [ Dominius ][0|0|0|0|94.4|18.9] ( -938h 17% )[LA2 wear 
+leth PR] 
+[Curing]: APPLY RESTORATION TO ARMS
+You take out some salve and quickly rub it on your arms.
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your limbs strengthen and you feel stronger.
+[AFF]: Weariness
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+The lethargy evaporates, leaving you full of energy.
+[AFF]: Lethargy
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+H:4958|90% M:4966|100%  15:05:04:908  [ Dominius ][0|0|0|0|94.4|18.9] ( +436h 7% )[LA2 PR] 
+You have recovered balance on all limbs.
+[Curing]: STAND
+You stand up.
+H:4958|90% M:4966|100%  15:05:05:692  [ Dominius ][0|0|0|0|94.4|18.9][LA2] 
+Your left arm is too severely damaged to permit that.
+Both your arms must be free and functioning to do that.
+Envenomed: (Gecko)
+Sliced:    (Right leg) (26%)
+Sileris stripped...
+Proc:      (Inguz)
+Afflicted: (Sensitivity)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Proned)
+Afflicted: (Prone)
+[HP]:      (79%/100%).
+Afflicted: (Slickness Paralysis).*
+[ast[75], clum[75], sen, weari[75], naus, deaf, slick, frzn[50], prn, para]
+Dominius eats a magnesium chip.
+Dominius takes some elixir from an elegant diamond vial and rubs it into his torso.ribs: 0
+
+Processed Cures(paralysis slickness)
+H:4958|90% M:4866|97%  15:05:05:712  [ Dominius ][0|0|0|0|94.4|26][LA2] 
+You suddenly perceive the vague outline of an aura of rebounding around Dominius.
+H:4958|90% M:4866|97%  15:05:05:761  [ Dominius ][0|0|0|0|94.4|26][LA2] 
+You may eat another plant or mineral.
+You may drink another health or mana elixir. Mana (4.403)
+H:4958|90% M:4816|96%  15:05:06:440  [ Dominius ][0|0|0|0|94.4|26][LA2] 
+Dominius eats a magnesium chip.
+Dominius stands up.
+ + + + STANDING + + +
+Processed Cures(slickness)
+Dominius applies a quicksilver droplet to himself.
+H:4958|90% M:4816|96%  15:05:07:439  [ Dominius ][0|0|0|0|94.4|26][LA2] 
+Dominius's aura of weapons rebounding disappears.
+Dominius lashes out with a straight kick at you.
+You parry the attack with a deft manoeuvre.
+Dropping back into a low crouch, Dominius whips a dark ash wood staff at your left thigh.
+As Dominius's blow crunches into you, you perceive that he has dealt 9.2% damage to your left
+leg.
+The staff cracks across your left thigh, the muscles suddenly becoming weak.
+[AFF]: Weariness
+Health lost: 310 (physical blunt).
+Dropping back into a low crouch, Dominius whips a dark ash wood staff at your right thigh.
+The staff cracks across your right thigh, the muscles suddenly becoming weak.
+[AFF]: Lethargy
+Your shield completely absorbs the damage.
+H:4648|85% M:4816|96%  15:05:07:672  [ Dominius ][0|0|0|0|94.4|26] ( -310h 5% )[LA2 wear leth] 
+You have recovered balance on all limbs.
+Your left arm is too severely damaged to permit that.
+Both your arms must be free and functioning to do that.
+Razed: Nothing
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (77%/100%).
+Afflicted: (Paralysis)
+[ast, clum[75], sen, weari[75], naus, deaf, frzn[50], para]
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your limbs strengthen and you feel stronger.
+[AFF]: Weariness
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+Your left arm feels stronger and healthier.
+[AFF]: Damagedleftarm
+You may apply another salve to yourself. Arms (4.011)
+H:5460|100% M:4791|96%  15:05:08:913  [ Dominius ][0|0|0|0|94.4|26] ( +812h 14% )[la1 leth] 
+[Curing]: APPLY MENDING TO ARMS
+You take out some salve and quickly rub it on your arms.
+The bones in your left arm mend.
+[AFF]: Brokenleftarm
+Dominius eats a magnesium chip.
+Processed Cures(paralysis)
+[ast, clum[75], sen, weari[75], naus, deaf, frzn[50]]
+
+H:5460|100% M:4791|96%  15:05:08:964  [ Dominius ][0|0|0|0|94.4|26][leth] 
+You may eat another plant or mineral.
+H:5460|100% M:4791|96%  15:05:09:354  [ Dominius ][0|0|0|0|94.4|26][leth] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+The lethargy evaporates, leaving you full of energy.
+[AFF]: Lethargy
+H:5460|100% M:4791|96%  15:05:09:532  [ Dominius ][0|0|0|0|94.4|26]
+[OUTR]: 1 Ginseng (568)
+You have recovered balance on all limbs.
+Dominius raises his arms above his head, and a strange blue light begins to emanate from
+between his palms.
+Blue light crackles forth from Dominius's palms, striking you down and snapping your puny
+limbs.
+[AFF]: Brokenrightleg
+[AFF]: Brokenrightarm
+[AFF]: Brokenleftleg
+[AFF]: Brokenleftarm
+[AFF]: Prone
+H:5460|100% M:4791|96%  15:05:09:691  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 ll1 PR] 
+
+H:5460|100% M:4791|96%  15:05:09:725  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 ll1 PR] 
+You cannot do that because both of your arms must be whole and unbound.
+You cannot do that because both of your arms must be whole and unbound.
+You must be standing to walk anywhere.
+You cannot do that because both of your arms must be whole and unbound.
+[HP]:      (79%/100%)
+H:5460|100% M:4691|94%  15:05:09:743  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 ll1 PR] 
+You cannot do that because both of your arms must be whole and unbound.
+You cannot do that because both of your arms must be whole and unbound.
+You must be standing to walk anywhere.
+You cannot do that because both of your arms must be whole and unbound.
+H:5460|100% M:4691|94%  15:05:09:760  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 ll1 PR] 
+You cannot do that because both of your arms must be whole and unbound.
+You cannot do that because both of your arms must be whole and unbound.
+You must be standing to walk anywhere.
+You cannot do that because both of your arms must be whole and unbound.
+H:5460|100% M:4691|94%  15:05:09:777  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 ll1 PR] 
+You cannot do that because both of your arms must be whole and unbound.
+You cannot do that because both of your arms must be whole and unbound.
+You must be standing to walk anywhere.
+You cannot do that because both of your arms must be whole and unbound.
+H:5460|100% M:4691|94%  15:05:09:794  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 ll1 PR] 
+You cannot do that because both of your arms must be whole and unbound.
+You cannot do that because both of your arms must be whole and unbound.
+You must be standing to walk anywhere.
+You cannot do that because both of your arms must be whole and unbound.
+H:5460|100% M:4691|94%  15:05:09:855  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 ll1 PR] 
+You cannot do that because both of your arms must be whole and unbound.
+You cannot do that because both of your arms must be whole and unbound.
+You must be standing to walk anywhere.
+You cannot do that because both of your arms must be whole and unbound.
+H:5460|100% M:4691|94%  15:05:09:874  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 ll1 PR] 
+You cannot do that because both of your arms must be whole and unbound.
+You cannot do that because both of your arms must be whole and unbound.
+You must be standing to walk anywhere.
+You cannot do that because both of your arms must be whole and unbound.
+You may apply another salve to yourself. Arms (0.944)
+H:5460|100% M:4691|94%  15:05:09:907  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 ll1 PR] 
+
+H:5460|100% M:4691|94%  15:05:09:975  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 ll1 PR] 
+You cannot do that because both of your arms must be whole and unbound.
+You cannot do that because both of your arms must be whole and unbound.
+You must be standing to walk anywhere.
+You cannot do that because both of your arms must be whole and unbound.
+[HP]:      (79%/100%)
+H:5460|100% M:4591|92%  15:05:09:992  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 ll1 PR] 
+You cannot do that because both of your arms must be whole and unbound.
+You cannot do that because both of your arms must be whole and unbound.
+You must be standing to walk anywhere.
+You cannot do that because both of your arms must be whole and unbound.
+H:5460|100% M:4591|92%  15:05:10:009  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 ll1 PR] 
+You cannot do that because both of your arms must be whole and unbound.
+You cannot do that because both of your arms must be whole and unbound.
+You must be standing to walk anywhere.
+You cannot do that because both of your arms must be whole and unbound.
+H:5460|100% M:4591|92%  15:05:10:027  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 ll1 PR] 
+You cannot do that because both of your arms must be whole and unbound.
+You cannot do that because both of your arms must be whole and unbound.
+You must be standing to walk anywhere.
+You cannot do that because both of your arms must be whole and unbound.
+H:5460|100% M:4591|92%  15:05:10:100  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 ll1 PR] 
+You cannot do that because both of your arms must be whole and unbound.
+You cannot do that because both of your arms must be whole and unbound.
+You must be standing to walk anywhere.
+You cannot do that because both of your arms must be whole and unbound.
+H:5460|100% M:4591|92%  15:05:10:118  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 ll1 PR] 
+You cannot do that because both of your arms must be whole and unbound.
+You cannot do that because both of your arms must be whole and unbound.
+You must be standing to walk anywhere.
+You cannot do that because both of your arms must be whole and unbound.
+[Curing]: APPLY MENDING TO LEGS
+You take out some salve and quickly rub it on your legs.
+The bones in your left leg mend.
+[AFF]: Brokenleftleg
+H:5460|100% M:4591|92%  15:05:10:131  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 PR] 
+
+H:5460|100% M:4591|92%  15:05:10:161  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 PR] 
+You cannot do that because both of your arms must be whole and unbound.
+You cannot do that because both of your arms must be whole and unbound.
+You must be standing to walk anywhere.
+You cannot do that because both of your arms must be whole and unbound.
+H:5460|100% M:4591|92%  15:05:10:225  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 PR] 
+You cannot do that because both of your arms must be whole and unbound.
+You cannot do that because both of your arms must be whole and unbound.
+You must be standing to walk anywhere.
+You cannot do that because both of your arms must be whole and unbound.
+H:5460|100% M:4591|92%  15:05:10:243  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 PR] 
+You cannot do that because both of your arms must be whole and unbound.
+You cannot do that because both of your arms must be whole and unbound.
+You must be standing to walk anywhere.
+You cannot do that because both of your arms must be whole and unbound.
+H:5460|100% M:4591|92%  15:05:10:281  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 PR] 
+You cannot do that because both of your arms must be whole and unbound.
+You cannot do that because both of your arms must be whole and unbound.
+You must be standing to walk anywhere.
+You cannot do that because both of your arms must be whole and unbound.
+H:5460|100% M:4591|92%  15:05:10:341  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 PR] 
+You cannot do that because both of your arms must be whole and unbound.
+You cannot do that because both of your arms must be whole and unbound.
+You must be standing to walk anywhere.
+You cannot do that because both of your arms must be whole and unbound.
+H:5460|100% M:4591|92%  15:05:10:360  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 PR] 
+You cannot do that because both of your arms must be whole and unbound.
+You cannot do that because both of your arms must be whole and unbound.
+You must be standing to walk anywhere.
+You cannot do that because both of your arms must be whole and unbound.
+H:5460|100% M:4591|92%  15:05:10:399  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 PR] 
+You cannot do that because both of your arms must be whole and unbound.
+You cannot do that because both of your arms must be whole and unbound.
+You must be standing to walk anywhere.
+You cannot do that because both of your arms must be whole and unbound.
+H:5460|100% M:4591|92%  15:05:10:474  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 PR] 
+You cannot do that because both of your arms must be whole and unbound.
+You cannot do that because both of your arms must be whole and unbound.
+You must be standing to walk anywhere.
+You cannot do that because both of your arms must be whole and unbound.
+H:5460|100% M:4591|92%  15:05:10:492  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 PR] 
+You cannot do that because both of your arms must be whole and unbound.
+You cannot do that because both of your arms must be whole and unbound.
+You must be standing to walk anywhere.
+You cannot do that because both of your arms must be whole and unbound.
+Dominius eats an aurum flake.
+Dominius takes a long drag off his pipe.
+Processed Cures(asthma clumsiness sensitivity weariness)
+H:5460|100% M:4591|92%  15:05:10:701  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 PR] 
+Ferocity:  [####|####|####|####]
+You may eat another bit of irid moss or potash.
+H:5460|100% M:4591|92%  15:05:10:885  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 PR] 
+You may eat another plant or mineral. Eat (1.539)
+You may apply another salve to yourself. Legs (0.941)
+H:5460|100% M:4591|92%  15:05:11:071  [ Dominius ][0|0|0|0|94.4|26][rl1 ra1 la1 PR] 
+[Curing]: APPLY MENDING TO LEGS
+You take out some salve and quickly rub it on your legs.
+The bones in your right leg mend.
+[AFF]: Brokenrightleg
+[Curing]: STAND
+You stand up.
+H:5460|100% M:4591|92%  15:05:11:164  [ Dominius ][0|0|0|0|94.4|26][ra1 la1] 
+
+-----------------------------------------------------------------------------------------------
+          Target set to: Dominius (Level 129 Shikudo)          
+-----------------------------------------------------------------------------------------------
+ Reset Success!
+
+You may drink another health or mana elixir. Health (4.335)
+You may apply another salve to yourself. Legs (0.975)
+H:5460|100% M:4541|91%  15:05:12:137  [ Dominius ][0|0|0|0|94.4|26][ra1 la1] 
+Your target is now: Dominius (an adventurer)
+H:5460|100% M:4541|91%  15:05:12:226  [ Dominius ][0|0|0|0|94.4|26][ra1 la1] 
+Dominius is not currently an ally.
+H:5460|100% M:4541|91%  15:05:12:229  [ Dominius ][0|0|0|0|94.4|26][ra1 la1] 
+Dominius is already an enemy.
+H:5460|100% M:4541|91%  15:05:12:232  [ Dominius ][0|0|0|0|94.4|26][ra1 la1] 
+[Curing]: APPLY MENDING TO ARMS
+You take out some salve and quickly rub it on your arms.
+The bones in your left arm mend.
+[AFF]: Brokenleftarm
+Dominius eats a ferrum flake.
+H:5460|100% M:4541|91%  15:05:12:337  [ Dominius ][0|0|0|0|94.4|26][ra1] 
+Dominius rises onto the balls of his feet, a look of grim certainty overcoming his face.
+Dominius lashes out with a high kick at your torso.
+You parry the attack with a deft manoeuvre.
+Dominius whips a dark ash wood staff at the side of your neck.
+As Dominius's blow crunches into you, you perceive that he has dealt 6.7% damage to your head.
+Your body locks in paralysis as numbness overtakes your body below the neck.
+[AFF]: Paralysis
+Health lost: 323 (physical blunt).
+Bleeding off the momentum of his previous strike, Dominius turns and brings a dark ash wood
+staff around in a thrust at your solar plexus.
+As Dominius's blow crunches into you, you perceive that he has dealt 13.4% damage to your
+torso.
+Your breath exits your lungs in an explosive gasp as the end of the staff smashes home.
+[AFF]: Asthma
+Health lost: 323 (physical blunt).
+H:4814|88% M:4541|91%  15:05:12:560  [ Dominius ][0|0|0|0|94.4|26] ( -646h 11% )[ra1 AST PAR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+Your right arm is too severely damaged to permit that.
+Both your arms must be free and functioning to do that.
+You cease wielding a blessed legionnaire's longsword in your left hand.
+You start to wield a mithril broadsword in your left hand.
+Envenomed: (Xentio)
+Sliced:    (Torso) (11.8%)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (72%/100%).
+Afflicted: (Clumsiness Paralysis).*
+[clum, para]
+[OUTR]: 1 Bloodroot (888)
+You focus on automatically empowering the isaz, sleizak, and inguz runes.
+H:5460|100% M:4441|89%  15:05:12:894  [ Dominius ][0|11.8|0|0|94.4|26] ( +646h 11% )[ra1 AST] 
+The aura of kai energy clinging to your limbs fades.
+H:5460|100% M:4441|89%  15:05:12:904  [ Dominius ][0|11.8|0|0|94.4|26][ra1 AST] 
+Dominius takes a drink from an elegant diamond vial.
+You may apply another salve to yourself. Arms (0.979)
+H:5460|100% M:4441|89%  15:05:13:314  [ Dominius ][0|11.8|0|0|94.4|26][ra1 AST] 
+[Curing]: APPLY MENDING TO ARMS
+You take out some salve and quickly rub it on your arms.
+The bones in your right arm mend.
+[AFF]: Brokenrightarm
+H:5460|100% M:4441|89%  15:05:13:464  [ Dominius ][0|11.8|0|0|94.4|26][AST] 
+Dominius eats a magnesium chip.
+Processed Cures(paralysis)
+[clum]
+
+H:5460|100% M:4441|89%  15:05:13:911  [ Dominius ][0|11.8|0|0|94.4|26][AST] 
+You may eat another plant or mineral. Eat (1.534)
+H:5460|100% M:4441|89%  15:05:14:256  [ Dominius ][0|11.8|0|0|94.4|26][AST] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+H:5460|100% M:4441|89%  15:05:14:310  [ Dominius ][0|11.8|0|0|94.4|26]
+You may apply another salve to yourself. Arms (0.93)
+H:5460|100% M:4441|89%  15:05:14:394  [ Dominius ][0|11.8|0|0|94.4|26]
+Dominius whips a dark ash wood staff at the side of your neck.
+Your body locks in paralysis as numbness overtakes your body below the neck.
+[AFF]: Paralysis
+Health lost: 323 (physical blunt).
+Bleeding off the momentum of his previous strike, Dominius turns and brings a dark ash wood
+staff around in a thrust at your solar plexus.
+As Dominius's blow crunches into you, you perceive that he has dealt 13.4% damage to your
+torso.
+Your breath exits your lungs in an explosive gasp as the end of the staff smashes home.
+[AFF]: Asthma
+Health lost: 323 (physical blunt).
+Dominius lashes out with a high kick at your torso.
+As Dominius's blow crunches into you, you perceive that he has dealt 9.2% damage to your torso.
+The foot of Dominius drives into your solar plexus.
+Health lost: 376 (physical blunt).
+H:4438|81% M:4441|89%  15:05:14:606  [ Dominius ][0|11.8|0|0|94.4|26] ( -1022h 18% )[AST PAR] 
+You have recovered balance on all limbs.
+H:4438|81% M:4441|89%  15:05:15:025  [ Dominius ][0|11.8|0|0|94.4|26][AST PAR] 
+You are no longer stunned.
+H:4438|81% M:4441|89%  15:05:15:549  [ Dominius ][0|11.8|0|0|94.4|26][AST PAR] 
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+Dominius eats an aurum flake.
+You may eat another plant or mineral.
+H:4874|89% M:4838|97%  15:05:15:873  [ Dominius ][0|11.8|0|0|94.4|26] ( +436h 7% +397m 7% )[AST 
+PAR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+You cease wielding a mithril broadsword in your left hand.
+You start to wield a blessed legionnaire's longsword in your left hand.
+Envenomed: (Xentio)
+Sliced:    (Dominius)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Engage:    (Dominius)
+Equilibrium used: 2.00s..
+Afflicted: (Clumsiness Paralysis)
+[clum, para]
+[OUTR]: 1 Bloodroot (887)
+You focus on automatically empowering the isaz, sleizak, and inguz runes.
+H:4874|89% M:4788|96%  15:05:16:012  [ Dominius ][0|11.8|0|0|94.4|26][AST] 
+
+[Legacy]: Adjusted Dominius's class to Monk.
+You may drink another health or mana elixir. Health (4.451)
+H:4874|89% M:4738|95%  15:05:17:175  [ Dominius ][0|11.8|0|0|94.4|26][AST] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+Dominius eats a magnesium chip.
+A supple metallic shell of quicksilver has formed around Dominius.
+Dominius whips a dark ash wood staff at the side of your neck.
+Your body locks in paralysis as numbness overtakes your body below the neck.
+[AFF]: Paralysis
+Health lost: 323 (physical blunt).
+Dropping back into a low crouch, Dominius whips a dark ash wood staff at your left thigh.
+As Dominius's blow crunches into you, you perceive that he has dealt 9.2% damage to your left
+leg.
+The staff cracks across your left thigh, the muscles suddenly becoming weak.
+[AFF]: Weariness
+Your shield completely absorbs the damage.
+Dominius lashes out with a high kick at your torso.
+As Dominius's blow crunches into you, you perceive that he has dealt 9.2% damage to your torso.
+
+[SLC]: Reset torso counts.
+The foot of Dominius drives into your solar plexus.
+Health lost: 376 (physical blunt).
+H:4761|87% M:4738|95%  15:05:17:541  [ Dominius ][0|11.8|0|0|94.4|26][AST wear PAR] 
+You may eat another plant or mineral. Eat (1.667)
+H:4761|87% M:4738|95%  15:05:17:544  [ Dominius ][0|11.8|0|0|94.4|26][AST wear PAR] 
+
+[Predicted]: MILDTRAUMA
+You have recovered equilibrium.
+You have recovered balance on all limbs.
+H:4761|87% M:4738|95%  15:05:17:919  [ Dominius ][0|11.8|0|0|94.4|26][AST wear PAR] 
+You are no longer stunned.
+H:4761|87% M:4738|95%  15:05:18:324  [ Dominius ][0|11.8|0|0|94.4|26][AST wear PAR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+[Curing]: APPLY RESTORATION TO BODY
+You take out some salve and quickly rub it on your body.
+Envenomed: (Vernalius)
+Sliced:    (Dominius)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (85%/100%).
+Afflicted: (Weariness Paralysis)
+[clum, weari, para]
+[OUTR]: 1 Bloodroot (886)
+You may utilise the tree tattoo again. Tree (13.972)
+H:4761|87% M:4713|94%  15:05:18:891  [ Dominius ][0|11.8|0|0|94.4|26][AST wear] 
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Your limbs strengthen and you feel stronger.
+[AFF]: Weariness
+Dominius eats a magnesium chip.
+Processed Cures(paralysis)
+[clum, weari]
+
+H:4761|87% M:4713|94%  15:05:18:942  [ Dominius ][0|11.8|0|0|94.4|26][AST] 
+You suddenly perceive the vague outline of an aura of rebounding around Dominius.
+H:4761|87% M:4713|94%  15:05:19:238  [ Dominius ][0|11.8|0|0|94.4|26][AST] 
+Dominius's aura of weapons rebounding disappears.
+Dominius whips a dark ash wood staff at the side of your neck.
+Your body locks in paralysis as numbness overtakes your body below the neck.
+[AFF]: Paralysis
+Health lost: 257 (physical blunt).
+Bleeding off the momentum of his previous strike, Dominius turns and brings a dark ash wood
+staff around in a thrust at your solar plexus.
+As Dominius's blow crunches into you, you perceive that he has dealt 13.4% damage to your
+torso.
+Your breath exits your lungs in an explosive gasp as the end of the staff smashes home.
+Health lost: 257 (physical blunt).
+Dominius lashes out with a high kick at your torso.
+As Dominius's blow crunches into you, you perceive that he has dealt 9.2% damage to your torso.
+The foot of Dominius drives into your solar plexus.
+Health lost: 298 (physical blunt).
+H:3949|72% M:4713|94%  15:05:19:473  [ Dominius ][0|11.8|0|0|94.4|26] ( -812h 14% )[AST PAR] 
+Dominius takes a long drag off his pipe.
+H:3949|72% M:4713|94%  15:05:19:651  [ Dominius ][0|11.8|0|0|94.4|26][AST PAR] 
+You may eat another plant or mineral. Eat (1.524)
+H:3949|72% M:4713|94%  15:05:19:920  [ Dominius ][0|11.8|0|0|94.4|26][AST PAR] 
+You have recovered balance on all limbs.
+H:3949|72% M:4713|94%  15:05:20:244  [ Dominius ][0|11.8|0|0|94.4|26][AST PAR] 
+Dominius eats an aurum flake.
+You are no longer stunned.
+Processed Cures(clumsiness weariness)
+H:4058|74% M:4713|94%  15:05:20:468  [ Dominius ][0|11.8|0|0|94.4|26][AST PAR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:4058|74% M:4713|94%  15:05:20:662  [ Dominius ][0|11.8|0|0|94.4|26][AST] 
+Envenomed: (Kalmia)
+Sliced:    (Dominius)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (81%/100%).
+Afflicted: (Asthma Paralysis)
+[ast, clum[50], weari[50], para]
+[OUTR]: 1 Bloodroot (885)
+You may eat another bit of irid moss or potash.
+Dominius twirls his staff, a look of serene calm overcoming him.
+H:4058|74% M:4563|91%  15:05:21:592  [ Dominius ][0|11.8|0|0|94.4|26][AST] 
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+You may drink another health or mana elixir. Health (4.46)
+H:4494|82% M:4960|99%  15:05:21:669  [ Dominius ][0|11.8|0|0|94.4|26] ( +436h 7% +397m 7% 
+)[AST] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5460|100% M:4960|99%  15:05:21:793  [ Dominius ][0|11.8|0|0|94.4|26] ( +966h 17% )[AST] 
+Dominius eats a magnesium chip.
+You may eat another plant or mineral.
+Processed Cures(paralysis) Eat (1.512)
+H:5460|100% M:4960|99%  15:05:22:173  [ Dominius ][0|11.8|0|0|94.4|26][AST] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+Dominius whips a dark ash wood staff in a tight arc, sweeping it at your head.
+Stars explode in front of your eyes as the staff cracks you across the side of the head.
+[AFF]: Dizziness
+Health lost: 294 (physical blunt).
+Bracing his back foot, Dominius lunges forward with a dark ash wood staff at your face.
+The staff drives into your face, your jaw shattering under the blow.
+[AFF]: Anorexia
+[AFF]: Stuttering
+Health lost: 294 (physical blunt).
+Snapping his leg out to its full extent, Dominius drives a heel into your left knee.
+As Dominius's blow crunches into you, you perceive that he has dealt 9.2% damage to your left
+leg.
+You feel your knee crunch under the force of the kick, nausea and pain racking you.
+[AFF]: Brokenleftleg
+Health lost: 318 (physical blunt).
+H:4554|83% M:4960|99%  15:05:22:394  [ Dominius ][0|11.8|0|0|94.4|26] ( -906h 16% )[ll1 dizz 
+ANO stut] 
+
+[SLC]: Reset torso counts.
+Your torso feels stronger and healthier.
+[AFF]: Mildtrauma
+You may apply another salve to yourself. Body (4.038)
+[Curing]: APPLY MENDING TO LEGS
+You take out some salve and quickly rub it on your legs.
+The bones in your left leg mend.
+[AFF]: Brokenleftleg
+[Curing]: FOCUS MIND
+You focus your mind intently on curing your mental maladies.
+Your tongue will finally obey your commands properly.
+[AFF]: Stuttering
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Dominius)
+Sileris stripped.
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Sensitivity)
+[HP]:      (72%/100%).
+Afflicted: (Slickness Paralysis Prefarar)
+[ast, clum[50], weari[50], deaf, slick, para]
+Dominius takes a drink from an elegant diamond vial.
+You may apply another salve to yourself. Legs (0.934)
+H:4554|83% M:4610|92%  15:05:23:509  [ Dominius ][0|11.8|0|0|94.4|26] ( -350m 7% )[dizz ANO] 
+[Curing]: APPLY EPIDERMAL TO BODY
+You take out some salve and quickly rub it on your body.
+Food is no longer repulsive to you.
+[AFF]: Anorexia
+H:4554|83% M:4610|92%  15:05:23:561  [ Dominius ][0|11.8|0|0|94.4|26][dizz] 
+Dominius eats a magnesium chip.
+Processed Cures(paralysis slickness)
+[ast, clum[50], weari[50], deaf, slick[50], para[50]]
+
+H:4554|83% M:4610|92%  15:05:23:763  [ Dominius ][0|11.8|0|0|94.4|26][dizz] 
+You may eat another plant or mineral.
+H:4554|83% M:4610|92%  15:05:23:898  [ Dominius ][0|11.8|0|0|94.4|26][dizz] 
+[Curing]: EAT GOLDENSEAL
+You eat a goldenseal root.
+You are no longer dizzy.
+[AFF]: Dizziness
+H:4554|83% M:4610|92%  15:05:23:945  [ Dominius ][0|11.8|0|0|94.4|26]
+[OUTR]: 1 Goldenseal (1483)
+You may apply another salve to yourself. Body (0.949)
+H:4554|83% M:4610|92%  15:05:24:510  [ Dominius ][0|11.8|0|0|94.4|26]
+You have recovered balance on all limbs.
+Envenomed: (Curare)
+Sliced:    (Dominius)
+Empower:   (Inguz)
+Shield:    (Scrambled Brains)
+Ferocity:  [####|####|####|####]
+[HP]:      (84%/100%).
+Afflicted: (Dizziness)
+[diz, ast, clum[50], weari[50], deaf, slick[50], para]
+A look of extreme focus crosses the face of Dominius.
+Your mind is able to focus once again. Focus (2.492)
+H:4554|83% M:4410|88%  15:05:25:070  [ Dominius ][0|11.8|0|0|94.4|26] ( -200m 4% )
+Dominius eats a magnesium chip.
+Dominius applies a quicksilver droplet to himself.
+Processed Cures(paralysis)
+Dominius touches a tree of life tattoo.
+Processed Cures(clumsiness dizziness weariness asthma)
+[diz[75], ast[75], clum[38], weari[38], deaf]
+
+H:4554|83% M:4410|88%  15:05:25:511  [ Dominius ][0|11.8|0|0|94.4|26]
+You may eat another plant or mineral. Eat (1.615)
+H:4554|83% M:4410|88%  15:05:25:559  [ Dominius ][0|11.8|0|0|94.4|26]
+You may drink another health or mana elixir. Health (4.384)
+H:4554|83% M:4410|88%  15:05:26:178  [ Dominius ][0|11.8|0|0|94.4|26]
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5460|100% M:4410|88%  15:05:26:274  [ Dominius ][0|11.8|0|0|94.4|26] ( +906h 16% )
+You have recovered balance on all limbs.
+Envenomed: (Kalmia)
+Sliced:    (Dominius)
+Proc:      (Inguz)
+Afflicted: (Sensitivity)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (72%/100%).
+Afflicted: (Asthma Paralysis)
+[diz[75], ast, clum[38], sen, weari[38], deaf, para]
+
+Processed Cures(dizziness)
+Dominius eats a magnesium chip.
+Dominius takes some elixir from an elegant diamond vial and rubs it into his torso.ribs: 0
+
+H:5460|100% M:4260|85%  15:05:27:248  [ Dominius ][0|11.8|0|0|94.4|26]
+Dominius falters, his flowing motions becoming jerky for a moment as he abruptly transitions
+into a new series of kata.
+The eyes of Dominius fall closed, a look of tranquility coming over him.
+H:5460|100% M:4260|85%  15:05:27:539  [ Dominius ][0|11.8|0|0|94.4|26]
+You may eat another bit of irid moss or potash.
+H:5460|100% M:4260|85%  15:05:27:628  [ Dominius ][0|11.8|0|0|94.4|26]
+You suddenly perceive the vague outline of an aura of rebounding around Dominius.
+You have recovered balance on all limbs.
+Razed: Rebounding
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (69%/100%).
+Afflicted: (Paralysis)
+[ast, clum[38], sen, weari[38], deaf, para]
+Dominius eats a magnesium chip.
+Dominius eats a potash crystal.
+Processed Cures(paralysis)
+Dominius eats an aurum flake.
+Dominius takes a long drag off his pipe.
+Processed Cures(asthma clumsiness sensitivity weariness)
+You have recovered balance on all limbs.
+You cease wielding a blessed legionnaire's longsword in your left hand.
+You start to wield a mithril broadsword in your left hand.
+Envenomed: (Gecko)
+Sliced:    (Torso) (23.6%)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (62%/100%).
+Afflicted: (Slickness Paralysis).*
+[sen[75], deaf, slick, para]
+You focus on automatically empowering the isaz, sleizak, and inguz runes.
+H:5460|100% M:4135|83%  15:05:30:699  [ Dominius ][0|23.6|0|0|94.4|26]
+You may drink another health or mana elixir. Health (4.465)
+H:5460|100% M:4135|83%  15:05:30:739  [ Dominius ][0|23.6|0|0|94.4|26]
+[Curing]: SIP MANA
+You take a drink from an oaken vial.
+Your mind feels stronger and more alert.
+Dominius takes a drink from an elegant diamond vial.
+Dominius takes a long drag off his pipe.
+H:5460|100% M:4916|98%  15:05:31:917  [ Dominius ][0|23.6|0|0|94.4|26] ( +781m 15% )
+Dominius eats a magnesium chip.
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Torso) (35.4%)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (77%/100%).
+Afflicted: (Clumsiness Paralysis).*
+[clum, sen[75], deaf, para]
+You may utilise the tree tattoo again. Tree (14.087)
+Dominius eats a magnesium chip.
+Processed Cures(paralysis)
+[clum, sen[75], deaf]
+
+H:5460|100% M:4816|96%  15:05:33:858  [ Dominius ][0|35.4|0|0|94.4|26]
+H:5460|100% M:4816|96%  15:05:34:085  [ Dominius ][0|35.4|0|0|94.4|26]
+You have recovered balance on all limbs.
+Envenomed: (Euphorbia)
+Sliced:    (Torso) (47.2%)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (67%/100%).
+Afflicted: (Nausea Paralysis).*
+[clum, sen[75], naus, deaf, para]
+You may drink another health or mana elixir. Mana (4.421)
+H:5460|100% M:4716|94%  15:05:35:201  [ Dominius ][0|47.2|0|0|94.4|26]
+Dominius eats a potash crystal.
+Dominius eats a magnesium chip.
+Processed Cures(paralysis)
+[clum, sen[75], naus, deaf]
+
+H:5460|100% M:4716|94%  15:05:35:449  [ Dominius ][0|47.2|0|0|94.4|26]
+A supple metallic shell of quicksilver has formed around Dominius.
+H:5460|100% M:4716|94%  15:05:35:493  [ Dominius ][0|47.2|0|0|94.4|26]
+Dominius takes a drink from an elegant diamond vial.
+H:5460|100% M:4716|94%  15:05:36:386  [ Dominius ][0|47.2|0|0|94.4|26]
+Dominius eats an aurum flake.
+You have recovered balance on all limbs.
+H:5460|100% M:4666|93%  15:05:37:458  [ Dominius ][0|47.2|0|0|94.4|26]
+H:5460|100% M:4666|93%  15:05:37:463  [ Dominius ][0|47.2|0|0|94.4|26]
+You cease wielding a mithril broadsword in your left hand.
+You start to wield a blessed legionnaire's longsword in your left hand.
+Envenomed: (Vernalius)
+Sliced:    (Torso) (54.3%)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (90%/100%).
+Afflicted: (Weariness Paralysis).*
+[clum[50], sen[38], weari, naus, deaf, para]
+You focus on automatically empowering the isaz, sleizak, and inguz runes.
+H:5460|100% M:4566|91%  15:05:37:575  [ Dominius ][0|54.3|0|0|94.4|26]
+Dominius eats a magnesium chip.
+Processed Cures(paralysis)
+[clum[50], sen[38], weari, naus, deaf]
+
+H:5460|100% M:4566|91%  15:05:38:862  [ Dominius ][0|54.3|0|0|94.4|26]
+You suddenly perceive the vague outline of an aura of rebounding around Dominius.
+Dominius's aura of weapons rebounding disappears.
+H:5460|100% M:4641|93%  15:05:39:038  [ Dominius ][0|54.3|0|0|94.4|26]
+Dominius takes a long drag off his pipe.
+You have recovered balance on all limbs.
+Envenomed: (Kalmia)
+Sliced:    (Torso) (61.4%)
+Runeblade: (Nairat)
+Afflicted: (Frozen)
+Empower:   (Sleizak)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (79%/100%).
+Afflicted: (Asthma Paralysis).*
+[ast, clum[50], sen[38], weari, naus, deaf, frzn[200], para]
+Dominius takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+H:5460|100% M:4441|89%  15:05:39:434  [ Dominius ][0|61.4|0|0|94.4|26] ( -200m 4% )
+Dominius takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+Dominius eats a magnesium chip.
+Dominius touches a tree of life tattoo.
+Processed Cures(paralysis)
+
+THEY CAN TOUCH TREE AGAIN!
+Dominius takes a drink from an elegant diamond vial.
+As Dominius turns away from you, you draw upon the power of isaz and deliver a vicious blow
+with your runeblade, sending him staggering.
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+H:5460|100% M:4441|89%  15:05:40:838  [ Dominius ][0|61.4|0|0|94.4|26]
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Dominius)
+Sileris stripped.
+Proc:      (Sleizak 1)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Engage:    (Dominius)
+Equilibrium used: 2.00s.
+Strike:    (Proned)
+Afflicted: (Prone).
+Afflicted: (Slickness Paralysis)
+[ast[80], clum[40], weari, naus, deaf, slick, prn, para]
+Dominius eats a magnesium chip.
+Processed Cures(paralysis slickness)
+[ast[80], clum[40], weari, naus, deaf, prn, para]
+
+H:5460|100% M:4341|87%  15:05:42:123  [ Dominius ][0|61.4|0|0|94.4|26]
+Empower:    (Isaz)
+You have recovered equilibrium.
+You have recovered balance on all limbs.
+Envenomed: (Aconite)
+Sliced:    (Torso) (68.5%)
+Runeblade: (Nairat)
+Afflicted: (Frozen)
+Proc:       (Isaz)
+Shield:    (Scrambled Brains)
+Ferocity:  [####|####|####|####]
+[HP]:      (77%/100%).
+Afflicted: (Stupidity Dizziness).*
+[diz, epi, stu, ast[80], clum[40], weari, naus, deaf, frzn[200], prn, para]
+[Curing]: SIP MANA
+You take a drink from an oaken vial.
+Your mind feels stronger and more alert.
+Dominius lets out a loud, long "MOOOOOOOOOOO!"
+Dominius takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+A look of extreme focus crosses the face of Dominius.
+H:5460|100% M:4938|99%  15:05:43:523  [ Dominius ][0|68.5|0|0|94.4|26] ( +597m 12% )
+Dominius eats a magnesium chip.
+Dominius stands up.
+ + + + STANDING + + +
+Processed Cures(slickness)
+Dominius applies a quicksilver droplet to himself.
+H:5460|100% M:4938|99%  15:05:43:709  [ Dominius ][0|68.5|0|0|94.4|26]
+As Dominius turns away from you, you draw upon the power of isaz and deliver a vicious blow
+with your runeblade, sending him staggering.
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+Dominius drops to one knee.
+H:5460|100% M:4938|99%  15:05:44:106  [ Dominius ][0|68.5|0|0|94.4|26]
+Dominius takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+Empower:    (Isaz)
+Dominius: has shielded!
+Dominius: has shielded!
+Dominius: has shielded!
+Dominius pulls down his pants and moons the world.
+H:5460|100% M:4838|97%  15:05:45:118  [ Dominius ][0|68.5|0|0|94.4|26]
+Dominius sweeps across the floor, leaping and twirling like a true master.
+Dominius grunts a bit and then lets out a loud "OINK!"
+Dominius falls to his knees in worship.
+Dominius eats an aurum flake.
+Processed Cures(asthma clumsiness weariness)
+[diz, epi, stu, ast[67], weari[67], naus, deaf]
+
+H:5460|100% M:4838|97%  15:05:45:294  [ Dominius ][0|68.5|0|0|94.4|26]
+You have recovered balance on all limbs.
+Razed: Shield
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (77%/100%).
+Afflicted: (Paralysis)
+[diz, epi, stu, ast[67], weari[67], naus, deaf, para]
+Dominius takes a drink from an elegant diamond vial.
+H:5460|100% M:4738|95%  15:05:45:497  [ Dominius ][0|68.5|0|0|94.4|26]
+
+Processed Cures(dizziness epilepsy stupidity)
+Dominius falls to his knees in worship.
+H:5460|100% M:4738|95%  15:05:45:576  [ Dominius ][0|68.5|0|0|94.4|26]
+Dominius blinks.
+H:5460|100% M:4738|95%  15:05:45:741  [ Dominius ][0|68.5|0|0|94.4|26]
+Tears fill Dominius's eyes and begin to slowly run down his face.
+Dominius gives up a round of applause.
+H:5460|100% M:4738|95%  15:05:45:744  [ Dominius ][0|68.5|0|0|94.4|26]
+Dominius pulls down his pants and moons the world.
+H:5460|100% M:4738|95%  15:05:46:045  [ Dominius ][0|68.5|0|0|94.4|26]
+A look of extreme focus crosses the face of Dominius.
+Processed Cures(dizziness epilepsy stupidity)
+H:5460|100% M:4738|95%  15:05:46:058  [ Dominius ][0|68.5|0|0|94.4|26]
+Dominius fondles himself absently.
+H:5460|100% M:4738|95%  15:05:46:211  [ Dominius ][0|68.5|0|0|94.4|26]
+Dominius sweeps across the floor, leaping and twirling like a true master.
+H:5460|100% M:4738|95%  15:05:46:325  [ Dominius ][0|68.5|0|0|94.4|26]
+Dominius eats a magnesium chip.
+Dominius blinks.
+Dominius waggles his eyebrows comically.
+H:5460|100% M:4738|95%  15:05:46:860  [ Dominius ][0|68.5|0|0|94.4|26]
+Dominius giggles happily.
+H:5460|100% M:4738|95%  15:05:47:212  [ Dominius ][0|68.5|0|0|94.4|26]
+You have recovered balance on all limbs.
+Envenomed: (Aconite)
+Sliced:    (Dominius)
+Proc:       (Isaz)
+Shield:    (Scrambled Brains)
+Ferocity:  [####|####|####|####]
+Engage:    (Dominius)
+Equilibrium used: 2.00s..
+Afflicted: (Dizziness)
+[diz, epi, stu, ast[67], weari[67], naus, deaf]
+Dominius attempts to do a standing backflip, but merely stumbles over his own feet.
+H:5460|100% M:4688|94%  15:05:47:425  [ Dominius ][0|68.5|0|0|94.4|26]
+Dominius gets down on one knee and serenades the world.
+H:5460|100% M:4688|94%  15:05:47:534  [ Dominius ][0|68.5|0|0|94.4|26]
+Dominius gives up a round of applause.
+H:5460|100% M:4688|94%  15:05:47:656  [ Dominius ][0|68.5|0|0|94.4|26]
+You suddenly perceive the vague outline of an aura of rebounding around Dominius.
+You may drink another health or mana elixir. Mana (4.429)
+H:5460|100% M:4688|94%  15:05:47:950  [ Dominius ][0|68.5|0|0|94.4|26]
+Tears fill Dominius's eyes and begin to slowly run down his face.
+H:5460|100% M:4688|94%  15:05:47:954  [ Dominius ][0|68.5|0|0|94.4|26]
+Dominius sweeps across the floor, leaping and twirling like a true master.
+H:5460|100% M:4688|94%  15:05:48:129  [ Dominius ][0|68.5|0|0|94.4|26]
+Dominius waggles his eyebrows comically.
+H:5460|100% M:4688|94%  15:05:48:445  [ Dominius ][0|68.5|0|0|94.4|26]
+Dominius: has shielded!
+Dominius: has shielded!
+Dominius: has shielded!
+Dominius eats an aurum flake.
+Processed Cures(asthma weariness)
+[diz, epi, stu, naus, deaf, Reb]
+
+H:5460|100% M:4688|94%  15:05:48:578  [ Dominius ][0|68.5|0|0|94.4|26]
+Dominius gives up a round of applause.
+Dominius fondles himself absently.
+Dominius wails like an old woman.
+Dominius stumbles and pokes himself in the eye.
+H:5460|100% M:4688|94%  15:05:48:593  [ Dominius ][0|68.5|0|0|94.4|26]
+A look of extreme focus crosses the face of Dominius.
+H:5460|100% M:4688|94%  15:05:48:745  [ Dominius ][0|68.5|0|0|94.4|26]
+Dominius hugs himself compassionately.
+H:5460|100% M:4688|94%  15:05:48:781  [ Dominius ][0|68.5|0|0|94.4|26]
+Dominius drops to one knee.
+H:5460|100% M:4688|94%  15:05:48:912  [ Dominius ][0|68.5|0|0|94.4|26]
+Dominius wails like an old woman.
+H:5460|100% M:4763|95%  15:05:49:094  [ Dominius ][0|68.5|0|0|94.4|26]
+You have recovered equilibrium.
+You have recovered balance on all limbs.
+Razed: Rebounding
+[HP]:      (88%/100%)
+H:5460|100% M:4663|93%  15:05:49:195  [ Dominius ][0|68.5|0|0|94.4|26]
+Dominius gets down on one knee and serenades the world.
+Dominius wails like an old woman.
+H:5460|100% M:4663|93%  15:05:49:374  [ Dominius ][0|68.5|0|0|94.4|26]
+Tears fill Dominius's eyes and begin to slowly run down his face.
+Dominius breaks down and sobs uncontrollably.
+H:5460|100% M:4663|93%  15:05:49:591  [ Dominius ][0|68.5|0|0|94.4|26]
+"The voices! The voices! Get them out of my head!!" Dominius moans, holding his head.
+
+H:5460|100% M:4663|93%  15:05:49:755  [ Dominius ][0|68.5|0|0|94.4|26]
+Dominius eats an aurum flake.
+Dominius waggles his eyebrows comically.
+H:5460|100% M:4663|93%  15:05:50:122  [ Dominius ][0|68.5|0|0|94.4|26]
+Dominius takes a long drag off his pipe.
+Your ferocity decreases.
+Dominius twitches spasmodically.
+H:5460|100% M:4663|93%  15:05:50:414  [ Dominius ][0|68.5|0|0|94.4|26]
+Dominius giggles happily.
+Dominius sweeps across the floor, leaping and twirling like a true master.
+H:5460|100% M:4663|93%  15:05:50:556  [ Dominius ][0|68.5|0|0|94.4|26]
+Dominius twitches spasmodically.
+Dominius blinks.
+H:5460|100% M:4663|93%  15:05:50:720  [ Dominius ][0|68.5|0|0|94.4|26]
+
+Processed Cures(dizziness epilepsy stupidity)
+Dominius begins to jerk and shake violently, foaming at the mouth.
+Dominius gets down on one knee and serenades the world.
+H:5460|100% M:4663|93%  15:05:50:926  [ Dominius ][0|68.5|0|0|94.4|26]
+You have recovered balance on all limbs.
+H:5460|100% M:4663|93%  15:05:50:976  [ Dominius ][0|68.5|0|0|94.4|26]
+Razed: Shield
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (89%/100%).
+Afflicted: (Paralysis)
+[diz[67], epi, stu, naus, deaf, para]
+Dominius looks around vainly for a partner to tango with.
+A look of extreme focus crosses the face of Dominius.
+Processed Cures(dizziness epilepsy stupidity)
+H:5460|100% M:4563|91%  15:05:51:307  [ Dominius ][0|68.5|0|0|94.4|26]
+Dominius eats a magnesium chip.
+Dominius: has shielded!
+Dominius: has shielded!
+Dominius: has shielded!
+You have recovered balance on all limbs.
+H:5460|100% M:4513|90%  15:05:52:766  [ Dominius ][0|68.5|0|0|94.4|26]
+H:5460|100% M:4513|90%  15:05:52:772  [ Dominius ][0|68.5|0|0|94.4|26]
+Razed: Shield
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (91%/100%).
+Afflicted: (Paralysis)
+[diz[44], epi[67], stu[67], naus, deaf, para]
+Dominius eats a ferrum flake.
+A supple metallic shell of quicksilver has formed around Dominius.
+H:5460|100% M:4413|88%  15:05:53:710  [ Dominius ][0|68.5|0|0|94.4|26]
+A look of extreme focus crosses the face of Dominius.
+Processed Cures(dizziness epilepsy stupidity)
+H:5460|100% M:4413|88%  15:05:53:791  [ Dominius ][0|68.5|0|0|94.4|26]
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Dominius)
+Runeblade: (Nairat)
+Afflicted: (Frozen)
+Empower:   (Inguz)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Sensitivity)
+[HP]:      (84%/100%).
+Afflicted: (Clumsiness Prefarar)
+[epi[44], stu[44], clum, sen, deaf, frzn[200], para]
+[Curing]: SIP MANA
+You take a drink from an oaken vial.
+Your mind feels stronger and more alert.
+Dominius takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+Dominius eats a magnesium chip.
+
+THEY CAN TOUCH TREE AGAIN!
+Dominius takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+Dominius eats an aurum flake.
+Processed Cures(clumsiness sensitivity)
+[epi[44], stu[44], clum[50], sen[50], deaf]
+
+H:5460|100% M:4916|98%  15:05:56:624  [ Dominius ][0|68.5|0|0|94.4|26] ( +503m 10% )
+You have recovered balance on all limbs.
+H:5460|100% M:4916|98%  15:05:56:657  [ Dominius ][0|68.5|0|0|94.4|26]
+H:5460|100% M:4916|98%  15:05:56:661  [ Dominius ][0|68.5|0|0|94.4|26]
+Envenomed: (Vernalius)
+Sliced:    (Dominius)
+Proc:      (Inguz)
+Afflicted: (Sensitivity)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (76%/100%).
+Afflicted: (Weariness Paralysis)
+[epi[44], stu[44], clum[50], sen, weari, deaf, para]
+Dominius takes some elixir from an elegant diamond vial and rubs it into his torso.ribs: 0
+
+H:5460|100% M:4816|96%  15:05:56:832  [ Dominius ][0|68.5|0|0|94.4|26]
+Dominius eats a magnesium chip.
+You have recovered balance on all limbs.
+Envenomed: (Kalmia)
+Sliced:    (Dominius)
+Empower:   (Sleizak)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (64%/100%).
+Afflicted: (Asthma Paralysis)
+[epi[44], stu[44], ast, clum[50], sen, weari, deaf, para]
+Dominius eats a potash crystal.
+You suddenly perceive the vague outline of an aura of rebounding around Dominius.
+You may drink another health or mana elixir. Mana (4.459)
+H:5460|100% M:4691|94%  15:05:59:348  [ Dominius ][0|68.5|0|0|94.4|26]
+Dominius eats a magnesium chip.
+Dominius's aura of weapons rebounding disappears.
+H:5460|100% M:4691|94%  15:06:00:190  [ Dominius ][0|68.5|0|0|94.4|26]
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Dominius)
+Sileris stripped.
+Proc:      (Sleizak 1)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (63%/100%).
+Afflicted: (Slickness Paralysis)
+[epi[44], stu[44], ast, clum[50], sen, weari, naus, deaf, slick, para]
+Dominius gives a mighty yell, then suddenly looks about sharply seemingly drained yet
+refreshed.
+H:5460|100% M:4591|92%  15:06:01:425  [ Dominius ][0|68.5|0|0|94.4|26]
+Dominius: has shielded!
+Dominius: has shielded!
+Dominius: has shielded!
+Dominius eats a magnesium chip.
+Dominius takes a drink from a garnet vial.
+Processed Cures(paralysis slickness)
+H:5460|100% M:4541|91%  15:06:01:520  [ Dominius ][0|68.5|0|0|94.4|26]
+You have recovered balance on all limbs.
+Razed: Shield
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (96%/100%).
+Afflicted: (Paralysis)
+[epi[44], stu[44], ast, clum[50], sen, weari, naus, deaf, slick[50], para]
+Dominius eats a magnesium chip.
+Dominius applies a quicksilver droplet to himself.
+Processed Cures(paralysis)
+Dominius touches a tree of life tattoo.
+Dominius takes a long drag off his pipe.
+H:5460|100% M:4441|89%  15:06:03:311  [ Dominius ][0|68.5|0|0|94.4|26]
+You have recovered balance on all limbs.
+Envenomed: (Kalmia)
+Sliced:    (Torso) (75.6%)
+Empower:   (Sleizak)
+Afflicted: (Weariness)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (89%/100%).
+Afflicted: (Asthma Paralysis).*
+[epi[38], stu[38], ast, clum[43], sen[86], weari, naus[86], deaf, para]
+Dominius eats a magnesium chip.
+Dominius: has shielded!
+Dominius: has shielded!
+Dominius: has shielded!
+H:5460|100% M:4241|85%  15:06:05:055  [ Dominius ][0|75.6|0|0|94.4|26] ( -200m 4% )
+You have recovered balance on all limbs.
+Razed: Shield
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (87%/100%).
+Afflicted: (Paralysis)
+[epi[38], stu[38], ast, clum[43], sen[86], weari, naus[86], deaf, para]
+[Curing]: SIP MANA
+You take a drink from an oaken vial.
+Your mind feels stronger and more alert.
+Dominius eats an aurum flake.
+Processed Cures(asthma clumsiness sensitivity weariness)
+[epi[38], stu[38], ast[75], sen[64], weari[75], naus[86], deaf, para]
+
+H:5460|100% M:4880|98%  15:06:06:600  [ Dominius ][0|75.6|0|0|94.4|26] ( +639m 12% )
+Dominius eats a magnesium chip.
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Torso) (82.7%)
+Proc:      (Sleizak 2)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Proned)
+Afflicted: (Prone)
+[HP]:      (79%/100%).
+Afflicted: (Slickness Paralysis).*
+[voyria, epi[38], stu[38], ast[75], sen[64], weari, naus, deaf, slick, prn, para]
+Dominius takes a drink from an elegant diamond vial.
+Dominius takes a drink from an elegant diamond vial.
+H:5460|100% M:4780|96%  15:06:08:323  [ Dominius ][0|82.7|0|0|94.4|26]
+Dominius eats a magnesium chip.
+Dominius stands up.
+ + + + STANDING + + +
+Processed Cures(slickness)
+H:5460|100% M:4855|97%  15:06:09:889  [ Dominius ][0|82.7|0|0|94.4|26]
+Dominius: has shielded!
+Dominius: has shielded!
+Dominius: has shielded!
+You have recovered balance on all limbs.
+Razed: Shield
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (98%/100%).
+Afflicted: (Paralysis)
+[epi[38], stu[38], ast, sen[64], weari, naus, deaf, slick, para]
+You may drink another health or mana elixir. Mana (4.347)
+H:5460|100% M:4755|95%  15:06:10:945  [ Dominius ][0|82.7|0|0|94.4|26]
+Dominius eats an aurum flake.
+Processed Cures(asthma sensitivity weariness)
+[epi[38], stu[38], ast, weari[50], naus, deaf, slick, para]
+
+H:5460|100% M:4755|95%  15:06:11:415  [ Dominius ][0|82.7|0|0|94.4|26]
+You suddenly perceive the vague outline of an aura of rebounding around Dominius.
+H:5460|100% M:4705|94%  15:06:11:858  [ Dominius ][0|82.7|0|0|94.4|26]
+You have recovered balance on all limbs.
+Razed: Rebounding
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (97%/100%).
+[epi[38], stu[38], ast, weari[50], naus, deaf, slick, para]
+
+H:5460|100% M:4605|92%  15:06:12:073  [ Dominius ][0|82.7|0|0|94.4|26]
+Dominius eats a magnesium chip.
+Processed Cures(paralysis slickness)
+[epi[38], stu[38], ast, weari[50], naus, deaf, slick[50], para[50]]
+
+H:5460|100% M:4605|92%  15:06:13:241  [ Dominius ][0|82.7|0|0|94.4|26]
+Dominius: has shielded!
+Dominius: has shielded!
+Dominius: has shielded!
+You have recovered balance on all limbs.
+H:5460|100% M:4605|92%  15:06:13:897  [ Dominius ][0|82.7|0|0|94.4|26]
+H:5460|100% M:4605|92%  15:06:13:903  [ Dominius ][0|82.7|0|0|94.4|26]
+Razed: Shield
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (98%/100%).
+Afflicted: (Paralysis)
+[epi[38], stu[38], ast, weari[50], naus, deaf, slick[50], para]
+Dominius eats an aurum flake.
+Dominius takes a long drag off his pipe.
+Processed Cures(asthma weariness)
+H:5460|100% M:4505|90%  15:06:14:815  [ Dominius ][0|82.7|0|0|94.4|26]
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Torso) (89.8%)
+Empower:   (Inguz)
+Shield:    (Scrambled Brains)
+Ferocity:  [####|####|####|####]
+[HP]:      (97%/100%).
+Afflicted: (Clumsiness Dizziness).*
+[diz, epi[38], stu[38], clum, naus, deaf, slick[50], para]
+A look of extreme focus crosses the face of Dominius.
+H:5460|100% M:4305|86%  15:06:15:812  [ Dominius ][0|89.8|0|0|94.4|26] ( -200m 4% )
+Dominius eats a magnesium chip.
+Dominius applies a quicksilver droplet to himself.
+Processed Cures(paralysis)
+Dominius takes a long drag off his pipe.
+You have recovered balance on all limbs.
+Envenomed: (Vernalius)
+Sliced:    (Torso) (96.9%)
+Proc:      (Inguz)
+Afflicted: (Sensitivity)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Sensitivity)
+[HP]:      (86%/100%).
+Afflicted: (Weariness Paralysis).*
+[diz, epi[38], stu[38], clum, sen, weari, naus, deaf, para]
+[Curing]: SIP MANA
+You take a drink from an oaken vial.
+Your mind feels stronger and more alert.
+Dominius takes some elixir from an elegant diamond vial and rubs it into his torso.ribs: 0
+
+H:5460|100% M:4966|100%  15:06:17:736  [ Dominius ][0|96.9|0|0|94.4|26] ( +661m 13% )
+
+Processed Cures(dizziness epilepsy stupidity)
+Dominius eats a magnesium chip.
+Dominius touches a tree of life tattoo.
+Processed Cures(paralysis)
+
+THEY CAN TOUCH TREE AGAIN!
+Dominius eats an aurum flake.
+You have recovered balance on all limbs.
+Envenomed: (Curare)
+Sliced:    (Left leg) (101.5%)
+Runeblade: (Nairat)
+Afflicted: (Frozen)
+Shield:    (Prone)
+Ferocity:  [####|####|####|####]
+[HP]:      (78%/100%)..*
+[diz[53], clum[53], sen[53], weari[53], naus[80], deaf, frzn[200], prn, para]
+Dominius takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+H:5460|100% M:4866|97%  15:06:19:822  [ Dominius ][0|96.9|0|0|101.5|26]
+Dominius takes a long drag off his pipe.
+H:5460|100% M:4866|97%  15:06:19:896  [ Dominius ][0|96.9|0|0|101.5|26]
+Dominius takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+H:5460|100% M:4866|97%  15:06:21:001  [ Dominius ][0|96.9|0|0|101.5|26]
+Dominius eats a magnesium chip.
+Processed Cures(paralysis)
+[diz[53], clum[53], sen[53], weari[53], naus[80], deaf, prn]
+
+H:5460|100% M:4866|97%  15:06:21:198  [ Dominius ][0|96.9|0|0|101.5|26]
+You have recovered balance on all limbs.
+Envenomed: (Kalmia)
+Sliced:    (Torso) (104%)
+Runeblade: (Nairat)
+Afflicted: (Frozen)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (67%/100%).
+Afflicted: (Asthma Paralysis).*
+[diz[53], ast, clum[53], sen[53], weari[53], naus[80], deaf, frzn[200], prn, para]
+Dominius eats a potash crystal.
+Dominius takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+H:5460|100% M:4716|94%  15:06:21:978  [ Dominius ][0|104|0|0|101.5|26]
+You may drink another health or mana elixir. Mana (4.504)
+H:5460|100% M:4716|94%  15:06:22:240  [ Dominius ][0|104|0|0|101.5|26]
+Dominius takes a drink from an elegant diamond vial.
+Dominius eats a magnesium chip.
+Dominius takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+You have recovered balance on all limbs.
+Impaled: Dominius. (Sorry, Darona)
+Stunned: Dominius.
+Ferocity:  [####|####|####|####]
+[HP]:      (89%/100%)
+H:5460|100% M:4616|92%  15:06:23:778  [ Dominius ][0|104|0|0|101.5|26]
+Dominius eats an aurum flake.
+Dominius takes some salve from a vial and rubs it on his legs.
+Processed Cures(asthma clumsiness sensitivity weariness)
+H:5460|100% M:4616|92%  15:06:25:295  [ Dominius ][0|104|0|0|101.5|26]
+Dominius looks pale and gaunt as his body shudders on the end of the weapon.
+H:5460|100% M:4616|92%  15:06:25:721  [ Dominius ][0|104|0|0|101.5|26]
+A supple metallic shell of quicksilver has formed around Dominius.
+Dominius eats a ferrum flake.
+Processed Cures(nausea)
+[diz[53], ast[75], clum[40], sen[40], weari[40], slick2, deaf, prn, IMPALED]
+
+H:5460|100% M:4566|91%  15:06:26:874  [ Dominius ][0|104|0|0|101.5|26]
+
+[DEF]: Blindness
+[DEF]: Insomnia
+[DEF]: Deafness
+
+You have recovered balance on all limbs.
+With a vicious snarl you carve a merciless swathe through the steaming guts of Dominius, who
+gurgles and chokes as you withdraw your dripping blade, glistening with gore.
+You have slain Dominius. Reset Success!
+
+
+[SLAIN] Dominius
+Defeated, Dominius is cast out of the Arena.
+Your combat rating increases by 37.
+You have been awarded 2 Delosian Eagles for your feat within the Oniar Estate.
+**********************************************************
+You have been victorious and leave the Arena in triumph!
+**********************************************************
+ 

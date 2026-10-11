@@ -35,10 +35,12 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^The instep of your foot smashes into the underarm of (\w+), throwing (him|her) from (his|her) feet and sending
-    (him|her) spinning to the ground.
+- pattern: ^The instep of your foot smashes into the (?:\w+ )?underarm of (\w+), throwing
   type: 1
 ]]--
+-- v4.7.414: the pattern expected "into the underarm of X"; the real line names the side, "into the
+-- left underarm of X" (log 2026-10-11), so this never fired. It is ~131 columns and wraps, so
+-- it is a start fragment now.
 -- v4.7.413: only for OUR target (it recorded and relayed anyone's hit on anyone), and the party
 -- message only goes out with party relay on.
 if isTargeted(matches[2]) then

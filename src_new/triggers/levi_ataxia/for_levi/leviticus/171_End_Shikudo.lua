@@ -38,4 +38,5 @@ patterns:
 ]]--
 
 setTriggerStayOpen("Start Shikudo", 0)
-if monk and monk.shikudo then monk.shikudo.stop() end
+-- v4.7.414: guard the field too; no script in this package defines monk.shikudo.
+if monk and monk.shikudo and monk.shikudo.stop then monk.shikudo.stop() end

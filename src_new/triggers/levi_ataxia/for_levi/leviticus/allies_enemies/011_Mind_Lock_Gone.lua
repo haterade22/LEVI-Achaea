@@ -38,8 +38,11 @@ patterns:
   type: 3
 - pattern: Your mindlock with (.+) shatters!
   type: 1
+- pattern: ^You have lost your telepathic lock upon (\w+)\.
+  type: 1
 ]]--
-
+-- v4.7.414: also "You have lost your telepathic lock upon X.", which the game prints when the
+-- target dies (log 2026-10-11); it never cleared mindlocked before.
 mindlocked = false
 deleteFull()
 ataxia_boxEcho("MIND LOCK GONE", "red")

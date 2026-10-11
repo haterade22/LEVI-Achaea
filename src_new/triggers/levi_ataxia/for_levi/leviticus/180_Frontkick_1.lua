@@ -36,6 +36,7 @@ patterns:
 - pattern: ^You lash out with a straight kick at the (\w+) shoulder of (\w+).$
   type: 1
 ]]--
-
+-- v4.7.414: guarded. No script in this package defines monk.shikudo, so this call threw
+-- "attempt to index global 'monk'" on every strike line it matched.
 local limb = matches[2].. " arm"
-monk.shikudo.limb_hit(limb, "frontkick")
+if monk and monk.shikudo and monk.shikudo.limb_hit then monk.shikudo.limb_hit(limb, "frontkick") end

@@ -1,0 +1,2733 @@
+H:7465|100% M:4675|93% E:100% W:100% [NW|SW] R:0 12:01.42-ex*-🌀0💧🌪️ K:0%[0|0|0|0|0|0] 
+mt
+queue addclearfull eb mind travel Claes
+You drift on the waves of telepathy, allowing your mental power to carry you to your subject.
+The Oniar estate gates.
+The sky lightens with the onset of dawn. A rune like a lightning bolt has been sketched into the ground here (Uruz: Heal). A rune like a rising sun
+has been sketched into the ground here (Dagaz: Heals affs). Squire Claes Ancyrion-Firedancer, the Imperial Blade is here. She wields a blessed 
+legionnaire's longsword in her left hand and a Shield of Absorption in her right.
+You see exits leading north, northeast, and northwest.
+Equilibrium used: 0.85s.
+H:7465|100% M:4415|87% E:100% W:99% [NE|NW|N] R:0 12:02.17-x*-🌀0💧🌪️ K:0%[0|0|0|0|0|0]  ( -260m 5% )
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes dawnkick  kuro left kuro right   / assess"
+
+H:7465|100% M:4415|87% E:100% W:99% [NE|NW|N] R:0 12:02.29-x*-🌀0💧🌪️ K:0%[0|0|0|0|0|0] 
+You have recovered equilibrium.                                                         --- EQUILIBRIUM ---
+H:7465|100% M:4405|87% E:100% W:99% [NE|NW|N] R:0 12:02.94-ex*-🌀0💧🌪️ K:0%[0|0|0|0|0|0] 
+maup
+queue addclearfull eb!p!w!t  pk
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your left leg.
+Springing off your back foot, the heel of your foot smashes into the temple of Claes with flawless precision.
+As your blow lands with a crunch, you perceive that you have dealt 8.9% damage to Claes's head. (8.9%)
+Balance used: 2.8s.
+curing priority Paralysis 20
+Falling back into a low crouch, you lash out with a swift strike at the left thigh of Claes.
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left leg. (8.4%)
+The staff cracks across the left thigh of Claes...
+Processed Affliction(Weariness)
+Falling back into a low crouch, you lash out with a swift strike at the right thigh of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's right leg. (8.4%)
+The staff cracks across the right thigh of Claes...
+Processed Affliction(Lethargy)
+You are now maintaining a kata chain of 3 actions.
+You glance over Claes and see that her health is at 4463/5460 [81%].
+[Health]: 82%
+H:7465|100% M:4339|86% E:100% W:99% [NE|NW|N] R:0 12:03.45-e*-🌀3💧🌪️ K:0%[8.9|0|0|0|8.4|8.4] 
+wear leth
+Claes eats a piece of kelp.
+Claes touches a tree of life tattoo.
+                   --- THEY TOUCHED TREE ---
+                   --- THEY TOUCHED TREE ---
+Processed Cures(weariness)Processed Cures
+Processed Cures(lethargy)
+Claes takes a drink from a black-walnut vial.
+Claes eats some irid moss.
+A wall of rough stone rises from the earth to block the exit to the northwest.
+H:7465|100% M:4339|86% E:100% W:99% [NE|NW|N] R:0 12:03.54-e*-🌀3💧🌪️ K:0%[8.9|0|0|0|8.4|8.4] 
+A fierce mountain falcon soars in upon silver wings.
+H:7465|100% M:4339|86% E:100% W:99% [NE|NW|N] R:0 12:03.54-e*-🌀3💧🌪️ K:0%[8.9|0|0|0|8.4|8.4] 
+curing priority Paralysis 2
+mzzz
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes flashheel left kuro left kuro left   / assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes flashheel left kuro left kuro left   / assess"
+
+H:7465|100% M:4335|86% E:100% W:99% [NE|NW|N] R:0 12:04.95-e*-🌀3💧🌪️ K:0%[8.9|0|0|0|8.4|8.4] 
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+H:7465|100% M:4335|86% E:100% W:99% [NE|NW|N] R:0 12:05.57-e*-🌀3💧🌪️ K:0%[8.9|0|0|0|8.4|8.4] 
+
+Processed Affliction(Epilepsy)
+Claes eats a goldenseal root.
+Processed Cures(epilepsy)
+H:7465|100% M:4291|85% E:100% W:99% [NE|NW|N] R:0 12:06.00-e*-🌀3💧🌪️ K:0%[8.9|0|0|0|8.4|8.4] 
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your left leg.
+Snapping your leg out to its full extent, you drive a heel into the left knee of Claes.
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left leg. (16.8%)
+You feel the satisfying crunch of bone under the impact of your heel...
+Processed Affliction(Leftleg)
+Balance used: 2.1s.
+Falling back into a low crouch, you lash out with a swift strike at the left thigh of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left leg. (25.2%)
+The staff cracks across the left thigh of Claes...
+Processed Affliction(Weariness)
+Falling back into a low crouch, you lash out with a swift strike at the left thigh of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left leg. (33.6%)
+The staff cracks across the left thigh of Claes...
+Processed Affliction(Lethargy)
+You are now maintaining a kata chain of 6 actions.
+You glance over Claes and see that her health is at 4813/5460 [88%].
+[Health]: 89%
+H:7465|100% M:4225|84% E:100% W:99% [NE|NW|N] R:0 12:06.22-e*-🌀6💧🌪️ K:0%[8.9|0|0|0|33.6|8.4] 
+wear leth
+
+[DEF]: Insulation
+The blade of Claes is a blur as she moves forward, slicing into you.
+[Legacy]: Curing against SnB (Claes).
+Health lost: 523 (physical cutting).
+Cold blue flames wreathe Claes's runeblade, emanating an icy chill that penetrates you to the bone.
+[Legacy]: Curing against RunewardenSnB (Claes).
+[AFF]: Shivering
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Claes quickly lunges to the side, bringing her shield around to smash into your spine.
+[AFF]: Paralysis
+Your muscles lock in painful contractions in reaction to the blow.
+Health lost: 131 (physical blunt).
+Claes moves in to engage you.
+H:6811|91% M:4225|84% E:100% W:99% [NE|NW|N] R:0 12:06.32-e*-🌀6💧🌪️ K:9%[8.9|0|0|0|33.6|8.4]  ( -654h 8% )[PAR clum shiv] 
+wear leth
+Claes takes some salve from a vial and rubs it on her legs.
+Processed Cures(leftleg)
+
+
+OPPONENT APPLIED TO THEIR legs!!
+
+
+You eat a bloodroot leaf.
+outr bloodroot
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+You take out some salve and quickly rub it on your skin.
+Your body warms up and you stop shivering.
+[AFF]: Shivering
+You touch the tree of life tattoo.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+You take a drink from a black-walnut vial.
+Your mind feels stronger and more alert.
+H:6811|91% M:5024|100% E:100% W:99% [NE|NW|N] R:0 12:06.44-e*-🌀6💧🌪️ K:9%[8.9|0|0|0|33.6|8.4]  ( +799m 15% )
+wear leth
+A fierce mountain falcon dives at you, raking your face with its talons.
+Health lost: 217 (physical cutting).
+H:6594|88% M:5024|100% E:100% W:99% [NE|NW|N] R:0 12:06.45-e*-🌀6💧🌪️ K:9%[8.9|0|0|0|33.6|8.4]  ( -217h 2% )
+wear leth
+[OUTR]: 1 Bloodroot (1332)
+mzzz
+queue addclearfull eb!p!w!t  pk
+You may apply another salve to yourself. Skin (0.845)
+H:6594|88% M:4984|99% E:100% W:99% [NE|NW|N] R:0 12:07.31-e*-🌀6💧🌪️ K:9%[8.9|0|0|0|33.6|8.4] 
+wear leth
+
+[DEF]: Insulation
+You take out some salve and quickly rub it on your skin.
+A feeling of comfortable warmth spreads over you.
+H:6594|88% M:4984|99% E:100% W:99% [NE|NW|N] R:0 12:07.40-e*-🌀6💧🌪️ K:9%[8.9|0|0|0|33.6|8.4] 
+wear leth
+Claes eats a piece of kelp.
+Processed Cures(weariness)
+H:6594|88% M:4974|99% E:100% W:99% [NE|NW|N] R:0 12:07.57-e*-🌀6💧🌪️ K:9%[8.9|0|0|0|33.6|8.4] 
+leth
+You may eat another plant or mineral. Eat (1.587)
+H:6594|88% M:4974|99% E:100% W:99% [NE|NW|N] R:0 12:07.99-e*-🌀6💧🌪️ K:9%[8.9|0|0|0|33.6|8.4] 
+leth
+Claes takes a drink from a black-walnut vial.
+H:6594|88% M:4974|99% E:100% W:99% [NE|NW|N] R:0 12:08.04-e*-🌀6💧🌪️ K:9%[8.9|0|0|0|33.6|8.4] 
+leth
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+H:6594|88% M:4974|99% E:100% W:99% [NE|NW|N] R:0 12:08.22-e*-🌀6💧🌪️ K:9%[8.9|0|0|0|33.6|8.4] 
+leth
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your left leg.
+Snapping your leg out to its full extent, you drive a heel into the left knee of Claes.
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left leg. (42%)
+You feel the satisfying crunch of bone under the impact of your heel...
+Processed Affliction(Leftleg)
+Balance used: 2.1s.
+Falling back into a low crouch, you lash out with a swift strike at the left thigh of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left leg. (50.4%)
+The staff cracks across the left thigh of Claes...
+Processed Affliction(Weariness)
+Falling back into a low crouch, you lash out with a swift strike at the left thigh of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left leg. (58.8%)
+The staff cracks across the left thigh of Claes...
+You are now maintaining a kata chain of 9 actions.
+You glance over Claes and see that her health is at 4501/5460 [82%].
+[Health]: 83%
+You may apply another salve to yourself. Skin (0.914)
+H:6594|88% M:4908|97% E:100% W:99% [NE|NW|N] R:0 12:08.33-e*-🌀9💧🌪️ K:9%[8.9|0|0|0|58.8|8.4] 
+wear leth
+Claes takes some salve from a vial and rubs it on her legs.
+Processed Cures(leftleg)
+
+
+OPPONENT APPLIED TO THEIR legs!!
+
+
+H:6594|88% M:4908|97% E:100% W:99% [NE|NW|N] R:0 12:08.41-e*-🌀9💧🌪️ K:9%[8.9|0|0|0|58.8|8.4] 
+wear leth
+
+[DEF]: Insulation
+The blade of Claes is a blur as she moves forward, slicing into you.
+Health lost: 523 (physical cutting).
+Cold blue flames wreathe Claes's runeblade, emanating an icy chill that penetrates you to the bone.
+[AFF]: Shivering
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Claes quickly lunges to the side, bringing her shield around to smash into your spine.
+[AFF]: Paralysis
+Your muscles lock in painful contractions in reaction to the blow.
+Health lost: 131 (physical blunt).
+H:5940|79% M:4908|97% E:100% W:99% [NE|NW|N] R:0 12:08.42-e*-🌀9💧🌪️ K:18%[8.9|0|0|0|58.8|8.4]  ( -654h 8% )[PAR clum shiv] 
+wear leth
+You eat a bloodroot leaf.
+outr bloodroot
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+You take out some salve and quickly rub it on your skin.
+Your body warms up and you stop shivering.
+[AFF]: Shivering
+[OUTR]: 1 Bloodroot (1331)
+Claes eats a piece of kelp.
+Processed Cures(weariness)
+H:5940|79% M:4828|96% E:100% W:99% [NE|NW|N] R:0 12:09.19-e*-🌀9💧🌪️ K:18%[8.9|0|0|0|58.8|8.4] [clum] 
+leth
+You may apply another salve to yourself. Skin (0.886)
+H:5940|79% M:4818|95% E:100% W:99% [NE|NW|N] R:0 12:09.51-e*-🌀9💧🌪️ K:18%[8.9|0|0|0|58.8|8.4] [clum] 
+leth
+mzzz
+queue addclearfull eb!p!w!t  pk
+
+[DEF]: Insulation
+Claes eats some irid moss.
+You take out some salve and quickly rub it on your skin.
+A feeling of comfortable warmth spreads over you.
+H:5940|79% M:4818|95% E:100% W:99% [NE|NW|N] R:0 12:09.61-e*-🌀9💧🌪️ K:18%[8.9|0|0|0|58.8|8.4] [clum] 
+leth
+
+[DEF]: Levitating
+A fierce mountain falcon rips out a chunk of your flesh with its beak.
+Your levitating defence is ripped apart by its talons.
+Health lost: 228 (physical cutting).
+H:5712|76% M:4818|95% E:100% W:99% [NE|NW|N] R:0 12:09.61-e*-🌀9💧🌪️ K:18%[8.9|0|0|0|58.8|8.4]  ( -228h 3% )[clum] 
+leth
+
+[DEF]: Levitating
+You take a drink from a black-walnut vial.
+Your body begins to feel lighter and you feel that you are floating slightly.
+You may eat another plant or mineral. Eat (1.513)
+H:5712|76% M:4750|94% E:100% W:99% [NE|NW|N] R:0 12:10.13-e*-🌀9💧🌪️ K:18%[8.9|0|0|0|58.8|8.4] [clum] 
+leth
+You eat an aurum flake.
+outr aurum
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:5712|76% M:4750|94% E:100% W:99% [NE|NW|N] R:0 12:10.15-e*-🌀9💧🌪️ K:18%[8.9|0|0|0|58.8|8.4] 
+leth
+Health lost: 10 (raw).
+You bleed 10 health.
+H:5702|76% M:4750|94% E:100% W:99% [NE|NW|N] R:0 12:10.23-e*-🌀9💧🌪️ K:18%[8.9|0|0|0|58.8|8.4] 
+leth
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+H:5802|77% M:4650|92% E:100% W:99% [NE|NW|N] R:0 12:10.35-e*-🌀9💧🌪️ K:18%[8.9|0|0|0|58.8|8.4] 
+leth
+[OUTR]: 1 Aurum (991)
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your left leg.
+Snapping your leg out to its full extent, you drive a heel into the left knee of Claes.
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left leg. (67.2%)
+You feel the satisfying crunch of bone under the impact of your heel...
+Processed Affliction(Leftleg)
+Balance used: 2.1s.
+Falling back into a low crouch, you lash out with a swift strike at the left thigh of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left leg. (75.6%)
+The staff cracks across the left thigh of Claes...
+Processed Affliction(Weariness)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes flashheel left kuro left kuro light left   / assess
+Falling back into a low crouch, you lash out with a swift strike at the left thigh of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left leg. (84%)
+The staff cracks across the left thigh of Claes...
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes flashheel left kuro light left kuro light left   / assess
+You are now maintaining a kata chain of 12 actions.
+You glance over Claes and see that her health is at 4351/5460 [79%].
+[Health]: 80%
+H:5802|77% M:4584|91% E:100% W:99% [NE|NW|N] R:0 12:10.46-e*-🌀12💧🌪️ K:18%[8.9|0|0|0|84|8.4] 
+wear leth
+Claes takes some salve from a vial and rubs it on her legs.
+Processed Cures(leftleg)
+
+
+OPPONENT APPLIED TO THEIR legs!!
+
+
+H:5802|77% M:4584|91% E:100% W:99% [NE|NW|N] R:0 12:10.54-e*-🌀12💧🌪️ K:18%[8.9|0|0|0|84|8.4] 
+wear leth
+You may apply another salve to yourself. Skin (0.963)
+H:5802|77% M:4584|91% E:100% W:99% [NE|NW|N] R:0 12:10.55-e*-🌀12💧🌪️ K:18%[8.9|0|0|0|84|8.4] 
+wear leth
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes flashheel left kuro left kuro light left   /
+assess"
+H:5802|77% M:4584|91% E:100% W:99% [NE|NW|N] R:0 12:10.58-e*-🌀12💧🌪️ K:18%[8.9|0|0|0|84|8.4] 
+wear leth
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes flashheel left kuro light left kuro light left   /
+assess"
+H:5802|77% M:4584|91% E:100% W:99% [NE|NW|N] R:0 12:10.58-e*-🌀12💧🌪️ K:18%[8.9|0|0|0|84|8.4] 
+wear leth
+The blade of Claes is a blur as she moves forward, slicing into you.
+Health lost: 523 (physical cutting).
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Claes quickly lunges to the side, bringing her shield around to smash into your spine.
+[AFF]: Paralysis
+Your muscles lock in painful contractions in reaction to the blow.
+Health lost: 131 (physical blunt).
+H:5148|68% M:4584|91% E:100% W:99% [NE|NW|N] R:0 12:10.66-e*-🌀12💧🌪️ K:27%[8.9|0|0|0|84|8.4]  ( -654h 8% )[PAR clum] 
+wear leth
+[OUTR]: 1 Irid (1436)
+You eat some irid moss.
+H:5745|76% M:4945|98% E:100% W:99% [NE|NW|N] R:0 12:10.74-e*-🌀12💧🌪️ K:27%[8.9|0|0|0|84|8.4]  ( +597h 7% +361m 7% )[PAR clum] 
+wear leth
+You may drink another health or mana elixir. Mana (4.475)
+H:5745|76% M:4945|98% E:100% W:99% [NE|NW|N] R:0 12:10.85-e*-🌀12💧🌪️ K:27%[8.9|0|0|0|84|8.4] [PAR clum] 
+wear leth
+Claes eats a piece of kelp.
+You take a drink from an elegant diamond vial.
+Processed Cures(weariness)
+The elixir heals and soothes you.
+H:7109|95% M:4945|98% E:100% W:99% [NE|NW|N] R:0 12:10.93-e*-🌀12💧🌪️ K:27%[8.9|0|0|0|84|8.4]  ( +1364h 18% )[PAR clum] 
+leth
+t
+transition to Rain form
+Dropping into a lower stance, you snap your weapon into an offensive position, tensing your muscles in preparation for the form of Willows in Rain
+Storm.
+H:7109|95% M:4945|98% E:100% W:99% [NE|NW|N] R:0 12:11.59-e*-💧0🛡️🌲 K:27%[8.9|0|0|0|84|8.4] [PAR clum] 
+leth
+You may eat another plant or mineral. Eat (1.46)
+H:7109|95% M:4945|98% E:100% W:99% [NE|NW|N] R:0 12:11.71-e*-💧0🛡️🌲 K:27%[8.9|0|0|0|84|8.4] [PAR clum] 
+leth
+You eat a bloodroot leaf.
+outr bloodroot
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:7465|100% M:5024|100% E:100% W:99% [NE|NW|N] R:0 12:11.90-e*-💧0🛡️🌲 K:27%[8.9|0|0|0|84|8.4]  ( +356h 4% )[clum] 
+leth
+[OUTR]: 1 Bloodroot (1330)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes kuro left kuro light left frontkick left   / assess
+maul
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes frontkick left kuro left ruku right   / assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes kuro left kuro light left frontkick left   /
+assess"
+H:7465|100% M:5024|100% E:100% W:99% [NE|NW|N] R:0 12:12.26-e*-💧0🛡️🌲 K:27%[8.9|0|0|0|84|8.4] [clum] 
+leth
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes frontkick left kuro left ruku right   / assess"
+
+H:7465|100% M:5024|100% E:100% W:99% [NE|NW|N] R:0 12:12.35-e*-💧0🛡️🌲 K:27%[8.9|0|0|0|84|8.4] [clum] 
+leth
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+H:7465|100% M:5024|100% E:100% W:99% [NE|NW|N] R:0 12:12.45-e*-💧0🛡️🌲 K:27%[8.9|0|0|0|84|8.4] [clum] 
+leth
+Claes eats a ginseng root.
+Claes takes a drink from a black-walnut vial.
+Processed Cures(lethargy)
+H:7465|100% M:5024|100% E:100% W:99% [NE|NW|N] R:0 12:12.47-e*-💧0🛡️🌲 K:27%[8.9|0|0|0|84|8.4] [clum] 
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your left leg.
+You lash out with a straight kick at the left shoulder of Claes.
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left arm. (8.4%)
+The instep of your foot smashes into the left underarm of Claes, throwing her from her feet and sending her spinning to the ground.
+ --------------------------------------------------------------
+ --------------------GOT PRONE!!--------------------------
+ --------------------GOT PRONE!!--------------------------
+ --------------------------------------------------------------
+Processed Affliction(Prone)
+Balance used: 2.1s.
+Falling back into a low crouch, you lash out with a swift strike at the left thigh of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left leg. (92.4%)
+The staff cracks across the left thigh of Claes...
+Processed Affliction(Weariness)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes frontkick left kuro light left ruku right   / assess
+You spin a full rotation, bringing a twisted oaken staff around in a blur of motion to smash into the right arm of Claes.
+Processed Affliction(Clumsiness)
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's right arm. (8.4%)
+The staff connects to the right arm with a resounding crack, the limb flopping uselessly.
+You are now maintaining a kata chain of 3 actions.
+You glance over Claes and see that her health is at 4499/5460 [82%].
+[Health]: 83%
+H:7465|100% M:4948|98% E:100% W:99% [NE|NW|N] R:0 12:12.56-e*-💧3🛡️🌲 K:27%[8.9|0|8.4|8.4|92.4|8.4] [clum] 
+clum wear
+A fierce mountain falcon dives at you, raking your face with its talons.
+Health lost: 334 (physical blunt).
+H:7131|95% M:4948|98% E:100% W:99% [NE|NW|N] R:0 12:12.64-e*-💧3🛡️🌲 K:27%[8.9|0|8.4|8.4|92.4|8.4]  ( -334h 4% )[clum] 
+clum wear
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes frontkick left kuro light left ruku right   /
+assess"
+H:7131|95% M:4908|97% E:100% W:99% [NE|NW|N] R:0 12:12.70-e*-💧3🛡️🌲 K:27%[8.9|0|8.4|8.4|92.4|8.4] [clum] 
+clum wear
+Claes stands up.
+
+Claes IS NO LONGER PRONE.  FAE|HE|SHE IS UP!!
+
+Claes IS NO LONGER PRONE.  FAE|HE|SHE IS UP!!
+
+H:7131|95% M:4908|97% E:100% W:99% [NE|NW|N] R:0 12:12.91-e*-💧3🛡️🌲 K:27%[8.9|0|8.4|8.4|92.4|8.4] [clum] 
+clum wear
+The blade of Claes is a blur as she moves forward, slicing into you.
+Claes misses you with a blessed legionnaire's longsword.
+Claes quickly lunges to the side, bringing her shield around to smash into your spine.
+[AFF]: Paralysis
+Your muscles lock in painful contractions in reaction to the blow.
+Health lost: 136 (physical blunt).
+H:6995|93% M:4908|97% E:100% W:99% [NE|NW|N] R:0 12:12.93-e*-💧3🛡️🌲 K:36%[8.9|0|8.4|8.4|92.4|8.4] [PAR clum] 
+clum wear
+
+                   ---CAN TREE AGAIN---
+maul
+queue addclearfull eb!p!w!t  pk
+You may eat another plant or mineral. Eat (1.524)
+H:7368|98% M:4908|97% E:100% W:99% [NE|NW|N] R:0 12:13.42-e*-💧3🛡️🌲 K:36%[8.9|0|8.4|8.4|92.4|8.4]  ( +373h 4% )[PAR clum] 
+clum wear
+You eat a bloodroot leaf.
+outr bloodroot
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:7368|98% M:4908|97% E:100% W:99% [NE|NW|N] R:0 12:13.45-e*-💧3🛡️🌲 K:36%[8.9|0|8.4|8.4|92.4|8.4] [clum] 
+clum wear
+[OUTR]: 1 Bloodroot (1329)
+Claes eats a piece of kelp.
+Processed Cures(clumsiness weariness)
+H:7368|98% M:4880|97% E:100% W:99% [NE|NW|N] R:0 12:14.25-e*-💧3🛡️🌲 K:36%[8.9|0|8.4|8.4|92.4|8.4] [clum] 
+clum50 wear50
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+H:7368|98% M:4880|97% E:100% W:99% [NE|NW|N] R:0 12:14.59-e*-💧3🛡️🌲 K:36%[8.9|0|8.4|8.4|92.4|8.4] [clum] 
+clum50 wear50
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your left leg.
+You lash out with a straight kick at the left shoulder of Claes.
+You fumble your strike, the attack going wide.
+Balance used: 2.1s.
+Falling back into a low crouch, you lash out with a swift strike at the left thigh of Claes...
+The staff cracks across the left thigh of Claes...
+Processed Affliction(Weariness)
+Processed Affliction(Lethargy)
+You spin a full rotation, bringing a twisted oaken staff around in a blur of motion to smash into the right arm of Claes.
+Processed Affliction(Clumsiness)
+Processed Affliction(Healthleech)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes frontkick left kuro left ruku right   transition oak / assess
+Claes parries the attack with a deft manoeuvre.
+ YOU HIT PARRY!!
+
+ YOU HIT PARRY!!
+You are now maintaining a kata chain of 6 actions.
+You glance over Claes and see that her health is at 4182/5460 [76%].
+[Health]: 77%
+H:7368|98% M:4814|95% E:100% W:99% [NE|NW|N] R:0 12:14.70-e*-💧6🛡️🌲 K:36%[8.9|0|8.4|8.4|92.4|8.4] [clum] 
+clum wear hlch50 leth50
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes frontkick left kuro left ruku right   transition
+oak / assess"
+H:7368|98% M:4814|95% E:100% W:99% [NE|NW|N] R:0 12:14.80-e*-💧6🛡️🌲 K:36%[8.9|0|8.4|8.4|92.4|8.4] [clum] 
+clum wear hlch50 leth50
+
+[DEF]: Deafness
+The blade of Claes is a blur as she moves forward, slicing into you.
+Health lost: 545 (physical cutting).
+[AFF]: Weariness
+Your limbs grow heavy and you groan feebly.
+Claes quickly lunges to the side, bringing her shield around to smash into your spine.
+[AFF]: Paralysis
+Your muscles lock in painful contractions in reaction to the blow.
+Health lost: 136 (physical blunt).
+Claes draws a Shield of Absorption back, then lunges forward with a savage strike to your ribs.
+Your hearing is suddenly restored.
+H:6687|89% M:4814|95% E:100% W:99% [NE|NW|N] R:0 12:14.92-ed*-💧6🛡️🌲 K:45%[8.9|0|8.4|8.4|92.4|8.4]  ( -681h 9% )[PAR clum wear] 
+clum wear hlch50 leth50
+mdcc
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes frontkick right kuro right kuro right   / assess
+queue addclearfull eb!p!w!t  pk
+You may eat another plant or mineral. Eat (1.498)
+H:6687|89% M:4774|95% E:100% W:99% [NE|NW|N] R:0 12:15.04-ed*-💧6🛡️🌲 K:45%[8.9|0|8.4|8.4|92.4|8.4] [PAR clum wear] 
+clum wear hlch50 leth50
+A rune like a rising sun upon the ground flares, bathing Claes with healing magic.
+Processed Cures(clumsiness healthleech lethargy weariness)
+H:6687|89% M:4774|95% E:100% W:99% [NE|NW|N] R:0 12:15.05-ed*-💧6🛡️🌲 K:45%[8.9|0|8.4|8.4|92.4|8.4] [PAR clum wear] 
+clum75 wear75 hlch37 leth37[GLUE] passive cure
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes frontkick right kuro right kuro right   / assess"
+
+H:6687|89% M:4774|95% E:100% W:99% [NE|NW|N] R:0 12:15.12-ed*-💧6🛡️🌲 K:45%[8.9|0|8.4|8.4|92.4|8.4] [PAR clum wear] 
+clum75 wear75 hlch37 leth37
+You eat a bloodroot leaf.
+outr bloodroot
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:6687|89% M:4774|95% E:100% W:99% [NE|NW|N] R:0 12:15.24-ed*-💧6🛡️🌲 K:45%[8.9|0|8.4|8.4|92.4|8.4] [clum wear] 
+clum75 wear75 hlch37 leth37
+You may drink another health or mana elixir. Health (4.44)
+H:6687|89% M:4774|95% E:100% W:99% [NE|NW|N] R:0 12:15.34-ed*-💧6🛡️🌲 K:45%[8.9|0|8.4|8.4|92.4|8.4] [clum wear] 
+clum75 wear75 hlch37 leth37
+[OUTR]: 1 Bloodroot (1328)
+Claes eats some irid moss.
+H:6687|89% M:4774|95% E:100% W:99% [NE|NW|N] R:0 12:15.62-ed*-💧6🛡️🌲 K:45%[8.9|0|8.4|8.4|92.4|8.4] [clum wear] 
+clum75 wear75 hlch37 leth37
+A fierce mountain falcon dives at you, raking your face with its talons.
+Your kai energy defence is ripped apart by its talons.
+Health lost: 278 (physical blunt).
+H:6409|85% M:4774|95% E:100% W:99% [NE|NW|N] R:0 12:15.66-ed*-💧6🛡️🌲 K:20%[8.9|0|8.4|8.4|92.4|8.4]  ( -278h 3% )[clum wear] 
+clum75 wear75 hlch37 leth37
+Health lost: 26 (raw).
+You bleed 26 health.
+H:6383|85% M:4758|94% E:100% W:99% [NE|NW|N] R:0 12:15.73-ed*-💧6🛡️🌲 K:20%[8.9|0|8.4|8.4|92.4|8.4] [clum wear] 
+clum75 wear75 hlch37 leth37
+Claes eats a piece of kelp.
+Processed Cures(clumsiness weariness healthleech)
+H:6383|85% M:4758|94% E:100% W:99% [NE|NW|N] R:0 12:15.82-ed*-💧6🛡️🌲 K:20%[8.9|0|8.4|8.4|92.4|8.4] [clum wear] 
+clum50 wear50 leth37
+mdcc
+queue addclearfull eb!p!w!t  pk
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+You may eat another bit of irid moss or potash.
+H:6483|86% M:4658|92% E:100% W:99% [NE|NW|N] R:0 12:16.62-ed*-💧6🛡️🌲 K:20%[8.9|0|8.4|8.4|92.4|8.4] [clum wear] 
+clum50 wear50 leth37
+You may eat another plant or mineral. Eat (1.435)
+H:6483|86% M:4658|92% E:100% W:99% [NE|NW|N] R:0 12:16.71-ed*-💧6🛡️🌲 K:20%[8.9|0|8.4|8.4|92.4|8.4] [clum wear] 
+clum50 wear50 leth37
+You eat an aurum flake.
+outr aurum
+Your limbs strengthen and you feel stronger.
+[AFF]: Weariness
+H:6483|86% M:4658|92% E:100% W:99% [NE|NW|N] R:0 12:16.78-ed*-💧6🛡️🌲 K:20%[8.9|0|8.4|8.4|92.4|8.4] [clum] 
+clum50 wear50 leth37
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your left leg.
+You lash out with a straight kick at the right shoulder of Claes.
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's right arm. (16.8%)
+The instep of your foot smashes into the right underarm of Claes, throwing her from her feet and sending her spinning to the ground.
+ --------------------------------------------------------------
+ --------------------GOT PRONE!!--------------------------
+ --------------------GOT PRONE!!--------------------------
+ --------------------------------------------------------------
+Processed Affliction(Prone)
+Balance used: 2.1s.
+Falling back into a low crouch, you lash out with a swift strike at the right thigh of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's right leg. (16.8%)
+The staff cracks across the right thigh of Claes...
+Processed Affliction(Weariness)
+Processed Affliction(Lethargy)
+Falling back into a low crouch, you lash out with a swift strike at the right thigh of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's right leg. (25.2%)
+The staff cracks across the right thigh of Claes...
+Processed Affliction(Lethargy)
+You are now maintaining a kata chain of 9 actions.
+You glance over Claes and see that her health is at 4323/5460 [79%].
+[Health]: 80%
+H:6483|86% M:4592|91% E:100% W:99% [NE|NW|N] R:0 12:16.82-ed*-💧9🛡️🌲 K:20%[8.9|0|8.4|16.8|92.4|25.2] [clum] 
+clum50 wear leth
+Claes takes a drink from a black-walnut vial.
+H:6483|86% M:4592|91% E:100% W:99% [NE|NW|N] R:0 12:16.96-ed*-💧9🛡️🌲 K:20%[8.9|0|8.4|16.8|92.4|25.2] [clum] 
+clum50 wear leth
+[OUTR]: 1 Aurum (990)
+Claes stands up.
+
+Claes IS NO LONGER PRONE.  FAE|HE|SHE IS UP!!
+
+Claes IS NO LONGER PRONE.  FAE|HE|SHE IS UP!!
+
+H:6483|86% M:4592|91% E:100% W:99% [NE|NW|N] R:0 12:17.17-ed*-💧9🛡️🌲 K:20%[8.9|0|8.4|16.8|92.4|25.2] [clum] 
+clum50 wear leth
+The blade of Claes is a blur as she moves forward, slicing into you.
+Health lost: 545 (physical cutting).
+[AFF]: Asthma
+You feel a tightening sensation grow in your lungs.
+Claes quickly lunges to the side, bringing her shield around to smash into your spine.
+[AFF]: Paralysis
+Your muscles lock in painful contractions in reaction to the blow.
+Health lost: 136 (physical blunt).
+H:5802|77% M:4592|91% E:100% W:99% [NE|NW|N] R:0 12:17.17-ed*-💧9🛡️🌲 K:29%[8.9|0|8.4|16.8|92.4|25.2]  ( -681h 9% )[PAR AST clum] 
+clum50 wear leth
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+H:7166|95% M:4512|89% E:100% W:98% [NE|NW|N] R:0 12:17.34-ed*-💧9🛡️🌲 K:29%[8.9|0|8.4|16.8|92.4|25.2]  ( +1364h 18% )[PAR AST clum] 
+clum50 wear leth
+Claes eats a piece of kelp.
+Processed Cures(clumsiness weariness)
+H:7166|95% M:4502|89% E:100% W:98% [NE|NW|N] R:0 12:17.53-ed*-💧9🛡️🌲 K:29%[8.9|0|8.4|16.8|92.4|25.2] [PAR AST clum] 
+wear50 leth
+Claes touches a tree of life tattoo.
+                   --- THEY TOUCHED TREE ---
+                   --- THEY TOUCHED TREE ---Processed Cures
+Processed Cures(weariness lethargy)
+H:7166|95% M:4502|89% E:100% W:98% [NE|NW|N] R:0 12:17.71-ed*-💧9🛡️🌲 K:29%[8.9|0|8.4|16.8|92.4|25.2] [PAR AST clum] 
+leth50
+mdcc
+queue addclearfull eb!p!w!t  pk
+You may eat another plant or mineral. Eat (1.502)
+H:7166|95% M:4474|89% E:100% W:98% [NE|NW|N] R:0 12:18.34-ed*-💧9🛡️🌲 K:29%[8.9|0|8.4|16.8|92.4|25.2] [PAR AST clum] 
+leth50
+You eat a bloodroot leaf.
+outr bloodroot
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:7166|95% M:4474|89% E:100% W:98% [NE|NW|N] R:0 12:18.54-ed*-💧9🛡️🌲 K:29%[8.9|0|8.4|16.8|92.4|25.2] [AST clum] 
+leth50
+[OUTR]: 1 Bloodroot (1327)
+A fierce mountain falcon dives at you, raking your face with its talons.
+Health lost: 241 (physical cutting).
+H:6925|92% M:4474|89% E:100% W:98% [NE|NW|N] R:0 12:18.66-ed*-💧9🛡️🌲 K:29%[8.9|0|8.4|16.8|92.4|25.2]  ( -241h 3% )[AST clum] 
+leth50
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+H:6925|92% M:4434|88% E:100% W:98% [NE|NW|N] R:0 12:18.84-ed*-💧9🛡️🌲 K:29%[8.9|0|8.4|16.8|92.4|25.2] [AST clum] 
+leth50
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your left leg.
+You lash out with a straight kick at the right shoulder of Claes.
+You fumble your strike, the attack going wide.
+Balance used: 2.1s.
+Falling back into a low crouch, you lash out with a swift strike at the right thigh of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's right leg. (33.6%)
+The staff cracks across the right thigh of Claes...
+Processed Affliction(Weariness)
+Falling back into a low crouch, you lash out with a swift strike at the right thigh of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's right leg. (42%)
+The staff cracks across the right thigh of Claes...
+Processed Affliction(Lethargy)
+You are now maintaining a kata chain of 12 actions.
+You glance over Claes and see that her health is at 4667/5460 [85%].
+[Health]: 86%
+H:6925|92% M:4368|86% E:100% W:98% [NE|NW|N] R:0 12:18.95-ed*-💧12🛡️🌲 K:29%[8.9|0|8.4|16.8|92.4|42] [AST clum] 
+wear leth
+Claes eats a piece of kelp.
+Processed Cures(weariness)
+H:6925|92% M:4368|86% E:100% W:98% [NE|NW|N] R:0 12:19.33-ed*-💧12🛡️🌲 K:29%[8.9|0|8.4|16.8|92.4|42] [AST clum] 
+leth
+
+[DEF]: Fangbarrier
+The blade of Claes is a blur as she moves forward, slicing into you.
+Health lost: 684 (physical cutting).
+[AFF]: Slickness
+The protective covering coating your skin sloughs off.
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+Claes quickly lunges to the side, bringing her shield around to smash into your spine.
+[AFF]: Paralysis
+Your muscles lock in painful contractions in reaction to the blow.
+Health lost: 170 (physical blunt).
+H:6071|81% M:4364|86% E:100% W:98% [NE|NW|N] R:0 12:19.40-ed*-💧12🛡️🌲 K:38%[8.9|0|8.4|16.8|92.4|42]  ( -854h 11% )[PAR SLCK AST clum] 
+leth
+You may eat another plant or mineral. Eat (1.435)
+H:6071|81% M:4284|85% E:100% W:98% [NE|NW|N] R:0 12:19.00-ed*-💧12🛡️🌲 K:38%[8.9|0|8.4|16.8|92.4|42] [PAR SLCK AST clum] 
+leth
+You eat a bloodroot leaf.
+outr bloodroot
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:6071|81% M:4284|85% E:100% W:98% [NE|NW|N] R:0 12:20.14-ed*-💧12🛡️🌲 K:38%[8.9|0|8.4|16.8|92.4|42] [SLCK AST clum] 
+leth
+[OUTR]: 1 Bloodroot (1326)
+You may utilise the tree tattoo again. Tree (13.899)
+H:6071|81% M:4284|85% E:100% W:98% [NE|NW|N] R:0 12:20.36-ed*-💧12🛡️🌲 K:38%[8.9|0|8.4|16.8|92.4|42] [SLCK AST clum] 
+leth
+mdcc
+queue addclearfull eb!p!w!t  pk
+You touch the tree of life tattoo.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+H:6071|81% M:4284|85% E:100% W:98% [NE|NW|N] R:0 12:20.59-ed*-💧12🛡️🌲 K:38%[8.9|0|8.4|16.8|92.4|42] [SLCK clum] 
+leth
+You take a long drag of realgar off your pipe.
+Your glands cease their oily secretion.
+[AFF]: Slickness
+[OUTR]: 1 Quicksilver (1502)
+You apply a quicksilver droplet to yourself.
+H:6071|81% M:4284|85% E:100% W:98% [NE|NW|N] R:0 12:20.75-ed*-💧12🛡️🌲 K:38%[8.9|0|8.4|16.8|92.4|42] [clum] 
+leth
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+H:6071|81% M:4284|85% E:100% W:98% [NE|NW|N] R:0 12:20.91-ed*-💧12🛡️🌲 K:38%[8.9|0|8.4|16.8|92.4|42] [clum] 
+leth
+Claes eats a ginseng root.
+Processed Cures(lethargy)
+H:6071|81% M:4284|85% E:100% W:98% [NE|NW|N] R:0 12:20.92-ed*-💧12🛡️🌲 K:38%[8.9|0|8.4|16.8|92.4|42] [clum] 
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your left leg.
+You lash out with a straight kick at the right shoulder of Claes.
+You fumble your strike, the attack going wide.
+Balance used: 2.1s.
+Falling back into a low crouch, you lash out with a swift strike at the right thigh of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's right leg. (50.4%)
+The staff cracks across the right thigh of Claes...
+Processed Affliction(Lethargy Weariness)
+Falling back into a low crouch, you lash out with a swift strike at the right thigh of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's right leg. (58.8%)
+The staff cracks across the right thigh of Claes...
+You are now maintaining a kata chain of 15 actions.
+You glance over Claes and see that her health is at 4004/5460 [73%].
+[Health]: 74%
+H:6071|81% M:4218|83% E:100% W:98% [NE|NW|N] R:0 12:21.02-ed*-💧15🛡️🌲 K:38%[8.9|0|8.4|16.8|92.4|58.8] [clum] 
+wear leth
+Health lost: 10 (raw).
+You bleed 10 health.
+H:6061|81% M:4218|83% E:100% W:98% [NE|NW|N] R:0 12:21.23-ed*-💧15🛡️🌲 K:38%[8.9|0|8.4|16.8|92.4|58.8] [clum] 
+wear leth
+Claes takes a drink from a black-walnut vial.
+H:6061|81% M:4218|83% E:100% W:98% [NE|NW|N] R:0 12:21.49-ed*-💧15🛡️🌲 K:38%[8.9|0|8.4|16.8|92.4|58.8] [clum] 
+wear leth
+The blade of Claes is a blur as she moves forward, slicing into you.
+Health lost: 545 (physical cutting).
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Claes quickly lunges to the side, bringing her shield around to smash into your spine.
+[AFF]: Paralysis
+Your muscles lock in painful contractions in reaction to the blow.
+Health lost: 136 (physical blunt).
+H:5380|72% M:4218|83% E:100% W:98% [NE|NW|N] R:0 12:21.54-ed*-💧15🛡️🌲 K:47%[8.9|0|8.4|16.8|92.4|58.8]  ( -681h 9% )[PAR clum] 
+wear leth
+A fierce mountain falcon dives at you, raking your face with its talons.
+Health lost: 278 (physical blunt).
+H:5102|68% M:4218|83% E:100% W:98% [NE|NW|N] R:0 12:21.67-ed*-💧15🛡️🌲 K:47%[8.9|0|8.4|16.8|92.4|58.8]  ( -278h 3% )[PAR clum] 
+wear leth
+You eat some irid moss.
+H:5699|76% M:4539|90% E:100% W:98% [NE|NW|N] R:0 12:21.69-ed*-💧15🛡️🌲 K:47%[8.9|0|8.4|16.8|92.4|58.8]  ( +597h 7% +321m 6% )[PAR clum] 
+wear leth
+You may eat another plant or mineral. Eat (1.617)
+You may drink another health or mana elixir. Health (4.318)
+H:5699|76% M:4539|90% E:100% W:98% [NE|NW|N] R:0 12:21.73-ed*-💧15🛡️🌲 K:47%[8.9|0|8.4|16.8|92.4|58.8] [PAR clum] 
+wear leth
+You eat a bloodroot leaf.
+outr bloodroot
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+H:7220|96% M:4539|90% E:100% W:98% [NE|NW|N] R:0 12:21.89-ed*-💧15🛡️🌲 K:47%[8.9|0|8.4|16.8|92.4|58.8]  ( +1521h 20% )[clum] 
+wear leth
+[OUTR]: 1 Bloodroot (1325)
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.47)
+H:7465|100% M:4611|91% E:100% W:98% [NE|NW|N] R:0 12:22.29-ed*-💧15🛡️🌲 K:47%[8.9|0|8.4|16.8|92.4|58.8]  ( +245h 3% )[clum] 
+wear leth
+Claes eats a piece of kelp.
+Processed Cures(weariness)
+H:7465|100% M:4601|91% E:100% W:98% [NE|NW|N] R:0 12:22.65-ed*-💧15🛡️🌲 K:47%[8.9|0|8.4|16.8|92.4|58.8] [clum] 
+leth
+maul
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes frontkick left kuro left ruku right   transition oak / assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes frontkick left kuro left ruku right   transition
+oak / assess"
+H:7465|100% M:4601|91% E:100% W:98% [NE|NW|N] R:0 12:22.98-ed*-💧15🛡️🌲 K:47%[8.9|0|8.4|16.8|92.4|58.8] [clum] 
+leth
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+H:7465|100% M:4601|91% E:100% W:98% [NE|NW|N] R:0 12:23.07-ed*-💧15🛡️🌲 K:47%[8.9|0|8.4|16.8|92.4|58.8] [clum] 
+leth
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your left leg.
+You lash out with a straight kick at the left shoulder of Claes.
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left arm. (16.8%)
+The instep of your foot smashes into the left underarm of Claes, throwing her from her feet and sending her spinning to the ground.
+ --------------------------------------------------------------
+ --------------------GOT PRONE!!--------------------------
+ --------------------GOT PRONE!!--------------------------
+ --------------------------------------------------------------
+Processed Affliction(Prone)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes nervestrike  livestrike  risingkick head   / assess
+Balance used: 2.1s.
+Falling back into a low crouch, you lash out with a swift strike at the left thigh of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left leg.
+                   --- LEFT LEG BROKE! LEFT LEG BROKE! ---
+ (100.8%)
+The staff cracks across the left thigh of Claes...
+Processed Affliction(Weariness)
+You spin a full rotation, bringing a twisted oaken staff around in a blur of motion to smash into the right arm of Claes.
+Processed Affliction(Clumsiness)
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's right arm. (25.2%)
+The staff connects to the right arm with a resounding crack, the limb flopping uselessly.
+You are now maintaining a kata chain of 18 actions.
+Rising onto the balls of your feet, you prepare to begin the deadly form of the Live Oak.
+You glance over Claes and see that her health is at 4766/5460 [87%].
+[Health]: 88%
+H:7465|100% M:4535|90% E:100% W:98% [NE|NW|N] R:0 12:23.18-ed*-🌲0🌀🍃 K:47%[8.9|0|16.8|25.2|100.8|58.8] [clum] 
+clum wear leth
+Claes takes some salve from a vial and rubs it on her legs.
+
+
+OPPONENT APPLIED TO THEIR legs!!
+
+
+H:7465|100% M:4535|90% E:100% W:98% [NE|NW|N] R:0 12:23.25-ed*-🌲0🌀🍃 K:47%[8.9|0|16.8|25.2|100.8|58.8] [clum] 
+clum wear leth
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes nervestrike  livestrike  risingkick head   /
+assess"
+H:7465|100% M:4535|90% E:100% W:98% [NE|NW|N] R:0 12:23.34-ed*-🌲0🌀🍃 K:47%[8.9|0|16.8|25.2|100.8|58.8] [clum] 
+clum wear leth
+You may eat another plant or mineral. Eat (1.602)
+H:7465|100% M:4535|90% E:100% W:98% [NE|NW|N] R:0 12:23.49-ed*-🌲0🌀🍃 K:47%[8.9|0|16.8|25.2|100.8|58.8] [clum] 
+clum wear leth
+You eat an aurum flake.
+outr aurum
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:7465|100% M:4535|90% E:100% W:98% [NE|NW|N] R:0 12:23.67-ed*-🌲0🌀🍃 K:47%[8.9|0|16.8|25.2|100.8|58.8] 
+clum wear leth
+[OUTR]: 1 Aurum (989)
+Claes eats a piece of kelp.
+Processed Cures(clumsiness weariness)
+H:7465|100% M:4535|90% E:100% W:98% [NE|NW|N] R:0 12:24.24-ed*-🌲0🌀🍃 K:47%[8.9|0|16.8|25.2|100.8|58.8] 
+clum50 wear50 leth
+maul
+queue addclearfull eb!p!w!t  pk
+
+[DEF]: Mindseye
+A fierce mountain falcon rips out a chunk of your flesh with its beak.
+Your mindseye defence is ripped apart by its talons.
+Health lost: 200 (physical cutting).
+H:7265|97% M:4525|90% E:100% W:98% [NE|NW|N] R:0 12:24.73-edM*-🌲0🌀🍃 K:47%[8.9|0|16.8|25.2|100.8|58.8]  ( -200h 2% )
+clum50 wear50 leth
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+H:7265|97% M:4485|89% E:100% W:98% [NE|NW|N] R:0 12:25.13-edM*-🌲0🌀🍃 K:47%[8.9|0|16.8|25.2|100.8|58.8] 
+clum50 wear50 leth
+maul
+queue addclearfull eb!p!w!t  pk
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your left leg.
+You whip a twisted oaken staff at the side of Claes's neck.
+As your blow lands with a crunch, you perceive that you have dealt 12.3% damage to Claes's head. (21.2%)
+Processed Affliction(Paralysis)
+Turning with the motion, you channel the momentum of your previous strike into a thrust at the solar plexus of Claes with a twisted oaken staff...
+As your blow lands with a crunch, you perceive that you have dealt 12.3% damage to Claes's torso. (12.3%)
+The breath of Claes leaves her in an explosive gasp as the end of the staff smashes home...
+Processed Affliction(Asthma)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes nervestrike  ruku torso risingkick head   transition Willow / assess
+You drive your foot up in a rising kick at the head of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's head. (29.6%)
+Your foot catches Claes under the chin, snapping her head back.
+Balance used: 2.1s.
+You are now maintaining a kata chain of 3 actions.
+You glance over Claes and see that her health is at 4084/5460 [74%].
+[Health]: 75%
+You may eat another plant or mineral. Eat (1.586)
+H:7265|97% M:4419|87% E:100% W:98% [NE|NW|N] R:0 12:25.25-edM*-🌲3🌀🍃 K:47%[29.6|12.3|16.8|25.2|100.8|58.8] 
+PAR AST clum50 wear50 leth
+You eat a calamine crystal.
+outr calamine
+H:7265|97% M:4419|87% E:100% W:98% [NE|NW|N] R:0 12:25.41-edM*-🌲3🌀🍃 K:47%[29.6|12.3|16.8|25.2|100.8|58.8] 
+PAR AST clum50 wear50 leth
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes nervestrike  ruku torso risingkick head  
+transition Willow / assess"
+H:7265|97% M:4419|87% E:100% W:98% [NE|NW|N] R:0 12:25.41-edM*-🌲3🌀🍃 K:47%[29.6|12.3|16.8|25.2|100.8|58.8] 
+PAR AST clum50 wear50 leth
+[OUTR]: 1 Calamine (1569)
+maul
+queue addclearfull eb!p!w!t  pk
+You may drink another health or mana elixir. Health (4.372)
+H:7265|97% M:4376|87% E:100% W:98% [NE|NW|N] R:0 12:26.32-edM*-🌲3🌀🍃 K:47%[29.6|12.3|16.8|25.2|100.8|58.8] 
+PAR AST clum50 wear50 leth
+maul
+queue addclearfull eb!p!w!t  pk
+Claes eats a bloodroot leaf.
+Claes takes a drink from a black-walnut vial.
+Processed Cures(paralysis)
+Claes eats some irid moss.
+H:7265|97% M:4376|87% E:100% W:98% [NE|NW|N] R:0 12:26.37-edM*-🌲3🌀🍃 K:47%[29.6|12.3|16.8|25.2|100.8|58.8] 
+AST clum50 wear50 leth
+Health lost: 4 (raw).
+You bleed 4 health.
+H:7261|97% M:4376|87% E:100% W:98% [NE|NW|N] R:0 12:26.74-edM*-🌲3🌀🍃 K:47%[29.6|12.3|16.8|25.2|100.8|58.8] 
+AST clum50 wear50 leth
+You may eat another plant or mineral. Eat (1.49)
+H:7261|97% M:4376|87% E:100% W:98% [NE|NW|N] R:0 12:26.97-edM*-🌲3🌀🍃 K:47%[29.6|12.3|16.8|25.2|100.8|58.8] 
+AST clum50 wear50 leth
+maul
+queue addclearfull eb!p!w!t  pk
+
+                   ---CAN TREE AGAIN---
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+H:7261|97% M:4376|87% E:100% W:98% [NE|NW|N] R:0 12:27.23-edM*-🌲3🌀🍃 K:47%[29.6|12.3|16.8|25.2|100.8|58.8] 
+AST clum50 wear50 leth
+[Limb]: Reset Claes' left leg.
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your left leg.
+You whip a twisted oaken staff at the side of Claes's neck.
+As your blow lands with a crunch, you perceive that you have dealt 12.3% damage to Claes's head. (41.9%)
+Processed Affliction(Paralysis)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes flashheel right hiru  hiraku    transition Rain / assess
+You spin a full rotation, bringing a twisted oaken staff around in a blur of motion to smash into the torso of Claes.
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's torso. (20.7%)
+Claes staggers as the staff cracks across her ribs, sweat breaking out upon her forehead...
+Processed Affliction(Slickness)
+The protective coating covering the skin of Claes sloughs off...
+You drive your foot up in a rising kick at the head of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's head. (50.3%)
+Your foot catches Claes under the chin, snapping her head back.
+Balance used: 2.1s.
+You are now maintaining a kata chain of 6 actions.
+Twirling your staff, you sink into the calm required for the form of Willows Shaken by the Wind.
+You glance over Claes and see that her health is at 4388/5460 [80%].
+[Health]: 81%
+H:7261|97% M:4310|85% E:100% W:98% [NE|NW|N] R:0 12:27.34-edM*-🍃0💧 K:47%[50.3|20.7|16.8|25.2|0|58.8] 
+PAR SLCK AST clum50 wear50 leth
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes flashheel right hiru  hiraku    transition Rain /
+assess"
+H:7261|97% M:4300|85% E:100% W:98% [NE|NW|N] R:0 12:27.54-edM*-🍃0💧 K:47%[50.3|20.7|16.8|25.2|0|58.8] 
+PAR SLCK AST clum50 wear50 leth
+You may eat another bit of irid moss or potash.
+H:7261|97% M:4300|85% E:100% W:98% [NE|NW|N] R:0 12:27.65-edM*-🍃0💧 K:47%[50.3|20.7|16.8|25.2|0|58.8] 
+PAR SLCK AST clum50 wear50 leth
+A fierce mountain falcon dives at you, raking your face with its talons.
+Health lost: 333 (physical blunt).
+H:6928|92% M:4300|85% E:100% W:98% [NE|NW|N] R:0 12:27.77-edM*-🍃0💧 K:47%[50.3|20.7|16.8|25.2|0|58.8]  ( -333h 4% )
+PAR SLCK AST clum50 wear50 leth
+
+[DEF]: Deafness
+[AFF]: Deafness
+The aural world fades to silence.
+H:6928|92% M:4300|85% E:100% W:98% [NE|NW|N] R:0 12:27.78-eM*-🍃0💧 K:47%[50.3|20.7|16.8|25.2|0|58.8] 
+PAR SLCK AST clum50 wear50 leth
+maul
+queue addclearfull eb!p!w!t  pk
+maul
+queue addclearfull eb!p!w!t  pk
+Claes eats a bloodroot leaf.
+You take a drink from a black-walnut vial.
+Processed Cures(paralysis slickness)
+Your mind feels stronger and more alert.
+H:7028|94% M:4990|99% E:100% W:98% [NE|NW|N] R:0 12:28.46-eM*-🍃0💧 K:47%[50.3|20.7|16.8|25.2|0|58.8]  ( +690m 13% )
+PAR AST clum50 wear50 leth
+maul
+queue addclearfull eb!p!w!t  pk
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+H:7028|94% M:4990|99% E:100% W:98% [NE|NW|N] R:0 12:29.31-eM*-🍃0💧 K:47%[50.3|20.7|16.8|25.2|0|58.8] 
+PAR AST clum50 wear50 leth
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your left leg.
+Snapping your leg out to its full extent, you drive a heel into the right knee of Claes.
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's right leg. (67.2%)
+You feel the satisfying crunch of bone under the impact of your heel...
+Processed Affliction(Rightleg)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes flashheel right hiru  hiraku    transition rain / assess
+Balance used: 1.9s.
+Snapping back into a ready stance, you whirl a twisted oaken staff in a long sweep at the head of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.6% damage to Claes's head. (58.9%)
+The staff connects to the side of Claes's head with a resounding crack...
+Processed Affliction(Dizziness)
+Bracing your back foot, you lunge forward with a twisted oaken staff at the face of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.6% damage to Claes's head. (67.5%)
+The staff smashes into the face of Claes with a sickening crunch...
+Processed Affliction(Anorexia Stuttering)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/mind impatience Claes/assess
+You are now maintaining a kata chain of 3 actions.
+A kata of at least 5 must be performed in order to flow from the Willows Shaken by the Wind to another.
+You glance over Claes and see that her health is at 3348/5460 [61%].
+[Health]: 62%
+H:7028|94% M:4924|98% E:100% W:98% [NE|NW|N] R:0 12:29.43-eM*-🍃3💧 K:47%[67.5|20.7|16.8|25.2|0|67.2] 
+dizz PAR ANO AST clum50 wear50 leth
+maul
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes flashheel right hiru  hiraku    transition rain /
+assess"
+H:7028|94% M:4924|98% E:100% W:98% [NE|NW|N] R:0 12:29.55-eM*-🍃3💧 K:47%[67.5|20.7|16.8|25.2|0|67.2] 
+dizz PAR ANO AST clum50 wear50 leth
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/mind impatience Claes/assess"
+H:7028|94% M:4924|98% E:100% W:98% [NE|NW|N] R:0 12:29.56-eM*-🍃3💧 K:47%[67.5|20.7|16.8|25.2|0|67.2] 
+dizz PAR ANO AST clum50 wear50 leth
+maul
+queue addclearfull eb!p!w!t  pk
+A rune like a rising sun upon the ground flares, bathing Claes with healing magic.
+Processed Cures(stuttering anorexia asthma clumsiness dizziness lethargy weariness)
+H:7028|94% M:4924|98% E:100% W:98% [NE|NW|N] R:0 12:30.15-eM*-🍃3💧 K:47%[67.5|20.7|16.8|25.2|0|67.2] 
+dizz85 PAR ANO85 AST85 clum42 wear42 leth85[GLUE] passive cure
+maul
+queue addclearfull eb!p!w!t  pk
+Claes puts some gold sovereigns in a wyvernskin pack.
+H:7028|94% M:4896|97% E:100% W:98% [NE|NW|N] R:0 12:30.49-eM*-🍃3💧 K:47%[67.5|20.7|16.8|25.2|0|67.2] 
+dizz85 PAR ANO85 AST85 clum42 wear42 leth85
+Claes takes some salve from a vial and rubs it on her legs.
+Processed Cures(rightleg)
+
+
+OPPONENT APPLIED TO THEIR legs!!
+
+
+A look of extreme focus crosses the face of Claes.
+Processed Cures(stuttering anorexia dizziness)
+H:7028|94% M:4896|97% E:100% W:98% [NE|NW|N] R:0 12:30.57-eM*-🍃3💧 K:47%[67.5|20.7|16.8|25.2|0|67.2] 
+dizz57 PAR ANO57 AST85 clum42 wear42 leth85
+maul
+queue addclearfull eb!p!w!t  pk
+
+[DEF]: Fangbarrier
+The quicksilver hardens into a supple metallic shell.
+H:7028|94% M:4896|97% E:100% W:98% [NE|NW|N] R:0 12:30.75-eM*-🍃3💧 K:47%[67.5|20.7|16.8|25.2|0|67.2] 
+dizz57 PAR ANO57 AST85 clum42 wear42 leth85
+A fierce mountain falcon dives at you, raking your face with its talons.
+Health lost: 198 (physical cutting).
+H:6830|91% M:4896|97% E:100% W:98% [NE|NW|N] R:0 12:30.78-eM*-🍃3💧 K:47%[67.5|20.7|16.8|25.2|0|67.2]  ( -198h 2% )
+dizz57 PAR ANO57 AST85 clum42 wear42 leth85
+maul
+queue addclearfull eb!p!w!t  pk
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+H:6830|91% M:4856|96% E:100% W:98% [NE|NW|N] R:0 12:31.26-eM*-🍃3💧 K:47%[67.5|20.7|16.8|25.2|0|67.2] 
+dizz57 PAR ANO57 AST85 clum42 wear42 leth85
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your left leg.
+Equilibrium used: 1.27s.
+You fill the mind of Claes with an impatient feeling.
+Processed Affliction(Impatience)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes flashheel right hiru  hiraku    transition rain / assess
+You glance over Claes and see that her health is at 3348/5460 [61%].
+[Health]: 62%
+H:6830|91% M:4724|94% E:100% W:98% [NE|NW|N] R:0 12:31.44-xM*-🍃3💧 K:47%[67.5|20.7|16.8|25.2|0|67.2] 
+dizz57 IMP PAR ANO57 AST85 clum42 wear42 leth85
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes flashheel right hiru  hiraku    transition rain /
+assess"
+H:6830|91% M:4724|94% E:100% W:98% [NE|NW|N] R:0 12:31.59-xM*-🍃3💧 K:47%[67.5|20.7|16.8|25.2|0|67.2] 
+dizz57 IMP PAR ANO57 AST85 clum42 wear42 leth85
+Claes takes some salve from a vial and rubs it on her legs.
+
+
+OPPONENT APPLIED TO THEIR legs!!
+
+
+Claes stands up.
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/mind paralyse Claes/assess
+
+
+Claes IS NO LONGER PRONE.  FAE|HE|SHE IS UP!!
+
+Claes IS NO LONGER PRONE.  FAE|HE|SHE IS UP!!
+
+Claes applies a sileris berry to herself.
+H:6830|91% M:4724|94% E:100% W:98% [NE|NW|N] R:0 12:31.65-xM*-🍃3💧 K:47%[67.5|20.7|16.8|25.2|0|67.2] 
+dizz57 IMP ANO57 AST85 clum42 wear42 leth85
+A nearly invisible magical shield forms around Claes.
+H:6830|91% M:4724|94% E:100% W:98% [NE|NW|N] R:0 12:31.77-xM*-🍃3💧 K:37%[67.5|20.7|16.8|25.2|0|67.2] 
+dizz57 IMP ANO57 AST85 clum42 wear42 leth85
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/mind paralyse Claes/assess"
+H:6830|91% M:4724|94% E:100% W:98% [NE|NW|N] R:0 12:31.80-xM*-🍃3💧 K:37%[67.5|20.7|16.8|25.2|0|67.2] 
+dizz57 IMP ANO57 AST85 clum42 wear42 leth85
+Claes touches a tree of life tattoo.
+                   --- THEY TOUCHED TREE ---
+                   --- THEY TOUCHED TREE ---Processed Cures
+Processed Cures(stuttering clumsiness dizziness weariness lethargy asthma impatience anorexia)
+H:6830|91% M:4724|94% E:100% W:98% [NE|NW|N] R:0 12:31.82-xM*-🍃3💧 K:37%[67.5|20.7|16.8|25.2|0|67.2] 
+dizz48 IMP ANO48 AST73 clum36 wear36 leth73
+Health lost: 11 (raw).
+You bleed 11 health.
+H:6819|91% M:4724|94% E:100% W:98% [NE|NW|N] R:0 12:32.35-xM*-🍃3💧 K:37%[67.5|20.7|16.8|25.2|0|67.2] 
+dizz48 IMP ANO48 AST73 clum36 wear36 leth73
+mp
+queue addclearfull eb mind paralyse Claes
+You have recovered equilibrium.                                                         --- EQUILIBRIUM ---
+Equilibrium used: 1.70s.
+You reach out with your mind and paralyse Claes.
+Processed Affliction(Paralysis)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes SHATTER  flashheel right hiraku    transition rain / assess
+You may drink another health or mana elixir. Mana (4.913)
+H:7192|96% M:4748|94% E:100% W:98% [NE|NW|N] R:0 12:33.25-xM*-🍃3💧 K:37%[67.5|20.7|16.8|25.2|0|67.2]  ( +373h 4% )
+dizz48 IMP PAR ANO48 AST73 clum36 wear36 leth73
+Claes takes some salve from a vial and rubs it on her body.
+Processed Cures(anorexia)
+
+
+OPPONENT APPLIED TO THEIR body!!
+
+
+Claes eats a goldenseal root.
+A look of extreme focus crosses the face of Claes.
+Processed Cures(stuttering dizziness)
+Claes takes a drink from a black-walnut vial.
+Claes eats some irid moss.
+H:7192|96% M:4748|94% E:100% W:98% [NE|NW|N] R:0 12:33.26-xM*-🍃3💧 K:37%[67.5|20.7|16.8|25.2|0|67.2] 
+PAR AST73 clum36 wear36 leth73
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes SHATTER  flashheel right hiraku    transition rain
+/ assess"
+H:7465|100% M:4748|94% E:100% W:98% [NE|NW|N] R:0 12:33.51-xM*-🍃3💧 K:37%[67.5|20.7|16.8|25.2|0|67.2]  ( +273h 3% )
+PAR AST73 clum36 wear36 leth73
+A fierce mountain falcon rips out a chunk of your flesh with its beak.
+Health lost: 235 (physical cutting).
+H:7230|96% M:4748|94% E:100% W:98% [NE|NW|N] R:0 12:34.29-xM*-🍃3💧 K:37%[67.5|20.7|16.8|25.2|0|67.2]  ( -235h 3% )
+PAR AST73 clum36 wear36 leth73
+You may utilise the tree tattoo again. Tree (13.973)
+H:7330|98% M:4579|91% E:100% W:98% [NE|NW|N] R:0 12:34.57-xM*-🍃3💧 K:37%[67.5|20.7|16.8|25.2|0|67.2]  ( -169m 3% )
+PAR AST73 clum36 wear36 leth73
+maup
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes SHATTER  flashheel left hiraku    / assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes SHATTER  flashheel left hiraku    / assess"
+
+H:7330|98% M:4579|91% E:100% W:98% [NE|NW|N] R:0 12:34.74-xM*-🍃3💧 K:37%[67.5|20.7|16.8|25.2|0|67.2] 
+PAR AST73 clum36 wear36 leth73
+You have recovered equilibrium.                                                         --- EQUILIBRIUM ---
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your left leg.
+Bracing your feet, you drive a twisted oaken staff towards Claes.
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes flashheel left hiru  hiraku    / assess
+The end of your staff smashes the magical shield surrounding Claes in an explosion of translucent shards.
+Snapping your leg out to its full extent, you drive a heel into the left knee of Claes.
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left leg. (8.4%)
+You feel the satisfying crunch of bone under the impact of your heel...
+Processed Affliction(Leftleg)
+Balance used: 1.9s.
+Bracing your back foot, you lunge forward with a twisted oaken staff at the face of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.6% damage to Claes's head. (76.1%)
+The staff smashes into the face of Claes with a sickening crunch...
+Processed Affliction(Anorexia Stuttering)
+You are now maintaining a kata chain of 6 actions.
+You glance over Claes and see that her health is at 3995/5460 [73%].
+[Health]: 74%
+H:7330|98% M:4513|89% E:100% W:98% [NE|NW|N] R:0 12:34.92-eM*-🍃6💧 K:37%[76.1|20.7|16.8|25.2|8.4|67.2] 
+PAR ANO AST73 clum36 wear36 leth73
+Claes takes some salve from a vial and rubs it on her legs.
+Processed Cures(leftleg)
+
+
+OPPONENT APPLIED TO THEIR legs!!
+
+
+H:7330|98% M:4513|89% E:100% W:98% [NE|NW|N] R:0 12:35.01-eM*-🍃6💧 K:37%[76.1|20.7|16.8|25.2|8.4|67.2] 
+PAR ANO AST73 clum36 wear36 leth73
+maup
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes flashheel left hiru  hiraku    / assess"
+
+H:7330|98% M:4513|89% E:100% W:98% [NE|NW|N] R:0 12:35.09-eM*-🍃6💧 K:37%[76.1|20.7|16.8|25.2|8.4|67.2] 
+PAR ANO AST73 clum36 wear36 leth73
+A look of extreme focus crosses the face of Claes.
+Processed Cures(stuttering anorexia)
+H:7330|98% M:4497|89% E:100% W:98% [NE|NW|N] R:0 12:36.02-eM*-🍃6💧 K:37%[76.1|20.7|16.8|25.2|8.4|67.2] 
+PAR ANO50 AST73 clum36 wear36 leth73
+maud
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/mind impatience Claes/assess
+queue addclearfull eb!p!w!t  pk
+Claes takes some salve from a vial and rubs it on her body.
+Processed Cures(anorexia)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes flashheel right hiru  hiraku    transition rain / assess
+
+
+
+OPPONENT APPLIED TO THEIR body!!
+
+
+Claes eats a bloodroot leaf.
+A nearly invisible magical shield forms around Claes.
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes SHATTER  flashheel right hiraku    transition rain / assess
+
+Processed Cures(paralysis)
+H:7330|98% M:4497|89% E:100% W:98% [NE|NW|N] R:0 12:36.22-eM*-🍃6💧 K:37%[76.1|20.7|16.8|25.2|8.4|67.2] 
+AST73 clum36 wear36 leth73
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/mind impatience Claes/assess"
+H:7330|98% M:4497|89% E:100% W:98% [NE|NW|N] R:0 12:36.23-eM*-🍃6💧 K:37%[76.1|20.7|16.8|25.2|8.4|67.2] 
+AST73 clum36 wear36 leth73
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes flashheel right hiru  hiraku    transition rain /
+assess"
+H:7330|98% M:4497|89% E:100% W:98% [NE|NW|N] R:0 12:36.34-eM*-🍃6💧 K:37%[76.1|20.7|16.8|25.2|8.4|67.2] 
+AST73 clum36 wear36 leth73
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes SHATTER  flashheel right hiraku    transition rain
+/ assess"
+H:7330|98% M:4497|89% E:100% W:98% [NE|NW|N] R:0 12:36.35-eM*-🍃6💧 K:37%[76.1|20.7|16.8|25.2|8.4|67.2] 
+AST73 clum36 wear36 leth73
+You have recovered balance on your left arm.
+H:7330|98% M:4497|89% E:100% W:98% [NE|NW|N] R:0 12:36.43-eM*-🍃6💧 K:37%[76.1|20.7|16.8|25.2|8.4|67.2] 
+AST73 clum36 wear36 leth73
+maud
+queue addclearfull eb!p!w!t  pk
+You have recovered balance on your legs.
+You have recovered balance on your right arm.
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your left leg.
+Bracing your feet, you drive a twisted oaken staff towards Claes.
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes frontkick left kuro left ruku right   / assess
+The end of your staff smashes the magical shield surrounding Claes in an explosion of translucent shards.
+Snapping your leg out to its full extent, you drive a heel into the right knee of Claes.
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's right leg. (75.6%)
+You feel the satisfying crunch of bone under the impact of your heel...
+Processed Affliction(Rightleg)
+Balance used: 1.9s.
+Bracing your back foot, you lunge forward with a twisted oaken staff at the face of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.6% damage to Claes's head. (84.7%)
+The staff smashes into the face of Claes with a sickening crunch...
+Processed Affliction(Anorexia Stuttering)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes frontkick left ruku torso ruku torso   / assess
+You are now maintaining a kata chain of 9 actions.
+Dropping into a lower stance, you snap your weapon into an offensive position, tensing your muscles in preparation for the form of Willows in Rain
+Storm.
+You glance over Claes and see that her health is at 3348/5460 [61%].
+[Health]: 62%
+H:7330|98% M:4431|88% E:100% W:98% [NE|NW|N] R:0 12:36.79-eM*-💧0🛡️🌲 K:37%[84.7|20.7|16.8|25.2|8.4|75.6] 
+ANO AST73 clum36 wear36 leth73
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes frontkick left kuro left ruku right   / assess"
+
+H:7330|98% M:4431|88% E:100% W:98% [NE|NW|N] R:0 12:36.90-eM*-💧0🛡️🌲 K:37%[84.7|20.7|16.8|25.2|8.4|75.6] 
+ANO AST73 clum36 wear36 leth73
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes frontkick left ruku torso ruku torso   / assess"
+
+H:7330|98% M:4431|88% E:100% W:98% [NE|NW|N] R:0 12:36.90-eM*-💧0🛡️🌲 K:37%[84.7|20.7|16.8|25.2|8.4|75.6] 
+ANO AST73 clum36 wear36 leth73
+Claes takes some salve from a vial and rubs it on her legs.
+Processed Cures(rightleg)
+
+
+OPPONENT APPLIED TO THEIR legs!!
+
+
+H:7330|98% M:4431|88% E:100% W:98% [NE|NW|N] R:0 12:37.15-eM*-💧0🛡️🌲 K:37%[84.7|20.7|16.8|25.2|8.4|75.6] 
+ANO AST73 clum36 wear36 leth73
+maud
+queue addclearfull eb!p!w!t  pk
+A fierce mountain falcon rips out a chunk of your flesh with its beak.
+Health lost: 251 (physical cutting).
+H:7079|94% M:4431|88% E:100% W:98% [NE|NW|N] R:0 12:37.30-eM*-💧0🛡️🌲 K:37%[84.7|20.7|16.8|25.2|8.4|75.6]  ( -251h 3% )
+ANO AST73 clum36 wear36 leth73
+maud
+queue addclearfull eb!p!w!t  pk
+Health lost: 11 (raw).
+You bleed 11 health.
+H:7068|94% M:4381|87% E:100% W:98% [NE|NW|N] R:0 12:37.85-eM*-💧0🛡️🌲 K:37%[84.7|20.7|16.8|25.2|8.4|75.6] 
+ANO AST73 clum36 wear36 leth73
+maud
+queue addclearfull eb!p!w!t  pk
+You have recovered balance on your left arm.
+H:7068|94% M:4381|87% E:100% W:98% [NE|NW|N] R:0 12:38.25-eM*-💧0🛡️🌲 K:37%[84.7|20.7|16.8|25.2|8.4|75.6] 
+ANO AST73 clum36 wear36 leth73
+maud
+queue addclearfull eb!p!w!t  pk
+Claes takes some salve from a vial and rubs it on her body.
+Processed Cures(anorexia)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes frontkick left kuro left ruku right   / assess
+
+
+
+OPPONENT APPLIED TO THEIR body!!
+
+
+Claes eats a piece of kelp.
+Claes takes a drink from a black-walnut vial.
+Processed Cures(asthma clumsiness weariness)
+H:7068|94% M:4381|87% E:100% W:98% [NE|NW|N] R:0 12:38.37-eM*-💧0🛡️🌲 K:37%[84.7|20.7|16.8|25.2|8.4|75.6] 
+AST48 leth73
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes frontkick left kuro left ruku right   / assess"
+
+H:7068|94% M:4381|87% E:100% W:98% [NE|NW|N] R:0 12:38.49-eM*-💧0🛡️🌲 K:37%[84.7|20.7|16.8|25.2|8.4|75.6] 
+AST48 leth73
+A look of extreme focus crosses the face of Claes.
+Processed Cures(stuttering)
+H:7068|94% M:4353|86% E:100% W:98% [NE|NW|N] R:0 12:38.58-eM*-💧0🛡️🌲 K:37%[84.7|20.7|16.8|25.2|8.4|75.6] 
+AST48 leth73
+You have recovered balance on your legs.
+You have recovered balance on your right arm.
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your left leg.
+You lash out with a straight kick at the left shoulder of Claes.
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left arm. (25.2%)
+The instep of your foot smashes into the left underarm of Claes, throwing her from her feet and sending her spinning to the ground.
+ --------------------------------------------------------------
+ --------------------GOT PRONE!!--------------------------
+ --------------------GOT PRONE!!--------------------------
+ --------------------------------------------------------------
+Processed Affliction(Prone)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes frontkick left kuro left ruku right  transition oak / assess
+Balance used: 2.1s.
+Falling back into a low crouch, you lash out with a swift strike at the left thigh of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left leg. (16.8%)
+The staff cracks across the left thigh of Claes...
+Processed Affliction(Weariness)
+You spin a full rotation, bringing a twisted oaken staff around in a blur of motion to smash into the right arm of Claes.
+Processed Affliction(Clumsiness)
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's right arm. (33.6%)
+The staff connects to the right arm with a resounding crack, the limb flopping uselessly.
+You are now maintaining a kata chain of 3 actions.
+You glance over Claes and see that her health is at 3057/5460 [55%].
+[Health]: 56%
+H:7068|94% M:4287|85% E:100% W:98% [NE|NW|N] R:0 12:38.69-eM*-💧3🛡️🌲 K:37%[84.7|20.7|25.2|33.6|16.8|75.6] 
+AST48 clum wear leth73
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes frontkick left kuro left ruku right  transition
+oak / assess"
+H:7068|94% M:4287|85% E:100% W:98% [NE|NW|N] R:0 12:38.85-eM*-💧3🛡️🌲 K:37%[84.7|20.7|25.2|33.6|16.8|75.6] 
+AST48 clum wear leth73
+maud
+queue addclearfull eb!p!w!t  pk
+Claes eats some irid moss.
+H:7068|94% M:4287|85% E:100% W:98% [NE|NW|N] R:0 12:39.35-eM*-💧3🛡️🌲 K:37%[84.7|20.7|25.2|33.6|16.8|75.6] 
+AST48 clum wear leth73
+maud
+queue addclearfull eb!p!w!t  pk
+maud
+queue addclearfull eb!p!w!t  pk
+Claes eats a piece of kelp.
+Processed Cures(asthma clumsiness weariness)
+H:7068|94% M:4277|85% E:100% W:98% [NE|NW|N] R:0 12:39.98-eM*-💧3🛡️🌲 K:37%[84.7|20.7|25.2|33.6|16.8|75.6] 
+clum66 wear66 leth73
+Claes stands up.
+
+Claes IS NO LONGER PRONE.  FAE|HE|SHE IS UP!!
+
+Claes IS NO LONGER PRONE.  FAE|HE|SHE IS UP!!
+
+H:7068|94% M:4277|85% E:100% W:98% [NE|NW|N] R:0 12:40.20-eM*-💧3🛡️🌲 K:37%[84.7|20.7|25.2|33.6|16.8|75.6] 
+clum66 wear66 leth73
+[northwest - Claes (1)]
+H:7068|94% M:4277|85% E:100% W:98% [NE|NW|N] R:0 12:40.21-eM*-💧3🛡️🌲 K:37%[84.7|20.7|25.2|33.6|16.8|75.6] 
+clum66 wear66 leth73
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/northwest / combo Claes frontkick left kuro left ruku right 
+transition oak / assess"
+H:7068|94% M:4277|85% E:100% W:98% [NE|NW|N] R:0 12:40.32-eM*-💧3🛡️🌲 K:37%[84.7|20.7|25.2|33.6|16.8|75.6] 
+clum66 wear66 leth73
+A fierce mountain falcon dives at you, raking your face with its talons.
+Health lost: 334 (physical blunt).
+H:6734|90% M:4277|85% E:100% W:98% [NE|NW|N] R:0 12:40.33-eM*-💧3🛡️🌲 K:37%[84.7|20.7|25.2|33.6|16.8|75.6]  ( -334h 4% )
+clum66 wear66 leth73
+maud
+queue addclearfull eb!p!w!t  pk
+You take a drink from a black-walnut vial.
+Your mind feels stronger and more alert.
+H:6834|91% M:5024|100% E:100% W:98% [NE|NW|N] R:0 12:40.55-eM*-💧3🛡️🌲 K:37%[84.7|20.7|25.2|33.6|16.8|75.6]  ( +747m 14% )
+clum66 wear66 leth73
+You have recovered balance on your left arm.
+H:6834|91% M:5024|100% E:100% W:98% [NE|NW|N] R:0 12:40.63-eM*-💧3🛡️🌲 K:37%[84.7|20.7|25.2|33.6|16.8|75.6] 
+clum66 wear66 leth73
+You have recovered balance on your legs.
+You have recovered balance on your right arm.
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your left leg.
+                   --- WALL BLOCKING ---
+
+                   --- WALL BLOCKING ---
+
+                   --- WALL BLOCKING ---
+Ahh, I am truly sorry, but I do not see anyone by that name here.
+You detect nothing here by that name.
+H:6834|91% M:5024|100% E:100% W:98% [NE|NW|N] R:0 12:40.74-exM*-💧3🛡️🌲 K:37%[84.7|20.7|25.2|33.6|16.8|75.6] 
+clum66 wear66 leth73
+
+[DEF]: Mindseye
+Touching the mindseye tattoo, your senses are suddenly heightened.
+Equilibrium used: 2.16s.
+curing priority Paralysis 20
+H:6834|91% M:5024|100% E:100% W:98% [NE|NW|N] R:0 12:40.94-x*-💧3🛡️🌲 K:37%[84.7|20.7|25.2|33.6|16.8|75.6] 
+clum66 wear66 leth73
+curing priority defense  mindseye reset
+
+                   ---CAN TREE AGAIN---
+curing priority Paralysis 2
+[northeast - Claes (1)]
+H:6834|91% M:5024|100% E:100% W:98% [NE|NW|N] R:0 12:42.50-x*-💧3🛡️🌲 K:37%[84.7|20.7|25.2|33.6|16.8|75.6] 
+clum66 wear66 leth73
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/northeast / combo Claes frontkick left kuro left ruku right 
+transition oak / assess"
+H:6834|91% M:4986|99% E:100% W:98% [NE|NW|N] R:0 12:42.59-x*-💧3🛡️🌲 K:37%[84.7|20.7|25.2|33.6|16.8|75.6] 
+clum66 wear66 leth73
+You have recovered equilibrium.                                                         --- EQUILIBRIUM ---
+H:7207|96% M:5024|100% E:100% W:98% [NE|NW|N] R:0 12:43.09-ex*-💧3🛡️🌲 K:37%[84.7|20.7|25.2|33.6|16.8|75.6]  ( +373h 4% )
+clum66 wear66 leth73
+Health lost: 11 (raw).
+You bleed 11 health.
+H:7196|96% M:5024|100% E:100% W:98% [NE|NW|N] R:0 12:43.35-ex*-💧3🛡️🌲 K:37%[84.7|20.7|25.2|33.6|16.8|75.6] 
+clum66 wear66 leth73
+A fierce mountain falcon dives at you, raking your face with its talons.
+Health lost: 300 (physical blunt).
+H:6896|92% M:5024|100% E:100% W:98% [NE|NW|N] R:0 12:43.40-ex*-💧3🛡️🌲 K:37%[84.7|20.7|25.2|33.6|16.8|75.6]  ( -300h 4% )
+clum66 wear66 leth73
+mt
+queue addclearfull eb mind travel Claes
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes frontkick left kuro left ruku right  transition oak / assess
+You drift on the waves of telepathy, allowing your mental power to carry you to your subject.
+Empty training yard.
+The sky lightens with the onset of dawn. Squire Claes Ancyrion-Firedancer, the Imperial Blade is here. She wields a blessed legionnaire's longsword in
+her left hand and a Shield of Absorption in her right.
+You see exits leading southwest and northwest.
+Equilibrium used: 0.72s.
+H:7269|97% M:4691|93% E:100% W:97% [NW|SW] R:0 12:43.78-x*-💧3🛡️🌲 K:37%[84.7|20.7|25.2|33.6|16.8|75.6]  ( +373h 4% -333m 6% )
+clum66 wear66 leth73
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes frontkick left kuro left ruku right  transition
+oak / assess"
+H:7269|97% M:4691|93% E:100% W:97% [NW|SW] R:0 12:43.88-x*-💧3🛡️🌲 K:37%[84.7|20.7|25.2|33.6|16.8|75.6] 
+clum66 wear66 leth73
+Claes leaves to the southwest.
+[southwest - Claes (1)]
+H:7269|97% M:4691|93% E:100% W:97% [NW|SW] R:0 12:44.24-x*-💧3🛡️🌲 K:37%[84.7|20.7|25.2|33.6|16.8|75.6] 
+clum66 wear66 leth73
+maud
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/southwest / combo Claes frontkick left kuro left ruku right 
+transition oak / assess"
+H:7269|97% M:4691|93% E:100% W:97% [NW|SW] R:0 12:44.33-x*-💧3🛡️🌲 K:37%[84.7|20.7|25.2|33.6|16.8|75.6] 
+clum66 wear66 leth73
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes frontkick left kuro left ruku right  transition oak / assess
+You have recovered equilibrium.                                                         --- EQUILIBRIUM ---
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your left leg.
+The Oniar estate gates.
+The sky lightens with the onset of dawn. A rune like a lightning bolt has been sketched into the ground here (Uruz: Heal). A rune like a rising sun
+has been sketched into the ground here (Dagaz: Heals affs). A large wall of stone stands here, blocking passage to the northwest. Squire Claes 
+Ancyrion-Firedancer, the Imperial Blade is here. She wields a blessed legionnaire's longsword in her left hand and a Shield of Absorption in her 
+right.
+You see exits leading north, northeast, and northwest.
+You lash out with a straight kick at the left shoulder of Claes.
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left arm. (33.6%)
+The instep of your foot smashes into the left underarm of Claes, throwing her from her feet and sending her spinning to the ground.
+ --------------------------------------------------------------
+ --------------------GOT PRONE!!--------------------------
+ --------------------GOT PRONE!!--------------------------
+ --------------------------------------------------------------
+Processed Affliction(Prone)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes nervestrike  livestrike  risingkick head   / assess
+Balance used: 2.1s.
+Falling back into a low crouch, you lash out with a swift strike at the left thigh of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left leg. (25.2%)
+The staff cracks across the left thigh of Claes...
+Processed Affliction(Weariness)
+Processed Affliction(Lethargy)
+You spin a full rotation, bringing a twisted oaken staff around in a blur of motion to smash into the right arm of Claes.
+Processed Affliction(Clumsiness)
+Processed Affliction(Healthleech)
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's right arm. (42%)
+The staff connects to the right arm with a resounding crack, the limb flopping uselessly.
+You are now maintaining a kata chain of 6 actions.
+Rising onto the balls of your feet, you prepare to begin the deadly form of the Live Oak.
+You glance over Claes and see that her health is at 3654/5460 [66%].
+[Health]: 67%
+H:7269|97% M:4625|92% E:99% W:97% [NE|NW|N] R:0 12:44.49-e*-🌲0🌀🍃 K:37%[84.7|20.7|33.6|42|25.2|75.6] 
+clum wear hlch66 leth66
+Claes stands up.
+
+Claes IS NO LONGER PRONE.  FAE|HE|SHE IS UP!!
+
+Claes IS NO LONGER PRONE.  FAE|HE|SHE IS UP!!
+
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes frontkick left kuro left ruku right  transition
+oak / assess"
+H:7269|97% M:4625|92% E:99% W:97% [NE|NW|N] R:0 12:44.66-e*-🌲0🌀🍃 K:37%[84.7|20.7|33.6|42|25.2|75.6] 
+clum wear hlch66 leth66
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes nervestrike  livestrike  risingkick head   /
+assess"
+H:7269|97% M:4625|92% E:99% W:97% [NE|NW|N] R:0 12:44.66-e*-🌲0🌀🍃 K:37%[84.7|20.7|33.6|42|25.2|75.6] 
+clum wear hlch66 leth66
+Claes eats a piece of kelp.
+Processed Cures(clumsiness weariness healthleech)
+H:7269|97% M:4625|92% E:99% W:97% [NE|NW|N] R:0 12:44.88-e*-🌲0🌀🍃 K:37%[84.7|20.7|33.6|42|25.2|75.6] 
+clum66 wear66 hlch44 leth66
+You may drink another health or mana elixir. Mana (4.35)
+H:7269|97% M:4625|92% E:99% W:97% [NE|NW|N] R:0 12:44.91-e*-🌲0🌀🍃 K:37%[84.7|20.7|33.6|42|25.2|75.6] 
+clum66 wear66 hlch44 leth66
+A fierce mountain falcon soars in upon silver wings.
+H:7269|97% M:4625|92% E:99% W:97% [NE|NW|N] R:0 12:45.34-e*-🌲0🌀🍃 K:37%[84.7|20.7|33.6|42|25.2|75.6] 
+clum66 wear66 hlch44 leth66
+The blade of Claes is a blur as she moves forward, slicing into your torso.
+Claes misses you with a mithril broadsword.
+Claes quickly lunges to the side, bringing her shield around to smash into your spine.
+[AFF]: Paralysis
+Your muscles lock in painful contractions in reaction to the blow.
+Health lost: 169 (physical blunt).
+H:7100|95% M:4625|92% E:99% W:97% [NE|NW|N] R:0 12:45.35-e*-🌲0🌀🍃 K:46%[84.7|20.7|33.6|42|25.2|75.6]  ( -169h 2% )[PAR] 
+clum66 wear66 hlch44 leth66
+A rune like a rising sun upon the ground flares, bathing Claes with healing magic.
+Processed Cures(clumsiness healthleech lethargy weariness)
+H:7100|95% M:4625|92% E:99% W:97% [NE|NW|N] R:0 12:45.40-e*-🌲0🌀🍃 K:46%[84.7|20.7|33.6|42|25.2|75.6] [PAR] 
+clum49 wear49 leth49[GLUE] passive cure
+Claes eats some irid moss.
+You eat a bloodroot leaf.
+outr bloodroot
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:7100|95% M:4625|92% E:99% W:97% [NE|NW|N] R:0 12:45.44-e*-🌲0🌀🍃 K:46%[84.7|20.7|33.6|42|25.2|75.6] 
+clum49 wear49 leth49
+[OUTR]: 1 Bloodroot (1324)
+Claes touches a tree of life tattoo.
+                   --- THEY TOUCHED TREE ---
+                   --- THEY TOUCHED TREE ---Processed Cures
+Processed Cures(clumsiness weariness lethargy)
+H:7100|95% M:4609|91% E:99% W:97% [NE|NW|N] R:0 12:45.99-e*-🌲0🌀🍃 K:46%[84.7|20.7|33.6|42|25.2|75.6] 
+maul
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes nervestrike  livestrike     / assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes nervestrike  livestrike     / assess"
+H:7100|95% M:4609|91% E:99% W:97% [NE|NW|N] R:0 12:46.28-e*-🌲0🌀🍃 K:46%[84.7|20.7|33.6|42|25.2|75.6] 
+You have recovered balance on your legs.
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your left leg.
+You whip a twisted oaken staff at the side of Claes's neck.
+As your blow lands with a crunch, you perceive that you have dealt 12.3% damage to Claes's head. (97%)
+Processed Affliction(Paralysis)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes nervestrike light  livestrike     / assess
+Turning with the motion, you channel the momentum of your previous strike into a thrust at the solar plexus of Claes with a twisted oaken staff...
+As your blow lands with a crunch, you perceive that you have dealt 12.3% damage to Claes's torso. (33%)
+The breath of Claes leaves her in an explosive gasp as the end of the staff smashes home...
+Processed Affliction(Asthma)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes nervestrike light  ruku torso    transition Willow / assess
+You are now maintaining a kata chain of 2 actions.
+You glance over Claes and see that her health is at 3781/5460 [69%].
+[Health]: 70%
+H:7200|96% M:4443|88% E:99% W:97% [NE|NW|N] R:0 12:46.43-e*-🌲2🌀🍃 K:46%[97|33|33.6|42|25.2|75.6]  ( -166m 3% )
+PAR AST
+Claes eats a bloodroot leaf.
+Processed Cures(paralysis)
+H:7200|96% M:4443|88% E:99% W:97% [NE|NW|N] R:0 12:46.63-e*-🌲2🌀🍃 K:46%[97|33|33.6|42|25.2|75.6] 
+AST
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes nervestrike light  livestrike     / assess"
+
+H:7200|96% M:4443|88% E:99% W:97% [NE|NW|N] R:0 12:46.65-e*-🌲2🌀🍃 K:46%[97|33|33.6|42|25.2|75.6] 
+AST
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes nervestrike light  ruku torso    transition Willow
+/ assess"
+H:7200|96% M:4443|88% E:99% W:97% [NE|NW|N] R:0 12:46.65-e*-🌲2🌀🍃 K:46%[97|33|33.6|42|25.2|75.6] 
+AST
+You may eat another plant or mineral. Eat (1.431)
+H:7200|96% M:4416|87% E:99% W:97% [NE|NW|N] R:0 12:46.95-e*-🌲2🌀🍃 K:46%[97|33|33.6|42|25.2|75.6] 
+AST
+Claes takes a drink from a black-walnut vial.
+H:7200|96% M:4416|87% E:99% W:97% [NE|NW|N] R:0 12:47.40-e*-🌲2🌀🍃 K:46%[97|33|33.6|42|25.2|75.6] 
+AST
+The blade of Claes is a blur as she moves forward, slicing into your torso.
+As Claes carves into you, you perceive that she has dealt 11.8% damage to your torso.
+ LIMB DAMAGE: torso (11.8%)
+ ----------- PARRYING torso
+queue prepend eb parry torso
+[0|11.8|0|0|0|0]
+Health lost: 786 (physical cutting).
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Claes quickly lunges to the side, bringing her shield around to smash into your spine.
+[AFF]: Paralysis
+Your muscles lock in painful contractions in reaction to the blow.
+Health lost: 169 (physical blunt).
+H:6245|83% M:4406|87% E:100% W:97% [NE|NW|N] R:0 12:47.83-e*-🌲2🌀🍃 K:55%[97|33|33.6|42|25.2|75.6]  ( -955h 12% )[PAR clum] 
+AST
+You eat a bloodroot leaf.
+outr bloodroot
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+H:7465|100% M:4326|86% E:100% W:97% [NE|NW|N] R:0 12:48.08-e*-🌲2🌀🍃 K:55%[97|33|33.6|42|25.2|75.6]  ( +1220h 16% )[clum] 
+AST
+[OUTR]: 1 Bloodroot (1323)
+maul
+setalias pk dismount/stand/wield staff/mind lock Claes/parry torso/combo Claes nervestrike light  ruku torso    transition Willow / assess
+queue addclearfull eb!p!w!t  pk
+Claes eats a piece of kelp.
+Processed Cures(asthma)
+H:7465|100% M:4326|86% E:100% W:97% [NE|NW|N] R:0 12:48.27-e*-🌲2🌀🍃 K:55%[97|33|33.6|42|25.2|75.6] [clum] 
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry torso/combo Claes nervestrike light  ruku torso    transition Willow /
+assess"
+H:7465|100% M:4326|86% E:100% W:97% [NE|NW|N] R:0 12:48.36-e*-🌲2🌀🍃 K:55%[97|33|33.6|42|25.2|75.6] [clum] 
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry torso/combo Claes nervestrike light  livestrike     / assess"
+
+H:7465|100% M:4326|86% E:100% W:97% [NE|NW|N] R:0 12:48.45-e*-🌲2🌀🍃 K:55%[97|33|33.6|42|25.2|75.6] [clum] 
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your torso.
+You whip a twisted oaken staff at the side of Claes's neck.
+Claes parries the attack with a deft manoeuvre.
+ YOU HIT PARRY!!
+
+ YOU HIT PARRY!!
+Turning with the motion, you channel the momentum of your previous strike into a thrust at the solar plexus of Claes with a twisted oaken staff.
+As your blow lands with a crunch, you perceive that you have dealt 12.3% damage to Claes's torso. (45.3%)
+The breath of Claes leaves her in an explosive gasp as the end of the staff smashes home.
+Processed Affliction(Asthma)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry torso/combo Claes nervestrike light  ruku torso    transition Willow / assess
+You are now maintaining a kata chain of 4 actions.
+You glance over Claes and see that her health is at 4524/5460 [82%].
+[Health]: 83%
+H:7465|100% M:4260|84% E:100% W:97% [NE|NW|N] R:0 12:48.60-e*-🌲4🌀🍃 K:55%[97|45.3|33.6|42|25.2|75.6] [clum] 
+AST
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry torso/combo Claes nervestrike light  ruku torso    transition Willow /
+assess"
+H:7465|100% M:4260|84% E:100% W:97% [NE|NW|N] R:0 12:48.71-e*-🌲4🌀🍃 K:55%[97|45.3|33.6|42|25.2|75.6] [clum] 
+AST
+Health lost: 9 (raw).
+You bleed 9 health.
+H:7456|99% M:4260|84% E:100% W:97% [NE|NW|N] R:0 12:48.85-e*-🌲4🌀🍃 K:55%[97|45.3|33.6|42|25.2|75.6] [clum] 
+AST
+maul
+queue addclearfull eb!p!w!t  pk
+A fierce mountain falcon dives at you, raking your face with its talons.
+Health lost: 203 (physical cutting).
+H:7253|97% M:4256|84% E:100% W:97% [NE|NW|N] R:0 12:49.44-e*-🌲4🌀🍃 K:55%[97|45.3|33.6|42|25.2|75.6]  ( -203h 2% )[clum] 
+AST
+You may eat another plant or mineral. Eat (1.501)
+H:7253|97% M:4256|84% E:100% W:97% [NE|NW|N] R:0 12:49.56-e*-🌲4🌀🍃 K:55%[97|45.3|33.6|42|25.2|75.6] [clum] 
+AST
+You eat an aurum flake.
+outr aurum
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+[OUTR]: 1 Aurum (988)
+Claes eats a piece of kelp.
+Processed Cures(asthma)
+H:7253|97% M:4216|83% E:100% W:97% [NE|NW|N] R:0 12:49.83-e*-🌲4🌀🍃 K:55%[97|45.3|33.6|42|25.2|75.6] 
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry torso/combo Claes nervestrike light  livestrike     / assess"
+
+H:7253|97% M:4216|83% E:100% W:97% [NE|NW|N] R:0 12:49.99-e*-🌲4🌀🍃 K:55%[97|45.3|33.6|42|25.2|75.6] 
+maup
+setalias pk dismount/stand/wield staff/mind lock Claes/parry torso/combo Claes livestrike  kuro left risingkick torso   / assess
+queue addclearfull eb!p!w!t  pk
+The blade of Claes is a blur as she moves forward, slicing into your torso.
+You parry the attack with a deft manoeuvre.            ---------- WE PARRIED! GOOD JOB!
+Claes quickly lunges to the side, bringing her shield around to smash into your spine.
+[AFF]: Paralysis
+Your muscles lock in painful contractions in reaction to the blow.
+Health lost: 169 (physical blunt).
+H:7084|94% M:4216|83% E:100% W:97% [NE|NW|N] R:0 12:50.25-e*-🌲4🌀🍃 K:64%[97|45.3|33.6|42|25.2|75.6]  ( -169h 2% )[PAR] 
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry torso/combo Claes livestrike  kuro left risingkick torso   / assess"
+
+H:7084|94% M:4216|83% E:100% W:97% [NE|NW|N] R:0 12:50.26-e*-🌲4🌀🍃 K:64%[97|45.3|33.6|42|25.2|75.6] [PAR] 
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+H:7084|94% M:4216|83% E:100% W:97% [NE|NW|N] R:0 12:50.64-ex*-🌲4🌀🍃 K:64%[97|45.3|33.6|42|25.2|75.6] [PAR] 
+maup
+queue addclearfull eb!p!w!t  pk
+You may eat another plant or mineral. Eat (1.456)
+H:7084|94% M:4188|83% E:100% W:97% [NE|NW|N] R:0 12:51.15-ex*-🌲4🌀🍃 K:64%[97|45.3|33.6|42|25.2|75.6] [PAR] 
+You eat a bloodroot leaf.
+outr bloodroot
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:7084|94% M:4188|83% E:100% W:97% [NE|NW|N] R:0 12:51.25-ex*-🌲4🌀🍃 K:64%[97|45.3|33.6|42|25.2|75.6] 
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your torso.
+Lunging forward, you drive the end of a twisted oaken staff viciously into the solar plexus of Claes.
+As your blow lands with a crunch, you perceive that you have dealt 12.3% damage to Claes's torso. (57.6%)
+The breath of Claes leaves her in an explosive gasp as the end of the staff smashes home...
+Processed Affliction(Asthma)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry torso/combo Claes ruku torso kuro left risingkick torso   / assess
+Falling back into a low crouch, you lash out with a swift strike at the left thigh of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left leg. (33.6%)
+The staff cracks across the left thigh of Claes...
+Processed Affliction(Weariness)
+You drive your foot up in a rising kick at the torso of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's torso. (66%)
+Your foot drives into the solar plexus of Claes.
+Balance used: 2.1s.
+You are now maintaining a kata chain of 7 actions.
+You glance over Claes and see that her health is at 3452/5460 [63%].
+[Health]: 64%
+H:7084|94% M:4122|82% E:100% W:97% [NE|NW|N] R:0 12:51.27-e*-🌲7🌀🍃 K:64%[97|66|33.6|42|33.6|75.6] 
+AST wear
+[OUTR]: 1 Bloodroot (1322)
+Claes eats a piece of kelp.
+Claes eats some irid moss.
+Processed Cures(asthma weariness)
+H:7084|94% M:4122|82% E:100% W:97% [NE|NW|N] R:0 12:51.44-e*-🌲7🌀🍃 K:64%[97|66|33.6|42|33.6|75.6] 
+AST50 wear50
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry torso/combo Claes ruku torso kuro left risingkick torso   / assess"
+
+H:7084|94% M:4122|82% E:100% W:97% [NE|NW|N] R:0 12:51.48-e*-🌲7🌀🍃 K:64%[97|66|33.6|42|33.6|75.6] 
+AST50 wear50
+Claes takes a drink from a black-walnut vial.
+H:7084|94% M:4122|82% E:100% W:97% [NE|NW|N] R:0 12:52.02-e*-🌲7🌀🍃 K:64%[97|66|33.6|42|33.6|75.6] 
+AST50 wear50
+You may drink another health or mana elixir. Health (4.383)
+H:7184|96% M:4022|80% E:100% W:97% [NE|NW|N] R:0 12:52.46-e*-🌲7🌀🍃 K:64%[97|66|33.6|42|33.6|75.6] 
+AST50 wear50
+maup
+queue addclearfull eb!p!w!t  pk
+A fierce mountain falcon dives at you, raking your face with its talons.
+Health lost: 317 (physical blunt).
+H:6867|91% M:4022|80% E:100% W:97% [NE|NW|N] R:0 12:52.48-e*-🌲7🌀🍃 K:64%[97|66|33.6|42|33.6|75.6]  ( -317h 4% )
+AST50 wear50
+The blade of Claes is a blur as she moves forward, slicing into your left leg.
+As Claes carves into you, you perceive that she has dealt 11.8% damage to your left leg.
+ LIMB DAMAGE: left leg (11.8%)
+ ----------- PARRYING left leg
+queue prepend eb parry left leg
+[0|11.8|0|0|11.8|0]
+Health lost: 626 (physical cutting).
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Claes quickly lunges to the side, bringing her shield around to smash into your spine.
+[AFF]: Paralysis
+Your muscles lock in painful contractions in reaction to the blow.
+Health lost: 134 (physical blunt).
+H:6107|81% M:4012|79% E:100% W:97% [NE|NW|N] R:0 12:52.59-e*-🌲7🌀🍃 K:73%[97|66|33.6|42|33.6|75.6]  ( -760h 10% )[PAR clum] 
+AST50 wear50
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+H:7408|99% M:3932|78% E:100% W:97% [NE|NW|N] R:0 12:52.63-e*-🌲7🌀🍃 K:73%[97|66|33.6|42|33.6|75.6]  ( +1301h 17% )[PAR clum] 
+AST50 wear50
+You may eat another plant or mineral. Eat (1.514)
+H:7408|99% M:3932|78% E:100% W:97% [NE|NW|N] R:0 12:52.76-e*-🌲7🌀🍃 K:73%[97|66|33.6|42|33.6|75.6] [PAR clum] 
+AST50 wear50
+You eat a bloodroot leaf.
+outr bloodroot
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:7408|99% M:3932|78% E:100% W:97% [NE|NW|N] R:0 12:52.86-e*-🌲7🌀🍃 K:73%[97|66|33.6|42|33.6|75.6] [clum] 
+AST50 wear50
+[OUTR]: 1 Bloodroot (1321)
+Claes eats a piece of kelp.
+Processed Cures(asthma weariness)
+H:7408|99% M:3932|78% E:100% W:97% [NE|NW|N] R:0 12:53.06-e*-🌲7🌀🍃 K:73%[97|66|33.6|42|33.6|75.6] [clum] 
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes ruku torso kuro left risingkick torso   / assess"
+
+H:7465|100% M:4032|80% E:100% W:97% [NE|NW|N] R:0 12:53.24-e*-🌲7🌀🍃 K:73%[97|66|33.6|42|33.6|75.6] [clum] 
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes livestrike  kuro left risingkick torso   / assess"
+
+H:7465|100% M:4032|80% E:100% W:97% [NE|NW|N] R:0 12:53.25-e*-🌲7🌀🍃 K:73%[97|66|33.6|42|33.6|75.6] [clum] 
+maup
+queue addclearfull eb!p!w!t  pk
+You have recovered balance on your legs.
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+You will now attempt to parry attacks to your left leg.
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your left leg.
+Lunging forward, you drive the end of a twisted oaken staff viciously into the solar plexus of Claes.
+As your blow lands with a crunch, you perceive that you have dealt 12.3% damage to Claes's torso. (78.3%)
+The breath of Claes leaves her in an explosive gasp as the end of the staff smashes home...
+Processed Affliction(Asthma)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes ruku torso kuro left risingkick torso  transition gaital / assess
+Falling back into a low crouch, you lash out with a swift strike at the left thigh of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left leg. (42%)
+The staff cracks across the left thigh of Claes...
+Processed Affliction(Lethargy Weariness)
+You drive your foot up in a rising kick at the torso of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's torso. (86.7%)
+Your foot drives into the solar plexus of Claes.
+Balance used: 2.1s.
+You are now maintaining a kata chain of 10 actions.
+You glance over Claes and see that her health is at 4388/5460 [80%].
+[Health]: 81%
+H:7465|100% M:3966|78% E:100% W:97% [NE|NW|N] R:0 12:53.39-e*-🌲10🌀🍃 K:73%[97|86.7|33.6|42|42|75.6] [clum] 
+AST wear leth
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes ruku torso kuro left risingkick torso  transition
+gaital / assess"
+H:7465|100% M:3966|78% E:100% W:97% [NE|NW|N] R:0 12:53.62-e*-🌲10🌀🍃 K:73%[97|86.7|33.6|42|42|75.6] [clum] 
+AST wear leth
+You may eat another plant or mineral. Eat (1.459)
+H:7465|100% M:3966|78% E:100% W:97% [NE|NW|N] R:0 12:54.35-e*-🌲10🌀🍃 K:73%[97|86.7|33.6|42|42|75.6] [clum] 
+AST wear leth
+You eat an aurum flake.
+outr aurum
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+Health lost: 9 (raw).
+You bleed 9 health.
+H:7456|99% M:3966|78% E:100% W:97% [NE|NW|N] R:0 12:54.36-e*-🌲10🌀🍃 K:73%[97|86.7|33.6|42|42|75.6] 
+AST wear leth
+[OUTR]: 1 Aurum (987)
+Claes eats a piece of kelp.
+Processed Cures(asthma weariness)
+H:7456|99% M:3956|78% E:100% W:97% [NE|NW|N] R:0 12:54.74-e*-🌲10🌀🍃 K:73%[97|86.7|33.6|42|42|75.6] 
+AST50 wear50 leth
+
+[DEF]: Deafness
+The blade of Claes is a blur as she moves forward, slicing into your left leg.
+You parry the attack with a deft manoeuvre.            ---------- WE PARRIED! GOOD JOB!
+Claes quickly lunges to the side, bringing her shield around to smash into your spine.
+[AFF]: Paralysis
+Your muscles lock in painful contractions in reaction to the blow.
+Health lost: 169 (physical blunt).
+Claes draws a Shield of Absorption back, then lunges forward with a savage strike to your ribs.
+Your hearing is suddenly restored.
+H:7287|97% M:3928|78% E:100% W:97% [NE|NW|N] R:0 12:54.89-ed*-🌲10🌀🍃 K:82%[97|86.7|33.6|42|42|75.6]  ( -169h 2% )[PAR] 
+AST50 wear50 leth
+maup
+queue addclearfull eb!p!w!t  pk
+You have recovered balance on your legs.
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+H:7287|97% M:3928|78% E:100% W:97% [NE|NW|N] R:0 12:55.41-exd*-🌲10🌀🍃 K:82%[97|86.7|33.6|42|42|75.6] [PAR] 
+AST50 wear50 leth
+
+                   ---CAN TREE AGAIN---
+A fierce mountain falcon dives at you, raking your face with its talons.
+Health lost: 193 (physical cutting).
+H:7094|95% M:3928|78% E:100% W:97% [NE|NW|N] R:0 12:55.52-exd*-🌲10🌀🍃 K:82%[97|86.7|33.6|42|42|75.6]  ( -193h 2% )[PAR] 
+AST50 wear50 leth
+You may eat another plant or mineral. Eat (1.545)
+H:7094|95% M:3912|77% E:100% W:97% [NE|NW|N] R:0 12:55.91-exd*-🌲10🌀🍃 K:82%[97|86.7|33.6|42|42|75.6] [PAR] 
+AST50 wear50 leth
+You eat a bloodroot leaf.
+outr bloodroot
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:7094|95% M:3912|77% E:100% W:97% [NE|NW|N] R:0 12:56.13-exd*-🌲10🌀🍃 K:82%[97|86.7|33.6|42|42|75.6] 
+AST50 wear50 leth
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your left leg.
+You whip a twisted oaken staff at Claes in a controlled arc, bringing its length to crack against her torso.
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's torso. (95.1%)
+Claes staggers as the staff cracks across her ribs, sweat breaking out upon her forehead...
+Processed Affliction(Slickness)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes  kuro left kuro right   / assess
+The protective coating covering the skin of Claes sloughs off...
+Falling back into a low crouch, you lash out with a swift strike at the left thigh of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left leg. (50.4%)
+The staff cracks across the left thigh of Claes...
+Processed Affliction(Weariness)
+You drive your foot up in a rising kick at the torso of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's torso.
+                   --- TORSO BROKE! TORSO BROKE! ---
+ (103.5%)
+Your foot drives into the solar plexus of Claes.
+Balance used: 2.1s.
+You are now maintaining a kata chain of 13 actions.
+You let your eyes fall closed and instinct guide you as you flow into the form of Gaital.
+You glance over Claes and see that her health is at 3718/5460 [68%].
+[Health]: 69%
+H:7094|95% M:3846|76% E:100% W:97% [NE|NW|N] R:0 12:56.13-ed*-🌀0💧🌪️ K:82%[97|103.5|33.6|42|50.4|75.6] 
+SLCK AST50 wear leth50
+[OUTR]: 1 Bloodroot (1320)
+t
+transition to Rain form
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes  kuro left kuro right   / assess"
+H:7094|95% M:3846|76% E:100% W:97% [NE|NW|N] R:0 12:56.39-ed*-🌀0💧🌪️ K:82%[97|103.5|33.6|42|50.4|75.6] 
+SLCK AST50 wear leth50
+A kata of at least 5 must be performed in order to flow from the Gaital to another.
+H:7094|95% M:3846|76% E:100% W:97% [NE|NW|N] R:0 12:56.48-ed*-🌀0💧🌪️ K:82%[97|103.5|33.6|42|50.4|75.6] 
+SLCK AST50 wear leth50
+You may drink another health or mana elixir. Health (4.378)
+H:7094|95% M:3846|76% E:100% W:97% [NE|NW|N] R:0 12:57.08-ed*-🌀0💧🌪️ K:82%[97|103.5|33.6|42|50.4|75.6] 
+SLCK AST50 wear leth50
+Claes eats a piece of kelp.
+Claes takes a long drag off her pipe.
+Processed Cures(asthma weariness)
+Claes takes some salve from a vial and rubs it on her body.
+
+
+OPPONENT APPLIED TO THEIR body!!
+
+
+Claes applies a sileris berry to herself.
+Claes takes a drink from a black-walnut vial.
+You take a drink from a black-walnut vial.
+Your mind feels stronger and more alert.
+H:7094|95% M:4652|92% E:100% W:97% [NE|NW|N] R:0 12:57.13-ed*-🌀0💧🌪️ K:82%[97|103.5|33.6|42|50.4|75.6]  ( +806m 16% )
+leth50
+The blade of Claes is a blur as she moves forward, slicing into your torso.
+As Claes carves into you, you perceive that she has dealt 11.8% damage to your torso.
+ LIMB DAMAGE: torso (23.6%)
+ ----------- PARRYING torso
+queue prepend eb parry torso
+[0|23.6|0|0|11.8|0]
+Health lost: 607 (physical cutting).
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Claes quickly lunges to the side, bringing her shield around to smash into your spine.
+[AFF]: Paralysis
+Your muscles lock in painful contractions in reaction to the blow.
+Health lost: 131 (physical blunt).
+H:6356|85% M:4652|92% E:100% W:97% [NE|NW|N] R:0 12:57.18-ed*-🌀0💧🌪️ K:91%[97|103.5|33.6|42|50.4|75.6]  ( -738h 9% )[PAR clum] 
+leth50
+maup
+setalias pk dismount/stand/wield staff/mind lock Claes/parry torso/combo Claes  kuro left kuro right   / assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry torso/combo Claes  kuro left kuro right   / assess"
+H:6356|85% M:4572|91% E:100% W:97% [NE|NW|N] R:0 12:57.42-ed*-🌀0💧🌪️ K:91%[97|103.5|33.6|42|50.4|75.6] [PAR clum] 
+leth50
+Claes eats some irid moss.
+H:6356|85% M:4572|91% E:100% W:97% [NE|NW|N] R:0 12:57.51-ed*-🌀0💧🌪️ K:91%[97|103.5|33.6|42|50.4|75.6] [PAR clum] 
+leth50
+You may eat another plant or mineral. Eat (1.513)
+H:6356|85% M:4562|90% E:100% W:97% [NE|NW|N] R:0 12:57.64-ed*-🌀0💧🌪️ K:91%[97|103.5|33.6|42|50.4|75.6] [PAR clum] 
+leth50
+You eat a bloodroot leaf.
+outr bloodroot
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:6356|85% M:4562|90% E:100% W:97% [NE|NW|N] R:0 12:57.70-ed*-🌀0💧🌪️ K:91%[97|103.5|33.6|42|50.4|75.6] [clum] 
+leth50
+[OUTR]: 1 Bloodroot (1319)
+maup
+queue addclearfull eb!p!w!t  pk
+You have recovered balance on your legs.
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your torso.
+Dropping into a lower stance, you sweep a twisted oaken staff at the left thigh of Claes.
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left leg. (58.8%)
+The staff cracks across the left thigh of Claes...
+Processed Affliction(Weariness)
+Falling back into a low crouch, you lash out with a swift strike at the right thigh of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's right leg. (84%)
+The staff cracks across the right thigh of Claes...
+Processed Affliction(Lethargy)
+You are now maintaining a kata chain of 2 actions.
+You glance over Claes and see that her health is at 4360/5460 [79%].
+[Health]: 80%
+H:6356|85% M:4496|89% E:100% W:97% [NE|NW|N] R:0 12:58.29-ed*-🌀2💧🌪️ K:91%[97|103.5|33.6|42|58.8|84] [clum] 
+wear leth
+A fierce mountain falcon rips out a chunk of your flesh with its beak.
+Health lost: 221 (physical cutting).
+H:6235|83% M:4396|87% E:100% W:97% [NE|NW|N] R:0 12:58.54-ed*-🌀2💧🌪️ K:91%[97|103.5|33.6|42|58.8|84] [clum] 
+wear leth
+Claes eats a piece of kelp.
+Processed Cures(weariness)
+H:6235|83% M:4356|86% E:100% W:97% [NE|NW|N] R:0 12:58.85-ed*-🌀2💧🌪️ K:91%[97|103.5|33.6|42|58.8|84] [clum] 
+leth
+maup
+queue addclearfull eb!p!w!t  pk
+You may eat another plant or mineral. Eat (1.477)
+H:6235|83% M:4328|86% E:100% W:97% [NE|NW|N] R:0 12:59.24-ed*-🌀2💧🌪️ K:91%[97|103.5|33.6|42|58.8|84] [clum] 
+leth
+You eat an aurum flake.
+outr aurum
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:6235|83% M:4328|86% E:100% W:97% [NE|NW|N] R:0 12:59.46-ed*-🌀2💧🌪️ K:91%[97|103.5|33.6|42|58.8|84] 
+leth
+[OUTR]: 1 Aurum (986)
+The blade of Claes is a blur as she moves forward, slicing into your torso.
+You parry the attack with a deft manoeuvre.            ---------- WE PARRIED! GOOD JOB!
+Claes quickly lunges to the side, bringing her shield around to smash into your spine.
+[AFF]: Paralysis
+Your muscles lock in painful contractions in reaction to the blow.
+Health lost: 163 (physical blunt).
+H:6072|81% M:4328|86% E:100% W:97% [NE|NW|N] R:0 12:59.65-ed*-🌀2💧🌪️ K:100%[97|103.5|33.6|42|58.8|84]  ( -163h 2% )[PAR] 
+leth
+maup
+queue addclearfull eb!p!w!t  pk
+Health lost: 18 (raw).
+You bleed 18 health.
+H:6054|81% M:4328|86% E:100% W:97% [NE|NW|N] R:0 12:59.86-ed*-🌀2💧🌪️ K:100%[97|103.5|33.6|42|58.8|84] [PAR] 
+leth
+Claes touches a tree of life tattoo.
+                   --- THEY TOUCHED TREE ---
+                   --- THEY TOUCHED TREE ---Processed Cures
+Processed Cures(lethargy)
+H:6054|81% M:4328|86% E:100% W:97% [NE|NW|N] R:0 13:00.22-ed*-🌀2💧🌪️ K:100%[97|103.5|33.6|42|58.8|84] [PAR] 
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+H:6054|81% M:4328|86% E:100% W:97% [NE|NW|N] R:0 13:00.45-exd*-🌀2💧🌪️ K:100%[97|103.5|33.6|42|58.8|84] [PAR] 
+A rune like a rising sun upon the ground flares, bathing Claes with healing magic.
+H:6054|81% M:4328|86% E:100% W:97% [NE|NW|N] R:0 13:00.48-exd*-🌀2💧🌪️ K:100%[97|103.5|33.6|42|58.8|84] [PAR] [GLUE] passive cure
+maup
+queue addclearfull eb!p!w!t  pk
+You may eat another plant or mineral. Eat (1.47)
+H:6054|81% M:4328|86% E:100% W:97% [NE|NW|N] R:0 13:00.94-exd*-🌀2💧🌪️ K:100%[97|103.5|33.6|42|58.8|84] [PAR] 
+You eat a bloodroot leaf.
+outr bloodroot
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:6054|81% M:4328|86% E:100% W:97% [NE|NW|N] R:0 13:00.98-exd*-🌀2💧🌪️ K:100%[97|103.5|33.6|42|58.8|84] 
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your torso.
+Dropping into a lower stance, you sweep a twisted oaken staff at the left thigh of Claes.
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left leg. (67.2%)
+The staff cracks across the left thigh of Claes...
+Processed Affliction(Weariness)
+Falling back into a low crouch, you lash out with a swift strike at the right thigh of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's right leg. (92.4%)
+The staff cracks across the right thigh of Claes...
+setalias pk dismount/stand/wield staff/mind lock Claes/parry torso/combo Claes flashheel left kuro left kuro light right   / assess
+
+Processed Affliction(Lethargy)
+You are now maintaining a kata chain of 4 actions.
+You glance over Claes and see that her health is at 4109/5460 [75%].
+[Health]: 76%
+Claes eats a piece of kelp.
+Processed Cures(weariness)
+H:6054|81% M:4262|84% E:100% W:97% [NE|NW|N] R:0 13:01.17-ed*-🌀4💧🌪️ K:100%[97|103.5|33.6|42|67.2|92.4] 
+leth
+[OUTR]: 1 Bloodroot (1318)
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry torso/combo Claes flashheel left kuro left kuro light right   / assess"
+
+H:6054|81% M:4262|84% E:100% W:97% [NE|NW|N] R:0 13:01.17-ed*-🌀4💧🌪️ K:100%[97|103.5|33.6|42|67.2|92.4] 
+leth
+You may drink another health or mana elixir. Mana (4.382)
+H:6054|81% M:4262|84% E:100% W:97% [NE|NW|N] R:0 13:01.58-ed*-🌀4💧🌪️ K:100%[97|103.5|33.6|42|67.2|92.4] 
+leth
+Claes takes a drink from a black-walnut vial.
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+H:7338|98% M:4262|84% E:100% W:97% [NE|NW|N] R:0 13:01.73-ed*-🌀4💧🌪️ K:100%[97|103.5|33.6|42|67.2|92.4]  ( +1284h 17% )
+leth
+maup
+queue addclearfull eb!p!w!t  pk
+The blade of Claes is a blur as she moves forward, slicing into your left leg.
+As Claes carves into you, you perceive that she has dealt 11.8% damage to your left leg.
+ LIMB DAMAGE: left leg (23.6%)
+ ----------- PARRYING left leg
+queue prepend eb parry left leg
+[0|23.6|0|0|23.6|0]
+Health lost: 762 (physical cutting).
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Claes quickly lunges to the side, bringing her shield around to smash into your spine.
+[AFF]: Paralysis
+Your muscles lock in painful contractions in reaction to the blow.
+Health lost: 163 (physical blunt).
+H:6413|85% M:4262|84% E:100% W:97% [NE|NW|N] R:0 13:02.14-ed*-🌀4💧🌪️ K:99%[97|103.5|33.6|42|67.2|92.4]  ( -925h 12% )[PAR clum] 
+leth
+maup
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes flashheel left kuro left kuro light right   / assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes flashheel left kuro left kuro light right   /
+assess"
+H:6413|85% M:4182|83% E:100% W:97% [NE|NW|N] R:0 13:02.47-ed*-🌀4💧🌪️ K:99%[97|103.5|33.6|42|67.2|92.4] [PAR clum] 
+leth
+You may eat another plant or mineral. Eat (1.55)
+H:6413|85% M:4182|83% E:100% W:97% [NE|NW|N] R:0 13:02.54-ed*-🌀4💧🌪️ K:99%[97|103.5|33.6|42|67.2|92.4] [PAR clum] 
+leth
+Claes eats a ginseng root.
+You eat a bloodroot leaf.
+Processed Cures(lethargy)
+outr bloodroot
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:6413|85% M:4172|83% E:100% W:97% [NE|NW|N] R:0 13:02.70-ed*-🌀4💧🌪️ K:99%[97|103.5|33.6|42|67.2|92.4] [clum] 
+[OUTR]: 1 Bloodroot (1317)
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your left leg.
+Snapping your leg out to its full extent, you drive a heel into the left knee of Claes.
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left leg. (75.6%)
+You feel the satisfying crunch of bone under the impact of your heel...
+Processed Affliction(Leftleg)
+Balance used: 2.1s.
+Falling back into a low crouch, you lash out with a swift strike at the left thigh of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left leg. (84%)
+The staff cracks across the left thigh of Claes...
+Processed Affliction(Weariness)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes flashheel left kuro light left kuro light right   / assess
+Falling back into a low crouch, you lash out with a swift strike at the right thigh of Claes...
+The staff cracks across the right thigh of Claes...
+Processed Affliction(Lethargy)
+You are now maintaining a kata chain of 7 actions.
+You glance over Claes and see that her health is at 4360/5460 [79%].
+[Health]: 80%
+H:6413|85% M:4078|81% E:100% W:97% [NE|NW|N] R:0 13:03.08-ed*-🌀7💧🌪️ K:99%[97|103.5|33.6|42|84|92.4] [clum] 
+wear leth
+Claes takes some salve from a vial and rubs it on her legs.
+Processed Cures(leftleg)
+
+
+OPPONENT APPLIED TO THEIR legs!!
+
+
+H:6413|85% M:4078|81% E:100% W:97% [NE|NW|N] R:0 13:03.12-ed*-🌀7💧🌪️ K:99%[97|103.5|33.6|42|84|92.4] [clum] 
+wear leth
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes flashheel left kuro light left kuro light right  
+/ assess"
+H:6413|85% M:4078|81% E:100% W:97% [NE|NW|N] R:0 13:03.21-ed*-🌀7💧🌪️ K:99%[97|103.5|33.6|42|84|92.4] [clum] 
+wear leth
+Claes eats some irid moss.
+H:6786|90% M:4178|83% E:100% W:97% [NE|NW|N] R:0 13:03.54-ed*-🌀7💧🌪️ K:99%[97|103.5|33.6|42|84|92.4]  ( +373h 4% )[clum] 
+wear leth
+You may eat another plant or mineral. Eat (1.525)
+H:7159|95% M:4178|83% E:100% W:97% [NE|NW|N] R:0 13:04.24-ed*-🌀7💧🌪️ K:99%[97|103.5|33.6|42|84|92.4]  ( +373h 4% )[clum] 
+wear leth
+Claes eats a piece of kelp.
+You eat an aurum flake.
+Processed Cures(weariness)
+outr aurum
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:7259|97% M:4078|81% E:100% W:97% [NE|NW|N] R:0 13:04.38-ed*-🌀7💧🌪️ K:99%[97|103.5|33.6|42|84|92.4] 
+leth
+[OUTR]: 1 Aurum (985)
+A fierce mountain falcon dives at you, raking your face with its talons.
+Health lost: 194 (physical cutting).
+H:7065|94% M:4076|81% E:100% W:97% [NE|NW|N] R:0 13:04.57-ed*-🌀7💧🌪️ K:99%[97|103.5|33.6|42|84|92.4]  ( -194h 2% )
+leth
+The blade of Claes is a blur as she moves forward, slicing into your left leg.
+You parry the attack with a deft manoeuvre.            ---------- WE PARRIED! GOOD JOB!
+Claes quickly lunges to the side, bringing her shield around to smash into your spine.
+[AFF]: Paralysis
+Your muscles lock in painful contractions in reaction to the blow.
+Health lost: 163 (physical blunt).
+H:6902|92% M:4076|81% E:100% W:97% [NE|NW|N] R:0 13:04.69-ed*-🌀7💧🌪️ K:100%[97|103.5|33.6|42|84|92.4]  ( -163h 2% )[PAR] 
+leth
+mzzz
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes flashheel left kuro light left kuro light left   / assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes flashheel left kuro light left kuro light left   /
+assess"
+H:6902|92% M:4036|80% E:100% W:97% [NE|NW|N] R:0 13:04.90-ed*-🌀7💧🌪️ K:100%[97|103.5|33.6|42|84|92.4] [PAR] 
+leth
+You have recovered balance on your legs.
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+H:6902|92% M:4036|80% E:100% W:97% [NE|NW|N] R:0 13:05.09-exd*-🌀7💧🌪️ K:100%[97|103.5|33.6|42|84|92.4] [PAR] 
+leth
+Health lost: 3 (raw).
+You bleed 3 health.
+H:6899|92% M:4036|80% E:100% W:97% [NE|NW|N] R:0 13:05.36-exd*-🌀7💧🌪️ K:100%[97|103.5|33.6|42|84|92.4] [PAR] 
+leth
+You may eat another plant or mineral. Eat (1.442)
+H:6899|92% M:4036|80% E:100% W:97% [NE|NW|N] R:0 13:05.83-exd*-🌀7💧🌪️ K:100%[97|103.5|33.6|42|84|92.4] [PAR] 
+leth
+Claes eats a ginseng root.
+You eat a bloodroot leaf.
+Processed Cures(lethargy)
+outr bloodroot
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:6899|92% M:4020|80% E:100% W:97% [NE|NW|N] R:0 13:05.94-exd*-🌀7💧🌪️ K:100%[97|103.5|33.6|42|84|92.4] 
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your left leg.
+Snapping your leg out to its full extent, you drive a heel into the left knee of Claes.
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left leg. (92.4%)
+You feel the satisfying crunch of bone under the impact of your heel...
+Processed Affliction(Leftleg)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes  kuro light left kuro light left   / assess
+Balance used: 2.1s.
+Falling back into a low crouch, you lash out with a swift strike at the left thigh of Claes...
+The staff cracks across the left thigh of Claes...
+Processed Affliction(Lethargy Weariness)
+Falling back into a low crouch, you lash out with a swift strike at the left thigh of Claes...
+The staff cracks across the left thigh of Claes...
+You are now maintaining a kata chain of 10 actions.
+You glance over Claes and see that her health is at 4654/5460 [85%].
+[Health]: 86%
+H:6899|92% M:3954|78% E:100% W:97% [NE|NW|N] R:0 13:05.94-ed*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] 
+wear leth
+[OUTR]: 1 Bloodroot (1316)
+Claes takes some salve from a vial and rubs it on her legs.
+Processed Cures(leftleg)
+
+
+OPPONENT APPLIED TO THEIR legs!!
+
+
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry left leg/combo Claes  kuro light left kuro light left   / assess"
+
+H:6899|92% M:3954|78% E:100% W:97% [NE|NW|N] R:0 13:06.11-ed*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] 
+wear leth
+You may drink another health or mana elixir. Health (4.526)
+H:6899|92% M:3954|78% E:100% W:97% [NE|NW|N] R:0 13:06.24-ed*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] 
+wear leth
+Claes takes a drink from a black-walnut vial.
+You take a drink from a black-walnut vial.
+Your mind feels stronger and more alert.
+H:6899|92% M:4620|91% E:100% W:97% [NE|NW|N] R:0 13:06.31-ed*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4]  ( +666m 13% )
+wear leth
+A supple purple shell of sileris berry juice has formed around Claes.
+H:6899|92% M:4620|91% E:100% W:97% [NE|NW|N] R:0 13:07.12-ed*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] 
+wear leth
+The blade of Claes is a blur as she moves forward, slicing into your torso.
+As Claes carves into you, you perceive that she has dealt 11.8% damage to your torso.
+ LIMB DAMAGE: torso (35.4%)
+ ----------- PARRYING torso
+queue prepend eb parry torso
+[0|35.4|0|0|23.6|0]
+Health lost: 607 (physical cutting).
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Claes drives the edge of her shield into your throat, cutting off your air supply.
+[AFF]: Asthma
+Health lost: 136 (physical blunt).
+Claes draws a Shield of Absorption back, then lunges forward with a savage strike to your ribs.
+[AFF]: Sensitivity
+H:6156|82% M:4592|91% E:100% W:97% [NE|NW|N] R:0 13:07.16-ed*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4]  ( -743h 9% )[AST clum SENS] 
+wear leth
+You touch the tree of life tattoo.
+The stinging feeling fades.
+[AFF]: Sensitivity
+j ne
+queue addclearfull eb!p!w!t stand 
+queue add eb!p!w!t wear greaves
+queue add eb!p!w!t mj ne
+queue add eb!p!w!t leap ne
+You may eat another plant or mineral. Eat (1.526)
+H:6156|82% M:4552|90% E:100% W:97% [NE|NW|N] R:0 13:07.46-ed*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] [AST clum] 
+wear leth
+A fierce mountain falcon dives at you, raking your face with its talons.
+Health lost: 192 (physical cutting).
+H:5964|79% M:4552|90% E:100% W:97% [NE|NW|N] R:0 13:07.60-ed*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4]  ( -192h 2% )[AST clum] 
+wear leth
+Claes eats a piece of kelp.
+You eat an aurum flake.
+setalias pk dismount/stand/wield staff/mind lock Claes/parry torso/combo Claes  kuro light left kuro light left   / assess
+
+Processed Cures(weariness)
+outr aurum
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry torso/combo Claes  kuro light left kuro light left   / assess"
+
+H:5964|79% M:4502|89% E:100% W:96% [NE|NW|N] R:0 13:07.83-ed*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] [clum] 
+leth
+[OUTR]: 1 Aurum (984)
+You have recovered balance on your legs.
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+You are already wearing this item.
+                   --- DISMOUNTED ---
+
+                   --- DISMOUNTED ---
+
+                   --- DISMOUNTED ---
+You bunch your powerful muscles and launch yourself in a majestic leap northeastwards.
+Empty training yard.
+The sky lightens with the onset of dawn.
+You see exits leading southwest and northwest.
+Balance used: 1.0s.
+H:5964|79% M:4502|89% E:99% W:96% [NW|SW] R:0 13:07.90-ed*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] [clum] 
+leth
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+H:5964|79% M:4502|89% E:99% W:97% [NW|SW] R:0 13:08.90-exd*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] [clum] 
+leth
+nw
+queue addclearfull freestand nw
+A fierce mountain falcon soars in upon silver wings.
+H:5964|79% M:4502|89% E:99% W:97% [NW|SW] R:0 13:09.13-exd*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] [clum] 
+leth
+You may eat another plant or mineral. Eat (1.49)
+H:5964|79% M:4502|89% E:99% W:97% [NW|SW] R:0 13:09.22-exd*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] [clum] 
+leth
+nw
+queue add freestand nw
+A break in the estate wall.
+The sky lightens with the onset of dawn.
+You see exits leading southeast, southwest, and northwest.
+H:5964|79% M:4502|89% E:99% W:97% [SW|NW|SE] R:0 13:09.23-exd*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] [clum] 
+leth
+You eat an aurum flake.
+outr aurum
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:5964|79% M:4502|89% E:99% W:97% [SW|NW|SE] R:0 13:09.29-exd*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] 
+leth
+Secluded copse.
+The sky lightens with the onset of dawn. A large beehive hangs down from the trees above.
+There are no obvious exits.
+[OUTR]: 1 Aurum (983)
+[southeast - Claes (1)]
+H:5964|79% M:4502|89% E:99% W:97% [] R:0 13:09.63-exd*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] 
+leth
+
+                   ---CAN TREE AGAIN---
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry torso/southeast / combo Claes  kuro light left kuro light left   /
+assess"
+H:5964|79% M:4502|89% E:99% W:97% [] R:0 13:09.74-exd*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] 
+leth
+Claes arrives from the southeast.
+[here - Claes (1)]
+H:5964|79% M:4492|89% E:99% W:97% [] R:0 13:10.27-exd*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] 
+leth
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry torso/combo Claes  kuro light left kuro light left   / assess"
+
+H:6064|81% M:4392|87% E:99% W:96% [] R:0 13:10.40-exd*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] 
+leth
+A fierce mountain falcon soars in upon silver wings.
+H:6064|81% M:4392|87% E:99% W:96% [] R:0 13:10.53-exd*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] 
+leth
+The blade of Claes is a blur as she moves forward, slicing into you.
+Health lost: 657 (physical cutting).
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Claes quickly lunges to the side, bringing her shield around to smash into your spine.
+[AFF]: Paralysis
+Your muscles lock in painful contractions in reaction to the blow.
+Health lost: 163 (physical blunt).
+Claes moves in to engage you.
+H:5244|70% M:4392|87% E:99% W:96% [] R:0 13:10.60-exd*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4]  ( -820h 10% )[PAR clum] 
+leth
+You may drink another health or mana elixir. Mana (4.329)
+H:5244|70% M:4312|85% E:99% W:96% [] R:0 13:10.70-exd*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] [PAR clum] 
+leth
+You may eat another plant or mineral. Eat (1.568)
+H:5244|70% M:4312|85% E:99% W:96% [] R:0 13:10.82-exd*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] [PAR clum] 
+leth
+You eat a bloodroot leaf.
+outr bloodroot
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+H:7109|95% M:4312|85% E:99% W:96% [] R:0 13:10.84-exd*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4]  ( +1865h 24% )[clum] 
+leth
+Health lost: 7 (raw).
+You bleed 7 health.
+H:7102|95% M:4312|85% E:99% W:96% [] R:0 13:10.89-exd*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] [clum] 
+leth
+[OUTR]: 1 Bloodroot (1315)
+
+CAPE ALMOST GONE, 120s left
+You may eat another plant or mineral. Eat (1.582)
+H:7102|95% M:4284|85% E:99% W:96% [] R:0 13:12.49-exd*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] [clum] 
+leth
+You eat an aurum flake.
+outr aurum
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+The blade of Claes is a blur as she moves forward, slicing into you.
+Health lost: 657 (physical cutting).
+[AFF]: Weariness
+Your limbs grow heavy and you groan feebly.
+Claes quickly lunges to the side, bringing her shield around to smash into your spine.
+[AFF]: Paralysis
+Your muscles lock in painful contractions in reaction to the blow.
+Health lost: 163 (physical blunt).
+H:6282|84% M:4274|85% E:99% W:96% [] R:0 13:12.63-exd*-🌀10💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4]  ( -820h 10% )[PAR wear] 
+leth
+[OUTR]: 1 Aurum (982)
+t
+transition to Rain form
+Dropping into a lower stance, you snap your weapon into an offensive position, tensing your muscles in preparation for the form of Willows in Rain
+Storm.
+H:6282|84% M:4234|84% E:99% W:96% [] R:0 13:13.40-exd*-💧0🛡️🌲 K:100%[97|103.5|33.6|42|92.4|92.4] [PAR wear] 
+leth
+A fierce mountain falcon dives at you, raking your face with its talons.
+Health lost: 288 (physical blunt).
+H:6367|85% M:4234|84% E:99% W:96% [] R:0 13:13.59-exd*-💧0🛡️🌲 K:100%[97|103.5|33.6|42|92.4|92.4] [PAR wear] 
+leth
+You may eat another plant or mineral. Eat (1.414)
+H:6740|90% M:4294|85% E:99% W:96% [] R:0 13:14.05-exd*-💧0🛡️🌲 K:100%[97|103.5|33.6|42|92.4|92.4]  ( +373h 4% )[PAR wear] 
+leth
+You eat a bloodroot leaf.
+outr bloodroot
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:6740|90% M:4294|85% E:99% W:96% [] R:0 13:14.16-exd*-💧0🛡️🌲 K:100%[97|103.5|33.6|42|92.4|92.4] [wear] 
+leth
+[OUTR]: 1 Bloodroot (1314)
+The blade of Claes is a blur as she moves forward, slicing into you.
+Health lost: 684 (physical cutting).
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+The sleizak rune flashes bright upon a blessed legionnaire's longsword in the hand of Claes.
+Claes quickly lunges to the side, bringing her shield around to smash into your spine.
+[AFF]: Paralysis
+Your muscles lock in painful contractions in reaction to the blow.
+Health lost: 170 (physical blunt).
+H:5886|78% M:4294|85% E:99% W:96% [] R:0 13:14.69-exd*-💧0🛡️🌲 K:100%[97|103.5|33.6|42|92.4|92.4]  ( -854h 11% )[PAR clum wear] 
+leth
+You may drink another health or mana elixir. Health (4.423)
+H:5886|78% M:4226|84% E:99% W:96% [] R:0 13:15.33-exd*-💧0🛡️🌲 K:100%[97|103.5|33.6|42|92.4|92.4] [PAR clum wear] 
+leth
+adopt gaital form
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+H:7298|97% M:4226|84% E:99% W:96% [] R:0 13:15.50-exd*-💧0🛡️🌲 K:100%[97|103.5|33.6|42|92.4|92.4]  ( +1412h 18% )[PAR clum wear] 
+leth
+You clumsily transition from the form of Willows in Rain Storm into the form of Gaital.
+Balance used: 4.1s.
+curing priority Paralysis 20
+You let your eyes fall closed and instinct guide you as you flow into the form of Gaital.
+H:7298|97% M:4226|84% E:99% W:96% [] R:0 13:15.50-ed*-🌀0💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] [PAR clum wear] 
+leth
+You may eat another plant or mineral. Eat (1.562)
+H:7298|97% M:4226|84% E:99% W:96% [] R:0 13:15.73-ed*-🌀0💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] [PAR clum wear] 
+leth
+You eat an aurum flake.
+outr aurum
+Your limbs strengthen and you feel stronger.
+[AFF]: Weariness
+H:7298|97% M:4210|83% E:99% W:96% [] R:0 13:15.94-ed*-🌀0💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] [PAR clum] 
+leth
+[OUTR]: 1 Aurum (981)
+Health lost: 15 (raw).
+You bleed 15 health.
+H:7383|98% M:4110|81% E:99% W:96% [] R:0 13:16.39-ed*-🌀0💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] [PAR clum] 
+leth
+The blade of Claes is a blur as she moves forward, slicing into you.
+Health lost: 657 (physical cutting).
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+You feel suddenly very ill as a blessed legionnaire's longsword strikes you, a rush of nausea threatening to overcome you.
+[AFF]: Nausea
+Claes drives the edge of her shield into your throat, cutting off your air supply.
+[AFF]: Asthma
+Health lost: 172 (physical blunt).
+H:6554|87% M:4110|81% E:99% W:96% [] R:0 13:16.70-ed*-🌀0💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4]  ( -829h 11% )[PAR AST clum naus] 
+leth
+A fierce mountain falcon dives at you, raking your face with its talons.
+Health lost: 309 (physical blunt).
+H:6245|83% M:4110|81% E:99% W:96% [] R:0 13:16.75-ed*-🌀0💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4]  ( -309h 4% )[PAR AST clum naus] 
+leth
+You may eat another plant or mineral. Eat (1.459)
+H:6245|83% M:4030|80% E:99% W:96% [] R:0 13:17.40-ed*-🌀0💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] [PAR AST clum naus] 
+leth
+You eat an aurum flake.
+outr aurum
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+H:6245|83% M:4030|80% E:99% W:96% [] R:0 13:17.51-ed*-🌀0💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] [PAR clum naus] 
+leth
+maux
+setalias pk dismount/stand/wield staff/mind lock Claes/parry torso/combo Claes sweep    flashheel left   / assess
+queue addclearfull eb!p!w!t  pk
+[OUTR]: 1 Aurum (980)
+The inguz rune flashes bright upon a blessed legionnaire's longsword in the hand of Claes.
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry torso/combo Claes sweep    flashheel left   / assess"
+H:6245|83% M:4020|80% E:99% W:96% [] R:0 13:17.69-ed*-🌀0💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] [PAR clum naus] 
+leth
+Claes takes a drink from a black-walnut vial.
+H:6245|83% M:4020|80% E:99% W:96% [] R:0 13:17.88-ed*-🌀0💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] [PAR clum naus] 
+leth
+curing priority Paralysis 2
+
+[DEF]: Fangbarrier
+The blade of Claes is a blur as she moves forward, slicing into your torso.
+As Claes carves into you, you perceive that she has dealt 11.8% damage to your torso.
+ LIMB DAMAGE: torso (47.2%)
+  ---- >10s since last parry![0|47.2|0|0|23.6|0]
+Health lost: 762 (physical cutting).
+[AFF]: Slickness
+The protective covering coating your skin sloughs off.
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+Claes swings her shield around, smashing your temple with a backhanded blow.
+[AFF]: Dizziness
+Your mind swims as dizziness overtakes you.
+[AFF]: Scrambledbrains
+Your brains feel scrambled by the impact.
+Health lost: 241 (physical blunt).
+Claes draws a Shield of Absorption back, then lunges forward with a savage strike to your ribs.
+[AFF]: Sensitivity
+H:5242|70% M:4020|80% E:99% W:96% [] R:0 13:18.60-ed*-🌀0💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4]  ( -1003h 13% )[dizz PAR SLCK clum SENS naus sbrain] 
+
+leth
+You focus your mind intently on curing your mental maladies.
+You take a long drag of realgar off your pipe.
+Your glands cease their oily secretion.
+[AFF]: Slickness
+You may eat another plant or mineral. Eat (1.53)
+H:5242|70% M:3774|75% E:99% W:96% [] R:0 13:19.04-ed*-🌀0💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4]  ( -246m 4% )[dizz PAR clum SENS naus sbrain] 
+leth
+You eat a bloodroot leaf.
+outr bloodroot
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+You apply a quicksilver droplet to yourself.
+H:5242|70% M:3774|75% E:99% W:96% [] R:0 13:19.12-ed*-🌀0💧🌪️ K:100%[97|103.5|33.6|42|92.4|92.4] [dizz clum SENS naus sbrain] 
+leth
+[OUTR]: 1 Bloodroot (1313)
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your torso.
+Taking a firm hold of a twisted oaken staff you whip it in a wide sweep at the legs of Claes.
+The staff sweeps the legs out from under Claes, sending her sprawling.
+ --------------------------------------------------------------
+ --------------------GOT PRONE!!--------------------------
+ --------------------GOT PRONE!!--------------------------
+ --------------------------------------------------------------
+Processed Affliction(Prone)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry torso/combo Claes flashheel left ruku right ruku left   / assess
+Snapping your leg out to its full extent, you drive a heel into the left knee of Claes.
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left leg.
+                   --- LEFT LEG BROKE! LEFT LEG BROKE! ---
+ (100.8%)
+You feel the satisfying crunch of bone under the impact of your heel...
+Processed Affliction(Leftleg)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry torso/combo Claes flashheel right ruku right ruku left   / assess
+Balance used: 2.1s.
+You are now maintaining a kata chain of 2 actions.
+You glance over Claes and see that her health is at 5125/5460 [93%].
+[Health]: 94%
+H:5242|70% M:3677|73% E:99% W:96% [] R:0 13:19.56-ed*-🌀2💧🌪️ K:100%[97|103.5|33.6|42|100.8|92.4] [dizz clum SENS naus sbrain] 
+leth
+maux
+queue addclearfull eb!p!w!t  pk
+Claes takes some salve from a vial and rubs it on her legs.
+Processed Cures(leftleg)
+
+
+OPPONENT APPLIED TO THEIR legs!!
+
+
+H:5242|70% M:3677|73% E:100% W:96% [] R:0 13:19.71-ed*-🌀2💧🌪️ K:100%[97|103.5|33.6|42|100.8|92.4] [dizz clum SENS naus sbrain] 
+leth
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry torso/combo Claes flashheel left ruku right ruku left   / assess"
+
+H:5242|70% M:3677|73% E:100% W:96% [] R:0 13:19.71-ed*-🌀2💧🌪️ K:100%[97|103.5|33.6|42|100.8|92.4] [dizz clum SENS naus sbrain] 
+leth
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry torso/combo Claes flashheel right ruku right ruku left   / assess"
+
+H:5242|70% M:3677|73% E:100% W:96% [] R:0 13:19.71-ed*-🌀2💧🌪️ K:100%[97|103.5|33.6|42|100.8|92.4] [dizz clum SENS naus sbrain] 
+leth
+A fierce mountain falcon dives at you, raking your face with its talons.
+Health lost: 372 (physical blunt).
+H:4870|65% M:3677|73% E:100% W:96% [] R:0 13:19.74-ed*-🌀2💧🌪️ K:100%[97|103.5|33.6|42|100.8|92.4]  ( -372h 4% )[dizz clum SENS naus sbrain] 
+leth
+You eat some irid moss.
+H:5467|73% M:4078|81% E:100% W:96% [] R:0 13:19.92-ed*-🌀2💧🌪️ K:100%[97|103.5|33.6|42|100.8|92.4]  ( +597h 7% +401m 7% )[dizz clum SENS naus sbrain] 
+
+leth
+You may drink another health or mana elixir. Health (4.5)
+H:5467|73% M:4078|81% E:100% W:96% [] R:0 13:19.92-ed*-🌀2💧🌪️ K:100%[97|103.5|33.6|42|100.8|92.4] [dizz clum SENS naus sbrain] 
+leth
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+H:7223|96% M:4078|81% E:100% W:96% [] R:0 13:20.12-ed*-🌀2💧🌪️ K:100%[97|103.5|33.6|42|100.8|92.4]  ( +1756h 23% )[dizz clum SENS naus sbrain] 
+leth
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.502)
+H:7223|96% M:4078|81% E:100% W:96% [] R:0 13:20.20-ed*-🌀2💧🌪️ K:100%[97|103.5|33.6|42|100.8|92.4] [dizz clum SENS naus sbrain] 
+leth
+You may eat another plant or mineral. Eat (1.471)
+H:7223|96% M:4078|81% E:100% W:96% [] R:0 13:20.63-ed*-🌀2💧🌪️ K:100%[97|103.5|33.6|42|100.8|92.4] [dizz clum SENS naus sbrain] 
+leth
+You eat an aurum flake.
+outr aurum
+The stinging feeling fades.
+[AFF]: Sensitivity
+H:7223|96% M:4078|81% E:100% W:96% [] R:0 13:20.75-ed*-🌀2💧🌪️ K:100%[97|103.5|33.6|42|100.8|92.4] [dizz clum naus sbrain] 
+leth
+[OUTR]: 1 Aurum (979)
+maux
+queue addclearfull eb!p!w!t  pk
+You are no longer dizzy.
+[AFF]: Dizziness
+H:7223|96% M:4078|81% E:100% W:96% [] R:0 13:20.96-ed*-🌀2💧🌪️ K:100%[97|103.5|33.6|42|100.8|92.4] [clum naus sbrain] 
+leth
+Your mind is able to focus once again. Focus (2.46)
+H:7223|96% M:4078|81% E:100% W:96% [] R:0 13:21.16-ed*-🌀2💧🌪️ K:100%[97|103.5|33.6|42|100.8|92.4] [clum naus sbrain] 
+leth
+You may utilise the tree tattoo again. Tree (13.967)
+H:7223|96% M:4078|81% E:100% W:96% [] R:0 13:21.24-ed*-🌀2💧🌪️ K:100%[97|103.5|33.6|42|100.8|92.4] [clum naus sbrain] 
+leth
+Your brains no longer feel so scrambled.
+[AFF]: Scrambledbrains
+H:7223|96% M:4078|81% E:100% W:96% [] R:0 13:21.46-ed*-🌀2💧🌪️ K:100%[97|103.5|33.6|42|100.8|92.4] [clum naus] 
+leth
+You have recovered balance on your legs.
+H:7223|96% M:4078|81% E:100% W:96% [] R:0 13:21.62-ed*-🌀2💧🌪️ K:100%[97|103.5|33.6|42|100.8|92.4] [clum naus] 
+leth
+Health lost: 13 (raw).
+You bleed 13 health.
+H:7210|96% M:4078|81% E:100% W:96% [] R:0 13:21.88-ed*-🌀2💧🌪️ K:100%[97|103.5|33.6|42|100.8|92.4] [clum naus] 
+leth
+You may eat another plant or mineral. Eat (1.495)
+H:7210|96% M:4078|81% E:100% W:96% [] R:0 13:22.25-ed*-🌀2💧🌪️ K:100%[97|103.5|33.6|42|100.8|92.4] [clum naus] 
+leth
+You eat an aurum flake.
+outr aurum
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:7210|96% M:4078|81% E:100% W:96% [] R:0 13:22.34-ed*-🌀2💧🌪️ K:100%[97|103.5|33.6|42|100.8|92.4] [naus] 
+leth
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your torso.
+Snapping your leg out to its full extent, you drive a heel into the right knee of Claes.
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's right leg.
+                   --- RIGHT LEG BROKE! RIGHT LEG BROKE! ---
+ (100.8%)
+You feel the satisfying crunch of bone under the impact of your heel...
+Processed Affliction(Rightleg)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry torso/combo Claes flashheel left needle  jinzuku    / assess
+Balance used: 2.1s.
+You spin a full rotation, bringing a twisted oaken staff around in a blur of motion to smash into the right arm of Claes.
+Processed Affliction(Clumsiness)
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's right arm. (50.4%)
+The staff connects to the right arm with a resounding crack, the limb flopping uselessly.
+You spin a full rotation, bringing a twisted oaken staff around in a blur of motion to smash into the left arm of Claes.
+Processed Affliction(Healthleech)
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left arm. (42%)
+The staff connects to the left arm with a resounding crack, the limb flopping uselessly.
+You are now maintaining a kata chain of 5 actions.
+You glance over Claes and see that her health is at 4166/5460 [76%].
+[Health]: 77%
+H:7310|97% M:3912|77% E:100% W:96% [] R:0 13:22.46-ed*-🌀5💧🌪️ K:100%[97|103.5|42|50.4|100.8|100.8]  ( -166m 3% )[naus] 
+clum hlch leth
+[OUTR]: 1 Aurum (978)
+Claes eats a piece of kelp.
+Claes touches a tree of life tattoo.
+                   --- THEY TOUCHED TREE ---
+                   --- THEY TOUCHED TREE ---
+Processed Cures(clumsiness healthleech)Processed Cures
+Processed Cures(healthleech clumsiness lethargy rightleg)
+Claes takes a drink from a black-walnut vial.
+Claes eats some irid moss.
+H:7310|97% M:3912|77% E:100% W:96% [] R:0 13:22.53-ed*-🌀5💧🌪️ K:100%[97|103.5|42|50.4|100.8|100.8] [naus] 
+clum37 hlch37 leth75
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry torso/combo Claes flashheel left needle  jinzuku    / assess"
+
+H:7310|97% M:3912|77% E:100% W:96% [] R:0 13:22.57-ed*-🌀5💧🌪️ K:100%[97|103.5|42|50.4|100.8|100.8] [naus] 
+clum37 hlch37 leth75
+
+[DEF]: Temperance
+A fierce mountain falcon rips out a chunk of your flesh with its beak.
+Your temperance defence is ripped apart by its talons.
+Health lost: 225 (physical cutting).
+H:7085|94% M:3902|77% E:100% W:96% [] R:0 13:22.76-ed*-🌀5💧🌪️ K:100%[97|103.5|42|50.4|100.8|100.8]  ( -225h 3% )[naus] 
+clum37 hlch37 leth75
+
+[DEF]: Temperance
+You take a drink from a black-walnut vial.
+A chill runs over your icy skin.
+[Limb]: Reset Claes' left leg.
+You may eat another plant or mineral. Eat (1.474)
+H:7458|99% M:3834|76% E:100% W:95% [] R:0 13:23.83-ed*-🌀5💧🌪️ K:100%[97|103.5|42|50.4|0|100.8]  ( +373h 4% )[naus] 
+clum37 hlch37 leth75
+Claes takes some salve from a vial and rubs it on her legs.
+Processed Cures(rightleg)
+
+
+OPPONENT APPLIED TO THEIR legs!!
+
+
+You eat a ferrum flake.
+outr ferrum
+Your stomach becalms itself.
+[AFF]: Nausea
+H:7458|99% M:3834|76% E:100% W:95% [] R:0 13:23.95-ed*-🌀5💧🌪️ K:100%[97|103.5|42|50.4|0|100.8] 
+clum37 hlch37 leth75
+[OUTR]: 1 Ferrum (1319)
+H:7465|100% M:3934|78% E:100% W:96% [] R:0 13:24.13-ed*-🌀5💧🌪️ K:100%[97|103.5|42|50.4|0|100.8] 
+clum37 hlch37 leth75
+You have recovered balance on your legs.
+You may drink another health or mana elixir. Health (4.446)
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+H:7465|100% M:3934|78% E:100% W:96% [] R:0 13:24.56-exd*-🌀5💧🌪️ K:100%[97|103.5|42|50.4|0|100.8] 
+clum37 hlch37 leth75
+You take a drink from a black-walnut vial.
+Your mind feels stronger and more alert.
+H:7465|100% M:4822|95% E:100% W:96% [] R:0 13:24.79-exd*-🌀5💧🌪️ K:100%[97|103.5|42|50.4|0|100.8]  ( +888m 17% )
+clum37 hlch37 leth75
+Claes takes some salve from a vial and rubs it on her legs.
+
+
+OPPONENT APPLIED TO THEIR legs!!
+
+
+H:7465|100% M:4822|95% E:100% W:96% [] R:0 13:24.93-exd*-🌀5💧🌪️ K:100%[97|103.5|42|50.4|0|100.8] 
+clum37 hlch37 leth75
+maux
+queue addclearfull eb!p!w!t  pk
+You may eat another plant or mineral. Eat (1.447)
+H:7465|100% M:4812|95% E:100% W:96% [] R:0 13:25.43-exd*-🌀5💧🌪️ K:100%[97|103.5|42|50.4|0|100.8] 
+clum37 hlch37 leth75
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your torso.
+Snapping your leg out to its full extent, you drive a heel into the left knee of Claes.
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's left leg. (8.4%)
+You feel the satisfying crunch of bone under the impact of your heel...
+Processed Affliction(Leftleg)
+Balance used: 2.1s.
+Reversing your grip on a twisted oaken staff, you drive the top of the weapon into the throat of Claes...
+As your blow lands with a crunch, you perceive that you have dealt 13.4% damage to Claes's head.
+                   --- HEAD BROKE! HEAD BROKE! ---
+ (110.4%)
+The end of the staff smashes into the exposed throat of Claes, crushing cartilage...
+Processed Affliction(Crushedthroat)
+setalias pk dismount/stand/wield staff/mind lock Claes/parry torso/dispatch Claes/assess
+You flow around Claes, a twisted oaken staff lashing out in a swift strike at her kidneys.
+As your blow lands with a crunch, you perceive that you have dealt 8.4% damage to Claes's torso.
+                   --- TORSO BROKE! TORSO BROKE! ---
+ (111.9%)
+The end of the staff drives viciously into the kidneys of Claes.
+You are now maintaining a kata chain of 8 actions.
+You glance over Claes and see that her health is at 4813/5460 [88%].
+[Health]: 89%
+H:7465|100% M:4746|94% E:100% W:96% [] R:0 13:25.48-ed*-🌀8💧🌪️ K:100%[110.4|111.9|42|50.4|8.4|100.8] 
+clum37 hlch37 leth75
+Claes eats a goldenseal root.
+You eat a calamine crystal.
+outr calamine
+H:7465|100% M:4746|94% E:100% W:96% [] R:0 13:25.53-ed*-🌀8💧🌪️ K:100%[110.4|111.9|42|50.4|8.4|100.8] 
+clum37 hlch37 leth75
+Alias "pk" will now execute: "dismount/stand/wield staff/mind lock Claes/parry torso/dispatch Claes/assess"
+H:7465|100% M:4746|94% E:100% W:96% [] R:0 13:25.69-ed*-🌀8💧🌪️ K:100%[110.4|111.9|42|50.4|8.4|100.8] 
+clum37 hlch37 leth75
+[OUTR]: 1 Calamine (1568)
+A fierce mountain falcon rips out a chunk of your flesh with its beak.
+Health lost: 192 (physical cutting).
+H:7273|97% M:4746|94% E:100% W:96% [] R:0 13:25.83-ed*-🌀8💧🌪️ K:100%[110.4|111.9|42|50.4|8.4|100.8]  ( -192h 2% )
+clum37 hlch37 leth75
+You may eat another bit of irid moss or potash.
+H:7273|97% M:4730|94% E:100% W:96% [] R:0 13:25.85-ed*-🌀8💧🌪️ K:100%[110.4|111.9|42|50.4|8.4|100.8] 
+clum37 hlch37 leth75
+maux
+queue addclearfull eb!p!w!t  pk
+maux
+queue addclearfull eb!p!w!t  pk
+You may eat another plant or mineral. Eat (1.545)
+H:7273|97% M:4690|93% E:100% W:95% [] R:0 13:27.09-ed*-🌀8💧🌪️ K:100%[110.4|111.9|42|50.4|8.4|100.8] 
+clum37 hlch37 leth75
+Claes eats a ginseng root.
+Claes takes a drink from a black-walnut vial.
+Processed Cures(lethargy)
+H:7273|97% M:4690|93% E:100% W:95% [] R:0 13:27.12-ed*-🌀8💧🌪️ K:100%[110.4|111.9|42|50.4|8.4|100.8] 
+clum37 hlch37
+Health lost: 6 (raw).
+You bleed 6 health.
+H:7267|97% M:4690|93% E:100% W:95% [] R:0 13:27.38-ed*-🌀8💧🌪️ K:100%[110.4|111.9|42|50.4|8.4|100.8] 
+clum37 hlch37
+You have recovered balance on your legs.
+You have recovered balance on your right arm.
+H:7267|97% M:4690|93% E:100% W:95% [] R:0 13:27.51-ed*-🌀8💧🌪️ K:100%[110.4|111.9|42|50.4|8.4|100.8] 
+clum37 hlch37
+maux
+queue addclearfull eb!p!w!t  pk
+
+[DEF]: Deafness
+[AFF]: Deafness
+The aural world fades to silence.
+H:7267|97% M:4653|92% E:100% W:95% [] R:0 13:27.65-e*-🌀8💧🌪️ K:100%[110.4|111.9|42|50.4|8.4|100.8] 
+clum37 hlch37
+[Limb]: Reset Claes' right leg.
+
+[DEF]: Insomnia
+[DEF]: Blindness
+[DEF]: Deafness
+You have recovered balance on your left arm.
+You are not currently riding anything.
+You must dissolve your current lock before attempting another.
+You will now attempt to parry attacks to your torso.
+Placing one foot on the chest of Claes to hold her in place, you drive your staff down with all your strength into her weakened throat. The gurgling
+death rattle is the only sound to herald her death as she gives a single great convulsion beneath your heel, then falls still.
+Claes backs away and eases off.
+You have lost your telepathic lock upon Claes.
+You have slain Claes.
+ 
