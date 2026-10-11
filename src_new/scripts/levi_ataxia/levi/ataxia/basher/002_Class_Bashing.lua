@@ -3767,7 +3767,8 @@ end
 --
 --   You swiftly return to concealment in the wake of your triumph.
 --
--- (trigger serpent/020, user: "this rehides us also") arrives the instant the denizen dies, which
+-- (trigger serpent/020, user: "this rehides us also") -- and the refusal "You are already hidden."
+-- (v4.7.409, same trigger: a refusal is a free state probe) -- arrives the instant the denizen dies, which
 -- is exactly when the next round is built for the next denizen -- before any Defences.Add. So the
 -- line also counts for SERPENT_CONCEAL_WINDOW seconds. A stamp, never a write to ataxia.defences:
 -- GMCP owns the state, and a belief it never confirmed is one it will never Remove. A Remove of
@@ -3775,7 +3776,7 @@ end
 local SERPENT_CONCEAL_WINDOW = 3
 
 function ataxiaBasher_serpentHidden()
-   if ataxia.defences and ataxia.defences.hiding then return true end
+   if ataxia.defences and (ataxia.defences.hiding or ataxia.defences.hide) then return true end
    local at = ataxiaTemp and tonumber(ataxiaTemp.serpentConcealAt)
    if not at then return false end
    local nowT = (getEpoch and getEpoch()) or os.time()
@@ -3809,9 +3810,10 @@ function ataxiaBasher_serpentBashing()
       local sp = ataxia.settings.separator
       local rest = ataxiaBasher_searingLightwall(sp)..brage
       if rest:sub(-#sp) == sp then rest = rest:sub(1, -#sp - 1) end -- no bare trailing separator
-      -- THE DIRK (v4.7.394, user: "backstab needs a dirk in our hand"; v4.7.408 the user's exact
-      -- form: "wield dirk;backstab target" -- the dirk alone, not the shield with it).
-      return "wield dirk"..sp.."backstab "..target..((rest ~= "") and (sp..rest) or "")
+      -- THE DIRK (v4.7.394, user: "backstab needs a dirk in our hand"). `wield shield dirk` is the
+      -- same command the Serpent PvP offense uses before its dirk attacks (serpent/002). (v4.7.408
+      -- briefly sent `wield dirk`; user, v4.7.409: "wield shield dirk is fine".)
+      return "wield shield dirk"..sp.."backstab "..target..((rest ~= "") and (sp..rest) or "")
    end
 
    -- Searing Light rides FIRST (see above): an eq cast, so the balance garrote still swings.

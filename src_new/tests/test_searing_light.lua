@@ -368,12 +368,12 @@ describe("Assassin's Blade: open with BACKSTAB while hidden", function()
 
   it("hidden: backstab FIRST, the battlerage after it, no garrote", function()
     local cmd = bash({})
-    expect(cmd).toBe("wield dirk;backstab 7;BRAGE")
+    expect(cmd).toBe("wield shield dirk;backstab 7;BRAGE")
   end)
 
   it("hidden with Searing Light: backstab first, then the lightwall", function()
     local cmd = bash({ lightwall = true })
-    expect(cmd:sub(1, #"wield dirk;backstab 7;conjure lightwall")).toBe("wield dirk;backstab 7;conjure lightwall")
+    expect(cmd:sub(1, #"wield shield dirk;backstab 7;conjure lightwall")).toBe("wield shield dirk;backstab 7;conjure lightwall")
   end)
 
   it("no bare trailing separator when nothing follows the backstab", function()
@@ -381,7 +381,7 @@ describe("Assassin's Blade: open with BACKSTAB while hidden", function()
     ataxiaBasher_assembleBattlerage = function() return "" end
     local cmd = bash({})
     ataxiaBasher_assembleBattlerage = real
-    expect(cmd).toBe("wield dirk;backstab 7")
+    expect(cmd).toBe("wield shield dirk;backstab 7")
   end)
 
   it("hidden beats the venom bite too", function()
@@ -415,10 +415,17 @@ describe("Assassin's Blade: open with BACKSTAB while hidden", function()
     mnemAssassinsBlade = true
     ataxia.defences = {}
     local cmd = ataxiaBasher_serpentBashing()
-    expect(cmd:sub(1, #"wield dirk;backstab 7")).toBe("wield dirk;backstab 7")
+    expect(cmd:sub(1, #"wield shield dirk;backstab 7")).toBe("wield shield dirk;backstab 7")
     clock = clock + 4 -- the window has passed with no GMCP hiding: back to the normal swing
     expect(has(ataxiaBasher_serpentBashing(), "backstab")).toBeFalse()
     mnemAssassinsBlade = nil
+  end)
+
+  it("trigger serpent/020 matches the rehide line and the already-hidden refusal", function()
+    local f = io.open("src_new/triggers/levi_ataxia/for_levi/leviticus/serpent/020_Darkwalker_Concealed.lua")
+    local src = f:read("*a"); f:close()
+    expect(src:find("pattern: You swiftly return to concealment in the wake of your triumph", 1, true) ~= nil).toBeTrue()
+    expect(src:find("pattern: You are already hidden", 1, true) ~= nil).toBeTrue()
   end)
 
   it("a GMCP Remove of hiding cancels the concealment at once", function()

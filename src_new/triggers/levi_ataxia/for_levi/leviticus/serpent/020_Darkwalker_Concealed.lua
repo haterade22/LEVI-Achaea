@@ -35,9 +35,12 @@ colorTriggerBgColor: '#000000'
 patterns:
 - pattern: You swiftly return to concealment in the wake of your triumph
   type: 2
+- pattern: You are already hidden
+  type: 2
 ]]--
 
--- DARKWALKER REHIDES US (v4.7.408, user: "this rehides us also").
+-- DARKWALKER REHIDES US (v4.7.408, user: "this rehides us also"). v4.7.409: the game's refusal
+-- "You are already hidden." proves the same thing, so it stamps the same way.
 --
 --   You swiftly return to concealment in the wake of your triumph.
 --
