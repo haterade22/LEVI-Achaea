@@ -2,6 +2,8 @@
 
 A comprehensive [Mudlet](https://www.mudlet.org/) automation and combat system for [Achaea](https://www.achaea.com/), an Iron Realms Entertainment MUD.
 
+The repo also holds an **[Achaea knowledge base](#achaea-knowledge-base)** (`kb/`): the game's own data on all 203 afflictions, every class's 1,929 abilities, curing, defences and mechanics, cross-checked against the code.
+
 ## Download
 
 Get the latest release:
@@ -37,7 +39,8 @@ The GUI system (zGUI Redux) was originally created by **Zulah**. It has been enh
 | **Automated Curing** | SSC integration with custom priority management, curingset profiles |
 | **Defense Management** | Automatic defense rekeeping, parry system, anti-class priority adjustments; Monk and Blademaster keep DEAF and BLIND up with their timed skills (one send per trance) instead of spending herb balance |
 | **Limb Tracking** | Self limb counter (SLC) with percentage-based damage, auto-parry, threshold alerts, party callouts |
-| **Target Affliction Tracking** | V3 probability engine with branching cure prediction, lock detection at configurable confidence thresholds |
+| **Target Affliction Tracking** | V3 probability engine with branching cure prediction, lock detection at configurable confidence thresholds; enemy salve applications count as one cure each; timed afflictions (hamstring, dazzle, hellsight, ...) expire on the game's own duration |
+| **Curing Priority Sync** | The curing priority table re-sends itself to your `normal` curingset after it changes (at login, as about 8 multi-set commands to stay under the server's 5-a-second limit) |
 
 ### Class Offense Modules (18+ Classes)
 
@@ -261,6 +264,58 @@ Defaults: health, mana, and cape enabled; willpower and endurance off. Drag bars
 | **Per-System Install** | `atinstall`, `abinstall`, `aninstall` for targeted setup |
 | **Config Guides** | `ataxia setup guide ataxia/basher/ndb` for comprehensive option walkthrough |
 | **Settings Persistence** | Fault-isolated resilient loader (cycle-safe, GUI-safe); per-file `.bak` rotation + `_ataxia_backup` profile-backup fallback; `table.save`/`table.load` |
+
+## Achaea Knowledge Base
+
+`kb/` is a reference to Achaea built from **the game's own output** and checked against this package's code. Afflictions and cures are at its core, because Achaean combat comes down to giving afflictions and curing them. Start at **[kb/INDEX.md](kb/INDEX.md)**; [kb/README.md](kb/README.md) explains how it works.
+
+### What's in it
+
+| Area | Contents | Source |
+|------|----------|--------|
+| [Affliction database](kb/afflictions/database.md) | All **203** afflictions: cures, the line you see when it hits you and when it is cured, the DIAGNOSE text, durations (45 wear off on their own), and the game's flags (116 cannot be removed by random cures). Old names are mapped (disfigurement = disloyalty). Machine copy: `afflictions.json` | In-game `AFFLICTION SHOW`, `WHATCURES` |
+| [Affliction catalog](kb/afflictions/catalog.md) | Every affliction's cure next to what our code believes: the herb the target tracker expects and our PvP and bashing curing priorities. Flags any disagreement | HELP 13.7.2, live WHATCURES, the code (generated) |
+| [How afflictions work](kb/afflictions/README.md) | The give-and-cure loop from both sides, [cure channels and what blocks them](kb/afflictions/cure-channels.md), [locks](kb/afflictions/locks.md), [limb damage](kb/afflictions/limb-damage.md) | HELP files, guides |
+| [Class cures](kb/afflictions/class-cures.md) | Each class's own cures (fitness, shrugging, passives...), what blocks them, the line that shows them, and our trigger for each | HELP, community guide, code |
+| [Expiry lines](kb/afflictions/expiry-lines.md) | Timed afflictions leaving a target: the lines we catch, and the ones still wanted from combat logs | Code, AFFLICTION SHOW |
+| [Classes](kb/classes/) | One page per class (21): every ability of every skill (60 skills, **1,929** abilities) with syntax, cost, cooldown, target and the afflictions it names. Machine copy: `abilities.json` | [Achaea wiki](https://wiki.achaea.com/Category:Classes) |
+| [Curing](kb/curing/) | Every herb, mineral, elixir and salve; server-side curing commands, limits, and a snapshot of a live curing setup | HELP 13.7.x, live output |
+| [Defences](kb/defences/README.md) | The game's 279 defence names, and how ours map to them | Live `DEF` list |
+| [Mechanics](kb/mechanics/balance-and-queueing.md) | Balance, equilibrium and the server queue (including the 10-command limit across all queues) | HELP 4.6, 4.6.1 |
+| [Conflicts](kb/CONFLICTS.md) | Every place two sources, or a source and the code, disagree, and how each was settled | -- |
+
+### How it stays accurate
+
+- **Raw text is kept as evidence.** Everything pasted or captured is saved unedited in `kb/raw/` (HELP files, live command output, wiki pages, logs), and every curated page lists its sources.
+- **Every claim carries a confidence level:** live game output > HELP files > the code > the wiki > community guides > unverified. Live output wins when they disagree; HELP 13.7.2, for example, still says hypochondria is cured by kelp.
+- **Generated pages are rebuilt, never hand-edited**, so they cannot drift from their sources.
+- **It is checked against the code.** That has already found and fixed real bugs: a target tracker that erased four afflictions on every salve application and never saw head cures, timed afflictions that never expired, a Serpent offense that never saw monkshood land, an Infernal group lock that sent euphorbia for impatience and "plague" as a venom, curing priorities that had not reached the server in two months, and an AI venom reference with 12 wrong venom-to-affliction mappings.
+
+### Adding to it
+
+1. **Paste anything** (HELP files, `AB` output, combat logs, announcements) into the knowledge base text file, then run **`/kb-ingest`** in Claude Code. It files the new text, updates the pages, cross-checks the code, and logs any conflict.
+2. **Capture straight from the game** with `kbcapture` in Mudlet, then `/kb-ingest` (or `python tools/kb_capture_import.py`):
+
+   | Command | What it does |
+   |---------|-------------|
+   | `kbcapture afflictions` | `AFFLICTION LIST`, then `AFFLICTION SHOW` + `WHATCURES` for every affliction (about 400 commands, ~8 min, output hidden; refuses while the basher is on) |
+   | `kbcapture help cures \| help heal` | Capture any commands, separated by `\|` (not `;`, which Mudlet splits before the alias sees it) |
+   | `kbcapture` / `kbcapture stop` | Progress / stop after the current answer |
+
+3. **Refresh the class abilities** from the wiki with `python tools/kb_wiki_skills.py --refresh`.
+
+### Tools
+
+| Tool | Purpose |
+|------|---------|
+| `tools/kb_inbox.py` | What is new in the paste file since the last ingest |
+| `tools/kb_capture_import.py` | File `kbcapture` output into `kb/raw/live/` (routes each answer by its content, so lag cannot misfile it) |
+| `tools/kb_affliction_db.py` | Build the affliction database from the captured `AFFLICTION SHOW` answers |
+| `tools/kb_catalog.py` | Build the affliction catalog (game cures joined to our code) |
+| `tools/kb_prio_diff.py` | Compare a captured `CURING PRIORITY LIST` with the code's priority table |
+| `tools/kb_wiki_skills.py` | Fetch every class skill from the Achaea wiki and build the class pages |
+
+---
 
 ## Affliction Tracker (V3 Branching Probability Engine)
 
@@ -884,7 +939,16 @@ LEVI-Achaea/
 │   ├── flatten_alias_hierarchy.py  # Bulk alias hierarchy remapping
 │   ├── compare_builds.py       #   Compare XML vs Muddler output
 │   ├── mudlet_extract.py       #   Extract XML package → src_new format
+│   ├── kb_*.py                 #   Knowledge base tools (see Achaea Knowledge Base)
 │   └── lib/                    #   Shared library code (hierarchy, YAML parsing)
+├── kb/                         # Achaea knowledge base (start: kb/INDEX.md)
+│   ├── afflictions/            #   The core: database, catalog, cure channels, class cures, locks
+│   ├── classes/                #   Every class's abilities (generated from the wiki)
+│   ├── curing/                 #   Curatives, server-side curing
+│   ├── defences/, mechanics/   #   Defence names; balance, equilibrium, the queue
+│   ├── raw/                    #   Verbatim evidence: HELP, live output, wiki pages, logs
+│   ├── CONFLICTS.md            #   Disagreements found, and how each was settled
+│   └── INDEX.md                #   One line per page
 ├── docs/
 │   ├── plans/                  #   Project plans and reviews
 │   ├── legend-deck.md          #   Legend Deck card reference
@@ -893,7 +957,7 @@ LEVI-Achaea/
 │   ├── agents/                 # Custom subagents (offense-system, build-and-version, team)
 │   ├── classes/                # 26 class mechanic files + lock_types.md
 │   ├── projects/               # Per-system deep-dive docs (mnemosyne, basher, ...)
-│   └── skills/                 # Slash commands (/build, /version-bump)
+│   └── skills/                 # Slash commands (/build, /version-bump, /kb-ingest)
 ├── .github/workflows/          # CI/CD (syntax check, tests, tagged release builds)
 ├── .vscode/tasks.json          # VS Code build/test tasks (Ctrl+Shift+B)
 ├── build.sh                    # One-command build script
@@ -946,7 +1010,7 @@ Open the `LEVI-Achaea/` folder. Press **Ctrl+Shift+B** to build, or use **Termin
 | **Clean Build Output** | Remove `muddler_project/build/` |
 | **Run Tests** | Execute unit tests via test_runner.lua |
 
-**Claude Code**: `/build` runs the full pipeline. `/version-bump <version>` updates all 3 version locations.
+**Claude Code**: `/build` runs the full pipeline. `/version-bump <version>` updates all 3 version locations. `/kb-ingest` files new Achaea material into the knowledge base.
 
 **Custom subagents** (`.claude/agents/`): `offense-system` for class offense development, `build-and-version` for release automation, `team-class-offense` for parallel class work.
 
@@ -960,6 +1024,10 @@ Build tasks are in `.vs/tasks.vs.json`. Right-click the root folder in Solution 
 
 | Document | Purpose |
 |----------|---------|
+| [kb/INDEX.md](kb/INDEX.md) | **Achaea knowledge base**: afflictions, cures, classes, curing, defences, mechanics |
+| [kb/afflictions/database.md](kb/afflictions/database.md) | The game's own record of all 203 afflictions |
+| [kb/classes/](kb/classes/) | Every class's skills and abilities |
+| [kb/CONFLICTS.md](kb/CONFLICTS.md) | Source and code disagreements, and their resolutions |
 | [GETTING_STARTED.md](GETTING_STARTED.md) | Setup guide, system overview, common tasks |
 | [CLAUDE.md](CLAUDE.md) | Full technical reference (architecture, APIs, combat mechanics, development guidelines) |
 | [CHANGELOG.md](CHANGELOG.md) | Change history with dates and details |

@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-10-11 - README: the Achaea knowledge base (docs only, no version bump)
+
+The README gains an **Achaea Knowledge Base** section: what `kb/` holds (the affliction database,
+catalog, class cures, expiry lines, 21 class pages, curing, defences, mechanics, conflicts), how it
+stays accurate (raw evidence, confidence levels, generated pages, code cross-checks and the bugs they
+found), how to add to it (`/kb-ingest`, `kbcapture`, the wiki tool) and its six tools. Also: a pointer
+in the intro, two Combat System rows (salve and timed-affliction tracking, curing priority sync),
+`kb/` and the tools in Repository Structure, and knowledge base rows in Documentation.
+
+---
+
 ## 2026-10-11 - Serpent: "Your attack has brought you out of hiding." (v4.7.412)
 
 New trigger `serpent/022_Out_Of_Hiding.lua` (user-supplied line) calls
