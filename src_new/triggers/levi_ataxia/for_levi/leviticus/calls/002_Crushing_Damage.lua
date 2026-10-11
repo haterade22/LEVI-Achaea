@@ -38,11 +38,11 @@ patterns:
 - pattern: ^Whirling around, you bring the ball of your foot crashing into the temple of (\w+).
   type: 1
 ]]--
-
-if matches[2]== target then
-selectCurrentLine() fg("a_yellow") bg("black") 
-replace("" ..matches[2].. " [SPINKICK]")
-end
-if partyrelay and not ataxia.afflictions.aeon then
-send("pt " ..matches[2].. ": Spinkicked! A lot of Damage")
+-- v4.7.414: the party message only for OUR target (it relayed a spinkick on anyone).
+if isTargeted(matches[2]) then
+  selectCurrentLine() fg("a_yellow") bg("black")
+  replace("" ..matches[2].. " [SPINKICK]")
+  if partyrelay and not ataxia.afflictions.aeon then
+    send("pt " ..matches[2].. ": Spinkicked! A lot of Damage")
+  end
 end

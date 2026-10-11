@@ -37,4 +37,5 @@ patterns:
   type: 1
 ]]--
 
-monk.shikudo.limb_hit("head", "needle")
+-- v4.7.414: guarded. No script in this package defines monk.shikudo.
+if monk and monk.shikudo and monk.shikudo.limb_hit then monk.shikudo.limb_hit("head", "needle") end

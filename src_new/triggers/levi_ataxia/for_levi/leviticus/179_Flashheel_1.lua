@@ -36,11 +36,13 @@ patterns:
 - pattern: ^Snapping your leg out to its full extent, you drive a heel into the (right|left) knee of (\w+).$
   type: 1
 ]]--
-
-if isTarget(matches[3]) then
+-- v4.7.414: guarded. No script in this package defines monk.shikudo, so this call threw
+-- "attempt to index global 'monk'" on every strike line it matched.
+-- It also called isTarget(), which nothing defines; isTargeted() is the real function.
+if isTargeted(matches[3]) then
  flash_leg = matches[2]
  local limb = flash_leg.." leg"
- monk.shikudo.limb_hit(limb, "flashheel")
+ if monk and monk.shikudo and monk.shikudo.limb_hit then monk.shikudo.limb_hit(limb, "flashheel") end
 else
  flash_leg = "none"
 end

@@ -45,6 +45,6 @@ patterns:
 ]]--
 
 if not monk or not monk.shikudo then return end
-monk.shikudo.start()
+if monk.shikudo.start then monk.shikudo.start() end  -- v4.7.414: guarded
 monk.shikudo.combo_affs = {}
 monk.shikudo.parrying = {}

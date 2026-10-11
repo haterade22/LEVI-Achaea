@@ -67,6 +67,35 @@ for free.
 **Attacking one:** he has Metamorphosis `FITNESS` (3.00s balance, purges asthma) in every combat
 form, so an asthma-based lock is expensive against him. Target components he cannot self-purge.
 
+### Monk (Shikudo) -- **CONFIRMED** DISPATCH (2026-10-11, a SHARED log, not our own fight)
+
+Log: `kb/raw/logs/2026-10-11_shikudo-vs-runewarden-snb_attacker.txt` (the monk's own view).
+Every line, both views: `kb/combat/shikudo.md`. Dossier: `.claude/classes/monk.md`.
+
+| Path | Status | Requirement | Tell |
+|---|---|---|---|
+| **DISPATCH** | **CONFIRMED KILL** (13:25, 86 s in) | prone + damaged head + crushed throat | a SWEEP, then FLASHHEEL breaking a leg every round (you spend your turns mending and never stand), then NEEDLE |
+| CRESCENT (Maelstrom kick) | WIKI | prone + 50% health or less | he ASSESSes you after every combo ("You glance over...") |
+| MIND SCYTHE | WIKI | mangled head + two of stupidity, impatience, dizziness, epilepsy, confusion | Telepathy afflictions on top of head damage |
+| Affliction lock | CONFIRMED (the pieces) | MIND IMPATIENCE and MIND PARALYSE between combos; livestrike asthma, ruku slickness, hiraku anorexia | "You fill the mind of <you> with an impatient feeling." |
+
+**The fight's shape:** Rain form (kuro for weariness/lethargy, flashheel to break a leg, frontkick
+for prone, ruku for clumsiness/healthleech), Oak (nervestrike, livestrike, risingkick), Willow
+(hiru, hiraku, SHATTER for the shield tattoo), Gaital (needle, jinzuku). A form change needs a
+kata of at least 5.
+
+### Runewarden (sword and board) -- **CONFIRMED** DISEMBOWEL (2026-10-11, a SHARED log)
+
+Log: `kb/raw/logs/2026-10-11_runewarden-snb-vs-shikudo_defender.txt` (the Runewarden's view),
+and the same Runewarden losing in the Shikudo log above. Write-up: `kb/combat/runewarden-snb.md`.
+
+| Path | Status | Requirement | Tell |
+|---|---|---|---|
+| **IMPALE -> DISEMBOWEL** | **CONFIRMED KILL** | torso past 100% | slices to the torso every round; RAZE strips your shield and rebounding first |
+| Paralysis pressure | **CONFIRMED** | the shield strike "...smash into your spine." gives paralysis | seen 20 times in 86 s; a venom rides every slice |
+
+**Her Dagaz rune cures her afflictions on a timer** while she stands on it.
+
 ### Every other class -- **ASSUMED**
 
 `.claude/classes/*.md` carry kill routes for all classes, but none has been verified against one
@@ -81,7 +110,7 @@ Highest value to confirm next, by how often they kill us and how little we know:
 | Shaman | Tzantza | instant, and goldenseal-stack gated |
 | Occultist | Wheel cheese | `combatQueue()` already has a hardcoded response to it |
 | Pariah | Voyria kill | ditto |
-| Monk/Shikudo | Limb prep | shares the limb machinery we just fixed for Sentinel |
+| Monk/Tekura | Limb prep (backbreaker) | shares the limb machinery we just fixed for Sentinel (Shikudo is confirmed above) |
 
 ## What this file is not
 

@@ -36,17 +36,15 @@ patterns:
 - pattern: ^Whirling around, you bring the ball of your foot (crashing|smashing) into the (temple|ribs) of (\w+).$
   type: 1
 ]]--
-
+-- v4.7.414: rebuilt. Every call in this body was dead or wrong, so it threw on every spinkick:
+-- isTarget() and limbhit() exist nowhere, tarAff is not a table (tarAff[...] errors), and
+-- gotAff("prone") is OUR OWN affliction handler (it reads gmcp.Char.Afflictions.Add), so a temple
+-- spinkick would have recorded prone on us, not the target. 580/581 record spinkick from the
+-- damage line; this keeps only the (guarded) hand-off to an external monk.shikudo, if one exists.
 local limb_map = {
  ["temple"] = "head",
  ["ribs"] = "torso"
  }
-if isTarget(matches[4]) then
- if matches[3] == "temple" then
-  if not tarAff["prone"] then
-	 gotAff("prone")
-	end
- end
- limbhit(limb_map[matches[3]], "shikudo", "spinkick"..limb_map[matches[3]])
- monk.shikudo.limb_hit(limb_map[matches[3]], "spinkick")
+if isTargeted(matches[4]) then
+ if monk and monk.shikudo and monk.shikudo.limb_hit then monk.shikudo.limb_hit(limb_map[matches[3]], "spinkick") end
 end

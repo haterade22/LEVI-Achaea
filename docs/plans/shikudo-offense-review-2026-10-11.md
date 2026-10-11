@@ -114,3 +114,41 @@ or parry records nothing, which is correct. Problems:
 - Mind Scythe, Kai Choke/Enfeeble/Cripple in PvP, and riftlock are not implemented.
 - Prone follow-ups (hiraku stun, hiru confusion, risingkick stun) are unused after a frontkick.
 - No tests cover 006, 007 or 009.
+
+## What two real combat logs settled (2026-10-11, later the same day)
+
+The user shared two fights (`kb/raw/logs/`, written up in `kb/combat/shikudo.md`): a Shikudo killing
+a sword-and-board Runewarden by Dispatch (the monk's log) and a Runewarden killing a Shikudo (hers).
+
+- **The wrap risk was real.** Strike lines run to 147 columns ("Turning with the motion, you channel
+  the momentum of your previous strike into a thrust at the solar plexus of <T> with <staff>.").
+- **Most attacks print a different strike line first in a combo than later.** No strike trigger knew
+  livestrike's or hiru's later line; their afflictions reached the tracker only through effect lines.
+- **A strike line proves nothing on its own:** a parried strike prints it, then "<T> parries the
+  attack with a deft manoeuvre." Two fallback triggers recorded from strike lines.
+- **`light` strikes print no damage line** (no limb damage; the affliction still lands), and a Shield
+  of Absorption can swallow the damage line too. The strike triggers need the damage line.
+- **Flashheel breaks the leg** (the target mends her legs after every one). **Inline `combo ...
+  transition <form>` works**; a form change needs a **kata of at least 5**. **ASSESS** gives the
+  target's health ("You glance over <T> and see that her health is at 4463/5460 [81%]."); our
+  `698_Assess` already stores it in `ataxiaTemp.lastAssess`. **SHATTER** breaks the shield tattoo
+  inside a combo. **Sweep pairs with a kick** (`sweep flashheel left`).
+- **The Dispatch as done:** one SWEEP, then FLASHHEEL on a leg every round so she never stood, then
+  NEEDLE (head past 100%, throat crushed), then DISPATCH. The leg's limb damage was 8%.
+
+## Status
+
+- **Phase 1 (tracking): done.** v4.7.413 (shipped inside the Serpent release, commit dc30f2d5) and
+  v4.7.414, with `src_new/tests/test_shikudo_tracking.lua` (30 tests against the real lines).
+  Beyond the list above, v4.7.414 also fixed: 14 triggers calling the undefined `monk.shikudo`
+  (and three calling `isTarget`) threw on every strike, and one would have recorded prone on US;
+  the frontkick effect line's pattern never matched; the needle fallback recorded on parried
+  strikes; the dedupe flag (`ignoreThirdPerson`) went stale after strikes with no effect-line
+  partner, losing absorbed and light blows; losing the mind lock never cleared `mindlocked`.
+- **Still open from phase 1, moved to phase 3:** light or absorbed nervestrike and ruku to the arm
+  are not recorded (no target-named effect line). Hold each strike as pending until the next
+  strike or the prompt and drop it on a parry, fumble or dodge line. Dawnkick's epilepsy line is
+  still wanted.
+- **Phase 2 (make the current modes correct): next.** Add to the list above: Crescent reads
+  `ataxiaTemp.lastAssess`; flashheel is a break, not prep; never SWEEP with a staff attack; send
+  SHATTER when the target has a shield; never send a transition below kata 5.

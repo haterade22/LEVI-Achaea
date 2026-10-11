@@ -25,6 +25,7 @@ kb/
 │   ├── announcements/ game announcements       (add as pasted)
 │   └── logs/          combat or death logs worth keeping
 ├── classes/           every class's skills and abilities (from the wiki, generated)
+├── combat/            classes as they look in real fights: every line, both sides (from logs)
 ├── afflictions/       THE CORE: the model, catalog, channels, class cures, locks, limb damage
 ├── curing/            curatives, server-side curing (incl. your live state)
 ├── defences/          defence names and upkeep

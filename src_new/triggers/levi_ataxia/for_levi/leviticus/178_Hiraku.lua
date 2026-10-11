@@ -38,5 +38,6 @@ patterns:
 - pattern: ^Bracing your back foot, you lunge forward with a warped black iron staff coated with rust at the face of (\w+).$
   type: 1
 ]]--
-
-monk.shikudo.limb_hit("head", "hiraku")
+-- v4.7.414: guarded. No script in this package defines monk.shikudo, so this call threw
+-- "attempt to index global 'monk'" on every strike line it matched.
+if monk and monk.shikudo and monk.shikudo.limb_hit then monk.shikudo.limb_hit("head", "hiraku") end

@@ -11,8 +11,10 @@
 ---
 --- The evaluator is deliberately small. It understands exactly the shapes this package uses for
 --- line-start matching -- literals, escaped literals, `\d+ \w+ \S+` (optionally captured), `.{m,n}`,
---- a `(?:...){m,n}` group, and a trailing `$` -- and it RAISES on anything else, so a pattern it
---- cannot judge fails loudly instead of passing quietly.
+--- a `(?:...){m,n}` group, and a trailing `$` -- plus, since v4.7.414, character classes
+--- (`[0-9\.]`, `[^,]`) and alternation inside a group (`(left leg|right leg)`), which the
+--- strike triggers' damage lines use. It RAISES on anything else, so a pattern it cannot judge
+--- fails loudly instead of passing quietly.
 
 local L = {}
 
@@ -40,6 +42,14 @@ function L.patterns(path)
           buf = buf .. " " .. (lines[i]:gsub("^%s+", ""))
         end
         raw = (buf:sub(2, -2):gsub("''", "'"))
+      else
+        -- A long PLAIN scalar is folded too: its continuation rows are indented and are not the
+        -- `type:` key, and YAML joins them with one space ("(left leg|right" + "leg)\.$").
+        -- Without this the pattern was read half-way and its type as nil (v4.7.414).
+        while lines[i + 1] and lines[i + 1]:match("^%s+%S") and not lines[i + 1]:match("^%s*type:") do
+          i = i + 1
+          raw = raw .. " " .. (lines[i]:gsub("^%s+", ""))
+        end
       end
       local typ = tonumber((lines[i + 1] or ""):match("^%s*type:%s*(%d+)"))
       out[#out + 1] = { pat = raw, type = typ }
@@ -66,48 +76,100 @@ end
 -- ---------------------------------------------------------------------------------------------
 local CLASS = { d = "%d", w = "[%w_]", S = "%S", s = "%s" }
 
+-- A character class -- `[0-9\.]`, `[\w'\-]`, `[^,]` -- starting at p[i] == "[". Returns the token
+-- and the index after its `]`. Added v4.7.414 so the strike triggers' damage-line patterns can be
+-- evaluated, not just their start fragments.
+local function parseSet(p, i)
+  local j, neg, tests = i + 1, false, {}
+  if p:sub(j, j) == "^" then neg, j = true, j + 1 end
+  local first = j
+  while j <= #p do
+    local c = p:sub(j, j)
+    if c == "]" and j > first then break end
+    if c == "\\" then
+      local n = p:sub(j + 1, j + 1)
+      local cls = CLASS[n]
+      if cls then
+        tests[#tests + 1] = function(ch) return ch:match("^" .. cls .. "$") ~= nil end
+      else
+        tests[#tests + 1] = function(ch) return ch == n end
+      end
+      j = j + 2
+    elseif p:sub(j + 1, j + 1) == "-" and j + 2 <= #p and p:sub(j + 2, j + 2) ~= "]" then
+      local lo, hi = c:byte(), p:byte(j + 2)
+      tests[#tests + 1] = function(ch) local b = ch:byte(); return b >= lo and b <= hi end
+      j = j + 3
+    else
+      tests[#tests + 1] = function(ch) return ch == c end
+      j = j + 1
+    end
+  end
+  assert(p:sub(j, j) == "]", "unterminated character class in " .. p)
+  local function set(ch)
+    local hit = false
+    for _, t in ipairs(tests) do
+      if t(ch) then hit = true; break end
+    end
+    return hit ~= neg
+  end
+  return { set = set }, j + 1
+end
+
+-- Parse up to `stop` (")" inside a group). Returns the list of ALTERNATIVES (token lists) -- more
+-- than one only inside a group with `|`, as in `(left leg|right leg)` -- and the index of `stop`.
+-- Alternation outside a group is not something this package's patterns use, so it raises.
 local function parse(p, i, stop)
-  local toks = {}
+  local alts, toks = {}, {}
   while i <= #p do
     local c = p:sub(i, i)
-    if stop and c == stop then return toks, i end
-    local tok
-    if c == "\\" then
-      local n = p:sub(i + 1, i + 1)
-      if CLASS[n] then tok = { class = CLASS[n] } else tok = { lit = n } end
-      i = i + 2
-    elseif c == "(" then
-      local inner, j
-      if p:sub(i + 1, i + 2) == "?:" then inner, j = parse(p, i + 3, ")")
-      else inner, j = parse(p, i + 1, ")") end
-      assert(p:sub(j, j) == ")", "unbalanced group in " .. p)
-      tok = { group = inner }
-      i = j + 1
-    elseif c == "." then
-      tok = { class = "." }
+    if stop and c == stop then break end
+    if c == "|" then
+      if not stop then error("trigger_lib: top-level alternation is unsupported in " .. p) end
+      alts[#alts + 1] = toks
+      toks = {}
       i = i + 1
-    elseif c == "$" then
-      tok = { eol = true }
-      i = i + 1
-    elseif c:match("[%[%]%*%?%|%^{}]") then
-      error("trigger_lib: unsupported regex syntax '" .. c .. "' in " .. p)
     else
-      tok = { lit = c }
-      i = i + 1
+      local tok
+      if c == "\\" then
+        local n = p:sub(i + 1, i + 1)
+        if CLASS[n] then tok = { class = CLASS[n] } else tok = { lit = n } end
+        i = i + 2
+      elseif c == "(" then
+        local inner, j
+        if p:sub(i + 1, i + 2) == "?:" then inner, j = parse(p, i + 3, ")")
+        else inner, j = parse(p, i + 1, ")") end
+        assert(p:sub(j, j) == ")", "unbalanced group in " .. p)
+        tok = { group = inner }
+        i = j + 1
+      elseif c == "[" then
+        tok, i = parseSet(p, i)
+      elseif c == "." then
+        tok = { class = "." }
+        i = i + 1
+      elseif c == "$" then
+        tok = { eol = true }
+        i = i + 1
+      elseif c:match("[%]%*%?%^{}]") then
+        error("trigger_lib: unsupported regex syntax '" .. c .. "' in " .. p)
+      else
+        tok = { lit = c }
+        i = i + 1
+      end
+      -- quantifier
+      local q = p:sub(i, i)
+      if q == "+" then tok.min, tok.max = 1, 10000; i = i + 1
+      elseif q == "*" then tok.min, tok.max = 0, 10000; i = i + 1
+      elseif q == "?" then tok.min, tok.max = 0, 1; i = i + 1
+      elseif q == "{" then
+        local a, b, j = p:match("^{(%d+),(%d+)}()", i)
+        assert(a, "unsupported quantifier in " .. p)
+        tok.min, tok.max = tonumber(a), tonumber(b); i = j
+      else tok.min, tok.max = 1, 1 end
+      toks[#toks + 1] = tok
     end
-    -- quantifier
-    local q = p:sub(i, i)
-    if q == "+" then tok.min, tok.max = 1, 10000; i = i + 1
-    elseif q == "*" then tok.min, tok.max = 0, 10000; i = i + 1
-    elseif q == "?" then tok.min, tok.max = 0, 1; i = i + 1
-    elseif q == "{" then
-      local a, b, j = p:match("^{(%d+),(%d+)}()", i)
-      assert(a, "unsupported quantifier in " .. p)
-      tok.min, tok.max = tonumber(a), tonumber(b); i = j
-    else tok.min, tok.max = 1, 1 end
-    toks[#toks + 1] = tok
   end
-  return toks, i
+  alts[#alts + 1] = toks
+  return alts, i
 end
 
 local match -- forward
@@ -122,9 +184,15 @@ local function one(tok, s, pos)
     if ch == "" then return {} end
     if tok.class == "." or ch:match("^" .. tok.class .. "$") then return { pos + 1 } end
     return {}
+  elseif tok.set then
+    local ch = s:sub(pos, pos)
+    if ch ~= "" and tok.set(ch) then return { pos + 1 } end
+    return {}
   elseif tok.group then
     local ends = {}
-    match(tok.group, 1, s, pos, function(e) ends[#ends + 1] = e end)
+    for _, alt in ipairs(tok.group) do
+      match(alt, 1, s, pos, function(e) ends[#ends + 1] = e end)
+    end
     return ends
   end
   return {}
@@ -160,7 +228,7 @@ function L.matches(pat, typ, line)
   if pat:sub(1, 1) ~= "^" then
     error("trigger_lib: only ^-anchored regex patterns are supported, got " .. pat)
   end
-  local toks = parse(pat, 2)
+  local toks = parse(pat, 2)[1]
   local found = false
   match(toks, 1, line, 1, function() found = true end)
   return found

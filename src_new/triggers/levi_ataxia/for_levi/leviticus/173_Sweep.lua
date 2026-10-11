@@ -36,5 +36,6 @@ patterns:
 - pattern: ^Taking a firm hold of a warped black iron staff coated with rust you whip it in a wide sweep at the legs of (\w+).$
   type: 1
 ]]--
-
-monk.shikudo.limb_hit("sweep", "sweep")
+-- v4.7.414: guarded. No script in this package defines monk.shikudo, so this call threw
+-- "attempt to index global 'monk'" on every strike line it matched.
+if monk and monk.shikudo and monk.shikudo.limb_hit then monk.shikudo.limb_hit("sweep", "sweep") end

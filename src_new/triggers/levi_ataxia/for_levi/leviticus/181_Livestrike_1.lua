@@ -37,5 +37,6 @@ patterns:
     of (\w+).$
   type: 1
 ]]--
-
-monk.shikudo.limb_hit("torso", "livestrike")
+-- v4.7.414: guarded. No script in this package defines monk.shikudo, so this call threw
+-- "attempt to index global 'monk'" on every strike line it matched.
+if monk and monk.shikudo and monk.shikudo.limb_hit then monk.shikudo.limb_hit("torso", "livestrike") end

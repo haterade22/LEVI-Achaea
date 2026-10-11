@@ -68,10 +68,16 @@ CALL_RE = re.compile(r"\b([A-Za-z_]\w*)\s*\(")
 # separate package whose ~220 functions live outside src_new, so including it would report
 # hundreds of false positives -- and a noisy gate gets switched off, which is how a guard
 # becomes decoration.
+#
+# `monk` is the one exception: no script we ship defines it, yet 14 Shikudo triggers called
+# monk.shikudo.limb_hit() and threw on every strike they matched (fixed v4.7.414 by guarding
+# them, in case another installed package provides it). Listing it means every call into it must
+# stay guarded.
 NAMESPACES = (
     "ataxia", "ataxiaBasher", "ataxiaNDB", "ataxiagui", "ataxiaTables", "ataxiaTemp",
     "selfLimbDamage", "blademaster", "shaman", "psion", "apostate", "tekura", "tekura6",
     "infernalDWC", "ldm", "bashStats", "gearAudit", "itemCatalog", "classDetect", "leviSetup",
+    "monk",
 )
 _NS = "(?:" + "|".join(NAMESPACES) + ")"
 FIELD_CALL_RE = re.compile(r"\b(" + _NS + r")((?:\.[A-Za-z_]\w*)+)\s*\(")
@@ -113,9 +119,17 @@ def walk_all():
                 yield os.path.join(dirpath, n)
 
 
+LONG_COMMENT_RE = re.compile(r"--\[(=*)\[.*?\]\1\]", re.S)
+
+
 def strip_comments(body):
-    """Drop line comments. Without this, prose like `-- Set ataxiaBasher.fleeTimeout (seconds)`
-    reads as a call to a field that does not exist."""
+    """Drop comments. Without this, prose like `-- Set ataxiaBasher.fleeTimeout (seconds)`
+    reads as a call to a field that does not exist.
+
+    Long comments (`--[[ ... ]]`) go first (v4.7.414): the line pass only sees their first line,
+    so a header block naming `.claude/classes/monk.md (class mechanics)` read as a call to
+    `monk.md()`. Each block keeps its line breaks, so reported line numbers stay right."""
+    body = LONG_COMMENT_RE.sub(lambda m: "\n" * m.group(0).count("\n"), body)
     out = []
     for line in body.splitlines():
         i = line.find("--")

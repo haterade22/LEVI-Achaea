@@ -89,8 +89,10 @@ describe("the evaluator itself (so a pass means something)", function()
   end)
 
   it("refuses a pattern shape it cannot judge rather than passing it", function()
-    local ok = pcall(TL.matches, "^foo[abc]bar", 1, "fooabar")
-    expect(ok).toBeFalse()
+    -- (v4.7.414: character classes such as [abc] are understood now, so the examples are a
+    -- top-level alternation and a lookahead, which still are not.)
+    expect(pcall(TL.matches, "^foo|bar", 1, "foo")).toBeFalse()
+    expect(pcall(TL.matches, "^foo(?=bar)", 1, "foobar")).toBeFalse()
   end)
 end)
 

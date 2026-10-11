@@ -70,6 +70,12 @@ second_attack: "155 - tekura.dispatch.run()"    # legacy TKD 3-limb
 kai:  "kaido/001,006 -> 'kai surge <target>' ; kaido/003 -> 'kai cripple <target>'"
 ```
 
+**Shikudo, confirmed from two real fights (2026-10-11):** every strike, damage and effect line from
+both sides, `light` strikes (no limb damage at all), form changes (a kata of 5+; inline
+`... transition <form>` works), ASSESS for the target's health, SHATTER for the shield tattoo, and
+the Dispatch as it was done are in `kb/combat/shikudo.md`. What the offense code gets wrong, and
+the plan: `docs/plans/shikudo-offense-review-2026-10-11.md`.
+
 ### Alternative Kill: Shikudo Lock Route (Affliction-Based)
 ```yaml
 type: affliction
@@ -104,11 +110,13 @@ form_strategy:
 kill_method: "Pure damage pressure through staff attacks + Telepathy once truelocked"
 
 implementation:
-  file: "008_CC_Shikudo_Offense_ALL.lua"
-  mode: "lock"
-  activate: "sklock() or shikudolock()"
-  dispatch: "shikudo.dispatch() (after mode set)"
-  status: "shikudo.status() or skstatus()"
+  # Corrected 2026-10-11: 008 is switched off; the live lock is 007.
+  file: "007_CC_Shikudo_Lock.lua"
+  activate: "alias sr -> shikudolock() (shikudoLock.dispatch())"
+  status: "sklstatus() / sklockstatus() (shikudoLock.status())"
+  known_bug: "Telepathy never fires: it is gated on ataxia.balances.eq, which nothing writes, and sends
+    mindlock/impatience/paralyse/batter where the game wants MIND LOCK/IMPATIENCE/PARALYSE/BATTER
+    (Shikudo phase 2)"
 ```
 
 ### Shikudo Kill: Dispatch (Limb-Based) - PRIMARY
@@ -116,11 +124,14 @@ implementation:
 type: limb
 summary: Prep legs AND head, SWEEP to prone + break legs, SPINKICK/NEEDLE head, DISPATCH
 
-prerequisites:
-  - Target must be prone (from SWEEP)
-  - At least one leg broken (100%+) - keeps them prone
-  - Head broken/damaged (100%+ or damagedhead affliction)
-  - Windpipe damaged (from NEEDLE - gives damagedwindpipe or crushedthroat)
+prerequisites:  # the game's (WIKI): prone + damaged head + crushed throat
+  - Target must be prone (SWEEP or FRONTKICK)
+  - Head damaged (100%+ or damagedhead)
+  - Throat crushed (NEEDLE gives crushedthroat)
+  # Not a game requirement, but how it was done (log 2026-10-11, kb/combat/shikudo.md): after
+  # one SWEEP the monk FLASHHEELed a leg every round -- flashheel BREAKS a leg in one blow -- so
+  # the target spent her turns mending and never stood up again. Dispatch landed with her left
+  # leg at 8% damage.
 
 # CRITICAL: NEVER break legs until head is also prepped!
 # Breaking legs prematurely wastes the setup.
@@ -142,7 +153,8 @@ kill_flow:
 
   phase_3_kill:
     form: "Gaital"
-    combo_1: "SWEEP + KURO (prones + breaks both legs in one combo)"
+    combo_1: "SWEEP + FLASHHEEL (prone + a broken leg). SWEEP uses both arms, so only a kick can
+      join it: SWEEP + KURO is not a legal combo. Seen: combo <t> sweep flashheel left"
     combo_2: "SPINKICK + NEEDLE (breaks head + applies windpipe)"
     combo_3: "DISPATCH (instant kill)"
 
@@ -170,14 +182,15 @@ key_mechanics:
     effect: "Knocks target prone"
     cost: "Uses BOTH arm balances - only one kick allowed with sweep"
   light_modifier:
-    effect: "Reduces limb damage, builds kata safely"
+    effect: "NO limb damage: a light strike prints no damage line but still lands its affliction
+      and its effect line (CONFIRMED, log 2026-10-11: kuro light, nervestrike light). Builds kata safely"
     usage: "Use on prepped limbs to avoid premature breaks"
   forms:
     transition: "Need 5+ kata to transition between forms"
     kata_reset: "ANY transition resets kata to 0"
     kata_limit: "12 per form (24 for Rain)"
 
-kill_condition_check: |
+kill_condition_check: |   # 006's check: stricter than the game (the leg term is not needed)
   tAffs.prone
   AND (lb[target].hits["left leg"] >= 100 OR lb[target].hits["right leg"] >= 100)
   AND (lb[target].hits["head"] >= 100 OR tAffs.damagedhead)
@@ -303,7 +316,8 @@ spinkick:
 flashheel:
   skill: Shikudo
   balance: bal
-  effect: "High leg/knee damage"
+  effect: "BREAKS the leg in one blow (CONFIRMED, log 2026-10-11: the target mended her legs after
+    every flashheel), plus 8.4% limb damage. Not prep."
   syntax: "COMBO <target> flashheel left/right <staff1> <staff2>"
   forms: [Willow, Gaital]
 
@@ -317,7 +331,8 @@ risingkick:
 frontkick:
   skill: Shikudo
   balance: bal
-  effect: "Arm damage"
+  effect: "Arm damage and PRONE (CONFIRMED: '...throwing her from her feet and sending her spinning
+    to the ground.')"
   syntax: "COMBO <target> frontkick left/right <staff1> <staff2>"
   forms: [Rain]
 
@@ -333,11 +348,11 @@ dispatch:
   balance: bal
   effect: "INSTANT KILL when conditions met"
   syntax: "DISPATCH <target>"
-  requirements:
+  requirements:  # WIKI; CONFIRMED in practice (log 2026-10-11)
     - "Target must be prone"
-    - "At least one leg broken (100%+)"
-    - "Head broken/damaged (100%+)"
-    - "Windpipe damaged (from NEEDLE)"
+    - "Head damaged (100%+)"
+    - "Throat crushed (from NEEDLE)"
+    # (not a broken leg: it only keeps a prone target from standing)
 
 # Kaido
 kai:

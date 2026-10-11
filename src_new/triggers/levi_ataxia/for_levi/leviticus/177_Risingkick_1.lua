@@ -36,5 +36,6 @@ patterns:
 - pattern: ^You drive your foot up in a rising kick at the (head|torso) of (\w+).$
   type: 1
 ]]--
-
-monk.shikudo.limb_hit(matches[2], "risingkick")
+-- v4.7.414: guarded. No script in this package defines monk.shikudo, so this call threw
+-- "attempt to index global 'monk'" on every strike line it matched.
+if monk and monk.shikudo and monk.shikudo.limb_hit then monk.shikudo.limb_hit(matches[2], "risingkick") end

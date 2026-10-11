@@ -172,7 +172,7 @@ contains one dead call has that **call guarded** (`if NAME then NAME(...) end`, 
 files already use for their V3 calls), never disabled, or real logic goes with it. 27 of 62 were
 the second kind.
 
-**CHECK 2 -- a namespace FIELD called but never defined (v4.7.281).** `attempt to call field 'echo' (a nil value)`: **`ataxia.echo` exists nowhere in the tree** -- the helper is the global `ataxiaEcho`, built in a `_groups.yaml` inline script -- so **17 call sites across 4 files were dead**, including every echoing branch of `bash shinprobe` and **all nine echoes in `ataxiabars`**. The same sweep found `shaman.help()`, called unguarded by `sp help` and defined nowhere. Check 1 cannot see either: it reasons about GLOBALS defined by INACTIVE scripts, and these are table FIELDS defined by nothing (as was the v4.7.264 `zgui` family, an INDEX rather than a call). `check_missing_fields()` scans `.lua` AND `_groups.yaml` for `NS.field(...)` whose `NS.field` is assigned nowhere. Kept quiet enough to survive: **`mmp` is excluded** (a separate package, ~220 functions outside `src_new`, hundreds of false positives), **comments are stripped** (`-- Set ataxiaBasher.fleeTimeout (seconds)` otherwise reads as a call), and **the guard window is TWO LINES** rather than one, because the idiom here puts the test on its own line (`if ataxia and ataxia.decho then` / call / `end`) and per-line strictness flagged six safe sites. Findings report the REAL file line -- `split()` drops the header, and a finding you cannot jump to is one you will not act on. **A gate that cries wolf gets switched off, which is how a guard becomes decoration.**
+**CHECK 2 -- a namespace FIELD called but never defined (v4.7.281).** `attempt to call field 'echo' (a nil value)`: **`ataxia.echo` exists nowhere in the tree** -- the helper is the global `ataxiaEcho`, built in a `_groups.yaml` inline script -- so **17 call sites across 4 files were dead**, including every echoing branch of `bash shinprobe` and **all nine echoes in `ataxiabars`**. The same sweep found `shaman.help()`, called unguarded by `sp help` and defined nowhere. Check 1 cannot see either: it reasons about GLOBALS defined by INACTIVE scripts, and these are table FIELDS defined by nothing (as was the v4.7.264 `zgui` family, an INDEX rather than a call). `check_missing_fields()` scans `.lua` AND `_groups.yaml` for `NS.field(...)` whose `NS.field` is assigned nowhere. Kept quiet enough to survive: **`mmp` is excluded** (a separate package, ~220 functions outside `src_new`, hundreds of false positives), **comments are stripped** (`-- Set ataxiaBasher.fleeTimeout (seconds)` otherwise reads as a call), and **the guard window is TWO LINES** rather than one, because the idiom here puts the test on its own line (`if ataxia and ataxia.decho then` / call / `end`) and per-line strictness flagged six safe sites. Findings report the REAL file line -- `split()` drops the header, and a finding you cannot jump to is one you will not act on. **A gate that cries wolf gets switched off, which is how a guard becomes decoration.** It only sees the namespaces listed in `NAMESPACES`, which is why 14 Shikudo triggers calling `monk.shikudo.limb_hit` (defined by no script we ship) threw unseen: since v4.7.414 `monk` is listed, so every call into it must stay guarded, and `--[[ ]]` block comments are stripped as well (a header naming "monk.md (class mechanics)" read as a call).
 
 **`tools/check_colours.py` -- a colour name is only valid in OUR palette (v4.7.287).**
 `007_Custom_Colour_Table.lua` WHOLESALE REPLACES Mudlet's, so a name that is perfectly good in stock
@@ -210,6 +210,9 @@ Current dev machine (2026-10-09, no `E:` drive): Temurin 21 JDK via
 `gh release download 1.1.0 -R demonnic/muddler -p muddle-shadow-1.1.0.zip`.
 
 **Testing**: Run `lua5.1 src_new/tests/test_runner.lua` or use the "Run Tests" VS Code task. Tests use `mock_mudlet.lua` to stub the Mudlet API.
+**No Lua installed (this Windows machine)?** `python -m pip install lupa` (a virtualenv is fine),
+then `python tools/run_lua_tests.py [one_test_file.lua]` runs the same suite in an embedded Lua
+5.1 (v4.7.414). Run it before pushing: otherwise CI is the first place a test runs.
 
 ### Versioning & Auto-Update
 
@@ -241,6 +244,14 @@ at a two-week-old `v4.7.46` build while `version.txt` on raw `main` still advert
 would have caught it. **The version CHECK (raw `main`) and the version DOWNLOAD
 (`releases/latest`) read different sources and can disagree.** Repair without losing history:
 `gh release edit v<version> --latest`, then `gh release delete <stray> --yes --cleanup-tag=false`.
+
+**Several Claude sessions can share this working tree (2026-10-11).** A session that stages with
+`git add -A` or `git commit -a` commits whatever another session has in progress: the Serpent
+release v4.7.413 shipped half of the Shikudo tracking work that way, unmentioned in its changelog
+entry, and switched the tree to `main` under the session whose work it was. **Stage by path; check
+`git status` for files that are not yours before committing, branching or bumping the version;
+and never switch the shared tree's branch while another session may be working in it.**
+`ListAgents` shows the other sessions on this machine.
 
 **Auto-update system** (`ataxia.updater` namespace, `misc_scripts/021_Auto_Update.lua`):
 - On `sysLoadEvent` (5s delay): downloads `version.txt` from GitHub raw, compares against `ataxiaVersion`
@@ -385,7 +396,7 @@ v4.7.265 documented `bash dwaeonic off`, which was never a real command.
 | **serpent** | 1 (002) | **Documented** | Ekanelia lock, darkshade, scytherus | `serpent/` |
 | **shaman** | 1 (028) | **Documented** | Tzantza, locks, bleed | `shaman/` |
 | **snipe** | 1 | **Documented** | Class-agnostic snipe system | `snipe/` |
-| **shikudo** | ~5 | **Documented** | V1/V2/Lock | `shikudo/` |
+| **shikudo** | 006, 007 live | **Documented** | Dispatch (006), lock (007); 009 GodMode unreachable; rework planned | `shikudo/` |
 | **tekura** | ~3 | **Documented** | 6-limb backbreaker (TK6), 3-limb legacy (TKD) | `tekura/` |
 | **two_handed** | 1 | Undocumented | 2H knight | `two_handed/` |
 | **wildwalker** | 8 | Undocumented | Navigation/utility | `wildwalker/` |
@@ -447,16 +458,24 @@ read `mmp.settings.mapsource`). `service` is an experimental live Crowdmap; `cro
 - **Defense Management**: Automatic parrying, SSC integration
 - **Basher**: `ataxiaBasher` for automated hunting (see details below)
 - **Class Modules**: Serpent, Shaman, Blademaster, Infernal DWC, Apostate, Monk, and 12+ more
-- **Shikudo Dispatch System**: Full auto-combat for Monk/Shikudo spec
-  - `200_Shikudo.lua` (V1) - Balanced leg prep, both legs 90%+
-  - `201_Shikudo_V2.lua` (V2) - Focus fire one leg with SPINKICK kill route
-  - `203_Shikudo_Lock.lua` (Lock) - Pure affliction-based locking with Telepathy
-  - V1/V2 Commands: `shikudo.dispatch()`, `shikudov2.dispatch()`, `skstatus()`, `skv2status()`
-  - Lock Commands: `shikudolock()`, `sklstatus()`, `sklockstatus()`
-  - **V2 SPINKICK**: If target is prone + head at level 2 damage → instant MANGLE kill
-  - **Kai Surge**: `canKaiSurge()` requires 31 kai, burst ability
-  - **Max Kata per Form**: Tykonos/Oak/Willow=12, Rain=24, Gaital=12, Maelstrom=12
-  - **Lock Telepathy**: `mindlocked` global tracks if target's mind is connected
+- **Shikudo (Monk)** (corrected 2026-10-11; the old list named files that never existed). Live:
+  `shikudo/006_CC_Shikudo_Dispatch.lua` (`sk`; `zz`/`xx` when the monk has no stance) and
+  `007_CC_Shikudo_Lock.lua` (`sr` -> `shikudolock()`, status `sklstatus()`). `009_CC_Shikudo_GodMode.lua`
+  is unreachable: `vv` calls `shikudo.setMode`, defined only in the switched-off 008. What is wrong
+  and the three-phase rework: `docs/plans/shikudo-offense-review-2026-10-11.md`. Every real line from
+  two fights, both sides: `kb/combat/shikudo.md`.
+  - **Tracking** (v4.7.413-414, `test_shikudo_tracking.lua`): strike triggers 563-585 pair a strike
+    line's START with the damage line up to two rows later (strike lines run to 147 columns);
+    effect-line triggers (`3rd_person_shikudo/`, `calls/`, 586) record what landed; 587 clears the
+    `ignoreThirdPerson` dedupe flag at every strike. All but `calls/` only run while our own queued
+    command's output is on screen (`queue_Scan` opens the groups, the prompt closes them).
+  - **A strike line is not a hit:** it prints even when parried. `light` strikes and blows a
+    Shield of Absorption swallows print no damage line but still land.
+  - **Facts the offense must respect** (logs, 2026-10-11): at most three attacks, one a kick; SWEEP
+    pairs only with a kick; flashheel BREAKS the leg; a form change needs a kata of 5+ (inline
+    `combo ... transition <form>` works); ASSESS gives the target's health (`698_Assess` stores
+    `ataxiaTemp.lastAssess`); SHATTER breaks the shield tattoo; Dispatch = prone + damaged head +
+    crushed throat.
 - **Infernal DWC Vivisect System**: Full auto-combat for Infernal DWC spec
   - `003_Infernal_DWC_Vivisect.lua` - Undercut + DSL vivisect strategy
   - Commands: `infernalDWCVivisect()`, `infernalDWCStatus()`, `infernalDWCReset()`
