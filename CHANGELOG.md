@@ -2,6 +2,23 @@
 
 ---
 
+## 2026-10-10 - kbcapture asks about every affliction the game lists; defence batch question settled (v4.7.400)
+
+- **The full AFFLICTION LIST is captured:** 203 afflictions over four MORE pages. 79 have no record yet
+  and 85 are not in our curing priority table at all (amnesia, blackout, hamstrung, unconsciousness,
+  internalbleeding, deepsleep, silenced, ...). `database.md` now has a coverage section listing both.
+- **`kbcapture afflictions` extends itself from that list.** After AFFLICTION LIST answers,
+  `ataxiaKB.extendFromList` queues SHOW + WHATCURES for every listed name not already queued. Before,
+  a run asked only about names our code already knew, so it could never discover the rest.
+  `ataxiaKB.parseAfflictionList` reads one capitalised word per line after the dashed rule, skipping MORE
+  lines. Only the afflictions run extends; a plain `kbcapture affliction list` does not.
+- **Settled: one bad defence name does not sink the batched defup command.** The in-game test answered
+  "You may not set a priority for the 'harrying' defence." and still set grookbubble. No code change.
+
+Tests: `test_kb_capture.lua` (list parsing, the extension, no extension for a plain capture).
+
+---
+
 ## 2026-10-10 - Monkshood records disloyalty; kbcapture separates commands with `|` (v4.7.399)
 
 - **The Serpent offense never saw monkshood land.** `VENOM_TO_AFF` (serpent/002) mapped monkshood to

@@ -1,4 +1,18 @@
-# affliction list  (2026-10-10T23:59:34Z)
+##### KBCAPTURE 2026-10-10T23:52:23Z | affliction show damagedrightarm
+Affliction:         A damaged right arm
+Diagnose:           has a partially damaged right arm.
+Afflicted msg:      Your right arm is greatly damaged from the beating.
+Cured msg:          Your right arm feels stronger and healthier.
+Cure(s):            Apply Restoration To Arms
+Description:        Having a damaged right arm prevents you from using that arm in most situations.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+##### END
+##### KBCAPTURE 2026-10-10T23:59:34Z | affliction list
 All afflictions
 ------------------------------------------------
 Accentato
@@ -59,6 +73,8 @@ Demonstain
 Depression
 Deteriorate
 Diminished
+[Type MORE if you wish to continue reading. (29% shown)]
+[File continued via MORE]
 Disloyalty
 Disrupted
 Dissonance
@@ -119,6 +135,8 @@ Lovestruck
 Manaleech
 Mangledhead
 Mangledleftarm
+[Type MORE if you wish to continue reading. (58% shown)]
+[File continued via MORE]
 Mangledleftleg
 Mangledrightarm
 Mangledrightleg
@@ -179,6 +197,8 @@ Temperedcholeric
 Temperedmelancholic
 Temperedphlegmatic
 Temperedsanguine
+[Type MORE if you wish to continue reading. (87% shown)]
+[File continued via MORE]
 Tenderskin
 Tension
 Timeflux
@@ -204,3 +224,5 @@ Webbed
 Whisperingmadness
 Woeconstrained
 Wristfractures
+
+##### END

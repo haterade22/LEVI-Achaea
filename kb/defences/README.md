@@ -49,7 +49,8 @@ names, but four are the commands that raise the defence (`blade tune`, `acrobati
 ataxia.defences[value]`. `systemDefup` builds its `curing priority defence ... 25` command from
 the defup PROFILE's keys. So the values above are harmless.
 
-**Still open** (`kb/CONFLICTS.md`): the defup command is ONE batched command, and some keys our
-tables accept are not SSC defences (parrying, compoundmask, simultaneity, clarity, harrying). If
-the game rejects the whole command for one bad name, a profile containing one of them keeps
-nothing up.
+**Tested 2026-10-10: one bad name does not sink the batch.** The defup command is ONE batched
+command, and some keys our tables accept are not SSC defences (parrying, compoundmask,
+simultaneity, clarity, harrying). `curing priority defence harrying 25 grookbubble 25` answered
+"You may not set a priority for the 'harrying' defence." and still set grookbubble
+(`kb/raw/live/defence-batch-test_2026-10-10.txt`). That refusal line is how to spot a bad name.

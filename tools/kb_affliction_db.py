@@ -165,6 +165,22 @@ def main():
                "CANONICAL name: GMCP, the tracker and the cure lines all use it (v4.7.399: the Serpent "
                "offense recorded monkshood as `disfigurement` and never saw it land).", ""]
         md += [f"- `{k}` is `{c}`" for k, c in aliases]
+    # COVERAGE against the game's own AFFLICTION LIST (captured in full since v4.7.398 pages MORE).
+    list_path = os.path.join(ROOT, "kb", "raw", "live", "affliction_list.txt")
+    if os.path.exists(list_path):
+        text = open(list_path, encoding="utf-8").read()
+        body = text.split("----", 1)[1] if "----" in text else text
+        game = [l.strip().lower() for l in body.splitlines() if re.fullmatch(r"[A-Za-z]+", l.strip())]
+        no_record = [n for n in game if n not in db]
+        not_curing = [n for n in game if n not in code_keys]
+        md += ["", "## Coverage against the game's AFFLICTION LIST", "",
+               f"The game lists **{len(game)}** afflictions (`kb/raw/live/affliction_list.txt`). "
+               f"{len(game) - len(no_record)} have a record above.", "",
+               f"**No record yet ({len(no_record)})**, filled by the next `kbcapture afflictions`: "
+               + (", ".join(f"`{n}`" for n in no_record) or "none"), "",
+               f"**Not in our curing priority table ({len(not_curing)})**: SSC cures these at the server's "
+               "own default priority. Some are not curable at all (states, curses, class marks); the ones that "
+               "are deserve a decision: " + (", ".join(f"`{n}`" for n in not_curing) or "none")]
     md += ["", "## Descriptions", ""]
     for k, r in sorted(db.items()):
         if r.get("alias_of"):
