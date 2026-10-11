@@ -1,0 +1,374 @@
+Be it within the inscrutable confines of the Conclave or the implacable depths of the Underrealm, the halls of crystal harmonies or the workshops of artifice, all sorcerers know a singular truth that need not be put to word: some workings are best left unworked. To take up the study of Charnel is no gift or glory: it is a singular rejection of this truth.
+ 
+No price too high, no hubris too great. No doom too distant. Such is the burden of the Pariah and such is their eternal fate once they step onto the path of
+damnation. Dwelling in their black sanctums beneath the desert sands, these reborn sorcerers dabble in the very substance of mortality, and pay the price not with mana or madness but with their eternal souls and the wounds carved therein.
+ 
+Woe to he who reads the tablet of interment, and woe to he who does not flee: for life entombed in ensorcelled stone is their Accursed reward and an eternity to weep.
+
+The skill of Charnel is available to members of the [[Pariah]] [[class]], along with [[Memorium]] and [[Pestilence (skill)|Pestilence]].
+
+==Abilities in Charnel==
+{{Skill_detail
+ |skill=Crypt
+ |description=Your black domain.
+ |lessons=
+ |syntax=CRYPT RAISE<br>CRYPT ENTER [crypt]<br>CRYPT EXPAND <direction><br>CRYPT COLLAPSE <direction><br>CRYPT SEAL<br>CRYPTS<br>CRYPT RELOCATE
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=The domain of the accursed is both fortress and sanctum; sheltered from those that would scorn them for their vitiating state of being. All of the higher workings of Charnel require your crypt be raised and expanded; a Pariah without a crypt is no Pariah at all.<p>CRYPT RAISE: create your crypt. It will start out with one room.<br>CRYPT EXPAND <direction>: expand your crypt in a given direction. This creates a new room. Initially, these rooms will be simple passageways. Your crypt can only expand so much before it can support no further rooms, so choose your layout wisely.<br>CRYPT COLLAPSE <direction>: collapse rooms in your crypt to change the layout. You must work inwards from dead ends.<br>CRYPT ENTER: enter your crypt. This has a delay during which you may do nothing.<br>CRYPT SEAL: if would-be raiders break the seal on your crypt, this channelled action will allow you to repair the doors from just outside your crypt.<br>CRYPT RELOCATE: those over level 50 may relocate their crypt to a new location. The crypt must be sealed for this to be done, it is a long channelled action, and the same restrictions as raising a crypt in the first place apply. Moving your crypt the first time is free: subsequent moves cost 50 bound credits.<br>CRYPTS: see what other crypts are in a location.</p><p>* Note that the talon tattoo can pull anyone from a crypt.</br>
+}}
+
+{{Skill_detail
+ |skill=Sarcophagus
+ |description=The heart of your power.
+ |lessons=
+ |syntax=SARCOPHAGUS BUILD<br>SARCOPHAGUS ENTER<br>SARCOPHAGUS CALL
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Your crypt may be your domain, but that which it is built to protect is the beating heart of your power: your sarcophagus. The greatest works of Charnel require this be built, and it must be raised in a tomb constructed within the depths of your crypt. You may call it from an unshaped location in your crypt to move it there, and thus relocate your tomb (this is mostly useful when changing the layout of your crypt and needing to destroy your old tomb).
+}}
+
+{{Skill_detail
+ |skill=Guide
+ |description=You need but show them the way.
+ |lessons=
+ |syntax=ACCURSED GUIDE <target>
+ |required=300 willpower and 400 mana
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Sometimes there are those of ambition that simply need a guiding hand, to be shown a path to transcendence beneath the eternal sands. While standing in your ritual chamber, you may send forth a portal to such an individual, though it is taxing like all worthy endeavours, and requires all of your focus.<p>* This creates a portal to someone on the same continent as you, and is a channel. The portal is two-way, beware!</p>
+}}
+
+{{Skill_detail
+ |skill=Plunder
+ |description=By will and by force.
+ |lessons=
+ |syntax=PLUNDER CRYPT <crypt ID|crypt owner name><br>PLUNDER KNOWLEDGE [ritual name]
+ |required=
+ |target=
+ |cooldown=9.00 seconds of balance
+ |detail=Other Pariah's will ever hoard their knowledge within the Arcane Record of their black sanctum. If they shall not yield it by will then you will take it by force. You may plunder a crypt's doors every so often; this channelled action will inform the Pariah who you are attempting to strike against and it takes some time. Once the defences are breached, then the true test begins: invading the dark interior and braving the traps and guardians to reach their Arcane Record. Once this is achieved, you may plunder any tablets they have stored within.<p>If you survive that long.</p>
+}}
+
+<b>Accursed Rituals</b>
+
+{{Skill_detail
+ |skill=Tablets
+ |description=The words are scribed on unyielding stone.
+ |lessons=
+ |syntax=TABLET STORE <tablet><br>TABLET RETRIEVE <tablet><br>TABLET LIST
+ |required=
+ |target=
+ |cooldown=
+ |detail=The ancient rituals of Charnel are scribed in tablets of stone. These can be acquired in various ways, but one thing is universal: they may be used but once and they will decay very rapidly when held outside your crypt's Arcane Record. When you gain a tablet, you will gain access to the ability associated to that ritual, and may learn how to utilise said ritual.  
+}}
+
+<b>Accursed Workings</b>
+
+{{Skill_detail
+ |skill=Eternity
+ |description=May it cover the land.
+ |lessons=
+ |syntax=ACCURSED ETERNITY [direction/SENSE]
+ |required=
+ |target=
+ |cooldown=2.50 seconds of equilibrium
+ |detail=Bring the endless eternity into being, covering a location in the unforgiving sands of the desert. You may also project your eternity in a given direction, if you already stand upon sandy ground.
+}}
+
+{{Skill_detail
+ |skill=Cryptbound
+ |description=Wake in darkness.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=To be Accursed is to be ever bound to your tomb. If you would resurrect outside the cave after embracing death, you will instead resurrect within the confines of your sarcophagus(*).<p>* Note special resurrections override this, such as gravestones from the death talisman set or foray insurance.</p>
+}}
+
+{{Skill_detail
+ |skill=Reconstitute
+ |description=Your bonds are of your own devising.
+ |lessons=
+ |syntax=ACCURSED RECONSTITUTE
+ |required=500 mana
+ |target=
+ |cooldown=
+ |detail=The form of the Accursed ever strives to return to its state of vitiation. Yet moments of freedom can yet be yours. By breaking yourself down into the sand of the desert, for a scant few moments you will be free of your curse, though such is ever short-lived.<p>* You can slip out of entanglements every 10 seconds immediately, similar to a bard's dwinnu.</p>
+}}
+
+{{Skill_detail
+ |skill=Resolve
+ |description=Pain is an old adversary.
+ |lessons=
+ |syntax=ACCURSED RESOLVE
+ |required=
+ |target=
+ |cooldown=2.40 seconds of equilibrium
+ |detail=The tribulation of the Accursed is to suffer long after others would not. Yet those that survive resolve to fight on through wounds that would slay an ordinary man or woman; while suffused with your Accursed resolve the damage you suffer from bleeding will be halved, and will never slay you outright(*).<p>* The actual amount of bleeding you receive is unmodified, just the damage taken from the periodic ticks.</p>
+}}
+
+{{Skill_detail
+ |skill=Cryptcall
+ |description=It ever beckons you back.
+ |lessons=
+ |syntax=ACCURSED CRYPTCALL
+ |required=
+ |target=
+ |cooldown=
+ |detail=The link to your sarcophagus is one that can be manipulated to a degree at a distance. By focusing upon it, after a substantial delay you will return to the heart of your power: note there is a limit on how far this link can extend(*).<p>* You must be on the same plane as your sarcophagus to initiate this ability.</p>
+}}
+
+{{Skill_detail
+ |skill=Still
+ |description=The silence of the grave.
+ |lessons=
+ |syntax=ACCURSED STILL [direction]
+ |required=
+ |target=
+ |cooldown=3.10 seconds of equilibrium
+ |detail=Bring the stillness of the grave to a location that labours beneath the endless eternity, quelling sound above a whisper(*).<p>* All forms of telepathic communication are greatly stifled, only permitting one per person every 3 seconds. This effect lasts one minute.</p>
+}}
+
+{{Skill_detail
+ |skill=Arise
+ |description=That which lies beneath the endless sands.
+ |lessons=
+ |syntax=ACCURSED ARISE <target>
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Your black domain and the endless sands bend to accommodate you. If you and another are within your crypt, you may transport yourself directly to them; likewise, if in sufficiently sandy terrain(*) you may teleport to another in your local area who is also within similar terrain.<p>* Desert terrain, or a room brought under the sway of an accursed.</p>
+}}
+
+{{Skill_detail
+ |skill=Awaken
+ |description=The desert's wrath.
+ |lessons=
+ |syntax=ACCURSED AWAKEN
+ |required=
+ |target=
+ |cooldown=2.20 seconds of equilibrium
+ |detail=Awaken the wrath of the desert in a sandy location, kicking up a terrible sandstorm to obscure the vision of those who would seek to divine specifics about the immediate surroundings.  
+}}
+
+{{Skill_detail
+ |skill=Wave
+ |description=A deluge of a drier kind.
+ |lessons=
+ |syntax=ACCURSED WAVE <target> <direction>
+ |required=
+ |target=
+ |cooldown=2.80 seconds of equilibrium
+ |detail=When you stand upon sandy ground, you may command it to rise up and drive a foe from your sight. Obstructions will prevent the movement(*), and if the sand was brought forth by your Accursed work, it shall be consumed(**).<p>* Blocking, walls, etc.<br>** Eternity is cleared if it is the basis for the environmental check in this case. This ability could be used freely in desert areas or sandy locations created through more obscure means.</p>
+}}
+
+{{Skill_detail
+ |skill=Mirage
+ |description=Trust not your eyes or flesh.
+ |lessons=
+ |syntax=ACCURSED MIRAGE
+ |required=
+ |target=
+ |cooldown=3.80 seconds of equilibrium
+ |detail=This high art of the Accursed allows you to breathe forth your poisonous nature upon the location, for a short time(*) bending the rules which
+govern the wounds wrought upon the mortal man. In practice, this means that if someone strikes another adventurer, for a brief moment after said attacker will find they cannot inflict any lasting harm upon anyone else.<p>* This lasts thirty seconds and has a five minute cooldown.</p><p>** For two seconds after you strike someone directly or otherwise (and for damage that isn't trivial), you will find that you can inflict no damage to anyone but that target while the mirage is active.</p><p>*** Other Accursed are immune to the implications of the mirage, and unblockable damage bypasses its unholy nature entirely.</p>
+}}
+
+{{Skill_detail
+ |skill=Congregation
+ |description=For they will attend your feast.
+ |lessons=
+ |syntax=ACCURSED CONGREGATION
+ |required=
+ |target=
+ |cooldown=4.00 seconds of equilibrium
+ |detail=When standing upon sand, you may impose your will to force a congregation to attend you. This is a channeled action at the conclusion of which, all that stand in adjacent rooms upon sand who possess the mass defence will be drawn down and deposited before you. Those that do not possess the mass defence shall suffer a brief period of being stunned instead.<p>* Sand must be present in a room at all three phases (channel start, middle, and resolution) for it to be checked at the conclusion of the congregation.</p>
+}}
+
+{{Skill_detail
+ |skill=Dust
+ |description=To dust.
+ |lessons=
+ |syntax=ACCURSED DUST
+ |required=
+ |target=
+ |cooldown=
+ |detail=You may temporarily return your Accursed form to a less vitiating state of being, though a transient one. By focusing for a short time you may prepare yourself to become dust for a time; a catalyst will cause this state to manifest(*), during which time you will be free from many of the tribulations of mortal existence, though also from mortal agency(**).<p>* When you take damage after the channel is complete.<br>** You will be unable to interact with much of the world, though very little will be able to harm you or otherwise inconvenience you directly.</p>
+}}
+
+{{Skill_detail
+ |skill=Embrace
+ |description=The bain of life.
+ |lessons=
+ |syntax=ACCURSED EMBRACE SICKNESS
+ |required=
+ |target=
+ |cooldown=
+ |detail=Many terrible things were born of dabbling in the realm of death, but perhaps one of the most terrible consequences was the sickness that the Accursed brought into the living world. To embrace your nature as an Accursed is to accept that sickness upon yourself; death shall have its due(*), and time shall not heal this wound(**).<p>* If you die with the death sickness and are resurrected by starbursts or similar means, you will not be cured of your afflictions. However, the sickness will pass from you to your killer in this instance.<br>** Those labouring beneath the death sickness are entirely immune to lesser aeonic workings: attempts to bring down the curse of the Aeon upon such a target without foci to amplify the working (a ruinated wheel tarot, or a vodun doll or puppet for example) shall fail.</p>
+}}
+
+<b>Reshaping</b>
+
+{{Skill_detail
+ |skill=Reshape
+ |description=In your own image.
+ |lessons=
+ |syntax=CRYPT RESHAPE <to new type of room>
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Your command over your domain has grown to the point where you can now reshape the chambers of your domain to fit your needs. There are various types of chambers that your domain can possess, and you can reshape any chamber within your domain excluding the initial chamber(*).<p>* This is the one you arrive in when crypt entering.</p>
+}}
+
+{{Skill_detail
+ |skill=Passage
+ |description=The simplest of reshapings.
+ |lessons=
+ |syntax=CRYPT RESHAPE PASSAGE
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=The most basic of reshapings, you can shape a room to be a simple passageway. These have no particularly useful properties, but may be used to mislead or trap intruders.  
+}}
+
+{{Skill_detail
+ |skill=Interment
+ |description=The beginning of the end.
+ |lessons=
+ |syntax=CRYPT RESHAPE INTERMENT
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=The interment chamber is perhaps one of the most important chambers in your entire crypt, though also one of the least vulnerable to tampering. By necessity it must be constructed directly adjacent to the entrance of your crypt, and you would do well to ensure it is protected.   
+}}
+
+{{Skill_detail
+ |skill=Library
+ |description=The repository of your knowledge.
+ |lessons=
+ |syntax=CRYPT RESHAPE LIBRARY
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=This chamber in your crypt is where you may store your ritual tablets. See AB CHARNEL TABLETS for the details. 
+}}
+
+{{Skill_detail
+ |skill=Manifest
+ |description=A chamber for rituals and more.
+ |lessons=
+ |syntax=CRYPT RESHAPE MANIFEST
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Your ritual manifest is where higher arcane rituals are performed, with more specialised needs than the interment chamber.   
+}}
+
+{{Skill_detail
+ |skill=Reliquary
+ |description=Where treasures are laid to rest.
+ |lessons=
+ |syntax=CRYPT RESHAPE RELIQUARY
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=The reliquary is a mysterious chamber within the depths of the Charnel crypt. Its true purpose is shrouded in mystery, though there are whisperings that it is utilised in some of the higher rituals of the art.  
+}}
+
+{{Skill_detail
+ |skill=Pit
+ |description=To claim the unwary.
+ |lessons=
+ |syntax=CRYPT RESHAPE PIT
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Many an unwary intruder has been dispatched with a simple hole in the ground. Place these well, and trap them appropriately(*).<p>* Note that you can only build pits out of rooms with a single up exit.</p>
+}}
+
+{{Skill_detail
+ |skill=Tomb
+ |description=Your hallowed hall.
+ |lessons=
+ |syntax=CRYPT RESHAPE TOMB
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=The tomb of your crypt is where your sarcophagus will be kept, and it is the most vulnerable to your enemies. All of your efforts should go to defending this most hallowed of halls, for the cost of failure is terrible indeed.
+}}
+
+<b>Traps</b>
+
+{{Skill_detail
+ |skill=Trapdoor
+ |description=A step into the abyss.
+ |lessons=
+ |syntax=CRYPT TRAP BUILD TRAPDOOR<br>CRYPT TRAP DISMANTLE TRAPDOOR
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Many things lie in wait for those that will trespass in your domain, but may they dread each step and breath. You may create a trapdoor in a location with an exit to the down; this will conceal said exit. Furthermore, when your unsuspecting foes step onto the trapdoor they shall plunge down into the blackness beneath. 
+}}
+
+{{Skill_detail
+ |skill=Carve
+ |description=They dare walk on hallowed stone.
+ |lessons=
+ |syntax=CRYPT CARVE <logograph>
+ |required=
+ |target=
+ |cooldown=
+ |detail=The stone of your crypt is so saturated with arcane power that you may use its very stone as a base for the logographs of Memorium. By carving them into the stone, all that enter their location excluding yourself will find themselves struck down by said logograph's power(*).<p>* See [[memorium]] ability files for details.</p>
+}}
+
+{{Skill_detail
+ |skill=Spikes
+ |description=Your domain has teeth.
+ |lessons=
+ |syntax=CRYPT TRAP BUILD SPIKES<br>CRYPT TRAP DISMANTLE SPIKES
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=A simple trap, but a deadly one nevertheless. Bringing forth spikes in a location shall cause any that approach from the upward direction (voluntary or otherwise) to impale themselves on their dagger-like points, suffering terribly in the process.
+}}
+
+{{Skill_detail
+ |skill=Crush
+ |description=No mercy for trespass.
+ |lessons=
+ |syntax=CRYPT TRAP BUILD CRUSH<br>CRYPT TRAP DISMANTLE CRUSH
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Perhaps the most formidable trap in the array available to you, this deadly surprise for intruders shall trigger upon anyone other than yourself entering the chamber in which it is placed. The walls shall slowly begin to move inwards; around ten seconds later, they shall complete their terminal journey, crushing any that remain between them and leaving nothing but the dead in their wake.<p>You may only have one of this trap in your whole crypt, and while it will not trigger upon you entering its room, you are still vulnerable to the final crushing impact.</p>
+}}
+
+<b>Guardians</b>
+
+{{Skill_detail
+ |skill=Golem
+ |description=To protect what is yours.
+ |lessons=
+ |syntax=CRYPT GUARDIAN RAISE GOLEM<br>CRYPT GUARDIAN BANISH GOLEM
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=The most basic guardians that can protect your crypt, golems are sturdy constructs that shall batter your enemies with their fists as well as smashing any magical shields that they may raise. Only one golem can be brought forth in a location at a time. 
+}}
+
+{{Skill_detail
+ |skill=Scarabs
+ |description=The chittering guardians of the accursed.
+ |lessons=
+ |syntax=CRYPT GUARDIAN RAISE SCARABS<br>CRYPT GUARDIAN BANISH SCARABS
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=A far more formidable guardian to call forth than the simple golem, the swarms of scarabs are less hardy but far more vicious in their aggression.   
+}}
+
+[[Category:Skills]]

@@ -1,0 +1,1035 @@
+Metamorphosis is the ability to bond with the spirits of various animals, ranging from the mundane to the fantastic. To begin the process, MORPH <animal>. Once a metamporh has successfully metamorphosed, they will find it is a strain on them to stay bonded causing a greater endurance drain. UNMORPH (or HUMAN) will bring them out of the form.
+
+The skill of '''Metamorphosis''' is available to the [[Druid]] and [[Sentinel]] [[class|classes]].
+
+Druids also have the skills of [[Groves]] and [[Reclamation]], while Sentinels also have the skills of [[Woodlore]] and [[Skirmishing]].
+
+==Abilities in Metamorphosis==
+:''The Basilisk and Jaguar morphs are unique to members of the Sentinel class.''
+:''The Hydra and Wyvern morphs are unique to members of the Druid class.''
+{{Skill_detail
+ |skill=Powers
+ |description=Lists the powers you possess when morphed into a creature.
+ |lessons=0
+ |syntax=POWERS
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=While morphed, this command will show you what animal-specific abilities you have available to you.
+}}
+
+{{Skill_detail
+ |skill=Squirrel
+ |description=A cute, bushy-tailed woodland creature.
+ |lessons=0
+ |syntax=MORPH SQUIRREL
+ |required=16 mana
+ |target=Self
+ |cooldown=
+ |detail=A cute, bushy-tailed woodland creature.<br>Powers: Forage, Digging
+}}
+
+{{Skill_detail
+ |skill=Wildcat
+ |description=A small untamed feline. Alert and perceptive.
+ |lessons=7
+ |syntax=MORPH WILDCAT
+ |required=20 mana
+ |target=Self
+ |cooldown=
+ |detail=A small untamed feline. Alert and perceptive.<br>Powers: Alertness, Nightsight, Scratch
+}}
+
+{{Skill_detail
+ |skill=Wolf
+ |description=The wary white wolf.
+ |lessons=16
+ |syntax=MORPH WOLF
+ |required=30 mana
+ |target=Self
+ |cooldown=
+ |detail=The form of the wary white wolf.<br>Powers: Bite, Fitness, Howl, Nightsight, Scent
+}}
+
+{{Skill_detail
+ |skill=Turtle
+ |description=The aquatic turtle.
+ |lessons=23
+ |syntax=MORPH TURTLE
+ |required=20 mana
+ |target=Self
+ |cooldown=
+ |detail=The aquatic turtle.<br>Powers: Fluidswim, Snap
+}}
+
+{{Skill_detail
+ |skill=Jackdaw
+ |description=The black jackdaw.
+ |lessons=34
+ |syntax=MORPH JACKDAW
+ |required=30 mana
+ |target=Self
+ |cooldown=
+ |detail=The black jackdaw.<br>Powers: Fly, Land
+}}
+
+{{Skill_detail
+ |skill=Cheetah
+ |description=A creature quick of eye and fleet of foot.
+ |lessons=58
+ |syntax=MORPH CHEETAH
+ |required=40 mana
+ |target=Self
+ |cooldown=
+ |detail=The Cheetah is quick of eye and fleet of foot.<br>Powers: Alertness, Bite, Fitness, Leap, Nightsight, Scent, Sprint
+}}
+
+{{Skill_detail
+ |skill=Owl
+ |description=The wise bird of prey.
+ |lessons=89
+ |syntax=MORPH OWL
+ |required=40 mana
+ |target=Self
+ |cooldown=
+ |detail=The wise bird of prey.<br>Powers: Fly, Land, Nightsight, Spy, Swoop
+}}
+
+{{Skill_detail
+ |skill=Hyena
+ |description=A vicious, stealthy creature with a chilling howl.
+ |lessons=134
+ |syntax=MORPH HYENA
+ |required=60 mana
+ |target=Self
+ |cooldown=
+ |detail=A vicious, stealthy creature with a chilling howl.<br>Powers: Alertness, Claw, Elusiveness, Fitness, Howl, Leap, Nightsight, Scent, Stealth
+}}
+
+{{Skill_detail
+ |skill=Condor
+ |description=The swift and mighty bird of prey.
+ |lessons=178
+ |syntax=MORPH CONDOR
+ |required=70 mana
+ |target=Self
+ |cooldown=
+ |detail=The swift and mighty bird of prey.<br>Powers: Fly, Land, Nightsight, ScanArea, Spy, Swoop, Traverse, View
+}}
+
+{{Skill_detail
+ |skill=Gopher
+ |description=A cute, burrowing animal.
+ |lessons=200
+ |syntax=MORPH GOPHER
+ |required=14 mana
+ |target=Self
+ |cooldown=
+ |detail=A cute, burrowing animal.<br>Powers: Burrow, Digging, Sniff
+}}
+
+{{Skill_detail
+ |skill=Sloth
+ |description=A slow, ponderous creature.
+ |lessons=245
+ |syntax=MORPH SLOTH
+ |required=2 mana
+ |target=Self
+ |cooldown=
+ |detail=A slow, ponderous creature.<br>Powers: Rest
+}}
+
+{{Skill_detail
+ |skill=Bear
+ |description=The mighty grizzly bear.
+ |lessons=356
+ |syntax=MORPH BEAR
+ |required=80 mana
+ |target=Self
+ |cooldown=
+ |detail=The mighty grizzly bear.<br>Powers: Alertness, Block, Scent, Shred, Vitality
+}}
+
+{{Skill_detail
+ |skill=Bonding
+ |description=Increased rapport with the animal spirits.
+ |lessons=423
+ |syntax=BOND SPIRIT<br>BOND SPIRIT OFF
+ |required=
+ |target=Self
+ |cooldown=1.50 seconds of equilibrium
+ |detail=When you bond with the spirit that you have metamorphosised into, your chance of being forced back to your mortal form is greatly decreased. The downside of this is that you will lose endurance more quickly from the increased strain.
+}}
+
+{{Skill_detail
+ |skill=Nightingale
+ |description=A delicate, beautiful bird with an exquisite song.
+ |lessons=467
+ |syntax=MORPH NIGHTINGALE
+ |required=60 mana
+ |target=Self
+ |cooldown=
+ |detail=A delicate, beautiful bird with an exquisite song.<br>Powers: Fly, Land, Melody
+}}
+
+{{Skill_detail
+ |skill=Elephant
+ |description=Largest of the land mammals.
+ |lessons=534
+ |syntax=MORPH ELEPHANT
+ |required=100 mana
+ |target=Self
+ |cooldown=
+ |detail=Largest of the land mammals.<br>Powers: Block, Fitness, Stampede, Trumpet, Vitality, Yank
+}}
+
+{{Skill_detail
+ |skill=Transmorph
+ |description=The ability to morph from form to form.
+ |lessons=600
+ |syntax=MORPH <form>
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=The power you wield allows you to morph directly from one animal to another, without changing back to regular form first.
+}}
+
+{{Skill_detail
+ |skill=Wolverine
+ |description=Pound for pound, one of the most vicious animals.
+ |lessons=703
+ |syntax=MORPH WOLVERINE
+ |required=22 mana
+ |target=Self
+ |cooldown=
+ |detail=Pound for pound, one of the most vicious animals.<br>Powers: Burrow, Digging, Claw, Ambush, Elusiveness, Nightsight, Sniff
+}}
+
+{{Skill_detail
+ |skill=Jaguar
+ |description=A powerful, quick, and stealthy beast.
+ |lessons=841
+ |syntax=MORPH JAGUAR
+ |required=90 mana
+ |target=Self
+ |unique=Yes
+ |cooldown=
+ |detail=A powerful, quick, and stealthy beast.<br>Powers: Alertness, Ambush, Bloodscent, Discernment, Dismember, Elusiveness, Fitness, Leap, Maul, Might, Nightsight, Resistance, Scent, Sprint, Stealth, Vitality
+}}
+
+{{Skill_detail
+ |skill=Icewyrm
+ |description=A mythical creature of awesome, magical power.
+ |lessons=910
+ |syntax=MORPH ICEWYRM
+ |required=80 mana
+ |target=Self
+ |cooldown=
+ |detail=A mythical creature of awesome, magical power.<br>Powers: Alertness, Icebreath, Maul, Might, Nightsight, Scent, Sprint, Temperance, Vitality
+}}
+
+{{Skill_detail
+ |skill=Eagle
+ |description=The king of all flighted birds.
+ |lessons=944
+ |syntax=MORPH EAGLE
+ |required=100 mana
+ |target=Self
+ |cooldown=
+ |detail=The king of all flighted birds.<br>Powers: Fly, Hoist, Land, Nightsight, ScanArea, Spy, Swoop, Track, Traverse, View
+}}
+
+{{Skill_detail
+ |skill=Gorilla
+ |description=An agile yet powerful primate.
+ |lessons=1117
+ |syntax=MORPH GORILLA
+ |required=120 mana
+ |target=Self
+ |cooldown=
+ |detail=An agile yet powerful primate.<br>Powers: Alertness, Pound, Leap, Swinging
+}}
+
+{{Skill_detail
+ |skill=Affinity
+ |description=Obtaining a greater affinity with an animal spirit.
+ |lessons=1427
+ |syntax=EMBRACE SPIRIT
+ |required=500 mana
+ |target=
+ |cooldown=4.00 seconds of equilibrium
+ |detail=The gift of spiritual affinity indicates a level of proficiency at which metamorphosis is so second-nature that it takes a lesser toll on you. The endurance loss rate for all spirit forms is greatly decreased from the time that this ability is activated.
+}}
+
+{{Skill_detail
+ |skill=Wyvern
+ |description=The cousin of dragons themselves.
+ |lessons=1598
+ |syntax=MORPH WYVERN
+ |required=160 mana
+ |target=Self
+ |cooldown=4.00 seconds of equilibrium
+ |unique=Yes
+ |detail=The cousin of dragons themselves.<br>Powers: Sting, Alertness, Blaze, Fitness, Flame, Fly, Frenzy, Hoist, Incinerate, Ignite, Inferno, Land, Leap, Maul, Might, Nightsight, ScanArea, Scent, Shred, Spy, Swoop, Temperance, Track, Traverse, View, Vitality, Wreathe
+}}
+
+{{Skill_detail
+ |skill=Hydra
+ |description=A fearsome creature steeped in mystery.
+ |lessons=1599
+ |syntax=MORPH HYDRA
+ |required=140 mana
+ |target=Self
+ |cooldown=
+ |unique=Yes
+ |detail=A fearsome creature, shrouded in mystery. Its multiple heads are capable of a varied number of abilities.<br>Powers: Alertness, Block, Fitness, Furor, Might, Nightsight, Resistance, Scent, Stampede, Temperance, Vitality, Secretion<p>Group 1 abilities: Bite, Flame, Freeze<br>Group 2 abilities: Snap, Roar<br>Group 3 abilities: Sting, Negate, Armclamp, Legclamp, Bind, Shatter</p><p>Group abilities can be used in conjunction with each other to unleash a devastating flurry of blows on your opponent. Abilities in group 1 are accessed like normal, while abilities in group 2 can be accessed while off-balance if your previous attack was an ability from group 1. Group 3 abilities are on their own balance, and can be used any time that it is available.</p>
+}}
+
+{{Skill_detail
+ |skill=Basilisk
+ |description=The silent, magical beast of lore.
+ |lessons=1599
+ |syntax=MORPH BASILISK
+ |required=80 mana
+ |target=Self
+ |cooldown=
+ |unique=Yes
+ |detail=The silent, magical beast of lore.<br>Powers: Elusiveness, Bite, Flame, Glare, Negate, Gaze, Resistance, Stealth, Petrify
+}}
+
+{{Skill_detail
+ |skill=Truemorph
+ |description=Instantaneous metamorphosis.
+ |lessons=1736
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=So attuned are you to the animal spirits, that you are able to morph instantaneously.
+}}
+
+
+
+===Powers in Metamorphosis===
+{{Skill_detail
+ |skill=Alertness
+ |description=Bear, Cheetah, Gorilla, Hydra, Hyena, Icewyrm, Jaguar, Wildcat, and Wyvern
+ |lessons=7
+ |syntax=ALERTNESS [ON{{!}}OFF]<br>RELAX ALERTNESS
+ |required=20 mana and mana drain
+ |target=Self
+ |cooldown=2.50 seconds of equilibrium
+ |detail=Your sense of hearing is heightened enough to allow you to detect movement in adjacent locations.
+}}
+
+{{Skill_detail
+ |skill=Ambush
+ |description=Jaguar and Wolverine
+ |lessons=703
+ |syntax=AMBUSH <target>
+ |required=
+ |target=Adventurers
+ |cooldown=4.00 seconds of balance
+ |detail=When performed towards a target in an adjacent location, you spring out, knock them to the ground, stunning them briefly, and cause damage as well. This ability cannot be used from the trees or when flying, for either the ambusher or the target.
+}}
+
+{{Skill_detail
+ |skill=Armclamp
+ |description=Hydra
+ |lessons=
+ |syntax=HYDRA ARMCLAMP <target> LEFT/RIGHT
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of hydra head balance
+ |detail=Using your many hydra heads, you can clamp down on the arm of an adventurer.
+}}
+
+{{Skill_detail
+ |skill=BIND
+ |description=Hydra
+ |lessons=
+ |syntax=HYDRA BIND <target>
+ |required=150 mana
+ |target=Adventurers
+ |cooldown=3.50 seconds of hydra head balance
+ |detail=Bind an adventurer up in your many hydra heads, preventing most forms of action.
+}}
+
+{{Skill_detail
+ |skill=Bite
+ |description=Basilisk, Cheetah, Hydra and Wolf
+ |lessons=16
+ |syntax=BITE <target><br>HYDRA BITE <target>*
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=3.25 seconds of balance
+ |detail=Sink your jaws into an unruly opponent. When utilised in the basilisk morph, against adventurers, this has a chance to deliver the loki venom.<p>* Hydra morph only: Delivers your secreted venom into the bloodstream of your adventurer foe.</p>
+}}
+
+{{Skill_detail
+ |skill=Blaze
+ |description=Wyvern
+ |lessons=
+ |syntax=BLAZE
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=This formidable power of the wyvern allows you to coat yourself in fire, at the cost of some of your inner flame. While empowered, your mauls will drive any they strike to the ground.
+
+Additionally, while you are ablaze in this manner, your prey will find it impossible to parry your mauls or frenzies so long as they are also afflicted with the darkshade affliction.
+}}
+
+{{Skill_detail
+ |skill=Block
+ |description=Bear, Elephant and Hydra
+ |lessons=356
+ |syntax=BLOCK <direction><br>UNBLOCK
+ |required=
+ |target=Room
+ |cooldown=
+ |detail=This will allow you to block much movement in a particular direction.
+}}
+
+{{Skill_detail
+ |skill=Bloodscent
+ |description=Jaguar
+ |lessons=842
+ |syntax=
+ |required=
+ |target=
+ |cooldown=
+ |detail=Once you have the scent of your prey's blood in your nose, nothing will stop you from tracking them down(*).<p>* When you strike a tumbling target who is already bleeding with your spear, you will gain the bloodscent defence. This permits you to bypass most forms of room hinder while it lasts (approximately ten seconds - this timer does not refresh).</p>
+}}
+
+{{Skill_detail
+ |skill=Burrow
+ |description=Gopher and Wolverine
+ |lessons=200
+ |syntax=BURROW <direction>{{!}}ABOVE{{!}}BELOW
+ |required=
+ |target=Room
+ |cooldown=2.50 seconds of balance
+ |detail=With this ability, you may, in many environments, burrow underground. While underground, you will be unable to do most actions. You will be able to drop, get, score, stat, def, i, burrow, and morph. As a gopher, you will only be able to burrow quite shallowly. However, once the wolverine morph is attained, you may burrow up to nine levels deep. In fact, you will find that you can burrow underneath many things that you can not normally burrow into. For example, though you cannot burrow down through a highway, you can, if you go at least six levels deep, burrow underneath it. Be warned, however, that anything which you cannot burrow into cannot be burrowed out of. Thus, if you decide to try burrowing underneath a large area which provides you no way of reaching the surface, be very careful, lest you become lost, for you will have no way of getting out. Remember, to go up or down levels, use BURROW ABOVE, or BURROW BELOW.<p>It is rumoured that there are other races living beneath the earth, and if you leave items buried at any depth beyond the first level down, these races may seek out and steal whatever you left deep in the earth.</p>
+}}
+
+{{Skill_detail
+ |skill=Claw
+ |description=Hyena and Wolverine
+ |lessons=134
+ |syntax=CLAW <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=3.25 seconds of balance
+ |detail=Attack an opponent with your claws.
+}}
+
+{{Skill_detail
+ |skill=Digging
+ |description=Squirrel, Gopher and Wolverine
+ |lessons=0
+ |syntax=DIG<br>BURY <item>
+ |required=
+ |target=Room
+ |cooldown=2.00 seconds of balance
+ |detail=With this ability, you may use your little claws to dig up buried things, and to bury things.
+}}
+
+
+{{Skill_detail
+ |skill=Discernment
+ |description=Jaguar
+ |lessons=842
+ |syntax=DISCERN <target>
+ |required=
+ |target=
+ |cooldown=2.00 seconds of equilibrium
+ |detail=You will be able to quickly assess the wounds of your prey, gauging roughly how severe their bleeding is.
+}}
+
+{{Skill_detail
+ |skill=Dismember
+ |description=Jaguar
+ |lessons=841
+ |syntax=DISMEMBER
+ |required=
+ |target=Adventurers
+ |cooldown=3.40 seconds of balance
+ |detail=The savage spirit of the jaguar is ferocious indeed. Once you have bound and impaled an opponent, you can fall upon your helpless prey, ending their life in a bloody frenzy. 
+}}
+
+{{Skill_detail
+ |skill=Elusiveness
+ |description=Basilisk, Hyena, Jaguar and Wolverine
+ |lessons=134
+ |syntax=ELUSIVENESS [ON{{!}}OFF]<br>RELAX ELUSIVENESS
+ |required=
+ |target=Self
+ |cooldown=3.50 seconds of equilibrium
+ |detail=With this ability, you cannot be easily followed, allowing you to roam about the land in more safety.
+}}
+
+{{Skill_detail
+ |skill=Fitness
+ |description=Cheetah, Elephant, Hydra, Hyena, Jaguar, Wolf and Wyvern
+ |lessons=16
+ |syntax=FITNESS
+ |required=
+ |target=Self
+ |cooldown=3.00 seconds of balance
+ |detail=With your mastery of your own body, you are able to purge yourself of the asthma affliction.
+}}
+
+{{Skill_detail
+ |skill=Flame
+ |description=Basilisk, Hydra and Wyvern
+ |lessons=289
+ |syntax=SUMMON FIRE<br>FLAME <target><br>FLAME <icewall-direction><br>FLAME GROUND<br>BELCH<br>RELAX FLAME<br>HYDRA FLAME <target>*
+ |required=
+ |target=Adventurers, room, denizens, and self
+ |cooldown=Equilibrium
+ |detail=Before this ability may be used, you must build up fire inside you. Type SUMMON FIRE to begin this process. When you are ready to breathe yellow fire, you may FLAME <target> or FLAME <icewall-direction>. BELCH or RELAX FLAME will get rid of the flame prematurely.<p>* Hydra morph only. Unleashes a devastating blast of magical fire towards your target. This version can be used against denizens.</p>
+}}
+
+{{Skill_detail
+ |skill=Fluidswim
+ |description=Turtle
+ |lessons=23
+ |syntax=SWIM <direction>
+ |required=
+ |target=Room
+ |cooldown=
+ |detail=Move across flooding, rivers, lakes, and oceans with confidence and speed.
+}}
+
+{{Skill_detail
+ |skill=Fly
+ |description=Condor, Eagle, Jackdaw, Nightingale, Owl and Wyvern
+ |lessons=34
+ |syntax=FLY<br>LAND
+ |required=
+ |target=Self
+ |cooldown=4.00 seconds of balance
+ |detail=Soar up into the heavens and fly above the land. LAND to come back to the earth once again.
+}}
+
+{{Skill_detail
+ |skill=Forage
+ |description=Squirrel
+ |lessons=0
+ |syntax=FORAGE
+ |required=
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Attempt to scamper about forestal locations, searching for food.
+}}
+
+{{Skill_detail
+ |skill=Freeze
+ |description=Hydra
+ |lessons=
+ |syntax=HYDRA FREEZE <target>
+ |required=150 mana
+ |target=Adventurers and denizens.
+ |cooldown=3.75 seconds of balance
+ |detail=Release a bone-chilling blast towards your foe, freezing them to the core.<p>* Against denizens this deals cold damage.</p>
+}}
+
+{{Skill_detail
+ |skill=Frenzy
+ |description=Wyvern
+ |lessons=
+ |syntax=FRENZY <target> <sting venom> <claw venom> [limb]
+ |required=
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Unleash a frenzy at your prey, first plunging your venom-filled stinger into them before ripping at them with your claws.
+<p>You may sting with: darkshade, vardrax, euphorbia, or sumac(*).</p>
+<p>You must have a vial of venom on hand to envenom your claws with.</p>
+<p>* You may only sting with sumac every so often: your venom sacks have a limited amount and take time to refill after each use.</p>
+}}
+
+{{Skill_detail
+ |skill=Furor
+ |description=Hydra
+ |lessons=
+ |syntax=HYDRA FUROR [venom] <limb>
+ |required=
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=Tear at one of your prey's limbs with two of your serpentine heads, afflicting them with whatever venom you have secreted.
+}}
+
+{{Skill_detail
+ |skill=Gaze
+ |description=Basilisk
+ |lessons=289
+ |syntax=GAZE <target> [PARALYSIS{{!}}CONFUSION]
+ |required=150 mana
+ |target=Adventurers and denizens
+ |cooldown=2.00 seconds of equilibrium
+ |detail=The gaze of the basilisk is a powerful and fearful one indeed. With it, you may paralyse or confuse an adventurer or deal psychic damage to a denizen.
+}}
+
+{{Skill_detail
+ |skill=Glare
+ |description=Basilisk
+ |lessons=1599
+ |syntax=GLARE <target> [STUPIDITY{{!}}IMPATIENCE]
+ |required=200 mana
+ |target=Adventurers
+ |cooldown=2.00 seconds of equilibrium
+ |detail=With this ability, you may curse your foe with stupidity or impatience.
+}}
+
+{{Skill_detail
+ |skill=Hoist
+ |description=Eagle and Wyvern
+ |lessons=944
+ |syntax=HOIST <target><br>RELEASE <target><br>DEPOSIT [<target>]
+ |required=
+ |target=Adventurers
+ |cooldown=4.00 seconds of balance. (Deposit and Release)
+ |detail=From within the skies, you may swoop down on an opponent and HOIST them off the ground. Once you have them clasped within your mighty talons, you can move about with them and either RELEASE them, causing them great damage if they are unfortunate enough not to be able to fly, or DEPOSIT them on the ground somewhere.
+}}
+
+{{Skill_detail
+ |skill=Howl
+ |description=Hyena and Wolf
+ |lessons=16
+ |syntax=HOWL <target>
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Drain the mental strength of an opponent with your blood-curdling howl.
+}}
+
+{{Skill_detail
+ |skill=Icebreath
+ |description=Icewyrm
+ |lessons=
+ |syntax=FREEZE <target>/GROUND
+ |required=
+ |target=Adventurers and room
+ |cooldown=GROUND: 3.00 seconds of equilibrium<br>Target: 2.00 seconds of equilibrium
+ |detail=With this ability, you may freeze another adventurer, or the ground beneath you. The first time you freeze an adventurer, he will begin shivering violently, causing him to occassionally lose his equilibrium. The second time you do it, he will become stiff with the cold. If you freeze the ground, a coat of ice will form which will hinder those moving in and out.
+}}
+
+{{Skill_detail
+ |skill=Ignite
+ |description=Wyvern
+ |lessons=
+ |syntax=IGNITE
+ |required=600 mana
+ |target=Self
+ |cooldown=
+ |detail=This ability will allow the wyvern to instantly increase their inner flame by two levels, but has a fairly long recovery period.
+}}
+
+{{Skill_detail
+ |skill=Incinerate
+ |description=Wyvern
+ |lessons=1599
+ |syntax=SUMMON FIRE<br>INCINERATE <target><br>BELCH<br>RELAX FLAME
+ |required=100 mana
+ |target=Adventurers
+ |cooldown=6.00 seconds of equilibrium
+ |detail=After building up white fire within you, you may turn your thermal destruction on an opponent, causing him massive damage and possibly instant death. BELCH will get rid of the flame prematurely.<p>* Kills if the target is below 40% of maximum health, this threshold rising based on how badly they are on fire (50% at one stack of burning, 55% at two, 60% at three).
+}}
+
+{{Skill_detail
+ |skill=Inferno
+ |description=Wyvern
+ |lessons=1599
+ |syntax=SUMMON FIRE<br>INFERNO
+ |required=150 mana
+ |target=Room
+ |cooldown=4.50 seconds of balance
+ |detail=Once you have summoned forth blue fire, you may let loose with an armageddon of flame, searing all of those in your location. This is no simple fire, however; even if extinguished, it shall reignite upon the unfortunate individual after a short time.
+}}
+
+{{Skill_detail
+ |skill=Leap
+ |description=Cheetah, Gorilla, Hyena, Jaguar and Wyvern
+ |lessons=58
+ |syntax=LEAP <direction>
+ |required=
+ |target=Self
+ |cooldown=1.00 seconds of balance
+ |detail=This ability will allow you to leap over various obstacles in your way.
+}}
+
+{{Skill_detail
+ |skill=Legclamp
+ |description=Hydra
+ |lessons=
+ |syntax=HYDRA LEGCLAMP <target> LEFT/RIGHT
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of hydra head balance
+ |detail=Using your many hydra heads, you can clamp down on the leg of an adventurer.
+}}
+
+{{Skill_detail
+ |skill=Maul
+ |description=Icewyrm, Jaguar and Wyvern
+ |lessons=841
+ |syntax=MAUL <target> [body part(*)]
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=3.25 seconds of balance
+ |detail=Rend your victim with your claws and teeth.<p>* In order to target a specific body part, you must have the targeting ability.</p>
+}}
+
+{{Skill_detail
+ |skill=Melody
+ |description=Nightingale
+ |lessons=467
+ |syntax=SING MELODY
+ |required=
+ |target=Self
+ |cooldown=4.00 seconds of equilibrium
+ |detail=While you are singing this gorgeous melody, people will not be able to attack through the prismatic barrier. However, due to the difficulty of this, you cannot do anything else and maintain your song at the same time.
+}}
+
+{{Skill_detail
+ |skill=Might
+ |description=Hydra, Icewyrm, Jaguar and Wyvern
+ |lessons=841
+ |syntax=MIGHT
+ |required=10 mana
+ |target=Self
+ |cooldown=4.50 seconds of equilibrium
+ |detail=Using the power of your naturally strong body, you can heal certain afflictions.
+}}
+
+{{Skill_detail
+ |skill=Negate
+ |description=Basilisk and Hydra
+ |lessons=1599
+ |syntax=NEGATE <target><br>HYDRA NEGATE <target>*
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=2.00 seconds of equilibrium
+ |detail=Attempt to strip away the defences of your target.<br>This attack will always strip the caloric salve defence first if it is present.<br>* Hydra morph only.
+}}
+
+{{Skill_detail
+ |skill=Nightsight
+ |description=Cheetah, Condor, Eagle, Hydra, Hyena, Icewyrm, Jaguar, Owl, Wildcat, Wolf, Wolverine and Wyvern
+ |lessons=7
+ |syntax=NIGHTSIGHT [ON{{!}}OFF]<br>RELAX NIGHTSIGHT
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=Use your sensitive eyes to see in the dark.
+}}
+
+{{Skill_detail
+ |skill=Petrify
+ |description=Basilisk
+ |lessons=1599
+ |syntax=PETRIFY <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of equilibrium
+ |detail=The gaze of the basilisk is truly terrible to behold. If your victim lacks the blindness defence, and suffers from four of hallucinations, dizziness, recklessness, confusion, paranoia, epilepsy, and impatience, you may turn them into little more than a living statue. They will be unable to do anything in this time, although the petrification is short-lived.<p>Note that you must be the originator of an affliction for it to count.</p>
+}}
+
+{{Skill_detail
+ |skill=Pound
+ |description=Gorilla
+ |lessons=1117
+ |syntax=POUND <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.75 seconds of balance
+ |detail=Pound your opponent's body with an enormously powerful blow that is even more devastating if the poor victim is frozen.
+}}
+
+{{Skill_detail
+ |skill=Resistance
+ |description=Basilisk, Hydra and Jaguar
+ |lessons=289
+ |syntax=RESISTANCE
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=Gain resistance to magical attack.
+}}
+
+{{Skill_detail
+ |skill=Rest
+ |description=Sloth
+ |lessons=245
+ |syntax=REST
+ |required=
+ |target=Self
+ |cooldown=5.00 seconds of balance
+ |detail=Use this ability to regain endurance at a vastly increased rate.
+}}
+
+{{Skill_detail
+ |skill=Roar
+ |description=Hydra
+ |lessons=
+ |syntax=HYDRA ROAR <target>
+ |required=150 mana
+ |target=Adventurers
+ |cooldown=
+ |detail=The sheer power of your roar can knock those that hear it from their feet.
+}}
+
+{{Skill_detail
+ |skill=ScanArea
+ |description=Condor, Eagle and Wyvern
+ |lessons=178
+ |syntax=SCAN AREA
+ |required=150 mana
+ |target=Room
+ |cooldown=5.00 seconds of equilibrium
+ |detail=While you are flying, you will detect everyone in your local area who is visible and not indoors (suitable for TRAVERSE-ing to). This will not show specific locations, just names.
+}}
+
+{{Skill_detail
+ |skill=Scent
+ |description=Bear, Cheetah, Hydra, Hyena, Icewyrm, Jaguar, Wolf and Wyvern
+ |lessons=16
+ |syntax=SCENT <target>
+ |required=
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=Attempt to discern the location of an adventurer by his scent.
+}}
+
+{{Skill_detail
+ |skill=Scratch
+ |description=Wildcat
+ |lessons=7
+ |syntax=SCRATCH <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=3.25 seconds of balance
+ |detail=Scratch your opponent with your small claws.
+}}
+
+{{Skill_detail
+ |skill=Secretion
+ |description=Hydra
+ |lessons=
+ |syntax=HYDRA SECRETE <venom>
+ |required=20 mana
+ |target=Self
+ |cooldown=
+ |detail=By channeling toxins from the pit of your stomach, the hydra can naturally secrete the following venoms: xentio, darkshade, prefarar, vernalius, aconite, gecko and nechamandra. 
+}}
+
+{{Skill_detail
+ |skill=Shatter
+ |description=Hydra
+ |lessons=1289
+ |syntax=HYDRA SHATTER <adventurer>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of hydra head balance
+ |detail=Your many heads will strike out at your target, shattering any protective shield found.
+}}
+
+{{Skill_detail
+ |skill=Shred
+ |description=Bear and Wyvern
+ |lessons=356
+ |syntax=SHRED <target>
+ |required=
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=Using your formidable claws, you're able to shred the flesh of your opponent, causing more than normal bleeding damage.
+}}
+
+{{Skill_detail
+ |skill=Snap
+ |description=Hydra and Turtle
+ |lessons=23
+ |syntax=SNAP <target><br>HYDRA SNAP <target>*
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=3.25 seconds of balance
+ |detail=Snap at an adventurer opponent with your beak or maw.<p>* Hydra morph only.<br>** When using HYDRA SNAP <target>, this skill can be used against denizens to deal damage.</br>
+}}
+
+{{Skill_detail
+ |skill=Sniff
+ |description=Gopher and Wolverine
+ |lessons=200
+ |syntax=SNIFF
+ |required=
+ |target=Room
+ |cooldown=1.00 seconds of equilibrium
+ |detail=While burrowed down to the first level, sniff will tell you who is above you.
+}}
+
+{{Skill_detail
+ |skill=Sprint
+ |description=Cheetah, Icewyrm and Jaguar
+ |lessons=58
+ |syntax=SPRINT <direction> [1-10]
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=Quickly sprint in a chosen direction.
+}}
+
+{{Skill_detail
+ |skill=Spy
+ |description=Condor, Eagle, Owl and Wyvern
+ |lessons=89
+ |syntax=SPY <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Using your lofty vantage point in the sky, you attempt to spy on an outdoors adventurer.
+}}
+
+{{Skill_detail
+ |skill=Stampede
+ |description=Elephant and Hydra
+ |lessons=534
+ |syntax=STAMPEDE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=4.00 seconds of balance
+ |detail=From an adjacent location, you may use your elephantine bulk to stampede over someone.
+}}
+
+{{Skill_detail
+ |skill=Stealth
+ |description=Basilisk, Hyena and Jaguar
+ |lessons=134
+ |syntax=STEALTH [ON{{!}}OFF]<br>RELAX STEALTH
+ |required=
+ |target=Self
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This will allow you to sneak about the land in a very stealthy manner.
+}}
+
+{{Skill_detail
+ |skill=Sting
+ |description=Hydra and Wyvern
+ |lessons=1599
+ |syntax=STING <target><br>HYDRA STING <target>*
+ |required=
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=With this ability, you may use your deadly tail to sting a hapless victim, delivering the loki venom.<br>* Hydra morph only.
+}}
+
+{{Skill_detail
+ |skill=Swinging
+ |description=Gorilla
+ |lessons=1117
+ |syntax=SWING UP<br>SWING DOWN
+ |required=
+ |target=Room
+ |cooldown=2.00 seconds of balance
+ |detail=When in a forest location, you will be able to swing up into the trees.
+}}
+
+{{Skill_detail
+ |skill=Swoop
+ |description=Condor, Eagle, Owl and Wyvern
+ |lessons=89
+ |syntax=SWOOP <target>
+ |required=
+ |target=Adventurers
+ |cooldown=4.50 seconds of balance
+ |detail=While you are flying, you may swoop down on an adventurer on the ground, causing him damage with your claws.
+}}
+
+{{Skill_detail
+ |skill=Temperance
+ |description=Hydra, Icewyrm and Wyvern
+ |lessons=1289
+ |syntax=TEMPERANCE
+ |required=
+ |target=Self
+ |cooldown=3.50 seconds of equilibrium
+ |detail=Bestow fire resistance on yourself.
+}}
+
+{{Skill_detail
+ |skill=Track
+ |description=Eagle and Wyvern
+ |lessons=944
+ |syntax=TRACK <target><br>PURSUE <target>
+ |required=50 mana
+ |target=
+ |cooldown=TRACK: 4.50 seconds of equilibrium<br>PURSUE: 1.00 seconds of equilibrium
+ |detail=While flying, you will be able to fly to an adventurer very quickly using TRACK. PURSUE is a complementary ability, and allows you to aerially pursue someone. Your target must be on the ground, and you will follow him from the air while he moves.
+}}
+
+{{Skill_detail
+ |skill=Traverse
+ |description=Condor, Eagle and Wyvern
+ |lessons=178
+ |syntax=TRAVERSE <target>
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=From within the heavens, you may move instantly to the skies above an adventurer that is nearby.
+}}
+
+{{Skill_detail
+ |skill=Trumpet
+ |description=Elephant
+ |lessons=534
+ |syntax=TRUMPET <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of equilibrium
+ |detail=With your mighty bulk, you are able to blast a wall of sound at someone, attempting to knock them to the ground even from the trees or air.
+}}
+
+{{Skill_detail
+ |skill=View
+ |description=Condor, Eagle and Wyvern
+ |lessons=178
+ |syntax=VIEW
+ |required=
+ |target=Room
+ |cooldown=
+ |detail=While you are flying, you may locate all who are nearby and below you.
+}}
+
+{{Skill_detail
+ |skill=Vitality
+ |description=Bear, Elephant, Hydra, Icewyrm, Jaguar and Wyvern
+ |lessons=356
+ |syntax=VITALITY
+ |required=
+ |target=Self
+ |cooldown=5.00 seconds of equilibrium
+ |detail=You may only activate this ability when very near full health and mana. Once active, when you drop to less than twenty-five percent of your maximum health without dying, you will get a sudden rush of adrenaline that will heal you significantly.
+}}
+
+{{Skill_detail
+ |skill=Wreathe
+ |description=Wyvern
+ |lessons=
+ |syntax=WREATHE
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=Using some of your inner flame(*), you may wreathe your hands in fire for a short time.<p>When mauling an adventurer, this will deliver the ablaze affliction; if they are already on fire, it will do significantly increased damage and add a stack of burning.<p>When mauling a denizen, your damage will increase and be dealt as fire damage rather than cutting.<p>* This ability will decrease your inner flame by one level.</br>
+}}
+
+{{Skill_detail
+ |skill=Yank
+ |description=Elephant
+ |lessons=534
+ |syntax=YANK <target>
+ |required=
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=From an adjacent location, you may yank an adventurer into your location with your trunk, providing that the adventurer isn't being held there by some means.
+}}
+
+[[Category:Skills]][[Category:Edit needed]]

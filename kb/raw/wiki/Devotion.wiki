@@ -1,0 +1,406 @@
+:''This page is about the Devotion skill. For other uses, see [[Devotion (disambiguation)]].''
+
+Devotion is arguably the personal hallmark of the [[Bloodsworn_Gods|Bloodsworn]] servants and arms the Priest and Paladin with many tools with which to fight the enemies of [[truth]] and [[righteousness]]. Through the power of their faith a priest may enact a holy inquisition to ensure that the enemies of Good are duly punished for their crimes.
+
+Devotion also offers access to the holy rites, a large group of offensive and defensive tools that can not only offer visions of hell to their foe, pacify the chaotic, summon forth demons and dazzling light to torment their opponent, but can also revitalise allies, resurrect fellow believers, and swear the blood oath to create a powerful bond.
+
+[[devotion (statistic)|Devotion]] is considered a resource and can be gained passively on a daily basis or by immolating the corpses of the fallen in the [[Flame of Yggdrasil]], snatching souls from the harrowing journey to the Finality.
+
+The skill of '''Devotion''' is available to the [[Priest]] [[class]]. Priests also have the skills of [[Spirituality]] and [[Zeal]].
+
+==Abilities in Devotion==
+:''Penitence is a Priest specific ability.''
+{{Skill_detail
+ |skill=Enlightenment
+ |description=Look into the soul of someone.
+ |lessons=0
+ |syntax=PERFORM ENLIGHTENMENT [target]
+ |required=
+ |target=Adventurers and self
+ |cooldown=3.50 seconds of equilibrium
+ |detail=When performed upon yourself, this will reveal your current devotion levels. When performed on an adventurer, this will reveal their devotion levels if they have access to the Light. It will also reveal if they have accepted the true path of Good and have received a Preaching blessing.
+}}
+
+{{Skill_detail
+ |skill=Hands
+ |description=Lay hands on a person to heal him.
+ |lessons=7
+ |syntax=PERFORM HANDS [target]
+ |required=150 devotion
+ |target=Adventurers, denizens, and self
+ |cooldown=3.00 seconds of equilibrium
+ |detail=This ability will allow you to lay hands on yourself or another to heal some damage.
+}}
+
+{{Skill_detail
+ |skill=Parting
+ |description=Water will pull apart to make way for your blessed self.
+ |lessons=16
+ |syntax=PERFORM PARTING <direction>
+ |required=100 devotion
+ |target=Room
+ |cooldown=1.00 seconds of equilibrium
+ |detail=In true religious tradition, you will now be able to part the water in a location, allowing safe and dry passage.
+}}
+
+{{Skill_detail
+ |skill=Preaching
+ |description=Show an adventurer the beauty of belief.
+ |lessons=34
+ |syntax=PERFORM PREACHING <target>
+ |required=250 devotion
+ |target=Adventurers
+ |cooldown=2.00 seconds of equilibrium
+ |detail=This ability will allow you the opportunity to preach to an adventurer. Should they accept the enlightened truth you offer, they will receive a blessing over their life that allows them to be targeted with the DELIVERANCE and RESURRECTION abilities.
+}}
+
+{{Skill_detail
+ |skill=Truth
+ |description=Dispel illusions with the power of your devotion.
+ |lessons=45
+ |syntax=PERFORM TRUTH
+ |required=100 devotion
+ |target=Room
+ |cooldown=3.00 seconds of equilibrium
+ |detail=This ability allows you to detect certain types of hidden adventurers in your room.
+}}
+
+{{Skill_detail
+ |skill=Rites
+ |description=List what rites are active.
+ |lessons=67
+ |syntax=RITES
+ |required=
+ |target=Room
+ |cooldown=1.00 seconds of equilibrium
+ |detail=This ability will show you what rites are operating in your room.
+}}
+
+{{Skill_detail
+ |skill=Sustenance
+ |description=The Gods will provide for you.
+ |lessons=89
+ |syntax=PERFORM RITE OF SUSTENANCE
+ |required=1500 devotion
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=At the cost of some devotion, you may feed yourself with this ability. You need to be holding a bowl of some sort in order for this to work. Upon performing the rite, your bowl will be filled with Divine manna, which will provide you with great sustenance.
+}}
+
+{{Skill_detail
+ |skill=Inspiration
+ |description=Gain an infusion of divinely-inspired strength.
+ |lessons=112
+ |syntax=PERFORM INSPIRATION
+ |required=800 devotion
+ |target=Self
+ |cooldown=3.50 seconds of equilibrium
+ |detail=This ability will cause you to pray for divinely-inspired strength, effectively raising your strength +2 for a short time.
+}}
+
+{{Skill_detail
+ |skill=Bliss
+ |description=Give an adventurer a glimpse of paradise.
+ |lessons=134
+ |syntax=PERFORM BLISS <target>
+ |required=1000 devotion
+ |target=Adventurers and self
+ |cooldown=6.50 seconds of equilibrium
+ |detail=This will give your companion a glimpse of Paradise. The vision will be so calming and refreshing that the target will receive many beneficial blessings.
+}}
+
+{{Skill_detail
+ |skill=Pilgrimage
+ |description=Travel to someone in a Rite of Pilgrimage.
+ |lessons=178
+ |syntax=PERFORM RITE OF PILGRIMAGE<br>PERFORM PILGRIMAGE <target>
+ |required=Rite: 300 devotion<bR>Travel: 450 devotion
+ |target=Adventurers
+ |cooldown=Rite: 5.00 seconds of equilibrium<br>Travel: 3.50 seconds of equilibrium
+ |detail=By performing the rite of pilgrimage, you are able to then pilgrimage to anyone standing in that rite.
+}}
+
+{{Skill_detail
+ |skill=Purity
+ |description=Damage the Unholy.
+ |lessons=223
+ |syntax=PERFORM PURITY <target>
+ |required=250 devotion
+ |target=Adventurers and denizens.
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Call upon your faith to the Bloodsworn and assail a foe's soul with your righteousness and pious fury. This holy prayer will bypass any magical shields or prismatic barriers around your target.<p>This ability does not cost devotion when used against denizens.</p>
+}}
+
+{{Skill_detail
+ |skill=Penitence
+ |description=Condemn the unfaithful to eternal penance.
+ |unique=Yes
+ |lessons=267
+ |syntax=PERFORM PENITENCE <target>
+ |required=300 devotion and 100 mana
+ |target=Adventurers
+ |cooldown=1.00 seconds of equilibrium
+ |detail=Through your piety, you are able to force an individual to perform penance for their crimes. Upon granting redemption to this person through death, your works will be rewarded with an increase in your Devotional energies.
+
+When used against an adventurer, this will brand them and upon granting redemption to this person through death, your righteous work will be rewarded with an increase in your Devotional energies.
+
+Against denizens, this will scour your foe in righteous fire, forcing them to take ten percent more damage from your mace(*) and the weaponmastery attacks of your fellow Paladins(**). In this case, the devotion cost of this holy art will be reduced but its equilibrium cost will be slightly increased.
+
+* SPIRITUALITY SMITE.
+** All weapon-based attacks in the WEAPONMASTERY skill when performed by a Paladin.
+}}
+
+{{Skill_detail
+ |skill=Chaoscalm
+ |description=Attack the chaotic nature of a chaos entity, pacifying it.
+ |lessons=289
+ |syntax=PERFORM CHAOSCALM <doppleganger>
+ |required=500 devotion
+ |target=
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Chaos entities are the stuff of disorder, and your ordered, calm behavior is striking enough to drive them into submission for a short period of time.
+}}
+
+{{Skill_detail
+ |skill=Visions
+ |description=Condemn your foe with horrific visions.
+ |lessons=334
+ |syntax=PERFORM VISIONS <target>
+ |required=100 devotion and 50 mana
+ |target=Adventurers
+ |cooldown=2.50 seconds of equilibrium
+ |detail=Condemn your foe as an enemy of creation, striking them down to never know peace with the dementia and shyness afflictions.
+}}
+
+{{Skill_detail
+ |skill=Warding
+ |description=Drive your enemies off with overwhelming fear.
+ |lessons=378
+ |syntax=PERFORM RITE OF WARDING
+ |required=180 devotion
+ |target=Room
+ |cooldown=3.80 seconds of equilibrium
+ |detail=This ability will set up a rite that will ward off any of your enemies that enter the room, by giving them fear.
+}}
+
+{{Skill_detail
+ |skill=Force
+ |description=Make an adventurer follow your wish.
+ |lessons=423
+ |syntax=PERFORM FORCE <target> <command>
+ |required=2000 devotion
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Using your powers over those who are open to hearing the message, you may force an adventurer to bend to your will and carry out your commands.
+}}
+
+{{Skill_detail
+ |skill=Piety
+ |description=Bind those around you with the force of ultimate piety.
+ |lessons=467
+ |syntax=PERFORM RITE OF PIETY
+ |required=600 devotion
+ |target=Room
+ |cooldown=3.00 seconds of equilibrium
+ |detail=This rite will make it difficult for your enemies to leave the room. When it successfully prevents them from moving, they will suffer a balance penalty.
+}}
+
+{{Skill_detail
+ |skill=Dazzle
+ |description=Confuse and dazzle an opponent.
+ |lessons=545
+ |syntax=PERFORM DAZZLE <target>
+ |required=250 devotion
+ |target=Adventurers
+ |cooldown=2.50 seconds of equilibrium
+ |detail=This will dazzle the mind of an adventurer with stupidity.
+}}
+
+{{Skill_detail
+ |skill=Demons
+ |description=Summon demons to torment the unrighteous.
+ |lessons=600
+ |syntax=PERFORM RITE OF DEMONS
+ |required=360 devotion
+ |target=Room
+ |cooldown=3.50 seconds of equilibrium
+ |detail=This rite will cause your enemies to be tormented by vengeful demons.
+}}
+
+{{Skill_detail
+ |skill=Sloth
+ |description=The sin of sloth is yours to condemn.
+ |lessons=668
+ |syntax=PERFORM SLOTH <target>
+ |required=10 devotion
+ |target=Adventurers
+ |cooldown=2.20 seconds of equilibrium
+ |detail=Condemn a target with the sin of sloth, giving them weariness.
+}}
+
+{{Skill_detail
+ |skill=Allsight
+ |description=Gain insight into all movement into and out of holy areas.
+ |lessons=668
+ |syntax=PERFORM RITE OF ALLSIGHT
+ |required=180 devotion
+ |target=Room
+ |cooldown=3.80 seconds of equilibrium
+ |detail=When activated, this ability will inform you whenever any of your enemies enters or leaves the room that the Rite is in.
+}}
+
+{{Skill_detail
+ |skill=Healing
+ |description=A powerful healing ability.
+ |lessons=737
+ |syntax=PERFORM RITE OF HEALING
+ |required=360 devotion
+ |target=Room
+ |cooldown=3.50 seconds of equilibrium
+ |detail=This ability will cause a rite to spring into existence which will occasionally heal an affliction from you and your allies that are in the room.
+}}
+
+{{Skill_detail
+ |skill=Well-being
+ |description=A rite to keep those nearby fed and rested.
+ |lessons=806
+ |syntax=PERFORM RITE OF WELL-BEING
+ |required=120 devotion
+ |target=Room
+ |cooldown=5.00 seconds of equilibrium
+ |detail=The rite of well-being is a beneficial rite to all in the room. While in it, one will not grow any hungrier or sleepier. It lasts for quite a bit longer than the standard rite.
+}}
+
+{{Skill_detail
+ |skill=Convocation
+ |description=Call to you someone in a Rite of Convocation.
+ |lessons=875
+ |syntax=PERFORM RITE OF CONVOCATION<br>PERFORM CONVOCATION <target>
+ |required=Rite: 600 devotion<br>Summon: 600 devotion, 500 mana
+ |target=Adventurers
+ |cooldown=Rite: 4.00 seconds of equilibrium<br>Summon: 6.00 seconds of equilibrium
+ |detail=This powerful ability will allow you to create a Rite of Convocation. Anyone in a Rite of Convocation set up by you can then be summoned by you by doing PERFORM CONVOCATION <adventurer>, providing that adventurer does not have certain defences set up, such as the mass salve.
+}}
+
+{{Skill_detail
+ |skill=Revitalisation
+ |description=A rite to heal health and mana.
+ |lessons=944
+ |syntax=PERFORM RITE OF REVITALISATION
+ |required=360 devotion
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This rite will heal a percentage of one's maximum health and maximum mana. It will affect everyone in the room who is not an enemy of the Devotionist who performed it.
+}}
+
+{{Skill_detail
+ |skill=Deliverance
+ |description=Deliver a target unto you.
+ |lessons=1048
+ |syntax=PERFORM DELIVERANCE <target>
+ |required=1200 devotion
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This will allow you to summon an adventurer from any distance should they have been blessed with the PREACHING ability. It should be noted that a monolith sigil placed in the room of the summonee or summoner will prevent this from working.<p>Be aware that delivering another adventurer out of combat may open you up for repercussion.</p> 
+}}
+
+{{Skill_detail
+ |skill=Cleansing
+ |description=Rid your enemies of their unclean aspects.
+ |lessons=1117
+ |syntax=PERFORM RITE OF CLEANSING
+ |required=300 devotion
+ |target=Room
+ |cooldown=3.60 seconds of equilibrium
+ |detail=This relatively short-lived rite will begin slowly stripping the defences of any enemies in the room. It shall always strip the blackwind or astralform defences first.
+}}
+
+{{Skill_detail
+ |skill=Reclaim
+ |description=Reclaim one of your rites.
+ |lessons=1134
+ |syntax=PERFORM RECLAIM <rite>
+ |required=
+ |target=Room
+ |cooldown=3.00 seconds of equilibrium
+ |detail=This ability will allow you to remove one of your rites from your location, regaining some of the devotion used to summon it.
+}}
+
+{{Skill_detail
+ |skill=Prayer
+ |description=Pray for the salvation of your congregation.
+ |lessons=1186
+ |syntax=PERFORM RITE OF PRAYER
+ |required=
+ |target=Room
+ |cooldown=
+ |detail=To perform this rite, there must be at least eight people together in a room. Apprentices do not count and you may be the only person with Devotion there. All of the adventurers must KNEEL before the rite can begin and no adventurer may participate in this rite more than once every Achaean month. You will gain a certain amount of devotion for every adventurer present, and the members of the assembled congregation will gain experience also.<p>''500 devotion is gained for each valid person present as the rite ends.''</p>
+}}
+
+{{Skill_detail
+ |skill=Banishment
+ |description=Send the unholy Chaos entities back to their hell.
+ |lessons=1289
+ |syntax=PERFORM RITE OF BANISHMENT
+ |required=450 devotion
+ |target=Room
+ |cooldown=4.50 seconds of equilibrium
+ |detail=This rite will occasionally attempt to destroy a chaos entity, provided that a minion of chaos, sent by the Chaos Prince, Dameron, is not in the room. Also, it is rumoured that those occultists to have formed a pact with the greatest of the Chaos Lords may be capable of defeating this potent rite.
+}}
+
+{{Skill_detail
+ |skill=Fasting
+ |description=Rob them of their will to eat.
+ |lessons=1358
+ |syntax=PERFORM FASTING <target>
+ |required=10 devotion
+ |target=Adventurers
+ |cooldown=2.20 seconds of equilibrium
+ |detail=Instill an antipathy for food in your target, giving anorexia.
+}}
+
+{{Skill_detail
+ |skill=Resurrection
+ |description=Grant life anew to a slain believer.
+ |lessons=1393
+ |syntax=PERFORM RESURRECTION <target>
+ |required=2000 devotion
+ |target=Adventurers
+ |cooldown=5.00 seconds of equilibrium
+ |detail=One of the holiest of abilities, this will grant life anew to the target adventurer. For this ability to work, the adventurer must have been preached to and accepted the blessing over their life or be under level 30.
+}}
+
+{{Skill_detail
+ |skill=Illuminate
+ |description=Illuminate your path.
+ |lessons=1565
+ |syntax=PERFORM ILLUMINATE <direction><br>PERFORM EXTINGUISH
+ |required=Illuminate: 3.50 seconds of equilibrium<br>Extinguish: 4.00 seconds of equilibrium
+ |target=Room
+ |cooldown=Illuminate: 1000 mana, and 1500 devotion<br>Extinguish: 1000 mana, and 500 devotion
+ |detail=When you perform this ability, you will create an orb of light which will move off in the direction specified. The orb is unpredictable and will move erratically. Each time it moves, the orb will illuminate the room, giving a chance to strip the blackwind or astralform defences from adventurers in the room.<p>In addition, you may extinguish the orb at any time to travel directly to the room the orb is currently in.</p><p>It should be noted that the orb will only have enough energy to move a limited number of times, and it will fade if not extinguished a short while after it ceases moving.</p>
+}}
+
+{{Skill_detail
+ |skill=Purify
+ |description=Cleanse the land of necromantic corruption.
+ |lessons=1565
+ |syntax=PERFORM PURIFY
+ |required=500 mana
+ |target=
+ |cooldown=4.80 seconds of equilibrium
+ |detail=Drive out necromantic corruption, destroying the hands of the grave that may clutch at the living in a location. If a Necromancer stands guard over said hands, there is a delay during which the faithful may perform no other actions, so focussed on their task are they. 
+}}
+
+{{Skill_detail
+ |skill=Bloodsworn
+ |description=Bond with another via a blood oath.
+ |lessons=1736
+ |syntax=BLOODSWEAR <priest or paladin><br>BLOODSWORN ON/OFF<br>BLOODSWORN REJECT
+ |required=Bloodswear <target>: 1000 mana<br>Bloodswear on: 1000 mana, 5 mana per second drain
+ |target=Adventurers and self
+ |cooldown=Bloodswear on: 6.00 seconds of equilibrium
+ |detail=The bond of the bloodsworn is one of the most revered rituals of devotion-users. When a Priest and a Paladin feel strongly that they wish to become one, they bloodswear to each other, and from that moment on, have the capability to bond their very souls to each other. When the BLOODSWORN ON ritual is performed by both the Priest and the Paladin, their maximum health and manas will be 65% of the -sum- of both their normal maximum health and maximum mana respectively. Further, some portion of the health or mana healed by either the Priest or Paladin, when using elixirs of health or mana, will also be healed on his or her bloodsworn. The hands ability shall also heal an additional amount when performed on your bloodsworn.<p>The bloodsworn ability will automatically turn off if the Priest and Paladin are away from each other for greater than approximately 60 seconds.</p><p>As with many phenomena that grant great power unto the user, the power of the bloodsworn comes at a price. While the bloodsworn pact is activated, with BLOODSWORN ON, the mana of both the Priest and Paladin will drain away. Further, and far more seriously, if either dies while the ability is active, the other will be critically damaged in body. Such is the price of power.</p><p>If you wish to break your blood bond, you may do so by rejecting your bloodsworn, but be aware that you will not be able to become bloodsworn to another until the New Year.</p>
+}}
+
+[[Category:Skills]]

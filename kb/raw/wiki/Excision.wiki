@@ -1,0 +1,414 @@
+As bearers of '''Excision''', the [[Paladin|paladinal]] warriors of [[Aurora|Light]] and [[Deucalion|Fire]] are the implacable vanguard in the unending battle against the malign forces that plague [[Creation]]. Ever faithful and ever formidable, they give no quarter in the war that must be won.
+ 
+A wielder of Excision's coruscating brilliance, the Paladin is a champion standing unbowed in the face of those who might seek to thwart the sacred charge imparted upon them. They are the first to charge and the last to flee: a light in the darkest hour whose wrath remains an eternal inspiration to the righteous and breaker of that which is Profane.
+
+For with steel and flame shall the rot be excised: there will be peace only when there is no more need for swords.
+
+The skill of '''Excision''' is available to members of the [[Paladin]] [[class]], along with [[Valour]] and [[Weaponmastery]].
+
+==Abilities in Excision==
+{{Skill_detail
+ |skill=Wrath
+ |description=A sword against the wicked.
+ |lessons=
+ |syntax=WRATH<br>WRATH MUSTER
+ |required=
+ |target=
+ |cooldown=
+ |detail=Your righteous wrath is a thing to behold. Wielded as both sword and shield against the enemies of Creation, it fuels much of your abilities in Excision. These abilities can be performed independent of balance and
+equilibrium, though your wrath will be diminished by each used in such a way (and there is a recovery time before you may use another one)(*).<br>
+* You will regenerate wrath over time.
+}}
+
+{{Skill_detail
+ |skill=Steadfast
+ |description=You will stand unmoved.
+ |lessons=
+ |syntax=BLOCK <direction> [STEADFAST]
+ |required=
+ |target=
+ |cooldown=
+ |detail=Though your fellows from the other schools of weaponmastery may block directions, none of them have quite the steadfast vigour you possess. By blocking a direction in a steadfast way, you will be much more formidable in this aspect(*).<br>
+
+* Functionally, blocking a direction with the steadfast argument appended will cause you to serve as two people blocking said direction, instead of just one.
+}}
+
+{{Skill_detail
+ |skill=Denounce
+ |description=Let no evil go unchallenged.
+ |lessons=
+ |syntax=PERFORM DENOUNCE <target>
+ |required=20% Holy Wrath
+ |target=
+ |cooldown=4.00 seconds of wrath balance
+ |detail=Rousing your wrath against an enemy of creation, you may denounce his wicked ways, shattering defences that may try to keep you from excising the corruption that stands before you(*).
+
+* Destroys rebounding if present. If your target is burning, it will also strip any prismatic barrier present.
+** The wrath cost of this ability is reduced against an ablaze target.
+}}
+
+{{Skill_detail
+ |skill=Faith
+ |description=The armour which does not rust or break.
+ |lessons=
+ |syntax=PERFORM FAITH
+ |required=
+ |target=
+ |cooldown=3.2 seconds of equilibrium
+ |detail=Your foes will come at you with sword and spell, but they will not avail them: for you are clad not only in plate and chain but beneath the aegis of your faith.<br>
+* Grants damage resistance to cutting, blunt, and magic damage. Less so in the case of magic.
+}}
+
+{{Skill_detail
+ |skill=Repent
+ |description=They cannot escape their sins.
+ |lessons=
+ |syntax=PERFORM REPENT <target>
+ |required=15% Holy Wrath
+ |target=
+ |cooldown=5.00 seconds of wrath balance
+ |detail=Show a heretic their sins, over and over again.<br>
+* Gives the hallucinations affliction.<br>
+** This ability is faster against a prone target.
+}}
+
+{{Skill_detail
+ |skill=Bladefire
+ |description=Your sword shall cleave the shadows.
+ |lessons=
+ |syntax=PERFORM BLADEFIRE
+ |required=10% Holy Wrath
+ |target=
+ |cooldown=3.00 seconds of wrath balance
+ |detail=You may now strike with flame as well as steel; after preparing to do so, for the next 20 seconds or three strikes of your weapon(*) your weapon shall set your target ablaze (or increase their burning) when it strikes.<br>
+* On skills that strike twice such as doubleslash or doublewhirl, this will only fire once per use.
+}}
+
+{{Skill_detail
+ |skill=Insight
+ |description=Misdirection is no refuge.
+ |lessons=
+ |syntax=PERFORM INSIGHT
+ |required=
+ |target=
+ |cooldown=1.50 seconds of wrath balance
+ |detail=Your foes may cloak themselves in deception and secrecy, but your eyes will not be so easily deceived. Seek out an individual and know where they may be.
+}}
+
+{{Skill_detail
+ |skill=Dawnhand
+ |description=The Lightbringer guides your hand.
+ |lessons=
+ |syntax=PERFORM DAWNHAND
+ |required=
+ |target=
+ |cooldown=3.60 seconds of equilibrium
+ |detail=The Lightbringer will guide your hand, bolstering your strength.
+* Grants +1 strength.
+** At dawn, grants +3 instead.
+}}
+
+{{Skill_detail
+ |skill=Sustain
+ |description=You will give your life for the cause.
+ |lessons=
+ |syntax=PERFORM SUSTAIN <target>
+ |required=
+ |target= Adventurers and denizens
+ |cooldown=3.00 seconds of equilibrium
+ |detail=By giving up your own health, you may heal another. When used for your bloodsworn's benefit, the amount given up is far reduced and the amount they are restored by is increased. When healing an adventurer, you will restore both health and mana, though the amount of mana restored is lesser.
+}}
+
+{{Skill_detail
+ |skill=Unbowed
+ |description=For Creation, you stand.
+ |lessons=
+ |syntax=PERFORM UNBOWED
+ |required=
+ |target=
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This defence will grant you a great surge of health when you enter a drastically wounded state, similar to a monk's vitality. Notably however, your faith is so strong that unlike a monk, this ability will even save you from blows that would otherwise slay you(*).
+* Excluding if the damage was unblockable.
+*** There is a cooldown after this fires before you may raise the defence again.
+}}
+
+{{Skill_detail
+ |skill=Banish
+ |description=The Anathema will not go unchallenged.
+ |lessons=
+ |syntax=PERFORM BANISH <target>
+ |required=
+ |target=
+ |cooldown=6.00 seconds of wrath balance
+ |detail=Pray to the Bloodsworn gods to strike down one of the Anathema(*), punishing the heretic for their transgressions.
+
+* This ability is used against members of the Unnamable class.
+** It shall decrement their amount of chaotic manifestation, as well as
+dealing damage to them.</p>
+}}
+
+{{Skill_detail
+ |skill=Crusade
+ |description=Of singular focus and relentless drive.
+ |lessons=
+ |syntax=PERFORM CRUSADE <target>
+ |required=12% Holy Wrath
+ |target=
+ |cooldown=3.00 seconds of wrath balance
+ |detail=Sometimes a particular enemy of Creation will require your singular focus to destroy. You may now focus your crusade upon him or her, and by doing so enable you to perform various higher abilities against their person. See relevant ability files for details.
+}}
+
+{{Skill_detail
+ |skill=Hunt
+ |description=The light shines on all.
+ |lessons=
+ |syntax=PERFORM HUNT
+ |required=5% Holy Wrath
+ |target=
+ |cooldown=6.00 seconds of wrath balance
+ |detail=You may hunt the enemy of Creation that you have begun your crusade against, immediately transporting yourself to their location.
+
+* This ability is stopped by a monolith on the caster's end. It is also stopped by a monolith on the target's end, but not if they are ablaze.
+** This ability only works if your target is in the same area, unless said target is ablaze: then it requires the same continent/plane.
+*** There is a cooldown before you may perform this ability again, though not if used against an ablaze target.
+}}
+
+{{Skill_detail
+ |skill=Hallowed
+ |description=They shall not leave this holy place.
+ |lessons=
+ |syntax=PERFORM HALLOWED
+ |required=4% Holy Wrath
+ |target=
+ |cooldown=4.00 seconds of wrath balance
+ |detail=You may declare a location to be hallowed ground, bringing forth a rite of piety. This rite will cause it to be difficult for any of your enemies to leave the location.
+}}
+
+{{Skill_detail
+ |skill=Scour
+ |description=Cleansed in holy fire.
+ |lessons=
+ |syntax=PERFORM SCOUR <target>
+ |required=5% Holy Wrath
+ |target=
+ |cooldown=4.00 seconds of wrath balance
+ |detail=Beckon forth the cleansing fire to scour away an enemy of Creation(*).
+
+* Gives the tenderskin affliction. 
+}}
+
+{{Skill_detail
+ |skill=Decree
+ |description=By Their mandate.
+ |lessons=
+ |syntax=PERFORM DECREE <target> <decree>
+ |required=
+ |target=
+ |cooldown=3.00 seconds of balance
+ |detail=Speak your holy decree, and an enemy of Creation shall struggle not to obey.
+* This will force a target to perform the action you specify.
+}}
+
+{{Skill_detail
+ |skill=Retribution
+ |description=They will be avenged.
+ |lessons=
+ |syntax=PERFORM RETRIBUTION
+ |required=
+ |target=
+ |cooldown=3.40 seconds of equilibrium
+ |detail=By swearing to avenge any of your comrades(*) that fall in battle, any time one of them is slain by an enemy of Creation(**), you will immediately recover balance.
+
+* Any member of Targossas or one of the Bloodsworn's orders.
+** Anyone not from the above groups.
+}}
+
+{{Skill_detail
+ |skill=Stoke
+ |description=To ever greater heights.
+ |lessons=
+ |syntax=PERFORM STOKE
+ |required=
+ |target=
+ |cooldown=3.40 seconds of equilibrium
+ |detail=By entering a meditative trance, you may stoke your fervour to greater heights, rapidly restoring your holy wrath(*).<p>* This is a channel.</p>
+}}
+
+{{Skill_detail
+ |skill=Pyre
+ |description=Consign them to the flame.
+ |lessons=
+ |syntax=PERFORM PYRE <target>
+ |required=5% Holy Wrath
+ |target=
+ |cooldown=2.5 seconds of wrath balance
+ |detail=Begin consigning a heretic to the flame, purging Creation of their blight(*).
+
+* Gives the pyre affliction. This makes it impossible to cure ablaze below the level of the pyre (so if you have level 3 pyre, you cannot cure ablaze lower than level 3). 
+}}
+
+{{Skill_detail
+ |skill=Flare
+ |description=Her radiance finds all.
+ |lessons=
+ |syntax=PERFORM FLARE <target>
+ |required=5% Holy Wrath
+ |target=
+ |cooldown=5.00 seconds of wrath balance
+ |detail=Direct the light to shine upon an enemy of Creation; no doubt they shall be found wanting.
+* Gives the darkshade affliction.
+}}
+
+{{Skill_detail
+ |skill=Deliverance
+ |description=Deliver one of the faithful to your side.
+ |lessons=
+ |syntax=PERFORM DELIVERANCE <target>
+ |required=
+ |target=
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This will allow you to summon an adventurer from any distance should they have been blessed with the PREACHING ability by a priest. It should be noted that a monolith sigil placed in the room of the summonee or
+summoner will prevent this from working.
+
+Be aware that delivering another adventurer out of combat may open you up for repercussion.
+}}
+
+{{Skill_detail
+ |skill=Rush
+ |description=First to fight, last to fail.
+ |lessons=
+ |syntax=PERFORM RUSH <target> <dir>
+ |required=6% Holy Wrath
+ |target=
+ |cooldown=6.00 seconds of wrath balance
+ |detail=Lead the charge into battle from an adjacent location(*), shattering through any icewall that may bar your path(**), and shocking the enemy of Creation you engage at your coming(***).
+* This is a channeled action with a windup period, and people will follow you when you move.
+** This will break icewalls, but not stonewalls, and no totems will strike you or your comrades on entering the new room.
+*** Your target will be disrupted if you are successful.
+}}
+
+{{Skill_detail
+ |skill=Purify
+ |description=Corruption shall be burned away.
+ |lessons=
+ |syntax=PERFORM PURIFY
+ |required=10% Holy Wrath
+ |target=
+ |cooldown=6.00 seconds of wrath balance
+ |detail=You may burn away necromantic corruption, ridding a location of any hands of the grave that may have been called forth by a servant of evil. Priests are somewhat more adept at this particular holy working, so you
+will find that while still capable, you will complete this working somewhat slower under all conditions(*).
+
+* This ability takes significantly longer to perform if a necromancer is within the location, and it is an interruptable action.
+}}
+
+{{Skill_detail
+ |skill=Confront
+ |description=The vanguard, always.
+ |lessons=
+ |syntax=PERFORM CONFRONT <target>
+ |required=
+ |target= Adventurers and denizens
+ |cooldown=3.60 seconds of equilibrium
+ |detail=Confront an enemy of Creation and strike them down.<p>* Deals damage to a denizen or adventurer, bypassing but not stripping magical shields and similar.<p>** If your target is ablaze, they shall also suffer some mana loss (though less than their health). The amount of mana is increased the more they are burning.<p>*** This does magical fire damage normally. If the target adventurer is ablaze, it does unblockable damage instead.</p>
+}}
+
+{{Skill_detail
+ |skill=Martyr
+ |description=With the last breath, and after.
+ |lessons=
+ |syntax=MARTYR YOURSELF FOR <target>
+ |required=
+ |target=
+ |cooldown=
+ |detail=Even after you fall in battle, you will fight on for the cause. With the final vestiges of your strength you may suffuse one of the yet living faithful with strength, restoring them greatly. However, your soul shall be immediately sent tumbling into the Finality's grasp when doing so.
+
+* Must be done very shortly after dying.
+** You will forcefully embrace death when you perform this ability.
+}}
+
+{{Skill_detail
+ |skill=Fervour
+ |description=Victory is at hand.
+ |lessons=
+ |syntax=PERFORM FERVOUR
+ |required=
+ |target=
+ |cooldown=3.60 seconds of equilibrium
+ |detail=When driven by divine fervour, any time someone in your room burns via the ablaze affliction while also being afflicted with the pyre affliction, you will be passively healed of an affliction. Additionally, any time someone suffers from darkshade that you have afflicted them with, the damage they will suffer from shall be more significant.</p>
+}}
+
+{{Skill_detail
+ |skill=Condemn
+ |description=You are the judge, and you find them wanting.
+ |lessons=
+ |syntax=PERFORM CONDEMN <target>
+ |required=25% Holy Wrath
+ |target=
+ |cooldown=6.00 seconds of wrath balance
+ |detail=Condemn an enemy of Creation to burn.<br>* A condemned target may not cure ablaze below one stack, but a paladin may also no longer raise the burning level.<p>** Condemnation can take the place of the pyre requirement where the Fervour ability is concerned in regards to its healing aspect. The bonus to darkshade will not function under condemnation (see AB EXCISION FERVOUR).</p><p>*** You may not hunt a heretic who is condemned (see AB EXCISION HUNT for details).</P>
+}}
+
+{{Skill_detail
+ |skill=Hellsight
+ |description=The fate that awaits their deeds.
+ |lessons=
+ |syntax=PERFORM HELLSIGHT <target>
+ |required=15% Holy Wrath
+ |target=
+ |cooldown=2.50 seconds of equilibrium
+ |detail=Make it known to a heretic the fate that awaits their malign misdeeds.<p>The costs are significantly reduced if used on a target you are CRUSADING against.<p>* Gives the hellsight affliction.</p>
+}}
+
+{{Skill_detail
+ |skill=Bloodsworn
+ |description=Bond with another via a blood oath.
+ |lessons=
+ |syntax=BLOODSWEAR <priest><br>BLOODSWORN ON/OFF<br>BLOODSWORN REJECT<br>
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=The bond of the bloodsworn is one of the most revered rituals of those that protect Creation.<br>
+
+As the Lady Aurora and Lord Deucalion did, a priest and paladin (or two priests) bloodswear to each other, and from that moment on, they have the capability to bond their very souls to each other. When the BLOODSWORN ON ritual is performed by both parties, their maximum health and mana will be 65% of the -sum- of both their normal maximum health and maximum mana respectively. Further, some portion of the health or mana healed by either of the Devotionists, when using elixirs of health or mana, will also be healed on his or her bloodsworn. The hands ability
+shall also heal an additional amount when performed on your bloodsworn by a priest, and sustain in the case of a paladin.<br>
+
+If your Bloodsworn falls in battle and is holding any holy rites, they will shift to you, so you may yet seek to triumph.<br>
+
+The bloodsworn ability will automatically turn off if the Priest and Paladin are away from each other for greater than approximately 60 seconds.<br>
+
+As with many phenomena that grant great power unto the user, the power of the bloodsworn comes at a price. While the bloodsworn pact is activated, with BLOODSWORN ON, the mana of both of the Devotionists will drain away. Further, and far more seriously, if either dies while the ability is active, the other will be critically damaged in body.<br>
+
+Such is the price of power.<br>
+
+If you wish to break your blood bond, you may do so by rejecting your bloodsworn, but be aware that you will not be able to become bloodsworn to another until the New Year.
+}}
+
+{{Skill_detail
+ |skill=Withdraw
+ |description=The time to act is now.
+ |lessons=
+ |syntax=PERFORM WITHDRAW <target>
+ |required=
+ |target=
+ |cooldown=3.50 seconds of wrath balance
+ |detail=There is a time for condemnation, and there is a time for action. You may withdraw your condemnation of an enemy of Creation if you deem that they must know the true meaning of purification by flame.
+}}
+
+{{Skill_detail
+ |skill=Damnation
+ |description=Let Creation be healed.
+ |lessons=
+ |syntax=PERFORM DAMNATION <target>
+ |required=
+ |target=
+ |cooldown=3.00 seconds of balance
+ |detail=Consign the very soul of an enemy of Creation to die, burning their corruption from your charge(*).
+
+* Slays a target outright who has a broken head and either:
+Two of pyre, guilt, and spiritburn.<br>
+or<br>
+Level five burning.
+
+}}
+
+[[category: Skills]] [[category: Edit needed]]

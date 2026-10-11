@@ -1,0 +1,278 @@
+Tarot is the occult skill of inscribing magical cards with various inks in order to create a powerful image. Each of the major arcana of the Tarot deck is represented here. To use the skill, one must first find some blank tarot cards. Then, you may inscribe the cards with various images, each unique image empowers the card's wielder with different types of magic. Inscribing takes intense concentration and one cannot do much else while focusing on the task.
+
+The skill of '''Tarot''' is available to members of the [[Jester]] and [[Occultist]] [[class|classes]].
+
+Jesters also have the skills of [[Pranks]] and [[Puppetry]], while Occultists also have the skills of [[Occultism]] and [[Domination]].
+
+==Abilities in Tarot==
+:''The ability of Ruinate is unique to members of the Occultist class.''
+
+{{Skill_detail
+ |skill=Inscribing
+ |description=The ability to inscribe images upon blank Tarot cards.
+ |lessons=
+ |syntax=INSCRIBE BLANK WITH [1-20] <IMAGE>
+ |required=10 mana
+ |target=
+ |cooldown=
+ |detail=With this ability, you may inscribe blank tarot cards with the various images of the Major Arcana.
+}}
+
+{{Skill_detail
+ |skill=Sun
+ |description=Create a portable light source.
+ |lessons=7
+ |syntax=FLING SUN AT GROUND
+ |required=
+ |target=Room
+ |cooldown=3.00 seconds of balance
+ |detail=This Tarot will create a small ball of light to illuminate your surroundings.<br>In addition, for as long as the globe of light remains at your location, it shall periodically heal you of afflictions.  
+}}
+
+{{Skill_detail
+ |skill=Cardpacks
+ |description=Use the handy cardpacks for easier storage.
+ |lessons=7
+ |syntax=IND [number{{!}}ALL] <card><br>OUTD [ALL{{!}}number] <card><br>DECKLIST
+ |required=
+ |target=
+ |cooldown=
+ |detail=Cardpacks is the ability to store and retrieve tarot cards using a tarot deck. You may store up to 5000 of each card type. This ability requires that you have a tarot deck in your inventory. 
+}}
+
+{{Skill_detail
+ |skill=Emperor
+ |description=Create the compulsion in others to follow you.
+ |lessons=16
+ |syntax=Adventurers
+ |required=
+ |target=
+ |cooldown=3.00 seconds of balance
+ |detail=The Emperor is a symbol of leadership and power. With this card, you will force other adventurers to recognise your leadership and follow you. 
+}}
+
+{{Skill_detail
+ |skill=Magician
+ |description=Replenish your mana with the might of the Magician.
+ |lessons=34
+ |syntax=FLING MAGICIAN AT <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=The Magician represents the power of magic and the power of the mind. This card will replenish the mana of the adventurer it is thrown at.
+}}
+
+{{Skill_detail
+ |skill=Priestess
+ |description=Heal yourself with the benevolence of the Priestess.
+ |lessons=56
+ |syntax=FLING PRIESTESS AT <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=The Priestess represents benevolent healing. Flinging this card at an adventurer will heal some of his health.
+}}
+
+{{Skill_detail
+ |skill=Fool
+ |description=Shrug off afflictions with blind courage.
+ |lessons=89
+ |syntax=FLING FOOL AT <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=The Fool is pictured as being immune to fear and full of courage. With this Tarot you may throw off three afflictions by denying their existence. You must wait a time(*) before the Fool will attend you again.<p>* 35 second cooldown.</p>
+}}
+
+{{Skill_detail
+ |skill=Chariot
+ |description=Create an infernal chariot to ride.
+ |lessons=134
+ |syntax=FLING CHARIOT AT GROUND<br>BOARD CHARIOT<br>SPUR CHARIOT SKYWARDS<br>LAND<br>DISMOUNT
+ |required=
+ |target=3.00 seconds of balance
+ |cooldown=
+ |detail=The Chariot will create an infernal chariot upon which you may ride. It has the ability to fly also. BOARD CHARIOT will board your chariot. SPUR CHARIOT SKYWARDS will drive it up to the sky. LAND will bring you back down again. While in the Chariot, you may move about using the usual commands. Be warned: flinging cards at the ground while flying is a useless endeavour.
+}}
+
+{{Skill_detail
+ |skill=Hermit
+ |description=Teleport to an uninhabited location.
+ |lessons=178
+ |syntax=ACTIVATE HERMIT [tag]<br>FLING HERMIT AT GROUND [tag]<br>SNIFF HERMIT<br>HERMITS
+ |required=
+ |target=
+ |cooldown=Activation: 2.00 seconds of equilibrium<br>Fling: 3.00 seconds of balance
+ |detail=The Hermit is a solitary person. When you activate the hermit card, it will remember the location at which you activated it. Then, when you fling it, you will be transported to that location, provided there are no adventurers in that location at the time. SNIFF HERMIT will tell you the name of the location at which the hermit was activated.
+}}
+
+{{Skill_detail
+ |skill=Empress
+ |description=Summon your friends to you.
+ |lessons=223
+ |syntax=FLING EMPRESS AT <target><br>SNIFF EMPRESS <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=With this ability, you may summon someone from anywhere within the local area, provided you are on his or her allies list. If you have forced yourself onto that list via the Lust tarot, then you will be able to summon that person from anywhere on the continent.<br>You may also SNIFF a card inscribed with this image to determine if you have someone lusted.
+}}
+
+{{Skill_detail
+ |skill=Lovers
+ |description=Create a strong love for you in your target.
+ |lessons=289
+ |syntax=FLING LOVERS AT <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=The Lovers tarot will inspire your target to fall deeply in love with you. While in love with you, he or she will be generally unwilling to cause you harm.<p>When ruinated, the lovers become the betrayer. It shall inflict manaleech when flung.</p>
+}}
+
+{{Skill_detail
+ |skill=Hangedman
+ |description=Hinder your opponent with a mass of ropes.
+ |lessons=423
+ |syntax=FLING HANGEDMAN AT <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=The Hangedman will entangle your foe in a mass of ropes.<p>You cannot command entities while off balance from flinging this card.</p>
+}}
+
+{{Skill_detail
+ |skill=Tower
+ |description=Cause a crumbling tower to appear in your location.
+ |lessons=512
+ |syntax=FLING TOWER AT GROUND
+ |required=
+ |target=Room
+ |cooldown=3.00 seconds of balance
+ |detail=The Tower card will cause a crumbling tower to appear in your location, which will then collapse, making it difficult to leave via some of the exits.
+}}
+
+{{Skill_detail
+ |skill=Wheel
+ |description=Spin the wheel and take your chances.
+ |lessons=600
+ |syntax=FLING WHEEL AT GROUND
+ |required=
+ |target=Room
+ |cooldown=3.00 seconds of balance
+ |detail=The Wheel of Fortune is mysterious and represents luck, neither good nor bad. Sometimes it will bring good things, sometimes bad. The effects of this card are permanent, except those affecting adventurer statistics.<p>Use of this card which affects anyone unwillingly could result in very serious repercussions.</p><br>When ruinated, the wheel of fortune becomes the Wheel of Chaos. Fling it at the ground and it will begin to rotate. After rotating the number of desired times it will lash out with chaotic energy. Lesser in many ways than the karmic powered rays of Occultism, but with relatively similar results.
+
+The first ray will freeze. The second will give stuttering. The final gives blackout. Note that the wheel will be indiscriminate, striking everyone except you(*).<p>* You may specify how many rotations you wish to happen before the wheel starts lashing out such as: RUINATE WHEEL AT GROUND 4. This number must be between 1 and 7, and defaults to 1 if not specified.
+}}
+
+{{Skill_detail
+ |skill=Creator
+ |description=Create an illusion in an adjacent room.
+ |lessons=704
+ |syntax=FLING CREATOR <direction> <illusion text>
+ |required=
+ |target=Room
+ |cooldown=3.00 seconds of balance
+ |detail=This Tarot card will allow you to create an illusion of your choosing in an adjacent location. You may embed a single newline by including the characters \n at the appropriate spot. For limitations and restrictions, please refer to HELP ILLUSIONS.<br>When ruinated, the Creator becomes the Destroyer. This manifestation of destruction requires a fully charged Death card to invoke, and that Death card will also be consumed in the process. You may only fling the Destroyer at a target who is both blacked out and shivering; but when you do, they will be slain shortly thereafter(*).<p>* This is a channel similar to death tarot, but resolves faster when the additional conditions are met.</p>
+}}
+
+{{Skill_detail
+ |skill=Justice
+ |description=Bring justice to the unjust.
+ |lessons=807
+ |syntax=FLING JUSTICE AT <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=The Justice tarot will bring the wrath of Miramar, the Even-Handed, down upon your foe.<p>When ruinated, the justice becomes tyranny. It will convert the following afflictions into broken limbs: paralysis, sensitivity, healthleech, haemophilia, weariness, asthma, or clumsiness. If four or
+more afflictions are converted, the target is frozen; this ability will also prone your target if both of their legs are broken when it resolves.</p>
+}}
+
+{{Skill_detail
+ |skill=Star
+ |description=Strike down a foe with a flaming meteor.
+ |lessons=911
+ |syntax=FLING STAR AT <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=The Star tarot will bring down a flaming meteor upon your unlucky foe's head. Your foe must be within three rooms of your line of sight and both you and he must be outdoors.  
+}}
+
+{{Skill_detail
+ |skill=Aeon
+ |description=Curse your foe with the mark of Chronos.
+ |lessons=1049
+ |syntax=FLING AEON AT <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.70 seconds of balance
+ |detail=The Aeon tarot will give the curse of Chronos the Eternal to an adventurer, slowing his passage through time.<p>You cannot command entities while off balance from flinging this card.</p>
+}}
+
+{{Skill_detail
+ |skill=Lust
+ |description=Cause an opponent to hopelessly lust after you.
+ |lessons=1187
+ |syntax=FLING LUST AT <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=With this Tarot, you may instill a lust for you in another adventurer, so that he or she will consider you an ally.
+}}
+
+{{Skill_detail
+ |skill=Universe
+ |description=Transport yourself around the land.
+ |lessons=1290
+ |syntax=FLING UNIVERSE AT GROUND<br>UNIVERSE LIST<br>TOUCH <area>
+ |required=
+ |target=
+ |cooldown=3.00 seconds of balance
+ |detail=The Universe tarot will allow you to quickly travel throughout Achaea, with instant transport to a number of locations on the mainland of Sapience and continent of Meropis.
+}}
+
+{{Skill_detail
+ |skill=Devil
+ |description=Call a Devil to serve you, though no more than once.
+ |lessons=1428
+ |syntax=FLING DEVIL AT GROUND<br>SUPPRESS DEVIL
+ |required=
+ |target=
+ |cooldown=3.00 seconds of balance
+ |detail=The Devil is a rather unique card. When you fling it at the ground, a Devil will be called up, who will serve you once, and only once. He will possess your body and, the next Tarot card you fling, he will cause you to immediately fling another one of six random tarot cards.
+}}
+
+{{Skill_detail
+ |skill=Moon
+ |description=Bestow the maladies of the moon upon your enemy.
+ |lessons=1497
+ |syntax=FLING MOON AT <target> [affliction]
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance<br>Specified Affliction: 2.10 seconds of balance (at transcendent)
+ |detail=The moon tarot will give your enemy maladies associated with the mind. The affliction will be random if unspecified, and hidden from the victim. If you specify an affliction, the ability is faster to recover from, but the victim shall see what was delivered.<br>You may pick from: stupidity, masochism, hallucinations, hypersomnia, confusion, epilepsy, claustrophobia, or agoraphobia.  
+}}
+
+{{Skill_detail
+ |skill=Ruinate
+ |description=Two sides of the same coin.
+ |lessons=
+ |syntax=RUINATE <card> at <target>
+ |required=Adventurers
+ |target=
+ |unique=Yes
+ |cooldown=
+ |detail=So few truly understand the duality inherent in the nature of Chaos. With a minor application of your recondite knowledge, twist one of the major arcana just so to display its opposite face.<p>Currently, the lovers, justice, creator, and wheel cards may be ruinated. See their ability files for details.</p>
+}}
+
+{{Skill_detail
+ |skill=Death
+ |description=Call down Death itself to claim the soul of your enemy.
+ |lessons=1738
+ |syntax=RUB DEATH ON <target><br>SNIFF DEATH<br>FLING DEATH AT <target>
+ |required=
+ |target=Adventurers
+ |cooldown=Fling: 3.00 seconds of balance<br>Rub: 3.20 seconds of equilibrium
+ |detail=To attune Death, you must first rub it on your enemy seven times. <p>Sniffing the card will tell you how many times you have rubbed it on your foul oppressor, while flinging it will begin the process of calling Death himself to gather the soul of your enemy to him. Be warned though that this process takes concentration and you may not do anything else while Death is on his way.</p><p>When rubbing Death, normally your card will only gain one charge towards attunement. However, the number of charges generated for each rub will be increased for each of a set of conditions that are true(*).</p><p>Finally, rubbing death on your target will attempt to freeze that adventurer, though can only ever make them shiver at worst.</p><p>* Death rubs are increased for each of: stun, aeon, entangled, shivering, or paralysed.
+}}
+
+[[Category:Skills]][[Category:Edit needed]]

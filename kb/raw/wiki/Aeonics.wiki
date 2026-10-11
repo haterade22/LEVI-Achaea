@@ -1,0 +1,307 @@
+Aeonics grants [[Depthswalkers]] a degree of control over the flow of [[time]]. Originally practiced by the ancient Tsol'teth Overlord [[Agith'maal]], it was deemed too dangerous even by the standards of the current generation of the [[Tsol'teth]] race and placed upon the short list of arts forbidden. However, not all of Agith'maal's descendents were so cautious. Parni deSangre, destroyer of once-great Seleucar taught an apprentice; and when she was hunted down and slain by the Tsol'teth warrior Agith'tai for her perceived threat, he granted Sapience knowledge of the art. Whether out of spite or duty, it is still unknown. Practitioners of this skill specialise in modifications to localised time, both their own and that of others. It is whispered that the truly great may turn aside the greatest enemy of all: death.
+
+The skill of '''Aeonics''' is available to members of the [[Depthswalker]] [[class]], along with [[Shadowmancy]] and [[Terminus]].
+
+==Abilities in Aeonics==
+{{Skill_detail
+ |skill=Memory
+ |description=Remember what was.
+ |lessons=
+ |syntax=CHRONO MEMORY<br>CHRONO RETURN
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=In a display of power beyond the comprehension of any current practitioner of Aeonics, Parni deSangre, he who was Tenith'oru, imprinted the memory of his fallen protege upon the timestream so indelibly that with sufficient training, a practitioner of the time arts may step back through the years and see what once was. (*)<br>* This is the method through which one shall study Aeonics and later Terminus: they may LEARN from Kosuira.  
+
+
+As the first of the overland cities to enter into an alliance with the Tsol'teth of Anzari-tarin, citizens of Hashan may study Terminus in a facility within their own walls. Use of the Forbidden Art to visit the Child Sorceress is no longer permitted by Hashan law.  
+
+}}
+
+{{Skill_detail
+ |skill=Regression
+ |description=Time bends to accommodate.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=This is both the most basic and core of the Aeonics abilities. Though Aeonic-based abilities are powerful on their own, many of them can be boosted to even greater heights of potency. However, this will use your very life force as fuel; aging you rapidly beyond anything a normal adventurer was meant to sustain.<p>However, due to your mastery, you will slowly regress back to your original age over time. The novice practitioner may be liberal with their life force, wasting it away in the first moments of any engagement. The skilled one, however, shall be far more calculating.</p><p>Note that a very few abilities may drain your life force even when not boosted, if to a lesser degree. These abilities will be noted in the relevant ability files.</p><p>This ability is passive and cannot be deactivated. The age costs in ability files refer specifically to the cost of the ability if boosted.</p>
+}}
+
+{{Skill_detail
+ |skill=Divine
+ |description=The timelines do not lie.
+ |lessons=
+ |syntax=CHRONO DIVINE <target> [BOOST]
+ |required=40 age
+ |target=Adventurers
+ |cooldown=
+ |detail=By following the timeline, you may seek out another adventurer and determine their location.<br>When boosted, this ability will cost no balance or equilibrium.
+}}
+
+{{Skill_detail
+ |skill=Rewind
+ |description=The past becomes the present.
+ |lessons=
+ |syntax=CHRONO REWIND [BOOST]
+ |required=20 age
+ |target=Self
+ |cooldown=
+ |detail=This ability will allow you to rewind time to a point when you were healthier, restoring some health.<br>When boosted, this ability rewinds further, restoring more health.
+}}
+
+{{Skill_detail
+ |skill=Blur
+ |description=Move with supernatural speed.
+ |lessons=
+ |syntax=CHRONO BLUR [BOOST]
+ |required=180 age
+ |target=Self
+ |cooldown=
+ |detail=This ability allows you to move more rooms at a time.<br>When boosted, it will last longer.
+}}
+
+{{Skill_detail
+ |skill=Rift
+ |description=Distance is no barrier.
+ |lessons=
+ |syntax=CHRONO RIFT <target> [BOOST]
+ |required=140 age
+ |target=Adventurers
+ |cooldown=
+ |detail=This ability will allow you to open a rift to serve as a portal between you and another adventurer. Note that there is a delay between you creating the rift and it fully manifesting; a monolith at either end shall prevent the rift from being opened.<p>Note that if you boost the rift, a monolith on your end of the attempt shall not prevent it from opening, though one on the target's end shall still.</p>
+}}
+
+{{Skill_detail
+ |skill=Images
+ |description=One of many.
+ |lessons=
+ |syntax=CHRONO IMAGES [boost]
+ |required=500 age
+ |target=Self
+ |cooldown=
+ |detail=By tapping into alternative timelines, you may allow your enemies to see multiple copies of you, though only one is real. This will serve as a reflection to spare you from an attack; if you boost the ability, two reflections shall manifest.
+}}
+
+{{Skill_detail
+ |skill=Causality
+ |description=The future is yours.
+ |lessons=
+ |syntax=CHRONO CAUSALITY [BOOST]
+ |required=270 age
+ |target=Self
+ |cooldown=
+ |detail=By tapping into the threads of causality, you can determine when and where an enemy shall strike. This will allow you to dodge any physical attack with absolute certainty, though no more than once. You may only do this sparingly.<br>If you boost this ability, you may tap into the threads of causality without incurring an equilibrium cost. 
+}}
+
+{{Skill_detail
+ |skill=Accelerate
+ |description=It all adds up.
+ |lessons=
+ |syntax=CHRONO ACCELERATE [BOOST]
+ |required=340 age
+ |target=Self
+ |cooldown=
+ |detail=With this ability you may massively increase your body's ability to purge afflictions, resulting in a random affliction being cured from those presently afflicting you. If you boost this ability, two afflictions will be cured.<p>Note that being reckless will make you unable to carry out the acceleration process, and being prone will make boosting the process impossible.</p>
+}}
+
+{{Skill_detail
+ |skill=Disassociate
+ |description=Gain now is pain later.
+ |lessons=
+ |syntax=CHRONO DISASSOCIATE [BOOST]
+ |required=400 age
+ |target=Self
+ |cooldown=
+ |detail=This ability shall allow you to become numb to all damage taken for nine seconds. However, when the nine seconds end, you shall take the total damage you would have suffered, and more.<br>If boosted, the disassociation shall only last for five seconds.
+}}
+
+{{Skill_detail
+ |skill=Doom
+ |description=Their days are numbered.
+ |lessons=
+ |syntax=CHRONO DOOM <target> [BOOST]
+ |required=720 age
+ |target=Adventurers
+ |cooldown=
+ |detail=By gathering your full Aeonic might, you may eradicate someone from the timestream, destroying them utterly.<p>Note that this takes all of your considerable concentration; you may not perform any other actions while preparing your target's end. A target being afflicted with aeon when you initiate this ability shall slightly speed up the completion time; this stacks with the boosted bonus.</p><p>Additionally, note that by boosting this ability, hindrances such as paralysis and entanglements shall not abort your attempt; the subject must leave if they wish to survive. The ability will also complete slightly faster. However, this comes with a price. If you then fail to complete your attempt to bring about the doom of your victim, the aeonic backlash shall completely annihilate you from existence, killing you instantly.</p>
+}}
+
+{{Skill_detail
+ |skill=Dilation
+ |description=Given time all rules can be broken.
+ |lessons=
+ |syntax=CHRONO DILATION [BOOST]
+ |required=200 age
+ |target=Self
+ |cooldown=
+ |detail=A meditative state which allows you to alter the flow of time around you, making you regress to your natural age much faster.<br>If boosted, the amount of age that you shall regress by on each tick shall be increased. 
+}}
+
+{{Skill_detail
+ |skill=Aeon
+ |description=The curse of the Lord of Time.
+ |lessons=
+ |syntax=CHRONO AEON <target> [BOOST]
+ |required=360 age
+ |target=Adventurers
+ |cooldown=
+ |detail=The curse of Aeon, Lord of Time, shall strike down a target who lacks the speed defence. All of their actions while the curse remains shall be delayed to a major degree. If they are protected by the speed defence, it shall be stripped instead of them receiving the curse.<br>Note that the curse will fade on its own after a while. If boosted, the curse shall remain indefinitely until cured.
+}}
+
+{{Skill_detail
+ |skill=Displacement
+ |description=A minor adjustment.
+ |lessons=
+ |syntax=CHRONO DISPLACE <dir> [BOOST]
+ |required=200 age
+ |target=Self
+ |cooldown=
+ |detail=With a minor application of your power, shift yourself to an adjacent location. If boosted, this ability's equilibrium cost is reduced noticeably.
+}}
+
+{{Skill_detail
+ |skill=Preempt
+ |description=There is no escape.
+ |lessons=
+ |syntax=CHRONO PREEMPT <target> [BOOST]<br>CHRONO UNPREEMPT
+ |required=250 age
+ |target=Adventurers
+ |cooldown=
+ |detail=By predicting where a person will be, whenever they try to move to an adjacent location from your current one you shall preempt them, moving to that location first.<br>This ability requires you be unhindered(*).<br>The effect lasts 15 seconds if unboosted. If boosted, it lasts for twice that. Additionally, if boosted the ability will not incur an equilibrium cost.<br>* This requires you not be prone, have paralysis, or writhe-based afflictions; it does not include having balance or equilibrium.<br>Note that after preempt expires against a target, that target is immune to -any- Depthswalker using preempt on them for a short time afterwards.
+}}
+
+{{Skill_detail
+ |skill=Shift
+ |description=A slip sideways through time.
+ |lessons=
+ |syntax=CHRONO SHIFT [BOOST]
+ |required=600 age
+ |target=Self
+ |cooldown=
+ |detail=This powerful manipulation of the timestream shall cause your health and mana to switch their current values. Note that this ability is potent enough that even when not boosted, it shall incur an age cost (half the standard boost cost).<br>If boosted, the equilibrium cost is significantly reduced.
+}}
+
+{{Skill_detail
+ |skill=Backlash
+ |description=Everything has a price.
+ |lessons=
+ |syntax=CHRONO BACKLASH
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=By forcibly manipulating time, you are able to completely remove any excess age you may have built up due to overuse of your Aeonic abilities. However, the strain this puts on your body shall mean that further regression shall take much longer for a time.  
+}}
+
+{{Skill_detail
+ |skill=Discard
+ |description=The mind is your weapon.
+ |lessons=
+ |syntax=CHRONO DISCARD <amount> [BOOST]
+ |required=150 age
+ |target=Self
+ |cooldown=
+ |detail=You may discard away your vitality in order to expand your mind, swapping health for mana at a 50% loss (so discard 1000 health, get 500 mana).<br>When boosted, this ability will not incur an equilibrium cost.
+}}
+
+{{Skill_detail
+ |skill=Haste
+ |description=Be slow and dead.
+ |lessons=
+ |syntax=CHRONO HASTE <target{{!}}BOOST>
+ |required=470 age
+ |target=Adventurers
+ |cooldown=
+ |detail=Direct your command of time to increase the rate of balance recovery of another. If you boost this ability, you may boost all those that stand with you. 
+}}
+
+{{Skill_detail
+ |skill=Loop
+ |description=Over, and over, and over again.
+ |lessons=
+ |syntax=CHRONO LOOP [BOOST]<br>CHRONO ASSERT
+ |required=350 age
+ |target=
+ |cooldown=
+ |detail=This Aeonics spell is cast upon a scythe manifested via Shadowmancy. While imbued into the blade of a scythe, the next attack with that scythe shall lock your foe into a timeloop, which, until cured, shall result in all Shadowmancy-based instills delivering two afflictions instead of one.<p>NOTE: While the loop is active, venoms on your scythe will lay dormant and not deliver their effects.</p><p>When boosted, the loop effect shall benefit the attack it is delivered upon with this effect as well as subsequent ones.</p><p>Note that this spell is unique in that, due to its instability, you must have regressed to below a quarter of your maximum possible age in order to invoke it.</p><p>If you wish to purge the effect from your weapon, you may simply CHRONO ASSERT.</p> 
+}}
+
+{{Skill_detail
+ |skill=Degenerate
+ |description=The ravages of time.
+ |lessons=
+ |syntax=CHRONO DEGENERATE <target> [BOOST]
+ |required=700 age
+ |target=Adventurers
+ |cooldown=
+ |detail=If a target is sufficiently afflicted(*), you may drastically accelerate the effects of said afflictions. This will cause the unfortunate subject to age in an instant, decreasing their constitution by one for each affliction.<br>When boosted, the target will lose two constitution per affliction.<br>* Valid afflictions are: weariness, clumsiness, healthleech, nausea, asthma, and paralysis. 
+}}
+
+{{Skill_detail
+ |skill=Paradox
+ |description=They shall conform.
+ |lessons=
+ |syntax=CHRONO PARADOX <target> <plant> [BOOST]
+ |required=350 age
+ |target=Adventurers
+ |cooldown=
+ |detail=You may instill a future possibility into the timeline, dictating that your target shall not eat a given herb(*). If they violate that directive and eat that herb, a paradox will be created and they shall suffer non-trivial mana damage.<br>If this ability is boosted, it consumes no equilibrium and lasts for ten herb eats. If not boosted, it lasts for five.<br>* Valid herbs are kelp, goldenseal, lobelia, ash and bellwort. They will work for their transmutation counterparts.<br>** Note that paradox will only fire if the target has something else they could be eating, given the nature of the ability.  
+}}
+
+{{Skill_detail
+ |skill=Deteriorate
+ |description=Madness comes to all.
+ |lessons=
+ |syntax=CHRONO DETERIORATE <target> [BOOST]
+ |required=300 age
+ |target=Adventurers and denizens
+ |cooldown=
+ |detail=If a target is sufficiently afflicted(*), you may drastically accelerate the effects of said afflictions. This will cause the unfortunate subject to age in an instant, decreasing their intelligence by one for each affliction.<br>When boosted, the target will lose two intelligence per affliction.<br>In addition, someone suffering under this status will take significantly more health and mana loss from the depression affliction.<br>* Valid afflictions are: stupidity, confusion, hallucinations, depression, shadowmancy madness, vertigo, masochism, agoraphobia, claustrophobia.<br>** Valid battlerage afflictions against denizens are: recklessness, charm, fear, aeon, and amnesia.</br>
+}}
+
+{{Skill_detail
+ |skill=Hindsight
+ |description=Mistakes shall not be replicated.
+ |lessons=
+ |required= 
+ |target = 
+ |syntax=None
+ |cooldown=
+ |detail=When you miss a blow with a manifested scythe against a target due to the clumsiness affliction, you will seize upon that individual's temporal flow, ensuring that if you miss due to the same reason again in the immediate future(*), you will mitigate the error(**).<br><br>* Six seconds.<br>** The damage of your attack is cut by 80%, but you will still land the
+venoms.
+}}
+{{Skill_detail
+ |skill=Distortion
+ |description=Those that forget the past...
+ |lessons=
+ |syntax=CHRONO DISTORT [BOOST]
+ |required=300 age
+ |target=Adventurers and room
+ |cooldown=
+ |detail=This powerful act of time manipulation allows you to distort the timestream in a location, causing all of your personal enemies to have a chance to be moved slightly back in time each time they attempt to leave. This will result in them failing to escape your location.<br>Note that boosting this ability removes the eq cost. However, the older you are, the less able you are to maintain this spell, resulting in it becoming progressively less potent the older you grow. 
+}}
+
+{{Skill_detail
+ |skill=Timewell
+ |description=Your might made manifest.
+ |lessons=
+ |syntax=CHRONO TIMEWELL [BOOST]
+ |required=700 age
+ |target=Room
+ |cooldown=
+ |detail=One of the greatest of the Aeonic arts is the ability to summon forth a timewell. This ability shall bring forth a disruption, making many ranged attacks fail to be able to be performed upon one standing within its disruptive field.<br>Notably, this ability shall not dissipate if the creator falls in battle.<br>If boosted, the timewell shall last longer than normal.
+}}
+
+{{Skill_detail
+ |skill=Rebirth
+ |description=Death shall never claim you.
+ |lessons=
+ |syntax=CHRONO REBIRTH
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=This greatest of the time abilities exacts a terrible price upon the user. Not only can it only be used sparingly, but when activated it shall immediately raise you to the maximum age possible for you to survive.<br>However, the power it grants is equally terrible. You may return from the very brink of death, reforming your mortal shell around your soul. Be warned. You shall return extremely weak in mind and body. 
+}}
+
+[[Category:Skills]][[Category:Edit needed]]

@@ -1,0 +1,394 @@
+The Venom skill involves the production of various venoms by glands. These glands are remnants of evolution and lay dormant in most people. To those with the skill though, they can be used to great effect. First, one must secrete a particular venom. There will be a short pause while your glands produce the chosen toxin. Once the venom has been secreted, it cannot be held in the bloodstream indefinitely. Each venom has a risk factor incorporated into it. The more powerful the venom, the greater the chance of it backfiring and affecting the producer. To get the venom out of the bloodstream, one must either bite another adventurer or purge the venom from their body.
+
+It should be pointed out that denizens will be immune to most venoms that do things other than cause damage.
+
+The skill of '''Venom''' is available to members of the [[Serpent]] [[class]], along with [[Subterfuge]] and [[Hypnosis]].
+
+==Abilities in Venom==
+{{Skill_detail
+ |skill=Secrete
+ |description=The ancient ability of producing venom.
+ |lessons=
+ |syntax=SECRETE <venom>
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=The ancient ability of producing venom.
+}}
+
+{{Skill_detail
+ |skill=Bite
+ |description=Sinking your fangs into an unfortunate victim.
+ |lessons=
+ |syntax=BITE <target> [<venom>]
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=4.00 seconds of balance
+ |detail=Sinking your fangs into an unfortunate victim.<br>The addition of a venom only functions when biting adventurers.
+}}
+
+{{Skill_detail
+ |skill=Purge
+ |description=Cleansing your venom sacs of poison.
+ |lessons=
+ |syntax=PURGE
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=Cleansing your venom sacs of poison.
+}}
+
+{{Skill_detail
+ |skill=Shrugging
+ |description=Resist the detrimental effects of venoms.
+ |lessons=
+ |syntax=SHRUGGING
+ |required=
+ |target=Self
+ |cooldown=1.60 seconds of equilibrium, 10.0 second cooldown
+ |detail=With your mastery over your own body, you are able to cure yourself of an affliction. Due to the taxing nature of this ability, you will need to recover a short time after using it before you may use it again.
+}}
+
+{{Skill_detail
+ |skill=[[Sumac]]
+ |description=Minor damage.
+ |lessons=
+ |syntax=SECRETE SUMAC<br>BITE <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=
+ |detail=This venom will cause minor damage to adventurers and denizens. This venom cannot be used to envenom a weapon.
+}}
+
+{{Skill_detail
+ |skill=[[Xentio]]
+ |description=Loss of coordination.
+ |lessons=
+ |syntax=SECRETE XENTIO<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Cause a loss of coordination in your target.
+}}
+
+{{Skill_detail
+ |skill=[[Oleander]]
+ |description=Blindness.
+ |lessons=
+ |syntax=SECRETE OLEANDER<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Cause blindness in your target.
+}}
+
+{{Skill_detail
+ |skill=[[Eurypteria]]
+ |description=Gives the victim delusions of invulnerability.
+ |lessons=
+ |syntax=SECRETE EURYPTERIA<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Afflict your victim with recklessness.
+}}
+
+{{Skill_detail
+ |skill=[[Kalmia]]
+ |description=Inhibits the respiratory system.
+ |lessons=
+ |syntax=SECRETE KALMIA<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Afflict your victim with severe asthma.
+}}
+
+{{Skill_detail
+ |skill=[[Digitalis]]
+ |description=Causes unbearable shyness.
+ |lessons=
+ |syntax=SECRETE DIGITALIS<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Cause unbearable shyness in your victim.
+}}
+
+{{Skill_detail
+ |skill=[[Darkshade]]
+ |description=Makes the victim allergic to sunlight.
+ |lessons=
+ |syntax=SECRETE DARKSHADE<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Give your target an allergy to sunlight.
+}}
+
+{{Skill_detail
+ |skill=[[Curare]]
+ |description=A venom of muscular paralysis.
+ |lessons=
+ |syntax=SECRETE CURARE<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Cause your victim's body to freeze with paralysis.
+}}
+
+{{Skill_detail
+ |skill=[[Epteth]]
+ |description=Shrivel up the arms of your unlucky victim.
+ |lessons=
+ |syntax=SECRETE EPTETH<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Cause your victim's arms to shrivel.
+}}
+
+{{Skill_detail
+ |skill=[[Prefarar]]
+ |description=Increase the recipient's sensitivity.
+ |lessons=
+ |syntax=SECRETE PREFARAR<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Increase your victim's sensitivity to pain.
+}}
+
+{{Skill_detail
+ |skill=[[Monkshood]]
+ |description=Disfigure your victim, causing disloyalty in those around.
+ |lessons=
+ |syntax=SECRETE MONKSHOOD<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Causes your victim to become disfigured making their loyal servants turn on them.
+}}
+
+{{Skill_detail
+ |skill=[[Euphorbia]]
+ |description=Induces spasmodic vomiting.
+ |lessons=
+ |syntax=SECRETE EUPHORBIA<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Induces spasmodic vomiting.
+}}
+
+{{Skill_detail
+ |skill=[[Colocasia]]
+ |description=Gives blindness and deafness.
+ |lessons=
+ |syntax=SECRETE COLOCASIA<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Cause both blindness and deafness in your victim.
+}}
+
+{{Skill_detail
+ |skill=[[Oculus]]
+ |description=Forces the recipient's eyelids open.
+ |lessons=
+ |syntax=SECRETE OCULUS<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Forces your victim's eyelids open clearing his eyes of blindness.
+}}
+
+{{Skill_detail
+ |skill=[[Camus]]
+ |description=A more powerful version of Sumac.
+ |lessons=
+ |syntax=SECRETE CAMUS<br>BITE <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=
+ |detail=A more powerful version of Sumac poison. This venom can not be used to envenom a weapon.
+}}
+
+{{Skill_detail
+ |skill=[[Vernalius]]
+ |description=A venom that weakens the muscles.
+ |lessons=
+ |syntax=SECRETE VERNALIUS<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=A venom that weakens the muscles.
+}}
+
+{{Skill_detail
+ |skill=[[Epseth]]
+ |description=Cause the legs of your victim to become useless.
+ |lessons=
+ |syntax=SECRETE EPSETH<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Cause the legs of your victim to become useless.
+}}
+
+{{Skill_detail
+ |skill=[[Larkspur]]
+ |description=Causes great dizziness.
+ |lessons=
+ |syntax=SECRETE LARKSPUR<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Cause great dizziness in your target.
+}}
+
+{{Skill_detail
+ |skill=[[Slike]]
+ |description=Give the curse of anorexia to your victim.
+ |lessons=
+ |syntax=SECRETE SLIKE<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Causes your victim to fall prey to anorexia.
+}}
+
+{{Skill_detail
+ |skill=[[Voyria]]
+ |description=The deadliest venom known to mankind.
+ |lessons=
+ |syntax=SECRETE VOYRIA<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=This deadly venom will induce a quick death for its victim.
+}}
+
+{{Skill_detail
+ |skill=[[Delphinium]]
+ |description=Put your victim to sleep.
+ |lessons=
+ |syntax=SECRETE DELPHINIUM<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Put your victim to sleep.
+}}
+
+{{Skill_detail
+ |skill=Transcretion
+ |description=The ability to instantly secrete a venom.
+ |lessons=
+ |syntax=SECRETE <venom> ON <edged weapon>
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=The ability of Transcretion is automatic and will allow you to secrete and instantly be able to bite without waiting for balance. You will also be able to secrete venoms directly onto edged weapons.
+}}
+
+{{Skill_detail
+ |skill=[[Notechis]]
+ |description=Induce haemophilia in a target.
+ |lessons=
+ |syntax=SECRETE NOTECHIS<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Induce haemophilia in your target. This venom can not be used to envenom a weapon.
+}}
+
+{{Skill_detail
+ |skill=[[Vardrax]]
+ |description=Grants an insatiable addiction.
+ |lessons=
+ |syntax=SECRETE VARDRAX<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=This potent venom will instill an addiction in your victim that will not be sated.
+}}
+
+{{Skill_detail
+ |skill=[[loki_(venom)|Loki]]
+ |description=An unpredictable toxin.
+ |lessons=
+ |syntax=SECRETE LOKI<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=This unpredictable toxin will afflict your victim with a random venom.
+}}
+
+{{Skill_detail
+ |skill=[[Aconite]]
+ |description=Cause sheer stupidity in your opponent.
+ |lessons=
+ |syntax=SECRETE ACONITE<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Afflict your victim with sheer stupidity.
+}}
+
+{{Skill_detail
+ |skill=[[Selarnia]]
+ |description=Forcing your victim back into mortal form.
+ |lessons=
+ |syntax=SECRETE SELARNIA<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=This venom will force the spirit animals out of those pesky forestals.
+}}
+
+{{Skill_detail
+ |skill=[[Gecko]]
+ |description=Causes the recipient to become foully oily.
+ |lessons=
+ |syntax=SECRETE GECKO<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Cause your victim to secrete foul oils from his skin.
+}}
+
+{{Skill_detail
+ |skill=[[Scytherus]]
+ |description=A venom that thins the blood.
+ |lessons=
+ |syntax=SECRETE SCYTHERUS<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=A nasty venom that will thin the victim's blood allowing your toxins to be more effective.
+}}
+
+{{Skill_detail
+ |skill=[[Nechamandra]]
+ |description=A venom that chills the veins.
+ |lessons=
+ |syntax=SECRETE NECHAMANDRA<br>BITE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=A venom that chills the veins.
+}}
+
+{{Skill_detail
+ |skill=Ekanelia
+ |description=A lethality profound.
+ |lessons=
+ |syntax=EKANELIA<br>EKANELIA STUDY <reaction>
+ |required=
+ |target=
+ |cooldown=
+ |detail=Your grasp of venom has reached such a profound transcendence that you are now able to turn the very immune system of your victim's against
+them. Certain venoms, when delivered in just the right quantities, can promote violent immune responses which in turn lead to cascading failures and further afflictions manifesting throughout the subjects body.<p>Each reaction has:<br>A trigger: the venom which sets off the cascading failure (this is what you bite with).<br>Conditionals: the afflictions which the subject must already labour under.<br>A result: the result of the reaction taking place.<p>Some reactions have:<br>A bonus conditional: a bonus conditional which can be met.<br>A bonus result: the bonus which is achieved if the bonus conditional is met.<p>Naturally, with the exact dose and balance requirements of this high art of venom, only the fangs of the serpent are sufficient for this purpose(*).<p>* You may see what reactions you are aware of with the EKANELIA command, and study one at further length with the EKANELIA STUDY <reaction> command.<br>** Reactions fire on the bite command.</p>
+}}
+
+[[Category:Skills]]

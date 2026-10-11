@@ -18,11 +18,13 @@ kb/
 ├── inbox/             ingest state (snapshot of the source file at the last ingest)
 ├── raw/               VERBATIM source text. Never edited. The evidence for every claim.
 │   ├── help/          HELP files (in-game)
+│   ├── wiki/          Achaea wiki pages, raw wikitext (`tools/kb_wiki_skills.py`)
 │   ├── live/          live command output: whatcures.txt (one WHATCURES line per capture), ...
 │   ├── guides/        community guides (lower confidence than HELP)
 │   ├── ab/            AB <skill> output        (add as pasted)
 │   ├── announcements/ game announcements       (add as pasted)
 │   └── logs/          combat or death logs worth keeping
+├── classes/           every class's skills and abilities (from the wiki, generated)
 ├── afflictions/       THE CORE: the model, catalog, channels, class cures, locks, limb damage
 ├── curing/            curatives, server-side curing (incl. your live state)
 ├── defences/          defence names and upkeep

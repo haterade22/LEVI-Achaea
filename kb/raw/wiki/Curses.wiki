@@ -1,0 +1,424 @@
+Drawing on the darker side of mysticism, those of the [[Shaman]] class have the [[:Category:Abilities|ability]] to afflict their enemies with Curses, a deadly skill that can sometimes be prevented only by a [[curseward]]. Curses draws on the dark side of the mystic world for its power. It is a simple, yet powerful and deadly skill, allowing one to reel off curse after curse in quick and deadly succession. The curses available range from epilepsy to vertigo to the voyria plague.
+
+The skill of '''Curses''' is available to members of the [[Shaman]] [[class]], along with [[Spiritlore]] and [[Vodun]]
+
+==Abilities in Curses==
+{{Skill_detail
+ |skill=[[Fear]]
+ |description=Instill great fear in your target.
+ |lessons=
+ |syntax=CURSE <target> FEAR
+ |required=45 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=This ability works to instil fear in your victim.
+}}
+
+{{Skill_detail
+ |skill=Discernment
+ |description=Discern the severity of your victim's wounds.
+ |lessons=
+ |syntax=DISCERN <target>
+ |required=
+ |target=Adventurers
+ |cooldown=1.00 seconds of equilibrium
+ |detail=With a practiced eye, determine how severely your victim is bleeding.
+}}
+
+{{Skill_detail
+ |skill=[[deafness|Deaf]]
+ |description=Dampen an opponent's hearing.
+ |lessons=
+ |syntax=CURSE <target> DEAF
+ |required=45 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Remove the hearing of your victim.
+}}
+
+{{Skill_detail
+ |skill=[[bleeding|Bleed]]
+ |description=Curse your opponent with uncontrollable bleeding.
+ |lessons=
+ |syntax=CURSE <target> BLEED
+ |required=30 mana
+ |target=Adventurers and denizens
+ |cooldown=2.20 seconds of balance
+ |detail=Induce bleeding in your target. This ability will work on Denizens as well as adventurers.
+}}
+
+{{Skill_detail
+ |skill=[[clumsiness|Clumsy]]
+ |description=Your victim will fumble about.
+ |lessons=
+ |syntax=CURSE <target> CLUMSY
+ |required=100 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Cause your victim to fumble about.
+}}
+
+{{Skill_detail
+ |skill=[[Vertigo]]
+ |description=A devastating fear of heights.
+ |lessons=
+ |syntax=CURSE <target> VERTIGO
+ |required=100 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Afflict your target with a great fear of heights.
+}}
+
+{{Skill_detail
+ |skill=[[Impatience]]
+ |description=Inability to concentrate on focused tasks.
+ |lessons=
+ |syntax=CURSE <target> IMPATIENCE
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Afflict your victim with an inability to concentrate on focused tasks.
+}}
+
+{{Skill_detail
+ |skill=[[Amnesia]]
+ |description=Make your victim forget what he meant to do.
+ |lessons=
+ |syntax=CURSE <target> AMNESIA
+ |required=100 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Make your victim forget what he meant to do.
+}}
+
+{{Skill_detail
+ |skill=[[Agoraphobia]]
+ |description=Fear of open spaces.
+ |lessons=
+ |syntax=CURSE <target> AGORAPHOBIA
+ |required=100 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Afflict your victim with a fear of open spaces.
+}}
+
+{{Skill_detail
+ |skill=Breach
+ |description=Cut through an opponent's curseward.
+ |lessons=
+ |syntax=CURSE <target> BREACH
+ |required=90 mana
+ |target=Adventurers
+ |cooldown=1.00 seconds of balance
+ |detail=Rip down your opponent's cursewards.
+}}
+
+{{Skill_detail
+ |skill=[[dizziness|Dizzy]]
+ |description=Causes problems when trying to move.
+ |lessons=
+ |syntax=CURSE <target> DIZZY
+ |required=100 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Afflict your target with severe dizziness.
+}}
+
+{{Skill_detail
+ |skill=[[Claustrophobia]]
+ |description=Fear of being under cover.
+ |lessons=
+ |syntax=CURSE <target> CLAUSTROPHOBIA
+ |required=100 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Afflict your target with a great fear of enclosed spaces.
+}}
+
+{{Skill_detail
+ |skill=[[Paranoia]]
+ |description=They are out to get you, believe me.
+ |lessons=
+ |syntax=CURSE <target> PARANOIA
+ |required=100 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Instil a fear of other people in your victim. 
+}}
+
+{{Skill_detail
+ |skill=[[blindness|Blind]]
+ |description=Curse an opponent with blindness.
+ |lessons=
+ |syntax=CURSE <target> BLIND
+ |required=45 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Remove your poor victim's eyesight.
+}}
+
+{{Skill_detail
+ |skill=[[Masochism]]
+ |description=The love of your own pain.
+ |lessons=
+ |syntax=CURSE <target> MASOCHISM
+ |required=100 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Make your victim love pain so much they will inflict it upon themselves.
+}}
+
+{{Skill_detail
+ |skill=[[Asthma]]
+ |description=Creates difficulty when breathing.
+ |lessons=
+ |syntax=CURSE <target> ASTHMA
+ |required=100 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Make it difficult for your victim to breathe.
+}}
+
+{{Skill_detail
+ |skill=Truecurse
+ |description=The ability to drive your curses through magic shields.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=With the ability of truecurse, adventurer's magical shields will no longer get in the way of your dreaded curses.
+}}
+
+{{Skill_detail
+ |skill=[[recklessness|Reckless]]
+ |description=A dangerous disregard for personal well-being.
+ |lessons=
+ |syntax=CURSE <target> RECKLESS
+ |required=100 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Give your target a dangerous disregard for their personal well-being.
+}}
+
+{{Skill_detail
+ |skill=[[Epilepsy]]
+ |description=Disrupt the nervous system of your victim.
+ |lessons=
+ |syntax=CURSE <target> EPILEPSY
+ |required=70 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Cause your victim to go into seizures.
+}}
+
+{{Skill_detail
+ |skill=[[Manaleech]]
+ |description=Cause the victim's mana to bleed away.
+ |lessons=
+ |syntax=CURSE <target> MANALEECH
+ |required=70 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Sap away mana from your target.
+}}
+
+{{Skill_detail
+ |skill=[[pacifism|Peace]]
+ |description=Fill your enemy's mind with thoughts of peace.
+ |lessons=
+ |syntax=CURSE <target> PEACE
+ |required=60 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Fill your enemy's mind with thoughts of peace, granting the pacifism affliction.   
+}}
+
+{{Skill_detail
+ |skill=[[Dementia]]
+ |description=Distorts the victim's perceptions of the world.
+ |lessons=
+ |syntax=CURSE <target> DEMENTIA
+ |required=100 mana
+ |target=
+ |cooldown=2.20 seconds of balance
+ |detail=Distorts the victim's perceptions of the world.
+}}
+
+{{Skill_detail
+ |skill=[[paralysis|Paralyse]]
+ |description=Freeze the limbs of your enemy.
+ |lessons=
+ |syntax=CURSE <target> PARALYSE
+ |required=55 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Cause your victims body to freeze with paralysis.
+}}
+
+{{Skill_detail
+ |skill=[[voyria|Plague]]
+ |description=Curse someone with the voyria affliction.
+ |lessons=
+ |syntax=CURSE <target> PLAGUE
+ |required=70 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Afflict your victim with the deadly Voyria.
+}}
+
+{{Skill_detail
+ |skill=[[Addiction]]
+ |description=Creates a terrible addiction.
+ |lessons=
+ |syntax=CURSE <target> ADDICTION
+ |required=65 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Cause your target to become addicted.
+}}
+
+{{Skill_detail
+ |skill=Swiftcurse
+ |description=The ability to deliver curses much more quickly.
+ |lessons=
+ |syntax=SWIFTCURSE<br>SWIFTCURSE <target> <curse>
+ |required=300 mana
+ |target=Self
+ |cooldown=2.50 seconds of equilibrium
+ |detail=This potent defence will drastically speed up your next ten curses after initiation. Breach is excluded.
+}}
+
+{{Skill_detail
+ |skill=[[stupidity|Stupid]]
+ |description=Make a victim dumb as a rock.
+ |lessons=
+ |syntax=CURSE <target> STUPID
+ |required=55 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Make a victim dumb as a rock.
+}}
+
+{{Skill_detail
+ |skill=[[Healthleech]]
+ |description=A victim's health will slowly bleed away.
+ |lessons=
+ |syntax=CURSE <target> HEALTHLEECH
+ |required=70 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Sap away your target's health.
+}}
+
+{{Skill_detail
+ |skill=[[Sensitivity]]
+ |description=Cause your victim to become extremely sensitive to pain.
+ |lessons=
+ |syntax=CURSE <target> SENSITIVITY
+ |required=65 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Cause your victim to become extremely sensitive to pain.
+}}
+
+{{Skill_detail
+ |skill=[[Vomiting]]
+ |description=Upset the stomach of your enemy.
+ |lessons=
+ |syntax=CURSE <target> VOMITING
+ |required=70 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Induce severe vomiting in your hapless victim.
+}}
+
+{{Skill_detail
+ |skill=[[Sleep]]
+ |description=Put an enemy to sleep, or remove his sleep defences.
+ |lessons=
+ |syntax=CURSE <target> SLEEP
+ |required=55 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Put an enemy to sleep, or remove their sleep defences.
+}}
+
+{{Skill_detail
+ |skill=[[Haemophilia]]
+ |description=Deny them respite from their wounds.
+ |lessons=
+ |syntax=CURSE <target> HAEMOPHILIA
+ |required=100 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Deny your victim the ability to clot their wounds.
+}}
+
+{{Skill_detail
+ |skill=[[Anorexia]]
+ |description=A terrible condition, preventing one from eating.
+ |lessons=
+ |syntax=CURSE <target> ANOREXIA
+ |required=65 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=A terrible condition, preventing one from eating.
+}}
+
+{{Skill_detail
+ |skill=[[Weariness]]
+ |description=Weaken the body of your opponent.
+ |lessons=
+ |syntax=CURSE <target> WEARINESS
+ |required=65 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=Weaken your opponent's body.
+}}
+
+{{Skill_detail
+ |skill=Blight
+ |description=The most feared of the Curse abilities.
+ |lessons=
+ |syntax=BLIGHT <target> <curse>
+ |required=
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=A blight is a magical construction, sourced in the netherworld, wrapped around a traditional curse which will mask the effects of your attacks. Note that the use of the blight is more mentally draining than a traditional curse.<br>''Curse mana costs are increased by +120''
+}}
+
+{{Skill_detail
+ |skill=[[Ablaze|Inflame]]
+ |description=Set a victim's very blood aflame.
+ |lessons=
+ |syntax=CURSE <target> INFLAME
+ |required=350 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=This potent curse will cause your target's blood to catch a flame. It requires that your victim first be bleeding; the more they suffer, the greater the potency of the curse.
+}}
+
+{{Skill_detail
+ |skill=Tzantza
+ |description=Bring a most painful end to your victim.
+ |lessons=
+ |syntax=CURSE <target> TZANTZA
+ |required=300 mana
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=This requires at least one of the listed afflictions to pull off. Though once you have their mind in your grasp you can use the devastating Tzantza curse to shrink their head. Watch the fun as their skin draws tighter and their skull implodes upon itself. The more afflictions your victim suffers over, the faster the process will proceed. At six afflictions, death is instantaneous.<br><br>Valid afflictions are:<br>Agoraphobia, Amnesia, Claustrophobia, Confusion, Dementia, Dizziness, Epilepsy<br>Impatience, Masochism, Paranoia, Recklessness, Stupidity, Vertigo, Addiction
+}}
+
+{{Skill_detail
+ |skill=Jinx
+ |description=The ultimate shamanic curse.
+ |lessons=
+ |syntax=JINX <curse1> <curse2> <target>
+ |required=60 mana
+ |target=Adventurers and denizens
+ |cooldown=2.30 seconds of balance
+ |detail=This highest of the shamanic arts allows a practitioner to combine two curses into one assault, delivering both simultaneously.<br>However, due to the extreme complexity of such an undertaking, the practitioner must prepare themselves to channel the malign energies, by utilising the lesser curses to build up a sufficient charge. 
+}}
+
+[[Category:Skills]]

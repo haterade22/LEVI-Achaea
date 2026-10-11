@@ -2,6 +2,31 @@
 
 ---
 
+## 2026-10-11 - Every class's abilities from the wiki; the venom database was wrong (v4.7.406)
+
+User: "for each class you can collect their AB skills by searching the achaea wiki".
+
+- **`tools/kb_wiki_skills.py`** fetches every skill page of all 21 classes (wiki Category:Classes, 60
+  skills incl. Sublimation, Shikudo and Woe -- Woe is Cyrene citizens only) as raw wikitext into
+  `kb/raw/wiki/`, one request a second, following redirects (TwoArts -> Two Arts) and three
+  disambiguations (Anathema, Devotion, Venom). It parses every `{{Skill_detail}}` block into
+  `kb/classes/abilities.json` and one page per class: **1,929 abilities** with syntax, cost, cooldown,
+  target, and the afflictions each one names (matched against the game's affliction list; names that
+  are also everyday words, like silver or bound, are not tagged). Only real HTML tags are stripped, so
+  `<target>`/`<venom>` placeholders survive.
+- **`.claude/databases/venoms.yaml` -- the venom reference the AI reads before writing offense code --
+  had 12 wrong venom -> affliction mappings**, including euphorbia = impatience, plus a duplicate
+  eurypteria and sumac given an affliction (it only does damage). The venom list is regenerated from
+  `venom_to_aff` (what tracking uses), the wiki and live WHATCURES, with a `weapon` field (sumac, camus
+  and notechis cannot envenom a weapon). Sumac rows fixed in CLAUDE.md, infernal.md and
+  afflictions.yaml. The unused `infernalGroupLock.lockVenomMap` (recklessness = sumac, haemophilia =
+  eurypteria) is removed.
+- **Found, not fixed (`kb/CONFLICTS.md` #3):** the Infernal group lock's impatience step sends
+  euphorbia, which gives nausea; no venom gives impatience.
+- **Gag:** "You purge every drop of venom from your bloodstream." (011_GAG2).
+
+---
+
 ## 2026-10-11 - Timed afflictions actually leave the target (v4.7.405)
 
 User: "there should be third party lines for hamstrung, etc. for when it comes off". Checking how

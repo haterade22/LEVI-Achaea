@@ -1,0 +1,363 @@
+Where a skill like Venom is a naturally developed ability, and a skill like Subterfuge is an ability with many magical elements, Hypnosis is a science. It has long been known that our subconscious mind is a powerful force and that it can be influenced in mysterious ways, but until a forgotten Serpentlord discovered the principles of Hypnosis, there was no way to use it.
+
+With this skill, a practitioner of Hypnosis will be able to sink someone into a hypnotic trance, possibly even without them realising it, and implant various subliminal suggestions. They can then seal their victim's mind and implant a timer that determines how long after the hypnosis has been triggered until the suggestions start becoming active.
+
+The skill of '''Hypnosis''' is available to members of the [[Serpent]] [[class]], along with [[Subterfuge]] and [[Venom_(Skill)|Venom]].
+
+==Abilities in Hypnosis==
+<b>Hypnotic techniques</b>
+{{Skill_detail
+ |skill=Hypnotise
+ |description=Their minds are yours.
+ |lessons=
+ |syntax=HYPNOTISE <target><br>SUGGEST <target> <suggestion><br>SEAL <target> <delay in seconds><br>SNAP <target>
+ |required=Equilibrium
+ |target=Adventurers
+ |cooldown=
+ |detail=This ability is the basis for all hypnotic manipulation. First you must hypnotise a victim, to seize control of his or her mind. This can take several seconds.<p>Once a trance is secured, you may begin implanting hypnotic suggestions, and finally seal the victim's trance. Once this is complete, you may snap your victim to trigger their trance, and the hypnotic suggestions shall begin to fire in rapid succession.</p>
+}}
+
+{{Skill_detail
+ |skill=Seal
+ |description=Poised to strike.
+ |lessons=
+ |syntax=SEAL <target> <delay in seconds>
+ |required=200 mana
+ |target=Adventurers
+ |cooldown=2.0 seconds of equilibrium
+ |detail=The act of sealing a hypnotic trance primes it for use. You may seal your trance at any time for three seconds and upwards, and suggestions tick periodically every four seconds there after.<p>However, if you seal your trance while your victim suffers from a deadened mind, the trance will sink more deeply into their psyche, tying itself more intrinsically and becoming vastly more potent when triggered(*).<br>* The delay can be set as low as one second, and the suggestions trigger every three seconds there after.</br>
+}}
+
+{{Skill_detail
+ |skill=Analyse
+ |description=Discover the implanted suggestions in someone.
+ |lessons=
+ |syntax=ANALYSE <target{{!}}ME>
+ |required=
+ |target=Adventurers and self
+ |cooldown=1.50 seconds of equilibrium
+ |detail=With this ability, you may analyse a person's state of mind (including your own), to determine any hypnotic suggestions that may be implanted.
+}}
+
+{{Skill_detail
+ |skill=Impulse
+ |description=Some pressure here, some manipulation there.
+ |lessons=
+ |syntax=IMPULSE <target> <suggestion>
+ |required=
+ |target=
+ |cooldown=1.70 seconds of equilibrium
+ |detail=It is one thing to sink your mark into a hypnotic trance and set their mind into a downward spiral, but quite another to simply lay them low with a glance. Nevertheless, you are now equal to both tasks.<p>By triggering impulses in the mind of your victim, you may inflict them with one of the trivial suggestions(*) that are known to you.<br>* See ab hypnosis for the list of trivial suggestions.</p>
+}}
+
+{{Skill_detail
+ |skill=Cleanse
+ |description=Clean yourself or another of suggestions.
+ |lessons=
+ |syntax=CLEANSE <adventurer/ME> <suggestion>
+ |required=
+ |target=Adventurers and self
+ |cooldown=
+ |detail=This ability allows you to cleanse hypnotic suggestions from an individual.<p>You may also cleanse yourself, but in this instance you can only remove suggestions that would force you to carry out a physical action.</p>
+}}
+
+{{Skill_detail
+ |skill=Mesmerise
+ |description=Much subtler, near-undetectable hypnosis.
+ |lessons=
+ |syntax=MESMERISE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=By mesmerising a victim, you will be able to greatly increase the chance of them overlooking your attempts to remove their hard earned possessions via pickpocketing.
+}}
+
+{{Skill_detail
+ |skill=Imprint
+ |description=Store the mental state of your subject.
+ |lessons=
+ |syntax=HYPNOTIC IMPRINT <target><br>HYPNOTIC IMPRINT FORGET <person><br>HYPNOTIC IMPRINT FORGET ALL<br>HYPNOTIC IMPRINT LIST
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=This greatest of the hypnotic arts allows you to store the mental state of a subject, greatly increasing the speed of future hypnosis attempts against that person.<p>Note that you may only hold up to five imprints at any one time.</p>
+}}
+
+<b>Trivial suggestions</b>
+{{Skill_detail
+ |skill=[[Amnesia]]
+ |description=Causes the victim to forget to do his next action.
+ |lessons=
+ |syntax=
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Causes the victim to forget to do his next action.
+}}
+
+{{Skill_detail
+ |skill=[[Paranoia]]
+ |description=They are out to get you, believe me.
+ |lessons=
+ |syntax=
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=They are out to get you, believe me.
+}}
+
+{{Skill_detail
+ |skill=[[Loneliness]]
+ |description=Fear of being left on your own.
+ |lessons=
+ |syntax=
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Fear of being left on your own.
+}}
+
+{{Skill_detail
+ |skill=[[Claustrophobia]]
+ |description=Fear of enclosed spaces.
+ |lessons=
+ |syntax=
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Fear of enclosed spaces.
+}}
+
+{{Skill_detail
+ |skill=[[Stuttering]]
+ |description=Anxious difficulty with speech.
+ |lessons=
+ |syntax=
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Anxious difficulty with speech.
+}}
+
+{{Skill_detail
+ |skill=[[Hallucinations]]
+ |description=Vivid hallucinations to plague your foe.
+ |lessons=
+ |syntax=
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Vivid hallucinations to plague your foe.
+}}
+
+{{Skill_detail
+ |skill=[[Dementia]]
+ |description=Hugely distorts victim's perception of the world.
+ |lessons=
+ |syntax=
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Hugely distorts victim's perception of the world.
+}}
+
+{{Skill_detail
+ |skill=[[Deadening]]
+ |description=Weakening of the mind.
+ |lessons=
+ |syntax=
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Weakening of the mind.
+}}
+
+{{Skill_detail
+ |skill=[[Epilepsy]]
+ |description=Throw your victim's nervous system into disarray.
+ |lessons=
+ |syntax=
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Throw your victim's nervous system into disarray.
+}}
+
+{{Skill_detail
+ |skill=[[Agoraphobia]]
+ |description=Fear of open spaces.
+ |lessons=
+ |syntax=
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Fear of open spaces.
+}}
+
+{{Skill_detail
+ |skill=[[Masochism]]
+ |description=The love of your own pain.
+ |lessons=
+ |syntax=
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=The love of your own pain.
+}}
+
+{{Skill_detail
+ |skill=[[Recklessness]]
+ |description=Ignorance of health and disregard for well-being.
+ |lessons=
+ |syntax=
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Ignorance of health and disregard for well-being.
+}}
+
+{{Skill_detail
+ |skill=[[Vertigo]]
+ |description=Fear of heights.
+ |lessons=
+ |syntax=
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Fear of heights.
+}}
+
+{{Skill_detail
+ |skill=[[Confusion]]
+ |description=Causes the mind to become confounded.
+ |lessons=
+ |syntax=
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Causes the mind to become confounded.
+}}
+
+{{Skill_detail
+ |skill=[[Stupidity]]
+ |description=Abject, stumbling idiocy.
+ |lessons=
+ |syntax=
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Abject, stumbling idiocy.
+}}
+
+<b>Complex Suggestions</b>
+{{Skill_detail
+ |skill=[[Clumsiness]]
+ |description=Inability to use weaponry effectively.
+ |lessons=
+ |syntax=
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Inability to use weaponry effectively.
+}}
+
+{{Skill_detail
+ |skill=[[Addiction]]
+ |description=A terrible addiction.
+ |lessons=
+ |syntax=
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=A terrible addiction.
+}}
+
+{{Skill_detail
+ |skill=[[Pacifism]]
+ |description=Loss of desire to cause anyone harm.
+ |lessons=
+ |syntax=
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Loss of desire to cause anyone harm.
+}}
+
+{{Skill_detail
+ |skill=[[Hypersomnia]]
+ |description=A condition that prevents insomnia.
+ |lessons=
+ |syntax=SUGGEST <target> HYPERSOMNIA
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=A condition that prevents insomnia.
+}}
+
+{{Skill_detail
+ |skill=[[Lethargy]]
+ |description=A distinct lack of energy.
+ |lessons=
+ |syntax=
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=A distinct lack of energy.
+}}
+
+{{Skill_detail
+ |skill=[[Anorexia]]
+ |description=Loss of desire to eat.
+ |lessons=
+ |syntax=
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Loss of desire to eat.
+}}
+
+{{Skill_detail
+ |skill=[[disruption|Disrupt]]
+ |description=Destroy your opponent's mental equilibrium.
+ |lessons=
+ |syntax=
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=This potent suggestion will knock the target off equilibrium briefly, or fully disrupt them if confusion is also present at the time it triggers.
+}}
+
+{{Skill_detail
+ |skill=[[Generosity]]
+ |description=Indiscriminate, overwhelming generosity.
+ |lessons=
+ |syntax=
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Indiscriminate, overwhelming generosity.
+}}
+
+{{Skill_detail
+ |skill=Action
+ |description=The ability to suggest an action of your choice.
+ |lessons=
+ |syntax=SUGGEST <target> ACTION <command>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=This potent suggestion will allow you to directly implant a command into the mind of your victim, which they will have no choice but to perform once their trance is activated. 
+}}
+
+{{Skill_detail
+ |skill=[[Hypochondria]]
+ |description=The conviction that one is constantly afflicted.
+ |lessons=
+ |syntax=
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=The conviction that one is constantly afflicted.
+}}
+
+[[Category:Skills]]

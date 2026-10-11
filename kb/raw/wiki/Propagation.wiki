@@ -1,0 +1,263 @@
+Those who practice propagation focus on altering their own physical state through the power of nature. Able to assume the form of the mighty Viridian, the adept propagator shall find themselves able to alter all aspects of their body, granting many beneficial changes.
+
+In addition, those that truly master the Viridian shall find that nature can be both lethal as well as benign. These rare individuals are able to cause death with naught but a single touch, and are feared appropriately.
+
+The skill of '''Propagation''' is available to members of the [[Sylvan]] [[class]], along with [[Groves]] and [[Weatherweaving]].
+
+==Abilities in Propagation==
+{{Skill_detail
+ |skill=Viridian
+ |description=Become a mighty viridian.
+ |lessons=
+ |syntax=ASSUME VIRIDIAN [STAFF]
+ |required=200 mana
+ |target=Self
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Meaning 'green' in an ancient language, a Viridian is a living, walking embodiment of the flora of the land. Upon casting this spell, you will quickly transform into one as thorny vines cover your body and burrow into your flesh. You will become stronger, able to endure more damage, and gain a protective bonus to physical damage done to you however your movements will be slightly hampered.<p>HUMAN will allow you to change back into your normal form. Be aware that remaining in this form is a constant drain on your willpower.</p><p>* STAFF option may be added to allow transformation into the mighty Viridian in areas that are not normally conducive to plant growth.</p>
+}}
+
+{{Skill_detail
+ |skill=Thornrend
+ |description=Rend your foes with your lethal vines.
+ |lessons=
+ |syntax=THORNREND <target> [venom] [limb] [plant to propagate arms with]
+ |required=80 mana
+ |target=Adventurers and denizens
+ |cooldown=3.00 seconds of equilibrium
+ |detail=You may now lash the flesh of your foes with your thorny vines, doing damage.<p>If you have learned the TARGETING ability in Weaponry, you may optionally direct your thornrend at a specific body part, causing additional damage to an arm, leg, the head, or the torso of your opponent.</p><p>If you have gained the ENVENOM ability in Weaponry then you may envenom your arms, which will deliver a venom to your target when you thornrend. Otherwise, you may SECRETE SAP to coat your arms in a single application.</p>
+}}
+
+{{Skill_detail
+ |skill=Targeting
+ |description=Aiming your blows at specific body parts.
+ |lessons=
+ |syntax=TARGET <body part> (HEAD{{!}}TORSO{{!}}RIGHT/LEFT ARM{{!}}RIGHT/LEFT LEG{{!}}NOTHING)
+ |required=
+ |target=
+ |cooldown=
+ |detail=With this ability, you will be able to target specific body parts on your opponent. Because this requires more precise timing on your part, the sheer damage you can do is reduced. However, by lacerating these body parts with your lethal vines, you can cause damage to them that is more difficult to cure than simple broken bones. For instance, a limb may be able to be beaten into uselessness, which requires a restoration salve to fix (and which does not get fixed immediately). Attacks to the torso will produce internal bleeding, while attacks to the head will produce a concussion. TARGET NOTHING will turn targeting off. 
+}}
+
+{{Skill_detail
+ |skill=Propagate
+ |description=Enhance yourself with nature's bounty.
+ |lessons=
+ |syntax=PROPAGATE <HEAD|BODY|ARMS|LEGS> WITH <plant><br>PROPAGATIONS
+ |required=200 mana
+ |target=Self
+ |cooldown=2.50 seconds
+ |detail=This is the core of the propagator's strategy. While in Viridian form, you are able to propagate one of either your head, body, arms, or legs with a plant. As you progress in propagation, you will learn to utilise more plants in this way. Each plant conveys a different benefit depending on the location you grow it.<p>Returning to human form will remove all of your propagations.</p>
+}}
+
+{{Skill_detail
+ |skill=[[Bloodroot]]
+ |description=One of the most widely used herbs.
+ |lessons=
+ |syntax=PROPAGATE <HEAD/BODY/ARMS/LEGS> WITH BLOODROOT
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=When propagated, this plant conveys the following bonuses:<p>'''Head''': You will regenerate endurance faster.<br>'''Body''': You will regenerate health faster.<br>'''Arms''': Your thornrend attack will deal increased damage to paralysed adventurers or hindered denizens (*).<br>'''Legs''': Move more quickly through caves and other such locations.<p>* Valid denizens battlerage afflictions are: clumsiness, amnesia, charm, and stun.</p>
+}}
+
+{{Skill_detail
+ |skill=[[Kelp]]
+ |description=The grass of the sea.
+ |lessons=
+ |syntax=PROPAGATE <HEAD/BODY/ARMS/LEGS> WITH KELP
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=When propagated, this plant conveys the following bonuses:<p>'''Head''': Increased asphyxiation resistance.<br>'''Body''': Allows for breathing underwater.<br>'''Arms''': Your thornrends will additionally deliver the healthleech affliction.<br>'''Legs''': Assuming you can already walk on water, move more quickly through watery environments.</p>
+}}
+
+{{Skill_detail
+ |skill=[[Bellwort]]
+ |description=A flower with mysterious properties.
+ |lessons=
+ |syntax=PROPAGATE <HEAD/BODY/ARMS/LEGS> WITH BELLWORT
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=When propagated, this plant conveys the following bonuses:<p>'''Head''': Access to the rage ability, which cures various afflictions.<br>'''Body''': Immunity to the peace affliction.<br>'''Arms''': Your thornrend attacks will additionally deliver the weariness affliction.<br>'''Legs''': The ability to walk on water.</p>
+}}
+
+{{Skill_detail
+ |skill=Mutation
+ |description=The first step toward mastery.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=You are now able to propagate up to two of the four possible locations simultaneously.
+}}
+
+{{Skill_detail
+ |skill=Lacerate
+ |description=Lay open their throat with your vines.
+ |lessons=
+ |syntax=LACERATE <target>
+ |required=150 mana
+ |target=Adventurers
+ |cooldown=2.50 seconds of equilibrium
+ |detail=You will now be capable of lacerating a target's throat, slashing vocal cords and causing great pain.
+}}
+
+{{Skill_detail
+ |skill=[[Valerian]]
+ |description=A plant that grows in mountainous areas.
+ |lessons=
+ |syntax=PROPAGATE <HEAD/BODY/ARMS/LEGS> WITH VALERIAN
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=When propagated, this plant conveys the following bonuses:<p>'''Head''': Increased psychic resistance.<br>'''Body''': Reduces the mana cost of clotting your wounds.<br>'''Arms''': Your thornrends will additionally deliver the slickness affliction.<br>'''Legs''': Move more quickly through mountainous areas.</p>
+}}
+
+{{Skill_detail
+ |skill=[[Lobelia]]
+ |description=A brightly coloured plant used to cure phobias.
+ |lessons=
+ |syntax=PROPAGATE <HEAD/BODY/ARMS/LEGS> WITH LOBELIA
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=When propagated, this plant conveys the following bonuses:<p>'''Head''': You are less likely to fall prey to the muddling effects of the   
+stupidity affliction.<br>'''Body''': You will be immune to fear effects from phobia afflictions.<br>'''Arms''': Your thornrend attacks will additionally deliver the vertigo affliction.<br>'''Legs''': Move faster through forests.</p>
+}}
+
+{{Skill_detail
+ |skill=[[Elm]]
+ |description=A potent herb with limited applications.
+ |lessons=
+ |syntax=PROPAGATE <HEAD/BODY/ARMS/LEGS> WITH ELM
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=When propagated, this plant conveys the following bonuses:<p>'''Head''': Allows you to writhe out of transfixation much faster.<br>'''Body''': Allows you to writhe entanglements faster.<br>'''Arms''': Your thornrend attack shall deliver dizziness.<br>'''Legs''': Move faster through tundra and polar regions.</p>
+}}
+
+{{Skill_detail
+ |skill=[[Sileris]]
+ |description=A berry that grows in various valleys.
+ |lessons=
+ |syntax=PROPAGATE <HEAD/BODY/ARMS/LEGS> WITH SILERIS
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=When propagated, this plant conveys the following bonuses:<p>'''Head''': You will recover more quickly from sipping the immunity elixir.<br>'''Body''': Increased resistance to poison damage.<br>'''Arms''': Your thornrend attack will deal cutting damage against adventurers and denizens, instead of magical.<br>'''Legs''': You are less likely to slip on icy ground.</br>
+}}
+
+{{Skill_detail
+ |skill=Vinewreathe
+ |description=Call upon Nature to hinder your foe.
+ |lessons=
+ |syntax=VINEWREATHE <target>
+ |required=500 mana
+ |target=Adventurers
+ |cooldown=2.80 seconds of equilibrium
+ |detail=Calling upon Nature, you may summon a mass of animated vines to hinder your target for a time, preventing any attempts they make to parry your thornrends.
+}}
+
+{{Skill_detail
+ |skill=[[Kola]]
+ |description=A small nut with surprising potency.
+ |lessons=
+ |syntax=PROPAGATE <HEAD/BODY/ARMS/LEGS> WITH KOLA
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=When propagated, this plant conveys the following bonuses:<p>'''Head''': Maintaining the metawake defence will cost less mana and          
+willpower.<br>'''Body''': Awaken swiftly as if you had the kola defence.<br>'''Arms''': Your thornrend attack will secrete a sap that will attempt to put your target to sleep.<br>'''Legs''': Move faster through jungles and valleys.</p>
+}}
+
+{{Skill_detail
+ |skill=Multiplication
+ |description=Greater control over the viridian.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=You have reached a point in your training where you are able to propagate three of the four possible locations simultaneously.
+}}
+
+{{Skill_detail
+ |skill=Barkskin
+ |description=Make your skin tough like bark.
+ |lessons=
+ |syntax=BARKSKIN
+ |required=200 mana
+ |target=Self
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This ability will cause your skin to become as bark, providing an increased measure of protection vs. attacks doing physical damage.
+}}
+
+{{Skill_detail
+ |skill=[[Goldenseal]]
+ |description=A plant that affects the mind.
+ |lessons=
+ |syntax=PROPAGATE <HEAD/BODY/ARMS/LEGS> WITH GOLDENSEAL
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=When propagated, this plant conveys the following bonuses:<p>'''Head''': Increased willpower regeneration.<br>'''Body''': Increased mana regeneration.<br>'''Arms''': Your thornrend attacks will additionally deliver epilepsy.<br>'''Legs''': Move faster through grasslands.
+}}
+
+{{Skill_detail
+ |skill=[[Skullcap]]
+ |description=A plant that grows in the harsher environments.
+ |lessons=
+ |syntax=PROPAGATE <HEAD/BODY/ARMS/LEGS> WITH SKULLCAP
+ |required=
+ |target=Self
+ |cooldown=
+ |detail= When propagated, this plant conveys the following bonuses:<p>'''Head''': You will be able to see when adventurers fall in battle as if you had the deathsight defence.<br>'''Body''': You will recover more quickly from smoking the skullcap plant.<br>'''Arms''': Your thornrend attacks will funnel power into an arcane storm if one is present (requires feedback on your target) OR bypass the shield defence against denizens(*).<br>'''Legs''': Move more swiftly through deserts.<p>* Your thornrend attacks will bypass, but not strip, the magical shield defence on denizens.</p>
+}}
+
+{{Skill_detail
+ |skill=Eclipse
+ |description=Bedazzle your foe with a celestial bolt.
+ |lessons=
+ |syntax=ECLIPSE <target>
+ |required=600 mana
+ |target=Adventurers
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Calling upon the vast brilliance of sky-bound celestial bodies, you may overwhelm a target's senses. Unless they are sufficiently restrained, your victim may evade the effects of the spell.
+}}
+
+{{Skill_detail
+ |skill=[[Hawthorn]]
+ |description=A plant that grows in hilly locations.
+ |lessons=
+ |syntax=PROPAGATE <HEAD/BODY/ARMS/LEGS> WITH HAWTHORN
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=When propagated, this plant conveys the following bonuses:<p>'''Head''': You can shout longer messages without passing out from the strain.<br>'''Body''': When eating the hawthorn plant, you will gain the deafness defence faster than usual.<br>'''Arms''': Your thornrend attack will deliver the sensitivity affliction if deafness is not present; otherwise it shall strip the deafness defence.<br>'''Legs''': Move faster through hilly locations.</p>
+}}
+
+{{Skill_detail
+ |skill=Heartseed
+ |description=Send Nature's touch to destroy your enemy from within.
+ |lessons=
+ |syntax=HEARTSEED <target>
+ |required=750 mana
+ |target=Adventurers
+ |cooldown=5.50 seconds of equilibrium
+ |detail=Among the most dangerous and forbidden of a sylvan's spells, the Heartseed embodies Nature at its most baneful. Draining your victim's vitality to speed its growth, the germination of a Heartseed will rapidly end the life of he or she whom it is sent to plague. If your victim manages to avoid their fate and cure the heartseed, their body will be wracked by the process, causing them significant damage for each injured limb they suffer from.
+}}
+
+{{Skill_detail
+ |skill=Acceleration
+ |description=Complete mastery of the viridian form.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=You have reached a point where you are able to have all four possible locations propagated simultaneously.
+}}
+
+[[Category:Skills]]

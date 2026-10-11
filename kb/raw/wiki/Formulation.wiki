@@ -1,0 +1,250 @@
+Using the mystic research carried out over the centuries in the [[Cauda Pavonis]], Alchemists have mastered the art of amalgamating potent compounds that can turn the tide of any battle.
+
+A variety of different mixtures are available, from phials of toxic gases which can be thrown into groups of enemies, to helpful concoctions that, when imbibed, will bolster the creator's offensive and defensive capabilities.
+
+The skill of '''Formulation''' is available to members of the [[Alchemist]] [[class]], along with [[Alchemy]] and [[Physiology]]. Instead of formulation, an Alchemist may choose the skill of [[Sublimation]].
+
+==Abilities in Formulation==
+{{Skill_detail
+ |skill=Mask
+ |description=Craft yourself a protective mask.
+ |lessons=
+ |syntax=CRAFT MASK<br>SECURE MASK
+ |required=5 cloth
+ |target=
+ |cooldown=
+ |detail=Possibly the most important of all, this vital item of clothing, when secured, will filter the air that passes through to you and allow you to avoid many hazards when working with dangerous substances.
+}}
+
+{{Skill_detail
+ |skill=Amalgamate
+ |description=Combine minerals to create potent compounds.
+ |lessons=
+ |syntax=AMALGAMATE <compound>
+ |required=
+ |target=
+ |cooldown=2.20 seconds of balance
+ |detail=With the right mineral reagents, you are able to create various potent compounds to alter your own physiology and create various effects.
+}}
+
+{{Skill_detail
+ |skill=Endorphin
+ |description=Soothe the body with a potent endorphin.
+ |lessons=
+ |syntax=WIELD ENDORPHIN<br>THROW ENDORPHIN <AT GROUND{{!}}direction>
+ |required=1 cuprum, 1 argentum
+ |target=
+ |cooldown=2.60 seconds of balance
+ |detail=This compound produces a gas which, when inhaled, will heal the body of some damage.
+}}
+
+{{Skill_detail
+ |skill=Nutritional
+ |description=A potent nutritional supplement.
+ |lessons=
+ |syntax=IMBIBE NUTRITIONAL<br>ADMINISTER NUTRITIONAL <target>
+ |required=1 ferrum, 1 potash
+ |target=
+ |cooldown=
+ |detail=This compound is a potent nutritional supplement. It is rumoured that many alchemists have found themselves able to sustain their bodies off of this almost indefinitely. 
+}}
+
+{{Skill_detail
+ |skill=Corrosive
+ |description=An acid to eat away at various defences.
+ |lessons=
+ |syntax=WIELD CORROSIVE<br>THROW CORROSIVE <AT GROUND{{!}}direction>
+ |required=2 magnesium, 3 cinnabar
+ |target=
+ |cooldown=2.60 seconds of balance
+ |detail=This potent acid reacts violently when it comes into contact with certain defences, chief among them magical shields. 
+}}
+
+{{Skill_detail
+ |skill=Petrifying
+ |description=Partial petrification comes with many advantages.
+ |lessons=
+ |syntax=IMBIBE PETRIFYING
+ |required=2 ferrum, 1 plumbum
+ |target=
+ |cooldown=
+ |detail=This compound alters the physiology of the alchemist. By partially turning one's bones into a dense, iron-like substance, the user shall find themselves slowed but more able to resist physical damage. However, they should be wary of attacks that draw their power from lightning, as they will be particularly vulnerable to such.<p>If the compound is highly volatile, its effects shall expire after five minutes.</p>
+}}
+
+{{Skill_detail
+ |skill=Incendiary
+ |description=Sear flesh from bone with this lethal compound.
+ |lessons=
+ |syntax=WIELD INCENDIARY<br>THROW INCENDIARY <AT GROUND{{!}}direction>
+ |required=2 magnesium, 1 potash
+ |target=
+ |cooldown=2.60 seconds of balance
+ |detail=This deadly compound clings to the skin of those that it comes into contact with, burning until either all fuel is exhausted or the victim manages to scrub away the reactant.  
+}}
+
+{{Skill_detail
+ |skill=Alteration
+ |description=Modify various properties of your compounds.
+ |lessons=
+ |syntax=ENHANCE POTENCY{{!}}STABILITY{{!}}VOLATILITY OF <compound><br>DILUTE POTENCY{{!}}STABILITY{{!}}VOLATILITY OF <compound><br>AMALGAMATE <compound> <type> <amount> <type> <amount>...
+ |required=
+ |target=
+ |cooldown=
+ |detail=You have reached a point in your training where you are able to more directly alter the compounds that you create.<p>Your mastery is such that you will be able to alter the potency, stability, or volatility. Although the true alchemist shall find experimentation to be the best guide, as a general rule volatility shall cause a faster reaction, stability shall allow the compound to react for a longer period of time, and potency shall cause a more concentrated effect.</p><p>You may also specify the potency, stability and/or volatility of a compound at the time you AMALGAMATE it.</p>
+}}
+
+{{Skill_detail
+ |skill=Scrutinise
+ |description=Determine specifics about your compounds.
+ |lessons=
+ |syntax=SCRUTINISE <compound>
+ |required=
+ |target=
+ |cooldown=
+ |detail=You are now able to determine specifics about how volatile, potent, or stable a compound is.
+}}
+
+{{Skill_detail
+ |skill=Insufflate
+ |description=This compound will allow you to convert water into oxygen.
+ |lessons=
+ |syntax=IMBIBE INSUFFLATE
+ |required=1 gypsum, 1 dolomite
+ |target=
+ |cooldown=
+ |detail=This compound will alter your physiology, allowing you to convert foreign substances into oxygen. For the most part this can be used to allow one to breathe under water.
+}}
+
+{{Skill_detail
+ |skill=Devitalisation
+ |description=The air itself turns against your victims.
+ |lessons=
+ |syntax=WIELD DEVITALISATION<br>THROW DEVITALISATION <AT GROUND{{!}}direction>
+ |required=2 aurum, 1 cuprum
+ |target=
+ |cooldown=2.60 seconds of balance
+ |detail=This experimental compound is insidious indeed. Those that inhale it shall find that over time their maximum health reserves shall steadily decrease, and they will be unable to recover such until they have separated themselves from the substance for a time. The alchemist should be especially wary, as at this point all attempts to create a filter via their protective mask have failed.  
+}}
+
+{{Skill_detail
+ |skill=Intoxicant
+ |description=Paralyse the lungs of the unprotected.
+ |lessons=
+ |syntax=WIELD INTOXICANT<br>THROW INTOXICANT <AT GROUND{{!}}direction>
+ |required=2 potash, 1 cinnabar
+ |target=
+ |cooldown=2.60 seconds of balance
+ |detail=This airborn substance will cause paralysis of the lungs if inhaled.
+}}
+
+{{Skill_detail
+ |skill=Vaporisation
+ |description=A compound that reacts violently with water.
+ |lessons=
+ |syntax=WIELD VAPORISATION<br>THROW VAPORISATION <AT GROUND{{!}}direction>
+ |required=2 magnesium, 1 malachite
+ |target=
+ |cooldown=2.60 seconds of balance
+ |detail=This powder reacts violently with water, able to boil away liquid or turn ice to steam.
+}}
+
+{{Skill_detail
+ |skill=Phosphorous
+ |description=A compound to create a blinding flash.
+ |lessons=
+ |syntax=WIELD PHOSPHOROUS<br>THROW PHOSPHOROUS <AT GROUND{{!}}direction>
+ |required=1 arsenic, 2 magnesium
+ |target=
+ |cooldown=2.60 seconds of balance
+ |detail=When exposed to the open air, this compound will produce a blinding flash. The blindness induced is so damaging that not even the mindseye tattoo can allow one to see until they have recovered.  
+}}
+
+{{Skill_detail
+ |skill=Monoxide
+ |description=A gas to disorientate your subjects.
+ |lessons=
+ |syntax=WIELD MONOXIDE<br>THROW MONOXIDE <AT GROUND{{!}}direction>
+ |required=1 ferrum, 1 realgar, 1 plumbum
+ |target=
+ |cooldown=2.60 seconds of balance
+ |detail=This potent gas causes those who inhale it to become extremely disorientated.<p>If flung from an adjacent room, any who breathe the gas in shall find themselves periodically falling to the ground. If flung at the ground, those that inhale it shall also suffer an immediate balance loss.</p>
+}}
+
+{{Skill_detail
+ |skill=Toxin
+ |description=Death with a single breath.
+ |lessons=
+ |syntax=WIELD TOXIN<br>THROW TOXIN <AT GROUND{{!}}direction>
+ |required=2 arsenic, 1 potash, 1 magnesium
+ |target=Adventurers
+ |cooldown=
+ |detail=A single breath of the gas released by this compound is enough to produce the most deadly of reactions, striking down the unfortunate individual with the voyria plague.
+}}
+
+{{Skill_detail
+ |skill=Concussive
+ |description=A compound that reacts violently when exposed to the air.
+ |lessons=
+ |syntax=WIELD CONCUSSIVE<br>THROW CONCUSSIVE <AT GROUND{{!}}direction>
+ |required=2 magnesium, 2 argentum, 1 potash
+ |target=
+ |cooldown=2.60 seconds of balance
+ |detail=This compound will cause a violent explosion. While it lacks much damaging potential, it will cause a concussive wave, able to launch any who do not have themselves suitably secured from the location.<p>When the alchemist is at the centre of the detonation, he or she is able to be more accurate, allowing for the explosion to occasionally bypass defences which would otherwise hold a subject in place.</p>
+}}
+
+{{Skill_detail
+ |skill=Mayology
+ |description=The culmination of the Mayan experiment.
+ |lessons=
+ |syntax=AMALGAMATE DESTRUCTIVE<br>IMBIBE DESTRUCTIVE
+ |required=1 plumbum, 1 aurum, 1 potash, 1 ferrum, 1 argentum, 1 cuprum, 1 realgar
+ |target=
+ |cooldown=
+ |detail=This serum is possibly the most potent compound of those discovered by modernday alchemists. Able to drive the consumer's body far beyond mortal limits, rumour has it that it was an attempt to replicate the divine miracle performed by Maya which raised the adventurers of Sapience to partial divinity in the battle with the Worldreaver, but through the application of science.<p>Although the experiment inevitably failed, the result was a serum which could speed up the alchemist's balance and equilibrium to an incredible degree. However, the price is high indeed. Any who consume this compound shall find their body will break down under the strain, resulting in certain death shortly after. For this reason it is dismissed as a failure in many circles, although as a last resort it is without compare.</p>
+}}
+
+{{Skill_detail
+ |skill=Halophilic
+ |description=An experimental agent.
+ |lessons=
+ |syntax=WIELD HALOPHILIC<br>THROW HALOPHILIC <AT GROUND{{!}}direction>
+ |required=4 salt, 2 plumbum
+ |target=Room
+ |cooldown=
+ |detail=This experimental compound has little practical use, as it only seems able to kill certain species of vines.
+}}
+
+{{Skill_detail
+ |skill=Enhancement
+ |description=A formula to enhance your physiology.
+ |lessons=
+ |syntax=IMBIBE ENHANCEMENT
+ |required=3 argentum, 2 quicksilver
+ |target=
+ |cooldown=
+ |detail=This formula is yet another attempt to achieve a superior state of being through the application of science. Although not as potent as some previous attempts, the changes tend to persist for a greater period of time, as well as providing far less danger to the user.<p>The changes make the alchemist both more durable, as well as granting potential for greater control over their own internal processes. The only known drawbacks as of current research is that the subject tends to suffer from a state of heightened aggression, and the backlash when the changes revert can induce minor discomfort.</p>
+}}
+
+{{Skill_detail
+ |skill=Bolster
+ |description=Force your body beyond its limits.
+ |lessons=
+ |syntax=BOLSTER
+ |required=351 mana and enhanced form
+ |target=
+ |cooldown=2.60 seconds of balance
+ |detail=This potent ability allows an alchemist who has imbibed the enhancement formula to drive their body into a state of advanced healing. Even the most terrible injuries can be healed, although the toll upon the alchemist's mental reserves is excessively high.<p>It is also theorised that extended use of this ability will cause the backlash from the alchemists physiology reverting from an enhanced state to be exponentially more dangerous.<p>
+}}
+
+{{Skill_detail
+ |skill=Philosopherstone
+ |description=The pinnacle of Alchemical learning.
+ |lessons=
+ |syntax=TRANSMUTATE PHILOSOPHER STONE
+ |required=2000 mana
+ |target=
+ |cooldown=7.50 seconds of equilibrium
+ |detail=The Philosopher's Stone is the pinnacle of Alchemical learning and mastery. The Stone is created in four steps, with each step providing increased power and insight to the Alchemist who creates it. The nigredo, or blackening comes first. Following this is the albedo, the whitening. Then the citrinitas, or yellowing. The final step is the rubedo, or reddening.<p>Most Alchemists will only be able to ever complete the nigredo, and none have ever completed the final step of rubedo. What powers it ultimately holds is unknown, but many theories have been whispered in the vaunted halls of the Cauda Pavonis.</p>
+}}
+
+[[Category:Skills]][[Category:Edit needed]]

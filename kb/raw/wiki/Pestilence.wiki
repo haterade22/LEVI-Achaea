@@ -1,0 +1,213 @@
+:''This article is about the Pariah skill. For the enchantment, please see [[ring of pestilence]].''
+
+The practitioner of Pestilence is armed where ever they may walk, for their weapons are not of steel or bronze but of chitin and plague. In the darkness the chittering nightmares wait, enthralled to the will of their benefactor. When the skies turn black and the myriad eyes open, one thing can be certain: it is time to feast and there is enough for all.
+ 
+The sorcerer who raises swarms to do their bidding may wield them in many ways. Be it simply sending them to sting their enemies or blot out the sky, drown their enemies on dry land or feast from within, one thing can be certain: the Pariah's fist is manifold, and it will fall on countless wings.
+
+The skill of Pestilence is available to members of the [[Pariah]] [[class]], along with [[Memorium ]] and [[Charnel]].
+
+==Abilities in Pestilence==
+{{Skill_detail
+ |skill=Detect
+ |description=That which may fall under your sway.
+ |lessons=
+ |syntax=SWARM DETECT
+ |required=
+ |target=
+ |cooldown=2.50 seconds of equilibrium
+ |detail=The intrepid sorcerer will require a swarm to do their bidding, and in the early days a more hands-on process is required. While wandering the land you may detect what insect life is nearby that you may enthrall; different insects may be found in different locations, and some locations will be more bountiful than others.   
+}}
+
+{{Skill_detail
+ |skill=Enthrall
+ |description=You are the nightmare that crawls and flies.
+ |lessons=
+ |syntax=SWARM ENTHRALL [type of insect]<br>SWARM BUILD <number of insect> <type of insect> [<number of insect> <type of insect> ...]<br>SWARM NAME <swarm> <new name>
+SWARM SHOW <swarm><br>SWARM DISPERSE <swarm><br>SWARM DISMISS [RESERVES] <insect type><br>SWARM DISBAND <swarm><br>SWARM RESERVES<br>SWARMS
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=While in a location that you have detected sufficient insectoid life, you may bend your arcane art to the task of bringing your soon-to-be minions under your sway.<p>SWARM ENTHRALL: bring insects under your control. If there are multiple types of insects in the location, you will need to specify which ones you wish to enthrall.<br>SWARM BUILD: break your enthralled insects up into swarms.<br>SWARM NAME: give a personalised name to a swarm, for easy reference.<br>SWARM SHOW: see details about one of your swarms.<br>SWARM DISPERSE: disperse one of your swarms back into your reserves of insects.<br>SWARM RESERVES: see your insects outside of swarms.<br>SWARM DISMISS: Get rid of unwanted insect types, even from your reserves.<br>SWARM DISBAND: wipe one of your swarms.<br>SWARMS: see all of your swarms.</p>
+}}
+
+{{Skill_detail
+ |skill=Infect
+ |description=Your minions carry much.
+ |lessons=
+ |syntax=SWARM INFECT <swarm> <plague>
+ |required=
+ |target=
+ |cooldown=2.00 seconds of equilibrium
+ |detail=Your deadly swarms bring ruin upon your enemies, but sometimes a more insidious approach is required. Each swarm can be infected with one of the deadly plagues that your arcane art may manufacture: these can then be conveyed through various methods.<p>Note that the process of infecting takes time, so preparation before battle is key.</p>
+}}
+
+{{Skill_detail
+ |skill=Devour
+ |description=Leave no scraps.
+ |lessons=
+ |syntax=SWARM DEVOUR <swarm> <target
+ |required=
+ |target=Denizens.
+ |cooldown=40.00 seconds
+ |detail=Command a ravenous swarm of burrowing insects to surge towards a denizen, where they will rip and tear flesh, dealing cutting damage. This ability can only be performed every so often(*), unless the swarm fully devours its target(**).<p>* Every 40 seconds.<br>** If this attack lands the killing blow, the cooldown is immediately refunded.</br>
+}}
+
+{{Skill_detail
+ |skill=Sacrifice
+ |description=The price of power.
+ |lessons=
+ |syntax=SWARM SACRIFICE <swarm>
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=When need is high, you may sacrifice one of your swarms by flooding it with your arcane power. It is a costly use of your minions, though doing so will cause all in your location (except yourself) to be struck down with the arcane plague that said swarm was carrying. They shall also suffer damage from the excess energy released.<p>* This will destroy the swarm utilised on use, including all insects contained therein.</p>
+}}
+
+{{Skill_detail
+ |skill=Eclipse
+ |description=Darkness beneath the writhing clouds.
+ |lessons=
+ |syntax=SWARM ECLIPSE <swarm>
+ |required=
+ |target=
+ |cooldown=2.60 seconds of equilibrium
+ |detail=There will always be those that think that they can outfly your swarms. They are wrong. By directing one of your swarms made up of flying insects to eclipse the sky in a location, any who try to take to the air to escape that location will find that your minions are not so simply evaded(*). If you attempt to take to the skies yourself, your swarm will immediately disperse from its task.<p>* They will be knocked back to the ground and off balance.</p>
+}}
+
+{{Skill_detail
+ |skill=Virulence
+ |description=Interaction heralds doom.
+ |lessons=
+ |syntax=VIRULENCE <target>
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=The arcane plagues are dangerous in the singular, but it is when they interact that they truly become deadly. Various plagues react to one another when coaxed to do so via higher sorcery, and the interactions are listed below:<p>Pyramides + Flushings = Healthleech.<br>Pyramides + Rebbies = Slickness.<br>Flushings + Rebbies = Darkshade.<br>Flushings + Sandfever = Anorexia.<br>Mycalium + Sandfever = Dizziness if not present, then stupidity if not present, or blackout if both are present.<br>Mycalium + Sandfever + Rebbies = Peace.<p>These conditionals do stack with one another, and you may only invoke this act of higher sorcery a subsequent time after some delay. This working of higher sorcery can be wielded against anyone in the local area.</p>
+}}
+
+===Higher Sorcery===
+{{Skill_detail
+ |skill=Sting
+ |description=Pain that comes on countless wings.
+ |lessons=
+ |syntax=SWARM STING <swarm> <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Send a swarm composed of stinging and flying insects to descend upon your enemy. Beyond simply suffering the pain of the ordeal, if your victim is an adventurer they shall also be infected by whatever plague your swarm is infected with.<p>Weariness will affect this ability.</p>
+}}
+
+{{Skill_detail
+ |skill=Burrow
+ |description=Into the warm and dark.
+ |lessons=
+ |syntax=SWARM BURROW <swarm> <target>
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Send your swarm to burrow into the flesh of your foe, lingering within their body. This utilisation of your swarms does not do more than cause bodily discomfort(*), but there are many opportunities available to one who can invade the corpus once this has been achieved(**).<p>* Does damage.<br>** There are further abilities which can be utilised via a burrowed swarm.</p>
+}}
+
+{{Skill_detail
+ |skill=Extract
+ |description=Call them home post haste.
+ |lessons=
+ |syntax=SWARM EXTRACT <swarm>
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=If one of your swarms has burrowed into a victim, you may call them urgently to return with predictably bloody results. A swarm ripping itself free in this manner will cause blood to splatter the location(*), bodily harm, and convey any plague it is carrying.<p>* See AB MEMORIUM SANGUINEHAND.</p>
+}}
+
+{{Skill_detail
+ |skill=Infest
+ |description=Rampant from within.
+ |lessons=
+ |syntax=SWARM INFEST <swarm>
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Your options once one of your swarms has burrowed inside a victim are numerous. While perhaps not as viscerally satisfying as tearing your minions free, infestation is a more subtle working. Though your swarm will be expelled in the process, you can have them leave behind remnants of that plague which they carry, which will manifest at a later time(*).<p>* The plague your swarm is carrying will relapse twice at a later time, though it is not given on the process of infestation itself.</p>
+}}
+
+{{Skill_detail
+ |skill=Latency
+ |description=A bleak future awaits.
+ |lessons=
+ |syntax=SWARM LATENCY <swarm>
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Your myriad minions are undoubtedly deadly when used overtly, but there are more subtle workings you may also employ. Once the defences of your foe have been breached(*), and they are sufficiently vulnerable(**), you may utilise your minions as a vector through which to ravage your foe internally with your sorcery(***).<p>* A target who possesses three of: pyramides, flushings, rebbies, mycalium, and sandfever.<br>** You must have a swarm burrowed into your target.<br>*** Their body will be unable to process immunity elixirs for thirteen  
+seconds after your arcane strike.</p>
+}}
+
+{{Skill_detail
+ |skill=Scourge
+ |description=A black fate indeed.
+ |lessons=
+ |syntax=SWARM SCOURGE <swarm> <target>
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=An enemy who is sufficiently weakened and vulnerable to your myriad minions can be dispatched post haste. May their fate be a lesson to those that would consider opposing your will(*).<p>* They will need to be suffering from thinned blood, haemophilia, and the pyramides disease as well as 200 bleeding.</p>
+}}
+
+===Plagues===
+{{Skill_detail
+ |skill=Pyramides
+ |description=The body rejects that which sustains.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=Its origins shrouded in mystery, this insidious plague takes its name from the legendary swordsman. Any wound that bleeds becomes potentially deadly when labouring beneath this disease, the body turning against itself and being unmade from within(*).<p>* All bleeding is increased by 10% when suffering under this plague.<br>
+** Note: this affliction will always be cured after paralysis when attempting to cure it via bloodroot or magnesium.</p>
+}}
+
+{{Skill_detail
+ |skill=Rebbies
+ |description=An unpleasant transformative disease.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=Its origins shrouded in mystery, this disease is a slow-working infection that breaks down and reshapes the body over time. In itself it is not particularly dangerous: the truly nightmarish aspect of its function is that the modifications are passed on to any of the infected's progeny. One of the immediate symptoms, however, is that salve applied to the skin can leave it extremely tender(*).<p>* Applying salves to the skin or torso area will result in being afflicted with sensitivity.</p> 
+}}
+
+{{Skill_detail
+ |skill=Flushings
+ |description=Even the vital will be purged.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=A most unpleasant disease that in the distant past inspired all manner of modern day curses, flushings is an insidious plague which causes a violent reaction to the consumption of ginseng(*). The reaction causes the body to turn against itself, and purge even that which sustains it(**).<p>* Also applies to ferrum minerals.<br>** Each time you eat ginseng/ferrum you will bleed from your pores.</p>
+}}
+
+{{Skill_detail
+ |skill=Mycalium
+ |description=A blight upon this land.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=Named for perhaps the most loathed monarch in the history of the Seleucarian Empire, this disease is extremely insidious. One infected with the unnatural plague may not even realise they have it; they will only know that all that gaze upon them are provoked to irrational and indiscriminate violence(*), though in its more rampant manifestations they will find that they will suffer from uncontrollable shaking(**).<p>* Those afflicted with this disease will be considered a personal enemy by everyone.<br>** Periodic balance loss, similar to the epilepsy affliction if to a reduced frequency.</p>
+}}
+
+{{Skill_detail
+ |skill=Sandfever
+ |description=A single step is a quest indeed.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=Beneath the oppressive sun of the desert the infamous sandfever was born. A hapless individual labouring under this disease will find movement a truly exhausting task; once mighty warriors will find themselves drained by even the most simple of movement(*), and once sharp minds shall fall into silent disarray(**).<p>* While afflicted with this affliction a person's celerity becomes 1: this means you can only move one room before having to wait to move again.<br>** You cannot focus your mind while afflicted with sandfever.</p>
+}}
+
+[[Category:Skills]]

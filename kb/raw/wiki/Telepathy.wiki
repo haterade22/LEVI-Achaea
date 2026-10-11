@@ -1,0 +1,469 @@
+Telepathy is the skill of mental manipulation. The abilities in it may be divided generally into two parts. The first are abilities that can simply be attempted on any adventurer in the same location. The second kind are abilities that require a mind lock to use.
+
+The skill of '''Telepathy''' is available to members of the [[Monk]] [[class]], along with [[Tekura]] and [[Kaido]]. After a monk has mastered Tekura they may enhance their training with [[Shikudo]].
+
+==Abilities in Telepathy==
+:''Abilities designated with an asterisk (*) are available to use without a mind lock.
+{{Skill_detail
+ |skill=Sense
+ |description=Use your telepathic powers to seek out others.
+ |lessons=
+ |syntax=MIND SENSE <target>
+ |required=10 mana
+ |target=Adventurers
+ |cooldown=
+ |detail=With this ability, you are able to seek out the mind of another adventurer, gaining knowledge of his physical location.
+}}
+
+{{Skill_detail
+ |skill=Lock
+ |description=Focus your telepathic power to lock minds with someone.
+ |lessons=
+ |syntax=MIND LOCK <target><br>MIND CEASE <target><br>MIND UNLOCK <target><br>MIND STATUS
+ |required=80 mana
+ |target=Adventurers
+ |cooldown=
+ |detail=This is the ability that most of the Telepathic arts are focused around. It is the skill of breaking down the barriers of resistance in another person and locking your mind to his. The adventurer must be in the same area as you, for even your powerful mind has its limits.<p>The time it takes to gain a mind lock can vary depending on your target. Your skill in Telepathy vs. his skill in Philosophy and your willpower vs. his willpower are the prime factors in how long it will take to attain the lock.</p><p>A mind lock attempt can be stopped prematurely via MIND CEASE.</p><p>Once you have initiated a lock, every 15 seconds, the locked mind automatically gets a chance to break the lock. The chance of breaking the lock is determined by a comparison of your current willpower vs. the target's current willpower, and your Telepathy level vs. the target's Philosophy level, and various mental defenses for both individuals.</p><p>MIND STATUS will show you who your mind is locked with, as well as any continuous abilities that are being channeled through the lock.</p>
+}}
+
+{{Skill_detail
+ |skill=Glance
+ |description=Look through the eyes of your subject.
+ |lessons=
+ |syntax=MIND GLANCE
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This allows you to look through the eyes of the adventurer you have locked minds with.
+}}
+
+{{Skill_detail
+ |skill=Telesense
+ |description=Detect attempts to mind lock you or others nearby.
+ |lessons=
+ |syntax=MIND TELESENSE [ON{{!}}OFF]
+ |required=100 mana and mana drain
+ |target=Adventurers
+ |cooldown=
+ |detail=Due to your heightened telepathic awareness, you are able to detect attempts to lock your mind.
+}}
+
+{{Skill_detail
+ |skill=Fear
+ |description=Fill your target's mind with an irrational fear.(*)
+ |lessons=
+ |syntax=MIND FEAR [target]
+ |required=100 mana
+ |target=Adventurers
+ |cooldown=2.00 seconds of equilibrium
+ |detail=With this ability, you are able to throw the mind of a locked adventurer into a state of irrational fear.
+}}
+
+{{Skill_detail
+ |skill=Throw
+ |description=Mentally push a subject in any direction.
+ |lessons=
+ |syntax=MIND THROW <direction>
+ |required=150 mana
+ |target=Adventurers
+ |cooldown=3.00 seconds of equilibrium
+ |detail=As you learn to better control the mind of a locked adventurer, you gain some control over their actions. This is the first of them. You are able to make the adventurer's mind try to move its body in the direction of your choice.<p>Due to the strain of this ability on the user, any held mindlocks are immediately broken.</p>
+}}
+
+{{Skill_detail
+ |skill=Hallucinate
+ |description=Project an illusion into the mind of your subject.(*)
+ |lessons=
+ |syntax=MIND HALLUCINATE <target> <illusion>
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=2.00 seconds of equilibrium
+ |detail=The adventurer experiences the hallucination directly in his mind. A mind lock is required if the victim is not in the same room. Note that the name of your adventurer target is not optional. You may embed a single new line by including the two characters "\n" as you desire. For limitations and exclusions, please also refer to HELP ILLUSIONS.
+}}
+
+{{Skill_detail
+ |skill=Terror
+ |description=Strike utter terror into the mind of your subject.
+ |lessons=
+ |syntax=MIND TERROR
+ |required=300 mana
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=You are able to throw your target into a state of pure terror - far greater than simple fear. Your target will drop whatever he is holding and run screaming in terror.
+}}
+
+{{Skill_detail
+ |skill=Confuse
+ |description=Disrupt and confuse your subject.(*)
+ |lessons=
+ |syntax=MIND CONFUSE [target]
+ |required=200 mana
+ |target=Adventurers
+ |cooldown=2.00 seconds of equilibrium
+ |detail=By directing a powerful pulse of telepathic energy into the mind of a locked adventurer, you are able to short-circuit his mental processes, causing confusion in his mind.
+}}
+
+{{Skill_detail
+ |skill=Suffuse
+ |description=Suffuse the mind of your subject with mental energy.
+ |lessons=
+ |syntax=MIND SUFFUSE
+ |required=Mana
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Not all of the Telepathic arts are concerned with harming your target. This is one that is not. What it does is take some of your considerable mental strength and give it to the adventurer you have mind locked, albeit with some loss due to the energy it takes to transfer the mana over the telepathic link.
+}}
+
+{{Skill_detail
+ |skill=Drain
+ |description=Draw mana from your subject's mind into your own.(*)
+ |lessons=
+ |syntax=MIND DRAIN [target]
+ |required=
+ |target=Adventurers
+ |cooldown=2.50 seconds of equilibrium
+ |detail=Almost the reverse of Suffuse, this drains mental strength from your target and bestows it upon you.
+}}
+
+{{Skill_detail
+ |skill=Listen
+ |description=Listen to all that your subject hears.
+ |lessons=
+ |syntax=MIND LISTEN<br>MIND UNLISTEN
+ |required=400 mana and mana drain
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=You are now able to direct audio sensory input to the mindlocked adventurer over the telepathic link to you. MIND UNLISTEN will stop this ability. Note that due to the ongoing effort required to maintain this ability, there is a constant loss of mental strength.
+}}
+
+{{Skill_detail
+ |skill=Divine
+ |description=Determine the health and mana levels of your subject.(*)
+ |lessons=
+ |syntax=MIND DIVINE [target]
+ |required=100 mana
+ |target=Adventurers
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Having gained a certain level of competence in the art of Telepathy, you can now gain exact knowledge of the physical and mental state of an adventurer.
+}}
+
+{{Skill_detail
+ |skill=Fullsense
+ |description=Seek out all minds within your reach.
+ |lessons=
+ |syntax=FULLSENSE
+ |required=200 mana
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=By sending out an invisible telepathic web, you can detect all minds within your local area.
+}}
+
+{{Skill_detail
+ |skill=Isolate
+ |description=Cut remote communication off from your subject.
+ |lessons=
+ |syntax=MIND ISOLATE<br>MIND UNISOLATE
+ |required=500 mana and mana drain
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This will isolate a mind locked adventurer from all communication coming to him from outside his location.
+}}
+
+{{Skill_detail
+ |skill=Disrupt
+ |description=Destroy your opponent's mental equilibrium.(*)
+ |lessons=
+ |syntax=MIND DISRUPT [target]
+ |required=100 mana
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=With this ability, you may destroy the equilibrium of your targetted adventurer.
+}}
+
+{{Skill_detail
+ |skill=Transfer
+ |description=Transfer a telepathic lock to a fellow telepath.
+ |lessons=
+ |syntax=MIND TRANSFER <telepath>
+ |required=100 mana and 400 willpower
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Using this ability will allow you to transfer a mind lock to another telepath. The target telepath must be in the same area as you, for this is a delicate operation.
+}}
+
+{{Skill_detail
+ |skill=Impatience
+ |description=Inability to concentrate on focused tasks.(*)
+ |lessons=
+ |syntax=MIND IMPATIENCE [target]
+ |required=200 mana
+ |target=Adventurers
+ |cooldown=1.50 seconds of equilibrium
+ |detail=Causes your locked target to not be able to concentrate on focused tasks.
+}}
+
+{{Skill_detail
+ |skill=Epilepsy
+ |description=Throw your victim's nervous system into disarray.(*)
+ |lessons=
+ |syntax=MIND EPILEPSY [target]
+ |required=200 mana
+ |target=Adventurers
+ |cooldown=1.50 seconds of equilibrium
+ |detail=By short-circuiting some of the nervous system of your locked adventurer, you are able to cause periodic spasms in him, causing him to be unable to do many things while spasming.
+}}
+
+{{Skill_detail
+ |skill=Pacify
+ |description=Soothe all violent thoughts from your subject's mind.
+ |lessons=
+ |syntax=MIND PACIFY
+ |required=200 mana
+ |target=Adventurers
+ |cooldown=2.50 seconds of equilibrium
+ |detail=By drawing a soft cloak of telepathic power over the mind of a locked adventurer, you are able to make offensive actions abhorrent to him. This will last for a short, random amount of time, or until an offensive act is directed at him.
+}}
+
+{{Skill_detail
+ |skill=Empathy
+ |description=Establishing a physical link through your telepathy.
+ |lessons=
+ |syntax=MIND EMPATHY<br>MIND UNEMPATHY
+ |required=250 mana
+ |target=Adventurers
+ |cooldown=MIND EMPATHY: 4.00 seconds of equilibrium.<br>MIND UNEMPATHY: 3.00 seconds of equilibrium.
+ |detail=This ability will channel much damage done to a locked adventurer over the telepathic link to you. Be careful with it though, for it is possible to die if too much damage is inflicted upon you via the telepathic link. This ability costs a regular drain of mental power.
+}}
+
+{{Skill_detail
+ |skill=Stupidity
+ |description=Induce idiocy in the mind of your opponent.(*)
+ |lessons=
+ |syntax=MIND STUPIDITY [target]
+ |required=250 mana
+ |target=Adventurers
+ |cooldown=1.50 seconds of equilibrium
+ |detail=By casting a net of psychic energy over your opponent's mind, you will cause his mind to occassionally misfire and do something entirely different from what was intended.
+}}
+
+{{Skill_detail
+ |skill=Command
+ |description=Force a subject to do your bidding.
+ |lessons=
+ |syntax=MIND COMMAND <command>
+ |required=200 mana
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=You have gained sufficient knowledge of the workings of the mind to caress it into doing exactly what you wish. Your target must be undeaf if you wish for them to hear your command.
+}}
+
+{{Skill_detail
+ |skill=Mindcloak
+ |description=Stealth telepathy.
+ |lessons=
+ |syntax=MIND CLOAK [ON{{!}}OFF]
+ |required=Mana drain
+ |target=Self
+ |cooldown=
+ |detail=This ability will allow you to, at a regular drain of mental power, attempt mind locks that will be harder to detect than normal. It will go undetected by adventurers who are using Telesense, for instance. In addition, this will make it more difficult for a locked mind to recognise and reject your own. Cloaking your mind comes with a heavy mental cost any time you are actively engaged in locking another's mind.
+}}
+
+{{Skill_detail
+ |skill=Paralyse
+ |description=Exert mental power to paralyse your subject.(*)
+ |lessons=
+ |syntax=MIND PARALYSE [target]
+ |required=200 mana
+ |target=Adventurers
+ |cooldown=2.00 seconds of equilibrium
+ |detail=This ability temporarily rewires the mind of a locked adventurer, preventing the adventurer from moving. In effect, the adventurer is paralysed.
+}}
+
+{{Skill_detail
+ |skill=Hypersense
+ |description=Hypersensitivity to telepathic activity.
+ |lessons=
+ |syntax=MIND HYPERSENSE [ON{{!}}OFF]
+ |required=200 mana with mana and willpower drain
+ |target=Self
+ |cooldown=
+ |detail=You are now able to cast a net of telepathic power over the local area. Like a spider at the centre of his web, any attempts at telepathic locking within your net will vibrate the invisible strands of mental power and alert you to the attempts.
+}}
+
+{{Skill_detail
+ |skill=Amnesia
+ |description=Induce temporary forgetfulness into your subject.(*)
+ |lessons=
+ |syntax=MIND AMNESIA [target]
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=2.00 seconds of equilibrium
+ |detail=A simple-sounding, though extremely effective ability, this allows you to cause short-term amnesia in your locked adventurer. He will simply fail to execute the next action he attempts, as he will forget what he is doing before he manages to do it.
+}}
+
+{{Skill_detail
+ |skill=Barrier
+ |description=Throw up a telepathic barrier around your subject.
+ |lessons=
+ |syntax=MIND BARRIER<br>MIND UNBARRIER
+ |required=Mana drain
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=You are now able to protect a locked adventurer against other telepathic attempts at control by wrapping your mind around his. MIND UNBARRIER will lower this protective shield. Note that while maintaining a mind barrier, your ability to perform other telepathic feats will be limited due to the concentration required.
+}}
+
+{{Skill_detail
+ |skill=Scan
+ |description=Scan the mind of your subject.
+ |lessons=
+ |syntax=MIND SCAN
+ |required=200 mana
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=An improvement on Divine, this will allow you to see considerably more information about the locked adventurer.
+}}
+
+{{Skill_detail
+ |skill=Deadening
+ |description=Dull your opponent's mind.(*)
+ |lessons=
+ |syntax=MIND DEADENING [target]
+ |required=200 mana
+ |target=Adventurers
+ |cooldown=2.00 seconds of equilibrium
+ |detail=This ability will cause your opponent's mind to be dull. If you start a mind lock while your opponent is in this condition, your ability to lock and hold his mind will be increased.
+}}
+
+{{Skill_detail
+ |skill=Travel
+ |description=Cross great distances to your subject in a single step.
+ |lessons=
+ |syntax=MIND TRAVEL
+ |required=500 mana
+ |target=Adventurers
+ |cooldown=1.00 seconds of equilibrium
+ |detail=An extremely complicated ability, this opens up a pathway between your mind and that of an individual you have locked, allowing you to travel to your target.
+}}
+
+{{Skill_detail
+ |skill=Mindnet
+ |description=Cast a mental net about your surroundings.
+ |lessons=
+ |syntax=MINDNET [ON{{!}}OFF]<br>RELAX MINDNET
+ |required=Mana drain
+ |target=Self
+ |cooldown=
+ |detail=At a constant mana drain, this ability throws up a telepathic net over the local area, informing you whenever anyone moves into or out of range of the net.
+}}
+
+{{Skill_detail
+ |skill=Crush
+ |description=Attack your subject with a crushing psychic attack.(*)
+ |lessons=
+ |syntax=MIND CRUSH [target]
+ |required=150 mana
+ |target=Adventurers and denizens
+ |cooldown=3.40 seconds of equilibrium
+ |detail=Mind crush sends a crushing wave of mental energy at the target, doing both physical and mental damage.<p>If this attack is being performed at a distance, line-of-sight is required.</p>
+}}
+
+{{Skill_detail
+ |skill=Daze
+ |description=Render your subject extremely vulnerable to hypnosis.
+ |lessons=
+ |syntax=MIND DAZE
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Only useful in conjunction with an adventurer skilled in Hypnosis, this will wipe out an adventurer's ability to resist an attempt at hypnosis.
+}}
+
+{{Skill_detail
+ |skill=Strip
+ |description=Strip the defences from your opponent.(*)
+ |lessons=
+ |syntax=MIND STRIP [target]
+ |required=200 mana
+ |target=Adventurers
+ |cooldown=2.00 seconds of equilibrium
+ |detail=Your mental prowess is such that you may coax your opponent into relaxing his defences.
+}}
+
+{{Skill_detail
+ |skill=Sapience
+ |description=Instantly know your subject's thoughts and actions.
+ |lessons=
+ |syntax=MIND SAPIENCE<br>UNWATCH
+ |required=500 mana and mana drain
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=By essentially tapping into a locked adventurer's cortex, you are able to see anything the adventurer does. UNWATCH to cease watching your target's actions. Note that this ability comes with a very steep mental cost.
+}}
+
+{{Skill_detail
+ |skill=Clamp
+ |description=Set a telepathic mind clamp about your subject.
+ |lessons=
+ |syntax=MIND CLAMP<br>MIND UNCLAMP
+ |required=250 mana and mana drain
+ |target=Adventurers
+ |cooldown=MIND CLAMP: 4.00 seconds of equilibrium<br>MIND UNCLAMP: 2.50 seconds of equilibrium.
+ |detail=This allows you to reach out with your mind and clamp down on the locked adventurer's mind, reducing his maximum health and mana levels by twenty percent. MIND UNCLAMP will allow you to release this hold on your opponent's mind, returning their health and mana levels to normal.
+}}
+
+{{Skill_detail
+ |skill=Blackout
+ |description=Cause a short-lived, total blackout to your subject.
+ |lessons=
+ |syntax=MIND BLACKOUT
+ |required=800 mana
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=By sending out a blast of rawest telepathic power, you are able to, for a short period of time, knock out all senses of your locked target.
+}}
+
+{{Skill_detail
+ |skill=Scythe
+ |description=Cleave their psyche asunder.
+ |lessons=
+ |syntax=MIND SCYTHE
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This formidable ability allows the skilled telepath to utterly eradicate the psyche of their unfortunate victim. For this to work the subject must suffer from a mangled head and at least two of: stupidity, impatience, dizziness, epilepsy, or confusion.  
+}}
+
+{{Skill_detail
+ |skill=Batter
+ |description=Devastate your opponent's mind with an overwhelming attack.(*)
+ |lessons=
+ |syntax=MIND BATTER [target]
+ |required=500 mana
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This powerful telepathic attack will instantly give your unlucky target stupidity, epilepsy, and dizziness.
+}}
+
+{{Skill_detail
+ |skill=Radiance
+ |description=Destroy your subject with a single blast of mental energy.
+ |lessons=
+ |syntax=MIND RADIANCE
+ |required=800 mana
+ |target=Adventurers
+ |cooldown=20.00 seconds of equilibrium
+ |detail=The most powerful attack a telepath has, this allows you to build up an awesome amount of telepathic power, then release it to your hapless victim, killing him instantly. It takes some time to build up, during which you may do nothing else. Further, you may not execute this ability if your target is in the same location as you. Your concentration will also be broken if your target moves into your location.
+}}
+
+{{Skill_detail
+ |skill=Mindprints
+ |description=Take a mindprint of your subject.
+ |lessons=
+ |syntax=MIND PRINT<br>MINDPRINTS<br>FORGET <adventurer>
+ |required=100 mana
+ |target=Adventurers
+ |cooldown=
+ |detail=Once you have locked minds with an adventurer, you are able to gain intimate knowledge of their mind, making it easier to gain and hold a mind lock in the future. However, due to the incredible complexity of the mind, you may only hold five mindprints at once. MIND PRINT will take a mindprint of the adventurer you have locked. MINDPRINTS will list whom you have mindprints of, and FORGET will remove an adventurer from your list, allowing you to MINDPRINT a new adventurer.
+}}
+
+[[Category:Skills]]

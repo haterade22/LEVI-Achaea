@@ -1,0 +1,348 @@
+Heir to the chivalric tradition, '''Discipline''' is a [[knights|knightly]] skill that may be thought of as having three distinct parts. The first part, Falconry, involves the raising, training, and use of [[falcons]]. The second part of Chivalry is [[archery]]. By gaining the abilities to assess wind direction and speed and use different kinds of [[bows|weapons]] (longbows, crossbows, darkbows) you may attack from afar, or shoot at a cowardly opponent who has fled to the skies. The third and final part of Chivalry involves an assortment of aggressive abilities ranging from howling a Battlecry, to Engaging your unlucky opponent, to boosting your prowess with Fury.
+
+The skill of Discipline is available only to members of the [[Runewarden]] [[class]], although most of its arts are shared with the [[Dominion]], [[Malignity]], and [[Valour]] skills of the [[Unnamable]], [[Infernal]], and [[Paladin]] classes. Like the other warrior-classes, Runewardens train in [[Weaponmastery]], but the ideographic skill of [[Runelore]] is unique to them.
+
+
+==Abilities in Discipline==
+{{Skill_detail
+ |skill=Falcon
+ |description=Use the basic skills to interact with your falcon.
+ |lessons=
+ |syntax=FALCON
+ |required=
+ |target=
+ |cooldown=
+ |detail=The art of Falconry is a noble one indeed. It is a sport reserved solely for those of chivalrous breeding, for a bird as noble as the falcon would never respond to commands given by one without honour.<p>When you initially gain Falconry, the first thing you must do is find a hatchery. At the hatchery, FALCON REQUEST.</p><p>Hatcheries are located in:<br>* the Mhojave desert near the Ruins of el'Jazira<br>- the Ashtan resource hub<br>- the Cyrene resource hub<br>- the Eleusian resource hub<br>- the Hashan resource hub<br>- the Mhaldor resource hub<br>- the Targossas resource hub<br>- the manor of the Grand Merchant Collective, in Delos<br>(*) this is the only public hatchery.</p><p>Each hatchery gives out a different breed of falcon. The breeds vary in appearance only: capabilities are identical. </p><p>Your falcon comes to you with assorted statistics which have been randomly assigned. </p><p>If you cause your falcon to die, you will be refused another falcon. There is absolutely no excuse for killing or conspiring to kill your falcon. </p><p>Below is a list of commands that may be used once you have gotten your falcon. </p><p>FALCON ASSESS : See information about your falcon.<br>FALCON RECALL : Recall your falcon to your wrist. Requires a falconry glove. <br>FALCON SANCTUARY : Order your falcon to a sanctuary where it will be safe. <br>FALCON LAND : Order your falcon to land on the ground.<br>FALCON CIRCLE : Order your falcon to fly up into the skies.<br>FALCON TRAIN : Order your falcon to go train, in order to raise a stat. <br>FALCON REPORT : Gain information on where your falcon is.<br>FALCON SLAY : Order your falcon to slay someone.<br>FALCON HUNT : When your falcon is hungry, have it go hunt for its food. <br>FALCON FLEE : Set the amount of health remaining when your falcon will flee battle. <br>FALCON SLEEP : Order your falcon to sleep.<br>FALCON FEED RAT : Feed the corpses of rats to your falcon.</p><p>As your falcon gains in<br>'''Stamina''': its health will increase.<br>'''Speed''': it will attack more quickly as well as fly from place to place more quickly. <br>'''Strength''': it will attack with more power as well as be able to carry larger items.</p>
+}}
+
+{{Skill_detail
+ |skill=Weathering
+ |description=Increase your ability to weather damage.
+ |lessons=
+ |syntax=WEATHERING
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=Your budding control over your body will assist you in weathering the storm of life by increasing your constitution by one point.
+}}
+
+{{Skill_detail
+ |skill=Seek
+ |description=Order your bird to seek out an adventurer.
+ |lessons=
+ |syntax=FALCON SEEK <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Using this ability, you may order your falcon to seek out another adventurer. Your falcon must be either on the ground or on your wrist to use this ability.
+}}
+
+{{Skill_detail
+ |skill=Glance
+ |description=Look through the eyes of your bird.
+ |lessons=
+ |syntax=FALCON GLANCE
+ |required=
+ |target=Room
+ |cooldown=
+ |detail=If your falcon is not inside someone's inventory, or inside something, this will let you see the location it is in.
+}}
+
+{{Skill_detail
+ |skill=Block
+ |description=Obstructing departure with your body.
+ |lessons=
+ |syntax=BLOCK <direction><br>UNBLOCK
+ |required=
+ |target=Room
+ |cooldown=
+ |detail=This ability will allow you to block a particular direction, preventing normal movement in that direction.
+}}
+
+{{Skill_detail
+ |skill=Fitness
+ |description=Controlling your breathing.
+ |lessons=
+ |syntax=FITNESS
+ |required=
+ |target=Self
+ |cooldown=3.00 seconds of balance
+ |detail=With your mastery of your own body, you are able to purge yourself of the asthma affliction.
+}}
+
+{{Skill_detail
+ |skill=Follow
+ |description=Order your falcon to aerially follow someone.
+ |lessons=
+ |syntax=FALCON FOLLOW <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=You have established enough of a rapport with your falcon now that you may order it to follow, from the air, a particular adventurer. When the falcon loses the adventurer, generally because the adventurer goes indoors, it will stop following. 
+}}
+
+{{Skill_detail
+ |skill=Gripping
+ |description=Grip your wielded items in a deathlock.
+ |lessons=
+ |syntax=GRIP<br>RELAX GRIP
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=While using this ability, you will prevent items from being knocked out of your grip.
+}}
+
+{{Skill_detail
+ |skill=Barge
+ |description=Barging your opponents.
+ |lessons=
+ |syntax=BARGE <target> <direction>
+ |required=
+ |target=Adventurers
+ |cooldown=4.00 seconds of balance
+ |detail=This ability will barge an adventurer to the direction you choose. To start the ability, you must be in a room adjacent to the room where the target adventurer resides, and you must choose to barge him in a direction that wouldn't take him into the room you are in. So, for instance, say that Isildur is in a room to the north of me, and that this room has another exit to the ne. I would do BARGE ISILDUR NE.
+}}
+
+{{Skill_detail
+ |skill=Battlecry
+ |description=Stun a target with the power of your voice.
+ |lessons=
+ |syntax=BATTLECRY <target>
+ |required=
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Your battle cry is so powerful that when directed against another, it will blast him to the ground and stun him, provided he isn't deaf.
+}}
+
+{{Skill_detail
+ |skill=Bowmanship
+ |description=Use of the valued projectile weapon.
+ |lessons=
+ |syntax=SHOOT <target> <direction>
+ |required=
+ |target=Adventurers
+ |cooldown=3.50 seconds of balance
+ |detail=Use one of the various bows to shoot an adventurer in a line-of-sight location from you.
+}}
+
+{{Skill_detail
+ |skill=Quivers
+ |description=Take full advantage of your quiver.
+ |lessons=
+ |syntax=ENVENOM ARROW[S] [number of arrows] <colour> <venom><br>INSPECT QUIVER<br>DYE <number of arrows> ARROW[S] <colour><br>SWITCH <colour>
+ |required=
+ |target=
+ |cooldown=
+ |detail=Your mastery of quivers allows you to dye and envenom arrows from vials in your possession to be stored in your quiver.<p>When envenoming arrows, if a number of arrows is provided, you will dye and envenom that number of undyed arrows the colour and venom selected. Otherwise, you will coat all your arrows of the selected colour with the venom of your choice. </p><p>Inspecting your quiver will show you how many of each colour arrow you possess and what venoms they have been covered with. </p><p>Further, you may dye any number of undyed arrows the colour of your choice. However, you will find yourself unable to do so if you have arrows of that colour envenomed within your quiver.</p><p>Colours you may use are red, blue, purple, green, black, white, grey, orange, gold, and silver.</p><p>To switch to using a specific colour of arrow, simply SWITCH <colour>. If you wish to switch back to using undyed arrows, simply do SWITCH NORMAL.</p>
+}}
+
+{{Skill_detail
+ |skill=Wind
+ |description=Further increase your accuracy through wind compensation.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=Once you have this ability, your accuracy with bowmanship will be increased.
+}}
+
+{{Skill_detail
+ |skill=Aiming
+ |description=Increase your accuracy in shooting.
+ |lessons=
+ |syntax=AIM <target> <direction>
+ |required=
+ |target=
+ |cooldown=
+ |detail=Increase the accuracy of your shooting.
+}}
+
+{{Skill_detail
+ |skill=Sturdiness
+ |description=Standing firm against attempts to move you.
+ |lessons=
+ |syntax=STAND FIRM
+ |required=
+ |target=Self
+ |cooldown=3.00 seconds of balance
+ |detail=By concentrating on increasing your mass, you are able to gain immunity from most attempts to move you against your will. It is lost when you next use balance or equilibrium.
+}}
+
+{{Skill_detail
+ |skill=Deliver
+ |description=Order your falcon to deliver an object to someone.
+ |lessons=
+ |syntax=STAND FIRM
+ |required=
+ |target=Self
+ |cooldown=3.00 seconds of balance
+ |detail=By concentrating on increasing your mass, you are able to gain immunity from most attempts to move you against your will. It is lost when you next use balance or equilibrium.
+}}
+
+{{Skill_detail
+ |skill=Resistance
+ |description=Reduce the damage taken from magical attacks.
+ |lessons=
+ |syntax=RESISTANCE
+ |required=
+ |target=
+ |cooldown=
+ |detail=Due to your increased bodily control, you are able to reduce the damage from magical attacks.
+}}
+
+{{Skill_detail
+ |skill=Crossbows
+ |description=A powerful projectile weapon.
+ |lessons=
+ |syntax=SHOOT <target> <direction>
+ |required=
+ |target=Adventurers
+ |cooldown=3.50 seconds of balance
+ |detail=The crossbow is more powerful, but less accurate, than the longbow.
+}}
+
+{{Skill_detail
+ |skill=Clotting
+ |description=Reduce the level of your bleeding.
+ |lessons=
+ |syntax=CLOT
+ |required=60 mana
+ |target=Self
+ |cooldown=
+ |detail=This will permit you to partially clot your bleeding.
+}}
+
+{{Skill_detail
+ |skill=Rage
+ |description=Throw off pacifying afflictions.
+ |lessons=
+ |syntax=RAGE
+ |required=150 mana
+ |target=Self
+ |cooldown=
+ |detail=This ability will allow you to cure certain pacifying afflictions, notably those that are normally cured by eating bellwort.
+}}
+
+{{Skill_detail
+ |skill=Rake
+ |description=Command your falcon to strike with its talons.
+ |lessons=
+ |syntax=FALCON RAKE <target>
+ |required=
+ |target=Denizens
+ |cooldown=2.25 seconds of equilibrium
+ |detail=Command your falcon to fall upon a denizen opponent, raking them with its talons and dealing damage(*). Note that you can only command your loyal in this fashion every so often(**).<p>* This damage is based on your falcon's trained strength and whether it is a warhawk (see AB DISCIPLINE WARHAWK).<br>** Every 30 seconds.</br>
+}}
+
+{{Skill_detail
+ |skill=Retrieve
+ |description=Command your falcon to fetch an object for you.
+ |lessons=
+ |syntax=FALCON RETRIEVE <item>
+ |required=
+ |target=
+ |cooldown=
+ |detail=Using this ability will cause your falcon to try and pick up an object (which musn't be too large) in the room that it is in, and deliver it back to you. Upon doing so, it would probably be appropriate to say some kind words to your falcon and maybe pet it a bit.
+}}
+
+{{Skill_detail
+ |skill=Startle
+ |description=Order your bird to harass an opponent's steed.
+ |lessons=
+ |syntax=FALCON STARTLE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=This ability will allow your falcon to startle an opponent's steed, tossing the poor rider off. Note that this works regardless of whether your opponent is on the ground, in the trees, or flying. You simply need be in the same room, and the falcon will fly to the correct elevation to startle your target's mount.
+}}
+
+{{Skill_detail
+ |skill=Track
+ |description=Order your falcon to follow and track someone.
+ |lessons=
+ |syntax=FALCON TRACK <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=This ability is an improved version of falcon follow. With track, even if the falcon temporarily loses its target, because the target went indoors, the falcon will continue to follow the target once the target comes back outside.
+}}
+
+{{Skill_detail
+ |skill=Defend
+ |description=Attempt to protect someone else with swordwork.
+ |lessons=
+ |syntax=DEFEND <target>UNDEFEND
+ |required=
+ |target=Adventurers
+ |cooldown=4.00 seconds of balance
+ |detail=Upon using this ability, you will attempt to take much of the damage from the blows that might otherwise harm the adventurer you are defending.
+}}
+
+{{Skill_detail
+ |skill=Observe
+ |description=Your falcon can now report on the state of individuals.
+ |lessons=
+ |syntax=FALCON OBSERVE
+ |required=
+ |target=Room
+ |cooldown=
+ |detail=If your falcon is flying, it will report back to you the health levels of everyone who is in the local area and outdoors.
+}}
+
+{{Skill_detail
+ |skill=Darkbows
+ |description=Using the infamous darkbows of Hashan.
+ |lessons=
+ |syntax=SHOOT <target> <direction>
+ |required=
+ |target=Adventurers
+ |cooldown=3.50 seconds of balance
+ |detail=The famed darkbows of Hashan are both expensive and powerful. Only slightly less powerful than a crossbow, they are far more accurate.
+}}
+
+{{Skill_detail
+ |skill=Warhawk
+ |description=Equip your falcon with talons of steel.
+ |lessons=
+ |syntax=FALCON WARHAWK
+ |required=
+ |target=
+ |cooldown=
+ |detail=If you have a set of steel talons, you may equip your falcon with them, allowing it to attack with more strength.
+}}
+
+{{Skill_detail
+ |skill=Engage
+ |description=Damage a cowardly opponent.
+ |lessons=
+ |syntax=ENGAGE <target><br>DISENGAGE [<target>]
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=2.50 seconds of equilibrium
+ |detail=There is nothing more despicable and dishonourable than a coward, and this ability will allow you to punish cowards, as is their due. Once you have engaged an adventurer, if he is otherwise unhindered and tries to leave the room, you will get in an extra strike, whether you have equilibrium and balance or not.
+}}
+
+{{Skill_detail
+ |skill=Swiftmount
+ |description=Mount or vault your steeds at increased speed.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=You have reached such a level of training in the arts of Chivalry that you regain balance while Mounting a steed much more rapidly. Furthermore, if you have the ability Vault in Riding, you can use it without any loss of balance at all.
+}}
+
+{{Skill_detail
+ |skill=Fury
+ |description=Temporarily raise your strength.
+ |lessons=
+ |syntax=FURY [ON/OFF]<br>RELAX FURY
+ |required=
+ |target=Self
+ |cooldown=2.00 seconds of equilibrium
+ |detail=This will allow you to temporarily raise your strength with 2 points, for no more than a total of 1/4th of each Achaean day. It can be used once a day without cost, but if you turn it off and turn it back on within the same Achaean day, you will incur a cost of 500 willpower each time you turn it back on. Your endurance losses will be significantly higher while Fury is active.
+}}
+
+[[Category:Skills]][[Category:Edit needed]]

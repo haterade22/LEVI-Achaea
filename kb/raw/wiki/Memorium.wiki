@@ -1,0 +1,304 @@
+There are few mediums as potent in the working of sorcery as blood, be it one's own or an enemy's.
+ 
+The practitioner of Memorium understands and accepts this. Wielding desert-forged blade in one hand and arcane might in the other, the Pariah needs no weapon besides blood and will to see their ends achieved. With sanguine ink and air as canvas, they carve their inevitable decrees into the world, one corpse at a time.
+ 
+The practitioner of this skill learns to trace the ancient logographs of the desert tribes, each imbued with singular purpose and empowered by the medium through which it is brought to life. The very beating of your foe's heart shall beat the march of their demise, and drop by drop the sands shall drink of their final days.
+
+
+The skill of Memorium is available to members of the [[Pariah]] [[class]], along with [[Pestilence (skill)|Pestilence]] and [[Charnel]].
+
+==Abilities in Memorium==
+{{Skill_detail
+ |skill=Crux
+ |description=From which your will shall spring.
+ |lessons=
+ |syntax=CRUX DRAW<p>CRUX CLEANSE
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=The ritual blade of the practitioner of Memorium is key to almost all higher works of the art. Walk forth to the endless sands(*) and forge your focus for the trials to come.<p>* Any desert room, under the light of the sun.</p>
+}}
+
+{{Skill_detail
+ |skill=Let
+ |description=A crude but necessary step.
+ |lessons=
+ |syntax=CRUX LET <target{{!}}ME>
+ |required=
+ |target=Adventurers and self
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Collecting the blood of your foe is the first step to overcoming them. Your ritual blade can retain the blood of one you let for later workings; you may also let your own blood, either for emergencies or specialised rituals.<p>Probing your ritual blade shall show whose blood it currently retains, if any.</p>
+}}
+
+{{Skill_detail
+ |skill=Wrack
+ |description=A basic application of the craft.
+ |lessons=
+ |syntax=BLOOD WRACK <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=2.20 seconds of balance
+ |detail=A basic application of your arcane craft: wrack the blood in the veins of your foe, and they will suffer(*). The suffering is increased for each of the plagues of pestilence ravaging your target.<p>* Does damage.<br>** Sanguinehand will activate off this ability.</p>
+}}
+
+{{Skill_detail
+ |skill=Expose
+ |description=Strike when they are vulnerable.
+ |lessons=
+ |syntax=NONE
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=The process of chaining together logographs comes with many benefits, but there is always a residual amount of arcane energy wasted when performing this process. You are now at a point in your studies when you can turn this to your advantage.<p>When chaining together logographs, you can direct said excess energy through the blood upon your ritual blade. Whomever said blood belongs to will find themselves weakened for a short time and vulnerable to your sorcery(*). The blood does not necessarily need to be that of the person you are tracing against.</p><p>* Exposing someone to your sorcery means you can perform abilities that fall under higher sorcery against them at no equilibrium cost. Performing an ability in this way will remove said exposure.</p>
+}}
+
+{{Skill_detail
+ |skill=Sanguinehand
+ |description=The arcane guides your hand.
+ |lessons=
+ |syntax=NONE
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=You have become sufficiently in tune with the arcane flows that now, when your sorcery causes blood to diverge from its standard pathways, you may stand ready to collect such if your ritual blade is clean(*).<p>* If your ritual knife possesses no blood, certain abilities will result in you immediately catching the blood of someone you utilise those abilities against. These will be noted in their relevant ability files.</p>
+}}
+
+{{Skill_detail
+ |skill=Transpose
+ |description=Blood calls to blood.
+ |lessons=
+ |syntax=CRUX TRANSPOSE <venom>
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Once you have gathered blood upon your ritual blade, the unfortunate donator shall find that its medium can conduct rather a great deal back to the host. If you possess a vial of most venoms(*), you may transpose it through said medium, delivering it to your victim no matter where they may be. Unfortunately, this does ruin the blood for future purposes, and you will need to collect it once again.<p>* Certain venoms cannot be transposed: typically if it can't be envenomed, it cannot be transposed.<br>** Transpose clears any epitaph you have currently formed.</p>
+}}
+
+{{Skill_detail
+ |skill=Jars
+ |description=A little goes a long way.
+ |lessons=
+ |syntax=JAR STORE <jar{{!}}person><br>JAR RETRIEVE <jar{{!}}PERSON><br>JARS CARRIED<br>JARS STORED<br>JAR FILL<br>CRUX BLOODY <person><br>JAR CLEANSE <person name{{!}}jar ID>
+ |required=
+ |target=
+ |cooldown=
+ |detail=With blood such an important medium, it is always worth having some on hand. The practiced Pariah will store the blood of their most dangerous foes on their person for rapid use; the truly great will also keep an extra reserve within the depths of their crypt.<p>JAR FILL: wipe the blood from your ritual blade into a jar.<br>CRUX BLOODY <person>: immediately bloody your ritual blade with the blood from a jar on your person.<br>JARS CARRIED: see what jars you are carrying, and how many applications you will be able to derive from their sanguine contents.<br>JARS STORED: in your reliquary, see what jars you have stored.<br>JAR STORE <jar ID{{!}}person name>: store a jar in your reliquary.<br>JAR RETRIEVE <jar ID{{!}}person name>: retrieve a jar from your reliquary.<br>JAR CLEANSE <person name{{!}}jar ID>: cleanse a jar you are holding of blood.</p><p>You may carry five jars on your person at a given time, and your reliquary may hold up to ten in addition.</p>
+}}
+
+{{Skill_detail
+ |skill=Heartbeat
+ |description=Their pulse shall sound their end.
+ |lessons=
+ |syntax=TRACE <logograph> <target> <delay> HEARTBEATS
+ |required=
+ |target=
+ |cooldown=
+ |detail=When tracing your logographs, you can now alter them in very minor ways, causing their effects to manifest later rather than immediately. This time is measured in the beats of your enemy's heart. For this reason, the accelerate ability shall also reduce the delay time when used in combination with this.<p>The delay must be between 1 and 5 heartbeats.</p>
+}}
+
+{{Skill_detail
+ |skill=Ensorcell
+ |description=Bound in blood and fate besides.
+ |lessons=
+ |syntax=CRUX ENSORCELL <target>
+ |required=
+ |target=
+ |cooldown=2.50 seconds of balance
+ |detail=Higher mastery with your ritual blade will enable you to both bind and let in a single stroke. When you ensorcell your foe, they will find it difficult to flee from your arcane power(*), and you shall claim the life which sustains them in preparation for higher workings(**).<p>* They have a chance to fail to leave on movement attempts.<br>** You will gain their blood upon your ritual blade, similar to let.</p>
+}}
+
+{{Skill_detail
+ |skill=Quarrel
+ |description=Blood settles all disputes.
+ |lessons=
+ |syntax=QUARREL <target> <direction> <logograph>
+ |required=
+ |target=
+ |cooldown=3.50 seconds of balance
+ |detail=Your hands may be denied the weapons of war, but to walk your path is to make of denial a tomb and destiny both. Wielding your own blood, you may
+craft arrows to strike at your enemies, each imbued with a logograph that is known to you.<p>* All logographs may be used except the fissure.<br>** This attacks damage, accuracy, and balance scales to any artefact bow in your inventory that has the shooting upgrade.</p>
+
+}}
+
+===Higher Sorcery===
+
+{{Skill_detail
+ |skill=Accelerate
+ |description=Ever closer to the end.
+ |lessons=
+ |syntax=BLOOD ACCELERATE <target>
+ |required=
+ |target=
+ |cooldown=2.50 seconds of equilibrium
+ |detail=Blood in the veins of your enemy is far more difficult to manipulate, though difficult does not mean impossible. Some minor applications of sorcery are available to you even then, and acceleration is one such working.<p>By making the heart of your foe beat ever faster, you will cause your logographs that are tied to said beating to manifest more swiftly(*), and in addition cause some particularly deadly diseases of the blood to manifest more rapidly(**).</p><p>* Logographs delayed with the heartbeat ability will have their timers reduced when using this ability.<br>** If your target suffers from the voyria affliction when you use this ability, said affliction will immediately advance to a very late stage.</p> 
+}}
+
+{{Skill_detail
+ |skill=Subversion
+ |description=Until the well runs dry.
+ |lessons=
+ |syntax=ACCURSED PERFORM THE RITUAL OF SUBVERSION <target>
+ |required=4000 mana
+ |target=
+ |cooldown=15.00 seconds of equilibrium
+ |detail=The ritual of Subversion is both the pinnacle of Memorium and the ultimate expression of the depths that the art can be twisted to by one
+of the Accursed. With mastery of the Logographs and the unhallowed will of the Accursed combined, blood and sorcery may be combined in a ritual better left lost.<p>After you have laid claim to the blood of your victim within one of your stone jars, you may take up knife to craft the manner of their doom in the Ritual Chamber of your crypt. Only freshly obtained blood will suffice: stored blood may be sufficient for lesser works, but this is no such working. You will require a full jar, for the work is long and complex.</p><p>The ritual of subversion will take an ability of your victim and make it yours as well, for a time.</p><p>* Each class has an ability or abilities associated for subversion. If there are multiple choices, it is random which you will receive, though there is a subtle suggestion during the ritual that this might be the case.<br>** The class of the target at the time blood was taken is the one targeted by the ritual. You may find some classes do not have abilities to subvert, most obviously other Pariahs.<br>*** There is a cooldown on this ability, and it is a channel to activate.</p>
+}}
+
+===Logographs===
+
+{{Skill_detail
+ |skill=Trace
+ |description=Blood as ink and air as canvas.
+ |lessons=
+ |syntax=TRACE <logograph> <target>
+ |required=
+ |target=
+ |cooldown=
+ |detail=The ancient script of the desert people has little power on its own, but such cannot be said for the blood of adventurers. When traced in the blood of an adventurer by a talented sorcerer, all manner of curses can be brought down upon an enemy. 
+}}
+
+{{Skill_detail
+ |skill=Serpent
+ |description=Of deadly fangs and poison.
+ |lessons=
+ |syntax=TRACE SERPENT <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=2.20 seconds of balance
+ |detail=The striking serpent shall sink its ethereal fangs into the neck of a foe when traced, paralysing them with its power. In addition, this logograph is unique in the fact that when traced in an epitaph following the logograph of the scorpion, your enemy will also find that the voyria plague has been introduced into their bloodstream(*).<p>* See AB MEMORIUM EPITAPH for details.</p>
+}}
+
+{{Skill_detail
+ |skill=Shield
+ |description=To ward against the wicked.
+ |lessons=
+ |syntax=TRACE SHIELD ME
+ |required=
+ |target=Self
+ |cooldown=1.50 seconds of balance
+ |detail=One of the lesser logographs, the shield cannot be worked into an epitaph, though is one of the most useful logographs all the same. When traced for your person it shall convey resistance to injury; the wiser the tracer, the greater the benefit(*).<p>* The amount of damage resistance this conveys is related to your intelligence stat.</p>
+}}
+
+{{Skill_detail
+ |skill=Fissure
+ |description=That which sunders.
+ |lessons=
+ |syntax=TRACE FISSURE <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=1.80 seconds of balance
+ |detail=One of the crudest of logographs, the fissure possesses two properties of interest. The former is its ability to sunder the magical shields protecting your enemies; the second is that it does not chain from or to anything. Notably however, it also does not interrupt the chaining of other logographs, for reasons the ancient sorcerers were never able to uncover. 
+}}
+
+{{Skill_detail
+ |skill=Nest
+ |description=Of rot and decay.
+ |lessons=
+ |syntax=TRACE NEST <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=2.20 seconds of balance
+ |detail=Home. Safety. Grave. A nest can be all these and more. When traced against an enemy this logograph shall instill a great sense of weariness in them(*).<p>* Gives weariness.</p>
+}}
+
+{{Skill_detail
+ |skill=Scales
+ |description=Balance in all things.
+ |lessons=
+ |syntax=TRACE SCALES <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=2.20 seconds of balance
+ |detail=The symbol of the scales represents balance. Yet when traced against an enemy imperfections can be introduced in such a way as to make them unbalanced, and the ruin this brings upon your foe shall leave them reeling(*).<p>* Gives clumsiness.</p>
+}}
+
+{{Skill_detail
+ |skill=Epitaph
+ |description=To go beyond the singular.
+ |lessons=
+ |syntax=EPITAPH<br>EPITAPH FOCUS <logograph1> <logograph2> [logograph...n]<br>EPITAPH ADVANCE <target>
+ |required=
+ |target=
+ |cooldown=
+ |detail=The truly gifted wielder of Memorium does not deal in the singular logographs that compose the basic workings. As the wielder learns the script, they realise over time that the logographs flow together; one logograph can flow into one or more other logographs, speeding up the process of tracing. When tracing an epitaph in this way, it is said that the knife of a master can become little more than a blur.<p>In addition, you may fix a set of logographs in your mind, your hand so practiced at tracing that you may advance to the earliest in your epitaph that will maintain an unbroken chain(**).</p><p>* Use the EPITAPH command to see what logographs flow into which. The balance bonus is cumulative so long as you continue to chain logographs, but it does have a limit.<br>** EPITAPH FOCUS and EPITAPH ADVANCE are purely for convenience; you may trace epitaphs individually if you prefer.</p>
+}}
+
+{{Skill_detail
+ |skill=Skein
+ |description=The unravelling thread of life.
+ |lessons=
+ |syntax=TRACE SKEIN <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=2.20 seconds of balance
+ |detail=The thread of life ever unwinds, and all that lives comes to its eventual end. This logograph signifies such, though with a well placed cut in its tracing the practitioner can instill a realisation of your foe's own mortality and the ephemeral nature of the time remaining to them(*).<p>* Gives impatience.</p>
+}}
+
+{{Skill_detail
+ |skill=Leech
+ |description=To draw out the poison.
+ |lessons=
+ |syntax=TRACE LEECH <ME{{!}}target>
+ |required=
+ |target=Adventurers and self
+ |cooldown=1.50 seconds of balance
+ |detail=One of the lesser logographs, the leech cannot be worked into an epitaph, though it is useful all the same. When traced for yourself or another this logograph shall periodically draw out the afflictions which plague you(*).<p>* Roughly every ten seconds, and lasting for five minutes.</p>
+}}
+
+{{Skill_detail
+ |skill=Scarab
+ |description=Insatiable. Without mercy.
+ |lessons=
+ |syntax=TRACE SCARAB <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=
+ |detail=The ravenous guardians of the Charnel tombs are insatiable. When traced against your foe, so too will they share in the endless hunger(*).<p>* Gives addiction.</p>
+}}
+
+{{Skill_detail
+ |skill=Sun
+ |description=Protector. Destroyer.
+ |lessons=
+ |syntax=TRACE SUN <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=2.20 seconds of balance
+ |detail=The Sun which both nourishes and destroys. All are equal beneath its brilliant glare, though not all can withstand that which it reveals. When traced against a foe, their minds will be pushed to breaking beneath its power, their thoughts thrown into disarray(*).<p>* Gives epilepsy.</p>
+}}
+
+{{Skill_detail
+ |skill=Bear
+ |description=The claws that rend and tear.
+ |lessons=
+ |syntax=TRACE BEAR <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=2.20 seconds of balance
+ |detail=The mighty bear shall rend and tear your foe when traced, spilling blood and ensuring that it shall ever flow out with their life.<p>* Gives haemophilia and bleeding. The bleeding is increased in the case where they already have haemophilia when you trace this logograph.</p>
+}}
+
+{{Skill_detail
+ |skill=Jackal
+ |description=The jaws which snuff the vital.
+ |lessons=
+ |syntax=TRACE JACKAL <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=2.20 seconds of balance
+ |detail=The jackal's bite is not something to be underestimated, and such is reflected in the logograph which depicts it. Tracing this logograph against your foe shall let them experience that moment before the fangs definitively close upon them.<p>* Gives asthma.</p>
+}}
+
+{{Skill_detail
+ |skill=Scorpion
+ |description=The striking predator of the sands.
+ |lessons=
+ |syntax=TRACE SCORPION <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=2.20 seconds of balance
+ |detail=This logograph is unique in that it takes more power to imbue than blood alone can provide. For this reason, it requires some preparation: it can only be traced as the final logograph in your epitaph, and said epitaph must be sufficiently long(*). However, such preparation comes with expected results: the scorpion shall inflict your foe with a terrible curse, thinning their blood(**). Notably, this logograph is so complex that it does not suffer alterations of any kind: you cannot utilise the scorpion with the heartbeat ability.<p>* At least a length of four.<br>** Gives the thinned blood affliction (similar to the scytherus venom).</p>
+}}
+
+[[Category:Skills]]

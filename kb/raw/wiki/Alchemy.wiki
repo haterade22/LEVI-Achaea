@@ -1,0 +1,279 @@
+Alchemy is the primary study of the Alchemists, focusing on the manipulation of the ether and the alchemical energies that flow through it. The main focus of the skill is based upon drawing upon the latent alchemical energies via Symbology to direct the power of the alchemical primes and metals. Further aspects of Alchemy involve the extraction of the three primes; salt, sulphur, and mercury; from the earth itself, and synthesising these substances into various metals. The skilled practitioner of Alchemy will even find it possible to transmute flesh into varying substances, culminating in the ability to encase another completely in gold.
+
+The skill of '''Alchemy''' is available to members of the [[Alchemist]] [[class]], along with [[Physiology]] and [[Formulation]] or [[Sublimation]].
+
+==Abilities in Alchemy==
+{{Skill_detail
+ |skill=Symbology
+ |description=Draw upon the alchemical energies.
+ |lessons=0
+ |syntax=EDUCE <symbol> [args]
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=Equilibrium
+ |detail=The power of symbology allows alchemists to tap into the ether and draw upon the alchemical energies of the primes and metals. <br>Each symbol corresponds to one of the primes or metals, and each has a differing effect.<br>The different symbols you may call upon become available with increased training in Alchemy.<p>See AB ALCHEMY LEAD as an example.</p>
+}}
+
+{{Skill_detail
+ |skill=Metallurgy
+ |description=Reduction to the six alchemical metals.
+ |lessons=0
+ |syntax=REDUCE <#> <metal> FROM <mineral><br>REDUCE <metal>
+ |required=100 mana
+ |target=
+ |cooldown=2.75 seconds of balance
+ |detail=Reduction of the six alchemical metals from minerals is the first step in understanding the alchemical composition of all things. In order to perform the reduction, you must be standing within a transmutation laboratory in which you have permission to work.<p>The six alchemical metals are: lead, iron, tin, copper, silver, and gold.</p><p>Each mineral is composed of certain metals, so not all alchemical metals can be reduced from all minerals. REDUCE <metal> will reveal the minerals from which a given alchemical metal can be reduced.</p><p>Alchemical metals produced via metallurgy can also be manipulated by the name a<metal>. For example, agold or atin.</p>
+}}
+
+{{Skill_detail
+ |skill=Primes
+ |description=Isolation of alchemical primes.
+ |lessons=0
+ |syntax=ISOLATE <#> <prime> FROM <metal><br>ISOLATE <prime>
+ |required=100 mana
+ |target=
+ |cooldown=2.75 seconds of balance
+ |detail=Isolation of alchemical primes from alchemical metals is the fundamental mark of a capable alchemist. In order to perform the isolation, you must be standing within a transmutation laboratory in which you have permission to work.</p><p>The three alchemical primes are: salt, sulphur, and mercury.</p><p>Each alchemical metal is composed of certain alchemical primes, so not all alchemical primes can be isolated from all alchemical metals. ISOLATE <prime> will reveal the alchemical metals from which a given alchemical prime can be isolated.</p><p>Alchemical primes produced via isolation can also be manipulated by the name a<prime>. For example, asalt or asulphur.</p>
+}}
+
+{{Skill_detail
+ |skill=Lead
+ |description=Density from the lowest of the metals.
+ |lessons=0
+ |syntax=EDUCE LEAD<br>EDUCE LEAD <target>
+ |required=150 mana
+ |target=Adventurers and self
+ |cooldown=2.00 seconds of equilibrium
+ |symbol=Two concentric circles
+ |detail=Calling upon the energy of lead, the lowest of the alchemical metals, will grant great density to your body.<p>You may also target this at another adventurer flying in the sky above you, dragging them back to earth by drastically increasing their weight for a short time and briefly knocking them off balance.</p><p>Use without a target incurs a small equilibrium loss.</p>
+}}
+
+{{Skill_detail
+ |skill=Seek
+ |description=Find another through the ether.
+ |lessons=7
+ |syntax=ETHER SEEK <target>
+ |required=20 mana
+ |target=Adventurers
+ |cooldown=1.00 seconds of equilibrium
+ |detail=By folding a small window into the ether, you may seek the location of another.
+}}
+
+{{Skill_detail
+ |skill=Robes
+ |description=The mystic garb of the Alchemist.
+ |lessons=16
+ |syntax=ROBES SUMMON<br>ROBES CALL<br>ROBES IMBUE WITH <up to four symbols><br>ROBES IMBUE SLOT <1-4> <symbol><br>ROBES CLEAR<br>ROBES EXAMINE
+ |required=
+ |target=Self
+ |cooldown=Equilibrium
+ |detail=Robes are the traditional garb of the alchemist, and alchemists may weave from the ether a set of specially crafted robes able to offer protection from damage.<p>ROBES SUMMON will weave a new set of robes from strands of the ether. ROBES CALL will return your robes to you, should they be lost.</p><p>Each pair of robes may be imbued with the symbols of up to four primes or metals, each offering protection from one type of damage. It is possible to imbue your robes from scratch using ROBES IMBUE WITH <symbols>, wiping away any previous imbuements and applying new ones. It is also possible to imbue a single "slot", using ROBES IMBUE SLOT <1-4> <symbol>. Finally, one may remove all symbols from their robes using ROBES CLEAR, and view the status of any slots using ROBES EXAMINE.</p><p>Note that a symbol may only appear once on a pair of robes, and using a symbol requires knowing the appropriate ability in Alchemy.</p><p>The symbols and the damage type they protect against are:<br>'''Lead''': Blunt<br>'''Iron''': Cutting<br>'''Salt''': Magic<br>'''Tin''': Psychic<br>'''Copper''': Electric<br>'''Sulphur''': Asphyxiation<br>'''Silver''': Cold<br>'''Gold''': Fire<br>'''Mercury''': Poison</p>
+}}
+
+{{Skill_detail
+ |skill=Iron
+ |description=Strike with the power of iron.
+ |lessons=23
+ |syntax=EDUCE IRON <target>
+ |required=80 mana
+ |target=Adventurers and denizens
+ |cooldown=4.00 seconds of equilibrium
+ |symbol=Two isosceles triangles set base-to-base
+ |detail=The energy of iron will surround your target with flames possessing the cold bite of a sword. 
+}}
+
+{{Skill_detail
+ |skill=Salt
+ |description=The first prime will cleanse your body.
+ |lessons=89
+ |syntax=EDUCE SALT
+ |required=200 mana
+ |target=Self
+ |cooldown=3.00 seconds of equilibrium
+ |symbol=A bisected circle
+ |detail=The energy of salt, first of the primes, will purge your body of afflictions.<br>This effect will be prevented if you labour under the stupidity affliction. 
+}}
+
+{{Skill_detail
+ |skill=Tin
+ |description=Tin will grant you a reflective barrier.
+ |lessons=178
+ |syntax=EDUCE TIN
+ |required=500 mana
+ |target=Self
+ |cooldown=3.00 seconds of equilibrium
+ |symbol=Two parallel line segments connected by diagonals.
+ |detail=The energies of tin will raise a reflective barrier around your body, this will persist for the next two attacks, and will return a portion of the damage you would receive to your attacker.<p>Note that this is ineffective versus unblockable damage.</p>
+}}
+
+{{Skill_detail
+ |skill=Copper
+ |description=Shatter an enemy's defence with copper's energies.
+ |lessons=289
+ |syntax=EDUCE COPPER <target>
+ |required=75 mana
+ |target=Adventurers and denizens
+ |cooldown=2.30 seconds of equilibrium
+ |symbol:Two overlapping hexagons
+ |detail=The energies of copper will allow you to shatter an opponent's magical shield.  
+}}
+
+{{Skill_detail
+ |skill=Extispicy
+ |description=The future is found in unexpected places.
+ |lessons=378
+ |syntax=DISSECT <rat corpse>
+ |required=100 mana
+ |target=Self
+ |cooldown=4.00 seconds of balance
+ |detail=Though but simple vermin, the internal anatomy of rats is a sure indicator of future events. By dissecting and studying any rat found throughout the cities of Sapience, you may gain glimpses of what is yet to come, allowing an increased chance of critical strikes.
+}}
+
+{{Skill_detail
+ |skill=Sulphur
+ |description=The second prime will quicken your healing.
+ |lessons=378
+ |syntax=EDUCE SULPHUR
+ |required=350 mana
+ |target=Self
+ |cooldown=4.00 seconds of equilibrium
+ |symbol=Two tangent semicircles
+ |detail=The energy of sulphur will allow you to metabolise health elixirs more efficiently, causing an increase in health gained. This effect will not last indefinitely, however. 
+}}
+
+{{Skill_detail
+ |skill=Displace
+ |description=Drag another through the ether.
+ |lessons=512
+ |syntax=ETHER DISPLACE <target>
+ |required=500 mana
+ |target=Adventurers
+ |cooldown=6.00 seconds of equilibrium
+ |detail=By funneling a most precise amount of matter through the ether, you may draw another across an area to stand before you. This requires your target to remain within the same location until your attempt is completed. This will take some time, during which your concentration is required.<p>This ability bypasses monolith sigils when targeted at mutual allies, and works faster in this case.</p>
+}}
+
+{{Skill_detail
+ |skill=Silver
+ |description=The light of silver reveals all.
+ |lessons=600
+ |syntax=EDUCE SILVER <target><br>EDUCE SILVER
+ |required=500 mana
+ |target=Adventurers
+ |cooldown=5.00 seconds of equilibrium
+ |symbol=A crescent tangent to a line segment.
+ |detail=The energy of silver will bathe another in a radiant light, negating the effects of shrouding for a time. This effect will last much longer if applied during the night.<p>If you do not specify a target, this ability will attempt to draw those who are astralformed, blackwinded, or phased in your location back to a physical state.</p>
+}}
+
+{{Skill_detail
+ |skill=Phlogistication
+ |description=Burn your enemy from the inside out.
+ |lessons=703
+ |syntax=PHLOGISTICATE <target>
+ |required=400 mana
+ |target=Adventurers
+ |cooldown=4.50 seconds of equilibrium
+ |detail=This ability will cause an enemy's internal anatomy to begin a controlled form of combustion for a time. Fuelled by the use of equilibrium, this will render moss and potash temporarily inert when eaten. Note that this effect will stack if your opponent is already off balance from eating moss or potash, but only to a limited ceiling.<p>This effect is mutually exclusive with that of vitrification.</p>
+}}
+
+{{Skill_detail
+ |skill=Gold
+ |description=The highest of the metals allows you to share your wisdom.
+ |lessons=806
+ |syntax=EDUCE GOLD <target> <2-5000>
+ |required=500 mana
+ |target=Adventurers
+ |cooldown=6.00 seconds of equilibrium
+ |symbol=A circumscribed star
+ |detail=Utilising the power of gold, the highest of the metals, you may transfer your willpower to another, with some restrictions. First, half of the willpower transferred will be lost. Second, if transferring willpower brings the Alchemist below half of his or her maximum, there is a chance that all willpower will be lost, and the beneficiary will gain none.
+}}
+
+{{Skill_detail
+ |skill=Etherchannel
+ |description=Part the ether for expedient travel.
+ |lessons=841
+ |syntax=ETHERCHANNEL <anchor>
+ |required=500 mana and 2 metals of the same element.
+ |target=Self
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This ability will allow an Alchemist to pass through the ether to any of the alchemical anchors across Sapience. Any action while channelling this ability will interrupt it.<p>'''Iron''': The Granite Hills.<br>'''Tin''': The Eastern Wilderness.<br>'''Copper''': The Northern Vashnar Mountains.<br>'''Silver''': The Southern Vashnar Mountains.<br>'''Gold''': The Siroccian Mountains.</p>
+}}
+
+{{Skill_detail
+ |skill=Mercury
+ |description=The third prime will bolster your mind.
+ |lessons=910
+ |syntax=EDUCE MERCURY
+ |required=350 mana
+ |target=Self
+ |cooldown=4.00 seconds of equilibrium
+ |symbol=A circle inscribed within a square
+ |detail=This ability will allow you to metabolise mana elixirs more efficiently, causing an increase in mana gained. This effect will not last indefinitely, however.
+}}
+
+{{Skill_detail
+ |skill=Astronomy
+ |description=The power of the cosmos is yours.
+ |lessons=1036
+ |syntax=ASTRONOMY FOCUS <celestial body><br>ASTRONOMY EMPOWER <target>/ME<br>ASTRONOMY STATUS
+ |required=500 mana
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Each city maintains, within an astronomical laboratory, an orrery specifically designed to resonate with the alchemical energies and the celestial bodies which share this affinity. It is possible to focus this orrery upon one of these celestial bodies, and once three alchemists from your city have done so, you may empower any non-forestal citizen with its power. This focus will be reset every Sarapin, when Ethian's Crossing disrupts the energies across Sapience. The focusing must be done from the appropriate laboratory, and the empowering may be done from anywhere.<p>The celestial bodies, the energy with which they resonate, and their empowered effects are:<br>'''The [[sun]]''' - Gold - Increased health regeneration.<br>'''The [[moon]]''' - Silver - Increased mana regeneration.<br>'''The [[Nebula Coronae]] (nebula)''' - Copper - Increased endurance and willpower regeneration.<br>'''[[Ethian]]''' - Tin - Increased damage versus denizens.</p>
+}}
+
+{{Skill_detail
+ |skill=Vitrification
+ |description=Turn an opponent's skin into glass.
+ |lessons=1163
+ |syntax=VITRIFY <target>
+ |required=400 mana
+ |target=Adventurers
+ |cooldown=4.50 seconds of equilibrium
+ |detail=This ability will cause an enemy's skin to partially transmutate into glass for a time. Abilities that use balance will cause bleeding, with the amount scaling upward with the length of balance loss.<p>This effect is mutually exclusive with that of phlogistication.</p>
+}}
+
+{{Skill_detail
+ |skill=Decompound
+ |description=A way to devolve Talisman Pieces into pure gold.
+ |lessons=1289
+ |syntax=DECOMPOUND <number> <Talisman piece name> <piece level>
+ |required=You must be in an equipped metallurgic lab.
+ |target=
+ |cooldown=
+ |detail=This ability allows the skilled alchemist to decompose talisman pieces into gold. The amount of gold produced is dependent on the rarity and level of the piece being decomposed.  
+}}
+
+{{Skill_detail
+ |skill=Revivification
+ |description=Grant life to the deceased.
+ |lessons=1439
+ |syntax=REVIVE <target>
+ |required=400 mana
+ |target=Adventurers
+ |cooldown=5.00 seconds of equilibrium
+ |detail=Using the alchemical energies and a catalyst of five pieces of the salt prime, you may return a corpse to life. Ensure that the corpse is whole and in good condition, lest the results be less than desirable.
+}}
+
+{{Skill_detail
+ |skill=Disrupt
+ |description=Send ripples through the ether.
+ |lessons=1588
+ |syntax=ETHER DISRUPT
+ |required=1500 mana
+ |target=Room
+ |cooldown=10.00 seconds of equilibrium
+ |detail=By sending ripples through the ether, you may temporarily disrupt telepathic communications into and out of the surrounding area. This will require a long period during which you may not perform any actions, and comes with a very steep mana and willpower cost.
+}}
+
+{{Skill_detail
+ |skill=Aurification
+ |description=Immortalise your enemies in gleaming gold.
+ |lessons=1736
+ |syntax=AURIFY <target>
+ |required=250 mana
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=The pinnacle of offensive Alchemy, this ability will turn an enemy into a lovely golden statue if his or her health and mana are both at or below sixty percent of their maximums.
+}}
+
+[[Category:Skills]]

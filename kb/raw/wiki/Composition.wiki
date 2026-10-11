@@ -1,0 +1,271 @@
+The skill of '''Composition''' was coalesced by the [[Scarlatti|Great Bard]] from the vast diaspora of musical traditions in [[Achaea]]. It is the apogee of mortal talent, weaving many disparate traditions the world over into cohesive performances that can as easily move a heart as break one.
+
+This power flows from the Place of Eternal Song through the instrument of the Bard such that [[Sapience]] will never again forget the significance of Art or its impact.
+
+As dangerous as music can be, however, remember that it is the ability to make history that makes for true might.
+
+The skill of '''Composition''' is available to members of the [[Bard]] [[class]], along with [[Bladedance]] and [[Sagas]] (or [[Woe]]).
+
+=Abilities in Composition=
+==The performing arts==
+{{Skill_detail
+ |skill=Performance
+ |description=The fundamentals of the stage.
+ |lessons=1
+ |syntax=COMPOSE <song> [movement]<br>
+PERFORMANCE SHOW<br>
+PERFORMANCE END
+ |required=
+ |target=
+ |cooldown=
+ |detail=The fundamental of the performer, what more critical piece of the undertaking can there be than the beginning? Performances are split into two parts:<p>Songs: these strike all your enemies in your location periodically in some manner dependent on the type of song you are playing.<p>Movements: these passively benefit all of your allies in your location in some way as long as your song is playing.<p>When starting out, your performance can only contain one movement, but as your skill grows, so too will the scope of your performance.</p>
+}}
+
+{{Skill_detail
+ |skill=Refrain
+ |description=The blade sings.
+ |lessons=89
+ |syntax=BLADE <attack> <song to refrain>
+ |required=
+ |target=
+ |cooldown=
+ |detail=Melding song and steel in a perfection that only a true composer could appreciate, you may now strike with a song alongside a bladedance technique as well(*).<p>* The refrain hits before the bladedance attack.<p>Song effects when used as the refrain:<br>'''Paean''': Paralysis<br>'''Bhajan''': Dizziness<br>'''Nomos''': Breaks shield and lyre if either are present. If neither, breaks rebounding<br>'''Gusheh''': Addiction<br>'''Ode''': Asthma<br>'''Ghazal''': Slickness<br>'''Elegy''': Lethargy<p>*You may also use a finale in place of a refrain. See the finale ability for details.</p>
+
+}}
+
+{{Skill_detail
+ |skill=Cadence
+ |description=As the music plays on.
+ |lessons=356
+ |syntax=PERFORMANCE SUSPEND/RESUME
+ |required=
+ |target=
+ |cooldown=2.50 seconds of equilibrium
+ |detail=You have advanced in your mastery to a point where you may now suspend a performance and resume it at will(*).<p>* A suspended performance will not decrease in time remaining while you're online, and a suspended performance will not hit any enemies.</p>
+}}
+
+{{Skill_detail
+ |skill=Symphony
+ |description=You are the maestro.
+ |lessons=738
+ |syntax=COMPOSE <song> <movement1> [movement2] [movement3]
+ |required=
+ |target=
+ |cooldown=
+ |detail=You may now weave multiple movements into your song, having up to three simultaneously tied in with your grand performance.
+}}
+
+{{Skill_detail
+ |skill=Crescendo
+ |description=The rising swell of the song.
+ |lessons=1669
+ |syntax=passive
+ |required=
+ |target=
+ |cooldown=
+ |detail=As you approach mastery of the performing arts, so too are your performances enhanced greatly. Now, all who are passively influenced by one of your songs who have a crescendo building about them will find that that crescendo draws faster with greater speed(*).<p>* Each time your passive song hits someone the crescendo affliction gains a stack if present.</p>
+}}
+
+{{Skill_detail
+ |skill=Duet
+ |description=Such harmony profound.
+ |lessons=
+ |syntax=DUET <target>
+ |required=
+ |target=
+ |cooldown=2.60 seconds of equilibrium
+ |detail=Though your own performances are doubtlessly grand beyond the reckoning of all that would behold them, sometimes one may simply wish to raise the level of another, perhaps tragically less gifted, musician. By performing this ability you will greatly raise an actively building crescendo about another(*), so long as someone other than yourself is responsible for it(**).<p>* Sets their crescendo to one stack below the finale threshold.<br>** You cannot be the one who gave the crescendo affliction in question.</p>
+}}
+
+{{Skill_detail
+ |skill=Finale
+ |description=The curtain falls.
+ |lessons=1704
+ |syntax=FINALE <target>
+ |required=
+ |target=Room
+ |cooldown=2.00 seconds of equilibrium
+ |detail=If a crescendo has built sufficiently about a target(*), you may bring your ongoing performance to a grand finale. This ends your current
+performance.<p>* Five stacks of crescendo.<p>Finales:<p>Paean: gives the reeling affliction for 20 seconds, which causes all bladedance attacks to be performed from the back position until it fades.<p>Bhajan: Strikes the hearer with both stupidity and epilepsy. Additionally, if they are suffering from head trauma, they will lose focus balance for a significant period of time.<p>Nomos: mangles an already level two broken leg. Prioritises the left
+over the right.<p>Gusheh: mangles an already level two broken arm. Prioritises the left over the right.<p>Ode: your foe will be rendered unable to communicate by any means for five minutes.<p>Ghazal: causes your foe to succumb to a love-wrought madness for thirty seconds. While succumbed to said madness, they will be unable to. perceive the state of themselves (similar to recklessness) and all physical damage shall become unblockable.<p>Elegy: any blessing of the stars protecting your target will be removed, and any starburst tattoos upon their person will be removed.<p>Prosodion: transfixes the hearer with the power of the Accentato, making earworm incurable for twenty seconds.</p>
+}}
+==Songs==
+{{Skill_detail
+ |skill=Paean
+ |description=And off to war they went.
+ |lessons=45
+ |syntax=COMPOSE PAEAN
+ |required=
+ |target=
+ |cooldown=2.50 seconds of equilibrium
+ |detail= This song of war will cause all of your enemies who tremble beneath its hearing to know the bloodshed of times gone by(*).<p>* All enemies bleed. Either for a small amount or twenty percent of their current bleeding, whichever is higher.<p>When refrained: gives paralysis.<p>Finale: gives the reeling affliction for 20 seconds, which causes all bladedance attacks to be performed from the back position until it fades.</p>
+}}
+
+{{Skill_detail
+ |skill=Bhajan
+ |description=That dread which stokes the fear.
+ |lessons=134
+ |syntax=COMPOSE BHAJAN
+ |required=
+ |target=
+ |cooldown=2.50 seconds of equilibrium
+ |detail=This dark song will stoke the fears of all of your enemies that hear it(*).<p>* Gives the fear affliction.<p>When refrained: gives dizziness.<p>Finale: strikes the hearer into such a state of inaction that they will lose focus balance(*) for a significant period of time, as well as afflicting them with both stupidity and epilepsy.<br>* Head must be damaged for focus knock.</br>
+}}
+
+{{Skill_detail
+ |skill=Nomos
+ |description=The most disciplined resolve.
+ |lessons=223
+ |syntax=COMPOSE NOMOS
+ |required=
+ |target=
+ |cooldown=2.50 seconds of equilibrium
+ |detail=The relentless march of your nomos shall crush the resolve of your enemies, destroying reflections raised about their person and revealing them for who they are beneath(*).<p>* If they have only one reflection, it is destroyed. Otherwise the number of reflections protecting them is halved.<p>When refrained: breaks shield or prismatic, if present. If neither is present, breaks rebounding.<p>Finale: mangles an already level two broken leg. Prioritises the left over the right.</p>
+}}
+
+{{Skill_detail
+ |skill=Gusheh
+ |description=Of joy and feasts with friends.
+ |lessons=312
+ |syntax=COMPOSE GUSHEH
+ |required=
+ |target=
+ |cooldown=2.50 seconds of equilibrium
+ |detail=A song of the many joys of life, this grand performance is sure to cloud the senses of any enemy who hears it(*).<p>* Stuns for a short time. <p>When refrained: gives addiction.<p>Finale: mangles an already level two broken arm. Prioritises the left over the right.
+}}
+
+{{Skill_detail
+ |skill=Ode
+ |description=For heroes do we sing. 
+ |lessons=1049
+ |syntax=COMPOSE ODE
+ |required=
+ |target=
+ |cooldown=2.50 seconds of equilibrium
+ |detail=This song about legendary heroes shall take the breath away from any enemy that hears you sing it, making them unable to say anything for a short time(*). If they are asthmatic, this time is increased.<p>* Only impacts SAY. Telepathic channels are not influenced.<p>When refrained: gives asthma.<p>Finale: your foe will be rendered unable to communicate by any means for five minutes.</p>
+}}
+
+{{Skill_detail
+ |skill=Ghazal
+ |description=So sweet the love sublime.
+ |lessons=1049
+ |syntax=COMPOSE GHAZAL
+ |required=
+ |target=
+ |cooldown=2.50 seconds of equilibrium
+ |detail=A song of heartache and love, when your enemies hear this song they will become lovestruck. While not as potent as the true lovers curse, this will make the afflicted potentially forget someone is an enemy in any given moment(*).<p>* All enemy checks have a chance to fail outright.<p>When refrained: gives slickness.<p>Finale: causes your foe to succumb to a love-wrought madness for thirty seconds. While succumbed to said madness, they will be unable to perceive the state of themselves (similar to recklessness) and all physical damage shall become unblockable.</p>
+}}
+
+{{Skill_detail
+ |skill=Elegy
+ |description=Weep for the dead.
+ |lessons=1187
+ |syntax=COMPOSE ELEGY
+ |required=
+ |target=
+ |cooldown=2.50 seconds of equilibrium
+ |detail=This solemn song for the dead will lay the weariness of loss upon all who hear it. Each time an enemy hears your song, their celerity will be greatly reduced(*), and if they are already lethargic, it will be eliminated entirely(**).<p>* Their celerity will be set to one movement below maximum to whatever they can normally move.<br>** They will have their celerity reduced to the lowest possible level.<p>When refrained: gives lethargy.<p>Finale: any blessing of the stars protecting your target will be removed, and any starburst tattoos upon their person will be removed.</p>
+}}
+
+{{Skill_detail
+ |skill=Prosodion
+ |description=Of grandeur most Divine.
+ |lessons=1325
+ |syntax=COMPOSE PROSODION
+ |required=90 mana
+ |target=Room
+ |cooldown=2.50 seconds of equilibrium
+ |detail=The Prosodion is a song about the Gods, and all your enemies that hear it shall be struck down with a sliver of that grandeur.<p>* Deals some damage passively to all enemies.<p>When refrained: gives sensitivity.<p>Finale: transfixes the hearer with the power of the Accentato, making earworm incurable for twenty seconds.</p>
+}}
+
+==Movements==
+{{Skill_detail
+ |skill=Prelude
+ |description=Before the beginning.
+ |lessons=58
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=This movement which prepares the body of you and your allies shall grant some resistance to magical damage.
+}}
+
+{{Skill_detail
+ |skill=Aria
+ |description=You'll keep this party going.
+ |lessons=112
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail= This upbeat movement bolsters you and your allies, reducing all willpower and endurance use by around ten percent(*).<p>* Some abilities are unmodified by anything when it comes to this cost. As with other enhancements, this movement will not help in these cases.</p>
+}}
+
+{{Skill_detail
+ |skill=Maqam
+ |description=To lend keenness to blades unsheathed.
+ |lessons=400
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=This movement will lend the blows of you and your allies with greater precision, granting a small bonus to critical hits.
+}}
+
+{{Skill_detail
+ |skill=Scherzo
+ |description=Through thick and thin.
+ |lessons=467
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail= his fast paced movement will periodically regenerate your health and that of your allies. This operates independently of other regeneration sources (so stacks with artefacts and similar).
+}}
+
+{{Skill_detail
+ |skill=Sonata
+ |description=To unburden all with ears to hear.
+ |lessons=578
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=The movement of the sonata shall unburden you and your allies of their afflictions periodically, healing one at random.
+}}
+
+{{Skill_detail
+ |skill=Pastorale
+ |description=To soothe the mind and soul.
+ |lessons=1256
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=A tranquil movement to bring peace to you and your allies, all that are affected by the pastorale will have a small chance to resist being forced to act against their will.
+}}
+
+{{Skill_detail
+ |skill=Rondo
+ |description=Onwards we march.
+ |lessons=1497
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=The rondo movement bolsters you and your allies for the march ahead, halving the time it takes to cross rough terrain and similar(*).<p>* Rubble, for example. This does not apply to moving through Charnel crypts, however.</p>
+}}
+
+{{Skill_detail
+ |skill=Nocturne
+ |description=For silent you will be not.
+ |lessons=1738
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=This greatest movement may be added to any performance, and then not even a silence vibration or similar shall stop all from hearing your masterful song.
+}}
+
+
+[[Category:Skills]]

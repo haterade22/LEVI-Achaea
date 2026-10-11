@@ -1,0 +1,317 @@
+The conviction of Zeal grants many great powers. Wielding holy verse empowered by the echoes of [[phoenix]] song, there are few limits upon a [[Priest]]'s capabilities. From condemning a heretic to be plagued by visions of their sins to drawing upon their allies for a surge of healing power beyond any other, the vanguard of [[Creation]] stands ready to exact retribution upon any that would challenge the sanctity of their charge.
+
+The skill of '''Zeal''' is available to members of the [[Priest]] class, along with [[Spirituality]] and [[Devotion]].
+
+==Abilities in Zeal==
+{{Skill_detail
+ |skill=Anoint
+ |description=Your pledge.
+ |lessons=
+ |syntax=ANOINT ASH
+ |required=
+ |target=
+ |cooldown=
+ |detail=A wielder of the holy verses must first gain the ability to imbue their words with a remnant of Phoenix Song. Travel to the island of Anost in the City of Targossas(*) and ANOINT your brow with the holy ash that can be found there.<br>* This is also a landmark, if you are unsure how to locate it on foot.
+}}
+
+{{Skill_detail
+ |skill=Verses
+ |description=Knowledge of the holy verses.
+ |lessons=
+ |syntax=VERSES
+ |required=
+ |target=
+ |cooldown=
+ |detail=You may view the holy verses that you have learned, and the various limitations imposed on the use of each in prayer. 
+}}
+
+{{Skill_detail
+ |skill=Will
+ |description=A verse to bolster the mind.
+ |lessons=16
+ |syntax=RECITE WILL <target{{!}}ME>
+ |required=
+ |target=Adventurers and self
+ |cooldown=3.00 seconds of prayer balance
+ |detail=This holy verse shall bolster the mind of yourself or an ally, improving their willpower regeneration.
+}}
+
+{{Skill_detail
+ |skill=Endurance
+ |description=May the protectors of Creation never falter.
+ |lessons=32
+ |syntax=RECITE ENDURANCE <target|ME>
+ |required=
+ |target=Adventurers and self
+ |cooldown=3.00 seconds of prayer balance
+ |detail=This holy verse shall grant improved endurance regeneration to yourself or an ally.
+}}
+
+{{Skill_detail
+ |skill=Attend
+ |description=They shall hear what you have to say.
+ |lessons=51
+ |syntax=RECITE ATTEND <target>
+ |required=
+ |target=Adventurers
+ |cooldown=1.60 seconds of prayer balance
+ |detail=Some would seek to close their ears as well as their hearts to the holy truth of the Light and Fire. No matter. With this verse you may force them to attend you, stripping away such protections with a simple sentence.
+}}
+
+{{Skill_detail
+ |skill=Fire
+ |description=The verse of the righteous.
+ |lessons=64
+ |syntax=RECITE FIRE <target{{!}}ME>
+ |required=
+ |target=Adventurers and self
+ |cooldown=3.00 seconds of prayer balance
+ |detail=Recite the verse of fire, granting you or an ally protection against the ravages of flame.
+}}
+
+{{Skill_detail
+ |skill=Void
+ |description=A verse to stave off the outer cold.
+ |lessons=80
+ |syntax=RECITE VOID <target{{!}}ME>
+ |required=
+ |target=Adventurers and self
+ |cooldown=3.00 seconds of prayer balance
+ |detail=This holy verse is both warning and protection. It grants improved resistance to cold damage to either yourself or an ally.
+}}
+
+{{Skill_detail
+ |skill=Protection
+ |description=The verse of protection.
+ |lessons=127
+ |syntax=RECITE PROTECTION <target{{!}}ME>
+ |required=
+ |target=Adventurers and self
+ |cooldown=3.00 seconds of prayer balance
+ |detail=A holy verse of protection, this scripture conveys a protection on yourself or an ally that reduces incoming damage from physical blows.
+}}
+
+{{Skill_detail
+ |skill=Fragility
+ |description=The profane are weak in body as with mind.
+ |lessons=192
+ |syntax=RECITE FRAGILITY <target>
+ |required=
+ |target=Adventurers
+ |cooldown=1.60 seconds of prayer balance
+ |detail=Direct this holy verse at a profane enemy of Creation and the next blow you deal with your mace shall deal greatly increased damage to the chosen limb(*).<br>* This increases the next mace attack's limb damage you deal by approximately 30%. 
+}}
+
+{{Skill_detail
+ |skill=Prayer
+ |description=Chaining the holy verses.
+ |lessons=255
+ |syntax=VERSES
+ |required=
+ |target=
+ |cooldown=
+ |detail=You may now chain holy verses together. Each verse you recite(*) somewhat quickly after a prior one will form a prayer; a prayer of two or more verses that you allow to finish without reciting further will   
+grant you conviction. Conviction is used to enact some of the more powerful holy verses.<p>Additionally, certain verses can only be utilised once per prayer, and others may require a prayer of a certain length before they can be recited.<br>* Verses that specifically target yourself do not increase your prayer's length. Prayers that target others or that are somewhat indiscriminate do.</p>
+}}
+
+{{Skill_detail
+ |skill=Condemnation
+ |description=There will be a reckoning.
+ |lessons=320
+ |syntax=RECITE CONDEMNATION <target>
+ |required=
+ |target=Adventurers
+ |cooldown=1.60 seconds of prayer balance
+ |detail=Condemn your foe with this holy verse, striking them down with the justice affliction. 
+}}
+
+{{Skill_detail
+ |skill=Guilt
+ |description=Remind them of their failings.
+ |lessons=352
+ |syntax=RECITE GUILT <target>
+ |required=
+ |target=
+ |cooldown=1.70 seconds of prayer balance
+ |detail=This verse reminds a foe of their life's failings, forcing them to confront them. Attempts to focus their mind shall only serve to worsen their situation(*).<br>* Focus still cures an affliction, but it also gives a new mental affliction in the cured one's place. 
+}}
+
+{{Skill_detail
+ |skill=Persevere
+ |description=There will be barriers to overcome.
+ |lessons=384
+ |syntax=RECITE PERSEVERE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=1.60 seconds of prayer balance
+ |detail=You will persevere even when your enemy flees to the skies. Reciting
+this holy verse will draw them back down to your level. 
+}}
+
+{{Skill_detail
+ |skill=Unflinching
+ |description=You will not back away from what must be done.
+ |lessons=448
+ |syntax=RECITE UNFLINCHING <target>
+ |required=
+ |target=Adventurers
+ |cooldown=1.60 seconds of prayer balance
+ |detail=This holy verse can drive you to greater levels of fervour, allowing you to strike through the next attempt to parry that the foe you recite it against attempts.<br>In addition, reciting this verse while you are not hunting the heretics shall convey the heresy defence, though it will be more short-lived compared to utilising the spirituality ability.<p>Recitation of this verse is not affected by weariness.</p>   
+}}
+
+{{Skill_detail
+ |skill=Ash
+ |description=Consign them to their fate.
+ |lessons=575
+ |syntax=RECITE ASH <target>
+ |required=
+ |target=
+ |cooldown=1.60 seconds of prayer balance
+ |detail=This verse brings forth latent fires that sear at the soul, lying in wait to be ignited by true fire(*).<br>* When a target takes damage from ticks of being on fire, they will also suffer mana damage. They shall also take mana damage if they successfully move while on fire.<br>* Gives the spiritburn affliction.
+}}
+
+{{Skill_detail
+ |skill=Penance
+ |description=Let them gaze upon their sins.
+ |lessons=672
+ |syntax=RECITE PENANCE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=1.60 seconds of prayer balance
+ |detail=Recite this holy verse and allow the profane soul to gaze upon their past sins, paralysing them with the truth of their corruption(*).<br>* Gives the paralysis affliction.
+}}
+
+{{Skill_detail
+ |skill=Reflection
+ |description=The verse of self reflection.
+ |lessons=800
+ |syntax=RECITE REFLECTION <target>
+ |required=
+ |target=Adventurers
+ |cooldown=2.70 seconds of prayer balance
+ |detail=Recite this verse against one of the profane and they shall share in the suffering they would seek to bring upon you. Some of the afflictions dealt to you shall be gifted back to them in turn for a short time(*).<br>* Ten seconds.
+}}
+
+{{Skill_detail
+ |skill=Rebuke
+ |description=Punish their transgressions.
+ |lessons=831
+ |syntax=RECITE <verse> <target> REBUKE <sin>
+ |required=
+ |target=
+ |cooldown=
+ |detail=Your mastery of the holy verses now grants you the ability to conclude your prayer with a punishment of one of a heretics sins. Certain punishments require a prayer of longer length than others. The punishment is given alongside the standard verse effect:<br>'''Chaos''': requires a prayer of at least two verses, gives hallucinations.<br>'''Darkness''': requires a prayer of at least two verses, gives paranoia.<br>'''Evil''': requires a prayer of at least three verses, gives masochism.<br>'''Heresy''': requires a prayer of at least four verses. Gives the inquisition affliction to a target suffering from both the guilt and spiritburn afflictions.<p>Note that you may only couple rebuke with a verse that also targets a specific enemy.</p>
+}}
+
+{{Skill_detail
+ |skill=Burn
+ |description=Let the fire speak for you.
+ |lessons=913
+ |syntax=RECITE BURN <target>
+ |required=
+ |target=
+ |cooldown=1.70 seconds of prayer balance
+ |detail=Perhaps the most straight forward of all holy verses, but no less powerful for that. Send fire to scourge the flesh of your profane foe, leaving them tender and pained to such an extent that any attempt to apply a salve shall cause them to suffer in mind(*).<br>* Drains mana on applying salves.<br>* Gives the tenderskin affliction.
+}}
+
+{{Skill_detail
+ |skill=Light
+ |description=The rallying cry of the Light.
+ |lessons=1062
+ |syntax=RECITE LIGHT
+ |required=
+ |target=Self
+ |cooldown=3.00 seconds of prayer balance
+ |detail=The rallying cry of the light, this verse will heal all of your blessed comrades in your location and for each one healed it shall cure an affliction from you.<p>Though there is no limit on how often a priest may recite this verse, it may only be recited in a given location every so often(*).<br>* 30 seconds.</p>
+}}
+
+{{Skill_detail
+ |skill=Wrath
+ |description=Righteous fury is a thing to behold.
+ |lessons=1311
+ |syntax=RECITE WRATH <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of prayer balance
+ |detail=The verse of wrath shall ravage your foe with holy flame, burning their mind(*). If they are also alight with regular flame(**) and prone, they shall suffer in body as well.<br>* The mana damage scales to the number of afflictions they are suffering from. Guilt, ablaze, spiritburn, and tenderskin increase the value by more than other afflictions, followed by mental and limb based afflictions. Inquisition increases more than anything else.<br>** If they have the ablaze affliction.
+}}
+
+{{Skill_detail
+ |skill=Purge
+ |description=Let the disease be burned away.
+ |lessons=1510
+ |syntax=RECITE PURGE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=2.30 seconds of prayer balance
+ |detail=Recite the holy verse of purging to damage your foe and set them ablaze.
+}}
+
+{{Skill_detail
+ |skill=Rejection
+ |description=You will not stand for such corruption.
+ |lessons=1857
+ |syntax=RECITE REJECTION <target> <direction>
+ |required=
+ |target=Adventurers
+ |cooldown=2.80 seconds of prayer balance
+ |detail=The verse of rejection is a manifestation of your defiance in the face of the enemies of Creation. Recite this verse, and even from a far you shall strike down your foes. <br>* Does damage to a target in line of sight. Notably, this bypasses magical shields and prismatic barriers. 
+}}
+
+{{Skill_detail
+ |skill=Oration
+ |description=Creation shall flourish.
+ |lessons=
+ |syntax=
+ |required=
+ |target=
+ |cooldown=
+ |detail=The enemies of Creation shall learn that your cause is a righteous one, whether they care to hear or not(*).<p>* You will never stumble over your recitals when directed against one afflicted with justice.
+}}
+
+{{Skill_detail
+ |skill=Salvation
+ |description=The verse of salvation.
+ |lessons=2006
+ |syntax=RECITE SALVATION [PREPARE]
+ |required=
+ |target=Self
+ |cooldown=3.80 seconds of prayer balance
+ |detail=A prayer for salvation, not for yourself but for others, this powerful verse of prayer shall create a prismatic barrier for all blessed comrades in your location.  
+}}
+
+{{Skill_detail
+ |skill=Benediction
+ |description=A holy blessing to protect the righteous.
+ |lessons=2155
+ |syntax=RECITE BENEDICTION <target>
+ |required=
+ |target=Adventurers and self
+ |cooldown=
+ |detail=This holy benediction shall grant all of the blessings gained from reciting the verses of fire, void, protection, will and endurance to an individual in your location. Due to the nature of this supplication, it is not considered a holy verse and does not compose any aspect of a prayer.
+}}
+
+{{Skill_detail
+ |skill=Glory
+ |description=The verse of glory.
+ |lessons=2303
+ |syntax=RECITE GLORY
+ |required=
+ |target=Self
+ |cooldown=3.00 seconds of prayer balance
+ |detail=A verse inspiring victory and tenacity, this holy power will bring forth a blessed protection on a given location when recited against a foe of Creation. For one minute after activation if an individual blessed by devotion to the gods falls in battle and is raised by the grace of the stars, he or she shall be pulled from the location to a random adjacent location. This effect can fire up to three times before it runs its course, and it can not be brought forth again for a short time in the location(*).<br>* This cooldown is on the location, not on the priest.
+}}
+
+{{Skill_detail
+ |skill=Revelations
+ |description=Show them Evil's horror.
+ |lessons=2502
+ |syntax=RECITE REVELATIONS <target>
+ |required=
+ |target=Adventurers
+ |cooldown=1.60 seconds of prayer balance
+ |detail=Recite this holy verse to reveal to a heretic the true depths of Evil's depravity; permit them not the chance to turn their eyes away.<br>* Gives the hellsight affliction.
+}}
+
+[[Category:Skills]]
+[[Category:Edit needed]]

@@ -1,0 +1,349 @@
+Woodlore imparts [[adventurers]] who practise it with the expertise of laying traps, summoning animal [[:Category:Class Loyals|guardians]], and performing a variety of other [[combat]]-related, [[forestal]] [[:Category:Abilities|abilities]].
+
+The skill was first taught to members of the [[Sentinels of Nature|Sentinels Guild]] by [[Vixen]] after she had in turn learned the art from [[Etarni]] during her extended stay in the [[:Category:Villages|village]] of the [[Tomacula]], following the Sentinels' act of annihilating their [[Groves]] to cure Vixen of a feverish ailment that had befallen her.
+
+The skill of '''Woodlore''' is available to members of the [[Sentinel]] [[class]], along with [[Metamorphosis]] and [[Skirmishing]].
+
+==Abilities in Woodlore==
+{{Skill_detail
+ |skill=Hide
+ |description=Conceal yourself in the shadows.
+ |lessons=0
+ |syntax=HIDE<br>EMERGE
+ |required=
+ |target=Self
+ |cooldown=4.00 seconds of balance
+ |detail=Conceal yourself from view.
+}}
+
+{{Skill_detail
+ |skill=Swinging
+ |description=Swing up into the trees like a monkey on kola.
+ |lessons=7
+ |syntax=SWING UP<br>SWING DOWN
+ |required=
+ |target=Room
+ |cooldown=2.00 seconds of balance
+ |detail=When in a location with trees (such as a forest, or a jungle, or many gardens), you may swing up into the branches.
+}}
+
+{{Skill_detail
+ |skill=Traps
+ |description=The ability to search for traps in your location.
+ |lessons=16
+ |syntax=TRAPS<br>TRAPS LIST
+ |required=
+ |target=Room
+ |cooldown=Traps: 3.00 seconds of balance<br>Traps List: 5.00 seconds of balance
+ |detail=The TRAPS ability will search for traps in the room, giving you information about them. You will not be able to find traps laid by someone with higher skill than you. TRAPS LIST will show you all your traps around the world.
+}}
+
+{{Skill_detail
+ |skill=Dart
+ |description=A trap that shoots out a poisoned dart at its victim.
+ |lessons=16
+ |syntax=ASSEMBLE DART TRAP<br>LAY DART <direction><br>ENVENOM DART <direction> WITH <venom>
+ |required=3 wood
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=The dart trap shoots out a dart when sprung. It does no damage, but may be envenomed from vials with venom in them, in which case the dart will poison the victim with whatever venom was applied to the trap. Like all traps, it has a bit of magic in it and will only affect your enemies.
+}}
+
+{{Skill_detail
+ |skill=[[Fox]]
+ |description=Summon a lithe vixen to attack your enemies.
+ |lessons=34
+ |syntax=SUMMON FOX
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of equilibrium
+ |detail=With this ability you may call a sly and cunning vixen to attack your enemies. When she attacks your victim, if they are suffering from the haemophilia affliction, the amount of bleeding she can inflict will be higher. <p>HELP MOBILES will show you what commands you can use with it.<br>** Those enemied to the forests will not be able to call upon the aid of Nature to assist them.</p>
+}}
+
+{{Skill_detail
+ |skill=Barkskin
+ |description=Make your skin tough like bark.
+ |lessons=56
+ |syntax=BARKSKIN
+ |required=200 mana
+ |target=Self
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This ability will cause your skin to become as bark, providing an increased measure of protection vs. attacks doing physical damage.
+}}
+
+{{Skill_detail
+ |skill=Snare
+ |description=Trap your enemies like the stupid beasts they are.
+ |lessons=134
+ |syntax=ASSEMBLE SNARE TRAP<br>LAY SNARE <direction>
+ |required=3 rope
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=This trap will snare an opponent like a hare heading for the cooking pot, reducing their celerity to 1 for 20 seconds.
+}}
+
+{{Skill_detail
+ |skill=Lastharvest
+ |description=The ability to see who last harvested in a room.
+ |lessons=178
+ |syntax=LASTHARVEST
+ |required=
+ |target=
+ |cooldown=
+ |detail=Whenever a plant is harvested, or, indeed, anything that is alive is changed, traces are left in the fabric of life-energy that sustains all living beings. The lastharvest ability allows you to tap into those energies for a short time to see who last harvested from each plant in your location.
+}}
+
+{{Skill_detail
+ |skill=Lemming
+ |description=Summon a suspiciously helpful lemming to your aid.
+ |lessons=178
+ |syntax=SUMMON LEMMING
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of equilibrium
+ |detail=The lemming will race around and between the legs of an opponent, making them afraid of heights.<p>** Those enemied to the forests will not be able to call upon the aid of Nature to assist them.</p>
+}}
+
+{{Skill_detail
+ |skill=Naturalism
+ |description=Discover who exterminated a room last.
+ |lessons=178
+ |syntax=NATURALISM
+ |required=
+ |target=None
+ |cooldown=
+ |detail=Naturalism allows you to detect the foul stain of a Necromancer's soul on an exterminated room, letting you see who did it.
+}}
+
+{{Skill_detail
+ |skill=Firstaid
+ |description=Use your knowledge of healing to reduce bleeding.
+ |lessons=256
+ |syntax=FIRSTAID [ON{{!}}OFF]<br>RELAX FIRSTAID
+ |required=200 mana
+ |target=Self
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Anyone who spends time in the wilderness understands the value of a basic knowledge of first aid. Using this technique, you will cause your wounds to clot more quickly.
+}}
+
+{{Skill_detail
+ |skill=Disarm
+ |description=Attempt to disarm a trap.
+ |lessons=289
+ |syntax=DISARM <trap type> <direction>
+ |required=
+ |target=Room
+ |cooldown=2.00 seconds of balance
+ |detail=Using this ability, you will attempt to disarm a trap in the direction specified. If you are successful, and not in the arena, then you will get the commodities that went into its making. If you are unsuccessful, you will fall victim to the trap. You will only be able to disarm traps laid by those with skill equal to or less than your own.
+}}
+
+{{Skill_detail
+ |skill=Mask
+ |description=Hide your animal companions from plain sight.
+ |lessons=312
+ |syntax=MASK<br>UNMASK
+ |required=500 mana
+ |target=
+ |cooldown=2.00 seconds of equilibrium
+ |detail=Your skill in Woodlore has increased to the point that your animal companions will obey your orders to hide themselves from plain sight.
+}}
+
+{{Skill_detail
+ |skill=Noose
+ |description=A trap to strangle your enemies.
+ |lessons=334
+ |syntax=ASSEMBLE NOOSE TRAP LAY NOOSE <direction>
+ |required=3 rope
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=This is the snare trap's more powerful cousin. It snares someone, but it proceeds to strangle that person until he or she writhes out of the trap.
+}}
+
+{{Skill_detail
+ |skill=Raven
+ |description=Call a raven to aid you in combat.
+ |lessons=378
+ |syntax=SUMMON RAVEN
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of equilibrium
+ |detail=The raven will dart in and out of an opponent's line of sight, instilling paranoia in them.<p>** Those enemied to the forests will not be able to call upon the aid of Nature to assist them.</p>
+}}
+
+{{Skill_detail
+ |skill=Catapult
+ |description=A trap that will throw your enemies out of the room.
+ |lessons=423
+ |syntax=ASSEMBLE CATAPULT TRAP<br>LAY CATAPULT <direction> <direction to throw person>
+ |required=1 rope and 1 wood
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=The catapult trap is laid in a direction like all traps, but is also set to throw its victim in a particular direction.<p>So, for instance, say you are in a room with north and west exits. You might do: LAY CATAPULT NORTH WEST. Then, when one of your enemies either tries to leave the room going north, or tries to enter the room from the north, he will be thrown west and thrown off-balance momentarily.</p>
+}}
+
+{{Skill_detail
+ |skill=Campfire
+ |description=Build a campfire to soothe the body and soul.
+ |lessons=467
+ |syntax=BUILD CAMPFIRE<br>STOKE CAMPFIRE
+ |required=3 wood to build, 1 wood to stoke
+ |target=Room
+ |cooldown=8.00 seconds of balance
+ |detail=When you build a campfire, those in the room with it will regenerate endurance and willpower at a greatly increased rate. When the fire starts to burn out, you may stoke it to keep it going.
+}}
+
+{{Skill_detail
+ |skill=Badger
+ |description=Call for the aid of a very grumpy badger.
+ |lessons=512
+ |syntax=SUMMON BADGER
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of equilibrium
+ |detail=The grumpy badger is a fearsome foe and is able to rip into opponents with its claws, causing great amounts of bleeding.(*) If the target is sufficiently bleeding already(**), the badger will enter a frenzy and additionally give asthma.<p>* The bleeding is increased if the target also has haemophilia.<br>200 bleeding or more.<p>*** Those enemied to the forests will not be able to call upon the aid of Nature to assist them.</p>
+}}
+
+{{Skill_detail
+ |skill=Clothesline
+ |description=A trap that will rip open the jugular of a victim.
+ |lessons=556
+ |syntax=ASSEMBLE CLOTHESLINE TRAP<br>LAY CLOTHESLINE <direction>
+ |required=3 rope
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=This trap will cut the jugular of any enemy of yours that tries to pass by it, causing great bleeding.
+}}
+
+{{Skill_detail
+ |skill=Alarm
+ |description=Put an alarm on a trap.
+ |lessons=600
+ |syntax=SET ALARM <direction>
+ |required=
+ |target=Adventurers
+ |cooldown=1.00 seconds of balance
+ |detail=Set an alarm on a trap such that the trap owner will be notified when the trap is sprung.
+}}
+
+{{Skill_detail
+ |skill=Nativity
+ |description=Your connection with nature is formidable indeed.
+ |lessons=703
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=Your bond with nature is so strong that you may now summon your animal companions anywhere that you may be in Sapience.
+}}
+
+{{Skill_detail
+ |skill=Dustbomb
+ |description=Numb the senses of this trap's victims.
+ |lessons=944
+ |syntax=ASSEMBLE DUSTBOMB TRAP<br>LAY DUSTBOMB <direction>
+ |required=1 diamond dust and 1 rope
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=When sprung, the dustbomb will numb a person's senses, cutting off much sensory input for a time.
+}}
+
+{{Skill_detail
+ |skill=[[butterflies|Butterfly]]
+ |description=Summon a butterfly to assist you in combat.
+ |lessons=1048
+ |syntax=SUMMON BUTTERFLY
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Though small and seemingly harmless, the butterfly is a powerful ally in combat, buzzing about your enemy's head and restoring their hearing.<p>** Those enemied to the forests will not be able to call upon the aid of Nature to assist them.</p>
+}}
+
+{{Skill_detail
+ |skill=Horseshoe
+ |description=A trap that stuns its victims with a blow to the head.
+ |lessons=1151
+ |syntax=ASSEMBLE HORSESHOE TRAP<br>LAY HORSESHOE <direction>
+ |required=3 iron and 3 rope
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=This trap drops a horseshoe on top of its victim's head, stunning him for a time.
+}}
+
+{{Skill_detail
+ |skill=Fleetness
+ |description=Navigate the forests with expert skill.
+ |lessons=1220
+ |syntax=FLEETNESS
+ |required=
+ |target=Self
+ |cooldown=2.00 seconds of balance
+ |detail=This ability grants a defence that, when activated, will allow you to move faster through the forests.
+}}
+
+{{Skill_detail
+ |skill=Thornspray
+ |description=Attack your enemies with a flurry of flying thorns.
+ |lessons=1289
+ |syntax=INVOKE THORNSPRAY
+ |required=250 mana
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=While in a forested environment, you may fill the air with deadly flying thorns, damaging anyone in the room.<p>** Those enemied to the forests will not be able to call upon the aid of Nature to assist them.</p>
+}}
+
+{{Skill_detail
+ |skill=Conceal
+ |description=Conceal the nature of a trap's effect.
+ |lessons=1427
+ |syntax=CONCEAL TRAP <direction>
+ |required=
+ |target=1.00 seconds of balance
+ |cooldown=
+ |detail=This powerful ability will allow you to disguise the effects of a trap from he who sets it off. The victim will know he set off a trap, but will not immediately know what kind of trap was set off.
+}}
+
+{{Skill_detail
+ |skill=Evasion
+ |description=Elude the intruding eyes below.
+ |lessons=1581
+ |syntax=EVASION [ON{{!}}OFF]<br>RELAX EVASION
+ |required=
+ |target=
+ |cooldown=4.00 seconds of balance
+ |detail=Your masterful knowledge over the skies will allow you to perform skilful evasive techniques while flying, avoiding the piercing gazes of those on the ground below. Note that such action is very physically demanding, and such will incur a heavy endurance drain.
+}}
+
+{{Skill_detail
+ |skill=Enrage
+ |description=Drive one of your companions into a rage.
+ |lessons=1599
+ |syntax=ENRAGE <animal> <person>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Through your link with your companions, you are able to drive one into a rage, causing them to do a more dangerous attack than they normally would. This does not consume balance or equilibrium, and the animal does not need to be actively summoned for you to call it forth for a single attack. <p>'''Badger''': will deliver bleeding and addiction. If the target already has addiction, will deliver nausea.</p><p>'''Fox''': will deliver healthleech.</p><p>'''Wolf''': will give hallucinations.</p><p>'''Lemming''': will strip rebounding or shield; if neither are present, it will strip a random defence. Shield is always stripped before rebounding.</p><p>'''Raven''': will deliver sensitivity.</p><p>'''Butterfly''': will unblind its target.</p>
+}}
+
+{{Skill_detail
+ |skill=Wolf
+ |description=Call the mighty grey wolf to your side.
+ |lessons=1634
+ |syntax=SUMMON WOLF
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of equilibrium
+ |detail=The most powerful of the animals that will come to your call, the mighty wolf will attack with its fangs and claws, damaging its victims. If your foe is lacking the deafness defence they will also be shaken by the wolf's howl, increasing damage taken.<p>** Those enemied to the forests will not be able to call upon the aid of Nature to assist them.</p>
+}}
+
+{{Skill_detail
+ |skill=Darts
+ |description=A trap to quickly overload an enemy with poisons.
+ |lessons=1736
+ |syntax=ASSEMBLE DARTS TRAP<br>LAY DARTS <direction><br>ENVENOM DARTS <direction> WITH <venom>
+ |required=3 wood and 3 rope make 3 darts traps
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=The darts trap, when sprung, will begin shooting darts (hopefully) holds 5 darts and will be destroyed when the last dart is shot.
+}}
+
+[[Category:Skills]]

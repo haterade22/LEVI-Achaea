@@ -1,0 +1,351 @@
+"Light does not create shade, Light constrains shade. In the darkness shadows are free." Thus spoke Overlord Gattan'lier 468 years before the fall of the Seleucarian Empire.
+
+The art of Shadowmancy is the foundation of the Tsol'teth fighting style. While Terminus is arguably the art they are more infamous for, it is Shadowmancy that underpins their entire fighting style.
+
+Practitioners of this skill are never truly helpless, for where there is darkness they are mighty, and where there is a Depthswalker darkness soon follows. The abilities vary greatly, ranging from the foundational concepts--manifesting weapons from nothing but shadows--to the ultimate expression of the art: turning a foe's own shadow against its host in a final, brutal betrayal.
+
+The skill of '''Shadowmancy''' is available to members of the [[Depthswalker]] [[class]], along with [[Aeonics]] and [[Terminus]].
+
+==Abilities in Shadowmancy==
+{{Skill_detail
+ |skill=Enshroud
+ |description=Cloak your location in blackest night.
+ |lessons=
+ |syntax=SHADOW ENSHROUD
+ |required=
+ |target=
+ |cooldown=
+ |detail=Create a magical darkness to completely enshroud your location.
+}}
+
+{{Skill_detail
+ |skill=Manifest
+ |description=Forge weapons from the shadows that surround you.
+ |lessons=
+ |syntax=SHADOW MANIFEST{{!}}BANISH{{!}}UNMAKE <SCYTHE{{!}}DAGGER>
+ |required=
+ |target=
+ |cooldown=
+ |detail=The very shadows shall come together to form your blade. You may manifest both a dagger and scythe, which will be utilised for different abilities that you shall learn as your abilities improve. If you already have either a dagger or scythe in existence, performing this ability shall summon it back to you, rather than creating a new one.<br>Note that for the initial manifestation, you must be surrounded by magical darkness. 
+}}
+
+{{Skill_detail
+ |skill=Cull
+ |description=Your foes are wheat before the storm.
+ |lessons=
+ |syntax=SHADOW CULL <target> [venom]
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=This powerful attack with your scythe deals high damage but is somewhat slow.
+}}
+
+{{Skill_detail
+ |skill=Intone
+ |description=The shadows are your voice and more.
+ |lessons=
+ |syntax=SHADOW INTONE [anonymous] <message>
+ |required=
+ |target=
+ |cooldown=
+ |detail=When standing in a location cloaked in magical darkness, you may project your voice so that all those who also stand in said darkness may hear you, regardless of distance or boundaries.
+}}
+
+{{Skill_detail
+ |skill=Cloak
+ |description=The cloak of power from ancient lore.
+ |lessons=
+ |syntax=SHADOW CLOAK
+ |required=
+ |target=
+ |cooldown=
+ |detail=The cloaks of power were a secret known only to the Tsol'teth Overlords of ancient times. While wearing this cloak, you may perform many of the more mysterious of the shadow abilities. Additionally, the cloak shall grant you protection from various forms of attack.
+}}
+
+{{Skill_detail
+ |skill=Ascend
+ |description=Take to the sky upon a surge of shadows.
+ |lessons=
+ |syntax=SHADOW ASCEND
+ |required=
+ |target=
+ |cooldown=
+ |detail=Your power over the shadows has reached a point that you may manifest wings, allowing you to take to the sky. 
+}}
+
+{{Skill_detail
+ |skill=Disperse
+ |description=Melt away into the darkness.
+ |lessons=
+ |syntax=SHADOW DISPERSE
+ |required=
+ |target=
+ |cooldown=
+ |detail=While wearing your cloak, you may draw the shadows in about your person. When leaving a location shrouded in magical darkness, the direction you left in has a chance to be hidden.
+}}
+
+{{Skill_detail
+ |skill=Strike
+ |description=You shall not suffer obstructions.
+ |lessons=
+ |syntax=SHADOW STRIKE <target> [KNEEL]
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Command your shadow to rend asunder any magical shields that your opponent may have raised as protection. If they lack a shield and you append KNEEL to this command, their own shadow shall turn against them, knocking them to the ground at your feet. You must be wielding a manifested dagger to carry out this ability.<br>'''* Note that if your target is knocked prone this ability incurs a longer balance recovery.
+}}
+
+{{Skill_detail
+ |skill=Phylactery
+ |description=A prison for the fallen.
+ |lessons=
+ |syntax=PHYLACTERY CREATE<br>PHYLACTERY RECALL<br>PHYLACTERY LIST<br>PHYLACTERY RELEASE <shadow>
+ |required=
+ |target=
+ |cooldown=
+ |detail=The true masters of the art are able to contain the shadows of those they vanquish in battle. However, even they require a receptacle of sufficient power to store the shadows, and thus the phylactery was conceived.<p>To create a phylactery, you must stand within a darkened room and possess six bone and two silver commodities. The phylactery must be forged from an organic substance to retain its power, and wood has been found to lack a sufficient lifespan.</p><p>If you were to lose your phylactery, you may RECALL it at any time from anywhere through your bond with it. Note that due to this bond, only you will be able to utilise your phylactery, and you will be unable to utilise a phylactery created by someone else.</p><p>Finally, you may LIST those shadows that you have currently bound within your phylactery. You may only store a given number of shadows within the phylactery, so choose wisely. Note that you can RELEASE a shadow at any time, if you deem it no longer worthwhile to retain it.</p>
+}}
+
+{{Skill_detail
+ |skill=Instill
+ |description=The might of the Overlords directed through your weapon.
+ |lessons=
+ |syntax=SHADOW INSTILL <weapon> WITH <power><br>SHADOW INSTILL <weapon> WITH NOTHING
+ |required=
+ |target=
+ |cooldown=
+ |detail=It is said in ancient times the Tsol'teth Overlords were capable of directing the greatest of the shadow abilities with no more than a gesture. Alas, such total mastery has been long since lost. Now a medium is required to channel such powers, and weapons manifested from shadow are more than satisfactory for such a purpose.<p>When you instill a weapon with one of the powers, striking an individual with that weapon shall cause the power to effect them alongside the blow. See the relevant ability files for each instill for details of what shall befall the unfortunate victim. </p><p>Note: the curare venom and depression/madness instillations cannot exist upon the same weapon at once.</p><p>You may also SHADOW INSTILL <weapon> WITH NOTHING to remove all previously-instilled powers.</p>
+}}
+
+{{Skill_detail
+ |skill=Degeneration
+ |description=Attack their physical capability.
+ |lessons=
+ |syntax=SHADOW INSTILL <weapon> WITH DEGENERATION
+ |required=
+ |target=
+ |cooldown=
+ |detail=This instillation of a weapon shall cause the target to be afflicted with progressively more debilitating afflictions. It shall first afflict them with clumsiness, then weariness, and finally paralysis. If they suffer from all of the afflictions, it shall deal non-trivial damage(*).<br>* The damage is significantly less if you do not have the target attuned, and halved if you do not possess the target's shadow within your phylactery.
+}}
+
+{{Skill_detail
+ |skill=Envenom
+ |description=Coat a weapon in venoms.
+ |lessons=
+ |syntax=ENVENOM <weapon> with <venom><br>WIPE <weapon>
+ |required=
+ |target=
+ |cooldown=
+ |detail=With this ability, you may layer venoms on an edged weapon. Each time that weapon hits somebody, one venom will poison your opponent, and disappear from the weapon. They work on a last-on, first- off basis, so if you put xentio on a weapon, and then put voyria on, the voyria would come off first, and the xentio second. You must have the selected venom in a vial in your inventory. In order to get rid of the venoms on a weapon, simply WIPE <weapon>.
+}}
+
+{{Skill_detail
+ |skill=Convey
+ |description=Good help is hard to find.
+ |lessons=
+ |syntax=SHADOW CONVEY <item> TO <person>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=You may now separate yourself from your shadow for a brief time, and have it convey items to other adventurers. Your shadow can reach anyone on the same continent as you, or anyone standing within magical darkness. This latter case even functions across planes of existence, so is formidable indeed. 
+}}
+
+{{Skill_detail
+ |skill=Reap
+ |description=Your onslaught shall claim them all.
+ |lessons=
+ |syntax=SHADOW REAP <target> [venom]
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=A reaping blow with the scythe, that forsakes damage for superior speed.
+}}
+
+{{Skill_detail
+ |skill=Depression
+ |description=Turn their focus inward.
+ |lessons=
+ |syntax=SHADOW INSTILL <weapon> WITH DEPRESSION
+ |required=
+ |target=
+ |cooldown=
+ |detail=This instillation causes your foe to become depressed. Depression is a curse created by an ancient Tsol'teth Overlord, and its danger is in its long term effects. For each phobia or madness that the victim suffers from, they will suffer in both body and mind when the symptoms manifest themselves.<p>Note that if the subject already suffers from depression, this instillation shall give nausea, then hypochondria, and finally, if all other afflictions are present, both anorexia and masochism simultaneously.</p>
+}}
+
+{{Skill_detail
+ |skill=Vortex
+ |description=Bring the fight to you.
+ |lessons=
+ |syntax=SHADOW VORTEX
+ |required=
+ |target=Adventurers
+ |cooldown=3.50 seconds of balance
+ |detail=Summon forth a vortex of shadows to suck in all adventurers from adjacent locations. 
+}}
+
+{{Skill_detail
+ |skill=Retribution
+ |description=There shall be no salvation.
+ |lessons=
+ |syntax=SHADOW INSTILL <weapon> WITH RETRIBUTION
+ |required=
+ |target=
+ |cooldown=
+ |detail=The instillation of retribution is a powerful one indeed. First, it shall strike down your enemy with justice. Then, it shall deliver the curse of retribution. If both are present, it shall burn away some of the victim's mana reserves. For each of depression, retribution, madness, and parasite that are present, the amount of mana drained is increased. <p>Retribution was a curse created in the early days of Tsol'teth experimentation as a method by which they could overcome those foes with far greater capabilities than their own. It fell out of use after the individual might of the Tsol'teth reached such a point as to be unrivalled. Whenever one afflicted with the retribution curse drinks a mana elixir, they shall find that their physical body suffers for half as much mana was restored.</p>
+}}
+
+{{Skill_detail
+ |skill=Sever
+ |description=A minor mercy.
+ |lessons=
+ |syntax=SHADOW SEVER <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Sometimes, you may wish to prove a point without necessarily killing your foe. In the event of such an eventuality, you may sever their shadow, leaving them grievously injured but alive. This shall add their shadow to your phylactery, but unlike other methods they shall survive the ordeal.<br>Note that this ability takes some time to complete during which you may not be interrupted, and requires the use of a shadow dagger.
+}}
+
+{{Skill_detail
+ |skill=Step
+ |description=None are beyond your reach.
+ |lessons=
+ |syntax=SHADOW STEP <target>
+ |required=
+ |target=
+ |cooldown=
+ |detail=This ability will allow you to cross a great distance to a given target in an instant. A monolith sigil on either end of the movement shall prevent the attempt.<p>Note that if you possess a shadow of the target in your phylactery, you may cross the distance whether they stand within magical darkness or not. If you do not, they must be standing in magical darkness and must be within the same area.</p><p>Note that each phylactery-empowered step to a non-mutual ally shall have a chance to destroy the shadow stored within your phylactery.</p>
+}}
+
+{{Skill_detail
+ |skill=Preeminence
+ |description=The shadows tell you all.
+ |lessons=
+ |syntax=SHADOW PREEMINENCE
+ |required=
+ |target=
+ |cooldown=
+ |detail=While standing within magical darkness, you may form a connection with all other locations shrouded in a similar form, determining anyone that stands within said shadows. 
+}}
+
+{{Skill_detail
+ |skill=Madness
+ |description=Insanity is a torture all its own.
+ |lessons=
+ |syntax=SHADOW INSTILL <weapon> WITH MADNESS
+ |required=
+ |target=
+ |cooldown=
+ |detail=This instillation shall bring down the curse of madness on your victim. This particular curse causes the unfortunate subject to be periodically afflicted with a random phobia; additionally, it doubles the recovery time of focus attempts, and significantly increases the mana cost.<p>If this instillation strikes someone already afflicted by madness, they will suffer vertigo, then hallucinations. If all three afflictions are present, they shall be stunned.</p>
+}}
+
+{{Skill_detail
+ |skill=Consume
+ |description=They shall sustain you.
+ |lessons=
+ |syntax=SHADOW CONSUME <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=While wielding a manifested dagger of shadows, you may plunge it into the shadow of your foe, leaching away some of their mana(*) and adding it to your own.<p>*This does increased mana drain for each of DEPRESSION, RETRIBUTION, and SHADOW MADNESS present.</p>
+}}
+
+{{Skill_detail
+ |skill=Redeem
+ |description=Grant respite to a former foe.
+ |lessons=
+ |syntax=SHADOW REDEEM <person>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=You may release the shadow of someone from your phylactery, fully healing the health and mana of the owner where ever they may be.<br>Note that this has a long per target cooldown.
+}}
+
+{{Skill_detail
+ |skill=Contemplation
+ |description=Perceive the state of another's mental strength.
+ |lessons=
+ |syntax=CONTEMPLATE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=With this ability, you may see how much mana an adventurer has.
+}}
+
+{{Skill_detail
+ |skill=Attune
+ |description=Minor alterations can have major repercussions.
+ |lessons=
+ |syntax=SHADOW ATTUNE <target> TO <MADNESS{{!}}DEGENERATION><br>SHADOW UNATTUNE <target>
+ |required=
+ |target=
+ |cooldown=
+ |detail=By attuning a person's shadow, you will cause them to be periodically afflicted. Attuning to madness gives periodic phobias and insanities; attuning to degeneration gives afflictions that will hinder the target.<br>Attuning requires the use of a manifested dagger.
+}}
+
+{{Skill_detail
+ |skill=Leach
+ |description=Their weakness is your strength.
+ |lessons=
+ |syntax=SHADOW INSTILL <weapon> WITH LEACH
+ |required=
+ |target=
+ |cooldown=
+ |detail=The leaching instillation was conceptualised to allow Tsol'teth warriors to fight on and appear tireless and implacable. The first strike of this instillation delivers the fabled parasitic curse. If parasite is already present, the subject is struck down with healthleech; if both are present, they are afflicted with manaleech. Finally, if all afflictions are present, you shall claim the very shadow of your foe with your strike.<p>The parasitic curse will cause all natural regeneration(*) to be given to you instead of the afflicted subject. <br>* This does not include regeneration from tattoos.</p>
+}}
+
+{{Skill_detail
+ |skill=Veil
+ |description=Cloak your movements to the paramount degree.
+ |lessons=
+ |syntax=SHADOW VEIL<br>EMERGE
+ |required=
+ |target=
+ |cooldown=
+ |detail=While wearing your cloak, you may invoke this highest of the shadow evasion abilities. You will be so hidden as to not appear on alertness or similar detection methods.<br>At the time of your choosing, you may EMERGE from the shadows.
+}}
+
+{{Skill_detail
+ |skill=Mutilate
+ |description=Beyond all recognition.
+ |lessons=
+ |syntax=SHADOW MUTILATE <target> [venom]
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=If you hold someone's shadow within your phylactery, you may shred it with a manifested dagger, causing significant health and mana damage to the unfortunate soul. This will cause you to lose their shadow from your phylactery. You may also apply a venom in the process.<br>Unlike other phylactery-related abilities, they must be in your location for you to do this.
+}}
+
+{{Skill_detail
+ |skill=Extinguish
+ |description=The shadows are your dominion.
+ |lessons=
+ |syntax=SHADOW EXTINGUISH
+ |required=
+ |target=
+ |cooldown=
+ |detail=The greatest demonstration of your might over the masses manifests through this ability. With nothing but your mastery over darkness, bring down blackness upon an entire area, cloaking every location within in magical darkness. Be warned, all standing in the area will be warned of the impending darkness before it falls.
+}}
+
+{{Skill_detail
+ |skill=Assimilate
+ |description=You will take it all away.
+ |lessons=
+ |syntax=SHADOW ASSIMILATE <target> <STRENGTH/SPEED/YEARS>
+ |required=
+ |target=
+ |cooldown=1.80 seconds of balance
+ |detail=With a victim's shadow held within your phylactery, you may take of that which is their province and make of it your own.<br>Strength: for the next thirty seconds, your unnatural strength will permit you to surpass simple physical realities, striking with your scythe even when paralysed.<br>Speed: for the next fourty seconds, your reap and cull abilities will be somewhat faster, though they will deal somewhat less damage as well.<br>Years: for the next thirty seconds, each time you land a blow on your victim and they survive the assault, you will steal of their years and restore your youth if needed.<br>* Only one assimilation bonus may be in play at once, and they only apply against the target you used the shadow of to instigate the process.<br>** Consumes the shadow upon use.
+}}
+
+{{Skill_detail
+ |skill=Dictate
+ |description=Death is but a word away.
+ |lessons=
+ |syntax=SHADOW DICTATE <target>
+ |required=
+ |target=
+ |cooldown=
+ |detail=The ultimate expression of your power, this ability allows you to command a person's shadow to execute your sentence. If a target is below 40% of their maximum mana, you may carry out this ability, having their shadow act as their own executioner.<p>The threshold raises for 5% for each of depression, madness, retribution, and parasite that are present on the target.<br>Note that successfully slaying your foe with this ability will also claim their shadow, providing that you possess a phylactery with sufficient room remaining.</p>
+}}
+
+[[Category:Skills]][[Category:Edit needed]]

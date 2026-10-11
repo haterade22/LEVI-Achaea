@@ -1,0 +1,480 @@
+Once studied in ancient times by predecessors to the modern Occultists, the skill of Occultism is gained through the study of the Mysteries of the nature of the universe itself. This knowledge, which encompasses manipulating auras, bending of time and reality, and mastering the powers of karma, were all lost ages ago during what the Occultists termed the "[[Burning Times]]" when the [[Church]] successfully launched a crusade against the then-scattered individuals practicing Occultism. The survivors banded together, but it was too late to save the knowledge of Occultism. The early practitioners turned to the dark art of Necromancy and entered into a long period of gaining their powers through death magic. That is until the [[Modern Age|modern age]], when Occultism was re-discovered and perfected. Led by [[Shakti]], '''Silverstorm''' and '''Saruman''', the Occultists gathered and began a ritual which created an anchor to a ritual began in the distant past, thus bridging the two times and completing a Great Occult Working that allowed the return of Occultism. Since then, Occultists have turned their backs on Necromancy and again study the older science of Occultism.
+
+The skill of '''Occultism''' is available to members of the [[Occultist]] [[class]], along with [[Tarot]] and [[Domination]].
+
+==Abilities in Occultism==
+{{Skill_detail
+ |skill=Ague
+ |description=A chill that enters from the aura to the body.
+ |lessons=
+ |syntax=AGUE <target>
+ |required=100 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of equilibrium
+ |detail=You can afflict a person's aura with an ague. This will cause the unfortunate wretch to freeze in two or three stages. If the target has a caloric salve applied, this will nullify the caloric salve. If not, then it will set him or her shivering, which will regularly cause a loss of equilibrium. If you chill a shivering person, you will freeze him or her completely. If two of their limbs are broken to the point of needing a restoration salve, it will perform this freeze twice in a single cast.
+}}
+
+{{Skill_detail
+ |skill=Auraglance
+ |description=Seek out another in your mind's eye.
+ |lessons=16
+ |syntax=AURAGLANCE <target>
+ |required=20 mana
+ |target=Adventurers
+ |cooldown=1.00 seconds of equilibrium
+ |detail=Using the power of your will, you can seek out the location of anyone's aura.
+}}
+
+{{Skill_detail
+ |skill=Warp
+ |description=Cause your enemy's body to warp beyond recognition.
+ |lessons=23
+ |syntax=WARP <target>
+ |required=80 mana
+ |target=Adventurers and denizens
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Your power to warp reality can be focused on a single individual, causing horrific mutations and cancerous growths that are ultimately quite lethal.
+}}
+
+{{Skill_detail
+ |skill=Night
+ |description=Create darkness in the room.
+ |lessons=34
+ |syntax=NIGHT
+ |required=50 mana
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Cast a shroud of darkness over a location.
+}}
+
+{{Skill_detail
+ |skill=Shroud
+ |description=Perform many actions in secret.
+ |lessons=56
+ |syntax=SHROUD<br>UNSHROUD
+ |required=75 mana
+ |target=
+ |cooldown=2.00 seconds of equilibrium
+ |detail=This will draw a shroud of concealment over your actions.
+}}
+
+{{Skill_detail
+ |skill=Bodywarp
+ |description=Warping your own body is not for the faint of heart.
+ |lessons=67
+ |syntax=BODYWARP
+ |required=75 mana
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=You can warp your own form into an unspeakable image, causing a primal fear even in the most hardy so long as they can see you(*).
+* The victim must be unblind.
+}}
+
+{{Skill_detail
+ |skill=Eldritchmists
+ |description=The Hymn to Glaaki will raise strange mists.
+ |lessons=89
+ |syntax=ELDRITCHMISTS
+ |required=200 mana
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=By singing the Hymn to Glaaki, you may call up eldrich mists out of the ground itself, harming all adventurers present except yourself.
+}}
+
+{{Skill_detail
+ |skill=Mask
+ |description=Conceal the movement of your chaos entities.
+ |lessons=112
+ |syntax=MASK<br>UNMASK
+ |required=500 mana
+ |target=
+ |cooldown=2.00 seconds of equilibrium
+ |detail=This ability will cause all the chaos entities in your entourage to become cloaked. While cloaked, their movement in and out of rooms will not be seen. To remove the cloak, use UNMASK.
+}}
+
+{{Skill_detail
+ |skill=Attend
+ |description=Force your students to pay attention.
+ |lessons=134
+ |syntax=ATTEND <target>
+ |required=125 mana
+ |target=Adventurers and denizens
+ |cooldown=2.20 seconds of equilibrium
+ |detail=Using the power of your will, you can exert your aura and force your students to attend to their studies, curing them of deafness and blindness.<p>Alternatively, when used against a denizen, you can lash their minds with karmic energy, dealing psychic damage to any who have enough vitality to pay attention(*).<p>* This skill only deals damage to denizens at 100% health or higher.</p>
+}}
+
+{{Skill_detail
+ |skill=Enervate
+ |description=Suck the strength from your enemy's aura.
+ |lessons=156
+ |syntax=ENERVATE <target>
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Using the power of your aura, you can send forth a tendril and suck out the energy from the aura of another, thereby draining another's mental energy to add to your own. If your subject is afflicted with manaleech or they are frozen, the amount of their mental strength you drain will be increased. 
+}}
+
+{{Skill_detail
+ |skill=Encipher
+ |description=Hide your writings from prying eyes.
+ |lessons=178
+ |syntax=ENCIPHER <journal/letter><br>TRANSLATE <journal/letter>
+ |required=50 mana
+ |target=
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Secrecy is one of the hallmarks of Occultism. In order to guard your writings from the uninitiated, you can hide your writings in a cipher. TRANSLATE will decipher the text so anyone may read.
+}}
+
+{{Skill_detail
+ |skill=Quicken
+ |description=A small time warp around your enemy makes them hungry.
+ |lessons=200
+ |syntax=QUICKEN <target>
+ |required=75 mana
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Your power over reality and time is such that you can create a small warp in the time field around an individual, who will not notice any time pass, though his or her body will suddenly feel the effects.
+}}
+
+{{Skill_detail
+ |skill=Astralvision
+ |description=Your aura gives insights into that which is around.
+ |lessons=223
+ |syntax=ASTRALVISION
+ |required=700 mana
+ |target=
+ |cooldown=4.00 seconds of equilibrium
+ |detail=You are an Occultist, attuned to the aura of all living beings and able to seek out their lifeforce. With this power, you will gain both deathsight and lifevision.
+}}
+
+{{Skill_detail
+ |skill=Shrivel
+ |description=Cause your opponent's limbs to shrivel up.
+ |lessons=245
+ |syntax=SHRIVEL ARMS/LEGS <target><br>SHRIVEL LEFT/RIGHT ARM/LEG <target>
+ |required=300 mana
+ |target=Adventurers
+ |cooldown=2.10 seconds of equilibrium
+ |detail=By grabbing onto the limb of an adventurer, you can destroy its marrow, rendering it useless.
+}}
+
+{{Skill_detail
+ |skill=Readaura
+ |description=Reading another's aura will reveal their secrets.
+ |lessons=267
+ |syntax=READAURA <target>
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=0.50 seconds of equilibrium
+ |detail=Your knowledge of auras is such that you may read the auras of others, seeing any anomalies and enchantments attached to the auras, or sense any presence that protects or affects the aura.<p>This ability requires equilibrium, but not balance.</p>
+}}
+
+{{Skill_detail
+ |skill=Karma
+ |description=Sense how much karma you have accumulated.
+ |lessons=289
+ |syntax=KARMA<br>STUDY <item>
+ |required=
+ |target=
+ |cooldown=
+ |detail=You may now utilize karma by probing the occult mysteries found in various valuable items found across the land. KARMA will tell you how high your karma level is. When you STUDY <item>, your karma level will rise, and the karmic value of the item you are studying will be slowly consumed by this thirst for knowledge.     
+}}
+
+{{Skill_detail
+ |skill=Heartstone
+ |description=Create a figurine of your heart to help give you mana.
+ |lessons=312
+ |syntax=HEARTSTONE
+ |required=1.50% karma
+ |target=
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Using your karma, you can create a heartstone, which stores mana that will be drawn upon until the heartstone cracks.
+}}
+
+{{Skill_detail
+ |skill=Simulacrum
+ |description=Create a figurine of yourself that absorbs damage.
+ |lessons=334
+ |syntax=SIMULACRUM
+ |required=3% karma
+ |target=
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Using your karma, you can create a simulacrum that stores health. Whenever you take damage, a portion of that damage will be absorbed by the simulacrum until it cracks.
+}}
+
+{{Skill_detail
+ |skill=Entities
+ |description=Sense the whereabouts of Chaos Entities in the land.
+ |lessons=356
+ |syntax=ENTITIES [LOYAL]
+ |required=
+ |target=
+ |cooldown=4.00 seconds of equilibrium
+ |detail=The disruptions in reality caused by entities of Chaos are quite distinctive to one trained in the sublime arts of Occultism. By reaching out with your consciousness, you may find the locations of these disruptions throughout the Prime Material Plane. Unlike those of lesser, uninitiated minds, you are able to perform this feat from any plane, and even pinpoint those entities loyal specifically to you whether on the Prime Material Plane or otherwise.
+}}
+
+{{Skill_detail
+ |skill=Timewarp
+ |description=Warping time in a location will move vibes.
+ |lessons=378
+ |syntax=TIMEWARP
+ |required=1% karma
+ |target=Room
+ |cooldown=4.25 seconds of equilibrium
+ |detail=You are a master of time itself and can warp the field of time in your location. If there are any vibes in your location, one will be randomly dislocated outside of time.
+}}
+
+{{Skill_detail
+ |skill=Distortaura
+ |description=Distorting your aura will protect you from physical harm.
+ |lessons=423
+ |syntax=DISTORTAURA<br>NORMALAURA
+ |required=0.50% karma and mana drain
+ |target=
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Tapping into your karma, you can distort your own aura, causing a portion of physical damage meant for you to be fed back on the attacker. Your mana reserves will be constantly drained as long as your aura is distorted. NORMALAURA will return your aura to its natural state. <p>A distorted aura additionally mitigates some damage from denizens, though not from players.</p>
+}}
+
+{{Skill_detail
+ |skill=Pinchaura
+ |description=Surgically alter your patient's aura.
+ |lessons=467
+ |syntax=PINCHAURA <target> <defence>
+ |required=0.50% karma
+ |target=
+ |cooldown=4.00 seconds of equilibrium
+ |detail=You have become exceptionally expert in the study of auras. Indeed, now you can surgically alter an individual's aura, removing one of the following defences: cloak, speed, caloric, frost, levitation, insomnia, kola.
+}}
+
+{{Skill_detail
+ |skill=Impart
+ |description=Impart your karmic knowledge to others with Occultism.
+ |lessons=489
+ |syntax=IMPART <target>
+ |required=
+ |target=Adventurers
+ |cooldown=9.00 seconds of equilibrium
+ |detail=This ability will allow you to transfer some of your own karma to another Occultist. It should be noted that this is not an even exchange - more karma is lost by you than is gained by the recipient of the transfer.
+}}
+
+{{Skill_detail
+ |skill=Transcendence
+ |description=Open a gateway to the Plane of Chaos.
+ |lessons=534
+ |syntax=TRANSCENDENCE<br>ENTER GATEWAY
+ |required=6% karma
+ |target=
+ |cooldown=
+ |detail=Open a gateway to the Chaos Plane, allowing you to go there and bargain for the services of the Chaos Entities. Once the gate is opened, ENTER GATEWAY to enter the Chaos Plane. Once there, you can either wait the quarter part of an Achaean day (in which case you will be unceremoniously ejected), or you can seek the exit, which is hidden in the Whirlpool of Chaos.
+}}
+
+{{Skill_detail
+ |skill=Unnamable
+ |description=Hear what cannot be named, or see what cannot be imagined.
+ |lessons=600
+ |syntax=UNNAMABLE SPEAK<br>UNNAMABLE VISION
+ |required=1% karma
+ |target=Room
+ |cooldown=3.20 seconds of equilibrium
+ |detail=From your studies of occult lore, you can use karma to actually speak the Unnamable's name or cause a vision of the Unnamable to appear to everyone in a location. For any who are not trained in occult studies, those hearing the name or seeing the vision will be afflicted with various insanities.<p>The insanities bestowed by this will not duplicate with existing maladies upon the unfortunate witness or listener.</p>
+}}
+
+{{Skill_detail
+ |skill=Devolve
+ |description=Devolving your enemy will make them unrecognizable.
+ |lessons=704
+ |syntax=DEVOLVE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=You have the power to terribly curse your opponent so that his or her appearance de-evolves into a primitive state, causing any allies to turn on him or her in disgust and to crush their own opinion of their worth(*).<p>* Gives disloyalty and shyness.</p>
+}}
+
+{{Skill_detail
+ |skill=Cleanseaura
+ |description=Cleanse away those pesky animal spirits from an aura.
+ |lessons=807
+ |syntax=CLEANSEAURA <target>
+ |required=1% karma
+ |target=Adventurers and denizens
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This obscure occultic ability allows one to strip away the natural defences of a target's aura, exposing them to more invasive assaults.<p>When used against an adventurer, you will require your target's mana be 40% or lower to be successful. In this weakened state, certain eldritch entities will be able to exploit the victim's aura to great effect(*).<p>Against denizens, this will cause your foe to take ten percent more damage from occult abilities(**), chaos hounds(***), and the weaponmastery attacks of your fellow Unnamables(****). In this case, the equilibrium and karma cost of this occultic art shall be greatly reduced.<p>* See AB DOMINATION GLAAKI for details.<br>** OCCULTISM WARP and ATTEND.<br>*** DOMINATION LYCANTHA.<br>**** All weapon-based attacks in the WEAPONMASTERY skill when performed by an Unnamable.</br>
+}}
+
+{{Skill_detail
+ |skill=Tentacles
+ |description=Master your body and create tentacles of your own.
+ |lessons=911
+ |syntax=TENTACLES
+ |required=1% karma
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=You can warp your body so that it sprouts tentacles, which seek out your enemies of their own accord, holding them in your location.
+}}
+
+{{Skill_detail
+ |skill=Chaosrays
+ |description=Pure chaos will strike all in a location.
+ |lessons=1014
+ |syntax=CHAOSRAYS
+ |required=2% karma
+ |target=
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Transmuting your karma into pure chaos, you can summon forth the Seven Rays to blast a location, hitting everyone in the room except yourself with random rays of chaos.
+}}
+
+{{Skill_detail
+ |skill=Interlink
+ |description=They shall warp under your will.
+ |lessons=
+ |syntax=BODYWARP <target> <limb> [lesser occultic work]
+ |required=50 mana and 2 willpower
+ |target=
+ |cooldown=2.60 seconds of equilibrium
+ |detail=Through extensive study of the Unnamables, the Occultists of Ashtan have determined how to mutate the bodies of others in a more controlled manner than previously believed possible(*). This greater working builds upon the lesser forms of warping, though it requires a far greater degree of finesse. However, it comes with the unique benefit that lesser occultic workings(**) may be introduced into the process.</p> <p>* Does limb damage and a minor amount of health damage. The limb damage is increased against a limb that is already broken to requiring a mending salve.</p> <p>** Lesser works which can be combined are: ague, shrivel, and regress.
+}}
+
+{{Skill_detail
+ |skill=Instill
+ |description=Instill your victim's aura with diseases of the body.
+ |lessons=1083
+ |syntax=INSTILL <target> WITH <affliction>
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=2.50 seconds of equilibrium
+ |detail=This ability will allow you to instill your victim's aura with various afflictions. You may select from: asthma, clumsiness, healthleech, sensitivity, slickness, paralysis, or darkshade.<p>This process inflicts a minorly taxing influence upon the subject(*), though the influence is more significant if you are in possession of a truename derived by the power of the Imperator(**).</p> <p>* Does some small amount of health and mana damage.</p> <p>** From the Glaaki ability in Domination.</p>
+}}
+
+{{Skill_detail
+ |skill=Whisperingmadness
+ |description=A curse of madness not soon forgotten.
+ |lessons=1118
+ |syntax=WHISPERINGMADNESS <target>
+ |required=200 mana
+ |target=Adventurers
+ |cooldown=2.30 seconds of equilibrium
+ |detail=Having one of the following insanities: dementia, stupidity, confusion, hypersomnia, paranoia, hallucinations, impatience, addiction, agoraphobia, lovers, loneliness, recklessness, and masochism, weakens the mind enough to afflict that person with the dreaded curse of whispering madness. Once afflicted, your victim will find that attempts to focus their mind take far longer to recover from.
+}}
+
+{{Skill_detail
+ |skill=Devilmark
+ |description=The Mark of the Devil grants great power.
+ |lessons=1187
+ |syntax=DEVILMARK<br>WIPE DEVILMARK
+ |required=500 mana
+ |target=
+ |cooldown=4.00 seconds of equilibrium
+ |detail=You can give yourself the mark of the devil. When flinging the tarot DEVIL card, the devil is bound to you by your will for a longer period of time up to a possible three services. The mark of the devil vanishes as soon as this term of service expires. You may also wipe the devilmark from your body to prematurely end the services of a devil.
+}}
+
+{{Skill_detail
+ |skill=Truename
+ |description=Find the truename of your enemy.
+ |lessons=1290
+ |syntax=TRUENAME CORPSE<br>TRUENAMES<br>TRUENAMES FORGET <target><br>UTTER TRUENAME <target>
+ |required=1% karma
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Your occult knowledge has grown to such an extent that you can discern the truename of an individual, the name that vibrates to that person's soul, from his or her corpse. TRUENAMES will tell you whose truenames you have and how many times you may utter it. If the truename of a person is uttered in front of him or her, that person will be harmed in body and mind and be inflicted by the Aeon curse. Once uttered, that particular truename will be forgotten.<p>Due to the mental strain of remembering an individual's truename, you are only able to remember up to three for each person, for a total of fifty people.</p>
+}}
+
+{{Skill_detail
+ |skill=Astralform
+ |description=Turn yourself into a being of pure energy.
+ |lessons=1428
+ |syntax=ASTRALFORM<br>HUMAN<br>ASTRALISE <direction>
+ |required=250 mana and 200 karma
+ |target=Self
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Having mastered all facets of your aura, you can now become pure spirit, though you will moderately lose willpower as you strain to hold your nebulous form together. HUMAN is the command to return to your normal form.<p>In addition, you may ASTRALISE in a direction to bypass closed doors, though this is a channeled action and will not bypass doors that are locked.</p>
+}}
+
+{{Skill_detail
+ |skill=Enlighten
+ |description=Reveal the truth to the uninitiated.
+ |lessons=1566
+ |syntax=ENLIGHTEN <target>
+ |required=2% karma
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Perhaps the cruelest curse imaginable, you can reveal the occult mysteries to a non-initiate as you have learned it. Their minds must be sufficiently open for the revelation to be received. In other words, they must have six(*) of: claustrophobia, agoraphobia, lovers, dementia, epilepsy, hallucinations, confusion, stupidity, paranoia, vertigo, shyness, addiction, recklessness, or masochism.<p>If such is the case, you may give that target the revelation of what the nature of the universe is as you see it, which will unfortunately make their insanities permanent until death.</p><p>* This number drops to five if they are suffering from the curse of whispering madness.</p>   
+}}
+
+{{Skill_detail
+ |skill=Unravel
+ |description=Destroy the psyche of the uninitiated.
+ |lessons=1566
+ |syntax=UNRAVEL MIND OF <target>
+ |required=500 mana
+ |target=Adventurers
+ |cooldown=5.00 seconds of equilibrium
+ |detail=Once you've enlightened the mind of a non-initiate to the mysteries of the Occult, you may draw upon the latent energies of Entropy and Discord throughout Creation. Focusing these Chaotic ripples upon your target's already battered psyche, you may completely unravel his mind, slaying him instantly. Slaying an individual in this manner will release a potent karmic aura, buffering your own karma.
+}}
+
+{{Skill_detail
+ |skill=Compel
+ |description=They will hear and be silent.
+ |lessons=1600
+ |syntax=COMPEL <target> <compulsion>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=The mysteries of the multiverse are many and great, but the fragile mind of the unenlightened ever shies away from such possibility. Yet when you
+have seized upon the fundamental nature of such a mortal derived from their yet living person(*), you will find that more delicate opportunities open up before you.<p>You may command such a student to observe one of these mysteries. If they are adequately prepared for the revelation therein, various results will be made manifest:</p><br>Discord:<p>Requires: the target have the healthleech and asthma afflictions.</p><p>Result: their mind will be greatly strained, causing them to be struck down with the loneliness and dizziness afflictions.</p><br>Entropy:<p>Requires: the target has the haemophilia and addiction afflictions.</p><p>Result: the subject will contemplate the nature of time, losing the speed defence if it is present and being struck down with the curse of the Aeon if it is not.</p><br>Potential:<p>Requires: the target be afflicted with all four of their limbs being broken or is frozen.</p> <p>Result: if the target's limbs are broken, they will suffer a short-lived blackout. If they are frozen, they will suffer damage.</p><p>* It must be a true name acquired via the Glaaki ability in Domination.</p><p>** Compelling carries its own internal cooldown, and though it requires both balance and equilibrium, it consumes neither.</p>
+}}
+
+{{Skill_detail
+ |skill=Transmogrify
+ |description=Reincarnate as a Chaos Lord.
+ |lessons=1738
+ |syntax=TRANSMOGRIFY ACTIVATE<br>TRANSMOGRIFY DEACTIVATE<br>TRANSMOGRIFY STATUS<br>MUTATIONS
+ |required=Activate: 30% karma<br>Deactivate: 2% karma
+ |target=Self
+ |cooldown=Activate: 12.00 seconds of equilibrium<br>Deactivate: 5.00 seconds of equilibrium
+ |detail=Congratulations! Your studies have now reached the plateau wherein your mastery of the occult is so great that you can now prepare your body and aura for true transformation. Instead of dying, you will transmogrify into a being of pure chaos--you will become a Chaos Lord. You will receive one change of the body, skin and a very odd miscellaneous change which correspond to the effects listed below. MUTATIONS will show you exactly what the functions of the mutations you have are. It will not show useless mutations (see below).<p>By raising a barrier between yourself and the Chaos Lord's spirit, you may prevent your transformation from occuring upon death. This barrier can be lowered in the future at a much smaller cost.</p><p>TRANSMOGRIFY STATUS will show the state of the Chaos Lord within your soul, if any.</p><p>You may only use this ability once every 3-9 (random) Achaean days.</p><p>* Note: The chance for positive changes outweighs the chance for negative changes by nearly a 2-1 margin. It is also possible to get a useless mutation. For instance, bulging muscles that give no strength advantage, or blotchy skin that does not subject you to greater magical damage.
+<table style="border-collapse:collapse;padding:1px;margin:1px>
+<tr><th>One Body Change</th><th>Description</th></tr>
+<tr><td>+1 to +3 STR</td><td>bulging muscles</td></tr>
+<tr><td>+1 to +3 INT</td><td>an expanded skull</td></tr>
+<tr><td>+1 to +3 DEX</td><td>double joints</td></tr>
+<tr><td>+1 to +3 CON</td><td>a gorilla-like body</td></tr>
+<tr><td>-1 to -3 STR</td><td>stringy muscles</td></tr>
+<tr><td>-1 to -3 INT</td><td>a caved forehead</td></tr>
+<tr><td>-1 to -3 DEX</td><td>stiff joints</td></tr>
+<tr><td>-1 to -3 CON</td><td>an anorexic body</td></tr>
+<tr><td>&nbsp;</td></tr>
+<tr><th>One Skin Change</th><th>Description</th></tr>
+<tr><td>Level 1 to 3 Cold</td><td>blue fur</td></tr>
+<tr><td>Level 1 to 3 Fire</td><td>red scales</td></tr>
+<tr><td>Level 1 to 3 Magic</td><td>purple fur</td></tr>
+<tr><td>Level 1 to 3 Elect.</td><td>white scales</td></tr>
+<tr><td>Level 1 to 3 Poison</td><td>black scales</td></tr>
+<tr><td>Level 1 to 3 Blunt</td><td>hardened skin</td></tr>
+<tr><td>Level 1 to 3 Cutting</td><td>bumpy skin</td></tr>
+<tr><td>Level 1 to 3 Asphyxiation</td><td>porous skin</td></tr>
+<tr><td>Level 1 to 3 Psychic</td><td>porcupine needles</td></tr>
+<tr><td>Level -1 to -3 Cold</td><td>papery skin</td></tr>
+<tr><td>Level -1 to -3 Fire</td><td>fluffy feathers</td></tr>
+<tr><td>Level -1 to -3 Magic</td><td>blotchy skin</td></tr>
+<tr><td>Level -1 to -3 Elect.</td><td>silvery skin</td></tr>
+<tr><td>Level -1 to -3 Poison</td><td>mottled skin</td></tr>
+<tr><td>Level -1 to -3 Blunt</td><td>bruised skin</td></tr>
+<tr><td>Level -1 to -3 Cutting</td><td>thin skin</td></tr>
+<tr><td>Level -1 to -3 Asphyxiation</td><td>waxy skin</td></tr>
+<tr><td>Level -1 to -3 Psychic</td><td>pocked skin</td></tr>
+<tr><td>&nbsp;</td></tr>
+<tr><th>One Misc.Change</th><th>Description</th></tr>
+<tr><td>Level 1 to 2 Health Regen</td><td>a chicken-like head</td></tr>
+<tr><td>Level 1 to 2 Mana Regen</td><td>frog feet</td></tr>
+<tr><td>Level 1 to 2 Will Regen</td><td>bulging eyes</td></tr>
+<tr><td>Level 1 to 2 End. Regen</td><td>elephantine legs</td></tr>
+<tr><td>Level 1 slow bal</td><td>a bloated belly</td></tr>
+<tr><td>Level 1 slow eq</td><td>a protruding brow</td></tr>
+<tr><td>Level 1 to 2 slow wake</td><td>droopy eyes</td></tr>
+<tr><td>Level 1 slow heal</td><td>a sunken chest</td></tr>
+</table>
+}}
+
+[[Category:Skills]]
+[[Category:Chaos]]
+[[Category:Edit needed]]

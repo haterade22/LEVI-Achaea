@@ -1,0 +1,407 @@
+The weather is beyond the grasp of any mortal mage, but the practitioners of weatherweaving have learned to direct where control is impossible.
+
+Focusing upon the elemental channels of earth, water and air, practitioners of weatherweaving are perhaps less versatile in the ways that they may bend their arcane might. However, where they sacrifice such versatility, they gain in precision and power, and are rumoured to be able to unleash truly terrifying demonstrations of nature's destructive capabilities. There are whispers of those who could call lightning to strike down their foes from a cloudless sky, or summon winds able to strip the skin from bone in mere moments.
+
+The skill of '''Weatherweaving''' is available to members of the [[Sylvan]] [[class]], along with [[Propagation]] and [[Groves]].
+
+==Abilities in Weatherweaving==
+{{Skill_detail
+ |skill=Channel
+ |description=Open conduits to the Elemental Realms.
+ |lessons=
+ |syntax=CHANNEL <AIR{{!}}WATER{{!}}EARTH><br>CHANNELS<br>SEVER ALL{{!}}<channel>
+ |required=200 mana
+ |target=Self
+ |cooldown=1.50 seconds of equilibrium
+ |detail=Using this ability, you may open a channel to one of the three elemental realms that you have access to. Keeping these channels open has a cost in willpower. SEVER AIR/WATER/EARTH will close that channel. CHANNELS will list what channels you have open. 
+}}
+
+{{Skill_detail
+ |skill=Windwhip
+ |description=Lash them with a whip of air.
+ |lessons=
+ |syntax=CAST WINDWHIP AT <target>
+ |required=15 mana
+ |channels=Air
+ |target=Adventurers and denizens
+ |cooldown=3.90 seconds of equilibrium
+ |detail=You may conjure forth a whip formed of condensed air to lash your enemies with.
+}}
+
+{{Skill_detail
+ |skill=Gust
+ |description=Blow someone in a direction with a gust of wind.
+ |lessons=
+ |syntax=CAST GUST<br>CAST GUST AT <target> <direction>
+ |required=40 mana
+ |channels=Air
+ |target=Adventurers
+ |cooldown=3.00 seconds of equilibrium
+ |detail=By channelling the element of air, you can either blow a fog or cloud out of the room, or blow an adventurer in a particular direction.
+}}
+
+{{Skill_detail
+ |skill=Reflection
+ |description=Create a distracting illusion of yourself.
+ |lessons=
+ |syntax=CAST REFLECTION AT ME/<target>
+ |required=50 mana
+ |channels=Air and Water
+ |target=Adventurers and self
+ |cooldown=3.00 seconds of equilibrium
+ |detail=By weaving together the powers of air and water, you may create a distracting reflection of yourself to absorb one hostile attack upon your person.
+}}
+
+{{Skill_detail
+ |skill=Fortification
+ |description=Protect your open channels from attack.
+ |lessons=
+ |syntax=FORTIFY <channel><br>FORTIFY ALL
+ |required=100 mana
+ |target=
+ |cooldown=1.00 seconds of equilibrium
+ |detail=Using this ability will provide you protection against abilities that may attack your open elemental channels. These abilities will first have to attack your fortification before destroying your channel. However, fortify does have a regular willpower cost associated with it.<p>If you choose to fortify all, the mana and eq costs will be the cost of fortifying a single channel multiplied by the number of channels you have open.</p>
+}}
+
+{{Skill_detail
+ |skill=Scry
+ |description=Locate another adventurer.
+ |lessons=
+ |syntax=CAST SCRY AT <target>
+ |channels=Water
+ |required=30 mana
+ |target=Adventurers
+ |cooldown=1.00 seconds of equilibrium
+ |detail=By summoning up an image in a pool of water, you are able to scry for the location of a target.
+}}
+
+{{Skill_detail
+ |skill=Geyser
+ |description=Knock someone out of the trees or the sky.
+ |lessons=
+ |syntax=CAST GEYSER AT <target>
+ |channels=Earth and Water
+ |required=100 mana
+ |target=Adventurers
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Using this ability, you may knock a flying or treed adventurer out of the skies or trees.
+}}
+
+{{Skill_detail
+ |skill=Circulate
+ |description=Circulate electricity throughout your body.
+ |lessons=
+ |syntax=CAST CIRCULATE
+ |channels=Air and Earth
+ |required=300 mana
+ |target=Self
+ |cooldown=3.00 seconds of equilibrium
+ |detail=With this spell, you will be able to grant yourself the ability to circulate electricity through your body with greater ease, reducing the damage you take from lightning-based attacks.
+}}
+
+{{Skill_detail
+ |skill=Shear
+ |description=Slice away shields with a blade of wind.
+ |lessons=
+ |syntax=CAST SHEAR AT <target>
+ |channels=Air
+ |required=38 mana
+ |target=Adventurers and denizens
+ |cooldown=2.45 seconds of equilibrium
+ |detail=This spell will allow you to slice through magical shields that protect your enemy.
+}}
+
+{{Skill_detail
+ |skill=Binding
+ |description=The magic of channel binding.
+ |lessons=
+ |syntax=BIND <channel>/ALL
+ |required=150 mana
+ |target=
+ |cooldown=1.00 seconds of equilibrium
+ |detail=Like fortification, binding provides protection against losing your channels due to others attacking them. If a channel that is unfortified is attacked, binding will protect that channel a large percentage of the time. It has a willpower loss associated with it, however.<p>If you choose to BIND ALL, the mana and equilibrium costs will be what it costs for a single channel binding, multiplied by however many channels you have open.</p>
+}}
+
+{{Skill_detail
+ |skill=Disturb
+ |description=Disturb the natural weather patterns.
+ |lessons=
+ |syntax=CAST DISTURB
+ |channels=Air, Water and Earth
+ |required=100 mana
+ |target=Room
+ |cooldown=2.60 seconds of equilibrium
+ |detail=This ability allows you to disturb the natural weather patterns, causing them to drastically worsen in your immediate location.
+}}
+
+{{Skill_detail
+ |skill=Static
+ |description=Conjure forth a burst of static.
+ |lessons=
+ |syntax=CAST STATIC AT <target>
+ |channels=Air and earth
+ |required=38 mana
+ |target=Adventurers and denizens
+ |cooldown=2.35 seconds of equilibrium
+ |detail=This spell causes a burst of static, which will paralyse any adventurer it is focussed upon.<p>Against denizens, this spell will deal electrical damage.</p>
+}}
+
+{{Skill_detail
+ |skill=Thunderclap
+ |description=A burst of sound to rupture the ears.
+ |lessons=
+ |syntax=CAST THUNDERCLAP AT <target>
+ |channels=Air and Earth
+ |required=38 mana
+ |target=Adventurers and denizens
+ |cooldown=2.35 seconds of equilibrium
+ |detail=This spell will generate a shockingly loud clap of thunder. Against adventurers it shall restore the target's hearing if they are deaf, or instill the sensitivity affliction in them if they are not.<p>When used against a denizen, this spell will deal blunt damage.</p>
+}}
+
+{{Skill_detail
+ |skill=Feedback
+ |description=Bleed off your residual power.
+ |lessons=
+ |syntax=CAST FEEDBACK AT <target>
+ |required=5 mana and disturbed weather
+ |target=Adventurers
+ |cooldown=
+ |detail=This small spell allows you to create a conduit between an individual and the residual power left in the clouds created by disturbing the natural weather patterns. Each time you cast a spell upon the person who the conduit has been formed with, the residual power of the spell is bled off and used to power your arcane disturbance.
+}}
+
+{{Skill_detail
+ |skill=Gale
+ |description=Hurl the unsecured to the corners of the globe.
+ |lessons=
+ |syntax=CAST GALE
+ |required=
+ |target=Room
+ |cooldown=3.80 seconds of equilibrium
+ |detail=This powerful wind spell will allow you to throw all those not secured by the mass defence from your location.
+}}
+
+{{Skill_detail
+ |skill=Flash
+ |description=A brilliant flash of light.
+ |lessons=
+ |syntax=CAST FLASH AT <target>
+ |channels=Air and Earth
+ |required=38 mana and 18 arcane power
+ |target=Adventurers
+ |cooldown=2.80 seconds of equilibrium
+ |detail=This spell permits you to conjure forth a brilliant flash of light at an enemy. The light will restore their vision if they are blind, or transfix them if they are not.
+}}
+
+{{Skill_detail
+ |skill=Synchronisity
+ |description=Control the flows of two spells at once.
+ |lessons=
+ |syntax=SYNCHRONISE <spell1> <spell2> <target>
+ |required=50 mana and arcane power
+ |target=Adventurers
+ |cooldown=Equilibrium
+ |detail=Your skill has reached such a level that you are able to direct the channeled power of two spells practically simultaneously, casting them in rapid succession.<p>The following spells can be cast in this way: windwhip, shear, static, thunderclap, flash, bolt, razorwind, cyclone, and hailstone.</p>
+}}
+
+{{Skill_detail
+ |skill=Bolt
+ |description=A searing bolt of lightning.
+ |lessons=
+ |syntax=CAST BOLT AT <target>
+ |channels=Air and Earth
+ |required=45 mana and 16 arcane power
+ |target=Adventurers
+ |cooldown=2.80 seconds of equilibrium
+ |detail=This spell will summon forth a searing bolt of lightning to strike down an enemy. If the target is under 75% of their maximum health, it shall also cause them to black out.
+}}
+
+{{Skill_detail
+ |skill=Electrify
+ |description=Sometimes, lightning does strike twice.
+ |lessons=
+ |syntax=CAST ELECTRIFY AT <target>
+ |channels=Air and Earth
+ |required=50 mana and 44 arcane power
+ |target=Adventurers
+ |cooldown=3.00 seconds of equilibrium
+ |detail=This extremely potent spell allows you to summon forth a lightning strike against a foe. However, the spell is two fold; after the initial strike, a less potent one shall follow some seconds later.
+}}
+
+{{Skill_detail
+ |skill=Overcharge
+ |description=To the point of instability, and no further.
+ |lessons=
+ |syntax=OVERCHARGE <spell1> <spell2> <target>
+ |required=50 mana and arcane power
+ |target=Adventurers
+ |cooldown=Equilibrium
+ |detail=This ability is used in place of synchronisation. You may overcharge two spells, causing various effects.<p>'''Lightning spells''': take 15 units of arcane energy each. They deliver paralysis, and damage if paralysis is already present. They shall also temporarily extend focus mind recovery time, though this effect is short lived.<br>'''Wind spells''': take 13 units of arcane energy each, and deliver asthma. They deliver damage if asthma is already present.<br>'''Water spells''': they take 13 units of arcane energy each, and deliver weariness. If weariness is already present on the target, they deliver damage.</p><p>''Static, thunderclap, and bolt are lightning spells; cyclone and razorwind are wind spells. Waterspout and hailstone are water spells.</p>
+}}
+
+{{Skill_detail
+ |skill=Razorwind
+ |description=A wind to lacerate the skin.
+ |lessons=
+ |syntax=CAST RAZORWIND AT <target>
+ |channels=Air
+ |required=38 mana
+ |target=Adventurers and denizens
+ |cooldown=2.35 seconds of equilibrium
+ |detail=This potent air spell will inflict healthleech against adventurers, or deal cutting damage against denizens.
+}}
+
+{{Skill_detail
+ |skill=Fog
+ |description=Conjure up obscuring fog.
+ |lessons=
+ |syntax=CAST FOG
+ |required=250 mana
+ |target=Room
+ |channels=Air and Water
+ |cooldown=4.00 seconds of equilibrium
+ |detail=By channelling the powers of air and water, you may cause an elemental fog to envelop the room.
+}}
+
+{{Skill_detail
+ |skill=Cyclone
+ |description=The greatest of the wind spells.
+ |lessons=
+ |syntax=CAST CYCLONE AT <target>
+ |channels=Air
+ |required=40 mana
+ |target=Adventurers and denizens
+ |cooldown=2.50 seconds of equilibrium
+ |detail=This powerful wind spell will cause dizziness when used against an adventurer. If the subject is already dizzy, it will give impatience and cause them to suffer damage.<p>Against denizens, this spell will deal blunt damage.</p>
+}}
+
+{{Skill_detail
+ |skill=Aerial
+ |description=Summon an air elemental to carry you to the skies.
+ |lessons=
+ |syntax=CAST AERIAL
+ |channels=Air
+ |required=
+ |target=250 mana
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This powerful spell allows you to lift yourself on the aircurrents, granting flight.
+}}
+
+{{Skill_detail
+ |skill=Hailstone
+ |description=Simple is best.
+ |lessons=
+ |syntax=CAST HAILSTONE AT <target>
+ |channels=Air and Water
+ |required=33 mana
+ |target=Adventurers and denizens
+ |cooldown=2.50 seconds of equilibrium
+ |detail=Summon forth a hailstone to strike your target in the side of the head.<p>If the target is an adventurer, this will give them clumsiness. If they are already clumsy, it shall give epilepsy. If they have epilepsy, it shall give impatience.<p>This spell also causes cold damage to both adventurers and denizens.</p>
+}}
+
+{{Skill_detail
+ |skill=Illusion
+ |description=Cast an illusion of your choosing.
+ |lessons=
+ |syntax=CAST ILLUSION <illusion><br>CAST <target> ILLUSION <illusion>
+ |channels=Water
+ |required=25 mana
+ |target=Adventurers and room
+ |cooldown=2.00 seconds of equilibrium
+ |detail=With this spell, you can create an illusion of your choosing in the room about you. You may embed a single newline in your illusion by including the character sequence \n at the appropriate spot. You may optionally specify a target for your illusion by adding the name of your intended victim after the word 'cast'. For limitations and restrictions, please refer to HELP ILLUSIONS.
+}}
+
+{{Skill_detail
+ |skill=Deluge
+ |description=A great flood of water.
+ |lessons=
+ |syntax=CAST DELUGE
+ |channels=Water
+ |required=250 mana
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This powerful water spell shall summon forth a great deluge of water, flooding your immediate location.
+}}
+
+{{Skill_detail
+ |skill=Hailstorm
+ |description=Call down a hailstorm to pummel everyone else in the room.
+ |lessons=
+ |syntax=CAST HAILSTORM
+ |channels=Air and Water
+ |required=500 mana
+ |target=Room
+ |cooldown=3.50 seconds of equilibrium
+ |detail=With this spell, you may rain hailstones down upon all your enemies in the room.
+}}
+
+{{Skill_detail
+ |skill=Waterspout
+ |description=Bend water to your will.
+ |lessons=
+ |syntax=CAST WATERSPOUT AT <target>
+ |channels=Air and Water
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=
+ |detail=Summon water to create a spout to envelop your foe in frigid cold.<p>If the target is an adventurer, this will give them confusion. If they are already confused, this spell will give them dizziness; if they have both dizziness and confusion, this spell will give them vertigo. If the room is flooded, your waterspout will also deal damage in these cases.<p>When used against a denizen, this spell will deal cold damage.</p>
+
+{{Skill_detail
+ |skill=Simultaneity
+ |description=Parallel channelling.
+ |lessons=
+ |syntax=SIMULTANEITY
+ |required=
+ |target=
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This powerful ability allows you to open channels to the air, water, and earth realms all at once.
+}}
+
+{{Skill_detail
+ |skill=Shockwave
+ |description=Your power shall not be denied.
+ |lessons=
+ |syntax=CAST SHOCKWAVE AT <target>
+ |channels=Air and Earth
+ |required=50 mana and at least 40 arcane power
+ |target=Adventurers
+ |cooldown=3.40 seconds of equilibrium
+ |detail=This spell is one of the greatest in the weatherweaver's arsenal. It allows you to discharge all of your stored arcane power at once, focusing it into an onslaught that will cause extreme damage to the one who has crossed you. The more power used past the minimum, the greater the harm will be.<p>The damage of shockwave is also increased if someone is suitably vulnerable, which for the purposes of this spell requires them to have one or more of the following afflictions: healthleech, impatience, dizziness, or epilepsy.</p>
+}}
+
+{{Skill_detail
+ |skill=Rainstorm
+ |description=Open the skies and deluge the earth.
+ |lessons=
+ |syntax=CAST RAINSTORM
+ |channels=Water
+ |required=250 mana
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=By calling up a temporary rainstorm, you can put out any fires that may burn on the ground or on those around you.
+}}
+
+{{Skill_detail
+ |skill=Stormhammer
+ |description=Call down the wrath of the storm upon multiple enemies.
+ |lessons=
+ |syntax=CAST STORMHAMMER AT <target> [AND <target> [AND <target>]]
+ |required=1200 mana
+ |channels=Air and Earth
+ |target=Adventurers and denizens
+ |cooldown=6.00 seconds of equilibrium
+ |detail=This powerful attack can cast a lightning bolt at one, two, or three adventurers or denizens.
+}}
+
+{{Skill_detail
+ |skill=Fulmination
+ |description=Your fury is terrible indeed.
+ |lessons=
+ |syntax=CAST FULMINATION <delay>
+ |channels=Air and Earth
+ |required=1500 mana
+ |target=Adventurers and room
+ |cooldown=6.00 seconds of equilibrium
+ |detail=This most powerful of the lightning spells allows you to summon forth a sphere of condensed electricity. You may set a delay between 10 and 60 seconds on the construct, after which time it will become unstable. Woe to any who are present for that eventuality. 
+}}
+
+[[Category:Skills]]

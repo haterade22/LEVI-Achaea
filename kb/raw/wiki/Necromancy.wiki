@@ -1,0 +1,361 @@
+Necromancy is the dark art of death magic. At the lower levels, there is an assortment of rather nefarious abilities. Soon though, the ability of Cannibalism is gained, a skill which has inspired wide-spread fear of those practicing Necromancy. Through cannibalism, a Necromancer increases his life essence, which powers the higher abilities. At the very highest level, a Necromancer gains the power to protect his very soul from death.
+
+The ability to regain the [[life essence]] necessary to use Necromancy may be sealed from individuals by the [[Dread Ecclesiarch of Transvital Corruption]], should they prove themselves to be directly against the ideals of the [[Lords of Evil]]. One who has undergone this process is said to be in [[anathema (severance)|anathema]].
+
+The skill of '''Necromancy''' is available to members of the [[Apostate]] [[class]], along with [[Evileye]] and [[Apostasy]]. Once practised by the [[Occultist]] and [[Infernal]] classes as well.
+
+
+==Abilities in Necromancy==
+{{Skill_detail
+ |skill=Deathsight
+ |description=Attune yourself to the Underworld.
+ |lessons=0
+ |syntax=DEATHSIGHT<br>RELAX DEATHSIGHT
+ |required=50 mana
+ |target=
+ |cooldown=2.00 seconds of equilibrium
+ |detail=Using this ability, you will attune yourself to the realm of Death. While doing so, you will be alerted whenever anyone dies.
+}}
+
+{{Skill_detail
+ |skill=Chill
+ |description=Send the cold of the grave to plague an opponent.
+ |lessons=7
+ |syntax=CHILL <target><br>CHILL <direction>
+ |required=100 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of equilibrium
+ |detail=Use this ability to freeze an adventurer in two or three stages. If the target has a caloric salve applied, this will nullify the caloric salve. If he doesn't, then it will set him shivering, which will regularly cause him to lose equilibrium. If you chill a shivering adventurer, you will freeze him completely.<p>Additionally, you may target this in a given direction, destroying any firewall that may be blocking that exit.</p>
+}}
+
+{{Skill_detail
+ |skill=Sense
+ |description=Seek out the life force of another being.
+ |lessons=16
+ |syntax=SENSE <target>
+ |required=20 mana
+ |target=Adventurers
+ |cooldown=1.00 second of equilibrium
+ |detail=You will seek out the very life essence of an adventurer, gaining you the knowledge of his location.
+}}
+
+{{Skill_detail
+ |skill=Decay
+ |description=Causing your opponent's flesh to decay.
+ |lessons=23
+ |syntax=DECAY <target>
+ |required=80 mana
+ |target=Adventurers and denizens
+ |cooldown=4.00 seconds of equilibrium
+ |detail=You have gained the standard attack of the Necromancer. Your touch is enough to cause the flesh of your victim to wither. It does magical damage.
+}}
+
+{{Skill_detail
+ |skill=Night
+ |description=Create darkness in the room.
+ |lessons=34
+ |syntax=NIGHT
+ |required=50 mana
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Cast a shroud of darkness over a location.
+}}
+
+{{Skill_detail
+ |skill=Shroud
+ |description=Perform many actions in secret.
+ |lessons=56
+ |syntax=SHROUD<br>UNSHROUD
+ |required=70 mana
+ |target=
+ |cooldown=2.00 seconds of equilibrium
+ |detail=This will draw a shroud of concealment over your actions.
+}}
+
+{{Skill_detail
+ |skill=Screech
+ |description=The shriek of the banshee.
+ |lessons=89
+ |syntax=SCREECH
+ |required=70 mana
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=You have gained the power of the banshee. Your very scream will drive those who can hear you out of the location.
+}}
+
+{{Skill_detail
+ |skill=Taint
+ |description=Attack those with pure souls.
+ |lessons=112
+ |syntax=TAINT <target>
+ |required=50 mana
+ |target=Adventurers and denizens
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Summon the malignity of the Lord and strike down a foe's soul with raw, necromantic power. This dark prayer will bypass any magical shields or prismatic barriers around your target.
+}}
+
+{{Skill_detail
+ |skill=Feed
+ |description=Derive sustenance from another being.
+ |lessons=134
+ |syntax=FEED <target>
+ |required=150 mana
+ |target=
+ |cooldown=5.00 seconds of equilibrium
+ |detail=Essence: 1.5%<br>You are now able to literally drain the nourishment from another adventurer in a display of cruelty.
+}}
+
+{{Skill_detail
+ |skill=Leech
+ |description=Leech away the mental energy of your target.
+ |lessons=156
+ |syntax=LEECH <target>
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This is the skill of draining another's mental energy to add to your own.
+}}
+
+{{Skill_detail
+ |skill=Lifevision
+ |description=Allows you to see many hidden beings.
+ |lessons=178
+ |syntax=LIFEVISION
+ |required=600 mana
+ |target=Adventurers
+ |cooldown=3.50 seconds of equilibrium
+ |detail=You are attuned to the life essences of all living beings, and with this power, you will see through many illusions and hiding defences.
+}}
+
+{{Skill_detail
+ |skill=Shrivel
+ |description=Cause your opponent's limbs to shrivel up.
+ |lessons=223
+ |syntax=SHRIVEL <arms/legs> <target><br>SHRIVEL <left/right> <arm/leg> <target>
+ |required=300 mana
+ |target=Adventurers
+ |cooldown=2.10 seconds of equilibrium
+ |detail=By grabbing onto the limb of an adventurer, you can destroy its marrow, rendering it useless.
+}}
+
+{{Skill_detail
+ |skill=Cannibalism
+ |description=Rip out and consume the heart of your victims.
+ |lessons=267
+ |syntax=DRAW HEART<br>CONSUME HEART
+ |required=
+ |target=
+ |cooldown=4.00 seconds of balance
+ |detail=This is truly the joy of the Necromancer. If there is a corpse on the ground that has not already been victimised by a fellow Necromancer, you may DRAW HEART. Then, in an orgy of gastronomic pleasure, you may CONSUME HEART. The greater the experience of the adventurer who provided the heart, the greater your gain in life essence will be. Enjoy this pleasure, my murderous friend, for there are few greater in life or death.<p>It is important to note that how much life essence you get is modified by the experience of your victim.</p>
+}}
+
+{{Skill_detail
+ |skill=Essence
+ |description=Sense about how much life essence you have.
+ |lessons=267
+ |syntax=ESSENCE
+ |required=
+ |target=
+ |cooldown=
+ |detail=This will tell you how much life essence you possess.
+}}
+
+{{Skill_detail
+ |skill=Sapience
+ |description=Draw upon your essence to increase your mana.
+ |lessons=289
+ |syntax=SAPIENCE
+ |required=1.50% life essence
+ |target=
+ |cooldown=3.50 seconds of equilibrium
+ |detail=You draw on your life essence to boost your mana.
+}}
+
+{{Skill_detail
+ |skill=Vigour
+ |description=Draw upon your essence to increase your health.
+ |lessons=334
+ |syntax=VIGOUR
+ |required=1.50% life essence
+ |target=
+ |cooldown=3.50 seconds of equilibrium
+ |detail=You draw on your life essence to boost your health.
+}}
+
+{{Skill_detail
+ |skill=Putrefaction
+ |description=Cause your flesh to decay and melt.
+ |lessons=423
+ |syntax=PUTREFACTION<br>SOLIDIFY
+ |required=1% life essence and health drain
+ |target=
+ |cooldown=3.50 seconds of equilibrium
+ |detail=By turning your flesh into a semi-liquid, rotting state, you gain some measure of immunity from both blunt and edged weapons.
+}}
+
+{{Skill_detail
+ |skill=Drain
+ |description=Drain your life essence into another Necromancer.
+ |lessons=467
+ |syntax=DRAIN <target>
+ |required=Life essence drain
+ |target=Adventurers
+ |cooldown=
+ |detail=With this ability you can transfer life essence from yourself to another necromancer. Unfortunately, it is not a perfect transfer and some life essence will be lost in the process. You can avoid this imperfect aspect if carrying out the transfer upon Mhaldor Isle (or within Mhaldor city proper), as these are locations so closely tied to the necromantic arts that the working becomes far easier.  
+}}
+
+{{Skill_detail
+ |skill=Belch
+ |description=Spew forth a noxious gas.
+ |lessons=534
+ |syntax=BELCH
+ |required=200 mana
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This ability will allow you to belch forth a cloud of foul, poisoning gas that will hurt anyone breathing it in, except you.
+}}
+
+{{Skill_detail
+ |skill=Deathaura
+ |description=Surround yourself in a miasma of evil.
+ |lessons=534
+ |syntax=DEATHAURA
+ |required=1% life essence and 300 mana
+ |target=Room
+ |cooldown=3.50 seconds of equilibrium
+ |detail=This ability will create, for a sixth of an Achaean day, and at a cost of life essence, an aura of death and evil that will harm all enemies who are in your location. 
+}}
+
+{{Skill_detail
+ |skill=Disfigure
+ |description=Curse someone with the visage of a rotting corpse.
+ |lessons=600
+ |syntax=DISFIGURE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Using this ability, you will cause your opponent's visage to become so horrific that even his closest allies will turn on him. The chaos and fickleness of emotion and sentiment is a wonderful thing, is it not?
+}}
+
+{{Skill_detail
+ |skill=Soulstorm
+ |description=Driving animal spirits away.
+ |lessons=703
+ |syntax=SOULSTORM <target>
+ |required=1% life essence
+ |target=Adventurers and denizens
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Unleash your necromantic essence in a deadly soulstorm, cruelly assaulting the soul of your foe. This ability will attempt to force a metamorphosized adventurer back into his mortal form.<p>Against denizens, you will instead profane their soul with malign energy, causing them to take ten percent more damage from necromantic abilities(*), the curses of evileye(**), and the weaponmastery attacks of your fellow Infernals(***). In this case, the equilibrium and essence costs of this dark art shall be greatly reduced.<p>* NECROMANCY DECAY and TAINT.<br>** EVILEYE BLEED.<br>*** All weapon-based attacks in the WEAPONMASTERY skill when performed by an Infernal.</br>
+}}
+
+{{Skill_detail
+ |skill=Gravehands
+ |description=Summon the hands of the grave to hinder your opponents.
+ |lessons=910
+ |syntax=SUMMON HANDS OF THE GRAVE<br>BANISH HANDS OF THE GRAVE
+ |required=1.50% life essence and 350 mana
+ |target=Adventurers
+ |cooldown=3.00 seconds of equilibrium
+ |detail=This ability will cause rotting hands to rise up from the ground to grab at the ankles of any who try to leave the location. The only ones who will not be affected are those who serve Evil in the city of Mhaldor.
+}}
+
+{{Skill_detail
+ |skill=Leprosy
+ |description=Spread disease to all around you.
+ |lessons=910
+ |syntax=LEPROSY
+ |required=3.50% life essence and 500 mana
+ |target=Room
+ |cooldown=4.50 seconds of equilibrium
+ |detail=By filling your body with the unclean, you can infect many others in the room with you, be they friend or foe, causing random limbs to shrivel up. Useful against a group.
+}}
+
+{{Skill_detail
+ |skill=Exterminate
+ |description=Destroy all plant life in a location.
+ |lessons=1048
+ |syntax=EXTERMINATE
+ |required=5% life essence and 1000 mana
+ |target=Room
+ |cooldown=6.00 seconds of equilibrium and 12.00 upon completion
+ |detail=Using your command of the energies of death, you are able to wipe a forest area clean of plant life, replenishing some of your essence. Be warned though, there is an essence cost to this ability, and unless there is a sufficient amount of plant life in the room, you may lose essence using it. It should also be noted that an exterminated room is no longer considered a forest room, so many Druidic abilities will not work in such a room.<p>Take note: prolonged use of extermination will take a toll on your essence reserves, and you will find that each subsequent attempt incurs a greater cost in essence than the last to perform.</p>
+}}
+
+{{Skill_detail
+ |skill=Vengeance
+ |description=Revenge with your dying breath.
+ |lessons=1186
+ |syntax=VENGEANCE [ON/OFF]<br>RELAX VENGEANCE
+ |required=4% life essence
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=At the cost of a fair amount of life essence, you will exact revenge on everyone in the room when you are killed, in most circumstances.
+}}
+
+{{Skill_detail
+ |skill=Soulspear
+ |description=Meld soul-matter from the dead into a physical weapon.
+ |lessons=1289
+ |syntax=EVOKE SOULSPEAR FROM <target corpse><br>THROW SOULSPEAR AT <target> <direction>
+ |required=2.50% life essence
+ |target=Adventurers
+ |cooldown=6.00 seconds of balance
+ |detail=Soulspear allows the skilled Necromancer to form a weapon forged in the soul of the dead. By taking an adventurer corpse, you can form the soulspear. A corpse from an adventurer level 30 and under has too weak a soul to form such a powerful weapon out of. Beyond that, the higher the level of the victim, the more powerful the soulspear.<p>Once you have it, you may throw it at someone who is outside your room, anywhere in your line-of-sight. It will shatter shields and prismatic barriers, or, if the person lacks one of those, the necromantic energy will be released, summoning forth hands of the grave in your victim's location.</p>
+}}
+
+{{Skill_detail
+ |skill=Transverse
+ |description=Cross vast distances in a single step.
+ |lessons=1358
+ |syntax=TRANSVERSE <target>
+ |required=2% life essence and 500 mana
+ |target=Adventurers
+ |cooldown=3.00 seconds of equilibrium
+ |detail=This ability allows for swift travel across the land. You must initiate the activation from a room where hands of the grave have been summoned forth.<p>If your target also stands in a room where the hands grasp at the living, this travel is instantaneous. If the hands are not present, the target is required to be a practitioner of necromancy, and the travel will be delayed.</p>
+}}
+
+{{Skill_detail
+ |skill=Blackwind
+ |description=Assume the form of the deadly blackwind.
+ |lessons=1427
+ |syntax=BLACKWIND<br>HUMAN<br>CHOKE <target><br>SURGE <direction>
+ |required=5% life essence, 500 mana and willpower drain
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This allows you to take the form of the deadly blackwind. While in this form, your freedom is severely limited, but your ability to be harmed is also severely restricted. After you have become the blackwind, you have the nefarious ability to slip down a victim's throat and CHOKE him. While in blackwind form, you will lose willpower very quickly as you strain to hold your nebulous form together. HUMAN is the command to return to your normal form.<p>In addition, you may SURGE in a direction to bypass closed doors, though this is a channeled action and will not bypass doors that are locked.</p>
+}}
+
+{{Skill_detail
+ |skill=Desecration
+ |description=Banish the holy rites of the Bloodsworn Gods.
+ |lessons=1531
+ |syntax=DESECRATE <rite>
+ |required=3.50% life essence and 500 mana
+ |target=Room
+ |cooldown=4.00 seconds of balance
+ |detail=Using your Necromantic essence, you may sever any devotional rites from the location in which you stand. If the layer of the rite is present, this ability takes some time, during which you may make no actions.
+}}
+
+{{Skill_detail
+ |skill=Vivisect
+ |description=Rip your victim's chest open and torture him to death.
+ |lessons=1565
+ |syntax=VIVISECT <target>
+ |required=300 mana
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Evil as you are, you find yourself enjoying live experimentation, preferably on people you know. Once your victim is splayed out and helpless, meaning all four of his or her limbs are withered, you may perform your experiments, killing your victim in horrifying agony.<p>Successful completion of this ability will thwart the ressurective capability of the starburst tattoo.</p>
+}}
+
+{{Skill_detail
+ |skill=Soulcage
+ |description=Harness your life essence to escape death itself.
+ |lessons=1736
+ |syntax=SOULCAGE ACTIVATE<br>SOULCAGE DEACTIVATE<br>SOULCAGE STATUS
+ |required=New soulcage (30% life essence), Reactivate (3%), Deactivate (2%)
+ |target=
+ |cooldown=12.00 seconds of equilibrium
+ |detail=This is perhaps the greatest of the necromantic abilities, and carries with it the greatest life essence cost. It allows you to spin a web of life essence around your very soul, protecting it from death. Soulcage may only be used once every 6 Achaean days.<p>The soulcage can be deactivated by raising a barrier of life essence between it and your soul, preventing it from saving you from death. It may be reactivated later for a much lower essence cost.</p><p>SOULCAGE STATUS will show the current state of your soulcage, if any.</p>
+}}
+
+[[Category:Skills]]

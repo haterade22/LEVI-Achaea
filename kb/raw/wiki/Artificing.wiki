@@ -1,0 +1,229 @@
+In perfect union of a Magi's craft, Artificing combines the arcane power of elementalism and the perfect balance of crystalism to craft a mighty golem to carry out its creator's bidding.
+
+Due to their crystalline structure, they have an innate tie to vibrations in their surroundings. A master magi can use this bond to unleash a variety of deadly effects against all who stand in their way.
+
+The skill of '''Artificing''' is available to members of the [[Magi]] [[class]], along with [[Elementalism]] and [[Crystalism]].
+
+==Abilities in Artificing==
+{{Skill_detail
+ |skill=Workshop
+ |description=Where it all begins.
+ |lessons=
+ |syntax=WORKSHOP CONSTRUCT <foci><br>WORKSHOP REFINE <crystal><br>WORKSHOP INVENTORY
+ |required=
+ |target=
+ |cooldown=
+ |detail=Many will see a Magi upon the field of battle, laying about their enemies with fire and lightning, and never give thought to the time and effort that goes into achieving such power. Within the Workshops of Artifice you will create your foci. Work on your treaties with the Elemental Planes, and grow truly mighty. This is where mastery truly begins:<br><br>WORKSHOP CONSTRUCT <foci>: eventually you will be able to create an Elemental Foci.<br>WORKSHOP REFINE <crystal>: within the workshop and with the right reagents you will learn to refine special crystals to enhance the use of your foci.<br>WORKSHOP INVENTORY: see what crystals you have stored in this workshop.
+}}
+
+{{Skill_detail
+ |skill=Unweave
+ |description=A way to unweave Talisman Pieces and gain gold.
+ |lessons=
+ |syntax=WORKSHOP UNWEAVE <piece> <level>
+ |required=
+ |target=
+ |cooldown=
+ |detail=Crystal: Unweave is simply the ability to take a Talisman piece (see HELP TALISMANS) and turn it (or them) into gold. This must be performed in an Artificing workshop.
+}}
+
+{{Skill_detail
+ |skill=Staff
+ |description=The greatest of Elemental foci.
+ |lessons=
+ |syntax=WORKSHOP CONSTRUCT STAFF<br>STAFF CAST <spell> at <target><br>STAFF INSERT <crystal><br>STAFF REMOVE <crystal><br>STAFF DISMANTLE
+ |required=CAST STAFF: 1000 mana<br>STAFFCAST: 150 mana<br>a collection of small gems, a cube of elemental ice, a pinch of diamond dust, a small supply of charcoals, and a wood commodity
+ |target=Adventurers, denizens, and self
+ |cooldown=4.00 seconds of equilibrium
+ |detail=A foci tried and tested for working with the elements, the Elemental Staff is truly a masterwork of arcane enginuity. When you first craft your staff, you will only be able to cast one spell through it, and that spell is DISSOLUTION: a blast of pure arcane force.<br><br>However, as your skill in Artificing grows and you find yourself able to refine various crystals to insert into your staff, your foci shall become more formidable, unlocking if not more powerful, then more complex spells that may be cast through it. Certain crystals may also impart special properties upon your staff: see their ability files for details.<br>* Note that an Elemental Staff may only hold up to four crystals at a given time.<br>** If you lose your staff (and it does not reset to you), you may dismantle that staff whereever it may be. This will permanently destroy it and you will need to make a new one.<br>*** Constructing a staff is a lengthy operation during which you may do nothing.
+}}
+
+{{Skill_detail
+ |skill=Scintilla
+ |description=A crystal to channel fire.
+ |lessons=
+ |syntax=WORKSHOP REFINE SCINTILLA CRYSTAL
+ |required=a collection of small gems
+ |target=
+ |cooldown=
+ |detail=When set into your staff, this crystal will permit you to channel a burning scintilla through your foci, a potent fire spell.<br>* STAFF CAST SCINTILLA AT <target>, for instance.
+}}
+
+{{Skill_detail
+ |skill=Horripilation
+ |description=A crystal to channel frost.
+ |lessons=
+ |syntax=WORKSHOP REFINE HORRIPILATION CRYSTAL
+ |required=a collection of small gems
+ |target=
+ |cooldown=
+ |detail=When set into your Elemental Staff, this crystal will permit the casting of a freezing HORRIPILATION spell through it.<br>* STAFF CAST HORRIPILATION AT <target>, for instance.
+}}
+
+{{Skill_detail
+ |skill=Lightning
+ |description=A crystal to focus electricity.
+ |lessons=
+ |syntax=WORKSHOP REFINE LIGHTNING CRYSTAL
+ |required=a collection of small gems
+ |target=
+ |cooldown=
+ |detail=When set into your Elemental Staff, this crystal will permit the casting of a LIGHTNING spell through it.<br>* STAFF CAST LIGHTNING AT <target>, for instance.
+}}
+
+{{Skill_detail
+ |skill=Glacial
+ |description=There is cold, then there is Cold.
+ |lessons=
+ |syntax=WORKSHOP REFINE GLACIAL CRYSTAL
+ |required=a collection of small gems
+ |target=
+ |cooldown=
+ |detail=When set into your staff, this crystal will enhance your control over your spell of horripilation, allowing you to bleed off the excess water to bind your target with bonds of water, making it hard for them to leave the location for a time(*).<br>* The duration of the bonds is highly variable. If they are frozen, they shall last for 45 seconds. If they are only shivering, they will last for 35 seconds. If they are neither shivering nor frozen but lacking the insulation defence, they will last 25 seconds. Otherwise, they will only last 15 seconds.
+}}
+
+{{Skill_detail
+ |skill=Shock
+ |description=Your foci will be positively electrifying.
+ |lessons=
+ |syntax=WORKSHOP REFINE SHOCK CRYSTAL
+ |required=a collection of small gems
+ |target=
+ |cooldown=
+ |detail=When set into a staff alongside a lightning crystal, when casting your lightning spell through your foci your target will also be struck down with the stupidity affliction.
+}}
+
+{{Skill_detail
+ |skill=Immolation
+ |description=They will char under your power.
+ |lessons=
+ |syntax=WORKSHOP REFINE IMMOLATION CRYSTAL
+ |required=a collection of small gems
+ |target=
+ |cooldown=
+ |detail=*They will be afflicted with ablaze (or have their burning level increase) four seconds after your staffcast.
+}}
+
+{{Skill_detail
+ |skill=Rapidity
+ |description=From force to finesse.
+ |lessons=
+ |syntax=WORKSHOP REFINE RAPIDITY CRYSTAL
+ |required=a collection of small gems
+ |target=
+ |cooldown=
+ |detail=This rare crystal can transform your Elemental Staff from a weapon of directed force into one of finesse. All spells cast through your staff will be cast twice as fast, but the potency of them will also be halved(*).<br>* Around twice as fast, but at half damage.
+}}
+
+{{Skill_detail
+ |skill=Treaties
+ |description=Thus is agreement made.
+ |lessons=
+ |syntax=TREATY FORM <denizen><br>TREATY LIST<br>ELEMENTAL SUMMON <elemental>
+ |required=
+ |target=
+ |cooldown=
+ |detail=Though the creation of your arcane staff is doubtlessly what the uneducated might consider the height of the work you carry out in your workshop, the true student of Artifice knows better. Your staff is a foci, and one grand at that; but it is the treaties with the Elemental Planes which you will carve into crystal which shall unlock your full potential.<br>While within your workshop, you may establish treaties with the denizens of the Elemental Planes. As you progress through Artifice your ability to create treaties with more and more powerful denizens of said planes will become possible, and there are rumours that at the very height of mastery... well. They are simply rumours.<br><br>TREATY FORM <denizen>: attempt to form an agreement with a denizen of an Elemental Plane. See relevant ability files for costs or other factors that may be involved on a per treaty basis.<br>TREATY LIST: see what treaties you have established, and for how long they will last(*).<br>ELEMENTAL SUMMON <elemental>: see the ELEMENTALS ability file for more details.<br>* Treaties do not last forever and will need to be renewed once they lapse.
+}}
+
+{{Skill_detail
+ |skill=Elementals
+ |description=From word to will.
+ |lessons=
+ |syntax=ELEMENTAL SUMMON <elemental><br>ELEMENTAL CALL [PASSIVE]<br>ELEMENTAL POWERS<br>ELEMENTAL DISMISS <elemental>
+ |required=
+ |target=
+ |cooldown=
+ |detail=Once you have established treaties with the denizens of the Elemental Planes, now comes the time to call them forth into your service.<br>ELEMENTAL SUMMON <elemental>: summon an elemental you have formed a treaty with. Initially this will need to be performed within your workshop, though there will come a time when you will go beyond such constraints upon your power.<br>ELEMENTAL CALL: call all elementals you have summoned back to your side. This does not incur equilibrium, though it can only be done every so often.<br>ELEMENTAL POWERS: see what powers your currently summoned elementals possess.<br>ELEMENTAL DISMISS <elemental>: send an elemental back to its home.<br>You may only have up to two elementals called forth at a time, and only one from each Elemental Plane. For example, you can have a waterweird and an efreeti, but not an efreeti and an ashbeast.
+}}
+
+{{Skill_detail
+ |skill=Waterweird
+ |description=A minor servant of Sllshya.
+ |lessons=
+ |syntax=NONE
+ |required=a cube of elemental ice
+ |target=Adventurers and self
+ |cooldown=
+ |detail=This minor servant of Sllshya will allow you to cross over any body of water so long as it remains by your side. In addition, you will be unmoved by any currents that would seek to sweep you away.
+}}
+
+{{Skill_detail
+ |skill=Djinn
+ |description=A subordinate agent of Whiirh.
+ |lessons=
+ |syntax=ELEMENTAL LEVITATE [target]
+ |required=100 mana<br>a pinch of diamond dust
+ |target=Adventurers and self
+ |cooldown=3.60 seconds of equilibrium
+ |detail=Once summoned, this lesser elemental of Whiirh's domain will allow you to levitate yourself into the sky, or another if you so desire. It will only be able to do this every so often, but it should be noted that the power of this elemental's levitation is quite formidable, and will bypass most things that would otherwise prevent you from taking to the skies.
+}}
+
+{{Skill_detail
+ |skill=Sandling
+ |description=A diminutive denizen of Garash.
+ |lessons=
+ |syntax=ELEMENTAL DESCEND
+ |required=250 mana<br>a lump of red clay
+ |target=Adventurers and self
+ |cooldown=4.00 seconds of equilibrium
+ |channels=Earth
+ |detail=One of four elementals you can summon, the sandling will lower you into the ground, effectively burying you. Additionally, you will be able to burrow laterally so long as the ground is soft enough to permit. However, you may not burrow deeper than one level below ground.
+}}
+
+{{Skill_detail
+ |skill=Efreeti
+ |description=A lesser flame of Kkractle.
+ |lessons=
+ |syntax=NONE
+ |required=a piece of coal
+ |target=Adventurers and self
+ |cooldown=
+ |detail=This lesser flame of Kkractle, when summoned, will begin to spin wildly, setting any enemies in your location ablaze periodically.
+}}
+
+{{Skill_detail
+ |skill=Stoneback
+ |description=A hulking guardian of Earth.
+ |lessons=
+ |syntax=ELEMENTAL BULWARK <ME|target>
+ |required=a block of unworked stone
+ |target=Adventurers and self
+ |cooldown=3.60 seconds of equilibrium
+ |detail=The formidable servant of Garash that is the stoneback will permit the raising of a magical shield for yourself or for another.
+}}
+
+{{Skill_detail
+ |skill=Breath
+ |description=A subtle superior of air.
+ |lessons=
+ |syntax=ELEMENTAL BREATHMELD <target|STOP>
+ |required=
+ |target=
+ |cooldown=1.00 seconds of equilibrium
+ |detail=This superior servant of Whiirh is truly a subtle and deadly summoning. By commanding it to meld with the breath of your target, each time they breathe more heavily than normal due to moving while burdened by density or laboured breathing, your servant shall teleport you to their new location, so long as they stand not upon either a monolith sigil and remain upon the same continent as you.<br>* A monolith on the Magi's end will prevent the travel as well, as will their relevant elemental being slain.<br>** An elemental may only perform a breathmelding once every two minutes, and the affect lasts for one minute on a given target.<br>*** You may abort a breathmeld at any time, though this does not clear the cooldown.
+}}
+
+{{Skill_detail
+ |skill=Mistfiend
+ |description=A dread minion of Sllshya.
+ |lessons=
+ |syntax=ELEMENTAL CONDENSE|ELEMENTAL FOGBANK
+ |required=300 mana<br>a cube of elemental ice
+ |target=
+ |cooldown=4.20 seconds of equilibrium
+ |detail=The powerful mistfiend will permit you to control water on a macro scale within your local area. Command it to form a fogbank, and all magically flooded locations nearby will be dispersed to form fog in those rooms; command it to condense, and all magical fog shall turn to water to flood said rooms instead.<br>* The mistfiend may only act once every minute.
+}}
+
+{{Skill_detail
+ |skill=Ashbeast
+ |description=A harbinger of Fire.
+ |lessons=
+ |syntax=ELEMENTAL SURGE
+ |required=a small supply of charcoals
+ |target=Adventurers
+ |cooldown=3.60 seconds of equilibrium
+ |detail=This mighty servant of Kkractle can be commanded to surge the heat of its flames, annihilating all inanimate constructs of hated water in your location(*).<br>* Destroys icewalls, flood, and frozen ground.</br>
+}}
+
+[[Category:Skills]][[Category:Edit needed]]

@@ -1,0 +1,551 @@
+Elementalism is a relatively straightforward skill. By opening channels to four of the five Elemental realms (Magi do not use the Spirit realm), practitioners can cast a wide variety of elementally-based offensive and defensive spells. The effects of these spells might range from summoning an efreeti to calling down the might of Vastar, the Skylord, in the Stormhammer, to bringing forth fog or hail. Elementalism used to be practised by the [[Sylvan]] class as well, but was abandoned in 680 AF when they syncronised their abilities with a great storm and it was replaced with the skill of [[Propagation]].
+
+The skill of '''Elementalism''' is available to members [[Magi]] [[class]], along with [[Crystalism]] and [[Artificing]].
+
+==Abilities in Elementalism==
+{{Skill_detail
+ |skill=Channel
+ |description=Open conduits to the Elemental Realms.
+ |lessons=
+ |syntax=CHANNEL AIR/EARTH/FIRE/WATER<br>CHANNELS<br>SEVER ALL/AIR/EARTH/FIRE/WATER
+ |required=200 mana
+ |target=Self
+ |cooldown=1.50 seconds of equilibrium
+ |detail=Using this ability, you may open a channel to one of the four basic elemental realms. Keeping these channels open has a cost in willpower. SEVER
+AIR/WATER/EARTH/FIRE will close that channel. CHANNELS will list what channels you have open.
+}}
+
+{{Skill_detail
+ |skill=Light
+ |description=Light up your surroundings.
+ |lessons=
+ |syntax=CAST LIGHT
+ |required=50 mana
+ |channels=Fire
+ |target=Room
+ |cooldown=3.00 seconds of equilibrium
+ |detail=With the illuminating power of fire, you may momentarily reveal those in the room who may be hiding.
+}}
+
+{{Skill_detail
+ |skill=Fortification
+ |description=Protect your open channels from attack.
+ |lessons=
+ |syntax=FORTIFY <channel><br>FORTIFY ALL
+ |required=100 mana
+ |target=Self
+ |cooldown=1.00 seconds of equilibrium
+ |detail=Using this ability will provide you protection against abilities that may attack your open elemental channels. These abilities will first have to attack your fortification before destroying your channel. However, fortify does have a regular willpower cost associated with it.<p>If you choose to fortify all, the mana and eq costs will be the cost of fortifying a single channel multiplied by the number of channels you have open.</p>
+}}
+
+{{Skill_detail
+ |skill=Scry
+ |description=Locate another adventurer.
+ |lessons=
+ |syntax=CAST SCRY AT <target>
+ |required=30 mana
+ |channels=Water
+ |target=Adventurers
+ |cooldown=1.00 seconds of equilibrium
+ |detail=By summoning up an image in a pool of water, you are able to scry for the location of a target.
+}}
+
+{{Skill_detail
+ |skill=Resonance
+ |description=The Elemental Planes are at your fingertips.
+ |lessons=
+ |syntax=RESONANCE<br>RESONANCE VERBOSITY <NONE|LOW|HIGH>
+ |required=
+ |channels=
+ |target=
+ |cooldown=
+ |detail=Certain Elemental Spells cause a form of resonance with the Elemental Planes upon which they draw(*). As your resonance grows, the last target of the spell you cast to cause that increase in resonance will suffer various affects, listed below. Resonance is fleeting and will fade over time.<br><br>Air:<br>-Minor resonance: gives asthma.<br>-Moderate resonance: gives sensitivity.<br>-Major resonance: gives healthleech.<br>Earth:<br>-Minor resonance: breaks a random limb (it will always pick an unbroken limb).<br>-Moderate resonance: stuns the target for a short time and gives paralysis.<br>-Major resonance: gives cracked ribs (it does not increase the number of cracked ribs a target has - only ever gives the base affliction).<br>Fire:<br>-Minor resonance: both strips and gives an effect which prevents the raising of the temperance defence..<br>-Moderate resonance:                     scalds the target. If the target is already scalded, sets the target ablaze and deals some damage.<br>-Major resonance: gives the blistered affliction. If they're already blistered, gives a stack of the ablaze affliction.<br>Water:<br>-Minor resonance: gives the frostbite affliction. If it is already present, does some damage.<br>-Moderate resonance: gives the stuttering affliction and deals some cold damage.<br>-Major resonance: gives the anorexia affliction.<br><br>* These are listed under AB ELEMENTALISM.<br>** Note that resonance is only generated if your spell is targeted against an adventurer who is directly within your location when it resolves (i.e. ranged firelash will not generate resonance, but in room will).<br>*** You can set your verbosity for seeing resonance messages to none, low or high. The default is low.
+}}
+
+{{Skill_detail
+ |skill=Erode
+ |description=Destroy the defences of your opponent.
+ |lessons=
+ |syntax=CAST ERODE AT <target> [defence] [MAINTAIN]
+ |required=75 mana
+ |channels=Air, Earth, Fire and Water
+ |target=Adventurers and denizens
+ |cooldown=2.50 seconds of equilibrium
+ |detail=With the destructive fury of all the elements at your command, you may destroy a defence on an opponent. This spell will strip the first defence it does not find from the below list, and if none are present strip any random defence. You may also specify one of the listed defences and target that on in particular:<br>Shield, chargeshield, insulation, and temperance.<p>* Note that this spell is special in that while instead of increasing resonance, when you successfully strip a defence all resonance you possess is decreased by one level unless you specify the MAINTAIN argument.
+}}
+
+{{Skill_detail
+ |skill=Binding
+ |description=The magic of channel binding.
+ |lessons=
+ |syntax=BIND <channel>/ALL
+ |required=150 mana
+ |target=
+ |cooldown=1.00 seconds of equilibrium
+ |detail=Like fortification, binding provides protection against losing your channels due to others attacking them. If a channel that is unfortified is attacked, binding will protect that channel a large percentage of the time. It has a willpower loss associated with it, however.<p>If you choose to BIND ALL, the mana and equilibrium costs will be what it costs for a single channel binding, multiplied by however many channels you have open.</p>
+}}
+
+{{Skill_detail
+ |skill=Deepfreeze
+ |description=Cast a spell of extreme cold at your enemies.
+ |lessons=
+ |syntax=CAST DEEPFREEZE
+ |required=500 mana
+ |channels=Air and Water
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This spell is a magnified version of the freeze spell, except that it is not targetable. It will attack all those in the room who are your enemy.
+}}
+
+{{Skill_detail
+ |skill=Illusion
+ |description=Cast an illusion of your choosing.
+ |lessons=
+ |syntax=CAST ILLUSION [LETHAL] <illusion><br>CAST <target> ILLUSION [LETHAL] <illusion>
+ |required=50 mana
+ |channels=Air and Fire
+ |target=Room
+ |cooldown=2.00 seconds of equilibrium
+ |detail=With this spell, you can create an illusion of your choosing in the room about you. You may embed a single newline by using the character sequence \n in your illusion.<p>For limitations and restrictions, please refer to HELP ILLUSIONS in full.</p>
+}}
+
+{{Skill_detail
+ |skill=Simultaneity
+ |description=Parallel channeling.
+ |lessons=
+ |syntax=SIMULTANEITY
+ |required=1000 mana
+ |target=Self
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Using this fine ability, you will simultaneously open channels to the Air, Water, Earth, and Fire realms.
+}}
+
+{{Skill_detail
+ |skill=Stormhammer
+ |description=Call down the wrath of the storm upon multiple enemies.
+ |lessons=
+ |syntax=CAST STORMHAMMER AT <target> [AND <target> [AND <target>]]
+ |required=1200 mana
+ |channels=Air and Fire
+ |target=Adventurers and denizens
+ |cooldown=6.00 seconds of equilibrium
+ |detail=This powerful attack can cast a lightning bolt at one, two, or three adventurers or denizens.
+}}
+
+{{Skill_detail
+ |skill=Destroy
+ |description=A sliver of Primal Fire.
+ |lessons=
+ |syntax=CAST DESTROY AT <target> 
+ |required=
+ |channels=Fire
+ |target=Adventurers
+ |cooldown=3.60 seconds of equilibrium
+ |detail= When dealing with a sufficiently weakened foe(*), you will be able to unleash the wrath of Kkractle directly upon them, destroying them.<p>* They must be afflicted with a conflagration and have 40% of their health or less.<br>** You must be wielding an elemental staff to perform this ability.<br>*** While this ability may be cast normally, if you also possess an ashbeast it will be enhanced, and will bypass starburst protections and similar in this case.</br>
+}}
+
+{{Skill_detail
+ |skill=Holocaust
+ |description=Create a delayed explosion of immense power.
+ |lessons=
+ |syntax=CAST HOLOCAUST <seconds> (Between 10 and 60)
+ |required=1500 mana
+ |channels=Fire
+ |target=Room
+ |cooldown=6.00 seconds of equilibrium
+ |detail=This extremely powerful spell creates a magical bomb with a timer on it.<p>When the time runs out, the bomb will explode in a massive, fiery holocaust.</p>
+}}
+
+{{Skill_detail
+ |skill=Magmasphere
+ |description=A delayed eruption of magmatic fury.
+ |lessons=
+ |syntax=CAST MAGMASPHERE <seconds> (Between 10 and 60)
+ |required=
+ |channels=Earth and Fire
+ |target=Adventurers and room
+ |cooldown=
+ |detail=This powerful spell creates a sphere of magma that, after some time has elapsed (specified by you), will violently explode. The flying stone has a chance to break the limbs of any in the current location in addition to the significant damage that it will always deal. 
+}}
+
+===Higher Order Spells===
+
+{{Skill_detail
+ |skill=Hypothermia
+ |description=The freezing touch of Sllshya.
+ |lessons=
+ |syntax=CAST HYPOTHERMIA AT <target>
+ |required=60 mana
+ |channels=Air and Water
+ |target=Adventurers
+ |cooldown=2.60 seconds of equilibrium
+ |detail=With this higher order spell, if your enemy is already frozen, you may bring a terrible cold down upon him or her, removing their ability to heal their frozen state.<p>* This affliction is cured via the restoration salve.</p>
+}}
+
+{{Skill_detail
+ |skill=Shalestorm
+ |description=A downpour of stone.
+ |lessons=
+ |syntax=CAST SHALESTORM AT <target>
+ |required=100 mana
+ |channels=Earth
+ |target=
+ |cooldown=2.40 seconds of equilibrium
+ |detail=This higher order earth spell will summon up a storm of rocks to periodically pummel your victim(*). For every two times the rocks pummel a victim, your resonance with the Elemental Plane of Earth will decrease. The storm will cease once your resonance is gone entirely.<p>* This will do damage and break a random limb of your victim if your victim is unshielded. If they are shielded, it will break the shield.</p>
+}}
+
+{{Skill_detail
+ |skill=Firestorm
+ |description=The very world shall burn at your command.
+ |lessons=
+ |syntax=CAST FIRESTORM
+ |required=50 mana
+ |channels=Air and Fire
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This formidable higher order fire spell will call a rampant firestorm into being. This will spread to all adjacent rooms and will periodically sear the flesh of any who stand within said locations.<p>Be warned. Fire is truly an indiscriminate force. You shall not be spared from a firestorm, even if you were the one to call it forth.</p>
+}}
+
+{{Skill_detail
+ |skill=Glaciate
+ |description=A doom of Maklak's make.
+ |lessons=
+ |syntax=CAST GLACIATE AT <target>
+ |required=50 mana
+ |channels=Air and Water
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=This higher order spell will inflict terrible damage upon those that are already frozen.
+}}
+
+{{Skill_detail
+ |skill=Conflagrate
+ |description=Summon forth a terrible conflagration.
+ |lessons=
+ |syntax=CAST CONFLAGRATE AT <target>
+ |required=150 mana
+ |channels=Fire
+ |target=Adventurers
+ |cooldown=2.35 seconds of equilibrium
+ |detail=This higher order fire spell will cause a conflagration to engulf your target. This conflagration will deal periodic damage until the person is able to extinguish it. The only way to do this is to remove all traces of the ablaze affliction from their person.<p>For the purposes of this spell, suitably vulnerable requires that the target has two or more stacks of the ablaze affliction.</p>
+}}
+
+{{Skill_detail
+ |skill=Emanation
+ |description=The elements unleashed.
+ |lessons=
+ |syntax=CAST EMANATION AT <target> <AIR|EARTH|FIRE|WATER>
+ |required=100 mana
+ |channels=Air, Earth, Fire, and Water
+ |target=
+ |cooldown=2.40 seconds of equilibrium
+ |detail=This higher order spell will allow you, when you are majorly resonant with one of the Elemental Planes, to unleash all of your accumulated power in a single devastating strike. This clears any resonance you have with the given Plane, and each type has a various affect:<p>Air: your target will be struck down with paralysis and dizziness, as well as being stunned for a short time. If they already have dizziness, they will be given asthma instead.<p>Earth: your target's torso will become calcified. Additionally, if cast against someone with serious internal trauma, your foe shall be slain outright.<p>Fire: your target will be given two stacks of the ablaze affliction.<p>Water: your target will be given a level of freeze (or have the insulation defence stripped), and will be disrupted along with being afflicted with stuttering.<p>All emanations deal damage.</p>
+}}
+
+{{Skill_detail
+ |skill=Purity
+ |description=Life's water will ever run clear.
+ |lessons=
+ |syntax=CAST PURITY
+ |required=1000 mana
+ |channels=Water
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=With major resonance to the Elemental Plane of Water achieved, you may cast this higher order to keep your blood and body ever clean of many malign forces(*). This removes all of your resonance with all Elemental Planes, lasts ten seconds and carries a long cooldown.<p>* You will become immune to many afflictions (primarily those cured by herbs and minerals) while this defence lasts.
+}}
+
+{{Skill_detail
+ |skill=Convergence
+ |description=Unbounded arcane might.
+ |lessons=
+ |syntax=CAST CONVERGENCE AT <target>
+ |required=300 mana
+ |channels=Air, Earth, Fire, and Water
+ |target=
+ |cooldown=2.90 seconds of equilibrium
+ |detail=This formidable higher order spell requires that your victim has progressed to the fourth stage of the dissonance affliction and requires moderate resonance to all of the Elemental Planes at a minimum. You may then place this mark upon your target, and thus spell their doom. A target you have converged is vulnerable to your staffcast magic no matter where they might flee upon your current plane, and your scrying magic will incur no equilibrium when seeking them out. Additionally, they will become very vulnerable to all forms of elemental and magical damage coming from your arcane personage, and your magic will bypass any shield or prismatic barrier they may attempt to raise(*).<p>* Or similar defences.</p>
+}}
+
+===Resonant Spells===
+
+{{Skill_detail
+ |skill=Gust
+ |description=Blow someone in a direction with a gust of wind.
+ |lessons=
+ |syntax=CAST GUST<br>CAST GUST AT <target> <direction>
+ |required=40 mana
+ |channels=Air
+ |target=Adventurers and room
+ |cooldown=3.00 seconds of equilibrium
+ |detail=By channeling the element of air, you can either blow a fog or cloud out of the room, or blow an adventurer in a particular direction.
+}}
+
+{{Skill_detail
+ |skill=Firelash
+ |description=Attack with elemental fire.
+ |lessons=
+ |syntax=CAST FIRELASH AT <target>/<icewall>/<totem>/GROUND/VINES
+ |required=120 mana
+ |channels=Fire
+ |target=Adventurers, denizens, and room
+ |cooldown=Equilibrium
+ |detail=By lashing out with fire, you may damage an adventurer or a denizen, melt an icewall, clear an overgrowthed totem, or melt ice-covered ground. Note that you can hit adventurers with this from an adjacent room, and when cast in room against an adventurer it will also set them ablaze.   
+}}
+
+{{Skill_detail
+ |skill=Freeze
+ |description=Chill another adventurer.
+ |lessons=
+ |syntax=CAST FREEZE AT GROUND/<target>
+ |required=Ground: 200 mana<br>Targetted: 100 mana
+ |channels=Air and Water
+ |target=Adventurers and room
+ |cooldown=Ground: 4.00 seconds of equilibrium<br>Targetted: 3.00 seconds of equilibrium
+ |detail=When casting freeze at the ground, you will cause a coating of ice to cover it, causing others to slip occasionally. When casting it at another adventurer, you will first strip the insulation defence if the target has it, then cause the target to shiver, and finally freeze him. If you successfully cast this upon a target (for example, a heat vibration does not stop it), it also causes damage.
+}}
+
+{{Skill_detail
+ |skill=Geyser
+ |description=Knock someone out of the trees or the sky.
+ |lessons=
+ |syntax=CAST GEYSER AT <target>
+ |required=100 mana
+ |channels=Earth, Fire, and Water
+ |target=Adventurers
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Using this ability, you may knock a flying or treed adventurer out of the sky or trees. If you have major resonance with the Elemental Plane of Water, your target will also be disrupted.
+}}
+
+{{Skill_detail
+ |skill=Dehydrate
+ |description=Make them vulnerable to the consuming flame.
+ |lessons=
+ |syntax=CAST DEHYDRATE AT <target>
+ |required=45 mana
+ |channels=Fire and Water
+ |target=Adventurers
+ |cooldown=2.30 seconds of equilibrium
+ |detail=This working of fire and water will sap the excess moisture from your victim, making them become dehydrated for a time(*) and suffer some damage.<p>* Gives the nausea and weariness afflictions.<br>** If they already have weariness, they will be given a stack of burning. If they already have nausea, gives a stack of freeze. If they have both, it gives burning (not both freeze and burning).</p>
+}}
+
+{{Skill_detail
+ |skill=Fulminate
+ |description=Fry your enemies with awesome bolts of lightning.
+ |lessons=
+ |syntax=CAST FULMINATE AT <target>
+ |required=120 mana
+ |channels=Air and Fire
+ |target=Adventurers
+ |cooldown=2.40 seconds of equilibrium
+ |detail=Strike down an adventurer with a sizzling bolt of lightning.<p>* Gives the fulminated affliction. If they already have this affliction, gives the epilepsy affliction. If they have both, gives the paralysis affliction.<br>** Also deals damage.</p>
+}}
+
+{{Skill_detail
+ |skill=Bombard
+ |description=A trivial application of Air and Earth.
+ |lessons=
+ |syntax=CAST BOMBARD <target>
+ |required=50 mana
+ |channels=Air and Earth
+ |target=Adventurers
+ |cooldown=2.40 seconds of equilibrium
+ |detail=This trivial application of Air and Earth summons up a flurry of small rocks to bombard and disorient a foe.<p>* Gives the clumsiness affliction.</p>
+}}
+
+{{Skill_detail
+ |skill=Mudslide
+ |description=A sludge to send them sprawling.
+ |lessons=
+ |syntax=CAST MUDSLIDE AT <target>
+ |required=90 mana
+ |channels=Earth and Water
+ |target=Adventurers
+ |cooldown=2.30 seconds of equilibrium
+ |detail=Summon up a sticky tide of mud to knock your foe sprawling and leave them covered in sludge.<p>* Deals some damage, and gives the slickness affliction as well as knocking the target prone.</p>
+}}
+
+{{Skill_detail
+ |skill=Magma
+ |description=Rock to boil and bubble.
+ |lessons=
+ |syntax=CAST MAGMA AT <target>
+ |required=90 mana
+ |channels=Earth and Fire
+ |target=Adventurers
+ |cooldown=2.30 seconds of equilibrium
+ |detail=Summon up a boiling tide of magma to scald the flesh of your foe with(*).<p>* Gives the scalded affliction and deals some damage.</p>
+}}
+
+{{Skill_detail
+ |skill=Transfix
+ |description=Mesmerize your target into inaction.
+ |lessons=
+ |syntax=CAST TRANSFIX AT <target>
+ |required=200 mana
+ |channels=Air and Fire
+ |target=Adventurers
+ |cooldown=3.00 seconds of equilibrium
+ |detail=By creating a mesmerising pattern of fire, you may transfix an opponent into inaction. Blindness will prevent this, but this will remove the blindness in the process. When the blindness is removed, if you are moderately resonant with both the Elemental Planes of Air and Fire, your target will also be afflicted with stupidity.<p>* Note that you only gain resonance and the associated affects when transfix unblinds. When it transfixes proper, your resonance decay will be reset but you will not gain any of the associated benefits on that cast.</p>
+}}
+
+===Spells of Warding and Protection===
+
+{{Skill_detail
+ |skill=Reflection
+ |description=Create a distracting illusion of yourself.
+ |lessons=
+ |syntax=CAST REFLECTION AT ME/<target>
+ |required=50 mana
+ |channels=Air and Fire
+ |target=Adventurers and self
+ |cooldown=3.00 seconds of equilibrium
+ |detail=By focusing the light of fire through a prism of elemental air, you can create a magical reflection of yourself, which will absorb one attack before being destroyed. You may only have one reflection at a time.
+}}
+
+{{Skill_detail
+ |skill=Stonefist
+ |description=Coat your fists with rock and punch with more power.
+ |lessons=
+ |syntax=CAST STONEFIST<br>RELAX STONEFIST
+ |required=60 mana
+ |channels=Earth
+ |target=Self
+ |cooldown=4.00 seconds of equilibrium
+ |detail=By coating your fists in elemental earth, you'll find yourself better able to grip your staff against attempts to pull it from your grasp.
+}}
+
+{{Skill_detail
+ |skill=Stoneskin
+ |description=Create a protective but supple layer of stone around you.
+ |lessons=
+ |syntax=CAST STONESKIN
+ |required=75 mana
+ |channels=Earth
+ |target=Self
+ |cooldown=2.00 seconds of equilibrium
+ |detail=Similar to the manner in which stonefist coats your fists in stone, stoneskin coats much of your body in stone, providing some protection against physical attacks (more from blunt than from cutting damage). As your skill in elementalism increases, so will the protection this ability affords you.
+}}
+
+{{Skill_detail
+ |skill=Chargeshield
+ |description=Create a magical shield to resist electric damage.
+ |lessons=
+ |syntax=CAST CHARGESHIELD AT ME/<target>
+ |required=200 mana
+ |channels=Air and Earth
+ |target=Adventurers and self
+ |cooldown=4.00 seconds of equilibrium
+ |detail=The chargeshield is a defensive spell which will provide you with some protection from electric attacks.
+}}
+
+{{Skill_detail
+ |skill=Bloodboil
+ |description=Boil off that which afflicts you.
+ |lessons=
+ |syntax=CAST BLOODBOIL
+ |required=75 mana
+ |channels=Fire and Water
+ |target=Self
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Through the purifying powers of fire, and the recuperative powers of water, you may cure yourself of an affliction with this spell. If you suffer under the haemophilia affliction your blood will be too thin for this spell to take affect, and if you have both major resonance with the Elemental Planes of Fire and Water this ability will have a chance to cure a second affliction. 
+}}
+
+{{Skill_detail
+ |skill=Diamondskin
+ |description=Give your skin diamond-like hardening.
+ |lessons=
+ |syntax=CAST DIAMONDSKIN
+ |required=175 mana
+ |channels=Earth, Fire, and Water
+ |target=Self
+ |cooldown=2.00 seconds of equilibrium
+ |detail=Greatly increase your resistance to cutting damage, and modestly increase your resistance to blunt damage, by adding diamond-like hardness to your skin. The protection afforded increases with your skill in elementalism. 
+}}
+
+===Terrain Manipulation===
+
+{{Skill_detail
+ |skill=Firewall
+ |description=Create a wall of elemental fire.
+ |lessons=
+ |syntax=CAST FIREWALL <direction>
+ |required=100 mana
+ |channels=Fire
+ |target=Room
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Channeling the power of elemental fire, you will create walls of burning flame.
+}}
+
+{{Skill_detail
+ |skill=Fog
+ |description=Conjure up obscuring fog.
+ |lessons=
+ |syntax=CAST FOG
+ |required=250 mana
+ |channels=Air and Water
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=With the powers of air and water, you may cause an elemental fog to fill your surroundings.
+}}
+
+{{Skill_detail
+ |skill=Hellfumes
+ |description=Create choking fumes in your surroundings.
+ |lessons=
+ |syntax=CAST HELLFUMES
+ |required=200 mana
+ |channels=Air and Earth
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This spell will create a noxious cloud in your location, choking those around you.
+}}
+
+{{Skill_detail
+ |skill=Flood
+ |description=Drown a location in water.
+ |lessons=
+ |syntax=CAST FLOOD
+ |required=250 mana
+ |channels=Water
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Channel the power of elemental water to flood the room you stand in.
+}}
+
+{{Skill_detail
+ |skill=Quake
+ |description=Open cracks in the ground to drain away water.
+ |lessons=
+ |syntax=CAST QUAKE
+ |required=250 mana
+ |channels=Earth
+ |target=Room
+ |cooldown=3.20 seconds of equilibrium
+ |detail=By summoning forth a minor earthquake, you are able to drain away any water that may be flooding your location.
+}}
+
+{{Skill_detail
+ |skill=Icewall
+ |description=Conjure up an obstructing icewall.
+ |lessons=
+ |syntax=CAST ICEWALL <direction>
+ |required=100 mana
+ |channels=Water
+ |target=Room
+ |cooldown=3.00 seconds of equilibrium
+ |detail=This spell will create a wall of elemental ice, blocking the passage of those who would seek to pass by.
+}}
+
+{{Skill_detail
+ |skill=Hailstorm
+ |description=Call down a hailstorm to pummel everyone else in the room.
+ |lessons=
+ |syntax=CAST HAILSTORM
+ |required=500 mana
+ |channels=Air and Water
+ |target=Room
+ |cooldown=3.50 seconds of equilibrium
+ |detail=With this spell, you may rain hailstones down upon all your enemies in your location.
+}}
+
+[[Category:Skills]]

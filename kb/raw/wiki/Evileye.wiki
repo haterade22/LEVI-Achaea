@@ -1,0 +1,380 @@
+Evileye is a skill that is perhaps related to the [[Curses]] [[:Category:Skills|skill]] used by the [[Shaman|Shamans]], albeit perhaps less powerful. With it, one may make eye contact with an opponent and give them the 'evil eye', imposing a wide variety of [[:Category:Afflictions|afflictions]] upon the opponent. At the high end of the ability, one learns the craft of giving multiple afflictions simultaneously.
+
+The skill of '''Evileye''' is available to members of the [[Apostate]] [[class]], along with [[Necromancy]] and [[Apostasy]].
+
+==Abilities in Evileye==
+{{Skill_detail
+ |skill=[[Fear]]
+ |description=Instill great fear in your target.
+ |lessons=0
+ |syntax=STARE <target> FEAR
+ |required=33 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=This ability works to instil fear in your victim.
+}}
+
+{{Skill_detail
+ |skill=[[Deafness|Deaf]]
+ |description=Dampen an opponent's hearing.
+ |lessons=6
+ |syntax=STARE <target> DEAF
+ |required=33 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Remove the hearing of your victim.
+}}
+
+{{Skill_detail
+ |skill=[[Impatience]]
+ |description=Inability to concentrate on focused tasks.
+ |lessons=15
+ |syntax=STARE <target> IMPATIENCE
+ |required=45 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Afflict your victim with an inability to concentrate on focused tasks.
+}}
+
+{{Skill_detail
+ |skill=[[Clumsiness|Clumsy]]
+ |description=Your victim will fumble about.
+ |lessons=33
+ |syntax=STARE <target> CLUMSY
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Cause your victim to fumble about.
+}}
+
+{{Skill_detail
+ |skill=[[Vertigo]]
+ |description=A devastating fear of heights.
+ |lessons=55
+ |syntax=STARE <target> VERTIGO
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Afflict your target with a great fear of heights.
+}}
+
+{{Skill_detail
+ |skill=[[Bleeding|Bleed]]
+ |description=Curse your opponent with uncontrollable bleeding.
+ |lessons=88
+ |syntax=STARE <target> BLEED
+ |required=30 mana
+ |target=Adventurers and denizens
+ |cooldown=1.90 seconds of balance
+ |detail=Induce bleeding in your target. This ability will work on Denizens as well as adventurers.
+}}
+
+{{Skill_detail
+ |skill=Amnesia
+ |description=Make your victim forget what he meant to do.
+ |lessons=111
+ |syntax=STARE <target> AMNESIA
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Make your victim forget what he meant to do.
+}}
+
+{{Skill_detail
+ |skill=[[Agoraphobia]]
+ |description=Fear of open spaces.
+ |lessons=133
+ |syntax=STARE <target> AGORAPHOBIA
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Afflict your victim with a fear of open spaces.
+}}
+
+{{Skill_detail
+ |skill=Deadeyes
+ |description=Inflict multiple ailments simultaneously.
+ |lessons=466
+ |syntax=DEADEYES <target> <first evileye> <second evileye>
+ |required=Mana cost is the combined cost of each evileye.
+ |target=Adventurers and denizens
+ |cooldown=2.30 seconds of balance
+ |detail=With this ability, you may crush an opponent with two simultaneous evileyes. This ability also becomes faster the greater your skill in evileye.
+}}
+
+{{Skill_detail
+ |skill=Breach
+ |description=Cut through an opponent's curseward.
+ |lessons=177
+ |syntax=STARE <target> BREACH
+ |required=125 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Rip down your opponents cursewards.
+}}
+
+{{Skill_detail
+ |skill=[[Dizziness|Dizzy]]
+ |description=Causes problems when trying to move.
+ |lessons=222
+ |syntax=STARE <target> DIZZY
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Afflict your target with severe dizziness.
+}}
+
+{{Skill_detail
+ |skill=[[Claustrophobia]]
+ |description=Fear of being under cover.
+ |lessons=255
+ |syntax=STARE <target> CLAUSTROPHOBIA
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Afflict your target with a great fear of enclosed spaces.
+}}
+
+{{Skill_detail
+ |skill=[[Paranoia]]
+ |description=They are out to get you, believe me.
+ |lessons=288
+ |syntax=STARE <target> PARANOIA
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Instil a fear of other people in your victim.
+}}
+
+{{Skill_detail
+ |skill=[[Blindness|Blind]]
+ |description=Curse an opponent with blindness.
+ |lessons=333
+ |syntax=STARE <target> BLIND
+ |required=33 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Remove your poor victim's eyesight.
+}}
+
+{{Skill_detail
+ |skill=[[Masochism]]
+ |description=The love of your own pain.
+ |lessons=377
+ |syntax=STARE <target> MASOCHISM
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Make your victim love pain so much they will inflict it upon themselves.
+}}
+
+{{Skill_detail
+ |skill=[[Asthma]]
+ |description=Creates difficulty when breathing.
+ |lessons=422
+ |syntax=STARE <target> ASTHMA
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Make it difficult for your victim to breath.
+}}
+
+{{Skill_detail
+ |skill=[[Recklessness|Reckless]]
+ |description=A dangerous disregard for personal well-being.
+ |lessons=488
+ |syntax=STARE <target> RECKLESS
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Give your target a dangerous disregard for their personal well-being.
+}}
+
+{{Skill_detail
+ |skill=[[Epilepsy]]
+ |description=Disrupt the nervous system of your victim.
+ |lessons=555
+ |syntax=STARE <target> EPILEPSY
+ |required=75 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Cause your victim to go into seizures.
+}}
+
+{{Skill_detail
+ |skill=[[Confusion]]
+ |description=Befuddle the minds of your enemies.
+ |lessons=599
+ |syntax=STARE <target> CONFUSION
+ |required=33 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Befuddle the minds of your enemies.
+}}
+
+{{Skill_detail
+ |skill=[[Peace]]
+ |description=Fill your enemy's mind with thoughts of peace.
+ |lessons=667
+ |syntax=STARE <target> PEACE
+ |required=62 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Fill your enemy's mind with thoughts of peace.
+}}
+
+{{Skill_detail
+ |skill=[[Dementia]]
+ |description=Distorts the victim's perceptions of the world.
+ |lessons=736
+ |syntax=STARE <target> DEMENTIA
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Distorts the victim's perceptions of the world.
+}}
+
+{{Skill_detail
+ |skill=Sight
+ |description=Restoring your sight.
+ |lessons=771
+ |syntax=SIGHT
+ |required=25 willpower
+ |target=Self
+ |cooldown=1.90 seconds of balance
+ |detail=By focusing your will on your sight, you are able to clear your eyes of blindness after a brief period of concentration.
+}}
+
+{{Skill_detail
+ |skill=Sicken
+ |description=Bring down disease upon them.
+ |lessons=
+ |syntax=STARE <target> SICKEN
+ |required=55 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=This potent curse shall afflict your subject with paralysis. If they already have paralysis, this curse shall deliver manaleech; if they have both paralysis and manaleech it shall deliver slickness, and if they have all three it shall deal damage.  
+}}
+
+{{Skill_detail
+ |skill=Plague
+ |description=Curse someone with the [[voyria]] affliction.
+ |lessons=874
+ |syntax=STARE <target> PLAGUE
+ |required=75 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Afflict your victim with the deadly Voyria.
+}}
+
+{{Skill_detail
+ |skill=[[Addiction]]
+ |description=Creates a terrible addiction.
+ |lessons=943
+ |syntax=STARE <target> ADDICTION
+ |required=70 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Cause your target to become addicted.
+}}
+
+{{Skill_detail
+ |skill=Cowardice
+ |description=Rob the courage from a victim.
+ |lessons=1047
+ |syntax=STARE <target> COWARDICE
+ |required=150 mana
+ |target=Adventurers and denizens
+ |cooldown=1.90 seconds of balance
+ |detail=This ability, which works on both adventurers and denizens, will cause the target to move in a random direction.
+}}
+
+{{Skill_detail
+ |skill=[[Stupidity|Stupid]]
+ |description=Make a victim dumb as a rock.
+ |lessons=1150
+ |syntax=STARE <target> STUPID
+ |required=60 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Make a victim dumb as a rock.
+}}
+
+{{Skill_detail
+ |skill=[[Mana_leech|Manaleech]]
+ |description=A terrible curse of the mind.
+ |lessons=1219
+ |syntax=STARE <target> MANALEECH
+ |required=75 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Sap away your targets mana.
+}}
+
+{{Skill_detail
+ |skill=[[Sensitivity]]
+ |description=Cause your victim to become extremely sensitive to pain.
+ |lessons=1288
+ |syntax=STARE <target> SENSITIVITY
+ |required=70 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Cause your victim to become extremely sensitive to pain.
+}}
+
+{{Skill_detail
+ |skill=[[Nausea|Vomiting]]
+ |description=Upset the stomach of your enemy.
+ |lessons=1392
+ |syntax=STARE <target> VOMITING
+ |required=75 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Induce severe vomiting in your hapless victim.
+}}
+
+{{Skill_detail
+ |skill=[[Sleep]]
+ |description=Put an enemy to sleep, or remove his sleep defences.
+ |lessons=1495
+ |syntax=STARE <target> SLEEP
+ |required=55 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Put an enemy to sleep, or remove their sleep defences.
+}}
+
+{{Skill_detail
+ |skill=[[Anorexia]]
+ |description=A terrible condition, preventing one from eating.
+ |lessons=1598
+ |syntax=STARE <target> ANOREXIA
+ |required=70 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=A terrible condition, preventing one from eating.
+}}
+
+{{Skill_detail
+ |skill=[[Weariness]]
+ |description=Weaken the body of your opponent.
+ |lessons=1667
+ |syntax=STARE <target> WEARINESS
+ |required=75 mana
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Weaken your opponent's body.
+}}
+
+{{Skill_detail
+ |skill=Truestare
+ |description=Cast the evil eye through magical shields.
+ |lessons=1736
+ |syntax=TRUESTARE
+ |required=100 mana
+ |target=Adventurers and self
+ |cooldown=
+ |detail=With the ability of truestare magical shields will no longer get in the way of your evil eyes.<br><br>In addition, you may activate a defence which will allow you to enhance all of your ocular techniques to such a degree that you may utilise them while blind.  
+}}
+
+[[Category:Skills]]

@@ -1,0 +1,326 @@
+:''This page is about the [[Unnamable]] skill. For [[necromancy]] excommunication, see [[Anathema (severance)]].''
+In the profane whispers of Outside are the mysteries of '''Anathema''' brought to [[Creation]]. Issued with calamitous howls from a thousand mouths as the abberations remake themselves in malign image, the skill that defines the [[Unnamable]] is a thing of madness and ruin entwined.
+ 
+In a quest for twisted perfection does the Unnamable strive, ever forward with regard for neither the self nor the world they seek to defile. Melding [[karma]] and self-imposed desolation to birth something new, the [[chaos|chaotic]] warriors of [[Ashtan]] revel in their dire work. For the Unnamable is a thing of nightmare, and where it walks so too does terror follow.
+
+The skill of '''Anathema''' is available to members of the Unnamable [[class]], along with [[Weaponmastery]] and [[Dominion]].
+
+==Abilities in Anathema==
+{{Skill_detail
+ |skill=Connection
+ |description=The fundamental which underpins.
+ |lessons=
+ |syntax=KARMA<br>KARMA DRAW
+ |required=
+ |target=
+ |cooldown=
+ |detail=Each Unnamable requires vast amounts of karma to facilitate their works, and the Living Book of Eschaton is the greatest repository of karma there is. Those citizens of Ashtan who undertake this path may seek it out, and TOUCH it to begin the process.<p>Once a connection is established, the student of Anathema may DRAW upon the connection when in the Eschaton's presence, restoring some of their karmic reserves. Note however, this process is painful, and doing so in excess may have consequences.</p>
+}}
+
+===Ruinous Whispers===
+
+{{Skill_detail
+ |skill=Croon
+ |description=They shall listen and tremble.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=The mysteries of the outer spheres are beyond the capacity of the unenlightened mind to truly comprehend. Once you have mutated your mouths - the first step on the road to assuming the form of the Unnamable, you may reveal a fraction of some of these terrible truths to the uninitiated(*).<p>* See relevant ability files for details on each.</p>
+}}
+
+{{Skill_detail
+ |skill=Revelation
+ |description=They shall see and be found wanting.
+ |lessons=
+ |syntax=CROON REVELATION <target>
+ |required=0.10% karma
+ |target=
+ |cooldown=5.00 seconds of anathema balance
+ |detail=Reveal one of the truths of Chaos to the uninitiated. Those of weak stomachs and inferior drive shall not be up to the challenge(*).<p>* Gives nausea.<br>** Your target must be incapacitated in some form for this to land: paralysis, prone, stunned, etc.</p>
+}}
+
+{{Skill_detail
+ |skill=Hunger
+ |description=To slake until the spring runs dry.
+ |lessons=
+ |syntax=CROON HUNGER <target>
+ |required=0.20% karma
+ |target=
+ |cooldown=5.00 seconds of anathema balance
+ |detail=If your victim labours under three or more stacks of horror, you can croon to them of the Unnamable's hunger, whispering of the sweet truth of its inevitability. They too shall find a portion of that hunger, for the touch of Chaos is upon all(*).<p>* Gives addiction.
+}}
+
+{{Skill_detail
+ |skill=Corrosion
+ |description=Like an acid, ever burning
+ |lessons=
+ |syntax=CROON CORROSION  <target>
+ |required=0.10% karma
+ |target=
+ |cooldown=5.00 seconds of anathema balance
+ |detail=As Chaos erodes and destroys that which is lesser, so shall the enemies of Chaos be worn down and away. Croon to your victim of this truth, and their nature shall be revealed for the easily broken thing that it is(*).<p>* Gives manaleech.</p>
+}}
+
+{{Skill_detail
+ |skill=Mirror
+ |description=The duality of all things.
+ |lessons=
+ |syntax=CROON MIRROR <target>
+ |required=1% karma
+ |target=
+ |cooldown=5.00 seconds of anathema balance
+ |detail=Croon to a subject of the duality of Chaos, of the two faces of the coin that spins. They shall stand as Creation, and you as its greater twin(*).<p>* By linking yourself to someone in this way, each time they are passively healed of an affliction, so shall you be.</p>
+}}
+
+{{Skill_detail
+ |skill=Extinction
+ |description= Creation's scourge.
+ |lessons=
+ |syntax=CROON EXTINCTION <target> <limb1> <limb2>
+ |required=4% karma
+ |target=
+ |cooldown=5.00 seconds of anathema balance
+ |detail=Croon to your victim of the power of extinction, that which breaks and destroys. If they are already fragile to its workings, they shall know the power of devastation firsthand(*).<p>* Any limb that you specify which is broken to the point of needing a restoration salve shall take very significant (around 25% per stack) further limb damage. This is increased substantially for each stack of the horror affliction said target suffers from.<br>** There is a 1 minute cooldown on you crooning this ability, and a target has a 45 second immunity from it after being hit with it once.<br>*** You cannot target this ability against the torso.</p>
+}}
+
+===Basic Mutations===
+
+{{Skill_detail
+ |skill=Mutate
+ |description=The process of transformation.
+ |lessons=
+ |syntax=MUTATE <basic mutation>
+ |required=
+ |target=
+ |cooldown=
+ |detail=Due to the rituals you have undergone, you may now exert some basic influence over your body, developing minor mutations to bring you closer to the state of transcendent being: that of the Unnamable itself. See the relevant ability files for each mutation for details.
+}}
+
+{{Skill_detail
+ |skill=Mouths
+ |description=Whispers from the boundary
+ |lessons=
+ |syntax=MUTATE MOUTHS
+ |required=0.5% karma
+ |target=
+ |cooldown=5.00 seconds of anathema balance
+ |detail=You may now mutate myriad mouths, which shall croon and feast and more besides upon your behalf(*).<p>* This basic mutation is required to be formed to wield many other Anathema abilities.</p>
+}}
+
+{{Skill_detail
+ |skill=Bulk
+ |description=Grow, oh grow.
+ |lessons=
+ |syntax=MUTATE BULK
+ |required=0.50% karma
+ |target=
+ |cooldown=5.00 seconds of anathema balance
+ |detail=A simple manipulation of mass, swell your bulk to a far greater size(*).<p>* Increases your strength by one point, and conveys some minor resistance to cutting and blunt damage.</p>
+}}
+
+{{Skill_detail
+ |skill=Eyes
+ |description=Watching... watching.
+ |lessons=
+ |syntax=MUTATE EYES
+ |required=0.5% karma
+ |target=
+ |cooldown=5.00 seconds of anathema balance
+ |detail=With many eyes, your farsee ability will be much more formidable(*).<p>* Your farsee ability will be able to identify the room an individual is in even when you are not in their area.</p>
+}}
+
+{{Skill_detail
+ |skill=Joints
+ |description=A greater range of motion.
+ |lessons=
+ |syntax=MUTATE JOINTS
+ |required=1% karma
+ |target=
+ |cooldown=3.00 seconds of anathema balance
+ |detail=By mutating your joints, you will enable yourself a greater range of flexibility, allowing you to writhe out of various entanglements faster(*).
+<p>* Having the bound affliction disables this bonus.</p>
+}}
+
+{{Skill_detail
+ |skill=Tentacles
+ |description=They shall not escape your grasp.
+ |lessons=
+ |syntax=MUTATE TENTACLES<br>FLAIL TENTACLES
+ |required=2% karma
+ |target=
+ |cooldown=5.00 seconds of anathema balance
+ |detail=One of the more complex basic mutations, you may mutate tentacles of your own to clutch at your enemies that would seek to leave your location(*). You may also flail your tentacles, yanking those in the sky back to the ground.<p>* This is similar to the tentacles of an Occultism practitioner, though due to your less refined touch with the delicate aspects of auric manipulation you will find your tentacles last a far shorter time.</p>
+}}
+
+===Manifestations===
+
+{{Skill_detail
+ |skill=Manifestation
+ |description=Ever closer to transcendence.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=1.50 seconds of balance
+ |detail=The Unnamables were forged as warriors by the Occultists of Ashtan, and are well prepared for the wielding of karma. However, ritual preparation and martial training cannot replace a life spent in study, and an Unnamable lacks the delicate control that these scholars of Chaos enjoy. Though a weakness, the Unnamables have made this also their strength.</p>Though drawing karma through your body will ravage your mind and flesh, even as the Unnamable grows more overcome he shall force his body to strive ever closer to transcendence. Flesh shall warp and mutate, bones shall twist and grow, and by a battle's culmination the Unnamable shall be closer to its namesake than ever before(*).<* As you become more warped by chaotic energy, you will mutate a random manifestation of the Unnamable. See the relevant ability files for details. You cannot control which manifestation you receive.</p>
+}}
+
+{{Skill_detail
+ |skill=Brains
+ |description=Its so simple with more than one.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=This manifestation will bolster your mental capacity, increasing how quickly you recover from attempts to focus your mind while you can maintain your superior mutated state.</p>
+}}
+
+{{Skill_detail
+ |skill=Heads
+ |description=The chorus yet grows louder.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=This manifestation shall cause you to mutate multiple secondary heads. When you croon your truths to the uninitiated, they too shall croon with you(*).<p>* Dealing some small amount of damage to go along with your standard croon effects.</p>
+}}
+
+{{Skill_detail
+ |skill=Tumors
+ |description=Bile and blood shall burn as flame.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=This manifestation causes vile tumors to form across the Unnamable's body. When struck with sufficient force, these shall rupture, showering your attacker with burning blood and bile.
+}}
+
+{{Skill_detail
+ |skill=Tongues
+ |description=Tendrils to grasp and rend.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=5.00 seconds of anathema balance
+ |detail=This manifestation will cause each of your myriad mouths to grown tongues. These will lash out at attempts to parry your blows, having a 50% chance to negate the parry attempt.
+}}
+
+{{Skill_detail
+ |skill=Venomsacks
+ |description=Payback never tasted so vile.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=Once you develop venomsacks in your mouth, they will draw small amounts of venom from your bloodstream when you are hit with them. While this is not enough to reduce the effect of the venom upon your person, when your venomsacks become full you will spit the delightful concoction directly into your attackers face, and give them a taste of their own medicine.<p>* Every five venoms, you will spit one of said venoms back at the last person to deliver you one. The venom delivered from the list is random and resolves after your attacker's attack is fully complete (providing you are still alive).<br>** You have a 66% chance to absorb part of the venom on the hit.</p>
+}}
+
+===Ruinous Whispers===
+
+{{Skill_detail
+ |skill=Horror
+ |description=The primordial dread.
+ |lessons=
+ |syntax=UNNAMABLE HORROR <target>
+ |required=1% karma
+ |target=
+ |cooldown=3.50 seconds of anathema balance
+ |detail=Reveal one of the mysteries of the outer spheres to a victim, instilling a horror in them that shall only grow(*).<p>* Gives an affliction that prevents the curing of the fear affliction. Additionally, each time someone would otherwise panic from fear instead of moving this affliction shall gain another stack. This affliction cures faster when out of the giver's presence.<br>** This affliction decreases all wrath gain for members of the Paladin class by 20% while they are suffering from it.<br>*** If you use this ability against someone with a broken head, the fear affliction will be delivered alongside it.</p>
+}}
+
+{{Skill_detail
+ |skill=Presence
+ |description=You are the terror that walks.
+ |lessons=
+ |syntax=UNNAMABLE PRESENCE [RELAX]
+ |required=2.5% karma
+ |target=
+ |cooldown=5.00 seconds of anathema balance
+ |detail=You may radiate the terrible presence of the Unnamable, a terror so profound that it shall inspire fear in any mortal not warded against its threat in some form(*).<p>* Citizens of Ashtan are immune outside the arena unless they are one of your personal enemies.<br>** Gives the fear affliction. If it hits someone who already has fear, forces a fear tick on that person.<br>*** While you are suffused with this presence, any manaleech affliction you inflict upon someone shall also ravage their body.</p>
+}}
+
+{{Skill_detail
+ |skill=Willbreak
+ |description=The psyche is such a fragile thing.
+ |lessons=
+ |syntax=UNNAMABLE WILLBREAK <target>
+ |required=0.5% karma
+ |target=
+ |cooldown=5.00 seconds of anathema balance
+ |detail=Whisper one of the great mysteries into the ear of your unfortunate subject. Though his mind will be too fragile to comprehend the greatness you have gifted, no doubt other results shall serve(*).<p>* Knocks focus balance for a short time. If they are afflicted with horror, they shall also attempt to flee in fear.</p>
+}}
+
+{{Skill_detail
+ |skill=Scream
+ |description=Let the cry of desolation sound once more.
+ |lessons=
+ |syntax=UNNAMABLE SCREAM <target>
+ |required=0.50% karma
+ |target=Adventurers and denizens
+ |cooldown=3.60 seconds of equilibrium
+ |detail=Unleash a psychic scream against your victim, one no barrier shall avail them against(*).<p>* This deals damage that bypasses magical shields and prismatic barriers.<p>Additionally, this skill consumes no karma when targeted against denizens.</p>
+}}
+
+{{Skill_detail
+ |skill=Devour
+ |description=Until the last.
+ |lessons=
+ |syntax=UNNAMABLE DEVOUR
+ |required=4% karma
+ |target=
+ |cooldown=5.00 seconds of anathema balance
+ |detail=As you grow closer to the transcendent being, so too does your hunger grow. Once you are sufficiently mutated and focussed on devouring all you are able, anytime someone dies in your location you will consume their corpse for a burst of health, if another does not get there first...<p>* You require tentacles and mouths mutated as well as this defence active to do this.<br>** This can push you above your maximum health to a point.<br>*** This is indiscriminate. You will eat allies too if they die.</p>
+}}
+
+{{Skill_detail
+ |skill=Pierce
+ |description=Scars for those with eyes to see.
+ |lessons=
+ |syntax=UNNAMABLE PIERCE
+ |required=3% karma
+ |target=
+ |cooldown=3.00 seconds of anathema balance
+ |detail=Where great work has been done, Creation has thus been scarred. These wounds may be reopened briefly for those with the will to see it so, and you may travel to them(*).<p>* A random room from a list of predetermined locations. You must be on the main continent.<br>** A monolith sigil prevents this ability.<br>*** You can only do this once every minute.<br>**** When used by a citizen of Ashtan beside the Living Book of Eschaton, pierce will take you to the Plane of Chaos.</p>
+}}
+
+{{Skill_detail
+ |skill=Frenzy
+ |description=Ruin has come.
+ |lessons=
+ |syntax=UNNAMABLE FRENZY
+ |required=8% karma
+ |target=
+ |cooldown=5.00 seconds of anathema balance
+ |detail=Unleash ruin upon Creation, and sweep aside all that would stand before you. The wrath of Chaos unleashed is a terrible thing to behold, and while consumed by your frenzy you shall strike faster with both body and mind the more wounded you become. However, take note: Chaos suffers no lesser working when unleashed in this way. No trinkets or potions shall reverse the damage inflicted in this state of transcendent might.<p>* The lower your health is, the faster your balance and equilibrium recovery will be. However, you cannot heal your health or mana by any means while suffused by the hunger to destroy.<br>** This ability may only be called upon every so often, and requires you be at a state of 100% manifestation to unleash it (a state which is out of reach under normal conditions, though it is said true master's of anathema may be able to reach it in particular circumstances).</p>
+}}
+
+{{Skill_detail
+ |skill=Anarchy
+ |description=Let Chaos reign.
+ |lessons=
+ |syntax=UNNAMABLE ANARCHY
+ |required=2% karma
+ |target=
+ |cooldown=4.00 seconds of anathema balance
+ |detail=While radiating the presence of the Unnamable, if you dedicate your focus to the task you may unleash true anarchy upon Creation. Your unnamable presence shall extend to adjacent locations, though such requires all of your concentration to maintain(*).<p>* This is a channeled action.</p>
+}}
+{{Skill_detail
+ |skill=Catastrophe
+ |description=Destruction given flesh.
+ |lessons=
+ |syntax=UNNAMABLE CATASTROPHE <target>
+ |required=5% karma
+ |target=
+ |cooldown=5.00 seconds of anathema balance
+ |detail=Having mastered your craft, you may now assume a brief state of total manifestation; this terrifying form shall be more than enough to unleash total destruction upon an appropriate victim(*).<p>* They must have at least two fully mangled limbs. One must be an arm, and the other must not be.<br>** This will slay your target outright.</p>
+}}
+
+
+[[Category:Skills]]

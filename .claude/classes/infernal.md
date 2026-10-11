@@ -737,11 +737,11 @@ belch:
 | **eurypteria** | recklessness | **lobelia** | Lock aff for Depthswalker |
 | **digitalis** | shyness | **goldenseal** | Mental stack |
 | **larkspur** | dizziness | **goldenseal** | Mental stack |
-| **monkshood** | disloyalty | **lobelia** | Hinder loyalty-based abilities |
+| **monkshood** | disloyalty | **smoke valerian** | Hinder loyalty-based abilities |
 | **aconite** | stupidity | **goldenseal** | Mental stack, focus bait |
 | **darkshade** | darkshade (light allergy) | **ginseng** | Hinder targeting |
 | **notechis** | haemophilia | **ginseng** | Lock aff for Magi/Sylvan, Agony synergy |
-| **sumac** | impatience | **goldenseal** | Truelock completion |
+| **sumac** | none: DAMAGE only | n/a | (wiki Venom (Skill): "minor damage to adventurers and denizens"; it gives no affliction) |
 | **vernalius** | weakness | **kelp** | Hinder physical actions |
 | **oleander** | blindness | smoke | Hinder targeting |
 | **colocasia** | blindness + deafness | smoke + deafness | Full sensory denial |
@@ -787,7 +787,7 @@ for_venomlock:
   goal: "Softlock + paralysis blocks tree"
 
 for_truelock:
-  venoms: [curare, kalmia, gecko, euphorbia, sumac, slike]
+  venoms: [curare, kalmia, gecko, euphorbia, slike]   # sumac removed: damage only, no impatience
   goal: "Venomlock + impatience blocks focus + weariness blocks Fitness"
 
 for_limb_pressure:
@@ -836,8 +836,8 @@ for_lock_building:
 
 for_truelock_finish:
   combinations:
-    - [sumac, slike]        # Impatience + Weariness
-    - [curare, sumac]       # Paralysis + Impatience
+    # (Two pairs built on "sumac = impatience" were removed 2026-10-11: sumac only does damage, and
+    # no venom gives impatience. Where an Infernal gets impatience from is open: kb/CONFLICTS.md.)
   timing: "When softlocked and pushing for truelock"
 
 # With Hellforge Investments

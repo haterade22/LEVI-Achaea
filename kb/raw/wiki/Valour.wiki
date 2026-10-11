@@ -1,0 +1,340 @@
+Shining with the ancient nobility of templar tradition, '''Valour''' is a [[knights|knightly]] skill that may be thought of as having three distinct parts. The first part, eaglery involves the raising, training, and use of [[eagles]]. The second part of Valour is [[archery]]. By gaining the abilities to assess wind direction and speed and use different kinds of [[bows|weapons]] (longbows, crossbows, darkbows) you may attack from afar, or shoot at a cowardly opponent who has fled to the skies. The third and final part involves an assortment of aggressive abilities ranging from howling a Battlecry, to Engaging your unlucky opponent, to boosting your prowess with Fury.
+
+The skill of Valour is available only to members of the [[Paladin]] [[class]], although most of its abilities are shared with the [[Dominion]], [[Malignity]], and [[Discipline]] skills of the [[Unnamable]], [[Infernal]], and [[Runewarden]] classes.  Like the other warrior-classes, Paladins train in [[Weaponmastery]], but the fiery arts of [[Excision]] are unique to them.
+
+==Abilities in Valour==
+{{Skill_detail
+ |skill=Eagle
+ |description=Your loyal companion.
+ |lessons=
+ |syntax=EAGLE
+ |required=
+ |target=
+ |cooldown=
+ |detail=The golden eagles serve only those loyal to the Bloodsworn divine, forming a lifelong partnership with a paladin in their struggle against the forces of Evil, Chaos, and Darkness. </p><p>Your eagle comes to you with assorted statistics which have been randomly assigned. </p><p>If you cause your eagle to die, you will be refused another eagle. There is absolutely no excuse for killing or conspiring to kill your eagle. </p><p>Below is a list of commands that may be used once you have gotten your eagle. </p><p>EAGLE ASSESS : See information about your eagle.<br>EAGLE RECALL : Recall your eagle to your shoulder. <br>EAGLE SANCTUARY : Order your eagle to a sanctuary where it will be safe. <br>EAGLE LAND : Order your eagle to land on the ground.<br>EAGLE CIRCLE : Order your eagle to fly up into the skies.<br>EAGLE TRAIN : Order your eagle to go train, in order to raise a stat. <br>EAGLE REPORT : Gain information on where your eagle is.<br>EAGLE SLAY : Order your eagle to slay someone.<br>EAGLE HUNT : When your eagle is hungry, have it go hunt for its food. <br>EAGLE FLEE : Set the amount of health remaining when your eagle will flee battle. <br>EAGLE SLEEP : Order your eagle to sleep.<br>EAGLE FEED RAT : Feed the corpses of rats to your eagle.</p><p>As your eagle gains in<br>'''Stamina''': its health will increase.<br>'''Speed''': it will attack more quickly as well as fly from place to place more quickly. <br>'''Strength''': it will attack with more power as well as be able to carry larger items.</p>
+}}
+
+{{Skill_detail
+ |skill=Weathering
+ |description=Increase your ability to weather damage.
+ |lessons=
+ |syntax=WEATHERING
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=Your budding control over your body will assist you in weathering the storm of life by increasing your constitution by one point.
+}}
+
+{{Skill_detail
+ |skill=Seek
+ |description=Order your bird to seek out an adventurer.
+ |lessons=
+ |syntax=EAGLE SEEK <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Using this ability, you may order your eagle to seek out another adventurer. Your eagle must be either on the ground or on your wrist to use this ability.
+}}
+
+{{Skill_detail
+ |skill=Glance
+ |description=See as your companion sees.
+ |lessons=
+ |syntax=EAGLE GLANCE
+ |required=
+ |target=Room
+ |cooldown=
+ |detail=Look through the eyes of your eagle, seeing its immediate
+surroundings(*).
+* Does not work if it is in someone's inventory or similar.
+}}
+
+{{Skill_detail
+ |skill=Block
+ |description=Obstructing departure with your body.
+ |lessons=
+ |syntax=BLOCK <direction><br>UNBLOCK
+ |required=
+ |target=Room
+ |cooldown=
+ |detail=This ability will allow you to block a particular direction, preventing normal movement in that direction.
+}}
+
+{{Skill_detail
+ |skill=Follow
+ |description=Ever watchful.
+ |lessons=
+ |syntax=EAGLE FOLLOW <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=You have established enough of a rapport with your eagle now that you may order it to follow, from the air, a particular adventurer. When the eagle loses the adventurer, generally because the adventurer goes indoors, it will stop following. 
+}}
+
+{{Skill_detail
+ |skill=Gripping
+ |description=Grip your wielded items in a deathlock.
+ |lessons=
+ |syntax=GRIP<br>RELAX GRIP
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=While using this ability, you will prevent items from being knocked out of your grip.
+}}
+
+{{Skill_detail
+ |skill=Barge
+ |description=Barging your opponents.
+ |lessons=
+ |syntax=BARGE <target> <direction>
+ |required=
+ |target=Adventurers
+ |cooldown=4.00 seconds of balance
+ |detail=This ability will barge an adventurer to the direction you choose. To start the ability, you must be in a room adjacent to the room where the target adventurer resides, and you must choose to barge him in a direction that wouldn't take him into the room you are in. So, for instance, say that Isildur is in a room to the north of me, and that this room has another exit to the ne. I would do BARGE ISILDUR NE.
+}}
+
+{{Skill_detail
+ |skill=Battlecry
+ |description=Stun a target with the power of your voice.
+ |lessons=
+ |syntax=BATTLECRY <target>
+ |required=
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Your battle cry is so powerful that when directed against another, it will blast him to the ground and stun him, provided he isn't deaf.
+}}
+
+{{Skill_detail
+ |skill=Bowmanship
+ |description=Use of the valued projectile weapon.
+ |lessons=
+ |syntax=SHOOT <target> <direction>
+ |required=
+ |target=Adventurers
+ |cooldown=3.50 seconds of balance
+ |detail=Use one of the various bows to shoot an adventurer in a line-of-sight location from you.
+}}
+
+{{Skill_detail
+ |skill=Quivers
+ |description=Take full advantage of your quiver.
+ |lessons=
+ |syntax=ENVENOM ARROW[S] [number of arrows] <colour> <venom><br>INSPECT QUIVER<br>DYE <number of arrows> ARROW[S] <colour><br>SWITCH <colour>
+ |required=
+ |target=
+ |cooldown=
+ |detail=Your mastery of quivers allows you to dye and envenom arrows from vials in your possession to be stored in your quiver.<p>When envenoming arrows, if a number of arrows is provided, you will dye and envenom that number of undyed arrows the colour and venom selected. Otherwise, you will coat all your arrows of the selected colour with the venom of your choice. </p><p>Inspecting your quiver will show you how many of each colour arrow you possess and what venoms they have been covered with. </p><p>Further, you may dye any number of undyed arrows the colour of your choice. However, you will find yourself unable to do so if you have arrows of that colour envenomed within your quiver.</p><p>Colours you may use are red, blue, purple, green, black, white, grey, orange, gold, and silver.</p><p>To switch to using a specific colour of arrow, simply SWITCH <colour>. If you wish to switch back to using undyed arrows, simply do SWITCH NORMAL.</p>
+}}
+
+{{Skill_detail
+ |skill=Wind
+ |description=Further increase your accuracy through wind compensation.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=Once you have this ability, your accuracy with bowmanship will be increased.
+}}
+
+{{Skill_detail
+ |skill=Aiming
+ |description=Increase your accuracy in shooting.
+ |lessons=
+ |syntax=AIM <target> <direction>
+ |required=
+ |target=
+ |cooldown=
+ |detail=Increase the accuracy of your shooting.
+}}
+
+{{Skill_detail
+ |skill=Sturdiness
+ |description=Standing firm against attempts to move you.
+ |lessons=
+ |syntax=STAND FIRM
+ |required=
+ |target=Self
+ |cooldown=3.00 seconds of balance
+ |detail=By concentrating on increasing your mass, you are able to gain immunity from most attempts to move you against your will. It is lost when you next use balance or equilibrium.
+}}
+
+{{Skill_detail
+ |skill=Deliver
+ |description=Small things can be salvation.
+ |lessons=
+ |syntax=EAGLE DELIVER [group] TO <lucky recipient>
+ |required=
+ |target=Self
+ |cooldown=3.00 seconds of balance
+ |detail=With this ability, you may order your eagle to deliver a small item or
+group of items from your inventory into the inventory of another adventurer.
+}}
+
+{{Skill_detail
+ |skill=Resistance
+ |description=Reduce the damage taken from magical attacks.
+ |lessons=
+ |syntax=RESISTANCE
+ |required=
+ |target=
+ |cooldown=
+ |detail=Due to your increased bodily control, you are able to reduce the damage from magical attacks.
+}}
+
+{{Skill_detail
+ |skill=Crossbows
+ |description=A powerful projectile weapon.
+ |lessons=
+ |syntax=SHOOT <target> <direction>
+ |required=
+ |target=Adventurers
+ |cooldown=3.50 seconds of balance
+ |detail=The crossbow is more powerful, but less accurate, than the longbow.
+}}
+
+{{Skill_detail
+ |skill=Clotting
+ |description=Reduce the level of your bleeding.
+ |lessons=
+ |syntax=CLOT
+ |required=60 mana
+ |target=Self
+ |cooldown=
+ |detail=This will permit you to partially clot your bleeding.
+}}
+
+{{Skill_detail
+ |skill=Fitness
+ |description=Controlling your breathing.
+ |lessons=
+ |syntax=FITNESS
+ |required=
+ |target=Self
+ |cooldown=3.00 seconds of balance
+ |detail=With your mastery of your own body, you are able to purge yourself of the asthma affliction.
+}}
+
+{{Skill_detail
+ |skill=Rage
+ |description=Throw off pacifying afflictions.
+ |lessons=
+ |syntax=RAGE
+ |required=150 mana
+ |target=Self
+ |cooldown=
+ |detail=This ability will allow you to cure certain pacifying afflictions, notably those that are normally cured by eating bellwort.
+}}
+
+{{Skill_detail
+ |skill=Retrieve
+ |description=Secure it in the talons.
+ |lessons=
+ |syntax=EAGLE RETRIEVE <item>
+ |required=
+ |target=
+ |cooldown=
+ |detail=Using this ability will cause your eagle to try and pick up an object in
+the room that it is in, and deliver it back to you.
+}}
+
+{{Skill_detail
+ |skill=Startle
+ |description=The steed is often an easier target.
+ |lessons=
+ |syntax=EAGLE STARTLE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=This ability will allow your eagle to startle an opponent's steed, tossing the poor rider off. Note that this works regardless of whether your opponent is on the ground, in the trees, or flying. You simply need be in the same room, and the eagle will fly to the correct elevation to startle your target's mount.
+}}
+
+{{Skill_detail
+ |skill=Track
+ |description=There is no hiding from the light.
+ |lessons=
+ |syntax=EAGLE TRACK <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=This ability is an improved version of eagle follow. With track, even if the eagle temporarily loses its target, because the target went indoors, the eagle will continue to follow the target once the target comes back outside.
+}}
+
+{{Skill_detail
+ |skill=Defend
+ |description=Attempt to protect someone else with swordwork.
+ |lessons=
+ |syntax=DEFEND <target>UNDEFEND
+ |required=
+ |target=Adventurers
+ |cooldown=4.00 seconds of balance
+ |detail=Upon using this ability, you will attempt to take much of the damage from the blows that might otherwise harm the adventurer you are defending.
+}}
+
+{{Skill_detail
+ |skill=Observe
+ |description=A bird's eye view.
+ |lessons=
+ |syntax=EAGLE OBSERVE
+ |required=
+ |target=Room
+ |cooldown=
+ |detail=If your eagle is flying, it will report back to you the health levels of everyone who is in the local area and outdoors.
+}}
+
+{{Skill_detail
+ |skill=Darkbows
+ |description=Using the infamous darkbows of Hashan.
+ |lessons=
+ |syntax=SHOOT <target> <direction>
+ |required=
+ |target=Adventurers
+ |cooldown=3.50 seconds of balance
+ |detail=The famed darkbows of Hashan are both expensive and powerful. Only slightly less powerful than a crossbow, they are far more accurate.
+}}
+
+{{Skill_detail
+ |skill=Nightrender.
+ |description=To tear the Dark asunder.
+ |syntax=EAGLE NIGHTRENDER
+ |required=
+ |target=
+ |cooldown=
+ |detail=Equip your eagle with steel talons, and set it loose upon the enemies of Creation(*).
+* Significantly increases your eagle's offensive capabilities.
+}}
+
+{{Skill_detail
+ |skill=Engage
+ |description=Damage a cowardly opponent.
+ |lessons=
+ |syntax=ENGAGE <target><br>DISENGAGE [<target>]
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=2.50 seconds of equilibrium
+ |detail=There is nothing more despicable and dishonourable than a coward, and this ability will allow you to punish cowards, as is their due. Once you have engaged an adventurer, if he is otherwise unhindered and tries to leave the room, you will get in an extra strike, whether you have equilibrium and balance or not.
+}}
+
+{{Skill_detail
+ |skill=Swiftmount
+ |description=Mount or vault your steeds at increased speed.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=You have reached such a level of training in the arts of Chivalry that you regain balance while Mounting a steed much more rapidly. Furthermore, if you have the ability Vault in Riding, you can use it without any loss of balance at all.
+}}
+
+{{Skill_detail
+ |skill=Fury
+ |description=Temporarily raise your strength.
+ |lessons=
+ |syntax=FURY [ON/OFF]<br>RELAX FURY
+ |required=
+ |target=Self
+ |cooldown=2.00 seconds of equilibrium
+ |detail=This will allow you to temporarily raise your strength with 2 points, for no more than a total of 1/4th of each Achaean day. It can be used once a day without cost, but if you turn it off and turn it back on within the same Achaean day, you will incur a cost of 500 willpower each time you turn it back on. Your endurance losses will be significantly higher while Fury is active.
+}}
+
+[[Category:Skills]]

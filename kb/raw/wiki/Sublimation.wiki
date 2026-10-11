@@ -1,0 +1,408 @@
+The first boon offered by the [[Tlalaiad|Genesis]], earned by the bravery of [[Hashan]]'s leadership in 798 AF, the oft-whispered of [[Wellspring]] beneath the city is no longer a locked and guarded secret, but remains guarded nonetheless. The Alchemists who dare to experiment with the residual power of the ancient [[Proteus|Protean]] star have cast off the limiting truths presented by the [[Cauda Pavonis]] and tread paths of study never walked before.
+
+Sublimation is an alternative field to Formulation, practiced by those capable of drawing on Hashan's Wellspring reservoir of energy. Its arts are centered around manipulation of forces, alignment of energies, and the oft-misunderstood field of substantiation.
+ 
+The school of '''Manipulation''' operates upon bending fundamental forces to one's will, be those concrete forces such as gravity or the more abstract forces such as probability.
+ 
+Alternatively, the school of '''Alignment''' does not waste unnecessary effort on altering their environment. Instead, their studies focus on aligning events just so as to ensure that their victory is inevitable. Though most students pride themselves on subtlety, a master of this field is far from. 
+
+Finally, those that study under '''Substantiation''' are not content with simply altering the world around them. Indeed, they bend their attention to a far more concerning line of study: that of imposing their own sense of reality over what already exists. To be a master of Substantiation is to see the world as it is and find it wanting.
+
+Alchemists of [[Sapience]] have diverged into two distinct paths. The traditional alchemical practice of [[Formulation]] and the field of Sublimation. You may select your field once every 24 hours to swap between the two. 
+
+The skill of '''Sublimation''' is available to members of the [[Alchemist]] [[class]], along with [[Alchemy]] and [[Physiology]]. Instead of sublimation, an Alchemist may choose the skill of [[Formulation]].
+
+==Abilities in Sublimation==
+{{Skill_detail
+ |skill=Schools
+ |description=Knowledge is the path to greatness.
+ |lessons=
+ |syntax=SCHOOLS SHOW<br>SCHOOLS SELECT  <school> <APPRENTICE/JOURNEYMAN/MASTER><br>SCHOOLS RESIGN
+ |required=
+ |target=
+ |cooldown=
+ |detail=The three schools of research surrounding the application of the Wellspring are Manipulation, Substantiation, and Alignment.
+
+Manipulation focusses upon the manipulation of fundamental and abstract forces. While the lower feats of this school of study tend to be rather overt, the higher abstract abilities are as subtle as they are deadly.
+
+Substantiation focusses upon imposing one's will upon reality, and using sufficient energy to simply make that will manifest. Though often looked down on as a rather brute force approach, the results cannot be argued with. Typically, the lower feats of this school focus upon highly defensive measures, though Master's are whispered to have learned of truely destructive applications.
+
+Meanwhile, the school of Alignment aims to minimise wastefulness by focussing upon shifting what is already present into causing results. Extremely overt, this school of study is well equipped for causing devastation.
+
+You may only be a master, journeyman, or apprentice of one school. Choose wisely, as this will dictate which abilities you have available.
+}}
+
+{{Skill_detail
+ |skill=[[#Tap|Tap]]
+ |description=Tap the power of the Wellspring.
+ |lessons=
+ |syntax=TAP WELLSPRING
+ |required=
+ |target=
+ |cooldown=4.00 seconds of balance
+ |detail=Due to long exposure, you have learned the process of tapping the Wellspring of energy which lays beneath the city of Hashan. Every so often your reserves of energy shall refill from the Wellspring passively.
+
+You may enact the process actively yourself, though you may only do this so often or risk catastrophic harm to yourself.
+}}
+
+{{Skill_detail
+ |skill=[[#Field|Field]]
+ |description=Choose your field of study.
+ |lessons=
+ |syntax=FIELD SELECT <FORMULATION/SUBLIMATION>
+ |required=
+ |target=
+ |cooldown=24 hours
+ |detail=Alchemists of Sapience have diverged into two distinct paths. The
+traditional alchemical practice of Formulation and the field of
+Sublimation. You may select your field once every 24 hours to swap
+between the two, and at a cost of 100 lessons(*).
+
+* The first switch is free.
+** ADMINISTRATIVE NOTE: Sublimation is controlled by the City of Hashan.
+If you are an enemy, might be an enemy, or have hostile intent against this organisation we strongly advise against selecting this as your field. They can and will remove your ability to functionally utilise this skill.
+}}
+
+{{Skill_detail
+ |skill=[[#Residual|Residual]]
+ |description=Waste not even the scraps.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=Those that have dedicated themselves to the study of the Wellspring shall find that specialisation comes at a cost. With their focus upon the various schools of Sublimation, their grasp of the biological sciences falter, reducing their ability to utilise the physiology inundate ability substantially, as follows:
+* Choleric, melancholic, and sanguine's affects are halved.
+* Phlegmatic will no longer give weariness at all, and the progression is changed to lethargy, anorexia, slickness at 2, 6, and 8 tempers respectively.
+
+However, such a loss is a minor inconvenience at best. After learning to utilise residual energy in their everyday lives, Alchemists may empower their wrack and truewrack attacks to give the following passive benefits:
+* Choleric: wrack and truewrack attempts will deal unblockable damage.
+* Melancholic: wrack and truewrack attempts shall deal mana damage.
+* Sanguine: wrack and truewrack attempts shall incur bleeding.
+* Phlegmatic: above two tempers, your truewrack attempts will no longer miss due to clumsiness. Above five tempers, your truewrack attempts will have a reduced balance cost (increasing for each stack above five).
+
+Note that all residual effects scale to the number of tempers of the relevant humour present on the target.
+
+NOTE: should your connection to the Wellspring be severed, the passive benefits will also no longer function.
+
+
+}}
+
+{{Skill_detail
+ |skill=[[#Overdraw|Overdraw]]
+ |description=A pragmatic price.
+ |lessons=
+ |syntax=MANIPULATE OVERDRAW
+ |required=
+ |target=
+ |cooldown=3.00 seconds of balance
+ |detail=You may overdraw from the Wellspring when carrying out an act of manipulation, substantiation, or alignment. Doing so is very taxing and will cause you to be unable to tap the Wellspring for a time (passively and actively). See the relevant abilities for the effects of overdrawing in a given case.
+
+* To overdraw, append the word OVERDRAW to the end of an action. For instance, MANIPULATE SOLAR <target> OVERDRAW.
+}}
+
+{{Skill_detail
+ |skill=Potentiate
+ |description=Driven beyond.
+ |lessons=
+ |syntax=POTENTIATE WELLSPRING
+ |required=
+ |target=Self
+ |cooldown=1.00 seconds of balance
+ |detail=Utilising the raw potential of the Wellspring, you can drive your body to its pinnacle(*), though at great risk to your well-being(**).<p>* While benefitting from the potentiate defence, your physiological abilities against denizens will be performed 33% faster, though they will deal reduced damage as a consequence.<br>** Using this skill will deal damage to you.</br>
+}}
+
+==Schools in Sublimation==
+
+===Substantiation===
+{{Skill_detail
+ |skill=Transience
+ |description=Deception is the first step.
+ |lessons=
+ |syntax=SUBSTANTIATE TRANSIENCE <BUCKET/SHOVEL/TINDERBOX>
+ |required=5% Wellspring Energy
+ |target=Self 
+ |cooldown=5.00 seconds of balance
+ |detail=A training exercise typically taught to those who aspire to the school of Substantiation, the student focusses upon tricking reality into acknowledging the presence of something that is not. Basic necessities may be created in this way, though they are simply pale imitations and will rapidly fade as reality reasserts itself(*).
+
+Given the basic nature of this exercise, overdrawing serves no purpose.
+* These decay very quickly.
+}}
+
+{{Skill_detail
+ |skill=Identity
+ |description=The masks we wear.
+ |lessons=
+ |syntax=SUBSTANTIATE IDENTITY <target>
+ |required=1.50% Wellspring Energy
+ |target=Self
+ |cooldown=3.00 seconds of word balance
+ |detail=The least of the techniques from the school of Substantiation, you may impose your will upon reality, fooling a casual observation into believing you are someone you are not(*).
+
+Overdraw effect: this identity shall periodically shift.
+* Similar to the chameleon tattoo.
+}}
+
+{{Skill_detail
+ |skill=Dispersal
+ |description=Before its even close.
+ |lessons=
+ |syntax=SUBSTANTIATE DISPERSAL <type1>
+ |required=3% Wellspring Energy
+ |target=Self
+ |cooldown=3.00 seconds of balance
+ |detail=Impose your will upon reality, causing certain forms of energy entering your location to be dispersed when focussed upon you(*).
+
+Valid types are cutting, blunt, fire, cold, poison, electricity, psychic, or asphyxiation.
+
+Overdraw effect: you may specify a second type of energy to disperse, and the effect remains for longer.
+
+* You may reduce the damage taken by that type for yourself in the location.
+}}
+
+{{Skill_detail
+ |skill=Sympathy
+ |description=Sympathetic connections are harder than they seem.
+ |lessons=5% Wellspring Energy
+ |syntax=SUBSTANTIATE SYMPATHY <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of damage
+ |detail=Establish a sympathetic connection with a target, and after 12 seconds a portion of all damage they took in that time shall be gifted to you in a surge of healing.
+
+Overdraw effect: time drops to 6 seconds.
+}}
+
+{{Skill_detail
+ |skill=Copies
+ |description=One is just a number, after all.
+ |lessons=
+ |syntax=SUBSTANTIATE COPIES
+ |required=6% Wellspring Energy
+ |target=Adventurers and room
+ |cooldown=3.00 seconds of word balance
+ |detail=The concept of individuality is difficult to subvert, but a student of the school of Substantiation is no stranger to such complexities. Substantiate copies into existence and images of all that stand in your location excepting you shall be formed(*).
+
+Overdraw effect: targets you as well.
+
+* Creates a reflection.
+}}
+
+{{Skill_detail
+ |skill=Radiation
+ |description=Annihilation unleashed.
+ |lessons=
+ |syntax=SUBSTANTIATE RADIATION
+ |required=25% Wellspring Energy
+ |target=Room
+ |cooldown=3.00 seconds of word balance
+ |detail=The coming of the Morning Star was an event so catastrophic that few incidents since have come close to displaying such pure destructive power. Though a full replication would be both impossible and the height of stupidity, masters of the school of Substantiation have learned to bring but a sliver of that which was back into reality. Upon initiation, you may do nothing, and after a short delay significant damage shall be inflicted upon all in your location. A short while after that, more damage will be inflicted, and if your channeling is permitted to reach its culmination a third time. Each strike is significantly more powerful from the last and indiscriminate(*). If your working reaches its final phase, all in the area will be totally blinded by the flash for a time. This working may only be enacted by an individual every so often, and also may not be repeatedly called forth in the same location.
+
+Overdraw effect: the ticks happen closer together.
+
+* The first two ticks do not hit the caster. The last one does.
+}}
+
+{{Skill_detail
+ |skill=Impose
+ |description=Your will is absolute.
+ |lessons=
+ |syntax=SUBSTANTIATE IMPOSITION <target>
+ |required=20% Wellspring Energy
+ |target=Self
+ |cooldown=4.00 seconds of balance
+ |detail=The greatest master's of the school of Substantiation have reached such a point in their ability to manipulate reality that they may cast their will out across the entire local area, halving the cost of all Sublimation abilities upon their reserves of energy for a time.
+
+Overdraw effect: all Sublimation practitioners shall benefit from your imposition in addition to yourself.
+}}
+
+===Manipulate===
+{{Skill_detail
+ |skill=Internal
+ |description=To manipulate energy is dangerous work.
+ |lessons=
+ |syntax=MANIPULATE INTERNAL
+ |required=2% Wellspring Energy
+ |target=Self
+ |cooldown=2.50 seconds of balance
+ |detail=The school of Manipulation is dangerous, and its training exercise reflects this. Prospective students are expected to raise their own internal temperature to gain a grasp of the process of bending energy to their will. Raising one's temperature can be utilised to cure frozen and similar effects(*).
+
+Due to the relative simplicity of this exercise, overdrawing upon the Wellspring serves no use.
+
+* This can only be done once every ten seconds.
+}}
+
+{{Skill_detail
+ |skill=Thermal
+ |description=A slight shunting of heat.
+ |lessons=
+ |syntax=MANIPULATE THERMAL
+ |required=4% Wellspring Energy
+ |target=Room
+ |cooldown=3.00 seconds of balance
+ |detail=Thermal energy is surprisingly difficult to manipulate directly. Nevertheless, shunting it out of a location is simple enough. Drain a location of heat and cause all within to be given a level of freeze.
+
+Overdraw effect: destroys all firewalls in the current location.
+}}
+
+{{Skill_detail
+ |skill=Gravity
+ |description=The fundamental force.
+ |lessons=
+ |syntax=MANIPULATE GRAVITY <target> [overdraw target]
+ |required=2.50% Wellspring Energy
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=Manipulate the fundamental force of gravity, increasing it upon an enemy and sending them prone.
+
+Overdraw effect: on cast this will also throw a random person in the room into the sky if possible (neither you or the original target). You may alternatively specify a target (MANIPULATE GRAVITY PLAYER1 PLAYER2 OVERDRAW) and the second player specified will be hit with the overdraw effect if they are a viable candidate.
+}}
+
+{{Skill_detail
+ |skill=Solar
+ |description=An intermediary form of energy.
+ |lessons=
+ |syntax=MANIPULATE SOLAR <target>
+ |required=6% Wellspring Energy
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=Solar energy is easy to manipulate, but exceptionally hard to direct. To achieve such is a milestone in the school of Manipulation. Direct a ray of solar energy at a target, and they shall be struck down with sensitive skin for the next five seconds, or until they take a blow of sufficient damage(*).
+
+Overdraw effect: even when the Sun is not visible in the sky you may channel its power. Additionally, it shall do damage in this case.
+
+* A blow that deals over ten percent of the target's health shall end this effect immediately (though that blow shall still be granted the sensitive bonus).
+}}
+
+{{Skill_detail
+ |skill=Gravitywell
+ |description=Control the distance.
+ |lessons=
+ |syntax=MANIPULATE GRAVITYWELL
+ |required=5% Wellspring Energy
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=Manipulate the fundamental forces and bring a gravitywell into being. All in adjacent rooms will be pulled inwards upon creation.
+
+Overdraw effect: the well will destabilise four seconds after creation, having a chance to throw all those in the location from the well's room.
+}}
+
+{{Skill_detail
+ |skill=Probability
+ |description=The abstract can be cruel.
+ |lessons=
+ |syntax=MANIPULATE PROBABILITY
+ |required=12% Wellspring Energy
+ |target=Room
+ |cooldown=3.00 seconds of balance
+ |detail=Only a true master can manipulate the abstract. Manipulating probability in a location shall create a field that, when an individual is resurrected by the grace of the stars, another person in the location will have a chance to have their starburst defence stripped. Though this is relatively indiscriminate, the attunement with the Wellspring that Hashani have cultivated means their deaths shall not trigger this effect, and neither shall their starbursts be stripped.
+
+This is a soft channel, requiring that you stay in the room to finalise the field's creation, but may perform actions while doing so.
+
+Overdraw effect: the windup duration to create the field is halved.
+}}
+
+{{Skill_detail
+ |skill=Spatial
+ |description=The ultimate form of Manipulation.
+ |lessons=
+ |syntax=MANIPULATE SPATIAL 
+ |required=10% Wellspring Energy
+ |target=Room
+ |cooldown=3.00 seconds of balance
+ |detail=To attempt to manipulate the fundamental laws of space and time is a formidable task indeed. Those of the school of Manipulation know well the dangers of the latter, and have mastered the former. You may twist space in a location just so, that any attempting to leave rooms adjacent to the distorted location via magical means of travel will have the potential to fail said attempts.
+
+Overdraw effect: the duration of the effect is increased.
+}}
+
+===Alignment===
+{{Skill_detail
+ |skill=Placement
+ |description=Every step an artform.
+ |lessons=
+ |syntax=ALIGN PLACEMENT
+ |required=1% Wellspring Energy
+ |target=Self
+ |cooldown=3.00 seconds of balance
+ |detail=This lowest of the alignment abilities is a relatively simple task in theory, but rather difficult in practice. Considered ideal for novices to the school, one who masters this process shall be able to place their feet just so, and will not trigger the next trap that they would step into upon movement.
+
+Due to the function of this as a training ability, overdrawing power from the Wellspring serves no purpose.
+}}
+
+{{Skill_detail
+ |skill=Combustion
+ |description=A spark in the right place and moment.
+ |lessons=
+ |syntax=ALIGN COMBUSTION
+ |required=1.50% Wellspring Energy
+ |target=Room
+ |cooldown=3.00 seconds of balance
+ |detail=Align matters just so that a flame ignites, radiating outward from you and setting all others in the location ablaze. They will also be dealt damage, and this damage is increased substantially against an already ablaze target at the time of cast.
+
+Overdraw effect: the flames will ignite any clouds of hunger-inducing gas in the location, destroying them.
+}}
+
+{{Skill_detail
+ |skill=Weatherpatterns
+ |description=So many options.
+ |lessons=
+ |syntax=ALIGN WEATHERPATTERNS 
+ |required=4% Wellspring Energy
+ |target=Room
+ |cooldown=3.00 seconds of balance
+ |detail=Align the weather just so that a freak snowstorm occurs.
+
+Overdraw effect: cause the sun to blaze down upon adjacent locations, boiling away unnatural waters.
+}}
+
+{{Skill_detail
+ |skill=Frequency
+ |description=Just the right pitch.
+ |lessons=
+ |syntax=ALIGN FREQUENCY <target>
+ |required=4.5% Wellspring Energy
+ |target=Room
+ |cooldown=3.20 seconds of balance
+ |detail=Align sound in a location just so to cause a crystal vibration or musical harmonic(*) to shatter.
+Overdraw effect: hit a vibration/harmonic in an adjacent location.
+
+* Vibes are always targeted before harmonics.
+}}
+
+{{Skill_detail
+ |skill=Eruption
+ |description=Delayed devastation.
+ |lessons=
+ |syntax=ALIGN ERUPTION <target>
+ |required=5% Wellspring Energy
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=This act of alignment will cause a minor volcanic eruption beneath the feet of your target, dealing damage. This takes some time to enact, but does not take concentration. You may perform other actions while the eruption is being prepared. Note that you must start this within three rooms of your target, but it shall strike them on completion so long as they remain within the same area as they were on initiation.
+
+Overdraw effect: the eruption will complete more swiftly.
+}}
+
+{{Skill_detail
+ |skill=Flashstep
+ |description=One with energy.
+ |lessons=
+ |syntax=ALIGN FLASHSTEP <direction>
+ |required=5% Wellspring Energy
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=Only a master of the school of Alignment would be so bold as to risk configuring their own nature. The flashstep allows you to align yourself so utterly with the energy of the world that for the briefest instant, you are one and the same. Transverse to any adjacent location after a short delay: only being prone after initiation will prevent your egress.<p>Overdraw effect: the windup takes a second longer to complete but will not be stopped by being prone.</p><p>A short balance loss will be incurred when flashstep resolves successfully.</p>
+}}
+
+{{Skill_detail
+ |skill=Nocturne
+ |description=Annihilate them.
+ |lessons=
+ |syntax=ALIGN NOCTURNE <target1> <target2> <target3>
+ |required=15% Wellspring Energy
+ |target=Adventurers
+ |cooldown=5.00 seconds of balance
+ |detail=Long has the legend of Eternal Night been poured over by scholars. This greatest act of the school of Alignment attempts to replicate that feat, even if only in part. Utilising three anchor points, configure things just so, and bring down a threefold meteor strike against your foes. Any that remain at the culmination shall be slain outright.
+
+Overdraw effect: the channel is reduced from twelve seconds to ten.
+}}
+
+[[Category:Skills]]

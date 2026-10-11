@@ -1,0 +1,432 @@
+Crystalism is a powerful skill which involves using magical crystals to create vibrations. These vibrations may be single-use or, more commonly, persistent and room-based. In order to set up a vibration, one must first obtain crystals from the [[Master Crystal]] of their [[:category:houses|House]] using the refine ability. Once a Magi has crystals they can spin them and finally embed various powerful vibrations. Some vibrations will affect only the Magi, some will affect only the Magi's enemies, and some will affect everyone in the room.
+
+Those who do not hold membership in a [[:category:houses|House]] which owns a [[Master Crystal]] will find difficulty using some abilities within this skill, and will have to go to the public [[Master Crystal]] in the crystal caverns of [[Tasur'ke]].
+
+The skill of '''Crystalism''' is available to members of the [[Magi]] [[class]], along with [[Elementalism]] and [[Artificing]].
+
+==Abilities in Crystalism==
+{{Skill_detail
+ |skill=Refine
+ |description=Refine a piece of crystal out of the Master.
+ |lessons=0
+ |syntax=REFINE [1-10] <shape>
+ |required=50 mana
+ |target=
+ |cooldown=1.00 seconds of balance
+ |detail=This ability must be done in the presence of the Master Crystal. It will refine one of the possible crystal shapes from the Master, reducing the Master Crystal by one facet.<br>Possible shapes are:<table style="border-collapse:collapse"><tr><td style="width:75px;">Pyramid</td><td style="width:75px;">Torus</td><td style="width:75px;">Pentagon</td></tr><tr><td style="width:75px;">Cylinder</td><td style="width:75px;">Cube</td><td style="width:75px;">Diamond</td></tr><tr><td style="width:75px;">Sphere</td><td style="width:75px;">Polyhedron</td><td style="width:75px;">Spiral</td></tr><tr><td style="width:75px;">Egg</td><td style="width:75px;">Disc</td></tr></table>In order to replenish the facets of the Master Crystal, you must find pearls, and FOLD PEARL INTO CRYSTAL.
+}}
+
+{{Skill_detail
+ |skill=Fold
+ |description=Fold pearls into a master crystal.
+ |lessons=0
+ |syntax=FOLD PEARL INTO <master crystal>
+ |required=
+ |target=
+ |cooldown=
+ |detail=The ability to fold pearls into a master crystal allows a magi to refine for the crystals necessary for the crystal arts.
+}}
+
+{{Skill_detail
+ |skill=Embed
+ |description=Embed crystalline vibrations.
+ |lessons=0
+ |syntax=EMBED <vibration>
+ |required=300 mana
+ |target=Room
+ |cooldown=3.10 seconds of equilibrium
+ |detail=Once you embed a vibration, it will shortly activate.
+}}
+
+{{Skill_detail
+ |skill=Touch
+ |description=Determine how many facets you may refine.
+ |lessons=0
+ |syntax=TOUCH CRYSTAL
+ |required=
+ |target=
+ |cooldown=
+ |detail=When done in the presence of a Master Crystal, this will tell you how many facets it has.
+}}
+
+{{Skill_detail
+ |skill=Spin
+ |description=Set crystals to spinning.
+ |lessons=0
+ |syntax=SPIN <crystal>
+ |required=
+ |target=
+ |cooldown=
+ |detail=Set a crystal to spinning.
+}}
+
+{{Skill_detail
+ |skill=Dampen
+ |description=Attempt to dampen a vibration, destroying it.
+ |lessons=0
+ |syntax=DAMPEN <vibration>
+ |required=
+ |target=Room
+ |cooldown=4.00 seconds of balance
+ |detail=This ability gives you the power to destroy a vibration. You may only destroy vibrations that you are capable of embedding.
+}}
+
+{{Skill_detail
+ |skill=Vibes
+ |description=See what vibrations are in a room.
+ |lessons=0
+ |syntax=VIBES or VIBRATIONS
+ |required=
+ |target=Room
+ |cooldown=1.00 seconds of equilibrium
+ |detail=This ability will show you what vibrations are in a room.
+}}
+
+{{Skill_detail
+ |skill=Dissipate
+ |description=Attack the mana of your enemies.
+ |lessons=6
+ |syntax=EMBED DISSIPATE
+ |required=300 mana
+ |shapes=Pentagon 
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This vibration will attack the mana of your enemies.
+}}
+
+{{Skill_detail
+ |skill=Palpitation
+ |description=Cause small heart attacks in your enemies.
+ |lessons=15
+ |syntax=EMBED PALPITATION
+ |required=300 mana
+ |shapes=Cylinder 
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This vibration will cause small heart attacks in your enemies, doing damage.
+}}
+
+{{Skill_detail
+ |skill=Heat
+ |description=Fill a room with soothing warmth.
+ |lessons=33
+ |syntax=EMBED HEAT
+ |required=300 mana
+ |shapes=Pyramid
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This vibration will heat up the room around you, counteracting the normal effects of cold weather.
+}}
+
+{{Skill_detail
+ |skill=Alarm
+ |description=Be alerted to movements of your enemies.
+ |lessons=66
+ |syntax=EMBED ALARM
+ |required=300 mana
+ |shapes=Spiral
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This vibration will notify you whenever one of your enemies leaves or enters the room it is in.
+}}
+
+{{Skill_detail
+ |skill=Tremors
+ |description=Cause ground-shaking quakes.
+ |lessons=88
+ |syntax=EMBED TREMORS
+ |required=300 mana
+ |shapes=Disc and Egg
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=A low, rumbling vibration, this is powerful enough to knock non-levitating enemies off of their feet. If the adventurer is levitating, it will strip the defence. 
+}}
+
+{{Skill_detail
+ |skill=Reverberation
+ |description=Protect your vibrations against some attacks.
+ |lessons=133
+ |syntax=EMBED REVERBERATION
+ |required=300 mana
+ |shapes=Disc and Pentagon
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This vibration will protect your other vibrations in the room against most things which might destroy them, except the Dampen ability and the Retardation vibration.
+}}
+
+{{Skill_detail
+ |skill=Sonicportal
+ |description=Open a portal to someone.
+ |lessons=177
+ |syntax=EMBED SONICPORTAL <target>
+ |required=300 mana
+ |shapes=Sphere and Torus
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=When you embed this vibration, a portal will appear soon after leading between you and your target.
+}}
+
+{{Skill_detail
+ |skill=Adduction
+ |description=Suck those around you into your room.
+ |lessons=222
+ |syntax=EMBED ADDUCTION
+ |required=300 mana
+ |shapes=Disc and Polyhedron
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=The adduction vibration will attempt to pull in people from adjacent locations.
+}}
+
+{{Skill_detail
+ |skill=Crystalhome
+ |description=Transport yourself back to the Master Crystal.
+ |lessons=288
+ |syntax=CRYSTALHOME
+ |required=4.00 second delay
+ |target=Self
+ |cooldown=
+ |detail=This ability will allow you to return automatically to your Master Crystal, with a short delay.<br>Note:<br>- You must belong to a House with a Master Crystal and be at least of House Rank 3<br>- Targossas and Eleusis may access their Master Crystal at City Rank 2
+}}
+
+{{Skill_detail
+ |skill=Harmony
+ |description=A soothing, healing vibration.
+ |lessons=333
+ |syntax=EMBED HARMONY<br>TUNE HARMONY HEALING{{!}}RESTORATION
+ |required=300 mana
+ |shapes=Egg and Sphere
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This vibration will heal either your afflictions or health and mana. If you TUNE to HEALING, it shall do the former; if you Tune to RESTORATION, it shall do the latter.
+}}
+
+{{Skill_detail
+ |skill=Creeps
+ |description=Cause fear in your enemies.
+ |lessons=377
+ |syntax=EMBED CREEPS
+ |required=300 mana
+ |shapes=Torus
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This unnerving vibration will cause shyness in your enemies.
+}}
+
+{{Skill_detail
+ |skill=Silence
+ |description=A sound-negating vibration.
+ |lessons=422
+ |syntax=EMBED SILENCE
+ |required=300 mana
+ |shapes=Egg
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This vibration alters itself constantly so as to cancel out most sound in the room.
+}}
+
+{{Skill_detail
+ |skill=Revelation
+ |description=Reveal those around you who may be concealed.
+ |lessons=466
+ |syntax=EMBED REVELATION
+ |required=300 mana
+ |shapes=Cube and Diamond
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This vibration will cause concealed adventurers to be revealed.
+}}
+
+{{Skill_detail
+ |skill=Grounding
+ |description=Root yourself to the ground.
+ |lessons=511
+ |syntax=EMBED GROUNDING
+ |required=300 mana
+ |shapes=Sphere
+ |target=Self
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This vibration will root you to the ground, and make it difficult for you to be moved or move, provided you are not in a watery environment.
+}}
+
+{{Skill_detail
+ |skill=Oscillate
+ |description=Discordant music to cause amnesia.
+ |lessons=555
+ |syntax=EMBED OSCILLATE
+ |required=300 mana
+ |shapes=Diamond
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=By creating neurologically disruptive vibrations, this ability will periodically give amnesia to your enemies.
+}}
+
+{{Skill_detail
+ |skill=Worldvibes
+ |description=The ability to see your vibes worldwide.
+ |lessons=599
+ |syntax=VIBES ALL
+ |required=
+ |target=
+ |cooldown=1.00 seconds of equilibrium
+ |detail=This ability will show you the status of all your active vibrations.
+}}
+
+{{Skill_detail
+ |skill=Focus
+ |description=Draw your vibrations back to you.
+ |lessons=599
+ |syntax=VIBES FOCUS
+ |required=100 mana
+ |shapes=
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=By producing a specific resonance, you may call one of each vibration you actively possess to your current location(*), though all others will be destroyed in the process.<p>* Does not call the reverberation vibration.</p>
+}}
+
+{{Skill_detail
+ |skill=Disorientation
+ |description=Disorient your enemies with dizziness.
+ |lessons=703
+ |syntax=EMBED DISORIENTATION
+ |required=300 mana
+ |shapes=Spiral
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=By disrupting the inner ear, this vibration will cause periodic dizziness in your enemies.
+}}
+
+{{Skill_detail
+ |skill=Energise
+ |description=Suck health from your enemies and use it.
+ |lessons=842
+ |syntax=EMBED ENERGISE<br>ABSORB ENERGY
+ |required=300 mana
+ |shapes=Polyhedron
+ |target=Room and self
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This ability will drain the health of your enemies, and store a portion of it. When you wish to use that health, you must do ABSORB ENERGY. This will, however, destroy the vibration.
+}}
+
+{{Skill_detail
+ |skill=Stridulation
+ |description=Destroy the equilibrium of your enemies.
+ |lessons=945
+ |syntax=EMBED STRIDULATION
+ |required=300 mana
+ |shapes=Cylinder and Polyhedron
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Stridulation vibrations afflict your enemies with stridulating periodically. This affliction shall cause your hostile vibrations to periodically coalesce upon their frequency so long as it remains upon their person.<p>* Note that the retardation and silence vibrations are excluded from the hostile vibrations which will do so.
+}}
+
+{{Skill_detail
+ |skill=Gravity
+ |description=Increase the power of gravity in the room.
+ |lessons=1083
+ |syntax=EMBED GRAVITY
+ |required=300 mana
+ |shapes=Egg and Torus
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=The oscillations of this vibration cause the downward pull of gravity to be increased in your room, pulling those in the trees and sky to the ground. 
+}}
+
+{{Skill_detail
+ |skill=Forest
+ |description=Cause a forest of sharp crystal to arise.
+ |lessons=1152
+ |syntax=EMBED FOREST
+ |required=300 mana
+ |shapes=Diamond and Pyramid
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This vibration causes a forest of small, very sharp crystals to arise, damaging anyone who falls in the room, provided they are not levitating.
+}}
+
+{{Skill_detail
+ |skill=Dissonance
+ |description=Cause your enemies to become dissonant.
+ |lessons=1290
+ |syntax=EMBED DISSONANCE
+ |required=300 mana
+ |shapes=Cylinder, Sphere and Spiral
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Every person vibrates with a certain fundamental frequency. This vibration will cause damage in those vibrating at the normal frequency, but has a chance of causing enemies to vibrate dissonantly. In this case, the enemy in question will lose a defence periodically.
+}}
+
+{{Skill_detail
+ |skill=Detune
+ |description=By your design, or none at all.
+ |lessons=1359
+ |syntax=DETUNE <target>
+ |required=
+ |shapes=
+ |target=
+ |cooldown=2.50 seconds of equilibrium
+ |detail=Sometimes a magi may find that another seeks to set the tone of an engagement, creating vibrations to block the use of one's own.<p>This unacceptable state of affairs is no true barrier to the accomplished sorcerer. You may DETUNE another magi, and all vibrations span by them in your location will become detuned.<p>* Detuned vibrations hit the owner as well as their enemies.<p>* Detuned vibrations inform all magi in the current location when they influence someone.</p>
+}}
+
+{{Skill_detail
+ |skill=Plague
+ |description=Afflict your enemies with debilitating effects.
+ |lessons=1394
+ |syntax=EMBED PLAGUE
+ |required=300 mana
+ |shapes=Cube, Pyramid, Spiral
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=A powerful vibration, it will slowly kill your enemies who stand within it, giving a variety of afflictions before death.
+}}
+
+{{Skill_detail
+ |skill=Lullaby
+ |description=Put your enemies to sleep.
+ |lessons=1532
+ |syntax=EMBED LULLABY
+ |required=300 mana
+ |shapes=Pyramid
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=The powerful lullaby vibration will put your enemies to sleep.
+}}
+
+{{Skill_detail
+ |skill=Retardation
+ |description=Slow time in your location.
+ |lessons=1635
+ |syntax=EMBED RETARDATION
+ |required=300 mana
+ |shapes=Disc
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=The retardation vibration slows time in the location, giving the aeon effect to everyone in the room, including you. Unfortunately, due to its time-bending effects, this vibration will disable any crystalline vibrations in the room with it that offer passive effects, and affect any weapons or projectiles thrown from outside of the vibration's effect. 
+}}
+
+{{Skill_detail
+ |skill=Cataclysm
+ |description=Unleash the fury of a team of magi.
+ |lessons=1739
+ |syntax=EMBED CATACLYSM<br>IMBUE
+ |required=300 mana
+ |shapes=Cylinder, Cube, Diamond, Disc, Egg, Pentagon, Polyhedron, Pyramid, Spiral, Sphere, and Torus (2 of each total, 1 of each spun per Magi) 
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This is the most powerful of the vibrations. Two magi must each spin all eleven of the crystals before one can EMBED the CATACLYSM vibration. Once the vibration has been embedded, the second magi (who must also have transcendent Crystalism) must IMBUE the vibration with his power to complete the cataclysm. This vibration will only function outdoors.<br>Once this has been done, anyone with STAFFCAST, FREEZE, or TRANSFIX in Elementalism will be able to cast them through the cataclysm vibration at anyone outdoors within a three room radius. 
+}}
+
+{{Skill_detail
+ |skill=Destabilise
+ |description= he power to destabilise crystalline vibrations is formidable indeed.
+ |lessons=
+ |syntax=VIBE DESTABILISE <vibe type>
+ |required=400 mana
+ |shapes=
+ |target=Room
+ |cooldown=Equilibrium
+ |detail=Your mastery over Crystalism grants insights into the exact tonal frequencies necessary to throw crystalline vibrations into disarray and
+causing them to become unstable. This will inevitably cause the vibration to be destroyed, but their instability will cause them to have various potent effects upon the location before they expire.<p>'''Adduction''': will attempt to draw all those in adjacent locations into the room.<br>'''Alarm''': informs you of all people in the local area.<br>'''Creeps''': afflicts everyone in the room with fear, agoraphobia, and claustrophobia.<br>'''Disorientation''': prones and gives dizziness to everyone in the room.<br>'''Dissipate''': drains mana from everyone in the room.<br>'''Dissonance''': breaks all magical shields protecting adventurer's in the location.<br>'''Energise''': restores some health for each person besides the destabiliser.<br>'''Forest''': causes nontrivial bleeding to everyone in the room.<br>'''Gravity''': forces all those in the sky above back to the ground.<br>'''Grounding''': launches everyone in the room into the sky.<br>'''Harmony''': will restore health to everyone in the room.<br>'''Heat''': deals fire damage and causes ablaze to everyone in the room.<br>'''Lullaby''': strips the metawake and insomnia defences.<br>'''Oscillate:''' deals minor damage and afflicts everyone in the room with both epilepsy and stupidity.<br>'''Palpitation''': deals damage to everyone in the room.<br>'''Plague''': breaks the limbs of everyone in the room.<br>'''Retardation''': afflicts everyone in the room with the curse of Aeon.<br>'''Reverberation''': destroys all monolith, cube, knife, and eye sigils on the ground in your location.<br>'''Silence''': blocks all usage of communication channels for a short time by all present when used, even if they then leave the room.<br>'''Revelation''': strips the phase, astralform, or blackwind defences from everyone in the room.<br>'''Stridulation''': disrupts the mental equilibrium of everyone in the room.<br>'''Tremors''': creates rubble to block the exits of the room.</br>
+}}
+
+[[Category:Skills]][[Category:Edit needed]]

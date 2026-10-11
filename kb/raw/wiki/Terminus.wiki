@@ -1,0 +1,482 @@
+The Tsol'teth are perhaps the greatest wielders of arcane forces known to Achaea. The skill that made much of this possible was Terminus; the art of discovering and utilising the words of power to invoke changes upon the world. No-one has ever truly mastered this skill; indeed, the reason for Tsol'teth rarely working alone is that diversification is the only way that all of the various branches of Terminus could be available to them simultaneously.
+
+Though Terminus supplies many great and terrible powers--the Litany of Obedience being a prime example--its true strength comes from its diversity. One day a Depthswalker may subjugate the wills of those that stand in opposition; the next call down lightning to scourge an opposing army. Knowing is half the battle.
+
+The skill of '''Terminus''' is available to members of the [[Depthswalker]] [[class]], along with [[Aeonics]] and [[Shadowmancy]].
+
+==Abilities in Terminus==
+{{Skill_detail
+ |skill=Research
+ |description=Knowledge is power.
+ |lessons=
+ |syntax=RESEARCH <tree><br>RESEARCH STATUS<br>RESEARCH POINTS
+ |required=
+ |target=
+ |cooldown=
+ |detail=While both Aeonics and Shadowmancy made the Tsol'teth terrible indeed, it was the art of Terminus that allowed them to perform many of their more cataclysmic feats of power. Terminus allows one to use the ancient Tsol'teth language to enact various outcomes; some are relatively minor, and some are near miracles in their scope.<p>However, the knowledge of the Tsol'teth was guarded jealously, and no one person could learn it all. As you progress through the skill you shall gain access to various research trees that you may study. The more you study a tree, the more abilities you shall unlock. As you progress you shall also be able to study more trees, as your mental capacity shall expand to accommodate.</p><p>Note: tier 1 through 4 abilities all cost one research point. Tier 5 abilities cost 2, though tier 5 abilities are not available until later in Terminus.<br>You must be in an equipped Terminus lab to research trees - the only currently known lab is accessed through the MEMORY ability in Aeonics.</p>
+}}
+
+{{Skill_detail
+ |skill=[[#Hunting|Hunting]]
+ |description=The acquisition of strength.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=You have now unlocked the hunting research tree. This tree has a focus on being able to defeat denizens more efficiently.
+}}
+
+{{Skill_detail
+ |skill=[[#Longevity|Longevity]]
+ |description=Who doesn't want to live forever?
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=You have now unlocked the longevity research tree. This has a focus on abilities to make you heal yourself more efficiently, or to push the boundaries of what is possible in that capacity.
+}}
+
+{{Skill_detail
+ |skill=[[#Augmentation|Augmentation]]
+ |description=Only the best.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=You have now unlocked the augmentation research tree. This tree allows you to make improvements to the tools of Shadowmancy, among other things.<br>Note that augmented items only function at their improved capacity while you retain knowledge of the requisite ability from this tree.
+}}
+
+{{Skill_detail
+ |skill=[[#Environmental|Environmental]]
+ |description=The world is your weapon.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=You have now unlocked the environmental research tree. This tree focuses upon manipulation of the surrounding environments, both for offensive and defensive purposes.
+}}
+
+{{Skill_detail
+ |skill=[[#Conquest|Conquest]]
+ |description=The might of the warlords.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=You have now unlocked the conquest research tree. This tree focuses upon ways to optimise confrontations between armies, and was a favoured branch by the Tsol'teth of old.
+}}
+
+{{Skill_detail
+ |skill=Purge
+ |description=The mind is malleable.
+ |lessons=
+ |syntax=RESEARCH FORGET
+ |required=
+ |target=
+ |cooldown=
+ |detail=You are now able to purge your mind of progress in a given research tree. This will not remove your ability to access that tree, just any progress you have made in currently studying it.<br>This has a 24 hours cooldown.
+}}
+
+{{Skill_detail
+ |skill=Mastery
+ |description=Master your chosen field.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=You are now able to complete your study of a research tree, learning it all the way to completion.<br>Note that you may only master one research tree at this time.
+}}
+
+{{Skill_detail
+ |skill=Fulcrum
+ |description=The centre of your power.
+ |lessons=
+ |syntax=INTONE MORUDAI<br>FULCRUM STATUS<br>GO FULCRUM
+ |required=
+ |target=Self
+ |cooldown=8.00 seconds of word balance
+ |detail=Your fulcrum is both a haven and staging point. By speaking this word of power you may mark a location; then you may return to it from anywhere. It is said the true Tsol'teth can cross both planar and continental boundaries. You are not so knowledgeable to accomplish such a task, so are confined to only being able to return to your fulcrum from the same continent and plane.<p>Note that all fulcrums are purged at dawn, without exception. Not even the Tsol'teth were able to overcome this limitation, though the weakness was religiously guarded. Additionally, a fulcrum once placed cannot be changed until the next dawn, and you may only have one fulcrum in existence at a time. Choose wisely!</p>
+}}
+
+{{Skill_detail
+ |skill=Truevoice
+ |description=True voice of the Tsol'teth.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=Your voice now possesses such power that your incantations can bypass even the power of the silence vibrations that magi may bring forth in their feeble attempts to thwart you.
+}}
+
+{{Skill_detail
+ |skill=[[#Dominion|Dominion]]
+ |description=Control, control, control.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=You have now unlocked the dominion research tree. Possibly one of the things that made the Tsol'teth so infamous was their ability to bend others to their will. This research tree was what permitted them to do so.
+}}
+
+{{Skill_detail
+ |skill=Diversify
+ |description=Mediocrity is unacceptable.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=Your mastery has reached such a point that you may now learn up to two research trees to completion, gaining the capstone ability of both.
+}}
+
+
+==Research Trees in Terminus==
+
+===Hunting===
+{{Skill_detail
+ |skill=Trusad
+ |description=Your precision is without compare.
+ |lessons=
+ |syntax=INTONE TRUSAD
+ |required=
+ |target=Self
+ |cooldown=5.00 seconds of word balance
+ |detail=This word of power enhances your precision against denizens, raising your critical hits chance.
+}}
+
+{{Skill_detail
+ |skill=Tsuura
+ |description=The first step is survival.
+ |lessons=
+ |syntax=INTONE TSUURA
+ |required=
+ |target=Self
+ |cooldown=5.00 seconds of word balance
+ |detail=This word of power shall convey a defence upon you that shall make you more able to resist the damage dealt by denizens.
+}}
+
+{{Skill_detail
+ |skill=Kail
+ |description=Turn aside your foes.
+ |lessons=
+ |syntax=INTONE KAIL
+ |required=
+ |target=Self
+ |cooldown=12.00 seconds of word balance
+ |detail=This word of power shall summon forth a prismatic barrier to protect you.<br>''This ability incurs an equilibrium cost in addition to the standard word balance cost.''
+}}
+
+{{Skill_detail
+ |skill=Hailad
+ |description=You can take them all.
+ |lessons=
+ |syntax=INTONE HAILAD
+ |required=
+ |target=Denizens and room
+ |cooldown=
+ |detail=Upon uttering this word, all denizens in your location shall immediately become hostile to you.<br>This does not work against denizens loyal to other adventurers or organisations.
+}}
+
+{{Skill_detail
+ |skill=Laiad
+ |description=The weak of will shall serve your ends.
+ |lessons=
+ |syntax=INTONE LAIAD <target>
+ |required=
+ |target=Denizens
+ |cooldown=2.00 seconds of word balance
+ |detail=You may intone this word of power at a denizen of the land, causing their sense of danger to be greatly inhibited. This allows you to exploit openings for a short time, doing increased damage with all scythe attacks.
+}}
+
+===Longevity===
+{{Skill_detail
+ |skill=Ukhia
+ |description=Your blood is not for them to spill.
+ |lessons=
+ |syntax=INTONE UKHIA
+ |required=
+ |target=Self
+ |cooldown=6.00 seconds of word balance
+ |detail=This word of power conveys a defence that shall have a chance to entirely remove the willpower cost on an attempt to clot your bleeding.
+}}
+
+{{Skill_detail
+ |skill=Qamad
+ |description=A deeper trance.
+ |lessons=
+ |syntax=INTONE QAMAD
+ |required=
+ |target=Self
+ |cooldown=5.50 seconds of word balance
+ |detail=This word of power allows you to, while meditating, sink into a deeper trance and increase your rate of regeneration.
+}}
+
+{{Skill_detail
+ |skill=Thi
+ |description=No wound can stop you.
+ |lessons=
+ |syntax=INTONE THI
+ |required=
+ |target=Self
+ |cooldown=10.00 seconds of word balance
+ |detail=This word will fully restore your health, mana, willpower and endurance.<br>Note that it may only be uttered once every 8 hours. 
+}}
+
+{{Skill_detail
+ |skill=Fliennad
+ |description=Twice is better than once.
+ |lessons=
+ |syntax=INTONE FLIENNAD
+ |required=
+ |target=Self
+ |cooldown=16.00 seconds of word balance
+ |detail=This ability will reset all of your tattoos, causing them to come off cooldown(*). This also restores up to 300 years of age.<p>*It may only be used once every 8 minutes.</p>
+}}
+
+{{Skill_detail
+ |skill=Uraiad
+ |description=Why settle for worse?
+ |lessons=
+ |syntax=INTONE URAIAD <target>
+ |required=
+ |target=Adventurers and self
+ |cooldown=10.00 seconds of word balance
+ |detail=A truly potent ability, speak this word targeted at one who considers you a mutual ally. For the next thirty minutes you shall possess the same constitution and strength as your chosen target.<br>* Note that this carries a one hour cooldown.<br>** Additionally note that this is a direct link. If your linked target's stats change while you are linked with them, your stats shall also change to mirror them. 
+}}
+
+===Augmentation===
+{{Skill_detail
+ |skill=Dalem
+ |description=A superior model.
+ |lessons=
+ |syntax=INTONE DALEM
+ |required=
+ |target=
+ |cooldown=6.00 seconds of word balance
+ |detail=While holding a phylactery created via Shadowmancy, you may utter this word to enhance said phylactery, making it able to hold an additional five shadows. 
+}}
+
+{{Skill_detail
+ |skill=Mainaad
+ |description=You have certainly not lost your edge.
+ |lessons=
+ |syntax=INTONE MAINAAD <SCYTHE{{!}}DAGGER>
+ |required=
+ |target=
+ |cooldown=4.00 seconds of word balance
+ |detail=By uttering this word over one of the respective weapons created via Shadowmancy, you may enhance its cutting edge, causing it to deal more damage against your foes. 
+}}
+
+{{Skill_detail
+ |skill=Balateth
+ |description=Strike like lightning.
+ |lessons=
+ |syntax=INTONE BALATETH <SCYTHE{{!}}DAGGER>
+ |required=
+ |target=
+ |cooldown=4.00 seconds of word balance
+ |detail=By uttering this word over the respective weapon created via Shadowmancy, you may enhance its speed.
+}}
+
+{{Skill_detail
+ |skill=Tah'maal
+ |description=Yet closer to the elusive legend.
+ |lessons=
+ |syntax=INTONE TAH'MAAL
+ |required=
+ |target=
+ |cooldown=5.00 seconds of word balance
+ |detail=Though the true cloak of the Tsol'teth overlords is far out of your reach, this word when uttered over a Shadowmancy cloak brings you yet one step closer. It shall improve the cloak so that, when worn, it shall grant you increased resistance to the destructive force of fire. In addition, one wearing an augmented cloak who performs the rebirth ability from Aeonics shall return with more health and mana than one without. The recovery time of the rebirth ability shall also be significantly reduced.  
+}}
+
+{{Skill_detail
+ |skill=Mainaas
+ |description=The greatest feat of augmentation.
+ |lessons=
+ |syntax=INTONE MAINAAS
+ |required=
+ |target=Self
+ |cooldown=6.50 seconds of word balance
+ |detail=The greatest feat of augmentation is using your own body as your canvas. By augmenting your own skin, you shall become more resistant to both cutting and blunt attacks. 
+}}
+
+===Environmental===
+{{Skill_detail
+ |skill=Saihan
+ |description=Let the water be no more.
+ |lessons=
+ |syntax=INTONE SAIHAN
+ |required=
+ |target=Room
+ |cooldown=6.00 seconds of word balance
+ |detail=Speaking this word shall immediately dispel any magically summoned forth water in your location.
+}}
+
+{{Skill_detail
+ |skill=Tasha
+ |description=Snuff the flames with a single word.
+ |lessons=
+ |syntax=INTONE TASHA
+ |required=
+ |target=Room
+ |cooldown=6.00 seconds of word balance
+ |detail=Speak this word and snuff a firewall in your location.<br>Note that you may not choose which to destroy; this word of power is unpredictable. 
+}}
+
+{{Skill_detail
+ |skill=Bahar
+ |description=A final strike.
+ |lessons=
+ |syntax=INTONE BAHAR <target>
+ |required=
+ |target=Adventurers
+ |cooldown=7.00 seconds of word balance
+ |detail=Summon forth a lightning strike against an enemy. They must be within three rooms of you and outdoors.
+}}
+
+{{Skill_detail
+ |skill=Heila
+ |description=None stand above you.
+ |lessons=
+ |syntax=INTONE HEILA
+ |required=
+ |target=Adventurers and room
+ |cooldown=6.00 seconds of word balance
+ |detail=Speak this word and bring all that fly above you in the skies down to your level.
+}}
+
+{{Skill_detail
+ |skill=Har'bain
+ |description=Let the ground swallow you up.
+ |lessons=
+ |syntax=INTONE HAR'BAIN<br>BURROW ABOVE
+ |required=
+ |target=Self
+ |cooldown=7.00 seconds of word balance
+ |detail=Speak this word and let the ground swallow you up.
+}}
+
+===Conquest===
+{{Skill_detail
+ |skill=Tooros
+ |description=Cause pain with but a word.
+ |lessons=
+ |syntax=INTONE TOOROS
+ |required=
+ |target=Adventurers
+ |cooldown=10.00 seconds of word balance
+ |detail=Speak a word and cause damage to all that stand in your location.<br>Beware: this word is indiscriminate and will strike at you as well.
+}}
+
+{{Skill_detail
+ |skill=Trointeth
+ |description=Heresy is not even the beginning.
+ |lessons=
+ |syntax=INTONE TROINTETH
+ |required=
+ |target=
+ |cooldown=5.00 seconds of word balance
+ |detail=Speak this heretical word and the shrines of the divine shall become muted. Note that as your proficiency within the Conquest research tree increases, so too does your grasp of this word as follows:<p>At level two, it impacts your current room.
+At level three, it impacts your current and adjacent rooms.
+At level four, it impacts your current room, adjacent rooms, and the rooms adjacent to those.
+At level five, it impacts your current room, adjacent rooms, the rooms adjacent to those, and the rooms adjacent to those.</p> <p>The cooldown and duration decrease and increase respectively as you increase in the research, though particularly in the case of duration these gains are much more minor than the other benefits conveyed. <p>When worldburn is activated, the Trointeth cooldown on all shrines for that order is cleared.</p>
+}}
+
+{{Skill_detail
+ |skill=Booreth
+ |description=It's not paranoia if...
+ |lessons=
+ |syntax=INTONE BOORETH
+ |required=
+ |target=
+ |cooldown=4.50 seconds of word balance
+ |detail=The sound of this word shall instill a madness in all who hear it, making them believe that anyone and everyone is an enemy.
+}}
+
+{{Skill_detail
+ |skill=Tuad
+ |description=Deny their salvation.
+ |lessons=
+ |syntax=INTONE TUAD <direction>
+ |required=
+ |target=
+ |cooldown=7.50 seconds of word balance
+ |detail=With this word of power, you may shatter an ice or stonewall that bars your path, causing it to explode and deal damage(*) to all that stand on either side of it. Note that stonewalls shall cause more damage when they shatter.<p>*This strips magical shields if one is present, but does no damage in cases where this occurs.</p>
+}}
+
+{{Skill_detail
+ |skill=Lament
+ |description=And thus, they fell.
+ |lessons=
+ |syntax=UTTER LAMENT
+ |required=
+ |target=Adventurers
+ |cooldown=3.40 seconds of word balance
+ |detail=The power to tap the ancestral memories of the Tsol'teth line is one usually restricted to those of the true blood, but due to your studies you are now able to glance back a single generation.<p>Speak the lamentation of deSangre, and all those that you see as allies shall be granted an enhancement truly terrible in nature. Whenever one under the effect of the lamentation slays another(*), they shall become stronger, faster, tougher(**).</p><p>Due to the taxing nature of tapping the ancestral memories, this ability carries a fairly significant cooldown. <br>* Killing an enemy does not reset the lamentation timer.<br>** Each kill grants them +1 to each stat and a balance/equilibrium bonus.</p>
+}}
+
+===Dominion===
+{{Skill_detail
+ |skill=Elad
+ |description=They have no choice in the matter.
+ |lessons=
+ |syntax=INTONE ELAD <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=By targeting this word of power at one of the weak-willed, you can force them into following you around the land. Instantly obtain your army!
+}}
+
+{{Skill_detail
+ |skill=Gaiartha
+ |description=Your mind is your own.
+ |lessons=
+ |syntax=INTONE GAIARTHA
+ |required=
+ |target=Self
+ |cooldown=15.50 seconds of word balance
+ |detail=Speaking this word of power shall convey a defence upon you that shall prevent the next attempt to force you to carry out an action against your will from being successful.
+}}
+
+{{Skill_detail
+ |skill=Steelmind
+ |description=Your grace is limitless.
+ |lessons=
+ |syntax=INTONE GAIARTHA <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=You have reached a sufficient level of proficiency that, with this ability, you will be able to target the gaiartha word of power at another, granting them its beneficial effects.
+}}
+
+{{Skill_detail
+ |skill=Kharan
+ |description=They shall do your bidding.
+ |lessons=
+ |syntax=INTONE KHARAN <target> <command>
+ |required=
+ |target=Adventurers
+ |cooldown=6.50 seconds of word balance
+ |detail=This word of power shall allow you to command a subject to carry out a single action. Unfortunately, as this is a fairly temperamental word of power, it requires that the subject in question lack the deafness defence.<br>Additionally, this word of power will consume equilibrium.
+}}
+
+{{Skill_detail
+ |skill=Litany
+ |description=A power out of legend.
+ |lessons=
+ |syntax=INTONE LITANY <command>
+ |required=
+ |target=Adventurers
+ |cooldown=9.00 seconds of word balance
+ |detail=One of the most feared power of the Tsol'teth Overlords was their ability to bend an entire battlefield to their will with nothing but the power of their voice. After mastering this research tree, that power is now yours.<p>When you utter the litany and specify the command that you wish to dictate, all those that stand in your location or adjacent to it shall be forced to carry out that command.<br>This ability both has a windup time and informs both your location and those adjacent when you begin to initiate it.</p>
+}}
+
+[[Category:Skills]][[Category:Edit needed]]

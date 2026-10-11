@@ -1,0 +1,612 @@
+Subterfuge is a diverse skill, encompassing abilities ranging from the secret rattle that those of serpentine ambitions may use to communicate with each other, to archery, the conjuring of [[illusion|illusions]], dimensional [[wormhole|wormholes]], and various stealth and attack abilities.
+
+The skill of '''Subterfuge''' is available to members of the [[Serpent]] [[class]], along with [[Venom_(Skill)|Venom]] and [[Hypnosis]].
+
+==Abilities in Subterfuge==
+{{Skill_detail
+ |skill=Rattle
+ |description=Knowledge of the coded Serpent Lord tongue.
+ |lessons=0
+ |syntax=RATTLE <text><br>RATTLE TO <person> <text>
+ |required=
+ |target=Adventurers, denizens, room, and self
+ |cooldown=
+ |detail=With this ability, you may communicate with others who have it with no fear of being overheard by other mortals.
+}}
+
+{{Skill_detail
+ |skill=Hide
+ |description=Conceal yourself from view.
+ |lessons=7
+ |syntax=HIDE<br>EMERGE
+ |required=
+ |target=Self
+ |cooldown=Hide: 4.00 seconds of balance<br>Emerge: 1.00 seconds of balance.
+ |detail=Conceal yourself from view and then type EMERGE to cease concealing.
+}}
+
+{{Skill_detail
+ |skill=Scales
+ |description=Coat yourself in protective, serpentine scales.
+ |lessons=16
+ |syntax=SCALES<br>SCALES SHED
+ |required=
+ |target=Self
+ |cooldown=3.00 seconds of balance
+ |detail=So snake-like are you that you may cover yourself with mildly protective scales at will.
+}}
+
+{{Skill_detail
+ |skill=Garrote
+ |description=Choke the life out of a target with your whip.
+ |lessons=23
+ |syntax=GARROTE <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=Using a wielded whip, you can try to slip behind a target and choke the life out of him or her. Armour is rendered entirely useless to your victim. Furthermore, while it is difficult to do normally, if your target is fairly helpless (paralysed, tied up, frozen, fallen on the ground, sleeping, unconscious, or some other similar afflictions) then you will always hit with this. The higher your subterfuge, the more damage this ability will do.
+}}
+
+{{Skill_detail
+ |skill=Evade
+ |description=Misleading your pursuer.
+ |lessons=34
+ |syntax=EVADE <direction>
+ |required=
+ |target=
+ |cooldown=2.00 seconds of balance
+ |detail=No difficult feat for one trained in the arts of subterfuge, you may silently evade past obstructions, at once losing anyone who may be following you.
+}}
+
+{{Skill_detail
+ |skill=Shadow
+ |description=Shadowing a target in order to track them.
+ |lessons=45
+ |syntax=SHADOW <target>
+ |required=
+ |target=Adventurers
+ |cooldown=4.00 seconds of balance
+ |detail=From on the ground or in the trees you are able to shadow an adventurer from an adjacent location. This will cause you to enter their location and begin following them.
+}}
+
+{{Skill_detail
+ |skill=Flay
+ |description=Flay the anti-venom sileris coatings from your enemies.
+ |lessons=56
+ |syntax=FLAY <target><br>FLAY <target> REBOUNDING [<venom>]<br>FLAY <target> SHIELD [<venom>]
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=2.00 seconds of balance
+ |detail=Using a whip, you will be able to flay the waxy coating of the sileris berry from your opponent, enabling you to sink your fangs into his flesh once more; or to flay a rebounding aura or magical shield to attack with weapons once more. You can also use FLAY <denizen> SHIELD to flay the shield defence from denizens.<p>If your flay leaves your target without a rebounding aura and magical shield, it will apply a venom from your whip.</p>
+}}
+
+{{Skill_detail
+ |skill=Waiting
+ |description=Awaiting a target to be shadowed.
+ |lessons=67
+ |syntax=AWAIT <target>
+ |required=
+ |target=Adventurers
+ |cooldown=4.00 seconds of balance
+ |detail=Once activated, this ability will allow you to stand still and wait for another adventurer unnoticed. When the adventurer enters the location, you will begin to follow.
+}}
+
+{{Skill_detail
+ |skill=Pacing
+ |description=The ability to anticipate and keep pace with others.
+ |lessons=78
+ |syntax=PACING [ON{{!}}OFF]<br>RELAX PACING
+ |required=Endurance drain
+ |target=
+ |cooldown=Pacing: 3.50 seconds of balance<br>Relax: 3.00 seconds of balance.
+ |detail=At a constant endurance drain, you will be able to follow those while they sprint away.
+}}
+
+{{Skill_detail
+ |skill=Bask
+ |description=Bathing in the hot sun.
+ |lessons=89
+ |syntax=BASK
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=In an outdoor room you may bask in the hot sun, replenishing your strength and curing your afflictions.<p>A desperate serpent may also bask in the presence of a lightwall.</p>
+}}
+
+{{Skill_detail
+ |skill=Block
+ |description=Obstructing departure with your body.
+ |lessons=112
+ |syntax=BLOCK <direction><br>UNBLOCK
+ |required=
+ |target=
+ |cooldown=
+ |detail=This will allow you to block much movement in a particular direction.
+}}
+
+{{Skill_detail
+ |skill=Swinging
+ |description=Swinging up into the treetops.
+ |lessons=134
+ |syntax=SWING UP<br>SWING DOWN
+ |required=
+ |target=
+ |cooldown=2.00 seconds of balance
+ |detail=When in a forest location, you will be able to swing up into the trees.
+}}
+
+{{Skill_detail
+ |skill=Secret
+ |description=Give someone an item without their knowledge.
+ |lessons=156
+ |syntax=SECRET <item> to <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=This simply puts an item on an adventurer without him noticing.
+}}
+
+{{Skill_detail
+ |skill=Scan
+ |description=Scanning the forest floor from the treetops.
+ |lessons=178
+ |syntax=SCAN
+ |required=
+ |target=
+ |cooldown=
+ |detail=While in the treetops, you can scan the ground for passerbys.
+}}
+
+{{Skill_detail
+ |skill=Bowmanship
+ |description=Use of the valued projectile weapon.
+ |lessons=200
+ |syntax=SHOOT <target> <direction>
+ |required=
+ |target=Adventurers
+ |cooldown=3.50 seconds of balance
+ |detail=Use one of the various bows to shoot an adventurer in a line-of-sight location from you.
+}}
+
+{{Skill_detail
+ |skill=Seize
+ |description=Grabbing unwary victims from the forest floor.
+ |lessons=223
+ |syntax=SEIZE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=4.50 seconds of balance
+ |detail=While in the trees, you may seize an adventurer and bring him up to your level.
+}}
+
+{{Skill_detail
+ |skill=Colours
+ |description=Dye your arrows to categorise them.
+ |lessons=223
+ |syntax=INSPECT QUIVER<br>DYE <number of arrows> ARROW[S] <colour><br>SWITCH <colour>
+ |required=
+ |target=
+ |cooldown=3.50 seconds of balance
+ |detail=First, one should inspect his quiver to discover how many arrows he has in it. Then, you may dye a number of arrows a certain colour.<p>Colours you may use are red, blue, purple, green, black, white, grey, orange, gold, and silver.</p><p>To switch to using a specific colour of arrow, simply SWITCH <colour>. If you wish to switch back 
+to using undyed arrows, simply do SWITCH NORMAL.</p>
+}}
+
+{{Skill_detail
+ |skill=Shove
+ |description=Sending a hapless victim crashing to the forest floor.
+ |lessons=245
+ |syntax=SHOVE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=4.00 seconds of balance
+ |detail=While in the trees, you may shove an adventurer to the ground, possibly breaking his legs.
+}}
+
+{{Skill_detail
+ |skill=Noose
+ |description=Covert and deadly assassination from the trees.
+ |lessons=267
+ |syntax=CRAFT NOOSE<br>NOOSE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=Craft: 3.50 seconds of balance<br>Noose: 4.00 seconds of balance
+ |detail=While you are in the trees you can craft a noose from the vines hanging everywhere. Then, if there is a sole victim below you, you can NOOSE <adventurer>. This is a long process as you have to move with utter silence. If anyone else enters the location, your attempt will be ruined.
+}}
+
+{{Skill_detail
+ |skill=Aiming
+ |description=Increase your accuracy in shooting.
+ |lessons=289
+ |syntax=AIM <target> <direction>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Increase the accuracy of your shooting.
+}}
+
+{{Skill_detail
+ |skill=Listen
+ |description=Detect action and conversations nearby.
+ |lessons=312
+ |syntax=LISTEN <direction>
+ |required=
+ |target=Room
+ |cooldown=3.50 seconds of equilibrium
+ |detail=Use your auditory acuity to listen in on conversations in an adjacent room.
+}}
+
+{{Skill_detail
+ |skill=Dispel
+ |description=Rid your environment of illusions.
+ |lessons=334
+ |syntax=DISPEL ME<br>DISPEL <target>
+ |required=5 mana
+ |target=Adventurers and self
+ |cooldown=
+ |detail=Use this ability to dispel most illusions associated with yourself or another adventurer.
+}}
+
+{{Skill_detail
+ |skill=Lipread
+ |description=The ability to understand what is said while deaf.
+ |lessons=356
+ |syntax=LIPREAD
+ |required=
+ |target=Self
+ |cooldown=3.00 seconds of equilibrium
+ |detail=This will allow you to understand speech normally, even when you are deaf, and understand speech that has been disturbed by wind.
+}}
+
+{{Skill_detail
+ |skill=Eavesdrop
+ |description=Listen even through closed doors.
+ |lessons=378
+ |syntax=EAVESDROP <direction>
+ |required=
+ |target=Room
+ |cooldown=3.50 seconds of equilibrium
+ |detail=Your skills have improved to the point where you can now listen even through closed doors.
+}}
+
+{{Skill_detail
+ |skill=Slit
+ |description=Cut the throat of a helpless victim.
+ |lessons=400
+ |syntax=SLIT <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.50 seconds of balance
+ |detail=Provided you are wielding either a dagger or dirk, this ability will allow you to slit the throat of your enemy who is bound or not conscious (sleeping, meditating, unconscious), causing significant bleeding damage.
+}}
+
+{{Skill_detail
+ |skill=Wind
+ |description=Further increase your accuracy through wind compensation.
+ |lessons=423
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=Once you have this ability, your accuracy with bowmanship will be increased.
+}}
+
+{{Skill_detail
+ |skill=Ghost
+ |description=Give yourself a ghostly appearance.
+ |lessons=445
+ |syntax=CONJURE GHOST
+ |required=50 mana
+ |target=Self
+ |cooldown=3.50 seconds of equilibrium
+ |detail=Give yourself a ghostly appearance.
+}}
+
+{{Skill_detail
+ |skill=Doublestab
+ |description=Quickly administer two venoms to a target with your dirk.
+ |lessons=467
+ |syntax=DOUBLESTAB/DSTAB <target> [venom1 venom2]
+ |required=
+ |target=Adventurers
+ |cooldown=2.80 seconds of balance
+ |detail=If you are wielding a dirk that has been envenomed with more than one venom, you may use this ability to quickly deliver two venoms simultaneously to your target.
+}}
+
+{{Skill_detail
+ |skill=Envenom
+ |description=Dip your arrows in venom.
+ |lessons=489
+ |syntax=ENVENOM ARROW <colour> <venom><br>ENVENOM <weapon> with <venom><br>WIPE <weapon>
+ |required=
+ |target=
+ |cooldown=
+ |detail=After you have coloured a group of arrows, you may cover the tips with venom if you have the ability to secrete the particular type of venom. You can also envenom normal edged weapons with this ability.
+}}
+
+{{Skill_detail
+ |skill=Seek
+ |description=Sense for dimensional wormholes.
+ |lessons=512
+ |syntax=WORM SEEK
+ |required=
+ |target=Room
+ |cooldown=3.00 seconds of equilibrium
+ |detail=This will tell you if a wormhole exists in your location and where it leads if one does.
+}}
+
+{{Skill_detail
+ |skill=Warp
+ |description=Open and enter a dimensional wormhole.
+ |lessons=512
+ |syntax=WORM WARP
+ |required=
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=When in the presence of a worm hole, this will allow you to enter it.
+}}
+
+{{Skill_detail
+ |skill=Illusion
+ |description=Create an illusion of your choosing.
+ |lessons=534
+ |syntax=CONJURE [target] ILLUSION <illusion>
+ |required=25 mana
+ |target=Adventurers and room
+ |cooldown=1.00 seconds of equilibrium
+ |detail=Create an illusion of your choosing in the room you are in, optionally targeted at a specific person. You may conjure an illusion without balance, but this will increase the equilibrium cost to 3.1 seconds. It is also possible to bite someone immediately after conjuring your illusion, before your have recovered equilibrium. You may embed a single newline in your illusion by including the character sequence \n at the appropriate spot. For limitations and restrictions on illusions, please refer to HELP ILLUSIONS.
+}}
+
+{{Skill_detail
+ |skill=Crossbows
+ |description=A powerful projectile weapon.
+ |lessons=556
+ |syntax=SHOOT <target> <direction>
+ |required=
+ |target=Adventurers
+ |cooldown=3.50 seconds of balance
+ |detail=The crossbow is more powerful, but less accurate, than the longbow.
+}}
+
+{{Skill_detail
+ |skill=Cloak
+ |description=Hide your actions from others.
+ |lessons=578
+ |syntax=CONJURE CLOAK<br>CONJURE CLOAK <target><br>DISPEL ME
+ |required=70 mana
+ |target=
+ |cooldown=3.50 seconds of equilibrium
+ |detail=This will conjure up a cloak that will disguise many actions from observers.<p>DISPEL ME will remove a subterfuge induced cloak from your person.</p>
+}}
+
+{{Skill_detail
+ |skill=Dash
+ |description=Sprint in a particular direction.
+ |lessons=578
+ |syntax=DASH <direction> [distance] (Between 1 and 11 rooms)
+ |required=
+ |target=
+ |cooldown=
+ |detail=Sprint quickly in a particular direction.
+}}
+
+{{Skill_detail
+ |skill=Lightwall
+ |description=Create a palpable wall of light.
+ |lessons=634
+ |syntax=CONJURE LIGHTWALL <direction><br>SNUFF LIGHTWALLS
+ |required=45 mana
+ |target=Adventurers and room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This will conjure a wall of light, which, when passed through, will afflict the unfortunate individual with the darkshade affliction. It also drastically speeds up the progression of the affliction for anyone standing in its presence.
+}}
+
+{{Skill_detail
+ |skill=Resonance
+ |description=Allow sounds to resonate through a distant wormhole.
+ |lessons=668
+ |syntax=WORM RESONANCE ON/OFF
+ |required=
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Allow sounds to resonate to you through a wormhole.
+}}
+
+{{Skill_detail
+ |skill=Darkbows
+ |description=Using the infamous darkbows of Hashan.
+ |lessons=737
+ |syntax=SHOOT <target> <direction>
+ |required=
+ |target=Adventurers
+ |cooldown=3.50 seconds of balance
+ |detail=The famed darkbows of Hashan are both expensive and powerful. Only slightly less powerful than a crossbow, they are far more accurate.
+}}
+
+{{Skill_detail
+ |skill=Splice
+ |description=Create a dimensional wormhole.
+ |lessons=806
+ |syntax=WORM SPLICE <target>
+ |required=
+ |target=Room
+ |cooldown=3.00 seconds of balance
+ |detail=This command takes two Serpents with the ability to splice. Target the other Serpent and then execute this command. It will take quite awhile, but when finished, a wormhole will be formed between your two locations.
+}}
+
+{{Skill_detail
+ |skill=Pinshot
+ |description=Focus your fire upon the feet of your victim.
+ |lessons=806
+ |syntax=PINSHOT <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=This powerful ability will focus your fire upon the feet of your victim, making it difficult for them to flee from you. In addition, if your loyal snake is present when the arrow lands, they will strike out immediately at your unlucky foe.<p>If you evade from a room, all your pinshots will be yanked loose of your hapless victim.</p>
+}}
+
+{{Skill_detail
+ |skill=Appraise
+ |description=View the contents of another adventurer's inventory.
+ |lessons=806
+ |syntax=APPRAISE <adventurer>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=This will list an adventurer's entire inventory.<p>This will incur a short loss of equilibrium if your target has a bell tattoo.</p>
+}}
+
+{{Skill_detail
+ |skill=Backstab
+ |description=Attack from the shadows.
+ |lessons=875
+ |syntax=BACKSTAB <target> [<venom>]
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=Initiation: 2.00 seconds<br>Backstab:  2.00 seconds of balance
+ |detail=Only useable while hidden in the shadows, backstab is a delayed ability. After initiating it, you will spend a few seconds circling around to get directly behind your opponent, and then you will leap from the shadows to plant a dirk or dagger in his back.
+}}
+
+{{Skill_detail
+ |skill=Channel
+ |description=Hurl an object through a dimensional wormhole.
+ |lessons=910
+ |syntax=WORM CHANNEL <object>
+ |required=
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Use this ability to throw an object through a dimensional wormhole.
+}}
+
+{{Skill_detail
+ |skill=Pickpocket
+ |description=Deftly pilfer from unsuspecting targets.
+ |lessons=944
+ |syntax=PICKPOCKET <target> [item]
+ |required=150 mana
+ |target=Adventurers and denizens
+ |cooldown=1.50 seconds of balance
+ |detail=The ultimate test of stealth and dexterity, allowing daring thieves to liberate gold or objects from the possession of an unsuspecting target.<p>You may also attempt to liberate a specific item from your target, but this is exceedingly difficult.</p>
+}}
+
+{{Skill_detail
+ |skill=Bind
+ |description=Hog-tie an unconscious or sleeping opponent.
+ |lessons=979
+ |syntax=BIND <target>
+ |required=
+ |target=Adventurers
+ |cooldown=Success: 3.50 seconds of balance<br>Failure: 0.50 seconds
+ |detail=If your target is sleeping or unconscious, and you have a length of rope on your person, you may hog-tie your unlucky target. This requires much longer to writhe out of than web does, for instance.
+}}
+
+{{Skill_detail
+ |skill=Execute
+ |description=Subject your enemy to a merciless execution.
+ |lessons=1082
+ |syntax=EXECUTE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=While wielding a whip, you may attempt to execute a prone victim.
+}}
+
+{{Skill_detail
+ |skill=Sources
+ |description=Sense out all dimensional wormholes.
+ |lessons=1117
+ |syntax=WORM SOURCES [FULL]
+ |required=50 mana
+ |target=
+ |cooldown=3.50 seconds of equilibrium
+ |detail=Sense all wormholes in the local area.
+}}
+
+{{Skill_detail
+ |skill=Weaving
+ |description=Weave and dodge like the cobra itself.
+ |lessons=1186
+ |syntax=WEAVING [ON{{!}}OFF]<br>RELAX WEAVING
+ |required=Mana drain
+ |target=
+ |cooldown=3.00 seconds of balance
+ |detail=At the cost of a heavy mana drain, you may boost your effective avoidance massively. This is cumulative with whatever level you are at in your avoidance skill.
+}}
+
+{{Skill_detail
+ |skill=Yank
+ |description=Use a whip to pull an opponent into your room.
+ |lessons=1289
+ |syntax=YANK <target>
+ |required=
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=Using this ability, you may try to yank an adventurer from an adjacent room into yours with your whip. You must be wielding a whip to use this ability.
+}}
+
+{{Skill_detail
+ |skill=Vortex
+ |description=Suck an unwilling target into a wormhole.
+ |lessons=1358
+ |syntax=WORM VORTEX <target>
+ |required=500 mana
+ |target=Adventurers
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Suck an adventurer, willing or not, through a wormhole.
+}}
+
+{{Skill_detail
+ |skill=Snipe
+ |description=The ability to sharpshoot.
+ |lessons=1427
+ |syntax=SNIPE <target> <direction>
+ |required=
+ |target=Adventurers
+ |cooldown=Success: 3.50 seconds of balance<br>Failure: 0.50 seconds of balance.
+ |detail=Using this ability, you can improve your accuracy at shooting. Use it instead of the SHOOT command.
+}}
+
+{{Skill_detail
+ |skill=Cancel
+ |description=Destroy a wormhole.
+ |lessons=1531
+ |syntax=WORM CANCEL
+ |required=
+ |target=Room
+ |cooldown=5.00 seconds of equilibrium
+ |detail=Destroy a wormhole if there is one in your location.
+}}
+
+{{Skill_detail
+ |skill=Secondsight
+ |description=See wormholes with greater clarity.
+ |lessons=1565
+ |syntax=SECONDSIGHT
+ |required=300 mana
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Once activated, this ability will allow you to see wormholes as if they were regular exits.
+}}
+
+{{Skill_detail
+ |skill=[[Snakes|Snake]]
+ |description=A pet snake to assist you in combat.
+ |lessons=1634
+ |syntax=SUMMON RATTLESNAKE<br>SUMMON RATTLESNAKE INVENTORY{{!}}INV
+ |required=100 mana
+ |target=Adventurers
+ |cooldown=5.00 seconds of equilibrium
+ |detail=The first time you summon a snake, you may have to try many times before you're successful. Eventually though, the snakes of the wild won't be able to resist your serpentine charms, and one will come slithering to serve. Once you have your snake, you may summon it back at any time should you lose it (simply SUMMON RATTLESNAKE INVENTORY{{!}}INV] again). Your snake may be ordered to perform the actions listed in HELP DENIZENS.<p>City/House membership influences what precisely is summoned.<br>'''Ashtan''' summon kraits.<br>'''CIJ''' summon puffadders.<br>'''Eleusis''' summon treesnakes.<br>'''Hashan''' summon vipers.<br>'''Mhaldor''' summon adders.<br>'''Targossas''' summon moccasins.<br>'''Cyrene''' summon lanceheads.<br>All others summon rattlesnakes.</p>
+}}
+
+{{Skill_detail
+ |skill=Phase
+ |description=Alter your status in space-time itself.
+ |lessons=1736
+ |syntax=PHASE<br>UNPHASE
+ |required=100 mana
+ |target=Self
+ |cooldown=4.00 seconds of balance
+ |detail=This is probably the most effective concealment ability there is. While phased, you will be hidden from all mortal adventurers, aside from other phased ones. You will, further, be unable to interact with items, denizens, or unphased adventurers. The caveat here is that you may try to attack an unphased adventurer, which will automatically unphase you. Thus, phase can be used as an effective aid to assassinations.<p>Be warned that you will lose endurance rather quickly while phased.</p>
+}}
+
+[[Category:Skills]]
