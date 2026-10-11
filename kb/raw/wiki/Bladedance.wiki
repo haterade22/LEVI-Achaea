@@ -1,0 +1,328 @@
+'''Bladedance''' is in the whirl and flash of metallic song, the cut and jab of flourishing a rapier, and the staccato steps within flawless footwork. With their songblessed swords in hand do all [[Bards]] whether journeyman or master embrace unconventional fighting techniques that drive studious masters to despair. Acrobatic and athletic from Sunrise to Sunset, by following the tempo of battle like musical notes upon a sheet the storytellers of [[Achaea]] manifest a style as unorthodox as it is effective.
+The skill of Bladedance is available to members of the Bard [[class]], along with [[Composition]] and [[Sagas]] (or [[Woe]]).
+
+==Abilities in Bladedance==
+===Rapier Techniques===
+{{Skill_detail
+ |skill=Harmonise
+ |description=The first step of the dance.
+ |lessons=1
+ |syntax=BATHE RAPIER IN SONG
+ |required=
+ |target=
+ |cooldown=
+ |detail=The aspiring bladedancer will require no simple blade of unfeeling steel for their performance. Once you have acquired an appropriate rapier,
+head to the Grotto of Song and BATHE RAPIER IN SONG to prepare for the battles to come.<p>* Bladedance will require a songblessed rapier.</p>
+}}
+
+{{Skill_detail
+ |skill=Gripping
+ |description=Strong hands will save your life.
+ |lessons=9
+ |syntax=GRIP|RELAX GRIP
+ |required=
+ |target=
+ |cooldown=2.30 seconds of balance
+ |detail=While utilising this ability, you will prevent items from being knocked out of your hands.
+}}
+
+{{Skill_detail
+ |skill=Jab
+ |description=Control the distance.
+ |lessons=23
+ |syntax=BLADE JAB <target> <LEFT ARM/TORSO/RIGHT ARM>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=2.10 seconds of balance
+ |detail= The simplest of techniques with the rapier, this swift jab teaches the student to gauge distance accurately while also inflicting piercing wounds to an adversary. As with other bladedance techniques, the jab will have different results based on your position in relation to your partner and where the jab lands. These results are as follows:
+From the front:
+At the arms: the limb will be broken.<br>
+At the torso: afflicts with nausea.<br>
+
+From the side:
+At the arms: afflicts with clumsiness.<br>
+At the torso: afflicts with asthma.<br>
+
+From the back:
+At the arms: gives weariness. If the jab breaks the arm, deals bonus damage.<br>
+At the torso: afflicts with anorexia. If the jab breaks the torso, tonal trauma takes place(*).<br>
+
+* See AB BLADEDANCE TONAL.
+}}
+
+{{Skill_detail
+ |skill=Tune
+ |description=Just the right pitch.
+ |lessons=29
+ |syntax=BLADE TUNE
+ |required=
+ |target=
+ |cooldown=3.00 seconds of balance
+ |detail=Weave song about your person, warding off all forms of damage to an extent.
+}}
+
+{{Skill_detail
+ |skill=Punctuate
+ |description=Emphasis is key.
+ |lessons=45
+ |syntax=BLADE PUNCTUATE <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=2.00 seconds of equilibrium
+ |detail=This swift flurry of jabs with the rapier is used to break the defences of your partner. It will destroy barriers to further bladedance techniques if they are present.
+* Strips rebounding aura, then magical shields.
+}}
+
+{{Skill_detail
+ |skill=Hound
+ |description=The dance isn't over.
+ |lessons=289
+ |syntax=BLADE HOUND <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=Sometimes when you get behind a partner they're just going to try to make a run for it. With this technique you'll hound their steps, and, so long as you have their back still(*), you'll be able to charge back into
+the dance inflicting quite the damage while stunning them.
+
+* If someone is in an adjacent room and you have back position, this ability will move you into their room and damage them as well as conveying a moderate stun.
+}}
+
+{{Skill_detail
+ |skill=Tonal
+ |description=First the edge, next the sound.
+ |lessons=356
+ |syntax=passive
+ |required=
+ |target=
+ |cooldown=
+ |detail=When you deal particularly powerful blows, the tonal resonance of your songblessed rapier shall cause terrible trauma to the impact site beyond even the norm:
+The head: afflicts with impatience.<br>
+Torso: afflicts with asthma.<br>
+Either arm: afflicts with slickness.<br>
+Either leg: afflicts with prone.<br>
+
+* This will be noted in relevant ability files.
+}}
+
+{{Skill_detail
+ |skill=Flick
+ |description=Sometimes steel, sometimes song.
+ |lessons=467
+ |syntax=BLADE FLICK <target>
+ |required=
+ |target=Adventurers
+ |cooldown=2.10 seconds of balance
+ |detail=This flick with the blade focuses more on song than steel, permitting the bard to channel the nature of their song blessed weapon to greater affect. If successful your foe will be struck down with certain deadly conditions:<p>From the front: crescendo, an enthralling condition which will only grow more dire the longer they dance to your tune(*).<p>From the side: earworm, a condition that is sure to grow worse over time(**).<p>From the back: both crescendo and earworm.<p>* Each time someone afflicted with crescendo eats an herb that is not ash (which cures crescendo), the crescendo will build. At a certain point, this makes other abilities available (see AB COMPOSITION FINALE).<br>** All bladedance attacks that deal damage deal additional damage against a target afflicted with earworm. This damage increases the longer the earworm remains uncured.<br>*** When used against denizens, this ability deals psychic damage to your foe.</br>
+}}
+
+{{Skill_detail
+ |skill=Flourish
+ |description=You're mesmerising, you are.
+ |lessons=669
+ |syntax=BLADE FLOURISH <target>
+ |required=
+ |target=Adventurers
+ |cooldown=2.10 seconds of balance.
+ |detail=This elegant flourish with your blade may not inflict any harm, but it'll certainly give you the opportunity to adjust your footwork while your partner is spellbound by your peerless grace. In practice, you will advance two positions through the bladedance immediately (so from front to back, side to front, back to side).
+}}
+
+{{Skill_detail
+ |skill=Highsun
+ |description=A high point of the day.
+ |lessons=704
+ |syntax=BLADE HIGHSUN <target> <HEAD/LEFT ARM/RIGHT ARM>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=2.30 seconds of balance
+ |detail=A downward strike with the edge of the blade aimed at the head or arms of a partner, the highsun strike delivers the first affliction that your foe does not have from:
+
+When aimed at the head:<br>
+From the front: clumsiness, weariness, or recklessness.<br>
+From the side: addiction, generosity, or confusion.<br>
+From the back: paralysis, generosity, or diminished(*).<br>
+
+When aimed at the arms:<br>
+From the front: clumsiness, weariness, or haemophilia.<br>
+From the side: weariness, clumsiness, or healthleech.<br>
+From the back: paralysis, healthleech, or sensitivity.<br>
+
+* Diminished prevents the use of any active cures while afflicted with it.
+
+}}
+
+{{Skill_detail
+ |skill=Heelsnap
+ |description=Two legs are for amateurs.
+ |lessons=773
+ |syntax=BLADE HEELSNAP <target> <LEFT/RIGHT>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=2.30 seconds of balance
+ |detail=This low lateral slash with the rapier is aimed at one of the legs of your partner. As with other techniques with the rapier, it has various affects based upon your position in relation to your partner:
+
+From the front: breaks the leg in question.<br>
+
+From the side: if aimed at the left leg, afflicts with healthleech. If aimed at the right leg, afflicts with sensitivity.<br>
+
+From the back: afflicts with hamstrung and dismounts your partner if they are mounted.<br>
+}}
+
+{{Skill_detail
+ |skill=Sunrise
+ |description=Down goes your partner.
+ |lessons=980
+ |syntax=BLADE SUNRISE <target> <LEFT/RIGHT>
+ |required=
+ |target=Adventurers
+ |cooldown=2.30 seconds of balance
+ |detail=As the sun ascends to greet the dawn, so too shall your rapier rise to meet your adversary. Delivered not as a traditional lateral or vertical slash but as a diagonal blow to the hip and up into the torso, this strike can be utterly devastating. If the torso and leg adjacent to the hip you are aiming at are sufficiently damaged(*), both will be brokenas a result of this strike, and tonal trauma takes place upon both limbs.
+
+* Both limbs must be damaged enough that the next bladedance attack would break them.
+** Se AB BLADEDANCE TONAL.
+}}
+
+{{Skill_detail
+ |skill=Sunset
+ |description=Light on falling steel.
+ |lessons=1290
+ |syntax=BLADE SUNSET <target> <LEFT/RIGHT>
+ |required=
+ |target=Adventurers
+ |cooldown=2.30 seconds of balance
+ |detail=As the sun descends at the close of day, so too shall your rapier fall upon your adversary. Delivered not as a traditional lateral or vertical slash but as a diagonal blow down upon either the left or right shoulder, this strike can be utterly devastating. If the head and arm adjacent to the shoulder you are aiming at are sufficiently damaged(*), both will be broken as a result of this strike, and tonal trauma takes place upon both limbs(**).
+
+* Both limbs must be damaged enough that the next bladedance attack would break them.
+** Se AB BLADEDANCE TONAL.
+}}
+
+{{Skill_detail
+ |skill=Deathfrombelow
+ |description=From earth to sky with blade and voice.
+ |lessons=1738
+ |syntax=DEATHFROMBELOW <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=Sometimes those of lesser footwork will think to take to the skies or trees, foolishly believing that surely you cannot be as sublime in such environs as your peerless grace upon the ground. You will soon disabuse them of this folly, for with a single bound and a cry(*) you will bring them straight back down to your level with a strike of your blade(**).<p>* This uses your warcry if you have one set.</p><p>** This deals damage and knocks them prone to the ground, as well as incurring a relatively nontrivial blackout.</p>
+}}
+
+==Dance Moves==
+{{Skill_detail
+ |skill=Footwork
+ |description=Poetry in motion.
+ |lessons=5
+ |syntax=passive
+ |required=
+ |target=
+ |cooldown=
+ |detail=Your footwork is the envy and ambition of lesser dancers: poetry in motion to make even the most cold-hearted soul stop and regard. As you enter the deadly dance with a partner, you will take the front position. As you strike, you will move around them, taking the side position, and eventually entering their blindspot in the back position. The novice bladedancer will move into side position after five strikes in the front position and into back position after two further strikes. They will return to the front position after a single attack in the back position.<p>Most bladedance techniques function differently against your partner depending on your position, and your partner will be unable to parry attacks entirely performed from their blindspot.<p>Additionally, you will deal bonus damage to any denizens when striking.<p>Note that if your partner escapes you, reengaging swiftly will let you preserve your positional sense, but if they evade you for too long you will need to return to the front position.</p>
+
+}}
+{{Skill_detail
+ |skill=Backflip
+ |description=You make it look so easy.
+ |lessons=67
+ |syntax=BACKFLIP <direction>
+ |required=
+ |target=
+ |cooldown=
+ |detail=With the casual grace that only you possess you can flip over obstructions such as adventurers blocking you or icewalls.
+}}
+{{Skill_detail
+ |skill=Acrobatics
+ |description=Stay light, stay mobile.
+ |lessons=134
+ |syntax=ACROBATICS <ON/OFF>
+ |required=
+ |target=
+ |cooldown=3.0 seconds of balance
+ |detail=With this ability, you will exercise your dexterity, becoming far more difficult to hit. Be warned that it comes with a serious endurance drain.
+}}
+{{Skill_detail
+ |skill=Dodging
+ |description=For the toughest of crowds.
+ |lessons=178
+ |syntax=DODGING <ON/OFF>
+RELAX DODGING
+ |required=
+ |target=
+ |cooldown=
+ |detail=This ability will allow you to dodge attacks from the air.
+}}
+{{Skill_detail
+ |skill=Tempo
+ |description=Timing is everything.
+ |lessons=245
+ |syntax=TEMPO <ADAGIO/MODERATO/ALLEGRO>
+ |required=
+ |target=
+ |cooldown=2.0 seconds of balance
+ |detail=The tempo of your footwork is of prime importance for any dancer of the blade. The three styles will dictate how rapidly you may transition between positions, and all have their place:<p>Adagio: 4, 4, 3.<p>Moderato: 3, 2, 2.<p>Allegro: 2, 1, 1.<p>Vivace: 1, 6, 3.<p>No tempo: 5, 2, 1.<p>* Numbers relate to number of bladedance attacks performed in front, side, and back respectively.</p>
+}}
+{{Skill_detail
+ |skill=Hawkstep
+ |description=Move and strike, move and strike.
+ |lessons=876
+ |syntax=DANCE HAWKSTEP
+ |required=
+ |target=
+ |cooldown=2.5 seconds of balance
+ |detail= This dance is one of swift motion and exacting precision. When dancing the hawkstep attempts to hinder your escape from a room (by such things as rites of piety and the like) shall be less likely to succeed.
+
+* Note that you can only dance one thing at a time, so the hawkstep is exclusive with the dance of the harrying, for example.
+}}
+{{Skill_detail
+ |skill=Somersault
+ |description=Keep it moving.
+ |lessons=911
+ |syntax=SOMERSAULT <direction>
+ |required=
+ |target=
+ |cooldown=4.0 seconds of balance
+ |detail=An advanced form of tumbling, you may quickly somersault passed barriers or similar, even when bound(*).
+
+* This functionally acts as a survival tumble which completes faster.
+}}
+{{Skill_detail
+ |skill=Wavedance
+ |description=For never do you tire.
+ |lessons=1152
+ |syntax=DANCE WAVEDANCE
+ |required=
+ |target=
+ |cooldown=2.00 seconds of balance
+ |detail=Dancing as the waves do, you shall be as relentless as they in turn, and yet never quite unleashed(*).<p>* You will not be parried while dancing this dance, but will also do no limb damage.</p>
+}}
+{{Skill_detail
+ |skill=Balancing
+ |description=Poise weeps at your perfection.
+ |lessons=1394
+ |syntax=BALACING <ON|OFF>
+         RELAX BALANCING
+ |required=
+ |target=
+ |cooldown=
+ |detail=With this ability, you will have superior balance, making it much more difficult to knock you off your feet with abilities such as sweepkick, or the earthquake vibration. There is a mana drain associated with it, however.
+}}
+{{Skill_detail
+ |skill=Encircle
+ |description=Work with an ally to encircle foes.
+ |lessons=1394
+ |syntax=ENCIRCLE WITH <ally><br>ENCIRCLE WITH NOBODY</br>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Stand beside an ally, ready to encircle your foe.<p>Using this ability on a mutual ally will allow you to circle behind your target from the front position, so long as your partner is in the room.</p>
+}}
+{{Skill_detail
+ |skill=Harrying
+ |description=The show is not over.
+ |lessons=1600
+ |syntax=DANCE HARRYING
+ |required=
+ |target=
+ |cooldown=2.50 seconds of balance
+ |detail=The dance of the harrying is one focussed on swift blows of the rapier to keep your enemy pinned within your deadly encirclement. Though these blows typically do no real harm, the threat of your blades point will make it difficult for even the fleetest foe to escape your lethal performance. <p>*You may switch from harrying to another dance without consuming balance.</p>
+}}
+
+[[Category:Skills]]

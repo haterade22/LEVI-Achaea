@@ -1,0 +1,369 @@
+Kaido is a skill with two main parts to it. The first part, comprising the lower abilities, consist of an assortment of defensive abilities that rely on bodily control, such as automatic mana regeneration, healing limbs by force of will, and so on. The higher abilities relate to the use of Kai energy. After a monk has built up Kai energy by being near violent actions, they may use the Kai abilities, which are extremely powerful.
+
+The skill of '''Kaido''' is available to members of the [[Monk]] [[class]], along with [[Tekura]] and [[Telepathy]]. After a monk has mastered Tekura they may enhance their training with [[Shikudo]].
+
+==Abilities in Kaido==
+{{Skill_detail
+ |skill=Weathering
+ |description=Increase your ability to weather damage.
+ |lessons=
+ |syntax=WEATHERING
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=Your budding control over your body will assist you in weathering the storm of life by increasing your constitution by one point.
+}}
+
+{{Skill_detail
+ |skill=Vitality
+ |description=Call upon a rush of adrenaline to heal you.
+ |lessons=
+ |syntax=VITALITY
+ |required=
+ |target=Self
+ |cooldown=5.00 seconds of equilibrium
+ |detail=You may only activate this ability when very near full health and mana. Once active, when you drop to less than twenty-five percent of your maximum health without dying, you will get a sudden rush of adrenaline that will heal you significantly.
+}}
+
+{{Skill_detail
+ |skill=Sturdiness
+ |description=Standing firm against attempts to move you.
+ |lessons=
+ |syntax=STAND FIRM
+ |required=
+ |target=Self
+ |cooldown=3.00 seconds of balance
+ |detail=By concentrating on increasing your mass, you are able to gain immunity from most attempts to move you against your will. It is lost when you next use balance or equilibrium.
+}}
+
+{{Skill_detail
+ |skill=Toughness
+ |description=Increased resistance to physical attacks.
+ |lessons=
+ |syntax=TOUGHNESS
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=By increasing the density of your skin, you are able to decrease the amount of damage you will take from physical cutting attacks.
+}}
+
+{{Skill_detail
+ |skill=Deaf
+ |description=Blocking out sound by force of will.
+ |lessons=
+ |syntax=DEAF
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=This simply allows you to enter a short trance and deafen yourself.
+}}
+
+{{Skill_detail
+ |skill=Hearing
+ |description=Restoring your hearing.
+ |lessons=
+ |syntax=HEARING
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=Instantly restores your hearing.
+}}
+
+{{Skill_detail
+ |skill=Clotting
+ |description=Reduce the level of your bleeding.
+ |lessons=
+ |syntax=CLOT
+ |required=60 mana
+ |target=Self
+ |cooldown=
+ |detail=This will permit you to partially clot your bleeding.
+}}
+
+{{Skill_detail
+ |skill=Regeneration
+ |description=Regain health through strength of mind.
+ |lessons=
+ |syntax=REGENERATION [ON{{!}}OFF]<br>RELAX REGENERATION
+ |required=Mana and Willpower drain
+ |target=
+ |cooldown=
+ |detail=At an ongoing mental drain, you are able to channel your mental energy into healing yourself.
+}}
+
+{{Skill_detail
+ |skill=Sight
+ |description=Restoring your sight.
+ |lessons=
+ |syntax=SIGHT
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=You have sufficient control over your body to instantly repair your eyes when blinded.
+}}
+
+{{Skill_detail
+ |skill=Blind
+ |description=Blinding yourself to prevent optical damage.
+ |lessons=
+ |syntax=BLIND
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=A few seconds after using this ability, you will blind yourself.
+}}
+
+{{Skill_detail
+ |skill=Resistance
+ |description=Reduce the damage taken from magical attacks.
+ |lessons=
+ |syntax=RESISTANCE
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=Due to your increased bodily control, you are able to reduce the damage from magical attacks.
+}}
+
+{{Skill_detail
+ |skill=Nightsight
+ |description=Gain the ability of infravision.
+ |lessons=
+ |syntax=NIGHTSIGHT [ON{{!}}OFF]<br>RELAX NIGHTSIGHT
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=You will gain the ability to see in normal darkness.
+}}
+
+{{Skill_detail
+ |skill=Fitness
+ |description=Controlling your breathing.
+ |lessons=
+ |syntax=FITNESS
+ |required=
+ |target=Self
+ |cooldown=3.00 seconds of balance
+ |detail=With your mastery of your own body, you are able to purge yourself of the asthma affliction.
+}}
+
+{{Skill_detail
+ |skill=Restoration
+ |description=Healing damaged limbs by force of will.
+ |lessons=
+ |syntax=RESTORE
+ |required=100 mana
+ |target=Self
+ |cooldown=3.00 seconds of equilibrium
+ |detail=By channeling mental power into healing, you can heal any broken limbs you may have at one time.<p>''Listed are the base costs, these increase with 1/2/3/4 limbs broken.''</p>
+}}
+
+{{Skill_detail
+ |skill=Projectiles
+ |description=Avoiding many projectiles.
+ |lessons=
+ |syntax=PROJECTILES [ON{{!}}OFF]<br>RELAX PROJECTILES
+ |required=Mana and Willpower drain
+ |target=Self
+ |cooldown=
+ |detail=At the cost of some mana, you are able to heighten your reflexes and dodge many projectiles.
+}}
+
+{{Skill_detail
+ |skill=Dodging
+ |description=Avoiding attacks from the sky.
+ |lessons=
+ |syntax=DODGING [ON{{!}}OFF]<br>RELAX DODGING
+ |required=Mana and Willpower drain
+ |target=Self
+ |cooldown=
+ |detail=This ability will allow you to dodge attacks from the air.
+}}
+
+{{Skill_detail
+ |skill=Constitution
+ |description=Maintaining your intestinal equilibrium.
+ |lessons=
+ |syntax=CONSTITUTION
+ |required=
+ |target=Self
+ |cooldown=3.00 seconds of equilibrium
+ |detail=This ability will gain you a stomach of steel.
+}}
+
+{{Skill_detail
+ |skill=Splitting
+ |description=Constant meditation by splitting your consciousness.
+ |lessons=
+ |syntax=SPLIT MIND<br>JOIN MIND
+ |required=
+ |target=Self
+ |cooldown=3.00 seconds of equilibrium
+ |detail=By splitting your consciousness into dual parts, you will lose part of your maximum mana level, but will effectively meditate constantly in your second mind, gaining you mana constantly and speeding up meditation.
+}}
+
+{{Skill_detail
+ |skill=Breathing
+ |description=Holding your breath.
+ |lessons=
+ |syntax=HOLD BREATH<br>RELEASE
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=This ability will grant a short-term immunity from anything doing asphyxiation damage. However, any offensive activity or consumption of balance or equilibrium will cause you to begin breathing once again.
+}}
+
+{{Skill_detail
+ |skill=Consciousness
+ |description=The ability to stay conscious at all times.
+ |lessons=
+ |syntax=CONSCIOUSNESS [ON{{!}}OFF]<br>RELAX CONSCIOUSNESS
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=Your power of concentration is such that you will be able to maintain a grasp on consciousness where you might normally lose it.
+}}
+
+{{Skill_detail
+ |skill=Immunity
+ |description=Immunity from most poisons.
+ |lessons=
+ |syntax=Self
+ |required=
+ |target=
+ |cooldown=
+ |detail=Your power of concentration is such that you will be able to maintain a grasp on consciousness where you might normally lose it.
+}}
+
+{{Skill_detail
+ |skill=Boosting
+ |description=Increasing your rate of regeneration.
+ |lessons=
+ |syntax=BOOST REGENERATION
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=This ability, when used in conjunction with Regeneration, alters the rate of regeneration to a more favourable mana-to-health ratio.
+}}
+
+{{Skill_detail
+ |skill=Transmute
+ |description=Instantly convert mana into health.
+ |lessons=
+ |syntax=TRANSMUTE <0-1000>
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=This will instantly turn the specified amount of mana into health, minus a bit that is lost in the transfer.
+}}
+
+{{Skill_detail
+ |skill=Numbness
+ |description=Delaying the effects of damage.
+ |lessons=
+ |syntax=NUMB
+ |required=
+ |target=Self
+ |cooldown=3.00 seconds of equilibrium
+ |detail=With a very clever method of concentration, you are now able to numb yourself to damage received, at least temporarily. When the numbness wears off, all the damage you would have taken, minus 40%, will be received in one blow.
+}}
+
+{{Skill_detail
+ |skill=Kaitrance
+ |description=Entering the mystical Kai Trance.
+ |lessons=
+ |syntax=KAI TRANCE<br>BREAK TRANCE
+ |required=Mana drain
+ |target=Self
+ |cooldown=
+ |detail=This is the basis for the most powerful Kaido abilities. It is the ability which allows you to gather Kai energy to use in later abilities. Everytime a person on your enemies list does something offensive in your location, you will gain Kai energy from it. How much you gain depends on how much energy the ability generates. While you are in a Kai Trance, you will lose Kai energy relatively quickly, as well as losing some mental energy. When you BREAK TRANCE, you will lose all your accumulated Kai Energy. 
+}}
+
+{{Skill_detail
+ |skill=Kaichoke
+ |description=Crush a victim's windpipe remotely.
+ |lessons=
+ |syntax=KAI CHOKE <target>
+ |required=10 Kai energy and 50 mana
+ |target=Adventurers and denizens.
+ |cooldown=4.00 seconds of equilibrium
+ |detail=By manipulating the Kai energy that flows around us all, you are able to choke the life out of any adventurer in your line of sight, dealing increased damage to those suffering under certain afflictions(*).<p>If instead you turn your focus onto a denizen, this skill becomes much simpler to perform but can only be used on those foes in the same location as you(**).<p>* This deals increased damage to targets that have one of: a damaged/mangled head, a damaged/mangled torso, or are mind clamped.<br>** This skill requires and consumes no kai energy when used against a denizen but requires the target to be in the same location as the monk in these cases.</br>
+}}
+
+{{Skill_detail
+ |skill=Kaicripple
+ |description=Cripple your target completely.
+ |lessons=
+ |syntax=KAI CRIPPLE <target>
+ |required=41 Kai energy
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=By sending out a crushing whip of Kai, you can crush the limbs of your target.
+}}
+
+{{Skill_detail
+ |skill=Kaiheal
+ |description=Healing yourself with Kai energy.
+ |lessons=
+ |syntax=KAI HEAL
+ |required=21 Kai energy
+ |target=Self
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Although this may only be performed at yourself, it is a very powerful healing ability.
+}}
+
+{{Skill_detail
+ |skill=Surge
+ |description=A blast of focussed power.
+ |lessons=
+ |syntax=KAI SURGE <target>
+ |required=45 Kai energy
+ |target=Adventurers
+ |cooldown=3.20 seconds of equilibrium
+ |detail=By directing a surge of pure kai energy into an enemy, you may set their muscles to violently spasming. This will prevent them from being able to remount, as well as slightly disrupting tumble attempts(*). This ability also prones and causes some damage. The effect will fade over time.<p>* Each damaged limb currently extends the length of a tumble attempt; the kai surge status will increase this penalty. Tumble with no damaged limbs is unaltered.</p> 
+}}
+
+{{Skill_detail
+ |skill=Burst
+ |description=When the external will not supply.
+ |lessons=
+ |syntax=KAI BURST
+ |required=
+ |target=Self
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Sometimes there will be no simple way to take in kai energy the conventional way. Though the highest workings of kaido may be out of your reach in these situations, by sending a burst of uncontrolled kai energy outward you may somewhat mitigate this limitation(*). This is taxing however, and may only be done every so often, as well as stripping any active kai boost defence you may have established(**).<p>* This fills your kai to a little under half.</p><p>** Once every 90 seconds, and you cannot reraise your boost defence until this time has expired.</p><p>*** Note if you're above a certain kai threshold you can't use this ability (i.e. when it would be pointless to do so).</p>
+}}
+
+{{Skill_detail
+ |skill=Kaiboost
+ |description=Increase your receptiveness to Kai energy.
+ |lessons=
+ |syntax=KAI BOOST
+ |required=11 Kai energy
+ |target=Self
+ |cooldown=
+ |detail=As you become more efficient in the art of handling Kai, you gain the ability to double the amount of Kai energy you get.
+}}
+
+{{Skill_detail
+ |skill=Enfeeble
+ |description=Unleash a massive blast of kai energy at your opponent.
+ |lessons=
+ |syntax=KAI ENFEEBLE <target>
+ |required=61 Kai energy
+ |target=Adventurers
+ |cooldown=3.00 seconds of equilibrium
+ |detail=This ability will throw a massive shockwave of kai energy at your opponent, cutting his current health and mana in half. If your opponent does not lie prone before you, this will be reduced to a 25% reduction in health and mana.
+}}
+
+{{Skill_detail
+ |skill=Deliverance
+ |description=Grant your enemies release from this mortal coil.
+ |lessons=
+ |syntax=KAI DELIVERANCE
+ |required=81 Kai energy
+ |target=Adventurers
+ |cooldown=
+ |detail=Once activating this ability, there will be a short delay. After this time, anyone who attempts to harm you for the next thirty seconds from close by will die instantly in a massive backlash of Kai energy.
+}}
+
+[[Category:Skills]][[Category:Edit needed]]

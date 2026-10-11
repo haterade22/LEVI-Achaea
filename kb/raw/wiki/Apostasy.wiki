@@ -1,0 +1,402 @@
+The hallmark skill of the Apostate, Apostasy is the art and science of summoning and dealing with the mighty Baalzadeens and lesser daemons. In it, they will learn to use the sentient daeggers, form a relationship with your loving Baalzadeen, and learn to summon a variety of lesser daemons into a pentagram drawn with blood. Perhaps the most feared ability of the Apostasy skill is that which allows your Baalzadeen to tear the soul from an unwilling victim.
+
+The skill of '''Apostasy''' is available to members of the [[Apostate]] [[class]], along with [[Necromancy]] and [[Evileye]].
+
+==Abilities in Apostasy==
+{{Skill_detail
+ |skill=Daegger
+ |description=Call to your side a living, daemonic daegger to aid you.
+ |lessons=
+ |syntax=SUMMON DAEGGER<br>STAB <target>
+ |required=300 mana
+ |target=Adventurers
+ |cooldown=Equilibrium
+ |detail=The daemonic daeggers are actually living creatures; small daemons with a network of small brains geared towards making them somewhat intelligent weapons. You can quickly stab your daegger at your target even if your skill in weaponry isn't very high because the creature's eye and limited levitation abilities will help to guide your hand. If the daegger is envenomed then the target has a chance to receive the relevant venom affliction. The strength, accuracy, and to a lesser degree speed of your stabs will depend on your skill in Apostasy.
+}}
+
+{{Skill_detail
+ |skill=Hunt
+ |description=Command your daegger to hunt your enemy.
+ |lessons=
+ |syntax=DAEGGER LEVITATE<br>DAEGGER HUNT <target>
+ |required=
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Your daegger has become stronger. Strong enough, in fact, that it can, with a bit of help from you, levitate itself and even fly at potentially lethal speeds towards your foe. This is superior to simply throwing the weapon because it can hook around and come at odd angles, and if it misses, it will attack again. Because you are guiding the daegger largely with the power of your mind, your intelligence, not your strength, affects the power with which it will strike your opponent. Additionally, your weaponry skill is what affects the chance of it hitting, as the daegger is putting most of its energy into the act of levitation. The higher your skill in Apostasy is, the greater the number of passes your daegger will make.  
+}}
+
+{{Skill_detail
+ |skill=Envenom
+ |description=Envenom your daegger to poison your victims.
+ |lessons=
+ |syntax=ENVENOM DAEGGER WITH <venom>
+ |required=
+ |target=
+ |cooldown=
+ |detail=With this ability, you may layer venoms on an edged weapon. Each time that weapon hits somebody, one venom will poison your opponent, and disappear from the weapon. They work on a last-on, first-off basis, so if you put xentio on a weapon, and then put voyria on, the voyria would come off first, and the xentio second. You must have the selected venom in a vial in your inventory. In order to get rid of the venoms on a weapon, simply WIPE <weapon>.
+}}
+
+{{Skill_detail
+ |skill=Pentagrams
+ |description=Sketch an infernal pentagram, in blood.
+ |lessons=
+ |syntax=CARVE PENTAGRAM<br>DISPEL PENTAGRAM
+ |required=0.25% life essence
+ |target=Room
+ |cooldown=1.00 seconds of balance
+ |detail=At a small life essence cost (if you do not have the essence skill in necromancy then telling just how much you have and how much you are using will be difficult) you can infuse your blood with a greater power. Then, taking your daegger, you make a small puncture in your hand, and carve an infernal pentagram onto the ground with your own steaming blood. There can be only one pentagram on the ground in a room at a given time, and you can only use a pentagram drawn in your own blood, infused with the life essence of others, as it may be. From here, a variety of other abilities may be used.
+}}
+
+{{Skill_detail
+ |skill=[[Baalzadeen]]
+ |description=Summon your beloved Baalzadeen to do your bidding.
+ |lessons=
+ |syntax=SUMMON BAALZADEEN<br>BANISH BAALZADEEN
+ |required=0.50% life essence
+ |target=
+ |cooldown=2.00 seconds of equilibrium
+ |detail=The Baalzadeen is the primary daemon of the apostasy skill. They strike a balance between being powerful enough to be very useful to you, but not so powerful that they break your will, and consume your mind and soul. Though ethereal and either unable or unwilling to do anything to defend itself, its powers can be bent towards your ends in many ways.
+}}
+
+{{Skill_detail
+ |skill=Taste
+ |description=Taste the flesh of your Baalzadeen.
+ |lessons=
+ |syntax=DEMON TASTE
+ |required=
+ |target=
+ |cooldown=0.10 seconds of equilibrium
+ |detail=By tasting the sweet, sweet flesh of your Baalzadeen, you will be able to determine its level of health, and any ongoing abilities it is using.
+}}
+
+{{Skill_detail
+ |skill=Rest
+ |description=Order your Baalzadeen to rest.
+ |lessons=
+ |syntax=DEMON REST
+ |required=
+ |target=
+ |cooldown=3.20 seconds of equilibrium
+ |detail=This ability is used to order your Baalzadeen to cease using any repeating abilities, such as sear or syphon.
+}}
+
+{{Skill_detail
+ |skill=Armour
+ |description=Request that your Baalzadeen grant you protection.
+ |lessons=
+ |syntax=DEMON ARMOUR
+ |required=300 Baalzadeen health
+ |target=
+ |cooldown=2.50 seconds of equilibrium
+ |detail=Your Baalzadeen's power may now be used to create a demonic armour around yourself. Its effect is cumulative with any other armour you may wear.
+}}
+
+{{Skill_detail
+ |skill=[[Fear|Horror]]
+ |description=Instill great fear into your victim with your demon's aid.
+ |lessons=
+ |syntax=DEMON HORROR <target>
+ |required=125 Baalzadeen health
+ |target=Adventurers
+ |cooldown=2.00 seconds of equilibrium
+ |detail=Instill great fear into your victim with your demon's aid.
+}}
+
+{{Skill_detail
+ |skill=Fiend
+ |description=Summon a daemon fiend to attack an enemy.
+ |lessons=
+ |syntax=SUMMON FIEND<br>ORDER FIEND ATTACK <target><br>ORDER FIEND PASSIVE
+ |required=150 mana
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=The fiend is one of the minor daemons. Once summoned in your pentagram, it will flex and fire and lash out with its countless edged appendages, causing your target to sustain serious bleeding damage.
+}}
+
+{{Skill_detail
+ |skill=Scorch
+ |description=Order your Baalzadeen to melt [[icewall|icewalls]].
+ |lessons=
+ |syntax=DEMON SCORCH <icewall>
+ |required=150 Baalzadeen health
+ |target=
+ |cooldown=2.50 seconds of equilibrium
+ |detail=Use the cursed breath of your Baalzadeen to melt icewalls and wither Reclamation vines.<p>Vines are destroyed with one cast if the reclaimer is not in the area, two if they are in the area but not in the room, three if they are in the room.</p>
+}}
+
+{{Skill_detail
+ |skill=Presences
+ |description=Locate those in your local area with your Baalzadeen.
+ |lessons=
+ |syntax=DEMON PRESENCES
+ |required=200 Baalzadeen health
+ |target=
+ |cooldown=2.50 seconds of equilibrium
+ |detail=Using this ability, your Baalzadeen will reach out and provide you with some information on the status of each person in your local area.
+}}
+
+{{Skill_detail
+ |skill=Mask
+ |description=Summon dark powers to mask your demonic servitor.
+ |lessons=
+ |syntax=MASK<br>UNMASK
+ |required=500 mana
+ |target=
+ |cooldown=2.00 seconds of equilibrium
+ |detail=This ability will conceal the movements of your Baalzadeen. UNMASK removes the concealment.
+}}
+
+{{Skill_detail
+ |skill=Sap
+ |description=Drain away the mana of a victim with your loving demon.
+ |lessons=
+ |syntax=DEMON SAP <target>
+ |required=50 Baalzadeen health
+ |target=Adventurers
+ |cooldown=2.75 seconds of equilibrium
+ |detail=With this ability, your Baalzadeen will draw some mana from its target.
+}}
+
+{{Skill_detail
+ |skill=Trace
+ |description=Command your Baalzadeen to trace the movements of someone.
+ |lessons=
+ |syntax=DEMON TRACE <target><br>DEMON TRACE OFF
+ |required=
+ |target=Adventurers
+ |cooldown=2.00 seconds of equilibrium
+ |detail=Though this ability will only function within the local continent, your Baalzadeen will be able to trace the movements of nearly any adventurer.
+}}
+
+{{Skill_detail
+ |skill=Fortify
+ |description=Fortify the health of your Baalzadeen with yours.
+ |lessons=
+ |syntax=DEMON FORTIFY
+ |required=
+ |target=
+ |cooldown=2.00 seconds of equilibrium
+ |detail=Using this ability, you may replenish your Baalzadeen's power at a cost of some of your health.
+}}
+
+{{Skill_detail
+ |skill=Apathy
+ |description=Become numb to the crushing pain of existence.
+ |lessons=
+ |syntax=DEMON APATHY
+ |required=250 Baalzadeen health
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Your Baalzadeen is able to imbue in you such an incredible level of apathy that for ten seconds you will take no damage from attacks. There is, of course, a caveat, which is that when that ten seconds is up, you will take all the damage you received, minus 40%, in one fell blow.
+}}
+
+{{Skill_detail
+ |skill=Shadowstrike
+ |description=Use your daegger to strike at the shadow of a victim.
+ |lessons=
+ |syntax=DAEGGER SHADOWSTRIKE <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=4.50 seconds of equilibrium
+ |detail=Once you have levitated your daegger, you can order it to perform the deadly shadowstrike. Your daegger will fly towards your foe, seeming to miss, but instead plunging into the gut of their shadow.<p>Against adventurers, this will have the same effect as if the daegger had impaled the target through his or her stomach. Your target will take damage for as long as he or she is impaled, and will have to writhe painfully off the daegger.<p>When used against a denizen, your daegger will deal cutting damage upon striking the target's shadow.</p>
+}}
+
+{{Skill_detail
+ |skill=Beckon
+ |description=Your Baalzadeen is an attractive force indeed.
+ |lessons=
+ |syntax=DEMON BECKON [<target>]
+ |required=300 Baalzadeen health
+ |target=Adventurers and room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Your Baalzadeen can be a potently attractive force. With the Beckon ability, you will cause it to attempt to draw either everybody in surrounding rooms, or a specific person, into your room.
+}}
+
+{{Skill_detail
+ |skill=Daemonite
+ |description=Summon forth a small daemonite to annoy your enemies.
+ |lessons=
+ |syntax=SUMMON DAEMONITE<br>ORDER DAEMONITE ATTACK <target><br>ORDER DAEMONITE PASSIVE
+ |required=150 mana
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=The daemonite is a small winged daemon which is considered to be of little threat. Once summoned, it will repeatedly fly at your target adventurer, driving him off balance.
+}}
+
+{{Skill_detail
+ |skill=Strip
+ |description=Command your demon to strip the defences from someone.
+ |lessons=
+ |syntax=DEMON STRIP <target>
+ |required=100 Baalzadeen health and 100 mana
+ |target=Adventurers
+ |cooldown=1.80 seconds of equilibrium
+ |detail=With your Baalzadeen, you may strip a defence from your target, even through a magical shield.
+}}
+
+{{Skill_detail
+ |skill=Sear
+ |description=Order your Baalzadeen to sear the flesh of an enemy.
+ |lessons=
+ |syntax=DEMON SEAR <target><br>DEMON SEAR OFF
+ |required=50 Baalzadeen health
+ |target=Adventurers and denizens
+ |cooldown=2.00 seconds of equilibrium
+ |detail=At your command, your Baalzadeen will sear the flesh of a target with unholy fire.<p>When used against a denizen, your Baalzadeen will scorch them with its breath, dealing fire damage. Your Baalzadeen does not lose health when this skill is used against denizens.<p> When used against an adventurer, your Baalzadeen will begin to regularly ignite your target. Each time it sets the foe ablaze in this way, your Baalzadeen will use up some of its health.<p>DEMON SEAR OFF or DEMON REST will cause your demon to stop searing the target.</p>
+}}
+
+{{Skill_detail
+ |skill=Puncture
+ |description=Pierce another's flesh with your daegger.
+ |lessons=
+ |syntax=DAEGGER PUNCTURE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=2.15 seconds of balance
+ |detail=By letting your daegger guide your hand, you may pierce the skin of an opponent, delivering a venom from the daemon's tip. Your daegger is able to identify and navigate your target's defenses, allowing this attack to bypass any aura of rebounding surrounding him.
+}}
+
+{{Skill_detail
+ |skill=Eliminate
+ |description=Use your daegger to tear the beating heart from a victim.
+ |lessons=
+ |syntax=DAEGGER ELIMINATE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.50 seconds of equilibrium
+ |detail=This skill allows you to create an essentially psychic link with your daegger, seeing through its eyes as it sees through yours, and analysing your target for openings on a level most mortals can not match. You will then begin to close in on your target, and if the attack is successful, that is if you are not knocked over, paralysed, or webbed, you will penetrate any defenses they have set up, and plunge your daegger into your target's heart. Your daegger's blade will open and drive its teeth into the flesh and bone surrounding the target's heart, neatly severing it and removing it when you withdraw the blade soaking up the gore it is covered in.
+}}
+
+{{Skill_detail
+ |skill=[[Bloodworms]]
+ |description=Summon forth a horde of these foul lesser daemons.
+ |lessons=
+ |syntax=SUMMON BLOODWORMS
+ |required=500 mana
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=When the Malevolent One was sealed beneath hundreds of tons of rock, His strength to break free was stretched to its limit on multiple levels. Maggots and worms fed on what remained of the shell of a body He had initially constructed for Himself. Upon returning to His glory, He found these worms, bloated with the plunder of His flesh -- and with His power. When you summon the bloodworms, they will, after a moment, burst forth, spreading out into the surrounding rooms and attacking all with their poisoned psychic screams. All those who are not deaf will firstly suffer from masochism, then dizziness. If both afflictions are present, they will suffer in both mind and body.  
+}}
+
+{{Skill_detail
+ |skill=Blast
+ |description=Order your Baalzadeen to blast your enemies from the room.
+ |lessons=
+ |syntax=DEMON BLAST
+ |required=1000 Baalzadeen health
+ |target=Room
+ |cooldown=6.00 seconds of equilibrium
+ |detail=At great cost to your Baalzadeen's health, this ability may be used to literally blast all those who are not on your allies list out of the room, pushing them from 1-6 rooms away, if there be room to advance in a straight line.
+}}
+
+{{Skill_detail
+ |skill=Mindread
+ |description=Command your demon to listen to incoming tells.
+ |lessons=
+ |syntax=DEMON MINDREAD<br>DEMON MINDREAD OFF
+ |required=400 Baalzadeen health
+ |target=
+ |cooldown=2.00 seconds of equilibrium
+ |detail=With the activation of this ability, your Baalzadeen will attempt to overhear incoming tells to the room you are in.
+}}
+
+{{Skill_detail
+ |skill=[[Nightmare_(demon)|Nightmare]]
+ |description=A daemonite born of the rape of the Goddess of Dreams.
+ |lessons=
+ |syntax=SUMMON NIGHTMARE
+ |required=150 mana
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Born of [[Sartan|Sartan's]] rape of [[Valnurana]], the nightmare is the most ethereal of daemons. Though it will sometimes briefly take on shape, it has no body, and even with the added motivation of the pentagram it will not exist within sunlight.<p>The nightmare will first afflict with hypersomnia. If it is present it  delivers dementia, then finally hellsight.</p>
+}}
+
+{{Skill_detail
+ |skill=Fury
+ |description=Cause those around you to go into an enhancing fury.
+ |lessons=
+ |syntax=DEMON FURY
+ |required=2000 Baalzadeen health
+ |target=Room
+ |cooldown=10.00 seconds of equilibrium
+ |detail=This extremely powerful, though extremely costly ability, will speed up the equilibrium and balance times of everybody in the room for 20 seconds. Please remember that your Baalzadeen is good to you, and if you overuse this ability, you run the risk of weakening it to the point of uselessness.
+}}
+
+{{Skill_detail
+ |skill=Stain
+ |description=Stain the soul of someone with your Baalzadeen.
+ |lessons=
+ |syntax=DEMON STAIN <target>
+ |required=300 Baalzadeen health
+ |target=Adventurers
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Your Baalzadeen may be ordered to stain the soul of your target, lowering his or her various attributes for a short period. There is no known cure for this ability, besides death.
+}}
+
+{{Skill_detail
+ |skill=Bloodpact
+ |description=An unholy pact with the Inferno.
+ |lessons=
+ |syntax=DEMON BLOODPACT <target> FOR <NIGHTMARE{{!}}FIEND{{!}}DAEMONITE>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=This demonic pact allows you to utilise the link between fresh blood upon your daegger and its unwilling donator to immediately bring a pentagram and demon into being.<b>Note that the blood must be fresh; your daegger shall become stained with it for a short time after your daegger strikes someone through use of the hunt ability.
+}}
+
+{{Skill_detail
+ |skill=Syphon
+ |description=Order your Baalzadeen to draw afflictions away from you.
+ |lessons=
+ |syntax=DEMON SYPHON<br>DEMON SYPHON OFF
+ |required=100 Baalzadeen health
+ |target=
+ |cooldown=1.80 seconds of equilibrium
+ |detail=Your Baalzadeen has a great affection for you, and will, at a cost to its health each time it works, slowly syphon off afflictions from you.
+}}
+
+{{Skill_detail
+ |skill=Contemplation
+ |description=Perceive the state of another's mental strength.
+ |lessons=
+ |syntax=CONTEMPLATE <target>
+ |required=100 mana
+ |target=Adventurers
+ |cooldown=
+ |detail=With this ability, you may see how much mana an adventurer has.
+}}
+
+{{Skill_detail
+ |skill=Refuge
+ |description=Seek refuge in the [[Inferno]].
+ |lessons=
+ |syntax=DEMON REFUGE
+ |required=2500 Baalzadeen health
+ |target=
+ |cooldown=5.00 seconds of equilibrium
+ |detail=With this ability, your Baalzadeen may be ordered to transport you to the Inferno (a region of safety for your kind).
+}}
+
+{{Skill_detail
+ |skill=Corrupt
+ |description=Lay low the heretics with demonic corruption.
+ |lessons=
+ |syntax=DEMON CORRUPT <target> [affliction]
+ |required=200 Baalzadeen health
+ |target=Adventurers
+ |cooldown=3.00 seconds of equilibrium
+ |detail=The skilled apostasy practitioner can command their demonic servant to corrupt the soul of an unfortunate heretic.<br>This will cause all curses that have been laid upon the person through the application of evileye to be lifted, but at a terrible price indeed.
+}}
+
+{{Skill_detail
+ |skill=Catharsis
+ |description=Perhaps their death is the greatest mercy there is.
+ |lessons=
+ |syntax=DEMON CATHARSIS <target>
+ |required=1000 Baalzadeen health
+ |target=Adventurers
+ |cooldown=4.40 seconds of equilibrium
+ |detail=With hatred in your heart, you may order your Baalzadeen to bring, shall we say...catharsis, to the soul of your enemy, who must be on less than half mana.
+}}
+
+[[Category:Skills]][[Category:Edit needed]]

@@ -12,6 +12,9 @@ One line per page. Kept up to date by `/kb-ingest`.
 - [afflictions/locks.md](afflictions/locks.md): lock definitions and how each is escaped
 - [afflictions/limb-damage.md](afflictions/limb-damage.md): body part states, damage vs break, parrying
 
+## Classes
+- [classes/](classes/): one page per class (21) with every ability of its skills -- syntax, cost, cooldown, target, the afflictions it names (GENERATED from the wiki by `tools/kb_wiki_skills.py`; WIKI confidence). `abilities.json` is the machine copy (60 skills, 1,929 abilities)
+
 ## Curing
 - [curing/curatives.md](curing/curatives.md): every herb/mineral pair, elixir and salve
 - [curing/server-side-curing.md](curing/server-side-curing.md): SSC commands, how our code drives them, and your live curing state
@@ -44,6 +47,7 @@ One line per page. Kept up to date by `/kb-ingest`.
 | raw/help/13.7_healing-and-curing.txt, 13.9_body-part-damage.txt | HELP 13.7, 13.9 | 2026-10-10 |
 | raw/help/4.6_equilibrium-and-balance.txt, 4.6.1_queueing.txt | HELP 4.6, 4.6.1 | 2026-10-10 |
 | raw/ab/survival_diagnose_1380.txt | AB Diagnose | 2026-10-10 |
+| raw/wiki/<Skill>.wiki (60) | Achaea wiki skill pages, raw wikitext | 2026-10-11 |
 | raw/guides/lock-types.txt | Community guide: lock types | 2026-10-10 |
 | raw/guides/active-and-passive-cures-with-fire-lines.txt | Community guide: what each class cure looks like | 2026-10-10 |
 

@@ -1,0 +1,249 @@
+The most ancient of powers given to the Aldar in the moment of their formation by Ayar, beyond even the innumerable other natural advantages of their race, was their strength in will and mind. This manifested itself in vast psionic and telepathic might, an ability wielded with unfathomable ease as they imposed their thought upon themselves and upon the world around them. With the centuries of peace during which these arts were mastered, coupled to their functionally unchallenged rule of Creation below the Pantheon itself, offensive techniques within Psionics never saw true progress beyond the simple, rendering them almost unrefined by the measure of modern telepaths. Yet it was never their offensive powers that made this lost art so mighty in the hands of the Firstborn.
+
+The skill of '''Psionics''' is available to members of the [[Psion]] [[class]], along with [[Weaving]] and [[Emulation]].
+
+==Abilities in Psionics==
+{{Skill_detail
+ |skill=Expunge
+ |description=Your mind must never be corrupted.
+ |lessons=
+ |syntax=PSI EXPUNGE
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Purge your mind of a single mental affliction. If you have impatience, this will always be cured first. If you are confused, you will be unable to focus enough to carry out this psionic act.
+}}
+
+{{Skill_detail
+ |skill=Splinter
+ |description=A spike of psychic force.
+ |lessons=
+ |syntax=PSI SPLINTER <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=2.00 seconds of equilibrium
+ |detail=A precisely targeted spike of psychic force will shatter the magical shields surrounding your opponents.
+}}
+
+{{Skill_detail
+ |skill=Comprehend
+ |description=A simple application of your intellect.
+ |lessons=
+ |syntax=PSI COMPREHEND
+ |required=
+ |target=
+ |cooldown=2.80 seconds of equilibrium
+ |detail=Direct your considerable intellect towards the process of understanding all racial languages(*).<p>* This has the same restrictions as the necklace of comprehension artefact.</p>
+}}
+
+{{Skill_detail
+ |skill=Expand
+ |description=The mind shall not be constrained.
+ |lessons=
+ |syntax=PSI EXPAND
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Expand your mental faculties, restoring some mana.
+}}
+
+{{Skill_detail
+ |skill=Imprint
+ |description=Communication is key.
+ |lessons=
+ |syntax=PSI IMPRINT <RETRIEVE{{!}}message>
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=You may imprint a psionic message upon a location, after which any other also practiced in psionics may retrieve said message. There may only be one psionic message per location and the act of retrieving the message will damage said message. If damaged too much, the message will fade.
+}}
+
+{{Skill_detail
+ |skill=Insertion
+ |description=A subtle touch of misdirection.
+ |lessons=
+ |syntax=PSI INSERTION <target> <CITY{{!}}PARTY{{!}}ARMY{{!}}TELL> <talker> <message>
+ |required=
+ |target=
+ |cooldown=2.40 seconds of equilibrium
+ |detail=Interfering in an individuals telepathic communication channels is a trivial enough process if one knows how. It is said that the true born Aldar could project their influence across an entire network, but alas such is lost to all but the barest few. You may target an individual and make them see a message on the channel you so desire, though the telesense defence will make it apparent to them that someone is interfering (though they will not see who). 
+}}
+
+{{Skill_detail
+ |skill=Ironwill
+ |description=Your mind against theirs.
+ |lessons=
+ |syntax=PSI IRONWILL [<target>]
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=By focusing all of your attention on the process(*), you may drive out foreign influence upon your mind or the mind of a friendly target(**), breaking any mindlocks if one is present.<p>* This is a channeled action: you may perform no other actions while focusing on severing the mindlock.</p>** In the case where you target it at the person you have lifebonded it will be the same delay as when targeting it at yourself: in all other cases the channel is twice as long.</p>
+}}
+
+{{Skill_detail
+ |skill=Radiate
+ |description=Your will is implacable.
+ |lessons=
+ |syntax=PSI RADIATE
+ |required=
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Radiate a circle of psychic force outwards, knocking all that stand in your location off their feet: friend and foe alike.
+}}
+
+{{Skill_detail
+ |skill=Muddle
+ |description=A gentle touch to confound and mislead.
+ |lessons=
+ |syntax=PSI MUDDLE <target>
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=This subversive psionic art will not harm your enemy directly, but will cause mental maladies to affect them more significantly(*).<p>* They shall have a greater chance of failing actions due to stupidity, and are more likely to suffer the adverse affects of dizziness.</p>
+}}
+
+{{Skill_detail
+ |skill=Sensitivity
+ |description=The faintest changes are yours to know.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=Your mind is now so attuned to those around you that you will be able to detect when the body, mind or spirit of someone you have began the unweaving of reaches a critical level.
+}}
+
+{{Skill_detail
+ |skill=Manipulate
+ |description=Controlling the self is of paramount concern.
+ |lessons=
+ |syntax=PSI MANIPULATE <cmd>
+ |required=
+ |target=
+ |cooldown=3.30 seconds of equilibrium
+ |detail=Drive your body into action even when paralysed through sheer force of will.
+}}
+
+{{Skill_detail
+ |skill=Breakthrough
+ |description=Pain is a warning.
+ |lessons=
+ |syntax=PSI BREAKTHROUGH
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=By pushing your mind beyond its safe limits, you will temporarily speed your focus balance.
+}}
+
+{{Skill_detail
+ |skill=Link
+ |description=Your mind is far superior.
+ |lessons=
+ |syntax=PSI LINK <target><br>PSI UNLINK
+ |required=
+ |target=
+ |cooldown=
+ |detail=Link your mind to another and you will take attacks against their mind upon yourself. Be warned, if your mana falls below half of your maximum you will die outright and if not resurrected by a starburst tattoo or similar shall find your soul lacking significantly in substance(*).<p>* You will die and be left on low mana as a soul.</p>
+}}
+
+{{Skill_detail
+ |skill=Blast
+ |description=Sometimes a hammer can replace the scalpel.
+ |lessons=
+ |syntax=PSI BLAST <target>
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Sometimes you require a more overt display of force. Though your gifts do not lend themselves overly to offensive acts, an unfocussed blast of psychic power is more than within your grasp. Providing a target's mind is sufficiently weakened(*), you may direct this blast to ravage their mind, leaving their mental defences in ruins. This will permit you to not only strike at their flesh with your woven weapons, but also at their mind(**).<p>* They must have at least three of: impatience, stupidity, blackout,    
+dizziness, epilepsy, and unwoven mind.<br>** Your weaving attacks shall drain mana when striking a target with a ravaged mind.</p>
+}}
+
+{{Skill_detail
+ |skill=Perception
+ |description=The insidious becomes apparent.
+ |lessons=
+ |syntax=PSI PERCEPTION
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Reach out with your psionic senses, detecting how many telepaths are holding mindlocks in your local area.
+}}
+
+{{Skill_detail
+ |skill=Contemplation
+ |description=Perceive the state of another's mental strength.
+ |lessons=
+ |syntax=CONTEMPLATE <target>
+ |required=
+ |target=
+ |cooldown=1.00 seconds of equilibrium
+ |detail=With this ability, you may see how much mana an adventurer has.
+}}
+
+{{Skill_detail
+ |skill=Projection
+ |description=Your will made manifest.
+ |lessons=
+ |syntax=PSI PROJECTION
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=By creating a psychic projection of yourself in a location, you may overlay it with yourself from anywhere on the same plane and continent. Doing so will swap your location with the projection(*).<p>* The projection will fade after three swaps.</p>
+}}
+
+{{Skill_detail
+ |skill=Vanish
+ |description=Perception is everything.
+ |lessons=
+ |syntax=PSI VANISH <PARTIAL{{!}}TOTAL>
+ |required=
+ |target=
+ |cooldown=2.50 seconds of equilibrium
+ |detail=This advanced psionic ability will permit you to consistently annihilate the knowledge of your presence from the minds of those in your proximity. You may select partial(*) or total(**), total having all of the benefits of partial but lasting half as long. This ability is very taxing, and you may only enact any form of vanish every so often.<p>* A partial vanish shall hide your presence in a room.<br>** A total vanish shall hide your entry and exit, as well as your presence on alertness.</p>
+}}
+
+{{Skill_detail
+ |skill=Transcend
+ |description=Perfect unity of the mind and body.
+ |lessons=
+ |syntax=PSI TRANSCEND [skill to use if full transcendence only]
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=By attaining a truly transcendent mind, you may operate your physical and mental abilities in complete harmony(*). To attain this state of mind you must exercise your body's potential while focusing on the state of transcendence(**).<p>* Once your mind and body achieve full transcendence, you can perform a psionics action while off equilibrium and for no incurred equilibrium cost.<br>** Each time you perform a weaving-based attack while transcendence is active you will increase how harmonised your mind and body are. A failure to attack after some time will cause your state to regress.</p>
+}}
+
+{{Skill_detail
+ |skill=Combustion
+ |description=Just like heating water.
+ |lessons=
+ |syntax=PSI COMBUSTION <target>
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=One of the basic exercises for budding psion students was to heat a cup of water with their will alone. Unfortunately, during the War of Humanity where death was the business of the Aldar, one particularly malicious student under Han-Silnir's command determined that at its heart blood is simply liquid too, and equally available for manipulation.<p>Though boiling the blood inside a person's veins is fortunately beyond modern psionics users, blood that is open to the air is an easy target(*). While the blood forged flames burn upon someone's skin, they will find it impossible to apply salves(**).</p><p>* If someone is bleeding sufficiently, you may set their blood aflame with this technique.<br>** This affliction is cured once all bleeding is clotted away.</p>
+}}
+
+{{Skill_detail
+ |skill=Excise
+ |description=A single cut at the fundamental level.
+ |lessons=
+ |syntax=PSI EXCISE <target>
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=If your enemy's mind is sufficiently weakened, you can deliver a single precise stroke to cause the whole to collapse in upon itself(*).<p>* Requires below 30% of mana.</p>
+}}
+
+{{Skill_detail
+ |skill=Foresight
+ |description=The pinnacle of mental might.
+ |lessons=
+ |syntax=PSI FORESIGHT <target> <TREE{{!}}SHIELD>
+ |required=
+ |target=
+ |cooldown=
+ |detail=In ancient times the Aldar Caymus drove his mind's potential beyond all others, able to pierce the very fabric of time and gaze upon events not yet transpired. While no other has achieved the mastery he claimed since, a lesser form of such foresight is available to you. By fixating on a possible eventuality in the future, if such an eventuality comes to pass you will be able to act with unnatural speed to disrupt it. While this will not foil the action entirely, it will cause it to have undesirable consequences. If your foresight fails however, and the action is not performed, you will be stunned.<p>'''Tree''': foreseeing a tree touch will extend the recovery period.<br>'''Shield''': foreseeing a shield tattoo shall extend the equilibrium recovery period. 
+}}
+
+[[Category:Skills]][[Category:Edit needed]]

@@ -1,0 +1,410 @@
+The art of Tekura was first developed more than 600 years ago, long before the fall of the [[Seleucarian Empire]]. A sect of monks was being persecuted by some of the legions of the Empire and the monks were not permitted weapons to defend themselves. So, they were forced to train their bodies to martial perfection; their hands and feet becoming deadly weapons in and of themselves.
+
+Most of the tekura abilities are affected by a variety of factors. First, being in a stance modifies the damage and speed of each tekura attack. A monk will always want to be in some stance or another while using tekura. Second, the higher the monk's tekura, the more likely they are to hit an opponent with a particular attack, and the more damage they will do with that attack.
+
+The advancement system of Tekura is a bit different from the other skills. A monk may progress to a certain level in the skill, and then they must be tested to see if they are worthy of a new belt. A test consists of successfully completing a kata, or a series of moves, in front of someone who is either a black belt, or at least three belts above the monk. Tests may be performed by adventurers or denizen tutors (up to silver belt). If you cannot find a fellow
+adventurer who is qualified to grade you, you may ask a denizen tutor with:
+
+<div style="padding-top:10px;width:100%;text-align:center;">'''For reference here are the belts a Tekura practitioner may achieve, as well as what kata must be demonstrated to obtain it.'''</div>
+{| cellpadding=5 cellspacing=0 style="margin:auto;width:90%;text-align:center; color:black; border:1px solid black;" border=1
+!style="width:7.6%"|Skill Rank
+!style="width:7.6%"|Inept
+!style="width:7.6%"|Novice
+!style="width:7.6%"|Apprentice
+!style="width:7.6%"|Capable
+!style="width:7.6%"|Adept
+!style="width:7.6%"|Skilled
+!style="width:7.6%"|Gifted
+!style="width:7.6%"|Expert
+!style="width:7.6%"|Virtuoso
+!style="width:7.6%"|Fabled
+!style="width:7.6%"|Mythical
+!style="width:7.6%"|Transcendent
+|-
+!Belt Level
+|White<div style='margin:auto;width:50%;height:5px;border:1px solid black;background-color: white;"></div>
+|Grey<div style='margin:auto;width:50%;height:5px;border:1px solid black;background-color: grey;"></div>
+|Yellow<div style='margin:auto;width:50%;height:5px;border:1px solid black;background-color: yellow;"></div>
+|Green<div style='margin:auto;width:50%;height:5px;border:1px solid black;background-color: green;"></div>
+|Blue<div style='margin:auto;width:50%;height:5px;border:1px solid black;background-color: blue;"></div>
+|Orange<div style='margin:auto;width:50%;height:5px;border:1px solid black;background-color: orange;"></div>
+|Red<div style='margin:auto;width:50%;height:5px;border:1px solid black;background-color: red;"></div>
+|Purple<div style='margin:auto;width:50%;height:5px;border:1px solid black;background-color: purple;"></div>
+|Bronze<div style='margin:auto;width:50%;height:5px;border:1px solid black;background-color: #cd7f32;"></div>
+|Silver<div style='margin:auto;width:50%;height:5px;border:1px solid black;background-color: silver;"></div>
+|Gold<div style='margin:auto;width:50%;height:5px;border:1px solid black;background-color: gold;"></div>
+|Black<div style='margin:auto;width:50%;height:5px;border:1px solid black;background-color: black;"></div>
+|-
+!Kata
+|None||Jakata||Lisagi||Rhee||Philos||Tykorima||Opha||Nexus||Kali||Do-san||Rhythos||Krull
+|-
+|}
+
+
+The art of '''Tekura''' is available to members of the [[Monk]] [[class]], along with [[Kaido]] and [[Telepathy]]. After a monk has mastered Tekura they may enhance their training with [[Shikudo]].
+
+==Abilities in Tekura==
+{{Skill_detail
+ |skill=Horse
+ |description=The most basic stance.
+ |lessons=
+ |syntax=HRS<br>LEAP <direction>
+ |required=
+ |target=Self
+ |cooldown=2.00 seconds of balance
+ |detail=The first stance any practitioner of tekura becomes proficient in, the horse stance is ideal for striking. This is demonstrated in the fact that in this stance alone, you are able to perform standard strikes in conjunction with the slam and wrench throws.<p>Additionally, due to the firm grounding of your feet in this stance, you are able to leap over obstructions in a given direction, although this will naturally break your stance.</p><p>Note that usually entering a tekura stance consumes and requires balance. However, those skilled in tekura are able to transition into a new stance immediately following a tekura kick or punch, although this will make your recovery period slightly slower.</p>
+}}
+
+{{Skill_detail
+ |skill=Combo
+ |description=Combo attacks together.
+ |lessons=
+ |syntax=COMBO <target> <kick|stance> [limb] <punch1> [limb] <punch2> [limb]
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=
+ |detail=This ability allows you to perform tekura combos. You may choose to omit or include any of the limb targets, but must always specify a full combo (one kick, two punches). The combo can only be executed if you possess balance on both arms and legs.
+}}
+
+{{Skill_detail
+ |skill=Hook
+ |description=A curving punch.
+ |lessons=
+ |syntax=HKP <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=4.00 seconds of arm balance
+ |detail=The hook punch is a punch aimed at the opponent's torso.
+}}
+
+{{Skill_detail
+ |skill=Snapkick
+ |description=A straight-forward kick.
+ |lessons=
+ |syntax=SNK <target> left/right
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=4.00 seconds of leg balance
+ |detail=This low, and easy-to-perform kick attacks the legs of an opponent.
+}}
+
+{{Skill_detail
+ |skill=Jab
+ |description=A straight-forward punch.
+ |lessons=
+ |syntax=JBP <target> <HEAD|ARMS>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of arm balance
+ |detail=A quick strike with the fingers. When targeting the head, this will restore someone's hearing. When targeting the arms, it will disable the target's ability to parry for a very short time. 
+}}
+
+{{Skill_detail
+ |skill=Eagle
+ |description=Stance of the soaring eagle.
+ |lessons=
+ |syntax=EGS<br>HGK <target>
+ |required=
+ |target=Adventurers and self
+ |cooldown=2.00 seconds of balance
+ |detail=The stance of the eagle is geared towards flexibility and speed. Your kicks and punches will be faster when performed from this stance. Furthermore, you are able to perform the highkick ability from this stance, bringing down someone who may be above you in the trees or the skies. This ability will prone the unfortunate individual.
+}}
+
+{{Skill_detail
+ |skill=Sidekick
+ |description=A powerful thrusting kick.
+ |lessons=
+ |syntax=SDK <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=4.00 seconds of leg balance
+ |detail=This kick drives your leg straight into an opponent's torso.
+}}
+
+{{Skill_detail
+ |skill=Uppercut
+ |description=An upwards hooking punch.
+ |lessons=
+ |syntax=UCP <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=4.00 seconds of arm balance
+ |detail=With the uppercut punch, you will attack your opponent's head.
+}}
+
+{{Skill_detail
+ |skill=Bodyblock
+ |description=Using your body to block blows.
+ |lessons=
+ |syntax=BDB<br>UNBLOCK BDB<br>UNBLOCK ALL
+ |required=50 mana and mana drain
+ |target=Self
+ |cooldown=1.00 seconds of balance
+ |detail=At the cost of a constant mana drain, this block attempts to stop or reduce physical damage aimed at your body.<p>With any block, you may UNBLOCK <block> to lower it. Alternatively, you may UNBLOCK ALL to lower all of your blocks.</p>
+}}
+
+{{Skill_detail
+ |skill=Block
+ |description=Obstructing departure with your body.
+ |lessons=
+ |syntax= BLOCK <direction><br>UNBLOCK
+ |required=
+ |target=
+ |cooldown=
+ |detail=This will allow you to block much movement in a particular direction.
+}}
+
+{{Skill_detail
+ |skill=Palmstrike
+ |description=A strike with your palm to the face.
+ |lessons=
+ |syntax=PMP <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of arm balance
+ |detail=This blow will attack the sensitive areas of your opponent's face. It will deliver impatience if they do not have it, or stupidity if they do.
+}}
+
+{{Skill_detail
+ |skill=Hammerfist
+ |description=A strike with your fists to the legs.
+ |lessons=
+ |syntax=HFP <target> left/right
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=4.00 seconds of arm balance
+ |detail=The hammerfist attack brings your fist down on an opponents leg.
+}}
+
+{{Skill_detail
+ |skill=Cat
+ |description=An agile, defensive stance.
+ |lessons=
+ |syntax=CTS
+ |required=
+ |target=Self
+ |cooldown=2.00 seconds of balance
+ |detail=The primary purpose of the cat stance is for facing those with formidable offensive capabilities. It grants superior defence, allowing one to block far more often than in other stances. However, you will find that it is more difficult to attack, and your attacks will be slower. 
+}}
+
+{{Skill_detail
+ |skill=Roundhouse
+ |description=A twisting kick.
+ |lessons=
+ |syntax=RHK <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=4.00 seconds of leg balance
+ |detail=This powerful kick shall shatter any magical shield surrounding your target.
+}}
+
+{{Skill_detail
+ |skill=Evade
+ |description=A block that attempts to completely avoid attacks.
+ |lessons=
+ |syntax=EVB<br>UNBLOCK EVB
+ |required=50 mana and mana drain
+ |target=Self
+ |cooldown=1.00 seconds of balance
+ |detail=At the cost of a regular mana and willpower drain, this will increase your effective avoidance skill.<p>This block will convey a greater benefit when in the eagle stance.</p>
+}}
+
+{{Skill_detail
+ |skill=Sweep
+ |description=Attempting to sweep your opponent off his feet.
+ |lessons=
+ |syntax=SWK <target>
+ |required=
+ |target=Adventurers
+ |cooldown=4.50 seconds of leg balance
+ |detail=A specialized kick that attempts to sweep the legs out from under your opponent.
+}}
+
+{{Skill_detail
+ |skill=Bear
+ |description=A highly specialised stance.
+ |lessons=
+ |syntax=BRS
+ |required=
+ |target=Self
+ |cooldown=2.00 seconds of balance
+ |detail=One of the most dangerous offensively orientated stances, those in the bear stance perform both more damaging throws as well as finding themselves able to intercept their enemies from fleeing on occasion. However, both kicks and punches will be somewhat slowed. 
+}}
+
+{{Skill_detail
+ |skill=Slam
+ |description=A throw to target the head.
+ |lessons=
+ |syntax=SLT <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=This throw targets the head of the subject. When executed, it shall cause their brains to be scrambled for a time, removing their ability to naturally reject your mental locks.<p>It can only be used against a prone opponent, and the effect will last longer if the target's head is already damaged when the slam is performed.</p>
+}}
+
+{{Skill_detail
+ |skill=Moonkick
+ |description=A powerful, curving kick.
+ |lessons=
+ |syntax=MNK <target> left/right
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=4.00 seconds of leg balance
+ |detail=This kick, so-called because the foot travels in the arc of a crescent moon, attacks the arms of your opponent.
+}}
+
+{{Skill_detail
+ |skill=Spear
+ |description=A jabbing punch with an outstretched hand.
+ |lessons=
+ |syntax=SPP <target> left/right
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=4.00 seconds of arm balance
+ |detail=This punch is used with a rigid hand. With your knowledge of musculature, you're able to hit just the right spot in the target's arms to damage his arms.
+}}
+
+{{Skill_detail
+ |skill=Rat
+ |description=A well-balanced stance.
+ |lessons=
+ |syntax=RTS
+ |required=
+ |target=Self
+ |cooldown=2.00 seconds of balance
+ |detail=This stance is geared toward superior accuracy, and is favoured by many for the purposes of facing those with superior avoidance. It also allows the tekura practitioner to block more often, granting superior defence.<p>However, that accuracy comes with a cost. Kicks and punches performed from this stance will be slower than many other stances.</p>
+}}
+
+{{Skill_detail
+ |skill=Thrustkick
+ |description=A kick designed to push your target away.
+ |lessons=
+ |syntax=THK <target> <direction>
+ |required=
+ |target=Adventurers
+ |cooldown=4.00 seconds of leg balance
+ |detail=Using your great leg power, you will attempt to kick your opponent away in the specified direction.
+}}
+
+{{Skill_detail
+ |skill=Wrench
+ |description=A throw that targets already damaged limbs.
+ |lessons=
+ |syntax=WRT <target> <HEAD{{!}}TORSO{{!}}LEFT ARM{{!}}RIGHT ARM>
+ |required=
+ |target=Adventurers
+ |cooldown=4.00 seconds of balance
+ |detail=This specialised throw can only be targeted against a limb that is already damaged. Unlike the other throws in tekura, this does not require the target to be prone.<p>Depending on the limb targeted, various different effects will occur:</p><p>Head: after wrenching someone's head, they will periodically suffer from epilepsy for a time after the injury.<br>Torso: the target's ribs shall become bruised.<br>Either arm: you shall yank the target off balance and throw them to the ground.
+}}
+
+{{Skill_detail
+ |skill=Axe
+ |description=A slow but powerful kick.
+ |lessons=
+ |syntax=AXK <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=6.50 seconds of balance
+ |detail=This powerful kick is highly inaccurate and can only be landed against a prone opponent. However, it does extremely high damage to the target's head.<p>If used against a target who suffers from a concussion, it shall deliver a severe blackout.</p>
+}}
+
+{{Skill_detail
+ |skill=Guarding
+ |description=Guarding a body part and counterattacking.
+ |lessons=
+ |syntax=GUARD <head/torso/left arm/right arm/left leg/right leg>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=This ability is similar to, but an improvement on, the parrying ability that those with sufficient skill in weaponry can use. It allows you to not only guard a single location on your body against attack, but counter any attacks made to there by automatically throwing your opponent from his mount and stunning him.<p>When in the cat stance, you may switch which limb you are guarding while off balance.</p>
+}}
+
+{{Skill_detail
+ |skill=Scorpion
+ |description=A devastatingly powerful attack stance.
+ |lessons=
+ |syntax=SCS
+ |required=
+ |target=Self
+ |cooldown=2.00 seconds of balance
+ |detail=A truly lethal stance, the scorpion sacrifices defence for offense. Punches and kicks will both deliver enhanced damage(*), and your kicks and punches will be executed at the fastest possible speed. You will however find that you are able to block far less often in this stance.<p>(*) Note that this does not change how quickly you may break a target's limbs, only how much health damage they take from your attacks.</p>
+}}
+
+{{Skill_detail
+ |skill=Whirlwind
+ |description=The most powerful kick.
+ |lessons=
+ |syntax=WWK <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=4.50 seconds of leg balance
+ |detail=The most impressive of all kicks, this one is essentially two spinning crescent kicks aimed at the head of an unlucky opponent.
+}}
+
+{{Skill_detail
+ |skill=Bladehand
+ |description=A swift strike to the side of the neck.
+ |lessons=
+ |syntax=BLP <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of arm balance
+ |detail=A quick strike to the side of the neck, this punch inflicts dizziness.
+}}
+
+{{Skill_detail
+ |skill=Pinch
+ |description=A special and powerful block.
+ |lessons=
+ |syntax=PNB<br>UNBLOCK PNB
+ |required=50 mana and mana drain
+ |target=Adventurers
+ |cooldown=1.00 seconds of balance
+ |detail=A very special block which is capable of stunning your opponent if he or she is already weakened sufficiently.
+}}
+
+{{Skill_detail
+ |skill=Backbreaker
+ |description=The ultimate throw.
+ |lessons=
+ |syntax=BBT <target>
+ |required=
+ |target=
+ |cooldown=4.00 seconds of balance
+ |detail=The ultimate throw, this attack will deliver significant damage. The damage is increased the more that an opponent's torso is damaged. This attack only works against prone opponents.<p>If you are able to perform four(*) backbreakers in quick succession, a subject shall find that their spine shall give way, and they shall perish instantly.</p><p>(*) If the target suffers from the bruised ribs affliction, this number is reduced to three.</p>
+}}
+
+{{Skill_detail
+ |skill=Jumpkick
+ |description=Attack someone in an adjacent room with a flying kick.
+ |lessons=
+ |syntax=JPK <target>
+ |required=
+ |target=Adventurers
+ |cooldown=4.00 seconds of leg balance
+ |detail=With this ability, you are able to demonstrate your ability to combine style and power in a single move, the jump kick. Starting in an adjacent location, you will fly in, slam your outstretched foot into your unlucky victim's body, knocking him to the floor, stunning him, and doing a fair amount of damage.
+}}
+
+{{Skill_detail
+ |skill=Dragon
+ |description=The superior state of mind.
+ |lessons=
+ |syntax=DRS
+ |required=
+ |target=Self
+ |cooldown=2.00 seconds of balance
+ |detail=More of a state of mind than a stance, this is the ultimate expression of tekura. While in this stance, the true master shall recover from utilising mental equilibrium far more swiftly, as well as being able to turn aside many blows with their blocks.
+}}
+
+{{Skill_detail
+ |skill=Path
+ |description=Switch to a new school of study.
+ |lessons=
+ |syntax=SCHOOL SWITCH SHIKUDO
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=You have reached such mastery of Tekura that you are now ready to advance to a new school of martial study if you so desire. Be warned. Doing so will put you back to inept in your primary skill and you will need to learn the new skill again. Additionally, Shikudo is a far more complex school, and should only be considered by the advanced.<p>You will be able to return to Tekura and retain your skill investment, but there is a cooldown on switching of 24 hours and a cost of 100 lessons.</p>
+}}
+
+[[Category:Skills]][[Category:Edit needed]]

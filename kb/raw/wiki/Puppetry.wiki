@@ -1,0 +1,358 @@
+Puppetry is a skill that lets you create an empathetic link between a puppet and someone else. By making this link stronger through repeated refinements of the puppet, you can affect that person from afar. Puppetry is often confused with the [[Shaman]] skill of [[Vodun]], though one would do well to remember that puppets are not [[dolls]], and vice versa.
+
+The skill of '''Puppetry''' is available to members of the [[Jester]] [[class]], along with [[Pranks]] and [[Tarot]].
+
+==Abilities in Puppetry==
+{{Skill_detail
+ |skill=Fashion
+ |description=Fashion puppets from wood.
+ |lessons=
+ |syntax=FASHION PUPPET OF <target><br>PUPPET UNRAVEL <target>
+ |required=Initial fashion: 50 mana, and 2 Wood<br>Standard fashion: 50 mana<br>Unravel: 750 mana
+ |target=Adventurers
+ |cooldown=Initial fashion: 2.00 seconds of balance<br>Standard fashion: 2.00 seconds of balance<br>Unravel: 10.00 seconds of balance
+ |detail=In order to fashion a puppet, you first need to get yourself 2 wood commodities. After you fashion the first time, you will have for yourself a crude humanoid puppet. In order to make it actually useful, you must then wield the puppet, and FASHION PUPPET OF <target>.<p>As you fashion your puppet of an adventurer over and over, you'll notice that it gets closer and closer to being a semi-living puppet. Further, the more fashions you have with your puppet, the more Puppetry powers will be able to be channeled through the puppet.</p><p>Additionally, your puppet will decay at a rate of 50% every 6 minutes after the last fashion. This effect does not occur for puppets of allied adventurers.</p><p>If you find yourself in need of destroying a puppet that is no longer in your possession, you may unravel it from afar. Note that this is a difficult feat, and will result in being thrown off balance for a long period of time.</p>
+}}
+
+{{Skill_detail
+ |skill=Gripping
+ |description=Grip your puppets tighter than ever before.
+ |lessons=
+ |syntax=GRIP<br>RELAX GRIP
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=While using this ability, you will prevent items from being knocked out of your grip. 
+}}
+
+{{Skill_detail
+ |skill=Confusion
+ |description=Muddle the thoughts of your victim.
+ |lessons=
+ |syntax=PUPPET CONFUSION
+ |required=5 Fashions (1 Used)
+ |target=Adventurers
+ |cooldown=1.50 seconds of balance
+ |detail=This will cause your victim to become mentally confused.
+}}
+
+{{Skill_detail
+ |skill=Dizzy
+ |description=Cause your enemy to become unsteady on his feet.
+ |lessons=
+ |syntax=PUPPET DIZZY
+ |required=5 Fashions (1 Used)
+ |target=Adventurers
+ |cooldown=1.00 seconds of balance
+ |detail=Curse your victim with the dizziness affliction.
+}}
+
+{{Skill_detail
+ |skill=Sleep
+ |description=Put someone to sleep.
+ |lessons=
+ |syntax=PUPPET SLEEP
+ |required=10 Fashions (1 Used)
+ |target=Adventurers
+ |cooldown=1.00 seconds of balance
+ |detail=Either put your victim to sleep, or remove a sleep-related defence.
+}}
+
+{{Skill_detail
+ |skill=Illusion
+ |description=Cause your victim to see an image of your choosing.
+ |lessons=
+ |syntax=PUPPET ILLUSION <illusion>
+ |required=5 Fashions (1 Used)
+ |target=Adventurers
+ |cooldown=1.00 seconds of balance
+ |detail=Cause your puppet's namesake to see something specific. You may embed a single newline by including the characters \n at the appropriate spot.
+}}
+
+{{Skill_detail
+ |skill=Spy
+ |description=See the surroundings of your target.
+ |lessons=
+ |syntax=PUPPET SPY
+ |required=10 Fashions (1 Used)
+ |target=Adventurers
+ |cooldown=1.00 seconds of balance
+ |detail=Get a view of what's in your target's surroundings. If your puppet is above 30 fashions this skill requires nothing to use.
+}}
+
+{{Skill_detail
+ |skill=Status
+ |description=Find out what the health and mana of your target is.
+ |lessons=
+ |syntax=PUPPET STATUS<br>PUPPET SUMMARY
+ |required=15 Fashions (0 Used)
+ |target=Adventurers
+ |cooldown=Balance
+ |detail=Through your puppet, you may see the health and mana of your target.
+}}
+
+{{Skill_detail
+ |skill=Strip
+ |description=Strip someone's defences.
+ |lessons=
+ |syntax=PUPPET STRIP
+ |required=15 fashions, 1 used
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=This ability will strip a defence from your puppet's namesake.
+}}
+
+{{Skill_detail
+ |skill=Paralyse
+ |description=Lock up the muscle system of your victim.
+ |lessons=
+ |syntax=PUPPET PARALYSE
+ |required=10 fashions, 1 used
+ |target=Adventurers
+ |cooldown=1.00 seconds of balance
+ |detail=Paralyse the nervous system of the victim.
+}}
+
+{{Skill_detail
+ |skill=Break
+ |description=Break both the arms or both the legs of someone.
+ |lessons=
+ |syntax=PUPPET BREAK ARMS/LEGS
+ |required=15 fashions, 2 used
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=With this ability, you may break both the arms or legs of your victim.
+}}
+
+{{Skill_detail
+ |skill=Throttle
+ |description=Choke the life out of your victim.
+ |lessons=
+ |syntax=PUPPET THROTTLE
+ |required=1 fashion
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=As long as the puppets living twin is in the area you may wrap your fingers tightly around your puppets throat, and watch in joy as its likeness asphyxiates.
+}}
+
+{{Skill_detail
+ |skill=Reckless
+ |description=Induce a sense of extreme bravado in your opponent.
+ |lessons=
+ |syntax=PUPPET RECKLESS
+ |required=15 fashions, 1 used
+ |target=Adventurers
+ |cooldown=1.00 seconds of balance
+ |detail=With this ability, you'll cause your victim to think he or she is always on full health.
+}}
+
+{{Skill_detail
+ |skill=Tickle
+ |description=Tickle the feet of your puppet.
+ |lessons=
+ |syntax=PUPPET TICKLE
+ |required=15 fashions, 1 used
+ |target=Adventurers
+ |cooldown=1.75 seconds of balance
+ |detail=By tickling the bottom of your puppet's feet, you will cause your victim to laugh convulsively.
+}}
+
+{{Skill_detail
+ |skill=Burn
+ |description=Set them ablaze.
+ |lessons=
+ |syntax=PUPPET BURN
+ |required=10 fashions, 1 used
+ |target=Adventurers
+ |cooldown=1.00 seconds of balance
+ |detail=Set your victim alight!
+}}
+
+{{Skill_detail
+ |skill=Bleed
+ |description=Make them bleed.
+ |lessons=
+ |syntax=PUPPET BLEED
+ |required=10 fashions, 1 used
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=Cause blood to begin pouring from the pores of your unlucky opponent.
+}}
+
+{{Skill_detail
+ |skill=Travel
+ |description=Instantly travel to your target.
+ |lessons=
+ |syntax=PUPPET TRAVEL
+ |required=30 fashions, 5 used
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=With this ability, you may cross a continent to travel to your victim.
+}}
+
+{{Skill_detail
+ |skill=Tonguetie
+ |description=Sorry, say that again?
+ |lessons=
+ |syntax=PUPPET TONGUETIE
+ |required=20 fashions, 4 used
+ |target=Adventurers
+ |cooldown=1.90 seconds of balance
+ |detail=Twist and contort the tongue of your puppet, making them utterly tongue-tied! For as long as they remain tongue tied, they will be unable to cure the stuttering affliction by any means.
+}}
+
+{{Skill_detail
+ |skill=Cripple
+ |description=Break all the limbs of some unlucky victim.
+ |lessons=
+ |syntax=PUPPET CRIPPLE
+ |required=25 fashions, 7 used
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=Break all the limbs of a victim.
+}}
+
+{{Skill_detail
+ |skill=Command
+ |description=Make a victim obey your orders.
+ |lessons=
+ |syntax=PUPPET COMMAND <command>
+ |required=25 fashions, 1 used
+ |target=Adventurers
+ |cooldown=1.80 seconds of balance
+ |detail=Command your victim to perform a specific action.
+}}
+
+{{Skill_detail
+ |skill=Slow
+ |description=Make a victim move in slow motion.
+ |lessons=
+ |syntax=PUPPET SLOW
+ |required=20 fashions, 10 used (1 if speed defense is stripped)
+ |target=Adventurers
+ |cooldown=4.00 seconds of balance
+ |detail=Slow the movement of your victim through time.
+}}
+
+{{Skill_detail
+ |skill=Puncture
+ |description=Damage your target's internal organs.
+ |lessons=
+ |syntax=PUPPET PUNCTURE
+ |required=20 fashions, 4 used
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=Push your fingers sadistically into the gut of your victim, damaging their torso in the process. Sometimes this damage is enough to cause them to no longer be able to eat.
+}}
+
+{{Skill_detail
+ |skill=Blackout
+ |description=Rob your victim of some of his senses.
+ |lessons=
+ |syntax=PUPPET BLACKOUT
+ |required=20 fashions, 4 used
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=Blackout some of the senses of your opponent, temporarily.
+}}
+
+{{Skill_detail
+ |skill=Summon
+ |description=Summon your victim to you.
+ |lessons=
+ |syntax=PUPPET SUMMON
+ |required=30 fashions, 6 used
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=Summons your puppet's model to you, providing he is in the same area or an adjacent room.
+}}
+
+{{Skill_detail
+ |skill=Bind
+ |description=Tie up your hapless opponent.
+ |lessons=
+ |syntax=PUPPET BIND
+ |required=15 fashions, 4 used
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=Tie up a victim through your puppet.
+}}
+
+{{Skill_detail
+ |skill=Listen
+ |description=Hear talking through your target's ears.
+ |lessons=
+ |syntax=PUPPET LISTEN<br>PUPPET LISTEN END
+ |required=40 fashions, 5 used
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=With this ability, you'll be able to hear anything anyone who is in the room with your victim says.
+}}
+
+{{Skill_detail
+ |skill=Inventory
+ |description=See the inventory of your target.
+ |lessons=
+ |syntax=PUPPET INVENTORY
+ |required=25 fashions, 1 used
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=See the possessions in the inventory of your victim.
+}}
+
+{{Skill_detail
+ |skill=Imbibe
+ |description=Prick your target to make them sick.
+ |lessons=
+ |syntax=PUPPET IMBIBE WITH <venom>
+ |required=10 fashions, 1 used
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=Imbibe a venom directly into the bloodstream of your puppet's model with a pin. You must have a vial of whatever venom you wish to imbibe with in your inventory.
+}}
+
+{{Skill_detail
+ |skill=Mangle
+ |description=Viciously mangle one of your victim's limbs.
+ |lessons=
+ |syntax=PUPPET MANGLE <left/right> <arm/leg>
+ |required=25 fashions, 4 used
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=Though breaking someone's limb is certainly painful, mangling it is far worse.
+}}
+
+{{Skill_detail
+ |skill=Concussion
+ |description=Give your victim a concussion.
+ |lessons=
+ |syntax=PUPPET CONCUSSION
+ |required=40 fashions, 20 used
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=An extremely potent affliction, the concussion gives one afflicted with it amnesia every second.
+}}
+
+{{Skill_detail
+ |skill=Leech
+ |description=Leech the experience from your victim.
+ |lessons=
+ |syntax=PUPPET LEECH
+ |required=35 fashions, 5 used
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=This interesting and useful ability will allow a Puppetmaster to leech experience from a victim who is in a hunting party. What it essentially does is give experience to the Puppetmaster as if he or she was a part of the hunting party that the victim is in.
+}}
+
+{{Skill_detail
+ |skill=Truefashion
+ |description=Fashion faster than ever before.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=With TRUEFASHION, you have achieved a level of skill whereby sometimes you can get two fashions in the time it normally takes to get one.
+}}
+
+[[Category:Skills]][[Category:Edit needed]]

@@ -1,0 +1,283 @@
+In the beginning there were no [[:Category:City-states|cities]]; those that practice Reclamation shall see it so again.
+
+Nature is both beautiful and terrible, and the power that Reclamation grants reflects this. Those that have gained proficiency are able to tap into the remnants of natural life in a location, coaxing them to grow at an astounding rate. Nature shall overtake the location, granting the one to enable the process great power when standing upon their reclaimed land. Very little is known about the full capabilities of a master of this skill, although there are rumours of practitioners being everywhere simultaneously, or having the earth swallow up those unfortunate enough to fall in battle.
+
+The skill of '''Reclamation''' is available to members of the [[Druid]] [[class]], along with [[Groves]] and [[Metamorphosis]].
+
+==Abilities in Reclamation==
+{{Skill_detail
+ |skill=Reclaim
+ |description=The greatest oak sprouts from a tiny seed.
+ |lessons=
+ |syntax=RECLAMATION BEGIN
+ |required=300 mana
+ |target=Room
+ |cooldown=4.50 seconds of balance
+ |detail=This ability is the basis upon which all other reclamation abilities are built. You may reclaim a room for nature, which will be the first of many. You may only perform most reclamation abilities in a room you have reclaimed unless otherwise stated.<p>This ability takes concentration to perform in most cases, although it will be quicker in forests and instantaneous if in your grove. You may only reclaim one room in this way at a time.</p><p>In addition, attempts to exterminate a room that you have reclaimed shall first remove your claim upon it, before damaging nature; a powerful asset indeed.</p>
+}}
+
+{{Skill_detail
+ |skill=Relinquish
+ |description=Sometimes one must retreat to advance.
+ |lessons=
+ |syntax=RECLAMATION RELINQUISH
+ |required=100 mana
+ |target=
+ |cooldown=2.50 seconds of balance
+ |detail=Sometimes, one must retreat if they wish to claim a greater prize at a later date. This ability will allow you to release your claim on any locations that you may have reclaimed.
+}}
+
+{{Skill_detail
+ |skill=Expand
+ |description=Slowly but surely.
+ |lessons=
+ |syntax=RECLAMATION EXPAND
+ |required=
+ |target=Room
+ |cooldown=3.50 seconds of balance
+ |detail=Once you have begun reclaiming a location, you may expand on your network by performing this ability adjacent to a room you have already reclaimed. The restrictions are similar to reclaiming a room with the reclaim ability, although you may reclaim as many rooms in this way as you are able. 
+}}
+
+{{Skill_detail
+ |skill=Status
+ |description=Know the extent of your control.
+ |lessons=
+ |syntax=RECLAMATION STATUS
+ |required=
+ |target=
+ |cooldown=2.50 seconds of balance
+ |detail=This ability will allow you to view all of the locations you have reclaimed, as well as any active effects that may be operating on those locations.   
+}}
+
+{{Skill_detail
+ |skill=Forestwalk
+ |description=You are everywhere at once.
+ |lessons=
+ |syntax=RECLAMATION FORESTWALK <target>
+ |required=200 mana
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=You may cross the distance between yourself and someone standing in one of your reclaimed locations in a single step, providing you are also standing upon ground you have claimed.<br>This ability will be blocked by the presence of a monolith sigil or similar.
+}}
+
+{{Skill_detail
+ |skill=Lash
+ |description=The vines will scourge their flesh.
+ |lessons=
+ |syntax=RECLAMATION LASH<br>RECLAMATION TERMINATE LASH/ALL
+ |required=250 mana
+ |target=Adventurers
+ |cooldown=4.50 seconds of balance
+ |detail=Those who walk within your claimed land will be lashed by the vines, causing damage and some bleeding.
+}}
+
+{{Skill_detail
+ |skill=Sleepspores
+ |description=Send them into slumber.
+ |lessons=
+ |syntax=RECLAMATION SLEEPSPORES<br>RECLAMATION TERMINATE SLEEPSPORES/ALL
+ |required=250 mana
+ |target=Adventurers
+ |cooldown=4.50 seconds of balance
+ |detail=Your network is now capable of producing spores that when inhaled, shall cause the unfortunate individual to become very tired.<br>Poison, sleep, refresh spores and pollen are all mutually exclusive.
+}}
+
+{{Skill_detail
+ |skill=Windwhisper
+ |description=The wind tells many secrets.
+ |lessons=
+ |syntax=RECLAMATION WINDWHISPER<br>RECLAMATION TERMINATE WINDWHISPER/ALL
+ |required=450 mana
+ |target=
+ |cooldown=3.40 seconds of balance
+ |detail=This ability will allow you to hear any word that is spoken aloud in your reclaimed locations.
+}}
+
+{{Skill_detail
+ |skill=Knowledge
+ |description=Nothing can be hidden from you.
+ |lessons=
+ |syntax=RECLAMATION KNOWLEDGE
+ |required=500 mana
+ |target=
+ |cooldown=3.50 seconds of balance
+ |detail=You have reached a point where you are able to immediately determine the locations of any that walk upon your reclaimed land.
+}}
+
+{{Skill_detail
+ |skill=Omniscience
+ |description=Knowledge is power.
+ |lessons=
+ |syntax=RECLAMATION OMNISCIENCE<br>RECLAMATION TERMINATE OMNISCIENCE/ALL
+ |required=250 mana
+ |target=4.50 seconds of balance
+ |cooldown=
+ |detail=While active, you will know whenever someone moves in or out of locations reclaimed by you.
+}}
+
+{{Skill_detail
+ |skill=Poisonspores
+ |description=A far less gentle fate.
+ |lessons=
+ |syntax=RECLAMATION POISONSPORES<br>RECLAMATION TERMINATE POISONSPORES/ALL
+ |required=250 mana
+ |target=Adventurers
+ |cooldown=4.50 seconds of balance
+ |detail=These spores are far more deadly than simple sleep spores, and will cause the victim to suffer if they are unfortunate enough to inhale them.<br>Poison, sleep, refresh spores and pollen are all mutually exclusive.
+}}
+
+{{Skill_detail
+ |skill=Consume
+ |description=The flesh of the fallen shall nourish nature.
+ |lessons=
+ |syntax=RECLAMATION CONSUME<br>RECLAMATION TERMINATE CONSUME/ALL
+ |required=250 mana
+ |target=
+ |cooldown=4.50 seconds of balance
+ |detail=Your network is now able to consume the corpses of any that fall within its bounds, expanding outwards from the location that they fell if it is able. 
+}}
+
+{{Skill_detail
+ |skill=Constrict
+ |description=Restrain those that trespass.
+ |lessons=
+ |syntax=RECLAMATION CONSTRICT <target>
+ |required=200 mana
+ |target=Adventurers
+ |cooldown=3.10 seconds of balance
+ |detail=You may command the vines to bind someone in place, but it will rob them of their energy for a time, and will be unable to bind a second person in that given location for a while.  
+}}
+
+{{Skill_detail
+ |skill=Regrowth
+ |description=Nature will always recover.
+ |lessons=
+ |syntax=RECLAMATION REGROWTH
+ |required=2500 mana
+ |target=Room
+ |cooldown=5.00 seconds of balance
+ |detail=Those locations that have been exterminated by the foul necromancers are truly a blight upon nature. If you discover such a location adjacent to your network, you may regrow it, healing the damage and claiming the land in a single stroke. Alternatively, if you lack any network at all, you may do this to begin claiming one. 
+}}
+
+{{Skill_detail
+ |skill=Pollen
+ |description=Choke the life from them.
+ |lessons=
+ |syntax=RECLAMATION POLLEN<br>RECLAMATION TERMINATE POLLEN/ALL
+ |required=250 mana
+ |target=Adventurers
+ |cooldown=4.50 seconds of balance
+ |detail=This potent pollen will enter the lungs and throat of those that inhale it, asphyxiating them.<br>Poison, sleep, refresh spores and pollen are all mutually exclusive.
+}}
+
+{{Skill_detail
+ |skill=Signal
+ |description=Let no transgression go unpunished.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=Your mastery has reached such a point that you will be made aware whenever anyone is attacking one of your reclaimed locations with abilities such as necromancy exterminate.   
+}}
+
+{{Skill_detail
+ |skill=Smother
+ |description=Rob the flames of oxygen.
+ |lessons=
+ |syntax=RECLAMATION SMOTHER
+ |required=
+ |target=Room
+ |cooldown=2.50 seconds of balance
+ |detail=When standing within your reclaimed network, you may cause the vines to smother any flames that may have sprung up, extinguishing them all immediately across the entire expanse of your reclaimed land.
+}}
+
+{{Skill_detail
+ |skill=Refresh
+ |description=The most benign of spores.
+ |lessons=
+ |syntax=RECLAMATION REFRESH<br>RECLAMATION TERMINATE REFRESH/ALL
+ |required=
+ |target=Adventurers
+ |cooldown=4.50 seconds of balance
+ |detail=The most benign of the spores your network can produce, these will heal the physical body of those that inhale them.<br>Poison, sleep, refresh spores and pollen are all mutually exclusive.
+}}
+
+{{Skill_detail
+ |skill=Polarity
+ |description=Two is better than one.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=You have reached a point in your training where you are able to support two active effects on your network at once. This ability does not permit you to have two spore type abilities active at the same time.
+}}
+
+{{Skill_detail
+ |skill=Subsume
+ |description=All will become one.
+ |lessons=
+ |syntax=RECLAMATION SUBSUME
+ |required=1000 mana
+ |target=Room
+ |cooldown=7.00 seconds of balance
+ |detail=This powerful ability is situationally one of the greatest in the reclaimer's arsenal. If your reclaimed land meets another's (two rooms become adjacent to one another) and the reclaimer of the other land is a mutual ally, you may subsume his or her land and make it part of your own network.<br>To do this, you must stand on the room that is adjacent to your network that they have reclaimed and perform the ability.  
+}}
+
+{{Skill_detail
+ |skill=Trinity
+ |description=Perfect control is yours.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=You have reached a point in your training where you are able to support three active effects on your network at once. This ability does not permit you to have two spore type abilities active at the same time.
+}}
+
+{{Skill_detail
+ |skill=Ward
+ |description=Over your dead body.
+ |lessons=
+ |syntax=RECLAMATION WARD<br>RELAX WARD
+ |required=350 mana
+ |target=Self
+ |cooldown=
+ |detail=This ability will grant a defence that will prevent any room you are standing in from having your claim stripped from it.
+}}
+
+{{Skill_detail
+ |skill=Revive
+ |description=Breathe life back into the fallen.
+ |lessons=
+ |syntax=REVIVE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=5.00 seconds of equilibrium
+ |detail=While standing on your reclaimed ground, you can breathe life back into the corpse of a fallen adventurer.
+}}
+
+{{Skill_detail
+ |skill=Embrace
+ |description=Return them to the embrace of nature.
+ |lessons=
+ |syntax=RECLAMATION EMBRACE <target>
+ |required=100 mana
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=When standing in a reclaimed location, you may have the vines tear apart a suitably vulnerable enemy. For the purposes of this ability, suitably vulnerable requires that the target has both arms and both legs at least damaged to the point of needing the restoration salve to fix them.
+}}
+
+{{Skill_detail
+ |skill=Wrath
+ |description=The wrath of nature unleashed.
+ |lessons=
+ |syntax=RECLAMATION WRATH
+ |required=1000 mana
+ |target=Adventurers
+ |cooldown=5.00 seconds of balance
+ |detail=This ability is maybe the greatest and most costly of all. When all else is lost, you may sacrifice all land that you have reclaimed, dealing significant damage to all those that stand within. A terrible sacrifice indeed, but sometimes the advancing foes must be stopped at all costs.
+}}
+
+[[Category:Skills]][[Category:Edit needed]]

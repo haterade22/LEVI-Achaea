@@ -1,0 +1,340 @@
+The two "Arts" referred to are the '''Draw Art''' and the '''Blade Art'''. Vastly different to such techniques as [[Chivalry]] and [[Swashbuckling]], a master of the Two Arts kills a man more easily by drawing a sword from its sheath than by swinging a naked blade. Lucaine Pyramides is recorded as unsheathing his blade for only a second at a time in combat - killing people in single motions of his sword, the [[Three Moons]].
+
+Originating in [[Kashar]] and most notably practised by the famed warrior [[Lucaine Pyramides]], the Two Arts is an enigmatic style of combat combining swordplay with techniques resembling the [[Kaido|kai]] energy used by [[monks]]. To be able to truly harness this skill, one must possess a unique blade; the smith [[Murad]] and the Hatha-yin maiden [[Kavaya]] will aid those who seek a blade of their own, and they can be located in an encampment east of [[Delos]].
+
+Another aspect of the Two Arts involves imbuing the blade with supernatural power, similar to the lost [[Templars|Templar]] ability of [[Bladefire]]. For example, the ability, "'''Desperate Angel'''", imbues one's blade with an individual's desperation, fear, anger, and rage, and sends them slashing through the opponent. This technique was performed by Pyramides on the [[serpent]] [[Lucius Errikale]] in the [[Battle of King's Tomb]] during the [[Wars of Succession]].
+
+The skill of '''TwoArts''' is available to members of the [[Blademaster]] [[class]], along with [[Striking]] and [[Shindo]].
+
+==Abilities in Two Arts==
+{{Skill_detail
+ |skill=Preparation
+ |description=A scabbard is as important as one's blade.
+ |lessons=
+ |syntax=POSITION SCABBARD
+ |required=
+ |target=
+ |cooldown=
+ |detail=A properly positioned scabbard is integral in drawing one's sword with ease, grace, and power.<br>Neglect your scabbard at your peril, for the First Art is useless without it.
+}}
+
+{{Skill_detail
+ |skill=Bladename
+ |description=Every sword is unique.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=Every sword has a name, just as every sword has an owner; the first step towards mastery of the Two Arts is to learn this.<br>In order to gain your sword, seek out Kavaya near the Eastern Ithmia, east of the City of Delos.
+}}
+
+{{Skill_detail
+ |skill=Drawslash
+ |description=A single, measured slash.
+ |lessons=
+ |syntax=DRAWSLASH <target> [<body part>]
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=2.50 seconds of balance
+ |detail=Draw your blade and aim a single slash at your target before resheathing.<br>With the Weaponry ability of TARGETING, this attack may optionally be targeted at a particular body part.
+}}
+
+{{Skill_detail
+ |skill=Gripping
+ |description=Clench your blade with an unshakable grip.
+ |lessons=
+ |syntax=GRIP<br>RELAX GRIP
+ |required=
+ |target=
+ |cooldown=
+ |detail=While using this ability, you will prevent items from being knocked out of your grip.
+}}
+
+{{Skill_detail
+ |skill=Doya
+ |description=Strike true with the slow might of the Earth stance.
+ |lessons=
+ |syntax=DOYA<br>UNSTANCE
+ |required=
+ |target=
+ |cooldown=2.00 seconds of balance
+ |detail=Stance: Earth<br>Ever steady underfoot, the Earth is a fixture of steadfast might. This strong, grounded stance favours sure strikes, granting a moderate increase to damage and accuracy at the cost of speed.
+}}
+
+{{Skill_detail
+ |skill=Raze
+ |description=Cleave through defensive auras.
+ |lessons=
+ |syntax=RAZE <target> [ [[magical shield|SHIELD]]{{!}}[[aura of weapons rebounding|REBOUNDING]]]
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=2.00 seconds of balance
+ |detail=With raze, your sword will become a weapon of destruction, attacking the defences of your enemies that serve to keep your weapons out.
+}}
+
+{{Skill_detail
+ |skill=Armslash
+ |description=Cut across the arms.
+ |lessons=
+ |syntax=ARMSLASH <target> [LEFT{{!}}RIGHT]
+ |required=
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=Draw and slash your blade across the arms of your enemy from either left or right. Such an attack will strike both arms in immediate succession, the second with less force than the first.
+}}
+
+{{Skill_detail
+ |skill=Engage
+ |description=Lash out at a cowardly foe.
+ |lessons=
+ |syntax=ENGAGE <target><br>DISENGAGE [<target>]
+ |required=50 mana and mana drain
+ |target=Adventurers
+ |cooldown=2.00 seconds of equilibrium
+ |detail=There is nothing more despicable and dishonourable than a coward, and this ability will allow you to punish cowards, as is their due. Once you have engaged an adventurer, if he is otherwise unhindered and tries to leave the room, you will get in an extra strike, whether you have equilibrium and balance or not.<br>This ability may be initiated if off balance.
+}}
+
+{{Skill_detail
+ |skill=Discernment
+ |description=Quickly assess an opponent's wounds.
+ |lessons=
+ |syntax=DISCERN <target>
+ |required=
+ |target=Adventurers
+ |cooldown=1.00 seconds of equilibrium
+ |detail=With a keen and practised eye, discern the severity of any bleeding wounds your opponent may endure.
+}}
+
+{{Skill_detail
+ |skill=Legslash
+ |description=Slash across the legs.
+ |lessons=
+ |syntax=LEGSLASH <target> [LEFT{{!}}RIGHT]
+ |required=
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=Draw and slash your blade across the legs of your enemy from either left or right. This horizontal attack will strike both legs in immediate succession, the second less powerfully than the first.
+}}
+
+{{Skill_detail
+ |skill=Thyr
+ |description=The whirling Wind stance neglects power for speed.
+ |lessons=
+ |syntax=THYR<br>UNSTANCE
+ |required=
+ |target=
+ |cooldown=2.00 seconds of balance
+ |detail=Stance: Air<br>Unceasing and all-pervasive, the Wind flows and soars invisibly and unpredictably. This graceful stance permits somewhat greater speed and accuracy of attack, but blows dealt will be significantly less powerful.
+}}
+
+{{Skill_detail
+ |skill=Impale
+ |description= Drive your blade straight through your target.
+ |lessons=
+ |syntax=IMPALE <target><br>WITHDRAW BLADE
+ |required=
+ |target=Adventurers
+ |cooldown=2.40 seconds of balance
+ |detail=This wicked ability may be used when your hapless victim has fallen to the ground and lies there, helpless. With it, you will drive your sword into his body, causing regular damage as long as he is on the sword. Further, while impaled, he will find himself unable to move, though you too will be unable to move.
+}}
+
+{{Skill_detail
+ |skill=Centreslash
+ |description=Carve up or down across the head and chest.
+ |lessons=
+ |syntax=CENTRESLASH <target> [UP{{!}}DOWN]
+ |required=
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=Draw your blade and slash your enemy with a rising or falling vertical blow. This attack will strike your foe's head and torso in succession, depending on from which direction the blow comes, dealing less damage to the second area struck.
+}}
+
+{{Skill_detail
+ |skill=Balanceslash
+ |description=Drive your enemy back with a balanced slash.
+ |lessons=
+ |syntax=BALANCESLASH <target>
+ |required=
+ |target=Adventurers
+ |cooldown=2.10 seconds of balance
+ |detail=This powerful, measured blow will drive your target back, knocking them off-balance.
+}}
+
+{{Skill_detail
+ |skill=Infusefire
+ |description=Wreathe your blade in crackling flame.
+ |lessons=
+ |syntax=INFUSE FIRE
+ |required=5 Shin energy
+ |target=
+ |cooldown=
+ |detail=By channelling accumulated Shin energy into your sword, you may heat your blade to a scorching temperature. A weapon so empowered will burn as fire the next time it is drawn, potentially setting your target ablaze. If a target is already ablaze, extra damage may be dealt.<br>** Your blade may only be infused with one element at a time.
+}}
+
+{{Skill_detail
+ |skill=Pommelstrike
+ |description=Deliver a stunning blow with the hilt of your sword.
+ |lessons=
+ |syntax=POMMELSTRIKE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=1.50 seconds of balance
+ |detail=Drive the pommel of your blade into your opponent's skull, delivering a swift and accurate blow.
+}}
+
+{{Skill_detail
+ |skill=Mir
+ |description=The adaptive Water stance favours defence.
+ |lessons=
+ |syntax=MIR<br>UNSTANCE
+ |required=
+ |target=
+ |cooldown=2.00 seconds of balance
+ |detail=Stance: Water<br>Patient and unchanging, yielding yet impervious, Water is supremely adaptive to its surroundings. This flowing stance is slow to attack but affords tremendous physical defence.
+}}
+
+{{Skill_detail
+ |skill=Predict
+ |description=Know yourself, know your foe.
+ |lessons=
+ |syntax=PREDICT <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=The trained blademaster shall be able to assess the state of a foe's limbs with a single glance.
+}}
+
+{{Skill_detail
+ |skill=Bladesuicide
+ |description=If death must come, be it by your own blade.
+ |lessons=
+ |syntax=BLADESUICIDE
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=In the direst of circumstances, so long as you still keep your blade, your life remains in your own hands. By driving your sword through your own heart, you may bring immediate death.
+}}
+
+{{Skill_detail
+ |skill=Retaliationstrike
+ |description=Unleash a fierce strike against your attacker.
+ |lessons=
+ |syntax=RETALIATION[STRIKE] [ON{{!}}OFF]
+ |required=
+ |target=
+ |cooldown=2.50 seconds of balance
+ |detail=Prepare yourself to strike back against your foes. Any time a physical blow is struck against you, you have a chance to loose your blade upon your attacker in retaliation.
+}}
+
+{{Skill_detail
+ |skill=Infuselightning
+ |description=Command lightning into your sword.
+ |lessons=
+ |syntax=INFUSE LIGHTNING
+ |required=5 Shin energy
+ |target=
+ |cooldown=
+ |detail=By channelling accumulated Shin energy into your sword, you may charge your blade with volatile electrical currents. A weapon so empowered will strike as lightning the next time it is drawn, and shall cause your foe's muscles to lock up in clumsiness.<br>** Your blade may only be infused with one element at a time.
+}}
+
+{{Skill_detail
+ |skill=Bladetwist
+ |description=Torment an impaled foe.
+ |lessons=
+ |syntax=BLADETWIST
+ |required=
+ |target=Adventurers
+ |cooldown=1.00 second of balance
+ |detail=Should your enemy be impaled upon your sword, you may twist the blade, gouging through their innards and letting a torrent of blood.
+}}
+
+{{Skill_detail
+ |skill=Arash
+ |description=Aggressive and powerful, the Fire stance is one of attack.
+ |lessons=
+ |syntax=ARASH<br>UNSTANCE
+ |required=
+ |target=
+ |cooldown=2.00 seconds of balance
+ |detail=Stance: Fire<br>Flickering and ephemeral, Fire manifests in the weaving, surging flame and the overwhelming force of sudden combustion. Blows struck from this reckless, offensively focused stance will deal significantly more damage, with more speed, but you will be more vulnerable to attacks.
+}}
+
+{{Skill_detail
+ |skill=Infuseice
+ |description=Suffuse your blade with ice.
+ |lessons=
+ |syntax=INFUSE ICE
+ |required=5 Shin energy
+ |target=
+ |cooldown=
+ |detail=By channelling accumulated Shin energy into your sword, you may chill your blade to a glacial state. A weapon so empowered will strike as ice the next time it is drawn, and may freeze your target into inaction.<br>** Your blade may only be infused with one element at a time.
+}}
+
+{{Skill_detail
+ |skill=Multislash
+ |description=Spill blood with a succession of slashes.
+ |lessons=
+ |syntax=MULTISLASH <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=4.50 seconds of balance
+ |detail=By compounding your focus, you may slash your target thrice in a single, continuous motion. Such an attack will deal more damage and draw more blood than a lesser slash, but not permit an accompanying strike.
+}}
+
+{{Skill_detail
+ |skill=Compassslash
+ |description=Send their blood to the points of the compass.
+ |lessons=
+ |syntax=COMPASSSLASH <target> <direction>
+ |required=
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=Draw and slash your target from one of the cardinal directions, causing more bleeding than a lesser slash.<p>The points of the compass:<br>'''NORTH''': head<br>'''EAST''':left arm<br>'''SOUTHEAST''': left leg<br>'''SOUTH''': torso<br>'''SOUTHWEST''': right leg<br>'''WEST''': right arm</p>
+}}
+
+{{Skill_detail
+ |skill=Infusevoid
+ |description=Wield the Void and your sword as one.
+ |lessons=
+ |syntax=INFUSE VOID
+ |required=5 Shin energy
+ |target=
+ |cooldown=
+ |detail=By channelling accumulated Shin energy into your sword, you may fold the recondite power of the Void about your blade. A weapon so empowered will flow as a shadow the next time it is drawn, carving through armour and other physical protections as if a tool of magic, and may negate one of your opponent's defences.<br>** Your blade may only be infused with one element at a time.
+}}
+
+{{Skill_detail
+ |skill=Impaleslash
+ |description=Let their blood flow freely.
+ |lessons=
+ |syntax=IMPALESLASH
+ |required=
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=When an opponent writhes impaled upon your blade, with this technique you may carve through vital organs, causing severe internal bleeding and hampering your enemy's ability to clot their wounds.
+}}
+
+{{Skill_detail
+ |skill=Sanya
+ |description=The total focus of the Void stance amplifies inner power.
+ |lessons=
+ |syntax=SANYA<br>UNSTANCE
+ |required=
+ |target=
+ |cooldown=2.00 seconds of balance
+ |detail=Stance: Void<br>Empty of all things, Void is absolute nothingness without boundary or end. The clarity gained by driving away thought, and by freeing your mind of distraction, in contemplation of Void, will enhance your connection with your physical form. Striking from this stance will yield more Shin energy, and less will be consumed by most abilities.
+}}
+
+{{Skill_detail
+ |skill=Brokenstar
+ |description=Draw the broken star across your foe.
+ |lessons=
+ |syntax=BROKENSTAR <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=Unleash the fatal fury of a master swordsman by carving the broken star. In the sanguinary heat of battle, when your opponent's bleeding reaches a suitably profuse intensity, let your blade guide your hand as four perfect, precise strokes cut free their soul.
+}}
+
+[[Category:Skills]][[Category:Edit needed]]

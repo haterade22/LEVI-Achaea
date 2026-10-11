@@ -1,367 +1,219 @@
 # Achaea Venoms Database
 # For Claude AI consumption - structured data for combat system development
-# Last Updated: 2026-01-08
+# REGENERATED 2026-10-11 from authoritative sources, replacing a hand-written list that had 12
+# wrong venom -> affliction mappings (euphorbia was 'impatience', xentio 'stupidity', notechis
+# 'shyness', ...). Code was written from it: the Infernal group lock still sends euphorbia for
+# impatience. Sources, per field:
+#   affliction  -- venom_to_aff in ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua (what tracking
+#                  uses), else the wiki's Venom (Skill) page
+#   cure        -- live WHATCURES (kb/afflictions/afflictions.json)
+#   weapon      -- false where the wiki says it 'cannot be used to envenom a weapon' (bite only)
+#   wiki        -- the wiki's own text (kb/raw/wiki/Venom.wiki)
+# NO VENOM GIVES IMPATIENCE. Sumac and camus only do damage.
 
 venoms:
-  # ============================================================================
-  # KELP/AURUM CURES (eating balance)
-  # ============================================================================
-
-  kalmia:
-    affliction: asthma
-    cure_method: eat
-    cure_herb: kelp
-    cure_mineral: aurum
-    effect: "Prevents smoking pipes"
-    lock_role: "Core softlock component - blocks smoking cures"
-    priority: critical
-
-  vernalius:
-    affliction: weariness
-    cure_method: eat
-    cure_herb: kelp
-    cure_mineral: aurum
-    effect: "Prevents Restore ability, blocks passive cures for many classes"
-    lock_role: "Class-specific lock affliction for Knights, Monk, Serpent, etc."
-    priority: high
-
-  prefarar:
-    affliction: sensitivity
-    cure_method: eat
-    cure_herb: kelp
-    cure_mineral: aurum
-    effect: "Increases damage taken"
-    priority: medium
-
-  supara:
-    affliction: clumsiness
-    cure_method: eat
-    cure_herb: kelp
-    cure_mineral: aurum
-    effect: "Causes fumbling, failed actions"
-    priority: medium
-
-  epseth:
-    affliction: healthleech
-    cure_method: eat
-    cure_herb: kelp
-    cure_mineral: aurum
-    effect: "Drains health on movement"
-    priority: low
-
-  epteth:
-    affliction: hypochondria
-    cure_method: eat
-    cure_herb: lobelia
-    cure_mineral: argentum
-    effect: "Fake afflictions appear in diagnose"
-    priority: low
-
-  # ============================================================================
-  # BLOODROOT/MAGNESIUM CURES (eating balance)
-  # ============================================================================
-
-  curare:
-    affliction: paralysis
-    cure_method: eat
-    cure_herb: bloodroot
-    cure_mineral: magnesium
-    effect: "Prevents all actions and Tree tattoo"
-    lock_role: "Core venomlock component - blocks Tree escape"
-    priority: critical
-
-  gecko:
-    affliction: slickness
-    cure_method: eat
-    cure_herb: bloodroot
-    cure_mineral: magnesium
-    alternate_cure: "smoke valerian/realgar"
-    effect: "Prevents applying salves"
-    lock_role: "Core softlock component - blocks salve cures"
-    priority: critical
-
-  # ============================================================================
-  # GINSENG/FERRUM CURES (eating balance)
-  # ============================================================================
-
-  vardrax:
-    affliction: addiction
-    cure_method: eat
-    cure_herb: ginseng
-    cure_mineral: ferrum
-    effect: "Forces eating of held items"
-    lock_role: "Riftlock helper - depletes herb supply"
-    priority: medium
-
-  darkshade:
-    affliction: darkshade
-    cure_method: eat
-    cure_herb: ginseng
-    cure_mineral: ferrum
-    effect: "Causes death after 26 seconds if not cured"
-    lock_role: "Kill condition for Serpent darkshade route"
-    priority: critical
-    kill_timer: 26
-
-  scytherus:
-    affliction: scytherus
-    cure_method: eat
-    cure_herb: ginseng
-    cure_mineral: ferrum
-    effect: "Poison damage on actions, combos with fratricide"
-    priority: high
-
-  slike:
-    affliction: anorexia
-    cure_method: apply
-    cure_salve: epidermal
-    alternate_cure: focus
-    effect: "Prevents eating herbs"
-    lock_role: "Core softlock component - blocks herb cures"
-    priority: critical
-    note: "NOT a ginseng cure despite being listed here - uses epidermal salve"
-
-  voyria:
-    affliction: voyria
-    cure_method: sip
-    cure_elixir: immunity
-    effect: "Poison spreading through body, prevents sip cures"
-    lock_role: "Lock affliction for Apostate, Pariah, Bard, Priest"
-    priority: high
-
-  eurypteria:
-    affliction: haemophilia
-    cure_method: eat
-    cure_herb: ginseng
-    cure_mineral: ferrum
-    effect: "Greatly increased bleeding"
-    lock_role: "Lock affliction for Magi, Sylvan"
-    priority: medium
-
-  delphinium:
-    affliction: insomnia_strip
-    cure_method: none
-    effect: "First strips insomnia, second strips gypsum/kola, third causes sleep"
-    lock_role: "Sleeplock progression"
-    priority: high
-    mechanic: |
-      1st application: Removes Insomnia defence
-      2nd application: Removes Gypsum/Kola defence
-      3rd application: Causes sleep
-
-  loki:
-    affliction: random
-    cure_method: varies
-    effect: "Applies a random affliction"
-    priority: low
+  aconite:
+    affliction: "stupidity"
+    cure: "eat goldenseal / eat plumbum and focus mind"
+    weapon: true
+    source: "venom_to_aff"
+    wiki: "Cause sheer stupidity in your opponent. Afflict your victim with sheer stupidity."
 
   camus:
-    affliction: camus
-    cure_method: eat
-    cure_herb: ginseng
-    cure_mineral: ferrum
-    effect: "Poison damage"
-    priority: low
-
-  noctec:
-    affliction: nausea
-    cure_method: eat
-    cure_herb: ginseng
-    cure_mineral: ferrum
-    effect: "Causes vomiting"
-    priority: medium
-
-  oleander:
-    affliction: lethargy
-    cure_method: eat
-    cure_herb: ginseng
-    cure_mineral: ferrum
-    effect: "Increased balance/equilibrium times"
-    priority: medium
-
-  # ============================================================================
-  # GOLDENSEAL/PLUMBUM CURES (eating balance)
-  # ============================================================================
-
-  euphorbia:
-    affliction: impatience
-    cure_method: eat
-    cure_herb: goldenseal
-    cure_mineral: plumbum
-    effect: "Prevents using Focus"
-    lock_role: "Core hardlock component - prevents Focus escape"
-    priority: critical
-
-  xentio:
-    affliction: stupidity
-    cure_method: eat
-    cure_herb: goldenseal
-    cure_mineral: plumbum
-    effect: "Random failures, lowers cure chances"
-    lock_role: "Lock affliction for Alchemist, mental pressure"
-    priority: high
-
-  aconite:
-    affliction: dizziness
-    cure_method: eat
-    cure_herb: goldenseal
-    cure_mineral: plumbum
-    effect: "Random direction movement"
-    priority: medium
+    affliction: "none (damage, stronger than sumac)"
+    cure: "n/a"
+    weapon: false
+    source: "wiki"
+    wiki: "A more powerful version of Sumac. A more powerful version of Sumac poison. This venom can not be used to envenom a weapon."
 
   colocasia:
-    affliction: epilepsy
-    cure_method: eat
-    cure_herb: goldenseal
-    cure_mineral: plumbum
-    effect: "Random seizures"
-    priority: medium
+    affliction: "blindness + deafness"
+    cure: "apply epidermal to head"
+    weapon: true
+    source: "wiki"
+    wiki: "Gives blindness and deafness. Cause both blindness and deafness in your victim."
 
-  notechis:
-    affliction: shyness
-    cure_method: eat
-    cure_herb: goldenseal
-    cure_mineral: plumbum
-    effect: "Prevents speaking/shouting"
-    priority: low
+  curare:
+    affliction: "paralysis"
+    cure: "eat bloodroot / eat magnesium"
+    weapon: true
+    source: "venom_to_aff"
+    wiki: "A venom of muscular paralysis. Cause your victim's body to freeze with paralysis."
+
+  darkshade:
+    affliction: "darkshade"
+    cure: "eat ginseng / eat ferrum"
+    weapon: true
+    source: "venom_to_aff"
+    wiki: "Makes the victim allergic to sunlight. Give your target an allergy to sunlight."
+
+  delphinium:
+    affliction: "sleeping"
+    cure: "wake (or the insomnia / kola defences first)"
+    weapon: true
+    source: "venom_to_aff"
+    wiki: "Put your victim to sleep. Put your victim to sleep."
 
   digitalis:
-    affliction: depression
-    cure_method: eat
-    cure_herb: goldenseal
-    cure_mineral: plumbum
-    effect: "Causes random sits, despair"
-    priority: medium
+    affliction: "shyness"
+    cure: "eat goldenseal / eat plumbum and focus mind"
+    weapon: true
+    source: "venom_to_aff"
+    wiki: "Causes unbearable shyness. Cause unbearable shyness in your victim."
 
-  # ============================================================================
-  # LOBELIA/ARGENTUM CURES (eating balance)
-  # ============================================================================
+  epseth:
+    affliction: "crippled leg (level 1 break)"
+    cure: "apply mending to legs"
+    weapon: true
+    source: "venom_to_aff"
+    wiki: "Cause the legs of your victim to become useless. Cause the legs of your victim to become useless."
 
-  sumac:
-    affliction: recklessness
-    cure_method: eat
-    cure_herb: lobelia
-    cure_mineral: argentum
-    effect: "Lowers cure chances, prevents caution"
-    lock_role: "Lock affliction for Depthswalker"
-    priority: medium
+  epteth:
+    affliction: "crippled arm (level 1 break)"
+    cure: "apply mending to arms"
+    weapon: true
+    source: "venom_to_aff"
+    wiki: "Shrivel up the arms of your unlucky victim. Cause your victim's arms to shrivel."
 
-  hepafarin:
-    affliction: masochism
-    cure_method: eat
-    cure_herb: lobelia
-    cure_mineral: argentum
-    effect: "Forced self-harm"
-    priority: medium
-    serpent_note: "Enables Ekanelia monkshood and curare transformations"
+  euphorbia:
+    affliction: "nausea"
+    cure: "eat ginseng / eat ferrum"
+    weapon: true
+    source: "venom_to_aff"
+    wiki: "Induces spasmodic vomiting. Induces spasmodic vomiting."
 
-  vernus:
-    affliction: vertigo
-    cure_method: eat
-    cure_herb: lobelia
-    cure_mineral: argentum
-    effect: "Random falls"
-    priority: low
+  eurypteria:
+    affliction: "recklessness"
+    cure: "eat lobelia / eat argentum and focus mind"
+    weapon: true
+    source: "venom_to_aff"
+    wiki: "Gives the victim delusions of invulnerability. Afflict your victim with recklessness."
 
-  oculus:
-    affliction: loneliness
-    cure_method: eat
-    cure_herb: lobelia
-    cure_mineral: argentum
-    effect: "Prevents following"
-    priority: low
+  gecko:
+    affliction: "slickness"
+    cure: "smoke valerian / smoke realgar and eat bloodroot / eat magnesium"
+    weapon: true
+    source: "venom_to_aff"
+    wiki: "Causes the recipient to become foully oily. Cause your victim to secrete foul oils from his skin."
 
-  selarnia:
-    affliction: agoraphobia
-    cure_method: eat
-    cure_herb: lobelia
-    cure_mineral: argentum
-    effect: "Fear of open spaces"
-    priority: low
-
-  dature:
-    affliction: claustrophobia
-    cure_method: eat
-    cure_herb: lobelia
-    cure_mineral: argentum
-    effect: "Fear of enclosed spaces"
-    priority: low
-
-  # ============================================================================
-  # ASH/STANNUM CURES (eating balance)
-  # ============================================================================
-
-  monkshood:
-    affliction: disloyalty   # old name: disfigurement
-    # HELP 13.7.2: disfigurement is cured by SMOKING valerian/realgar, not ash.
-    # Our code tracks it as `disloyalty` (smokeCureTableV3). See kb/afflictions/catalog.md.
-    cure_method: smoke
-    cure_herb: valerian
-    cure_mineral: realgar
-    effect: "Causes physical disfigurement"
-    priority: low
-    serpent_note: "With asthma+masochism+weariness, Ekanelia adds IMPATIENCE"
-
-  aconite_ash:
-    affliction: confusion
-    cure_method: eat
-    cure_herb: ash
-    cure_mineral: stannum
-    effect: "Random command substitution"
-    lock_role: "Lock affliction for Psion"
-    priority: high
-
-  arsenic:
-    affliction: hallucinations
-    cure_method: eat
-    cure_herb: ash
-    cure_mineral: stannum
-    effect: "Fake room descriptions and messages"
-    priority: medium
-
-  nightshade:
-    affliction: paranoia
-    cure_method: eat
-    cure_herb: ash
-    cure_mineral: stannum
-    effect: "Sees fake enemies"
-    priority: low
-
-  benzedrine:
-    affliction: hypersomnia
-    cure_method: eat
-    cure_herb: ash
-    cure_mineral: stannum
-    effect: "Extreme drowsiness"
-    priority: medium
+  kalmia:
+    affliction: "asthma"
+    cure: "eat kelp / eat aurum"
+    weapon: true
+    source: "venom_to_aff"
+    wiki: "Inhibits the respiratory system. Afflict your victim with severe asthma."
 
   larkspur:
-    affliction: dementia
-    cure_method: eat
-    cure_herb: ash
-    cure_mineral: stannum
-    effect: "Random actions"
-    priority: medium
+    affliction: "dizziness"
+    cure: "eat goldenseal / eat plumbum and focus mind"
+    weapon: true
+    source: "venom_to_aff"
+    wiki: "Causes great dizziness. Cause great dizziness in your target."
 
-  # ============================================================================
-  # BELLWORT/CUPRUM CURES (eating balance)
-  # ============================================================================
+  loki:
+    affliction: "a random venom's affliction"
+    cure: "n/a"
+    weapon: true
+    source: "wiki"
+    wiki: "An unpredictable toxin. This unpredictable toxin will afflict your victim with a random venom."
 
-  selarnia_peace:
-    affliction: peace
-    cure_method: eat
-    cure_herb: bellwort
-    cure_mineral: cuprum
-    effect: "Prevents aggressive actions"
-    priority: high
+  monkshood:
+    affliction: "disloyalty"
+    cure: "smoke valerian / smoke realgar"
+    weapon: true
+    source: "venom_to_aff"
+    wiki: "Disfigure your victim, causing disloyalty in those around. Causes your victim to become disfigured making their loyal servants turn on them."
 
-  maidenhair:
-    affliction: generosity
-    cure_method: eat
-    cure_herb: bellwort
-    cure_mineral: cuprum
-    effect: "Forces giving away items"
-    priority: medium
+  nechamandra:
+    affliction: "shivering"
+    cure: "apply caloric"
+    weapon: true
+    source: "venom_to_aff"
+    wiki: "A venom that chills the veins. A venom that chills the veins."
+
+  notechis:
+    affliction: "haemophilia"
+    cure: "eat ginseng / eat ferrum"
+    weapon: false
+    source: "venom_to_aff"
+    wiki: "Induce haemophilia in a target. Induce haemophilia in your target. This venom can not be used to envenom a weapon."
+
+  oculus:
+    affliction: "none: removes the target's blindness"
+    cure: "n/a"
+    weapon: true
+    source: "wiki"
+    wiki: "Forces the recipient's eyelids open. Forces your victim's eyelids open clearing his eyes of blindness."
+
+  oleander:
+    affliction: "blindness"
+    cure: "apply epidermal to head"
+    weapon: true
+    source: "wiki"
+    wiki: "Blindness. Cause blindness in your target."
+
+  prefarar:
+    affliction: "sensitivity"
+    cure: "eat kelp / eat aurum"
+    weapon: true
+    source: "venom_to_aff"
+    wiki: "Increase the recipient's sensitivity. Increase your victim's sensitivity to pain."
+
+  scytherus:
+    affliction: "scytherus"
+    cure: "eat ginseng / eat ferrum"
+    weapon: true
+    source: "venom_to_aff"
+    wiki: "A venom that thins the blood. A nasty venom that will thin the victim's blood allowing your toxins to be more effective."
+
+  selarnia:
+    affliction: "selarnia"
+    cure: "apply mending to body"
+    weapon: true
+    source: "wiki"
+    wiki: "Forcing your victim back into mortal form. This venom will force the spirit animals out of those pesky forestals."
+
+  slike:
+    affliction: "anorexia"
+    cure: "apply epidermal to body and focus mind"
+    weapon: true
+    source: "venom_to_aff"
+    wiki: "Give the curse of anorexia to your victim. Causes your victim to fall prey to anorexia."
+
+  sumac:
+    affliction: "none (damage)"
+    cure: "n/a"
+    weapon: false
+    source: "wiki"
+    wiki: "Minor damage. This venom will cause minor damage to adventurers and denizens. This venom cannot be used to envenom a weapon."
+
+  vardrax:
+    affliction: "addiction"
+    cure: "eat ginseng / eat ferrum"
+    weapon: true
+    source: "venom_to_aff"
+    wiki: "Grants an insatiable addiction. This potent venom will instill an addiction in your victim that will not be sated."
+
+  vernalius:
+    affliction: "weariness"
+    cure: "eat kelp / eat aurum"
+    weapon: true
+    source: "venom_to_aff"
+    wiki: "A venom that weakens the muscles. A venom that weakens the muscles."
+
+  voyria:
+    affliction: "voyria"
+    cure: "sip immunity"
+    weapon: true
+    source: "venom_to_aff"
+    wiki: "The deadliest venom known to mankind. This deadly venom will induce a quick death for its victim."
+
+  xentio:
+    affliction: "clumsiness"
+    cure: "eat kelp / eat aurum"
+    weapon: true
+    source: "venom_to_aff"
+    wiki: "Loss of coordination. Cause a loss of coordination in your target."
 
 # ============================================================================
 # VENOM RELATIONSHIPS

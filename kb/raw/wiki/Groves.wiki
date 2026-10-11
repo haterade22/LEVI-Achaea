@@ -1,0 +1,661 @@
+Groves is the skill of interacting with the great [[:category:forests|forests]] of Achaea. It will allow practitioners to establish a private Grove from which they will base their power. Groves absorb and accumulate sunlight, which practitioners use to power the abilities. Every night, a Grove will lose some of the sunlight, as the Grove must maintain itself even when everything else is sleeping soundly. Further, most abilities in Groves will use up some of this sunlight energy.
+
+The skill of '''Groves''' is available to the [[Druid]] and [[Sylvan]] [[class|classes]].
+
+Druids also have the skills of [[Metamorphosis]] and [[Reclamation]], while Sylvans also have the skills of [[Propagation]] and [[Weatherweaving]].
+
+==Abilities in Groves==
+:''Harmony is only available to those druids in appropriate forestal organisations.''
+{{Skill_detail
+ |skill=Imprint
+ |description=Choose a forest location as your grove.
+ |lessons=
+ |syntax=IMPRINT
+ |required=
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Once you have discovered a vacant forest or jungle location, this ability may be used to claim it as your own. Be warned: this bond is nearly permanent, and nobody but you may undo it.
+}}
+
+{{Skill_detail
+ |skill=Perceive
+ |description=Determine if a forest area has been claimed as a grove.
+ |lessons=
+ |syntax=PERCEIVE
+ |required=
+ |target=Room
+ |cooldown=
+ |detail=Use this ability to discover if a forest location has been claimed as a grove or not.
+}}
+
+{{Skill_detail
+ |skill=Sever
+ |description=Erase your imprint permanently from your grove.
+ |lessons=
+ |syntax=GROVE SEVER
+ |required=
+ |target=Room
+ |cooldown=
+ |detail=This ability will permanently sever the link with your grove. All sunlight energy in your grove will be lost.
+}}
+
+{{Skill_detail
+ |skill=Energy
+ |description=Determine how much sunlight your grove has stored.
+ |lessons=
+ |syntax=GROVE ENERGY
+ |required=1 sunlight
+ |target=Room
+ |cooldown=
+ |detail=By communing with your grove, you may discover how much sunlight energy remains.
+}}
+
+{{Skill_detail
+ |skill=Who
+ |description=Sense who is in the forest.
+ |lessons=
+ |syntax=GROVE WHO
+ |required=Sunlight
+ |target=Room
+ |cooldown=
+ |detail=This ability will cause the forest itself to report on the presence of other adventurers that are in it.
+}}
+
+{{Skill_detail
+ |skill=Status
+ |description=Discover information on the status of your grove.
+ |lessons=
+ |syntax=GROVE STATUS
+ |required=2 sunlight
+ |target=Room
+ |cooldown=
+ |detail=Use this ability to discover various pieces of information on the status of your grove.
+}}
+
+{{Skill_detail
+ |skill=Look
+ |description=See through the eyes of a forest into a distant location.
+ |lessons=
+ |syntax=GROVE LOOK <target>
+ |required=
+ |target=Adventurers
+ |cooldown=1 sunlight
+ |detail=Use this ability to view a wooded location that another adventurer is located in.
+}}
+
+{{Skill_detail
+ |skill=Shake
+ |description=Send a tremor throughout your grove.
+ |lessons=
+ |syntax=GROVE SHAKE
+ |required=100 sunlight
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Send a tremor through ground and trees alike in and near your grove. Nearby mounted adventurers will find themselves on the ground, while those in the trees may experience rapid loss of altitude combined with injury.
+}}
+
+{{Skill_detail
+ |skill=Elevate
+ |description=Ascend into the treetops.
+ |lessons=
+ |syntax=GROVE ELEVATE<br>GROVE ELEVATE <target>
+ |required=100 sunlight
+ |target=Adventurers and self
+ |cooldown=3.50 seconds of equilibrium
+ |detail=Using this ability, you may rise into the trees. Once there, you may travel normally, using DOWN to leave the trees.
+}}
+
+{{Skill_detail
+ |skill=Watch
+ |description=Command your grove to report certain activity within it.
+ |lessons=
+ |syntax=GROVE WATCH/UNWATCH
+ |required=10 sunlight
+ |target=Room
+ |cooldown=
+ |detail=This strange ability will allow you to share a mental kinship with others in your grove. It will cause you to receive much information that would normally be seen only by the individual adventurers in your grove. UNWATCH will stop you watching again.
+}}
+
+{{Skill_detail
+ |skill=Eject
+ |description=Toss all but yourself out of your grove.
+ |lessons=
+ |syntax=GROVE EJECT
+ |required=15 sunlight
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=With this ability, you may cause the wilderness in your grove to throw out all in it, save for yourself and your allies.
+}}
+
+{{Skill_detail
+ |skill=Return
+ |description=Return instantly to your grove from anywhere in the forest.
+ |lessons=
+ |syntax=GROVE RETURN
+ |required=100 sunlight
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=When activated, this ability will cause you to return to your grove from any wooded area.
+}}
+
+{{Skill_detail
+ |skill=Eyes
+ |description=Locate everyone in the forest.
+ |lessons=
+ |syntax=GROVE EYES
+ |required=20 sunlight
+ |target=
+ |cooldown=
+ |detail=Grove eyes will, like GROVE WHO, tell you who is in the forest, with the added advantage of telling you where in the forest they are.
+}}
+
+{{Skill_detail
+ |skill=Forestwatch
+ |description=Know all entry and exit from the forest.
+ |lessons=
+ |syntax=GROVE FORESTWATCH ON/OFF
+ |required=25 sunlight
+ |target=Room
+ |cooldown=
+ |detail=This ability will inform everyone in your grove every time an adventurer enters or exits the forest.
+}}
+
+{{Skill_detail
+ |skill=Seal
+ |description=Prevent night-time draining sunlight from your grove.
+ |lessons=
+ |syntax=GROVE SEAL
+ |required=60 sunlight
+ |target=Room
+ |cooldown=5.00 seconds of equilibrium
+ |detail=For one Achaean month, this ability will seal off your grove from nighttime energy loss.
+}}
+
+{{Skill_detail
+ |skill=Tend
+ |description=Lovingly caring for your grove.
+ |lessons=
+ |syntax=GROVE TEND
+ |required=
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Though this is only useable once an Achaean year, it will add ten percent to the sunlight energy in your grove.
+}}
+
+{{Skill_detail
+ |skill=Lastharvest
+ |description=The ability to see who last harvested in a room.
+ |lessons=
+ |syntax=LASTHARVEST
+ |required=
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Whenever a plant is harvested, or, indeed, anything that is alive is changed, traces are left in the fabric of life-energy that sustains all living beings. The lastharvest ability allows you to tap into those energies for a short time to see who last harvested from each plant in your location.
+}}
+
+{{Skill_detail
+ |skill=Naturalism
+ |description=Discover who exterminated a room last.
+ |lessons=
+ |syntax=NATURALISM
+ |required=
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Naturalism allows you to detect the foul stain of a Necromancer's soul on an exterminated room, letting you see who did it.
+}}
+
+{{Skill_detail
+ |skill=Screen
+ |description=Raise a screen against telepathy within your grove.
+ |lessons=
+ |syntax=GROVE SCREEN
+ |required=80 sunlight
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=While this ability is active, your grove will be safe from those attempting to gain a telepathic lock on anyone within.
+}}
+
+{{Skill_detail
+ |skill=Roots
+ |description=Secure yourself to the ground with tree roots.
+ |lessons=
+ |syntax=GROVE ROOTS
+ |required=40 sunlight
+ |target=Room
+ |cooldown=3.50 seconds of equilibrium
+ |detail=While using this ability, you will be secured to the ground and none of the various abilities that attempt to lift a target will succeed on you.
+}}
+
+{{Skill_detail
+ |skill=Preservation
+ |description=For one year, shield your grove from damage.
+ |lessons=
+ |syntax=GROVE PRESERVATION
+ |required=200 sunlight
+ |target=Room
+ |cooldown=
+ |detail=For one Achaean year, this ability will render your grove immune to damage from certain abilities.
+}}
+
+{{Skill_detail
+ |skill=Smudge
+ |description=Remove ground-based runes from your grove.
+ |lessons=
+ |syntax=GROVE SMUDGE
+ |required=50 sunlight
+ |target=Room
+ |cooldown=
+ |detail=With this ability, you may command your grove to remove a rune from itself.
+}}
+
+{{Skill_detail
+ |skill=Quarterstaff
+ |description=Summon a powerful quarterstaff from your grove.
+ |lessons=
+ |syntax=GROVE QUARTERSTAFF<br>SHARPEN QUARTERSTAFF<br>SPIN QUARTERSTAFF<br>TAP QUARTERSTAFF<br>WHIRL QUARTERSTAFF<br>SWING QUARTERSTAFF [target]
+ |required=1000 sunlight
+ |target=Self
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Using this ability, you will gain a quarterstaff from the heart of a tree in your grove. You may then SHARPEN QUARTERSTAFF to sharpen it. Once sharpened, you may STAB <target>. You may also SPIN QUARTERSTAFF to conjure an aura of protection against physical and magical damage. TAP QUARTERSTAFF will turn your quarterstaff into a source of light. WHIRL QUARTERSTAFF will reveal many hidden or cloaked people that may be in your location. It is rumoured that there are other abilities that may be performed with your quarterstaff, including one to create a slightly more powerful aura of protection.
+}}
+
+{{Skill_detail
+ |skill=Calling
+ |description=Call your loyal creatures back to your grove.
+ |lessons=
+ |syntax=GROVE CALLING
+ |required=
+ |target=Room
+ |cooldown=
+ |detail=This ability will call all creatures loyal to you back to your grove.
+}}
+
+{{Skill_detail
+ |skill=Track
+ |description=Constantly track the movement of anyone in the forest.
+ |lessons=
+ |syntax=GROVE TRACK <target><br>GROVE TRACK OFF
+ |required=
+ |target=Adventurers
+ |cooldown=20 sunlight
+ |detail=Using this ability, you may track an adventurer's movement through the forest. GROVE TRACK OFF will cease this tracking.
+}}
+
+{{Skill_detail
+ |skill=Portal
+ |description=Open a portal to your grove for anyone in the forest.
+ |lessons=
+ |syntax=GROVE PORTAL <target>
+ |required=75 sunlight
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=With this ability, you can create a portal to any adventurer in the same area, who may then come to you through the portal. The portal is one-way: it may not be used to go to the adventurer.
+}}
+
+{{Skill_detail
+ |skill=Summon
+ |description=After a time, bring anyone in the forest to your grove.
+ |lessons=
+ |syntax=GROVE SUMMON <target>
+ |required=50 sunlight
+ |target=Adventurers
+ |cooldown=
+ |detail=With this ability, you may begin the process of summoning any adventurer in a forest to your grove. It will take a small amount of time, during which the adventurer may escape the summoning by moving. Also any actions on your part during the summoning process will halt the summons.
+}}
+
+{{Skill_detail
+ |skill=Flow
+ |description=Slip instantly from your grove to anyone in the forest.
+ |lessons=
+ |syntax=GROVE FLOW <target>
+ |required=150 sunlight
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=With this ability, you may instantly travel from your grove to anyone in forest or jungle.
+}}
+
+{{Skill_detail
+ |skill=Imbue
+ |description=Infuse your quarterstaff with the power of sunlight.
+ |lessons=
+ |syntax=GROVE IMBUE<br>EVOKE SUNLIGHT<br>EVOKE STATUS
+ |required=3500 sunlight and mana (GROVE IMBUE)
+ |target=
+ |cooldown=Equilibrium
+ |detail=Imbue your quarterstaff with the light of the sun. You must be standing in a sunlit place to EVOKE SUNLIGHT. Be aware that empowering a quarterstaff in this way may cause some personal damage. The capacity of your quarterstaff to store light will grow with your skill in Groves. EVOKE STATUS will inform you of its current charge and capacity.<br>When in your grove, you may GROVE IMBUE to charge your quarterstaff rapidly, be it day or night, at a severe drain to your grove.
+}}
+
+{{Skill_detail
+ |skill=Regrowth
+ |description=Reform a sharpened quarterstaff.
+ |lessons=
+ |syntax=REGROW QUARTERSTAFF
+ |required=10 sunlight
+ |target=Self
+ |cooldown=
+ |detail=Through the power of imbued sunlight, you may return a sharpened quarterstaff to its full length.
+}}
+
+{{Skill_detail
+ |skill=Cure
+ |description=Cure someone of an affliction.
+ |lessons=
+ |syntax=GROVE CURE<br>GROVE CURE <target>
+ |required=10 sunlight
+ |target=Adventurers and self
+ |cooldown=5.00 seconds of equilibrium
+ |detail=Cure will allow you to cure yourself or an adventurer of a random affliction.
+}}
+
+{{Skill_detail
+ |skill=Isolation
+ |description=Transport yourself to the Glade of Isolation.
+ |lessons=
+ |syntax=GROVE ISOLATION
+ |required=220 sunlight
+ |target=Room
+ |cooldown=
+ |detail=This powerful ability will take you, and anyone following you to a secret grove with exits to many places in the land. Be warned though, that it is quite expensive in sunlight energy.
+}}
+
+{{Skill_detail
+ |skill=Channel
+ |description=Transfer energy to the grove of another.
+ |lessons=
+ |syntax=GROVE CHANNEL <target><br>GROVE CHANNEL STOP
+ |required=Sunlight drain
+ |target=Adventurers
+ |cooldown=
+ |detail=This ability will allow you to transfer sunlight energy from one grove to another. Both you and the target adventurer must be standing in your respective groves. This can be a useful ability though it should be noted some energy is lost maintaining the channel.
+}}
+
+{{Skill_detail
+ |skill=Vigour
+ |description=Call on the invigorating warmth of sunlight.
+ |lessons=
+ |syntax=EVOKE VIGOUR [target]
+ |required=300 sunlight and 150 mana
+ |target=Adventurers and self
+ |cooldown=5.00 seconds of equilibrium
+ |detail=By showering yourself or another with sunlight, you may encourage regeneration of health for a brief period. The benefit experienced by another will not be as significant as that felt when this ability is used on one's self.
+}}
+
+{{Skill_detail
+ |skill=Remedy
+ |description=Heal another of maladies and ailments.
+ |lessons=
+ |syntax=EVOKE REMEDY <target>
+ |required=50 sunlight and 150 mana
+ |target=Adventurers
+ |cooldown=5.00 seconds of equilibrium
+ |detail=This technique can heal another adventurer of a single affliction at a time. It may not be used on one's self. Not all afflictions may be remedied.
+}}
+
+{{Skill_detail
+ |skill=Rain
+ |description=Conjuring a magical shower of rejuvenating rain.
+ |lessons=
+ |syntax=GROVE RAIN
+ |required=250 sunlight
+ |target=Room
+ |cooldown=
+ |detail=By calling a refreshing rain into your grove, you will cause everyone in the grove to experience relatively rapid refreshing of endurance and willpower.
+}}
+
+{{Skill_detail
+ |skill=Fertility
+ |description=Perform the rites of fertility.
+ |lessons=
+ |syntax=EVOKE FERTILITY
+ |required=100 sunlight and 200 mana
+ |target=Room
+ |cooldown=
+ |detail=The rites of fertility will temporarily bolster plant growth wherever they are performed.
+}}
+
+{{Skill_detail
+ |skill=Concealment
+ |description=Hide all those within your grove from prying eyes.
+ |lessons=
+ |syntax=GROVE CONCEALMENT
+ |required=60 sunlight
+ |target=Room
+ |cooldown=
+ |detail=Use this ability to conceal your grove from the prying eyes of all but the Gods Themselves.
+}}
+
+{{Skill_detail
+ |skill=Sharing
+ |description=Granting the use of your grove to your allies.
+ |lessons=
+ |syntax=GROVE SHARE<br>GROVE WITHDRAW
+ |required=200 sunlight
+ |target=Room
+ |cooldown=
+ |detail=Grove sharing will allow any grove user on your allies list to use your grove as if it were his own. GROVE WITHDRAW will disable grove sharing.
+}}
+
+{{Skill_detail
+ |skill=Flash
+ |description=Illuminate the surroundings with a revealing flash of light.
+ |lessons=
+ |syntax=EVOKE FLASH
+ |required=300 sunlight and 150 mana
+ |target=Room
+ |cooldown=5.00 seconds of equilibrium
+ |detail=By channeling your sunlight reserves, Flash has the chance to reveal the presence of all hidden adventurers in the room, save for the Divinities.
+}}
+
+{{Skill_detail
+ |skill=Gate
+ |description=Open a gateway of light.
+ |lessons=
+ |syntax=GROVE GATE <adventurer><br>EVOKE GATE <adventurer>
+ |required=GROVE: 150 sunlight<br>EVOKE: 150 imbued sunlight and 250 mana
+ |target=Adventurers
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Grove gate will allow you to open a two-way portal between you and any adventurer, anywhere on the same continent as yourself. It is also possible to evoke a portal from an imbued quarterstaff, though the range of this gateway will be limited to the local area.
+}}
+
+{{Skill_detail
+ |skill=Thornlash
+ |description=Lash your prey with Nature's fury.
+ |lessons=
+ |syntax=GROVE THORNLASH <target>
+ |required=
+ |target=Denizens
+ |cooldown=2.00 seconds of balance
+ |detail=Tap into Nature's fury and command your grove to lash at a denizen, dealing significant cutting damage to them. The potency of this invocation is determined by the Druid or Sylvan casting it(*).<p>* The damage dealt by this ability will scale with the higher of your strength or intelligence stat.</p>
+}}
+
+{{Skill_detail
+ |skill=Harmony
+ |description=Seek Nature's blessing through absolute harmony
+ |lessons=
+ |syntax=EVOKE HARMONY <nowiki>[STATUS|ME|<target>]</nowiki>
+ |required=1000 imbued sunlight (harmonize)<br>250 imbued sunlight (blessing)
+ |target=Adventurers
+ |unique=Yes
+ |cooldown=
+ |detail=When standing in one of several natural environments, a Druid may attempt to harmonise him or herself to that environment with EVOKE HARMONY.<br>Once three Druids are in harmony with the same environment, all Druids* will be able to bestow a blessing associated with that harmonisation on<br>him/herself or another adventurer**, using EVOKE HARMONY <ME{{!}}target>.<p>Only one environment may be fully harmonised at a time, and this harmonisation will last until the end of the year.<br>EVOKE HARMONY STATUS will show the current state of harmony of the various environments.</p><p>The effects of each environment are:<br>'''Forest''': Increased health regeneration.<br>'''Ocean''': Increased mana regeneration.<br>'''Mountains''': Increased willpower and endurance regeneration.<br>'''Desert''': Increased damage versus denizens.<br>'''Tundra''': Increased effectiveness of frost and venom elixirs.</p><p>* This ability is available to Druids of Eleusis and cityless Druids who are also members of the Heartwood Kin and the Scions of the Ithmia.<br>** Harmony blessings may be granted to members of Eleusis and cityless members of the Heartwood Kin and the Scions of the Ithmia.</p>
+}}
+
+{{Skill_detail
+ |skill=Hive
+ |description=Create a hive of stinging bees to defend your grove.
+ |lessons=
+ |syntax=GROVE HIVE<br>HARVEST HIVE<br>TAP HIVE<br>CALL BEES<br>CALL NEW SWARM
+ |required=GROVE HIVE: 120 sunlight<br>CALL NEW SWARM: 500 mana
+ |target=
+ |cooldown=GROVE HIVE: 6.00 seconds of equilibrium<br>TAP HIVE: 4.8 seconds of balance<br>CALL BEES: 4.00 seconds of equilibrium<br>CALL NEW SWARM: 5.00 seconds of equilibrium
+ |detail=Hive will create a hive of bees in your grove that will live there and protect it. TAP HIVE will call forth the bees, who will proceed to attack your enemies in your grove. Bees are also capable of following you around Sapience (see HELP DENIZENS for more commands). An added benefit to this magical hive is that you may HARVEST HIVE. Doing this will not only feed you and heal your mind and body fully, but it will also attempt to increase a random skill of yours slightly. If the random skill happens to be Transcendent already, then no benefit will be gained. This ability may only be used infrequently.
+}}
+
+{{Skill_detail
+ |skill=Overgrowth
+ |description=Return a totem to the embrace of Nature.
+ |lessons=
+ |syntax=EVOKE OVERGROWTH
+ |required=250 sunlight and 150 mana
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This ability must be performed in a location where a totem is implanted. By ensconcing the totem with an overgrowth of dense greenery, you may conceal its runes from view, rendering it powerless. A well-placed lash of fire may destroy the obscuring plantlife, returning the totem to full function. 
+}}
+
+{{Skill_detail
+ |skill=Rejuvenate
+ |description=Restore an exterminated room to its natural state.
+ |lessons=
+ |syntax=REJUVENATE
+ |required=1000 mana
+ |target=Room
+ |cooldown=6.00 seconds of equilibrium
+ |detail=This ability will allow you to rejuvenate land that has been exterminated by a foul Necromancer. It requires the presence of a cube of elemental ice in your inventory.
+}}
+
+{{Skill_detail
+ |skill=Snowstorm
+ |description=Spread the white cloak of winter across the land.
+ |lessons=
+ |syntax=EVOKE SNOWSTORM
+ |required=200 sunlight and 150 mana
+ |target=
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This technique will conjure up a blizzard to temporarily blanket the area, every bit as fierce and cold as a naturally occurring snowstorm. The effects of the heat vibration may interfere with this evocation.
+}}
+
+{{Skill_detail
+ |skill=Wildgrowth
+ |description=Ensnare your enemies with tenacious plantlife.
+ |lessons=
+ |syntax=EVOKE WILDGROWTH
+ |required=200 sunlight and 150 mana
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=On using this technique, wild growth will sprout from the earth wherever you go for a short period of time. Any personal enemies attempting to leave your location by most conventional means risk being hindered by this plantlife.
+}}
+
+{{Skill_detail
+ |skill=Barrier
+ |description=Form an impenetrable barrier of light itself.
+ |lessons=
+ |syntax=EVOKE BARRIER<br>EVOKE BARRIER <target>
+ |required=350 sunlight and 150 mana
+ |target=Adventurers and self
+ |cooldown=6.00 seconds of equilibrium
+ |detail=By forming a wall of solid light around yourself, or another adventurer, you may create a powerful defensive barrier able to withstand most attacks. While largely impenetrable, the barrier will dissolve should whomever it protects perform an action (with some exceptions).  
+}}
+
+{{Skill_detail
+ |skill=Forestbinding
+ |description=Prevent all entry and exit from the forest.
+ |lessons=
+ |syntax=GROVE FORESTBINDING
+ |required=3000 sunlight
+ |target=
+ |cooldown=6.50 seconds of equilibrium
+ |detail=This powerful ability will prevent entry to and egress from the forest that is bound for all those not in an organisation aligned with Nature. Only one forest may be bound at a given time. The grove energy cost is doubled after the first use, if used again within 24 Achaean days.
+}}
+
+{{Skill_detail
+ |skill=Resurrection
+ |description=Restore yourself or a friend to life.
+ |lessons=
+ |syntax=GROVE RESURRECTION <target> [FORCE]<br>GROVE RESURRECTION
+ |required=350 sunlight
+ |target=Adventurers and self
+ |cooldown=10.00 seconds of equilibrium
+ |detail=This very costly ability will grant life to the corpse of any adventurer you specify, provided the corpse is in your grove. The second form is used for yourself.<p>The forest will resist attempts to resurrect its enemies. If you wish to proceed with the resurrection, you will be required to FORCE the attempt at a much higher personal cost. Note that forcing your grove to resurrect an individual will ALWAYS have a higher cost.</p><p>Those grove users who are truly devoted to Nature are also able to resurrect the souls of others, so long as they too are adherents to Nature's worship and protection. Those who are citizens of Eleusis, or members of the Scions of the Ithmia and Heartwood Kin Houses fall into this category.</p>
+}}
+
+{{Skill_detail
+ |skill=Guardian
+ |description=Summon an earth golem to guard your grove.
+ |lessons=
+ |syntax=GROVE GUARDIAN
+ |required=1000 sunlight
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=So strong is your bond with your grove that you are able to reach down into the roots of the earth and call forth one of the fabled earth golem Guardians to stand guard over your grove. It will protect your grove, attacking anyone on your enemies list who comes in, and will stay until dead. Note, however, that there is a very high grove energy cost.
+}}
+
+{{Skill_detail
+ |skill=Dampen
+ |description=Put an end to aural interferences.
+ |lessons=
+ |syntax=EVOKE DAMPENING
+ |required=200 sunlight and 150 mana
+ |target=Room
+ |cooldown=5.00 seconds of equilibrium
+ |detail=With a swirling rush of leaves, you may dampen the complex tonal structures that bind vibrations and harmonics together, immediately putting one to an end.
+}}
+
+{{Skill_detail
+ |skill=Lightning
+ |description=Strike your foes with nature's fury.
+ |lessons=
+ |syntax=EVOKE LIGHTNING <target> <direction>
+ |required=150 mana and 10 sunlight
+ |target=Adventurers
+ |cooldown=3.50 seconds of equilibrium
+ |detail=Harnessing the wrath of the sky, you may direct a powerful bolt of lightning to strike a foe. Your target must be a sufficient distance away from you, and within your line of sight. Lightning is a mercurial force, and may occasionally leave your target plagued with ailments, or fizzle out harmlessly. 
+}}
+
+{{Skill_detail
+ |skill=Vivify
+ |description=Bring forth life from blight.
+ |lessons=
+ |syntax=VIVIFY
+ |required=1000 sunlight
+ |target=Room
+ |cooldown=6.00 seconds of equilibrium
+ |detail=The Blighted Isle upon which the city of Mhaldor stands is an affront to Nature and her ilk. While standing upon the tainted land you may perform this act of cleansing, calling forth growth to drive back the corruption. The servants of Evil shall find that their mastery of necromantic essence grows weaker, the more of their domain becomes cleansed.<p>Take note: prolonged use of vivification will take a heavy toll on your sunlight reserves. You will find each subsequent cleansing incurs a higher cost than the last.</p>
+}}
+
+{{Skill_detail
+ |skill=Panacea
+ |description=Nature's touch can heal all ills.
+ |lessons=
+ |syntax=EVOKE PANACEA
+ |required=250 sunlight and 150 mana
+ |target=Self
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Through your quarterstaff, you may focus the restorative powers of Nature on yourself. For a time, you will be healed of afflictions at regular intervals.
+}}
+
+{{Skill_detail
+ |skill=Portability
+ |description=The ultimate expression of the bond with your grove.
+ |lessons=
+ |syntax=PLANT QUARTERSTAFF<br>GROVE UNIFY
+ |required=
+ |target=Room
+ |cooldown=5.00 seconds of balance
+ |detail=This, the most powerful of all grove abilities, allows you to temporarily move your grove to any forest or jungle location where there is not already a grove or temporary grove. Planting a quarterstaff in such a location will move your grove there, though only temporarily. With time, your grove will return to its home. If you wish to prematurely move your grove back to its original location, simply GROVE UNIFY.<p>It should be noted that a few abilities will not work in a temporary grove.<br>Channel &nbsp;&nbsp;&nbsp; Sever &nbsp;&nbsp;&nbsp; Guardian &nbsp;&nbsp;&nbsp; Sharing &nbsp;&nbsp;&nbsp; Hive &nbsp;&nbsp;&nbsp; Forestbinding</p>
+}}
+
+{{Skill_detail
+ |skill=Formicary
+ |description=Summon the swarm to defend a natural location.
+ |lessons=
+ |syntax=EVOKE FORMICARY RECLAIM<br>EVOKE FORMICARY EMPOWER<br>EVOKE FORMICARY TUNE ELEUSIS <nowiki>| FOREST</nowiki><br>EVOKE FORMICARY INFECT MURRAIN <nowiki>| FETTER</nowiki>
+ |required=
+ |target=
+ |cooldown=
+ |detail=Formicaries are used to spread the influence of the swarm throughout Eleusis and beyond. Each formicary holds a small portion of the swarm,
+empowered by the raw energy of Nature itself, to defend the land from the enemies of Nature. All formicary skills will consume a portion of the swarm, and all formicaries will consume a small portion of the swarm each month.<p>CREATE - At a cost of 20 fibre, 10 wood, and 2 bone commodities, create a new formicary to house the swarm.<p>RECLAIM - Destroy a formicary.<p>EMPOWER - Call upon the raw power of Nature to empower a formicary.<p>TUNE - Tune a formicary to react against the enemies of either Eleusis or Forest enemies.<p>INFECT - Infect the swarm housed in a formicary with either murrain or
+fetter. Murrain will cause the swarm to infect enemies with painful afflictions. Fetter will cause the swarm to hinder enemy movement.
+}}
+
+{{Skill_detail
+ |skill=Swarmsense
+ |description=Sense the size of the swarm.
+ |lessons=
+ |syntax=EVOKE SWARMSENSE
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=Using this skill will allow you to sense the number of insects that have infested the foetid pool in Eleusis.
+}}
+
+[[Category:Skills]][[Category:Edit needed]]

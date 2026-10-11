@@ -1,0 +1,317 @@
+The skill of '''Sagas''' is the last and greatest in the repertoire of the [[Achaean]] [[Bard]]. Comprising
+grand tales spun from the history of [[Sapience]] and its [[mortals]] across more than nine hundred [[year]]s, it is through their recitation of the past that the Bard not only remembers it but gives it new life.
+
+From the collapsing star of [[Ethian]] to the birth of the [[Genesis]] or the advent of the [[Bal'met|Worldreaver]],
+these are the stories shaping all that is.
+
+Save for citizens of [[Cyrene]], the skill of Sagas is available to members of the [[Bard]] [[class]], along with [[Bladedance]] and [[Composition]]. Alone amongst all others, minstrels of the Heart of the Vashnars are burdened with honouring the memory of [[Woe]].
+
+==Abilities in Sagas==
+{{Skill_detail
+ |skill=Scene
+ |description=Ambience is everything.
+ |lessons=
+ |syntax=SCENE [LETHAL] <illusion>
+ |required=100 mana
+ |target=
+ |cooldown=2.50 seconds of equilibrium
+ |detail=Craft a scene for all in your location to witness(*).<p>* Creates an illusion. You may embed up to one newline with \n.</p>
+}}
+
+===Storytelling===
+{{Skill_detail
+ |skill=Recite
+ |description=Once upon a time...
+ |lessons=1
+ |syntax=RECITE <saga> [target]
+ |required=
+ |target=
+ |cooldown=
+ |detail=To tell a tale, to spin a yarn, to bring to life a story of long gone days. The teller of great sagas of the past knows the power in such things, and so tell them you shall.
+
+Each saga will have multiple stages. All sagas will do something upon being completed, and some will do things at other points in the tale as well. Consult each saga for specifics upon the nature of your grand design.
+}}
+
+{{Skill_detail
+ |skill=Gossip
+ |description=You'll never believe what I heard...
+ |lessons=1497
+ |syntax=GOSSIP SPREAD <gossip>
+GOSSIP LISTEN
+ |required=
+ |target=
+ |cooldown=5.00 seconds of balance
+ |detail=The art of storytelling is one step removed from the art of conversation, and as a master of both, sometimes you just need to get your message out there in a less obvious way.
+
+By seeking out various establishments(*), you can, around once an Achaean day, spread some gossip. Similarly in said locations, you may also listen for gossip every so often, and in such a way gossip is bound to spread.
+
+* Inns and similar, generally.
+}}
+
+{{Skill_detail
+ |skill=Countermand
+ |description=No, this is how it went.
+ |lessons=1600
+ |syntax=COUNTERMAND <target>
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium and 8.00 seconds of voice balance
+ |detail=Every storyteller knows there is just that one person who has to be the centre of attention even when they've just got nothing worthwhile to say. Clearly, anything you have to say is far more facinating than such
+lesser tellers of tales, and now you will prove it!
+
+You may countermand any saga that you know being told by another, having a chance to completely interrupt their flow and aborting it before it can reach a grand culmination(*).
+
+* You are not guaranteed to succeed. You can increase your chances through various means, but never to a hundred percent.
+}}
+
+{{Skill_detail
+ |skill=Prologue
+ |description=Delay the conclusion.
+ |lessons=
+ |syntax=RECITE PROLOGUE <saga>
+ |required=
+ |target=None
+ |cooldown=20.00 seconds of voice balance
+ |detail=Masters of storytelling gain the ability to delay the conclusion of a tale for dramatic effect.<p>Using this ability will recite another tale up to its culmination, at which point the completion will be delayed.<p>The tale may be completed for the next 5 minutes instantly at the cost of 3 seconds of balance. This will incur a cooldown of 5 minutes. No tall tales can be completed in this way.</p>
+}}
+
+{{Skill_detail
+ |skill=Troubador
+ |description=Where ever the story takes you.
+ |lessons=
+ |syntax=passive
+ |required=
+ |target=
+ |cooldown=
+ |detail=A good storyteller must go where ever the tale may take them, though equally it is true that some legends just don't hit as hard when constantly on the move.<p>You may now move while performing many of your sagas for an audience, them no longer being interrupted if your location changes between recite stages(*).</p><p>* Channeled sagas are excluded.</p>
+}}
+===Grand Tales===
+{{Skill_detail
+ |skill=Ethian
+ |description=Flee the falling star
+ |lessons=191
+ |syntax=RECITE ETHIAN
+ |required=
+ |target=Room
+ |cooldown=20.00 seconds of voice balance and 3.00 seconds of equilibrium
+ |detail=The coming of the Morning Star is a tale of destruction and terror. At its recital, those beasts of burden that are nearby will have a glimpse of that dread event, and will flee in panic at its knowing.
+
+* Makes mounts panic and run about until soothed.
+}}
+
+{{Skill_detail
+ |skill=Reckoning
+ |description=Arcanum undone.
+ |lessons=134
+ |syntax=RECITE RECKONING
+ |required=200 mana
+ |target=Self
+ |cooldown=2.50 seconds of equilibrium and 20.00 seconds of voice balance
+ |detail=The Tale of the first Reckoning one is of wizards and warriors, dragons and despots, triumph and victory: but at its core it is a tale of magic, and its thwarting.
+
+When you complete this grand tale, all icewalls, firewalls, and lightwalls in your location will be undone, destroyed in an instant.
+}}
+
+{{Skill_detail
+ |skill=Snowstears
+ |description=The freezing waters came.
+ |lessons=178
+ |syntax=RECITE SNOWSTEARS
+ |required=75 mana
+ |target=Room
+ |cooldown=
+ |detail=Though the coming of the freezing waters which ravaged Cyrene was a
+thing of horror and liberation both, it was the dreadful silence left in
+the aftermath which will forever weigh upon those that were there to
+witness that darkest day in the history of the Heart of the Vashnars.
+
+* Conveys a short lived silence effect upon the room.
+}}
+
+{{Skill_detail
+ |skill=Jadeicon
+ |description=When dream turns to nightmare.
+ |lessons=267
+ |syntax=RECITE JADEICON
+ |required=
+ |target=Room
+ |cooldown=2.30 seconds of balance and 16.00 seconds of voice balance
+ |detail=The power of dreams is one so frequently underestimated, and perhaps no tale tells this so clearly as that of the jade icon. For a time after this retelling, any attempt to put someone to sleep in the location will
+still succeed, but the one who would seek to impose said slumber shall suffer in their turn(*).
+
+* Afflicts anyone who gives the sleep affliction to another with a mental affliction.
+}}
+
+{{Skill_detail
+ |skill=Haidar
+ |description=Of great escape and glory.
+ |lessons=334
+ |syntax=RECITE HAIDAR
+ |required=
+ |target=Room
+ |cooldown=18 seconds of voice balance
+ |detail=The tale of Haidar, the Lion, is one of arts reclaimed and more: and yet
+at its core it is a tale about escape.
+
+As you recite this saga, each time you reach another section of the tale, you will free yourself from various attempts to entangle your person.
+}}
+
+{{Skill_detail
+ |skill=Divinechild
+ |description=To take the power for One's own.
+ |lessons=356
+ |syntax=RECITE DIVINECHILD
+ |required=
+ |target=Room
+ |cooldown=16.00 seconds of voice balance and 3.00 seconds of equilibrium
+ |detail=A story of theft and of power, of taking and of subversion, the sagas of the Divine Child will bring forth a shifting field of absorption in your location. Periodically it will shift, and all damage to your allies of a given type will become impossible until it shifts once more.
+
+* The shifting cannot be controlled.
+}}
+{{Skill_detail
+ |skill=Eternalnight
+ |description=And no sun did shine.
+ |lessons=467
+ |syntax=RECITE ETERNALNIGHT <target>
+ |required=
+ |target=Adventurers
+ |cooldown=1.50 seconds of balance and 16.00 seconds of voice balance
+ |detail=The tale of Slith's attempt to bring an Eternal Night upon Achaea is one which has spellbound many a listener over the years. Indeed, the story is so entwined with the act of focus that your listener, each time they hear the next lines of the tale, will be healed of any other attempts to transfix them under which they may labour.
+}}
+{{Skill_detail
+ |skill=Vertani
+ |description=Empire's wrath unleashed.
+ |lessons=578
+ |syntax=RECITE VERTANI <target>
+ |required=
+ |target=Aventurers
+ |cooldown=2.30 seconds of balance and 16.00 seconds of voice balance
+ |detail=A tale of peaceful approach turned to brutal war, the retelling of the Vertan Empire's coming can end only one way. You may recite this Saga while focused upon someone nearby and outdoors(*), and at its culmination meteors shall descend to shatter the magical shields of said individual and all who stand alongside them. Note that once the
+retelling begins, even if the target flees, so long as they remain outdoors the meteors shall still fall upon them, no matter how far they might flee(**).
+
+* Nearby for this purposes is within the same local area.
+** Within reason. Crossing planar boundaries or similar may prove too much, even for the glory of Vertan's Empire retold.
+}}
+{{Skill_detail
+ |skill=Magisterion
+ |description=And so the dead did stir and...
+ |lessons=738
+ |syntax=RECITE MAGISTERION
+ |required=
+ |target=Room
+ |cooldown=18.00 seconds of voice balance
+ |detail=The tale of the Magisterion is a grim one, and one inexorably tied in with the Underworld and the lord who once ruled there. When reciting it, your retelling will destroy necromantic constructs(*), though a necromancer being present will require much more effort to overcome(**).
+
+* On the first tick with no necromancer present, gravehands are destroyed. On the second tick gravehands are destroyed even if a necromancer is present. On the third tick, infestation maggots are destroyed.
+** If a necromancer (Oppression users count as necromancers for the purposes of this ability) is present, this recital is a channeled action.
+}}
+{{Skill_detail
+ |skill=Redsea
+ |description=The oceans ran as blood.
+ |lessons=911
+ |syntax=RECITE REDSEA
+ |required=
+ |target=Room
+ |cooldown=18.00 seconds of voice balance
+ |detail=A tale of disruption and corruption, the day the seas ran red with blood is one wrought by Baelgrim's hand. By retelling that grim tale, water's wrath may be made manifest upon all who hear, and they will suffer its disruption(*).
+
+* Water disruption is a timed affliction that causes you to lose some mana when you sip health elixirs or similar.
+}}
+{{Skill_detail
+ |skill=Genesis
+ |description=All things controlled.
+ |lessons=945
+ |syntax=RECITE GENESIS
+ |required=
+ |target=Room
+ |cooldown=2.50 seconds of equilibrium and 18.00 seconds of voice balance
+ |detail=The tale of the Genesis is one inexorably intertwined with that of the Tsol'teth, and the terrible deeds they wrought upon the overland in their relentless quest to realise divinity. When speaking this tale, the first two sections of the story shall normalise any reverberation vibrations present in the location, and at the last, any retardation vibe that might be present will succumb to this crushing power.
+}}
+{{Skill_detail
+ |skill=Accord
+ |description=Betrayal most foul.
+ |lessons=1083
+ |syntax=RECITE ACCORD
+ |required=
+ |target=Room
+ |cooldown=15.00 seconds of voice balance and 3.00 seconds of equilibrium
+ |detail=This tale is one of agreement, but more, one of the most profound betrayal. All that hear it shall know an echo of that most dread choice, and will be struck down with the betrayal affliction for a time.<p>* All afflicted with betrayal have a chance to consider anyone an enemy in a given moment, or an ally as no ally at all. Note that this does not in fact modify either ally or enemy lists in the process.</p>
+}}
+{{Skill_detail
+ |skill=Descent
+ |description=Of renegades and sorrow.
+ |lessons=1256
+ |syntax=RECITE DESCENT <target>
+ |required=
+ |target=Room
+ |cooldown=25.00 seconds of voice balance and 2.80 seconds of equilibrium
+ |detail=There was fire and fury a plenty on that day when the renegade host descended upon the city of Targossas, and so this recounting conveys. Upon its conclusion, everyone in the location will be cleansed of a random affliction which afflicts them, excluding the one you are reciting the story to and yourself. Then, the unfortunate subject of your grand recital will be inflicted with damage based on the number of afflictions cured from the audience.
+
+}}
+{{Skill_detail
+ |skill=Haskor
+ |description=The Hero made Divine.
+ |lessons=
+ |syntax=RECITE HASKOR
+ |required=
+ |target=
+ |cooldown=20.00 seconds of voice balance and 3.00 seconds of equilibrium
+ |detail=The Saga of Haskor is one of many battlefields, but through it all runs a single golden thread: Heroism.<p>Speak the saga of Haskor, and all mutual allies that hear your tale will fall under the mantle of your heroism, defended against death so long as you stand. Beware, though. If you fall... the day is dark indeed.<p>* For around half a minute after this saga takes effect, your allies protected by said saga will never know death by the hands of other adventurers so long as they stand with you. However, if you perish, all who heard it shall fall with you as well...<br>** There is a cooldown of five minutes on using this ability, and it is apparent to all when it is activated.
+}}
+{{Skill_detail
+ |skill=Endbringer
+ |description=The day when Death did die.
+ |lessons=1428
+ |syntax=RECITE ENDBRINGER <target>
+ |required=
+ |target=
+ |cooldown=25.00 seconds of voice balance
+ |detail=A tale of tragedy and long held grudges, the Endbringer's Demise is a story with only one inevitable and indefatigable conclusion. Reciting this solemn recounting to a listener will take all of your focus, and yet upon its final word they shall be cast from this life and into those Halls that Thoth once did rule.
+
+* Bypasses all forms of special resurrection such as starburst. The target immediately embraces death upon being slain.
+** This is a channeled action which resolves faster the more stacks of the crescendo affliction are present on the target when you begin the recital.
+
+}}
+
+{{Skill_detail
+ |skill=Imperator
+ |description=From beyond the flow of time.
+ |lessons=1463
+ |syntax=RECITE IMPERATOR
+ |required=
+ |target=Room
+ |cooldown=20.00 seconds of voice balance
+ |detail=There are many tales of the enigmatic Imperator who sits the Infernal Throne and the dread power at his command. By speaking this story into the world, that first great foe overcome by the Imperator shall be broken, and all timewells in your location and adjacent shall be shattered.
+
+* This is a channeled action.
+
+}}
+{{Skill_detail
+ |skill=Deathsheart
+ |description=To give everything and more.
+ |lessons=1600
+ |syntax=RECITE DEATHSHEART
+ |required=
+ |target=Room
+ |cooldown=30.00 seconds of voice balance
+ |detail=This solemn tale is one of greatest sacrifice, and giving up of one's self so that others may survive. If you speak this tale over where another fallen adventurer did make their final stand(*), upon its completion they will be resurrected, but you will be cast into the Halls of the Finality immediately(**). This tale can only be told so often, and takes all of your focus(***).
+
+* You must recite this saga in the room where an adventurer fell. Their corpse is not required, but they must currently be dead.
+** You will immediately embrace death and you will leave no corpse behind.
+*** This carries a thirty minute cooldown upon success and is a channeled action.
+}}
+{{Skill_detail
+ |skill=Worldreaver
+ |description=Annihilation.
+ |lessons=1738
+ |syntax=RECITE WORLDREAVER
+ |required=
+ |target=Room
+ |cooldown=20.00 seconds of voice balance
+ |detail=There is no saga so dire and no tale so terrible as that of He who cast down Gods and broke the world in His coming. The dread power of Bal'met may be gone from Creation, but in this harrowing recital can a sliver of the knowing of that impossible foe be made manifest. Though it will take all of your focus(*) to recite, at the culmination of this recounting all damage in the location will become unblockable for a short time. This affects all present: enemy, ally, and the one who gave voice to this most terrible of tales.
+
+* This is a channeled action.
+}}
+
+
+[[category: skills]]

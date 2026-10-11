@@ -39,6 +39,8 @@ patterns:
   type: 3
 - pattern: You eat a kola nut.
   type: 3
+- pattern: You purge every drop of venom from your bloodstream.
+  type: 3
 - pattern: A chill runs over your icy skin.
   type: 3
 - pattern: You are now wearing a balloon prisoner's shackle with colourful links.

@@ -1,0 +1,298 @@
+"The body may be made stronger through combat."
+ 
+Of the servants of Evil, none embody this Truth more than the Infernal Knights of His city. Versed in the ferocious art of Oppression and armed with befouled weapon and plate, the vanguard of Evil are not lightly crossed.
+ 
+Focused upon devastating, overwhelming force, the practitioner of Oppression is a juggernaut of profane wrath. Where lesser warriors would falter at the deaths of their own, these exemplars of iniquity will continue the fight with ever greater fervour.
+ 
+Woe to those that stand before them, and woe to those who flee; for the arm of Evil is long, and it wields a hellforged blade.
+
+The skill of '''Oppression''' is available to members of the [[Infernal]] [[class]], along with [[Malignity]] and [[Weaponmastery]].
+
+==Abilities in Oppression==
+{{Skill_detail
+ |skill=Hellforge
+ |description=Rise in His service.
+ |lessons=
+ |syntax=HELLFORGE STATUS<br>HELLFORGE CALL <WEAPON{{!}}ARMOUR><br>HELLFORGE CHANNEL <effect><br>HELLFORGE INVEST <effect><br>HELLFORGE PROFANE <armour{{!}}weapon><br>HELLFORGE STRIP <armour{{!}}weapon>
+ |required=
+ |target=
+ |cooldown=
+ |detail=The Infernal knights are blessed by the Lord of Evil with the arms profaned by His dark will. Visit the forge within his temple upon the western isle, and forge yourself a new.<p>Profaned arms are tied so closely to the Lord of Evil that acts of Necromancy channeled directly through them can be performed without feeding upon the life essence of the wielder(*). There are two types of abilities that may be utilised in this way:<p>Armour-based abilities are channeled and you may only have two active at a given time.</p><p>Weapon-based abilities are invested and typically take the place of a venom when they strike a target, though there are exceptions (see relevant ability files for details).</p><p>* Hellforge-based Oppression abilities cost no life essence due to this, though the scope is far narrower than the traditional art of necromancy. As a price for this, an Infernal knight will struggle with traditional Necromancy, and techniques from said school of the black art will be far more draining on their life essence than for a true practitioner. In addition, they regain life essence at a much reduced rate naturally than true Necromancy practitioners.</p>
+}}
+
+{{Skill_detail
+ |skill=Accusation
+ |description=Brand the heretic.
+ |lessons=
+ |syntax=ACCUSATION
+ |required=
+ |target=Self
+ |cooldown=4.0 seconds of equilibrium
+ |detail=When standing within a location that has been vivified, you may uncover the lingering trace of the heretic who dared defile His Isle.
+}}
+==What is called evil is simply the drive for advancement, for greatness. We seek, through discipline and pain, to spur the advancement of nothing less than sentient life:==
+{{Skill_detail
+ |skill=Relentless
+ |description=His legion will not falter.
+ |lessons=
+ |syntax=HELLFORGE ACTIVATE RELENTLESS
+ |required=
+ |target=
+ |cooldown=3.00 seconds of balance
+ |detail=Empower your hellforged armour with the relentless endurance of the Master, and you will be unswayed by those effects which would attempt to inspire fear in you(*).<p>* You still receive the afflictions, but you will not be affected by them.</p>
+}}
+
+{{Skill_detail
+ |skill=Exterminate
+ |description=The Lord's dominion shall expand.
+ |lessons=
+ |syntax=EXTERMINATE
+ |required=5% life essence
+ |target=
+ |cooldown=6.00 seconds of equilibrium
+ |detail=Using your command of the energies of death, you are able to wipe a forest area clean of plant life, replenishing some of your essence. Be warned though, there is an essence cost to this ability, and unless there is a sufficient amount of plant life in the room, you may lose essence using it. It should also be noted that an exterminated room is no longer considered a forest room, so many Druidic abilities will not work in such a room.<p>Take note: prolonged use of extermination will take a toll on your essence reserves, and you will find that each subsequent attempt incurs a greater cost in essence than the last to perform.</p>
+}}
+
+{{Skill_detail
+ |skill=Infestation
+ |description=Summon vile maggots from the depths.
+ |lessons=
+ |syntax=SUMMON INFESTATION<br>BANISH INFESTATION
+ |required=3.50% life essence and 300 mana
+ |target=Room
+ |cooldown=3.00 seconds of equilibrium
+ |detail=This ability will summon a horde of foul maggots from the depths of the earth. For a limited duration, all enemies in the room will be afflicted with varying ailments as the vile creatures burrow into their skin.<p>This will not duplicate an existing affliction.</p>
+}}
+==Cruelty - the application of pain - is the method by which one weeds out the weak and feeble-minded from the population:==
+{{Skill_detail
+ |skill=Implacable
+ |description=Then serve in death.
+ |lessons=
+ |syntax=DRAW HEART<br>CONSUME HEART
+ |required=
+ |target=
+ |cooldown=4.00 seconds of balance
+ |detail=If they will not serve in life than they shall in Death. By drawing the hearts of the fallen, you may consume them to restore your reserves of life essence. 
+}}
+
+{{Skill_detail
+ |skill=Ravage
+ |description=Mercy is a disease.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=When disemboweling a heathen with your blade, if they have the impudence to survive you will twist your blade as it comes free, causing internal trauma (or serious internal trauma if they already have a damaged torso).
+}}
+
+{{Skill_detail
+ |skill=Torture
+ |description=Let the heathens suffer for their blasphemy.
+ |lessons=
+ |syntax=HELLFORGE INVEST TORTURE
+ |required=
+ |target=
+ |cooldown=
+ |detail=Imbue necromantic energy into your blade, replacing a venom application on the next blow. Your blade shall corrupt their blood, causing haemophilia.
+}}
+
+{{Skill_detail
+ |skill=Deathaura
+ |description=Surround yourself in a miasma of evil.
+ |lessons=
+ |syntax=DEATHAURA
+ |required=
+ |target=
+ |cooldown=
+ |detail=This ability will create, for a sixth of an Achaean day, and at a cost of life essence, an aura of death and evil that will harm all enemies who are in your location.
+}}
+==Weakness must be eliminated in all its forms: Physical, Mental, and Spiritual:==
+{{Skill_detail
+ |skill=Punishment
+ |description=Their weakness shall not go unanswered.
+ |lessons=
+ |syntax=HELLFORGE INVEST PUNISHMENT
+ |required=
+ |target=
+ |cooldown=
+ |detail=Imbue your blade with necromantic energy, taking the place of a venom application. On your next blow you shall cause terrible suffering to the heathen that dares oppose you(*).<p>* This damage scales to the number of mental afflictions your victim suffers from.</p>
+}}
+
+{{Skill_detail
+ |skill=Tyranny
+ |description=They shall bend the knee.
+ |lessons=
+ |syntax=TYRANNY
+ |required=3% life essence
+ |target=
+ |cooldown=3.00 seconds of balance
+ |detail=Channel great amounts of necromantic energy through your profane weapon, and call forth the hands of the grave to claw at the living(*).<p>* This calls gravehands and also prones all non-mhaldorians in the location.</p>
+}}
+
+{{Skill_detail
+ |skill=Conqueror
+ |description=Go forth in His name.
+ |lessons=
+ |syntax=HELLFORGE CHANNEL CONQUEROR
+ |required=
+ |target=
+ |cooldown=3.00 seconds of balance
+ |detail=Each time you slay an adventurer you will immediately regain balance (though not equilibrium) and will also gain a surge of health. When you slay a denizen you will gain the health, but not regain balance.<p>This is an ongoing hellforge armour effect.</p>
+}}
+==The enemies of strength are those who trumpet the craven values of forgiveness, tolerance, and laxity of discipline:==
+{{Skill_detail
+ |skill=Predator
+ |description=To hide is futile.
+ |lessons=
+ |syntax=PREY UPON <target>
+ |required=
+ |target=
+ |cooldown=2.50 seconds of equilibrium
+ |detail=Seek out a heathen with your oppressive gaze, detecting them where ever they may be on your current plane.
+}}
+
+{{Skill_detail
+ |skill=Exploit
+ |description=The flaws of the heathens are known to you.
+ |lessons=
+ |syntax=HELLFORGE INVEST EXPLOIT
+ |required=
+ |target=
+ |cooldown=
+ |detail=Imbue necromantic energy into your blade, taking the place of a venom application. Upon your next blow the heathen will be struck down with both weariness and paranoia. 
+}}
+
+{{Skill_detail
+ |skill=Desecration
+ |description=Banish the holy rites of the Bloodsworn Gods.
+ |lessons=
+ |syntax=DESECRATE <rite>
+ |required=
+ |target=
+ |cooldown=3.00 seconds of balance
+ |detail=Using your Necromantic essence, you may sever any devotional rites from the location in which you stand. If the layer of the rite is present, this ability takes some time, during which you may make no actions.
+}}
+==The body may be made stronger through combat:==
+{{Skill_detail
+ |skill=Rampage
+ |description=Crush their hope.
+ |lessons=
+ |syntax=RAMPAGE AGAINST <target>
+ |required=
+ |target=
+ |cooldown=1.10 seconds of balance
+ |detail=It is expected that the weak shall seek to flee your wrath. You may rampage against these feckless cowards. If there are hands of the grave in your location and in the target's location, your rampage shall resolve immediately. If there are not, you shall rampage more swiftly against one in an adjacent location, though anyone in your local area cannot escape your reach.  
+}}
+
+{{Skill_detail
+ |skill=Bloodlust
+ |description=Until the last breath.
+ |lessons=
+ |syntax=HELLFORGE CHANNEL BLOODLUST
+ |required=
+ |target=
+ |cooldown=3.00 seconds of balance
+ |detail=His chosen warriors do not fear to die in His name, no price is too high and no life is greater than the cause. When suffused with bloodlust you will be unable to determine the value of your health or mana, but for each heathen(*) that falls in your location you will be empowered(**).<p>* Non-mhaldorian.<br>** You will have a surge of healing to both health and mana and an affliction will be cured from your person.</p>
+}}
+
+{{Skill_detail
+ |skill=Apotheosis
+ |description=There can be but one.
+ |lessons=
+ |syntax=APOTHEOSIS CHALLENGE <infernal><br>APOTHEOSIS STANDINGS
+ |required=
+ |target=
+ |cooldown=
+ |detail=All serve the Lord, but only one can be the strongest.<br>All are the Lord's tools, but only one can be the sharpest.<br>All are the Lord's army, but only one can be His sword.<p>In his wisdom the Lord of Evil has granted his most faithful knights to pit themselves against one another. There is no surrender. There is no mercy. There is no second chance(*). Many may enter the infernal arena but only one shall leave unbowed. Visit the arena within the Lord of Evil's temple upon the western Isle and you may issue an apotheosis challenge to another knight of Evil that also stands there. To take up the Infernal arms is acceptance enough(**). The knight of Evil who triumphs over the most of his fellows shall be elevated above all others come years end(***).</p><p>* You may only face a given person once per Achaean year. There are no do overs!<br>** Standing in the acceptance location leaves you open to be challenged. You will not have the option to refuse and the battle is to the death.<br>*** The Apotheosis reward is awarded at each years end.</p>
+}}
+==The mind may be made stronger through the elimination of conscience. One does this by inflicting pain on others:==
+{{Skill_detail
+ |skill=Torment
+ |description=In body and mind.
+ |lessons=
+ |syntax=HELLFORGE INVEST TORMENT
+ |required=
+ |target=
+ |cooldown=
+ |detail=Imbue necromantic energy into your blade, taking the place of a venom. When your blade strikes your foe it shall give the healthleech affliction; if they are already leeching their health away, they will become confused. 
+}}
+
+{{Skill_detail
+ |skill=Quash
+ |description=Put them back in their place.
+ |lessons=
+ |syntax=QUASH <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Sometimes a welp will think to rise above their station. They are simply educated with a blow of the hand; no need to bloody the whip when your own body will suffice.<p>* This deals damage, and will strip any magical shield your target may possess.</p>
+}}
+
+{{Skill_detail
+ |skill=Agony
+ |description=They shall bleed for the Lord.
+ |lessons=
+ |syntax=none
+ |required=
+ |target=
+ |cooldown=
+ |detail=Your hellforged weapon will now feed upon the blood of your target. When it strikes a heathen bleeding 100 or more you will be healed in body, and if it strikes a heathen bleeding 200 or more you will additionally be cured of an affliction. Additionally, any heathen that suffers from the healthleech affliction delivered by you will cause you to be cured of an affliction when their strength is drained(*).<p>This is passive and always active so long as you are wielding your hellforged weapon.<p>* This effect has a 12 second cooldown. It does not lockout the bleed requirement, but it also does not stack with it.</p>
+}}
+
+{{Skill_detail
+ |skill=Vivisect
+ |description=They shall serve as example.
+ |lessons=
+ |syntax=VIVISECT <target>
+ |required=
+ |target=
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Evil as you are, you find yourself enjoying live experimentation, preferably on people you know. Once your victim is splayed out and helpless, meaning all four of his or her limbs are withered, you may perform your experiments, killing your victim in horrifying agony. 
+}}
+==The spirit may be made stronger by enduring hardships, both self-imposed and externally-imposed:==
+{{Skill_detail
+ |skill=Pitiless
+ |description=Death is no barrier to His triumph.
+ |lessons=
+ |syntax=HELLFORGE CHANNEL PITILESS
+ |required=
+ |target=
+ |cooldown=3.00 seconds of balance
+ |detail=When channeling the pitiless focus of the Lord through your hellforged armour you shall strike out at all of your enemies with His vengeance when you fall. This is similar to the necromantic method of doing so, though with a single difference: any who are truely slain by your vengeful blow shall immediately plunge into the Halls of the Finality.<p>This is an ongoing hellforge armour effect.</p>
+}}
+
+{{Skill_detail
+ |skill=Unswayed
+ |description=You will overcome.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=Your understanding has progressed to such a degree that the Lord will grant you resistance to damage, so that you may fight on passed the point when lesser soldiers would fall.<p>This is a passive effect always in play when you are clad in your hellforged armour.</p>
+}}
+
+{{Skill_detail
+ |skill=Anguish
+ |description=Pain is nothing before your will.
+ |lessons=
+ |syntax=HELLFORGE CHANNEL ANGUISH
+ |required=
+ |target=
+ |cooldown=3.00 seconds of balance
+ |detail=Draw upon the fires of the Inferno, weaving them into your armour. Though the searing heat will periodically cause you to suffer, if the unthinkable happens and you fall in service to the Lord you will return through the Halls of the Finality with greater swiftness, so as to rejoin in His work with all haste.
+}}
+
+{{Skill_detail
+ |skill=Cripple
+ |description=Break the body, forge the spirit.
+ |lessons=
+ |syntax=CRIPPLE <target> <limb1> <limb2>
+ |required=
+ |target=
+ |cooldown=3.10 seconds of balance
+ |detail=Sometimes a whelp will require you to get a little more hands on when it comes to discipline. Take them up by two of their limbs and show them how generous you were previously to allow them the use of said limbs.<p>* Breaks both limbs and deals some minor damage.</p>
+}}
+
+[[Category:Skills]]

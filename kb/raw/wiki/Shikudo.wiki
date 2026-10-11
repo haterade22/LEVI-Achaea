@@ -1,0 +1,372 @@
+As [[Castomira Brangwin]] took control of Seleucar, the Shikudo-trained monks of [[Judgement Mountain]] were forced to put down their staves and canes. Driven by fear, the Empress sought to disarm those she felt had the power to threaten her reign. In place of the staff, the fighting style of Tekura flourished, and the monks started down a new path that would see their very bodies transformed into deadly weapons for generations and generations to come.
+
+Until the sun rose over Judgement Mountain in the month of Chronos during the 742nd year after the fall of the Seleucarian Empire.
+
+For centuries the monastery had harboured frictions, muttered arguments between those espousing the honour of holding to the old agreements versus those who believe the whims of a long-dead tyrant should not shackle the ways of the living arts. It was in this autumn month that saw the deliberations come to a terrible head, enlivened by the tragedy of [[Auldyn]], a young initiate. Murdered at the hands of [[Belin]], the young boy took up the initiate's training staff and brutally bludgeoned her to death.
+
+Debate raged through the monastery, the once-whispered arguments given loud, vociferous voice. The Grandmaster [[Kevadrin]] stood before a gathered crowd, having solicited argument and opinion from all who dared to hold one, and announced that the arts of the Staff, Shikudo, the mastery of balance and extension with the pole, would return to formal training once more. That these would be offered to any monk who proved himself disciplined and a master of the unarmed Tekura style. Though it had taken hundreds of years, Castomira's embargo was finally lifted.
+
+Those who successfully demonstrate for the Grandmaster the Krull kata are granted access to the silent grove. Here, an aspirant to the fighting arts of old may pluck a branch from the ancient trees and claim his staff of willow or oak.
+
+The art of '''Shikudo''' is available to members of the [[Monk]] [[class]] who have already mastered the art of [[Tekura]], along with [[Kaido]] and [[Telepathy]]
+
+==Abilities in Shikudo==
+{{Skill_detail
+ |skill=Path
+ |description=Switch to a new school of study.
+ |lessons=
+ |syntax=SCHOOL SWITCH TEKURA
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=If you wish to return to your previous studies of Tekura, you may do so. Your progress in the arts of Shikudo shall be remembered and you may return to the Shikudo school later if so desired.<p>Switching costs 100 lessons and may only be done once every 24 hours.</p>
+}}
+<span id="combo"></span>
+{{Skill_detail
+ |skill=Combo
+ |description=Combine attacks to devastate your foes.
+ |lessons=
+ |syntax=COMBO <target> <attack1> [limb] [attack2] [limb] [attack3] [limb]
+ |required=
+ |target=
+ |cooldown=
+ |detail=By combining attacks together you can perform devastating combinations against your foes. Shikudo combinations may consist of no more than three attacks, only one of which may be a kick. For instance, you could COMBO GATTAN'BAHAR DART HEAD LIVESTRIKE FLASHHEEL LEFT (we do not recommend doing this to Gattan'bahar).
+}}
+
+{{Skill_detail
+ |skill=Tykonos
+ |description=A highly defensive form.
+ |lessons=
+ |syntax=ADOPT TYKONOS FORM
+ |transitions=Willows Shaken by the Wind
+ |attacks=THRUST, SWEEP, RISINGKICK
+ |required=
+ |target=
+ |cooldown=
+ |detail=The forms of Shikudo are the backbone of the art. You can only be in one form at a time, though you may flow between the forms at opportune moments, once you further your studies. Many of the Shikudo strikes may 
+only be performed in certain forms, and each form conveys its own set of benefits upon the practitioner.<p>The Tykonos form is primarily a defensive form, and you will find yourself able to divert damage more easily when in this form.</p>
+}}
+
+{{Skill_detail
+ |skill=Thrust
+ |description=The most basic of strikes.
+ |lessons=
+ |syntax=THRUST <limb>
+ |required=
+ |target=
+ |cooldown=
+ |detail=The most basic of strikes, deliver a thrust to a limb with your staff.<p>Note that this ability along with all other Shikudo strikes and kicks must be performed in a combination. See [[#combo|AB SHIKUDO COMBO]] for details. 
+}}
+
+{{Skill_detail
+ |skill=Gripping
+ |description=Hold fast to your staff against all odds.
+ |lessons=
+ |syntax=GRIP<br>RELAX GRIP
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=By gripping tightly with your hands, prevent your staff from being knocked out of your hands.
+}}
+
+{{Skill_detail
+ |skill=Shatter
+ |description=Brush aside the shields of your foes.
+ |lessons=
+ |syntax=SHATTER
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=
+ |detail=Smash magical shields with a single blow of your staff. This ability is unique among all Shikudo techniques in that it can be performed in the flow of any one of the forms.
+}}
+
+{{Skill_detail
+ |skill=Willow
+ |description=A form which emphasises speed.
+ |lessons=
+ |syntax=ADOPT WILLOW FORM
+ |transitions=Willows in Rain Storm
+ |attacks=DART, SWEEP, HIRU, FLASHHEEL, HIRAKU
+ |required=
+ |target=
+ |cooldown=
+ |detail=Willows Shaken by the Wind is the Shikudo form which emphasises speed. All Shikudo strikes and kicks performed in this form shall be faster than normal, and you will be so fast that you may even knock arrows out 
+of the air as they seek you, providing you are wielding your staff.
+}}
+
+{{Skill_detail
+ |skill=Dart
+ |description=A swift strike to snap bones.
+ |lessons=
+ |syntax=DART <limb>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=
+ |detail=Sacrificing damage, you may deliver a swift thrust to a limb with your staff.<p>Note that this ability along with all other Shikudo strikes and kicks must be performed in a combination. See [[#combo|AB SHIKUDO]] COMBO for details.</p>
+}}
+
+{{Skill_detail
+ |skill=Kata
+ |description=The true art of Shikudo.
+ |lessons=
+ |syntax=TRANSITION TO <form> FORM
+ |required=
+ |target=
+ |cooldown=
+ |detail=A kata is a series of strikes that chain together to form a greater whole. Each time you perform a strike or kick it becomes part of your kata. The primary benefit of kata chains is that once you have built a kata chain of sufficient length(*) you may TRANSITION TO THE <form> FORM, to immediately transition into that form(**). Transitioning will reset your kata chain.<p>However, if you maintain a kata chain for too long (i.e. by staying in the same form overly long) you increase your chance of stumbling and failing your kata. This is catastrophic for the Shikudo practitioner, as it not only resets your kata chain but also puts you completely out of your current form and back into the basic Shikudo form (Tykonos). This can be the moment when fights are lost. The Tykonos form is exempt from this, as the technique is specifically designed to be able to maintain a kata chain indefinitely. Naturally, it is a far more limited form in terms of viable strikes or kicks due to this fact.</p><p>* A kata chain of sufficient length is a chain consisting of at least 5 actions.<br>** Note that you can only transition in this way to forms listed as valid transitions for that form (see AB <form> for valid options). You must of course also have studied that form in Shikudo.</p>
+}}
+
+{{Skill_detail
+ |skill=Flashheel
+ |description=A swift kick to damage joints.
+ |lessons=
+ |syntax=FLASHHEEL <LEFT{{!}}RIGHT>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=
+ |detail=The joints are the most vulnerable part of a limb. By targeting the knees with this kick, you will be able to break said limb with a single blow, crippling your foe.<p>Note that this ability along with all other Shikudo strikes and kicks must be performed in a combination. See [[#combo|AB SHIKUDO COMBO]] for details.</p>
+}}
+
+{{Skill_detail
+ |skill=Risingkick
+ |description=A high kick targeting the head or torso.
+ |lessons=
+ |syntax=RISINGKICK <HEAD{{!}}TORSO>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=
+ |detail=This high kick can be aimed at the head or torso. If aimed at the head of a prone opponent, it shall stun them for a short time. Likewise, if aimed at the torso of someone suffering internal trauma, it shall also stun them.
+}}
+
+{{Skill_detail
+ |skill=Sweep
+ |description=A prone opponent is at their most vulnerable.
+ |lessons=
+ |syntax=SWEEP
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=
+ |detail=Using your staff, you may sweep someone off their feet. Note that this consumes both of your arm balances, so may not be combined with other strike attacks (though it may be combined with a kick).<p>Note that this ability along with all other Shikudo strikes and kicks must be performed in a combination. See [[#combo|AB SHIKUDO COMBO]] for details.</p>
+}}
+
+{{Skill_detail
+ |skill=Hiraku
+ |description=Some people simply talk too much.
+ |lessons=
+ |syntax=HIRAKU
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=
+ |detail=Aim a strike at the face of your foe with your staff, shattering teeth and making it impossible for them to eat(*). If they are also prone, they will be stunned for a short time.<p>* They will be afflicted with anorexia and stuttering.</p>
+}}
+
+{{Skill_detail
+ |skill=Rain
+ |description=Countless drops to conquer mountains.
+ |lessons=
+ |syntax=ADOPT RAIN FORM
+ |transitions=Tykonos, Live Oak
+ |attacks=RUKU, KURO, HIRU, FRONTKICK
+ |required=
+ |target=
+ |cooldown=
+ |detail=The form of Willows in Rain Storm is an offensive form, but reliant on repeated strikes rather than powerful blows. You may perform kata chains of twice the normal length when in this form before risking stumbling out of form, and as said kata chain grows longer the damage you deal shall increase.<p>Additionally, your equilibrium recovery shall be significantly increased when in this form.</p>
+}}
+
+{{Skill_detail
+ |skill=Hiru
+ |description=Rattle their skull with a strike from your staff.
+ |lessons=
+ |syntax=HIRU
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=
+ |detail=Deliver a blow to your foe's head with your staff. This will give them dizziness; if they are prone, it may also afflict them with confusion.
+}}
+
+{{Skill_detail
+ |skill=Ruku
+ |description=Numb the ribs or arms with a swift blow from your staff.
+ |lessons=
+ |syntax=RUKU <TORSO{{!}}LEFT{{!}}RIGHT>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=
+ |detail=Aiming blows at the arms or torso of a foe can have various effects. If you target the arms they will become numbed, ruining motor control and afflicting the target with clumsiness (or healthleech if the target already has clumsiness). If you strike the ribs of your foe, you'll inflict enough pain that they will begin to sweat profusely, afflicting them with slickness. 
+}}
+
+{{Skill_detail
+ |skill=Frontkick
+ |description=Bring them down to the ground.
+ |lessons=
+ |syntax=FRONTKICK <LEFT{{!}}RIGHT>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=
+ |detail=This straight kick may be targeted at either arm, arming to strike the vulnerable nerve clusters just below the shoulder. The blow is powerful enough that it will throw the target off their feet if it connects, proning them.<p>Note that this ability along with all other Shikudo strikes and kicks must be performed in a combination. See [[#combo|AB SHIKUDO COMBO]] for details.
+}}
+
+{{Skill_detail
+ |skill=Kuro
+ |description=A lower strike to numb the legs.
+ |lessons=
+ |syntax=KURO <LEFT{{!}}RIGHT>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=
+ |detail=By targeting the muscles in your foe's legs, you may weaken them severely, afflicting said target with weariness. Should your foe already suffer from the weariness affliction, the blow will render them lethargic.
+}}
+
+{{Skill_detail
+ |skill=Oak
+ |description=Unbent, unbroken.
+ |lessons=
+ |syntax=ADOPT OAK FORM
+ |transitions=Willows Shaken by the Wind, Gaital
+ |attacks=LIVESTRIKE, NERVESTRIKE, RUKU, RISINGKICK, KURO
+ |required=
+ |target=
+ |cooldown=
+ |detail=The form of the Live Oak is based around dealing powerful blows. All Shikudo strikes and kicks performed during this form shall do increased damage.
+}}
+
+{{Skill_detail
+ |skill=Livestrike
+ |description=Rob them of breath with a single blow.
+ |lessons=
+ |syntax=LIVESTRIKE
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=
+ |detail=A powerful thrust aimed at the solar plexus, this staff attack will rob your target of breath, delivering asthma.<p>Note that this ability along with all other Shikudo strikes and kicks must be performed in a combination. See [[#combo|AB SHIKUDO COMBO]] for details.
+}}
+
+{{Skill_detail
+ |skill=Nervestrike
+ |description=Deny them control.
+ |lessons=
+ |syntax=NERVESTRIKE
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=
+ |detail=A precise strike to the side of the neck with your staff will paralyse your foe, leaving them unable to act.<p>Note that this ability along with all other Shikudo strikes and kicks must be performed in a combination. See [[#combo|AB SHIKUDO COMBO]] for details.</p>
+}}
+
+{{Skill_detail
+ |skill=Gaital
+ |description=The deceptive form of legend.
+ |lessons=
+ |syntax=ADOPT GAITAL FORM
+ |transitions=Willows in Rain Storm, Unrelenting Storm
+ |attacks=NEEDLE, SPINKICK, SWEEP, RUKU, FLASHHEEL, KURO, JINZUKU, DAWNKICK
+ |required=
+ |target=
+ |cooldown=
+ |detail=While in this deceptive form your instinct will guide you to such a degree that your foe will have no hope of predicting your attacks. Indeed, your skill will be so great that your attacks shall simply slide through attempts to parry them.
+}}
+
+{{Skill_detail
+ |skill=Attrition
+ |description=The death of a thousand strikes.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=The Sentaari masters of old could strike someone with minimal force but with major results. Indeed, many enemies that these grandmasters would encounter would find themselves incapacitated without a single bone broken or drop of blood spilled.<p>By appending LIGHT after a staff strike in a combination, that attack shall not deal any limb damage, but the health damage and affliction shall still be delivered (if applicable). Note that this only applies to staff attacks, you may not deliver light kicks. An example: THRUST LIGHT HEAD, NERVESTRIKE LIGHT, etc.</p>
+}}
+
+{{Skill_detail
+ |skill=Needle
+ |description=Rob them of breath.
+ |lessons=
+ |syntax=NEEDLE
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=
+ |detail=A precision strike against the throat, you may crush someone's windpipe with a single thrust of your weapon.<p>Note that this ability along with all other Shikudo strikes and kicks must be performed in a combination. See [[#combo|AB SHIKUDO COMBO]] for details.
+}}
+
+{{Skill_detail
+ |skill=Spinkick
+ |description=A crushing kick backed up by momentum.
+ |lessons=
+ |syntax=SPINKICK
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=
+ |detail=This powerful kick will strike a target's torso if they're on their feet or their head if they are sprawled upon the ground. In the event you strike your foes head, they will take significantly more damage.
+}}
+
+{{Skill_detail
+ |skill=Dawnkick
+ |description=As inexorable as the rising Sun.
+ |lessons=
+ |syntax= DAWNKICK
+ |transitions=
+ |attacks=
+ |required=
+ |target=
+ |cooldown=
+ |detail=This powerful kick targets the head, and can be performed against both a prone foe and a standing one. When it lands, it will cause their brain
+to be rattled and for them to see stars for a time(*). If they are prone, this effect lasts longer and the damage is higher(**).<p>* Shortly after this kick lands, the target will be afflicted with epilepsy.</p><p>** If they are prone, they will be afflicted again a short time after the first time they receive epilepsy.</p>
+}}
+
+{{Skill_detail
+ |skill=Maelstrom
+ |description=A form of death.
+ |lessons=
+ |syntax=ADOPT MAELSTROM FORM
+ |transitions=Live Oak
+ |attacks=RUKU, RISINGKICK, SWEEP, CRESCENT, LIVESTRIKE, JINZUKU
+ |required=
+ |target=
+ |cooldown=
+ |detail=The form of the Unrelenting Storm is the most rarely taught of the Shikudo Forms, as it is both exceptionally difficult to master and intended for primarily one purpose: to deal with those who can only be dissuaded by death. All Shikudo strikes and kicks that successfully deal damage(*) shall generate Kai energy when in this form, providing you are within the meditative state granted by a Kai Trance. Additionally, the more kai that you possess, the higher your resistance to damage will be.<p>* Attacks that are parried or otherwise blocked will not generate Kai energy.</p> 
+}}
+
+{{Skill_detail
+ |skill=Hyperfocus
+ |description=A single opportunity is enough.
+ |lessons=
+ |syntax=HYPERFOCUS <limb{{!}}NONE>
+ |required=
+ |target=
+ |cooldown=
+ |detail=By hyperfocussing upon a specific limb, you will be able to identify gaps in your target's defence, avoiding all attempts to parry strikes against that limb. However, focus of this nature comes with a cost: though you will be able to bypass parry attempts, your strike on the hyperfocussed limb shall only deal half as much damage to that limb as normal. 
+}}
+
+{{Skill_detail
+ |skill=Jinzuku
+ |description=A sharp thrust to the kidneys.
+ |lessons=
+ |syntax=JINZUKU
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=
+ |detail=This swift strike to the kidney's will instill a craving in your target, causing them to become addicted to the consumption of curatives.<p>Note that this ability along with all other Shikudo strikes and kicks must be performed in a combination. See [[#combo|AB SHIKUDO COMBO]] for details.</p>
+}}
+
+{{Skill_detail
+ |skill=Crescent
+ |description=The deadly Kai-enhanced kick.
+ |lessons=
+ |syntax=CRESCENT
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=This kick may only be performed against a foe who lies prone. If that foe has half their health or less, your Kai-enhanced kick shall slay them instantly; if they do not, they will manage to dodge this kick, in which event your recovery time shall be greatly increased.<p>Upon launching this kick you shall immediately flow into the Tykonos form, so it is wise to be certain of your target's demise before committing.</p>
+}}
+
+{{Skill_detail
+ |skill=Dispatch
+ |description=Beware an angered Shikudo practitioner.
+ |lessons=
+ |syntax=DISPATCH{{!}}INCAPACITATE <target> [form]
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Though much of the Shikudo style is based upon not delivering fatal blows, sometimes there are few other options. If your foe is prone with a damaged head and windpipe, you may dispatch them with a single blow of your staff, ending their life instantly. In the event that you believe that death is not necessary, you may instead INCAPACITATE your foe, stunning them for a great length of time rather than ending their life.<p>Note that this ability is unique among the Shikudo strikes: it is performed outside of a combination and may be used regardless of your form. You may also specify a form when carrying out the act, which you will immediately flow into if your dispatch is successful, regardless of any other limitations.</p>
+}}
+
+[[Category:Skills]][[Category:Edit needed]]

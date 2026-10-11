@@ -271,7 +271,7 @@ afflictions:
     cure_herb: lobelia
     cure_mineral: argentum
     effect: "Lowered cure chances, prevents cautious actions"
-    delivered_by: [sumac, class_abilities]
+    delivered_by: [eurypteria, class_abilities]   # was sumac: sumac only does damage (wiki)
     priority: 1
     class_lock_for: [Depthswalker]
 

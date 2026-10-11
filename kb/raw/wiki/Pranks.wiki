@@ -1,0 +1,403 @@
+The skill of pranks is an amusing mish-mash of acrobatic abilities, strange-and-amusing abilities involving props like balloons, mice, and jack-in-the-boxes, and the science of bomb-making. Practiced solely by Jesters, these abilities even include some seriously bad jokes, and even the ability to scrawl graffiti on city walls.
+
+The skill of '''Pranks''' is available to members of the [[Jester]] [[class]], along with [[Tarot]] and [[Puppetry]].
+
+==Abilities in Pranks==
+{{Skill_detail
+ |skill=Handspring
+ |description=Leap at your foes in neighboring rooms.
+ |lessons=
+ |syntax=HS/HANDSPRING <target>
+ |required=
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=With this acrobatic attack, you can handspring into an adjacent room, attacking an adventurer there.
+}}
+
+{{Skill_detail
+ |skill=Props
+ |description=Wish for the props that every good jester needs.
+ |lessons=
+ |syntax=WISH FOR [2-10] <prop>
+ |required=
+ |target=
+ |cooldown=1.00 seconds of balance
+ |detail=With this ability, you may throw some gold up into the air and wish for balloons, mickeys, itching powder, or blackjacks. You must have the relevant ability to wish for the associated prop.<br><u>Costs</u><br><table style="border-collapse: collapse"><tr><td style="padding-left:10px">Balloon</td><td>:</td><td style="text-align:right">20 gold</td></tr><tr><td style="padding-left:10px">Blackjack</td><td>:</td><td style="text-align:right">500 gold</td></tr><tr><td style="padding-left:10px">Mickey</td><td>:</td><td style="text-align:right">20 gold</td></tr><tr><td style="padding-left:10px">Itchpowder</td><td>:</td><td style="text-align:right">20 gold</td></tr></table>You may optionally wish for multiple (up to 10) props at once. When doing so, the gold cost and balance use will be multiplied.
+}}
+
+{{Skill_detail
+ |skill=Balloons
+ |description=Take to the skies with balloons.
+ |lessons=
+ |syntax=INFLATE BALLOON
+ |required=
+ |target=
+ |cooldown=4.00 seconds of balance
+ |detail=The first of a few balloon-related abilities, this allows the jester to inflate a normal balloon and fly up to the skies with it.
+}}
+
+{{Skill_detail
+ |skill=Slipperiness
+ |description=Slip out of that which would bind you.
+ |lessons=
+ |syntax=SLIPPERINESS
+ |required=
+ |target=Self
+ |cooldown=2.00 seconds of balance
+ |detail=Once you've activated slipperiness, you will be able to WRITHE from entanglements faster than normal. Additionally, your agility will allow you to partially avoid attacks from denizens, reducing your damage taken. There is no ongoing cost to this ability.
+}}
+
+{{Skill_detail
+ |skill=Bop
+ |description=Deliver a vicious blow with a blackjack.
+ |lessons=
+ |syntax=BOP <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=3.00 seconds of balance
+ |detail=This ability requires that you have a blackjack wielded. With it, you may bop someone, either adventurer or denizen. It may be used in conjunction with the targeting ability in weaponry.<br>Additionally, when used against adventurers, it will deliver either amnesia, stupidity, or epilepsy.
+}}
+
+{{Skill_detail
+ |skill=Giraffes
+ |description=Twist a balloon into a giraffe.
+ |lessons=
+ |syntax=INFLATE BALLOON INTO GIRAFFE<br>MOUNT GIRAFFE<br>STEP INTO TREES
+ |required=
+ |target=5.00 seconds of balance
+ |cooldown=
+ |detail=This ability requires the presence of a balloon in your inventory.  MOUNT GIRAFFE will allow you to mount it, and then you can move it around as usual. You are also able to STEP INTO TREES from on its back.
+}}
+
+{{Skill_detail
+ |skill=Backflip
+ |description=Flip over obstructions.
+ |lessons=
+ |syntax=BACKFLIP <direction>
+ |required=
+ |target=
+ |cooldown=1.00 seconds of balance
+ |detail=You may BACKFLIP past obstructions that would otherwise be impassable by normal means.
+}}
+
+{{Skill_detail
+ |skill=Hocuspocus
+ |description=Cast coloured illusions to dazzle those about you.
+ |lessons=
+ |syntax=HOCUSPOCUS <delay in seconds> COLOUR <color> <illusion message><br>HOCUSPOCUS <delay in seconds> <illusion message>
+ |required=1 mana per character
+ |target=Room
+ |cooldown=3.00 seconds of equilibrium
+ |detail=This ability lets you set off coloured, delayed illusions. The colours available to you can be seen at the bottom of CONFIG COLOUR, with the exception of 15, which you may not use. The cost in mana is one mana for each character in the illusion. You may embed a single newline in an illusion by inserting the character sequence \n at the appropriate spot. For restrictions and limitations, please refer to HELP ILLUSIONS. 
+}}
+
+{{Skill_detail
+ |skill=Runaway
+ |description=Make a swift retreat.
+ |lessons=
+ |syntax=RUNAWAY <direction> [distance] (between 1 and 11 rooms)
+ |required=
+ |target=
+ |cooldown=
+ |detail=While you are riding your inflatable giraffe, you may beat a hasty retreat, going up to 10 rooms in a straight line.
+}}
+
+{{Skill_detail
+ |skill=Concussionbomb
+ |description=Momentarily stun everyone in the room.
+ |lessons=
+ |syntax=CONSTRUCT CONCUSSION BOMB<br>THROW BOMB <direction>/AT GROUND
+ |required=1 iron
+ |target=Adventurers and room
+ |cooldown=4.00 seconds of balance
+ |detail=This bomb, when it explodes, will create a wave of force that will stun everyone in the room momentarily. You can make two bombs out of a single commodity.
+}}
+
+{{Skill_detail
+ |skill=Butterflybomb
+ |description=Blast people from the skies and trees.
+ |lessons=
+ |syntax=CONSTRUCT BUTTERFLY BOMB<br>THROW BOMB <direction>/AT GROUND
+ |required=1 iron
+ |target=Adventurers and room
+ |cooldown=4.00 seconds of balance
+ |detail=Upon exploding, this bomb will rise up into the air and knock those in the trees and skies to the ground. You can make two bombs out of a single commodity.
+}}
+
+{{Skill_detail
+ |skill=Balloonhandoff
+ |description=Launch your foes to the clouds with a balloon.
+ |lessons=
+ |syntax=INFLATE BALLOON AND GIVE TO <target>
+ |required=
+ |target=Adventurers
+ |cooldown=4.00 seconds of balance
+ |detail=With this ability you may inflate a balloon and immediately hand it to someone else, causing them to be carried into the air. Those protected by the mass defence are too heavy to be moved.
+}}
+
+{{Skill_detail
+ |skill=Backhandspring
+ |description=Leap out of the room striking someone on the way out.
+ |lessons=
+ |syntax=BHS/BACKHANDSPRING <target> <direction>
+ |required=
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=With the backwards handspring, you may leave the room while simultaneously kicking someone on your way out.
+}}
+
+{{Skill_detail
+ |skill=Balancing
+ |description=Maintain superior balance.
+ |lessons=
+ |syntax=BALANCING [ON{{!}}OFF]<br>RELAX BALANCING
+ |required=Mana drain
+ |target=Self
+ |cooldown=0.50 seconds of balance
+ |detail=With this ability, you will have superior balance, making it much more difficult to knock you off your feet. There is a mana drain associated with it, however.
+}}
+
+{{Skill_detail
+ |skill=Envenom
+ |description=Coat a weapon in venoms.
+ |lessons=
+ |syntax=ENVENOM <weapon> with <venom><br>WIPE <weapon>
+ |required=
+ |target=
+ |cooldown=
+ |detail=With this ability, you may layer venoms on an edged weapon. Each time that weapon hits somebody, one venom will poison your opponent, and disappear from the weapon. They work on a last-on, first-off basis, so if you put xentio on a weapon, and then put voyria on, the voyria would come off first, and the xentio second. You must have the selected venom in a vial in your inventory. In order to get rid of the venoms on a weapon, simply WIPE <weapon>.
+}}
+
+{{Skill_detail
+ |skill=Smokebomb
+ |description=Choke all in the room with a plume of smoke.
+ |lessons=
+ |syntax=CONSTRUCT SMOKE BOMB<br>THROW SMOKEBOMB <direction>/AT GROUND
+ |required=1 iron
+ |target=Adventurers and room
+ |cooldown=4.00 seconds of balance
+ |detail=This bomb, when it explodes, will spew out a foul gas that will choke those in the room. The fumes induce hunger in those that inhale them. You can make two bombs out of a single commodity.
+}}
+
+{{Skill_detail
+ |skill=Juggling
+ |description=The ancient art of juggling.
+ |lessons=
+ |syntax=JUGGLE <item1> [item2] [item3]<br>JUGGLED<br>JUGGLE STOP
+ |required=
+ |target=
+ |cooldown=1.00 seconds of balance
+ |detail=You may juggle up to two items at once, or three if you have reached Transcendent pranks. Once you are juggling, you may throw the items you're juggling at a greatly decreased cost in balance. JUGGLED will show you what, if anything, you are juggling. Be aware that juggling comes with an endurance drain and, no matter how nimble your fingers, you are not adept enough to juggle bombs. 
+}}
+
+{{Skill_detail
+ |skill=Webbomb
+ |description=Explode strands of webbing to bind everyone in the room.
+ |lessons=
+ |syntax=CONSTRUCT WEB BOMB<br>THROW BOMB <direction>/AT GROUND
+ |required=1 rope
+ |target=Adventurers and room
+ |cooldown=4.00 seconds of balance
+ |detail=When this bomb explodes, it will throw out magically sticky webbing everywhere. You can make two bombs out of a single commodity.
+}}
+
+{{Skill_detail
+ |skill=Acrobatics
+ |description=Masterful footwork to make yourself a difficult target.
+ |lessons=
+ |syntax=ACROBATICS [ON{{!}}OFF]<br>RELAX ACROBATICS
+ |required=
+ |target=
+ |cooldown=3.00 seconds of balance
+ |detail=With this ability, you will exercise your dexterity, becoming far more difficult to hit. Be warned that it comes with a serious endurance drain.
+}}
+
+{{Skill_detail
+ |skill=Vent
+ |description=Sometimes you have to just let it all out.
+ |lessons=
+ |syntax=VENT <target>
+ |required=
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=The humourless can sometimes just be too much. By venting your frustration upon them, tomorrow can be a brighter day!<p>You'll slap the stupid into them and make them a stuttering fool, that you will.</p>
+}}
+
+{{Skill_detail
+ |skill=Badjoke
+ |description=Strip defences with your terrible jokes alone.
+ |lessons=
+ |syntax=BADJOKE
+ |required=100 mana
+ |target=Adventurers, denizens, and room
+ |cooldown=3.00 seconds of equilibrium
+ |detail=This ability will induce the desire to slap you in those who hear your  jokes, causing them to lose the rebounding aura and shield defences.<br>Note that other jesters are already so familiar with terrible jokes that this ability will not work on them.  
+}}
+
+{{Skill_detail
+ |skill=Mickey
+ |description=Slip someone a mickey.
+ |lessons=
+ |syntax=SLIP <target> MICKEY
+ |required=
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=After obtaining a mickey from the Props ability, you can slyly slip the mickey to someone, which will cause that person to eat the mickey instead of the next herb he intends to eat, making him sick.
+}}
+
+{{Skill_detail
+ |skill=Traps
+ |description=The ability to search for traps in your location.
+ |lessons=
+ |syntax=TRAPS
+ |required=
+ |target=Room
+ |cooldown=3.00 seconds of balance
+ |detail=The TRAPS ability will search for traps in the room, giving you information about them. You will not be able to find traps laid by someone with higher skill than you.
+}}
+
+{{Skill_detail
+ |skill=Disarm
+ |description=Attempt to disarm a trap.
+ |lessons=
+ |syntax=DISARM <trap type> <direction>
+ |required=
+ |target=Room
+ |cooldown=4.00 seconds of balance
+ |detail=Using this ability, you will attempt to disarm a trap in the direction specified. If you are successful, and not in the arena, then you will get the commodities that went into its making. If you are unsuccessful, you will fall victim to the trap. You will only be able to disarm traps laid by those with skill equal to or less than your own.
+}}
+
+{{Skill_detail
+ |skill=Graffiti
+ |description=Scrawl messages on walls.
+ |lessons=
+ |syntax=SCRAWL <colour> <text><br>SCRUB WALLS<br>IDENTIFY GRAFFITI
+ |required=Write: 500 mana
+ |target=Room
+ |cooldown=Write: 6.00 seconds of equilibrium<br>Identify: 3.00 seconds of balance
+ |detail=While in any outdoor urban location, you can scrawl coloured graffiti on the wall. It will last until someone uses a bucket of water to scrub it off, with SCRUB WALLS.
+}}
+
+{{Skill_detail
+ |skill=Somersault
+ |description=Quickly somersault past obstructions.
+ |lessons=
+ |syntax=SOMERSAULT <direction>
+ |required=
+ |target=
+ |cooldown=4.00 seconds of balance
+ |detail=With this ability you can escape a location even if you're webbed or paralysed. It is faster than 'tumbling' in Survival, as a bonus.
+}}
+
+{{Skill_detail
+ |skill=Arrowcatch
+ |description=Pluck arrows from the air.
+ |lessons=
+ |syntax=ARROWCATCH [ON{{!}}OFF]<br>RELAX ARROWCATCH
+ |required=Mana drain
+ |target=
+ |cooldown=2.00 seconds of balance
+ |detail=At the cost of a constant mana drain, this ability will give you a chance to pluck arrows fired at you from the air.
+}}
+
+{{Skill_detail
+ |skill=Bananas
+ |description=Litter the floor with banana peels.
+ |lessons=
+ |syntax=LITTER FLOOR WITH PEELS
+ |required=150 mana
+ |target=Room
+ |cooldown=4.00 seconds of balance
+ |detail=You are now able to conjure up a handful of banana peels on the ground. These slippery items will make it more difficult for people to leave the room.
+}}
+
+{{Skill_detail
+ |skill=Firecracker
+ |description=Construct festive firecrackers.
+ |lessons=
+ |syntax=CONSTRUCT FIRECRACKER<br>LIGHT FIRECRACKER
+ |required=1 iron
+ |target=Room
+ |cooldown=4.00 seconds of balance
+ |detail=The firecracker is an essentially useless little prank designed to make celebratory occasions more festive. You'll find that a single piece of iron will make three firecrackers.
+}}
+
+{{Skill_detail
+ |skill=Itchpowder
+ |description=Employ the irritating itchpowder.
+ |lessons=
+ |syntax=SLIP <target> ITCHPOWDER
+ |required=
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=Like the mickey, once you've gotten some itchpowder through the Props ability, you can slip it on someone, making him or her itch uncontrollably until an epidermal salve is applied.<p>This will cause the unfortunate individual to be periodically afflicted with impatience. 
+}}
+
+{{Skill_detail
+ |skill=Dustbomb
+ |description=Numb the sense of your victims with a bomb.
+ |lessons=
+ |syntax=CONSTRUCT DUST BOMB<br>THROW BOMB <direction>/AT GROUND
+ |required=1 diamond dust
+ |target=Adventurers and room
+ |cooldown=4.00 seconds of balance
+ |detail=This ability will cause a cloud of dust to go up, cutting off much sensory input for a time. You can make two bombs out of a single commodity.
+}}
+
+{{Skill_detail
+ |skill=Jackinthebox
+ |description=An innocent musical toy with a vicious bite!
+ |lessons=
+ |syntax=CONSTRUCT JACK-IN-THE-BOX<br>WIND JACK-IN-THE-BOX FOR <target>
+ |required=1 iron and 1 wood
+ |target=Adventurers
+ |cooldown=Construct: 4.00 seconds of balance<br>Wind: 2.00 seconds of balance
+ |detail=With this ability, you may construct a jack-in-the-box that, when wound and targetted for a specific person (see syntax above), will kill that person when the puppet pops out, assuming the target is still in the room. You may not do anything else while you wind the jack-in-the-box.
+}}
+
+{{Skill_detail
+ |skill=Timers
+ |description=Give your bombs a delayed effect.
+ |lessons=
+ |syntax=TIMER <bomb> <3-60 seconds>
+ |required=
+ |target=
+ |cooldown=0.50 seconds of balance
+ |detail=By setting a timer on a bomb, you are able to delay its effect. Be warned though, that once a timer has been set, a bomb cannot be picked up again.
+}}
+
+{{Skill_detail
+ |skill=Gallowshumour
+ |description=A tough crowd, this one.
+ |lessons=
+ |syntax=GALLOWSHUMOUR <target>
+ |required=
+ |target=Adventurers
+ |cooldown=2.10 seconds of balance
+ |detail=Sometimes the infamous greyfaces need a bit of a different approach to coax out a smile. If wielding a puppet of one such poor soul, you may enlighten him or her with some good old gallows humour, adding some real character to his face in the process(*). Even then, you might need to soften them up a bit first(**).<p>If used against a denizen, this skill does not require a puppet and behaves differently. With your morbid humour, you will inflict psychic damage upon the target. The closer they are to death, the sharper your wit cuts(***).<p>* This will improve the fashioned state of your puppet.<br>** The more afflictions the target has, the more fashions you will receive. They will require at least two and several things are excluded: broken limbs, writhe afflictions, and anything with a nonstandard cure such as time.<br>*** You will deal increased damage to denizens under 50% health. This bonus increases on denizens below 25% health.</br>
+}}
+
+{{Skill_detail
+ |skill=Suicidemice
+ |description=Brainwash mice to carry bombs on their backs.
+ |lessons=
+ |syntax=TIE CHEESE TO ROPE<br>FISH FOR MICE<br>REEL IN MOUSE<br>EDUCATE MOUSE<br>STRAP <bomb> TO <mouse><br>ORDER MOUSE KILL <target><br>CALL MICE
+ |required=
+ |target=Adventurers
+ |cooldown=Educate: 5.00 seconds of balance<br>Strap: 4.00 seconds of balance
+ |detail=Brainwash mice until they are willing to sacrifice their lives for you. First, get a rope and cheese, and then tie the rope to the cheese. Then, you have to fish for the mice in a city area. Reel the mouse in when one bites. Once you've caught one, you may educate him, which will prepare the mouse for use. Just strap a bomb onto his back, drop him, and ORDER MOUSE KILL <whoever>. If you are within approximately 10 rooms of your target, the mouse will immediately take off chasing your unlucky victim, and, upon finding the person, detonate the bomb.
+}}
+
+{{Skill_detail
+ |skill=Liberate
+ |description=They weren't using it anyway.
+ |lessons=
+ |syntax=LIBERATE TONGUE OF <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.60 seconds of balance
+ |detail=Once you've got a good idea of how someone's wagging their tongue, you can grab that beauty right out of their mouth*. You'll need to get it just right though, so it'll take some observing.<p>Once someone is afflicted with stuttering, each time they communicate** you'll get a better idea of what you need. Once you've observed enough***, the rest is up to you!</p><p>* Yes, they die. Tragic but what can you do.<br>** Any form of communication triggers this, as well as the puppet tickle ability. Laughter might not be the best medicine in this case.<br>*** You'll need to observe four times to be able to liberate their tongue.</p>
+}}
+
+
+[[Category:Skills]][[Category:Edit needed]]

@@ -1,0 +1,413 @@
+Intense training of the body, the senses, and the mind are requisite steps on the path to becoming a true master swordsman. While such training will enable feats of speed, agility, and mental acuity that are breathtaking in their own right, the practise of Shindo is defined by the accrual and spectacular unleashing of Shin energy. The surging flow and heady rhythm of battle is known to all warriors, but students of Shindo learn to enter the Shin trance, greatly enhancing their sensitivity to its power. Many advanced TwoArts and Striking abilities require Shin energy to perform. Their use will not be possible without first learning the ShinTrance ability.
+
+The skill of '''Shindo''' is available to members of the [[Blademaster]] [[class]], along with [[TwoArts]] and [[Striking]].
+
+==Abilities in Shindo==
+{{Skill_detail
+ |skill=Weathering
+ |description=Rigorous training yields a toughened physique.
+ |lessons=
+ |syntax=WEATHERING
+ |required=
+ |target=
+ |cooldown=
+ |detail=Your budding control over your body will assist you in weathering the storm of life by increasing your constitution by one point.
+}}
+
+{{Skill_detail
+ |skill=Augment
+ |description=Your bladework reaches new heights of potency.
+ |lessons=
+ |syntax=SHIN AUGMENT <ALL{{!}}amount>
+ |required=Shin energy
+ |target=
+ |cooldown=
+ |detail=By augmenting your reflexes with shin energy, you will reach such a degree of skill with the blade that you are able to deflect blows aimed at your limbs, even when prone.<br>** This ability is used in conjunction with the parry ability.
+}}
+
+{{Skill_detail
+ |skill=Breathing
+ |description=Control your breathing to resist choking attacks.
+ |lessons=
+ |syntax=HOLD BREATH<br>RELEASE
+ |required=
+ |target=
+ |cooldown=
+ |detail=This ability will grant a short-term immunity from anything doing asphyxiation damage. However, any offensive activity or consumption of balance or equilibrium will cause you to begin breathing once again.   
+}}
+
+{{Skill_detail
+ |skill=Shintrance
+ |description=Sink into a reverie of battle.
+ |lessons=
+ |syntax=SHIN TRANCE<br>BREAK TRANCE
+ |required=
+ |target=
+ |cooldown=
+ |detail=Swordplay and Striking are supremely graceful arts, the fury of bloodshed tempered by rhythm, control, and prowess. Entering the Shin trance, you may sensitise yourself to the cadence and flow of combat, accumulating Shin energy with every strike you land upon a foe. Successfully channelling this energy is essential in order to unleash many of the advanced Shindo, TwoArts, and Striking techniques. The more powerful your opponent, the more Shin energy you will gain from striking them. Shin energy will slowly dissipate over time.
+}}
+
+{{Skill_detail
+ |skill=Shadow
+ |description=Surveil from the shadows.
+ |lessons=
+ |syntax=SHADOW <target>
+ |required=
+ |target=Adventurers
+ |cooldown=4.00 seconds of balance
+ |detail=From the ground or in the trees you may attempt to shadow an adventurer in an adjacent location. If you are not detected, you will enter their location unseen and begin to follow them.
+}}
+
+{{Skill_detail
+ |skill=Detect
+ |description=Find others throughout the land.
+ |lessons=
+ |syntax=DETECT <target>
+ |required=20 mana
+ |target=Adventurers
+ |cooldown=1.00 seconds of equilibrium
+ |detail=A useful benefit of the intense training of body and mind inherent to the practise of Shindo is an increased sensitivity to the latent telepathic powers all mortals possess. By honing your focus, you may detect the location of other adventurers.
+}}
+
+{{Skill_detail
+ |skill=Deaf
+ |description=Will silence upon the world.
+ |lessons=
+ |syntax=DEAF
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=Through force of will, you may block out all sound, rendering yourself deaf.
+}}
+
+{{Skill_detail
+ |skill=Hearing
+ |description=Restore aural sensation.
+ |lessons=
+ |syntax=HEARING
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=No trauma may deprive you of your hearing should you wish otherwise. Concentrate, and the sounds of the world will return.
+}}
+
+{{Skill_detail
+ |skill=Blind
+ |description=Render your eyes unseeing.
+ |lessons=
+ |syntax=BLIND
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=Meditating upon the Void, you may will your eyes to cease their function, blinding yourself.
+}}
+
+{{Skill_detail
+ |skill=Sight
+ |description=See the world anew.
+ |lessons=
+ |syntax=SIGHT
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=You have sufficient control over your body to instantly repair your eyes when blinded.
+}}
+
+{{Skill_detail
+ |skill=Nightsight
+ |description=Vision in darkness as in light.
+ |lessons=
+ |syntax=NIGHTSIGHT [ON{{!}}OFF]<br>RELAX NIGHTSIGHT
+ |required=
+ |target=
+ |cooldown=
+ |detail=The dark of night is no barrier to your trained eyesight.
+}}
+
+{{Skill_detail
+ |skill=Bind
+ |description=Brace yourself with Shin energy.
+ |lessons=
+ |syntax=BINDING [ON{{!}}OFF]<br>RELAX BINDING
+ |required=300 mana
+ |target=
+ |cooldown=2.00 seconds of equilibrium
+ |detail=Once so bound, any Shin energy accumulated beyond the maximum you may store will invigorate your body, sparking a renewal of health.
+}}
+
+{{Skill_detail
+ |skill=Blocking
+ |description=Deny them escape.
+ |lessons=
+ |syntax=BLOCK <direction><br>UNBLOCK
+ |required=
+ |target=
+ |cooldown=
+ |detail=With the ability to block exits, you cut off the chances for your cowardly opponent's to flee your blade.
+}}
+
+{{Skill_detail
+ |skill=Toughness
+ |description=Strengthen your body against assault.
+ |lessons=
+ |syntax=TOUGHNESS
+ |required=
+ |target=
+ |cooldown=
+ |detail=By increasing the density of your skin, you are able to decrease the amount of damage you will take from physical cutting attacks.
+}}
+
+{{Skill_detail
+ |skill=Projectiles
+ |description=Weave and dodge missiles.
+ |lessons=
+ |syntax=PROJECTILES [ON{{!}}OFF]<br>RELAX PROJECTILES
+ |required=Mana drain
+ |target=
+ |cooldown=
+ |detail=Heightening your reflexes, you may sense and avoid many projectiles.
+}}
+
+{{Skill_detail
+ |skill=Dodging
+ |description=Elude attacks from the air.
+ |lessons=
+ |syntax=DODGING [ON{{!}}OFF]<br>RELAX DODGING
+ |required=Mana drain
+ |target=
+ |cooldown=
+ |detail=This ability will allow you to dodge attacks from the air.
+}}
+
+{{Skill_detail
+ |skill=Sturdiness
+ |description=Stand steadfast against acts of force.
+ |lessons=
+ |syntax=STAND FIRM
+ |required=
+ |target=
+ |cooldown=3.00 seconds of balance
+ |detail=By concentrating on increasing your mass, you are able to gain immunity from most attempts to move you against your will. It is lost when you next use balance or equilibrium.
+}}
+
+{{Skill_detail
+ |skill=Leap
+ |description=Vault over obstacles.
+ |lessons=
+ |syntax=LEAP <direction>
+ |required=
+ |target=
+ |cooldown=1.00 seconds of balance
+ |detail=Walls, rubble, and other impediments are no longer a problem to one with your training. What you cannot get around, you may go over.
+}}
+
+{{Skill_detail
+ |skill=Immunity
+ |description=Withstand the foulest of poisons.
+ |lessons=
+ |syntax=IMMUNITY
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=By stirring your circulation, you may prepare yourself to shrug away the next poison that enters your bloodstream. As venoms are so wide in variety, such a state of readiness requires the whole of your focus; performing any action will end your immunity.
+}}
+
+{{Skill_detail
+ |skill=Burst
+ |description=A crude release of force.
+ |lessons=
+ |syntax=BURST <target>
+ |required=70 mana
+ |target=Adventurers and denizens
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Shin energy is a source of power both pliant and potent. You may unleash a measure of this energy upon a target in a crude but damaging burst of raw force.<p>This attack will bypass, but not destroy, magical shields and prismatic barriers, and does more damage against both prone opponents and those suffering a damaged head(*).</p> <p>* These bonuses both stack with one another, but with diminishing returns.</p>
+}}
+
+{{Skill_detail
+ |skill=Dash
+ |description=Fly across the ground.
+ |lessons=
+ |syntax=DASH <direction> [distance] (Between 1 and 11 rooms)
+ |required=
+ |target=
+ |cooldown=
+ |detail=Sprinting in a particular direction, you may rapidly cover a great distance.
+}}
+
+{{Skill_detail
+ |skill=Waterwalk
+ |description=Dance over the waves.
+ |lessons=
+ |syntax=WATERWALK [ON{{!}}OFF]<br>RELAX WATERWALK
+ |required=
+ |target=
+ |cooldown=2.00 seconds of balance
+ |detail=So swift are your footsteps that water will not part beneath your feet, permitting you to glide across the surface.
+}}
+
+{{Skill_detail
+ |skill=Clarity
+ |description=Behold no deception.
+ |lessons=
+ |syntax=CLARITY
+ |required=650 mana
+ |target=
+ |cooldown=6.00 seconds of equilibrium
+ |detail=Those who would hide in the shadows cannot escape your well-trained eyes and ears. Your increased awareness may also see the truth behind magical illusions, although the chances of detecting this type of artifice are less reliable.
+}}
+
+{{Skill_detail
+ |skill=Mindnet
+ |description=Know of all who approach.
+ |lessons=
+ |syntax=MINDNET [ON{{!}}OFF]<br>RELAX MINDNET
+ |required=Mana drain
+ |target=
+ |cooldown=
+ |detail=Reaching out with your every sense, abilities heightened by rigorous mental training, you may become aware of the comings and goings of others nearby. Such concentration will be a constant burden on your mana reserves.
+}}
+
+{{Skill_detail
+ |skill=Consciousness
+ |description=Maintain awareness at all times.
+ |lessons=
+ |syntax=CONSCIOUSNESS [ON{{!}}OFF]<br>RELAX CONSCIOUSNESS
+ |required=
+ |target=
+ |cooldown=
+ |detail=Such is your iron will that you may cling to consciousness where lesser minds would fail.
+}}
+
+{{Skill_detail
+ |skill=Healthtrans
+ |description=Heal your wounds with Shin power.
+ |lessons=
+ |syntax=SHIN HEALTHTRANS <amount of Shin>/ALL
+ |required=Shin energy
+ |target=
+ |cooldown=
+ |detail=Releasing Shin energy inwardly, you may instantly mend wounds and restore your body. The more energy accumulated, the more you may transmute in this feat of regeneration.
+}}
+
+{{Skill_detail
+ |skill=Manatrans
+ |description=Fortify your mind with Shin power.
+ |lessons=
+ |syntax=SHIN MANATRANS <amount of Shin>/ALL
+ |required=Shin energy
+ |target=
+ |cooldown=
+ |detail=Allowing Shin energy to focus your thoughts and elucidate your mind, you may instantly replenish your mana reserves. The more energy accumulated, the more you may transmute in this way.
+}}
+
+{{Skill_detail
+ |skill=Highleap
+ |description=The sky is within your reach.
+ |lessons=
+ |syntax=LEAP HIGH<br>LAND
+ |required=
+ |target=
+ |cooldown=
+ |detail=So powerful are your legs that you may leap high into the sky, briefly eluding gravity's grip. Beware that you lack the control to move about while up in the air.
+}}
+
+{{Skill_detail
+ |skill=Annihilation
+ |description=Fury given fiery form.
+ |lessons=
+ |syntax=SHIN ANNIHILATION
+ |required=40 Shin energy and 10 mana
+ |target=
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Sparked into flame by inner fury, you may release the unbridled might of your accumulated Shin energy in a flood of flames that will scorch all within reach. So forceful is this burst of heat that others may be flung from the location. Focus and control are essential in performing this advanced technique, lest you yourself succumb to the fire.
+}}
+
+{{Skill_detail
+ |skill=Thunderstorm
+ |description=Unleash a galvanic surge of power.
+ |lessons=
+ |syntax=SHIN THUNDERSTORM
+ |required=30 Shin energy
+ |target=
+ |cooldown=4.00 seconds of equilibrium
+ |detail=As the storm releases its might through crackling bolts of lightning, so may you channel Shin energy into a savage electrical assault upon all in the vicinity. The galvanic forces released are likely to jangle the nerves of those struck.
+}}
+
+{{Skill_detail
+ |skill=Blizzard
+ |description=Quench your foes with a storm of ice.
+ |lessons=
+ |syntax=SHIN BLIZZARD
+ |required=30 Shin energy
+ |target=Room
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Through a secret Shindo technique familiar only to masters of the art, you may draw the heat from the air around you into yourself. Manipulating the resultant freezing atmosphere into a shearing blizzard, you may scourge all nearby with lashes of ice, freezing them and destroying any heat vibration that might be present at your location. In addition, once your power leaves your control, it shall settle in the location, forming a temporary obscuring snowstorm.   
+}}
+
+{{Skill_detail
+ |skill=Bounding
+ |description=Leap great distances in but one soaring step.
+ |lessons=
+ |syntax=BOUND <direction>
+ |required=
+ |target=
+ |cooldown=2.40 seconds of balance
+ |detail=Launching yourself skywards, you may briefly soar through the air in a particular direction, bypassing the adjacent location, and any obstacles within, and landing in the location beyond.
+}}
+
+{{Skill_detail
+ |skill=Vitiate
+ |description=Your strength becomes another's frailty.
+ |lessons=
+ |syntax=VITIATE <target>
+ |required=40 Shin energy
+ |target=Adventurers
+ |cooldown=5.00 seconds of equilibrium
+ |detail=The potent forces of Shin energy can prove crippling to the uninitiated. By directing them upon an opponent, you may weaken your foe for a time, sapping their strength and dexterity.
+}}
+
+{{Skill_detail
+ |skill=Meditate
+ |description=Your focus is without compare.
+ |lessons=
+ |syntax=SHIN MEDITATE<br>EVADE <dir>
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=This state of mind allows you to sink into a trance-like state, granting you abilities normally beyond your capabilities. Even the greatest modern day practitioners of shindo can only maintain this state for a short time, and there is a significant recovery period before it is safe to once again enter the trance.<p>While meditating, you will gain access to the ability to evade past walls and other barriers, as well as being immune to the power of runic totems that may have been bound to the earth.</p>
+}}
+
+{{Skill_detail
+ |skill=Fullsense
+ |description=Reach out with your mind to touch others nearby.
+ |lessons=
+ |syntax=FULLSENSE
+ |required=200 mana
+ |target=
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Scouring the surroundings with your well-honed senses, both physical and mental, you may detect the presences of all adventurers within the local area.
+}}
+
+{{Skill_detail
+ |skill=Perfection
+ |description=Alone against the horde.
+ |lessons=
+ |syntax=SHIN PERFECTION
+ |required=40 Shin energy
+ |target=Self
+ |cooldown=
+ |detail=By enhancing your battle instincts with shin energy, they can become asclose to perfect as a mortal warrior can aspire to. Though this is of little benefit when meeting foes in single combat, when facing armies all but your primary adversary(*) shall find that your sense of danger is so profound that any attacks they direct against your person may be evaded outright(**).<p>* The first person to hit you will never miss. This resets every 5 seconds if they have not hit in that time.</p><p>** All subsequent single target attacks from other adventurers have a chance to miss you outright. This does not work against ranged abilities, and you must be relatively unhindered for it to work.</p>
+}}
+
+{{Skill_detail
+ |skill=Phoenix
+ |description=Rebirth through cleansing flame.
+ |lessons=
+ |syntax=SHIN PHOENIX
+ |required=Shin Energy Required: 80<br>Shin Energy Consumed: All
+ |target=Self
+ |cooldown=
+ |detail=Kindling Shin energy into purifying flames, you may immolate yourself in a display of perfect mastery over both your body and the art of Shindo. Purified by fire, your form will be renewed, cleansed almost all ailments and afflictions. This feat requires and will consume a full reserve of Shin energy. 
+}}
+
+[[Category:Skills]][[Category:Edit needed]]

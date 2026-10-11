@@ -1,0 +1,281 @@
+With trained knowledge of the anatomies of many of the sentient races that walk Sapience comes the ability to exploit their physical vulnerabilities. Precise, unarmed strikes to pressure points and sensitive locations allow a master of Striking to leave a foe collapsed upon the ground, unable to breathe, or rigid with paralysis. Wielding the closed fist, spear hand, and open palm, a Blademaster may strike in tandem with many sword attacks.
+
+The skill of '''Striking''' is available to members of the [[Blademaster]] [[class]], along with [[Two Arts]] and [[Shindo]].
+
+==Abilities in Striking==
+{{Skill_detail
+ |skill=Constitution
+ |description=Maintaining your intestinal equilibrium.
+ |lessons=
+ |syntax=CONSTITUTION
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=This ability will gain you a stomach of steel.
+}}
+
+{{Skill_detail
+ |skill=Sternum
+ |description=A painful blow to the breastbone.
+ |lessons=
+ |syntax=STRIKE <target> STERNUM
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=2.50 seconds of balance
+ |detail=Inflict significant pain with a splintering strike to your target's breastbone, located at the centre of their ribcage.
+}}
+
+{{Skill_detail
+ |skill=Shoulder
+ |description=Induce a state of weariness in your target.
+ |lessons=
+ |syntax=STRIKE <target> SHOULDER
+ |required=
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=By harassing pressure points near an enemy's shoulder with a frontal strike, weaken important muscles and leave them weary.
+}}
+
+{{Skill_detail
+ |skill=Hands
+ |description=Send a numbing pain into your foe's hands.
+ |lessons=
+ |syntax=STRIKE <target> HANDS LEFT/RIGHT
+ |required=
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=By directing your strikes to your opponent's hands it will cause them to go numb briefly.
+}}
+
+{{Skill_detail
+ |skill=Fitness
+ |description=Control your breathing.
+ |lessons=
+ |syntax=FITNESS
+ |required=
+ |target=
+ |cooldown=3.00 seconds of balance
+ |detail=With the increased lung power you have gained from your bodily mastery, you are able to purge the effects of asthma.
+}}
+
+{{Skill_detail
+ |skill=Ears
+ |description=Turn your opponent into a clumsy fool.
+ |lessons=
+ |syntax=STRIKE <target> EARS
+ |required=
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=The inner ear helps to control one's balance. Box your victim's ears with twin open-handed blows to leave them clumsy and staggering.
+}}
+
+{{Skill_detail
+ |skill=Nose
+ |description=A disfiguring strike to turn even the most loyal.
+ |lessons=
+ |syntax=STRIKE <target> NOSE
+ |required=
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=Comprised of delicate cartilage, the nose is a vulnerable point. By smashing the organ with a swift strike, leave your victim unrecognisable to allies, and unable to command loyal minions.
+}}
+
+{{Skill_detail
+ |skill=Knees
+ |description=Send your target sprawling to the ground.
+ |lessons=
+ |syntax=STRIKE <target> KNEES
+ |required=
+ |target=Adventurers
+ |cooldown=3.25 seconds of balance
+ |detail=Manipulating your opponent's knee joint with a well-placed blade hand will reliably send them falling to the ground. If they are elevated by sitting upon a steed or similar, you'll instead be able to get a grip upon them and yank them from their mount.
+}}
+
+{{Skill_detail
+ |skill=Alleviate
+ |description=Cure yourself of pesky afflictions.
+ |lessons=
+ |syntax=ALLEVIATE
+ |required=75 mana
+ |target=
+ |cooldown=2.75 seconds of equilibrium
+ |detail=Detailed understanding of the body has therapeutic benefits. By actively stimulating relevant muscles and pressure points, you may heal yourself of an ailment.
+}}
+
+{{Skill_detail
+ |skill=Neck
+ |description=Cause your opponent's limbs to lock up.
+ |lessons=
+ |syntax=STRIKE <target> NECK
+ |required=
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=Clustered nerves in the neck leave a target vulnerable to lasting paralysis if struck with precision.
+}}
+
+{{Skill_detail
+ |skill=Kidney
+ |description=Impede your foe's ability to process elixirs
+ |lessons=
+ |syntax=STRIKE <target> KIDNEYS
+ |required=
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=A blow to the kidneys will impede your foe's ability to process elixirs, causing symptoms similar to addiction.
+}}
+
+{{Skill_detail
+ |skill=Eyes
+ |description=Force your enemy to witness madness.
+ |lessons=
+ |syntax=STRIKE <target> EYES
+ |required=
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=By rupturing blood vessels in a target's eyes, leave them blind and unable to trust what they see.
+}}
+
+{{Skill_detail
+ |skill=Airfist
+ |description=Channel Shindo into a blustering gale.
+ |lessons=
+ |syntax=AIRFIST <target>
+ |required=15 Shin energy
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=Through Shin mastery, channel the wind itself to scourge a foe, hindering their attempts to parry or guard blows.<br>** Shin energy is necessary to perform elemental strikes. Only one element may be channelled upon a foe at a time. 
+}}
+
+{{Skill_detail
+ |skill=Hamstring
+ |description=Cripple your target's movement.
+ |lessons=
+ |syntax=STRIKE <target> HAMSTRING
+ |required=
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=Crippling the hamstring muscles of a target's upper leg will greatly hinder their ability to walk for a short time.
+}}
+
+{{Skill_detail
+ |skill=Temple
+ |description=Send your foe into a stupor.
+ |lessons=
+ |syntax=STRIKE <target> TEMPLE
+ |required=
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=The head has many exploitable weak points. A strike to either temple, above and behind the eye, will rock the brain and dull your victim's mind, leaving them in a stupor.
+}}
+
+{{Skill_detail
+ |skill=Chin
+ |description=Envelop your opponent in a restful sleep.
+ |lessons=
+ |syntax=STRIKE <target> CHIN
+ |required=
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=Jolt an opponent's skull with a powerful, upwards blow to their chin, nudging them into a brief slumber.
+}}
+
+{{Skill_detail
+ |skill=Icefist
+ |description=Channel Shindo into an icy strike.
+ |lessons=
+ |syntax=ICEFIST <target>
+ |required=15 Shin energy
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=Through Shin mastery, channel the cold to encase a foe in a freezing rime of ice, rendering untouchable any magical tattoos they may bear.<br>** Shin energy is necessary to perform elemental strikes. Only one element may be channelled upon a foe at a time.
+}}
+
+{{Skill_detail
+ |skill=Flamefist
+ |description=Channel Shindo into a fiery strike.
+ |lessons=
+ |syntax=FLAMEFIST <target>
+ |required=15 Shin energy
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=Through Shin mastery, channel fire to engulf a victim in a cloak of flames that will scorch away any impending anti-weapon aura of rebounding. Such conflagrating will, however, cauterise the wounds of the target, resulting in them bleeding somewhat less for the duration.<br>** Shin energy is necessary to perform elemental strikes. Only one element may be channelled upon a foe at a time.
+}}
+
+{{Skill_detail
+ |skill=Voidfist
+ |description=Channel Shindo into a powerful vortex.
+ |lessons=
+ |syntax=VOIDFIST <target>
+ |required=15 Shin energy
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=Through Shin mastery, channel the very emptiness of the void upon a target, enabling each of your future strikes to be enhanced with the draining power of the void. When striking a voidfisted opponent, their very mind shall be sapped, and they shall lose mana.<br>** Shin energy is necessary to perform elemental strikes. Only one element may be channelled upon a foe at a time.<br>Note: Shin generation is halved when striking a voidfisted opponent.
+}}
+
+{{Skill_detail
+ |skill=Groin
+ |description=Instil a sense of heroism into your target.
+ |lessons=
+ |syntax=STRIKE <target> GROIN
+ |required=
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=A vulnerable point for both males and females, the groin, when struck, may cause a foe to block out the overwhelming pain endured, wilfully ignoring any further damage to their body.
+}}
+
+{{Skill_detail
+ |skill=Chest
+ |description=Afflict your enemy with constant affliction.
+ |lessons=
+ |syntax=STRIKE <target> CHEST
+ |required=
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=This combination of strikes to pressure points upon the chest of your victim will induce a variety of painful sensations upon them, mimicking the ongoing symptoms of numerous other ailments.
+}}
+
+{{Skill_detail
+ |skill=Throat
+ |description=Remove your foe's ability to breathe.
+ |lessons=
+ |syntax=STRIKE <target> THROAT
+ |required=
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=A blow to the vulnerable throat of an enemy will leave them gasping and unable to breathe.
+}}
+
+{{Skill_detail
+ |skill=Stomach
+ |description=Imbue a loss of desire to eat.
+ |lessons=
+ |syntax=STRIKE <target> STOMACH
+ |required=
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=A precise strike to the stomach will cause muscles to spasm, leaving your winded target unwilling to eat and unable to digest.
+}}
+
+{{Skill_detail
+ |skill=Underarm
+ |description=Force them to secrete a slick sweat.
+ |lessons=
+ |syntax=STRIKE <target> UNDERARM
+ |required=
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=By assaulting the sensitive armpit of a foe, you may stimulate their sweat glands, causing an unnaturally profuse degree of perspiration.
+}}
+
+{{Skill_detail
+ |skill=Deathstrike
+ |description=Unleash the fury of your martial prowess.
+ |lessons=
+ |syntax=DEATHSTRIKE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=With absolute knowledge of your victim's anatomy, unleashing a fatal combination of strikes to vulnerable points is but a matter of timing.
+}}
+
+[[Category:Skills]][[Category:Edit needed]]

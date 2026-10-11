@@ -74,9 +74,9 @@ CLASS-SPECIFIC LOCK AFFLICTIONS:
     Blademaster, Druid, Infernal, Monk, Paladin,  | weariness     | vernalius
     Runewarden, Sentinel                          |               |
     Apostate, Pariah, Bard, Priest                | voyria        | voyria
-    Magi, Sylvan                                  | haemophilia   | eurypteria
+    Magi, Sylvan                                  | haemophilia   | (no weapon venom: notechis cannot envenom a weapon; INVEST TORTURE)
     Alchemist                                     | stupidity     | aconite
-    Depthswalker                                  | recklessness  | sumac
+    Depthswalker                                  | recklessness  | eurypteria
     Psion                                         | confusion     | aconite_ash
     Jester, Occultist, Shaman                     | paralysis     | curare
 
@@ -139,16 +139,11 @@ infernalGroupLock.state = {
     lastLockLevel = nil,  -- Track lock level changes for debug output
 }
 
--- Venom mapping for class-specific lock afflictions
-infernalGroupLock.lockVenomMap = {
-    weariness = "vernalius",
-    voyria = "voyria",
-    haemophilia = "eurypteria",
-    stupidity = "aconite",
-    recklessness = "sumac",
-    confusion = "aconite_ash",
-    paralysis = "curare",
-}
+-- (infernalGroupLock.lockVenomMap was removed 2026-10-11: nothing read it -- getClassLockAff asks
+-- getLockingAffliction -- and two entries were wrong against the wiki's Venom (Skill) page:
+-- recklessness = "sumac" (sumac only does damage; recklessness is eurypteria) and
+-- haemophilia = "eurypteria" (that gives recklessness; notechis gives haemophilia but cannot
+-- envenom a weapon). An unused wrong table is an invitation to start using it.)
 
 -------------------------------------------------------------------------------
 -- AFFLICTION TRACKING HELPER

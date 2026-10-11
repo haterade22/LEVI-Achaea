@@ -1,0 +1,301 @@
+Gifted with the power to pierce the layers of reality and commune with the Spirit Realm, members of the Shaman class have access to wells of power thought long-lost.
+
+Upon entering a trance, practitioners of Spiritlore may bind the spirits of one or more ancient spirits to them, augmenting the Shaman's already impressive arsenal of abilities with new features. Additionally, one may choose to further attune oneself with a particular spirit and unlock even greater powers. The most skilled practitioners are even rumoured to be able to attune themselves with multiple spirits, or even of being able to sever their spirit from their body and traverse incorporeally.
+
+The skill of '''Spiritlore''' is available to members of the [[Shaman]] [[class]], along with [[Curses]] and [[Vodun]].
+
+==Abilities in Spiritlore==
+{{Skill_detail
+ |skill=Commune
+ |description=Commune with the spirits.
+ |lessons=
+ |syntax=COMMUNE<br>SPIRIT BIND <spirit><br>SPIRIT ATTUNE <spirit><br>SPIRIT UNBIND <spirit>{{!}}ALL<br>SPIRIT UNATTUNE <spirit><br>SPIRIT BINDINGS
+ |required=Bind: 200 mana
+ |target=
+ |cooldown=Attune: 4.00 seconds of balance<br>Unattune: 2.00 seconds of balance<br>Unbind: 2.00 seconds of balance<br>Unbind all: 2.20 seconds of balance
+ |detail=By communing with a spirit, you may bind it to yourself. This will grant you some of the powers that that particular spirit possessed during its life. You may bind up to five spirits at once.<p>You may also attune yourself completely to a spirit. This will grant additional benefits, although you may only attune two spirits at a time. Once you have mastered the spiritual arts in their entirety, you may attune three spirits at a time.</p><p>Communing requires a ritual drum, which can be purchased from most general stores around Sapience.</p>
+}}
+
+{{Skill_detail
+ |skill=Daina
+ |description=Daina, The Viridian.
+ |lessons=
+ |syntax=INVOKE PURIFICATION
+ |required=200 mana
+ |target=
+ |attune=Increased willpower regeneration.
+ |cooldown=3.00 seconds of balance
+ |detail=By channeling the power of nature, you are able to drive diseases from your body with greatly increased efficiency.
+}}
+
+{{Skill_detail
+ |skill=Jhulian
+ |description=Jhulian, The Nomad.
+ |lessons=
+ |syntax=INVOKE WAYFARE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=5.00 seconds of balance
+ |attune=An increased capability to dodge attacks.
+ |detail=The spirit of Jhulian, The Nomad will allow you to travel to a mutual ally, given a short delay.
+}}
+
+{{Skill_detail
+ |skill=Arius
+ |description=Arius, The Druid
+ |lessons=
+ |syntax=INVOKE ROAR <target>
+ |required=100 mana
+ |target=Adventurers and denizens
+ |cooldown=3.00 seconds of balance
+ |attune=Increased mana regeneration.
+ |detail=Once you have bound the spirit of Arius, The Druid, you will be able to channel the mighty power of the hydra to unleash a terrible roar at your opponent, disrupting their mental equilibrium.<p>When targeted against denizens, it will do damage and cost equilibrium rather than balance.</p>
+}}
+
+{{Skill_detail
+ |skill=Silvanix
+ |description=Silvanix, The Fool.
+ |lessons=
+ |syntax=INVOKE ARROWCATCHING ON|OFF
+ |required=Mana drain
+ |target=Self
+ |cooldown=2.00 seconds of balance
+ |attune=The tumble ability will have a reduced balance.
+ |detail=The skilled jester has deft wits and defter hands, and Silvanix was no exception. By binding his spirit, you will be able to snatch arrows from the very air.
+}}
+
+{{Skill_detail
+ |skill=Ri'shen
+ |description=Ri'shen, The Master.
+ |lessons=
+ |syntax=INVOKE REGENERATION
+ |required=300 mana
+ |target=Self
+ |cooldown=3.50 seconds of balance
+ |attune=Increased health regeneration.
+ |detail=One who has mastered the practices of kaido is able to restore their body from almost any injury. While the power granted to you through the connection with Ri'Shen is not to that level, it will allow you to perform lesser feats of regeneration.
+}}
+
+{{Skill_detail
+ |skill=Maligus
+ |description=Maligus, The Cleric.
+ |lessons=
+ |syntax=INVOKE SOULREND <target><br>CURSE <target> <affliction> INVOKE SOULREND
+ |required=Invoke: 50 mana<br>Curse: Invoke mana cost + curse mana cost.
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |attune=Curses will drain a small amount of health and mana from the target.
+ |detail=The practitioners of Apostasy have long been feared for their mastery of unholy powers, and Maligus in life was no exception. Upon binding his spirit, you will gain the ability to forceably attune a vodun doll to the soul of an unfortunate subject, improving its detail potentially far quicker than would normally be possible. This ability will be more effective against those who lack mental fortitude. Additionally, various afflictions, listed from most impactful to least, improve the power of a soulrend if the victim suffers from them: manaleech, confusion, shyness, paranoia, dementia.<p>This ability can be combined with curses.</p>* The rend takes place before the affliction is delivered from a curse, so cursing manaleech and soulrending at once will not work.<br>** Note that with the exception of manaleech, if these modifier afflictions are masked they are 33% less impactful.</br>
+}}
+
+{{Skill_detail
+ |skill=Aspar
+ |description=Aspar, The Iron Handed.
+ |lessons=
+ |syntax=INVOKE COAGULATION <target> <affliction><br>CURSE <target> <affliction> INVOKE COAGULATION <affliction>
+ |required=20 mana
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |attune=Increased resistance to asphyxiation damage.
+ |detail=Alchemists know more about how to turn a body against itself than perhaps anyone else in Sapience. In life, Aspar was most feared for his ability to manipulate the sanguine humours of his enemies.<p>By binding his spirit, you will be able to infect open wounds with disease, forcing the blood to clot but doing far more harm than good. Diseases which may be inflicted in this way are impatience, paralysis, asthma, slickness, anorexia, weariness, lethargy, and clumsiness.<p>This ability is combinable with curses.</p>
+}}
+
+{{Skill_detail
+ |skill=Aelkesh
+ |description=Aelkesh, The Faceless.
+ |lessons=
+ |syntax=INVOKE PROJECTION
+ |required=1000 mana
+ |target=
+ |cooldown=2.50 seconds of balance
+ |attune=A chance for swiftcurse charges not to be consumed when hunting denizens. It shall also reduce the willpower cost of the bleed curse against denizens.
+ |detail=Aelkesh was an Occultist who lived during the period of heightened strife with the Church. He developed an ability to allow him to travel great distances to facilitate his escape in the event of danger, and while binding his spirit will not grant such mastery, it will allow you to fling yourself out of potentially fatal situations. Be warned, however it is far from accurate.
+}}
+
+{{Skill_detail
+ |skill=Teraile
+ |description=Teraile, The Swordsman.
+ |lessons=
+ |syntax=INVOKE BLOODLET <target>
+ |required=20 mana
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |attune=Curses will inflict bleeding.
+ |detail=The skill of the practitioners of the legendary Two Arts can not be overstated. By binding the spirit of one of the long dead masters of this art, you will be able to lacerate the flesh of your enemies.<p>This ability will cause the victim to gain the haemophilia affliction, there by removing their ability to clot their wounds. If your victim already has haemophilia, they will suffer bleeding.</p><p>This ability may be combined with curses.</p>
+}}
+
+{{Skill_detail
+ |skill=Arcanor
+ |description=Arcanor, The Sorcerer.
+ |lessons=
+ |syntax=INVOKE ICEFORT
+ |required=400 mana
+ |target=Room
+ |cooldown=5.00 seconds of balance
+ |attune=Increased elemental damage resistance.
+ |detail=To fight on your terms as a mage is the first step toward victory. By binding the spirit of Arcanor, you will be able to invoke his power to summon great walls of ice to block the escape of all those who would flee from your wrath.
+}}
+
+{{Skill_detail
+ |skill=Syvis
+ |description=Syvis, The Venomous.
+ |lessons=
+ |syntax=CURSE <target> <affliction> INVOKE RELAPSE <affliction>
+ |required=20 mana
+ |target=
+ |cooldown=2.20 seconds of balance
+ |attune=Resistance to poison damage.
+ |detail=The masters of venom have long been feared for their deception and cunning when it comes to the elimination of those that would cross them. By binding the spirit of this ancient assassin, you will be capable of causing diseases that your victim believes they have cured to relapse shortly there after. Be warned, you are no true master of the art. You may only perform this ability every so often.<p>This ability must be combined with curses.</p>
+}}
+
+{{Skill_detail
+ |skill=Marak
+ |description=Marak, The Eviscerator.
+ |lessons=
+ |syntax=CURSE <target> <affliction> INVOKE SOULSCOURGE <ability>
+ |required=300 mana
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |attune=Increased constitution.
+ |detail=This ability will allow you to destroy a vodun doll to balancelessly activate one of the following vodun-based abilities on the target: confusion, dizzy, sleep, bind, paralyse, break, throttle, reckless, bleed, cripple, mangle, imbibe. The doll must be fashioned to twice the extent that the ability used would normally require. This ability must be comboed with curses.
+}}
+
+{{Skill_detail
+ |skill=Anthius
+ |description=Anthius, The Crusader.
+ |lessons=
+ |syntax=INVOKE JUDGEMENT <target> <direction>
+ |required=150 mana
+ |target=Adventurers
+ |cooldown=3.50 seconds of balance
+ |attune=Immunity to the fear affliction.
+ |detail=Anthius was one of the faithful Templars who sought out and eliminated those that would corrupt the sanctity of Creation. By channeling this spirit, you are able to unleash holy judgement at a heretic in an adjacent location. The spectral fires will scythe past magical defences, and will not be denied.
+}}
+
+{{Skill_detail
+ |skill=Garon
+ |description=Garon, The Knight.
+ |lessons=
+ |syntax=CARVE totem<br>IMPLANT <totem><br>UPROOT <totem><br>DRAW CIRCLE of <PAIN{{!}}BINDING><br>SMUDGE TOTEM<br>SMUDGE TOTEM SLOT <1-6><br>SMUDGE CIRCLE SURROUNDING <totem><br>EMPOWER TOTEM<br>TUNE <totem> ENEMIES/NONALLIES  (personal totems)<br>TUNE <totem> ENEMIES/NONMEMBERS (organisational totems)
+ |required=
+ |target=
+ |cooldown=Carve: 2.00 seconds of balance<br>Smudge: 4.00 seconds of balance upon initiation and completion
+ |attune=Increased physical damage resistance
+ |detail=While this spirit gives you sufficient knowledge to craft magical totems, you lack the knowledge required to etch them with runes of power. To this end, a different medium is required.<p>To carve a totem, you will require 20 wood, 10 leather, and 2 silver commodities. Once you have obtained and implanted one into the ground, you may draw either a circle of binding or pain about its base. When an unfortunate enemy looks upon the totem empowered by such a circle, he shall find himself either bound in place or struck down by great pain, dependent on which circle has been drawn.</p><p>Drawing a circle requires two black inks.</p>
+}}
+
+{{Skill_detail
+ |skill=Designate
+ |description=Designate the owners of your tribal totems.
+ |lessons=
+ |syntax=DESIGNATE <person> AS OWNER OF <totem><br>DESIGNATE ORDER OF <deity> AS OWNER OF <totem><br>DESIGNATE <organisation> AS OWNER OF <totem><br>CLAIM <totem><br>REJECT <totem>
+ |required=
+ |target=
+ |cooldown=3.00 seconds of balance
+ |detail=With this ability you may designate an owner for a specific totem. Only the crafter of the totem may use this ability. The totem remains owned by the crafter until the designated owner (or a member of the designated owner organisation) CLAIMs the totem. If the totem is claimed, then the designated owner becomes the true owner. If the totem is rejected, then the crafter remains the owner. At that point the crafter may attempt another designation as desired. Houses, Cities, Orders, Oakstone, and ndividuals may own totems - clans may not.<p>When you designate a totem, its tuning is automatically set against the enemies of the new owner.</p>
+}}
+
+{{Skill_detail
+ |skill=Tarnel
+ |description=Tarnel, The Walker.
+ |lessons=
+ |syntax=INVOKE SNARE <target>
+ |required=10 mana
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |attune=You may move more rooms at once.
+ |detail=The walkers of the forest know the value in snaring an unsuspecting victim. The prey that doesn't see the trap coming has its throat cut first.<p>At the chance of breaking your bond with Tarnel, The Walker, you may bind an enemy. This invokation is very fast.</p>
+}}
+
+{{Skill_detail
+ |skill=Kosuira
+ |description=Kosuira, The Child Sorceress
+ |lessons=
+ |syntax=INVOKE GLACIATION
+ |required=
+ |target=Room
+ |cooldown=
+ |attune=Increased resistance against psychic damage.
+ |detail=A protege in the art of Terminus, Kosuira learned much more of the art than any modern day Depthswalker. Though much of this knowledge is now out of reach, by tapping into her spirit you may bring down an invocation, freezing the ground in your location and doing similarly for all adjacent locations. 
+}}
+
+{{Skill_detail
+ |skill=Enkindle
+ |description=For the most desperate of times.
+ |lessons=
+ |syntax=SPIRIT ENKINDLE<br>SPIRIT SLACKEN <spirit><br>SPIRIT SLACKEN SOLIDIFY <spirit></br>
+ |required=500 mana and 200 willpower
+ |target=
+ |cooldown=3.60 seconds of equilibrium
+ |detail=The master practitioner can learn to slacken bonds to the point of breaking while in communion, and yet in a time of need draw them all back to full potence for a brief time, though with dire consequences.<p>* Slackening a bond puts it into a dormant status, it keeps its attunement. You cannot have a slackened and active bond with the same spirit.<br>* You can have as many slackened bonds as you can have active bonds and these limits do not impact one another, so you can have five active and five slackened for instance.<br>* When you enkindle, all active bonds are severed and all slackened bonds are made active. After five minutes all bonds will be broken and you will be unable to commune for a further five minutes.
+}}
+
+{{Skill_detail
+ |skill=Arayan
+ |description=Arayan, The Healer.
+ |lessons=
+ |syntax=INVOKE RESURRECTION <target>
+ |required=1000 mana
+ |target=Adventurers
+ |cooldown=4.00 seconds of balance
+ |attune=Curses shall restore a small amount of health and mana.
+ |detail=The power of priests to heal their fortunate allies is legendary.<p>Though you shall require a focus in the form of a vodun doll fashioned to at least 50 times, you will be able to channel this power. By destroying the doll in its entirety, you may drag your comrade back from the very state of death itself, restoring him or her to a physical body.</p>
+}}
+
+{{Skill_detail
+ |skill=Tether
+ |description=Desperate times lead to temporary measures.
+ |lessons=
+ |syntax=SPIRIT TETHER <spirit><br>SPIRIT UNTETHER [SPIRIT]<br>SPIRIT TETHER SOLIDIFY
+ |required=
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=For those times when a traditional communion may not be possible, the able practitioner will find himself able to form a makeshift bond with one of the spirits.<p>Tethering is inferior to binding; it will not permit attunement of said spirit and it will break after a single use of the related spirit's power, but it may be performed outside of any trance.</p><p>You may also solidify a tether, transforming it into a full binding; though the mental equilibrium cost of doing so is substantial.</p>
+}}
+
+{{Skill_detail
+ |skill=Spiritwalk
+ |description=Walk free of the confines of mortal flesh.
+ |lessons=
+ |syntax=SPIRITWALK<br>RETURN
+ |required=1000 mana
+ |target=
+ |cooldown=Spiritwalk: 4.50 seconds of equilibrium<br>Return: 5.00 seconds of equilibrium
+ |detail=This greatest of the spiritual arts allows you to leave your body and walk as a spirit about the land. The further from your body you stray, the faster your willpower shall drain. If you run out of willpower, your spiritual form shall fade and your body will die.<p>Be further warned. Leaving your body alone is a terribly dangerous affair. If an enemy were to stumble upon it, they would be able to destroy it, and any hope you have of returning to a physical form.</p>
+}}
+
+{{Skill_detail
+ |skill=Khentimen
+ |description=If you dare.
+ |lessons=1704
+ |syntax=SPIRIT BIND Khentimen
+ |required=
+ |target=
+ |cooldown=3.80 seconds of equilibrium
+ |detail=Long have shamans been cautioned against reaching out to those damned souls who practice that art most maligned.<p>* Performing this ability shall create a mirage style effect upon the location. See AB CHARNEL MIRAGE for full details - the mechanics are identical.<br>** Note that no higher communion is necessary to attempt this most foolish of undertakings. After all. It won't help.</p>
+}}
+
+{{Skill_detail
+ |skill=Mastery
+ |description=Mastery of the spiritual arts.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=Now that you have mastered the spiritual arts in their entirety, you will be able to attune up to three spirits at a time.
+}}
+
+{{Skill_detail
+ |skill=Adchachel
+ |description=Demiurge Adchachel, The Rose of Pain
+ |lessons=
+ |syntax=INVOKE BLASPHEMY
+ |required=
+ |target=
+ |cooldown=
+ |attune=Halves the willpower drain while spiritwalking.
+ |detail=Demiurge Adchachel was one of the key leaders in the battle of the deeps during the Black Wave. Having consumed the heart of Agith'maal, the Tsol'teth's insidious remnant twisted and consumed him, changing the charismatic Black Lotus of Mystery into something not remotely resembling that which came before. Going on to sire many children, the Rose Of Pain can trace his line all the way to the hand that destroyed great Seleucar, his black influence stretching down the centuries long after he was immolated in the purging flames that ended his reign of terror.<p>By channeling this fell spirit, you may corrupt even the most sacred of locations, destroying a random holy rite that protects a room. If the presence of a practitioner of the holy art Devotion stands in said location, their pure influence shall cause this process to take some time.</p>
+}}
+
+[[Category:Skills]]

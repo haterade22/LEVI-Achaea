@@ -1,0 +1,339 @@
+Despite its similarities with the [[Sagas]] of lowland [[Bards]], the skill of '''Woe''' is a singular, epic saga of uttermost dread. Taking upon themselves the burden of [[Pazuzu|Black Pazuzu's]] many sins, the Bards of [[Cyrene]] bear witness to the full, terrible scope of dark deeds done across millennia beyond counting.
+
+Yet though the light may grow dim and the night yet grow long, it is that lone mountain city among [[Sapience]]'s storytellers who are not afeared to tell the tale of [[Achaea]]'s most ancient evil.
+
+For citizens of Cyrene, the skill of Woe replaces the [[Sagas]] of the rest of Sapience's Bards. 
+
+==Abilities in Woe==
+
+{{Skill_detail
+ |skill=Condemned
+ |description=The coldest dish so served.
+ |lessons=
+ |syntax=RECITE CONDEMNED
+ |required=
+ |target=
+ |cooldown=16.00 seconds of voice balance and 2.00 seconds of equilibrium
+ |detail=The tale of the Condemneds vengeance is one long in the making and more tragic still for the fact that he may yet have stayed his hand if not
+for a single dismissive word. Yet there is no doubt that come the time of choice [[Han-Silnar]] slew the Wanderer in defiance of those that hold his chains: in this, he would not be commanded otherwise.<p>* Cyrenians that hear this tale shall be granted the steelmind defence, making the next forced action against them fail.</p>
+}}
+
+{{Skill_detail
+ |skill=Recite
+ |description=Listen now of the Prince most dread.
+ |lessons=1
+ |syntax=RECITE <saga of woe> [arguments]
+ |required=
+ |target=
+ |cooldown=
+ |detail=It is said that the weight of a life's sin is commensurate with their evil. If such is the case, then Black Pazuzu's evil is a burden to be borne by a City and its Peoples from now unto distant futures unknown.
+
+And so when you recite the tales of [[Pazuzu|Black Pazuzu, Prince of Woe]] and self-proclaimed New God, it is the weight of Remembrance that you will bear: both ancient transference and sacred charge. This is his story, but you are not afeared.
+}}
+
+{{Skill_detail
+ |skill=[[Inferno]]
+ |description=Of an origin most malign.
+ |lessons=23
+ |syntax=RECITE INFERNO
+ |required=
+ |target=
+ |cooldown=16.00 seconds of voice balance and 2.00 seconds of equilibrium
+ |detail=It began, as it so often does, with fire. Speak the tale of the birthplace of Woe and the landscape shall become most hellish in its turn(*).
+
+* Firewalls will be raised over all available exits of your location.
+}}
+
+{{Skill_detail
+ |skill=[[Chaos Wars|Chaoswars]]
+ |description=So let us speak of ambitions great.
+ |lessons=45
+ |syntax=RECITE CHAOSWARS
+ |required=
+ |target=
+ |cooldown=16.00 seconds of voice balance and 2.00 seconds of equilibrium
+ |detail=From aeons long ago when the first war was waged comes this story of alliances and betrayals. When you speak this tale, all who are present at the culmination shall find that for a time they will be unable to change those they consider ally or enemy by any means.
+}}
+
+{{Skill_detail
+ |skill=[[Nishnatoba]]
+ |description=The end of the beginning.
+ |lessons=112
+ |syntax=RECITE NISHNATOBA
+ |required=
+ |target=
+ |cooldown=17.00 seconds of voice balance and 2.50 seconds of equilibrium
+ |detail=The tale of the great battle upon Nishnatoba is one foundational to history, as is the last charge that came at its grand culmination. Speak this tale and all of your citymates that are members of the standing army in your location will rally behind you(*), ready to charge into battle.
+
+* They will be added to your group.
+}}
+
+{{Skill_detail
+ |skill=[[Enheduanna]]
+ |description=Weep for what was lost.
+ |lessons=156
+ |syntax=RECITE ENHEDUANNA
+ |required=
+ |target=
+ |cooldown=16.00 seconds of voice balance
+ |detail=The tragic tale of Enheduanna is one of sorrow and betrayal, love and hatred, and terrible, terrible wrath. At the culmination of this tale all in your location that hear you, ally or enemy, will be suffused with a fragment of that terrible fury, all of their actions becoming enhanced(*).
+
+* Balance and equilibrium time is reduced while present in the room where this tale was spoken for those that heard it, though not for long.
+* This tale may only be spoken once every five minutes.
+}}
+
+{{Skill_detail
+ |skill=[[Tribunal]]
+ |description=For Justice must be served.
+ |lessons=245
+ |syntax=RECITE TRIBUNAL
+ |required=
+ |target=
+ |cooldown=16.00 seconds of voice balance and 3.50 seconds of equilibrium
+ |detail=Justice must be served, and this solemn retelling will speak of the first justice that was wrought. On completing it, you will see of the justice which must be served in the present day(*).
+
+* It will reveal the locations of all of those in the realm who Cyrene has a bounty placed upon.
+}}
+
+{{Skill_detail
+ |skill=[[Seleucar]]
+ |description=Of darkness roused from maddened depths.
+ |lessons=312
+ |syntax=RECITE SELEUCAR
+ |required=
+ |target=
+ |cooldown=16.00 seconds of voice balance and 2.00 seconds of equilibrium
+ |detail=The might of once great Seleucar was a thing that broke the first Black Wave, or at least such was the great design. By speaking this foretelling, you and all allies that hear the grand culmination shall be suffused with a portion of that might temporarily, gaining a bonus when fighting particularly mighty foes(**).
+
+* All allies and Cyrenians in your location.
+* While enhanced in this way your attacks will do more damage against denizens who cannot be struck with critical strikes.
+}}
+
+{{Skill_detail
+ |skill=[[Taug]]
+ |description=A doom on [[Gruul|Gruul's]] line.
+ |lessons=378
+ |syntax=RECITE TAUG
+ |required=
+ |target=
+ |cooldown=19.00 seconds of voice balance and 3.00 seconds of equilibrium
+ |detail=Bound, but never broken. Imprisoned, but yet imperious. The tale of that guise named Taug is one which doomed the line of Gruul and broke a nation even in their triumph. Speak this tale most grim and the blood rains will fall, and all will remember the horror of the king without a crown.
+
+* Blood rain in a location prevents magical travel into that location.
+}}
+
+{{Skill_detail
+ |skill=[[Danaeus|Savant]]
+ |description=Of vengeance in the making.
+ |lessons=467
+ |syntax=RECITE SAVANT
+ |required=
+ |target=
+ |cooldown=18.00 seconds of voice balance and 3.00 seconds of equilibrium
+ |detail=The tale of the traitor Danaeus begins with a mortal life and ends with the ascension of a [[Chaos Lord]]. Through fell magics, the once-companion of the wizard [[Hycanthus]] despaired of a finite existence and chose the path of blood and betrayal, turning on one master, then another, and then another. All that hear this tale will know a vengeance yet unfilled, and long in the making.
+
+* Gives the vengeance defence to all in the location.
+}}
+
+{{Skill_detail
+ |skill=[[Chaos Lord|Chaoslords]]
+ |description=Of uplifting and twisted rule.
+ |lessons=534
+ |syntax=RECITE CHAOSLORDS
+ |required=
+ |target=
+ |cooldown= 16.00 seconds of voice balance and 3.00 seconds of equilibrium
+ |detail=When the Chaos Lords first arose and those in power shifted by the day, so too did their vulnerabilities change seemingly at random. At the culmination of this tale, a field of damage absorption shall be created, periodically changing to make a given damage type utterly negated in your location(*).
+
+* The shifting cannot be controlled.
+}}
+
+{{Skill_detail
+ |skill=[[Tiamenjiara]]
+ |description=Of lies and deeds most dire.
+ |lessons=635
+ |syntax=RECITE TIAMENJIARA
+ |required=
+ |target=
+ |cooldown=16.00 seconds of voice balance and 2.50 seconds of equilibrium
+ |detail=When the elemental balance was cast into disarray and long bound [[Taug]] was unleashed from a prison ancient in the making, it was a time of great strife. Listen now and hear of how it transpired, and, at the culmination, witness the elements once more be broken at least in part(*).
+
+* A random [[Elemental Lords|elemental lord]] in the location will be forced out of their form.
+}}
+
+{{Skill_detail
+ |skill=[[Sh'fah]]
+ |description=An ancient foe cast down.
+ |lessons=807
+ |syntax=RECITE SH'FAH
+ |required=
+ |target=
+ |cooldown=16.00 seconds of voice balance and 2.50 seconds of equilibrium
+ |detail=The story of the crystal legion that fell prey to [[Pazuzu]] unchained after so long guarding his prison is one often overlooked, but for those who comprehend the great task these warriors were appointed to, it is one that can only give them over to reflection(*).
+
+* Grants everyone in the location a reflection.
+}}
+
+{{Skill_detail
+ |skill=Infamy
+ |description=A silver tongue to topple empires.
+ |lessons=911
+ |syntax=GOSSIP SPREAD <gossip>
+GOSSIP LISTEN
+ |required=
+ |target=
+ |cooldown=5.00 seconds of balance
+ |detail=The silver tongue of Woe's Prince was as infamous as any of his fell deeds. With whispers and honey he brought kings to their knees and collapsed empires with a word, his argent web spun like a fattened spider. While you cannot quite match Pazuzu's level of charisma, you will find it easy to influence the general public(*) and insert your own gossip into the murmurs of the trifling masses.
+
+* Within inns and similar, generally.
+}}
+
+{{Skill_detail
+ |skill=[[Khalas]]
+ |description=For nothing of remorse was known.
+ |lessons=945
+ |syntax=RECITE KHALAS
+ |required=
+ |target=
+ |cooldown=20.00 seconds of voice balance and 4.00 seconds of equilibrium
+ |detail=The unleashing of Khalas from His imprisonment is a tale which came to herald much, but in and of itself, it is a tale of freedom. All that hear this tale, for a short time(*), will be immune to all forms of room hinder(**).
+
+* Five to ten seconds.
+* Such as rites of piety, gravehands, tentacles and similar.
+}}
+
+{{Skill_detail
+ |skill=Memory
+ |description=The lines of past and present thin.
+ |lessons=1083
+ |syntax=RECITE MEMORY
+ |required=
+ |target=
+ |cooldown=16.00 seconds of voice balance and 2.50 seconds of equilibrium
+ |detail=A tale of mustering for war, of plots most dire and the breath before a storm. Speak this tale and you will be transported to the [[Cyrene#Landmarks|Pantheon of the Gods]] for a mustering of your own, though only if close enough and unbarred by a monolith(*).
+
+* Same plane and continent, and not on a ship.
+}}
+
+{{Skill_detail
+ |skill=[[Thoth]]
+ |description=Of Death alive but not.
+ |lessons=1187
+ |syntax=RECITE THOTH
+ |required=
+ |target=
+ |cooldown=18.00 seconds of voice balance
+ |detail=There was a time, long after His demise, when Thoth once more walked and fought with those who would see Woe brought low. However, that which has gone beyond will soon fade once more, and this tale will make such manifest to all(*).
+
+* On the first tick with no necromancer present, gravehands are destroyed. On the second tick gravehands are destroyed even if a necromancer is present. On the third tick, infestation maggots are destroyed.
+* If a necromancer ([[Oppression]] users count as necromancers for the purposes of this ability) is present, this recital is a channeled action.
+}}
+
+{{Skill_detail
+ |skill=Duel
+ |description=A triumvirate new and broken.
+ |lessons=1256
+ |syntax=RECITE DUEL <target>
+ |required=
+ |target=
+ |cooldown=16.00 seconds of voice balance
+ |detail=There was a time when three gods went to face the Prince most Dread, and three gods failed to bring him low. Recite this tale to an individual(*), and both they and three of your citymates will benefit from an increased capacity for war for a time(**).
+
+* The target must not be Cyrenian, and three Cyrenians in your location except yourself must be present. Otherwise this reciting will fail.
+* They will have faster balance recovery for a time.
+}}
+
+{{Skill_detail
+ |skill=[[Slith]]
+ |description=Of friendship slain by duty.
+ |lessons=1394
+ |syntax=RECITE SLITH <target>
+ |required=
+ |target=
+ |cooldown=16.00 seconds of voice balance
+ |detail=A friendship broken. A trust sundered. A deal struck, and all in the name of duty.
+
+Speak the solemn tale of when Woe and Death's Demise parted ways forevermore, and see one perish as that ancient alliance did(*).<p>* This is a channeled action, at the culmination of which your target is slain.</p><p>** The channel resolves faster the more stacks of the crescendo affliction are present on the target when you begin the recital.</p>
+}}
+
+{{Skill_detail
+ |skill=Mortals
+ |description=United at the last.
+ |lessons=1532
+ |syntax=RECITE MORTALS
+ |required=
+ |target=
+ |cooldown=20.00 seconds of voice balance and 3.00 seconds of equilibrium
+ |detail=So now we speak of the closing days of the Age of Blackest Woe, and when mortals at last united as one to bring down the forces of the Infernal Prince. When reciting this tale, all Cyrenians in rooms adjacent to you that share allyship with you(*) or who are in your current party will be summoned to your side(**).
+
+* Mutual allies.
+* Rooms with a monolith when the recital begins are excluded. A monolith at recital culmination will have no influence, however.
+}}
+
+{{Skill_detail
+ |skill=Siege
+ |description=A city fallen and besieged.
+ |lessons=1600
+ |syntax=RECITE SIEGE
+ |required=
+ |target=
+ |cooldown=20.00 seconds of voice balance and 4.00 seconds of equilibrium
+ |detail=The siege upon [[Shallam]] lost was one of great heroism and loss, but also one of great triumphs and great mistakes. By reciting this tale, a sliver of the chaos that befell that great battlefield will be made known, and fire shall once more reign from the heavens(*).
+
+* A random room in the local area with people in it is chosen. Everyone in that room takes damage.
+* This is a channeled action.
+}}
+
+{{Skill_detail
+ |skill=March
+ |description=A prelude to the beginning and the end.
+ |lessons=
+ |syntax=passive
+ |required=
+ |target=
+ |cooldown=
+ |detail=The great march to memory was the prelude to the final clash with the Prince of Woe, and it if manifest not through tale but through reenactment. You may now tell many of the tales of Woe while on the march, though some particularly ominous ones still require the stillness of contemplation to be fully comprehended(*).<p>* Recitals are no longer interrupted by moving, though channeled recitals are excluded.</p>
+}}
+
+{{Skill_detail
+ |skill=Pantheon
+ |description=Divine wrath unleashed.
+ |lessons=1669
+ |syntax=RECITE PANTHEON
+ |required=
+ |target=
+ |cooldown=19.00 seconds of voice balance and 3.00 seconds of equilibrium
+ |detail=In all the long histories of the world have the Pantheon rarely marched to war united, and the resolve must be great indeed for such a dire event to transpire. Speak this tale of battle met and all who share a cause with you(*) will share in a fragment of that resolve, becoming numb to the ravages of war(**). This tale is a difficult one to tell, and you may only do so infrequently(***).
+
+* All Cyrenians in your location.
+* All affected will gain the numbness defence for twenty-five seconds.
+* This tale can only be recited once an hour.
+}}
+
+{{Skill_detail
+ |skill=Prologue
+ |description=Master the dramatic pause.
+ |lessons=
+ |syntax=RECITE PROLOGUE <saga>
+ |required=
+ |target=None
+ |cooldown=20.00 seconds of voice balance
+ |detail=Masters of storytelling gain the ability to delay the conclusion of a tale for dramatic effect.<p>Using this ability will recite another tale up to its culmination, at which point the completion will be delayed.<p>The tale may be completed for the next 5 minutes instantly at the cost of 3 seconds of balance. This will incur a cooldown of 5 minutes. No tall tales can be completed in this way.</p>
+}}
+
+{{Skill_detail
+ |skill=Funeral
+ |description=The tale to end all tales.
+ |lessons=1738
+ |syntax=RECITE FUNERAL
+ |required=
+ |target=
+ |cooldown=20.00 seconds of voice balance
+ |detail=All tales speak of dread Woe's final rest, yet with its speaking you may yet put another to theirs in turn. Recite this story over the corpse of a mighty denizen(*), and all within the location that have not participated in a funeral recently(**) will be bolstered(***).
+
+* The denizen must be one immune to critical strikes and of a sufficiently potent level. The corpse is destroyed.
+* You can only recite a funeral every 24 hours and participate in one every 24 hours.
+* Everyone in the audience receives some experience.
+}}
+
+[[category: skills]]

@@ -1,0 +1,241 @@
+Physiology is the study of the biological processes required for life. Alchemists trained in Physiology will find themselves able to utilise this knowledge in two primary ways:
+
+First, Alchemists may manipulate the humours, or vital fluids, of others in order to cause illnesses of varying degree, eventually gaining the power to slay another via spontaneous organ failure. Humourism, as this art is called, is based upon the tempering of another's body, aiming to increase his internal fluid level. An unrestricted Humourist is a force to be feared, but their effects may be countered by the ingestion of the ginger herb and antimony mineral.
+
+The second aspect of Physiology is the creation and control of homunculi. From within a properly equipped laboratory, the trained Alchemist may take a small sample of his own flesh, germinating it into a [[homunculus]]. Through the physiological and ethereal bond between Alchemist and homunculus, the diminutive creature may be controlled by its master, able to perform varied tasks from assaulting an opponent to being the eyes, ears, and mouth of its owner.
+
+The skill of '''Physiology''' is available to members of the [[Alchemist]] [[class]], along with [[Alchemy]] and [[Formulation]] or [[Sublimation]].
+
+==Abilities in Physiology==
+{{Skill_detail
+ |skill=Humourism
+ |description=Tinker with an enemy's vital fluids.
+ |lessons=
+ |syntax=TEMPER <target> <humour><br>EVALUATE <target> HUMOURS
+ |required=100 mana
+ |target=Adventurers
+ |cooldown=1.70 seconds of humour balance
+ |detail=The body is held in balance by four vital fluids, called humours. Humourism is the science of manipulating these humours via the ether to cause illness in another.<p>To raise a target's humours, you must TEMPER that humour. Humours can be reduced by the target eating the ginger herb or antimony mineral. The maximum number of times each of a person's humours may be tempered is eight.</p><p>Each time you TEMPER a humour it raises the level by 1. If the target is afflicted with afflictions related to that humour, this number may rise.</p><p>Each humour will cause the victim to be disadvantaged in some form. The penalties and related afflictions are as follows.<br>Choleric (yellow bile): Random curing abilities will have a chance of failing. (nausea, sensitivity, slickness)<br>Melancholic (black bile): Irid moss and potash will have a reduced healing benefit. (anorexia, impatience, stupidity)<br>Phlegmatic (phlegm): Smoking will have a chance of filling your lungs with phlegm, increasing your lungs recovery time. (asthma, clumsiness, weariness)<br>Sanguine (blood): Bleeding will increase over time. (haemophilia, recklessness, paralysis)</p><p>Only one humour may be tempered at once with this ability; training in Physiology will allow for more freedom in tempering multiple humours.</p><p>Evaluation of a target's humours can be done for free.</p>
+}}
+
+{{Skill_detail
+ |skill=Cultivation
+ |description=A homunculus will serve you faithfully.
+ |lessons=
+ |syntax=CULTIVATE NUCLEUS<br>GERMINATE NUCLEUS <prime><br>HOMUNCULUS FOLLOW<br>HOMUNCULUS RETURN<br>HOMUNCULUS ATTACK <target><br>HOMUNCULUS PACIFY<br>HOMUNCULUS <command> [args]
+ |required=
+ |target=Adventurers
+ |cooldown=Homunculus balance
+ |detail=You may CULTIVATE NUCLEUS, using a small amount of your own flesh to create a small mass of living tissue. This nucleus can then be germinated from anywhere, so long as you hold in your hands some alchemical salt, sulphur, or mercury, into a full-grown homunculus using GERMINATE NUCLEUS <prime>.<p>This homunculus, which is a small, imperfect copy of the alchemist who created it, may be controlled via the ethereal bindings between the creator and the created. Initial control is weak, but further training in Physiology will allow for more proficient control of your homunculus.</p><p>You may only have one homunculus alive at a time, and it will perish should you yourself die.</p><p>HOMUNCULUS FOLLOW will order your homunculus to follow you. If it is unable to follow you because it is in a different location, HOMUNCULUS RETURN will bring the homunculus back to you. You may also HOMUNCULUS ATTACK <target> to have your homunculus attack another, though its attacks will be weak without training in Physiology. Finally, HOMUNCULUS PACIFY will command your homunculus to cease its attacks.</p><p>Most homunculus abilities work on their own special balance, while requiring balance and equilibrium.</p>
+}}
+
+{{Skill_detail
+ |skill=Eyes
+ |description=See through the eyes of your homunculus.
+ |lessons=
+ |syntax=HOMUNCULUS LOOK<br>HOMUNCULUS EXITS
+ |required=
+ |target=Denizens
+ |cooldown=5.00 seconds of homunculus balance
+ |detail=Having gained the ability to control your homunculus's eyes, you may look into whatever room it stands so long as it is on the same continent as you. You may also specifically check for exits from its current room.
+}}
+
+{{Skill_detail
+ |skill=Legs
+ |description=Control your homunculus's legs from a distance.
+ |lessons=
+ |syntax=HOMUNCULUS MOVE <direction>
+ |required=
+ |target=
+ |cooldown=2.50 seconds of homunculus balance
+ |detail=So long as you and your homunculus stand within the same area, you may order your homunculus to move from room to room.
+}}
+
+{{Skill_detail
+ |skill=Wrack
+ |description=Afflict an opponent by assaulting the humours.
+ |lessons=
+ |syntax=WRACK <target> <humour{{!}}affliction>
+ |required=60 mana
+ |target=Adventurers and denizens
+ |cooldown=2.00 seconds of balance
+ |detail=By assaulting an opponent's humours, you can afflict upon them several common maladies. Each has several afflictions and a damage type associated with it, and any afflictions from wracking a humour will come only from this pool. When wracking, you may specify the affliction you wish to use, or you may allow the affliction to manifest at random at the cost of a slight delay in speed. It is possible to wrack an opponent's untempered humour, though this is done at a balance penalty and may be done only via specifying the affliction.<p>When used against denizens, wracking will deal damage with the type of damage determined by the chosen humour.<p>Wracking operates outside of humour balance, and may be used off-equilibrium immediately following a symbology ability when targeted against an adventurer.</p><p>The humours and their affliction pools are:<br>'''Choleric''': Nausea, sensitivity, slickness, (poison damage).<br>'''Melancholic''': stupidity, anorexia, impatience, (cold damage).<br>'''Phlegmatic''': clumsiness, weariness, asthma, (asphyxiation damage).<br>'''Sanguine''': Haemophilia, recklessness, paralysis, (magic damage).</p>
+}}
+
+{{Skill_detail
+ |skill=Arms
+ |description=Specialised attacks for your homunculus.
+ |lessons=
+ |syntax=HOMUNCULUS ATTACK <target><br>HOMUNCULUS ADMINISTER <prime>
+ |required=250 mana
+ |target=Adventurers
+ |cooldown=3.00 seconds of equilibrium
+ |detail=By mastering control of your homunculus's arms, you may now use your homunculus to more effectively attack your opponent. In addition to increased damage, your homunculus's damage type will change depending on the prime used to germinate it, and each prime will grant the attacks a special effect:<br>'''Salt''': Magic damage - Attacks will cause bleeding.<br>'''Sulphur''': Psychic damage - Attacks will drain mana.<br>'''Mercury''': Poison damage - extend the next herb balance of the target.<p>Note, however, that if your homunculus becomes separated from you, its attacks will revert to its original, weak attacks.</p><p>In addition, you may administer one of the primes with which your homunculus was not germinated in order to temporarily grant the effects of that prime. Note that attacks under the effects of administered primes will be less effective than those of its native type.</p>
+}}
+
+{{Skill_detail
+ |skill=Evaluate
+ |description=Discern the vitals of another.
+ |lessons=
+ |syntax=EVALUATE <target><br>EVALUATE <target> HUMOURS
+ |required=
+ |target=Adventurers
+ |cooldown=1.00 second of equilibrium
+ |detail=By evaluating your target, you may roughly discern his or her fluid level, humour states, health and mana.<p>Evaluating your target's humour states alone with EVALUATE <target> HUMOURS will not use any equilibrium.</p>
+}}
+
+{{Skill_detail
+ |skill=Ears
+ |description=Listen through your homunculus's ears.
+ |lessons=
+ |syntax=HOMUNCULUS LISTEN <ON{{!}}OFF>
+ |required=
+ |target=
+ |cooldown=3.00 seconds of homunculus balance
+ |detail=Having mastered control of your homunculus's auditory system, you may decide to listen to anything your homunculus hears.
+}}
+
+{{Skill_detail
+ |skill=Diffusion
+ |description=Manipulation of two humours at once.
+ |lessons=
+ |syntax=None (passive)
+ |required=
+ |target=
+ |cooldown=
+ |detail=You are now able to temper up to two humours on an opponent at one time.
+}}
+
+{{Skill_detail
+ |skill=Mouth
+ |description=Speak through the mouth of your homunculus.
+ |lessons=
+ |syntax=HOMUNCULUS SAY <text>
+ |required=
+ |target=
+ |cooldown=6.00 seconds of homunculus balance
+ |detail=You may use your homunculus's mouth to speak from afar.
+}}
+
+{{Skill_detail
+ |skill=Saturation
+ |description=Concurrent control over three humours.
+ |lessons=
+ |syntax=None (passive)
+ |required=
+ |target=
+ |cooldown=
+ |detail=You are now able to temper up to three humours on an opponent at one time.
+}}
+
+{{Skill_detail
+ |skill=Hands
+ |description=Your homunculus possesses dextrous fingers.
+ |lessons=
+ |syntax=HOMUNCULUS INV[ENTORY]<br>HOMUNCULUS GIVE <item> TO <person><br>HOMUNCULUS GET <item><br>HOMUNCULUS DROP <item>
+ |required=
+ |target=
+ |cooldown=6.00 seconds of homunculus balance
+ |detail=With control over your homunculus's hands, you may now manipulate items from afar. All commands require your homunculus to be in the same area as yourself, with the exception of looking in its inventory.<p>HOMUNCULUS INV[ENTORY] will show you what your homunculus is currently holding.</p><p>HOMUNCULUS GIVE <item> TO <person> allows to your homunculus to hand an item to another. The homunculus must be in the same room, on the same elevation, as the target, and the target may not be phased or similar.</p><p>HOMUNCULUS GET <item> will pick up an item from the ground. This can only be done if your homunculus is holding fewer than five items already, and is subject to the same restrictions as picking up an item yourself.</p><p>HOMUNCULUS DROP <item> will drop an item from your homunculus's inventory into its current room. This is subject to the same restrictions as dropping items yourself.</p>
+}}
+
+{{Skill_detail
+ |skill=Effusion
+ |description=Mastery of all four humours.
+ |lessons=
+ |syntax=None (passive)
+ |required=
+ |target=
+ |cooldown=
+ |detail=You are now able to temper all four humours on an opponent at one time.
+}}
+
+{{Skill_detail
+ |skill=Torso
+ |description=Your homunculus will prevent an enemy from escaping.
+ |lessons=
+ |syntax=None (passive)
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Your homunculus will now attempt to block whoever it is currently attacking from leaving the room, so long as you stand beside it.
+}}
+
+{{Skill_detail
+ |skill=Truewrack
+ |description=Wrack two humours simultaneously.
+ |lessons=
+ |syntax=TRUEWRACK <target> <humour{{!}}affliction> <humour{{!}}affliction>
+ |required=100 mana
+ |target=
+ |cooldown=2.80 seconds of balance
+ |detail=Your skill in physiology now allows you to wrack two humours at once. If you do not specify two afflictions, random ones will be picked from the relevant humour pools.<p>You can find the lists of relevant afflictions under AB PHYSIOLOGY WRACK.<br>Note: Paralysis may only be delivered once the sanguine humour has been sufficiently tempered (two times).</p>
+}}
+
+{{Skill_detail
+ |skill=Throat
+ |description=Your homunculus's screeching will startle an enemy.
+ |lessons=
+ |syntax=HOMUNCULUS SHRIEK <target>
+ |required=500 mana
+ |target=Adventurers
+ |cooldown=12.00 seconds of homunculus balance
+ |detail=By controlling your homunculus's throat, you may shriek loudly at an opponent, disrupting his or her concentration. This will knock your target off focus balance or increase the timer needed to regain focus balance, as appropriate.<p>You must be in the same room as your homunculus to use this ability.</p>
+}}
+
+{{Skill_detail
+ |skill=Cascade
+ |description=Failure upon failure.
+ |lessons=
+ |syntax= Append CASCADE to the end of appropriate attacks
+ |required=
+ |target=
+ |cooldown=
+ |detail=Your grasp over the humours of your subjects is now such that you may meld your mastery of physiology with your alchemical workings directly. Causing cascade failures requires a sufficiently prepared subject:<p>Vitrification: requires a target's sanguine humour has been tempered at least twice and brings it back into balance by one temper. However, you will perform the vitrification far more swiftly than normal.</p>
+}}
+
+{{Skill_detail
+ |skill=Inundate
+ |description=Attack an already imbalanced humour.
+ |lessons=
+ |syntax=INUNDATE <target> <humour>
+ |required=100 mana
+ |target=Adventurers
+ |cooldown=1.70 seconds of humour balance
+ |detail=By inundating an already tempered humour with additional fluid, you may cause an instant reaction in your opponent. This will cause all fluid to be drained from that humour. The more fluid drained, the greater the reaction.<p>The effects for each humour are:<br>'''Choleric''': Health loss.<br>'''Melancholic''': Mana loss.<br>'''Sanguine''': Bleeding.<br>'''Phlegmatic''': Afflict with afflictions from lethargy, anorexia, slickness and weariness.</p><p>The higher the fluid level, the more afflictions will be delivered simultaneously.</p>
+}}
+
+{{Skill_detail
+ |skill=Corruption
+ |description=Capitalise on your homunculus's alien physiology.
+ |lessons=
+ |syntax=HOMUNCULUS CORRUPT <target>
+ |required=500 mana
+ |target=Adventurers
+ |cooldown=12.00 seconds of homunculus balance
+ |detail=By channeling your powers of humourism through the alien body of your homunculus, you may corrupt an opponent's melancholic and sanguine humours. This has the interesting effect of causing mana loss from bleeding, and health loss from clotting. The effect will wear off after a time.
+}}
+
+{{Skill_detail
+ |skill=Transfusion
+ |description=Eternal life with a brand new body.
+ |lessons=
+ |syntax=INCUBATE NUCLEUS<br>TRANSFUSE STATUS<br>TRANSFUSE CONSCIOUSNESS
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=While within your home city's physiology laboratory, you may INCUBATE NUCLEUS, which will then grow over time into a perfect replica of your body. This will take several days, after which you will be able to TRANSFUSE CONSCIOUSNESS should you die, moving your soul into this new body. This must be done from the same continent and plane as the laboratory. TRANSFUSE STATUS will show you the location of your incubating body, and how much more time (if any) is needed for incubation to complete.
+}}
+
+{{Skill_detail
+ |skill=Reave
+ |description=Kill another with catastrophic organ failure.
+ |lessons=
+ |syntax=REAVE <target>
+ |required=250 mana
+ |target=Adventurers
+ |cooldown=12.00 seconds of humour balance
+ |detail=If at least two of your target's humours are tempered, you can attempt to shut down his internal organs, causing instant death. This will take some time to complete, during which you can perform no other actions. Having more humours tempered will make the process simpler, decreasing the time needed to induce arrest.
+}}
+
+[[Category:Skills]][[Category:Edit needed]]

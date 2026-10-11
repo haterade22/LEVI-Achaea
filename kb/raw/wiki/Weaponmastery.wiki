@@ -1,0 +1,757 @@
+Masters of [[Forged weapons|melee weapons]], knights with the weaponmastery skill are a force to be reckoned with against their fellow [[adventurers]] and [[:Category:Denizens|denizens]] alike. Weaponmasters can select a specialisation based on the weapons they wish to use, either dual cutting, dual blunt, two-handed, or sword and shield.
+
+The skill of '''Weaponmastery''' is available to to members of the four knight classes: [[Infernal]], [[Paladin]], [[Runewarden]], and [[Unnamable]].
+
+Knights share many chivalry-derived abilities through [[Discipline]], [[Dominion]], [[Malignity]] and [[Valour]] though each also have their own unique skill; Infernals command the dark art of [[Oppression]], Paladins wield the holy power of [[Excision]], Runewardens possess the mystical talent of [[Runelore]], and Unamables employ the otherworldly forces of [[Anathema (skill)|Anathema]].
+
+==Abilities in Weaponmastery==
+
+===General Abilities===
+Basic skills available to all who practice weaponmastery, regardless of specialisation.
+{{Skill_detail
+ |skill=Swordplay
+ |description=Increased mastery of the shortsword.
+ |lessons=0
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=This ability works to automatically increase your damage and accuracy with a shortsword. Be warned that it will only work when you're wielding a shortsword.
+}}
+
+{{Skill_detail
+ |skill=Specialise
+ |description=Gain proficiency in one of the schools of weaponry.
+ |lessons=22
+ |syntax=SPECIALISE IN <weapon style>
+ |required=
+ |target=
+ |cooldown=
+ |detail=The decision to specialise in a specific school of weaponry shall dictate the rest of your growth as a knight. You shall learn abilities specific to your chosen school as you progress further in weaponmastery.<p>The different schools are:</p>'''Two handed:''' a style which focuses on single, powerful blows with warhammers and bastard swords.<br>'''Sword and shield:''' a style that focuses on combination attacks, balancing offense and defence.<br>'''Dual cutting:''' a style that focuses on wielding two bladed weapons simultaneously. Typically based around swifter strikes to overwhelm opponents.<br>'''Dual blunt:''' a style that focuses on wielding two blunt weapons simultaneously, and generating momentum to unleash exceptionally damaging strikes against an opponent.<p>Note: you may switch your specialisation, but it shall cost you 100 lessons each time that you do so (outside of your initial selection).</p>
+}}
+
+{{Skill_detail
+ |skill=Envenom
+ |description=Coat a weapon in venoms.
+ |lessons=222
+ |syntax=ENVENOM <weapon> WITH <venom><br>WIPE <weapon>
+ |required=
+ |target=
+ |cooldown=
+ |detail=With this ability, you may layer venoms on an edged weapon. Each time that weapon hits somebody, one venom will poison your opponent, and disappear from the weapon. They work on a last-on, first-off basis, so if you put xentio on a weapon, and then put voyria on, the voyria would come off first, and the xentio second. You must have the selected venom in a vial in your inventory. In order to get rid of the venoms on a weapon, simply WIPE <weapon>.
+}}
+
+{{Skill_detail
+ |skill=Arc
+ |description=Swing your blade in a controlled arc.
+ |lessons=1324
+ |syntax=ARC [<venom>]<br>ARC <target> [<venom>]
+ |required=
+ |target=Adventurers and room
+ |cooldown=4.75 seconds of balance
+ |detail=By swinging your sword in a controlled arc, you will be able to damage everyone in the room with your sword.<p>If you optionally specify a target, the arc shall only strike that person, but the blow is far swifter to recover from (3.00 seconds).</p><p>Note that this ability may be performed off equilibrium.</p>
+}}
+
+
+===Dual Cutting Specialisation===
+Proficient in the use of two cutting weapons, knights with this specialisation use scimitars or battle axes to decimate their foes with damage and venoms.
+{{Skill_detail
+ |skill=Predict
+ |description=Predict when your blows will damage their limbs.
+ |lessons=22
+ |syntax=PREDICT <target>
+ |required=
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=The trained weapons master is able to determine approximately when their blows will cause their target's limbs to break.
+}}
+
+{{Skill_detail
+ |skill=Raze
+ |description=Attack the defences that would keep your weapons out.
+ |lessons=89
+ |syntax=RAZE <target> [SHIELD{{!}}REBOUNDING]
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=2.00 seconds of balance
+ |detail=With raze, your sword will become a weapon of destruction, attacking the defences of your enemies that serve to keep your weapons out.
+}}
+
+{{Skill_detail
+ |skill=Duality
+ |description=The ability to wield and use two weapons simultaneously.
+ |lessons=200
+ |syntax=DSL|DOUBLESLASH <target> [limb] [venom1] [venom2]
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=The scimitar and axe are the weapons of the true warrior, and you are skilled enough with this noble weapon to wield two and use two of them at once.<p>You may optionally specify a limb and venoms to use.</p>
+}}
+
+{{Skill_detail
+ |skill=Lunge
+ |description=A deep, piercing blow from an adjacent location.
+ |lessons=245
+ |syntax=LUNGE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=When starting from an adjacent location, you may lunge at a target, causing quite a bit of damage. You must be wielding a sword to use this ability.
+}}
+
+{{Skill_detail
+ |skill=Impale
+ |description=Sink your blade into an opponent.
+ |lessons=267
+ |syntax=IMPALE <target><br>WITHDRAW BLADE
+ |required=
+ |target=Adventurers
+ |cooldown=4.00 seconds of balance
+ |detail=This wicked ability may be used when your hapless victim has fallen to the ground and lies there, helpless. With it, you will drive your sword into his body, causing regular damage as long as he is on the sword. Further, while impaled, he will find himself unable to move, though you too will be unable to move.<p>If your victim suffers from two broken legs it will greatly extend the length of time it takes them to escape your blade.</p>
+}}
+
+{{Skill_detail
+ |skill=Razeslash
+ |description=First penetrate his defences, then give him the sharp end.
+ |lessons=511
+ |syntax=RAZESLASH|RSL <target> [limb] [venom]
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=2.70 seconds of balance
+ |detail=You have now gained the ability to simultaneously raze and slash an opponent. Many knights have found it to be a very effective tactic in taking down another adventurer's magical shield and attacking at the same time.
+}}
+
+{{Skill_detail
+ |skill=Undercut
+ |description=Take them down to the ground.
+ |lessons=910
+ |syntax=UNDERCUT <target> <LEFT{{!}}RIGHT LEG>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Swing at a leg of your target with a battleaxe. If the leg breaks, you'll take the opportunity to drive your target to the ground. If it does not break the limb, the balance on this attack is significantly increased.<p>This will always break the limb when it is above 90% damaged.<br>Note that this attack does not deliver a venom.</p>
+}}
+
+{{Skill_detail
+ |skill=Cleave
+ |description=Rend your opponent's body in two.
+ |lessons=1186
+ |syntax=CLEAVE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=If you are wielding a sword in your hand, you may try to cleave someone's body asunder. Your opponent does not have to be in the room with you when you begin a cleave, but by the time you get the second cleave-related message, he must be in the room, or the cleave will be stopped. If you do successfully cleave your opponent, you will so destroy his body that there will be nothing left for anyone to immolate.
+}}
+
+{{Skill_detail
+ |skill=Mastery
+ |description=Through intense concentration, increase your blade mastery.
+ |lessons=1393
+ |syntax=MASTERY [ON{{!}}OFF]<br>RELAX MASTERY
+ |required=
+ |target=
+ |cooldown=
+ |detail=Mastery is the ability to pour such concentration into your bladework that your ability to penetrate cutting defenses increases.
+}}
+
+{{Skill_detail
+ |skill=Concuss
+ |description=Rattle skulls with a brutal blow.
+ |lessons=1462
+ |syntax=CONCUSS <target>
+ |required=
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=With the flat of a battleaxe, deliver a skull rattling blow to a downed opponent, delivering blackout.
+}}
+
+{{Skill_detail
+ |skill=Intimidate
+ |description=Make them fear for their life.
+ |lessons=1703
+ |syntax=INTIMIDATE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=You may intimidate a vulnerable opponent, causing them to lose coordination to the point that they will extend any tumbling attempts they attempt. Vulnerable for the purposes of this ability requires a target be prone with both legs broken.<p>Note that this ability may be performed without balance, but requires equilibrium.</p>
+}}
+
+{{Skill_detail
+ |skill=Disembowel
+ |description=Tear the entrails from a target.
+ |lessons=1736
+ |syntax=DISEMBOWEL <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=Once you have impaled someone, you may disembowel them, ripping open their bloated bellies, and causing immense damage.<p>Those suffering from internal bleeding will take more damage from this attack.</p>
+}}
+
+===Dual Blunt Specialisation===
+Master of destruction, these specialists obliterate an opponents limbs with flails and morningstars.
+{{Skill_detail
+ |skill=Momentum
+ |description=Strike them with ever greater power.
+ |lessons=22
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=The skilled wielder of the flail or morningstar is capable of using the momentum of previous attacks to perform greater feats. Each whirl based attack performed with one of these weapons that lands shall raise the momentum of the knight's following attacks, to potentially devastating effect.
+}}
+
+{{Skill_detail
+ |skill=Whirl
+ |description=The most basic of blunt attacks.
+ |lessons=55
+ |syntax=WHIRL <target> [limb]
+ |required=Either a flail or a morningstar
+ |target=Adventurers and denizens
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=This ability delivers a single, powerful blow with your chosen weapon. When striking a limb that is already damaged to the point of needing a restoration salve, it will deliver a fracture to that limb(*).<p>Excluding the legs.
+}}
+
+{{Skill_detail
+ |skill=Fracture
+ |description=Fracture the defences that would protect your opponent.
+ |lessons=100
+ |syntax=FRACTURE <target> [REBOUNDING{{!}}SHIELD]
+ |required=
+ |target=Adventurers
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=This attack will allow you to shatter the aura of rebounding or magical shield that may protect an opponent.<p>Due to the nature of this attack, a failed fracture attempt against an unprotected target shall result in a loss of momentum.</p>
+}}
+
+{{Skill_detail
+ |skill=Doublewhirl
+ |description=Strike twice as fast.
+ |lessons=178
+ |syntax=DOUBLEWHIRL <target> [limb1] [limb2]
+ |required=Two flails or morningstars
+ |target=Adventurers and denizens
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=You have reached a point in your training where you may now utilise two weapons at once to attack. Your skill is such that you may target each separate attack to a different limb of your target. When you strike an already damaged limb of an opponent with this attack, that limb will gain a fracture(*).<p>* Excluding the legs.
+}}
+
+{{Skill_detail
+ |skill=Sizeup
+ |description=With the trained eye of a warrior.
+ |lessons=312
+ |syntax=SIZEUP <target>
+ |required=Two flails or morningstars
+ |target=Adventurers
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=With the gifted eye of a warrior, observe your adversary and determine the number of fractures their limbs suffer from.</p>
+}}
+
+{{Skill_detail
+ |skill=Predict
+ |description=Predict when your blows will damage their limbs.
+ |lessons=334
+ |syntax=PREDICT <target>
+ |required=
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=The trained weapons master is able to determine approximately when their blows will cause their target's limbs to break.
+}}
+
+{{Skill_detail
+ |skill=Skullcrush
+ |description=Crush their skulls.
+ |lessons=556
+ |syntax=SKULLCRUSH <target>
+ |required=A blunt weapon of some form
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=If you are wielding a blunt weapon in your hand, you may try to crush someone's skull. Your opponent does not have to be in the room with you when you begin your attempt, but by the time you get the second attack-related message, he must be in the room, or the skullcrush will be stopped.
+}}
+
+{{Skill_detail
+ |skill=Discipline
+ |description=Your form is flawless.
+ |lessons=737
+ |syntax=DISCIPLINE
+ |required=
+ |target=
+ |cooldown=
+ |detail=The true knight does not suffer any potential flaws in form or technique. You may now drive the hated imperfection of clumsiness from your being, though doing so is taxing and carries a long delay before you may do so again.
+}}
+
+{{Skill_detail
+ |skill=Expend
+ |description=Expend your momentum for crippling effects.
+ |lessons=875
+ |syntax=DOUBLEWHIRL <target> <limb1> [EXPEND] <limb2> [EXPEND]
+ |required=
+ |target=Adventurers
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=You may now expend your momentum upon a limb while striking at the limbs of your target to produce various effects. This will require momentum and reset the momentum decay timer. The results are different depending on if you are using a flail or a morningstar.<p>'''Morningstars:'''<p>When expending in a strike to the head, your opponent will be stunned and have their vision restored. If they are already unblind and are also prone, they will receive a skull fracture.<br>When expending in a strike to the torso, you will drive the air from your target's lungs, cancelling any aura of rebounding that they may have begun establishing about their person, and numbing them into paralysis. If they are already paralysed, you will crack their ribs.<br>When expending in a strike to the left arm, you will make them unable to parry effectively for a short time and afflict your opponent with clumsiness. If they are already clumsy, you will fracture their wrist.<br>When expending in a strike to the right arm, they will find themselves unable to utilise tattoos effectively for a time and will be afflicted with weariness. If they were already weary, you will crack their wrist.<br>Finally, when expending in a strike to either leg, your target will be knocked to the ground and become lethargic.<p>'''Flails:'''<p>When expending in a strike to the head, your target will be afflicted with healthleech. If they already have healthleech and are prone, you will fracture their skull.<br>When expending to the torso, you will drive the breath from their lungs and afflict them with asthma. If they are already asthmatic, you will crack their ribs.<br>When expending to either arm, you will cause their skin to become bloody and raw, afflicting them with darkshade. If they are already suffering from this affliction, you will fracture their wrist.<br>When expending to either leg, you will cause them to become clumsy. If they are already clumsy, they will be knocked off balance for a short while.<p>* All expends cost 1 momentum, except expend legs with a morningstar which costs 3.<br>** All non-fracture based afflictions from flail expends relapse a short while after they are first given, striking for a second time.
+}}
+
+{{Skill_detail
+ |skill=Assault
+ |description=Unleash a terrible assault against a helpless opponent.
+ |lessons=1186
+ |syntax=ASSAULT <target> <HEAD{{!}}TORSO>
+ |required=Requires: 7 momentum<br>Uses: 5 momentum
+ |target=Adventurers
+ |cooldown=2.60 seconds of balance
+ |detail=This brutal attack can only be performed against a prone opponent. It deals significant damage, and has different results based on the limb targeted.<p>Head: raises the damaged state of the limb by a full level if possible.<br>Torso: fractures three of your target's ribs in one strike(*).<p>When targeted against the head it consumes 7 momentum; when targeted against the torso only 3. This ability also has a longer balance cost when used against the head.<p>*   Two ribs if the target has no internal trauma. Three if they have mild internal trauma. Four if they have serious internal trauma.
+}}
+
+{{Skill_detail
+ |skill=Furor
+ |description=You have the high ground.
+ |lessons=1233
+ |syntax=
+ |required=Flails
+ |target=Adventurers
+ |cooldown=2.60 seconds of balance
+ |detail=When wielding flails, your furor is so great that your blows which would otherwise expend momentum against a prone target no longer do. <p>* You will not gain momentum on attacks in this case, but you will not lose it either.
+}}
+
+{{Skill_detail
+ |skill=Pulp
+ |description=End their life in a single strike.
+ |lessons=1736
+ |syntax=PULP <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.10 seconds of balance
+ |detail=You may pulp the brains of a suitably vulnerable victim, ending their life in a single terrible strike.<p>For the purposes of this ability, suitably vulnerable requires they be prone with either a mangled head -or- five or more skull fractures.
+}}
+
+===Two-handed Specialisation===
+Wielding the largest weapons available, these warriors conquer their enemies with bastard swords and warhammers.
+{{Skill_detail
+ |skill=Continuation
+ |description=Shrug off afflictions like the trivialities they are.
+ |lessons=67
+ |syntax=BATTLEFURY CONTINUATION
+ |required=
+ |target=
+ |cooldown=7.00 seconds of battlefury balance
+ |detail=You may use this ability to shrug off the affects of paralysis. There is a fairly substantial delay before you may utilise this ability for a second time.<p>Your body takes time to recover from this ability, removing your capability to utilise fitness for a short time following it.</p>
+}}
+
+{{Skill_detail
+ |skill=Slaughter
+ |description=Dispense with your opposition.
+ |lessons=100
+ |syntax=SLAUGHTER <target> [venom]
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=Deliver a single, powerful blow to shatter bone and rend flesh.
+}}
+
+{{Skill_detail
+ |skill=Overhand
+ |description=Split their skulls with a mighty blow.
+ |lessons=111
+ |syntax=OVERHAND <target>
+ |required=
+ |target=Adventurers
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=This powerful blow aimed at the head shall deliver skull fractures. The more skull fractures your victim suffers from, the longer it shall take them to recover from sipping a healing elixir or tonic.<p>Additionally, while afflicted with skull fractures, the target shall periodically receive nausea. This periodic afflicting becomes faster based on how many fractures are present.</p>
+}}
+
+{{Skill_detail
+ |skill=Carve
+ |description=Carve through your victim's defences.
+ |lessons=200
+ |syntax=CARVE <target>
+ |required=Bastard Sword
+ |target=Adventurers and denizens
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=This ability allows the user to carve through defences that would keep them from their opponent. If both the rebounding aura and shield defence are present, both are stripped, if only one is present, a followup damaging slash will be dealt.
+}}
+
+{{Skill_detail
+ |skill=Splinter
+ |description=Splinter the defences protecting your opponent.
+ |lessons=200
+ |syntax=SPLINTER <target>
+ |required=Warhammer
+ |target=Adventurers and denizens
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=This ability allows the user to smash through defences that would keep them from their opponent. If both the rebounding aura and shield defence are present, both are stripped, if only one is present, a follow-up damaging blow will be dealt.
+}}
+
+{{Skill_detail
+ |skill=Perceive
+ |description=Perceive the state of your opponent.
+ |lessons=290
+ |syntax=BATTLEFURY PERCEIVE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=The trained warrior is able to pick out the slightest details of an opponent, even through the haze of battle.<p>This ability will allow you to determine the exact state of the injuries you have inflicted against a target.</p>
+}}
+
+{{Skill_detail
+ |skill=Underhand
+ |description=Deliver a devastating rising stroke.
+ |lessons=334
+ |syntax=UNDERHAND <target>
+ |required=
+ |target=Adventurers
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=This raising strike aimed at the torso aims to crack the ribs of your opponent. The more cracked ribs they suffer from, the less healing elixirs or tonics shall restore them for.<p>Additionally, while afflicted with cracked ribs, the target shall periodically receive sensitivity. This periodic afflicting becomes faster based on how many fractures are present.</p>
+}}
+
+{{Skill_detail
+ |skill=Upset
+ |description=Bring them down in a tangle of limbs.
+ |lessons=445
+ |syntax=BATTLEFURY UPSET <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of battlefury balance
+ |detail=Against an opponent who has suffered at least one badly damaged leg, you may exploit their motions to gain an opening with which to tangle your weapon with their legs. This will bring them crashing to the ground.
+}}
+
+{{Skill_detail
+ |skill=Hew
+ |description=Deliver precision strikes against your opponent's limbs.
+ |lessons=556
+ |syntax=HEW <target> <LEFT{{!}}RIGHT ARM{{!}}LEG>
+ |required=Bastard Sword
+ |target=Adventurers
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=This ability can target either the arms or legs of your opponent. When striking the arms they will suffer from wrist fractures, and when hitting the legs you will deliver torn tendons.<p>Wrist fractures will periodically afflict with lethargy. Torn tendons periodically gives clumsiness, and also makes it more difficult to leave the room.</p><p>Afflictions relapse faster based on how many fractures are present.</p>
+}}
+
+{{Skill_detail
+ |skill=Pulverise
+ |description=Pulp your opponent's limbs with crushing blows.
+ |lessons=556
+ |syntax=PULVERISE <target> <LEFT{{!}}RIGHT> <ARM{{!}}LEG>
+ |required=Warhammer
+ |target=Adventurers
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=This ability can target either the arms or legs of your opponent. When striking the arms they will suffer from wrist fractures, and when hitting the legs you will deliver torn tendons.
+}}
+
+{{Skill_detail
+ |skill=Distract
+ |description=Distract them with a deafening shout.
+ |lessons=703
+ |syntax=BATTLEFURY DISTRACT <target>
+ |required=
+ |target=Adventurers
+ |cooldown=2.00 seconds of battlefury balance
+ |detail=With this ability, you are able to distract your enemy from acts that take intense focus. For instance, the behead or shatter abilities from weaponry.
+}}
+
+{{Skill_detail
+ |skill=Focus
+ |description=Alter your technique.
+ |lessons=703
+ |syntax=BATTLEFURY FOCUS <SPEED{{!}}PRECISION>
+ |required=
+ |target=
+ |cooldown=2.00 seconds of battlefury balance
+ |detail=This ability will allow the trained knight to alter his stance to produce various results. By focusing on speed, the next attack will be sped up. By focusing on precision, the damage dealt by the next attack will be reduced, but the number of limb-based afflictions dealt will be doubled.
+}}
+
+{{Skill_detail
+ |skill=Discipline
+ |description=Your technique is flawless.
+ |lessons=737
+ |syntax=DISCIPLINE
+ |required=
+ |target=
+ |cooldown=
+ |detail=The true knight does not suffer any potential flaws in form or technique. You may now drive the hated imperfection of clumsiness from your being, though doing so is taxing and carries a long delay before you may do so again.
+}}
+
+{{Skill_detail
+ |skill=Deflect
+ |description=Redirect incoming projectiles.
+ |lessons=965
+ |syntax=DEFLECT
+ |required=
+ |target=
+ |cooldown=
+ |detail=You may now deflect incoming arrows toward less vital areas of your body, mitigating their overall damage.
+}}
+
+{{Skill_detail
+ |skill=Cleave
+ |description=Rend your opponent's body in two.
+ |lessons=979
+ |syntax=CLEAVE <target>
+ |required=Bastard Sword
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=If you are wielding a sword in your hand, you may try to cleave someone's body asunder. Your opponent does not have to be in the room with you when you begin a cleave, but by the time you get the second cleave-related message, he must be in the room, or the cleave will be stopped. If you do successfully cleave your opponent, you will so destroy his body that there will be nothing left for anyone to immolate.
+}}
+
+{{Skill_detail
+ |skill=Skullcrush
+ |description=Crush their skulls.
+ |lessons=979
+ |syntax=SKULLCRUSH <target>
+ |required=Warhammer
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=If you are wielding a blunt weapon in your hand, you may try to crush someone's skull. Your opponent does not have to be in the room with you when you begin your attempt, but by the time you get the second attack-related message, he must be in the room, or the skullcrush will be stopped.
+}}
+
+{{Skill_detail
+ |skill=Recover
+ |description=A true knight will die on his feet.
+ |lessons=1220
+ |syntax=RECOVER FOOTING
+ |required=
+ |target=
+ |cooldown=
+ |detail=Having learned to roll with the momentum of your blows, you will be able to come back to your feet if knocked down. This ability does not require balance, if following a weaponmastery attack.
+}}
+
+{{Skill_detail
+ |skill=Devastate
+ |description=Destroy their limbs utterly.
+ |lessons=1393
+ |syntax=DEVASTATE <target> ARMS{{!}}LEGS [<venom>]
+ |required=
+ |target=Adventurers
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=This ability delivers a single, powerful strike across your opponent's body, targeting either their arms or their legs. The more wrist fractures or torn tendons they suffer from respectively, the greater the damage to their limbs.<p>If the limb is already broken prior to the devastate attempt, the level of limb damage will be increased.</p>
+}}
+
+{{Skill_detail
+ |skill=Brain
+ |description=Put him out of his misery.
+ |lessons=1496
+ |syntax=BRAIN <target>
+ |required=Warhammer
+ |target=Adventurers
+ |cooldown=
+ |detail=Deliver a crushing blow to a prone opponent with a warhammer.
+}}
+
+{{Skill_detail
+ |skill=Overwhelm
+ |description=Dispatch them with a single catastrophic blow.
+ |lessons=1531
+ |syntax=BATTLEFURY OVERWHELM <target>
+ |required=Warhammer
+ |target=Adventurers
+ |cooldown=
+ |detail=Set your feet and raise your hammer, in preparation for a single catastrophic blow. Your next brain attempt will be altered to do damage based on how many skull fractures the target has. This ability requires you possess both standard balance as well as battlefury balance, and consumes both.
+}}
+
+{{Skill_detail
+ |skill=Impale
+ |description=Sink your blade into an opponent.
+ |lessons=1565
+ |syntax=IMPALE <target><br>WITHDRAW BLADE
+ |required=Bastard Sword
+ |target=Adventurers
+ |cooldown=4.00 seconds of balance
+ |detail=This wicked ability may be used when your hapless victim has fallen to the ground and lies there, helpless. With it, you will drive your sword into his body, causing regular damage as long as he is on the sword. Further, while impaled, he will find himself unable to move, though you too will be unable to move.<br>If your victim suffers from two broken legs it will greatly extend the length of time it takes them to escape your blade.
+}}
+
+{{Skill_detail
+ |skill=Disembowel
+ |description=Tear the entrails from a target.
+ |lessons=1736
+ |syntax=DISEMBOWEL <target>
+ |required=Bastard Sword
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=Once you have impaled someone, you may disembowel them, ripping open their bloated bellies, and causing immense damage.<p>Those suffering from internal bleeding will take more damage from this attack.</p>
+}}
+
+===Sword and Shield Specialisation===
+Using their shields for both offence and defence, masters of the sword and shield specialisation are a foe to fear. They are also armed with longswords and broadswords.
+{{Skill_detail
+ |skill=Rend
+ |description=Rend the flesh of your foes.
+ |lessons=63
+ |syntax=REND <target> [limb] [venom]
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=Deliver a slow, yet powerful blow with your sword.
+}}
+
+{{Skill_detail
+ |skill=Raze
+ |description=Remove the defences that would keep your weapons from your foe.
+ |lessons=100
+ |syntax=RAZE <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=2.00 seconds of balance
+ |detail=This ability will allow you to raze the defences that would protect your opponent from your attacks, such as the aura of rebounding or magical shields.
+}}
+
+{{Skill_detail
+ |skill=Smash
+ |description=Deliver a crushing blow with your shield.
+ |lessons=134
+ |syntax=SMASH <target> [HIGH{{!}}MID{{!}}LOW]
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=This powerful strike with your shield will have various affects depending on where you strike your victim.<p>Targeting high shall deliver a mental affliction(*), as well as delivering the scrambled brains affliction.<br>Targeting mid shall cause their muscles to lock in paralysis.<br>Targeting low shall cause them to stumble and become hopelessly clumsy.<br>If no target is specified for this attack, the damage dealt is more significant.<br>* It will first deliver dizziness if not present, then recklessness, stupidity, confusion, and finally epilepsy.</p>
+}}
+
+{{Skill_detail
+ |skill=Combination
+ |description=Link your blade and shield attacks into devastating combinations.
+ |lessons=178
+ |syntax=COMBINATION <target> <sword attack> [limb] [venom] <shield attack> [arguments]
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=By performing both sword and shield attacks in synch, you are able to unleash vicious combinations against your opponents.
+}}
+
+{{Skill_detail
+ |skill=Drive
+ |description=Deny them of breath with a precise strike to the throat.
+ |lessons=223
+ |syntax=DRIVE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=By driving the edge of your shield into your opponent's throat, you may cut off their air supply, inflicting them with a case of asthma.
+}}
+
+{{Skill_detail
+ |skill=Slice
+ |description=Speed is the mark of a true master.
+ |lessons=334
+ |syntax=SLICE <target> [limb] [venom]
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=Deliver a swift strike with your blade, sacrificing damage for speed.
+}}
+
+{{Skill_detail
+ |skill=Impale
+ |description=Pin them to the ground with your blade.
+ |lessons=511
+ |syntax=IMPALE <target><br>WITHDRAW BLADE
+ |required=
+ |target=Adventurers
+ |cooldown=4.00 seconds of balance
+ |detail=This wicked ability may be used when your hapless victim has fallen to the ground and lies there, helpless. With it, you will drive your sword into his body, causing regular damage as long as he is on the sword. Further, while impaled, he will find himself unable to move, though you too will be unable to move.<p>If your victim suffers from two broken legs it will greatly extend the length of time it takes them to escape your blade.</p>
+}}
+
+{{Skill_detail
+ |skill=Concuss
+ |description=Rattle their brain with a mighty blow.
+ |lessons=600
+ |syntax=CONCUSS <target>
+ |required=
+ |target=Adventurers
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=When your victim lies helpless at your feet, you may deliver a mighty blow to their head with your shield, making them see stars and afflicting them with the blackout affliction.
+}}
+
+{{Skill_detail
+ |skill=Trip
+ |description=Send them sprawling.
+ |lessons=737
+ |syntax=TRIP <target>
+ |required=
+ |target=Adventurers
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=With this ability, you may knock the legs out from under a hapless victim.
+}}
+
+{{Skill_detail
+ |skill=Anticipate
+ |description=You see every blow that's coming.
+ |lessons=1014
+ |syntax=ANTICIPATE
+ |required=
+ |target=
+ |cooldown=2.00 seconds of equilibrium
+ |detail=Once you have gained an understanding of the flow of a given battle, you may enter a state of heightened anticipation, during which you will mitigate most attempts to physically strike at you.<p>* Requires maximum ferocity and resets to zero.<br>** For six seconds (or until it fires three times), you will reduce most physical damage blows to zero.<br>*** This ability has identical bypass conditions as the shield of absorption artefact.</p>
+}}
+
+{{Skill_detail
+ |skill=Club
+ |description=A brutal display of power.
+ |lessons=1048
+ |syntax=CLUB <target>
+ |required=
+ |target=Adventurers
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=Once you have suitably prepared your opponent by breaking one of his limbs and impaling him upon your blade, you may bring your shield crashing down upon his skull, stunning him momentarily.
+}}
+
+{{Skill_detail
+ |skill=Cleave
+ |description=Rend your opponent's body in two.
+ |lessons=1186
+ |syntax=CLEAVE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=If you are wielding a sword in your hand, you may try to cleave someone's body asunder. Your opponent does not have to be in the room with you when you begin a cleave, but by the time you get the second cleave-related message, he must be in the room, or the cleave will be stopped. If you do successfully cleave your opponent, you will so destroy his body that there will be nothing left for anyone to immolate.
+}}
+
+{{Skill_detail
+ |skill=Dedication
+ |description=Your dedication to victory can overcome all barriers.
+ |lessons=1324
+ |syntax=DEDICATION
+ |required=200 mana
+ |target=Self
+ |cooldown=
+ |detail=Your dedication to victory is so great that at the cost of your own health, you may fight through the effects of paralysis.<br>This requires max ferocity and halves your ferocity upon use.
+}}
+
+{{Skill_detail
+ |skill=Ferocity
+ |description=Channel the ferocity of battle.
+ |lessons=1496
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=You have reached a point in your training where you are able to channel the ferocity of battle which each successful combination attack that you may land.
+}}
+
+{{Skill_detail
+ |skill=Strike
+ |description=Unleash your ferocity against your foe.
+ |lessons=1496
+ |syntax=SHIELDSTRIKE <target> <HIGH{{!}}MID{{!}}LOW>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Once you have generated sufficient ferocity, you may unleash a devastating blow with your shield. This attack does not consume balance and may be followed with a standard combination attack.<p>When targeted high, the strike will stun your opponent.<br>When targeted to the midsection, the strike will deliver sensitivity.<br>When striking low, you will knock your opponent to the ground.</p>
+}}
+
+{{Skill_detail
+ |skill=Guardbreak
+ |description=Exploit holes in their guard.
+ |lessons=1668
+ |syntax=GUARDBREAK <target> [venom]
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=This attack is not as fast or powerful as other sword based slashes, but it generates twice as much ferocity when successful.
+}}
+
+{{Skill_detail
+ |skill=Disembowel
+ |description=Tear the entrails from a target.
+ |lessons=1736
+ |syntax=DISEMBOWEL <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=Once you have impaled someone, you may disembowel them, ripping open their bloated bellies, and causing immense damage.<p>Those suffering from internal bleeding will take more damage from this attack.</p>
+}}
+
+[[Category: Skills]]

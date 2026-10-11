@@ -1,0 +1,504 @@
+The skill of Runelore revolves around two aspects: [[Runes]] and [[Totems]]. By sketching various runes on the ground, on yourself, on other people, or on weapons or armour, a variety of beneficial or harmful effects may be achieved.
+
+While Runes are a nice supplement to other skills, the true power of Runelore is only unleashed in the Totem. By sketching up to six runes on a Totem, and then either Implanting it, or Standing it, you are able to create a weapon of destruction that can wreak havoc with anyone the Totem is tuned to affect, when that person enters the room.
+
+The skill of '''Runelore''' is available to members of the [[runewardens|Runewarden]] [[class]], along with [[Weaponmastery]] and [[Discipline]].
+
+==Abilities in Runelore==
+{{Skill_detail
+ |skill=Smudge
+ |description=Ability to destroy runes.
+ |lessons=
+ |syntax=SMUDGE <totem><br>SMUDGE <totem> SLOT <1-6><br>SMUDGE GROUND [rune]<br>SMUDGE <rune> OFF ME
+ |required=
+ |target=Room and self
+ |cooldown=4.00 seconds of balance
+ |detail=With this ability you may remove (smudge) a rune from yourself, the ground or from a totem, assuming that your skill in Runelore equals or exceeds that of the one who originally sketched the rune. Smudging a totem or slot on a totem for any totem not owned by you will take longer, and may potentially notify the totem owner or owning organisation of the attempt.
+}}
+
+{{Skill_detail
+ |skill=Sketch
+ |description=Sketch runes with expert precision.
+ |lessons=
+ |syntax=SKETCH RUNE ON <ITEM{{!}}GROUND{{!}}PERSON>
+ |required=
+ |target=Adventurers, room, and self
+ |cooldown=Balance
+ |detail=The art of sketching mystical runes.
+}}
+
+{{Skill_detail
+ |skill=Kena
+ |description=A rune to inspire fear.
+ |lessons=
+ |syntax=SKETCH KENA ON GROUND/<totem>
+ |required=1 Red Ink
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |symbol=Nightmare
+ |detail=Inspires fear in an enemy who enters and sees it. It will disappear after one use, unless it is on a totem.<br>In configuration:<br>Attune condition: your runeblade strikes a target with 20% mana or less.<br>Empower effect: delivers impatience.[[File:Rune_Kena2.png|right|frameless|24px|alt=KENA]]
+}}
+
+{{Skill_detail
+ |skill=Uruz
+ |description=Heal your allies with earth magic.
+ |lessons=
+ |syntax=SKETCH URUZ ON GROUND
+ |required=1 Blue Ink, 1 Yellow Ink
+ |target=Adventurers and self
+ |cooldown=5.00 seconds of balance
+ |symbol=Lightning Bolt
+ |detail=Heals you and your allies.[[File:Rune_Uruz.gif|right|frameless|24px|alt=URUZ]]
+}}
+
+{{Skill_detail
+ |skill=Fehu
+ |description=Causes sleeping urges.
+ |lessons=
+ |syntax=SKETCH FEHU ON GROUND/<totem>
+ |required=1 Red Ink
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |symbol=Closed Eye
+ |detail=This rune will cause someone to fall asleep when they see it, or remove insomnia or the kola defence. It will disappear after one use unless it is on a totem.<br>In configuration:<p>Attune condition: your runeblade strikes someone missing the insomnia affliction or who is prone.</p><p>Empower effect: puts a person to sleep if they are missing the insomnia defence. Does not strip kola or similar. [[File:Rune_Fehu.gif|right|frameless|24px|alt=FEHU]]
+}}
+
+{{Skill_detail
+ |skill=Pithakhan
+ |description=Attack the mental reserves of your enemies.
+ |lessons=
+ |syntax=SKETCH PITHAKHAN ON GROUND/<totem><br>SKETCH PITHAKHAN ON <weapon>
+ |required=1 Red Ink
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |symbol=Square Box
+ |detail=When sketched on the ground or on a totem, it attacks an enemy's mana when he or she encounters it. Disappears after one use, unless it is on a totem. Won't affect blind people.<br>When sketched upon a weapon, it enables the weapon to occasionally drain mana from a target. This will only apply if the weapon is a runeblade.[[File:Rune_Pithakhan.gif|right|frameless|24px|alt=PITHAKHAN]]
+}}
+
+{{Skill_detail
+ |skill=Jera
+ |description=A rune to increase the vitality of the bearer.
+ |lessons=
+ |syntax=SKETCH JERA ON ME/<target>
+ |required=1 Purple Ink
+ |target=Adventurers and self
+ |cooldown=4.00 seconds of balance
+ |symbol=Mighty Oak
+ |detail=While the rune lasts, this will increase the bearer's strength and constitution by 1.[[File:Rune_Jera.gif|right|frameless|24px|alt=JERA]]
+}}
+
+{{Skill_detail
+ |skill=Inguz
+ |description=A rune with the ability to paralyse.
+ |lessons=
+ |syntax=SKETCH INGUZ ON GROUND/<totem>
+ |required=1 Red Ink
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |symbol=Stickman
+ |detail=Paralyses an enemy who enters and sees it. Disappears after one use unless it is on a totem.<br>In configuration:<br>Attune condition: your runeblade strikes a paralysed target.<br>Empower effect: gives one stack of the cracked ribs affliction.[[File:Rune_Inguz.png|right|frameless|24px|alt=INGUZ]]
+}}
+
+{{Skill_detail
+ |skill=Wunjo
+ |description=Upon encountering this, an enemy's sight will be returned.
+ |lessons=
+ |syntax=SKETCH WUNJO ON GROUND/<totem>
+ |required=1 Red Ink
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |symbol=Open Eye
+ |detail=Returns sight to an enemy who encounters it.<br>In configuration:<br>Attune condition: your runeblade strikes a target who is shivering. <br>Empower effect: your foe will suffer damage based on how many cracked ribs they have.[[File:Rune_Wunjo.png|right|frameless|24px|alt=WUNJO]]
+}}
+
+{{Skill_detail
+ |skill=Lagul
+ |description=Add an element of bleeding to your strategem.
+ |lessons=
+ |syntax=SKETCH LAGUL ON <weapon>
+ |required=1 Purple Ink
+ |target=Adventurers
+ |cooldown=4.00 seconds of balance
+ |symbol=Dirk
+ |detail=A runeblade possessing this rune will inflict more bleeding when striking an enemy.[[File:Rune_Lagul.png|right|frameless|24px|alt=LAGUL]]
+}}
+
+{{Skill_detail
+ |skill=Sowulu
+ |description=Damages the health of enemies.
+ |lessons=
+ |syntax=SKETCH SOWULU ON GROUND/<totem>
+ |required=1 Red Ink
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |symbol=Nail
+ |detail=This will damage an opponent who sees it. It will disappear after one use, unless on a totem. It will not affect deaf people.<br>In configuration:<br> Attune condition: your runeblade strikes a limb that is damaged (i.e. in the process of needing a restoration application to heal it).<br>Empower effect: gives healthleech. If any fracture afflictions are present on your target, they will immediately relapse their associated symptom afflictions.[[File:Rune_Slowulu.png|right|frameless|24px|alt=SLOWULU]]
+}}
+
+{{Skill_detail
+ |skill=Algiz
+ |description=A rune of protection from damage.
+ |lessons=
+ |syntax=SKETCH ALGIZ ON ME/<target>
+ |required=1 Green Ink
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |symbol=Elk
+ |detail=As long as it lasts, this grants a reduction by 10% of all damage types to the adventurer.[[File:Rune_Algiz.png|right|frameless|24px|alt=ALGIZ]]
+}}
+
+{{Skill_detail
+ |skill=Isaz
+ |description=A rune to call shockwaves to take your enemies off balance.
+ |lessons=
+ |syntax=SKETCH ISAZ ON GROUND
+ |required=1 Blue Ink, 1 Red Ink
+ |target=Adventurers
+ |cooldown=4.00 seconds of balance
+ |symbol=Flurry of Lightning Bolts
+ |detail=When sketched upon the ground, this rune calls forth a rumbling from the earth to unbalance your enemies. This requires they either be not levitating or afflicted with either the lethargy or weariness afflictions. If they are levitating and not afflicted, the levitation defence will be stripped instead of the disruption to their balance. <br>Additionally, you will be able to enhance your abilities with an empowered weapon, allowing you to prevent enemies from fleeing your grasp. This must be used in conjunction with the engage ability in Discipline, and requires an Isaz rune be sketched upon the ground(*).<br>* This requirement is removed if you possess an Isaz rune in configuration upon your runeblade.<br>In configuration:<br>Attune condition: your engage prevents escape, or an isaz rune you have sketched upon the ground disrupts the balance of one of your enemies.<br>Empower effect: delivers epilepsy. [[File:Rune_Isaz.png|right|frameless|24px|alt=ISAZ]] 
+}}
+
+{{Skill_detail
+ |skill=Totems
+ |description=The symbol of the master of Runelore.
+ |lessons=
+ |syntax=CARVE TOTEM<br>SKETCH <rune> ON <totem> ON SLOT <1-6><br>STAND TOTEM<br>SMUDGE <totem> [SLOT 1-6]
+ |required=
+ |target=Adventurers
+ |cooldown=Carve cooldown: 2.00 seconds of balance<br>Stand cooldown: 4.00 seconds of balance<br>Smudge cooldown: 4.00 seconds of balance upon initiation and completion
+ |detail=Totems are a very powerful runelore skill. After you've carved a totem, you may sketch runes on one of 6 slots on a totem. You may then STAND TOTEM, to prop the totem up, and all enemies who enter the room will be affected by -each- rune on the totem, going from rune #1 to rune #6.<p>In order to carve a totem, you will require 20 wood commodities, 10 leather commodities, and 2 silver commodities.</p><p>In order to remove a rune from a totem, simply SMUDGE <totem> [SLOT 1-6] (the slot 1-6 is optional). You may also smudge runes on the ground, with SMUDGE GROUND. You may only smudge runes that were sketched by someone with equal or lesser skill in Runelore.</p><p>Runes that you may sketch on totems:<br>Kena, Fehu, Pithakhan, Ingut, Nairat, Tiwaz, Wunjo, Sowulu, Mannaz, Sleizak, Loshre</p>
+}}
+
+{{Skill_detail
+ |skill=Dagaz
+ |description=This rune will heal afflictions from you at random.
+ |lessons=
+ |syntax=SKETCH DAGAZ ON GROUND
+ |required=1 Green Ink, 1 Red Ink
+ |target=Self
+ |cooldown=5.00 seconds of balance
+ |symbol=Rising Sun
+ |detail=Use earth magic to cure you of what ails you.[[File:Rune_Dagaz.png|right|frameless|24px|alt=DAGAZ]] 
+}}
+
+{{Skill_detail
+ |skill=Gebu
+ |description=This rune will increase the blunt protection of armour.
+ |lessons=
+ |syntax=SKETCH GEBU ON <armour>
+ |required=1 Gold Ink
+ |target=
+ |cooldown=4.00 seconds of balance
+ |symbol=Shield
+ |detail=Increases the blunt protection of armour.[[File:Rune_Gebu.png|right|frameless|24px|alt=GEBU]] 
+}}
+
+{{Skill_detail
+ |skill=Gebo
+ |description=A rune to increase the cutting protection of armour.
+ |lessons=
+ |syntax=SKETCH GEBO ON <armour>
+ |required=1 Gold Ink
+ |target=
+ |cooldown=4.00 seconds of balance
+ |symbol=Chain
+ |detail=Increases the cutting protection of armour.[[File:Rune_Gebo.png|right|frameless|24px|alt=GEBO]]
+}}
+
+{{Skill_detail
+ |skill=Gular
+ |description=Drawing on the power of the earth, raise a stone wall.
+ |lessons=
+ |syntax=SKETCH GULAR ON GROUND <direction>
+ |required=1 Red Ink
+ |target=Room
+ |cooldown=2.00 seconds of balance
+ |symbol=None
+ |detail=This rune will cause a wall of stone to rise up from the ground, blocking the progress of all who would travel that way.<p>If a stonewall already exists in the specified direction, Gular will instead destroy it.</p>   
+}}
+
+{{Skill_detail
+ |skill=Raido
+ |description=Summon a spiritual steed to bear you home.
+ |lessons=
+ |syntax=SKETCH RAIDO ON GROUND<br>SAY RIDE HOME<br>RAIDO LOCATE<br>RAIDO SEVER
+ |required=1 Green Ink
+ |target=Self
+ |cooldown=10.00 seconds of balance
+ |symbol=Horse
+ |detail=After sketching the rune upon the ground, say 'ride home' from anywhere on the continent, and be taken back to the rune, which will be destroyed.
+<br>RAIDO LOCATE will show the location of your existing raido rune, if any.<p>RAIDO SEVER will remotely smudge your existing raido rune, if any.</p> <p>Note: The northern areas only accessible through the wilderness are treated as a separate continent.</p>[[File:Rune_Raido.png|right|frameless|24px|alt=RAIDO]]
+}}
+
+{{Skill_detail
+ |skill=Thurisaz
+ |description=Call forth a spout of molten lava from the earth.
+ |lessons=
+ |syntax=SKETCH THURISAZ ON GROUND FOR <target>
+ |required=1 Blue Ink, 1 Red Ink
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |symbol=Volcano
+ |detail=When sketched upon the ground, this rune calls forth a spout of molten lava to injure a target. It fades shortly after use.<br>It will also prevent rooms that it is sketched in from being flooded for a time.[[File:Rune_Thurisaz.png|right|frameless|24px|alt=THURISAZ]]
+}}
+
+{{Skill_detail
+ |skill=Lagua
+ |description=Further punish your foe.
+ |lessons=
+ |syntax=SKETCH LAGUA ON <weapon>
+ |required=1 Purple Ink
+ |target=
+ |cooldown=4.00 seconds of balance
+ |symbol=Large Hammer
+ |detail=When disemboweling with a runeblade possessing this rune, the damage will be magnified on those suffering internal trauma to a significant degree.
+<br>Alternatively, when sketched on an empowered blunt weapon, that weapon will occasionally inflict a numbing effect upon your opponent's arm.[[File:Rune_Lagua.png|right|frameless|24px|alt=LAGUA]]
+}}
+
+{{Skill_detail
+ |skill=Hugalaz
+ |description=Call down a hailstorm around you.
+ |lessons=
+ |syntax=SKETCH HUGALAZ ON GROUND<br>SKETCH HUGALAZ ON <weapon>
+ |required=1 Blue Ink
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |symbol=Ball of Ice
+ |detail=When sketched upon the ground, this rune brings a hailstorm down upon your enemies. It fades immediately upon use.<br>When sketched upon a weapon, this rune provides some chance that the weapon will deliver an additional burst of hail damage when it strikes. To sketch it upon a weapon requires the weapon to be a RUNEBLADE.[[File:Rune_Hugalaz.png|right|frameless|24px|alt=HUGALAZ]]
+}}
+
+{{Skill_detail
+ |skill=Truesketch
+ |description=Sketch more than one rune on the ground.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=You have mastered the ability to coordinate three separate earth magics within the same space. 
+}}
+
+{{Skill_detail
+ |skill=Nauthiz
+ |description=Suck the nourishment from your foes.
+ |lessons=
+ |syntax=SKETCH NAUTHIZ ON GROUND
+ |required=1 Blue Ink, 1 Yellow Ink
+ |target=Adventurers
+ |cooldown=4.00 seconds of balance
+ |symbol=Leech
+ |detail=This destructive rune is unique in that it functions differently under certain conditions.<br>When sketched in a magically flooded location(*), it will cause the water to be drained away immediately, consuming the rune in the process.<br>When sketched out of water it will persist, and will suck the nourishment from your enemies standing in the room.<br>* Nauthiz is special in that it can be sketched even through water.[[File:Rune_Nauthiz.png|right|frameless|24px|alt=NAUTHIZ]]
+}}
+
+{{Skill_detail
+ |skill=Mannaz
+ |description=Return hearing to a victim.
+ |lessons=
+ |syntax=SKETCH MANNAZ ON GROUND/<totem>
+ |required=1 Red Ink
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |symbol=Bell
+ |detail=Returns hearing to an enemy who enters and sees it. Disappears after one use unless it is on a totem.<br>In configuration:<br>Attune condition: your runeblade strikes a target off focus balance.<br>Empower effect: delivers manaleech. If they are already inflicted with manaleech, delivers a timed affliction which disables all mana regeneration instead.[[File:Rune_Mannaz.png|right|frameless|24px|alt=MANNAZ]]
+}}
+
+{{Skill_detail
+ |skill=Othala
+ |description=Besiege your enemies with multiple spouts of molten lava.
+ |lessons=
+ |syntax=SKETCH OTHALA ON GROUND
+ |required=5 red Inks
+ |target=
+ |cooldown=4.00 seconds of balance
+ |symbol=Mountain Range
+ |detail=When sketched on the ground, this rune shall erupt three times in quick succession.<br>Each eruption shall destroy [[prismatic barriers]], then magical shields, or do damage if neither is present to all of your enemies in your location.[[File:Rune_Othala.png|right|frameless|24px|alt=OTHALA]]
+}}
+
+{{Skill_detail
+ |skill=Sleizak
+ |description=Afflict a foe with the horrible voyria poison.
+ |lessons=
+ |syntax=SKETCH SLEIZAK ON GROUND/<totem>
+ |required=1 Blue Ink
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |symbol=Viper
+ |detail=Will infect someone with voyria if he or she sees it upon entering a room. Disappears after one use unless it is on a totem.<br>In configuration:<br>Attune condition: your runeblade strikes a weary or lethargic target.<br>Empower effect: delivers nausea. If they are already afflicted with nausea, delivers voyria instead. [[File:Rune_Sleizak.png|right|frameless|24px|alt=SLEIZAK]]
+}}
+
+{{Skill_detail
+ |skill=Tiwaz
+ |description=This rune will remove the defenses of your enemies.
+ |lessons=
+ |syntax=SKETCH TIWAZ ON GROUND/<totem>
+ |required=1 Blue Ink, 2 Red Inks
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |symbol=Upwards-Pointing Arrow
+ |detail=Strips away a defence of any enemy who enters and sees it. It disappears after one use, unless it is on a totem. When sketched upon the ground, it may also be empowered against a target in the sky or trees above, and will draw them back down to your level.<br>In configuration:<br>Attune condition: your target is off restoration salve balance and has no limbs in need of said restoration application.<br>Empower effect: breaks both of your target's arms.[[File:Rune_Tiwaz.png|right|frameless|24px|alt=TIWAZ]]
+}}
+
+{{Skill_detail
+ |skill=Berkana
+ |description=Provides health regeneration to the bearer.
+ |lessons=
+ |syntax=SKETCH BERKANA ON ME/<target>
+ |required=3 Yellow Inks
+ |target=Adventurers and self
+ |cooldown=2.00 seconds of balance
+ |symbol=Lion
+ |detail=Gives health regeneration to the bearer of the rune.[[File:Rune_Berkana.png|right|frameless|24px|alt=BERKANA]]
+}}
+
+{{Skill_detail
+ |skill=Nairat
+ |description=A rune to entangle.
+ |lessons=
+ |syntax=SKETCH NAIRAT ON GROUND/<totem>/<weapon>
+ |required=1 Yellow Ink
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |symbol=Butterfly
+ |detail=When sketched upon the ground or on a totem, an enemy will be entangled upon seeing this rune. It will disappear after one use unless it is on a totem.<br>When sketched upon a weapon, this rune causes the weapon to FREEZE its target at random. To sketch it upon a weapon requires the weapon to be a RUNEBLADE.[[File:Rune_Nairat.png|right|frameless|24px|alt=NAIRAT]]
+}}
+
+{{Skill_detail
+ |skill=Eihwaz
+ |description=A powerful vibration-dampening rune.
+ |lessons=
+ |syntax=SKETCH EIHWAZ ON GROUND/<weapon>
+ |required=1 Blue Ink, 1 Yellow Ink
+ |target=Adventurers
+ |cooldown=4.00 seconds of balance
+ |symbol=Yew
+ |detail=When sketched upon the ground, this rune will dampen non-protected crystalline vibrations.<br>When sketched upon a weapon, this rune will randomly mask the effects of venoms delivered by the weapon. To sketch it upon a weapon requires the weapon to be a RUNEBLADE.[[File:Rune_Eihwaz.png|right|frameless|24px|alt=EIHWAZ]]
+}}
+
+{{Skill_detail
+ |skill=Runebinding
+ |description=Bind your runes to your body.
+ |lessons=
+ |syntax=None
+ |required=
+ |target=
+ |cooldown=
+ |detail=You have reached a high degree of sympathy with earth magic, allowing you to bind runes to your body for longer than ever before.
+}}
+
+{{Skill_detail
+ |skill=Laguz
+ |description=Increased damage to the limbs of your foe.
+ |lessons=
+ |syntax=SKETCH LAGUZ ON <weapon>
+ |required=1 Purple Ink
+ |target=
+ |cooldown=4.00 seconds of balance
+ |symbol=Long Slim Blade
+ |detail=When sketched upon a runeblade, the weapon will deal more damage to a target's limbs.[[File:Rune_Laguz.png|right|frameless|24px|alt=LAGUZ]]
+}}
+
+{{Skill_detail
+ |skill=Runicarmour
+ |description=Empower armour with the strength of the earth.
+ |lessons=
+ |syntax=EMPOWER <armour>
+ |required=2000 mana
+ |target=
+ |cooldown=10.00 seconds of equilibrium
+ |detail=Calling upon the powers of the earth, you are able to empower any suit of armour upon which the runes gebo and gebu have been sketched. Empowering armour will render it usable only by he who empowered it, but it will bear the defensive powers of the runes of protection for one hundred months.
+}}
+
+{{Skill_detail
+ |skill=Runeblades
+ |description=Runewardens may empower a weapon as a legendary runeblade.
+ |lessons=
+ |syntax=EMPOWER <weapon><br>SKETCH PITHAKHAN ON <weapon><br>SKETCH NAIRAT ON <weapon><br>SKETCH EIHWAZ ON <weapon><br>SKETCH HUGALAZ ON <weapon>
+ |required=2000 mana
+ |target=Adventurers
+ |cooldown=10.00 seconds of equilibrium
+ |detail=With your expert training in Runelore, you can craft any knight's weapon into a powerful Runeblade.<p>First sketch Lagul, Lagua, and Laguz upon the blade. Then stand firm upon the earth and EMPOWER the blade.</p><p>Empowerment of a weapon lasts for 100 Achaean months, during which time the Lagul, Lagua, and Laguz runes will not fade. In addition, a Runeblade may have one other rune (Pithakhan, Nairat, Eihwaz, or Hugalaz only) sketched upon it, enhancing its powers even further.  
+}}
+
+{{Skill_detail
+ |skill=Loshre
+ |description=Cause an opponent to become afflicted with anorexia.
+ |lessons=
+ |syntax=SKETCH LOSHRE ON GROUND/<totem>
+ |required=1 Blue Ink
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |symbol=Apple Core
+ |detail=Gives anorexia to those who see it upon entering. Disappears after one use unless it is on a totem.<br>In configuration:<br>Attune condition: your runeblade strikes an addicted target.<br>Empower effect: delivers a timed affliction which, if the person eats ginseng or ferrum while labouring under, will drain their health and mana.[[File:Rune_Loshre.png|right|frameless|24px|alt=LOSHRE]]
+}}
+
+{{Skill_detail
+ |skill=Configuration
+ |description=Combining runes about a central point.
+ |lessons=
+ |syntax=SKETCH CONFIGURATION <runeblade/LEFT/RIGHT/WIELDED> <rune1> <rune2> [rune3]<br>SMUDGE <runeblade> <rune in configuration><br>EMPOWER <rune><br>EMPOWER PRIORITY SET <rune1> <rune2> <rune3><br>EMPOWER PRIORITY CLEAR
+ |required=
+ |target= 
+ |cooldown=4.00 seconds of balance
+ |detail=You have reached a point in your study of the runic script that you may now begin to sketch runic configurations upon your runeblade. Only certain runes can be sketched in configuration, and they must always be sketched about one of the core runeblade runes: Nairat, Hugalaz, Eihwaz, or Pithakhan. Runes sketched in configuration become attuned under certain situations, and when in such a state can be empowered(*). The runes that can be sketched in configuration and their attunement conditions are now listed in the relevant ability file for that rune.<br>* Empowered runes fire their effects after a successful weaponmastery attack resolves: in the case of multiple hit attacks such as doubleslash or combination, they resolve after the entire attack has completed.<br>** Configuration conditions are only checked on the first hit of these multi hit attacks. Runewardens of the dual cutting or dual blunt specialisations should wield their configured runeblade in their left hand.<br>*** You may set an empower priority to automatically attempt to empower runes as they become attuned.
+}}
+
+{{Skill_detail
+ |skill=Implant
+ |description=Create a bond between your totem and the earth.
+ |lessons=
+ |syntax=IMPLANT TOTEM<br>UPROOT TOTEM<br>TUNE <totem> ENEMIES/NONALLIES  (personal totems)<br>TUNE <totem> ENEMIES/NONMEMBERS (organisational totems)
+ |required=
+ |target=Room
+ |cooldown=
+ |detail=With this ability, you may take a totem, and make it into a semi-permanent fixture, mainly for defensive purposes. Once you begin the implanting process, it will take quite a bit of time, during which you may not do anything else. Once it IS implanted, however, no one will be able to pick it up, unless he has the ability to uproot a totem, which will take even longer than implanting it.<p>Totems are automatically against the enemies of whatever entity owns them. When implanted, it will be tuned against your enemies. When designated, it will be tuned against the enemies of whatever the new owner happens to be (see AB RUNELORE DESIGNATE). Once claimed, organisationally-owned totems can be tuned against either the organisation's enemies or all but the organisation's members, and personally-owned totems can be tuned against either the owner's enemies or all but the owner's allies.</p><p>This is the only way to clear the ownership on a totem.</p>
+}}
+
+{{Skill_detail
+ |skill=Empower
+ |description=Enable smudge reporting.
+ |lessons=
+ |syntax=EMPOWER TOTEM
+ |required=1000 mana
+ |target=
+ |cooldown=5.00 seconds of equilibrium
+ |detail=With this ability, you may empower any totem to report attempts to smudge any of its runes, or to uproot the totem proper.<p>Empowerment has a small chance of fading every Achaean day that passes, after which it will cease reporting and must be re-empowered.</p>
+}}
+
+{{Skill_detail
+ |skill=Designate
+ |description=Arrange clear title and ownership.
+ |lessons=
+ |syntax=DESIGNATE <person> AS OWNER OF <totem><br>DESIGNATE ORDER OF <deity> AS OWNER OF <totem><br>DESIGNATE <organisation> AS OWNER OF <totem><br>CLAIM <totem><br>REJECT <totem>
+ |required=
+ |target=
+ |cooldown=3.00 seconds of balance
+ |detail=With this ability you may designate an owner for a specific totem. Only the crafter of the totem may use this ability. The totem remains owned by the crafter until the designated owner (or a member of the designated owner organisation) CLAIMs the totem. If the totem is claimed, then the designated owner becomes the true owner. If the totem is rejected, then the crafter remains the owner. At that point the crafter may attempt another designation as desired. Houses, Cities, Orders, Oakstone, and individuals may own totems - clans may not.<p>When you designate a totem, its tuning is automatically set against the enemies of the new owner.</p>
+}}
+
+{{Skill_detail
+ |skill=Bisect
+ |description=As relentless as the storm.
+ |lessons=
+ |syntax=BISECT <target> [venom]
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=4.00 seconds of balance
+ |detail=While wielding an edged runeblade of some form with the hugalaz rune sketched upon the blade, you may attempt to bisect your foe with a single empowered strike(*).<br>* This is a multi damage typed ability that deals first lightning damage then cutting damage.<br>** If your target is an adventurer and at 20% of their health or lower when the cutting damage would be applied, they will be slain outright instead.<br>*** Notably, this attack bypasses auras of rebounding and reflections but leaves them intact.</br>
+}}
+
+{{Skill_detail
+ |skill=Adapt
+ |description=Battle waits for no one. 
+ |lessons=
+ |syntax=
+ |required=
+ |target=
+ |cooldown=
+ |detail=When you wield a runeblade with a configuration upon the blade, usually it takes a short while for the runic configuration to become active. However, the true master of runelore has learned to adapt him or herself to a change in the flow of battle and to turn this to their advantage: thus, when swapping from runeblade to another runeblade in your primary hand of a different type(*), you may eliminate this delay entirely(**).<br>* Going from say, a scimitar to a battleaxe or flail to a morningstar would let you skip the delay in a runic configuration becoming active. Going from a scimitar to a scimitar would not.<br>** You may only adapt once every 10 seconds or so.
+}}
+
+''All runic symbols made by Freepik from www.flaticon.com''
+
+[[Category:Skills]]
+[[Category: Edit needed]]

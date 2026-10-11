@@ -1,0 +1,283 @@
+Masters of their chosen weapon and skilled both in and out of the [[forests]] of [[Sapience]], the [[sentinel]] class combine flawless technique with a ruthless savagery to achieve their ends.
+
+Discarding the civilised constructs of [[chivalry]] and fairness, a practitioner of skirmishing uses both the environment and all tools at his disposal to eliminate all opposition. The true masters of the art are rumoured to be able to send their prey into a comatose state, or even destroy their enemies so completely that the remains can never be found.
+
+The skill of '''Skirmishing''' is available to members of the [[Sentinel]] [[class]], along with [[Metamorphosis]] and [[Woodlore]].
+
+==Abilities in Skirmishing==
+{{Skill_detail
+ |skill=Returning
+ |description=The ability to throw an axe such that it will return.
+ |lessons=
+ |syntax=THROW HANDAXE AT <target><br>THROW HANDAXE <direction> AT <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=This ability will allow your axe to return to your hand when thrown. It can target adventurers and denizens in room, but only adventurers in line of sight. 
+}}
+
+{{Skill_detail
+ |skill=Trip
+ |description=Knock an unruly foe to the ground.
+ |lessons=
+ |syntax=TRIP <target> <LEFT/RIGHT> [venom]
+ |required=
+ |target=Adventurers
+ |cooldown=2.75 seconds of balance
+ |detail=While wielding a spear or trident, you may knock an opponent's legs out from under him. A swift follow-up strike with the point of the weapon will ensure he won't want to stand up any time soon.
+}}
+
+{{Skill_detail
+ |skill=Grab
+ |description=Use an axe to pull someone in from a nearby room.
+ |lessons=
+ |syntax=BTHROW AXE AT <target> <direction>
+ |required=
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=This ability will allow you to bring someone in another room to you by throwing your axe at them.
+}}
+
+{{Skill_detail
+ |skill=Shove
+ |description=Sending a hapless victim crashing to the forest floor.
+ |lessons=
+ |syntax=SHOVE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=4.00 seconds of balance
+ |detail=While in the trees, you may shove an adventurer to the ground, possibly breaking his legs.
+}}
+
+{{Skill_detail
+ |skill=Rive
+ |description=Shatter an opponent's shield.
+ |lessons=
+ |syntax=RIVE <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=2.25 seconds of balance
+ |detail=With expert precision, you may shatter an opponent's shield with a well-aimed thrust of a spear or trident.
+}}
+
+{{Skill_detail
+ |skill=Thrust
+ |description=The most basic of skirmishing attacks.
+ |lessons=
+ |syntax=THRUST <target> [limb] [venom]
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=This is a basic thrust with a spear or trident.
+}}
+
+{{Skill_detail
+ |skill=Spinning
+ |description=Set up a defensive shield with a spear or trident.
+ |lessons=
+ |syntax=SPIN SPEAR/TRIDENT<br>STOP
+ |required=
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=At the cost of a large endurance drain, you may spin your spear or trident in such a way as to cause you to automatically deliver an attack to anyone attacking you physically. You will cease spinning the spear as soon as you do anything aggressive, or when you do STOP.
+}}
+
+{{Skill_detail
+ |skill=Seize
+ |description=Grabbing unwary victims from the forest floor.
+ |lessons=
+ |syntax=SEIZE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=4.50 seconds of balance
+ |detail=While in the trees, you may seize an adventurer and bring him up to your level.
+}}
+
+{{Skill_detail
+ |skill=Scout
+ |description=A good woodsman checks his path.
+ |lessons=
+ |syntax=SCOUT
+ |required=
+ |target=2.00 seconds of balance
+ |cooldown=
+ |detail=This ability will grant a defence which shall allow you to see past obstructions with abilities such as GLANCE or SQUINT from the vision skill.
+}}
+
+{{Skill_detail
+ |skill=Envenom
+ |description=Coat a weapon in venoms.
+ |lessons=
+ |syntax=ENVENOM <weapon> WITH <venom><br>WIPE <weapon>
+ |required=
+ |target=
+ |cooldown=
+ |detail=With this ability, you may layer venoms on an edged weapon. Each time that weapon hits somebody, one venom will poison your opponent, and disappear from the weapon. They work on a last-on, first-off basis, so if you put xentio on a weapon, and then put voyria on, the voyria would come off first, and the xentio second. You must have the selected venom in a vial in your inventory. In order to get rid of the venoms on a weapon, simply WIPE <weapon>.
+}}
+
+{{Skill_detail
+ |skill=Brace
+ |description=Impale attackers on a spear or trident.
+ |lessons=
+ |syntax=SET SPEAR/TRIDENT
+ |required=
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=By bracing your spear or trident on the ground, you will attempt to impale anyone initiating an attack in an adjacent room that ends in your room. For instance: barge, jumpkick, etc. The very unlucky victim will take damage until he or she writhes off the spear or trident, but, you will not be able to move as long as the person is impaled on your spear or trident.
+}}
+
+{{Skill_detail
+ |skill=Rivestrike
+ |description=There is no defence against your onslaught.
+ |lessons=
+ |syntax=RIVESTRIKE <target> [limb] [venom]
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=This ability will allow you to rive through protective defences, then deliver a followup blow. If both the shield and rebounding defences are present, the second blow shall target the second of these defences rather than dealing damage.
+}}
+
+{{Skill_detail
+ |skill=Ensnare
+ |description=Mesmerise them with your flawless skill.
+ |lessons=
+ |syntax=ENSNARE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=2.00 seconds of balance
+ |detail=You may ensnare the gaze of a prone opponent with your flawless skill with your chosen weapon. This shall cause them to be transfixed if the blindness defence is not present; otherwise it shall strip the blindness defence.<p>Note: your target must be prone.</p>
+}}
+
+{{Skill_detail
+ |skill=Lacerate
+ |description=Let them bleed for their foolishness.
+ |lessons=
+ |syntax=LACERATE <target> [limb] [venom]
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=This slicing attack with your chosen weapon aims to inflict maximum bleeding, as well as delivering a venom and the haemophilia affliction if your target is an adventurer. 
+}}
+
+{{Skill_detail
+ |skill=Scythe
+ |description=Slice through the defences that would protect your foes.
+ |lessons=
+ |syntax=SCYTHE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=This ability with your chosen weapon will allow you to randomly strip a defence from an enemy. It shall always target defences in this order: prismatic barriers, reflections, mass, then a random defence.<p>* Note that it strips all reflections at once, not just one.</p>
+}}
+
+{{Skill_detail
+ |skill=Rattle
+ |description=Rattle their brains with a blow to the head.
+ |lessons=
+ |syntax=RATTLE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=2.50 seconds of balance
+ |detail=This ability will knock a prone and transfixed target unconscious. The more health your victim is missing, the longer they shall remain unconscious for. This duration is also increased if a rattle follows within ten seconds of a skullbash, their brains being sufficiently scrambled already.
+}}
+
+{{Skill_detail
+ |skill=Truss
+ |description=Truss them up for slaughter.
+ |lessons=
+ |syntax=TRUSS <target>
+ |required=1 rope
+ |target=Adventurers
+ |cooldown=1.50 seconds of balance
+ |detail=You can truss up an unconscious opponent. These bindings take much longer to escape than standard bonds.
+}}
+
+{{Skill_detail
+ |skill=Skullbash
+ |description=Split their skull with a mighty blow.
+ |lessons=
+ |syntax=SKULLBASH <target>
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=3.30 seconds of balance
+ |detail=Deliver a powerful blow to the head of an opponent.<p>Against adventurers, this requires that your target be prone and the damage of this attack will be increased based on how damaged the target's head already is.<p>When targeted against a denizen, this attack will deal damage, assuming they lack the vitality to properly dodge your strike(*).<p>* This attack deals vastly reduced damage against denizens unless they are below 33% health.</p>
+}}
+
+{{Skill_detail
+ |skill=Gouge
+ |description=Lay them open with a precision strike.
+ |lessons=
+ |syntax=GOUGE <target> [limb] [venom]
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=This attack with your chosen weapon causes significant bleeding as well as the weariness affliction, if used against an adventurer.
+}}
+
+{{Skill_detail
+ |skill=Impale
+ |description=Drive your blade straight through your target.
+ |lessons=
+ |syntax=IMPALE <target><br>WITHDRAW BLADE
+ |required=
+ |target=
+ |cooldown=2.40 seconds of balance
+ |detail=This wicked ability may be used when your hapless victim has fallen to the ground and lies there, helpless. With it, you will drive your spear/trident into his body, causing regular damage as long as he is on the weapon. Further, while impaled, he will find himself unable to move, though you too will be unable to move.
+}}
+
+{{Skill_detail
+ |skill=Drag
+ |description=Drag away your prey.
+ |lessons=
+ |syntax=DRAG <direction>
+ |required=
+ |target=Adventurers
+ |cooldown=3.40 seconds of balance
+ |detail= You may drag someone you have impaled away. (This will remove your spear or trident from your victim's gut.)
+}}
+
+{{Skill_detail
+ |skill=Barbs
+ |description=Chivalry is a construct of the city dwellers.
+ |lessons=
+ |syntax=CRAFT BARBS<br>ATTACH BARBS TO <weapon>
+ |required=1 iron
+ |target=
+ |cooldown=4.00 seconds of balance
+ |detail=You may now craft barbs to attach to your chosen weapon. This will occasionally cause the wounds you inflict to be torn open to a greater degree, decreasing the effectiveness of attempts to clot the injuries.
+}}
+
+{{Skill_detail
+ |skill=Wrench
+ |description=Gut them like a fish.
+ |lessons=
+ |syntax=WRENCH [venom]
+ |required=
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=You may wrench your weapon if an opponent is impaled upon it, causing terrible internal damage.
+}}
+
+{{Skill_detail
+ |skill=Doublestrike
+ |description=Strike, then strike again.
+ |lessons=
+ |syntax=DOUBLESTRIKE <target> [limb] [venom]
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=Balance cost varies based on weapon speed
+ |detail=With this ability, you may use your chosen weapon to deal a lateral slash, then using the momentum continue your attack to strike with the haft of your weapon.<p>Against adventurers, the blow with the haft shall first deliver impatience. If the target is already impatient, it shall deal epilepsy.<p>Against denizens, your damage will be split amongst the slice of your weapon and strike of its haft.</p>
+}}
+
+{{Skill_detail
+ |skill=Extirpate
+ |description=Return them to the embrace of nature.
+ |lessons=
+ |syntax=EXTIRPATE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=3.20 seconds of balance
+ |detail=Once you have petrified an enemy, you may take your spear and shatter their stone body into myriad shards, ending their life and returning their remains to the embrace of nature.   
+}}
+
+[[Category:Skills]]

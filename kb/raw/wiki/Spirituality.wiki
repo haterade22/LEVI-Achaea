@@ -1,0 +1,382 @@
+The abilities in Spirituality revolve around two main things: Guardian Angels and Spiritual Maces. Practitioners of Spirituality also get a guardian angel, who will stay with them forever. Generally speaking, an angel will only act in a defensive capacity, except when it involves Chaos Entities. Angels and Entities have a long-standing hatred of each other.
+
+Spiritual maces, on the other hand, form the core of a Priest's offensive ability. By using them in different ways, the Priest gains the ability to cause damage, smash limbs, and cause a variety of other effects, including the feared Judgement, where a Priest stands in Judgement of an adventurer. Failing the judgement means death. This is, of course, an ability that only the most powerful of Priests may perform.
+
+The skill of '''Spirituality''' is available to members of the [[Priest]] [[class]], along with [[Devotion]] and [[Zeal]].
+
+==Abilities in Spirituality==
+{{Skill_detail
+ |skill=Summon
+ |description=Summon your angel to your side.
+ |lessons=
+ |syntax=ANGEL SUMMON<br>ANGEL FADE
+ |required=325 devotion
+ |target=
+ |cooldown=2.00 seconds of equilibrium
+ |detail=ANGEL SUMMON will call your angel to your side. When your angel has not been summoned, she will be resting invisible, though always near you. ANGEL FADE will cause your angel to fade back into obscurity.
+}}
+
+{{Skill_detail
+ |skill=Touch
+ |description=Assess the power of your angel.
+ |lessons=
+ |syntax=ANGEL TOUCH
+ |required=
+ |target=
+ |cooldown=1.00 seconds of equilibrium
+ |detail=Using this ability, you will be able to assess the current power of your Angel. When she runs out of power, she will be forced to disappear and regain power.
+}}
+
+{{Skill_detail
+ |skill=Mace
+ |description=Summon a spiritual mace to aid you.
+ |lessons=
+ |syntax=SUMMON MACE<br>CALL MACE<br>SMITE <target> [CHASTEN <BODY{{!}}MIND{{!}}affliction>]
+ |required=
+ |target=Adventurers and denizens
+ |cooldown=2.90 seconds of balance
+ |detail=Using your inherent link to the spirit world, you may summon a spiritual mace, with which to smite down your enemies. Note that your spiritual mace can be used with the targeting abilities in weaponry.
+}}
+
+{{Skill_detail
+ |skill=Shine
+ |description=Cause your guardian angel to radiate light.
+ |lessons=
+ |syntax=ANGEL SHINE [<target>]
+ |required=Target: 5 Angel power and 100 mana
+ |target=Adventurers and room
+ |cooldown=Roomwide: 2.00 seconds of equilibrium<br>Target: 1.50 seconds of equilibrium
+ |detail=Upon doing this, your Angel will begin radiating light, the better to avoid fumbling about in the darkness. If you direct this ability at an adventurer, it will blind that adventurer.
+}}
+
+{{Skill_detail
+ |skill=Call
+ |description=Call your mace to you when you have lost it.
+ |lessons=
+ |syntax=CALL MACE
+ |required=
+ |target=
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Through sheer willpower, you will be able to summon your mace to you if you have lost it.
+}}
+
+{{Skill_detail
+ |skill=Aura
+ |description=Shield yourself with an aura of protection.
+ |lessons=
+ |syntax=ANGEL AURA [<target>]
+ |required=10 Angel power and 100 mana
+ |target=Adventurers and self
+ |cooldown=4.00 seconds of equilibrium
+ |detail=This ability will cause your angel to raise a magical shield (like the tattoo), of whomever you choose. If you do not specify anyone, then it will raise a shield around you.
+}}
+
+{{Skill_detail
+ |skill=Panic
+ |description=Ask your angel to cause terror in a chosen victim.
+ |lessons=
+ |syntax=ANGEL PANIC <target>
+ |required=
+ |target=Adventurers
+ |cooldown=2.40 seconds of equilibrium
+ |detail=With this ability, you may command your angel to strike fear into the heart of another adventurer.
+}}
+
+{{Skill_detail
+ |skill=Fortify
+ |description=Boost your angel's power with your own health.
+ |lessons=
+ |syntax=ANGEL FORTIFY
+ |required=Health
+ |target=
+ |cooldown=2.00 seconds of equilibrium
+ |detail=Using this ability, you may replenish your angel's power at a cost of some of your health.
+}}
+
+{{Skill_detail
+ |skill=Watch
+ |description=Have your angel keep watch on your enemies.
+ |lessons=
+ |syntax=ANGEL WATCH [ON{{!}}OFF]
+ |required=10 Angel power
+ |target=Adventurers
+ |cooldown=2.00 seconds of equilibrium
+ |detail=When you turn on this ability, your angel will begin reporting on the movements of your enemies when they are near to you.
+}}
+
+{{Skill_detail
+ |skill=Smash
+ |description=Deal a crushing blow to one of your opponent's limbs.
+ |lessons=
+ |syntax=SMASH ARMS{{!}}LEGS <target> [CHASTEN <BODY{{!}}MIND{{!}}affliction>]
+ |required=
+ |target=Adventurers
+ |cooldown=2.20 seconds of balance
+ |detail=This ability will allow you to crush one of your opponents arms or legs with your mace, rendering it useless.
+}}
+
+{{Skill_detail
+ |skill=Rest
+ |description=Causes your angel to conserve her power.
+ |lessons=
+ |syntax=ANGEL REST
+ |required=
+ |target=
+ |cooldown=2.80 seconds of equilibrium
+ |detail=Many abilities that you may use with your Angel will cause a regular drain on her power. This ability will cause your Angel to cease doing these things and rest.
+}}
+
+{{Skill_detail
+ |skill=Drain
+ |description=Gain health from your angel.
+ |lessons=
+ |syntax=ANGEL DRAIN
+ |required=527 Angel power
+ |target=Self
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Your Angel stands ready to sacrifice even her very essence for your benefit. This ability will replenish some of your health at a cost to her.
+}}
+
+{{Skill_detail
+ |skill=Heresy
+ |description=Summon rage at the heretics and hunt them with fervour.
+ |lessons=
+ |syntax=HUNT HERESY
+ |required=400 mana
+ |target=Adventurers
+ |cooldown=4.00 seconds of equilibrium
+ |detail=Engulf your mace in righteous flame, burning away the aura of rebounding from your foes. This is a costly ability, however, and is of limited duration.
+}}
+
+{{Skill_detail
+ |skill=Seek
+ |description=Have your angel report on another person.
+ |lessons=
+ |syntax=ANGEL SEEK <target>
+ |required=5 Angel power
+ |target=Adventurers
+ |cooldown=2.40 seconds of equilibrium
+ |detail=This ability will cause your angel to report on the whereabouts of the selected adventurer, his or her health and mana levels, and who is with him or her.
+}}
+
+{{Skill_detail
+ |skill=Mindread
+ |description=Your angel reports to you on local conversations.
+ |lessons=
+ |syntax=ANGEL MINDREAD
+ |required=100 Angel power
+ |target=Room
+ |cooldown=2.00 seconds of equilibrium
+ |detail=This ability will cause your angel to report to you any tells that adventurers in the room with you receive.
+}}
+
+{{Skill_detail
+ |skill=Push
+ |description=Make the unbelievers kneel.
+ |lessons=
+ |syntax=ANGEL PUSH <target>
+ |required=50 Angel power and 15 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of equilibrium
+ |detail=Have your angel throw a heretic to the ground.
+}}
+
+{{Skill_detail
+ |skill=Beckon
+ |description=Draws in people from adjacent locations.
+ |lessons=
+ |syntax=ANGEL BECKON [<target>]
+ |required=Roomwide: 35 Angel power<br>Target:35 Angel power, and 30 mana
+ |target=Adventurers and room
+ |cooldown=Roomwide: 4.00 seconds of equilibrium<br>Target: 1.50 seconds of equilibrium
+ |detail=This ability will cause your angel to draw all those in adjacent locations to your location. If you target a specific adventurer (who must be in an adjacent location), then it will draw only that adventurer in. If the adventurer(s) being drawn in can't move normally, then angel beckon will do nothing.
+}}
+
+{{Skill_detail
+ |skill=Sear
+ |description=Order your angel to sear an unlucky opponent.
+ |lessons=
+ |syntax=ANGEL SEAR <target><br>ANGEL SEAR ICEWALL <direction>
+ |required=10 Angel power and 100 mana
+ |target=Adventurers and room
+ |cooldown=2.50 seconds of equilibrium
+ |detail=With this ability, you may command your guardian angel to sear an opponent with intense heat, causing them to burst into flames. If the target is a denizen, this will not consume any of your angel's power.<p>If your target is an adventurer and is already ablaze, they shall become sensitive to pain(*).<p>Alternatively, your angel can melt an icewall.<p>* This respects the deafness defence: if this is present the angel shall strip it instead.</p>
+}}
+
+{{Skill_detail
+ |skill=Judgement
+ |description=Pass a sentence of death upon the evil.
+ |lessons=
+ |syntax=JUDGE <target>
+ |required=
+ |target=Adventurers
+ |cooldown=5.00 seconds of equilibrium
+ |detail=Through supplication and prayer, you may seek judgement that an adventurer has committed a crime punishable by death, and await his sentence.<p>This ability takes some time to work, though less if the heretic possesses the justice affliction at the time you begin.</p>
+}}
+
+{{Skill_detail
+ |skill=Strip
+ |description=Order your angel to strip a defence from a heretic.
+ |lessons=
+ |syntax=ANGEL STRIP <target>
+ |required=10 Angel power and 100 mana
+ |target=Adventurers
+ |cooldown=1.80 seconds of equilibrium
+ |detail=You may order your angel to strip a defence from your opponent. It will always strip magical shields first.
+}}
+
+{{Skill_detail
+ |skill=Ripples
+ |description=Your angel watches for chaos ripples.
+ |lessons=
+ |syntax=ANGEL RIPPLES
+ |required=15 Angel power
+ |target=Room
+ |cooldown=2.00 seconds of equilibrium
+ |detail=With this ability, you will be able to see a list of all chaos entities currently on the Prime Material Plane.
+}}
+
+{{Skill_detail
+ |skill=Ward
+ |description=Cause fear in most chaos entities.
+ |lessons=
+ |syntax=ANGEL WARD
+ |required=15 Angel power
+ |target=Room
+ |cooldown=3.10 seconds of equilibrium
+ |detail=Ward will cause all Chaos Entities in the room to have to fight to maintain their composure. If they fail, they will flee in fear.
+}}
+
+{{Skill_detail
+ |skill=Chasten
+ |description=Deal a mind-numbing blow to an enemy.
+ |lessons=
+ |syntax=CHASTEN <target> [BODY{{!}}MIND{{!}}<affliction>]
+ |required=100 mana
+ |target=Adventurers
+ |cooldown=2.80 seconds of equilibrium
+ |detail=The successful believer requires many methods to discourage the chaotic natures of many of Achaea's inhabitants. Chasten will allow you to disrupt an adventurer's mental processes, while focusing it upon the body will disrupt their physical processes.<p>This ability can be performed off balance if following a smite attack.</p><p>Available body afflictions: paralysis, healthleech, clumsiness, nausea, and asthma.<br>Available regular afflictions: epilepsy, dizziness, confusion, and recklessness.</p> <p> Should your target have all of the afflictions from one pool, they will receive either addiction (for body) or impatience (for mind). </p>
+}}
+
+{{Skill_detail
+ |skill=Presences
+ |description=Searches out all in the local area.
+ |lessons=
+ |syntax=ANGEL PRESENCES
+ |required=50 Angel power
+ |target=Room
+ |cooldown=2.50 seconds of equilibrium
+ |detail=Using this ability, you will be able to gain information on the status of the other people in the same area as you.
+}}
+
+{{Skill_detail
+ |skill=Lift
+ |description=Raise up your congregation.
+ |lessons=
+ |syntax=ANGEL LIFT <target>
+ |required=
+ |target=Room
+ |cooldown=2.90 seconds of equilibrium
+ |detail=Command your angel to lift an individual into the sky if outdoors, and it shall be so.
+}}
+
+{{Skill_detail
+ |skill=Trace
+ |description=Have your angel report on someone's movement.
+ |lessons=
+ |syntax=ANGEL TRACE <target><br>ANGEL TRACE OFF
+ |required=25 Angel power
+ |target=Adventurers
+ |cooldown=2.00 seconds of equilibrium
+ |detail=With trace, your angel will report on each movement of an adventurer, within the same continent.
+}}
+
+{{Skill_detail
+ |skill=Sap
+ |description=Order your angel to sap the mental strength of an enemy.
+ |lessons=
+ |syntax=ANGEL SAP <target>
+ |required=5 Angel power
+ |target=Adventurers
+ |cooldown=2.75 seconds of equilibrium
+ |detail=Order your angel to sap the mental strength of your target. The more afflictions your target suffers from, the more this will drain(*).<p>* The drain scales to the number of afflictions they are suffering from. Guilt, ablaze, spiritburn, and tenderskin increase the value by more than other afflictions, followed by mental and limb based afflictions. Inquisition increases more than anything else.</p>
+}}
+
+{{Skill_detail
+ |skill=Care
+ |description=Have your angel care for your physical well-being.
+ |lessons=
+ |syntax=ANGEL CARE [ON{{!}}OFF]
+ |required=50 Angel power
+ |target=Self
+ |cooldown=1.80 seconds of equilibrium
+ |detail=This ability will cause your Angel to regularly heal your afflictions at a significant cost of power to her.
+}}
+
+{{Skill_detail
+ |skill=Refuge
+ |description=Have your angel transport you to a place of safety.
+ |lessons=
+ |syntax=ANGEL REFUGE
+ |required=300 Angel power
+ |target=Self
+ |cooldown=5.00 seconds of equilibrium
+ |detail=Using this ability, you may order your Angel to take you to Nirvana.
+}}
+
+{{Skill_detail
+ |skill=Empathy
+ |description=Have your angel heal you regularly.
+ |lessons=
+ |syntax=ANGEL EMPATHY<br>ANGEL EMPATHY OFF
+ |required=
+ |target=Self
+ |cooldown=2.50 seconds of equilibrium
+ |detail=With this ability, your Angel will regularly heal you if you are damaged.
+}}
+
+{{Skill_detail
+ |skill=Power
+ |description=Increase your angel's power through use of mana.
+ |lessons=
+ |syntax=ANGEL POWER
+ |required=Mana
+ |target=2.75 seconds of equilibrium
+ |cooldown=
+ |detail=Using the mental bond between you and your angel, you can devote some of your own mental energy to restore your spiritual companion's strength.
+}}
+
+{{Skill_detail
+ |skill=Contemplate
+ |description=Perceive the state of another's mental strength.
+ |lessons=
+ |syntax=CONTEMPLATE <target>
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=1.00 seconds of equilibrium
+ |detail=With this ability, you may see how much mana an adventurer has.
+}}
+
+{{Skill_detail
+ |skill=Sacrifice
+ |description=Full restoration of self at great cost to your angel.
+ |lessons=
+ |syntax=ANGEL SACRIFICE
+ |required=
+ |target=Self
+ |cooldown=5.00 seconds of equilibrium
+ |detail=Though it will cost her greatly, your Angel will make the massive sacrifice required to restore you fully in both mind and body.
+}}
+
+{{Skill_detail
+ |skill=Absolve
+ |description=Command your angel to tear the soul from your enemy.
+ |lessons=
+ |syntax=ANGEL ABSOLVE <target>
+ |required=50 Angel power
+ |target=Adventurers
+ |cooldown=4.40 seconds of equilibrium
+ |detail=Using this most powerful of Angelic abilities, your Angel will rip the very soul from your enemy. Be warned though, your enemy must be on less than half of his maximum mana.
+}}
+
+[[Category:Skills]]

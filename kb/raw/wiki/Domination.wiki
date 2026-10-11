@@ -1,0 +1,306 @@
+Domination is without question the most dangerous art within Achaea. It involves the summoning of entities from the [[Chaos Plane]] as well as [[Chaos Lords]]. A practitioner risks their life and very soul in dealing with them, for they are powerful and not to be trifled with. To gain the services of a [[Chaos entities|Chaos Entity]], one must first discover a way into the Chaos Plane. Once there, search them out and attempt to dominate them.
+
+Though once connected with the Chaos Plane, [[Taug|Lord Taug]], also known as [[Pazuzu|Prince Pazuzu]] is no longer welcome there, and thus bargains can no longer be made with this [[Chaos Lords]] through the abilities of Domination.
+
+It should also be noted that although wielding the recondite magicks of the occultist
+has historically been regarded as an altogether laissez faire matter (save by the [[Church]]), since the rise of the [[Glaaki|Imperator]] and closer ties of the Chaos Court with the [[Prime Material Plane|Prime]], power rests with the [[Ruinous Intercessor of Interplanar Dominion]] to [[exile]] any cabalist who would use his or her discordant talents against the [[Ashtan|Seat of Chaos]].
+
+The skill of '''Domination''' is available to members of the [[Occultist]] [[class]], along with [[Occultism]] and [[Tarot]].
+
+==Abilities in Domination==
+{{Skill_detail
+ |skill=[[Skyrax]]
+ |description=Skyrax, the Skyscourge.
+ |lessons=0
+ |syntax=COMMAND DERVISH AT <target>
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=2.10 seconds of entity balance
+ |detail=When you call upon the aid of Skyrax, he will send you a whirling dervish, which, when you command it will knock your target from the skies or trees.
+}}
+
+{{Skill_detail
+ |skill=[[Rixil]]
+ |description=Rixil, the spectre.
+ |lessons=7
+ |syntax=COMMAND SYCOPHANT AT <target>
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=2.00 seconds of entity balance
+ |detail=Rixil, when summoned, will send to you a sycophant, which, when COMMANDed, will significantly increase the recovery time from your victim's next attempt to focus their mind.<p>When primebonded, the sycophant shall drain the mana of your enemies; this mana is increased if they are shivering, and increased even more so if they are frozen.</p>
+}}
+
+{{Skill_detail
+ |skill=[[Eerion]]
+ |description=Eerion, the demon jester.
+ |lessons=16
+ |syntax=COMMAND GREMLIN AT <target>
+ |required=50 mana
+ |target=Adventurers and denizens
+ |cooldown=2.75 seconds of equilibrium
+ |detail=When you call upon Eerion, he will send to you a foul little gremlin, who will, when COMMANDed, shatter the magical shields surrounding your target. If your target labours under the whispering madness affliction, you will recover faster from this ability.<p>When primebonded, the gremlin shall race around the legs of your target, inspiring dizziness in them; if they are already dizzy, it shall knock them off balance.</p>
+}}
+
+{{Skill_detail
+ |skill=[[Arctar]]
+ |description=Arctar, the Defender.
+ |lessons=34
+ |syntax=COMMAND ORB
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=Arctar, the Defender. Enigmatic, skilful, Guardian of the Chaos Throne. When you summon him, he will send to you a chaos orb. This orb may then be COMMANDed to explode, granting you a temporary defence against that which would harm you. 
+}}
+
+{{Skill_detail
+ |skill=[[Scrag (Chaos Lord)|Scrag]]
+ |description=Scrag, tender of the bloodleech pool.
+ |lessons=56
+ |syntax=COMMAND BLOODLEECH AT <target>
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=
+ |detail=Scrag is the tender of the bloodleech pool upon the Plane of Chaos. When called upon, he shall send one of his servants to you: when commanded, it shall thin the blood of your foe, causing them to suffer from haemophilia.<p>When primebonded, the leech shall coax out the blood of your foe, making them bleed. If their blood is thinned, the amount of bleeding will be increased.</p>
+}}
+
+{{Skill_detail
+ |skill=[[Pyradius]]
+ |description=Pyradius, the firelord.
+ |lessons=89 
+ |syntax=COMMAND FIRELORD AT <target> <affliction>
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=3.00 seconds of entity balance
+ |detail=Pyradius will send his firelords to assist you. These Chaotic minions have the power to convert the afflictions your enemies labour into other conditions:
+
+- Whisperingmadness becomes recklessness.
+
+- Manaleech becomes anorexia.
+
+- Healthleech becomes psychic damage (this does not cure the
+healthleech).
+
+When primebonded, the firelords will strike down those in your location and adjacent ones with Pyradius' fire, burning them and setting them ablaze.
+}}
+
+{{Skill_detail
+ |skill=[[Golgotha]]
+ |description=Golgotha, the Ascendant's Thrall
+ |lessons=112
+ |syntax=SUMMON GOLGOTHA
+ |required=
+ |target=
+ |cooldown=2.40 seconds of equilibrium
+ |detail=Though a mere shadow of his former glory, Golgotha will pact with occultists. He will grant a protection from attempts to magically banish your chaotic servants back to the Chaos Plane, though it will only aid you when you are in the same location as the targeted entities.
+}}
+
+{{Skill_detail
+ |skill=[[Dameron]]
+ |description=Jy'Barrak Dameron, the Hand
+ |lessons=134
+ |syntax=COMMAND MINION AT <target>
+ |required=
+ |target=Adventurers
+ |cooldown=
+ |detail=Jy'Barrak Dameron is the right hand of the infernal throne. The minion he shall send to aide you can be commanded to unravel the very mind of your target, slaying them instantly(*).<p>The minion's of Dameron gain no benefit from being primebonded, though when one is present it will protect all of your other minions from being banished from the prime.</p><p>* They must be enlightened, as with unravel via the occultism skill.</p>
+}}
+
+{{Skill_detail
+ |skill=[[Palpatar]]
+ |description=Palpatar, the Glutton of Glaaki.
+ |lessons=178
+ |syntax=COMMAND WORM AT <target>
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=3.10 seconds of entity balance
+ |detail=When you call upon the Glutton of Glaaki he shall send one of his vile worms to aide you. When commanded at a victim it shall infest them with the Glutton's maggots, which shall periodically leech away their health(*), though they wither and die given some time.<p>When primebonded, the worm shall burrow into your target's belly, making them violently ill periodically(**).</p><p>* Gives healthleech on a tick.<br>** Gives nausea.</p>
+}}
+
+{{Skill_detail
+ |skill=[[Nin'Kharsag]]
+ |description=Nin'Kharsag, the Slime Master.
+ |lessons=223
+ |syntax=COMMAND SLIME AT <target>
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=2.60 seconds of entity balance
+ |detail=Summoning the Slime Lord will cause a chaos slime to be sent to you.
+
+When COMMANDed, it will envelop your victim and cause their next tree tattoo attempt to take longer to recover from. If they have asthma, they will also be paralysed; inhaling the Slime Lord's spawn is never good for one's health.
+
+When primebonded, the slime shall periodically damage your target; the amount of damage inflicted is increased if they are suffering from healthleech.
+}}
+
+{{Skill_detail
+ |skill=[[Istria]]
+ |description=Istria, the pathfinder.
+ |lessons=289
+ |syntax=ORDER PATHFINDER HOME
+ |required=
+ |target=Self
+ |cooldown=3.00 seconds of equilibrium
+ |detail=When called upon, Istria, known as the Pathfinder, will send to you a pathfinder entity. Wherever you summon the pathfinder entity will be home to it. Later, you may simply ORDER PATHFINDER HOME to be taken back to where the pathfinder was summoned from.
+}}
+
+{{Skill_detail
+ |skill=[[Marduk]]
+ |description=Marduk, the eater of souls.
+ |lessons=
+ |syntax=ORDER SOULMASTER POSSESS <target><br>ORDER <target> <command>
+ |required=356
+ |target=Adventurers
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Marduk will send to you a soulmaster entity. This entity may be ordered to POSSESS an adventurer. When it does, it will take a few seconds to gain control of the victim's mind. Once it has done this, you may ORDER <target> <command>. Doing this is quite difficult for the soulmaster though, so you will be restricted to doing it once every few seconds. 
+}}
+
+{{Skill_detail
+ |skill=Primebond
+ |description=Agency upon the Prime.
+ |lessons=356
+ |syntax=PRIMEBOND<br>PRIMEBOND FORM <chaos lord><br>PRIMEBOND SEVER <chaos lord>
+ |required=
+ |target=
+ |cooldown=
+ |detail=The minions the Chaos Court will send to you are limited in their agency given the constraints they labour under. No matter. A skilled user of Domination will find they are able to forge bonds with the various Chaos Lord's upon the Chaos Plane, and by doing so grant the minions those Lords will send greater freedom when summoned(*).<p>You may only support up to four bonds at a time, so choose wisely. Bonds may only be forged in the presence of the Lord you seek to bond with; they may be severed from anywhere.</p><p>* Entities benefitting from a prime bond will act passively in addition to retaining their active effects. See the ability files for relevant details for each entity.</p>
+}}
+
+{{Skill_detail
+ |skill=[[Nemesis]]
+ |description=Nemesis.
+ |lessons=423
+ |syntax=COMMAND HUMBUG AT <target>
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of entity balance
+ |detail=When you call upon Lord Nemesis he shall send to you a humbug, which when commanded to strike your enemy shall inspire an insatiable addiction in them.<p>When primebonded, the humbug shall drain some health; if they are suffering from said insatiable addiction, it shall also drain some mana as well as additional health.</p>
+}}
+
+{{Skill_detail
+ |skill=[[Buul]]
+ |description=Buul, the Chaos Chirurgeon.
+ |lessons=512
+ |syntax=COMMAND CHIMERA AT <target><br>MOUNT CHIMERA<br>SPUR CHIMERA SKYWARD
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=2.50 seconds of entity balance
+ |detail=When you call upon Buul he shall send to you a chimera, which you may ride, and when commanded at a foe will deliver a most terrifying roar. If your target is not deaf, they shall suffer an affliction of the mind.<p>When primebonded, the chimera shall periodically strike out with one of its heads at a target, causing one of the following effects:<br>- A roar which will cure a target's deafness if such is present, or knock them prone with a stun if it is not.<br>- A headbutt which will knock your foe prone. <br>- An insidious blast of breath which shall inspire sleep in your enemy.</p>
+}}
+
+{{Skill_detail
+ |skill=[[Cadmus]]
+ |description=Cadmus, the cursed shaman.
+ |lessons=600
+ |syntax=COMMAND BUBONIS AT <target>
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of entity balance
+ |detail=The plague lord will send to you a bubonis, which when commanded, will inflict such torment upon your foe with a single touch that their lungs 
+will fill with fluid(*). If they are already suffering in such a way, they shall be struck down with slickness.<p>When primebonded, the bubonis shall act of its own will, inflicting your foe with maladies of the mind.<p>* Gives asthma.</p>
+}}
+
+{{Skill_detail
+ |skill=[[Piridon]]
+ |description=Piridon, the shapechanger.
+ |lessons=738
+ |syntax=ORDER DOPPLEGANGER <command>
+ |required=
+ |target=Adventurers and room
+ |cooldown=
+ |detail=When you summon Piridon, he will send to you a doppleganger. The doppleganger will look like you, though it must be referred to as 'doppleganger'. The doppleganger is much different from other entities in that it may be remotely commanded.<p>'''CHANNEL <ab>''' : Allows you to channel certain Occult abilities through your doppleganger. These include: Ague, Devolution, Eldrichmists, Quicken, Shrivel, Timewarp, and Warp.<br>'''CLOAK''' : Masks your doppleganger's entry and exit.<br>'''EXITS''' : Shows the exits from the room your doppleganger is in.<br>'''LOOK''' : Your doppleganger looks at the room it is in.<br>'''MOVE <dir>''' : Your doppleganger moves in a specific direction.<br>'''RETURN''' : Your doppleganger returns to you.<br>'''SEEK <who>''' : Your doppleganger seeks a specific adventurer. If he is flying, it will go and wait underneath. Trees present no obstacle to this.</p><p>Special note about channeling: the channel to your doppleganger is a two-way link, however briefly it may be in operation. Any backlash from an attack channeled through your doppleganger has a very high likelihood of continuing through that link and harming you directly.</p>
+}}
+
+{{Skill_detail
+ |skill=[[Danaeus]]
+ |description=Danaeus, the dark savant.
+ |lessons=911
+ |syntax=COMMAND STORM AT <target>
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=2.20 seconds of entity balance
+ |detail=Danaeus will send to you a Chaos Storm. You may command the storm to inflict your target with clumsiness.<p>When primebonded, the storm shall periodically notify you of where its target is located, providing they remain in the local area and are not protected from forms of scrying.</p>
+}}
+
+{{Skill_detail
+ |skill=[[Xenophage]]
+ |description=Xenophage, keeper of the chaos gate.
+ |lessons=1083
+ |syntax=SUMMON XENOPHAGE
+ |required=
+ |target=Self
+ |cooldown=
+ |detail=Xenophage will, when called upon, bring you instantly to the Chaos Plane. However, you must be on full health and mana to use this.
+}}
+
+{{Skill_detail
+ |skill=[[Lycantha]]
+ |description=Lycantha, Keeper of the Hounds.
+ |lessons=1256
+ |syntax=COMMAND HOUND AT <target>
+ |required=50 mana
+ |target=Adventurers and denizens
+ |cooldown=3.50 seconds of entity balance
+ |detail=The Keeper of the Chaos Hounds shall send one of his charges to serve you when called upon.<p>When commanded to strike an adventurer, the hound shall inspire weariness in them.<p>Against denizens, the hound will rend their flesh, dealing damage(*).<p>When primebonded, the hound shall periodically break magical shields when such are present.<p>* Commanding your hound against denizens requires and uses equilibrium, rather than entity balance.</p>
+}}
+
+{{Skill_detail
+ |skill=Tarotlink
+ |description=Command your doppleganger to throw tarot cards.
+ |lessons=1428
+ |syntax=ORDER DOPPLEGANGER CHANNEL FLING <tarot card> [target]
+ |required=
+ |target=Adventurers
+ |cooldown=3.00 seconds of balance
+ |detail=Willing your doppleganger to use a card in your possession, you'll be able to order it to fling it remotely! Note that not all of the tarots can be used by the doppleganger. For instance: Death and Hermit, among others.
+}}
+
+{{Skill_detail
+ |skill=[[Hecate]]
+ |description=Hecate, Mother of the Crones.
+ |lessons=1566
+ |syntax=COMMAND CRONE AT <target> <LEFT|RIGHT ARM|LEG>
+ |required=50 mana
+ |target=Adventurers
+ |cooldown=3.00 seconds of entity balance
+ |detail=Hecate will send to you a withered crone which can be commanded to wither the limbs of your victim.<p>When primebonded, the crone will act to wither limbs on her own, though she will not always pick wisely.</p>
+}}
+
+{{Skill_detail
+ |skill=Covenant
+ |description=You are known to the court.
+ |lessons=1600
+ |syntax=COVENANTS
+ |COVENANT ESTABLISH
+ |COVENANT DISBAND <covenant>
+ |COVENANT MANIFEST <covenant>
+ |required=
+ |target=
+ |cooldown=10 seconds of equilibrium
+ |detail=Having established yourself as a practitioner of the art, you are now able to make pacts on a greater scale than previously. While you have formed prime bonds with a cadre of the Chaos Lords, you may establish a covenant. You may have up to two covenants at once, and swap between them by manifesting the desired of the two.</p><p>(*)This swaps your set of prime bonds.</p><p>(**) This comes with a long equilibrium.</p>
+}}
+
+{{Skill_detail
+ |skill=Feed
+ |description=A transaction most profane.
+ |lessons=1600
+ |syntax=PRIMEBOND FEED <chaos lord>
+ |required=8% karma
+ |target=
+ |cooldown=3.00 seconds of equilibrium
+ |detail=Melding your knowledge of Occultism with the bonds you have wrought with the Lord's of the Chaos Court, you may pour karma down one of these
+established connections to empower the servants of that Chaos Lord that stand alongside you.<p>* Doubles the tick rate of that entity and forces a tick to happen very shortly after the empowerment, though that entity will be destroyed within 18 seconds.<br>** You may only perform this ability once per minute.</p>
+}}
+
+{{Skill_detail
+ |skill=[[Glaaki]]
+ |description=Glaaki, the Eldritch Ascendant
+ |lessons=1738
+ |syntax=SUMMON GLAAKI<br>COMMAND ABOMINATION AT <target>
+ |required=
+ |target=
+ |cooldown=
+ |detail=Ancient; formidable; greatest of the Chaos Lords. The Eldritch Ascendant is all of these and many things left best unspoken. Ruthlessly pragmatic, Glaaki tore his rule from the hands of those thought untouchable. Any who pact with him beware, for slights can fester a thousand years or more. <p>To those granted his grace, the Ascendant shall bestow the use of one of his abominable servants. This avatar, when commanded to violate a victim whose aura has been made sufficiently vulnerable to external assault, shall determine the fundamental nature of the target and grant the occultist the greatest weapon of all; knowledge of their subject's true name.</p><p>(*) an aura can be made sufficiently vulnerable through the cleanseaura ability in Occultism.<br>(**) truenames gained in this way have a much shorter lifespan than those gained through standard methods.</p>
+}}
+
+[[Category:Skills]]
+[[Category:Chaos]]
+[[Category:Edit needed]]
