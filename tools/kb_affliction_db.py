@@ -154,15 +154,16 @@ def main():
         md.append(f"- **{title}** ({len(pool)} entries): marked NoRandomCure by the game: "
                   + (", ".join(f"`{a}`" for a in both) if both else "none"))
     md += ["", "## Afflictions", "",
-           "| Affliction | Cure(s) | Wears off after | Diagnose shows | When it hits you | When it is cured | Flags set |",
-           "|---|---|---|---|---|---|---|"]
+           "| Affliction | Cure(s) | Wears off after | Diagnose shows | When it hits you | When it is cured | When it wears off | Flags set |",
+           "|---|---|---|---|---|---|---|---|"]
     for k, r in sorted(db.items()):
         if r.get("alias_of"):
             continue
         on = ", ".join(f for f, v in sorted(r.get("flags", {}).items()) if v is True)
         cell = lambda s: (s or "").replace("|", "\\|")
         md.append(f"| [`{k}`](../raw/live/affliction_show/{k}.txt) {cell(r['name'])} | {cell(r.get('cures'))} | {cell(r.get('default_time'))} | "
-                  f"{cell(r.get('diagnose'))} | {cell(r.get('afflicted_msg'))} | {cell(r.get('cured_msg'))} | {on} |")
+                  f"{cell(r.get('diagnose'))} | {cell(r.get('afflicted_msg'))} | {cell(r.get('cured_msg'))} | "
+                  f"{cell(r.get('expire_msg'))} | {on} |")
     aliases = sorted((k, r["alias_of"]) for k, r in db.items() if r.get("alias_of"))
     if aliases:
         md += ["", "## Old names the game still accepts", "",

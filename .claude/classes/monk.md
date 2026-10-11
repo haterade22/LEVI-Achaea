@@ -49,7 +49,7 @@ phases (TK6):
 parry_avoidance: "During PREP skip parried limb; if last limb parried -> kai surge (dismount) -> sweep (prones) -> punch last limb"
 
 kai_modes:
-  surge: "31 kai, 3.2s eq, dismount (tekura6.config.kaiMode = 'surge')"
+  surge: "31 kai, 3.2s eq, dismount (tekura6.config.kaiMode = 'surge')"  # the code's 31; wiki KW:319 says 45 kai (unverified)
   cripple: "41 kai, 4s eq, dismount + L1 break all limbs ('cripple')"
 ```
 
@@ -96,7 +96,10 @@ shikudo_afflictions:
   kuro: "weariness, or lethargy if already weary (Rain/Oak/Gaital)"  # AB 2501 confirmed 2026-10-04; trigger 573 records exactly this
 
 telepathy_afflictions:
-  mindlock: "Required for Telepathy abilities"
+  mindlock: "Needed ONLY to reach a target outside your room, and for certain skills such as Radiance and
+    Sapience (the user and Mystor, 2026-10-11). In-room affliction attacks (impatience, paralyse, batter, confuse,
+    stupidity, epilepsy, ...) need no lock. The wiki also puts BLACKOUT behind the lock; the players' rule says
+    otherwise, so confirm it on its first live use"
   impatience: "Required for hardlock"
   batter: "stupidity + epilepsy + dizziness"
   paralyse: "Backup for paralysis"
@@ -107,7 +110,8 @@ form_strategy:
   3: "Transition to Oak - apply asthma, paralysis, weariness"
   4: "Stay in Oak - maintain afflictions, use Telepathy for impatience"
 
-kill_method: "Pure damage pressure through staff attacks + Telepathy once truelocked"
+kill_method: "Once truelocked: damage (staff and kicks) or MIND SCYTHE. Telepathy helps BUILD the lock (MIND
+  IMPATIENCE is its impatience); it is not saved for after it (corrected 2026-10-11)"
 
 implementation:
   # Corrected 2026-10-11: 008 is switched off; the live lock is 007.
@@ -138,7 +142,7 @@ prerequisites:  # the game's (WIKI): prone + damaged head + crushed throat
 
 kill_flow:
   phase_1_prep_legs:
-    form: "Rain (24 kata capacity)"
+    form: "Rain (twice the normal chain length, wiki; the code caps it at 24)"
     attacks: "KURO left/right"
     goal: "Both legs to 90.8% (one hit from break)"
     protection: "Once prepped, use LIGHT attacks to avoid breaking"
@@ -188,7 +192,9 @@ key_mechanics:
   forms:
     transition: "Need 5+ kata to transition between forms"
     kata_reset: "ANY transition resets kata to 0"
-    kata_limit: "12 per form (24 for Rain)"
+    kata_limit: "No game number (wiki: Rain allows twice the normal length; Tykonos never stumbles). The code
+      caps at 12, 24 in Rain; Oak reached 13 with no stumble (log 2026-10-11), which rules out only a certain
+      stumble at 12"
 
 kill_condition_check: |   # 006's check: stricter than the game (the leg term is not needed)
   tAffs.prone
@@ -365,18 +371,21 @@ kai:
     - cripple: "Self-damage for affliction cure"
     - transmute: "Convert MANA into HEALTH (AB 893; requires balance, does not consume it) -- this line said health-to-mana until v4.7.320, which is backwards"
 
-# Telepathy
-mindblast:
+# Telepathy (every ability: kb/classes/monk.md; lines and costs seen in fights: kb/combat/shikudo.md)
+# There is no MINDBLAST: MIND BLAST and MIND SCRAMBLE are Monk BATTLERAGE (scripts/_groups.yaml), and
+# Telepathy's damage ability is MIND CRUSH (corrected 2026-10-11).
+mindcrush:
   skill: Telepathy
-  balance: eq
-  effect: "Mental damage and affliction"
-  syntax: "MINDBLAST <target>"
+  balance: "eq, 3.40s (wiki)"
+  effect: "Physical and mental damage; works on adventurers and denizens"
+  syntax: "MIND CRUSH [target]"
 
 mindlock:
   skill: Telepathy
-  balance: eq
-  effect: "Apply mental lock"
-  syntax: "MINDLOCK <target>"
+  balance: "none listed; 80 mana (wiki)"
+  effect: "Locks your mind to the target's. Needed only to reach a target outside your room and for certain
+    skills such as Radiance and Sapience (the user and Mystor, 2026-10-11)"
+  syntax: "MIND LOCK <target>"  # live: 'mind lock Claes' (log 2026-10-11); MINDLOCK was wrong
 ```
 
 ## Defensive Abilities
@@ -477,7 +486,9 @@ recommended_strategy: |
 ```yaml
 # Shikudo uses 6 forms with different attacks available per form
 # Must have 5+ kata to transition between forms
-# Each form has a maximum kata before you stumble (lose kata)
+# The max_kata values below are the CODE's caps (006/007/008), NOT the game's: the wiki gives no number
+# (Rain allows "twice the normal length"; Tykonos is exempt and can hold a chain indefinitely), and a
+# log (2026-10-11) shows Oak at kata 13 with no stumble. The stumble line has never been captured.
 
 Tykonos:
   max_kata: 12
@@ -489,7 +500,7 @@ Tykonos:
 
 Willow:
   max_kata: 12
-  staff_attacks: [dart, hiru, hiraku]
+  staff_attacks: [dart, sweep, hiru, hiraku]  # sweep added 2026-10-11 (wiki SW:89)
   kicks: [flashheel]
   transitions_to: [Rain]
   style: "Speed-focused"
@@ -501,7 +512,7 @@ Rain:
   kicks: [frontkick]
   transitions_to: [Tykonos, Oak]
   style: "Best for damage building"
-  notes: "PRIMARY PREP FORM - 24 kata = ~8 combos of sustained damage"
+  notes: "PRIMARY PREP FORM - 24 kata (the code's cap) = ~8 combos of sustained damage"
 
 Oak:
   max_kata: 12
@@ -540,14 +551,14 @@ transition_map:
 # Optimal form cycle: Willow → Rain → Oak → Gaital (when ready)
 #
 # Willow: Start here, HEAD prep with hiru/hiraku, transition to Rain at 6 kata
-# Rain: PRIMARY LEG prep with kuro (24 kata capacity!), can also prep head with hiru
+# Rain: PRIMARY LEG prep with kuro (24 kata, the code's cap), can also prep head with hiru
 # Oak: HEAD prep with nervestrike, ONLY go to Gaital when BOTH legs AND head prepped
 # Gaital: KILL form - sweep, needle, spinkick, dispatch
 #
 # If kill fails in Gaital: Maelstrom → Oak → (continue cycle)
 #
 # Key: NEVER enter Gaital until both legs AND head are prepped
-# Key: Rain has 24 kata = ~8 combos of sustained prep time
+# Key: Rain has 24 kata (the code's cap) = ~8 combos of sustained prep time
 ```
 
 ## Shikudo Implementation (LEVI System)
@@ -555,7 +566,7 @@ transition_map:
 # UNIFIED OFFENSE SYSTEM
 # All Shikudo offense modes consolidated into single file
 
-primary_file: "008_CC_Shikudo_Offense_ALL.lua"
+primary_file: "008_CC_Shikudo_Offense_ALL.lua"  # SWITCHED OFF (isActive 'no'): the live code is 006 + 007
   header: "Shikudo Offense (Unified)"
   description: "Unified Shikudo offense with mode selector (shikudo.dispatch/status/setMode)"
   includes:
@@ -571,9 +582,9 @@ files:
   003_Dispatch_Dat_Hoe.lua: ""
   004_Levi_Dispatch.lua: ""
   005_Shikudo_Needle_Logic.lua: ""
-  006_CC_Shikudo_Dispatch.lua: "Standalone dispatch"
-  007_CC_Shikudo_Lock.lua: "Standalone lock"
-  008_CC_Shikudo_Offense_ALL.lua: "UNIFIED offense (all modes) - PRIMARY"
+  006_CC_Shikudo_Dispatch.lua: "Dispatch -- LIVE (sk; zz/xx when the monk has no stance)"
+  007_CC_Shikudo_Lock.lua: "Lock -- LIVE (sr -> shikudoLock.dispatch(); shikudolock() is only its fallback)"
+  008_CC_Shikudo_Offense_ALL.lua: "UNIFIED offense (all modes) -- switched off"
   009_CC_Shikudo_GodMode.lua: "God Mode handler (shikudo.godmode.run/status)"
 
 # Mode Selection
@@ -590,7 +601,7 @@ mode_system:
 dispatch_specifics:
   staff: "Every attack prepends 'wield staff489282' (artifact staff)"
   mhaldorian_safety: "On a Mhaldorian target, sends INCAPACITATE instead of DISPATCH (friendly-fire safety)"
-  kai_surge_dismount: "Auto 'kai surge' (>=31 kai) to dismount a mounted target while in Rain"
+  kai_surge_dismount: "Auto 'kai surge' (>=31 kai) to dismount a mounted target while in Rain"  # wiki KW:319: 45 kai (unverified)
   gaital_kai_window: "Kai Surge window in Gaital (ataxiaTemp.kaiSurgeWindow) sweeps to re-prone + hammers the parried limb (~15s no-remount)"
   shield: "If target shielded, combo with 'shatter' to break it"
 
@@ -681,7 +692,7 @@ current_system:
 
   kill_sequence:
     phase_1: "Willow: START HERE, head prep with hiru/hiraku, transition to Rain at 6 kata"
-    phase_2: "Rain: PRIMARY LEG prep with kuro (24 kata!), can also prep head with hiru"
+    phase_2: "Rain: PRIMARY LEG prep with kuro (24 kata, the code's cap), can also prep head with hiru"
     phase_3: "Oak: HEAD prep with NERVESTRIKE FIRST (paralysis prevents parry!)"
     phase_4: "Gaital: ONLY when both legs AND head prepped → sweep + break → dispatch"
     fallback: "If kill fails in Gaital: Maelstrom → Oak → (continue cycle)"
@@ -828,13 +839,18 @@ oak_continuation:
     4: "Then mind impatience, watch their cures"
     5: "Transition to Willow or Gaital for finisher"
 
-# CRITICAL: Opponent CANNOT SEE what happens during blackout!
-# No combat messages at all - they must DIAGNOSE to know what hit them
+# CRITICAL (the user, 2026-10-11): "Blackout is a CRITICAL affliction to give (you give it once, they usually
+# touch tree to cure and we give it again). Under blackout they cannot see what we do to them."
+# The game (AFFLICTION SHOW blackout): lasts 4 seconds, cured by time; the TREE cured it in log 2 (it is not
+# NoRandomCure); it "obscures your prompt and prevents you from seeing many things happening" -- MANY, not all. A live
+# victim (log 2026-10-11) lost their prompt and their own action lines, still saw the monk eat, and touched
+# the tree 1.85s in.
 blackout_psychology:
-  - "Opponent sees nothing during blackout"
+  - "Opponent sees almost nothing of what we do during blackout (their prompt is hidden)"
   - "Most assume you're just disrupting and CONCENTRATE"
   - "Meanwhile you've paralyzed them, burst limbs, stacked affs"
-  - "When blackout ends, they're in terrible state with ZERO info"
+  - "When blackout ends they have missed much of what we did (log 2: they still saw the monk eat, and their
+    curing kept running)"
   - "They waste time with DIAGNOSE while you transition to Oak"
 ```
 
@@ -859,7 +875,9 @@ phases:
     description: "Build kata for blackout burst"
     form: Rain
     attacks: "kuro (weariness/lethargy), ruku (clumsy), hiru (dizziness)"
-    goal: "Reach 9+ kata with mindlock established"
+    goal: "Reach 9+ kata with mindlock established"  # 008's rule. The players need no lock in the room except for
+    # certain skills (Radiance, Sapience), but the next phase is BLACKOUT, which the wiki puts behind the lock;
+    # unconfirmed in the room (kb/CONFLICTS.md #7)
     transition_to: "BLACKOUT_BURST when ready"
 
   BLACKOUT_BURST:
@@ -883,7 +901,12 @@ phases:
     forms: [Oak, Gaital, Rain]
     goal: "Kill through sustained damage"
 
-key_functions:
+key_functions:  # NONE of these exists: 008 (switched off) has no isReadyForBurst or canBlackout, and updatePhase is
+  # 007's shikudoLock.updatePhase. 008's burst rule is inline in shikudo.selectTelepathy (008:395-444): an eq test
+  # on ataxia.balances.eq, which nothing writes; mindlock first; Rain only; in riftlock the bare word
+  # `blackout <target>` at kata >= 9 with 008's own 10 s limit (the wiki lists 4.00 s of equilibrium and no
+  # separate cooldown; not checked in game). The status line 'Burst Ready' (008:1023) is Rain + kata >= 9 +
+  # mindlocked.
   isReadyForBurst: "Returns true when in Rain with 9+ kata and mindlock"
   canBlackout: "Returns true if EQ available and cooldown elapsed"
   updatePhase: "Automatically detects and updates current phase"
@@ -891,14 +914,20 @@ key_functions:
 synergies:
   - "Telepathy is FASTER in Rain stance (EQ balance decrease bonus)"
   - "Kai Surge is faster in Rain (for mounted targets)"
-  - "Blackout hides ALL combat messages from opponent"
+  - "Blackout hides most of what we do (the game: 'many things') for 4 seconds, or until they tree it"
   - "Frontkick can prone (confusion via hiru if already prone)"
 
-telepathy_rule:
-  critical: "ONLY use Telepathy in RAIN form!"
-  reason: "Rain provides EQ balance decrease bonus - telepathy is faster"
-  exception: "Mindlock can be established in any form (one-time setup)"
-  all_other_telepathy: "blackout, paralyse, impatience, batter - RAIN ONLY"
+telepathy_rule:  # corrected 2026-10-11 (the user and Mystor; wiki; log 1)
+  preferred: "Rain is where Telepathy is cheapest: 'your equilibrium recovery shall be significantly increased'
+    (wiki SW:173). MIND TRAVEL took 0.85s in Gaital and 0.72s in Rain (log 1). The user: 'Shikudo Monks also use
+    telepathy in RAIN form do to the bonus of EQ.'"
+  not_only: "Not only Rain, though: log 1 cast MIND IMPATIENCE and MIND PARALYSE in Willow"
+  one_or_the_other: "In log 1 a telepathy round took the place of that round's combo (the user, below: 'you can't
+    attack and do telepathy'; log 1's alias swapped the combo out for the MIND command). Open: in log 2 a
+    blackout arrived inside a combo round (kb/combat/shikudo.md)"
+  mindlock: "Needed for a target outside the room and for certain skills such as Radiance and Sapience (the user
+    and Mystor), so not a setup step for the (*) attacks in the room. Open for BLACKOUT: the wiki puts it behind
+    the lock and it has not been tried in the room without one (kb/CONFLICTS.md #7)"
 ```
 
 ### Scythe Fork Strategy (Gaital)
@@ -1099,7 +1128,8 @@ Shikudo-specific triggers:
 - Needle messages: "jabs * with the staff" - windpipe damage
 - Dispatch messages: "dispatches *" - kill executed
 - SPINKICK on prone: "spins and kicks * in the head" - massive damage
-- Stumble: "You lose your rhythm" - kata reset, form may change
+- Stumble: "You lose your rhythm" (UNVERIFIED: in no log and no trigger). Per the wiki a stumble resets the kata
+  AND drops you into Tykonos; Tykonos itself never stumbles
 - Hyperfocus: "You will now focus on bypassing attempts to deflect blows when striking the *"
   → Call shikudo.setHyperfocus(matches[2]) to track state
 - Hyperfocus clear: "You stop focussing upon bypassing your target's parry"
@@ -1126,9 +1156,11 @@ Edge cases:
   - Prone + damaged head: INSTANTLY MANGLES head (level 2 → 3)
 - SWEEP uses BOTH arm balances - only one kick allowed
 - Form transitions require 5+ kata (can transition anytime after 5 if conditions met)
-- Rain form has 24 kata max (all others have 12)
+- Rain allows "twice the normal length" of kata (wiki); the 24/12 caps are the CODE's. A stumble is a chance
+  that grows the longer a chain runs (wiki), so log 2026-10-11's Oak 13 and Rain 18 without one rule out only a
+  certain stumble at 12, not a 12/24 limit. Tykonos is exempt
 - Willow transitions at 6 kata (2 combos) to avoid over-prepping legs
-- Rain stays and preps head with hiru if legs already prepped (no rush, 24 kata)
+- Rain stays and preps head with hiru if legs already prepped (no rush, 24 kata: the code's cap)
 - Oak at 9 kata goes to Gaital if ready, otherwise cycles back to Willow for more prep
 - Gaital at 9 kata goes to Maelstrom if kill not ready (Maelstrom → Oak → Gaital cycle)
 - Other non-Rain forms transition at 9 kata

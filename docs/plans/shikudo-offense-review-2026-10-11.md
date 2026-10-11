@@ -24,9 +24,15 @@ Dispatch/Incapacitate are used outside a combo, in any form.
 healthleech if already clumsy; kuro weariness, or lethargy if already weary; hiru dizziness, plus confusion if
 prone; hiraku anorexia + stuttering, plus a stun if prone; jinzuku addiction; needle crushed throat; flashheel
 BREAKS a leg in one blow; frontkick (arm) and sweep prone; risingkick stun (head if prone, torso with internal
-trauma); dawnkick epilepsy shortly after, a second time if prone. Telepathy (mind-locked target): MIND
+trauma); dawnkick epilepsy shortly after, a second time if prone. Telepathy: MIND
 IMPATIENCE / PARALYSE / CONFUSE / STUPIDITY / EPILEPSY / FEAR / AMNESIA / PACIFY / DEADENING / DAZE / DISRUPT /
-ISOLATE / CLAMP / BLACKOUT, and MIND BATTER = stupidity + epilepsy + dizziness.
+ISOLATE / CLAMP / BLACKOUT, and MIND BATTER = stupidity + epilepsy + dizziness. The wiki's (*) abilities
+among them (impatience, paralyse, confuse, stupidity, epilepsy, fear, amnesia, deadening, disrupt, batter) need
+no lock. The players (the user and Mystor, 2026-10-11) say most Telepathy needs only the target in the room,
+with a lock only for out-of-room targets and certain skills such as Radiance and Sapience. PACIFY, DAZE,
+ISOLATE, CLAMP and BLACKOUT carry no (*), and the wiki's text for PACIFY, ISOLATE, CLAMP and BLACKOUT also names
+a locked target. Whether they need the lock in the same room is unconfirmed (blackout: kb/CONFLICTS.md #7); see
+"Telepathy and blackout" below.
 
 **Kill routes:** Crescent (Maelstrom kick: prone and <= 50% health, otherwise a long recovery and you drop to
 Tykonos); Dispatch (prone + damaged head + windpipe); Mind Scythe (mangled head + two of stupidity, impatience,
@@ -47,7 +53,7 @@ jinzuku in one form.
 | 009_CC_Shikudo_GodMode | Unreachable: `vv` calls `shikudo.setMode`, which exists only in inactive 008, so `vv` throws |
 | 001, 002, 004, 005 | Dead (no callers, or redefined by 006) |
 | 003, 008 | Inactive |
-| aliases `dis`, `lock` | Throw on every press (call undefined functions) |
+| aliases `dis`, `lock` | Call undefined functions, but sit in the switched-off SHIKUDO alias group, so they never fire (corrected 2026-10-11) |
 
 ## Offense logic findings
 
@@ -84,8 +90,8 @@ or parry records nothing, which is correct. Problems:
    them: ruku ~132-147 characters, hiru ~145, livestrike ~127, needle ~129, kai surge ~190, against a wrap of
    119-124. If they wrap they never match. Slickness/asthma/dizziness then rely only on the short third-person
    effect lines, and **ruku to the arm (clumsiness/healthleech) has no fallback**. Needs a live log to confirm.
-2. **Mind Confuse and Mind Stupidity record nothing.** They call `tarAffedConfirmed`, defined only in the
-   inactive `001_Core.lua`. **Blackout, fear, amnesia, epilepsy, pacify, deadening, daze, isolate and clamp are
+2. **Mind Confuse and Mind Stupidity recorded nothing** (fixed in v4.7.413). They called `tarAffedConfirmed`,
+   defined only in the inactive `001_Core.lua`. **Blackout, fear, amnesia, epilepsy, pacify, deadening, daze, isolate and clamp are
    not tracked at all.**
 3. **Missing prone conditionals:** hiru's confusion, hiraku's stun, risingkick's stun. **Dawnkick is not tracked**
    (first epilepsy or the delayed second one).
@@ -152,3 +158,69 @@ a sword-and-board Runewarden by Dispatch (the monk's log) and a Runewarden killi
 - **Phase 2 (make the current modes correct): next.** Add to the list above: Crescent reads
   `ataxiaTemp.lastAssess`; flashheel is a break, not prep; never SWEEP with a staff attack; send
   SHATTER when the target has a shield; never send a transition below kata 5.
+
+## Telepathy and blackout (the user and Mystor, 2026-10-11)
+
+Checked against the wiki, the two logs, the game's AFFLICTION SHOW and the code (written up in
+`kb/combat/shikudo.md`, "Telepathy" and "Blackout").
+
+- **A mind lock is needed only to reach a target outside the room**, and for certain skills such as
+  Radiance and Sapience (Mystor: "lock is only needed for out of room things"). Most Telepathy needs only
+  the target in the room (the user); the wiki's (*) abilities certainly, blackout unconfirmed (#7).
+- **Rain is where Telepathy is cheapest:** "your equilibrium recovery shall be significantly increased"
+  (wiki); MIND TRAVEL took 0.85 s in Gaital and 0.72 s in Rain. Monks also use it in other forms (log 1:
+  Willow). In log 1 a Telepathy round took the place of the combo that round (the alias swapped one for
+  the other); log 2's blackout arrived inside a combo round, so whether both fit in one round is open.
+- **Blackout is critical** (the user): they usually TREE it off, and we give it again; under it they
+  cannot see what we do to them. The game: it lasts 4 s and is cured by time. Mystor: "You can blackout,
+  and then combo 1 time. And the combo is hidden." Each tree spent on blackout is a tree (about 14 s
+  cooldown, log 2) not spent on the lock. The wiki says blackout needs a lock; the players' rule says not
+  in the room: confirm live.
+
+**What the code gets wrong today (add to phase 2):**
+1. **No automated Telepathy can fire.** 007 checks `ataxia.balances.eq`, which nothing writes (the real
+   field is `ataxia.vitals.eq`, `update_stuff/004_ataxia_Vitals_Update.lua`). 008 (switched off) and 009
+   (unreachable) are the only other pickers in the offense files, and 006 has none. A fourth,
+   `disruptmind()` (`levi_scripts/telepathy/001_DISRUPT.lua`), is loaded but nothing calls it. It queues
+   `mind blackout`, then CONFUSE, DISRUPT and IMPATIENCE (`queue addclear free`, the right `mind <ability>`
+   form, no lock gate). It sends no target: the wiki's BLACKOUT syntax takes none, and the others take an
+   optional one. It keys off `tAffs.blackout`, which nothing sets for MIND BLACKOUT, so it would only ever
+   send BLACKOUT.
+2. **Every ability waits on `mindlocked`** (007:426, 008:404): drop the gate for in-room abilities; keep a
+   lock only for anything that truly needs one.
+3. **Bare words are sent** (`mindlock`, `impatience`, `paralyse`, `batter`, `blackout`): the game takes
+   `MIND IMPATIENCE <target>` (log 1). The alias `mp` sends `mind paralyze`, and `mrap` reads an `affstrack`
+   that is never assigned.
+4. **Prefer Rain for Telepathy rounds** and decide per round between a combo and a MIND command.
+5. **Blackout cycle:** MIND BLACKOUT, then the hidden combo; again after their tree (or the 4 s expiry).
+
+**Tracking to add (phase 2):**
+6. **Blackout on the target:** nothing records MIND BLACKOUT; the two blackout recorders (Psion LIGHTSTEAL
+   525, Knight CONCUSS snb/008, both only on a prone target) clear it after 3.5 s where the game says 4;
+   and the tracker's tree pool (`treeCurableAffsV3`) lacks blackout, so a tree under blackout never cures
+   it in our model. The tree is charged to the target's OTHER afflictions instead, if it carries any:
+   `onTargetTreeV3` removes the one tree-pool affliction present or branches over several, then trigger
+   389's `tSingleRandom()` erases the first present one on its own list. One or two real afflictions are
+   dropped while blackout stays until its timer. Use `ataxia_tarAffTimed("blackout", 4)` and put blackout
+   in the tree pool. Capture our MIND BLACKOUT success line first.
+7. **No triggers for MIND EPILEPSY, AMNESIA, STRIP, DEADENING, SCYTHE, FEAR, PACIFY, DAZE, ISOLATE or
+   CLAMP**; and a MIND affliction sent outside the server queue is never seen by the gated
+   `telepathy_tekura` triggers. No alias does this today: `mba`, `mp`, `mi` and `md` use
+   `queue addclear free` (`mrap` uses `queue add eqbal`). The unqueued `min`, `ml`, `mu`, `mhl`, `mha` and
+   `mhd` send LOCK, UNLOCK and HALLUCINATE, which no `telepathy_tekura` trigger matches (the lock line, 701,
+   is ungated). Only a MIND affliction typed by hand goes unseen.
+
+**Form and kata facts the offense must use (log 1, wiki):**
+- Willow combos with a kick cost 1.9 s against 2.1 s elsewhere (2.8 s with dawnkick); only the kick's
+  reading prints, so staff-only combos are unmeasured.
+- A standalone TRANSITION costs no balance and works while paralysed; a refused one keeps the kata chain.
+  The comments in `basher/002_Class_Bashing.lua` at 2361 and 2620, and the live trigger
+  `triggers/.../shikudo/002_Reset_Failsafe.lua`, which sets `ataxia.vitals.kata = 0` and echoes
+  "-= reset kata =-" on every refusal until charstats re-reports, all assume it resets; all are wrong.
+  Every strike sent counts toward the kata, fumbled and parried ones included.
+- ADOPT reaches a form off the transition list but costs 4.1 s of balance.
+- The kata caps in 006/007/008 (12, 24 in Rain) have no source. Log 1: Oak reached 13 and Rain 18 with no
+  stumble; a stumble is a chance that grows (wiki), so this rules out only a certain stumble at 12, which is
+  how the code's comments put it (006 "Must transition before kata 12 stumble"), not a 12/24 limit. Kai
+  Surge: the code assumes 31 kai but never checks it on a live path (TK6 sends KAI SURGE with no kai check,
+  007 uses 31 only for a READY echo, and only switched-off 008 gates on it); the wiki says 45.

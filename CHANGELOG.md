@@ -2,6 +2,77 @@
 
 ---
 
+## 2026-10-11 - Telepathy, blackout and the Shikudo forms in the knowledge base (docs and generators only, no version bump)
+
+The user and Mystor (in game) corrected what our docs said about Telepathy. Their rules were checked
+against the wiki, the two logs, the game's own AFFLICTION SHOW and the code, and every page now says
+the same thing (`kb/combat/shikudo.md`, `.claude/classes/monk.md`, the rework plan, `docs/kill-paths.md`,
+`kb/CONFLICTS.md`, CLAUDE.md).
+- **A mind lock is needed only to reach a target outside the room, and for certain skills such as
+  Radiance and Sapience.** Most Telepathy needs only the target in the room: the wiki's 15 (*)
+  abilities certainly. The docs said the lock was "Required for Telepathy abilities" and that
+  Telepathy was for Rain "ONLY".
+  Rain is where it is cheapest (wiki: "equilibrium recovery shall be significantly increased"; log 1:
+  MIND TRAVEL took 0.85 s in Gaital and 0.72 s in Rain); it is not the only form (log 1 used two MIND
+  attacks in Willow).
+- **Blackout** (the user: "a CRITICAL affliction to give ... they usually touch tree to cure and we
+  give it again"). The game's record: it lasts 4 seconds and wears off by itself; in log 2 the tree
+  cured it. The wiki puts it behind the lock (no (*), and `MIND BLACKOUT` names no target); that is
+  open conflict #7, to settle the first time it is used without one. Log 2's blackout arrived INSIDE
+  one of the monk's combo rounds, so whether a MIND command and a combo fit in one round is open too.
+- **Form facts from the logs:** the balance reading prints after a combo's kick, so only combos
+  with a kick are measured: 1.9 s in Willow, 2.1 s elsewhere, 2.8 s with dawnkick. A standalone
+  TRANSITION costs none and goes through while paralysed; a refused one keeps the kata chain; ADOPT
+  needs no kata but costs 4.1 s; SHATTER works in every form (wiki). Log 1's monk opened in
+  **Gaital**, not Rain as `kb/combat/shikudo.md` and `docs/kill-paths.md` had it. A stumble is a
+  growing chance (wiki), so Oak 13 and Rain 18 without one do not disprove a 12/24 kata limit.
+- **What the offense gets wrong** is now listed for phase 2 of the rework: no automated Telepathy can
+  fire (007 reads an equilibrium field nothing writes; a fourth picker, `disruptmind()`, is loaded and
+  never called), every ability waits on the lock, bare words are sent instead of `MIND <ability>
+  <target>`, and nothing records MIND BLACKOUT on the target. Worse than a missing record: the
+  tracker's tree pool lacks blackout, so a tree that cured blackout is charged to one or two REAL
+  afflictions in our model. The live trigger `shikudo/002_Reset_Failsafe` zeroes our kata on a refused
+  transition, which log 1 shows keeps the chain. Kai Surge's 31 kai is assumed but never checked on a
+  live path (TK6 sends it with no kai check; the wiki says 45).
+- `.claude/classes/monk.md`: there is no MINDBLAST (Telepathy's damage ability is MIND CRUSH; MIND BLAST
+  is Monk battlerage), the lock is `MIND LOCK <target>`, 008 is switched off (006 and 007 are live; `sr`
+  calls `shikudoLock.dispatch()`), the "key functions" it listed exist nowhere, and the kata caps and
+  Kai Surge's 31 kai are marked as the code's numbers, not the game's.
+- **Generators:** `tools/kb_wiki_skills.py` keeps each skill page's lead paragraphs and the wiki's own
+  notes, marks the abilities the wiki stars (*), and puts the players' lock rule on the Telepathy page.
+  It now escapes `*` and `<` in prose (GitHub dropped the "(*)" marker the Telepathy note explains,
+  made 13 ability descriptions italic, and read `MORPH <animal>` as an HTML tag), drops disambiguation
+  hatnotes (Anathema, Devotion, Pestilence printed "This page is about ..." twice), and renders a wiki
+  table as a Markdown table (Tekura's belt table leaked as raw `{| ... |}` markup).
+  `tools/kb_affliction_db.py` adds a "When it wears off" column (the game's expire line). The 21 class
+  pages, `abilities.json` and `database.md` are regenerated.
+- `kb/raw/players/shikudo-2026-10-11.txt`: the user's and Mystor's own words on Shikudo, Telepathy,
+  the lock, blackout and Mystor's form plan (Rain to 10 kata with arm prep, Oak for asthma and
+  slickness, Willow for the lock), kept verbatim as evidence.
+- **Checked before shipping:** five agents tried to refute every new claim against the wiki, the logs,
+  the code and the game's records, and a second agent re-checked each finding. 55 problems were
+  confirmed and fixed (the items above that differ from the first draft), one was rejected.
+- `kb/CONFLICTS.md`: SHATTER resolved; new open items for blackout and the lock, the kata limits, Kai
+  Surge's cost and blackout tracking.
+
+---
+
+## 2026-10-11 - Local Lua 5.1 on this machine; a test that only ran on Linux (tests and docs only, no version bump)
+
+- **Native Lua 5.1.5** (LuaBinaries Win64) installed to `C:\Tools\lua51` and added to the user PATH, and
+  `lupa` installed in the main Python. `lua5.1` / `luac5.1` are the names CI, the VS Code "Run Tests"
+  task, `/verify` and the pre-commit lint hook call; the hook had been printing "No luac found --
+  skipping Lua syntax check", so it had never linted on this machine.
+- **`test_kb_capture.lua` failed 13 tests under native Windows Lua** while Linux (CI) and lupa passed: it
+  wrote to `os.tmpname()`, which under `lua5.1.exe`'s old C runtime (msvcr80) names a file in the drive
+  ROOT (`\s1hk.`), where it cannot write. Such a name is now moved into `%TEMP%`, and the open is
+  asserted, so a failure names the path instead of "attempt to index local 'f'". The suite passes
+  2845/2845 under native Lua 5.1, lupa and CI.
+- CLAUDE.md's testing note covers both runners, the restart a PATH change needs, why it must stay 5.1,
+  and the `os.tmpname()` rule.
+
+---
+
 ## 2026-10-11 - Shikudo: hits on the target are recorded, checked against two real fights (v4.7.413-414)
 
 Phase 1 of the Shikudo offense rework (`docs/plans/shikudo-offense-review-2026-10-11.md`). The user

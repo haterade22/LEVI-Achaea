@@ -6,6 +6,10 @@
 
 ## Evileye (34 abilities)
 
+Evileye is a skill that is perhaps related to the Curses skill used by the Shamans, albeit perhaps less powerful. With it, one may make eye contact with an opponent and give them the 'evil eye', imposing a wide variety of afflictions upon the opponent. At the high end of the ability, one learns the craft of giving multiple afflictions simultaneously.
+
+The skill of Evileye is available to members of the Apostate class, along with Necromancy and Apostasy.
+
 Source: [https://wiki.achaea.com/Evileye](https://wiki.achaea.com/Evileye) (raw: `kb/raw/wiki/Evileye.wiki`)
 
 | Ability | Syntax | Cost | Cooldown / balance | Works on | Afflictions named |
@@ -84,6 +88,12 @@ Source: [https://wiki.achaea.com/Evileye](https://wiki.achaea.com/Evileye) (raw:
 
 ## Necromancy (32 abilities)
 
+Necromancy is the dark art of death magic. At the lower levels, there is an assortment of rather nefarious abilities. Soon though, the ability of Cannibalism is gained, a skill which has inspired wide-spread fear of those practicing Necromancy. Through cannibalism, a Necromancer increases his life essence, which powers the higher abilities. At the very highest level, a Necromancer gains the power to protect his very soul from death.
+
+The ability to regain the life essence necessary to use Necromancy may be sealed from individuals by the Dread Ecclesiarch of Transvital Corruption, should they prove themselves to be directly against the ideals of the Lords of Evil. One who has undergone this process is said to be in anathema.
+
+The skill of Necromancy is available to members of the Apostate class, along with Evileye and Apostasy. Once practised by the Occultist and Infernal classes as well.
+
 Source: [https://wiki.achaea.com/Necromancy](https://wiki.achaea.com/Necromancy) (raw: `kb/raw/wiki/Necromancy.wiki`)
 
 | Ability | Syntax | Cost | Cooldown / balance | Works on | Afflictions named |
@@ -144,7 +154,7 @@ Source: [https://wiki.achaea.com/Necromancy](https://wiki.achaea.com/Necromancy)
 - **Belch**: Spew forth a noxious gas. This ability will allow you to belch forth a cloud of foul, poisoning gas that will hurt anyone breathing it in, except you.
 - **Deathaura**: Surround yourself in a miasma of evil. This ability will create, for a sixth of an Achaean day, and at a cost of life essence, an aura of death and evil that will harm all enemies who are in your location.
 - **Disfigure**: Curse someone with the visage of a rotting corpse. Using this ability, you will cause your opponent's visage to become so horrific that even his closest allies will turn on him. The chaos and fickleness of emotion and sentiment is a wonderful thing, is it not?
-- **Soulstorm**: Driving animal spirits away. Unleash your necromantic essence in a deadly soulstorm, cruelly assaulting the soul of your foe. This ability will attempt to force a metamorphosized adventurer back into his mortal form. Against denizens, you will instead profane their soul with malign energy, causing them to take ten percent more damage from necromantic abilities(*), the curses of evileye(**), and the weaponmastery attacks of your fellow Infernals(***). In this case, the equilibrium and essence costs of this dark art shall be greatly reduced. * NECROMANCY DECAY and TAINT. ** EVILEYE BLEED. *** All weapon-based attacks in the WEAPONMASTERY skill when performed by an Infernal.
+- **Soulstorm**: Driving animal spirits away. Unleash your necromantic essence in a deadly soulstorm, cruelly assaulting the soul of your foe. This ability will attempt to force a metamorphosized adventurer back into his mortal form. Against denizens, you will instead profane their soul with malign energy, causing them to take ten percent more damage from necromantic abilities(\*), the curses of evileye(\*\*), and the weaponmastery attacks of your fellow Infernals(\*\*\*). In this case, the equilibrium and essence costs of this dark art shall be greatly reduced. \* NECROMANCY DECAY and TAINT. \*\* EVILEYE BLEED. \*\*\* All weapon-based attacks in the WEAPONMASTERY skill when performed by an Infernal.
 - **Gravehands**: Summon the hands of the grave to hinder your opponents. This ability will cause rotting hands to rise up from the ground to grab at the ankles of any who try to leave the location. The only ones who will not be affected are those who serve Evil in the city of Mhaldor.
 - **Leprosy**: Spread disease to all around you. By filling your body with the unclean, you can infect many others in the room with you, be they friend or foe, causing random limbs to shrivel up. Useful against a group.
 - **Exterminate**: Destroy all plant life in a location. Using your command of the energies of death, you are able to wipe a forest area clean of plant life, replenishing some of your essence. Be warned though, there is an essence cost to this ability, and unless there is a sufficient amount of plant life in the room, you may lose essence using it. It should also be noted that an exterminated room is no longer considered a forest room, so many Druidic abilities will not work in such a room. Take note: prolonged use of extermination will take a toll on your essence reserves, and you will find that each subsequent attempt incurs a greater cost in essence than the last to perform.
@@ -157,6 +167,10 @@ Source: [https://wiki.achaea.com/Necromancy](https://wiki.achaea.com/Necromancy)
 - **Soulcage**: Harness your life essence to escape death itself. This is perhaps the greatest of the necromantic abilities, and carries with it the greatest life essence cost. It allows you to spin a web of life essence around your very soul, protecting it from death. Soulcage may only be used once every 6 Achaean days. The soulcage can be deactivated by raising a barrier of life essence between it and your soul, preventing it from saving you from death. It may be reactivated later for a much lower essence cost. SOULCAGE STATUS will show the current state of your soulcage, if any.
 
 ## Apostasy (36 abilities)
+
+The hallmark skill of the Apostate, Apostasy is the art and science of summoning and dealing with the mighty Baalzadeens and lesser daemons. In it, they will learn to use the sentient daeggers, form a relationship with your loving Baalzadeen, and learn to summon a variety of lesser daemons into a pentagram drawn with blood. Perhaps the most feared ability of the Apostasy skill is that which allows your Baalzadeen to tear the soul from an unwilling victim.
+
+The skill of Apostasy is available to members of the Apostate class, along with Necromancy and Evileye.
 
 Source: [https://wiki.achaea.com/Apostasy](https://wiki.achaea.com/Apostasy) (raw: `kb/raw/wiki/Apostasy.wiki`)
 
@@ -203,7 +217,7 @@ Source: [https://wiki.achaea.com/Apostasy](https://wiki.achaea.com/Apostasy) (ra
 
 - **Daegger**: Call to your side a living, daemonic daegger to aid you. The daemonic daeggers are actually living creatures; small daemons with a network of small brains geared towards making them somewhat intelligent weapons. You can quickly stab your daegger at your target even if your skill in weaponry isn't very high because the creature's eye and limited levitation abilities will help to guide your hand. If the daegger is envenomed then the target has a chance to receive the relevant venom affliction. The strength, accuracy, and to a lesser degree speed of your stabs will depend on your skill in Apostasy.
 - **Hunt**: Command your daegger to hunt your enemy. Your daegger has become stronger. Strong enough, in fact, that it can, with a bit of help from you, levitate itself and even fly at potentially lethal speeds towards your foe. This is superior to simply throwing the weapon because it can hook around and come at odd angles, and if it misses, it will attack again. Because you are guiding the daegger largely with the power of your mind, your intelligence, not your strength, affects the power with which it will strike your opponent. Additionally, your weaponry skill is what affects the chance of it hitting, as the daegger is putting most of its energy into the act of levitation. The higher your skill in Apostasy is, the greater the number of passes your daegger will make.
-- **Envenom**: Envenom your daegger to poison your victims. With this ability, you may layer venoms on an edged weapon. Each time that weapon hits somebody, one venom will poison your opponent, and disappear from the weapon. They work on a last-on, first-off basis, so if you put xentio on a weapon, and then put voyria on, the voyria would come off first, and the xentio second. You must have the selected venom in a vial in your inventory. In order to get rid of the venoms on a weapon, simply WIPE <weapon>.
+- **Envenom**: Envenom your daegger to poison your victims. With this ability, you may layer venoms on an edged weapon. Each time that weapon hits somebody, one venom will poison your opponent, and disappear from the weapon. They work on a last-on, first-off basis, so if you put xentio on a weapon, and then put voyria on, the voyria would come off first, and the xentio second. You must have the selected venom in a vial in your inventory. In order to get rid of the venoms on a weapon, simply WIPE &lt;weapon>.
 - **Pentagrams**: Sketch an infernal pentagram, in blood. At a small life essence cost (if you do not have the essence skill in necromancy then telling just how much you have and how much you are using will be difficult) you can infuse your blood with a greater power. Then, taking your daegger, you make a small puncture in your hand, and carve an infernal pentagram onto the ground with your own steaming blood. There can be only one pentagram on the ground in a room at a given time, and you can only use a pentagram drawn in your own blood, infused with the life essence of others, as it may be. From here, a variety of other abilities may be used.
 - **Baalzadeen**: Summon your beloved Baalzadeen to do your bidding. The Baalzadeen is the primary daemon of the apostasy skill. They strike a balance between being powerful enough to be very useful to you, but not so powerful that they break your will, and consume your mind and soul. Though ethereal and either unable or unwilling to do anything to defend itself, its powers can be bent towards your ends in many ways.
 - **Taste**: Taste the flesh of your Baalzadeen. By tasting the sweet, sweet flesh of your Baalzadeen, you will be able to determine its level of health, and any ongoing abilities it is using.
