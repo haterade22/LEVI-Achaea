@@ -38,7 +38,6 @@ ALLOWLIST = {
     'levi_ataxia/for_levi/leviticus/general/024_Meteorite.lua',
     'levi_ataxia/for_levi/leviticus/general/026_Calcify.lua',
     'levi_ataxia/for_levi/leviticus/highlighting/048_Aeonic_Distortion_Proc.lua',
-    'levi_ataxia/for_levi/leviticus/monk/002_Kai_Surge.lua',
 }
 
 

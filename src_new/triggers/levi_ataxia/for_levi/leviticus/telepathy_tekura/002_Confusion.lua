@@ -40,8 +40,9 @@ patterns:
 ]]--
 
 if isTargeted(matches[2]) then
-	-- Guarded v4.7.261: callee lives in a script that is switched off, so a bare call throws.
-	if tarAffedConfirmed then tarAffedConfirmed("confusion") end
+	-- v4.7.413: tarAffedConfirmed lives only in the inactive 001_Core, so the guarded call recorded
+	-- NOTHING and Mind Confuse was invisible to the tracker.
+	tarAffed("confusion")
   if ataxia.settings.raid.enabled then
     if partyrelay and not ataxia.afflictions.aeon then
     send("pt confusion on "..matches[2],false)

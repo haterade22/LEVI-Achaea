@@ -33,19 +33,16 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^As the power of your kai builds within you, you lift a hand towards (\w+)\. A searing bolt of power leaps forth, blasting \w+ backwards and leaving \w+ lying, twitching, upon the ground\.$
+- pattern: ^As the power of your kai builds within you, you lift a hand towards (\w+)\.
   type: 1
 ]]--
 
 if isTargeted(matches[2]) then
-  tAffs.prone = true
   erAff("shield")
   selectString(line, 1)
   setBold(true)
   fg("violet")
   resetFormat()
-  tarAffed("prone")
-  confirmAffV2("prone")
   tarAffed("prone")
 
   -- 15s mount lockout window: target cannot remount, use sweep + parried limb
@@ -59,5 +56,5 @@ if isTargeted(matches[2]) then
 end
 
 if partyrelay and not ataxia.afflictions.aeon then
-  send("pt: " .. matches[2] .. ": Kai Surged (prone)")
+  send("pt " .. matches[2] .. ": Kai Surged (prone)")
 end

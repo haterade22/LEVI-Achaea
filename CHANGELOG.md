@@ -13,6 +13,17 @@ in the intro, two Combat System rows (salve and timed-affliction tracking, curin
 
 ---
 
+## 2026-10-11 - Serpent: a refused backstab falls back to the garrote / bite (v4.7.413)
+
+User: "You must be hiding or phased to backstab. -- this should mean that we are not hidden and need
+to continue with attacking with garrote or biting". New trigger `serpent/023_Backstab_Refused.lua`
+calls the new `ataxiaBasher_serpentBackstabRefused()` (basher/002): it drops the hidden window and the
+`hiding` defence (as the landed backstab does) and re-sends the round at once with
+`ataxiaBasher_requeueNow`, so the garrote (or camus bite with the venom boons) goes out on the balance
+the refused backstab did not spend. Test in `test_searing_light.lua`.
+
+---
+
 ## 2026-10-11 - Serpent: "Your attack has brought you out of hiding." (v4.7.412)
 
 New trigger `serpent/022_Out_Of_Hiding.lua` (user-supplied line) calls

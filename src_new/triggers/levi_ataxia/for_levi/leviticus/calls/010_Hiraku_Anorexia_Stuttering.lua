@@ -38,20 +38,15 @@ patterns:
 - pattern: ^The staff smashes into the face of (\w+) with a sickening crunch\.$
   type: 1
 ]]--
-
-selectCurrentLine() fg("a_yellow") bg("black") 
-replace("" ..matches[2].. " [Hiraku: Anorexia | Stuttering]")
-
-if not tAffs.prone then
-send("pt " ..matches[2].. ": anorexia stuttering")
-tarAffed("anorexia")
-tarAffed("stuttering")
-end
-
-if tAffs.prone then
-				send("pt " ..matches[2].. ": Anorexia Stuttering Stunned")
-			tarAffed("anorexia")
-			tarAffed("stuttering")
-      
-      
+-- v4.7.413: only for OUR target (it recorded and relayed anyone's hit on anyone), and the party
+-- message only goes out with party relay on.
+-- (A prone target is also stunned briefly; no target stun is tracked yet, so it is only relayed.)
+if isTargeted(matches[2]) then
+  selectCurrentLine() fg("a_yellow") bg("black")
+  replace("" ..matches[2].. " [Hiraku: Anorexia | Stuttering]")
+  tarAffed("anorexia")
+  tarAffed("stuttering")
+  if partyrelay then
+    send("pt " ..matches[2].. ": anorexia stuttering" .. (haveAff("prone") and " (stunned)" or ""))
+  end
 end

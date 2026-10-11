@@ -42,14 +42,12 @@ patterns:
 - pattern: ^The end of the staff smashes into the exposed throat of (\w+), crushing cartilage\.$
   type: 1
 ]]--
-
-if matches[2]==target then
-selectCurrentLine() fg("a_yellow") bg("black") 
-replace("" ..matches[2].. " [NEEDLE: Crushed Throat]")
+-- v4.7.413: only for OUR target (it recorded and relayed anyone's hit on anyone), and the party
+-- message only goes out with party relay on.
+if isTargeted(matches[2]) then
+  selectCurrentLine() fg("a_yellow") bg("black")
+  replace("" ..matches[2].. " [NEEDLE: Crushed Throat]")
+  tarAffed("crushedthroat")
+  tneedle = 100
+  if partyrelay then send("pt " ..matches[2].. ": Crushed Throat") end
 end
-
-
-send("pt " ..matches[2].. ": Crushed Throat")
-   
-tarAffed("crushedthroat")
-tneedle = 100
