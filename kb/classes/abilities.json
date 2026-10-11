@@ -333,6 +333,11 @@
     "target": "Self"
    }
   ],
+  "intro": [
+   "Aeonics grants Depthswalkers a degree of control over the flow of time. Originally practiced by the ancient Tsol'teth Overlord Agith'maal, it was deemed too dangerous even by the standards of the current generation of the Tsol'teth race and placed upon the short list of arts forbidden. However, not all of Agith'maal's descendents were so cautious. Parni deSangre, destroyer of once-great Seleucar taught an apprentice; and when she was hunted down and slain by the Tsol'teth warrior Agith'tai for her perceived threat, he granted Sapience knowledge of the art. Whether out of spite or duty, it is still unknown. Practitioners of this skill specialise in modifications to localised time, both their own and that of others. It is whispered that the truly great may turn aside the greatest enemy of all: death.",
+   "The skill of Aeonics is available to members of the Depthswalker class, along with Shadowmancy and Terminus."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Aeonics.wiki",
   "url": "https://wiki.achaea.com/Aeonics"
  },
@@ -605,6 +610,11 @@
     "target": "Adventurers"
    }
   ],
+  "intro": [
+   "Alchemy is the primary study of the Alchemists, focusing on the manipulation of the ether and the alchemical energies that flow through it. The main focus of the skill is based upon drawing upon the latent alchemical energies via Symbology to direct the power of the alchemical primes and metals. Further aspects of Alchemy involve the extraction of the three primes; salt, sulphur, and mercury; from the earth itself, and synthesising these substances into various metals. The skilled practitioner of Alchemy will even find it possible to transmute flesh into varying substances, culminating in the ability to encase another completely in gold.",
+   "The skill of Alchemy is available to members of the Alchemist class, along with Physiology and Formulation or Sublimation."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Alchemy.wiki",
   "url": "https://wiki.achaea.com/Alchemy"
  },
@@ -937,6 +947,12 @@
     "target": ""
    }
   ],
+  "intro": [
+   "In the profane whispers of Outside are the mysteries of Anathema brought to Creation. Issued with calamitous howls from a thousand mouths as the abberations remake themselves in malign image, the skill that defines the Unnamable is a thing of madness and ruin entwined.",
+   "In a quest for twisted perfection does the Unnamable strive, ever forward with regard for neither the self nor the world they seek to defile. Melding karma and self-imposed desolation to birth something new, the chaotic warriors of Ashtan revel in their dire work. For the Unnamable is a thing of nightmare, and where it walks so too does terror follow.",
+   "The skill of Anathema is available to members of the Unnamable class, along with Weaponmastery and Dominion."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Anathema.wiki",
   "url": "https://wiki.achaea.com/Anathema_(skill)"
  },
@@ -1356,6 +1372,11 @@
     "target": "Adventurers"
    }
   ],
+  "intro": [
+   "The hallmark skill of the Apostate, Apostasy is the art and science of summoning and dealing with the mighty Baalzadeens and lesser daemons. In it, they will learn to use the sentient daeggers, form a relationship with your loving Baalzadeen, and learn to summon a variety of lesser daemons into a pentagram drawn with blood. Perhaps the most feared ability of the Apostasy skill is that which allows your Baalzadeen to tear the soul from an unwilling victim.",
+   "The skill of Apostasy is available to members of the Apostate class, along with Necromancy and Evileye."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Apostasy.wiki",
   "url": "https://wiki.achaea.com/Apostasy"
  },
@@ -1598,6 +1619,12 @@
     "target": "Adventurers"
    }
   ],
+  "intro": [
+   "In perfect union of a Magi's craft, Artificing combines the arcane power of elementalism and the perfect balance of crystalism to craft a mighty golem to carry out its creator's bidding.",
+   "Due to their crystalline structure, they have an innate tie to vibrations in their surroundings. A master magi can use this bond to unleash a variety of deadly effects against all who stand in their way.",
+   "The skill of Artificing is available to members of the Magi class, along with Elementalism and Crystalism."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Artificing.wiki",
   "url": "https://wiki.achaea.com/Artificing"
  },
@@ -1910,6 +1937,10 @@
     "target": ""
    }
   ],
+  "intro": [
+   "Bladedance is in the whirl and flash of metallic song, the cut and jab of flourishing a rapier, and the staccato steps within flawless footwork. With their songblessed swords in hand do all Bards whether journeyman or master embrace unconventional fighting techniques that drive studious masters to despair. Acrobatic and athletic from Sunrise to Sunset, by following the tempo of battle like musical notes upon a sheet the storytellers of Achaea manifest a style as unorthodox as it is effective. The skill of Bladedance is available to members of the Bard class, along with Composition and Sagas (or Woe)."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Bladedance.wiki",
   "url": "https://wiki.achaea.com/Bladedance"
  },
@@ -2270,6 +2301,13 @@
     "target": ""
    }
   ],
+  "intro": [
+   "Be it within the inscrutable confines of the Conclave or the implacable depths of the Underrealm, the halls of crystal harmonies or the workshops of artifice, all sorcerers know a singular truth that need not be put to word: some workings are best left unworked. To take up the study of Charnel is no gift or glory: it is a singular rejection of this truth.",
+   "No price too high, no hubris too great. No doom too distant. Such is the burden of the Pariah and such is their eternal fate once they step onto the path of damnation. Dwelling in their black sanctums beneath the desert sands, these reborn sorcerers dabble in the very substance of mortality, and pay the price not with mana or madness but with their eternal souls and the wounds carved therein.",
+   "Woe to he who reads the tablet of interment, and woe to he who does not flee: for life entombed in ensorcelled stone is their Accursed reward and an eternity to weep.",
+   "The skill of Charnel is available to members of the Pariah class, along with Memorium and Pestilence."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Charnel.wiki",
   "url": "https://wiki.achaea.com/Charnel"
  },
@@ -2569,6 +2607,13 @@
     "target": ""
    }
   ],
+  "intro": [
+   "The skill of Composition was coalesced by the Great Bard from the vast diaspora of musical traditions in Achaea. It is the apogee of mortal talent, weaving many disparate traditions the world over into cohesive performances that can as easily move a heart as break one.",
+   "This power flows from the Place of Eternal Song through the instrument of the Bard such that Sapience will never again forget the significance of Art or its impact.",
+   "As dangerous as music can be, however, remember that it is the ability to make history that makes for true might.",
+   "The skill of Composition is available to members of the Bard class, along with Bladedance and Sagas (or Woe)."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Composition.wiki",
   "url": "https://wiki.achaea.com/Composition"
  },
@@ -2993,6 +3038,12 @@
     "target": "Room"
    }
   ],
+  "intro": [
+   "Crystalism is a powerful skill which involves using magical crystals to create vibrations. These vibrations may be single-use or, more commonly, persistent and room-based. In order to set up a vibration, one must first obtain crystals from the Master Crystal of their House using the refine ability. Once a Magi has crystals they can spin them and finally embed various powerful vibrations. Some vibrations will affect only the Magi, some will affect only the Magi's enemies, and some will affect everyone in the room.",
+   "Those who do not hold membership in a House which owns a Master Crystal will find difficulty using some abilities within this skill, and will have to go to the public Master Crystal in the crystal caverns of Tasur'ke.",
+   "The skill of Crystalism is available to members of the Magi class, along with Elementalism and Artificing."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Crystalism.wiki",
   "url": "https://wiki.achaea.com/Crystalism"
  },
@@ -3452,6 +3503,11 @@
     "target": "Adventurers and denizens"
    }
   ],
+  "intro": [
+   "Drawing on the darker side of mysticism, those of the Shaman class have the ability to afflict their enemies with Curses, a deadly skill that can sometimes be prevented only by a curseward. Curses draws on the dark side of the mystic world for its power. It is a simple, yet powerful and deadly skill, allowing one to reel off curse after curse in quick and deadly succession. The curses available range from epilepsy to vertigo to the voyria plague.",
+   "The skill of Curses is available to members of the Shaman class, along with Spiritlore and Vodun"
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Curses.wiki",
   "url": "https://wiki.achaea.com/Curses"
  },
@@ -3854,6 +3910,15 @@
     "target": "Adventurers and self"
    }
   ],
+  "intro": [
+   "Devotion is arguably the personal hallmark of the Bloodsworn servants and arms the Priest and Paladin with many tools with which to fight the enemies of truth and righteousness. Through the power of their faith a priest may enact a holy inquisition to ensure that the enemies of Good are duly punished for their crimes.",
+   "Devotion also offers access to the holy rites, a large group of offensive and defensive tools that can not only offer visions of hell to their foe, pacify the chaotic, summon forth demons and dazzling light to torment their opponent, but can also revitalise allies, resurrect fellow believers, and swear the blood oath to create a powerful bond.",
+   "Devotion is considered a resource and can be gained passively on a daily basis or by immolating the corpses of the fallen in the Flame of Yggdrasil, snatching souls from the harrowing journey to the Finality.",
+   "The skill of Devotion is available to the Priest class. Priests also have the skills of Spirituality and Zeal."
+  ],
+  "notes": [
+   "Penitence is a Priest specific ability."
+  ],
   "source": "kb/raw/wiki/Devotion.wiki",
   "url": "https://wiki.achaea.com/Devotion_(skill)"
  },
@@ -4203,6 +4268,11 @@
     "target": "Self"
    }
   ],
+  "intro": [
+   "Heir to the chivalric tradition, Discipline is a knightly skill that may be thought of as having three distinct parts. The first part, Falconry, involves the raising, training, and use of falcons. The second part of Chivalry is archery. By gaining the abilities to assess wind direction and speed and use different kinds of weapons (longbows, crossbows, darkbows) you may attack from afar, or shoot at a cowardly opponent who has fled to the skies. The third and final part of Chivalry involves an assortment of aggressive abilities ranging from howling a Battlecry, to Engaging your unlucky opponent, to boosting your prowess with Fury.",
+   "The skill of Discipline is available only to members of the Runewarden class, although most of its arts are shared with the Dominion, Malignity, and Valour skills of the Unnamable, Infernal, and Paladin classes. Like the other warrior-classes, Runewardens train in Weaponmastery, but the ideographic skill of Runelore is unique to them."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Discipline.wiki",
   "url": "https://wiki.achaea.com/Discipline"
  },
@@ -4517,6 +4587,13 @@
     "target": ""
    }
   ],
+  "intro": [
+   "Domination is without question the most dangerous art within Achaea. It involves the summoning of entities from the Chaos Plane as well as Chaos Lords. A practitioner risks their life and very soul in dealing with them, for they are powerful and not to be trifled with. To gain the services of a Chaos Entity, one must first discover a way into the Chaos Plane. Once there, search them out and attempt to dominate them.",
+   "Though once connected with the Chaos Plane, Lord Taug, also known as Prince Pazuzu is no longer welcome there, and thus bargains can no longer be made with this Chaos Lords through the abilities of Domination.",
+   "It should also be noted that although wielding the recondite magicks of the occultist has historically been regarded as an altogether laissez faire matter (save by the Church), since the rise of the Imperator and closer ties of the Chaos Court with the Prime, power rests with the Ruinous Intercessor of Interplanar Dominion to exile any cabalist who would use his or her discordant talents against the Seat of Chaos.",
+   "The skill of Domination is available to members of the Occultist class, along with Occultism and Tarot."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Domination.wiki",
   "url": "https://wiki.achaea.com/Domination"
  },
@@ -4855,6 +4932,11 @@
     "target": "Self"
    }
   ],
+  "intro": [
+   "Dominion is a blade-wielding, hound-summoning school of abilities purloined from the chivalric traditions of traditional knighthood for the use of Chaos warriors. The spread of the skill compasses taming the hounds of Lycantha, mastering the various types of bows, and an assortment of aggressive supplemental battle abilities ranging from howling or engaging an unlucky opponent and boosting one's prowess with the fury of the eldritch horror.",
+   "The skill of Dominion is available to members of the Unnamable class, although it shares most of its arts with Valour, Discipline, and Malignity skills of Paladins, Runewardens, and Infernals. Like the other warrior-classes, Unnamables train in Weaponmastery, but the eldritch skill of Anathema is unique to them."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Dominion.wiki",
   "url": "https://wiki.achaea.com/Dominion"
  },
@@ -5413,6 +5495,11 @@
     "target": "Room"
    }
   ],
+  "intro": [
+   "Elementalism is a relatively straightforward skill. By opening channels to four of the five Elemental realms (Magi do not use the Spirit realm), practitioners can cast a wide variety of elementally-based offensive and defensive spells. The effects of these spells might range from summoning an efreeti to calling down the might of Vastar, the Skylord, in the Stormhammer, to bringing forth fog or hail. Elementalism used to be practised by the Sylvan class as well, but was abandoned in 680 AF when they syncronised their abilities with a great storm and it was replaced with the skill of Propagation.",
+   "The skill of Elementalism is available to members Magi class, along with Crystalism and Artificing."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Elementalism.wiki",
   "url": "https://wiki.achaea.com/Elementalism"
  },
@@ -5608,6 +5695,12 @@
     "target": "Self"
    }
   ],
+  "intro": [
+   "The Relics of Proteus were something that both fascinated and confounded the Aldar. As tools of violence and augmentation they were unsurpassed when fully attuned to a user (a bonding impossible to all save those they were designed for), and yet their means of creation was something outside of their understanding, coming as it did from the inscrutable hand of Proteus Himself. This lack of knowing drove many Firstborn to seek the secrets of these creations, a journey which brought them both great victories and terrible losses.",
+   "The art of Emulation is the remnants of the research that those Aldar stored within Saar-elan and Nur. Though their goal of replicating a relic of Proteus was never attained, several of their effects could be emulated to either lesser degrees or in some cases vastly divergent ones.",
+   "The skill of Emulation is available to members of the Psion class, along with Weaving and Psionics."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Emulation.wiki",
   "url": "https://wiki.achaea.com/Emulation"
  },
@@ -6012,6 +6105,11 @@
     "target": "Adventurers and self"
    }
   ],
+  "intro": [
+   "Evileye is a skill that is perhaps related to the Curses skill used by the Shamans, albeit perhaps less powerful. With it, one may make eye contact with an opponent and give them the 'evil eye', imposing a wide variety of afflictions upon the opponent. At the high end of the ability, one learns the craft of giving multiple afflictions simultaneously.",
+   "The skill of Evileye is available to members of the Apostate class, along with Necromancy and Apostasy."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Evileye.wiki",
   "url": "https://wiki.achaea.com/Evileye"
  },
@@ -6397,6 +6495,13 @@
     "target": ""
    }
   ],
+  "intro": [
+   "As bearers of Excision, the paladinal warriors of Light and Fire are the implacable vanguard in the unending battle against the malign forces that plague Creation. Ever faithful and ever formidable, they give no quarter in the war that must be won.",
+   "A wielder of Excision's coruscating brilliance, the Paladin is a champion standing unbowed in the face of those who might seek to thwart the sacred charge imparted upon them. They are the first to charge and the last to flee: a light in the darkest hour whose wrath remains an eternal inspiration to the righteous and breaker of that which is Profane.",
+   "For with steel and flame shall the rot be excised: there will be peace only when there is no more need for swords.",
+   "The skill of Excision is available to members of the Paladin class, along with Valour and Weaponmastery."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Excision.wiki",
   "url": "https://wiki.achaea.com/Excision"
  },
@@ -6653,6 +6758,12 @@
     "target": ""
    }
   ],
+  "intro": [
+   "Using the mystic research carried out over the centuries in the Cauda Pavonis, Alchemists have mastered the art of amalgamating potent compounds that can turn the tide of any battle.",
+   "A variety of different mixtures are available, from phials of toxic gases which can be thrown into groups of enemies, to helpful concoctions that, when imbibed, will bolster the creator's offensive and defensive capabilities.",
+   "The skill of Formulation is available to members of the Alchemist class, along with Alchemy and Physiology. Instead of formulation, an Alchemist may choose the skill of Sublimation."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Formulation.wiki",
   "url": "https://wiki.achaea.com/Formulation"
  },
@@ -7308,6 +7419,14 @@
     "target": "Self"
    }
   ],
+  "intro": [
+   "Groves is the skill of interacting with the great forests of Achaea. It will allow practitioners to establish a private Grove from which they will base their power. Groves absorb and accumulate sunlight, which practitioners use to power the abilities. Every night, a Grove will lose some of the sunlight, as the Grove must maintain itself even when everything else is sleeping soundly. Further, most abilities in Groves will use up some of this sunlight energy.",
+   "The skill of Groves is available to the Druid and Sylvan classes.",
+   "Druids also have the skills of Metamorphosis and Reclamation, while Sylvans also have the skills of Propagation and Weatherweaving."
+  ],
+  "notes": [
+   "Harmony is only available to those druids in appropriate forestal organisations."
+  ],
   "source": "kb/raw/wiki/Groves.wiki",
   "url": "https://wiki.achaea.com/Groves"
  },
@@ -7682,6 +7801,12 @@
     "target": "Adventurers"
    }
   ],
+  "intro": [
+   "Where a skill like Venom is a naturally developed ability, and a skill like Subterfuge is an ability with many magical elements, Hypnosis is a science. It has long been known that our subconscious mind is a powerful force and that it can be influenced in mysterious ways, but until a forgotten Serpentlord discovered the principles of Hypnosis, there was no way to use it.",
+   "With this skill, a practitioner of Hypnosis will be able to sink someone into a hypnotic trance, possibly even without them realising it, and implant various subliminal suggestions. They can then seal their victim's mind and implant a timer that determines how long after the hypnosis has been triggered until the suggestions start becoming active.",
+   "The skill of Hypnosis is available to members of the Serpent class, along with Subterfuge and Venom."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Hypnosis.wiki",
   "url": "https://wiki.achaea.com/Hypnosis"
  },
@@ -8055,6 +8180,11 @@
     "target": "Adventurers"
    }
   ],
+  "intro": [
+   "Kaido is a skill with two main parts to it. The first part, comprising the lower abilities, consist of an assortment of defensive abilities that rely on bodily control, such as automatic mana regeneration, healing limbs by force of will, and so on. The higher abilities relate to the use of Kai energy. After a monk has built up Kai energy by being near violent actions, they may use the Kai abilities, which are extremely powerful.",
+   "The skill of Kaido is available to members of the Monk class, along with Tekura and Telepathy. After a monk has mastered Tekura they may enhance their training with Shikudo."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Kaido.wiki",
   "url": "https://wiki.achaea.com/Kaido"
  },
@@ -8395,6 +8525,11 @@
     "target": "Self"
    }
   ],
+  "intro": [
+   "Steeped in the unholy heritage of the Iron Citadel, Malignity is a knightly skill that may be thought of as having three distinct parts. The first part, hyena-training, involves the raising, training, and use of hyenas. The second part of Malignity is archery. By gaining the abilities to assess wind direction and speed and use different kinds of weapons (longbows, crossbows, darkbows) you may attack from afar, or shoot at a cowardly opponent who has fled to the skies. The third and final part involves an assortment of aggressive abilities ranging from howling a Battlecry, to Engaging your unlucky opponent, to boosting your prowess with Fury.",
+   "The skill of Malignity is available only to members of the Infernal class, although most of its arts are shared with the Dominion, Valour, and Discipline skills of the Unnamable, Paladin, and Runewarden classes. Like the other warrior-classes, Infernals also train in Weaponmastery, but the cruel skill of Oppression is unique to them."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Malignity.wiki",
   "url": "https://wiki.achaea.com/Malignity"
  },
@@ -8707,6 +8842,13 @@
     "target": "Adventurers and denizens"
    }
   ],
+  "intro": [
+   "There are few mediums as potent in the working of sorcery as blood, be it one's own or an enemy's.",
+   "The practitioner of Memorium understands and accepts this. Wielding desert-forged blade in one hand and arcane might in the other, the Pariah needs no weapon besides blood and will to see their ends achieved. With sanguine ink and air as canvas, they carve their inevitable decrees into the world, one corpse at a time.",
+   "The practitioner of this skill learns to trace the ancient logographs of the desert tribes, each imbued with singular purpose and empowered by the medium through which it is brought to life. The very beating of your foe's heart shall beat the march of their demise, and drop by drop the sands shall drink of their final days.",
+   "The skill of Memorium is available to members of the Pariah class, along with Pestilence and Charnel."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Memorium.wiki",
   "url": "https://wiki.achaea.com/Memorium"
  },
@@ -9759,6 +9901,15 @@
     "target": "Adventurers"
    }
   ],
+  "intro": [
+   "Metamorphosis is the ability to bond with the spirits of various animals, ranging from the mundane to the fantastic. To begin the process, MORPH <animal>. Once a metamporh has successfully metamorphosed, they will find it is a strain on them to stay bonded causing a greater endurance drain. UNMORPH (or HUMAN) will bring them out of the form.",
+   "The skill of Metamorphosis is available to the Druid and Sentinel classes.",
+   "Druids also have the skills of Groves and Reclamation, while Sentinels also have the skills of Woodlore and Skirmishing."
+  ],
+  "notes": [
+   "The Basilisk and Jaguar morphs are unique to members of the Sentinel class.",
+   "The Hydra and Wyvern morphs are unique to members of the Druid class."
+  ],
   "source": "kb/raw/wiki/Metamorphosis.wiki",
   "url": "https://wiki.achaea.com/Metamorphosis"
  },
@@ -10119,6 +10270,12 @@
     "target": ""
    }
   ],
+  "intro": [
+   "Necromancy is the dark art of death magic. At the lower levels, there is an assortment of rather nefarious abilities. Soon though, the ability of Cannibalism is gained, a skill which has inspired wide-spread fear of those practicing Necromancy. Through cannibalism, a Necromancer increases his life essence, which powers the higher abilities. At the very highest level, a Necromancer gains the power to protect his very soul from death.",
+   "The ability to regain the life essence necessary to use Necromancy may be sealed from individuals by the Dread Ecclesiarch of Transvital Corruption, should they prove themselves to be directly against the ideals of the Lords of Evil. One who has undergone this process is said to be in anathema.",
+   "The skill of Necromancy is available to members of the Apostate class, along with Evileye and Apostasy. Once practised by the Occultist and Infernal classes as well."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Necromancy.wiki",
   "url": "https://wiki.achaea.com/Necromancy"
  },
@@ -10616,6 +10773,11 @@
     "target": "Self"
    }
   ],
+  "intro": [
+   "Once studied in ancient times by predecessors to the modern Occultists, the skill of Occultism is gained through the study of the Mysteries of the nature of the universe itself. This knowledge, which encompasses manipulating auras, bending of time and reality, and mastering the powers of karma, were all lost ages ago during what the Occultists termed the \"Burning Times\" when the Church successfully launched a crusade against the then-scattered individuals practicing Occultism. The survivors banded together, but it was too late to save the knowledge of Occultism. The early practitioners turned to the dark art of Necromancy and entered into a long period of gaining their powers through death magic. That is until the modern age, when Occultism was re-discovered and perfected. Led by Shakti, Silverstorm and Saruman, the Occultists gathered and began a ritual which created an anchor to a ritual began in the distant past, thus bridging the two times and completing a Great Occult Working that allowed the return of Occultism. Since then, Occultists have turned their backs on Necromancy and again study the older science of Occultism.",
+   "The skill of Occultism is available to members of the Occultist class, along with Tarot and Domination."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Occultism.wiki",
   "url": "https://wiki.achaea.com/Occultism"
  },
@@ -10921,6 +11083,14 @@
     "target": ""
    }
   ],
+  "intro": [
+   "\"The body may be made stronger through combat.\"",
+   "Of the servants of Evil, none embody this Truth more than the Infernal Knights of His city. Versed in the ferocious art of Oppression and armed with befouled weapon and plate, the vanguard of Evil are not lightly crossed.",
+   "Focused upon devastating, overwhelming force, the practitioner of Oppression is a juggernaut of profane wrath. Where lesser warriors would falter at the deaths of their own, these exemplars of iniquity will continue the fight with ever greater fervour.",
+   "Woe to those that stand before them, and woe to those who flee; for the arm of Evil is long, and it wields a hellforged blade.",
+   "The skill of Oppression is available to members of the Infernal class, along with Malignity and Weaponmastery."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Oppression.wiki",
   "url": "https://wiki.achaea.com/Oppression"
  },
@@ -11159,6 +11329,12 @@
     "target": ""
    }
   ],
+  "intro": [
+   "The practitioner of Pestilence is armed where ever they may walk, for their weapons are not of steel or bronze but of chitin and plague. In the darkness the chittering nightmares wait, enthralled to the will of their benefactor. When the skies turn black and the myriad eyes open, one thing can be certain: it is time to feast and there is enough for all.",
+   "The sorcerer who raises swarms to do their bidding may wield them in many ways. Be it simply sending them to sting their enemies or blot out the sky, drown their enemies on dry land or feast from within, one thing can be certain: the Pariah's fist is manifold, and it will fall on countless wings.",
+   "The skill of Pestilence is available to members of the Pariah class, along with Memorium and Charnel."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Pestilence.wiki",
   "url": "https://wiki.achaea.com/Pestilence"
  },
@@ -11429,6 +11605,13 @@
     "target": "Adventurers"
    }
   ],
+  "intro": [
+   "Physiology is the study of the biological processes required for life. Alchemists trained in Physiology will find themselves able to utilise this knowledge in two primary ways:",
+   "First, Alchemists may manipulate the humours, or vital fluids, of others in order to cause illnesses of varying degree, eventually gaining the power to slay another via spontaneous organ failure. Humourism, as this art is called, is based upon the tempering of another's body, aiming to increase his internal fluid level. An unrestricted Humourist is a force to be feared, but their effects may be countered by the ingestion of the ginger herb and antimony mineral.",
+   "The second aspect of Physiology is the creation and control of homunculi. From within a properly equipped laboratory, the trained Alchemist may take a small sample of his own flesh, germinating it into a homunculus. Through the physiological and ethereal bond between Alchemist and homunculus, the diminutive creature may be controlled by its master, able to perform varied tasks from assaulting an opponent to being the eyes, ears, and mouth of its owner.",
+   "The skill of Physiology is available to members of the Alchemist class, along with Alchemy and Formulation or Sublimation."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Physiology.wiki",
   "url": "https://wiki.achaea.com/Physiology"
  },
@@ -11847,6 +12030,11 @@
     "target": "Adventurers"
    }
   ],
+  "intro": [
+   "The skill of pranks is an amusing mish-mash of acrobatic abilities, strange-and-amusing abilities involving props like balloons, mice, and jack-in-the-boxes, and the science of bomb-making. Practiced solely by Jesters, these abilities even include some seriously bad jokes, and even the ability to scrawl graffiti on city walls.",
+   "The skill of Pranks is available to members of the Jester class, along with Tarot and Puppetry."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Pranks.wiki",
   "url": "https://wiki.achaea.com/Pranks"
  },
@@ -12131,6 +12319,12 @@
     "target": "Self"
    }
   ],
+  "intro": [
+   "Those who practice propagation focus on altering their own physical state through the power of nature. Able to assume the form of the mighty Viridian, the adept propagator shall find themselves able to alter all aspects of their body, granting many beneficial changes.",
+   "In addition, those that truly master the Viridian shall find that nature can be both lethal as well as benign. These rare individuals are able to cause death with naught but a single touch, and are feared appropriately.",
+   "The skill of Propagation is available to members of the Sylvan class, along with Groves and Weatherweaving."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Propagation.wiki",
   "url": "https://wiki.achaea.com/Propagation"
  },
@@ -12390,6 +12584,11 @@
     "target": ""
    }
   ],
+  "intro": [
+   "The most ancient of powers given to the Aldar in the moment of their formation by Ayar, beyond even the innumerable other natural advantages of their race, was their strength in will and mind. This manifested itself in vast psionic and telepathic might, an ability wielded with unfathomable ease as they imposed their thought upon themselves and upon the world around them. With the centuries of peace during which these arts were mastered, coupled to their functionally unchallenged rule of Creation below the Pantheon itself, offensive techniques within Psionics never saw true progress beyond the simple, rendering them almost unrefined by the measure of modern telepaths. Yet it was never their offensive powers that made this lost art so mighty in the hands of the Firstborn.",
+   "The skill of Psionics is available to members of the Psion class, along with Weaving and Emulation."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Psionics.wiki",
   "url": "https://wiki.achaea.com/Psionics"
  },
@@ -12759,6 +12958,11 @@
     "target": ""
    }
   ],
+  "intro": [
+   "Puppetry is a skill that lets you create an empathetic link between a puppet and someone else. By making this link stronger through repeated refinements of the puppet, you can affect that person from afar. Puppetry is often confused with the Shaman skill of Vodun, though one would do well to remember that puppets are not dolls, and vice versa.",
+   "The skill of Puppetry is available to members of the Jester class, along with Pranks and Tarot."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Puppetry.wiki",
   "url": "https://wiki.achaea.com/Puppetry"
  },
@@ -13042,6 +13246,12 @@
     "target": "Adventurers"
    }
   ],
+  "intro": [
+   "In the beginning there were no cities; those that practice Reclamation shall see it so again.",
+   "Nature is both beautiful and terrible, and the power that Reclamation grants reflects this. Those that have gained proficiency are able to tap into the remnants of natural life in a location, coaxing them to grow at an astounding rate. Nature shall overtake the location, granting the one to enable the process great power when standing upon their reclaimed land. Very little is known about the full capabilities of a master of this skill, although there are rumours of practitioners being everywhere simultaneously, or having the earth swallow up those unfortunate enough to fall in battle.",
+   "The skill of Reclamation is available to members of the Druid class, along with Groves and Metamorphosis."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Reclamation.wiki",
   "url": "https://wiki.achaea.com/Reclamation"
  },
@@ -13533,6 +13743,12 @@
     "target": ""
    }
   ],
+  "intro": [
+   "The skill of Runelore revolves around two aspects: Runes and Totems. By sketching various runes on the ground, on yourself, on other people, or on weapons or armour, a variety of beneficial or harmful effects may be achieved.",
+   "While Runes are a nice supplement to other skills, the true power of Runelore is only unleashed in the Totem. By sketching up to six runes on a Totem, and then either Implanting it, or Standing it, you are able to create a weapon of destruction that can wreak havoc with anyone the Totem is tuned to affect, when that person enters the room.",
+   "The skill of Runelore is available to members of the Runewarden class, along with Weaponmastery and Discipline."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Runelore.wiki",
   "url": "https://wiki.achaea.com/Runelore"
  },
@@ -13807,6 +14023,12 @@
     "target": "Room"
    }
   ],
+  "intro": [
+   "The skill of Sagas is the last and greatest in the repertoire of the Achaean Bard. Comprising grand tales spun from the history of Sapience and its mortals across more than nine hundred years, it is through their recitation of the past that the Bard not only remembers it but gives it new life.",
+   "From the collapsing star of Ethian to the birth of the Genesis or the advent of the Worldreaver, these are the stories shaping all that is.",
+   "Save for citizens of Cyrene, the skill of Sagas is available to members of the Bard class, along with Bladedance and Composition. Alone amongst all others, minstrels of the Heart of the Vashnars are burdened with honouring the memory of Woe."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Sagas.wiki",
   "url": "https://wiki.achaea.com/Sagas"
  },
@@ -14188,6 +14410,13 @@
     "target": ""
    }
   ],
+  "intro": [
+   "\"Light does not create shade, Light constrains shade. In the darkness shadows are free.\" Thus spoke Overlord Gattan'lier 468 years before the fall of the Seleucarian Empire.",
+   "The art of Shadowmancy is the foundation of the Tsol'teth fighting style. While Terminus is arguably the art they are more infamous for, it is Shadowmancy that underpins their entire fighting style.",
+   "Practitioners of this skill are never truly helpless, for where there is darkness they are mighty, and where there is a Depthswalker darkness soon follows. The abilities vary greatly, ranging from the foundational concepts--manifesting weapons from nothing but shadows--to the ultimate expression of the art: turning a foe's own shadow against its host in a final, brutal betrayal.",
+   "The skill of Shadowmancy is available to members of the Depthswalker class, along with Aeonics and Terminus."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Shadowmancy.wiki",
   "url": "https://wiki.achaea.com/Shadowmancy"
  },
@@ -14562,6 +14791,15 @@
     "target": "Adventurers"
    }
   ],
+  "intro": [
+   "As Castomira Brangwin took control of Seleucar, the Shikudo-trained monks of Judgement Mountain were forced to put down their staves and canes. Driven by fear, the Empress sought to disarm those she felt had the power to threaten her reign. In place of the staff, the fighting style of Tekura flourished, and the monks started down a new path that would see their very bodies transformed into deadly weapons for generations and generations to come.",
+   "Until the sun rose over Judgement Mountain in the month of Chronos during the 742nd year after the fall of the Seleucarian Empire.",
+   "For centuries the monastery had harboured frictions, muttered arguments between those espousing the honour of holding to the old agreements versus those who believe the whims of a long-dead tyrant should not shackle the ways of the living arts. It was in this autumn month that saw the deliberations come to a terrible head, enlivened by the tragedy of Auldyn, a young initiate. Murdered at the hands of Belin, the young boy took up the initiate's training staff and brutally bludgeoned her to death.",
+   "Debate raged through the monastery, the once-whispered arguments given loud, vociferous voice. The Grandmaster Kevadrin stood before a gathered crowd, having solicited argument and opinion from all who dared to hold one, and announced that the arts of the Staff, Shikudo, the mastery of balance and extension with the pole, would return to formal training once more. That these would be offered to any monk who proved himself disciplined and a master of the unarmed Tekura style. Though it had taken hundreds of years, Castomira's embargo was finally lifted.",
+   "Those who successfully demonstrate for the Grandmaster the Krull kata are granted access to the silent grove. Here, an aspirant to the fighting arts of old may pluck a branch from the ancient trees and claim his staff of willow or oak.",
+   "The art of Shikudo is available to members of the Monk class who have already mastered the art of Tekura, along with Kaido and Telepathy"
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Shikudo.wiki",
   "url": "https://wiki.achaea.com/Shikudo"
  },
@@ -14983,6 +15221,11 @@
     "target": "Self"
    }
   ],
+  "intro": [
+   "Intense training of the body, the senses, and the mind are requisite steps on the path to becoming a true master swordsman. While such training will enable feats of speed, agility, and mental acuity that are breathtaking in their own right, the practise of Shindo is defined by the accrual and spectacular unleashing of Shin energy. The surging flow and heady rhythm of battle is known to all warriors, but students of Shindo learn to enter the Shin trance, greatly enhancing their sensitivity to its power. Many advanced TwoArts and Striking abilities require Shin energy to perform. Their use will not be possible without first learning the ShinTrance ability.",
+   "The skill of Shindo is available to members of the Blademaster class, along with TwoArts and Striking."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Shindo.wiki",
   "url": "https://wiki.achaea.com/Shindo"
  },
@@ -15288,6 +15531,12 @@
     "target": "Adventurers"
    }
   ],
+  "intro": [
+   "Masters of their chosen weapon and skilled both in and out of the forests of Sapience, the sentinel class combine flawless technique with a ruthless savagery to achieve their ends.",
+   "Discarding the civilised constructs of chivalry and fairness, a practitioner of skirmishing uses both the environment and all tools at his disposal to eliminate all opposition. The true masters of the art are rumoured to be able to send their prey into a comatose state, or even destroy their enemies so completely that the remains can never be found.",
+   "The skill of Skirmishing is available to members of the Sentinel class, along with Metamorphosis and Woodlore."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Skirmishing.wiki",
   "url": "https://wiki.achaea.com/Skirmishing"
  },
@@ -15590,6 +15839,12 @@
     "target": ""
    }
   ],
+  "intro": [
+   "Gifted with the power to pierce the layers of reality and commune with the Spirit Realm, members of the Shaman class have access to wells of power thought long-lost.",
+   "Upon entering a trance, practitioners of Spiritlore may bind the spirits of one or more ancient spirits to them, augmenting the Shaman's already impressive arsenal of abilities with new features. Additionally, one may choose to further attune oneself with a particular spirit and unlock even greater powers. The most skilled practitioners are even rumoured to be able to attune themselves with multiple spirits, or even of being able to sever their spirit from their body and traverse incorporeally.",
+   "The skill of Spiritlore is available to members of the Shaman class, along with Curses and Vodun."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Spiritlore.wiki",
   "url": "https://wiki.achaea.com/Spiritlore"
  },
@@ -15995,6 +16250,12 @@
     "target": "Adventurers"
    }
   ],
+  "intro": [
+   "The abilities in Spirituality revolve around two main things: Guardian Angels and Spiritual Maces. Practitioners of Spirituality also get a guardian angel, who will stay with them forever. Generally speaking, an angel will only act in a defensive capacity, except when it involves Chaos Entities. Angels and Entities have a long-standing hatred of each other.",
+   "Spiritual maces, on the other hand, form the core of a Priest's offensive ability. By using them in different ways, the Priest gains the ability to cause damage, smash limbs, and cause a variety of other effects, including the feared Judgement, where a Priest stands in Judgement of an adventurer. Failing the judgement means death. This is, of course, an ability that only the most powerful of Priests may perform.",
+   "The skill of Spirituality is available to members of the Priest class, along with Devotion and Zeal."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Spirituality.wiki",
   "url": "https://wiki.achaea.com/Spirituality"
  },
@@ -16288,6 +16549,11 @@
     "target": "Adventurers"
    }
   ],
+  "intro": [
+   "With trained knowledge of the anatomies of many of the sentient races that walk Sapience comes the ability to exploit their physical vulnerabilities. Precise, unarmed strikes to pressure points and sensitive locations allow a master of Striking to leave a foe collapsed upon the ground, unable to breathe, or rigid with paralysis. Wielding the closed fist, spear hand, and open palm, a Blademaster may strike in tandem with many sword attacks.",
+   "The skill of Striking is available to members of the Blademaster class, along with Two Arts and Shindo."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Striking.wiki",
   "url": "https://wiki.achaea.com/Striking"
  },
@@ -16607,6 +16873,16 @@
     "target": "Adventurers"
    }
   ],
+  "intro": [
+   "The first boon offered by the Genesis, earned by the bravery of Hashan's leadership in 798 AF, the oft-whispered of Wellspring beneath the city is no longer a locked and guarded secret, but remains guarded nonetheless. The Alchemists who dare to experiment with the residual power of the ancient Protean star have cast off the limiting truths presented by the Cauda Pavonis and tread paths of study never walked before.",
+   "Sublimation is an alternative field to Formulation, practiced by those capable of drawing on Hashan's Wellspring reservoir of energy. Its arts are centered around manipulation of forces, alignment of energies, and the oft-misunderstood field of substantiation.",
+   "The school of Manipulation operates upon bending fundamental forces to one's will, be those concrete forces such as gravity or the more abstract forces such as probability.",
+   "Alternatively, the school of Alignment does not waste unnecessary effort on altering their environment. Instead, their studies focus on aligning events just so as to ensure that their victory is inevitable. Though most students pride themselves on subtlety, a master of this field is far from.",
+   "Finally, those that study under Substantiation are not content with simply altering the world around them. Indeed, they bend their attention to a far more concerning line of study: that of imposing their own sense of reality over what already exists. To be a master of Substantiation is to see the world as it is and find it wanting.",
+   "Alchemists of Sapience have diverged into two distinct paths. The traditional alchemical practice of Formulation and the field of Sublimation. You may select your field once every 24 hours to swap between the two.",
+   "The skill of Sublimation is available to members of the Alchemist class, along with Alchemy and Physiology. Instead of sublimation, an Alchemist may choose the skill of Formulation."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Sublimation.wiki",
   "url": "https://wiki.achaea.com/Sublimation"
  },
@@ -17226,6 +17502,11 @@
     "target": "Self"
    }
   ],
+  "intro": [
+   "Subterfuge is a diverse skill, encompassing abilities ranging from the secret rattle that those of serpentine ambitions may use to communicate with each other, to archery, the conjuring of illusions, dimensional wormholes, and various stealth and attack abilities.",
+   "The skill of Subterfuge is available to members of the Serpent class, along with Venom and Hypnosis."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Subterfuge.wiki",
   "url": "https://wiki.achaea.com/Subterfuge"
  },
@@ -17529,6 +17810,14 @@
     "syntax": "RUB DEATH ON <target> / SNIFF DEATH / FLING DEATH AT <target>",
     "target": "Adventurers"
    }
+  ],
+  "intro": [
+   "Tarot is the occult skill of inscribing magical cards with various inks in order to create a powerful image. Each of the major arcana of the Tarot deck is represented here. To use the skill, one must first find some blank tarot cards. Then, you may inscribe the cards with various images, each unique image empowers the card's wielder with different types of magic. Inscribing takes intense concentration and one cannot do much else while focusing on the task.",
+   "The skill of Tarot is available to members of the Jester and Occultist classes.",
+   "Jesters also have the skills of Pranks and Puppetry, while Occultists also have the skills of Occultism and Domination."
+  ],
+  "notes": [
+   "The ability of Ruinate is unique to members of the Occultist class."
   ],
   "source": "kb/raw/wiki/Tarot.wiki",
   "url": "https://wiki.achaea.com/Tarot"
@@ -17917,6 +18206,15 @@
     "target": "Self"
    }
   ],
+  "intro": [
+   "The art of Tekura was first developed more than 600 years ago, long before the fall of the Seleucarian Empire. A sect of monks was being persecuted by some of the legions of the Empire and the monks were not permitted weapons to defend themselves. So, they were forced to train their bodies to martial perfection; their hands and feet becoming deadly weapons in and of themselves.",
+   "Most of the tekura abilities are affected by a variety of factors. First, being in a stance modifies the damage and speed of each tekura attack. A monk will always want to be in some stance or another while using tekura. Second, the higher the monk's tekura, the more likely they are to hit an opponent with a particular attack, and the more damage they will do with that attack.",
+   "The advancement system of Tekura is a bit different from the other skills. A monk may progress to a certain level in the skill, and then they must be tested to see if they are worthy of a new belt. A test consists of successfully completing a kata, or a series of moves, in front of someone who is either a black belt, or at least three belts above the monk. Tests may be performed by adventurers or denizen tutors (up to silver belt). If you cannot find a fellow adventurer who is qualified to grade you, you may ask a denizen tutor with:",
+   "For reference here are the belts a Tekura practitioner may achieve, as well as what kata must be demonstrated to obtain it.",
+   "| Skill Rank | Belt Level | Kata |\n|---|---|---|\n| Inept | White | None |\n| Novice | Grey | Jakata |\n| Apprentice | Yellow | Lisagi |\n| Capable | Green | Rhee |\n| Adept | Blue | Philos |\n| Skilled | Orange | Tykorima |\n| Gifted | Red | Opha |\n| Expert | Purple | Nexus |\n| Virtuoso | Bronze | Kali |\n| Fabled | Silver | Do-san |\n| Mythical | Gold | Rhythos |\n| Transcendent | Black | Krull |",
+   "The art of Tekura is available to members of the Monk class, along with Kaido and Telepathy. After a monk has mastered Tekura they may enhance their training with Shikudo."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Tekura.wiki",
   "url": "https://wiki.achaea.com/Tekura"
  },
@@ -18405,6 +18703,13 @@
     "target": "Adventurers"
    }
   ],
+  "intro": [
+   "Telepathy is the skill of mental manipulation. The abilities in it may be divided generally into two parts. The first are abilities that can simply be attempted on any adventurer in the same location. The second kind are abilities that require a mind lock to use.",
+   "The skill of Telepathy is available to members of the Monk class, along with Tekura and Kaido. After a monk has mastered Tekura they may enhance their training with Shikudo."
+  ],
+  "notes": [
+   "Abilities designated with an asterisk (*) are available to use without a mind lock."
+  ],
   "source": "kb/raw/wiki/Telepathy.wiki",
   "url": "https://wiki.achaea.com/Telepathy"
  },
@@ -18877,6 +19182,12 @@
     "target": "Adventurers"
    }
   ],
+  "intro": [
+   "The Tsol'teth are perhaps the greatest wielders of arcane forces known to Achaea. The skill that made much of this possible was Terminus; the art of discovering and utilising the words of power to invoke changes upon the world. No-one has ever truly mastered this skill; indeed, the reason for Tsol'teth rarely working alone is that diversification is the only way that all of the various branches of Terminus could be available to them simultaneously.",
+   "Though Terminus supplies many great and terrible powers--the Litany of Obedience being a prime example--its true strength comes from its diversity. One day a Depthswalker may subjugate the wills of those that stand in opposition; the next call down lightning to scourge an opposing army. Knowing is half the battle.",
+   "The skill of Terminus is available to members of the Depthswalker class, along with Aeonics and Shadowmancy."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Terminus.wiki",
   "url": "https://wiki.achaea.com/Terminus"
  },
@@ -19223,6 +19534,13 @@
     "target": "Adventurers"
    }
   ],
+  "intro": [
+   "The two \"Arts\" referred to are the Draw Art and the Blade Art. Vastly different to such techniques as Chivalry and Swashbuckling, a master of the Two Arts kills a man more easily by drawing a sword from its sheath than by swinging a naked blade. Lucaine Pyramides is recorded as unsheathing his blade for only a second at a time in combat - killing people in single motions of his sword, the Three Moons.",
+   "Originating in Kashar and most notably practised by the famed warrior Lucaine Pyramides, the Two Arts is an enigmatic style of combat combining swordplay with techniques resembling the kai energy used by monks. To be able to truly harness this skill, one must possess a unique blade; the smith Murad and the Hatha-yin maiden Kavaya will aid those who seek a blade of their own, and they can be located in an encampment east of Delos.",
+   "Another aspect of the Two Arts involves imbuing the blade with supernatural power, similar to the lost Templar ability of Bladefire. For example, the ability, \"Desperate Angel\", imbues one's blade with an individual's desperation, fear, anger, and rage, and sends them slashing through the opponent. This technique was performed by Pyramides on the serpent Lucius Errikale in the Battle of King's Tomb during the Wars of Succession.",
+   "The skill of TwoArts is available to members of the Blademaster class, along with Striking and Shindo."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/TwoArts.wiki",
   "url": "https://wiki.achaea.com/TwoArts"
  },
@@ -19560,6 +19878,11 @@
     "target": "Self"
    }
   ],
+  "intro": [
+   "Shining with the ancient nobility of templar tradition, Valour is a knightly skill that may be thought of as having three distinct parts. The first part, eaglery involves the raising, training, and use of eagles. The second part of Valour is archery. By gaining the abilities to assess wind direction and speed and use different kinds of weapons (longbows, crossbows, darkbows) you may attack from afar, or shoot at a cowardly opponent who has fled to the skies. The third and final part involves an assortment of aggressive abilities ranging from howling a Battlecry, to Engaging your unlucky opponent, to boosting your prowess with Fury.",
+   "The skill of Valour is available only to members of the Paladin class, although most of its abilities are shared with the Dominion, Malignity, and Discipline skills of the Unnamable, Infernal, and Runewarden classes. Like the other warrior-classes, Paladins train in Weaponmastery, but the fiery arts of Excision are unique to them."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Valour.wiki",
   "url": "https://wiki.achaea.com/Valour"
  },
@@ -19980,6 +20303,12 @@
     "target": ""
    }
   ],
+  "intro": [
+   "The Venom skill involves the production of various venoms by glands. These glands are remnants of evolution and lay dormant in most people. To those with the skill though, they can be used to great effect. First, one must secrete a particular venom. There will be a short pause while your glands produce the chosen toxin. Once the venom has been secreted, it cannot be held in the bloodstream indefinitely. Each venom has a risk factor incorporated into it. The more powerful the venom, the greater the chance of it backfiring and affecting the producer. To get the venom out of the bloodstream, one must either bite another adventurer or purge the venom from their body.",
+   "It should be pointed out that denizens will be immune to most venoms that do things other than cause damage.",
+   "The skill of Venom is available to members of the Serpent class, along with Subterfuge and Hypnosis."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Venom.wiki",
   "url": "https://wiki.achaea.com/Venom_(Skill)"
  },
@@ -20345,6 +20674,12 @@
     "target": "Adventurers"
    }
   ],
+  "intro": [
+   "The skill of Vodun is a mystical one and not to be confused with the Jester skill of Puppetry. By using an empathetic link to imbue a carving of someone with life energy, you can affect that person from afar. Powerful Vodun masters are rumoured to be able to do anything from confusing people from afar, to leeching life experiences away from them, to slaying them from afar.",
+   "If a Shaman obtains a doll of you, then you must either obtain the doll and destroy it, or slay the Vodun master that created it.",
+   "The skill of Vodun is available to members of the Shaman class, along with Spiritlore and Curses."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Vodun.wiki",
   "url": "https://wiki.achaea.com/Vodun"
  },
@@ -21151,6 +21486,12 @@
     "target": "Adventurers"
    }
   ],
+  "intro": [
+   "Masters of melee weapons, knights with the weaponmastery skill are a force to be reckoned with against their fellow adventurers and denizens alike. Weaponmasters can select a specialisation based on the weapons they wish to use, either dual cutting, dual blunt, two-handed, or sword and shield.",
+   "The skill of Weaponmastery is available to to members of the four knight classes: Infernal, Paladin, Runewarden, and Unnamable.",
+   "Knights share many chivalry-derived abilities through Discipline, Dominion, Malignity and Valour though each also have their own unique skill; Infernals command the dark art of Oppression, Paladins wield the holy power of Excision, Runewardens possess the mystical talent of Runelore, and Unamables employ the otherworldly forces of Anathema."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Weaponmastery.wiki",
   "url": "https://wiki.achaea.com/Weaponmastery"
  },
@@ -21491,6 +21832,12 @@
     "target": "Adventurers and room"
    }
   ],
+  "intro": [
+   "The weather is beyond the grasp of any mortal mage, but the practitioners of weatherweaving have learned to direct where control is impossible.",
+   "Focusing upon the elemental channels of earth, water and air, practitioners of weatherweaving are perhaps less versatile in the ways that they may bend their arcane might. However, where they sacrifice such versatility, they gain in precision and power, and are rumoured to be able to unleash truly terrifying demonstrations of nature's destructive capabilities. There are whispers of those who could call lightning to strike down their foes from a cloudless sky, or summon winds able to strip the skin from bone in mere moments.",
+   "The skill of Weatherweaving is available to members of the Sylvan class, along with Propagation and Groves."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Weatherweaving.wiki",
   "url": "https://wiki.achaea.com/Weatherweaving"
  },
@@ -21749,6 +22096,12 @@
     "target": "Adventurers"
    }
   ],
+  "intro": [
+   "The art of Weaving is twofold: first and foremost, it is the practice of forging weapons from the substance of Creation, calling to your hand a blade or mace and dismissing it as soon as its work is done.",
+   "Second, it is the means by which a practitioner may begin the return to Creation of a foe, unweaving their mortal shell and consigning them to a grim fate.",
+   "The skill of Weaving is available to members of the Psion class, along with Psionics and Emulation."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Weaving.wiki",
   "url": "https://wiki.achaea.com/Weaving"
  },
@@ -22032,6 +22385,12 @@
     "target": ""
    }
   ],
+  "intro": [
+   "Despite its similarities with the Sagas of lowland Bards, the skill of Woe is a singular, epic saga of uttermost dread. Taking upon themselves the burden of Black Pazuzu's many sins, the Bards of Cyrene bear witness to the full, terrible scope of dark deeds done across millennia beyond counting.",
+   "Yet though the light may grow dim and the night yet grow long, it is that lone mountain city among Sapience's storytellers who are not afeared to tell the tale of Achaea's most ancient evil.",
+   "For citizens of Cyrene, the skill of Woe replaces the Sagas of the rest of Sapience's Bards."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Woe.wiki",
   "url": "https://wiki.achaea.com/Woe"
  },
@@ -22394,6 +22753,12 @@
     "target": "Adventurers"
    }
   ],
+  "intro": [
+   "Woodlore imparts adventurers who practise it with the expertise of laying traps, summoning animal guardians, and performing a variety of other combat-related, forestal abilities.",
+   "The skill was first taught to members of the Sentinels Guild by Vixen after she had in turn learned the art from Etarni during her extended stay in the village of the Tomacula, following the Sentinels' act of annihilating their Groves to cure Vixen of a feverish ailment that had befallen her.",
+   "The skill of Woodlore is available to members of the Sentinel class, along with Metamorphosis and Skirmishing."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Woodlore.wiki",
   "url": "https://wiki.achaea.com/Woodlore"
  },
@@ -22731,6 +23096,11 @@
     "target": "Adventurers"
    }
   ],
+  "intro": [
+   "The conviction of Zeal grants many great powers. Wielding holy verse empowered by the echoes of phoenix song, there are few limits upon a Priest's capabilities. From condemning a heretic to be plagued by visions of their sins to drawing upon their allies for a surge of healing power beyond any other, the vanguard of Creation stands ready to exact retribution upon any that would challenge the sanctity of their charge.",
+   "The skill of Zeal is available to members of the Priest class, along with Spirituality and Devotion."
+  ],
+  "notes": [],
   "source": "kb/raw/wiki/Zeal.wiki",
   "url": "https://wiki.achaea.com/Zeal"
  }

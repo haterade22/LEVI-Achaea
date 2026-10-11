@@ -72,6 +72,14 @@ NOTES = {
     ("Bard", "Sagas"): "the full-member skill for Bards outside Cyrene (Cyrene citizens may take Woe)",
     ("Alchemist", "Sublimation"): "alternative to Formulation (uses Hashan's Wellspring)",
     ("Monk", "Shikudo"): "alternative to Tekura (requires transcendent Tekura)",
+    ("Monk", "Telepathy"): "Players (the user and Mystor, 2026-10-11): a mind lock is needed only to reach a target "
+                           "OUTSIDE your room and for certain skills such as Radiance (which cannot be used on a "
+                           "target in your room) and Sapience (which watches a locked target). The 15 abilities the "
+                           "wiki marks with an asterisk need only the target in the room, as the wiki also says, even "
+                           "where their text says 'locked'. The wiki puts every unmarked one behind the lock, and most "
+                           "of those take no target argument (MIND BLACKOUT, MIND TERROR); which of them work in the "
+                           "same room without a lock is open, blackout above all (kb/CONFLICTS.md #7). "
+                           "See kb/combat/shikudo.md",
 }
 FIELDS = ("skill", "description", "lessons", "syntax", "required", "target", "cooldown", "detail")
 
@@ -110,6 +118,73 @@ def clean(value, sep=" "):
     v = re.sub(r"'''?", "", v)
     v = re.sub(HTML_TAGS, " ", v, flags=re.I)
     return re.sub(r"[ \t\r\n]+", " ", html.unescape(v)).strip()
+
+
+def wikitable(block):
+    """A MediaWiki table ({| ... |}) -> a Markdown table. Rows are split on "|-", header cells start
+    with "!" and data cells with "|" ("!!" / "||" separate cells on one line); a cell's attributes
+    (style="..."|) are dropped. When every row starts with a header cell, the row labels are the
+    table's columns (Tekura's belt table runs rank / belt / kata across), so it is transposed."""
+    rows, cur = [], []
+    for line in block.splitlines()[1:]:
+        t = line.strip()
+        if t.startswith("|}"):
+            break
+        if t.startswith("|-"):
+            if cur:
+                rows.append(cur)
+            cur = []
+            continue
+        if not t or t[0] not in "!|":
+            continue
+        is_head = t[0] == "!"
+        for c in re.split(r"!!|\|\|", t[1:]):
+            m = re.match(r"\s*[a-z-]+\s*=[^|\[]*\|(.*)$", c, re.S)    # style="..."|content
+            cur.append((is_head, clean(m.group(1) if m else c)))
+    if cur:
+        rows.append(cur)
+    if not rows:
+        return ""
+    if all(r and r[0][0] for r in rows) and len({len(r) for r in rows}) == 1:
+        rows = [list(col) for col in zip(*rows)]                        # transpose
+    width = max(len(r) for r in rows)
+    lines = []
+    for i, r in enumerate(rows):
+        cells = [c for _, c in r] + [""] * (width - len(r))
+        lines.append("| " + " | ".join(x.replace("|", "\\|") for x in cells) + " |")
+        if i == 0:
+            lines.append("|" + "---|" * width)
+    return "\n".join(lines)
+
+
+def intro(text):
+    """The page's own words before the ability list: its lead paragraphs and any italic note under the
+    abilities heading. They carry rules that apply to every ability -- Telepathy's lead says some
+    abilities need only the target in the room, and its note says (*) marks them -- and the class
+    pages used to drop both, so a "(*)" in a description meant nothing (2026-10-11).
+    A ":''This page is about ...''" line above the first heading is a disambiguation hatnote, not
+    content, so it is dropped, and notes are read only below that heading. A wiki table in the lead
+    becomes a Markdown table paragraph (it used to leak as one line of raw {| ... |} markup)."""
+    first = text.find("{{Skill_detail")
+    head = text if first < 0 else text[:first]
+    lead_end = re.search(r"^=", head, re.M)          # any heading, "=X=" or "==X=="
+    lead = head if not lead_end else head[:lead_end.start()]
+    tables = []
+
+    def keep_table(m):
+        tables.append(wikitable(m.group(0)))
+        return "\n\n@@TABLE%d@@\n\n" % (len(tables) - 1)
+    lead = re.sub(r"^\{\|.*?^\|\}", keep_table, lead, flags=re.M | re.S)
+    lead = re.sub(r"^:+\s*''.*$", "", lead, flags=re.M)                # hatnotes
+    lead = re.sub(r"\{\{[^{}]*\}\}", " ", lead)                     # templates
+    lead = re.sub(r"\[\[(?:File|Image):[^\]]*\]\]", " ", lead, flags=re.I)
+    paras = []
+    for p in re.split(r"\n\s*\n", lead):
+        m = re.fullmatch(r"\s*@@TABLE(\d+)@@\s*", p)
+        paras.append(tables[int(m.group(1))] if m else clean(p))
+    below = head[lead_end.start():] if lead_end else ""
+    notes = [clean(m) for m in re.findall(r"^:+\s*''+(.+?)(?:''+)?\s*$", below, re.M)]
+    return [p for p in paras if p], [n for n in notes if n]
 
 
 def blocks(text):
@@ -185,8 +260,9 @@ def main():
             found = sorted({m.lower() for m in aff_re.findall(" ".join(a.get(f, "") for f in ("description", "detail")))}) if aff_re else []
             a["afflictions"] = found
         page = PAGE.get(skill, skill).replace(" ", "_")
+        lead, notes = intro(text)
         data[skill] = {"source": f"kb/raw/wiki/{skill}.wiki", "url": f"https://wiki.achaea.com/{page}",
-                       "abilities": abilities}
+                       "intro": lead, "notes": notes, "abilities": abilities}
 
     os.makedirs(OUT, exist_ok=True)
     with open(os.path.join(OUT, "abilities.json"), "w", encoding="utf-8", newline="\n") as fh:
@@ -194,6 +270,10 @@ def main():
         fh.write("\n")
 
     cell = lambda s: (s or "").replace("|", "\\|")
+    # Prose outside a code span: a bare "*" pairs up into italics (the "(*)" marker vanished, and the
+    # note explaining it lost its own asterisk) and "<animal>" is read as an HTML tag and dropped.
+    # Never applied to the backticked syntax cell, where an escape would show literally.
+    md_esc = lambda s: (s or "").replace("*", "\\*").replace("<", "&lt;")
     for cls, ss in CLASSES.items():
         md = [f"# {cls}: skills and abilities", "",
               "> GENERATED by `tools/kb_wiki_skills.py` from the Achaea wiki. Confidence: **WIKI** -- in-game",
@@ -205,16 +285,23 @@ def main():
                 continue
             abil = data[skill]["abilities"]
             note = NOTES.get((cls, skill))
-            md += [f"## {skill} ({len(abil)} abilities)", ""] + ([f"*{note}.*", ""] if note else []) + [f"Source: [{data[skill]['url']}]({data[skill]['url']}) "
+            md += [f"## {skill} ({len(abil)} abilities)", ""] + ([f"*{md_esc(note)}.*", ""] if note else [])
+            md += [p for para in data[skill].get("intro", [])
+                   for p in ((para if para.startswith("| ") else md_esc(para)), "")]
+            md += [f"*Wiki note: {md_esc(n)}*" for n in data[skill].get("notes", [])] + ([""] if data[skill].get("notes") else [])
+            md += [f"Source: [{data[skill]['url']}]({data[skill]['url']}) "
                    f"(raw: `{data[skill]['source']}`)", "",
                    "| Ability | Syntax | Cost | Cooldown / balance | Works on | Afflictions named |",
                    "|---|---|---|---|---|---|"]
             for a in abil:
-                md.append(f"| **{cell(a.get('skill'))}** | `{cell(a.get('syntax'))}` | {cell(a.get('required'))} | "
-                          f"{cell(a.get('cooldown'))} | {cell(a.get('target'))} | {', '.join(a['afflictions'])} |")
+                # The wiki marks some abilities "(*)" at the end of the description; the page's note says
+                # what it means (Telepathy: usable without a mind lock). Show it beside the name.
+                star = " (*)" if (a.get("description") or "").rstrip().endswith("(*)") else ""
+                md.append(f"| **{cell(a.get('skill'))}**{star} | `{cell(a.get('syntax'))}` | {cell(md_esc(a.get('required')))} | "
+                          f"{cell(md_esc(a.get('cooldown')))} | {cell(md_esc(a.get('target')))} | {', '.join(a['afflictions'])} |")
             md += ["", "### Details", ""]
             for a in abil:
-                md.append(f"- **{a.get('skill')}**: {a.get('description', '')} {a.get('detail', '')}".rstrip())
+                md.append(f"- **{a.get('skill')}**: {md_esc(a.get('description'))} {md_esc(a.get('detail'))}".rstrip())
             md.append("")
         with open(os.path.join(OUT, f"{cls.lower()}.md"), "w", encoding="utf-8", newline="\n") as fh:
             fh.write("\n".join(md) + "\n")

@@ -77,12 +77,24 @@ Every line, both views: `kb/combat/shikudo.md`. Dossier: `.claude/classes/monk.m
 | **DISPATCH** | **CONFIRMED KILL** (13:25, 86 s in) | prone + damaged head + crushed throat | a SWEEP, then FLASHHEEL breaking a leg every round (you spend your turns mending and never stand), then NEEDLE |
 | CRESCENT (Maelstrom kick) | WIKI | prone + 50% health or less | he ASSESSes you after every combo ("You glance over...") |
 | MIND SCYTHE | WIKI | mangled head + two of stupidity, impatience, dizziness, epilepsy, confusion | Telepathy afflictions on top of head damage |
-| Affliction lock | CONFIRMED (the pieces) | MIND IMPATIENCE and MIND PARALYSE between combos; livestrike asthma, ruku slickness, hiraku anorexia | "You fill the mind of <you> with an impatient feeling." |
+| Affliction lock | CONFIRMED (the pieces) | MIND IMPATIENCE and MIND PARALYSE between combos; livestrike asthma, ruku slickness, hiraku anorexia | Not captured from the victim's side (the monk sees "You fill the mind of <T> with an impatient feeling.") |
 
-**The fight's shape:** Rain form (kuro for weariness/lethargy, flashheel to break a leg, frontkick
-for prone, ruku for clumsiness/healthleech), Oak (nervestrike, livestrike, risingkick), Willow
-(hiru, hiraku, SHATTER for the shield tattoo), Gaital (needle, jinzuku). A form change needs a
-kata of at least 5.
+**The fight's shape:** Gaital (dawnkick, kuro for weariness/lethargy, flashheel to break a leg),
+Rain (frontkick for prone, kuro, ruku for clumsiness/healthleech), Oak (nervestrike, livestrike,
+risingkick), Willow (hiru, hiraku, SHATTER for the shield tattoo, MIND IMPATIENCE and PARALYSE),
+then Rain and Oak again, Gaital at kata 13, Rain at kata 10, and last ADOPT GAITAL FORM from Rain at
+kata 0 (4.1 s of balance) for the Dispatch combos (sweep, flashheel, needle, jinzuku). A TRANSITION
+needs a kata of at least 5, and only to a form on the current form's list; ADOPT needs no kata but
+costs balance.
+
+**Blackout** (the user, 2026-10-11: a CRITICAL affliction; the victim usually touches the tree to
+cure it, he gives it again, and under it you cannot see what he does to you). The game's record: it
+lasts 4 s and "obscures your prompt and prevents you from seeing many things happening". In log 2 the
+victim's own drink, eat and tree lines vanished, while her balance, cooldown, stun-end and
+elixir-effect lines, and the monk eating, still printed. Mystor: blackout, then one combo, and the
+combo is hidden, so a blackout is the tell that a combo you cannot see is coming. In log 2 the
+blackout landed WITH a combo whose first two strikes were visible, so it came with the combo, not
+before it.
 
 ### Runewarden (sword and board) -- **CONFIRMED** DISEMBOWEL (2026-10-11, a SHARED log)
 

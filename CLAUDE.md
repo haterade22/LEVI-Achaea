@@ -468,7 +468,8 @@ read `mmp.settings.mapsource`). `service` is an experimental live Crowdmap; `cro
 - **Class Modules**: Serpent, Shaman, Blademaster, Infernal DWC, Apostate, Monk, and 12+ more
 - **Shikudo (Monk)** (corrected 2026-10-11; the old list named files that never existed). Live:
   `shikudo/006_CC_Shikudo_Dispatch.lua` (`sk`; `zz`/`xx` when the monk has no stance) and
-  `007_CC_Shikudo_Lock.lua` (`sr` -> `shikudolock()`, status `sklstatus()`). `009_CC_Shikudo_GodMode.lua`
+  `007_CC_Shikudo_Lock.lua` (`sr` -> `shikudoLock.dispatch()`, `shikudolock()` only its fallback; status
+  `sklstatus()`). `009_CC_Shikudo_GodMode.lua`
   is unreachable: `vv` calls `shikudo.setMode`, defined only in the switched-off 008. What is wrong
   and the three-phase rework: `docs/plans/shikudo-offense-review-2026-10-11.md`. Every real line from
   two fights, both sides: `kb/combat/shikudo.md`.
@@ -480,10 +481,22 @@ read `mmp.settings.mapsource`). `service` is an experimental live Crowdmap; `cro
   - **A strike line is not a hit:** it prints even when parried. `light` strikes and blows a
     Shield of Absorption swallows print no damage line but still land.
   - **Facts the offense must respect** (logs, 2026-10-11): at most three attacks, one a kick; SWEEP
-    pairs only with a kick; flashheel BREAKS the leg; a form change needs a kata of 5+ (inline
-    `combo ... transition <form>` works); ASSESS gives the target's health (`698_Assess` stores
-    `ataxiaTemp.lastAssess`); SHATTER breaks the shield tattoo; Dispatch = prone + damaged head +
-    crushed throat.
+    pairs only with a kick; flashheel BREAKS the leg; a TRANSITION needs a kata of 5+ (inline
+    `combo ... transition <form>` works; ADOPT needs none but costs 4.1 s of balance); ASSESS gives the
+    target's health (`698_Assess` stores `ataxiaTemp.lastAssess`); SHATTER breaks the shield tattoo
+    (seen in Willow; the wiki says it works in any form); Dispatch = prone + damaged head + crushed
+    throat. Willow combos with a kick cost 1.9 s of balance (2.1 s in the other forms, 2.8 s with
+    dawnkick; a combo without a kick prints no reading); a standalone TRANSITION costs none, and a
+    refused one keeps the kata chain.
+  - **Telepathy** (the user and Mystor, 2026-10-11): **a mind lock is needed only for a target outside
+    the room and certain skills such as Radiance and Sapience**; most Telepathy needs only the target
+    present (the wiki's (*) abilities certainly; the wiki puts BLACKOUT behind the lock, which is open,
+    `kb/CONFLICTS.md` #7). **Rain speeds equilibrium**, so monks do their Telepathy there (not only
+    there). **Blackout is critical**: 4 s, they usually tree it off, we give it again, and it hides the
+    combo behind it. The Shikudo offense sends no Telepathy today (the only automatic MIND command is
+    the PvE basher's `aconfig monk` MIND CRUSH), and nothing records MIND BLACKOUT on the target (only
+    Psion LIGHTSTEAL and Knight CONCUSS record blackout, both on a prone target, and both clear it after
+    3.5 s; phase 2, `kb/combat/shikudo.md`).
 - **Infernal DWC Vivisect System**: Full auto-combat for Infernal DWC spec
   - `003_Infernal_DWC_Vivisect.lua` - Undercut + DSL vivisect strategy
   - Commands: `infernalDWCVivisect()`, `infernalDWCStatus()`, `infernalDWCReset()`

@@ -1,0 +1,35 @@
+# Players on Shikudo and Telepathy, in their own words (2026-10-11)
+
+Verbatim, as the user relayed them. Mystor is a Shikudo monk; his arena logs (six fights, five
+with MIND SAPIENCE on the opponent) are filed in kb/raw/logs/. Curated in kb/combat/shikudo.md.
+
+## The user (in this repo's chat, 2026-10-11)
+
+Shikudo Monks also use telepathy in RAIN form do to the bonus of EQ. You dont need a mind lock to perform most of the telepathy. Blackout is a CRITICAL affliction to give (you give it once, they usually touch tree to cure and we give it again). Under blackout they cannot see what we do to them
+
+Most of telepathy only need target in your room
+
+Shikudo can also rift lock because their staff and kicks do limb damage, break both arms and they cannot apply or use rifts. Combine that with addiction it is riftlock
+
+## Mystor (in game, relayed by the user, 2026-10-11)
+
+Mystor tells you, "Correct, lock is only needed for out of room things."
+
+(the user added:) or certain skills like radience, sapience.
+
+## Mystor (Discord, relayed by the user, 2026-10-11, about his six logs)
+
+a big thing you will see is me shooting for 10 kata in rain with 2x arm prep
+[2:32 PM]𝑴𝒚𝒔𝒕𝒐𝒓 [FOIG], : ive taken a liking to frontkick arm kuro ruku for 3x damaged prone clu hlee wea leth
+[2:32 PM]𝑴𝒚𝒔𝒕𝒐𝒓 [FOIG], : going into oak
+[2:32 PM]𝑴𝒚𝒔𝒕𝒐𝒓 [FOIG], : ast sli
+[2:32 PM]𝑴𝒚𝒔𝒕𝒐𝒓 [FOIG], : into willow for lock
+
+## Mystor (an earlier chat with the user, kept verbatim in .claude/classes/monk.md, about lines 960-1085)
+
+The full chat covers his forms, Telepathy in Rain, illusions, blackout, Kai Surge and Gaital. Its
+blackout lines:
+
+Mystor: "Blackout in rain is basically a no brainer."
+Mystor: "You can blackout, and then combo 1 time."
+Mystor: "And the combo is hidden."

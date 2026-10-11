@@ -6,6 +6,10 @@
 
 ## Subterfuge (55 abilities)
 
+Subterfuge is a diverse skill, encompassing abilities ranging from the secret rattle that those of serpentine ambitions may use to communicate with each other, to archery, the conjuring of illusions, dimensional wormholes, and various stealth and attack abilities.
+
+The skill of Subterfuge is available to members of the Serpent class, along with Venom and Hypnosis.
+
 Source: [https://wiki.achaea.com/Subterfuge](https://wiki.achaea.com/Subterfuge) (raw: `kb/raw/wiki/Subterfuge.wiki`)
 
 | Ability | Syntax | Cost | Cooldown / balance | Works on | Afflictions named |
@@ -74,7 +78,7 @@ Source: [https://wiki.achaea.com/Subterfuge](https://wiki.achaea.com/Subterfuge)
 - **Garrote**: Choke the life out of a target with your whip. Using a wielded whip, you can try to slip behind a target and choke the life out of him or her. Armour is rendered entirely useless to your victim. Furthermore, while it is difficult to do normally, if your target is fairly helpless (paralysed, tied up, frozen, fallen on the ground, sleeping, unconscious, or some other similar afflictions) then you will always hit with this. The higher your subterfuge, the more damage this ability will do.
 - **Evade**: Misleading your pursuer. No difficult feat for one trained in the arts of subterfuge, you may silently evade past obstructions, at once losing anyone who may be following you.
 - **Shadow**: Shadowing a target in order to track them. From on the ground or in the trees you are able to shadow an adventurer from an adjacent location. This will cause you to enter their location and begin following them.
-- **Flay**: Flay the anti-venom sileris coatings from your enemies. Using a whip, you will be able to flay the waxy coating of the sileris berry from your opponent, enabling you to sink your fangs into his flesh once more; or to flay a rebounding aura or magical shield to attack with weapons once more. You can also use FLAY <denizen> SHIELD to flay the shield defence from denizens. If your flay leaves your target without a rebounding aura and magical shield, it will apply a venom from your whip.
+- **Flay**: Flay the anti-venom sileris coatings from your enemies. Using a whip, you will be able to flay the waxy coating of the sileris berry from your opponent, enabling you to sink your fangs into his flesh once more; or to flay a rebounding aura or magical shield to attack with weapons once more. You can also use FLAY &lt;denizen> SHIELD to flay the shield defence from denizens. If your flay leaves your target without a rebounding aura and magical shield, it will apply a venom from your whip.
 - **Waiting**: Awaiting a target to be shadowed. Once activated, this ability will allow you to stand still and wait for another adventurer unnoticed. When the adventurer enters the location, you will begin to follow.
 - **Pacing**: The ability to anticipate and keep pace with others. At a constant endurance drain, you will be able to follow those while they sprint away.
 - **Bask**: Bathing in the hot sun. In an outdoor room you may bask in the hot sun, replenishing your strength and curing your afflictions. A desperate serpent may also bask in the presence of a lightwall.
@@ -84,9 +88,9 @@ Source: [https://wiki.achaea.com/Subterfuge](https://wiki.achaea.com/Subterfuge)
 - **Scan**: Scanning the forest floor from the treetops. While in the treetops, you can scan the ground for passerbys.
 - **Bowmanship**: Use of the valued projectile weapon. Use one of the various bows to shoot an adventurer in a line-of-sight location from you.
 - **Seize**: Grabbing unwary victims from the forest floor. While in the trees, you may seize an adventurer and bring him up to your level.
-- **Colours**: Dye your arrows to categorise them. First, one should inspect his quiver to discover how many arrows he has in it. Then, you may dye a number of arrows a certain colour. Colours you may use are red, blue, purple, green, black, white, grey, orange, gold, and silver. To switch to using a specific colour of arrow, simply SWITCH <colour>. If you wish to switch back to using undyed arrows, simply do SWITCH NORMAL.
+- **Colours**: Dye your arrows to categorise them. First, one should inspect his quiver to discover how many arrows he has in it. Then, you may dye a number of arrows a certain colour. Colours you may use are red, blue, purple, green, black, white, grey, orange, gold, and silver. To switch to using a specific colour of arrow, simply SWITCH &lt;colour>. If you wish to switch back to using undyed arrows, simply do SWITCH NORMAL.
 - **Shove**: Sending a hapless victim crashing to the forest floor. While in the trees, you may shove an adventurer to the ground, possibly breaking his legs.
-- **Noose**: Covert and deadly assassination from the trees. While you are in the trees you can craft a noose from the vines hanging everywhere. Then, if there is a sole victim below you, you can NOOSE <adventurer>. This is a long process as you have to move with utter silence. If anyone else enters the location, your attempt will be ruined.
+- **Noose**: Covert and deadly assassination from the trees. While you are in the trees you can craft a noose from the vines hanging everywhere. Then, if there is a sole victim below you, you can NOOSE &lt;adventurer>. This is a long process as you have to move with utter silence. If anyone else enters the location, your attempt will be ruined.
 - **Aiming**: Increase your accuracy in shooting. Increase the accuracy of your shooting.
 - **Listen**: Detect action and conversations nearby. Use your auditory acuity to listen in on conversations in an adjacent room.
 - **Dispel**: Rid your environment of illusions. Use this ability to dispel most illusions associated with yourself or another adventurer.
@@ -125,6 +129,12 @@ Source: [https://wiki.achaea.com/Subterfuge](https://wiki.achaea.com/Subterfuge)
 - **Phase**: Alter your status in space-time itself. This is probably the most effective concealment ability there is. While phased, you will be hidden from all mortal adventurers, aside from other phased ones. You will, further, be unable to interact with items, denizens, or unphased adventurers. The caveat here is that you may try to attack an unphased adventurer, which will automatically unphase you. Thus, phase can be used as an effective aid to assassinations. Be warned that you will lose endurance rather quickly while phased.
 
 ## Venom (35 abilities)
+
+The Venom skill involves the production of various venoms by glands. These glands are remnants of evolution and lay dormant in most people. To those with the skill though, they can be used to great effect. First, one must secrete a particular venom. There will be a short pause while your glands produce the chosen toxin. Once the venom has been secreted, it cannot be held in the bloodstream indefinitely. Each venom has a risk factor incorporated into it. The more powerful the venom, the greater the chance of it backfiring and affecting the producer. To get the venom out of the bloodstream, one must either bite another adventurer or purge the venom from their body.
+
+It should be pointed out that denizens will be immune to most venoms that do things other than cause damage.
+
+The skill of Venom is available to members of the Serpent class, along with Subterfuge and Hypnosis.
 
 Source: [https://wiki.achaea.com/Venom_(Skill)](https://wiki.achaea.com/Venom_(Skill)) (raw: `kb/raw/wiki/Venom.wiki`)
 
@@ -202,9 +212,15 @@ Source: [https://wiki.achaea.com/Venom_(Skill)](https://wiki.achaea.com/Venom_(S
 - **Gecko**: Causes the recipient to become foully oily. Cause your victim to secrete foul oils from his skin.
 - **Scytherus**: A venom that thins the blood. A nasty venom that will thin the victim's blood allowing your toxins to be more effective.
 - **Nechamandra**: A venom that chills the veins. A venom that chills the veins.
-- **Ekanelia**: A lethality profound. Your grasp of venom has reached such a profound transcendence that you are now able to turn the very immune system of your victim's against them. Certain venoms, when delivered in just the right quantities, can promote violent immune responses which in turn lead to cascading failures and further afflictions manifesting throughout the subjects body. Each reaction has: A trigger: the venom which sets off the cascading failure (this is what you bite with). Conditionals: the afflictions which the subject must already labour under. A result: the result of the reaction taking place. Some reactions have: A bonus conditional: a bonus conditional which can be met. A bonus result: the bonus which is achieved if the bonus conditional is met. Naturally, with the exact dose and balance requirements of this high art of venom, only the fangs of the serpent are sufficient for this purpose(*). * You may see what reactions you are aware of with the EKANELIA command, and study one at further length with the EKANELIA STUDY <reaction> command. ** Reactions fire on the bite command.
+- **Ekanelia**: A lethality profound. Your grasp of venom has reached such a profound transcendence that you are now able to turn the very immune system of your victim's against them. Certain venoms, when delivered in just the right quantities, can promote violent immune responses which in turn lead to cascading failures and further afflictions manifesting throughout the subjects body. Each reaction has: A trigger: the venom which sets off the cascading failure (this is what you bite with). Conditionals: the afflictions which the subject must already labour under. A result: the result of the reaction taking place. Some reactions have: A bonus conditional: a bonus conditional which can be met. A bonus result: the bonus which is achieved if the bonus conditional is met. Naturally, with the exact dose and balance requirements of this high art of venom, only the fangs of the serpent are sufficient for this purpose(\*). \* You may see what reactions you are aware of with the EKANELIA command, and study one at further length with the EKANELIA STUDY &lt;reaction> command. \*\* Reactions fire on the bite command.
 
 ## Hypnosis (32 abilities)
+
+Where a skill like Venom is a naturally developed ability, and a skill like Subterfuge is an ability with many magical elements, Hypnosis is a science. It has long been known that our subconscious mind is a powerful force and that it can be influenced in mysterious ways, but until a forgotten Serpentlord discovered the principles of Hypnosis, there was no way to use it.
+
+With this skill, a practitioner of Hypnosis will be able to sink someone into a hypnotic trance, possibly even without them realising it, and implant various subliminal suggestions. They can then seal their victim's mind and implant a timer that determines how long after the hypnosis has been triggered until the suggestions start becoming active.
+
+The skill of Hypnosis is available to members of the Serpent class, along with Subterfuge and Venom.
 
 Source: [https://wiki.achaea.com/Hypnosis](https://wiki.achaea.com/Hypnosis) (raw: `kb/raw/wiki/Hypnosis.wiki`)
 
@@ -246,9 +262,9 @@ Source: [https://wiki.achaea.com/Hypnosis](https://wiki.achaea.com/Hypnosis) (ra
 ### Details
 
 - **Hypnotise**: Their minds are yours. This ability is the basis for all hypnotic manipulation. First you must hypnotise a victim, to seize control of his or her mind. This can take several seconds. Once a trance is secured, you may begin implanting hypnotic suggestions, and finally seal the victim's trance. Once this is complete, you may snap your victim to trigger their trance, and the hypnotic suggestions shall begin to fire in rapid succession.
-- **Seal**: Poised to strike. The act of sealing a hypnotic trance primes it for use. You may seal your trance at any time for three seconds and upwards, and suggestions tick periodically every four seconds there after. However, if you seal your trance while your victim suffers from a deadened mind, the trance will sink more deeply into their psyche, tying itself more intrinsically and becoming vastly more potent when triggered(*). * The delay can be set as low as one second, and the suggestions trigger every three seconds there after.
+- **Seal**: Poised to strike. The act of sealing a hypnotic trance primes it for use. You may seal your trance at any time for three seconds and upwards, and suggestions tick periodically every four seconds there after. However, if you seal your trance while your victim suffers from a deadened mind, the trance will sink more deeply into their psyche, tying itself more intrinsically and becoming vastly more potent when triggered(\*). \* The delay can be set as low as one second, and the suggestions trigger every three seconds there after.
 - **Analyse**: Discover the implanted suggestions in someone. With this ability, you may analyse a person's state of mind (including your own), to determine any hypnotic suggestions that may be implanted.
-- **Impulse**: Some pressure here, some manipulation there. It is one thing to sink your mark into a hypnotic trance and set their mind into a downward spiral, but quite another to simply lay them low with a glance. Nevertheless, you are now equal to both tasks. By triggering impulses in the mind of your victim, you may inflict them with one of the trivial suggestions(*) that are known to you. * See ab hypnosis for the list of trivial suggestions.
+- **Impulse**: Some pressure here, some manipulation there. It is one thing to sink your mark into a hypnotic trance and set their mind into a downward spiral, but quite another to simply lay them low with a glance. Nevertheless, you are now equal to both tasks. By triggering impulses in the mind of your victim, you may inflict them with one of the trivial suggestions(\*) that are known to you. \* See ab hypnosis for the list of trivial suggestions.
 - **Cleanse**: Clean yourself or another of suggestions. This ability allows you to cleanse hypnotic suggestions from an individual. You may also cleanse yourself, but in this instance you can only remove suggestions that would force you to carry out a physical action.
 - **Mesmerise**: Much subtler, near-undetectable hypnosis. By mesmerising a victim, you will be able to greatly increase the chance of them overlooking your attempts to remove their hard earned possessions via pickpocketing.
 - **Imprint**: Store the mental state of your subject. This greatest of the hypnotic arts allows you to store the mental state of a subject, greatly increasing the speed of future hypnosis attempts against that person. Note that you may only hold up to five imprints at any one time.

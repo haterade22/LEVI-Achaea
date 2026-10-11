@@ -6,6 +6,9 @@ sources:
   - kb/raw/logs/2026-10-11_runewarden-snb-vs-shikudo_defender.txt
   - kb/raw/wiki/Shikudo.wiki
   - kb/raw/wiki/Telepathy.wiki
+  - kb/raw/wiki/Kaido.wiki
+  - kb/raw/live/affliction_show/blackout.txt
+  - the user and Mystor, in game, 2026-10-11 (Telepathy and the mind lock; blackout)
 code:
   - src_new/triggers/levi_ataxia/for_levi/leviticus/563-587 (strike triggers, strike-start dedupe reset)
   - src_new/triggers/levi_ataxia/for_levi/leviticus/calls/ (effect-line triggers)
@@ -39,14 +42,31 @@ logs. `<staff>` is the weapon's description ("a twisted oaken staff"), `<T>` the
 - **`light`:** `kuro light left`, `nervestrike light`. A light strike prints its strike line and
   its effect line but **no damage line**, i.e. it lands the affliction without limb damage. Use:
   keep afflicting through a limb without breaking it before the rest are ready.
-- **Balance:** 2.1 s for most combos (21 of 27 measured), 1.9 s, 2.8 s with dawnkick, once 4.1 s.
+- **Balance:** the "Balance used" line prints straight after the combo's KICK, once per combo, so
+  only combos with a kick are measured: 2.1 s for 21 combos in Gaital, Rain and Oak, **1.9 s in
+  Willow** (all three Willow combos, each with flashheel: the wiki's faster strikes and kicks,
+  confirmed), and 2.8 s for the one Gaital combo with dawnkick. The four combos without a kick (two
+  in Oak, two in Gaital) printed no reading. ADOPT took 4.1 s and a leap 1.0 s. Rain does not change
+  balance.
 - **Transitions:** `TRANSITION <form>` inline at the end of a combo works (the form's line prints
-  right after the combo's kata line), and so does a separate `TRANSITION TO RAIN FORM`. **A kata
-  of at least 5 is required:** "A kata of at least 5 must be performed in order to flow from the
-  Willows Shaken by the Wind to another." (also seen for Gaital). Seen: Rain to Oak at kata 6 and
-  18, Oak to Willow at 6, Willow to Rain at 9, Oak to Gaital at 13. A new form starts the kata
-  again at 0. `ADOPT GAITAL FORM` jumps straight there: "You clumsily transition from the form of
-  Willows in Rain Storm into the form of Gaital."
+  right after the combo's kata line), and so does a separate `TRANSITION TO RAIN FORM`, which **cost
+  no balance and went through while paralysed** (twice in log 1). **A kata of at least 5 is
+  required:** "A kata of at least 5 must be performed in order to flow from the Willows Shaken by the
+  Wind to another." (also seen for Gaital). A refused transition **keeps** the chain (kata 3 stayed
+  3, and the next combo made 6). Seen: Gaital to Rain at kata 12 and 10, Rain to Oak at 6 and 18,
+  Oak to Willow at 6, Willow to Rain at 9, Oak to Gaital at 13. A new form starts the kata again at
+  0, and **every strike sent counts**: fumbled, parried, light and SHATTER alike.
+- **ADOPT <form> FORM** reaches a form that is not on the current form's list, and **costs balance
+  (4.1 s)**: "You clumsily transition from the form of Willows in Rain Storm into the form of Gaital."
+  (the monk was clumsy at the time, so "clumsily" may come from the affliction). Others see: "<M>
+  falters, his flowing motions becoming jerky for a moment as he abruptly transitions into a new
+  series of kata."
+- **How long a chain can run:** the wiki gives no number (Rain allows "twice the normal length",
+  and Tykonos is exempt), and a stumble is a chance that grows the longer a chain runs. Log 1: Oak
+  reached 13 and Rain 18 with no stumble. That rules out only a certain stumble at 12, which is how
+  our code's comments put it (006: "Must transition before kata 12 stumble"); it does not rule out a
+  12/24 limit. The stumble line has never been captured. Per the wiki a stumble resets the kata AND
+  drops you into Tykonos.
 - **ASSESS gives the target's health,** which Crescent needs (it requires 50% or less):
   "You glance over <T> and see that her health is at 4463/5460 [81%]." The monk in log 1 ran
   `assess` after every combo.
@@ -117,17 +137,71 @@ line fits on one row (log 2's 96-column wrap split it; this user's 119-124 does 
 | Rain | Dropping into a lower stance, you snap your weapon into an offensive position, tensing your muscles in preparation for the form of Willows in Rain Storm. | <M> drops into a lower stance, his weapon snapping up into an aggressive guard. |
 | Oak | Rising onto the balls of your feet, you prepare to begin the deadly form of the Live Oak. | <M> rises onto the balls of his feet, a look of grim certainty overcoming his face. |
 | Willow | Twirling your staff, you sink into the calm required for the form of Willows Shaken by the Wind. | <M> twirls his staff, a look of serene calm overcoming him. |
-| Gaital | You let your eyes fall closed and instinct guide you as you flow into the form of Gaital. | (not seen) |
+| Gaital | You let your eyes fall closed and instinct guide you as you flow into the form of Gaital. | The eyes of <M> fall closed, a look of tranquility coming over him. |
+
+**What each form gives** (wiki, Shikudo): **Tykonos** diverts damage more easily, and a chain there
+never stumbles. **Willow**: faster strikes and kicks (confirmed above). **Rain**: chains twice as
+long, damage that grows with the chain, and **"your equilibrium recovery shall be significantly
+increased"**, which is why monks do their Telepathy there. **Oak**: more damage. **Gaital**: strikes
+slide through parries. **Maelstrom**: kai from damaging strikes inside a kai trance, and resistance
+that grows with kai. **SHATTER** works in every form ("it can be performed in the flow of any one of
+the forms").
 
 ## Telepathy
 
-| Command | Line | Cost |
-|---|---|---|
-| MIND TRAVEL <T> | You drift on the waves of telepathy, allowing your mental power to carry you to your subject. | 0.85 s eq |
-| MIND LOCK <T> while locked | You must dissolve your current lock before attempting another. | |
-| MIND IMPATIENCE <T> | You fill the mind of <T> with an impatient feeling. | 1.27 s eq |
-| MIND PARALYSE <T> | You reach out with your mind and paralyse <T>. | 1.70 s eq |
-| (the target died) | You have lost your telepathic lock upon <T>. | |
+**A mind lock is needed only to reach a target outside your room, and for certain skills such as
+Radiance and Sapience** (the user and Mystor, in game, 2026-10-11). Those two are lock skills by
+nature (wiki): RADIANCE, the instant kill, builds up for a while and cannot be used on a target in
+your room, and SAPIENCE shows you everything a locked target does. The user: most Telepathy needs
+only the target in the room. The wiki agrees for its 15 abilities marked (*), all of which take a
+target: impatience, paralyse, batter, confuse, stupidity, epilepsy, fear, amnesia, deadening,
+disrupt, strip, crush, drain, divine and hallucinate. It puts a lock on the rest, **blackout**
+included: no (*), and `MIND BLACKOUT` names no target, where every (*) ability takes one (its "your
+locked target" wording is no guide alone: MIND IMPATIENCE, a (*) ability, says the same). The
+players' rule is the working rule in the same room, but for blackout it disagrees with the wiki and
+is untested; see [CONFLICTS.md](../CONFLICTS.md) #7. Log 1 cannot test it, because the monk held a
+lock all fight.
+
+**Rain is where Telepathy is cheapest.** Rain's "equilibrium recovery shall be significantly
+increased" (wiki), and the user says Shikudo monks also use telepathy in Rain for that reason. It is
+not Rain-only: log 1 cast its two afflictions in Willow. In log 1 a Telepathy round took the place
+of that round's combo (the alias swapped the combo out for the MIND command); whether a monk can send
+both in one round is open (log 2's blackout, below).
+
+| Command | Line | Equilibrium used (form) | Wiki |
+|---|---|---|---|
+| MIND TRAVEL <T> | You drift on the waves of telepathy, allowing your mental power to carry you to your subject. | 0.85 s (Gaital); **0.72 s (Rain)** | 1.00 s |
+| MIND LOCK <T> while locked | You must dissolve your current lock before attempting another. | | none listed |
+| MIND IMPATIENCE <T> | You fill the mind of <T> with an impatient feeling. | 1.27 s (Willow) | 1.50 s |
+| MIND PARALYSE <T> | You reach out with your mind and paralyse <T>. | 1.70 s (Willow) | 2.00 s |
+| (the target died) | You have lost your telepathic lock upon <T>. | | |
+
+Outside Rain every reading was 0.85 of the wiki's figure, a speed-up this character has everywhere
+(cause unknown); the one Rain reading was 0.72. No victim-side line of any MIND ability has been
+captured yet.
+
+### Blackout
+
+The user: **"Blackout is a CRITICAL affliction to give (you give it once, they usually touch tree to
+cure and we give it again). Under blackout they cannot see what we do to them."** Mystor
+(`.claude/classes/monk.md`): "Also if you arent using blackout at all in the rest of your attacks.
+Blackout in rain is basically a no brainer. You can blackout, and then combo 1 time. And the combo is
+hidden."
+- **MIND BLACKOUT** (wiki): 800 mana and 4.00 s of equilibrium. Rain should shorten that; by how much
+  is unmeasured.
+- **The game's record** (`AFFLICTION SHOW blackout`): it lasts **4 seconds** and is cured by **time**.
+  The victim gets no line when it lands, and "Your senses return to you as the blackout ends." when it
+  expires. It "obscures your prompt and prevents you from seeing many things happening". It is not
+  marked NoRandomCure, and in log 2 the **tree** cured it.
+- **Seen live** (log 2, the victim's side): their prompt read BLACKOUT; the lines of their own
+  actions ("You take a drink...", "You eat...", "You touch the tree...") and the bloodroot's cure line
+  vanished while their curing kept firing, but "The elixir heals and soothes you." and their balance,
+  ready, stun-ended and ferocity lines still printed; a stun ended with no visible cause; and they
+  still saw the monk eat ("Dominius eats an aurum flake."). They touched the tree 1.85 s in, and it
+  ended.
+- **Why it matters:** a blackout they tree away is a tree (about 14 s cooldown, log 2) not spent on
+  the lock, and the combo behind it is hidden. Give it again after the tree.
+- **Not captured yet:** our own MIND BLACKOUT success line.
 
 ## Dispatch, as it was done
 
@@ -146,10 +220,14 @@ limb tracker read head 110, torso 112, left arm 42, right arm 50, left leg 8, ri
 
 ## The two fights
 
-**Log 1, the Shikudo's (86 s, a win).** Every round sent one server alias: `dismount`, `stand`,
-`wield staff`, `mind lock`, `parry <limb>`, the combo, `assess`. The plan, in order:
-1. **Rain:** dawnkick and kuro kuro, then flashheel and two kuros on one leg, over and over (the
-   leg broke each time and was mended each time).
+**Log 1, the Shikudo's (86 s, a win).** Every combo round, and the Dispatch, sent one server alias:
+`dismount`, `stand`, `wield staff`, `mind lock`, `parry <limb>`, the combo (or `dispatch Claes`),
+`assess`. MIND IMPATIENCE went through the same alias with the combo swapped out for it. MIND
+PARALYSE (`mp`) and both MIND TRAVELs (`mt`) went out as bare queued commands
+(`queue addclearfull eb mind paralyse Claes`), without the alias's dismount, lock, parry or assess.
+The plan, in order:
+1. **Gaital:** dawnkick and kuro kuro, then flashheel and two kuros on one leg, over and over (the
+   leg broke each time and was mended each time), then TRANSITION TO RAIN FORM at kata 12.
 2. **Rain:** frontkick, kuro, ruku to the arm (prone, weariness or lethargy, clumsiness or healthleech).
 3. **Oak** (at kata 18): nervestrike, livestrike, risingkick to the head; nervestrike, ruku torso,
    risingkick, then on to Willow.
@@ -157,8 +235,8 @@ limb tracker read head 110, torso 112, left arm 42, right arm 50, left leg 8, ri
    right after). MIND IMPATIENCE and MIND PARALYSE between combos, and SHATTER when she raised a
    shield.
 5. Back through Rain and Oak (livestrike, kuro, risingkick to the torso) to **Gaital** at kata 13.
-6. Rain, then ADOPT Gaital; sweep and flashheel; flashheel and two rukus to the arms; flashheel,
-   needle, jinzuku; **Dispatch**.
+6. Gaital to Rain at kata 10, then ADOPT Gaital (4.1 s of balance); sweep and flashheel; flashheel
+   and two rukus to the arms; flashheel, needle, jinzuku; **Dispatch**.
 
 The Runewarden cured with kelp, goldenseal, ginseng, bloodroot, moss and her elixir, mending on
 her legs after every flashheel, the tree tattoo, FOCUS, a shield tattoo, sileris, and a Dagaz
@@ -166,7 +244,13 @@ rune on the ground that cured afflictions periodically. See [runewarden-snb.md](
 
 **Log 2, the Runewarden's (a loss for the monk).** Dominius opened in Rain (kuro, kuro,
 frontkick), mixed in nervestrike, livestrike, hiru, hiraku, risingkick and flashheel, and cured
-paralysis with magnesium again and again. Claes sliced the torso to 104%, razed his shield and
+paralysis with magnesium again and again. Claes was blacked out once (15:04:39; the source is not
+shown, most likely MIND BLACKOUT) and touched the tree 1.85 s later. It came inside one of his Oak
+combo rounds: "[AFF]: Blackout" printed after his nervestrike and livestrike, before the prompt, and
+no third attack printed (each of his other seven Oak rounds had a rising kick to the torso). The
+unexplained "You are no longer stunned." may be that hidden kick. If the source was MIND BLACKOUT
+(equilibrium), it went out in the same round as a combo (balance), which log 1's alias never did.
+Settle it on our first MIND BLACKOUT. Claes sliced the torso to 104%, razed his shield and
 rebounding, then impaled and disembowelled him.
 
 ## What our triggers record (CONFIRMED-in-code, test_shikudo_tracking.lua)
@@ -187,6 +271,28 @@ until the next prompt (`misc_scripts/001_Queue_Scanning.lua`, `318_Prompt_Trigge
   partner (nervestrike, frontkick, risingkick, spinkick, ruku to the arm) left it set, and the
   next absorbed or light blow's effect line was skipped. Log 1 has the case at 12:14: a combo
   ended with ruku to the arm, and the next kuro's damage line never printed.
+- **Telepathy** (`telepathy_tekura/`, the same gated window): confuse, batter, paralyse, stupidity,
+  disrupt and impatience have triggers; blackout, epilepsy, amnesia, strip, deadening, scythe, fear,
+  pacify, daze, isolate and clamp do not. A MIND affliction sent outside the server queue is never
+  seen by them. No alias does that today: `mba`, `mp`, `mi` and `md` queue, and the unqueued `min`,
+  `ml`, `mu`, `mhl`, `mha` and `mhd` send LOCK, UNLOCK and HALLUCINATE, which these triggers do not
+  match (the lock line, 701, is ungated).
+- **Blackout on the target:** nothing records MIND BLACKOUT. The only blackout recorders are Psion
+  LIGHTSTEAL (525) and Knight CONCUSS (`snb/008`), both on a prone target, each clearing it after a
+  fixed 3.5 s (the game says 4). The tracker's tree pool does not include blackout, so a tree under
+  blackout never cures it in our model: the tree is charged to one or two of the target's OTHER
+  afflictions instead, when it carries any (`onTargetTreeV3`, then trigger 389's `tSingleRandom()`
+  erases the first one present on its own list), and blackout stays until its timer.
+- **The Shikudo offense sends no Telepathy today** (the only automatic MIND command is the PvE
+  basher's `aconfig monk` MIND CRUSH): the lock offense (007) waits on an equilibrium field nothing
+  sets, puts every ability behind the mind lock, and sends bare words (`paralyse`) instead of
+  `MIND PARALYSE`. A fourth picker, `disruptmind()` (`levi_scripts/telepathy/001_DISRUPT.lua`), is
+  loaded but nothing calls it: it queues `mind blackout`, then CONFUSE, DISRUPT and IMPATIENCE, keyed
+  off `tAffs.blackout`, which nothing sets for MIND BLACKOUT. Phase 2 of the rework.
+- **A refused transition:** the live trigger `shikudo/002_Reset_Failsafe` zeroes our kata count
+  (`ataxia.vitals.kata = 0`, echo "-= reset kata =-") on "A kata of at least N must be performed",
+  and `basher/002_Class_Bashing.lua` (2361, 2620) relies on it; log 1 shows the game KEEPS the chain
+  (phase 2).
 - **Still not recorded:** light or absorbed **nervestrike** (paralysis) and **ruku to the arm**
   (clumsiness, healthleech), which have no target-named effect line; **dawnkick**'s epilepsy
   (line not captured); and target **stuns** (no duration is known). The fix is to hold a strike
@@ -195,7 +301,14 @@ until the next prompt (`misc_scripts/001_Queue_Scanning.lua`, `318_Prompt_Trigge
 
 ## Conflicts and open questions
 
-- **SHATTER is not in the wiki's form lists**, yet it was used inside a combo in Willow form.
+- **Blackout and the mind lock:** the wiki says blackout needs one; the players' rule (a lock only
+  for out-of-room targets and certain skills) says not in the same room. Settle it on the first
+  live MIND BLACKOUT without a lock.
+- **Kata limits:** no game number (the wiki: Rain allows twice the normal length, Tykonos never
+  stumbles); our code caps at 12, and 24 in Rain. Log 1's Oak 13 and Rain 18 without a stumble rule
+  out only a certain stumble at 12, since a stumble is a chance that grows. Kai Surge: the code
+  assumes 31 kai (TK6 sends KAI SURGE with no kai check at all, 007 uses 31 only for a READY echo,
+  and only switched-off 008 gates on it); the wiki says 45 (Kaido).
 - **Prone extras (hiru's confusion, hiraku's and risingkick's stun):** the wiki has them; neither
   log shows a different line when they apply (hiru and hiraku hit a prone target at 12:29).
 - **First-in-combo lines for hiru, hiraku, needle and jinzuku** come from our older triggers, not

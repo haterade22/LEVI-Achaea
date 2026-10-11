@@ -6,6 +6,14 @@
 
 ## Groves (59 abilities)
 
+Groves is the skill of interacting with the great forests of Achaea. It will allow practitioners to establish a private Grove from which they will base their power. Groves absorb and accumulate sunlight, which practitioners use to power the abilities. Every night, a Grove will lose some of the sunlight, as the Grove must maintain itself even when everything else is sleeping soundly. Further, most abilities in Groves will use up some of this sunlight energy.
+
+The skill of Groves is available to the Druid and Sylvan classes.
+
+Druids also have the skills of Metamorphosis and Reclamation, while Sylvans also have the skills of Propagation and Weatherweaving.
+
+*Wiki note: Harmony is only available to those druids in appropriate forestal organisations.*
+
 Source: [https://wiki.achaea.com/Groves](https://wiki.achaea.com/Groves) (raw: `kb/raw/wiki/Groves.wiki`)
 
 | Ability | Syntax | Cost | Cooldown / balance | Works on | Afflictions named |
@@ -94,7 +102,7 @@ Source: [https://wiki.achaea.com/Groves](https://wiki.achaea.com/Groves) (raw: `
 - **Roots**: Secure yourself to the ground with tree roots. While using this ability, you will be secured to the ground and none of the various abilities that attempt to lift a target will succeed on you.
 - **Preservation**: For one year, shield your grove from damage. For one Achaean year, this ability will render your grove immune to damage from certain abilities.
 - **Smudge**: Remove ground-based runes from your grove. With this ability, you may command your grove to remove a rune from itself.
-- **Quarterstaff**: Summon a powerful quarterstaff from your grove. Using this ability, you will gain a quarterstaff from the heart of a tree in your grove. You may then SHARPEN QUARTERSTAFF to sharpen it. Once sharpened, you may STAB <target>. You may also SPIN QUARTERSTAFF to conjure an aura of protection against physical and magical damage. TAP QUARTERSTAFF will turn your quarterstaff into a source of light. WHIRL QUARTERSTAFF will reveal many hidden or cloaked people that may be in your location. It is rumoured that there are other abilities that may be performed with your quarterstaff, including one to create a slightly more powerful aura of protection.
+- **Quarterstaff**: Summon a powerful quarterstaff from your grove. Using this ability, you will gain a quarterstaff from the heart of a tree in your grove. You may then SHARPEN QUARTERSTAFF to sharpen it. Once sharpened, you may STAB &lt;target>. You may also SPIN QUARTERSTAFF to conjure an aura of protection against physical and magical damage. TAP QUARTERSTAFF will turn your quarterstaff into a source of light. WHIRL QUARTERSTAFF will reveal many hidden or cloaked people that may be in your location. It is rumoured that there are other abilities that may be performed with your quarterstaff, including one to create a slightly more powerful aura of protection.
 - **Calling**: Call your loyal creatures back to your grove. This ability will call all creatures loyal to you back to your grove.
 - **Track**: Constantly track the movement of anyone in the forest. Using this ability, you may track an adventurer's movement through the forest. GROVE TRACK OFF will cease this tracking.
 - **Portal**: Open a portal to your grove for anyone in the forest. With this ability, you can create a portal to any adventurer in the same area, who may then come to you through the portal. The portal is one-way: it may not be used to go to the adventurer.
@@ -113,8 +121,8 @@ Source: [https://wiki.achaea.com/Groves](https://wiki.achaea.com/Groves) (raw: `
 - **Sharing**: Granting the use of your grove to your allies. Grove sharing will allow any grove user on your allies list to use your grove as if it were his own. GROVE WITHDRAW will disable grove sharing.
 - **Flash**: Illuminate the surroundings with a revealing flash of light. By channeling your sunlight reserves, Flash has the chance to reveal the presence of all hidden adventurers in the room, save for the Divinities.
 - **Gate**: Open a gateway of light. Grove gate will allow you to open a two-way portal between you and any adventurer, anywhere on the same continent as yourself. It is also possible to evoke a portal from an imbued quarterstaff, though the range of this gateway will be limited to the local area.
-- **Thornlash**: Lash your prey with Nature's fury. Tap into Nature's fury and command your grove to lash at a denizen, dealing significant cutting damage to them. The potency of this invocation is determined by the Druid or Sylvan casting it(*). * The damage dealt by this ability will scale with the higher of your strength or intelligence stat.
-- **Harmony**: Seek Nature's blessing through absolute harmony When standing in one of several natural environments, a Druid may attempt to harmonise him or herself to that environment with EVOKE HARMONY. Once three Druids are in harmony with the same environment, all Druids* will be able to bestow a blessing associated with that harmonisation on him/herself or another adventurer**, using EVOKE HARMONY <ME|target>. Only one environment may be fully harmonised at a time, and this harmonisation will last until the end of the year. EVOKE HARMONY STATUS will show the current state of harmony of the various environments. The effects of each environment are: Forest: Increased health regeneration. Ocean: Increased mana regeneration. Mountains: Increased willpower and endurance regeneration. Desert: Increased damage versus denizens. Tundra: Increased effectiveness of frost and venom elixirs. * This ability is available to Druids of Eleusis and cityless Druids who are also members of the Heartwood Kin and the Scions of the Ithmia. ** Harmony blessings may be granted to members of Eleusis and cityless members of the Heartwood Kin and the Scions of the Ithmia.
+- **Thornlash**: Lash your prey with Nature's fury. Tap into Nature's fury and command your grove to lash at a denizen, dealing significant cutting damage to them. The potency of this invocation is determined by the Druid or Sylvan casting it(\*). \* The damage dealt by this ability will scale with the higher of your strength or intelligence stat.
+- **Harmony**: Seek Nature's blessing through absolute harmony When standing in one of several natural environments, a Druid may attempt to harmonise him or herself to that environment with EVOKE HARMONY. Once three Druids are in harmony with the same environment, all Druids\* will be able to bestow a blessing associated with that harmonisation on him/herself or another adventurer\*\*, using EVOKE HARMONY &lt;ME|target>. Only one environment may be fully harmonised at a time, and this harmonisation will last until the end of the year. EVOKE HARMONY STATUS will show the current state of harmony of the various environments. The effects of each environment are: Forest: Increased health regeneration. Ocean: Increased mana regeneration. Mountains: Increased willpower and endurance regeneration. Desert: Increased damage versus denizens. Tundra: Increased effectiveness of frost and venom elixirs. \* This ability is available to Druids of Eleusis and cityless Druids who are also members of the Heartwood Kin and the Scions of the Ithmia. \*\* Harmony blessings may be granted to members of Eleusis and cityless members of the Heartwood Kin and the Scions of the Ithmia.
 - **Hive**: Create a hive of stinging bees to defend your grove. Hive will create a hive of bees in your grove that will live there and protect it. TAP HIVE will call forth the bees, who will proceed to attack your enemies in your grove. Bees are also capable of following you around Sapience (see HELP DENIZENS for more commands). An added benefit to this magical hive is that you may HARVEST HIVE. Doing this will not only feed you and heal your mind and body fully, but it will also attempt to increase a random skill of yours slightly. If the random skill happens to be Transcendent already, then no benefit will be gained. This ability may only be used infrequently.
 - **Overgrowth**: Return a totem to the embrace of Nature. This ability must be performed in a location where a totem is implanted. By ensconcing the totem with an overgrowth of dense greenery, you may conceal its runes from view, rendering it powerless. A well-placed lash of fire may destroy the obscuring plantlife, returning the totem to full function.
 - **Rejuvenate**: Restore an exterminated room to its natural state. This ability will allow you to rejuvenate land that has been exterminated by a foul Necromancer. It requires the presence of a cube of elemental ice in your inventory.
@@ -133,6 +141,15 @@ Source: [https://wiki.achaea.com/Groves](https://wiki.achaea.com/Groves) (raw: `
 - **Swarmsense**: Sense the size of the swarm. Using this skill will allow you to sense the number of insects that have infested the foetid pool in Eleusis.
 
 ## Metamorphosis (92 abilities)
+
+Metamorphosis is the ability to bond with the spirits of various animals, ranging from the mundane to the fantastic. To begin the process, MORPH &lt;animal>. Once a metamporh has successfully metamorphosed, they will find it is a strain on them to stay bonded causing a greater endurance drain. UNMORPH (or HUMAN) will bring them out of the form.
+
+The skill of Metamorphosis is available to the Druid and Sentinel classes.
+
+Druids also have the skills of Groves and Reclamation, while Sentinels also have the skills of Woodlore and Skirmishing.
+
+*Wiki note: The Basilisk and Jaguar morphs are unique to members of the Sentinel class.*
+*Wiki note: The Hydra and Wyvern morphs are unique to members of the Druid class.*
 
 Source: [https://wiki.achaea.com/Metamorphosis](https://wiki.achaea.com/Metamorphosis) (raw: `kb/raw/wiki/Metamorphosis.wiki`)
 
@@ -264,10 +281,10 @@ Source: [https://wiki.achaea.com/Metamorphosis](https://wiki.achaea.com/Metamorp
 - **Ambush**: Jaguar and Wolverine When performed towards a target in an adjacent location, you spring out, knock them to the ground, stunning them briefly, and cause damage as well. This ability cannot be used from the trees or when flying, for either the ambusher or the target.
 - **Armclamp**: Hydra Using your many hydra heads, you can clamp down on the arm of an adventurer.
 - **BIND**: Hydra Bind an adventurer up in your many hydra heads, preventing most forms of action.
-- **Bite**: Basilisk, Cheetah, Hydra and Wolf Sink your jaws into an unruly opponent. When utilised in the basilisk morph, against adventurers, this has a chance to deliver the loki venom. * Hydra morph only: Delivers your secreted venom into the bloodstream of your adventurer foe.
+- **Bite**: Basilisk, Cheetah, Hydra and Wolf Sink your jaws into an unruly opponent. When utilised in the basilisk morph, against adventurers, this has a chance to deliver the loki venom. \* Hydra morph only: Delivers your secreted venom into the bloodstream of your adventurer foe.
 - **Blaze**: Wyvern This formidable power of the wyvern allows you to coat yourself in fire, at the cost of some of your inner flame. While empowered, your mauls will drive any they strike to the ground. Additionally, while you are ablaze in this manner, your prey will find it impossible to parry your mauls or frenzies so long as they are also afflicted with the darkshade affliction.
 - **Block**: Bear, Elephant and Hydra This will allow you to block much movement in a particular direction.
-- **Bloodscent**: Jaguar Once you have the scent of your prey's blood in your nose, nothing will stop you from tracking them down(*). * When you strike a tumbling target who is already bleeding with your spear, you will gain the bloodscent defence. This permits you to bypass most forms of room hinder while it lasts (approximately ten seconds - this timer does not refresh).
+- **Bloodscent**: Jaguar Once you have the scent of your prey's blood in your nose, nothing will stop you from tracking them down(\*). \* When you strike a tumbling target who is already bleeding with your spear, you will gain the bloodscent defence. This permits you to bypass most forms of room hinder while it lasts (approximately ten seconds - this timer does not refresh).
 - **Burrow**: Gopher and Wolverine With this ability, you may, in many environments, burrow underground. While underground, you will be unable to do most actions. You will be able to drop, get, score, stat, def, i, burrow, and morph. As a gopher, you will only be able to burrow quite shallowly. However, once the wolverine morph is attained, you may burrow up to nine levels deep. In fact, you will find that you can burrow underneath many things that you can not normally burrow into. For example, though you cannot burrow down through a highway, you can, if you go at least six levels deep, burrow underneath it. Be warned, however, that anything which you cannot burrow into cannot be burrowed out of. Thus, if you decide to try burrowing underneath a large area which provides you no way of reaching the surface, be very careful, lest you become lost, for you will have no way of getting out. Remember, to go up or down levels, use BURROW ABOVE, or BURROW BELOW. It is rumoured that there are other races living beneath the earth, and if you leave items buried at any depth beyond the first level down, these races may seek out and steal whatever you left deep in the earth.
 - **Claw**: Hyena and Wolverine Attack an opponent with your claws.
 - **Digging**: Squirrel, Gopher and Wolverine With this ability, you may use your little claws to dig up buried things, and to bury things.
@@ -275,12 +292,12 @@ Source: [https://wiki.achaea.com/Metamorphosis](https://wiki.achaea.com/Metamorp
 - **Dismember**: Jaguar The savage spirit of the jaguar is ferocious indeed. Once you have bound and impaled an opponent, you can fall upon your helpless prey, ending their life in a bloody frenzy.
 - **Elusiveness**: Basilisk, Hyena, Jaguar and Wolverine With this ability, you cannot be easily followed, allowing you to roam about the land in more safety.
 - **Fitness**: Cheetah, Elephant, Hydra, Hyena, Jaguar, Wolf and Wyvern With your mastery of your own body, you are able to purge yourself of the asthma affliction.
-- **Flame**: Basilisk, Hydra and Wyvern Before this ability may be used, you must build up fire inside you. Type SUMMON FIRE to begin this process. When you are ready to breathe yellow fire, you may FLAME <target> or FLAME <icewall-direction>. BELCH or RELAX FLAME will get rid of the flame prematurely. * Hydra morph only. Unleashes a devastating blast of magical fire towards your target. This version can be used against denizens.
+- **Flame**: Basilisk, Hydra and Wyvern Before this ability may be used, you must build up fire inside you. Type SUMMON FIRE to begin this process. When you are ready to breathe yellow fire, you may FLAME &lt;target> or FLAME &lt;icewall-direction>. BELCH or RELAX FLAME will get rid of the flame prematurely. \* Hydra morph only. Unleashes a devastating blast of magical fire towards your target. This version can be used against denizens.
 - **Fluidswim**: Turtle Move across flooding, rivers, lakes, and oceans with confidence and speed.
 - **Fly**: Condor, Eagle, Jackdaw, Nightingale, Owl and Wyvern Soar up into the heavens and fly above the land. LAND to come back to the earth once again.
 - **Forage**: Squirrel Attempt to scamper about forestal locations, searching for food.
-- **Freeze**: Hydra Release a bone-chilling blast towards your foe, freezing them to the core. * Against denizens this deals cold damage.
-- **Frenzy**: Wyvern Unleash a frenzy at your prey, first plunging your venom-filled stinger into them before ripping at them with your claws. You may sting with: darkshade, vardrax, euphorbia, or sumac(*). You must have a vial of venom on hand to envenom your claws with. * You may only sting with sumac every so often: your venom sacks have a limited amount and take time to refill after each use.
+- **Freeze**: Hydra Release a bone-chilling blast towards your foe, freezing them to the core. \* Against denizens this deals cold damage.
+- **Frenzy**: Wyvern Unleash a frenzy at your prey, first plunging your venom-filled stinger into them before ripping at them with your claws. You may sting with: darkshade, vardrax, euphorbia, or sumac(\*). You must have a vial of venom on hand to envenom your claws with. \* You may only sting with sumac every so often: your venom sacks have a limited amount and take time to refill after each use.
 - **Furor**: Hydra Tear at one of your prey's limbs with two of your serpentine heads, afflicting them with whatever venom you have secreted.
 - **Gaze**: Basilisk The gaze of the basilisk is a powerful and fearful one indeed. With it, you may paralyse or confuse an adventurer or deal psychic damage to a denizen.
 - **Glare**: Basilisk With this ability, you may curse your foe with stupidity or impatience.
@@ -288,14 +305,14 @@ Source: [https://wiki.achaea.com/Metamorphosis](https://wiki.achaea.com/Metamorp
 - **Howl**: Hyena and Wolf Drain the mental strength of an opponent with your blood-curdling howl.
 - **Icebreath**: Icewyrm With this ability, you may freeze another adventurer, or the ground beneath you. The first time you freeze an adventurer, he will begin shivering violently, causing him to occassionally lose his equilibrium. The second time you do it, he will become stiff with the cold. If you freeze the ground, a coat of ice will form which will hinder those moving in and out.
 - **Ignite**: Wyvern This ability will allow the wyvern to instantly increase their inner flame by two levels, but has a fairly long recovery period.
-- **Incinerate**: Wyvern After building up white fire within you, you may turn your thermal destruction on an opponent, causing him massive damage and possibly instant death. BELCH will get rid of the flame prematurely. * Kills if the target is below 40% of maximum health, this threshold rising based on how badly they are on fire (50% at one stack of burning, 55% at two, 60% at three).
+- **Incinerate**: Wyvern After building up white fire within you, you may turn your thermal destruction on an opponent, causing him massive damage and possibly instant death. BELCH will get rid of the flame prematurely. \* Kills if the target is below 40% of maximum health, this threshold rising based on how badly they are on fire (50% at one stack of burning, 55% at two, 60% at three).
 - **Inferno**: Wyvern Once you have summoned forth blue fire, you may let loose with an armageddon of flame, searing all of those in your location. This is no simple fire, however; even if extinguished, it shall reignite upon the unfortunate individual after a short time.
 - **Leap**: Cheetah, Gorilla, Hyena, Jaguar and Wyvern This ability will allow you to leap over various obstacles in your way.
 - **Legclamp**: Hydra Using your many hydra heads, you can clamp down on the leg of an adventurer.
-- **Maul**: Icewyrm, Jaguar and Wyvern Rend your victim with your claws and teeth. * In order to target a specific body part, you must have the targeting ability.
+- **Maul**: Icewyrm, Jaguar and Wyvern Rend your victim with your claws and teeth. \* In order to target a specific body part, you must have the targeting ability.
 - **Melody**: Nightingale While you are singing this gorgeous melody, people will not be able to attack through the prismatic barrier. However, due to the difficulty of this, you cannot do anything else and maintain your song at the same time.
 - **Might**: Hydra, Icewyrm, Jaguar and Wyvern Using the power of your naturally strong body, you can heal certain afflictions.
-- **Negate**: Basilisk and Hydra Attempt to strip away the defences of your target. This attack will always strip the caloric salve defence first if it is present. * Hydra morph only.
+- **Negate**: Basilisk and Hydra Attempt to strip away the defences of your target. This attack will always strip the caloric salve defence first if it is present. \* Hydra morph only.
 - **Nightsight**: Cheetah, Condor, Eagle, Hydra, Hyena, Icewyrm, Jaguar, Owl, Wildcat, Wolf, Wolverine and Wyvern Use your sensitive eyes to see in the dark.
 - **Petrify**: Basilisk The gaze of the basilisk is truly terrible to behold. If your victim lacks the blindness defence, and suffers from four of hallucinations, dizziness, recklessness, confusion, paranoia, epilepsy, and impatience, you may turn them into little more than a living statue. They will be unable to do anything in this time, although the petrification is short-lived. Note that you must be the originator of an affliction for it to count.
 - **Pound**: Gorilla Pound your opponent's body with an enormously powerful blow that is even more devastating if the poor victim is frozen.
@@ -308,13 +325,13 @@ Source: [https://wiki.achaea.com/Metamorphosis](https://wiki.achaea.com/Metamorp
 - **Secretion**: Hydra By channeling toxins from the pit of your stomach, the hydra can naturally secrete the following venoms: xentio, darkshade, prefarar, vernalius, aconite, gecko and nechamandra.
 - **Shatter**: Hydra Your many heads will strike out at your target, shattering any protective shield found.
 - **Shred**: Bear and Wyvern Using your formidable claws, you're able to shred the flesh of your opponent, causing more than normal bleeding damage.
-- **Snap**: Hydra and Turtle Snap at an adventurer opponent with your beak or maw. * Hydra morph only. ** When using HYDRA SNAP <target>, this skill can be used against denizens to deal damage.
+- **Snap**: Hydra and Turtle Snap at an adventurer opponent with your beak or maw. \* Hydra morph only. \*\* When using HYDRA SNAP &lt;target>, this skill can be used against denizens to deal damage.
 - **Sniff**: Gopher and Wolverine While burrowed down to the first level, sniff will tell you who is above you.
 - **Sprint**: Cheetah, Icewyrm and Jaguar Quickly sprint in a chosen direction.
 - **Spy**: Condor, Eagle, Owl and Wyvern Using your lofty vantage point in the sky, you attempt to spy on an outdoors adventurer.
 - **Stampede**: Elephant and Hydra From an adjacent location, you may use your elephantine bulk to stampede over someone.
 - **Stealth**: Basilisk, Hyena and Jaguar This will allow you to sneak about the land in a very stealthy manner.
-- **Sting**: Hydra and Wyvern With this ability, you may use your deadly tail to sting a hapless victim, delivering the loki venom. * Hydra morph only.
+- **Sting**: Hydra and Wyvern With this ability, you may use your deadly tail to sting a hapless victim, delivering the loki venom. \* Hydra morph only.
 - **Swinging**: Gorilla When in a forest location, you will be able to swing up into the trees.
 - **Swoop**: Condor, Eagle, Owl and Wyvern While you are flying, you may swoop down on an adventurer on the ground, causing him damage with your claws.
 - **Temperance**: Hydra, Icewyrm and Wyvern Bestow fire resistance on yourself.
@@ -323,10 +340,16 @@ Source: [https://wiki.achaea.com/Metamorphosis](https://wiki.achaea.com/Metamorp
 - **Trumpet**: Elephant With your mighty bulk, you are able to blast a wall of sound at someone, attempting to knock them to the ground even from the trees or air.
 - **View**: Condor, Eagle and Wyvern While you are flying, you may locate all who are nearby and below you.
 - **Vitality**: Bear, Elephant, Hydra, Icewyrm, Jaguar and Wyvern You may only activate this ability when very near full health and mana. Once active, when you drop to less than twenty-five percent of your maximum health without dying, you will get a sudden rush of adrenaline that will heal you significantly.
-- **Wreathe**: Wyvern Using some of your inner flame(*), you may wreathe your hands in fire for a short time. When mauling an adventurer, this will deliver the ablaze affliction; if they are already on fire, it will do significantly increased damage and add a stack of burning. When mauling a denizen, your damage will increase and be dealt as fire damage rather than cutting. * This ability will decrease your inner flame by one level.
+- **Wreathe**: Wyvern Using some of your inner flame(\*), you may wreathe your hands in fire for a short time. When mauling an adventurer, this will deliver the ablaze affliction; if they are already on fire, it will do significantly increased damage and add a stack of burning. When mauling a denizen, your damage will increase and be dealt as fire damage rather than cutting. \* This ability will decrease your inner flame by one level.
 - **Yank**: Elephant From an adjacent location, you may yank an adventurer into your location with your trunk, providing that the adventurer isn't being held there by some means.
 
 ## Reclamation (25 abilities)
+
+In the beginning there were no cities; those that practice Reclamation shall see it so again.
+
+Nature is both beautiful and terrible, and the power that Reclamation grants reflects this. Those that have gained proficiency are able to tap into the remnants of natural life in a location, coaxing them to grow at an astounding rate. Nature shall overtake the location, granting the one to enable the process great power when standing upon their reclaimed land. Very little is known about the full capabilities of a master of this skill, although there are rumours of practitioners being everywhere simultaneously, or having the earth swallow up those unfortunate enough to fall in battle.
+
+The skill of Reclamation is available to members of the Druid class, along with Groves and Metamorphosis.
 
 Source: [https://wiki.achaea.com/Reclamation](https://wiki.achaea.com/Reclamation) (raw: `kb/raw/wiki/Reclamation.wiki`)
 
