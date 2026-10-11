@@ -42,13 +42,14 @@ our code.
 | Command | Notes |
 |---|---|
 | `CURING PRIORITY LIST` | Show the affliction order |
-| `CURING PRIORITY <aff1> <p1> [<aff2> <p2> ...]` | Several in one command. **Writes a STORED priority into the ACTIVE curingset.** |
+| `CURING PRIORITY <aff1> <p1> [<aff2> <p2> ...]` | Several in one command (the MULTI-SET form: use it for bulk changes). **Writes a STORED priority into the ACTIVE curingset.** |
 | `CURING PRIORITY INSERT <aff> <p> [all]` | Insert |
 | `CURING PRIORITY RESET` | Back to the default |
 | `CURING PRIORITY DEFENCE LIST` / `<name> <1-25>` / `<name> RESET` | Defence upkeep order. **No default is provided.** |
 | `CURING PRIOAFF <aff>` / `NONE` | **Temporary** priority until cured. Writes nothing stored, so it is always safe. |
 
 Rules from our code and history (CONFIRMED-in-code; details in CLAUDE.md, "Server-Side Curing"):
+- **At most 5 `CURING PRIORITY` commands a second** (Announce #5450). Over it, the server answers "You have exceeded the spam threshold for curing priority. Please see Announce #5450 for details." and DROPS the write. Bulk changes must use the multi-set form; our table goes out as about 8 commands of 20 pairs (v4.7.403), and trigger 787 re-sends it if a refusal is ever seen.
 - **Route every write through `ataxia_sendCuringPriority()`.** It throttles to 4 commands per
   second (the server allows 5) and refuses stored writes while the PvE `bash` set is active.
 - **Base and per-stack priorities** (announced 2026-08-19, not in HELP 13.7.8):

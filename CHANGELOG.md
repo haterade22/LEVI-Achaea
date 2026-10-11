@@ -2,6 +2,30 @@
 
 ---
 
+## 2026-10-11 - Curing priorities go out as multi-set commands; rate-limit refusals are caught (v4.7.403)
+
+After v4.7.402 the login re-send drew seven "You have exceeded the spam threshold for curing
+priority. Please see Announce #5450 for details." Each is a write the server DROPPED. Announce #5450
+caps CURING PRIORITY at 5 uses a second and asks for the multi-set form for bulk changes.
+`ataxia_sendDefaultPrios` and the bash installer sent one affliction per command, five per burst, which
+is exactly at the limit, so any other priority write in the same second (defup, a class swap) tipped
+it over.
+
+- **`ataxia_prioMassCommands(prios)`** packs a table into `curing priority a 1 b 2 ...` commands of 20
+  pairs, sorted (a family's base before its overrides). The PvP table is about 8 commands, sent one a
+  second through the throttle. The bash installer uses the same packing (raw `send`, since its writes
+  must land in the bash set).
+- **Trigger 787** catches the refusal. `ataxia_prioSpamRejected` forgets the recorded send and retries
+  the table once, at most once a minute.
+- **The fingerprint carries a format tag (`mass1|`)**, so every save re-sends once: the last send was
+  recorded as done although writes were dropped.
+- **The bash-set guard recognises the multi-set form** (no `$` anchor; the first pair classifies it).
+
+Tests: `test_prio_sync.lua` (command count and pair limit; the refusal retry and its once-a-minute
+guard), `test_curing_prios.lua` (base-before-override now checked on the real builder).
+
+---
+
 ## 2026-10-11 - Every curable affliction has a curing priority (v4.7.402)
 
 User: "85 afflictions". The game lists 85 afflictions `ataxia_defaultCuringPrios()` never named.

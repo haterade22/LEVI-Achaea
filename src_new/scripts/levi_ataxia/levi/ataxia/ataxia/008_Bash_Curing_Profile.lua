@@ -228,7 +228,7 @@ local function currentSet()
 end
 
 -- One-time server-side setup. Clones the PvP set so unlisted affs keep their values,
--- then writes only the deltas. Batched 5-per-command and staggered like
+-- then writes only the deltas, as multi-set commands one a second like
 -- ataxia_sendDefaultPrios (001) -- the server rejects more than 5 commands a second.
 -- The switch BACK is scheduled after the last batch: a priority written after we have
 -- already left the set would land in the wrong one.
@@ -266,22 +266,21 @@ end
 -- calls send() directly, bypassing ataxia_sendCuringPriority's guard, so nothing else caught
 -- it either.
 local function bashInstallWrite(s, from)
-  local entries = {}
-  for aff, val in pairs(ataxia_bashCuringPrios()) do
-    entries[#entries + 1] = "curing priority " .. aff .. " " .. val
-  end
-  table.sort(entries)  -- deterministic batching, so a retry sends the same thing
+  local prios = ataxia_bashCuringPrios()
+  local entries = 0
+  for _ in pairs(prios) do entries = entries + 1 end
 
   send("curingset switch " .. s.setname)
   send("curingset clone " .. from)
 
+  -- Multi-set commands, one a second (v4.7.403, Announce #5450): five single writes per burst
+  -- sat exactly at the 5-a-second limit, so any other priority write tipped it over and the
+  -- server dropped writes silently. Raw send() on purpose: these writes MUST land in the bash
+  -- set, and the throttle's bash-set guard exists to stop exactly that.
   local delay = 1.5
-  for i = 1, #entries, 5 do
-    local batch = {}
-    for j = i, math.min(i + 4, #entries) do batch[#batch + 1] = entries[j] end
-    local cmd = table.concat(batch, ";")
+  for _, cmd in ipairs(ataxia_prioMassCommands(prios)) do
     tempTimer(delay, function() send(cmd) end)
-    delay = delay + 1.5
+    delay = delay + 1.0
   end
 
   tempTimer(delay, function()
@@ -289,7 +288,7 @@ local function bashInstallWrite(s, from)
     s.installed = true
     s.active = false
     if ataxiaEcho then
-      ataxiaEcho("Bash curing profile '" .. s.setname .. "' installed (" .. #entries ..
+      ataxiaEcho("Bash curing profile '" .. s.setname .. "' installed (" .. entries ..
         " priorities, cloned from '" .. from .. "'). Auto-switching is " ..
         (s.enabled and "ON" or "OFF") .. ".")
     end

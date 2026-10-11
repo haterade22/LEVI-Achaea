@@ -141,13 +141,14 @@ describe("ataxia_sendDefaultPrios", function()
   it("emits a family BASE before its overrides", function()
     -- An explicit correctness claim with nothing asserting it: switching the sort to key on
     -- affliction name, or dropping it, breaks the ordering invisibly.
+    -- Reads the REAL command builder (v4.7.403 multi-set form), not a copy of its sort.
     reset({})
     local prios, e = ataxia_defaultCuringPrios(), {}
-    for a, v in pairs(prios) do e[#e + 1] = "curing priority " .. a .. " " .. v end
-    table.sort(e)
+    for _, cmd in ipairs(ataxia_prioMassCommands(prios)) do
+      for name in cmd:match("^curing priority (.+)$"):gmatch("(%w+) %d+") do e[#e + 1] = name end
+    end
     local seenBase = {}
-    for _, cmd in ipairs(e) do
-      local name = cmd:match("^curing priority (%S+)")
+    for _, name in ipairs(e) do
       local base, lvl = name:match("^(%a+)(%d+)$")
       if base and prios[base] then
         if not seenBase[base] then

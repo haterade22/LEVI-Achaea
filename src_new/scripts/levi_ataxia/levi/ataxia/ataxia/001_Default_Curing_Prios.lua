@@ -17,6 +17,8 @@ packageName: ''
 
 -- unnamed > For Levi > Levi_062424 > leviticus > LeviAtaxia > Ataxia-DownloadThis > Ataxia > System-related > Curing Stuff > Priority-related > Default Curing Prios
 
+ataxia = ataxia or {}
+
 -- Sends all default curing priorities to SSC, staggered to avoid flooding.
 -- Both resetOnLogin and resetPrios use the same table-driven approach.
 function ataxia_sendDefaultPrios()
@@ -33,39 +35,67 @@ function ataxia_sendDefaultPrios()
   end
 
   local prios = ataxia_defaultCuringPrios()
-  -- Collect into array for deterministic batching
-  local entries = {}
-  for aff, val in pairs(prios) do
-    entries[#entries + 1] = "curing priority " .. aff .. " " .. val
-  end
-  -- Sorted for the reason bashInstallWrite sorts: a retry must send the same thing. pairs()
-  -- order is undefined, so the batching was non-deterministic. It also puts a family's BASE
-  -- ahead of its overrides (" " sorts before "4"), which is the safe order to write them in.
-  table.sort(entries)
-  -- Send in batches of 5, staggered by 1.5s
-  local batchSize = 5
-  local delay = 0
   local sig = ataxia_prioTableSig(prios)
-  for i = 1, #entries, batchSize do
-    local batch = {}
-    for j = i, math.min(i + batchSize - 1, #entries) do
-      batch[#batch + 1] = entries[j]
-    end
-    local cmd = table.concat(batch, ";")
-    local last = (i + batchSize > #entries)
+  local cmds = ataxia_prioMassCommands(prios)
+  -- Through the throttle when it is loaded, so another writer in the same second is counted
+  -- against the same budget; one command a second leaves room for those writers either way.
+  local sendPrio = ataxia_sendCuringPriority or function(c) send(c) end
+  for i, cmd in ipairs(cmds) do
+    local last = (i == #cmds)
     local function go()
-      send(cmd)
-      -- Record what the server now holds only once the LAST batch is out, so a disconnect
+      sendPrio(cmd)
+      -- Record what the server now holds only once the LAST command is out, so a disconnect
       -- halfway leaves the table marked unsent and the next login sends it again.
       if last then ataxia_prioMarkSent(sig) end
     end
-    if delay == 0 then
-      go()
-    else
-      tempTimer(delay, go)
-    end
-    delay = delay + 1.5
+    if i == 1 then go() else tempTimer(i - 1, go) end
   end
+end
+
+-- ONE COMMAND, MANY PRIORITIES (v4.7.403).
+--
+-- Announce #5450: at most 5 uses of CURING PRIORITY a second, and the game's answer to bulk
+-- changes is the multi-set form `CURING PRIORITY <aff1> <n1> <aff2> <n2> ...` (HELP 13.7.8).
+-- This file and the bash installer used to send one affliction per command, five commands a
+-- burst every 1.5s -- exactly AT the limit, so any other priority write in the same second
+-- (defup, a class swap) tipped it over. A live login re-send (v4.7.397) drew seven
+-- "You have exceeded the spam threshold for curing priority" refusals, each one a write the
+-- server dropped. Packed 20 pairs a command, the whole table is about 8 commands.
+ataxia.PRIO_PAIRS_PER_COMMAND = 20
+
+-- Sorted, so a retry sends the same thing and a family's BASE comes before its overrides
+-- ("burning" sorts before "burning4"), the safe order to write them in.
+function ataxia_prioMassCommands(prios, perCommand)
+  perCommand = perCommand or ataxia.PRIO_PAIRS_PER_COMMAND
+  local keys = {}
+  for k in pairs(prios) do keys[#keys + 1] = k end
+  table.sort(keys)
+  local cmds, cur = {}, {}
+  for _, k in ipairs(keys) do
+    cur[#cur + 1] = k .. " " .. tostring(prios[k])
+    if #cur >= perCommand then
+      cmds[#cmds + 1] = "curing priority " .. table.concat(cur, " ")
+      cur = {}
+    end
+  end
+  if #cur > 0 then cmds[#cmds + 1] = "curing priority " .. table.concat(cur, " ") end
+  return cmds
+end
+
+-- "You have exceeded the spam threshold for curing priority." (trigger 787): the server dropped
+-- a write. Whatever the table send recorded is no longer true, so forget it -- the next login
+-- (or one retry here, at most once a minute) sends the table again.
+function ataxia_prioSpamRejected()
+  ataxia.settings = ataxia.settings or {}
+  ataxia.settings.prioSentSig = nil
+  ataxiaTemp = ataxiaTemp or {}
+  local now = (getEpoch and getEpoch()) or os.time()
+  if ataxiaTemp.prioSpamRetryAt and now - ataxiaTemp.prioSpamRetryAt < 60 then return end
+  ataxiaTemp.prioSpamRetryAt = now
+  if ataxiaEcho then
+    ataxiaEcho("The server rejected some curing priority writes (rate limit). Re-sending the table in 10s.")
+  end
+  tempTimer(10, function() if ataxia_prioSyncCheck then ataxia_prioSyncCheck() end end)
 end
 
 -- KEEPING THE SERVER IN STEP WITH THIS TABLE (v4.7.397).
@@ -86,7 +116,10 @@ function ataxia_prioTableSig(prios)
   local parts = {}
   for k, v in pairs(prios) do parts[#parts + 1] = k .. "=" .. tostring(v) end
   table.sort(parts)
-  return table.concat(parts, ",")
+  -- The SEND FORMAT is part of the fingerprint: v4.7.403 changed how the table is sent after a
+  -- send that the server partly rejected had already been recorded as done, so bumping this
+  -- tag makes every existing save re-send once.
+  return "mass1|" .. table.concat(parts, ",")
 end
 
 function ataxia_prioMarkSent(sig)
