@@ -2,6 +2,27 @@
 
 ---
 
+## 2026-10-11 - All 203 afflictions on record; the importer files answers by content (v4.7.401)
+
+The user ran the self-extending `kbcapture afflictions`: 423 answers.
+
+- **Coverage is complete:** every one of the 203 afflictions in AFFLICTION LIST has an AFFLICTION SHOW
+  record (206 records, with old names). **45 have a fixed duration** (`Default time`, from blackout 4s
+  to speechless 300s); **11 have no known cure** (amnesia, deepsleep, mindclamp, weakenedmind,
+  isolation, ...); 116 are NoRandomCure.
+- **The importer routes by content.** A lag spike longer than the 4s capture timeout shifted two
+  answers into the NEXT command's block (the anorexia record under `whatcures anorexia`, the blindness
+  WHATCURES line under `affliction show bloodfire`, which overwrote bloodfire's file with it). Every
+  answer names its affliction, so records and WHATCURES lines are now filed by what they say.
+  A record runs to the next record or the end of the block, not to its last flag: `Default time:`
+  and `Expire msg:` come after it. Flush-left lines inside a record (a channel line, "(Market): ...")
+  are skipped. Re-importing an archived capture does not archive it again.
+- **"Has no known cures" is an answer,** kept in `whatcures.txt` and shown in the catalog.
+- **A second cure line reads as "and":** "Apply Epidermal To Body" / "Focus Mind" now matches WHATCURES.
+- **`kbcapture` waits 8s for an answer** (was 4s).
+
+---
+
 ## 2026-10-10 - kbcapture asks about every affliction the game lists; defence batch question settled (v4.7.400)
 
 - **The full AFFLICTION LIST is captured:** 203 afflictions over four MORE pages. 79 have no record yet

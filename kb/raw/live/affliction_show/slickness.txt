@@ -1,4 +1,4 @@
-# affliction show slickness  (2026-10-10T23:40:53Z)
+# affliction show slickness  (2026-10-11T00:13:49Z)
 Affliction:         Slickness
 Diagnose:           extremely oily.
 Afflicted msg:      You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.

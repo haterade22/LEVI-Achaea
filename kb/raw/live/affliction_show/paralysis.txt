@@ -1,4 +1,4 @@
-# affliction show paralysis  (2026-10-10T23:40:21Z)
+# affliction show paralysis  (2026-10-11T00:13:18Z)
 Affliction:         Paralysis
 Diagnose:           paralysed.
 Afflicted msg:      A prickly stinging overcomes your body, fading away into numbness.

@@ -1,0 +1,12 @@
+# affliction show amnesia  (2026-10-11T00:14:26Z)
+Affliction:         Amnesia
+Diagnose:           suffering from amnesia.
+Afflicted msg:      Suddenly dizzy, you clutch your head and wonder what it was you were thinking about.
+Cured msg:          none
+Description:        Amnesia makes you forget one action that you try to take.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            Yes
+Accentato:          Yes
+CadmusCurse:        No

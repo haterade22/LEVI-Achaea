@@ -1,0 +1,13 @@
+# affliction show speechless  (2026-10-11T00:15:58Z)
+Affliction:         Speechless
+Diagnose:           rendered entirely unable to communicate.
+Afflicted msg:      none
+Cured msg:          You find your tongue will once more obey your will to speak.
+Cure(s):            Time
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       300 seconds

@@ -1,0 +1,12 @@
+# affliction show deepsleep  (2026-10-11T00:14:51Z)
+Affliction:         Deepsleep
+Diagnose:           in an unnaturally deep sleep.
+Afflicted msg:      none
+Cured msg:          none
+Description:        A deep sleep is one from which you will never naturally wake.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

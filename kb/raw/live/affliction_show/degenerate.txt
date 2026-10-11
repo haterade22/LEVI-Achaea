@@ -1,0 +1,12 @@
+# affliction show degenerate  (2026-10-11T00:14:52Z)
+Affliction:         Degenerate
+Diagnose:           weakened in body.
+Afflicted msg:      none
+Cured msg:          You suddenly feel much less weak, strength flooding back into your limbs.
+Cure(s):            Time
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

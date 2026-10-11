@@ -1,4 +1,4 @@
-# affliction show addiction  (2026-10-10T23:38:25Z)
+# affliction show addiction  (2026-10-11T00:11:07Z)
 Affliction:         Addiction to curatives
 Diagnose:           suffering from addiction.
 Afflicted msg:      You feel a terrible hunger grow within you.

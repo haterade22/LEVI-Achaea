@@ -1,0 +1,15 @@
+# affliction show flamefisted  (2026-10-11T00:15:04Z)
+Affliction:         Flamefisted
+Diagnose:           suffused with an aura of fire.
+Afflicted msg:      none
+Cured msg:          none
+Expire msg:         A trickle of sweat cools your scorched skin as the raging blaze abates.
+Cure(s):            Time
+Description:        This fiery aura immediately burns away any aura of rebounding.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       15 seconds

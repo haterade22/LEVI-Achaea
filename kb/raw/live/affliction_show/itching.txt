@@ -1,4 +1,4 @@
-# affliction show itching  (2026-10-10T23:39:56Z)
+# affliction show itching  (2026-10-11T00:12:53Z)
 Affliction:         Itching
 Diagnose:           afflicted with terrible itching.
 Afflicted msg:      A terrible urge to itch yourself bloody comes over you.

@@ -1,0 +1,15 @@
+# affliction show blackout  (2026-10-11T00:14:30Z)
+Affliction:         Blackout
+Diagnose:           devoid of senses.
+Afflicted msg:      none
+Cured msg:          none
+Expire msg:         Your senses return to you as the blackout ends.
+Cure(s):            Time
+Description:        Blackout obscures your prompt and prevents you from seeing many things happening.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       4 seconds

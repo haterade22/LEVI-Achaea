@@ -1,4 +1,4 @@
-# affliction show manaleech  (2026-10-10T23:40:04Z)
+# affliction show manaleech  (2026-10-11T00:13:01Z)
 Affliction:         Manaleech
 Diagnose:           a victim of manaleech.
 Afflicted msg:      Your mana begins to drain away.

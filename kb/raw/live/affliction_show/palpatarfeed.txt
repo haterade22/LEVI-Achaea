@@ -1,0 +1,14 @@
+# affliction show palpatarfeed  (2026-10-11T00:15:40Z)
+Affliction:         Palpatarfeed
+Diagnose:           Being fed on by the maggots of Palpatar.
+Afflicted msg:      none
+Cured msg:          The maggots infesting you wither and die.
+Cure(s):            Time
+Description:        This affliction will periodically afflict with healthleech until it fades.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       20 seconds

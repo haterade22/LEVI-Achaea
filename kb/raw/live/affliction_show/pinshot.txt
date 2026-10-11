@@ -1,0 +1,14 @@
+# affliction show pinshot  (2026-10-11T00:15:45Z)
+Affliction:         Pinshot
+Diagnose:           impaled through the foot.
+Afflicted msg:      none
+Cured msg:          The arrow through your foot finally comes free, allowing you to move normally once again.
+Cure(s):            Time
+Description:        This affliction will cause various movement attempts to fail on occasion.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       21 seconds

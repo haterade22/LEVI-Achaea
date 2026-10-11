@@ -1,0 +1,15 @@
+# affliction show lightbind  (2026-10-11T00:15:30Z)
+Affliction:         Lightbind
+Diagnose:           bound by chains of golden light.
+Afflicted msg:      none
+Cured msg:          none
+Expire msg:         The golden chains of light that bind you dissipate.
+Cure(s):            Time
+Description:        This affliction will cause various movement attempts to fail on occasion.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       22 seconds

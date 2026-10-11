@@ -1,4 +1,4 @@
-# affliction show healthleech  (2026-10-10T23:39:41Z)
+# affliction show healthleech  (2026-10-11T00:12:37Z)
 Affliction:         Healthleech
 Diagnose:           a victim of healthleech.
 Afflicted msg:      Your health begins to drain away.

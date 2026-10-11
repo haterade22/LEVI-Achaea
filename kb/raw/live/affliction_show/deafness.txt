@@ -1,4 +1,4 @@
-# affliction show deafness  (2026-10-10T23:39:07Z)
+# affliction show deafness  (2026-10-11T00:12:04Z)
 Affliction:         Deafness
 Diagnose:           deaf.
 Afflicted msg:      Sounds fade as you lose your hearing.

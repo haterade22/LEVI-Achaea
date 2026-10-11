@@ -1,0 +1,14 @@
+# affliction show constricted  (2026-10-11T00:14:43Z)
+Affliction:         Constricted
+Diagnose:           being constricted by vines.
+Afflicted msg:      none
+Cured msg:          You manage to wrestle the vines away from your limbs.
+Cure(s):            Time
+Description:        Constricted vines will disable various abilities that speed up writhing.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       30 seconds

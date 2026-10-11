@@ -1,4 +1,4 @@
-# affliction show confusion  (2026-10-10T23:38:49Z)
+# affliction show confusion  (2026-10-11T00:11:46Z)
 Affliction:         Confusion
 Diagnose:           confused.
 Afflicted msg:      Your head spins as your mind is drowned in chaos and confusion.

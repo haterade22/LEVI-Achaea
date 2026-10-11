@@ -1,4 +1,4 @@
-# affliction show dissonance  (2026-10-10T23:39:16Z)
+# affliction show dissonance  (2026-10-11T00:12:12Z)
 Affliction:         Dissonance
 Diagnose:           has a dissonant nature.
 Afflicted msg:      You feel your body begin to vibrate in tune with the disruptive harmonies.

@@ -1,0 +1,15 @@
+# affliction show hamstrung  (2026-10-11T00:15:07Z)
+Affliction:         Hamstrung
+Diagnose:           suffering from a crippled hamstring.
+Afflicted msg:      none
+Cured msg:          none
+Expire msg:         You feel the tightness in your hamstring subside, allowing free movement once again.
+Cure(s):            Time
+Description:        A crippled hamstring greatly impedes one's ability to walk for a short time.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       10 seconds

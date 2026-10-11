@@ -1,0 +1,13 @@
+# affliction show homunculusmercury  (2026-10-11T00:15:13Z)
+Affliction:         Homunculusmercury
+Diagnose:           struggling to process edible curatives.
+Afflicted msg:      none
+Cured msg:          Eating is suddenly less difficult again.
+Cure(s):            Time
+Description:        Extends the next herb balance.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

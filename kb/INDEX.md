@@ -34,7 +34,7 @@ One line per page. Kept up to date by `/kb-ingest`.
 | raw/help/13.7.8_server-side-curing.txt | HELP 13.7.8 SSC commands | 2026-10-10 |
 | raw/help/conditional-afflictions-for-the-achaean-forms.txt | HELP: class active/passive cures and blockers (old skill names) | 2026-10-10 |
 | raw/live/whatcures.txt | Live WHATCURES output, one line per affliction (read by `tools/kb_catalog.py`) | 2026-10-10 (hypochondria) |
-| raw/live/affliction_show/ (133), raw/live/captures/ | First `kbcapture afflictions` run: 267 answers | 2026-10-10 |
+| raw/live/affliction_show/ (211), raw/live/captures/ | `kbcapture afflictions` runs: all 203 game afflictions, plus old names | 2026-10-11 |
 | raw/live/affliction_list.txt | AFFLICTION LIST, all 203 afflictions (4 MORE pages) | 2026-10-10 |
 | raw/live/defence-batch-test_2026-10-10.txt | Test: one bad defence name in a batch only rejects that name | 2026-10-10 |
 | raw/live/curing-priority-defence-list_bash_2026-10-10.txt | Defence priorities, bash set | 2026-10-10 |

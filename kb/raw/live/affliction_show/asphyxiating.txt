@@ -1,0 +1,12 @@
+# affliction show asphyxiating  (2026-10-11T00:14:27Z)
+Affliction:         Asphyxiating
+Diagnose:           suffering with every breath.
+Afflicted msg:      none
+Cured msg:          Your breaths finally begin to come easier, the burning in your lungs subsiding.
+Cure(s):            Time
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

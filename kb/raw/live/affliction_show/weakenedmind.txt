@@ -1,0 +1,12 @@
+# affliction show weakenedmind  (2026-10-11T00:16:13Z)
+Affliction:         Weakenedmind
+Diagnose:           weakened in mind.
+Afflicted msg:      none
+Cured msg:          The power of Rixil fades from your mind.
+Description:        Being weakened in mind will cause the next attempt to focus your mind to have a significantly increased recovery time.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

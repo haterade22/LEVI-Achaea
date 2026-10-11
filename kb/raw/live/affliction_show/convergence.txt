@@ -1,0 +1,11 @@
+# affliction show convergence  (2026-10-11T00:14:44Z)
+Affliction:         Convergence
+Diagnose:           elemental energy is converging upon you.
+Afflicted msg:      none
+Cured msg:          none
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

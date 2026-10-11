@@ -1,4 +1,4 @@
-# affliction show brokenrightleg  (2026-10-10T23:38:42Z)
+# affliction show brokenrightleg  (2026-10-11T00:11:39Z)
 Affliction:         A broken right leg
 Diagnose:           afflicted by a crippled right leg.
 Afflicted msg:      Your right leg breaks with a loud crack.

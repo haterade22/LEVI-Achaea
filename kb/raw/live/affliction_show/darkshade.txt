@@ -1,4 +1,4 @@
-# affliction show darkshade  (2026-10-10T23:39:03Z)
+# affliction show darkshade  (2026-10-11T00:12:00Z)
 Affliction:         An allergy to sunlight
 Diagnose:           allergic to sunlight.
 Afflicted msg:      Your vision is flooded with light, and your face suddenly reddens.

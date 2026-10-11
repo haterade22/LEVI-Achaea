@@ -1,4 +1,4 @@
-# affliction show sandfever  (2026-10-10T23:40:36Z)
+# affliction show sandfever  (2026-10-11T00:13:33Z)
 Affliction:         Sandfever
 Diagnose:           labouring under a terrible fever.
 Afflicted msg:      You're tired. So very tired.

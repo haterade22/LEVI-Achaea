@@ -1,0 +1,15 @@
+# affliction show slimeobscure  (2026-10-11T00:15:54Z)
+Affliction:         Slimeobscure
+Diagnose:           Covered in viscous slime.
+Afflicted msg:      none
+Cured msg:          none
+Expire msg:         You rid yourself of the slime coating your skin.
+Cure(s):            Time
+Description:        This affliction will obscure random cure messages.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       60 seconds

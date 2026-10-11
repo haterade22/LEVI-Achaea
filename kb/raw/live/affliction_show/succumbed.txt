@@ -1,0 +1,13 @@
+# affliction show succumbed  (2026-10-11T00:15:59Z)
+Affliction:         Succumbed
+Diagnose:           succumbed to a love-wrought madness.
+Afflicted msg:      none
+Cured msg:          Your thoughts clear, your pulse steadies; love's madness has left you... for now.
+Cure(s):            Time
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       30 seconds

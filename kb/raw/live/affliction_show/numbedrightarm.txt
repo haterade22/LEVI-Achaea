@@ -1,0 +1,13 @@
+# affliction show numbedrightarm  (2026-10-11T00:15:39Z)
+Affliction:         Numbedrightarm
+Diagnose:           your right arm is completely numb.
+Afflicted msg:      none
+Cured msg:          none
+Expire msg:         Feeling returns to your right arm.
+Cure(s):            Time
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

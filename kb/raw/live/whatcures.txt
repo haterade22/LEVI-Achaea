@@ -128,3 +128,84 @@ The affliction 'voyria' is cured by: Sip Immunity.
 The affliction 'webbed' is cured by: Writhe.
 The affliction 'whisperingmadness' is cured by: Eat Lobelia / Eat Argentum.
 The affliction 'wristfractures' is cured by: Apply Health To Arms.
+# 2026-10-10 19:18 (kbcapture)
+The affliction 'bloodfire' has no known cures.
+The affliction 'accentato' is cured by: Time.
+The affliction 'airfisted' is cured by: Time.
+The affliction 'amnesia' has no known cures.
+The affliction 'asphyxiating' is cured by: Time.
+The affliction 'betrayal' is cured by: Time.
+The affliction 'blackout' is cured by: Time.
+The affliction 'blistered' is cured by: Time.
+The affliction 'breathless' is cured by: Time.
+The affliction 'bruisedribs' is cured by: Time.
+The affliction 'calcifiedskull' is cured by: Apply Restoration To Head.
+The affliction 'calcifiedtorso' is cured by: Apply Restoration To Body.
+The affliction 'coldfate' is cured by: Time.
+The affliction 'condemned' is cured by: Time.
+The affliction 'conflagration' has no known cures.
+The affliction 'constricted' is cured by: Time.
+The affliction 'convergence' has no known cures.
+The affliction 'corruption' is cured by: Time.
+The affliction 'cremated' is cured by: Time.
+The affliction 'dazzled' is cured by: Apply Mending To Head and Time.
+The affliction 'deathsickness' is cured by: Time.
+The affliction 'deepsleep' has no known cures.
+The affliction 'degenerate' is cured by: Time.
+The affliction 'dehydrated' is cured by: Time.
+The affliction 'demonstain' is cured by: Time.
+The affliction 'deteriorate' is cured by: Time.
+The affliction 'empoweredloshre' is cured by: Time.
+The affliction 'empoweredmannaz' is cured by: Time.
+The affliction 'enlightenment' has no known cures.
+The affliction 'enmesh' is cured by: Time.
+The affliction 'ensorcelled' is cured by: Time.
+The affliction 'flamefisted' is cured by: Time.
+The affliction 'grievouswounds' is cured by: Apply Health To Torso.
+The affliction 'hamstrung' is cured by: Time.
+The affliction 'hatred' is cured by: Time.
+The affliction 'hecatecurse' is cured by: Time.
+The affliction 'hindered' is cured by: Time.
+The affliction 'homunculusmercury' is cured by: Time.
+The affliction 'icebound' is cured by: Writhe.
+The affliction 'icefisted' is cured by: Time.
+The affliction 'inquisition' has no known cures.
+The affliction 'internalbleeding' is cured by: Apply Restoration To Body.
+The affliction 'isolation' has no known cures.
+The affliction 'kaisurge' is cured by: Time.
+The affliction 'kkractlebrand' is cured by: Sip Health.
+The affliction 'lapsingconsciousness' is cured by: Time.
+The affliction 'latched' is cured by: Sip Health.
+The affliction 'lightbind' is cured by: Time.
+The affliction 'lovestruck' is cured by: Time.
+The affliction 'mindclamp' has no known cures.
+The affliction 'mindravaged' is cured by: Time.
+The affliction 'muddled' is cured by: Time.
+The affliction 'numbedleftarm' is cured by: Time.
+The affliction 'numbedrightarm' is cured by: Time.
+The affliction 'palpatarfeed' is cured by: Time.
+The affliction 'penitence' has no known cures.
+The affliction 'petrified' is cured by: Time.
+The affliction 'phlogisticated' is cured by: Time.
+The affliction 'pinshot' is cured by: Time.
+The affliction 'reeling' is cured by: Time.
+The affliction 'revealed' is cured by: Time.
+The affliction 'scrambledbrains' is cured by: Time.
+The affliction 'silenced' is cured by: Time.
+The affliction 'silver' is cured by: Time.
+The affliction 'slimeobscure' is cured by: Time.
+The affliction 'snared' is cured by: Time.
+The affliction 'solarburn' is cured by: Time.
+The affliction 'speechless' is cured by: Time.
+The affliction 'succumbed' is cured by: Time.
+The affliction 'timeflux' is cured by: Time.
+The affliction 'tonguetied' is cured by: Apply Restoration To Head.
+The affliction 'trueblind' is cured by: Time.
+The affliction 'unconsciousness' is cured by: Time.
+The affliction 'vinewreathed' is cured by: Time.
+The affliction 'vitiated' is cured by: Time.
+The affliction 'vitrified' is cured by: Time.
+The affliction 'voidfisted' is cured by: Time.
+The affliction 'waterbonds' is cured by: Time.
+The affliction 'weakenedmind' has no known cures.
+The affliction 'woeconstrained' is cured by: Time.

@@ -1,0 +1,15 @@
+# affliction show voidfisted  (2026-10-11T00:16:10Z)
+Affliction:         Voidfisted
+Diagnose:           suffused with the void.
+Afflicted msg:      none
+Cured msg:          none
+Expire msg:         The empty grasp of the void retreats, and you breathe more easily.
+Cure(s):            Time
+Description:        Surrounded by the void, curative herbs may not be as effective.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       15 seconds

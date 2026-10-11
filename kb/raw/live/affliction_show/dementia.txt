@@ -1,4 +1,4 @@
-# affliction show dementia  (2026-10-10T23:39:08Z)
+# affliction show dementia  (2026-10-11T00:12:06Z)
 Affliction:         Dementia
 Diagnose:           demented.
 Afflicted msg:      You look about yourself, frenzied and wild-eyed.

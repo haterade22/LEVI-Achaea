@@ -1,0 +1,12 @@
+# affliction show blistered  (2026-10-11T00:14:31Z)
+Affliction:         Blistered
+Diagnose:           suffering from horribly blistered skin.
+Afflicted msg:      none
+Cured msg:          Your horribly blistered skin has recovered somewhat, your movement no longer so limited.
+Cure(s):            Time
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

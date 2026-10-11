@@ -1,0 +1,16 @@
+# affliction show dazzled  (2026-10-11T00:14:48Z)
+Affliction:         Dazzled
+Diagnose:           dazzled.
+Afflicted msg:      none
+Cured msg:          Your head clears and you are no longer dazzled.
+Expire msg:         The affects of the dazzling wear off.
+Cure(s):            Apply Mending To Head
+                    Time
+Description:        Being dazzled lowers your accuracy with certain physical attacks and halves your resistance to damage.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       60 seconds

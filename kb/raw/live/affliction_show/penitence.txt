@@ -1,0 +1,12 @@
+# affliction show penitence  (2026-10-11T00:15:41Z)
+Affliction:         Penitence
+Diagnose:           serving penance.
+Afflicted msg:      none
+Cured msg:          none
+Description:        If you have been forced to perform penance for your crimes, any Devoted priest will earn more Devotion from killing you.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

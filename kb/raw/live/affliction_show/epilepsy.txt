@@ -1,4 +1,4 @@
-# affliction show epilepsy  (2026-10-10T23:39:24Z)
+# affliction show epilepsy  (2026-10-11T00:12:20Z)
 Affliction:         Epilepsy
 Diagnose:           suffering from epilepsy.
 Afflicted msg:      Your nerves feel suddenly jangled.

@@ -1,4 +1,4 @@
-# affliction show burning  (2026-10-10T23:38:44Z)
+# affliction show burning  (2026-10-11T00:11:40Z)
 Affliction:         Burning
 Diagnose:           ablaze.
 Afflicted msg:      none

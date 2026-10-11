@@ -1,4 +1,4 @@
-# affliction show slashedthroat  (2026-10-10T23:40:50Z)
+# affliction show slashedthroat  (2026-10-11T00:13:46Z)
 Affliction:         Slashedthroat
 Diagnose:           bleeding from a slashed throat.
 Afflicted msg:      Blood sprays forth as the thorn-laden vine rips a deep wound in your throat.

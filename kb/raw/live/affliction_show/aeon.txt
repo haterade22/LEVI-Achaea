@@ -1,4 +1,4 @@
-# affliction show aeon  (2026-10-10T23:38:27Z)
+# affliction show aeon  (2026-10-11T00:11:08Z)
 Affliction:         The aeon curse
 Diagnose:           afflicted with the curse of the Aeon.
 Afflicted msg:      Suddenly your movement through the time stream is slowed.

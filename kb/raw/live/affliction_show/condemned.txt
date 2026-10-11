@@ -1,0 +1,14 @@
+# affliction show condemned  (2026-10-11T00:14:40Z)
+Affliction:         Condemned
+Diagnose:           you are condemned to burn.
+Afflicted msg:      none
+Cured msg:          The righteous condemnation lifts, and you breathe more easily.
+Cure(s):            Time
+Description:        While condemned, you may not cure ablaze, but that burning may also not be increased by paladins.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       40 seconds

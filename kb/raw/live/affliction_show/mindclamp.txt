@@ -1,0 +1,12 @@
+# affliction show mindclamp  (2026-10-11T00:15:33Z)
+Affliction:         A clamped mind
+Diagnose:           mindclamped.
+Afflicted msg:      none
+Cured msg:          none
+Description:        A clamped mind reduces your health and mental strength by approximately one fifth.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

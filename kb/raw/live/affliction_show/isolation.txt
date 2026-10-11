@@ -1,0 +1,12 @@
+# affliction show isolation  (2026-10-11T00:15:22Z)
+Affliction:         Mind isolation
+Diagnose:           cut off from communication.
+Afflicted msg:      none
+Cured msg:          none
+Description:        If your mind has been isolated by a telepath, no-one will hear you speak on telepathic channels.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

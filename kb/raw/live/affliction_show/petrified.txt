@@ -1,0 +1,12 @@
+# affliction show petrified  (2026-10-11T00:15:43Z)
+Affliction:         Petrified
+Diagnose:           completely petrified.
+Afflicted msg:      none
+Cured msg:          Sensation returns to you as the petrification ends.
+Cure(s):            Time
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

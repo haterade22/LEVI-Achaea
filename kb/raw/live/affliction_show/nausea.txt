@@ -1,4 +1,4 @@
-# affliction show nausea  (2026-10-10T23:40:17Z)
+# affliction show nausea  (2026-10-11T00:13:14Z)
 Affliction:         Nausea
 Diagnose:           violently ill.
 Afflicted msg:      A sense of extreme nausea washes over you.

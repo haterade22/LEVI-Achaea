@@ -1,0 +1,12 @@
+# affliction show silenced  (2026-10-11T00:15:51Z)
+Affliction:         Silenced
+Diagnose:           enduring a terrible pervasive silence.
+Afflicted msg:      none
+Cured msg:          Sound suddenly rushes in, the terrible pervading silence gone as swiftly as it came.
+Cure(s):            Time
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

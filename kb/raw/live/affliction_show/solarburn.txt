@@ -1,0 +1,13 @@
+# affliction show solarburn  (2026-10-11T00:15:56Z)
+Affliction:         Solarburn
+Diagnose:           skin seared by solar energy.
+Afflicted msg:      none
+Cured msg:          Your skin ceases its painful tingling.
+Cure(s):            Time
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       5 seconds

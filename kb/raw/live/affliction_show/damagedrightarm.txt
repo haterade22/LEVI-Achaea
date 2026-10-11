@@ -1,4 +1,4 @@
-# affliction show damagedrightarm  (2026-10-10T23:52:23Z)
+# affliction show damagedrightarm  (2026-10-11T00:11:57Z)
 Affliction:         A damaged right arm
 Diagnose:           has a partially damaged right arm.
 Afflicted msg:      Your right arm is greatly damaged from the beating.

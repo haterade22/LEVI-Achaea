@@ -1,0 +1,13 @@
+# affliction show vitiated  (2026-10-11T00:16:07Z)
+Affliction:         Vitiated
+Diagnose:           vitiated by Shin energy.
+Afflicted msg:      none
+Cured msg:          none
+Cure(s):            Time
+Description:        Being vitiated reduces your strength and dexterity by two points.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

@@ -1,0 +1,15 @@
+# affliction show airfisted  (2026-10-11T00:14:24Z)
+Affliction:         Airfisted
+Diagnose:           being plagued by a blustering gale.
+Afflicted msg:      none
+Cured msg:          none
+Expire msg:         Clarity of form returns as the wind plaguing your mind dies down.
+Cure(s):            Time
+Description:        A windy gale will hinder their attempts to parry and the movements of Chaos orbs.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       15 seconds

@@ -1,0 +1,15 @@
+# affliction show hecatecurse  (2026-10-11T00:15:10Z)
+Affliction:         Hecatecurse
+Diagnose:           Cursed with the power of Hecate.
+Afflicted msg:      none
+Cured msg:          none
+Expire msg:         The crazed whispering fades from your mind.
+Cure(s):            Time
+Description:        Prevents curing of the whispering madness affliction for its duration.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       16 seconds

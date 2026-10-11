@@ -1,4 +1,4 @@
-# affliction show concussion  (2026-10-10T23:38:48Z)
+# affliction show concussion  (2026-10-11T00:11:45Z)
 Affliction:         Concussion
 Diagnose:           has a serious concussion.
 Afflicted msg:      The massive trauma to your head has damaged your skull and brain considerably.

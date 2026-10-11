@@ -1,0 +1,12 @@
+# affliction show enlightenment  (2026-10-11T00:15:00Z)
+Affliction:         Enlightenment
+Diagnose:           understanding the occult mysteries and nature of the universe as seen by $(gname$).
+Afflicted msg:      none
+Cured msg:          The alien and strange visions leave you, and the Chaos that permeated your mind lessens.
+Description:        Enlightenment opens your mind to occult revelations, and will make certain mental insanities permanent until you die.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

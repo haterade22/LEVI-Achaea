@@ -47,7 +47,9 @@ packageName: ''
 ataxiaKB = ataxiaKB or {}
 ataxiaTemp = ataxiaTemp or {}
 
-ataxiaKB.CAPTURE_TIMEOUT = 4    -- seconds to wait for an answer's closing prompt
+-- 8s, not 4: the 2026-10-11 run hit a lag spike where two answers took over 4s and each landed in the
+-- NEXT command's block. The importer now files answers by content, but a longer wait avoids the shift.
+ataxiaKB.CAPTURE_TIMEOUT = 8    -- seconds to wait for an answer's closing prompt
 ataxiaKB.GAP = 0.6              -- seconds between one answer ending and the next send
 ataxiaKB.FILE = "kb_capture.txt"
 

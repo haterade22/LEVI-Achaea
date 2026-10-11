@@ -1,0 +1,13 @@
+# affliction show waterbonds  (2026-10-11T00:16:11Z)
+Affliction:         Waterbonds
+Diagnose:           Bound by tendrils of water.
+Afflicted msg:      none
+Cured msg:          The tendrils of water that bind you splash into an icy puddle at your feet as they disperse.
+Cure(s):            Time
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       30 seconds

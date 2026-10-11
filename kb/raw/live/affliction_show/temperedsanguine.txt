@@ -1,4 +1,4 @@
-# affliction show temperedsanguine  (2026-10-10T23:41:07Z)
+# affliction show temperedsanguine  (2026-10-11T00:14:02Z)
 Affliction:         A tempered sanguine humour
 Diagnose:           your sanguine humour has been tempered a total of $=(type$) times.
 Afflicted msg:      none

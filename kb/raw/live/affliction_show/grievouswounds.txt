@@ -1,0 +1,13 @@
+# affliction show grievouswounds  (2026-10-11T00:15:06Z)
+Affliction:         Grievously wounded
+Diagnose:           suffering from $(type$) grievous wounds.
+Afflicted msg:      Blood flows freely from a grievous wound.
+Cured msg:          The flow of blood stops as your wounds close.
+Cure(s):            Apply Health To Torso
+Description:        While you can fight through a single wound, even the most stalwart adventurer will succumb to enough of them.
+NoRandomCure:       No
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

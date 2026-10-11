@@ -1,4 +1,4 @@
-# affliction show guilt  (2026-10-10T23:39:37Z)
+# affliction show guilt  (2026-10-11T00:12:33Z)
 Affliction:         Guilt
 Diagnose:           plagued by terrible guilt.
 Afflicted msg:      A terrible guilt descends upon you.

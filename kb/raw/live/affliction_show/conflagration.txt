@@ -1,0 +1,12 @@
+# affliction show conflagration  (2026-10-11T00:14:41Z)
+Affliction:         Conflagration
+Diagnose:           a conflagration rages about you.
+Afflicted msg:      The flames plaguing you suddenly begin to rage with terrible intensity.
+Cured msg:          The conflagration raging about you sputters and dies.
+Description:        This affliction causes significant damage for as long as the conflagration rages. The only way to be rid of it is to attempt to extinguish the flames that feed the conflagration. This is accomplished by curing all stacks of the ablaze affliction present upon you.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

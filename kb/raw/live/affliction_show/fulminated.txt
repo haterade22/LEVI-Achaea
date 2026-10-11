@@ -1,4 +1,4 @@
-# affliction show fulminated  (2026-10-10T23:39:34Z)
+# affliction show fulminated  (2026-10-11T00:12:30Z)
 Affliction:         Fulminated
 Diagnose:           electrified by fulminous energy.
 Afflicted msg:      Your nerve endings become electrified and you begin to tremble.

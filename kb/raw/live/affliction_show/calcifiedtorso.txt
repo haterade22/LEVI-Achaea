@@ -1,0 +1,13 @@
+# affliction show calcifiedtorso  (2026-10-11T00:14:37Z)
+Affliction:         Calcifiedtorso
+Diagnose:           suffering from a calcifying ribcage.
+Afflicted msg:      none
+Cured msg:          Your ribs' calcification abruptly ceases, leaving only a dull ache behind.
+Cure(s):            Apply Restoration To Body
+Description:        Calcification takes time to complete, and if not cured before then either your torso shall suffer extreme damage (elevating it to the next level of damage), or if it is already at maximum torso damage, you shall take significant damage.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

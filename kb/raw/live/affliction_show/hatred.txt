@@ -1,0 +1,13 @@
+# affliction show hatred  (2026-10-11T00:15:08Z)
+Affliction:         Hatred
+Diagnose:           inspired to great heights of loathing.
+Afflicted msg:      An all-consuming hatred for everyone and everything suffuses you.
+Cured msg:          Your total loathing for everything fades.
+Cure(s):            Time
+Description:        You shall consider everyone an enemy.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

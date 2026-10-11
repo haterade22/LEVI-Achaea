@@ -1,0 +1,12 @@
+# affliction show deathsickness  (2026-10-11T00:14:50Z)
+Affliction:         Deathsickness
+Diagnose:           Labouring beneath the bane of life.
+Afflicted msg:      An unnatural chill sweeps through your body, a numbing sensation radiating outward from your heart and into every limb.
+Cured msg:          The unnatural chill pervading your body abruptly lifts.
+Cure(s):            Time
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No

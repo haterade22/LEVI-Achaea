@@ -1,0 +1,15 @@
+# affliction show dehydrated  (2026-10-11T00:14:54Z)
+Affliction:         Dehydrated
+Diagnose:           seriously dehydrated.
+Afflicted msg:      none
+Cured msg:          none
+Expire msg:         Your skin feels less dry.
+Cure(s):            Time
+Description:        Reduces your resistance to fire-based damage.
+NoRandomCure:       Yes
+WhisperingMadness:  No
+Enlighten:          No
+Tzantza:            No
+Accentato:          No
+CadmusCurse:        No
+Default time:       45 seconds

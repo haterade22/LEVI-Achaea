@@ -1,4 +1,4 @@
-# affliction show fear  (2026-10-10T23:39:26Z)
+# affliction show fear  (2026-10-11T00:12:22Z)
 Affliction:         Fear
 Diagnose:           afflicted by fear.
 Afflicted msg:      A terrible fear comes over you.
