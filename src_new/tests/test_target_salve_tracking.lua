@@ -99,11 +99,25 @@ describe("enemy salve tracking: one application, one cure", function()
     expect(P("bloodfire")).toBe(0)
   end)
 
-  it("skin (caloric) cures a cold affliction, but not while hypothermic", function()
-    world(); fresh({ "frozen" })
+  -- applyAffV3("frozen") runs the cold CHAIN (nocaloric -> shivering -> frozen) rather than
+  -- setting frozen, so these build the target's state directly and check it first.
+  local function exactly(affs)
+    fresh({})
+    local set = {}
+    for _, a in ipairs(affs) do set[a] = true end
+    afflictionStatesV3 = { { affs = set, prob = 1 } }
+    rebuildCacheV3()
+    for _, a in ipairs(affs) do expect(P(a)).toBe(1) end
+  end
+
+  it("skin (caloric) cures a cold affliction", function()
+    world(); exactly({ "frozen" })
     apply(BODY_SKIN, "skin")
     expect(P("frozen")).toBe(0)
-    world(); fresh({ "frozen", "hypothermia" })
+  end)
+
+  it("skin cures nothing cold while hypothermic", function()
+    world(); exactly({ "frozen", "hypothermia" })
     apply(BODY_SKIN, "skin")
     expect(P("frozen")).toBe(1)
   end)
