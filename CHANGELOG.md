@@ -2,6 +2,22 @@
 
 ---
 
+## 2026-10-11 - Local Lua 5.1 on this machine; a test that only ran on Linux (tests and docs only, no version bump)
+
+- **Native Lua 5.1.5** (LuaBinaries Win64) installed to `C:\Tools\lua51` and added to the user PATH, and
+  `lupa` installed in the main Python. `lua5.1` / `luac5.1` are the names CI, the VS Code "Run Tests"
+  task, `/verify` and the pre-commit lint hook call; the hook had been printing "No luac found --
+  skipping Lua syntax check", so it had never linted on this machine.
+- **`test_kb_capture.lua` failed 13 tests under native Windows Lua** while Linux (CI) and lupa passed: it
+  wrote to `os.tmpname()`, which under `lua5.1.exe`'s old C runtime (msvcr80) names a file in the drive
+  ROOT (`\s1hk.`), where it cannot write. Such a name is now moved into `%TEMP%`, and the open is
+  asserted, so a failure names the path instead of "attempt to index local 'f'". The suite passes
+  2845/2845 under native Lua 5.1, lupa and CI.
+- CLAUDE.md's testing note covers both runners, the restart a PATH change needs, why it must stay 5.1,
+  and the `os.tmpname()` rule.
+
+---
+
 ## 2026-10-11 - Shikudo: hits on the target are recorded, checked against two real fights (v4.7.413-414)
 
 Phase 1 of the Shikudo offense rework (`docs/plans/shikudo-offense-review-2026-10-11.md`). The user

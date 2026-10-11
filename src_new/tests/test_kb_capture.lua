@@ -33,7 +33,19 @@ ataxiaTemp.kbcap = nil
 
 dofile("src_new/scripts/levi_ataxia/levi/ataxia/misc_scripts/025_KB_Capture.lua")
 
-local FILE = os.tmpname()
+-- A temp file that works on every runtime. The old Windows C runtime LuaBinaries' lua5.1.exe is built
+-- on (msvcr80) returns a name in the ROOT of the current drive ("\s1hk."), which is not writable, so
+-- such a name is moved into %TEMP%. Linux (CI) and lupa return a full path and are left alone.
+local function tempPath()
+  local name = os.tmpname()
+  if name:sub(1, 1) == "\\" and name:sub(2, 2) ~= "\\" then
+    local dir = os.getenv("TEMP") or os.getenv("TMP")
+    if dir then name = dir .. name end
+  end
+  return name
+end
+
+local FILE = tempPath()
 local realPath = ataxiaKB.path
 ataxiaKB.path = function() return FILE end
 
@@ -56,7 +68,7 @@ local function reset()
   sent, timers, trigs, gagged = {}, {}, {}, 0
   ataxiaTemp.kbcap = nil
   ataxiaBasher.enabled = false
-  local f = io.open(FILE, "w"); f:close()
+  local f = assert(io.open(FILE, "w")); f:close()
 end
 
 local ok, err = pcall(function()

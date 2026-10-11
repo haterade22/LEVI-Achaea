@@ -210,9 +210,17 @@ Current dev machine (2026-10-09, no `E:` drive): Temurin 21 JDK via
 `gh release download 1.1.0 -R demonnic/muddler -p muddle-shadow-1.1.0.zip`.
 
 **Testing**: Run `lua5.1 src_new/tests/test_runner.lua` or use the "Run Tests" VS Code task. Tests use `mock_mudlet.lua` to stub the Mudlet API.
-**No Lua installed (this Windows machine)?** `python -m pip install lupa` (a virtualenv is fine),
-then `python tools/run_lua_tests.py [one_test_file.lua]` runs the same suite in an embedded Lua
-5.1 (v4.7.414). Run it before pushing: otherwise CI is the first place a test runs.
+**Local Lua on this Windows machine (2026-10-11).** Native Lua 5.1.5 (LuaBinaries Win64) is in
+`C:\Tools\lua51`, on the user PATH: `lua5.1` / `luac5.1`, the names CI, the VS Code "Run Tests"
+task, `/verify` and the pre-commit lint hook all call (the hook printed "No luac found -- skipping
+Lua syntax check" until then, so it had never linted here). A shell or editor started before PATH
+changed needs a restart, or `export PATH="/c/Tools/lua51:$PATH"`. It must stay 5.1: Mudlet runs
+5.1, and a 5.4 `luac` rejects escapes 5.1 accepts. `lupa` is installed in the main Python too, so
+`python tools/run_lua_tests.py [one_test_file.lua]` runs the same suite in an embedded Lua 5.1.
+Run one of them before pushing: otherwise CI is the first place a test runs.
+**Never use a bare `os.tmpname()` in a test**: under `lua5.1.exe`'s old C runtime it returns a name
+in the drive root (`\s1hk.`), which is not writable (`test_kb_capture.lua` failed 13 tests this
+way while Linux and lupa passed); move such a name into `%TEMP%`, as that test does.
 
 ### Versioning & Auto-Update
 
