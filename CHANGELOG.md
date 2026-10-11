@@ -2,6 +2,31 @@
 
 ---
 
+## 2026-10-11 - Infernal group lock: no impatience step, and real venoms for the class lock (v4.7.407)
+
+User: "Infernal doesnt have access to impatience anymore. It used to be given through infestation but
+they changed that." The group lock (`dwc/002_Infernal_Group_Lock.lua`) had a step "if no impatience,
+send euphorbia". Euphorbia gives nausea and no venom gives impatience, so without a teammate supplying
+impatience the lock re-sent euphorbia forever and never reached its class lock affliction. The step is
+removed: asthma, slickness, anorexia, then the class lock affliction (curare always on the second
+venom). The lock levels are unchanged (hardlock/truelock still need impatience, as in the game), so
+they show it when a teammate supplies it. `.claude/classes/infernal.md` records that infestation no
+longer gives impatience.
+
+**Found while fixing it: the class lock "venom" was not a venom.** `getClassLockAff` called
+`getLockingAffliction(target)`, which (with any argument but `"name"`) returns a SHORTHAND -- `plague`,
+`reckless`, `stupid`, `paralyse` -- and the group lock sent that as the venom: against a Priest, Bard,
+Apostate or Pariah it envenomed with "plague". Only weariness classes worked, because that branch used
+Hellforge exploit. Now it asks for the affliction (`getLockingAffliction("name")`) and
+`infernalGroupLock.LOCK_DELIVERY` maps it to what an Infernal can deliver: weariness = Hellforge
+`exploit`, haemophilia = Hellforge `torture` (notechis cannot envenom a weapon), voyria, aconite
+(stupidity), eurypteria (recklessness), curare (paralysis). Psion's confusion has no delivery, so that
+step reinforces asthma. The attack now invests whichever Hellforge was chosen, not always exploit.
+Test: `test_infernal_group_lock.lua` (the softlock order, no euphorbia, real venoms per class, both
+Hellforge investments, the Psion case, and the sent command).
+
+---
+
 ## 2026-10-11 - Every class's abilities from the wiki; the venom database was wrong (v4.7.406)
 
 User: "for each class you can collect their AB skills by searching the achaea wiki".
