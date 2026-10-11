@@ -36,5 +36,5 @@ patterns:
 ]]--
 
 if isTargeted(matches[2]) then
-	erAff("vinewreathe")
+	ataxia_tarAffFaded("vinewreathed")  -- was erAff("vinewreathe"): a name nothing sets, so it never removed it
 end

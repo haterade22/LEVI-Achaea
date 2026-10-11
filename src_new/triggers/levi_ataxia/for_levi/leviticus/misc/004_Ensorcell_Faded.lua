@@ -38,4 +38,9 @@ patterns:
   type: 1
 ]]--
 
-if not pariah.state.ensorcellTimer then erAff("ensorcelled") end
+-- "Your ensorcelment of X has broken" is definitive. The old guard (`if not ensorcellTimer`) skipped
+-- it whenever a timer handle existed, and the handle was never cleared, so after the first cast
+-- this line did nothing (v4.7.405).
+if pariah.state.ensorcellTimer then killTimer(pariah.state.ensorcellTimer) end
+pariah.state.ensorcellTimer = nil
+erAff("ensorcelled")

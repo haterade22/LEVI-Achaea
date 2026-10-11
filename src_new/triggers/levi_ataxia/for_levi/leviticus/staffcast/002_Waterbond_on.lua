@@ -39,16 +39,14 @@ patterns:
 
 if isTargeted(matches[2]) then
 twaterbond = true
-  if tAffs.frozen then
-    tempTimer(45, [[twaterbond = false]])
-  elseif tAffs.shiving then
-    tempTimer(35, [[twaterbond = false]])
-  elseif tAffs.nocaloric then
-    tempTimer(25, [[twaterbond = false]])
-  else
-  tempTimer(15, [[twaterbond = false]])
+  -- How long the bonds hold depends on how cold the target already is.
+  local bondFor = 15
+  if tAffs.frozen then bondFor = 45
+  elseif tAffs.shiving then bondFor = 35
+  elseif tAffs.nocaloric then bondFor = 25
   end
-tarAffed("waterbond")
+  tempTimer(bondFor, [[twaterbond = false]])
+ataxia_tarAffTimed("waterbond", bondFor)
 if partyrelay and not ataxia.afflictions.aeon then send("pt " ..target.. ": Waterbond") end
 end
   

@@ -37,7 +37,7 @@ patterns:
 ]]--
 
 if isTargeted(matches[2]) then
-	erAff("bonds")
+	ataxia_tarAffFaded("waterbond")  -- was erAff("bonds"): a name nothing sets
 	targetIshere = true
 	ataxia_boxEcho("Water bonds has faded from "..target, "purple")
 end

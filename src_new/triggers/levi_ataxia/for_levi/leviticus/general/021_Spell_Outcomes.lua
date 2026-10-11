@@ -58,9 +58,8 @@ magi.offense.state = magi.offense.state or {}
 
 -- Magma -> scalded (from 017_Magma)
 if line:find("bubbling magma") then
-  tarAffed("scalded")
+  ataxia_tarAffTimed("scalded")
   if magi.offense.setScalded then magi.offense.setScalded() end
-  tempTimer(20, [[erAff("scalded")]])
   magi.offense.ptRelay(target .. ": Magma (scalded)")
   magi.offense.debugEcho("Magma hit -> scalded")
 

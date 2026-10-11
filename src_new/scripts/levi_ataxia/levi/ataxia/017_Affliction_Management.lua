@@ -173,6 +173,60 @@ function erAff(what)
     raiseEvent("target cured aff", what)
 end
 
+-- TIMED AFFLICTIONS ON THE TARGET (v4.7.405).
+--
+-- Some afflictions wear off on their own after a fixed time (the game's own `Default time`,
+-- AFFLICTION SHOW, kb/afflictions/afflictions.json). Each trigger used to run its own timer, and
+-- several did not work: `tempTimer(10, [[tAffs.hamstring = nil]])` writes the OLD table only, and
+-- V3 copies its own belief back over tAffs on the next sync, so hamstring/airfist/voidfist never
+-- expired at all. Others had no timer (hellsight, dazzle, muddled, scalded via resonance).
+--
+--   ataxia_tarAffTimed(aff[, seconds])  -- give it, and expire it after the game's duration.
+--                                          A repeat restarts the clock (the game refreshes it).
+--   ataxia_tarAffFaded(aff)             -- a third-person expiry LINE saw it go: remove it now
+--                                          and cancel the clock. A line is exact; the clock is
+--                                          the backstop for a line we miss or have not captured.
+--
+-- Keys are the names OUR code uses (hamstring, airfist, dazzle), which can differ from the game's
+-- (hamstrung, airfisted, dazzled). The timer only removes it if the target is still the one it was
+-- given to; a target change resets V3 anyway.
+ataxia_TARGET_AFF_SECONDS = {
+  hamstring = 10,      -- game: hamstrung, 10 seconds
+  airfist = 15,        -- game: airfisted, 15 (the old 18s timer never worked)
+  voidfist = 15,       -- game: voidfisted, 15
+  dazzle = 60,         -- game: dazzled, 60 (also cured by mending to the head)
+  hellsight = 120,     -- game: 120 (also cured by smoking valerian)
+  muddled = 12,
+  scalded = 20,
+  ensorcelled = 20,    -- the old timer used 21
+  vinewreathed = 20,
+  waterbond = 30,      -- game: waterbonds, 30
+}
+
+function ataxia_tarAffTimed(aff, seconds)
+  seconds = seconds or ataxia_TARGET_AFF_SECONDS[aff]
+  tarAffed(aff)
+  if not seconds then return end
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.tarAffTimers = ataxiaTemp.tarAffTimers or {}
+  local timers = ataxiaTemp.tarAffTimers
+  if timers[aff] then killTimer(timers[aff]) end
+  local who = target
+  timers[aff] = tempTimer(seconds, function()
+    timers[aff] = nil
+    if target == who then erAff(aff) end
+  end)
+end
+
+function ataxia_tarAffFaded(aff)
+  local timers = ataxiaTemp and ataxiaTemp.tarAffTimers
+  if timers and timers[aff] then
+    killTimer(timers[aff])
+    timers[aff] = nil
+  end
+  erAff(aff)
+end
+
 function haveAff(what)
     if haveAffV3 then return haveAffV3(what) end
     -- Ultra-fallback during load order (before V3 script loads)

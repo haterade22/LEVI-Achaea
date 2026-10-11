@@ -8,6 +8,7 @@ One line per page. Kept up to date by `/kb-ingest`.
 - [afflictions/catalog.md](afflictions/catalog.md): every affliction's cure, joined to our tracker and SSC priorities (GENERATED)
 - [afflictions/cure-channels.md](afflictions/cure-channels.md): cure balances, what blocks each one, shared balances
 - [afflictions/class-cures.md](afflictions/class-cures.md): each class's active and passive cures, blockers, fire lines, our triggers
+- [afflictions/expiry-lines.md](afflictions/expiry-lines.md): timed afflictions leaving the TARGET: the lines we catch, the clock backstop, lines still wanted
 - [afflictions/locks.md](afflictions/locks.md): lock definitions and how each is escaped
 - [afflictions/limb-damage.md](afflictions/limb-damage.md): body part states, damage vs break, parrying
 

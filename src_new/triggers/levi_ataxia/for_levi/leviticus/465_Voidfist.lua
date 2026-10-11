@@ -38,7 +38,5 @@ patterns:
 ]]--
 
 if isTargeted(matches[2]) then
-		tarAffed("voidfist")
-		if bmFistTimer then killTimer(bmFistTimer) end
-		bmFistTimer = tempTimer(18, [[tAffs.voidfist = nil; ataxia_Echo("Voidfist has faded from "..target..".")]])
+		ataxia_tarAffTimed("voidfist")  -- 15s (game); the old tAffs-only timer never expired it
 end
