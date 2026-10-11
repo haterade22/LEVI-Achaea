@@ -725,6 +725,11 @@ assassins_blade: |
   the round is `backstab <target>` FIRST, then the lightwall and battlerage, so neither can reveal us
   before it lands. Darkwalker has no flag: the `hiding` defence is the gate.
   v4.7.394, user: "backstab needs a dirk in our hand" -- the round starts `wield shield dirk;backstab <target>`.
+  v4.7.408, user: "wield dirk;backstab target" -- the round is now `wield dirk;backstab <target>`. And
+  Darkwalker's kill line "You swiftly return to concealment in the wake of your triumph." ("this rehides
+  us also", trigger serpent/020) counts as hidden for 3s (`ataxiaBasher_serpentHidden`), because it
+  arrives before GMCP's Defences.Add and the next denizen's round is built in that gap. It also
+  re-queues the round at once. A GMCP Remove of `hiding` cancels it. It never writes ataxia.defences.
 venom_agony_purge: |
   v4.7.392, user: "We need to purge in this instance" on "You scream out in agony as a vicious venom tears
   through your body." serpent/019 sends a direct `purge` (like serpent/014's secrete refusal), at most once

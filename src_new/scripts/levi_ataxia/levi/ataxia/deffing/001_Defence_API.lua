@@ -142,6 +142,8 @@ function lostDef()
 	end
 	ataxia.defences[def[1]:lower()] = nil
 	ataxiaTemp.lokiCheck = true
+	-- Revealed: Darkwalker's concealment stamp no longer stands (basher/002, v4.7.408).
+	if def[1]:lower() == "hiding" then ataxiaTemp.serpentConcealAt = nil end
 
 end
 

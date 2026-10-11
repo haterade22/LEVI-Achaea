@@ -368,12 +368,12 @@ describe("Assassin's Blade: open with BACKSTAB while hidden", function()
 
   it("hidden: backstab FIRST, the battlerage after it, no garrote", function()
     local cmd = bash({})
-    expect(cmd).toBe("wield shield dirk;backstab 7;BRAGE")
+    expect(cmd).toBe("wield dirk;backstab 7;BRAGE")
   end)
 
   it("hidden with Searing Light: backstab first, then the lightwall", function()
     local cmd = bash({ lightwall = true })
-    expect(cmd:sub(1, #"wield shield dirk;backstab 7;conjure lightwall")).toBe("wield shield dirk;backstab 7;conjure lightwall")
+    expect(cmd:sub(1, #"wield dirk;backstab 7;conjure lightwall")).toBe("wield dirk;backstab 7;conjure lightwall")
   end)
 
   it("no bare trailing separator when nothing follows the backstab", function()
@@ -381,7 +381,7 @@ describe("Assassin's Blade: open with BACKSTAB while hidden", function()
     ataxiaBasher_assembleBattlerage = function() return "" end
     local cmd = bash({})
     ataxiaBasher_assembleBattlerage = real
-    expect(cmd).toBe("wield shield dirk;backstab 7")
+    expect(cmd).toBe("wield dirk;backstab 7")
   end)
 
   it("hidden beats the venom bite too", function()
@@ -406,6 +406,33 @@ describe("Assassin's Blade: open with BACKSTAB while hidden", function()
     local cmd = bash({ shielded = true })
     expect(has(cmd, "backstab")).toBeFalse()
     expect(has(cmd, "flay 7 shield")).toBeTrue()
+  end)
+
+  -- v4.7.408, user: "You swiftly return to concealment in the wake of your triumph." -- "this rehides us also".
+  it("Darkwalker's line counts as hidden before GMCP says so", function()
+    reset({})
+    ataxiaBasher_serpentConcealed()
+    mnemAssassinsBlade = true
+    ataxia.defences = {}
+    local cmd = ataxiaBasher_serpentBashing()
+    expect(cmd:sub(1, #"wield dirk;backstab 7")).toBe("wield dirk;backstab 7")
+    clock = clock + 4 -- the window has passed with no GMCP hiding: back to the normal swing
+    expect(has(ataxiaBasher_serpentBashing(), "backstab")).toBeFalse()
+    mnemAssassinsBlade = nil
+  end)
+
+  it("a GMCP Remove of hiding cancels the concealment at once", function()
+    reset({})
+    ataxiaBasher_serpentConcealed()
+    expect(ataxiaBasher_serpentHidden()).toBeTrue()
+    gmcp.Char = gmcp.Char or {}
+    gmcp.Char.Defences = { Remove = { "hiding" } }
+    local ok, err = pcall(dofile, "src_new/scripts/levi_ataxia/levi/ataxia/deffing/001_Defence_API.lua")
+    expect(ok).toBeTrue()
+    ataxiaBasher.enabled = true -- quiet the echo
+    lostDef()
+    ataxiaBasher.enabled = nil
+    expect(ataxiaBasher_serpentHidden()).toBeFalse()
   end)
 
   it("the boon is wired: flag, claim alias, run start", function()
