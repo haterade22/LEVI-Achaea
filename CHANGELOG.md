@@ -2,6 +2,28 @@
 
 ---
 
+## 2026-10-11 - Every curable affliction has a curing priority (v4.7.402)
+
+User: "85 afflictions". The game lists 85 afflictions `ataxia_defaultCuringPrios()` never named.
+Reading their AFFLICTION SHOW records shows **71 cannot be cured by SSC at all**: 60 wear off
+(`Cure(s): Time`) and 11 have no known cure. A priority does nothing for those, so none is set.
+The other **14 have a real cure** and are now in the table:
+
+- **11 keep the server's own value** (captured live): calcifiedskull/torso 2, grievouswounds 3,
+  dazed/frostbite/kkractlebrand 5, internalbleeding/earworm/fulminated 8, diminished 12. Naming them
+  puts them under the table's control, so a server default can no longer drift unseen.
+- **tonguetied 7 -> 18.** Its only effect is blocking the stuttering cure (19). At 7 it took the head
+  restoration salve ahead of a damaged/mangled head (8).
+- **latched and icebound 1 -> 2.** Slot 1 is reserved for on-the-fly swaps; 2 is the lethal band and
+  where the other writhe binds sit. latched is the Water Lord drowning latch (cured by sipping health).
+- **dazzled added at 7.** It halves damage resistance and had no priority at all.
+
+The table's fingerprint changes, so the next login re-sends it to the `normal` set
+(`ataxia_prioSyncCheck`, v4.7.397). `database.md`'s coverage section now separates "curable but
+unranked" (0) from "SSC cannot cure" (71). Test: `test_curing_prios_coverage.lua`.
+
+---
+
 ## 2026-10-11 - All 203 afflictions on record; the importer files answers by content (v4.7.401)
 
 The user ran the self-extending `kbcapture afflictions`: 423 answers.

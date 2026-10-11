@@ -406,6 +406,35 @@ function ataxia_defaultCuringPrios()
     -- and hallucinations 9). No escalation: nothing documents a crescendo kill threshold.
     ["crescendo"] = 9,        -- Ash. Bard mechanic.
 
+    -----------------------------------------------------------
+    -- THE GAME'S OTHER CURABLE AFFLICTIONS (v4.7.402)
+    -----------------------------------------------------------
+    -- The full AFFLICTION LIST (203, kb/raw/live/affliction_list.txt) held 85 afflictions this
+    -- table never named. 71 of them cannot be cured by SSC at all -- 60 wear off ("Cure(s): Time")
+    -- and 11 have "no known cures" -- so a priority would do nothing and none is set. These 14 do
+    -- have a cure. 11 keep the value the server already gave them (captured live 2026-10-10);
+    -- naming them here puts them under the table's control (ataxia_prioSyncCheck re-sends a
+    -- changed table), so a server default can no longer drift unseen. Cures and effects are the
+    -- game's own words, from kb/afflictions/afflictions.json.
+    ["latched"] = 2,          -- Sip health. The Water Lord drowning latch -- a KILL route. Server
+                              -- had 1; 1 is reserved here for on-the-fly swaps, 2 is the lethal band.
+    ["icebound"] = 2,         -- Writhe. "Restrictive on any actions ... including the use of curative
+                              -- arts." With the other writhe binds at 2. Server had 1.
+    ["calcifiedskull"] = 2,   -- Restoration head. Timed: if not cured, the head jumps a damage level.
+    ["calcifiedtorso"] = 2,   -- Restoration body. Same mechanic, torso.
+    ["grievouswounds"] = 3,   -- Apply health to torso. "Enough of them" kills.
+    ["dazed"] = 5,            -- Smoke elm. Removes all resistance to hypnotism (Serpent).
+    ["frostbite"] = 5,        -- Caloric. Next freeze strips insulation and hits harder.
+    ["kkractlebrand"] = 5,    -- Sip health. Fire Lord brand: lowers fire resist, can be detonated.
+    ["dazzled"] = 7,          -- Mending head (or 60s). HALVES damage resistance. NEW: had no priority.
+    ["internalbleeding"] = 8, -- Restoration body. "Massive bleeding."
+    ["earworm"] = 8,          -- Smoke elm.
+    ["fulminated"] = 8,       -- Goldenseal. A successful focus then strikes you with paralysis.
+    ["diminished"] = 12,      -- Bellwort.
+    ["tonguetied"] = 18,      -- Restoration head. Its ONLY effect is blocking the stuttering cure (19),
+                              -- so it sits just above stuttering. Server had 7, which took the head
+                              -- restoration ahead of damaged/mangled head (8).
+
     ["blindness"] = 26,       -- Ignored by SSC (custom handling).
     ["deafness"] = 26,        -- Ignored by SSC (custom handling).
     ["insomnia"] = 26,        -- Ignored by SSC (custom handling).
