@@ -238,7 +238,9 @@ The game lists **203** afflictions (`kb/raw/live/affliction_list.txt`). 203 have
 
 **No record yet (0)**, filled by the next `kbcapture afflictions`: none
 
-**Not in our curing priority table (85)**: SSC cures these at the server's own default priority. Some are not curable at all (states, curses, class marks); the ones that are deserve a decision: `accentato`, `airfisted`, `amnesia`, `asphyxiating`, `betrayal`, `blackout`, `blistered`, `bloodfire`, `breathless`, `bruisedribs`, `calcifiedskull`, `calcifiedtorso`, `coldfate`, `condemned`, `conflagration`, `constricted`, `convergence`, `corruption`, `cremated`, `dazed`, `dazzled`, `deathsickness`, `deepsleep`, `degenerate`, `dehydrated`, `demonstain`, `deteriorate`, `diminished`, `earworm`, `empoweredloshre`, `empoweredmannaz`, `enlightenment`, `enmesh`, `ensorcelled`, `flamefisted`, `frostbite`, `fulminated`, `grievouswounds`, `hamstrung`, `hatred`, `hecatecurse`, `hindered`, `homunculusmercury`, `icebound`, `icefisted`, `inquisition`, `internalbleeding`, `isolation`, `kaisurge`, `kkractlebrand`, `lapsingconsciousness`, `latched`, `lightbind`, `lovestruck`, `mindclamp`, `mindravaged`, `muddled`, `numbedleftarm`, `numbedrightarm`, `palpatarfeed`, `penitence`, `petrified`, `phlogisticated`, `pinshot`, `reeling`, `revealed`, `scrambledbrains`, `silenced`, `silver`, `slimeobscure`, `snared`, `solarburn`, `speechless`, `succumbed`, `timeflux`, `tonguetied`, `trueblind`, `unconsciousness`, `vinewreathed`, `vitiated`, `vitrified`, `voidfisted`, `waterbonds`, `weakenedmind`, `woeconstrained`
+**Curable but NOT in our curing priority table (0)**: SSC cures these at the server's own default, which can drift unseen. Each one needs a decision: none
+
+Not in the table because SSC cannot cure them, so a priority would do nothing: 60 wear off on their own ("Time"), 11 have no known cure.
 
 ## Descriptions
 

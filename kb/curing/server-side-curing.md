@@ -130,7 +130,9 @@ set is `normal`. In any other set it tells you to `reset prios` from `normal` in
 `unweavingbody2`, `unweavingmind2` from older tables. Deleting a key from our table never deletes
 the server row (CLAUDE.md, base + per-stack). Each one equals or is close to its base today.
 
-**Live afflictions our table does not set** (they keep the server default): latched 1,
+**Every curable affliction is now in our table (v4.7.402).** Of the 85 the game lists that the table never named, 71 cannot be cured by SSC (60 wear off, 11 have no cure). The other 14 are set: 11 at the server's own value, plus three changes: `tonguetied` 7 -> 18 (it only blocks the stuttering cure, and at 7 it took the head restoration ahead of a damaged head), `latched` and `icebound` 1 -> 2 (slot 1 is reserved for emergency swaps), and `dazzled` added at 7 (halves damage resistance; it had no priority). `kb/afflictions/database.md` reports this coverage after every capture.
+
+**Live afflictions our table did not set** (before v4.7.402; they kept the server default): latched 1,
 icebound 1, calcifiedskull 2, calcifiedtorso 2, grievouswounds 3, mindravaged 4, dazed 5,
 kkractlebrand 5, frostbite 5, tonguetied 7, internalbleeding 8, fulminated 8, earworm 8,
 burning2/3 9, horror2-5 9, pyre2 9, diminished 12, unweavingbody2 25, unweavingmind2 25.

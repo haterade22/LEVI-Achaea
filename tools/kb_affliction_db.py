@@ -178,14 +178,23 @@ def main():
         game = [l.strip().lower() for l in body.splitlines() if re.fullmatch(r"[A-Za-z]+", l.strip())]
         no_record = [n for n in game if n not in db]
         not_curing = [n for n in game if n not in code_keys]
+
+        def curable(n):
+            cures = (db.get(n, {}).get("cures") or "").strip().lower()
+            return bool(cures) and cures != "time"
+        gap = [n for n in not_curing if curable(n)]
+        timed = [n for n in not_curing if (db.get(n, {}).get("cures") or "").strip().lower() == "time"]
+        nocure = [n for n in not_curing if n not in gap and n not in timed]
         md += ["", "## Coverage against the game's AFFLICTION LIST", "",
                f"The game lists **{len(game)}** afflictions (`kb/raw/live/affliction_list.txt`). "
                f"{len(game) - len(no_record)} have a record above.", "",
                f"**No record yet ({len(no_record)})**, filled by the next `kbcapture afflictions`: "
                + (", ".join(f"`{n}`" for n in no_record) or "none"), "",
-               f"**Not in our curing priority table ({len(not_curing)})**: SSC cures these at the server's "
-               "own default priority. Some are not curable at all (states, curses, class marks); the ones that "
-               "are deserve a decision: " + (", ".join(f"`{n}`" for n in not_curing) or "none")]
+               f"**Curable but NOT in our curing priority table ({len(gap)})**: SSC cures these at the server's "
+               "own default, which can drift unseen. Each one needs a decision: "
+               + (", ".join(f"`{n}`" for n in gap) or "none"), "",
+               f"Not in the table because SSC cannot cure them, so a priority would do nothing: "
+               f"{len(timed)} wear off on their own (\"Time\"), {len(nocure)} have no known cure."]
     md += ["", "## Descriptions", ""]
     for k, r in sorted(db.items()):
         if r.get("alias_of"):
