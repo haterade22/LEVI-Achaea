@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-10-11 - Serpent: "You are already hidden." counts as hidden; back to `wield shield dirk` (v4.7.409)
+
+- Trigger `serpent/020_Darkwalker_Concealed.lua` also matches "You are already hidden." -- the game's
+  refusal of HIDE proves we are hidden, so it stamps the same 3s window as Darkwalker's rehide line
+  and re-queues the round with the backstab.
+- `ataxiaBasher_serpentHidden()` also accepts a GMCP defence named `hide` as well as `hiding`.
+- The opener is `wield shield dirk;backstab <target>` again (user: "wield shield dirk is fine");
+  v4.7.408 had changed it to `wield dirk`.
+
+---
+
 ## 2026-10-11 - Serpent: `wield dirk;backstab`, and Darkwalker's rehide line counts as hidden (v4.7.408)
 
 User: "for serpent when i have boons darkwalker and assassins blade we should be wield dirk;backstab
