@@ -266,7 +266,11 @@ treeCurableAffsV3 = {
     "clumsiness", "weariness", "epilepsy", "haemophilia", "nausea",
     "dizziness", "shyness", "stupidity", "confusion", "dementia",
     "paranoia", "hallucinations", "impatience", "hypersomnia", "addiction",
-    "darkshade"
+    "darkshade",
+    -- v4.7.416: the tree cured these in Mystor's logs (healthleech, a level-1 broken limb) and in a
+    -- Runewarden's (blackout), and the game's AFFLICTION SHOW does not mark any of them NoRandomCure.
+    -- Damaged (level-2) limbs ARE NoRandomCure, so they stay out.
+    "healthleech", "brokenleftleg", "brokenrightleg", "brokenleftarm", "brokenrightarm", "blackout"
 }
 -- Backward compat alias
 treeCurableAffsV2 = treeCurableAffsV3

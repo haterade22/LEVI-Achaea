@@ -38,10 +38,19 @@ patterns:
   type: 1
 ]]--
 
+-- v4.7.416: the shell forms about 10 s AFTER the application (Mystor's logs, 2026-10-11: 1117 -> 1465,
+-- 2399 -> 2724, 3495 -> 3888), and until it forms a venom or a ruku to the torso still lands. Only the
+-- "has formed" line records the barrier; the application line just notes when it was applied.
 if isTargeted(matches[2]) then
-	tarAffed("fangbarrier")
-	tarAffed("sileris")
-  confirmAffV2("fangbarrier")
-  confirmAffV2("sileris")
-  if serpent and serpent.state then serpent.state.geckoStripAttempted = false end
+  if (matches[1] or ""):find("^A supple metallic shell") then
+    tarAffed("fangbarrier")
+    tarAffed("sileris")
+    if confirmAffV2 then
+      confirmAffV2("fangbarrier")
+      confirmAffV2("sileris")
+    end
+    if serpent and serpent.state then serpent.state.geckoStripAttempted = false end
+  elseif ataxiaTemp then
+    ataxiaTemp.silerisAppliedAt = getEpoch and getEpoch() or os.time()
+  end
 end

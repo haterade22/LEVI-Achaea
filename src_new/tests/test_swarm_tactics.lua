@@ -3730,13 +3730,25 @@ describe("v4.7.378 -- after an escape, and when the legs give out", function()
     expect(cnt("leap s")).toBe(2)
   end)
 
-  it("the leg-refusal trigger tells the swarm", function()
+  it("the leg-refusal trigger tells the swarm when both legs are out", function()
     local real, why = S.onMoveRefusedBound, nil
     S.onMoveRefusedBound = function(w) why = w end
+    ataxia.afflictions = { brokenleftleg = true, damagedrightleg = true }
     local ok, err = pcall(dofile, "src_new/triggers/levi_ataxia/for_levi/leviticus/345_Broken_Legs_Block.lua")
     S.onMoveRefusedBound = real
     if not ok then error(err, 0) end
     expect(why).toBe("both legs broken")
+  end)
+
+  it("with ONE bad leg the line is STAND's refusal, so the move is not parked (v4.7.416)", function()
+    -- Mystor's logs: 10 of 10 with a single damaged leg, in the STAND slot, the kick still landed
+    local real, why = S.onMoveRefusedBound, nil
+    S.onMoveRefusedBound = function(w) why = w end
+    ataxia.afflictions = { damagedrightleg = true }
+    local ok, err = pcall(dofile, "src_new/triggers/levi_ataxia/for_levi/leviticus/345_Broken_Legs_Block.lua")
+    S.onMoveRefusedBound = real
+    if not ok then error(err, 0) end
+    expect(why).toBeNil()
   end)
 
   -- 5. the real reason

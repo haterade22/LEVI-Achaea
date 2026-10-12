@@ -2,6 +2,36 @@
 
 ---
 
+## 2026-10-12 - v4.7.416: legs, venom breaks, PvP parry, fangbarrier, the tree pool and SICKEN (Mystor's logs)
+
+The rest of the faults found by reading Mystor's six arena logs.
+
+**Legs**
+- `345_Broken_Legs_Block` acts only when both legs are out. "Both of your legs must be free and unhindered to do that." is also STAND's refusal when ONE leg is hindered (10 of 10 in the logs). Our moves send `stand;<dir>`, so with one bad leg the swarm parked and re-sent a move that had already happened.
+
+**Our own limbs**
+- **Venom breaks** reset the limb tracker (`038`). Epteth and epseth print "...shrivels into a useless appendage." / "...shrivels up and becomes useless.", never "breaks with a loud crack".
+- **The PvP parry line** feeds the parry tracker (`highlighting/027`). "You parry the attack with a deft manoeuvre." names no limb, so it uses the limb we are parrying.
+
+**The target's defences**
+- **Fangbarrier** counts only when the shell forms (`442`). It forms about 10 s after the sileris is applied, and slickness still lands in between.
+- **The tree's random-cure pool** gains healthleech, the four level-1 broken limbs and blackout. The tree cured each of them in a log, and the game marks none of them NoRandomCure.
+
+**SICKEN and DEADEYES** (an Apostate's own commands, with the Apostate review session)
+- SICKEN gives manaleech, then slickness, never paralysis. Fixed in `apostate/002` and in V3 `applyAffV3`, which turned "sicken" into both afflictions at once.
+- Trigger 462 now checks the target on every branch. It used to record stares at OTHER people on our target.
+- 462's sensitivity-on-a-deaf-target branch is now reachable.
+- `apostate/001`, a broken duplicate of 002, is switched off.
+
+**Looked at and left alone**
+- 225's shield clear: no log shows a shielded target attacking.
+- Mana sips counted as health: the error only over-estimates the target's health.
+- The hyena and daegger patterns: the write-up misread them.
+
+Tests: 2860 (11 new: `test_apostate_deadeyes.lua`, plus additions to `test_shikudo_tracking.lua`, `test_swarm_tactics.lua` and `test_target_cure_tables.lua`).
+
+---
+
 ## 2026-10-11 - DEADEYES and SICKEN, from an Apostate's own commands (docs only, no version bump)
 
 - **Settled from Mystor's Apostate log**, cross-checked by the Apostate review session (`kb/CONFLICTS.md`):
