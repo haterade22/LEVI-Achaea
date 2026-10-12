@@ -224,3 +224,21 @@ Checked against the wiki, the two logs, the game's AFFLICTION SHOW and the code 
   how the code's comments put it (006 "Must transition before kata 12 stumble"), not a 12/24 limit. Kai
   Surge: the code assumes 31 kai but never checks it on a live path (TK6 sends KAI SURGE with no kai check,
   007 uses 31 only for a READY echo, and only switched-off 008 gates on it); the wiki says 45.
+
+## Phase 2 progress
+
+**v4.7.417 (2026-10-12):**
+- **The lock offense (007) sends Telepathy at all.**
+  - It reads `ataxia.vitals.eq`; `ataxia.balances.eq` is written nowhere, so it had never sent one.
+  - It sends `MIND IMPATIENCE / BATTER / PARALYSE <target>` instead of bare words.
+  - It no longer locks first. All three are (*) abilities and need only the target in the room.
+- **Crescent (006) reads the ASSESS health** (`ataxiaTemp.lastAssess`). `ataxiaTemp.targetHP` is written nowhere, so Crescent could never fire.
+- **A refused transition keeps our kata.** `shikudo/002_Reset_Failsafe` no longer zeroes it, and the basher's comments are corrected.
+- **Checked and already right:** both offenses refuse a transition below kata 5; 006 sends SWEEP as the only staff attack (with a kick); both send SHATTER first when the target is shielded.
+
+**Still open:**
+- flashheel planned as the break it is;
+- Telepathy in the dispatch offense (006), preferring Rain, as Mystor plays;
+- the blackout cycle (its lock question, CONFLICTS #7);
+- a kai check before KAI SURGE (cost 31 or 45, #9);
+- kata caps measured rather than assumed (#8).

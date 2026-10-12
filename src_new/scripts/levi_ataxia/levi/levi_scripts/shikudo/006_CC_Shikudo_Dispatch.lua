@@ -674,7 +674,9 @@ function shikudo.selectKick()
 
   elseif form == "Maelstrom" then
     -- CRESCENT if target is prone and low health
-    if tAffs.prone and (tonumber(ataxiaTemp.targetHP) or 100) <= 50 then
+    -- v4.7.417: the health comes from ASSESS (698_Assess stores ataxiaTemp.lastAssess, a percentage);
+    -- ataxiaTemp.targetHP is written nowhere, so Crescent could never fire.
+    if tAffs.prone and (tonumber(ataxiaTemp.lastAssess or ataxiaTemp.targetHP) or 100) <= 50 then
       ataxiaTemp.kickTarget = "torso"
       return "crescent"  -- Finishing move
     end

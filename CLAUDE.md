@@ -494,8 +494,8 @@ read `mmp.settings.mapsource`). `service` is an experimental live Crowdmap; `cro
     present (the wiki's (*) abilities certainly; the wiki puts BLACKOUT behind the lock, which is open,
     `kb/CONFLICTS.md` #7). **Rain speeds equilibrium**, so monks do their Telepathy there (not only
     there). **Blackout is critical**: 4 s, they usually tree it off, we give it again, and it hides the
-    combo behind it. The Shikudo offense sends no Telepathy today (the only automatic MIND command is
-    the PvE basher's `aconfig monk` MIND CRUSH), and nothing records MIND BLACKOUT on the target (only
+    combo behind it. Since v4.7.417 the lock offense (007) sends MIND IMPATIENCE / BATTER / PARALYSE (it read an
+    equilibrium field nothing writes, sent bare words and locked first); the dispatch offense (006) sends none, and nothing records MIND BLACKOUT on the target (only
     Psion LIGHTSTEAL and Knight CONCUSS record blackout, both on a prone target, and both clear it after
     3.5 s; phase 2, `kb/combat/shikudo.md`).
 - **Infernal DWC Vivisect System**: Full auto-combat for Infernal DWC spec

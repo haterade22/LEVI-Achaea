@@ -2358,7 +2358,8 @@ end
 --
 -- leaveAt is the kata the chain must ALREADY be at, read *before* this combo is sent.
 -- A TRANSITION needs a chain of at least 5 ("A kata of at least 5 must be performed in order
--- to flow from the Live Oak to another") and a REJECTED transition RESETS the chain to 0.
+-- to flow from the Live Oak to another"). A REJECTED transition keeps the chain (log 2026-10-11:
+-- kata 3, refused, still 3, then 6), but the round it was meant for is lost.
 -- That reset is why leaveAt must be >= 5 and not 2: the old value bet on the queued combo's
 -- 3 actions landing first (2+3=5), but in game the transition was evaluated while the chain
 -- was still 3, got rejected, reset the chain, and the next pass repeated it -- an infinite
@@ -2617,8 +2618,8 @@ local function shikudoBashCombo(tar, useShieldbreak)
     -- transition kata (e.g. 6), re-appends a transition, and that one resolves against a
     -- chain of only 3 -> "A kata of at least 5 must be performed..." -> a wasted attempt after
     -- every single form change. Zero it optimistically; charstats re-reports the true value on
-    -- its next tick, and 002_Reset_Failsafe also zeroes it if the transition is rejected, so a
-    -- wrong guess here self-corrects within one tick either way.
+    -- its next tick, so a wrong guess here self-corrects within one tick (since v4.7.417,
+    -- 002_Reset_Failsafe no longer zeroes it on a refusal, because the game keeps the chain).
     ataxia.vitals.kata = 0
   end
   return cmd.."; "

@@ -2,6 +2,19 @@
 
 ---
 
+## 2026-10-12 - v4.7.417: Shikudo phase 2: the lock offense's Telepathy, Crescent, refused transitions
+
+- **The lock offense (`shikudo/007`) can send Telepathy.**
+  - It read `ataxia.balances.eq`, which nothing writes, so it never sent any. It now reads `ataxia.vitals.eq`.
+  - It sends `MIND IMPATIENCE / BATTER / PARALYSE <target>`. Before, it sent bare words the game does not take (`impatience <t>`, `mindlock <t>`).
+  - It no longer spends an equilibrium round on a lock first. These are (*) abilities and need only the target in the room (the user and Mystor).
+- **Crescent (`shikudo/006`) reads the target's health from ASSESS** (`ataxiaTemp.lastAssess`). It read `ataxiaTemp.targetHP`, which is written nowhere.
+- **A refused transition no longer zeroes our kata** (`shikudo/002_Reset_Failsafe`). The game keeps the chain (log: 3, refused, still 3, then 6). The basher's comments are corrected.
+- Plan: phase-2 progress recorded in `docs/plans/shikudo-offense-review-2026-10-11.md`.
+- Tests: `test_shikudo_offense.lua` (4 new; 2864 total). It loads the real 006 and 007.
+
+---
+
 ## 2026-10-12 - v4.7.416: legs, venom breaks, PvP parry, fangbarrier, the tree pool and SICKEN (Mystor's logs)
 
 The rest of the faults found by reading Mystor's six arena logs.
