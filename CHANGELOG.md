@@ -2,6 +2,25 @@
 
 ---
 
+## 2026-10-11 - Mystor's six Shikudo arena logs: filed, first findings (docs only, no version bump)
+
+Mystor (a Shikudo monk) shared six of his arena fights, five with MIND SAPIENCE on the opponent, so
+the logs show the opponent's own typed commands. Filed verbatim in `kb/raw/logs/2026-10-11_mystor_*`
+(his client's output explained in `kb/raw/logs/README.md`); first findings in `kb/combat/shikudo.md`
+("Mystor's six arena fights"). Line-by-line reading of every log is in progress; per-class write-ups
+and trigger fixes will follow.
+- **Equilibrium:** Telepathy and Kaido cost 0.72 of the wiki's figure in Rain and 0.85 in every other
+  form (MIND PARALYSE 1.44 s against 1.70 s, 26 and 2 readings), so Rain itself takes about 15% off.
+- **Balance:** 2.1 s a combo, 1.9 s in Willow, 2.8 s with dawnkick, 3.7 s with spinkick.
+- **Kata:** no chain of his went past 12 outside Rain; Rain reached 16 (CONFLICTS #8).
+- **Nervestrike has a line naming the target** ("Horror overcomes the face of <T> as his body locks in
+  paralysis."), which the knowledge base said it lacked; no trigger records it yet.
+- **The opponents' aliases**, as typed: the Infernal's DSL to the left leg with paired venoms, the
+  Apostate's deadeyes pairs with truestare and loyals, and the Depthswalker's attune, instill, reap and
+  dictate.
+
+---
+
 ## 2026-10-11 - Telepathy, blackout and the Shikudo forms in the knowledge base (docs and generators only, no version bump)
 
 The user and Mystor (in game) corrected what our docs said about Telepathy. Their rules were checked

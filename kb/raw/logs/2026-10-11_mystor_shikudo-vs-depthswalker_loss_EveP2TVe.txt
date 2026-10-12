@@ -1,0 +1,1120 @@
+Your target is now: Belaziel (an adventurer)
+Belaziel is now one of your enemies.
+[B|E] [CDBK] H:6265|100% M:6012|100% [6.83] [Rain]:0 K:0% 
+20:17:05 (0) [Belaziel]: 
+pt starting mind lock on Belaziel
+You: Mindlock (start) -> Belaziel
+[B|E] [CDBK] H:6265|100% M:6012|100% [6.83] [Rain]:0 K:0% 
+20:17:05 (0) [Belaziel]: 
+You are not the member of any party.
+[B|E] [CDBK] H:6265|100% M:6012|100% [6.83] [Rain]:0 K:0% 
+20:17:05 (0) [Belaziel]: 
+You: Mindlock (finish) -> Belaziel
+  /\/\ (_)_ __   __| |   / /  ___   ___| | _____  __| |
+ /    \| | '_ \ / _` |  / /  / _ \ / __| |/ / _ \/ _` |
+/ /\/\ \ | | | | (_| | / /__| (_) | (__|   <  __/ (_| |
+\/    \/_|_| |_|\__,_| \____/\___/ \___|_|\_\___|\__,_|
+[B|E] [CDBK] H:6265|100% M:5902|98% [6.83] [Rain]:0 K:0% -110m 
+20:17:09 (0) [Belaziel]: 
+You: Mind Print (add) -> Belaziel
+pt Sapience started on Belaziel
+You: Mind Sapience -> Belaziel
+[Eq Spent: 2.89s]
+[B|-] [CDBK] H:6265|100% M:5544|92% [6.83] [Rain]:0 K:0% -358m 
+20:17:10 (0) [Belaziel]: 
+You are not the member of any party.
+[B|-] [CDBK] H:6265|100% M:5544|92% [6.83] [Rain]:0 K:0% 
+20:17:10 (0) [Belaziel]: 
+--> Belaziel: touch amnesia
+--> Belaziel: stand
+--> Belaziel: get monolith from bag568276
+--> Belaziel: artefact recall 497396
+--> Belaziel: attach 497396 to monolith
+--> Belaziel: drop monolith
+--> Belaziel: put group monolith in bag568276
+--> Belaziel: chrono distortion
+[B|-] [CDBK] H:6265|100% M:5534|92% [6.83] [Rain]:0 K:0% 
+20:17:11 (0) [Belaziel]: 
+You have recovered equilibrium.
+[Eq Recov: 2.76s]
+[B|E] [CDBK] H:6265|100% M:5934|98% [6.83] [Rain]:0 K:0% +400m 
+20:17:13 (0) [Belaziel]: 
+--> Belaziel: touch amnesia
+--> Belaziel: stand
+--> Belaziel: artefact recall 497396
+--> Belaziel: get group monolith from bag568276
+--> Belaziel: get monolith
+--> Belaziel: combine group monolith fully
+--> Belaziel: put group monolith in bag568276
+[B|E] [CDBK] H:6265|100% M:5934|98% [6.83] [Rain]:0 K:0% 
+20:17:13 (0) [Belaziel]: tell Belaziel Ready when you are
+[B|E] [CDBK] H:6265|100% M:5941|98% [6.83] [Rain]:0 K:0% 
+20:17:15 (0) [Belaziel]: 
+--> Belaziel: touch amnesia
+--> Belaziel: stand
+--> Belaziel: wield shield524649 scythe186067
+--> Belaziel: chrono assert
+--> Belaziel: chrono loop boost
+--> Belaziel: chrono dilation
+[B|E] [CDBK] H:6265|100% M:5931|98% [6.83] [Rain]:0 K:0% 
+20:17:16 (0) [Belaziel]: 
+You may once more shift your defensive posture.
+[B|E] [CDBK] H:6265|100% M:5862|97% [6.83] [Rain]:0 K:0% 
+20:17:19 (0) [Belaziel]: 
+mind lock Belaziel
+You: Mindlock (lost) -> Belaziel
+  /\/\ (_)_ __   __| |   / /  ___  ___| |_ 
+ /    \| | '_ \ / _` |  / /  / _ \/ __| __|
+/ /\/\ \ | | | | (_| | / /__| (_) \__ \ |_ 
+\/    \/_|_| |_|\__,_| \____/\___/|___/\__|
+[B|E] [CDBK] H:6265|100% M:5832|97% [6.83] [Rain]:0 K:0% 
+20:17:19 (0) [Belaziel]: 
+You are not the member of any party.
+[B|E] [CDBK] H:6265|100% M:5832|97% [6.83] [Rain]:0 K:0% 
+20:17:19 (0) [Belaziel]: 
+pt starting mind lock on Belaziel
+You: Mindlock (start) -> Belaziel
+Your mindlock is speeded by the mindprint you hold.
+[B|E] [CDBK] H:6265|100% M:5832|97% [6.83] [Rain]:0 K:0% 
+20:17:19 (0) [Belaziel]: 
+You are not the member of any party.
+[B|E] [CDBK] H:6265|100% M:6012|100% [6.83] [Rain]:0 K:0% +180m 
+20:17:19 (0) [Belaziel]: 
+[B|E] [CDBK] H:6265|100% M:6002|99% [6.83] [Rain]:0 K:0% 
+20:17:22 (0) [Belaziel]: 
+You: Mindlock (finish) -> Belaziel
+  /\/\ (_)_ __   __| |   / /  ___   ___| | _____  __| |
+ /    \| | '_ \ / _` |  / /  / _ \ / __| |/ / _ \/ _` |
+/ /\/\ \ | | | | (_| | / /__| (_) | (__|   <  __/ (_| |
+\/    \/_|_| |_|\__,_| \____/\___/ \___|_|\_\___|\__,_|
+[B|E] [CDBK] H:6265|100% M:5972|99% [6.83] [Rain]:0 K:0% 
+20:17:22 (0) [Belaziel]: 
+You: Mind Print (add) -> Belaziel
+pt Sapience started on Belaziel
+You: Mind Sapience -> Belaziel
+[Eq Spent: 2.89s]
+[B|-] [CDBK] H:6265|100% M:5506|91% [6.83] [Rain]:0 K:0% -466m 
+20:17:23 (0) [Belaziel]: 
+You are not the member of any party.
+[B|-] [CDBK] H:6265|100% M:5506|91% [6.83] [Rain]:0 K:0% 
+20:17:23 (0) [Belaziel]: 
+You have recovered equilibrium.
+[Eq Recov: 2.77s]
+[B|E] [CDBK] H:6265|100% M:5571|92% [6.83] [Rain]:0 K:0% 
+20:17:26 (0) [Belaziel]: 
+--> Belaziel: tell mystor ready
+[B|E] [CDBK] H:6265|100% M:5505|91% [6.83] [Rain]:0 K:0% 
+20:17:27 (0) [Belaziel]: 
+A grand foyer in the Oniar estate. (indoors)
+You see exits leading north, northeast, east, south, west, and up.
+[B|E] [CDBK] H:6265|100% M:5905|98% [6.83] [Rain]:0 K:0% +400m 
+20:17:28 (0) [Belaziel]: 
+Guest bedroom. (indoors)
+A phantom sea turtle wafts here, his opaque fins outstretched to either side. The surroundings are distorted, as if viewed through water. Lord Belaziel Shin, the Shadowmancer is 
+here, hidden. His features are obscured by a porcelain-white mask of a shadow-eyed fox. He wields a subtle forearm shield in his left hand and deSangre's spite in his right.
+You see a single exit leading west.
+[B|E] [CDBK] H:6265|100% M:5905|98% [6.83] [Rain]:0 K:0% 
+20:17:28 (0) [Belaziel]: 
+(1) person here: Belaziel, 
+[Zax]: +Def: parrying (head).
+You have no sanity.
+[Zax]: parry head/combo Belaziel frontkick left kuro left ruku left/assess Belaziel".
+You hold no "bomb".
+You are not fallen or kneeling.
+You will now attempt to parry attacks to your head.
+You: Frontkick left arm -> Belaziel Left arm: 8.4% [+8.4%]
+The instep of your foot smashes into the left underarm of Belaziel, throwing him from his steed. Kata is 1
+[Bal Spent: 2.1s]
+You: Kuro left leg -> Belaziel Left leg: 8.4% [+8.4%]
+The staff cracks across the left thigh of Belaziel. Kata is 2
+You: Ruku left arm -> Belaziel Left arm: 16.8% [+8.4%]
+The staff connects to the left arm with a resounding crack, the limb flopping uselessly. Kata is 3
+[Rain]: You are now maintaining a kata chain of 3 actions.
+[Belaziel] HP: [==============================] (5502|6113) (90.00%)
+pt Belaziel: weariness clumsiness
+[-|E] [CDBK] H:6265|100% M:5839|97% [6.83] [Rain]:3 K:0% 
+20:17:29 (1) [Belaziel]: wear(100%), clum(100%), 
+You are not the member of any party.
+[-|E] [CDBK] H:6265|100% M:5839|97% [6.83] [Rain]:3 K:0% 
+20:17:29 (1) [Belaziel]: wear(100%), clum(100%), 
+--> Belaziel: outr kelp
+Belaziel suddenly jerks, his head snapping up.
+--> Belaziel: eat kelp
+Belaziel eats a piece of kelp.
+--> Belaziel: vault 646894
+Belaziel easily vaults onto the back of a phantom sea turtle.
+[-|E] [CDBK] H:6265|100% M:5839|97% [6.83] [Rain]:3 K:0% 
+20:17:30 (2) [Belaziel]: wear(50%), clum(50%), 
+--> Belaziel: touch tree
+Belaziel touches a tree of life tattoo.
+[-|E] [CDBK] H:6265|100% M:5839|97% [6.83] [Rain]:3 K:0% 
+20:17:30 (1) [Belaziel]: 
+[Zax]: +Aff: timeloop.
+[Zax]: +Aff: clumsiness.
+[Zax]: +Aff: weariness.
+--> Belaziel: touch amnesia
+--> Belaziel: stand
+--> Belaziel: put bomb in pack
+--> Belaziel: get body
+--> Belaziel: wipe scythe
+--> Belaziel: wield shield524649 scythe186067
+--> Belaziel: shadow attune Mystor to degeneration
+Belaziel reaches past you, plunging Gattan'lier's hunger into your shadow.
+[Zax]: Assuming Belaziel's class is depthswalker.
+A sudden sense of foreboding comes over you.
+--> Belaziel: chrono assert
+--> Belaziel: shadow reap Mystor curare
+Belaziel: Reap -> You
+You take 925 psychic, damage.
+You have been afflicted with timeloop.
+The world seems to grow distorted around you, as if through a thick fog.
+Shadowmancy: Degeneration -> You
+You have been afflicted with clumsiness.
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+You have been afflicted with weariness.
+Your limbs grow heavy and you groan feebly.
+--> Belaziel: assess Mystor
+--> Belaziel: contemplate Mystor
+[-|E] [CDBK] H:5340|85% M:5931|98% [6.83] [Rain]:3 K:5% [clum, wear, TLOOP] -925h 
+20:17:31 (1) [Belaziel]: 
+[Zax]: -Def: parrying (head).
+[Zax]: +Def: parrying (right leg).
+You have recovered balance on your legs.
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+You have no sanity.
+[Zax]: parry right leg/combo Belaziel frontkick right kuro left ruku right/assess Belaziel".
+You hold no "bomb".
+You are not fallen or kneeling.
+You will now attempt to parry attacks to your right leg.
+You: Frontkick right arm -> Belaziel Right arm: 8.4% [+8.4%]
+The instep of your foot smashes into the right underarm of Belaziel, throwing him from his steed. Kata is 4
+[Bal Spent: 2.1s]
+You: Kuro left leg -> Belaziel Left leg: 16.8% [+8.4%]
+The staff cracks across the left thigh of Belaziel. Kata is 5
+You: Ruku right arm -> Belaziel Right arm: 16.8% [+8.4%]
+The staff connects to the right arm with a resounding crack, the limb flopping uselessly. Kata is 6
+[Rain]: You are now maintaining a kata chain of 6 actions.
+[Belaziel] HP: [==============================] (5403|6113) (88.39%)
+pt Belaziel: weariness clumsiness
+[-|E] [CDBK] H:5340|85% M:5865|97% [6.83] [Rain]:6 K:5% [clum, wear, TLOOP] 
+20:17:31 (1) [Belaziel]: wear(100%), clum(100%), 
+[Zax]: -Aff: timeloop.
+[Zax]: -Aff: weariness.
+[Curing]: OUTR CUPRUM
+[Zax]: -1 Cuprum (1767).
+[Curing]: EAT CUPRUM
+You eat a cuprum flake.
+You break out of the feedback loop.
+You have cured the timeloop affliction.
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Your limbs strengthen and you feel stronger.
+You have cured the weariness affliction.
+[-|E] [CDBK] H:5340|85% M:5865|97% [6.83] [Rain]:6 K:5% [clum] 
+20:17:31 (1) [Belaziel]: wear(100%), clum(100%), 
+You are not the member of any party.
+[-|E] [CDBK] H:5340|85% M:5865|97% [6.83] [Rain]:6 K:5% [clum] 
+20:17:31 (1) [Belaziel]: wear(100%), clum(100%), 
+--> Belaziel: eat kelp
+Belaziel eats a piece of kelp.
+[-|E] [CDBK] H:5340|85% M:5865|97% [6.83] [Rain]:6 K:5% [clum] 
+20:17:32 (2) [Belaziel]: wear(50%), clum(50%), 
+--> Belaziel: parry left arm
+[-|E] [CDBK] H:5340|85% M:5835|97% [6.83] [Rain]:6 K:5% [clum] 
+20:17:32 (2) [Belaziel]: wear(50%), clum(50%), 
+You may eat another plant or mineral.
+[Eat Recov: 1.51s]
+[-|E] [CDBK] H:5540|88% M:5735|95% [6.83] [Rain]:6 K:5% [clum] 
+20:17:32 (2) [Belaziel]: wear(50%), clum(50%), 
+[Zax]: -Aff: clumsiness.
+[Curing]: EAT AURUM
+You eat an aurum flake.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+You have cured the clumsiness affliction.
+[-|E] [CDBK] H:5540|88% M:5735|95% [6.83] [Rain]:6 K:5% 
+20:17:32 (2) [Belaziel]: wear(50%), clum(50%), 
+[Zax]: -1 Aurum (1279).
+[-|E] [CDBK] H:5540|88% M:5735|95% [6.83] [Rain]:6 K:5% 
+20:17:33 (2) [Belaziel]: wear(50%), clum(50%), 
+--> Belaziel: vault 646894
+Belaziel easily vaults onto the back of a phantom sea turtle.
+[-|E] [CDBK] H:5540|88% M:5735|95% [6.83] [Rain]:6 K:5% 
+20:17:33 (2) [Belaziel]: wear(50%), clum(50%), 
+[Zax]: +Aff: paralysis.
+[Zax]: +Aff: clumsiness.
+--> Belaziel: touch amnesia
+--> Belaziel: stand
+--> Belaziel: put bomb in pack
+--> Belaziel: get body
+--> Belaziel: wipe scythe
+Belaziel carefully wipes all the venoms off of deSangre's spite.
+--> Belaziel: wield shield524649 scythe186067
+--> Belaziel: shadow attune Mystor to degeneration
+--> Belaziel: chrono assert
+--> Belaziel: shadow reap Mystor curare
+Belaziel: Reap -> You
+You take 925 psychic, damage.
+You have been afflicted with paralysis.
+A prickly stinging overcomes your body, fading away into numbness.
+Shadowmancy: Degeneration -> You
+You have been afflicted with clumsiness.
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+--> Belaziel: assess Mystor
+--> Belaziel: contemplate Mystor
+[-|E] [CDBK] H:4615|73% M:5735|95% [6.83] [Rain]:6 K:10% [clum, PAR] -925h 
+20:17:33 (2) [Belaziel]: wear(50%), clum(50%), 
+You have recovered balance on your legs.
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+[Curing]: TRANSMUTE 1065
+You: Kai Transmute -> Yourself
+[B|E] [CDBK] H:5680|90% M:4670|77% [6.83] [Rain]:6 K:10% [clum, PAR] +1065h -1065m 
+20:17:33 (2) [Belaziel]: wear(50%), clum(50%), 
+[Curing]: SIP MANA
+You take a drink from an amethyst vial.
+Your mind feels stronger and more alert.
+[B|E] [CDBK] H:5680|90% M:6012|100% [6.83] [Rain]:6 K:10% [clum, PAR] +1342m 
+20:17:33 (2) [Belaziel]: wear(50%), clum(50%), 
+[B|E] [CDBK] H:5680|90% M:6012|100% [6.83] [Rain]:6 K:10% [clum, PAR] 
+20:17:33 (2) [Belaziel]: wear(50%), clum(50%), 
+--> Belaziel: eat kelp
+Belaziel eats a piece of kelp.
+[B|E] [CDBK] H:5680|90% M:6012|100% [6.83] [Rain]:6 K:10% [clum, PAR] 
+20:17:33 (1) [Belaziel]: 
+[Zax]: -Def: parrying (right leg).
+[Zax]: +Def: parrying (right leg).
+You have no sanity.
+[Zax]: parry right leg/wield shield/mind impatience Belaziel/assess Belaziel".
+You are paralysed and are unable to drop anything.
+Paralysed as you are, your body is not able to pick up anything.
+Paralysed as you are, your body is not able to pick up anything.
+You are paralysed and unable to do that.
+You will now attempt to parry attacks to your right leg.
+You are paralysed and cannot do that.
+[Eq Spent: 1.07s]
+pt Mind impatience on Belaziel|pt Belaziel: impatience
+You: Mind Impatience -> Belaziel
+[Belaziel] HP: [==============================] (5403|6113) (88.39%)
+[B|-] [CDBK] H:5680|90% M:5880|97% [6.83] [Rain]:6 K:10% [clum, PAR] -132m 
+20:17:33 (1) [Belaziel]: IMP(100%), 
+You are not the member of any party.
+You are not the member of any party.
+[B|-] [CDBK] H:5680|90% M:5880|97% [6.83] [Rain]:6 K:10% [clum, PAR] 
+20:17:33 (1) [Belaziel]: IMP(100%), 
+You may eat another plant or mineral.
+[Eat Recov: 1.51s]
+[B|-] [CDBK] H:5680|90% M:5955|99% [6.83] [Rain]:6 K:10% [clum, PAR] 
+20:17:34 (1) [Belaziel]: IMP(100%), 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|-] [CDBK] H:5680|90% M:5955|99% [6.83] [Rain]:6 K:10% [clum] 
+20:17:34 (1) [Belaziel]: IMP(100%), 
+[Zax]: -1 Magnesium (1182).
+[B|-] [CDBK] H:5680|90% M:5955|99% [6.83] [Rain]:6 K:10% [clum] 
+20:17:34 (1) [Belaziel]: IMP(100%), 
+[Zax]: -Def: parrying (right leg).
+[Zax]: +Def: parrying (right leg).
+You have recovered equilibrium.
+[Eq Recov: 0.97s]
+You have no sanity.
+[Zax]: parry right leg/combo Belaziel frontkick left kuro left ruku left/assess Belaziel".
+You hold no "bomb".
+You are not fallen or kneeling.
+You will now attempt to parry attacks to your right leg.
+You: Frontkick left arm -> Belaziel Left arm: 25.2% [+8.4%]
+The instep of your foot smashes into the left underarm of Belaziel, throwing him from his steed. Kata is 7
+[Bal Spent: 2.1s]
+You: Kuro left leg -> Belaziel
+Belaziel parries the attack with a deft manoeuvre.
+You: Ruku left arm -> Belaziel Left arm: 33.6% [+8.4%]
+The staff connects to the left arm with a resounding crack, the limb flopping uselessly. Kata is 9
+[Rain]: You are now maintaining a kata chain of 9 actions.
+[Belaziel] HP: [==============================] (4978|6113) (81.43%)
+pt Belaziel: clumsiness
+[-|E] [CDBK] H:5680|90% M:5889|97% [6.83] [Rain]:9 K:10% [clum] 
+20:17:34 (1) [Belaziel]: IMP(100%), clum(100%), 
+--> Belaziel: sip health
+Belaziel takes a drink from an oaken vial.
+[-|E] [CDBK] H:5680|90% M:5889|97% [6.83] [Rain]:9 K:10% [clum] 
+20:17:34 (1) [Belaziel]: IMP(100%), clum(100%), 
+You are not the member of any party.
+[-|E] [CDBK] H:5680|90% M:5889|97% [6.83] [Rain]:9 K:10% [clum] 
+20:17:34 (1) [Belaziel]: IMP(100%), clum(100%), 
+[Zax]: paralysis set to priority 25.
+[-|E] [CDBK] H:5680|90% M:5889|97% [6.83] [Rain]:9 K:10% [clum] 
+20:17:34 (1) [Belaziel]: IMP(100%), clum(100%), 
+[Zax]: paralysis set to priority 5.
+[-|E] [CDBK] H:5680|90% M:5821|96% [6.83] [Rain]:9 K:10% [clum] 
+20:17:35 (1) [Belaziel]: IMP(100%), clum(100%), 
+--> Belaziel: vault 646894
+Belaziel easily vaults onto the back of a phantom sea turtle.
+[-|E] [CDBK] H:5680|90% M:5821|96% [6.83] [Rain]:9 K:10% [clum] 
+20:17:35 (1) [Belaziel]: IMP(100%), clum(100%), 
+[Zax]: +Aff: timeloop.
+[Zax]: +Aff: weariness.
+[Zax]: +Aff: paralysis.
+--> Belaziel: parry right arm
+--> Belaziel: touch amnesia
+--> Belaziel: stand
+--> Belaziel: put bomb in pack
+--> Belaziel: get body
+--> Belaziel: wipe scythe
+--> Belaziel: wield shield524649 scythe186067
+--> Belaziel: shadow attune Mystor to degeneration
+--> Belaziel: chrono loop boost
+Belaziel: Chrono Loop
+Belaziel grows older before your eyes.
+--> Belaziel: shadow reap Mystor
+Belaziel: Reap -> You
+You take 925 psychic, damage.
+You have been afflicted with timeloop.
+The world seems to grow distorted around you, as if through a thick fog.
+Shadowmancy: Degeneration -> You
+You have been afflicted with weariness.
+Your limbs grow heavy and you groan feebly.
+You have been afflicted with paralysis.
+A prickly stinging overcomes your body, fading away into numbness.
+--> Belaziel: assess Mystor
+--> Belaziel: contemplate Mystor
+[-|E] [CDBK] H:4755|75% M:5821|96% [6.83] [Rain]:9 K:15% [clum, wear, PAR, TLOOP] -925h 
+20:17:35 (1) [Belaziel]: IMP(100%), clum(100%), 
+--> Belaziel: outr plumbum
+--> Belaziel: eat plumbum
+Belaziel eats a plumbum flake.
+[-|E] [CDBK] H:4755|75% M:5821|96% [6.83] [Rain]:9 K:15% [clum, wear, PAR, TLOOP] 
+20:17:35 (1) [Belaziel]: clum(100%), 
+You may eat another plant or mineral.
+[Eat Recov: 1.51s]
+[-|E] [CDBK] H:4755|75% M:6002|99% [6.83] [Rain]:9 K:15% [clum, wear, PAR, TLOOP] 
+20:17:36 (1) [Belaziel]: clum(100%), 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[-|E] [CDBK] H:4755|75% M:6002|99% [6.83] [Rain]:9 K:15% [clum, wear, TLOOP] 
+20:17:36 (1) [Belaziel]: clum(100%), 
+[Zax]: -1 Magnesium (1181).
+[-|E] [CDBK] H:4755|75% M:6002|99% [6.83] [Rain]:9 K:5% [clum, wear, TLOOP] 
+20:17:36 (1) [Belaziel]: clum(100%), 
+You have recovered balance on your legs.
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+[Curing]: TRANSMUTE 940
+You: Kai Transmute -> Yourself
+[B|E] [CDBK] H:5695|90% M:5062|84% [6.83] [Rain]:9 K:5% [clum, wear, TLOOP] +940h -940m 
+20:17:36 (1) [Belaziel]: clum(100%), 
+[Zax]: -Def: parrying (right leg).
+[Zax]: +Def: parrying (left leg).
+You have no sanity.
+[Zax]: parry left leg/combo Belaziel frontkick right kuro left kuro left/assess Belaziel".
+You hold no "bomb".
+You are not fallen or kneeling.
+You will now attempt to parry attacks to your left leg.
+You: Frontkick right arm -> Belaziel
+Belaziel parries the attack with a deft manoeuvre.
+[Bal Spent: 2.1s]
+You: Kuro left leg -> Belaziel Left leg: 25.2% [+8.4%]
+The staff cracks across the left thigh of Belaziel. Kata is 10
+You: Kuro left leg -> Belaziel Left leg: 33.6% [+8.4%]
+The staff cracks across the left thigh of Belaziel. Kata is 11
+[Rain]: You are now maintaining a kata chain of 12 actions.
+[Belaziel] HP: [==============================] (5754|6113) (94.13%)
+pt Belaziel: weariness weariness
+[-|E] [CDBK] H:5695|90% M:4996|83% [6.83] [Rain]:12 K:5% [clum, wear, TLOOP] 
+20:17:36 (1) [Belaziel]: wear(100%), clum(100%), leth(100%), 
+--> Belaziel: eat kelp
+Belaziel eats a piece of kelp.
+[-|E] [CDBK] H:5695|90% M:4996|83% [6.83] [Rain]:12 K:5% [clum, wear, TLOOP] 
+20:17:36 (2) [Belaziel]: wear(50%), clum(50%), leth(100%), 
+You are not the member of any party.
+[-|E] [CDBK] H:5695|90% M:4996|83% [6.83] [Rain]:12 K:5% [clum, wear, TLOOP] 
+20:17:36 (2) [Belaziel]: wear(50%), clum(50%), leth(100%), 
+[-|E] [CDBK] H:5695|90% M:4996|83% [6.83] [Rain]:12 K:5% [clum, wear, TLOOP] 
+20:17:37 (2) [Belaziel]: wear(50%), clum(50%), leth(100%), 
+[Zax]: +Aff: paralysis.
+[Zax]: +Aff: justice.
+[Zax]: +Aff: retribution.
+--> Belaziel: touch amnesia
+--> Belaziel: stand
+--> Belaziel: put bomb in pack
+--> Belaziel: get body
+--> Belaziel: wipe scythe
+--> Belaziel: wield shield524649 scythe186067
+--> Belaziel: shadow attune Mystor to degeneration
+--> Belaziel: shadow instill scythe with retribution
+--> Belaziel: chrono assert
+--> Belaziel: shadow reap Mystor curare
+Belaziel: Reap -> You
+You take 925 psychic, damage.
+You have been afflicted with paralysis.
+A prickly stinging overcomes your body, fading away into numbness.
+Shadowmancy: Retribution -> You
+You have been afflicted with justice.
+A set of scales appears over your head and one side quickly descends, as you feel an aura of justice surround you.
+You have been afflicted with retribution.
+A terrible sense of foreboding descends upon you.
+--> Belaziel: assess Mystor
+--> Belaziel: contemplate Mystor
+[-|E] [CDBK] H:5083|81% M:4996|83% [6.83] [Rain]:12 K:10% [just, clum, wear, PAR, retr, TLOOP] -612h 
+20:17:37 (2) [Belaziel]: wear(50%), clum(50%), leth(100%), 
+You may eat another plant or mineral.
+[Eat Recov: 1.51s]
+You may drink another health or mana elixir.
+[Sip Recov: 4.38s]
+[-|E] [CDBK] H:5083|81% M:4996|83% [6.83] [Rain]:12 K:10% [just, clum, wear, PAR, retr, TLOOP] 
+20:17:37 (2) [Belaziel]: wear(50%), clum(50%), leth(100%), 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[Curing]: SIP MANA
+You take a drink from an amethyst vial.
+You are ravaged by the curse of retribution.
+You take 966 magical, damage.
+Your mind feels stronger and more alert.
+[-|E] [CDBK] H:4117|65% M:6012|100% [6.83] [Rain]:12 K:10% [just, clum, wear, retr, TLOOP] -966h +1016m 
+20:17:37 (2) [Belaziel]: wear(50%), clum(50%), leth(100%), 
+[Zax]: -1 Magnesium (1180).
+[-|E] [CDBK] H:4117|65% M:6012|100% [6.83] [Rain]:12 K:10% [just, clum, wear, retr, TLOOP] 
+20:17:37 (2) [Belaziel]: wear(50%), clum(50%), leth(100%), 
+[Curing]: EAT POTASH
+You eat a potash crystal.
+You feel your health and mana replenished.
+[-|E] [CDBK] H:4618|73% M:6012|100% [6.83] [Rain]:12 K:10% [just, clum, wear, retr, TLOOP] +501h 
+20:17:38 (2) [Belaziel]: wear(50%), clum(50%), leth(100%), 
+[Zax]: -1 Potash (749).
+[-|E] [CDBK] H:4618|73% M:6012|100% [6.83] [Rain]:12 K:10% [just, clum, wear, retr, TLOOP] 
+20:17:38 (2) [Belaziel]: wear(50%), clum(50%), leth(100%), 
+[Zax]: +Aff: stupidity.
+Your body trembles with weakness.
+You have been afflicted with stupidity.
+Hmmmm. Why must everything be so difficult to figure out?
+[-|E] [CDBK] H:4618|73% M:6012|100% [6.83] [Rain]:12 K:10% [just, clum, STUP, wear, retr, TLOOP] 
+20:17:38 (2) [Belaziel]: wear(50%), clum(50%), leth(100%), 
+[Zax]: -Aff: stupidity.
+[Curing]: FOCUS MIND
+You focus your mind intently on curing your mental maladies.
+You aren't such a complete idiot anymore.
+You have cured the stupidity affliction.
+--> Belaziel: eat kelp
+Belaziel eats a piece of kelp.
+You have recovered balance on your legs.
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+[Curing]: TRANSMUTE 877
+You: Kai Transmute -> Yourself
+[B|E] [CDBK] H:5695|90% M:4869|80% [6.83] [Rain]:12 K:10% [just, clum, wear, retr, TLOOP] +877h -877m 
+20:17:38 (1) [Belaziel]: leth(100%), 
+[Zax]: -Def: parrying (left leg).
+[Zax]: +Def: parrying (right arm).
+You have no sanity.
+[Zax]: parry right arm/combo Belaziel frontkick right ruku right kuro left/assess Belaziel".
+You hold no "bomb".
+You are not fallen or kneeling.
+You will now attempt to parry attacks to your right arm.
+You: Frontkick right arm -> Belaziel
+Belaziel parries the attack with a deft manoeuvre.
+[Bal Spent: 2.1s]
+You: Ruku right arm -> Belaziel
+Belaziel parries the attack with a deft manoeuvre.
+You: Kuro left leg -> Belaziel Left leg: 42% [+8.4%]
+The staff cracks across the left thigh of Belaziel. Kata is 14 Doubleaff
+Justice is dealt out and your attack rebounds onto you.
+You take 43 physical blunt, damage.
+[Rain]: You are now maintaining a kata chain of 15 actions.
+[Belaziel] HP: [==============================] (5616|6113) (91.87%)
+pt Belaziel: weariness lethargy
+[-|E] [CDBK] H:5652|90% M:4803|79% [6.83] [Rain]:15 K:10% [just, clum, wear, retr, TLOOP] 
+20:17:38 (1) [Belaziel]: wear(100%), leth(100%), 
+You are not the member of any party.
+[-|E] [CDBK] H:5652|90% M:4803|79% [6.83] [Rain]:15 K:10% [just, clum, wear, retr, TLOOP] 
+20:17:39 (1) [Belaziel]: wear(100%), leth(100%), 
+[Zax]: paralysis set to priority 25.
+[-|E] [CDBK] H:5652|90% M:4803|79% [6.83] [Rain]:15 K:10% [just, clum, wear, retr, TLOOP] 
+20:17:39 (1) [Belaziel]: wear(100%), leth(100%), 
+[Zax]: paralysis set to priority 5.
+[-|E] [CDBK] H:5652|90% M:4733|78% [6.83] [Rain]:15 K:10% [just, clum, wear, retr, TLOOP] 
+20:17:39 (1) [Belaziel]: wear(100%), leth(100%), 
+You may eat another plant or mineral.
+[Eat Recov: 1.5s]
+[-|E] [CDBK] H:5652|90% M:4733|78% [6.83] [Rain]:15 K:10% [just, clum, wear, retr, TLOOP] 
+20:17:39 (1) [Belaziel]: wear(100%), leth(100%), 
+[Zax]: -Aff: retribution.
+[Curing]: EAT CUPRUM
+You eat a cuprum flake.
+The terrible sense of foreboding lifts.
+You have cured the retribution affliction.
+[-|E] [CDBK] H:5652|90% M:4733|78% [6.83] [Rain]:15 K:10% [just, clum, wear, TLOOP] 
+20:17:39 (1) [Belaziel]: wear(100%), leth(100%), 
+[Zax]: +Aff: nausea.
+[Zax]: +Aff: depression.
+[Zax]: +Aff: hypochondria.
+--> Belaziel: touch amnesia
+--> Belaziel: stand
+--> Belaziel: put bomb in pack
+--> Belaziel: get body
+--> Belaziel: wipe scythe
+--> Belaziel: wield shield524649 scythe186067
+--> Belaziel: shadow attune Mystor to degeneration
+--> Belaziel: shadow instill scythe with depression
+--> Belaziel: chrono assert
+--> Belaziel: shadow reap Mystor euphorbia
+Belaziel: Reap -> You
+You take 925 psychic, damage.
+You have been afflicted with nausea.
+A sense of extreme nausea washes over you.
+Shadowmancy: Depression -> You
+You have been afflicted with depression.
+Everything seems so pointless.
+You have been afflicted with hypochondria.
+A terrible sense of unease comes over you.
+--> Belaziel: assess Mystor
+--> Belaziel: contemplate Mystor
+[-|E] [CDBK] H:4727|75% M:4733|78% [6.83] [Rain]:15 K:15% [hchon, just, clum, depr, wear, TLOOP, naus] -925h 
+20:17:39 (1) [Belaziel]: wear(100%), leth(100%), 
+--> Belaziel: eat kelp
+Belaziel eats a piece of kelp.
+[-|E] [CDBK] H:4727|75% M:4733|78% [6.83] [Rain]:15 K:15% [hchon, just, clum, depr, wear, TLOOP, naus] 
+20:17:40 (1) [Belaziel]: leth(100%), 
+Your superior constitution allows your body to fight off the negative affects of your nausea.
+[-|E] [CDBK] H:4727|75% M:4733|78% [6.83] [Rain]:15 K:15% [hchon, just, clum, depr, wear, TLOOP, naus] 
+20:17:40 (1) [Belaziel]: leth(100%), 
+You may eat another plant or mineral.
+[Eat Recov: 1.41s]
+Your mind is able to focus once again.
+[Focus Recov: 2.46s]
+[-|E] [CDBK] H:4727|75% M:4733|78% [6.83] [Rain]:15 K:15% [hchon, just, clum, depr, wear, TLOOP, naus] 
+20:17:40 (1) [Belaziel]: leth(100%), 
+[Zax]: -Aff: hypochondria.
+[Curing]: OUTR ARGENTUM
+[Zax]: -1 Argentum (1260).
+[Curing]: EAT ARGENTUM
+You eat an argentum flake.
+My, you feel healthier than you have in years.
+You have cured the hypochondria affliction.
+You have recovered balance on your legs.
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+[Curing]: TRANSMUTE 514
+You: Kai Transmute -> Yourself
+[B|E] [CDBK] H:5554|88% M:4509|75% [6.83] [Rain]:15 K:15% [just, clum, depr, wear, TLOOP, naus] +514h -514m 
+20:17:40 (1) [Belaziel]: leth(100%), 
+[Zax]: -Def: parrying (right arm).
+[Zax]: +Def: parrying (right leg).
+[Zax]: +Def: kaiboost.
+You have no sanity.
+[Zax]: parry right leg/transition to oak form/kai boost/combo Belaziel risingkick head ruku right kuro left/assess Belaziel".
+You hold no "bomb".
+You are not fallen or kneeling.
+You will now attempt to parry attacks to your right leg.
+You: Oak Form
+You gather up and expend your Kai energy to enhance your sensitivity to its energies.
+You: Risingkick head -> Belaziel Head: 4.2% [+4.2%]
+Your foot catches Belaziel under the chin, snapping his head back. Kata is 1
+Justice is dealt out and your attack rebounds onto you.
+You take 66 physical blunt, damage.
+[Bal Spent: 2.1s]
+You: Ruku right arm -> Belaziel
+Belaziel parries the attack with a deft manoeuvre.
+You: Kuro left leg -> Belaziel Left leg: 50.4% [+8.4%]
+The staff cracks across the left thigh of Belaziel. Kata is 3
+Justice is dealt out and your attack rebounds onto you.
+You take 44 physical blunt, damage.
+[Oak]: You are now maintaining a kata chain of 3 actions.
+[Belaziel] HP: [==============================] (5616|6113) (91.87%)
+pt Belaziel: weariness
+[-|E] [CDBK] H:5444|86% M:4443|73% [6.83] [Oak]:3 K:4% [just, clum, depr, wear, TLOOP, naus] -110h 
+20:17:40 (1) [Belaziel]: wear(100%), leth(100%), 
+You are not the member of any party.
+[-|E] [CDBK] H:5444|86% M:4443|73% [6.83] [Oak]:3 K:4% [just, clum, depr, wear, TLOOP, naus] 
+20:17:41 (1) [Belaziel]: wear(100%), leth(100%), 
+[Zax]: paralysis set to priority 25.
+[-|E] [CDBK] H:5444|86% M:4443|73% [6.83] [Oak]:3 K:4% [just, clum, depr, wear, TLOOP, naus] 
+20:17:41 (1) [Belaziel]: wear(100%), leth(100%), 
+[Zax]: paralysis set to priority 5.
+[-|E] [CDBK] H:5444|86% M:4443|73% [6.83] [Oak]:3 K:4% [just, clum, depr, wear, TLOOP, naus] 
+20:17:41 (1) [Belaziel]: wear(100%), leth(100%), 
+--> Belaziel: eat kelp
+Belaziel eats a piece of kelp.
+[-|E] [CDBK] H:5444|86% M:4443|73% [6.83] [Oak]:3 K:4% [just, clum, depr, wear, TLOOP, naus] 
+20:17:41 (1) [Belaziel]: leth(100%), 
+[Zax]: +Aff: asthma.
+[Zax]: +Aff: shadowmadness.
+[Zax]: +Aff: vertigo.
+--> Belaziel: parry left arm
+--> Belaziel: touch amnesia
+--> Belaziel: stand
+--> Belaziel: put bomb in pack
+--> Belaziel: get body
+--> Belaziel: wipe scythe
+--> Belaziel: wield shield524649 scythe186067
+--> Belaziel: shadow attune Mystor to degeneration
+--> Belaziel: shadow instill scythe with madness
+--> Belaziel: chrono assert
+--> Belaziel: shadow reap Mystor kalmia
+Belaziel: Reap -> You
+You take 925 psychic, damage.
+You have been afflicted with asthma.
+You feel a tightening sensation grow in your lungs.
+Shadowmancy: Madness -> You
+You have been afflicted with shadowmadness.
+Your sanity begins to escape you.
+You have been afflicted with vertigo.
+The idea of heights makes you queasy suddenly.
+--> Belaziel: assess Mystor
+--> Belaziel: contemplate Mystor
+[-|E] [CDBK] H:4519|72% M:4443|73% [6.83] [Oak]:3 K:14% [vert, just, SMAD, clum, depr, wear, TLOOP, naus, AST] -925h 
+20:17:41 (1) [Belaziel]: leth(100%), 
+[Zax]: -Aff: vertigo.
+[Curing]: FOCUS MIND
+You focus your mind intently on curing your mental maladies.
+Your fear of heights subsides.
+You have cured the vertigo affliction.
+[-|E] [CDBK] H:4519|72% M:4043|67% [6.83] [Oak]:3 K:14% [just, SMAD, clum, depr, wear, TLOOP, naus, AST] -400m 
+20:17:41 (1) [Belaziel]: leth(100%), 
+You may drink another health or mana elixir.
+[Sip Recov: 4.32s]
+[-|E] [CDBK] H:4519|72% M:4043|67% [6.83] [Oak]:3 K:14% [just, SMAD, clum, depr, wear, TLOOP, naus, AST] 
+20:17:42 (1) [Belaziel]: leth(100%), 
+[Curing]: SIP MANA
+You take a drink from an amethyst vial.
+Your mind feels stronger and more alert.
+[-|E] [CDBK] H:4519|72% M:5153|85% [6.83] [Oak]:3 K:14% [just, SMAD, clum, depr, wear, TLOOP, naus, AST] +1110m 
+20:17:42 (1) [Belaziel]: leth(100%), 
+You may eat another plant or mineral.
+[Eat Recov: 1.46s]
+[-|E] [CDBK] H:4519|72% M:5123|85% [6.83] [Oak]:3 K:14% [just, SMAD, clum, depr, wear, TLOOP, naus, AST] 
+20:17:42 (1) [Belaziel]: leth(100%), 
+[Zax]: -Aff: justice.
+[Curing]: EAT CUPRUM
+You eat a cuprum flake.
+The curse of justice leaves you.
+You have cured the justice affliction.
+[-|E] [CDBK] H:4519|72% M:5123|85% [6.83] [Oak]:3 K:14% [SMAD, clum, depr, wear, TLOOP, naus, AST] 
+20:17:42 (1) [Belaziel]: leth(100%), 
+You have recovered balance on your legs.
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+[Curing]: TRANSMUTE 614
+You: Kai Transmute -> Yourself
+[B|E] [CDBK] H:5133|81% M:4509|75% [6.83] [Oak]:3 K:14% [SMAD, clum, depr, wear, TLOOP, naus, AST] +614h -614m 
+20:17:43 (1) [Belaziel]: leth(100%), 
+[Zax]: -Def: parrying (right leg).
+[Zax]: +Def: parrying (head).
+You have no sanity.
+[Zax]: parry head/combo Belaziel risingkick head nervestrike ruku right/assess Belaziel".
+You hold no "bomb".
+You are not fallen or kneeling.
+You will now attempt to parry attacks to your head.
+You: Risingkick head -> Belaziel Head: 8.4% [+4.2%]
+Your foot catches Belaziel under the chin, snapping his head back. Kata is 4
+[Bal Spent: 2.1s]
+You: Nervestrike -> Belaziel Head: 14.5% [+6.1%]
+Horror overcomes the face of Belaziel as his body locks in paralysis. Kata is 5
+You: Ruku right arm -> Belaziel Right arm: 25.2% [+8.4%]
+The staff connects to the right arm with a resounding crack, the limb flopping uselessly. Kata is 6
+[Oak]: You are now maintaining a kata chain of 6 actions.
+[Belaziel] HP: [==============================] (5166|6113) (84.51%)
+pt Belaziel: clumsiness
+[-|E] [CDBK] H:5133|81% M:4443|73% [6.83] [Oak]:6 K:14% [SMAD, clum, depr, wear, TLOOP, naus, AST] 
+20:17:43 (1) [Belaziel]: PAR(100%), clum(100%), leth(100%), 
+--> Belaziel: sip health
+Belaziel takes a drink from an oaken vial.
+[-|E] [CDBK] H:5133|81% M:4443|73% [6.83] [Oak]:6 K:14% [SMAD, clum, depr, wear, TLOOP, naus, AST] 
+20:17:43 (1) [Belaziel]: PAR(100%), clum(100%), leth(100%), 
+You are not the member of any party.
+[-|E] [CDBK] H:5133|81% M:4443|73% [6.83] [Oak]:6 K:14% [SMAD, clum, depr, wear, TLOOP, naus, AST] 
+20:17:43 (1) [Belaziel]: PAR(100%), clum(100%), leth(100%), 
+[Zax]: paralysis set to priority 25.
+[-|E] [CDBK] H:5133|81% M:4443|73% [6.83] [Oak]:6 K:14% [SMAD, clum, depr, wear, TLOOP, naus, AST] 
+20:17:43 (1) [Belaziel]: PAR(100%), clum(100%), leth(100%), 
+[Zax]: paralysis set to priority 5.
+[-|E] [CDBK] H:5133|81% M:4369|72% [6.83] [Oak]:6 K:14% [SMAD, clum, depr, wear, TLOOP, naus, AST] 
+20:17:43 (1) [Belaziel]: PAR(100%), clum(100%), leth(100%), 
+--> Belaziel: outr bloodroot
+--> Belaziel: eat bloodroot
+Belaziel eats a bloodroot leaf.
+[-|E] [CDBK] H:5133|81% M:4369|72% [6.83] [Oak]:6 K:14% [SMAD, clum, depr, wear, TLOOP, naus, AST] 
+20:17:43 (1) [Belaziel]: clum(100%), leth(100%), 
+You may eat another bit of irid moss or potash.
+[Moss Recov: 5.88s]
+[-|E] [CDBK] H:5133|81% M:4769|79% [6.83] [Oak]:6 K:14% [SMAD, clum, depr, wear, TLOOP, naus, AST] +400m 
+20:17:43 (1) [Belaziel]: clum(100%), leth(100%), 
+You may eat another plant or mineral.
+[Eat Recov: 1.55s]
+[-|E] [CDBK] H:5133|81% M:4769|79% [6.83] [Oak]:6 K:14% [SMAD, clum, depr, wear, TLOOP, naus, AST] 
+20:17:44 (1) [Belaziel]: clum(100%), leth(100%), 
+[Zax]: +Aff: slickness.
+[Zax]: -Def: fangbarrier.
+[Zax]: +Aff: hypochondria.
+[Zax]: +Aff: masochism.
+[Zax]: +Aff: anorexia.
+--> Belaziel: parry right arm
+--> Belaziel: touch amnesia
+--> Belaziel: stand
+--> Belaziel: put bomb in pack
+--> Belaziel: get body
+--> Belaziel: wipe scythe
+--> Belaziel: wield shield524649 scythe186067
+--> Belaziel: shadow instill scythe with depression
+--> Belaziel: chrono assert
+--> Belaziel: shadow reap Mystor gecko
+Belaziel: Reap -> You
+You take 925 psychic, damage.
+You have been afflicted with slickness.
+The protective covering coating your skin sloughs off.
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+Shadowmancy: Depression -> You
+You have been afflicted with hypochondria.
+A terrible sense of unease comes over you.
+Nothing will ever be right again - there can be no salvation.
+You have been afflicted with masochism.
+You have been afflicted with anorexia.
+--> Belaziel: assess Mystor
+--> Belaziel: contemplate Mystor
+[-|E] [CDBK] H:4208|67% M:4769|79% [6.83] [Oak]:6 K:24% [s] [SLCK, hchon, ANO, SMAD, maso, clum, depr, wear, TLOOP, naus, AST] -925h 
+20:17:44 (1) [Belaziel]: clum(100%), leth(100%), 
+A sinister laughter fills your ears, and you feel sanity slipping away...
+[-|E] [CDBK] H:4208|67% M:4844|80% [6.83] [Oak]:6 K:24% [s] [SLCK, hchon, ANO, SMAD, maso, clum, depr, wear, TLOOP, naus, AST] 
+20:17:44 (1) [Belaziel]: clum(100%), leth(100%), 
+--> Belaziel: touch tree
+Belaziel touches a tree of life tattoo.
+[-|E] [CDBK] H:4408|70% M:4744|78% [6.83] [Oak]:6 K:24% [s] [SLCK, hchon, ANO, SMAD, maso, clum, depr, wear, TLOOP, naus, AST] +200h -100m 
+20:17:44 (2) [Belaziel]: clum(50%), leth(50%), 
+You may utilise the tree tattoo again.
+[Tree Recov: 13.94s]
+[Zax]: -Aff: shadowmadness.
+[Zax]: -Def: parrying (head).
+[Zax]: +Def: parrying (torso).
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Your sanity reestablishes itself.
+You have cured the shadowmadness affliction.
+--> Belaziel: outr ginseng
+--> Belaziel: eat ginseng
+Belaziel eats a ginseng root.
+You have recovered balance on your legs.
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+You have no sanity.
+[Zax]: parry torso/combo Belaziel risingkick head nervestrike ruku right/assess Belaziel".
+You hold no "bomb".
+You are not fallen or kneeling.
+You will now attempt to parry attacks to your torso.
+You: Risingkick head -> Belaziel Head: 18.7% [+4.2%]
+Your foot catches Belaziel under the chin, snapping his head back. Kata is 7
+[Bal Spent: 2.1s]
+You: Nervestrike -> Belaziel Head: 24.8% [+6.1%]
+Horror overcomes the face of Belaziel as his body locks in paralysis. Kata is 8
+You: Ruku right arm -> Belaziel Right arm: 33.6% [+8.4%]
+The staff connects to the right arm with a resounding crack, the limb flopping uselessly. Kata is 9
+[Oak]: You are now maintaining a kata chain of 9 actions.
+[Belaziel] HP: [==============================] (5828|6113) (95.34%)
+pt Belaziel: clumsiness
+[-|E] [CDBK] H:4408|70% M:4678|77% [6.83] [Oak]:9 K:24% [s] [SLCK, hchon, ANO, maso, clum, depr, wear, TLOOP, naus, AST] 
+20:17:45 (1) [Belaziel]: PAR(100%), clum(100%), 
+You are not the member of any party.
+[-|E] [CDBK] H:4408|70% M:4678|77% [6.83] [Oak]:9 K:24% [s] [SLCK, hchon, ANO, maso, clum, depr, wear, TLOOP, naus, AST] 
+20:17:45 (1) [Belaziel]: PAR(100%), clum(100%), 
+[Zax]: paralysis set to priority 25.
+[-|E] [CDBK] H:4408|70% M:4678|77% [6.83] [Oak]:9 K:24% [s] [SLCK, hchon, ANO, maso, clum, depr, wear, TLOOP, naus, AST] 
+20:17:45 (1) [Belaziel]: PAR(100%), clum(100%), 
+[Zax]: paralysis set to priority 5.
+[-|E] [CDBK] H:4408|70% M:4678|77% [6.83] [Oak]:9 K:24% [s] [SLCK, hchon, ANO, maso, clum, depr, wear, TLOOP, naus, AST] 
+20:17:45 (1) [Belaziel]: PAR(100%), clum(100%), 
+[Zax]: +Aff: dizziness.
+Your body trembles with weakness.
+You have been afflicted with dizziness.
+Your mind swims as dizziness overtakes you.
+[-|E] [CDBK] H:4408|70% M:4668|77% [6.83] [Oak]:9 K:24% [s] [dizz, SLCK, hchon, ANO, maso, clum, depr, wear, TLOOP, naus, AST] 
+20:17:46 (1) [Belaziel]: PAR(100%), clum(100%), 
+You may drink another health or mana elixir.
+[Sip Recov: 4.5s]
+[-|E] [CDBK] H:4408|70% M:4668|77% [6.83] [Oak]:9 K:24% [s] [dizz, SLCK, hchon, ANO, maso, clum, depr, wear, TLOOP, naus, AST] 
+20:17:46 (1) [Belaziel]: PAR(100%), clum(100%), 
+[Zax]: +Aff: paralysis.
+[Zax]: +Aff: parasite.
+[Zax]: +Aff: healthleech.
+--> Belaziel: eat bloodroot
+Belaziel eats a bloodroot leaf.
+--> Belaziel: touch amnesia
+--> Belaziel: stand
+--> Belaziel: put bomb in pack
+--> Belaziel: get body
+--> Belaziel: wipe scythe
+--> Belaziel: wield shield524649 scythe186067
+--> Belaziel: shadow attune Mystor to degeneration
+--> Belaziel: shadow instill scythe with leach
+--> Belaziel: chrono assert
+--> Belaziel: shadow reap Mystor curare
+Belaziel: Reap -> You
+You take 925 psychic, damage.
+You have been afflicted with paralysis.
+A prickly stinging overcomes your body, fading away into numbness.
+As the weapon strikes you, you feel your strength being leeched away.
+You have been afflicted with parasite.
+You feel your strength being leeched away.
+You have been afflicted with healthleech.
+Your health begins to drain away.
+--> Belaziel: assess Mystor
+--> Belaziel: contemplate Mystor
+[-|E] [CDBK] H:3483|55% M:4668|77% [6.83] [Oak]:9 K:34% [v] [dizz, SLCK, hchon, prst, ANO, maso, clum, depr, wear, PAR, TLOOP, hlch, naus, AST] -925h 
+20:17:46 (1) [Belaziel]: clum(100%), 
+Your mind is able to focus once again.
+[Focus Recov: 4.99s]
+[-|E] [CDBK] H:3483|55% M:4668|77% [6.83] [Oak]:9 K:34% [v] [dizz, SLCK, hchon, prst, ANO, maso, clum, depr, wear, PAR, TLOOP, hlch, naus, AST] 
+20:17:46 (1) [Belaziel]: clum(100%), 
+[Zax]: -Aff: masochism.
+[Curing]: FOCUS MIND
+You focus your mind intently on curing your mental maladies.
+You no longer enjoy pain.
+You have cured the masochism affliction.
+[Zax]: +Aff: lethargy.
+You have been afflicted with lethargy.
+You feel your energy robbed from you as lethargy overtakes you.
+Your will to keep fighting drains away.
+You take 352 psychic, damage.
+[-|E] [CDBK] H:3444|54% M:4068|67% [6.83] [Oak]:9 K:34% [v] [dizz, SLCK, hchon, prst, ANO, clum, depr, wear, PAR, TLOOP, leth, hlch, naus, AST] -434m 
+20:17:47 (1) [Belaziel]: clum(100%), 
+You have recovered balance on your legs.
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+[B|E] [CDBK] H:3444|54% M:4068|67% [6.83] [Oak]:9 K:34% [v] [dizz, SLCK, hchon, prst, ANO, clum, depr, wear, PAR, TLOOP, leth, hlch, naus, AST] 
+20:17:47 (1) [Belaziel]: clum(100%), 
+--> Belaziel: sip mana
+Belaziel takes a drink from a moonstone vial.
+[B|E] [CDBK] H:3444|54% M:4068|67% [6.83] [Oak]:9 K:34% [v] [dizz, SLCK, hchon, prst, ANO, clum, depr, wear, PAR, TLOOP, leth, hlch, naus, AST] 
+20:17:47 (1) [Belaziel]: clum(100%), 
+--> Belaziel: eat kelp
+Belaziel eats a piece of kelp.
+[B|E] [CDBK] H:3444|54% M:4068|67% [6.83] [Oak]:9 K:34% [v] [dizz, SLCK, hchon, prst, ANO, clum, depr, wear, PAR, TLOOP, leth, hlch, naus, AST] 
+20:17:48 (1) [Belaziel]: 
+[Zax]: +Aff: stupidity.
+[Zax]: +Aff: shadowmadness.
+[Zax]: +Aff: vertigo.
+--> Belaziel: touch amnesia
+--> Belaziel: stand
+--> Belaziel: put bomb in pack
+--> Belaziel: get body
+--> Belaziel: wipe scythe
+--> Belaziel: wield shield524649 scythe186067
+--> Belaziel: shadow attune Mystor to degeneration
+--> Belaziel: shadow instill scythe with madness
+--> Belaziel: chrono assert
+--> Belaziel: shadow reap Mystor aconite
+Belaziel: Reap -> You
+You take 925 psychic, damage.
+You have been afflicted with stupidity.
+Hmmmm. Why must everything be so difficult to figure out?
+Shadowmancy: Madness -> You
+You have been afflicted with shadowmadness.
+Your sanity begins to escape you.
+You have been afflicted with vertigo.
+The idea of heights makes you queasy suddenly.
+--> Belaziel: assess Mystor
+--> Belaziel: contemplate Mystor
+[B|E] [CDBK] H:2519|40% M:4068|67% [6.83] [Oak]:9 K:44% [v] [dizz, SLCK, vert, hchon, prst, ANO, SMAD, clum, depr, STUP, wear, PAR, TLOOP, leth, hlch, naus, AST] -925h 
+20:17:48 (1) [Belaziel]: 
+You drop to one knee.
+[B|E] [CDBK] H:2519|40% M:4068|67% [6.83] [Oak]:9 K:44% [v] [dizz, SLCK, vert, hchon, prst, ANO, SMAD, clum, depr, STUP, wear, PAR, TLOOP, leth, hlch, naus, AST] 
+20:17:49 (1) [Belaziel]: 
+Your mind is able to focus once again.
+[Focus Recov: 2.4s]
+[B|E] [CDBK] H:2519|40% M:4068|67% [6.83] [Oak]:9 K:44% [v] [dizz, SLCK, vert, hchon, prst, ANO, SMAD, clum, depr, STUP, wear, PAR, TLOOP, leth, hlch, naus, AST] 
+20:17:49 (1) [Belaziel]: 
+[Zax]: -Aff: dizziness.
+[Curing]: FOCUS MIND
+You focus your mind intently on curing your mental maladies.
+You are no longer dizzy.
+You have cured the dizziness affliction.
+[B|E] [CDBK] H:2519|40% M:3668|61% [6.83] [Oak]:9 K:44% [v] [SLCK, vert, hchon, prst, ANO, SMAD, clum, depr, STUP, wear, PAR, TLOOP, leth, hlch, naus, AST] -400m 
+20:17:49 (1) [Belaziel]: 
+You take 506 unblockable, damage.
+[B|E] [CDBK] H:2013|32% M:3668|61% [6.83] [Oak]:9 K:44% [v] [SLCK, vert, hchon, prst, ANO, SMAD, clum, depr, STUP, wear, PAR, TLOOP, leth, hlch, naus, AST] -506h 
+20:17:49 (1) [Belaziel]: 
+You pick your nose absently.
+[B|E] [CDBK] H:2013|32% M:3668|61% [6.83] [Oak]:9 K:44% [v] [SLCK, vert, hchon, prst, ANO, SMAD, clum, depr, STUP, wear, PAR, TLOOP, leth, hlch, naus, AST] 
+20:17:49 (1) [Belaziel]: 
+[Zax]: +Aff: impatience.
+You have been afflicted with impatience.
+You shuffle your feet noisily, suddenly bored.
+Your will to keep fighting drains away.
+You take 352 psychic, damage.
+[Zax]: -Def: vitality.
+[Zax]: +Aff: manaleech.
+--> Belaziel: parry right arm
+--> Belaziel: touch amnesia
+--> Belaziel: stand
+--> Belaziel: put bomb in pack
+--> Belaziel: get body
+--> Belaziel: wipe scythe
+--> Belaziel: wield shield524649 scythe186067
+--> Belaziel: shadow instill scythe with leach
+--> Belaziel: chrono assert
+--> Belaziel: shadow reap Mystor voyria
+Belaziel: Reap -> You
+You take 925 psychic, damage.
+A surge of rejuvenating energy floods your system, healing your wounds.
+As the weapon strikes you, you feel your strength being leeched away.
+You have been afflicted with manaleech.
+Your mana begins to drain away.
+As the scythe comes away, the writhing figure of your shadow clings to the blade.
+--> Belaziel: assess Mystor
+--> Belaziel: contemplate Mystor
+[B|E] [CDBK] H:3442|54% M:3198|53% [6.83] [Oak]:9 K:54% [true] [mleech, SLCK, vert, hchon, prst, ANO, IMP, SMAD, clum, depr, STUP, wear, PAR, TLOOP, leth, hlch, naus, AST] +1581h 
+20:17:51 (1) [Belaziel]: 
+A sinister laughter fills your ears, and you feel sanity slipping away...
+[B|E] [CDBK] H:3442|54% M:3133|52% [6.83] [Oak]:9 K:54% [true] [mleech, SLCK, vert, hchon, prst, ANO, IMP, SMAD, clum, depr, STUP, wear, PAR, TLOOP, leth, hlch, naus, AST] 
+20:17:51 (1) [Belaziel]: 
+[Zax]: +Aff: recklessness.
+[Zax]: +Aff: justice.
+[Zax]: +Aff: retribution.
+--> Belaziel: touch amnesia
+--> Belaziel: stand
+--> Belaziel: put bomb in pack
+--> Belaziel: get body
+--> Belaziel: wipe scythe
+--> Belaziel: wield shield524649 scythe186067
+--> Belaziel: shadow instill scythe with retribution
+--> Belaziel: chrono assert
+--> Belaziel: shadow reap Mystor eurypteria
+Belaziel: Reap -> You
+You take 925 psychic, damage.
+You have been afflicted with recklessness.
+You realise that your heroic actions can no longer continue unnoticed, and you take it upon yourself to rectify the situation.
+Shadowmancy: Retribution -> You
+You have been afflicted with justice.
+A set of scales appears over your head and one side quickly descends, as you feel an aura of justice surround you.
+You have been afflicted with retribution.
+A terrible sense of foreboding descends upon you.
+--> Belaziel: assess Mystor
+--> Belaziel: contemplate Mystor
+[B|E] [CDBK] H:6265|100% M:6012|100% [6.83] [Oak]:9 K:64% [true] [mleech, SLCK, vert, hchon, just, prst, ANO, IMP, SMAD, clum, depr, STUP, wear, rek, PAR, retr, TLOOP, leth, hlch, 
+naus, AST] +2823h +2509m 
+20:17:53 (1) [Belaziel]: 
+[Zax]: +Aff: agoraphobia.
+[Zax]: +Aff: dizziness.
+You feel madness creeping ever closer.
+You have been afflicted with agoraphobia.
+Terror descends upon you and your head swims - you must find shelter!
+Your body trembles with weakness.
+You have been afflicted with dizziness.
+Your mind swims as dizziness overtakes you.
+[B|E] [CDBK] H:6265|100% M:6012|100% [6.83] [Oak]:9 K:64% [true] [mleech, dizz, SLCK, vert, hchon, just, prst, ANO, IMP, SMAD, clum, depr, STUP, ago, wear, rek, PAR, retr, TLOOP, 
+leth, hlch, naus, AST] 
+20:17:54 (1) [Belaziel]: 
+Your mind is able to focus once again.
+[Focus Recov: 4.82s]
+[B|E] [CDBK] H:6265|100% M:6012|100% [6.83] [Oak]:9 K:64% [true] [mleech, dizz, SLCK, vert, hchon, just, prst, ANO, IMP, SMAD, clum, depr, STUP, ago, wear, rek, PAR, retr, TLOOP, 
+leth, hlch, naus, AST] 
+20:17:54 (1) [Belaziel]: 
+[B|E] [CDBK] H:6265|100% M:6012|100% [6.83] [Oak]:9 K:64% [true] [mleech, dizz, SLCK, vert, hchon, just, prst, ANO, IMP, SMAD, clum, depr, STUP, ago, wear, rek, PAR, retr, TLOOP, 
+leth, hlch, naus, AST] 
+20:17:54 (1) [Belaziel]: 
+[B|E] [CDBK] H:6265|100% M:6012|100% [6.83] [Oak]:9 K:64% [true] [mleech, dizz, SLCK, vert, hchon, just, prst, ANO, IMP, SMAD, clum, depr, STUP, ago, wear, rek, PAR, retr, TLOOP, 
+leth, hlch, naus, AST] 
+20:17:54 (1) [Belaziel]: 
+[Zax]: -Def: weathering.
+[Zax]: -Def: coldresist.
+[Zax]: -Def: resistance.
+[Zax]: -Def: insulation.
+[Zax]: -Def: electricresist.
+[Zax]: -Def: magicresist.
+[Zax]: -Def: toughness.
+[Zax]: -Def: projectiles.
+[Zax]: -Def: temperance.
+[Zax]: -Def: regeneration.
+[Zax]: -Def: boostedregeneration.
+[Zax]: -Def: kola.
+[Zax]: -Def: thirdeye.
+[Zax]: -Def: fireresist.
+[Zax]: -Def: mindnet.
+[Zax]: -Def: consciousness.
+[Zax]: -Def: dodging.
+[Zax]: -Def: insomnia.
+[Zax]: -Aff: insomnia.
+[Zax]: -Def: mindseye.
+[Zax]: -Def: deathsight.
+[Zax]: -Def: mindcloak.
+[Zax]: -Def: shikudoform.
+[Zax]: -Def: alertness.
+[Zax]: -Def: levitating.
+[Zax]: -Def: gripping.
+[Zax]: -Def: cloak.
+[Zax]: -Def: constitution.
+[Zax]: -Def: kaitrance.
+[Zax]: -Def: splitmind.
+[Zax]: -Def: lifevision.
+[Zax]: -Def: hyperfocus.
+[Zax]: -Def: avoid.
+[Zax]: -Def: kaiboost.
+[Zax]: -Aff: deafness.
+[Zax]: -Def: deafness.
+[Zax]: -Aff: blindness.
+[Zax]: -Def: blindness.
+[Zax]: -Aff: clumsiness.
+[Zax]: -Aff: timeloop.
+[Zax]: -Aff: weariness.
+[Zax]: -Aff: nausea.
+[Zax]: -Aff: depression.
+[Zax]: -Aff: asthma.
+[Zax]: -Aff: slickness.
+[Zax]: -Aff: hypochondria.
+[Zax]: -Aff: anorexia.
+[Zax]: -Aff: paralysis.
+[Zax]: -Aff: parasite.
+[Zax]: -Aff: healthleech.
+[Zax]: -Aff: lethargy.
+[Zax]: -Aff: stupidity.
+[Zax]: -Aff: shadowmadness.
+[Zax]: -Aff: vertigo.
+[Zax]: -Aff: impatience.
+[Zax]: -Aff: voyria.
+[Zax]: -Aff: manaleech.
+[Zax]: -Aff: recklessness.
+[Zax]: -Aff: justice.
+[Zax]: -Aff: retribution.
+[Zax]: -Aff: agoraphobia.
+[Zax]: -Aff: dizziness.
+--> Belaziel: touch amnesia
+--> Belaziel: stand
+--> Belaziel: put bomb in pack
+--> Belaziel: get body
+--> Belaziel: wipe scythe
+--> Belaziel: wield scythe186067 dagger455492
+--> Belaziel: unwield right
+Belaziel: Unwielded deSangre's spite (right)
+--> Belaziel: unwield left
+Belaziel: Unwielded a subtle forearm shield (left)
+Belaziel: Wielding deSangre's spite (left)
+Belaziel: Wielding Gattan'lier's hunger (right)
+--> Belaziel: intone tooros
+Drawing himself up to his full height, Belaziel speaks a terrible word of power.
+The piercing sound sends a spike of agony into your brain, threatening to rob you of conscious thought.
+Belaziel clutches at his head, face contorted in pain.
+--> Belaziel: shadow dictate Mystor
+Belaziel leans forward and whispers a single word into your ear: "Die".
+As you move to push him away, you realise that you cannot move. Cold hands wrap around your throat from behind and in a moment of horrified realisation you realise that your very 
+shadow has become the instrument of your end. The crackle of snapping bone is the final thing you hear before you are dropped, lifeless, to the ground.
+You have been slain by Belaziel.
+[Zax]: +8 Magnesium (1188).
+[Zax]: +3 Potash (752).
+[Zax]: +5 Plumbum (1100).
+[Zax]: +6 Aurum (1285).
+[Zax]: +5 Ferrum (993).
+[Zax]: +1 Cuprum (1768).
+[Zax]: +1 Argentum (1261).
+**********************************************************
+You have been defeated and are thrown out of the Arena.
+**********************************************************
+Colosseum Diabolus staging grounds. (indoors)
+A noxious, red-hued fog overwhelms the area with a thick, palpable vapour. There are 5 flail-wielding knights here. A runic totem is planted solidly in the ground. Khovroth 
+Agathon, Vanguard of His Legion is here. He wields a Shield of Absorption in his left hand and a crimson-hued daegger in his right.
+You see exits leading north, east, and out.
+Your combat rating decreases by -19.
