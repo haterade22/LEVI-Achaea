@@ -28,6 +28,7 @@ One line per page. Kept up to date by `/kb-ingest`.
 ## Combat (classes as they look in real fights)
 - [combat/shikudo.md](combat/shikudo.md): every Shikudo strike, damage and effect line from both sides (first vs later in a combo), light strikes, forms, kata, Telepathy, ASSESS, SHATTER, the Dispatch kill as done, and what our triggers record
 - [combat/runewarden-snb.md](combat/runewarden-snb.md): a sword-and-board Runewarden's round (slice, venom, shield strikes), her curing and runes, and the impale-disembowel kill
+- [combat/fights/](combat/fights/README.md): one write-up per combat log -- Mystor's six arena fights as a Shikudo against a Depthswalker, an Infernal (three), an Apostate and a Shaman, with the opponents' own typed commands (MIND SAPIENCE), their curing, every distinct game line, and lessons for our package.
 
 ## Meta
 - [README.md](README.md): how the KB works and how to add material
@@ -54,6 +55,7 @@ One line per page. Kept up to date by `/kb-ingest`.
 | raw/wiki/<Skill>.wiki (60) | Achaea wiki skill pages, raw wikitext | 2026-10-11 |
 | raw/logs/2026-10-11_shikudo-vs-runewarden-snb_attacker.txt | Combat log: a Shikudo kills a Runewarden by Dispatch (the monk's view; shared by the user) | 2026-10-11 |
 | raw/logs/2026-10-11_runewarden-snb-vs-shikudo_defender.txt | Combat log: a Runewarden kills a Shikudo by disembowel (her view; channel chat removed) | 2026-10-11 |
+| raw/logs/2026-10-11_mystor_*.txt (6) | Mystor's own arena fights as a Shikudo: against a Depthswalker, an Infernal (three times), an Apostate and a Shaman; five with MIND SAPIENCE on the opponent, so his typed commands show | 2026-10-11 |
 | raw/players/shikudo-2026-10-11.txt | Players in their own words: the user and Mystor on Shikudo, Telepathy, the mind lock and blackout | 2026-10-11 |
 | raw/guides/lock-types.txt | Community guide: lock types | 2026-10-10 |
 | raw/guides/active-and-passive-cures-with-fire-lines.txt | Community guide: what each class cure looks like | 2026-10-10 |

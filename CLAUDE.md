@@ -475,7 +475,8 @@ read `mmp.settings.mapsource`). `service` is an experimental live Crowdmap; `cro
   two fights, both sides: `kb/combat/shikudo.md`.
   - **Tracking** (v4.7.413-414, `test_shikudo_tracking.lua`): strike triggers 563-585 pair a strike
     line's START with the damage line up to two rows later (strike lines run to 147 columns);
-    effect-line triggers (`3rd_person_shikudo/`, `calls/`, 586) record what landed; 587 clears the
+    effect-line triggers (`3rd_person_shikudo/`, `calls/`, 586) record what landed (nervestrike's own
+    line, `3rd_person_shikudo/008`, since v4.7.415, so light nervestrikes count); 587 clears the
     `ignoreThirdPerson` dedupe flag at every strike. All but `calls/` only run while our own queued
     command's output is on screen (`queue_Scan` opens the groups, the prompt closes them).
   - **A strike line is not a hit:** it prints even when parried. `light` strikes and blows a
@@ -2272,7 +2273,9 @@ stored, and is always safe.
 **PvE bashing curing profile** (`ataxia/ataxia/008_Bash_Curing_Profile.lua`, v4.7.172): the
 default table (`001_Default_Curing_Prios.lua`) is tuned entirely for PvP, which loses bashers.
 Two balances are contended and the PvP ordering spends both on afflictions that do nothing to
-a denizen: **potash/moss shares the EATING balance with every cure-mineral**, and **mending/
+a denizen: **potash/moss shares the EATING balance with every cure-mineral** (QUESTIONED 2026-10-11:
+Mystor's client times moss on its own `[Moss Recov]`, and an Apostate ate plumbum and potash in the same
+second; `kb/CONFLICTS.md` #11), and **mending/
 restoration shares the SALVE balance with crackedribs/fractures/traumas**. So the PvE table
 inverts it — cure-channel blockers (anorexia/slickness/paralysis) > limbs at 4-6 (arms gate
 the attack, legs gate every escape) > damage math > salve competitors parked at 20 > junk

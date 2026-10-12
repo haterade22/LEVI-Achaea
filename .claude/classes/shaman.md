@@ -121,7 +121,7 @@ Utility aliases: `shstatus` (status), `shreset` (reset to group), `shspirits` (s
 Selected by `selectInvoke` priority; each requires a bound combat spirit (028:599-650).
 ```yaml
 bloodlet:    { spirit: teraile, effect: "haemophilia + start bleeding",  syntax: "invoke bloodlet <target>" }
-coagulation: { spirit: aspar,   effect: "convert bleed>=200 into an affliction", syntax: "invoke coagulation <aff>" }
+coagulation: { spirit: aspar,   effect: "convert bleed into an affliction (the game accepted it at bleed 120, Mystor's log 2026-10-11; our offense gates on 200)", syntax: "invoke coagulation <aff>" }
 relapse:     { spirit: syvis,   effect: "force aff to relapse after cure (paralysis is #1 target; skipped vs tree)", syntax: "invoke relapse <aff>" }
 soulscourge: { spirit: marak,   effect: "mana damage", syntax: "invoke soulscourge" }
 soulrend:    { spirit: maligus, effect: "higher mana damage; gated on manaleech/confusion/shyness/paranoia/dementia", syntax: "invoke soulrend" }

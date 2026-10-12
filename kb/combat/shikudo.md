@@ -82,7 +82,7 @@ are the **first** attack of a combo and when they **follow** another one.
 |---|---|---|---|---|---|
 | kuro | Dropping into a lower stance, you sweep <staff> at the left thigh of <T>. | Falling back into a low crouch, you lash out with a swift strike at the left thigh of <T>. | The staff cracks across the left thigh of <T>. | weariness; lethargy if already weary | 8.4% leg |
 | ruku | You whip <staff> at <T> in a controlled arc, bringing its length to crack against her torso. | You spin a full rotation, bringing <staff> around in a blur of motion to smash into the torso of <T>. (or "the right arm of <T>") | torso: <T> staggers as the staff cracks across her ribs, sweat breaking out upon her forehead. arm: The staff connects to the right arm with a resounding crack, the limb flopping uselessly. | torso: slickness. arm: clumsiness; healthleech if already clumsy | 8.4% |
-| nervestrike | You whip <staff> at the side of <T>'s neck. | (not seen) | none on the attacker's side | paralysis | 12.3% head |
+| nervestrike | You whip <staff> at the side of <T>'s neck. | (not seen) | "Horror overcomes the face of <T> as his body locks in paralysis." (Mystor's logs; recorded since v4.7.415) | paralysis | 12.3% head |
 | livestrike | Lunging forward, you drive the end of <staff> viciously into the solar plexus of <T>. | Turning with the motion, you channel the momentum of your previous strike into a thrust at the solar plexus of <T> with <staff>. | The breath of <T> leaves her in an explosive gasp as the end of the staff smashes home. | asthma | 12.3% torso |
 | hiru | Whirling <staff> in a tight arc, you bring the weapon around to crash into the side of the head of <T>. (ASSUMED: our trigger 575) | Snapping back into a ready stance, you whirl <staff> in a long sweep at the head of <T>. | The staff connects to the side of <T>'s head with a resounding crack. | dizziness; confusion too if prone (WIKI) | 8.6% head |
 | hiraku | Stepping forward, you drive <staff> at the face of <T>. (ASSUMED: our trigger 178) | Bracing your back foot, you lunge forward with <staff> at the face of <T>. | The staff smashes into the face of <T> with a sickening crunch. | anorexia, stuttering; a stun too if prone (WIKI) | 8.6% head |
@@ -253,6 +253,94 @@ unexplained "You are no longer stunned." may be that hidden kick. If the source 
 Settle it on our first MIND BLACKOUT. Claes sliced the torso to 104%, razed his shield and
 rebounding, then impaled and disembowelled him.
 
+## Mystor's six arena fights (2026-10-11, first pass)
+
+Mystor's own logs: `kb/raw/logs/2026-10-11_mystor_*` (how to read his client's output:
+`kb/raw/logs/README.md`). In five of the six he ran MIND SAPIENCE on the opponent, so the logs show
+the opponent's own typed commands (`--> Agathon: dsl Mystor left leg epteth epteth`). His plan, in
+his words (`kb/raw/players/shikudo-2026-10-11.txt`): Rain to 10 kata with two rounds of arm prep
+(frontkick to the arm, kuro, ruku: damage, prone, clumsiness, healthleech, weariness, lethargy),
+then Oak (asthma, slickness), then Willow for the lock.
+
+| Log | Opponent | Result | How it ended |
+|---|---|---|---|
+| EveP2TVe | Belaziel, Depthswalker | lost, about 49 s | SHADOW DICTATE: "Belaziel leans forward and whispers a single word into your ear: "Die"." |
+| FceAmb0o | Agathon, Infernal with two scimitars | won | three KAI CHOKEs took him to 249/7281 (3%); he died moments later |
+| LcJC-rJ5 | Agathon, Apostate | won | SPINKICK to the head (100%), then DISPATCH |
+| c.iJVmpL | Agathon, Infernal | won | MIND SCYTHE |
+| t54WWU6b | Agathon (first read: Shaman, from his curses and jinxes; no Sapience in this log) | lost, truelocked | "A roar of triumph bursts from Agathon and with horrified realization, you watch as he brings his whirling scimitar towards your neck, severing your head from your body." |
+| vNTjvghY | Agathon, Infernal | won | KAI CHOKE, then "Agathon collapses to the ground, his life snuffed out like a candle." |
+
+**Measured by his client** (`[Bal Spent]` / `[Eq Spent]` lines, all six logs; script output in the
+session scratchpad, `timings2.py`):
+- **Balance:** 2.1 s for every combo except in Willow (1.9 s, flashheel + hiraku + hiru, 15 times),
+  with dawnkick (2.8 s) and with spinkick (needle + spinkick + kuro, 3.7 s). A transition at the front
+  of a combo and a SHATTER inside one cost nothing extra. His commonest combos: Rain frontkick + kuro
+  + ruku (29 times; also frontkick + ruku + kuro/ruku), Oak nervestrike + risingkick + ruku / livestrike /
+  kuro, Gaital flashheel + kuro/ruku + ruku/jinzuku, Maelstrom risingkick + jinzuku + ruku.
+- **Equilibrium: Rain takes 0.72 of the wiki's figure and every other form 0.85.**
+
+  | Ability | Rain | Other forms | Wiki |
+  |---|---|---|---|
+  | MIND IMPATIENCE | 1.07 s (20) | 1.27 s (12) | 1.50 s |
+  | MIND PARALYSE | 1.44 s (26) | 1.70 s (2) | 2.00 s |
+  | MIND CONFUSE | 1.44 s (1) | 1.70 s (2) | 2.00 s |
+  | MIND HALLUCINATE | | 1.70 s (2) | 2.00 s |
+  | MIND THROW | 2.16 s (2) | | 3.00 s |
+  | MIND DISRUPT | 2.89 s (10) | 3.40 s (3) | 4.00 s |
+  | MIND SAPIENCE | 2.89 s (13) | 3.40 s (1) | 4.00 s |
+  | MIND SCYTHE | 2.89 s (1) | | 4.00 s |
+  | MIND BATTER | 2.70 s (1) | | 4.00 s |
+  | CURSEWARD | 2.89 s (12) | | |
+  | KAI CHOKE | | 3.40 s (4) | 4.00 s |
+  | KAI CRIPPLE | 2.89 s (1) | | |
+
+  0.85 everywhere is this character's own speed-up; Mystor says he has the quick-witted trait
+  (`.claude/classes/monk.md`). So Rain itself takes about another 15% off equilibrium (0.72 / 0.85).
+  BATTER's single 2.70 s reading fits neither ratio.
+- **Kata:** outside Rain no chain of his went past 12 (Oak, Gaital, Willow and Maelstrom each reached
+  exactly 12 in FceAmb0o); Rain reached 16 (LcJC-rJ5). Log 1's monk reached 13 in Oak, so 12 is his
+  habit or a soft limit, not a hard cap (CONFLICTS #8).
+
+**New lines (not in this page before):**
+- **Nervestrike does have a line naming the target:** "Horror overcomes the face of <T> as his body
+  locks in paralysis." (48 times, each right after his nervestrike, light ones included). This page
+  said it had none. Since v4.7.415 `3rd_person_shikudo/008` records paralysis from it.
+- **KAI CHOKE:** "<T> gasps and stumbles as an unseen force crushes the life breath out of him." It
+  was his finisher in two fights; in vNTjvghY the kill line followed: "<T> collapses to the ground, his
+  life snuffed out like a candle."
+- **KAI CRIPPLE** (LcJC-rJ5:2726): his client showed all four of the target's limbs at level 1 right
+  after (its own model, not game text).
+- **The Infernal's death aura:** "You feel sickened and weak by the aura of death emanating from <T>."
+  then "You take 547 magical, damage." (40 times). Before his attack he wipes his scimitar: "<T>
+  carefully wipes all the venoms off of a Scimitar of Eagles." and, as he attacks, "<T>'s aura of
+  weapons rebounding disappears.".
+
+**What the opponents typed** (Sapience; grouped per prompt, script `sapience.py`):
+- **Infernal** (FceAmb0o): `stand / wield scimitar<id> scimitar<id> / wipe scimitar<id> / dsl Mystor
+  left leg <venom> <venom> / assess Mystor`. The venom pairs were epteth + epteth, xentio + curare and
+  epseth + epseth, all on the left leg. Between attacks he cured with `eat aurum` (often after
+  `outr aurum`), `fitness`, `eat magnesium`, `smoke malachite`, `sip health`, `apply quicksilver` and
+  `touch tree`.
+- **Apostate** (LcJC-rJ5): `stand`, then `touch mercy / order loyals kill Mystor / g body / truestare /
+  deadeyes Mystor <aff> <aff> / contemplate Mystor`. The pairs were breach + sensitivity, impatience +
+  paralysis, stupid + paralysis and clumsy + paralysis. He cured with `eat aurum`, `eat magnesium`,
+  `outr potash / eat potash`, `focus mind`, `touch tree` and `sip health`. He also told his party what
+  Mystor had (`pt Mystor: impatience paralysis`).
+- **Depthswalker** (EveP2TVe):
+  - Opening: `touch amnesia / stand / wield shield scythe / chrono assert / chrono loop boost / chrono
+    dilation`, and a monolith (`artefact recall`, `chrono distortion`).
+  - Every attack: `touch amnesia / stand / put bomb in pack / get body / wipe scythe / wield shield
+    scythe / shadow attune Mystor to degeneration / shadow instill scythe with
+    <retribution|madness|depression> / chrono assert / shadow reap Mystor <venom> / assess Mystor /
+    contemplate Mystor`.
+  - The kill: `wield scythe dagger / unwield right / unwield left / intone tooros / shadow dictate
+    Mystor`.
+  - He cured with `eat kelp`, `touch tree` and `sip health`.
+
+Full write-up of each fight (timeline, the opponent's rotation and curing order, every distinct game
+line, lessons): [fights/](fights/README.md).
+
 ## What our triggers record (CONFIRMED-in-code, test_shikudo_tracking.lua)
 
 Our queued attacks open the "Affs Post Queue - Gated" and "3rd Person Shikudo" trigger groups
@@ -293,8 +381,12 @@ until the next prompt (`misc_scripts/001_Queue_Scanning.lua`, `318_Prompt_Trigge
   (`ataxia.vitals.kata = 0`, echo "-= reset kata =-") on "A kata of at least N must be performed",
   and `basher/002_Class_Bashing.lua` (2361, 2620) relies on it; log 1 shows the game KEEPS the chain
   (phase 2).
-- **Still not recorded:** light or absorbed **nervestrike** (paralysis) and **ruku to the arm**
-  (clumsiness, healthleech), which have no target-named effect line; **dawnkick**'s epilepsy
+- **Nervestrike's own effect line** (`3rd_person_shikudo/008`, v4.7.415) records paralysis, so a light
+  or absorbed nervestrike is recorded too; with a damage line, 563 records it and sets the dedupe flag.
+- **The target's CONCENTRATE** ("<T>'s eyes lose their focus suddenly.", trigger 788, v4.7.415) clears
+  `disrupted`, which `telepathy_tekura/007` used to keep for a flat 10 s.
+- **Still not recorded:** light or absorbed **ruku to the arm** (clumsiness, healthleech), which has no
+  target-named effect line; **dawnkick**'s epilepsy
   (line not captured); and target **stuns** (no duration is known). The fix is to hold a strike
   as pending until the next strike or the prompt and drop it on a parry, fumble or dodge line
   (planned with the offense rework, `docs/plans/shikudo-offense-review-2026-10-11.md`).

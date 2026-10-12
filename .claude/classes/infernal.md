@@ -4,7 +4,7 @@
 - **Type**: Knight
 - **Combat Style**: Limb | Affliction (depends on spec)
 - **Difficulty**: Medium
-- **Lock Affliction**: Weariness (blocks Fitness passive cure)
+- **Lock Affliction**: Weariness (blocks FITNESS, a typed command rather than a passive: 46 sends in one of Mystor's logs; "Your body is too weary to perform such a feat.")
 
 ## Skills
 ```yaml
@@ -500,6 +500,7 @@ level_1_break:
   sources:
     - "Epteth venom (arm break level 1)"
     - "Epseth venom (leg break level 1)"
+    - "Epteth/epseth break the LEFT limb first, then the right, whatever limb the DSL aims at; one mending application (or the tree) cures each (Mystor's logs, 2026-10-11)"
   effect: "Limb is 'withered' - counts for vivisect requirement"
   cure: "Single restoration application (4s salve balance)"
 

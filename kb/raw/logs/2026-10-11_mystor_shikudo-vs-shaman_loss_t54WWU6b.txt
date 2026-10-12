@@ -1,0 +1,3806 @@
+Your target is now: Agathon (an adventurer)
+Agathon is now one of your enemies.
+[B|E] [CDBK] H:6265|100% M:5594|98% [3] [Rain]:0 K:0% 
+10:28:44 (0) [Agathon]: 
+pt starting mind lock on Agathon
+You: Mindlock (start) -> Agathon
+[B|E] [CDBK] H:6265|100% M:5594|98% [3] [Rain]:0 K:0% 
+10:28:44 (0) [Agathon]: 
+You are not the member of any party.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:0% 
+10:28:44 (0) [Agathon]: 
+Tendrils of blackness spew forth from the surface of the mirror, pulling you beneath its sheen surface. Pain pierces your mind. Just as you succumb to the terror, you awake, and 
+you find yourself within a forbidding forest.
+You are moved by an iron-rimmed mirror.
+Corroded meadow.
+The stars twinkle in the clear night sky. An ornate mirror stands here, its silver face reflecting cold light.
+You see exits leading north, east, south, and west.
+[B|E] [CDBK] H:6265|100% M:5662|99% [3] [Rain]:0 K:0% 
+10:28:44 (0) [Agathon]: mind cease
+You cease attempting to initiate a mindlock.
+[B|E] [CDBK] H:6265|100% M:5665|99% [3] [Rain]:0 K:0% 
+10:28:46 (0) [Agathon]: 
+The face of Agathon appears in the mirror, warping as he steps through it.
+Mindnet: Agathon has entered the area.
+Alertness: Agathon has entered Corroded meadow at your location.
+[here - Agathon (1)]
+[B|E] [CDBK] H:6265|100% M:5601|98% [3] [Rain]:0 K:0% 
+10:29:03 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+Agathon's aura of weapons rebounding disappears.
+Agathon points an imperious finger at you.
+You have been afflicted with paralysis.
+Agathon: Curse -> You
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5591|98% [3] [Rain]:0 K:3% [PAR] Bl:40 
+10:29:04 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+A great gurgling sound is heard as Agathon takes a long drag from an enamel bubble pipe. A series of shining bubbles erupt from the bowl of his pipe.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5511|97% [3] [Rain]:0 K:3% 
+10:29:04 (0) [Agathon]: 
+[Zax]: -1 Magnesium (812).
+[B|E] [CDBK] H:6265|100% M:5511|97% [3] [Rain]:0 K:3% 
+10:29:04 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+You have been afflicted with paralysis.
+Agathon: Curse -> You
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5443|95% [3] [Rain]:0 K:6% [PAR] Bl:40 
+10:29:05 (0) [Agathon]: 
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5363|94% [3] [Rain]:0 K:6% [PAR] 
+10:29:05 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.57s]
+[B|E] [CDBK] H:6265|100% M:5438|95% [3] [Rain]:0 K:6% [PAR] 
+10:29:06 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6265|100% M:5438|95% [3] [Rain]:0 K:6% 
+10:29:06 (0) [Agathon]: 
+[Zax]: +Aff: haemophilia.
+You have been afflicted with haemophilia.
+Agathon: Curse -> You
+You sense a subtle change deep within.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5438|95% [3] [Rain]:0 K:9% [haem] Bl:40 
+10:29:06 (0) [Agathon]: 
+[Zax]: -1 Magnesium (811).
+[B|E] [CDBK] H:6265|100% M:5438|95% [3] [Rain]:0 K:9% [haem] Bl:40 
+10:29:06 (0) [Agathon]: 
+[Zax]: -Aff: haemophilia.
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Your blood regains its ability to clot.
+You have cured the haemophilia affliction.
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5358|94% [3] [Rain]:0 K:9% 
+10:29:06 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+You have been afflicted with paralysis.
+Agathon: Curse -> You
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+Agathon: Invoke Relapse -> You
+[B|E] [CDBK] H:6265|100% M:5358|94% [3] [Rain]:0 K:12% [PAR] Bl:40 
+10:29:07 (0) [Agathon]: 
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5278|93% [3] [Rain]:0 K:12% [PAR] 
+10:29:07 (0) [Agathon]: 
+The bubbles spewn from an enamel bubble pipe burst. *POP*  *POP*   *POP*
+[B|E] [CDBK] H:6265|100% M:5278|93% [3] [Rain]:0 K:12% [PAR] 
+10:29:07 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.59s]
+[B|E] [CDBK] H:6265|100% M:5278|93% [3] [Rain]:0 K:12% [PAR] 
+10:29:07 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6265|100% M:5278|93% [3] [Rain]:0 K:12% 
+10:29:08 (0) [Agathon]: 
+[Zax]: -1 Magnesium (810).
+[B|E] [CDBK] H:6265|100% M:5278|93% [3] [Rain]:0 K:12% 
+10:29:08 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+You have been afflicted with paralysis.
+Agathon: Curse -> You
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:15% [PAR] Bl:40 +394m 
+10:29:09 (0) [Agathon]: 
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5592|98% [3] [Rain]:0 K:15% [PAR] 
+10:29:09 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.48s]
+[B|E] [CDBK] H:6265|100% M:5512|97% [3] [Rain]:0 K:15% [PAR] 
+10:29:09 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6265|100% M:5512|97% [3] [Rain]:0 K:15% 
+10:29:09 (0) [Agathon]: 
+[Zax]: -1 Magnesium (809).
+[B|E] [CDBK] H:6265|100% M:5512|97% [3] [Rain]:0 K:15% 
+10:29:09 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+Horror overcomes you as you realise that the curse of paralysis has manifested upon you once again.
+You have been afflicted with paralysis.
+A prickly stinging overcomes your body, fading away into numbness.
+[B|E] [CDBK] H:6265|100% M:5512|97% [3] [Rain]:0 K:15% [PAR] 
+10:29:09 (0) [Agathon]: 
+[Zax]: +Aff: haemophilia.
+You have been afflicted with haemophilia.
+Agathon: Curse -> You
+You sense a subtle change deep within.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5512|97% [3] [Rain]:0 K:18% [haem, PAR] Bl:40 
+10:29:10 (0) [Agathon]: 
+[Zax]: +Aff: weariness.
+Agathon: Jinx -> You
+A prickly stinging overcomes your body, fading away into numbness.
+You have been afflicted with weariness.
+Your limbs grow heavy and you groan feebly.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5512|97% [3] [Rain]:0 K:22% [haem, wear, PAR] Bl:120 
+10:29:10 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.57s]
+[B|E] [CDBK] H:6265|100% M:5512|97% [3] [Rain]:0 K:22% [haem, wear, PAR] Bl:120 
+10:29:11 (0) [Agathon]: 
+You take 120 raw, damage.
+You bleed 120 health.
+[B|E] [CDBK] H:6145|98% M:5512|97% [3] [Rain]:0 K:22% [haem, wear, PAR] Bl:120 -120h 
+10:29:11 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6145|98% M:5512|97% [3] [Rain]:0 K:22% [haem, wear] Bl:120 
+10:29:11 (0) [Agathon]: 
+[Zax]: -1 Magnesium (808).
+[B|E] [CDBK] H:6145|98% M:5512|97% [3] [Rain]:0 K:22% [haem, wear] Bl:120 
+10:29:11 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.44s]
+[B|E] [CDBK] H:6145|98% M:5512|97% [3] [Rain]:0 K:22% [haem, wear] Bl:120 
+10:29:12 (0) [Agathon]: 
+[Zax]: -Aff: haemophilia.
+[Curing]: EAT FERRUM
+You eat a ferrum flake.
+Your blood regains its ability to clot.
+You have cured the haemophilia affliction.
+[Curing]: CLOT 120
+You clot your wounds 6 times.
+[B|E] [CDBK] H:6145|98% M:5272|92% [3] [Rain]:0 K:22% [wear] -240m 
+10:29:12 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+You have been afflicted with paralysis.
+Agathon: Curse -> You
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6145|98% M:5272|92% [3] [Rain]:0 K:25% [wear, PAR] Bl:40 
+10:29:13 (0) [Agathon]: 
+[Zax]: -1 Ferrum (1153).
+[B|E] [CDBK] H:6145|98% M:5272|92% [3] [Rain]:0 K:25% [wear, PAR] Bl:40 
+10:29:13 (0) [Agathon]: 
+You suddenly perceive the vague outline of an aura of rebounding around Agathon.
+[B|E] [CDBK] H:6145|98% M:5272|92% [3] [Rain]:0 K:25% [wear, PAR] Bl:40 
+10:29:13 (0) [Agathon]: 
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6145|98% M:5192|91% [3] [Rain]:0 K:25% [wear, PAR] 
+10:29:13 (0) [Agathon]: 
+[Zax]: +Aff: haemophilia.
+Agathon's aura of weapons rebounding disappears.
+You have been afflicted with haemophilia.
+Agathon: Curse -> You
+You sense a subtle change deep within.
+A dull ache builds behind your eyes.
+Agathon: Invoke Bloodlet -> You
+[B|E] [CDBK] H:6145|98% M:5124|90% [3] [Rain]:0 K:28% [haem, wear, PAR] Bl:293 
+10:29:13 (0) [Agathon]: 
+A great gurgling sound is heard as Agathon takes a long drag from an enamel bubble pipe. A series of shining bubbles erupt from the bowl of his pipe.
+[B|E] [CDBK] H:6145|98% M:5124|90% [3] [Rain]:0 K:28% [haem, wear, PAR] Bl:293 
+10:29:14 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.54s]
+[B|E] [CDBK] H:6145|98% M:5114|90% [3] [Rain]:0 K:28% [haem, wear, PAR] Bl:293 
+10:29:14 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6145|98% M:5114|90% [3] [Rain]:0 K:28% [haem, wear] Bl:293 
+10:29:14 (0) [Agathon]: 
+[Zax]: -1 Magnesium (807).
+[B|E] [CDBK] H:6145|98% M:5114|90% [3] [Rain]:0 K:28% [haem, wear] Bl:293 
+10:29:14 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+[Zax]: +Aff: impatience.
+Agathon: Jinx -> You
+You have been afflicted with paralysis.
+A prickly stinging overcomes your body, fading away into numbness.
+You have been afflicted with impatience.
+You shuffle your feet noisily, suddenly bored.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5014|88% [3] [Rain]:0 K:32% [haem, IMP, wear, PAR] Bl:373 
+10:29:15 (0) [Agathon]: 
+You are:
+blind.
+deaf.
+wearied in body.
+afflicted by haemophilia.
+paralysed.
+impatient.
+bleeding for 373 health.
+[Eq Spent: 0.72s]
+[B|-] [CDBK] H:6265|100% M:5014|88% [3] [Rain]:0 K:32% [haem, IMP, wear, PAR] Bl:373 
+10:29:15 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.45s]
+[B|-] [CDBK] H:6265|100% M:5089|89% [3] [Rain]:0 K:32% [haem, IMP, wear, PAR] Bl:373 
+10:29:16 (0) [Agathon]: 
+You have recovered equilibrium.
+[Eq Recov: 0.65s]
+[B|E] [CDBK] H:6265|100% M:5467|96% [3] [Rain]:0 K:32% [haem, IMP, wear, PAR] Bl:373 +378m 
+10:29:16 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6265|100% M:5467|96% [3] [Rain]:0 K:32% [haem, IMP, wear] Bl:373 
+10:29:16 (0) [Agathon]: 
+[Zax]: -1 Magnesium (806).
+[B|E] [CDBK] H:6265|100% M:5467|96% [3] [Rain]:0 K:32% [haem, IMP, wear] Bl:373 
+10:29:16 (0) [Agathon]: 
+You take 373 raw, damage.
+You bleed 373 health.
+[B|E] [CDBK] H:5892|94% M:5467|96% [3] [Rain]:0 K:22% [haem, IMP, wear] Bl:373 -373h 
+10:29:16 (0) [Agathon]: 
+The bubbles spewn from an enamel bubble pipe burst. *POP*  *POP*   *POP*
+[B|E] [CDBK] H:5892|94% M:5467|96% [3] [Rain]:0 K:22% [haem, IMP, wear] Bl:373 
+10:29:17 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+You have been afflicted with paralysis.
+Agathon: Curse -> You
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:5892|94% M:5467|96% [3] [Rain]:0 K:25% [haem, IMP, wear, PAR] Bl:413 
+10:29:17 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.55s]
+[B|E] [CDBK] H:5892|94% M:5401|95% [3] [Rain]:0 K:25% [haem, IMP, wear, PAR] Bl:413 
+10:29:17 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:5892|94% M:5401|95% [3] [Rain]:0 K:25% [haem, IMP, wear] Bl:413 
+10:29:17 (0) [Agathon]: 
+[Zax]: -1 Magnesium (805).
+[B|E] [CDBK] H:5892|94% M:5401|95% [3] [Rain]:0 K:25% [haem, IMP, wear] Bl:413 
+10:29:18 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+You have been afflicted with paralysis.
+Agathon: Curse -> You
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:5892|94% M:5401|95% [3] [Rain]:0 K:28% [haem, IMP, wear, PAR] Bl:453 
+10:29:18 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.51s]
+[B|E] [CDBK] H:6205|99% M:5662|99% [3] [Rain]:0 K:28% [haem, IMP, wear, PAR] Bl:453 +313h +261m 
+10:29:19 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6205|99% M:5662|99% [3] [Rain]:0 K:28% [haem, IMP, wear] Bl:453 
+10:29:19 (0) [Agathon]: 
+[Zax]: +Aff: asthma.
+You have been afflicted with asthma.
+Agathon: Curse -> You
+You feel a tightening sensation grow in your lungs.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6205|99% M:5662|99% [3] [Rain]:0 K:31% [haem, IMP, wear, AST] Bl:493 
+10:29:19 (0) [Agathon]: 
+[Zax]: -1 Magnesium (804).
+[B|E] [CDBK] H:6205|99% M:5662|99% [3] [Rain]:0 K:31% [haem, IMP, wear, AST] Bl:493 
+10:29:19 (0) [Agathon]: 
+[Zax]: asthma set to priority 1.
+[B|E] [CDBK] H:6205|99% M:5662|99% [3] [Rain]:0 K:31% [haem, IMP, wear, AST] Bl:493 
+10:29:19 (0) [Agathon]: 
+You may utilise the tree tattoo again.
+[Tree Recov: 13.97s]
+[B|E] [CDBK] H:6205|99% M:5662|99% [3] [Rain]:0 K:31% [haem, IMP, wear, AST] Bl:493 
+10:29:20 (0) [Agathon]: 
+[Zax]: +Aff: anorexia.
+[Zax]: +Aff: slickness.
+[Zax]: -Def: fangbarrier.
+You have been afflicted with anorexia.
+Agathon: Curse -> You
+The idea of eating or drinking is repulsive to you.
+A dull ache builds behind your eyes.
+Agathon: Invoke Coagulation -> You
+You have been afflicted with slickness.
+The protective covering coating your skin sloughs off.
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+[B|E] [CDBK] H:6205|99% M:5662|99% [3] [Rain]:0 K:34% [h] [haem, SLCK, ANO, IMP, wear, AST] Bl:393 
+10:29:20 (0) [Agathon]: 
+[Zax]: -Aff: slickness.
+[Zax]: -Aff: anorexia.
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Your glands cease their oily secretion.
+You have cured the slickness affliction.
+[Curing]: APPLY EPIDERMAL TO BODY
+You take out some salve and quickly rub it on your body.
+Food is no longer repulsive to you.
+You have cured the anorexia affliction.
+[Curing]: OUTR QUICKSILVER
+[Zax]: -1 Quicksilver (759).
+[Curing]: APPLY QUICKSILVER
+You apply a quicksilver droplet to yourself.
+[B|E] [CDBK] H:6205|99% M:5662|99% [3] [Rain]:0 K:34% [haem, IMP, wear, AST] Bl:393 
+10:29:20 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.55s]
+[B|E] [CDBK] H:6205|99% M:5662|99% [3] [Rain]:0 K:34% [haem, IMP, wear, AST] Bl:393 
+10:29:21 (0) [Agathon]: 
+[Zax]: -Aff: weariness.
+[Curing]: EAT AURUM
+You eat an aurum flake.
+Your limbs strengthen and you feel stronger.
+You have cured the weariness affliction.
+[B|E] [CDBK] H:6265|100% M:5562|98% [3] [Rain]:0 K:34% [haem, IMP, AST] Bl:393 -100m 
+10:29:21 (0) [Agathon]: 
+[Zax]: -Aff: asthma.
+You inhale deeply, purging yourself of your asthmatic condition.
+[Bal Spent: 2.8s]
+[-|E] [CDBK] H:6265|100% M:5562|98% [3] [Rain]:0 K:34% [haem, IMP] Bl:393 
+10:29:21 (0) [Agathon]: 
+[Zax]: -1 Aurum (933).
+[-|E] [CDBK] H:6265|100% M:5562|98% [3] [Rain]:0 K:34% [haem, IMP] Bl:393 
+10:29:21 (0) [Agathon]: 
+[Zax]: paralysis set to priority 25.
+[Zax]: asthma set to priority 12.
+[-|E] [CDBK] H:6265|100% M:5562|98% [3] [Rain]:0 K:34% [haem, IMP] Bl:393 
+10:29:21 (0) [Agathon]: 
+You may apply another salve to yourself.
+[Salve Recov: 0.93s]
+[-|E] [CDBK] H:6265|100% M:5562|98% [3] [Rain]:0 K:34% [haem, IMP] Bl:393 
+10:29:21 (0) [Agathon]: 
+You take 393 raw, damage.
+You bleed 393 health.
+[-|E] [CDBK] H:5872|93% M:5496|96% [3] [Rain]:0 K:34% [haem, IMP] Bl:393 -393h 
+10:29:22 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+[Zax]: +Aff: weariness.
+Agathon: Jinx -> You
+You have been afflicted with paralysis.
+A prickly stinging overcomes your body, fading away into numbness.
+You have been afflicted with weariness.
+Your limbs grow heavy and you groan feebly.
+A dull ache builds behind your eyes.
+[-|E] [CDBK] H:5872|93% M:5496|96% [3] [Rain]:0 K:38% [haem, IMP, wear, PAR] Bl:473 
+10:29:22 (0) [Agathon]: 
+[Zax]: paralysis set to priority 5.
+[-|E] [CDBK] H:5872|93% M:5496|96% [3] [Rain]:0 K:38% [haem, IMP, wear, PAR] Bl:473 
+10:29:22 (0) [Agathon]: 
+You suddenly perceive the vague outline of an aura of rebounding around Agathon.
+[-|E] [CDBK] H:5872|93% M:5496|96% [3] [Rain]:0 K:38% [haem, IMP, wear, PAR] Bl:473 
+10:29:22 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.52s]
+[-|E] [CDBK] H:5872|93% M:5496|96% [3] [Rain]:0 K:38% [haem, IMP, wear, PAR] Bl:473 
+10:29:22 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[-|E] [CDBK] H:5872|93% M:5496|96% [3] [Rain]:0 K:38% [haem, IMP, wear] Bl:473 
+10:29:22 (0) [Agathon]: 
+[Zax]: -1 Magnesium (803).
+[-|E] [CDBK] H:5872|93% M:5496|96% [3] [Rain]:0 K:38% [haem, IMP, wear] Bl:473 
+10:29:23 (0) [Agathon]: 
+You have recovered balance on all limbs.
+[Bal Recov: 2.7s]
+Your body is too weary to perform such a feat.
+[B|E] [CDBK] H:5872|93% M:5496|96% [3] [Rain]:0 K:38% [haem, IMP, wear] Bl:473 
+10:29:24 (0) [Agathon]: 
+Agathon's aura of weapons rebounding disappears.
+You shuffle your feet noisily, suddenly bored.
+Agathon: Curse -> You
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:5872|93% M:5672|100% [3] [Rain]:0 K:41% [haem, IMP, wear] Bl:513 +176m 
+10:29:24 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.54s]
+[B|E] [CDBK] H:5872|93% M:5662|99% [3] [Rain]:0 K:41% [haem, IMP, wear] Bl:513 
+10:29:24 (0) [Agathon]: 
+[Zax]: -Aff: haemophilia.
+Agathon takes a long drag off an enamel bubble pipe.
+[Curing]: EAT FERRUM
+You eat a ferrum flake.
+Your blood regains its ability to clot.
+You have cured the haemophilia affliction.
+[Curing]: CLOT 513
+You clot your wounds 26 times.
+[Curing]: SIP MANA
+You take a drink from an amethyst vial.
+Your mind feels stronger and more alert.
+[B|E] [CDBK] H:5872|93% M:5220|92% [3] [Rain]:0 K:41% [IMP, wear] -442m 
+10:29:24 (0) [Agathon]: 
+[Zax]: -1 Ferrum (1152).
+[B|E] [CDBK] H:5872|93% M:5220|92% [3] [Rain]:0 K:41% [IMP, wear] 
+10:29:24 (0) [Agathon]: 
+[Zax]: +Aff: haemophilia.
+You have been afflicted with haemophilia.
+Agathon: Curse -> You
+You sense a subtle change deep within.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:5872|93% M:5220|92% [3] [Rain]:0 K:44% [haem, IMP, wear] Bl:40 
+10:29:25 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.48s]
+[B|E] [CDBK] H:5872|93% M:5153|90% [3] [Rain]:0 K:44% [haem, IMP, wear] Bl:40 
+10:29:26 (0) [Agathon]: 
+[Zax]: -Aff: haemophilia.
+[Curing]: EAT FERRUM
+You eat a ferrum flake.
+Your blood regains its ability to clot.
+You have cured the haemophilia affliction.
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6185|98% M:5148|90% [3] [Rain]:0 K:44% [IMP, wear] +313h 
+10:29:26 (0) [Agathon]: 
+[Zax]: -1 Ferrum (1151).
+[B|E] [CDBK] H:6185|98% M:5148|90% [3] [Rain]:0 K:44% [IMP, wear] 
+10:29:26 (0) [Agathon]: 
+[Zax]: +Aff: haemophilia.
+You shuffle your feet noisily, suddenly bored.
+Agathon: Curse -> You
+A dull ache builds behind your eyes.
+Agathon: Invoke Bloodlet -> You
+You have been afflicted with haemophilia.
+[B|E] [CDBK] H:6185|98% M:5148|90% [3] [Rain]:0 K:47% [haem, IMP, wear] Bl:40 
+10:29:26 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.5s]
+[B|E] [CDBK] H:6265|100% M:5048|88% [3] [Rain]:0 K:47% [haem, IMP, wear] Bl:40 -100m 
+10:29:27 (0) [Agathon]: 
+[Zax]: -Aff: haemophilia.
+[Curing]: EAT FERRUM
+You eat a ferrum flake.
+Your blood regains its ability to clot.
+You have cured the haemophilia affliction.
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:4968|87% [3] [Rain]:0 K:47% [IMP, wear] 
+10:29:27 (0) [Agathon]: 
+[Zax]: -1 Ferrum (1150).
+[B|E] [CDBK] H:6265|100% M:4968|87% [3] [Rain]:0 K:47% [IMP, wear] 
+10:29:27 (0) [Agathon]: 
+[Zax]: +Aff: asthma.
+Agathon: Jinx -> You
+You shuffle your feet noisily, suddenly bored.
+You have been afflicted with asthma.
+You feel a tightening sensation grow in your lungs.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:4968|87% [3] [Rain]:0 K:51% [IMP, wear, AST] Bl:80 
+10:29:28 (0) [Agathon]: 
+[Zax]: asthma set to priority 1.
+[B|E] [CDBK] H:6265|100% M:4968|87% [3] [Rain]:0 K:51% [IMP, wear, AST] Bl:80 
+10:29:28 (0) [Agathon]: 
+[Curing]: CLOT 80
+You clot your wounds 4 times.
+[B|E] [CDBK] H:6265|100% M:4808|84% [3] [Rain]:0 K:51% [IMP, wear, AST] -160m 
+10:29:28 (0) [Agathon]: diag
+You are:
+blind.
+deaf.
+impatient.
+wearied in body.
+afflicted by horrible asthma.
+[Eq Spent: 0.72s]
+[B|-] [CDBK] H:6265|100% M:4808|84% [3] [Rain]:0 K:51% [IMP, wear, AST] 
+10:29:28 (0) [Agathon]: 
+You may drink another health or mana elixir.
+[Sip Recov: 4.48s]
+[B|-] [CDBK] H:6265|100% M:4808|84% [3] [Rain]:0 K:51% [IMP, wear, AST] 
+10:29:29 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.49s]
+[B|-] [CDBK] H:6265|100% M:5091|89% [3] [Rain]:0 K:51% [IMP, wear, AST] +283m 
+10:29:29 (0) [Agathon]: 
+[Zax]: -Aff: asthma.
+[Curing]: EAT AURUM
+You eat an aurum flake.
+Your bronchial tubes open up and your asthma is cured.
+You have cured the asthma affliction.
+[B|-] [CDBK] H:6265|100% M:5081|89% [3] [Rain]:0 K:51% [IMP, wear] 
+10:29:29 (0) [Agathon]: 
+You have recovered equilibrium.
+[Eq Recov: 0.61s]
+[B|E] [CDBK] H:6265|100% M:5081|89% [3] [Rain]:0 K:51% [IMP, wear] 
+10:29:29 (0) [Agathon]: 
+[Zax]: asthma set to priority 12.
+[B|E] [CDBK] H:6265|100% M:5081|89% [3] [Rain]:0 K:51% [IMP, wear] 
+10:29:29 (0) [Agathon]: 
+[Zax]: -1 Aurum (932).
+[B|E] [CDBK] H:6265|100% M:5081|89% [3] [Rain]:0 K:51% [IMP, wear] 
+10:29:29 (0) [Agathon]: 
+[Zax]: +Aff: haemophilia.
+You have been afflicted with haemophilia.
+Agathon: Curse -> You
+You sense a subtle change deep within.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5014|88% [3] [Rain]:0 K:54% [haem, IMP, wear] Bl:40 
+10:29:30 (0) [Agathon]: 
+[Zax]: +Def: fangbarrier.
+The quicksilver hardens into a supple metallic shell.
+[B|E] [CDBK] H:6265|100% M:5014|88% [3] [Rain]:0 K:54% [haem, IMP, wear] Bl:40 
+10:29:30 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.52s]
+[B|E] [CDBK] H:6265|100% M:5014|88% [3] [Rain]:0 K:54% [haem, IMP, wear] Bl:40 
+10:29:30 (0) [Agathon]: 
+Your limbs grow heavy and you groan feebly.
+Agathon: Curse -> You
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5014|88% [3] [Rain]:0 K:57% [haem, IMP, wear] Bl:80 
+10:29:30 (0) [Agathon]: 
+You may purge your lungs once again.
+[B|E] [CDBK] H:6265|100% M:5014|88% [3] [Rain]:0 K:57% [haem, IMP, wear] Bl:80 
+10:29:31 (0) [Agathon]: 
+[Zax]: -Aff: haemophilia.
+[Curing]: EAT FERRUM
+You eat a ferrum flake.
+Your blood regains its ability to clot.
+You have cured the haemophilia affliction.
+[Curing]: CLOT 80
+You clot your wounds 4 times.
+[B|E] [CDBK] H:6265|100% M:4854|85% [3] [Rain]:0 K:57% [IMP, wear] -160m 
+10:29:31 (0) [Agathon]: 
+[Zax]: -1 Ferrum (1149).
+[B|E] [CDBK] H:6265|100% M:4854|85% [3] [Rain]:0 K:57% [IMP, wear] 
+10:29:31 (0) [Agathon]: 
+[Zax]: +Aff: haemophilia.
+You have been afflicted with haemophilia.
+Agathon: Curse -> You
+You sense a subtle change deep within.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:4854|85% [3] [Rain]:0 K:60% [haem, IMP, wear] Bl:40 
+10:29:31 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.5s]
+[B|E] [CDBK] H:6265|100% M:5232|92% [3] [Rain]:0 K:60% [haem, IMP, wear] Bl:40 
+10:29:32 (0) [Agathon]: 
+[Zax]: -Aff: haemophilia.
+[Curing]: EAT FERRUM
+You eat a ferrum flake.
+Your blood regains its ability to clot.
+You have cured the haemophilia affliction.
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5152|90% [3] [Rain]:0 K:60% [IMP, wear] 
+10:29:32 (0) [Agathon]: 
+[Zax]: -1 Ferrum (1148).
+[B|E] [CDBK] H:6265|100% M:5152|90% [3] [Rain]:0 K:60% [IMP, wear] 
+10:29:32 (0) [Agathon]: 
+You suddenly perceive the vague outline of an aura of rebounding around Agathon.
+[B|E] [CDBK] H:6265|100% M:5152|90% [3] [Rain]:0 K:60% [IMP, wear] 
+10:29:32 (0) [Agathon]: 
+Agathon's aura of weapons rebounding disappears.
+You shuffle your feet noisily, suddenly bored.
+Agathon: Curse -> You
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5152|90% [3] [Rain]:0 K:63% [IMP, wear] Bl:40 
+10:29:33 (0) [Agathon]: 
+A great gurgling sound is heard as Agathon takes a long drag from an enamel bubble pipe. A series of shining bubbles erupt from the bowl of his pipe.
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5072|89% [3] [Rain]:0 K:63% [IMP, wear] 
+10:29:33 (0) [Agathon]: 
+Agathon weaves his fingers together skilfully.
+[B|E] [CDBK] H:6265|100% M:5072|89% [3] [Rain]:0 K:63% [IMP, wear] 
+10:29:34 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.48s]
+[B|E] [CDBK] H:6265|100% M:5002|88% [3] [Rain]:0 K:63% [IMP, wear] 
+10:29:34 (0) [Agathon]: 
+[Zax]: -Aff: impatience.
+[Curing]: EAT PLUMBUM
+You eat a plumbum flake.
+You are patient once again.
+You have cured the impatience affliction.
+[B|E] [CDBK] H:6265|100% M:5002|88% [3] [Rain]:0 K:63% [wear] 
+10:29:34 (0) [Agathon]: 
+[Zax]: -1 Plumbum (1004).
+[B|E] [CDBK] H:6265|100% M:4992|88% [3] [Rain]:0 K:63% [wear] 
+10:29:34 (0) [Agathon]: 
+You may utilise the tree tattoo again.
+[Tree Recov: 13.95s]
+[B|E] [CDBK] H:6265|100% M:4992|88% [3] [Rain]:0 K:63% [wear] 
+10:29:34 (0) [Agathon]: 
+[Zax]: -Aff: weariness.
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Your limbs strengthen and you feel stronger.
+You have cured the weariness affliction.
+[B|E] [CDBK] H:6265|100% M:4992|88% [3] [Rain]:0 K:63% 
+10:29:34 (0) [Agathon]: 
+[Zax]: +Aff: haemophilia.
+You have been afflicted with haemophilia.
+Agathon: Curse -> You
+You sense a subtle change deep within.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:4992|88% [3] [Rain]:0 K:66% [haem] Bl:40 
+10:29:34 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+You have been afflicted with paralysis.
+Agathon: Curse -> You
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+Agathon: Invoke Relapse -> You
+[B|E] [CDBK] H:6265|100% M:4992|88% [3] [Rain]:0 K:69% [haem, PAR] Bl:80 
+10:29:35 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.41s]
+[B|E] [CDBK] H:6265|100% M:4992|88% [3] [Rain]:0 K:69% [haem, PAR] Bl:80 
+10:29:35 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6265|100% M:4992|88% [3] [Rain]:0 K:69% [haem] Bl:80 
+10:29:35 (0) [Agathon]: 
+[Zax]: -1 Magnesium (802).
+[B|E] [CDBK] H:6265|100% M:4992|88% [3] [Rain]:0 K:69% [haem] Bl:80 
+10:29:36 (0) [Agathon]: 
+The bubbles spewn from an enamel bubble pipe burst. *POP*  *POP*   *POP*
+[B|E] [CDBK] H:6265|100% M:5067|89% [3] [Rain]:0 K:69% [haem] Bl:80 
+10:29:36 (0) [Agathon]: diag
+[Zax]: +Aff: impatience.
+You have been afflicted with impatience.
+Agathon: Curse -> You
+You shuffle your feet noisily, suddenly bored.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5067|89% [3] [Rain]:0 K:72% [haem, IMP] Bl:120 
+10:29:37 (0) [Agathon]: 
+You are:
+blind.
+deaf.
+afflicted by haemophilia.
+impatient.
+bleeding for 120 health.
+[Eq Spent: 0.72s]
+[B|-] [CDBK] H:6265|100% M:5067|89% [3] [Rain]:0 K:72% [haem, IMP] Bl:120 
+10:29:37 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.58s]
+[B|-] [CDBK] H:6265|100% M:5067|89% [3] [Rain]:0 K:72% [haem, IMP] Bl:120 
+10:29:37 (0) [Agathon]: 
+[Zax]: -Aff: haemophilia.
+[Curing]: EAT FERRUM
+You eat a ferrum flake.
+Your blood regains its ability to clot.
+You have cured the haemophilia affliction.
+[Curing]: CLOT 120
+You clot your wounds 6 times.
+[B|-] [CDBK] H:6265|100% M:4827|85% [3] [Rain]:0 K:72% [IMP] -240m 
+10:29:37 (0) [Agathon]: 
+[Zax]: -1 Ferrum (1147).
+[B|-] [CDBK] H:6265|100% M:4827|85% [3] [Rain]:0 K:72% [IMP] 
+10:29:37 (0) [Agathon]: 
+You have recovered equilibrium.
+[Eq Recov: 0.56s]
+[B|E] [CDBK] H:6265|100% M:4827|85% [3] [Rain]:0 K:72% [IMP] 
+10:29:37 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+Horror overcomes you as you realise that the curse of paralysis has manifested upon you once again.
+You have been afflicted with paralysis.
+A prickly stinging overcomes your body, fading away into numbness.
+[B|E] [CDBK] H:6265|100% M:4827|85% [3] [Rain]:0 K:72% [IMP, PAR] 
+10:29:38 (0) [Agathon]: 
+[Curing]: SIP MANA
+You take a drink from an amethyst vial.
+Your mind feels stronger and more alert.
+[B|E] [CDBK] H:6265|100% M:5289|93% [3] [Rain]:0 K:72% [IMP, PAR] +531m 
+10:29:38 (0) [Agathon]: 
+You shuffle your feet noisily, suddenly bored.
+Agathon: Curse -> You
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5289|93% [3] [Rain]:0 K:75% [IMP, PAR] Bl:40 
+10:29:38 (0) [Agathon]: 
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5209|91% [3] [Rain]:0 K:75% [IMP, PAR] 
+10:29:38 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.48s]
+[B|E] [CDBK] H:6265|100% M:5209|91% [3] [Rain]:0 K:75% [IMP, PAR] 
+10:29:39 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Zax]: +Aff: haemophilia.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+You have been afflicted with haemophilia.
+Agathon: Curse -> You
+You sense a subtle change deep within.
+A dull ache builds behind your eyes.
+Agathon: Invoke Bloodlet -> You
+[B|E] [CDBK] H:6265|100% M:5209|91% [3] [Rain]:0 K:78% [haem, IMP] Bl:295 
+10:29:39 (0) [Agathon]: 
+[Zax]: -1 Magnesium (801).
+[B|E] [CDBK] H:6265|100% M:5209|91% [3] [Rain]:0 K:78% [haem, IMP] Bl:295 
+10:29:39 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.55s]
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:78% [haem, IMP] Bl:295 +463m 
+10:29:40 (0) [Agathon]: 
+[Zax]: -Aff: haemophilia.
+[Curing]: EAT FERRUM
+You eat a ferrum flake.
+Your blood regains its ability to clot.
+You have cured the haemophilia affliction.
+[Curing]: CLOT 295
+You clot your wounds 15 times.
+[B|E] [CDBK] H:6265|100% M:5072|89% [3] [Rain]:0 K:78% [IMP] -600m 
+10:29:40 (0) [Agathon]: 
+[Zax]: -1 Ferrum (1146).
+[B|E] [CDBK] H:6265|100% M:5072|89% [3] [Rain]:0 K:78% [IMP] 
+10:29:41 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+Agathon: Jinx -> You
+You have been afflicted with paralysis.
+A prickly stinging overcomes your body, fading away into numbness.
+You shuffle your feet noisily, suddenly bored.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5072|89% [3] [Rain]:0 K:82% [IMP, PAR] Bl:80 
+10:29:41 (0) [Agathon]: 
+[Curing]: CLOT 30
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:4992|88% [3] [Rain]:0 K:82% [IMP, PAR] 
+10:29:41 (0) [Agathon]: 
+You suddenly perceive the vague outline of an aura of rebounding around Agathon.
+[B|E] [CDBK] H:6265|100% M:4992|88% [3] [Rain]:0 K:82% [IMP, PAR] 
+10:29:41 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.5s]
+[B|E] [CDBK] H:6265|100% M:4922|86% [3] [Rain]:0 K:82% [IMP, PAR] 
+10:29:42 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6265|100% M:4922|86% [3] [Rain]:0 K:82% [IMP] 
+10:29:42 (0) [Agathon]: 
+[Zax]: -1 Magnesium (800).
+[B|E] [CDBK] H:6265|100% M:4922|86% [3] [Rain]:0 K:82% [IMP] 
+10:29:42 (0) [Agathon]: 
+You may drink another health or mana elixir.
+[Sip Recov: 4.48s]
+[B|E] [CDBK] H:6265|100% M:4922|86% [3] [Rain]:0 K:82% [IMP] 
+10:29:42 (0) [Agathon]: 
+[Zax]: +Aff: haemophilia.
+Agathon's aura of weapons rebounding disappears.
+Agathon: Jinx -> You
+You have been afflicted with haemophilia.
+You sense a subtle change deep within.
+You shuffle your feet noisily, suddenly bored.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:4922|86% [3] [Rain]:0 K:86% [haem, IMP] Bl:80 
+10:29:43 (0) [Agathon]: 
+Agathon takes a long drag off an enamel bubble pipe.
+[B|E] [CDBK] H:6265|100% M:4922|86% [3] [Rain]:0 K:86% [haem, IMP] Bl:80 
+10:29:43 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.54s]
+[B|E] [CDBK] H:6265|100% M:4922|86% [3] [Rain]:0 K:86% [haem, IMP] Bl:80 
+10:29:44 (0) [Agathon]: 
+[Zax]: -Aff: haemophilia.
+[Curing]: EAT FERRUM
+You eat a ferrum flake.
+Your blood regains its ability to clot.
+You have cured the haemophilia affliction.
+[Curing]: CLOT 80
+You clot your wounds 4 times.
+[Curing]: SIP MANA
+You take a drink from an amethyst vial.
+Your mind feels stronger and more alert.
+[B|E] [CDBK] H:6265|100% M:5330|93% [3] [Rain]:0 K:86% [IMP] +408m 
+10:29:44 (0) [Agathon]: 
+[Zax]: -1 Ferrum (1145).
+[B|E] [CDBK] H:6265|100% M:5330|93% [3] [Rain]:0 K:86% [IMP] 
+10:29:44 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+You have been afflicted with paralysis.
+Agathon: Curse -> You
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5320|93% [3] [Rain]:0 K:89% [IMP, PAR] Bl:40 
+10:29:45 (0) [Agathon]: 
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5240|92% [3] [Rain]:0 K:89% [IMP, PAR] 
+10:29:45 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.53s]
+[B|E] [CDBK] H:6265|100% M:5240|92% [3] [Rain]:0 K:89% [IMP, PAR] 
+10:29:45 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6265|100% M:5240|92% [3] [Rain]:0 K:89% [IMP] 
+10:29:45 (0) [Agathon]: 
+[Zax]: -1 Magnesium (799).
+[B|E] [CDBK] H:6265|100% M:5240|92% [3] [Rain]:0 K:89% [IMP] 
+10:29:45 (0) [Agathon]: 
+[Zax]: +Aff: haemophilia.
+You have been afflicted with haemophilia.
+Agathon: Curse -> You
+You sense a subtle change deep within.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5240|92% [3] [Rain]:0 K:92% [haem, IMP] Bl:40 
+10:29:46 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+You have been afflicted with paralysis.
+Agathon: Curse -> You
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5245|92% [3] [Rain]:0 K:85% [haem, IMP, PAR] Bl:80 
+10:29:47 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.51s]
+[B|E] [CDBK] H:6265|100% M:5245|92% [3] [Rain]:0 K:85% [haem, IMP, PAR] Bl:80 
+10:29:47 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6265|100% M:5245|92% [3] [Rain]:0 K:85% [haem, IMP] Bl:80 
+10:29:47 (0) [Agathon]: 
+[Zax]: -1 Magnesium (798).
+[B|E] [CDBK] H:6265|100% M:5245|92% [3] [Rain]:0 K:85% [haem, IMP] Bl:80 
+10:29:47 (0) [Agathon]: 
+[Zax]: +Aff: anorexia.
+You have been afflicted with anorexia.
+Agathon: Curse -> You
+The idea of eating or drinking is repulsive to you.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5245|92% [3] [Rain]:0 K:88% [haem, ANO, IMP] Bl:120 
+10:29:48 (0) [Agathon]: 
+[Zax]: -Aff: anorexia.
+[Curing]: APPLY EPIDERMAL TO BODY
+You take out some salve and quickly rub it on your body.
+Food is no longer repulsive to you.
+You have cured the anorexia affliction.
+[B|E] [CDBK] H:6265|100% M:5245|92% [3] [Rain]:0 K:88% [haem, IMP] Bl:120 
+10:29:48 (0) [Agathon]: 
+You may utilise the tree tattoo again.
+[Tree Recov: 13.94s]
+[B|E] [CDBK] H:6265|100% M:5623|99% [3] [Rain]:0 K:88% [haem, IMP] Bl:120 
+10:29:48 (0) [Agathon]: 
+You may drink another health or mana elixir.
+[Sip Recov: 4.5s]
+[B|E] [CDBK] H:6265|100% M:5623|99% [3] [Rain]:0 K:88% [haem, IMP] Bl:120 
+10:29:48 (0) [Agathon]: 
+[Zax]: -Aff: impatience.
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+You are patient once again.
+You have cured the impatience affliction.
+[B|E] [CDBK] H:6265|100% M:5623|99% [3] [Rain]:0 K:88% [haem] Bl:120 
+10:29:48 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.58s]
+[B|E] [CDBK] H:6265|100% M:5623|99% [3] [Rain]:0 K:88% [haem] Bl:120 
+10:29:49 (0) [Agathon]: 
+[Zax]: -Aff: haemophilia.
+[Curing]: EAT FERRUM
+You eat a ferrum flake.
+Your blood regains its ability to clot.
+You have cured the haemophilia affliction.
+[Curing]: CLOT 120
+You clot your wounds 6 times.
+[B|E] [CDBK] H:6265|100% M:5383|94% [3] [Rain]:0 K:88% -240m 
+10:29:49 (0) [Agathon]: 
+You may apply another salve to yourself.
+[Salve Recov: 0.92s]
+[B|E] [CDBK] H:6265|100% M:5383|94% [3] [Rain]:0 K:88% 
+10:29:49 (0) [Agathon]: 
+[Zax]: -1 Ferrum (1144).
+[B|E] [CDBK] H:6265|100% M:5383|94% [3] [Rain]:0 K:88% 
+10:29:49 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+[Zax]: +Aff: haemophilia.
+Agathon: Jinx -> You
+You have been afflicted with paralysis.
+A prickly stinging overcomes your body, fading away into numbness.
+You have been afflicted with haemophilia.
+You sense a subtle change deep within.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5656|99% [3] [Rain]:0 K:92% [haem, PAR] Bl:80 +273m 
+10:29:49 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.38s]
+[B|E] [CDBK] H:6265|100% M:5588|98% [3] [Rain]:0 K:92% [haem, PAR] Bl:80 
+10:29:50 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6265|100% M:5588|98% [3] [Rain]:0 K:92% [haem] Bl:80 
+10:29:50 (0) [Agathon]: 
+[Zax]: -1 Magnesium (797).
+[B|E] [CDBK] H:6265|100% M:5588|98% [3] [Rain]:0 K:92% [haem] Bl:80 
+10:29:50 (0) [Agathon]: 
+You suddenly perceive the vague outline of an aura of rebounding around Agathon.
+[B|E] [CDBK] H:6265|100% M:5588|98% [3] [Rain]:0 K:92% [haem] Bl:80 
+10:29:51 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+Agathon's aura of weapons rebounding disappears.
+You have been afflicted with paralysis.
+Agathon: Curse -> You
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5588|98% [3] [Rain]:0 K:95% [haem, PAR] Bl:120 
+10:29:51 (0) [Agathon]: 
+Agathon takes a long drag off an enamel bubble pipe.
+[B|E] [CDBK] H:6265|100% M:5588|98% [3] [Rain]:0 K:95% [haem, PAR] Bl:120 
+10:29:52 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.6s]
+[B|E] [CDBK] H:6265|100% M:5588|98% [3] [Rain]:0 K:95% [haem, PAR] Bl:120 
+10:29:52 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6265|100% M:5588|98% [3] [Rain]:0 K:95% [haem] Bl:120 
+10:29:52 (0) [Agathon]: 
+[Zax]: -1 Magnesium (796).
+[B|E] [CDBK] H:6265|100% M:5588|98% [3] [Rain]:0 K:95% [haem] Bl:120 
+10:29:52 (0) [Agathon]: 
+[Zax]: +Aff: weariness.
+You have been afflicted with weariness.
+Agathon: Curse -> You
+Your limbs grow heavy and you groan feebly.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5588|98% [3] [Rain]:0 K:98% [haem, wear] Bl:160 
+10:29:52 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+You have been afflicted with paralysis.
+Agathon: Curse -> You
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+You may eat another plant or mineral.
+[Eat Recov: 1.49s]
+[B|E] [CDBK] H:6265|100% M:5588|98% [3] [Rain]:0 K:100% [haem, wear, PAR] Bl:200 
+10:29:53 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6265|100% M:5588|98% [3] [Rain]:0 K:100% [haem, wear] Bl:200 
+10:29:53 (0) [Agathon]: 
+[Zax]: -1 Magnesium (795).
+[B|E] [CDBK] H:6265|100% M:5588|98% [3] [Rain]:0 K:100% [haem, wear] Bl:200 
+10:29:54 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+You have been afflicted with paralysis.
+Agathon: Curse -> You
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5504|97% [3] [Rain]:0 K:100% [haem, wear, PAR] Bl:240 
+10:29:54 (0) [Agathon]: 
+You take 240 raw, damage.
+You bleed 240 health.
+[B|E] [CDBK] H:6025|96% M:5504|97% [3] [Rain]:0 K:100% [haem, wear, PAR] Bl:240 -240h 
+10:29:55 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.53s]
+[B|E] [CDBK] H:6025|96% M:5504|97% [3] [Rain]:0 K:100% [haem, wear, PAR] Bl:240 
+10:29:55 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6025|96% M:5504|97% [3] [Rain]:0 K:100% [haem, wear] Bl:240 
+10:29:55 (0) [Agathon]: 
+[Zax]: -1 Magnesium (794).
+[B|E] [CDBK] H:6025|96% M:5504|97% [3] [Rain]:0 K:100% [haem, wear] Bl:240 
+10:29:55 (0) [Agathon]: 
+[Zax]: +Aff: impatience.
+You have been afflicted with impatience.
+Agathon: Curse -> You
+You shuffle your feet noisily, suddenly bored.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6025|96% M:5504|97% [3] [Rain]:0 K:100% [haem, IMP, wear] Bl:280 
+10:29:55 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+You have been afflicted with paralysis.
+Agathon: Curse -> You
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, wear, PAR] Bl:320 +240h +168m 
+10:29:56 (0) [Agathon]: 
+Agathon takes a drink from an oaken vial.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, wear, PAR] Bl:320 
+10:29:56 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.61s]
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, wear, PAR] Bl:320 
+10:29:57 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, wear] Bl:320 
+10:29:57 (0) [Agathon]: 
+[Zax]: -1 Magnesium (793).
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, wear] Bl:320 
+10:29:57 (0) [Agathon]: 
+You are:
+blind.
+deaf.
+afflicted by haemophilia.
+wearied in body.
+impatient.
+bleeding for 320 health.
+[Eq Spent: 0.72s]
+[B|-] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, wear] Bl:320 
+10:29:57 (0) [Agathon]: 
+[Zax]: +Aff: asthma.
+You have been afflicted with asthma.
+Agathon: Curse -> You
+You feel a tightening sensation grow in your lungs.
+A dull ache builds behind your eyes.
+[B|-] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, wear, AST] Bl:360 
+10:29:57 (0) [Agathon]: 
+[Zax]: asthma set to priority 1.
+[B|-] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, wear, AST] Bl:360 
+10:29:57 (0) [Agathon]: 
+You have recovered equilibrium.
+[Eq Recov: 0.63s]
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, wear, AST] Bl:360 
+10:29:58 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.5s]
+[B|E] [CDBK] H:6265|100% M:5603|98% [3] [Rain]:0 K:100% [haem, IMP, wear, AST] Bl:360 
+10:29:58 (0) [Agathon]: 
+[Zax]: -Aff: asthma.
+[Zax]: +Aff: anorexia.
+[Zax]: +Aff: slickness.
+[Zax]: -Def: fangbarrier.
+[Curing]: EAT AURUM
+You eat an aurum flake.
+Your bronchial tubes open up and your asthma is cured.
+You have cured the asthma affliction.
+You have been afflicted with anorexia.
+Agathon: Curse -> You
+The idea of eating or drinking is repulsive to you.
+A dull ache builds behind your eyes.
+Agathon: Invoke Coagulation -> You
+You have been afflicted with slickness.
+The protective covering coating your skin sloughs off.
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+[B|E] [CDBK] H:6265|100% M:5603|98% [3] [Rain]:0 K:100% [haem, SLCK, ANO, IMP, wear] Bl:260 
+10:29:58 (0) [Agathon]: 
+[Zax]: asthma set to priority 12.
+[B|E] [CDBK] H:6265|100% M:5603|98% [3] [Rain]:0 K:100% [haem, SLCK, ANO, IMP, wear] Bl:260 
+10:29:58 (0) [Agathon]: 
+[Zax]: -1 Aurum (931).
+[B|E] [CDBK] H:6265|100% M:5603|98% [3] [Rain]:0 K:100% [haem, SLCK, ANO, IMP, wear] Bl:260 
+10:29:58 (0) [Agathon]: 
+[Zax]: -Aff: slickness.
+[Zax]: -Aff: anorexia.
+[Curing]: SMOKE REALGAR
+You take a long drag of realgar off your pipe.
+Your glands cease their oily secretion.
+You have cured the slickness affliction.
+[Curing]: APPLY EPIDERMAL TO BODY
+You take out some salve and quickly rub it on your body.
+Food is no longer repulsive to you.
+You have cured the anorexia affliction.
+[Curing]: APPLY QUICKSILVER
+You apply a quicksilver droplet to yourself.
+[B|E] [CDBK] H:6265|100% M:5603|98% [3] [Rain]:0 K:100% [haem, IMP, wear] Bl:260 
+10:29:59 (0) [Agathon]: 
+You may apply another salve to yourself.
+[Salve Recov: 0.81s]
+[B|E] [CDBK] H:6265|100% M:5593|98% [3] [Rain]:0 K:100% [haem, IMP, wear] Bl:260 
+10:29:59 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.46s]
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, wear] Bl:260 
+10:30:00 (0) [Agathon]: 
+Your lungs have recovered enough to smoke another mineral or plant.
+[Smoke Recov: 1.43s]
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, wear] Bl:260 
+10:30:00 (0) [Agathon]: 
+You suddenly perceive the vague outline of an aura of rebounding around Agathon.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, wear] Bl:260 
+10:30:00 (0) [Agathon]: 
+[Zax]: -Aff: haemophilia.
+[Zax]: +Aff: paralysis.
+[Zax]: +Aff: asthma.
+[Curing]: EAT FERRUM
+You eat a ferrum flake.
+Your blood regains its ability to clot.
+You have cured the haemophilia affliction.
+[Curing]: CLOT 260
+You clot your wounds 13 times.
+Agathon's aura of weapons rebounding disappears.
+Agathon: Jinx -> You
+You have been afflicted with paralysis.
+A prickly stinging overcomes your body, fading away into numbness.
+You have been afflicted with asthma.
+You feel a tightening sensation grow in your lungs.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5152|90% [3] [Rain]:0 K:100% [IMP, wear, PAR, AST] Bl:80 -520m 
+10:30:00 (0) [Agathon]: 
+[Zax]: +Def: curseward.
+You: Curseward
+[Eq Spent: 2.89s]
+[B|-] [CDBK] H:6265|100% M:4986|87% [3] [Rain]:0 K:100% [IMP, wear, PAR, AST] Bl:80 -166m 
+10:30:00 (0) [Agathon]: 
+[Zax]: asthma set to priority 1.
+[B|-] [CDBK] H:6265|100% M:4986|87% [3] [Rain]:0 K:100% [IMP, wear, PAR, AST] Bl:80 
+10:30:00 (0) [Agathon]: 
+[Zax]: -1 Ferrum (1143).
+[B|-] [CDBK] H:6265|100% M:4986|87% [3] [Rain]:0 K:100% [IMP, wear, PAR, AST] Bl:80 
+10:30:00 (0) [Agathon]: 
+Agathon takes a long drag off an enamel bubble pipe.
+[Curing]: CLOT 80
+You clot your wounds 4 times.
+[B|-] [CDBK] H:6265|100% M:4826|85% [3] [Rain]:0 K:100% [IMP, wear, PAR, AST] -160m 
+10:30:00 (0) [Agathon]: 
+[Zax]: paralysis set to priority 25.
+[B|-] [CDBK] H:6265|100% M:4826|85% [3] [Rain]:0 K:100% [IMP, wear, PAR, AST] 
+10:30:00 (0) [Agathon]: 
+[B|-] [CDBK] H:6265|100% M:4826|85% [3] [Rain]:0 K:100% [IMP, wear, PAR, AST] 
+10:30:01 (0) [Agathon]: 
+[Zax]: paralysis set to priority 5.
+[B|-] [CDBK] H:6265|100% M:4826|85% [3] [Rain]:0 K:100% [IMP, wear, PAR, AST] 
+10:30:01 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.46s]
+[B|-] [CDBK] H:6265|100% M:4826|85% [3] [Rain]:0 K:100% [IMP, wear, PAR, AST] 
+10:30:01 (0) [Agathon]: 
+[Zax]: -Aff: asthma.
+[Curing]: EAT AURUM
+You eat an aurum flake.
+Your bronchial tubes open up and your asthma is cured.
+You have cured the asthma affliction.
+[Zax]: asthma set to priority 12.
+[B|-] [CDBK] H:6265|100% M:4826|85% [3] [Rain]:0 K:100% [IMP, wear, PAR] 
+10:30:02 (0) [Agathon]: 
+[Zax]: -1 Aurum (930).
+[B|-] [CDBK] H:6265|100% M:4826|85% [3] [Rain]:0 K:100% [IMP, wear, PAR] 
+10:30:02 (0) [Agathon]: 
+You may utilise the tree tattoo again.
+[Tree Recov: 13.96s]
+[B|-] [CDBK] H:6265|100% M:4758|83% [3] [Rain]:0 K:100% [IMP, wear, PAR] 
+10:30:02 (0) [Agathon]: 
+[Curing]: SIP MANA
+You take a drink from an amethyst vial.
+Your mind feels stronger and more alert.
+[B|-] [CDBK] H:6265|100% M:5331|93% [3] [Rain]:0 K:100% [IMP, wear, PAR] +573m 
+10:30:02 (0) [Agathon]: 
+You have recovered equilibrium.
+[Eq Recov: 2.71s]
+You already have curseward up.
+[B|E] [CDBK] H:6265|100% M:5331|93% [3] [Rain]:0 K:100% [IMP, wear, PAR] 
+10:30:03 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.47s]
+[B|E] [CDBK] H:6265|100% M:5331|93% [3] [Rain]:0 K:100% [IMP, wear, PAR] 
+10:30:03 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6265|100% M:5331|93% [3] [Rain]:0 K:100% [IMP, wear] 
+10:30:03 (0) [Agathon]: 
+[Zax]: -1 Magnesium (792).
+[B|E] [CDBK] H:6265|100% M:5331|93% [3] [Rain]:0 K:100% [IMP, wear] 
+10:30:03 (0) [Agathon]: 
+[Zax]: -Aff: weariness.
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Your limbs strengthen and you feel stronger.
+You have cured the weariness affliction.
+[B|E] [CDBK] H:6265|100% M:5331|93% [3] [Rain]:0 K:100% [IMP] 
+10:30:03 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.56s]
+[B|E] [CDBK] H:6265|100% M:5662|99% [3] [Rain]:0 K:100% [IMP] +331m 
+10:30:05 (0) [Agathon]: 
+[Zax]: -Aff: impatience.
+[Curing]: EAT PLUMBUM
+You eat a plumbum flake.
+You are patient once again.
+You have cured the impatience affliction.
+[B|E] [CDBK] H:6265|100% M:5662|99% [3] [Rain]:0 K:100% 
+10:30:05 (0) [Agathon]: 
+[Zax]: -1 Plumbum (1003).
+[B|E] [CDBK] H:6265|100% M:5662|99% [3] [Rain]:0 K:100% 
+10:30:05 (0) [Agathon]: 
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% 
+10:30:06 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.46s]
+[B|E] [CDBK] H:6265|100% M:5605|98% [3] [Rain]:0 K:100% 
+10:30:06 (0) [Agathon]: 
+You may drink another health or mana elixir.
+[Sip Recov: 4.4s]
+[B|E] [CDBK] H:6265|100% M:5605|98% [3] [Rain]:0 K:100% 
+10:30:07 (0) [Agathon]: 
+[Zax]: +Def: fangbarrier.
+The quicksilver hardens into a supple metallic shell.
+[B|E] [CDBK] H:6265|100% M:5605|98% [3] [Rain]:0 K:100% 
+10:30:08 (0) [Agathon]: 
+You suddenly perceive the vague outline of an aura of rebounding around Agathon.
+[B|E] [CDBK] H:6265|100% M:5605|98% [3] [Rain]:0 K:100% 
+10:30:09 (0) [Agathon]: 
+Agathon's aura of weapons rebounding disappears.
+Agathon points an imperious finger at you, but your curseward holds.
+[B|E] [CDBK] H:6265|100% M:5595|98% [3] [Rain]:0 K:100% 
+10:30:10 (0) [Agathon]: 
+A great gurgling sound is heard as Agathon takes a long drag from an enamel bubble pipe. A series of shining bubbles erupt from the bowl of his pipe.
+[B|E] [CDBK] H:6265|100% M:5595|98% [3] [Rain]:0 K:100% 
+10:30:10 (0) [Agathon]: 
+You tilt your head to one side, rub your chin, and thoughtfully declare "Hrm."
+[B|E] [CDBK] H:6265|100% M:5608|98% [3] [Rain]:0 K:100% 
+10:30:10 (0) [Agathon]: 
+Agathon points an imperious finger at you, but your curseward holds.
+[B|E] [CDBK] H:6265|100% M:5608|98% [3] [Rain]:0 K:100% 
+10:30:11 (0) [Agathon]: 
+The bubbles spewn from an enamel bubble pipe burst. *POP*  *POP*   *POP*
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% 
+10:30:13 (0) [Agathon]: 
+Agathon points an imperious finger at you, but your curseward holds.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% 
+10:30:13 (0) [Agathon]: 
+[Zax]: -Def: curseward.
+Your curseward has been breached!
+Agathon: Curse -> You
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5665|99% [3] [Rain]:0 K:93% Bl:40 
+10:30:16 (0) [Agathon]: 
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5585|98% [3] [Rain]:0 K:93% 
+10:30:17 (0) [Agathon]: 
+[Zax]: +Aff: weariness.
+[Zax]: +Aff: paralysis.
+Agathon: Jinx -> You
+You have been afflicted with weariness.
+Your limbs grow heavy and you groan feebly.
+You have been afflicted with paralysis.
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5585|98% [3] [Rain]:0 K:97% [wear, PAR] Bl:80 
+10:30:17 (0) [Agathon]: 
+You may utilise the tree tattoo again.
+[Tree Recov: 14.01s]
+[B|E] [CDBK] H:6265|100% M:5585|98% [3] [Rain]:0 K:97% [wear, PAR] Bl:80 
+10:30:17 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[Curing]: CLOT 80
+You clot your wounds 4 times.
+[B|E] [CDBK] H:6265|100% M:5425|95% [3] [Rain]:0 K:97% [wear] -160m 
+10:30:17 (0) [Agathon]: 
+[Zax]: -1 Magnesium (791).
+[B|E] [CDBK] H:6265|100% M:5425|95% [3] [Rain]:0 K:97% [wear] 
+10:30:17 (0) [Agathon]: 
+[Zax]: -Aff: weariness.
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Your limbs strengthen and you feel stronger.
+You have cured the weariness affliction.
+[B|E] [CDBK] H:6265|100% M:5425|95% [3] [Rain]:0 K:97% 
+10:30:18 (0) [Agathon]: 
+You suddenly perceive the vague outline of an aura of rebounding around Agathon.
+[B|E] [CDBK] H:6265|100% M:5425|95% [3] [Rain]:0 K:97% 
+10:30:18 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.49s]
+[B|E] [CDBK] H:6265|100% M:5347|94% [3] [Rain]:0 K:97% 
+10:30:19 (0) [Agathon]: 
+[Zax]: +Aff: weariness.
+Agathon's aura of weapons rebounding disappears.
+You have been afflicted with weariness.
+Agathon: Curse -> You
+Your limbs grow heavy and you groan feebly.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5347|94% [3] [Rain]:0 K:100% [wear] Bl:40 
+10:30:19 (0) [Agathon]: 
+[Zax]: -Aff: weariness.
+Agathon takes a long drag off an enamel bubble pipe.
+[Curing]: EAT AURUM
+You eat an aurum flake.
+Your limbs strengthen and you feel stronger.
+You have cured the weariness affliction.
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5267|92% [3] [Rain]:0 K:100% 
+10:30:19 (0) [Agathon]: 
+[Zax]: -1 Aurum (929).
+[B|E] [CDBK] H:6265|100% M:5267|92% [3] [Rain]:0 K:100% 
+10:30:20 (0) [Agathon]: 
+[Zax]: +Aff: weariness.
+You have been afflicted with weariness.
+Agathon: Curse -> You
+Your limbs grow heavy and you groan feebly.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [wear] Bl:40 
+10:30:21 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.57s]
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [wear] Bl:40 
+10:30:21 (0) [Agathon]: 
+[Zax]: -Aff: weariness.
+[Curing]: EAT AURUM
+You eat an aurum flake.
+Your limbs strengthen and you feel stronger.
+You have cured the weariness affliction.
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5592|98% [3] [Rain]:0 K:100% 
+10:30:21 (0) [Agathon]: 
+[Zax]: -1 Aurum (928).
+[B|E] [CDBK] H:6265|100% M:5592|98% [3] [Rain]:0 K:100% 
+10:30:21 (0) [Agathon]: 
+[Zax]: +Aff: weariness.
+You have been afflicted with weariness.
+Agathon: Curse -> You
+Your limbs grow heavy and you groan feebly.
+A dull ache builds behind your eyes.
+You may eat another plant or mineral.
+[Eat Recov: 1.54s]
+[B|E] [CDBK] H:6265|100% M:5592|98% [3] [Rain]:0 K:100% [wear] Bl:40 
+10:30:22 (0) [Agathon]: 
+[Zax]: -Aff: weariness.
+[Curing]: EAT AURUM
+You eat an aurum flake.
+Your limbs strengthen and you feel stronger.
+You have cured the weariness affliction.
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5442|95% [3] [Rain]:0 K:100% -150m 
+10:30:23 (0) [Agathon]: 
+[Zax]: -1 Aurum (927).
+[B|E] [CDBK] H:6265|100% M:5442|95% [3] [Rain]:0 K:100% 
+10:30:23 (0) [Agathon]: 
+[Zax]: +Aff: weariness.
+You have been afflicted with weariness.
+Agathon: Curse -> You
+Your limbs grow heavy and you groan feebly.
+A dull ache builds behind your eyes.
+You may eat another plant or mineral.
+[Eat Recov: 1.58s]
+[B|E] [CDBK] H:6265|100% M:5432|95% [3] [Rain]:0 K:100% [wear] Bl:40 
+10:30:24 (0) [Agathon]: 
+[Zax]: -Aff: weariness.
+[Curing]: EAT AURUM
+You eat an aurum flake.
+Your limbs strengthen and you feel stronger.
+You have cured the weariness affliction.
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5352|94% [3] [Rain]:0 K:100% 
+10:30:24 (0) [Agathon]: 
+[Zax]: -1 Aurum (926).
+[B|E] [CDBK] H:6265|100% M:5352|94% [3] [Rain]:0 K:100% 
+10:30:25 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.57s]
+[B|E] [CDBK] H:6265|100% M:5427|95% [3] [Rain]:0 K:100% 
+10:30:26 (0) [Agathon]: 
+[Zax]: +Aff: addiction.
+[Zax]: +Aff: nausea.
+Agathon: Jinx -> You
+You have been afflicted with addiction.
+You feel a terrible hunger grow within you.
+You have been afflicted with nausea.
+A sense of extreme nausea washes over you.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5355|94% [3] [Rain]:0 K:100% [ADD, naus] Bl:80 
+10:30:27 (0) [Agathon]: 
+[Zax]: -Aff: nausea.
+[Curing]: EAT FERRUM
+You eat a ferrum flake.
+Your stomach becalms itself.
+You have cured the nausea affliction.
+[Curing]: CLOT 80
+You clot your wounds 4 times.
+[B|E] [CDBK] H:6265|100% M:5195|91% [3] [Rain]:0 K:100% [ADD] -160m 
+10:30:27 (0) [Agathon]: 
+You suddenly perceive the vague outline of an aura of rebounding around Agathon.
+[B|E] [CDBK] H:6265|100% M:5573|98% [3] [Rain]:0 K:100% [ADD] +378m 
+10:30:28 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.4s]
+[B|E] [CDBK] H:6265|100% M:5573|98% [3] [Rain]:0 K:100% [ADD] 
+10:30:28 (0) [Agathon]: 
+[Zax]: -Aff: addiction.
+[Curing]: EAT FERRUM
+You eat a ferrum flake.
+Your terrible addiction seems to wane.
+You have cured the addiction affliction.
+[B|E] [CDBK] H:6265|100% M:5573|98% [3] [Rain]:0 K:100% 
+10:30:29 (0) [Agathon]: 
+[Zax]: -1 Ferrum (1142).
+[B|E] [CDBK] H:6265|100% M:5573|98% [3] [Rain]:0 K:100% 
+10:30:29 (0) [Agathon]: 
+[Zax]: +Aff: addiction.
+[Zax]: +Aff: nausea.
+Agathon's aura of weapons rebounding disappears.
+Agathon: Jinx -> You
+You have been afflicted with addiction.
+You feel a terrible hunger grow within you.
+You have been afflicted with nausea.
+A sense of extreme nausea washes over you.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5563|98% [3] [Rain]:0 K:100% [ADD, naus] Bl:80 
+10:30:29 (0) [Agathon]: 
+Agathon takes a long drag off an enamel bubble pipe.
+[Curing]: CLOT 80
+You clot your wounds 4 times.
+[B|E] [CDBK] H:6265|100% M:5403|95% [3] [Rain]:0 K:100% [ADD, naus] -160m 
+10:30:29 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.51s]
+[B|E] [CDBK] H:6265|100% M:5403|95% [3] [Rain]:0 K:100% [ADD, naus] 
+10:30:30 (0) [Agathon]: 
+[Zax]: -Aff: nausea.
+[Curing]: EAT FERRUM
+You eat a ferrum flake.
+Your stomach becalms itself.
+You have cured the nausea affliction.
+[B|E] [CDBK] H:6265|100% M:5403|95% [3] [Rain]:0 K:100% [ADD] 
+10:30:30 (0) [Agathon]: 
+[Zax]: +Aff: haemophilia.
+You have been afflicted with haemophilia.
+Agathon: Curse -> You
+You sense a subtle change deep within.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5606|98% [3] [Rain]:0 K:100% [haem, ADD] Bl:40 +203m 
+10:30:31 (0) [Agathon]: 
+You may utilise the tree tattoo again.
+[Tree Recov: 13.95s]
+[B|E] [CDBK] H:6265|100% M:5606|98% [3] [Rain]:0 K:100% [haem, ADD] Bl:40 
+10:30:32 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.48s]
+[B|E] [CDBK] H:6265|100% M:5606|98% [3] [Rain]:0 K:100% [haem, ADD] Bl:40 
+10:30:32 (0) [Agathon]: 
+[Zax]: -Aff: haemophilia.
+[Zax]: -Aff: addiction.
+[Curing]: EAT FERRUM
+You eat a ferrum flake.
+Your blood regains its ability to clot.
+You have cured the haemophilia affliction.
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Your terrible addiction seems to wane.
+You have cured the addiction affliction.
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5526|97% [3] [Rain]:0 K:100% 
+10:30:32 (0) [Agathon]: 
+[Zax]: -2 Ferrum (1140).
+[B|E] [CDBK] H:6265|100% M:5526|97% [3] [Rain]:0 K:100% 
+10:30:32 (0) [Agathon]: 
+[Zax]: +Aff: haemophilia.
+You have been afflicted with haemophilia.
+Agathon: Curse -> You
+You sense a subtle change deep within.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5526|97% [3] [Rain]:0 K:100% [haem] Bl:40 
+10:30:32 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+You have been afflicted with paralysis.
+Agathon: Curse -> You
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+Agathon: Invoke Relapse -> You
+[B|E] [CDBK] H:6265|100% M:5526|97% [3] [Rain]:0 K:100% [haem, PAR] Bl:80 
+10:30:33 (0) [Agathon]: 
+You take 80 raw, damage.
+You bleed 80 health.
+[B|E] [CDBK] H:6185|98% M:5526|97% [3] [Rain]:0 K:100% [haem, PAR] Bl:80 
+10:30:33 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.63s]
+[B|E] [CDBK] H:6185|98% M:5526|97% [3] [Rain]:0 K:100% [haem, PAR] Bl:80 
+10:30:33 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6185|98% M:5526|97% [3] [Rain]:0 K:100% [haem] Bl:80 
+10:30:33 (0) [Agathon]: 
+[Zax]: -1 Magnesium (790).
+[B|E] [CDBK] H:6185|98% M:5526|97% [3] [Rain]:0 K:100% [haem] Bl:80 
+10:30:34 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+You have been afflicted with paralysis.
+Agathon: Curse -> You
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6185|98% M:5516|97% [3] [Rain]:0 K:100% [haem, PAR] Bl:120 
+10:30:35 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.54s]
+[B|E] [CDBK] H:6185|98% M:5446|96% [3] [Rain]:0 K:100% [haem, PAR] Bl:120 
+10:30:35 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6185|98% M:5446|96% [3] [Rain]:0 K:100% [haem] Bl:120 
+10:30:35 (0) [Agathon]: 
+[Zax]: -1 Magnesium (789).
+[B|E] [CDBK] H:6185|98% M:5446|96% [3] [Rain]:0 K:100% [haem] Bl:120 
+10:30:35 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+Horror overcomes you as you realise that the curse of paralysis has manifested upon you once again.
+You have been afflicted with paralysis.
+A prickly stinging overcomes your body, fading away into numbness.
+[B|E] [CDBK] H:6265|100% M:5521|97% [3] [Rain]:0 K:100% [haem, PAR] Bl:120 
+10:30:36 (0) [Agathon]: 
+[Zax]: +Aff: impatience.
+Agathon: Jinx -> You
+A prickly stinging overcomes your body, fading away into numbness.
+You have been afflicted with impatience.
+You shuffle your feet noisily, suddenly bored.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, PAR] Bl:200 
+10:30:36 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.48s]
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, PAR] Bl:200 
+10:30:37 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP] Bl:200 
+10:30:37 (0) [Agathon]: 
+[Zax]: -1 Magnesium (788).
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP] Bl:200 
+10:30:37 (0) [Agathon]: 
+You suddenly perceive the vague outline of an aura of rebounding around Agathon.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP] Bl:200 
+10:30:37 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+[Zax]: +Aff: asthma.
+Agathon's aura of weapons rebounding disappears.
+Agathon: Jinx -> You
+You have been afflicted with paralysis.
+A prickly stinging overcomes your body, fading away into numbness.
+You have been afflicted with asthma.
+You feel a tightening sensation grow in your lungs.
+A dull ache builds behind your eyes.
+You may eat another plant or mineral.
+[Eat Recov: 1.41s]
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, PAR, AST] Bl:280 
+10:30:38 (0) [Agathon]: 
+[Zax]: +Def: curseward.
+You: Curseward
+[Eq Spent: 2.89s]
+[B|-] [CDBK] H:6265|100% M:5506|97% [3] [Rain]:0 K:100% [haem, IMP, PAR, AST] Bl:280 -166m 
+10:30:38 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+Agathon takes a long drag off an enamel bubble pipe.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|-] [CDBK] H:6265|100% M:5506|97% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:280 
+10:30:39 (0) [Agathon]: 
+[Zax]: paralysis set to priority 25.
+[B|-] [CDBK] H:6265|100% M:5506|97% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:280 
+10:30:39 (0) [Agathon]: 
+[Zax]: -1 Magnesium (787).
+[B|-] [CDBK] H:6265|100% M:5506|97% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:280 
+10:30:39 (0) [Agathon]: 
+You take 280 raw, damage.
+You bleed 280 health.
+[B|-] [CDBK] H:5985|95% M:5506|97% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:280 -280h 
+10:30:39 (0) [Agathon]: 
+[Zax]: paralysis set to priority 5.
+[B|-] [CDBK] H:5985|95% M:5432|95% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:280 
+10:30:40 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.54s]
+[B|-] [CDBK] H:5985|95% M:5432|95% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:280 
+10:30:40 (0) [Agathon]: 
+[Zax]: -Aff: haemophilia.
+[Curing]: EAT FERRUM
+You eat a ferrum flake.
+Your blood regains its ability to clot.
+You have cured the haemophilia affliction.
+[Curing]: CLOT 280
+You clot your wounds 14 times.
+[B|-] [CDBK] H:5985|95% M:4872|85% [3] [Rain]:0 K:100% [IMP, AST] -560m 
+10:30:40 (0) [Agathon]: 
+[Zax]: -1 Ferrum (1139).
+[B|-] [CDBK] H:5985|95% M:4872|85% [3] [Rain]:0 K:100% [IMP, AST] 
+10:30:40 (0) [Agathon]: 
+Agathon points an imperious finger at you, but your curseward holds.
+[B|-] [CDBK] H:5985|95% M:4872|85% [3] [Rain]:0 K:100% [IMP, AST] 
+10:30:40 (0) [Agathon]: 
+[Zax]: -Aff: asthma.
+You have recovered equilibrium.
+[Eq Recov: 2.84s]
+You inhale deeply, purging yourself of your asthmatic condition.
+[Bal Spent: 2.8s]
+[-|E] [CDBK] H:6265|100% M:5155|90% [3] [Rain]:0 K:100% [IMP] 
+10:30:41 (0) [Agathon]: 
+[Zax]: paralysis set to priority 25.
+[-|E] [CDBK] H:6265|100% M:5155|90% [3] [Rain]:0 K:100% [IMP] 
+10:30:41 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.39s]
+[-|E] [CDBK] H:6265|100% M:5155|90% [3] [Rain]:0 K:100% [IMP] 
+10:30:42 (0) [Agathon]: 
+[Zax]: -Aff: impatience.
+[Curing]: EAT PLUMBUM
+You eat a plumbum flake.
+You are patient once again.
+You have cured the impatience affliction.
+[-|E] [CDBK] H:6265|100% M:5155|90% [3] [Rain]:0 K:100% 
+10:30:42 (0) [Agathon]: 
+[Zax]: -1 Plumbum (1002).
+[-|E] [CDBK] H:6265|100% M:5155|90% [3] [Rain]:0 K:100% 
+10:30:42 (0) [Agathon]: 
+Agathon points an imperious finger at you, but your curseward holds.
+[-|E] [CDBK] H:6265|100% M:5155|90% [3] [Rain]:0 K:100% 
+10:30:42 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.43s]
+[-|E] [CDBK] H:6265|100% M:5082|89% [3] [Rain]:0 K:100% 
+10:30:43 (0) [Agathon]: 
+[Zax]: paralysis set to priority 5.
+[-|E] [CDBK] H:6265|100% M:5082|89% [3] [Rain]:0 K:100% 
+10:30:43 (0) [Agathon]: say You hit me with ano sli right as I cured asthma
+[-|E] [CDBK] H:6265|100% M:5082|89% [3] [Rain]:0 K:100% 
+10:30:44 (0) [Agathon]: 
+You have recovered balance on all limbs.
+[Bal Recov: 2.73s]
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5450|96% [3] [Rain]:0 K:100% +368m 
+10:30:44 (0) [Agathon]: 
+You may utilise the tree tattoo again.
+[Tree Recov: 13.93s]
+[B|E] [CDBK] H:6265|100% M:5450|96% [3] [Rain]:0 K:100% 
+10:30:46 (0) [Agathon]: 
+You suddenly perceive the vague outline of an aura of rebounding around Agathon.
+[B|E] [CDBK] H:6265|100% M:5525|97% [3] [Rain]:0 K:90% 
+10:30:47 (0) [Agathon]: say was very unfortunate time
+[B|E] [CDBK] H:6265|100% M:5443|95% [3] [Rain]:0 K:90% 
+10:30:50 (0) [Agathon]: 
+You may purge your lungs once again.
+[B|E] [CDBK] H:6265|100% M:5443|95% [3] [Rain]:0 K:90% 
+10:30:51 (0) [Agathon]: say if you had hit right before the aurum eat, only tree woulda saved me
+[B|E] [CDBK] H:6265|100% M:5662|99% [3] [Rain]:0 K:90% +219m 
+10:31:11 (0) [Agathon]: 
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:80% 
+10:31:33 (0) [Agathon]: 
+[B|E] [CDBK] H:6265|100% M:5602|98% [3] [Rain]:0 K:80% 
+10:31:41 (0) [Agathon]: say it was good
+[B|E] [CDBK] H:6265|100% M:5602|98% [3] [Rain]:0 K:80% 
+10:31:41 (0) [Agathon]: say but I was guarenteed out there
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:70% 
+10:31:47 (0) [Agathon]: say bc I had an eat
+[B|E] [CDBK] H:6265|100% M:5592|98% [3] [Rain]:0 K:70% 
+10:31:51 (0) [Agathon]: say you had to curse par ast there
+[B|E] [CDBK] H:6265|100% M:5521|97% [3] [Rain]:0 K:70% 
+10:32:03 (0) [Agathon]: say then hit ano coag sli
+[B|E] [CDBK] H:6265|100% M:5591|98% [3] [Rain]:0 K:70% 
+10:32:10 (0) [Agathon]: say my eat woulda cured par meaning ast stuck
+[B|E] [CDBK] H:6265|100% M:5592|98% [3] [Rain]:0 K:60% 
+10:32:19 (0) [Agathon]: say you got unfortunate eat timing
+[B|E] [CDBK] H:6265|100% M:5662|99% [3] [Rain]:0 K:60% 
+10:32:26 (0) [Agathon]: say do you track enemy eat time?
+[B|E] [CDBK] H:6265|100% M:5598|98% [3] [Rain]:0 K:60% 
+10:32:34 (0) [Agathon]: 
+Agathon's aura of weapons rebounding disappears.
+Agathon points an imperious finger at you, but your curseward holds.
+[B|E] [CDBK] H:6265|100% M:5662|99% [3] [Rain]:0 K:60% 
+10:32:44 (0) [Agathon]: 
+Agathon takes a long drag off an enamel bubble pipe.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:60% 
+10:32:45 (0) [Agathon]: 
+[Zax]: -Def: curseward.
+Your curseward has been breached!
+Agathon: Curse -> You
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:63% Bl:40 
+10:32:46 (0) [Agathon]: 
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5592|98% [3] [Rain]:0 K:63% 
+10:32:46 (0) [Agathon]: 
+[Zax]: +Aff: stupidity.
+[Zax]: +Aff: paralysis.
+Agathon: Jinx -> You
+You have been afflicted with stupidity.
+Hmmmm. Why must everything be so difficult to figure out?
+You have been afflicted with paralysis.
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5521|97% [3] [Rain]:0 K:57% [STUP, PAR] Bl:80 
+10:32:46 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Zax]: -Aff: stupidity.
+[Curing]: EAT MAGNESIUM
+You waggle your eyebrows comically.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[Curing]: FOCUS MIND
+You focus your mind intently on curing your mental maladies.
+You aren't such a complete idiot anymore.
+You have cured the stupidity affliction.
+[Curing]: CLOT 30
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5350|94% [3] [Rain]:0 K:57% -171m 
+10:32:47 (0) [Agathon]: 
+[Zax]: -1 Magnesium (786).
+[B|E] [CDBK] H:6265|100% M:5350|94% [3] [Rain]:0 K:57% 
+10:32:47 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.46s]
+[B|E] [CDBK] H:6265|100% M:5350|94% [3] [Rain]:0 K:57% 
+10:32:48 (0) [Agathon]: 
+Agathon weaves his fingers together skilfully.
+[B|E] [CDBK] H:6265|100% M:5350|94% [3] [Rain]:0 K:57% 
+10:32:48 (0) [Agathon]: 
+Your mind is able to focus once again.
+[Focus Recov: 2.43s]
+[B|E] [CDBK] H:6265|100% M:5350|94% [3] [Rain]:0 K:57% 
+10:32:49 (0) [Agathon]: 
+[Zax]: +Aff: stupidity.
+You have been afflicted with stupidity.
+Agathon: Curse -> You
+Hmmmm. Why must everything be so difficult to figure out?
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5340|94% [3] [Rain]:0 K:60% [STUP] Bl:40 
+10:32:49 (0) [Agathon]: 
+[Zax]: -Aff: stupidity.
+[Curing]: FOCUS MIND
+You focus your mind intently on curing your mental maladies.
+You aren't such a complete idiot anymore.
+You have cured the stupidity affliction.
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5094|89% [3] [Rain]:0 K:60% -246m 
+10:32:49 (0) [Agathon]: 
+[Zax]: +Aff: stupidity.
+You have been afflicted with stupidity.
+Agathon: Curse -> You
+Hmmmm. Why must everything be so difficult to figure out?
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5029|88% [3] [Rain]:0 K:63% [STUP] Bl:40 
+10:32:50 (0) [Agathon]: 
+[Zax]: -Aff: stupidity.
+[Curing]: EAT PLUMBUM
+You eat a plumbum flake.
+You aren't such a complete idiot anymore.
+You have cured the stupidity affliction.
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:4949|87% [3] [Rain]:0 K:63% 
+10:32:50 (0) [Agathon]: 
+[Zax]: -1 Plumbum (1001).
+[B|E] [CDBK] H:6265|100% M:4949|87% [3] [Rain]:0 K:63% 
+10:32:50 (0) [Agathon]: 
+[Zax]: +Aff: stupidity.
+You have been afflicted with stupidity.
+Agathon: Curse -> You
+Hmmmm. Why must everything be so difficult to figure out?
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:4949|87% [3] [Rain]:0 K:66% [STUP] Bl:40 
+10:32:51 (0) [Agathon]: 
+[Zax]: -Aff: stupidity.
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+You aren't such a complete idiot anymore.
+You have cured the stupidity affliction.
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:4869|85% [3] [Rain]:0 K:66% 
+10:32:51 (0) [Agathon]: 
+Your mind is able to focus once again.
+[Focus Recov: 2.43s]
+[B|E] [CDBK] H:6265|100% M:4869|85% [3] [Rain]:0 K:66% 
+10:32:52 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.54s]
+[B|E] [CDBK] H:6265|100% M:4869|85% [3] [Rain]:0 K:66% 
+10:32:52 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+You have been afflicted with paralysis.
+Agathon: Curse -> You
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5247|92% [3] [Rain]:0 K:69% [PAR] Bl:40 +378m 
+10:32:52 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5167|91% [3] [Rain]:0 K:69% 
+10:32:52 (0) [Agathon]: 
+[Zax]: -1 Magnesium (785).
+[B|E] [CDBK] H:6265|100% M:5167|91% [3] [Rain]:0 K:69% 
+10:32:52 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+You have been afflicted with paralysis.
+Agathon: Curse -> You
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+Agathon: Invoke Relapse -> You
+[B|E] [CDBK] H:6265|100% M:5167|91% [3] [Rain]:0 K:72% [PAR] Bl:40 
+10:32:53 (0) [Agathon]: 
+You suddenly perceive the vague outline of an aura of rebounding around Agathon.
+[B|E] [CDBK] H:6265|100% M:5167|91% [3] [Rain]:0 K:72% [PAR] Bl:40 
+10:32:53 (0) [Agathon]: 
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5087|89% [3] [Rain]:0 K:72% [PAR] 
+10:32:53 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.45s]
+[B|E] [CDBK] H:6265|100% M:5087|89% [3] [Rain]:0 K:72% [PAR] 
+10:32:54 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6265|100% M:5087|89% [3] [Rain]:0 K:72% 
+10:32:54 (0) [Agathon]: 
+[Zax]: -1 Magnesium (784).
+[B|E] [CDBK] H:6265|100% M:5087|89% [3] [Rain]:0 K:72% 
+10:32:54 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+Agathon's aura of weapons rebounding disappears.
+You have been afflicted with paralysis.
+Agathon: Curse -> You
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5005|88% [3] [Rain]:0 K:75% [PAR] Bl:40 
+10:32:55 (0) [Agathon]: 
+Agathon takes a long drag off an enamel bubble pipe.
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5208|91% [3] [Rain]:0 K:75% [PAR] +203m 
+10:32:55 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.56s]
+[B|E] [CDBK] H:6265|100% M:5208|91% [3] [Rain]:0 K:75% [PAR] 
+10:32:55 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6265|100% M:5208|91% [3] [Rain]:0 K:75% 
+10:32:56 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+Horror overcomes you as you realise that the curse of paralysis has manifested upon you once again.
+You have been afflicted with paralysis.
+A prickly stinging overcomes your body, fading away into numbness.
+[B|E] [CDBK] H:6265|100% M:5208|91% [3] [Rain]:0 K:75% [PAR] 
+10:32:56 (0) [Agathon]: 
+[Zax]: -1 Magnesium (783).
+[B|E] [CDBK] H:6265|100% M:5208|91% [3] [Rain]:0 K:75% [PAR] 
+10:32:56 (0) [Agathon]: 
+[Zax]: +Aff: haemophilia.
+You have been afflicted with haemophilia.
+Agathon: Curse -> You
+You sense a subtle change deep within.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5208|91% [3] [Rain]:0 K:78% [haem, PAR] Bl:40 
+10:32:56 (0) [Agathon]: 
+You take 40 raw, damage.
+You bleed 40 health.
+[B|E] [CDBK] H:6225|99% M:5208|91% [3] [Rain]:0 K:78% [haem, PAR] Bl:40 
+10:32:57 (0) [Agathon]: 
+[Zax]: +Aff: weariness.
+Agathon: Jinx -> You
+A prickly stinging overcomes your body, fading away into numbness.
+You have been afflicted with weariness.
+Your limbs grow heavy and you groan feebly.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5283|93% [3] [Rain]:0 K:82% [haem, wear, PAR] Bl:120 
+10:32:57 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.48s]
+[B|E] [CDBK] H:6265|100% M:5283|93% [3] [Rain]:0 K:82% [haem, wear, PAR] Bl:120 
+10:32:57 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6265|100% M:5283|93% [3] [Rain]:0 K:82% [haem, wear] Bl:120 
+10:32:57 (0) [Agathon]: 
+[Zax]: -1 Magnesium (782).
+[B|E] [CDBK] H:6265|100% M:5283|93% [3] [Rain]:0 K:82% [haem, wear] Bl:120 
+10:32:57 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.59s]
+[B|E] [CDBK] H:6265|100% M:5209|91% [3] [Rain]:0 K:82% [haem, wear] Bl:120 
+10:32:59 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+You have been afflicted with paralysis.
+Agathon: Curse -> You
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5209|91% [3] [Rain]:0 K:85% [haem, wear, PAR] Bl:160 
+10:32:59 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6265|100% M:5209|91% [3] [Rain]:0 K:85% [haem, wear] Bl:160 
+10:32:59 (0) [Agathon]: 
+[Zax]: -1 Magnesium (781).
+[B|E] [CDBK] H:6265|100% M:5209|91% [3] [Rain]:0 K:85% [haem, wear] Bl:160 
+10:32:59 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+You have been afflicted with paralysis.
+Agathon: Curse -> You
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5199|91% [3] [Rain]:0 K:88% [haem, wear, PAR] Bl:200 
+10:33:00 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.53s]
+[B|E] [CDBK] H:6265|100% M:5577|98% [3] [Rain]:0 K:88% [haem, wear, PAR] Bl:200 +378m 
+10:33:00 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6265|100% M:5577|98% [3] [Rain]:0 K:88% [haem, wear] Bl:200 
+10:33:01 (0) [Agathon]: 
+[Zax]: -1 Magnesium (780).
+[B|E] [CDBK] H:6265|100% M:5577|98% [3] [Rain]:0 K:88% [haem, wear] Bl:200 
+10:33:01 (0) [Agathon]: 
+[Zax]: +Aff: impatience.
+You have been afflicted with impatience.
+Agathon: Curse -> You
+You shuffle your feet noisily, suddenly bored.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5577|98% [3] [Rain]:0 K:91% [haem, IMP, wear] Bl:240 
+10:33:01 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+You have been afflicted with paralysis.
+Agathon: Curse -> You
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5577|98% [3] [Rain]:0 K:94% [haem, IMP, wear, PAR] Bl:280 
+10:33:02 (0) [Agathon]: 
+You take 280 raw, damage.
+You bleed 280 health.
+[B|E] [CDBK] H:5985|95% M:5577|98% [3] [Rain]:0 K:94% [haem, IMP, wear, PAR] Bl:280 -280h 
+10:33:02 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.52s]
+[B|E] [CDBK] H:5985|95% M:5577|98% [3] [Rain]:0 K:94% [haem, IMP, wear, PAR] Bl:280 
+10:33:02 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:5985|95% M:5577|98% [3] [Rain]:0 K:94% [haem, IMP, wear] Bl:280 
+10:33:02 (0) [Agathon]: 
+[Zax]: -1 Magnesium (779).
+[B|E] [CDBK] H:5985|95% M:5577|98% [3] [Rain]:0 K:94% [haem, IMP, wear] Bl:280 
+10:33:02 (0) [Agathon]: 
+[Zax]: +Aff: asthma.
+You have been afflicted with asthma.
+Agathon: Curse -> You
+You feel a tightening sensation grow in your lungs.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:5985|95% M:5511|97% [3] [Rain]:0 K:97% [haem, IMP, wear, AST] Bl:320 
+10:33:03 (0) [Agathon]: 
+[Zax]: asthma set to priority 1.
+[B|E] [CDBK] H:5985|95% M:5511|97% [3] [Rain]:0 K:97% [haem, IMP, wear, AST] Bl:320 
+10:33:03 (0) [Agathon]: say You should track enemy eat and not attempt seal if it lines up within .2 of eat
+[B|E] [CDBK] H:6185|98% M:5411|95% [3] [Rain]:0 K:97% [haem, IMP, wear, AST] Bl:320 +200h -100m 
+10:33:03 (0) [Agathon]: 
+You suddenly perceive the vague outline of an aura of rebounding around Agathon.
+[B|E] [CDBK] H:6185|98% M:5411|95% [3] [Rain]:0 K:97% [haem, IMP, wear, AST] Bl:320 
+10:33:04 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.49s]
+[B|E] [CDBK] H:6185|98% M:5411|95% [3] [Rain]:0 K:97% [haem, IMP, wear, AST] Bl:320 
+10:33:04 (0) [Agathon]: 
+[Zax]: -Aff: weariness.
+[Curing]: EAT AURUM
+You eat an aurum flake.
+Your limbs strengthen and you feel stronger.
+You have cured the weariness affliction.
+[B|E] [CDBK] H:6185|98% M:5411|95% [3] [Rain]:0 K:97% [haem, IMP, AST] Bl:320 
+10:33:04 (0) [Agathon]: 
+[Zax]: +Aff: anorexia.
+[Zax]: +Aff: slickness.
+[Zax]: -Def: fangbarrier.
+Agathon's aura of weapons rebounding disappears.
+You have been afflicted with anorexia.
+Agathon: Curse -> You
+The idea of eating or drinking is repulsive to you.
+A dull ache builds behind your eyes.
+Agathon: Invoke Coagulation -> You
+You have been afflicted with slickness.
+The protective covering coating your skin sloughs off.
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+[B|E] [CDBK] H:6185|98% M:5411|95% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:220 
+10:33:04 (0) [Agathon]: 
+[Zax]: -Aff: asthma.
+You inhale deeply, purging yourself of your asthmatic condition.
+[Bal Spent: 2.8s]
+[-|E] [CDBK] H:6185|98% M:5411|95% [3] [Rain]:0 K:100% [haem, SLCK, ANO, IMP] Bl:220 
+10:33:04 (0) [Agathon]: 
+[Zax]: -1 Aurum (925).
+[-|E] [CDBK] H:6185|98% M:5411|95% [3] [Rain]:0 K:100% [haem, SLCK, ANO, IMP] Bl:220 
+10:33:04 (0) [Agathon]: 
+[Zax]: -Aff: slickness.
+[Zax]: -Aff: anorexia.
+Agathon takes a long drag off an enamel bubble pipe.
+[Curing]: SMOKE REALGAR
+You take a long drag of realgar off your pipe.
+Your glands cease their oily secretion.
+You have cured the slickness affliction.
+[Curing]: APPLY EPIDERMAL TO BODY
+You take out some salve and quickly rub it on your body.
+Food is no longer repulsive to you.
+You have cured the anorexia affliction.
+[Curing]: APPLY QUICKSILVER
+You apply a quicksilver droplet to yourself.
+[-|E] [CDBK] H:6185|98% M:5411|95% [3] [Rain]:0 K:100% [haem, IMP] Bl:220 
+10:33:04 (0) [Agathon]: 
+[Zax]: asthma set to priority 12.
+[-|E] [CDBK] H:6185|98% M:5411|95% [3] [Rain]:0 K:100% [haem, IMP] Bl:220 
+10:33:04 (0) [Agathon]: 
+You may apply another salve to yourself.
+[Salve Recov: 0.87s]
+[-|E] [CDBK] H:6185|98% M:5401|95% [3] [Rain]:0 K:100% [haem, IMP] Bl:220 
+10:33:05 (0) [Agathon]: 
+You may utilise the tree tattoo again.
+[Tree Recov: 13.98s]
+[-|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP] Bl:220 +271m 
+10:33:05 (0) [Agathon]: 
+[Zax]: -Aff: impatience.
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+You are patient once again.
+You have cured the impatience affliction.
+You may eat another plant or mineral.
+[Eat Recov: 1.57s]
+[-|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem] Bl:220 
+10:33:05 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+[Zax]: +Aff: weariness.
+Your lungs have recovered enough to smoke another mineral or plant.
+[Smoke Recov: 1.47s]
+Agathon: Jinx -> You
+You have been afflicted with paralysis.
+A prickly stinging overcomes your body, fading away into numbness.
+You have been afflicted with weariness.
+Your limbs grow heavy and you groan feebly.
+A dull ache builds behind your eyes.
+[-|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, wear, PAR] Bl:300 
+10:33:06 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[-|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, wear] Bl:300 
+10:33:06 (0) [Agathon]: 
+[Zax]: -1 Magnesium (778).
+[-|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, wear] Bl:300 
+10:33:06 (0) [Agathon]: 
+You have recovered balance on all limbs.
+[Bal Recov: 2.69s]
+Your body is too weary to perform such a feat.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, wear] Bl:300 
+10:33:07 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.42s]
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, wear] Bl:300 
+10:33:07 (0) [Agathon]: 
+[Zax]: -Aff: haemophilia.
+[Curing]: EAT FERRUM
+You eat a ferrum flake.
+Your blood regains its ability to clot.
+You have cured the haemophilia affliction.
+[Curing]: CLOT 300
+You clot your wounds 15 times.
+[B|E] [CDBK] H:6265|100% M:5072|89% [3] [Rain]:0 K:100% [wear] -600m 
+10:33:07 (0) [Agathon]: 
+[Zax]: -1 Ferrum (1138).
+[B|E] [CDBK] H:6265|100% M:5072|89% [3] [Rain]:0 K:100% [wear] 
+10:33:07 (0) [Agathon]: 
+[Zax]: +Aff: addiction.
+[Zax]: +Aff: haemophilia.
+You have been afflicted with addiction.
+Agathon: Curse -> You
+You feel a terrible hunger grow within you.
+A dull ache builds behind your eyes.
+Agathon: Invoke Bloodlet -> You
+You have been afflicted with haemophilia.
+[B|E] [CDBK] H:6265|100% M:5072|89% [3] [Rain]:0 K:100% [haem, ADD, wear] Bl:40 
+10:33:07 (0) [Agathon]: 
+You take 40 raw, damage.
+You bleed 40 health.
+[B|E] [CDBK] H:6225|99% M:5072|89% [3] [Rain]:0 K:100% [haem, ADD, wear] Bl:40 
+10:33:08 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.52s]
+[B|E] [CDBK] H:6225|99% M:5450|96% [3] [Rain]:0 K:100% [haem, ADD, wear] Bl:40 +378m 
+10:33:09 (0) [Agathon]: 
+[Zax]: -Aff: haemophilia.
+[Curing]: EAT FERRUM
+You eat a ferrum flake.
+Your blood regains its ability to clot.
+You have cured the haemophilia affliction.
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6225|99% M:5370|94% [3] [Rain]:0 K:100% [ADD, wear] 
+10:33:09 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.45s]
+[B|E] [CDBK] H:6265|100% M:5260|92% [3] [Rain]:0 K:100% [ADD, wear] 
+10:33:10 (0) [Agathon]: 
+[Zax]: -Aff: addiction.
+[Curing]: EAT FERRUM
+You eat a ferrum flake.
+Your terrible addiction seems to wane.
+You have cured the addiction affliction.
+[B|E] [CDBK] H:6265|100% M:5260|92% [3] [Rain]:0 K:100% [wear] 
+10:33:10 (0) [Agathon]: 
+[Zax]: -1 Ferrum (1137).
+[B|E] [CDBK] H:6265|100% M:5260|92% [3] [Rain]:0 K:100% [wear] 
+10:33:11 (0) [Agathon]: 
+[Zax]: +Aff: addiction.
+[Zax]: +Aff: nausea.
+Agathon: Jinx -> You
+You have been afflicted with addiction.
+You feel a terrible hunger grow within you.
+You have been afflicted with nausea.
+A sense of extreme nausea washes over you.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5187|91% [3] [Rain]:0 K:100% [ADD, wear, naus] Bl:80 
+10:33:11 (0) [Agathon]: 
+[Curing]: CLOT 80
+You clot your wounds 4 times.
+[B|E] [CDBK] H:6265|100% M:5027|88% [3] [Rain]:0 K:100% [ADD, wear, naus] -160m 
+10:33:11 (0) [Agathon]: 
+Talo has been slain in The Collosea en Duir by Miriew Le'Yuet, Brother from another Boulder.
+[B|E] [CDBK] H:6265|100% M:5027|88% [3] [Rain]:0 K:100% [ADD, wear, naus] 
+10:33:12 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.39s]
+[B|E] [CDBK] H:6265|100% M:5027|88% [3] [Rain]:0 K:100% [ADD, wear, naus] 
+10:33:12 (0) [Agathon]: 
+[Zax]: -Aff: nausea.
+[Curing]: EAT FERRUM
+You eat a ferrum flake.
+Your stomach becalms itself.
+You have cured the nausea affliction.
+[B|E] [CDBK] H:6265|100% M:5027|88% [3] [Rain]:0 K:100% [ADD, wear] 
+10:33:12 (0) [Agathon]: 
+You suddenly perceive the vague outline of an aura of rebounding around Agathon.
+[B|E] [CDBK] H:6265|100% M:5027|88% [3] [Rain]:0 K:100% [ADD, wear] 
+10:33:12 (0) [Agathon]: 
+[Zax]: +Aff: stupidity.
+Agathon's aura of weapons rebounding disappears.
+You have been afflicted with stupidity.
+Agathon: Curse -> You
+Hmmmm. Why must everything be so difficult to figure out?
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5027|88% [3] [Rain]:0 K:100% [ADD, STUP, wear] Bl:40 
+10:33:13 (0) [Agathon]: 
+[Zax]: -Aff: stupidity.
+Agathon takes a long drag off an enamel bubble pipe.
+[Curing]: FOCUS MIND
+You focus your mind intently on curing your mental maladies.
+You aren't such a complete idiot anymore.
+You have cured the stupidity affliction.
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[Curing]: SIP MANA
+You take a drink from an amethyst vial.
+Your mind feels stronger and more alert.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [ADD, wear] +645m 
+10:33:13 (0) [Agathon]: 
+You have added the RECKLESSNESS affliction to your predicted afflictions list.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [ADD, wear] 
+10:33:13 (0) [Agathon]: 
+You are predicting that you have the recklessness afflictions.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [ADD, wear] 
+10:33:13 (0) [Agathon]: 
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [ADD, wear] 
+10:33:13 (0) [Agathon]: 
+You may purge your lungs once again.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [ADD, wear] 
+10:33:14 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.64s]
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [ADD, wear] 
+10:33:14 (0) [Agathon]: 
+[Zax]: -Aff: addiction.
+[Curing]: EAT FERRUM
+You eat a ferrum flake.
+Your terrible addiction seems to wane.
+You have cured the addiction affliction.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [wear] 
+10:33:14 (0) [Agathon]: 
+You are predicting that you have the recklessness afflictions.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [wear] 
+10:33:14 (0) [Agathon]: 
+[Zax]: -1 Ferrum (1136).
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [wear] 
+10:33:14 (0) [Agathon]: 
+[Zax]: +Aff: stupidity.
+You have been afflicted with stupidity.
+Agathon: Curse -> You
+Hmmmm. Why must everything be so difficult to figure out?
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [STUP, wear] Bl:40 
+10:33:14 (0) [Agathon]: 
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[Zax]: +Def: fangbarrier.
+The quicksilver hardens into a supple metallic shell.
+[B|E] [CDBK] H:6265|100% M:5592|98% [3] [Rain]:0 K:100% [STUP, wear] 
+10:33:14 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+You have been afflicted with paralysis.
+Agathon: Curse -> You
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5512|97% [3] [Rain]:0 K:100% [STUP, wear, PAR] Bl:40 
+10:33:15 (0) [Agathon]: 
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5432|95% [3] [Rain]:0 K:100% [STUP, wear, PAR] 
+10:33:15 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.44s]
+[B|E] [CDBK] H:6265|100% M:5432|95% [3] [Rain]:0 K:100% [STUP, wear, PAR] 
+10:33:15 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You pick your nose absently.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6265|100% M:5432|95% [3] [Rain]:0 K:100% [STUP, wear] 
+10:33:15 (0) [Agathon]: 
+You are predicting that you have the recklessness afflictions.
+[B|E] [CDBK] H:6265|100% M:5432|95% [3] [Rain]:0 K:100% [STUP, wear] 
+10:33:15 (0) [Agathon]: 
+[Zax]: -1 Magnesium (777).
+[B|E] [CDBK] H:6265|100% M:5432|95% [3] [Rain]:0 K:100% [STUP, wear] 
+10:33:15 (0) [Agathon]: 
+Your mind is able to focus once again.
+[Focus Recov: 2.48s]
+[B|E] [CDBK] H:6265|100% M:5432|95% [3] [Rain]:0 K:100% [STUP, wear] 
+10:33:15 (0) [Agathon]: 
+[Zax]: -Aff: stupidity.
+[Curing]: FOCUS MIND
+You focus your mind intently on curing your mental maladies.
+You aren't such a complete idiot anymore.
+You have cured the stupidity affliction.
+[B|E] [CDBK] H:6265|100% M:5549|97% [3] [Rain]:0 K:100% [wear] +117m 
+10:33:16 (0) [Agathon]: 
+You are predicting that you have the recklessness afflictions.
+[B|E] [CDBK] H:6265|100% M:5549|97% [3] [Rain]:0 K:100% [wear] 
+10:33:16 (0) [Agathon]: 
+[Zax]: +Aff: impatience.
+You have been afflicted with impatience.
+Agathon: Curse -> You
+You shuffle your feet noisily, suddenly bored.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5549|97% [3] [Rain]:0 K:100% [IMP, wear] Bl:40 
+10:33:16 (0) [Agathon]: 
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5469|96% [3] [Rain]:0 K:100% [IMP, wear] 
+10:33:16 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.56s]
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:90% [IMP, wear] +203m 
+10:33:17 (0) [Agathon]: 
+[Zax]: +Aff: stupidity.
+You have been afflicted with stupidity.
+Agathon: Curse -> You
+Hmmmm. Why must everything be so difficult to figure out?
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:93% [IMP, STUP, wear] Bl:40 
+10:33:17 (0) [Agathon]: 
+[Zax]: -Aff: stupidity.
+[Curing]: EAT PLUMBUM
+You eat a plumbum flake.
+You aren't such a complete idiot anymore.
+You have cured the stupidity affliction.
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5592|98% [3] [Rain]:0 K:93% [IMP, wear] 
+10:33:17 (0) [Agathon]: 
+You are predicting that you have the recklessness afflictions.
+[B|E] [CDBK] H:6265|100% M:5592|98% [3] [Rain]:0 K:93% [IMP, wear] 
+10:33:17 (0) [Agathon]: 
+[Zax]: -1 Plumbum (1000).
+[B|E] [CDBK] H:6265|100% M:5592|98% [3] [Rain]:0 K:93% [IMP, wear] 
+10:33:17 (0) [Agathon]: 
+You may drink another health or mana elixir.
+[Sip Recov: 4.4s]
+[B|E] [CDBK] H:6265|100% M:5592|98% [3] [Rain]:0 K:93% [IMP, wear] 
+10:33:17 (0) [Agathon]: 
+Agathon weaves his fingers together skilfully.
+Your mind is able to focus once again.
+[Focus Recov: 2.38s]
+[B|E] [CDBK] H:6265|100% M:5592|98% [3] [Rain]:0 K:93% [IMP, wear] 
+10:33:18 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.5s]
+[B|E] [CDBK] H:6265|100% M:5592|98% [3] [Rain]:0 K:93% [IMP, wear] 
+10:33:19 (0) [Agathon]: 
+[Zax]: -Aff: impatience.
+[Curing]: EAT PLUMBUM
+You eat a plumbum flake.
+You are patient once again.
+You have cured the impatience affliction.
+[Curing]: FOCUS MIND
+You focus your mind intently on curing your mental maladies.
+[B|E] [CDBK] H:6265|100% M:5426|95% [3] [Rain]:0 K:93% [wear] -166m 
+10:33:19 (0) [Agathon]: 
+You are not predicting that you have any afflictions at present.
+[B|E] [CDBK] H:6265|100% M:5359|94% [3] [Rain]:0 K:93% [wear] 
+10:33:19 (0) [Agathon]: 
+[Zax]: -1 Plumbum (999).
+[B|E] [CDBK] H:6265|100% M:5359|94% [3] [Rain]:0 K:93% [wear] 
+10:33:19 (0) [Agathon]: 
+[Zax]: +Aff: dizziness.
+You have been afflicted with dizziness.
+Agathon: Curse -> You
+Your mind swims as dizziness overtakes you.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5359|94% [3] [Rain]:0 K:96% [dizz, wear] Bl:40 
+10:33:19 (0) [Agathon]: 
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5279|93% [3] [Rain]:0 K:96% [dizz, wear] 
+10:33:19 (0) [Agathon]: 
+You may utilise the tree tattoo again.
+[Tree Recov: 13.99s]
+[B|E] [CDBK] H:6265|100% M:5269|92% [3] [Rain]:0 K:96% [dizz, wear] 
+10:33:19 (0) [Agathon]: 
+[Zax]: -Aff: weariness.
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Your limbs strengthen and you feel stronger.
+You have cured the weariness affliction.
+[B|E] [CDBK] H:6265|100% M:5269|92% [3] [Rain]:0 K:96% [dizz] 
+10:33:19 (0) [Agathon]: 
+[Zax]: +Aff: impatience.
+You have been afflicted with impatience.
+Agathon: Curse -> You
+You shuffle your feet noisily, suddenly bored.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5269|92% [3] [Rain]:0 K:99% [dizz, IMP] Bl:40 
+10:33:20 (0) [Agathon]: 
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5189|91% [3] [Rain]:0 K:99% [dizz, IMP] 
+10:33:20 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.41s]
+[B|E] [CDBK] H:6265|100% M:5189|91% [3] [Rain]:0 K:99% [dizz, IMP] 
+10:33:20 (0) [Agathon]: 
+[Zax]: -Aff: impatience.
+[Curing]: EAT PLUMBUM
+You eat a plumbum flake.
+You are patient once again.
+You have cured the impatience affliction.
+[B|E] [CDBK] H:6265|100% M:5189|91% [3] [Rain]:0 K:99% [dizz] 
+10:33:20 (0) [Agathon]: 
+[Zax]: -1 Plumbum (998).
+[B|E] [CDBK] H:6265|100% M:5189|91% [3] [Rain]:0 K:99% [dizz] 
+10:33:20 (0) [Agathon]: 
+[Zax]: +Aff: impatience.
+You have been afflicted with impatience.
+Agathon: Curse -> You
+You shuffle your feet noisily, suddenly bored.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5189|91% [3] [Rain]:0 K:100% [dizz, IMP] Bl:40 
+10:33:21 (0) [Agathon]: 
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5109|90% [3] [Rain]:0 K:100% [dizz, IMP] 
+10:33:21 (0) [Agathon]: 
+Your mind is able to focus once again.
+[Focus Recov: 2.36s]
+[B|E] [CDBK] H:6265|100% M:5109|90% [3] [Rain]:0 K:100% [dizz, IMP] 
+10:33:21 (0) [Agathon]: 
+You suddenly perceive the vague outline of an aura of rebounding around Agathon.
+[B|E] [CDBK] H:6265|100% M:5109|90% [3] [Rain]:0 K:100% [dizz, IMP] 
+10:33:21 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.48s]
+[B|E] [CDBK] H:6265|100% M:5109|90% [3] [Rain]:0 K:100% [dizz, IMP] 
+10:33:22 (0) [Agathon]: 
+[Zax]: -Aff: dizziness.
+[Curing]: EAT PLUMBUM
+You eat a plumbum flake.
+You are no longer dizzy.
+You have cured the dizziness affliction.
+[B|E] [CDBK] H:6265|100% M:5109|90% [3] [Rain]:0 K:100% [IMP] 
+10:33:22 (0) [Agathon]: 
+[Zax]: -1 Plumbum (997).
+[B|E] [CDBK] H:6265|100% M:5109|90% [3] [Rain]:0 K:100% [IMP] 
+10:33:22 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+Agathon's aura of weapons rebounding disappears.
+You have been afflicted with paralysis.
+Agathon: Curse -> You
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+Agathon: Invoke Relapse -> You
+[B|E] [CDBK] H:6265|100% M:5109|90% [3] [Rain]:0 K:100% [IMP, PAR] Bl:40 
+10:33:22 (0) [Agathon]: 
+A great gurgling sound is heard as Agathon takes a long drag from an enamel bubble pipe. A series of shining bubbles erupt from the bowl of his pipe.
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5029|88% [3] [Rain]:0 K:100% [IMP, PAR] 
+10:33:22 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.53s]
+[B|E] [CDBK] H:6265|100% M:4964|87% [3] [Rain]:0 K:100% [IMP, PAR] 
+10:33:23 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6265|100% M:4964|87% [3] [Rain]:0 K:100% [IMP] 
+10:33:23 (0) [Agathon]: 
+[Zax]: -1 Magnesium (776).
+[B|E] [CDBK] H:6265|100% M:4964|87% [3] [Rain]:0 K:100% [IMP] 
+10:33:24 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+You have been afflicted with paralysis.
+Agathon: Curse -> You
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5342|94% [3] [Rain]:0 K:100% [IMP, PAR] Bl:40 +378m 
+10:33:24 (0) [Agathon]: 
+You take 40 raw, damage.
+You bleed 40 health.
+[B|E] [CDBK] H:6225|99% M:5342|94% [3] [Rain]:0 K:100% [IMP, PAR] Bl:32 
+10:33:24 (0) [Agathon]: 
+[Curing]: CLOT 32
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6225|99% M:5262|92% [3] [Rain]:0 K:100% [IMP, PAR] 
+10:33:24 (0) [Agathon]: 
+Horror overcomes you as you realise that the curse of paralysis has manifested upon you once again.
+A prickly stinging overcomes your body, fading away into numbness.
+[B|E] [CDBK] H:6225|99% M:5252|92% [3] [Rain]:0 K:100% [IMP, PAR] 
+10:33:25 (0) [Agathon]: 
+[Zax]: +Aff: haemophilia.
+You have been afflicted with haemophilia.
+Agathon: Curse -> You
+You sense a subtle change deep within.
+A dull ache builds behind your eyes.
+You may eat another plant or mineral.
+[Eat Recov: 1.49s]
+[B|E] [CDBK] H:6225|99% M:5252|92% [3] [Rain]:0 K:100% [haem, IMP, PAR] Bl:40 
+10:33:25 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6225|99% M:5252|92% [3] [Rain]:0 K:100% [haem, IMP] Bl:40 
+10:33:25 (0) [Agathon]: 
+[Zax]: -1 Magnesium (775).
+[B|E] [CDBK] H:6225|99% M:5252|92% [3] [Rain]:0 K:100% [haem, IMP] Bl:40 
+10:33:25 (0) [Agathon]: 
+The bubbles spewn from an enamel bubble pipe burst. *POP*  *POP*   *POP*
+[B|E] [CDBK] H:6225|99% M:5252|92% [3] [Rain]:0 K:100% [haem, IMP] Bl:40 
+10:33:25 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+Agathon: Jinx -> You
+You have been afflicted with paralysis.
+A prickly stinging overcomes your body, fading away into numbness.
+You shuffle your feet noisily, suddenly bored.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5535|97% [3] [Rain]:0 K:100% [haem, IMP, PAR] Bl:120 +283m 
+10:33:26 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.48s]
+[B|E] [CDBK] H:6265|100% M:5535|97% [3] [Rain]:0 K:100% [haem, IMP, PAR] Bl:120 
+10:33:27 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6265|100% M:5610|98% [3] [Rain]:0 K:100% [haem, IMP] Bl:120 
+10:33:27 (0) [Agathon]: 
+[Zax]: -1 Magnesium (774).
+[B|E] [CDBK] H:6265|100% M:5610|98% [3] [Rain]:0 K:100% [haem, IMP] Bl:120 
+10:33:27 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+[Zax]: +Aff: asthma.
+Agathon: Jinx -> You
+You have been afflicted with paralysis.
+A prickly stinging overcomes your body, fading away into numbness.
+You have been afflicted with asthma.
+You feel a tightening sensation grow in your lungs.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5540|97% [3] [Rain]:0 K:100% [haem, IMP, PAR, AST] Bl:200 
+10:33:28 (0) [Agathon]: 
+[Zax]: +Def: curseward.
+You: Curseward
+[Eq Spent: 2.89s]
+[B|-] [CDBK] H:6265|100% M:5374|94% [3] [Rain]:0 K:100% [haem, IMP, PAR, AST] Bl:200 -166m 
+10:33:28 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.52s]
+[B|-] [CDBK] H:6265|100% M:5374|94% [3] [Rain]:0 K:100% [haem, IMP, PAR, AST] Bl:200 
+10:33:28 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|-] [CDBK] H:6265|100% M:5374|94% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:200 
+10:33:28 (0) [Agathon]: 
+[Zax]: paralysis set to priority 25.
+[B|-] [CDBK] H:6265|100% M:5374|94% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:200 
+10:33:28 (0) [Agathon]: 
+[Zax]: -1 Magnesium (773).
+[B|-] [CDBK] H:6265|100% M:5374|94% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:200 
+10:33:28 (0) [Agathon]: 
+[Zax]: paralysis set to priority 5.
+[B|-] [CDBK] H:6265|100% M:5364|94% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:200 
+10:33:29 (0) [Agathon]: 
+You take 200 raw, damage.
+You bleed 200 health.
+[B|-] [CDBK] H:6065|96% M:5364|94% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:200 -200h 
+10:33:30 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.61s]
+[B|-] [CDBK] H:6065|96% M:5364|94% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:200 
+10:33:30 (0) [Agathon]: 
+[Zax]: -Aff: haemophilia.
+[Curing]: EAT FERRUM
+You eat a ferrum flake.
+Your blood regains its ability to clot.
+You have cured the haemophilia affliction.
+[Curing]: CLOT 200
+You clot your wounds 10 times.
+[B|-] [CDBK] H:6065|96% M:4964|87% [3] [Rain]:0 K:100% [IMP, AST] -400m 
+10:33:30 (0) [Agathon]: 
+[Zax]: -Def: curseward.
+Your curseward has been breached!
+Agathon: Curse -> You
+A dull ache builds behind your eyes.
+[B|-] [CDBK] H:6065|96% M:4964|87% [3] [Rain]:0 K:100% [IMP, AST] Bl:40 
+10:33:30 (0) [Agathon]: 
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[Zax]: -1 Ferrum (1135).
+[B|-] [CDBK] H:6065|96% M:4884|86% [3] [Rain]:0 K:100% [IMP, AST] 
+10:33:30 (0) [Agathon]: 
+You suddenly perceive the vague outline of an aura of rebounding around Agathon.
+[B|-] [CDBK] H:6065|96% M:4812|84% [3] [Rain]:0 K:100% [IMP, AST] 
+10:33:31 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+[Zax]: +Aff: haemophilia.
+[Zax]: -Aff: asthma.
+Agathon's aura of weapons rebounding disappears.
+Agathon: Jinx -> You
+You have been afflicted with paralysis.
+A prickly stinging overcomes your body, fading away into numbness.
+You have been afflicted with haemophilia.
+You sense a subtle change deep within.
+A dull ache builds behind your eyes.
+You have recovered equilibrium.
+[Eq Recov: 2.95s]
+You inhale deeply, purging yourself of your asthmatic condition.
+[Bal Spent: 2.8s]
+[-|E] [CDBK] H:6065|96% M:4812|84% [3] [Rain]:0 K:100% [haem, IMP, PAR] Bl:80 
+10:33:31 (0) [Agathon]: 
+A great gurgling sound is heard as Agathon takes a long drag from an enamel bubble pipe. A series of shining bubbles erupt from the bowl of his pipe.
+[Curing]: SIP MANA
+You take a drink from an amethyst vial.
+Your mind feels stronger and more alert.
+[-|E] [CDBK] H:6065|96% M:5457|96% [3] [Rain]:0 K:100% [haem, IMP, PAR] Bl:80 +645m 
+10:33:31 (0) [Agathon]: 
+[Zax]: paralysis set to priority 25.
+[-|E] [CDBK] H:6065|96% M:5457|96% [3] [Rain]:0 K:100% [haem, IMP, PAR] Bl:80 
+10:33:31 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.44s]
+[-|E] [CDBK] H:6065|96% M:5457|96% [3] [Rain]:0 K:100% [haem, IMP, PAR] Bl:80 
+10:33:31 (0) [Agathon]: 
+[Zax]: -Aff: haemophilia.
+[Curing]: EAT FERRUM
+You eat a ferrum flake.
+Your blood regains its ability to clot.
+You have cured the haemophilia affliction.
+[Curing]: CLOT 80
+You clot your wounds 4 times.
+[-|E] [CDBK] H:6065|96% M:5297|93% [3] [Rain]:0 K:100% [IMP, PAR] -160m 
+10:33:32 (0) [Agathon]: 
+[Zax]: -1 Ferrum (1134).
+[-|E] [CDBK] H:6065|96% M:5297|93% [3] [Rain]:0 K:100% [IMP, PAR] 
+10:33:32 (0) [Agathon]: 
+[Zax]: +Aff: haemophilia.
+You have been afflicted with haemophilia.
+Agathon: Curse -> You
+You sense a subtle change deep within.
+A dull ache builds behind your eyes.
+[-|E] [CDBK] H:6065|96% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, PAR] Bl:40 +375m 
+10:33:33 (0) [Agathon]: 
+[Zax]: paralysis set to priority 5.
+[-|E] [CDBK] H:6265|100% M:5572|98% [3] [Rain]:0 K:100% [haem, IMP, PAR] Bl:40 
+10:33:33 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.55s]
+[-|E] [CDBK] H:6265|100% M:5572|98% [3] [Rain]:0 K:100% [haem, IMP, PAR] Bl:40 
+10:33:33 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+Agathon takes a drink from an oaken vial.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[-|E] [CDBK] H:6265|100% M:5572|98% [3] [Rain]:0 K:100% [haem, IMP] Bl:40 
+10:33:33 (0) [Agathon]: 
+[Zax]: -1 Magnesium (772).
+[-|E] [CDBK] H:6265|100% M:5572|98% [3] [Rain]:0 K:100% [haem, IMP] Bl:40 
+10:33:33 (0) [Agathon]: 
+You may utilise the tree tattoo again.
+[Tree Recov: 14s]
+[-|E] [CDBK] H:6265|100% M:5572|98% [3] [Rain]:0 K:100% [haem, IMP] Bl:40 
+10:33:33 (0) [Agathon]: 
+[Zax]: -Aff: haemophilia.
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Your blood regains its ability to clot.
+You have cured the haemophilia affliction.
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[-|E] [CDBK] H:6265|100% M:5492|96% [3] [Rain]:0 K:100% [IMP] 
+10:33:34 (0) [Agathon]: 
+You have recovered balance on all limbs.
+[Bal Recov: 2.65s]
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5492|96% [3] [Rain]:0 K:100% [IMP] 
+10:33:34 (0) [Agathon]: 
+[Zax]: +Aff: weariness.
+You have been afflicted with weariness.
+Agathon: Curse -> You
+Your limbs grow heavy and you groan feebly.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5492|96% [3] [Rain]:0 K:100% [IMP, wear] Bl:40 
+10:33:34 (0) [Agathon]: 
+[Curing]: CLOT 40
+You clot your wounds 2 times.
+[B|E] [CDBK] H:6265|100% M:5412|95% [3] [Rain]:0 K:100% [IMP, wear] 
+10:33:34 (0) [Agathon]: 
+The bubbles spewn from an enamel bubble pipe burst. *POP*  *POP*   *POP*
+[B|E] [CDBK] H:6265|100% M:5402|95% [3] [Rain]:0 K:100% [IMP, wear] 
+10:33:34 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.44s]
+[B|E] [CDBK] H:6265|100% M:5402|95% [3] [Rain]:0 K:100% [IMP, wear] 
+10:33:35 (0) [Agathon]: 
+[Zax]: -Aff: impatience.
+[Curing]: EAT PLUMBUM
+You eat a plumbum flake.
+You are patient once again.
+You have cured the impatience affliction.
+[B|E] [CDBK] H:6265|100% M:5402|95% [3] [Rain]:0 K:100% [wear] 
+10:33:35 (0) [Agathon]: 
+[Zax]: -1 Plumbum (996).
+[B|E] [CDBK] H:6265|100% M:5402|95% [3] [Rain]:0 K:100% [wear] 
+10:33:35 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+[Zax]: +Aff: haemophilia.
+You have been afflicted with paralysis.
+Agathon: Curse -> You
+A prickly stinging overcomes your body, fading away into numbness.
+A dull ache builds behind your eyes.
+Agathon: Invoke Bloodlet -> You
+You have been afflicted with haemophilia.
+[B|E] [CDBK] H:6265|100% M:5402|95% [3] [Rain]:0 K:100% [haem, wear, PAR] Bl:40 
+10:33:35 (0) [Agathon]: 
+You take 40 raw, damage.
+You bleed 40 health.
+[B|E] [CDBK] H:6225|99% M:5402|95% [3] [Rain]:0 K:100% [haem, wear, PAR] Bl:40 
+10:33:35 (0) [Agathon]: 
+You may drink another health or mana elixir.
+[Sip Recov: 4.37s]
+[B|E] [CDBK] H:6225|99% M:5334|94% [3] [Rain]:0 K:100% [haem, wear, PAR] Bl:40 
+10:33:36 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.5s]
+[B|E] [CDBK] H:6265|100% M:5617|99% [3] [Rain]:0 K:100% [haem, wear, PAR] Bl:40 +283m 
+10:33:36 (0) [Agathon]: 
+[Zax]: -Aff: paralysis.
+[Curing]: EAT MAGNESIUM
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[B|E] [CDBK] H:6265|100% M:5617|99% [3] [Rain]:0 K:100% [haem, wear] Bl:40 
+10:33:36 (0) [Agathon]: 
+[Zax]: -1 Magnesium (771).
+[B|E] [CDBK] H:6265|100% M:5617|99% [3] [Rain]:0 K:100% [haem, wear] Bl:40 
+10:33:36 (0) [Agathon]: 
+[Zax]: +Aff: impatience.
+[Zax]: +Aff: asthma.
+Agathon: Jinx -> You
+You have been afflicted with impatience.
+You shuffle your feet noisily, suddenly bored.
+You have been afflicted with asthma.
+You feel a tightening sensation grow in your lungs.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, wear, AST] Bl:120 
+10:33:37 (0) [Agathon]: 
+[Zax]: asthma set to priority 1.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, wear, AST] Bl:120 
+10:33:37 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.49s]
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, wear, AST] Bl:120 
+10:33:38 (0) [Agathon]: 
+[Zax]: -Aff: weariness.
+[Curing]: EAT AURUM
+You eat an aurum flake.
+Your limbs strengthen and you feel stronger.
+You have cured the weariness affliction.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:120 
+10:33:38 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:120 
+10:33:38 (0) [Agathon]: 
+[Zax]: -1 Aurum (924).
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:120 
+10:33:38 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:120 
+10:33:38 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:120 
+10:33:38 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:120 
+10:33:38 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:120 
+10:33:38 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:120 
+10:33:38 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:120 
+10:33:38 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:120 
+10:33:38 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:120 
+10:33:38 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:120 
+10:33:38 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:120 
+10:33:38 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:120 
+10:33:38 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:120 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:120 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:120 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [haem, IMP, AST] Bl:120 
+10:33:39 (0) [Agathon]: 
+[Zax]: +Aff: anorexia.
+[Zax]: +Aff: slickness.
+[Zax]: -Def: fangbarrier.
+You have been afflicted with anorexia.
+Agathon: Curse -> You
+The idea of eating or drinking is repulsive to you.
+A dull ache builds behind your eyes.
+Agathon: Invoke Coagulation -> You
+You have been afflicted with slickness.
+The protective covering coating your skin sloughs off.
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:39 (0) [Agathon]: 
+You may eat another plant or mineral.
+[Eat Recov: 1.59s]
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You suddenly perceive the vague outline of an aura of rebounding around Agathon.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5596|98% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+You may not purge your lungs again as of this time.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, AST] Bl:20 
+10:33:40 (0) [Agathon]: 
+[Zax]: +Aff: weariness.
+Agathon's aura of weapons rebounding disappears.
+You have been afflicted with weariness.
+Agathon: Curse -> You
+Your limbs grow heavy and you groan feebly.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, wear, AST] Bl:60 
+10:33:40 (0) [Agathon]: 
+Agathon takes a long drag off an enamel bubble pipe.
+Your body is too weary to perform such a feat.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, wear, AST] Bl:60 
+10:33:40 (0) [Agathon]: 
+Your body is too weary to perform such a feat.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, wear, AST] Bl:60 
+10:33:40 (0) [Agathon]: 
+Your body is too weary to perform such a feat.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, wear, AST] Bl:60 
+10:33:40 (0) [Agathon]: 
+Your body is too weary to perform such a feat.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, wear, AST] Bl:60 
+10:33:41 (0) [Agathon]: 
+Your body is too weary to perform such a feat.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, wear, AST] Bl:60 
+10:33:41 (0) [Agathon]: 
+Your body is too weary to perform such a feat.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, wear, AST] Bl:60 
+10:33:41 (0) [Agathon]: 
+Your body is too weary to perform such a feat.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, wear, AST] Bl:60 
+10:33:41 (0) [Agathon]: 
+Your body is too weary to perform such a feat.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, wear, AST] Bl:60 
+10:33:41 (0) [Agathon]: 
+Your body is too weary to perform such a feat.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, wear, AST] Bl:60 
+10:33:41 (0) [Agathon]: 
+Your body is too weary to perform such a feat.
+[B|E] [CDBK] H:6265|100% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, wear, AST] Bl:60 
+10:33:41 (0) [Agathon]: 
+You take 60 raw, damage.
+You bleed 60 health.
+[B|E] [CDBK] H:6205|99% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, wear, AST] Bl:60 
+10:33:41 (0) [Agathon]: 
+Your body is too weary to perform such a feat.
+[B|E] [CDBK] H:6205|99% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, wear, AST] Bl:60 
+10:33:41 (0) [Agathon]: 
+Your body is too weary to perform such a feat.
+[B|E] [CDBK] H:6205|99% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, wear, AST] Bl:60 
+10:33:41 (0) [Agathon]: 
+You may purge your lungs once again.
+[B|E] [CDBK] H:6205|99% M:5672|100% [3] [Rain]:0 K:100% [h] [haem, SLCK, ANO, IMP, wear, AST] Bl:60 
+10:33:41 (0) [Agathon]: 
+[Zax]: +Aff: paralysis.
+Agathon: Jinx -> You
+You have been afflicted with paralysis.
+A prickly stinging overcomes your body, fading away into numbness.
+You sense a subtle change deep within.
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:6205|99% M:5672|100% [3] [Rain]:0 K:100% [true] [haem, SLCK, ANO, IMP, wear, PAR, AST] Bl:140 
+10:33:42 (0) [Agathon]: 
+[Zax]: +Def: curseward.
+You: Curseward
+[Eq Spent: 2.89s]
+[B|-] [CDBK] H:6205|99% M:5506|97% [3] [Rain]:0 K:100% [true] [haem, SLCK, ANO, IMP, wear, PAR, AST] Bl:140 -166m 
+10:33:42 (0) [Agathon]: diag
+[Zax]: paralysis set to priority 25.
+[B|-] [CDBK] H:6205|99% M:5506|97% [3] [Rain]:0 K:100% [true] [haem, SLCK, ANO, IMP, wear, PAR, AST] Bl:140 
+10:33:42 (0) [Agathon]: 
+You must regain equilibrium first.
+[B|-] [CDBK] H:6205|99% M:5506|97% [3] [Rain]:0 K:100% [true] [haem, SLCK, ANO, IMP, wear, PAR, AST] Bl:140 
+10:33:42 (0) [Agathon]: nod
+You nod your head emphatically.
+[B|-] [CDBK] H:6205|99% M:5436|95% [3] [Rain]:0 K:100% [true] [haem, SLCK, ANO, IMP, wear, PAR, AST] Bl:140 
+10:33:44 (0) [Agathon]: 
+[Zax]: paralysis set to priority 5.
+[B|-] [CDBK] H:6205|99% M:5436|95% [3] [Rain]:0 K:100% [true] [haem, SLCK, ANO, IMP, wear, PAR, AST] Bl:140 
+10:33:44 (0) [Agathon]: 
+[Zax]: -Def: curseward.
+Your curseward has been breached!
+Agathon: Curse -> You
+A dull ache builds behind your eyes.
+[B|-] [CDBK] H:6205|99% M:5436|95% [3] [Rain]:0 K:100% [true] [haem, SLCK, ANO, IMP, wear, PAR, AST] Bl:180 
+10:33:44 (0) [Agathon]: 
+It is now the 2nd of Daedalan, 1014 years after the fall of the Seleucarian Empire.
+[B|-] [CDBK] H:6205|99% M:5426|95% [3] [Rain]:0 K:100% [true] [haem, SLCK, ANO, IMP, wear, PAR, AST] Bl:180 
+10:33:45 (0) [Agathon]: 
+[Zax]: +Def: curseward.
+A dull ache builds behind your eyes.
+Agathon: Curse -> You
+You have recovered equilibrium.
+[Eq Recov: 2.95s]
+You: Curseward
+[Eq Spent: 2.89s]
+[B|-] [CDBK] H:6265|100% M:5160|90% [3] [Rain]:0 K:100% [true] [haem, SLCK, ANO, IMP, wear, PAR, AST] Bl:220 -266m 
+10:33:45 (0) [Agathon]: 
+[Zax]: paralysis set to priority 25.
+[B|-] [CDBK] H:6265|100% M:5160|90% [3] [Rain]:0 K:100% [true] [haem, SLCK, ANO, IMP, wear, PAR, AST] Bl:220 
+10:33:45 (0) [Agathon]: 
+[Zax]: -Def: curseward.
+Your curseward has been breached!
+Agathon: Curse -> You
+A dull ache builds behind your eyes.
+[B|-] [CDBK] H:6265|100% M:5160|90% [3] [Rain]:0 K:100% [true] [haem, SLCK, ANO, IMP, wear, PAR, AST] Bl:260 
+10:33:46 (0) [Agathon]: 
+You take 260 raw, damage.
+You bleed 260 health.
+[B|-] [CDBK] H:6005|95% M:5160|90% [3] [Rain]:0 K:100% [true] [haem, SLCK, ANO, IMP, wear, PAR, AST] Bl:260 -260h 
+10:33:46 (0) [Agathon]: 
+[Zax]: paralysis set to priority 5.
+[B|-] [CDBK] H:6005|95% M:5160|90% [3] [Rain]:0 K:90% [true] [haem, SLCK, ANO, IMP, wear, PAR, AST] Bl:260 
+10:33:46 (0) [Agathon]: 
+Agathon: Jinx -> You
+Your limbs grow heavy and you groan feebly.
+You shuffle your feet noisily, suddenly bored.
+A dull ache builds behind your eyes.
+[B|-] [CDBK] H:6265|100% M:5443|95% [3] [Rain]:0 K:94% [true] [haem, SLCK, ANO, IMP, wear, PAR, AST] Bl:340 
+10:33:47 (0) [Agathon]: 
+You may utilise the tree tattoo again.
+[Tree Recov: 14.01s]
+[Zax]: +Def: curseward.
+You have recovered equilibrium.
+[Eq Recov: 2.88s]
+You: Curseward
+[Eq Spent: 2.89s]
+[B|-] [CDBK] H:6265|100% M:5506|97% [3] [Rain]:0 K:94% [true] [haem, SLCK, ANO, IMP, wear, PAR, AST] Bl:340 -166m 
+10:33:48 (0) [Agathon]: 
+[Zax]: -Def: curseward.
+Your curseward has been breached!
+Agathon: Curse -> You
+A dull ache builds behind your eyes.
+[B|-] [CDBK] H:6265|100% M:5506|97% [3] [Rain]:0 K:97% [true] [haem, SLCK, ANO, IMP, wear, PAR, AST] Bl:380 
+10:33:49 (0) [Agathon]: 
+You suddenly perceive the vague outline of an aura of rebounding around Agathon.
+[Zax]: +Aff: stupidity.
+Agathon's aura of weapons rebounding disappears.
+Agathon: Jinx -> You
+You feel a tightening sensation grow in your lungs.
+You have been afflicted with stupidity.
+Hmmmm. Why must everything be so difficult to figure out?
+A dull ache builds behind your eyes.
+[B|-] [CDBK] H:6265|100% M:5496|96% [3] [Rain]:0 K:100% [true] [haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:460 
+10:33:50 (0) [Agathon]: 
+Agathon takes a long drag off an enamel bubble pipe.
+[Zax]: +Def: curseward.
+You have recovered equilibrium.
+[Eq Recov: 2.87s]
+You: Curseward
+[Eq Spent: 2.89s]
+[B|-] [CDBK] H:6265|100% M:5330|93% [3] [Rain]:0 K:100% [true] [haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:460 -166m 
+10:33:51 (0) [Agathon]: 
+You take 460 raw, damage.
+You bleed 460 health.
+[B|-] [CDBK] H:5805|92% M:5266|92% [3] [Rain]:0 K:100% [true] [haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:460 -460h 
+10:33:52 (0) [Agathon]: 
+[Zax]: -Def: curseward.
+Your curseward has been breached!
+Agathon: Curse -> You
+A dull ache builds behind your eyes.
+[B|-] [CDBK] H:5805|92% M:5266|92% [3] [Rain]:0 K:100% [true] [haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:500 
+10:33:52 (0) [Agathon]: 
+You blink.
+[B|-] [CDBK] H:5805|92% M:5266|92% [3] [Rain]:0 K:100% [true] [haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:500 
+10:33:52 (0) [Agathon]: 
+The idea of eating or drinking is repulsive to you.
+Agathon: Curse -> You
+A dull ache builds behind your eyes.
+Agathon: Invoke Coagulation -> You
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+[B|-] [CDBK] H:5805|92% M:5266|92% [3] [Rain]:0 K:100% [true] [haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:400 
+10:33:53 (0) [Agathon]: 
+[Zax]: +Def: curseward.
+You have recovered equilibrium.
+[Eq Recov: 2.95s]
+You: Curseward
+[Eq Spent: 2.89s]
+[B|-] [CDBK] H:5805|92% M:5100|89% [3] [Rain]:0 K:100% [true] [haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:400 -166m 
+10:33:54 (0) [Agathon]: 
+Agathon: Jinx -> You
+[B|-] [CDBK] H:5805|92% M:5090|89% [3] [Rain]:0 K:100% [true] [haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:400 
+10:33:54 (0) [Agathon]: 
+A shade of magic has destroyed Zargoth with the wonders of the arcane.
+[B|-] [CDBK] H:5805|92% M:5090|89% [3] [Rain]:0 K:100% [true] [haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:400 
+10:33:55 (0) [Agathon]: 
+[Zax]: -Def: curseward.
+Your curseward has been breached!
+Agathon: Curse -> You
+A dull ache builds behind your eyes.
+[B|-] [CDBK] H:5805|92% M:5400|95% [3] [Rain]:0 K:100% [true] [haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:440 +310m 
+10:33:56 (0) [Agathon]: 
+[Zax]: +Def: curseward.
+You have recovered equilibrium.
+[Eq Recov: 2.89s]
+You: Curseward
+[Eq Spent: 2.89s]
+[B|-] [CDBK] H:6118|97% M:5506|97% [3] [Rain]:0 K:100% [true] [haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:440 +313h +106m 
+10:33:57 (0) [Agathon]: 
+You take 440 raw, damage.
+You bleed 440 health.
+[B|-] [CDBK] H:5678|90% M:5506|97% [3] [Rain]:0 K:100% [true] [haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:440 -440h 
+10:33:57 (0) [Agathon]: 
+[Zax]: -Def: curseward.
+Your curseward has been breached!
+Agathon: Curse -> You
+A dull ache builds behind your eyes.
+[B|-] [CDBK] H:6191|98% M:5481|96% [3] [Rain]:0 K:100% [true] [haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:480 +513h 
+10:33:57 (0) [Agathon]: 
+[Zax]: +Aff: dizziness.
+[Zax]: +Aff: epilepsy.
+Agathon: Jinx -> You
+You have been afflicted with dizziness.
+Your mind swims as dizziness overtakes you.
+You have been afflicted with epilepsy.
+Your nerves feel suddenly jangled.
+A dull ache builds behind your eyes.
+[B|-] [CDBK] H:6191|98% M:5481|96% [3] [Rain]:0 K:100% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 
+10:33:58 (0) [Agathon]: 
+You suddenly perceive the vague outline of an aura of rebounding around Agathon.
+[B|-] [CDBK] H:6191|98% M:5481|96% [3] [Rain]:0 K:100% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 
+10:33:58 (0) [Agathon]: 
+A shade of might has destroyed Vissa in a deadly display of brute force.
+[B|-] [CDBK] H:6191|98% M:5481|96% [3] [Rain]:0 K:100% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 
+10:33:59 (0) [Agathon]: 
+You have recovered equilibrium.
+[Eq Recov: 2.8s]
+You pull down your pants and moon the world.
+[B|E] [CDBK] H:6191|98% M:5471|96% [3] [Rain]:0 K:100% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 
+10:34:00 (0) [Agathon]: 
+[Zax]: +Def: curseward.
+You: Curseward
+[Eq Spent: 2.89s]
+[B|-] [CDBK] H:6191|98% M:5305|93% [3] [Rain]:0 K:100% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 -166m 
+10:34:00 (0) [Agathon]: 
+Agathon's aura of weapons rebounding disappears.
+Agathon points an imperious finger at you, but your curseward holds.
+[B|-] [CDBK] H:6191|98% M:5239|92% [3] [Rain]:0 K:100% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 
+10:34:01 (0) [Agathon]: 
+Agathon takes a long drag off an enamel bubble pipe.
+[B|-] [CDBK] H:6191|98% M:5239|92% [3] [Rain]:0 K:100% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 
+10:34:01 (0) [Agathon]: 
+You have recovered equilibrium.
+[Eq Recov: 2.89s]
+You get down on one knee and serenade the world.
+[B|E] [CDBK] H:6191|98% M:5239|92% [3] [Rain]:0 K:100% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 
+10:34:03 (0) [Agathon]: 
+You take 560 raw, damage.
+You bleed 560 health.
+[B|E] [CDBK] H:5631|89% M:5239|92% [3] [Rain]:0 K:100% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 -560h 
+10:34:03 (0) [Agathon]: 
+A shade of might has destroyed Zargoth in a deadly display of brute force.
+[B|E] [CDBK] H:5831|93% M:5139|90% [3] [Rain]:0 K:100% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 +200h -100m 
+10:34:03 (0) [Agathon]: 
+Agathon points an imperious finger at you, but your curseward holds.
+[B|E] [CDBK] H:5831|93% M:5439|95% [3] [Rain]:0 K:100% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 +300m 
+10:34:04 (0) [Agathon]: 
+You take 560 raw, damage.
+You bleed 560 health.
+[B|E] [CDBK] H:5705|91% M:5600|98% [3] [Rain]:0 K:100% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 -126h +161m 
+10:34:08 (0) [Agathon]: 
+Agathon points an imperious finger at you, but your curseward holds.
+[B|E] [CDBK] H:5705|91% M:5600|98% [3] [Rain]:0 K:100% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 
+10:34:08 (0) [Agathon]: 
+You suddenly perceive the vague outline of an aura of rebounding around Agathon.
+[B|E] [CDBK] H:5905|94% M:5490|96% [3] [Rain]:0 K:100% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 +200h -110m 
+10:34:10 (0) [Agathon]: 
+Agathon peers about himself dubiously.
+[B|E] [CDBK] H:5905|94% M:5490|96% [3] [Rain]:0 K:100% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 
+10:34:11 (0) [Agathon]: 
+You take 560 raw, damage.
+You bleed 560 health.
+[B|E] [CDBK] H:5345|85% M:5672|100% [3] [Rain]:0 K:100% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 -560h +182m 
+10:34:14 (0) [Agathon]: 
+Agathon's aura of weapons rebounding disappears.
+Agathon points an imperious finger at you, but your curseward holds.
+[B|E] [CDBK] H:5345|85% M:5662|99% [3] [Rain]:0 K:100% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 
+10:34:14 (0) [Agathon]: 
+Agathon takes a long drag off an enamel bubble pipe.
+Agathon takes a drink from an oaken vial.
+[B|E] [CDBK] H:5345|85% M:5662|99% [3] [Rain]:0 K:100% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 
+10:34:14 (0) [Agathon]: 
+[B|E] [CDBK] H:5345|85% M:5662|99% [3] [Rain]:0 K:100% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 
+10:34:15 (0) [Agathon]: 
+You take 560 raw, damage.
+You bleed 560 health.
+[B|E] [CDBK] H:5611|89% M:5672|100% [3] [Rain]:0 K:90% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 +110m 
+10:34:19 (0) [Agathon]: 
+You suddenly perceive the vague outline of an aura of rebounding around Agathon.
+[B|E] [CDBK] H:5811|92% M:5506|97% [3] [Rain]:0 K:90% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 +200h -166m 
+10:34:23 (0) [Agathon]: 
+You take 560 raw, damage.
+You bleed 560 health.
+[B|E] [CDBK] H:5251|83% M:5424|95% [3] [Rain]:0 K:90% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 -560h 
+10:34:25 (0) [Agathon]: 
+Your limbs begin to jerk and shake uncontrollably, and you begin to foam at the mouth.
+[Bal Spent: 1.8s]
+[-|E] [CDBK] H:5251|83% M:5424|95% [3] [Rain]:0 K:90% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 
+10:34:26 (0) [Agathon]: 
+You have recovered balance on all limbs.
+[Bal Recov: 1.74s]
+[B|E] [CDBK] H:6077|96% M:5672|100% [3] [Rain]:0 K:90% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 +826h +248m 
+10:34:28 (0) [Agathon]: 
+Your limbs begin to jerk and shake uncontrollably, and you begin to foam at the mouth.
+[Bal Spent: 1.8s]
+[-|E] [CDBK] H:6077|96% M:5598|98% [3] [Rain]:0 K:90% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 
+10:34:30 (0) [Agathon]: 
+You take 560 raw, damage.
+You bleed 560 health.
+[-|E] [CDBK] H:5517|88% M:5598|98% [3] [Rain]:0 K:90% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 -560h 
+10:34:30 (0) [Agathon]: 
+You have recovered balance on all limbs.
+[Bal Recov: 1.79s]
+[B|E] [CDBK] H:5517|88% M:5598|98% [3] [Rain]:0 K:90% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 
+10:34:31 (0) [Agathon]: 
+You get down on one knee and serenade the world.
+[B|E] [CDBK] H:5717|91% M:5417|95% [3] [Rain]:0 K:90% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 +200h -181m 
+10:34:35 (0) [Agathon]: 
+You take 560 raw, damage.
+You bleed 560 health.
+[B|E] [CDBK] H:5157|82% M:5417|95% [3] [Rain]:0 K:90% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 -560h 
+10:34:36 (0) [Agathon]: 
+[Curing]: TRANSMUTE 501
+You: Kai Transmute -> Yourself
+[B|E] [CDBK] H:5658|90% M:4916|86% [3] [Rain]:0 K:90% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 +501h -501m 
+10:34:36 (0) [Agathon]: diag
+You are:
+blind.
+deaf.
+afflicted by haemophilia.
+impatient.
+afflicted by horrible asthma.
+anorexic.
+extremely oily.
+wearied in body.
+paralysed.
+unnaturally stupid.
+overcome by dizziness.
+suffering from epilepsy.
+bleeding for 560 health.
+[Eq Spent: 0.72s]
+[B|-] [CDBK] H:5658|90% M:4916|86% [3] [Rain]:0 K:90% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 
+10:34:36 (0) [Agathon]: 
+You have recovered equilibrium.
+[Eq Recov: 0.74s]
+[B|E] [CDBK] H:5658|90% M:5228|92% [3] [Rain]:0 K:90% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 +312m 
+10:34:37 (0) [Agathon]: 
+Your limbs begin to jerk and shake uncontrollably, and you begin to foam at the mouth.
+[Bal Spent: 1.8s]
+[-|E] [CDBK] H:5658|90% M:5228|92% [3] [Rain]:0 K:90% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 
+10:34:37 (0) [Agathon]: 
+You have recovered balance on all limbs.
+[Bal Recov: 1.71s]
+[B|E] [CDBK] H:6265|100% M:5586|98% [3] [Rain]:0 K:90% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 +607h +358m 
+10:34:38 (0) [Agathon]: 
+Agathon's aura of weapons rebounding disappears.
+Agathon points an imperious finger at you, but your curseward holds.
+[B|E] [CDBK] H:6265|100% M:5586|98% [3] [Rain]:0 K:90% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 
+10:34:39 (0) [Agathon]: 
+Agathon takes a long drag off an enamel bubble pipe.
+[B|E] [CDBK] H:6265|100% M:5586|98% [3] [Rain]:0 K:90% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 
+10:34:39 (0) [Agathon]: 
+You take 560 raw, damage.
+You bleed 560 health.
+[B|E] [CDBK] H:5705|91% M:5509|97% [3] [Rain]:0 K:90% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 -560h 
+10:34:41 (0) [Agathon]: 
+Comprehension flashes across Agathon's face.
+[B|E] [CDBK] H:5705|91% M:5509|97% [3] [Rain]:0 K:90% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 
+10:34:43 (0) [Agathon]: 
+You take 560 raw, damage.
+You bleed 560 health.
+[B|E] [CDBK] H:5345|85% M:5495|96% [3] [Rain]:0 K:80% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 -360h 
+10:34:47 (0) [Agathon]: 
+Your limbs begin to jerk and shake uncontrollably, and you begin to foam at the mouth.
+[Bal Spent: 1.8s]
+[-|E] [CDBK] H:5345|85% M:5495|96% [3] [Rain]:0 K:80% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:560 
+10:34:47 (0) [Agathon]: 
+[Zax]: -Def: curseward.
+Your curseward has been breached!
+Agathon: Curse -> You
+A dull ache builds behind your eyes.
+[-|E] [CDBK] H:5345|85% M:5495|96% [3] [Rain]:0 K:83% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:600 
+10:34:47 (0) [Agathon]: 
+You suddenly perceive the vague outline of an aura of rebounding around Agathon.
+[-|E] [CDBK] H:5345|85% M:5495|96% [3] [Rain]:0 K:83% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:600 
+10:34:47 (0) [Agathon]: 
+Agathon's aura of weapons rebounding disappears.
+Agathon's eyes flutter and close as he begins to rock back and forth, chanting ominously under his breath.
+A dull ache builds behind your eyes.
+[-|E] [CDBK] H:5658|90% M:5570|98% [3] [Rain]:0 K:86% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:640 
+10:34:48 (0) [Agathon]: 
+Agathon takes a long drag off an enamel bubble pipe.
+[-|E] [CDBK] H:5658|90% M:5570|98% [3] [Rain]:0 K:86% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:640 
+10:34:48 (0) [Agathon]: 
+Agathon ceases his chanting, a frustrated expression crossing his face.
+[-|E] [CDBK] H:5658|90% M:5570|98% [3] [Rain]:0 K:86% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:640 
+10:34:48 (0) [Agathon]: 
+[Zax]: +Def: curseward.
+You have recovered balance on all limbs.
+[Bal Recov: 1.71s]
+You: Curseward
+[Eq Spent: 2.89s]
+[B|-] [CDBK] H:5971|95% M:5434|95% [3] [Rain]:0 K:86% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:640 -238m 
+10:34:49 (0) [Agathon]: 
+You nod your head emphatically.
+[B|-] [CDBK] H:5971|95% M:5424|95% [3] [Rain]:0 K:86% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:640 
+10:34:50 (0) [Agathon]: 
+You have recovered equilibrium.
+[Eq Recov: 2.88s]
+You twitch spasmodically.
+[B|E] [CDBK] H:6171|98% M:5324|93% [3] [Rain]:0 K:86% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:640 +200h -100m 
+10:34:52 (0) [Agathon]: 
+You take 640 raw, damage.
+You bleed 640 health.
+[B|E] [CDBK] H:5531|88% M:5672|100% [3] [Rain]:0 K:86% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:640 -640h +348m 
+10:34:52 (0) [Agathon]: 
+You suddenly perceive the vague outline of an aura of rebounding around Agathon.
+[B|E] [CDBK] H:5531|88% M:5598|98% [3] [Rain]:0 K:86% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:640 
+10:34:57 (0) [Agathon]: 
+You take 640 raw, damage.
+You bleed 640 health.
+[B|E] [CDBK] H:5404|86% M:5501|96% [3] [Rain]:0 K:86% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:640 -127h 
+10:34:58 (0) [Agathon]: 
+[Zax]: -Def: curseward.
+Agathon's aura of weapons rebounding disappears.
+Your curseward has been breached!
+Agathon: Curse -> You
+A dull ache builds behind your eyes.
+[B|E] [CDBK] H:5717|91% M:5672|100% [3] [Rain]:0 K:89% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:680 +313h +171m 
+10:35:00 (0) [Agathon]: 
+[Zax]: +Def: curseward.
+You: Curseward
+[Eq Spent: 2.89s]
+[B|-] [CDBK] H:5717|91% M:5506|97% [3] [Rain]:0 K:89% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:680 -166m 
+10:35:00 (0) [Agathon]: 
+Your limbs begin to jerk and shake uncontrollably, and you begin to foam at the mouth.
+[Bal Spent: 1.8s]
+[-|-] [CDBK] H:5717|91% M:5434|95% [3] [Rain]:0 K:89% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:680 
+10:35:01 (0) [Agathon]: 
+Agathon points an imperious finger at you, but your curseward holds.
+[-|-] [CDBK] H:5717|91% M:5434|95% [3] [Rain]:0 K:89% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:680 
+10:35:01 (0) [Agathon]: 
+You have recovered balance on all limbs.
+[Bal Recov: 1.71s]
+[B|-] [CDBK] H:5717|91% M:5434|95% [3] [Rain]:0 K:89% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:680 
+10:35:03 (0) [Agathon]: 
+You have recovered equilibrium.
+[Eq Recov: 2.89s]
+[B|E] [CDBK] H:5717|91% M:5434|95% [3] [Rain]:0 K:89% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:680 
+10:35:03 (0) [Agathon]: 
+"Heh heh heh," Agathon chuckles.
+[B|E] [CDBK] H:5717|91% M:5434|95% [3] [Rain]:0 K:89% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:680 
+10:35:03 (0) [Agathon]: 
+You take 680 raw, damage.
+You bleed 680 health.
+[B|E] [CDBK] H:5037|80% M:5434|95% [3] [Rain]:0 K:89% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:680 -680h 
+10:35:03 (0) [Agathon]: 
+[B|E] [CDBK] H:5237|83% M:5253|92% [3] [Rain]:0 K:89% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:680 +200h -181m 
+10:35:06 (0) [Agathon]: smile
+Your mouth turns up as your face breaks into a smile.
+[B|E] [CDBK] H:5237|83% M:5253|92% [3] [Rain]:0 K:89% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:680 
+10:35:07 (0) [Agathon]: 
+You take 680 raw, damage.
+You bleed 680 health.
+[B|E] [CDBK] H:4870|77% M:5672|100% [3] [Rain]:0 K:89% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:680 -680h 
+10:35:09 (0) [Agathon]: 
+[Curing]: TRANSMUTE 814
+The idea of putting something in your stomach sickens you.
+[B|E] [CDBK] H:4870|77% M:5672|100% [3] [Rain]:0 K:89% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:680 
+10:35:09 (0) [Agathon]: 
+[Curing]: TRANSMUTE 501
+You: Kai Transmute -> Yourself
+[B|E] [CDBK] H:5684|90% M:5171|91% [3] [Rain]:0 K:89% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:680 +814h -501m 
+10:35:09 (0) [Agathon]: 
+A grim, ominous scimitar rings out brightly as Agathon rapidly draws it from a scabbard embellished with a gold eagle.
+[B|E] [CDBK] H:5884|93% M:4995|88% [3] [Rain]:0 K:89% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:680 +200h -176m 
+10:35:10 (0) [Agathon]: 
+Agathon raises his scimitar over his head and begins to swing it in a wide circle, gaining speed as he goes.
+[B|E] [CDBK] H:5884|93% M:4995|88% [3] [Rain]:0 K:89% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:680 
+10:35:10 (0) [Agathon]: 
+[Bal Spent: 1.8s]
+[-|E] [CDBK] H:5884|93% M:4995|88% [3] [Rain]:0 K:89% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:680 
+10:35:12 (0) [Agathon]: 
+You have recovered balance on all limbs.
+[Bal Recov: 1.75s]
+[B|E] [CDBK] H:5884|93% M:4927|86% [3] [Rain]:0 K:89% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:680 
+10:35:13 (0) [Agathon]: 
+You take 680 raw, damage.
+You bleed 680 health.
+[B|E] [CDBK] H:5204|83% M:4927|86% [3] [Rain]:0 K:89% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:680 -680h 
+10:35:14 (0) [Agathon]: 
+Agathon begins to bear down on you with his whirling scimitar.
+[B|E] [CDBK] H:5404|86% M:4817|84% [3] [Rain]:0 K:89% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:680 +200h -110m 
+10:35:15 (0) [Agathon]: say do you have confusion?
+[B|E] [CDBK] H:5404|86% M:5195|91% [3] [Rain]:0 K:79% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:680 +378m 
+10:35:17 (0) [Agathon]: 
+You take 680 raw, damage.
+You bleed 680 health.
+[B|E] [CDBK] H:5350|85% M:5473|96% [3] [Rain]:0 K:79% [true] [epi, dizz, haem, SLCK, ANO, IMP, STUP, wear, PAR, AST] Bl:680 +278m 
+10:35:20 (0) [Agathon]: 
+[Zax]: -Def: weathering.
+[Zax]: -Def: coldresist.
+[Zax]: -Def: resistance.
+[Zax]: -Def: insulation.
+[Zax]: -Def: electricresist.
+[Zax]: -Def: magicresist.
+[Zax]: -Def: mindseye.
+[Zax]: -Def: toughness.
+[Zax]: -Def: projectiles.
+[Zax]: -Def: temperance.
+[Zax]: -Def: regeneration.
+[Zax]: -Def: boostedregeneration.
+[Zax]: -Def: thirdeye.
+[Zax]: -Def: fireresist.
+[Zax]: -Def: kola.
+[Zax]: -Def: mindnet.
+[Zax]: -Def: consciousness.
+[Zax]: -Def: dodging.
+[Zax]: -Def: vitality.
+[Zax]: -Def: levitating.
+[Zax]: -Def: kaitrance.
+[Zax]: -Def: deathsight.
+[Zax]: -Def: mindcloak.
+[Zax]: -Def: alertness.
+[Zax]: -Def: gripping.
+[Zax]: -Def: cloak.
+[Zax]: -Def: constitution.
+[Zax]: -Def: lifevision.
+[Zax]: -Def: splitmind.
+[Zax]: -Def: shikudoform.
+[Zax]: -Def: hyperfocus.
+[Zax]: -Def: insomnia.
+[Zax]: -Aff: insomnia.
+[Zax]: -Def: curseward.
+[Zax]: -Aff: blindness.
+[Zax]: -Def: blindness.
+[Zax]: -Aff: deafness.
+[Zax]: -Def: deafness.
+[Zax]: -Aff: haemophilia.
+[Zax]: -Aff: impatience.
+[Zax]: -Aff: asthma.
+[Zax]: -Aff: anorexia.
+[Zax]: -Aff: slickness.
+[Zax]: -Aff: weariness.
+[Zax]: -Aff: paralysis.
+[Zax]: -Aff: stupidity.
+[Zax]: -Aff: dizziness.
+[Zax]: -Aff: epilepsy.
+A roar of triumph bursts from Agathon and with horrified realization, you watch as he brings his whirling scimitar towards your neck, severing your head from your body. The last 
+thing you see before death is your own crumpling body, neck spitting blood like a fountain.
+You have been slain by Agathon.
+[Zax]: +2 Potash (758).
+[Zax]: +47 Magnesium (818).
+[Zax]: +14 Plumbum (1010).
+[Zax]: +15 Aurum (939).
+[Zax]: +25 Ferrum (1159).
+[Zax]: +1 Quartz (1136).
+[Zax]: +1 Quicksilver (760).
+**********************************************************
+You have been defeated and are thrown out of the Arena.
+**********************************************************
+The spectator stands of the Colosseum Diabolus. (indoors)
+A noxious, red-hued fog overwhelms the area with a thick, palpable vapour. A runic totem is planted solidly in the ground. A stalwart basalt pedestal bears a gleaming bronze plaque
+aloft, declaring the Champion of Baelgrim. A vicious death adder is here, hood flared in warning. Domina Saibel Aristata is here. Her features are obscured by a mask of lifevision.
+She wields a serrated dirk of cold steel in her left hand and a sable heater shield lined with broken arrowheads in her right.
+You see a single exit leading south.
