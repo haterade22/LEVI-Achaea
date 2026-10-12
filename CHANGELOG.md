@@ -2,6 +2,25 @@
 
 ---
 
+## 2026-10-12 - v4.7.418: the fight recorder (`fightlog`)
+
+The user: "we should add a way to log the fights and save them somewhere that you can analyse".
+
+- **`misc_scripts/026_Fight_Log.lua` (new, namespace `ataxiaFight`)** records a fight to `<profile>/fightlogs/<date>_<time>_<Opponent>.log`, one row per event, each with a millisecond timestamp:
+  - every game line as the game sent it (gagged or not), and every prompt;
+  - every command we sent, from `sysDataSendRequest`, so commands sent without an echo are there too;
+  - our afflictions and defences as GMCP reports them (`+aff`/`-aff`, `+def`/`-def`);
+  - what our tracker gives the target or takes away (`+tar`/`-tar`, from its "tar afflicted" and "target cured aff" events), so what we believed can be checked against the lines.
+- **It starts on its own** when a player attacks us (the class detector's "attacker class detected") or when we send a queued command naming our target while that target is a player in the room. PvE targets are numbers and denizens are not players, so bashing is never recorded.
+- **It stops** 3 s after a kill, our death or an arena verdict (the four lines are from Mystor's logs), after 60 s with nothing naming the opponent (automatic recordings only; one started by hand runs until `fightlog off`), at 50,000 rows, or on disconnect. After an automatic stop the same opponent cannot open a new log for 15 s, so a fight's last queued commands do not start a second one.
+- **Cost:** the catch-all line trigger exists only while recording, and rows are written every 2 s rather than per line.
+- **Alias `fightlog`** (new): `status`, `on [name]`, `off`, `auto on|off`, `idle <seconds>`.
+- **`tools/fightlog_import.py` (new)** copies the logs into `kb/raw/logs/ours/` (never moving or editing them) and summarises each: opponent, length, how it ended, the afflictions we got and the commands we sent.
+- Docs: `kb/raw/logs/README.md` (row format), CLAUDE.md.
+- Tests: `test_fight_log.lua` (13 new). Break-back: removing the name normalisation fails two of them, removing the re-start guard one.
+
+---
+
 ## 2026-10-12 - v4.7.417: Shikudo phase 2: the lock offense's Telepathy, Crescent, refused transitions
 
 - **The lock offense (`shikudo/007`) can send Telepathy.**

@@ -22,6 +22,14 @@ This repository contains the **"For Levi" Mudlet package**, a comprehensive comb
 
 **`kbcapture afflictions`** (in Mudlet, `misc_scripts/025_KB_Capture.lua`) asks the game `AFFLICTION LIST`, then `AFFLICTION SHOW` + `WHATCURES` for every affliction our code knows AND every one the game lists (203 on 2026-10-10; separate ad-hoc commands with `|`, never `;`) and writes the raw answers to `<profile>/kb_capture.txt`; `python tools/kb_capture_import.py` files them into `kb/raw/live/`. Capture records, the repo parses.
 
+**`fightlog`** (v4.7.418, `misc_scripts/026_Fight_Log.lua`) records our PvP fights to `<profile>/fightlogs/`: every game
+line as the game sent it (gagged or not), prompts, every command we sent (echoed or not), our GMCP afflictions and
+defences, and our tracker's changes to the target, each with a millisecond timestamp. It starts on its own (a player
+attacks us, or we queue a command naming our target while the target is a player in the room) and stops after a kill,
+a death, an arena verdict or 60 s with nothing naming the opponent. `python tools/fightlog_import.py` copies the logs
+into `kb/raw/logs/ours/` and summarises them; it reads the Mudlet profiles on this machine, so run it before
+analysing one of the user's fights. Row format: `kb/raw/logs/README.md`.
+
 **On completing ANY task** (a feature, a fix, a research finding, a confirmed game mechanic), before considering it done, update every piece of documentation it touches:
 
 - **Knowledge base** (`kb/`) — any confirmed game fact (cure, blocker, fire line, ability, mechanic) goes into the right `kb/` page with its source and confidence tag; new raw game text goes into `kb/raw/` unedited.
@@ -122,6 +130,7 @@ LEVI-Achaea/
 │   ├── kb_inbox.py            # KB: what is new in the inbox file since the last /kb-ingest
 │   ├── kb_catalog.py          # KB: regenerate kb/afflictions/catalog.md from HELP + code tables
 │   ├── kb_capture_import.py   # KB: file in-game `kbcapture` output (Mudlet profile) into kb/raw/live/
+│   ├── fightlog_import.py     # copy in-game `fightlog` recordings into kb/raw/logs/ours/, summarise them
 │   └── legacy/                # Retired build tools
 ├── build.sh                   # Build script: ./build.sh [--dry-run] [--convert-only]
 ├── .gitignore                 # Excludes build artifacts, IDE state, caches
