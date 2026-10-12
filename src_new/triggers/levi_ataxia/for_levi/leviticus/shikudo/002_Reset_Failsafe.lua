@@ -36,5 +36,7 @@ patterns:
   type: 1
 ]]--
 
-cecho("\n   <red>-= reset kata =-")
-ataxia.vitals.kata = 0
+-- v4.7.417: a refused transition KEEPS the kata chain (log 2026-10-11: kata 3, refused, still 3, then 6
+-- after the next combo). This used to zero our count, which then disagreed with the game until charstats
+-- re-reported it. Now it only says the transition was refused.
+cecho("\n   <red>-= transition refused: kata below 5 (the chain is kept) =-")

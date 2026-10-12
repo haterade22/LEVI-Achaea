@@ -416,30 +416,33 @@ end
 function shikudoLock.selectTelepathy()
   -- Telepathy uses EQ balance, separate from BAL (staff attacks)
   -- This allows simultaneous affliction pressure
-
-  -- Check if we have EQ
-  if not ataxia.balances.eq then
+  --
+  -- v4.7.417 (Shikudo rework, phase 2):
+  --  * The equilibrium flag is ataxia.vitals.eq (update_stuff/004). ataxia.balances.eq is written
+  --    nowhere, so this returned nil every time and the lock offense never sent any Telepathy.
+  --  * These are MIND commands. The game takes "MIND IMPATIENCE <target>" (log 2026-10-11), not the bare
+  --    word the old code sent ("impatience <target>", "mindlock <target>").
+  --  * No lock first. IMPATIENCE, BATTER and PARALYSE are among the wiki's (*) abilities, which need only
+  --    the target in the room (the user and Mystor, 2026-10-11: a lock is for out-of-room targets and
+  --    certain skills such as Radiance and Sapience). Locking first cost an equilibrium round for nothing.
+  if not (ataxia.vitals and ataxia.vitals.eq) then
     return nil
   end
 
-  -- Priority 1: Establish mindlock (uses global 'mindlocked' variable)
-  if not mindlocked then
-    return "mindlock " .. target
-  end
-
-  -- Priority 2: Impatience for hardlock (CRITICAL)
+  -- Priority 1: Impatience for hardlock (CRITICAL)
   if shikudoLock.checkSoftlock() and not tAffs.impatience then
-    return "impatience " .. target
+    return "mind impatience " .. target
   end
 
-  -- Priority 3: Batter for mental pressure (stupidity + epilepsy + dizziness)
+  -- Priority 2: Batter for mental pressure (stupidity + epilepsy + dizziness)
   if shikudoLock.checkSoftlock() then
-    return "batter " .. target
+    return "mind batter " .. target
   end
 
-  -- Priority 4: Paralyse as backup for paralysis
-  if not tAffs.paralysis and mindlocked then
-    return "paralyse " .. target
+  -- Priority 3: Paralyse as backup for paralysis (an equilibrium filler: an Apostate cured it within
+  -- a second every time in Mystor's log, so it is pressure, not a lock piece)
+  if not tAffs.paralysis then
+    return "mind paralyse " .. target
   end
 
   return nil
