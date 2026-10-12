@@ -2,6 +2,21 @@
 
 ---
 
+## 2026-10-11 - DEADEYES and SICKEN, from an Apostate's own commands (docs only, no version bump)
+
+- **Settled from Mystor's Apostate log**, cross-checked by the Apostate review session (`kb/CONFLICTS.md`):
+  - DEADEYES takes affliction words, `paralysis` among them, delivered in the order typed.
+  - SICKEN gives manaleech first, then slickness, not paralysis. The wiki's cascade is outdated.
+- CLAUDE.md's `getLockingAffliction` note is corrected, and the generated Apostate page now carries the live note.
+- **Still wrong in code:**
+  - `apostate/002_Deadeyes` follows the wiki order.
+  - `apostate/001` always assumes manaleech.
+  - V3 `venomExpansionV3` gives both afflictions at once.
+  - Trigger 462's sensitivity-on-deaf branch is unreachable.
+- `kb/raw/logs/README.md` notes the user's two different `LcJC-rJ5.html` exports.
+
+---
+
 ## 2026-10-11 - Kill paths: four classes from Mystor's logs (docs only, no version bump)
 
 - `docs/kill-paths.md` gains the four classes from Mystor's six arena fights, with their tells:

@@ -2155,7 +2155,7 @@ strategy: "Stack kelp affs to keep asthma stuck"
 kelp_stack: [asthma, clumsiness, sensitivity, weariness, healthleech]
 ```
 
-**`getLockingAffliction()` returns a CURSE NAME, not an affliction (2026-10-11).** It is inline in `_groups.yaml`. Called with `"name"` it returns the target class's lock AFFLICTION (`voyria`, `recklessness`, `haemophilia`, ...). Called any other way it returns the SHAMAN `CURSE <target> <name>` word: `plague`, `reckless`, `stupid`, `weariness`, `paralyse`, `haemophilia` (wiki Curses). Four of those are also Apostate evil-eye stares, but Apostate has no PARALYSE or HAEMOPHILIA stare (it gives paralysis with SICKEN), so they are NOT valid stares for every class. The Infernal group lock sent the curse word as a VENOM ("plague") until v4.7.407. Ask for `"name"` and map the affliction to your own class's delivery.
+**`getLockingAffliction()` returns a CURSE NAME, not an affliction (2026-10-11).** It is inline in `_groups.yaml`. Called with `"name"` it returns the target class's lock AFFLICTION (`voyria`, `recklessness`, `haemophilia`, ...). Called any other way it returns the SHAMAN `CURSE <target> <name>` word: `plague`, `reckless`, `stupid`, `weariness`, `paralyse`, `haemophilia` (wiki Curses). An Apostate's DEADEYES takes AFFLICTION words, `paralysis` among them, and SICKEN gives MANALEECH first, then slickness, not paralysis (Mystor's log, 2026-10-11; `kb/CONFLICTS.md`). There is no haemophilia stare, so that word is not valid for every class. The Infernal group lock sent the curse word as a VENOM ("plague") until v4.7.407. Ask for `"name"` and map the affliction to your own class's delivery.
 
 #### Class-Specific Lock Afflictions
 | Classes | Extra Affliction | Blocks |

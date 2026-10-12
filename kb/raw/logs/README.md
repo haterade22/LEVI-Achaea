@@ -35,6 +35,10 @@ Reading them:
 
 ### Mystor's six arena logs (shared by the user, 2026-10-11)
 
+**A name collision:** the user saved two DIFFERENT exports as `LcJC-rJ5.html`, Mystor's Apostate fight
+(`Downloads/shikudo fights/`, filed here as `..._mystor_shikudo-vs-apostate_win_LcJC-rJ5.txt`) and Claes
+vs Pharaus (`Downloads/`, not filed). Cite Mystor's as "Mystor's Apostate log".
+
 Mystor is a Shikudo monk; the user relayed his notes on them (`kb/raw/players/shikudo-2026-10-11.txt`).
 Converted the same way (one row per `<br>`); they carried no channel chat, so nothing was removed.
 His client runs its own system, which ADDS lines and GAGS (hides) others, printing a summary instead:

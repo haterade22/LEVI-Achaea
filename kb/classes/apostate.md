@@ -6,6 +6,8 @@
 
 ## Evileye (34 abilities)
 
+*Live (Mystor's log, 2026-10-11): DEADEYES takes affliction words, paralysis among them, and SICKEN gives MANALEECH first, then slickness once manaleech is up. The paralysis-first text below is outdated. See kb/CONFLICTS.md.*
+
 Evileye is a skill that is perhaps related to the Curses skill used by the Shamans, albeit perhaps less powerful. With it, one may make eye contact with an opponent and give them the 'evil eye', imposing a wide variety of afflictions upon the opponent. At the high end of the ability, one learns the craft of giving multiple afflictions simultaneously.
 
 The skill of Evileye is available to members of the Apostate class, along with Necromancy and Apostasy.
