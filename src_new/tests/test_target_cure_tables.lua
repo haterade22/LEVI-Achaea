@@ -123,6 +123,21 @@ describe("Target cure tables -- WHATCURES (v4.7.371)", function()
   end)
 end)
 
+describe("the tree's random-cure pool (v4.7.416)", function()
+  it("holds what the tree was seen to cure, and not the NoRandomCure damaged limbs", function()
+    local pool = {}
+    for _, a in ipairs(treeCurableAffsV3) do pool[a] = true end
+    -- Mystor's logs: the tree cured healthleech and a level-1 broken limb; a Runewarden's: blackout.
+    -- The game's AFFLICTION SHOW marks none of these NoRandomCure.
+    for _, a in ipairs({ "healthleech", "brokenleftleg", "brokenrightleg", "brokenleftarm", "brokenrightarm", "blackout" }) do
+      expect(pool[a]).toBeTrue()
+    end
+    -- damaged (level-2) limbs ARE NoRandomCure
+    expect(pool.damagedleftleg).toBeNil()
+    expect(pool.damagedrightarm).toBeNil()
+  end)
+end)
+
 -- Restore the shared Lua state: drop every global the loaded files created and
 -- put back every one they replaced.
 for k in pairs(_G) do

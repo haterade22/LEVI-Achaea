@@ -11,7 +11,7 @@ hierarchy:
 - Classes A-J
 - Apostate
 attributes:
-  isActive: 'yes'
+  isActive: 'no'
   isFolder: 'no'
   isTempTrigger: 'no'
   isMultiline: 'no'
@@ -36,6 +36,9 @@ patterns:
 - pattern: ^You stare at (\w+), giving \w+ the evil eye.$
   type: 1
 ]]--
+-- SWITCHED OFF (v4.7.416). It shares 002's pattern, whose ONE capture is the target, but its body reads
+-- matches[2] as the eye and matches[3] as the target, so no branch could ever match. All it did was
+-- clear curseward on ANY stare and relay the target's name to the party. 002 and 462 track the stares.
 
 tarInsomnia = tarInsomnia or true
 deadaff = matches[2]

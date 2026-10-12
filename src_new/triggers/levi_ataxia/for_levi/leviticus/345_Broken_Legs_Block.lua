@@ -53,9 +53,26 @@ patterns:
     tick rather than waiting out the timeout), and roll back the owned battlerage
     replay the same way 344 and 329_Battlerage_Global_Cooldown do.
 
-    NOTE: one broken leg does not trip this -- Achaea lets you stand and walk on one.
-    The refusal means BOTH, which is also when the swarm most needs to move.
+    CORRECTED (v4.7.416): ONE hindered leg DOES trip this line. Mystor's logs (2026-10-11) show
+    it 10 times out of 10 with a single damaged or broken leg ("rl1", "RL2"), each time in the
+    STAND slot of his alias, while the kick in the same alias still landed. So the line is
+    STAND's refusal: the game checks the legs before "You are not fallen or kneeling.". Our
+    moves send "stand;<dir>" and "stand;leap <dir>", so with one bad leg this line comes from
+    the STAND and the move itself goes through; parking and re-sending it then moved us twice.
+    Everything below therefore runs only when our afflictions say BOTH legs are out, which is
+    when the move itself is refused.
 ]]--
+
+local function legOut(side)
+	local a = ataxia and ataxia.afflictions
+	if not a then return false end
+	for _, k in ipairs({ "broken" .. side .. "leg", "damaged" .. side .. "leg", "mangled" .. side .. "leg" }) do
+		local v = a[k]
+		if v and v ~= 0 then return true end
+	end
+	return false
+end
+if not (legOut("left") and legOut("right")) then return end
 
 -- A refused round did not execute: drop every owned rotation's in-flight replay.
 for _, k in ipairs({"rwBrPending", "dwBrPending", "psionBrPending", "gdragonBrPending"}) do

@@ -108,6 +108,7 @@ local function run(file, ctx)
     monk = ctx.monk or false,
   }
   for _, n in ipairs(NOOP) do env[n] = function() return 0 end end
+  for k, v in pairs(ctx.extra or {}) do env[k] = v end
   setmetatable(env, { __index = _G })
   setfenv(fn, env)
   fn()
@@ -435,6 +436,66 @@ describe("lines that had no trigger", function()
     expect(n).toBe(1)
     expect(next(r.env.tAffs)).toBeNil()
     expect(r.sent[1]).toBe("pt " .. T .. ": Kai Surged (prone)")
+  end)
+end)
+
+describe("our own lines from Mystor's logs (v4.7.416)", function()
+  it("venom breaks (epteth, epseth) reset the limb like a loud crack (038)", function()
+    local f = "038_Limb_Broken_L1.lua"
+    for _, c in ipairs({
+      { "You stumble as your left leg shrivels into a useless appendage.", "left leg" },
+      { "You stumble as your right leg shrivels into a useless appendage.", "right leg" },
+      { "You watch, in horror, as your left arm shrivels up and becomes useless.", "left arm" },
+      { "You watch, in horror, as your right arm shrivels up and becomes useless.", "right arm" },
+    }) do
+      expect(TL.anyMatches(pats(f), c[1])).toBeTrue()
+      local cleared, raised = nil, nil
+      local sld = { [c[2]] = { threshold = "critical" } }
+      run(f, { matches = { c[1], c[2] }, line = c[1], extra = {
+        selfLimbDamage = sld,
+        ataxia_clearLimbDamage = function(l) cleared = l end,
+        raiseEvent = function(_, l, th) raised = l .. ":" .. th end,
+      } })
+      expect(cleared).toBe(c[2])
+      expect(sld[c[2]].threshold).toBe("broken")
+      expect(raised).toBe(c[2] .. ":broken")
+    end
+  end)
+
+  it("the PvP parry line feeds the parry tracker with the limb we parry (027)", function()
+    local f = "highlighting/027_Parry_Success.lua"
+    local pvp = "You parry the attack with a deft manoeuvre."
+    expect(TL.anyMatches(pats(f), pvp)).toBeTrue()
+    local got
+    run(f, { matches = { pvp }, line = pvp, extra = {
+      deselect = function() end,
+      ataxia = { parrying = { limb = "torso" } },
+      ataxia_parrySuccess = function(l) got = l end,
+    } })
+    expect(got).toBe("torso")
+    local pve = "You parry the assault to your left leg with a deft maneouvre."
+    got = nil
+    run(f, { matches = { pve, "left leg" }, line = pve, extra = {
+      deselect = function() end,
+      ataxia = { parrying = { limb = "torso" } },
+      ataxia_parrySuccess = function(l) got = l end,
+    } })
+    expect(got).toBe("left leg")
+  end)
+end)
+
+describe("the target's sileris (442, v4.7.416)", function()
+  it("only the formed shell is a fangbarrier; the application is not yet", function()
+    local f = "442_Got_Sileris.lua"
+    local applied = T .. " applies a quicksilver droplet to himself."
+    local formed = "A supple metallic shell of quicksilver has formed around " .. T .. "."
+    expect(TL.anyMatches(pats(f), applied)).toBeTrue()
+    expect(TL.anyMatches(pats(f), formed)).toBeTrue()
+    local r = run(f, { matches = { applied, T }, line = applied, extra = { getEpoch = function() return 100 end } })
+    expect(#r.affs).toBe(0)
+    expect(r.env.ataxiaTemp.silerisAppliedAt).toBe(100)
+    r = run(f, { matches = { formed, T }, line = formed, extra = { confirmAffV2 = function() end } })
+    expect(has(r.affs, "fangbarrier")).toBeTrue()
   end)
 end)
 

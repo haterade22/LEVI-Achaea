@@ -100,8 +100,10 @@ targetBurningLevelV3 = targetBurningLevelV3 or 0
 -- Venom expansion: compound venoms that apply multiple constituent afflictions
 -- Note: epseth/epteth removed — they break a SINGLE limb (determined by game
 -- output), so limb damage triggers handle them directly, not venom expansion.
+-- v4.7.416: "sicken" is no longer here. It gave BOTH afflictions, but SICKEN gives one: manaleech, then
+-- slickness once manaleech is up (an Apostate's own commands, Mystor's log 2026-10-11). applyAffV3
+-- resolves it below, the way trigger 462 does.
 local venomExpansionV3 = {
-    sicken = {"manaleech", "slickness"},
 }
 
 -- Affliction last-confirmed timestamps for staleness pruning
@@ -235,6 +237,9 @@ end
 -- Add affliction to ALL branches (we definitely inflicted it)
 function applyAffV3(aff)
     if not aff then return end
+    if aff == "sicken" then
+        aff = (tAffs and tAffs.manaleech) and "slickness" or "manaleech"
+    end
 
     -- Venom expansion: compound venoms apply all constituent afflictions
     local expansion = expandVenomV3(aff)

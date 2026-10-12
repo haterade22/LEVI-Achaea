@@ -33,6 +33,8 @@ colorTriggerBgColor: '#000000'
 patterns:
 - pattern: ^You parry the assault to your (head|torso|left arm|right arm|left leg|right leg) with a deft man(?:oe|eo)uvre\.$
   type: 1
+- pattern: ^You parry the attack with a deft man(?:oe|eo)uvre\.
+  type: 1
 ]]--
 
 -- Live logs show "maneouvre" for this first-person line while the third-person PvP
@@ -43,6 +45,11 @@ fg("spring_green")
 deselect()
 resetFormat()
 
-if ataxia_parrySuccess then
-	ataxia_parrySuccess(matches[2]:lower())
+-- v4.7.416: PvP prints "You parry the attack with a deft manoeuvre." with NO limb (Mystor's logs,
+-- 2026-10-11), so in PvP the parry tracker was never fed. The limb is the one we are parrying,
+-- which 757 records from "You will now attempt to parry attacks to your <limb>.".
+local limb = matches[2] and matches[2]:lower()
+	or (ataxia and ataxia.parrying and ataxia.parrying.limb)
+if ataxia_parrySuccess and limb then
+	ataxia_parrySuccess(limb)
 end

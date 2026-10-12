@@ -37,15 +37,17 @@ patterns:
   type: 1
 ]]--
 
-local getSicken = {"paralysis", "manaleech", "slickness"}
+-- v4.7.416: SICKEN gives manaleech first, then slickness once manaleech is up, never paralysis (an
+-- Apostate's own commands in Mystor's log, 2026-10-11; the wiki's paralysis-first text is outdated).
+-- With both up, what it gives is unknown, so nothing is recorded.
+local getSicken = {"manaleech", "slickness"}
 local s = false
-for _, aff in pairs(getSicken) do
+for _, aff in ipairs(getSicken) do
 	if not haveAff(aff) then
 		s = aff
 		break
 	end
 end
-if not s then s = "paralysis" end
 
 if isTargeted(matches[2]) then
 	if ataxiaTemp.deadeyesOne then
@@ -53,7 +55,7 @@ if isTargeted(matches[2]) then
 			erAff("curseward")
 		else
 			if ataxiaTemp.deadeyesOne == "sicken" then
-				tarAffed(s)
+				if s then tarAffed(s) end
 			else
 				tarAffed(ataxiaTemp.deadeyesOne)
 			end
@@ -61,7 +63,7 @@ if isTargeted(matches[2]) then
 		ataxiaTemp.deadeyesOne = nil
 	else
 		if ataxiaTemp.deadeyesTwo == "sicken" then
-			tarAffed(s)
+			if s then tarAffed(s) end
 		else
 			tarAffed(ataxiaTemp.deadeyesTwo)
 		end

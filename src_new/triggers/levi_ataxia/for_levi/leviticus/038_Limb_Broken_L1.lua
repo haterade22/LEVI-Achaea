@@ -33,6 +33,10 @@ colorTriggerBgColor: '#000000'
 patterns:
 - pattern: ^Your (left arm|right arm|left leg|right leg) breaks with a loud crack\.$
   type: 1
+- pattern: ^You stumble as your (left leg|right leg) shrivels into a useless appendage\.
+  type: 1
+- pattern: ^You watch, in horror, as your (left arm|right arm) shrivels up and becomes useless\.
+  type: 1
 ]]--
 
 --[[
@@ -65,6 +69,9 @@ patterns:
     Live 2026-07-30: iron malagmae emitted ~25 of these in 90 seconds.
 ]]--
 
+-- v4.7.416: venom breaks (epteth, epseth) print their own lines, not "breaks with a loud crack":
+-- "You stumble as your left leg shrivels into a useless appendage." and "You watch, in horror, as
+-- your left arm shrivels up and becomes useless." (Mystor's logs, 2026-10-11: 86 of them).
 local limb = matches[2]
 
 if selfLimbDamage and selfLimbDamage[limb] then
