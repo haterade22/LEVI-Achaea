@@ -70,6 +70,10 @@ elseif line:find("rip the excess water") then
   magi.offense.debugEcho("Dehydrate cast")
 
 -- Fulminate — smart chain: fulminated -> epilepsy -> paralysis (from 013_Fulminate)
+-- No burn: the wiki's FULMINATE gives fulminated, then epilepsy, then paralysis, and damage
+-- (Elementalism.wiki:340). The +1 burn every hit used to add here was a stack the game never
+-- gave, and it could open conflagrate's "burns >= 2" gate a stack early. An ablaze from the
+-- fire resonance a fulminate builds is counted by 022 (moderate/major fire).
 elseif line:find("lightning strikes from the air") then
   if haveAff("epilepsy") and haveAff("fulminated") and not haveAff("paralysis") then
     tarAffed("paralysis")
@@ -81,9 +85,7 @@ elseif line:find("lightning strikes from the air") then
     tarAffed("fulminated")
     magi.offense.ptRelay(target .. ": Fulminate (fulminated)")
   end
-  magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)
-  tburns = magi.offense.state.burns
-  magi.offense.debugEcho("Fulminate hit -> burns:" .. magi.offense.state.burns)
+  magi.offense.debugEcho("Fulminate hit")
 
 -- Bombard -> clumsiness (from 016_Bombard)
 elseif line:find("flurry of rocks to bombard") then
@@ -110,6 +112,6 @@ elseif line:find("torrent of thick mud") then
 end
 
 -- Burns counter display (only for spells that actually affect burns)
-if (line:find("lightning strikes") or line:find("lash of fire")) and magi.offense.state.burns and magi.offense.state.burns > 0 then
+if line:find("lash of fire") and magi.offense.state.burns and magi.offense.state.burns > 0 then
   cecho(" <DimGrey>[<red>" .. magi.offense.state.burns .. "/5<DimGrey>]")
 end

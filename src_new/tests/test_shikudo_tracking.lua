@@ -404,10 +404,15 @@ describe("lines that had no trigger", function()
     -- Mystor's logs: "--> Agathon: concentrate" then this line, 11 times
     local ln = T .. "'s eyes lose their focus suddenly."
     expect(TL.anyMatches(pats("788_Target_Concentrated.lua"), ln)).toBeTrue()
-    local r = run("788_Target_Concentrated.lua", { matches = { ln, T }, line = ln })
-    expect(has(r.cured, "disrupted")).toBeTrue()
-    expect(#r.cured).toBe(1)
-    expect(#run("788_Target_Concentrated.lua", { matches = { ln, "Claes" }, line = ln }).cured).toBe(0)
+    -- 788 calls ataxia_tarAffFaded (v4.7.419), which also cancels telepathy_tekura/007's backstop
+    -- clock (test_telepathy_tracking.lua drives both through the real tracker).
+    local faded = {}
+    local extra = { ataxia_tarAffFaded = function(a) faded[#faded + 1] = a end }
+    run("788_Target_Concentrated.lua", { matches = { ln, T }, line = ln, extra = extra })
+    expect(#faded).toBe(1)
+    expect(faded[1]).toBe("disrupted")
+    run("788_Target_Concentrated.lua", { matches = { ln, "Claes" }, line = ln, extra = extra })
+    expect(#faded).toBe(1)
   end)
 
   it("the pipe triggers match every pipe name and the gurgling wording (v4.7.415)", function()

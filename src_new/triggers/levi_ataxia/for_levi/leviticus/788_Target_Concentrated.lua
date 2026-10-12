@@ -38,7 +38,9 @@ patterns:
 -- v4.7.415: the target's CONCENTRATE. Mystor's logs (2026-10-11) show it straight after the
 -- opponent's own `concentrate` (Sapience), 11 times. It cures DISRUPTED and nothing else: an
 -- Infernal concentrated MIND DISRUPT away within a second 8 times out of 9, while
--- telepathy_tekura/007 kept `disrupted` on its target for a flat 10 s.
+-- telepathy_tekura/007 kept `disrupted` on its target for a flat 10 s. That 10 s is now only a
+-- backstop clock (ataxia_tarAffTimed), and the faded call cancels it with the affliction; plain
+-- erAff left it running after the target had already concentrated.
 if isTargeted(matches[2]) then
-  erAff("disrupted")
+  ataxia_tarAffFaded("disrupted")
 end

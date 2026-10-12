@@ -34,7 +34,6 @@ ALLOWLIST = {
     'levi_ataxia/for_levi/leviticus/635_WRENCH_TORSO.lua',
     'levi_ataxia/for_levi/leviticus/colours/001_Deathblow.lua',
     'levi_ataxia/for_levi/leviticus/denizen_attacks_misc_lines/005_Mobs_Misc_(wont_track).lua',
-    'levi_ataxia/for_levi/leviticus/general/022_Resonance_Afflictions.lua',
     'levi_ataxia/for_levi/leviticus/general/024_Meteorite.lua',
     'levi_ataxia/for_levi/leviticus/general/026_Calcify.lua',
     'levi_ataxia/for_levi/leviticus/highlighting/048_Aeonic_Distortion_Proc.lua',

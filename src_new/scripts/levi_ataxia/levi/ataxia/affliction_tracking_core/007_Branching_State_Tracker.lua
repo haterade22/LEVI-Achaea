@@ -127,6 +127,17 @@ curingTableV3 = {
     bloodroot = {"paralysis", "slickness", "pyramides"},
 }
 
+-- Afflictions a herb eat takes only when nothing else that herb cures is there (onHerbCureV3).
+-- A place in the cure list cannot say this: the 4/2/1 weights give even the LAST of two candidates
+-- a third of the eat, which leaves the other at 0.33, over haveAff's 0.3, so one eat cures neither.
+--   fratricide: 25 in our priorities, the bottom (ataxia/001_Default_Curing_Prios.lua:280; the
+--   live normal set agrees, kb/raw/live/curing-priority-list_normal_2026-10-10.txt:33), our best
+--   guess at the target's. It stands near the FRONT of both lobelia lists. V3 never saw it until
+--   the Serpent offense recorded it (v4.7.419, serpent/002 onSnapped), so every lobelia eat went
+--   to the others; once it did, one eat over masochism + fratricide left masochism at 0.67 and the
+--   next monkshood impulse dropped the masochism its reaction needs.
+local herbCureLastV3 = { fratricide = true }
+
 -- V3 smoke cure table (priority order)
 -- Smoking cures one of these (in order if multiple present). One table covers
 -- both pipes: elm (aeon, dazed, deadening, earworm, tension, unweavingspirit)
@@ -393,13 +404,20 @@ function onHerbCureV3(herb)
     local branchedAffs = {}  -- Track unique afflictions that were candidates in branching
 
     for _, state in ipairs(afflictionStatesV3) do
-        -- Find which curable afflictions exist in this branch
-        local candidates = {}
+        -- Find which curable afflictions exist in this branch. A cure-last one (herbCureLastV3)
+        -- is a candidate only when nothing else is.
+        local candidates, last = {}, nil
         for _, aff in ipairs(curableAffs) do
             if state.affs[aff] then
-                table.insert(candidates, aff)
+                if herbCureLastV3[aff] then
+                    last = last or {}
+                    table.insert(last, aff)
+                else
+                    table.insert(candidates, aff)
+                end
             end
         end
+        if #candidates == 0 and last then candidates = last end
 
         if #candidates == 0 then
             -- No curable affs in this branch - state unchanged
@@ -1061,7 +1079,9 @@ cureGroupsV3 = {
     herb_kelp = {"clumsiness", "healthleech", "weariness", "asthma", "sensitivity", "parasite"},
     herb_ginseng = {"nausea", "haemophilia", "addiction", "darkshade", "flushings", "lethargy", "scytherus"},
     herb_goldenseal = {"stupidity", "impatience", "depression", "sandfever", "epilepsy", "dizziness", "dissonance", "shyness"},
-    herb_lobelia = {"recklessness", "vertigo", "spiritburn", "tenderskin", "loneliness", "claustrophobia", "masochism", "agoraphobia", "hypochondria"},
+    -- fratricide: "Cure(s): Eat Lobelia / Eat Argentum" (kb/raw/live/affliction_show/fratricide.txt:6),
+    -- as curingTableV3.lobelia above already has it.
+    herb_lobelia = {"fratricide", "recklessness", "vertigo", "spiritburn", "tenderskin", "loneliness", "claustrophobia", "masochism", "agoraphobia", "hypochondria"},
     herb_ash = {"confusion", "hypersomnia", "hallucinations", "paranoia", "dementia", "crescendo"},
     herb_bellwort = {"timeloop", "justice", "retribution", "lovers", "peace", "pacified", "generosity", "indifference", "diminished"},
     herb_bloodroot = {"paralysis", "slickness"},

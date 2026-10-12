@@ -1,0 +1,8 @@
+# Serpent notes, as relayed by the user (2026-10-12)
+
+Verbatim, as the user relayed it ("for serpent"); the source was not named. Curated in
+.claude/classes/serpent.md, "Notes relayed 2026-10-12".
+
+## Relayed by the user (2026-10-12)
+
+Summary: dstab is the fastest 2venoms in the game,  hypochondria afflicts impatience after 10 seconds, and the following command now exists which afflicts impatience if they have asthma and weariness, as well as masochism and disloyalty: impulse masochism monkshood. You also have three sources of relapsing effects, most notably a new affliction called fratricide which causes impulses (mentals only) to relapse at 2.25s.

@@ -38,7 +38,10 @@ function ataxia_Vitals_Update()
 	ataxia.vitals.mpp = math.floor((ataxia.vitals.mp/ataxia.vitals.maxmp)*100)
 	ataxia.vitals.stance = false
 	ataxia.vitals.class = 0
-	
+	-- Kai is re-read every tick, like class: a class without kai (a Blademaster's Shin) must read
+	-- nil, not the last Monk value. ataxia_kai() (monk/004) is the reader.
+	ataxia.vitals.kai = nil
+
 	for _,str in ipairs(stats) do
 		local sep = str:find(": ")
 		if sep then
@@ -54,7 +57,7 @@ function ataxia_Vitals_Update()
 					if stance ~= ataxia.vitals.form then
 						ataxia.vitals.oldform = ataxia.vitals.form
 						ataxia.vitals.form = stance
-            shikudo_checkForms()
+            shikudo_checkForms(true) -- a real change: resets the kata (monk/003)
 					end
 				end
       elseif key == "Spec" then
@@ -81,7 +84,16 @@ function ataxia_Vitals_Update()
 			-- gsub leaks its COUNT into tonumber as a base and throws (v4.7.127).
 			elseif key:lower():find("essence") then
 				ataxia.vitals.essence = tonumber((tostring(val):gsub("%%", "")))
-			elseif key == "Kai" or key == "Shin" then
+			elseif key == "Kai" then
+				-- "Kai: 59%" -- a percentage, 0-100 (the prompt's "K:59%"). Kept in `class` too for the
+				-- readers that still look there (windows/001 Monk line, shikudo/007 getKai). The stamp
+				-- lives on ataxiaTemp, which is never saved: ataxia.vitals is, so a kai restored from disk
+				-- has no stamp and ataxia_kai() reads it as unknown (the v4.7.299 rule).
+				local kai = tonumber(string.match(val, "%d+"))
+				ataxia.vitals.kai = kai
+				ataxia.vitals.class = kai
+				if kai then ataxiaTemp.kaiAt = getEpoch() end
+			elseif key == "Shin" then
 				ataxia.vitals.class = tonumber( string.match(val, "%d+") )
 			elseif key == "Wellspring" then
 				ataxia.vitals.class = tonumber(string.match(val, "%d+"))

@@ -13,7 +13,7 @@ from two pools when the target uses the tree or a passive cure (`affliction_trac
 ASSUMED meaning: a NoRandomCure affliction cannot be removed by those random cures. Not yet
 confirmed in-game, so the lists below are questions, not bugs.
 
-- **Tree pool `treeCurableAffsV3`** (21 entries): marked NoRandomCure by the game: none
+- **Tree pool `treeCurableAffsV3`** (27 entries): marked NoRandomCure by the game: none
 - **Passive pool `passiveCurableAffsV3`** (53 entries): marked NoRandomCure by the game: none
 
 ## Afflictions

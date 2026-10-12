@@ -63,13 +63,16 @@ if target == matches[2] then
     tarAffed("weariness")
   end
 
+  -- Weary, not nauseous: a stack of burning, and the spell's own nausea. NOT frozen: "If they
+  -- already have weariness, they will be given a stack of burning. If they already have nausea,
+  -- gives a stack of freeze." (Elementalism.wiki:328). The frozen recorded here made P7 cast a
+  -- 2.6 s hypothermia at a target that was not frozen.
   if not haveAff("nausea") and haveAff("weariness") then
     magi.offense = magi.offense or {}
     magi.offense.state = magi.offense.state or {}
     magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)
     tburns = magi.offense.state.burns -- backward compat
     tarAffed("burning")
-    tarAffed("frozen")
     tarAffed("nausea")
     cecho(" <DimGrey>[<red>"..tburns.."/5<DimGrey>]")
   end

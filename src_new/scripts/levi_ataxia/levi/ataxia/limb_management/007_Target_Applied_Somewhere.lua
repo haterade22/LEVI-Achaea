@@ -44,7 +44,7 @@ end
 function target_appliedTo(where)
   -- Central crushedthroat check (head apply could have been pending)
   if ataxiaTemp.crushedCheck and ataxiaTemp.crushedCheck.pending then
-      local now = os.clock()
+      local now = getEpoch()
       if now - ataxiaTemp.crushedCheck.lastApply < 1.2 then
           if haveAff("crushedthroat") then
               erAff("crushedthroat")

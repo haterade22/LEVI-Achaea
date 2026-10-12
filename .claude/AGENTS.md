@@ -165,8 +165,8 @@ Read the **`kb/afflictions/`** (cure channels, catalog with our SSC priorities, 
 | **Blademaster** | `blademaster` | `bmd`/`bmdq`/`bmbs` → `blademaster.run()` | `blademaster/005_CC_BM_Ice.lua` |
 | **Apostate** | `apostate` | `ll`/`corr` → `apostate.dispatch()` | `apostate/015_CC_Apostate.lua` |
 | **Psion** | `psion` | `zz` → `psion.dispatch()` | `psion/001_Levi_Psion_Logic.lua` |
-| **Shikudo V1/V2** | `shikudo`/`shikudov2` | `shikudo.dispatch()` | `shikudo/001_Shikudo.lua` |
-| **Shikudo Lock** | `shikudoLock` | `shikudolock()` | `shikudo/007_CC_Shikudo_Lock.lua` |
+| **Shikudo Dispatch** | `shikudo` | `sk`, and `zz`/`xx`/`vv` with no Tekura stance → `shikudo.dispatch()` | `shikudo/006_CC_Shikudo_Dispatch.lua` (008 and 009 GodMode are switched off) |
+| **Shikudo Lock** | `shikudoLock` | `sr` → `shikudoLock.dispatch()` (`shikudolock()` only wraps it) | `shikudo/007_CC_Shikudo_Lock.lua` |
 | **DWB Runie** | `dwbRunie` | `dwbRunie.dispatch()` | `dwb_runie/001_DWB_Runie_Logic.lua` |
 | **Magi** | `magi.offense` | `zz`/`xx`/`vv`/`cc`/`sr`/`mm` | `mage/004_Magi_Offense.lua` |
 | **Tekura 6L** | `tekura6` | `tk6()` | `tekura/002_Tekura_6Limb_Offense.lua` |
@@ -1021,15 +1021,29 @@ at birth, relying on an event that a quiet room never produced.
 shared-tick semantics to "earliest wins": the latter lets an early tick undercut every deliberate
 deferral elsewhere in the system.
 
-## The nil callee has three shapes; a gate that knows one is not a gate (v4.7.281)
+## The nil callee has four shapes; a gate that knows one is not a gate (v4.7.281, v4.7.419)
 
 1. an ACTIVE trigger calling a global only an INACTIVE script defines (v4.7.261)
+   1b. an ACTIVE SCRIPT doing the same (v4.7.419). Check 1 had only ever read triggers, aliases,
+   timers and keys as callers. Its first run over scripts found `misc_scripts/001_Queue_Scanning`
+   calling `shikudo_findCombo` on every queued monk combo, defined only by the switched-off
+   `shikudo/008`, so `queue_Scan` threw and skipped its own later work for monks (the call is
+   removed in v4.7.419).
 2. a trigger INDEXING a table built by a group script that may be off (v4.7.264)
 3. a namespace FIELD called but never assigned anywhere (v4.7.281)
+4. a namespace FIELD called from active code that only a SWITCHED-OFF file assigns (v4.7.419).
+   The shape-3 check counts a definition in a switched-off file as a definition, so it was blind to
+   `vv` calling `shikudo.setMode`, defined only in the switched-off `shikudo/008`: every press on a
+   Shikudo threw.
 
 `ataxia.echo` is shape 3 and does not exist -- the helper is the global `ataxiaEcho` -- which left 17
 dead call sites, including every echoing branch of `bash shinprobe` and all nine in `ataxiabars`.
-`tools/check_orphans.py` now covers shapes 1 and 3.
+`tools/check_orphans.py` covers shapes 1, 1b, 3 and 4 (checks 1, 1b, 2 and 2b), and all four fail CI.
+1b and 2b were built report-only and made strict (`STRICT_SCRIPT_CALLERS`, `STRICT_INACTIVE_FIELDS`)
+once their reports were clean. 1b reads a script as long code: it strips comments, reads
+`obj.NAME(` as a field call, skips names the file binds itself, and accepts a guard on the line or
+the two above. A field check sees only the namespaces listed in `NAMESPACES`, so a new namespace
+must be added there before its calls are checked.
 
 What made shape 3 checkable was keeping it quiet: **exclude external packages** (`mmp` alone
 produced hundreds of hits), **strip comments** (prose naming a config field parses as a call), and

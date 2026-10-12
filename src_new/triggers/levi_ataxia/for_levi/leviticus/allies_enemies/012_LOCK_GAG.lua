@@ -43,4 +43,13 @@ patterns:
 ]]--
 
 mindlocked = false
-deleteFull()
+-- "You do not possess a mindlock." stays on screen: the game is telling us we hold no lock, and
+-- gagged, that looked like nothing at all. No log has it, so which command prints it is
+-- unconfirmed (perhaps MIND UNLOCK). It is not how a MIND command that needs a lock is refused:
+-- that is "You require a mindlock to perform that ability." (MIND PRINT and SAPIENCE,
+-- kb/raw/logs/2026-10-11_mystor_shikudo-vs-apostate_win_LcJC-rJ5.txt:7-10), which no trigger
+-- gags or reads, so it is the line the CONFLICTS #7 test (MIND BLACKOUT without a lock) will
+-- most likely see. The lock-attempt lines are still noise.
+if line ~= "You do not possess a mindlock." then
+  deleteFull()
+end

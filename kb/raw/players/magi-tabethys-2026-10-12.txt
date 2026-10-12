@@ -1,0 +1,8 @@
+# Tabethys on Magi, in their own words (2026-10-12)
+
+Verbatim, as the user relayed it ("this is from tabethys"). Curated in .claude/classes/magi.md,
+"Tabethys's core rotation".
+
+## Tabethys (relayed by the user, 2026-10-12)
+
+If you meet that minimum then the rest will fit together eventually. The "core rotation" that most people start with, at least, is: magma, dehydrate, dehydrate, fulminate. This does several things that are important: it afflicts scalded, it usually burns tree, it knocks the enemy off herb balance, it forces them to choose between fulminated and asthma, blisters them (so walking away is not so simple), and sets your water to 2 and earth to 1, enabling the biggest of all bonks, the CAST MUDSLIDE for par, sli, ano, prone. Assuming you have vibes going (and if you don't then you are a fool), this has a good chance at landing a focus lock. The finisher from focus lock is usually emanate water (stuttering + strips caloric), freeze (shivering), freeze (frozen, stuttering) => glaciate (or hypothermia if they are somehow not in glaciate-kills-them-in-one range)

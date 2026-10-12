@@ -58,7 +58,7 @@ Each per-class combat system directory is fully independent and uses its own nam
 |-----------|-----------|----------------------|
 | `levi_scripts/dwc/` | `infernalDWC`, `infernalDWC2L` | Yes |
 | `levi_scripts/blademaster/` | `blademaster` | Yes |
-| `levi_scripts/shikudo/` | `shikudo`, `shikudov2`, `shikudoLock` | Yes |
+| `levi_scripts/shikudo/` | `shikudo` (006), `shikudoLock` (007), `shikudoLedger` (010); 008 and 009 are switched off | Yes |
 | `levi_scripts/shaman/` | `shamanOffense` | Yes |
 | `levi_scripts/apostate/` | `apostate` | Yes |
 | `levi_scripts/serpent/` | `serp_*` globals | Yes |

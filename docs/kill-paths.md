@@ -130,7 +130,7 @@ Highest value to confirm next, by how often they kill us and how little we know:
 
 | Class | Documented primary | Why it matters |
 |---|---|---|
-| Serpent | Ekanelia / voyria | fast, and our anti-Serpent handler is the most elaborate |
+| Serpent | Truelock: DSTAB venoms plus the monkshood reaction's impatience (`IMPULSE <t> MASOCHISM MONKSHOOD`, PLAYER, relayed 2026-10-12), finished by EXECUTE (WIKI: a prone target and a whip) or a scimitar BEHEAD; darkshade/scytherus damage | Impatience comes two ways: the monkshood reaction (asthma + weariness up; the impulse brings the masochism) and hypochondria on its own seconds later (one log; relayed: 10 s). Fratricide makes each impulse relapse shortly after it lands (game: "a short time"; relayed: 2.25 s). No Serpent log yet; what is checked and what is not: `.claude/classes/serpent.md`, "Notes relayed 2026-10-12" |
 | Shaman | Tzantza | instant, and goldenseal-stack gated. Seen instead (above): a truelock, then BEHEAD |
 | Occultist | Wheel cheese | `combatQueue()` already has a hardcoded response to it |
 | Pariah | Voyria kill | ditto |

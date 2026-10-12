@@ -205,10 +205,10 @@ describe("ataxiaBasher_monkBashing2 — Shikudo form rotation", function()
     expect(has(cmd, "transition to the")).toBeFalse()
   end)
 
-  -- The game rejects a TRANSITION below a chain of 5 and the rejection RESETS the chain, so
-  -- transitioning early is not merely wasted -- it livelocks the rotation (chain 0 -> 3 ->
-  -- rejected -> 0 -> ...), which is exactly what was seen in game. Never gate below 5.
-  it("never transitions below a kata of 5 (a rejected transition resets the chain)", function()
+  -- The game rejects a TRANSITION below a chain of 5. A refused transition KEEPS the chain
+  -- (attacker log: kata 3, refused, still 3, then 6), but the round it was meant for is lost, so
+  -- never transitioning below 5 is the rotation's own rule.
+  it("never transitions below a kata of 5 (a refused transition wastes the round)", function()
     for _, form in ipairs({"Rain", "Oak", "Tykonos", "Gaital", "Maelstrom"}) do
       for _, k in ipairs({0, 2, 3, 4}) do
         reset(); ataxia.vitals.form, ataxia.vitals.kata = form, k

@@ -106,7 +106,7 @@ function reboundHold.shouldHold()
   if not targetClass or not reboundHold.PHYSICAL_CLASSES[targetClass] then return false end
 
   -- Predict when rebounding will return
-  local elapsed = os.clock() - reboundHold.state.reboundLostAt
+  local elapsed = getEpoch() - reboundHold.state.reboundLostAt
   local timeUntilRebound = reboundHold.config.REBOUND_RECOVERY - elapsed
 
   if timeUntilRebound <= 0 or timeUntilRebound > reboundHold.config.HOLD_WINDOW then
@@ -156,7 +156,9 @@ end
 --------------------------------------------------------------------------------
 
 function reboundHold.onReboundLost()
-  reboundHold.state.reboundLostAt = os.clock()
+  -- getEpoch(), not os.clock(): Lua 5.1 defines os.clock as CPU time, which matches wall
+  -- time only under Windows' C runtime (v4.7.419).
+  reboundHold.state.reboundLostAt = getEpoch()
   debugEcho("Rebounding lost at " .. string.format("%.3f", reboundHold.state.reboundLostAt))
 end
 
@@ -260,7 +262,7 @@ function reboundHold.status()
   echo("  Max Hold Timeout: " .. cfg.MAX_HOLD_TIMEOUT .. "s\n")
   echo("  Debug:            " .. tostring(cfg.debugEcho) .. "\n")
   if st.reboundLostAt then
-    local elapsed = os.clock() - st.reboundLostAt
+    local elapsed = getEpoch() - st.reboundLostAt
     local eta = cfg.REBOUND_RECOVERY - elapsed
     echo("  Rebound lost:     " .. string.format("%.1f", elapsed) .. "s ago\n")
     echo("  ETA to return:    " .. string.format("%.1f", math.max(0, eta)) .. "s\n")

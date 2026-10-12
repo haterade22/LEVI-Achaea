@@ -201,6 +201,7 @@ ataxia_TARGET_AFF_SECONDS = {
   ensorcelled = 20,    -- the old timer used 21
   vinewreathed = 20,
   waterbond = 30,      -- game: waterbonds, 30
+  blackout = 4,        -- game: 4 seconds, cured by time (AFFLICTION SHOW); the old timers used 3.5
 }
 
 function ataxia_tarAffTimed(aff, seconds)

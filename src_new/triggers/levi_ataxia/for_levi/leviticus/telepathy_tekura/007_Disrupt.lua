@@ -40,8 +40,10 @@ patterns:
 ]]--
 
 if isTargeted(matches[2]) then
-	tarAffed("disrupted")
-  tempTimer(10, [[erAff("disrupted")]])
+  -- AFFLICTION SHOW gives disrupted no duration: it lasts until the target CONCENTRATEs, which 788
+  -- sees. The 10 s is a backstop for a concentrate we miss, not a game duration. A raw timer here
+  -- was not restarted by a re-disrupt, so the first one's clock erased the second.
+  ataxia_tarAffTimed("disrupted", 10)
   if partyrelay then
     send("pt disrupt on "..matches[2],false)
   end  

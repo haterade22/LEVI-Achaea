@@ -2,6 +2,191 @@
 
 ---
 
+## 2026-10-12 - v4.7.419: Shikudo wave 1, one target tree one charge, Serpent and Magi fixes
+
+The first wave of `docs/plans/shikudo-offense-review-2026-10-11.md`, and fixes from relayed Serpent
+and Magi notes, each checked against the game data and the code. The two Shikudo offenses
+(`shikudo/006` dispatch, `007` lock) are unchanged; their rebuild is the next wave. Tabethys's Magi
+rotation is documented, not implemented.
+
+**Shikudo and monk**
+- **`vv` on a Shikudo no longer throws** (`153_Fourth_Attack`). It called `shikudo.setMode("godmode")`,
+  defined only by the switched-off `shikudo/008`, so every press failed; it now runs the dispatch
+  offense as `zz` does (and `shikudo.dispatchMind` once something defines it). A Tekura's `vv` is unchanged.
+- **GodMode (`shikudo/009`) is switched off.** Nothing could reach it, and its first tick threw
+  (`shikudo_breakPoint`, also defined only by 008). Its header records why and what a later route
+  should salvage; `skgodmode()` and `skgmstatus()` go with it.
+- **Every queued monk combo threw in `queue_Scan`** (`misc_scripts/001_Queue_Scanning`), calling
+  `shikudo_findCombo`, which only the switched-off `shikudo/008` has defined since 3c312975
+  (2026-03-16). The throw skipped the rest of `queue_Scan` for that line (the doRepeat re-queue, the
+  Repeat Offence enable, butchering); the call is removed.
+- **The strike ledger** (phase 3a: new `shikudo/010_Shikudo_Strike_Ledger.lua`, trigger 789) records a
+  ruku to the arm that prints no damage line, such as a light one (clumsiness, then healthleech). Its
+  effect line, "The staff connects to the right arm with a resounding crack, the limb flopping
+  uselessly.", followed all 47 rukus to the arm in Mystor's vNTjvghY log (33 damaged, 14 light) but
+  names no target, so the ledger gives it to the strike in flight: 587 opens an entry per strike line,
+  789 hands it every line that can end a strike, and the prompt (318) expires it.
+- The ledger records nothing without a line: a parry, a fumble or a shield's rebound drops the strike,
+  and a strike that ends with no outcome line is only counted (`shikudoLedger.unresolved`), as is an arm
+  line the strike in flight does not fit (`shikudoLedger.refused`, `lastRefused`).
+  `shikudoLedger.debug = true` echoes both, so an unseen outcome line can be captured.
+- **Two double recordings are gone.** Trigger 586, a copy of `3rd_person_shikudo/004`, recorded
+  slickness again after every ruku to the torso; it is deleted, with the switched-off `calls/004`.
+  `3rd_person_shikudo/001` now skips once after 576, so a damaged livestrike records asthma once.
+- **Shared monk state in the new `ataxia/monk/004_Kai_And_Kata.lua`.** `update_stuff/004` reads kai into
+  its own field, `ataxia.vitals.kai` (stamped `ataxiaTemp.kaiAt`, so a kai restored from disk reads as
+  unknown); before, Kai shared `vitals.class` with Shin and `vitals.kai` was written nowhere.
+  `ataxia_KAI_COST` and `ataxia_kaiAfford(ability, spent, tgt)` hold the costs: Kai Surge is the wiki's
+  45, not 31 (boost 11, cripple 41 and choke 10, measured in the logs, all equal the wiki), and an
+  unknown kai is never enough for a paid ability (choke on a denizen is free). 007's KAI SURGE READY
+  echo still uses 31 (display only).
+- **The kata is kept current, and a kata policy is written down.** The chain line (164) and
+  the lapse line (165) write `ataxia.vitals.kata`, and a real form change zeroes it
+  (`shikudo_checkForms(true)`, `monk/003`). `ataxia_KATA` leaves a form at a chain of 12 after the combo
+  (Rain 15, Tykonos at 5), and the new alias `skata` shows the caps or saves an override. No offense
+  reads the policy yet: 006 and 007 keep their own caps, the basher its PvE literals.
+- ASSESS (698) keeps the raw numbers (`ataxiaTemp.lastAssessHp/Max/At/Who`) for
+  `ataxia_assessAtMostHalf`, because the floored percentage read 3540/7000 (50.57%) as 50; no offense
+  calls it yet. A move into Tykonos we did not ask for, while a chain was alive, is recorded and echoed
+  as a probable stumble (`ataxiaTemp.shikudoStumbles`), so the first stumble line can be kept
+  (CONFLICTS #8).
+- **TK6 (`tekura/002`) pays for its dismount.** Its KAI SURGE / KAI CRIPPLE dismount, the package's only
+  automatic send that spends kai, went out unchecked, so a refused one left the sweep aimed at a rider.
+  It now needs `ataxia_kaiAfford` (surge 45, cripple 41); a target known to ride, with kai short, gets
+  prep instead, said once: "[TK6] SURGE needs 45 kai, have 40 -- no sweep, prepping instead".
+- TK6 trusts the mount flag `tmounted`, which no target change resets, only after seeing it down while
+  the target was ours (`tekura6.mountConfirmed`): a flag left by an earlier target sweeps anyway, and
+  `tk6status` shows it as YES?. No second dismount while our own surge holds this target
+  (`ataxiaTemp.kaiSurgeWho`), and the Kai Surge trigger (`monk/002`) kills the last window's timer,
+  which used to close a second window early.
+- **The kaido aliases send what is typed.** `ks`, `ke`, `kcr` and `kh` silently dropped the command
+  below their cost (`ks` at the wrong 31) and threw on a nil kai; they now always send, warning first
+  when kai is known short ("[Kai] SURGE needs 45, have 40 -- sent anyway"). `kc` keeps its MIND CRUSH
+  fallback when kai is known short, and says so.
+- TK6's no-target echo (`tar <name>`, which cecho read as a colour our palette lacks) threw; it now says
+  `tar NAME`. The `basher/002` Shikudo rotation comment no longer repeats the claim, retracted in
+  v4.7.69, that a refused transition resets the chain.
+
+**Target tracking (every class)**
+- **One target tree is one charge** (trigger 389, `curing/002_Wide_Groups`). With V3 on,
+  `onTargetTreeV3` already branched over every tree-curable affliction and `tSingleRandom()` then erased
+  one more, so asthma + slickness + blackout read 4/3 afflictions after one tree, where the truth is 2.
+  389 now calls the new `ataxia_targetTreeV3()`, then `tSingleRandom({ noErase = true })`; with V3 off
+  nothing changes.
+- What a tree takes for certain now leaves tAffs as well as V3 (through `ataxia_tarAffFaded`), because
+  `syncToOldSystemV3` visits only afflictions still in some branch: without it a lone asthma would read
+  0 to `haveAff` and stay true to every tAffs reader. When nothing branch-tracked was there, the tree
+  takes one level-1 broken limb, which V3 tracks simply and cannot branch; a tree V3 calls an illusion
+  charges nothing.
+- `tSingleRandom(opts)` returns its pick, and 389 stamps `ataxiaTemp.targetTreeAt`. Read it only while
+  `tBals.tree` is false: a target switch resets that, not the stamp.
+- **Blackout on the target lasts the game's 4 s** (AFFLICTION SHOW), and a repeat restarts it: Psion
+  LIGHTSTEAL (525) and Knight CONCUSS (`snb/008`) use `ataxia_tarAffTimed` (`blackout = 4` in 017)
+  instead of raw 3.5 s timers, the first of which erased a second blackout early. 525 calls "blackout"
+  to the party only when it lands, naming the person struck.
+- **MIND DISRUPT keeps `disrupted` until the target concentrates** (`telepathy_tekura/007`): its 10 s is
+  a backstop, since AFFLICTION SHOW gives no duration, and the CONCENTRATE line (788) cancels it through
+  `ataxia_tarAffFaded`. A re-disrupt is no longer erased by the first one's timer.
+- `allies_enemies/012` no longer deletes the line its no-lock pattern names (`You do not possess a
+  mindlock.`; no log has it). A MIND command that needs a lock is refused with "You require a mindlock
+  to perform that ability." (LcJC-rJ5:7-10), which nothing gags.
+- `mp` sends MIND PARALYSE, the spelling the game accepted (attacker log :1063-1064 sent, :1067 landed).
+  Removed `mrap` (it read `affstrack`, which nothing assigns, and threw on every use) and the uncalled
+  `disruptmind()` (`levi_scripts/telepathy/001_DISRUPT`).
+- **Timers that measured CPU time:** the rebound-recovery prediction (`deffing/006_Rebound_Hold`), the
+  crushed-throat apply window (triggers 392 and 393, `limb_management/007`) and the balance-time
+  display (`update_stuff/005`) use `getEpoch()` instead of `os.clock()` (10 uses). Lua 5.1's `os.clock`
+  is CPU time, equal to wall time only under Windows' C runtime, so on Linux and macOS they barely moved.
+
+**Serpent** (`serpent/002_Serpent_Offense.lua` unless named; the notes: `kb/raw/players/serpent-2026-10-12.txt`)
+- **The three monkshood impatience sends check the fangbarrier** (the shield-break flay + impulse,
+  PRIORITY 4, PRIORITY 5), like the other impulses: with the barrier up the round goes on to the gecko
+  strip instead of sending a blocked impulse every round. Scytherus mode's impulse still does not (open).
+- **The Ekanelia success line (`serpent/016`) records the reaction's result** on the target, from
+  `serpent.EKANELIA_RESULTS` (monkshood impatience, kalmia slickness, loki nausea + paralysis, curare
+  hypochondria, aconite paranoia, voyria confusion + disrupted: our own table, since the game's list was
+  never captured). On monkshood it stamps the 2.5 s impatience cooldown, which nothing called before.
+- Monkshood is no longer sent for an impatience the target already has (selectBiteVenom step 3,
+  selectRelapseImpulse), and the keybind suggestion override no longer replaces a suggestion the
+  reaction needs (the masochism of the monkshood pair).
+- **Fratricide is on the tracker** (`tarAffed` in onSnapped, `erAff` in onFratricideCured), so
+  `haveAff("fratricide")` is true after the snap. A lobelia eat cures it only when nothing else lobelia
+  cures is there (`herbCureLastV3`, `affliction_tracking_core/007`): it is 25 in our priorities, and
+  a list position cannot say "last", since with two candidates the other stays at 0.33, over
+  `haveAff`'s 0.3.
+- Fratricide's relapse window is 2.25 s (the relayed notes; the game says only "a short time after being
+  first introduced"), not 3.0 s from no source. The offense's timers (this window, the impatience
+  cooldown, the 8.15 s rebounding pre-empt) run on `getEpoch()` instead of `os.clock()`.
+- **Defence vs Serpent** (`Algedonic.AntiSerpent`): `curing prioaff hypochondria` (it brings impatience
+  some seconds later) and, while scytherus is up, `curing prioaff fratricide`, both after paralysis.
+  PRIOAFF writes no stored priority, so both are right in the `serpent` curingset class detection uses.
+
+**Magi** (Tabethys's rotation is not implemented; the offense keeps its priority order, but glaciate's
+gate and several of its inputs change, below)
+- **Resonance tracking survives the server's wrap** (`general/022_Resonance_Afflictions`). Moderate
+  earth (paralysis) and major water (anorexia), the "par" and "ano" of the mudslide, were anchored full
+  lines of 148 and 128 columns with a 7-letter name, so at this user's 119-124 wrap they never matched.
+  Every long 022 pattern is now an early fragment, and a name that falls after the wrap is read from the
+  next row, so the name check stays.
+- **The water emanation fires** (`enamation/002`): its pattern was folded across two YAML lines (about
+  180 columns, which check_wrap cannot see) and is now an 84-column opening fragment, the name read from
+  the row that ends the sentence. It also records stuttering, as the wiki says.
+- FREEZE (`general/021_Freeze`) no longer records weariness and nausea, which it does not give and which
+  steered the offense to "dehydrate if weariness"; with frostbite and insulation, one line records the
+  strip and the next stage and removes the frostbite (the game's frostbite record). DEHYDRATE on a weary,
+  not-nauseous target (`015_Dehydrate`) no longer records a frozen, which made P7 cast a wasted hypothermia.
+- FULMINATE (`021_Spell_Outcomes`) no longer adds a burn, which could open conflagrate's `burns >= 2`
+  gate a stack early. A resonance blister expires on the shared target clock (`ataxia_tarAffTimed`,
+  15 s, no source), and the Fire Lord blister (493) records blistered only: no unsourced burning stack,
+  and its "tar afflicted" event is raised again.
+- **Glaciate (P3, `mage/004_Magi_Offense`) needs V3 frozen and hypothermia**, with water and air at 2+.
+  It read the hypothermia latch, which only a target change or `mm reset` clears, and never tested
+  frozen, so it kept casting at a target that had cured hypothermia; P7 now lays hypothermia again first,
+  and `mm status` reads V3 too.
+- `get_resonance` (`mage/001_Resonance`) matches the charstats resonance keys in any case, zeroes a plane
+  with no entry, and returns when charstats is missing. The key format is still unconfirmed (CONFLICTS #29).
+
+**Tools and tests**
+- **`tools/check_orphans.py`:** check 1b reads active SCRIPTS as callers of globals that only
+  switched-off scripts define (it found `queue_Scan` above), and check 2b reports a namespace field called
+  from active code that only switched-off files assign (it would have caught `vv`). Both fail CI
+  (`STRICT_SCRIPT_CALLERS`, `STRICT_INACTIVE_FIELDS`); `NAMESPACES` gains `shikudo` and `shikudoLock`, and
+  `_groups.yaml` inline-script globals count as live.
+- For 1b to be clean, `029_VOICECRAFT_PRIOS` (`bardvoiceprios()`) and `blademaster/004_Group`
+  (`bm_groupfighting()`) are switched off: nothing calls either, and each calls a global that only a
+  switched-off script defines. The live Blademaster group route is `bmgroup()` in `005_CC_BM_Ice`.
+- `tools/check_wrap.py`: `general/022_Resonance_Afflictions.lua` leaves the allowlist (6 remain).
+- New tests: `test_monk_aliases.lua` (6), `test_monk_kai_kata.lua` (45), `test_tekura6_kai.lua` (25),
+  `test_telepathy_tracking.lua` (22), `test_target_tree.lua` (16), `test_shikudo_ledger.lua` (38),
+  `test_serpent_notes.lua` (36), `test_magi_tracking.lua` (23). `test_shikudo_tracking.lua`'s 788 test
+  expects `ataxia_tarAffFaded`, and `test_curing_prios.lua` defines `table.contains` when it is missing,
+  so it also passes when run alone.
+
+**Docs and knowledge base**
+- Filed verbatim: `kb/raw/players/serpent-2026-10-12.txt` (Serpent notes the user relayed) and
+  `kb/raw/players/magi-tabethys-2026-10-12.txt` (Tabethys on Magi), with their `kb/INDEX.md` rows.
+- `.claude/classes/serpent.md`: new "Notes relayed 2026-10-12" (DSTAB, hypochondria's delayed
+  impatience, IMPULSE MASOCHISM MONKSHOOD, fratricide's 2.25 s, the relapse sources), each checked
+  against kb/raw, and the PvP sections rewritten against the code (fratricide is cured by
+  lobelia/argentum, its relapse is timed from introduction, AntiSerpent has four real branches).
+  `docs/kill-paths.md`: the Serpent row.
+- `.claude/classes/magi.md`: new "Tabethys's core rotation" (the opener, the mudslide, vibes and the
+  focus lock, the freeze-to-glaciate finisher) and where our offense differs, plus rows corrected
+  against the wiki, AFFLICTION SHOW and the code. Making the rotation a mode is the user's decision.
+- `.claude/classes/monk.md` (008 and 009 not live, the alias map, Kai Surge 45, the TK6 kai gate, 006's
+  real form rules, Dispatch from any form, the shared monk state), `kb/combat/shikudo.md`,
+  `kb/afflictions/expiry-lines.md` (blackout's 4 s, disrupted's backstop), `kb/afflictions/database.md`
+  (regenerated: the tree pool has 27 entries), the plan, `.claude/AGENTS.md` (the nil callee's four
+  shapes), `docs/ai-includes/agent-teams.md` and the V2 testing plan.
+- `kb/CONFLICTS.md`: #6 and #10 resolved, #2, #7, #8 and #9 updated, Dispatch from any form recorded as
+  resolved, and new open rows #18-#31 (the lock offense's transition wording, seven Serpent and six Magi
+  questions). CLAUDE.md matches.
+
+Tests: 3088, all passing under native lua5.1 and lupa (211 new). `check_orphans.py` (all four checks)
+and `check_wrap.py` pass.
+
+---
+
 ## 2026-10-12 - v4.7.418: the fight recorder (`fightlog`)
 
 The user: "we should add a way to log the fights and save them somewhere that you can analyse".

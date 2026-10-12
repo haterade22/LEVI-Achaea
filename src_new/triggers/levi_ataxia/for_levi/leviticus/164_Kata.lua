@@ -38,5 +38,11 @@ patterns:
   type: 1
 ]]--
 
-selectCurrentLine() fg("black") bg("old_lace") 
+selectCurrentLine() fg("black") bg("old_lace")
 katachain = tonumber(matches[2])
+-- The offenses read ataxia.vitals.kata. This line prints at the end of each combo, before the
+-- prompt, so it is fresher than charstats, which lags a tick (basher/002). kataLast and kataAt
+-- feed monk/004 (ataxia_kataAtRisk) and the stumble recorder (monk/003); ataxiaTemp is never saved.
+ataxia.vitals.kata = katachain
+ataxiaTemp.kataLast = katachain
+ataxiaTemp.kataAt = getEpoch()

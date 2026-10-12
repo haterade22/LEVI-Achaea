@@ -8,6 +8,14 @@
 require("mock_mudlet")
 local mock = require("mock_mudlet")
 
+-- Mudlet's table.contains. Earlier test files define it, so this file passed only in the full
+-- suite; define it here (and restore it at the end) so the file also passes alone.
+local savedContains = table.contains
+table.contains = table.contains or function(t, val)
+  for _, v in pairs(t) do if v == val then return true end end
+  return false
+end
+
 ataxia = ataxia or {}
 ataxia.afflictions = {}
 ataxia.curingprio = {}
@@ -355,3 +363,4 @@ ataxia.settings.bashcuring = { active = false }
 ataxia_bashProfileActive = nil
 ataxia_bashProfileOff = nil
 target = nil
+table.contains = savedContains

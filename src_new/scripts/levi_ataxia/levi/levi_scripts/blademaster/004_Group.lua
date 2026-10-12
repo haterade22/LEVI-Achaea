@@ -8,10 +8,14 @@ hierarchy:
 - Leviticus
 - Blademaster
 attributes:
-  isActive: 'yes'
+  isActive: 'no'
   isFolder: 'no'
 packageName: ''
 ]]--
+
+-- v4.7.419: switched off. bm_groupfighting() has no caller anywhere, and it opens by calling
+-- bmgrouplock(), which only the switched-off blademaster/001_Logic defines (check_orphans 1b). The live
+-- group route is bmgroup() in 005_CC_BM_Ice.
 
 --17.0/11.3
 function bm_groupfighting()
