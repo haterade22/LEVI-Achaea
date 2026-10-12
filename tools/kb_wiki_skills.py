@@ -72,6 +72,9 @@ NOTES = {
     ("Bard", "Sagas"): "the full-member skill for Bards outside Cyrene (Cyrene citizens may take Woe)",
     ("Alchemist", "Sublimation"): "alternative to Formulation (uses Hashan's Wellspring)",
     ("Monk", "Shikudo"): "alternative to Tekura (requires transcendent Tekura)",
+    ("Apostate", "Evileye"): "Live (Mystor's log, 2026-10-11): DEADEYES takes affliction words, paralysis among them, "
+                             "and SICKEN gives MANALEECH first, then slickness once manaleech is up. The paralysis-first "
+                             "text below is outdated. See kb/CONFLICTS.md",
     ("Monk", "Telepathy"): "Players (the user and Mystor, 2026-10-11): a mind lock is needed only to reach a target "
                            "OUTSIDE your room and for certain skills such as Radiance (which cannot be used on a "
                            "target in your room) and Sapience (which watches a locked target). The 15 abilities the "
