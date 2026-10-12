@@ -108,6 +108,18 @@ and the same Runewarden losing in the Shikudo log above. Write-up: `kb/combat/ru
 
 **Her Dagaz rune cures her afflictions on a timer** while she stands on it.
 
+### Four classes from Mystor's six arena fights (2026-10-11, SHARED logs, the Shikudo's view)
+
+Logs: `kb/raw/logs/2026-10-11_mystor_*`. Write-ups, with line numbers: `kb/combat/fights/`. Five of the
+six had MIND SAPIENCE on the opponent, so his own commands are known, not guessed.
+
+| Class | Path | Status | Requirement | Tell |
+|---|---|---|---|---|
+| **Shaman** | truelock, then **BEHEAD** with a scimitar | **CONFIRMED KILL** | asthma, anorexia, slickness, impatience and paralysis (weariness first, which blocks FITNESS). The victim was NOT prone | the scimitar is drawn only for the kill; about 10 s from the swing to death. A probable TZANTZA at four afflictions did not kill (six are needed) |
+| **Depthswalker** | **SHADOW DICTATE** | **CONFIRMED KILL** | mana below 40%, plus 5% per amplifier (depression, madness, retribution, parasite) | the depression capstone line, the leach capstone ("shadow claimed"), then one packet that wields the dagger and sends INTONE TOOROS before DICTATE. Recklessness made the prompt read full health and mana while it was lethal. One uncured timeloop doubled 8 instills |
+| Infernal (two scimitars, DSL) | VIVISECT | CONFIRMED (tried 5 times, never landed) | all four limbs broken | "<T> reaches out for your chest but his hand stops short of it." is the refused attempt. Epteth/epseth break the LEFT limb first; DEATHAURA 547 every 7 s; TORMENT's healthleech 506 |
+| Apostate | DEADEYES pressure | CONFIRMED (pressure, no kill) | paralysis about every 2.3 s from DEADEYES affliction pairs, with loyals and the daegger | `touch mercy / order loyals / truestare / deadeyes <t> <aff> <aff>` every round; Syphon every 12 s |
+
 ### Every other class -- **ASSUMED**
 
 `.claude/classes/*.md` carry kill routes for all classes, but none has been verified against one
@@ -119,7 +131,7 @@ Highest value to confirm next, by how often they kill us and how little we know:
 | Class | Documented primary | Why it matters |
 |---|---|---|
 | Serpent | Ekanelia / voyria | fast, and our anti-Serpent handler is the most elaborate |
-| Shaman | Tzantza | instant, and goldenseal-stack gated |
+| Shaman | Tzantza | instant, and goldenseal-stack gated. Seen instead (above): a truelock, then BEHEAD |
 | Occultist | Wheel cheese | `combatQueue()` already has a hardcoded response to it |
 | Pariah | Voyria kill | ditto |
 | Monk/Tekura | Limb prep (backbreaker) | shares the limb machinery we just fixed for Sentinel (Shikudo is confirmed above) |
