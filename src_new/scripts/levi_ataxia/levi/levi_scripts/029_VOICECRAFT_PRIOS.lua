@@ -8,10 +8,13 @@ hierarchy:
 - Leviticus
 - BARD
 attributes:
-  isActive: 'yes'
+  isActive: 'no'
   isFolder: 'no'
 packageName: ''
 ]]--
+
+-- v4.7.419: switched off. bardvoiceprios() has no caller anywhere, and it ends by calling attack() /
+-- attackswift(), which only the switched-off shaman/002_ATTACK and 005_SWIFT define (check_orphans 1b).
 
 function bardvoiceprios()
 getLockingAffliction()

@@ -181,7 +181,14 @@ contains one dead call has that **call guarded** (`if NAME then NAME(...) end`, 
 files already use for their V3 calls), never disabled, or real logic goes with it. 27 of 62 were
 the second kind.
 
-**CHECK 2 -- a namespace FIELD called but never defined (v4.7.281).** `attempt to call field 'echo' (a nil value)`: **`ataxia.echo` exists nowhere in the tree** -- the helper is the global `ataxiaEcho`, built in a `_groups.yaml` inline script -- so **17 call sites across 4 files were dead**, including every echoing branch of `bash shinprobe` and **all nine echoes in `ataxiabars`**. The same sweep found `shaman.help()`, called unguarded by `sp help` and defined nowhere. Check 1 cannot see either: it reasons about GLOBALS defined by INACTIVE scripts, and these are table FIELDS defined by nothing (as was the v4.7.264 `zgui` family, an INDEX rather than a call). `check_missing_fields()` scans `.lua` AND `_groups.yaml` for `NS.field(...)` whose `NS.field` is assigned nowhere. Kept quiet enough to survive: **`mmp` is excluded** (a separate package, ~220 functions outside `src_new`, hundreds of false positives), **comments are stripped** (`-- Set ataxiaBasher.fleeTimeout (seconds)` otherwise reads as a call), and **the guard window is TWO LINES** rather than one, because the idiom here puts the test on its own line (`if ataxia and ataxia.decho then` / call / `end`) and per-line strictness flagged six safe sites. Findings report the REAL file line -- `split()` drops the header, and a finding you cannot jump to is one you will not act on. **A gate that cries wolf gets switched off, which is how a guard becomes decoration.** It only sees the namespaces listed in `NAMESPACES`, which is why 14 Shikudo triggers calling `monk.shikudo.limb_hit` (defined by no script we ship) threw unseen: since v4.7.414 `monk` is listed, so every call into it must stay guarded, and `--[[ ]]` block comments are stripped as well (a header naming "monk.md (class mechanics)" read as a call).
+**CHECK 2 -- a namespace FIELD called but never defined (v4.7.281).** `attempt to call field 'echo' (a nil value)`: **`ataxia.echo` exists nowhere in the tree** -- the helper is the global `ataxiaEcho`, built in a `_groups.yaml` inline script -- so **17 call sites across 4 files were dead**, including every echoing branch of `bash shinprobe` and **all nine echoes in `ataxiabars`**. The same sweep found `shaman.help()`, called unguarded by `sp help` and defined nowhere. Check 1 cannot see either: it reasons about GLOBALS defined by INACTIVE scripts, and these are table FIELDS defined by nothing (as was the v4.7.264 `zgui` family, an INDEX rather than a call). `check_missing_fields()` scans `.lua` AND `_groups.yaml` for `NS.field(...)` whose `NS.field` is assigned nowhere. Kept quiet enough to survive: **`mmp` is excluded** (a separate package, ~220 functions outside `src_new`, hundreds of false positives), **comments are stripped** (`-- Set ataxiaBasher.fleeTimeout (seconds)` otherwise reads as a call), and **the guard window is TWO LINES** rather than one, because the idiom here puts the test on its own line (`if ataxia and ataxia.decho then` / call / `end`) and per-line strictness flagged six safe sites. Findings report the REAL file line -- `split()` drops the header, and a finding you cannot jump to is one you will not act on. **A gate that cries wolf gets switched off, which is how a guard becomes decoration.** It only sees the namespaces listed in `NAMESPACES`, which is why 14 Shikudo triggers calling `monk.shikudo.limb_hit` (defined by no script we ship) threw unseen: since v4.7.414 `monk` is listed (and since v4.7.419 `shikudo` and `shikudoLock`), so every call into it must stay guarded, and `--[[ ]]` block comments are stripped as well (a header naming "monk.md (class mechanics)" read as a call).
+
+**CHECKS 1b and 2b (v4.7.419).** 1b reads active SCRIPTS as callers too (check 1 read only triggers,
+aliases, timers and keys); its first run found `queue_Scan` calling `shikudo_findCombo`, defined only by
+the switched-off `shikudo/008`, on every queued monk combo. 2b reports a field called from active code
+that only switched-off files assign: check 2 counts those as defined, so `vv` shipped calling
+`shikudo.setMode`. Both were built report-only and made strict once clean (`STRICT_SCRIPT_CALLERS`,
+`STRICT_INACTIVE_FIELDS`), so all four checks fail CI; land a new check the same way.
 
 **`tools/check_colours.py` -- a colour name is only valid in OUR palette (v4.7.287).**
 `007_Custom_Colour_Table.lua` WHOLESALE REPLACES Mudlet's, so a name that is perfectly good in stock
@@ -406,14 +413,14 @@ v4.7.265 documented `bash dwaeonic off`, which was never a real command.
 | **dwc_runie** | 1 | Undocumented | DWC + runelore | `dwc_runie/` |
 | **earth_lord** | 5 | Undocumented | Limb targeting | `earth_lord/` |
 | **i_snb** | 1 | Undocumented | Infernal SnB | `i_snb/` |
-| **mage** | 4 | **Documented** | Elementalism: salve push, fire burns, water freeze, lock, group, stormhammer | `mage/` |
+| **mage** | 5 | **Documented** | Elementalism: a priority tree every mode runs first (destroy, meteorite shield strip, glaciate on a frozen target once hypothermia is laid, stormhammer, mudslide at asthma + water 2), then fire burns and freeze (xx; vv's water mode has no branch and runs the same tree), salve (zz), lock (cc), group (sr). Tabethys's rotation (opener, earth-1 mudslide, focus lock, emanate water + freeze twice + glaciate finisher) is curated in magi.md, not implemented | `mage/` |
 | **pariah** | 1 | Undocumented | Plague/swarm | `pariah/` |
 | **psion** | 1 | **Documented** | Mana kill, deconstruct, flurry burst | `psion/` |
 | **s_n_b** | 1 | Undocumented | Sword and Board | `s_n_b/` |
 | **serpent** | 1 (002) | **Documented** | Ekanelia lock, darkshade, scytherus | `serpent/` |
 | **shaman** | 1 (028) | **Documented** | Tzantza, locks, bleed | `shaman/` |
 | **snipe** | 1 | **Documented** | Class-agnostic snipe system | `snipe/` |
-| **shikudo** | 006, 007 live | **Documented** | Dispatch (006), lock (007); 009 GodMode unreachable; rework planned | `shikudo/` |
+| **shikudo** | 006, 007, 010 live | **Documented** | Dispatch (006), lock (007), strike ledger (010); 009 GodMode switched off (v4.7.419; why and what to salvage are in its header; to be deleted with 001/002/004/005/008); offense rework in progress (wave 1: v4.7.419) | `shikudo/` |
 | **tekura** | ~3 | **Documented** | 6-limb backbreaker (TK6), 3-limb legacy (TKD) | `tekura/` |
 | **two_handed** | 1 | Undocumented | 2H knight | `two_handed/` |
 | **wildwalker** | 8 | Undocumented | Navigation/utility | `wildwalker/` |
@@ -476,18 +483,26 @@ read `mmp.settings.mapsource`). `service` is an experimental live Crowdmap; `cro
 - **Basher**: `ataxiaBasher` for automated hunting (see details below)
 - **Class Modules**: Serpent, Shaman, Blademaster, Infernal DWC, Apostate, Monk, and 12+ more
 - **Shikudo (Monk)** (corrected 2026-10-11; the old list named files that never existed). Live:
-  `shikudo/006_CC_Shikudo_Dispatch.lua` (`sk`; `zz`/`xx` when the monk has no stance) and
-  `007_CC_Shikudo_Lock.lua` (`sr` -> `shikudoLock.dispatch()`, `shikudolock()` only its fallback; status
-  `sklstatus()`). `009_CC_Shikudo_GodMode.lua`
-  is unreachable: `vv` calls `shikudo.setMode`, defined only in the switched-off 008. What is wrong
-  and the three-phase rework: `docs/plans/shikudo-offense-review-2026-10-11.md`. Every real line from
-  two fights, both sides: `kb/combat/shikudo.md`.
+  `shikudo/006_CC_Shikudo_Dispatch.lua` (`sk`; `zz`/`xx`/`vv` when the monk has no stance; `vv` runs
+  `shikudo.dispatchMind` once something defines it, else the dispatch), `007_CC_Shikudo_Lock.lua` (`sr`
+  -> `shikudoLock.dispatch()`, `shikudolock()` only its fallback; status `sklstatus()`) and the strike
+  ledger `010_Shikudo_Strike_Ledger.lua`. `009_CC_Shikudo_GodMode.lua` is switched off (v4.7.419; its
+  header lists why and what to salvage): until then `vv` called `shikudo.setMode`, defined only in the
+  switched-off 008, and threw on every press. What is wrong and the three-phase rework:
+  `docs/plans/shikudo-offense-review-2026-10-11.md`. Every real line from two fights, both sides:
+  `kb/combat/shikudo.md`.
   - **Tracking** (v4.7.413-414, `test_shikudo_tracking.lua`): strike triggers 563-585 pair a strike
     line's START with the damage line up to two rows later (strike lines run to 147 columns);
-    effect-line triggers (`3rd_person_shikudo/`, `calls/`, 586) record what landed (nervestrike's own
+    effect-line triggers (`3rd_person_shikudo/`, `calls/`) record what landed (nervestrike's own
     line, `3rd_person_shikudo/008`, since v4.7.415, so light nervestrikes count); 587 clears the
     `ignoreThirdPerson` dedupe flag at every strike. All but `calls/` only run while our own queued
     command's output is on screen (`queue_Scan` opens the groups, the prompt closes them).
+  - **The strike ledger** (v4.7.419, `shikudo/010` + trigger 789, `test_shikudo_ledger.lua`) gives an
+    effect line that names no target (ruku to the arm) to the strike in flight: 587 opens an entry per
+    strike line, 789 hands it every line that can end a strike, 318 expires it before closing the gated
+    groups. It records only on a line, never at the boundary; misses are counted (`.unresolved`,
+    `.refused`/`.lastRefused`) and echoed under `shikudoLedger.debug`. The duplicate recorder 586 is
+    gone, and livestrike (`3rd_person_shikudo/001`) skips once after 576, like its siblings.
   - **A strike line is not a hit:** it prints even when parried. `light` strikes and blows a
     Shield of Absorption swallows print no damage line but still land.
   - **Facts the offense must respect** (logs, 2026-10-11): at most three attacks, one a kick; SWEEP
@@ -505,8 +520,15 @@ read `mmp.settings.mapsource`). `service` is an experimental live Crowdmap; `cro
     there). **Blackout is critical**: 4 s, they usually tree it off, we give it again, and it hides the
     combo behind it. Since v4.7.417 the lock offense (007) sends MIND IMPATIENCE / BATTER / PARALYSE (it read an
     equilibrium field nothing writes, sent bare words and locked first); the dispatch offense (006) sends none, and nothing records MIND BLACKOUT on the target (only
-    Psion LIGHTSTEAL and Knight CONCUSS record blackout, both on a prone target, and both clear it after
-    3.5 s; phase 2, `kb/combat/shikudo.md`).
+    Psion LIGHTSTEAL and Knight CONCUSS record blackout, both on a prone target; since v4.7.419 for the
+    game's 4 s through `ataxia_tarAffTimed`, a repeat restarting the clock; `kb/combat/shikudo.md`).
+  - **Shared monk state** (v4.7.419, `ataxia/monk/004_Kai_And_Kata.lua`): kai (`ataxia_kai()`, from
+    `ataxia.vitals.kai`, stamped `ataxiaTemp.kaiAt` so a kai restored from disk is unknown), its costs
+    (`ataxia_kaiAfford(ability, spent, tgt)`: surge 45; unknown kai is never enough for a paid ability,
+    and choke on a denizen is free), the kata POLICY (`ataxia_KATA`, `skata`: from Mystor's play, not
+    game limits) and `ataxia_assessAtMostHalf`. Only TK6, the kaido aliases and `skata` read it yet;
+    006/007 keep their own copies. **Pitfall:** `kataAt` outlives the chain, so `ataxia_kataAtRisk`
+    tests the kata (0 = no chain; a form change zeroes it).
 - **Infernal DWC Vivisect System**: Full auto-combat for Infernal DWC spec
   - `003_Infernal_DWC_Vivisect.lua` - Undercut + DSL vivisect strategy
   - Commands: `infernalDWCVivisect()`, `infernalDWCStatus()`, `infernalDWCReset()`
@@ -527,6 +549,13 @@ V3 is the **single source of truth** for target affliction tracking. It models m
 - `haveAff(what)` — Query (routes to V3 at 30% threshold, fallback tAffs during load)
 - `getAffProbabilityV3(aff)` — Exact probability 0.0–1.0
 - Always use the public API — never call `applyAffV3()`/`removeAffV3()` directly
+
+**One target tree is one charge (v4.7.419, every class).** Trigger 389 calls `ataxia_targetTreeV3()`
+(`curing/002`), then `tSingleRandom({ noErase = true })`, which only returns its pick: V3 branches the
+cure, what it took for certain leaves tAffs too, and one level-1 broken limb (simple-tracked) goes only
+when nothing branch-tracked was there. Read `ataxiaTemp.targetTreeAt` only while `tBals.tree` is false.
+**Pitfall:** a cure V3 resolves to ONE affliction never reaches tAffs (`syncToOldSystemV3` visits only
+keys still in some branch): a lone asthma eaten with kelp stays true there. Open (`affliction_tracking_core/007`).
 
 ### ataxiaBasher (Automated Hunting System)
 
@@ -2337,11 +2366,17 @@ Classes generally focus on one of two kill paths:
 
 ### Serpent Combat System (Ekanelia + Impulse)
 
-Modern Serpent combat revolves around two key mechanics:
+Modern Serpent combat revolves around two key mechanics. What is confirmed and what is not, in detail:
+`.claude/classes/serpent.md` (Impulse Mechanics, Fratricide Mechanics, "Notes relayed 2026-10-12").
 
-**Impulse** - Instant mental affliction delivery when:
-- Target has asthma AND weariness AND no fangbarrier
-- Delivers impatience or anorexia instantly (no SNAP timing needed)
+**Impulse** (wiki: `IMPULSE <target> <suggestion>`, 1.70 s of equilibrium):
+- It gives one TRIVIAL suggestion, masochism among them (Hypnosis.wiki:86-251). Anorexia and
+  hypochondria are complex suggestions, and impatience is no suggestion at all.
+- Impatience comes from the monkshood REACTION: `impulse <target> masochism monkshood` (relayed notes;
+  our code sends it) brings the masochism, so with asthma + weariness up the reaction adds impatience.
+  IMPULSE taking a venom, and what that costs, are unverified (`kb/CONFLICTS.md` #20).
+- The no-fangbarrier rule is our code's (`checkImpulseEligible`, after HELP 13.7: the coating stops a
+  Serpent's bites). Since v4.7.419 every impulse path calls it except scytherus mode's.
 
 **Ekanelia** - BITE venom transformation that ADDS bonus afflictions:
 | Venom | Conditionals Required | Normal + Bonus Effect |
@@ -2352,21 +2387,35 @@ Modern Serpent combat revolves around two key mechanics:
 | loki | confusion + recklessness | random + **nausea + paralysis** |
 | scytherus | addiction + nausea | scytherus + **camus damage** |
 
-**Fratricide** - Causes Impulse-delivered afflictions to RELAPSE after cure
-- Combined with scytherus = ~1200 damage per relapse tick
-- CRITICAL to cure early when fighting serpents
+These are our own `EKANELIA_TABLE`: the game's list (EKANELIA / EKANELIA STUDY) was never captured,
+and the relayed notes confirm only monkshood. Since v4.7.419 the success line (`serpent/016`) records
+each reaction's result on the target (`serpent.EKANELIA_RESULTS`).
+
+**Fratricide** (AFFLICTION SHOW): "Grants major negative poison resist and causes hypnotic impulses to
+relapse a short time after being first introduced." Cure: Eat Lobelia / Eat Argentum.
+- The relapse is timed from when an impulse is introduced, not from a cure; the record gives no time
+  and no count (relayed: 2.25 s, our `FRATRICIDE_RELAPSE` since v4.7.419; `kb/CONFLICTS.md` #21).
+- Since v4.7.419 it is on the target tracker, and a lobelia eat cures it only when nothing else lobelia
+  cures is there (`herbCureLastV3`, `affliction_tracking_core/007`). A herb list's order cannot say
+  "cured last": with two candidates the other one keeps 0.33, above `haveAff`'s 0.3.
+- How a Serpent gives it is unconfirmed: our code SUGGESTs it and SNAPs, the record calls it a venom (#23).
 
 **Kill Routes**:
 1. **True Lock**: asthma + slickness + paralysis + impatience + anorexia + weariness
 2. **Darkshade Kill**: Keep darkshade stuck for 26 seconds (protected by ginseng stack)
 
-**Defense Priority vs Serpent**:
-1. Tree when Impulse enabled + mental affliction present
-2. Re-apply fangbarrier (quicksilver) when stripped
-3. Cure fratricide IMMEDIATELY when scytherus present
-4. Block Ekanelia setups by curing masochism, clumsiness, or confusion early
+**Defense Priority vs Serpent** (`Algedonic.AntiSerpent` in `algedonic_defense_1.0/001_Anti_Priorities.lua`;
+it runs only while OUR TARGET is a Serpent in the NDB):
+1. Tree when approaching lock: asthma + slickness + impatience or anorexia.
+2. Impatience: prioaff it and touch shield.
+3. Since v4.7.419, `curing prioaff hypochondria` (it brings impatience later) and, while scytherus is
+   up, `curing prioaff fratricide`, both after paralysis. PRIOAFF writes no stored priority, so these
+   are safe in the `serpent` curingset class detection switches to (never captured, #25).
+4. No code re-applies quicksilver: fangbarrier is on SSC defence keep-up. Curing masochism no longer
+   blocks the monkshood route (the impulse brings it); denying asthma or weariness does (astWear swap).
 
-**Key Files**: `.claude/classes/serpent.md`, `src_new/scripts/.../serpent/002_Ekanelia_Offense.lua`
+**Key Files**: `.claude/classes/serpent.md`, `src_new/scripts/.../serpent/002_Serpent_Offense.lua`
+(the only file in `levi_scripts/serpent/`), `src_new/tests/test_serpent_notes.lua`
 
 **Limb Damage-Based**: Break limbs to enable killing blows
 - Limbs track damage as percentage (0-200%+)
@@ -2647,6 +2696,14 @@ function ataxia.balance.regained("bal")
 end
 ```
 
+### Pitfall: `os.clock()` is CPU time, not a clock
+Lua 5.1 defines `os.clock()` as CPU time; it equals wall time only under Windows' C runtime, so on
+Linux and macOS a game timer built on it barely advances. Time game events with `getEpoch()`, and move
+every stamp and every comparison of one timer together. v4.7.419 replaced the last `os.clock()` calls
+(the rebound-recovery prediction, the crushed-throat apply window, the balance-time display and the
+Serpent offense's `now()`); `test_serpent_notes.lua` holds `os.clock` still, so a Serpent timer that
+reads it again fails its test.
+
 ---
 
 ## GMCP Data Reference
@@ -2869,7 +2926,14 @@ Tracks exact limb damage percentages from combat text with automated defensive r
 
 **A RELOAD NOW BRINGS EVERY BOON BACK (v4.7.350).** Boon flags are bare globals, so a reimport clears them; `M._relatchBoons` sends `boon claimed` once per run so the rows (`<name>  <echoes>  <rarity>`) can re-latch what we own. `M.BOON_FLAGS` documented itself as latched from "the BOON CLAIM ... and the BOONS list (on demand, and after a reload)" -- **only the claim half was ever wired**. The generic row trigger `mnemosyne/013_Boons_List_Row` learned, recorded, coloured and annotated every row and never called `latchBoonFlag`, so a boon returned after a reload only if it ALSO had a hand-written row trigger. 15 of the table's 20 did not -- including Dead Breath and Deathtempest, so a mid-run reimport silently stopped the Apostate's belch and soulstorm (and Dead Breath cannot self-rescue from its boon line, because the belch that prints it never fires without the flag). The row trigger now calls `latchBoonFlag(name)` -- **only while `ataxiaBasher.inMnemosyne`** (v4.7.351: only one of the twenty consumers, Sharp Mind, checks for itself, so a list printed outside a run would have armed the belch and soulstorm for ordinary bashing; the wade-status trigger sets the flag before the re-latch is sent, and the per-boon rows 098-101 carry the same gate). **Run start now calls `M.clearBoonFlags()` too** (v4.7.351) -- it had cleared only a hand-written list missing 13 of the 20. Safe because the pattern requires an echo count AND a rarity word -- the offer screen's `Name:   description` rows have neither. **When adding a boon to `BOON_FLAGS`, no row trigger is needed any more** -- a test feeds a row for every name in the table and requires every flag back. Panoply (the user's prompt for this) was never affected: it has its own row trigger, and `weave flurry` has replaced `weave deathblow` under it since it shipped.
 
-**A TRIGGER PATTERN MUST FIT ON ONE WRAPPED ROW (v4.7.351).** This user's Achaea wraps server-side at **119-124 columns** (measured from the break points in their pastes), so a long line reaches Mudlet as separate rows and a pattern that runs past the break -- or a fragment that straddles it -- can never match, silently. Three triggers from one week did exactly that (782 gravehands confirmation, 779 belch fouled, 780 soulstorm landing for long mob names) plus the highlights for all three. **Match an EARLY phrase of any line near or over ~110 characters; for a highlight, add a short anchored tail `^.{0,60}<last words>\.$` so the wrapped row is coloured too.** Chat pastes arrive UNWRAPPED, so a paste is not evidence of the line's length. Two guards: `tools/check_wrap.py` (CI) fails any pattern whose shortest match is wider than 118 columns (8 pre-existing allowlisted; a stale entry fails the check), and `tests/test_trigger_wrap.lua` + `tests/trigger_lib.lua` catch the straddling class the lint cannot see -- they wrap known lines at 100/119/124 and run the trigger's REAL patterns per row, through an evaluator that raises on any regex shape it cannot judge. **Assert on the PATTERN, never on the file text** -- after the first fix, 782's old test still passed on the comment explaining the fix.
+**A TRIGGER PATTERN MUST FIT ON ONE WRAPPED ROW (v4.7.351).** This user's Achaea wraps server-side at **119-124 columns** (measured from the break points in their pastes), so a long line reaches Mudlet as separate rows and a pattern that runs past the break -- or a fragment that straddles it -- can never match, silently. Three triggers from one week did exactly that (782 gravehands confirmation, 779 belch fouled, 780 soulstorm landing for long mob names) plus the highlights for all three. **Match an EARLY phrase of any line near or over ~110 characters; for a highlight, add a short anchored tail `^.{0,60}<last words>\.$` so the wrapped row is coloured too.** Chat pastes arrive UNWRAPPED, so a paste is not evidence of the line's length. Two guards: `tools/check_wrap.py` (CI) fails any pattern whose shortest match is wider than 118 columns (6 pre-existing allowlisted since v4.7.419; a stale entry fails the check), and `tests/test_trigger_wrap.lua` + `tests/trigger_lib.lua` catch the straddling class the lint cannot see -- they wrap known lines at 100/119/124 and run the trigger's REAL patterns per row, through an evaluator that raises on any regex shape it cannot judge. **Assert on the PATTERN, never on the file text** -- after the first fix, 782's old test still passed on the comment explaining the fix.
+
+**A STATE trigger whose target NAME falls after the wrap reads it from the next row (v4.7.419).** An
+early fragment drops the name, and recording on `target` instead would record a spell cast at anyone
+else. `general/022`'s `withName` and `enamation/002` read the rest of the sentence from the following
+rows with `tempLineTrigger(1, 1, ...)`, one row at a time and at most two more, and keep their name
+check: the highlighting/071 idiom, used to record. `check_wrap.py` cannot see a pattern FOLDED across
+YAML lines (`kb/CONFLICTS.md` #2).
 
 **MOUNTJUMP RECOVERS BOTH WAYS (v4.7.351).** "You have no mount on which to jump." (705) now re-sends a recorded MOUNTJUMP as `leap` (`ataxiaBasher_jumpRefusedOnFoot`) -- a stale mounted belief (died in the saddle, mount killed, thrown by an uncaptured line) previously lost the escape. Both recoveries HOLD the send, still latching, while a tumble is in flight (`S.moveLocked`) or we stand in lava (`M.onLava` owns movement). `S.reset` clears the jump ledger; `ataxiaBasher_onDeath` sets the belief to UNKNOWN (nil) above its enabled-check. **The gravehands once-per-room record is cleared at each ripple** (`M.onRippleReset`) -- the tower reuses room numbers.
 
@@ -2928,7 +2992,14 @@ Two Tekura systems: TK6 (6-limb backbreaker, primary) and TKD (3-limb legacy). B
 
 **Kill route (TK6):** Prep all 6 limbs to 86%+ → Break arms+torso (Horse stance) → Wrench torso + break legs (Bear stance) → Backbreaker.
 
-**Kai modes:** `tekura6.config.kaiMode` — `"surge"` (31 kai, 3.2s eq, dismount) or `"cripple"` (41 kai, 4s eq, dismount + L1 breaks all limbs).
+**Kai modes:** `tekura6.config.kaiMode` — `"surge"` (45 kai, 3.2s eq, dismount) or `"cripple"` (41 kai, 4s eq, dismount + L1 breaks all limbs).
+
+**The dismount is paid for (v4.7.419).** TK6 sends it only when `ataxia_kaiAfford` (monk/004) passes;
+unknown kai is not enough. `tmounted` is one global that no target change resets, so TK6 trusts it only
+after seeing it down while the target was ours (`tekura6.mountConfirmed`): a known rider with kai short
+gets prep instead (echoed once), a flag carried over from an earlier target sweeps anyway (`tk6status`:
+YES?), and there is no second dismount while our surge holds the target (`ataxiaTemp.kaiSurgeWho`).
+The kaido aliases warn when kai is known short and still send; `kc` falls back to MIND CRUSH.
 
 ---
 
@@ -2984,7 +3055,7 @@ fight. Parenthesise mixed `and`/`or` conditions.
 two lines when the affliction block is long, so a naive log parser silently drops exactly the
 most-afflicted (i.e. most interesting) prompts.
 
-**Timed afflictions on the target expire through `ataxia_tarAffTimed(aff[, seconds])` (v4.7.405)**, which adds the affliction and removes it after the game's `Default time` (`ataxia_TARGET_AFF_SECONDS`, `017_Affliction_Management.lua`). A third-person fade line calls `ataxia_tarAffFaded(aff)` to remove it now and cancel the clock. **Never expire a target affliction with `tAffs.x = nil`:** V3 copies its own belief back over `tAffs` on the next sync, so it never expires (hamstring, airfist and voidfist were all broken this way). And make sure the fade line removes the SAME key the add used: `vinewreathe` vs `vinewreathed`, `bonds` vs `waterbond`, and `airfisted` vs `airfist` were all silent no-ops. Lines collected in `kb/afflictions/expiry-lines.md`.
+**Timed afflictions on the target expire through `ataxia_tarAffTimed(aff[, seconds])` (v4.7.405)**, which adds the affliction and removes it after the game's `Default time` (`ataxia_TARGET_AFF_SECONDS`, `017_Affliction_Management.lua`). A third-person fade line calls `ataxia_tarAffFaded(aff)` to remove it now and cancel the clock. **Never expire a target affliction with `tAffs.x = nil`:** V3 copies its own belief back over `tAffs` on the next sync, so it never expires (hamstring, airfist and voidfist were all broken this way). And make sure the fade line removes the SAME key the add used: `vinewreathe` vs `vinewreathed`, `bonds` vs `waterbond`, and `airfisted` vs `airfist` were all silent no-ops. Lines collected in `kb/afflictions/expiry-lines.md`. Since v4.7.419 blackout uses it (4 s: Psion LIGHTSTEAL 525, Knight CONCUSS `snb/008`), and MIND DISRUPT gives `disrupted` a 10 s BACKSTOP (`telepathy_tekura/007`; the game gives it no duration, only Concentrate cures it) that the target's CONCENTRATE line (788) cancels through `ataxia_tarAffFaded`.
 
 **Enemy salve applications are one cure each (v4.7.404).** "X takes some salve from a vial and rubs it on his <spot>" names the spot, not the salve, so `salveCureTableV3` lists everything a salve at that spot cures (from live WHATCURES) and the tracker BRANCHES to one cure. Only PROOFS are erased outright: an application is impossible while slick or under bloodfire. A trigger that owns a cure with its own timing (393's delayed restoration for hypothermia/calcified torso, 392's head damage and crushed throat) keeps it, and the branching is skipped for that application so nothing is cured twice. `test_target_salve_tracking.lua` drives the real triggers through the real tracker.
 
@@ -3237,7 +3308,7 @@ The project uses Claude Code hooks for automated quality gates and context prese
 
 ---
 
-**Last Updated**: 2026-08-12
+**Last Updated**: 2026-10-12
 **Project Lead**: Michael
 **Development Environment**: VS Code + Mudlet + Claude Code
 **Reference Systems**: Orion, Ataxia

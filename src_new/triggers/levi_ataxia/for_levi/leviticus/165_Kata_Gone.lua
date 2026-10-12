@@ -38,5 +38,12 @@ patterns:
   type: 1
 ]]--
 
-selectCurrentLine() fg("black") bg("old_lace") 
+selectCurrentLine() fg("black") bg("old_lace")
 katachain = 0
+-- The chain lapsed (about 17-20 s after the last strike, vNTjvghY:5967); the form is kept. The
+-- offenses read ataxia.vitals.kata, and Kata "is absent from charstats until a chain starts"
+-- (basher/002), so charstats may never report the 0: zero it here. ataxia_kataAtRisk (monk/004)
+-- reads that 0. The stumble recorder (monk/003) reads the time instead: a lapsed chain has nothing
+-- left to stumble from. ataxiaTemp is never saved.
+ataxia.vitals.kata = 0
+ataxiaTemp.kataLapseAt = getEpoch()

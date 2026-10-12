@@ -38,16 +38,34 @@ patterns:
 
 if matches[2] ~= target then return end
 
- if not haveAff("shivering") and haveAff("nocaloric") then
-    tarAffed("weariness")
+-- One stage of the freeze ladder per line: "you will first strip the insulation defence if the
+-- target has it, then cause the target to shiver, and finally freeze him" (Elementalism.wiki:304).
+-- A stripped insulation is tracked as the target affliction `nocaloric`.
+--
+-- NO WEARINESS OR NAUSEA. Every branch used to add both, although FREEZE gives neither; they
+-- switched off the offense's dehydrateWillFreeze and steered it to "dehydrate if weariness"
+-- (004_Magi_Offense). This file was "Dehydrate - Frozen" until b48b6603 and no capture says which
+-- spell prints this line; if it is DEHYDRATE's freeze stack, 015 records that cast's own nausea
+-- and weariness from its landing line.
+--
+-- FROSTBITE: "While suffering from frostbite, the next time you are frozen if you possess the
+-- insulation defence it will be stripped and you will be struck with the freezing attack
+-- directly. Your frostbite will fade when this occurs." (kb/raw/live/affliction_show/frostbite.txt)
+-- So with frostbite and insulation, one line strips the insulation AND lands the next stage.
+local function nextStage()
+  if not haveAff("shivering") then
     tarAffed("shivering")
-    tarAffed("nausea")
-  elseif not haveAff("nocaloric") then
-    tarAffed("weariness")
-    tarAffed("nocaloric")
-    tarAffed("nausea")
-  elseif haveAff("shivering") and haveAff("nocaloric") and not haveAff("frozen") then
+  elseif not haveAff("frozen") then
     tarAffed("frozen")
-    tarAffed("weariness")
-    tarAffed("nausea")
   end
+end
+
+if not haveAff("nocaloric") then
+  tarAffed("nocaloric")
+  if haveAff("frostbite") then
+    nextStage()
+    erAff("frostbite")
+  end
+else
+  nextStage()
+end

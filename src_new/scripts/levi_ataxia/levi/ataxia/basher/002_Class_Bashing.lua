@@ -2353,22 +2353,22 @@ end
 
 
 -- Willow is the damage form (speed is king), and Willow -> Rain -> Oak -> Willow is the
--- shortest legal cycle back to it (see shikudo.transitions), so ride Willow to its 12-kata
--- cap and leave Rain/Oak as soon as a transition is LEGAL.
+-- shortest legal cycle back to it (see shikudo.transitions), so ride Willow to a chain of 12
+-- (policy, not a game cap: kb/CONFLICTS.md #8) and leave Rain/Oak once a transition is LEGAL.
 --
 -- leaveAt is the kata the chain must ALREADY be at, read *before* this combo is sent.
 -- A TRANSITION needs a chain of at least 5 ("A kata of at least 5 must be performed in order
--- to flow from the Live Oak to another"). A REJECTED transition keeps the chain (log 2026-10-11:
--- kata 3, refused, still 3, then 6), but the round it was meant for is lost.
--- That reset is why leaveAt must be >= 5 and not 2: the old value bet on the queued combo's
--- 3 actions landing first (2+3=5), but in game the transition was evaluated while the chain
--- was still 3, got rejected, reset the chain, and the next pass repeated it -- an infinite
--- fail loop that never transitioned at all. Gate on a chain that is legal on its own and the
--- loop cannot form, whatever the combo contributes.
+-- to flow from the Willows Shaken by the Wind to another."), judged on the chain when it
+-- resolves; an inline one resolves after this combo's strikes (attacker log 2026-10-11:960-961,
+-- the chain line "3", then the refusal). With leaveAt >= 5 the chain we read is legal already,
+-- whatever the combo adds. A refusal costs only the form change: the combo lands and the game
+-- KEEPS the chain (3, refused, then 6 and 9, :960-1198). v4.7.68's "it reset the chain into an
+-- endless loop" was our own Reset_Failsafe zeroing the kata; v4.7.69 retracted it.
 --
 -- Combos are 3 actions, so the chain steps 0,3,6,9,12 and first satisfies >= 5 at 6.
 -- That gives 4 combos in Willow (0,3,6,9) and 3 in each of Rain/Oak (0,3,6) -- ~40% Willow.
--- Tykonos is where a stumble dumps you, and it transitions straight back to Willow.
+-- Tykonos is where a stumble dumps you, and it transitions straight back to Willow. These are
+-- PvE's own literals: `skata` (monk/004) tunes the shared PvP kata policy and must not change bashing.
 local SHIKUDO_BASH_ROTATION = {
   Willow    = {nextForm = "Rain",   leaveAt = 9},
   Rain      = {nextForm = "Oak",    leaveAt = 5},

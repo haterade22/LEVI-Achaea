@@ -43,6 +43,12 @@ local hpb = math.floor(php/5)
 
 if not isTargeted(t) then return end
 ataxiaTemp.lastAssess = php
+-- The raw numbers, when and whom: php is floored, so 3540/7000 (50.57%) reads 50, and Crescent
+-- kills only at half health or less (Shikudo.wiki:358). Read by ataxia_assessAtMostHalf (monk/004).
+ataxiaTemp.lastAssessHp = hp
+ataxiaTemp.lastAssessMax = mhp
+ataxiaTemp.lastAssessAt = getEpoch()
+ataxiaTemp.lastAssessWho = t
 
 
 if type(target) == "string" then

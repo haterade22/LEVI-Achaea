@@ -46,13 +46,15 @@ if isTargeted(person) then
 	if multimatches[3][1] ~= "Your blow strikes "..person.." but is robbed of much of its impact by your faulty technique." then
 		if haveAff("prone") then
 			moveCursor(0, getLineNumber()-1)
-			tarAffed("blackout")
-			tempTimer(3.5, [[erAff("blackout")]])
+			ataxia_tarAffTimed("blackout")  -- 4s (game); the old 3.5s timer was never cancelled by a repeat
+			-- Lightsteal blacks out only a foe on the ground (kb/classes/psion.md:49), so the call
+			-- belongs here. It used to go out after every lightsteal, standing or not, on anyone,
+			-- naming the global target instead of the person struck.
+			if partyrelay and not ataxia.afflictions.aeon then
+				send("pt "..person..": blackout")
+			end
 		end
-		send("contemplate "..target,false)		
-		moveCursorEnd()	
+		send("contemplate "..target,false)
+		moveCursorEnd()
 	end
-end
-if partyrelay and not ataxia.afflictions.aeon then
-send("pt " ..target.. ": blackout")
 end

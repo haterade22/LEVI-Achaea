@@ -26,6 +26,9 @@ packageName: ''
 -- Parry Avoidance:
 --   - During PREP: skip parried limb, target others
 --   - Last limb parried: kai surge (dismount) -> sweep (prones) -> punch last limb
+--     The dismount goes out only with the kai to pay for it (tekura6.kaiDismount); without
+--     it a sweep cannot prone a rider, so that round preps instead -- unless the mount flag
+--     predates this target (tekura6.mountConfirmed), when it sweeps anyway.
 
 --------------------------------------------------------------------------------
 -- NAMESPACE & STATE
@@ -42,12 +45,16 @@ tekura6.state = {
   lastTarget = nil,           -- Target-change detection (DWB pattern)
   lastEchoTime = nil,         -- Debounced echo timestamp (DWB pattern)
   lastKickLimb = nil,         -- Direct parry tracking: stores kick target for parry trigger
+  kaiShortfall = nil,         -- kaiMode (+"?" if sweeping anyway) last echoed short (kaiDismount)
+  mount = nil,                -- { who, carried }: whose mount flag this is (tekura6.mountConfirmed)
 }
 
 tekura6.config = {
   breakThreshold = 100,
   debugEcho = true,
-  kaiMode = "surge",  -- "surge" (31 kai, 3.2s eq) or "cripple" (41 kai, 4s eq, L1 breaks all)
+  -- "surge" (45 kai, 3.2s eq) or "cripple" (41 kai, 4s eq, L1 breaks all). Costs from
+  -- ataxia_KAI_COST (monk/004); the surge was 31 here, the wiki says 45 (kb/CONFLICTS.md #9).
+  kaiMode = "surge",
 }
 
 tekura6.PHASES = {
@@ -254,6 +261,56 @@ function tekura6.isMounted()
   return tmounted or tekura6.hasAff("mounted") or false
 end
 
+-- Is the mount flag about THIS target? tmounted is one global for whoever we fight (trigger 265
+-- sets it, 264 clears it), and nothing resets it when the target changes (016 switchTarget does
+-- not), so a true carried over from an earlier target says nothing about this one. It is trusted
+-- for this target once TK6 has seen it false while this target was ours: a later true is then a
+-- 265 line about them. run() looks on every round, so the first look is the target's first round.
+-- A "mounted" target affliction needs none of this: 016 resets those per target.
+function tekura6.mountConfirmed()
+  local who = type(target) == "string" and target:lower() or tostring(target)
+  local m = tekura6.state.mount
+  if not m or m.who ~= who then
+    m = { who = who, carried = tmounted and true or false }
+    tekura6.state.mount = m
+  end
+  if not tmounted then m.carried = false end
+  if tekura6.hasAff("mounted") then return true end
+  return (tmounted and not m.carried) and true or false
+end
+
+-- True while our KAI SURGE window is open on THIS target (trigger monk/002 records whom the surge
+-- landed on): it put them on the ground, and they cannot remount (Kaido.wiki:322). The window
+-- itself is not per target, and a surge on someone else proves nothing about this one.
+function tekura6.surgeHoldsTarget()
+  local t = ataxiaTemp
+  if not (t and t.kaiSurgeWindow) then return false end
+  return type(t.kaiSurgeWho) == "string" and type(target) == "string"
+    and t.kaiSurgeWho:lower() == target:lower()
+end
+
+-- The dismount that opens a parry bypass on a mounted target, "kai <kaiMode> <target>;", or nil
+-- when we cannot pay for it. monk/004 owns kai: surge 45, cripple 41 (Kaido.wiki:319, :297), and
+-- an unknown kai is not enough -- a dismount the game refuses leaves the round's sweep aimed at a
+-- rider. The shortfall is echoed once, not on every press, until a dismount is affordable again.
+-- `confirmed` (tekura6.mountConfirmed) is what the caller does without it: no sweep, or a sweep.
+function tekura6.kaiDismount(confirmed)
+  local mode = tekura6.config.kaiMode
+  local ok, have, need = ataxia_kaiAfford(mode, nil, target)
+  if ok then
+    tekura6.state.kaiShortfall = nil
+    return "kai " .. mode .. " " .. target .. ";"
+  end
+  local key = mode .. (confirmed and "" or "?")
+  if tekura6.state.kaiShortfall ~= key then
+    tekura6.state.kaiShortfall = key
+    tekura6.echo(tostring(mode):upper() .. " needs " .. tostring(need) .. " kai, have "
+      .. (have and tostring(have) or "unknown") .. (confirmed and " -- no sweep, prepping instead"
+        or " -- sweeping without it (not seen mounted since targeting " .. tostring(target) .. ")"))
+  end
+  return nil
+end
+
 -- Echo helper with tag
 function tekura6.echo(text)
   cecho("\n<yellow>[TK6]<reset> " .. text)
@@ -318,12 +375,16 @@ function tekura6.dispatch.buildPrepAttack()
   -- Parry bypassed because sweep prones them; use the window to prep the stuck limb.
   ataxiaTemp = ataxiaTemp or {}
   if ataxiaTemp.kaiSurgeWindow and parried ~= "none" then
-    return tekura6.dispatch.buildParryBypassAttack(parried)
+    local bypass = tekura6.dispatch.buildParryBypassAttack(parried)
+    if bypass then return bypass end
   end
 
   -- EDGE CASE: Only 1 unprepped limb and it's parried
+  -- No bypass (a rider we cannot pay to dismount) falls through: the prep below still builds a
+  -- combo, on the parried limb itself when no other limb is safe to hit.
   if #unprepped == 1 and unprepped[1] == parried then
-    return tekura6.dispatch.buildParryBypassAttack(unprepped[1])
+    local bypass = tekura6.dispatch.buildParryBypassAttack(unprepped[1])
+    if bypass then return bypass end
   end
 
   -- EDGE CASE: No unprepped limbs (shouldn't reach here, phase would be BREAK)
@@ -461,15 +522,31 @@ end
 
 -- PARRY BYPASS: Kai surge (dismount) + sweep (prone) + punch last limb
 -- Break guard: if 2 punches would break, use 1 real punch + overflow/filler
+-- Returns nil when there is no bypass this round: the target rides (tekura6.mountConfirmed), a
+-- sweep cannot prone a rider, and we cannot pay for the dismount (tekura6.kaiDismount). The
+-- callers prep instead.
 function tekura6.dispatch.buildParryBypassAttack(parriedLimb)
   local cmd = ""
   local punchDmg = tekura6.state.punchDamage
   local breakAt = tekura6.config.breakThreshold
   local currentDmg = tekura6.getLimbDamage(parriedLimb)
 
-  -- Kai dismount if mounted (required for sweep)
-  if tekura6.isMounted() then
-    cmd = "kai " .. tekura6.config.kaiMode .. " " .. target .. ";"
+  -- Kai dismount if mounted (required for sweep) -- but not while our surge holds this target down
+  -- (tekura6.surgeHoldsTarget), though tmounted still says mounted: only trigger 264 ever clears
+  -- it. Another dismount there would re-spend kai on a target already down or, since the window
+  -- opens just after a surge spent its kai, drop the window's sweep for want of it.
+  -- An unpaid dismount costs the sweep only when the mount is THIS target's (mountConfirmed): a
+  -- flag carried over from an earlier target sweeps anyway, as every bypass did before the gate.
+  if tekura6.isMounted() and not tekura6.surgeHoldsTarget() then
+    local confirmed = tekura6.mountConfirmed()
+    local dismount = tekura6.kaiDismount(confirmed)
+    if dismount then
+      cmd = dismount
+    elseif confirmed then
+      return nil
+    end
+  else
+    tekura6.state.kaiShortfall = nil -- no dismount needed: a later shortfall is a new one
   end
 
   tekura6.state.lastKickLimb = nil  -- Sweep doesn't target a specific limb
@@ -558,9 +635,10 @@ function tekura6.dispatch.run()
   ataxiaTemp = ataxiaTemp or {}
   tAffs = tAffs or {}
 
-  -- Safety check
+  -- Safety check (the placeholder is in capitals: cecho reads any <word> as a colour tag, and a
+  -- name missing from our palette, misc_scripts/007, makes the echo throw)
   if not target or target == "" then
-    cecho("\n<red>[TK6] No target set! Use: tar <name>")
+    cecho("\n<red>[TK6] No target set! Use: tar NAME")
     return
   end
 
@@ -578,6 +656,10 @@ function tekura6.dispatch.run()
     tekura6.state.attackInFlight = false
     tekura6.state.lastTarget = target
   end
+
+  -- Look at the mount flag every round, so the first look at a new target is its first round,
+  -- before any line about them: tekura6.mountConfirmed trusts a later true for this target only.
+  tekura6.mountConfirmed()
 
   -- Get current phase
   local phase = tekura6.dispatch.getPhase()
@@ -716,7 +798,10 @@ function tekura6.dispatch.status()
   cecho("\n<yellow>| <white>CONDITIONS:<yellow>")
   cecho("\n<yellow>|   <white>Prone: " .. (tekura6.hasAff("prone") and "<green>YES" or "<red>NO"))
   cecho("      <white>Parried: <cyan>" .. (ataxiaTemp.parriedLimb or "none"))
-  cecho("\n<yellow>|   <white>Mounted: " .. (tekura6.isMounted() and "<red>YES" or "<green>NO"))
+  -- YES? = the flag is up but predates this target (mountConfirmed): the bypass sweeps anyway
+  local mounted = not tekura6.isMounted() and "<green>NO"
+    or (tekura6.mountConfirmed() and "<red>YES" or "<yellow>YES?")
+  cecho("\n<yellow>|   <white>Mounted: " .. mounted)
   cecho("    <white>Shield: " .. (tekura6.checkShield() and "<red>YES" or "<green>NO"))
   cecho("\n<yellow>|   <white>Tracking: <cyan>" .. tekura6.getTrackingSystem())
   cecho("\n<yellow>+------------------------------------------------+")

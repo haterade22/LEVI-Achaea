@@ -85,7 +85,7 @@ patterns:
 -- v4.7.414: every Shikudo strike line starts a new hit, so it clears the dedupe flag.
 --
 -- The strike triggers (563-585) set ignoreThirdPerson when they record from the damage line, and
--- the effect-line triggers (586 and the 3rd Person Shikudo group) skip once and clear it, so one
+-- the effect-line triggers (the 3rd Person Shikudo group) skip once and clear it, so one
 -- hit is not recorded twice. That matters for kuro, which escalates (weariness, then lethargy).
 -- But strikes with no effect-line partner -- nervestrike, frontkick, risingkick, spinkick, ruku
 -- to the arm, dart, thrust -- left the flag set, and the next effect line whose own strike trigger had NOT fired was skipped:
@@ -94,3 +94,8 @@ patterns:
 -- combo). The affliction landed and was never recorded. Clearing the flag at every strike line
 -- makes the dedupe per hit. Line starts are from the 2026-10-11 logs and the strike triggers.
 ignoreThirdPerson = nil
+
+-- v4.7.419: and the strike opens its entry in the strike ledger (shikudo/010), which gives ruku to
+-- the arm's untargeted effect line (789) to the strike it belongs to. Guarded, so a switched-off
+-- ledger cannot make this throw on every strike line (tools/check_orphans.py, v4.7.261).
+if shikudoLedger and shikudoLedger.strike then shikudoLedger.strike(line) end

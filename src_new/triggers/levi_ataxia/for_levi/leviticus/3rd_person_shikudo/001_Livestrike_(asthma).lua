@@ -36,7 +36,16 @@ patterns:
 - pattern: ^The breath of (\w+) leaves \w+ in an explosive gasp as the end of the staff smashes home.$
   type: 1
 ]]--
+-- v4.7.419: one hit, one record. 576 records a damaged livestrike from its damage line and sets
+-- ignoreThirdPerson, so this line, the same hit, skips once and clears the flag, as 004 does for
+-- ruku to the torso. Before, a damaged livestrike recorded asthma twice. A livestrike with no
+-- damage line, or as a later strike of a combo (a line no strike trigger owns), is still recorded
+-- here: 587 clears the flag at every strike line.
 
 if isTargeted(matches[2]) then
-  tarAffed("asthma")
+  if not ignoreThirdPerson then
+    tarAffed("asthma")
+  else
+    ignoreThirdPerson = nil
+  end
 end

@@ -45,12 +45,21 @@ if isTargeted(matches[2]) then
   resetFormat()
   tarAffed("prone")
 
-  -- 15s mount lockout window: target cannot remount, use sweep + parried limb
+  -- Mount lockout window: the target cannot remount, so TK6 sweeps and punches its parried limb
+  -- (tekura/002 buildPrepAttack). 15 s has no source -- the wiki says only "The effect will fade
+  -- over time" (Kaido.wiki:322) -- so it is kept as the code's own guess. Each surge restarts the
+  -- window: the last surge's timer is killed first, or it would close this window early. Its id
+  -- lives on ataxiaTemp, which is never saved (a saved id names a stranger's timer after a reload).
+  -- kaiSurgeWho is whom the surge holds down: TK6 skips its dismount for that target only.
   ataxiaTemp = ataxiaTemp or {}
   ataxiaTemp.kaiSurgeWindow = true
-  tempTimer(15, function()
+  ataxiaTemp.kaiSurgeWho = matches[2]
+  if ataxiaTemp.kaiSurgeTimer then killTimer(ataxiaTemp.kaiSurgeTimer) end
+  ataxiaTemp.kaiSurgeTimer = tempTimer(15, function()
     ataxiaTemp = ataxiaTemp or {}
     ataxiaTemp.kaiSurgeWindow = false
+    ataxiaTemp.kaiSurgeWho = nil
+    ataxiaTemp.kaiSurgeTimer = nil
     cecho("\n<yellow>[Monk] Kai Surge mount window expired")
   end)
 end

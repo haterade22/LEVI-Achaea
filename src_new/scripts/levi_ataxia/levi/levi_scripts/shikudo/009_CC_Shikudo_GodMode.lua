@@ -9,9 +9,51 @@ hierarchy:
 - Shikudo Script - Levi
 - Shikudo
 attributes:
-  isActive: 'yes'
+  isActive: 'no'
   isFolder: 'no'
 packageName: ''
+]]--
+
+--[[
+================================================================================
+RETIRED (v4.7.419): switched off. Nothing could reach this file, and it threw if
+anything did. It stays as a reference until a later cleanup deletes it together
+with 001/002/004/005/008. With it off, shikudo.godmode, skgodmode() and
+skgmstatus() no longer exist; nothing live called them.
+
+Why:
+  1. vv never reached it. The vv alias (153_Fourth_Attack) called
+     shikudo.setMode("godmode"), which only the switched-off 008 defines
+     (008:67), and 006's shikudo.dispatch() had no mode routing; only 008 handed
+     off to shikudo.godmode.run(). vv stopped calling setMode in v4.7.419.
+  2. run() throws on its first tick: it calls shikudo_breakPoint (line 787),
+     which only the switched-off 008 defines (008:124).
+  3. calcLimbs adds ataxiaTables.limbData.shik* values that are nil in a fresh
+     session (line 150 is the first). limbData starts empty (the Levi_Ataxia
+     init script in src_new/scripts/_groups.yaml), and only the Shikudo strike
+     triggers write them, after a strike lands; 006 falls back to defaults
+     (shikudo.getAttackDamage).
+  4. Flashheel is planned as leg PREP (llFLASH/rlFLASH at 158-159,
+     executeReady at 178-180), but it breaks the leg in a single blow
+     (Shikudo.wiki:127).
+  5. Willow sends SPINKICK (willowPrios, 238-241), a Gaital attack; Willow's
+     only kick is flashheel (Shikudo.wiki:89, :261).
+  6. KAI BOOST (line 821) is gated on ataxia.vitals.kai, which nothing wrote
+     while this file was switched on: 004_ataxia_Vitals_Update's Kai branch
+     stored the Kai charstat in ataxia.vitals.class only, so it was never sent.
+
+Worth salvaging for a later riftlock or arm route (to be built in 006 or 007):
+  - rainPrios's kata-scaled slot picks (355-375: kuro at kata 12+ for
+    weariness then lethargy, ruku at 10+ for clumsiness then healthleech), with
+    frontkick on the less-damaged arm (310-321). Mystor: "shooting for 10
+    kata in rain with 2x arm prep" (kb/raw/players/shikudo-2026-10-11.txt:22).
+  - The cumulative light simulation: shouldLight (198-212) and rainPrios's
+    sim table (310-351), so two strikes in one combo cannot together break
+    a prepped limb.
+  - gaitalPrios's double-ruku + flashheel round (542-550), which Mystor
+    plays: "combo Agathon flashheel left ruku right ruku left" (kb/raw/logs/
+    2026-10-11_mystor_shikudo-vs-infernal-dwc_win_vNTjvghY.txt:7455).
+================================================================================
 ]]--
 
 --[[

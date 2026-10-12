@@ -25,10 +25,11 @@ function queue_Scan(stuff)
 	
 	if ataxia_isClass("monk") then
     enableTrigger("3rd Person Shikudo")
-    if smallStuff:find("combo") then
-      --monk_checkCombo(smallStuff)
-      shikudo_findCombo(smallStuff)
-    end
+    -- v4.7.419: the combo hook that sat here (shikudo_findCombo) was defined only by the switched-off
+    -- shikudo/008 once monk/002_Shikudo_Limb_Counter was deleted (3c312975, 2026-03-16), so every
+    -- queued monk combo threw here and skipped the rest of queue_Scan (the doRepeat re-queue, the
+    -- Repeat Offence enable, butchering). Strike tracking lives in triggers 563-587 and the
+    -- shikudo/010 strike ledger now.
 	end
 	
 	if ataxiaTemp.butchering then

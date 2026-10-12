@@ -9,19 +9,44 @@
 ## Skills
 ```
 Subterfuge: Stealth, assassination, and utility abilities
-Venom: Knowledge and application of toxins
+Venom: Knowledge and application of toxins, and Ekanelia (venom reactions)
 Hypnosis: Mental manipulation through suggestions (including Impulse)
 ```
+
+## Confidence on this page
+
+- **WIKI**: the Achaea wiki as filed in `kb/raw/wiki/` and generated into `kb/classes/serpent.md`.
+  An in-game `AB` wins where they differ. No Serpent AB is filed in `kb/raw/ab/` (it holds only
+  DIAGNOSE); the ABs cited in the PvE sections were pasted in chat.
+- **CONFIRMED**: game text in `kb/raw/`: AFFLICTION SHOW and WHATCURES records, HELP files, combat logs.
+- **PLAYER**: the notes relayed on 2026-10-12 (`kb/raw/players/serpent-2026-10-12.txt`).
+- **UNVERIFIED**: nothing in `kb/raw` supports it yet.
+
+There is no Serpent fight log in `kb/raw/logs/` yet. So how a Serpent's own commands behave is
+WIKI, PLAYER or UNVERIFIED, and the lines our offense triggers read (dstab, bite, reaction,
+impulse, relapse, snap) are code only: none of them is captured in `kb/raw` (grepped 2026-10-12).
+One fight recorded with `fightlog` (v4.7.418, millisecond stamps) would settle most of the open
+items on this page.
+
+Code anchors are `src_new/scripts/levi_ataxia/levi/levi_scripts/serpent/002_Serpent_Offense.lua`
+(written `:<line>` below) unless another file is named, as of v4.7.419.
 
 ---
 
 ## Offense Modes & Aliases (002_Serpent_Offense.lua)
 
 ```yaml
-# Aliases (registered ~line 2606-2616)
+# The everyday keys are class-shared aliases. On a Serpent each sets a mode, then attacks once.
+shared_aliases:
+  zz:  "serp_setmode_lock(); serp_ekanelia_offense()       # 152_First_Attack_(All_Classes).lua:45-47"
+  vv:  "serp_setmode_darkshade(); serp_ekanelia_offense()  # 153_Fourth_Attack_(All_Classes).lua:19-21"
+  sr:  "serp_setmode_group(); serp_ekanelia_offense()      # 154_Group_(All_Classes).lua:32-34"
+  srr: "serp_setmode_scytherus(); serp_ekanelia_offense()  # 157_Scytherus_(All_Classes).lua:14-16"
+
+# The offense's own aliases (tempAlias, :2684-2696)
 aliases:
-  ek:          "serp_ekanelia_offense()  # fire one attack round"
-  ekauto:      "auto mode"
+  ek:          "serp_ekanelia_offense()  # fire one attack round in the current mode"
+  ekauto:      "auto mode (the default: serpOffenseMode = 'auto', :83)"
   eklock:      "lock mode"
   ekgroup:     "group mode"
   ekdark:      "darkshade mode"
@@ -35,23 +60,29 @@ aliases:
 # Eight strategy modes drive selection
 modes: [auto, lock, group, darkshade, scytherus, bitepayload, hypnosis, hypnolock]
 
-# Every attack round is prefixed:
-adder_pet:  "order adder kill <target>   # serpent uses an adder pet (~line 2100)"
-purge:      "purge  # residual venom cleared before each attack"
+# One round: serp_ekanelia_offense (:2204) maps the mode to a strategy (auto: determineStrategy,
+# :1237; the other modes inline, :2264-2351), selectVenoms (:1367) picks the DSTAB venoms, and
+# serp_ekanelia_attack (:1670) builds the command. It dispatches only with balance, and only once
+# per balance (attackInFlight, cleared on the balance-regained edge, :2208-2215, :2661-2670).
 
-# Round-1 opener burst (buildOpener, config-gated, ~2036-2063)
+# Every round goes out as ONE `queue addclear freestand` entry (serp_sendAttack, :2150-2198):
+purge:      "purge  # residual venom cleared first (:2181-2182)"
+adder_pet:  "order adder kill <target>  (:2178-2179). The wiki's Snake ability summons a different snake per city (Mhaldor: adders); the command always says adder"
+
+# Round-1 opener (buildOpener, :2115-2142), once per target
 opener:
-  useOpener:    "master toggle"
-  useBowOpener: "remove/wield bow; pinshot <target> foot; wield shield dirk"
-  dispel:       "dispel <target>"
-  useSigils:    "drop incandescent sigil; attach monolith sigil to incandescent sigil"
+  dispel:       "dispel <target>  (first attack on each target, :2190-2194)"
+  useOpener:    "master toggle (default on, :141)"
+  useBowOpener: "remove bow; wield bow; pinshot <target> foot; wield shield dirk (default on, :142). The code's comment says PINSHOT needs a body part (:2121); the wiki's syntax is `PINSHOT <target>` (UNVERIFIED either way)"
+  useSigils:    "drop incandescent sigil; attach monolith sigil to incandescent sigil (default off, :146)"
 
-# Per-round denial (config useExitBlock, ~2085-2097)
-exit_block: "rotates `block <dir>` across gmcp room exits between rounds (throttled 5s)"
+# Per-round denial (config useExitBlock, default off, :145)
+exit_block: "sends `block <dir>` on its own, unqueued, for an exit not blocked in the last 5 s (nextExitToBlock :2093-2106; :2164-2176)"
 ```
 
-### Class-Aware Venom Routing (CLASS_LOCK_VENOM, ~700-728)
-Once paralysis is stuck, the second lock venom is chosen per target class:
+### Class-Aware Venom Routing (CLASS_LOCK_VENOM, :765-783)
+pickVenom sends curare while paralysis is missing (:823). Once paralysis is up, the next venom is
+the target class's lock venom, when its affliction is missing (:825-834):
 
 | Target class | First lock venom | Blocks |
 |--------------|------------------|--------|
@@ -63,79 +94,324 @@ Once paralysis is stuck, the second lock venom is chosen per target class:
 | depthswalker | eurypteria | recklessness → shadow cures |
 | druid, sentinel | kalmia | asthma → smoke + morph |
 
-Class comes from `classDetect.state.attackerClass` (fallback `tarClass`); unknown class → standard priority.
+Class comes from `classDetect.state.attackerClass` (fallback `tarClass`; getClassLockAff,
+:785-793); unknown class → standard priority.
+
+**Notechis may not ride a DSTAB.** The wiki says notechis "can not be used to envenom a weapon"
+(`kb/raw/wiki/Venom.wiki:302`), and DSTAB delivers the venoms on a dirk. Our routing sends it by
+DSTAB against Magi and Sylvan (above), in `ginseng_pressure` (:1564) and as the haemophilia piece
+of `lock_reinforce` (AFF_TO_VENOM, :198). UNVERIFIED in game; if the game refuses it, notechis has
+to be bitten.
 
 ### Advanced Mid-Fight Behaviors
 ```yaml
 lock_reinforce_burst: |
-  Post-truelock burst-finish (serpStrategy == "lock_reinforce", ~1438-1481) run
-  before execute: paralysis maintain (curare) → voyria reinforcement (+eurypteria
-  for recklessness) → vardrax+euphorbia (addiction+nausea) → scytherus/camus damage.
+  Lock, darkshade and bitepayload modes at truelock until a voyria impulse has gone out, and
+  lock/darkshade at hardlock once impatience was delivered (:2268-2276, :2302-2309, :2332-2337).
+  selectVenoms (:1500-1550): curare while paralysis is missing (with the class lock venom, else
+  voyria) -> voyria (+eurypteria for recklessness) -> vardrax + euphorbia (addiction + nausea).
+  PRIORITY 7 (:1900-1914) impulses scytherus once addiction + nausea are up (camus, by our
+  reaction table), or voyria (with a vertigo suggestion when vertigo is missing) once anorexia +
+  impatience are up; that marks voyriaSent and hands over to the finish strategy.
 
 relapse_lock: |
-  Fires after impatience delivered (~926-956): pre-load gecko+slike when
-  asthma+weariness stacked, stupidity impulse, then monkshood re-lock — timed to the
-  fratricide ~3s relapse window.
+  Lock and darkshade modes only, from the moment serpent.state.impatienceDelivered is set
+  (trigger 016, on our monkshood reaction) until hardlock (:2255-2281, :2308-2311).
+  selectVenoms (:1485-1498) pre-loads gecko + slike once asthma + weariness are up and neither
+  slickness nor anorexia is. PRIORITY 7 (:1916-1926) runs selectRelapseImpulse (:991-1023): the
+  monkshood pair again when slickness + anorexia are up and impatience is not (the impatience
+  check is v4.7.419), else ONE stupidity impulse per relapse phase. Nothing here is timed to
+  fratricide: the only fratricide clock is the 2.25 s window inside selectImpulse (see
+  Fratricide Mechanics), and the stupidity impulse does not go through selectImpulse. (This
+  entry said "timed to the fratricide ~3s relapse window" until v4.7.419.)
 
 bitepayload_ladder: |
-  selectBiteVenom (~984-1028) — a BAL-only alternative to impulse. Priority:
-  scytherus/camus loop → monkshood/kalmia/curare/loki/aconite Ekanelia →
-  single-aff lock-piece bites (curare/kalmia/vernalius).
+  selectBiteVenom (:1051-1097) picks the bite in bitepayload mode (PRIORITY 6, :1881-1887) and,
+  in every mode, the venom the rebounding pre-empt's impulse carries (:1806-1807, falling back
+  to pickVenom). It returns nil while sileris/fangbarrier is up (:1052). Priority: scytherus
+  (camus loop) -> the monkshood reaction (asthma + masochism + weariness, and since v4.7.419
+  only while impatience is missing) -> the kalmia, curare, loki and aconite reactions ->
+  curare / kalmia / vernalius for a missing lock piece. A BITE costs 4.00 s of balance (WIKI)
+  against DSTAB's 2.80 s.
 
 rebounding_reapply_preempt: |
-  When target rebounding drops it stamps a clock and fires one impulse+bite through
-  the ~8.15s gap before rebounding returns (~1726-1742).
+  When the target's rebounding drops, the clock is stamped (:1683-1689); 8.15 s later one
+  `impulse <target> <suggestion> <bite venom>` goes out if the bite can land (:1795-1812). The
+  code assumes rebounding returns about 8.5 s after it is stripped (comment, :1796); no capture
+  says so. Since v4.7.419 the clock is getEpoch (see "What the offense records").
 
 gecko_strip: |
-  Strips sileris/fangbarrier for impulse via a gecko bite (geckoStripAttempted +
-  postGeckoLockdown one-shot), then slams curare+slike to seal the lock (~1890-1907).
-  This is how sileris/fangbarrier is cleared — NOT flay.
+  When the target's sileris/fangbarrier blocks the bite and the monkshood pair is the impulse we
+  want, the round DSTABs gecko + another venom once (geckoStripAttempted), and the round after
+  it sends curare + slike if impatience landed (postGeckoLockdown) (:1965-1982, :1372-1383).
+  It never runs in scytherus mode or relapse_lock (:1970-1971); scytherus mode's own block for
+  a blocked bite only echoes (:1984-1989).
+  Slickness does strip the coating: CONFIRMED twice ("The protective covering coating your skin
+  sloughs off." right after slickness lands: kb/raw/logs/2026-10-11_mystor_shikudo-vs-depthswalker_loss_EveP2TVe.txt:771,
+  2026-10-11_mystor_shikudo-vs-infernal-dwc_win_c.iJVmpL.txt:873). A bare FLAY <target> strips
+  it too (HELP 13.7, WIKI), but the offense never sends a bare flay. (This entry said "NOT
+  flay"; that is true of our code, not of the game.)
 
 cure_tracking: |
-  Counts kelp/ginseng/bloodroot/focus cures in a 6s window (~1242-1257) and forks
-  between ginseng_pressure (target fears darkshade) and lock push.
+  serpent.trackCure (:1208-1231) counts the target's ginseng, bloodroot and focus cures in a 6 s
+  window (ginseng only while a kelp affliction is up). Nothing passes "kelp" (the callers are
+  399_Focus_(known), herbs/005_Bloodroot_TEST and herbs/007_Ginseng), so kelpCures stays 0.
+  More than 2 ginseng cures with a ginseng stack under 3 switches auto mode to ginseng_pressure
+  (:1314-1322); darkshade mode switches on the first one (:2295-2299).
 
 execute_safety: |
-  V3 confidence tiers haveAff_locked (0.90) / haveAff_tactical (0.70) recompute
-  soft/hard/truelock; execute is gated behind getStateProbabilityV3 of all 5 lock
-  affs >= 0.90 so a kill never fires on an already-cured aff (~2160-2171).
+  serp_ekanelia_offense recomputes the locks at graded confidence (:2239-2250): softlock = 3 of
+  anorexia/asthma/slickness/bloodfire at 0.70; hardlock = that + impatience or sandfever at
+  0.70; truelock = that + paralysis at 0.90 (haveAff_locked / haveAff_tactical, :99-106).
+  EXECUTE also needs getStateProbabilityV3 of the five lock afflictions >= 0.90 (:1782-1790).
+  See the Finisher for what the wiki says EXECUTE itself needs.
+```
+
+### What the offense records on the target (v4.7.419)
+```yaml
+dstab:    "serpent/001_Doublestab: on our dstab line, tarAffed for the two venoms we SENT (envenomList[1], envenomListTwo[1])"
+bite:     "serpent/009_Bite: tarAffed(venom_to_aff(venom)) for the venom named in our bite line (not loki or camus)"
+reaction: |
+  serpent/016_Ekanelia_Success, since v4.7.419: tarAffed(serpent.EKANELIA_RESULTS[venom])
+  (:525-532): monkshood impatience, kalmia slickness, loki nausea + paralysis, curare
+  hypochondria, aconite paranoia, voyria confusion + disrupted; nothing for scytherus (camus is
+  damage). On monkshood it also stamps the 2.5 s impatience cooldown (stampImpatienceCooldown,
+  :646-648, which nothing called before) and sets serpent.state.impatienceDelivered. Before
+  v4.7.419 it recorded nothing, so our own impatience reached the tracker only if the target
+  printed the boredom line (414_Impatience_1), and PRIORITY 4, PRIORITY 7 and selectBiteVenom
+  kept re-sending monkshood after it had worked.
+impulse:    "serpent/017_Impulse_Suggestion: tarAffed(suggestion)"
+relapse:    "serpent/018_Impulse_Relapse: tarAffed(suggestion) again"
+fratricide: "tarAffed('fratricide') at the snap, if the fratricide suggestion was given (onSnapped, :267-284); erAff in onFratricideCured (:304-310). See Fratricide Mechanics"
+timers: |
+  Since v4.7.419 the offense's own timers (the 2.5 s impatience cooldown, the 2.25 s fratricide
+  window and the 8.15 s rebounding pre-empt) run on getEpoch (now(), :574-581). They ran on
+  os.clock, which Lua 5.1 defines as CPU time: wall time only under Windows' C runtime, so on
+  Linux and macOS they ran many times slower than real time.
+lines: "Every pattern above is our code's. None of these lines is captured in kb/raw."
+tests: "src_new/tests/test_serpent_notes.lua (36 tests, v4.7.419)"
 ```
 
 ---
 
-## CRITICAL: Impulse Mechanics (Updated 2024)
+## Notes relayed 2026-10-12
 
-**Impulse is the primary method Serpents use to deliver mental afflictions.**
+**Source:** `kb/raw/players/serpent-2026-10-12.txt`, relayed by the user; its author was not named.
+Tag: PLAYER. Each claim was checked against the game data in `kb/raw` and against the code as of
+v4.7.419.
+
+| Relayed claim | Game data | Status | Our code now |
+|---|---|---|---|
+| "dstab is the fastest 2venoms in the game" | DSTAB 2.80 s of balance (WIKI). A Druid wyvern's FRENZY gives two venoms in 2.20 s (WIKI); a knight's DSL runs 2.0-2.4 s in our logs | Contradicted on the data we hold; true within the Serpent kit | DSTAB is already the default attack |
+| "hypochondria afflicts impatience after 10 seconds" | One log shows hypochondria giving impatience on its own; the game's record gives no time | Effect CONFIRMED (one log); 10 s UNVERIFIED | Defence cures it early (prioaff, v4.7.419); the offense does not plan around it |
+| `impulse masochism monkshood` "now exists" and gives impatience with asthma + weariness | The wiki's IMPULSE takes no venom; masochism is a trivial suggestion; the reaction list was never captured | UNVERIFIED (the venom form and the reaction) | Already sent, with the target, from several paths |
+| fratricide makes impulses (mentals only) relapse "at 2.25s" | "causes hypnotic impulses to relapse a short time after being first introduced" | Effect CONFIRMED; 2.25 s UNVERIFIED | Window 3.0 s -> 2.25 s (v4.7.419) |
+| "three sources of relapsing effects" | Two Serpent sources in the game data: scytherus and fratricide | Third not identified | -- |
+
+### 1. DSTAB, "the fastest two venoms in the game"
+
+- **Game data (WIKI).** `DOUBLESTAB/DSTAB <target> [venom1 venom2]`, 2.80 s of balance, adventurers
+  only: "If you are wielding a dirk that has been envenomed with more than one venom, you may use
+  this ability to quickly deliver two venoms simultaneously to your target." Transcretion lets a
+  Serpent "secrete venoms directly onto edged weapons". No Ekanelia reaction fires from it: "only
+  the fangs of the serpent are sufficient for this purpose" (Venom, Ekanelia).
+- **Against the claim.** On the wiki figures we hold, a Druid wyvern's FRENZY gives a sting venom
+  and a claw venom in 2.20 s of balance (`kb/classes/druid.md`, Frenzy; the sting is limited to
+  darkshade, vardrax, euphorbia or sumac, and the claw needs a vial on hand). A knight's DSL is
+  "Balance cost varies based on weapon speed" (`kb/classes/infernal.md`, Duality) and ran about
+  2.0-2.4 s in Mystor's Infernal logs (`kb/combat/fights/2026-10-11_mystor_shikudo-vs-infernal-dwc_win_FceAmb0o.md`,
+  `..._vNTjvghY.md`). Hydra FUROR (2.00 s) and Sentinel DOUBLESTRIKE carry one venom each. Within
+  the Serpent kit the claim holds: BITE is 4.00 s for one venom.
+- **Unverified.** The 2.80 s is wiki only (no `AB DOUBLESTAB`), and the wiki may predate a rebalance.
+- **Our code.** DSTAB is the default attack (`attackMode = "dstab"`, :85; header :21-24). The normal
+  round is `wield shield dirk;dstab <target> <v1> <v2>` (:2029-2035).
+- **Settle.** `AB DOUBLESTAB` in game, and a Serpent's DSTAB cadence timed in a `fightlog` recording.
+
+### 2. Hypochondria's delayed impatience
+
+- **Game data.** The record says nothing about it: "Hypochondriacs often think they are suffering
+  from afflictions they do not have." Cure: Eat Lobelia / Eat Argentum
+  (`kb/raw/live/affliction_show/hypochondria.txt`).
+- **It happens (CONFIRMED, one log).** In `kb/raw/logs/2026-10-11_mystor_shikudo-vs-depthswalker_loss_EveP2TVe.txt`,
+  hypochondria lands at 20:17:44 (774-775, "A terrible sense of unease comes over you."), lethargy
+  between 20:17:46 and 20:17:47 (879), and impatience at 20:17:49 (945-946, "You shuffle your feet
+  noisily, suddenly bored."), with no attacker line before either. The order nausea -> lethargy ->
+  impatience is credited to Classleads #154 (31 July 2025) in `.claude/classes/depthswalker.md`;
+  that text is not in `kb/raw`, so it is second-hand.
+- **The 10 s is UNVERIFIED.** The log's stamps are whole seconds. Counted from the latest
+  hypochondria, the impatience came about 5 s later. An earlier hypochondria landed at 20:17:39
+  (575) and was cured a second later (598-600, "You eat an argentum flake."); counted from that one,
+  the gap is about 10 s, which would mean the clock survived the cure. One log cannot tell the two
+  apart. The victim also already had nausea, the first symptom, which may have shortened the chain.
+- **Also unverified:** whether curing hypochondria inside the window stops the impatience.
+- **How a Serpent gives it.** Hypochondria is a COMPLEX suggestion (`kb/raw/wiki/Hypnosis.wiki:353`),
+  so it comes through HYPNOTISE / SUGGEST / SEAL / SNAP, not IMPULSE. Our reaction table also gives
+  it from curare (hypersomnia + masochism), which no game data confirms.
+- **Our code, offense.** The offense gives hypochondria two ways: it is the first of hypnolock's
+  three complex suggestions (selectHypnoLockSuggestions, :438-448), and it is our curare reaction's
+  result (picked by selectBiteVenom :1076-1078 and selectOpportunisticEkanelia :972-976; trigger 016
+  records it since v4.7.419). It reads it twice: as a PRIORITY 4 "third condition" for the
+  monkshood impulse (impatienceConditionsMet, :672), and as one of the four mentals the focus-lock
+  push counts (MENTAL_AFFS, :711-716, for focusLockReady, :726-733). It does not wait for the free
+  impatience, as the Depthswalker offense does (`depthswalker.selectInstillLock`, `depthswalker/015_CC_Depthswalker.lua:519`).
+  Nothing models the delay: `017_Affliction_Management.lua` has no hypochondria clock, and the
+  boredom-line trigger (`414_Impatience_1`) records impatience alone, deliberately without
+  back-filling hypochondria.
+- **Our code, defence.** Hypochondria is priority 5 (`ataxia/001_Default_Curing_Prios.lua:223`;
+  row 5 of the live normal set). hypoImp (on by default) raises it to 1 and impatience to 4 when
+  lethargy, nausea or addiction is up too (`algedonic_defense_1.0/001_Anti_Priorities.lua:167-174`).
+  Since v4.7.419 `Algedonic.AntiSerpent` sends `curing prioaff hypochondria` while it is up and
+  paralysis is not (:741-744 of that file), the branch AntiDepthswalker already had (:427-428).
+- **Settle.** A `fightlog` recording of hypochondria on someone without nausea, left uncured; then
+  one cured within a couple of seconds, to see whether the impatience still comes.
+
+### 3. IMPULSE MASOCHISM MONKSHOOD
+
+- **Game data (WIKI).** `IMPULSE <target> <suggestion>`, 1.70 s of equilibrium: "you may inflict
+  them with one of the trivial suggestions(*) that are known to you" (`kb/raw/wiki/Hypnosis.wiki:43-50`).
+  No venom argument, no stated requirement. The wiki does list the trivial suggestions
+  (Hypnosis.wiki:86-251): amnesia, paranoia, loneliness, claustrophobia, stuttering, hallucinations,
+  dementia, deadening, epilepsy, agoraphobia, **masochism**, recklessness, vertigo, confusion and
+  stupidity, exactly our TRIVIAL_SUGGESTIONS (:156-160). So IMPULSE can give masochism. The complex
+  suggestions (Hypnosis.wiki:252 onward: clumsiness, addiction, pacifism, hypersomnia, lethargy,
+  anorexia, disrupt, generosity, action, hypochondria) need the full hypnosis. **Impatience is no
+  suggestion at all.**
+- Monkshood gives disloyalty (WIKI; AFFLICTION SHOW disloyalty: Smoke Valerian / Smoke Realgar;
+  "disfigurement" is its old name, `kb/CONFLICTS.md`).
+- Ekanelia (WIKI, Venom.wiki:383-391): a reaction has a trigger venom ("this is what you bite
+  with"), conditionals, a result, and sometimes a bonus conditional and bonus result; "** Reactions
+  fire on the bite command." The game's list of reactions (`EKANELIA`, `EKANELIA STUDY <reaction>`)
+  has never been captured.
+- **What the notes add (PLAYER).** IMPULSE now takes a venom as well, and `impulse masochism
+  monkshood` gives masochism (the impulse), disloyalty (the venom) and, if the target has asthma
+  and weariness, impatience. That matches our own reaction table (monkshood: asthma + masochism +
+  weariness -> impatience, :459-466): the impulse brings its own masochism, so only asthma +
+  weariness must already be up.
+- **Unverified.** The venom form itself; what it costs (the header says "BAL+EQ", :25: the wiki's
+  equilibrium for the impulse, plus a bite's balance?); whether fangbarrier blocks it (our code
+  assumes so); whether impatience is the reaction's result or its bonus result. The relayed form
+  leaves out `<target>`, which the wiki requires; our sends include it.
+- **Our code.** It already sends `impulse <target> masochism monkshood`:
+  - PRIORITY 4 (:1829-1854): asthma + weariness plus one "third condition" (fratricide,
+    hypochondria, scytherus, slickness, or anorexia with focus down; impatienceConditionsMet,
+    :666-676), or asthma + weariness alone in relapse_lock (impatienceConditionsRelapse, :679-684),
+    and not inside the 2.5 s impatience cooldown. The third condition is our choice, not the game's
+    (comment, :663).
+  - PRIORITY 7's normal branch (:1949-1962) sends the same pair on asthma + weariness alone, through
+    selectImpulsePair (:902-933).
+  - The shield-break flay chains it on equilibrium (:1745-1755), and relapse_lock re-sends it once
+    slickness + anorexia are up (selectRelapseImpulse, :997-1002).
+  - With masochism already up it impulses another suggestion on the same venom (:1845-1849).
+  - v4.7.419: every monkshood send now calls checkImpulseEligible (sileris/fangbarrier). Three did
+    not (shield-break :1745-1746, PRIORITY 4 :1842-1843, PRIORITY 5 :1860), so with fangbarrier up
+    the round sent a blocked impulse every round and never reached the gecko strip. (Scytherus
+    mode's impulse still does not check it: see Impulse Mechanics.)
+  - v4.7.419: monkshood is no longer sent FOR impatience onto a target that already has it
+    (selectBiteVenom step 3, :1066-1067; selectRelapseImpulse, :997). PRIORITY 5 still carries its
+    mental impulse on monkshood and requires impatience (focusLockReady, :726-733), so the
+    reaction's impatience is wasted there; that is left as it is.
+  - v4.7.419: the keybind suggestion override no longer replaces the masochism the reaction needs
+    (reactionNeeds, :537-547).
+- **Defence.** Since the impulse brings the masochism, curing masochism beforehand does not stop
+  this route; it still stops a plain BITE monkshood. The conditionals a victim can deny in advance
+  are asthma and weariness: astWear (on by default) raises asthma to 3 against a Serpent target
+  when both are up (`algedonic_defense_1.0/001_Anti_Priorities.lua:190-195`).
+- **Settle.** `AB HYPNOSIS IMPULSE` (syntax and cost) and `EKANELIA STUDY MONKSHOOD` in game, and a
+  `fightlog` recording of our own `impulse <target> masochism monkshood` to read the reaction line.
+
+### 4. Fratricide's 2.25 s relapse
+
+- **Game data (CONFIRMED, AFFLICTION SHOW).** "Grants major negative poison resist and causes
+  hypnotic impulses to relapse a short time after being first introduced." Cure: Eat Lobelia / Eat
+  Argentum. The full record is under Fratricide Mechanics.
+- **"Mentals only".** The record says "hypnotic impulses", i.e. the suggestion half, which is all
+  mental. So the masochism from `impulse ... masochism monkshood` should relapse; whether the
+  reaction's impatience does is not stated, since it comes from the venom, not the suggestion.
+- **2.25 s is UNVERIFIED.** The record says "a short time". It times the relapse from when the
+  impulse is first introduced, not from a cure. It does not say how many times the impulse
+  relapses. Our reading (UNVERIFIED): once, shortly after the impulse lands, not after every
+  cure, which this page described until v4.7.419. Knight flail expends use the same "after they
+  are first given" wording and add "striking for a second time"; the fratricide record has no
+  such clause.
+- **Our code.** `FRATRICIDE_RELAPSE = 2.25` (:583-589; it was 3.0, from no stated source).
+  selectImpulse will not re-impulse an affliction it sent less than 2.25 s ago while fratricide is
+  believed up (:598-614), since the relapse is about to bring it back; a second pass ignores the
+  window rather than return nothing. The window runs from our SEND (recordImpulse, :628-632), while
+  the game counts from landing, so 2.25 s plus our latency is the matching figure. The tracker
+  follows the relapse itself, not a clock: trigger 018 re-records the affliction on its relapse line.
+- **Settle.** A `fightlog` recording of us impulsing under fratricide: the gap between 017's line
+  and 018's line for the same suggestion.
+
+### 5. "Three sources of relapsing effects"
+
+| Source | Game data | Serpent's? |
+|---|---|---|
+| Scytherus ("Thin blood") | "Scytherus causes any venoms you get affected by to relapse after a short delay." Cure: Eat Ginseng / Eat Ferrum (`kb/raw/live/affliction_show/scytherus.txt`) | Yes: SECRETE SCYTHERUS / BITE (WIKI) |
+| Fratricide | "causes hypnotic impulses to relapse a short time after being first introduced" | Yes by its effect; how it is given is unknown (Fratricide Mechanics) |
+| (third) | Not found in the game data. Candidates: hypochondria's delayed symptoms (one log; the game never calls them a relapse); our reaction table's scytherus -> camus (code only); the Toxicologist boon (PvE, Mnemosyne only) | -- |
+
+Not Serpent, listed so they are not confused with these: Shaman SYVIS, "causing diseases that your
+victim believes they have cured to relapse shortly there after" (`kb/raw/wiki/Spiritlore.wiki:148`);
+knight flail expends, "relapse a short while after they are first given, striking for a second time"
+(`kb/raw/wiki/Weaponmastery.wiki:288`); Pariah infest, "The plague your swarm is carrying will relapse
+twice at a later time" (`kb/raw/wiki/Pestilence.wiki:130`).
+
+**Our code:** trigger 018 records fratricide's impulse relapses on the target. Nothing in the
+target tracker models scytherus's venom relapses.
+
+---
+
+## CRITICAL: Impulse Mechanics (checked 2026-10-12)
+
+**Impulse is how a Serpent gives a trivial suggestion without hypnosis, and, with a venom (relayed
+notes), how its main reaction, monkshood's impatience, is delivered.**
 
 ```yaml
-impulse_requirements:
-  description: "Impulse eligibility (checkImpulseEligible) is gated ONLY on the bite landing"
-  conditions:
-    - "Victim has NO sileris AND NO fangbarrier defense (bite must land)"
-  note_on_asthma_weariness: |
-    asthma + weariness is NOT an impulse gate. It is the conditional set for the
-    monkshood-Ekanelia impatience path (impatienceConditionsMet, 002_Serpent_Offense.lua:601-611),
-    a SEPARATE check. Impulse itself only needs no sileris/fangbarrier.
+impulse:
+  game: "IMPULSE <target> <suggestion>, 1.70 s of equilibrium; one TRIVIAL suggestion; no venom argument and no stated requirement (WIKI, kb/raw/wiki/Hypnosis.wiki:43-50)"
+  trivial_suggestions: [amnesia, paranoia, loneliness, claustrophobia, stuttering, hallucinations, dementia, deadening, epilepsy, agoraphobia, masochism, recklessness, vertigo, confusion, stupidity]  # WIKI, Hypnosis.wiki:86-251; = TRIVIAL_SUGGESTIONS (:156-160)
+  complex_only: [clumsiness, addiction, pacifism, hypersomnia, lethargy, anorexia, disrupt, generosity, action, hypochondria]  # WIKI, Hypnosis.wiki:252 onward: full hypnosis only
+  not_a_suggestion: "impatience (it comes from the monkshood REACTION), fratricide (see Fratricide Mechanics)"
+  venom_form: "PLAYER, UNVERIFIED: `impulse masochism monkshood` (relayed notes). Our code sends `impulse <target> <suggestion> <venom>` on every impulse (:1755, :1810, :1825, :1852, :1864, :2017, :2044)"
+  cost: "Wiki: 1.70 s of equilibrium. Code header: 'BAL+EQ' (:25). The venom half's cost is UNVERIFIED"
 
-  delivery: |
-    Command is `impulse <target> <suggestion> <venom>` (no SUGGEST keyword).
-    It ALWAYS pairs a hypnosis suggestion with a bite venom to trigger an Ekanelia
-    transform. Impatience specifically comes from `impulse <target> masochism monkshood`
-    (monkshood Ekanelia), not from impulsing 'impatience' directly.
+our_eligibility_rule: |
+  checkImpulseEligible (:1108-1122) refuses an impulse while the target has sileris or
+  fangbarrier. Since v4.7.419 every impulse path calls it except scytherus mode's (PRIORITY 7,
+  :1935-1939). That branch runs when addiction + nausea are up and scytherus is not (the scytherus
+  mode strategy, :2315-2325), and sends `impulse <target> <suggestion> scytherus` unchecked; the
+  gecko strip skips scytherus mode too (:1970). So with fangbarrier up it sends, every round, an
+  impulse the rest of the offense treats as blocked, and because the impulse replaces the DSTAB,
+  scytherus_attack's gecko (its first venom when asthma is up and slickness is not, :1608-1617)
+  never goes out to strip the barrier (open; not fixed in v4.7.419). Before v4.7.419 the three
+  monkshood sends (shield-break :1745-1746, PRIORITY 4 :1842-1843, PRIORITY 5 :1860) did not
+  check it either. The rule is ours: HELP 13.7 says the coating gives "protection
+  against bites from adventurers of the Serpent class" (kb/raw/help/13.7_healing-and-curing.txt:78-81),
+  and a reaction "fires on the bite command", so an impulse's venom is presumably bitten. No
+  capture shows fangbarrier blocking IMPULSE.
 
-  note: "SNAP from hypnosis does NOT deliver impatience anymore - use Impulse instead"
+asthma_weariness: |
+  NOT an impulse gate. With masochism they are the monkshood reaction's conditionals, and that
+  reaction is where the impatience comes from. `impulse <target> masochism monkshood` brings the
+  masochism, so asthma + weariness are the only conditionals that must already be up (Notes
+  relayed 2026-10-12, item 3).
 
-impulse_afflictions:
-  - impatience: "Blocks focus - critical for true lock"
-  - anorexia: "Blocks eating - delivered after slickness applied"
-  - confusion: "Random commands"
-  - amnesia: "Forgets queued commands"
-  - stupidity: "Disrupts equilibrium skills"
+impulse_afflictions:   # what IMPULSE gives directly: the trivial list above, notably (effects: AFFLICTION SHOW)
+  - masochism: "the monkshood and curare reactions' conditional"
+  - confusion: "'extends your equilibrium recovery rates by 100%'; with recklessness, the loki reaction's conditionals (and the voyria reaction's RESULT)"
+  - stupidity: "'You may fumble some actions.'"
+  - amnesia: "'makes you forget one action that you try to take'"
+  - vertigo: "the voyria reaction's conditional (with anorexia + impatience)"
+  - dementia, deadening: "the aconite reaction's conditionals; deadening also deepens a SEAL (WIKI)"
+  - epilepsy, recklessness: "mental pressure; recklessness is the loki reaction's other conditional"
+  # NOT impatience (no suggestion) and NOT anorexia (a complex suggestion; slike gives it)
+
+note: "Impatience is no suggestion, so neither SNAP nor IMPULSE gives it directly; it comes from the monkshood reaction (the old impSnap swap was removed: swaps/002_Priority_Management.lua:22)"
 
 counter_impulse:
-  - "Maintain sileris/fangbarrier defense"
-  - "Cure asthma OR weariness quickly (both are kelp - only one at a time)"
-  - "Prioritize asthma cure when both present to break impulse setup"
+  - "Keep fangbarrier up: it stops bites (HELP 13.7). Slickness strips it (two logs) and so does a bare FLAY (HELP 13.7, WIKI)"
+  - "Deny asthma or weariness (both kelp: one cure per eat). astWear raises asthma to 3 against a Serpent target when both are up"
+  - "Curing masochism in advance does NOT stop the impulse route: the impulse brings it"
 ```
 
 ---
@@ -144,20 +420,81 @@ counter_impulse:
 
 ```yaml
 fratricide:
-  venom: "Unknown - likely Hypnosis or special ability"
-  cure: "Argentum (pill)"
-  effect: |
-    When victim has fratricide, impulse-delivered mental afflictions
-    will RELAPSE after being cured. This creates a "focus lock" where:
-    1. Serpent delivers impatience via impulse
-    2. Victim focuses to cure impatience
-    3. Fratricide causes impatience to RELAPSE immediately
-    4. Victim cannot escape the mental affliction loop
+  record: |
+    CONFIRMED, AFFLICTION SHOW (kb/raw/live/affliction_show/fratricide.txt), and on the game's
+    AFFLICTION LIST (kb/raw/live/affliction_list.txt:77):
+      Description:   "Grants major negative poison resist and causes hypnotic impulses to relapse a short time after being first introduced."
+      Cure(s):       Eat Lobelia / Eat Argentum   (also WHATCURES, kb/raw/live/whatcures.txt:53); NoRandomCure: No
+      Diagnose:      "plagued by an insidious venom."
+      Afflicted msg: "Something subtle and yet insidious overcomes you."
+      Cured msg:     "You rid yourself of the insidious venom plaguing you."
+    This page said the cure was "Argentum (pill)" until v4.7.419: it is lobelia, or an argentum
+    flake (the eat line in our logs is "You eat an argentum flake.").
 
-  priority: |
-    Must cure fratricide BEFORE approaching lock state.
-    If you have asthma + slickness + fratricide, you're in danger.
-    Cure fratricide early to prevent impulse relapse loop.
+  how_given: |
+    UNKNOWN. Fratricide is in no Hypnosis, Venom or Subterfuge page we hold, and not in either
+    suggestion list. The game's own record calls it a VENOM ("an insidious venom"). Our code gives
+    it as a SUGGESTION: hypnotise -> `suggest <target> fratricide` -> snap (fratricide mode,
+    getCommand :361-369), which nothing in the game data supports, and which snaps without the
+    SEAL the wiki puts before SNAP. Treat that route as UNVERIFIED. Settle with AB VENOM, AB
+    HYPNOSIS and EKANELIA in game, or a log of a Serpent landing it.
+
+  the_relapse: |
+    Timed from when each impulse is FIRST INTRODUCED (game), not from a cure. The record gives no
+    count. Our reading (UNVERIFIED): each impulse relapses once, shortly after it lands, and an
+    affliction cured after that stays cured. It is not a loop that brings an affliction back
+    after every cure, which is what this page described until v4.7.419 ("Fratricide causes
+    impatience to RELAPSE immediately ... cannot escape"). Knight flail expends use the same
+    timing words and state the count the fratricide record leaves out: "relapse a short while
+    after they are first given, striking for a second time" (Weaponmastery.wiki:288).
+    Timing: "a short time" (game); 2.25 s (relayed notes, PLAYER); our code used 3.0 s from no
+    source and now uses 2.25 s.
+    Scope: "hypnotic impulses" (game), the suggestion half; the notes say "mentals only". Whether
+    the monkshood REACTION's impatience relapses is not stated: it comes from the venom.
+
+  poison_resist: |
+    "major negative poison resist": poison damage hits harder while it is up. Camus is "A more
+    powerful version of Sumac poison" (WIKI), so a scytherus/camus Serpent gains from it. Not
+    quantified.
+
+  our_offense: |
+    - The 2.25 s window: FRATRICIDE_RELAPSE (:583-589) in selectImpulse (:598-614), measured
+      from our send (recordImpulse, :628-632), on getEpoch (:574-581).
+    - On the tracker since v4.7.419: onSnapped calls tarAffed("fratricide") when the fratricide
+      suggestion was given (:267-284), and onFratricideCured calls erAff (:304-310). Before,
+      it wrote tAffs.fratricide directly, so haveAff("fratricide") read false and a lobelia eat
+      could never take it off.
+    - In V3 a herb eat takes fratricide only when nothing else that herb cures is there
+      (herbCureLastV3 in onHerbCureV3, affliction_tracking_core/007_Branching_State_Tracker.lua:130-139,
+      :406-420): it is 25, the bottom, in our priorities and the live normal set, and a list
+      position cannot express "cured last". Without the rule, one eat over masochism + fratricide
+      left masochism believed at 0.67, and the next monkshood impulse dropped the masochism its
+      reaction needs.
+    - The cure line we listen for, "The look of madness fades from (\w+)'s eyes" (a temp
+      trigger registered at load, :2770-2778), is code only, does not check whose eyes, and does
+      not match the game's own cured message above. The offense still ORs
+      serpent.hypnosis.fratricideActive into its checks (selectImpulse, impatienceConditionsMet,
+      focusLockReady). The snap sets it; only that line or a hypnosis reset clears it
+      (serpent.hypnosis.reset, :317-321: a target change, a lost or noticed hypnosis, a "too
+      perceptive" refusal, switching into a hypnosis or hypnolock mode; :2629-2632,
+      :2789-2817, :2455-2459, :2473-2477).
+    - It counts as a third condition for PRIORITY 4 (:670-671) and is required for the focus-lock
+      push, PRIORITY 5 (focusLockReady, :726-733: fratricide + 4 mentals + focus down +
+      impatience + asthma + weariness).
+
+  our_defence: |
+    - Priority 25, the bottom (ataxia/001_Default_Curing_Prios.lua:280; row 25 of the live
+      normal set, kb/raw/live/curing-priority-list_normal_2026-10-10.txt:33).
+    - fratLock (on by default): fratricide -> 4 when fratricide + asthma + slickness are up
+      (algedonic_defense_1.0/001_Anti_Priorities.lua:197-202, restored :306-312).
+    - v4.7.419: Algedonic.AntiSerpent sends `curing prioaff fratricide` while fratricide and
+      scytherus are up and paralysis is not (:746-752), the "cure fratricide at once when
+      scytherus is up" rule. PRIOAFF writes no stored priority.
+    - Against a detected Serpent, class detection switches to the in-game `serpent` curingset
+      (class_detect/001_Class_Detect_Engine.lua:62, :202-215). That set exists
+      (kb/raw/live/curingset-list_2026-10-10.txt:17) but its priority list was never captured, so
+      the priority actually in force against a Serpent is unknown. fratLock's write and its
+      restore land in whichever set is active, and the restore writes the normal table's 25.
 ```
 
 ---
@@ -172,35 +509,41 @@ concept: |
   cures to clear.
 
 kelp_stack:
-  description: "Most common and powerful stack - ENABLES IMPULSE"
+  description: "Most common and powerful stack - sets up the monkshood reaction"
   afflictions: [asthma, clumsiness, sensitivity, weariness]
   critical_note: |
-    Asthma + Weariness together enables Impulse delivery.
-    Both are kelp cures - victim can only cure ONE per eat balance.
+    Asthma + weariness are two of the monkshood reaction's three conditionals, and
+    `impulse <target> masochism monkshood` brings the third, so with both up the impulse
+    gives impatience (Notes relayed 2026-10-12). Both are kelp/aurum cures: one per eat.
+    Clumsiness + weariness are the kalmia reaction's conditionals.
     This is the foundation of Serpent lock strategy.
 
 ginseng_stack:
   description: "Damage-over-time stack"
-  afflictions: [addiction, darkshade, haemophilia, lethargy, scytherus]
+  afflictions: [addiction, darkshade, haemophilia, lethargy, nausea, scytherus]
   strategy: |
-    Stack darkshade + scytherus for heavy DoT pressure.
-    Add haemophilia to prevent clotting.
+    Stack darkshade + scytherus for pressure; scytherus also makes every later venom
+    relapse ("Thin blood", AFFLICTION SHOW). Addiction + nausea set up our scytherus ->
+    camus reaction. Add haemophilia to prevent clotting.
 
 goldenseal_stack:
-  description: "Mental affliction stack (delivered via Impulse)"
+  description: "Mental affliction stack"
   afflictions: [dissonance, dizziness, epilepsy, impatience, stupidity]
   strategy: |
-    Impatience blocks focus - critical for true lock.
-    Delivered via IMPULSE, NOT via venom or SNAP.
+    Impatience blocks focus - critical for true lock. It comes from the monkshood
+    REACTION, not from a suggestion (impatience is none) and not from SNAP. Epilepsy and
+    stupidity are trivial suggestions, so IMPULSE gives them; aconite gives stupidity and
+    larkspur dizziness.
 
 bloodroot_stack:
   description: "Critical lock stack"
   afflictions: [paralysis, slickness]
   strategy: |
-    Both cured by bloodroot herb.
-    Paralysis blocks tree AND all actions.
-    Slickness blocks salves (can't cure anorexia).
-    When asthma present, can't smoke valerian for slickness.
+    Paralysis: Eat Bloodroot / Eat Magnesium. Slickness: the same, or Smoke Valerian /
+    Smoke Realgar (AFFLICTION SHOW).
+    Paralysis blocks the tree and active physical movement.
+    Slickness blocks salves (can't cure anorexia with epidermal).
+    When asthma is present, the victim can't smoke valerian for slickness.
     PRIORITIZE PARALYSIS when asthma blocks smoking.
 ```
 
@@ -209,45 +552,46 @@ bloodroot_stack:
 ### Primary Kill: Impulse Lock (Modern Serpent)
 ```yaml
 type: affliction
-summary: Use Impulse to deliver mental afflictions after establishing kelp stack
+summary: DSTAB lock venoms, the monkshood reaction for impatience, then a finisher
+status: "ASSUMED: no Serpent fight log in kb/raw/logs; the pieces are WIKI, PLAYER and our code"
 
 prerequisites:
-  - Target must have asthma + weariness (enables Impulse)
-  - Target must NOT have sileris/fangbarrier defense
-  - Apply fratricide to prevent focus escape
+  - "Asthma + weariness on the target: with the impulse's own masochism they fire the monkshood reaction (impatience)"
+  - "No sileris/fangbarrier for the impulse or bite (HELP 13.7: the coating stops Serpent bites). DSTAB's weapon venoms are probably not stopped (inferred from a DSL, below)"
+  - "Fratricide (optional): each impulse relapses shortly after it lands"
 
-attack_sequence_from_combat_log:
+attack_sequence:   # inherited; this page called it "from combat log", but no Serpent log is in kb/raw
   phase_1_kelp_setup:
-    - "DST target kalmia vernalius"   # asthma + weariness (BOTH kelp cures)
-    - "Flay strips only shield/rebounding — NOT sileris/fangbarrier"
-    - "dstab lands through sileris/fangbarrier; only impulse/bite is blocked"
+    - "DSTAB target kalmia vernalius"   # asthma + weariness (BOTH kelp cures)
+    - "FLAY <target> SHIELD|REBOUNDING strips those; a bare FLAY <target> strips the sileris coating (HELP 13.7, WIKI). Our offense never sends a bare flay: it strips the coating with slickness (gecko), which works (CONFIRMED in two logs)"
+    - "Weapon venoms land through a formed fangbarrier: an Infernal's DSL gave anorexia, then slickness stripped the coating (c.iJVmpL log, 863-873). Not seen for DSTAB itself"
 
   phase_2_impulse_delivery:
-    - "impulse target masochism monkshood"  # monkshood Ekanelia -> impatience (blocks focus)
-    - "impulse target <suggestion> slike"    # anorexia via bite (after slickness)
-    - "Fratricide applied via hypnosis"      # Causes impulse affs to RELAPSE
+    - "impulse target masochism monkshood"  # masochism (impulse) + disloyalty (monkshood) + impatience (reaction)
+    - "DSTAB slike once impatience is up (slikeGateMet, :799-804), or relapse_lock's gecko + slike pre-load"  # anorexia
+    - "Fratricide, if up, makes each impulse relapse shortly after it lands (how it is given: unknown)"
 
   phase_3_lock_completion:
-    - "DST target curare gecko"       # paralysis + slickness (BOTH bloodroot)
+    - "DSTAB target curare gecko"       # paralysis + slickness (BOTH bloodroot)
     - "Target now in true lock"
-    - "Continue pressure until death"
+    - "Finisher: EXECUTE / BEHEAD (below)"
 
-actual_combat_example:
-  round_1: "Doublestab kalmia vernalius → asthma + weariness"
-  round_2: "Flay shield/rebounding (sileris/fangbarrier NOT flayed - dstab works through it)"
+example_rounds:   # ASSUMED (inherited, no log)
+  round_1: "DSTAB kalmia vernalius → asthma + weariness"
+  round_2: "Flay shield/rebounding if up (DSTAB works through a fangbarrier: inferred, not seen)"
   round_3: "impulse masochism monkshood → impatience, victim can't focus"
-  round_4: "Doublestab curare gecko → paralysis + slickness"
-  round_5: "impulse <suggestion> slike → anorexia, victim can't eat"
+  round_4: "DSTAB curare gecko → paralysis + slickness"
+  round_5: "DSTAB slike → anorexia, victim can't eat (this said 'impulse <suggestion> slike'; our offense sends slike by DSTAB)"
   result: "TRUE LOCK - victim cannot cure anything"
 
 required_afflictions:
-  - asthma: "Blocks smoking, enables Impulse (kelp cure)"
-  - weariness: "Blocks Fitness, enables Impulse (kelp cure - competes with asthma!)"
-  - slickness: "Blocks salves (bloodroot cure)"
-  - paralysis: "Blocks tree AND all actions (bloodroot cure - competes with slickness!)"
-  - impatience: "Blocks focus (delivered via Impulse, NOT venom)"
-  - anorexia: "Blocks eating (delivered via Impulse, NOT venom)"
-  - fratricide: "Causes impulse mental affs to RELAPSE (argentum cure)"
+  - asthma: "Blocks smoking; a monkshood conditional (kelp cure)"
+  - weariness: "Blocks Fitness; a monkshood conditional (kelp cure - competes with asthma!)"
+  - slickness: "Blocks salves (bloodroot cure, or smoke when there is no asthma)"
+  - paralysis: "Blocks the tree and physical movement (bloodroot cure - competes with slickness!)"
+  - impatience: "Blocks focus. From the monkshood reaction, not a suggestion"
+  - anorexia: "Blocks eating. From slike (venom); as a COMPLEX suggestion it cannot be impulsed"
+  - fratricide: "Optional: impulses relapse shortly after they land (lobelia/argentum cure)"
 
 cure_competition_insight: |
   KEY: Serpent exploits that bloodroot cures BOTH paralysis AND slickness.
@@ -259,35 +603,36 @@ cure_competition_insight: |
 ### Alternative Kill: Hypnosis + Impulse Combo
 ```yaml
 type: affliction
-summary: Use hypnosis for fratricide setup, impulse for mental delivery
+summary: Hypnosis for fratricide (an UNVERIFIED route), impulse for mental delivery
 
 steps:
   1: "HYPNOTISE <target>"
-  2: "SUGGEST <target> fratricide"     # Sets up relapse mechanic
-  3: "SNAP to trigger fratricide"
+  2: "SUGGEST <target> fratricide"     # UNVERIFIED: no such suggestion on the wiki, and the game's record calls fratricide an insidious venom
+  3: "SNAP <target>"                   # our fratricide mode snaps without a SEAL; the wiki puts SEAL before SNAP
   4: "Apply asthma + weariness (kelp stack)"
-  5: "impulse <target> masochism monkshood"  # impatience via monkshood Ekanelia; relapses due to fratricide
+  5: "impulse <target> masochism monkshood"  # impatience via the monkshood reaction; under fratricide the impulse relapses shortly after
   6: "Apply paralysis + slickness"
-  7: "impulse <target> <suggestion> slike"   # anorexia via bite
-  8: "Target locked with relapsing impatience"
+  7: "DSTAB slike (anorexia)"
+  8: "Target locked"
 
 key_insight: |
-  Modern Serpent does NOT use SNAP for impatience/anorexia delivery.
-  SNAP is used for fratricide and other hypnosis-only afflictions.
-  IMPULSE is used for mental afflictions (requires asthma + weariness).
+  Impatience is no suggestion (WIKI), so neither SNAP nor IMPULSE gives it directly; it
+  comes from the monkshood reaction. IMPULSE gives TRIVIAL suggestions; the complex ones
+  (anorexia, hypochondria, disrupt, ...) need the full HYPNOTISE / SUGGEST / SEAL / SNAP.
 
-hypnosis_only_afflictions:
-  - fratricide: "Causes impulse affs to relapse"
-  - disrupt: "Disrupts equilibrium"
-  - amnesia: "Forgets commands"
+hypnosis_only_afflictions:   # complex suggestions (WIKI, Hypnosis.wiki:252 onward)
+  - disrupt: "Knocks the target off equilibrium briefly, or fully disrupts them if confusion is present"
+  - hypochondria: "Gives impatience on its own seconds later (Notes relayed 2026-10-12)"
+  - others: [clumsiness, addiction, pacifism, hypersomnia, lethargy, anorexia, generosity, action]
+  - fratricide: "NOT a suggestion in the wiki; our code's route only (UNVERIFIED)"
 
-impulse_delivered_afflictions:
-  - impatience: "Blocks focus"
-  - anorexia: "Blocks eating"
-  - confusion: "Random commands"
-  - stupidity: "Disrupts equilibrium skills"
+impulse_delivered_afflictions:   # the trivial suggestions (WIKI, Hypnosis.wiki:86-251)
+  - [amnesia, paranoia, loneliness, claustrophobia, stuttering, hallucinations, dementia, deadening, epilepsy, agoraphobia, masochism, recklessness, vertigo, confusion, stupidity]
 
-notes: "Takes 4 seconds to SNAP after hypnotizing"
+notes: |
+  Our code waits 4 s after the hypnotised line before it snaps (SNAP_DELAY, :152; onHypnotised,
+  :231-250). WIKI: a trance is sealed for 3 s or more (1 s if the victim has deadening), then
+  the suggestions tick every 4 s (every 3 s with deadening).
 ```
 
 ### Alternative Kill: Darkshade/Scytherus Damage
@@ -297,15 +642,15 @@ summary: Stack damage-over-time afflictions for passive damage kill
 
 steps:
   1: "Apply darkshade (damage over time)"
-  2: "Apply scytherus (damage over time)"
-  3: "Apply sensitivity (increases all damage)"
+  2: "Apply scytherus (every later venom relapses)"
+  3: "Apply sensitivity (increases damage taken)"
   4: "Continue venom pressure while DoTs tick"
   5: "Target dies to accumulated damage"
 
 required_afflictions:
-  - darkshade: "Periodic damage"
-  - scytherus: "Periodic damage"
-  - sensitivity: "50% more damage taken"
+  - darkshade: "'Darkshade makes even the lightest ray of sunlight extremely painful. Stay outside too long and you will surely die.' (AFFLICTION SHOW). Our code's kill clock: 26 s stuck (DARKSHADE_KILL_TIME, :150). A lightwall 'drastically speeds up the progression' (WIKI)"
+  - scytherus: "'Thin blood': venoms relapse after a short delay (AFFLICTION SHOW). Our code adds the scytherus -> camus reaction for damage (code only)"
+  - sensitivity: "'Sensitive skin increases the damage of any painful attacks you receive.' (AFFLICTION SHOW; no figure given. This page said 50%)"
 ```
 
 ### Finisher: Execute / Behead (truelock)
@@ -313,120 +658,154 @@ required_afflictions:
 type: execute
 summary: PvP lock finisher — the offense file's actual kill commands
 
-steps:
-  1: "If target is prone: wield shield scimitar; behead <target>"
-  2: "Else (finish strategy): execute <target>"
+code:
+  1: "Truelock and the target prone: wield shield scimitar; behead <target> (:1777-1781)"
+  2: "Else, finish strategy and joint probability >= 0.90: execute <target>, with no wield (:1782-1790)"
 
 joint_probability_gate: |
   execute only fires when getStateProbabilityV3 of all 5 lock affs
   (anorexia, asthma, slickness, impatience, paralysis) >= 0.90.
   If truelock is per-aff true but jointly shaky, it falls through to the
   lock_reinforce burst instead of gambling the kill on a bluff.
-  (002_Serpent_Offense.lua:1707-1720, 2160-2171)
+  (002_Serpent_Offense.lua:1782-1790, 2239-2250)
+
+game_data: |
+  WIKI (Subterfuge, Execute): "While wielding a whip, you may attempt to execute a prone
+  victim." 2.00 s of balance. So EXECUTE wants a PRONE target and a WHIP, while our code
+  sends it only when the target is NOT prone (prone goes to BEHEAD) and without wielding
+  the whip. BEHEAD is in none of the Serpent's skill pages (the knights' Distract calls it
+  one of "the behead or shatter abilities from weaponry"); in Mystor's Shaman log a
+  Shaman beheaded a paralysed, truelocked victim who was never prone, with a scimitar
+  (kb/raw/logs/2026-10-11_mystor_shikudo-vs-shaman_loss_t54WWU6b.txt:3715-3791; the
+  write-up, kb/combat/fights/..._t54WWU6b.md, already notes our prone gate is stricter).
+  So the two branches look the wrong way round. UNVERIFIED in a Serpent fight: settle with
+  AB SUBTERFUGE EXECUTE and one try each against a prone and a standing target.
 
 notes: |
   GARROTE is NOT a PvP kill route — the PvP offense file never sends it.
   garrote is the PvE basher attack only (ataxiaBasher_serpentBashing,
-  002_Class_Bashing.lua:710-724).
+  basher/002_Class_Bashing.lua:3826).
 ```
 
 ## Offensive Abilities
 ```yaml
-# Subterfuge
+# WIKI (kb/classes/serpent.md) unless marked. No Serpent AB is captured, so the costs are the wiki's.
+# Subterfuge / Venom
 bite:
-  skill: Subterfuge
-  balance: bal
-  effect: "Bite with envenomed fangs, applies one venom"
-  syntax: "BITE <target> <venom>"
-  notes: "Single venom application"
+  skill: Venom
+  balance: "4.00 seconds of balance"
+  effect: "Bite with envenomed fangs, applies one venom (the venom only works on adventurers); Ekanelia reactions fire on the bite"
+  syntax: "BITE <target> [<venom>]"
+  notes: "Single venom application; fangbarrier (sileris/quicksilver) stops it (HELP 13.7)"
 
 doublestab:
   skill: Subterfuge
-  balance: bal
-  effect: "Stab twice with dirks, applies two venoms"
-  syntax: "DST <target> <venom1> <venom2>"
-  notes: "Most common attack, two venoms per balance"
+  balance: "2.80 seconds of balance"
+  effect: "Two venoms at once from a dirk envenomed with more than one venom; adventurers only"
+  syntax: "DOUBLESTAB/DSTAB <target> [venom1 venom2]"
+  notes: "Our default attack. No Ekanelia reaction (fangs only). The wiki says sumac, camus and notechis cannot envenom a weapon"
 
 flay:
   skill: Subterfuge
-  balance: bal
-  effect: "Strip rebounding or shield defense"
-  syntax: "FLAY <target>"
+  balance: "2.00 seconds of balance"
+  effect: "Strips the sileris coating (bare FLAY), or rebounding, or a shield; applies the whip's venom if the target is left with neither rebounding nor shield"
+  syntax: "FLAY <target> / FLAY <target> REBOUNDING [<venom>] / FLAY <target> SHIELD [<venom>]"
+  notes: "Our offense sends only the SHIELD/REBOUNDING forms (:1754, :1763)"
 
 garrote:
   skill: Subterfuge
-  balance: bal
-  effect: "Strangle from stealth for execute"
+  balance: "varies with weapon speed"
+  effect: "With a whip, slip behind the target and choke; armour is useless; always hits a helpless target (paralysed, tied up, frozen, fallen, sleeping, unconscious)"
   syntax: "GARROTE <target>"
-  notes: "Requires hidden, behind target"
+  notes: "No hiding requirement in the wiki text (this page said 'Requires hidden, behind target'). Our PvE basher attack only"
+
+execute:
+  skill: Subterfuge
+  balance: "2.00 seconds of balance"
+  effect: "While wielding a whip, execute a PRONE victim"
+  syntax: "EXECUTE <target>"
+  notes: "See the Finisher: our code sends it on a target that is not prone"
 
 hide:
   skill: Subterfuge
-  balance: eq
+  balance: "Hide: 4.00 seconds of balance; Emerge: 1.00 seconds of balance (this page said eq)"
   effect: "Enter stealth mode"
-  syntax: "HIDE"
+  syntax: "HIDE / EMERGE"
 
 phase:
   skill: Subterfuge
-  balance: eq
-  effect: "Become phased, untargetable"
-  syntax: "PHASE"
+  balance: "4.00 seconds of balance, 100 mana (this page said eq); endurance drains while phased"
+  effect: "Hidden from all unphased adventurers; attacking one unphases you"
+  syntax: "PHASE / UNPHASE"
 
 # Hypnosis
 hypnotise:
   skill: Hypnosis
-  balance: eq
-  effect: "Begin hypnosis on target"
+  balance: "equilibrium"
+  effect: "Seize the victim's mind; this can take several seconds"
   syntax: "HYPNOTISE <target>"
   notes: "Required before suggestions"
 
 suggest:
   skill: Hypnosis
-  balance: eq
-  effect: "Queue a suggestion for target"
+  effect: "Implant a suggestion (trivial or complex) in a hypnotised victim"
   syntax: "SUGGEST <target> <suggestion>"
-
-snap:
-  skill: Hypnosis
-  balance: eq
-  effect: "Trigger all queued suggestions"
-  syntax: "SNAP"
-  notes: "4 second delay after hypnotise"
 
 seal:
   skill: Hypnosis
-  balance: eq
-  effect: "Lock in a suggestion permanently"
-  syntax: "SEAL <target> <suggestion>"
+  balance: "2.0 seconds of equilibrium, 200 mana"
+  effect: "Primes the trance: a delay of 3 s or more (1 s if the victim has deadening), after which the suggestions tick every 4 s (3 s with deadening)"
+  syntax: "SEAL <target> <delay in seconds>"
+  notes: "This page said 'SEAL <target> <suggestion>: lock in a suggestion permanently'. Our hypnolock sends `seal <target> <number of suggestions>` (getCommand, :355), i.e. a delay of 1-3 s: with fewer than three suggestions that is under the 3 s minimum unless the victim has deadening. UNVERIFIED in game"
+
+snap:
+  skill: Hypnosis
+  effect: "Triggers the sealed trance; the suggestions begin to fire"
+  syntax: "SNAP <target>"
+  notes: "Our fratricide mode snaps without a seal (:361-369)"
+
+impulse:
+  skill: Hypnosis
+  balance: "1.70 seconds of equilibrium"
+  effect: "One TRIVIAL suggestion, without hypnosis"
+  syntax: "IMPULSE <target> <suggestion>  (relayed: a venom may follow; see Impulse Mechanics)"
+
+shrugging:
+  skill: Venom
+  balance: "1.60 seconds of equilibrium, 10.0 second cooldown"
+  effect: "Cure one of your own afflictions"
+  syntax: "SHRUGGING"
 ```
 
 ## Complete Venom Reference
 ```yaml
 # Venoms are used by Serpents and classes with edged weapons (Knights DWC)
-# Listed by combat utility category
+# Listed by combat utility category.
+# Venom -> affliction: venom_to_aff (ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua:202-249) and
+# the wiki's Venom page; cures: AFFLICTION SHOW (kb/raw/live/affliction_show/).
 
 # === LOCK AFFLICTIONS (Priority for True Lock) ===
 kalmia:
   affliction: asthma
-  cure: kelp
+  cure: kelp (or aurum)
   effect: "Contracts lungs, blocks smoking pipes"
   lock_role: "Blocks smoke cures (aeon, slickness alt)"
 
 gecko:
   affliction: slickness
-  cure: bloodroot
+  cure: "bloodroot or magnesium; or smoke valerian or realgar"
   effect: "Body coated in slick slime, blocks applying salves"
-  lock_role: "Blocks salve cures (anorexia, restoration, mending)"
+  lock_role: "Blocks salve cures (anorexia, restoration, mending); strips a fangbarrier (CONFIRMED in two logs)"
 
 slike:
   affliction: anorexia
-  cure: epidermal
+  cure: "apply epidermal to body, or FOCUS"
   effect: "Lose all desire for food/drink, blocks eating herbs"
   lock_role: "Blocks herb cures (most afflictions)"
 
 curare:
   affliction: paralysis
-  cure: bloodroot
+  cure: bloodroot (or magnesium)
   effect: "Muscles fail to respond, cannot move or act"
   lock_role: "Blocks tree tattoo usage"
 
@@ -447,24 +826,24 @@ vernalius:
 sumac:
   affliction: damage
   cure: none
-  effect: "Minor direct damage"
+  effect: "Minor direct damage; cannot envenom a weapon (WIKI)"
 
 camus:
   affliction: damage
   cure: none
-  effect: "Concentrated sumac, more potent damage"
+  effect: "Concentrated sumac, more potent damage; cannot envenom a weapon, so it is bitten (WIKI)"
 
 darkshade:
   affliction: darkshade
-  cure: ginseng
+  cure: ginseng (or ferrum)
   effect: "Sun sears flesh when exposed to sunlight (DoT)"
   notes: "Damage over time in outdoor/lit rooms"
 
 scytherus:
-  affliction: scytherus
-  cure: ginseng
-  effect: "Blood turns against when foreign substance introduced"
-  notes: "Damage when eating/drinking cures"
+  affliction: scytherus   # the game calls it "Thin blood"
+  cure: ginseng (or ferrum)
+  effect: "'Scytherus causes any venoms you get affected by to relapse after a short delay.' (AFFLICTION SHOW)"
+  notes: "One of the Serpent's relapse sources. This page said 'damage when eating/drinking cures'; no game data says so"
 
 voyria:
   affliction: voyria
@@ -476,18 +855,18 @@ voyria:
 prefarar:
   affliction: sensitivity
   cure: kelp
-  effect: "All nerve endings heightened, 50% more damage taken"
+  effect: "Increases the damage of painful attacks taken (no figure in the record)"
   notes: "Stacks with kelp affs (asthma, weariness)"
 
 # === UTILITY AFFLICTIONS ===
 oleander:
   affliction: blindness
-  cure: epidermal
+  cure: epidermal (to the head)
   effect: "Visual system fails, eyes no longer function"
 
 colocasia:
-  affliction: deafblind
-  cure: epidermal
+  affliction: [blindness, deafness]
+  cure: epidermal (to the head, one each)
   effect: "Robbed of sight AND hearing simultaneously"
 
 digitalis:
@@ -497,18 +876,19 @@ digitalis:
 
 aconite:
   affliction: stupidity
-  cure: goldenseal
+  cure: goldenseal (or plumbum, or FOCUS)
   effect: "Brain ceases operating correctly, complete stupor"
-  notes: "Disrupts focus attempts, equilibrium skills"
+  notes: "The record: 'Stupidity makes it harder to do exactly what you want to do. You may fumble some actions.'"
 
 monkshood:
   affliction: disloyalty   # old name: disfigurement (the game treats them as one)
-  cure: valerian_smoke
+  cure: "smoke valerian or realgar"
   effect: "Horrible facial disfigurement, loyals may turn"
+  notes: "The trigger venom of the monkshood reaction (impatience)"
 
 euphorbia:
-  affliction: vomiting
-  cure: ginseng
+  affliction: nausea   # this page said "vomiting"; the record: "Nausea causes intermittent, painful vomiting."
+  cure: ginseng (or ferrum)
   effect: "Digestive upheaval, spasmodic vomiting"
   notes: "Interrupts eating, purges rift items"
 
@@ -519,7 +899,7 @@ larkspur:
 
 delphinium:
   affliction: sleep
-  cure: none
+  cure: "wake"
   effect: "Slows heartrate, induces peaceful sleep"
   notes: "Target must be woken or cannot act"
 
@@ -531,16 +911,14 @@ vardrax:
 
 # === LIMB VENOMS ===
 epteth:
-  affliction: crippled_arms
-  cure: restoration
+  affliction: a level-1 broken arm (venom_to_aff: brokenleftarm, else brokenrightarm)
+  cure: "apply mending to arms"
   effect: "Upper limb muscles shrivel, arms become useless"
-  notes: "Affects arm limbs"
 
 epseth:
-  affliction: crippled_legs
-  cure: restoration
+  affliction: a level-1 broken leg (venom_to_aff: brokenleftleg, else brokenrightleg)
+  cure: "apply mending to legs"
   effect: "Leg muscles rot and wither"
-  notes: "Affects leg limbs"
 
 # === MENTAL AFFLICTIONS ===
 eurypteria:
@@ -578,19 +956,19 @@ notechis:
   affliction: haemophilia
   cure: ginseng
   effect: "Prevents blood from clotting"
-  notes: "Target cannot clot bleeding"
+  notes: "Target cannot clot bleeding. Cannot envenom a weapon (WIKI): see Class-Aware Venom Routing"
 
 # === VENOM CURE GROUPINGS (for affliction stacking) ===
 cure_groups:
   kelp: [asthma, clumsiness, sensitivity, weariness, health_leech]
-  lobelia: [agoraphobia, claustrophobia, hypochondria, loneliness, masochism, recklessness, vertigo]
+  lobelia: [agoraphobia, claustrophobia, fratricide, hypochondria, loneliness, masochism, recklessness, vertigo]
   ginseng: [addiction, darkshade, haemophilia, lethargy, nausea, scytherus]
   goldenseal: [dizziness, epilepsy, impatience, shyness, stupidity, dissonance]
   bloodroot: [paralysis, slickness]
   epidermal: [anorexia, blindness, deafness]
   valerian_smoke: [disloyalty, slickness_alt]
   caloric: [shivering, frozen]
-  restoration: [crippled_limbs]
+  mending: [broken_limbs]   # this said "restoration: crippled_limbs"
 ```
 
 ---
@@ -599,22 +977,35 @@ cure_groups:
 
 ```yaml
 ekanelia_overview:
+  source: |
+    WIKI (Venom, Ekanelia; kb/raw/wiki/Venom.wiki:383-391): a reaction has a trigger venom
+    ("this is what you bite with"), conditionals the victim must already have, and a result;
+    some add a bonus conditional and a bonus result. "only the fangs of the serpent are
+    sufficient for this purpose" and "** Reactions fire on the bite command." The game lists the
+    reactions you know with EKANELIA and explains one with EKANELIA STUDY <reaction>; neither has
+    been captured. So every reaction below comes from our own table (EKANELIA_TABLE, :459-509;
+    header, :30-37) and is UNVERIFIED. The relayed notes (2026-10-12) agree on one: monkshood.
   description: |
     Ekanelia is a Serpent skill that ADDS bonus afflictions to BITE attacks
     when specific conditionals are present on the target.
-    IMPORTANT: Delivered by BITE and IMPULSE (impulse = suggestion + bite), NOT
-    by DOUBLESTAB. In the lock rotation the PRIMARY delivery is via impulse
-    (selectImpulsePair), not a raw bite. File header: "EKANELIA TRANSFORMATIONS
+    Delivered by BITE, and by IMPULSE when it carries a venom (relayed notes; our code), NOT by
+    DOUBLESTAB (a dirk, not fangs). In the lock rotation the main delivery is the impulse
+    (selectImpulsePair, :902-933), not a raw bite. File header: "EKANELIA TRANSFORMATIONS
     (BITE/IMPULSE only)" (002_Serpent_Offense.lua:30).
 
   mechanic: |
     When biting with an Ekanelia-enhanced venom, if the target has ALL
     the required conditional afflictions, the bite delivers BOTH the normal
     venom affliction AND the bonus Ekanelia effect. This makes single bites
-    extremely powerful when conditions are met.
+    extremely powerful when conditions are met. Whether our "bonus" afflictions
+    are the game's results or bonus results is unknown.
+
+  recording: |
+    Since v4.7.419 trigger 016 records the reaction's afflictions on the target
+    (serpent.EKANELIA_RESULTS, :525-532); trigger 009 records the venom's own.
 
   tradeoff: |
-    Using BITE instead of DST means serpent only applies one venom base,
+    Using BITE instead of DSTAB means serpent only applies one venom base,
     but gains potentially 2-3 afflictions total when Ekanelia triggers.
 
 ekanelia_transformations:
@@ -637,15 +1028,19 @@ ekanelia_transformations:
     normal_effect: disloyalty
     bonus_effect: impatience
     total: "disloyalty + impatience from single bite"
-    notes: "Alternative impatience delivery without Impulse requirement"
+    notes: |
+      The MAIN impatience route, not an alternative to impulse (this page said "Alternative
+      impatience delivery without Impulse requirement"): `impulse <target> masochism monkshood`
+      brings the masochism itself, so only asthma + weariness must already be up (relayed notes,
+      PLAYER; our selectImpulsePair). A plain BITE monkshood needs masochism already present
+      (selectBiteVenom step 3, :1064-1069).
 
   curare:
     conditionals: [hypersomnia, masochism]
     normal_effect: paralysis
     bonus_effect: hypochondria
-    consumes: hypersomnia
-    total: "paralysis + hypochondria (hypersomnia consumed)"
-    notes: "Lobelia + paralysis in one attack"
+    total: "paralysis + hypochondria"
+    notes: "Lobelia + paralysis in one attack. (This page said the reaction consumes hypersomnia; neither our code nor any game data says so.)"
 
   voyria:
     conditionals: [anorexia, impatience, vertigo]
@@ -665,10 +1060,8 @@ ekanelia_transformations:
     conditionals: [addiction, nausea]
     normal_effect: scytherus
     bonus_effect: camus
-    bonus_conditionals: [haemophilia]
-    enhanced_bonus: "additional camus"
-    total: "scytherus + camus damage (enhanced with haemophilia)"
-    notes: "Heavy damage output when conditions met"
+    total: "scytherus + camus damage"
+    notes: "Heavy damage output when conditions met. (A haemophilia 'bonus conditional' this page listed is in neither our code nor any game data.)"
 ```
 
 ---
@@ -677,14 +1070,15 @@ ekanelia_transformations:
 ```yaml
 scales:
   skill: Subterfuge
-  effect: "Damage reduction"
-  syntax: "SCALES"
+  effect: "Mildly protective serpentine scales"
+  syntax: "SCALES / SCALES SHED"
+  notes: "3.00 seconds of balance (WIKI)"
 
 phase:
   skill: Subterfuge
-  effect: "Become untargetable (phased)"
-  syntax: "PHASE"
-  notes: "Cannot attack while phased"
+  effect: "Hidden from all unphased adventurers; cannot interact with items, denizens or unphased adventurers"
+  syntax: "PHASE / UNPHASE"
+  notes: "Attacking an unphased adventurer unphases you (WIKI); this said they cannot attack while phased"
 
 hiding:
   skill: Subterfuge
@@ -707,8 +1101,12 @@ notes: "Serpent is affliction-based, not limb-based"
 ```
 
 ## Bashing (PvE)
+
+The game lines quoted in this section were pasted by the user from their own client (the versions
+are in CHANGELOG.md). None of them is filed in `kb/raw` yet.
+
 ```yaml
-# ataxiaBasher_serpentBashing (002_Class_Bashing.lua:710-724)
+# ataxiaBasher_serpentBashing (basher/002_Class_Bashing.lua:3826)
 attack_command: "garrote <target>"   # the actual basher attack (NOT "BATTLERAGE BITE")
 attack_skill: Subterfuge
 sequence:
@@ -757,13 +1155,18 @@ venom_boons: |
 ```yaml
 # CRITICAL: Understanding the modern Serpent lock
 
-impulse_prevention:
-  description: "Impulse requires asthma + weariness + no sileris"
+impatience_prevention:   # this was "impulse_prevention: Impulse requires asthma + weariness + no sileris"
+  description: |
+    IMPULSE itself has no stated requirement (WIKI). What asthma + weariness enable is the
+    monkshood REACTION: `impulse <you> masochism monkshood` brings its own masochism, and with
+    asthma + weariness up the reaction adds impatience (Notes relayed 2026-10-12). Fangbarrier
+    stops the bite (HELP 13.7), and so, by our code's reading, the impulse's venom.
   defense:
-    - "Maintain sileris/fangbarrier defense"
-    - "When asthma + weariness present, BOOST ASTHMA PRIORITY"
+    - "Keep fangbarrier up: the live normal set keeps it at defence priority 25 (kb/raw/live/curing-priority-defence-list_normal_2026-10-10.txt:27). Slickness strips it (two logs) and so does a bare FLAY (HELP 13.7)"
+    - "When asthma + weariness are both up, cure asthma first (astWear: asthma -> 3 against a Serpent target)"
     - "Asthma and weariness are BOTH kelp cures - you can only cure one at a time"
-    - "Curing asthma breaks the impulse requirement"
+    - "Curing masochism in advance does NOT stop the impulse route (the impulse brings it); it only stops a plain BITE monkshood"
+    - "Hypochondria gives impatience on its own seconds later: cure it early (AntiSerpent prioaff, v4.7.419)"
 
 bloodroot_competition:
   description: "Paralysis and slickness BOTH cure with bloodroot"
@@ -771,14 +1174,15 @@ bloodroot_competition:
     - "When asthma present, you can't smoke valerian for slickness"
     - "So bloodroot must handle BOTH paralysis and slickness"
     - "PRIORITIZE PARALYSIS when asthma blocks smoking"
-    - "Paralysis blocks ALL actions including tree; slickness only blocks salves"
+    - "Paralysis blocks the tree and physical movement; slickness only blocks salves"
 
 fratricide_handling:
-  description: "Fratricide causes impulse mental affs to RELAPSE"
+  description: "Each impulse relapses shortly after it lands (game: 'a short time'; relayed: 2.25 s), and poison resistance drops"
   defense:
-    - "Cure fratricide EARLY with argentum"
-    - "If you have asthma + slickness + fratricide, you're approaching lock"
-    - "Boost fratricide priority when asthma + slickness present"
+    - "Cure with lobelia or argentum (Eat Lobelia / Eat Argentum)"
+    - "fratLock: fratricide -> 4 when asthma + slickness are up too (on by default)"
+    - "AntiSerpent: `curing prioaff fratricide` while scytherus is up and paralysis is not (v4.7.419)"
+    - "The record times the relapse from the impulse's introduction, not from a cure. Our reading (UNVERIFIED; the record gives no count): it brings an affliction back once, and an affliction cured after that should stay cured"
 
 tree_timing:
   description: "Tree is your emergency escape - don't wait until locked"
@@ -792,6 +1196,7 @@ ekanelia_defense:
   description: |
     Ekanelia STACKS bonus afflictions on BITE attacks when conditionals met.
     A single bite can deliver 2-3 afflictions - extremely dangerous.
+    (Every reaction is from our own table; see the Ekanelia section.)
 
   critical_combinations:
     kalmia_setup:
@@ -801,8 +1206,8 @@ ekanelia_defense:
 
     monkshood_setup:
       conditionals: [asthma, masochism, weariness]
-      danger: "Gets impatience without needing Impulse"
-      defense: "Cure masochism - blocks both monkshood and curare"
+      danger: "Impatience; the impulse brings the masochism, so only asthma + weariness must be up"
+      defense: "Cure asthma OR weariness. Curing masochism blocks only a plain bite (and the curare reaction)"
 
     loki_trap:
       conditionals: [confusion, recklessness]
@@ -810,94 +1215,119 @@ ekanelia_defense:
       defense: "Cure confusion OR recklessness before they bite"
 
   defense_priorities:
-    - "Cure masochism early - blocks 2 Ekanelia transformations"
+    - "Cure asthma or weariness early - they gate the monkshood impatience"
     - "Don't let clumsiness + weariness stack (enables kalmia→slickness)"
     - "Track conditional combos to predict incoming afflictions"
-    - "Ekanelia fires on BITE and IMPULSE (not DST) - impulse is the primary lock-rotation delivery"
+    - "Ekanelia fires on BITE (WIKI) and, by the relayed notes and our code, on an IMPULSE that carries a venom; not on DSTAB. In our offense the impulse is the main lock-rotation delivery"
 
 priority_cures:
-  - asthma: "HIGHEST vs Serpent - blocks impulse AND smoking"
-  - weariness: "Blocks Fitness, enables impulse (kelp - competes with asthma)"
-  - paralysis: "Blocks tree AND all actions - prioritize over slickness when can't smoke"
+  - asthma: "HIGHEST vs Serpent - a monkshood conditional, and blocks smoking"
+  - weariness: "Blocks Fitness; a monkshood conditional (kelp - competes with asthma)"
+  - paralysis: "Blocks the tree and physical movement - prioritize over slickness when can't smoke"
   - slickness: "Blocks salves - cure with bloodroot OR smoke valerian (if no asthma)"
-  - fratricide: "Cure early to prevent impulse relapse loop"
+  - hypochondria: "Gives impatience on its own seconds later (relayed: 10 s)"
+  - fratricide: "Impulses relapse shortly after landing; poison resistance down"
   - impatience: "Restore focus ability"
   - anorexia: "Restore eating ability"
   - sensitivity: "Reduce incoming damage"
 
 dangerous_abilities:
-  - doublestab: "Two venoms per attack - can apply asthma+weariness in one hit"
+  - doublestab: "Two venoms per attack (2.80 s, WIKI) - can apply asthma+weariness in one hit"
   - bite_ekanelia: "Single bite delivers 2-3 affs when conditionals met"
-  - impulse: "Delivers mental afflictions INSTANTLY when asthma+weariness present"
-  - fratricide: "Causes impulse mental affs to RELAPSE after cure"
-  - hypnosis: "Sets up fratricide via SUGGEST/SNAP"
-  - phase: "Makes them untargetable"
-  - flay: "Strips shield or rebounding (NOT sileris/fangbarrier - dstab works through those)"
-  - execute/behead: "PvP lock finisher (behead when prone); gated by V3 joint-probability >=0.90"
+  - impulse: "A trivial suggestion on 1.70 s of equilibrium; with a venom (relayed) it also bites: masochism + monkshood gives impatience when asthma + weariness are up"
+  - fratricide: "Each impulse relapses shortly after it lands (how it is given: unknown)"
+  - hypnosis: "Complex suggestions (anorexia, hypochondria, disrupt, ...) via HYPNOTISE/SUGGEST/SEAL/SNAP"
+  - phase: "Makes them untargetable; attacking you unphases them"
+  - flay: "Strips shield, rebounding, or the sileris coating (bare FLAY). DSTAB's weapon venoms probably land through a fangbarrier anyway (a DSL's did, c.iJVmpL log 863-873; not seen for DSTAB)"
+  - execute/behead: "PvP finisher. EXECUTE needs a prone target and a whip (WIKI)"
 
 avoid:
-  - "Letting asthma + weariness stack (enables impulse)"
+  - "Letting asthma + weariness stack (sets up the monkshood impatience)"
   - "Letting paralysis + slickness stack when asthma present"
   - "Waiting too long to tree (tree when APPROACHING lock)"
-  - "Ignoring fratricide (causes focus lock via relapse)"
+  - "Leaving hypochondria up (impatience follows on its own)"
+  - "Ignoring fratricide when scytherus is up (impulses relapse; poison resistance down)"
   - "Standing still when they're hidden"
   - "Low health with darkshade/scytherus active"
   - "Letting clumsiness + weariness stack (enables Ekanelia kalmia→slickness)"
-  - "Ignoring masochism (enables monkshood and curare Ekanelia bonuses)"
+  - "Ignoring masochism (the curare reaction, and a plain monkshood bite)"
 
 recommended_strategy: |
   MODERN SERPENT DEFENSE PRIORITY:
 
-  1. PREVENT IMPULSE: Cure asthma immediately when weariness present.
+  1. DENY THE MONKSHOOD IMPATIENCE: Cure asthma immediately when weariness is present.
      Both are kelp - only one cure per balance. Asthma is higher priority.
+     The impulse brings the masochism, so asthma + weariness are what you can deny.
 
-  2. FRATRICIDE EARLY: If you get fratricide + asthma + slickness,
-     boost fratricide priority. Cure it before impatience is delivered.
+  2. HYPOCHONDRIA AND FRATRICIDE EARLY: hypochondria hands over impatience on its own
+     seconds later; fratricide makes each impulse relapse shortly after it lands. Cure
+     fratricide at once when scytherus is up.
 
   3. TREE EARLY: Touch tree when you have asthma + slickness + (impatience OR anorexia).
      This is "approaching lock" - tree NOW before paralysis locks you out.
 
   4. PARALYSIS OVER SLICKNESS: When asthma blocks smoking, bloodroot must
-     cure both para and slick. Prioritize paralysis - it blocks ALL actions.
+     cure both para and slick. Prioritize paralysis.
 
-  5. MAINTAIN SILERIS: Sileris/fangbarrier blocks impulse/bite entirely (dstab still
-     lands through it). Serpent clears it via the gecko-strip path (NOT flay) - re-apply
-     quicksilver immediately when stripped.
+  5. MAINTAIN FANGBARRIER: it stops bites (HELP 13.7), and by our code's reading the
+     impulse's venom, but probably not DSTAB's weapon venoms (a DSL's landed through one in
+     a log; not seen for DSTAB). Slickness strips it (two logs) and so does a bare FLAY -
+     re-apply quicksilver at once; the shell forms about 10 s after the application
+     (CONFIRMED, Infernal logs).
 
   6. KELP STACK AWARENESS: Track your kelp stack. If kelp is depleted
      and you have asthma + weariness, you're in serious danger.
 
 anti_serpent_function: |
-  See AntiSerpent() in src_new/scripts/levi_ataxia/levi/levi_scripts/algedonic_defense_1.0/001_Anti_Priorities.lua
+  Algedonic.AntiSerpent (src_new/scripts/levi_ataxia/levi/levi_scripts/algedonic_defense_1.0/001_Anti_Priorities.lua:700-753).
+  Algedonic.Prioritize() calls it on every GMCP affliction gain and loss
+  (004_Aff_gains_losses.lua:367, :444) when OUR TARGET is a Serpent in the NDB
+  (ataxiaNDB_getClass(target), :108-109) - not when an unknown Serpent attacks us.
+  In order, first match wins:
+  1. Approaching lock (asthma + slickness + impatience or anorexia) and we can tree (not
+     paralysed, not both arms broken, tree balance) -> `touch tree` (:707-720)
+  2. impatience, no paralysis -> `curing prioaff impatience` + `cq all;touch shield` (:722-728)
+  3. hypochondria, no paralysis -> `curing prioaff hypochondria` (:741-744, v4.7.419)
+  4. fratricide + scytherus, no paralysis -> `curing prioaff fratricide` (:746-752, v4.7.419)
+  PRIOAFF writes no stored priority, so 3 and 4 are right in whichever curingset is active.
+  This page used to list eight "key triggers". Two are real: approaching lock -> tree (branch 1,
+  older than v4.7.419; the old list said "asthma + slickness + mental", the code checks
+  impatience or anorexia) and fratricide + scytherus (branch 4, a prioaff since v4.7.419). The
+  "asthma cure" item is the astWear swap below, not an AntiSerpent branch. The other five
+  (impulseLockThreat, the two "impulseEnabled" items, a quicksilver re-apply, Ekanelia
+  prevention) exist nowhere in the code.
 
-  Key triggers (priority order):
-  1. approachingLock + tree → TREE (asthma + slickness + mental)
-  2. impulseLockThreat + tree → TREE (asthma + weariness + no fangbarrier + mental)
-  3. fratricide + impulseEnabled + tree → TREE (stops relapse spiral)
-  4. fangbarrier down → Re-apply quicksilver
-  5. fratricide + scytherus → Cure fratricide NOW (1200 damage per relapse)
-  6. Ekanelia prevention (masochism, kalmia setup, loki setup)
-  7. Impulse prevention (asthma cure)
-  8. fratricide + impulseEnabled → Cure fratricide
+  Persistent swaps (Algedonic.ApplySwaps / RestoreSwaps in the same file; toggles in
+  swaps/002_Priority_Management.lua, `aconfig prios`):
+  - astWear (on): asthma -> 3 when asthma + weariness and the target is a Serpent (:190-195)
+  - astImp (on): impatience -> 1 when paralysis + asthma and the target is an Alchemist or Serpent (:141-148)
+  - paraAst (on): paralysis -> 1 when asthma + paralysis + slickness (:183-188)
+  - fratLock (on): fratricide -> 4 when fratricide + asthma + slickness (:197-202)
+  - hypoImp (on): hypochondria -> 1 and impatience -> 4 when lethargy, nausea or addiction is up too (:167-174)
+  - scyPara (OFF by default, swaps/002:37): scytherus -> 2 when paralysis is up too (:126-131)
+  Each is restored when its affliction is cured (:242-312). They write STORED priorities into
+  whichever curingset is active, and against a detected Serpent class detection switches to the
+  in-game `serpent` set, whose priority list has never been captured.
 ```
 
 ## Implementation Notes
 ```
-Triggers to watch for:
-- "jabs you with a dirk coated in" - venom application
-- "bites you viciously" - bite attack (check for Ekanelia bonus!)
-- "begins to weave" - hypnosis starting
-- "snaps" - suggestions triggering (fratricide setup)
-- "impulse" - mental affliction delivery (CRITICAL)
-- "disappears into the shadows" - they hid
-- "phases out of existence" - they phased
-- "flay" - stripping sileris/rebounding
+Lines our triggers read (patterns from the code; none captured in kb/raw as of 2026-10-12):
+- Victim side (determine_class/002_Serpent_Class_Grab): "^(\w+) quickly pricks you with \w+ dirk\.$"
+  and "^(\w+) sinks \w+ fangs into you, injecting .+ venom\.$". This page used to list
+  "jabs you with a dirk coated in" and "bites you viciously"; neither is in any trigger or capture.
+- Our offense: dstab (serpent/001), bite (009), reaction (016), impulse (017), relapse (018);
+  see "What the offense records on the target".
+- Fangbarrier on the target: up on "A supple metallic shell of quicksilver has formed around <T>."
+  (442; CONFIRMED in the Infernal logs, about 10 s after the application); our bite refused (707,
+  code only); stripped (706): our flay lines (code only) and "The protective coating covering the
+  skin of <T> sloughs off." (CONFIRMED, c.iJVmpL log, 1078).
 
 Ekanelia Detection:
-- When serpent uses BITE instead of DST, check for Ekanelia bonus
+- When serpent uses BITE instead of DSTAB, check for Ekanelia bonus
 - Track target conditionals - if clumsiness+weariness, kalmia bite = asthma+slickness
 - If masochism present, curare/monkshood bites gain bonus effects
-- Bite gives fewer base venoms than DST, but more total affs when Ekanelia procs
+- Bite gives fewer base venoms than DSTAB, but more total affs when Ekanelia procs
 
 GMCP considerations:
 - Track gmcp.Char.Afflictions for current affs
@@ -905,38 +1335,29 @@ GMCP considerations:
 - Hidden state not in GMCP, must use triggers
 - Track kelp stack count for curing decisions
 
-Priority Swap Triggers (implemented in 029_Priority_Swaps.lua):
-- paraAst: asthma + paralysis + slickness → boost paralysis to prio 1
-- astWear: asthma + weariness vs Serpent → boost asthma to prio 3
-- fratLock: fratricide + asthma + slickness → boost fratricide to prio 4
-
-AntiSerpent Function (001_Anti_Priorities.lua):
-- Tree when: canTree AND approachingLock (asthma + slickness + imp/ano)
-- Impulse prevention: boost asthma when asthma + weariness present
-- Fratricide handling: boost fratricide when asthma + slickness present
-- Para vs slick: prioritize paralysis when asthma blocks smoking
+Priority swaps: see anti_serpent_function above. They live in
+algedonic_defense_1.0/001_Anti_Priorities.lua (Algedonic.ApplySwaps / RestoreSwaps). There is no
+029_Priority_Swaps.lua, and swaps/003_Priority_Swaps.lua is an empty stub saying so.
 
 Edge cases:
 - Double venom means 2 afflictions per attack
-- Hypnosis suggestions fire with 4s delay (SNAP)
-- IMPULSE delivers instantly when asthma + weariness + no sileris
-- Phase makes them untargetable but they can't attack
+- Hypnosis: a sealed trance fires its suggestions every 4 s after the seal's delay (3 s with deadening) (WIKI)
+- IMPULSE: a trivial suggestion on 1.70 s of equilibrium; asthma + weariness matter only to the monkshood reaction
+- Phase hides them; attacking unphases them
 - Garrote is the PvE basher attack only, NOT a PvP finisher (execute/behead handle PvP)
 - Paralysis and slickness COMPETE for bloodroot cure
 - Asthma and weariness COMPETE for kelp cure
 - Ekanelia BITE can deliver 2-3 affs when conditionals met (check tAffs)
-- Ekanelia curare CONSUMES hypersomnia when triggered
-- Ekanelia loki becomes PREDICTABLE (nausea+para) with confusion+recklessness
+- Ekanelia loki becomes PREDICTABLE (nausea+para) with confusion+recklessness (our table)
 
 Venom cure groupings (same herb):
 - Kelp: asthma, clumsiness, sensitivity, weariness
-- Ginseng: addiction, darkshade, haemophilia, lethargy, scytherus
+- Ginseng: addiction, darkshade, haemophilia, lethargy, nausea, scytherus
 - Goldenseal: dissonance, dizziness, epilepsy, impatience, stupidity
-- Lobelia: agoraphobia, claustrophobia, hypochondria, loneliness, masochism, recklessness, vertigo
+- Lobelia (or argentum): agoraphobia, claustrophobia, fratricide, hypochondria, loneliness, masochism, recklessness, vertigo
 - Bloodroot: paralysis, slickness
-- Argentum: fratricide (IMPORTANT - cure early vs Serpent)
 
-DEPRECATED: impSnap swap (Serpents no longer deliver impatience via SNAP)
+DEPRECATED: impSnap swap (impatience is no suggestion; swaps/002_Priority_Management.lua:22)
 ```
 
 ## Searing Light (Mnemosyne boon, v4.7.307) -- LIGHTWALL as a room nuke
@@ -956,7 +1377,7 @@ afflicts darkshade and the wall speeds darkshade's progression for anyone standi
 | needs a direction | first PLANAR exit of the room's known exits, sorted; a refused direction (`There is already a lightwall in that direction.`, trigger `serpent/001`) is skipped next time |
 | confirmation | trigger `mnemosyne/088`: the conjure line restamps the room from the landed moment and releases the replay; the detonation line prints only with the boon and re-latches the flag |
 
-**Lines, captured 2026-09-16:**
+**Lines, pasted by the user from their client on 2026-09-16 (not yet filed in `kb/raw`):**
 
 ```
 You form a ball of light in your palm and hurl it northwards.
@@ -965,4 +1386,3 @@ A bright, fiery detonation flares outwards as the lightwall takes shape, searing
 
 **Open question, deliberately not guessed:** whether our own lightwall darkshades us when the
 sweep or the escape ladder walks through it. If so, `SNUFF LIGHTWALLS` on room clear is the fix.
-

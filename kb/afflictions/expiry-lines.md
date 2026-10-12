@@ -4,7 +4,7 @@ confidence: mixed (tagged per line)
 sources:
   - kb/afflictions/afflictions.json      # Default time + YOUR expiry line (AFFLICTION SHOW)
   - src_new/triggers/...                  # third-person lines already in triggers (CONFIRMED-in-code)
-last_verified: 2026-10-11
+last_verified: 2026-10-12
 ---
 
 # Timed afflictions: when they wear off the TARGET
@@ -30,6 +30,7 @@ only shows up when it happens to someone in front of you, so those lines come fr
 | waterbond | `^The tendrils of water that bound (\w+) splash to the ground as the power sustaining them fades\.$` | staffcast/001, other_things_fading/001 (that one removed `bonds` until v4.7.405) |
 | lightbind (a flag, not tracked) | `^The golden chains of light which bind (\w+) dissipate.$` | 290 |
 | ensorcelled | `^You sense that your ensorcelment of (\w+) has broken.$` (first person, about your own ensorcel) | misc/004 (it was ignored after the first cast until v4.7.405) |
+| disrupted (not timed by the game) | `^(\w+)'s eyes lose their focus suddenly\.` (the target's CONCENTRATE, its only cure: AFFLICTION SHOW gives "Cure(s): Concentrate" and no duration) | 788. MIND DISRUPT (`telepathy_tekura/007`) gives it with a 10 s clock that is OUR backstop for a missed concentrate, not a game duration; 788 cancels that clock (v4.7.419) |
 
 ## On the clock only (no third-person line captured yet)
 
@@ -41,6 +42,7 @@ only shows up when it happens to someone in front of you, so those lines come fr
 | hellsight | 120s | "The hellish visions that haunted you recede into the darkness from whence they came." |
 | muddled | 12s | (none given) |
 | scalded | 20s | (none given) |
+| blackout | 4s | "Your senses return to you as the blackout ends." Given by Psion LIGHTSTEAL (525) and Knight CONCUSS (`snb/008`), each only on a prone target; a repeat restarts the clock (v4.7.419; they used a raw 3.5 s timer before). A tree also cures it (it is in the tree pool). Nothing records MIND BLACKOUT yet |
 
 The first-person line is a strong hint at the third-person one, but it is not that line. **Wanted
 from combat logs:** the third-person lines for hamstring's siblings above, and for the timed

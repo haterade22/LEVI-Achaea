@@ -45,14 +45,27 @@ tdeliverance = false
 	end
   if passiveFailsafe then restorePassiveCure() end
 
-	-- V3 integration: handle branching state tracker
-	if onTargetTreeV3 then onTargetTreeV3() end
-
-	tSingleRandom()
+	-- V3 integration: one tree is ONE cure. With V3 on, ataxia_targetTreeV3 (curing/002) lets
+	-- onTargetTreeV3 charge it, branching over every tree-curable affliction (blackout included
+	-- since v4.7.416), then clears in tAffs what V3 took for certain and charges a broken limb V3
+	-- cannot see. tSingleRandom() erasing its own pick on top charged one tree twice: asthma +
+	-- slickness + blackout read 4/3 afflictions after one tree, where the truth is 2. With V3 on
+	-- it now only computes its pick (noErase); with V3 off it erases, as before.
+	if onTargetTreeV3 and affConfigV3 and affConfigV3.enabled then
+		ataxia_targetTreeV3()
+		tSingleRandom({ noErase = true })
+	else
+		if onTargetTreeV3 then onTargetTreeV3() end
+		tSingleRandom()
+	end
   	selectString(line, 1)
 	fg("green")
 	resetFormat()
 	tBals.tree = false
+	-- When this target last treed: a reader takes 13 s minus its age as the cooldown left. Trees
+	-- came 13-16 s apart (FceAmb0o:359 onwards); the 13 s re-arm is below. A target switch resets
+	-- tBals.tree (016) but not this stamp, so read it only while tBals.tree is false.
+	ataxiaTemp.targetTreeAt = getEpoch()
   if tBals.timers.tree then killTimer(tBals.timers.tree) end
 	tBals.timers.tree = tempTimer(13, [[tBals.tree = true; tBals.timers.tree = nil]])
 	targetIshere = true

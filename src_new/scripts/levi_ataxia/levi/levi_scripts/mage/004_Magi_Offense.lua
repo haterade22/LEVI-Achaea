@@ -54,7 +54,7 @@ local _sd = {
   scintillaSpark = false,
   scintillaTimer = nil,
   firestorm = false,
-  hypothermia = false,
+  hypothermia = false,  -- set by magi_offense_tracking/005; read by nothing now (P3, P7, status read V3)
   frozen = false,
   shivering = false,
   partyrelay = true,
@@ -235,10 +235,16 @@ function magi.offense.selectSpell()
     return magi.offense.selectMeteorite()
   end
 
-  --=== PRIORITY 3: GLACIATE (hypothermia + dual resonance) ===--
+  --=== PRIORITY 3: GLACIATE (frozen + hypothermia + dual resonance) ===--
+  -- Glaciate does "terrible damage upon those that are already frozen" (Elementalism.wiki:218),
+  -- so frozen is required; it was computed here and never tested. Hypothermia is read from V3,
+  -- not the st.hypothermia LATCH: our hypothermia line sets the latch
+  -- (magi_offense_tracking/005) and only a target change or `mm reset` clears it, so after the
+  -- target applied caloric (frozen) and restoration (hypothermia) P3 kept casting glaciate at a
+  -- target it does not hurt. The same V3 read lets P7 lay hypothermia again once it is cured.
   local frozen = magi.offense.getAffProb("frozen") >= 0.5
-  local hypothermia = st.hypothermia or magi.offense.getAffProb("hypothermia") >= 0.5
-  if hypothermia and freso then
+  local hypothermia = magi.offense.getAffProb("hypothermia") >= 0.5
+  if frozen and hypothermia and freso then
     return "cast glaciate at " .. target
   end
 
@@ -642,7 +648,10 @@ function magi.offense.status()
   cecho("\n <cornflower_blue>Scalded: " .. (st.scalded and "<orange_red>YES" or "<dim_grey>no"))
   cecho("\n <cornflower_blue>Calcify: " .. (st.calcifiedTorso and "<red>TORSO" or "<dim_grey>-") .. " " .. (st.calcifiedSkull and "<red>SKULL" or "<dim_grey>-"))
   cecho("\n <cornflower_blue>Shalestorm: " .. (st.shalestorm and "<green>ACTIVE" or "<dim_grey>no"))
-  local dispHypo = st.hypothermia or magi.offense.getAffProb("hypothermia") >= 0.5
+  -- Hypothermia as P3 and P7 read it, from V3. The st.hypothermia latch outlives a cure (only a
+  -- target change or `mm reset` clears it), so showing it printed "Hypothermia: YES" beside a P7
+  -- that was casting hypothermia again.
+  local dispHypo = magi.offense.getAffProb("hypothermia") >= 0.5
   local dispFrozen = magi.offense.getAffProb("frozen") >= 0.5
   cecho("\n <cornflower_blue>Hypothermia: " .. (dispHypo and "<dodger_blue>YES" or "<dim_grey>no"))
   cecho("\n <cornflower_blue>Frozen: " .. (dispFrozen and "<dodger_blue>YES" or "<dim_grey>no"))

@@ -41,7 +41,9 @@ if isTargeted(matches[2]) then
     erAff("slickness")
 
     -- ==== CRUSHEDTHROAT TRACKING ====
-    local now = os.clock()
+    -- getEpoch(), not os.clock(): Lua 5.1 defines os.clock as CPU time, which matches wall
+    -- time only under Windows' C runtime (v4.7.419).
+    local now = getEpoch()
     if ataxiaTemp.crushedCheck.pending then
         if now - ataxiaTemp.crushedCheck.lastApply < 1.2 then
             -- confirmed mending, cure crushedthroat

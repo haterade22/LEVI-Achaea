@@ -26,8 +26,11 @@ if gmcp.Char.Status.class == "Monk" then
     tekura6.config.kaiMode = "cripple"
     tekura6.dispatch.run()
   else
-    shikudo.setMode("godmode")
-    shikudo.dispatch()
+    -- v4.7.419: this called shikudo.setMode("godmode"), which only the switched-off 008 defines, so
+    -- every press on a Shikudo threw -- and 006's dispatch has no mode routing, so GodMode (009, now
+    -- retired) was never reachable anyway. vv runs the Telepathy variant of the dispatch offense once
+    -- shikudo.dispatchMind exists (011), and until then the plain dispatch offense, as zz does.
+    if shikudo.dispatchMind then shikudo.dispatchMind() else shikudo.dispatch() end
   end
 end
 

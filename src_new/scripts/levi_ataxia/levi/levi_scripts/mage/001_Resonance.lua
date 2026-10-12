@@ -29,50 +29,29 @@ magi.resonance = magi.resonance or {
     ["air"] = 0,
     ["fire"] = 0
 }
+-- Resonance per plane, 0-3, from the charstats the game sends with every prompt: an entry
+-- naming r<plane> ("rair", "rfire", "rearth", "rwater"), with the level after its colon.
+--
+-- THE KEY FORMAT IS UNCONFIRMED: no charstats capture with resonance up exists in kb/ or the
+-- tests. Every other charstats key we read is capitalised ("Stance: ...", "Kai: N%"), and this
+-- match was case-sensitive, so a key sent as "Rair" left every plane at 0. It is matched on the
+-- lowercased entry now. Every plane is also zeroed first: a plane whose entry is absent used to
+-- keep its last level for good, and now reads 0 (harmless if the game always sends all four).
+-- Capture one gmcp.Char.Vitals.charstats with resonance up into kb/raw/live to settle both.
+local RESONANCE_PLANES = { "air", "fire", "earth", "water" }
+local RESONANCE_LEVELS = { minor = 1, moderate = 2, major = 3 }
+
 function get_resonance()
-  for k, v in pairs(gmcp.Char.Vitals.charstats) do
-    if string.match(v, "rair") then
-      if v:split(":")[2]:trim():lower() == "major" then
-        magi.resonance.air = 3
-      elseif v:split(":")[2]:trim():lower() == "moderate" then
-        magi.resonance.air = 2
-      elseif v:split(":")[2]:trim():lower() == "minor" then
-        magi.resonance.air = 1
-      else
-        magi.resonance.air = 0
-      end
-    end
-    if string.match(v, "rfire") then
-      if v:split(":")[2]:trim():lower() == "major" then
-        magi.resonance.fire = 3
-      elseif v:split(":")[2]:trim():lower() == "moderate" then
-        magi.resonance.fire = 2
-      elseif v:split(":")[2]:trim():lower() == "minor" then
-        magi.resonance.fire = 1
-      else
-        magi.resonance.fire = 0
-      end
-    end
-    if string.match(v, "rearth") then
-      if v:split(":")[2]:trim():lower() == "major" then
-        magi.resonance.earth = 3
-      elseif v:split(":")[2]:trim():lower() == "moderate" then
-        magi.resonance.earth = 2
-      elseif v:split(":")[2]:trim():lower() == "minor" then
-        magi.resonance.earth = 1
-      else
-        magi.resonance.earth = 0
-      end
-    end
-    if string.match(v, "rwater") then
-      if v:split(":")[2]:trim():lower() == "major" then
-        magi.resonance.water = 3
-      elseif v:split(":")[2]:trim():lower() == "moderate" then
-        magi.resonance.water = 2
-      elseif v:split(":")[2]:trim():lower() == "minor" then
-        magi.resonance.water = 1
-      else
-        magi.resonance.water = 0
+  local r = magi.resonance
+  for _, plane in ipairs(RESONANCE_PLANES) do r[plane] = 0 end
+  local stats = gmcp and gmcp.Char and gmcp.Char.Vitals and gmcp.Char.Vitals.charstats
+  if type(stats) ~= "table" then return end
+  for _, v in pairs(stats) do
+    local entry = tostring(v):lower()
+    for _, plane in ipairs(RESONANCE_PLANES) do
+      if entry:find("r" .. plane, 1, true) then
+        local level = (entry:match("^[^:]*:([^:]*)") or ""):trim()
+        r[plane] = RESONANCE_LEVELS[level] or 0
       end
     end
   end

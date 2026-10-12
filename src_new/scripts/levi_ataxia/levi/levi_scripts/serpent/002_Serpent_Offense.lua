@@ -66,17 +66,17 @@ serpent.config = serpent.config or {}
 serpent.hypnosis = serpent.hypnosis or {}
 serpent.state = serpent.state or {}
 
--- Per-aff impulse timestamps for fratricide 3s relapse window.
+-- Per-aff impulse timestamps for fratricide's 2.25 s relapse window (FRATRICIDE_RELAPSE below).
 -- Every impulse call goes through recordImpulse() and selectImpulse() respects the window.
 lastImpulsed = lastImpulsed or {}
 
--- Timestamp (os.clock) of when the target's rebounding was last observed to drop.
+-- Timestamp (now(), getEpoch) of when the target's rebounding was last observed to drop.
 -- Rebounding reapplies ~8.5s after being stripped; we pre-empt that reapply with an
 -- impulse instead of eating a reflected hit. 0 = disarmed. Reset on target change.
 lastReboundingFlay = lastReboundingFlay or 0
 
 -- Impatience delivery cooldown (2.5s).
--- Stamped by the ekanelia confirm trigger, NOT on send.
+-- Stamped by the ekanelia confirm trigger (serpent/016_Ekanelia_Success), NOT on send.
 lastImpatienceAttempt = lastImpatienceAttempt or 0
 
 -- Combat state
@@ -271,7 +271,13 @@ function serpent.hypnosis.onSnapped()
 
     if serpent.hypnosis.fratricideApplied then
         serpent.hypnosis.fratricideActive = true
-        tAffs.fratricide = true
+        -- Through the tracker, not `tAffs.fratricide = true`: haveAff() reads V3 only
+        -- (017_Affliction_Management.lua, haveAff), so a bare tAffs write left
+        -- haveAff("fratricide") false, and the target's lobelia eat (onHerbCureV3) could never
+        -- take it off (it takes fratricide only when nothing else lobelia cures is there, which
+        -- keeps masochism's cure for the monkshood pair: herbCureLastV3, 007). Same scope as
+        -- before: tarAffed records on the current target.
+        tarAffed("fratricide")
         Algedonic.Echo("<red>HYPNOSIS: <white>SNAP! Fratricide ACTIVE - Impulse affs will relapse!")
     else
         Algedonic.Echo("<yellow>HYPNOSIS: <white>SNAP triggered!")
@@ -297,7 +303,9 @@ end
 
 function serpent.hypnosis.onFratricideCured()
     serpent.hypnosis.fratricideActive = false
-    tAffs.fratricide = false
+    -- The tracker's removal (it also clears tAffs). The cure trigger below calls only this, so
+    -- the cure is reported once.
+    erAff("fratricide")
     Algedonic.Echo("<dim_grey>HYPNOSIS: <white>Target cured fratricide")
 end
 
@@ -501,6 +509,44 @@ local EKANELIA_TABLE = {
 }
 
 --[[
+    What each reaction GIVES, as the tracker's affliction names, keyed by the reaction's venom.
+    The success line ("You sense the weakness in X as your <venom> takes hold.",
+    triggers/.../serpent/016_Ekanelia_Success.lua) records these with tarAffed. Before it did,
+    our own monkshood impatience reached the tracker only if the target printed the boredom line
+    (414_Impatience_1), so PRIORITY 4, PRIORITY 7 and selectBiteVenom kept re-sending monkshood
+    after it had worked.
+    - Only the reaction's own result. The venom's own affliction comes from the bite line
+      (009_Bite.lua, venom_to_aff), so listing it here would record it twice.
+    - EKANELIA_TABLE.result is a display string ("nausea + paralysis"), so it is not parsed.
+    - No scytherus: its reaction is camus DAMAGE, not an affliction.
+    - Copied from EKANELIA_TABLE, which is our own: no reaction list is captured in kb/ (the game
+      lists them with EKANELIA / EKANELIA STUDY <reaction>, kb/raw/wiki/Venom.wiki:383-391).
+]]--
+serpent.EKANELIA_RESULTS = {
+    monkshood = {"impatience"},
+    kalmia    = {"slickness"},
+    loki      = {"nausea", "paralysis"},
+    curare    = {"hypochondria"},
+    aconite   = {"paranoia"},
+    voyria    = {"confusion", "disrupted"},
+}
+
+-- True when `suggestion` is a conditional of `venom`'s reaction that the target lacks, i.e. the
+-- impulse's suggestion is what lets the reaction fire (selectImpulsePair's one-missing case,
+-- the lock_reinforce voyria/vertigo pair). The keybind override must not replace such a one.
+local function reactionNeeds(venom, suggestion)
+    for _, ek in ipairs(EKANELIA_TABLE) do
+        if ek.trigger == venom then
+            for _, cond in ipairs(ek.conditionals) do
+                if cond == suggestion then return not haveAff(suggestion) end
+            end
+            return false
+        end
+    end
+    return false
+end
+
+--[[
     Check for Ekanelia opportunities.
     Populates ekaneliaReady table with triggers that have ALL conditionals met.
 ]]--
@@ -525,13 +571,26 @@ end
 -- IMPULSE SELECTION (Nil-safe, two-pass with fratricide window)
 -- =============================================================================
 
+-- Wall-clock seconds, like every other timer in this file (getEpoch: snapReadyTime, the darkshade
+-- clock, pinshotSentAt). This was os.clock(), which Lua 5.1 defines as CPU time: it equals wall time
+-- only under Windows' C runtime, so on Linux and macOS the 2.5 s impatience cooldown (live since
+-- serpent/016 stamps it), the fratricide window and the 8.15 s rebounding pre-empt ran in CPU
+-- seconds, which pass many times slower than real ones while the client waits on the game.
 local function now()
-    return os.clock()
+    return getEpoch()
 end
+
+-- Seconds after an impulse during which fratricide will relapse it by itself, so impulsing the
+-- same affliction again inside the window is wasted. 2.25 s is the relayed Serpent notes'
+-- figure ("causes impulses (mentals only) to relapse at 2.25s",
+-- kb/raw/players/serpent-2026-10-12.txt); the game's own record gives no number ("a short time
+-- after being first introduced", kb/raw/live/affliction_show/fratricide.txt:7). Was 3.0, from
+-- no stated source. Measured from our SEND (recordImpulse), as before.
+local FRATRICIDE_RELAPSE = 2.25
 
 --[[
     Two-pass impulse selection:
-      Pass 1: respect fratricide 3s cooldown per aff
+      Pass 1: respect fratricide's 2.25 s relapse window per aff (FRATRICIDE_RELAPSE)
       Pass 2: fallback ignoring cooldown (never returns nil)
     Optional excludeAff param for cases like curare ekanelia
     (don't re-impulse masochism when it's already the conditional).
@@ -545,7 +604,7 @@ local function selectImpulse(excludeAff)
         if aff ~= excludeAff and not haveAff(aff) then
             if hasFratricide then
                 local lastTime = lastImpulsed[aff] or 0
-                if (now() - lastTime) >= 3.0 then
+                if (now() - lastTime) >= FRATRICIDE_RELAPSE then
                     return aff
                 end
             else
@@ -574,8 +633,10 @@ end
 
 -- =============================================================================
 -- IMPATIENCE COOLDOWN
--- canAttemptImpatience() gates the send.
--- stampImpatienceCooldown() is called ONLY from the ekanelia confirm trigger.
+-- canAttemptImpatience() gates the send (the shield-break branch and PRIORITY 4).
+-- stampImpatienceCooldown() is called ONLY from the ekanelia confirm trigger
+-- (serpent/016_Ekanelia_Success, on a monkshood reaction). Until that trigger called it,
+-- nothing did, and the 2.5 s guard never closed.
 -- =============================================================================
 
 local function canAttemptImpatience()
@@ -931,7 +992,9 @@ function selectRelapseImpulse()
     -- Priority 1: Monkshood re-lock — if softlock present, deliver impatience NOW
     -- Anorexia blocks eating -> target can't goldenseal -> impatience sticks
     -- Don't waste the softlock window on stupidity when herbs are already blocked
-    if haveAff("slickness") and haveAff("anorexia") then
+    -- Not while impatience is still up: selectImpulsePair does not check the reaction's result,
+    -- so this was the one P7 path that re-sent monkshood onto impatience.
+    if haveAff("slickness") and haveAff("anorexia") and not haveAff("impatience") then
         local monkshoodPair = selectImpulsePair()
         if monkshoodPair and monkshoodPair.label == "impatience" then
             return monkshoodPair
@@ -998,8 +1061,10 @@ function selectBiteVenom()
         return {venom = "scytherus", label = "deliver scytherus + camus"}
     end
 
-    -- 3. Monkshood ekanelia ready → free impatience via bite (no EQ cost)
-    if haveAff("asthma") and haveAff("masochism") and haveAff("weariness") then
+    -- 3. Monkshood ekanelia ready → free impatience via bite (no EQ cost). Not onto impatience
+    -- that is already up: the reaction's only product would be wasted.
+    if haveAff("asthma") and haveAff("masochism") and haveAff("weariness")
+       and not haveAff("impatience") then
         return {venom = "monkshood", label = "impatience (ekanelia)"}
     end
 
@@ -1677,7 +1742,8 @@ function serp_ekanelia_attack()
         local impulsePriority = nil  -- {sug, venom, label}
         if kalmiaEkaneliaMet() then
             impulsePriority = {sug = selectImpulse(nil), venom = "kalmia", label = "asthma+slickness"}
-        elseif hasShield and impatienceConditionsMet() and canAttemptImpatience() then
+        elseif hasShield and impatienceConditionsMet() and canAttemptImpatience()
+            and checkImpulseEligible() then
             -- Shield-break: monkshood ekanelia for impatience (forces shield touch-fail)
             local sug = haveAff("masochism") and selectImpulse("masochism") or "masochism"
             impulsePriority = {sug = sug, venom = "monkshood", label = "impatience (shield-break)"}
@@ -1764,13 +1830,17 @@ function serp_ekanelia_attack()
     -- PRIORITY 4: Impatience delivery — canAttemptImpatience() gates send.
     -- stampImpatienceCooldown() called from ekanelia confirm trigger, not here.
     -- canUseSecondary overridden by impatienceConditionsMet().
+    -- checkImpulseEligible(): sileris/fangbarrier stops the monkshood bite, as for every other
+    -- impulse. Without it this branch sent a blocked impulse every round and returned before
+    -- the gecko strip further down could ever clear the barrier.
     -- --------------------------------------------------------
     -- During relapse_lock, use the relaxed condition check (asthma+weariness sufficient).
     -- Normal lock mode keeps the third-condition gate (fratricide/hypochondria/scytherus/slickness).
     local impatienceReady = (serpStrategy == "relapse_lock")
         and impatienceConditionsRelapse()
         or impatienceConditionsMet()
-    if impatienceReady and canAttemptImpatience() and canUseSecondary and not eqAction then
+    if impatienceReady and canAttemptImpatience() and canUseSecondary and not eqAction
+       and checkImpulseEligible() then
         local impulseAff
         if haveAff("masochism") then
             impulseAff = selectImpulse("masochism")
@@ -1785,8 +1855,9 @@ function serp_ekanelia_attack()
 
     -- --------------------------------------------------------
     -- PRIORITY 5: Focus lock push (fratricide + 4 mentals + focus bal down)
+    -- Gated on checkImpulseEligible() like PRIORITY 4: the impulse rides a monkshood bite.
     -- --------------------------------------------------------
-    if focusLockReady() and canUseSecondary and not eqAction then
+    if focusLockReady() and canUseSecondary and not eqAction and checkImpulseEligible() then
         local impulseAff = selectImpulse(nil)
         recordImpulse(impulseAff)
         serp_sendAttack(preAtk .. wieldDirk ..
@@ -1963,8 +2034,12 @@ function serp_ekanelia_attack()
         end
     end
 
-    -- Keybind-requested suggestion override
-    if useImpulse and hSuggActive ~= "" and impulsePair then
+    -- Keybind-requested suggestion override. Never over a suggestion the reaction needs: for the
+    -- monkshood impatience pair that suggestion is the masochism, and replacing it means the
+    -- reaction cannot fire. (Nothing in the package sets hSuggRequest, so this only applies after
+    -- a manual `lua hSuggRequest = ...`.)
+    if useImpulse and hSuggActive ~= "" and impulsePair
+       and not reactionNeeds(impulsePair.venom, impulsePair.suggestion) then
         recordImpulse(hSuggActive)
         cmd = wieldDirk .. "impulse " .. target .. " " .. hSuggActive .. " " .. impulsePair.venom
     end
@@ -2695,7 +2770,7 @@ if tempRegexTrigger then
     serpent.triggers.fratricideCured = tempRegexTrigger(
         "The look of madness fades from (\\w+)'s eyes",
         [[
-            if erAffWrapper then erAffWrapper("fratricide") elseif erAff then erAff("fratricide") end
+            -- onFratricideCured does the erAff; a second one here would report the cure twice.
             if serpent and serpent.hypnosis and serpent.hypnosis.onFratricideCured then
                 serpent.hypnosis.onFratricideCured()
             end

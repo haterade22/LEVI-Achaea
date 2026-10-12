@@ -163,7 +163,13 @@
 
 **Expected**:
 - Paralysis removed (tree always cures paralysis)
-- One other aff removed based on tSingleRandom
+- With V3 on (since v4.7.419), the tree is ONE charge: trigger 389 calls `ataxia_targetTreeV3()`
+  (`curing/002_Wide_Groups.lua`), which lets `onTargetTreeV3` branch over the tree pool, clears from
+  tAffs (through `ataxia_tarAffFaded`) every pool affliction that was present before the tree and is
+  below 0.01 after it. When nothing branch-tracked in the pool was present and V3 accepted the tree
+  (not an illusion), it also takes ONE level-1 broken limb, the first present (left leg, right leg,
+  left arm, right arm). `tSingleRandom({ noErase = true })` then erases nothing.
+  With V3 off, `tSingleRandom()` still erases one affliction, as before
 - V2 should sync with whatever old system does
 
 ## Regression Tests

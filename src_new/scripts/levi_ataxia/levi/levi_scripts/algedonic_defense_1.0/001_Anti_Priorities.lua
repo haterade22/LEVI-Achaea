@@ -726,6 +726,30 @@ function Algedonic.AntiSerpent()
         Algedonic.Echo("<red>TOUCH SHIELD - IMPATIENCE!<white>")
         return
     end
+
+    -- Both branches below are CURING PRIOAFF: temporary, no stored priority is written, so they
+    -- are right in whichever curingset class detection has switched to (against a Serpent, the
+    -- in-game `serpent` set, whose priorities were never captured). Like every prioaff here they
+    -- yield to paralysis. They need no throttle of their own: Prioritize() runs on affliction
+    -- gain and loss (004_Aff_gains_losses: gotAff/lostAff), not on every prompt, the same as the
+    -- branches above. The paralysis cure is itself a loss, so the prioaff follows it at once.
+
+    -- HYPOCHONDRIA gives impatience on its own some seconds later: 10 s per the relayed notes
+    -- (kb/raw/players/serpent-2026-10-12.txt); one log shows lethargy, then impatience, with no
+    -- attacker line (kb/raw/logs/2026-10-11_mystor_shikudo-vs-depthswalker_loss_EveP2TVe.txt:774-946).
+    -- The branch AntiDepthswalker has.
+    if ataxia.afflictions.hypochondria and not hasParalysis then
+        send("curing prioaff hypochondria")
+        return
+    end
+
+    -- FRATRICIDE with SCYTHERUS: cure fratricide at once (CLAUDE.md, "Defense Priority vs
+    -- Serpent"). Its stored priority is 25, so SSC otherwise leaves it to last; it gives "major
+    -- negative poison resist" (kb/raw/live/affliction_show/fratricide.txt:7) while scytherus makes
+    -- every venom relapse. Lobelia or argentum, as hypochondria above.
+    if ataxia.afflictions.fratricide and ataxia.afflictions.scytherus and not hasParalysis then
+        send("curing prioaff fratricide")
+    end
 end
 
 
