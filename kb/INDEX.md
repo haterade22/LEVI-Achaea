@@ -28,6 +28,7 @@ One line per page. Kept up to date by `/kb-ingest`.
 ## Combat (classes as they look in real fights)
 - [combat/shikudo.md](combat/shikudo.md): every Shikudo strike, damage and effect line from both sides (first vs later in a combo), light strikes, forms, kata, Telepathy, ASSESS, SHATTER, the Dispatch kill as done, and what our triggers record
 - [combat/runewarden-snb.md](combat/runewarden-snb.md): a sword-and-board Runewarden's round (slice, venom, shield strikes), her curing and runes, and the impale-disembowel kill
+- [combat/fights/](combat/fights/README.md): one write-up per combat log -- Mystor's six arena fights as a Shikudo against a Depthswalker, an Infernal (three), an Apostate and a Shaman, with the opponents' own typed commands (MIND SAPIENCE), their curing, every distinct game line, and lessons for our package.
 
 ## Meta
 - [README.md](README.md): how the KB works and how to add material

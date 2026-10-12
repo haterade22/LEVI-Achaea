@@ -338,8 +338,8 @@ session scratchpad, `timings2.py`):
     Mystor`.
   - He cured with `eat kelp`, `touch tree` and `sip health`.
 
-The per-fight write-ups (in progress) will settle the rest: each opponent's kill route and curing
-order, every third-person cure line, and which of these lines our triggers miss.
+Full write-up of each fight (timeline, the opponent's rotation and curing order, every distinct game
+line, lessons): [fights/](fights/README.md).
 
 ## What our triggers record (CONFIRMED-in-code, test_shikudo_tracking.lua)
 
