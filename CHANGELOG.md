@@ -2,6 +2,16 @@
 
 ---
 
+## 2026-10-11 - Kill paths: four classes from Mystor's logs (docs only, no version bump)
+
+- `docs/kill-paths.md` gains the four classes from Mystor's six arena fights, with their tells:
+  - **Shaman: CONFIRMED kill.** A truelock (weariness first, which blocks FITNESS), then BEHEAD with a scimitar on a victim who was NOT prone. A probable TZANTZA at four afflictions did not kill.
+  - **Depthswalker: CONFIRMED kill.** SHADOW DICTATE, after the depression and leach capstones and a packet that wields the dagger and sends INTONE TOOROS. Recklessness made the prompt read full health and mana while the kill was live.
+  - **Infernal (two scimitars):** VIVISECT, attempted five times and never landed.
+  - **Apostate:** DEADEYES paralysis pressure, with no kill.
+
+---
+
 ## 2026-10-11 - v4.7.415: nervestrike's paralysis, the target's CONCENTRATE and every pipe are recorded (Mystor's logs)
 
 Found by reading Mystor's six arena logs line by line (`kb/combat/fights/`).
