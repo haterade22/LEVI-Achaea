@@ -82,7 +82,7 @@ are the **first** attack of a combo and when they **follow** another one.
 |---|---|---|---|---|---|
 | kuro | Dropping into a lower stance, you sweep <staff> at the left thigh of <T>. | Falling back into a low crouch, you lash out with a swift strike at the left thigh of <T>. | The staff cracks across the left thigh of <T>. | weariness; lethargy if already weary | 8.4% leg |
 | ruku | You whip <staff> at <T> in a controlled arc, bringing its length to crack against her torso. | You spin a full rotation, bringing <staff> around in a blur of motion to smash into the torso of <T>. (or "the right arm of <T>") | torso: <T> staggers as the staff cracks across her ribs, sweat breaking out upon her forehead. arm: The staff connects to the right arm with a resounding crack, the limb flopping uselessly. | torso: slickness. arm: clumsiness; healthleech if already clumsy | 8.4% |
-| nervestrike | You whip <staff> at the side of <T>'s neck. | (not seen) | none on the attacker's side | paralysis | 12.3% head |
+| nervestrike | You whip <staff> at the side of <T>'s neck. | (not seen) | "Horror overcomes the face of <T> as his body locks in paralysis." (Mystor's logs; recorded since v4.7.415) | paralysis | 12.3% head |
 | livestrike | Lunging forward, you drive the end of <staff> viciously into the solar plexus of <T>. | Turning with the motion, you channel the momentum of your previous strike into a thrust at the solar plexus of <T> with <staff>. | The breath of <T> leaves her in an explosive gasp as the end of the staff smashes home. | asthma | 12.3% torso |
 | hiru | Whirling <staff> in a tight arc, you bring the weapon around to crash into the side of the head of <T>. (ASSUMED: our trigger 575) | Snapping back into a ready stance, you whirl <staff> in a long sweep at the head of <T>. | The staff connects to the side of <T>'s head with a resounding crack. | dizziness; confusion too if prone (WIKI) | 8.6% head |
 | hiraku | Stepping forward, you drive <staff> at the face of <T>. (ASSUMED: our trigger 178) | Bracing your back foot, you lunge forward with <staff> at the face of <T>. | The staff smashes into the face of <T> with a sickening crunch. | anorexia, stuttering; a stun too if prone (WIKI) | 8.6% head |
@@ -304,8 +304,8 @@ session scratchpad, `timings2.py`):
 
 **New lines (not in this page before):**
 - **Nervestrike does have a line naming the target:** "Horror overcomes the face of <T> as his body
-  locks in paralysis." (48 times, each right after his nervestrike). This page said it had none, and no
-  trigger of ours records it.
+  locks in paralysis." (48 times, each right after his nervestrike, light ones included). This page
+  said it had none. Since v4.7.415 `3rd_person_shikudo/008` records paralysis from it.
 - **KAI CHOKE:** "<T> gasps and stumbles as an unseen force crushes the life breath out of him." It
   was his finisher in two fights; in vNTjvghY the kill line followed: "<T> collapses to the ground, his
   life snuffed out like a candle."
@@ -381,8 +381,12 @@ until the next prompt (`misc_scripts/001_Queue_Scanning.lua`, `318_Prompt_Trigge
   (`ataxia.vitals.kata = 0`, echo "-= reset kata =-") on "A kata of at least N must be performed",
   and `basher/002_Class_Bashing.lua` (2361, 2620) relies on it; log 1 shows the game KEEPS the chain
   (phase 2).
-- **Still not recorded:** light or absorbed **nervestrike** (paralysis) and **ruku to the arm**
-  (clumsiness, healthleech), which have no target-named effect line; **dawnkick**'s epilepsy
+- **Nervestrike's own effect line** (`3rd_person_shikudo/008`, v4.7.415) records paralysis, so a light
+  or absorbed nervestrike is recorded too; with a damage line, 563 records it and sets the dedupe flag.
+- **The target's CONCENTRATE** ("<T>'s eyes lose their focus suddenly.", trigger 788, v4.7.415) clears
+  `disrupted`, which `telepathy_tekura/007` used to keep for a flat 10 s.
+- **Still not recorded:** light or absorbed **ruku to the arm** (clumsiness, healthleech), which has no
+  target-named effect line; **dawnkick**'s epilepsy
   (line not captured); and target **stuns** (no duration is known). The fix is to hold a strike
   as pending until the next strike or the prompt and drop it on a parry, fumble or dodge line
   (planned with the offense rework, `docs/plans/shikudo-offense-review-2026-10-11.md`).

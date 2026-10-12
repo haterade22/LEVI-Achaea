@@ -298,6 +298,18 @@ describe("effect lines record what landed", function()
     expect(has(effect("3rd_person_shikudo/001_Livestrike_(asthma).lua", ln, T).affs, "asthma")).toBeTrue()
   end)
 
+  it("nervestrike's effect line (3rd Person Shikudo/008) gives paralysis, light ones too (v4.7.415)", function()
+    -- Mystor's logs (2026-10-11): after every nervestrike, light ones included, 46 of 46
+    local f = "3rd_person_shikudo/008_Nervestrike_(paralysis).lua"
+    local ln = "Horror overcomes the face of " .. T .. " as his body locks in paralysis."
+    expect(TL.anyMatches(pats(f), ln)).toBeTrue()
+    expect(TL.anyMatches(pats(f), "Horror overcomes the face of " .. T .. " as her body locks in paralysis.")).toBeTrue()
+    expect(has(effect(f, ln, T).affs, "paralysis")).toBeTrue()
+    expect(#effect(f, ln, "Claes").affs).toBe(0)
+    -- the Magi line is a different one and stays with 420
+    expect(TL.anyMatches(pats(f), "Horror overcomes " .. T .. "'s face as his body stiffens into paralysis.")).toBeFalse()
+  end)
+
   it("Mind Confuse and Mind Stupidity are recorded (their helper was in a switched-off script)", function()
     local c = "You direct a powerful pulse of telepathic energy into " .. T .. ", throwing her mind into chaos and confusion."
     expect(TL.anyMatches(pats("telepathy_tekura/002_Confusion.lua"), c)).toBeTrue()
@@ -319,6 +331,17 @@ describe("one hit is recorded once (ignoreThirdPerson)", function()
     expect(rawget(r.env, "ignoreThirdPerson")).toBe(true)
     local fx = kuroEffect(true, { weariness = true })
     expect(#fx.affs).toBe(0)                                -- no second step to lethargy
+    expect(rawget(fx.env, "ignoreThirdPerson")).toBeNil()
+  end)
+
+  it("a nervestrike its strike trigger recorded is not recorded again by its effect line (v4.7.415)", function()
+    local r = strike("563_Nervestrike_(paralysis).lua", "head")
+    expect(has(r.affs, "paralysis")).toBeTrue()
+    expect(rawget(r.env, "ignoreThirdPerson")).toBe(true)
+    local ln = "Horror overcomes the face of " .. T .. " as his body locks in paralysis."
+    local fx = run("3rd_person_shikudo/008_Nervestrike_(paralysis).lua",
+      { matches = { ln, T }, line = ln, ignoreThirdPerson = true })
+    expect(#fx.affs).toBe(0)
     expect(rawget(fx.env, "ignoreThirdPerson")).toBeNil()
   end)
 
@@ -374,6 +397,31 @@ describe("lines that had no trigger", function()
     expect(found).toBeTrue()
     local r = run("allies_enemies/011_Mind_Lock_Gone.lua", { matches = { ln, T } })
     expect(rawget(r.env, "mindlocked")).toBe(false)
+  end)
+
+  it("the target's CONCENTRATE line clears disrupted (788, v4.7.415)", function()
+    -- Mystor's logs: "--> Agathon: concentrate" then this line, 11 times
+    local ln = T .. "'s eyes lose their focus suddenly."
+    expect(TL.anyMatches(pats("788_Target_Concentrated.lua"), ln)).toBeTrue()
+    local r = run("788_Target_Concentrated.lua", { matches = { ln, T }, line = ln })
+    expect(has(r.cured, "disrupted")).toBeTrue()
+    expect(#r.cured).toBe(1)
+    expect(#run("788_Target_Concentrated.lua", { matches = { ln, "Claes" }, line = ln }).cured).toBe(0)
+  end)
+
+  it("the pipe triggers match every pipe name and the gurgling wording (v4.7.415)", function()
+    local smokes = {
+      T .. " takes a long drag off an enamel bubble pipe.",
+      T .. " takes a long drag off his pipe.",
+      "A great gurgling sound is heard as " .. T .. " takes a long drag from an enamel bubble pipe.",
+    }
+    for _, f in ipairs({ "215_Rebounding_Smoked.lua", "278_Lost_Asthma.lua", "curing_bals/009_Ataxia_Rebounding.lua" }) do
+      for _, ln in ipairs(smokes) do
+        if not TL.anyMatches(pats(f), ln) then error(f .. " misses: " .. ln) end
+      end
+    end
+    local r = run("278_Lost_Asthma.lua", { matches = { smokes[1], T }, line = smokes[1] })
+    expect(has(r.cured, "asthma")).toBeTrue()
   end)
 
   it("Kai Surge: its start fits the wrap, it records prone once, and writes no tAffs", function()

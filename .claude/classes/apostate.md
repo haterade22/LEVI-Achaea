@@ -39,7 +39,7 @@ passive_cure:
 baalzadeen:
   description: "Primary demon companion, always with Apostate"
   abilities:
-    syphon: "Passive cure every 10 seconds"
+    syphon: "Passive cure every 12 seconds (exactly 12 in Mystor's log, 2026-10-11; passive_syphon = 12.0)"
     restore: "Heal Apostate's health and mana (uses balance)"
     apathy: "Apostate takes no damage, then 60% of total when ends"
     trace: "Track target's movements (useful vs serpents)"

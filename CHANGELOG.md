@@ -2,6 +2,28 @@
 
 ---
 
+## 2026-10-11 - v4.7.415: nervestrike's paralysis, the target's CONCENTRATE and every pipe are recorded (Mystor's logs)
+
+Found by reading Mystor's six arena logs line by line (`kb/combat/fights/`).
+- **Nervestrike's own effect line is recorded** (`3rd_person_shikudo/008`): "Horror overcomes the face of
+  <T> as his body locks in paralysis." printed after every nervestrike, light ones included (46 of 46).
+  Strike trigger 563 records paralysis only when a damage line prints, so light and absorbed
+  nervestrikes were never recorded; 563 sets the dedupe flag, so a normal hit still counts once.
+- **The target's CONCENTRATE clears disrupted** (trigger 788): "<T>'s eyes lose their focus suddenly."
+  follows his `concentrate`. An Infernal concentrated MIND DISRUPT away within a second 8 times out of 9,
+  while `telepathy_tekura/007` kept `disrupted` on him for a flat 10 s.
+- **Every pipe is seen** (`215`, `278`, `curing_bals/009`): they matched only a one-word pipe ("off his
+  pipe"), so 51 of 56 smokes in the logs ("off an enamel bubble pipe", and "A great gurgling sound is
+  heard as <T> takes a long drag ...") never armed the rebounding-coming-back timer.
+- Docs: `kb/CONFLICTS.md` gains 11 open items from the logs (moss balance, the server's cure order,
+  DEADEYES tokens, and eight trigger or tracker faults left for follow-up: the legs line, venom breaks,
+  PvP parry, the shield clear on rebounding down, fangbarrier timing, the tree pool, mana sips counted
+  as health, two patterns that cannot match) and five resolved ones; the Apostate, Shaman and Infernal
+  dossiers are corrected (Syphon 12 s, Coagulation at bleed 120, FITNESS typed, venom breaks left first).
+- Tests: 4 new in `test_shikudo_tracking.lua` (2849 total).
+
+---
+
 ## 2026-10-11 - Mystor's six Shikudo arena logs: filed, first findings (docs only, no version bump)
 
 Mystor (a Shikudo monk) shared six of his arena fights, five with MIND SAPIENCE on the opponent, so
