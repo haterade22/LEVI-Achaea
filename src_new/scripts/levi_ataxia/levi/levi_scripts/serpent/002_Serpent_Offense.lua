@@ -268,6 +268,11 @@ function serpent.hypnosis.onSnapped()
     serpent.hypnosis.phase = "cooldown"
     tAffs.snapped = true
     tAffs.hypnotised = false
+    -- The snap spends the seal. In lock mode canSnap() IS `sealed`, and only reset() used to clear
+    -- it, so after a lock chain (ekhl) every round sent SNAP as its eq action until something reset
+    -- the chain, and that eq action held off every impulse that needs a free eq slot (PRIORITY 3,
+    -- 4, 5 and 7, the monkshood impatience among them). Cleared since v4.7.420.
+    serpent.hypnosis.sealed = false
 
     if serpent.hypnosis.fratricideApplied then
         serpent.hypnosis.fratricideActive = true
@@ -314,6 +319,13 @@ function serpent.hypnosis.onSealed()
     Algedonic.Echo("<green>HYPNOSIS: <white>Sealed " .. #serpent.hypnosis.suggestions .. " suggestions!")
 end
 
+-- Resets the chain and what it knew about its target, but NOT the mode: that is the user's choice
+-- (ekhl -> "lock", ekhyp -> "fratricide", set by serp_setmode_*), and this runs on every target
+-- change (016 switchTarget, and the "changed target" handler below) and whenever a chain fails
+-- (the hypnosisLost, hypnosisNoticed and hypnosisTooPerceptive triggers). It set mode =
+-- "fratricide" until v4.7.420, so after a target change in hypnolock the next chain suggested
+-- fratricide and snapped with no seal. The lock mode's suggestions are what THIS target lacks
+-- (selectHypnoLockSuggestions), so they are picked again rather than kept from the last target.
 function serpent.hypnosis.reset()
     serpent.hypnosis.phase = "idle"
     serpent.hypnosis.suggestions = {}
@@ -322,8 +334,8 @@ function serpent.hypnosis.reset()
     serpent.hypnosis.hypnoTarget = nil
     serpent.hypnosis.snapReadyTime = nil
     -- Hypno lock fields
-    serpent.hypnosis.mode = "fratricide"
-    serpent.hypnosis.targetSuggestions = {}
+    serpent.hypnosis.targetSuggestions = (serpent.hypnosis.mode == "lock")
+        and selectHypnoLockSuggestions() or {}
     serpent.hypnosis.sealed = false
     serpent.hypnosis.snapTimerFired = false
 
@@ -1830,9 +1842,10 @@ function serp_ekanelia_attack()
     -- PRIORITY 4: Impatience delivery — canAttemptImpatience() gates send.
     -- stampImpatienceCooldown() called from ekanelia confirm trigger, not here.
     -- canUseSecondary overridden by impatienceConditionsMet().
-    -- checkImpulseEligible(): sileris/fangbarrier stops the monkshood bite, as for every other
-    -- impulse. Without it this branch sent a blocked impulse every round and returned before
-    -- the gecko strip further down could ever clear the barrier.
+    -- checkImpulseEligible(): sileris/fangbarrier stops the monkshood bite, as for every impulse
+    -- (scytherus mode's PRIORITY 7 impulse was the last without it, until v4.7.420). Without it
+    -- this branch sent a blocked impulse every round and returned before the gecko strip further
+    -- down could ever clear the barrier.
     -- --------------------------------------------------------
     -- During relapse_lock, use the relaxed condition check (asthma+weariness sufficient).
     -- Normal lock mode keeps the third-condition gate (fratricide/hypochondria/scytherus/slickness).
@@ -1933,8 +1946,12 @@ function serp_ekanelia_attack()
         useImpulse = true
 
     -- Scytherus mode impulse — deliver scytherus when aff not on target
+    -- checkImpulseEligible() like every other impulse: the scytherus rides a bite, and by our rule
+    -- sileris/fangbarrier stops a bite. This was the one impulse without it (until v4.7.420), so
+    -- with the barrier up this mode sent a blocked impulse every round instead of its dstab.
     elseif serpOffenseMode == "scytherus" and serpStrategy == "scytherus_attack"
-       and not useBite and not eqAction and not haveAff("scytherus") then
+       and not useBite and not eqAction and not haveAff("scytherus")
+       and checkImpulseEligible() then
         impulsePair = {suggestion = selectImpulse(nil), venom = "scytherus", label = "camus"}
         useImpulse = true
 
@@ -2456,6 +2473,9 @@ function serp_setmode_hypnosis()
     if serpOffenseMode ~= "hypnosis" then
         serpOffenseMode = "hypnosis"
         if serpent.hypnosis and serpent.hypnosis.reset then
+            -- reset() no longer sets the mode (v4.7.420), so this alias chooses fratricide itself,
+            -- first: a "lock" left by an earlier ekhl would otherwise survive into this chain.
+            serpent.hypnosis.mode = "fratricide"
             serpent.hypnosis.reset()
         end
         cecho("\n<cyan>Serpent offense: HYPNOSIS COMBO mode<reset>\n")

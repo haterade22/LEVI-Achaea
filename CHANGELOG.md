@@ -2,6 +2,275 @@
 
 ---
 
+## 2026-10-12 - v4.7.420: Shikudo wave 2 (both offenses rebuilt, vv Telepathy), Magi emanations fire, tracker sync fixes
+
+The second wave of `docs/plans/shikudo-offense-review-2026-10-11.md`. The lock offense (`shikudo/007`,
+`sr`) follows Mystor's counted route and kills with KAI CHOKE; the dispatch offense (`shikudo/006`,
+`zz`/`xx`/`sk`) is rebuilt on what the logged kills did; `vv` gains Telepathy (new `shikudo/011`). The
+Magi fire, air and earth emanation triggers, which had never fired on this user's wrap, now fire.
+Tabethys's Magi rotation is still not implemented. The release also carries follow-up fixes the v4.7.419
+reviews found: the target tracker's sync (every class), Serpent hypnolock and impulse gates, a
+per-target mount flag for TK6, and Magi trigger fixes.
+
+**The lock offense (`shikudo/007_CC_Shikudo_Lock.lua`, `sr`)**
+- **It follows Mystor's route** (plan finding #8). v4.7.417 went for anorexia first: when the target cured
+  it before Rain reached a chain of 5, 007 went Rain -> Tykonos -> Willow and never back to Oak, so asthma
+  and nervestrike paralysis stopped going out. His six logs show 56 transitions, none into Tykonos
+  (`kb/combat/shikudo.md`, "Mystor's lock route, counted"), and 007 now follows them: Rain (weariness,
+  clumsiness, the arm prep) -> Oak at a chain of 10 with both on, at 15, or as soon as a transition is
+  legal once anorexia is on; Oak -> Willow only once asthma AND slickness are on and anorexia is still off
+  (all six of his Willow entries); Oak -> Gaital at 12; Willow -> Rain when the Oak half drops, or at 12.
+  With anorexia already on, Oak holds for its kuro (weariness) and nervestrike (paralysis), which Willow
+  does not have (Shikudo.wiki:89). The caps are monk/004's policy (`skata`).
+- **A MIND command is a round of its own**, sent instead of the combo, not after it: Mystor chained one onto
+  a combo in 0 of 274 rounds, and HELP 4.6 says an equilibrium ability usually needs balance too
+  (`chainTelepathy = true` keeps the old shape behind a switch). MIND IMPATIENCE is critical as soon as
+  asthma, slickness or anorexia is on, so FOCUS cannot cure the anorexia hiraku is about to give; MIND
+  PARALYSE closes softlock + impatience; the Rain filler is impatience, paralyse, then disrupt, with no
+  filler paralyse on an Apostate (one ate magnesium straight after it, LcJC-rJ5:3124-3141). MIND BATTER
+  is dropped. At most 2 MIND rounds in a row, and none once the chain is 12 s past its last strike unless
+  the round transitions, which resets the chain anyway (Shikudo.wiki:116). Neither the MIND pick nor the
+  KILL prelude looks at equilibrium at the press: the `free` queue waits for it whatever the round is
+  (HELP 4.6.1), and the gate only swapped a critical impatience for a combo that landed hiraku first.
+- **The kill.** Truelocked, with KAI CHOKE affordable (10 kai, monk/004): MIND CONFUSE, then MIND DISRUPT
+  (at most 3 prelude rounds), then KAI CHOKE alone every round until the lock breaks, Mystor's finisher in
+  both lock wins (FceAmb0o:6309-6443, vNTjvghY:8840-9020). 007 had never sent a kai ability; it only
+  echoed `KAI SURGE READY`, at a wrong 31 kai.
+- **007 counts the rounds the game RUNS, not the presses of `sr`.** Each press sends `queue addclear free`,
+  which replaces a round still waiting for equilibrium, balance, or the end of a binding, paralysis or
+  stun (HELP 4.6.1). The last-round, MIND-run, prelude and choke state moved on every press, so two
+  presses per recovery ran the same kind of round every time, a third press turned a critical impatience
+  into a combo, and in a truelock a fourth jumped to the choke with no prelude sent. A temp trigger now
+  reads the queue's run line with the pattern `queue_Scan` uses (`clean-up/001_Queue_Scanning.lua`:34; no
+  capture of the line is in kb/raw), matched on its first row because a combo's run line (about 134
+  columns) wraps, and only then counts the round and its alternated limb sides. Until the first run line
+  matches, a round counts when sent, so the caps still hold with queue alerts off; alerts turned off
+  after that freeze the history until a reload (CONFLICTS #35).
+- **Kicks.** Flashheel BREAKS the leg (Shikudo.wiki:127), so Willow and Gaital flashheel the leg trigger
+  577 has not recorded as broken (`shikudoLock.flashLeg`; 577 records a break only from the damage line);
+  it was always `flashheel left` (#3, narrowed). Gaital spinkicks a prone target. Oak, Tykonos, and
+  Maelstrom without Crescent kick `risingkick torso`, Mystor's lock-window kick (vNTjvghY:7918); KAI CHOKE
+  does more damage to a target with a damaged or mangled torso or head, or a mind clamp (Kaido.wiki:289),
+  so those kicks help the kill only once the torso is damaged. Rain frontkicks the less damaged arm, and
+  the combo's ruku hits the same arm.
+- **The staff strikes come from one table** (`shikudoLock.STAFF`) instead of six pickers: the strike for
+  each missing lock affliction first, then the form's fill, never the same strike twice. Gone: `hiraku
+  hiraku` in Willow, `ruku torso ruku torso` and `jinzuku jinzuku` in Maelstrom, and Rain's lone
+  slickness. Rain is frontkick + kuro + ruku; Oak is risingkick torso + livestrike + ruku torso, asthma
+  and slickness in one combo (vNTjvghY:8281).
+- **Crescent** (#5) went out whenever the phase was KILL, with no prone check and no health check. It now
+  needs a prone target and a fresh ASSESS of this target at half health or less, judged from the raw
+  numbers (`ataxia_assessAtMostHalf`), and never goes into a shatter round.
+- **Round shape.** The transition goes FIRST, as `transition to <form> form` (56 times in Mystor's logs);
+  `transition to the <form> form`, which 007 appended after the combo, appears in none of them (CONFLICTS
+  #18, now resolved). Every round ends `;assess <t>`, as both players' aliases do, which keeps Crescent's
+  reading fresh. Kai is read through `ataxia_kai()`, `sklstatus` shows the `skata` cap, and the
+  no-target echo says `tar NAME` (cecho read `<name>` as a colour our palette lacks).
+
+**The dispatch offense (`shikudo/006_CC_Shikudo_Dispatch.lua`, `zz`/`xx`/`sk`)**
+- **Dispatch needs only prone, a damaged head and a crushed windpipe** (Shikudo.wiki:369; #4). The extra
+  demand for a leg at 100% is gone: the logged kill went out with the kicked leg at 8.4% (attacker log
+  :2654, :2664).
+- **Flashheel breaks are read from the tracker** (#3). Trigger 577 records `broken<side>leg` for every
+  flashheel that prints a damage line, but 006 called a leg broken only at 100% damage. The new
+  `shikudo.flashheelKick` chooses the leg: not into the parry; not to 100% unless the round sweeps or she
+  is down; an unbroken leg first; when pushing, never a leg already at 100% while the other is below it
+  (the logged push went to the other leg, attacker log :2474, :2560-2561); then the more damaged leg.
+  Willow and Gaital use it, and the dead safe-to-break planning (`isLegSafe`) and its unread
+  urgent-transition flag are gone.
+- **Gaital's kill phase.** One needle crushes the windpipe (Shikudo.wiki:287; attacker log :2566, :2662),
+  so slot 2 needles again only while the head stays short of 100 (`shikudo.needleSecond`); otherwise ruku
+  torso (slickness blocks the mending she needs to stand and to cure the throat), then jinzuku, then kuro.
+  A prone target's window goes to the head and throat instead of leg prep, and spinkick goes to a prone
+  head when she stays down and one needle would not finish it (Mystor's finish, LcJC-rJ5:5797-5803).
+- **Hyperfocus** (#6): 006 reads `ataxiaTemp.hyperLimb`, which trigger `shikudo/003` writes, so the halved
+  damage on the hyperfocused limb (Shikudo.wiki:336) finally applies; it read `shikudo.state.hyperfocus`,
+  which nothing wrote. Both prep thresholds take their damage from `getAttackDamage`, which removes the
+  nervestrike 7.8 vs 13.4 split.
+- **Parry** (#7): the parried limb is read every round, from trigger 148's perceived parry or the `tp*`
+  flags that 187 and `parry/001` set, and the hyperfocused limb counts as open. 006 cleared its
+  was-parried flags on every keypress, so a switch away from the parry lasted one press. Rain keeps its
+  frontkick arm until that arm is parried.
+- **Damage defaults from raw damage lines:** flashheel, frontkick and kuro 8.4%, needle 13.4%. Spinkick
+  stays 27, since Mystor's +15% was probably halved by hyperfocus.
+- **Prone follow-ups:** Tykonos risingkicks a prone head (stun, Shikudo.wiki:138), and Willow's slot 2
+  falls back to `hiraku light` on a prone target (stun, :160; Mystor sends it, vNTjvghY:7976). Both stuns
+  are the wiki's word (CONFLICTS #4).
+- **Transitions use the shared kata policy** (`ataxia_kataShouldLeave`, monk/004, `skata`), judged after
+  the combo's strikes, two in a sweep round ("a kata chain of 2 actions" after sweep + flashheel,
+  c.iJVmpL:3868-3872). The Rain cap drops from 24 to 15, Tykonos leaves as soon as a transition is legal,
+  and the display-only `shikudo.maxKata` table is gone (`skstatus` shows the policy cap).
+- **Gaital never leaves while she is prone, nor on the round that sweeps her down**
+  (`shikudo.gaitalSweeps`). v4.7.419 left for Maelstrom at kata 9+ whenever she was not dispatch-ready,
+  even with a kill in progress, the sweep round included. Every sweep round is judged on its two
+  strikes, so no form sends an inline transition from a sweep that leaves the chain at 4.
+- **Crescent** fires only on a prone target with a fresh ASSESS of this target at half health or less,
+  judged from the raw numbers (`ataxia_assessAtMostHalf(5)`): the floored percentage let 3540/7000 (50.6%)
+  through.
+- **`shikudo.buildRound()`** builds the round without sending it (kind dispatch, incapacitate, shatter or
+  combo); `shikudo.dispatch()` sends it, and 011 reuses it. Combo and shatter rounds end with `;assess
+  <target>` (`shikudo.config.assessEachRound`, default on), so trigger 698 prints an HP bar each round;
+  the kill round never assesses.
+- **The staff** (#10): 006 and trigger 168 wield `shikudo.staffRef()` instead of the hardcoded
+  `staff489282`, one player's item id. The new alias `skstaff <item>|clear` sets it; the default is the
+  bare keyword `staff`.
+- **Triggers 166, `calls/008` and `gags/001` match any staff**, with early fragments of the line, and
+  `gags/001` also gags the tail row of a wrapped strike line. Its old whole-line pattern for ruku to the
+  arm in the "full rotation" wording never matched at a 119-column wrap: the line is 121 columns with the
+  user's staff (attacker log :774).
+- **`gags/001` and 166 act in PvP only** (a string target and the basher off). Most of their fragments end
+  before the target's name, so unlike the old one-word patterns they also match our strikes on a denizen:
+  without the guard, bashing as a Shikudo monk would have hidden our own strike lines, and every basher
+  shatter round would have cleared the PvP target's shield.
+
+**`vv`: dispatch + Telepathy (new `shikudo/011_Shikudo_Telepathy.lua`)**
+- **`vv` on a Shikudo (alias 153) runs `shikudo.dispatchMind`**: the dispatch offense with Telepathy rounds
+  between its combos, as Mystor plays it (87 of his rounds were a MIND command alone, and no MIND
+  affliction ever rode a combo). `zz`, `xx` and `sk` stay combo-only.
+- **A MIND round goes out alone:** `queue addclear free <combatQueue()>[wield <shikudo.tele.shield>;]mind
+  <ability> <target>;assess <target>`, never with a combo or a transition. A kill, a shield on the
+  target, or no pick hands the press to 006's `shikudo.dispatch()`, so DISPATCH and SHATTER always come
+  first.
+- **The picker, in order:** MIND SCYTHE (a mangled head plus two of stupidity, impatience, dizziness,
+  epilepsy, confusion) and MIND BATTER (a mangled head, fewer than two), both only with
+  `shikudo.tele.scythe`; nothing inside our own 4 s blackout; MIND IMPATIENCE to close asthma + slickness
+  + anorexia; MIND BLACKOUT to stick or as bait (off by default); MIND DISRUPT on a confused target; then
+  a Rain burst from kata 9 (impatience, else paralyse; never paralyse on an Apostate), stopped after 4
+  MIND rounds have run since the last combo.
+- **Gates:** a target, mana at least 25%, and a kata chain not at risk of lapsing (`ataxia_kataAtRisk(12)`).
+  No MIND round in a kill window: while she lies down in Gaital, or while she lies down in Maelstrom with
+  a fresh ASSESS at half health or less, where 006's CRESCENT kills her. No equilibrium gate, for 007's
+  reason: it would only turn an early press into a combo and end every burst after one round.
+- **The burst and the blackout window move on the run line**, as 007's history does: pressing `vv` again
+  while a round waits counts nothing, and at the cap the combo stays queued until it runs. Unlike 007,
+  any run line carrying a combo ends the burst. Until a run line has been read, the press counts. vv's
+  state lives on `ataxiaTemp` (never saved) and survives a reload, so queue alerts turned off mid-session
+  freeze it until a client restart.
+- **MIND BLACKOUT is wired and switched off** (`shikudo.tele.blackout = false`) until our own success line,
+  its lock question (CONFLICTS #7) and its syntax are captured live. Turned on, it queues 006's next
+  round behind the blackout with `queue add free`.
+- **MIND SCYTHE, with the MIND BATTER that sets it up, is wired and switched off** (`shikudo.tele.scythe =
+  false`). The wiki leaves Scythe off its list of abilities usable without a mind lock, the one scythe in
+  the logs was cast with a lock held (CONFLICTS #7), and a refused scythe changes nothing vv reads, so vv
+  would resend it on every press. Neither can fire yet anyway: nothing records a target's mangled head
+  (trigger 632 records `damagedhead` at 100-199% head damage and `concussion` at 200%+, and then only
+  when no leg, arm or torso is in its own band).
+
+**Magi** (`enamation/001`, `003`, `004`, `magi_offense_tracking/005`; Tabethys's rotation is still not
+implemented)
+- **The fire, air and earth emanations fire.** Each matched its whole line (about 150-164 columns) with a
+  pattern folded across two YAML lines, which `tools/check_wrap.py` cannot see (CONFLICTS #2), so on this
+  user's 119-124-column wrap none ever fired: the fire emanation's burns, the air emanation's paralysis
+  and dizziness and the earth emanation's relay were lost. Each now works as the water emanation (002)
+  has since v4.7.419: it matches an opening fragment of 67-72 columns, joins the following rows until the
+  sentence closes, and reads the target's name with the old pattern's tail. The name check stays, and
+  every row of our own cast is highlighted.
+- The air emanation also records **asthma** when we already believed the target dizzy
+  (Elementalism.wiki:242: "If they already have dizziness, they will be given asthma instead"); paralysis
+  and dizziness are recorded as before. Its short stun is not: no duration is given, stun is not a game
+  affliction, and nothing reads a target's stun.
+- The fire emanation, as before, adds two burns to the offense's counter (capped at 5) and ONE burning to
+  V3. The wiki gives two ablaze stacks, but V3 never lowers a burning level above 1 (a body mending cures
+  burning only at level 1), so a second application would leave a burning no mending clears. The cost:
+  after one enemy mending, V3 reads no burning and the offense zeroes its counter while a stack may
+  remain. Handed to the V3 core (CONFLICTS #32).
+- The earth emanation still only sets `magi.calcifying_head` (read by nothing) and relays. The wiki's
+  calcified torso is recorded only by `general/026_Calcify`'s own line, which no capture shows following
+  the emanation (CONFLICTS #33).
+- Hypothermia (`magi_offense_tracking/005`) no longer writes the `st.hypothermia` latch, which nothing has
+  read since v4.7.419; the afflictions it records are unchanged. The field's default and reset in
+  `mage/004_Magi_Offense.lua`, and two comments there that still say 005 sets it (:57, :241-242), wait
+  for a later tidy-up.
+
+**Target tracking (every class: `affliction_tracking_core/007`, `008`, `017`, trigger 318)**
+- **A cure V3 resolves to its only candidate now leaves tAffs too.** The sync visited only afflictions still in
+  some branch, so a lone weariness eaten off with kelp (Mystor's log: an aurum flake) left haveAff at 0 while
+  every tAffs reader, the Shikudo lock's checkSoftlock among them, still saw it. The sync now remembers what V3
+  gave tAffs and clears, once, what V3 holds nowhere now; only V3's own keys (bleed, horror and the flags
+  triggers write are left alone). A target reset forgets the set instead of clearing tAffs, because its
+  callers write their own defaults (blindness, deafness, rebounding) first.
+- **tAffs now agrees with haveAff at 30%.** The sync clears an affliction, once, when V3's probability drops from
+  30% or more to under 30%; it used to keep anything between 1% and 30%. Two kelp eats over four kelp
+  afflictions left weariness at 3/14: haveAff said gone, tAffs said present. **Watch in play:** an offense that
+  reads tAffs may now re-send an affliction it used to believe was still on.
+- **A passive's random cure is charged once** (318). Every passive that sets `ataxiaTemp.randomCure` has already
+  charged V3 (onPassiveCureV3); the prompt then erased one or N more, the double charge trigger 389 had on
+  trees (one Syphon over six afflictions read 25/6 left instead of 5). With V3 on, 318 erases nothing;
+  onPassiveCureV3 takes a level-1 broken limb when no branch can pay, and reports a cure it made certain through
+  `ataxia_tarAffFaded` (the fight log's feed).
+- **A signal proving one affliction absent removes only that one** (collapseAffAbsentV3). A smoke while asthma
+  was certain (a missed cure line, or an illusion) reset V3 to empty and forgot paralysis, slickness and
+  anorexia too.
+- `erAff("haemophilia")` now clears `tAffs.haemophilia` (it reset only the bleed counters).
+
+**Serpent (`serpent/002`)**
+- **Scytherus mode's impulse checks sileris/fangbarrier**, like every other impulse path. With the barrier up it
+  sent a blocked impulse every round; now the round falls back to the scytherus dstab, which leads with gecko
+  when asthma is up, so the strip goes out.
+- **A target change or a failed hypnosis no longer resets the chain's mode.** `serpent.hypnosis.reset()` set
+  mode = 'fratricide', so after a target change in hypnolock (`ekhl`) the next chain suggested fratricide and
+  snapped with no seal. It now keeps the mode; `ekhyp` sets fratricide itself.
+- **The hypnolock chain ends at its snap.** The snap never cleared the seal, so after every `ekhl` chain each
+  round sent SNAP as its equilibrium action until a reset, holding off every impulse that needs a free
+  equilibrium slot, the monkshood impatience among them.
+
+**Tekura (TK6, trigger 265, `016_Targeting_Functions`)**
+- **The mount flag has an owner.** Trigger 265 ("Being mounted, your opponent has little use for their legs.")
+  records whose mount it is (`ataxiaTemp.mountedWho`, the current target), and TK6 reads it: a flag recorded
+  for another target is no mount (no dismount, no kai spent, `tk6status` NO). `tmounted` itself is unchanged,
+  so the Blademaster and Shikudo offenses read it as before.
+
+**Magi follow-ups**
+- **The Glacial waterbond (`staffcast/002`) fires on a wrapped screen** and times the bond by the wiki's ladder
+  (Artificing.wiki:82: frozen 45 s, shivering 35, insulation stripped 25, else 15). Its folded full-line
+  pattern (134 columns at least) never matched on this wrap, so lock mode (`cc`) kept casting horripilation;
+  it also tested `tAffs.shiving`, a misspelling. A hypothermic target counts as frozen.
+- ERODE (`magi_offense_tracking/015`) records `nocaloric` when its strip line names insulation or caloric.
+- A failed conflagrate (`general/020`) and the fan line (`general/022_Increase_Burning`) change our target's
+  burns only when the line names our target.
+
+**Comments**
+- `update_stuff/004`: Kai is kept in `vitals.class` only for the `windows/001` Monk line (007 reads
+  `ataxia_kai()` now). `monk/004`'s header: its readers now include 006, 007 and 011.
+
+**Tests**
+- New `test_v3_followups.lua` (23): the real kelp, smoke, Syphon, Dragonheal and prompt (318) triggers and the
+  `raffs` alias through the real tracker, with verbatim log lines. New `test_magi_followups.lua` (16).
+  `test_serpent_notes.lua` +9 (scytherus gate, hypnolock through the real target switch, seal and snap lines),
+  `test_tekura6_kai.lua` +7 (the mount owner through the real 265 and 016).
+- New `test_shikudo_dispatch.lua` (59): the real monk/004 and 006 and the real trigger and alias bodies;
+  triggers 166, `calls/008` and `gags/001` through `trigger_lib` at 100/119/124 columns.
+- New `test_shikudo_telepathy.lua` (47): the real monk/004, 006 and 011, including a MIND round whose own
+  run line wraps.
+- New `test_magi_emanations.lua` (13): the emanation lines, rebuilt from the old patterns (no capture
+  exists), whole and wrapped at 100/119/124. Its last test drives the real V3 tracker, the public API and
+  salve trigger 391, and shows that no burning outlives two body mendings after a fire emanation; it fails
+  if 001 gives V3 two burnings.
+- `test_shikudo_offense.lua` loads monk/004 first and has 46 tests: 44 on the real 007, one on 006's
+  Crescent (its fixture carries raw ASSESS numbers) and one on the `shikudo/002` trigger. The run line
+  goes through 007's real pattern and callback, wrapped at 100/119/124/200 columns.
+
+**Docs and knowledge base**
+- `.claude/classes/monk.md`: both offenses as rebuilt, `vv` (011) and the run-line history; the 12/24
+  caps, `staff489282`, `isLegSafe` and the broken-leg Dispatch lines are gone. `kb/combat/shikudo.md`: new
+  "Mystor's lock route, counted" (the 56 transitions, MIND rounds by form, the two KAI CHOKE kills). The
+  plan's "Phase 2 progress" gains v4.7.420. `.claude/AGENTS.md`: "Round history moves when the GAME RUNS
+  the round, not on the press".
+- `.claude/classes/magi.md`: the four emanation triggers as they work now, why V3 holds one of the fire
+  emanation's stacks, 005 without the latch, everything that reads `st.calcifiedTorso`, `026_Calcify`'s
+  duplicate earth-emanation pattern, and `general/005_Firestorm_up`, which never matches on this wrap. The
+  Group PvP notes no longer call EMANATION and SHALESTORM area spells: both take one target
+  (Elementalism.wiki:237-242, :189-194).
+- `kb/CONFLICTS.md`: #2 (the emanations and the waterbond fixed), #7 (now blackout AND MIND SCYTHE), #23
+  (hypnolock keeps its mode) and #30 updated; #18 resolved (moot); new open rows #32-#36 (ablaze stacks in V3,
+  the three emanation lines, a MIND command into a shield, the run line for a round that runs at once, the
+  waterbond's duration). CLAUDE.md matches.
+
+Tests: 3304, all passing under native lua5.1 (216 new since v4.7.419). `check_orphans.py` (all four checks) and
+`check_wrap.py` pass.
+
+---
+
 ## 2026-10-12 - v4.7.419: Shikudo wave 1, one target tree one charge, Serpent and Magi fixes
 
 The first wave of `docs/plans/shikudo-offense-review-2026-10-11.md`, and fixes from relayed Serpent

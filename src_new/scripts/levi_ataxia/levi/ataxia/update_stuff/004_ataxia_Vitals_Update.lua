@@ -86,7 +86,7 @@ function ataxia_Vitals_Update()
 				ataxia.vitals.essence = tonumber((tostring(val):gsub("%%", "")))
 			elseif key == "Kai" then
 				-- "Kai: 59%" -- a percentage, 0-100 (the prompt's "K:59%"). Kept in `class` too for the
-				-- readers that still look there (windows/001 Monk line, shikudo/007 getKai). The stamp
+				-- reader that still looks there (the windows/001 Monk line). The stamp
 				-- lives on ataxiaTemp, which is never saved: ataxia.vitals is, so a kai restored from disk
 				-- has no stamp and ataxia_kai() reads it as unknown (the v4.7.299 rule).
 				local kai = tonumber(string.match(val, "%d+"))

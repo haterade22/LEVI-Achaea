@@ -74,6 +74,15 @@ simpleAffsV3 = simpleAffsV3 or {}
 -- Updated whenever states change via rebuildCacheV3()
 affCacheV3 = affCacheV3 or {}
 
+-- What V3 held at its last sync into tAffs, aff -> probability (syncToOldSystemV3, v4.7.420). The
+-- sync clears in tAffs what is in here and nowhere in V3 now, and what was at 30% or more here and is
+-- under it now. Local, so a test load starts clean. Seeded the way getAllAffProbabilitiesV3 builds
+-- it, from the two tables above, which a reload keeps: a reload mid-fight still knows what tAffs was
+-- told.
+local heldAtSyncV3 = {}
+for aff, prob in pairs(affCacheV3) do heldAtSyncV3[aff] = prob end
+for aff in pairs(simpleAffsV3) do heldAtSyncV3[aff] = 1.0 end
+
 -- Afflictions that use simple tracking (don't contribute to state explosion)
 simpleTrackAffsV3 = {
     -- Limb damage
@@ -706,13 +715,14 @@ function collapseAffAbsentV3(aff)
             v3Echo("Collapsed " .. collapsed .. " branches (proved " .. aff .. " absent)")
         end
     elseif totalProb == 0 then
-        -- Contradiction! All branches had the affliction, but signal proves it's absent
-        -- This means our tracking was wrong - reset to single state without this aff
-        v3Echo("WARNING: Contradiction detected for " .. aff .. " - resetting")
-        afflictionStatesV3 = {{affs = {}, prob = 1.0}}
-        rebuildCacheV3()
-        syncToOldSystemV3()
-        updateAffDisplayV3()
+        -- Contradiction! All branches had the affliction, but signal proves it's absent.
+        -- Either that belief was wrong (a cure we did not see) or the signal was (an illusion).
+        -- Either way the signal says nothing about the rest, so only this one goes, from every
+        -- branch. v4.7.420: this reset to an EMPTY state, so a smoke while asthma was certain
+        -- also wiped the paralysis, slickness and anorexia, and the sync (which now clears what V3
+        -- stops holding) wiped them from tAffs too.
+        v3Echo("WARNING: Contradiction detected for " .. aff .. " - removing it from every branch")
+        removeAffV3(aff)
     end
 end
 
@@ -911,6 +921,11 @@ function resetStatesV3()
     resetPassiveCooldownsV3()
     if resetCureBalancesV3 then resetCureBalancesV3() end
     if killNegativeConfirmV3 then killNegativeConfirmV3() end
+    -- Forget what tAffs was told rather than clear it (v4.7.420). The callers write their own
+    -- defaults into tAffs just before this: blindness and deafness true in the raffs and res
+    -- aliases, 003_TargetOutOfRoom, login and 016's target reset, rebounding true in the aliases and
+    -- 016. Clearing what V3 held would turn those false.
+    heldAtSyncV3 = {}
     syncToOldSystemV3()
     v3Echo("States reset")
 end
@@ -989,7 +1004,8 @@ end
 
 -- Sync V3 state to old tAffs system for backward compatibility
 -- Only SET entries when confident (>= 30%), only CLEAR when essentially absent (< 1%)
--- Intermediate probabilities (1-30%) leave V1/V2 unchanged to prevent desync
+-- or when it has just dropped under 30% (v4.7.420, below).
+-- Otherwise intermediate probabilities (1-30%) leave tAffs unchanged
 function syncToOldSystemV3()
     if not tAffs then return end
 
@@ -997,10 +1013,27 @@ function syncToOldSystemV3()
     for aff, prob in pairs(allProbs) do
         if prob >= 0.3 then
             tAffs[aff] = true
-        elseif prob < 0.01 then
+        -- v4.7.420: at 30% or more last time, so tAffs was told it was there, and under it now, so
+        -- haveAff says it is not: tAffs is told too, once. Dragonheal's three cures over four
+        -- afflictions leave each at 1/4; tMultipleRandom's erase used to take three of them out of
+        -- tAffs, and without it tAffs kept all four. A value written into tAffs while V3 holds it
+        -- under 30% (390's kelp backtrack) is still left alone.
+        elseif prob < 0.01 or (heldAtSyncV3[aff] or 0) >= 0.3 then
             tAffs[aff] = false
         end
     end
+
+    -- v4.7.420: a cure V3 resolves to its only candidate removes it from EVERY branch, so the loop
+    -- above never sees it again and tAffs kept it true while haveAff read 0 (a lone asthma eaten
+    -- off with kelp; the old tree and passive erases had been hiding it). So whatever V3 held at the
+    -- last sync and holds nowhere now is cleared, once. Only V3's own keys: tAffs also carries what
+    -- V3 never tracks (bleed, horror, crescendo, and flags triggers write), which stays untouched.
+    for aff in pairs(heldAtSyncV3) do
+        if allProbs[aff] == nil then
+            tAffs[aff] = false
+        end
+    end
+    heldAtSyncV3 = allProbs   -- a fresh table per call, so keeping it costs no allocation
 
     -- V2 removed: tAffsV2 sync no longer needed (V3 is sole source of truth)
 end

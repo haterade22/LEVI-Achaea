@@ -420,7 +420,7 @@ v4.7.265 documented `bash dwaeonic off`, which was never a real command.
 | **serpent** | 1 (002) | **Documented** | Ekanelia lock, darkshade, scytherus | `serpent/` |
 | **shaman** | 1 (028) | **Documented** | Tzantza, locks, bleed | `shaman/` |
 | **snipe** | 1 | **Documented** | Class-agnostic snipe system | `snipe/` |
-| **shikudo** | 006, 007, 010 live | **Documented** | Dispatch (006), lock (007), strike ledger (010); 009 GodMode switched off (v4.7.419; why and what to salvage are in its header; to be deleted with 001/002/004/005/008); offense rework in progress (wave 1: v4.7.419) | `shikudo/` |
+| **shikudo** | 006, 007, 010, 011 live | **Documented** | Dispatch (006: zz/xx/sk), lock (007: sr; Mystor's route, KAI CHOKE kill), strike ledger (010), vv dispatch + Telepathy (011); 009 GodMode switched off (v4.7.419; why and what to salvage are in its header; to be deleted with 001/002/004/005/008); offense rework in progress (wave 1: v4.7.419, wave 2: v4.7.420) | `shikudo/` |
 | **tekura** | ~3 | **Documented** | 6-limb backbreaker (TK6), 3-limb legacy (TKD) | `tekura/` |
 | **two_handed** | 1 | Undocumented | 2H knight | `two_handed/` |
 | **wildwalker** | 8 | Undocumented | Navigation/utility | `wildwalker/` |
@@ -483,14 +483,15 @@ read `mmp.settings.mapsource`). `service` is an experimental live Crowdmap; `cro
 - **Basher**: `ataxiaBasher` for automated hunting (see details below)
 - **Class Modules**: Serpent, Shaman, Blademaster, Infernal DWC, Apostate, Monk, and 12+ more
 - **Shikudo (Monk)** (corrected 2026-10-11; the old list named files that never existed). Live:
-  `shikudo/006_CC_Shikudo_Dispatch.lua` (`sk`; `zz`/`xx`/`vv` when the monk has no stance; `vv` runs
-  `shikudo.dispatchMind` once something defines it, else the dispatch), `007_CC_Shikudo_Lock.lua` (`sr`
-  -> `shikudoLock.dispatch()`, `shikudolock()` only its fallback; status `sklstatus()`) and the strike
-  ledger `010_Shikudo_Strike_Ledger.lua`. `009_CC_Shikudo_GodMode.lua` is switched off (v4.7.419; its
-  header lists why and what to salvage): until then `vv` called `shikudo.setMode`, defined only in the
-  switched-off 008, and threw on every press. What is wrong and the three-phase rework:
-  `docs/plans/shikudo-offense-review-2026-10-11.md`. Every real line from two fights, both sides:
-  `kb/combat/shikudo.md`.
+  `shikudo/006_CC_Shikudo_Dispatch.lua` (`sk`; `zz`/`xx` when the monk has no stance),
+  `011_Shikudo_Telepathy.lua` (`vv` with no stance: `shikudo.dispatchMind`, the dispatch with MIND rounds
+  between its combos, v4.7.420), `007_CC_Shikudo_Lock.lua` (`sr` -> `shikudoLock.dispatch()`,
+  `shikudolock()` only its fallback; status `sklstatus()`) and the strike ledger
+  `010_Shikudo_Strike_Ledger.lua`. `009_CC_Shikudo_GodMode.lua` is switched off (v4.7.419; its header lists
+  why and what to salvage): until then `vv` called `shikudo.setMode`, defined only in the switched-off
+  008, and threw on every press. What is wrong and the three-phase rework:
+  `docs/plans/shikudo-offense-review-2026-10-11.md`. Every real line from two fights, both sides, and
+  Mystor's counted lock route: `kb/combat/shikudo.md`.
   - **Tracking** (v4.7.413-414, `test_shikudo_tracking.lua`): strike triggers 563-585 pair a strike
     line's START with the damage line up to two rows later (strike lines run to 147 columns);
     effect-line triggers (`3rd_person_shikudo/`, `calls/`) record what landed (nervestrike's own
@@ -506,8 +507,9 @@ read `mmp.settings.mapsource`). `service` is an experimental live Crowdmap; `cro
   - **A strike line is not a hit:** it prints even when parried. `light` strikes and blows a
     Shield of Absorption swallows print no damage line but still land.
   - **Facts the offense must respect** (logs, 2026-10-11): at most three attacks, one a kick; SWEEP
-    pairs only with a kick; flashheel BREAKS the leg; a TRANSITION needs a kata of 5+ (inline
-    `combo ... transition <form>` works; ADOPT needs none but costs 4.1 s of balance); ASSESS gives the
+    pairs only with a kick, and that round counts two kata actions (c.iJVmpL:3868-3872); flashheel
+    BREAKS the leg; a TRANSITION needs a kata of 5+ (inline `combo ... transition <form>` works and is
+    judged after the combo's strikes; ADOPT needs none but costs 4.1 s of balance); ASSESS gives the
     target's health (`698_Assess` stores `ataxiaTemp.lastAssess`); SHATTER breaks the shield tattoo
     (seen in Willow; the wiki says it works in any form); Dispatch = prone + damaged head + crushed
     throat. Willow combos with a kick cost 1.9 s of balance (2.1 s in the other forms, 2.8 s with
@@ -515,20 +517,47 @@ read `mmp.settings.mapsource`). `service` is an experimental live Crowdmap; `cro
     refused one keeps the kata chain.
   - **Telepathy** (the user and Mystor, 2026-10-11): **a mind lock is needed only for a target outside
     the room and certain skills such as Radiance and Sapience**; most Telepathy needs only the target
-    present (the wiki's (*) abilities certainly; the wiki puts BLACKOUT behind the lock, which is open,
+    present (the wiki's (*) abilities certainly; BLACKOUT and SCYTHE carry no (*), which is open,
     `kb/CONFLICTS.md` #7). **Rain speeds equilibrium**, so monks do their Telepathy there (not only
     there). **Blackout is critical**: 4 s, they usually tree it off, we give it again, and it hides the
-    combo behind it. Since v4.7.417 the lock offense (007) sends MIND IMPATIENCE / BATTER / PARALYSE (it read an
-    equilibrium field nothing writes, sent bare words and locked first); the dispatch offense (006) sends none, and nothing records MIND BLACKOUT on the target (only
-    Psion LIGHTSTEAL and Knight CONCUSS record blackout, both on a prone target; since v4.7.419 for the
-    game's 4 s through `ataxia_tarAffTimed`, a repeat restarting the clock; `kb/combat/shikudo.md`).
+    combo behind it. Since v4.7.420 every MIND command goes out as a round of its own (Mystor: none of
+    his 274 combos carried a MIND affliction), with no lock first and no equilibrium gate (the `free`
+    queue waits for it): 007 sends MIND IMPATIENCE as soon as asthma, slickness or anorexia is on and
+    MIND PARALYSE to close the lock or as a Rain filler, and kills with MIND CONFUSE, MIND DISRUPT, then
+    KAI CHOKE every round; `vv` (011) puts MIND rounds between 006's combos. MIND BLACKOUT and MIND
+    SCYTHE are wired in 011 and switched off (`shikudo.tele.blackout`, `shikudo.tele.scythe`) until the
+    lock question (#7), our own blackout line and a recorder for a mangled head are settled. Nothing
+    records MIND BLACKOUT on the target: only Psion LIGHTSTEAL and Knight CONCUSS record blackout, both
+    on a prone target, and since v4.7.419 hold it for the game's 4 s through `ataxia_tarAffTimed`, a
+    repeat restarting the clock (`kb/combat/shikudo.md`).
   - **Shared monk state** (v4.7.419, `ataxia/monk/004_Kai_And_Kata.lua`): kai (`ataxia_kai()`, from
     `ataxia.vitals.kai`, stamped `ataxiaTemp.kaiAt` so a kai restored from disk is unknown), its costs
     (`ataxia_kaiAfford(ability, spent, tgt)`: surge 45; unknown kai is never enough for a paid ability,
     and choke on a denizen is free), the kata POLICY (`ataxia_KATA`, `skata`: from Mystor's play, not
-    game limits) and `ataxia_assessAtMostHalf`. Only TK6, the kaido aliases and `skata` read it yet;
-    006/007 keep their own copies. **Pitfall:** `kataAt` outlives the chain, so `ataxia_kataAtRisk`
-    tests the kata (0 = no chain; a form change zeroes it).
+    game limits) and `ataxia_assessAtMostHalf`. TK6, the kaido aliases and `skata` read it, and since
+    v4.7.420 006, 007 and 011 do too (their own 12/24 caps and 007's surge 31 are gone). **Pitfall:**
+    `kataAt` outlives the chain, so `ataxia_kataAtRisk` tests the kata (0 = no chain; a form change
+    zeroes it).
+  - **The lock (007, `sr`, v4.7.420)** follows Mystor's counted route (56 transitions, none into
+    Tykonos): Rain -> Oak at a chain of 10 with weariness and clumsiness on, at 15, or as soon as legal
+    once anorexia is on; Oak -> Willow only with asthma + slickness on and anorexia still off; Oak ->
+    Gaital at 12. The transition goes FIRST (`transition to <form> form`, judged on the chain before the
+    combo) and every round ends `;assess <t>`; flashheel goes to the leg 577 has not recorded as broken,
+    Oak kicks `risingkick torso`, and Crescent needs prone plus a fresh raw ASSESS at half health or less.
+  - **The dispatch (006, `zz`/`xx`/`sk`, v4.7.420):** `shikudo.buildRound()` returns cmd, kind and
+    transition and never sends (011 reuses it); it picks the strikes first and judges the inline
+    transition on their count (a sweep round counts 2). No leg for Dispatch; `shikudo.flashheelKick`
+    picks the flashheel leg; one needle, a second only while the head is short; spinkick on a prone head;
+    Gaital holds while she is prone and on the sweep round (`shikudo.gaitalSweeps`); combo and shatter
+    rounds ASSESS; `skstaff` sets the staff (`shikudo.staffRef()`, default the bare keyword `staff`).
+  - **`vv` (011, v4.7.420):** MIND rounds between 006's combos (impatience to close a softlock, disrupt
+    on a confused target, a Rain burst from kata 9, at most 4), none in a kill window (prone in Gaital,
+    or prone at half health in Maelstrom); kill and shield rounds go to 006.
+  - **007 and 011 move their round history on the queue's run line, not on the press** (Lessons
+    Learned, "Counter Incrementing"; `.claude/AGENTS.md`). Until a run line has matched, a round counts
+    when sent; queue alerts turned off after that freeze 007's history until a reload and vv's (on
+    `ataxiaTemp`) until a client restart. Whether the line prints for a round that runs at once is open
+    (`kb/CONFLICTS.md` #35).
 - **Infernal DWC Vivisect System**: Full auto-combat for Infernal DWC spec
   - `003_Infernal_DWC_Vivisect.lua` - Undercut + DSL vivisect strategy
   - Commands: `infernalDWCVivisect()`, `infernalDWCStatus()`, `infernalDWCReset()`
@@ -541,7 +570,7 @@ read `mmp.settings.mapsource`). `service` is an experimental live Crowdmap; `cro
 
 V3 is the **single source of truth** for target affliction tracking. It models multiple possible world states simultaneously with probability weights, resolving ambiguous cures via branching and collapsing branches via verification signals.
 
-**Full documentation**: See `memory/affliction-tracking.md` (API, data structure, algorithm, verification signals, performance, commands)
+**Full documentation**: See `.claude/projects/affliction-tracking-v3/` (API, data structure, algorithm, verification signals, performance, commands)
 
 **Quick API reference:**
 - `tarAffed(...)` — Add afflictions (sets tAffs + V3 + raises event)
@@ -550,12 +579,23 @@ V3 is the **single source of truth** for target affliction tracking. It models m
 - `getAffProbabilityV3(aff)` — Exact probability 0.0–1.0
 - Always use the public API — never call `applyAffV3()`/`removeAffV3()` directly
 
+**V3 never lowers a burning level above 1 (open since v4.7.420).** `applyAffV3("burning")` adds a level per
+application (cap 5); a body mending cures burning only at level 1, and resets the level only when burning is
+the one body-salve affliction it can cure; `erAff` leaves the level, and only `resetStatesV3` clears a
+higher one. So two applications on one target leave a burning no mending clears, unless a mending between
+them cured the first as the only candidate: hence `enamation/001` gives V3 one burning for two ablaze stacks
+(`kb/CONFLICTS.md` #32). Drop this note once V3 (`affliction_tracking_core/007`) counts mendings down.
+
 **One target tree is one charge (v4.7.419, every class).** Trigger 389 calls `ataxia_targetTreeV3()`
 (`curing/002`), then `tSingleRandom({ noErase = true })`, which only returns its pick: V3 branches the
 cure, what it took for certain leaves tAffs too, and one level-1 broken limb (simple-tracked) goes only
 when nothing branch-tracked was there. Read `ataxiaTemp.targetTreeAt` only while `tBals.tree` is false.
-**Pitfall:** a cure V3 resolves to ONE affliction never reaches tAffs (`syncToOldSystemV3` visits only
-keys still in some branch): a lone asthma eaten with kelp stays true there. Open (`affliction_tracking_core/007`).
+**The sync (v4.7.420, `affliction_tracking_core/007`):** `syncToOldSystemV3` clears from tAffs, once, every key
+V3 held at its last sync and holds nowhere now, and every key whose probability drops from 30% or more to under
+30% (tAffs agrees with haveAff). It touches V3's own keys only. `resetStatesV3` forgets the remembered set rather
+than clearing tAffs, because its callers write their own defaults first. With V3 on, trigger 318 does not erase a
+passive's cure: `onPassiveCureV3` charges it, takes a level-1 limb when no branch can pay, and reports certain
+cures through `ataxia_tarAffFaded`. A contradiction in `collapseAffAbsentV3` removes only the disproved one.
 
 ### ataxiaBasher (Automated Hunting System)
 
@@ -2376,7 +2416,7 @@ Modern Serpent combat revolves around two key mechanics. What is confirmed and w
   our code sends it) brings the masochism, so with asthma + weariness up the reaction adds impatience.
   IMPULSE taking a venom, and what that costs, are unverified (`kb/CONFLICTS.md` #20).
 - The no-fangbarrier rule is our code's (`checkImpulseEligible`, after HELP 13.7: the coating stops a
-  Serpent's bites). Since v4.7.419 every impulse path calls it except scytherus mode's.
+  Serpent's bites). Every impulse path calls it (scytherus mode's since v4.7.420).
 
 **Ekanelia** - BITE venom transformation that ADDS bonus afflictions:
 | Venom | Conditionals Required | Normal + Bonus Effect |
@@ -2928,12 +2968,21 @@ Tracks exact limb damage percentages from combat text with automated defensive r
 
 **A TRIGGER PATTERN MUST FIT ON ONE WRAPPED ROW (v4.7.351).** This user's Achaea wraps server-side at **119-124 columns** (measured from the break points in their pastes), so a long line reaches Mudlet as separate rows and a pattern that runs past the break -- or a fragment that straddles it -- can never match, silently. Three triggers from one week did exactly that (782 gravehands confirmation, 779 belch fouled, 780 soulstorm landing for long mob names) plus the highlights for all three. **Match an EARLY phrase of any line near or over ~110 characters; for a highlight, add a short anchored tail `^.{0,60}<last words>\.$` so the wrapped row is coloured too.** Chat pastes arrive UNWRAPPED, so a paste is not evidence of the line's length. Two guards: `tools/check_wrap.py` (CI) fails any pattern whose shortest match is wider than 118 columns (6 pre-existing allowlisted since v4.7.419; a stale entry fails the check), and `tests/test_trigger_wrap.lua` + `tests/trigger_lib.lua` catch the straddling class the lint cannot see -- they wrap known lines at 100/119/124 and run the trigger's REAL patterns per row, through an evaluator that raises on any regex shape it cannot judge. **Assert on the PATTERN, never on the file text** -- after the first fix, 782's old test still passed on the comment explaining the fix.
 
-**A STATE trigger whose target NAME falls after the wrap reads it from the next row (v4.7.419).** An
-early fragment drops the name, and recording on `target` instead would record a spell cast at anyone
-else. `general/022`'s `withName` and `enamation/002` read the rest of the sentence from the following
-rows with `tempLineTrigger(1, 1, ...)`, one row at a time and at most two more, and keep their name
-check: the highlighting/071 idiom, used to record. `check_wrap.py` cannot see a pattern FOLDED across
-YAML lines (`kb/CONFLICTS.md` #2).
+**A STATE trigger whose target NAME falls after the wrap reads it from the following rows (v4.7.419-420).**
+An early fragment drops the name, and recording on `target` instead would record a spell cast at anyone
+else. `general/022`'s `withName` and the four emanation triggers (`enamation/001-004`) read up to two more
+rows, one at a time, with `tempLineTrigger(1, 1, ...)`, and keep their name check (the highlighting/071
+idiom, used to record). **When the name sits MID-sentence** (the fire, air and earth emanations), join the
+rows until the sentence closes, read the name with the old pattern's tail, and stop at the first closed
+sentence so no reader stays armed. `check_wrap.py` cannot see a pattern FOLDED across YAML lines
+(`kb/CONFLICTS.md` #2).
+
+**A fragment that ends before the name matches DENIZENS too (v4.7.420).** A whole-line strike pattern ending
+in a one-word `(\w+)` name never matched a multi-word denizen; cut to an early fragment, it can (`calls/008`
+and two of `gags/001`'s fragments still read a one-word name). A body meant for PvP then needs the PvE test
+the basher's own triggers 337/338 make: `if type(target) ~= "string" or (ataxiaBasher and
+ataxiaBasher.enabled) then return end`. Without it `gags/001` would hide our own strike lines while bashing,
+and 166 would clear the PvP target's shield on every basher shatter round.
 
 **MOUNTJUMP RECOVERS BOTH WAYS (v4.7.351).** "You have no mount on which to jump." (705) now re-sends a recorded MOUNTJUMP as `leap` (`ataxiaBasher_jumpRefusedOnFoot`) -- a stale mounted belief (died in the saddle, mount killed, thrown by an uncaptured line) previously lost the escape. Both recoveries HOLD the send, still latching, while a tumble is in flight (`S.moveLocked`) or we stand in lava (`M.onLava` owns movement). `S.reset` clears the jump ledger; `ataxiaBasher_onDeath` sets the belief to UNKNOWN (nil) above its enabled-check. **The gravehands once-per-room record is cleared at each ripple** (`M.onRippleReset`) -- the tower reuses room numbers.
 
@@ -2988,17 +3037,21 @@ Two Tekura systems: TK6 (6-limb backbreaker, primary) and TKD (3-limb legacy). B
 
 **Key files:** `tekura/002_Tekura_6Limb_Offense.lua` (TK6), `tekura/001_Tekura_Offense.lua` (TKD). **Namespace:** `tekura6` / `tekura`.
 
-**Aliases:** `zz` = TK6 with kai surge, `xx` = legacy TKD, `vv` = TK6 with kai cripple.
+**Aliases:** `zz` = TK6 with kai surge, `xx` = legacy TKD, `vv` = TK6 with kai cripple, all with a Tekura
+stance. With none (a Shikudo), `zz`/`xx` run the dispatch offense (`shikudo/006`) and `vv` its Telepathy
+variant, `shikudo.dispatchMind` (`shikudo/011`, v4.7.420).
 
 **Kill route (TK6):** Prep all 6 limbs to 86%+ → Break arms+torso (Horse stance) → Wrench torso + break legs (Bear stance) → Backbreaker.
 
 **Kai modes:** `tekura6.config.kaiMode` — `"surge"` (45 kai, 3.2s eq, dismount) or `"cripple"` (41 kai, 4s eq, dismount + L1 breaks all limbs).
 
 **The dismount is paid for (v4.7.419).** TK6 sends it only when `ataxia_kaiAfford` (monk/004) passes;
-unknown kai is not enough. `tmounted` is one global that no target change resets, so TK6 trusts it only
-after seeing it down while the target was ours (`tekura6.mountConfirmed`): a known rider with kai short
-gets prep instead (echoed once), a flag carried over from an earlier target sweeps anyway (`tk6status`:
-YES?), and there is no second dismount while our surge holds the target (`ataxiaTemp.kaiSurgeWho`).
+unknown kai is not enough. Since v4.7.420 trigger 265 records whose mount the flag is
+(`ataxiaTemp.mountedWho`, matched as 016's `isTargeted` matches a name and completed by `updateTarget`): a
+flag recorded for another target is no mount (no dismount, no kai, `tk6status` NO), and one recorded for this
+target counts even if it was up when they became the target. A known rider with kai short gets prep instead
+(echoed once). Only an ownerless flag still uses the seen-down-then-up inference (`tk6status`: YES?), and there
+is no second dismount while our surge holds the target (`ataxiaTemp.kaiSurgeWho`).
 The kaido aliases warn when kai is known short and still send; `kc` falls back to MIND CRUSH.
 
 ---
@@ -3119,6 +3172,13 @@ blademaster.bladetwistTriggerID = tempRegexTrigger(
   end
 )
 ```
+
+**The server queue does the same to a planner's history (v4.7.420).** An offense key sends `queue addclear
+free ...`, which REPLACES a round still waiting on equilibrium or balance, so history kept across rounds (the
+last round's kind, a MIND run, a prelude count, a latch, an alternated side) must move when the GAME RUNS the
+round. Counted per press, `shikudo/007` (caught in review) ran the same kind of round twice per recovery,
+turned a critical MIND IMPATIENCE into a combo and spent its KAI CHOKE prelude unsent. 007 and 011 commit a
+pending round on the queue's run line, matched on its FIRST row since it wraps (`.claude/AGENTS.md`).
 
 ### Limb Balancing Strategy
 

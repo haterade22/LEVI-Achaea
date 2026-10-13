@@ -2,8 +2,9 @@
 --
 -- The notes (kb/raw/players/serpent-2026-10-12.txt) were checked against the code, and these are
 -- the faults that held:
---   S1  the three monkshood impatience sends skipped the sileris/fangbarrier gate every other
---       impulse uses, so a blocked impulse went out every round and the gecko strip never ran;
+--   S1  the three monkshood impatience sends skipped the sileris/fangbarrier gate the other
+--       impulses use, so a blocked impulse went out every round and the gecko strip never ran
+--       (scytherus mode's impulse skipped it too: B1 below);
 --   S2  an Ekanelia reaction's result was never recorded, so our own impatience (and curare's
 --       hypochondria, kalmia's slickness, loki's nausea + paralysis) never reached the tracker,
 --       and the 2.5 s impatience cooldown had no caller;
@@ -17,12 +18,19 @@
 --   so the next monkshood impulse dropped the masochism its reaction needs;
 --   the offense's timers read os.clock(), CPU time on Linux and macOS, and S2 made the 2.5 s
 --   impatience cooldown live.
+-- And two follow-ups (v4.7.420):
+--   B1  scytherus mode's impulse was the one impulse still without the sileris/fangbarrier gate;
+--   B2  a target change reset the hypnosis chain's MODE with the chain, so after one in hypnolock
+--       (ekhl) the next chain suggested fratricide and snapped with no seal. Its review found the
+--       lock chain never ended: the snap left `sealed` set, which is canSnap() in lock mode, so
+--       every later round sent SNAP and held off the impulses that need the eq slot.
 --
 -- Loads the REAL offense (serpent/002), the REAL trigger body (serpent/016), the REAL defence
 -- handlers (algedonic_defense_1.0/001) and the REAL tracker (017's public API over V3, 007 + 008),
--- and builds whole rounds through serp_ekanelia_offense(). Every global the loaded files create or
--- change is restored at the end (one shared Lua state for all test files), and so are os.clock
--- (held still here: the offense must not read it) and table.contains.
+-- and builds whole rounds through serp_ekanelia_offense(). B2 also loads the REAL target switch
+-- (016_Targeting_Functions) and the class check it reads (misc_scripts/002). Every global the
+-- loaded files create or change is restored at the end (one shared Lua state for all test files),
+-- and so are os.clock (held still here: the offense must not read it) and table.contains.
 
 local mock = require("mock_mudlet")
 local before = {}
@@ -67,6 +75,19 @@ local FRAT_CURED
 for _, t in pairs(mock.active_triggers) do
   if t.pattern:find("look of madness", 1, true) then FRAT_CURED = t.callback end
 end
+
+-- For B2, taken here for the same reason (world() resets the mock): the trigger 002 registered for
+-- "has noticed your attempt at hypnosis", and the "changed target" handlers 007 and 002 registered,
+-- in order, which Mudlet runs when 016's switchTarget raises the event. The seal and snap lines'
+-- triggers are kept whole (pattern and code), so a test can check its line against the pattern.
+local HYPNO_NOTICED, HYPNO_SEALED, HYPNO_SNAPPED
+for _, t in pairs(mock.active_triggers) do
+  if t.pattern:find("has noticed your attempt at hypnosis", 1, true) then HYPNO_NOTICED = t.callback end
+  if t.pattern:find("your suggestions indelibly printed", 1, true) then HYPNO_SEALED = t end
+  if t.pattern:find("You snap your fingers in front of", 1, true) then HYPNO_SNAPPED = t end
+end
+local CHANGED_TARGET = {}
+for _, h in ipairs(mock.named_handlers["changed target"] or {}) do CHANGED_TARGET[#CHANGED_TARGET + 1] = h end
 
 local TL = dofile("src_new/tests/trigger_lib.lua")
 local EK_TRIGGER = "src_new/triggers/levi_ataxia/for_levi/leviticus/serpent/016_Ekanelia_Success.lua"
@@ -498,6 +519,211 @@ describe("S6: the defence against a Serpent", function()
       defend(affs)
       for _, c in ipairs(sends) do expect(has(c, "curing priority")).toBeFalse() end
     end
+  end)
+end)
+
+describe("B1: scytherus mode's impulse respects sileris/fangbarrier too", function()
+  -- Scytherus mode with addiction + nausea up and no scytherus yet: PRIORITY 7 impulses the
+  -- scytherus (its Ekanelia gives camus), riding a bite that the barrier stops.
+  local function scytherusRound(...)
+    world(); serpOffenseMode = "scytherus"; give("addiction", "nausea", ...)
+    return round()
+  end
+
+  it("no barrier: the scytherus impulse goes out", function()
+    expect(has(scytherusRound(), "impulse Agathon confusion scytherus")).toBeTrue()
+  end)
+
+  it("fangbarrier up: no impulse, and the round still dstabs", function()
+    local r = scytherusRound("fangbarrier")
+    expect(has(r, "impulse")).toBeFalse()
+    expect(has(r, "dstab Agathon curare kalmia")).toBeTrue()
+  end)
+
+  it("sileris blocks it the same way", function()
+    local r = scytherusRound("sileris")
+    expect(has(r, "impulse")).toBeFalse()
+    expect(has(r, "dstab Agathon")).toBeTrue()
+  end)
+
+  it("with asthma up, that dstab is the gecko that strips the barrier", function()
+    -- scytherus_attack's first venom is gecko when asthma is up and slickness is not
+    -- (selectVenoms); the blocked impulse used to replace the dstab, so it never went out.
+    local r = scytherusRound("asthma", "fangbarrier")
+    expect(has(r, "impulse")).toBeFalse()
+    expect(has(r, "dstab Agathon gecko")).toBeTrue()
+  end)
+end)
+
+describe("B2: hypnolock keeps its mode across a target change", function()
+  for _, f in ipairs({
+    "src_new/scripts/levi_ataxia/levi/ataxia/016_Targeting_Functions.lua",
+    "src_new/scripts/levi_ataxia/levi/ataxia/misc_scripts/002_System_Class_Functions.lua",
+  }) do
+    local fine, e = pcall(dofile, f)
+    if not fine then error("Failed to load " .. f .. ": " .. tostring(e)) end
+  end
+
+  -- Our target becomes `who` the way the `t` alias does it: 016's switchTarget, outside bashing,
+  -- with "changed target" run through the handlers 007 and 002 registered. What switchTarget
+  -- reaches outside the loaded files is stubbed for the call and put back after it.
+  local STUBBED = { "matches", "pariah", "ataxiaBasher", "raiseEvent", "setafflictionstackslevi",
+    "twohanded_resetFractures" }
+  local function retarget(who)
+    local saved = {}
+    for i, k in ipairs(STUBBED) do saved[i] = _G[k] end
+    matches = { "t " .. who:lower(), who:lower() }
+    pariah, ataxiaBasher = nil, nil              -- 016 indexes pariah when set (the runner's is "")
+    local record = raiseEvent
+    raiseEvent = function(e, ...)
+      record(e, ...)
+      if e == "changed target" then
+        for _, h in ipairs(CHANGED_TARGET) do h(e, ...) end
+      end
+    end
+    setafflictionstackslevi = function() end     -- 015 (over 004's stack list), not loaded
+    twohanded_resetFractures = function() end    -- ataxia/006, not loaded
+    gmcp.Char.Status = { class = "Serpent" }
+    ataxiaTemp.class = "Serpent"
+    ataxia.playersHere = { "Agathon", who }
+    local fine, e = pcall(switchTarget, who)
+    for i, k in ipairs(STUBBED) do _G[k] = saved[i] end
+    if not fine then error(e, 0) end
+  end
+
+  -- A test that leaves world() a mode it does not reset any more (reset() keeps it, which is the
+  -- point), so each one puts back the defaults whether it passes or not.
+  local function cleanly(fn)
+    local fine, e = pcall(fn)
+    serpent.hypnosis.mode = "fratricide"
+    serpent.hypnosis.targetSuggestions = {}
+    ataxia.playersHere = { "Agathon" }
+    if not fine then error(e, 0) end
+  end
+
+  it("after a target change the next chain suggests the lock afflictions, then seals", function()
+    cleanly(function()
+      world()
+      serp_setmode_hypnolock()                   -- ekhl: the chain starts on Agathon...
+      expect(serpent.hypnosis.mode).toBe("lock")
+      serpent.hypnosis.onHypnotised()
+      serpent.hypnosis.onSuggested("hypochondria") -- ...and gets one suggestion in
+      retarget("Claes")
+      expect(target).toBe("Claes")
+      expect(serpent.state.firstAttack).toBeTrue() -- 002's "changed target" handler ran as well
+      expect(serpent.hypnosis.mode).toBe("lock")
+      expect(#serpent.hypnosis.suggestions).toBe(0) -- Agathon's chain is gone
+
+      expect(has(round(), "hypnotise Claes")).toBeTrue()
+      serpent.hypnosis.onHypnotised()
+      local r = round()
+      expect(has(r, "suggest Claes hypochondria")).toBeTrue()
+      expect(has(r, "fratricide")).toBeFalse()
+      for _, sug in ipairs({ "hypochondria", "disrupt" }) do serpent.hypnosis.onSuggested(sug) end
+      expect(has(round(), "suggest Claes generosity")).toBeTrue()
+      serpent.hypnosis.onSuggested("generosity")
+      r = round()
+      expect(has(r, "seal Claes 3")).toBeTrue()
+      expect(has(r, "snap")).toBeFalse()
+    end)
+  end)
+
+  it("the lock suggestions are picked again for the new target", function()
+    cleanly(function()
+      world(); give("hypochondria")              -- Agathon has hypochondria already
+      serp_setmode_hypnolock()
+      expect(table.concat(serpent.hypnosis.targetSuggestions, ",")).toBe("disrupt,generosity")
+      retarget("Claes")                          -- Claes does not
+      expect(table.concat(serpent.hypnosis.targetSuggestions, ",")).toBe("hypochondria,disrupt,generosity")
+    end)
+  end)
+
+  it("a hypnosis attempt the target noticed restarts the lock chain, not a fratricide one", function()
+    cleanly(function()
+      world()
+      serp_setmode_hypnolock()
+      serpent.hypnosis.onHypnotised()
+      expect(HYPNO_NOTICED ~= nil).toBeTrue()
+      matches = { "Agathon has noticed your attempt at hypnosis!", "Agathon" }
+      assert((loadstring or load)(HYPNO_NOTICED))()
+      expect(serpent.hypnosis.phase).toBe("idle")
+      expect(serpent.hypnosis.mode).toBe("lock")
+      expect(has(round(), "hypnotise Agathon")).toBeTrue()
+      serpent.hypnosis.onHypnotised()
+      expect(has(round(), "suggest Agathon hypochondria")).toBeTrue()
+    end)
+  end)
+
+  it("ekhyp after ekhl runs the fratricide chain: the alias sets its own mode", function()
+    cleanly(function()
+      world()
+      serp_setmode_hypnolock()
+      serp_setmode_hypnosis()
+      expect(serpent.hypnosis.mode).toBe("fratricide")
+      expect(#serpent.hypnosis.targetSuggestions).toBe(0)
+      serpent.hypnosis.onHypnotised()
+      expect(has(round(), "suggest Agathon fratricide")).toBeTrue()
+    end)
+  end)
+
+  -- One of the hypnosis lines whose trigger was captured at load: the line must still match the
+  -- trigger's pattern, then the trigger's code runs.
+  local function hypnoLine(trig, line, who)
+    assert(trig, "002's trigger for this line was not captured at load")
+    assert(TL.matches(trig.pattern, 1, line), "002's pattern no longer takes: " .. line)
+    matches = { line, who }
+    assert((loadstring or load)(trig.callback))()
+  end
+
+  -- Fires, earliest first, the timers due within dt seconds of being armed. Each one here was
+  -- armed at the snap, so this is the client dt seconds after it.
+  local function elapse(dt)
+    local due = {}
+    for id, t in pairs(mock.active_timers) do
+      if t.delay <= dt then due[#due + 1] = { id = id, t = t } end
+    end
+    table.sort(due, function(a, b) return a.t.delay < b.t.delay end)
+    for _, d in ipairs(due) do
+      mock.active_timers[d.id] = nil
+      if type(d.t.callback) == "function" then d.t.callback() else assert((loadstring or load)(d.t.callback))() end
+    end
+  end
+
+  -- The chain B2's path now runs, followed past its snap. onSnapped left `sealed` true, and in
+  -- lock mode canSnap() IS `sealed`, so every round after the chain sent SNAP as its eq action,
+  -- and an eq action shuts out every impulse that needs the eq slot free (PRIORITY 3, 4, 5 and 7),
+  -- the monkshood impatience among them. Before B2 a target change turned the chain into the
+  -- fratricide one, whose canSnap() is phase == "ready_snap" and so ends at its snap.
+  it("the chain ends at its snap: no later round snaps again, and the impulses come back", function()
+    cleanly(function()
+      world()
+      serp_setmode_hypnolock()
+      serpent.hypnosis.onHypnotised()
+      retarget("Claes")
+      expect(has(round(), "hypnotise Claes")).toBeTrue()
+      serpent.hypnosis.onHypnotised()
+      for _, sug in ipairs({ "hypochondria", "disrupt", "generosity" }) do serpent.hypnosis.onSuggested(sug) end
+      expect(has(round(), "seal Claes 3")).toBeTrue()
+      hypnoLine(HYPNO_SEALED,
+        "You draw Claes out of his hypnotic daze, your suggestions indelibly printed on his mind.", "Claes")
+      expect(has(round(), "snap Claes")).toBeTrue()
+      hypnoLine(HYPNO_SNAPPED, "You snap your fingers in front of Claes.", "Claes")
+
+      elapse(0.5)                                -- onSnapped's switch to lock mode
+      expect(serpOffenseMode).toBe("lock")
+      expect(has(round(), "snap")).toBeFalse()
+      elapse(COOLDOWN_TIME)                      -- the chain's cooldown, and the trigger's 3 s
+      expect(serpent.hypnosis.phase).toBe("idle")
+      expect(has(round(), "snap")).toBeFalse()
+
+      -- A new target is believed to have rebounding, sileris and fangbarrier up (016's
+      -- targetresetafflictionslevi); they come down as the flay and the gecko strip would take them.
+      for _, def in ipairs({ "rebounding", "sileris", "fangbarrier" }) do erAff(def) end
+      give("asthma", "weariness", "slickness")  -- the impatience conditions, on Claes
+      local r = round()
+      expect(has(r, "impulse Claes masochism monkshood")).toBeTrue()
+      expect(has(r, "snap")).toBeFalse()
+    end)
   end)
 end)
 

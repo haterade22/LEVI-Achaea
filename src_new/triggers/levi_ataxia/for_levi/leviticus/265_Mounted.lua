@@ -36,3 +36,11 @@ patterns:
 ]]--
 
 tmounted = true
+
+-- Whose mount this is (v4.7.420). The line names nobody ("your opponent"), so it is the target we
+-- were attacking. tmounted stays one global for the readers that read it as one (Blademaster's
+-- KNEES dismount in blademaster/005, the Shikudo dispatch), but no target change resets it, so TK6
+-- reads the owner as well: a flag recorded for someone else is not this target's mount
+-- (tekura6.isMounted, tekura/002). ataxiaTemp is never saved.
+ataxiaTemp = ataxiaTemp or {}
+ataxiaTemp.mountedWho = target

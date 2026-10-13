@@ -1076,6 +1076,49 @@ precisely the sequence that failed live. They passed for years and would have go
 **A test that never performs the real sequence will happily pin the wrong behaviour.** When fixing a
 live bug, check whether the existing tests describe the world as it is or as the bug made it.
 
+## Round history moves when the GAME RUNS the round, not on the press (v4.7.420)
+
+A key-driven offense that plans the next round from earlier rounds (the kind of the last round, a run of
+MIND rounds, a prelude count, a latch, an alternating side) must move that history when the game RUNS a
+round, never when the key is pressed. Each press sends `queue addclear free ...`, which REPLACES a round
+still waiting on equilibrium, balance, a binding, paralysis or a stun (HELP 4.6.1), so history kept per
+press makes the round that runs depend on how often the key was pressed. Found in review of the rebuilt
+Shikudo lock (`shikudo/007`, `sr`): with two presses per recovery, Rain ran the same kind of round every
+window; the third press of a critical MIND IMPATIENCE turned it into a combo that landed hiraku first;
+and in a truelock the fourth press jumped to KAI CHOKE, so the confuse/disrupt prelude never went out.
+It is CLAUDE.md's "Counter Incrementing (Button Spam Issue)" with the server queue doing the replacing.
+
+How 007 and `vv` (`shikudo/011`) do it:
+- the round sent is kept PENDING with what it would change (007: its kind, the sides it alternated to,
+  whether it was a prelude round; vv: whether it was a blackout);
+- a session temp trigger reads the run line, `[System]: Running queued <q> command: <cmd>`, with the
+  pattern `clean-up/001_Queue_Scanning.lua`:34 uses (`queue_Scan` raises no event to subscribe to; no
+  capture of the line is in kb/raw), and commits the pending round when the run line's FIRST ROW is a
+  prefix of it, both lower-cased with whitespace dropped: a combo's run line is about 134 columns with
+  `combatQueue()`'s prefix and wraps at this user's 119-124, so only its first row is ever captured;
+- in 007 another command's run line moves nothing; vv also ends its burst on any run line whose first
+  row carries a whole-word `combo` (006's, 007's or one typed by hand). A later press replaces the
+  pending round, as the server replaced the queued one;
+- until a run line has matched one of our rounds (in vv, also any run line carrying a combo), a round
+  counts when it is sent, so the caps still hold with queue alerts off (`CONFIG SHOWQUEUEALERTS`);
+- the trigger id lives on `ataxiaTemp` (never saved) and a reload kills the old trigger first.
+
+The same root decides the other press-time read: on a `free`-queue round, equilibrium at the press says
+nothing about what will run (the queue waits for equilibrium AND balance whatever the round is), so 007
+and 011 dropped that gate too; it only swapped a critical MIND round for a combo that ran at the same
+moment. Known limits: whether the run line prints for a round that runs at once is unconfirmed (the
+package's gated tracking groups already assume it does; if it does not, such a round is never counted,
+because the next press replaces its pending record); a press that crosses a run line in flight can lose
+one round's count, which the caps bound; and queue alerts turned off mid-session FREEZE the history,
+007's until a reload (`shikudoLock.state` is rebuilt when 007 loads) and vv's until the client restarts
+(`ataxiaTemp.shikTele` survives a reload). A frozen history no longer moves the caps, so they bound
+nothing: frozen below a cap, MIND rounds can go out on every press until the lapse guard or the
+afflictions landing stop them; frozen at a cap, none goes out. Test it by feeding the real trigger
+callback the run line wrapped at several widths (`trigger_lib.wrap`, as `test_shikudo_offense.lua` does
+at 100/119/124/200). 006 needs none of this: the only cross-round state it reads,
+`ataxiaTemp.lastFrontkickArm`, changes only when the target parries that arm; `kickTarget` and
+`slot1Target` are rebuilt every round, and `lastFlashheelLeg` is written but read by nothing live.
+
 ## Quality Gates (Hooks)
 
 Hooks in `.claude/hooks/` run automatically and block operations that fail validation:

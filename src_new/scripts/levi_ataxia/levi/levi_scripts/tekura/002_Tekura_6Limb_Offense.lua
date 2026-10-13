@@ -28,7 +28,8 @@ packageName: ''
 --   - Last limb parried: kai surge (dismount) -> sweep (prones) -> punch last limb
 --     The dismount goes out only with the kai to pay for it (tekura6.kaiDismount); without
 --     it a sweep cannot prone a rider, so that round preps instead -- unless the mount flag
---     predates this target (tekura6.mountConfirmed), when it sweeps anyway.
+--     is not known to be this target's (tekura6.mountConfirmed), when it sweeps anyway. A
+--     flag trigger 265 recorded for another target is no mount at all (tekura6.isMounted).
 
 --------------------------------------------------------------------------------
 -- NAMESPACE & STATE
@@ -46,7 +47,7 @@ tekura6.state = {
   lastEchoTime = nil,         -- Debounced echo timestamp (DWB pattern)
   lastKickLimb = nil,         -- Direct parry tracking: stores kick target for parry trigger
   kaiShortfall = nil,         -- kaiMode (+"?" if sweeping anyway) last echoed short (kaiDismount)
-  mount = nil,                -- { who, carried }: whose mount flag this is (tekura6.mountConfirmed)
+  mount = nil,                -- { who, carried }: an ownerless mount flag's view (tekura6.mountConfirmed)
 }
 
 tekura6.config = {
@@ -256,19 +257,53 @@ function tekura6.checkRebounding()
   return tekura6.hasAff("rebounding") or (tAffs and tAffs.rebounding) or false
 end
 
--- Check if target is mounted
-function tekura6.isMounted()
-  return tmounted or tekura6.hasAff("mounted") or false
+-- A target as the ownerless check keys it (tekura6.mountConfirmed): lowercase, or a denizen's
+-- number as text.
+local function mountKey(who)
+  if who == nil then return nil end
+  return type(who) == "string" and who:lower() or tostring(who)
 end
 
--- Is the mount flag about THIS target? tmounted is one global for whoever we fight (trigger 265
--- sets it, 264 clears it), and nothing resets it when the target changes (016 switchTarget does
--- not), so a true carried over from an earlier target says nothing about this one. It is trusted
+-- Whose mount the flag is: trigger 265 records the target it printed against
+-- (ataxiaTemp.mountedWho, since v4.7.420), and 016's updateTarget completes a part of a name
+-- along with the target's. nil when no 265 line has recorded one, e.g. a flag set before that:
+-- tmounted is a bare global, so it outlives a package reinstall.
+local function mountOwner()
+  return ataxiaTemp and ataxiaTemp.mountedWho
+end
+
+-- Is the flag's owner this target? By the rule 016's isTargeted applies to a line naming our
+-- target: names compared lowercased, one person when either starts the other. `t aga` targets
+-- "Aga" until a line naming Agathon completes it (updateTarget, with no switchTarget), so 265 can
+-- record either spelling of one rider, and an exact match read a rider 265 had just seen as
+-- unmounted. A denizen's number matches only itself.
+local function ownsMount(owner, who)
+  if type(owner) ~= "string" or type(who) ~= "string" then
+    return owner ~= nil and who ~= nil and tostring(owner) == tostring(who)
+  end
+  local x, y = owner:lower(), who:lower()
+  if x == "" or y == "" then return false end
+  return x:sub(1, #y) == y or y:sub(1, #x) == x
+end
+
+-- Check if target is mounted. tmounted is one global for whoever we fight (trigger 265 sets it,
+-- 264 clears it) that no target change resets (016 switchTarget does not); a flag 265 recorded
+-- for someone else is not this target's mount, and one with no owner recorded counts, as before.
+function tekura6.isMounted()
+  if tekura6.hasAff("mounted") then return true end
+  if not tmounted then return false end
+  local owner = mountOwner()
+  return owner == nil or ownsMount(owner, target)
+end
+
+-- Is the mount flag about THIS target? When trigger 265 recorded whose it is (mountOwner), it is
+-- this target's exactly when that owner is this target (ownsMount). An ownerless one is trusted
 -- for this target once TK6 has seen it false while this target was ours: a later true is then a
--- 265 line about them. run() looks on every round, so the first look is the target's first round.
--- A "mounted" target affliction needs none of this: 016 resets those per target.
+-- 265 line about them, while a true carried over from an earlier target says nothing about this
+-- one. run() looks on every round, so the first look is the target's first round. A "mounted"
+-- target affliction needs none of this: 016 resets those per target.
 function tekura6.mountConfirmed()
-  local who = type(target) == "string" and target:lower() or tostring(target)
+  local who = mountKey(target)
   local m = tekura6.state.mount
   if not m or m.who ~= who then
     m = { who = who, carried = tmounted and true or false }
@@ -276,7 +311,10 @@ function tekura6.mountConfirmed()
   end
   if not tmounted then m.carried = false end
   if tekura6.hasAff("mounted") then return true end
-  return (tmounted and not m.carried) and true or false
+  if not tmounted then return false end
+  local owner = mountOwner()
+  if owner ~= nil then return ownsMount(owner, target) end
+  return not m.carried
 end
 
 -- True while our KAI SURGE window is open on THIS target (trigger monk/002 records whom the surge
@@ -535,8 +573,9 @@ function tekura6.dispatch.buildParryBypassAttack(parriedLimb)
   -- (tekura6.surgeHoldsTarget), though tmounted still says mounted: only trigger 264 ever clears
   -- it. Another dismount there would re-spend kai on a target already down or, since the window
   -- opens just after a surge spent its kai, drop the window's sweep for want of it.
-  -- An unpaid dismount costs the sweep only when the mount is THIS target's (mountConfirmed): a
-  -- flag carried over from an earlier target sweeps anyway, as every bypass did before the gate.
+  -- A flag 265 recorded for someone else is no mount here (isMounted). An unpaid dismount costs
+  -- the sweep only when the mount is THIS target's (mountConfirmed): an ownerless flag carried
+  -- over from an earlier target sweeps anyway, as every bypass did before the gate.
   if tekura6.isMounted() and not tekura6.surgeHoldsTarget() then
     local confirmed = tekura6.mountConfirmed()
     local dismount = tekura6.kaiDismount(confirmed)
@@ -798,7 +837,8 @@ function tekura6.dispatch.status()
   cecho("\n<yellow>| <white>CONDITIONS:<yellow>")
   cecho("\n<yellow>|   <white>Prone: " .. (tekura6.hasAff("prone") and "<green>YES" or "<red>NO"))
   cecho("      <white>Parried: <cyan>" .. (ataxiaTemp.parriedLimb or "none"))
-  -- YES? = the flag is up but predates this target (mountConfirmed): the bypass sweeps anyway
+  -- YES? = the flag is up with no owner recorded and predates this target (mountConfirmed): the
+  -- bypass sweeps anyway. NO also when 265 recorded the flag for someone else (isMounted).
   local mounted = not tekura6.isMounted() and "<green>NO"
     or (tekura6.mountConfirmed() and "<red>YES" or "<yellow>YES?")
   cecho("\n<yellow>|   <white>Mounted: " .. mounted)

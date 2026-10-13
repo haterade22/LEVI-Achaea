@@ -199,6 +199,16 @@ end
 
 function updateTarget(name)
 if type(target) ~= "number" then
+  -- Trigger 265 records whose mount the flag is as `target` when its line printed
+  -- (ataxiaTemp.mountedWho, v4.7.420), so after `t aga` it can hold part of a name. This is the
+  -- same person's name, completed, so the owner is completed with it. TK6 matches the owner the
+  -- way isTargeted above matches a name, either one starting the other (tekura6.isMounted), so a
+  -- part left behind would also match the next target whose name starts the same way (Agatha
+  -- after Agathon).
+  local who = ataxiaTemp and ataxiaTemp.mountedWho
+  if type(who) == "string" and type(target) == "string" and who:lower() == target:lower() then
+    ataxiaTemp.mountedWho = name:title()
+  end
   target = name:title()
   ataxiaEcho("Updated target full name to: "..target..".")
   if tar_upper then killTrigger(tar_upper) end

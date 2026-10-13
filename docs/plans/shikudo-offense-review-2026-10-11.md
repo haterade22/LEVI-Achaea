@@ -6,7 +6,9 @@ offense logic); every critical finding below was re-checked by hand against the 
 
 ## The game's rules that matter
 
-**Combo:** at most three attacks, only one a kick. Sweep uses both arm balances, so it pairs only with a kick.
+**Combo:** at most three attacks, only one a kick. Sweep uses both arm balances, so it pairs only with a kick,
+and a sweep round is two kata actions (c.iJVmpL:3868-3872; one combo of Mystor's put a `hiru light` beside a
+sweep, vNTjvghY:8081, and the hiru printed nothing though the chain counted three).
 Dispatch/Incapacitate are used outside a combo, in any form.
 
 **Forms** (wiki):
@@ -48,8 +50,9 @@ jinzuku in one form.
 
 | File | Status |
 |---|---|
-| 006_CC_Shikudo_Dispatch | **Live** dispatch path (`sk`, `zz`, `xx`, and `vv` since v4.7.419) |
-| 007_CC_Shikudo_Lock | **Live** lock path (`sr`) |
+| 006_CC_Shikudo_Dispatch | **Live** dispatch path (`sk`, `zz`, `xx`; `vv`'s combo, kill and shield rounds through 011). `skstaff` (alias `shikudo/007_Staff`, v4.7.420) sets the staff it wields |
+| 007_CC_Shikudo_Lock | **Live** lock path (`sr`), rebuilt in v4.7.420 |
+| 011_Shikudo_Telepathy | **Live** (v4.7.420): `vv` = the dispatch offense with Telepathy rounds between its combos (`shikudo.dispatchMind`) |
 | 009_CC_Shikudo_GodMode | **Switched off** (v4.7.419). Nothing could reach it, and its run() threw on the first tick. Why, and what a later riftlock or arm route should salvage, are in its RETIRED header; read them there (its line numbers are pinned by `test_monk_aliases.lua` and move with the file). To be deleted with 001/002/004/005/008 |
 | 010_Shikudo_Strike_Ledger | **Live** (v4.7.419): the strike ledger, phase 3a (Status, below) |
 | 001, 002, 004, 005 | Dead (no callers, or redefined by 006) |
@@ -60,25 +63,35 @@ jinzuku in one form.
 
 **Critical**
 1. **`vv` throws on Shikudo, and GodMode can never run** (153 -> `shikudo.setMode`, defined only in inactive 008).
-   **Resolved in v4.7.419:** 009 is switched off, and `vv` on a Shikudo runs `shikudo.dispatch()`, as `zz`
-   does (it calls `shikudo.dispatchMind` instead once something defines it; nothing does yet).
+   **Resolved in v4.7.419:** 009 is switched off, and `vv` on a Shikudo ran `shikudo.dispatch()`, as `zz`
+   does. Since v4.7.420 it runs `shikudo.dispatchMind` (011): the dispatch with Telepathy rounds.
 2. **The lock can never use Telepathy, so it never gets past venomlock.** 007 gates Telepathy on
    `ataxia.balances.eq`, which nothing writes. Even ungated, it sends `mindlock`, `impatience`, `paralyse`
    (the game needs `MIND LOCK`, `MIND IMPATIENCE`, `MIND PARALYSE`) and `batter`, which is not an ability
    (`MIND BATTER`). So impatience, and with it hardlock/truelock/kill, is unreachable. **Fixed in v4.7.417**
-   (Phase 2 progress, below).
+   (Phase 2 progress, below). v4.7.420 rebuilt it: a MIND round of its own instead of the combo, with no
+   equilibrium gate at all, and no BATTER.
 3. **Flashheel is treated as ~9% leg prep, but it breaks the leg outright.** 006 flashheels in every Willow combo
    and in Gaital, so legs break (and get mended) long before the head is ready. 009 does the same. 007 breaks the
-   left leg every combo.
+   left leg every combo. **Narrowed and fixed in v4.7.420:** the break is the players' tool (every logged Willow
+   combo carries a flashheel, and most Gaital combos: Mystor 43 of 47, log 1 8 of 11; it keeps her down and
+   mending), so the fix is choosing the LEG, not dropping the kick.
+   006's `shikudo.flashheelKick` ranks the legs (not into her parry, not to 100% unless the round sweeps or she is
+   down, an unbroken leg first) and reads the break from trigger 577; 007's `shikudoLock.flashLeg` kicks the leg
+   577 has not recorded as broken. `isLegSafe` and the "never break legs" doctrine are gone.
 
 **High**
 4. **Dispatch also requires a broken leg** (006:101-105). The game needs prone + damaged head + windpipe only.
+   **Fixed in v4.7.420** (006:99-105): the logged kill went out with the kicked leg at 8.4%.
 5. **Crescent never fires.** 006 reads `ataxiaTemp.targetHP`, which nothing writes. 007 fires it with no prone or
    health check. 009 can never reach it (it dispatches on the same state first). **006 fixed in v4.7.417** (it
-   reads ASSESS); 007 still fires it with no check. v4.7.419 added the gate both should use,
-   `ataxia_assessAtMostHalf()` (monk/004, raw ASSESS numbers), which no offense calls yet.
+   reads ASSESS). **Both fixed in v4.7.420:** 006's Maelstrom kick and 007's `crescentReady` need a prone target
+   and `ataxia_assessAtMostHalf(5)` (monk/004: a fresh ASSESS of this target, raw numbers, so 3540/7000 no
+   longer passes as 50%), and 007 never pairs Crescent with a shatter.
 6. **Hyperfocus key mismatch.** 006 reads `shikudo.state.hyperfocus`; the trigger writes `ataxiaTemp.hyperLimb`.
-   The halved damage on the hyperfocused limb is never modelled, so head prep is overestimated.
+   The halved damage on the hyperfocused limb is never modelled, so head prep is overestimated. **Fixed in
+   v4.7.420:** `shikudo.hyperLimb()` reads `ataxiaTemp.hyperLimb` (nil once GMCP's defence list lacks hyperfocus),
+   and both prep thresholds take their damage from `getAttackDamage`, which halves it.
 
 **Medium**
 7. Parry switching is half-wired (corrected 2026-10-12; this said the "was parried" flags were only ever
@@ -86,12 +99,26 @@ jinzuku in one form.
    `frontkickWasParried` by `parry/001` (:65, in Rain). 006 reads each one once and clears it while building
    the same combo (006:492, 556, 621), so the kick switches side only in the first combo 006 builds after
    the parry line. The frontkick and flashheel picks never read the persistent `ataxiaTemp.parriedLimb` (148's
-   perceive line and others write it); 006's risingkick and staff picks do.
+   perceive line and others write it); 006's risingkick and staff picks do. **Fixed in v4.7.420:**
+   `shikudo.parriedLimb()` reads 148's perceived parry, else the `tp*` flags 187 and `parry/001` set beside the
+   was-parried flags, every round; Rain keeps its frontkick arm until that arm is parried. The was-parried flags
+   are still written, and now only the switched-off 008 reads them.
 8. 007's softlock loops (Oak -> Willow -> Rain -> Oak, 5+ kata per hop), so anorexia is cured before asthma lands.
+   **Fixed in v4.7.420**, and it was worse than listed: when anorexia was cured before Rain reached kata 5, 007
+   went Rain -> Tykonos -> Willow and never saw Oak again. 007 now follows Mystor's counted route (Rain -> Oak ->
+   Willow, never Tykonos; Oak -> Willow only with asthma + slickness on and anorexia still off;
+   `kb/combat/shikudo.md`, "Mystor's lock route, counted").
 9. 009 defects: spinkick from Willow (Gaital only), kai never read (`vitals.kai` is never written), "clumsiness"
    slot sends ruku torso (slickness), transition ticks send no combo. **Resolved in v4.7.419 by retiring 009**
    (switched off; see its header). `ataxia.vitals.kai` is written since v4.7.419 (`update_stuff/004`).
-10. Weapon handling: 006 hardcodes `staff489282`; the sweep trigger hardcodes one staff description.
+10. Weapon handling: 006 hardcodes `staff489282`; the sweep trigger hardcodes one staff description. **Fixed in
+   v4.7.420 for 006 and the triggers that act:** every 006 round and trigger 168 wield `shikudo.staffRef()`
+   (the new `skstaff` alias, else the bare keyword `staff`), and triggers 166, `calls/008` and `gags/001` match
+   any staff as early fragments (166 and `gags/001` act only in PvP, since a fragment ending before the name
+   matches a denizen too). 007 still sends a bare `wield staff`. The "Start Shikudo" strike triggers 172-186 do
+   nothing but a guarded call into the undefined `monk.shikudo` (179 also sets a `flash_leg` that nothing
+   reads), so they are inert; the staff-strike ones, 173 the sweep among them, still name "a warped black iron
+   staff coated with rust". Candidates to retire.
 
 ## Tracking findings (what the triggers record on the target)
 
@@ -110,7 +137,11 @@ or parry records nothing, which is correct. Problems:
 3. **Missing prone conditionals:** hiru's confusion, hiraku's stun, risingkick's stun. **Dawnkick is not tracked**
    (first epilepsy or the delayed second one).
 4. **Spinkick to the head records `mangledhead`**, unconditionally and outside the target check. Dispatch reads
-   `damagedhead`.
+   `damagedhead`. **Fixed in v4.7.413** (581 no longer records it). Since then nothing records a target's
+   mangled head (632 records `damagedhead` at 100-199% head damage and `concussion` at 200%+, and only when no
+   leg, arm or torso is in its own band at the same time: its checks are one elseif chain, legs first), which
+   keeps vv's MIND SCYTHE dormant (v4.7.420): capture which head level the game calls mangled before writing a
+   recorder.
 5. **`calls/*` effect-line triggers have no target check** (sweep, frontkick, hiru, hiraku, needle): another
    Monk's hit on a third party marks your target. `calls/009` calls `tarAff`, which does not exist, so it
    throws on every jinzuku line.
@@ -127,7 +158,7 @@ or parry records nothing, which is correct. Problems:
 
 ## Docs that are wrong
 
-Status 2026-10-12 (v4.7.419):
+Status 2026-10-12 (v4.7.419, then v4.7.420):
 - CLAUDE.md's Shikudo section: the files that do not exist (200/201/203, `shikudov2`, `skv2status`), the Kai
   Surge claim and the Tykonos kata cap were removed on 2026-10-11. Its 009 and `vv` lines change with v4.7.419.
 - `.claude/classes/monk.md`: the SWEEP + KURO combo, the Dispatch requirements and flashheel's own entry were
@@ -139,17 +170,32 @@ Status 2026-10-12 (v4.7.419):
 - `.claude/AGENTS.md` and `docs/ai-includes/agent-teams.md` named `shikudov2`, which exists nowhere in
   src_new: corrected in v4.7.419.
 - Transitions: inline `combo ... transition <form>` (006) and a separate `TRANSITION TO <form> FORM` both work
-  live. 007 sends `transition to the <form> form` after its combo (007:545), the wiki's detail wording. No log
-  here shows that wording, but the PvE basher sent it until v4.7.68 and the game answered with the kata refusal
-  (CHANGELOG v4.7.68), so the game reads it as a TRANSITION; whether it succeeds at kata 5+ is unseen.
+  live. 007 sent `transition to the <form> form` after its combo (007:545 at v4.7.419), the wiki's detail
+  wording, which no log here shows; the PvE basher sent it until v4.7.68 and the game answered with the kata
+  refusal (CHANGELOG v4.7.68), so the game reads it as a TRANSITION, but a success at kata 5+ is unseen. **Since
+  v4.7.420 007 sends `transition to <form> form` FIRST in its round**, the wording Mystor sends (56 times in his
+  six logs), so no live code sends the THE wording any more.
+- v4.7.420 brought `.claude/classes/monk.md` and `kb/combat/shikudo.md` to the rebuilt offenses: 006 and 007 on
+  the shared kata policy (their own 12/24 tables and Rain's 24 gone), the staff from `skstaff` instead of
+  `staff489282`, Dispatch with no leg, flashheel as the chosen break rather than prep, `vv` as dispatch +
+  Telepathy (011), and the KAI CHOKE kill.
 
 ## Opportunities
-- Spinkick on a prone head (the big head-damage kick) is never used.
-- One needle crushes the windpipe; the double needle wastes a slot.
-- Mind Scythe, Kai Choke/Enfeeble/Cripple in PvP, and riftlock are not implemented.
-- Prone follow-ups (hiraku stun, hiru confusion, risingkick stun) are unused after a frontkick.
+- Spinkick on a prone head (the big head-damage kick) is never used. **006 sends it since v4.7.420** (prone, the
+  head not yet damaged, she stays down, and one needle would not finish the head), as Mystor finished one
+  (`combo Agathon needle spinkick kuro right`, LcJC-rJ5:5797); 007 spinkicks a prone target in Gaital.
+- One needle crushes the windpipe; the double needle wastes a slot. **Fixed in v4.7.420** (`shikudo.needleSecond`:
+  a second needle only while the head is still short of 100, else ruku torso, jinzuku, kuro).
+- Mind Scythe, Kai Choke/Enfeeble/Cripple in PvP, and riftlock are not implemented. **Kai Choke is 007's kill
+  since v4.7.420**; MIND SCYTHE is wired in vv (011) but off (`shikudo.tele.scythe`), pending the lock question
+  (kb/CONFLICTS.md #7) and a mangled-head recorder. Enfeeble and Cripple in PvP, and riftlock, are not.
+- Prone follow-ups (hiraku stun, hiru confusion, risingkick stun) are unused after a frontkick. **v4.7.420:**
+  006's Tykonos risingkicks a prone head and Willow's slot 2 falls back to `hiraku light` on a prone target
+  (Mystor sends it, vNTjvghY:7976); Oak already risingkicked a prone head. Hiru's confusion is still not aimed for.
 - No tests cover 006, 007 or 009. (Since v4.7.417 `test_shikudo_offense.lua` loads the real 006 and 007;
-  009 is switched off, which `test_monk_aliases.lua` pins.)
+  009 is switched off, which `test_monk_aliases.lua` pins.) **v4.7.420:** `test_shikudo_dispatch.lua` (59, the
+  real 006 and its triggers and alias), `test_shikudo_offense.lua` (46: 44 on 007, one on 006's Crescent, one on
+  the shikudo/002 trigger) and `test_shikudo_telepathy.lua` (47, 011), each loading the real monk/004 first.
 
 ## What two real combat logs settled (2026-10-11, later the same day)
 
@@ -192,11 +238,13 @@ a sword-and-board Runewarden by Dispatch (the monk's log) and a Runewarden killi
   fumble or a shield's rebound drops the strike; no dodge line has been seen. Dawnkick's epilepsy
   line is still wanted. **Phase 3b** (move about 30 recorders onto the ledger for a per-hit dedupe,
   then remove `ignoreThirdPerson`) waits until the ledger's counters have run in live play.
-- **Phase 2 (make the current modes correct): in progress** (v4.7.417, v4.7.419; Phase 2 progress,
-  below). Add to the list above: Crescent reads `ataxiaTemp.lastAssess`; flashheel is a break, not
+- **Phase 2 (make the current modes correct): in progress** (v4.7.417, v4.7.419, v4.7.420; Phase 2
+  progress, below). Add to the list above: Crescent reads `ataxiaTemp.lastAssess`; flashheel is a break, not
   prep; never SWEEP with a staff attack; send SHATTER when the target has a shield; never send a
   transition the game will judge below kata 5 (it judges the chain when the transition resolves: an
   inline one counts the combo's strikes, attacker:960-961, and one sent before the combo does not).
+  v4.7.420 rebuilt both offenses and added `vv`'s Telepathy; what remains is live checks, blackout and
+  scythe, and the items under "Still open".
 
 ## Telepathy and blackout (the user and Mystor, 2026-10-11)
 
@@ -225,15 +273,22 @@ Checked against the wiki, the two logs, the game's AFFLICTION SHOW and the code 
    form, no lock gate). It sends no target: the wiki's BLACKOUT syntax takes none, and the others take an
    optional one. It keys off `tAffs.blackout`, which nothing sets for MIND BLACKOUT, so it would only ever
    send BLACKOUT. **007 fixed in v4.7.417; `disruptmind()` deleted in v4.7.419.** 006 still sends no
-   Telepathy (planned for `vv`).
+   Telepathy; **`vv` does since v4.7.420** (011, `shikudo.dispatchMind`), with `zz`, `xx` and `sk` left
+   combo-only until it is proven live.
 2. **Every ability waits on `mindlocked`** (007:426, 008:404): drop the gate for in-room abilities; keep a
    lock only for anything that truly needs one. **Fixed in 007 in v4.7.417** (008 is switched off).
 3. **Bare words are sent** (`mindlock`, `impatience`, `paralyse`, `batter`, `blackout`): the game takes
    `MIND IMPATIENCE <target>` (log 1). The alias `mp` sends `mind paralyze`, and `mrap` reads an `affstrack`
    that is never assigned. **Fixed:** 007 in v4.7.417; in v4.7.419 `mp` sends `mind paralyse` (attacker
    log :1063-1064 sent, :1067 landed) and `mrap` is deleted.
-4. **Prefer Rain for Telepathy rounds** and decide per round between a combo and a MIND command.
+4. **Prefer Rain for Telepathy rounds** and decide per round between a combo and a MIND command. **Done in
+   v4.7.420:** both 007 and vv send a MIND round INSTEAD of the combo (Mystor paired a MIND affliction with a
+   combo in 0 of 274 rounds), 007 with a Rain filler and vv with a Rain burst from kata 9, neither gated on
+   equilibrium at the press (the `free` queue waits for it), and both count rounds when the game's run line
+   shows they ran, not per press.
 5. **Blackout cycle:** MIND BLACKOUT, then the hidden combo; again after their tree (or the 4 s expiry).
+   **Wired in vv (011) in v4.7.420 and switched off** (`shikudo.tele.blackout = false`): it waits for our
+   success line, the lock question (CONFLICTS #7) and the syntax (`mind blackout` vs `mind blackout <t>`).
 
 **Tracking to add (phase 2):**
 6. **Blackout on the target:** nothing records MIND BLACKOUT; the two blackout recorders (Psion LIGHTSTEAL
@@ -272,13 +327,18 @@ Checked against the wiki, the two logs, the game's AFFLICTION SHOW and the code 
   007 uses 31 only for a READY echo, and only switched-off 008 gates on it); the wiki says 45.
   **v4.7.419:** the caps are written down once, as policy taken from Mystor's play, in `ataxia/monk/004`
   (`ataxia_KATA`: leave at a chain of 12 after the combo, Rain 15, Tykonos as soon as legal; the `skata`
-  alias overrides them), but 006 and 007 do not read it yet. Every kai cost is there too
-  (`ataxia_KAI_COST`, surge 45), and TK6 now checks it before its dismount. 007 still echoes READY at 31
-  (display only).
+  alias overrides them). Every kai cost is there too (`ataxia_KAI_COST`, surge 45), and TK6 now checks it
+  before its dismount. **v4.7.420:** 006 and 007 read the policy and their own tables are gone. 006 judges its
+  inline transition on the chain after the combo's strikes, with a sweep round counted as TWO (Mystor's
+  client marks "Kata is 1" after the sweep and "Kata is 2" after its flashheel, then the game's "You are now
+  maintaining a kata chain of 2 actions.", c.iJVmpL:3868-3872); 007 sends its transition first and judges
+  the chain before the combo. 007 no longer mentions the surge: its kai ability is KAI CHOKE, read through
+  `ataxia_kai()`.
 - KAI and MIND commands add nothing to the kata (Mystor's prompts), and a chain with no strike lapses about
   20 s after the last one ("You can no longer maintain your deadly kata.", vNTjvghY:5967; the form is kept).
   So a run of MIND rounds must let a combo through in time: `ataxia_kataAtRisk()` (monk/004, v4.7.419)
-  answers that, and no offense calls it yet.
+  answers that. **Since v4.7.420 007 (a MIND round only when the chain's last strike is 12 s old or less, or
+  the round transitions) and vv (011) call it.**
 
 ## Phase 2 progress
 
@@ -320,12 +380,65 @@ Checked against the wiki, the two logs, the game's AFFLICTION SHOW and the code 
   in switched-off 008, is removed), and `tools/check_orphans.py` checks scripts as callers (1b) and fields
   only switched-off files assign (2b), both failing CI.
 
+**v4.7.420 (2026-10-12), the second wave: both offenses rebuilt, and `vv`'s Telepathy** (code detail in
+`.claude/classes/monk.md`; Mystor's counts in `kb/combat/shikudo.md`, "Mystor's lock route, counted"):
+- **The lock offense (007, `sr`) follows Mystor's counted route** (#8 fixed): Rain (weariness, clumsiness and
+  the arm prep) -> Oak at a chain of 10 with both, or 15 -> Willow only once asthma AND slickness are on and
+  anorexia is still off (all six of his Willow entries), Oak -> Gaital at 12, Willow -> Rain when the Oak half
+  drops; never Tykonos. The caps come from monk/004 (`skata`).
+- **007's kicks and staff** (#3 narrowed to choosing the leg): Willow and Gaital flashheel the leg trigger 577
+  has not recorded as broken (`shikudoLock.flashLeg`); Oak and Maelstrom kick risingkick torso; Rain frontkicks
+  the less damaged arm, and its ruku hits the same arm. One table (`shikudoLock.STAFF`) replaces six pickers:
+  the strike for each missing lock affliction first, never the same strike twice.
+- **007's Crescent** (#5 fixed): only on a prone target with a fresh ASSESS at half health or less
+  (`crescentReady`), never in a shatter round.
+- **007's round shape and kill:** the transition goes FIRST as `transition to <form> form`; a MIND round
+  replaces the combo (critical impatience as the lock forms, paralyse to close it, a Rain filler; no BATTER;
+  at most two in a row; none once the chain is 12 s past its last strike unless the round transitions; no
+  equilibrium gate); every round ends `;assess <t>`. Truelocked, with KAI CHOKE affordable: MIND CONFUSE, MIND
+  DISRUPT (at most three prelude rounds), then KAI CHOKE alone every round, Mystor's finisher in both lock wins.
+- **007's round history follows the run line:** the last round, the MIND run, the prelude count, the choke
+  latch and the alternated sides move when the game's run line shows the round RAN, not on the key press
+  (`.claude/AGENTS.md`, "Round history moves when the GAME RUNS the round").
+- **The dispatch offense (006, `zz`/`xx`/`sk`):** Dispatch needs no leg (#4 fixed); a flashheel break is read
+  from 577 and `shikudo.flashheelKick` chooses the leg (#3 fixed); one needle, with a second only while the
+  head is short (`needleSecond`); spinkick on a prone head; hyperfocus read from `ataxiaTemp.hyperLimb` (#6
+  fixed); the parried limb read every round (#7 fixed); damage defaults from the raw lines (flashheel,
+  frontkick, kuro 8.4; needle 13.4); Tykonos risingkick and Willow `hiraku light` on a prone target; the
+  shared kata policy, with a sweep round judged on two strikes and Gaital held while she is prone or on the
+  sweep round; Crescent on `ataxia_assessAtMostHalf(5)` (#5); `shikudo.buildRound()` (unsent rounds), and
+  `;assess <t>` on combo and shatter rounds.
+- **Staff and triggers** (#10 for what acts): `shikudo.staffRef()` and the `skstaff` alias replace
+  `staff489282` in 006 and trigger 168; 166, `calls/008` and `gags/001` match any staff, `gags/001` gags a
+  wrapped tail row too, and `gags/001` and 166 act in PvP only.
+- **`vv` = dispatch + Telepathy** (new `shikudo/011`, `shikudo.dispatchMind`): a MIND round alone between
+  006's combos (impatience to close a softlock, disrupt on a confused target, a Rain burst from kata 9, at
+  most 4 MIND rounds per burst), never in a kill window, run-line accounting like 007's (except that any
+  combo's run line ends the burst, and its state survives a reload). MIND BLACKOUT and MIND SCYTHE (with its
+  MIND BATTER) are wired and switched off.
+
 **Still open:**
-- flashheel planned as the break it is (the dispatch offense, 006);
-- Telepathy in the dispatch offense for `vv` (`shikudo.dispatchMind`), preferring Rain, as Mystor plays;
-- the lock offense (007) rebuilt on Mystor's counted route, with Telepathy as its own round;
-- 006 and 007 reading the shared kata policy, `ataxia_kataAtRisk` and the ASSESS gate (monk/004);
-- the blackout cycle (its lock question, CONFLICTS #7), after our MIND BLACKOUT line is captured;
+- live checks for the v4.7.420 rounds: whether the run line ("[System]: Running queued <q> command: ...",
+  the package's pattern; no capture in kb/raw) prints for a round that runs at once; whether a MIND command
+  chained after a combo executes (`chainTelepathy` stays off); Crescent's round shape, kill line and dodge
+  line; whether an appended ASSESS costs anything; whether a flashheel on an already-broken leg does
+  anything; whether a target with ONE broken leg can stand (006's `staysDown` assumes not); hyperfocus's set
+  and remove lines;
+- the blackout cycle (its lock question, CONFLICTS #7; vv has it wired and off), after our MIND BLACKOUT line
+  is captured; MIND SCYTHE likewise (#7), plus a recorder for a target's mangled head;
+- whether a MIND command rebounds off a shield (every logged rebound followed a combo);
+- 007's Rain filler alternates 1:1 with combos where Mystor ran bursts of up to eight; watch it in play
+  (`rainTelepathy`, `maxMindRounds`), and watch a target that keeps curing anorexia (Oak -> Gaital -> Rain);
+- 007 still wields the bare `staff` rather than `shikudo.staffRef()`;
+- queue alerts turned off mid-session freeze the run-line history: 007's until a reload, vv's until a client
+  restart (`ataxiaTemp.shikTele` survives a reload); a frozen history no longer moves the MIND cap, the
+  prelude limit or vv's burst;
+- code comments that still carry facts the docs corrected in v4.7.420 (next code pass): 006:588-589 (not
+  every Gaital combo flashheels: Mystor 43 of 47), 006:679-683 (that Oak branch is dead: `hitsToPrep`
+  returns at most 2, so a standing target's head is never kicked), 007:329 (torso damage raises KAI CHOKE
+  only once the torso is damaged, Kaido.wiki:289), 011:167-168 (632 records `damagedhead` only when no leg,
+  arm or torso is in its own band);
+- the "Start Shikudo" triggers 172-186 (inert, guarded calls into the undefined `monk.shikudo`) to retire;
 - kata caps measured rather than assumed (#8; the stumble recorder collects the evidence);
 - the real Kai Surge cost (#9; `ks` now sends at kai 31-44 with a warning, so it can be captured);
 - phase 3b, the per-hit dedupe through the ledger.

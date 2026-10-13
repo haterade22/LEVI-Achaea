@@ -18,8 +18,9 @@ code:
   - src_new/triggers/levi_ataxia/for_levi/leviticus/telepathy_tekura/
   - src_new/triggers/levi_ataxia/for_levi/leviticus/164, 165 (kata chain and lapse), 698 (ASSESS), 389 (the target's tree)
   - src_new/scripts/levi_ataxia/levi/ataxia/monk/003_Shikudo_Extras.lua, 004_Kai_And_Kata.lua (kai, kata, ASSESS state)
-  - src_new/scripts/levi_ataxia/levi/levi_scripts/shikudo/006_CC_Shikudo_Dispatch.lua, 007_CC_Shikudo_Lock.lua
-  - src_new/tests/test_shikudo_tracking.lua, test_shikudo_ledger.lua, test_monk_kai_kata.lua, test_telepathy_tracking.lua, test_target_tree.lua
+  - src_new/scripts/levi_ataxia/levi/levi_scripts/shikudo/006_CC_Shikudo_Dispatch.lua, 007_CC_Shikudo_Lock.lua, 011_Shikudo_Telepathy.lua
+  - src_new/triggers/levi_ataxia/for_levi/leviticus/166 (SHATTER), 168 (the staff wield), gags/001 (our strike lines), calls/008 (off)
+  - src_new/tests/test_shikudo_tracking.lua, test_shikudo_ledger.lua, test_monk_kai_kata.lua, test_telepathy_tracking.lua, test_target_tree.lua, test_shikudo_offense.lua (007), test_shikudo_dispatch.lua (006), test_shikudo_telepathy.lua (011)
 last_verified: 2026-10-12
 ---
 
@@ -46,6 +47,17 @@ logs. `<staff>` is the weapon's description ("a twisted oaken staff"), `<T>` the
   prompts): `[Rain]:3` before and after a KAI CRIPPLE (LcJC-rJ5:2700, :2728), `[Willow]:3` through
   three KAI CHOKEs (FceAmb0o:6386-6447), and `[Rain]:9` through a MIND IMPATIENCE and four MIND
   PARALYSEs (FceAmb0o:2593-2739). So a run of kai or MIND rounds lets the chain age toward its lapse.
+- **A SWEEP round is two kata actions,** the sweep and its kick. Mystor's `combo Agathon sweep
+  flashheel left` (c.iJVmpL:3862): "The staff sweeps the legs out from under Agathon, sending him
+  sprawling." (his client appends "Kata is 1"), the flashheel ("Kata is 2"), then "You are now
+  maintaining a kata chain of 2 actions." (:3868-3872; the same at LcJC-rJ5:5737-5747). The wiki: a
+  sweep "consumes both of your arm balances, so may not be combined with other strike attacks
+  (though it may be combined with a kick)" (Shikudo.wiki:149). All four logged sweeps proned the
+  target (those two, vNTjvghY:8089, attacker:2456). **One anomaly:** Mystor once put a staff strike
+  beside a sweep, `combo Agathon flashheel right sweep hiru light` (vNTjvghY:8081); the hiru printed
+  nothing, yet the chain went from 9 to 12 (:8086-8090; the fight write-up flags it). Since v4.7.420
+  the dispatch offense (006), which sends only `sweep <kick>`, judges a sweep round's inline
+  transition on two strikes.
 - **The chain lapses** when no strike comes for a while: "You can no longer maintain your deadly
   kata." (vNTjvghY:5967), about 20 s after the last chain line (10:40:43 at :5377, the lapse at
   10:41:03). The form is kept: the next prompt reads `[Rain]:0` (:5968). It appears once in the
@@ -72,13 +84,19 @@ logs. `<staff>` is the weapon's description ("a twisted oaken staff"), `<T>` the
   transition is judged after the combo's strikes: in log 1 (attacker:960-961) the chain line ("3")
   prints, then the refusal. Since v4.7.419 a real form change zeroes our `ataxia.vitals.kata` too
   (`shikudo_checkForms(true)`, `monk/003`), because charstats may not report the new chain until
-  the next strike. **The wording our lock offense sends has only been seen refused:** 007 sends
-  `;transition to the <form> form` after the combo (007:545 at HEAD), the wiki's detail wording
-  (Shikudo.wiki:116; its syntax line, :112, has no THE). No log here shows it; they show the inline
-  `transition <form>` and Mystor's separate `transition to <form> form`. But the PvE basher sent the
-  same wording, after its combo, until v4.7.68, and the game answered it with the kata refusal
-  (CHANGELOG v4.7.68 and commit 9064ca04, from a live log not kept in kb/raw), so the game reads it
-  as a TRANSITION. Whether it succeeds at kata 5+ is unseen.
+  the next strike. **Mystor puts `transition to <form> form` FIRST in the same command**
+  (`parry torso/transition to gaital form/combo Agathon flashheel right ruku right ruku right/assess
+  Agathon`, vNTjvghY:418), 56 times in his six logs, so the combo behind it already strikes in the new
+  form; one sent first is judged on the chain BEFORE the combo. **Since v4.7.420 the lock offense
+  (007) sends that wording first too.** Until then it sent `;transition to the <form> form` AFTER its
+  combo, the wiki's detail wording (Shikudo.wiki:116; its syntax line, :112, has no THE), which no log
+  here shows: "transition to the" occurs 0 times in kb/raw/logs. The PvE basher sent the same wording
+  until v4.7.68 and the game answered it with the kata refusal (CHANGELOG v4.7.68 and commit
+  9064ca04, from a live log not kept in kb/raw), so the game reads it as a TRANSITION; whether it
+  succeeds at kata 5+ is unseen, and no live code sends it now. It remains only in switched-off code
+  (the aliases `shikudo/001_Group_Flow_Attack` and `002_Crescent_Kill`, and 009) and in two active
+  scripts nothing reaches: `004_Levi_Dispatch`'s `levishikudodispatch()`, which 006 redefines
+  (006:1424), and `005_Shikudo_Needle_Logic`'s `levishikudoneedle()`, which nothing calls.
 - **ADOPT <form> FORM** reaches a form that is not on the current form's list, and **costs balance
   (4.1 s)**: "You clumsily transition from the form of Willows in Rain Storm into the form of Gaital."
   (the monk was clumsy at the time, so "clumsily" may come from the affliction). Others see: "<M>
@@ -87,17 +105,22 @@ logs. `<staff>` is the weapon's description ("a twisted oaken staff"), `<T>` the
 - **How long a chain can run:** the wiki gives no number (Rain allows "twice the normal length",
   and Tykonos is exempt), and a stumble is a chance that grows the longer a chain runs. Log 1: Oak
   reached 13 and Rain 18 with no stumble. That rules out only a certain stumble at 12, which is how
-  our code's comments put it (006: "Must transition before kata 12 stumble"); it does not rule out a
-  12/24 limit. The stumble line has never been captured. Per the wiki a stumble resets the kata AND
-  drops you into Tykonos.
+  006's comments put it until v4.7.420 ("Must transition before kata 12 stumble"); it does not rule
+  out a 12/24 limit. The stumble line has never been captured. Per the wiki a stumble resets the kata
+  AND drops you into Tykonos.
   - **Our policy (v4.7.419), not a game limit:** `ataxia_KATA` in `ataxia/monk/004_Kai_And_Kata.lua`
     leaves a form once the chain AFTER the combo reaches 12 (Rain 15; Tykonos as soon as a
     transition is legal, at 5), from how Mystor fights (no chain past 12 outside Rain; Rain to 15 in
     11 of 19 stints, 16 at most). `ataxia_kataShouldLeave(form, kata, strikes)` judges it, and
     the alias `skata` shows the caps or saves an override (it warns past the longest chains seen
-    without a stumble, 13 and Rain 18). **No offense reads this policy yet:** 006 and 007 keep
-    their own caps (12, 24 in Rain; 006:82-88, 007:71-78 at HEAD), and the basher keeps its own
-    PvE literals (`SHIKUDO_BASH_ROTATION`, `basher/002`), which `skata` deliberately never changes.
+    without a stumble, 13 and Rain 18). **Both offenses read it since v4.7.420** (their own 12/24
+    tables are gone). 006 judges its inline transition on the chain after the combo's strikes
+    (`strikes` 3, or 2 for a sweep round), and keeps Gaital past the cap while the target is prone or
+    on the round that sweeps her; 007 sends its transition first and so judges the chain before the
+    combo (`strikes` 0). Leaving at the cap, either way the chain has reached 12 (Rain 15) in the old
+    form; each offense also has its own earlier exits (`.claude/classes/monk.md`). The PvE basher
+    keeps its own literals (`SHIKUDO_BASH_ROTATION`, `basher/002`), which `skata` deliberately never
+    changes.
   - **A probable stumble is recorded** (v4.7.419, `monk/003` `shikudo_formChanged`): a move into
     Tykonos that we did not ask for, while a chain was alive (a chain line in the last 30 s, and no
     lapse line or earlier form change since it, in an earlier round), goes into
@@ -110,10 +133,15 @@ logs. `<staff>` is the weapon's description ("a twisted oaken staff"), `<T>` the
 - **ASSESS gives the target's health,** which Crescent needs (it requires 50% or less):
   "You glance over <T> and see that her health is at 4463/5460 [81%]." The monk in log 1 ran
   `assess` after every combo. `698_Assess` stores the floored percentage in `ataxiaTemp.lastAssess`,
-  which 006's Crescent reads (v4.7.417). Since v4.7.419 it also keeps the raw numbers and whom they
+  which 006's Crescent read in v4.7.417. Since v4.7.419 it also keeps the raw numbers and whom they
   were for (`lastAssessHp`, `lastAssessMax`, `lastAssessAt`, `lastAssessWho`), and
-  `ataxia_assessAtMostHalf()` (monk/004) reads them: floored, 3540/7000 (50.57%) reads 50. No
-  offense calls that helper yet.
+  `ataxia_assessAtMostHalf()` (monk/004) reads them: floored, 3540/7000 (50.57%) reads 50. **Since
+  v4.7.420 every Crescent gate calls it** (006's Maelstrom kick, 007's `crescentReady`, and vv's
+  kill-window gate in 011), at most 5 s old, of this target, with the target prone. And the rounds
+  of 006 and 007 (and vv's MIND rounds) end with `;assess <target>` by default
+  (`shikudo.config.assessEachRound`, `shikudoLock.config.assessEachRound`), as both players' aliases
+  do (attacker:53, vNTjvghY:418): that keeps the reading fresh, and 698 then prints its HP bar every
+  round. A Dispatch round carries no ASSESS.
 
 ## The lines of each attack
 
@@ -154,6 +182,12 @@ Runewarden applied salve to her legs after every flashheel.
 - **Absorbed:** against a Shield of Absorption the damage line can be missing while the effect
   line and the affliction still land. The victim sees "Your shield completely absorbs the damage."
 - **Light** strikes print no damage line by design (above).
+- **Rebounded off a shield tattoo:** "A dizzying beam of energy strikes you as your attack rebounds
+  off of Agathon's shield." The WHOLE combo bounces and costs equilibrium (`[Eq Spent: 1.44s]`,
+  FceAmb0o:2416). All six such lines in Mystor's logs follow a COMBO command (LcJC-rJ5:203-207,
+  FceAmb0o:2411-2415, c.iJVmpL:218-222 and :1821-1827, vNTjvghY:4420-4424 and :5990-5996).
+  **Whether a MIND command rebounds off a shield has never been seen.** Both offenses, and vv,
+  shatter a shield first either way.
 
 ### What the victim sees (log 2)
 
@@ -199,18 +233,24 @@ nature (wiki): RADIANCE, the instant kill, builds up for a while and cannot be u
 your room, and SAPIENCE shows you everything a locked target does. The user: most Telepathy needs
 only the target in the room. The wiki agrees for its 15 abilities marked (*), all of which take a
 target: impatience, paralyse, batter, confuse, stupidity, epilepsy, fear, amnesia, deadening,
-disrupt, strip, crush, drain, divine and hallucinate. It puts a lock on the rest, **blackout**
-included: no (*), and `MIND BLACKOUT` names no target, where every (*) ability takes one (its "your
-locked target" wording is no guide alone: MIND IMPATIENCE, a (*) ability, says the same). The
-players' rule is the working rule in the same room, but for blackout it disagrees with the wiki and
-is untested; see [CONFLICTS.md](../CONFLICTS.md) #7. Log 1 cannot test it, because the monk held a
-lock all fight.
+disrupt, strip, crush, drain, divine and hallucinate. It puts a lock on the rest, **blackout** and
+**scythe** included: no (*), and neither `MIND BLACKOUT` nor `MIND SCYTHE` names a target, where every
+(*) ability takes one (blackout's "your locked target" wording is no guide alone: MIND IMPATIENCE, a
+(*) ability, says the same). The players' rule is the working rule in the same room, but for
+blackout and scythe it disagrees with the wiki and is untested; see [CONFLICTS.md](../CONFLICTS.md)
+#7. Log 1 cannot test it, because the monk held a lock all fight, and Mystor's one scythe was cast
+with a lock held (below, "Conflicts and open questions").
 
 **Rain is where Telepathy is cheapest.** Rain's "equilibrium recovery shall be significantly
 increased" (wiki), and the user says Shikudo monks also use telepathy in Rain for that reason. It is
 not Rain-only: log 1 cast its two afflictions in Willow. In log 1 a Telepathy round took the place
-of that round's combo (the alias swapped the combo out for the MIND command); whether a monk can send
-both in one round is open (log 2's blackout, below).
+of that round's combo (the alias swapped the combo out for the MIND command), and **Mystor never
+paired the two**: 274 of his commands carry a combo, and none of them a MIND affliction command (11
+carry MIND LOCK and 3 KAI BOOST beside the combo); he sent 87 MIND commands alone (counts in
+"Mystor's lock route, counted", below). Whether a monk CAN send both in one round is still open
+(log 2's blackout, below); HELP 4.6 says an equilibrium ability usually needs balance as well
+(`kb/mechanics/balance-and-queueing.md`). So since v4.7.420 our MIND rounds go out alone (007, and
+vv through 011).
 
 | Command | Line | Equilibrium used (form) | Wiki |
 |---|---|---|---|
@@ -245,7 +285,12 @@ hidden."
   ended.
 - **Why it matters:** a blackout they tree away is a tree (about 14 s cooldown, log 2) not spent on
   the lock, and the combo behind it is hidden. Give it again after the tree.
-- **Not captured yet:** our own MIND BLACKOUT success line.
+- **Not captured yet:** our own MIND BLACKOUT success line. Mystor never sent it in his six logs
+  ("blackout" occurs nowhere in them), though he calls it "basically a no brainer" in Rain (players
+  file:33). vv (`shikudo/011`) has it wired and OFF (`shikudo.tele.blackout = false`) until three
+  things are settled live: that line, the lock question ([CONFLICTS.md](../CONFLICTS.md) #7), and
+  whether the game takes `mind blackout` or `mind blackout <target>` (the wiki's syntax names no
+  target).
 
 ## Dispatch, as it was done
 
@@ -266,7 +311,19 @@ limb tracker read head 110, torso 112, left arm 42, right arm 50, left leg 8, ri
 client's summary lines): at `[Gaital]:5` (:5834) one command sent `transition to rain form/dispatch
 Agathon oak` (:5847); "You: Rain Form" (:5851), "You: Dispatch -> Agathon" (:5852), then "You have
 slain Agathon." (:5859). So the Dispatch landed from Rain, as the wiki allows ("may be used
-regardless of your form", Shikudo.wiki:369), with Oak named as the form to flow into.
+regardless of your form", Shikudo.wiki:369), with Oak named as the form to flow into. Before it,
+Mystor finished the head with SPINKICK on the prone target: `combo Agathon needle spinkick kuro
+right` (:5797), the needle +6.7% to 95.2% and the spinkick +15% to 100% (:5801-5803, his client's
+summary lines).
+
+**What the dispatch offense (006) takes from these kills (v4.7.420):** the kill check is the game's
+three conditions, with no leg; ONE needle crushes the throat (`flashheel left needle jinzuku`,
+attacker:2566, :2662), so a second needle goes in the same combo only while the head would still be
+short of 100 after the first (and after a spinkick in that combo), and otherwise the slot gives
+slickness (ruku torso) or addiction (jinzuku); a flashheel that keeps her down (the leg not yet
+broken, never into her parry, pushed to 100% on the sweep round and while she is down); and
+spinkick on a prone head when she stays down and one needle would not finish it. The code:
+`.claude/classes/monk.md`.
 
 ## The two fights
 
@@ -406,7 +463,90 @@ session scratchpad, `timings2.py`):
 Full write-up of each fight (timeline, the opponent's rotation and curing order, every distinct game
 line, lessons): [fights/](fights/README.md).
 
-## What our triggers record (CONFIRMED-in-code, test_shikudo_tracking.lua)
+## Mystor's lock route, counted (v4.7.420)
+
+The lock offense (`shikudo/007`, `sr`) is built on these counts since v4.7.420, and its comments cite
+them. **How they were counted** (scripts in the session scratchpad): transitions from his client's
+form lines (`You: <Form> Form`), with the kata from the prompt before each (`[<Form>]:N`); his
+commands from his `[Zax]:` lines. His commands put the transition FIRST, so that kata is the chain the
+transition was judged on. **His target model** (the prompt's second row: `AST(99%)`, `SLCK(99%)`,
+`ANO(66%)` and so on) is his client's belief, not game text; the findings that rest on it say so.
+
+**56 transitions, none into Tykonos, none below a chain of 5:**
+
+| From | To | Times | Chain on the prompt before |
+|---|---|---|---|
+| Rain | Oak | 17 | 15 ten times, 16 once, 12 twice, 14, 10, and 6 twice (vNTjvghY:8285, :8789, his last lock cycle) |
+| Oak | Gaital | 13 | 12 every time |
+| Gaital | Rain | 11 | 12 nine times; 5 twice (LcJC-rJ5:5851, the round that dispatched; c.iJVmpL:4060) |
+| Oak | Willow | 6 | 12, 6, 9, 6, 6, 6 |
+| Willow | Rain | 5 | 12 four times, 6 once |
+| Gaital | Maelstrom | 2 | 6 and 9 (FceAmb0o:5856, vNTjvghY:7558) |
+| Maelstrom | Oak | 2 | 12 both times |
+
+- **Rain is where the arm prep happens:** "me shooting for 10 kata in rain with 2x arm prep" (players
+  file:22); his Rain combo is frontkick, kuro and ruku ("frontkick arm kuro ruku", players file:23),
+  with the frontkick and the ruku on one arm (`combo Agathon frontkick right ruku right ruku right`,
+  vNTjvghY:928-938).
+- **Oak to Willow only with asthma AND slickness on and anorexia OFF** (his model). At all six moves
+  his model showed AST and SLCK and no ANO: the rows vNTjvghY:7968 and :8437, FceAmb0o:4600 and
+  :6223, LcJC-rJ5:1054 and :2234, each followed by its Willow form line (:7980, :8448, :4611, :6234,
+  :1065, :2245). No Oak prompt at kata 5+ in the six logs has all three in his model. So anorexia
+  comes LAST, from Willow's hiraku: `flashheel right hiraku light hiru light` (vNTjvghY:7976;
+  FceAmb0o:4607, :6230). Willow has no kuro and no nervestrike (DART, SWEEP, HIRU, FLASHHEEL, HIRAKU:
+  Shikudo.wiki:89).
+- **The Oak half alone does not send him to Willow:** in c.iJVmpL (the MIND SCYTHE fight) his model
+  had asthma and slickness on in Oak at kata 6 and 9 in two stints (from :1083 and :3519), and he
+  stayed, leaving for Gaital at 12 (:1275, :3866).
+- **Oak's lock-window combo puts asthma and slickness on together:** `risingkick torso livestrike
+  light ruku torso` (vNTjvghY:8281, FceAmb0o:6124), with nervestrike and kuro around it
+  (vNTjvghY:7918, :8390; FceAmb0o:6162). His Oak kick there is RISINGKICK TORSO. KAI CHOKE deals
+  increased damage to a target with a damaged or mangled torso (or head, or a mind clamp; any one of
+  them, Kaido.wiki:289), so the torso kicks raise the choke only once the torso is damaged (the game's
+  mild internal trauma). That this is why he kicks the torso is our reading, not his words.
+- **Both lock fights ran Oak -> Gaital -> Maelstrom -> Oak -> Willow** (FceAmb0o:5721-6234,
+  vNTjvghY:7333-7980). FceAmb0o's kill followed in Willow; vNTjvghY went round Willow -> Rain -> Oak
+  twice more (:8116-8789) and killed in Oak.
+
+**Telepathy is a round of its own** (his `[Zax]:` lines): 274 commands carry a combo; 11 of them also
+carry MIND LOCK and 3 KAI BOOST, and none a MIND affliction command. 87 MIND commands went out alone:
+impatience 32, paralyse 29, disrupt 13, sapience 7, confuse 2, hallucinate 2, batter 1, scythe 1.
+Counted from his `You: Mind <ability>` lines instead, by the form at that moment (a transition at the
+front of the round counts as the new form): **79 affliction MIND rounds besides the scythe, 58 of
+them in Rain** (paralyse 26, impatience 20, disrupt 10, confuse 1, batter 1) and 21 elsewhere
+(impatience 12, disrupt 3, paralyse 2, confuse 2, hallucinate 2). In Rain they came in bursts:
+FceAmb0o:2600-2964 is one impatience and seven paralyses, every one at `[Rain]:9`, then a combo. He
+sent impatience BEFORE hiraku: in Maelstrom (FceAmb0o:5937), and in the very round that went into
+Willow (`transition to willow form/mind lock Agathon/wield shield/mind impatience Agathon`,
+vNTjvghY:8444). **MIND BLACKOUT: 0.**
+
+**The kill: confuse and disrupt, then KAI CHOKE every round** (both lock wins; health from his
+client's ASSESS bar):
+- **FceAmb0o**, in Willow at kata 3, his model showing the truelock (:6301): MIND CONFUSE (:6309),
+  MIND DISRUPT (:6361), then `kai choke Agathon` three rounds running (:6394, :6419, :6439). Health
+  87.30% (:6368), 53.39% (:6401), 24.47% (:6426), 3.42% (:6446); kai K:95% before the first choke and
+  K:65% after the third (:6382, :6447). He lost the lock at :6462, then "You have slain Agathon."
+  (:6467).
+- **vNTjvghY**, in Oak at kata 3 from 49.92% (:8799): his model had the softlock, weariness and
+  confusion (:8827), so MIND IMPATIENCE (:8840) and MIND PARALYSE (:8883) closed the truelock, MIND
+  DISRUPT followed (:8916), then `kai choke Agathon` at :8956 (42.07% to 11.63%, :8923, :8963) and at
+  :9016. "Agathon gasps and stumbles as an unseen force crushes the life breath out of him." (:8961,
+  :9021), "Agathon collapses to the ground, his life snuffed out like a candle." (:9028), "You have
+  slain Agathon." (:9029).
+- No combo went out between the chokes in either fight, so the chain sat at 3 through them.
+
+**What 007 takes, and what it leaves** (v4.7.420; the code is in `.claude/classes/monk.md`):
+- Takes: the route (Rain -> Oak at a chain of 10 with weariness and clumsiness on, at 15, or at once
+  mid-lock; Oak -> Willow only with the Oak half on and anorexia off; Oak -> Gaital at 12; Willow ->
+  Rain once the Oak half drops, or at 12; never Tykonos); the transition first, worded as he words
+  it; a MIND round instead of the combo, impatience before anorexia; RISINGKICK TORSO in Oak; and the
+  kill: confuse, disrupt, then KAI CHOKE alone every round.
+- Leaves: 007 goes from Gaital to Rain as soon as a transition is legal (he stayed to 12 in 9 of
+  11), and never goes to Maelstrom on its own; its Rain filler alternates one MIND round with one
+  combo (his bursts ran to eight); and it sends neither his MIND LOCK nor his shield wield on MIND
+  rounds (vv can wield one: `shikudo.tele.shield`).
+
+## What our triggers record (CONFIRMED-in-code, test_shikudo_tracking.lua, test_shikudo_dispatch.lua)
 
 Our queued attacks open the "Affs Post Queue - Gated" and "3rd Person Shikudo" trigger groups
 until the next prompt (`misc_scripts/001_Queue_Scanning.lua`, `318_Prompt_Trigger.lua`).
@@ -416,6 +556,25 @@ until the next prompt (`misc_scripts/001_Queue_Scanning.lua`, `318_Prompt_Trigge
   line with a long staff wraps at this user's 119-124 columns. They record nothing when no damage
   line prints: parried strikes (right), light strikes and absorbed blows (the effect lines and the
   strike ledger record those; see below).
+- **Any staff, and our strike lines gagged in PvP only** (v4.7.420). The patterns that named one
+  staff ("a twisted oaken staff") now take any, as early fragments: 166 (the SHATTER line,
+  `^Bracing your feet, you drive .+ towards`; attacker:1109), `calls/008` (nervestrike, still switched
+  off) and the ten staff patterns of `gags/001` (our own strike lines, gagged; its eleventh, the
+  frontkick's `...a straight kick at the shoulder of (\w+)\.$`, never matches the real "You lash out
+  with a straight kick at the left shoulder of Claes.", attacker:360). Most end before the target's
+  name; `calls/008` (`...at the side of (\w+)'s neck`) and two of the gags (ruku's `...at \w+ in a
+  controlled arc`, jinzuku's `^Stepping to the side of \w+, ...`) still read a one-word name. Staves
+  differ: Dominius wields "a dark ash wood staff" (defender:136). Whole lines could
+  not survive the wrap anyway: ruku to the arm is 121 columns with that staff ("You spin a full
+  rotation, bringing a twisted oaken staff around in a blur of motion to smash into the right arm of
+  Claes.", attacker:374), two rows at a 119-column wrap; `gags/001` now also gags the tail row of a
+  wrapped line (`tempLineTrigger(1, 1, ...)`, the highlighting/071 idiom). **A fragment that ends
+  before the name matches a denizen too** (the old patterns ended in a one-word name), so 166 and
+  `gags/001` act only in PvP: they return when the target is not a name or the basher is on, the two
+  facts the basher's own triggers 337/338 test. Without it, bashing as a Shikudo hid our own strike
+  lines, and every shatter round of the basher cleared the PvP target's shield through `erAff`. 168,
+  which answers the game's refusal to adopt a form without a staff (its pattern; no capture in
+  kb/raw), wields `shikudo.staffRef()`: the `skstaff` setting, else the bare keyword `staff`.
 - **Effect-line triggers** (`3rd_person_shikudo/`, `calls/`) record from the effect line, which
   prints whenever the affliction lands. They are the only record of livestrike and hiru as a later
   strike, and of light and absorbed blows other than ruku to the arm (the strike ledger, below).
@@ -480,12 +639,24 @@ until the next prompt (`misc_scripts/001_Queue_Scanning.lua`, `318_Prompt_Trigge
   is 2, and a real lock piece was lost. With V3 off, `tSingleRandom()` still erases one. 389 also
   stamps `ataxiaTemp.targetTreeAt` (the target's last tree); a target switch resets `tBals.tree` but
   not the stamp, so read it only while `tBals.tree` is false.
-- **Telepathy in the offense** (v4.7.417): the lock offense (007) sends MIND IMPATIENCE, MIND BATTER
-  or MIND PARALYSE <target> on equilibrium (`ataxia.vitals.eq`, 007:428-445 at HEAD), with no mind
-  lock first, chained after the round's combo (007:535-540; whether a MIND command and a combo can
-  share one queued round is untested). The dispatch offense (006) sends none, and no offense sends
-  MIND BLACKOUT. The PvE basher's `aconfig monk` MIND CRUSH is separate. `disruptmind()`
-  (`levi_scripts/telepathy/001_DISRUPT.lua`), which nothing called, was deleted in v4.7.419.
+- **Telepathy in the offense** (v4.7.420; v4.7.417 chained MIND IMPATIENCE / BATTER / PARALYSE after
+  the lock's combo, gated on equilibrium at the press). Every MIND command goes out as a round of its
+  own (`queue addclear free`, which waits for equilibrium AND balance), never after a combo, with no
+  mind lock first and no equilibrium gate:
+  - **the lock (007, `sr`)**: MIND IMPATIENCE as soon as asthma, slickness or anorexia is on without
+    it, and MIND PARALYSE to close softlock + impatience (both critical); a Rain filler (impatience,
+    paralyse, disrupt; no filler paralyse on an Apostate); at most two MIND rounds in a row; then its
+    kill: MIND CONFUSE, MIND DISRUPT, KAI CHOKE. No MIND BATTER.
+  - **`vv` (011, `shikudo.dispatchMind`)**: the dispatch offense with MIND rounds between its combos
+    (impatience to close a softlock, disrupt on a confused target, a Rain burst from kata 9). MIND
+    BLACKOUT and MIND SCYTHE (with the MIND BATTER that sets it up) are wired and switched off
+    (`shikudo.tele.blackout`, `shikudo.tele.scythe`).
+  - `zz`, `xx` and `sk` (006) send none. The PvE basher's `aconfig monk` MIND CRUSH is separate.
+    `disruptmind()` (`levi_scripts/telepathy/001_DISRUPT.lua`), which nothing called, was deleted in
+    v4.7.419.
+  Both 007 and 011 count a round when the game's run line shows it RAN, not when the key is pressed
+  (`.claude/classes/monk.md`): the line is the package's queue pattern, `[System]: Running queued
+  <q> command: <cmd>` (`clean-up/001_Queue_Scanning.lua`:34), which no capture in kb/raw shows.
 - **A refused transition keeps our kata count** (v4.7.417): `shikudo/002_Reset_Failsafe` still
   matches "A kata of at least N must be performed" but no longer zeroes `ataxia.vitals.kata`. The
   basher comments that assumed a reset are corrected (`basher/002_Class_Bashing.lua` 2620 in
@@ -499,31 +670,57 @@ until the next prompt (`misc_scripts/001_Queue_Scanning.lua`, `318_Prompt_Trigge
   `ataxia_tarAffFaded`, which also cancels that clock.
 - **Still not recorded:** **dawnkick**'s epilepsy (line not captured); target **stuns** (no duration
   is known); MIND BLACKOUT (line not captured); what KAI CRIPPLE does to the target's limbs (no
-  trigger). Light and absorbed ruku to the arm is recorded since v4.7.419 (the strike ledger,
+  trigger); a target's **mangled head** (632 records `damagedhead` once the head reads 100-199% and
+  `concussion` at 200%+, but only when no leg, arm or torso reads 100-199%, or 200%+, at the same time:
+  its checks are one elseif chain, legs first and the head last, so the leg the dispatch offense pushes
+  to 100% hides the head; 581's spinkick no longer records one since v4.7.413), so vv's MIND SCYTHE
+  could not fire even switched on. 006's Dispatch check is not affected: `shikudo.headDamaged()` also
+  reads the head's damage (006:163-165). Which head level the game calls mangled is uncaptured: Mystor's
+  client showed `H3` after a spinkick took the head to 100% (c.iJVmpL:3966-3981, before his scythe at
+  :4227). Light and absorbed ruku to the arm is recorded since v4.7.419 (the strike ledger,
   above), which expires a pending strike at the prompt and never commits it.
 
 ## Conflicts and open questions
 
-- **Blackout and the mind lock:** the wiki says blackout needs one; the players' rule (a lock only
-  for out-of-room targets and certain skills) says not in the same room. Settle it on the first
-  live MIND BLACKOUT without a lock. The likely refusal is "You require a mindlock to perform that
-  ability.", the line Mystor got for MIND PRINT and SAPIENCE without a lock (LcJC-rJ5:7-10); no
-  trigger gags or reads it. "You do not possess a mindlock." is the other candidate: trigger
-  `allies_enemies/012` matches it, no log has it, and since v4.7.419 012 no longer deletes it.
+- **Blackout, MIND SCYTHE and the mind lock:** the wiki marks the abilities that need no lock with
+  (*) (Telepathy.wiki:6); BLACKOUT and SCYTHE have none, and neither syntax names a target
+  (`MIND BLACKOUT`, :418; `MIND SCYTHE`, :429). The players' rule (a lock only for out-of-room targets and
+  certain skills such as Radiance and Sapience) says neither needs one in the same room. The one
+  scythe in the logs was cast with a lock held (`You: Mindlock (finish)` at c.iJVmpL:1715, `mind
+  scythe Agathon` at :4227, the lock lost only after the kill, :4233-4234). Settle each on its first
+  live use without a lock. The likely refusal is "You require a mindlock to perform that ability.",
+  the line Mystor got for MIND PRINT and SAPIENCE without a lock (LcJC-rJ5:7-10); no trigger gags or
+  reads it, so a refused MIND command changes nothing our offense reads and would be picked again on
+  every press. That is why vv (011) ships both switched off. "You do not possess a mindlock." is the
+  other candidate: trigger `allies_enemies/012` matches it, no log has it, and since v4.7.419 012 no
+  longer deletes it.
+- **Does a MIND command rebound off a shield?** Every rebound in the logs followed a combo (above,
+  "How a strike can fail"). Settle it with one MIND IMPATIENCE into a fresh shield in a spar, with
+  `fightlog` on. Our offenses shatter first either way.
+- **Does the queue's run line print for a round that runs at once?** 007 and vv count a round when
+  "[System]: Running queued <q> command: ..." shows it ran (the package's pattern; no capture in
+  kb/raw), and the gated tracking groups already open on it (`queue_Scan`). Whether it prints when
+  equilibrium and balance are already up as the round is queued is not stated by HELP 4.6.1, whose
+  `CONFIG SHOWQUEUEALERTS` turns these "system messages" on and off. If it does not print, such a
+  round is never counted: the next press replaces its pending record. Check once with `fightlog` and
+  queue alerts on.
 - **Kata limits:** no game number (the wiki: Rain allows twice the normal length, Tykonos never
-  stumbles). 006 and 007 cap at 12, and 24 in Rain; our written policy (monk/004, v4.7.419) leaves
-  at 12 and Rain 15, but no offense reads it yet. Log 1's Oak 13 and Rain 18 without a stumble rule
+  stumbles). Since v4.7.420 both offenses read our written policy (monk/004: leave at 12 after the
+  combo, Rain 15); their own 12/24 tables are gone. Log 1's Oak 13 and Rain 18 without a stumble rule
   out only a certain stumble at 12, since a stumble is a chance that grows. The stumble recorder
   (monk/003) flags the first probable stumble so its line can be kept.
 - **Kai Surge cost:** the wiki says 45 (Kaido); no log has a surge. Since v4.7.419 the cost is
   `ataxia_KAI_COST.surge = 45` (monk/004). TK6 sends its KAI SURGE / KAI CRIPPLE dismount only when
   `ataxia_kaiAfford` says it can pay (unknown kai is not enough), and the `ks` alias warns when kai
   is known short and sends anyway, so a surge at kai 31-44 can now be sent to settle it (CONFLICTS
-  #9). 007 still echoes "KAI SURGE READY" at 31 kai read from `vitals.class` (display only; 007:41,
-  497-498 at HEAD). The surge's no-remount window (trigger `monk/002`, 15 s) is the code's own guess:
-  the wiki says only "The effect will fade over time." (Kaido.wiki:322).
+  #9). Since v4.7.420 007 reads kai through `ataxia_kai()` and no longer mentions the surge: its kill
+  is KAI CHOKE (10 kai), and its status shows "KAI CHOKE READY" once that is affordable. The surge's
+  no-remount window (trigger `monk/002`, 15 s) is the code's own guess: the wiki says only "The
+  effect will fade over time." (Kaido.wiki:322).
 - **Prone extras (hiru's confusion, hiraku's and risingkick's stun):** the wiki has them; neither
   log shows a different line when they apply (hiru and hiraku hit a prone target at 12:29).
 - **First-in-combo lines for hiru, hiraku, needle and jinzuku** come from our older triggers, not
-  from these logs. Thrust, dart, spinkick, dawnkick-on-prone and Crescent are not in the logs.
+  from these logs. Thrust, dart, dawnkick on a prone target and Crescent are in no log. Spinkick's
+  strike line is in none either (Mystor's client gags it); after it, on a prone head, "You feel
+  something give way under your blow." printed twice (LcJC-rJ5:5804, c.iJVmpL:3973).
 - See [CONFLICTS.md](../CONFLICTS.md) for the open items.

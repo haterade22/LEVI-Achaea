@@ -32,13 +32,23 @@ packageName: ''
 
 -- Shikudo Dispatch Kill Logic System
 -- Focused on: Rain prep → Gaital kill → DISPATCH
--- Kill requires: Prone + Broken leg + Broken head + Windpipe damage (needle)
+-- Kill requires (wiki Dispatch, Shikudo.wiki:369): prone + damaged head + crushed windpipe (needle).
+-- No leg: a broken leg only keeps her down (v4.7.420; the logged Dispatch had the kicked leg at
+-- 8.4%, attacker log :2654, :2664).
 
 shikudo = shikudo or {}
 shikudo.state = {
   phase = "PREP",  -- PREP, PRONE, KILL
-  hyperfocus = nil,  -- Current hyperfocus target: nil, "head", "left leg", "right leg", etc.
+  -- The hyperfocused limb is not kept here: shikudo.hyperLimb() reads ataxiaTemp.hyperLimb (v4.7.420).
 }
+
+-- Options (v4.7.420). Runtime only: `shikudo` is not a saved table, and a reload keeps what is set.
+shikudo.config = shikudo.config or {}
+-- ASSESS after every combo and shatter round, as the monk in log 1 did ("... / assess", attacker
+-- log :53) and Mystor does ("combo Agathon needle spinkick kuro right/assess Agathon",
+-- LcJC-rJ5:5797). It keeps trigger 698's reading fresh for Crescent, which wants one at most 5 s
+-- old; 698 then prints an HP bar each round. Never on the kill round.
+if shikudo.config.assessEachRound == nil then shikudo.config.assessEachRound = true end
 
 -- Available attacks per form
 shikudo.formAttacks = {
@@ -78,31 +88,20 @@ shikudo.transitions = {
   Maelstrom = {"Oak"}
 }
 
--- Max kata per form before stumble
-shikudo.maxKata = {
-  Tykonos = 12,
-  Willow = 12,
-  Rain = 24,  -- Double chain!
-  Oak = 12,
-  Gaital = 12,
-  Maelstrom = 12
-}
+-- When to leave each form: the shared kata policy, ataxia_KATA / ataxia_kataShouldLeave (monk/004),
+-- with `skata` to override it. v4.7.420: the per-form table that stood here was only displayed; the
+-- decisions were literals in shouldTransition, so editing it changed nothing.
 
 --------------------------------------------------------------------------------
 -- KILL CONDITION CHECKS
 --------------------------------------------------------------------------------
 
 function shikudo.checkDispatchReady()
-  -- All 4 conditions for dispatch
-  local prone = tAffs.prone
-  local ll = shikudo.getLimbDamage("left leg")
-  local rl = shikudo.getLimbDamage("right leg")
-  local h = shikudo.getLimbDamage("head")
-  local legBroken = (ll >= 100 or rl >= 100)
-  local headBroken = (h >= 100 or tAffs.damagedhead)
-  local windpipe = (tAffs.damagedwindpipe or tAffs.crushedthroat)
-
-  return prone and legBroken and headBroken and windpipe
+  -- "If your foe is prone with a damaged head and windpipe" (Shikudo.wiki:369): three conditions.
+  -- v4.7.420: no leg. It demanded a leg at 100%, which blocks a legal Dispatch once she restores
+  -- her legs; the logged kill went out with the kicked leg at 8.4% (attacker log :2654, :2664).
+  return shikudo.has("prone") and shikudo.headDamaged()
+    and (shikudo.has("crushedthroat") or shikudo.has("damagedwindpipe"))
 end
 
 function shikudo.checkReadyForProne()
@@ -138,13 +137,123 @@ function shikudo.getLimbDamage(limb)
   return lb[target].hits[limb] or 0
 end
 
+--------------------------------------------------------------------------------
+-- STATE READS (v4.7.420)
+-- One read per fact, so the kick, the staff strikes and the kill gate agree within a round.
+--------------------------------------------------------------------------------
+
+-- A target affliction, read only: the V3 tracker through haveAff (which falls back to tAffs while
+-- V3 loads), else tAffs.
+function shikudo.has(aff)
+  if type(haveAff) == "function" then return haveAff(aff) and true or false end
+  return (tAffs and tAffs[aff]) and true or false
+end
+
+-- Is the leg broken? A landed FLASHHEEL breaks the leg at any limb damage: "you will be able to
+-- break said limb with a single blow" (Shikudo.wiki:127), and the bone-crunch line follows every
+-- landed flashheel in the 2026-10-11 log, at 8.4% (attacker :70-73). Trigger 577 records it as
+-- broken<side>leg; 006 used to call a leg broken only at 100% limb damage, so it never saw one.
+-- A leg at 100% is damaged as well. `side` is "left" or "right".
+function shikudo.legBroken(side)
+  return shikudo.has("broken" .. side .. "leg") or shikudo.has("damaged" .. side .. "leg")
+    or shikudo.getLimbDamage(side .. " leg") >= 100
+end
+
+-- The head as Dispatch needs it: damaged (Shikudo.wiki:369).
+function shikudo.headDamaged()
+  return shikudo.getLimbDamage("head") >= 100 or shikudo.has("damagedhead")
+end
+
+-- Is she still down at our next combo, even after one mend? Both legs broken, or a leg at 100%
+-- (which takes restoration, not one mend). Unconfirmed from her side: whether a target with ONE
+-- broken leg can stand has not been seen (our own STAND is refused with one, v4.7.416).
+function shikudo.staysDown()
+  return (shikudo.legBroken("left") and shikudo.legBroken("right"))
+    or shikudo.getLimbDamage("left leg") >= 100 or shikudo.getLimbDamage("right leg") >= 100
+    or shikudo.has("damagedleftleg") or shikudo.has("damagedrightleg")
+end
+
+-- The limb we HYPERFOCUS: strikes on it bypass her parry and deal half damage to it
+-- (Shikudo.wiki:336). Trigger shikudo/003 writes ataxiaTemp.hyperLimb; 006 read
+-- shikudo.state.hyperfocus, which only the uncalled setHyperfocus wrote, so the halving never
+-- applied. nil once GMCP's defence list is known and no longer holds hyperfocus (deffing/001's
+-- lostDef names it; Mystor's client prints "-Def: hyperfocus.", EveP2TVe:1054). The set and remove
+-- lines are uncaptured, so a wrong guess here costs the halving, never an illegal combo.
+function shikudo.hyperLimb()
+  local l = ataxiaTemp and ataxiaTemp.hyperLimb
+  if type(l) ~= "string" or l == "" or l == "none" then return nil end
+  local d = ataxia and ataxia.defences
+  if type(d) == "table" and next(d) ~= nil and not d.hyperfocus then return nil end
+  return l
+end
+
+-- The limb she parries: a PERCEIVED parry first (trigger 148, "<T> is attempting to parry blows
+-- directed at her <limb>."), else the limb of the last strike she parried (187 and parry/001 set
+-- one of these true and the rest false). Read fresh every round: 006 cleared a was-parried flag on
+-- every keypress, so a switch away from the parry lasted one press. Hyperfocus bypasses the parry
+-- on its own limb (Shikudo.wiki:336), so that limb counts as open. The tp* globals are shared with
+-- other classes' parry triggers and survive a target change: a stale one only steers a kick to
+-- the other limb.
+local PARRY_FLAGS = {
+  { "tph", "head" }, { "tpto", "torso" }, { "tpll", "left leg" },
+  { "tprl", "right leg" }, { "tpla", "left arm" }, { "tpra", "right arm" },
+}
+function shikudo.parriedLimb()
+  local p = ataxiaTemp and ataxiaTemp.parriedLimb
+  if type(p) ~= "string" or p == "" or p == "none" then
+    p = nil
+    for _, f in ipairs(PARRY_FLAGS) do
+      if _G[f[1]] == true then p = f[2]; break end
+    end
+  end
+  if p and p == shikudo.hyperLimb() then return nil end
+  return p
+end
+
+-- The staff to WIELD: ataxia.settings.shikudoStaff (alias skstaff), else the bare keyword "staff",
+-- which the user's own alias sends (attacker log :53). It was the literal staff489282, one
+-- player's item id, in four places.
+function shikudo.staffRef()
+  local s = ataxia and ataxia.settings and ataxia.settings.shikudoStaff
+  if type(s) == "string" and s ~= "" then return s end
+  return "staff"
+end
+
+-- shikudo.staffCommand(arg): the `skstaff` alias (aliases shikudo/007). `skstaff` shows the staff
+-- the offense wields, `skstaff <item>` sets it (an item id such as staff489282, or a keyword), and
+-- `skstaff clear` goes back to the bare keyword. Saved with the settings; with no setting nothing
+-- is saved, so a later default can still change.
+function shikudo.staffCommand(arg)
+  ataxia.settings = ataxia.settings or {}
+  if arg == "" then arg = nil end
+  -- Placeholders in capitals: cecho reads any <word> as a colour tag.
+  if not arg then
+    local set = ataxia.settings.shikudoStaff
+    ataxiaEcho("Shikudo wields <cyan>" .. shikudo.staffRef() .. "<reset>"
+      .. (set and "" or " (the bare keyword)") .. ". Change it: skstaff ITEM | skstaff clear")
+    return
+  end
+  if arg:lower() == "clear" then
+    ataxia.settings.shikudoStaff = nil
+    ataxiaEcho("Shikudo wields <cyan>staff<reset>, the bare keyword, again.")
+  else
+    ataxia.settings.shikudoStaff = arg
+    ataxiaEcho("Shikudo wields <cyan>" .. arg .. "<reset>.")
+  end
+  if ataxia_saveSettings then ataxia_saveSettings(false) end
+end
+
 -- Get damage for a specific attack (from shikudo_limbDamage table or defaults)
 -- If targetLimb is provided and matches hyperfocus, damage is HALVED
+-- Defaults (v4.7.420), from raw damage lines: flashheel, frontkick and kuro 8.4% (attacker log
+-- :71, :361, :76; Mystor's client shows "[+8.4%]"), needle 13.4% (attacker :2659). Spinkick stays
+-- 27: Mystor's +15% on a prone head (LcJC-rJ5:5803) was most likely halved by hyperfocus, as his
+-- needle was (6.7 = 13.4 / 2; his client logs "-Def: hyperfocus." in two other fights).
 function shikudo.getAttackDamage(attack, targetLimb)
   local defaults = {
-    kuro = 9.2, thrust = 14.5, needle = 10.6, nervestrike = 13.4,
+    kuro = 8.4, thrust = 14.5, needle = 13.4, nervestrike = 13.4,
     hiru = 4.3, hiraku = 4.3, livestrike = 7.8, ruku = 4.5,
-    dart = 4.4, flashheel = 9.2, risingkick = 9.2, frontkick = 9.2,
+    dart = 4.4, flashheel = 8.4, risingkick = 9.2, frontkick = 8.4,
     spinkick = 27.0  -- Massive damage on prone
   }
   local baseDamage
@@ -154,8 +263,8 @@ function shikudo.getAttackDamage(attack, targetLimb)
     baseDamage = defaults[attack] or 10  -- Default to 10% if unknown
   end
 
-  -- HYPERFOCUS: If attacking a hyperfocused limb, damage is HALVED
-  if targetLimb and shikudo.state.hyperfocus == targetLimb then
+  -- HYPERFOCUS: If attacking a hyperfocused limb, damage is HALVED (Shikudo.wiki:336)
+  if targetLimb and targetLimb == shikudo.hyperLimb() then
     return baseDamage / 2
   end
 
@@ -189,34 +298,19 @@ function shikudo.willOneHitPrep(limb, attack)
   return shikudo.hitsToPrep(limb, attack) == 1
 end
 
+-- The prep thresholds take their damage from getAttackDamage, so the defaults and the hyperfocus
+-- halving live in one place (v4.7.420: the head threshold used nervestrike 7.8 while hitsToPrep
+-- used 13.4).
 function shikudo.getLegPrepThreshold(leg)
   -- Use kuro damage as the baseline (safest threshold for legs)
-  -- Account for hyperfocus if specified
-  local legName = leg or "left leg"
-  local kuro = shikudo_limbDamage and shikudo_limbDamage.kuro or 9.2
-  if shikudo.state.hyperfocus == legName then
-    kuro = kuro / 2  -- Halved damage when hyperfocused
-  end
-  return 100 - kuro
+  return 100 - shikudo.getAttackDamage("kuro", leg or "left leg")
 end
 
 function shikudo.getHeadPrepThreshold()
   -- Head threshold depends on form (different attacks do different damage)
-  -- Account for hyperfocus if head is hyperfocused
   local form = ataxia.vitals.form or "Rain"
-  local dmg
-  if form == "Oak" then
-    dmg = shikudo_limbDamage and shikudo_limbDamage.nervestrike or 7.8
-  elseif form == "Gaital" then
-    dmg = shikudo_limbDamage and shikudo_limbDamage.needle or 10.6
-  else
-    dmg = shikudo_limbDamage and shikudo_limbDamage.hiru or 4.3
-  end
-
-  if shikudo.state.hyperfocus == "head" then
-    dmg = dmg / 2  -- Halved damage when hyperfocused
-  end
-  return 100 - dmg
+  local attack = (form == "Oak" and "nervestrike") or (form == "Gaital" and "needle") or "hiru"
+  return 100 - shikudo.getAttackDamage(attack, "head")
 end
 
 function shikudo.isLegPrepped(leg)
@@ -262,14 +356,13 @@ function shikudo.isDynamicHeadPrepped()
   return shikudo.getLimbDamage("head") >= shikudo.getHeadPrepThreshold()
 end
 
--- Global leg protection: returns true if safe to hit this leg
-function shikudo.isLegSafe(leg)
-  -- If head is already prepped, legs are safe to break
-  if shikudo.isDynamicHeadPrepped() then
-    return true
-  end
-  -- If head not prepped, don't hit prepped legs
-  return not shikudo.isLegPrepped(leg)
+-- Does this Gaital round SWEEP her down? selectGaitalStaff's PHASE 1: she stands, she is not
+-- mounted (a sweep may only dismount a rider), and both legs and the head are prepped. The kick
+-- pushes a leg to 100% beside the sweep and shouldTransition keeps Gaital for it, so all three ask
+-- this one question (v4.7.420).
+function shikudo.gaitalSweeps()
+  return not shikudo.has("prone") and not (tmounted or (tAffs and tAffs.mounted))
+    and shikudo.areBothLegsPrepped() and shikudo.isDynamicHeadPrepped()
 end
 
 --------------------------------------------------------------------------------
@@ -279,10 +372,13 @@ end
 -- and keep it there for the entire fight. No switching!
 --------------------------------------------------------------------------------
 
--- Set hyperfocus state (called by trigger when hyperfocus is set/cleared)
+-- Set hyperfocus state. v4.7.420: it writes ataxiaTemp.hyperLimb, the field trigger shikudo/003
+-- writes and shikudo.hyperLimb() reads (it wrote shikudo.state.hyperfocus, which the trigger never
+-- touched). Nothing calls it today; it is kept for a manual reset.
 function shikudo.setHyperfocus(limb)
+  ataxiaTemp = ataxiaTemp or {}
   if limb == "none" or limb == nil then
-    shikudo.state.hyperfocus = nil
+    ataxiaTemp.hyperLimb = nil
     cecho("\n<yellow>[Shikudo] Hyperfocus: NONE")
   else
     -- Normalize limb names
@@ -292,14 +388,14 @@ function shikudo.setHyperfocus(limb)
     elseif limb == "right leg" or limb == "rightleg" or limb == "rl" then
       normalized = "right leg"
     end
-    shikudo.state.hyperfocus = normalized
+    ataxiaTemp.hyperLimb = normalized
     cecho("\n<yellow>[Shikudo] Hyperfocus: " .. normalized)
   end
 end
 
 -- Check if hyperfocus is already set to head (our target)
 function shikudo.isHyperfocusSet()
-  return shikudo.state.hyperfocus == "head"
+  return shikudo.hyperLimb() == "head"
 end
 
 -- Get the hyperfocus command for combat start
@@ -307,7 +403,7 @@ end
 -- Returns: "hyperfocus head" if not set, nil if already set
 function shikudo.getHyperfocusCommand()
   -- If already hyperfocused on head, no command needed
-  if shikudo.state.hyperfocus == "head" then
+  if shikudo.hyperLimb() == "head" then
     return nil
   end
 
@@ -317,7 +413,7 @@ end
 
 -- Reset hyperfocus state (call when combat ends)
 function shikudo.resetHyperfocus()
-  shikudo.state.hyperfocus = nil
+  if ataxiaTemp then ataxiaTemp.hyperLimb = nil end
 end
 
 --------------------------------------------------------------------------------
@@ -326,13 +422,31 @@ end
 -- Only go to Gaital when BOTH legs AND head are prepped
 --------------------------------------------------------------------------------
 
-function shikudo.shouldTransition()
+-- The strikes an inline transition follows: a kick and two staff strikes, or a SWEEP and its kick
+-- (the sweep takes both arms), which the chain counts as two: "Kata is 1" after the sweep, "Kata
+-- is 2" after the flashheel, "a kata chain of 2 actions" (c.iJVmpL:3868-3872).
+local STRIKES, SWEEP_STRIKES = 3, 2
+
+-- shikudo.shouldTransition([strikes]) -> the form this combo's inline transition names, or nil.
+-- `strikes` is how many strikes the combo lands, default STRIKES; buildRound passes SWEEP_STRIKES
+-- for a sweep round (v4.7.420 review: it judged every round with 3, so a sweep round left a form
+-- one chain early, or sent a transition the game refuses).
+function shikudo.shouldTransition(strikes)
   local kata = ataxia.vitals.kata or 0
   local form = ataxia.vitals.form
+  strikes = strikes or STRIKES
 
-  if kata < 5 then
-    return nil  -- Need at least 5 kata to transition
+  -- v4.7.420: an inline `combo ... transition <form>` is judged on the chain AFTER the combo's
+  -- strikes (the chain line, then the refusal: attacker log :960-961), so it is legal once
+  -- kata + strikes reaches 5. It was judged on the chain before the combo, a combo late.
+  if kata + strikes < ataxia_KATA.min then
+    return nil  -- Need a chain of 5 after this combo to transition
   end
+
+  -- A form's cap: the shared kata policy (monk/004, ataxia_KATA; `skata` overrides it). Leave once
+  -- the chain after this combo reaches it. Policy, not a game limit: no stumble has been seen.
+  -- Tykonos never stumbles, so it leaves as soon as a transition is legal.
+  local atCap = ataxia_kataShouldLeave(form, kata, strikes)
 
   local legsPrepped = shikudo.areBothLegsPrepped()
   local headPrepped = shikudo.isDynamicHeadPrepped()
@@ -341,21 +455,15 @@ function shikudo.shouldTransition()
   -- GAITAL: KILL FORM - Only enter when ready, cycle out if stuck
   -- ═══════════════════════════════════════════════════════════════════════════
   if form == "Gaital" then
-    -- If all limbs prepped, stay for kill
-    if legsPrepped and headPrepped then
-      if shikudo.checkDispatchReady() then
-        return nil  -- Stay for dispatch
-      end
-      -- If stuck in Gaital kill phase too long, cycle out
-      if kata >= 9 then
-        return "Maelstrom"  -- Maelstrom -> Oak -> back to Gaital
-      end
-      return nil  -- Stay and keep trying for kill
-    end
-
-    -- NOT ready for kill - shouldn't be in Gaital, cycle out
-    if kata >= 9 then
-      return "Maelstrom"  -- Maelstrom -> Oak to continue prep
+    -- She is down, or this round sweeps her down: the needle, the spinkick and Dispatch all happen
+    -- here, so Gaital stays, past the cap if it must (v4.7.420: this returned Maelstrom at kata 9
+    -- mid-kill once her legs stopped reading prepped; the review found the sweep round itself
+    -- leaving at a chain of 9 or more, the round that puts her down).
+    if shikudo.has("prone") or shikudo.gaitalSweeps() then return nil end
+    -- Standing, the prep not there for a sweep, and at the cap: cycle out (Maelstrom -> Oak ->
+    -- back to Gaital).
+    if atCap then
+      return "Maelstrom"
     end
     return nil
   end
@@ -373,23 +481,23 @@ function shikudo.shouldTransition()
   end
 
   -- ═══════════════════════════════════════════════════════════════════════════
-  -- WILLOW: Stay longer (12 kata max) - transition at 9 to avoid stumble
+  -- WILLOW: Stay to the cap (12 after the combo by default)
   -- Willow is HEAD prep form (hiru, hiraku) - kicks hit legs
   -- ═══════════════════════════════════════════════════════════════════════════
   if form == "Willow" then
-    if kata >= 9 then
-      return "Rain"  -- Must transition before kata 12 stumble
+    if atCap then
+      return "Rain"
     end
     return nil
   end
 
   -- ═══════════════════════════════════════════════════════════════════════════
-  -- RAIN: Primary LEG prep form (24 kata capacity)
+  -- RAIN: Primary LEG prep form. Rain allows twice the normal chain (Shikudo.wiki:173); the
+  -- policy leaves at 15 after the combo, as Mystor does (11 of 19 stints), not the old 24.
   -- Can also prep head with hiru - no rush to leave
   -- ═══════════════════════════════════════════════════════════════════════════
   if form == "Rain" then
-    -- Rain has 24 kata max - stay longer for prep
-    if kata >= 21 then
+    if atCap then
       return "Oak"  -- Safety transition before stumble
     end
     -- If legs are prepped, can go to Oak for head prep
@@ -404,7 +512,7 @@ function shikudo.shouldTransition()
   -- Gaital can finish head prep with needle - don't cycle to Willow if legs done!
   -- ═══════════════════════════════════════════════════════════════════════════
   if form == "Oak" then
-    if kata >= 9 then
+    if atCap then
       -- DEBUG: Show what legsPrepped evaluates to
       local ll = shikudo.getLimbDamage("left leg")
       local rl = shikudo.getLimbDamage("right leg")
@@ -446,12 +554,12 @@ function shikudo.shouldTransition()
   -- OTHER FORMS: Route toward the main flow
   -- ═══════════════════════════════════════════════════════════════════════════
   if form == "Tykonos" then
-    if kata >= 9 then return "Willow" end
+    if atCap then return "Willow" end
     return nil
   end
 
   if form == "Maelstrom" then
-    if kata >= 9 then return "Oak" end
+    if atCap then return "Oak" end
     return nil
   end
 
@@ -475,38 +583,70 @@ end
 -- KICK SELECTION
 --------------------------------------------------------------------------------
 
+-- Which leg to FLASHHEEL (v4.7.420). Every landed flashheel BREAKS the leg and adds about 8.4%
+-- damage (Shikudo.wiki:127; attacker log :70-73), so the only choices are which leg, and whether to
+-- take it to 100% (damaged: restoration, not one mend). Both players flashheel every Willow and
+-- Gaital combo, to keep her down and mending (attacker log :53, :892, :1110, :2462-2653; Mystor
+-- alternates legs). The leg is ranked, in order:
+--   1. not the leg she parries;
+--   2. not to 100% unless pushToDamaged (the sweep round, or she is down);
+--   3. a leg that is not broken now: a fresh break is one more mend before she stands;
+--   4. when pushing, a leg this kick takes to 100%, then one it leaves short, and last a leg
+--      already at 100%, which the kick cannot take there: with the left leg at 100.8 the logged
+--      push went right (attacker log :2474, :2560-2561);
+--   5. the leg with more damage (both players focus one leg);
+--   6. left on a tie.
+function shikudo.flashheelKick(pushToDamaged)
+  local parried = shikudo.parriedLimb()
+  local best, bestKey
+  for _, side in ipairs({ "left", "right" }) do
+    local limb = side .. " leg"
+    local dmg = shikudo.getLimbDamage(limb)
+    local brink = dmg < 100 and dmg + shikudo.getAttackDamage("flashheel", limb) >= 100
+    -- Item 4: 0 takes the leg to 100%, 1 leaves it short, 2 finds it there already. v4.7.420
+    -- review: it scored a leg at 100% like a brink leg, so with both legs reading broken the
+    -- damage tie-break kicked the leg already there.
+    local push = 0
+    if pushToDamaged then
+      if dmg >= 100 then push = 2 elseif not brink then push = 1 end
+    end
+    -- Lower is better, compared item by item.
+    local key = {
+      parried == limb and 1 or 0,
+      (brink and not pushToDamaged) and 1 or 0,
+      shikudo.legBroken(side) and 1 or 0,
+      push,
+      -dmg,
+    }
+    local better = bestKey == nil
+    if not better then
+      for i = 1, #key do
+        if key[i] ~= bestKey[i] then better = key[i] < bestKey[i]; break end
+      end
+    end
+    if better then best, bestKey = side, key end
+  end
+  ataxiaTemp.kickTarget = best .. " leg"
+  ataxiaTemp.lastFlashheelLeg = best
+  return "flashheel " .. best
+end
+
 function shikudo.selectKick()
   local form = ataxia.vitals.form or "Rain"
-  local parried = ataxiaTemp.parriedLimb or "none"
+  local parried = shikudo.parriedLimb() or "none"
 
   -- Initialize kickTarget for staff coordination
   ataxiaTemp.kickTarget = nil
 
   if form == "Rain" then
-    -- FRONTKICK targets ARMS (different from legs/head)
-    -- Track parry state using dedicated flag (set by parry trigger)
-    local lastKick = ataxiaTemp.lastFrontkickArm or "left"
-    local wasParried = ataxiaTemp.frontkickWasParried or false
-
-    -- Clear the parry flag for next combo
-    ataxiaTemp.frontkickWasParried = false
-
-    -- If last frontkick was parried, switch arms
-    if wasParried then
-      if lastKick == "left" then
-        ataxiaTemp.kickTarget = "right arm"
-        ataxiaTemp.lastFrontkickArm = "right"
-        return "frontkick right"
-      else
-        ataxiaTemp.kickTarget = "left arm"
-        ataxiaTemp.lastFrontkickArm = "left"
-        return "frontkick left"
-      end
-    end
-
-    -- Default: use same arm as last time (or left if first)
-    ataxiaTemp.kickTarget = lastKick .. " arm"
-    return "frontkick " .. lastKick
+    -- FRONTKICK targets ARMS (different from legs/head). Keep the last arm across presses and
+    -- switch only when she parries that arm (v4.7.420: a was-parried flag cleared on every
+    -- keypress sent the next press straight back into the parry).
+    local arm = ataxiaTemp.lastFrontkickArm or "left"
+    if parried == arm .. " arm" then arm = (arm == "left") and "right" or "left" end
+    ataxiaTemp.lastFrontkickArm = arm
+    ataxiaTemp.kickTarget = arm .. " arm"
+    return "frontkick " .. arm
 
   elseif form == "Oak" then
     -- OAK: Kick selection - be smart about head vs torso
@@ -547,136 +687,34 @@ function shikudo.selectKick()
     return "risingkick torso"
 
   elseif form == "Gaital" then
-    -- KILL PHASE: Prioritize breaking prepped legs
-    -- Track parry state for flashheel
-    local lastKick = ataxiaTemp.lastFlashheelLeg or "left"
-    local wasParried = ataxiaTemp.flashheelWasParried or false
-
-    -- Clear the parry flag for next combo
-    ataxiaTemp.flashheelWasParried = false
-
-    local ll = shikudo.getLimbDamage("left leg")
-    local rl = shikudo.getLimbDamage("right leg")
-    local leftBroken = ll >= 100
-    local rightBroken = rl >= 100
-    local leftPrepped = shikudo.isLegPrepped("left")
-    local rightPrepped = shikudo.isLegPrepped("right")
-
-    -- PRIORITY 0: If last flashheel was parried, switch legs
-    if wasParried then
-      if lastKick == "left" then
-        ataxiaTemp.kickTarget = "right leg"
-        ataxiaTemp.lastFlashheelLeg = "right"
-        return "flashheel right"
-      else
-        ataxiaTemp.kickTarget = "left leg"
-        ataxiaTemp.lastFlashheelLeg = "left"
-        return "flashheel left"
-      end
+    -- SPINKICK hits the head of a prone foe much harder (Shikudo.wiki:298). Mystor finishes the head
+    -- with it: "combo Agathon needle spinkick kuro right" -- Needle +6.7%, Spinkick Head +15% to
+    -- 100%, then DISPATCH (LcJC-rJ5:5797-5803, :5852). It takes the flashheel's place, so only while
+    -- she stays down without a fresh break, and only when one needle will not finish the head alone.
+    if shikudo.has("prone") and parried ~= "head" and not shikudo.headDamaged()
+        and shikudo.getLimbDamage("head") + shikudo.getAttackDamage("needle", "head") < 100
+        and shikudo.staysDown() then
+      ataxiaTemp.kickTarget = "head"
+      return "spinkick"
     end
-
-    -- PRIORITY 1: If one leg broken but other prepped, break the prepped leg
-    if tAffs.prone then
-      if leftBroken and not rightBroken and rightPrepped then
-        ataxiaTemp.kickTarget = "right leg"
-        ataxiaTemp.lastFlashheelLeg = "right"
-        return "flashheel right"  -- Break right leg!
-      elseif rightBroken and not leftBroken and leftPrepped then
-        ataxiaTemp.kickTarget = "left leg"
-        ataxiaTemp.lastFlashheelLeg = "left"
-        return "flashheel left"  -- Break left leg!
-      end
-    end
-
-    -- PRIORITY 2: Break the PREPPED leg first (higher damage = closer to breaking)
-    -- In Gaital, we want to BREAK legs, not prep them
-    if rightPrepped and not rightBroken then
-      ataxiaTemp.kickTarget = "right leg"
-      ataxiaTemp.lastFlashheelLeg = "right"
-      return "flashheel right"  -- Break prepped right leg
-    elseif leftPrepped and not leftBroken then
-      ataxiaTemp.kickTarget = "left leg"
-      ataxiaTemp.lastFlashheelLeg = "left"
-      return "flashheel left"  -- Break prepped left leg
-    end
-
-    -- FALLBACK: Kick whichever leg has more damage (closer to prep/break)
-    if ll >= rl then
-      ataxiaTemp.kickTarget = "left leg"
-      ataxiaTemp.lastFlashheelLeg = "left"
-      return "flashheel left"
-    else
-      ataxiaTemp.kickTarget = "right leg"
-      ataxiaTemp.lastFlashheelLeg = "right"
-      return "flashheel right"
-    end
+    -- FLASHHEEL, pushed to 100% while she is down or this round sweeps (selectGaitalStaff's
+    -- PHASE 1, shikudo.gaitalSweeps), as both players do: Mystor's sweep round took the left leg
+    -- to 100% (c.iJVmpL:3867-3869), and the user's is "sweep flashheel left" (attacker log :2404).
+    return shikudo.flashheelKick(shikudo.has("prone") or shikudo.gaitalSweeps())
 
   elseif form == "Willow" then
-    -- FLASHHEEL targets legs
-    -- Track parry state using dedicated flag (similar to Rain frontkick)
-    local lastKick = ataxiaTemp.lastFlashheelLeg or "left"
-    local wasParried = ataxiaTemp.flashheelWasParried or false
-
-    -- Clear the parry flag for next combo
-    ataxiaTemp.flashheelWasParried = false
-
-    local leftHits = shikudo.hitsToPrep("left leg", "flashheel")
-    local rightHits = shikudo.hitsToPrep("right leg", "flashheel")
-
-    -- If last flashheel was parried, switch legs
-    if wasParried then
-      if lastKick == "left" then
-        ataxiaTemp.kickTarget = "right leg"
-        ataxiaTemp.lastFlashheelLeg = "right"
-        return "flashheel right"
-      else
-        ataxiaTemp.kickTarget = "left leg"
-        ataxiaTemp.lastFlashheelLeg = "left"
-        return "flashheel left"
-      end
-    end
-
-    -- Safe to hit if needs more damage
-    if leftHits > 0 then
-      ataxiaTemp.kickTarget = "left leg"
-      ataxiaTemp.lastFlashheelLeg = "left"
-      return "flashheel left"
-    elseif rightHits > 0 then
-      ataxiaTemp.kickTarget = "right leg"
-      ataxiaTemp.lastFlashheelLeg = "right"
-      return "flashheel right"
-    -- Both prepped - check if safe to break
-    elseif shikudo.isLegSafe("left") then
-      ataxiaTemp.kickTarget = "left leg"
-      ataxiaTemp.lastFlashheelLeg = "left"
-      return "flashheel left"  -- Head prepped, safe to break
-    else
-      -- Unsafe! Willow only has flashheel (legs). Hit already broken if possible
-      local ll = shikudo.getLimbDamage("left leg")
-      local rl = shikudo.getLimbDamage("right leg")
-      if ll >= 100 then
-        ataxiaTemp.kickTarget = "left leg"
-        ataxiaTemp.lastFlashheelLeg = "left"
-        return "flashheel left"  -- Already broken, no harm
-      elseif rl >= 100 then
-        ataxiaTemp.kickTarget = "right leg"
-        ataxiaTemp.lastFlashheelLeg = "right"
-        return "flashheel right"  -- Already broken, no harm
-      else
-        -- Neither broken, both prepped, head not ready
-        -- Hit left but flag for immediate transition
-        ataxiaTemp.kickTarget = "left leg"
-        ataxiaTemp.lastFlashheelLeg = "left"
-        ataxiaTemp.needsUrgentTransition = true
-        return "flashheel left"
-      end
-    end
+    -- FLASHHEEL. 006 never sweeps in Willow, so it keeps a leg short of 100% while the other leg
+    -- can take the kick: she would only restore it before the kill. (v4.7.420: the "safe to break"
+    -- planning this replaces sent a flashheel in every branch anyway, and its urgent-transition
+    -- flag had no reader.)
+    return shikudo.flashheelKick(false)
 
   elseif form == "Maelstrom" then
     -- CRESCENT if target is prone and low health
-    -- v4.7.417: the health comes from ASSESS (698_Assess stores ataxiaTemp.lastAssess, a percentage);
-    -- ataxiaTemp.targetHP is written nowhere, so Crescent could never fire.
-    if tAffs.prone and (tonumber(ataxiaTemp.lastAssess or ataxiaTemp.targetHP) or 100) <= 50 then
+    -- v4.7.417: the health comes from ASSESS (trigger 698). v4.7.420: from its RAW numbers, of this
+    -- target, at most 5 s old (ataxia_assessAtMostHalf, monk/004): the floored percentage let
+    -- 3540/7000 (50.6%) through, and Crescent kills only at half health or less (Shikudo.wiki:358).
+    if shikudo.has("prone") and ataxia_assessAtMostHalf(5) then
       ataxiaTemp.kickTarget = "torso"
       return "crescent"  -- Finishing move
     end
@@ -684,6 +722,12 @@ function shikudo.selectKick()
     return "risingkick head"
 
   else -- Tykonos
+    -- RISINGKICK to the head of a prone foe stuns them (Shikudo.wiki:138), as Oak already does.
+    if shikudo.has("prone") and parried ~= "head" then
+      ataxiaTemp.kickTarget = "head"
+      return "risingkick head"
+    end
+
     -- RISINGKICK targets head or torso
     local headHits = shikudo.hitsToPrep("head", "risingkick")
 
@@ -706,7 +750,7 @@ end
 
 function shikudo.selectStaff(slot)
   local form = ataxia.vitals.form or "Rain"
-  local parried = ataxiaTemp.parriedLimb or "none"
+  local parried = shikudo.parriedLimb() or "none"
 
   -- Slot 1 = primary attack, Slot 2 = secondary attack
 
@@ -996,18 +1040,29 @@ function shikudo.selectOakStaff(slot, parried)
   end
 end
 
+-- One NEEDLE crushes the windpipe: "with a single thrust of your weapon" (Shikudo.wiki:287); in the
+-- logged Dispatch, "flashheel left needle jinzuku" crushed it with one (attacker log :2566,
+-- :2658-2662). A second needle only adds head damage, so slot 2 needles only while slot 1's needle,
+-- and a spinkick in this combo, leave the head short of 100%. Otherwise slickness (ruku torso: no
+-- salve, so no mending to stand and none for the throat, which is cured by mending on the head),
+-- then addiction (jinzuku), then weariness on a leg that is not broken (kuro).
+function shikudo.needleSecond()
+  if not shikudo.headDamaged() then
+    local add = shikudo.getAttackDamage("needle", "head")
+    if ataxiaTemp.kickTarget == "head" then add = add + shikudo.getAttackDamage("spinkick", "head") end
+    if shikudo.getLimbDamage("head") + add < 100 then return "needle" end
+  end
+  if not shikudo.has("slickness") then return "ruku torso" end
+  if not shikudo.has("addiction") then return "jinzuku" end
+  return "kuro " .. (shikudo.legBroken("left") and "right" or "left")
+end
+
 function shikudo.selectGaitalStaff(slot, parried)
   -- Gaital: NEEDLE (head/windpipe), SWEEP (prone), KURO (legs)
   -- KILL FORM - breaking legs is INTENDED here
   -- SLOT COORDINATION: Still track to avoid hitting same unbroken leg twice
+  -- Prone is read through shikudo.has here and in the Gaital kick, so kick and staff agree.
 
-  local ll = shikudo.getLimbDamage("left leg")
-  local rl = shikudo.getLimbDamage("right leg")
-  local h = shikudo.getLimbDamage("head")
-
-  local headBroken = (h >= 100 or tAffs.damagedhead)
-  local hasWindpipe = (tAffs.damagedwindpipe or tAffs.crushedthroat)
-  local legsBroken = (ll >= 100 or rl >= 100)
   local bothLegsPrepped = shikudo.areBothLegsPrepped()
   local headPrepped = shikudo.isDynamicHeadPrepped()
   local isMounted = tmounted or tAffs.mounted
@@ -1025,13 +1080,13 @@ function shikudo.selectGaitalStaff(slot, parried)
       ataxiaTemp.slot1Target = "head"
       return "needle"
     else
-      return "needle"  -- Double needle for windpipe progress
+      return shikudo.needleSecond()
     end
   end
 
   -- PHASE 0: Not prone and limbs need prep -> prep first, don't sweep yet
   -- Only sweep when BOTH legs AND head are prepped
-  if not tAffs.prone and not isMounted and (not bothLegsPrepped or not headPrepped) then
+  if not shikudo.has("prone") and not isMounted and (not bothLegsPrepped or not headPrepped) then
     local leftPreppedNow = shikudo.isLegPrepped("left")
     local rightPreppedNow = shikudo.isLegPrepped("right")
 
@@ -1067,8 +1122,9 @@ function shikudo.selectGaitalStaff(slot, parried)
   end
 
   -- PHASE 1: Not prone + ALL limbs prepped → SWEEP to prone them
-  -- Only sweep when BOTH legs AND head are ready for kill sequence
-  if not tAffs.prone and not isMounted and bothLegsPrepped and headPrepped then
+  -- Only sweep when BOTH legs AND head are ready for kill sequence. The kick and shouldTransition
+  -- ask the same question (shikudo.gaitalSweeps).
+  if shikudo.gaitalSweeps() then
     if slot == 1 then
       ataxiaTemp.slot1Target = "sweep"
       return "sweep"  -- Prones target, kick breaks prepped leg
@@ -1077,64 +1133,27 @@ function shikudo.selectGaitalStaff(slot, parried)
     end
   end
 
-  -- Check leg prep/broken status
-  local leftPrepped = shikudo.isLegPrepped("left")
-  local rightPrepped = shikudo.isLegPrepped("right")
-  local leftBroken = ll >= 100
-  local rightBroken = rl >= 100
-  local leftReady = leftPrepped or leftBroken
-  local rightReady = rightPrepped or rightBroken
-  local bothLegsReady = leftReady and rightReady
-
-  -- PHASE 2: Prone + BOTH legs ready → needle for head + windpipe
-  -- Only go for kill when both legs are prepped or broken
-  if tAffs.prone and bothLegsReady then
+  -- PHASE 2: she is down. Head and throat; the kick keeps her down (Dispatch needs no leg,
+  -- Shikudo.wiki:369). v4.7.420: a prone target whose legs did not read prepped got kuro to the
+  -- legs instead, spending the prone window on a condition the kill does not have.
+  if shikudo.has("prone") then
     if slot == 1 then
       ataxiaTemp.slot1Target = "head"
       return "needle"
-    else
-      return "needle"  -- Double needle for windpipe
     end
-  end
-
-  -- PHASE 2b: Prone but one/both legs need work → kuro to prep
-  if tAffs.prone and not bothLegsReady then
-    local slot1Hit = ataxiaTemp.slot1Target or "none"
-
-    if slot == 1 then
-      -- Prep the leg that needs work
-      if not leftReady and parried ~= "left leg" then
-        ataxiaTemp.slot1Target = "left leg"
-        return "kuro left"
-      elseif not rightReady and parried ~= "right leg" then
-        ataxiaTemp.slot1Target = "right leg"
-        return "kuro right"
-      else
-        ataxiaTemp.slot1Target = "head"
-        return "needle"  -- Both legs ready somehow, go for head
-      end
-    else
-      -- Slot 2: prep the OTHER leg if needed
-      if not rightReady and slot1Hit ~= "right leg" and parried ~= "right leg" then
-        return "kuro right"
-      elseif not leftReady and slot1Hit ~= "left leg" and parried ~= "left leg" then
-        return "kuro left"
-      else
-        return "needle"  -- Fallback to head
-      end
-    end
+    return shikudo.needleSecond()
   end
 
   -- Fallback: build toward kill conditions
   if slot == 1 then
-    if not tAffs.prone then
+    if not shikudo.has("prone") then
       ataxiaTemp.slot1Target = "sweep"
       return "sweep"
     end
     ataxiaTemp.slot1Target = "head"
     return "needle"
   else
-    return "needle"
+    return shikudo.needleSecond()
   end
 end
 
@@ -1165,6 +1184,11 @@ function shikudo.selectWillowStaff(slot, parried)
       return "hiraku"  -- Continue head work
     elseif headHits >= 1 and slot1Hit ~= "head" and parried ~= "head" then
       return "hiraku"
+
+    -- HIRAKU on a prone foe also stuns (Shikudo.wiki:160); LIGHT spares a prepped head. Mystor
+    -- sends it ("flashheel right hiraku light hiru light", vNTjvghY:7976).
+    elseif shikudo.has("prone") and parried ~= "head" then
+      return "hiraku light"
 
     -- FALLBACK to torso
     else
@@ -1219,11 +1243,20 @@ end
 -- COMBO BUILDER
 --------------------------------------------------------------------------------
 
-function shikudo.buildCombo(transition)
-  local form = ataxia.vitals.form
+-- This combo's kick and two staff strikes, chosen in that order: the staff reads the kick's limb
+-- (ataxiaTemp.kickTarget), and slot 2 reads slot 1's (ataxiaTemp.slot1Target).
+local function selectStrikes()
   local kick = shikudo.selectKick()
   local staff1 = shikudo.selectStaff(1)
-  local staff2 = shikudo.selectStaff(2)
+  return kick, staff1, shikudo.selectStaff(2)
+end
+
+-- shikudo.buildCombo(transition[, kick, staff1, staff2]) -> "combo $tar ...", `transition` inline.
+-- It chooses the strikes unless they are given: buildRound chooses them first, so that it can judge
+-- the transition on the strikes this combo lands (v4.7.420).
+function shikudo.buildCombo(transition, kick, staff1, staff2)
+  local form = ataxia.vitals.form
+  if kick == nil then kick, staff1, staff2 = selectStrikes() end
 
   -- Handle sweep (uses both arm balances, limited combo)
   if staff1 == "sweep" then
@@ -1264,11 +1297,11 @@ function shikudo.buildCombo(transition)
 end
 
 --------------------------------------------------------------------------------
--- MAIN DISPATCH FUNCTION
+-- ROUND BUILDER
 --------------------------------------------------------------------------------
 
-function shikudo.dispatch()
-  -- Initialize if missing
+-- The tables a round reads, created when a fresh profile or a reload has not made them yet.
+local function ensureState()
   ataxia = ataxia or {}
   ataxia.vitals = ataxia.vitals or {}
   ataxia.settings = ataxia.settings or {}
@@ -1276,12 +1309,64 @@ function shikudo.dispatch()
   ataxia.playersHere = ataxia.playersHere or {}
   ataxiaTemp = ataxiaTemp or {}
   tAffs = tAffs or {}
+end
+
+-- shikudo.buildRound() -> cmd, kind, transition (v4.7.420)
+--   cmd         the round, WITHOUT the queue verb and without combatQueue()'s prefix:
+--                 "wield <staff>;dispatch <t>"                                  kind "dispatch"
+--                 "wield <staff>;incapacitate <t>"   (a Mhaldorian)             kind "incapacitate"
+--                 "wield <staff>;combo <t> shatter <kick>;assess <t>"           kind "shatter"
+--                 "wield <staff>;combo <t> <strikes>[ transition <form>];assess <t>"   kind "combo"
+--               The kill never carries an ASSESS; shatter and combo do while
+--               shikudo.config.assessEachRound is on.
+--   kind        as above.
+--   transition  the form the combo's inline transition names, or nil.
+-- nil when there is no target. It NEVER SENDS, and never calls combatQueue(), which can itself send
+-- `cq all`: shikudo.dispatch() puts "queue addclear free " and that prefix on, and
+-- shikudo.dispatchMind (011) queues the round behind a MIND command. Like any round it moves the
+-- per-round state the next one reads (ataxiaTemp.kickTarget, slot1Target, lastFrontkickArm,
+-- lastFlashheelLeg), and shouldTransition prints its Oak debug line.
+function shikudo.buildRound()
+  ensureState()
+  if not target or target == "" then return nil end
+  local wield = "wield " .. shikudo.staffRef() .. ";"
+  local assess = shikudo.config.assessEachRound and (";assess " .. target) or ""
+
+  -- KILL CHECK: All conditions met?
+  if shikudo.checkDispatchReady() then
+    -- SAFETY: Use INCAPACITATE for Mhaldorians (avoid friendly fire)
+    if tCity == "Mhaldor" or tCity == "(Mhaldor)" then
+      return wield .. "incapacitate " .. target, "incapacitate"
+    end
+    return wield .. "dispatch " .. target, "dispatch"
+  end
+
+  -- SHIELD CHECK
+  if tAffs.shield then
+    return wield .. "combo " .. target .. " shatter " .. shikudo.selectKick() .. assess, "shatter"
+  end
+
+  -- The strikes first, then the transition the combo carries inline: it is judged on the chain
+  -- after the strikes the combo lands, two in a sweep round (v4.7.420 review).
+  local kick, staff1, staff2 = selectStrikes()
+  local transition = shikudo.shouldTransition(staff1 == "sweep" and SWEEP_STRIKES or STRIKES)
+  local attack = shikudo.buildCombo(transition, kick, staff1, staff2):gsub("%$tar", target)
+  return wield .. attack .. assess, "combo", transition
+end
+
+--------------------------------------------------------------------------------
+-- MAIN DISPATCH FUNCTION
+--------------------------------------------------------------------------------
+
+function shikudo.dispatch()
+  -- Initialize if missing
+  ensureState()
 
   -- Debug: Show what we have
   cecho("\n<cyan>[Shikudo] Target: " .. tostring(target))
   cecho(" | Form: " .. tostring(ataxia.vitals.form))
   cecho(" | Kata: " .. tostring(ataxia.vitals.kata))
-  cecho(" | Hyperfocus: " .. tostring(shikudo.state.hyperfocus or "none"))
+  cecho(" | Hyperfocus: " .. tostring(shikudo.hyperLimb() or "none"))
   cecho("\n<cyan>[Shikudo] Limbs - H:" .. shikudo.getLimbDamage("head") .. " LL:" .. shikudo.getLimbDamage("left leg") .. " RL:" .. shikudo.getLimbDamage("right leg"))
   cecho(" | Ready for Prone: " .. (shikudo.checkReadyForProne() and "YES" or "NO"))
 
@@ -1303,7 +1388,8 @@ function shikudo.dispatch()
   local form = ataxia.vitals.form or "Rain"  -- Default to Rain if not set
   local kata = ataxia.vitals.kata or 0
 
-  -- Handle combatQueue - use empty string if function doesn't exist
+  -- Handle combatQueue - use empty string if function doesn't exist. It runs BEFORE the round is
+  -- built, as it always has: it can act on the target (a Deliverance target is dropped for a new one).
   local cmd = ""
   if combatQueue then
     cmd = combatQueue()
@@ -1312,47 +1398,20 @@ function shikudo.dispatch()
   -- HYPERFOCUS: User sets this manually before combat
   -- (Removed automatic hyperfocus - user will do this manually)
 
-  -- KILL CHECK: All conditions met?
-  if shikudo.checkDispatchReady() then
-    -- SAFETY: Use INCAPACITATE for Mhaldorians (avoid friendly fire)
-    local isMhaldorian = tCity == "Mhaldor" or tCity == "(Mhaldor)"
-    if isMhaldorian then
-      cmd = cmd .. "wield staff489282;incapacitate " .. target
-      send("queue addclear free " .. cmd)
-      cecho("\n<yellow>*** INCAPACITATE (Mhaldorian) ***")
-    else
-      -- Non-Mhaldorian = dispatch
-      cmd = cmd .. "wield staff489282;dispatch " .. target
-      send("queue addclear free " .. cmd)
-      cecho("\n<red>*** DISPATCH KILL ***")
-    end
-    return
-  end
+  local round, kind, transition = shikudo.buildRound()
+  if not round then return end
+  send("queue addclear free " .. cmd .. round)
 
-  -- SHIELD CHECK
-  if tAffs.shield then
-    local kick = shikudo.selectKick()
-    cmd = cmd .. "wield staff489282;combo " .. target .. " shatter " .. kick
-    send("queue addclear free " .. cmd)
-    return
-  end
-
-  -- TRANSITION CHECK - get transition before building combo
-  local transition = shikudo.shouldTransition()
-  if transition then
+  if kind == "incapacitate" then
+    cecho("\n<yellow>*** INCAPACITATE (Mhaldorian) ***")
+  elseif kind == "dispatch" then
+    cecho("\n<red>*** DISPATCH KILL ***")
+  elseif transition then
     cecho("\n<yellow>[Shikudo] Transitioning to " .. transition .. " after this combo")
   end
 
-  -- BUILD ATTACK (includes inline transition if needed)
-  local attack = shikudo.buildCombo(transition)
-  attack = attack:gsub("%$tar", target)
-
-  cmd = cmd .. "wield staff489282;" .. attack
-
-  send("queue addclear free " .. cmd)
-
   -- Debug output
-  if ataxia.debug then
+  if ataxia.debug and kind == "combo" then
     cecho("\n<cyan>[Shikudo] Form: " .. form .. " | Kata: " .. kata)
     cecho("\n<cyan>[Shikudo] H:" .. shikudo.getLimbDamage("head") .. " LL:" .. shikudo.getLimbDamage("left leg") .. " RL:" .. shikudo.getLimbDamage("right leg"))
     if transition then
@@ -1378,7 +1437,7 @@ function shikudo.status()
 
   local form = ataxia.vitals.form or "Unknown"
   local kata = ataxia.vitals.kata or 0
-  local maxKata = shikudo.maxKata[form] or 12
+  local maxKata = ataxia_kataLeaveAfter(form) or "?"  -- the policy cap (monk/004); nil for no form
 
   -- Get dynamic thresholds
   local legThreshold = shikudo.getLegPrepThreshold()
@@ -1388,7 +1447,7 @@ function shikudo.status()
   local bothLegsPrepped = shikudo.areBothLegsPrepped()
   local headPrepped = shikudo.isDynamicHeadPrepped()
 
-  local hyperfocus = shikudo.state.hyperfocus or "none"
+  local hyperfocus = shikudo.hyperLimb() or "none"
   local focusLeg = shikudo.getFocusLeg()
   local isMounted = tmounted or tAffs.mounted
 
@@ -1412,13 +1471,14 @@ function shikudo.status()
   cecho("\n<cyan>║   <white>R Leg: " .. (rightPrepped and "<green>" or "<red>") .. string.format("%.1f%%", shikudo.getLimbDamage("right leg")) .. (rightPrepped and " PREPPED" or "") .. rightArrow)
   cecho("\n<cyan>╠══════════════════════════════════════════╣")
   cecho("\n<cyan>║ <white>KILL CONDITIONS:<cyan>")
-  cecho("\n<cyan>║   <white>Prone: " .. (tAffs.prone and "<green>YES" or "<red>NO"))
-  cecho("\n<cyan>║   <white>Leg Broken: " .. ((shikudo.getLimbDamage("left leg") >= 100 or shikudo.getLimbDamage("right leg") >= 100) and "<green>YES" or "<red>NO"))
-  cecho("\n<cyan>║   <white>Head Broken: " .. ((shikudo.getLimbDamage("head") >= 100 or tAffs.damagedhead) and "<green>YES" or "<red>NO"))
-  cecho("\n<cyan>║   <white>Windpipe: " .. ((tAffs.damagedwindpipe or tAffs.crushedthroat) and "<green>YES" or "<red>NO"))
+  cecho("\n<cyan>║   <white>Prone: " .. (shikudo.has("prone") and "<green>YES" or "<red>NO"))
+  cecho("\n<cyan>║   <white>Head Broken: " .. (shikudo.headDamaged() and "<green>YES" or "<red>NO"))
+  cecho("\n<cyan>║   <white>Windpipe: " .. ((shikudo.has("damagedwindpipe") or shikudo.has("crushedthroat")) and "<green>YES" or "<red>NO"))
   cecho("\n<cyan>║   <white>DISPATCH READY: " .. (shikudo.checkDispatchReady() and "<green>*** YES ***" or "<red>NO"))
   cecho("\n<cyan>╠══════════════════════════════════════════╣")
   cecho("\n<cyan>║ <white>PREP STATUS:<cyan>")
+  -- Not a kill condition (v4.7.420): a broken leg keeps her down while the head and throat go.
+  cecho("\n<cyan>║   <white>Leg broken (holds her down): " .. ((shikudo.legBroken("left") or shikudo.legBroken("right")) and "<green>YES" or "<red>NO"))
   cecho("\n<cyan>║   <white>Focus Leg: <yellow>" .. focusLeg:upper() .. " <grey>(lower damage, hit first)")
   cecho("\n<cyan>║   <white>Both Legs Prepped: " .. (bothLegsPrepped and "<green>YES" or "<yellow>NO"))
   cecho("\n<cyan>║   <white>Head Prepped: " .. (headPrepped and "<green>YES" or "<yellow>NO"))
