@@ -446,6 +446,178 @@ describe("the kaido aliases say when kai is short, and still send", function()
   end)
 end)
 
+-- Since v4.7.420 trigger 265 records whose mount the flag is (ataxiaTemp.mountedWho): the target
+-- we were attacking when its line printed, as the line names nobody. TK6 reads that owner, so a
+-- rider's flag no longer follows us to the next target, and a rider whose flag was already up
+-- when they became the target is known as one the moment the line prints about them -- which the
+-- seen-down-then-up inference above could not see (true over true). Driven through the real 265
+-- body and the real target switch, 016's switchTarget. An owner recorded under part of a name
+-- (`t aga`) is matched as 016's isTargeted matches a name, and completed with the target's name by
+-- its updateTarget, which the last three tests drive.
+describe("the mount flag is the target's that trigger 265 printed against", function()
+  local TL = dofile(ROOT .. "tests/trigger_lib.lua")
+  local MOUNTED = ROOT .. "triggers/levi_ataxia/for_levi/leviticus/265_Mounted.lua"
+  local MOUNT_LINE = "Being mounted, your opponent has little use for their legs."
+  -- A load failure fails the tests that switch targets, rather than ending this file before its
+  -- restore at the bottom runs.
+  local loadErr
+  for _, f in ipairs({
+    ROOT .. "scripts/levi_ataxia/levi/ataxia/016_Targeting_Functions.lua",
+    ROOT .. "scripts/levi_ataxia/levi/ataxia/misc_scripts/002_System_Class_Functions.lua",
+  }) do
+    local ok, err = pcall(dofile, f)
+    if not ok and not loadErr then loadErr = "Failed to load " .. f .. ": " .. tostring(err) end
+  end
+
+  -- The 265 line about whoever is our target: the real body, once the line is checked against the
+  -- trigger's real pattern.
+  local function mountLine()
+    assert(TL.anyMatches(TL.patterns(MOUNTED), MOUNT_LINE), "265's pattern no longer takes its line")
+    body(MOUNTED)()
+  end
+
+  -- Our target becomes `who` by 016's switchTarget, as the `t` alias does it. What it reaches
+  -- outside TK6's world is stubbed for the call and put back after. The new target has Agathon's
+  -- limbs and parries the same leg (switchTarget forgets the last target's parry).
+  local STUBBED = { "matches", "gmcp", "pariah", "ataxiaBasher", "raiseEvent", "resetStatesV3",
+    "setafflictionstackslevi", "twohanded_resetFractures", "tBals" }
+  local function retarget(who)
+    if loadErr then error(loadErr, 0) end
+    local saved = {}
+    for i, k in ipairs(STUBBED) do saved[i] = _G[k] end
+    matches = { "t " .. who:lower(), who:lower() }
+    gmcp = { Char = { Status = { class = "Monk" } } }
+    pariah, ataxiaBasher = nil, nil         -- 016 indexes pariah when set (the runner's is "")
+    tBals = {}                              -- 016 writes a field before it replaces the table
+    raiseEvent = function() end
+    resetStatesV3 = function() end          -- the V3 tracker is not loaded here; TK6 reads tAffs
+    setafflictionstackslevi = function() end
+    twohanded_resetFractures = function() end
+    ataxia.settings.separator = "::"
+    ataxiaTemp.class = "Monk"
+    local ok, err = pcall(switchTarget, who)
+    for i, k in ipairs(STUBBED) do _G[k] = saved[i] end
+    if not ok then error(err, 0) end
+    lb[target] = lb.Agathon
+    ataxiaTemp.parriedLimb = "left leg"
+    echoed, sent = {}, {}
+  end
+
+  -- Each test starts with Agathon as the target (the alias tests above leave a denizen's number)
+  -- and ends with Agathon, pass or fail.
+  local function onAgathon(fn)
+    target = "Agathon"
+    local ok, err = pcall(fn)
+    target = "Agathon"
+    if not ok then error(err, 0) end
+  end
+
+  it("265 records the target it printed against", function()
+    onAgathon(function()
+      fixture(45, { mounted = false })
+      mountLine()
+      expect(tmounted).toBeTrue()
+      expect(ataxiaTemp.mountedWho).toBe("Agathon")
+      expect(build()).toBe("kai surge Agathon;combo Agathon swk hfp left hfp left")
+    end)
+  end)
+
+  it("a flag 265 set for Agathon is no mount of the next target", function()
+    onAgathon(function()
+      fixture(45, { mounted = false })
+      mountLine()                           -- Agathon rides
+      retarget("Claes")
+      expect(target).toBe("Claes")
+      expect(tmounted).toBeTrue()           -- the global is untouched...
+      expect(build()).toBe("combo Claes swk hfp left hfp left") -- ...and no kai goes on Claes
+      ataxia.vitals.kai = 30
+      expect(build()).toBe("combo Claes swk hfp left hfp left")
+      expect(#echoed).toBe(0)               -- no shortfall either: Claes needs no dismount
+      tekura6.dispatch.status()
+      expect(allEchoed()).toContain("Mounted: <green>NO")
+    end)
+  end)
+
+  it("the line about the new target makes the flag theirs, though it was already up", function()
+    onAgathon(function()
+      fixture(30, { mounted = false })
+      mountLine()                           -- Agathon rides, and the flag stays up...
+      retarget("Claes")
+      expect(build()).toBe("combo Claes swk hfp left hfp left")
+      mountLine()                           -- ...when the line prints about Claes
+      expect(ataxiaTemp.mountedWho).toBe("Claes")
+      expect(build()).toBe("combo Claes snk left jbp hfp left") -- a rider we cannot pay to dismount
+      expect(allEchoed()).toContain("SURGE needs 45 kai, have 30 -- no sweep, prepping instead")
+      ataxia.vitals.kai = 45
+      expect(build()).toBe("kai surge Claes;combo Claes swk hfp left hfp left")
+      echoed = {}
+      tekura6.dispatch.status()
+      expect(allEchoed()).toContain("Mounted: <red>YES")
+    end)
+  end)
+
+  it("the whole round: Agathon's flag sends Claes no surge; Claes's own line does", function()
+    onAgathon(function()
+      fixture(45, { mounted = false })
+      mountLine()
+      retarget("Claes")
+      tekura6.dispatch.run()
+      expect(sent[1]).toBe("queue addclear free unwield all;dismount;combo Claes swk hfp left hfp left")
+      mountLine()
+      sent = {}
+      tekura6.dispatch.run()
+      expect(sent[1]).toBe("queue addclear free unwield all;dismount;kai surge Claes;combo Claes swk hfp left hfp left")
+    end)
+  end)
+
+  -- `t aga` makes the target "Aga" (switchTarget title-cases what was typed), and a later line
+  -- naming Agathon completes it through 016's isTargeted -> updateTarget, with no switchTarget:
+  -- what any trigger that checks a name against our target does. string.starts (Mudlet's, which
+  -- isTargeted calls) is lent for the call.
+  local function lineNames(who)
+    if loadErr then error(loadErr, 0) end
+    local savedStarts = string.starts
+    string.starts = string.starts or function(s, p) return s:sub(1, #p) == p end
+    local ok, res = pcall(isTargeted, who)
+    string.starts = savedStarts
+    if not ok then error(res, 0) end
+    return res
+  end
+
+  it("a rider 265 saw under part of their name stays mounted once a line completes the name", function()
+    onAgathon(function()
+      fixture(45, { mounted = false })
+      retarget("Aga")                       -- `t aga`
+      expect(target).toBe("Aga")
+      mountLine()                           -- 265 prints before any line has named them in full
+      expect(lineNames("Agathon")).toBeTrue()
+      expect(target).toBe("Agathon")
+      expect(build()).toBe("kai surge Agathon;combo Agathon swk hfp left hfp left")
+      expect(ataxiaTemp.mountedWho).toBe("Agathon") -- the owner is completed with the target
+    end)
+  end)
+
+  it("a known rider targeted again by part of their name is still mounted", function()
+    onAgathon(function()
+      fixture(45, { mounted = false })
+      mountLine()                           -- Agathon rides
+      retarget("Aga")                       -- `t aga`: the same person, by the rule isTargeted uses
+      expect(build()).toBe("kai surge Aga;combo Aga swk hfp left hfp left")
+    end)
+  end)
+
+  it("a completed owner does not pass to another name that starts the same way", function()
+    onAgathon(function()
+      fixture(45, { mounted = false })
+      retarget("Aga")
+      mountLine()
+      lineNames("Agathon")                  -- the rider is Agathon
+      retarget("Agatha")                    -- someone else, whose name also starts "Aga"
+      expect(build()).toBe("combo Agatha swk hfp left hfp left")
+    end)
+  end)
+end)
+
 -- Restore the shared Lua state.
 for k in pairs(_G) do
   if before[k] == nil then _G[k] = nil end

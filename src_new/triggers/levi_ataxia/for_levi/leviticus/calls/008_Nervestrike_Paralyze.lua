@@ -35,12 +35,14 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^You whip a twisted oaken staff at the side of (\w+)'s neck\.$
+- pattern: ^You whip .+ at the side of (\w+)'s neck
   type: 1
 ]]--
 -- v4.7.414: switched off. It recorded paralysis from the STRIKE line, which the game prints even
--- when the strike is parried (log 2026-10-11), and its pattern names one staff ("a twisted oaken
--- staff"). 563 Nervestrike records paralysis from the damage line, which only a landed blow prints.
+-- when the strike is parried (log 2026-10-11). 563 Nervestrike records paralysis from the damage
+-- line, which only a landed blow prints. v4.7.420: the pattern no longer names one staff ("a
+-- twisted oaken staff"); it is an early fragment of "You whip a twisted oaken staff at the side of
+-- Claes's neck." (attacker log :829).
 selectCurrentLine() fg("a_yellow") bg("black") 
 replace("" ..matches[2].. " [Nervestrike: Paralysis]")
  

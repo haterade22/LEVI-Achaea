@@ -107,14 +107,23 @@ ignoreThirdPerson = false
 if sylvan_overcharge then sylvan_overcharge = nil end
 if dslAff then dslAff = nil end
 
-if ataxiaTemp.randomCure and ataxiaTemp.randomCure > 0 then 
-  if ataxiaTemp.randomCure == 1 then
+-- A passive's random cure. Every trigger that sets randomCure (passive_active/) has already charged
+-- it in V3 (onClassCureV3 -> onPassiveCureV3), so erasing here as well charged one cure twice: the
+-- double charge trigger 389 had on trees. With V3 on (v4.7.420): tSingleRandom({ noErase = true })
+-- only returns its pick, and tMultipleRandom (curing/002) has no such form, so it is not called.
+-- What the erase also did, onPassiveCureV3 does now (008): it takes a level-1 broken limb, which no
+-- branch holds, and reports a cure it made certain; the sync (007) takes out of tAffs what V3 no
+-- longer holds, or now holds under 30%. V3 off: as before.
+if ataxiaTemp.randomCure and ataxiaTemp.randomCure > 0 then
+  if onPassiveCureV3 and affConfigV3 and affConfigV3.enabled then
+    if ataxiaTemp.randomCure == 1 then tSingleRandom({ noErase = true }) end
+  elseif ataxiaTemp.randomCure == 1 then
     tSingleRandom()
   else
     tMultipleRandom(ataxiaTemp.randomCure)
   end
   ataxiaTemp.randomCure = nil
-end 
+end
 
 
 

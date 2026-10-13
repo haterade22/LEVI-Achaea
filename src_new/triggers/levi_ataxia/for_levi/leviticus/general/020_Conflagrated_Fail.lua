@@ -36,6 +36,13 @@ patterns:
   type: 1
 ]]--
 
+-- Only a failure at our target says anything about our target's burns (v4.7.420). Conflagrate
+-- lands on a target with "two or more stacks of the ablaze affliction"
+-- (kb/raw/wiki/Elementalism.wiki:230), so a failure means the target it names had fewer; but a
+-- failure at anyone else used to zero the count tracked on `target`. 019, the landed conflagrate,
+-- checks the name the same way.
+if matches[2] ~= target then return end
+
 tburns = 0
 magi.offense.state.burns = 0
 magi.offense.state.conflagrated = false

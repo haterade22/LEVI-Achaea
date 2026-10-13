@@ -427,6 +427,25 @@ function onPassiveCureV3(numCures)
     local pool = passiveCurableAffsV3
     local allCandidates = {}
 
+    -- v4.7.420: with V3 on, trigger 318 no longer erases the passive's cure, so this is its only
+    -- charge, and it does the two other things that erase did. (1) The four level-1 broken limbs
+    -- are in the pool but simple-tracked (007), so no branch holds them: a cure round that finds
+    -- no candidate in any branch takes the first present limb in the pool's order (left leg, right
+    -- leg, left arm, right arm, the order the erase took them in). Beside a branch candidate the
+    -- limb stays, as on the tree (ataxia_targetTreeV3, curing/002), since V3 cannot branch it.
+    -- (2) What the cure made certain is reported, below. With V3 off, 318 still erases and does
+    -- both, so neither is done here.
+    local had, limbs, taken = {}, {}, {}
+    if affConfigV3.enabled then
+        for _, aff in ipairs(pool) do
+            if simpleAffsV3[aff] then
+                limbs[#limbs + 1] = aff
+            elseif getAffProbabilityV3(aff) > 0 then
+                had[#had + 1] = aff
+            end
+        end
+    end
+
     for cure = 1, numCures do
         local newStates = {}
         local roundCandidates = {}
@@ -459,6 +478,10 @@ function onPassiveCureV3(numCures)
         for aff, _ in pairs(roundCandidates) do
             allCandidates[aff] = true
         end
+        if not next(roundCandidates) and limbs[#taken + 1] then
+            taken[#taken + 1] = limbs[#taken + 1]
+            allCandidates[taken[#taken]] = true
+        end
 
         afflictionStatesV3 = newStates
 
@@ -473,6 +496,17 @@ function onPassiveCureV3(numCures)
     syncToOldSystemV3()
     updateAffDisplayV3()
     killNegativeConfirmV3()
+
+    -- Through the public API (017), as the tree does: a candidate this cure took from every branch
+    -- raises "target cured aff" (the fight log's feed of target cures) and stops a timed clock, and
+    -- a taken limb leaves simpleAffsV3 the same way. A cure V3 only branched over is a guess and is
+    -- not reported; the old erase reported its guess.
+    if ataxia_tarAffFaded then
+        for _, aff in ipairs(had) do
+            if getAffProbabilityV3(aff) < 0.01 then ataxia_tarAffFaded(aff) end
+        end
+        for _, limb in ipairs(taken) do ataxia_tarAffFaded(limb) end
+    end
 
     if ataxiaEcho and affConfigV3.debugEcho then
         local candList = {}

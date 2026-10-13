@@ -142,6 +142,10 @@ end
 function erAff(what)
     -- Special numeric tracking
     if what == "haemophilia" then
+        -- v4.7.420: this branch reset only the bleed counters, never the affliction, so
+        -- erAff("haemophilia") left tAffs.haemophilia true (the V3 sync now clears it as well, but
+        -- only where V3 held it).
+        tAffs.haemophilia = false
         tAffs.bleed = 0
         tAffs.bleeding = 0
     elseif what == "crescendo" then

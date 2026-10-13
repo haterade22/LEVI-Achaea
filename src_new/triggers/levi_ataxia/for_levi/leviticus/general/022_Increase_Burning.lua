@@ -32,9 +32,15 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^You fan the heat of \w+'s body into consuming flame\.$
+- pattern: ^You fan the heat of (\w+)'s body into consuming flame\.$
   type: 1
 ]]--
+
+-- Only our target's burn (v4.7.420). The pattern captured no name, so this line added a burn to
+-- `target` whoever it named: our spell on another enemy in a group fight counted on our target.
+-- The neighbouring triggers (015_Dehydrate, 019, 021_Freeze, 021_Spell_Outcomes) all check the
+-- name. Which spell prints this line is open (kb/CONFLICTS.md #30).
+if matches[2] ~= target then return end
 
 magi.offense = magi.offense or {}
 magi.offense.state = magi.offense.state or {}

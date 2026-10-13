@@ -26,9 +26,9 @@ packageName: ''
     * whether a live chain has gone too long without a strike            ataxia_kataAtRisk
     * whether the last ASSESS puts our target at half health or less     ataxia_assessAtMostHalf
 
-  Readers in v4.7.419: tekura/002 (TK6 surge) and the kaido aliases. The Shikudo offenses
-  (006 zz/xx/sk, 007 sr, 011 vv) are being moved onto it. Functions and tables only, except the
-  send watcher at the end, so a test can load this file alone.
+  Readers: tekura/002 (TK6 surge), the kaido aliases, and since v4.7.420 the Shikudo offenses:
+  006 (zz/xx/sk), 007 (sr) and 011 (vv). Functions and tables only, except the send watcher at
+  the end, so a test can load this file alone.
 
   Where the inputs come from:
     ataxia.vitals.kai        update_stuff/004, from the Kai charstat (assumed "Kai: N%"; no capture

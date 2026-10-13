@@ -82,10 +82,10 @@ notes: "Set via tekura.state.preferScythe; a Telepathy-based kill, not a kick fi
 # aliases/.../levi_062424/ -- each Monk branch tests ataxia.vitals.stance: a Stance charstat means
 # Tekura, none means Shikudo (sr tests the Form charstat instead)
 first_attack:  "152 zz - Tekura: tekura6.dispatch.run(), kaiMode surge (TK6 Backbreaker). Shikudo: shikudo.dispatch() (006)"
-fourth_attack: "153 vv - Tekura: tekura6.dispatch.run(), kaiMode cripple. Shikudo: shikudo.dispatchMind() if it exists (nothing defines it yet), else shikudo.dispatch() (006). Until v4.7.419 it called shikudo.setMode('godmode'), defined only in switched-off 008, and threw"
+fourth_attack: "153 vv - Tekura: tekura6.dispatch.run(), kaiMode cripple. Shikudo: shikudo.dispatchMind() (011, v4.7.420: the dispatch offense with Telepathy rounds between its combos), else shikudo.dispatch() (006) if 011 is not loaded. Until v4.7.419 it called shikudo.setMode('godmode'), defined only in switched-off 008, and threw"
 second_attack: "155 xx - Tekura: tekura.dispatch.run() (legacy TKD 3-limb). Shikudo: shikudo.dispatch() (006)"
 group:         "154 sr - Shikudo only: shikudoLock.dispatch() (007) when a Form charstat is read; with none (Tekura) it echoes and does nothing"
-shikudo:       "sk (aliases/.../shikudo/004_Dispatch.lua) -> shikudo.dispatch(); skata (shikudo/006_Kata.lua, v4.7.419) shows or overrides the kata caps"
+shikudo:       "sk (aliases/.../shikudo/004_Dispatch.lua) -> shikudo.dispatch(); skata (shikudo/006_Kata.lua, v4.7.419) shows or overrides the kata caps; skstaff (shikudo/007_Staff.lua, v4.7.420) shows or sets the staff 006 and trigger 168 wield (007 still sends the bare 'wield staff')"
 kai: |  # aliases/.../kaido/ (alias group Kaido, active)
   ks 'kai surge <t>', kcr 'kai cripple <t>', ke 'kai enfeeble <t>', kh 'kai heal', kc 'kai choke <t>', nu 'numb'.
   Since v4.7.419 ks, kcr, ke and kh always send what was typed, and when kai is KNOWN to be short
@@ -105,9 +105,10 @@ the plan: `docs/plans/shikudo-offense-review-2026-10-11.md`.
 ### Alternative Kill: Shikudo Lock Route (Affliction-Based)
 ```yaml
 type: affliction
-summary: Pure affliction lock using Shikudo + Telepathy, damage through truelock
+summary: Affliction lock with Shikudo + Telepathy, killed by KAI CHOKE once truelocked (007, `sr`;
+  rebuilt on Mystor's counted route in v4.7.420: kb/combat/shikudo.md, "Mystor's lock route, counted")
 
-lock_progression:
+lock_progression:  # 007's phase (shikudoLock.updatePhase): SOFTLOCK -> VENOMLOCK -> HARDLOCK -> TRUELOCK -> KILL
   softlock: "asthma + anorexia + slickness"
   venomlock: "softlock + paralysis"
   hardlock: "venomlock + impatience (Telepathy)"
@@ -124,35 +125,145 @@ shikudo_afflictions:
 telepathy_afflictions:
   mindlock: "Needed ONLY to reach a target outside your room, and for certain skills such as Radiance and
     Sapience (the user and Mystor, 2026-10-11). In-room affliction attacks (impatience, paralyse, batter, confuse,
-    stupidity, epilepsy, ...) need no lock. The wiki also puts BLACKOUT behind the lock; the players' rule says
-    otherwise, so confirm it on its first live use"
-  impatience: "Required for hardlock"
-  batter: "stupidity + epilepsy + dizziness"
-  paralyse: "Backup for paralysis"
+    stupidity, epilepsy, ...) need no lock. The wiki also puts BLACKOUT and SCYTHE behind the lock; the players'
+    rule says otherwise, so confirm each on its first live use (kb/CONFLICTS.md #7)"
+  impatience: "Required for hardlock. 007 sends it as soon as asthma, slickness or anorexia is on, so FOCUS
+    cannot cure the anorexia hiraku is about to give (Mystor: FceAmb0o:5937, vNTjvghY:8444)"
+  paralyse: "The venomlock piece when nervestrike's has been cured: 007 sends it to close softlock + impatience"
+  confuse_disrupt: "007's kill prelude: a disrupted target has no equilibrium, and only CONCENTRATE brings it
+    back, which confusion makes fail"
+  batter: "stupidity + epilepsy + dizziness. 007 no longer sends it (v4.7.420: Mystor sent it once, just
+    before his MIND SCYTHE, never in a lock); vv (011) keeps it behind shikudo.tele.scythe, off"
 
-form_strategy:
-  1: "Start in Willow - get anorexia via Hiraku"
-  2: "Transition to Rain - build kata, apply slickness"
-  3: "Transition to Oak - apply asthma, paralysis, weariness"
-  4: "Stay in Oak - maintain afflictions, use Telepathy for impatience"
+# Mystor's counted route (56 transitions over his six logs, never Tykonos), as 007 plays it since v4.7.420
+# (shikudoLock.shouldTransition, 007:262-297). The transition goes FIRST in the round, so it is judged on the
+# chain before the combo (ataxia_kataShouldLeave(form, kata, 0)): nothing below a chain of 5.
+form_route:
+  Rain: "-> Oak once weariness and clumsiness are on at a chain of 10 (config.rainKata; 'me shooting for 10 kata
+    in rain with 2x arm prep'), at the cap (15), or at once with anorexia already on (mid-lock, what is missing
+    is Oak's asthma and slickness)"
+  Oak: "-> Willow only with asthma AND slickness on and anorexia still OFF (his model, all six Willow entries);
+    -> Gaital at the cap (12). With anorexia already on, Oak holds for its kuro (weariness) and nervestrike
+    (paralysis): Willow has neither (DART, SWEEP, HIRU, FLASHHEEL, HIRAKU, Shikudo.wiki:89)"
+  Willow: "-> Rain once asthma or slickness has dropped, or at the cap (12)"
+  Gaital: "-> Rain as soon as a transition is legal (Mystor stayed to 12 in 9 of 11)"
+  Maelstrom: "-> Oak (007 never goes there on its own)"
+  Tykonos: "-> Willow, its only exit (007 never goes there on its own)"
+  why: "v4.7.417 went for anorexia first. When the target cured it before Rain reached kata 5, it went Rain ->
+    Tykonos -> Willow and never saw Oak again, so asthma and nervestrike paralysis stopped going out (plan #8)"
 
-kill_method: "Once truelocked: damage (staff and kicks) or MIND SCYTHE. Telepathy helps BUILD the lock (MIND
+kicks:  # shikudoLock.selectKick(form, arm, leg), 007:306-331
+  Willow: "flashheel to the leg trigger 577 has NOT recorded as broken (shikudoLock.flashLeg). Flashheel BREAKS
+    the leg; a second break is a second mending, on the salve balance epidermal needs to cure anorexia"
+  Gaital: "spinkick on a prone target, else flashheel as in Willow"
+  Rain: "frontkick to the less damaged arm; the ruku in the same combo hits the same arm (Mystor's 'frontkick
+    right ruku right ruku right', vNTjvghY:928-938)"
+  Maelstrom: "crescent only when shikudoLock.crescentReady(): prone AND a fresh ASSESS of this target at half
+    health or less, from the raw numbers (ataxia_assessAtMostHalf(5)). Never in a shatter round"
+  otherwise: "risingkick torso (Oak, Tykonos, Maelstrom without Crescent), Mystor's lock-window kick. KAI CHOKE
+    deals increased damage to a target with a damaged or mangled torso (or head, or a mind clamp; any one of
+    them, Kaido.wiki:289), so the torso kicks raise the choke only once the torso is damaged (the game's mild
+    internal trauma). That this is why Mystor kicks the torso is our reading, not his words"
+  sides: "pickSide(kind): the side with less damage in lb[target].hits; with no reading or a tie it alternates,
+    and the alternation moves only when the round RUNS (state.roundAlt, committed with the round)"
+
+staff:  # shikudoLock.STAFF + pickStaff(form, arm, leg), 007:347-390: the strike for each missing lock affliction
+        # in order, then the form's fill, never the same strike twice
+  Rain: "kuro <leg> (weariness), ruku <arm> (clumsiness). Rain gives no slickness of its own"
+  Oak: "livestrike (asthma), ruku torso (slickness), nervestrike (paralysis), kuro <leg>, ruku <arm>; fill
+    livestrike + ruku torso, so 'risingkick torso livestrike ruku torso' puts asthma and slickness on together"
+  Willow: "hiraku + hiru (hiraku gives the anorexia)"
+  Maelstrom: "livestrike, ruku torso, jinzuku (addiction)"
+  Gaital: "ruku torso, kuro <leg>, jinzuku, ruku <arm>"
+  Tykonos: "thrust left leg + thrust right leg"
+  fixed: "v4.7.417's 'hiraku hiraku' in Willow, 'ruku torso ruku torso' / 'jinzuku jinzuku' in Maelstrom, and
+    Rain's lone ruku torso"
+
+round_planner:  # shikudoLock.dispatch(), 007:575-675. Every round is ONE 'queue addclear free' entry (free waits
+                # for equilibrium AND balance) and ends ';assess <t>' (config.assessEachRound)
+  1_shield: "a shield on the target: 'wield staff;combo <t> shatter <kick>' (a crescent pick becomes risingkick
+    torso)"
+  2_kill: "truelocked and KAI CHOKE affordable (10 kai through ataxia_kaiAfford('choke'); unknown kai is not):
+    up to config.maxPrelude (3) MIND rounds, MIND CONFUSE if she is not confused, then MIND DISRUPT if she is
+    not disrupted, then 'kai choke <t>' alone every round, no combo and no transition, until the lock breaks
+    (which resets the prelude and the choke latch). Mystor's finisher in both lock wins (FceAmb0o:6309-6443,
+    vNTjvghY:8840-9020)"
+  3_transition: "'transition to <form> form' FIRST, the wording Mystor sends (56 times); the rest of the round
+    is built for the form it leads into. v4.7.417 appended 'transition to the <form> form' AFTER the combo, a
+    wording in no log"
+  4_mind: "a MIND round INSTEAD of the combo when the pick is critical, or the last round run was a combo (or a
+    shatter); at most config.maxMindRounds (2) in a row; and none once the chain's last strike is over
+    config.lapseGuard (12) s old (ataxia_kataAtRisk), unless the round transitions: 'Transitioning will reset
+    your kata chain' (Shikudo.wiki:116), so a combo would save nothing, and if the chain lapsed first the
+    combo's transition would be refused and its strikes, built for the new form, go out in the old one. It
+    may carry the transition (vNTjvghY:8444)"
+  5_combo: "otherwise 'wield staff;[transition ...;]combo <t> <kick> <staff1> <staff2>'; a MIND command rides
+    after it only with config.chainTelepathy (default off: 0 of Mystor's 274 combos carried one)"
+
+telepathy:  # shikudoLock.selectTelepathy(form) -> cmd, critical (007:421-443);
+            # shikudoLock.selectPrelude() (007:450-458)
+  critical: "MIND IMPATIENCE when impatience is missing and asthma, slickness or anorexia is on; MIND PARALYSE
+    when the softlock and impatience are on and paralysis is missing"
+  rain_filler: "config.rainTelepathy, in a Rain round: impatience, then paralyse (none against an Apostate,
+    config.classSkip, read through ataxiaNDB_getClass: an Apostate ate magnesium right after it,
+    LcJC-rJ5:3124-3141), then disrupt. A filler goes out only right after a combo, so in Rain it alternates
+    1:1 with combos, where Mystor's bursts ran to eight MIND rounds at kata 9-12 (FceAmb0o:2600-2944,
+    vNTjvghY:3495); rainTelepathy and maxMindRounds are the knobs"
+  no_eq_gate: "no equilibrium gate (v4.7.420 review): the free queue waits for equilibrium whatever the round
+    is, so equilibrium at the press says nothing about what will run; the old gate swapped a critical
+    impatience for a combo that ran at the same moment and landed hiraku first"
+  no_lock: "no MIND LOCK first, and never bare words (v4.7.417)"
+
+history:  # v4.7.420 review; .claude/AGENTS.md, "Round history moves when the GAME RUNS the round"
+  what: "lastRound, mindRun, the prelude count, the choke latch and the alternated sides (shikudoLock.state,
+    never saved)"
+  when: "they move when the GAME RUNS a round, never on the press: each press sends 'queue addclear free',
+    which replaces a round still waiting, so per-press history made the round that ran depend on how often
+    sr was pressed (the third press of a critical impatience became a combo; the fourth press in a truelock
+    skipped the whole prelude). sendRound keeps the round PENDING; shikudoLock.onQueueRan commits it when the
+    pending round starts with the run line's first row, both lower-cased with whitespace dropped (007:536)"
+  run_line: "'[System]: Running queued <q> command: <cmd>' (shikudoLock.RAN_PATTERN, the pattern
+    clean-up/001_Queue_Scanning.lua:34 uses; no capture in kb/raw), read by a session tempRegexTrigger whose
+    id lives on ataxiaTemp.shikLockRunTrigger (a reload kills the old one first). A combo's run line is about
+    134 columns and wraps at this user's 119-124, so its FIRST row is matched as a prefix of the pending
+    round, both lower-cased with whitespace dropped. Another command's run line moves nothing"
+  fallback: "until a run line has matched one of our rounds (state.runLine), a round counts when it is sent,
+    so the caps hold with queue alerts off"
+  limits: "unconfirmed whether the run line prints for a round that runs at once (if it does not, that round
+    is never counted: the next press replaces its pending record); a press that crosses a run line in flight
+    can lose one round's count, which the caps bound; queue alerts turned off mid-session freeze the history
+    until a reload (007 rebuilds shikudoLock.state when it loads, 007:50-61). A frozen history stops the MIND
+    cap and the prelude limit from moving, so they bound nothing: frozen below a cap, MIND rounds (or prelude
+    rounds) can go out on every press until the lapse guard (the prelude has none) or the afflictions landing
+    stop them; frozen at a cap, none goes out (vv's freeze differs: vv_telepathy, below)"
+
+kill_method: "Once truelocked: MIND CONFUSE and MIND DISRUPT, then KAI CHOKE every round (round_planner above).
+  MIND SCYTHE (Mystor's third win) is wired only in vv (011), and off. Telepathy helps BUILD the lock (MIND
   IMPATIENCE is its impatience); it is not saved for after it (corrected 2026-10-11)"
 
 implementation:
-  # Corrected 2026-10-11: 008 is switched off; the live lock is 007.
   file: "007_CC_Shikudo_Lock.lua"
   activate: "alias sr (154) -> shikudoLock.dispatch() by name, only when a Shikudo Form charstat is read;
-    shikudolock() (007:628) is only its fallback"
-  status: "sklstatus() / sklockstatus() (shikudoLock.status())"
-  telepathy: "Since v4.7.417: on equilibrium (ataxia.vitals.eq, 007:428) it sends MIND IMPATIENCE / MIND
-    BATTER / MIND PARALYSE <target> (007:434-445) with no mind lock first, chained after the round's combo
-    (007:535-540; whether the game takes a MIND command and a combo in one queued round is untested).
-    Until then it waited on ataxia.balances.eq, which nothing writes, and sent bare words. Still open:
-    the blackout cycle, and Telepathy in the dispatch offense (006)"
-  kata: "Its own caps (shikudoLock.maxKata: 12, Rain 24). Once its affliction rules have passed, it
-    leaves a form 3 short of the cap (007:186-188). It does not read the shared policy in
-    ataxia/monk/004 (v4.7.419); no offense does yet"
+    shikudolock() (007:754) is only its fallback"
+  status: "sklstatus() / sklockstatus() (shikudoLock.status(), 007:681): phase, form with its policy cap
+    (ataxia_kataLeaveAfter), kai ('KAI CHOKE READY' once affordable, '?' while unknown), mind lock, lock pieces"
+  config: "shikudoLock.config (runtime only): rainKata 10, assessMaxAge 5, assessEachRound true, maxMindRounds 2,
+    maxPrelude 3, chokePrelude true, chainTelepathy false, rainTelepathy true, lapseGuard 12,
+    classSkip {apostate = {paralyse = true}}"
+  reads: "monk/004: ataxia_kai, ataxia_kaiAfford('choke'), ataxia_kataShouldLeave(form, kata, 0),
+    ataxia_kataAtRisk(12), ataxia_assessAtMostHalf(5), ataxia_kataLeaveAfter. Target afflictions through
+    haveAff, else tAffs. Until v4.7.420 it read kai from ataxia.vitals.class and only echoed 'KAI SURGE READY'
+    at a wrong 31; its own 12/24 kata caps (maxKata), selectDamageStaff and the six per-form staff pickers
+    are gone"
+  wield: "the bare 'wield staff' on combo and shatter rounds; it does not read the skstaff setting 006 uses"
+  tests: "test_shikudo_offense.lua (46 tests: 44 on the real 007, one on 006's Crescent and one on the
+    shikudo/002 trigger; monk/004 loaded first; the run line goes through 007's real pattern and callback,
+    wrapped at 100/119/124/200 columns)"
+  open: "live: whether a MIND command chained after a combo executes (chainTelepathy stays off), Crescent's
+    real round shape and lines, whether an appended ASSESS costs anything, whether a flashheel on an
+    already-broken leg does anything. The KILL prelude and the chokes ignore the lapse guard by design, so a
+    long choke run may leave the chain lapsed for the next transition. A target that keeps curing anorexia
+    could loop Oak -> Gaital -> Rain -> Oak"
 ```
 
 ### Shikudo Kill: Dispatch (Limb-Based) - PRIMARY
@@ -175,43 +286,62 @@ prerequisites:  # the game's (WIKI): prone + damaged head + crushed throat
 # never stood, while NEEDLE finished the head and throat (kb/combat/shikudo.md, "Dispatch, as it was
 # done"). (Corrected 2026-10-12: this said "NEVER break legs until head is also prepped".)
 
-kill_flow:  # a design for the dispatch offense, not 006's code and not how the recorded kill went (see
-            # above). 006 never sends SPINKICK (plan, Opportunities), leaves Rain with prepped legs at
-            # kata 9 (006:396), and goes Oak -> Gaital once both legs are prepped, head or not (006:422-426)
+kill_flow:  # how 006 plays it since v4.7.420 (shikudo.buildRound, 006:1329; shouldTransition, 006:434-567).
+            # The form exits are 006's own rules on top of the kata policy (ataxia_kataShouldLeave), not the
+            # game's; the policy cap is 12 after the combo (Rain 15)
   phase_1_prep_legs:
-    form: "Rain (twice the normal chain length, wiki; the code caps it at 24)"
-    attacks: "KURO left/right"
-    goal: "Both legs to 90.8% (one hit from break)"
-    protection: "Once prepped, use LIGHT attacks to avoid breaking"
-    transition: "Rain → Oak when kata >= 5 and legs prepped"
+    form: "Rain (twice the normal chain length, wiki; the policy leaves at 15 after the combo)"
+    attacks: "FRONTKICK to an arm, KURO on the legs (the less damaged first); with both legs prepped, HIRU
+      for the head, then ruku torso or LIGHT strikes"
+    goal: "Both legs one kuro from 100% (91.6% with the 8.4 default)"
+    transition: "Rain -> Oak as soon as a transition is legal once both legs AND the head are prepped (in Rain
+      the head counts as prepped one hiru short, 95.7%; 006:475-481); with the legs alone prepped at kata 9+
+      (006:504-506); or at the cap (006:500-502)"
 
   phase_2_prep_head:
     form: "Oak"
-    attacks: "NERVESTRIKE, RISINGKICK head"
-    goal: "Head to ~92% (one hit from break)"
-    protection: "Use LIGHT on legs if hitting them, or hit torso/arms"
-    transition: "Oak → Gaital when kata >= 5 and all limbs prepped"
+    attacks: "NERVESTRIKE first (staff before the kick: paralysis stops the parry), then RISINGKICK TORSO;
+      RISINGKICK HEAD only on a prone target (stun, Shikudo.wiki:138; 006:661-663). The branch that would kick a
+      standing target's head is dead: hitsToPrep returns at most 2, so `headHitsNerve <= 2` (006:674) always
+      sends the torso before it is reached (006:679-683)"
+    goal: "Head one nervestrike from 100% (86.6% with the 13.4 default)"
+    transition: "Oak -> Gaital as soon as a transition is legal with both legs AND the head prepped; at the
+      cap with both legs prepped (Gaital's NEEDLE finishes the head) or legs and head at 85%+; else back
+      to Willow at the cap"
 
   phase_3_kill:
     form: "Gaital"
-    combo_1: "SWEEP + FLASHHEEL (prone + a broken leg). SWEEP uses both arms, so only a kick can
-      join it: SWEEP + KURO is not a legal combo. Seen: combo <t> sweep flashheel left"
-    combo_2: "SPINKICK + NEEDLE (breaks head + applies windpipe)"
-    combo_3: "DISPATCH (instant kill)"
+    prep: "standing and not ready: kuro the unprepped legs, then needle the head (selectGaitalStaff PHASE 0)"
+    combo_1: "SWEEP + FLASHHEEL pushed to 100% (prone + a broken leg): 'combo <t> sweep flashheel <leg>', once
+      she stands, is not mounted, and both legs and the head are prepped (shikudo.gaitalSweeps). SWEEP uses
+      both arms, so only a kick joins it, and the round is two kata actions"
+    combo_2: "she is down: NEEDLE in slot 1 (one crushes the throat); slot 2 needles again only while the head
+      would still be short of 100, else ruku torso (slickness: no salve, so no mending to stand or for the
+      throat), then jinzuku, then kuro on an unbroken leg (shikudo.needleSecond). The kick: SPINKICK on a
+      prone head that is not yet damaged, when she stays down and one needle would not finish the head
+      (Mystor's finish: 'combo Agathon needle spinkick kuro right', LcJC-rJ5:5797-5803); else a flashheel
+      pushed to 100%"
+    combo_3: "DISPATCH once prone + damaged head + crushed throat, sent alone, no ASSESS (INCAPACITATE on a
+      Mhaldorian)"
+    holds: "Gaital never leaves while she is prone, nor on the round that sweeps her, even past the cap"
 
 dynamic_thresholds:
   description: "Prepped = ONE HIT away from breaking (100%)"
-  calculation: "threshold = 100 - attack_damage"
-  examples:
-    kuro_9.2_percent: "Leg prepped at 90.8%"
-    thrust_14.5_percent: "Leg prepped at 85.5%"
-    nervestrike_7.8_percent: "Head prepped at 92.2%"
-  note: "Actual damage depends on target health - use shikudo_limbDamage table"
+  calculation: "threshold = 100 - shikudo.getAttackDamage(attack, limb), halved on the hyperfocused limb"
+  examples:  # 006's defaults since v4.7.420, from raw damage lines (attacker :71, :76, :361, :2659)
+    kuro_8.4_percent: "Leg prepped at 91.6%"
+    thrust_14.5_percent: "Leg prepped at 85.5% (Tykonos)"
+    nervestrike_13.4_percent: "Head prepped at 86.6% in Oak (needle 13.4 in Gaital likewise; hiru 4.3 elsewhere:
+      95.7%). Hyperfocused on the head, 93.3%"
+  note: "006 reads shikudo_limbDamage[attack] before its defaults, but nothing writes that table, so the
+    defaults apply. The strike triggers store samples in ataxiaTables.limbData.shik*, which 006 does not
+    read: a sample taken on a hyperfocused limb is already halved"
 
 edge_cases:
   partial_prep: "If legs not fully prepped in Rain, Oak can finish with KURO"
-  kata_constraint: "006 leaves Rain for Oak at kata 21+ (006:392-393). A completed transition starts the
-    new form at kata 0; a refused one keeps the chain"
+  kata_constraint: "006 leaves Rain for Oak at the cap: the chain after the combo reaches 15, kata 12+ before a
+    three-strike combo (006:499-502). A completed transition starts the new form at kata 0; a refused one
+    keeps the chain"
   waiting_for_kata: "Use LIGHT attacks or hit torso/arms if can't transition yet"
   parried_limbs: "Switch to alternate limb or use LIGHT on parried limb"
 
@@ -232,27 +362,37 @@ key_mechanics:
       combo's strikes (log 2026-10-11, attacker:960-961: the chain line '3', then the refusal)"
     kata_reset: "A completed transition (or a stumble) resets the kata to 0 (wiki). A REFUSED transition
       (kata below 5) keeps the chain (log 2026-10-11: kata 3 stayed 3, and the next combo made 6)"
-    kata_limit: "No game number (wiki: Rain allows twice the normal length; Tykonos never stumbles). 006 and
-      007 cap at 12, 24 in Rain; Oak reached 13 with no stumble (log 2026-10-11), which rules out only a
-      certain stumble at 12. The written policy (ataxia_KATA, ataxia/monk/004, v4.7.419; see 'Kai, kata and
-      ASSESS' below) leaves at 12 after the combo, Rain 15, and is not read by any offense yet"
+    kata_limit: "No game number (wiki: Rain allows twice the normal length; Tykonos never stumbles); Oak
+      reached 13 with no stumble (log 2026-10-11), which rules out only a certain stumble at 12. Both
+      offenses read the written policy since v4.7.420 (ataxia_KATA, ataxia/monk/004; see 'Kai, kata and
+      ASSESS' below): leave at 12 after the combo, Rain 15, Tykonos as soon as legal. 006 passes its
+      combo's strikes (3, or 2 for a sweep round), 007 passes 0 because its transition goes first"
+    sweep_kata: "A SWEEP round is two kata actions, the sweep and its kick ('a kata chain of 2 actions',
+      c.iJVmpL:3868-3872), so 006 judges a sweep round's inline transition on 2: judged on 3, a Tykonos or
+      Maelstrom sweep round at a chain of 2 would carry a transition the game refuses (it reaches 4). Gaital
+      holds on the sweep round and while she is prone; v4.7.419's 006 left for Maelstrom at kata 9+ whenever
+      she was not dispatch-ready, the round that puts her down and a kill in progress included"
     kata_lapse: "A chain with no strike lapses about 20 s after the last one: 'You can no longer maintain
       your deadly kata.' (vNTjvghY:5967); the form is kept. KAI and MIND commands add no kata, so a run of
       them ages the chain (kb/combat/shikudo.md)"
 
-kill_condition_check: |   # 006's check: stricter than the game (the leg term is not needed)
-  tAffs.prone
-  AND (lb[target].hits["left leg"] >= 100 OR lb[target].hits["right leg"] >= 100)
-  AND (lb[target].hits["head"] >= 100 OR tAffs.damagedhead)
-  AND (tAffs.damagedwindpipe OR tAffs.crushedthroat)
-  → DISPATCH
+kill_condition_check: |   # 006's shikudo.checkDispatchReady (006:99-105): the game's three conditions
+  shikudo.has("prone")
+  AND (lb[target].hits["head"] >= 100 OR shikudo.has("damagedhead"))   -- shikudo.headDamaged()
+  AND (shikudo.has("crushedthroat") OR shikudo.has("damagedwindpipe"))
+  -> DISPATCH (INCAPACITATE on a Mhaldorian)
+  -- v4.7.420: no leg term. It demanded a leg at 100%, which blocks a legal Dispatch once she
+  -- restores her legs; the logged kill went out with the kicked leg at 8.4% (attacker :2654, :2664).
+  -- shikudo.has reads haveAff (V3), else tAffs.
 
 notes: |
-  Leg breaks are optional. As done live: SWEEP once, FLASHHEEL a leg every round to keep the target
-  prone, NEEDLE until the head is past 100% and the throat is crushed, then DISPATCH.
-  SPINKICK is the key - if head is already damaged (level 2), SPINKICK
-  on a prone target instantly mangles it (level 3), setting up dispatch (Mystor; the spinkick
-  strike line has never been captured).
+  Leg breaks are not required. As done live: SWEEP once, FLASHHEEL a leg every round to keep the
+  target prone, NEEDLE until the head is past 100% and the throat is crushed, then DISPATCH.
+  SPINKICK on a prone head takes it much further than a needle (Shikudo.wiki:298; +15% in Mystor's
+  log where the needle did +6.7%, LcJC-rJ5:5801-5803); Mystor says a spinkick on a damaged prone head
+  mangles it (level 3). 006 uses it to FINISH an undamaged head that one needle would leave short.
+  Its strike line has never been captured (Mystor's client gags it); after it, "You feel something
+  give way under your blow." printed twice (LcJC-rJ5:5804, c.iJVmpL:3973).
 ```
 
 ## Offensive Abilities
@@ -316,7 +456,9 @@ needle:
   effect: "High head damage + windpipe damage (required for Dispatch)"
   syntax: "COMBO <target> <kick> needle [needle]"
   forms: [Gaital]
-  critical: "Windpipe damage is REQUIRED for Dispatch kill"
+  critical: "Windpipe damage is REQUIRED for Dispatch kill. ONE needle crushes it ('with a single thrust',
+    Shikudo.wiki:287; the logged Dispatch: 'flashheel left needle jinzuku', attacker :2566, :2662), so 006
+    sends a second only while the head is still short of 100 (shikudo.needleSecond, v4.7.420)"
 
 kuro:
   skill: Shikudo
@@ -362,7 +504,9 @@ spinkick:
   effect: "Torso damage (standing) or HEAD damage (prone)"
   syntax: "COMBO <target> spinkick <staff1> <staff2>"
   forms: [Gaital]
-  critical: "If prone + damaged head → INSTANTLY MANGLES head!"
+  critical: "If prone + damaged head → INSTANTLY MANGLES head! (Mystor; unconfirmed in game text)"
+  offense: "006 (v4.7.420) spinkicks a prone head that is not damaged yet when she stays down and one needle
+    would not finish it; 007 spinkicks any prone target in Gaital"
 
 flashheel:
   skill: Shikudo
@@ -371,6 +515,14 @@ flashheel:
     every flashheel), plus 8.4% limb damage. Not prep."
   syntax: "COMBO <target> flashheel left/right <staff1> <staff2>"
   forms: [Willow, Gaital]
+  offense: "Every Willow combo in the logs carries a flashheel (Mystor 19 of 19, log 1 3 of 3), and most Gaital
+    combos do (Mystor 43 of 47: the other four were two needle + spinkick finishes on a prone head,
+    LcJC-rJ5:5797 and c.iJVmpL:3966, and two dawnkick rounds, c.iJVmpL:2588 and :2676; log 1 8 of 11: a
+    dawnkick opener, attacker:12-34, and two staff-only 'kuro left kuro right' combos, :1906 and :1977):
+    the break keeps her down and mending. Since
+    v4.7.420 both offenses choose the leg (006 shikudo.flashheelKick, 007 shikudoLock.flashLeg) and read the
+    break from trigger 577 (broken<side>leg). Before, 007 always kicked 'flashheel left' and 006 planned
+    the kick as leg prep"
 
 risingkick:
   skill: Shikudo
@@ -481,7 +633,7 @@ enabled: true
 tekura_target_order: [head, torso, left_arm, right_arm, left_leg, right_leg]
 tekura_break_requirements: {all_six_limbs: "86%+ prep -> break"}
 # Shikudo (dispatch): prone + damaged head + crushed throat (NEEDLE), then DISPATCH; a flashheeled leg
-# keeps a swept target down but is not required (006's own check still demands one: 006:95-106)
+# keeps a swept target down but is not required (006's check demanded one until v4.7.420)
 shikudo_target_order: [left_leg, right_leg, head, windpipe]  # 006's prep order
 finisher_options:
   - "BBT <target>"       # Tekura Backbreaker (all limbs broken, prone)
@@ -543,14 +695,15 @@ recommended_strategy: |
 ```yaml
 # Shikudo uses 6 forms with different attacks available per form
 # Must have 5+ kata to transition between forms
-# The max_kata values below are the CODE's caps (006/007; 008 is switched off), NOT the game's: the wiki
-# gives no number (Rain allows "twice the normal length"; Tykonos is exempt and can hold a chain
-# indefinitely), and a log (2026-10-11) shows Oak at kata 13 with no stumble. The stumble line has never
-# been captured. The written policy in ataxia/monk/004 (v4.7.419) differs: leave at 12 after the combo,
-# Rain 15, Tykonos as soon as legal; no offense reads it yet.
+# The max_kata values below are OUR POLICY, NOT the game's: ataxia_KATA.leaveAfter (ataxia/monk/004,
+# v4.7.419), the chain AFTER the combo at which a form is left, overridable with `skata`, and read by
+# both offenses since v4.7.420 (their own 12/24 tables are gone). The wiki gives no number (Rain allows
+# "twice the normal length"; Tykonos is exempt and can hold a chain indefinitely), and a log (2026-10-11)
+# shows Oak at kata 13 with no stumble. The stumble line has never been captured. The numbers come from
+# Mystor's play (kb/combat/shikudo.md, "Mystor's lock route, counted").
 
 Tykonos:
-  max_kata: none  # wiki: Tykonos holds a chain indefinitely. 006/007 still cap it at 12 (006:83, 007:72), and 006 leaves at kata 9 (006:448-449)
+  max_kata: none  # wiki: Tykonos holds a chain indefinitely. The policy leaves it as soon as a transition is legal (a chain of 5 after the combo); 007 never goes there
   staff_attacks: [thrust, sweep]
   kicks: [risingkick]
   transitions_to: [Willow]
@@ -566,12 +719,13 @@ Willow:
   notes: "Good for head damage (hiru, hiraku)"
 
 Rain:
-  max_kata: 24  # DOUBLE chain length!
+  max_kata: 15  # the policy (the code said 24 until v4.7.420). The wiki doubles the chain length; Mystor took Rain to 15 in 10 of his 17 Rain exits, 16 at most
   staff_attacks: [kuro, hiru, ruku]
   kicks: [frontkick]
   transitions_to: [Tykonos, Oak]
   style: "Best for damage building"
-  notes: "PRIMARY PREP FORM - 24 kata (the code's cap) = ~8 combos of sustained damage"
+  notes: "PRIMARY PREP FORM - 15 kata = 5 three-strike combos of sustained damage. Equilibrium recovers
+    fastest here, so it is where the Telepathy goes (007's Rain filler, vv's Rain burst)"
 
 Oak:
   max_kata: 12
@@ -596,7 +750,8 @@ Maelstrom:
   kicks: [risingkick, crescent]
   transitions_to: [Oak]
   style: "Death form"
-  notes: "Alternative kill with CRESCENT"
+  notes: "Alternative kill with CRESCENT (prone, half health or less: slain; above half, dodged with greatly
+    increased recovery, Shikudo.wiki:358). Both offenses gate it on prone + a fresh ASSESS at half or less"
 
 # Form Transition Paths
 transition_map:
@@ -607,41 +762,51 @@ transition_map:
   Gaital: [Rain, Maelstrom]
   Maelstrom: [Oak]
 
-# 006's form cycle: Willow → Rain → Oak → Gaital (when ready)
+# 006's form cycle (shikudo.shouldTransition, 006:434-567): Willow → Rain → Oak → Gaital (when ready).
+# An inline transition is judged on the chain AFTER the combo's strikes (3, or 2 in a sweep round), so a
+# "leave at 12" form leaves when the chain reads 9+ before a three-strike combo.
 #
-# Willow: Start here, HEAD prep with hiru/hiraku; 006 leaves for Rain at kata 9 (006:376-381)
-# Rain: PRIMARY LEG prep with kuro (24 kata, the code's cap), can also prep head with hiru
-# Oak: HEAD prep with nervestrike. 006 goes on to Gaital at kata 5+ once both legs AND the head are
-#      prepped (006:367-373), and at kata 9+ once both legs are prepped, head or not (Gaital's NEEDLE
-#      finishes the head, 006:422-426), or with both legs and the head at 85%+ (006:428-437);
-#      otherwise, at kata 9+, back to Willow (006:440)
-# Gaital: setup form - sweep, needle (Gaital has spinkick too; 006 never sends it). DISPATCH works
-#      from any form
+# Willow: HEAD prep with hiru/hiraku; 006 leaves for Rain at the cap (006:487-492)
+# Rain: PRIMARY LEG prep with kuro (the cap is 15), can also prep the head with hiru; leaves for Oak as
+#      soon as a transition is legal once both legs AND the head are prepped (006:475-481), with both legs
+#      prepped at kata 9+ (006:504-506), or at the cap
+# Oak: HEAD prep with nervestrike. 006 goes on to Gaital as soon as a transition is legal once both legs
+#      AND the head are prepped (006:475-481); at the cap once both legs are prepped, head or not
+#      (Gaital's NEEDLE finishes the head), or with both legs and the head at 85%+; otherwise, at the cap,
+#      back to Willow (006:514-551)
+# Gaital: the kill form - sweep, needle, spinkick on a prone head (v4.7.420). It never leaves while she is
+#      prone or on the round that sweeps her (shikudo.gaitalSweeps), even past the cap; standing and not
+#      ready at the cap, it goes to Maelstrom (006:457-469). DISPATCH works from any form
 #
 # If kill fails in Gaital: Maelstrom → Oak → (continue cycle)
 #
 # Key: Dispatch needs prone + damaged head + crushed throat. 006 enters Gaital from Oak once both legs
 #      are prepped (or legs and head are at 85%+), and SWEEPs there only once the legs AND the head are
-#      prepped (006:417-440, 1032-1078; a MOUNTED target is swept sooner, by the fallback at
-#      006:1128-1133): its own rules, not the game's
-# Key: Rain has 24 kata (the code's cap) = ~8 combos of sustained prep time
+#      prepped (selectGaitalStaff PHASE 0-1, 006:1087-1134; a MOUNTED target whose prep is not done is
+#      swept by the fallback at 006:1147-1157): its own rules, not the game's
+# Key: Rain's 15 = 5 three-strike combos of sustained prep time
+#
+# 007's route (the lock) is Mystor's counted one: Rain → Oak → Willow, Oak → Gaital at its cap, never
+# Tykonos (Kill Routes, "Alternative Kill: Shikudo Lock Route", form_route)
 ```
 
 ## Shikudo Implementation (LEVI System)
 ```yaml
-# LIVE: 006_CC_Shikudo_Dispatch.lua (dispatch) + 007_CC_Shikudo_Lock.lua (lock), with the strike ledger
-# (010) and the shared monk state in ataxia/monk/004. 008 (the old "unified" file with setMode, riftlock
-# and godmode) is SWITCHED OFF, so none of its modes or commands exist at runtime. (Corrected 2026-10-12:
-# this section presented 008 as the live system.)
+# LIVE: 006_CC_Shikudo_Dispatch.lua (dispatch), 007_CC_Shikudo_Lock.lua (lock) and 011_Shikudo_Telepathy.lua
+# (vv: the dispatch with Telepathy, v4.7.420), with the strike ledger (010) and the shared monk state in
+# ataxia/monk/004. 008 (the old "unified" file with setMode, riftlock and godmode) is SWITCHED OFF, so none
+# of its modes or commands exist at runtime. (Corrected 2026-10-12: this section presented 008 as the live
+# system.) The lock (007) is in Kill Routes, "Alternative Kill: Shikudo Lock Route".
 
-# On-disk files (levi_scripts/shikudo/ holds 001-010):
+# On-disk files (levi_scripts/shikudo/ holds 001-011):
 files:
   001_Shikudo.lua: "dead (no callers, or redefined by 006)"
   002_Shikudo_R2.lua: "dead"
   003_Dispatch_Dat_Hoe.lua: "switched off"
   004_Levi_Dispatch.lua: "dead"
   005_Shikudo_Needle_Logic.lua: "dead"
-  006_CC_Shikudo_Dispatch.lua: "Dispatch -- LIVE (sk; zz/xx/vv when the monk has no stance)"
+  006_CC_Shikudo_Dispatch.lua: "Dispatch -- LIVE (sk; zz/xx when the monk has no stance; vv's combo, kill and
+    shield rounds through 011)"
   007_CC_Shikudo_Lock.lua: "Lock -- LIVE (sr -> shikudoLock.dispatch(); shikudolock() is only its fallback)"
   008_CC_Shikudo_Offense_ALL.lua: "old unified offense (all modes) -- switched off"
   009_CC_Shikudo_GodMode.lua: "God Mode -- RETIRED, switched off in v4.7.419. Nothing could reach it (only 008's
@@ -649,45 +814,81 @@ files:
     riftlock or arm route should salvage. skgodmode()/skgmstatus() went with it"
   010_Shikudo_Strike_Ledger.lua: "Strike ledger -- LIVE (v4.7.419): records a light or absorbed ruku to the arm from
     its untargeted effect line (kb/combat/shikudo.md, 'What our triggers record')"
+  011_Shikudo_Telepathy.lua: "vv's Telepathy -- LIVE (v4.7.420): shikudo.dispatchMind, MIND rounds between 006's
+    combos (vv_telepathy, below)"
 
 # Mode selection: none live. shikudo.setMode / shikudo.mode / godmode exist only in switched-off 008
-# (008:67). vv no longer calls setMode (v4.7.419).
+# (008:67). vv no longer calls setMode (v4.7.419); it runs shikudo.dispatchMind (011) since v4.7.420.
 
 # Dispatch behaviour specifics (006, live)
 dispatch_specifics:
-  staff: "Every command carries 'wield staff489282;' (hardcoded) after combatQueue()'s prefix ('g body;g gold;
-    stand;' plus a parry or a chase step when one is due; ataxia/ataxia/003_Queueing_Related.lua:17-20):
-    006:1320, 1325, 1335, 1350"
-  mhaldorian_safety: "On a Mhaldorian target, sends INCAPACITATE instead of DISPATCH (friendly-fire safety, 006:1316-1322)"
-  shield: "If target shielded, SHATTER inside the combo (006:1335)"
+  round: "shikudo.buildRound() (006:1329) returns cmd, kind, transition and NEVER sends: kind 'dispatch'
+    ('wield <staff>;dispatch <t>', no ASSESS), 'incapacitate' (the same, on a Mhaldorian), 'shatter'
+    ('wield <staff>;combo <t> shatter <kick>;assess <t>') or 'combo' ('wield <staff>;combo <t> <strikes>
+    [transition <form>];assess <t>'); nil with no target. It chooses the strikes first and judges the
+    inline transition on their count. It never calls combatQueue(): shikudo.dispatch() (006:1361) calls
+    combatQueue() first (it can drop a Deliverance target for a new one), then sends 'queue addclear free '
+    .. prefix .. round; 011 reuses buildRound for the combo hidden behind a blackout"
+  staff: "Every round wields shikudo.staffRef(): the skstaff setting (ataxia.settings.shikudoStaff, saved),
+    else the bare keyword 'staff', which the user's own alias sends (attacker :53). Until v4.7.420 it was
+    one player's item, staff489282, in four places (and in trigger 168). combatQueue()'s prefix ('g body;
+    g gold;stand;' plus a parry or a chase step when one is due; ataxia/ataxia/003_Queueing_Related.lua)
+    goes in front"
+  assess: "Combo and shatter rounds end ';assess <t>' (shikudo.config.assessEachRound, default true, runtime
+    only, no alias): it keeps the ASSESS Crescent reads fresh, and trigger 698 prints an HP bar each round"
+  mhaldorian_safety: "On a Mhaldorian target (tCity), sends INCAPACITATE instead of DISPATCH (friendly-fire
+    safety, 006:1338-1340)"
+  shield: "If target shielded (tAffs.shield), SHATTER inside the combo (006:1345-1347)"
   kai_surge: "006 never sends KAI SURGE. The Rain dismount and the Gaital kai window were 008-only (switched
-    off). 007 only echoes 'KAI SURGE READY' at 31 kai read from vitals.class (007:41, 497-498), a display;
-    the real cost is 45 (ataxia/monk/004, kb/CONFLICTS.md #9). Only TK6 sends a surge automatically"
+    off). Only TK6 sends a surge automatically; 007's kai ability is KAI CHOKE, its kill (v4.7.420)"
 
 quick_commands:  # live functions only
-  dispatch: ["sk alias", "shikudo.dispatch() (006:1270)", "levishikudodispatch() (006:1365)"]
-  dispatch_status: ["shikudo.status() / skstatus() (006:1373, 1430)"]
-  lock: ["sr alias", "shikudoLock.dispatch()", "shikudolock() (007:628)"]
-  lock_status: ["sklstatus() / sklockstatus() (007:632, 636)"]
+  dispatch: ["sk alias", "shikudo.dispatch() (006:1361)", "levishikudodispatch() (006:1424)"]
+  dispatch_round: ["shikudo.buildRound() (006:1329): the round, unsent"]
+  dispatch_status: ["shikudo.status() / skstatus() (006:1432, 1490)"]
+  vv: ["vv alias (153)", "shikudo.dispatchMind() (011:327)"]
+  lock: ["sr alias", "shikudoLock.dispatch()", "shikudolock() (007:754)"]
+  lock_status: ["sklstatus() / sklockstatus() (007:758, 762)"]
   kata_caps: ["skata alias -> ataxia_kataCommand() (monk/004, v4.7.419)"]
+  staff: ["skstaff [ITEM|clear] alias -> shikudo.staffCommand() (006:226, v4.7.420)"]
   # skdispatch, sklock, skriftlock, shikudoriftlock, shikudo.reset, shikudo.setMode: 008 only (switched off)
 
-# Current dispatch system (006_CC_Shikudo_Dispatch.lua; the helpers below are 006:134-266)
+# Current dispatch system (006_CC_Shikudo_Dispatch.lua; the helpers below are 006:133-366)
 current_system:
-  description: "Dynamic threshold-based dispatch with leg protection"
+  description: "Dynamic threshold-based dispatch; the flashheel leg is chosen, not protected (v4.7.420)"
 
   dynamic_thresholds:
     purpose: "Calculate 'prepped' based on actual damage per hit"
     functions:
       - "shikudo.getLimbDamage(limb) → safely gets lb[target].hits[limb] or 0"
-      - "shikudo.getLegPrepThreshold() → 100 - kuro_damage (~90.8%)"
-      - "shikudo.getHeadPrepThreshold() → 100 - form_attack_damage"
+      - "shikudo.getAttackDamage(attack, limb) → the default (flashheel, frontkick, kuro 8.4; needle and
+        nervestrike 13.4; spinkick 27; thrust 14.5; hiru, hiraku 4.3), halved on the hyperfocused limb"
+      - "shikudo.getLegPrepThreshold(leg) → 100 - kuro damage (91.6%)"
+      - "shikudo.getHeadPrepThreshold() → 100 - the form's head attack (nervestrike in Oak, needle in Gaital,
+        hiru otherwise), through getAttackDamage. Until v4.7.420 it used nervestrike 7.8 where hitsToPrep
+        used 13.4"
       - "shikudo.isLegPrepped(leg) → true if leg >= threshold"
       - "shikudo.areBothLegsPrepped() → true if both legs prepped"
       - "shikudo.isDynamicHeadPrepped() → true if head >= threshold"
-      - "shikudo.isLegSafe(leg) → true if safe to hit (head prepped or leg not prepped)"
       - "shikudo.getFocusLeg() → returns leg with LESS damage (hit first to balance prep)"
       - "shikudo.getOffLeg() → returns leg with MORE damage (secondary target)"
+      # shikudo.isLegSafe and the display-only shikudo.maxKata table are gone (v4.7.420)
+
+  state_reads:  # v4.7.420, 006:147-244 and 363: one read per fact, so the kick, the staff and the kill agree
+    - "shikudo.has(aff) → haveAff (V3), else tAffs"
+    - "shikudo.legBroken(side) → broken<side>leg (trigger 577, from the flashheel's damage line, so a flashheel
+      whose damage a Shield of Absorption swallows is not recorded), damaged<side>leg,
+      or the limb at 100%+. 006 used to call a leg broken only at 100%, so it never saw a flashheel break"
+    - "shikudo.headDamaged() → head 100%+ or damagedhead"
+    - "shikudo.staysDown() → both legs broken, or a leg at 100%+ (that takes restoration, not one mend).
+      Whether a target with ONE broken leg can stand is unconfirmed; our own STAND is refused with one"
+    - "shikudo.hyperLimb() → the hyperfocused limb (ataxiaTemp.hyperLimb), nil once GMCP's defence list is
+      known and holds no hyperfocus"
+    - "shikudo.parriedLimb() → trigger 148's perceived parry (ataxiaTemp.parriedLimb), else the tp* flag
+      triggers 187 and parry/001 set; the hyperfocused limb counts as open. Read fresh every round"
+    - "shikudo.gaitalSweeps() → this Gaital round sweeps: she stands, is not mounted, both legs and the head
+      are prepped. The Gaital kick, the staff's PHASE 1 and shouldTransition all ask it"
+    - "shikudo.staffRef() / shikudo.staffCommand(arg) → the staff to wield, and the skstaff alias"
 
   limb_tracking:
     source: "lb[target].hits table from Romaen's limb counter"
@@ -701,61 +902,89 @@ current_system:
     balance_cost: "3.4 seconds"
     strategy: "ALWAYS hyperfocus HEAD at combat start, never switch"
     reason: "Head is key prep target; 3.4s cost makes switching impractical"
-    damage_adjustment: "Head prep threshold changes from ~92% to ~96% (half damage)"
+    damage_adjustment: "Damage on the hyperfocused limb is halved (Shikudo.wiki:336), so the head prep threshold
+      moves from 86.6% to 93.3% with needle or nervestrike. Mystor's needle did +6.7% (13.4 / 2) and his client
+      logs '-Def: hyperfocus.' in two other fights, so his spinkick's +15% was most likely halved too"
     functions:
-      - "shikudo.setHyperfocus(limb) (006:283): NOTHING calls it. The trigger shikudo/003_Hyperfocus_Detection
-        writes ataxiaTemp.hyperLimb (003:39), while 006 reads shikudo.state.hyperfocus (006:158, 197, 216), so
-        the halved damage is never applied (plan finding 6, open)"
-      - "shikudo.getHyperfocusCommand() (006:308) → returns 'hyperfocus head' if not already set"
-      - "shikudo.isHyperfocusSet() (006:301) → true if head is hyperfocused"
+      - "shikudo.hyperLimb() (006:182): reads ataxiaTemp.hyperLimb, which trigger shikudo/003_Hyperfocus_Detection
+        writes (003:39). Since v4.7.420 getAttackDamage, the thresholds and parriedLimb read it; before, 006
+        read shikudo.state.hyperfocus, which nothing wrote, so the halving never applied (plan finding 6).
+        003's pattern and the remove line are uncaptured (only Mystor's '-Def: hyperfocus.' is in a log), so
+        hyperLimb() fails safe: once GMCP's defence list is known and lacks hyperfocus it returns nil"
+      - "shikudo.setHyperfocus(limb) / resetHyperfocus() (006:378, 415): write and clear ataxiaTemp.hyperLimb.
+        Nothing calls them; kept for a manual reset"
+      - "shikudo.getHyperfocusCommand() (006:404) → returns 'hyperfocus head' if not already set"
+      - "shikudo.isHyperfocusSet() (006:397) → true if head is hyperfocused"
     auto_behavior: "None: 006 sends no HYPERFOCUS ('Removed automatic hyperfocus - user will do this manually',
-      006:1312-1313)"
+      006:1398-1399)"
 
-  transition_priority:
+  transition_priority:  # shikudo.shouldTransition([strikes]), 006:434-567. Legal once the chain after the
+                        # combo's strikes reaches 5 (kata + strikes); 'the cap' is ataxia_kataShouldLeave(form,
+                        # kata, strikes): 12 after the combo, Rain 15, Tykonos at once
     flow: "Willow → Rain → Oak → Gaital (when ready)"
-    0_all_ready: "BOTH legs AND head prepped at kata 5+ → one step toward Gaital (006:367-373)"
+    strikes: "buildRound passes the combo's real count: 3, or 2 for a sweep round (a sweep takes both arms and
+      pairs only with a kick). A direct call defaults to 3; pass 0 for a transition sent without a combo"
+    0_all_ready: "BOTH legs AND head prepped, once legal → one step toward Gaital (006:475-481)"
     1_willow:
-      early_exit: "Willow at 9+ kata → Rain (006:376-381; there is no 6-kata exit)"
+      at_cap: "Willow at the cap → Rain (006:487-492): a chain of 9+ before a three-strike combo"
     2_rain:
-      legs_prepped: "Rain legs prepped + kata 9+ → Oak (for nervestrike head prep)"
-      overflow: "Rain kata 21+ → ALWAYS go to Oak (safety transition before 24 stumble)"
-    3_oak:
-      all_ready: "Oak at kata 5+ with both legs AND the head prepped → Gaital (006:367-373)"
-      legs_prepped: "Oak at kata 9+ with both legs prepped, head or not → Gaital, whose NEEDLE finishes the
-        head (006:422-426)"
-      close: "Oak at kata 9+ with both legs and the head at 85%+ → Gaital (006:428-437)"
-      not_ready: "Oak at kata 9+ otherwise → Willow (cycle back for more prep, 006:440)"
+      legs_prepped: "Rain legs prepped + kata 9+ → Oak (for nervestrike head prep, 006:504-506)"
+      at_cap: "Rain at the cap (15 after the combo) → Oak (006:500-502). Until v4.7.420 this was kata 21+,
+        before a cap of 24"
+    3_oak:  # all at the cap (006:514-551)
+      legs_prepped: "both legs prepped, head or not → Gaital, whose NEEDLE finishes the head"
+      close: "both legs and the head at 85%+ → Gaital"
+      not_ready: "otherwise → Willow (cycle back for more prep)"
     4_gaital:
-      kill_ready: "Stay for dispatch"
-      stuck: "Kata 9+ and not ready → Maelstrom → Oak (cycle out)"
+      hold: "she is prone, or this round sweeps her (shikudo.gaitalSweeps): stay, even past the cap
+        (006:457-462). v4.7.419 left for Maelstrom at kata 9+ whenever she was not dispatch-ready, so a
+        kill in progress, and the very round that puts her down, could leave the form the needle is in"
+      stuck: "standing, not ready to sweep, at the cap → Maelstrom → Oak (cycle out, 006:465-467)"
+    5_other: "Tykonos → Willow and Maelstrom → Oak at the cap (006:556-564)"
 
   transition_syntax:
-    description: "Both forms work live: inline at the end of a combo (006:1238, 1260; log 1, attacker:443,
-      'combo Claes frontkick left kuro left ruku right transition oak'), or a separate TRANSITION TO <FORM>
-      FORM (log 1, e.g. attacker:321 'transition to Rain form'; it costs no balance and twice went through
-      while paralysed; Mystor sends 'transition to rain form' ahead of a dispatch, LcJC-rJ5:5847). 007
-      sends ';transition to the <form> form' after its combo (007:545). No log here shows that wording,
-      but the PvE basher sent it, after its combo, until v4.7.68, and the game answered with the kata
-      refusal (CHANGELOG v4.7.68, commit 9064ca04), so the game reads it as a TRANSITION; whether it
-      succeeds at kata 5+ is unseen"
+    description: "Both forms work live: inline at the end of a combo (006:1270-1272, 1292-1294; log 1,
+      attacker:443, 'combo Claes frontkick left kuro left ruku right transition oak'), or a separate
+      TRANSITION TO <FORM> FORM (log 1, e.g. attacker:321 'transition to Rain form'; it costs no balance and
+      twice went through while paralysed). 006 sends the inline form. 007 sends 'transition to <form> form'
+      FIRST in its round since v4.7.420, the wording Mystor sends (56 times, e.g. 'transition to rain
+      form/dispatch Agathon oak', LcJC-rJ5:5847); until then it appended 'transition to the <form> form'
+      after its combo, a wording in no log"
     example: "combo target risingkick head nervestrike livestrike transition willow"
-    note: "006 leaves non-Rain forms at kata 9 because it assumes a stumble at 12; the game gives no number
-      (kb/CONFLICTS.md #8: Oak 13 and Rain 18 seen with no stumble)"
+    note: "The caps are policy (kb/CONFLICTS.md #8: Oak 13 and Rain 18 seen with no stumble); 006's comment
+      'Must transition before kata 12 stumble' went with its own table in v4.7.420"
 
-  leg_protection:  # 006's intent; it cannot work for flashheel
-    principle: "006 avoids breaking prepped legs with LIGHT staff strikes"
-    flaw: "FLASHHEEL breaks a leg in one blow and is Willow's only kick, so isLegSafe() (006:266, used at
-      006:649) cannot stop a Willow or Gaital flashheel breaking a leg (plan finding 3, open). And breaking
-      the leg is how the recorded kill kept the target down"
-    forms_protected: [Rain, Oak, Tykonos, Willow]
-    willow_behavior: "If legs prepped but head not ready, hit already-broken leg if possible"
+  flashheel_leg:  # shikudo.flashheelKick(pushToDamaged), 006:599-632 (v4.7.420). It replaced isLegSafe and the
+                  # 'safe to break' planning, which sent a flashheel in every branch anyway
+    principle: "Every landed flashheel BREAKS the leg and adds about 8.4%, so the only choices are which leg
+      and whether to take it to 100% (damaged: restoration, not one mend). Every logged Willow combo
+      flashheels, and most Gaital combos (Mystor 43 of 47, log 1 8 of 11; flashheel, above), to keep her
+      down and mending"
+    ranking: "lower is better, item by item: (1) not the leg she parries; (2) not to 100% unless pushing;
+      (3) a leg not broken now (a fresh break is one more mend before she stands); (4) when pushing, a leg
+      this kick takes to 100%, then one it leaves short, and last one already at 100% (with the logger's
+      model reading the left leg at 100.8, the logged push went right: attacker :2474, :2560-2561); (5) the
+      more damaged leg; (6) left"
+    push: "pushToDamaged in Gaital while she is down or this round sweeps; never in Willow, where 006 does not
+      sweep, so a leg stays short of 100% while the other can take the kick"
+    other_kicks: "Rain keeps its frontkick arm across presses and switches only when she parries that arm.
+      Tykonos risingkicks a prone head (stun, Shikudo.wiki:138); Oak already did. Willow's slot 2 falls back
+      to 'hiraku light' on a prone target (stun, Shikudo.wiki:160; Mystor's 'flashheel right hiraku light hiru
+      light', vNTjvghY:7976). Neither kicks into a parried head"
+    light_strikes: "the staff pickers still go LIGHT or to the torso on prepped legs, so a kuro does not break
+      one early"
+    known_limit: "legBroken() calls any leg at 100%+ broken even after her mend cures the break, so item 3
+      cannot prefer re-breaking a mended leg at 100%. The attacker log re-broke the mended left leg (:2566,
+      after the logger's own 'Processed Cures(leftleg)' at :2479; its limb numbers are the logger's
+      tracker, not game text); 006 picks the same leg, but only through the left-on-a-tie rule"
 
   kill_sequence:
-    phase_1: "Willow: START HERE, head prep with hiru/hiraku, transition to Rain at kata 9 (006:376-381)"
-    phase_2: "Rain: PRIMARY LEG prep with kuro (24 kata, the code's cap), can also prep head with hiru"
+    phase_1: "Willow: head prep with hiru/hiraku, transition to Rain at the cap (006:487-492)"
+    phase_2: "Rain: PRIMARY LEG prep with kuro (the cap is 15), can also prep the head with hiru"
     phase_3: "Oak: HEAD prep with NERVESTRIKE FIRST (paralysis prevents parry!)"
-    phase_4: "Gaital: entered once both legs are prepped (006:422-426); NEEDLE the head until it is prepped
-      too (006:1032-1066), then sweep + break → dispatch (006:1069-1078)"
+    phase_4: "Gaital: entered once both legs are prepped (006:532-534); kuro and needle until legs and head are
+      prepped (006:1087-1122), then SWEEP + a flashheel pushed to 100% (006:1124-1134); she is down: NEEDLE,
+      needleSecond and the spinkick (006:1136-1145, 689-703) → DISPATCH"
     fallback: "If kill fails in Gaital: Maelstrom → Oak → (continue cycle)"
 
   attack_ordering:
@@ -765,7 +994,7 @@ current_system:
     oak:
       order: "staff1 + staff2 + kick (STAFF FIRST)"
       reason: "Nervestrike paralysis prevents parrying subsequent attacks"
-      example: "combo target nervestrike kuro left risingkick head"
+      example: "combo target nervestrike kuro left risingkick torso"  # 006 kicks the head only when she is prone
 
     rain:
       order: "kick + staff1 + staff2 (KICK FIRST - default)"
@@ -776,7 +1005,7 @@ current_system:
       order: "sweep + kick (SWEEP FIRST)"
       reason: "Sweep prones target, kick hits while prone"
       example: "combo target sweep flashheel left"
-      note: "Sweep uses both arm balances - only one kick allowed"
+      note: "Sweep uses both arm balances - only one kick allowed, and the round is two kata actions"
 
     maelstrom_sweep:
       order: "sweep + kick (SWEEP FIRST)"
@@ -785,12 +1014,66 @@ current_system:
 
     maelstrom_normal:
       order: "kick + staff1 + staff2 (KICK FIRST - default)"
-      reason: "Risingkick stuns if prone, crescent for damage"
+      reason: "Risingkick stuns if prone; crescent slays a prone target at half health or less"
       example: "combo target risingkick head livestrike ruku torso"
 
     other_forms:
       order: "kick + staff1 + staff2 (default)"
       reason: "No special affliction ordering needed"
+
+# vv (011_Shikudo_Telepathy.lua, v4.7.420): the dispatch offense with Telepathy rounds between its combos,
+# as Mystor plays it: 87 of his rounds were a MIND command alone, and no MIND affliction ever rode a combo
+# (kb/combat/shikudo.md, "Mystor's lock route, counted")
+vv_telepathy:
+  entry: "shikudo.dispatchMind() (011:327), from alias 153 when the monk has no stance. zz, xx and sk stay
+    combo-only until vv is proven live"
+  routing: "no target: echo and stop. reboundHold may hold the press (the integration every dispatch uses).
+    The kill (shikudo.checkDispatchReady) and a shield (tAffs.shield) go to shikudo.dispatch(): DISPATCH, or
+    SHATTER first. No pick: shikudo.dispatch(), the combo"
+  mind_round: "'queue addclear free <combatQueue()>[wield <shikudo.tele.shield>;]mind <ability> <t>;assess
+    <t>' as its OWN round: never a combo, never a transition (the next combo carries it inline). The ASSESS
+    follows shikudo.config.assessEachRound. If combatQueue() dropped a Deliverance target for a new one,
+    the press goes to shikudo.dispatch() for the new target"
+  gates: "a target; mana at least manaFloor (25%); the chain not at risk (ataxia_kataAtRisk(lapseGuard 12):
+    MIND adds no kata); and not in a kill window, which is a combo: she lies down in Gaital (needle,
+    spinkick, DISPATCH), or she lies down in Maelstrom with a fresh ASSESS at half health or less (006's
+    CRESCENT). No equilibrium gate (the free queue waits for it, and a gate would end every burst after one
+    round whenever vv is pressed early) and no lock first"
+  picker: "shikudo.telepathyPick(s, cfg) (011:184), pure over the snapshot shikudo.teleState(), in order:
+    (1-2) MIND SCYTHE with a mangled head and two of stupidity, impatience, dizziness, epilepsy, confusion,
+    else MIND BATTER with a mangled head, only with shikudo.tele.scythe; (3) nothing inside our own blackout
+    (blackoutSecs 4), so the combo it hides goes out; (4) MIND IMPATIENCE when asthma, slickness and
+    anorexia are on without it; (5) MIND BLACKOUT, only with shikudo.tele.blackout, in Rain at 40%+ mana,
+    to STICK (she is paralysed, or her tree is down for 4+ more s) or as BAIT (her tree is up and two lock
+    pieces are on, so the tree takes the blackout); (6) MIND DISRUPT on a confused target not yet
+    disrupted; (7) a Rain burst from kata burstKata (9) while fewer than burstMax (4) MIND rounds have run
+    since the last combo: impatience, else paralyse (not once she is paralysed; never on an Apostate,
+    classSkip)"
+  blackout: "wired and OFF (shikudo.tele.blackout = false) until our success line, the lock question
+    (kb/CONFLICTS.md #7) and 'mind blackout' vs 'mind blackout <t>' are settled live. Turned on, it queues
+    006's next round behind the blackout with 'queue add free ' .. shikudo.buildRound()"
+  scythe: "wired and OFF (shikudo.tele.scythe = false): the wiki gives SCYTHE no (*) and no target, the one
+    logged scythe was cast with a lock held (c.iJVmpL:1715, :4227), and a refused scythe changes nothing vv
+    reads, so vv would pick it again on every press. Dormant anyway: nothing records a target's mangledhead"
+  history: "the burst and the blackout window move when the game's run line shows a round RAN
+    (shikudo.onTeleQueueRan, 011:283; 007's pattern, matched from its first row). The pending record is
+    { key, blackout, committed } (011:243). Unlike 007, another command's run line CAN move it: any run line
+    whose first row carries a whole-word 'combo' (006's, 007's or one typed by hand) ends the burst
+    (011:293-295); a combo press drops the pending MIND round. Until a run line has been read (our pending
+    MIND round's, or any combo's), the press counts. State on ataxiaTemp.shikTele: never saved, and it
+    SURVIVES a reload (011:249-253; nothing resets ataxiaTemp), so only a client restart clears it"
+  limits: "as 007's (history.limits, the lock route above), except that queue alerts turned off mid-session
+    freeze vv's burst until the client restarts, not until a reload. Frozen below burstMax, a Rain round at
+    kata 9+ with an impatience or paralyse to give can be a MIND round on every press until the lapse guard
+    or those afflictions landing stop it; frozen at burstMax, no burst round goes out (the other picks are
+    not capped by the burst)"
+  config: "shikudo.tele (runtime only, back to the defaults on a client restart): manaFloor 25, burstMax 4,
+    burstKata 9, lapseGuard 12, blackout false, scythe false, blackoutManaFloor 40, blackoutSecs 4,
+    classSkip {apostate = {paralyse = true}}, shield unset"
+  tests: "test_shikudo_telepathy.lua (47 tests on the real monk/004, 006 and 011)"
+  open: "burstMax 4 is conservative (Mystor ran eight MIND rounds in one Rain burst, FceAmb0o:2600-2944);
+    whether the run line prints for our MIND rounds is unconfirmed (without it, until some run line has been
+    read, each press counts)"
 ```
 
 ## Advanced Shikudo Combat Strategies (Mystor's Insights)
@@ -985,11 +1268,12 @@ telepathy_rule:  # corrected 2026-10-11 (the user and Mystor; wiki; log 1)
     telepathy in RAIN form do to the bonus of EQ.'"
   not_only: "Not only Rain, though: log 1 cast MIND IMPATIENCE and MIND PARALYSE in Willow"
   one_or_the_other: "In log 1 a telepathy round took the place of that round's combo (the user, below: 'you can't
-    attack and do telepathy'; log 1's alias swapped the combo out for the MIND command). Open: in log 2 a
-    blackout arrived inside a combo round (kb/combat/shikudo.md)"
+    attack and do telepathy'; log 1's alias swapped the combo out for the MIND command), and none of Mystor's
+    274 combos carried a MIND affliction command. Open: in log 2 a blackout arrived inside a combo round
+    (kb/combat/shikudo.md). Since v4.7.420 007 and vv (011) send every MIND command as a round of its own"
   mindlock: "Needed for a target outside the room and for certain skills such as Radiance and Sapience (the user
-    and Mystor), so not a setup step for the (*) attacks in the room. Open for BLACKOUT: the wiki puts it behind
-    the lock and it has not been tried in the room without one (kb/CONFLICTS.md #7)"
+    and Mystor), so not a setup step for the (*) attacks in the room. Open for BLACKOUT and SCYTHE: the wiki
+    puts both behind the lock and neither has been tried in the room without one (kb/CONFLICTS.md #7)"
 ```
 
 ### Scythe Fork Strategy (Gaital)
@@ -1190,18 +1474,26 @@ quoted lines no log has):
 - Kata: "You are now maintaining a kata chain of N actions." (one per attack; trigger 164 writes
   ataxia.vitals.kata). Lapse: "You can no longer maintain your deadly kata." (165 zeroes it). Refused
   transition: "A kata of at least 5 must be performed in order to flow from the <form> to another."
-- Sweep: "The staff sweeps the legs out from under <T>, sending her sprawling." (prone)
+- Sweep: "The staff sweeps the legs out from under <T>, sending her sprawling." (prone). A sweep round is
+  two kata actions, the sweep and its kick (c.iJVmpL:3868-3872)
 - Needle: "The end of the staff smashes into the exposed throat of <T>, crushing cartilage." (crushed throat)
 - Dispatch: "Placing one foot on the chest of <T> to hold her in place, you drive your staff down with all
   your strength into her weakened throat. ..." then "You have slain <T>."
-- SPINKICK on a prone head: the strike line has never been captured
+- SPINKICK on a prone head: the strike line has never been captured (Mystor's client gags it); after it,
+  "You feel something give way under your blow." printed twice (LcJC-rJ5:5804, c.iJVmpL:3973)
+- KAI CHOKE (007's kill): "<T> gasps and stumbles as an unseen force crushes the life breath out of him."
+  (vNTjvghY:8961, FceAmb0o:6399)
+- Shield rebound: "A dizzying beam of energy strikes you as your attack rebounds off of <T>'s shield."
+  (after a combo every time in the logs; a MIND command's rebound is unseen)
 - Stumble: "You lose your rhythm" (UNVERIFIED: in no log and no trigger). Per the wiki a stumble resets the kata
   AND drops you into Tykonos; Tykonos itself never stumbles. Since v4.7.419 monk/003 records a move into
   Tykonos we did not ask for as a probable stumble, so the real line can be kept when it happens
 - Hyperfocus: "You will now focus on bypassing attempts to deflect blows when striking the *" (trigger
   shikudo/003's pattern; no log has it, only Mystor's "-Def: hyperfocus.")
-  → the trigger stores ataxiaTemp.hyperLimb (003:39); 006 does not read it
+  → the trigger stores ataxiaTemp.hyperLimb (003:39); 006 reads it through shikudo.hyperLimb() since v4.7.420
 - Hyperfocus clear: "You stop focussing upon bypassing your target's parry" (no log has it, no trigger)
+- The queue's run line, which 007 and vv count rounds by: "[System]: Running queued <q> command: <cmd>"
+  (the package's pattern, clean-up/001_Queue_Scanning.lua:34; no capture in kb/raw)
 
 GMCP considerations:
 - Track gmcp.Char.Vitals for limb percentages if available
@@ -1217,43 +1509,65 @@ Edge cases:
 - Combinations can hit multiple body parts
 - Tekura Backbreaker (BBT) requires all 6 limbs broken + prone (TK6); TKD alt kill is Scythe via Telepathy
 - Shikudo Dispatch requires prone + damaged head + damaged windpipe (crushed throat); no broken leg (wiki;
-  done that way in log 2026-10-11). 006's checkDispatchReady() still also demands a broken leg (006:95-106;
-  plan finding 4, open)
+  done that way in log 2026-10-11). 006's checkDispatchReady() matches that since v4.7.420 (006:99-105;
+  it demanded a leg at 100% until then, plan finding 4)
 - Mental afflictions from Telepathy can add lock pressure
 - SPINKICK behavior changes based on target state:
   - Standing: hits TORSO
   - Prone: hits HEAD with massive damage
-  - Prone + damaged head: INSTANTLY MANGLES head (level 2 → 3)
-- SWEEP uses BOTH arm balances - only one kick allowed
+  - Prone + damaged head: INSTANTLY MANGLES head (level 2 → 3) (Mystor; no game line shows the level)
+- SWEEP uses BOTH arm balances - only one kick allowed; the round counts two kata actions
 - Form transitions require 5+ kata (can transition anytime after 5 if conditions met)
-- Rain allows "twice the normal length" of kata (wiki); the 24/12 caps are the CODE's. A stumble is a chance
-  that grows the longer a chain runs (wiki), so log 2026-10-11's Oak 13 and Rain 18 without one rule out only a
-  certain stumble at 12, not a 12/24 limit. Tykonos is exempt
-- 006 leaves Willow at kata 9 (006:376-381), not 6
-- Rain stays and preps head with hiru if legs already prepped (no rush, 24 kata: the code's cap)
-- Oak at 9 kata goes to Gaital once both legs are prepped (head or not: Gaital's NEEDLE finishes it) or
-  legs and head are at 85%+, otherwise cycles back to Willow for more prep (006:417-440)
-- Gaital at 9 kata goes to Maelstrom if kill not ready (Maelstrom → Oak → Gaital cycle)
-- Other non-Rain forms transition at 9 kata
-- 006 transitions inline ("combo target kick staff1 staff2 transition form"); 007 sends a separate
-  "transition to the <form> form" after its combo (007:545). No log here shows that wording; the PvE basher
-  sent it until v4.7.68 and got the kata refusal (CHANGELOG v4.7.68), so the game reads it as a TRANSITION,
-  but a success at kata 5+ is unseen
+- Rain allows "twice the normal length" of kata (wiki); the 12 and Rain 15 caps are OUR POLICY (ataxia_KATA,
+  read by both offenses since v4.7.420; the code's 12/24 tables are gone). A stumble is a chance that grows
+  the longer a chain runs (wiki), so log 2026-10-11's Oak 13 and Rain 18 without one rule out only a certain
+  stumble at 12, not a 12/24 limit. Tykonos is exempt
+- 006 leaves Willow at the cap: a chain of 12 after the combo, i.e. kata 9+ before a three-strike combo
+  (006:487-492)
+- Rain stays and preps the head with hiru while the legs are prepped, the head is not, and the chain is
+  under 9; it goes to Oak as soon as a transition is legal once the head is prepped too (006:475-481), with
+  prepped legs at kata 9+, and at the cap (15 after the combo) regardless (006:499-507)
+- Oak at the cap goes to Gaital once both legs are prepped (head or not: Gaital's NEEDLE finishes it) or
+  legs and head are at 85%+, otherwise cycles back to Willow for more prep (006:514-551)
+- Gaital at the cap goes to Maelstrom if she stands and this round does not sweep her (Maelstrom → Oak →
+  Gaital cycle); while she is prone, or on the sweep round, it stays (006:457-469)
+- Other non-Rain forms transition at the cap (Tykonos as soon as legal)
+- 006 transitions inline ("combo target kick staff1 staff2 transition form"); 007 sends "transition to
+  <form> form" FIRST in its round (007:654, v4.7.420), the wording Mystor sends 56 times. Until v4.7.420 it
+  sent "transition to the <form> form" after its combo, which no log shows; the PvE basher sent that until
+  v4.7.68 and got the kata refusal (CHANGELOG v4.7.68), so the game reads it as a TRANSITION, but a success
+  at kata 5+ is unseen
 - LIGHT: seen only on STAFF strikes (kuro, ruku, hiru, hiraku, nervestrike, livestrike and jinzuku light in
   Mystor's logs); every "light risingkick" there is "nervestrike light risingkick". Whether a kick can be
   light is UNVERIFIED
-- Willow's only kick is flashheel, and every flashheel BREAKS the leg (log 2026-10-11); 006's isLegSafe()
-  (006:649) tests limb %, so it cannot prevent the break (plan finding 3)
+- Willow's only kick is flashheel, and every flashheel BREAKS the leg (log 2026-10-11). Since v4.7.420 both
+  offenses choose the leg (006 shikudo.flashheelKick, 007 shikudoLock.flashLeg) instead of trying to keep it
+  whole (006's isLegSafe is gone; plan finding 3)
+- Our strike lines no longer name one staff: 166 (SHATTER), calls/008 (off) and gags/001 match any staff
+  as early fragments, and gags/001 and 166 act only in PvP, since a fragment that ends before the name
+  matches a denizen too (v4.7.420; kb/combat/shikudo.md, "What our triggers record")
+- trigger 187 and parry/001 still set ataxiaTemp.flashheelWasParried / frontkickWasParried, which only the
+  switched-off 008 reads; 006 reads the tp* flags those triggers set beside them
 ```
 
 ## Kai, kata and ASSESS: shared monk state (v4.7.419)
 
-`ataxia/monk/004_Kai_And_Kata.lua` writes down once the facts the code still holds as scattered
-literals, one of them wrong (Kai Surge: 31 in 007's READY echo, 45 on the wiki). In v4.7.419 its
-readers are TK6's dismount (`tekura/002`), the kaido aliases and `skata`. **The Shikudo offenses
-(006, 007) do not read it yet** and keep their own copies (kata caps 12, Rain 24; 007's surge 31),
-as the basher keeps its PvE literals (`SHIKUDO_BASH_ROTATION`); wiring the offenses to it is the
-next part of the rework. Tests: `test_monk_kai_kata.lua`.
+`ataxia/monk/004_Kai_And_Kata.lua` writes down once the facts the code held as scattered literals,
+one of them wrong (Kai Surge: 31 in 007's old READY echo, 45 on the wiki). Its readers in v4.7.419
+were TK6's dismount (`tekura/002`), the kaido aliases and `skata`. **Since v4.7.420 the Shikudo
+offenses read it too**, and their own copies are gone (kata caps 12, Rain 24; 007's surge 31 and its
+kai read from `ataxia.vitals.class`):
+- **006** (`zz`, `xx`, `sk`): `ataxia_kataShouldLeave(form, kata, strikes)` with its combo's strikes
+  (3, or 2 for a sweep round), `ataxia_KATA.min` for the legality test, `ataxia_kataLeaveAfter` in
+  `skstatus`, and `ataxia_assessAtMostHalf(5)` for Crescent.
+- **007** (`sr`): `ataxia_kai()` and `ataxia_kaiAfford("choke")` for its KAI CHOKE kill,
+  `ataxia_kataShouldLeave(form, kata, 0)` (its transition goes first), `ataxia_kataAtRisk(12)` for
+  the MIND-round lapse guard, `ataxia_assessAtMostHalf(5)`, and `ataxia_kataLeaveAfter` in its status.
+- **011** (`vv`): `ataxia_kataAtRisk(12)`, `ataxia_assessAtMostHalf(5)` and `ataxia_shikudoForm`.
+
+The basher keeps its PvE literals (`SHIKUDO_BASH_ROTATION`), which `skata` deliberately never
+changes. Tests: `test_monk_kai_kata.lua`; `test_shikudo_offense.lua`, `test_shikudo_dispatch.lua` and
+`test_shikudo_telepathy.lua` load the real monk/004 before the offense they test.
 
 | Helper | What it answers |
 |---|---|
@@ -1518,5 +1832,5 @@ there are no crits refilling anything. `ataxia.settings.sipping.sharpmindat` tun
 ## `sr` routing (v4.7.382)
 `sr` (alias `154_Group_(All_Classes)`) as a Monk calls `shikudoLock.dispatch()` (007_CC_Shikudo_Lock)
 by name. `shikudolock()` is also written in 008, but 008 is switched off, so at runtime only 007's
-(007:628) exists; calling the method by name keeps `sr` right if 008 is ever switched back on.
+(007:754) exists; calling the method by name keeps `sr` right if 008 is ever switched back on.
 It requires a Shikudo `Form` charstat. With none (Tekura) it echoes and does nothing.

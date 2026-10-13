@@ -57,7 +57,6 @@ if defense then
     shield = "shield",
     blindness = "blindness",
     deafness = "deafness",
-    caloric = "caloric",
     insomnia = "insomnia",
     cloak = "cloak",
     speed = "speed",
@@ -65,6 +64,19 @@ if defense then
   local aff = defMap[defense]
   if aff then
     erAff(aff)
+  end
+
+  -- AN ERODED INSULATION IS RECORDED BY ITS ABSENCE (v4.7.420). ERODE strips the first of
+  -- "Shield, chargeshield, insulation, and temperance" the target has
+  -- (kb/raw/wiki/Elementalism.wiki:74), and a stripped insulation is the target affliction
+  -- `nocaloric`: 021_Freeze, 015_Dehydrate and the water emanation record it, and the offense
+  -- reads it as its `caloric` flag (004_Magi_Offense). The map above used to send `caloric` to
+  -- erAff, which clears a name nothing sets (a recording fight log writes it as a cure), so an
+  -- eroded insulation was never recorded. Only this line's own word decides: "insulation" is the
+  -- game's name for the defence (its DEF list), "caloric" the salve's; a line that names neither
+  -- records nothing.
+  if defense == "insulation" or defense == "caloric" then
+    tarAffed("nocaloric")
   end
 end
 

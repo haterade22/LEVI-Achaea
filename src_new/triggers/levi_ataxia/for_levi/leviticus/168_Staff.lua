@@ -38,4 +38,6 @@ patterns:
   type: 1
 ]]--
 
-send("wield staff489282")
+-- v4.7.420: wield the staff the dispatch offense wields: `skstaff <item>`, else the bare keyword
+-- "staff" (shikudo.staffRef, 006). It sent staff489282, one player's item id.
+send("wield " .. (shikudo and shikudo.staffRef and shikudo.staffRef() or "staff"))

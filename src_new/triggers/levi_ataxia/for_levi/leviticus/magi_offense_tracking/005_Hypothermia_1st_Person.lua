@@ -40,9 +40,7 @@ if isTargeted(matches[2]) then
   tarAffed("frozen")
   tarAffed("shivering")
   tarAffed("nocaloric")
-  -- Update magi offense state
-  magi = magi or {}
-  magi.offense = magi.offense or {}
-  magi.offense.state = magi.offense.state or {}
-  magi.offense.state.hypothermia = true
+  -- No st.hypothermia latch since v4.7.420. P3, P7 and `mm status` read hypothermia from V3
+  -- (004_Magi_Offense.lua), and the latch, cleared only by a target change or `mm reset`, outlived
+  -- the target's cure.
 end
