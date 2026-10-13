@@ -36,6 +36,10 @@ patterns:
   type: 1
 ]]--
 
+-- A confirmed battlerage: the game's ~1s global cooldown starts now (v4.7.421), so the
+-- next rebuild does not queue a battlerage the game will refuse.
+if ataxiaBasher_brFired then ataxiaBasher_brFired() end
+
 ataxiaBasher.shielded = false
 ataxiaTemp.ignoreCrits = false
 bashStats.attacks = bashStats.attacks + 1

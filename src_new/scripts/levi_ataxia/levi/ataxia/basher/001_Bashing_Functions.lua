@@ -1428,14 +1428,53 @@ end
 -- have up to six exit points apiece, and patching each is exactly how the spend got missed
 -- the first time.
 function ataxiaBasher_brCommit(cmd)
-  if cmd and cmd ~= "" and ataxiaTemp then ataxiaTemp.brFreeCharge = nil end
+  if cmd and cmd ~= "" and ataxiaTemp then ataxiaBasher_brSpendCharge() end
   return cmd
+end
+
+-- Spend the banked charge, remembering WHEN, so a battlerage the game then refuses
+-- ("You must wait a short time...", trigger 329) can give it back (v4.7.421). The game did
+-- not spend it -- the ability never executed -- so forgetting it lost a free cast.
+function ataxiaBasher_brSpendCharge()
+  ataxiaTemp = ataxiaTemp or {}
+  if ataxiaTemp.brFreeCharge then
+    ataxiaTemp.brFreeSpentAt = getEpoch and getEpoch() or 0
+  end
+  ataxiaTemp.brFreeCharge = nil
+end
+
+-- Trigger 329: the battlerage just queued was refused by the global cooldown. If it is the
+-- one that spent a free charge (within BR_REFUND_WINDOW), the charge is still banked.
+ataxiaBasher_BR_REFUND_WINDOW = 2
+function ataxiaBasher_brRefused()
+  ataxiaTemp = ataxiaTemp or {}
+  local spent = tonumber(ataxiaTemp.brFreeSpentAt)
+  local nowT = getEpoch and getEpoch() or 0
+  if spent and nowT - spent <= ataxiaBasher_BR_REFUND_WINDOW then
+    ataxiaTemp.brFreeCharge = true
+  end
+  ataxiaTemp.brFreeSpentAt = nil
+end
+
+-- The game's ~1s GLOBAL battlerage cooldown, from `brGlobalReadyAt`: armed by brSent, by
+-- the refusal line (329) and, since v4.7.421, by every CONFIRMED battlerage fire line
+-- (330-333, 342). The shared paths below never read it before v4.7.421, so the round right
+-- after a battlerage kill queued another one and the game refused it (live Serpent log).
+function ataxiaBasher_brGlobalReady()
+  local readyAt = tonumber(ataxiaTemp and ataxiaTemp.brGlobalReadyAt) or 0
+  return (getEpoch and getEpoch() or 0) >= readyAt
+end
+
+-- A battlerage fire line: the global cooldown started at that moment.
+function ataxiaBasher_brFired()
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.brGlobalReadyAt = (getEpoch and getEpoch() or 0) + 1
 end
 
 function ataxiaBasher_brSent()
   ataxiaTemp = ataxiaTemp or {}
   ataxiaTemp.brGlobalReadyAt = (getEpoch and getEpoch() or 0) + 1
-  ataxiaTemp.brFreeCharge = nil
+  ataxiaBasher_brSpendCharge()
 end
 
 -- RAGE FLOOR (v4.7.141). Some gear pays a flat damage bonus while battlerage is at or
@@ -1523,53 +1562,61 @@ function ataxiaBasher_berserkersEdgeRevert()
 end
 
 -- Generic battlerage handler for the standard pattern:
--- With 2+ targets: try special → small → large
--- With <2 targets: try small → large
+-- With 2+ targets: try special -> small -> large (small/large wait while special is ready but
+--   unaffordable: that is banking rage for the special).
+-- With <2 targets: try small -> large -> special.
+--
+-- NEVER IDLE (v4.7.421, user: "We should be using all battle rage abilities if others (damage)
+-- are on cooldown for every class"). The single-target branch used to stop after small and
+-- large, so with both on cooldown the special (Serpent obliviate, Infernal, Pariah, Apostate,
+-- Blue Dragon ...) never fired against one denizen however much rage sat there. It is the
+-- last resort now: damage first, then whatever is off cooldown.
 local function ataxiaBasher_standardBattlerage(class, specialRage, level, sp)
-  local command = ""
   local brData = ataxiaBasher.battlerage[class]
   if not brData then return "" end
+  if not ataxiaBasher_brGlobalReady() then return "" end
+  local rage = ataxia.vitals.rage
+  local function can(slot, cost)
+    return brData[slot] and not battleRage_Timers[slot] and ataxiaBasher_rageAfford(rage, cost)
+  end
+  local bigOk = (tonumber(level) or 0) > 35
 
   if ataxiaBasher_validTargets() >= 2 then
-    if not battleRage_Timers.special and ataxiaBasher_rageAfford(ataxia.vitals.rage, specialRage) then
-      command = brData.special..sp
-    elseif not battleRage_Timers.small and ataxiaBasher_rageAfford(ataxia.vitals.rage, 14) and battleRage_Timers.special then
-      command = brData.small..sp
-    elseif not battleRage_Timers.large and ataxiaBasher_rageAfford(ataxia.vitals.rage, 36) and battleRage_Timers.special and level > 35 then
-      command = brData.large..sp
-    end
+    if can("special", specialRage) then return brData.special..sp end
+    if not battleRage_Timers.special and brData.special then return "" end
+    if can("small", 14) then return brData.small..sp end
+    if bigOk and can("large", 36) then return brData.large..sp end
   else
-    if not battleRage_Timers.small and ataxiaBasher_rageAfford(ataxia.vitals.rage, 14) then
-      command = brData.small..sp
-    elseif not battleRage_Timers.large and ataxiaBasher_rageAfford(ataxia.vitals.rage, 36) and level > 35 then
-      command = brData.large..sp
-    end
+    if can("small", 14) then return brData.small..sp end
+    if bigOk and can("large", 36) then return brData.large..sp end
+    if can("special", specialRage) then return brData.special..sp end
   end
-  return command
+  return ""
 end
 
--- Crowd-control battlerage for 3+ targets (Black Dragon dragonfear, Shaman invoke korkma)
+-- Crowd-control battlerage for 3+ targets (Black Dragon dragonfear, Shaman invoke korkma).
+-- Below 3 targets the special is the last resort after small and large (v4.7.421).
 local function ataxiaBasher_crowdControlBattlerage(class, specialCmd, level, sp, smallRage, bigRage)
-  local command = ""
   local brData = ataxiaBasher.battlerage[class]
   if not brData then return "" end
+  if not ataxiaBasher_brGlobalReady() then return "" end
+  local rage = ataxia.vitals.rage
+  local function can(slot, cost)
+    return not battleRage_Timers[slot] and ataxiaBasher_rageAfford(rage, cost)
+  end
+  local bigOk = (tonumber(level) or 0) > 35
 
   if #stormhammerTargets >= 3 then
-    if not battleRage_Timers.special and ataxiaBasher_rageAfford(ataxia.vitals.rage, 29) then
-      command = specialCmd..sp
-    elseif not battleRage_Timers.small and ataxiaBasher_rageAfford(ataxia.vitals.rage, 14) and battleRage_Timers.special then
-      command = brData.small..sp
-    elseif not battleRage_Timers.large and ataxiaBasher_rageAfford(ataxia.vitals.rage, 36) and battleRage_Timers.special and level > 35 then
-      command = brData.large..sp
-    end
+    if can("special", 29) then return specialCmd..sp end
+    if not battleRage_Timers.special then return "" end
+    if brData.small and can("small", 14) then return brData.small..sp end
+    if brData.large and bigOk and can("large", 36) then return brData.large..sp end
   else
-    if not battleRage_Timers.small and ataxiaBasher_rageAfford(ataxia.vitals.rage, smallRage) then
-      command = brData.small..sp
-    elseif not battleRage_Timers.large and ataxiaBasher_rageAfford(ataxia.vitals.rage, bigRage) and level > 35 then
-      command = brData.large..sp
-    end
+    if brData.small and can("small", smallRage) then return brData.small..sp end
+    if brData.large and bigOk and can("large", bigRage) then return brData.large..sp end
+    if can("special", 29) then return specialCmd..sp end
   end
-  return command
+  return ""
 end
 
 -- Bard battlerage. Bard is excluded from the global culling-blade check below and owns culling
@@ -1989,7 +2036,7 @@ function ataxiaBasher_assembleBattlerage()
 		-- So the majority of classes banked a free charge and then declined the single
 		-- best thing to spend it on: a free AoE execute. The charge was not lost (it stays
 		-- banked), it was spent on a cheaper battlerage further down this function instead.
-		if ataxiaBasher_cullAfford(ataxia.vitals.rage, bigRage) then
+		if ataxiaBasher_brGlobalReady() and ataxiaBasher_cullAfford(ataxia.vitals.rage, bigRage) then
 			command = command.."reap "..target..sp
 		end
 	-- Black Dragon: dragonfear on 3rd target when 3+ mobs present
@@ -2023,11 +2070,15 @@ function ataxiaBasher_assembleBattlerage()
 	elseif ataxiaBasher_specialRageThresholds[class] then
 		command = ataxiaBasher_standardBattlerage(class, ataxiaBasher_specialRageThresholds[class], level, sp)
 	-- Fallback for unknown classes: just use small/large
-	elseif ataxiaBasher.battlerage[class] then
-		if not battleRage_Timers.small and ataxiaBasher_rageAfford(ataxia.vitals.rage, smallRage) then
-			command = ataxiaBasher.battlerage[class].small..sp
-		elseif not battleRage_Timers.large and ataxiaBasher_rageAfford(ataxia.vitals.rage, bigRage) and level > 35 then
-			command = ataxiaBasher.battlerage[class].large..sp
+	elseif ataxiaBasher.battlerage[class] and ataxiaBasher_brGlobalReady() then
+		local br = ataxiaBasher.battlerage[class]
+		if br.small and not battleRage_Timers.small and ataxiaBasher_rageAfford(ataxia.vitals.rage, smallRage) then
+			command = br.small..sp
+		elseif br.large and not battleRage_Timers.large and ataxiaBasher_rageAfford(ataxia.vitals.rage, bigRage) and level > 35 then
+			command = br.large..sp
+		elseif br.special and not battleRage_Timers.special and ataxiaBasher_rageAfford(ataxia.vitals.rage, bigRage) then
+			-- the special's cost is unknown for an unlisted class; bigRage is the safe guess
+			command = br.special..sp
 		end
 	end
 	-- One wrapper covers every rotation this dispatcher reaches. Blademaster/Magi also spend

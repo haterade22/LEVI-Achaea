@@ -20,8 +20,9 @@ packageName: ''
   - .claude/classes/lock_types.md (lock definitions)
   - .claude/classes/magi.md (class mechanics)
 
-  Modes: fire, water, lock, salve, group
+  Modes: fire, water, lock, salve, group, waterroute
   Dispatch: zz alias → magi.offense.dispatch()
+  Keys: zz salve, xx fire, cc lock, vv water, sr group, ww waterroute (v4.7.421)
 
   Based on xMagi reference (Aegoth/Tabethys) + our V3 affliction tracking.
   Resonance system: 4 elements (air/fire/water/earth) at levels 0-3.
@@ -29,10 +30,12 @@ packageName: ''
 
   Kill routes:
     fire  → burns → conflagrate → destroy/stormhammer
-    water → freeze → hypothermia → glaciate
+    water -> no branch of its own: it runs the fire tree (the water route is waterroute)
     lock  → kelp stack → truelock via resonance affs
     salve → salve-pressure via earth/fire resonance
     group → stormhammer multi-target + damage
+    waterroute -> Tabethys: magma, dehydrate x2, fulminate, the mudslide bonk; then emanate
+                  water, freeze until frozen, glaciate (selectWaterRouteSpell)
 ]]--
 
 ----------------------------------------------------------------
@@ -70,6 +73,11 @@ magi.offense.config = {
   scaldedDuration = 20,
   useArachnideye = false,   -- artefact toggle: arachnideye trample prefix
   useWebbomb = false,        -- artefact toggle: webbomb prefix
+  -- Water route (ww, v4.7.421): glaciate a frozen target whose health is unknown or at most this
+  -- percentage, else lay hypothermia first. 100 = glaciate first, Tabethys's usual finisher;
+  -- false = always hypothermia first ('mm glaciate off'). kb/ holds no figure for glaciate's
+  -- damage (kb/CONFLICTS.md #27), so lower it only from logged glaciates ('mm glaciate <pct>').
+  glaciateKillAt = 100,
 }
 
 ----------------------------------------------------------------
@@ -170,6 +178,8 @@ function magi.offense.reset()
   st.frozen = false
   st.shivering = false
   if st.scaldedTimer then killTimer(st.scaldedTimer); st.scaldedTimer = nil end
+  st.routeEarthNoted = nil   -- the water route's once-per-bonk earth note (v4.7.421)
+  st.routeRefulminated = nil -- the water route's one re-fulminate per bonk (v4.7.421)
 end
 
 ----------------------------------------------------------------
@@ -233,6 +243,20 @@ function magi.offense.selectSpell()
   --=== PRIORITY 2: SHIELD STRIP (meteorite variants) ===--
   if magi.offense.targetShielded() then
     return magi.offense.selectMeteorite()
+  end
+
+  --=== WATER ROUTE (ww, v4.7.421) ===--
+  -- Tabethys's rotation has its own selector, and it branches here because P3-P8 below would
+  -- otherwise cast first: P3 glaciates only with hypothermia and water/air at 2+, P7 lays
+  -- hypothermia first, and P8 mudslides on asthma at water 2 -- each a step of the route under a
+  -- different gate -- while P4-P6 (stormhammer, scintilla, emanation earth) cast in its place.
+  -- What still applies is above this line: the stale-burn reset (bookkeeping only), P1 DESTROY (it
+  -- slays a conflagrated target at 40% health or less, Elementalism.wiki:144, and P1 casts it under
+  -- destroyThreshold; the route never conflagrates, but a fire-mode round before ww can leave one)
+  -- and P2's shield strip (no spell reaches a shielded target). dispatch's guards (class, balance
+  -- and equilibrium, aeon, a target) ran before selectSpell.
+  if mode == "waterroute" then
+    return magi.offense.selectWaterRouteSpell()
   end
 
   --=== PRIORITY 3: GLACIATE (frozen + hypothermia + dual resonance) ===--
@@ -524,6 +548,188 @@ function magi.offense.selectGroupSpell()
 end
 
 ----------------------------------------------------------------
+-- Water route sub-tree (ww, v4.7.421): Tabethys's rotation
+----------------------------------------------------------------
+-- kb/raw/players/magi-tabethys-2026-10-12.txt, curated in .claude/classes/magi.md ("Tabethys's
+-- core rotation"): "magma, dehydrate, dehydrate, fulminate ... sets your water to 2 and earth to
+-- 1, enabling the biggest of all bonks, the CAST MUDSLIDE for par, sli, ano, prone". Every pick
+-- is read from the live state -- resonance (001_Resonance, 0-3 per plane) and the target as V3
+-- holds it -- never from a step counter, so a cure, a fade or a second press re-derives the step.
+-- How many levels one cast adds is not recorded (kb/CONFLICTS.md #26); Tabethys's numbers fit one
+-- per plane the spell draws on. The route reads the levels the game reports, so only what the bonk
+-- brings depends on that.
+
+-- Tabethys's focus lock as a JOINT probability: paralysis (no tree), slickness (no salve) and
+-- anorexia (no eating) held together in one V3 branch. Separate per-affliction tests overstate a
+-- joint state while V3 branches: two 50% branches, each missing a different one, read 50% for every
+-- affliction and 0% for the lock. getStateProbabilityV3 (affliction_tracking_core/007) is the joint
+-- query getLockStatusV3 (008) builds Apostate's locks from. Asthma is left out on purpose: the
+-- opener makes the target choose between asthma and fulminated (Tabethys), and either one left
+-- standing feeds the lock; `mm` shows both. It is read for the status and the echoes, and gates
+-- only the re-fulminate below: after the bonk the finisher itself adds the pressure.
+local FOCUS_LOCK = { "paralysis", "slickness", "anorexia" }
+
+function magi.offense.focusLockProb()
+  if getStateProbabilityV3 then return getStateProbabilityV3(FOCUS_LOCK) end
+  -- No V3: getAffProb reads tAffs, 0 or 1 each, so the product is "all three".
+  local p = 1
+  for _, aff in ipairs(FOCUS_LOCK) do p = p * magi.offense.getAffProb(aff) end
+  return p
+end
+
+function magi.offense.focusLocked()
+  return magi.offense.focusLockProb() >= 0.5
+end
+
+-- Whether we hold a health reading of THIS target. Trigger 698 stamps ataxiaTemp.lastAssessWho,
+-- lastAssess and lastAssessAt for our target only, and every round ends in `assess <target>`
+-- (sendAttack), so a live fight's stamp is seconds old. Names compare in any case, as isTargeted
+-- does. A stamp older than ASSESS_MAX_AGE is from an earlier fight with the same name: 698's stamp
+-- survives a target change (016_Targeting_Functions resets php and targetHealth, not ataxiaTemp).
+local ASSESS_MAX_AGE = 30
+
+function magi.offense.targetHPKnown()
+  local t = ataxiaTemp
+  local who = t and t.lastAssessWho
+  if type(who) ~= "string" or type(target) ~= "string" or who:lower() ~= target:lower() then return false end
+  if type(t.lastAssess) ~= "number" or type(t.lastAssessAt) ~= "number" then return false end
+  return getEpoch() - t.lastAssessAt <= ASSESS_MAX_AGE
+end
+
+-- The health the route reads: 698's figure, the one that comes WITH the stamp, never getTargetHP.
+-- getTargetHP returns targetHealth first, which general/001_Assess writes from any "You glance over"
+-- line, whoever it names, so one manual assess of a bystander would put their health on our target.
+-- nil when targetHPKnown() is false.
+function magi.offense.routeTargetHP()
+  if not magi.offense.targetHPKnown() then return nil end
+  return ataxiaTemp.lastAssess
+end
+
+-- The pick, with no echo: returns the spell, the step ("opener", "bonk" or "finisher") and why.
+function magi.offense.waterRoutePick()
+  local r = magi.resonance
+  local st = magi.offense.state
+  local t = target
+  local frozen = magi.offense.getAffProb("frozen") >= 0.5        -- as P3 computes it
+  local slick = magi.offense.getAffProb("slickness") >= 0.5
+
+  -- THE KILL: "freeze (frozen, stuttering) => glaciate (or hypothermia if they are somehow not in
+  -- glaciate-kills-them-in-one range)". Glaciate needs only frozen ("terrible damage upon those
+  -- that are already frozen", Elementalism.wiki:218), not P3's hypothermia and water/air 2+
+  -- (kb/CONFLICTS.md #31). It comes before the major-water emanation: a frozen target is one
+  -- caloric from losing it (unless slick or hypothermic), so the kill, or the hypothermia that
+  -- holds frozen, does not wait, and the emanation's freeze level (:242) is wasted on a target
+  -- already frozen.
+  if frozen then
+    local killAt = magi.offense.config.glaciateKillAt
+    local hp = magi.offense.routeTargetHP()
+    local known = hp ~= nil
+    if killAt and (not known or hp <= killAt) then
+      return "cast glaciate at " .. t, "finisher",
+        known and ("frozen, health " .. hp .. "%, glaciate at " .. killAt .. "% or less") or "frozen, health unknown"
+    end
+    -- Hypothermia "removes their ability to heal their frozen state" (Elementalism.wiki:182).
+    if magi.offense.getAffProb("hypothermia") < 0.5 then
+      return "cast hypothermia at " .. t, "finisher",
+        killAt and ("frozen, health " .. tostring(hp) .. "% over " .. killAt .. "%: hypothermia first")
+        or "glaciate off: hypothermia first"
+    end
+    return "cast glaciate at " .. t, "finisher", "frozen and hypothermic"
+  end
+
+  -- AFTER THE BONK: the target is slick, so the freezes stick (shivering and frozen are cured by
+  -- applying caloric, and slickness stops every salve). First keep fulminated up while the lock is
+  -- not on: fulminated turns their FOCUS, the one cure the lock leaves, into paralysis ("Successful
+  -- attempts to focus your mind to cure an affliction will cause you to be struck down with
+  -- paralysis.", kb/raw/live/affliction_show/fulminated.txt). Down means haveAff says so (V3 under
+  -- 30%), the test 021_Spell_Outcomes uses to decide a fulminate gives fulminated, so a recast it
+  -- records ends this and none can loop in V3's 30-50% band. ONCE per bonk (st.routeRefulminated,
+  -- stamped by selectWaterRouteSpell): a target that cures fulminated every round (tree, or a focus
+  -- that turns into paralysis) would otherwise be fulminated forever while major water decays unspent
+  -- and the freezes never come.
+  if slick and st.routeRefulminated ~= t and not magi.offense.hasAff("fulminated")
+    and not magi.offense.focusLocked() then
+    return "cast fulminate at " .. t, "finisher", "fulminated is down and they are not locked"
+  end
+  -- "emanate water (stuttering + strips caloric)": major water, which the bonk's 2 -> 3 gives, is
+  -- what the emanation needs and clears; it strips insulation (or adds a freeze level), disrupts and
+  -- stutters (Elementalism.wiki:242). Major water before a bonk is spent the same way, and the
+  -- opener then rebuilds water to 2: the bonk's anorexia comes from water growing 2 -> 3.
+  if r.water == 3 then
+    return "cast emanation at " .. t .. " water", slick and "finisher" or "opener", "major water"
+  end
+  -- "freeze (shivering), freeze (frozen, stuttering)": one stage a cast, insulation, then shivering,
+  -- then frozen (Elementalism.wiki:304).
+  if slick then
+    return "cast freeze at " .. t, "finisher", "slick, not frozen yet"
+  end
+
+  -- OPENER. Scalded is read the way the moderate-fire trigger reads it (022_Resonance_Afflictions:
+  -- the offense's own 20 s clock, or V3); MAGMA gives it (Elementalism.wiki:376).
+  if not (st.scalded or magi.offense.hasAff("scalded")) then
+    return "cast magma at " .. t, "opener", "not scalded"
+  end
+  -- DEHYDRATE draws on fire and water (Elementalism.wiki:325), so two of them take water to 2.
+  if r.water < 2 then
+    return "cast dehydrate at " .. t, "opener", "water " .. r.water .. " of 2"
+  end
+  -- FULMINATE at ANY fire level. The fire tree refuses it at fire 3 (fireWillBurn in
+  -- selectBurningSpell); Tabethys casts it there on purpose, for fulminated and the asthma that
+  -- minor air gives (Elementalism.wiki:62, :340), not for fire.
+  if r.air == 0 then
+    return "cast fulminate at " .. t, "opener", "air 0: fulminated + asthma"
+  end
+
+  -- BONK, at water 2 (water 3 never reaches here). The mudslide gives slickness and prone
+  -- (Elementalism.wiki:364); the water it adds, 2 -> 3, gives anorexia (major water), and the
+  -- earth, 1 -> 2, a short stun and paralysis (moderate earth, :62). Asthma is not required:
+  -- Tabethys's opener "forces them to choose between fulminated and asthma", and either one left
+  -- standing feeds the lock.
+  return "cast mudslide at " .. t, "bonk", "water 2, earth " .. r.earth
+end
+
+-- "cast emanation at X water" -> "emanation water", "cast freeze at X" -> "freeze".
+local function routeSpellName(spell)
+  local name, rest = spell:match("^cast (%a+) at %S+%s*(.*)$")
+  if not name then return spell end
+  return rest ~= "" and (name .. " " .. rest) or name
+end
+
+local function routePct(p)
+  return string.format("%d%%", math.floor(p * 100 + 0.5))
+end
+
+-- The route's spell for this round, echoed with its step and the lock, as the offenses echo a round.
+function magi.offense.selectWaterRouteSpell()
+  local st = magi.offense.state
+  local spell, step, why = magi.offense.waterRoutePick()
+  local lock = magi.offense.focusLockProb()
+  magi.offense.echo("<gold>Route " .. step .. ": <white>" .. routeSpellName(spell) .. " <dim_grey>(" .. why .. ")"
+    .. (lock >= 0.5 and " <green>LOCKED" or " <dim_grey>lock " .. routePct(lock)))
+  -- At earth 1 the bonk's earth 1 -> 2 brings the paralysis that blocks the tree (moderate earth,
+  -- Elementalism.wiki:62); at any other earth it lands without it. It is cast anyway: nothing in kb/
+  -- confirms that magma can be cast again on a scalded target to put earth back on 1, so the route
+  -- invents no earth-raising step. Said once per bonk: the note clears when the pick moves on.
+  -- The one re-fulminate a bonk allows is spent when it is picked; a new bonk gives another.
+  if step == "finisher" and spell:find("^cast fulminate ") then
+    st.routeRefulminated = target
+  elseif step == "bonk" then
+    st.routeRefulminated = nil
+  end
+  if step == "bonk" then
+    local earth = magi.resonance.earth
+    local key = tostring(target) .. ":" .. earth
+    if earth ~= 1 and st.routeEarthNoted ~= key then
+      st.routeEarthNoted = key
+      magi.offense.echo("<red>Bonk at earth " .. earth .. ": no paralysis from it (that needs earth 1 -> 2).")
+    end
+  else
+    st.routeEarthNoted = nil
+  end
+  return spell
+end
+
+----------------------------------------------------------------
 -- Fallback sub-tree
 ----------------------------------------------------------------
 
@@ -626,14 +832,15 @@ end
 ----------------------------------------------------------------
 
 function magi.offense.setMode(mode)
-  local valid = {fire = true, water = true, lock = true, salve = true, group = true}
+  -- waterroute (v4.7.421): Tabethys's rotation, run by ww. "water" stays what vv has always run.
+  local valid = {fire = true, water = true, lock = true, salve = true, group = true, waterroute = true}
   if valid[mode] then
     if magi.offense.state.mode ~= mode then
       magi.offense.echo("<gold>Mode set to: <white>" .. mode)
     end
     magi.offense.state.mode = mode
   else
-    magi.offense.echo("<red>Invalid mode: " .. tostring(mode) .. " (fire/water/lock/salve/group)")
+    magi.offense.echo("<red>Invalid mode: " .. tostring(mode) .. " (fire/water/lock/salve/group/waterroute)")
   end
 end
 
@@ -644,6 +851,25 @@ function magi.offense.status()
   magi.offense.echo("<gold>--- Magi Offense Status ---")
   cecho("\n <cornflower_blue>Mode: <white>" .. st.mode)
   cecho("\n <cornflower_blue>Resonance: <red>F:" .. r.fire .. " <dodger_blue>W:" .. r.water .. " <saddle_brown>E:" .. r.earth .. " <light_sky_blue>A:" .. r.air)
+  -- The water route (ww, v4.7.421): the step the next round would take, the joint lock beside the
+  -- two afflictions the opener makes them choose between, and where glaciate comes first.
+  if st.mode == "waterroute" then
+    if type(target) == "string" and target ~= "" then
+      local spell, step, why = magi.offense.waterRoutePick()
+      cecho("\n <cornflower_blue>Route step: <white>" .. step .. " <dim_grey>-- " .. routeSpellName(spell) .. " (" .. why .. ")")
+    else
+      cecho("\n <cornflower_blue>Route step: <dim_grey>no target")
+    end
+    local lock = magi.offense.focusLockProb()
+    cecho("\n <cornflower_blue>Focus lock: " .. (lock >= 0.5 and "<green>YES" or "<dim_grey>no")
+      .. " <dim_grey>(paralysis + slickness + anorexia together " .. routePct(lock)
+      .. "; asthma " .. routePct(magi.offense.getAffProb("asthma"))
+      .. ", fulminated " .. routePct(magi.offense.getAffProb("fulminated")) .. ")")
+    local killAt = magi.offense.config.glaciateKillAt
+    cecho("\n <cornflower_blue>Glaciate first: " .. (killAt
+      and ("<white>at " .. killAt .. "% health or less, or unknown health")
+      or "<dim_grey>off (hypothermia first)"))
+  end
   cecho("\n <cornflower_blue>Burns: <orange_red>" .. st.burns .. (st.conflagrated and " <red>[CONFLAGRATED]" or ""))
   cecho("\n <cornflower_blue>Scalded: " .. (st.scalded and "<orange_red>YES" or "<dim_grey>no"))
   cecho("\n <cornflower_blue>Calcify: " .. (st.calcifiedTorso and "<red>TORSO" or "<dim_grey>-") .. " " .. (st.calcifiedSkull and "<red>SKULL" or "<dim_grey>-"))

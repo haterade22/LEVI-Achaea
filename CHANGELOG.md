@@ -2,6 +2,56 @@
 
 ---
 
+## 2026-10-13 - v4.7.421: Magi water route (ww), battlerage never idles on the shared path
+
+### Magi: Tabethys's water route, a new key `ww`
+
+Tabethys's rotation was curated in `.claude/classes/magi.md` but no mode ran it: `vv`'s water mode runs
+the fire tree, and P3/P7/P8 sit above every mode branch with gates of their own.
+
+- **`ww`** (`magi_things/007_Water_Route.lua`) sets mode `waterroute` and dispatches. `selectSpell`
+  (`mage/004_Magi_Offense.lua`) branches to the new `selectWaterRouteSpell` after P1 (destroy) and P2
+  (the shield strip), before P3-P8. Picks come from live resonance and V3, never a step counter: frozen ->
+  glaciate (or hypothermia first above `glaciateKillAt`); slick -> one re-fulminate per bonk, emanation
+  water at water 3, freeze; opener magma, dehydrate x2, fulminate at air 0; the mudslide bonk at water 2
+  (echoes once when earth is not 1, so it brings no paralysis).
+- **The focus lock is a joint probability** (`focusLockProb`, paralysis + slickness + anorexia in one V3
+  branch), echoed every round and shown by `mm`.
+- **Health is our target's own 698 stamp** (`targetHPKnown`: name, figure and a stamp at most 30 s old),
+  never `getTargetHP`, which a bystander's assess can overwrite.
+- **`mm waterroute` / `mm route`** set the mode; **`mm glaciate N|off`** sets where glaciate comes first
+  (default 100; off = hypothermia first). `magi help` lists them. `vv`, `xx`, `zz`, `cc`, `sr` are unchanged.
+- Tests: `test_magi_water_route.lua` (58). Docs: magi.md "The water route (ww, v4.7.421)",
+  kb/CONFLICTS.md #27 and #31.
+
+### Battlerage never idles on the shared path (every class), Rage-Fuelled refund
+
+Live Serpent log (2026-10-12): Rage-Fuelled banked a free battlerage on every kill, rage sat at 98-100,
+and only thrash (the whip crack, trigger 330) and culling ever fired. User: "We should be using all
+battle rage abilities if others (damage) are on cooldown for every class".
+
+- **The special is the last resort against one denizen** (`basher/001`, `ataxiaBasher_standardBattlerage`,
+  `ataxiaBasher_crowdControlBattlerage`, the unlisted-class fallback). The single-target branch stopped
+  after small and large, so the special (Serpent obliviate, Infernal, Pariah, Apostate, Blue Dragon,
+  Shaman korkma, Black Dragon dragonfear) never fired against one denizen. Order is now damage first
+  (small -> large), then the special. 2+ targets are unchanged.
+- **The ~1s global battlerage cooldown is honoured on the shared path.** `ataxiaBasher_brGlobalReady()`
+  gates the shared culling reap and the three shared rotations; every confirmed fire line (330-333,
+  342) arms it via `ataxiaBasher_brFired()`. The round right after a battlerage kill used to queue
+  another battlerage, which the game refused ("You must wait a short time...").
+- **A refused battlerage gives its Rage-Fuelled charge back.** The send spends our record of the charge;
+  trigger 329 now calls `ataxiaBasher_brRefused()`, which restores it when it was spent in the last 2s
+  (`ataxiaTemp.brFreeSpentAt`). The ability never executed, so the game still had the charge.
+- **Every class's ready line clears its slot** (`011`, `ataxiaBasher_brReadyClassSlot`). "You can use
+  <X> again." was only mapped for the Bard; it now matches X against any word of the class's configured
+  small/large/special command ("Thrash", "Obliviate", "Korkma").
+- **Obliviate's fire line could never match** (trigger 332): the anchored full line is ~170 columns and
+  wrapped, so the Serpent special's 42s timer never armed. Matched on its opening now.
+- Not done: flagellate and snare (Serpent) are not in the battlerage table, since no fire line is
+  captured to time their cooldowns. Owned rotations (Bard, Blademaster, Monk, Magi, Psion, Depthswalker,
+  Runewarden, Golden Dragon) are unchanged.
+- Tests: `test_battlerage_fallback.lua` (20). AB: `kb/raw/ab/serpent_obliviate_2115.txt`.
+
 ## 2026-10-12 - v4.7.420: Shikudo wave 2 (both offenses rebuilt, vv Telepathy), Magi emanations fire, tracker sync fixes
 
 The second wave of `docs/plans/shikudo-offense-review-2026-10-11.md`. The lock offense (`shikudo/007`,

@@ -40,8 +40,7 @@ patterns:
   type: 1
 - pattern: ^You think back to the moment when you were reborn from your doom
   type: 1
-- pattern: ^You draw (.+)'s attention with the wavering tip of one finger, then quickly snap your fingers in front of \w+
-    face, the sudden sound temporarily blanking \w+ mind\.$
+- pattern: ^You draw (.+)'s attention with the wavering tip of one finger
   type: 1
 - pattern: A miasma of black flames springs up around you.
   type: 3
@@ -60,6 +59,10 @@ patterns:
 - pattern: ^You direct your voice in a high-pitched trill at (.+), dazing \w+\.$
   type: 1
 ]]--
+
+-- A confirmed battlerage: the game's ~1s global cooldown starts now (v4.7.421), so the
+-- next rebuild does not queue a battlerage the game will refuse.
+if ataxiaBasher_brFired then ataxiaBasher_brFired() end
 
 ataxiaBasher.shielded = false
 ataxiaTemp.ignoreCrits = false

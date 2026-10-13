@@ -1,0 +1,11 @@
+Obliviate (Attainment)  ABADMIN ID: 2115      Known: Yes
+-------------------------------------------------------------------------------
+Syntax:            OBLIVIATE <target>
+Extra Information: Gives denizen affliction: Amnesia
+
+Works on/against:  Denizens
+Cooldown:          41.00 seconds
+Resource:          28 rage
+Details:
+Use a minor hypnosis technique to cause your target to forget what it was doing, giving it amnesia for a few seconds.
+-------------------------------------------------------------------------------
