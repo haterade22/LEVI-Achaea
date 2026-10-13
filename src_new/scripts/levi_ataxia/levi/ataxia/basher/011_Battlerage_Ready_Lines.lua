@@ -102,6 +102,35 @@ local BR_SHARED = {
   trill        = "special",
 }
 
+-- EVERY CLASS'S OWN TABLE (v4.7.421). The shared rotation gates small/large/special on
+-- `battleRage_Timers`, armed by the fire lines (330-332) with a guessed cooldown. BR_SHARED
+-- above only knew the Bard's verbs, so for every other class the game's "You can use Thrash
+-- again." was ignored and the slot waited out the guess. Match the ready line's verb against
+-- any word of the class's configured command (the target is a number, so it never matches):
+-- "thrash 123" -> small, "shin daze 123" -> special, "invoke korkma 123" -> special.
+function ataxiaBasher_brReadyClassSlot(key)
+  local class = gmcp and gmcp.Char and gmcp.Char.Status and gmcp.Char.Status.class
+  if type(class) ~= "string" then return nil end
+  class = class:gsub("^%l", string.upper):gsub(" Lady", ""):gsub(" Lord", "")
+  local br = ataxiaBasher and ataxiaBasher.battlerage and ataxiaBasher.battlerage[class]
+  if type(br) ~= "table" then return nil end
+  for _, slot in ipairs({ "small", "large", "special" }) do
+    local cmd = br[slot]
+    if type(cmd) == "string" then
+      for word in cmd:lower():gmatch("%a+") do
+        if word == key then
+          if battleRage_Timers and battleRage_Timers[slot] then
+            pcall(killTimer, battleRage_Timers[slot])
+            battleRage_Timers[slot] = nil
+          end
+          return slot
+        end
+      end
+    end
+  end
+  return nil
+end
+
 --- Mark a battlerage ability as off cooldown, from the game's own ready line.
 -- `verb` is whatever the line named ("Collide", "Cullingblade", ...).
 function ataxiaBasher_brReady(verb)
@@ -135,7 +164,7 @@ function ataxiaBasher_brReady(verb)
   end
 
   local entry = BR_READY_MAP[key]
-  if not entry then return nil end
+  if not entry then return ataxiaBasher_brReadyClassSlot(key) end
   local tbl, field = entry[1], entry[2]
   if ataxiaTemp[tbl] then ataxiaTemp[tbl][field] = nil end
 

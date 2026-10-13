@@ -7,7 +7,7 @@
 - **Lock Affliction**: Haemophilia (prevents clotting, disrupts cure system)
 - **Offense System**: `magi.offense` namespace (`004_Magi_Offense.lua`)
 - **Dispatch**: `zz` (salve), `xx` (fire), `vv` (water, which has no branch and runs the fire tree), `cc` (lock) and `sr` (group) each set a mode and call `magi.offense.dispatch()`; `mm <mode>` sets the mode without attacking
-- **Players' practice**: Tabethys's core rotation (opener, mudslide, focus lock, water finisher) is curated in its own section below. Our offense does not run it.
+- **Players' practice**: Tabethys's core rotation (opener, mudslide, focus lock, water finisher) is curated in its own section below. Since v4.7.421 the `ww` key runs it (mode `waterroute`; see "The water route (ww, v4.7.421)").
 
 **Confidence tags** on text corrected or added on 2026-10-12: **WIKI** = `kb/raw/wiki/*.wiki` (in-game `AB` wins where they differ); **CONFIRMED** = the game's own record (`AFFLICTION SHOW` in `kb/raw/live/affliction_show/`, HELP in `kb/raw/help/`) or a logged line; **PLAYER** = Tabethys (`kb/raw/players/magi-tabethys-2026-10-12.txt`); **UNVERIFIED** = nothing in `kb/` backs it yet. Untagged rows in the older reference tables were not re-checked, and not all of them come from the wiki: on 2026-10-12 the Firelash, Shalestorm, Stormhammer, Magmasphere, Scintilla and Horripilation rows were found to give figures or effects that `kb/raw/wiki` does not (corrected below). Treat any other untagged row as UNVERIFIED.
 
@@ -377,7 +377,7 @@ strategy:
 
 ## Tabethys's core rotation (players' practice, 2026-10-12)
 
-**Source:** `kb/raw/players/magi-tabethys-2026-10-12.txt`, Tabethys's advice in their own words, relayed by the user. It is **PLAYER** confidence: how a strong Magi plays, not game text. This section checks each claim against the wiki and the game's records, and says where our offense differs. Nothing in the offense was changed to follow it: whether to make it a mode is the user's decision.
+**Source:** `kb/raw/players/magi-tabethys-2026-10-12.txt`, Tabethys's advice in their own words, relayed by the user. It is **PLAYER** confidence: how a strong Magi plays, not game text. This section checks each claim against the wiki and the game's records, and says where our offense differs. The user adopted it as its own key in v4.7.421 (`ww`, mode `waterroute`); the other keys are unchanged. "Where our offense differs" below still describes them.
 
 **This dossier credits Tabethys with xMagi**, the reference our offense was built from: "Key insight from Tabethys (xMagi author)" (Shalestorm + Scintilla section) and "Aegoth/Tabethys decision tree" (Reference Files). The record does not agree with itself: `004_Magi_Offense.lua`'s header says "Based on xMagi reference (Aegoth/Tabethys)", and the 2026-03-10 CHANGELOG entry that built the offense says "xMagi decision tree + Tabethys triggers". `xMagi.lua` is no longer at the path in Reference Files (checked 2026-10-12), so who wrote which part cannot be checked. It matters because the offense's glaciate gate, in the tree marked "based on xMagi reference", contradicts Tabethys's own finisher (difference 5 below; kb/CONFLICTS.md).
 
@@ -422,6 +422,8 @@ Fire at 3 from row 5 on is only what the model gives: it has had several casts t
 - **Hypothermia instead:** on a frozen target it removes "their ability to heal their frozen state" (WIKI :182). The game's record: "Prevents curing the freezing affliction.", cured by "Apply Restoration To Body", NoRandomCure (CONFIRMED). Slickness blocks that salve too, so under the lock it holds them frozen until glaciate is in range.
 
 ### Where our offense differs (v4.7.419)
+This describes `zz`/`xx`/`vv`/`cc`/`sr`, which v4.7.421 left as they were; `ww` runs the route itself (next section).
+
 1. **No mode runs the opener.** `zz` (salve) casts magma, bombard, then staffcast scintilla while earth is 2+ and the torso is not calcified. `xx` (fire) and `vv` (water) cast magma, then bombard (`selectFallback`, since burns are 0 and earth is under 2), then shalestorm, then scintilla (P5). `cc` (lock) opens with staffcast horripilation, then (once `staffcast/002` records the water bonds, which it cannot on this user's wrap) magma, bombard, fulminate up to air 3, and emanation air. `sr` (group) comes closest: magma, dehydrate, dehydrate, then **emanation fire at fire 3**, exactly where Tabethys fulminates. In fire and water mode the fire tree refuses fulminate at fire 3 (`fireWillBurn` in `selectBurningSpell`; Resonance Budgeting above).
 2. **`vv`'s water mode runs the fire tree.** `setMode` accepts "water" and `vv` sets it, but `selectSpell` branches only for lock, salve and group.
 3. **The mudslide gate has no earth test.** P8 casts mudslide on `asthma >= 0.5 and r.water == 2`. Nothing ensures earth is 1, so whether our mudslide brings the paralysis depends on wherever earth happens to be (shalestorm drains it, WIKI :194). Lock mode also mudslides a clumsy target at earth under 2 with no water test. P8 runs before the mode branches, so changing it changes all five modes.
@@ -432,6 +434,22 @@ Fire at 3 from row 5 on is only what the model gives: it has had several casts t
 **If it is adopted** (the user's call): a `selectWaterSpell()` branch on the unused water mode leaves fire, salve, lock and group untouched. Key it on resonance, not a step counter, so it re-derives after a cure: magma if not scalded, dehydrate while water is under 2, fulminate at air 0 whatever fire is; mudslide at water 2 + earth 1 inside the branch (P8 is shared); a focus-lock test through `getStateProbabilityV3({"paralysis", "slickness", "anorexia", "asthma"})` (four separate probabilities overstate a joint state while V3 is branching); then emanation water at water 3, freeze until frozen, and glaciate below a health threshold measured from logs, else hypothermia. P8 and P3 sit above the mode branches, so the branch must run before them or they will cast first.
 
 **Tracking for this route at v4.7.420.** The mudslide's paralysis and anorexia lines (`general/022`) and the water emanation (`enamation/002`) survive this user's 119-124-column wrap since v4.7.419, and the water emanation records stuttering. Since v4.7.420 the fire, air and earth emanations (`enamation/001`, `003`, `004`), which this route does not cast, fire on the wrap too (Trigger Architecture). The mudslide's own line (slickness + prone, `021_Spell_Outcomes`) is still an anchored full line, which fits a 119-column row only for names of up to 13 letters, and no test delivers it. Not tracked: the moderate-earth stun, the target's dehydrated, and any glaciate hit. Fulminated's focus-paralysis trigger (`magi_offense_tracking/007`) matches a wording no capture in `kb/` shows (UNVERIFIED); the only captured line like it is the Shikudo nervestrike's, "Horror overcomes the face of <T> as his body locks in paralysis." (kb/raw/logs, Mystor's logs), which 007 does not match.
+
+### The water route (ww, v4.7.421)
+`ww` sets mode `waterroute` and dispatches (`magi_things/007_Water_Route.lua`); `mm waterroute` (or `mm route`) sets the mode without attacking, and bare `mm` then shows the route step, the joint lock and the glaciate setting. `selectSpell` (`mage/004_Magi_Offense.lua`) branches to `selectWaterRouteSpell` after P1 (destroy) and P2 (the meteorite shield strip) and BEFORE P3-P8, because P3, P7 and P8 are steps of this route under other gates and P4-P6 would cast in its place. `vv`'s `water` mode is unchanged and still runs the fire tree.
+
+Every pick is read from live resonance and the target as V3 holds it (`waterRoutePick`), never from a step counter, so a cure or a second press re-derives the step:
+1. **Frozen:** glaciate if the target's health is unknown or at most `magi.offense.config.glaciateKillAt` (default 100, i.e. glaciate first, Tabethys's usual finisher); otherwise hypothermia first, then glaciate. Only frozen is required (#31). `mm glaciate N|off` sets it (not saved); `off` always lays hypothermia first. Health is trigger 698's stamp for THIS target, at most 30 s old (`targetHPKnown`/`routeTargetHP`), never `getTargetHP`, because `general/001_Assess` writes `targetHealth` from anyone's glance.
+2. **Slick, not frozen (after the bonk):** one re-fulminate per bonk while fulminated is down (`haveAff`) and the lock is not on; emanation water at water 3; else freeze.
+3. **Water 3 before any bonk:** emanation water (the opener rebuilds water to 2).
+4. **Opener:** magma if not scalded, dehydrate while water < 2, fulminate at air 0 (at any fire level, unlike the fire tree).
+5. **Bonk:** mudslide at water 2. At earth other than 1 it is cast anyway and echoes once that it brings no paralysis: nothing in kb/ confirms a way to set earth back to 1.
+
+**The lock is a JOINT probability** (`focusLockProb`, `getStateProbabilityV3({"paralysis","slickness","anorexia"})`): per-affliction tests overstate a branching state. Asthma is left out on purpose (the opener makes them choose between asthma and fulminated); `mm` shows both.
+
+**Known limit:** the one re-fulminate a bonk allows is spent when the round is PICKED, not when the queue runs it, so a press that replaces an unsent re-fulminate round loses it for that bonk (the Counter Incrementing pitfall). The cost is one skipped re-fulminate; the next pick is the emanation or a freeze.
+
+Tests: `src_new/tests/test_magi_water_route.lua` (58), which loads the real affliction API, V3, resonance, the offense and the `ww`/`mm`/`vv`/help alias bodies.
 
 ### Open questions (kb/CONFLICTS.md)
 - **Resonance per cast:** capture AB ELEMENTALISM, and RESONANCE after each cast of the opener.

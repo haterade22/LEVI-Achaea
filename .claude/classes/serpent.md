@@ -1149,6 +1149,26 @@ venom_boons: |
   Highlights (v4.7.384): our bite ("You sink your fangs into <x>, injecting just the proper amount of <venom>.")
   in bold chartreuse (highlighting/068); Toxicologist's relapse ("<x> screams out in agony, struck by the
   effects of a vicious venom.") in bold yellow (mnemosyne/108), which also re-latches mnemToxicologist.
+battlerage: |
+  Table (_groups.yaml ataxiaBasher.battlerage.Serpent): small = thrash, large = throatrip,
+  special = obliviate, raze = excoriate. Serpent runs the SHARED path (ataxiaBasher_standardBattlerage,
+  basher/001); special threshold 28.
+  Costs/cooldowns (Battlerage wiki page, WIKI confidence unless marked AB):
+    thrash     14 rage, 16s  -- heavy damage. Fire line "You crack <whip> over your head before
+                               repeatedly lashing <x> with it." (trigger 330; NOT culling blade)
+    throatrip  36 rage, 23s  -- damage. Fire line in trigger 331.
+    obliviate  28 rage, 41s  -- amnesia (AB 2115, kb/raw/ab/serpent_obliviate_2115.txt). Fire line
+                               "You draw <x>'s attention with the wavering tip of one finger, then quickly
+                               snap your fingers ..." (trigger 332; matched on its opening since v4.7.421,
+                               the full line wrapped and could never match, so its 42s timer never armed)
+    excoriate  17 rage       -- strips a denizen shield.
+    flagellate 25 rage, 27s  -- sensitivity. NOT in the table (no fire line captured).
+    snare      25 rage, 23s  -- more damage vs reckless/inhibited. NOT in the table (no fire line captured).
+  Order (v4.7.421, user: use every battlerage when the damage ones are on cooldown): one denizen
+  thrash -> throatrip -> obliviate; 2+ denizens obliviate first (unchanged). The ~1s global battlerage
+  cooldown is honoured, and a refused battlerage gives a Rage-Fuelled charge back.
+  Rage-Fuelled removes the COST, never the cooldown: at 98-100 rage (the 2026-10-12 log) it buys nothing
+  extra until flagellate/snare join the rotation.
 ```
 
 ## Fighting Against This Class
