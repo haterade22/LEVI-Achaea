@@ -259,6 +259,7 @@ M.BOON_SEED = {
   ["Providence"] = { description = "Your strength, dexterity, constitution, and intelligence are each increased by 4.", rarity = "legendary" },
   ["Psiblast"] = { description = "Your draconic blast attack is imbued with a Gold Dragon's breath, granting it a 20% chance to afflict your foe with clumsiness.", rarity = "common" },
   ["Pure Mana"] = { description = "Your staffcasts cost 5% of your mana on use, dealing bonus damage equal to the amount drained.", rarity = "legendary" },
+  ["Purifying Salt"] = { description = "Your alchemy salt ability deals magic damage to all denizens in your location." },
   ["Pustules"] = { description = "Your swarm sting ability now has a 50% chance to deal additional poison damage to all denizens in your location.", rarity = "uncommon" },
   ["Pyrrhic Victory"] = { description = "Your attacks against non-boss enemies always critically strike but you are now susceptible to being critically struck by denizens.", rarity = "rare" },
   ["Rage-Fuelled"] = { description = "When slaying a denizen, your next battlerage attack will cost no resource.", rarity = "rare" },

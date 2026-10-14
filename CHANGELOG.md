@@ -2,6 +2,22 @@
 
 ---
 
+## 2026-10-14 - v4.7.424: Alchemist Mnemosyne boons -- Pavonian, Purifying Salt, Rust
+
+User: "We need to account for these boons."
+
+- **Flags.** The three join `M.BOON_FLAGS` (`mnemosyne/004_Parsers.lua`): `mnemPavonian`,
+  `mnemPurifyingSalt`, `mnemRust`. Purifying Salt was missing from the boon seed table and is added.
+- **Pavonian** (wrack unblockable, +25%). WRACK is 2.00 s of balance and educe is equilibrium, so
+  `wrack <target> paralysis` now rides beside the educe in the same round. Not into a shield. The
+  affliction is `ataxiaBasher.alchemistWrackAff`.
+- **Purifying Salt** (salt hits every denizen in the room). With 2 or more denizens
+  (`ataxiaBasher.alchemistSaltAt`), `educe salt` replaces `educe iron`: 3.00 s of equilibrium against
+  4.00 s, and the whole room. Not while stupid, because stupidity blocks salt.
+- **Rust** (iron deals fire and sensitivity). No rotation change: iron stays the attack.
+- Docs: `.claude/classes/alchemist.md` (boon table; salt's cost corrected, it has no 10 s cooldown).
+  Tests: `test_basher_alchemist.lua` (+8).
+
 ## 2026-10-14 - v4.7.423: the bash console shows the balance and equilibrium recovery time
 
 User: "When bashing I cannot see my EQ recover (time)".

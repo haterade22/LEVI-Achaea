@@ -326,6 +326,28 @@ function ataxiaBasher_aEleBashing()
    return command   
 end
 
+-- ALCHEMIST MNEMOSYNE BOONS (v4.7.424). Each is gated on its flag (mnemosyne/004 M.BOON_FLAGS).
+--
+--   PURIFYING SALT: "Your alchemy salt ability deals magic damage to all denizens in your location."
+--     EDUCE SALT is 3.00s of equilibrium (the wiki; no separate cooldown) against educe iron's 4.00s,
+--     and it hits the whole room, so in a crowd it replaces the iron. It still purges an affliction
+--     from us. Stupidity stops it, so a stupid round stays on iron.
+--   PAVONIAN: "Your physiology wrack ability now does unblockable damage and deals 25% more damage."
+--     WRACK is 2.00s of BALANCE; educe is EQUILIBRIUM. So the wrack rides beside the educe in the
+--     same round instead of replacing it. A denizen has no tempered humour, so it must name an
+--     affliction (a balance penalty, per the AB). The damage is unblockable, so the humour's damage
+--     type does not matter; `ataxiaBasher.alchemistWrackAff` picks it (default paralysis).
+--   RUST: "Educe Iron now deals fire damage and afflicts your foe with sensitivity." Iron stays the
+--     attack, so the rotation does not change; the flag only shows the boon is known.
+function ataxiaBasher_alchemistSaltCrowd()
+	if not mnemPurifyingSalt then return false end
+	if ataxia.afflictions and ataxia.afflictions.stupidity then return false end
+	local M = ataxia.mnemosyne
+	local n = (M and M._denizenCount and M._denizenCount())
+		or (ataxia.denizensHere and #ataxia.denizensHere) or 0
+	return n >= (tonumber(ataxiaBasher.alchemistSaltAt) or 2)
+end
+
 function ataxiaBasher_alchemistBashing()
 	local command, sp = "", ataxia.settings.separator
 	local brage = ataxiaBasher_assembleBattlerage()
@@ -334,7 +356,7 @@ function ataxiaBasher_alchemistBashing()
 	-- bashing"). Educe needs no weapon, so the shield costs nothing; the same lead-in as the
 	-- Shaman and Pariah rotations.
 	local wield = "wield shield"..sp
-	
+
 	if ataxiaBasher.shielded then
 		if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
 			command = wield..raze..sp.."educe iron "..target
@@ -342,10 +364,15 @@ function ataxiaBasher_alchemistBashing()
 			command = wield.."educe copper "..target..sp..brage
 		end
 	else
-		command = wield..brage..sp.."educe iron "..target
+		local educe = ataxiaBasher_alchemistSaltCrowd() and "educe salt" or ("educe iron "..target)
+		local wrack = ""
+		if mnemPavonian then
+			wrack = sp.."wrack "..target.." "..(ataxiaBasher.alchemistWrackAff or "paralysis")
+		end
+		command = wield..brage..sp..educe..wrack
 	end
-	    
-	return command  
+
+	return command
 end
 
 -- How long a gravehands summon has to show its line before we treat it as lost (v4.7.347).
