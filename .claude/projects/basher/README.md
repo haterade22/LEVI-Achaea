@@ -38,3 +38,15 @@ All paths relative to `src_new/scripts/levi_ataxia/levi/ataxia/`.
 | [05-safety-systems.md](05-safety-systems.md) | Danger levels, PvP detection, death handling, circuit breakers |
 | [battlerage-pve.md](battlerage-pve.md) | **Battlerage for PvE** — rage mechanics + global cooldown, all 10 denizen afflictions (what each does + tactical value, mitigation-first), how the rotation uses them, Blademaster's kit |
 | [denizen-lines-catalog.md](denizen-lines-catalog.md) | Better-Blademaster-basher overhaul: our-attack / battlerage / denizen-affliction line catalog + BR spec; per-denizen state model; staged rollout |
+
+## The "Denizen Attacks / Misc Lines" folder is gated (v4.7.425)
+
+`triggers/.../denizen_attacks_misc_lines/` (001-026) ships with its folder **OFF**. `basher_engaged`
+("basher enabled") turns it on and `basher_disengaged` turns it off. Because `ataxiaBasher.enabled`
+is saved, a reload or reimport used to bring the basher back ON with the folder still OFF and no
+event, so every line in it (denizen state 011-021, inhibit 023-024, thrall disruption 025, the
+cleave splash 026, the clean-up gags) was dead while bashing. `ataxiaBasher_syncLineTriggers`
+(`genrunning/003`) now runs from `ataxiaBasher_gmcpDispatch` on every vitals update while the
+basher is on: it asks Mudlet `isActive(...)` (never a cached flag, which survives the reimport) at
+most once per 2 s and re-enables the folder and "Gold Dropped". A new trigger added to this folder
+fires only while the basher is on.

@@ -2,6 +2,22 @@
 
 ---
 
+## 2026-10-14 - v4.7.425: the bash line triggers turn on whenever the basher is on
+
+User: "Your vicious attack cleaves to a nearby enemy. Why isnt this highlighted?"
+
+- The highlight trigger (`denizen_attacks_misc_lines/026`) was correct. Its folder, "Denizen Attacks
+  / Misc Lines", ships OFF, and only the "basher enabled" event turned it on. `ataxiaBasher.enabled`
+  is saved, so after a reload or reimport the basher came back ON with the folder OFF and no event.
+  The explorer's resume also sets `enabled` without the event.
+- While that happened, the whole folder was dead: the cleave splash highlight, the denizen charm /
+  recklessness / aeon / weakness / stun state (011-021), the inhibit lines (023-024), the thrall move
+  disruption (025) and the clean-up gags.
+- New `ataxiaBasher_syncLineTriggers` (`genrunning/003`), called from `ataxiaBasher_gmcpDispatch` on
+  each vitals update while the basher is on. It asks Mudlet `isActive` at most once per 2 s and
+  re-enables the folder and "Gold Dropped". Test: `test_bash_line_triggers.lua` (5). Docs:
+  `.claude/projects/basher/README.md`.
+
 ## 2026-10-14 - v4.7.424: Alchemist Mnemosyne boons -- Pavonian, Purifying Salt, Rust
 
 User: "We need to account for these boons."

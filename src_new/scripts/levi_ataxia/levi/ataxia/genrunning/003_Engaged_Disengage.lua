@@ -150,6 +150,35 @@ if autoBashRotation then
   end
   end
 end
+-- THE BASH LINE TRIGGERS FOLLOW THE BASHER, NOT ONLY ITS EVENT (v4.7.425, user: "Your vicious
+-- attack cleaves to a nearby enemy. Why isnt this highlighted?").
+--
+-- The "Denizen Attacks / Misc Lines" folder ships OFF, and only `basher_engaged` (the "basher
+-- enabled" event) turns it on. But `ataxiaBasher.enabled` is SAVED: after a reload or a package
+-- reimport the folder is back to its shipped OFF while the basher comes back ON with no event,
+-- and the explorer's resume sets `enabled` without raising one. Every trigger in the folder then
+-- sat dead while we bashed: the cleave splash highlight (026), the denizen charm / recklessness /
+-- aeon / weakness / stun state (011-021), the inhibit lines (023-024), the thrall move disruption
+-- (025), and the clean-up gags.
+--
+-- So the vitals dispatch calls this on every update while the basher is on. It asks Mudlet whether
+-- the folder is active (a cached flag of our own would survive the reimport that resets the folder)
+-- and is throttled to once per BASH_LINES_CHECK seconds. Turning the folder OFF stays with
+-- `basher_disengaged`.
+local BASH_LINES_CHECK = 2
+function ataxiaBasher_syncLineTriggers()
+  if not (ataxiaBasher and ataxiaBasher.enabled) then return false end
+  ataxiaTemp = ataxiaTemp or {}
+  local now = getEpoch()
+  local last = ataxiaTemp.bashLinesCheckedAt
+  if last and now - last >= 0 and now - last < BASH_LINES_CHECK then return false end
+  ataxiaTemp.bashLinesCheckedAt = now
+  if (tonumber(isActive("Denizen Attacks / Misc Lines", "trigger")) or 0) > 0 then return false end
+  enableTrigger("Denizen Attacks / Misc Lines")
+  enableTrigger("Gold Dropped")
+  return true
+end
+
 function basher_engaged()
   if zgui then
     zgui.bwindow.console:clear()

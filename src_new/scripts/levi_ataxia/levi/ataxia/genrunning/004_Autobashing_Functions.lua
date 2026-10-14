@@ -249,6 +249,8 @@ end
 -- ============================================================================
 function ataxiaBasher_gmcpDispatch()
   if not ataxiaBasher.enabled then return end
+  -- Before the pause/flee gates: the line triggers must be on whenever the basher is (v4.7.425).
+  if ataxiaBasher_syncLineTriggers then ataxiaBasher_syncLineTriggers() end
   if ataxiaTemp.bashFlee or ataxiaBasher.paused or ataxiaTemp.fleeReturning then return end
   ataxiaBasher_tryAttack()
 end
