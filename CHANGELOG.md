@@ -2,6 +2,20 @@
 
 ---
 
+## 2026-10-14 - v4.7.423: the bash console shows the balance and equilibrium recovery time
+
+User: "When bashing I cannot see my EQ recover (time)".
+
+- The bash console's "Got equilibrium!" and "Got limb balance!" lines now end with the recovery time,
+  e.g. `BAL| Got equilibrium! (2.31s)`. New `ataxia_bashBalEcho` / `ataxia_balWatchText`
+  (`014_Balance_Timers.lua`) read the existing balance and equilibrium stopwatches WITHOUT stopping
+  them. Those watches start on the GMCP vitals that show the balance spent, so they stay right while
+  the server queue spends it again at once. `ataxia_gotbal`'s main-window suffix needs to see the
+  balance up first, which is why it is off during automatic bashing.
+- "Got equilibrium!" is no longer behind `bashBalSub`, the 1 s throttle that dedupes the two
+  limb-balance lines of one round. A balance line less than 1 s before it hid it.
+- Triggers `balances/001`, `006` and `007` call the shared echo. Test: `test_bash_balance_echo.lua` (4).
+
 ## 2026-10-14 - v4.7.422: Alchemist robes from the damage we take, Extispicy on rat kills, homunculus never bashed, a shield while bashing
 
 ### Robes: summon, then imbue the four damage types that hit hardest

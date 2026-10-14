@@ -35,14 +35,9 @@ patterns:
 ]]--
 
 if type(target) == "number" and ataxiaBasher.enabled then
-	if not bashBalSub then
-    if zgui then
-      cecho("bashDisplay", "\n<yellow>BAL| <goldenrod>Got equilibrium!")
-    else 
-		  ataxiagui.bashConsole:cecho("\n<yellow>BAL| <goldenrod>Got equilibrium!")		
-    end
-		bashBalSub = tempTimer(1, [[ bashBalSub = nil ]])
-	end
+	-- With its recovery time (v4.7.423), and NOT behind bashBalSub: that 1s throttle dedupes the two
+	-- limb-balance lines of one round, and a balance line just before this one swallowed it.
+	ataxia_bashBalEcho("Got equilibrium!", "eq")
 	if ataxia.afflictions.blackout then
 		ataxiaBasher_attack()
 	end
