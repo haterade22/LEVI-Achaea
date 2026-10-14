@@ -2,7 +2,7 @@
 
 ---
 
-## 2026-10-14 - v4.7.422: Alchemist robes from the damage we take, Extispicy on rat kills
+## 2026-10-14 - v4.7.422: Alchemist robes from the damage we take, Extispicy on rat kills, homunculus never bashed
 
 ### Robes: summon, then imbue the four damage types that hit hardest
 
@@ -34,6 +34,13 @@ User: "Kill eat and then dissect rat for bashing."
 - "rat" is matched as a word ("a ratman" is not a rat). `aconfig extispicy on|off`, setting `extispicy`.
 - Tests: `test_alchemist.lua` (12). Docs: `.claude/classes/alchemist.md` (Robes automation, Bashing,
   which also replaces the stale WRACK rotation with the real `educe iron` / `educe copper`).
+
+### The homunculus is ours: never targeted, never counted toward a swarm
+
+User: "homunculus482294 a diminutive homunculus resembling Leviticus -- add to the do not bash list".
+`homunculus` joins the own-denizen keywords (`002_Check_For_Any_Missing_Variables.lua`) in BOTH the
+fresh-install seed and the backfill loop, so an existing save gets it on the next load. Every
+homunculus is an Alchemist's pet, so it is a keyword for every class. Test in `test_basher_owndenizens.lua`.
 
 ## 2026-10-13 - v4.7.421: Magi water route (ww), battlerage never idles on the shared path
 

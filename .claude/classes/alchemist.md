@@ -365,6 +365,8 @@ Rats live in the cities. GMCP shows the defence as `extispicy`.
 - "rat" is matched as a word: "a young rat" and "an old black rat" count, "a ratman" does not.
 - `aconfig extispicy on|off`. Rats still have to be in the city's target list (`addmob`, or the
   automatic add on a kill).
+- The homunculus ("a diminutive homunculus resembling <name>") is an own-denizen keyword (v4.7.422):
+  the basher never targets it, never learns it, and the swarm count skips it.
 
 ## Fighting Against This Class
 ```yaml

@@ -147,8 +147,8 @@ function ataxiaCheckForMissing()
 	end
 
 	if ataxiaBasher.ownDenizens == nil then
-		ataxiaBasher.ownDenizens = {"falcon", "baalzadeen", "ashbeast", "hyena"}
-		ataxiaEcho("Own-denizen ignore list not found; seeded with <white>falcon<NavajoWhite>, <white>baalzadeen<NavajoWhite>, <white>ashbeast<NavajoWhite>, <white>hyena<NavajoWhite>.")
+		ataxiaBasher.ownDenizens = {"falcon", "baalzadeen", "ashbeast", "hyena", "homunculus"}
+		ataxiaEcho("Own-denizen ignore list not found; seeded with <white>falcon<NavajoWhite>, <white>baalzadeen<NavajoWhite>, <white>ashbeast<NavajoWhite>, <white>hyena<NavajoWhite>, <white>homunculus<NavajoWhite>.")
 		ataxiaEcho("<green>bash mine <NavajoWhite>to view/add/remove your own denizens.")
 	end
 
@@ -159,6 +159,9 @@ function ataxiaCheckForMissing()
 	--                live at 4% health on the mob bar), and a mauled pet turns on its
 	--                owner: "A daemonic hyena snarls as she hurls herself at you...".
 	--   baalzadeen -- the Apostate/Infernal demon, and falcon the knightly bird.
+	--   homunculus -- the Alchemist pet ("a diminutive homunculus resembling Leviticus",
+	--                v4.7.422, user: "add to the do not bash list"). Every homunculus is some
+	--                Alchemist's pet, so it is a keyword for every class, not a class pet.
 	--
 	-- THOSE LAST TWO WERE IN THE DEFAULT SEED AND NEVER IN THIS LOOP (v4.7.348, user: "the
 	-- denizens in the room should not count our Baalzadeen as Apostate! It is thinking it is
@@ -171,7 +174,7 @@ function ataxiaCheckForMissing()
 	--
 	-- A real denizen that ever collides with one of these is exempted with
 	-- `bash notmine add <name>` rather than by loosening the keyword.
-	for _, pet in ipairs({"ashbeast", "hyena", "baalzadeen", "falcon"}) do
+	for _, pet in ipairs({"ashbeast", "hyena", "baalzadeen", "falcon", "homunculus"}) do
 		if ataxiaBasher.ownDenizens and not table.contains(ataxiaBasher.ownDenizens, pet) then
 			table.insert(ataxiaBasher.ownDenizens, pet)
 			ataxiaEcho("Pet <white>" .. pet .. "<NavajoWhite> added to your own denizens -- never "
