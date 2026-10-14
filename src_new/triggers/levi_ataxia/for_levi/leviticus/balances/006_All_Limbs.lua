@@ -36,11 +36,7 @@ patterns:
 
 if (autoHarvesting or autoExtracting or type(target) == "number") and ataxiaBasher.enabled then
 	if not bashBalSub then
-    if zgui then 
-      cecho("bashDisplay","\n<yellow>BAL| <goldenrod>Got limb balance!")
-    else
-		  ataxiagui.bashConsole:cecho("\n<yellow>BAL| <goldenrod>Got limb balance!")
-    end		
+    ataxia_bashBalEcho("Got limb balance!", "bal") -- with its recovery time (v4.7.423)
 		bashBalSub = tempTimer(1, [[ bashBalSub = nil ]])
 	end
 	if ataxia.afflictions.blackout then

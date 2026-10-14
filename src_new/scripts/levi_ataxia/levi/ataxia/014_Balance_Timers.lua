@@ -13,6 +13,38 @@ attributes:
 packageName: ''
 ]]--
 
+-- THE BASH CONSOLE SHOWS THE RECOVERY TIME (v4.7.423, user: "When bashing I cannot see my EQ
+-- recover (time)"). While the basher runs, the "Got equilibrium!" / "Got limb balance!" lines in the
+-- bash console are what we watch, and they carried no time. These stopwatches are the right clock
+-- for them: they start on the GMCP vitals that show the balance SPENT. `ataxia_gotbal`'s clock
+-- (update_stuff/005) needs to see the balance UP first, and with the server queue firing the next
+-- attack the moment it recovers, it may never see that while bashing.
+--
+-- Read WITHOUT stopping: the recovery triggers in Ataxia/Balances run before the ones that stop
+-- the watch (003_EQUILIBRIUM, balances/001 and 006). Returns "2.31s", or "" when no watch is running.
+function ataxia_balWatchText(which)
+  local started, id
+  if which == "eq" then
+    started, id = ataxiaEQStopwatchStarted, ataxiaEQStopwatch
+  else
+    started, id = ataxiaBalStopwatchStarted, ataxiaBalStopwatch
+  end
+  if started ~= true or not id then return "" end
+  local secs = tonumber(getStopWatchTime(id))
+  if not secs then return "" end
+  return string.format("%.2fs", secs)
+end
+
+function ataxia_bashBalEcho(msg, which)
+  local t = ataxia_balWatchText and ataxia_balWatchText(which) or ""
+  local text = "\n<yellow>BAL| <goldenrod>" .. msg .. (t ~= "" and (" <white>(" .. t .. ")") or "")
+  if zgui then
+    cecho("bashDisplay", text)
+  elseif ataxiagui and ataxiagui.bashConsole then
+    ataxiagui.bashConsole:cecho(text)
+  end
+end
+
 function timerOnEQUsed()
   if gmcp.Char.Vitals.eq == '0' and ataxiaEQStopwatchStarted ~= true then
     startEQTimer()
