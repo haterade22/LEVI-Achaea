@@ -116,6 +116,8 @@ function bashStats_recordIncoming(amount, dtype)
   -- per prompt, which healing masks: a prompt that takes 2000 and sips 1500 records 500, and a
   -- net-positive prompt records nothing at all. This line is the damage BEFORE any of that.
   if ataxiaBasher_recordIncoming then ataxiaBasher_recordIncoming(amount) end
+  -- Alchemist in the tower: re-imbue the robes when the worst four types change (class_things/004).
+  if ataxia_robesCheck then ataxia_robesCheck() end
 end
 
 -- The damage type that has cost us the most this session: type, amount, share (0-100).

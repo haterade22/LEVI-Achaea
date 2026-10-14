@@ -298,7 +298,36 @@ educe_salt:
   effect: "Cure extra affliction"
   syntax: "EDUCE SALT"
   cooldown: 10s
+
+robes:
+  skill: Alchemy (ABADMIN 3)
+  effect: "Up to four symbols, each blocks one damage type"
+  syntax: "ROBES SUMMON / ROBES IMBUE WITH <up to four symbols>"
+  cost: equilibrium
+  symbols: "lead blunt, iron cutting, salt magic, tin psychic, copper electric, sulphur asphyxiation, silver cold, gold fire, mercury poison"
+  note: "IMBUE WITH wipes the old symbols; a symbol appears at most once"
 ```
+
+### Robes automation (v4.7.422, `class_things/004_Alchemist_Robes.lua`)
+
+Robes are not a DEF line, so SSC cannot keep them. Like METABOLISE, the system sends them itself:
+
+- **Defup** (`checkSSCErrors`, the Alchemist branch) and **login** (17 s timer) call `ataxia_robesSummon`.
+  It sends `queue add eq robes summon` once per session, then `queue add eq robes imbue with <four>`
+  when that set is not already on.
+- **Which four** (`aconfig robes auto`, the default): the damage types that cost us the most, from
+  `bashStats.incomingByType` (the "Health lost: N (physical blunt)." line). The ranking is used after
+  5 typed hits; until then, and to fill empty places, the set is **lead iron gold mercury**. "raw" and
+  "unblockable" have no symbol and are skipped. A fresh Mnemosyne run resets `bashStats`, so in the
+  tower the ranking is this run's.
+- **In the tower** (`ataxiaBasher.inMnemosyne`) every typed hit calls `ataxia_robesCheck`. When the
+  top four change, it re-imbues, at most once per 120 s, because each imbue costs one equilibrium.
+  Outside the tower it never re-imbues by itself.
+- `aconfig robes` shows the mode, the next set and the set last imbued. `aconfig robes lead iron gold
+  mercury` fixes a set, `auto` restores the ranking, `off` stops it, `now` imbues now, `summon`
+  summons a new set and imbues it.
+- Unconfirmed: the game's lines for summon and imbue are not captured yet, so the "set on now" value
+  is what we sent, not what the game confirmed.
 
 ## Passive Cures
 ```yaml
@@ -314,12 +343,31 @@ notes: "Alchemist is humour/affliction-based, not limb-based"
 
 ## Bashing (PvE)
 ```yaml
-attack_command: "WRACK <target>" or spec-specific
-attack_skill: Alchemy
-battlerage_abilities:
-  - wrack: "Basic damage"
-  - inundate: "Temper-based damage"
+attack_command: "EDUCE IRON <target>"   # ataxiaBasher_alchemistBashing, basher/002_Class_Bashing.lua
+lead_in: "WIELD SHIELD"                 # every attack (v4.7.422); educe needs no weapon
+shielded_target: "EDUCE COPPER <target>, or the battlerage raze at 17+ rage"
+stat: int                               # basher/007_Mob_Damage_DB.lua
 ```
+
+### Extispicy on rat kills (v4.7.422, `class_things/005_Alchemist_Extispicy.lua`)
+
+`DISSECT <rat corpse>` (ABADMIN 8, 4.00 s of balance, 100 mana) raises the critical strike chance.
+Rats live in the cities. GMCP shows the defence as `extispicy`.
+
+- The kill line "You have slain <x>, retrieving the corpse." puts the corpse in the pack, so no GET.
+- After a rat kill (`340_Slain` calls `ataxia_extispicyOnKill`), when the defence is down and mana is
+  100 or more, the system sends `ii corpse`, takes the first row whose name holds the word "rat", and
+  sends `queue addclear bal dissect <id>`.
+- `ataxiaTemp.dissectHold` stops the basher (`ataxiaBasher_tryAttack` and `ataxiaBasher_attack`) from
+  the probe until the queued dissect runs. Each attack sends `queue addclearfull`, and a cleared room
+  moves on at once; either would lose the dissect. `queue_Scan` releases the hold on the
+  "Running queued ... command: DISSECT" line; timers release it after 3 s with no rat corpse, or 8 s
+  after the dissect is queued.
+- "rat" is matched as a word: "a young rat" and "an old black rat" count, "a ratman" does not.
+- `aconfig extispicy on|off`. Rats still have to be in the city's target list (`addmob`, or the
+  automatic add on a kill).
+- The homunculus ("a diminutive homunculus resembling <name>") is an own-denizen keyword (v4.7.422):
+  the basher never targets it, never learns it, and the swarm count skips it.
 
 ## Fighting Against This Class
 ```yaml

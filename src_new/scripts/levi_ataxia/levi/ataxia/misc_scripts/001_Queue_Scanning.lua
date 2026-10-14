@@ -32,6 +32,11 @@ function queue_Scan(stuff)
     -- shikudo/010 strike ledger now.
 	end
 	
+	-- The queued Extispicy dissect ran: release the basher (class_things/005).
+	if ataxiaTemp.dissectHold and smallStuff:find("^dissect ") and ataxia_extispicyRan then
+		ataxia_extispicyRan()
+	end
+
 	if ataxiaTemp.butchering then
 		table.remove(ataxiaTemp.toButcher, 1)
 		if ataxiaTemp.toButcher[1] then

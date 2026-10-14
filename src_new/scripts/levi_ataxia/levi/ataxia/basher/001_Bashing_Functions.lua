@@ -150,6 +150,9 @@ function ataxiaBasher_attack()
   -- and swinging is not what was going to save us at IMP SLI AST ANO.
   if ataxiaTemp.phialHold then return end
 
+  -- Extispicy dissect queued (class_things/005): an attack's addclearfull would wipe it.
+  if ataxiaTemp.dissectHold then return end
+
   -- ESCAPE MODE (v4.7.243). User: "We should've stopped attacking here and put a priority on
   -- leaving the room." In the death log we swung at 1024 HP of an ~18,700 pool while the escape
   -- machinery was still trying to get us out -- and every attack sends `queue addclearfull`,

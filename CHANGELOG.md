@@ -2,6 +2,52 @@
 
 ---
 
+## 2026-10-14 - v4.7.422: Alchemist robes from the damage we take, Extispicy on rat kills, homunculus never bashed, a shield while bashing
+
+### Robes: summon, then imbue the four damage types that hit hardest
+
+User: "We would want to robes summon. Then imbue with lead, iron, gold and mercury (this depends on
+what is hitting the hardest in mnem since we track damage taken)."
+
+- `class_things/004_Alchemist_Robes.lua`. Robes are not a DEF line, so, like METABOLISE, defup (the
+  Alchemist branch of `checkSSCErrors`) and login send them: `queue add eq robes summon` once per
+  session, then `queue add eq robes imbue with <four>` when that set is not already on.
+- **The four** come from `bashStats.incomingByType`, which the "Health lost: N (type)." line fills,
+  ranked biggest first. The ranking is used after 5 typed hits; until then, and to fill empty places,
+  the set is lead iron gold mercury. "raw" and "unblockable" have no symbol.
+- **In the Mnemosyne** each typed hit checks the ranking (`ataxia_robesCheck`, from
+  `bashStats_recordIncoming`). A changed top four re-imbues, at most once per 120 s (an imbue costs an
+  equilibrium). A fresh run resets `bashStats`, so the ranking is this run's. This is the first code
+  that reads the incoming damage data to choose a defence.
+- `aconfig robes [auto | off | now | summon | <up to four symbols>]`. Setting `robesImbue`, default "auto".
+
+### Extispicy: dissect the rat corpse after a rat kill
+
+User: "Kill eat and then dissect rat for bashing."
+
+- `class_things/005_Alchemist_Extispicy.lua`. The kill line already retrieves the corpse. After a rat
+  kill (trigger 340), with the `extispicy` defence down and 100+ mana, `ii corpse` finds the first rat
+  corpse and `queue addclear bal dissect <id>` is sent.
+- `ataxiaTemp.dissectHold` holds the basher (tryAttack and attack), so its `queue addclearfull` and the
+  room-clear move cannot wipe the dissect. The queue-run line for DISSECT (`queue_Scan`) releases it;
+  timers release it after 3 s (no rat corpse) or 8 s (dissect queued).
+- "rat" is matched as a word ("a ratman" is not a rat). `aconfig extispicy on|off`, setting `extispicy`.
+- Tests: `test_alchemist.lua` (12). Docs: `.claude/classes/alchemist.md` (Robes automation, Bashing,
+  which also replaces the stale WRACK rotation with the real `educe iron` / `educe copper`).
+
+### Alchemist bashing holds a shield
+
+User: "Alchie should be wielding a shield when bashing". Every `ataxiaBasher_alchemistBashing` command
+now starts with `wield shield` (educe iron, educe copper and the raze), the same lead-in as the Shaman
+and Pariah rotations. Test: `test_basher_alchemist.lua` (3).
+
+### The homunculus is ours: never targeted, never counted toward a swarm
+
+User: "homunculus482294 a diminutive homunculus resembling Leviticus -- add to the do not bash list".
+`homunculus` joins the own-denizen keywords (`002_Check_For_Any_Missing_Variables.lua`) in BOTH the
+fresh-install seed and the backfill loop, so an existing save gets it on the next load. Every
+homunculus is an Alchemist's pet, so it is a keyword for every class. Test in `test_basher_owndenizens.lua`.
+
 ## 2026-10-13 - v4.7.421: Magi water route (ww), battlerage never idles on the shared path
 
 ### Magi: Tabethys's water route, a new key `ww`

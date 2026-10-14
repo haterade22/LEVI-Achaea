@@ -330,15 +330,19 @@ function ataxiaBasher_alchemistBashing()
 	local command, sp = "", ataxia.settings.separator
 	local brage = ataxiaBasher_assembleBattlerage()
 	local raze = ataxiaBasher.battlerage.Alchemist.raze
+	-- A shield in hand while bashing (v4.7.422, user: "Alchie should be wielding a shield when
+	-- bashing"). Educe needs no weapon, so the shield costs nothing; the same lead-in as the
+	-- Shaman and Pariah rotations.
+	local wield = "wield shield"..sp
 	
 	if ataxiaBasher.shielded then
 		if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
-			command = raze..sp.."educe iron "..target
+			command = wield..raze..sp.."educe iron "..target
 		else
-			command = "educe copper "..target..sp..brage
+			command = wield.."educe copper "..target..sp..brage
 		end
 	else
-		command = brage..sp.."educe iron "..target
+		command = wield..brage..sp.."educe iron "..target
 	end
 	    
 	return command  

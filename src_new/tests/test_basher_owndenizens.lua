@@ -196,6 +196,14 @@ describe("the pet backfill repairs a legacy save", function()
     expect(table.contains(shippedPets(), "falcon")).toBeTrue()
   end)
 
+  -- v4.7.422, user: "homunculus482294 a diminutive homunculus resembling Leviticus -- add to the
+  -- do not bash list". The Alchemist pet; it reaches existing saves through this loop.
+  it("ships the Alchemist homunculus, and an existing save gets it", function()
+    expect(table.contains(shippedPets(), "homunculus")).toBeTrue()
+    ataxiaBasher.ownDenizens = backfill({ "falcon" })
+    expect(ataxiaBasher_isOwnDenizen("a diminutive homunculus resembling Leviticus")).toBeTrue()
+  end)
+
   it("adds it to a save that predates the seed", function()
     local saved = backfill({ "ashbeast", "hyena" })
     expect(table.contains(saved, "baalzadeen")).toBeTrue()
