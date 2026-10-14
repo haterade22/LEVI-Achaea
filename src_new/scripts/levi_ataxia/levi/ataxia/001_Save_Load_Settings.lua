@@ -595,6 +595,8 @@ function ataxia_defaultSettings()
 		autogallop = false,
     avoidType = "physical",  -- Options: physical, mental, arcane, aoe
     metaboliseAff = "paralysis",  -- METABOLISE <aff> on every defup; false = off (deffing/001)
+    extispicy = true,  -- Alchemist: DISSECT the rat corpse after a rat kill while the defence is down (class_things/005)
+    robesImbue = "auto",  -- Alchemist ROBES IMBUE: "auto" = worst 4 damage types taken, false = off, or fixed symbols (class_things/004)
     raid = {enabled = false},
     fishing = {
       bait = "shrimp",

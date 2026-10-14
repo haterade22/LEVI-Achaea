@@ -171,8 +171,8 @@ function ataxiaBasher_tryAttack()
   -- The other holds were missing here (v4.7.243). `attack()` returns immediately for them, but
   -- reaching it still runs the pre-attack work and burns the 0.3s re-queue cooldown for nothing
   -- -- and that cooldown is exactly what makes the next real dispatch late.
-  if ataxiaTemp.escapeMode or ataxiaTemp.bardComposeHold or ataxiaTemp.phialHold then
-    if dbg then ataxiaEcho("[DBG] blocked: escape/compose/phial hold") end
+  if ataxiaTemp.escapeMode or ataxiaTemp.bardComposeHold or ataxiaTemp.phialHold or ataxiaTemp.dissectHold then
+    if dbg then ataxiaEcho("[DBG] blocked: escape/compose/phial/dissect hold") end
     return false
   end
 

@@ -83,6 +83,8 @@ function checkSSCErrors()
 		sendAll("summon baalzadeen", "queue addclear free mask; queue add free demon syphon",false)
   elseif ataxia_isClass("Alchemist") then
     send("secure mask",false)
+    -- Robes are not a DEF line either: summon once, imbue the worst four damage types (class_things/004).
+    if ataxia_robesSummon then ataxia_robesSummon("defup") end
 	elseif ataxia_isClass("priest") then
 		sendAll("recite benediction me", "perform bliss me",false)
   elseif ataxia_isClass("pariah") then

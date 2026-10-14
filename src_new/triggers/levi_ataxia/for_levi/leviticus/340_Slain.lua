@@ -78,6 +78,8 @@ if type(target) == "number" and ataxiaBasher.enabled then
 	-- FAMINE (v4.7.333): the affix feeds hunger off damage taken, so the upkeep runs on the room's
 	-- own clock rather than on a boon being held. No-op unless the affix is up.
 	if ataxia_famineTopUp then ataxia_famineTopUp() end
+	-- ALCHEMIST EXTISPICY: dissect the rat corpse we were just handed (class_things/005).
+	if ataxia_extispicyOnKill then ataxia_extispicyOnKill(matches[2]) end
 end
 
 if ataxiaBasher.enabled and matches[2] then
