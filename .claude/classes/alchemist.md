@@ -344,6 +344,7 @@ notes: "Alchemist is humour/affliction-based, not limb-based"
 ## Bashing (PvE)
 ```yaml
 attack_command: "EDUCE IRON <target>"   # ataxiaBasher_alchemistBashing, basher/002_Class_Bashing.lua
+lead_in: "WIELD SHIELD"                 # every attack (v4.7.422); educe needs no weapon
 shielded_target: "EDUCE COPPER <target>, or the battlerage raze at 17+ rage"
 stat: int                               # basher/007_Mob_Damage_DB.lua
 ```

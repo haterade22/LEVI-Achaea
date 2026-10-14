@@ -2,7 +2,7 @@
 
 ---
 
-## 2026-10-14 - v4.7.422: Alchemist robes from the damage we take, Extispicy on rat kills, homunculus never bashed
+## 2026-10-14 - v4.7.422: Alchemist robes from the damage we take, Extispicy on rat kills, homunculus never bashed, a shield while bashing
 
 ### Robes: summon, then imbue the four damage types that hit hardest
 
@@ -34,6 +34,12 @@ User: "Kill eat and then dissect rat for bashing."
 - "rat" is matched as a word ("a ratman" is not a rat). `aconfig extispicy on|off`, setting `extispicy`.
 - Tests: `test_alchemist.lua` (12). Docs: `.claude/classes/alchemist.md` (Robes automation, Bashing,
   which also replaces the stale WRACK rotation with the real `educe iron` / `educe copper`).
+
+### Alchemist bashing holds a shield
+
+User: "Alchie should be wielding a shield when bashing". Every `ataxiaBasher_alchemistBashing` command
+now starts with `wield shield` (educe iron, educe copper and the raze), the same lead-in as the Shaman
+and Pariah rotations. Test: `test_basher_alchemist.lua` (3).
 
 ### The homunculus is ours: never targeted, never counted toward a swarm
 
