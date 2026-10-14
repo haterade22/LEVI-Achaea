@@ -1319,6 +1319,9 @@ M.BOON_FLAGS = {
   ["Sharp Mind"]           = "mnemSharpMind", -- v4.7.320: Monk transmute becomes a top-up (basher/002)
   ["Seclusion"]            = "mnemSeclusion", -- v4.7.385: Jester hermit = once-per-ripple 200% heal (008/009)
   ["Motley Bop"]           = "mnemMotleyBop", -- v4.7.385: Jester keeps bopping in a crowd (basher/002)
+  ["Pavonian"]             = "mnemPavonian",      -- v4.7.424: Alchemist wracks on balance beside educe (basher/002)
+  ["Purifying Salt"]       = "mnemPurifyingSalt", -- v4.7.424: Alchemist educe salt in a crowd (basher/002)
+  ["Rust"]                 = "mnemRust",          -- v4.7.424: Alchemist educe iron is fire + sensitivity; no rotation change
 }
 
 -- An (ECHO) row names the same boon; a second copy does not make it a different one.

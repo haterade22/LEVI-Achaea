@@ -255,7 +255,8 @@ educe_salt:
   balance: eq
   effect: "Cure an extra affliction"
   syntax: "EDUCE SALT"
-  cooldown: 10s
+  cost: "200 mana, 3.00s of equilibrium (wiki; no separate cooldown -- the old '10s' was wrong)"
+  blocked_by: stupidity
 
 educe_tin:
   skill: Alchemy
@@ -297,7 +298,8 @@ educe_salt:
   skill: Alchemy
   effect: "Cure extra affliction"
   syntax: "EDUCE SALT"
-  cooldown: 10s
+  cost: "200 mana, 3.00s of equilibrium (wiki; no separate cooldown -- the old '10s' was wrong)"
+  blocked_by: stupidity
 
 robes:
   skill: Alchemy (ABADMIN 3)
@@ -347,7 +349,21 @@ attack_command: "EDUCE IRON <target>"   # ataxiaBasher_alchemistBashing, basher/
 lead_in: "WIELD SHIELD"                 # every attack (v4.7.422); educe needs no weapon
 shielded_target: "EDUCE COPPER <target>, or the battlerage raze at 17+ rage"
 stat: int                               # basher/007_Mob_Damage_DB.lua
+wrack: "WRACK <target> <affliction>, 2.00s of BALANCE, 60 mana; vs a denizen it must name an affliction"
 ```
+
+### Mnemosyne boons (v4.7.424, `ataxiaBasher_alchemistBashing`)
+
+Latched by `M.BOON_FLAGS` (`mnemosyne/004_Parsers.lua`); a boon we do not hold changes nothing.
+
+| Boon | Text | What the rotation does |
+|---|---|---|
+| Pavonian (`mnemPavonian`) | Wrack does unblockable damage, +25% | `wrack <target> <aff>` rides beside the educe: wrack is balance, educe is equilibrium. Not into a shield. Aff from `ataxiaBasher.alchemistWrackAff`, default paralysis (the type does not matter, the damage is unblockable). |
+| Purifying Salt (`mnemPurifyingSalt`) | Salt deals magic damage to all denizens in the room | `educe salt` replaces `educe iron` at `ataxiaBasher.alchemistSaltAt` (default 2) or more denizens: 3.00s against 4.00s of equilibrium, and the whole room. Never while stupid (stupidity blocks salt). |
+| Rust (`mnemRust`) | Educe iron deals fire damage and afflicts sensitivity | No change: iron stays the attack. |
+
+Not yet confirmed live: the size of wrack's balance penalty against an untempered (denizen) humour.
+If it pushes balance past educe iron's 4.00s, the round waits on balance.
 
 ### Extispicy on rat kills (v4.7.422, `class_things/005_Alchemist_Extispicy.lua`)
 
