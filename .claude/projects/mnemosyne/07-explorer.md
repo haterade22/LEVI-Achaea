@@ -84,9 +84,20 @@ and only while a move of ours is in flight. Both `_exploreMove` and `_tacticalAr
 in `M._explMoveOnTimeout` for this. Without it the 5s timeout re-sent the step (restarting the clamber)
 and, after `MOVE_RETRIES`, condemned a real exit; a tactical retreat was handed back as failed.
 
+**Dizziness (v4.7.426).** "The ground seems to tilt and you fall with a thump." fails the move,
+knocks us prone and TAKES balance (user, 2026-10-15), and the dizziness can be uncurable (Poindexter:
+"permanent dizziness"). Before this, the timeout re-sent once and then condemned a real exit. Trigger
+`mnemosyne/109_Dizzy_Fall` calls `M.onDizzyFall()`, the ice-slip shape: a sweep move is re-sent
+(`stand;<dir>` on the free queue, which waits for the balance) and its timeout is re-armed for
+`MOVE_TIMEOUT + DIZZY_GRACE` (8s); a tactical move is handed to `S.onMoveFailed()`, which re-sends the
+swarm's own verb. Its own counter `explore.dizzyFalls` (reset with `iceSlips`) is capped at
+`MAX_DIZZY_FALLS` (12), and the cap only re-decides the step: **a dizzy fall never condemns the
+exit**, because the fall is ours, not the door's. For the same reason the timeout does not write
+`explore.failed` while `ataxia.afflictions.dizziness` is up, so a fall line we never saw costs no exit.
+
 ### `Room.WrongDir` — server-authoritative wall (v4.7.99)
 
-The `MOVE_TIMEOUT` path above is the *fallback*. When the server knows the direction doesn't exist it sends `gmcp.Room.WrongDir` (body = the direction), and `M.onWrongDir(dir)` condemns it **instantly** instead of eating the ~10s timeout+retry: it marks `explore.failed[fromRoom][normDir(dir)] = true`, **prunes the exit from `MAP.rooms[fromRoom].exits`** (so `pathKnown`/relayout stop routing through a dementia-faked exit — the fragmentation behind "nowhere left to patrol"), kills `_explMoveT`, clears `moving`, and `_scheduleTick`s. It only acts on an in-flight explorer move (`explore.on and explore.moving`) and normalises the server's short-form direction (`"n"` → `"north"`). Because `WrongDir` fires *only* for a genuinely nonexistent exit, it never fires for an ice-slip/prone/lag (which keep `onIceSlip`/`MOVE_TIMEOUT`), so condemning outright is safe. Handler registered reload-safe (`M._explWrongDirH`, kill-before-register).
+The `MOVE_TIMEOUT` path above is the *fallback*. When the server knows the direction doesn't exist it sends `gmcp.Room.WrongDir` (body = the direction), and `M.onWrongDir(dir)` condemns it **instantly** instead of eating the ~10s timeout+retry: it marks `explore.failed[fromRoom][normDir(dir)] = true`, **prunes the exit from `MAP.rooms[fromRoom].exits`** (so `pathKnown`/relayout stop routing through a dementia-faked exit — the fragmentation behind "nowhere left to patrol"), kills `_explMoveT`, clears `moving`, and `_scheduleTick`s. It only acts on an in-flight explorer move (`explore.on and explore.moving`) and normalises the server's short-form direction (`"n"` → `"north"`). Because `WrongDir` fires *only* for a genuinely nonexistent exit, it never fires for an ice-slip/dizzy fall/prone/lag (which keep `onIceSlip`/`MOVE_TIMEOUT`), so condemning outright is safe. Handler registered reload-safe (`M._explWrongDirH`, kill-before-register).
 
 ## Navigation
 
@@ -286,6 +297,8 @@ So when `M.explore.tacticalMove` is set, `onIceSlip` does **not** call `_explore
 | `MAX_PATROL_LOOPS` | `3` | Fruitless full boss-hunt patrol loops before giving up |
 | `MAX_ICE_SLIPS` | `15` | Re-send a *sweep* move this many times after an ice slip before condemning the exit |
 | `MAX_TACTICAL_ICE_SLIPS` | `3` | The same budget for a swarm retreat, where each attempt costs a second under fire (v4.7.243) |
+| `MAX_DIZZY_FALLS` | `12` | Re-sends after a dizzy fall before re-deciding the step; the exit is never condemned (v4.7.426) |
+| `DIZZY_GRACE` | `3` | Added to `MOVE_TIMEOUT` after a dizzy fall, for the balance the fall took (v4.7.426) |
 
 ## Commands
 

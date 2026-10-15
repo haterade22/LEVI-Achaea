@@ -61,6 +61,12 @@ local MAX_ICE_SLIPS = 15 -- re-send a move this many times after slipping on ice
 -- flee. The caves-beneath-Kuthalebak death log spent exactly that, slipping, while three
 -- infested Vertani did ~2,150 HP/s to an ~18,700 pool.
 local MAX_TACTICAL_ICE_SLIPS = 3
+-- DIZZINESS (v4.7.426): "The ground seems to tilt and you fall with a thump." fails the move and
+-- takes balance. The fall is OURS, not the door's, so it never condemns the exit -- the cap only
+-- stops a runaway re-send loop. The grace covers the balance the fall took: the re-sent move waits
+-- for it on the free queue, and a 5s timeout under it would cost a retry for nothing.
+local MAX_DIZZY_FALLS = 12
+local DIZZY_GRACE = 3
 -- Fields rather than locals so tests can tune them (v4.7.262).
 M.LAVA_EPISODE_GAP = 6   -- seconds of silence that end one lava episode (matches M.roomLava)
 M.LAVA_STRAY_TICKS = 1   -- mismatched struggle ticks discarded before we believe them
@@ -1093,6 +1099,7 @@ function M._exploreMove(dir, isRetry)
   if not isRetry then
     M.explore.tries = 0
     M.explore.iceSlips = 0
+    M.explore.dizzyFalls = 0
     M._exploreEcho("room clear -> moving <cyan>" .. dir .. "<reset>.")
   end -- internal retries (timeout / ice) re-send silently
   -- Stand as part of the move: after clearing a room you're frequently prone, and
@@ -1140,9 +1147,11 @@ function M._exploreMove(dir, isRetry)
       end
       -- Give up on this exit for the session so we don't retry a wall forever --
       -- UNLESS this was a swarm-tactics move: those walk KNOWN edges (we just came
-      -- through them), and condemning a real exit would poison the sweep.
+      -- through them), and condemning a real exit would poison the sweep. Nor while
+      -- DIZZY (v4.7.426): a fall whose line we did not see is ours, not the door's.
       local nd = MAP.normDir and MAP.normDir(dir)
-      if nd and not M.explore.tacticalMove then
+      local dizzy = ataxia.afflictions and ataxia.afflictions.dizziness
+      if nd and not M.explore.tacticalMove and not dizzy then
         M.explore.failed[M.explore.fromRoom] = M.explore.failed[M.explore.fromRoom] or {}
         M.explore.failed[M.explore.fromRoom][nd] = true
       end
@@ -1169,6 +1178,7 @@ function M._tacticalArm(dir, timeout)
   M.explore.fromDir = dir
   M.explore.tries = 0
   M.explore.iceSlips = 0
+  M.explore.dizzyFalls = 0
   if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
   M.explore.clambered = false
   M._explMoveOnTimeout = function()
@@ -1262,6 +1272,41 @@ function M.onIceSlip()
   end
   M._exploreEcho("<grey>slipped on the ice -- up and going again.")
   M._exploreMove(M.explore.fromDir, true) -- re-send (silent; keeps tries, re-arms timeout)
+end
+
+-- "The ground seems to tilt and you fall with a thump." (trigger mnemosyne/109, v4.7.426). DIZZINESS
+-- fails the move, knocks us prone and takes balance -- and it can be uncurable (Poindexter: "permanent
+-- dizziness"), so the falls repeat all run. The exit is fine: re-send the stand+move like the ice slip,
+-- on the free queue, which waits for the balance the fall took. NEVER condemn the exit, not even at the
+-- cap -- a fall is a property of us, and a condemned real door can strand the sweep. Its own counter,
+-- so a dizzy room on ice does not spend the ice budget twice.
+function M.onDizzyFall()
+  if not (M.explore.on and M.explore.moving and M.explore.fromDir) then return end
+  -- A tumble in flight owns the movement (v4.7.243).
+  if M.swarm and M.swarm.moveLocked and M.swarm.moveLocked() then return end
+  M.explore.dizzyFalls = (M.explore.dizzyFalls or 0) + 1
+  if M.explore.tacticalMove then
+    -- The swarm re-sends its OWN verb (leap / backflip / mountjump / tumble), bounded by PULL_RETRIES.
+    M._exploreEcho("<grey>fell (dizzy) mid-retreat -- <cyan>re-sending the retreat<reset>.")
+    if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
+    M.explore.moving = false
+    M.explore.tacticalMove = false
+    if M.swarm and M.swarm.onMoveFailed then pcall(M.swarm.onMoveFailed) end
+    return
+  end
+  if M.explore.dizzyFalls > MAX_DIZZY_FALLS then
+    M._exploreEcho("<indian_red>fell (dizzy)<reset> " .. MAX_DIZZY_FALLS .. " times -- re-deciding (exit kept).")
+    if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
+    M.explore.moving = false
+    return M._exploreTick()
+  end
+  M._exploreEcho("<grey>fell (dizzy) -- up and going again.")
+  M._exploreMove(M.explore.fromDir, true) -- re-send (silent; keeps tries)
+  -- The re-sent move waits for the balance the fall took: give its timeout that much longer.
+  if M._explMoveT and M._explMoveOnTimeout then
+    pcall(killTimer, M._explMoveT)
+    M._explMoveT = tempTimer(MOVE_TIMEOUT + DIZZY_GRACE, M._explMoveOnTimeout)
+  end
 end
 
 -- "A wall blocks your way." / "A wall bars your path." (trigger 025): an icewall --
