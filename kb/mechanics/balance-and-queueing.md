@@ -61,3 +61,18 @@ and runs on recovery. `CONFIG SHOWQUEUEALERTS ON|OFF` toggles the queue messages
 
 **`freestand` needs you STANDING** (CLAUDE.md, Blademaster): an entry that cannot fire while you
 are prone waits until the next `addclear` replaces it.
+
+## Moves that fail without leaving the room
+
+Some lines say a move failed although the exit is real. Code that moves us must re-send the move
+on these lines, and must not treat the exit as a wall.
+
+| Line | Cause | Balance | Source |
+|---|---|---|---|
+| `The ground seems to tilt and you fall with a thump.` | dizziness (we fall prone) | the fall TAKES balance; how long is not measured | CONFIRMED (user, 2026-10-15, `kb/raw/players/dizziness-fall-2026-10-15.txt`) |
+| `You slip and fall on the ice as you try to leave.` | an icy room | moving needs balance, but a slip does not take it | CONFIRMED (user, 2026-09-30) |
+
+Dizziness can be uncurable (the Mnemosyne boon Poindexter gives "permanent dizziness"), so the fall
+can happen on any step of a run. The explorer handles it in `M.onDizzyFall()`
+(`src_new/scripts/.../mnemosyne/008_Explorer.lua`, trigger `mnemosyne/109`, v4.7.426): it re-sends
+`stand;<dir>` on the free queue, which waits for the balance, and never condemns the exit.

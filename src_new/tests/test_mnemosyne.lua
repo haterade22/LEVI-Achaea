@@ -4301,6 +4301,155 @@ describe("ice-slip recovery during a tactical retreat (v4.7.243)", function()
 end)
 
 -- ============================================================================
+-- v4.7.426 -- a DIZZY fall is ours, not the door's
+-- ============================================================================
+-- "The ground seems to tilt and you fall with a thump." fails the move and takes balance, and the
+-- dizziness can be uncurable. Before this, the 5s timeout re-sent once and then CONDEMNED a real exit.
+describe("dizzy fall during explore (v4.7.426)", function()
+  local M = ataxia.mnemosyne
+  local mock = require("mock_mudlet")
+
+  -- Runs fn with send/swarm/tick/afflictions mocked; everything restored under pcall.
+  local function with(fn)
+    local realSend, realSwarm, realTick, realAffs = send, M.swarm, M._exploreTick, ataxia.afflictions
+    local realCur = M.map.current
+    local st = { sent = {}, handed = 0, ticks = 0 }
+    local ok, err = pcall(function()
+      send = function(c) st.sent[#st.sent + 1] = c end
+      M.swarm = { moveLocked = function() return st.locked == true end,
+                  onMoveFailed = function() st.handed = st.handed + 1 end }
+      M._exploreTick = function() st.ticks = st.ticks + 1 end
+      ataxia.afflictions = {}
+      M.map.current = 300
+      M.explore.on = true
+      M.explore.failed = {}
+      fn(st)
+    end)
+    if M._explMoveT then killTimer(M._explMoveT); M._explMoveT = nil end
+    M.explore.on, M.explore.moving, M.explore.tacticalMove = false, false, false
+    send, M.swarm, M._exploreTick, ataxia.afflictions = realSend, realSwarm, realTick, realAffs
+    M.map.current = realCur
+    if not ok then error(err, 0) end
+  end
+
+  it("the real trigger fires on the line and calls onDizzyFall", function()
+    local TL = dofile("src_new/tests/trigger_lib.lua")
+    local P = "src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/109_Dizzy_Fall.lua"
+    local LINE = "The ground seems to tilt and you fall with a thump."
+    expect(TL.anyMatches(TL.patterns(P), LINE)).toBeTrue()
+    expect(TL.anyMatches(TL.patterns(P), "Bob staggers and falls to the ground.")).toBeFalse()
+    local realFall, realLine, calls = M.onDizzyFall, line, 0
+    local ok, err = pcall(function()
+      M.onDizzyFall = function() calls = calls + 1 end
+      line = LINE
+      dofile(P)
+    end)
+    M.onDizzyFall, line = realFall, realLine
+    if not ok then error(err, 0) end
+    expect(calls).toBe(1)
+  end)
+
+  it("a sweep fall re-sends stand+move, keeps tries, and condemns nothing", function()
+    with(function(st)
+      M._exploreMove("s")
+      M.explore.tries = 1
+      M.onDizzyFall()
+      expect(#st.sent).toBe(2)
+      expect(st.sent[2]:find("stand", 1, true) ~= nil).toBeTrue()
+      expect(st.sent[2]:sub(-2)).toBe(";s")
+      expect(M.explore.tries).toBe(1)
+      expect(M.explore.moving).toBeTrue()
+      expect(M.explore.dizzyFalls).toBe(1)
+      expect(next(M.explore.failed)).toBeNil()
+      expect(st.handed).toBe(0)
+    end)
+  end)
+
+  it("the re-sent move gets the balance grace on its timeout (5 + 3)", function()
+    with(function()
+      M._exploreMove("s")
+      expect(mock.active_timers[M._explMoveT].delay).toBe(5)
+      M.onDizzyFall()
+      expect(mock.active_timers[M._explMoveT].delay).toBe(8)
+    end)
+  end)
+
+  it("a tactical fall hands back to the swarm instead of walking", function()
+    with(function(st)
+      M._tacticalArm("e", 3)
+      M.onDizzyFall()
+      expect(st.handed).toBe(1)
+      expect(#st.sent).toBe(0)
+      expect(M.explore.moving).toBeFalse()
+      expect(M.explore.tacticalMove).toBeFalse()
+      expect(M._explMoveT).toBeNil()
+    end)
+  end)
+
+  it("does nothing with no move in flight, or while a tumble owns the movement", function()
+    with(function(st)
+      M.explore.moving = false
+      M.explore.fromDir = "s"
+      M.onDizzyFall()
+      expect(#st.sent).toBe(0)
+      M._exploreMove("s")
+      st.locked = true
+      M.explore.dizzyFalls = 0
+      M.onDizzyFall()
+      expect(#st.sent).toBe(1)          -- only the original move
+      expect(M.explore.dizzyFalls).toBe(0)
+      expect(st.handed).toBe(0)
+    end)
+  end)
+
+  it("past the cap it re-decides and STILL keeps the exit", function()
+    with(function(st)
+      M._exploreMove("s")
+      for _ = 1, 12 do M.onDizzyFall() end
+      expect(st.ticks).toBe(0)
+      expect(M.explore.moving).toBeTrue()
+      M.onDizzyFall()                    -- the 13th
+      expect(st.ticks).toBe(1)
+      expect(M.explore.moving).toBeFalse()
+      expect(next(M.explore.failed)).toBeNil()
+    end)
+  end)
+
+  it("a fresh move resets the fall count", function()
+    with(function()
+      M._exploreMove("s")
+      M.onDizzyFall()
+      expect(M.explore.dizzyFalls).toBe(1)
+      M._exploreMove("n")
+      expect(M.explore.dizzyFalls).toBe(0)
+      M._tacticalArm("e")
+      expect(M.explore.dizzyFalls).toBe(0)
+    end)
+  end)
+
+  -- A fall whose line we never saw must not cost a real exit either; without dizziness the old
+  -- condemn still holds.
+  it("the move timeout does not condemn the exit while we are dizzy", function()
+    with(function(st)
+      ataxia.afflictions.dizziness = true
+      M._exploreMove("s")
+      M._explMoveOnTimeout()             -- retry 1
+      expect(#st.sent).toBe(2)
+      M._explMoveOnTimeout()             -- out of retries
+      expect(M.explore.moving).toBeFalse()
+      expect(next(M.explore.failed)).toBeNil()
+      expect(st.ticks).toBe(1)
+
+      ataxia.afflictions.dizziness = nil
+      M._exploreMove("s")
+      M._explMoveOnTimeout()
+      M._explMoveOnTimeout()
+      expect(M.explore.failed[300] and M.explore.failed[300].south).toBeTrue()
+    end)
+  end)
+end)
+
+-- ============================================================================
 -- v4.7.385 -- Seclusion: ACTIVATE HERMIT in the holding room on the descent
 -- ============================================================================
 describe("Seclusion -- the hermit goes up with the descent", function()

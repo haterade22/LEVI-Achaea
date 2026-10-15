@@ -1,0 +1,12 @@
+# Dizziness: the fall that cancels a move, as relayed by the user (2026-10-15)
+
+Verbatim, as the user pasted it. Curated in kb/mechanics/balance-and-queueing.md,
+"Moves that fail without leaving the room".
+
+## Game line (pasted by the user)
+
+The ground seems to tilt and you fall with a thump.
+
+## The user's words (2026-10-15)
+
+When auto exploring in wades , we need to account for dizziness. Somestimes we have uncurable dizziness.  It takes balance and cancels us moving

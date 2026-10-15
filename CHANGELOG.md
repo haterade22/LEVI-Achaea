@@ -2,6 +2,29 @@
 
 ---
 
+## 2026-10-15 - v4.7.426: the explorer treats a dizzy fall like an ice slip
+
+User: "When auto exploring in wades, we need to account for dizziness. Sometimes we have uncurable
+dizziness. It takes balance and cancels us moving." The line: "The ground seems to tilt and you fall
+with a thump."
+
+- Nothing read our own fall line. The explorer saw only that the room did not change: the 5 s move
+  timeout re-sent once, and a second fall CONDEMNED a real exit into `explore.failed`, so the sweep
+  routed around a good door. A tactical move (pull, escape, re-entry) waited the full 5 s before the
+  swarm module heard of the failure.
+- New `M.onDizzyFall()` (`mnemosyne/008_Explorer.lua`) and trigger `mnemosyne/109_Dizzy_Fall`. A sweep
+  move is re-sent (`stand;<dir>` on the free queue, which waits for the balance the fall took) and its
+  timeout is re-armed for `MOVE_TIMEOUT + DIZZY_GRACE` (5 + 3 s). A tactical move goes back to
+  `S.onMoveFailed()`, which re-sends the swarm's own verb. Nothing happens while a tumble is in flight.
+- The fall NEVER condemns the exit: the fall is ours, not the door's, and with uncurable dizziness a
+  condemned door can strand the sweep. The counter `explore.dizzyFalls` is capped at `MAX_DIZZY_FALLS`
+  (12); the cap only re-decides the step.
+- The move timeout also skips the condemn while `ataxia.afflictions.dizziness` is up, so a fall line
+  we did not see (for example a mounted wording we have not captured) costs no exit.
+- Not measured: how long the fall takes balance (`DIZZY_GRACE` is a margin).
+- Tests: `test_mnemosyne.lua`, "dizzy fall during explore" (8). Docs: `.claude/projects/mnemosyne/07-explorer.md`,
+  `CLAUDE.md`, `kb/mechanics/balance-and-queueing.md`, `kb/raw/players/dizziness-fall-2026-10-15.txt`.
+
 ## 2026-10-14 - v4.7.425: the bash line triggers turn on whenever the basher is on
 
 User: "Your vicious attack cleaves to a nearby enemy. Why isnt this highlighted?"
