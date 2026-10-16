@@ -1,0 +1,37 @@
+# Mnemosyne per-unit damage boons and the STAT box, as relayed by the user (2026-10-16)
+
+Verbatim, as the user pasted it. Used by mnemosyne/011_Bonuses.lua (v4.7.427): the bonuses
+panel scales these boons by our max mana and our stats.
+
+## Boon text (pasted by the user)
+
+Mana Powered:                 You gain 4% bonus damage for every 1000 maximum mana you have.
+
+## The user's words (2026-10-16)
+
+This boon is additive for how much mana we have.
+
+Additionally the other boons like brute force is based off our stats and should be accounted for
+in our damage calcuations that are shown in the box.
+
+For example Brute force is based on strength. we have 16. 16 x 4.
+
+We can use STAT at anytime to see our stats
+
+## Answers the user gave to questions (2026-10-16)
+
+- "For every 1000 maximum mana" counts WHOLE thousands: 7714 max mana = 4% x 7 = 28%.
+- The package may send STAT itself; the STAT box is not to be gagged.
+
+## STAT box rows (transcribed from the user's screenshot, 2026-10-16)
+
+| Health  : 13215/13231 Willpower: 32495/32495 Strength : 16 Intelligence: 15 |
+| Mana    : 7714/7714   Endurance: 40305/40355 Dexterity: 14 Constitution: 19 |
+| Rest    : fully rested                        Bleeding : 3                     |
+| Hunger  : utterly satiated                    Sobriety : completely sober      |
+
+Spacing inside the rows is approximate (from an image). Two stats share one row, so a parser must
+read every "Name : N" pair on the line. The rows start with "|".
+
+Not confirmed: the exact text of Brute Force, Mental Prowess and Deadly Finesse. "4% per point" for
+all three is the user's figure for Brute Force, applied to the other two by the package.

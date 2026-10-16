@@ -86,7 +86,7 @@ function M.help()
     { "mnem queue [clear]", "Unsent tracker requests by endpoint; `clear` drops them all" },
     { "mnem debug", "Toggle verbose debug echoes" },
     { "mnem map [on|off|status]", "Toggle / diagnose the per-ripple mini-map" },
-    { "mnem bonuses [on|off]", "Panel: what this run's boons are actually giving us" },
+    { "mnem bonuses [on|off|stat]", "Panel: what this run's boons are actually giving us (stat = re-read STAT)" },
     { "mnem audit [report|reset]", "AUDIT the game's own resistances/crit; baseline + delta" },
     { "mnem explore [on|off|status]", "Auto-sweep the 4x4, clear rooms, stop at the boon screen" },
     { "mnem explore why", "Why is the sweep not moving? Per-exit refusal reasons" },
@@ -226,6 +226,9 @@ function M.command(rest)
     if B then
       if arg == "on" or arg == "off" then
         if B.toggle then B.toggle(arg == "on") end
+      elseif arg == "stat" then
+        -- Re-read our stats now (v4.7.427): the per-unit damage boons are scaled by them.
+        if ataxia.mnemosyne._statCheck then ataxia.mnemosyne._statCheck(true) end
       elseif B.report then
         B.report()
       end

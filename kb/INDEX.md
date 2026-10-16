@@ -60,6 +60,7 @@ One line per page. Kept up to date by `/kb-ingest`.
 | raw/players/serpent-2026-10-12.txt | Serpent notes relayed by the user: DSTAB, hypochondria's delayed impatience, IMPULSE MASOCHISM MONKSHOOD, fratricide's 2.25 s relapse | 2026-10-12 |
 | raw/players/magi-tabethys-2026-10-12.txt | Tabethys on Magi: the core rotation (magma, dehydrate, dehydrate, fulminate), CAST MUDSLIDE, the focus lock and the freeze-to-glaciate finisher | 2026-10-12 |
 | raw/players/dizziness-fall-2026-10-15.txt | The dizzy fall line ("The ground seems to tilt and you fall with a thump."): it takes balance and cancels the move; dizziness can be uncurable | 2026-10-15 |
+| raw/players/mnemosyne-scaling-boons-2026-10-16.txt | Mana Powered's text (4% per WHOLE 1000 max mana), the stat boons (4% per point, user), and the STAT box row format (two stats per row) | 2026-10-16 |
 | raw/guides/lock-types.txt | Community guide: lock types | 2026-10-10 |
 | raw/guides/active-and-passive-cures-with-fire-lines.txt | Community guide: what each class cure looks like | 2026-10-10 |
 

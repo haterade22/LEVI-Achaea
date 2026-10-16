@@ -127,6 +127,7 @@ end
 -- Console fallback, so the aggregation is readable even with the panel off (and in a client
 -- where Geyser failed to build). Same data, same order -- one source, two surfaces.
 function B.report()
+  if M._statCheck then pcall(M._statCheck) end
   local ok, sections = pcall(M.bonusSections)
   if not ok or type(sections) ~= "table" or #sections == 0 then
     return M.echo("<gold>Bonuses<reset> -- nothing claimed this run.")
@@ -144,6 +145,10 @@ end
 -- Re-render on the events that can change the answer: a claim, a ripple (new affixes), and the
 -- attunement read that decides INERT. Cheap -- the aggregation is a few dozen table reads.
 function B.refresh()
+  -- A per-unit damage boon needs our stats (v4.7.427). Every claim, combo grant and ripple comes
+  -- through here, so this is the one place to ask; `_statCheck` sends only when a held boon needs
+  -- a stat we have not read since the last claim, at most once per 20s.
+  if M._statCheck then pcall(M._statCheck) end
   if B.window and enabled() then B.render() end
 end
 

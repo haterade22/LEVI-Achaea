@@ -74,6 +74,7 @@ mid-ripple; gating it on `inMnem()` would blank it exactly when you are reading 
 |---------|--------|
 | `mnem bonuses` | `B.report()` -- **REPORTS to the console**, it does NOT toggle |
 | `mnem bonuses on` / `mnem bonuses off` | `B.toggle(true)` / `B.toggle(false)` -- force the panel, persists `bonusesEnabled` (default **off**) |
+| `mnem bonuses stat` | `M._statCheck(true)` -- send `STAT` now, so the per-unit boons are re-scaled (v4.7.427) |
 
 **Why bare `mnem bonuses` reports rather than toggling** (the one place this diverges from
 `mnem map`): the console fallback keeps the aggregation readable with the panel off, and in a
@@ -94,8 +95,27 @@ every type carries the same number, and prints per type otherwise. An empty sect
 than printed as a bare heading, and a wholly empty panel **says why** -- a blank panel and a broken
 panel look identical, and this one is legitimately blank for most of a session.
 
-`B.refresh()` is called from `onBoonClaim` and `onRipple` in `004_Parsers.lua` (both `pcall`'d):
-those are the two events that can change the answer -- a new claim, and a new ripple's affixes.
+**PER-UNIT damage boons (v4.7.427)** are scaled by a number about us, not read as a flat bonus:
+`M._dmgScaledFrom(name, desc)` reads "N% bonus damage for every <step> maximum mana|health" and
+"N% ... damage for each point of <stat list>" (Trainwreck names three stats); for an undescribed
+name in `M.BOON_STAT_DAMAGE` (Brute Force, Mental Prowess, Deadly Finesse) it uses
+`M.STAT_DAMAGE_PER_POINT` = 4 (the user's figure). `M._dmgScaledValue` multiplies: max mana counts
+WHOLE thousands (7714 -> 4% x 7 = +28%, user-confirmed), a stat counts every point (16 STR -> +64%).
+The row shows the arithmetic (`+28%  Mana Powered  4% x 7 (7714 max mana)`). A boon whose number we
+do not have is LISTED dim ("value unknown, type STAT") and NOT summed. `_dmgGenericFrom` stands down
+for these sentences, so the advisor (014) no longer reads them as a flat +4% either.
+
+**Where the numbers come from:** max mana/health from `gmcp.Char.Vitals`, live. Stats from the STAT
+box: trigger `mnemosyne/110_Stat_Row` (`^\|.*\b(?:Strength|Intelligence|Dexterity|Constitution)\s*:\s*\d+`)
+hands the WHOLE line to `M.onStatLine`, because two stats share a row. Stored on
+`ataxiaTemp.charStats` (never saved: a claim can change a stat) and copied to `ataxia.data.char`
+for the mob-damage DB. `M._statCheck()` sends `stat` (NOT gagged, user's choice) when a claimed
+boon scales with a stat and there is no reading, or the reading predates the last claim
+(`_recordClaim` -> `M._statInvalidate`); at most once per `M.STAT_ASK_GAP` (20 s), no timed refresh.
+
+`B.refresh()` is called from `onBoonClaim` and `onRipple` in `004_Parsers.lua` (both `pcall`'d), the
+combo grant (015) and AUDIT (013): the events that can change the answer. Since v4.7.427 it (and
+`B.report()`) first calls `M._statCheck()`, so the STAT request rides the same events.
 
 ### AUDIT (`mnemosyne/013_Audit.lua` + trigger `078`, v4.7.290)
 

@@ -259,6 +259,8 @@ function M._recordClaim(name)
     name = name, rarity = rarity, echoes = echoes, description = description,
   })
   M._historySave()
+  -- A claim can change a stat, so a STAT reading from before it is no longer current (v4.7.427).
+  if M._statInvalidate then pcall(M._statInvalidate) end
   if not M._quiet() then
     M.echo("Claimed <gold>" .. name .. "<reset>"
       .. (rarity ~= "" and (" (" .. rarity .. ")") or "")

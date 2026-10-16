@@ -2,6 +2,35 @@
 
 ---
 
+## 2026-10-16 - v4.7.427: the bonuses panel scales per-unit damage boons by our mana and stats
+
+User: "This boon is additive for how much mana we have. Mana Powered: You gain 4% bonus damage for
+every 1000 maximum mana you have." and "Brute force is based on strength. we have 16. 16 x 4. We can
+use STAT at anytime to see our stats."
+
+- The OFFENSE section of `mnem bonuses` read every damage boon as a flat percentage.
+  `_dmgGenericFrom` matched "gain 4% bonus damage" and stopped, so Mana Powered showed +4% (truth at
+  7714 max mana: +28%) and Trainwreck +2% (truth at 16/15/14: +90%). Brute Force, Mental Prowess and
+  Deadly Finesse showed +4% or nothing (truth at 16 STR: +64%). Nothing on the panel read our stats.
+- New `M._dmgScaledFrom` / `M._dmgScaledValue` (`mnemosyne/011_Bonuses.lua`). "N% ... for every <step>
+  maximum mana|health" counts WHOLE steps (user: 7714 -> 4 x 7). "N% ... for each point of <stats>"
+  multiplies by the sum of the stats. A name in `M.BOON_STAT_DAMAGE` with no text uses 4% per point
+  (`M.STAT_DAMAGE_PER_POINT`, the user's figure). The row prints the arithmetic. A boon whose number
+  is unknown is listed dim and NOT summed. `_dmgGenericFrom` stands down for these sentences, so no
+  boon counts twice and the advisor no longer reads them as a flat +4%.
+- Stats: new trigger `mnemosyne/110_Stat_Row` hands each STAT box row to `M.onStatLine`, which reads
+  every stat on the row (two share a row) into `ataxiaTemp.charStats` (never saved) and
+  `ataxia.data.char`. `M._statCheck()`, called from `B.refresh` and `B.report`, sends `stat` (not
+  gagged, user's choice) only when a held boon needs a stat and there is no reading since the last
+  claim (`_recordClaim` -> `M._statInvalidate`), at most once per 20 s. `mnem bonuses stat` forces one.
+- Seed: Mana Powered's text (user-pasted) added; it leaves `M.BOON_UNDESCRIBED`.
+- Tests: `test_mnem_bonuses.lua`, "per-unit damage boons" (7); break-back on the stand-down guard
+  fails the test. `test_mnemosyne.lua`'s stat-scaling advisor test now uses a baseline with no damage
+  clause (the old one relied on the flat misread). Docs: `.claude/projects/mnemosyne/05-commands.md`,
+  `CLAUDE.md`, `kb/raw/players/mnemosyne-scaling-boons-2026-10-16.txt`.
+- Not confirmed: the exact text of Brute Force, Mental Prowess and Deadly Finesse. A contemplate of
+  any of them replaces the 4% default with the game's own number.
+
 ## 2026-10-15 - v4.7.426: the explorer treats a dizzy fall like an ice slip
 
 User: "When auto exploring in wades, we need to account for dizziness. Sometimes we have uncurable

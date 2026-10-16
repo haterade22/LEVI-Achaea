@@ -9338,7 +9338,9 @@ describe("boon combos", function()
       ["Mental Prowess"] = { description = "You deal 4% increased damage for each point of intelligence.",
                              category = "Offence", rarity = "legendary" },
       ["Brute Force"] = { category = "Offence", rarity = "legendary" },         -- never contemplated
-      ["Plain Offence"] = { description = "You deal 4% increased damage.", category = "Offence",
+      -- No damage clause (v4.7.427): a per-unit sentence is no longer read as a flat +4%, so the
+      -- baseline must carry no flat damage either, or the difference stops being exactly the weight.
+      ["Plain Offence"] = { description = "Your blows feel heavier.", category = "Offence",
                             rarity = "legendary" },
       ["Stat Worded"] = { description = "Gain 1% bonus damage for each point of dexterity you have.",
                           category = "Offence", rarity = "legendary" },

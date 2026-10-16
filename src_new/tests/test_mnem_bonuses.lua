@@ -433,6 +433,129 @@ describe("bonus sections", function()
   end)
 end)
 
+-- ─── Per-unit damage: Mana Powered, the stat boons, Trainwreck (v4.7.427) ─────
+
+describe("per-unit damage boons are scaled by our own numbers", function()
+  local MANA = "You gain 4% bonus damage for every 1000 maximum mana you have."
+  local TRAIN = "You gain 2% bonus damage for each point of strength, intelligence and dexterity "
+    .. "you have, but you suffer from permanent stuttering."
+
+  -- Every global these tests touch is put back under pcall, because the suite shares one state.
+  local function with(stats, maxmp, fn)
+    local oldTemp, oldGmcp, oldStat = ataxiaTemp, gmcp, M.BOON_STAT_DAMAGE
+    ataxiaTemp = { charStats = stats }
+    gmcp = { Char = { Vitals = { maxmp = maxmp } } }
+    M.BOON_STAT_DAMAGE = { ["Brute Force"] = "strength", ["Mental Prowess"] = "intelligence",
+                           ["Deadly Finesse"] = "dexterity" }
+    local ok, err = pcall(fn)
+    ataxiaTemp, gmcp, M.BOON_STAT_DAMAGE = oldTemp, oldGmcp, oldStat
+    if not ok then error(err, 0) end
+  end
+
+  it("counts WHOLE thousands of max mana (user: 7714 -> 4 x 7 = 28)", function()
+    with(nil, "7714", function()
+      reset()
+      claim("Mana Powered", MANA)
+      local O = M.bonusTotals().offense
+      expect(O.total).toBe(28)
+      expect(O.rows[1].how:find("7714 max mana", 1, true) ~= nil).toBeTrue()
+    end)
+    with(nil, 999, function()
+      reset()
+      claim("Mana Powered", MANA)
+      expect(M.bonusTotals().offense.total).toBe(0)
+      expect(#M.bonusTotals().offense.rows).toBe(1)   -- still listed, at +0
+    end)
+  end)
+
+  it("the flat parser stands down for a per-unit sentence", function()
+    -- Before v4.7.427 both read as a flat +4% / +2%.
+    expect(M._dmgGenericFrom(MANA)).toBe(nil)
+    expect(M._dmgGenericFrom(TRAIN)).toBe(nil)
+    -- ...and a plain flat bonus still reads.
+    expect(M._dmgGenericFrom("You deal 1% bonus damage.").pct).toBe(1)
+  end)
+
+  it("scales an undescribed stat boon by 4 per point (user: 16 strength x 4)", function()
+    with({ strength = 16, at = 1 }, nil, function()
+      reset()
+      table.insert(M.history.claims, { run = 1, name = "Brute Force", echoes = 1 })
+      local O = M.bonusTotals().offense
+      expect(O.total).toBe(64)
+      expect(#O.unknown).toBe(0)
+    end)
+  end)
+
+  it("reads a stat list from the sentence (Trainwreck 16/15/14 -> +90)", function()
+    with({ strength = 16, intelligence = 15, dexterity = 14, at = 1 }, nil, function()
+      reset()
+      claim("Trainwreck", TRAIN)
+      expect(M.bonusTotals().offense.total).toBe(90)
+    end)
+  end)
+
+  it("lists a boon whose stat is unknown and leaves it out of the total", function()
+    with(nil, nil, function()
+      reset()
+      table.insert(M.history.claims, { run = 1, name = "Mental Prowess", echoes = 1 })
+      claim("Hidden Gem", "You deal 1% bonus damage.")
+      local O = M.bonusTotals().offense
+      expect(O.total).toBe(1)
+      expect(O.unknown[1].name).toBe("Mental Prowess")
+      expect(O.unknown[1].missing[1]).toBe("intelligence")
+      local found = false
+      for _, r in ipairs(sectionRows("OFFENSE")) do
+        if r.text:find("Mental Prowess", 1, true) and r.text:find("unknown", 1, true) then found = true end
+      end
+      expect(found).toBeTrue()
+    end)
+  end)
+
+  it("reads both stats from one STAT box row and ignores other text", function()
+    with(nil, nil, function()
+      ataxiaTemp = {}
+      local n = M.onStatLine(
+        "| Health  : 13215/13231 Willpower: 32495/32495 Strength : 16 Intelligence: 15 |")
+      expect(n).toBe(2)
+      expect(M.onStatLine(
+        "| Mana    : 7714/7714   Endurance: 40305/40355 Dexterity: 14 Constitution: 19 |")).toBe(2)
+      expect(ataxiaTemp.charStats.strength).toBe(16)
+      expect(ataxiaTemp.charStats.intelligence).toBe(15)
+      expect(ataxiaTemp.charStats.dexterity).toBe(14)
+      expect(ataxiaTemp.charStats.constitution).toBe(19)
+      expect(M.onStatLine("He has Strength: 5")).toBe(0)   -- not a box row
+    end)
+  end)
+
+  it("sends STAT only when a held boon needs a stat, once per gap, and again after a claim", function()
+    local sent, oldSend, oldEpoch = {}, send, getEpoch
+    local now = 1000
+    send = function(c) sent[#sent + 1] = c end
+    getEpoch = function() return now end
+    local ok, err = pcall(function()
+      with(nil, "7714", function()
+        reset()
+        claim("Mana Powered", MANA)                       -- needs mana only: no STAT
+        expect(M._statCheck()).toBe(false)
+        table.insert(M.history.claims, { run = 1, name = "Brute Force", echoes = 1 })
+        expect(M._statCheck()).toBe(true)
+        expect(sent[1]).toBe("stat")
+        now = now + 5
+        expect(M._statCheck()).toBe(false)               -- throttled
+        M.onStatLine("| Health  : 1/1 Willpower: 1/1 Strength : 16 Intelligence: 15 |")
+        now = now + 30
+        expect(M._statCheck()).toBe(false)               -- reading is current
+        now = now + 1
+        M._statInvalidate()                              -- a claim landed after the reading
+        expect(M._statCheck()).toBe(true)
+        expect(#sent).toBe(2)
+      end)
+    end)
+    send, getEpoch = oldSend, oldEpoch
+    if not ok then error(err, 0) end
+  end)
+end)
+
 -- Test files share ONE Lua state and run in sorted order, so the stubs above outlive this file
 -- (`test_mnem_bonuses` sorts before `test_mnemosyne`). Drop them: every one is a `M.x = ...`
 -- assignment in a real module, so nil lets the next file's dofile install the genuine article,

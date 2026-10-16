@@ -1607,6 +1607,19 @@ damage type); a `+60  -0` pair stays two numbers (netting hides a penalty); the 
 drifts (`mnem audit reset` drops it, for a run joined late); and there is NO delta from a single
 reading, since "no second reading yet" and "the boons bought nothing" are different answers.
 
+**PER-UNIT DAMAGE BOONS ARE SCALED, NOT FLAT (v4.7.427, user: "This boon is additive for how much
+mana we have" / "Brute force is based on strength. we have 16. 16 x 4").** `Mana Powered` ("4% bonus
+damage for every 1000 maximum mana") read as +4% where the truth was +28%; `Brute Force` /
+`Mental Prowess` / `Deadly Finesse` (4% per point of one stat, user's figure, `M.STAT_DAMAGE_PER_POINT`)
+and `Trainwreck` (2% per point of three stats) likewise. `M._dmgScaledFrom` + `M._dmgScaledValue`
+(011) multiply by max mana from gmcp (WHOLE thousands, user-confirmed) or our stats, and the row
+prints the arithmetic; `_dmgGenericFrom` stands down for "for every" / "for each point" sentences. **An
+unknown number is listed, never summed as 0.** Stats come from the STAT box (`mnemosyne/110_Stat_Row`
+-> `M.onStatLine`, two stats per row) into `ataxiaTemp.charStats`; `M._statCheck()` (from
+`B.refresh`/`B.report`) sends `stat`, not gagged, only when a held boon needs a stat and there is no
+reading since the last claim, at most once per 20 s. `mnem bonuses stat` forces one. Full detail:
+`.claude/projects/mnemosyne/05-commands.md`.
+
 **OFFENSE ON THE PANEL, AND THE +22% THAT WAS +30% (v4.7.289).** The live panel under-reported
 resistance because the all-damage branch took `desc:match("(%d+)%%")` -- the FIRST percentage in the
 sentence -- and `Ogre's Defence` reads "You lose **2%** critical strike chance, but you gain **10%**

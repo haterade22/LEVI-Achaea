@@ -325,6 +325,13 @@ end
 -- Returns { pct = n, cond = "<the governing clause>" or nil }.
 function M._dmgGenericFrom(desc)
   if type(desc) ~= "string" then return nil end
+  -- A PER-UNIT bonus is not a flat one (v4.7.427). "You gain 4% bonus damage for every 1000
+  -- maximum mana you have" matches "gain 4% bonus damage" below, and the panel showed +4% where
+  -- the truth was +28%. `M._dmgScaledFrom` owns these sentences; this parser stands down.
+  local low = desc:lower()
+  if low:find("damage for every", 1, true) or low:find("damage for each point", 1, true) then
+    return nil
+  end
   local n =
     desc:match("[Yy]ou deal%s+(%d+)%%%s+[%a]+%s+damage")
     or desc:match("[Yy]ou deal%s+(%d+)%%%s+damage")
@@ -346,6 +353,168 @@ function M._dmgGenericFrom(desc)
       or desc:match("^([Ww]hile [^,]+),")
       or desc:match("damage%s+(on the ground)")
   return { pct = tonumber(n), cond = cond }
+end
+
+-- ---------------------------------------------------------------------------
+-- PER-UNIT damage: the bonus is N% times a number about US (v4.7.427)
+-- ---------------------------------------------------------------------------
+--
+-- User: "This boon is additive for how much mana we have" and "Brute force is based on strength.
+-- we have 16. 16 x 4." Four wordings:
+--   "You gain 4% bonus damage for every 1000 maximum mana you have."                 Mana Powered
+--   "You gain 2% bonus damage for each point of strength, intelligence and dexterity
+--    you have, ..."                                                                    Trainwreck
+--   Brute Force / Mental Prowess / Deadly Finesse: 4% per point of one stat (user; their own
+--   text is not in the seed, so `M.BOON_STAT_DAMAGE` (014) names the stat and 4 is the user's).
+--
+-- "For every 1000" counts WHOLE thousands (user, 2026-10-16): 7714 max mana is 7 x 4 = 28%.
+-- The value needs a live number, so a boon whose number we do not have is LISTED and NOT SUMMED:
+-- a total that silently treats an unknown strength as 0 is a wrong headline, not a cautious one.
+
+local STAT_UNITS = { strength = true, intelligence = true, dexterity = true, constitution = true }
+local STAT_SHORT = { strength = "str", intelligence = "int", dexterity = "dex", constitution = "con" }
+
+-- The per-point default for the three single-stat boons with no text of their own (user-stated).
+M.STAT_DAMAGE_PER_POINT = 4
+
+-- Returns { per = n, units = { "strength", ... }, step = 1 } or { per, units = { "mana" }, step },
+-- or nil when the boon is not a per-unit damage boon.
+function M._dmgScaledFrom(name, desc)
+  if type(desc) == "string" then
+    local per, step, what = desc:match("(%d+)%%[%a%s]-damage%s+for every%s+(%d+)%s+maximum%s+(%a+)")
+    if per then
+      what = what:lower()
+      if what == "mana" or what == "health" then
+        return { per = tonumber(per), units = { what }, step = tonumber(step) }
+      end
+    end
+    local rest
+    per, rest = desc:match("(%d+)%%[%a%s]-damage%s+for each point of%s+(.+)")
+    if per then
+      -- The stat list ends at the first word that is neither a stat nor "and":
+      -- "strength, intelligence and dexterity you have, but ..." -> three stats.
+      local units = {}
+      for w in rest:gmatch("%a+") do
+        local lw = w:lower()
+        if STAT_UNITS[lw] then units[#units + 1] = lw
+        elseif lw ~= "and" then break end
+      end
+      if #units > 0 then return { per = tonumber(per), units = units, step = 1 } end
+    end
+  end
+  local stat = M.BOON_STAT_DAMAGE and M.BOON_STAT_DAMAGE[name]
+  if stat then
+    return { per = M.STAT_DAMAGE_PER_POINT, units = { stat }, step = 1, assumed = true }
+  end
+  return nil
+end
+
+-- Our current value of a unit, or nil when we do not know it. Stats come from the STAT box
+-- (`M.onStatLine`), max mana and health from gmcp, read live on every call.
+function M._unitValue(unit)
+  if STAT_UNITS[unit] then
+    local s = ataxiaTemp and ataxiaTemp.charStats
+    return s and tonumber(s[unit]) or nil
+  end
+  local v = gmcp and gmcp.Char and gmcp.Char.Vitals
+  if unit == "mana" then return v and tonumber(v.maxmp) or nil end
+  if unit == "health" then return v and tonumber(v.maxhp) or nil end
+  return nil
+end
+
+-- Apply a scaled entry: { pct, how } when every unit is known, else { missing = { units } }.
+function M._dmgScaledValue(sc)
+  local missing, total, parts = {}, 0, {}
+  for _, u in ipairs(sc.units) do
+    local v = M._unitValue(u)
+    if v == nil then
+      missing[#missing + 1] = u
+    else
+      total = total + v
+      parts[#parts + 1] = sc.step > 1 and (v .. " max " .. u) or ((STAT_SHORT[u] or u) .. " " .. v)
+    end
+  end
+  if #missing > 0 then return { missing = missing } end
+  local n = math.floor(total / sc.step)
+  local how = sc.per .. "% x " .. n .. " (" .. table.concat(parts, " + ") .. ")"
+  if sc.assumed then how = how .. ", " .. sc.per .. "%/point per user" end
+  return { pct = sc.per * n, how = how }
+end
+
+-- ---------------------------------------------------------------------------
+-- Reading our stats from the STAT box (v4.7.427)
+-- ---------------------------------------------------------------------------
+--
+-- The box prints two stats on some rows, so the trigger hands over the WHOLE line:
+--   | Health  : 13215/13231 Willpower: 32495/32495 Strength : 16 Intelligence: 15 |
+--   | Mana    : 7714/7714   Endurance: 40305/40355 Dexterity: 14 Constitution: 19 |
+-- Kept on `ataxiaTemp`, never under `ataxia` (saved wholesale) nor `ataxia.data.char` (wiped on
+-- every area change): a stat changes with a boon claim, so a reading restored from disk is a guess.
+function M.onStatLine(line)
+  if type(line) ~= "string" or not line:find("^%s*|") then return 0 end
+  ataxiaTemp = ataxiaTemp or {}
+  local found = 0
+  for stat, n in line:gmatch("(%a+)%s*:%s*(%d+)") do
+    local s = stat:lower()
+    if STAT_UNITS[s] then
+      ataxiaTemp.charStats = ataxiaTemp.charStats or {}
+      ataxiaTemp.charStats[s] = tonumber(n)
+      ataxiaTemp.charStats.at = getEpoch and getEpoch() or os.time()
+      -- The mob-damage DB keys hits by primary stat and read only a different, rarer line.
+      if ataxia and ataxia.data and ataxia.data.char then
+        ataxia.data.char[STAT_SHORT[s]] = n
+      end
+      found = found + 1
+    end
+  end
+  -- One redraw per STAT block, not one per row.
+  if found > 0 and tempTimer and M.bonuses and M.bonuses.refresh then
+    if M._statRefreshT then pcall(killTimer, M._statRefreshT) end
+    M._statRefreshT = tempTimer(0.3, function()
+      M._statRefreshT = nil
+      pcall(M.bonuses.refresh)
+    end)
+  end
+  return found
+end
+
+-- A claim can change a stat (Heroic Strength), so the last reading stops being current.
+function M._statInvalidate()
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.statDirtyAt = getEpoch and getEpoch() or os.time()
+end
+
+M.STAT_ASK_GAP = 20
+
+-- Do we need a STAT? Only when a claimed boon scales with a stat AND we have no reading, or the
+-- reading predates a claim. No timed refresh: a STAT box mid-fight every few minutes is noise.
+function M._statWanted()
+  local need = false
+  for _, b in ipairs(M._claimedBoons()) do
+    local sc = M._dmgScaledFrom(b.name, M._bonusDesc(b.name, b.echoes))
+    if sc then
+      for _, u in ipairs(sc.units) do if STAT_UNITS[u] then need = true end end
+    end
+  end
+  if not need then return false end
+  local s = ataxiaTemp and ataxiaTemp.charStats
+  if not (s and s.at) then return true end
+  local dirty = ataxiaTemp.statDirtyAt
+  return dirty ~= nil and s.at < dirty
+end
+
+-- Send STAT (not gagged: user's choice) when wanted, at most once per STAT_ASK_GAP seconds.
+-- `force` is `mnem bonuses stat`. Returns true when it sent.
+function M._statCheck(force)
+  if not force and not M._statWanted() then return false end
+  ataxiaTemp = ataxiaTemp or {}
+  local now = getEpoch and getEpoch() or os.time()
+  if not force and ataxiaTemp.statAskAt and now - ataxiaTemp.statAskAt < M.STAT_ASK_GAP then
+    return false
+  end
+  ataxiaTemp.statAskAt = now
+  if send then send("stat") end
+  return true
 end
 
 -- ON-HIT affliction procs: "Your attacks have a 5% chance to afflict the target with weakness."
@@ -378,7 +547,7 @@ end
 function M.bonusTotals()
   local stats, resists, procs, immune, costs, dmg = {}, {}, {}, {}, {}, {}
   local allResist = 0
-  local offense = { total = 0, rows = {}, conditional = {} }
+  local offense = { total = 0, rows = {}, conditional = {}, unknown = {} }
 
   for _, b in ipairs(M._claimedBoons()) do
     local desc = M._bonusDesc(b.name, b.echoes)
@@ -427,7 +596,20 @@ function M.bonusTotals()
     -- which totalled +50%. An exception exists precisely because the sentence cannot be parsed
     -- safely, so it is authoritative and the parser must stand down -- the same shape as the
     -- Poison alias double-count, one layer up.
-    local g = (not (ex and ex.stat and ex.stat.Damage)) and M._dmgGenericFrom(desc) or nil
+    -- PER-UNIT first (v4.7.427): a boon read here is never also read as a flat bonus.
+    local sc = M._dmgScaledFrom(b.name, desc)
+    if sc then
+      local v = M._dmgScaledValue(sc)
+      if v.pct then
+        offense.total = offense.total + v.pct
+        offense.rows[#offense.rows + 1] = { name = b.name, pct = v.pct, how = v.how }
+      else
+        offense.unknown[#offense.unknown + 1] =
+          { name = b.name, per = sc.per, step = sc.step, missing = v.missing }
+      end
+    end
+
+    local g = (not sc) and (not (ex and ex.stat and ex.stat.Damage)) and M._dmgGenericFrom(desc) or nil
     if g then
       if g.cond then
         offense.conditional[#offense.conditional + 1] = { name = b.name, pct = g.pct, cond = g.cond }
@@ -538,12 +720,20 @@ function M.bonusSections()
   -- OFFENSE, above the defensive blocks: it is the number you are usually reading the panel for.
   -- TOTAL first, then the boons that make it up, so the figure is auditable rather than asserted.
   local off = {}
-  local O = T.offense or { total = 0, rows = {}, conditional = {} }
+  local O = T.offense or { total = 0, rows = {}, conditional = {}, unknown = {} }
   if O.total ~= 0 then
     off[#off + 1] = { text = "TOTAL  " .. signed(O.total) .. "% damage", colour = "gold" }
   end
   for _, r in ipairs(O.rows) do
-    off[#off + 1] = { text = "  " .. signed(r.pct) .. "%  " .. r.name, colour = "yellow" }
+    off[#off + 1] = { text = "  " .. signed(r.pct) .. "%  " .. r.name
+      .. (r.how and ("  <dim_grey>" .. r.how) or ""), colour = "yellow" }
+  end
+  -- A per-unit boon whose number we do not have yet: listed, not summed (v4.7.427).
+  for _, r in ipairs(O.unknown or {}) do
+    local unit = r.step > 1 and ("per " .. r.step .. " max " .. table.concat(r.missing, "/"))
+      or ("per point of " .. table.concat(r.missing, "/"))
+    off[#off + 1] = { text = "  " .. r.per .. "% " .. unit .. "  " .. r.name
+      .. "  <dim_grey>-- value unknown, type STAT", colour = "dark_khaki" }
   end
   -- Conditional bonuses are shown but NOT summed. A headline that is right only while some
   -- defence happens to be up is worse than no headline, and the clause is what makes it usable.

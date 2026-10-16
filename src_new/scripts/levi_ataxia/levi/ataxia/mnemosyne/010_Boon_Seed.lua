@@ -173,6 +173,8 @@ M.BOON_SEED = {
   ["Heroic Strength"] = { description = "The Patron of Heroes increases your strength by 1.", rarity = "common", echo = "The Patron of Heroes increases your strength by 2." },
   ["Hexweaver"] = { description = "You no longer lose swiftcurse charges, and your curses consume no willpower.", rarity = "rare" },
   ["Hidden Gem"] = { description = "You deal 1% bonus damage.", rarity = "common", echo = "You deal 10% bonus damage." },
+  -- User-pasted 2026-10-16 (first-hand). The panel scales it by max mana, whole thousands (v4.7.427).
+  ["Mana Powered"] = { description = "You gain 4% bonus damage for every 1000 maximum mana you have.", category = "Offence" },
   ["Hoarder"] = { description = "All scaling gear effects are magnified by 15%.", rarity = "uncommon", echo = "All scaling gear effects are magnified by 30%." },
   ["Homebound"] = { description = "Returning to your raido cures you of all afflictions and restores you to full health. Not effective in the same location.", rarity = "rare" },
   ["Horror's Embrace"] = { description = "Flailing your tentacles deals damage to all denizens in your location and afflicts them with weakness. This effect has a 30 seconds cooldown before it can trigger again.", rarity = "rare" },
@@ -426,7 +428,6 @@ M.BOON_UNDESCRIBED = {
   "Heelbreaker",
   "Ogre's Strike",
   "Ogre's Speed",
-  "Mana Powered",
   "Brute Force",
   "Mental Prowess",
   "Deadly Finesse",
