@@ -119,6 +119,29 @@ describe("M._parseNamedBlock()", function()
     expect(#out).toBe(0)
   end)
 
+  -- Live offer screen: the "(ECHO) " prefix filled the 30-column padding, so only one space
+  -- followed the colon and the row was glued onto Candour's description.
+  it("parses an (ECHO) row with only one space after the colon", function()
+    local out = M._parseNamedBlock({
+      "Candour:                      You are immune to the blackout affliction by the clarity of the Lightbringer.",
+      "(ECHO) Way of The Empty Hand: While in a tekura stance, all blunt damage you deal is increased by 50%.",
+      "Ascetic:                      You are immune to the addiction affliction.",
+      "Restoration:                  Restore your resources instead.",
+    })
+    expect(#out).toBe(4)
+    expect(out[1].description).toBe("You are immune to the blackout affliction by the clarity of the Lightbringer.")
+    expect(out[2].name).toBe("(ECHO) Way of The Empty Hand")
+    expect(out[2].description).toBe("While in a tekura stance, all blunt damage you deal is increased by 50%.")
+    expect(out[3].name).toBe("Ascetic")
+    expect(out[4].name).toBe("Restoration")
+  end)
+
+  it("still parses a short (ECHO) row with column padding", function()
+    local out = M._parseNamedBlock({ "(ECHO) Restoration:           Restore your resources instead." })
+    expect(#out).toBe(1)
+    expect(out[1].name).toBe("(ECHO) Restoration")
+  end)
+
   it("returns an empty table for empty input", function()
     local out = M._parseNamedBlock({})
     expect(#out).toBe(0)
@@ -7120,6 +7143,28 @@ describe("a screen line glued onto a description", function()
     expect(lib["Azure Scales"].description).toBe("Gain 25% resistance to cold damage.")
     expect(lib["Azure Scales"].comboBoon).toBeTrue()
     expect(lib["Iron Throat"].description).toBe("Gain 25% resistance to asphyxiation damage.")
+  end)
+
+  -- v4.7.428: a one-space "(ECHO) Name: text" row used to be appended to the boon above it.
+  it("cuts a glued (ECHO) row off the boon above it", function()
+    local realSave = M._historySave
+    M._historySave = function() end
+    local n1, names, n2
+    local lib = withLibrary({
+      ["Candour"] = { description = "You are immune to the blackout affliction by the clarity of the Lightbringer."
+        .. " (ECHO) Way of The Empty Hand: While in a tekura stance, all blunt damage you deal is increased by 50%." },
+      ["Ascetic"] = { description = "You are immune to the addiction affliction." },
+    }, function()
+      n1, names = M._boonDbRepair()
+      n2 = M._boonDbRepair()
+    end)
+    M._historySave = realSave
+    expect(n1).toBe(1)
+    expect(names[1]).toBe("Candour")
+    expect(n2).toBe(0)
+    expect(lib["Candour"].description)
+      .toBe("You are immune to the blackout affliction by the clarity of the Lightbringer.")
+    expect(lib["Ascetic"].description).toBe("You are immune to the addiction affliction.")
   end)
 end)
 

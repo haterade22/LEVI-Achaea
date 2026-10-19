@@ -587,6 +587,15 @@ function M._boonDbRepair()
         if rec.category == nil and type(p.category) == "string" then rec.category = p.category end
         fixed[#fixed + 1] = name
       end
+      -- A glued "(ECHO) Name: text" row (v4.7.428): before `_parseNamedBlock` took one-space echo
+      -- rows, the row was appended to the boon above it. Prose never contains "(ECHO)".
+      local d = rec.description
+      local at = type(d) == "string" and d:find("%s%(ECHO%)%s")
+      if at then
+        local head = d:sub(1, at - 1):gsub("%s+$", "")
+        rec.description = (head ~= "") and head or nil
+        if fixed[#fixed] ~= name then fixed[#fixed + 1] = name end
+      end
     end
   end
   table.sort(fixed)

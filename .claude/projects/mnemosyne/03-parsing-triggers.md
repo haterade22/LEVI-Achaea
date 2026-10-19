@@ -120,6 +120,7 @@ M._captureLines(opts)
 Both blocks use a `Name:  <padded>  description` layout, and long descriptions word-wrap onto un-prefixed continuation lines. `_parseNamedBlock(lines)` rebuilds each entry:
 
 - A new entry matches `^(%S.-):%s%s+(%S.*)$` (name, then **two+ spaces**, then description) and is accepted only when `#name <= MAX_NAME_LEN` (40) — a longer "Name:" match is treated as prose, not a new entry.
+- **An `(ECHO)` row needs only ONE space** (v4.7.428): `^(%(ECHO%)%s+%S.-):%s+(%S.*)$` is tried first. The name column is 30 wide, and the 7-character `(ECHO) ` prefix can fill it: `(ECHO) Way of The Empty Hand: While in a tekura stance...` has one space after the colon. The 2-space rule read that row as a wrapped line of the boon above it, so the screen lost a boon and the boon above got the echo text glued onto its description. Prose never starts with `(ECHO)`, so the relaxed match is safe for these rows only. The name keeps its `(ECHO) ` prefix, as every consumer expects. `M._boonDbRepair` (007) cuts a glued ` (ECHO) ...` tail off a stored description at load, because `_learnBoon` overwrote the boon above with the joined text.
 - A line with no `Name:` prefix (matched by `^%s*(%S.-)%s*$`) is a wrapped continuation and is appended to the **previous** entry's `description` with a single joining space.
 - Blank lines (`^%s*$`) and dashed dividers (`isDivider` = `^%-%-%-+`, matching the game's ~80-dash rules) are skipped.
 

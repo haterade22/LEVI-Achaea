@@ -100,7 +100,12 @@ function M._parseNamedBlock(lines)
   local out = {}
   for _, ln in ipairs(lines) do
     if not (ln:match("^%s*$") or isDivider(ln)) then
-      local name, desc = ln:match("^(%S.-):%s%s+(%S.*)$")
+      -- An "(ECHO) " prefix uses up the screen's 30-column name padding, so a long echo name is
+      -- followed by ONE space, not two: "(ECHO) Way of The Empty Hand: While in a tekura...".
+      -- The 2-space test then read the row as a wrapped line of the boon above it. Prose never
+      -- starts with "(ECHO)", so one space is safe for these rows only.
+      local name, desc = ln:match("^(%(ECHO%)%s+%S.-):%s+(%S.*)$")
+      if not name then name, desc = ln:match("^(%S.-):%s%s+(%S.*)$") end
       if name and #name <= MAX_NAME_LEN then
         out[#out + 1] = {
           name = name:gsub("%s+$", ""),

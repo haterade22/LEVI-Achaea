@@ -2,6 +2,28 @@
 
 ---
 
+## 2026-10-19 - v4.7.428: an (ECHO) row on the boon offer screen is parsed as a boon
+
+User, with a live offer screen: "ECHO isnt being captured correctly."
+
+```
+Candour:                      You are immune to the blackout affliction by the clarity of the Lightbringer.
+(ECHO) Way of The Empty Hand: While in a tekura stance, all blunt damage you deal is increased by 50%.
+```
+
+- Cause: `M._parseNamedBlock` (`mnemosyne/004_Parsers.lua`) accepted a row only with TWO or more
+  spaces after the colon. The name column is 30 wide, and the 7-character `(ECHO) ` prefix filled it,
+  so this row had ONE space. The parser read it as a wrapped line of Candour. The screen had 3 boons,
+  not 4: Way of The Empty Hand was not learned, called out, scored, contemplated or reported, and
+  `_learnBoon` stored Candour's description with the echo row glued onto it.
+- Fix: a row that starts with `(ECHO)` is tried first and needs only one space. Prose never starts
+  with `(ECHO)`, so other rows keep the 2-space rule. The name keeps its `(ECHO) ` prefix.
+- Repair: `M._boonDbRepair` (`007_History.lua`, runs at load) cuts a glued ` (ECHO) ...` tail off a
+  stored description.
+- Tests (`test_mnemosyne.lua`): the pasted screen gives 4 entries; a padded `(ECHO)` row still
+  parses; the repair cuts the tail and is idempotent. Break-back: without the fix the screen test
+  gets 3 entries. Doc: `.claude/projects/mnemosyne/03-parsing-triggers.md`.
+
 ## 2026-10-16 - v4.7.427: the bonuses panel scales per-unit damage boons by our mana and stats
 
 User: "This boon is additive for how much mana we have. Mana Powered: You gain 4% bonus damage for
