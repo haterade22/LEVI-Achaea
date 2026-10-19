@@ -207,16 +207,27 @@ describe("the kata policy (monk/004)", function()
 end)
 
 describe("ASSESS (698) and Crescent's half health", function()
-  local function assess(name, hp, max)
+  local function assess(name, hp, max, class)
     ataxia = { vitals = {}, settings = {} }
     ataxiaTemp = {}
     isTargeted = function(n) return type(target) == "string" and n:lower() == target:lower() end
     deleteLine = function() end
-    ataxia_isClass = function() return false end
+    ataxia_isClass = function(c) return class ~= nil and c:lower() == class:lower() end
     ataxia_boxEcho = function() end
-    magi_setDestroy = function() end
     run(ASSESS, { "x", name, tostring(hp), tostring(max) })
   end
+
+  -- v4.7.429: 698 called magi_setDestroy for a Magi, and nothing in src_new defines it, so every
+  -- Magi round (each ends in `assess <target>`) threw here. This test used to stub it.
+  it("as a Magi, an assess of our target runs to the end with no magi_setDestroy defined", function()
+    target = "Agathon"
+    local savedFn = magi_setDestroy
+    magi_setDestroy = nil
+    local okRun, errRun = pcall(assess, "Agathon", 3000, 7000, "magi")
+    magi_setDestroy = savedFn
+    if not okRun then error(errRun) end
+    expect(ataxiaTemp.lastAssess).toBe(42)
+  end)
 
   it("3540/7000 is 50.57%: lastAssess floors to 50, but it is NOT half or less", function()
     target = "Agathon"

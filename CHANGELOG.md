@@ -2,6 +2,46 @@
 
 ---
 
+## 2026-10-19 - v4.7.429: Magi changes from Tabethys's log of a kill
+
+The user shared four logs "from Magi". Only one (`o6UKnyyy`) is a Magi fight: Tabethys leads a group
+on the World Tree and kills Kalys, a Serpent, with magma, dehydrate, dehydrate, then two
+stormhammers at about 50% health. The other three are the same player on Apostate. Filed as
+`kb/raw/logs/2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt`.
+
+- **One dehydrate counted two burns.** `general/015_Dehydrate.lua` added a burn on a weary target,
+  and `022_Increase_Burning` added another for the fan line ("You fan the heat of <T>'s body into
+  consuming flame.") that the same stack prints. The log shows one fan line for one stack (:422).
+  015 no longer counts the burn; the fan line is its only owner. Burns gate conflagrate and
+  destroy, so these fired a dehydrate early.
+- **Every Magi assess threw.** `698_Assess.lua` and `703_HYENA_SCENT.lua` called `magi_setDestroy`,
+  which is defined only in the retired `levi_test_project`. Every Magi round ends in `assess`.
+  Both calls are gone (the old function only printed a box echo; the stage word below replaces it).
+  `check_orphans.py` cannot see a global defined nowhere.
+- **The stormhammer kill round could be empty.** `magi.storm.selectTargets` (`mage/005`) took only
+  enemied players (of a known city, in city mode). With our target not enemied and nobody else
+  listed, `fire()` echoed "No ... enemies" and sent nothing, and P4 and group mode returned nil.
+  Now our target is slot 1 whenever gmcp lists it in the room. A target gmcp does not list (hidden,
+  or gone) is not cast at: Tabethys's log has two "You cannot see that being here." `fire()` now
+  sends the full round (`magi.offense.buildRound`: stand, staff and shield, the cast, assess).
+- **Target-only tracking.** `general/001_Assess.lua` set `targetHealth` from anyone's glance, and
+  P1 (destroy) and P4 (stormhammer) read it. `general/014_Temperance.lua` recorded a strip on
+  anyone. Both now check the name.
+- **Compact echoes, after Tabethys's display** (`mm echo [on|off]`, default on): `You: <Spell> ->
+  <Target>` once per round sent (`magi.offense.castEcho`, not again for the same round within 2 s);
+  `<Plane>: <Stage> -> <Target>` for each resonance that lands (`resoEcho`, called from the 13
+  branches of `022_Resonance_Afflictions`, and from `014_Temperance` and `022_Increase_Burning`);
+  and a stage word on the Magi prompt, `Target: Burns 2 [burn 2/5]` (`stageWord`, the same tests in
+  the same order as `selectSpell`, which it cannot call: it zeroes stale burns and P4 sends).
+- KB: `kb/CONFLICTS.md` #26 resolved (resonance grows one level per channelled plane per cast) and
+  the fan-line half of #30 resolved; new #37 (does moderate fire on a scalded target print "should
+  burn" beside the fan line? If so it still counts two). `.claude/classes/magi.md` gains "In play:
+  Tabethys's log of a group kill"; `kb/raw/logs/README.md` says how to read their echoes.
+- Tests: new `test_magi_tabethys.lua` (19: the stormhammer slot-1 rule and full round, the hidden
+  target, the two name checks, the echoes, the stage word); `test_magi_tracking.lua` (dehydrate +
+  fan line = one burn); `test_monk_kai_kata.lua` (a Magi assess with no `magi_setDestroy`). Each
+  fails against the old file. Full suite: 3455 passed.
+
 ## 2026-10-19 - v4.7.428: an (ECHO) row on the boon offer screen is parsed as a boon
 
 User, with a live offer screen: "ECHO isnt being captured correctly."

@@ -53,7 +53,12 @@ if gmcp.Char and gmcp.Char.Status then
 if ataxia_senseKeepTick then ataxia_senseKeepTick() end
 if gmcp.Char.Status.class == "Magi" then
 get_resonance()
-cecho("Target: Burns " ..tburns)
+-- The burns and, since v4.7.429, the stage word ("Target: Burns 2 [burn 2/5]", mage/004).
+if magi and magi.offense and magi.offense.promptEcho then
+  magi.offense.promptEcho()
+else
+  cecho("Target: Burns " ..tostring(tburns))
+end
 end
 end
 

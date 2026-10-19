@@ -1,0 +1,785 @@
+    9227h, 9508m ckdb-   (|--) (|||) (|||) (|||)
+9227h, 9508m cekdb-  (4.69) (|--) (|||) (|||) (|||)
+[System]: Prepended GET PEARL|GET GOLD|PUT GOLD IN PACK to your freestand queue.
+9227h, 9508m cekdb-   (|--) (|||) (|||) (|||)
+Post successful! Link: https://ada-young.com/pastebin/MIn0J6iw
+Ryzant inhales and begins holding his breath.
+9227h, 10296m cekdb-   (|--) (|||) (|||) (|||)
+Beneath blackened boughs.
+Yggdrasil's ancient limbs are supplanted by charred sentinels, weaving intricate motifs across the 
+stars that once sheltered mysterious creatures and boundless verdure. Footfalls are met with eddies 
+of soot, a silent testimony to the all-consuming inferno that annihilated the plane. The foliage is 
+utterly drained of life, leaving cinders caught eerily motionless as they desperately cling to their
+previous form. Occasionally another ashen frond will meet its destiny, crumbling in a final 
+fuliginous breath that sends a silent tribute into the void before fading from existence. There are 
+2 greater fire elementals here. Exuding umbral menace, a phantom jaguar is crouched here. Clouds of 
+frost swirl about the form of a massive elemental. A spectral owl swoops here on silent wings. A 
+Baalzadeen demon towers over you, filling you with dread. A mighty ghost basilisk lingers, its 
+great, ethereal shape shifting subtly. A massive creature of rock and earth sits immobile as a 
+stone. The twisted remains of Mortim lie here. Eradicator Valkael is here, shrouded. He wields a 
+Shield of Absorption in his right hand. The soul of Mortim roams the land, bodiless. Revenant Ryzant
+Nithilar, Scourge of His Legion is here. His features are obscured by a mask of lifevision. He 
+wields a Scimitar of Eagles in each hand. Agathon, Adherent of the Truths is here. He wields a 
+knotted willow staff in both hands.
+You see exits leading southeast and west.
+9227h, 10296m cekdb-   (|--) (|||) (|||) (|||)
+Ryzant exhales loudly.
+9227h, 10296m cekdb-   (|--) (|||) (|||) (|||)
+[System]: All queued commands cleared.+f STAND|STAND|SE|P MIRROR HERE
+9227h, 10296m cekdb-   (|--) (|||) (|||) (|||)
+Ryzant inhales and begins holding his breath.
+9227h, 10296m cekdb-   (|--) (|||) (|||) (|||)
+Valkael, riding a giant spectral owl, leaves to the southeast.
+Exploding into flames, the Baalzadeen disappears from view.
+9227h, 10296m cekdb-   (|||) (|||) (|||)
+keneanung: Priority list changed to:
+You have recovered equilibrium.=f STAND|STAND|SE|P MIRROR HERE
+You are not fallen or kneeling.
+You are not fallen or kneeling.
+Ryzant follows you southeast.
+The Collar of Mannamot.
+The etheric highway teems with a profusion of new growth, the breath of Life's Ancient inspiring the
+natural world to breathtaking fecundity. A rune resembling a horse has been sketched into the ground
+here. A spectral owl swoops here on silent wings. A Baalzadeen demon towers over you, filling you 
+with dread. Eradicator Valkael is here, shrouded. He wields a Shield of Absorption in his right 
+hand.
+You see exits leading northeast, southeast, southwest, northwest, up, down, and in.
+A wormhole is here, leading to: Ascending the lower trunk of Yggdrasil (#44943) in fathomless 
+expanse of the World Tree.
+What do you wish to examine?
+9227h, 10296m ckdb-   (|||) (|||) (|||)
+[Curing]: HOLD BREATH
+You feel an aura of rebounding surround you.
+9227h, 10371m ckdb-   (|||) (||-) (|||)
+9227h, 10371m ckdb-   (|||) (||-) (|||)
+9227h, 10371m ckdb-   (|||) (||-) (|||)
+9227h, 10371m ckdb-   (|||) (||-) (|||)
+9227h, 10371m ckdb-   (|||) (||-) (|||)
+9227h, 10371m ckdb-   (|||) (||-) (|||)
+9227h, 10560m ckdb-   (|||) (||-) (|||)
+9227h, 10560m ckdb-   (|||) (||-) (|||)
+You suddenly perceive the vague outline of an aura of rebounding around Valkael.
+9227h, 10560m ckdb-   (|||) (||-) (|||)
+You point your fists at the ground and freezing blasts of air emanate from your bracers to cover it 
+in ice.
+9227h, 10560m cekdb-  (3.12) (||-) (||-) (||-)
+[Curing]: SMOKE MALACHITE
+You take a long drag of malachite off your pipe.
+9227h, 10560m cekdb-   (||-) (||-) (||-)
+Valkael, riding a giant spectral owl, leaves to the northwest.
+Exploding into flames, the Baalzadeen disappears from view.
+9227h, 10560m cekdb-   (||-) (||-) (||-)
+You must regain equilibrium first.
+9227h, 10560m cekdb-   (||-) (||-) (||-)
+You are already concentrating on regaining equilibrium.
+9227h, 10560m cekdb-   (||-) (||-) (||-)
+You must regain equilibrium first.
+9227h, 10560m cekdb-   (||-) (||-) (||-)
+You are already concentrating on regaining equilibrium.
+9227h, 10560m cekdb-   (||-) (||-) (||-)
+You must regain equilibrium first.
+9227h, 10560m cekdb-   (||-) (||-) (||-)
+You are already concentrating on regaining equilibrium.
+9227h, 10560m cekdb-   (||-) (||-) (||-)
+Your lungs have recovered enough to smoke another mineral or plant.
+9227h, 10560m cekdb-   (||-) (||-) (||-)
+You must regain equilibrium first.
+9227h, 10560m cekdb-   (||-) (||-) (||-)
+You are already concentrating on regaining equilibrium.
+9227h, 10560m cekdb-   (||-) (||-) (||-)
+You must regain equilibrium first.
+9227h, 10560m cekdb-   (||-) (||-) (||-)
+You are already concentrating on regaining equilibrium.
+9227h, 10560m cekdb-   (||-) (||-) (||-)
+You must regain equilibrium first.
+9227h, 10560m cekdb-   (||-) (||-) (||-)
+9227h, 10560m cekdb-   (||-) (||-) (||-)
+You are already concentrating on regaining equilibrium.
+9227h, 10560m cekdb-   (||-) (||-) (||-)
+You must regain equilibrium first.
+9227h, 10560m cekdb-   (||-) (||-) (||-)
+You are already concentrating on regaining equilibrium.
+9227h, 10560m cekdb-   (||-) (||-) (||-)
+You must regain equilibrium first.
+9227h, 10560m cekdb-   (||-) (||-) (||-)
+You are already concentrating on regaining equilibrium.
+9227h, 10560m cekdb-   (||-) (||-) (||-)
+You have recovered equilibrium.
+9227h, 10560m ckdb-   (||-) (||-) (||-)
+the World Tree."
+9227h, 10560m ckdb-   (||-) (||-) (||-)
+[Curing]: HOLD BREATH
+Ahh, I am truly sorry, but I do not see anyone by that name here.
+9227h, 10560m ckdb-   (||-) (||-) (||-)
+Ryzant exhales loudly.
+9227h, 10560m ckdb-   (||-) (|--) (||-)
+Adanna, Adrastus, Aegoth, Agathon, Alashi, Annase, Archaosa, Autune, Axios, Bainz, Bingleton, 
+Boodir, Celline, Ceredia, Dalran, Danthan, Delia, Dierdre, Drillian, Dysmi, Dzuujah, Eiselle, 
+Elaniara, Fitz, Gallus, Gavriil, Gwi, Harran, Hikagejuunin, Ildiko, Iralia, Irimon, Izalyon, Jemma, 
+Kaiu, Kashryn, Khalayx, Komos, Laurlaethee, Layta, Laytron, Litharose, Lucilian, Maedhros, Maeror, 
+Maldrava, Mhuswys, Miriew, Mornath, Mortim, Mulligan, Mycen, Nagis, Nahaj, Nahaj, Nelcerus, Oenae, 
+Orianthe, Pharaus, Ranara, Redeux, Ruddra, Ryssa, Ryzant, Saphyria, Seldin, Serahfyna, Solina, 
+Tabethys, Talli, Tannivh, Tekla, Telie, Telox, Terana, Tharonus, Theosis, Thoralyn, Thulia, Tralden,
+Trendric, Tsia, Ulvin, Valkael, Veanna, Veldrin, Vesperyn, Yel, Ysindrolir, Zaleria, Zaric, Zarz, 
+Zbaco, Zex, and Zylenielle.
+Plus another 31 whose presence you cannot fully sense (95 total).
+9227h, 10560m ckdb-   (||-) (|--) (||-)
+9227h, 10560m ckdb-   (||-) (|--) (||-)
+The Collar of Mannamot.
+The etheric highway teems with a profusion of new growth, the breath of Life's Ancient inspiring the
+natural world to breathtaking fecundity. The ground is slick with ice. The trunk of Yggdrasil bulges
+out, forming into a massive branch that stretches forth into a timeless eternity beyond. Near the 
+bole, a broad platform of dark wood expands the already considerable width, offering an awe-
+inspiring vista of the dazzling celestial surroundings, fretted by the presence of myriad sparkling 
+supernovae and the occasional explosive meteor streaking across the heavens. A drift of snow piled 
+up against a strip of bark melts into a tiny stream of water, meandering its way to the edges of the
+World Tree's trunk before cascading its gelid droplets over the side. A rune resembling a horse has 
+been sketched into the ground here. A mighty ghost basilisk lingers, its great, ethereal shape 
+shifting subtly. A massive creature of rock and earth sits immobile as a stone. Revenant Ryzant 
+Nithilar, Scourge of His Legion is here. His features are obscured by a mask of lifevision. He 
+wields a Scimitar of Eagles in each hand.
+You see exits leading northeast, southeast, southwest, northwest, up, down, and in.
+A wormhole is here, leading to: Ascending the lower trunk of Yggdrasil (#44943) in fathomless 
+expanse of the World Tree.
+9227h, 10560m ckdb-   (||-) (|--) (||-)
+Ryzant inhales and begins holding his breath.
+9227h, 10560m ckdb-   (||-) (|--) (||-)
+9227h, 10560m ckdb-   (||-) (|--) (||-)
+Valkael, riding a giant spectral owl, arrives from the northwest.
+Pure evil fills the room as a Baalzadeen emerges.
+9227h, 10560m ckdb-   (||-) (|--) (||-)
+Valkael presses his hand over the abdomen of the unmoving body, chanting darkly. As an ethereal mist
+rises from its form and into Valkael's hand, it gradually melds into the shape of a glowing spear.
+9227h, 10560m ckdb-   (|--) (|--) (|--)
+Tree."
+9227h, 10560m ckdb-   (|--) (|--) (|--)
+You feel an aura of rebounding surround you.
+9227h, 10560m ckdb-   (|--) (|--) (|--)
+You suddenly perceive the vague outline of an aura of rebounding around Valkael.
+9227h, 10560m ckdb-   (|--) (|--) (|--)
+Agathon arrives from the northwest.
+9227h, 10560m ckdb-   (|--) (|--) (|--)
+You detect nothing here by that name.
+9227h, 10560m ckdb-   (|--) (|--) (|--)
+9227h, 10560m ckdb-   (|--) (|--) (|--)
+9227h, 10560m ckdb-   (|--) (|--) (|--)
+Valkael begins to follow you.
+9227h, 10560m ckdb-   (|--) (|--) (|--)
+9227h, 10560m ckdb-   (|--) (|--) (|--)
+9227h, 10560m ckdb-   (|--) (|--) (|--)
+Agathon begins to follow you.
+9227h, 10560m ckdb-   (|--) (|--) (|--)
+The following have joined the XP Event and are presently active in the realms:
+Ryssa, Faerum, Erishka, Kalys, Bainz, Mortim
+6 players are currently active in the XP Event.
+9227h, 10560m ckdb-   (|--) (|--) (|--)
+Your target is now: Erishka (an adventurer)
+9227h, 10560m ckdb-   (|--) (|--) (|--)
+9227h, 10560m ckdb-   (|--) (|--) (|--)
+Erishka is already an enemy.
+9227h, 10560m ckdb-   (|--) (|--) (|--)
+9227h, 10560m ckdb-   (|--) (|--) (|--)
+Valkael's aura of weapons rebounding disappears.
+Valkael mutters words of death and decay, and suddenly the ground breaks open all around as hands of
+rotting flesh and white bone push out of the ground.
+9227h, 10560m ckdb-   (|--) (|--)
+9227h, 10560m ckdb-   (|--) (|--)
+9227h, 10560m ckdb-   (|--) (|--)
+Valkael takes a long drag off his pipe.
+9227h, 10560m ckdb-   (|--) (|--)
+9227h, 10560m ckdb-   (|--) (|--)
+Naxx descends from above.
+9227h, 10560m ckdb-   (|--) (|--)
+A ghostly apparition glides into view from the northeast.
+A grey-brown rattlesnake enters from the northeast.
+9227h, 10560m ckdb-   (|--) (|--)
+The protective coating covering the skin of Valkael is ripped away along with his protections.
+Kalys snaps his wrist in a practiced motion, bringing Elentari's Scourge back around to strike at 
+Valkael a second time.+
+9227h, 10560m ckdb-   (|--) (|--)
+You are leading a group consisting of: Agathon, Ryzant, and Valkael.
+9227h, 10560m ckdb-   (|--) (|--)
+Valkael eats a magnesium chip.
+Valkael applies a quicksilver droplet to himself.
+9227h, 10560m ckdb-   (|--) (|--)
+You are leading a group consisting of: Agathon, Ryzant, and Valkael.
+9227h, 10560m ckdb-   (|--) (|--)
+You are leading a group consisting of: Agathon, Ryzant, and Valkael.
+9227h, 10560m ckdb-   
+You are leading a group consisting of: Agathon, Ryzant, and Valkael.
+9227h, 10560m ckdb-   
+You are leading a group consisting of: Agathon, Ryzant, and Valkael.
+9227h, 10560m ckdb-   
+Naxx begins to follow you.
+Naxx exhales loudly.
+9227h, 10560m ckdb-   
+Naxx inhales and begins holding her breath.
+9227h, 10560m ckdb-   
+A small grey-brown rattlesnake sinks its fangs into the neck of Valkael, injecting a potent dose of 
+toxin.
+9227h, 10560m ckdb-   
+Valkael eats an argentum flake.
+9227h, 10560m ckdb-   
+Valkael dances aside as Kalys attempts to slip behind him.
+9227h, 10560m ckdb-   
+Your target is now: Kalys (an adventurer)
+9227h, 10560m ckdb-   
+9227h, 10560m ckdb-   
+Kalys is now one of your enemies.
+9227h, 10560m ckdb-   
+Your target is now: Kalys (an adventurer)
+9227h, 10560m ckdb-   
+9227h, 10560m ckdb-   
+Kalys is already an enemy.
+9227h, 10560m ckdb-   
+9227h, 10560m ckdb-   
+[System]: All queued commands cleared.+f PVP=f PVP
+You have no mercy.
+You are not fallen or kneeling.
+You cease wielding a Shield of Absorption in your right hand.
+You cease wielding an exquisite Mhaldorian staff of sterling silver in your left hand.
+You start to wield a Shield of Absorption in your left hand.
+You start to wield an exquisite Mhaldorian staff of sterling silver in your right hand.---
+You: Magma -> Kalys
+Earth: Brokenrightarm -> Kalys
+You direct your will against the temperance elixir which protects Kalys and it burns away.
+(||||||||||||||||----) 8207 82%
+9227h, 10434m cekdb-  (1.79) (|--) (|--)
+[bro 1.00]
+9227h, 10434m cekdb-   (|--) (|--)
+[bro 1.00]
+[Curing]: SMOKE MALACHITE
+You take a long drag of malachite off your pipe.
+You have smoked the last traces of malachite in a polished marble pipe.
+Kalys takes some salve from a vial and rubs it on his arms.
+Kalys takes a drink from a purple heartwood vial.
+9227h, 10434m cekdb-   (|--) (|--)
+[System]: All queued commands cleared.+f PVP
+9227h, 10434m cekdb-   (|--) (|--)
+You may not assess someone again so soon after doing so previously.
+9227h, 10434m cekdb-   (|--) (|--)
+[System]: All queued commands cleared.+f PVP
+9227h, 10434m cekdb-   (|--) (|--)
+Agathon lashes out with a straight kick at Kalys.
+The foot of Agathon smashes into the vulnerable cluster of nerves beneath the arm of Kalys, sending 
+him spinning to the ground.
+Dropping back into a low crouch, Agathon whips a knotted willow staff in a swift strike at the right
+thigh of Kalys.
+The staff cracks across the right thigh of Kalys.
+Agathon spins a full rotation, bringing a knotted willow staff around in a blur to crash into the 
+left arm of Kalys.
+The staff connects to the left arm with a resounding crack, the limb flopping uselessly.
+9227h, 10434m cekdb-   (|--) (|--)
+[System]: All queued commands cleared.+f PVP
+9227h, 10434m cekdb-   (|--) (|--)
+Ryzant exhales loudly.
+Ryzant whips a Scimitar of Eagles through the air in front of Kalys, to no effect.
+Ryzant slashes into Kalys with a Scimitar of Eagles.
+Cold blue flames wreathe Ryzant's runeblade, emanating an icy, penetrating chill.+
+9227h, 10434m cekdb-   (|--) (|--)
+[par 1.00]
+Ryzant moves in to engage Kalys.
+9227h, 10434m cekdb-   (|--) (|--)
+[par 1.00]
+Kalys eats a magnesium chip.
+9227h, 10434m cekdb-   (|--) (|--)
+Valkael stares at Kalys, giving him the evil eye.
+9227h, 10434m cekdb-   (|--) (|--)
+Valkael stares at Kalys, giving him the evil eye.+
+9227h, 10434m cekdb-   (|--) (|--)
+[par 1.00]
+[System]: All queued commands cleared.+f PVP
+9227h, 10434m cekdb-   (|--) (|--)
+[par 1.00]
+Valkael eats a potash crystal.ILLUSION
+9227h, 10434m cekdb-   (|--) (|--)
+[par 1.00]
+[par 1.00]
+[System]: All queued commands cleared.+f PVP
+9227h, 10434m cekdb-   (|--) (|--)
+"paralysis"
+9227h, 10434m cekdb-   (|--) (|--)
+[par 1.00]
+9227h, 10434m cekdb-   (|--) (|--)
+[System]: All queued commands cleared.+f PVP
+9227h, 10434m cekdb-   (|--) (|--)
+9227h, 10434m cekdb-   (|--) (|--)
+9227h, 10434m cekdb-   (|--) (|--)
+"breach"
+9227h, 10434m cekdb-   (|--) (|--)
+[par 1.00]
+9227h, 10434m cekdb-   (|--) (|--)
+[par 1.00]
+[par 1.00]
+[System]: All queued commands cleared.+f PVP
+9227h, 10560m cekdb-   (|--) (|--)
+[par 1.00]
+Your lungs have recovered enough to smoke another mineral or plant.
+9227h, 10560m cekdb-   (|--) (|--)
+[System]: All queued commands cleared.+f PVP
+9227h, 10560m cekdb-   (|--) (|--)
+Kalys takes some salve from a vial and rubs it on his skin.
+9227h, 10560m cekdb-   (|--) (|--)
+[par 1.00]
+[par 1.00]
+You have recovered equilibrium.
+[Curing]: OUTRIFT MALACHITE
+You remove 1 malachite, bringing the total in the rift to 1793.
+9227h, 10560m ckdb-   (|--) (|--)
+[Curing]: PUT MALACHITE IN 577156
+You fill your pipe with a pinch of ground malachite.
+9227h, 10560m ckdb-   (|--) (|--)
+=f PVP
+You have no mercy.
+You are not fallen or kneeling.
+You: Dehydrate -> Kalys
+The skin of Kalys begins to dry and crack as he grows pale.
+You fan the heat of Kalys's body into consuming flame.
+Fire: Scalded > Burning -> Kalys
+Water: Frostbite -> Kalys
+(||||||||||||||||----) 7977 80%
+[par 1.00]
+9227h, 10464m cekdb-  (1.79) (|--) (|--) (||-)
+[par 1.00 wea 1.00 nau 1.00 bur 1.00]
+[par 1.00 wea 1.00 nau 1.00 bur 1.00]♨ 
+[wea 1.00 par 1.00 fro 1.00 nau 1.00 bur 1.00]♨ 
+[System]: All queued commands cleared.+f PVP
+9227h, 10464m cekdb-   (|--) (|--) (||-)
+[wea 1.00 par 1.00 fro 1.00 nau 1.00 bur 1.00]♨ 
+Kalys eats a magnesium chip.
+Kalys stands up.
+[wea 1.00 par 1.00 fro 1.00 nau 1.00 bur 1.00]♨ 
+[wea 1.00 par 1.00 fro 1.00 nau 1.00 bur 1.00]♨ 
+Valkael dances aside as Kalys attempts to slip behind him.
+9227h, 10464m cekdb-   (|--) (|--) (||-)
+[fro 1.00 wea 1.00 nau 1.00 bur 1.00]♨ 
+You suddenly perceive the vague outline of an aura of rebounding around Kalys.
+[fro 1.00 wea 1.00 nau 1.00 bur 1.00]♨ 
+9227h, 10464m cekdb-   (|--) (|--) (||-)
+Kalys touches a tree of life tattoo.
+9227h, 10464m cekdb-   (|--) (|--) (||-)
+[fro 0.67 wea 0.67 nau 0.67 bur 1.00]♨ 
+Agathon lashes out with a straight kick at Kalys.
+The foot of Agathon smashes into the vulnerable cluster of nerves beneath the arm of Kalys, sending 
+him spinning to the ground.
+Agathon spins a full rotation, bringing a knotted willow staff around in a blur to crash into the 
+right arm of Kalys.
+The staff connects to the right arm with a resounding crack, the limb flopping uselessly.
+Dropping back into a low crouch, Agathon whips a knotted willow staff in a swift strike at the left 
+thigh of Kalys.
+The staff cracks across the left thigh of Kalys.
+9227h, 10464m cekdb-   (|--) (|--) (||-)
+Naxx's aura of weapons rebounding disappears.
+[fro 0.67 wea 0.67 nau 0.67 bur 1.00]♨ 
+Naxx exhales loudly.
+Naxx reaches past Kalys, plunging Gattan'lier's hunger into his shadow.
+Naxx lashes out with a swift, reaping blow at Kalys.+
+As the weapon strikes Kalys, he seems greatly diminished.
+9227h, 10464m cekdb-   (|--) (|--) (||-)
+[par 1.00 wea 0.67 par 1.00 fro 0.67 nau 0.67 bur 1.00]♨ 
+Alias "stmpvp" will now execute: "stand/wield staff shield/cast stormhammer at Kalys"
+9227h, 10464m cekdb-   (|--) (|--) (||-)+f STMPVP
+9227h, 10464m cekdb-   (|--) (|--) (||-)
+Kalys eats a potash crystal.ILLUSION
+Naxx takes a long drag off her pipe.
+Valkael stares at Kalys, giving him the evil eye.+
+Valkael stares at Kalys, giving him the evil eye.+
+9227h, 10464m cekdb-   (|--) (|--) (||-)
+[par 1.00 fro 0.67 imp 1.00 par 1.00 nau 0.67 wea 0.67 bur 1.00]♨ 
+Ryzant inhales and begins holding his breath.
+9227h, 10464m cekdb-   (|--) (|--) (||-)
+"impatience"
+"paralysis"
+9227h, 10464m cekdb-   (|--) (|--) (||-)
+[par 1.00 fro 0.67 imp 1.00 par 1.00 nau 0.67 wea 0.67 bur 1.00]♨ 
+Ryzant exhales loudly.
+Lightning-quick, Ryzant jabs Kalys with a Scimitar of Eagles.
+The attack rebounds back onto Ryzant!
+Lightning-quick, Ryzant jabs Kalys with a Scimitar of Eagles.
+The attack rebounds back onto Ryzant!
+The protective coating covering the skin of Ryzant sloughs off.
+9227h, 10464m cekdb-   (|--) (|--) (||-)
+[par 1.00 fro 0.67 imp 1.00 par 1.00 nau 0.67 wea 0.67 bur 1.00]♨ 
+Ryzant eats an aurum flake.
+Ryzant takes a long drag off his pipe.
+Ryzant applies a quicksilver droplet to himself.
+9227h, 10464m cekdb-   (|--) (|--) (||-)
+[par 1.00 fro 0.67 imp 1.00 par 1.00 nau 0.67 wea 0.67 bur 1.00]♨ 
+9227h, 10464m cekdb-   (|--) (|--) (||-)
+9227h, 10464m cekdb-   (|--) (|--) (||-)
+9227h, 10464m cekdb-   (|--) (|--) (||-)
+[par 1.00 fro 0.67 imp 1.00 par 1.00 nau 0.67 wea 0.67 bur 1.00]♨ 
+Kalys takes some salve from a vial and rubs it on his body.
+The fires consuming Kalys diminish somewhat.
+9227h, 10464m cekdb-   (|--) (|--) (||-)
+[par 1.00 fro 0.67 imp 1.00 par 1.00 nau 0.67 wea 0.67 bur 1.00]
+[par 1.00 fro 0.67 imp 1.00 par 1.00 nau 0.67 wea 0.67 bur 1.00]
+You have recovered equilibrium.=f PVP
+You have no mercy.
+You are not fallen or kneeling.
+You: Dehydrate -> Kalys
+The skin of Kalys begins to dry and crack as he grows pale.
+You fan the heat of Kalys's body into consuming flame.
+Fire: Blistered -> Kalys
+Water: Stuttering -> Kalys
+(||||||||------------) 4415 44%
+[par 1.00 fro 0.67 imp 1.00 par 1.00 nau 0.67 wea 0.67 bur 1.00]=f STMPVP
+You must regain equilibrium first.
+You must regain equilibrium first.
+You must regain equilibrium first.
+9227h, 10368m cekdb-  (1.79) (|--) (||-) (|||)
+[par 1.00 fro 0.50 imp 1.00 par 1.00 nau 1.00 wea 1.00 bur 1.00]♨ 
+[fro 0.50 par 1.00 nau 1.00 imp 1.00 par 1.00 wea 1.00 stu 1.00 bur 1.00]♨ 
+You are already concentrating on regaining equilibrium.
+9227h, 10368m cekdb-   (|--) (||-) (|||)
+You are already concentrating on regaining equilibrium.
+9227h, 10368m cekdb-   (|--) (||-) (|||)
+Kalys eats a magnesium chip.
+9227h, 10368m cekdb-   (|--) (||-) (|||)
+[par 1.00 nau 1.00 imp 1.00 fro 0.50 wea 1.00 stu 1.00 bur 1.00]♨ 
+You are already concentrating on regaining equilibrium.
+9227h, 10368m cekdb-   (|--) (||-) (|||)
+[par 1.00 nau 1.00 imp 1.00 fro 0.50 wea 1.00 stu 1.00 bur 1.00]♨ 
+Alias "stmpvp" will now execute: "stand/wield staff shield/cast stormhammer at Kalys"
+9227h, 10368m cekdb-   (|--) (||-) (|||)+f STMPVP
+9227h, 10368m cekdb-   (|--) (||-) (|||)
+[par 1.00 nau 1.00 imp 1.00 fro 0.50 wea 1.00 stu 1.00 bur 1.00]♨ 
+Kalys stands up.
+[par 1.00 nau 1.00 imp 1.00 fro 0.50 wea 1.00 stu 1.00 bur 1.00]♨ 
+[par 1.00 nau 1.00 imp 1.00 fro 0.50 wea 1.00 stu 1.00 bur 1.00]♨ 
+9227h, 10368m cekdb-   (|--) (||-) (|||)
+Ryzant backs away and eases off.
+9227h, 10368m cekdb-   (|--) (||-) (|||)
+Agathon rises onto the balls of his feet, a look of grim certainty overcoming his face.
+9227h, 10368m cekdb-   (|--) (||-) (|||)
+[par 1.00 nau 1.00 imp 1.00 fro 0.50 wea 1.00 stu 1.00 bur 1.00]♨ 
+[par 1.00 nau 1.00 imp 1.00 fro 0.50 wea 1.00 stu 1.00 bur 1.00]♨ 
+Naxx inhales and begins holding her breath.
+9227h, 10368m cekdb-   (|--) (||-) (|||)
+You suddenly perceive the vague outline of an aura of rebounding around Valkael.
+[par 1.00 nau 1.00 imp 1.00 fro 0.50 wea 1.00 stu 1.00 bur 1.00]♨ 
+9227h, 10368m cekdb-   (|--) (||-) (|||)
+Ryzant inhales and begins holding his breath.
+9227h, 10560m cekdb-   (|--) (||-) (|||)
+Ryzant ceases to wield a Scimitar of Eagles in his left hand.
+Ryzant starts to wield a hellscorched, Mhaldorian battleaxe in his left hand.
+Ryzant exhales loudly.
+9227h, 10560m cekdb-   (|--) (||-) (|||)
+Valkael's aura of weapons rebounding disappears.
+[par 1.00 nau 1.00 imp 1.00 fro 0.50 wea 1.00 stu 1.00 bur 1.00]♨ 
+9227h, 10560m cekdb-   (|--) (||-) (|||)
+[par 1.00 nau 1.00 imp 1.00 fro 0.50 wea 1.00 stu 1.00 bur 1.00]♨ 
+Valkael takes a long drag off his pipe.
+Ryzant inhales and begins holding his breath.
+9227h, 10560m cekdb-   (|--) (||-) (|||)
+[par 1.00 nau 1.00 imp 1.00 fro 0.50 wea 1.00 stu 1.00 bur 1.00]♨ 
+You have recovered equilibrium.=f STMPVP
+You are not fallen or kneeling.
+You cease wielding an exquisite Mhaldorian staff of sterling silver in your right hand.
+You cease wielding a Shield of Absorption in your left hand.
+You start to wield an exquisite Mhaldorian staff of sterling silver in your left hand.
+You start to wield a Shield of Absorption in your right hand.
+You cannot see that being here.
+9227h, 10560m ckdb-   (|--) (||-) (|||)
+[Curing]: HOLD BREATH
+Valkael has left the group.
+Valkael, riding a giant spectral owl, leaves to the southeast.
+Exploding into flames, the Baalzadeen disappears from view.
+9227h, 10560m ckdb-   (|--) (||-) (|||)
+9227h, 10560m ckdb-   (|--) (||-) (|||)
+You create a pool of water in the air in front of you and look through it, sensing Kalys at Placid 
+pools.  (45028)
+From your knowledge, that room is in The collar of Mannamot.
+9227h, 10540m cekdb-  (0.78) (|--) (||-) (|||)
+[par 1.00 nau 1.00 imp 1.00 fro 0.50 wea 1.00 stu 1.00 bur 1.00]♨ 
+You have recovered equilibrium.
+9227h, 10540m ckdb-   (|--) (||-) (|||)
+9227h, 10540m ckdb-   (|--) (||-) (|||)
+[Curing]: HOLD BREATH
+A small grey-brown rattlesnake lunges for your throat, its fangs sinking into the waxy coating that 
+protects you.
+The protective barrier coating your skin dissolves.
+9227h, 10540m ckdb-   (|--) (||-) (|||)
+[Curing]: OUTR QUICKSILVER
+You remove 1 quicksilver, bringing the total in the rift to 15.
+[Curing]: APPLY QUICKSILVER
+You apply a quicksilver droplet to yourself.
+9227h, 10540m ckdb-   (|--) (||-) (|||)
+9227h, 10540m ckdb-   (|--) (||-) (|||)
+Focusing on the innate bond with your citymate, you set off southeast toward your goal.
+Your mount slips and falls on the ice as you try to leave.
+9227h, 10540m ckdb-   (|--) (||-) (|||)
+keneanung: Priority list changed to:
+	a greater water elemental
+	a lesser water elemental
+	a lesser water elemental
+	a lesser water elemental
+Focusing on the innate bond with your citymate, you set off southeast toward your goal.
+Agathon, Naxx, and Ryzant follows you southeast.
+Placid pools.
+Clouds of frost swirl about the form of a massive elemental. There are 4 swelling orb of water here.
+There are 5 whistling orb of pure wind here. Filling the air with a comforting warmth, an orb of 
+flame rests here. There are 4 perfectly smooth orb of earth here. There are 3 lesser water 
+elementals here. A spectral owl swoops here on silent wings. A Baalzadeen demon towers over you, 
+filling you with dread. Eradicator Valkael is here, shrouded. He wields a Shield of Absorption in 
+his right hand. Kalys is here, hidden. His features are obscured by Revelation's Guise. He wields 
+Thoth's fang in his left hand and Elentari's Scourge in his right.
+You see exits leading east and northwest.
+You have arrived at your destination!
+9227h, 10540m ckdb-   (|--) (||-) (|||)
+Kalys eats a potash crystal.
+9227h, 10540m ckdb-   (|--) (||-) (|||)
+[par 1.00 nau 1.00 imp 1.00 fro 0.50 wea 1.00 stu 1.00 bur 1.00]♨ 
+You feel an aura of rebounding surround you.
+9227h, 10540m ckdb-   (||-) (|||)
+keneanung: Priority list changed to:
+	a greater water elemental
+	a lesser water elemental
+	a lesser water elemental
+A lesser water elemental sloshes away to the east.
+9227h, 10540m ckdb-   (||-) (|||)
+Kalys eats a magnesium chip.
+9227h, 10540m ckdb-   (||-) (|||)
+[par 1.00 nau 1.00 imp 1.00 fro 0.50 wea 1.00 stu 1.00 bur 1.00]♨ 
+Alias "stmpvp" will now execute: "stand/wield staff shield/cast stormhammer at Kalys"
+9227h, 10560m ckdb-   (||-) (|||)+f STMPVP=f STMPVP
+You are not fallen or kneeling.---
+The sky above grows dark as you call upon powerful magics. Raising your hands balefully, you cause 
+lightning bolts, the hammer of the storm, to shoot from your hands and slam into Kalys.
+9227h, 9760m cekdb-  (4.69) (||-) (|||)
+Ryzant ceases to wield a hellscorched, Mhaldorian battleaxe in his left hand.
+Ryzant starts to wield a Scimitar of Eagles in his left hand.
+Ryzant exhales loudly.
+Ryzant whips a Scimitar of Eagles through the air in front of Kalys, to no effect.
+Ryzant bats the clumsy attempt of Kalys to defend against his attack aside.
+Lightning-quick, Ryzant jabs Kalys with a Scimitar of Eagles.+
+9227h, 9760m cekdb-   (||-) (|||)
+[fro 0.50 par 1.00 nau 1.00 imp 1.00 par 1.00 wea 1.00 stu 1.00 bur 1.00]♨ 
+Ryzant moves in to engage Kalys.
+9227h, 9760m cekdb-   (||-) (|||)
+[Curing]: SMOKE MALACHITE
+You take a long drag of malachite off your pipe.
+Kalys takes a drink from a purple heartwood vial.
+9227h, 9760m cekdb-   (||-) (|||)
+[fro 0.50 par 1.00 nau 1.00 imp 1.00 par 1.00 wea 1.00 stu 1.00 bur 1.00]♨ 
+(||||||||||----------) 5132 51%
+[fro 0.50 par 1.00 nau 1.00 imp 1.00 par 1.00 wea 1.00 stu 1.00 bur 1.00]♨ 
+9227h, 9694m cekdb-   (||-) (|||)
+"paralysis"
+9227h, 9694m cekdb-   (||-) (|||)
+Valkael stares at Kalys, giving him the evil eye.
+Valkael stares at Kalys, giving him the evil eye.
+9227h, 9694m cekdb-   (||-) (|||)
+Alias "stmpvp" will now execute: "stand/wield staff shield/cast stormhammer at Kalys"
+9227h, 9694m cekdb-   (||-) (|||)+f STMPVP
+9227h, 9694m cekdb-   (||-) (|||)
+Naxx exhales loudly.
+Naxx lashes out with a swift, reaping blow at Kalys.+
+As the scythe comes away, the writhing shadow of Kalys clings to the weapon.
+9227h, 10480m cekdb-   (||-) (|||)
+[fro 0.50 par 1.00 nau 1.00 imp 1.00 par 1.00 wea 1.00 stu 1.00 bur 1.00]♨ 
+"manaleech"
+"asthma"
+9227h, 10480m cekdb-   (||-) (|||)
+[wea 1.00 man 1.00 stu 1.00 fro 0.50 nau 1.00 imp 1.00 par 1.00 ast 1.00 par 1.00 bur 1.00]♨ 
+[wea 1.00 man 1.00 stu 1.00 fro 0.50 nau 1.00 imp 1.00 par 1.00 ast 1.00 par 1.00 bur 1.00]♨ 
+Kalys eats a magnesium chip.
+9227h, 10480m cekdb-   (||-) (|||)
+[wea 1.00 man 1.00 stu 1.00 par 1.00 imp 1.00 fro 0.50 ast 1.00 nau 1.00 bur 1.00]♨ 
+[wea 1.00 man 1.00 stu 1.00 par 1.00 imp 1.00 fro 0.50 ast 1.00 nau 1.00 bur 1.00]♨ 
+Ryzant backs away and eases off.
+9227h, 10480m cekdb-   (||-) (|||)
+Your lungs have recovered enough to smoke another mineral or plant.
+9227h, 10480m cekdb-   (||-) (|||)
+You suddenly perceive the vague outline of an aura of rebounding around Naxx.
+[wea 1.00 man 1.00 stu 1.00 par 1.00 imp 1.00 fro 0.50 ast 1.00 nau 1.00 bur 1.00]♨ 
+9227h, 10480m cekdb-   (||-) (|||)
+Alias "stmpvp" will now execute: "stand/wield staff shield/cast stormhammer at Kalys"
+9227h, 10480m cekdb-   (||-) (|||)+f STMPVP
+9227h, 10480m cekdb-   (||-) (|||)
+Ryzant inhales and begins holding his breath.
+9227h, 10480m cekdb-   (||-) (|||)
+Alias "stmpvp" will now execute: "stand/wield staff shield/cast stormhammer at Kalys"
+9227h, 10560m cekdb-   (||-) (|||)+f STMPVP
+9227h, 10560m cekdb-   (||-) (|||)
+Alias "stmpvp" will now execute: "stand/wield staff shield/cast stormhammer at Kalys"
+9227h, 10560m cekdb-   (||-) (|||)
+[wea 1.00 man 1.00 stu 1.00 par 1.00 imp 1.00 fro 0.50 ast 1.00 nau 1.00 bur 1.00]♨ +f STMPVP
+9227h, 10560m cekdb-   (||-) (|||)
+Naxx ceases to wield Agith'maal's ire in her left hand.
+Naxx starts to wield Gattan'lier's hunger in her left hand.
+Naxx's aura of weapons rebounding disappears.
+[wea 1.00 man 1.00 stu 1.00 par 1.00 imp 1.00 fro 0.50 ast 1.00 nau 1.00 bur 1.00]♨ 
+Drawing herself up to her full height, Naxx speaks a terrible word of power.
+Valkael clutches at his head, face contorted in pain.
+The piercing sound sends a spike of agony into your brain, threatening to rob you of conscious 
+thought.                                                                            -695 (psychic) 
+Naxx clutches at her head, face contorted in pain.
+Ryzant clutches at his head, face contorted in pain.
+Agathon clutches at his head, face contorted in pain.
+8532h, 10560m cekdb-   (||-) (|||)
+Naxx takes a long drag off her pipe.
+Naxx inhales and begins holding her breath.
+Naxx takes a drink from a cedarwood vial.
+8532h, 10560m cekdb-   (||-) (|||)
+[wea 1.00 man 1.00 stu 1.00 par 1.00 imp 1.00 fro 0.50 ast 1.00 nau 1.00 bur 1.00]♨ 
+Valkael, riding a giant spectral owl, leaves to the east.
+Exploding into flames, the Baalzadeen disappears from view.
+8532h, 10560m cekdb-   (|--) (||-)
+[System]: All queued commands cleared.+f STAND|STAND|SE|P MIRROR HERE
+8532h, 10560m cekdb-   (|--) (||-)
+8532h, 10560m cekdb-   (|--) (||-)
+[System]: All queued commands cleared.+f STAND|STAND|E|P MIRROR HERE
+8532h, 10560m cekdb-   (|--) (||-)
+[wea 1.00 man 1.00 stu 1.00 par 1.00 imp 1.00 fro 0.50 ast 1.00 nau 1.00 bur 1.00]♨ 
+A supple metallic shell of quicksilver has formed around Ryzant.
+[wea 1.00 man 1.00 stu 1.00 par 1.00 imp 1.00 fro 0.50 ast 1.00 nau 1.00 bur 1.00]♨ 
+8532h, 10560m cekdb-   (|--) (||-)
+Ryzant exhales loudly.
+8532h, 10560m cekdb-   (|--) (||-)
+[wea 1.00 man 1.00 stu 1.00 par 1.00 imp 1.00 fro 0.50 ast 1.00 nau 1.00 bur 1.00]♨ 
+keneanung: Priority list changed to:
+	a greater water elemental
+	a lesser water elemental
+A lesser water elemental sloshes away to the east.
+8532h, 10560m cekdb-   (|--) (||-)
+Ryzant inhales and begins holding his breath.
+8532h, 10560m cekdb-   (|--) (||-)
+You have recovered equilibrium.=f STAND|STAND|E|P MIRROR HERE
+You are not fallen or kneeling.
+You are not fallen or kneeling.
+Agathon, Naxx, and Ryzant follows you east.
+Drenched expanse on the World Tree's fifth tier.
+There are 3 lesser water elementals here. A spectral owl swoops here on silent wings. A Baalzadeen 
+demon towers over you, filling you with dread. Eradicator Valkael is here, shrouded. He wields a 
+Shield of Absorption in his right hand. Kalys is here, hidden. His features are obscured by 
+Revelation's Guise. He wields Thoth's fang in his left hand and Elentari's Scourge in his right.
+You see exits leading southeast and west.
+What do you wish to examine?
+keneanung: Priority list changed to:
+	a lesser water elemental
+	a lesser water elemental
+	a lesser water elemental
+8532h, 10560m ckdb-   (|--) (||-)
+[Curing]: HOLD BREATH
+Kalys eats a magnesium chip.
+Kalys takes a drink from a purple heartwood vial.
+8532h, 10560m ckdb-   (|--) (||-)
+[wea 1.00 man 1.00 stu 1.00 par 1.00 imp 1.00 fro 0.50 ast 1.00 nau 1.00 bur 1.00]♨ 
+I do not recognise anything called that here.
+8532h, 10560m ckdb-   (|--) (||-)
+Valkael's aura of weapons rebounding disappears.
+[wea 1.00 man 1.00 stu 1.00 par 1.00 imp 1.00 fro 0.50 ast 1.00 nau 1.00 bur 1.00]♨ 
+8532h, 10560m ckdb-   (|--) (||-)
+Valkael takes a long drag off his pipe.
+8532h, 10560m ckdb-   (|--) (||-)
+[wea 1.00 man 1.00 stu 1.00 par 1.00 imp 1.00 fro 0.50 ast 1.00 nau 1.00 bur 1.00]♨ 
+Valkael, riding a giant spectral owl, leaves to the southeast.
+Exploding into flames, the Baalzadeen disappears from view.
+8532h, 10560m ckdb-   (|--) (||-)
+Alias "stmpvp" will now execute: "stand/wield staff shield/cast stormhammer at Kalys"
+8532h, 10560m ckdb-   (|--) (||-)+f STMPVP=f STMPVP
+You are not fallen or kneeling.
+You cannot see that being here.
+8532h, 10560m ckdb-   (|--) (||-)
+[Curing]: HOLD BREATH
+[wea 1.00 man 1.00 stu 1.00 par 1.00 imp 1.00 fro 0.50 ast 1.00 nau 1.00 bur 1.00]♨ 
+9227h, 10560m ckdb-   (|--) (||-)
+[wea 1.00 man 1.00 stu 1.00 par 1.00 imp 1.00 fro 0.50 ast 1.00 nau 1.00 bur 1.00]♨ 
+Ryzant exhales loudly.
+9227h, 10560m ckdb-   (|--) (||-)
+Naxx exhales loudly.
+9227h, 10560m ckdb-   (|--) (||-)
+[wea 1.00 man 1.00 stu 1.00 par 1.00 imp 1.00 fro 0.50 ast 1.00 nau 1.00 bur 1.00]♨ 
+Naxx inhales and begins holding her breath.
+Ryzant inhales and begins holding his breath.
+keneanung: Priority list changed to:
+	a greater water elemental
+	a lesser water elemental
+	a lesser water elemental
+Focusing on the innate bond with your citymate, you set off southeast toward your goal.
+Agathon, Naxx, and Ryzant follows you southeast.
+Beside a starlit spring.
+Clouds of frost swirl about the form of a massive elemental. There are 2 lesser water elementals 
+here. A spectral owl swoops here on silent wings. A Baalzadeen demon towers over you, filling you 
+with dread. Eradicator Valkael is here, shrouded. He wields a Shield of Absorption in his right 
+hand. Kalys is here, hidden. His features are obscured by Revelation's Guise. He wields Thoth's fang
+in his left hand and Elentari's Scourge in his right.
+You see exits leading east and northwest.
+You have arrived at your destination!
+9227h, 10560m ckdb-   (|--) (||-)
+Agathon whips a knotted willow staff at the side of Kalys's neck.+
+Bleeding off the momentum of his previous strike, Agathon comes around with a vicious thrust of a 
+knotted willow staff at the solar plexus of Kalys.
+The breath of Kalys leaves him in an explosive gasp as the end of the staff smashes home.
+Agathon lashes out with a rising kick at the torso of Kalys.
+The foot of Agathon drives into the solar plexus of Kalys.
+9227h, 10560m ckdb-   (|--) (||-)
+[wea 1.00 man 1.00 stu 1.00 fro 0.50 nau 1.00 imp 1.00 par 1.00 ast 1.00 par 1.00 bur 1.00]♨ 
+You suddenly perceive the vague outline of an aura of rebounding around Kalys.
+[wea 1.00 man 1.00 stu 1.00 fro 0.50 nau 1.00 imp 1.00 par 1.00 ast 1.00 par 1.00 bur 1.00]♨ 
+9227h, 10560m ckdb-   (|--) (||-)
+You are already there!
+9227h, 10560m ckdb-   (|--) (||-)
+You are already there!
+9227h, 10560m ckdb-   (|--) (||-)
+You are already there!
+9227h, 10560m ckdb-   (|--) (||-)
+9227h, 10560m ckdb-   (|--) (||-)
+Alias "stmpvp" will now execute: "stand/wield staff shield/cast stormhammer at Kalys"
+9227h, 10560m ckdb-   (|--) (||-)+f STMPVP=f STMPVP
+You are not fallen or kneeling.
+The sky above grows dark as you call upon powerful magics. Raising your hands balefully, you cause 
+lightning bolts, the hammer of the storm, to shoot from your hands and slam into Kalys.
+You have slain Kalys.
+A starburst tattoo flares and bathes Kalys in red light.
+The corpse of a grotesque experiment falls from Kalys's person.
+The corpse of a grotesque experiment falls from Kalys's person.
+The corpse of a Vertani guard falls from Kalys's person.
+The corpse of a Vertani guard falls from Kalys's person.
+The corpse of a Vertani guard falls from Kalys's person.
+The corpse of a Vertani guard falls from Kalys's person.
+The corpse of a House Tsez air mage falls from Kalys's person.
+The corpse of a House Tsez air mage falls from Kalys's person.
+The corpse of a Vertani guard falls from Kalys's person.
+The corpse of a Vertani guard falls from Kalys's person.
+The corpse of a hybrid Tsol warrior falls from Kalys's person.
+The corpse of a Tsol'teth berserker falls from Kalys's person.
+The corpse of a hybrid Tsol warrior falls from Kalys's person.
+The corpse of a hybrid Tsol warrior falls from Kalys's person.
+The corpse of a hybrid Tsol warrior falls from Kalys's person.
+The corpse of a Tsol'teth berserker falls from Kalys's person.
+The corpse of a hybrid Tsol warrior falls from Kalys's person.
+The corpse of a hybrid Tsol warrior falls from Kalys's person.
+The corpse of a Tsol'teth berserker falls from Kalys's person.
+The corpse of a hybrid Tsol warrior falls from Kalys's person.
+The corpse of a Tsol'teth berserker falls from Kalys's person.
+The corpse of a Tsol'teth berserker falls from Kalys's person.
+The corpse of a hybrid Tsol warrior falls from Kalys's person.
+The corpse of a Tsol'teth berserker falls from Kalys's person.
+The corpse of a large dustmander falls from Kalys's person.
+The corpse of an unbound frost elemental falls from Kalys's person.
+The corpse of an unbound frost elemental falls from Kalys's person.
+The corpse of an errant firestorm elemental falls from Kalys's person.
+The corpse of an errant firestorm elemental falls from Kalys's person.
+The corpse of a sparking candela falls from Kalys's person.
+The corpse of an errant smoke elemental falls from Kalys's person.
+The corpse of an unbound smoke elemental falls from Kalys's person.
+The corpse of an errant firestorm elemental falls from Kalys's person.
+The corpse of an unbound firestorm elemental falls from Kalys's person.
+The corpse of an unbound smoke elemental falls from Kalys's person.
+The corpse of an unbound smoke elemental falls from Kalys's person.
+The corpse of an unbound firestorm elemental falls from Kalys's person.
+The corpse of a sparking candela falls from Kalys's person.
+The corpse of an unbound firestorm elemental falls from Kalys's person.
+The corpse of a burning zephyr falls from Kalys's person.
+The corpse of a sparking candela falls from Kalys's person.
+The corpse of a burning zephyr falls from Kalys's person.
+The corpse of a fiery djinn falls from Kalys's person.
+The corpse of a burning zephyr falls from Kalys's person.
+The corpse of an unbound smoke elemental falls from Kalys's person.
+The corpse of an unbound firestorm elemental falls from Kalys's person.
+The corpse of a burning zephyr falls from Kalys's person.
+The corpse of an errant firestorm elemental falls from Kalys's person.
+The corpse of a rock dervish falls from Kalys's person.
+Kalys drops 921 golden sovereigns onto the ground.

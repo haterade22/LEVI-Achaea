@@ -93,6 +93,7 @@ if hit:find("clutches at .+ throat") then
   if tgt == target then
     tarAffed("asthma")
     magi.offense.ptRelay(target .. ": Resonance Air (asthma)")
+    magi.offense.resoEcho("Air", "Asthma", tgt)
   end
 
 -- Moderate: Sensitivity
@@ -101,6 +102,7 @@ elseif hit:find("lashing and flaying") then
   if tgt == target then
     tarAffed("sensitivity")
     magi.offense.ptRelay(target .. ": Resonance Air (sensitivity)")
+    magi.offense.resoEcho("Air", "Sensitivity", tgt)
   end
 
 -- Major: Healthleech
@@ -109,6 +111,7 @@ elseif hit:find("dreadful pallor") then
   if tgt == target then
     tarAffed("healthleech")
     magi.offense.ptRelay(target .. ": Resonance Air (healthleech)")
+    magi.offense.resoEcho("Air", "Healthleech", tgt)
   end
 
 -- WATER RESONANCE AFFLICTIONS
@@ -118,6 +121,7 @@ elseif hit:find("Elemental Plane of Water", 1, true) then
     if tgt == target then
       tarAffed("frostbite")
       magi.offense.ptRelay(target .. ": Resonance Water (frostbite)")
+      magi.offense.resoEcho("Water", "Frostbite", tgt)
     end
   end)
 
@@ -127,6 +131,7 @@ elseif hit:find("flurry of icicles") then
   if tgt == target then
     tarAffed("stuttering")
     magi.offense.ptRelay(target .. ": Resonance Water (stuttering)")
+    magi.offense.resoEcho("Water", "Stuttering", tgt)
   end
 
 -- Major: Anorexia (the name is near the break)
@@ -135,6 +140,7 @@ elseif hit:find("tear at the vital fluids") then
     if tgt == target then
       tarAffed("anorexia")
       magi.offense.ptRelay(target .. ": Resonance Water (anorexia)")
+      magi.offense.resoEcho("Water", "Anorexia", tgt)
     end
   end)
 
@@ -148,6 +154,7 @@ elseif hit:find("loud crack emanates") then
     local limbName = limb:lower():gsub("%s+", "")
     tarAffed("broken" .. limbName)
     magi.offense.ptRelay(target .. ": Resonance Earth (broken " .. limb .. ")")
+    magi.offense.resoEcho("Earth", "Broken " .. limb:lower(), tgt)
   end
 
 -- Moderate: Paralysis (the name ends the line, always past the break)
@@ -156,6 +163,7 @@ elseif hit:find("residual power from your connection") then
     if tgt == target then
       tarAffed("paralysis")
       magi.offense.ptRelay(target .. ": Resonance Earth (paralysis)")
+      magi.offense.resoEcho("Earth", "Paralysis", tgt)
     end
   end)
 
@@ -165,6 +173,7 @@ elseif hit:find("smite .+ with the full force") then
   if tgt == target then
     tarAffed("crackedribs")
     magi.offense.ptRelay(target .. ": Resonance Earth (cracked ribs)")
+    magi.offense.resoEcho("Earth", "Cracked ribs", tgt)
   end
 
 -- FIRE RESONANCE AFFLICTIONS
@@ -173,17 +182,20 @@ elseif hit:find("should burn, and so") then
   local tgt = matches[2]
   if tgt == target then
     if magi.offense.hasAff("scalded") or magi.offense.state.scalded then
-      -- Already scalded → increment burns
+      -- Already scalded → increment burns. Open: if the game ALSO prints the fan line here
+      -- (022_Increase_Burning), this stack is counted twice (kb/CONFLICTS.md #37).
       magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)
       tburns = magi.offense.state.burns
       tarAffed("burning")
       cecho(" <DimGrey>[<red>" .. tburns .. "/5<DimGrey>]")
       magi.offense.ptRelay(target .. ": Resonance Fire (burning, burns:" .. magi.offense.state.burns .. ")")
+      magi.offense.resoEcho("Fire", "Scalded > Burning " .. magi.offense.state.burns .. "/5", tgt)
     else
       -- Not scalded yet → apply scalded + 20s timer
       ataxia_tarAffTimed("scalded")  -- the resonance path never expired it in the tracker
       magi.offense.setScalded()
       magi.offense.ptRelay(target .. ": Resonance Fire (scalded)")
+      magi.offense.resoEcho("Fire", "Scalded", tgt)
     end
   end
 
@@ -197,6 +209,7 @@ elseif hit:find("command %w+ to burn") and not hit:find("suffering") then
     -- blister lapsed on the first one's clock and a target change erased the NEW target's.
     ataxia_tarAffTimed("blistered", 15)
     magi.offense.ptRelay(target .. ": Resonance Fire (blistered)")
+    magi.offense.resoEcho("Fire", "Blistered", tgt)
   end
 
 -- Major (fire level 3): Burning (game text with "suffering" = already blistered)
@@ -208,5 +221,6 @@ elseif hit:find("command the suffering") then
     tarAffed("burning")
     cecho(" <DimGrey>[<red>" .. tburns .. "/5<DimGrey>]")
     magi.offense.ptRelay(target .. ": Resonance Fire (burning, burns:" .. magi.offense.state.burns .. ")")
+    magi.offense.resoEcho("Fire", "Blistered > Burning " .. magi.offense.state.burns .. "/5", tgt)
   end
 end

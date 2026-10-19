@@ -152,6 +152,7 @@ end
 local RES, EMAN, FREEZE = "general/022_Resonance_Afflictions.lua", "enamation/002_Water_Emanation.lua",
   "general/021_Freeze.lua"
 local DEHYD, SPELLS, BLISTERS = "general/015_Dehydrate.lua", "general/021_Spell_Outcomes.lua", "493_Blisters.lua"
+local FAN = "general/022_Increase_Burning.lua"
 local PATS, BODY = {}, {}   -- filled inside the protected block
 
 -- Deliver `text` as the server would at `width` (false: one row), one row at a time. The trigger
@@ -221,7 +222,7 @@ local EMANATION = "The might of elemental Water surging through your body, you m
 
 local ok, err = pcall(function()
 if loadErr then error(loadErr, 0) end
-for _, f in ipairs({ RES, EMAN, FREEZE, DEHYD, SPELLS, BLISTERS }) do
+for _, f in ipairs({ RES, EMAN, FREEZE, DEHYD, SPELLS, BLISTERS, FAN }) do
   PATS[f], BODY[f] = TL.patterns(TRG .. f), body(f)
 end
 
@@ -375,17 +376,44 @@ describe("015_Dehydrate: the wiki's three outcomes, and no frozen from weariness
     expect(deliver(DEHYD, T(DEHYDRATE_LINE, NAME), 100)).toBe(1)
   end
 
-  it("weary, not nauseous: a stack of burning and nausea, NOT frozen", function()
+  it("weary, not nauseous: nausea, NOT frozen; the burning is left to the fan line", function()
     dehydrate({ "weariness" })
-    expectList(added, { "burning", "nausea" })
+    expectList(added, { "nausea" })
     expect(has.frozen).toBeNil()
-    expect(magi.offense.state.burns).toBe(1)
+    expect(magi.offense.state.burns).toBe(0)
   end)
 
-  it("the other outcomes are unchanged (neither; nausea only; both)", function()
+  it("the other outcomes (neither; nausea only; both)", function()
     dehydrate({}); expectList(added, { "weariness", "nausea" })
     dehydrate({ "nausea" }); expectList(added, { "weariness", "nocaloric" })   -- a stack of freeze
-    dehydrate({ "weariness", "nausea" }); expectList(added, { "burning" })
+    dehydrate({ "weariness", "nausea" }); expectList(added, {})
+    expect(magi.offense.state.burns).toBe(0)
+  end)
+end)
+
+-- Tabethys's log (kb/raw/logs/2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt, lines
+-- 420-425): a dehydrate on a weary, nauseous target printed its line and then ONE fan line. Both
+-- triggers counted it, so one stack read as two (kb/CONFLICTS.md #30).
+describe("015 + 022_Increase_Burning: one dehydrate stack is one burn", function()
+  local DEHYDRATE_LINE = "The skin of <T> begins to dry and crack as he grows pale."
+  local FAN_LINE = "You fan the heat of <T>'s body into consuming flame."
+
+  it("dehydrate then the fan line, weary + nauseous or weary only: burns go up by 1", function()
+    for _, affs in ipairs({ { "weariness", "nausea" }, { "weariness" } }) do
+      world(affs)
+      deliver(DEHYD, T(DEHYDRATE_LINE, NAME), 100)
+      deliver(FAN, T(FAN_LINE, NAME), 100)
+      expect(magi.offense.state.burns).toBe(1)
+      expect(tburns).toBe(1)
+    end
+  end)
+
+  it("a clean target: weariness + nausea, and no burn without a fan line", function()
+    world()
+    deliver(DEHYD, T(DEHYDRATE_LINE, NAME), 100)
+    expect(magi.offense.state.burns).toBe(0)
+    expect(has.weariness).toBeTrue()
+    expect(has.nausea).toBeTrue()
   end)
 end)
 

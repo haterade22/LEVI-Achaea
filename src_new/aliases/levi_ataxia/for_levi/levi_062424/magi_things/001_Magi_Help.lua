@@ -27,5 +27,7 @@ cecho("\n<green> WW <DimGrey>Magma, dehydrate x2, fulminate, the mudslide bonk; 
 cecho("\n<green> MM WATERROUTE <white>(or MM ROUTE) <DimGrey>sets that mode without attacking. MM shows its step and the lock.")
 cecho("\n<green> MM GLACIATE <white>N | OFF <DimGrey>glaciate a frozen target at N% health or less (default 100: always).")
 cecho("\n<DimGrey>   OFF lays hypothermia first.")
+cecho("\n<green> MM ECHO <white>[ON | OFF] <DimGrey>one line per cast (You: Dehydrate), one per resonance that lands")
+cecho("\n<DimGrey>   (Fire: Scalded), and the stage word on the prompt (Target: Burns 2 [burn 2/5]).")
 echo("\n")
 ataxiaEcho("Note: lowercase for aliases.")

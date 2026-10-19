@@ -78,6 +78,11 @@ magi.offense.config = {
   -- false = always hypothermia first ('mm glaciate off'). kb/ holds no figure for glaciate's
   -- damage (kb/CONFLICTS.md #27), so lower it only from logged glaciates ('mm glaciate <pct>').
   glaciateKillAt = 100,
+  -- Compact echoes (v4.7.429, after Tabethys's system, kb/raw/logs/2026-10-19_tabethys_*): one
+  -- `You: <Spell> -> <Target>` line per round sent, one `<Plane>: <Stage> -> <Target>` line per
+  -- resonance that lands, and a stage word on the Magi prompt. Display only. `mm echo` toggles all
+  -- three. Not saved, like the toggles above.
+  compactEcho = true,
 }
 
 ----------------------------------------------------------------
@@ -118,6 +123,98 @@ function magi.offense.ptRelay(msg)
   if magi.offense.state.partyrelay and partyrelay and not ataxia.afflictions.aeon then
     send("pt " .. msg, false)
   end
+end
+
+----------------------------------------------------------------
+-- Compact echoes (v4.7.429)
+----------------------------------------------------------------
+-- Copied in design from Tabethys's system (o6UKnyyy log): "You: Magma -> Kalys",
+-- "Earth: Brokenrightarm -> Kalys", "Fire: Scalded > Burning -> Kalys". The game line stays on
+-- screen; the echo goes on its own line after it. The colours are the ones `mm` status uses.
+local PLANE_COLOUR = { Fire = "red", Water = "dodger_blue", Earth = "saddle_brown", Air = "light_sky_blue" }
+
+function magi.offense.compactOn()
+  return magi.offense.config.compactEcho ~= false
+end
+
+-- One landed resonance (022_Resonance_Afflictions, 014_Temperance, 022_Increase_Burning). The
+-- callers check the name first, so this only ever names our target.
+function magi.offense.resoEcho(plane, stage, tgt)
+  if not magi.offense.compactOn() then return end
+  cecho("\n<" .. (PLANE_COLOUR[plane] or "white") .. ">" .. plane .. ": <white>" .. stage
+    .. " <dim_grey>-> <NavajoWhite>" .. tostring(tgt or target))
+end
+
+-- "cast dehydrate at X" -> "Dehydrate", "cast emanation at X water" -> "Emanation water",
+-- "staffcast horripilation X" -> "Horripilation", "cast meteorite at X flaming 4" ->
+-- "Meteorite flaming 4". Every spell the tree sends names its target first after the spell word.
+function magi.offense.spellLabel(spell)
+  local s = spell:gsub("^staffcast ", ""):gsub("^cast ", "")
+  local name, rest = s:match("^(%a+)%s*(.*)$")
+  if not name then return spell end
+  rest = rest:gsub("^at ", ""):gsub("^%S+%s*", "", 1)
+  name = name:sub(1, 1):upper() .. name:sub(2)
+  return rest ~= "" and (name .. " " .. rest) or name
+end
+
+-- The cast line, once per round SENT. A key press rebuilds and re-sends the round (queue
+-- addclearfull replaces the one waiting), so the same round pressed again within 2 s is not a new
+-- cast. The stamp is on ataxiaTemp: it is transient and must not ride the saved ataxia namespace.
+local CAST_ECHO_REPEAT = 2
+
+function magi.offense.castEcho(label, who)
+  if not magi.offense.compactOn() then return end
+  ataxiaTemp = ataxiaTemp or {}
+  local key = label .. "|" .. tostring(who)
+  local last = ataxiaTemp.magiCastEcho
+  local now = getEpoch()
+  if last and last.key == key and now - last.at < CAST_ECHO_REPEAT then return end
+  ataxiaTemp.magiCastEcho = { key = key, at = now }
+  cecho("\n<gold>You: <white>" .. label .. " <dim_grey>-> <NavajoWhite>" .. tostring(who))
+end
+
+-- The stage the next round is in, in one word, from the same state and the same tests selectSpell
+-- uses, in the same order. selectSpell itself cannot be asked: it zeroes stale burns and P4 SENDS
+-- the stormhammer. waterRoutePick is pure, so the water route names its own step. nil without a
+-- target.
+function magi.offense.stageWord()
+  if type(target) ~= "string" or target == "" then return nil end
+  local r = magi.resonance or { fire = 0, water = 0, earth = 0, air = 0 }
+  local st = magi.offense.state
+  local cfg = magi.offense.config
+  local mode = st.mode
+  local hp = magi.offense.getTargetHP()
+  local burning = magi.offense.getAffProb("burning") ~= 0   -- selectSpell's stale-burn test
+  local burns = burning and (st.burns or 0) or 0
+  local conflagrated = burning and st.conflagrated
+
+  if conflagrated and hp < cfg.destroyThreshold then return "destroy" end              -- P1
+  if magi.offense.targetShielded() then return "shield" end                            -- P2
+  if mode == "waterroute" then
+    local _, step = magi.offense.waterRoutePick()
+    return step
+  end
+  local frozen = magi.offense.getAffProb("frozen") >= 0.5
+  local hypothermia = magi.offense.getAffProb("hypothermia") >= 0.5
+  local freso = (r.water >= 2) and (r.air >= 2)
+  if frozen and hypothermia and freso then return "glaciate" end                       -- P3
+  if hp <= cfg.stormhammerThreshold or (mode == "group" and hp <= 50) then return "storm" end
+  if frozen and not hypothermia and freso then return "hypothermia" end                -- P7
+  if mode == "lock" or mode == "salve" or mode == "group" then return mode end
+  if conflagrated then return "conflagrated" end
+  if not st.scalded then return "scald" end                                            -- P9
+  if burns > 0 then return "burn " .. burns .. "/5" end                                -- P12
+  return "build"
+end
+
+-- The Magi prompt's target line (318_Prompt_Trigger): the burns, and the stage word in brackets.
+function magi.offense.promptEcho()
+  local line = "Target: Burns " .. tostring(tburns or 0)
+  if magi.offense.compactOn() then
+    local stage = magi.offense.stageWord()
+    if stage then line = line .. " [" .. stage .. "]" end
+  end
+  cecho(line)
 end
 
 -- Count afflictions consuming target's mending/salve balance
@@ -763,9 +860,10 @@ end
 -- Send Attack
 ----------------------------------------------------------------
 
-function magi.offense.sendAttack(spell)
-  if not spell then return end
-
+-- The whole round around one spell: the utility prefix, stand, the staff and shield, the spell,
+-- then assess. sendAttack and the stormhammer (005 magi.storm.fire) both build it here, so a
+-- stormhammer round stands and wields like every other round (v4.7.429: it sent the bare cast).
+function magi.offense.buildRound(spell)
   local sep = ataxia.settings and ataxia.settings.separator or "::"
   local staff = magi.staff or "staff569815"
   local prefix = ""
@@ -778,10 +876,15 @@ function magi.offense.sendAttack(spell)
   end
 
   local cmd = prefix .. "stand" .. sep .. "wield " .. staff .. " shield"
-  cmd = cmd .. sep .. spell .. sep .. "assess " .. target
+  return cmd .. sep .. spell .. sep .. "assess " .. target
+end
 
-  send("queue addclearfull freestand " .. cmd)
+function magi.offense.sendAttack(spell)
+  if not spell then return end
 
+  send("queue addclearfull freestand " .. magi.offense.buildRound(spell))
+
+  magi.offense.castEcho(magi.offense.spellLabel(spell), target)
   magi.offense.debugEcho("Sent: " .. spell)
 end
 
