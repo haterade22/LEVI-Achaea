@@ -131,7 +131,9 @@ end
 -- Copied in design from Tabethys's system (o6UKnyyy log): "You: Magma -> Kalys",
 -- "Earth: Brokenrightarm -> Kalys", "Fire: Scalded > Burning -> Kalys". The game line stays on
 -- screen; the echo goes on its own line after it. The colours are the ones `mm` status uses.
-local PLANE_COLOUR = { Fire = "red", Water = "dodger_blue", Earth = "saddle_brown", Air = "light_sky_blue" }
+local PLANE_COLOUR = {
+  Fire = "red", Water = "dodger_blue", Earth = "saddle_brown", Air = "light_sky_blue",
+}
 
 function magi.offense.compactOn()
   return magi.offense.config.compactEcho ~= false
@@ -173,43 +175,43 @@ function magi.offense.castEcho(label, who)
   cecho("\n<gold>You: <white>" .. label .. " <dim_grey>-> <NavajoWhite>" .. tostring(who))
 end
 
--- The stage the next round is in, in one word, from the same state and the same tests selectSpell
--- uses, in the same order. selectSpell itself cannot be asked: it zeroes stale burns and P4 SENDS
--- the stormhammer. waterRoutePick is pure, so the water route names its own step. nil without a
--- target.
-function magi.offense.stageWord()
-  if type(target) ~= "string" or target == "" then return nil end
-  local r = magi.resonance or { fire = 0, water = 0, earth = 0, air = 0 }
-  local st = magi.offense.state
-  local cfg = magi.offense.config
-  local mode = st.mode
-  local hp = magi.offense.getTargetHP()
-  local burning = magi.offense.getAffProb("burning") ~= 0   -- selectSpell's stale-burn test
-  local burns = burning and (st.burns or 0) or 0
-  local conflagrated = burning and st.conflagrated
+-- The burns as the next round will read them: none when V3 holds no burning (the stale-burn
+-- reset, which selectSpell writes only when it runs).
+function magi.offense.liveBurns()
+  if magi.offense.getAffProb("burning") == 0 then return 0 end
+  return magi.offense.state.burns or 0
+end
 
-  if conflagrated and hp < cfg.destroyThreshold then return "destroy" end              -- P1
-  if magi.offense.targetShielded() then return "shield" end                            -- P2
-  if mode == "waterroute" then
+-- One word for what the next round does, NAMED FROM THE SPELL pickSpell picks (v4.7.430), so it
+-- cannot disagree with the round: v4.7.429 re-implemented the tests and drifted. The water route
+-- names its own step. nil without a target.
+local SPELL_STAGE = {
+  destroy = "destroy", meteorite = "shield", erode = "shield", glaciate = "glaciate",
+  hypothermia = "hypothermia", mudslide = "bonk", scintilla = "calcify", conflagrate = "conflagrate",
+  freeze = "freeze", shalestorm = "shalestorm",
+}
+function magi.offense.stageWord()
+  if type(target) ~= "string" or target == "" or not magi.resonance then return nil end
+  local spell = magi.offense.pickSpell()
+  if spell == magi.offense.STORM then return "storm" end
+  if spell == magi.offense.WATERROUTE then
     local _, step = magi.offense.waterRoutePick()
     return step
   end
-  local frozen = magi.offense.getAffProb("frozen") >= 0.5
-  local hypothermia = magi.offense.getAffProb("hypothermia") >= 0.5
-  local freso = (r.water >= 2) and (r.air >= 2)
-  if frozen and hypothermia and freso then return "glaciate" end                       -- P3
-  if hp <= cfg.stormhammerThreshold or (mode == "group" and hp <= 50) then return "storm" end
-  if frozen and not hypothermia and freso then return "hypothermia" end                -- P7
-  if mode == "lock" or mode == "salve" or mode == "group" then return mode end
-  if conflagrated then return "conflagrated" end
-  if not st.scalded then return "scald" end                                            -- P9
-  if burns > 0 then return "burn " .. burns .. "/5" end                                -- P12
+  local name, rest = spell:gsub("^staffcast ", ""):gsub("^cast ", ""):match("^(%a+)(.*)$")
+  if not name then return nil end
+  if name == "emanation" then return "emanate " .. (rest:match("(%a+)%s*$") or "") end
+  if SPELL_STAGE[name] then return SPELL_STAGE[name] end
+  if name == "magma" and not magi.offense.state.scalded then return "scald" end
+  local burns = magi.offense.liveBurns()
+  if burns > 0 then return "burn " .. burns .. "/5" end
   return "build"
 end
 
--- The Magi prompt's target line (318_Prompt_Trigger): the burns, and the stage word in brackets.
+-- The Magi prompt's target line (318_Prompt_Trigger): the burns the next round will read, and the
+-- stage word in brackets. tburns is not used: it holds a stale count until a round runs.
 function magi.offense.promptEcho()
-  local line = "Target: Burns " .. tostring(tburns or 0)
+  local line = "Target: Burns " .. tostring(magi.offense.liveBurns())
   if magi.offense.compactOn() then
     local stage = magi.offense.stageWord()
     if stage then line = line .. " [" .. stage .. "]" end
@@ -303,7 +305,17 @@ end
 -- Unified Decision Tree (based on xMagi reference)
 ----------------------------------------------------------------
 
-function magi.offense.selectSpell()
+-- What pickSpell returns in place of a command for the two picks that need more than a string:
+-- the stormhammer (selectSpell sends it through magi.storm) and the water route (selectSpell runs
+-- selectWaterRouteSpell, which echoes and stamps).
+magi.offense.STORM = "<stormhammer>"
+magi.offense.WATERROUTE = "<waterroute>"
+
+-- THE DECISION, WITH NO SIDE EFFECTS (v4.7.430). selectSpell sends what this returns; stageWord
+-- names it. v4.7.429's stage word copied the tests instead and drifted from them (in group mode it
+-- said "storm" over a P7 hypothermia or a P8 mudslide). The stale-burn reset is READ here and
+-- WRITTEN by selectSpell, so asking costs nothing.
+function magi.offense.pickSpell()
   local r = magi.resonance
   local st = magi.offense.state
   local mode = st.mode
@@ -322,10 +334,11 @@ function magi.offense.selectSpell()
   local nausea = magi.offense.getAffProb("nausea")
   local dehydrateWillFreeze = (nausea >= 0.5) and (weariness < 0.5)
 
-  -- Stale state paranoia (from xMagi reference)
+  -- Stale state paranoia (from xMagi reference): no burning in V3 means no burns and no
+  -- conflagration, whatever the counters say. selectSpell writes the counters back.
+  local conflagrated = st.conflagrated
   if magi.offense.getAffProb("burning") == 0 then
-    st.burns = 0
-    st.conflagrated = false
+    conflagrated = false
     burning = 0
   end
 
@@ -333,7 +346,7 @@ function magi.offense.selectSpell()
     and (frostbite >= 0.5 or burning > 1 or shivering >= 0.5 or not caloric)
 
   --=== PRIORITY 1: DESTROY (conflagrated + low HP) ===--
-  if st.conflagrated and hp < magi.offense.config.destroyThreshold then
+  if conflagrated and hp < magi.offense.config.destroyThreshold then
     return "cast destroy at " .. target
   end
 
@@ -353,7 +366,7 @@ function magi.offense.selectSpell()
   -- and P2's shield strip (no spell reaches a shielded target). dispatch's guards (class, balance
   -- and equilibrium, aeon, a target) ran before selectSpell.
   if mode == "waterroute" then
-    return magi.offense.selectWaterRouteSpell()
+    return magi.offense.WATERROUTE
   end
 
   --=== PRIORITY 3: GLACIATE (frozen + hypothermia + dual resonance) ===--
@@ -371,13 +384,7 @@ function magi.offense.selectSpell()
 
   --=== PRIORITY 4: STORMHAMMER (low HP kill) ===--
   if hp <= magi.offense.config.stormhammerThreshold then
-    if magi.storm and magi.storm.fire then
-      magi.storm.selectTargets()
-      magi.storm.fire()
-      return nil -- storm.fire sends directly
-    else
-      return "cast stormhammer at " .. target
-    end
+    return magi.offense.STORM
   end
 
   --=== PRIORITY 5: SHALESTORM+SCINTILLA (free calcify when shalestorm active) ===--
@@ -447,6 +454,30 @@ function magi.offense.selectSpell()
 
   --=== FALLBACK ===--
   return magi.offense.selectFallback()
+end
+
+-- The round's spell. Writes the stale-burn reset pickSpell only reads, then sends the two
+-- picks that are not plain commands. nil when the stormhammer went out through magi.storm.
+function magi.offense.selectSpell()
+  local st = magi.offense.state
+  if magi.offense.getAffProb("burning") == 0 then
+    st.burns = 0
+    st.conflagrated = false
+    tburns = 0
+  end
+  local spell = magi.offense.pickSpell()
+  if spell == magi.offense.WATERROUTE then
+    return magi.offense.selectWaterRouteSpell()
+  end
+  if spell == magi.offense.STORM then
+    if magi.storm and magi.storm.fire then
+      magi.storm.selectTargets()
+      magi.storm.fire()
+      return nil -- storm.fire sends directly
+    end
+    return "cast stormhammer at " .. target
+  end
+  return spell
 end
 
 ----------------------------------------------------------------
@@ -611,13 +642,7 @@ function magi.offense.selectGroupSpell()
 
   -- Stormhammer at higher threshold for group (50% instead of 25%)
   if hp <= 50 then
-    if magi.storm and magi.storm.fire then
-      magi.storm.selectTargets()
-      magi.storm.fire()
-      return nil
-    else
-      return "cast stormhammer at " .. target
-    end
+    return magi.offense.STORM   -- selectSpell sends it (v4.7.430: this sent it itself)
   end
 
   -- Emanation fire at cap (damage)
@@ -652,8 +677,8 @@ end
 -- 1, enabling the biggest of all bonks, the CAST MUDSLIDE for par, sli, ano, prone". Every pick
 -- is read from the live state -- resonance (001_Resonance, 0-3 per plane) and the target as V3
 -- holds it -- never from a step counter, so a cure, a fade or a second press re-derives the step.
--- How many levels one cast adds is not recorded (kb/CONFLICTS.md #26); Tabethys's numbers fit one
--- per plane the spell draws on. The route reads the levels the game reports, so only what the bonk
+-- One level per plane the spell draws on, per cast: Tabethys's log of a kill shows it (kb/CONFLICTS.md,
+-- Resolved 2026-10-19; PLAYER, from their echoes). The route reads the levels the game reports, so only what the bonk
 -- brings depends on that.
 
 -- Tabethys's focus lock as a JOINT probability: paralysis (no tree), slickness (no salve) and

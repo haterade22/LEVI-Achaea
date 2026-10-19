@@ -2,6 +2,49 @@
 
 ---
 
+## 2026-10-19 - v4.7.430: the review of v4.7.429 (Magi)
+
+The user asked for a tailored deep review of v4.7.429. Four agents reviewed one area each (burn
+accounting, stormhammer targeting, the echoes and trigger edits, the documentation); every finding
+below was checked against the code and the log before it was fixed.
+
+- **One mending took two burns.** Tabethys's log prints, for one body mending, "Kalys takes some
+  salve from a vial and rubs it on his body." and then "The fires consuming Kalys diminish
+  somewhat." (:412-413). `391_Applied_Body_Skin` lowered the counter on the first and
+  `general/025_Burns_Tracking` on the second. v4.7.429 fixed the doubled ADD, so the count ran LOW,
+  and conflagrate (burns >= 2) waited. 391 no longer touches the counter; 025's line owns it.
+- **The stage word drifted from the round.** v4.7.429 re-implemented `selectSpell`'s tests; in group
+  mode it said "storm" over a P7 hypothermia or a P8 mudslide, and it skipped P5, P6, P8, P10, P11
+  and P13. `selectSpell` is now split: `magi.offense.pickSpell()` decides with no side effects
+  (it reads the stale-burn reset and returns `magi.offense.STORM` / `WATERROUTE` markers), and
+  `selectSpell` writes the reset and sends. `stageWord` is named from the spell `pickSpell` returns,
+  so it cannot disagree. `selectGroupSpell` returns the marker instead of sending. The prompt's
+  burn count is `liveBurns()` (0 when V3 holds no burning), not the stale `tburns`.
+- **Hidden is hittable; the docs said the opposite.** Both stormhammers that hit went at a Kalys the
+  room shows "here, hidden" (:525, :706); both misses came after he had LEFT (:482, :490, :683).
+  `magi.storm.selectTargets` now casts at our target when nobody else qualifies, even if gmcp does
+  not list it (a miss costs only the refusal), and matches the target's name in any case (a target
+  set as "kalys" was put in twice beside "Kalys"). Whether gmcp lists a hidden player: new
+  `kb/CONFLICTS.md` #38.
+- **The room list dropped the wrong name.** `ataxia_Players_Update` (`update_stuff/001`): a player
+  leaving whom `ataxia.playersHere` did not hold made `table.index_of` return nil, and
+  `table.remove(t, nil)` removed the LAST name, often our target. Older than v4.7.429; the
+  stormhammer now reads this list, so it is fixed here.
+- `022_Increase_Burning`: the echo call is guarded like `014_Temperance`'s. `PLANE_COLOUR` is on
+  several lines so `tools/check_colours.py` reads its values (on one line it read the next table).
+- **Docs corrected.** CONFLICTS: #26's resolution tagged PLAYER, not CONFIRMED (stages come from
+  their echoes; air unseen); the fan-line resolution limited to the weary dehydrate; #37 rewritten
+  with the three readings of the first dehydrate and the other burn sources; #38 added; a Resolved
+  row for the mending lines. `.claude/classes/magi.md`: the burn pipeline, the resonance
+  assumption, "In play", the Files and tests tables, the trigger notes, and `buildRound`;
+  `PLAYER-LOG` (not a defined tag) is now `PLAYER`. `kb/raw/logs/README.md`, `CLAUDE.md`, `README.md`,
+  and the memory files updated.
+- Tests: `test_magi_tabethys.lua` 19 -> 26 (one mending = one burn, the unlisted-target and
+  case rules, enemied others with an unlisted target, group P7, the stage word for P6/P8/P10, the
+  stale prompt count, the room list); `test_magi_tracking.lua` now checks that 015 fired;
+  `test_magi_emanations.lua` reads the round's burns through `liveBurns`. Each new test fails
+  against the v4.7.429 file it covers. Full suite: 3462 passed.
+
 ## 2026-10-19 - v4.7.429: Magi changes from Tabethys's log of a kill
 
 The user shared four logs "from Magi". Only one (`o6UKnyyy`) is a Magi fight: Tabethys leads a group
@@ -29,7 +72,7 @@ stormhammers at about 50% health. The other three are the same player on Apostat
   anyone. Both now check the name.
 - **Compact echoes, after Tabethys's display** (`mm echo [on|off]`, default on): `You: <Spell> ->
   <Target>` once per round sent (`magi.offense.castEcho`, not again for the same round within 2 s);
-  `<Plane>: <Stage> -> <Target>` for each resonance that lands (`resoEcho`, called from the 13
+  `<Plane>: <Stage> -> <Target>` for each resonance that lands (`resoEcho`, 13 calls in the 12
   branches of `022_Resonance_Afflictions`, and from `014_Temperance` and `022_Increase_Burning`);
   and a stage word on the Magi prompt, `Target: Burns 2 [burn 2/5]` (`stageWord`, the same tests in
   the same order as `selectSpell`, which it cannot call: it zeroes stale burns and P4 sends).

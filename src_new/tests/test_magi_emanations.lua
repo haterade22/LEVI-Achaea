@@ -451,7 +451,10 @@ describe("fire: V3 holds one of the two stacks, so no burning outlives the mendi
       matches = { line, NAME, "body" }
       salve()
     end
-    expect(magi.offense.state.burns).toBe(0)
+    -- v4.7.430: the application line no longer lowers the counter (general/025's diminish line
+    -- does, and none is delivered here); the round reads it as V3 does, through liveBurns.
+    expect(magi.offense.state.burns).toBe(2)
+    expect(magi.offense.liveBurns()).toBe(0)
     expect(haveAff("burning")).toBeFalse()
   end)
 end)
