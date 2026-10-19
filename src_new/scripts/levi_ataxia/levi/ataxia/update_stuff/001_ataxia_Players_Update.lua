@@ -70,7 +70,11 @@ function ataxia_Players_Update(event)
 	--For when someone leaves your room.
 	else
 		local person = gmcp.Room.RemovePlayer
-		table.remove(ataxia.playersHere, table.index_of(ataxia.playersHere, person))
+		-- Only a name we hold (v4.7.430). table.index_of returns nil for anyone else, and
+		-- table.remove(t, nil) removes the LAST name: often our target, whom the Magi stormhammer
+		-- (mage/005) and every "is the target here" check then believed gone.
+		local idx = table.index_of(ataxia.playersHere, person)
+		if idx then table.remove(ataxia.playersHere, idx) end
 
 		if type(target) == "string" and isTargeted(person) then
 			enableTimer("TargetOutOfRoom")

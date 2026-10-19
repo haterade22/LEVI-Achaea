@@ -114,9 +114,11 @@ function magi.storm.findTargets()
   end
 end
 
--- Whether our target is a player gmcp lists in this room (v4.7.429). A hidden or departed player
--- is not listed, and a stormhammer at one is refused: Tabethys's log has "You cannot see that
--- being here." twice, each after a hand swap (kb/raw/logs/2026-10-19_tabethys_*).
+-- Whether our target is a player gmcp lists in this room (v4.7.429). Being listed decides only the
+-- ORDER (slot 1); see selectTargets for an unlisted target. Whether gmcp lists a HIDDEN player is
+-- unknown (kb/CONFLICTS.md #38): in Tabethys's log both stormhammers that hit went at a Kalys the
+-- room shows "here, hidden", and both misses ("You cannot see that being here.") came after he had
+-- left (kb/raw/logs/2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt:482, :490, :683).
 function magi.storm.targetInRoom()
   if type(target) ~= "string" or target == "" then return false end
   if type(ataxia.playersHere) ~= "table" then return false end
@@ -136,7 +138,7 @@ function magi.storm.selectTargets()
   local placed = false
   if target and target ~= "" then
     for i, name in ipairs(candidates) do
-      if name == target then
+      if name:lower() == target:lower() then   -- the same rule as targetInRoom (v4.7.430)
         if i ~= 1 then
           table.remove(candidates, i)
           table.insert(candidates, 1, target)
@@ -153,6 +155,12 @@ function magi.storm.selectTargets()
   -- nothing, and P4 / group mode returned nil, so the kill round was empty. With others listed, the
   -- stormhammer went at them and not at the target the round was for.
   if not placed and magi.storm.targetInRoom() then
+    table.insert(candidates, 1, target)
+  -- NOBODY ELSE AND OUR TARGET UNLISTED: cast at it anyway and let the game decide (v4.7.430). It
+  -- may be hidden and still hittable (the kill in Tabethys's log), and a target that has left costs
+  -- only "You cannot see that being here.". With others listed, we keep to them: one unseen name
+  -- may fail the whole multi-target cast.
+  elseif not placed and #candidates == 0 and type(target) == "string" and target ~= "" then
     table.insert(candidates, 1, target)
   end
 

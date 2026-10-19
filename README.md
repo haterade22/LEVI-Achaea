@@ -53,7 +53,7 @@ The GUI system (zGUI Redux) was originally created by **Zulah**. It has been enh
 | Apostate | `ll`/`corr` | Lock, corrupt, vivisect, sleep |
 | Monk (Shikudo) | varies | Limb prep, spinkick, telepathy lock |
 | Psion | `zz`/`psmind`/`psflurry` | Mana kill (Psi Excise), unweave execute (Deconstruct), damage burst (Flurry) |
-| Magi | `zz`/`xx`/`vv`/`cc` | Elementalism: salve push, fire burns, water freeze, lock, group, stormhammer |
+| Magi | `zz`/`xx`/`vv`/`cc`/`sr`/`ww`, `mm` | Elementalism: salve push, fire burns, lock, group stormhammer, Tabethys's water route (`ww`); `mm echo` for compact echoes |
 | Snipe | `snt` | Class-agnostic snipe with auto-scan |
 | *+ 10 more* | | Bard, Depthswalker, Pariah, Earth Lord, etc. |
 

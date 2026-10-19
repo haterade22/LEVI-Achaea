@@ -65,12 +65,12 @@ if isTargeted(matches[2]) then
       if onSalveCureV3 then onSalveCureV3("body") end
     end
 
-    magi.offense = magi.offense or {}
-    magi.offense.state = magi.offense.state or {}
-    magi.offense.state.burns = math.max((magi.offense.state.burns or 0) - 1, 0)
-    tburns = magi.offense.state.burns
+    -- The Magi burn counter is NOT lowered here (v4.7.430). A mending that takes a stack prints
+    -- "The fires consuming <T> diminish somewhat." on the next line, and general/025 lowers the
+    -- counter on that line: both did, so one application took two burns (Tabethys's log,
+    -- kb/raw/logs/2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt:412-413). An application that
+    -- takes no stack (restoration, or nothing burning) took one too. V3's cure above still runs.
     selectCurrentLine() fg("slate_grey")
-    cecho(" <DimGrey>[<red>"..tburns.."/5<DimGrey>]")
   elseif not haveAff("hypothermia") then
     -- Skin = caloric. Hypothermia blocks the cold cures (unchanged rule).
     if onSalveCureV3 then onSalveCureV3("skin") end

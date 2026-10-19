@@ -393,7 +393,7 @@ end)
 
 -- Tabethys's log (kb/raw/logs/2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt, lines
 -- 420-425): a dehydrate on a weary, nauseous target printed its line and then ONE fan line. Both
--- triggers counted it, so one stack read as two (kb/CONFLICTS.md #30).
+-- triggers counted it, so one stack read as two (kb/CONFLICTS.md, Resolved 2026-10-19).
 describe("015 + 022_Increase_Burning: one dehydrate stack is one burn", function()
   local DEHYDRATE_LINE = "The skin of <T> begins to dry and crack as he grows pale."
   local FAN_LINE = "You fan the heat of <T>'s body into consuming flame."
@@ -401,8 +401,8 @@ describe("015 + 022_Increase_Burning: one dehydrate stack is one burn", function
   it("dehydrate then the fan line, weary + nauseous or weary only: burns go up by 1", function()
     for _, affs in ipairs({ { "weariness", "nausea" }, { "weariness" } }) do
       world(affs)
-      deliver(DEHYD, T(DEHYDRATE_LINE, NAME), 100)
-      deliver(FAN, T(FAN_LINE, NAME), 100)
+      expect(deliver(DEHYD, T(DEHYDRATE_LINE, NAME), 100)).toBe(1)   -- 015 did fire
+      expect(deliver(FAN, T(FAN_LINE, NAME), 100)).toBe(1)
       expect(magi.offense.state.burns).toBe(1)
       expect(tburns).toBe(1)
     end

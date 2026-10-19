@@ -69,6 +69,8 @@ elseif line:find("firestorm roars") then
   magi.offense.debugEcho("Firestorm tick (self-damage, not tracking target burns here)")
 
 -- Burns diminishing (fires dying down on target)
+-- The ONLY place a mending lowers the counter (v4.7.430): 391 used to lower it on the application
+-- line just before this one, so one mending took two burns.
 elseif line:find("fires consuming") then
   local tgt = matches[2]
   if tgt == target then

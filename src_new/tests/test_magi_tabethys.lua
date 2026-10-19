@@ -5,8 +5,11 @@
 --   * stormhammer (005): the finders take only ENEMIED players (of a known city, in city mode), so
 --     a target we had not enemied was left out. Alone in the room it got "No ... enemies" and NO
 --     send, so P4 and group mode sent an empty kill round; with others listed, the stormhammer went
---     at them. It also sent the bare cast, with no stand or staff and shield. And a target that is
---     not listed in the room (hidden) must not be cast at: "You cannot see that being here."
+--     at them. It also sent the bare cast, with no stand or staff and shield. v4.7.430: an unlisted
+--     target with nobody else is cast at anyway (the log's hits were at a hidden Kalys).
+--   * v4.7.430 (the review): one mending lowered the burns twice (391 + 025); the stage word drifted
+--     from selectSpell (now named from pickSpell); a player leaving whom we did not hold removed the
+--     LAST name from ataxia.playersHere.
 --   * general/001_Assess set targetHealth from anyone's glance.
 --   * 014_Temperance recorded a strip on anyone as our target's.
 --   * the compact echoes (`You: <Spell> -> X`, `<Plane>: <Stage> -> X`) and the prompt's stage word.
@@ -126,11 +129,29 @@ describe("stormhammer: our target in the room is always slot 1", function()
     expect(sent[1]).toContain("cast stormhammer at Kalys and Ana and Bo::")
   end)
 
-  it("a target gmcp does not list (hidden, or gone): nothing is sent", function()
+  -- v4.7.430: in Tabethys's log both hits went at a Kalys shown "here, hidden" (:525, :706), and
+  -- gmcp may not list a hidden player. Alone, an unlisted target is cast at anyway.
+  it("an unlisted target with nobody else to hit: cast at it anyway, the game decides", function()
     world({ hp = 20, here = { "Ana" } })
     magi.offense.selectSpell()
-    expect(#sent).toBe(0)
-    expect(allEchoes()).toContain("No ")
+    expect(#sent).toBe(1)
+    expect(sent[1]).toContain("cast stormhammer at Kalys::assess Kalys")
+  end)
+
+  it("an unlisted target with enemied citymates here: cast at them only", function()
+    world({ hp = 20, here = { "Ana", "Bo" }, enemies = { "Ana", "Bo" },
+      cities = { Ana = "Hashan", Bo = "Hashan", Kalys = "Hashan" } })
+    magi.offense.selectSpell()
+    expect(sent[1]).toContain("cast stormhammer at Ana and Bo::")
+    expect(sent[1]:find("at Kalys", 1, true)).toBeNil()
+  end)
+
+  it("a target set in another case is not put in twice", function()
+    world({ hp = 20, here = { "Kalys", "Ana" }, enemies = { "Kalys", "Ana" }, mode = "all" })
+    target = "kalys"
+    magi.offense.selectSpell()
+    expect(sent[1]).toContain("cast stormhammer at Kalys and Ana::")
+    expect(sent[1]:find("kalys and", 1, true)).toBeNil()   -- v4.7.429 sent "kalys and Kalys and Ana"
   end)
 
   it("group mode at 50% takes the same path", function()
@@ -242,7 +263,28 @@ describe("the stage word follows selectSpell's order", function()
     world({ hp = 50 }); expect(W()).toBe("scald")
     world({ affs = { "frozen", "hypothermia" }, reso = { water = 2, air = 2 } }); expect(W()).toBe("glaciate")
     world({ affs = { "frozen" }, reso = { water = 2, air = 2 } }); expect(W()).toBe("hypothermia")
-    world({ offMode = "lock" }); expect(W()).toBe("lock")
+    world({ offMode = "lock" }); expect(W()).toBe("build")              -- horripilation
+  end)
+
+  -- v4.7.429 re-implemented the tests and said "storm" here: group mode reaches its stormhammer only
+  -- after P5-P8 (the reviewers' case). The word now comes from pickSpell's own pick.
+  it("group mode under 50% with a P7 hypothermia due: the word is the spell, hypothermia", function()
+    world({ hp = 45, offMode = "group", affs = { "frozen" }, reso = { water = 2, air = 2 } })
+    expect(W()).toBe("hypothermia")
+    expect(magi.offense.pickSpell()).toBe("cast hypothermia at Kalys")
+  end)
+
+  it("the word always names what selectSpell sends", function()
+    local cases = {
+      { scalded = true, reso = { earth = 3 }, burns = 2, affs = { "burning", "frostbite" } },  -- P6
+      { reso = { water = 2 }, affs = { "asthma" } },                                           -- P8
+      { scalded = true, affs = { "shivering", "brokenleftleg" } },                             -- P10
+    }
+    local want = { "emanate earth", "bonk", "freeze" }
+    for i, c in ipairs(cases) do
+      world(c)
+      expect(W()).toBe(want[i])
+    end
   end)
 
   it("destroy outranks the shield, as P1 outranks P2", function()
@@ -251,7 +293,7 @@ describe("the stage word follows selectSpell's order", function()
     expect(W()).toBe("destroy")
     world({ hp = 40, affs = { "burning" } })
     magi.offense.state.conflagrated = true
-    expect(W()).toBe("conflagrated")
+    expect(W()).toBe("scald")          -- P9 magma: P1 waits for the destroy range
   end)
 
   it("the water route names its own step, and the stage word sends nothing", function()
@@ -262,10 +304,52 @@ describe("the stage word follows selectSpell's order", function()
     expect(#sent).toBe(0)
   end)
 
+  it("the prompt reads the burns the next round reads: a stale count shows 0", function()
+    world({ scalded = true, burns = 3 })   -- V3 holds no burning
+    tburns = 3
+    magi.offense.promptEcho()
+    expect(echoes[1]).toBe("Target: Burns 0 [build]")
+  end)
+
   it("the prompt line: `Target: Burns 2 [burn 2/5]`", function()
     world({ scalded = true, burns = 2, affs = { "burning" } })
     magi.offense.promptEcho()
     expect(echoes[1]).toBe("Target: Burns 2 [burn 2/5]")
+  end)
+end)
+
+describe("a mending lowers the burns ONCE: 391 then 025, as the log prints them (:412-413)", function()
+  local SALVE, DIMINISH = body("391_Applied_Body_Skin.lua"), body("general/025_Burns_Tracking.lua")
+  it("two burns, one body application and its diminish line: one burn left", function()
+    world({ burns = 2, affs = { "burning" } })
+    selectCurrentLine, fg, restorePassiveCure, passiveFailsafe = function() end, function() end, function() end, nil
+    line = "Kalys takes some salve from a vial and rubs it on his body."
+    matches = { line, NAME, "body" }
+    SALVE()
+    expect(magi.offense.state.burns).toBe(2)
+    line = "The fires consuming Kalys diminish somewhat."
+    matches = { line, NAME }
+    DIMINISH()
+    expect(magi.offense.state.burns).toBe(1)
+  end)
+end)
+
+describe("the room list: a player we do not hold leaving removes nobody", function()
+  it("the target stays listed, and a listed player leaving is removed", function()
+    dofile("src_new/scripts/levi_ataxia/levi/ataxia/update_stuff/001_ataxia_Players_Update.lua")
+    table.index_of = table.index_of or function(t, v)
+      for i, x in ipairs(t) do if x == v then return i end end
+    end
+    enableTimer, disableTimer, ataxiaBasher = function() end, function() end, ataxiaBasher or {}
+    ataxia.playersHere = { "Ana", NAME }
+    gmcp.Room = { RemovePlayer = "Stranger" }
+    ataxia_Players_Update("gmcp.Room.RemovePlayer")
+    expect(#ataxia.playersHere).toBe(2)
+    expect(magi.storm.targetInRoom()).toBeTrue()
+    gmcp.Room.RemovePlayer = "Ana"
+    ataxia_Players_Update("gmcp.Room.RemovePlayer")
+    expect(#ataxia.playersHere).toBe(1)
+    expect(ataxia.playersHere[1]).toBe(NAME)
   end)
 end)
 

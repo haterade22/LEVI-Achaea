@@ -13,7 +13,7 @@ shows is written up in a curated page that cites it.
 | 2026-10-11_mystor_shikudo-vs-infernal-dwc_win_c.iJVmpL.txt | Mystor (Shikudo) beats Agathon, Infernal DSL; finished with MIND SCYTHE | Mystor's (the Shikudo); he ran MIND SAPIENCE on the opponent in five of six | [combat/shikudo.md](../../combat/shikudo.md) |
 | 2026-10-11_mystor_shikudo-vs-shaman_loss_t54WWU6b.txt | Mystor (Shikudo) loses to Agathon as a Shaman (curse, jinx, invoke), truelocked; no Sapience in this log | Mystor's (the Shikudo); he ran MIND SAPIENCE on the opponent in five of six | [combat/shikudo.md](../../combat/shikudo.md) |
 | 2026-10-11_mystor_shikudo-vs-infernal-dwc_win_vNTjvghY.txt | Mystor (Shikudo) beats Agathon, Infernal DSL; finished with KAI CHOKE | Mystor's (the Shikudo); he ran MIND SAPIENCE on the opponent in five of six | [combat/shikudo.md](../../combat/shikudo.md) |
-| 2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt | Tabethys (Magi) leads a group (Agathon, Ryzant, Valkael, Naxx) on the World Tree and kills Kalys, a Serpent, with STORMHAMMER at about 50% health: magma, dehydrate, dehydrate, then two stormhammers | Tabethys's (the Magi) | [.claude/classes/magi.md](../../../.claude/classes/magi.md) ("In play"), `kb/CONFLICTS.md` #26 and #30 |
+| 2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt | Tabethys (Magi) leads a group (Agathon, Ryzant, Valkael, Naxx) on the World Tree and kills Kalys, a Serpent, with STORMHAMMER at about 50% health: magma, dehydrate, dehydrate, then two stormhammers | Tabethys's (the Magi) | [.claude/classes/magi.md](../../../.claude/classes/magi.md) ("In play"), `kb/CONFLICTS.md` Resolved 2026-10-19, #37 and #38 |
 
 ## How they were made
 
@@ -69,10 +69,15 @@ vivisect). Their system's echoes, as it prints them (not game text):
   `general/022_Resonance_Afflictions` patterns. It does show two game lines it leaves alone: the
   temperance strip and `You fan the heat of <T>'s body into consuming flame.`
 - `(||||||||----) 8207 82%` replaces the ASSESS line; `[par 1.00 wea 0.67 ...]` is its target tracker
-  (three letters, the chance), with a trailing hot-springs character while the target burns.
+  (three letters, the chance), sometimes with a trailing hot-springs character whose meaning is not known (it is missing on some lines with `bur 1.00`, e.g. :415-416).
 - `=f PVP` / `+f PVP` and `Alias "stmpvp" will now execute: ...` are its queue and alias echoes.
-- Apostate logs only: `[DEYES]: <aff>+ <aff>+`, and a stage word after the tracker, `softpress`,
-  `hardpress`, `lock`. v4.7.429 copied the cast and resonance echoes and the stage word into ours.
+- Apostate logs only (NOT filed, so not checkable here; the user's Downloads, 2026-10-19):
+  `[DEYES]: <aff>+ <aff>+`, and a stage word after the tracker, `softpress`, `hardpress`, `lock`.
+  v4.7.429 copied the cast and resonance echoes and the idea of a stage word into ours.
+- **Two facts from this log that changed our code:** a body mending prints the application line
+  AND "The fires consuming <T> diminish somewhat." (:412-413); and both stormhammers that hit went
+  at a Kalys shown "here, hidden" (:525, :706), while both misses came after he had left (:482,
+  :490, :683).
 
 ## Our own fight logs (`ours/`)
 

@@ -39,9 +39,9 @@ patterns:
 -- Only our target's burn (v4.7.420). The pattern captured no name, so this line added a burn to
 -- `target` whoever it named: our spell on another enemy in a group fight counted on our target.
 -- The neighbouring triggers (015_Dehydrate, 019, 021_Freeze, 021_Spell_Outcomes) all check the
--- name. One burning stack prints one fan line (Tabethys's log, kb/CONFLICTS.md Resolved 2026-10-19):
--- a dehydrate on a weary target, and moderate fire on a scalded one. Since v4.7.429 this trigger is
--- the only owner of a dehydrate's burn (015 no longer counts it). Moderate fire is #37.
+-- name. A weary dehydrate's burning stack prints ONE fan line (Tabethys's log, kb/CONFLICTS.md
+-- Resolved 2026-10-19), so since v4.7.429 this trigger is the only count of a dehydrate's burn (015
+-- no longer counts it). Which OTHER casts print it (moderate fire, firelash, emanation...) is #37.
 if matches[2] ~= target then return end
 
 magi.offense = magi.offense or {}
@@ -49,4 +49,6 @@ magi.offense.state = magi.offense.state or {}
 magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)
 tburns = magi.offense.state.burns -- backward compat
 tarAffed("burning")
-magi.offense.resoEcho("Fire", "Burning " .. magi.offense.state.burns .. "/5", matches[2])
+if magi.offense.resoEcho then
+  magi.offense.resoEcho("Fire", "Burning " .. magi.offense.state.burns .. "/5", matches[2])
+end
