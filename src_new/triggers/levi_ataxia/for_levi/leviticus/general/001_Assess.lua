@@ -36,4 +36,8 @@ patterns:
   type: 1
 ]]--
 
+-- Only our target's health (v4.7.429). Any "You glance over X" line set it, whoever X was, and P1
+-- (destroy) and P4 (stormhammer) in mage/004 read it: one look at a bystander put their health on
+-- our target. 698_Assess makes the same check.
+if not isTargeted(matches[2]) then return end
 targetHealth = math.floor((matches[4] / matches[5]) * 100)

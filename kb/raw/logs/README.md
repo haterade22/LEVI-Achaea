@@ -13,6 +13,7 @@ shows is written up in a curated page that cites it.
 | 2026-10-11_mystor_shikudo-vs-infernal-dwc_win_c.iJVmpL.txt | Mystor (Shikudo) beats Agathon, Infernal DSL; finished with MIND SCYTHE | Mystor's (the Shikudo); he ran MIND SAPIENCE on the opponent in five of six | [combat/shikudo.md](../../combat/shikudo.md) |
 | 2026-10-11_mystor_shikudo-vs-shaman_loss_t54WWU6b.txt | Mystor (Shikudo) loses to Agathon as a Shaman (curse, jinx, invoke), truelocked; no Sapience in this log | Mystor's (the Shikudo); he ran MIND SAPIENCE on the opponent in five of six | [combat/shikudo.md](../../combat/shikudo.md) |
 | 2026-10-11_mystor_shikudo-vs-infernal-dwc_win_vNTjvghY.txt | Mystor (Shikudo) beats Agathon, Infernal DSL; finished with KAI CHOKE | Mystor's (the Shikudo); he ran MIND SAPIENCE on the opponent in five of six | [combat/shikudo.md](../../combat/shikudo.md) |
+| 2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt | Tabethys (Magi) leads a group (Agathon, Ryzant, Valkael, Naxx) on the World Tree and kills Kalys, a Serpent, with STORMHAMMER at about 50% health: magma, dehydrate, dehydrate, then two stormhammers | Tabethys's (the Magi) | [.claude/classes/magi.md](../../../.claude/classes/magi.md) ("In play"), `kb/CONFLICTS.md` #26 and #30 |
 
 ## How they were made
 
@@ -53,6 +54,25 @@ His client runs its own system, which ADDS lines and GAGS (hides) others, printi
 - `--> <Opponent>: <command>` is what MIND SAPIENCE shows: the OPPONENT's own typed commands. It is the
   most valuable thing in these logs.
 - `[<Name>] HP: [====] (<hp>|<max>) (<pct>%)` replaces the game's ASSESS line.
+
+### Tabethys's Magi log (shared by the user, 2026-10-19)
+
+The user shared four Mudlet 4.11.2 HTML exports "from Magi". Only `o6UKnyyy` is a Magi fight, and it is
+the one filed here, converted the same way (one row per `<br>`), nothing removed. The other three are
+the same player on Apostate (corpse notes "This is the end of those who would trifle with Tabethys",
+the same pipe 577156) and are not filed: `mWeyVmzu` (a Magi sparring dummy against a Depthswalker,
+then Apostate against Kalys, a Serpent), `dQOamabI` and `Fw51FO2M` (Apostate against Kalys, killed by
+vivisect). Their system's echoes, as it prints them (not game text):
+- `You: <Spell> -> <Target>` in place of the cast line; `<Plane>: <Stage> -> <Target>` in place of the
+  game's resonance lines, which it GAGS (`Earth: Brokenrightarm`, `Fire: Scalded > Burning`,
+  `Fire: Blistered`, `Water: Frostbite`, `Water: Stuttering`). So this log does not show our
+  `general/022_Resonance_Afflictions` patterns. It does show two game lines it leaves alone: the
+  temperance strip and `You fan the heat of <T>'s body into consuming flame.`
+- `(||||||||----) 8207 82%` replaces the ASSESS line; `[par 1.00 wea 0.67 ...]` is its target tracker
+  (three letters, the chance), with a trailing hot-springs character while the target burns.
+- `=f PVP` / `+f PVP` and `Alias "stmpvp" will now execute: ...` are its queue and alias echoes.
+- Apostate logs only: `[DEYES]: <aff>+ <aff>+`, and a stage word after the tracker, `softpress`,
+  `hardpress`, `lock`. v4.7.429 copied the cast and resonance echoes and the stage word into ours.
 
 ## Our own fight logs (`ours/`)
 

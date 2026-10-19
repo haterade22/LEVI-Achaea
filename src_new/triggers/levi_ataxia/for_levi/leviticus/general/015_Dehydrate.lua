@@ -36,16 +36,13 @@ patterns:
   type: 1
 ]]--
 
+-- THE BURN IS NOT COUNTED HERE (v4.7.429). A dehydrate that gives a stack of burning (a weary
+-- target, Elementalism.wiki:328) prints "You fan the heat of <T>'s body into consuming flame." on
+-- the next line, and 022_Increase_Burning counts that line. This trigger counted the same stack as
+-- well, so one dehydrate added two burns (kb/CONFLICTS.md, Resolved 2026-10-19). Evidence: Tabethys's log
+-- (kb/raw/logs/2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt): a dehydrate on a weary,
+-- nauseous target printed exactly one fan line. Burns gate conflagrate (P12) and destroy (P1).
 if target == matches[2] then
-
-  if haveAff("weariness") and haveAff("nausea") then
-      magi.offense = magi.offense or {}
-      magi.offense.state = magi.offense.state or {}
-      magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)
-      tburns = magi.offense.state.burns -- backward compat
-      tarAffed("burning")
-      cecho(" <DimGrey>[<red>"..tburns.."/5<DimGrey>]")
-  end
 
   if not haveAff("weariness") and not haveAff("nausea") then
    tarAffed("weariness")
@@ -66,15 +63,9 @@ if target == matches[2] then
   -- Weary, not nauseous: a stack of burning, and the spell's own nausea. NOT frozen: "If they
   -- already have weariness, they will be given a stack of burning. If they already have nausea,
   -- gives a stack of freeze." (Elementalism.wiki:328). The frozen recorded here made P7 cast a
-  -- 2.6 s hypothermia at a target that was not frozen.
+  -- 2.6 s hypothermia at a target that was not frozen. The burning is the fan line's (above).
   if not haveAff("nausea") and haveAff("weariness") then
-    magi.offense = magi.offense or {}
-    magi.offense.state = magi.offense.state or {}
-    magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)
-    tburns = magi.offense.state.burns -- backward compat
-    tarAffed("burning")
     tarAffed("nausea")
-    cecho(" <DimGrey>[<red>"..tburns.."/5<DimGrey>]")
   end
   if partyrelay and not ataxia.afflictions.aeon then send("pt " ..target.. ": weariness nausea") end
 end

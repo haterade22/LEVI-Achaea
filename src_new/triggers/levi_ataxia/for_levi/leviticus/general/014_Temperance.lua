@@ -36,6 +36,10 @@ patterns:
   type: 1
 ]]--
 
+-- Minor fire resonance strips temperance (Elementalism.wiki:62). Only our target's (v4.7.429): the
+-- line names who lost it, and a strip on another enemy in a group fight was recorded on ours.
+if type(target) ~= "string" or matches[2]:lower() ~= target:lower() then return end
+if magi and magi.offense and magi.offense.resoEcho then magi.offense.resoEcho("Fire", "Temperance stripped", matches[2]) end
 targetlostfrost = true
 tempTimer(17, [[targetlostfrost = false; erAff("notemperance")]])
 tarAffed("notemperance")

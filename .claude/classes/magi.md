@@ -74,7 +74,7 @@ water:
 ### Resonance Budgeting
 - EMANATION needs major resonance and **clears** that plane (WIKI :242): the way to spend a capped plane on purpose.
 - **A cast at a capped plane is not always waste.** `selectBurningSpell` treats it as waste: its fulminate, its two conditional dehydrates and its magma need `fireWillBurn` (fire 1-2), it emanates fire at 3, and its default dehydrate is reached only below fire 3. P2's meteorite (flaming only at fire 1-2) and `selectFallback`'s magma (fire under 3) avoid it too. The rest of the tree does not: P9's magma (fire and water mode), lock and salve mode's magma and lock mode's fulminate have no fire test, so each goes out at capped fire whenever its other conditions hold (for P9's, an unscalded target). Tabethys casts FULMINATE at fire 3 on purpose, for the fulminated and the asthma (minor air) it brings (PLAYER, see the rotation section). What a cast at major does to that plane (nothing, the major effect again, or only holding off the fade) is not stated anywhere in `kb/` (UNVERIFIED). The rule this page used to state ("Never waste capped resonance" — "if fire==3, emanate fire before casting more fire spells") is the code's choice, not a game rule.
-- A spell builds every plane it channels (magma = earth + fire, mudslide = earth + water, dehydrate = fire + water, fulminate = air + fire, freeze = air + water; channels WIKI). Tabethys's numbers add up only if each cast raises each of its planes by one level, which is the working assumption (UNVERIFIED).
+- A spell builds every plane it channels (magma = earth + fire, mudslide = earth + water, dehydrate = fire + water, fulminate = air + fire, freeze = air + water; channels WIKI). Each cast raises each plane it channels by one level: Tabethys's log of a kill (2026-10-19, `kb/raw/logs/2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt`) shows it from no resonance, magma then dehydrate twice (PLAYER-LOG; see "In play" below).
 - ERODE without MAINTAIN drops ALL resonance a level on a successful strip (WIKI :74); our meteorite fallback sends `cast erode at <t> maintain`.
 
 ### Resonance from GMCP
@@ -451,8 +451,32 @@ Every pick is read from live resonance and the target as V3 holds it (`waterRout
 
 Tests: `src_new/tests/test_magi_water_route.lua` (58), which loads the real affliction API, V3, resonance, the offense and the `ww`/`mm`/`vv`/help alias bodies.
 
+### In play: Tabethys's log of a group kill (2026-10-19)
+**Source:** `kb/raw/logs/2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt` (PLAYER-LOG: their own system's echoes beside game lines; see `kb/raw/logs/README.md`). Tabethys leads Agathon, Ryzant, Valkael and Naxx on the World Tree and kills Kalys, a Serpent. The other three logs the user shared are the same player on Apostate.
+
+| Line | Round (their alias) | Kalys after | What the round gave (their echo + the game line) |
+|---|---|---|---|
+| :243 | `PVP`: magma | 82% | `Earth: Brokenrightarm`; the game's temperance strip (minor fire) |
+| :335 | `PVP`: dehydrate | 80% | the game's fan line; `Fire: Scalded > Burning`, `Water: Frostbite` |
+| :420 | `PVP`: dehydrate | 44% | the game's fan line; `Fire: Blistered`, `Water: Stuttering` |
+| :547 | `STMPVP`: stormhammer | 51% (after a heartwood vial) | lightning; allies keep hitting |
+| :732 | `STMPVP`: stormhammer | slain | "You have slain Kalys." |
+
+What it settled, and what we changed (v4.7.429):
+- **Resonance is one level per channelled plane per cast** (was `kb/CONFLICTS.md` #26).
+- **One burning stack prints one fan line.** The second dehydrate, on a weary and nauseous target, printed one; our `general/015_Dehydrate` counted that stack and `022_Increase_Burning` counted it again. 015 no longer counts it.
+- **Group stormhammer at about 50%** finished a Serpent with allies hitting; `sr` already casts it at 50%.
+- **What not to copy:** two stormhammers sent at a hidden Kalys ("You cannot see that being here.", each after a hand swap), and their auto-queue replacing the manual finisher. Our stormhammer now casts only at a target gmcp lists in the room.
+
+Found on the same path and fixed in v4.7.429:
+- `magi.storm.selectTargets` puts our target in slot 1 whenever gmcp lists it, enemied or not, so the kill round is never empty; `fire()` sends the full round (`magi.offense.buildRound`: stand, staff and shield, the cast, assess).
+- `698_Assess` and `703_HYENA_SCENT` called `magi_setDestroy`, which nothing defines: every Magi assess threw.
+- `general/001_Assess` and `014_Temperance` record only our target.
+
+**Copied from their display** (`mm echo [on|off]`, default on): `You: <Spell> -> <Target>` once per round sent (`magi.offense.castEcho`; the same round pressed again within 2 s prints nothing); `<Plane>: <Stage> -> <Target>` for every resonance that lands on our target (`resoEcho`, from `022_Resonance_Afflictions`, `014_Temperance`, `022_Increase_Burning`); and a stage word on the Magi prompt, `Target: Burns 2 [burn 2/5]` (`stageWord`, the same tests in the same order as `selectSpell`: destroy, shield, the water route's step, glaciate, storm, hypothermia, lock/salve/group, conflagrated, scald, burn N/5, build). Tests: `src_new/tests/test_magi_tabethys.lua`.
+
 ### Open questions (kb/CONFLICTS.md)
-- **Resonance per cast:** capture AB ELEMENTALISM, and RESONANCE after each cast of the opener.
+- **Moderate fire on a scalded target (#37):** does "You will that <T> should burn" print beside the fan line? If it does, that stack is counted twice.
 - **Glaciate's kill range:** capture AB ELEMENTALISM GLACIATE, and log glaciate hits with the target's health before and after.
 - **Vibe interval:** log a disorientation or creeps vibration's affliction lines with timestamps.
 - **Resonance keys in GMCP:** capture one `gmcp.Char.Vitals.charstats` with resonance up.
@@ -678,7 +702,8 @@ P1-P8 run before the mode branches, so they act in every mode: a change to P3, P
 | `mm reset` | Reset all offense state |
 | `mm arach` / `mm arachnideye` | Toggle arachnideye trample prefix |
 | `mm web` / `mm webbomb` | Toggle webbomb prefix |
-| `mm storm` | Cycle the stormhammer target mode (city / all / priority) |
+| `mm storm` | Cycle the stormhammer target mode (city / all / priority). In every mode our target goes in slot 1 when gmcp lists it in the room (v4.7.429) |
+| `mm echo [on\|off]` | Toggle the compact echoes (`You: <Spell> -> X`, `<Plane>: <Stage> -> X`) and the prompt's stage word (v4.7.429, default on, not saved) |
 | `evibe` | Embed the wanted vibrations not already in the room, one at a time |
 | `vibe <name>` | Add or remove one vibration in the wanted list |
 | `vib` | Embed a fixed five: dissonance, disorientation, creeps, plague, harmony |

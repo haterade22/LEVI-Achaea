@@ -55,6 +55,15 @@ elseif arg == "arachnideye" or arg == "arach" then
 elseif arg == "webbomb" or arg == "web" then
   magi.offense.config.useWebbomb = not magi.offense.config.useWebbomb
   ataxiaEcho("Webbomb: " .. (magi.offense.config.useWebbomb and "ON" or "OFF"))
+elseif arg == "echo" or arg == "echo on" or arg == "echo off" then
+  -- v4.7.429: the compact cast/resonance echoes and the prompt's stage word (mage/004).
+  local want = arg:match("^echo (%a+)$")
+  if want then
+    magi.offense.config.compactEcho = (want == "on")
+  else
+    magi.offense.config.compactEcho = not magi.offense.compactOn()
+  end
+  ataxiaEcho("Magi compact echoes and stage word: " .. (magi.offense.compactOn() and "ON" or "OFF"))
 elseif arg == "storm" then
   if magi.storm then
     local modes = {"city", "all", "priority"}
@@ -67,5 +76,5 @@ elseif arg == "storm" then
   end
 else
   ataxiaEcho("Magi modes: fire | water | lock | salve | group | waterroute (or route; ww runs it)")
-  ataxiaEcho("Commands: mm debug | mm vibes | mm reset | mm arach | mm web | mm storm | mm glaciate N|off | mm (status)")
+  ataxiaEcho("Commands: mm debug | mm vibes | mm reset | mm arach | mm web | mm storm | mm glaciate N|off | mm echo [on|off] | mm (status)")
 end

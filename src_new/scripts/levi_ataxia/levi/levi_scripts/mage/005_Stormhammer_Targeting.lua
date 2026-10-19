@@ -114,6 +114,18 @@ function magi.storm.findTargets()
   end
 end
 
+-- Whether our target is a player gmcp lists in this room (v4.7.429). A hidden or departed player
+-- is not listed, and a stormhammer at one is refused: Tabethys's log has "You cannot see that
+-- being here." twice, each after a hand swap (kb/raw/logs/2026-10-19_tabethys_*).
+function magi.storm.targetInRoom()
+  if type(target) ~= "string" or target == "" then return false end
+  if type(ataxia.playersHere) ~= "table" then return false end
+  for _, person in pairs(ataxia.playersHere) do
+    if type(person) == "string" and person:lower() == target:lower() then return true end
+  end
+  return false
+end
+
 -- Pick up to 3 targets, guaranteeing primary target is slot 1
 function magi.storm.selectTargets()
   magi.storm.targets = {}
@@ -121,6 +133,7 @@ function magi.storm.selectTargets()
   local candidates = magi.storm.findTargets()
 
   -- Ensure primary target is slot 1 if present and an enemy
+  local placed = false
   if target and target ~= "" then
     for i, name in ipairs(candidates) do
       if name == target then
@@ -128,9 +141,19 @@ function magi.storm.selectTargets()
           table.remove(candidates, i)
           table.insert(candidates, 1, target)
         end
+        placed = true
         break
       end
     end
+  end
+
+  -- OUR TARGET IS ALWAYS SLOT 1 WHEN IT IS IN THE ROOM (v4.7.429). The finders take only enemied
+  -- players (and, in city mode, of a known city), so a target we had not enemied, or one with no
+  -- NDB city, was left out: with nobody else listed fire() echoed "No ... enemies" and sent
+  -- nothing, and P4 / group mode returned nil, so the kill round was empty. With others listed, the
+  -- stormhammer went at them and not at the target the round was for.
+  if not placed and magi.storm.targetInRoom() then
+    table.insert(candidates, 1, target)
   end
 
   for i = 1, math.min(3, #candidates) do
@@ -186,6 +209,16 @@ function magi.storm.fire()
   if magi.storm.targets[3] then
     cmd = cmd .. " and " .. magi.storm.targets[3]
   end
-  ataxiaEcho("Stormhammer: " .. table.concat(magi.storm.targets, ", "))
-  send("queue addclearfull freestand " .. cmd)
+  -- The full round (stand, staff and shield, the cast, assess), as every other Magi round. The
+  -- builder needs the offense (004); srr reaches this with or without it.
+  if magi.offense and magi.offense.buildRound and type(target) == "string" and target ~= "" then
+    send("queue addclearfull freestand " .. magi.offense.buildRound(cmd))
+  else
+    send("queue addclearfull freestand " .. cmd)
+  end
+  if magi.offense and magi.offense.castEcho and magi.offense.compactOn() then
+    magi.offense.castEcho("Stormhammer", table.concat(magi.storm.targets, ", "))
+  else
+    ataxiaEcho("Stormhammer: " .. table.concat(magi.storm.targets, ", "))
+  end
 end

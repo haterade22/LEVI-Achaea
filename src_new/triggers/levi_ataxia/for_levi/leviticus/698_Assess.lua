@@ -55,9 +55,9 @@ if type(target) == "string" then
 	if isTargeted(t) then
 		deleteLine()
 		cecho("\n<red> +[<NavajoWhite>"..target.."<red>] HP: <SeaGreen>[<green>"..string.rep("=", hpb)..string.rep(" ", 20-hpb).."<SeaGreen>] <red>"..php.."% -- <NavajoWhite>"..hp.."/"..mhp.." ")
-		if ataxia_isClass("magi") then
-			magi_setDestroy(php)
-		end
+		-- magi_setDestroy(php) was called here for a Magi (removed v4.7.429). It was defined only in
+		-- the retired levi_test_project, so every Magi assess threw after this echo. The Magi
+		-- prompt's stage word (mage/004 magi.offense.stageWord) now says when destroy is ready.
     
     if php <= 49.99 and (ataxia_isClass("Druid") or ataxia_isClass("monk")) then
       ataxia_boxEcho("TARGET IS IN INSTAKILL RANGE", "NavajoWhite:chat_bg")
