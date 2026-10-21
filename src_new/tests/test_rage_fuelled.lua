@@ -274,6 +274,49 @@ describe("ataxiaBasher_shieldDropped -- pull back the stale raze", function()
   end)
 end)
 
+-- v4.7.431, the mirror: a shield that goes UP must replace the plain swing already queued
+-- (user: "it should prompt us to refresh our attack function, as currently we then hit shield").
+describe("ataxiaBasher_shieldRaised -- replace the swing that would hit the new shield", function()
+  local calls, realAttack
+  local function arm()
+    reset()
+    calls = 0
+    realAttack = ataxiaBasher_attack
+    ataxiaBasher_attack = function() calls = calls + 1 end
+    ataxiaBasher.enabled, ataxiaBasher.paused = true, nil
+    target = 7
+    ataxiaTemp.swarmHold = nil
+  end
+  local function disarm() ataxiaBasher_attack = realAttack end
+
+  it("re-sends the round when a denizen shields", function()
+    arm()
+    ataxiaBasher_shieldRaised()
+    expect(calls).toBe(1)
+    disarm()
+  end)
+
+  it("throttles to one per second, on its own stamp (a drop in the same second still re-sends)", function()
+    arm()
+    ataxiaBasher_shieldRaised()
+    ataxiaBasher_shieldRaised()
+    expect(calls).toBe(1)
+    ataxiaBasher_shieldDropped()
+    expect(calls).toBe(2)
+    disarm()
+  end)
+
+  it("is inert in PvP, off, paused, or under the swarm hold", function()
+    arm(); target = "someplayer"; ataxiaBasher_shieldRaised()
+    arm(); ataxiaBasher.enabled = false; ataxiaBasher_shieldRaised()
+    arm(); ataxiaBasher.paused = true; ataxiaBasher_shieldRaised()
+    arm(); ataxiaTemp.swarmHold = true; ataxiaBasher_shieldRaised()
+    expect(calls).toBe(0)
+    ataxiaTemp.swarmHold = nil
+    disarm()
+  end)
+end)
+
 -- CONTROL-FIRST DENIZENS (v4.7.198). User: "a manifested nightmare -- when facing this
 -- denizen we need to use as many battlerages that slow their attacks down as possible."
 -- Against a listed mob, the battlerages that spend ITS balance outrank the ones that spend

@@ -2,6 +2,47 @@
 
 ---
 
+## 2026-10-21 - v4.7.431: greater elementals one at a time; re-send the round when a denizen shields
+
+User: "When fighting elementals, we want to only fight one greater at a time. Therefore, it is
+important to isolate the greaters by tumbling out, icewall, leap, etc when in a wade. We can use
+glance and squint to identify rooms with more than one in a greater elemental room." The user's
+three choices: a glanced room with 2+ greaters is skipped for now; if both greaters follow us, we
+fight both there; the rule covers any "greater ... elemental".
+
+- **Two greaters now start the isolation cycle.** The swarm assess counted every denizen as 1 and
+  needed 3, so two greaters alone got no tactic. `S._crowded(n)` (`mnemosyne/009`) is now the one
+  owner of "this room needs a tactic": 2+ greaters (`S._greaterCount`, own denizens excluded) OR the
+  old threshold. The idle assess, the Roll Hide panic gate and `S._checkPursuit` all ask it, so the
+  pull / icewall + leap / tumble choice is unchanged and two greaters that follow us stamp the
+  pursuit, which means we fight both there. One greater fewer on re-entry refunds the pull budget
+  (`entrySnap[room].g`). The pull echo says "ISOLATING".
+- **GLANCE reads one denizen sentence.** Two or more of one kind print as "There are 2 greater fire
+  elementals here." (World Tree log). `_glanceStart` (`mnemosyne/008`) arms a short line capture,
+  kept only inside the glanced block (the `onLavaSeen` token proof), and `_glanceResolve` reads the
+  JOINED rows, because the server wrap can split the sentence. 2+ greaters records the door in
+  `M.explore.greaterEdges` for 45 s. `_nextExploreStep` takes a free door here, then a backtrack to a
+  free door elsewhere (`M._backtrackStep`), and only then the held door ("only greater-elemental
+  doors are left -- going <dir> to isolate them"), so the rule never strands the sweep. An expired
+  record is glanced again. Cleared per ripple and on load.
+- **Not done:** two greaters of DIFFERENT kinds print two singular long descriptions, which have
+  never been captured, so a glance cannot see them (the assess still isolates them on entry).
+  SQUINT is not used: its output has never been captured.
+- **`mnem swarm greater [on|off|list|add <name>|remove <name>]`** (`mnemosyne/003`). `mnem swarm`
+  shows `greater=on(N here)`, `mnem explore status` lists the doors that wait, and Bloodscent recon
+  calls out a room with 2+ greaters.
+- **A denizen that shields now replaces the queued swing** (user: "A nearly invisible magical
+  shield forms around Celepharn, High Priest of Life. ... it should prompt us to refresh our attack
+  function, as currently we then hit shield"). Trigger 336 set `ataxiaBasher.shielded`, but that
+  shapes only the NEXT rebuild; the plain swing already in the server queue hit the shield.
+  `ataxiaBasher_shieldRaised()` (`basher/001`) re-sends the round at once, the mirror of
+  `ataxiaBasher_shieldDropped` (same gates: PvE, enabled, not paused, no swarm hold; its own
+  1/sec stamp). 336 also kills its previous expiry timer before arming a new one.
+- Tests: `test_swarm_tactics.lua` (7), `test_mnemosyne.lua` (6), `test_rage_fuelled.lua` (3).
+  Docs: `.claude/projects/mnemosyne/07-explorer.md`, new `kb/mechanics/elementals-and-glance.md`.
+
+---
+
 ## 2026-10-19 - v4.7.430: the review of v4.7.429 (Magi)
 
 The user asked for a tailored deep review of v4.7.429. Four agents reviewed one area each (burn

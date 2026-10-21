@@ -54,7 +54,11 @@ if type(target) == "number" and ataxiaBasher.enabled and not mnemHammerAnvil and
     ataxiaBasher.shielded = true
     local shieldDur = (ataxiaBasher.shieldTimers and ataxiaBasher.shieldTimers[secondTarget])
       or ataxiaBasher.shieldTimerDefault or 3.1
+    -- Kill the previous expiry first: an orphan would clear `shielded` during THIS shield.
+    if removeShield then pcall(killTimer, removeShield) end
     removeShield = tempTimer(shieldDur, [[ ataxiaBasher.shielded = false; removeShield = nil]])
+    -- v4.7.431: the swing already queued would hit the shield -- replace it with the raze round.
+    if ataxiaBasher_shieldRaised then ataxiaBasher_shieldRaised() end
   elseif ataxiaBasher.shieldswap and ataxiaBasher_validTargets() > 1 and not ataxiaTemp.mobshieldtimer then
     ataxiaBasher_shieldedTarget()
   end

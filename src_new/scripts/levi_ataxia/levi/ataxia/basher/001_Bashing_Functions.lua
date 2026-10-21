@@ -316,6 +316,24 @@ function ataxiaBasher_shieldDropped()
   if ataxiaBasher_attack then ataxiaBasher_attack() end
 end
 
+-- A denizen's shield just went UP (v4.7.431, user: "when bashing and this happens, it should
+-- prompt us to refresh our attack function, as currently we then hit shield"). The mirror of
+-- ataxiaBasher_shieldDropped: trigger 336 sets `ataxiaBasher.shielded`, but that only shapes the
+-- NEXT rebuild -- the plain swing already in the server queue hits the shield. Re-send now, so
+-- `queue addclearfull` replaces it with the raze round. Same gates and the same 1/sec throttle
+-- (its own stamp, so a raise and a drop in one second do not swallow each other).
+function ataxiaBasher_shieldRaised()
+  ataxiaTemp = ataxiaTemp or {}
+  if type(target) ~= "number" then return end
+  if not (ataxiaBasher and ataxiaBasher.enabled) then return end
+  if ataxiaBasher.paused then return end
+  if ataxiaTemp.swarmHold then return end
+  local nowT = (getEpoch and getEpoch()) or 0
+  if ataxiaTemp.shieldRaiseAt == nowT then return end
+  ataxiaTemp.shieldRaiseAt = nowT
+  if ataxiaBasher_attack then ataxiaBasher_attack() end
+end
+
 -- ============================================================================
 -- Damage tracking for extreme damage rate detection
 -- ============================================================================

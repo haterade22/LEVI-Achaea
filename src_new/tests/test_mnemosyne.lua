@@ -8892,6 +8892,81 @@ describe("glance recon before a never-walked door", function()
     expect(has("glance")).toBeFalse()
     expect(has("stand;s")).toBeTrue()
   end)
+
+  -- v4.7.431: one greater elemental at a time. Two greaters of one kind print as ONE sentence in
+  -- the glanced prose ("There are 2 greater fire elementals here."), mid-paragraph and wrappable.
+  local function isGreater(n) return n:lower():find("greater %a+ elemental") ~= nil end
+  local function greaterSetup(exits)
+    setup()
+    M.swarm._isGreater = isGreater -- the swarm file tests the real matcher
+    M.explore.greaterEdges = {}
+    MAP.onRoom(1, "A long corridor.", exits or { south = 0 }, nil)
+  end
+  local function glanceSouth(rows)
+    M._exploreTick()                                 -- glance south pending
+    MAP.onGlance("south")
+    for _, r in ipairs(rows) do M.onGlanceLine(r) end
+    MAP.onExitsLine("You see exits leading north and east.")
+  end
+
+  it("counts greaters in glanced prose, a wrapped sentence included", function()
+    setup()
+    M.swarm._isGreater = isGreater
+    expect(M._greatersInText("Dust. There are 2 greater earth elementals here. A rat.")).toBe(2)
+    expect(M._greatersInText("There are 3 lesser water elementals here.")).toBe(0)
+    expect(M._greatersInText(table.concat({ "A cave. There are 2 greater", "fire elementals here." }, " "))).toBe(2)
+  end)
+
+  it("a glance with 2+ greaters behind a door takes another door first", function()
+    greaterSetup({ south = 0, east = 0 })
+    M._exploreTick()
+    local first = M.explore.glance.dir             -- whichever door the sweep looks at first
+    local other = (first == "south") and "e" or "s"
+    MAP.onGlance(first)
+    M.onGlanceLine("A long corridor. (indoors)")
+    M.onGlanceLine("Rubble. There are 2 greater earth elementals here.")
+    MAP.onExitsLine("You see exits leading north and west.")
+    expect(M._greaterHeld(1, first)).toBeTrue()
+    local d, why = M._nextExploreStep()
+    expect(d).toBe(other)
+    expect(why).toBeNil()
+  end)
+
+  it("our own room's prose, outside the glanced block, records nothing", function()
+    greaterSetup({ south = 0 })
+    M._exploreTick()                                 -- pending, header not printed yet
+    M.onGlanceLine("There are 2 greater earth elementals here.")
+    MAP.onGlance("south")
+    MAP.onExitsLine("You see exits leading north and east.")
+    expect(M.explore.glance.done).toBeTrue()
+    expect(M._greaterHeld(1, "south")).toBeFalse()
+  end)
+
+  it("with no other door left, it goes in to isolate them", function()
+    greaterSetup({ south = 0 })
+    glanceSouth({ "There are 2 greater fire elementals here." })
+    local d, why = M._nextExploreStep()
+    expect(d).toBe("s")
+    expect(why).toBe("greater")
+    sent = {}
+    M._exploreTick()
+    expect(has("stand;s")).toBeTrue()                -- already looked: it walks, no second glance
+  end)
+
+  it("an expired record earns a fresh glance; a look with one greater clears it", function()
+    greaterSetup({ south = 0 })
+    glanceSouth({ "There are 2 greater fire elementals here." })
+    M.explore.greaterEdges[1].south.at = M.explore.greaterEdges[1].south.at - 100
+    expect(M._glanceWanted("s")).toBeTrue()
+    expect(M._greaterRec(1, "south")).toBeNil()
+  end)
+
+  it("the record dies with the ripple", function()
+    greaterSetup({ south = 0 })
+    glanceSouth({ "There are 2 greater fire elementals here." })
+    M.onRippleReset()
+    expect(M._greaterHeld(1, "south")).toBeFalse()
+  end)
 end)
 
 -- v4.7.319, deep review, reproduced: `glance south` ends in a direction and the send capture
