@@ -52,8 +52,32 @@ see them before it walks in.
 - **Code:** trigger 336 sets `ataxiaBasher.shielded` and, since v4.7.431, calls
   `ataxiaBasher_shieldRaised()` so the swing already queued is replaced by the raze round.
 
+### GLANCE while blind (live, user, 2026-10-21)
+```
+Glancing to the south, you see:
+A corridor inside the Gnoll fortress. (indoors)
+A mysterious entity abides.
+You see exits leading north and east.
+```
+- Blind, the glanced room shows "A mysterious entity abides." in place of its denizens (the same
+  line the MINDSEYE keeper notes for our own room). So no greater sentence can be read.
+  Unknown: whether one entity line prints per denizen or one for the whole room.
+- **Code:** `M._glanceWanted` (008) already skips the glance while `ataxia.defences.blindness`.
+- **Confidence:** CONFIRMED (live) for the line; ASSUMED for the cause (blindness).
+
+### SQUINT (live, user, 2026-10-21)
+```
+Narrowing your eyes, you squint off toward the northeast.
+A rock tunnel. (indoors)
+You can see no further.
+```
+- Header, room name, then "You can see no further." No exits line, so trigger 063 is not fed.
+  No denizens shown in this sample: unknown whether the room was empty or SQUINT never shows them.
+- **Confidence:** CONFIRMED (live).
+
 ## Open
 
 - The long description of ONE greater elemental (needed to see two greaters of DIFFERENT kinds in
   a glance) has never been captured.
-- SQUINT output has never been captured; the package does not use it.
+- SQUINT into a room WITH denizens (does it list them?). The package does not use SQUINT.
+- GLANCE with mindseye up while blind: does it show the denizens again?
