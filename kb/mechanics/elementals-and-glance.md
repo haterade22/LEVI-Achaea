@@ -69,16 +69,37 @@ You see exits leading north and east.
 
 ### SQUINT (live, user, 2026-10-21)
 ```
-Narrowing your eyes, you squint off toward the northeast.
-A rock tunnel. (indoors)
+Narrowing your eyes, you squint off toward the southeast.
+Upon broken cliffs.
+The sky darkens with the onset of night. The ground is slick with ice. The area is ablaze! A half-formed elemental of
+molten lava crawls slowly across the ground.
+Atop a jagged ridge.
+The sky darkens with the onset of night. The ground is slick with ice. The area is ablaze!
 You can see no further.
 ```
-- Header, room name, then "You can see no further." No exits line, so trigger 063 is not fed.
-  No denizens shown in this sample: unknown whether the room was empty or SQUINT never shows them.
+- SQUINT walks a straight line: for EACH room in that direction it prints the room name and its
+  prose, denizens included, until "You can see no further." Here: two rooms deep. No exits line, so
+  trigger 063 is not fed. (An earlier sample, "A rock tunnel. (indoors)", was one empty room.)
+- The first room's prose is the same as the GLANCE of that direction (sample below), minus the exits.
+- **Confidence:** CONFIRMED (live). **Code:** not used.
+
+### GLANCE prose also names room hazards (live, user, 2026-10-21)
+```
+Glancing to the southeast, you see:
+Upon broken cliffs.
+The sky darkens with the onset of night. The ground is slick with ice. The area is ablaze! A half-formed elemental of
+molten lava crawls slowly across the ground.
+You see exits leading northeast, southeast, and northwest.
+```
+- "The ground is slick with ice." and "The area is ablaze!" are in the glanced prose, before we enter.
+  The code reads only the lava phrase today. The denizen sentence wraps mid-name (the reason
+  `M._greatersInText` reads the joined rows).
+- "A half-formed elemental of molten lava crawls slowly across the ground." is the long description
+  of ONE denizen (short name not yet tied to it; it is not a "greater").
 - **Confidence:** CONFIRMED (live).
 
 ## Open
 
 - The long description of ONE greater elemental (needed to see two greaters of DIFFERENT kinds in
   a glance) has never been captured.
-- SQUINT into a room WITH denizens (does it list them?). The package does not use SQUINT.
+- The package does not use SQUINT. It could see greaters two rooms out; not wired.

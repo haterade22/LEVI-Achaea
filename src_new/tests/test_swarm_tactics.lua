@@ -934,6 +934,33 @@ describe("swarm reset + lifecycle", function()
     expect(S.recon ~= nil).toBeTrue()
     expect(#S.recon.lines).toBe(2)
   end)
+  -- v4.7.433: a fight never goes quiet, and a live GO recon kept 2659 lines of combat (saved to
+  -- disk with `ataxia`). The capture now stops itself on a line cap and on a time limit.
+  it("sense stops at the line cap and at the time limit, however busy the room", function()
+    fixture(0)
+    local real = M._captureLines
+    local ok, e = pcall(function()
+      local function feeder(perLineSeconds)
+        return function(opts)
+          local lines = {}
+          for i = 1, 3000 do
+            clock = clock + perLineSeconds
+            if opts.onLine("combat line " .. i) == "stop" then break end
+            lines[#lines + 1] = "combat line " .. i
+          end
+          opts.onDone(lines)
+        end
+      end
+      M._captureLines = feeder(0)
+      S.sense("test")
+      expect(#S.recon.lines).toBe(S.SENSE_MAX_LINES)
+      M._captureLines = feeder(0.1) -- 10 lines a second: the time limit wins
+      S.sense("test")
+      expect(#S.recon.lines <= S.SENSE_MAX_TIME * 10 + 1).toBeTrue()
+    end)
+    M._captureLines = real
+    if not ok then error(e, 0) end
+  end)
   it("passes through un-decorated after a forced move left the swarm room mid-arm", function()
     fixture(3)
     S.onTick()
