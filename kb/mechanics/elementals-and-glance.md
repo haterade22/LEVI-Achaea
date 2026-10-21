@@ -59,11 +59,13 @@ A corridor inside the Gnoll fortress. (indoors)
 A mysterious entity abides.
 You see exits leading north and east.
 ```
-- Blind, the glanced room shows "A mysterious entity abides." in place of its denizens (the same
-  line the MINDSEYE keeper notes for our own room). So no greater sentence can be read.
-  Unknown: whether one entity line prints per denizen or one for the whole room.
-- **Code:** `M._glanceWanted` (008) already skips the glance while `ataxia.defences.blindness`.
-- **Confidence:** CONFIRMED (live) for the line; ASSUMED for the cause (blindness).
+- Blind WITHOUT mindseye, the glanced room shows "A mysterious entity abides." in place of its
+  denizens (the same line the MINDSEYE keeper notes for our own room).
+- Blind WITH mindseye up, a glance reads the same as when not blind (user, 2026-10-21: "without
+  blind and mindseye is the same thing" / "yes, so it would be the same").
+- **Code:** since v4.7.432 `M._glanceWanted` (008) skips the glance only while blind AND mindseye
+  is down. The keeper in `deffing/007` touches mindseye whenever we are blind.
+- **Confidence:** CONFIRMED (live line; user statement for mindseye).
 
 ### SQUINT (live, user, 2026-10-21)
 ```
@@ -80,4 +82,3 @@ You can see no further.
 - The long description of ONE greater elemental (needed to see two greaters of DIFFERENT kinds in
   a glance) has never been captured.
 - SQUINT into a room WITH denizens (does it list them?). The package does not use SQUINT.
-- GLANCE with mindseye up while blind: does it show the denizens again?

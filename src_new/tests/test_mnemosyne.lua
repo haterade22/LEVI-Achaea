@@ -8856,6 +8856,15 @@ describe("glance recon before a never-walked door", function()
     expect(has("stand;s")).toBeTrue()
   end)
 
+  it("glances while blind when mindseye is up (v4.7.432: the same view as sighted)", function()
+    setup()
+    ataxia.defences.blindness, ataxia.defences.mindseye = true, true
+    M._exploreTick()
+    ataxia.defences.blindness, ataxia.defences.mindseye = nil, nil
+    expect(has("glance south")).toBeTrue()
+    expect(has("stand;s")).toBeFalse()
+  end)
+
   -- The status line was DEFINED in the first cut of this change and called from nowhere -- a
   -- function with no caller is dead code however good it is. Pin that status and why print it.
   it("mnem explore status and why both show the glance state", function()

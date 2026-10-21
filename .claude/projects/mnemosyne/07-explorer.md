@@ -1093,7 +1093,7 @@ GLANCE is free and prints the neighbour's description AND exits line before we s
 | The exits reach 008 | 005's glance token existed to DISCARD a neighbour's exits line (v4.7.262); it now also publishes it (`M._onGlanceExits`, guarded) |
 | Re-tick | only if still in the room we glanced from: `_scheduleTick` is last-call-wins and would otherwise kill an arrival settle if something moved us mid-glance |
 | Off | `mnem explore glance off` (v4.7.319; persisted as `ataxia.settings.reporting.glance`) |
-| Blind | skipped while `ataxia.defences.blindness` is up (v4.7.319) -- the Monk/BM keeper holds it, and a blind glance cost the full timeout for nothing |
+| Blind | skipped while `ataxia.defences.blindness` is up AND `mindseye` is down (v4.7.319; mindseye exception v4.7.432) -- blind without mindseye, the glance shows only "A mysterious entity abides."; with mindseye up it reads as if sighted (user), and the keeper touches mindseye whenever we are blind |
 | Left the room | a glance still pending for a room we have left is DROPPED at the gate (v4.7.319) -- not waited for, which stalled the sweep until the 30s watchdog |
 
 Parsed since v4.7.431: ONE denizen sentence, "There are N <plural> here.", for greater

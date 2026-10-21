@@ -2,6 +2,19 @@
 
 ---
 
+## 2026-10-21 - v4.7.432: GLANCE while blind, when mindseye is up
+
+User: "without blind and mindseye is the same thing" / "yes, so it would be the same". A live glance
+while blind showed only "A mysterious entity abides." where the denizens should be. With mindseye up
+the glance reads as if we were not blind. v4.7.319 skipped every glance while blind, so on a class
+that keeps BLIND up (Monk, Blademaster) the v4.7.431 greater-elemental recon could never run.
+`M._glanceWanted` (`mnemosyne/008`) now skips only when blind AND mindseye is down; the MINDSEYE
+keeper (`deffing/007`, v4.7.378) touches mindseye whenever we are blind, so this is the usual case.
+Test: `test_mnemosyne.lua` "glances while blind when mindseye is up". Both live samples (the blind
+GLANCE and a SQUINT) are in `kb/mechanics/elementals-and-glance.md`.
+
+---
+
 ## 2026-10-21 - v4.7.431: greater elementals one at a time; re-send the round when a denizen shields
 
 User: "When fighting elementals, we want to only fight one greater at a time. Therefore, it is
