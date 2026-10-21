@@ -770,6 +770,40 @@ Pure logic (threshold, `_backDir`, the state machine, decorator, resets) is unit
 See also: [04-ripple-map.md](04-ripple-map.md) (the `MAP` graph API this reuses), [05-commands.md](05-commands.md) (`mnem` dispatch), [01-architecture.md](01-architecture.md) (run lifecycle / gating).
 
 
+### Greater elementals one at a time (v4.7.431)
+
+User doctrine: "When fighting elementals, we want to only fight one greater at a time." Before
+this, every denizen counted 1 and the pull needed 3, so two greaters alone got no tactic.
+
+- **Count.** `S._isGreater(name)` matches `S.GREATER_PATTERNS` (`"greater %a+ elemental"`, lowercase)
+  plus `cfg.greaterExtra` (plain substrings, `mnem swarm greater add <name>`). `S._greaterCount()`
+  reads `ataxia.denizensHere` and skips our own denizens. `cfg.greater = false` turns the rule off.
+- **One owner.** `S._crowded(n)` returns `true, reason, g` when the room holds 2+ greaters OR
+  `n >= S.threshold()`. The idle assess, the panic gate and `S._checkPursuit` all ask it.
+- **Both follow = fight both (user choice).** Because `_checkPursuit` asks `_crowded`, two greaters
+  that follow a pull stamp `pursuedAt`, and no new pull starts for `PURSUIT_MEMORY`.
+- **Progress.** `entrySnap[room].g` holds the greater count at the pull; one greater fewer on
+  re-entry refunds the pull budget, even when a lesser took its place.
+- **Mode.** Unchanged: indoors icewall + leap, outdoors plain pull (fly-kite if the swarm follows),
+  Roll Hide or ice = tumble.
+- **GLANCE (008).** `_glanceStart` arms a short `tempRegexTrigger("^(.*)$")` that hands rows to
+  `M.onGlanceLine`, kept only while the header token is armed for our direction (the
+  `onLavaSeen` proof). `_glanceResolve` joins the rows and `M._greatersInText` reads
+  "There are N <plural> here." (the wrap can split it). N >= 2 greaters records
+  `M.explore.greaterEdges[room][dir] = { n, at }` for `GREATER_SKIP` (45 s).
+- **Skip for now (user choice).** `_nextExploreStep` takes, in order: a free unexplored door here;
+  a backtrack to a room with a free door (`M._backtrackStep(cur, true)`); a held door here (second
+  return value `"greater"`, which the tick echoes); a plain backtrack. So the rule only delays a
+  room and never strands the sweep. An expired record earns a fresh glance (`_glanceWanted`); a
+  fresh glance with fewer than 2 clears it. `M.onRippleReset` and the load handler clear the table.
+  Patrol needs no change: it only targets visited rooms, and a held door is always unwalked.
+- **Not detected:** two greaters of DIFFERENT kinds (two singular long descriptions, no sample
+  yet). The assess still isolates them on entry. SQUINT is not used (no sample).
+- **Shown in:** `mnem swarm` (`greater=on(N here)`), `mnem explore status` (`greater doors
+  waiting: ...`), Bloodscent recon (`<room> (N greaters)` in the crowded list).
+- Tests: `test_swarm_tactics.lua` ("greater elementals one at a time"), `test_mnemosyne.lua`
+  (end of "glance recon before a never-walked door").
+
 ### The swarm that follows, the U-turn, ice, and entanglement (v4.7.370)
 
 From a death: every retreat was followed within a second, 15 of 30 seconds were spent attack-held,
@@ -1062,8 +1096,9 @@ GLANCE is free and prints the neighbour's description AND exits line before we s
 | Blind | skipped while `ataxia.defences.blindness` is up (v4.7.319) -- the Monk/BM keeper holds it, and a blind glance cost the full timeout for nothing |
 | Left the room | a glance still pending for a room we have left is DROPPED at the gate (v4.7.319) -- not waited for, which stalled the sweep until the 30s watchdog |
 
-Not parsed: denizens in the glanced prose (the corpse lines make that a parser with its own
-failure modes). Not used: SQUINT. Open: a boss that spawns in lava is unreachable by the patrol
+Parsed since v4.7.431: ONE denizen sentence, "There are N <plural> here.", for greater
+elementals only (see "Greater elementals one at a time"); no other denizen prose is read. Not used:
+SQUINT. Open: a boss that spawns in lava is unreachable by the patrol
 (honest MOVE MANUALLY); a denizen that does not follow us out is never cleared.
 
 **v4.7.319 -- what the full review found in the above.** (1) **Livelock.** A lava room with its own

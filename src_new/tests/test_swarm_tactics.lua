@@ -4040,6 +4040,118 @@ describe("v4.7.390 -- diagnose whenever we leave", function()
   end)
 end)
 
+describe("v4.7.431 -- greater elementals one at a time", function()
+  local realOwn = ataxiaBasher_isOwnDenizen
+  local function room(names)
+    ataxia.denizensHere = {}
+    for i, n in ipairs(names) do ataxia.denizensHere[1000 + i] = n end
+  end
+  local function setup(names)
+    fixture(#names)
+    room(names)
+  end
+  local function done()
+    ataxia.denizensHere = nil
+    ataxiaBasher_isOwnDenizen = realOwn
+  end
+
+  it("matches any 'greater <kind> elemental', not a lesser one", function()
+    fixture(0)
+    expect(S._isGreater("a greater earth elemental")).toBeTrue()
+    expect(S._isGreater("A greater fire elemental")).toBeTrue()
+    expect(S._isGreater("a lesser earth elemental")).toBeFalse()
+    expect(S._isGreater("an unbound frost elemental")).toBeFalse()
+    done()
+  end)
+
+  it("two greaters below the threshold start the isolation pull", function()
+    local ok, e = pcall(function()
+      setup({ "a greater earth elemental", "a greater earth elemental" })
+      expect(S.threshold()).toBe(3)
+      expect(S.onTick()).toBeTrue()
+      expect(S.state).toBe("pulling")
+      expect(ataxiaTemp.swarmPullDir).toBe("s")
+    end)
+    done()
+    if not ok then error(e, 0) end
+  end)
+
+  it("one greater and one lesser are fought in place", function()
+    local ok, e = pcall(function()
+      setup({ "a greater earth elemental", "a lesser earth elemental" })
+      S.onTick()
+      expect(S.state).toBe("idle")
+      expect(ataxiaTemp.swarmPullDir).toBeNil()
+    end)
+    done()
+    if not ok then error(e, 0) end
+  end)
+
+  it("our own denizen is not counted as a greater", function()
+    local ok, e = pcall(function()
+      setup({ "a greater earth elemental", "a greater earth elemental" })
+      ataxiaBasher_isOwnDenizen = function(n) return n == "a greater earth elemental" end
+      expect(S._greaterCount()).toBe(0)
+      S.onTick()
+      expect(S.state).toBe("idle")
+    end)
+    done()
+    if not ok then error(e, 0) end
+  end)
+
+  it("`greater off` turns the rule off; an added name joins it", function()
+    local ok, e = pcall(function()
+      setup({ "a greater earth elemental", "a greater fire elemental" })
+      cfg.swarm.greater = false
+      S.onTick()
+      expect(S.state).toBe("idle")
+      cfg.swarm.greater = nil
+      room({ "a colossal magma elemental", "a colossal magma elemental" })
+      expect(S._greaterCount()).toBe(0)
+      cfg.swarm.greaterExtra = { "colossal magma" }
+      expect(S._greaterCount()).toBe(2)
+    end)
+    done()
+    if not ok then error(e, 0) end
+  end)
+
+  it("both greaters follow: pursued, so no second pull -- we fight both there", function()
+    local ok, e = pcall(function()
+      setup({ "a greater earth elemental", "a greater earth elemental" })
+      S._retreat, S.pursuedAt = nil, nil
+      S._noteRetreat(200)
+      MAP.current = 100 -- both followed us into the funnel room
+      S._checkPursuit() -- stamps the landing
+      clock = clock + 2
+      S._checkPursuit() -- judges it, past PURSUIT_SETTLE
+      expect(S._pursued()).toBeTrue()
+      S.state = "idle"
+      S.onTick()
+      expect(S.state).toBe("idle")
+      expect(ataxiaTemp.swarmPullDir).toBeNil()
+    end)
+    done()
+    if not ok then error(e, 0) end
+  end)
+
+  it("one greater fewer refunds the pull budget", function()
+    local ok, e = pcall(function()
+      setup({ "a greater earth elemental", "a greater earth elemental", "a lesser earth elemental" })
+      S.onTick()
+      expect(S.pulls[200]).toBe(1)
+      expect(S.entrySnap[200].g).toBe(2)
+      S.reset("test")
+      -- re-entry: a greater died, a new lesser walked in -- the SAME head count, so only the
+      -- greater count shows progress
+      room({ "a greater earth elemental", "a lesser earth elemental", "a lesser earth elemental" })
+      S.onTick()
+      expect(S.pulls[200]).toBe(1) -- refunded to 0, then this pull counts 1 (2 without the refund)
+    end)
+    done()
+    if not ok then error(e, 0) end
+  end)
+end)
+
 -- v4.7.345: the mount module was loaded above for the mountjump tests.
 ataxiaBasher_isMounted, ataxiaBasher_mountVerb = nil, nil
 ataxiaBasher_mountedSet, ataxiaBasher_jumpSent = nil, nil

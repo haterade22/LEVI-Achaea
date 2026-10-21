@@ -322,6 +322,63 @@ function S.threshold()
   return t
 end
 
+-- ---------------------------------------------------------------------------
+-- GREATER ELEMENTALS: ONE AT A TIME (v4.7.431, user: "When fighting elementals, we want to only
+-- fight one greater at a time. Therefore, it is important to isolate the greaters by tumbling out,
+-- icewall, leap, etc when in a wade.")
+-- ---------------------------------------------------------------------------
+-- The count above gives every denizen 1, so two greaters alone (or two greaters and a lesser)
+-- sat below the threshold of 3 and got no tactic. A room with 2+ greaters now starts the same
+-- pull / wall / tumble cycle as a swarm does. The name rule is a PATTERN ("greater fire
+-- elemental", "greater earth elemental", any later type); `mnem swarm greater add <text>` adds
+-- plain substrings for other mobs the user wants to meet one at a time.
+--
+-- "Both follow" is deliberately NOT special (user: fight both there): S._checkPursuit asks
+-- S._crowded too, so two greaters that follow the pull stamp pursuedAt and we fight them.
+S.GREATER_PATTERNS = { "greater %a+ elemental" }
+
+function S._isGreater(name)
+  if type(name) ~= "string" then return false end
+  local s = S._cfg()
+  if s.greater == false then return false end
+  local low = name:lower()
+  for _, p in ipairs(S.GREATER_PATTERNS) do
+    if low:find(p) then return true end
+  end
+  if type(s.greaterExtra) == "table" then
+    for _, x in ipairs(s.greaterExtra) do
+      if type(x) == "string" and x ~= "" and low:find(x:lower(), 1, true) then return true end
+    end
+  end
+  return false
+end
+
+local function ownDenizen(name)
+  if not ataxiaBasher_isOwnDenizen then return false end
+  local ok, r = pcall(ataxiaBasher_isOwnDenizen, name)
+  return ok and r == true
+end
+
+-- Greaters in the room we stand in (gmcp Char.Items, own denizens excluded like the 008 counts).
+function S._greaterCount()
+  local n, dz = 0, ataxia and ataxia.denizensHere
+  if type(dz) ~= "table" then return 0 end
+  for _, name in pairs(dz) do
+    if S._isGreater(name) and not ownDenizen(name) then n = n + 1 end
+  end
+  return n
+end
+
+-- THE one owner of "this room needs a tactic". `n` is the room's denizen count (the caller has it).
+-- Returns crowded, reason, greaters.
+function S._crowded(n)
+  n = tonumber(n) or 0
+  local g = S._greaterCount()
+  if g >= 2 then return true, g .. " greater elementals", g end
+  if n >= S.threshold() then return true, n .. " denizens", g end
+  return false, nil, g
+end
+
 function S._enabled()
   return S._cfg().enabled == true
     and M.explore ~= nil and M.explore.on == true
@@ -384,10 +441,11 @@ function S._checkPursuit()
   local since = now() - r.landedAt
   if since < (tonumber(S.PURSUIT_SETTLE) or 1.5) then return end
   local n = (M._denizenCount and M._denizenCount()) or 0
-  if n >= S.threshold() then
+  local crowded, why = S._crowded(n)
+  if crowded then
     S._retreat = nil
     S.pursuedAt = now()
-    S._echo("<indian_red>the swarm followed the retreat<reset> (" .. n .. " here) -- another retreat "
+    S._echo("<indian_red>the swarm followed the retreat<reset> (" .. why .. " here) -- another retreat "
       .. "will not shake them; <cyan>fighting here<reset>.")
   elseif since > (tonumber(S.PURSUIT_WINDOW) or 4) then
     S._retreat = nil -- it worked: we landed somewhere quiet
@@ -691,7 +749,7 @@ function S._beginPull(shortBack, longBack, shortFwd, count, mode)
   -- pre-swing count + focused target hp (both improve when the cycle achieves anything).
   do
     local id, hp = S._targetHp()
-    S.entrySnap[cur] = { n = count, id = id, hp = hp }
+    S.entrySnap[cur] = { n = count, id = id, hp = hp, g = S._greaterCount() }
   end
   S.state = "pulling"
   S.mode = mode or "pull"
@@ -722,7 +780,9 @@ function S._beginPull(shortBack, longBack, shortFwd, count, mode)
       S._echo("no swing came; escaping plain -> <cyan>" .. S.backShort .. "<reset>.")
     end
   end)
-  S._echo("<yellow>" .. tostring(count) .. " denizens<reset> (>= " .. S.threshold() .. ") -- "
+  local g = S._greaterCount()
+  S._echo((g >= 2 and ("<yellow>" .. g .. " greater elementals<reset> (one at a time) -- ISOLATING: ")
+      or ("<yellow>" .. tostring(count) .. " denizens<reset> (>= " .. S.threshold() .. ") -- "))
     .. (S.mode == "wall" and "hit once, WALL the door and leap it" or "hit once and pull back")
     .. " (" .. S.pulls[cur] .. "/" .. MAX_PULLS .. ").")
   return true
@@ -1845,7 +1905,7 @@ function S.onTick()
   -- mid-kite. Gated inside _maybePanic (boon, config, HP, cooldown, a valid exit).
   if (S.state ~= "idle"
       or ((M._roomHasDenizens and M._roomHasDenizens())
-          and ((M._denizenCount and M._denizenCount()) or 0) >= S.threshold()))
+          and S._crowded((M._denizenCount and M._denizenCount()) or 0)))
      and S._maybePanic() then
     return true
   end
@@ -2192,10 +2252,11 @@ function S.onTick()
   end
   if cur and S.noTactics[cur] then return false end
   local n = (M._denizenCount and M._denizenCount()) or 0
-  if n < S.threshold() then return false end
+  local crowded, why, g = S._crowded(n)
+  if not crowded then return false end
   -- A swarm that follows every retreat follows a pull too (v4.7.370): fight in place.
   if S._pursued() then
-    S._sayOnce("pursued-pull", n .. " denizens, and this swarm follows -- <grey>no pull<reset>, fighting in place.")
+    S._sayOnce("pursued-pull", why .. ", and this swarm follows -- <grey>no pull<reset>, fighting in place.")
     return false
   end
   -- Hit-and-run continuation (user doctrine, Putoran-wildcat log 2026-07-26: nothing
@@ -2209,10 +2270,14 @@ function S.onTick()
   if snap and (S.pulls[cur] or 0) > 0 then
     local id, hp = S._targetHp()
     local chipped = id and hp and snap.id == id and snap.hp and hp < snap.hp
-    if n < snap.n or chipped then
+    -- A greater that died or wandered off is progress too, even if a lesser took its place.
+    local fewerGreaters = snap.g and g < snap.g
+    if n < snap.n or chipped or fewerGreaters then
       S.pulls[cur] = 0
       S._echo("progress since last pull ("
-        .. (n < snap.n and (snap.n .. "->" .. n .. " denizens") or ("target " .. snap.hp .. "%->" .. hp .. "%"))
+        .. (n < snap.n and (snap.n .. "->" .. n .. " denizens")
+          or (fewerGreaters and (snap.g .. "->" .. g .. " greaters"))
+          or ("target " .. snap.hp .. "%->" .. hp .. "%"))
         .. ") -- <green>hit-and-run continues<reset>.")
     end
   end
@@ -2714,20 +2779,25 @@ function S._senseCommit()
   local rows = S._senseRows
   S._senseRows = nil
   if not rows or #rows == 0 then return end
-  local byRoom, order = {}, {}
+  local byRoom, order, greaters = {}, {}, {}
   for _, r in ipairs(rows) do
     if not byRoom[r.room] then byRoom[r.room] = 0; order[#order + 1] = r.room end
     byRoom[r.room] = byRoom[r.room] + 1
+    if S._isGreater(r.name) then greaters[r.room] = (greaters[r.room] or 0) + 1 end
   end
   S.recon = {
     at = now(),
     ripple = (M.run and M.run.ripple) or 0,
-    mobs = rows, byRoom = byRoom, rooms = order,
+    mobs = rows, byRoom = byRoom, rooms = order, greaters = greaters,
   }
   local thr = S.threshold()
   local hot = {}
   for _, room in ipairs(order) do
-    if byRoom[room] >= thr then hot[#hot + 1] = room .. " (" .. byRoom[room] .. ")" end
+    if (greaters[room] or 0) >= 2 then
+      hot[#hot + 1] = room .. " (" .. greaters[room] .. " greaters)"
+    elseif byRoom[room] >= thr then
+      hot[#hot + 1] = room .. " (" .. byRoom[room] .. ")"
+    end
   end
   S._echo("recon: <yellow>" .. #rows .. "<reset> denizens across <yellow>" .. #order
     .. "<reset> rooms" .. (#hot > 0
@@ -2759,6 +2829,9 @@ function S.status()
     .. " panic=" .. tostring(s.panic) .. "@" .. tostring(s.panicAt) .. "%"
     .. ((tonumber(s.panicHp) or 0) > 0 and ("/" .. tostring(s.panicHp) .. "hp") or "")
     .. " escape=" .. tostring(s.escape) .. "@" .. tostring(s.escapeAt) .. "%->" .. tostring(s.recoverAt) .. "%"
+    .. " greater=" .. ((s.greater == false) and "off" or ("on(" .. S._greaterCount() .. " here"
+      .. ((type(s.greaterExtra) == "table" and #s.greaterExtra > 0) and (", +" .. table.concat(s.greaterExtra, "/")) or "")
+      .. ")"))
     .. " hold=" .. tostring(ataxiaTemp.swarmHold or false)
     .. " recon=" .. (S.recon and (
       (S.recon.mobs and (#S.recon.mobs .. " mobs/" .. #(S.recon.rooms or {}) .. " rooms")

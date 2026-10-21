@@ -92,6 +92,7 @@ function M.help()
     { "mnem explore why", "Why is the sweep not moving? Per-exit refusal reasons" },
     { "mnem explore glance [on|off]", "Look before stepping into a never-walked room (lava pass-through)" },
     { "mnem swarm [on|off|assess <n>|deep <r> <n>|icewall|kite|panic|escape|panicat|escapeat|recoverat]", "Multi-mob tactics + low-HP escape (fly/retreat instead of shield-in-place)" },
+    { "mnem swarm greater [on|off|list|add <name>|remove <name>]", "Fight one greater elemental at a time (isolate 2+; glance skips their room)" },
     { "mnem sense", "Fullsense recon of the ripple (Sleuth boon reveals all denizens)" },
     { "mnem cards [on|off|maran <hp%>|seasone <hp%>|matic <n>]", "Legend deck auto-draw (maran/seasone/morimbuul/matic/covenant/xylthus)" },
     { "mnem boons", "This run's claimed boons (local history)" },
@@ -315,6 +316,32 @@ function M.command(rest)
           M.echo("Depth-scaled threshold <grey>off<reset> (flat " .. sc.threshold .. ").")
         else
           M.echo("Usage: mnem swarm deep <ripple> <n>  |  mnem swarm deep off")
+        end
+      elseif sub == "greater" then
+        -- v4.7.431: one greater elemental at a time. Built-in: any "greater <kind> elemental";
+        -- `add` puts other names (plain text, any part of the name) on the same rule.
+        local verb, what = rest2:match("^(%S*)%s*(.-)$")
+        verb = (verb or ""):lower()
+        if type(sc.greaterExtra) ~= "table" then sc.greaterExtra = {} end
+        if verb == "add" and what ~= "" then
+          sc.greaterExtra[#sc.greaterExtra + 1] = what:lower()
+          ataxia_saveSettings(false)
+          M.echo("Isolated like a greater elemental: <cyan>" .. what:lower() .. "<reset>.")
+        elseif verb == "remove" and what ~= "" then
+          for i = #sc.greaterExtra, 1, -1 do
+            if sc.greaterExtra[i] == what:lower() then table.remove(sc.greaterExtra, i) end
+          end
+          ataxia_saveSettings(false)
+          M.echo("Removed: <cyan>" .. what:lower() .. "<reset>.")
+        elseif verb == "list" then
+          M.echo("One at a time: any 'greater (any kind) elemental'"
+            .. (#sc.greaterExtra > 0 and (", plus: " .. table.concat(sc.greaterExtra, ", ")) or "") .. ".")
+        elseif verb == "" or verb == "on" or verb == "off" then
+          sc.greater = M._toggleState(verb, sc.greater ~= false)
+          ataxia_saveSettings(false)
+          M.echo("Greater elementals one at a time: " .. (sc.greater and "<green>ON" or "<grey>off") .. ".")
+        else
+          M.echo("Usage: mnem swarm greater [on|off|list|add <name>|remove <name>]")
         end
       elseif sub == "icewall" or sub == "kite" or sub == "panic" or sub == "escape" then
         sc[sub] = M._toggleState(rest2, sc[sub])

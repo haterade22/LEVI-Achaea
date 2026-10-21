@@ -243,12 +243,37 @@ function M._nextExploreStep()
   if not (MAP and MAP.current and MAP.rooms and MAP.rooms[MAP.current]) then return nil end
   local cur = MAP.current
 
+  -- A DOOR A GLANCE SHOWED 2+ GREATER ELEMENTALS BEHIND WAITS (v4.7.431, user: "skip it for now").
+  -- Two passes: first everything except those doors, here and as backtrack targets; then, only if
+  -- the first pass found nothing, those doors too -- so the rule delays a room and never strands
+  -- the sweep (the v4.7.319 lesson: a soft filter must have a way out). Greaters roam, so by the
+  -- time we come back the room may hold one; the record expires and the door is glanced again.
   local un = usableUnexplored(cur)
-  if #un > 0 then return MAP.shortDir(un[1]) end
+  local free = {}
+  for _, d in ipairs(un) do
+    if not M._greaterHeld(cur, d) then free[#free + 1] = d end
+  end
+  if #free > 0 then return MAP.shortDir(free[1]) end
 
-  -- Backtrack: BFS (over walked edges) to the nearest room that still has a
-  -- usable unexplored exit; take the first step of that path -- but never a
-  -- non-planar step (that would climb `up` out of the grid to the holding room).
+  local step = M._backtrackStep(cur, true)
+  if step then return step end
+  -- Second value "greater": the caller (the tick) says why; `mnem explore status` also calls this,
+  -- so the function itself stays silent.
+  if #un > 0 then return MAP.shortDir(un[1]), "greater" end
+  return M._backtrackStep(cur, false)
+end
+
+-- Backtrack: BFS (over walked edges) to the nearest room that still has a usable unexplored
+-- exit; take the first step of that path -- but never a non-planar step (that would climb `up`
+-- out of the grid to the holding room). `skipHeld`: a room whose only unexplored doors are
+-- greater-held does not count as a target.
+function M._backtrackStep(cur, skipHeld)
+  local function hasTarget(num)
+    for _, d in ipairs(usableUnexplored(num)) do
+      if not (skipHeld and M._greaterHeld(num, d)) then return true end
+    end
+    return false
+  end
   local best
   for num, r in pairs(MAP.rooms) do
     -- NEVER TARGET A LAVA ROOM (v4.7.319, deep review, probe-confirmed LIVELOCK). A lava room
@@ -258,7 +283,7 @@ function M._nextExploreStep()
     -- counters: `E -n-> NE -s-> E -n-> ...` for 24 ticks, no HP lost, no stop, MAX_PATROL_LOOPS
     -- never accruing. v4.7.318's patrol filter made that the ONLY outcome where the patrol used
     -- to walk in and pay once. The lava room's own doors are not the sweep's to finish.
-    if r.visited and num ~= cur and #usableUnexplored(num) > 0
+    if r.visited and num ~= cur and hasTarget(num)
        and not (M.roomIsLava and M.roomIsLava(num)) then
       -- Prefer the walked path; fall back to the known-room graph so a walked-graph gap
       -- (dropped edge in the demented tower) can't strand a placed, unexplored room.
@@ -523,8 +548,10 @@ function M.onRippleReset()
   if M.swarm then M.swarm.grounded = nil end
   M.explore.lavaRooms = {}
   M.explore.lavaEdges = {}
+  M.explore.greaterEdges = {} -- a room number is not a place (v4.7.260): the record dies with the ripple
   M.explore.glance = nil
   if M._glanceT then pcall(killTimer, M._glanceT); M._glanceT = nil end
+  if M._glanceLineOff then M._glanceLineOff() end
   if ataxiaTemp then ataxiaTemp.mnemLavaPlan = nil end
   M.explore.failed = {}
   M.explore.fromRoom = nil
@@ -979,9 +1006,10 @@ end
 -- Bounded by GLANCE_TIMEOUT: while BLIND is up (the Monk/BM keeper, v4.7.315) the glance may
 -- print nothing useful, and a recon that can stall the sweep is worse than no recon.
 --
--- Deliberately NOT parsing denizens out of the glanced prose in this version -- the corpse
--- lines alone make that a parser with its own failure modes. The raw fact we act on is one
--- phrase, "Molten lava bubbles and churns.", captured live 2026-09-18.
+-- Denizens are NOT parsed out of the glanced prose -- the corpse lines alone make that a parser
+-- with its own failure modes -- with ONE exception since v4.7.431: the "There are N <plural> here."
+-- sentence, for greater elementals (below). The lava fact is one phrase, "Molten lava bubbles and
+-- churns.", captured live 2026-09-18.
 -- ---------------------------------------------------------------------------
 M.explore.glance = M.explore.glance or nil -- { room, dir(long), at, done, lava, exits }
 
@@ -1003,17 +1031,86 @@ function M._glanceWanted(dirShort)
   -- GMCP key the keeper reads. (Single Minded Focus -- "you can no longer squint, glance, or
   -- observe" -- has no latch yet; it would belong here.)
   if ataxia.defences and ataxia.defences.blindness then return false end
+  local r0 = MAP.rooms and MAP.rooms[cur]
+  if r0 and r0.edges and r0.edges[nd] then return false end -- walked before: no recon needed
+  -- A greater-elemental record that has EXPIRED earns a fresh look (v4.7.431): they roam, and
+  -- the next glance decides whether the door still waits.
+  local rec = M._greaterRec(cur, nd)
+  if rec and not M._greaterHeld(cur, nd) then
+    M.explore.greaterEdges[cur][nd] = nil
+    return true
+  end
   local g = M.explore.glance
   if g and g.done and g.room == cur and g.dir == nd then return false end -- already looked
-  local r = MAP.rooms and MAP.rooms[cur]
-  if r and r.edges and r.edges[nd] then return false end -- walked before: no recon needed
   return true
+end
+
+-- ---------------------------------------------------------------------------
+-- GREATER ELEMENTALS BEHIND A DOOR (v4.7.431, user: "We can use glance and squint to identify
+-- rooms with more than one in a greater elemental room")
+-- ---------------------------------------------------------------------------
+-- The glanced prose names its denizens, and two or more of one kind print as ONE sentence:
+--   "There are 2 greater fire elementals here."   (World Tree log, 2026-10-19, line 15)
+-- That sentence sits mid-paragraph and a server wrap can split it, so every row of the glanced
+-- block is collected (only while the header token is armed for OUR direction -- the onLavaSeen
+-- proof) and the joined text is read once, at the resolve. A door with 2+ greaters behind it is
+-- recorded for GREATER_SKIP seconds; _nextExploreStep takes it only when nothing else is left.
+--
+-- NOT DETECTED (no sample yet): two greaters of DIFFERENT kinds, which print two singular long
+-- descriptions. The swarm module still isolates them the moment we stand in their room.
+-- SQUINT is not used either: its output has never been captured.
+local GREATER_SKIP = 45
+M.explore.greaterEdges = M.explore.greaterEdges or {}
+
+function M._greaterRec(num, dirLong)
+  local t = M.explore.greaterEdges and M.explore.greaterEdges[num]
+  return t and t[dirLong] or nil
+end
+
+-- Is the door `d` (long or short) out of room `num` one to leave for later?
+function M._greaterHeld(num, d)
+  local nd = (MAP.normDir and MAP.normDir(d)) or d
+  local rec = M._greaterRec(num, nd)
+  if not rec then return false end
+  local age = ((getEpoch and getEpoch()) or 0) - (tonumber(rec.at) or 0)
+  return age >= 0 and age < GREATER_SKIP
+end
+
+-- Count greaters named in glanced prose. Pure; unit-tested.
+function M._greatersInText(text)
+  if type(text) ~= "string" then return 0 end
+  local S = M.swarm
+  if not (S and S._isGreater) then return 0 end
+  local n = 0
+  for num, what in text:gmatch("There are (%d+) (.-) here%.") do
+    if S._isGreater(what) then n = n + (tonumber(num) or 0) end
+  end
+  return n
+end
+
+function M._glanceLineOff()
+  if M._glanceLineT then pcall(killTrigger, M._glanceLineT); M._glanceLineT = nil end
+end
+
+-- Every row while a glance is pending; kept only inside the glanced block (see above).
+function M.onGlanceLine(text)
+  local g = M.explore.glance
+  if not (g and not g.done) or type(text) ~= "string" then return end
+  local tok = MAP._glanceSkip
+  local td = tok and MAP.normDir and MAP.normDir(tok.dir)
+  if td ~= g.dir then return end
+  g.rows = g.rows or {}
+  if #g.rows < 30 then g.rows[#g.rows + 1] = text end
 end
 
 function M._glanceStart(dirShort)
   local nd = MAP.normDir(dirShort)
   M.explore.glance = { room = MAP.current, dir = nd, at = (getEpoch and getEpoch()) or 0,
                        done = false, lava = false, exits = nil }
+  M._glanceLineOff()
+  if tempRegexTrigger then
+    M._glanceLineT = tempRegexTrigger("^(.*)$", function() M.onGlanceLine(line) end)
+  end
   send("glance " .. nd, false)
   if M._glanceT then pcall(killTimer, M._glanceT) end
   M._glanceT = tempTimer(GLANCE_TIMEOUT, function()
@@ -1054,6 +1151,20 @@ function M._glanceResolve(why)
   if not g or g.done then return end
   g.done = true
   if M._glanceT then pcall(killTimer, M._glanceT); M._glanceT = nil end
+  M._glanceLineOff()
+  -- Greaters behind the door (v4.7.431). A fresh look with fewer than two clears an old record.
+  do
+    local n = M._greatersInText(table.concat(g.rows or {}, " "))
+    M.explore.greaterEdges = M.explore.greaterEdges or {}
+    if n >= 2 then
+      M.explore.greaterEdges[g.room] = M.explore.greaterEdges[g.room] or {}
+      M.explore.greaterEdges[g.room][g.dir] = { n = n, at = (getEpoch and getEpoch()) or 0 }
+      M._exploreEcho("<yellow>glance " .. MAP.shortDir(g.dir) .. ": " .. n .. " greater elementals<reset>"
+        .. " -- leaving that room for later (one greater at a time).")
+    elseif M.explore.greaterEdges[g.room] then
+      M.explore.greaterEdges[g.room][g.dir] = nil
+    end
+  end
   -- The exits line is the normal end and needs no line of its own; anything else is the glance
   -- NOT working (blind, darkness, a wording change in the header) and is worth one line, since
   -- a timeout-resolved glance was otherwise indistinguishable from one that never happened.
@@ -1540,7 +1651,7 @@ function M._exploreTick()
   end
   M.explore._lastWordWait = nil
 
-  local dir = M._nextExploreStep()
+  local dir, why = M._nextExploreStep()
   if dir then -- still sweeping new ground
     M.explore.hunting = false
     M.explore.patrolLoops = 0
@@ -1574,6 +1685,10 @@ function M._exploreTick()
       end
     end
     if M._glanceWanted(dir) then return M._glanceStart(dir) end
+    if why == "greater" then
+      M._exploreEcho("<yellow>only greater-elemental doors are left<reset> -- going " .. tostring(dir)
+        .. " to isolate them.")
+    end
     return M._exploreMove(dir)
   end
 
@@ -1968,6 +2083,23 @@ function M.exploreStatus()
   -- A pending glance HOLDS the step and its send is echo-suppressed, so without this line a
   -- held sweep looked identical to a stalled one (v4.7.319, deep review).
   M.echo("<gold>[explore]<reset> " .. M._glanceLine())
+  M.echo("<gold>[explore]<reset> " .. M._greaterLine())
+end
+
+-- Doors a glance showed 2+ greater elementals behind, and how long each still waits (v4.7.431).
+function M._greaterLine()
+  local out = {}
+  local t = (getEpoch and getEpoch()) or 0
+  for num, dirs in pairs(M.explore.greaterEdges or {}) do
+    for d, rec in pairs(dirs) do
+      if M._greaterHeld(num, d) then
+        out[#out + 1] = tostring(num) .. " " .. tostring(MAP.shortDir and MAP.shortDir(d) or d)
+          .. " (" .. tostring(rec.n) .. ", " .. math.floor(GREATER_SKIP - (t - (tonumber(rec.at) or 0))) .. "s)"
+      end
+    end
+  end
+  table.sort(out)
+  return "greater doors waiting: " .. (#out > 0 and table.concat(out, ", ") or "none")
 end
 
 -- The ripple is complete when the boon-offer screen appears. PAUSE the sweep (stop navigating so
@@ -2133,9 +2265,11 @@ M._explLoadH = registerAnonymousEventHandler("sysLoadEvent", function()
   M.explore.tacticalMove = false
   M.explore.lavaRooms = {}
   M.explore.lavaEdges = {}
+  M.explore.greaterEdges = {}
   M.explore._noExitLooks = nil
   M.explore.glance = nil
   if M._glanceT then pcall(killTimer, M._glanceT); M._glanceT = nil end
+  M._glanceLineOff()
   ataxiaTemp = ataxiaTemp or {}
   ataxiaTemp.bossChases, ataxiaTemp.bossPanicAt = nil, nil
   ataxiaTemp.mnemLavaPlan = nil

@@ -24,6 +24,7 @@ One line per page. Kept up to date by `/kb-ingest`.
 
 ## Mechanics
 - [mechanics/balance-and-queueing.md](mechanics/balance-and-queueing.md): balance vs equilibrium, server queue commands, types and the 10-command limit
+- [mechanics/elementals-and-glance.md](mechanics/elementals-and-glance.md): elemental denizen names and attacks, the "There are N <plural> here." room prose, GLANCE, a denizen shield going up
 
 ## Combat (classes as they look in real fights)
 - [combat/shikudo.md](combat/shikudo.md): every Shikudo strike, damage and effect line from both sides (first vs later in a combo), light strikes, forms, kata, Telepathy, ASSESS, SHATTER, the Dispatch kill as done, and what our triggers record
