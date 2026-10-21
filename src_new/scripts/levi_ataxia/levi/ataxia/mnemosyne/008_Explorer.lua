@@ -1030,7 +1030,12 @@ function M._glanceWanted(dirShort)
   -- the timeout -- one wasted second per never-walked door, ~16-24 a ripple, silently. The same
   -- GMCP key the keeper reads. (Single Minded Focus -- "you can no longer squint, glance, or
   -- observe" -- has no latch yet; it would belong here.)
-  if ataxia.defences and ataxia.defences.blindness then return false end
+  -- MINDSEYE RESTORES THE GLANCE (v4.7.432, user: "without blind and mindseye is the same
+  -- thing"). Blind with no mindseye, the glanced room shows only "A mysterious entity abides."
+  -- (live, 2026-10-21); with mindseye up it reads as if we were not blind, denizens included.
+  -- The keeper in deffing/007 touches mindseye whenever we are blind, so this is the usual case.
+  local d = ataxia.defences
+  if d and d.blindness and not d.mindseye then return false end
   local r0 = MAP.rooms and MAP.rooms[cur]
   if r0 and r0.edges and r0.edges[nd] then return false end -- walked before: no recon needed
   -- A greater-elemental record that has EXPIRED earns a fresh look (v4.7.431): they roam, and
