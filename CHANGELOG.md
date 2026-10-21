@@ -2,6 +2,20 @@
 
 ---
 
+## 2026-10-21 - v4.7.433: the fullsense recon captured 2659 lines of combat
+
+A live log: "fullsense captured 2659 raw line(s) (Sleuth, on GO)". `S.sense` (`mnemosyne/009`)
+captured every line until `SENSE_TIMEOUT` (2 s) of silence, and a fight is never silent. `S.recon`
+is under the SAVED `ataxia` namespace, so every line went to disk on every save (an earlier save
+problem came from a save cut off at 4 MiB). The capture now stops at `S.SENSE_MAX_LINES` (120) or
+`S.SENSE_MAX_TIME` (4 s), and a recon saved by an older version is trimmed to the cap at load.
+Test: `test_swarm_tactics.lua` "sense stops at the line cap and at the time limit".
+Also recorded (`kb/mechanics/elementals-and-glance.md`): SQUINT prints every room in a straight line
+with its prose and denizens until "You can see no further." (no exits line); glanced prose names
+ice and fire hazards; one denizen's long description. SQUINT stays unused.
+
+---
+
 ## 2026-10-21 - v4.7.432: GLANCE while blind, when mindseye is up
 
 User: "without blind and mindseye is the same thing" / "yes, so it would be the same". A live glance

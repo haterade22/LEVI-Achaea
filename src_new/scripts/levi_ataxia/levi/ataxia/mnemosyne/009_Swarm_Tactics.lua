@@ -66,6 +66,8 @@ local HOLD_TIMEOUT = 8      -- swarmHold self-clears (a cq all can destroy the q
                             -- > slowest class balance so a legitimately-queued chain isn't
                             -- un-gated and wiped just before it fires
 local SENSE_TIMEOUT = 2.0   -- fullsense capture: seconds of silence before flushing
+S.SENSE_MAX_LINES = 120   -- fullsense capture: hard cap (a fight never goes quiet; v4.7.433)
+S.SENSE_MAX_TIME = 4      -- ...and a hard time limit, in seconds
 local SENSE_DELAY = 3.0     -- on GO: wait out the wade-status/look burst (their captures
                             -- would force-finish ours and recon would store the wrong block)
 local PANIC_COOLDOWN = 10   -- min seconds between Roll Hide panic tumbles
@@ -135,6 +137,10 @@ S.noTactics = S.noTactics or {} -- [roomNum] = true -> fight in place (gave up)
 S.entrySnap = S.entrySnap or {} -- [roomNum] = { n, id, hp } at the last pull, for the progress check
 S.wallRaised = S.wallRaised or {} -- [roomNum] = true -> our icewall stands on its funnel edge
 S.recon = S.recon or nil      -- { at=<epoch>, ripple=<n>, lines={...} } last fullsense
+-- A save from before v4.7.433 can hold thousands of combat lines here (see S.sense): trim on load.
+if S.recon and type(S.recon.lines) == "table" and #S.recon.lines > S.SENSE_MAX_LINES then
+  for i = #S.recon.lines, S.SENSE_MAX_LINES + 1, -1 do S.recon.lines[i] = nil end
+end
 
 local function now()
   return (getEpoch and getEpoch()) or os.time()
@@ -2737,8 +2743,17 @@ end
 function S.sense(why)
   if not (M._captureLines and send) then return end
   send("fullsense")
+  -- BOUNDED (v4.7.433). The capture ends on SENSE_TIMEOUT of silence, and a fight is never
+  -- silent: a live GO recon took 2659 lines of combat. S.recon lives under the SAVED `ataxia`
+  -- namespace, so every one of them went to disk on every save. A fullsense answer is one short
+  -- block; stop at SENSE_MAX_LINES or SENSE_MAX_TIME, whichever comes first.
+  local started, count = now(), 0
   M._captureLines({
     timeout = SENSE_TIMEOUT,
+    onLine = function()
+      count = count + 1
+      if count > S.SENSE_MAX_LINES or (now() - started) > S.SENSE_MAX_TIME then return "stop" end
+    end,
     onDone = function(lines)
       S.recon = { at = now(), ripple = (M.run and M.run.ripple) or 0, lines = lines }
       S._echo("fullsense captured <cyan>" .. #lines .. "<reset> raw line(s)"
