@@ -202,6 +202,7 @@ function ataxiaCheckForMissing()
 	for _, mount in ipairs({
 		"black dardanic stallion",
 		"lean grizzly bear",
+		"phantom grizzly bear", -- v4.7.445, user: "This is a mount and not to be killed"
 		"war elephant",
 		"massive dire wolf",
 		"withered crypt worm",
