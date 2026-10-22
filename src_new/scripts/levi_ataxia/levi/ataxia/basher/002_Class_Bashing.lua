@@ -203,8 +203,22 @@ end
 -- one cast. Keyed on the room number, stamped at send, with the 3s in-flight hold the other room
 -- nukes use. STORM_FLOOR is the Depthswalker distortion lesson (v4.7.266): in the tower the room
 -- number can change on a LOOK without a move, and a room key alone would then re-cast every few
--- seconds. No game line is captured yet (cast, ticks, or a refusal).
+-- seconds. The refusal ("Clouds of draconic fury already exist here.") and the GOLDEN cast line
+-- are captured (trigger highlighting/073, v4.7.443): both call ataxiaBasher_dragonStormMark. The
+-- other colours' cast lines differ and are not captured; their storms rely on the send stamp and
+-- the hold's own 3s expiry, which is all the cast line ever shortens.
 local STORM_MANA, STORM_FLOOR, STORM_HOLD = 400, 10, 3
+
+-- The cast landed, or the game refused because clouds are already here: either way this room has
+-- a storm. Record the room and release the in-flight hold. A refusal restarts the floor too -- it
+-- is the only evidence when the room key is wrong.
+function ataxiaBasher_dragonStormMark(refused)
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.dragonStormRoom = (gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.num) or "unknown"
+  ataxiaTemp.dragonStormPendingAt = nil
+  if refused then ataxiaTemp.dragonStormAt = nowT end
+end
 
 function ataxiaBasher_dragonStormPick()
   if not dragonKrenindalan then return false end

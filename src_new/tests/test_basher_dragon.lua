@@ -501,6 +501,18 @@ describe("ataxiaBasher_dragonBashing -- Krenindalan Storm breathstorm (v4.7.442)
     expect(has(ataxiaBasher_dragonBashing(), "breathstorm")).toBeFalse()
   end)
 
+  it("the cast line releases the hold; a refusal marks the room and restarts the floor", function()
+    fresh()
+    expect(has(ataxiaBasher_dragonBashing(), "breathstorm")).toBeTrue()
+    clock = clock + 1
+    ataxiaBasher_dragonStormMark(false) -- the cast landed
+    expect(has(ataxiaBasher_dragonBashing(), "breathstorm")).toBeFalse() -- no replay
+    clock = clock + 30; gmcp.Room.Info.num = 104
+    ataxiaBasher_dragonStormMark(true) -- "Clouds of draconic fury already exist here."
+    expect(ataxiaTemp.dragonStormRoom).toBe(104)
+    expect(has(ataxiaBasher_dragonBashing(), "breathstorm")).toBeFalse()
+  end)
+
   it("no boon, no storm; a shield round blasts first", function()
     fresh(); dragonKrenindalan = false
     expect(has(ataxiaBasher_dragonBashing(), "breathstorm")).toBeFalse()
