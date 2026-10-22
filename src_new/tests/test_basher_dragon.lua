@@ -52,7 +52,9 @@ local function reset()
   ataxiaBasher.shielded, ataxiaBasher.rageraze = false, false
   ataxiaBasher.cullingBlade, ataxiaBasher.rageConserveThreshold = nil, nil
   ataxiaBasher.dragonBlast, ataxiaBasher.rageFloor = nil, nil
-  ataxia.vitals.rage = 0
+  ataxiaBasher.jabBash, ataxiaBasher.wotBash, ataxiaBasher.dragonIncant = nil, nil, nil
+  dragonOrganPiercer = nil
+  ataxia.vitals.rage, ataxia.vitals.wpp = 0, nil
   ataxia.defences = {}
   ataxiaTemp = {}
   gmcp.IRE.Target.Info = {}
@@ -203,7 +205,7 @@ describe("ataxiaBasher_dragonBashing -- Might of Sycaerunax blast weave", functi
     local cmd = ataxiaBasher_dragonBashing()
     expect(has(cmd, "blast " .. target)).toBeTrue()
     expect(has(cmd, "summon")).toBeFalse()
-    expect(has(cmd, "gut " .. target)).toBeTrue() -- the bal primary still swings
+    expect(has(cmd, "gut")).toBeFalse() -- one attack per round (v4.7.438)
   end)
 
   it("still summons ONCE when breath is down (the boon keeps it thereafter)", function()
@@ -257,11 +259,13 @@ describe("ataxiaBasher_dragonBashing -- Draconic Rampage trample", function()
     expect(has(ataxiaBasher_dragonBashing(), "gut " .. target)).toBeTrue()
   end)
 
-  it("rides beside the eq blast weave (blast + trample the same round)", function()
+  it("takes the whole round from the blast (one attack per round, v4.7.438)", function()
     reset(); dragonRampage = true; denizens = 2
     ataxiaBasher.dragonBlast = true; breath = "psi"
     ataxia.defences.dragonbreath = true; dragonMightSycaerunax = true
-    expect(has(ataxiaBasher_dragonBashing(), "blast " .. target .. ";trample")).toBeTrue()
+    local cmd = ataxiaBasher_dragonBashing()
+    expect(has(cmd, "trample")).toBeTrue()
+    expect(has(cmd, "blast")).toBeFalse()
   end)
 
   it("never trades a shield-break round for the trample", function()
@@ -331,60 +335,69 @@ describe("ataxiaBasher_dragonBashing -- Draconic Sweep tailsweep", function()
   end)
 end)
 
-describe("ataxiaBasher_dragonBashing -- Might of Sycaerunax blasts every round", function()
-  it("blasts even with the blast toggle off", function()
-    reset(); dragonSweep = false; dragonRampage = false
-    breath = "psi"; ataxia.defences.dragonbreath = true; dragonMightSycaerunax = true
+describe("ataxiaBasher_dragonBashing -- one attack per round (v4.7.438)", function()
+  -- "It should be Blast or Incantation or Jab or Rend or Gut."
+  local function base()
+    reset(); dragonSweep = false; dragonRampage = false; dragonMightSycaerunax = false
+  end
+  local function only(cmd, atk)
+    for _, other in ipairs({ "blast", "incantation", "jab", "rend", "gut", "whip" }) do
+      if other ~= atk then expect(has(cmd, other .. " ")).toBeFalse() end
+    end
+    expect(has(cmd, atk .. " " .. target)).toBeTrue()
+  end
+
+  it("Might of Sycaerunax: blast alone, even with the toggle off, incant on, or jab set", function()
+    base(); breath = "psi"; ataxia.defences.dragonbreath = true; dragonMightSycaerunax = true
     ataxiaBasher.dragonBlast = false
-    expect(has(ataxiaBasher_dragonBashing(), "blast " .. target .. ";gut " .. target)).toBeTrue()
+    only(ataxiaBasher_dragonBashing(), "blast")
+    ataxiaBasher.dragonIncant = true; ataxiaBasher.jabBash = true -- the live 'blast;jab' log
+    only(ataxiaBasher_dragonBashing(), "blast")
   end)
 
-  it("a blast round swings GUT even with jab set (the live 'blast;jab' log)", function()
-    reset(); dragonSweep = false; dragonRampage = false
-    breath = "psi"; ataxia.defences.dragonbreath = true; dragonMightSycaerunax = true
-    ataxiaBasher.jabBash = true; ataxiaBasher.dragonIncant = true
-    local cmd = ataxiaBasher_dragonBashing()
-    expect(has(cmd, "blast " .. target .. ";gut " .. target)).toBeTrue()
-    expect(has(cmd, "jab")).toBeFalse()
-    ataxiaBasher.jabBash, ataxiaBasher.dragonIncant = false, false
+  it("no blast: incantation, then jab, then whip, then rend, then gut", function()
+    base(); ataxiaBasher.dragonIncant = true; ataxiaBasher.jabBash = true
+    ataxiaBasher.wotBash = true; dragonOrganPiercer = true
+    only(ataxiaBasher_dragonBashing(), "incantation")
+    ataxiaBasher.dragonIncant = false
+    only(ataxiaBasher_dragonBashing(), "jab")
+    ataxiaBasher.jabBash = false
+    only(ataxiaBasher_dragonBashing(), "whip")
+    ataxiaBasher.wotBash = false
+    only(ataxiaBasher_dragonBashing(), "rend")
+    dragonOrganPiercer = false
+    only(ataxiaBasher_dragonBashing(), "gut")
+  end)
+
+  it("a jab round wields the dirk first", function()
+    base(); ataxiaBasher.jabBash = true
+    expect(has(ataxiaBasher_dragonBashing(), "wield dirk;jab " .. target)).toBeTrue()
   end)
 
   it("low willpower jabs for the incantation per round, and never rewrites the settings", function()
-    reset(); dragonSweep = false; dragonRampage = false; dragonMightSycaerunax = false
-    ataxiaBasher.dragonIncant = true; ataxia.vitals.wpp = 4
-    expect(has(ataxiaBasher_dragonBashing(), "jab " .. target)).toBeTrue()
+    base(); ataxiaBasher.dragonIncant = true; ataxia.vitals.wpp = 4
+    expect(has(ataxiaBasher_dragonBashing(), "wield dirk;jab " .. target)).toBeTrue()
     expect(ataxiaBasher.dragonIncant).toBe(true)
     expect(ataxiaBasher.jabBash == true).toBeFalse()
     ataxia.vitals.wpp = 60 -- willpower back: incantation again
-    expect(has(ataxiaBasher_dragonBashing(), "incantation " .. target)).toBeTrue()
-    ataxiaBasher.dragonIncant, ataxia.vitals.wpp = false, nil
+    only(ataxiaBasher_dragonBashing(), "incantation")
   end)
 
-  it("a blast round swings GUT, never an incantation (both use equilibrium)", function()
-    reset(); dragonSweep = false; dragonRampage = false
-    breath = "psi"; ataxia.defences.dragonbreath = true; dragonMightSycaerunax = true
-    ataxiaBasher.dragonIncant = true
-    local cmd = ataxiaBasher_dragonBashing()
-    expect(has(cmd, "blast " .. target .. ";gut " .. target)).toBeTrue()
-    expect(has(cmd, "incantation")).toBeFalse()
-    -- the shield-break reblast too
-    ataxiaBasher.shielded = true
-    cmd = ataxiaBasher_dragonBashing()
-    expect(has(cmd, "blast " .. target)).toBeTrue()
-    expect(has(cmd, "incantation")).toBeFalse()
-    -- no blast this round (breath down): the incantation stays
-    ataxiaBasher.shielded = false; ataxia.defences.dragonbreath = false
-    expect(has(ataxiaBasher_dragonBashing(), "incantation " .. target)).toBeTrue()
-    ataxiaBasher.dragonIncant = false
+  it("breath down: summon, then the swing; the shield round is the blast alone", function()
+    base(); breath = "psi"; ataxiaBasher.dragonBlast = true; ataxiaBasher.dragonIncant = true
+    expect(has(ataxiaBasher_dragonBashing(), "summon psi;incantation " .. target)).toBeTrue()
+    ataxiaBasher.shielded = true; dragonMightSycaerunax = true
+    only(ataxiaBasher_dragonBashing(), "blast")
   end)
 
   it("without the boon, the toggle and the jab exclusion still apply", function()
-    reset(); dragonSweep = false; dragonRampage = false; dragonMightSycaerunax = false
-    breath = "psi"; ataxia.defences.dragonbreath = true; ataxiaBasher.dragonBlast = false
+    base(); breath = "psi"; ataxia.defences.dragonbreath = true; ataxiaBasher.dragonBlast = false
     expect(has(ataxiaBasher_dragonBashing(), "blast")).toBeFalse()
     ataxiaBasher.dragonBlast = true; ataxiaBasher.jabBash = true
     expect(has(ataxiaBasher_dragonBashing(), "blast")).toBeFalse()
-    ataxiaBasher.jabBash = false
+    ataxiaBasher.dragonBlast = true; ataxiaBasher.jabBash = false
+    expect(has(ataxiaBasher_dragonBashing(), "blast " .. target .. ";summon psi")).toBeTrue()
+    expect(has(ataxiaBasher_dragonBashing(), "gut")).toBeFalse()
   end)
 end)
 
@@ -395,3 +408,4 @@ getDragonBreath = _breath
 dragonMightSycaerunax = false
 dragonRampage = false
 dragonSweep = false
+dragonOrganPiercer = false

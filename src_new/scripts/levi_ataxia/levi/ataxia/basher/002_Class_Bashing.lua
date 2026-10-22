@@ -48,78 +48,67 @@ function ataxiaBasher_dragonBashing()
   -- Red = dragonfire, Green = venom, Black = acid, Golden = psi). No hardcoded default.
   local ele = getDragonBreath()
 
-  -- The bal primary only (no breath weave): jab / whip / incantation / gut.
-  -- INCANTATION USES EQUILIBRIUM, like BLAST (user, 2026-10-22, v4.7.435): in a round that
-  -- blasts, an incantation behind it can never land, so `blasting` makes it GUT (balance).
-  -- A blast round never JABS either (user, v4.7.437: "we are blasting and jabbing but it
-  -- shouldnt do that"): jab is the weak low-willpower stand-in for incantation, and the
-  -- blast round already dropped the incantation.
-  -- LOW WILLPOWER is read here, per round (v4.7.437). The prompt used to REWRITE the saved
-  -- settings at 5% wp (jabBash on, dragonIncant off) and nothing ever undid it, so a
-  -- character that once ran dry jabbed for good -- even after `bash incant` was back on.
-  local function balAttack(blasting)
-    if ataxiaBasher.jabBash and not blasting then
-      return "jab " ..target
+  -- ONE ATTACK PER ROUND (user, v4.7.438): "It should be Blast or Incantation or Jab or Rend
+  -- or Gut." A round used to send `blast;gut` (blast on equilibrium beside a balance swing);
+  -- now the round is the FIRST of these that applies:
+  --   tailsweep/trample  Draconic Sweep / Rampage proc ready at 2+ denizens (the whole round)
+  --   blast              breath up and the weave on (`bash blast`, or Might of Sycaerunax)
+  --   summon <breath>    weave on, breath down: summon, then the swing below (as before)
+  --   incantation        `bash incant`, willpower above 5%
+  --   jab                `aconfig jab`, or the incantation at 5% willpower or less
+  --   whip               `aconfig wot`
+  --   rend               Organ Piercer claimed (3% vitals strike on REND)
+  --   gut                otherwise
+  -- LOW WILLPOWER is read per round (v4.7.437). The prompt used to REWRITE the saved settings
+  -- at 5% wp (jabBash on, dragonIncant off) and nothing undid it, so a character that once ran
+  -- dry jabbed for good. JAB NEEDS A DIRK IN HAND (user, v4.7.438): a jab round wields it first,
+  -- like the Serpent backstab's per-round wield (v4.7.394); a dirk already in hand costs nothing.
+  local jab = "wield dirk" ..sp.. "jab " ..target
+  local function balAttack()
+    local wpp = ataxia.vitals.wpp
+    local lowWp = wpp and wpp <= 5
+    if ataxiaBasher.dragonIncant and not lowWp then
+      return "incantation " ..target
+    elseif ataxiaBasher.jabBash or ataxiaBasher.dragonIncant then
+      return jab
     elseif ataxiaBasher.wotBash then
       return "whip " ..target
-    elseif ataxiaBasher.dragonIncant and not blasting then
-      local wpp = ataxia.vitals.wpp
-      if wpp and wpp <= 5 then return "jab " ..target end
-      return "incantation " ..target
-    else
-      return "gut " ..target
+    elseif dragonOrganPiercer then
+      return "rend " ..target
     end
+    return "gut " ..target
   end
 
-  -- Normal-rotation primary. When the blast weave is enabled (bash blast on) and we're using a
-  -- real primary (incantation/gut, not the low-wp jab or wotBash whip), fold in a breath blast:
-  --   breath up   -> blast (eq, damage + breaks shields/lyres) ; re-summon ; bal attack
-  --   breath down -> summon so it's ready next hit ; bal attack
-  -- balOverride swaps the balance swing (e.g. the Draconic Rampage trample) while the
-  -- eq-based blast weave still rides beside it.
-  -- Might of Sycaerunax: BLAST AS MUCH AS POSSIBLE (user-directed, v4.7.434). The breath
-  -- persists, so a blast costs only equilibrium -- it rides beside EVERY balance swing
-  -- (jab and whip included) and ignores `bash blast off`.
-  local function primary(balOverride)
+  -- The blast. Without Might of Sycaerunax it needs `bash blast on`, re-summons the breath
+  -- behind it, and stays out of the jab/whip setups (the low-willpower ones). Might of
+  -- Sycaerunax (+25% damage, the breath PERSISTS): BLAST AS MUCH AS POSSIBLE (user, v4.7.434)
+  -- -- no re-summon, and it ignores the toggle and the jab/whip exclusion.
+  local function blastRound()
+    local weave = ataxiaBasher.dragonBlast or dragonMightSycaerunax
     local weaveable = dragonMightSycaerunax
       or (not ataxiaBasher.jabBash and not ataxiaBasher.wotBash)
-    if (ataxiaBasher.dragonBlast or dragonMightSycaerunax) and weaveable and ele then
-      local bal = balOverride or balAttack(ataxia.defences.dragonbreath)
-      if ataxia.defences.dragonbreath then
-        -- Might of Sycaerunax (Mnemosyne boon): +25% blast damage AND the breath
-        -- weapon PERSISTS through BLAST (AB Blast: "Requires summoned breath") --
-        -- the re-summon is pure waste while it's up.
-        if dragonMightSycaerunax then
-          return "blast " ..target.. ";" ..bal
-        end
-        return "blast " ..target.. ";summon " ..ele.. ";" ..bal
-      else
-        return "summon " ..ele.. ";" ..bal
-      end
+    if not (weave and weaveable and ele) then return nil end
+    if not ataxia.defences.dragonbreath then
+      return "summon " ..ele.. sp ..balAttack()
     end
-    return balOverride or balAttack()
+    if dragonMightSycaerunax then return "blast " ..target end
+    return "blast " ..target.. sp .. "summon " ..ele
   end
 
   if ataxiaBasher.shielded then
     if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
-      command = command..raze..sp..primary()
+      command = command..raze..sp..(blastRound() or balAttack())
     else
-      -- Shield MUST be broken: blast unconditionally, re-summon the colour's breath, add bal damage.
-      -- Under Might of Sycaerunax the breath persists -- skip the re-summon here too.
-      local reblast
-      if dragonMightSycaerunax then
-        reblast = "blast " ..target.. ";"
-      else
-        reblast = ele and ("blast " ..target.. ";summon " ..ele.. ";") or ("blast " ..target.. ";")
-      end
-      command = command..sp..reblast..balAttack(true)..sp..brage()
+      -- Shield MUST be broken: blast unconditionally (re-summon the breath unless Might of
+      -- Sycaerunax keeps it). Shield rounds skip tailsweep/trample -- the Kai Choke rule.
+      local reblast = "blast " ..target
+      if ele and not dragonMightSycaerunax then reblast = reblast.. sp .. "summon " ..ele end
+      command = command..sp..reblast..sp..brage()
     end
   else
-    -- Draconic Sweep / Draconic Rampage (Mnemosyne boons): at 2+ denizens, off the
-    -- proc cooldown, the balance swing becomes TAILSWEEP (30s, blunt) or TRAMPLE
-    -- (40s, cutting). Shield-break rounds skip both -- break the shield first, like
-    -- the Kai Choke rule.
-    command = command..sp..brage()..sp..primary(ataxiaBasher_dragonAoePick())
+    -- The AoE pick stamps its cooldown, so it is asked only here, where its pick is sent.
+    local aoe = ataxiaBasher_dragonAoePick()
+    command = command..sp..brage()..sp..(aoe or blastRound() or balAttack())
   end
   return command
 end
