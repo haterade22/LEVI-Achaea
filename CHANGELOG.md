@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-10-22 - v4.7.445: the phantom grizzly bear is our mount
+
+User: "A phantom grizzly bear -- This is a mount and not to be killed". `phantom grizzly bear` joins
+the mount keywords backfilled into `ataxiaBasher.ownDenizens` (`002_Check_For_Any_Missing_Variables`):
+never targeted, never learned, never counted toward a swarm, and purged from the saved target lists
+on load. The full phrase, never "bear": the match is a substring, and a wild "grizzly bear" stays a
+target. (The by-ID mount exclusion, v4.7.335, also covers it once the mounts listing is read.)
+Test: `test_basher_owndenizens.lua` "mount keywords: the phantom grizzly bear" (reads the real list).
+
+---
+
 ## 2026-10-22 - v4.7.443: breathstorm cast and refusal lines
 
 Two live lines (Golden Dragon), trigger `highlighting/073` -> `ataxiaBasher_dragonStormMark` (`basher/002`):

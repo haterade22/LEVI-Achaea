@@ -251,3 +251,23 @@ describe("the real backfill repairs a legacy save", function()
     expect(n).toBe(1) -- and it did not duplicate what was already there
   end)
 end)
+
+-- v4.7.445, user: "A phantom grizzly bear -- This is a mount and not to be killed". The keyword
+-- list is read from the real backfill, so the test fails if the entry is ever dropped.
+describe("mount keywords: the phantom grizzly bear", function()
+  it("is our own denizen; a wild grizzly bear is still a target", function()
+    local f = io.open("src_new/scripts/levi_ataxia/levi/ataxia/002_Check_For_Any_Missing_Variables.lua")
+    local src = f:read("*a"); f:close()
+    local block = src:match("for _, mount in ipairs%(%{(.-)%}%) do")
+    expect(block ~= nil).toBeTrue()
+    local saved = ataxiaBasher.ownDenizens
+    ataxiaBasher.ownDenizens = {}
+    for kw in block:gmatch('"([^"]+)"') do table.insert(ataxiaBasher.ownDenizens, kw) end
+    local ok, err = pcall(function()
+      expect(ataxiaBasher_isOwnDenizen("A phantom grizzly bear")).toBeTrue()
+      expect(ataxiaBasher_isOwnDenizen("a grizzly bear")).toBeFalse()
+    end)
+    ataxiaBasher.ownDenizens = saved
+    if not ok then error(err, 0) end
+  end)
+end)
