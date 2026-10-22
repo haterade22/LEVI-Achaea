@@ -2,6 +2,23 @@
 
 ---
 
+## 2026-10-22 - v4.7.442: Krenindalan Storm -- a breathstorm in every room
+
+User: "We should do this in every room". Krenindalan Storm: "Each tick of your breathstorm ability
+deals unblockable damage to all denizens in your location, so long as you remain within the same
+room." AB 1548 BREATHSTORM: room, 3.50s of balance, 400 mana, requires summoned breath.
+- New flag `dragonKrenindalan` (trigger `mnemosyne/114` + the BOON CLAIM intercept; reset on run
+  start/end).
+- `ataxiaBasher_dragonStormPick` (`basher/002`): the first round in each room is `breathstorm`
+  (`summon <breath>;breathstorm` when the breath is down), before Spark Extant and the
+  tailsweep/trample procs. Keyed on the room number, stamped at send, with the 3s in-flight hold.
+  A 10s floor between casts stops a re-cast when a tower room number changes on a LOOK (the
+  Depthswalker distortion lesson, v4.7.266). Needs 400 mana. Shield rounds blast first.
+- Open: the breathstorm cast, tick and refusal lines are not captured yet.
+Tests: `test_basher_dragon.lua` "Krenindalan Storm breathstorm" (6).
+
+---
+
 ## 2026-10-22 - v4.7.441: CONFIG SCREENWIDTH 0 at every login -- the long triggers match again
 
 User set `CONFIG SCREENWIDTH 0` ("You have set your screen width to 0, which should disable wrapping

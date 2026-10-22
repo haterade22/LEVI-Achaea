@@ -53,7 +53,7 @@ local function reset()
   ataxiaBasher.cullingBlade, ataxiaBasher.rageConserveThreshold = nil, nil
   ataxiaBasher.dragonBlast, ataxiaBasher.rageFloor = nil, nil
   ataxiaBasher.jabBash, ataxiaBasher.wotBash, ataxiaBasher.dragonIncant = nil, nil, nil
-  dragonOrganPiercer, dragonSparkExtant = nil, nil
+  dragonOrganPiercer, dragonSparkExtant, dragonKrenindalan = nil, nil, nil
   ataxia.vitals.rage, ataxia.vitals.wpp = 0, nil
   ataxia.defences = {}
   ataxiaTemp = {}
@@ -455,6 +455,60 @@ describe("ataxiaBasher_dragonBashing -- Spark Extant incantation (v4.7.440)", fu
   end)
 end)
 
+describe("ataxiaBasher_dragonBashing -- Krenindalan Storm breathstorm (v4.7.442)", function()
+  local function fresh()
+    reset(); dragonKrenindalan = true; dragonSparkExtant = true; dragonSweep = true
+    dragonMightSycaerunax = true; breath = "psi"; ataxia.defences.dragonbreath = true
+    ataxia.vitals.mp = 3000; denizens = 3
+    gmcp.Room.Info.num = 101
+  end
+
+  it("storms first in a new room, before Spark Extant and tailsweep", function()
+    fresh()
+    local cmd = ataxiaBasher_dragonBashing()
+    expect(has(cmd, "breathstorm")).toBeTrue()
+    expect(has(cmd, "incantation")).toBeFalse()
+    expect(has(cmd, "tailsweep")).toBeFalse()
+  end)
+
+  it("replays the queued storm, then never again in the same room", function()
+    fresh()
+    expect(has(ataxiaBasher_dragonBashing(), "breathstorm")).toBeTrue()
+    clock = clock + 1
+    expect(has(ataxiaBasher_dragonBashing(), "breathstorm")).toBeTrue() -- in-flight hold
+    clock = clock + 30
+    expect(has(ataxiaBasher_dragonBashing(), "breathstorm")).toBeFalse()
+  end)
+
+  it("storms again in the next room", function()
+    fresh()
+    expect(has(ataxiaBasher_dragonBashing(), "breathstorm")).toBeTrue()
+    clock = clock + 15; gmcp.Room.Info.num = 102
+    expect(has(ataxiaBasher_dragonBashing(), "breathstorm")).toBeTrue()
+  end)
+
+  it("a room number that changes within 10s does not re-cast (the tower look churn)", function()
+    fresh()
+    expect(has(ataxiaBasher_dragonBashing(), "breathstorm")).toBeTrue()
+    clock = clock + 5; gmcp.Room.Info.num = 103
+    expect(has(ataxiaBasher_dragonBashing(), "breathstorm")).toBeFalse()
+  end)
+
+  it("summons a downed breath first, and waits for 400 mana", function()
+    fresh(); ataxia.defences.dragonbreath = false
+    expect(has(ataxiaBasher_dragonBashing(), "summon psi;breathstorm")).toBeTrue()
+    fresh(); ataxia.vitals.mp = 399
+    expect(has(ataxiaBasher_dragonBashing(), "breathstorm")).toBeFalse()
+  end)
+
+  it("no boon, no storm; a shield round blasts first", function()
+    fresh(); dragonKrenindalan = false
+    expect(has(ataxiaBasher_dragonBashing(), "breathstorm")).toBeFalse()
+    fresh(); ataxiaBasher.shielded = true
+    expect(has(ataxiaBasher_dragonBashing(), "breathstorm")).toBeFalse()
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
 getEpoch = _epoch
 ataxiaBasher_assembleBattlerage = _assemble
@@ -464,3 +518,4 @@ dragonRampage = false
 dragonSweep = false
 dragonOrganPiercer = false
 dragonSparkExtant = false
+dragonKrenindalan = false

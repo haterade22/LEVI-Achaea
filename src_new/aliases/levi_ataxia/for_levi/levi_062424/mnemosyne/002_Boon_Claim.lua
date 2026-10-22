@@ -115,6 +115,9 @@ if matches[2]:lower():find("organ piercer") then dragonOrganPiercer = true end
 -- Spark Extant: incantation hits every enemy denizen in the room for 33% less willpower; the
 -- dragon basher casts it first at 2+ denizens (v4.7.440).
 if matches[2]:lower():find("spark extant") then dragonSparkExtant = true end
+-- Krenindalan Storm: BREATHSTORM ticks deal unblockable damage to every denizen in the room while
+-- we stay; the dragon basher casts it once in each room (v4.7.442).
+if matches[2]:lower():find("krenindalan") then dragonKrenindalan = true end
 -- Flashforward: +20% damage while the chrono blur defence is up; the Depthswalker
 -- basher keeps CHRONO BLUR up (eq rider, age-capped) while it's claimed.
 if matches[2]:lower():find("flashforward") then dwFlashforward = true end
