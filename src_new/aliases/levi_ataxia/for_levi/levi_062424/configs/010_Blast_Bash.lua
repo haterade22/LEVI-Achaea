@@ -14,8 +14,9 @@ command: ''
 packageName: ''
 ]]--
 
--- Toggle whether the dragon basher weaves a breath BLAST into its incantation/gut rotation.
--- When on and dragonbreath is summoned, the attack becomes "blast <tar>;summon <ele>;<incant/gut> <tar>".
+-- Toggle whether the dragon basher BLASTS. A round is one attack (v4.7.438): when on, the round
+-- is "blast <tar>;summon <ele>", or "summon <ele>;blast <tar>;summon <ele>" with the breath down
+-- (summon is off-eq, v4.7.439). Might of Sycaerunax blasts even when this is off.
 if matches[2] == "on" then
 	ataxiaBasher.dragonBlast = true
 else
