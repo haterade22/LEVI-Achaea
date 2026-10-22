@@ -154,8 +154,9 @@ end
 -- blunt damage to all denizens in your location. This can only occur once every 30
 -- seconds." TAILSWEEP takes balance. The Rampage shape exactly: 2+ denizens, proc
 -- ready, send-side 30s stamp, and the in-flight hold so the round replays across the
--- 0.3s re-queue loop. No proc line is captured yet, so the send stamp is the only
--- clock; `ataxiaBasher_dragonSweepProc` is ready for a confirm trigger.
+-- 0.3s re-queue loop. Proc CONFIRMED (trigger highlighting/072, "Your draconic muscles
+-- flex like steel coils as you continue your sweep..."): `ataxiaBasher_dragonSweepProc`
+-- restarts the 30s from the LANDED moment and releases the hold (v4.7.436).
 function ataxiaBasher_dragonSweepProc()
   local nowT = (getEpoch and getEpoch()) or os.time()
   ataxiaTemp = ataxiaTemp or {}

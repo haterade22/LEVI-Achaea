@@ -31,8 +31,7 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^Iron-sharp claws rip and tear into all around you as your draconic bulk tramples over your puny lessers
-    in a monstrous frenzy\.$
+- pattern: ^Iron-sharp claws rip and tear into all around you as your draconic bulk tramples
   type: 1
 ]]--
 
@@ -40,6 +39,9 @@ patterns:
 -- nuke landed. Highlight, then restart the 40s proc cooldown from the confirmed
 -- moment (the queued trample can land seconds after the pick) and release the
 -- in-flight trample hold so the next round returns to the normal swing.
+-- FIRST ROW ONLY (v4.7.436): the game wraps the line before "frenzy." (live paste 2026-10-22),
+-- and the old pattern ended in "frenzy\.$", so it never fired and the 40s clock ran on the
+-- send stamp alone.
 selectString(line,1)
 setBold(true)
 fg("orange_red")

@@ -474,8 +474,19 @@ golden_dragon_battlerage:  # v4.7.129 -- ataxiaBasher_goldenDragonBattlerage (ba
       bulk tramples over your puny lessers in a monstrous frenzy."
       -> trigger highlighting/033: bold orange_red + ataxiaBasher_dragonRampageProc()
          restamps the 40s proc cd from the LANDED moment and releases the trample hold.
+         The game wraps it before "frenzy."; until v4.7.436 the pattern ended in
+         "frenzy\.$" and never fired. It now matches the first row's start only.
+    rampage_damage: "Damage dealt: 7618 (physical cutting)." (barrow bat, 2026-10-22)
+  tailsweep_lines: |  # live-captured 2026-10-22
+    action (flavor, untriggered): "You whip your huge, sinuous tail in a circle, knocking
+      your enemies off their feet."
+    sweep_proc: "Your draconic muscles flex like steel coils as you continue your sweep,
+      demolishing any puny foes who happen to be in the path of your rampaging tail."
+      -> trigger highlighting/072 (v4.7.436): bold orange_red + ataxiaBasher_dragonSweepProc()
+         restamps the 30s proc cd from the LANDED moment and releases the tailsweep hold.
+         Wraps after "happen to be in"; the pattern is the first row's start.
+    sweep_damage: "Damage dealt: 18970 (physical blunt)." (barrow bat, 2026-10-22)
   live_capture_wishlist:
-    - "Draconic Sweep proc line (wire into ataxiaBasher_dragonSweepProc, like highlighting/033)"
     - "Organ Piercer vitals-strike line"
     - "Psiblast fire line (wire into ataxiaBasher_gdragonConfirm; 331_Battlerage_Large.lua:80's
        draconic-gaze psychic line is likely it -- verify in Golden form, then move it to a
@@ -523,8 +534,8 @@ mnemosyne_boons:
       proc ready, send-side stamp + 3s in-flight hold, shield-break rounds skip it.
       ataxiaBasher_dragonAoePick owns the balance slot for both boons: a round in its
       hold replays first; when both are ready TAILSWEEP goes first (it can prone the
-      room, and a plain trample also hits prone targets). No proc line captured yet --
-      ataxiaBasher_dragonSweepProc() is ready for a confirm trigger.
+      room, and a plain trample also hits prone targets). The proc line (trigger
+      highlighting/072, v4.7.436) restamps the cooldown from the LANDED moment.
   might_of_sycaerunax_blast_priority: |  # v4.7.434, user: "use blast as much as possible"
     With the boon up, the blast weave ignores `bash blast off` and rides beside EVERY
     balance primary (jab and whip too, not only gut/incantation). BLAST is equilibrium
