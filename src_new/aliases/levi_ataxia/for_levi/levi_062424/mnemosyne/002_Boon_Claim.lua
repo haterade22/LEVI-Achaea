@@ -109,6 +109,9 @@ if matches[2]:lower():find("%f[%a]rampage") then dragonRampage = true end
 -- Draconic Sweep: TAILSWEEP deals a large room-wide blunt nuke on a 30s proc; same
 -- basher rule as Rampage (2+ denizens, off cooldown, tailsweep first when both are ready).
 if matches[2]:lower():find("draconic sweep") then dragonSweep = true end
+-- Organ Piercer: REND has a 3% chance of a large unblockable vitals strike; the dragon
+-- basher swings rend in place of gut while it is claimed (v4.7.438).
+if matches[2]:lower():find("organ piercer") then dragonOrganPiercer = true end
 -- Flashforward: +20% damage while the chrono blur defence is up; the Depthswalker
 -- basher keeps CHRONO BLUR up (eq rider, age-capped) while it's claimed.
 if matches[2]:lower():find("flashforward") then dwFlashforward = true end

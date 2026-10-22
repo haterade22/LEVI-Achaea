@@ -496,9 +496,23 @@ golden_dragon_battlerage:  # v4.7.129 -- ataxiaBasher_goldenDragonBattlerage (ba
     - "RESOLVED: 332's 'rummage...deadening it' line is Psion's -- Golden's Deaden line differs
        (captured above), so 332's Psion dispatch stands"
 
+basher_round:  # v4.7.438, user: "It should be Blast or Incantation or Jab or Rend or Gut"
+  rule: "ONE attack per round -- the first that applies"
+  order:
+    - "tailsweep / trample: Draconic Sweep / Rampage proc ready at 2+ denizens (the whole round)"
+    - "blast: breath up and the weave on (bash blast, or Might of Sycaerunax); re-summons behind it unless Might keeps the breath"
+    - "summon <breath>;<swing>: weave on, breath down"
+    - "incantation: bash incant, willpower above 5%"
+    - "wield dirk;jab: aconfig jab, or the incantation at 5% willpower or less (jab needs a dirk in hand)"
+    - "whip: aconfig wot"
+    - "rend: Organ Piercer claimed"
+    - "gut: otherwise"
+  shield_round: "blast alone (+ summon without Might), then the battlerage; never the AoE"
+  history: "v4.7.434-437 sent blast WITH a balance swing (blast;gut). Replaced by this rule."
+
 basher_toggles:
-  bash incant on/off: "Use INCANTATION (willpower, EQUILIBRIUM) instead of GUT as the primary bash attack; a blast round swings GUT instead (v4.7.435). At 5% willpower or less a round JABS instead -- read per round since v4.7.437 (the old prompt code rewrote jabBash/dragonIncant and never undid it, so a character jabbed for good)"
-  aconfig jab: "JAB instead of gut/incantation -- but never in a blast round, which swings GUT (v4.7.437)"
+  bash incant on/off: "Use INCANTATION (willpower, EQUILIBRIUM) instead of GUT. At 5% willpower or less a round JABS instead -- read per round since v4.7.437 (the old prompt code rewrote jabBash/dragonIncant and never undid it, so a character jabbed for good)"
+  aconfig jab: "WIELD DIRK;JAB instead of gut (v4.7.438) -- see basher_round for the order"
   bash blast on/off:
     default: on
     effect: |
@@ -539,16 +553,16 @@ mnemosyne_boons:
       highlighting/072, v4.7.436) restamps the cooldown from the LANDED moment.
   might_of_sycaerunax_blast_priority: |  # v4.7.434, user: "use blast as much as possible"
     With the boon up, the blast weave ignores `bash blast off` and rides beside EVERY
-    balance primary. In a blast round the balance swing is GUT (whip if `aconfig wot`): never
-    incantation (v4.7.435) and never jab (v4.7.437, user). BLAST is equilibrium
+    round (jab and whip setups too). Since v4.7.438 the blast is the WHOLE round (see
+    basher_round); v4.7.434-437 paired it with a balance swing. BLAST is equilibrium
     and the balance swing is balance, so both still go in the same round.
     INCANTATION ALSO USES EQUILIBRIUM (user, v4.7.435): a round that blasts (the weave
     with breath up, or the shield-break reblast) swings GUT in place of incantation.
     A round without a blast keeps the incantation.
-  organ_piercer: |  # seed catalogue only (v4.7.434), no automation
+  organ_piercer: |  # v4.7.438, dragonOrganPiercer flag (trigger mnemosyne/112 + BOON CLAIM intercept)
     "Your draconic rend ability now has a 3% chance to strike your target's vitals,
-    dealing a large amount of unblockable damage." The basher swings GUT, not REND; a
-    3% proc does not justify a swap without a measured damage comparison.
+    dealing a large amount of unblockable damage." User-directed: REND replaces GUT as the
+    last swing in basher_round while it is claimed.
 ```
 
 ## Fighting Against This Class

@@ -2,6 +2,24 @@
 
 ---
 
+## 2026-10-22 - v4.7.438: one dragon attack per round; jab wields a dirk; Organ Piercer rends
+
+User: "It should be Blast or Incantation or Jab or Rend or Gut", "Jab is fine but it has to wield
+dirk to do it". Answers to three questions: one attack per round; rend while Organ Piercer is claimed;
+a ready tailsweep/trample takes the whole round.
+- `ataxiaBasher_dragonBashing` (`basher/002`) now sends ONE attack, the first that applies:
+  tailsweep/trample proc (2+ denizens) > blast (breath up, weave on) > `summon <breath>;<swing>`
+  (breath down) > incantation (willpower above 5%) > `wield dirk;jab` > whip > rend (Organ Piercer)
+  > gut. v4.7.434-437 paired the blast with a balance swing (`blast;gut`); that is gone.
+- A shield round is the blast alone (+ summon without Might of Sycaerunax), then the battlerage.
+- Every jab round wields the dirk first (the Serpent backstab's per-round wield, v4.7.394).
+- **Organ Piercer** (new flag `dragonOrganPiercer`; trigger `mnemosyne/112` + the BOON CLAIM
+  intercept; reset on run start/end): REND replaces GUT.
+Tests: `test_basher_dragon.lua` "one attack per round" (6); `reset()` now clears the jab/whip/
+incantation/willpower state, so one failing test cannot break the next.
+
+---
+
 ## 2026-10-22 - v4.7.437: blast rounds jabbed -- the low-willpower latch
 
 User, with a log of `blast 405695;jab 405695` while `ataxiaBasher.dragonIncant` was true: "we are
