@@ -118,6 +118,9 @@ if matches[2]:lower():find("spark extant") then dragonSparkExtant = true end
 -- Krenindalan Storm: BREATHSTORM ticks deal unblockable damage to every denizen in the room while
 -- we stay; the dragon basher casts it once in each room (v4.7.442).
 if matches[2]:lower():find("krenindalan") then dragonKrenindalan = true end
+-- Terror of the Skies (dragon): non-boss denizens cannot track or chase us, so ANY move sheds the
+-- swarm -- the swarm tactics treat it like Roll Hide, with a plain step (v4.7.447).
+if matches[2]:lower():find("terror of the skies") then mnemTerrorSkies = true end
 -- Flashforward: +20% damage while the chrono blur defence is up; the Depthswalker
 -- basher keeps CHRONO BLUR up (eq rider, age-capped) while it's claimed.
 if matches[2]:lower():find("flashforward") then dwFlashforward = true end

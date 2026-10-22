@@ -732,7 +732,9 @@ function S._escapeSuffix(sep)
   -- entry's commands do NOT all run on one balance -- `point` fires on the next balance and
   -- `leap` on equilibrium, draining across ~7s. So a balance-gated tumble is HELD by the queue
   -- until balance returns rather than being rejected, exactly like the point is.
-  if mnemRollHide then return sep .. "tumble " .. S.backShort end
+  -- TERROR OF THE SKIES (v4.7.447): a plain step-out already sheds every non-boss pursuer, so it
+  -- outranks the Roll Hide tumble (falls through to the plain step, or the icy tumble below).
+  if mnemRollHide and not S._terrorSheds() then return sep .. "tumble " .. S.backShort end
   -- An icy swarm room: tumble the step-out too (v4.7.370).
   if S.swarmRoom and S.icyRooms and S.icyRooms[S.swarmRoom] then return sep .. "tumble " .. S.backShort end
   return sep .. S.backShort
@@ -996,8 +998,52 @@ function S._beginReenter()
   return true
 end
 
+-- LEAVING SHEDS THE SWARM -- two boons do it (v4.7.447).
+--   Roll Hide          (any class): a TUMBLE out of a room sheds all pursuers.
+--   Terror of the Skies (dragon):  "Your draconic heritage will prevent non-boss denizens from
+--                                   tracking or chasing you." ANY move sheds them -- except the
+--                                   boss. User: "As dragon we can leave without them tracking
+--                                   which is like roll hide and maklak's promise".
+-- Every "does leaving end the fight?" question asks S._shedsPursuers(); the command asks
+-- S._shedCmd(dir). Terror's move is a plain step: faster than a tumble, and it cannot be
+-- cancelled the ways a tumble can (prone, lost balance). Ice still tumbles (v4.7.370).
+
+-- Is the ripple's boss in this room? Only a KNOWN boss name counts (M.run.boss, from the
+-- Objective line); M._isBossName treats an unknown boss as a match, which here would switch
+-- Terror off for every room of a ripple whose boss we never read.
+function S._bossHere()
+  local boss = M.run and M.run.boss
+  if type(boss) ~= "string" or boss == "" then return false end
+  local dz = ataxia and ataxia.denizensHere
+  if type(dz) ~= "table" then return false end
+  local b = boss:lower()
+  for _, name in pairs(dz) do
+    if type(name) == "string" and name ~= "" then
+      local a = name:lower()
+      if a:find(b, 1, true) or b:find(a, 1, true) then return true end
+    end
+  end
+  return false
+end
+
+function S._terrorSheds()
+  return mnemTerrorSkies == true and not S._bossHere()
+end
+
+function S._shedsPursuers()
+  return mnemRollHide == true or S._terrorSheds()
+end
+
+-- The move that sheds them. Terror: a plain step, unless the room is icy. Roll Hide: a tumble.
+function S._shedCmd(dir)
+  local cur = M.map and M.map.current
+  local icy = cur and S.icyRooms and S.icyRooms[cur]
+  if S._terrorSheds() and not icy then return dir end
+  return "tumble " .. dir
+end
+
 -- Roll Hide panic: at panic HP with the boon up, tumble out -- the boon sheds ALL
--- pursuers.
+-- pursuers. Terror of the Skies (v4.7.447) takes the same path with a plain step.
 --
 -- DIRECTION: back into the room we just CLEARED, first choice (user, 2026-08-03:
 -- "we should tumble out into the room we just cleared"). That room is the one place on
@@ -1142,7 +1188,7 @@ end
 function S._maybePanic(hpNow)
   local hp = tonumber(hpNow) or hpp()
   local s = S._cfg()
-  if s.panic == false or not mnemRollHide then return false end
+  if s.panic == false or not S._shedsPursuers() then return false end
   -- Already out and healing: a second tumble sheds nothing (Roll Hide shed them the first
   -- time) and only walks us further from the sweep. Without this the 10s cooldown was the
   -- only thing between a slow heal and a tumble every ten seconds, wandering the ripple.
@@ -1156,6 +1202,10 @@ function S._maybePanic(hpNow)
   if S.moveLocked() then return false end
   S._lastPanicAt = now()
   send("cq all")
+  local cmd = S._shedCmd(dir)
+  local tumbling = cmd:sub(1, 7) == "tumble "
+  -- Land for the Terror step too: the recovery that follows is a GROUND recovery (recoverGround),
+  -- and reset() would not leave us airborne anyway.
   if S.flying then
     -- TUMBLE is a ground action: land FIRST or the tumble is rejected mid-kite and the
     -- panic (plus its cooldown) is wasted exactly when it matters most.
@@ -1178,7 +1228,7 @@ function S._maybePanic(hpNow)
   end)
   S.escapeOn("panic tumble") -- v4.7.243: stop swinging until we are out
   local sep = (ataxia.settings and ataxia.settings.separator) or ";"
-  send("queue addclear free stand" .. sep .. "tumble " .. dir)
+  send("queue addclear free stand" .. sep .. cmd)
   -- HEAL WHERE WE LANDED, then go back in (user, 2026-08-06: "the denizens wont follow so we
   -- can use this to our advantage to heal up and then do hit and run tactics").
   --
@@ -1198,7 +1248,8 @@ function S._maybePanic(hpNow)
   -- Self-ticking, like the hover: a recovery must never wait on an outside event to notice
   -- it has healed.
   if M._scheduleTick then M._scheduleTick(RECOVER_TICK) end
-  S._echo("<indian_red>PANIC (" .. hp .. "% hp)<reset> -- Roll Hide tumble <cyan>" .. dir
+  S._echo("<indian_red>PANIC (" .. hp .. "% hp)<reset> -- "
+    .. (tumbling and "Roll Hide tumble" or "Terror of the Skies: leaving") .. " <cyan>" .. dir
     .. "<reset> sheds all pursuers; healing to " .. s.recoverAt .. "% before going back in.")
   return true
 end
@@ -1986,12 +2037,14 @@ function S.onTick()
       end
       local spent = tonumber(S._recoverTumbles) or 0
       local budget = tonumber(S.RECOVER_TUMBLES) or 2
-      local dir = (spent < budget) and mnemRollHide and S._panicDir()
+      local dir = (spent < budget) and S._shedsPursuers() and S._panicDir()
       if dir then
         S._recoverTumbles = spent + 1
         local sep = (ataxia.settings and ataxia.settings.separator) or ";"
-        send("queue addclear free stand" .. sep .. "tumble " .. dir)
-        S.onTumbleStart(dir) -- confirm it actually lands; retry if it does not
+        local cmd = S._shedCmd(dir)
+        send("queue addclear free stand" .. sep .. cmd)
+        -- confirm a TUMBLE lands; retry if not. A plain step (Terror) has no tumble to retry.
+        if cmd:sub(1, 7) == "tumble " then S.onTumbleStart(dir) end
         S.recoverStarted = now() -- the recovery continues where we land, not from zero
         S._armRecoverHold()
         if M._scheduleTick then M._scheduleTick(RECOVER_TICK) end
@@ -2317,7 +2370,8 @@ function S.onTick()
   -- ICE OUTRANKS THE ICEWALL TOO (v4.7.370, user: "With ice, try tumbling instead"). The wall is
   -- crossed by a jump, and the jump is what slips; the plain pull's step-out tumbles instead.
   local icy = cur and S.icyRooms and S.icyRooms[cur]
-  local mode = (S._indoors() and S._cfg().icewall and not mnemRollHide and not icy) and "wall" or "pull"
+  -- Terror of the Skies sheds them on a plain step (v4.7.447): the same reason, the same pull.
+  local mode = (S._indoors() and S._cfg().icewall and not S._shedsPursuers() and not icy) and "wall" or "pull"
   return S._beginPull(shortBack, longBack, shortFwd, n, mode)
 end
 
@@ -2399,7 +2453,7 @@ function S.onVitals()
      and S._maybeSeclusion(hp) then
     return
   end
-  local wantPanic = s.panic ~= false and mnemRollHide and S._panicHpHit(hp)
+  local wantPanic = s.panic ~= false and S._shedsPursuers() and S._panicHpHit(hp)
   local wantEscape = s.escape ~= false and hp <= s.escapeAt
   -- THE DAMAGE WATCHDOG, EVALUATED HERE (v4.7.243). It used to live only inside
   -- `ataxiaBasher_attack`, BELOW the three holds -- so it fell silent the moment an escape was in
