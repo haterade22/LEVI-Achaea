@@ -106,6 +106,9 @@ if matches[2]:lower():find("sycaerunax") then dragonMightSycaerunax = true end
 -- Draconic Rampage: TRAMPLE deals a large room-wide cutting nuke on a 40s proc;
 -- the dragon basher spends the balance swing on it at 2+ denizens, off cooldown.
 if matches[2]:lower():find("%f[%a]rampage") then dragonRampage = true end
+-- Draconic Sweep: TAILSWEEP deals a large room-wide blunt nuke on a 30s proc; same
+-- basher rule as Rampage (2+ denizens, off cooldown, tailsweep first when both are ready).
+if matches[2]:lower():find("draconic sweep") then dragonSweep = true end
 -- Flashforward: +20% damage while the chrono blur defence is up; the Depthswalker
 -- basher keeps CHRONO BLUR up (eq rider, age-capped) while it's claimed.
 if matches[2]:lower():find("flashforward") then dwFlashforward = true end

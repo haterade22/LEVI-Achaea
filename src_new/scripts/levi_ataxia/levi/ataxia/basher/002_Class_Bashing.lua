@@ -67,10 +67,14 @@ function ataxiaBasher_dragonBashing()
   --   breath down -> summon so it's ready next hit ; bal attack
   -- balOverride swaps the balance swing (e.g. the Draconic Rampage trample) while the
   -- eq-based blast weave still rides beside it.
+  -- Might of Sycaerunax: BLAST AS MUCH AS POSSIBLE (user-directed, v4.7.434). The breath
+  -- persists, so a blast costs only equilibrium -- it rides beside EVERY balance swing
+  -- (jab and whip included) and ignores `bash blast off`.
   local function primary(balOverride)
     local bal = balOverride or balAttack()
-    local weaveable = not ataxiaBasher.jabBash and not ataxiaBasher.wotBash
-    if ataxiaBasher.dragonBlast and weaveable and ele then
+    local weaveable = dragonMightSycaerunax
+      or (not ataxiaBasher.jabBash and not ataxiaBasher.wotBash)
+    if (ataxiaBasher.dragonBlast or dragonMightSycaerunax) and weaveable and ele then
       if ataxia.defences.dragonbreath then
         -- Might of Sycaerunax (Mnemosyne boon): +25% blast damage AND the breath
         -- weapon PERSISTS through BLAST (AB Blast: "Requires summoned breath") --
@@ -101,10 +105,11 @@ function ataxiaBasher_dragonBashing()
       command = command..sp..reblast..balAttack()..sp..brage()
     end
   else
-    -- Draconic Rampage (Mnemosyne boon): at 2+ denizens, off the 40s proc cooldown,
-    -- the balance swing becomes TRAMPLE (room-wide cutting nuke). Shield-break
-    -- rounds skip it -- break the shield first, like the Kai Choke rule.
-    command = command..sp..brage()..sp..primary(ataxiaBasher_dragonRampagePick())
+    -- Draconic Sweep / Draconic Rampage (Mnemosyne boons): at 2+ denizens, off the
+    -- proc cooldown, the balance swing becomes TAILSWEEP (30s, blunt) or TRAMPLE
+    -- (40s, cutting). Shield-break rounds skip both -- break the shield first, like
+    -- the Kai Choke rule.
+    command = command..sp..brage()..sp..primary(ataxiaBasher_dragonAoePick())
   end
   return command
 end
@@ -141,6 +146,51 @@ function ataxiaBasher_dragonRampagePick()
   ataxiaTemp.dragonRampageAt = nowT
   ataxiaTemp.dragonRampagePendingAt = nowT
   return "trample"
+end
+
+-- Draconic Sweep pick: "Your draconic tailsweep ability now deals a large amount of
+-- blunt damage to all denizens in your location. This can only occur once every 30
+-- seconds." TAILSWEEP takes balance. The Rampage shape exactly: 2+ denizens, proc
+-- ready, send-side 30s stamp, and the in-flight hold so the round replays across the
+-- 0.3s re-queue loop. No proc line is captured yet, so the send stamp is the only
+-- clock; `ataxiaBasher_dragonSweepProc` is ready for a confirm trigger.
+function ataxiaBasher_dragonSweepProc()
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.dragonSweepAt = nowT
+  ataxiaTemp.dragonSweepPendingAt = nil
+end
+
+function ataxiaBasher_dragonSweepPick()
+  if not dragonSweep then return nil end
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  ataxiaTemp = ataxiaTemp or {}
+  local pend = ataxiaTemp.dragonSweepPendingAt
+  if pend and (nowT - (tonumber(pend) or 0)) < 3 then return "tailsweep" end
+  ataxiaTemp.dragonSweepPendingAt = nil
+  local M = ataxia.mnemosyne
+  local n = (M and M._denizenCount and M._denizenCount()) or 0
+  if n < 2 then return nil end
+  if (nowT - (tonumber(ataxiaTemp.dragonSweepAt) or 0)) < 30 then return nil end
+  ataxiaTemp.dragonSweepAt = nowT
+  ataxiaTemp.dragonSweepPendingAt = nowT
+  return "tailsweep"
+end
+
+-- Both room nukes in one balance slot. A round already in flight replays first, so a
+-- proc that comes ready mid-hold cannot abandon the other's queued swing. When both
+-- are ready, TAILSWEEP goes first: it can prone the room, and a plain trample also
+-- hits prone targets, so the trample that follows hits harder.
+function ataxiaBasher_dragonAoePick()
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  ataxiaTemp = ataxiaTemp or {}
+  local function held(key)
+    local pend = ataxiaTemp[key]
+    return pend and (nowT - (tonumber(pend) or 0)) < 3
+  end
+  if dragonRampage and held("dragonRampagePendingAt") then return "trample" end
+  if dragonSweep and held("dragonSweepPendingAt") then return "tailsweep" end
+  return ataxiaBasher_dragonSweepPick() or ataxiaBasher_dragonRampagePick()
 end
 
 -- Golden Dragon OWNS its battlerage (the Psion lesson, v4.7.128): the generic

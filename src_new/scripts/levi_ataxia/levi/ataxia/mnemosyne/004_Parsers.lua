@@ -266,6 +266,7 @@ function M.onRunEnd()
   psionRoth = false -- ...and wrath is a 3-minute, under-half-health heal again (v4.7.360)
   dragonMightSycaerunax = false -- boons gone on a confirmed run-end
   dragonRampage = false -- boons gone on a confirmed run-end
+  dragonSweep = false -- boons gone on a confirmed run-end
   dwFlashforward = false -- boons gone on a confirmed run-end
   infArmyOfDead = false -- boons gone on a confirmed run-end
   mnemGraveborn = false -- ...and the gravehands go back to being worth a crowd (v4.7.348)
