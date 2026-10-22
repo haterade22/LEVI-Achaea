@@ -79,6 +79,7 @@ dragonRampage = false  -- boons reset each run
 dragonSweep = false  -- boons reset each run
 dragonOrganPiercer = false  -- boons reset each run
 dragonSparkExtant = false  -- boons reset each run
+dragonKrenindalan = false  -- boons reset each run
 dwFlashforward = false  -- boons reset each run
 infArmyOfDead = false  -- boons reset each run
 mnemGraveborn = false  -- boons reset each run

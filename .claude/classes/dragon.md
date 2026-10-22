@@ -499,6 +499,7 @@ golden_dragon_battlerage:  # v4.7.129 -- ataxiaBasher_goldenDragonBattlerage (ba
 basher_round:  # v4.7.438, user: "It should be Blast or Incantation or Jab or Rend or Gut"
   rule: "ONE attack per round -- the first that applies"
   order:
+    - "breathstorm: Krenindalan Storm, once in each room, 400+ mana (summon first if the breath is down; v4.7.442)"
     - "incantation: Spark Extant claimed, 2+ denizens, willpower above 5% (v4.7.440; a tailsweep/trample still in its hold replays first)"
     - "tailsweep / trample: Draconic Sweep / Rampage proc ready at 2+ denizens (the whole round)"
     - "blast: the weave on (bash blast, or Might of Sycaerunax). Breath up: blast;summon (Might: blast). Breath down: summon;blast;summon (Might: summon;blast) -- SUMMON IS OFF-EQ (the user's trait, v4.7.439), so a downed breath never costs the blast"
@@ -559,6 +560,16 @@ mnemosyne_boons:
     INCANTATION ALSO USES EQUILIBRIUM (user, v4.7.435): a round that blasts (the weave
     with breath up, or the shield-break reblast) swings GUT in place of incantation.
     A round without a blast keeps the incantation.
+  krenindalan_storm:  # v4.7.442, dragonKrenindalan flag (trigger mnemosyne/114 + BOON CLAIM intercept)
+    effect: "Each BREATHSTORM tick deals unblockable damage to all denizens in the room while we stay"
+    ab_breathstorm: "BREATHSTORM (AB 1548): room, 3.50s of balance, 400 mana, requires summoned breath"
+    basher: |
+      User: "We should do this in every room". ataxiaBasher_dragonStormPick (basher/002): the
+      first round in each room is BREATHSTORM (`summon <breath>;breathstorm` if the breath is
+      down), before Spark Extant and the tailsweep/trample procs. Keyed on gmcp.Room.Info.num,
+      stamped at send, 3s in-flight hold, and a 10s floor between casts (a tower room number
+      can change on a LOOK -- the Depthswalker distortion lesson, v4.7.266). Needs 400 mana.
+      Shield rounds blast first. Open: the cast, tick and refusal lines are not captured.
   spark_extant:  # v4.7.440, dragonSparkExtant flag (trigger mnemosyne/113 + BOON CLAIM intercept)
     effect: "INCANTATION hits all enemy denizens in the room and costs 33% less willpower"
     basher: |

@@ -51,6 +51,7 @@ function ataxiaBasher_dragonBashing()
   -- ONE ATTACK PER ROUND (user, v4.7.438): "It should be Blast or Incantation or Jab or Rend
   -- or Gut." A round used to send `blast;gut` (blast on equilibrium beside a balance swing);
   -- now the round is the FIRST of these that applies:
+  --   breathstorm        Krenindalan Storm: once in each room, 400+ mana (v4.7.442)
   --   incantation        Spark Extant at 2+ denizens, willpower above 5% (v4.7.440)
   --   tailsweep/trample  Draconic Sweep / Rampage proc ready at 2+ denizens (the whole round)
   --   blast              breath up and the weave on (`bash blast`, or Might of Sycaerunax)
@@ -118,7 +119,12 @@ function ataxiaBasher_dragonBashing()
     -- A tailsweep/trample still in its in-flight hold replays first: the queue is cleared each
     -- round, so dropping a queued one would leave its cooldown stamped for a swing never sent.
     -- The AoE pick stamps its cooldown, so it is asked only on a round that sends its pick.
+    -- KRENINDALAN STORM (Mnemosyne boon, user v4.7.442: "We should do this in every room"):
+    -- BREATHSTORM first in each new room, so its unblockable room ticks run the longest.
     local round = ataxiaBasher_dragonAoeHeld()
+    if not round and ataxiaBasher_dragonStormPick() then
+      round = ataxia.defences.dragonbreath and "breathstorm" or ("summon " ..ele.. sp .. "breathstorm")
+    end
     if not round and ataxiaBasher_dragonSparkPick() then round = "incantation " ..target end
     round = round or ataxiaBasher_dragonAoePick() or blastRound() or balAttack()
     command = command..sp..brage()..sp..round
@@ -188,6 +194,33 @@ function ataxiaBasher_dragonSweepPick()
   ataxiaTemp.dragonSweepAt = nowT
   ataxiaTemp.dragonSweepPendingAt = nowT
   return "tailsweep"
+end
+
+-- Krenindalan Storm: "Each tick of your breathstorm ability deals unblockable damage to all
+-- denizens in your location, so long as you remain within the same room." AB 1548 BREATHSTORM:
+-- room, 3.50s of balance, 400 mana, requires summoned breath (summon is off-eq for this user,
+-- v4.7.439). ONCE PER ROOM (user, v4.7.442): the ticks stop when we leave, so each new room gets
+-- one cast. Keyed on the room number, stamped at send, with the 3s in-flight hold the other room
+-- nukes use. STORM_FLOOR is the Depthswalker distortion lesson (v4.7.266): in the tower the room
+-- number can change on a LOOK without a move, and a room key alone would then re-cast every few
+-- seconds. No game line is captured yet (cast, ticks, or a refusal).
+local STORM_MANA, STORM_FLOOR, STORM_HOLD = 400, 10, 3
+
+function ataxiaBasher_dragonStormPick()
+  if not dragonKrenindalan then return false end
+  if not getDragonBreath() then return false end
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  ataxiaTemp = ataxiaTemp or {}
+  local pend = tonumber(ataxiaTemp.dragonStormPendingAt)
+  if pend and (nowT - pend) < STORM_HOLD then return true end -- replay the queued cast
+  ataxiaTemp.dragonStormPendingAt = nil
+  if (tonumber(ataxia.vitals and ataxia.vitals.mp) or 0) < STORM_MANA then return false end
+  local room = (gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.num) or "unknown"
+  if ataxiaTemp.dragonStormRoom == room then return false end
+  if (nowT - (tonumber(ataxiaTemp.dragonStormAt) or 0)) < STORM_FLOOR then return false end
+  ataxiaTemp.dragonStormRoom, ataxiaTemp.dragonStormAt = room, nowT
+  ataxiaTemp.dragonStormPendingAt = nowT
+  return true
 end
 
 -- Spark Extant: incantation is a room nuke at 2+ denizens, while willpower is above 5%.

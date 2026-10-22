@@ -269,6 +269,7 @@ function M.onRunEnd()
   dragonSweep = false -- boons gone on a confirmed run-end
   dragonOrganPiercer = false -- boons gone on a confirmed run-end
   dragonSparkExtant = false -- boons gone on a confirmed run-end
+  dragonKrenindalan = false -- boons gone on a confirmed run-end
   dwFlashforward = false -- boons gone on a confirmed run-end
   infArmyOfDead = false -- boons gone on a confirmed run-end
   mnemGraveborn = false -- ...and the gravehands go back to being worth a crowd (v4.7.348)
