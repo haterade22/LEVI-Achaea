@@ -10,6 +10,23 @@ never targeted, never learned, never counted toward a swarm, and purged from the
 on load. The full phrase, never "bear": the match is a substring, and a wild "grizzly bear" stays a
 target. (The by-ID mount exclusion, v4.7.335, also covers it once the mounts listing is read.)
 Test: `test_basher_owndenizens.lua` "mount keywords: the phantom grizzly bear" (reads the real list).
+## 2026-10-22 - v4.7.444: the panic tumble never goes back into the room we fled
+
+A death (two fog elementals, "Dried river bed"). At 43% HP the escape leapt north out of the
+fight room. The leap landed at 22% HP and the Roll Hide panic fired in the north room.
+`S._panicDir()` (`mnemosyne/009`) takes `S._backDir()` first, and `_backDir` reverses the LAST
+move -- which was the retreat, so "back" was south, the room we had just fled. The tumble took us
+back to the unbound fog elemental, and two asphyxiation hits killed us. The ranked exit scan
+already skips the way into the swarm (`S.fwdShort`) and ranks the fled room low, but the "back"
+preference returned before it. North, a cleared room, was available.
+- `S._panicDir()` now takes "back" only when it leads to a cleared room (`S._exitRank(back) == 1`:
+  visited, not `S._fled`, not `S.swarmRoom`) and is not `S.fwdShort`. Otherwise the ranked scan
+  decides. The fled room is still the last fallback when it is the only door.
+- Tests: `test_swarm_tactics.lua` "never tumbles back into the room a retreat just fled" (fails
+  with the old code) and "still uses the fled room when it is the only door".
+- Not changed (seen in the same log): an 8 s blackout with stupidity hid the drop from 99% to 43%;
+  the 43% escape waited 2.2 s for equilibrium; the sweep re-entered a room that had taken us from
+  100% to 61% in about 2 s.
 
 ---
 

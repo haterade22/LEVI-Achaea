@@ -546,6 +546,25 @@ describe("Roll Hide panic -- tumble back into the cleared room", function()
     MAP.rooms[200].exits.east = 60
     expect(S._panicDir() ~= nil).toBeTrue()
   end)
+
+  -- v4.7.444 death: a retreat from 100 landed in 200, then the panic fired. "Back" is 100,
+  -- the room we fled -- the tumble must take the cleared room instead.
+  it("never tumbles back into the room a retreat just fled", function()
+    fixture(4)
+    MAP.rooms[200].exits = { south = 100, north = 300 }
+    MAP.rooms[300] = { visited = true, exits = { south = 200 } }
+    S._fled = { room = 100, at = clock }
+    S.swarmRoom, S.fwdShort = 100, "s"
+    expect(select(1, S._backDir())).toBe("s") -- the precondition: "back" IS the fled room
+    expect(S._panicDir()).toBe("n")
+  end)
+
+  it("still uses the fled room when it is the only door", function()
+    fixture(4)
+    S._fled = { room = 100, at = clock }
+    S.swarmRoom, S.fwdShort = 100, "s"
+    expect(S._panicDir()).toBe("s")
+  end)
 end)
 
 -- BRAVADO affix (v4.7.206): "perpetually reckless and unable to benefit from shields,
