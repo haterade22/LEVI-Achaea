@@ -112,6 +112,9 @@ if matches[2]:lower():find("draconic sweep") then dragonSweep = true end
 -- Organ Piercer: REND has a 3% chance of a large unblockable vitals strike; the dragon
 -- basher swings rend in place of gut while it is claimed (v4.7.438).
 if matches[2]:lower():find("organ piercer") then dragonOrganPiercer = true end
+-- Spark Extant: incantation hits every enemy denizen in the room for 33% less willpower; the
+-- dragon basher casts it first at 2+ denizens (v4.7.440).
+if matches[2]:lower():find("spark extant") then dragonSparkExtant = true end
 -- Flashforward: +20% damage while the chrono blur defence is up; the Depthswalker
 -- basher keeps CHRONO BLUR up (eq rider, age-capped) while it's claimed.
 if matches[2]:lower():find("flashforward") then dwFlashforward = true end

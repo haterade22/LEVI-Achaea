@@ -51,6 +51,7 @@ function ataxiaBasher_dragonBashing()
   -- ONE ATTACK PER ROUND (user, v4.7.438): "It should be Blast or Incantation or Jab or Rend
   -- or Gut." A round used to send `blast;gut` (blast on equilibrium beside a balance swing);
   -- now the round is the FIRST of these that applies:
+  --   incantation        Spark Extant at 2+ denizens, willpower above 5% (v4.7.440)
   --   tailsweep/trample  Draconic Sweep / Rampage proc ready at 2+ denizens (the whole round)
   --   blast              breath up and the weave on (`bash blast`, or Might of Sycaerunax)
   --                      (breath down: summon first -- summon is off-eq, v4.7.439)
@@ -111,9 +112,16 @@ function ataxiaBasher_dragonBashing()
       command = command..sp..blastCmd()..sp..brage()
     end
   else
-    -- The AoE pick stamps its cooldown, so it is asked only here, where its pick is sent.
-    local aoe = ataxiaBasher_dragonAoePick()
-    command = command..sp..brage()..sp..(aoe or blastRound() or balAttack())
+    -- SPARK EXTANT (Mnemosyne boon, user v4.7.440): incantation hits EVERY enemy denizen in
+    -- the room for 33% less willpower, so at 2+ denizens it outranks tailsweep, trample and
+    -- blast ("Incantation (with boon) > Tail > Trample > Blast"). Willpower above 5% only.
+    -- A tailsweep/trample still in its in-flight hold replays first: the queue is cleared each
+    -- round, so dropping a queued one would leave its cooldown stamped for a swing never sent.
+    -- The AoE pick stamps its cooldown, so it is asked only on a round that sends its pick.
+    local round = ataxiaBasher_dragonAoeHeld()
+    if not round and ataxiaBasher_dragonSparkPick() then round = "incantation " ..target end
+    round = round or ataxiaBasher_dragonAoePick() or blastRound() or balAttack()
+    command = command..sp..brage()..sp..round
   end
   return command
 end
@@ -182,11 +190,18 @@ function ataxiaBasher_dragonSweepPick()
   return "tailsweep"
 end
 
--- Both room nukes in one balance slot. A round already in flight replays first, so a
--- proc that comes ready mid-hold cannot abandon the other's queued swing. When both
--- are ready, TAILSWEEP goes first: it can prone the room, and a plain trample also
--- hits prone targets, so the trample that follows hits harder.
-function ataxiaBasher_dragonAoePick()
+-- Spark Extant: incantation is a room nuke at 2+ denizens, while willpower is above 5%.
+function ataxiaBasher_dragonSparkPick()
+  if not dragonSparkExtant then return false end
+  local wpp = ataxia.vitals and ataxia.vitals.wpp
+  if wpp and wpp <= 5 then return false end
+  local M = ataxia.mnemosyne
+  local n = (M and M._denizenCount and M._denizenCount()) or 0
+  return n >= 2
+end
+
+-- The tailsweep/trample round still in its in-flight hold, or nil.
+function ataxiaBasher_dragonAoeHeld()
   local nowT = (getEpoch and getEpoch()) or os.time()
   ataxiaTemp = ataxiaTemp or {}
   local function held(key)
@@ -195,7 +210,16 @@ function ataxiaBasher_dragonAoePick()
   end
   if dragonRampage and held("dragonRampagePendingAt") then return "trample" end
   if dragonSweep and held("dragonSweepPendingAt") then return "tailsweep" end
-  return ataxiaBasher_dragonSweepPick() or ataxiaBasher_dragonRampagePick()
+  return nil
+end
+
+-- Both room nukes in one balance slot. A round already in flight replays first, so a
+-- proc that comes ready mid-hold cannot abandon the other's queued swing. When both
+-- are ready, TAILSWEEP goes first: it can prone the room, and a plain trample also
+-- hits prone targets, so the trample that follows hits harder.
+function ataxiaBasher_dragonAoePick()
+  return ataxiaBasher_dragonAoeHeld()
+    or ataxiaBasher_dragonSweepPick() or ataxiaBasher_dragonRampagePick()
 end
 
 -- Golden Dragon OWNS its battlerage (the Psion lesson, v4.7.128): the generic

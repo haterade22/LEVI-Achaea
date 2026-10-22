@@ -53,7 +53,7 @@ local function reset()
   ataxiaBasher.cullingBlade, ataxiaBasher.rageConserveThreshold = nil, nil
   ataxiaBasher.dragonBlast, ataxiaBasher.rageFloor = nil, nil
   ataxiaBasher.jabBash, ataxiaBasher.wotBash, ataxiaBasher.dragonIncant = nil, nil, nil
-  dragonOrganPiercer = nil
+  dragonOrganPiercer, dragonSparkExtant = nil, nil
   ataxia.vitals.rage, ataxia.vitals.wpp = 0, nil
   ataxia.defences = {}
   ataxiaTemp = {}
@@ -409,6 +409,52 @@ describe("ataxiaBasher_dragonBashing -- one attack per round (v4.7.438)", functi
   end)
 end)
 
+describe("ataxiaBasher_dragonBashing -- Spark Extant incantation (v4.7.440)", function()
+  -- "Incantation (with boon) > Tail > Trample > Blast"
+  local function fresh(n)
+    reset(); dragonSparkExtant = true; dragonSweep = true; dragonRampage = true
+    dragonMightSycaerunax = true; breath = "psi"; ataxia.defences.dragonbreath = true
+    denizens = n
+  end
+
+  it("casts incantation over tailsweep, trample and blast at 2+ denizens", function()
+    fresh(3)
+    local cmd = ataxiaBasher_dragonBashing()
+    expect(has(cmd, "incantation " .. target)).toBeTrue()
+    expect(has(cmd, "tailsweep")).toBeFalse()
+    expect(has(cmd, "blast")).toBeFalse()
+    expect(ataxiaTemp.dragonSweepAt).toBe(nil) -- the AoE pick was never asked: no stamp
+  end)
+
+  it("solo it is the normal round (blast)", function()
+    fresh(1)
+    local cmd = ataxiaBasher_dragonBashing()
+    expect(has(cmd, "blast " .. target)).toBeTrue()
+    expect(has(cmd, "incantation")).toBeFalse()
+  end)
+
+  it("at 5% willpower or less it falls through to tailsweep", function()
+    fresh(3); ataxia.vitals.wpp = 5
+    expect(has(ataxiaBasher_dragonBashing(), "tailsweep")).toBeTrue()
+  end)
+
+  it("a tailsweep in its in-flight hold replays before the incantation", function()
+    fresh(3); dragonSparkExtant = false
+    expect(has(ataxiaBasher_dragonBashing(), "tailsweep")).toBeTrue()
+    dragonSparkExtant = true; clock = clock + 1
+    expect(has(ataxiaBasher_dragonBashing(), "tailsweep")).toBeTrue()
+    clock = clock + 3 -- hold over
+    expect(has(ataxiaBasher_dragonBashing(), "incantation " .. target)).toBeTrue()
+  end)
+
+  it("the shield round still blasts", function()
+    fresh(3); ataxiaBasher.shielded = true
+    local cmd = ataxiaBasher_dragonBashing()
+    expect(has(cmd, "blast " .. target)).toBeTrue()
+    expect(has(cmd, "incantation")).toBeFalse()
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
 getEpoch = _epoch
 ataxiaBasher_assembleBattlerage = _assemble
@@ -417,3 +463,4 @@ dragonMightSycaerunax = false
 dragonRampage = false
 dragonSweep = false
 dragonOrganPiercer = false
+dragonSparkExtant = false
