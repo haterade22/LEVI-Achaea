@@ -2,6 +2,21 @@
 
 ---
 
+## 2026-10-22 - v4.7.440: Spark Extant -- incantation first in a crowd
+
+User: "For this boon we should use incantation over blast for denizens 2 or more. Incantation (with
+boon) > Tail > Trample > Blast". Spark Extant: "Your incantation now hits all enemy denizens in the
+location and costs 33% less willpower."
+- New flag `dragonSparkExtant` (trigger `mnemosyne/113` + the BOON CLAIM intercept; reset on run
+  start/end). `ataxiaBasher_dragonSparkPick` (`basher/002`): at 2+ denizens and willpower above 5%,
+  the round is `incantation`, before tailsweep, trample and blast. Solo, the round is unchanged.
+- `ataxiaBasher_dragonAoeHeld` (split out of `ataxiaBasher_dragonAoePick`) runs first: a queued
+  tailsweep/trample replays before the incantation, because the round clears the queue and a dropped
+  one would leave its cooldown stamped for a swing never sent. Shield rounds still blast.
+Tests: `test_basher_dragon.lua` "Spark Extant incantation" (5).
+
+---
+
 ## 2026-10-22 - v4.7.439: a downed breath is summoned and blasted in the same round
 
 User: "it should be normally blast;summon breath (i have a trait that can be used off eq)". The

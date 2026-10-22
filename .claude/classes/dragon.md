@@ -499,6 +499,7 @@ golden_dragon_battlerage:  # v4.7.129 -- ataxiaBasher_goldenDragonBattlerage (ba
 basher_round:  # v4.7.438, user: "It should be Blast or Incantation or Jab or Rend or Gut"
   rule: "ONE attack per round -- the first that applies"
   order:
+    - "incantation: Spark Extant claimed, 2+ denizens, willpower above 5% (v4.7.440; a tailsweep/trample still in its hold replays first)"
     - "tailsweep / trample: Draconic Sweep / Rampage proc ready at 2+ denizens (the whole round)"
     - "blast: the weave on (bash blast, or Might of Sycaerunax). Breath up: blast;summon (Might: blast). Breath down: summon;blast;summon (Might: summon;blast) -- SUMMON IS OFF-EQ (the user's trait, v4.7.439), so a downed breath never costs the blast"
     - "incantation: bash incant, willpower above 5%"
@@ -558,6 +559,13 @@ mnemosyne_boons:
     INCANTATION ALSO USES EQUILIBRIUM (user, v4.7.435): a round that blasts (the weave
     with breath up, or the shield-break reblast) swings GUT in place of incantation.
     A round without a blast keeps the incantation.
+  spark_extant:  # v4.7.440, dragonSparkExtant flag (trigger mnemosyne/113 + BOON CLAIM intercept)
+    effect: "INCANTATION hits all enemy denizens in the room and costs 33% less willpower"
+    basher: |
+      User: "Incantation (with boon) > Tail > Trample > Blast". ataxiaBasher_dragonSparkPick
+      (basher/002): at 2+ denizens and willpower above 5% the round is incantation, before the
+      tailsweep/trample procs and the blast. ataxiaBasher_dragonAoeHeld runs first, so a queued
+      tailsweep/trample is never dropped with its cooldown already stamped. Shield rounds still blast.
   organ_piercer: |  # v4.7.438, dragonOrganPiercer flag (trigger mnemosyne/112 + BOON CLAIM intercept)
     "Your draconic rend ability now has a 3% chance to strike your target's vitals,
     dealing a large amount of unblockable damage." User-directed: REND replaces GUT as the
