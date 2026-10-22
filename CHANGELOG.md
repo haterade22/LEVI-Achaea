@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-10-22 - v4.7.439: a downed breath is summoned and blasted in the same round
+
+User: "it should be normally blast;summon breath (i have a trait that can be used off eq)". The
+breath-up round was already `blast;summon <breath>`. Because SUMMON is off-equilibrium, the
+breath-down round is now `summon;blast;summon` (`summon;blast` under Might of Sycaerunax, which
+keeps the breath) in place of `summon;<swing>`, a round with no blast. The shield round uses the
+same command (`blastCmd`, `basher/002`). Tests: `test_basher_dragon.lua` "breath down: summon
+(off-eq) then blast in the same round" and the two Might breath-down tests.
+
+---
+
 ## 2026-10-22 - v4.7.438: one dragon attack per round; jab wields a dirk; Organ Piercer rends
 
 User: "It should be Blast or Incantation or Jab or Rend or Gut", "Jab is fine but it has to wield
