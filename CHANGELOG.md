@@ -2,6 +2,28 @@
 
 ---
 
+## 2026-10-22 - v4.7.434: Draconic Sweep, and Might of Sycaerunax blasts every round
+
+User: "For dragon, we should incorporate this into it" (Organ Piercer, Draconic Sweep, Draconic
+Rampage) and "we should use blast as much as possible" (Might of Sycaerunax).
+- **Draconic Sweep** (new flag `dragonSweep`; trigger `mnemosyne/111` + the BOON CLAIM intercept;
+  reset on run start/end). `ataxiaBasher_dragonSweepPick` (`basher/002`) has the Rampage shape:
+  at 2+ denizens with the 30s proc ready, the balance swing becomes TAILSWEEP, with a send-side
+  stamp and the 3s in-flight hold. Shield-break rounds skip it.
+- `ataxiaBasher_dragonAoePick` owns the balance slot for both room nukes. A round in its hold
+  replays first, so a proc that comes ready cannot abandon the other's queued swing. When both
+  are ready, TAILSWEEP goes first: it can prone the room, and a plain trample also hits prone targets.
+- **Might of Sycaerunax**: the blast weave now ignores `bash blast off` and rides beside every
+  balance primary, jab and whip included. BLAST uses equilibrium, so the balance swing still goes
+  in the same round.
+- **Organ Piercer** (3% vitals strike on REND): seed catalogue only. The basher swings GUT.
+- Seed: Draconic Rampage text updated to the game's current wording (fill-only merge, so an existing
+  library row keeps its text).
+Tests: `test_basher_dragon.lua` "Draconic Sweep tailsweep" (5) and "Might of Sycaerunax blasts
+every round" (3). Open: the Draconic Sweep proc line is not captured yet.
+
+---
+
 ## 2026-10-21 - v4.7.433: the fullsense recon captured 2659 lines of combat
 
 A live log: "fullsense captured 2659 raw line(s) (Sleuth, on GO)". `S.sense` (`mnemosyne/009`)

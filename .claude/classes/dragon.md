@@ -475,6 +475,8 @@ golden_dragon_battlerage:  # v4.7.129 -- ataxiaBasher_goldenDragonBattlerage (ba
       -> trigger highlighting/033: bold orange_red + ataxiaBasher_dragonRampageProc()
          restamps the 40s proc cd from the LANDED moment and releases the trample hold.
   live_capture_wishlist:
+    - "Draconic Sweep proc line (wire into ataxiaBasher_dragonSweepProc, like highlighting/033)"
+    - "Organ Piercer vitals-strike line"
     - "Psiblast fire line (wire into ataxiaBasher_gdragonConfirm; 331_Battlerage_Large.lua:80's
        draconic-gaze psychic line is likely it -- verify in Golden form, then move it to a
        confirm trigger)"
@@ -492,6 +494,7 @@ basher_toggles:
       breath up -> "blast <tar>;summon <ele>;<incant/gut> <tar>"; breath down -> "summon <ele>;<incant/gut> <tar>".
       Element per colour via getDragonBreath() (Blue = ice). Turn off for trash mobs / low willpower.
       Gate: ataxia.defences.dragonbreath. Shielded hits always blast to break the shield regardless of this toggle.
+      Might of Sycaerunax overrides the toggle (and the jab/whip exclusion) -- see mnemosyne_boons.
 
 mnemosyne_boons:
   might_of_sycaerunax:  # v4.7.130, dragonMightSycaerunax flag (trigger 035 + BOON CLAIM intercept)
@@ -513,6 +516,23 @@ mnemosyne_boons:
       battlerage still rides, and shield-break rounds skip it (break the shield
       first). Send-side 40s stamp + the v4.7.129 in-flight hold; the proc line
       (trigger highlighting/033) restamps the cooldown from the LANDED moment.
+  draconic_sweep:  # v4.7.434, dragonSweep flag (trigger mnemosyne/111 + BOON CLAIM intercept)
+    effect: "TAILSWEEP deals a large amount of blunt damage to ALL denizens in the room; once every 30s"
+    basher: |
+      ataxiaBasher_dragonSweepPick (basher/002): the Rampage shape -- 2+ denizens, 30s
+      proc ready, send-side stamp + 3s in-flight hold, shield-break rounds skip it.
+      ataxiaBasher_dragonAoePick owns the balance slot for both boons: a round in its
+      hold replays first; when both are ready TAILSWEEP goes first (it can prone the
+      room, and a plain trample also hits prone targets). No proc line captured yet --
+      ataxiaBasher_dragonSweepProc() is ready for a confirm trigger.
+  might_of_sycaerunax_blast_priority: |  # v4.7.434, user: "use blast as much as possible"
+    With the boon up, the blast weave ignores `bash blast off` and rides beside EVERY
+    balance primary (jab and whip too, not only gut/incantation). BLAST is equilibrium
+    and the balance swing is balance, so both still go in the same round.
+  organ_piercer: |  # seed catalogue only (v4.7.434), no automation
+    "Your draconic rend ability now has a 3% chance to strike your target's vitals,
+    dealing a large amount of unblockable damage." The basher swings GUT, not REND; a
+    3% proc does not justify a swap without a measured damage comparison.
 ```
 
 ## Fighting Against This Class

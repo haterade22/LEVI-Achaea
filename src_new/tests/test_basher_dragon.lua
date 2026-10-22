@@ -285,9 +285,82 @@ describe("ataxiaBasher_dragonBashing -- Draconic Rampage trample", function()
   end)
 end)
 
+describe("ataxiaBasher_dragonBashing -- Draconic Sweep tailsweep", function()
+  local function fresh()
+    reset(); dragonRampage = false; dragonSweep = true; denizens = 3
+  end
+
+  it("spends the balance swing on TAILSWEEP at 2+ denizens off the 30s proc", function()
+    fresh()
+    local cmd = ataxiaBasher_dragonBashing()
+    expect(has(cmd, "tailsweep")).toBeTrue()
+    expect(has(cmd, "gut")).toBeFalse()
+  end)
+
+  it("stays on the normal swing solo or while the proc is down", function()
+    fresh(); denizens = 1
+    expect(has(ataxiaBasher_dragonBashing(), "gut " .. target)).toBeTrue()
+    fresh(); ataxiaTemp.dragonSweepAt = clock - 10
+    expect(has(ataxiaBasher_dragonBashing(), "gut " .. target)).toBeTrue()
+    clock = clock + 21 -- 31s since the proc: ready again
+    expect(has(ataxiaBasher_dragonBashing(), "tailsweep")).toBeTrue()
+  end)
+
+  it("never trades a shield-break round for the tailsweep", function()
+    fresh(); ataxiaBasher.shielded = true; breath = "psi"
+    expect(has(ataxiaBasher_dragonBashing(), "tailsweep")).toBeFalse()
+  end)
+
+  it("sweeps first when both are ready, then tramples on the next round", function()
+    fresh(); dragonRampage = true
+    expect(has(ataxiaBasher_dragonBashing(), "tailsweep")).toBeTrue()
+    clock = clock + 1
+    expect(has(ataxiaBasher_dragonBashing(), "tailsweep")).toBeTrue() -- in-flight hold
+    ataxiaBasher_dragonSweepProc() -- the sweep landed: hold released
+    expect(has(ataxiaBasher_dragonBashing(), "trample")).toBeTrue()
+  end)
+
+  it("a trample in flight is not abandoned when the sweep comes ready", function()
+    fresh(); dragonRampage = true
+    ataxiaTemp.dragonSweepAt = clock - 29 -- sweep ready in 1s
+    expect(has(ataxiaBasher_dragonBashing(), "trample")).toBeTrue()
+    clock = clock + 2 -- sweep now ready, trample still in its hold
+    expect(has(ataxiaBasher_dragonBashing(), "trample")).toBeTrue()
+    clock = clock + 2 -- hold over: the sweep takes the slot
+    expect(has(ataxiaBasher_dragonBashing(), "tailsweep")).toBeTrue()
+  end)
+end)
+
+describe("ataxiaBasher_dragonBashing -- Might of Sycaerunax blasts every round", function()
+  it("blasts even with the blast toggle off", function()
+    reset(); dragonSweep = false; dragonRampage = false
+    breath = "psi"; ataxia.defences.dragonbreath = true; dragonMightSycaerunax = true
+    ataxiaBasher.dragonBlast = false
+    expect(has(ataxiaBasher_dragonBashing(), "blast " .. target .. ";gut " .. target)).toBeTrue()
+  end)
+
+  it("blasts beside a jab or whip primary", function()
+    reset(); dragonSweep = false; dragonRampage = false
+    breath = "psi"; ataxia.defences.dragonbreath = true; dragonMightSycaerunax = true
+    ataxiaBasher.jabBash = true
+    expect(has(ataxiaBasher_dragonBashing(), "blast " .. target .. ";jab " .. target)).toBeTrue()
+    ataxiaBasher.jabBash = false
+  end)
+
+  it("without the boon, the toggle and the jab exclusion still apply", function()
+    reset(); dragonSweep = false; dragonRampage = false; dragonMightSycaerunax = false
+    breath = "psi"; ataxia.defences.dragonbreath = true; ataxiaBasher.dragonBlast = false
+    expect(has(ataxiaBasher_dragonBashing(), "blast")).toBeFalse()
+    ataxiaBasher.dragonBlast = true; ataxiaBasher.jabBash = true
+    expect(has(ataxiaBasher_dragonBashing(), "blast")).toBeFalse()
+    ataxiaBasher.jabBash = false
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
 getEpoch = _epoch
 ataxiaBasher_assembleBattlerage = _assemble
 getDragonBreath = _breath
 dragonMightSycaerunax = false
 dragonRampage = false
+dragonSweep = false
