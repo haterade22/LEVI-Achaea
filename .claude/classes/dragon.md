@@ -526,7 +526,7 @@ basher_toggles:
       Might of Sycaerunax overrides the toggle (and the jab/whip exclusion) -- see mnemosyne_boons.
 
 mnemosyne_boons:
-  might_of_sycaerunax:  # v4.7.130, dragonMightSycaerunax flag (trigger 035 + BOON CLAIM intercept)
+  might_of_sycaerunax:  # v4.7.130, dragonMightSycaerunax flag (M.BOON_FLAGS since v4.7.447 + BOON CLAIM intercept)
     effect: "Draconic BLAST does +25% damage and the breath weapon PERSISTS -- no resummon needed after use"
     ab_blast: "BLAST <target>: 4.00s of equilibrium, strips shield and/or lyre, requires summoned breath (AB 1544)"
     basher: |
@@ -535,7 +535,7 @@ mnemosyne_boons:
       while the flag is up. Breath fully down still summons once -- the boon keeps it
       from there. Colour-agnostic (any dragon in the tower). Standard boon-flag
       lifecycle: claim intercept / BOONS-row trigger re-latch / cleared on run start+end.
-  draconic_rampage:  # v4.7.133, dragonRampage flag (trigger 036 + BOON CLAIM intercept)
+  draconic_rampage:  # v4.7.133, dragonRampage flag (M.BOON_FLAGS since v4.7.447 + BOON CLAIM intercept)
     effect: "TRAMPLE deals a large amount of cutting damage to ALL denizens in the room; 40s proc cooldown"
     ab_trample: "TRAMPLE: room-wide, 2.75s of balance (AB 1564); off-proc it only hits prone targets"
     basher: |
@@ -545,7 +545,7 @@ mnemosyne_boons:
       battlerage still rides, and shield-break rounds skip it (break the shield
       first). Send-side 40s stamp + the v4.7.129 in-flight hold; the proc line
       (trigger highlighting/033) restamps the cooldown from the LANDED moment.
-  draconic_sweep:  # v4.7.434, dragonSweep flag (trigger mnemosyne/111 + BOON CLAIM intercept)
+  draconic_sweep:  # v4.7.434, dragonSweep flag (M.BOON_FLAGS since v4.7.447 + BOON CLAIM intercept)
     effect: "TAILSWEEP deals a large amount of blunt damage to ALL denizens in the room; once every 30s"
     basher: |
       ataxiaBasher_dragonSweepPick (basher/002): the Rampage shape -- 2+ denizens, 30s
@@ -562,7 +562,7 @@ mnemosyne_boons:
     INCANTATION ALSO USES EQUILIBRIUM (user, v4.7.435): a round that blasts (the weave
     with breath up, or the shield-break reblast) swings GUT in place of incantation.
     A round without a blast keeps the incantation.
-  krenindalan_storm:  # v4.7.442, dragonKrenindalan flag (trigger mnemosyne/114 + BOON CLAIM intercept)
+  krenindalan_storm:  # v4.7.442, dragonKrenindalan flag (M.BOON_FLAGS since v4.7.447 + BOON CLAIM intercept)
     effect: "Each BREATHSTORM tick deals unblockable damage to all denizens in the room while we stay"
     ab_breathstorm: "BREATHSTORM (AB 1548): room, 3.50s of balance, 400 mana, requires summoned breath"
     basher: |
@@ -580,14 +580,22 @@ mnemosyne_boons:
         exist here." -- marks the room AND restarts the 10s floor (the room key may be wrong).
       Without a cast line the send stamp + 3s hold expiry still work. Open: the other colours'
         cast lines, and the tick line (damage per tick).
-  spark_extant:  # v4.7.440, dragonSparkExtant flag (trigger mnemosyne/113 + BOON CLAIM intercept)
+  terror_of_the_skies:  # v4.7.447, mnemTerrorSkies flag (M.BOON_FLAGS + BOON CLAIM intercept)
+    effect: "Non-boss denizens cannot track or chase you"
+    swarm_tactics: |
+      User: "As dragon we can leave without them tracking which is like roll hide and maklak's
+      promise". mnemosyne/009 treats it like Roll Hide (S._shedsPursuers): the panic at the panic
+      floor, the recovery re-move, the pull step-out, and no indoor icewall. Its move is a plain
+      step (S._shedCmd), not a tumble; ice still tumbles; a flying panic lands first. It does not
+      shed the ripple's boss: S._bossHere() (a known M.run.boss in the room) switches it off.
+  spark_extant:  # v4.7.440, dragonSparkExtant flag (M.BOON_FLAGS since v4.7.447 + BOON CLAIM intercept)
     effect: "INCANTATION hits all enemy denizens in the room and costs 33% less willpower"
     basher: |
       User: "Incantation (with boon) > Tail > Trample > Blast". ataxiaBasher_dragonSparkPick
       (basher/002): at 2+ denizens and willpower above 5% the round is incantation, before the
       tailsweep/trample procs and the blast. ataxiaBasher_dragonAoeHeld runs first, so a queued
       tailsweep/trample is never dropped with its cooldown already stamped. Shield rounds still blast.
-  organ_piercer: |  # v4.7.438, dragonOrganPiercer flag (trigger mnemosyne/112 + BOON CLAIM intercept)
+  organ_piercer: |  # v4.7.438, dragonOrganPiercer flag (M.BOON_FLAGS since v4.7.447 + BOON CLAIM intercept)
     "Your draconic rend ability now has a 3% chance to strike your target's vitals,
     dealing a large amount of unblockable damage." User-directed: REND replaces GUT as the
     last swing in basher_round while it is claimed.

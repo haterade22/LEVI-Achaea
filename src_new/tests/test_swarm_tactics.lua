@@ -145,6 +145,8 @@ local function fixture(count)
   ataxia.vitals = { hpp = 100 }
   ataxia.afflictions = {}
   mnemRollHide = false
+  mnemTerrorSkies = false -- v4.7.447
+  M.run.boss = nil
 end
 
 describe("swarm threshold resolution", function()
@@ -1618,6 +1620,93 @@ end)
 -- icewall, just tumble out." The wall was never a barrier -- denizens walk through icewalls
 -- without Maklak's Promise, so it only PACED the swarm -- and it costs a balance-gated `point`,
 -- a wall-memory entry and a melt cycle later. Shedding every pursuer beats pacing them.
+-- TERROR OF THE SKIES (v4.7.447). User: "As dragon we can leave without them tracking which is
+-- like roll hide and maklak's promise". Any move sheds non-boss pursuers, so it takes Roll Hide's
+-- paths with a plain step instead of a tumble -- except when the ripple's boss is in the room.
+describe("Terror of the Skies -- leaving sheds the swarm", function()
+  local function has(needle)
+    for _, c in ipairs(sent) do if c == needle then return true end end
+    return false
+  end
+
+  it("panics out with a plain step, then heals where it lands", function()
+    fixture(3)
+    S.onTick(); S.decorate("attack", ";")
+    MAP.current = 100; mobs = 2; S.onTick()
+    MAP.rooms[100].exits.west = 50
+    mnemTerrorSkies = true
+    ataxia.vitals = { hpp = 30 }
+    S._lastPanicAt = nil
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("recovering")
+    expect(has("queue addclear free stand;w")).toBeTrue()
+    expect(has("queue addclear free stand;tumble w")).toBeFalse()
+  end)
+
+  it("lands first when flying, then steps (the recovery is on the ground)", function()
+    fixture(3)
+    S.onTick(); S.decorate("attack", ";")
+    MAP.current = 100; mobs = 0; S.onTick()
+    mobs = 3; S.onTick()
+    expect(S.flying).toBeTrue()
+    MAP.rooms[100].exits.west = 50
+    mnemTerrorSkies = true
+    ataxia.vitals = { hpp = 30 }
+    S._lastPanicAt = nil
+    expect(S.onTick()).toBeTrue()
+    local landAt, stepAt
+    for i, c in ipairs(sent) do
+      if c == "land" and not landAt then landAt = i end
+      if c == "queue addclear free stand;w" then stepAt = i end
+    end
+    expect(landAt ~= nil and stepAt ~= nil).toBeTrue()
+    expect(landAt < stepAt).toBeTrue()
+  end)
+
+  it("steps out of the pull, even with Roll Hide too", function()
+    fixture(3)
+    mnemTerrorSkies = true; mnemRollHide = true
+    S.onTick()
+    expect(S.decorate("attack", ";")).toBe("attack;s")
+  end)
+
+  it("takes the plain pull indoors instead of walling", function()
+    fixture(3)
+    gmcp.Room.Info.details = { "indoors" }
+    cfg.swarm.icewall = true
+    mnemTerrorSkies = true
+    expect(S.onTick()).toBeTrue()
+    expect(S.mode).toBe("pull")
+  end)
+
+  it("an icy room still tumbles", function()
+    fixture(3)
+    mnemTerrorSkies = true
+    S.icyRooms = { [200] = true, [100] = true }
+    expect(S._shedCmd("w")).toBe("tumble w")
+    S.icyRooms = {}
+    expect(S._shedCmd("w")).toBe("w")
+  end)
+
+  it("the ripple's boss in the room: Terror sheds nothing; Roll Hide still tumbles", function()
+    fixture(3)
+    mnemTerrorSkies = true
+    M.run.boss = "a towering fire lord"
+    ataxia.denizensHere = { [1001] = "a towering fire lord", [1002] = "a fire imp" }
+    local ok, err = pcall(function()
+      expect(S._shedsPursuers()).toBeFalse()
+      mnemRollHide = true
+      expect(S._shedsPursuers()).toBeTrue()
+      expect(S._shedCmd("w")).toBe("tumble w")
+      M.run.boss = nil -- an UNKNOWN boss does not switch Terror off
+      mnemRollHide = false
+      expect(S._shedsPursuers()).toBeTrue()
+    end)
+    ataxia.denizensHere = nil
+    if not ok then error(err, 0) end
+  end)
+end)
+
 describe("Roll Hide replaces the icewall", function()
   it("takes the plain pull indoors instead of walling, while the boon is up", function()
     fixture(3)

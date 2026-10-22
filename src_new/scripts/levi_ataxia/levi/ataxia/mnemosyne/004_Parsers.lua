@@ -270,6 +270,7 @@ function M.onRunEnd()
   dragonOrganPiercer = false -- boons gone on a confirmed run-end
   dragonSparkExtant = false -- boons gone on a confirmed run-end
   dragonKrenindalan = false -- boons gone on a confirmed run-end
+  mnemTerrorSkies = false -- boons gone on a confirmed run-end
   dwFlashforward = false -- boons gone on a confirmed run-end
   infArmyOfDead = false -- boons gone on a confirmed run-end
   mnemGraveborn = false -- ...and the gravehands go back to being worth a crowd (v4.7.348)
@@ -1331,6 +1332,17 @@ M.BOON_FLAGS = {
   ["Pavonian"]             = "mnemPavonian",      -- v4.7.424: Alchemist wracks on balance beside educe (basher/002)
   ["Purifying Salt"]       = "mnemPurifyingSalt", -- v4.7.424: Alchemist educe salt in a crowd (basher/002)
   ["Rust"]                 = "mnemRust",          -- v4.7.424: Alchemist educe iron is fire + sensitivity; no rotation change
+  -- The dragon boons (v4.7.447). Each had its own BOONS-row trigger (035, 036, 111-115), which set
+  -- the flag on ANY BOONS list -- outside the tower too, where the flags then drove tailsweep,
+  -- trample, breathstorm and the rest in ordinary bashing. The generic row trigger (013) latches
+  -- only inside the tower, and M.clearBoonFlags clears them at run start, so those triggers went.
+  ["Might of Sycaerunax"]  = "dragonMightSycaerunax", -- blast every round, breath persists (basher/002)
+  ["Draconic Rampage"]     = "dragonRampage",         -- trample proc at 2+ denizens (basher/002)
+  ["Draconic Sweep"]       = "dragonSweep",           -- tailsweep proc at 2+ denizens (basher/002)
+  ["Organ Piercer"]        = "dragonOrganPiercer",    -- rend replaces gut (basher/002)
+  ["Spark Extant"]         = "dragonSparkExtant",     -- incantation first at 2+ denizens (basher/002)
+  ["Krenindalan Storm"]    = "dragonKrenindalan",     -- breathstorm once per room (basher/002)
+  ["Terror of the Skies"]  = "mnemTerrorSkies",       -- leaving sheds non-boss pursuers (009)
 }
 
 -- An (ECHO) row names the same boon; a second copy does not make it a different one.

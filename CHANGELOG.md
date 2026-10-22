@@ -2,6 +2,32 @@
 
 ---
 
+## 2026-10-22 - v4.7.447: Terror of the Skies -- leaving sheds the swarm; dragon flags in BOON_FLAGS
+
+User: "Terror of the Skies: Your draconic heritage will prevent non-boss denizens from tracking or
+chasing you. As dragon we can leave without them tracking which is like roll hide and maklak's
+promise".
+- **Terror of the Skies** (flag `mnemTerrorSkies`): `mnemosyne/009` now asks `S._shedsPursuers()`
+  (Roll Hide OR Terror) everywhere it asked `mnemRollHide`: the panic at the panic floor, the recovery
+  re-move when company arrives, the indoor icewall (skipped), and the vitals gate. The command comes
+  from `S._shedCmd(dir)`: Terror is a plain step (faster, and it cannot be cancelled like a tumble),
+  Roll Hide alone is a tumble, and an icy room still tumbles (v4.7.370). A flying panic still lands
+  first, because the recovery that follows is a ground recovery. The pull step-out is a plain step
+  with Terror, even with Roll Hide too. `S.onTumbleStart` (the tumble retry) runs only for a tumble.
+- **Not the boss.** Terror says "non-boss": `S._bossHere()` switches it off while the ripple's boss
+  (a KNOWN `M.run.boss` name) is in the room. An unknown boss does not switch it off. Roll Hide is
+  unaffected.
+- **The dragon boon flags moved to `M.BOON_FLAGS`.** Might of Sycaerunax, Draconic Rampage, Draconic
+  Sweep, Organ Piercer, Spark Extant, Krenindalan Storm, Terror of the Skies. Their own BOONS-row
+  triggers (`mnemosyne/035`, `036`, `111`-`114`; 115 was never released) set the flag on ANY BOONS list,
+  so a list read outside the tower switched on tailsweep, trample and breathstorm for ordinary
+  bashing. The generic row trigger (013) latches only inside the tower, the confirmed claim latches
+  too, and `M.clearBoonFlags` clears them at run start. The triggers are removed.
+Tests: `test_swarm_tactics.lua` "Terror of the Skies -- leaving sheds the swarm" (6); the generic
+BOON_FLAGS row test now covers the seven dragon boons.
+
+---
+
 ## 2026-10-22 - v4.7.446: the setup wizard's dragon help, corrected
 
 User: "update everything and then push the latest". A review of every doc this session's dragon
