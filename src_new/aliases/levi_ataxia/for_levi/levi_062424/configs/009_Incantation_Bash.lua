@@ -16,6 +16,7 @@ packageName: ''
 
 if not ataxiaBasher.dragonIncant then
 	ataxiaBasher.dragonIncant = true
+	ataxiaBasher.jabBash = false -- choosing incantation as the primary drops a jab (v4.7.437)
 	ataxiaEcho("Will bash using incantation in dragon instead of gut.")
 else
 	ataxiaBasher.dragonIncant = false

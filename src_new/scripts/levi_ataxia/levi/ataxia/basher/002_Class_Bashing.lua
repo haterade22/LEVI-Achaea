@@ -51,12 +51,20 @@ function ataxiaBasher_dragonBashing()
   -- The bal primary only (no breath weave): jab / whip / incantation / gut.
   -- INCANTATION USES EQUILIBRIUM, like BLAST (user, 2026-10-22, v4.7.435): in a round that
   -- blasts, an incantation behind it can never land, so `blasting` makes it GUT (balance).
+  -- A blast round never JABS either (user, v4.7.437: "we are blasting and jabbing but it
+  -- shouldnt do that"): jab is the weak low-willpower stand-in for incantation, and the
+  -- blast round already dropped the incantation.
+  -- LOW WILLPOWER is read here, per round (v4.7.437). The prompt used to REWRITE the saved
+  -- settings at 5% wp (jabBash on, dragonIncant off) and nothing ever undid it, so a
+  -- character that once ran dry jabbed for good -- even after `bash incant` was back on.
   local function balAttack(blasting)
-    if ataxiaBasher.jabBash then
+    if ataxiaBasher.jabBash and not blasting then
       return "jab " ..target
     elseif ataxiaBasher.wotBash then
       return "whip " ..target
     elseif ataxiaBasher.dragonIncant and not blasting then
+      local wpp = ataxia.vitals.wpp
+      if wpp and wpp <= 5 then return "jab " ..target end
       return "incantation " ..target
     else
       return "gut " ..target

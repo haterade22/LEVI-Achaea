@@ -339,12 +339,25 @@ describe("ataxiaBasher_dragonBashing -- Might of Sycaerunax blasts every round",
     expect(has(ataxiaBasher_dragonBashing(), "blast " .. target .. ";gut " .. target)).toBeTrue()
   end)
 
-  it("blasts beside a jab or whip primary", function()
+  it("a blast round swings GUT even with jab set (the live 'blast;jab' log)", function()
     reset(); dragonSweep = false; dragonRampage = false
     breath = "psi"; ataxia.defences.dragonbreath = true; dragonMightSycaerunax = true
-    ataxiaBasher.jabBash = true
-    expect(has(ataxiaBasher_dragonBashing(), "blast " .. target .. ";jab " .. target)).toBeTrue()
-    ataxiaBasher.jabBash = false
+    ataxiaBasher.jabBash = true; ataxiaBasher.dragonIncant = true
+    local cmd = ataxiaBasher_dragonBashing()
+    expect(has(cmd, "blast " .. target .. ";gut " .. target)).toBeTrue()
+    expect(has(cmd, "jab")).toBeFalse()
+    ataxiaBasher.jabBash, ataxiaBasher.dragonIncant = false, false
+  end)
+
+  it("low willpower jabs for the incantation per round, and never rewrites the settings", function()
+    reset(); dragonSweep = false; dragonRampage = false; dragonMightSycaerunax = false
+    ataxiaBasher.dragonIncant = true; ataxia.vitals.wpp = 4
+    expect(has(ataxiaBasher_dragonBashing(), "jab " .. target)).toBeTrue()
+    expect(ataxiaBasher.dragonIncant).toBe(true)
+    expect(ataxiaBasher.jabBash == true).toBeFalse()
+    ataxia.vitals.wpp = 60 -- willpower back: incantation again
+    expect(has(ataxiaBasher_dragonBashing(), "incantation " .. target)).toBeTrue()
+    ataxiaBasher.dragonIncant, ataxia.vitals.wpp = false, nil
   end)
 
   it("a blast round swings GUT, never an incantation (both use equilibrium)", function()

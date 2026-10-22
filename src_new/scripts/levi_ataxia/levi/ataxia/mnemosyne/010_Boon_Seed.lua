@@ -109,7 +109,7 @@ M.BOON_SEED = {
   ["Demagogue"] = { description = "You are immune to the disloyalty affliction.", rarity = "common" },
   ["Diagnostician"] = { description = "You are immune to the hypochondria affliction.", rarity = "uncommon" },
   ["Disciple of Celestia"] = { description = "Slaying a denizen shall restore 5% energy to your guardian angel's reserves.", rarity = "uncommon" },
-  ["Disembowel"] = { description = "Your gut has a 20% chance to inflict your target with inhibit.", rarity = "uncommon" },
+  ["Disembowel"] = { description = "Your gut has a 50% chance to inflict your target with inhibit.", rarity = "uncommon" },
   ["Divine Thunder Cataclysm"] = { description = "Your Shindo thunderstorm ability now deals electric damage to all denizens in your location.", rarity = "rare" },
   ["Doom Inescapable"] = { description = "When you have sprouted tentacles, cowardly denizens will no longer be able to flee from your presence.", rarity = "common" },
   ["Draconic Rampage"] = { description = "Your draconic trample ability now deals a large amount of cutting damage to all denizens in your location. This can only occur once every 40 seconds.", rarity = "uncommon" },

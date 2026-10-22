@@ -2,6 +2,24 @@
 
 ---
 
+## 2026-10-22 - v4.7.437: blast rounds jabbed -- the low-willpower latch
+
+User, with a log of `blast 405695;jab 405695` while `ataxiaBasher.dragonIncant` was true: "we are
+blasting and jabbing but it shouldnt do that right?" Two causes:
+- **The latch.** At 5% willpower or less, the prompt (`010_Prompt_Running`) set `jabBash = true` and
+  `dragonIncant = false` in the SAVED settings, and nothing undid it. After `bash incant` was back
+  on, the stale jab still won, because `balAttack` checks jab first. The fallback is now read per
+  round in `balAttack` (incantation -> jab only while wpp <= 5) and never touches the settings.
+  `bash incant` on clears `jabBash`; at load, `dragonIncant` and `jabBash` both on (only the latch
+  makes that) clears `jabBash`.
+- **A blast round never jabs** (v4.7.434 had let the Might of Sycaerunax blast ride beside a jab):
+  `balAttack(blasting)` swings GUT, or whip if `aconfig wot` is on.
+- Seed: Disembowel is 50% now (was 20%).
+Tests: `test_basher_dragon.lua` "a blast round swings GUT even with jab set" and "low willpower jabs
+for the incantation per round, and never rewrites the settings".
+
+---
+
 ## 2026-10-22 - v4.7.436: the Rampage proc trigger never fired; Sweep proc wired
 
 Two live pastes. The game wraps the Draconic Rampage proc line before "frenzy.", and the pattern
