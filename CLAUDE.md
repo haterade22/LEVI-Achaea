@@ -2050,6 +2050,18 @@ Depthswalker's `chrono degenerate` (v4.7.265) -- so a scorching dragon sets up a
 for a Depthswalker in the party. **Not in any rotation**: `GDRAGON_BR` is Golden-specific, so
 there is no red-dragon rotation to add it to and it remains a manual cast.
 
+**THE DRAGON BASH ROUND IS ONE ATTACK (v4.7.434-439, user-directed).** `ataxiaBasher_dragonBashing`
+(`basher/002`) sends the FIRST that applies: Draconic Sweep `tailsweep` / Draconic Rampage
+`trample` (proc ready, 2+ denizens; `ataxiaBasher_dragonAoePick`, tailsweep first, a held round
+replays first) > blast (`bash blast` or Might of Sycaerunax) > incantation (above 5% willpower) >
+`wield dirk;jab` > whip > rend (Organ Piercer) > gut. The blast command is `blast;summon <breath>`,
+or `summon;blast;summon` when the breath is down -- SUMMON IS OFF-EQUILIBRIUM for this user (a
+trait) -- and Might of Sycaerunax drops the trailing summon. Incantation and blast both use
+equilibrium, which is why a round never pairs them. The low-willpower jab is read per round; the
+prompt no longer rewrites `jabBash`/`dragonIncant` (that latch jabbed forever, v4.7.437). Proc
+confirmations: `highlighting/033` (Rampage) and `/072` (Sweep) match the FIRST wrapped row only.
+Full detail: `.claude/classes/dragon.md` (`basher_round`, `mnemosyne_boons`).
+
 - Unlocked at level 99
 - 6 color variants: Red, Black, Silver, Gold, Blue, Green
 - Each color has unique breath weapon and battlerage
