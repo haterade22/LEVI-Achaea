@@ -10,6 +10,9 @@ never targeted, never learned, never counted toward a swarm, and purged from the
 on load. The full phrase, never "bear": the match is a substring, and a wild "grizzly bear" stays a
 target. (The by-ID mount exclusion, v4.7.335, also covers it once the mounts listing is read.)
 Test: `test_basher_owndenizens.lua` "mount keywords: the phantom grizzly bear" (reads the real list).
+
+---
+
 ## 2026-10-22 - v4.7.444: the panic tumble never goes back into the room we fled
 
 A death (two fog elementals, "Dried river bed"). At 43% HP the escape leapt north out of the
