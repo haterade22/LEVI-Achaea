@@ -241,3 +241,25 @@ describe("the evaluator's pattern types match Mudlet's", function()
     expect(TL.matches("You cannot do that while mounted.", 3, "You cannot do that while mounted.")).toBeTrue()
   end)
 end)
+
+-- Dragon room-nuke procs (v4.7.436). Both lines are live pastes from 2026-10-22. The game
+-- wrapped Rampage before "frenzy." and Sweep after "happen to be in"; 033's old pattern
+-- ended in "frenzy\.$" and so never fired.
+local RAMPAGE = "Iron-sharp claws rip and tear into all around you as your draconic bulk tramples over your puny lessers in a monstrous frenzy."
+local SWEEP = "Your draconic muscles flex like steel coils as you continue your sweep, demolishing any puny foes who happen to be in the path of your rampaging tail."
+describe("dragon proc confirmations fire on the wrapped line", function()
+  it("the evaluator reproduces the old 033 miss", function()
+    local old033 = "^Iron-sharp claws rip and tear into all around you as your draconic bulk tramples over your puny lessers in a monstrous frenzy\.$"
+    for _, w in ipairs({ 119, 124 }) do
+      for _, row in ipairs(TL.wrap(RAMPAGE, w)) do expect(TL.matches(old033, 1, row)).toBeFalse() end
+    end
+  end)
+  for _, w in ipairs(WIDTHS) do
+    it("033 Rampage proc @" .. w, function()
+      expect(fires("highlighting/033_Rampage_Proc.lua", RAMPAGE, w)).toBeTrue()
+    end)
+    it("072 Sweep proc @" .. w, function()
+      expect(fires("highlighting/072_Sweep_Proc.lua", SWEEP, w)).toBeTrue()
+    end)
+  end
+end)

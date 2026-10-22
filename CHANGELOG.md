@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-10-22 - v4.7.436: the Rampage proc trigger never fired; Sweep proc wired
+
+Two live pastes. The game wraps the Draconic Rampage proc line before "frenzy.", and the pattern
+of `highlighting/033` ended in "frenzy\.$", so it never matched: the 40s cooldown ran on the
+send stamp alone. The pattern now matches the start of the first row only.
+- **Draconic Sweep proc** (new trigger `highlighting/072`): "Your draconic muscles flex like steel
+  coils as you continue your sweep, demolishing any puny foes..." (wraps after "happen to be in").
+  It calls `ataxiaBasher_dragonSweepProc()`, which restarts the 30s from the LANDED moment and
+  releases the tailsweep hold.
+- Measured on a barrow bat: tailsweep proc 18970 blunt, trample proc 7618 cutting.
+- **`tools/check_wrap.py` skipped every pattern folded onto a second YAML line**, which is how 033
+  passed it. The parser now folds plain scalars (as `trigger_lib.lua` has since v4.7.414). That
+  found 139 more files with a pattern too wide for one row; they go on the allowlist for old
+  offenders, so the check still blocks new ones. They include the battlerage and our-attack lines
+  (330-332, 335, 337, 338).
+Tests: `test_trigger_wrap.lua` "dragon proc confirmations fire on the wrapped line" (both lines at
+100/119/124 columns, and the old 033 pattern's miss).
+
+---
+
 ## 2026-10-22 - v4.7.435: a blast round swings gut, not incantation
 
 User: "incantation uses eq". BLAST also uses equilibrium, so a round of `blast;incantation` lost
