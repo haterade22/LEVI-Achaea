@@ -108,13 +108,8 @@ if ataxiaBasher.enabled then
     -- Flee recovery check (percentage-based, replaces buggy operator-precedence line)
     ataxiaBasher_checkFleeRecovery()
 
-    -- Willpower-based dragon incant toggle
-    if ataxia.vitals.wpp and ataxia.vitals.wpp <= 5 then
-      if ataxiaBasher.dragonIncant == true then
-        ataxiaBasher.jabBash = true
-        ataxiaBasher.dragonIncant = false
-      end
-    end
+    -- (The low-willpower incantation -> jab fallback is read per round in
+    -- ataxiaBasher_dragonBashing's balAttack since v4.7.437; it no longer rewrites settings.)
 
     -- SINGLE attack dispatch — no basher_needAction, no atk flag reset
     disableTrigger("Denizen Attack Find")

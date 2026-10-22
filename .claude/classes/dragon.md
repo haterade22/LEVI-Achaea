@@ -497,7 +497,8 @@ golden_dragon_battlerage:  # v4.7.129 -- ataxiaBasher_goldenDragonBattlerage (ba
        (captured above), so 332's Psion dispatch stands"
 
 basher_toggles:
-  bash incant on/off: "Use INCANTATION (willpower, EQUILIBRIUM) instead of GUT as the primary bash attack; a blast round swings GUT instead (v4.7.435)"
+  bash incant on/off: "Use INCANTATION (willpower, EQUILIBRIUM) instead of GUT as the primary bash attack; a blast round swings GUT instead (v4.7.435). At 5% willpower or less a round JABS instead -- read per round since v4.7.437 (the old prompt code rewrote jabBash/dragonIncant and never undid it, so a character jabbed for good)"
+  aconfig jab: "JAB instead of gut/incantation -- but never in a blast round, which swings GUT (v4.7.437)"
   bash blast on/off:
     default: on
     effect: |
@@ -538,7 +539,8 @@ mnemosyne_boons:
       highlighting/072, v4.7.436) restamps the cooldown from the LANDED moment.
   might_of_sycaerunax_blast_priority: |  # v4.7.434, user: "use blast as much as possible"
     With the boon up, the blast weave ignores `bash blast off` and rides beside EVERY
-    balance primary (jab and whip too, not only gut/incantation). BLAST is equilibrium
+    balance primary. In a blast round the balance swing is GUT (whip if `aconfig wot`): never
+    incantation (v4.7.435) and never jab (v4.7.437, user). BLAST is equilibrium
     and the balance swing is balance, so both still go in the same round.
     INCANTATION ALSO USES EQUILIBRIUM (user, v4.7.435): a round that blasts (the weave
     with breath up, or the shield-break reblast) swings GUT in place of incantation.

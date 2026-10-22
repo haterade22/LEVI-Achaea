@@ -118,6 +118,12 @@ function ataxiaCheckForMissing()
 	-- yellow/orange boundary in getAgeColour -- bashing must not price out the PvP kit.
 	if ataxiaBasher.dwAgeCap == nil then ataxiaBasher.dwAgeCap = 400 end
 
+	-- v4.7.437: undo the old low-willpower latch. It set jabBash and cleared dragonIncant, so
+	-- BOTH on means the user turned `bash incant` back on afterwards and the stale jab won.
+	if ataxiaBasher.dragonIncant and ataxiaBasher.jabBash then
+		ataxiaBasher.jabBash = false
+	end
+
 	if ataxiaBasher.dragonBlast == nil then
 		ataxiaBasher.dragonBlast = true
 		ataxiaEcho("Dragon blast-weave option not found; defaulting to on.")
