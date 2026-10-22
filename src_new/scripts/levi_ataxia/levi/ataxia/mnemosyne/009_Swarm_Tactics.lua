@@ -1023,7 +1023,15 @@ function S._panicDir()
   local walledShort = (type(walledLong) == "string" and MAP and MAP.shortDir
     and MAP.normDir and MAP.shortDir(MAP.normDir(walledLong))) or nil
   local back = S._backDir and select(1, S._backDir())
-  if back and back ~= walledShort then return back end
+  -- "BACK" CAN BE THE FIGHT ROOM (v4.7.444, from a death). `_backDir` reverses the LAST move. When
+  -- the panic fires just after a retreat has landed, the last move WAS the retreat, so "back" is
+  -- the room we fled: a 43% escape leapt north, the panic fired at 22% in the north room, and the
+  -- tumble went south into the unbound fog elemental that killed us. The ranked scan below skips
+  -- that door; this preference returned before it. Take "back" only when it leads to a CLEARED room
+  -- (rank 1: visited, not just fled, not the swarm room) and is not the way into the swarm.
+  if back and back ~= walledShort and back ~= S.fwdShort and S._exitRank(back) == 1 then
+    return back
+  end
   local room = MAP and MAP.rooms and MAP.current and MAP.rooms[MAP.current]
   if not (room and room.exits) then return nil end
   local fwd = S.fwdShort and MAP.normDir and MAP.normDir(S.fwdShort)
