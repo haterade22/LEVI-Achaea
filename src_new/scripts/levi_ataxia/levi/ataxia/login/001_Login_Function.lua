@@ -268,6 +268,12 @@ if ataxia.settings.autogallop then
 	mmp.settings:setOption("gallop", false)
 end
 
+-- The game must not split lines: long trigger patterns match only a whole line (v4.7.441).
+-- `aconfig screenwidth off` leaves the game's setting alone.
+if tonumber(ataxia.settings.screenwidth) then
+	send("config screenwidth " .. ataxia.settings.screenwidth, false)
+end
+
 
 
 

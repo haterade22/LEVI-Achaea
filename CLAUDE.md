@@ -2995,14 +2995,24 @@ Tracks exact limb damage percentages from combat text with automated defensive r
 
 **A TRIGGER PATTERN MUST FIT ON ONE WRAPPED ROW (v4.7.351).** This user's Achaea wraps server-side at **119-124 columns** (measured from the break points in their pastes), so a long line reaches Mudlet as separate rows and a pattern that runs past the break -- or a fragment that straddles it -- can never match, silently. Three triggers from one week did exactly that (782 gravehands confirmation, 779 belch fouled, 780 soulstorm landing for long mob names) plus the highlights for all three. **Match an EARLY phrase of any line near or over ~110 characters; for a highlight, add a short anchored tail `^.{0,60}<last words>\.$` so the wrapped row is coloured too.** Chat pastes arrive UNWRAPPED, so a paste is not evidence of the line's length. Two guards: `tools/check_wrap.py` (CI) fails any pattern whose shortest match is wider than 118 columns (6 pre-existing allowlisted since v4.7.419; a stale entry fails the check), and `tests/test_trigger_wrap.lua` + `tests/trigger_lib.lua` catch the straddling class the lint cannot see -- they wrap known lines at 100/119/124 and run the trigger's REAL patterns per row, through an evaluator that raises on any regex shape it cannot judge. **Assert on the PATTERN, never on the file text** -- after the first fix, 782's old test still passed on the comment explaining the fix.
 
+**THE GAME NO LONGER SPLITS LINES: `CONFIG SCREENWIDTH 0` (v4.7.441).** The user set it on 2026-10-22
+("You have set your screen width to 0, which should disable wrapping completely") and it is now a
+saved setting, `ataxia.settings.screenwidth` (default 0), sent at EVERY login (`login/001`) and by
+`aconfig screenwidth <width|off>` (`configs/029`; `off` = `false`, never sent). Mudlet wraps the
+display only, so a trigger sees the whole line, and the 145 allowlisted long patterns match again. The
+one-row rule above STAYS as defence in depth: a width other than 0 -- set by hand, or by another
+client on the same character -- brings every one of those misses back, and new patterns must still pass
+`check_wrap.py`. Evidence that settled it: a highlight coloured BOTH screen rows of the Rampage proc
+line, which only a whole line can do.
+
 **A STATE trigger whose target NAME falls after the wrap reads it from the following rows (v4.7.419-420).**
 An early fragment drops the name, and recording on `target` instead would record a spell cast at anyone
 else. `general/022`'s `withName` and the four emanation triggers (`enamation/001-004`) read up to two more
 rows, one at a time, with `tempLineTrigger(1, 1, ...)`, and keep their name check (the highlighting/071
 idiom, used to record). **When the name sits MID-sentence** (the fire, air and earth emanations), join the
 rows until the sentence closes, read the name with the old pattern's tail, and stop at the first closed
-sentence so no reader stays armed. `check_wrap.py` cannot see a pattern FOLDED across YAML lines
-(`kb/CONFLICTS.md` #2).
+sentence so no reader stays armed. `check_wrap.py` reads patterns FOLDED across YAML lines since
+v4.7.436 (`kb/CONFLICTS.md` #2).
 
 **A fragment that ends before the name matches DENIZENS too (v4.7.420).** A whole-line strike pattern ending
 in a one-word `(\w+)` name never matched a multi-word denizen; cut to an early fragment, it can (`calls/008`
