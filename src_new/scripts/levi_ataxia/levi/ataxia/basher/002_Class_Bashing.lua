@@ -53,7 +53,7 @@ function ataxiaBasher_dragonBashing()
   -- now the round is the FIRST of these that applies:
   --   tailsweep/trample  Draconic Sweep / Rampage proc ready at 2+ denizens (the whole round)
   --   blast              breath up and the weave on (`bash blast`, or Might of Sycaerunax)
-  --   summon <breath>    weave on, breath down: summon, then the swing below (as before)
+  --                      (breath down: summon first -- summon is off-eq, v4.7.439)
   --   incantation        `bash incant`, willpower above 5%
   --   jab                `aconfig jab`, or the incantation at 5% willpower or less
   --   whip               `aconfig wot`
@@ -83,16 +83,23 @@ function ataxiaBasher_dragonBashing()
   -- behind it, and stays out of the jab/whip setups (the low-willpower ones). Might of
   -- Sycaerunax (+25% damage, the breath PERSISTS): BLAST AS MUCH AS POSSIBLE (user, v4.7.434)
   -- -- no re-summon, and it ignores the toggle and the jab/whip exclusion.
+  -- SUMMON IS OFF-EQUILIBRIUM (user, v4.7.439: "i have a trait that can be used off eq"), so
+  -- a downed breath is summoned and BLASTED in the same round: `summon;blast;summon` (no
+  -- trailing re-summon under Might, which keeps the breath). The breath-down round used to
+  -- be `summon;<swing>`, a round with no blast.
+  local function blastCmd()
+    local cmd = "blast " ..target
+    if ele and not ataxia.defences.dragonbreath then cmd = "summon " ..ele.. sp ..cmd end
+    if ele and not dragonMightSycaerunax then cmd = cmd.. sp .. "summon " ..ele end
+    return cmd
+  end
+
   local function blastRound()
     local weave = ataxiaBasher.dragonBlast or dragonMightSycaerunax
     local weaveable = dragonMightSycaerunax
       or (not ataxiaBasher.jabBash and not ataxiaBasher.wotBash)
     if not (weave and weaveable and ele) then return nil end
-    if not ataxia.defences.dragonbreath then
-      return "summon " ..ele.. sp ..balAttack()
-    end
-    if dragonMightSycaerunax then return "blast " ..target end
-    return "blast " ..target.. sp .. "summon " ..ele
+    return blastCmd()
   end
 
   if ataxiaBasher.shielded then
@@ -101,9 +108,7 @@ function ataxiaBasher_dragonBashing()
     else
       -- Shield MUST be broken: blast unconditionally (re-summon the breath unless Might of
       -- Sycaerunax keeps it). Shield rounds skip tailsweep/trample -- the Kai Choke rule.
-      local reblast = "blast " ..target
-      if ele and not dragonMightSycaerunax then reblast = reblast.. sp .. "summon " ..ele end
-      command = command..sp..reblast..sp..brage()
+      command = command..sp..blastCmd()..sp..brage()
     end
   else
     -- The AoE pick stamps its cooldown, so it is asked only here, where its pick is sent.

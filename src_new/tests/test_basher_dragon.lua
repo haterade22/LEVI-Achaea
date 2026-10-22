@@ -208,12 +208,12 @@ describe("ataxiaBasher_dragonBashing -- Might of Sycaerunax blast weave", functi
     expect(has(cmd, "gut")).toBeFalse() -- one attack per round (v4.7.438)
   end)
 
-  it("still summons ONCE when breath is down (the boon keeps it thereafter)", function()
+  it("still summons ONCE when breath is down, and blasts the same round (v4.7.439)", function()
     reset(); ataxiaBasher.dragonBlast = true; breath = "psi"
     dragonMightSycaerunax = true -- breath def NOT up
     local cmd = ataxiaBasher_dragonBashing()
-    expect(has(cmd, "summon psi")).toBeTrue()
-    expect(has(cmd, "blast")).toBeFalse()
+    expect(has(cmd, "summon psi;blast " .. target)).toBeTrue()
+    expect(has(cmd, "blast " .. target .. ";summon")).toBeFalse()
   end)
 
   it("without the boon the blast weave re-summons (unchanged)", function()
@@ -225,7 +225,7 @@ describe("ataxiaBasher_dragonBashing -- Might of Sycaerunax blast weave", functi
 
   it("shielded reblast skips the re-summon with the boon", function()
     reset(); ataxiaBasher.shielded = true; breath = "psi"
-    dragonMightSycaerunax = true
+    dragonMightSycaerunax = true; ataxia.defences.dragonbreath = true
     local cmd = ataxiaBasher_dragonBashing()
     expect(has(cmd, "blast " .. target)).toBeTrue() -- shield still gets blasted
     expect(has(cmd, "summon")).toBeFalse()
@@ -383,10 +383,18 @@ describe("ataxiaBasher_dragonBashing -- one attack per round (v4.7.438)", functi
     only(ataxiaBasher_dragonBashing(), "incantation")
   end)
 
-  it("breath down: summon, then the swing; the shield round is the blast alone", function()
+  it("breath down: summon (off-eq) then blast in the same round (v4.7.439)", function()
     base(); breath = "psi"; ataxiaBasher.dragonBlast = true; ataxiaBasher.dragonIncant = true
-    expect(has(ataxiaBasher_dragonBashing(), "summon psi;incantation " .. target)).toBeTrue()
-    ataxiaBasher.shielded = true; dragonMightSycaerunax = true
+    local cmd = ataxiaBasher_dragonBashing()
+    expect(has(cmd, "summon psi;blast " .. target .. ";summon psi")).toBeTrue()
+    expect(has(cmd, "incantation")).toBeFalse()
+    dragonMightSycaerunax = true -- Might keeps the breath: no trailing re-summon
+    cmd = ataxiaBasher_dragonBashing()
+    expect(has(cmd, "summon psi;blast " .. target)).toBeTrue()
+    expect(has(cmd, "blast " .. target .. ";summon")).toBeFalse()
+    ataxiaBasher.shielded = true -- the shield round summons first too
+    expect(has(ataxiaBasher_dragonBashing(), "summon psi;blast " .. target)).toBeTrue()
+    ataxia.defences.dragonbreath = true
     only(ataxiaBasher_dragonBashing(), "blast")
   end)
 

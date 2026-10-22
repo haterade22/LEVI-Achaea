@@ -500,14 +500,13 @@ basher_round:  # v4.7.438, user: "It should be Blast or Incantation or Jab or Re
   rule: "ONE attack per round -- the first that applies"
   order:
     - "tailsweep / trample: Draconic Sweep / Rampage proc ready at 2+ denizens (the whole round)"
-    - "blast: breath up and the weave on (bash blast, or Might of Sycaerunax); re-summons behind it unless Might keeps the breath"
-    - "summon <breath>;<swing>: weave on, breath down"
+    - "blast: the weave on (bash blast, or Might of Sycaerunax). Breath up: blast;summon (Might: blast). Breath down: summon;blast;summon (Might: summon;blast) -- SUMMON IS OFF-EQ (the user's trait, v4.7.439), so a downed breath never costs the blast"
     - "incantation: bash incant, willpower above 5%"
     - "wield dirk;jab: aconfig jab, or the incantation at 5% willpower or less (jab needs a dirk in hand)"
     - "whip: aconfig wot"
     - "rend: Organ Piercer claimed"
     - "gut: otherwise"
-  shield_round: "blast alone (+ summon without Might), then the battlerage; never the AoE"
+  shield_round: "the same blast command (summon first if the breath is down), then the battlerage; never the AoE"
   history: "v4.7.434-437 sent blast WITH a balance swing (blast;gut). Replaced by this rule."
 
 basher_toggles:
