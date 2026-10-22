@@ -275,6 +275,13 @@ function ataxiaCheckForMissing()
 		cecho("\n     <NavajoWhite>aconfig treeblackout <NavajoWhite> to toggle.")
 	end
 	
+	-- Screen width the game wraps at (v4.7.441). 0 = the game never splits a line, so a trigger
+	-- always sees the whole line; any width splits long lines and a pattern that runs past the
+	-- break never matches (139 trigger files had such patterns). Sent at every login.
+	if ataxia.settings.screenwidth == nil then
+		ataxia.settings.screenwidth = 0
+	end
+
 	if ataxia.settings.autogallop == nil then
 		ataxia.settings.autogallop = false
 		ataxiaEcho("Auto Gallop Setting not found: Reverting to default; won't toggle gallop when mounted.")

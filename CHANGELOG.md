@@ -2,6 +2,24 @@
 
 ---
 
+## 2026-10-22 - v4.7.441: CONFIG SCREENWIDTH 0 at every login -- the long triggers match again
+
+User set `CONFIG SCREENWIDTH 0` ("You have set your screen width to 0, which should disable wrapping
+completely") and asked for it in the Ataxia settings. With 0 the game sends each line whole and Mudlet
+wraps only the display, so the 145 allowlisted trigger patterns that are too long for one row (139
+found in v4.7.436) match again with no file change.
+- New setting `ataxia.settings.screenwidth`, default 0 (`002_Check_For_Any_Missing_Variables`).
+- Sent at every login (`login/001`), so a width changed by hand or by another client is put back.
+- `aconfig screenwidth [<width>|off]` (`configs/029`): shows it; a width is saved and sent at once;
+  `off` stops sending it. A width above 0 prints a warning. `off` is stored as `false`: a `nil` would
+  read as missing and the load-time check would put 0 back (the first draft had that bug; the test
+  caught it).
+- Setup wizard: a "Screen width" row and help entry 13.
+- Docs: CLAUDE.md (the one-row rule stays as defence in depth), `kb/CONFLICTS.md` #2.
+Tests: `test_screenwidth.lua` (4).
+
+---
+
 ## 2026-10-22 - v4.7.440: Spark Extant -- incantation first in a crowd
 
 User: "For this boon we should use incantation over blast for denizens 2 or more. Incantation (with
