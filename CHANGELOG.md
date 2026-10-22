@@ -2,6 +2,19 @@
 
 ---
 
+## 2026-10-22 - v4.7.446: the setup wizard's dragon help, corrected
+
+User: "update everything and then push the latest". A review of every doc this session's dragon
+work touches found the setup wizard's basher guide (`misc_scripts/020`, entry 12) out of date and
+partly wrong: it listed `bash jab <on|off>` and `bash wot <on|off>`, which do not exist (they are the
+`aconfig jab` and `aconfig wot` toggles), gave `bash incant` an argument it does not take, and left
+out `bash blast`. It now lists the four real commands and the one-attack round order (breathstorm >
+Spark Extant incantation > tailsweep > trample > blast > incantation > jab > whip > rend > gut).
+The `bash blast` alias comment (`configs/010`) and `.claude/classes/dragon.md` `basher_toggles` still
+described the old `blast;<swing>` round; both now describe the v4.7.438-439 round.
+
+---
+
 ## 2026-10-22 - v4.7.445: the phantom grizzly bear is our mount
 
 User: "A phantom grizzly bear -- This is a mount and not to be killed". `phantom grizzly bear` joins

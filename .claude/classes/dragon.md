@@ -512,14 +512,16 @@ basher_round:  # v4.7.438, user: "It should be Blast or Incantation or Jab or Re
   history: "v4.7.434-437 sent blast WITH a balance swing (blast;gut). Replaced by this rule."
 
 basher_toggles:
-  bash incant on/off: "Use INCANTATION (willpower, EQUILIBRIUM) instead of GUT. At 5% willpower or less a round JABS instead -- read per round since v4.7.437 (the old prompt code rewrote jabBash/dragonIncant and never undid it, so a character jabbed for good)"
-  aconfig jab: "WIELD DIRK;JAB instead of gut (v4.7.438) -- see basher_round for the order"
+  bash incant: "A TOGGLE (no argument; the wizard listed `<on|off>` until v4.7.446). Use INCANTATION (willpower, EQUILIBRIUM) instead of GUT. At 5% willpower or less a round JABS instead -- read per round since v4.7.437 (the old prompt code rewrote jabBash/dragonIncant and never undid it, so a character jabbed for good)"
+  aconfig jab: "A TOGGLE. WIELD DIRK;JAB instead of gut (v4.7.438) -- see basher_round for the order"
+  aconfig wot: "A TOGGLE. WHIP instead of gut; turns jab off"
   bash blast on/off:
     default: on
     effect: |
-      Weaves a breath BLAST into the incantation/gut rotation when dragonbreath is summoned:
-      breath up -> "blast <tar>;summon <ele>;<incant/gut> <tar>"; breath down -> "summon <ele>;<incant/gut> <tar>".
-      Element per colour via getDragonBreath() (Blue = ice). Turn off for trash mobs / low willpower.
+      The BLAST round (one attack per round since v4.7.438): breath up -> "blast <tar>;summon <ele>";
+      breath down -> "summon <ele>;blast <tar>;summon <ele>" (summon is off-eq, v4.7.439). Might of
+      Sycaerunax drops the trailing summon. Element per colour via getDragonBreath() (Blue = ice).
+      Turn off for trash mobs / low willpower.
       Gate: ataxia.defences.dragonbreath. Shielded hits always blast to break the shield regardless of this toggle.
       Might of Sycaerunax overrides the toggle (and the jab/whip exclusion) -- see mnemosyne_boons.
 
