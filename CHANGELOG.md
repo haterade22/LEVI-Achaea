@@ -2,6 +2,16 @@
 
 ---
 
+## 2026-10-22 - v4.7.435: a blast round swings gut, not incantation
+
+User: "incantation uses eq". BLAST also uses equilibrium, so a round of `blast;incantation` lost
+the incantation every time. `balAttack(blasting)` (`basher/002`) now returns GUT (balance) in place
+of INCANTATION in every round that blasts: the weave with breath up, and the shield-break reblast.
+A round without a blast (breath down) keeps the incantation. Jab and whip do not change.
+Test: `test_basher_dragon.lua` "a blast round swings GUT, never an incantation".
+
+---
+
 ## 2026-10-22 - v4.7.434: Draconic Sweep, and Might of Sycaerunax blasts every round
 
 User: "For dragon, we should incorporate this into it" (Organ Piercer, Draconic Sweep, Draconic

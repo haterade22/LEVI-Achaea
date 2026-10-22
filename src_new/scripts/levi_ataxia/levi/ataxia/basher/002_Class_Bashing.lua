@@ -48,13 +48,15 @@ function ataxiaBasher_dragonBashing()
   -- Red = dragonfire, Green = venom, Black = acid, Golden = psi). No hardcoded default.
   local ele = getDragonBreath()
 
-  -- The bal primary only (no breath weave): jab / whip / incantation / gut
-  local function balAttack()
+  -- The bal primary only (no breath weave): jab / whip / incantation / gut.
+  -- INCANTATION USES EQUILIBRIUM, like BLAST (user, 2026-10-22, v4.7.435): in a round that
+  -- blasts, an incantation behind it can never land, so `blasting` makes it GUT (balance).
+  local function balAttack(blasting)
     if ataxiaBasher.jabBash then
       return "jab " ..target
     elseif ataxiaBasher.wotBash then
       return "whip " ..target
-    elseif ataxiaBasher.dragonIncant then
+    elseif ataxiaBasher.dragonIncant and not blasting then
       return "incantation " ..target
     else
       return "gut " ..target
@@ -71,10 +73,10 @@ function ataxiaBasher_dragonBashing()
   -- persists, so a blast costs only equilibrium -- it rides beside EVERY balance swing
   -- (jab and whip included) and ignores `bash blast off`.
   local function primary(balOverride)
-    local bal = balOverride or balAttack()
     local weaveable = dragonMightSycaerunax
       or (not ataxiaBasher.jabBash and not ataxiaBasher.wotBash)
     if (ataxiaBasher.dragonBlast or dragonMightSycaerunax) and weaveable and ele then
+      local bal = balOverride or balAttack(ataxia.defences.dragonbreath)
       if ataxia.defences.dragonbreath then
         -- Might of Sycaerunax (Mnemosyne boon): +25% blast damage AND the breath
         -- weapon PERSISTS through BLAST (AB Blast: "Requires summoned breath") --
@@ -87,7 +89,7 @@ function ataxiaBasher_dragonBashing()
         return "summon " ..ele.. ";" ..bal
       end
     end
-    return bal
+    return balOverride or balAttack()
   end
 
   if ataxiaBasher.shielded then
@@ -102,7 +104,7 @@ function ataxiaBasher_dragonBashing()
       else
         reblast = ele and ("blast " ..target.. ";summon " ..ele.. ";") or ("blast " ..target.. ";")
       end
-      command = command..sp..reblast..balAttack()..sp..brage()
+      command = command..sp..reblast..balAttack(true)..sp..brage()
     end
   else
     -- Draconic Sweep / Draconic Rampage (Mnemosyne boons): at 2+ denizens, off the

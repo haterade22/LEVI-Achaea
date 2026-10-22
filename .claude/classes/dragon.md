@@ -486,7 +486,7 @@ golden_dragon_battlerage:  # v4.7.129 -- ataxiaBasher_goldenDragonBattlerage (ba
        (captured above), so 332's Psion dispatch stands"
 
 basher_toggles:
-  bash incant on/off: "Use INCANTATION (willpower) instead of GUT as the primary bash attack"
+  bash incant on/off: "Use INCANTATION (willpower, EQUILIBRIUM) instead of GUT as the primary bash attack; a blast round swings GUT instead (v4.7.435)"
   bash blast on/off:
     default: on
     effect: |
@@ -529,6 +529,9 @@ mnemosyne_boons:
     With the boon up, the blast weave ignores `bash blast off` and rides beside EVERY
     balance primary (jab and whip too, not only gut/incantation). BLAST is equilibrium
     and the balance swing is balance, so both still go in the same round.
+    INCANTATION ALSO USES EQUILIBRIUM (user, v4.7.435): a round that blasts (the weave
+    with breath up, or the shield-break reblast) swings GUT in place of incantation.
+    A round without a blast keeps the incantation.
   organ_piercer: |  # seed catalogue only (v4.7.434), no automation
     "Your draconic rend ability now has a 3% chance to strike your target's vitals,
     dealing a large amount of unblockable damage." The basher swings GUT, not REND; a

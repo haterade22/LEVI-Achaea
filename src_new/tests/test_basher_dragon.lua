@@ -347,6 +347,24 @@ describe("ataxiaBasher_dragonBashing -- Might of Sycaerunax blasts every round",
     ataxiaBasher.jabBash = false
   end)
 
+  it("a blast round swings GUT, never an incantation (both use equilibrium)", function()
+    reset(); dragonSweep = false; dragonRampage = false
+    breath = "psi"; ataxia.defences.dragonbreath = true; dragonMightSycaerunax = true
+    ataxiaBasher.dragonIncant = true
+    local cmd = ataxiaBasher_dragonBashing()
+    expect(has(cmd, "blast " .. target .. ";gut " .. target)).toBeTrue()
+    expect(has(cmd, "incantation")).toBeFalse()
+    -- the shield-break reblast too
+    ataxiaBasher.shielded = true
+    cmd = ataxiaBasher_dragonBashing()
+    expect(has(cmd, "blast " .. target)).toBeTrue()
+    expect(has(cmd, "incantation")).toBeFalse()
+    -- no blast this round (breath down): the incantation stays
+    ataxiaBasher.shielded = false; ataxia.defences.dragonbreath = false
+    expect(has(ataxiaBasher_dragonBashing(), "incantation " .. target)).toBeTrue()
+    ataxiaBasher.dragonIncant = false
+  end)
+
   it("without the boon, the toggle and the jab exclusion still apply", function()
     reset(); dragonSweep = false; dragonRampage = false; dragonMightSycaerunax = false
     breath = "psi"; ataxia.defences.dragonbreath = true; ataxiaBasher.dragonBlast = false
