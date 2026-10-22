@@ -263,3 +263,16 @@ describe("dragon proc confirmations fire on the wrapped line", function()
     end)
   end
 end)
+
+-- Breathstorm (v4.7.443): live lines from 2026-10-22. The cast names the breath, so only its
+-- colour-free start is matched; the refusal is short.
+local STORM_CAST = "Drawing a mighty breath to fill your lungs, you crane your neck backwards and send a screaming volley of psi-infused vapour into the air."
+local STORM_REFUSED = "Clouds of draconic fury already exist here."
+describe("breathstorm lines fire on the wrapped line", function()
+  for _, w in ipairs(WIDTHS) do
+    it("073 cast and refusal @" .. w, function()
+      expect(fires("highlighting/073_Breathstorm_Lines.lua", STORM_CAST, w)).toBeTrue()
+      expect(fires("highlighting/073_Breathstorm_Lines.lua", STORM_REFUSED, w)).toBeTrue()
+    end)
+  end
+end)

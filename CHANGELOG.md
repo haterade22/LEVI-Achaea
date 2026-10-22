@@ -2,6 +2,23 @@
 
 ---
 
+## 2026-10-22 - v4.7.443: breathstorm cast and refusal lines
+
+Two live lines (Golden Dragon), trigger `highlighting/073` -> `ataxiaBasher_dragonStormMark` (`basher/002`):
+- Cast: "Drawing a mighty breath to fill your lungs, you crane your neck backwards and send a
+  screaming volley of psi-infused vapour into the air." Bold orange_red; records the room and
+  releases the in-flight hold, so the queued cast is not sent again. User: "the cast line is
+  specific to golden". The pattern is the Golden opening only; other colours' lines are not
+  captured, and their storms rely on the send stamp and the 3s hold expiry (all the cast line
+  shortens). Each new colour's line is one more `- pattern:` in 073.
+- Refusal: "Clouds of draconic fury already exist here." Dim grey; records the room AND restarts
+  the 10s floor, because a refusal is the only evidence that the room key was wrong (or that the
+  clouds outlived our visit). It names no colour.
+Tests: `test_basher_dragon.lua` "the cast line releases the hold; a refusal marks the room", and
+`test_trigger_wrap.lua` "breathstorm lines fire on the wrapped line" (100/119/124).
+
+---
+
 ## 2026-10-22 - v4.7.442: Krenindalan Storm -- a breathstorm in every room
 
 User: "We should do this in every room". Krenindalan Storm: "Each tick of your breathstorm ability

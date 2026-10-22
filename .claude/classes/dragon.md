@@ -569,7 +569,15 @@ mnemosyne_boons:
       down), before Spark Extant and the tailsweep/trample procs. Keyed on gmcp.Room.Info.num,
       stamped at send, 3s in-flight hold, and a 10s floor between casts (a tower room number
       can change on a LOOK -- the Depthswalker distortion lesson, v4.7.266). Needs 400 mana.
-      Shield rounds blast first. Open: the cast, tick and refusal lines are not captured.
+      Shield rounds blast first.
+    lines: |  # trigger highlighting/073 (v4.7.443) -> ataxiaBasher_dragonStormMark(refused)
+      cast (GOLDEN only; other colours differ, not captured): "Drawing a mighty breath to fill
+        your lungs, you crane your neck backwards and send a screaming volley of psi-infused
+        vapour into the air." -- matched up to "backwards"; releases the in-flight hold.
+      refused (no colour word, should serve every colour): "Clouds of draconic fury already
+        exist here." -- marks the room AND restarts the 10s floor (the room key may be wrong).
+      Without a cast line the send stamp + 3s hold expiry still work. Open: the other colours'
+        cast lines, and the tick line (damage per tick).
   spark_extant:  # v4.7.440, dragonSparkExtant flag (trigger mnemosyne/113 + BOON CLAIM intercept)
     effect: "INCANTATION hits all enemy denizens in the room and costs 33% less willpower"
     basher: |
