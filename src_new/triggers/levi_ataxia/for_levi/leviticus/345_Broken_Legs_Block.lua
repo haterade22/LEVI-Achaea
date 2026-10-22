@@ -59,6 +59,9 @@ patterns:
     STAND's refusal: the game checks the legs before "You are not fallen or kneeling.". Our
     moves send "stand;<dir>" and "stand;leap <dir>", so with one bad leg this line comes from
     the STAND and the move itself goes through; parking and re-sending it then moved us twice.
+    v4.7.448 (a death): that holds for a WALK, not a LEAP. With one broken leg and prone, the line
+    printed twice -- the stand AND the leap -- and no move happened. The swarm therefore TUMBLES
+    on one leg (S.moveVerb, user), so its moves do not reach this refusal.
     Everything below therefore runs only when our afflictions say BOTH legs are out, which is
     when the move itself is refused.
 ]]--

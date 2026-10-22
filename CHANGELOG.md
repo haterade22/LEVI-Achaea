@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-10-22 - v4.7.448: one broken leg tumbles; the hidden-affliction DIAGNOSE no longer deletes the escape
+
+A death (a massive swamp python and a fungal toad in an Ablaze room). The python's constrict webs
+us every 2-5 seconds, so the only free window was 1.1 seconds, and two package faults lost it.
+- **The DIAGNOSE deleted the escape.** `confirmedUnknownAff` (`004_Aff_gains_losses.lua`) sends a
+  DIAGNOSE at 2+ hidden afflictions as `queue addclear free diagnose`. `addclear` empties the free
+  queue, and the swarm's escape waits there (`queue addclear free stand;leap <dir>`). The escape was
+  queued at 14:40:27.855; the web burst at 28.27, and a second `?` came at the same moment. No leap
+  followed, and the python webbed us again 1.1 s later. It is now `queue add free diagnose`.
+- **One broken leg refused the leap.** v4.7.416 read "Both of your legs must be free and unhindered
+  to do that." with one bad leg as STAND's refusal only (Mystor's logs: the WALK went through). Here,
+  with one broken leg and prone, the line printed twice -- the stand and the leap -- and no move
+  happened. User: "tumble at that point". `S._oneLegOut()` makes `S.moveVerb` tumble (beside the ice
+  rule, above the mount), so escapes, re-sends and pull step-outs tumble. Both legs out still waits.
+- Tests: `test_swarm_tactics.lua` "v4.7.448 -- one leg out" (3 tests); two older tests that asserted
+  "one leg is enough to leap" now expect the tumble; `test_afflictions.lua` asserts the DIAGNOSE has
+  no `addclear`. Each fix fails its tests when reverted.
+
+---
+
 ## 2026-10-22 - v4.7.447: Terror of the Skies -- leaving sheds the swarm; dragon flags in BOON_FLAGS
 
 User: "Terror of the Skies: Your draconic heritage will prevent non-boss denizens from tracking or
