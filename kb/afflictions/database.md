@@ -419,7 +419,7 @@ Not in the table because SSC cannot cure them, so a priority would do nothing: 6
 - **Stuttering** (`stuttering`): With a stutter, you can barely speak a word coherently.
 - **Succumbed** (`succumbed`): 
 - **A tempered choleric humour** (`temperedcholeric`): A tempered choleric humour causes random curing abilities to have a chance to fail.
-- **A tempered melancholic humour** (`temperedmelancholic`): A tempered melancholic humour reduces the efficacy of irid moss and potash.
+- **A tempered melancholic humour** (`temperedmelancholic`): A tempered melancholic humour reduces the efficacy of irid moss and potash, and increasingly suppresses natural mana regeneration.
 - **A tempered phlegmatic humour** (`temperedphlegmatic`): A tempered phlegmatic humour fills your lungs with phlegm when you try to smoke.
 - **A tempered sanguine humour** (`temperedsanguine`): A tempered sanguine humour causes bleeding to increase over time.
 - **Tenderskin** (`tenderskin`): This affliction causes applying salves to cause mana damage, more so for restoration applies.

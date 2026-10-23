@@ -6,6 +6,8 @@
 
 ## Spirituality (34 abilities)
 
+*Changed 2026-10-23: ANGEL PANIC gives slickness instead of fear on a hellsight target; under HERESY a 2+ verse prayer forces an extra ablaze tick on ablaze enemies (kb/changes/2026-10-23_classleads.md).*
+
 The abilities in Spirituality revolve around two main things: Guardian Angels and Spiritual Maces. Practitioners of Spirituality also get a guardian angel, who will stay with them forever. Generally speaking, an angel will only act in a defensive capacity, except when it involves Chaos Entities. Angels and Entities have a long-standing hatred of each other.
 
 Spiritual maces, on the other hand, form the core of a Priest's offensive ability. By using them in different ways, the Priest gains the ability to cause damage, smash limbs, and cause a variety of other effects, including the feared Judgement, where a Priest stands in Judgement of an adventurer. Failing the judgement means death. This is, of course, an ability that only the most powerful of Priests may perform.

@@ -6,6 +6,8 @@
 
 ## Subterfuge (55 abilities)
 
+*Changed 2026-10-23: HYPERSIGHT works as a star sigil on an evading Serpent you afflicted or damaged recently (kb/changes/2026-10-23_classleads.md).*
+
 Subterfuge is a diverse skill, encompassing abilities ranging from the secret rattle that those of serpentine ambitions may use to communicate with each other, to archery, the conjuring of illusions, dimensional wormholes, and various stealth and attack abilities.
 
 The skill of Subterfuge is available to members of the Serpent class, along with Venom and Hypnosis.
@@ -215,6 +217,8 @@ Source: [https://wiki.achaea.com/Venom_(Skill)](https://wiki.achaea.com/Venom_(S
 - **Ekanelia**: A lethality profound. Your grasp of venom has reached such a profound transcendence that you are now able to turn the very immune system of your victim's against them. Certain venoms, when delivered in just the right quantities, can promote violent immune responses which in turn lead to cascading failures and further afflictions manifesting throughout the subjects body. Each reaction has: A trigger: the venom which sets off the cascading failure (this is what you bite with). Conditionals: the afflictions which the subject must already labour under. A result: the result of the reaction taking place. Some reactions have: A bonus conditional: a bonus conditional which can be met. A bonus result: the bonus which is achieved if the bonus conditional is met. Naturally, with the exact dose and balance requirements of this high art of venom, only the fangs of the serpent are sufficient for this purpose(\*). \* You may see what reactions you are aware of with the EKANELIA command, and study one at further length with the EKANELIA STUDY &lt;reaction> command. \*\* Reactions fire on the bite command.
 
 ## Hypnosis (32 abilities)
+
+*Changed 2026-10-23: SUGGEST and SEAL used off balance take a fixed, unmodifiable equilibrium (kb/changes/2026-10-23_classleads.md).*
 
 Where a skill like Venom is a naturally developed ability, and a skill like Subterfuge is an ability with many magical elements, Hypnosis is a science. It has long been known that our subconscious mind is a powerful force and that it can be influenced in mysterious ways, but until a forgotten Serpentlord discovered the principles of Hypnosis, there was no way to use it.
 

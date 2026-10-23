@@ -6,6 +6,8 @@
 
 ## Weaponmastery (67 abilities)
 
+*Changed 2026-10-23: DWB EXPEND gives a uniform relapse message; new Two Handed RETALIATE (kb/changes/2026-10-23_classleads.md).*
+
 Masters of melee weapons, knights with the weaponmastery skill are a force to be reckoned with against their fellow adventurers and denizens alike. Weaponmasters can select a specialisation based on the weapons they wish to use, either dual cutting, dual blunt, two-handed, or sword and shield.
 
 The skill of Weaponmastery is available to to members of the four knight classes: Infernal, Paladin, Runewarden, and Unnamable.

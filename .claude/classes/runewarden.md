@@ -34,6 +34,7 @@ SnB (Sword and Board):
   weapons: [bastard sword] or [warhammer]
   style: High damage, strip defenses
   strength: Best damage, passive para cure, strips rebounding/shield
+  new_2026_10_23: "RETALIATE (Weaponmastery 157); no detail or AB yet (kb/changes/2026-10-23_classleads.md)"
 ```
 
 > **Implementation note**: Only **Dual Blunt (DWB)** has an implemented dispatch offense
@@ -128,6 +129,9 @@ whirl:
 doublewhirl:
   effect: "Both weapons; prep or break one/two limbs. 'expend' consumes momentum"
   syntax: "doublewhirl <target> <limb> [expend] [<limb2> [expend]]"
+  expend_relapse: "Since 2026-10-23 (Weaponmastery 93) the attacker gets ONE uniform message when an expended
+    affliction relapses, and the stray paralysis message on an asthma relapse is gone. Our code reads no relapse
+    line: blind 2.5 s timers in `expend_afflictions/006-012` re-add the affliction (kb/CONFLICTS.md #42)"
 
 assault:
   effect: "Flail/morningstar momentum-damage strike; torso ≥3 mom (≥6 doubled), head ≥7 mom (mangles)"

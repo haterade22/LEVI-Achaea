@@ -130,6 +130,10 @@ concertina:
   effect: "Play concertina for effects"
   syntax: "PLAY CONCERTINA"
 
+mice:
+  skill: Pranks
+  notes: "Since 2026-10-23 (Pranks 9, 264): used SUICIDEMICE return to the owner when the owner's part in an arena match ends (killed ones do not), and MICE shows each mouse's strapped bomb type. No code of ours"
+
 # Tarot (shared with Occultist)
 instill:
   skill: Tarot

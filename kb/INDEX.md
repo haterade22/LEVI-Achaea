@@ -26,6 +26,9 @@ One line per page. Kept up to date by `/kb-ingest`.
 - [mechanics/balance-and-queueing.md](mechanics/balance-and-queueing.md): balance vs equilibrium, server queue commands, types and the 10-command limit
 - [mechanics/elementals-and-glance.md](mechanics/elementals-and-glance.md): elemental denizen names and attacks, the "There are N <plural> here." room prose, GLANCE, a denizen shield going up
 
+## Changes (game announcements)
+- [changes/2026-10-23_classleads.md](changes/2026-10-23_classleads.md): the 2026-10-23 class-lead post, one block per change with its fight impact and code join: Crystalism DESTABILISE + OVERLOAD, Elementalism PEBBLE, Psionics PULSE, Woodlore GRAPPLE (AB for all four), Serpent SUGGEST/SEAL off balance, Striking on a broken head, ANGEL PANIC, HERESY, tempered melancholic, HALOPHILIC, HYPERSIGHT, Telepathy locks, DWB EXPEND, RETALIATE, third-party cure lines, artefact cooldowns
+
 ## Combat (classes as they look in real fights)
 - [combat/shikudo.md](combat/shikudo.md): every Shikudo strike, damage and effect line from both sides (first vs later in a combo), light strikes, forms, kata, Telepathy, ASSESS, SHATTER, the Dispatch kill as done, and what our triggers record
 - [combat/runewarden-snb.md](combat/runewarden-snb.md): a sword-and-board Runewarden's round (slice, venom, shield strikes), her curing and runes, and the impale-disembowel kill
@@ -53,6 +56,9 @@ One line per page. Kept up to date by `/kb-ingest`.
 | raw/help/13.7_healing-and-curing.txt, 13.9_body-part-damage.txt | HELP 13.7, 13.9 | 2026-10-10 |
 | raw/help/4.6_equilibrium-and-balance.txt, 4.6.1_queueing.txt | HELP 4.6, 4.6.1 | 2026-10-10 |
 | raw/ab/survival_diagnose_1380.txt | AB Diagnose | 2026-10-10 |
+| raw/announcements/classleads_2026-10-23.txt | The class-lead change post of 2026-10-23 | 2026-10-23 |
+| raw/live/captures/kb_capture_2026-10-23_122952.txt | AFFLICTION SHOW temperedmelancholic, pasted: the new mana-regen clause (filed by `kb_capture_import.py`; one soft wrap joined) | 2026-10-23 |
+| raw/ab/crystalism_overload_2026-10-23.txt, elementalism_pebble_2026-10-23.txt, psionics_pulse_2026-10-23.txt, woodlore_grapple_2026-10-23.txt | AB for the four new abilities of that post | 2026-10-23 |
 | raw/wiki/<Skill>.wiki (60) | Achaea wiki skill pages, raw wikitext | 2026-10-11 |
 | raw/logs/2026-10-11_shikudo-vs-runewarden-snb_attacker.txt | Combat log: a Shikudo kills a Runewarden by Dispatch (the monk's view; shared by the user) | 2026-10-11 |
 | raw/logs/2026-10-11_runewarden-snb-vs-shikudo_defender.txt | Combat log: a Runewarden kills a Shikudo by disembowel (her view; channel chat removed) | 2026-10-11 |

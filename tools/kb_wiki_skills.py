@@ -82,8 +82,36 @@ NOTES = {
                            "where their text says 'locked'. The wiki puts every unmarked one behind the lock, and most "
                            "of those take no target argument (MIND BLACKOUT, MIND TERROR); which of them work in the "
                            "same room without a lock is open, blackout above all (kb/CONFLICTS.md #7). "
-                           "See kb/combat/shikudo.md",
+                           "See kb/combat/shikudo.md. Changed 2026-10-23: locks and lock-based abilities treat an "
+                           "adjacent room as the same area, so one room across an area border no longer breaks a "
+                           "lock or cancels Radiance (kb/changes/2026-10-23_classleads.md)",
 }
+# The class-lead post of 2026-10-23 changed these skills after the wiki was captured. The note
+# points at the curated page, which has the details, the AB data and the code join.
+CHANGES_2026_10_23 = "kb/changes/2026-10-23_classleads.md"
+for _key, _text in {
+    ("Magi", "Crystalism"): "DESTABILISE needs balance AND equilibrium; new OVERLOAD (VIBE DESTABILISE <vibe> "
+                            "<target> <affliction>: paralysis, asthma, slickness, anorexia or stupidity)",
+    ("Magi", "Elementalism"): "new PEBBLE (CAST PEBBLE AT <target>, earth, 2.30 s eq, 90 mana): breaks one healthy limb",
+    ("Psion", "Psionics"): "new PULSE (PSI PULSE <target>, 1.00 s eq): reads how heavily the target bleeds",
+    ("Serpent", "Hypnosis"): "SUGGEST and SEAL used off balance take a fixed, unmodifiable equilibrium",
+    ("Serpent", "Subterfuge"): "HYPERSIGHT works as a star sigil on an evading Serpent you afflicted or damaged recently",
+    ("Alchemist", "Physiology"): "tempered MELANCHOLIC caps passive mana regen (level 2 at 2 stacks, 1 at 4, none at 6)",
+    ("Alchemist", "Sublimation"): "HALOPHILIC costs 3x reagents and clears vines (one toss, two with a Druid in the area)",
+    ("Priest", "Spirituality"): "ANGEL PANIC gives slickness instead of fear on a hellsight target; under HERESY a "
+                                "2+ verse prayer forces an extra ablaze tick on ablaze enemies",
+    ("Blademaster", "Striking"): "on a broken head, STRIKE EYES also gives hallucinations and TEMPLE also dizziness",
+    ("Sentinel", "Woodlore"): "new GRAPPLE (GRAPPLE <direction>, 2.50 s bal): springs your laid trap to pull you "
+                              "into the adjacent room",
+    ("Jester", "Pranks"): "used SUICIDEMICE return after an arena match; MICE shows each mouse's bomb type",
+    ("Occultist", "Domination"): "summoning entities on the Chaos Plane has a different message",
+    ("Runewarden", "Weaponmastery"): "DWB EXPEND gives a uniform relapse message; new Two Handed RETALIATE",
+    ("Paladin", "Weaponmastery"): "DWB EXPEND gives a uniform relapse message; new Two Handed RETALIATE",
+    ("Infernal", "Weaponmastery"): "DWB EXPEND gives a uniform relapse message; new Two Handed RETALIATE",
+    ("Unnamable", "Weaponmastery"): "DWB EXPEND gives a uniform relapse message; new Two Handed RETALIATE",
+}.items():
+    _note = f"Changed 2026-10-23: {_text} ({CHANGES_2026_10_23})"
+    NOTES[_key] = f"{NOTES[_key]}. {_note}" if _key in NOTES else _note
 FIELDS = ("skill", "description", "lessons", "syntax", "required", "target", "cooldown", "detail")
 
 

@@ -19,10 +19,10 @@
 | Anorexia | Apply | Epidermal | Epidermal | apply epidermal to body, focus mind ([show](../raw/live/affliction_show/anorexia.txt)) | `anorexia` | salve:body | 4 | 3 |  |
 | Asthma | Eat | Kelp | Aurum | eat kelp, eat aurum ([show](../raw/live/affliction_show/asthma.txt)) | `asthma` | kelp | 7 |  |  |
 | Bleeding | Clot |  |  | ([show](../raw/live/affliction_show/bleeding.txt)) | `bleeding` |  |  |  | no SSC priority in our tables |
-| Blindness | Apply | Epidermal | Epidermal | apply epidermal to head ([show](../raw/live/affliction_show/blindness.txt)) | `blindness` | salve:head | 26 |  |  |
+| Blindness | Apply | Epidermal | Epidermal | apply epidermal to head ([show](../raw/live/affliction_show/blindness.txt)) | `blindness` |  | 26 |  |  |
 | Claustrophobia | Eat | Lobelia | Argentum | eat lobelia, eat argentum, focus mind ([show](../raw/live/affliction_show/claustrophobia.txt)) | `claustrophobia` | lobelia | 16 | 25 |  |
 | Clumsiness | Eat | Kelp | Aurum | eat kelp, eat aurum ([show](../raw/live/affliction_show/clumsiness.txt)) | `clumsiness` | kelp | 7 | 6 |  |
-| Concussion | Apply | Restoration | Restoration | apply restoration to head ([show](../raw/live/affliction_show/concussion.txt)) | `concussion` |  | 12 | 20 |  |
+| Concussion | Apply | Restoration | Restoration | apply restoration to head ([show](../raw/live/affliction_show/concussion.txt)) | `concussion` | salve:head | 12 | 20 |  |
 | Confusion | Eat | Prickly Ash | Stannum | eat ash, eat stannum, focus mind ([show](../raw/live/affliction_show/confusion.txt)) | `confusion` | ash | 8 | 12 |  |
 | Crippled limb | Apply | Mending | Mending |  | `broken*` (4 keys) | salve (limb) | per limb | per limb |  |
 | Damaged limb | Apply | Restoration | Restoration |  | `damaged*` (5 keys) | salve (limb) | per limb | per limb |  |
@@ -47,7 +47,7 @@
 | Hypersomnia | Eat | Prickly Ash | Stannum | eat ash, eat stannum ([show](../raw/live/affliction_show/hypersomnia.txt)) | `hypersomnia` | ash | 9 | 25 |  |
 | Impatience | Eat | Goldenseal | Plumbum | eat goldenseal, eat plumbum ([show](../raw/live/affliction_show/impatience.txt)) | `impatience` | goldenseal | 4 |  |  |
 | Indifference | Eat | Bellwort | Cuprum | eat bellwort, eat cuprum ([show](../raw/live/affliction_show/indifference.txt)) | `indifference` | bellwort | 25 |  |  |
-| Internal Trauma | Apply | Restoration | Restoration | apply restoration to body ([show](../raw/live/affliction_show/serioustrauma.txt)) | `serioustrauma` |  | 17 | 20 | name mapping ASSUMED |
+| Internal Trauma | Apply | Restoration | Restoration | apply restoration to body ([show](../raw/live/affliction_show/serioustrauma.txt)) | `serioustrauma` | salve:body | 17 | 20 | name mapping ASSUMED |
 | Justice | Eat | Bellwort | Cuprum | eat bellwort, eat cuprum ([show](../raw/live/affliction_show/justice.txt)) | `justice` | bellwort | 16 | 25 |  |
 | Lethargy | Eat | Ginseng | Ferrum | eat ginseng, eat ferrum ([show](../raw/live/affliction_show/lethargy.txt)) | `lethargy` | ginseng | 11 | 25 |  |
 | Loneliness | Eat | Lobelia | Argentum | eat lobelia, eat argentum, focus mind ([show](../raw/live/affliction_show/loneliness.txt)) | `loneliness` | lobelia | 16 | 25 |  |
@@ -84,14 +84,14 @@ Paste `WHATCURES <aff>` / `AFFLICTION SHOW <aff>` output into the inbox to fill 
 | Code key | Live (WHATCURES) | Tracker cures with | PvP prio | Bash prio | Flags |
 |---|---|---|---|---|---|
 | `bound` | writhe ([show](../raw/live/affliction_show/bound.txt)) |  | 2 |  |  |
-| `calcifiedskull` | apply restoration to head ([show](../raw/live/affliction_show/calcifiedskull.txt)) |  | 2 |  |  |
+| `calcifiedskull` | apply restoration to head ([show](../raw/live/affliction_show/calcifiedskull.txt)) | salve:head | 2 |  |  |
 | `calcifiedtorso` | apply restoration to body ([show](../raw/live/affliction_show/calcifiedtorso.txt)) |  | 2 |  |  |
 | `crackedribs` | apply health to torso ([show](../raw/live/affliction_show/crackedribs.txt)) |  | 9 | 20 |  |
 | `crescendo` | eat ash, eat stannum ([show](../raw/live/affliction_show/crescendo.txt)) | ash | 9 |  |  |
-| `crushedthroat` | apply mending to head ([show](../raw/live/affliction_show/crushedthroat.txt)) | salve:head | 5 |  |  |
+| `crushedthroat` | apply mending to head ([show](../raw/live/affliction_show/crushedthroat.txt)) |  | 5 |  |  |
 | `daeggerimpale` | writhe ([show](../raw/live/affliction_show/daeggerimpale.txt)) |  | 2 |  |  |
 | `dazed` | smoke elm, smoke cinnabar ([show](../raw/live/affliction_show/dazed.txt)) | smoke | 5 |  |  |
-| `dazzled` | apply mending to head, time ([show](../raw/live/affliction_show/dazzled.txt)) |  | 7 |  |  |
+| `dazzled` | apply mending to head, time ([show](../raw/live/affliction_show/dazzled.txt)) | salve:head | 7 |  |  |
 | `depression` | eat goldenseal, eat plumbum ([show](../raw/live/affliction_show/depression.txt)) | goldenseal | 6 | 25 |  |
 | `diminished` | eat bellwort, eat cuprum ([show](../raw/live/affliction_show/diminished.txt)) | bellwort | 12 |  |  |
 | `disloyalty` | smoke valerian, smoke realgar ([show](../raw/live/affliction_show/disloyalty.txt)) | smoke | 15 | 25 |  |
@@ -99,22 +99,22 @@ Paste `WHATCURES <aff>` / `AFFLICTION SHOW <aff>` output into the inbox to fill 
 | `earworm` | smoke elm, smoke cinnabar ([show](../raw/live/affliction_show/earworm.txt)) | smoke | 8 |  |  |
 | `flushings` | eat ginseng, eat ferrum ([show](../raw/live/affliction_show/flushings.txt)) | ginseng | 5 |  |  |
 | `fratricide` | eat lobelia, eat argentum ([show](../raw/live/affliction_show/fratricide.txt)) | lobelia | 25 |  |  |
-| `frostbite` | apply caloric ([show](../raw/live/affliction_show/frostbite.txt)) | salve:body/skin/torso | 5 |  |  |
+| `frostbite` | apply caloric ([show](../raw/live/affliction_show/frostbite.txt)) | salve:skin | 5 |  |  |
 | `fulminated` | eat goldenseal, eat plumbum ([show](../raw/live/affliction_show/fulminated.txt)) | goldenseal | 8 |  |  |
 | `grievouswounds` | apply health to torso ([show](../raw/live/affliction_show/grievouswounds.txt)) |  | 3 |  |  |
 | `guilt` | eat lobelia, eat argentum ([show](../raw/live/affliction_show/guilt.txt)) | lobelia | 8 |  |  |
-| `heartseed` | apply restoration to body ([show](../raw/live/affliction_show/heartseed.txt)) |  | 2 |  |  |
+| `heartseed` | apply restoration to body ([show](../raw/live/affliction_show/heartseed.txt)) | salve:body | 2 |  |  |
 | `horror` | eat lobelia, eat argentum ([show](../raw/live/affliction_show/horror.txt)) | lobelia | 9 | 25 |  |
-| `hypothermia` | apply restoration to body ([show](../raw/live/affliction_show/hypothermia.txt)) | salve:torso | 2 |  |  |
+| `hypothermia` | apply restoration to body ([show](../raw/live/affliction_show/hypothermia.txt)) |  | 2 |  |  |
 | `icebound` | writhe ([show](../raw/live/affliction_show/icebound.txt)) |  | 2 |  |  |
 | `impaled` | writhe ([show](../raw/live/affliction_show/impaled.txt)) |  | 2 |  |  |
 | `insomnia` | eat goldenseal, eat plumbum ([show](../raw/live/affliction_show/insomnia.txt)) |  | 26 |  | deliberate: the tracker models insomnia as a target DEFENCE (curing/002) |
-| `internalbleeding` | apply restoration to body ([show](../raw/live/affliction_show/internalbleeding.txt)) |  | 8 |  |  |
+| `internalbleeding` | apply restoration to body ([show](../raw/live/affliction_show/internalbleeding.txt)) | salve:body | 8 |  |  |
 | `itching` | apply epidermal to body ([show](../raw/live/affliction_show/itching.txt)) | salve:body | 5 |  |  |
 | `kkractlebrand` | sip health ([show](../raw/live/affliction_show/kkractlebrand.txt)) |  | 5 |  |  |
-| `laceratedthroat` | apply restoration to head ([show](../raw/live/affliction_show/laceratedthroat.txt)) |  | 19 |  |  |
+| `laceratedthroat` | apply restoration to head ([show](../raw/live/affliction_show/laceratedthroat.txt)) | salve:head | 19 |  |  |
 | `latched` | sip health ([show](../raw/live/affliction_show/latched.txt)) |  | 2 |  |  |
-| `mildtrauma` | apply restoration to body ([show](../raw/live/affliction_show/mildtrauma.txt)) |  | 17 | 20 |  |
+| `mildtrauma` | apply restoration to body ([show](../raw/live/affliction_show/mildtrauma.txt)) | salve:body | 17 | 20 |  |
 | `mycalium` | eat goldenseal, eat plumbum ([show](../raw/live/affliction_show/mycalium.txt)) | goldenseal | 5 |  |  |
 | `parasite` | eat kelp, eat aurum ([show](../raw/live/affliction_show/parasite.txt)) | kelp | 7 |  |  |
 | `pressure` | eat pear, eat calcite ([show](../raw/live/affliction_show/pressure.txt)) |  | 25 |  |  |
@@ -124,12 +124,12 @@ Paste `WHATCURES <aff>` / `AFFLICTION SHOW <aff>` output into the inbox to fill 
 | `rebbies` | eat kelp, eat aurum ([show](../raw/live/affliction_show/rebbies.txt)) | kelp | 7 |  |  |
 | `retribution` | eat bellwort, eat cuprum ([show](../raw/live/affliction_show/retribution.txt)) | bellwort | 6 | 25 |  |
 | `sandfever` | eat goldenseal, eat plumbum ([show](../raw/live/affliction_show/sandfever.txt)) | goldenseal | 4 |  |  |
-| `scalded` | time ([show](../raw/live/affliction_show/scalded.txt)) | salve:head | 16 | 20 |  |
-| `selarnia` | apply mending to body ([show](../raw/live/affliction_show/selarnia.txt)) | salve:body/skin/torso | 20 |  |  |
+| `scalded` | time ([show](../raw/live/affliction_show/scalded.txt)) |  | 16 | 20 |  |
+| `selarnia` | apply mending to body ([show](../raw/live/affliction_show/selarnia.txt)) | salve:body | 20 |  |  |
 | `shadowmadness` | eat goldenseal, eat plumbum ([show](../raw/live/affliction_show/shadowmadness.txt)) | goldenseal | 6 | 25 |  |
 | `shivering` | apply caloric ([show](../raw/live/affliction_show/shivering.txt)) | salve:skin | 15 |  |  |
 | `skullfractures` | apply health to head ([show](../raw/live/affliction_show/skullfractures.txt)) |  | 8 | 20 |  |
-| `slashedthroat` | apply epidermal to head ([show](../raw/live/affliction_show/slashedthroat.txt)) |  | 19 |  |  |
+| `slashedthroat` | apply epidermal to head ([show](../raw/live/affliction_show/slashedthroat.txt)) | salve:head | 19 |  |  |
 | `sleeping` | wake ([show](../raw/live/affliction_show/sleeping.txt)) |  | 2 |  |  |
 | `spiritburn` | eat lobelia, eat argentum ([show](../raw/live/affliction_show/spiritburn.txt)) | lobelia | 11 | 25 |  |
 | `stridulating` | eat bellwort, eat cuprum ([show](../raw/live/affliction_show/stridulating.txt)) | bellwort | 24 |  |  |
@@ -140,7 +140,7 @@ Paste `WHATCURES <aff>` / `AFFLICTION SHOW <aff>` output into the inbox to fill 
 | `tenderskin` | eat lobelia, eat argentum ([show](../raw/live/affliction_show/tenderskin.txt)) | lobelia | 11 | 25 |  |
 | `tension` | smoke elm, smoke cinnabar ([show](../raw/live/affliction_show/tension.txt)) | smoke | 16 | 25 |  |
 | `timeloop` | eat bellwort, eat cuprum ([show](../raw/live/affliction_show/timeloop.txt)) | bellwort | 4 |  |  |
-| `tonguetied` | apply restoration to head ([show](../raw/live/affliction_show/tonguetied.txt)) |  | 18 |  |  |
+| `tonguetied` | apply restoration to head ([show](../raw/live/affliction_show/tonguetied.txt)) | salve:head | 18 |  |  |
 | `torntendons` | apply health to legs ([show](../raw/live/affliction_show/torntendons.txt)) |  | 10 | 20 |  |
 | `unweavingbody` | eat ginseng, eat ferrum ([show](../raw/live/affliction_show/unweavingbody.txt)) | ginseng | 25 |  |  |
 | `unweavingmind` | eat goldenseal, eat plumbum ([show](../raw/live/affliction_show/unweavingmind.txt)) | goldenseal | 25 |  |  |

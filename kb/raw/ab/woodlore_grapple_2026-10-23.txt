@@ -1,0 +1,8 @@
+Grapple (Woodlore)  ABADMIN ID: 3291          Known: No (3006 lessons required)
+-------------------------------------------------------------------------------
+Syntax:            GRAPPLE <direction>
+Cooldown:          2.50 seconds of balance
+Details:
+Spring a trap you have laid in the given direction to haul yourself into
+the adjacent room. It is destroyed if you are successfully moved.
+-------------------------------------------------------------------------------

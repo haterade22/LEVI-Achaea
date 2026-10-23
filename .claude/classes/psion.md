@@ -301,6 +301,13 @@ flurry:
   damage: "Level 5 UWS = ~90% max health"
 
 # Psionics
+psi_pulse:
+  skill: Psionics
+  balance: "1.00 seconds of equilibrium (AB 3292, CONFIRMED live)"
+  effect: "Sense exactly how heavily the target is bleeding; no affliction"
+  syntax: "PSI PULSE <target>"
+  notes: "New 2026-10-23 (kb/raw/ab/psionics_pulse_2026-10-23.txt). Adventurers only, 2974 lessons. A bleeding readout for a damage plan; the output line is uncaptured and our code does not use it"
+
 psi_blast:
   skill: Psionics
   balance: eq

@@ -209,6 +209,8 @@ Source: [https://wiki.achaea.com/Metamorphosis](https://wiki.achaea.com/Metamorp
 
 ## Woodlore (31 abilities)
 
+*Changed 2026-10-23: new GRAPPLE (GRAPPLE &lt;direction>, 2.50 s bal): springs your laid trap to pull you into the adjacent room (kb/changes/2026-10-23_classleads.md).*
+
 Woodlore imparts adventurers who practise it with the expertise of laying traps, summoning animal guardians, and performing a variety of other combat-related, forestal abilities.
 
 The skill was first taught to members of the Sentinels Guild by Vixen after she had in turn learned the art from Etarni during her extended stay in the village of the Tomacula, following the Sentinels' act of annihilating their Groves to cure Vixen of a feverish ailment that had befallen her.

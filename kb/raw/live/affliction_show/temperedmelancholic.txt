@@ -1,11 +1,11 @@
-# affliction show temperedmelancholic  (2026-10-11T00:13:59Z)
+# affliction show temperedmelancholic  (2026-10-23T00:00:00Z)
 Affliction:         A tempered melancholic humour
 Diagnose:           your melancholic humour has been tempered a total of $=(type$) times.
 Afflicted msg:      none
 Cured msg:          none
 Expire msg:         Your melancholic humour drains back to normal levels.
 Cure(s):            Eat Ginger / Eat Antimony
-Description:        A tempered melancholic humour reduces the efficacy of irid moss and potash.
+Description:        A tempered melancholic humour reduces the efficacy of irid moss and potash, and increasingly suppresses natural mana regeneration.
 NoRandomCure:       Yes
 WhisperingMadness:  No
 Enlighten:          No

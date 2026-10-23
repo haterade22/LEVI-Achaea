@@ -51,6 +51,10 @@ TARGET responds (class cures, lines we can see), and how WE respond (SSC priorit
    belongs:
    - affliction, cure, curative, lock or class-cure facts -> `kb/afflictions/` or `kb/curing/`
    - class abilities -> `kb/classes/<class>/<skill>.md`, linked from `.claude/classes/<class>.md`
+   - a game announcement (class-lead post, patch notes) -> `kb/changes/<YYYY-MM-DD>_<slug>.md`, one
+     block per change. `kb/classes/*.md` is generated, so point each changed skill at that page
+     through the `NOTES` table in `tools/kb_wiki_skills.py` and re-run it; then update the
+     hand-written dossiers in `.claude/classes/` (example: `kb/changes/2026-10-23_classleads.md`)
    - anything else -> a new topic folder, listed in `kb/README.md` and `kb/INDEX.md`
    Add each raw file to the page's `sources:`. Tag every claim's confidence. Live output beats
    HELP, and HELP beats a guide. **Write the "why"** (what it means for offense and for curing),

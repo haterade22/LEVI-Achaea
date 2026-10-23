@@ -619,6 +619,8 @@ key_insight: |
   Impatience is no suggestion (WIKI), so neither SNAP nor IMPULSE gives it directly; it
   comes from the monkshood reaction. IMPULSE gives TRIVIAL suggestions; the complex ones
   (anorexia, hypochondria, disrupt, ...) need the full HYPNOTISE / SUGGEST / SEAL / SNAP.
+  Since 2026-10-23, SUGGEST and SEAL sent OFF balance take a fixed equilibrium, so a Serpent
+  who puts them after a balance attack is slower; our offense puts them first.
 
 hypnosis_only_afflictions:   # complex suggestions (WIKI, Hypnosis.wiki:252 onward)
   - disrupt: "Knocks the target off equilibrium briefly, or fully disrupts them if confusion is present"
@@ -750,10 +752,12 @@ suggest:
   skill: Hypnosis
   effect: "Implant a suggestion (trivial or complex) in a hypnotised victim"
   syntax: "SUGGEST <target> <suggestion>"
+  off_balance: "Since 2026-10-23: used while OFF balance it takes a fixed, unmodifiable equilibrium (figure not given; admin: to slow Serpent's early game, may be reverted). Our offense sends it before dstab, on balance (002:2026), so it is unaffected (kb/changes/2026-10-23_classleads.md, kb/CONFLICTS.md #45)"
 
 seal:
   skill: Hypnosis
   balance: "2.0 seconds of equilibrium, 200 mana"
+  off_balance: "Since 2026-10-23: used while OFF balance it takes an unmodified equilibrium. Our offense seals before dstab, on balance (002:2043)"
   effect: "Primes the trance: a delay of 3 s or more (1 s if the victim has deadening), after which the suggestions tick every 4 s (3 s with deadening)"
   syntax: "SEAL <target> <delay in seconds>"
   notes: "This page said 'SEAL <target> <suggestion>: lock in a suggestion permanently'. Our hypnolock sends `seal <target> <number of suggestions>` (getCommand, :355), i.e. a delay of 1-3 s: with fewer than three suggestions that is under the 3 s minimum unless the victim has deadening. UNVERIFIED in game"
@@ -1084,6 +1088,11 @@ hiding:
   skill: Subterfuge
   effect: "Cannot be targeted if hidden"
   notes: "Broken by various detections"
+
+hypersight:
+  skill: Subterfuge
+  effect: "Since 2026-10-23: while active, works as a star sigil against an evading Serpent who has any affliction you gave, or took damage from you recently"
+  notes: "Announcement only (kb/changes/2026-10-23_classleads.md). Serpent vs Serpent: the first hit stops the other from slipping away. `hypersight` is only a defence name in our code"
 ```
 
 ## Passive Cures

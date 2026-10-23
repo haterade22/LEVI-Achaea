@@ -270,8 +270,14 @@ Comprehensive reference of all available artefacts in Achaea, compiled from offi
 | Level | Item | Credits | Effect |
 |-------|------|---------|--------|
 | - | gilded page | 100 | Single-use trait reset (consumed) - READ PAGE |
-| 1 | Grimoire of Adaptation | 1000 | Reset traits once per RL day - READ GRIMOIRE |
+| 1 | Grimoire of Adaptation | 1000 | Reset traits once every 12 RL hours - READ GRIMOIRE (was once per RL day; changed 2026-10-23) |
 | 2 | Grimoire of Hasty Adaptation | 2000 | Reset traits once every 2 RL hours - READ GRIMOIRE |
+
+### Changes from the 2026-10-23 class-lead post (not otherwise in this guide)
+The credits and categories of these two artefacts are not recorded here. Source:
+`kb/raw/announcements/classleads_2026-10-23.txt`, curated in `kb/changes/2026-10-23_classleads.md`.
+- **Gem of reincarnation:** cooldown 12 hours (was 24).
+- **Shackle artefact:** switching outfits no longer bypasses the shackle's delayed mass.
 
 ---
 

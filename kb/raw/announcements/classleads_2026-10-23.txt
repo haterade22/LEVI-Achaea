@@ -1,0 +1,74 @@
+Chivalry
+--------
+(19): There is now the ability to edit lineages on the admin side. The guild can work with us to get these updated where possible (some ancient knights were deleted so those remain out of reach, but this should help get the timeline much more thorough).
+
+Crystalism
+----------
+(207): DESTABILISE now requires balance and equilibrium, not just equilibrium.
+(207): New ability: OVERLOAD.
+
+Domination
+----------
+(216): Summoning entities on the Chaos Plane now has a different message.
+
+Elementalism
+----------
+(208): New ability: PEBBLE.
+
+Hypnosis
+--------
+(admin): SUGGEST while off balance now has a fixed, unmodifiable equilibrium.
+Notes: the attempt to slow down serpent early game while preserving the post snap explosiveness of the class continues. This change is fairly experimental but its my hope it moves the class more into what was envisioned rather than an offense that just never really drops off in a meaningful way. This one might very well get reverted though, we shall see how it pans out.
+(admin): SEAL is now unmodified equilibrium when off balance.
+See above.
+
+Physiology
+----------
+(229): Tempered MELANCHOLIC now caps passive mana regen level. Level two at two stacks, level one at four stacks, no regen at six stacks. The old penalty to moss still remains, this is in addition not a replacement.
+
+Pranks
+------
+(9): SUICIDEMICE that are used now return to the owner at the end of said owner's participation in an arena match. Ones that are killed still do not as of this time.
+(264): MICE now shows each mouse's strapped bomb type.
+
+Psionics
+--------
+(236): New ability: PULSE.
+
+Spirituality
+------------
+(53): ANGEL PANIC now gives slickness instead of fear if the target suffers from HELLSIGHT.
+(253): Finishing a prayer of at least two verses now forces an additional ablaze tick (does not reset the next ablaze tick timer) on all currently ablaze enemies in room while HERESY is active.
+
+Striking
+--------
+(270): When a target has a broken head, strike EYES now additionally delivers hallucinations and strike TEMPLE additionally gives dizziness.
+
+Subterfuge
+----------
+(31): HYPERSIGHT now possesses star sigil functionality when active and conditions are met. Conditions are that the evading serpent has any aff given by you afflicted on them or has taken damage from you recently.
+
+Sublimation
+-----------
+(37): HALOPHILIC has had its reagent cost tripled. It now also clears vines in one toss (with druid not in area) or two (with druid in area).
+
+Telepathy
+---------
+(115): Locks and lock-based abilities now treat an adjacent room to you as being in the same area for practical purposes. In other words, jumping one room across a border no longer breaks locks or cancels radiance, etc.
+
+Weaponmastery
+-------------
+(93): (Dual Blunt): EXPEND now gives a uniform relapse message to the attacker when an affliction relapses. The issue with asthma relapse showing a rogue paralysis message has also been resolved.
+(157): (Two Handed): New ability: RETALIATE.
+
+Woodlore
+--------
+(301): New ability: GRAPPLE.
+
+Misc
+----
+(bug): outfit switching no longer bypasses shackle delayed mass in regards to the shackle artefact.
+(141): Assessing from an arena's spectator stands now also shows the target's mana.
+(307): Level one grimoire and gem of reincarnation have had their cooldowns reduced to twelve hours from twenty four.
+(232): Third party affliction cures now only show to those who have relevant skill access where appropriate.
+The full affliction list for this is: bloodfire, coldfate, conflagration, constricted, degenerate, earworm, enmeshed, guilt, hatred, horror, inquisition, kkractlebrand, latched, lovers, mindravaged, mycalium, petrified, rebbies, reeling, retribution, shadowmadness, snared, tension, unweavings(all), and whisperingmadness.

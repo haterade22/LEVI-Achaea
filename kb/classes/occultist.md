@@ -164,6 +164,8 @@ Source: [https://wiki.achaea.com/Tarot](https://wiki.achaea.com/Tarot) (raw: `kb
 
 ## Domination (25 abilities)
 
+*Changed 2026-10-23: summoning entities on the Chaos Plane has a different message (kb/changes/2026-10-23_classleads.md).*
+
 Domination is without question the most dangerous art within Achaea. It involves the summoning of entities from the Chaos Plane as well as Chaos Lords. A practitioner risks their life and very soul in dealing with them, for they are powerful and not to be trifled with. To gain the services of a Chaos Entity, one must first discover a way into the Chaos Plane. Once there, search them out and attempt to dominate them.
 
 Though once connected with the Chaos Plane, Lord Taug, also known as Prince Pazuzu is no longer welcome there, and thus bargains can no longer be made with this Chaos Lords through the abilities of Domination.

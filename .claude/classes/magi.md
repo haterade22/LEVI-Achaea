@@ -99,6 +99,7 @@ water:
 | **Transfix** | Air/Fire | 3.0s | stupidity (if moderate+ resonance) | Mesmerization; removes blindness |
 | **Gust** | Air | 3.0s | none (knockback) | Directional push or room clear |
 | **Geyser** | Earth/Fire/Water | 3.0s | none (disruption) | Removes flying/treed targets |
+| **Pebble** (new 2026-10-23) | Earth | 2.3s, 90 mana | Breaks one HEALTHY limb + damage on a hit; on a target with every limb broken it only wounds, and resonance does not grow (AB 3290, `kb/raw/ab/elementalism_pebble_2026-10-23.txt`) | `CAST PEBBLE AT <target>`, adventurers only, 1336 lessons. A direct limb break with no damaged stage before it. Which limb it picks is not stated, and no line is captured (kb/CONFLICTS.md #40). Our offense does not use it. Not the travel "enchanted pebble" |
 
 ### Higher-Order Spells
 
@@ -212,7 +213,8 @@ Both are **free actions** (don't consume spell balance) and are prepended to the
 - **Embed**: Activate vibration in room (300 mana, 3.1s EQ)
 - **Dampen**: Destroy your own vibrations (4s bal)
 - **Focus**: Consolidate all vibes to current room (100 mana, 4s EQ)
-- **Destabilise**: Destroy vibrations with potent environmental effects (400 mana). Each vibe type has unique destabilization effect
+- **Destabilise**: Destroy vibrations with potent environmental effects (400 mana). Each vibe type has unique destabilization effect. **Since 2026-10-23 it needs balance AND equilibrium** (was equilibrium only). We never send it; only our own destabilise line is tracked (`502_Destabilise.lua`)
+- **Overload** (new 2026-10-23, AB 3289, 3301 lessons): `VIBE DESTABILISE <vibe> <target> <affliction>`. Destroys the vibe (its room effect still fires) and gives a target in the room ONE of paralysis, asthma, slickness, anorexia or stupidity, as chosen. Balance + equilibrium; the equilibrium is the greater of the vibe's destabilise cost and overload's own (not given). Each placed vibe is now a one-shot lock affliction. Its lines and own cost are uncaptured (kb/CONFLICTS.md #39); our offense does not use it. Source: `kb/raw/ab/crystalism_overload_2026-10-23.txt`
 
 ### Combat Vibrations
 

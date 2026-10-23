@@ -4211,7 +4211,7 @@
   ],
   "cured_msg": "none",
   "cures": "Eat Ginger / Eat Antimony",
-  "description": "A tempered melancholic humour reduces the efficacy of irid moss and potash.",
+  "description": "A tempered melancholic humour reduces the efficacy of irid moss and potash, and increasingly suppresses natural mana regeneration.",
   "diagnose": "your melancholic humour has been tempered a total of $=(type$) times.",
   "expire_msg": "Your melancholic humour drains back to normal levels.",
   "flags": {

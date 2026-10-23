@@ -1,0 +1,16 @@
+Overload (Crystalism)  ABADMIN ID: 3289       Known: No (3301 lessons required)
+-------------------------------------------------------------------------------
+Syntax:            VIBE DESTABILISE <vibe> <target> <affliction>
+Details:
+Having mastered the art of destabilising crystalline vibrations, you may
+force the unravelling frequency beyond its limits and direct the
+overloaded resonance at a foe standing alongside you. As the vibration
+is destroyed and its unstable effects unleashed upon the location, the
+overloaded frequency lashes out at your chosen target, afflicting them
+with paralysis, asthma, slickness, anorexia or stupidity as you choose.
+
+Overloading a vibration demands the same focus as destabilising one, and
+requires both balance and equilibrium. The equilibrium cost will be that
+of the destabilised vibration or of the overload itself, whichever is
+greater.
+-------------------------------------------------------------------------------

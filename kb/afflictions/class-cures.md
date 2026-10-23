@@ -87,6 +87,28 @@ What a lock needs **on top of** venomlock, to shut each class's extra cure:
 This is the per-class view. `.claude/classes/lock_types.md` has the established table, and the
 two should agree.
 
+## Third-party cure lines need skill access (since 2026-10-23)
+
+**CONFIRMED (announcement)**, Misc 232 in `kb/raw/announcements/classleads_2026-10-23.txt`:
+"Third party affliction cures now only show to those who have relevant skill access where
+appropriate." It covers 25 afflictions: bloodfire, coldfate, conflagration, constricted,
+degenerate, earworm, enmeshed, guilt, hatred, horror, inquisition, kkractlebrand, latched,
+lovers, mindravaged, mycalium, petrified, rebbies, reeling, retribution, shadowmadness, snared,
+tension, all unweavings, and whisperingmadness. ASSUMED: "relevant skill access" means the skill
+that gives the affliction.
+
+Why it matters: a cure line is how we see these afflictions leave a TARGET. Without the giver's
+skill we no longer see it, so an affliction that came in by party relay can stay in V3 forever.
+- Removal triggers that now go silent without the skill: `third-person_removes/001-007`
+  (mycalium, rebbies, shadowmadness, the three unweavings, guilt), `other_things_fading/002`,
+  `004`, `008` (lovers, mindravaged, horror stack-down), `herbs/016` (earworm, retribution),
+  `606_Petrify_Cured` (petrified).
+- Still seen: removals read from the target's own herb and salve lines (goldenseal, lobelia,
+  bellwort, the applies), and inquisition's own 20 s timer.
+- No backstop: none of the 25 has an entry in `ataxia_TARGET_AFF_SECONDS`.
+
+Open as kb/CONFLICTS.md #43. Details: [../changes/2026-10-23_classleads.md](../changes/2026-10-23_classleads.md).
+
 ## Conflicts
 
 Fixed in v4.7.395: Magi Harmony (now trigger 029), Paladin Healing (024), Dragonheal (005) and

@@ -26,6 +26,7 @@ Sublimation:
   description: "Hashan Wellspring variant"
   style: "Wellspring-powered abilities"
   unlock: "Alternative specialization"
+  halophilic: "Since 2026-10-23 (Sublimation 37): reagent cost x3; clears vines in one toss with no Druid in the area, two with one. We have no halophilic code"
 ```
 
 ## Core Combat Mechanics
@@ -42,7 +43,7 @@ humours:
     max_tempers: 8
 
   melancholic:
-    temper_effect: "Various effects"
+    temper_effect: "Lowers the efficacy of irid moss and potash, and 'increasingly suppresses natural mana regeneration' (AFFLICTION SHOW, re-captured 2026-10-23). The announcement gives the steps: mana regen level 2 at 2 stacks, level 1 at 4, none at 6 (Physiology 229)"
     inundate_effect: "Mana damage"
     max_tempers: 8
 

@@ -52,6 +52,7 @@ SnB (Sword and Board):
 2H (Two-Handed):
   weapons: [bastard sword] or [warhammer]
   style: Fractures, devastate, high damage
+  new_2026_10_23: "RETALIATE (Weaponmastery 157); no detail or AB yet (kb/changes/2026-10-23_classleads.md)"
   strength: Best damage, passive para cure, strips rebounding/shield
   kill_routes: [vivisect, disembowel, damage, cleave/skullcrush]
 ```

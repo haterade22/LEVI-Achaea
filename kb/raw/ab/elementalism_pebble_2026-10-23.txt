@@ -1,0 +1,16 @@
+Pebble (Elementalism)  ABADMIN ID: 3290       Known: No (1336 lessons required)
+-------------------------------------------------------------------------------
+Syntax:            CAST PEBBLE AT <target>
+Required Channels: earth
+
+Works on/against:  Adventurers
+Cooldown:          2.30 seconds of equilibrium
+Resource:          90 mana
+Details:
+Compress a handful of earth into a single dense pebble and hurl it at a
+target. Should the pebble strike true, it will shatter one of your
+target's healthy limbs, as well as causing damage. If every limb has
+already been broken, the pebble will still wound your target, and your
+resonance will not grow.
+
+-------------------------------------------------------------------------------

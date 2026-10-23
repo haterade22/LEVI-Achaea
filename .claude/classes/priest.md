@@ -127,6 +127,16 @@ angel_afflict:
   balance: free
   effect: "Angel applies affliction"
   syntax: "ANGEL <affliction> <target>"
+
+angel_panic:
+  skill: Spirituality   # the 2026-10-23 post files it under Spirituality; this page files the ANGEL abilities under Zeal
+  effect: "Gives fear; since 2026-10-23 it gives SLICKNESS instead if the target has hellsight (Spirituality 53)"
+  syntax: "ANGEL PANIC <target>"   # ASSUMED from the ANGEL <affliction> pattern
+  notes: "With a hellsight source (an Apostate ally), panic becomes a salve-lock piece. No trigger of ours records fear from it"
+
+heresy:
+  skill: Spirituality
+  effect: "Since 2026-10-23 (Spirituality 253): while HERESY is active, finishing a prayer of 2+ verses forces one extra ablaze tick on every ablaze enemy in the room (the next tick's timer is not reset)"
 ```
 
 ## Defensive Abilities

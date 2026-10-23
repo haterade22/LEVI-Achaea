@@ -72,6 +72,8 @@ Source: [https://wiki.achaea.com/Tarot](https://wiki.achaea.com/Tarot) (raw: `kb
 
 ## Pranks (36 abilities)
 
+*Changed 2026-10-23: used SUICIDEMICE return after an arena match; MICE shows each mouse's bomb type (kb/changes/2026-10-23_classleads.md).*
+
 The skill of pranks is an amusing mish-mash of acrobatic abilities, strange-and-amusing abilities involving props like balloons, mice, and jack-in-the-boxes, and the science of bomb-making. Practiced solely by Jesters, these abilities even include some seriously bad jokes, and even the ability to scrawl graffiti on city walls.
 
 The skill of Pranks is available to members of the Jester class, along with Tarot and Puppetry.

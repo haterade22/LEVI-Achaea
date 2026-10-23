@@ -1,0 +1,10 @@
+Pulse (Psionics)  ABADMIN ID: 3292            Known: No (2974 lessons required)
+-------------------------------------------------------------------------------
+Syntax:            PSI PULSE <target>
+Works on/against:  Adventurers
+Cooldown:          1.00 seconds of equilibrium
+Details:
+Attune your gifts to the pulse of your target to sense exactly how
+heavily they are bleeding.
+
+-------------------------------------------------------------------------------

@@ -34,6 +34,7 @@ SnB (Sword and Board):
   weapons: [bastard sword] or [warhammer]
   style: High damage, strip defenses
   strength: Best damage, passive para cure, strips rebounding/shield
+  new_2026_10_23: "RETALIATE (Weaponmastery 157); no detail or AB yet (kb/changes/2026-10-23_classleads.md)"
 ```
 
 ## Kill Routes

@@ -62,6 +62,8 @@ Source: [https://wiki.achaea.com/Weaving](https://wiki.achaea.com/Weaving) (raw:
 
 ## Psionics (22 abilities)
 
+*Changed 2026-10-23: new PULSE (PSI PULSE &lt;target>, 1.00 s eq): reads how heavily the target bleeds (kb/changes/2026-10-23_classleads.md).*
+
 The most ancient of powers given to the Aldar in the moment of their formation by Ayar, beyond even the innumerable other natural advantages of their race, was their strength in will and mind. This manifested itself in vast psionic and telepathic might, an ability wielded with unfathomable ease as they imposed their thought upon themselves and upon the world around them. With the centuries of peace during which these arts were mastered, coupled to their functionally unchallenged rule of Creation below the Pantheon itself, offensive techniques within Psionics never saw true progress beyond the simple, rendering them almost unrefined by the measure of modern telepaths. Yet it was never their offensive powers that made this lost art so mighty in the hands of the Firstborn.
 
 The skill of Psionics is available to members of the Psion class, along with Weaving and Emulation.

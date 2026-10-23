@@ -423,6 +423,9 @@ pommelstrike:
     neck: paralysis
     knees: prone
     feet: prone
+  broken_head: "Since 2026-10-23 (Striking 270): on a target with a BROKEN head, STRIKE EYES also gives
+    hallucinations and STRIKE TEMPLE also gives dizziness. Our triggers lag: `striking/008` (temple) never
+    adds dizziness, and `striking/009` (eyes) adds hallucinations on every eyes strike (kb/CONFLICTS.md #41)"
 
 airfist:
   skill: Striking
@@ -734,7 +737,8 @@ strike by fixed priority (fill the first missing lock aff):
 4. slickness (underarm)
 5. anorexia (stomach) - only if impatience AND slickness already present
 6. class locking affliction via `getLockingAffliction()` mapped through `blademaster.lockAffToStrike`
-   (paralyse->neck, weariness->shoulder, plague->eyes, stupid->temple, reckless->groin)
+   (paralyse->neck, weariness->shoulder, plague->eyes, stupid->temple, reckless->groin).
+   Since 2026-10-23 eyes and temple also give hallucinations and dizziness on a broken head; this order does not use that yet
 7. hypochondria (chest)
 8. sternum (all lock affs present - pump damage / maintain lock)
 

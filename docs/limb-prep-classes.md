@@ -227,6 +227,9 @@ AND (tAffs.damagedwindpipe OR tAffs.crushedthroat)
 - **Break threshold:** >= 98%
 - **Whiirh element:** Airstrike damage + prone
 - **Sllshya element:** Staff damage + nocaloric/shivering/frozen
+- **PEBBLE (new 2026-10-23, not used by our code):** `CAST PEBBLE AT <target>`, earth, 2.30 s eq, 90 mana.
+  A hit breaks one HEALTHY limb outright, with no damage stage first; with every limb broken it only wounds.
+  Which limb it picks is not stated (kb/CONFLICTS.md #40). Source: `kb/raw/ab/elementalism_pebble_2026-10-23.txt`
 
 ---
 

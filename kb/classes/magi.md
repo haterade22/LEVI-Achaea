@@ -6,6 +6,8 @@
 
 ## Elementalism (45 abilities)
 
+*Changed 2026-10-23: new PEBBLE (CAST PEBBLE AT &lt;target>, earth, 2.30 s eq, 90 mana): breaks one healthy limb (kb/changes/2026-10-23_classleads.md).*
+
 Elementalism is a relatively straightforward skill. By opening channels to four of the five Elemental realms (Magi do not use the Spirit realm), practitioners can cast a wide variety of elementally-based offensive and defensive spells. The effects of these spells might range from summoning an efreeti to calling down the might of Vastar, the Skylord, in the Stormhammer, to bringing forth fog or hail. Elementalism used to be practised by the Sylvan class as well, but was abandoned in 680 AF when they syncronised their abilities with a great storm and it was replaced with the skill of Propagation.
 
 The skill of Elementalism is available to members Magi class, along with Crystalism and Artificing.
@@ -109,6 +111,8 @@ Source: [https://wiki.achaea.com/Elementalism](https://wiki.achaea.com/Elemental
 - **Hailstorm**: Call down a hailstorm to pummel everyone else in the room. With this spell, you may rain hailstones down upon all your enemies in your location.
 
 ## Crystalism (36 abilities)
+
+*Changed 2026-10-23: DESTABILISE needs balance AND equilibrium; new OVERLOAD (VIBE DESTABILISE &lt;vibe> &lt;target> &lt;affliction>: paralysis, asthma, slickness, anorexia or stupidity) (kb/changes/2026-10-23_classleads.md).*
 
 Crystalism is a powerful skill which involves using magical crystals to create vibrations. These vibrations may be single-use or, more commonly, persistent and room-based. In order to set up a vibration, one must first obtain crystals from the Master Crystal of their House using the refine ability. Once a Magi has crystals they can spin them and finally embed various powerful vibrations. Some vibrations will affect only the Magi, some will affect only the Magi's enemies, and some will affect everyone in the room.
 

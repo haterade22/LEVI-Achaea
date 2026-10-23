@@ -126,7 +126,10 @@ telepathy_afflictions:
   mindlock: "Needed ONLY to reach a target outside your room, and for certain skills such as Radiance and
     Sapience (the user and Mystor, 2026-10-11). In-room affliction attacks (impatience, paralyse, batter, confuse,
     stupidity, epilepsy, ...) need no lock. The wiki also puts BLACKOUT and SCYTHE behind the lock; the players'
-    rule says otherwise, so confirm each on its first live use (kb/CONFLICTS.md #7)"
+    rule says otherwise, so confirm each on its first live use (kb/CONFLICTS.md #7). Since 2026-10-23 (Telepathy
+    115) locks and lock-based abilities treat an ADJACENT room as the same area: one room across an area border no
+    longer breaks the lock or cancels Radiance. Our lock-loss handling reads the game's lines (`allies_enemies/011`),
+    so it needs no change"
   impatience: "Required for hardlock. 007 sends it as soon as asthma, slickness or anorexia is on, so FOCUS
     cannot cure the anorexia hiraku is about to give (Mystor: FceAmb0o:5937, vNTjvghY:8444)"
   paralyse: "The venomlock piece when nervestrike's has been cured: 007 sends it to close softlock + impatience"

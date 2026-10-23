@@ -426,6 +426,13 @@ track:
   effect: "Track target"
   syntax: "TRACK <target>"
 
+grapple:
+  skill: Woodlore
+  balance: "2.50 seconds of balance (AB 3291, CONFIRMED live)"
+  effect: "Spring a trap you laid in the given direction to haul yourself into the adjacent room; the trap is destroyed when the move succeeds"
+  syntax: "GRAPPLE <direction>"
+  notes: "New 2026-10-23, 3006 lessons (kb/raw/ab/woodlore_grapple_2026-10-23.txt). Movement, not an attack: a Sentinel with a trap laid toward an exit can leave, or follow us, on balance"
+
 # Metamorphosis
 morph:
   skill: Metamorphosis

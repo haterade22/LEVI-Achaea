@@ -68,6 +68,8 @@ Source: [https://wiki.achaea.com/Alchemy](https://wiki.achaea.com/Alchemy) (raw:
 
 ## Physiology (21 abilities)
 
+*Changed 2026-10-23: tempered MELANCHOLIC caps passive mana regen (level 2 at 2 stacks, 1 at 4, none at 6) (kb/changes/2026-10-23_classleads.md).*
+
 Physiology is the study of the biological processes required for life. Alchemists trained in Physiology will find themselves able to utilise this knowledge in two primary ways:
 
 First, Alchemists may manipulate the humours, or vital fluids, of others in order to cause illnesses of varying degree, eventually gaining the power to slay another via spontaneous organ failure. Humourism, as this art is called, is based upon the tempering of another's body, aiming to increase his internal fluid level. An unrestricted Humourist is a force to be feared, but their effects may be countered by the ingestion of the ginger herb and antimony mineral.
@@ -188,7 +190,7 @@ Source: [https://wiki.achaea.com/Formulation](https://wiki.achaea.com/Formulatio
 
 ## Sublimation (27 abilities)
 
-*alternative to Formulation (uses Hashan's Wellspring).*
+*alternative to Formulation (uses Hashan's Wellspring). Changed 2026-10-23: HALOPHILIC costs 3x reagents and clears vines (one toss, two with a Druid in the area) (kb/changes/2026-10-23_classleads.md).*
 
 The first boon offered by the Genesis, earned by the bravery of Hashan's leadership in 798 AF, the oft-whispered of Wellspring beneath the city is no longer a locked and guarded secret, but remains guarded nonetheless. The Alchemists who dare to experiment with the residual power of the ancient Protean star have cast off the limiting truths presented by the Cauda Pavonis and tread paths of study never walked before.
 
