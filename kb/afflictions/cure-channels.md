@@ -33,8 +33,23 @@ cured through it. See [README.md](README.md) for the overall model.
 - **Eating is shared with moss/potash.** Healing by moss and curing by herb compete for the
   same eat. This is the reason the PvE bash curing profile exists
   (`ataxia/008_Bash_Curing_Profile.lua`).
-- **Salves are shared between limb mending/restoration and crackedribs, fractures and
-  traumas.** The same profile parks those at 20 so limbs come first while bashing.
+- **Salves are shared between limb mending/restoration and the traumas** (concussion,
+  mildtrauma, serioustrauma). The same profile parks those at 20 so limbs come first while bashing.
+- **The four fractures are NOT salve cures** (corrected 2026-10-23, v4.7.449). `crackedribs`,
+  `skullfractures`, `wristfractures` and `torntendons` are cured by `APPLY HEALTH TO <spot>`, the
+  health elixir (CONFIRMED, `AFFLICTION SHOW`, [skullfractures](../raw/live/affliction_show/skullfractures.txt)).
+  - One application removes ONE stack: "You take some elixir from a stone vial and rub it into
+    your head." / "The pain in your head lessens somewhat." took `skullfractures (3)` to `(2)`
+    (CONFIRMED, user log 2026-10-23).
+  - SSC applies health for them only above 70% health ("Will cure fractures above 70%", CURING
+    STATUS; `CURING HEALTHAFFSABOVE`). See [server-side-curing](../curing/server-side-curing.md).
+  - `skullfractures` lengthens the elixir recovery and gives periodic nausea; `crackedribs` cuts
+    elixir healing and gives periodic sensitivity. A big stack therefore cures slowly, and the
+    nausea costs a ferrum every few seconds (CONFIRMED, user log 2026-10-23).
+  - They most likely share the elixir balance with health sips (UNCONFIRMED).
+  - They are STACK afflictions: `ataxia.afflictions` holds a number. With Death's Demise the
+    Mnemosyne sweep waits in the cleared room until they are cured (`mnemosyne/008`
+    `M._fractureHold`, 20 s stall release).
 - **A herb and its mineral are interchangeable** and use the same balance. SSC's
   `CURING FALLBACK ON` uses the other when you run out of one.
 

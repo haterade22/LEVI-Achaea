@@ -1300,6 +1300,27 @@ SSC clots down (`curing clotat 30`), so standing still is doing work. A Last Wor
 would just idle the sweep. At 95% HP with 900 bleed the haemophiliac hold holds and the Last
 Word hold does not.
 
+### The Death's Demise fracture hold (v4.7.449)
+
+A third post-clear hold, after the two affix holds, keyed on a BOON (`mnemDeathsDemise`, latched
+through `M.BOON_FLAGS`). User: "If we have death's demise, we should wait until we cure all
+fractures before moving on". Death's Demise removes the death-cape life-steal, so health comes
+from elixirs, and the fractures spoil elixirs (crackedribs cuts the heal, skullfractures slows the
+elixir balance and gives periodic nausea).
+
+| boon | predicate | waits on |
+|---|---|---|
+| Death's Demise | `M._fractureHold()` | `crackedribs`, `skullfractures`, `wristfractures`, `torntendons` all at 0 |
+
+- The fractures are STACK afflictions: `ataxia.afflictions.skullfractures = 7`, a number.
+  `M._fractureStacks()` counts a number as that many stacks and `true` as one. (`S._blockingAffs`
+  in 009 counts only `v == true`, so no recovery gate ever saw a fracture.)
+- They cure slowly by design: `APPLY HEALTH` removes one stack, and SSC applies health for them
+  only above 70% HP. See `kb/afflictions/cure-channels.md`.
+- **Stall release:** `FRACTURE_STALL` (20 s) with no stack cured releases the hold for that room
+  and echoes why. A cure restarts the clock; a new stack does not. `M.explore._fracWait` holds
+  `{ room, total, at, released, announced }`; a new room or a fight (denizens present) resets it.
+
 
 ---
 

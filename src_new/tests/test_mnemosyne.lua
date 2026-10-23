@@ -2477,6 +2477,82 @@ describe("Last Word explode-on-death pacing", function()
   end)
 end)
 
+-- DEATH'S DEMISE FRACTURE HOLD (v4.7.449, user: "If we have death's demise, we should wait until
+-- we cure all fractures before moving on"). Fractures are STACK afflictions, so the table holds
+-- a NUMBER; the hold must read it, and it must always end (the stall release).
+describe("Death's Demise fracture hold", function()
+  local realEpoch, now
+  local function arm(affs)
+    realEpoch = getEpoch
+    now = 1000
+    getEpoch = function() return now end
+    M.map.current = 7
+    M.explore._fracWait = nil
+    ataxia.afflictions = affs or {}
+    mnemDeathsDemise = true
+  end
+  local function disarm()
+    getEpoch = realEpoch
+    mnemDeathsDemise = false
+    M.explore._fracWait = nil
+    ataxia.afflictions = {}
+  end
+
+  it("never holds without the boon", function()
+    arm({ skullfractures = 7 })
+    mnemDeathsDemise = false
+    expect(M._fractureHold()).toBeFalse()
+    disarm()
+  end)
+
+  it("holds on a NUMBER-valued stack and lets go when every stack is cured", function()
+    arm({ skullfractures = 7, wristfractures = 3, crackedribs = 0 })
+    local total, list = M._fractureStacks()
+    expect(total).toBe(10)
+    expect(list).toBe("skullfractures 7, wristfractures 3")
+    expect(M._fractureHold()).toBeTrue()
+    ataxia.afflictions = { skullfractures = 0, wristfractures = 0 }
+    expect(M._fractureHold()).toBeFalse()
+    disarm()
+  end)
+
+  it("counts a bare `true` as one stack", function()
+    arm({ torntendons = true })
+    expect((M._fractureStacks())).toBe(1)
+    expect(M._fractureHold()).toBeTrue()
+    disarm()
+  end)
+
+  it("stalls out after 20s with no stack cured, and a cure restarts the clock", function()
+    arm({ skullfractures = 5 })
+    expect(M._fractureHold()).toBeTrue()
+    now = now + 15
+    ataxia.afflictions.skullfractures = 4 -- progress: the clock restarts here
+    expect(M._fractureHold()).toBeTrue()
+    now = now + 19
+    expect(M._fractureHold()).toBeTrue() -- 19s since the last cure
+    ataxia.afflictions.skullfractures = 6 -- a NEW stack is not progress
+    now = now + 1
+    local held, why = M._fractureHold()
+    expect(held).toBeFalse()
+    expect(why).toBe("stalled")
+    now = now + 1
+    held, why = M._fractureHold()
+    expect(held).toBeFalse() -- released for this room, and said only once
+    expect(why).toBe(nil)
+    M.map.current = 8 -- a new room starts a new wait
+    expect(M._fractureHold()).toBeTrue()
+    disarm()
+  end)
+
+  it("latches from the claim name, (ECHO) or not", function()
+    mnemDeathsDemise = false
+    expect(M.latchBoonFlag("(ECHO) Death's Demise")).toBe("mnemDeathsDemise")
+    expect(mnemDeathsDemise).toBeTrue()
+    mnemDeathsDemise = false
+  end)
+end)
+
 -- PER-RIPPLE PERFORMANCE PROBE (v4.7.204). Everything else that knows about the bard's bash
 -- performance is REACTIVE -- the fade line, the "not in fact performing" error, the "already
 -- performing" refusal -- and all of them need something to go wrong first. PERFORMANCE is the

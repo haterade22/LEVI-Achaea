@@ -54,6 +54,7 @@ local GLANCE_TIMEOUT = 1.0 -- a glance that yields no exits line (blind, darknes
 local WATCHDOG = 30 -- seconds of no progress (no arrival / no denizen change) before a soft nudge
 local HAEMO_MOVE_HP = 90 -- Haemophiliac affix: hold navigation below this HP% (kills bleed thousands)
 local HAEMO_MOVE_BLEED = 50 -- ...and while bleeding above this (SSC clots it down; we stand still meanwhile)
+local FRACTURE_STALL = 20 -- Death's Demise fracture hold: release after this many seconds with no stack cured
 local MAX_PATROL_LOOPS = 3 -- fruitless full patrol loops (hunting the boss) before giving up
 local MAX_ICE_SLIPS = 15 -- re-send a move this many times after slipping on ice before giving up on the exit
 -- A TACTICAL move gets a far smaller budget (v4.7.243). 15 re-sends is defensible for an idle
@@ -1570,6 +1571,65 @@ function M._lastWordHold()
   return hp < HAEMO_MOVE_HP
 end
 
+-- Death's Demise fracture hold (v4.7.449, user: "If we have death's demise, we should wait until
+-- we cure all fractures before moving on"). The boon takes away the death cape's life-steal, so
+-- health comes from elixirs -- and the fractures are what spoil them: crackedribs cuts what an
+-- elixir heals, skullfractures lengthens the elixir balance (and gives the periodic nausea that
+-- costs a ferrum every few seconds). A clear room is where they get cured: nothing else wants
+-- the elixir there, so SSC applies health even at the bash set's parked 20.
+--
+-- They cure SLOWLY by design: APPLY HEALTH TO <spot> takes ONE stack off, and SSC applies health
+-- for them only above 70% HP ("Will cure fractures above 70%"). Fractures are STACK afflictions,
+-- so ataxia.afflictions holds a NUMBER (skullfractures = 7), which is also why S._blockingAffs
+-- (009, counts `v == true`) never saw them. A bare `true` counts as one stack.
+M.FRACTURE_AFFS = { "crackedribs", "skullfractures", "wristfractures", "torntendons" }
+
+function M._fractureStacks()
+  local a = ataxia and ataxia.afflictions
+  local total, parts = 0, {}
+  if type(a) ~= "table" then return 0, "" end
+  for _, k in ipairs(M.FRACTURE_AFFS) do
+    local v = a[k]
+    local n = (v == true and 1) or (type(v) == "number" and v > 0 and v) or 0
+    if n > 0 then
+      total = total + n
+      parts[#parts + 1] = k .. " " .. n
+    end
+  end
+  return total, table.concat(parts, ", ")
+end
+
+-- TRUE while the sweep should wait for the fractures. A hold must always end, so it STALLS OUT:
+-- FRACTURE_STALL seconds with no stack cured (below 70% HP, out of elixir, the apply refused)
+-- releases it for this room. Any cure restarts the clock. The release is kept for the room
+-- (`released`) so the next tick does not take the hold straight back.
+function M._fractureHold()
+  if not mnemDeathsDemise then return false end
+  local total = M._fractureStacks()
+  local w = M.explore._fracWait
+  if total <= 0 then
+    M.explore._fracWait = nil
+    return false
+  end
+  local now = (getEpoch and getEpoch()) or os.time()
+  local room = MAP and MAP.current
+  if not w or w.room ~= room then
+    w = { room = room, total = total, at = now }
+    M.explore._fracWait = w
+  end
+  if w.released then return false end
+  if total < w.total then
+    w.total, w.at = total, now
+  elseif total > w.total then
+    w.total = total -- a new stack is not progress; the clock keeps running
+  end
+  if now - w.at >= FRACTURE_STALL then
+    w.released = true
+    return false, "stalled"
+  end
+  return true
+end
+
 function M._haemoHold()
   if not mnemHaemophiliac then return false end
   local v = ataxia and ataxia.vitals
@@ -1615,6 +1675,7 @@ function M._exploreTick()
     -- basher is clearing this room; wait. Finding denizens is progress, so reset the
     -- boss-hunt counter. Announce once per room, not every tick.
     M.explore.patrolLoops = 0
+    M.explore._fracWait = nil -- a fight restarts the fracture wait (and its stall clock)
     if M.explore.fightingRoom ~= MAP.current then
       M.explore.fightingRoom = MAP.current
       M._exploreEcho("clearing this room (" .. denizenCount() .. " denizen(s)) -- basher on it.")
@@ -1655,6 +1716,24 @@ function M._exploreTick()
     return
   end
   M.explore._lastWordWait = nil
+
+  -- Death's Demise (v4.7.449): cure every fracture before the next fight. Same shape and 1.5s
+  -- re-check as the two affix holds above; it stalls out on its own (see M._fractureHold).
+  local fracHold, fracWhy = M._fractureHold()
+  if fracHold then
+    local w = M.explore._fracWait
+    if w and not w.announced then
+      w.announced = true
+      local _, list = M._fractureStacks()
+      M._exploreEcho("<indian_red>Death's Demise<reset> -- curing fractures before moving on (" .. list .. ").")
+    end
+    M._scheduleTick(1.5)
+    return
+  elseif fracWhy == "stalled" then
+    local _, list = M._fractureStacks()
+    M._exploreEcho("<indian_red>Death's Demise<reset> -- no fracture cured in " .. FRACTURE_STALL
+      .. "s; moving on with " .. list .. " (SSC applies health only above 70% HP).")
+  end
 
   local dir, why = M._nextExploreStep()
   if dir then -- still sweeping new ground

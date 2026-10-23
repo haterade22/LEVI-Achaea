@@ -2,6 +2,27 @@
 
 ---
 
+## 2026-10-23 - v4.7.449: Death's Demise -- the sweep cures fractures before moving on
+
+User: "We are not curing fractures correctly? Or it takes a long time. If we have death's demise, we
+should wait until we cure all fractures before moving on".
+- **The curing was correct, and slow by design.** The four fractures are cured by `APPLY HEALTH`, the
+  elixir, not a salve: one application removes ONE stack, `skullfractures` lengthens the elixir
+  recovery (and gives the periodic nausea that cost a ferrum every 2 s in the log), and SSC applies
+  health for them only above 70% HP. A stack of 7 takes many applications.
+- **Nothing waited for them.** The explorer moved on as soon as the room was clear. Fractures are
+  stack afflictions held as a NUMBER, and `S._blockingAffs` (mnemosyne/009) counts only `true`, so no
+  recovery gate saw them either.
+- **New: `M._fractureHold()`** (`mnemosyne/008`). With Death's Demise held (flag `mnemDeathsDemise`, in
+  `M.BOON_FLAGS`), a cleared room holds the sweep until every fracture is cured, re-checking every
+  1.5 s like the Haemophiliac and Last Word holds. It echoes once with the stacks. It releases after
+  20 s with no stack cured (for example below 70% HP) and says so. A fight resets the wait.
+- **Docs corrected:** `kb/afflictions/cure-channels.md` and the bash curing profile comment said the
+  fractures compete for the SALVE. They do not; the traumas do.
+Tests: `test_mnemosyne.lua` "Death's Demise fracture hold" (5).
+
+---
+
 ## 2026-10-22 - v4.7.447: Terror of the Skies -- leaving sheds the swarm; dragon flags in BOON_FLAGS
 
 User: "Terror of the Skies: Your draconic heritage will prevent non-boss denizens from tracking or
