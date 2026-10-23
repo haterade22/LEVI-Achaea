@@ -422,7 +422,8 @@ end
 
 -- BOTH LEGS BROKEN (v4.7.378). "Both of your legs must be free and unhindered to do that." -- the
 -- leap is refused, and so is the tumble: no ground escape can happen. Like being bound, but only
--- for the ground (the hover does not need legs). One leg is fine: Achaea lets you walk on one.
+-- for the ground (the hover does not need legs). One leg: a WALK goes through, a LEAP does not
+-- (v4.7.448), so S.moveVerb tumbles -- see S._oneLegOut.
 local function legOut(side)
   local a = ataxia and ataxia.afflictions
   if not a then return false end
@@ -433,6 +434,10 @@ local function legOut(side)
   return false
 end
 function S._legsOut() return legOut("left") and legOut("right") end
+-- ONE LEG OUT (v4.7.448, from a death). With one broken leg and prone, the game refused BOTH the
+-- stand and the leap ("Both of your legs must be free and unhindered to do that." twice), and the
+-- escape was lost while the python re-webbed us. User: "tumble at that point". S.moveVerb tumbles.
+function S._oneLegOut() return legOut("left") or legOut("right") end
 
 -- On every prompt and tick: did the retreat we made shake them?
 function S._checkPursuit()
@@ -639,6 +644,9 @@ function S.moveVerb(dirShort)
   -- into our own icewall -- and above the mount, because the tumble goes through from the saddle
   -- (user, v4.7.346).
   if MAP and MAP.current and S.icyRooms and S.icyRooms[MAP.current] then return "tumble" end
+  -- ONE LEG OUT: tumble (v4.7.448, user). The leap is refused on one broken leg. Same place as the
+  -- ice, for the same reasons. Both legs out never gets here: S._legsOut() parks the move.
+  if S._oneLegOut() then return "tumble" end
   if mounted then return "mountjump" end
   local class = gmcp and gmcp.Char and gmcp.Char.Status and gmcp.Char.Status.class
   if class == "Bard" then return "backflip" end
