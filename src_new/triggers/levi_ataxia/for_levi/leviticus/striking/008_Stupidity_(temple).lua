@@ -40,7 +40,11 @@ patterns:
 
 if isTargeted(matches[2]) then
 		tarAffed("stupidity")
+  -- Since 2026-10-23 (Striking 270) TEMPLE also gives dizziness on a broken head
+  -- (damagedhead is the head's broken level; kb/CONFLICTS.md #41).
+  local brokenHead = tAffs and (tAffs.damagedhead or tAffs.mangledhead)
+  if brokenHead then tarAffed("dizziness") end
 if not ataxia.afflictions.aeon and partyrelay then
-  send("pt " ..target..": stupidity")
+  send("pt " ..target..": stupidity" .. (brokenHead and " dizziness" or ""))
 end
 end

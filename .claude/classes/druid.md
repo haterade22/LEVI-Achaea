@@ -158,7 +158,7 @@ embrace:
   balance: "3.00 seconds of balance, 100 mana (WIKI)"
   syntax: "RECLAMATION EMBRACE <target>"
   effect: "Vines tear apart a target whose four limbs are all at least damaged"
-  changed_2026_10_23: "No longer requires vines (Reclamation 324). Our 'run' response (004_Aff_gains_losses:252) no longer helps, and its condition has a precedence bug (kb/CONFLICTS.md #46)"
+  changed_2026_10_23: "No longer requires vines (Reclamation 324). Our 'run' response (004_Aff_gains_losses, gotAff) may no longer help (kb/CONFLICTS.md #46). Its precedence bug, which ran it against any class, is fixed in v4.7.451"
 
 # Changed 2026-10-23 (kb/changes/2026-10-23_classleads.md, part 2)
 groves_changes: "LASTHARVEST removed; VIGOUR and similar drain sunlight only when there is enough to cast"

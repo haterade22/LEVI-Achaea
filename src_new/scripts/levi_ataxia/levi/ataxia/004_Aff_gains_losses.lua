@@ -249,7 +249,10 @@ function gotAff()
   
   
   --Druid Nonsense
-  elseif aff == "damagedrightarm" or aff == "damagedleftarm" and not ataxia.afflictions.prone and ataxiaNDB_getClass(target) == "Druid" then
+  -- The two arm (and, below, leg) tests are bracketed: unbracketed, `and` bound tighter than
+  -- `or`, so ANY damaged right arm or leg, against any class or denizen, ran these branches
+  -- (v4.7.451). Since 2026-10-23 EMBRACE needs no vines (kb/CONFLICTS.md #46).
+  elseif (aff == "damagedrightarm" or aff == "damagedleftarm") and not ataxia.afflictions.prone and ataxiaNDB_getClass(target) == "Druid" then
     send("cq all;goto 11090")
     ataxia_boxEcho("EMBRACE DANGER NEED TO RUN", "goldenrod")
     ataxia_boxEcho("EMBRACE DANGER NEED TO RUN", "goldenrod")
@@ -260,7 +263,7 @@ function gotAff()
     send("curing queue insert 1 restoration to legs")
     ataxia_boxEcho("WE ARE PREAPPLYING", "yellow")
     send("tumble " ..random_direction)
-   elseif aff == "damagedrightleg" or aff == "damagedleftleg" and ataxia.afflictions.prone and ataxiaNDB_getClass(target) == "Druid" then
+   elseif (aff == "damagedrightleg" or aff == "damagedleftleg") and ataxia.afflictions.prone and ataxiaNDB_getClass(target) == "Druid" then
     getdirectionn()
     send("tumble " ..random_direction)
     
@@ -407,7 +410,9 @@ function lostAff()
 		end
 		send("allies",false)
 	elseif aff[1] == "corruption" then
-		send("curing clotat 180",false)
+		-- Back to the installed threshold (003_Install_System sends `curing clotat 30`). This
+		-- restored 180, so after any corruption SSC clotted only above 180 bleed (v4.7.451).
+		send("curing clotat 30",false)
 		ataxia_boxEcho("CORRUPTION IS GONE - SAFE", "white")
   elseif aff[1] == "brokenrightarm" or aff[1] == "brokenleftarm" then
     preventriftlock = false

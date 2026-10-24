@@ -1666,7 +1666,9 @@ elseif ataxia.afflictions.clumsiness and mprepped_leftleg == true and mprepped_r
   
  
 --Anti Parry
-elseif not tAffs.numbedleftarm and ataxiaTemp.parriedLimb ~= "left arm" and ataxiaTemp.parriedLimb == "left leg" or ataxiaTemp.parriedLimb == "right leg" or ataxiaTemp.parriedLimb == "right arm" and m2prepped_leftarm == false and mprepped_leftarm == false then
+-- The parried-limb tests are bracketed here and in the left-leg branches below: unbracketed,
+-- `and` bound tighter than `or`, so one true test skipped every other gate (v4.7.451).
+elseif not tAffs.numbedleftarm and (ataxiaTemp.parriedLimb == "left leg" or ataxiaTemp.parriedLimb == "right leg" or ataxiaTemp.parriedLimb == "right arm") and m2prepped_leftarm == false and mprepped_leftarm == false then
   if ataxia.vitals.class < 1 and ataxiaTemp.parriedLimb ~= "torso" then
     atk = atk.. "wield left morningstar511732;wield right morningstar511735;hellforge invest " ..toppression.. ";hyena slay " ..target.. ";doublewhirl " ..target.. " torso torso;sizeup " ..target.. ";assess " ..target
   elseif ataxia.vitals.class < 1 and ataxiaTemp.parriedLimb == "torso" then
@@ -2322,13 +2324,13 @@ elseif not tAffs.numbedleftarm and ataxiaTemp.parriedLimb ~= "left arm" and atax
 
 -- Prep Left Leg
 
-elseif mprepped_leftleg == true or m2prepped_leftleg == true and ataxia.vitals.class < 4 and ataxiaTemp.parriedLimb ~= "right leg" then
+elseif (mprepped_leftleg == true or m2prepped_leftleg == true) and ataxia.vitals.class < 4 and ataxiaTemp.parriedLimb ~= "right leg" then
   atk = atk.. "wield left morningstar511732;wield right morningstar511735;hellforge invest " ..toppression.. ";doublewhirl " ..target.. " right leg right leg;sizeup " ..target.. ";assess " ..target
 
 elseif ataxiaTemp.fractures.skullfractures < 1 and ataxiaTemp.fractures.wristfractures < 1 and ataxiaTemp.fractures.crackedribs < 1 then
-  if mprepped_leftleg == true or m2prepped_leftleg == true and ataxia.vitals.class < 8 and ataxiaTemp.parriedLimb ~= "head" then
+  if (mprepped_leftleg == true or m2prepped_leftleg == true) and ataxia.vitals.class < 8 and ataxiaTemp.parriedLimb ~= "head" then
     atk = atk.. "wield left morningstar511732;wield right morningstar511735;hellforge invest " ..toppression.. ";doublewhirl " ..target.. " head head;sizeup " ..target.. ";assess " ..target
-  elseif mprepped_leftleg == true or m2prepped_leftleg == true and ataxia.vitals.class < 8 and ataxiaTemp.parriedLimb ~= "torso" then
+  elseif (mprepped_leftleg == true or m2prepped_leftleg == true) and ataxia.vitals.class < 8 and ataxiaTemp.parriedLimb ~= "torso" then
     atk = atk.. "wield left morningstar511732;wield right morningstar511735;hellforge invest " ..toppression.. ";doublewhirl " ..target.. " torso torso;sizeup " ..target.. ";assess " ..target
   elseif mprepped_leftleg == false and m2prepped_leftleg == false then
     atk = atk.. "wield left morningstar511732;wield right morningstar511735;hellforge invest " ..toppression.. ";doublewhirl " ..target.. " left leg left leg;sizeup " ..target.. ";assess " ..target

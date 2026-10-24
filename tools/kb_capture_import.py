@@ -88,8 +88,13 @@ def route(blocks):
     any other block is filed under its own name.
     """
     out, answered = {}, set()
+    # A late answer: `affliction show X` timed out empty and its record landed in the next block,
+    # `whatcures X` (2026-10-23, transfixation). Filed under its own name it became a second
+    # record of the same affliction (`stateoftransfixation`), so file it under X instead.
+    late = None
     for b in blocks:
         own = slug(b["cmd"][len("affliction show "):]) if b["cmd"].startswith("affliction show ") else None
+        late_key = late[1] if late and b["cmd"] == "whatcures " + late[0] else None
         lines, i, first = b["lines"], 0, True
         while i < len(lines):
             m = re.match(r"^Affliction:\s{2,}(.+)$", lines[i])
@@ -112,10 +117,11 @@ def route(blocks):
                 if l.startswith("Affliction:"):
                     break
                 i += 1
-            key = own if (own and first) else squash(m.group(1))
+            key = own if (own and first) else (late_key if (late_key and first) else squash(m.group(1)))
             out[key] = (b["stamp"], b["cmd"] if key == own else f"affliction show {key}", rec)
             answered.add(("show", key))
             first = False
+        late = (b["cmd"][len("affliction show "):], own) if (own and b["timeout"] and first) else None
         if own and any(l.startswith("There is no such affliction") for l in lines):
             out.setdefault(own, (b["stamp"], b["cmd"], ["There is no such affliction."]))
             answered.add(("show", own))

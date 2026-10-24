@@ -131,7 +131,8 @@ doublewhirl:
   syntax: "doublewhirl <target> <limb> [expend] [<limb2> [expend]]"
   expend_relapse: "Since 2026-10-23 (Weaponmastery 93) the attacker gets ONE uniform message when an expended
     affliction relapses, and the stray paralysis message on an asthma relapse is gone. Our code reads no relapse
-    line: blind 2.5 s timers in `expend_afflictions/006-012` re-add the affliction (kb/CONFLICTS.md #42)"
+    line: blind 2.5 s timers in `expend_afflictions/006-012` re-add the affliction (kb/CONFLICTS.md #42).
+    v4.7.451 fixed `007`'s key (`clumsiness`) and `011`'s pattern type, which never matched"
 
 assault:
   effect: "Flail/morningstar momentum-damage strike; torso ≥3 mom (≥6 doubled), head ≥7 mom (mangles)"

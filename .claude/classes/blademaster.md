@@ -424,8 +424,8 @@ pommelstrike:
     knees: prone
     feet: prone
   broken_head: "Since 2026-10-23 (Striking 270): on a target with a BROKEN head, STRIKE EYES also gives
-    hallucinations and STRIKE TEMPLE also gives dizziness. Our triggers lag: `striking/008` (temple) never
-    adds dizziness, and `striking/009` (eyes) adds hallucinations on every eyes strike (kb/CONFLICTS.md #41)"
+    hallucinations and STRIKE TEMPLE also gives dizziness. `striking/008` (temple) adds the dizziness since
+    v4.7.451; `striking/009` (eyes) still adds hallucinations on every eyes strike (kb/CONFLICTS.md #41)"
 
 airfist:
   skill: Striking

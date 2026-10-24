@@ -2,6 +2,33 @@
 
 ---
 
+## 2026-10-23 - v4.7.451: and-or precedence bugs, the corruption clotat, TEMPLE on a broken head
+
+Found while filing the 2026-10-23 class-lead changes (`kb/changes/2026-10-23_classleads.md`).
+- **A damaged right arm no longer walks us away (`ataxia/004_Aff_gains_losses.lua`, `gotAff()`).**
+  `aff == "damagedrightarm" or aff == "damagedleftarm" and not prone and class == "Druid"` groups as
+  `A or (B and ...)`, so ANY damaged right arm, against any class or denizen, sent
+  `cq all;goto 11090` and "EMBRACE DANGER". The same shape made any damaged right leg while prone
+  `tumble` in a random direction. Both tests are now bracketed, so they run only against a Druid.
+  EMBRACE also no longer needs vines (Reclamation 324), so the run may no longer prevent it
+  (kb/CONFLICTS.md #46, still open).
+- **The same bug in the Infernal DWB offense (`dwb/001`).** The anti-parry branch ran on a parried
+  right leg even with the left arm prepped. The three left-leg branches skipped their momentum and
+  parry checks once a left leg was prepped, so the torso branch (for a parried head) could never run.
+  All four are bracketed.
+- **Losing corruption restores `curing clotat 30`, the installed value.** It restored 180, so after
+  any corruption SSC clotted only above 180 bleed for the rest of the session (#47).
+- **STRIKE TEMPLE adds dizziness on a broken head** (`striking/008`; Striking 270), and relays both
+  afflictions. EYES is unchanged until a log shows what it gives on an unbroken head (#41).
+- **DWB flail expend triggers:** `007`'s relapse timer re-added `"clumsy"`, a key V3 does not know;
+  it is now `clumsiness`. `011` had a regex pattern with `type: 0` (substring), so it never matched;
+  it is now `type: 1`, and counts the wrist fracture and the paralysis like its siblings.
+- **Tooling:** `tools/kb_capture_import.py` files a late AFFLICTION SHOW answer (one that landed in
+  the next `whatcures` block after a timeout) under its own command, not as a second affliction.
+Tests: `test_afflictions.lua` (5 new) and `test_v451_triggers.lua` (5).
+
+---
+
 ## 2026-10-23 - v4.7.450: v4.7.448 and v4.7.449 in one release
 
 v4.7.448 (one broken leg tumbles; the DIAGNOSE no longer deletes the escape) was released from its

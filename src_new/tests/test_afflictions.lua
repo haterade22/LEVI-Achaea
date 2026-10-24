@@ -555,3 +555,51 @@ describe("Truthseeker suppresses the unknown-affliction counter", function()
     restore()
   end)
 end)
+
+-- ─── v4.7.451: the bracketed Druid branches and the clotat restore ───────────
+
+describe("gotAff() Druid branches (v4.7.451)", function()
+  local function run(name, class, prone)
+    mock.reset()
+    ataxia.afflictions = { prone = prone or nil }
+    local saved = ataxiaNDB_getClass
+    ataxiaNDB_getClass = function() return class end
+    gmcp.Char.Afflictions.Add = { name = name }
+    gotAff()
+    ataxiaNDB_getClass = saved
+  end
+
+  it("a damaged RIGHT arm against a non-Druid does not run", function()
+    -- Unbracketed, `aff == right or (aff == left and ... Druid)` ran for any class.
+    run("damagedrightarm", "Serpent")
+    expect(mock.was_sent("cq all;goto 11090")).toBeFalse()
+  end)
+
+  it("a damaged arm against a Druid still runs", function()
+    run("damagedrightarm", "Druid")
+    expect(mock.was_sent("cq all;goto 11090")).toBeTrue()
+    run("damagedleftarm", "Druid")
+    expect(mock.was_sent("cq all;goto 11090")).toBeTrue()
+  end)
+
+  it("a damaged RIGHT leg while prone against a non-Druid does not tumble", function()
+    run("damagedrightleg", "Blademaster", true)
+    expect(mock.was_sent("tumble north")).toBeFalse()
+  end)
+
+  it("a damaged leg while prone against a Druid tumbles", function()
+    run("damagedrightleg", "Druid", true)
+    expect(mock.was_sent("tumble north")).toBeTrue()
+  end)
+end)
+
+describe("lostAff() corruption restores the installed clotat (v4.7.451)", function()
+  it("sends curing clotat 30, not 180", function()
+    mock.reset()
+    ataxia.afflictions = { corruption = true }
+    gmcp.Char.Afflictions.Remove = { "corruption" }
+    lostAff()
+    expect(mock.was_sent("curing clotat 30")).toBeTrue()
+    expect(mock.was_sent("curing clotat 180")).toBeFalse()
+  end)
+end)

@@ -94,7 +94,7 @@ Paths below are under `src_new/`. `...\leviticus` means `triggers\levi_ataxia\fo
 ### Striking (Blademaster): EYES and TEMPLE on a broken head (270)
 - **Effect:** on a target with a broken head, STRIKE EYES also gives hallucinations and STRIKE TEMPLE also gives dizziness.
 - **Confidence:** CONFIRMED (announcement).
-- **Code:** affected (CONFLICTS #41). `...\leviticus\striking\008_Stupidity_(temple).lua`:37/42 adds stupidity only, never dizziness. `009_Hallucinations_(eyes).lua`:37/42 adds hallucinations on EVERY eyes strike, with no head check. The patch implies hallucinations come from eyes only on a broken head.
+- **Code:** affected (CONFLICTS #41). `...\leviticus\striking\008_Stupidity_(temple).lua` added stupidity only; since v4.7.451 it also adds dizziness when `tAffs.damagedhead` or `mangledhead` is set. `009_Hallucinations_(eyes).lua`:37/42 adds hallucinations on EVERY eyes strike, with no head check. The patch implies hallucinations come from eyes only on a broken head.
 - **Notes:** dizziness is a focus cure, so a temple strike on a broken head now adds to the focus pressure.
 
 ### Spirituality (Priest): ANGEL PANIC vs hellsight (53)
@@ -175,7 +175,7 @@ part of the same post. All **CONFIRMED (announcement)** unless tagged.
 ### Survival (everyone): CLOTTING takes an amount (164)
 - **Effect:** "CLOTTING now takes an amount of bleeding to clot." The user: bleeding "is cured by CLOT (amount)" (`kb/raw/players/cures-user-2026-10-23.txt`). ASSUMED: the syntax is `CLOT <amount>`, and the amount sets how much bleeding one clot removes.
 - **Code:** probably unaffected; open as CONFLICTS #47. We never send CLOT ourselves. SSC clots for us: `curing clotat 30` at install (`ataxia/003_Install_System.lua`:32). The Mnemosyne Haemophiliac hold waits while bleed is 50 or more for SSC to clot it down (`mnemosyne/008_Explorer.lua`:56, :1633-1638). If SSC's clot now removes only a fixed amount each time, the hold lasts longer.
-- **Found during the check (older):** losing corruption sets `curing clotat 180` (`ataxia/004_Aff_gains_losses.lua`:410), not the installed 30, so after a Pariah/corruption fight SSC clots only above 180.
+- **Found during the check (older), fixed in v4.7.451:** losing corruption set `curing clotat 180` (`ataxia/004_Aff_gains_losses.lua`), not the installed 30, so after a Pariah/corruption fight SSC clotted only above 180. It now restores 30.
 
 ### Subterfuge (Serpent): the snake's sileris strip is progressive (admin)
 - **Effect:** the snake pet no longer strips sileris in one hit. The sileris "degrades each tick", and after a certain number of hits it is stripped. Darkshade on the target speeds this up, and scytherus speeds it up a lot. With both, it strips at once, as before.
@@ -190,7 +190,7 @@ part of the same post. All **CONFIRMED (announcement)** unless tagged.
 ### Reclamation (Druid): EMBRACE no longer needs vines (324)
 - **Effect:** EMBRACE (`RECLAMATION EMBRACE <target>`, 3.00 s balance) no longer needs vines. The wiki's condition is still a target with all four limbs at least damaged (`kb/classes/druid.md`).
 - **Code:** affected; open as CONFLICTS #46. Our only Embrace response runs: `cq all;goto 11090` and "EMBRACE DANGER" (`ataxia/004_Aff_gains_losses.lua`:252-255). Running away from the reclaimed room no longer avoids an Embrace.
-- **Found during the check (older, and serious):** that branch's condition is `aff == "damagedrightarm" or aff == "damagedleftarm" and not prone and class == "Druid"`. Lua binds `and` tighter than `or`, so a damaged RIGHT arm from ANY source (any class, or a denizen) clears our queue and walks us to room 11090. It sits in `gotAff()`, with no class gate.
+- **Found during the check (older, and serious), fixed in v4.7.451:** that branch's condition was `aff == "damagedrightarm" or aff == "damagedleftarm" and not prone and class == "Druid"`. Lua binds `and` tighter than `or`, so a damaged RIGHT arm from ANY source (any class, or a denizen) cleared our queue and walked us to room 11090. The leg branch below it had the same bug (a random `tumble`), and so did four branches of the Infernal DWB offense. All are bracketed now.
 
 ### Metamorphosis (Druid, Sentinel): wreathe, incinerate, flame (337)
 - **WREATHE** now adds burning stacks, and WYVERN FRENZY can be wreathed.

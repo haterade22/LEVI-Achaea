@@ -44,4 +44,4 @@ if not tAffs.clumsiness then
    
 end
 
-tempTimer(2.5, [[tarAffed("clumsy")]])
+tempTimer(2.5, [[tarAffed("clumsiness")]])

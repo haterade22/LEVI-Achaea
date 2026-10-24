@@ -35,7 +35,7 @@ colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
 - pattern: ^The wet crunch of bone can be heard as the flail smashes into the \w+ \w+ of \w+\.$
-  type: 0
+  type: 1
 ]]--
 
 if ataxiaTemp.fractures.wristfractures == 0 or ataxiaTemp.fractures.wristfractures == nil then
