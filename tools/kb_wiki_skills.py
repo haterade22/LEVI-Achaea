@@ -95,7 +95,9 @@ for _key, _text in {
     ("Magi", "Elementalism"): "new PEBBLE (CAST PEBBLE AT <target>, earth, 2.30 s eq, 90 mana): breaks one healthy limb",
     ("Psion", "Psionics"): "new PULSE (PSI PULSE <target>, 1.00 s eq): reads how heavily the target bleeds",
     ("Serpent", "Hypnosis"): "SUGGEST and SEAL used off balance take a fixed, unmodifiable equilibrium",
-    ("Serpent", "Subterfuge"): "HYPERSIGHT works as a star sigil on an evading Serpent you afflicted or damaged recently",
+    ("Serpent", "Subterfuge"): "HYPERSIGHT works as a star sigil on an evading Serpent you afflicted or damaged recently; "
+                               "the snake's sileris strip is progressive (faster with darkshade, much faster with "
+                               "scytherus, at once with both)",
     ("Alchemist", "Physiology"): "tempered MELANCHOLIC caps passive mana regen (level 2 at 2 stacks, 1 at 4, none at 6)",
     ("Alchemist", "Sublimation"): "HALOPHILIC costs 3x reagents and clears vines (one toss, two with a Druid in the area)",
     ("Priest", "Spirituality"): "ANGEL PANIC gives slickness instead of fear on a hellsight target; under HERESY a "
@@ -107,7 +109,17 @@ for _key, _text in {
     ("Occultist", "Domination"): "summoning entities on the Chaos Plane has a different message",
     ("Runewarden", "Weaponmastery"): "DWB EXPEND gives a uniform relapse message; new Two Handed RETALIATE",
     ("Paladin", "Weaponmastery"): "DWB EXPEND gives a uniform relapse message; new Two Handed RETALIATE",
-    ("Infernal", "Weaponmastery"): "DWB EXPEND gives a uniform relapse message; new Two Handed RETALIATE",
+    ("Infernal", "Weaponmastery"): "DWB EXPEND gives a uniform relapse message; Oppression invests can be appended "
+                                   "to relevant blunt attacks; new Two Handed RETALIATE",
+    ("Infernal", "Oppression"): "new ACCUSATION",
+    ("Druid", "Reclamation"): "EMBRACE no longer requires vines",
+    ("Druid", "Groves"): "LASTHARVEST removed; VIGOUR and similar drain sunlight only when there is enough to cast",
+    ("Sylvan", "Groves"): "LASTHARVEST removed; VIGOUR and similar drain sunlight only when there is enough to cast",
+    ("Druid", "Metamorphosis"): "WREATHE adds burning stacks and WYVERN FRENZY can be wreathed; INCINERATE kills "
+                                "below 40%, rising with burning stacks to 60%; FLAME must be re-summoned within "
+                                "30 s of a morph, or it clears with backlash",
+    ("Sentinel", "Metamorphosis"): "FLAME must be re-summoned within 30 s of a morph, or it clears with backlash; "
+                                   "WREATHE and INCINERATE changed (wyvern, Druid only)",
     ("Unnamable", "Weaponmastery"): "DWB EXPEND gives a uniform relapse message; new Two Handed RETALIATE",
 }.items():
     _note = f"Changed 2026-10-23: {_text} ({CHANGES_2026_10_23})"

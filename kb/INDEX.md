@@ -27,7 +27,7 @@ One line per page. Kept up to date by `/kb-ingest`.
 - [mechanics/elementals-and-glance.md](mechanics/elementals-and-glance.md): elemental denizen names and attacks, the "There are N <plural> here." room prose, GLANCE, a denizen shield going up
 
 ## Changes (game announcements)
-- [changes/2026-10-23_classleads.md](changes/2026-10-23_classleads.md): the 2026-10-23 class-lead post, one block per change with its fight impact and code join: Crystalism DESTABILISE + OVERLOAD, Elementalism PEBBLE, Psionics PULSE, Woodlore GRAPPLE (AB for all four), Serpent SUGGEST/SEAL off balance, Striking on a broken head, ANGEL PANIC, HERESY, tempered melancholic, HALOPHILIC, HYPERSIGHT, Telepathy locks, DWB EXPEND, RETALIATE, third-party cure lines, artefact cooldowns
+- [changes/2026-10-23_classleads.md](changes/2026-10-23_classleads.md): the 2026-10-23 class-lead post, one block per change with its fight impact and code join: Crystalism DESTABILISE + OVERLOAD, Elementalism PEBBLE, Psionics PULSE, Woodlore GRAPPLE (AB for all four), Serpent SUGGEST/SEAL off balance, Striking on a broken head, ANGEL PANIC, HERESY, tempered melancholic, HALOPHILIC, HYPERSIGHT, Telepathy locks, DWB EXPEND, RETALIATE, third-party cure lines, artefact cooldowns; part 2: CLOTTING by amount, the Serpent snake's progressive sileris strip, DWB inline invests, EMBRACE without vines, wreathe/incinerate/flame, Groves, ACCUSATION
 
 ## Combat (classes as they look in real fights)
 - [combat/shikudo.md](combat/shikudo.md): every Shikudo strike, damage and effect line from both sides (first vs later in a combo), light strikes, forms, kata, Telepathy, ASSESS, SHATTER, the Dispatch kill as done, and what our triggers record
@@ -68,6 +68,8 @@ One line per page. Kept up to date by `/kb-ingest`.
 | raw/players/magi-tabethys-2026-10-12.txt | Tabethys on Magi: the core rotation (magma, dehydrate, dehydrate, fulminate), CAST MUDSLIDE, the focus lock and the freeze-to-glaciate finisher | 2026-10-12 |
 | raw/players/dizziness-fall-2026-10-15.txt | The dizzy fall line ("The ground seems to tilt and you fall with a thump."): it takes balance and cancels the move; dizziness can be uncurable | 2026-10-15 |
 | raw/players/mnemosyne-scaling-boons-2026-10-16.txt | Mana Powered's text (4% per WHOLE 1000 max mana), the stat boons (4% per point, user), and the STAT box row format (two stats per row) | 2026-10-16 |
+| raw/players/cures-user-2026-10-23.txt | The user on the five names the game does not list: bleeding = CLOT (amount), drowning = pear, nocaloric = apply caloric (a defence); the four tempered humours = ginger/antimony | 2026-10-23 |
+| raw/announcements/classleads_2026-10-23_part2.txt | Part 2 of the 2026-10-23 class-lead post: Groves, Metamorphosis, Oppression, Reclamation, the Serpent snake, DWB inline invests, CLOTTING | 2026-10-23 |
 | raw/guides/lock-types.txt | Community guide: lock types | 2026-10-10 |
 | raw/guides/active-and-passive-cures-with-fire-lines.txt | Community guide: what each class cure looks like | 2026-10-10 |
 

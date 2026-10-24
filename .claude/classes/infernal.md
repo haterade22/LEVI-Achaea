@@ -157,6 +157,8 @@ See [Venoms & Hellforge Investments](#venoms--hellforge-investments) section for
 | **INVEST TORMENT** | Healthleech | Damage focus |
 | **INVEST PUNISHMENT** | Scaling damage | Finish low-health targets |
 
+**Since 2026-10-23 (Weaponmastery 101):** with dual blunt, an invest can be appended to the end of a relevant blunt attack, inline. The syntax is not given. Our DWB still sends `hellforge invest <x>` as its own command (`dwb/001`:424-432; kb/CONFLICTS.md #48). **New Oppression ability: ACCUSATION** (Oppression 152), no detail yet.
+
 ### Passive Abilities (Oppression)
 ```yaml
 relentless:

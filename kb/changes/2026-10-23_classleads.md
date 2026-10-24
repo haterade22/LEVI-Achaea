@@ -8,6 +8,8 @@ sources:
   - kb/raw/ab/psionics_pulse_2026-10-23.txt
   - kb/raw/ab/woodlore_grapple_2026-10-23.txt
   - kb/raw/live/captures/kb_capture_2026-10-23_122952.txt
+  - kb/raw/announcements/classleads_2026-10-23_part2.txt
+  - kb/raw/players/cures-user-2026-10-23.txt
 code:
   - src_new/scripts/levi_ataxia/levi/levi_scripts/serpent/002_Serpent_Offense.lua
   - src_new/scripts/levi_ataxia/levi/levi_scripts/mage/004_Magi_Offense.lua
@@ -26,7 +28,7 @@ fight and whether our code depends on the old behaviour. The announcement text i
 four new abilities that were pasted as `AB` output are **CONFIRMED (live)**.
 
 The wiki-generated class pages (`kb/classes/`) predate this post. Each changed skill carries a
-note there that points to this page. The open questions are rows #39-#45 in
+note there that points to this page. The open questions are rows #39-#49 in
 [../CONFLICTS.md](../CONFLICTS.md).
 
 Paths below are under `src_new/`. `...\leviticus` means `triggers\levi_ataxia\for_levi\leviticus`.
@@ -164,5 +166,45 @@ Paths below are under `src_new/`. `...\leviticus` means `triggers\levi_ataxia\fo
 - **Domination (216):** summoning entities on the Chaos Plane has a different message. No trigger matches an entity summon line.
 - **Chivalry (19):** the admins can now edit knight lineages. No combat effect.
 
+## Part 2 ("More changes!")
+
+The second part of the post, `kb/raw/announcements/classleads_2026-10-23_part2.txt`. Its last two
+sections (Weaponmastery, Survival) came outside the pasted block, in the user's message; they are
+part of the same post. All **CONFIRMED (announcement)** unless tagged.
+
+### Survival (everyone): CLOTTING takes an amount (164)
+- **Effect:** "CLOTTING now takes an amount of bleeding to clot." The user: bleeding "is cured by CLOT (amount)" (`kb/raw/players/cures-user-2026-10-23.txt`). ASSUMED: the syntax is `CLOT <amount>`, and the amount sets how much bleeding one clot removes.
+- **Code:** probably unaffected; open as CONFLICTS #47. We never send CLOT ourselves. SSC clots for us: `curing clotat 30` at install (`ataxia/003_Install_System.lua`:32). The Mnemosyne Haemophiliac hold waits while bleed is 50 or more for SSC to clot it down (`mnemosyne/008_Explorer.lua`:56, :1633-1638). If SSC's clot now removes only a fixed amount each time, the hold lasts longer.
+- **Found during the check (older):** losing corruption sets `curing clotat 180` (`ataxia/004_Aff_gains_losses.lua`:410), not the installed 30, so after a Pariah/corruption fight SSC clots only above 180.
+
+### Subterfuge (Serpent): the snake's sileris strip is progressive (admin)
+- **Effect:** the snake pet no longer strips sileris in one hit. The sileris "degrades each tick", and after a certain number of hits it is stripped. Darkshade on the target speeds this up, and scytherus speeds it up a lot. With both, it strips at once, as before.
+- **Why (admin):** sileris was "turned off almost 100% of the time", so fratricide was "basically an always on thing". This keeps the snake strong in the mid and late game and slows the early game.
+- **Code:** unaffected in logic; open as CONFLICTS #49. Our offense does not count on the adder (`order adder kill`, `serpent/002`:2196) to strip sileris. It strips with gecko, and impulses wait for sileris and fangbarrier to be down (`checkImpulseEligible`). No trigger reads the snake's strip or degrade lines, so V3 notices the strip only when a later bite is refused (`707_Sileris_True`) or lands.
+- **Notes:** against a fresh target, sileris now stays up longer, so impulses and the frat route start later unless darkshade and scytherus are on.
+
+### Weaponmastery, Dual Blunt: inline Oppression invests (101)
+- **Effect:** an Infernal can append an Oppression invest to the end of a relevant blunt attack, to invest inline.
+- **Code:** affected (an opportunity); open as CONFLICTS #48. Our Infernal DWB sends `hellforge invest <x>` as a separate command before every attack (`dwb/001_Infernal_DWB_Logic_-_Levi.lua`:424, :428, :432). The post gives no inline syntax.
+
+### Reclamation (Druid): EMBRACE no longer needs vines (324)
+- **Effect:** EMBRACE (`RECLAMATION EMBRACE <target>`, 3.00 s balance) no longer needs vines. The wiki's condition is still a target with all four limbs at least damaged (`kb/classes/druid.md`).
+- **Code:** affected; open as CONFLICTS #46. Our only Embrace response runs: `cq all;goto 11090` and "EMBRACE DANGER" (`ataxia/004_Aff_gains_losses.lua`:252-255). Running away from the reclaimed room no longer avoids an Embrace.
+- **Found during the check (older, and serious):** that branch's condition is `aff == "damagedrightarm" or aff == "damagedleftarm" and not prone and class == "Druid"`. Lua binds `and` tighter than `or`, so a damaged RIGHT arm from ANY source (any class, or a denizen) clears our queue and walks us to room 11090. It sits in `gotAff()`, with no class gate.
+
+### Metamorphosis (Druid, Sentinel): wreathe, incinerate, flame (337)
+- **WREATHE** now adds burning stacks, and WYVERN FRENZY can be wreathed.
+- **INCINERATE** kills below 40% health (was higher), plus more for each burning stack, up to three stacks and a 60% cap. The first stack counts for more than the other two. The wiki capture already has the steps: 40%, then 50% at one burning stack, 55% at two and 60% at three (`kb/classes/druid.md`, WIKI).
+- **Summoned FLAME:** after a morph to another form, the Druid has 30 s to SUMMON FLAME again and gets the old flame level back after a short delay. Without that, they take backlash damage and the flame is cleared.
+- **Code:** no code reads incinerate or wreathe. **Notes (defence):** against a wyvern, every burning stack raises the incinerate kill line, so burning becomes a kill-route resource. Cure burning early and keep health above 60% when the Druid has white fire up.
+
+### Groves (Druid, Sylvan) (234, 64)
+- LASTHARVEST is removed from the skill.
+- VIGOUR and similar abilities drain sunlight only when there is enough to cast them.
+- **Code:** none.
+
+### Oppression (Infernal): ACCUSATION (152)
+- A new ability. The post gives no detail. **Code:** none.
+
 ## Conflicts
-Rows #39-#45 in [../CONFLICTS.md](../CONFLICTS.md).
+Rows #39-#49 in [../CONFLICTS.md](../CONFLICTS.md).

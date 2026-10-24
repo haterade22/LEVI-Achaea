@@ -68,6 +68,8 @@ Source: [https://wiki.achaea.com/Propagation](https://wiki.achaea.com/Propagatio
 
 ## Groves (59 abilities)
 
+*Changed 2026-10-23: LASTHARVEST removed; VIGOUR and similar drain sunlight only when there is enough to cast (kb/changes/2026-10-23_classleads.md).*
+
 Groves is the skill of interacting with the great forests of Achaea. It will allow practitioners to establish a private Grove from which they will base their power. Groves absorb and accumulate sunlight, which practitioners use to power the abilities. Every night, a Grove will lose some of the sunlight, as the Grove must maintain itself even when everything else is sleeping soundly. Further, most abilities in Groves will use up some of this sunlight energy.
 
 The skill of Groves is available to the Druid and Sylvan classes.

@@ -152,6 +152,20 @@ sap:
   balance: eq
   effect: "Sap target's energy"
   syntax: "SAP <target>"
+
+embrace:
+  skill: Reclamation
+  balance: "3.00 seconds of balance, 100 mana (WIKI)"
+  syntax: "RECLAMATION EMBRACE <target>"
+  effect: "Vines tear apart a target whose four limbs are all at least damaged"
+  changed_2026_10_23: "No longer requires vines (Reclamation 324). Our 'run' response (004_Aff_gains_losses:252) no longer helps, and its condition has a precedence bug (kb/CONFLICTS.md #46)"
+
+# Changed 2026-10-23 (kb/changes/2026-10-23_classleads.md, part 2)
+groves_changes: "LASTHARVEST removed; VIGOUR and similar drain sunlight only when there is enough to cast"
+wyvern_fire_changes:
+  wreathe: "Adds burning stacks; WYVERN FRENZY can now be wreathed"
+  incinerate: "Kills below 40% health, rising with burning stacks: 50% at one, 55% at two, 60% at three (WIKI + announcement)"
+  flame: "After a morph, re-SUMMON FLAME within 30 s to get the old flame level back after a short delay; otherwise backlash damage and the flame clears"
 ```
 
 ## Defensive Abilities
@@ -205,6 +219,8 @@ priority_cures:
   - petrification: "Cure before full petrify"
 
 dangerous_abilities:
+  - incinerate: "Wyvern kill below 40% health, up to 60% with three burning stacks (2026-10-23): cure burning early and stay above 60% when white fire is up"
+  - embrace: "Needs no vines since 2026-10-23: all four limbs damaged is enough, so cure limb damage, do not just leave the room"
   - petrify: "Basilisk instant kill"
   - maul: "High bear form damage"
   - vinetangle: "Entanglement"

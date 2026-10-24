@@ -440,6 +440,7 @@ morph:
   effect: "Transform into a form"
   syntax: "MORPH <form>"
   forms: [jaguar, basilisk, wolf, bear, eagle]
+  changed_2026_10_23: "Summoned FLAME: after a morph, re-summon within 30 s to keep the level, or take backlash and lose it (Metamorphosis 337). Wreathe/incinerate changes are wyvern, Druid only"
 
 attack:
   skill: Metamorphosis

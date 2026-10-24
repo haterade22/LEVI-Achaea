@@ -110,6 +110,8 @@ vinetangle:
   syntax: "VINETANGLE <target>"
   notes: "Grove must be active"
 
+groves_changes_2026_10_23: "LASTHARVEST removed; VIGOUR and similar drain sunlight only when there is enough to cast (Groves 234, 64)"
+
 # Weatherweaving
 call_weather:
   skill: Weatherweaving

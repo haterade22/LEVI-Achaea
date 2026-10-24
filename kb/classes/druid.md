@@ -6,6 +6,8 @@
 
 ## Groves (59 abilities)
 
+*Changed 2026-10-23: LASTHARVEST removed; VIGOUR and similar drain sunlight only when there is enough to cast (kb/changes/2026-10-23_classleads.md).*
+
 Groves is the skill of interacting with the great forests of Achaea. It will allow practitioners to establish a private Grove from which they will base their power. Groves absorb and accumulate sunlight, which practitioners use to power the abilities. Every night, a Grove will lose some of the sunlight, as the Grove must maintain itself even when everything else is sleeping soundly. Further, most abilities in Groves will use up some of this sunlight energy.
 
 The skill of Groves is available to the Druid and Sylvan classes.
@@ -141,6 +143,8 @@ Source: [https://wiki.achaea.com/Groves](https://wiki.achaea.com/Groves) (raw: `
 - **Swarmsense**: Sense the size of the swarm. Using this skill will allow you to sense the number of insects that have infested the foetid pool in Eleusis.
 
 ## Metamorphosis (92 abilities)
+
+*Changed 2026-10-23: WREATHE adds burning stacks and WYVERN FRENZY can be wreathed; INCINERATE kills below 40%, rising with burning stacks to 60%; FLAME must be re-summoned within 30 s of a morph, or it clears with backlash (kb/changes/2026-10-23_classleads.md).*
 
 Metamorphosis is the ability to bond with the spirits of various animals, ranging from the mundane to the fantastic. To begin the process, MORPH &lt;animal>. Once a metamporh has successfully metamorphosed, they will find it is a strain on them to stay bonded causing a greater endurance drain. UNMORPH (or HUMAN) will bring them out of the form.
 
@@ -344,6 +348,8 @@ Source: [https://wiki.achaea.com/Metamorphosis](https://wiki.achaea.com/Metamorp
 - **Yank**: Elephant From an adjacent location, you may yank an adventurer into your location with your trunk, providing that the adventurer isn't being held there by some means.
 
 ## Reclamation (25 abilities)
+
+*Changed 2026-10-23: EMBRACE no longer requires vines (kb/changes/2026-10-23_classleads.md).*
 
 In the beginning there were no cities; those that practice Reclamation shall see it so again.
 

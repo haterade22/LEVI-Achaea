@@ -6,7 +6,7 @@
 
 ## Subterfuge (55 abilities)
 
-*Changed 2026-10-23: HYPERSIGHT works as a star sigil on an evading Serpent you afflicted or damaged recently (kb/changes/2026-10-23_classleads.md).*
+*Changed 2026-10-23: HYPERSIGHT works as a star sigil on an evading Serpent you afflicted or damaged recently; the snake's sileris strip is progressive (faster with darkshade, much faster with scytherus, at once with both) (kb/changes/2026-10-23_classleads.md).*
 
 Subterfuge is a diverse skill, encompassing abilities ranging from the secret rattle that those of serpentine ambitions may use to communicate with each other, to archery, the conjuring of illusions, dimensional wormholes, and various stealth and attack abilities.
 

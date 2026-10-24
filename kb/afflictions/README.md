@@ -143,6 +143,22 @@ These are tracked in [../CONFLICTS.md](../CONFLICTS.md). In short:
   "Disfigurement", the old name of `disloyalty` (the game still accepts it). It omits about 50 afflictions our priority table handles. **Live
   `WHATCURES <aff>` output beats any HELP file.**
 - Druid/Sylvan **Grove Cure** has no trigger (its line is uncaptured) and no blocker.
+- **Five names are not game afflictions.** `bleeding`, `drowning`, `nocaloric`, `stinky` and
+  `temperedhumours` get "There is no such affliction." from AFFLICTION SHOW and "That is not a
+  known affliction." from WHATCURES (captures of 2026-10-11 and 2026-10-23). The game handles them
+  as other states, so the live record cannot answer for them. Their cures, from HELP 13.7.2 and
+  the user (`kb/raw/players/cures-user-2026-10-23.txt`):
+  - `bleeding`: CLOT, which takes an amount (`CLOT <amount>`, user). It is a vital (gmcp
+    charstats "Bleed: N"), not an affliction; SSC clots it by `curing clotat`.
+  - `drowning`: eat pear (calcite), which gives underwater breathing. Pear cannot be eaten in advance (HELP 13.7.1).
+  - `nocaloric`: apply caloric. It means the caloric DEFENCE is down (user); HELP 13.7.2 has no
+    row for it. Our code uses it the same way, as a target state (`mage/004_Magi_Offense.lua`:330).
+  - `stinky`: scrub (HELP 13.7.2 only).
+  - `temperedhumours`: HELP's group name. The game's own afflictions are the four humours
+    (`temperedcholeric`, `-melancholic`, `-phlegmatic`, `-sanguine`), each cured by eating ginger
+    or antimony (live, and the user agrees).
+  The capture asks about all five on every run (`ataxiaKB.EXTRA_AFFS`, `misc_scripts/025_KB_Capture.lua`:57),
+  so their refusals are expected, not new gaps.
 
 **Best next pastes:** `WHATCURES <aff>` and `AFFLICTION SHOW <aff>` for every affliction in
 the "not in HELP 13.7.2" table of [catalog.md](catalog.md), then `HELP CURES` and `HELP HEAL`.

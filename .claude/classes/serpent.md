@@ -67,7 +67,7 @@ modes: [auto, lock, group, darkshade, scytherus, bitepayload, hypnosis, hypnoloc
 
 # Every round goes out as ONE `queue addclear freestand` entry (serp_sendAttack, :2150-2198):
 purge:      "purge  # residual venom cleared first (:2181-2182)"
-adder_pet:  "order adder kill <target>  (:2178-2179). The wiki's Snake ability summons a different snake per city (Mhaldor: adders); the command always says adder"
+adder_pet:  "order adder kill <target>  (:2196). Since 2026-10-23 its sileris strip is PROGRESSIVE: the coating degrades each tick and strips after a number of hits; darkshade speeds it, scytherus speeds it a lot, both strip at once (admin; kb/CONFLICTS.md #49). The wiki's Snake ability summons a different snake per city (Mhaldor: adders); the command always says adder"
 
 # Round-1 opener (buildOpener, :2115-2142), once per target
 opener:

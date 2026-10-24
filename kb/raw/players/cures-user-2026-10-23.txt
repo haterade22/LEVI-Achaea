@@ -1,0 +1,10 @@
+Bleeding is cured by CLOT (amount)
+drowning is cured by pear
+nocaloric is cured by applying caloric (it is a defence)
+
+Below is all cured by Antimony/Ginger
+
+Temperedcholeric
+Temperedmelancholic
+Temperedphlegmatic
+Temperedsanguine

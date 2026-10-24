@@ -6,7 +6,7 @@
 
 ## Weaponmastery (67 abilities)
 
-*Changed 2026-10-23: DWB EXPEND gives a uniform relapse message; new Two Handed RETALIATE (kb/changes/2026-10-23_classleads.md).*
+*Changed 2026-10-23: DWB EXPEND gives a uniform relapse message; Oppression invests can be appended to relevant blunt attacks; new Two Handed RETALIATE (kb/changes/2026-10-23_classleads.md).*
 
 Masters of melee weapons, knights with the weaponmastery skill are a force to be reckoned with against their fellow adventurers and denizens alike. Weaponmasters can select a specialisation based on the weapons they wish to use, either dual cutting, dual blunt, two-handed, or sword and shield.
 
@@ -157,6 +157,8 @@ Source: [https://wiki.achaea.com/Weaponmastery](https://wiki.achaea.com/Weaponma
 - **Disembowel**: Tear the entrails from a target. Once you have impaled someone, you may disembowel them, ripping open their bloated bellies, and causing immense damage. Those suffering from internal bleeding will take more damage from this attack.
 
 ## Oppression (26 abilities)
+
+*Changed 2026-10-23: new ACCUSATION (kb/changes/2026-10-23_classleads.md).*
 
 "The body may be made stronger through combat."
 

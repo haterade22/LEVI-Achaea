@@ -6,6 +6,8 @@
 
 ## Metamorphosis (92 abilities)
 
+*Changed 2026-10-23: FLAME must be re-summoned within 30 s of a morph, or it clears with backlash; WREATHE and INCINERATE changed (wyvern, Druid only) (kb/changes/2026-10-23_classleads.md).*
+
 Metamorphosis is the ability to bond with the spirits of various animals, ranging from the mundane to the fantastic. To begin the process, MORPH &lt;animal>. Once a metamporh has successfully metamorphosed, they will find it is a strain on them to stay bonded causing a greater endurance drain. UNMORPH (or HUMAN) will bring them out of the form.
 
 The skill of Metamorphosis is available to the Druid and Sentinel classes.

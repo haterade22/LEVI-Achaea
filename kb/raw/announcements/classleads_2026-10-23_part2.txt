@@ -1,0 +1,43 @@
+More changes!
+
+Groves
+------
+* (234): LASTHARVEST has been removed from the skill.
+* (64): VIGOUR and similar shall now only drain sunlight if you have enough to cast the ability.
+
+Metamorphosis
+-------------
+* (337): WREATHE now adds burning stacks.
+* (337): WYVERN FRENZY can now be WREATHED.
+* INCINERATE has had its health kill threshold reduced to 40%, but now scales up with burning stacks (up to three
+stacks, capping out at 60%, first stack weighs more heavily than the second two).
+* (337): Summoned FLAME has undergone some changes:
+- On morphing to a different form, you have thirty seconds of time to summon flame again. If you do so, you'll return to
+your former flame level after a short delay.
+- If you do not summon flame again within said window, you'll take backlash damage and flame will be cleared.
+
+Oppression
+----------
+* (152): ACCUSATION has been added to the skill.
+
+Reclamation
+-----------
+* (324): EMBRACE no longer requires vines.
+
+Subterfuge
+----------
+* (Admin): The snake pets sileris strip has been altered to be progressive rather than one and done. It now degrades
+each tick and after a certain number of hits the sileris defence is stripped. The rate of degradement is increased by
+darkshade being present and significantly increased by scytherus being present (if both are present, it strips instantly
+as previously).
+* Note: my goal here was for this to facilitate the late game scytherus push but in practice it was just meaning sileris
+is turned off almost 100% of the time and consequently meaning frat was basically an always on thing too,. This should
+preserve the snakes potency for mid to late game but slow things down a little earlier on.
+
+Weaponmastery
+------------
+* (101): (Dual blunt): You can now append oppression invests to the end of relevant blunt attacks to do this inline.
+
+Survival
+--------
+* (164): CLOTTING now takes an amount of bleeding to clot.
