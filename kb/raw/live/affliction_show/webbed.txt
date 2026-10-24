@@ -1,4 +1,4 @@
-# affliction show webbed  (2026-10-11T00:14:19Z)
+# affliction show webbed  (2026-10-24T01:42:26Z)
 Affliction:         Entanglement by webs
 Diagnose:           entangled in strands of webbing.
 Afflicted msg:      none

@@ -1,4 +1,4 @@
-# affliction show blistered  (2026-10-11T00:14:31Z)
+# affliction show blistered  (2026-10-24T01:42:38Z)
 Affliction:         Blistered
 Diagnose:           suffering from horribly blistered skin.
 Afflicted msg:      none

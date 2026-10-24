@@ -1,4 +1,4 @@
-# affliction show hindered  (2026-10-11T00:15:12Z)
+# affliction show hindered  (2026-10-24T01:43:13Z)
 Affliction:         Hindered
 Diagnose:           hindered by the forests.
 Afflicted msg:      none

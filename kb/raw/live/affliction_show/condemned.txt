@@ -1,4 +1,4 @@
-# affliction show condemned  (2026-10-11T00:14:40Z)
+# affliction show condemned  (2026-10-24T01:42:44Z)
 Affliction:         Condemned
 Diagnose:           you are condemned to burn.
 Afflicted msg:      none

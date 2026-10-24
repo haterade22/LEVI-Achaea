@@ -1,4 +1,4 @@
-# affliction show scrambledbrains  (2026-10-11T00:15:50Z)
+# affliction show scrambledbrains  (2026-10-24T01:43:41Z)
 Affliction:         Scrambledbrains
 Diagnose:           your brains have been scrambled by a great impact.
 Afflicted msg:      Your brains feel scrambled by the impact.

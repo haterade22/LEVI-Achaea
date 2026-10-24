@@ -1,4 +1,4 @@
-# affliction show pinshot  (2026-10-11T00:15:45Z)
+# affliction show pinshot  (2026-10-24T01:43:37Z)
 Affliction:         Pinshot
 Diagnose:           impaled through the foot.
 Afflicted msg:      none

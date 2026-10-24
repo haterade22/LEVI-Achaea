@@ -1,4 +1,4 @@
-# affliction show hamstrung  (2026-10-11T00:15:07Z)
+# affliction show hamstrung  (2026-10-24T01:43:09Z)
 Affliction:         Hamstrung
 Diagnose:           suffering from a crippled hamstring.
 Afflicted msg:      none

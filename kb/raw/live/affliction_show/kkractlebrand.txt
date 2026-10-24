@@ -1,4 +1,4 @@
-# affliction show kkractlebrand  (2026-10-11T00:15:25Z)
+# affliction show kkractlebrand  (2026-10-24T01:40:44Z)
 Affliction:         Kkractlebrand
 Diagnose:           marked by the wrath of Kkractle.
 Afflicted msg:      The mark upon your brow bursts into flame, a singular point of agony that threatens to consume you.

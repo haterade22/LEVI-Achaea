@@ -1,4 +1,4 @@
-# affliction show unweavingbody  (2026-10-11T00:14:11Z)
+# affliction show unweavingbody  (2026-10-24T01:42:18Z)
 Affliction:         Unweavingbody
 Diagnose:           suffering from an unweaving body.
 Afflicted msg:      none

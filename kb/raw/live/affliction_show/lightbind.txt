@@ -1,4 +1,4 @@
-# affliction show lightbind  (2026-10-11T00:15:30Z)
+# affliction show lightbind  (2026-10-24T01:43:23Z)
 Affliction:         Lightbind
 Diagnose:           bound by chains of golden light.
 Afflicted msg:      none

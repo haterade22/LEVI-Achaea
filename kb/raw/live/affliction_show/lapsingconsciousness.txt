@@ -1,4 +1,4 @@
-# affliction show lapsingconsciousness  (2026-10-11T00:15:27Z)
+# affliction show lapsingconsciousness  (2026-10-24T01:43:21Z)
 Affliction:         Lapses in consciousness
 Diagnose:           afflicted by lapses in consciousness.
 Afflicted msg:      You feel your brain begin to falter.

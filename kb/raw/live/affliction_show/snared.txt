@@ -1,4 +1,4 @@
-# affliction show snared  (2026-10-11T00:15:55Z)
+# affliction show snared  (2026-10-24T01:43:47Z)
 Affliction:         Snared
 Diagnose:           tangled up by a rope snare.
 Afflicted msg:      none

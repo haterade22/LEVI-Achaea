@@ -1,4 +1,4 @@
-# affliction show latched  (2026-10-11T00:15:28Z)
+# affliction show latched  (2026-10-24T01:40:46Z)
 Affliction:         Latched
 Diagnose:           Moments from death.
 Afflicted msg:      You feel suddenly weak, your limbs trembling and bile rising.

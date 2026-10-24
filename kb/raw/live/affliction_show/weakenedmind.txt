@@ -1,4 +1,4 @@
-# affliction show weakenedmind  (2026-10-11T00:16:13Z)
+# affliction show weakenedmind  (2026-10-24T01:44:03Z)
 Affliction:         Weakenedmind
 Diagnose:           weakened in mind.
 Afflicted msg:      none

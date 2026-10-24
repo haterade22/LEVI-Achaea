@@ -1,4 +1,4 @@
-# affliction show agoraphobia  (2026-10-11T00:11:09Z)
+# affliction show agoraphobia  (2026-10-24T01:39:10Z)
 Affliction:         Agoraphobia
 Diagnose:           agoraphobic.
 Afflicted msg:      Terror descends upon you and your head swims - you must find shelter!

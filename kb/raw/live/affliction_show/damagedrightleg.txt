@@ -1,4 +1,4 @@
-# affliction show damagedrightleg  (2026-10-11T00:11:59Z)
+# affliction show damagedrightleg  (2026-10-24T01:39:44Z)
 Affliction:         A damaged right leg
 Diagnose:           has a partially damaged right leg.
 Afflicted msg:      Your right leg is greatly damaged from the beating.

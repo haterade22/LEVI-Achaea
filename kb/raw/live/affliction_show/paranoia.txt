@@ -1,4 +1,4 @@
-# affliction show paranoia  (2026-10-11T00:13:19Z)
+# affliction show paranoia  (2026-10-24T01:41:09Z)
 Affliction:         Paranoia
 Diagnose:           paranoid.
 Afflicted msg:      Unthinking paranoia overcomes you.

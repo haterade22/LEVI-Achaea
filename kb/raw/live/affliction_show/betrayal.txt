@@ -1,4 +1,4 @@
-# affliction show betrayal  (2026-10-11T00:14:28Z)
+# affliction show betrayal  (2026-10-24T01:42:35Z)
 Affliction:         Betrayal
 Diagnose:           treacherous.
 Afflicted msg:      You determine that, for your own good, it is time to betray anyone and everyone.

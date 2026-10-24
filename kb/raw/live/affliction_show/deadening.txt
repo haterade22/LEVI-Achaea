@@ -1,4 +1,4 @@
-# affliction show deadening  (2026-10-11T00:12:03Z)
+# affliction show deadening  (2026-10-24T01:39:49Z)
 Affliction:         A deadened mind
 Diagnose:           of a deadened mind.
 Afflicted msg:      A strange fog descends upon your mind.

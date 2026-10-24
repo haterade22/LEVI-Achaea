@@ -1,4 +1,4 @@
-# affliction show damagedleftleg  (2026-10-11T00:11:56Z)
+# affliction show damagedleftleg  (2026-10-24T01:39:41Z)
 Affliction:         A damaged left leg
 Diagnose:           has a partially damaged left leg.
 Afflicted msg:      Your left leg is greatly damaged from the beating.

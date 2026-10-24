@@ -1,4 +1,4 @@
-# affliction show dehydrated  (2026-10-11T00:14:54Z)
+# affliction show dehydrated  (2026-10-24T01:42:57Z)
 Affliction:         Dehydrated
 Diagnose:           seriously dehydrated.
 Afflicted msg:      none

@@ -1,4 +1,4 @@
-# affliction show conflagration  (2026-10-11T00:14:41Z)
+# affliction show conflagration  (2026-10-24T01:42:46Z)
 Affliction:         Conflagration
 Diagnose:           a conflagration rages about you.
 Afflicted msg:      The flames plaguing you suddenly begin to rage with terrible intensity.

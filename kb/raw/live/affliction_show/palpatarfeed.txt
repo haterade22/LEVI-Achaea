@@ -1,4 +1,4 @@
-# affliction show palpatarfeed  (2026-10-11T00:15:40Z)
+# affliction show palpatarfeed  (2026-10-24T01:43:32Z)
 Affliction:         Palpatarfeed
 Diagnose:           Being fed on by the maggots of Palpatar.
 Afflicted msg:      none

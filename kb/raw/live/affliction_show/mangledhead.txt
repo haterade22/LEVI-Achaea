@@ -1,4 +1,4 @@
-# affliction show mangledhead  (2026-10-11T00:13:03Z)
+# affliction show mangledhead  (2026-10-24T01:40:53Z)
 Affliction:         A mangled head
 Diagnose:           has a mangled head.
 Afflicted msg:      Your skull splits and caves in as your head takes serious damage.

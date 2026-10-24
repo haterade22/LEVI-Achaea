@@ -1,4 +1,4 @@
-# affliction show shivering  (2026-10-11T00:13:42Z)
+# affliction show shivering  (2026-10-24T01:41:33Z)
 Affliction:         The shivers
 Diagnose:           shivering.
 Afflicted msg:      You begin to shiver violently.

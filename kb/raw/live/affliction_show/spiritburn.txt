@@ -1,4 +1,4 @@
-# affliction show spiritburn  (2026-10-11T00:13:50Z)
+# affliction show spiritburn  (2026-10-24T01:41:41Z)
 Affliction:         Spiritburn
 Diagnose:           plagued by holy fires.
 Afflicted msg:      Your skin begins to grow uncomfortably hot.

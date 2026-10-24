@@ -1,4 +1,4 @@
-# affliction show shadowmadness  (2026-10-11T00:13:41Z)
+# affliction show shadowmadness  (2026-10-24T01:41:31Z)
 Affliction:         Shadowmadness
 Diagnose:           going slowly insane.
 Afflicted msg:      Your sanity begins to escape you.

@@ -1,4 +1,4 @@
-# affliction show corruption  (2026-10-11T00:14:46Z)
+# affliction show corruption  (2026-10-24T01:42:50Z)
 Affliction:         Corrupt humours
 Diagnose:           suffering from corrupted humours.
 Afflicted msg:      none

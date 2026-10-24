@@ -1,4 +1,4 @@
-# affliction show clumsiness  (2026-10-11T00:11:43Z)
+# affliction show clumsiness  (2026-10-24T01:39:29Z)
 Affliction:         Clumsiness
 Diagnose:           afflicted with clumsiness.
 Afflicted msg:      You gasp as your fine-tuned reflexes disappear into a haze of confusion.

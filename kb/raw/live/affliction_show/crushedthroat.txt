@@ -1,4 +1,4 @@
-# affliction show crushedthroat  (2026-10-11T00:11:50Z)
+# affliction show crushedthroat  (2026-10-24T01:39:36Z)
 Affliction:         Crushedthroat
 Diagnose:           suffering a crushed throat.
 Afflicted msg:      none

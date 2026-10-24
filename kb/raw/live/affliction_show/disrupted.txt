@@ -1,4 +1,4 @@
-# affliction show disrupted  (2026-10-11T00:12:11Z)
+# affliction show disrupted  (2026-10-24T01:39:58Z)
 Affliction:         Disrupted
 Diagnose:           mentally disrupted.
 Afflicted msg:      none

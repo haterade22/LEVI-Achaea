@@ -1,4 +1,4 @@
-# affliction show revealed  (2026-10-11T00:15:48Z)
+# affliction show revealed  (2026-10-24T01:43:40Z)
 Affliction:         Revealed
 Diagnose:           revealed by the power of a star sigil.
 Afflicted msg:      A strange dust settles upon your form, illuminating your outline.

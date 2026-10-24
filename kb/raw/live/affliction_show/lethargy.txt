@@ -1,4 +1,4 @@
-# affliction show lethargy  (2026-10-11T00:12:57Z)
+# affliction show lethargy  (2026-10-24T01:40:48Z)
 Affliction:         Lethargy
 Diagnose:           feeling rather lethargic.
 Afflicted msg:      You feel your energy robbed from you as lethargy overtakes you.

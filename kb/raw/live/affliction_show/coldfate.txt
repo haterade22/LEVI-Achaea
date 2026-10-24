@@ -1,4 +1,4 @@
-# affliction show coldfate  (2026-10-11T00:14:39Z)
+# affliction show coldfate  (2026-10-24T01:42:43Z)
 Affliction:         Coldfate
 Diagnose:           cursed with a cold fate.
 Afflicted msg:      none

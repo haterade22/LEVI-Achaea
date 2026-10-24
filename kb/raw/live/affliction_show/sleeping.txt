@@ -1,4 +1,4 @@
-# affliction show sleeping  (2026-10-11T00:13:47Z)
+# affliction show sleeping  (2026-10-24T01:41:38Z)
 Affliction:         Sleeping
 Diagnose:           sleeping.
 Afflicted msg:      You feel incredibly tired, and fall asleep immediately.

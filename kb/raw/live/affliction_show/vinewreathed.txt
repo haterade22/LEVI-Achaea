@@ -1,4 +1,4 @@
-# affliction show vinewreathed  (2026-10-11T00:16:06Z)
+# affliction show vinewreathed  (2026-10-24T01:43:56Z)
 Affliction:         Wreathed in vines
 Diagnose:           wreathed in flailing vines.
 Afflicted msg:      none

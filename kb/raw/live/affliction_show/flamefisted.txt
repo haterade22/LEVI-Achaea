@@ -1,4 +1,4 @@
-# affliction show flamefisted  (2026-10-11T00:15:04Z)
+# affliction show flamefisted  (2026-10-24T01:43:08Z)
 Affliction:         Flamefisted
 Diagnose:           suffused with an aura of fire.
 Afflicted msg:      none

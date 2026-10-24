@@ -1,4 +1,4 @@
-# affliction show hellsight  (2026-10-11T00:12:40Z)
+# affliction show hellsight  (2026-10-24T01:40:26Z)
 Affliction:         Hellsight
 Diagnose:           catching glimpses of Hell.
 Afflicted msg:      none

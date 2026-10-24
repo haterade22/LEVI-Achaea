@@ -1,4 +1,4 @@
-# affliction show slimeobscure  (2026-10-11T00:15:54Z)
+# affliction show slimeobscure  (2026-10-24T01:43:45Z)
 Affliction:         Slimeobscure
 Diagnose:           Covered in viscous slime.
 Afflicted msg:      none

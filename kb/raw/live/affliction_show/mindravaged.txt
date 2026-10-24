@@ -1,4 +1,4 @@
-# affliction show mindravaged  (2026-10-11T00:15:34Z)
+# affliction show mindravaged  (2026-10-24T01:43:27Z)
 Affliction:         Mindravaged
 Diagnose:           Ravaged in mind by psionic power.
 Afflicted msg:      none

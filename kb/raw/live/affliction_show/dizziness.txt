@@ -1,4 +1,4 @@
-# affliction show dizziness  (2026-10-11T00:12:14Z)
+# affliction show dizziness  (2026-10-24T01:40:00Z)
 Affliction:         Dizziness
 Diagnose:           overcome by dizziness.
 Afflicted msg:      Your mind swims as dizziness overtakes you.

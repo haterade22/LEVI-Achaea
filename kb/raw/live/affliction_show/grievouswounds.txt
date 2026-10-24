@@ -1,4 +1,4 @@
-# affliction show grievouswounds  (2026-10-11T00:15:06Z)
+# affliction show grievouswounds  (2026-10-24T01:40:17Z)
 Affliction:         Grievously wounded
 Diagnose:           suffering from $(type$) grievous wounds.
 Afflicted msg:      Blood flows freely from a grievous wound.

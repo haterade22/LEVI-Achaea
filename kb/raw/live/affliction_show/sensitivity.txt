@@ -1,4 +1,4 @@
-# affliction show sensitivity  (2026-10-11T00:13:38Z)
+# affliction show sensitivity  (2026-10-24T01:41:29Z)
 Affliction:         Sensitivity
 Diagnose:           sensitive to pain.
 Afflicted msg:      A prickly, stinging sensation spreads through your body.

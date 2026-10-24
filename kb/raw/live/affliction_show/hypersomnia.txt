@@ -1,4 +1,4 @@
-# affliction show hypersomnia  (2026-10-11T00:12:43Z)
+# affliction show hypersomnia  (2026-10-24T01:40:29Z)
 Affliction:         Hypersomnia
 Diagnose:           hypersomnic.
 Afflicted msg:      An urge to visit the Goddess of Dreams overcomes you.

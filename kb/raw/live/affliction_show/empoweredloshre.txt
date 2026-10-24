@@ -1,4 +1,4 @@
-# affliction show empoweredloshre  (2026-10-11T00:14:58Z)
+# affliction show empoweredloshre  (2026-10-24T01:43:01Z)
 Affliction:         Empoweredloshre
 Diagnose:           being sapped by the power of the Loshre rune.
 Afflicted msg:      none

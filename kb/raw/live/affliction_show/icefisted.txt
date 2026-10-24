@@ -1,4 +1,4 @@
-# affliction show icefisted  (2026-10-11T00:15:16Z)
+# affliction show icefisted  (2026-10-24T01:43:16Z)
 Affliction:         Icefisted
 Diagnose:           covered in a rime of frost.
 Afflicted msg:      none

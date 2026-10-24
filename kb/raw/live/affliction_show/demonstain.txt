@@ -1,4 +1,4 @@
-# affliction show demonstain  (2026-10-11T00:14:55Z)
+# affliction show demonstain  (2026-10-24T01:42:58Z)
 Affliction:         A demonic stain
 Diagnose:           stained by evil.
 Afflicted msg:      none

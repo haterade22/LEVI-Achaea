@@ -1,4 +1,4 @@
-# affliction show enmesh  (2026-10-11T00:15:02Z)
+# affliction show enmesh  (2026-10-24T01:43:05Z)
 Affliction:         Enmesh
 Diagnose:           unable to parry due to being partially bound.
 Afflicted msg:      none

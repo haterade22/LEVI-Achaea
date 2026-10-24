@@ -1,4 +1,4 @@
-# affliction show blindness  (2026-10-11T00:11:21Z)
+# affliction show blindness  (2026-10-24T01:39:16Z)
 Affliction:         Blindness
 Diagnose:           blind.
 Afflicted msg:      Your eyes dim as you lose your sight.

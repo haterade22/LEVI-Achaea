@@ -1,4 +1,4 @@
-# affliction show claustrophobia  (2026-10-11T00:11:42Z)
+# affliction show claustrophobia  (2026-10-24T01:39:28Z)
 Affliction:         Claustrophobia
 Diagnose:           claustrophobic.
 Afflicted msg:      The walls close in to suffocate you - you must escape!

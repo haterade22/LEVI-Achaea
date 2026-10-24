@@ -1,4 +1,4 @@
-# affliction show rebbies  (2026-10-11T00:13:28Z)
+# affliction show rebbies  (2026-10-24T01:41:19Z)
 Affliction:         Rebbies
 Diagnose:           your skin is secreting a vile slime.
 Afflicted msg:      You feel... odd. So very odd.

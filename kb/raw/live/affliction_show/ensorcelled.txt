@@ -1,4 +1,4 @@
-# affliction show ensorcelled  (2026-10-11T00:15:03Z)
+# affliction show ensorcelled  (2026-10-24T01:43:06Z)
 Affliction:         Ensorcelled
 Diagnose:           ensorcelled.
 Afflicted msg:      none

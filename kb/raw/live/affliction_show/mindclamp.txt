@@ -1,4 +1,4 @@
-# affliction show mindclamp  (2026-10-11T00:15:33Z)
+# affliction show mindclamp  (2026-10-24T01:43:25Z)
 Affliction:         A clamped mind
 Diagnose:           mindclamped.
 Afflicted msg:      none

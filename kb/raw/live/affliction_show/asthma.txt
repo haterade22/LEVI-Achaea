@@ -1,4 +1,4 @@
-# affliction show asthma  (2026-10-11T00:11:19Z)
+# affliction show asthma  (2026-10-24T01:39:13Z)
 Affliction:         Asthma
 Diagnose:           afflicted by horrible asthma.
 Afflicted msg:      You feel a tightening sensation grow in your lungs.

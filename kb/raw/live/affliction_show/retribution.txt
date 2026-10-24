@@ -1,4 +1,4 @@
-# affliction show retribution  (2026-10-11T00:13:31Z)
+# affliction show retribution  (2026-10-24T01:41:22Z)
 Affliction:         Retribution
 Diagnose:           suffering the curse of retribution.
 Afflicted msg:      A terrible sense of foreboding descends upon you.

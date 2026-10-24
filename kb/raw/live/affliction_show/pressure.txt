@@ -1,4 +1,4 @@
-# affliction show pressure  (2026-10-11T00:13:23Z)
+# affliction show pressure  (2026-10-24T01:41:13Z)
 Affliction:         Pressure
 Diagnose:           the pressure surrounding you is $=(type$).
 Afflicted msg:      none

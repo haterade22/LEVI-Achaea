@@ -1,4 +1,4 @@
-# affliction show cremated  (2026-10-11T00:14:47Z)
+# affliction show cremated  (2026-10-24T01:42:51Z)
 Affliction:         Cremated
 Diagnose:           soul seared by the might of Kkractle.
 Afflicted msg:      none

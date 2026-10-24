@@ -1,4 +1,4 @@
-# affliction show deathsickness  (2026-10-11T00:14:50Z)
+# affliction show deathsickness  (2026-10-24T01:42:53Z)
 Affliction:         Deathsickness
 Diagnose:           Labouring beneath the bane of life.
 Afflicted msg:      An unnatural chill sweeps through your body, a numbing sensation radiating outward from your heart and into every limb.

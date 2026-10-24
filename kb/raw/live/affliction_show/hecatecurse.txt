@@ -1,4 +1,4 @@
-# affliction show hecatecurse  (2026-10-11T00:15:10Z)
+# affliction show hecatecurse  (2026-10-24T01:43:12Z)
 Affliction:         Hecatecurse
 Diagnose:           Cursed with the power of Hecate.
 Afflicted msg:      none

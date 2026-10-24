@@ -1,4 +1,4 @@
-# affliction show woeconstrained  (2026-10-11T00:16:14Z)
+# affliction show woeconstrained  (2026-10-24T01:44:04Z)
 Affliction:         Woeconstrained
 Diagnose:           constrained to war by the tales of Woe.
 Afflicted msg:      none

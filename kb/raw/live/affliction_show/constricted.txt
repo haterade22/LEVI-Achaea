@@ -1,4 +1,4 @@
-# affliction show constricted  (2026-10-11T00:14:43Z)
+# affliction show constricted  (2026-10-24T01:42:47Z)
 Affliction:         Constricted
 Diagnose:           being constricted by vines.
 Afflicted msg:      none

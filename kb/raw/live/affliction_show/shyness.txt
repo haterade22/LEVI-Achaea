@@ -1,4 +1,4 @@
-# affliction show shyness  (2026-10-11T00:13:43Z)
+# affliction show shyness  (2026-10-24T01:41:34Z)
 Affliction:         Shyness
 Diagnose:           afflicted by unbearable shyness.
 Afflicted msg:      You look about yourself nervously.

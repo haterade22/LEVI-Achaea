@@ -1,4 +1,4 @@
-# affliction show hallucinations  (2026-10-11T00:12:36Z)
+# affliction show hallucinations  (2026-10-24T01:40:22Z)
 Affliction:         Hallucinations
 Diagnose:           hallucinating.
 Afflicted msg:      An unseen being takes you to one side and whispers conspiratorially to you.

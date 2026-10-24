@@ -1,4 +1,4 @@
-# affliction show pyre  (2026-10-11T00:13:27Z)
+# affliction show pyre  (2026-10-24T01:41:17Z)
 Affliction:         Pyre
 Diagnose:           being consigned to the flame.
 Afflicted msg:      none

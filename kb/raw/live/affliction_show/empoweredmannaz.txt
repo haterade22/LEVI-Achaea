@@ -1,4 +1,4 @@
-# affliction show empoweredmannaz  (2026-10-11T00:14:59Z)
+# affliction show empoweredmannaz  (2026-10-24T01:43:02Z)
 Affliction:         Empoweredmannaz
 Diagnose:           vitiated by the power of the Mannaz rune.
 Afflicted msg:      none

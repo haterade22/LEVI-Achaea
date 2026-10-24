@@ -1,4 +1,4 @@
-# affliction show dazzled  (2026-10-11T00:14:48Z)
+# affliction show dazzled  (2026-10-24T01:39:48Z)
 Affliction:         Dazzled
 Diagnose:           dazzled.
 Afflicted msg:      none

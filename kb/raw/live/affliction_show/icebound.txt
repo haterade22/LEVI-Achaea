@@ -1,4 +1,4 @@
-# affliction show icebound  (2026-10-11T00:15:15Z)
+# affliction show icebound  (2026-10-24T01:40:33Z)
 Affliction:         Restricted by frozen bonds
 Diagnose:           restricted by frozen bonds.
 Afflicted msg:      Frost covers your limbs, restricting your actions.

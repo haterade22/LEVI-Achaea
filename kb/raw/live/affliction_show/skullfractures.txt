@@ -1,4 +1,4 @@
-# affliction show skullfractures  (2026-10-11T00:13:45Z)
+# affliction show skullfractures  (2026-10-24T01:41:35Z)
 Affliction:         Skullfractures
 Diagnose:           suffering from $(type$) skull fractures.
 Afflicted msg:      none

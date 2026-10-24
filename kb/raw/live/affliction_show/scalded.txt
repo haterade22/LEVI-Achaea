@@ -1,4 +1,4 @@
-# affliction show scalded  (2026-10-11T00:13:34Z)
+# affliction show scalded  (2026-10-24T01:41:24Z)
 Affliction:         Scalded
 Diagnose:           horrifically scalded.
 Afflicted msg:      none

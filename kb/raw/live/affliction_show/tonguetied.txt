@@ -1,4 +1,4 @@
-# affliction show tonguetied  (2026-10-11T00:16:02Z)
+# affliction show tonguetied  (2026-10-24T01:41:58Z)
 Affliction:         A tongue tied
 Diagnose:           completely tongue tied.
 Afflicted msg:      Your tongue twists and writhes in your mouth as if with a will of its own.

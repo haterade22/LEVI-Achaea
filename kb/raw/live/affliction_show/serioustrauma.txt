@@ -1,4 +1,4 @@
-# affliction show serioustrauma  (2026-10-11T00:13:39Z)
+# affliction show serioustrauma  (2026-10-24T01:41:30Z)
 Affliction:         Serious internal trauma
 Diagnose:           has serious internal trauma.
 Afflicted msg:      Your internal organs have taken serious damage.

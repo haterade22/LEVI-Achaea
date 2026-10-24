@@ -1,4 +1,4 @@
-# affliction show internalbleeding  (2026-10-11T00:15:20Z)
+# affliction show internalbleeding  (2026-10-24T01:40:40Z)
 Affliction:         Massive internal bleeding
 Diagnose:           suffering from massive internal bleeding.
 Afflicted msg:      none

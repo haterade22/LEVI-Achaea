@@ -1,4 +1,4 @@
-# affliction show mangledrightleg  (2026-10-11T00:13:08Z)
+# affliction show mangledrightleg  (2026-10-24T01:40:59Z)
 Affliction:         A mangled right leg
 Diagnose:           has a mangled right leg.
 Afflicted msg:      To your horror, your right leg has been mutilated beyond repair by ordinary means.

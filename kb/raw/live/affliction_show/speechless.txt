@@ -1,4 +1,4 @@
-# affliction show speechless  (2026-10-11T00:15:58Z)
+# affliction show speechless  (2026-10-24T01:43:49Z)
 Affliction:         Speechless
 Diagnose:           rendered entirely unable to communicate.
 Afflicted msg:      none

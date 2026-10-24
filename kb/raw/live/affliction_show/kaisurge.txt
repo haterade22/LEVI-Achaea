@@ -1,4 +1,4 @@
-# affliction show kaisurge  (2026-10-11T00:15:24Z)
+# affliction show kaisurge  (2026-10-24T01:43:20Z)
 Affliction:         Kaisurge
 Diagnose:           greatly inhibited by a recent surge of Kai energy.
 Afflicted msg:      none

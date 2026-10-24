@@ -1,4 +1,4 @@
-# affliction show prone  (2026-10-11T00:13:24Z)
+# affliction show prone  (2026-10-24T01:41:15Z)
 Affliction:         Prone
 Diagnose:           seated on the ground.
 Afflicted msg:      none

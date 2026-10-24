@@ -1,4 +1,4 @@
-# affliction show selarnia  (2026-10-11T00:13:37Z)
+# affliction show selarnia  (2026-10-24T01:41:27Z)
 Affliction:         A severed bond with the spirits
 Diagnose:           losing the bond with the animal spirits.
 Afflicted msg:      none

@@ -1,4 +1,4 @@
-# affliction show frozen  (2026-10-11T00:12:29Z)
+# affliction show frozen  (2026-10-24T01:40:14Z)
 Affliction:         A frozen body
 Diagnose:           frozen stiff.
 Afflicted msg:      Your body slows as it freezes in the extreme cold.

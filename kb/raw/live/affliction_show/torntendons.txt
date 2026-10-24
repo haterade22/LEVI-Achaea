@@ -1,4 +1,4 @@
-# affliction show torntendons  (2026-10-11T00:14:08Z)
+# affliction show torntendons  (2026-10-24T01:42:00Z)
 Affliction:         Torntendons
 Diagnose:           suffering from $(type$) torn tendons.
 Afflicted msg:      none

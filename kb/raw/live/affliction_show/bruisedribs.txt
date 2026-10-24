@@ -1,4 +1,4 @@
-# affliction show bruisedribs  (2026-10-11T00:14:34Z)
+# affliction show bruisedribs  (2026-10-24T01:42:42Z)
 Affliction:         Bruisedribs
 Diagnose:           your ribs are severely bruised.
 Afflicted msg:      You feel your ribs give way under the blow and a burning sensation radiates outward through your chest.
