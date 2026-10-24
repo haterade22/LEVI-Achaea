@@ -34,7 +34,10 @@ function confirmedUnknownAff()
 		if ataxia.afflictions.unknown == nil then ataxia.afflictions.unknown = 0 end
 		ataxia.afflictions.unknown = ataxia.afflictions.unknown + 1
 		if ataxiaBasher and ataxiaBasher.enabled and ataxia.afflictions.unknown >= 2 and not sent_diagnose then
-			send("queue addclear free diagnose", false)
+			-- `add`, never `addclear` (v4.7.448, from a death): addclear EMPTIES the free queue,
+			-- and the swarm's escape waits there (`queue addclear free stand;leap <dir>`). A second
+			-- hidden affliction 0.4s after a low-HP escape deleted the leap, and the next web held us.
+			send("queue add free diagnose", false)
 			sent_diagnose = tempTimer(3, [[sent_diagnose = nil]])
 		end
 	end

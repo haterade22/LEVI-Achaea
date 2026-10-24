@@ -544,9 +544,14 @@ describe("Truthseeker suppresses the unknown-affliction counter", function()
     line = "You are confused as to the effects of the venom."
     confirmedUnknownAff()
     confirmedUnknownAff()
-    local diag = false
-    for _, c in ipairs(sent) do if c:find("diagnose", 1, true) then diag = true end end
+    local diag, clears = false, false
+    for _, c in ipairs(sent) do
+      if c:find("diagnose", 1, true) then diag = true end
+      -- v4.7.448: addclear empties the free queue, where the swarm's escape waits.
+      if c:find("addclear", 1, true) then clears = true end
+    end
     expect(diag).toBeTrue()
+    expect(clears).toBeFalse()
     restore()
   end)
 end)

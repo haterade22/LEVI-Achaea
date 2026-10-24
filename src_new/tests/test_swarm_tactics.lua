@@ -3477,6 +3477,47 @@ describe("v4.7.370 -- ice: tactical moves out of an icy room tumble", function()
   end)
 end)
 
+-- v4.7.448 death: one broken leg + prone, the game refused the stand AND the leap. User: tumble.
+describe("v4.7.448 -- one leg out: tactical moves tumble", function()
+  it("one broken leg makes the verb tumble -- mounted too; both legs or none do not", function()
+    fixture(4)
+    expect(S.moveVerb("s")).toBe("leap")
+    ataxia.afflictions = { brokenrightleg = true }
+    expect(S.moveVerb("s")).toBe("tumble")
+    local realMounted = ataxiaBasher_isMounted
+    ataxiaBasher_isMounted = function() return true end
+    local v = S.moveVerb("s")
+    ataxiaBasher_isMounted = realMounted
+    expect(v).toBe("tumble")
+    ataxia.afflictions = { brokenrightleg = 0 }  -- a cured stacking aff sits at 0
+    expect(S.moveVerb("s")).toBe("leap")
+  end)
+
+  it("the low-HP escape on one leg tumbles with a tumble-length timeout", function()
+    fixture(4)
+    gmcp.Room.Info.details = { "indoors" }
+    ataxia.afflictions = { damagedleftleg = true }
+    local timeouts, realArm = {}, M._tacticalArm
+    M._tacticalArm = function(dir, to) table.insert(armed, dir); timeouts[#timeouts + 1] = to end
+    lowHp(3000)
+    local ok, err = pcall(S.onVitals)
+    M._tacticalArm = realArm
+    if not ok then error(err, 0) end
+    expect(count("queue addclear free stand;tumble s")).toBe(1)
+    expect(timeouts[1]).toBe(S.TUMBLE_ARM)
+  end)
+
+  it("both legs out still waits -- no move is sent", function()
+    fixture(4)
+    gmcp.Room.Info.details = { "indoors" }
+    ataxia.afflictions = { brokenrightleg = true, brokenleftleg = true }
+    lowHp(3000)
+    S.onVitals()
+    expect(count("queue addclear free stand;tumble s")).toBe(0)
+    expect(count("queue addclear free stand;leap s")).toBe(0)
+  end)
+end)
+
 describe("v4.7.370 -- bound: say so, and leave the moment we are free", function()
   it("does not stamp the emergency clock while bound, so the first free prompt leaves", function()
     fixture(4)
@@ -3840,9 +3881,9 @@ describe("v4.7.378 -- after an escape, and when the legs give out", function()
     expect(cnt("leap")).toBe(0)
     expect(S._lastEmergencyAt).toBeNil()
     expect(out:find("both legs are broken", 1, true) ~= nil).toBeTrue()
-    ataxia.afflictions = { brokenleftleg = true } -- one leg is enough to leap
+    ataxia.afflictions = { brokenleftleg = true } -- one leg: the leap is refused, so tumble (v4.7.448)
     S.onVitals()
-    expect(cnt("leap s")).toBe(1)
+    expect(cnt("tumble s")).toBe(1)
   end)
 
   it("outdoors the hover still flies on broken legs", function()
@@ -3862,7 +3903,7 @@ describe("v4.7.378 -- after an escape, and when the legs give out", function()
     expect(cnt("leap s")).toBe(1)
     ataxia.afflictions = { brokenrightleg = true }
     S.onVitals()
-    expect(cnt("leap s")).toBe(2)
+    expect(cnt("tumble s")).toBe(1) -- one leg mended: re-sent as a tumble (v4.7.448)
   end)
 
   it("the leg-refusal trigger tells the swarm when both legs are out", function()

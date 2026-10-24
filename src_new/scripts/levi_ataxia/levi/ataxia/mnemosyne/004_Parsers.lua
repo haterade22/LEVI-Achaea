@@ -1343,6 +1343,7 @@ M.BOON_FLAGS = {
   ["Spark Extant"]         = "dragonSparkExtant",     -- incantation first at 2+ denizens (basher/002)
   ["Krenindalan Storm"]    = "dragonKrenindalan",     -- breathstorm once per room (basher/002)
   ["Terror of the Skies"]  = "mnemTerrorSkies",       -- leaving sheds non-boss pursuers (009)
+  ["Death's Demise"]       = "mnemDeathsDemise",      -- v4.7.449: the sweep cures fractures before moving on (008)
 }
 
 -- An (ECHO) row names the same boon; a second copy does not make it a different one.

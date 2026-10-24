@@ -131,6 +131,11 @@ function ataxia_bashCuringPrios()
     -- applied to a limb. This band is the direct fix for the 07:45:43 cracked-ribs
     -- application that beat a broken right arm.
     -----------------------------------------------------------
+    -- The four fractures are cured by APPLY HEALTH (the elixir), not a salve (AFFLICTION SHOW,
+    -- 2026-10-11): one stack per application, and SSC applies health for them only above 70% HP.
+    -- So they do not take a salve from a limb; they most likely share the elixir balance with
+    -- health SIPS (UNCONFIRMED). Parked all the same; with Death's Demise the Mnemosyne sweep cures them in the cleared room
+    -- before it moves on (mnemosyne/008 M._fractureHold, v4.7.449).
     ["crackedribs"] = 20,     -- (9)
     ["skullfractures"] = 20,  -- (8)
     ["torntendons"] = 20,     -- (10)
