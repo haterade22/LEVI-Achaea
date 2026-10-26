@@ -48,8 +48,7 @@ end
 -- Probe the horn, take the first item it lists, and eat it.
 --   reason  -- shown in the echo so the log says WHY we fed (starving / manual / ...)
 --   force   -- skip the cooldown (the `horn` alias passes this)
---   pre     -- a command sent in the same chain BEFORE the get+eat (`satiation`, v4.7.452)
-function ataxia_hornFeed(reason, force, pre)
+function ataxia_hornFeed(reason, force)
   if not force then
     local last = tonumber(ataxiaTemp.hornFedAt) or 0
     if (getEpoch() - last) < FEED_COOLDOWN then return false end
@@ -63,7 +62,7 @@ function ataxia_hornFeed(reason, force, pre)
     local id, what = matches[2], matches[3]
     hornCleanup()
     local sp = (ataxia.settings and ataxia.settings.separator) or ";"
-    send((pre and (pre .. sp) or "") .. "get " .. id .. " from horn" .. sp .. "eat " .. id, false)
+    send("get " .. id .. " from horn" .. sp .. "eat " .. id, false)
     if ataxiaEcho then
       ataxiaEcho("Horn of plenty: eating <green>" .. tostring(what) .. "<reset>"
         .. (reason and (" (" .. reason .. ")") or "") .. ".")
@@ -194,9 +193,8 @@ function ataxia_corpseUnconfirmed(id, what, attemptAt)
 end
 
 -- Probe our corpses, take the first, eat it. Returns false when the boon is absent or the
--- throttle is closed, so a caller can fall through to the horn. `pre` goes in the same chain
--- before the eat; `onEmpty` runs when the probe lists no edible corpse (both v4.7.452).
-function ataxia_carnivoreEat(reason, force, pre, onEmpty)
+-- throttle is closed, so a caller can fall through to the horn.
+function ataxia_carnivoreEat(reason, force)
   if not mnemObligateCarnivore then return false end
   if not force then
     local last = tonumber(ataxiaTemp.corpseAteAt) or 0
@@ -214,8 +212,7 @@ function ataxia_carnivoreEat(reason, force, pre, onEmpty)
     if ataxia_corpseInedible(id, what) then return end -- stay armed for the next row
     corpseCleanup()
     local attemptAt = getEpoch()
-    local sp = (ataxia.settings and ataxia.settings.separator) or ";"
-    send((pre and (pre .. sp) or "") .. "eat " .. id, false)
+    send("eat " .. id, false)
     if ataxiaEcho then
       ataxiaEcho("Obligate Carnivore: eating <green>the corpse of " .. tostring(what) .. "<reset>"
         .. (reason and (" (" .. reason .. ")") or "") .. ".")
@@ -228,12 +225,7 @@ function ataxia_carnivoreEat(reason, force, pre, onEmpty)
 
   -- Backstop: no corpses listed. Silent by design -- an empty pack is the normal state between
   -- kills, and a warning here would fire constantly and teach the user to ignore the channel.
-  -- The trigger is still armed only when no row was eaten, so that is the "empty" test.
-  ataxiaTemp.corpseTimer = tempTimer(CORPSE_PROBE_TIMEOUT, function()
-    local empty = ataxiaTemp.corpseTrigger ~= nil
-    corpseCleanup()
-    if empty and onEmpty then onEmpty() end
-  end)
+  ataxiaTemp.corpseTimer = tempTimer(CORPSE_PROBE_TIMEOUT, corpseCleanup)
 
   send("ii corpse", false)
   return true
@@ -251,8 +243,8 @@ function ataxia_carnivoreAte()
 end
 
 -- Kill top-up for FAMINE when corpses are edible (v4.7.333). Fired on a KILL because that is
--- when a corpse exists AND the fight is ending. Healing Metabolism no longer uses it (v4.7.452):
--- its defence comes from the SATIATION skill, not from a full stomach (see the section below).
+-- when a corpse exists AND the fight is ending. Healing Metabolism does not use it (v4.7.452):
+-- its defence comes from the SATIATION skill alone (see the section below).
 function ataxia_carnivoreTopUp()
   if not (mnemObligateCarnivore and mnemFamine) then return false end
   return ataxia_carnivoreEat("famine upkeep")
@@ -364,7 +356,7 @@ function ataxia_hungerSeen(state)
 end
 
 -- ---------------------------------------------------------------------------
--- HEALING METABOLISM: THE SATIATION SKILL, THEN FOOD (v4.7.452, user-directed)
+-- HEALING METABOLISM: THE SATIATION SKILL, BELOW AN HP THRESHOLD (v4.7.452; no food since v4.7.454)
 -- ---------------------------------------------------------------------------
 --
 --   Healing Metabolism: "Your health elixirs are 50% more effective while you possess the
@@ -373,35 +365,36 @@ end
 --     begin to concentrate on processing your food more efficiently. After activating it, you'll
 --     have a short period during which to eat some food."
 --
--- So the defence is a SKILL plus a meal, not a full stomach. User: "We actually need to use the
--- skill and eat food." `satiation` is in the game's DEF list, so GMCP Char.Defences reports it.
+-- THE SKILL ALONE GIVES THE DEFENCE (user's screen, 2026-10-26): GMCP `+ ( def satiation ) +` came
+-- BEFORE "You begin concentrating on efficient digestion.", with no food eaten, and it ended about
+-- 11.3 s later ("Your digestive efficiency returns to normal.", 12:22:21.449 -> 12:22:32.744).
+-- v4.7.452 ate a corpse or a horn item with every cast; at one cast per ~11 s that empties the
+-- six-item horn in about a minute, so the meal is gone. Whether food lengthens the defence is NOT
+-- tested.
 --
--- ONE CHAIN, SENT DIRECTLY: `satiation;eat <corpse>` or `satiation;get <id> from horn;eat <id>`.
--- SATIATION runs first and opens the window; the eat runs in the same instant, inside it. Direct,
--- never queued: `queue addclear` deletes a queued eat (the v4.7.304 rule above). Eating works on a
--- full stomach (user, 2026-10-26), so no hunger reading is needed.
+-- WHEN (user's choice, v4.7.454): only while health is below `ataxia.settings.satiationHpAt` %
+-- (default 75, `horn hp <n>`), so the 50% elixir bonus covers the sips that matter and no
+-- equilibrium or mana is spent at full health. Kept up at ~9 mana/s and a third of equilibrium,
+-- it would compete with every equilibrium rider (belch, deepfreeze, quash) for nothing.
 --
--- RAISED IMMEDIATELY (user's choice), not only at a kill: on every gmcp.Char.Vitals, when the
--- boon is held, the defence is absent, equilibrium is free and the mana floor holds. Food: a corpse
--- first under Obligate Carnivore (free), else the horn; an empty corpse probe falls back to the horn.
+-- `satiation` is SENT DIRECTLY (a queued command can be deleted by `queue addclear`, the v4.7.304
+-- rule above). Gates: the boon, the defence absent, equilibrium free, mana >= 100 +
+-- `satiationManaFloor` % of max (default 30), no paralysis/stun/unconsciousness/asleep.
 --
 -- GMCP IS THE PROOF. A Defences.Add of `satiation` confirms; no Add within SATIATION_CONFIRM
 -- seconds counts a failure, and SATIATION_MAX_FAILS failures in a row stop the attempts for
--- SATIATION_BACKOFF seconds -- a wrong command or a closed window must not spend all six horn
--- charges. The activation line "You begin concentrating on efficient digestion." (user, 2026-10-26;
--- trigger 791) only tells a failed attempt WHICH half failed: the skill, or the meal after it. The
--- eat-in-window line is not captured yet.
+-- SATIATION_BACKOFF seconds. The activation line (trigger 791) tells the back-off echo whether the
+-- skill fired at all.
 
 local SATIATION_CMD = "satiation"
 local SATIATION_MANA = 100
--- Seconds for the Defences.Add before an attempt counts as failed. It covers the probes (up to 3s,
--- twice when an empty corpse probe falls back to the horn) and the 4s of equilibrium.
-local SATIATION_CONFIRM = 12
+local SATIATION_CONFIRM = 5      -- seconds for the Defences.Add (it arrives with the activation)
 local SATIATION_MAX_FAILS = 3
 local SATIATION_BACKOFF = 300
 local SATIATION_MANA_FLOOR_DEFAULT = 30 -- % of max mana that must remain after the 100 is paid
--- Afflictions that stop the skill or the eat (anorexia stops eating).
-local SATIATION_BLOCKERS = { "anorexia", "paralysis", "stun", "unconsciousness", "asleep" }
+local SATIATION_HP_DEFAULT = 75         -- cast only below this % of max health
+-- Afflictions that stop the skill.
+local SATIATION_BLOCKERS = { "paralysis", "stun", "unconsciousness", "asleep" }
 
 local function isSatiationDef(name)
   return type(name) == "string" and name:lower() == "satiation"
@@ -428,7 +421,15 @@ local function satiationManaOk(v)
   return (mp - SATIATION_MANA) >= maxmp * floor / 100
 end
 
--- Trigger 791: "You begin concentrating on efficient digestion." The skill fired; the window is open.
+local function satiationHpLow(v)
+  local hp, maxhp = tonumber(v.hp), tonumber(v.maxhp)
+  if not hp or not maxhp or maxhp <= 0 then return false end
+  local at = tonumber(ataxia.settings and ataxia.settings.satiationHpAt)
+  if at == nil then at = SATIATION_HP_DEFAULT end
+  return hp < maxhp * at / 100
+end
+
+-- Trigger 791: "You begin concentrating on efficient digestion." The skill fired.
 function ataxia_satiationActivated()
   ataxiaTemp = ataxiaTemp or {}
   ataxiaTemp.satiationActivatedAt = getEpoch()
@@ -448,14 +449,14 @@ function ataxia_satiationUnconfirmed(attemptAt)
       local activated = (tonumber(ataxiaTemp.satiationActivatedAt) or 0) >= attemptAt
       ataxiaEcho("<red>Healing Metabolism: SATIATION did not raise the defence "
         .. SATIATION_MAX_FAILS .. " times<reset> -- stopping for " .. SATIATION_BACKOFF .. "s. "
-        .. (activated and "The skill activated, so the meal failed: check the horn and corpses."
+        .. (activated and "The skill activated, but GMCP did not report the defence."
           or "The skill never activated: check mana and equilibrium."))
     end
   end
   return true
 end
 
--- Send the chain if every gate passes. Returns true when an attempt started.
+-- Send `satiation` if every gate passes. Returns true when an attempt started.
 function ataxia_satiationTick()
   if not mnemHealingMetabolism then return false end
   ataxiaTemp = ataxiaTemp or {}
@@ -468,15 +469,11 @@ function ataxia_satiationTick()
   -- reload killed, so a lost timer cannot hold the upkeep shut.
   if ataxiaTemp.satiationPendingAt
     and (nowT - ataxiaTemp.satiationPendingAt) < SATIATION_CONFIRM + 2 then return false end
+  if not satiationHpLow(v) then return false end
   if not satiationManaOk(v) then return false end
   if satiationBlocked() then return false end
 
-  local reason = "satiation"
-  local function viaHorn() return ataxia_hornFeed(reason, true, SATIATION_CMD) end
-  local started = (mnemObligateCarnivore and ataxia_carnivoreEat(reason, true, SATIATION_CMD, viaHorn))
-    or viaHorn()
-  if not started then return false end
-
+  send(SATIATION_CMD, false)
   ataxiaTemp.satiationPendingAt = nowT
   satiationConfirmCleanup()
   ataxiaTemp.satiationConfirmTimer = tempTimer(SATIATION_CONFIRM, function()
@@ -491,11 +488,9 @@ function ataxia_satiationGained()
   local name = type(add) == "table" and (add.name or add[1]) or add
   if not isSatiationDef(name) then return false end
   ataxiaTemp = ataxiaTemp or {}
-  local wasPending = ataxiaTemp.satiationPendingAt ~= nil
   ataxiaTemp.satiationPendingAt, ataxiaTemp.satiationFails = nil, 0
   ataxiaTemp.satiationBackoffUntil = nil
   satiationConfirmCleanup()
-  if wasPending and ataxiaEcho then ataxiaEcho("Healing Metabolism: <green>satiation defence up<reset>.") end
   return true
 end
 

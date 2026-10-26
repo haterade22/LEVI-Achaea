@@ -1057,7 +1057,7 @@ chain or not -- or straight from `_flushPendingOffer` when no chain starts. `M.s
 NAMED PARTS (each part is a printed reason) built on the existing parsers (`_resistFrom`,
 `_immunitiesFrom`, `_statFrom`, `_dmgGenericFrom`, `_dmgBoostFrom`, `_procFrom` + Fae-Lapse's "chance you
 give the denizen you are attacking X", `_boonDrawbacks`, `_conflictsFor`, `_spiritGate`), relative to
-what we hold (`bonusTotals` resists/immunities, held categories). Stat-scaling damage boons (Brute Force / Mental Prowess / Deadly Finesse via `M.BOON_STAT_DAMAGE`, or "for each point of <stat>") get `statScalingDamage` +40 (v4.7.362, user: "These should be weighted high"). **Death's Demise and Gravedigger** get `topTier` +150 via `M.BOON_TOP_TIER` (v4.7.363, user: "should be highest in score"; **Star of Winter** -- an extra life every new ripple -- joined in v4.7.371) -- except while holding the other, since Death's Demise removes the death-cape life-steal Gravedigger builds on. A boon that says "gain no health" (Elixir Addict: no healing from moss or potash) is charged `herbHealingLost` 30, and `M.BOON_SYNERGY` pairs (Healing Metabolism <-> Obligate Carnivore) score `synergyHeld` +40 when the partner is held (v4.7.368, user-directed). Weights: `M.BOON_WEIGHTS` (defence
+what we hold (`bonusTotals` resists/immunities, held categories). Stat-scaling damage boons (Brute Force / Mental Prowess / Deadly Finesse via `M.BOON_STAT_DAMAGE`, or "for each point of <stat>") get `statScalingDamage` +40 (v4.7.362, user: "These should be weighted high"). **Death's Demise and Gravedigger** get `topTier` +150 via `M.BOON_TOP_TIER` (v4.7.363, user: "should be highest in score"; **Star of Winter** -- an extra life every new ripple -- joined in v4.7.371) -- except while holding the other, since Death's Demise removes the death-cape life-steal Gravedigger builds on. A boon that says "gain no health" (Elixir Addict: no healing from moss or potash) is charged `herbHealingLost` 30, and `M.BOON_SYNERGY` pairs score `synergyHeld` +40 when the partner is held (v4.7.368; the one pair, Healing Metabolism <-> Obligate Carnivore, was removed in v4.7.454 because the satiation defence needs no food). Weights: `M.BOON_WEIGHTS` (defence
 first), `M.BOON_CLASS_WEIGHTS[<gmcp class lower>]` merged over it (deep; empty until play says).
 Reroll hint needs `M._rerollsLeft` > 0 (trigger 094; reset per screen). **A REFUSED CONTEMPLATE IS
 NOT ALWAYS A BAD NAME (v4.7.328, user: "I picked it before the skill had time to look"):** claiming
@@ -1399,23 +1399,24 @@ stamps.
 
 **Pacing affixes (v4.7.196).** Two affixes make the instant a room goes quiet the worst instant to walk, so the auto-explorer carries two post-clear holds, both gated on 90% HP and both re-checking at 1.5s: **Haemophiliac** (`M._haemoHold`, also waits for the bleed to be CLOTTED, since SSC's `curing clotat` is doing real work while we stand still) and **Last Word** -- "Denizens explode on death!" (`M._lastWordHold`, HP only: an explosion is instantaneous, so there is nothing to clot and waiting on a bleed reading would just idle the sweep). Either holding is sufficient. Affix flags are now three (`mnemHaemophiliac`, `mnemDeluge`, `mnemLastWord`) plus the damage-suppression family on `ataxiaTemp.mnemNulled`, so the run-start reset block is **30 boons + 3 affixes = 33 lines** -- never read a boon count off that block. Captured in the same screenshot but deliberately UNHANDLED pending observation: **Necromantic** ("Denizens may revive as mindless thralls" -- potentially significant, since a room that clears then repopulates from its own corpses is exactly what `_roomHasDenizens` is trusted for) and **Iceblood** ("Taking damage causes your blood to freeze").
 
-**HEALING METABOLISM IS A SKILL PLUS A MEAL (v4.7.452) -- this supersedes the Healing Metabolism parts
-of the v4.7.294 and v4.7.303 notes below.** "The satiation defence" is not a full stomach. It comes
-from the Survival ability SATIATION (AB 1390: 4.00 s of equilibrium, 100 mana; "After activating it,
-you'll have a short period during which to eat some food"), and `satiation` is a DEF name, so GMCP
-reports it. User: "We actually need to use the skill and eat food." `ataxia_satiationTick`
-(`misc_scripts/022`) runs on every `gmcp.Char.Vitals` and, with the boon held, the defence absent,
-equilibrium free, mana >= 100 + `satiationManaFloor`% (default 30, `horn floor <n>`) and no
-anorexia/paralysis/stun/unconsciousness/asleep, sends ONE direct chain: `satiation;eat <corpse id>`
-(Obligate Carnivore; an empty corpse probe falls back to the horn) or `satiation;get <id> from
-horn;eat <id>`. Eating works on a full stomach (user). GMCP `Defences.Add satiation` confirms; no Add
-in 12 s is a failure, and 3 failures in a row stop it for 300 s, so a wrong command cannot spend all
-six horn charges. A `Defences.Remove` starts a new attempt at once. The SCORE hunger upkeep, the
-kill-driven SCORE poll and the kill corpse top-up now serve FAMINE only; `satiatePoll` and
-`ataxia_satiateKillCheck` are gone (`horn poll` was never reachable: the alias regex did not accept
-it). The activation line "You begin concentrating on efficient digestion." is captured (v4.7.453, trigger
-791): after 3 failures the echo says whether the skill or the meal failed. The eat-in-window line is
-not captured yet.
+**HEALING METABOLISM IS THE SATIATION SKILL, CAST BELOW AN HP THRESHOLD (v4.7.452-454) -- this
+supersedes the Healing Metabolism parts of the v4.7.294 and v4.7.303 notes below.** "The satiation
+defence" is not a full stomach. It is the Survival ability SATIATION (AB 1390: 4.00 s of equilibrium,
+100 mana), and `satiation` is a DEF name. **The skill alone gives it** (user's screen, 2026-10-26: GMCP
+`+ ( def satiation ) +` came before "You begin concentrating on efficient digestion.", with no food),
+and it is TIMED: about 11.3 s, ending "Your digestive efficiency returns to normal." v4.7.452 ate a
+corpse or a horn item with every cast; at one cast per ~11 s that empties the six-item horn in a
+minute, so v4.7.454 removed the meal. Whether food lengthens the defence is not tested. Kept up all
+the time it would cost ~9 mana/s and a third of equilibrium, so (user's choice) `ataxia_satiationTick`
+(`misc_scripts/022`, on every `gmcp.Char.Vitals`) sends `satiation` directly only while health is below
+`satiationHpAt`% (default 75, `horn hp <n>`), with the boon held, the defence absent, equilibrium free,
+mana >= 100 + `satiationManaFloor`% (default 30, `horn floor <n>`) and no
+paralysis/stun/unconsciousness/asleep. GMCP `Defences.Add satiation` confirms; no Add in 5 s is a
+failure, and 3 in a row stop it for 300 s, with an echo that says whether the activation line (trigger
+791) was seen. A `Defences.Remove` re-checks at once. The SCORE hunger upkeep and the kill corpse
+top-up serve FAMINE only; `satiatePoll` and `ataxia_satiateKillCheck` are gone. **The advisor's
+Healing Metabolism <-> Obligate Carnivore pairing (v4.7.368) is removed**: corpses add nothing to a
+skill-only defence, so `M.BOON_SYNERGY` is empty.
 
 **OBLIGATE CARNIVORE + HEALING METABOLISM -- FOOD BECOMES UPKEEP (v4.7.294,
 `ataxia_carnivoreEat`, `misc_scripts/022_Horn_Of_Plenty.lua`).** The horn exists because starvation

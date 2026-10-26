@@ -27,14 +27,24 @@ accursedresolve, acrobatics, affinity, agithtailegend, aiming, airpocket, alertn
 
 ## Satiation (Healing Metabolism)
 
-`satiation` (in the list above) is raised by the Survival ability SATIATION, followed by a meal
-eaten inside its short window. It is NOT a full stomach. Source: AB 1390,
+`satiation` (in the list above) is raised by the Survival ability SATIATION alone. It is NOT a full
+stomach, and it needs no food. Sources: AB 1390,
 [../raw/ab/survival_satiation_1390.txt](../raw/ab/survival_satiation_1390.txt) (CONFIRMED: 4.00 s of
-equilibrium, 100 mana). Eating works on a full stomach (user, 2026-10-26, CONFIRMED by play). The
-activation line is "You begin concentrating on efficient digestion." (user paste, 2026-10-26,
-CONFIRMED; trigger 791). The eat-in-window line and the duration of the defence are UNKNOWN. The Mnemosyne boon Healing Metabolism
-("health elixirs 50% more effective while you possess the satiation defence") is what makes it worth
-holding; `ataxia_satiationTick` (`misc_scripts/022_Horn_Of_Plenty.lua`) keeps it up (v4.7.452).
+equilibrium, 100 mana), and the user's screen, 2026-10-26 (CONFIRMED):
+
+```
++ ( def satiation ) +
+You begin concentrating on efficient digestion.
+...
+- ( def satiation ) -
+Your digestive efficiency returns to normal.
+```
+
+GMCP adds the defence with the activation line, before any eat. It is timed: about 11.3 s
+(12:22:21.449 to 12:22:32.744, no food eaten). Whether eating in the window lengthens it is UNKNOWN.
+The Mnemosyne boon Healing Metabolism ("health elixirs 50% more effective while you possess the
+satiation defence") is what makes it worth casting; `ataxia_satiationTick`
+(`misc_scripts/022_Horn_Of_Plenty.lua`) casts it below an HP threshold (v4.7.454).
 
 ## Our names that are not in this list
 

@@ -36,8 +36,8 @@ patterns:
 
 -- A row in the BOONS list confirms Healing Metabolism: "Your health elixirs are 50% more effective
 -- while you possess the satiation defence." The defence comes from the Survival skill SATIATION
--- (4s equilibrium, 100 mana) followed by a meal inside its short window, so while the flag is up
--- `ataxia_satiationTick` (misc_scripts/022, v4.7.452) sends `satiation;eat <food>` whenever the
--- defence is absent and equilibrium is free -- a corpse under Obligate Carnivore, else the horn.
+-- alone (4s equilibrium, 100 mana, lasts ~11 s), so while the flag is up `ataxia_satiationTick`
+-- (misc_scripts/022, v4.7.454) sends `satiation` below `satiationHpAt` % health (default 75)
+-- whenever the defence is absent and equilibrium is free.
 -- Cleared on run start/end. Type BOONS to re-sync.
 mnemHealingMetabolism = true

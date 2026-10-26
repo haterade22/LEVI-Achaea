@@ -107,6 +107,8 @@ function ataxiaCheckForMissing()
 	-- is paid. Mana is the curing pool too. `horn floor <n>`. (`satiatePoll`, the v4.7.303
 	-- SCORE poll for the wrong model, is gone.)
 	if ataxia.settings.satiationManaFloor == nil then ataxia.settings.satiationManaFloor = 30 end
+	-- ...and it is cast only below this % of max health (v4.7.454, `horn hp <n>`): it lasts ~11 s.
+	if ataxia.settings.satiationHpAt == nil then ataxia.settings.satiationHpAt = 75 end
 	ataxia.settings.satiatePoll = nil
 
 	-- Depthswalker PvE options (v4.7.142). Boinad spends 32 rage AND the shared word

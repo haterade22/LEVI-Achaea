@@ -211,7 +211,7 @@ describe("the horn defers to a corpse", function()
 end)
 
 describe("the kill top-up eats a corpse only under Famine (v4.7.452)", function()
-  -- Healing Metabolism's defence is the SATIATION skill plus a meal (ataxia_satiationTick), so the
+  -- Healing Metabolism's defence is the SATIATION skill alone (ataxia_satiationTick), so the
   -- kill top-up is Famine's alone: Obligate Carnivore + Famine.
   it("does not top up with only Obligate Carnivore", function()
     reset(); mnemObligateCarnivore = true

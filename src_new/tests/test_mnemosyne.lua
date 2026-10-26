@@ -9595,7 +9595,9 @@ describe("boon combos", function()
   -- the advisor recommended Elixir Addict. "I would lower Elixir Addict as the downsides of not using
   -- potash is not worth it. Plus if we have the boon where we can eat corpses it makes healing
   -- metabolism a higher pick by a lot."
-  it("Elixir Addict pays for its potash; Healing Metabolism pays more beside Obligate Carnivore", function()
+  -- v4.7.454: the satiation defence is the SATIATION skill alone, so Obligate Carnivore no longer
+  -- adds to Healing Metabolism (M.BOON_SYNERGY is empty). The pair now scores as if unrelated.
+  it("Elixir Addict pays for its potash; Healing Metabolism gains nothing beside Obligate Carnivore", function()
     local lib = {
       ["Elixir Addict"] = { description = "Your health and mana elixirs are 20% more effective but you gain no health or mana from moss or potash.",
                             category = "Defence", rarity = "uncommon", comboBoon = true },
@@ -9621,15 +9623,14 @@ describe("boon combos", function()
       expect(table.concat(ea.effects, " "):find("no healing from moss/potash", 1, true) ~= nil).toBeTrue()
 
       local fed = holding({ "Obligate Carnivore" }, function() return M.rankOffer(offer) end)
-      expect(fed[1].name).toBe("Healing Metabolism")
       local hm2
       for _, r in ipairs(fed) do if r.name == "Healing Metabolism" then hm2 = r end end
       local hm1 = holding({ "Plain Utility" }, function() return M.scoreBoon("Healing Metabolism") end)
-      expect(hm2.score - hm1.score).toBe(M.BOON_WEIGHTS.synergyHeld)
+      expect(hm2.score - hm1.score).toBe(0)
       -- and the other way round
       local oc0 = holding({ "Plain Defence" }, function() return M.scoreBoon("Obligate Carnivore") end)
       local oc1 = holding({ "Healing Metabolism" }, function() return M.scoreBoon("Obligate Carnivore") end)
-      expect(oc1.score - oc0.score).toBe(M.BOON_WEIGHTS.synergyHeld)
+      expect(oc1.score - oc0.score).toBe(0)
     end)
   end)
 

@@ -75,7 +75,7 @@ M.BOON_WEIGHTS = {
   -- 36 because the cost was invisible to the parser. Charged whenever a boon says "gain no health".
   herbHealingLost = 30,
   -- A BOON THAT FEEDS ONE WE HOLD (v4.7.368, user: "if we have the boon where we can eat corpses it
-  -- makes healing metabolism a higher pick by a lot"). See M.BOON_SYNERGY.
+  -- makes healing metabolism a higher pick by a lot"). See M.BOON_SYNERGY (empty since v4.7.454).
   synergyHeld = 40,
   -- A COST IS ONLY CHEAP IF WE CAN TAKE IT (v4.7.331, user: "if a boon gives us something but
   -- costs an affliction or something we dont have immunity for, it should be scored significantly
@@ -127,15 +127,13 @@ M.BOON_TOP_TIER = {
   ["Star of Winter"] = { why = "an extra life every new ripple" },
 }
 
--- Pairs that make each other better (v4.7.368). Healing Metabolism pays only "while you possess the
--- satiation defence" -- the SATIATION skill plus a meal in its window (v4.7.452) -- and Obligate
--- Carnivore ("You can EAT corpses, restoring hunger") makes that meal a free corpse
--- (ataxia_satiationTick, misc_scripts/022) -- without it, each satiation costs a horn charge.
--- Scored on the offered boon when we already hold its partner.
-M.BOON_SYNERGY = {
-  ["Healing Metabolism"] = { with = "Obligate Carnivore", why = "corpses feed the satiation window for free" },
-  ["Obligate Carnivore"] = { with = "Healing Metabolism", why = "corpses feed the satiation window for free" },
-}
+-- Pairs that make each other better, scored on the offered boon when we already hold its partner:
+-- { with = "<partner>", why = "<reason shown>" }.
+--
+-- EMPTY SINCE v4.7.454. v4.7.368 paired Healing Metabolism with Obligate Carnivore on the belief that
+-- corpses kept "the satiation defence" up for free. The defence is the SATIATION skill alone (the
+-- user's screen, 2026-10-26: GMCP added it with no food eaten), so corpses add nothing to it.
+M.BOON_SYNERGY = {}
 
 M.BOON_STAT_DAMAGE = {
   ["Brute Force"] = "strength",

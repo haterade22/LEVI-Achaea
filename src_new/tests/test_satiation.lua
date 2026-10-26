@@ -1,10 +1,10 @@
 --- test_satiation.lua -- satiation and hunger upkeep (misc_scripts/022_Horn_Of_Plenty.lua)
 --
--- HEALING METABOLISM (v4.7.452): "Your health elixirs are 50% more effective while you possess the
--- satiation defence." The defence is the Survival skill SATIATION (4s eq, 100 mana) followed by a
--- meal in its short window. `ataxia_satiationTick` runs on gmcp.Char.Vitals and sends ONE chain,
--- `satiation;eat <corpse>` or `satiation;get <id> from horn;eat <id>`, when the defence is absent,
--- eq is free and the mana floor holds. GMCP Defences.Add confirms; 3 unconfirmed attempts back off.
+-- HEALING METABOLISM (v4.7.452, no food since v4.7.454): "Your health elixirs are 50% more effective
+-- while you possess the satiation defence." The defence is the Survival skill SATIATION alone (4s eq,
+-- 100 mana, ~11 s). `ataxia_satiationTick` runs on gmcp.Char.Vitals and sends `satiation` when health
+-- is below `satiationHpAt` %, the defence is absent, eq is free and the mana floor holds. GMCP
+-- Defences.Add confirms; 3 unconfirmed attempts back off.
 --
 -- FAMINE keeps the v4.7.303 hunger-row upkeep: below "utterly satiated" it feeds, verifies with
 -- SCORE, and is bounded per episode. Loads the real misc_scripts/022_Horn_Of_Plenty.lua.
@@ -44,15 +44,17 @@ affed = function(a) return affs[a] == true end
 mock.reset()
 dofile("src_new/scripts/levi_ataxia/levi/ataxia/misc_scripts/022_Horn_Of_Plenty.lua")
 
-local function vitals(eq, mp, maxmp)
-  gmcp.Char.Vitals = { eq = eq or "1", mp = tostring(mp or 5000), maxmp = tostring(maxmp or 5000) }
+-- Health defaults to FULL (10000/10000), so the HP gate is closed unless a test lowers it.
+local function vitals(eq, mp, maxmp, hp)
+  gmcp.Char.Vitals = { eq = eq or "1", mp = tostring(mp or 5000), maxmp = tostring(maxmp or 5000),
+    hp = tostring(hp or 10000), maxhp = "10000" }
 end
 
 local function reset()
   sent, NOW, armed, timers, timerId = {}, 1000, nil, {}, 0
   affs = {}
   ataxiaTemp = {}
-  ataxia.settings.satiationManaFloor = nil
+  ataxia.settings.satiationManaFloor, ataxia.settings.satiationHpAt = nil, nil
   ataxia.defences = {}
   mnemObligateCarnivore, mnemHealingMetabolism, mnemFamine = false, false, false
   gmcp = { Char = { Defences = { Remove = {}, Add = {} } } }
@@ -75,12 +77,6 @@ local function listHorn(id, what)
   armed()
 end
 
--- The `ii corpse` row shape (733_Corpse_Found).
-local function listCorpse(id, what)
-  matches = { "  " .. id .. "the corpse of " .. what, id, what }
-  armed()
-end
-
 -- Fire pending timers (optionally only those of one delay); snapshot first, the mock's own rule.
 local function fireTimers(onlyDelay)
   local ids = {}
@@ -92,90 +88,96 @@ local function fireTimers(onlyDelay)
   end
 end
 
-describe("Healing Metabolism -- SATIATION, then food, in one chain", function()
-  it("probes the horn, then sends satiation;get;eat on the listed item", function()
-    reset(); mnemHealingMetabolism = true
+describe("Healing Metabolism -- SATIATION alone, below the HP threshold", function()
+  it("sends satiation directly, with no food", function()
+    reset(); mnemHealingMetabolism = true; vitals("1", 5000, 5000, 5000)
     expect(ataxia_satiationTick()).toBeTrue()
-    expect(sentAny("probe horn")).toBeTrue()
-    listHorn("loaf479025", "a small loaf of waybread")
-    expect(sentAny("satiation;get loaf479025 from horn;eat loaf479025")).toBeTrue()
-  end)
-
-  it("eats a corpse with Obligate Carnivore: satiation;eat <id>", function()
-    reset(); mnemHealingMetabolism, mnemObligateCarnivore = true, true
-    expect(ataxia_satiationTick()).toBeTrue()
-    expect(sentAny("ii corpse")).toBeTrue()
+    expect(sent[1]).toBe("satiation")
+    expect(#sent).toBe(1)
     expect(sentAny("probe horn")).toBeFalse()
-    listCorpse("corpse12345", "a rat")
-    expect(sentAny("satiation;eat corpse12345")).toBeTrue()
+    expect(sentAny("ii corpse")).toBeFalse()
   end)
 
-  it("falls back to the horn when the corpse probe lists nothing", function()
-    reset(); mnemHealingMetabolism, mnemObligateCarnivore = true, true
+  it("uses no corpse even with Obligate Carnivore", function()
+    reset(); mnemHealingMetabolism, mnemObligateCarnivore = true, true; vitals("1", 5000, 5000, 5000)
     ataxia_satiationTick()
-    fireTimers(3)                                -- the corpse probe timeout, nothing listed
-    expect(sentAny("probe horn")).toBeTrue()
-    listHorn("pork528142", "a slab of roast pork")
-    expect(sentAny("satiation;get pork528142 from horn;eat pork528142")).toBeTrue()
+    expect(sent[1]).toBe("satiation")
+    expect(sentAny("ii corpse")).toBeFalse()
   end)
 
   it("runs from gmcp.Char.Vitals", function()
-    reset(); mnemHealingMetabolism = true
+    reset(); mnemHealingMetabolism = true; vitals("1", 5000, 5000, 5000)
     raiseEvent("gmcp.Char.Vitals")
-    expect(sentCount("probe horn")).toBe(1)
+    expect(sentCount("satiation")).toBe(1)
   end)
 end)
 
 describe("Healing Metabolism -- the gates", function()
   it("does nothing without the boon", function()
-    reset()
+    reset(); vitals("1", 5000, 5000, 5000)
     expect(ataxia_satiationTick()).toBeFalse()
     expect(#sent).toBe(0)
   end)
 
+  it("casts only below the HP threshold (default 75%)", function()
+    reset(); mnemHealingMetabolism = true
+    vitals("1", 5000, 5000, 7500)                     -- 75% of 10000: not below
+    expect(ataxia_satiationTick()).toBeFalse()
+    vitals("1", 5000, 5000, 7499)
+    expect(ataxia_satiationTick()).toBeTrue()
+  end)
+
+  it("honours a configured HP threshold", function()
+    reset(); mnemHealingMetabolism = true; ataxia.settings.satiationHpAt = 50
+    vitals("1", 5000, 5000, 6000)
+    expect(ataxia_satiationTick()).toBeFalse()
+    vitals("1", 5000, 5000, 4000)
+    expect(ataxia_satiationTick()).toBeTrue()
+  end)
+
   it("does nothing while the defence is up", function()
-    reset(); mnemHealingMetabolism = true; ataxia.defences.satiation = true
+    reset(); mnemHealingMetabolism = true; ataxia.defences.satiation = true; vitals("1", 5000, 5000, 5000)
     expect(ataxia_satiationTick()).toBeFalse()
     expect(#sent).toBe(0)
   end)
 
   it("waits for equilibrium", function()
-    reset(); mnemHealingMetabolism = true; vitals("0")
+    reset(); mnemHealingMetabolism = true; vitals("0", 5000, 5000, 5000)
     expect(ataxia_satiationTick()).toBeFalse()
   end)
 
   it("keeps the mana floor after the 100-mana cost (default 30%)", function()
-    reset(); mnemHealingMetabolism = true; vitals("1", 1599, 5000)  -- 1499 left < 1500
+    reset(); mnemHealingMetabolism = true; vitals("1", 1599, 5000, 5000)  -- 1499 left < 1500
     expect(ataxia_satiationTick()).toBeFalse()
-    vitals("1", 1600, 5000)                                          -- 1500 left
+    vitals("1", 1600, 5000, 5000)                                          -- 1500 left
     expect(ataxia_satiationTick()).toBeTrue()
   end)
 
-  it("honours a configured floor", function()
+  it("honours a configured mana floor", function()
     reset(); mnemHealingMetabolism = true; ataxia.settings.satiationManaFloor = 0
-    vitals("1", 100, 5000)
+    vitals("1", 100, 5000, 5000)
     expect(ataxia_satiationTick()).toBeTrue()
   end)
 
-  it("does not try while anorexic or paralysed", function()
-    reset(); mnemHealingMetabolism = true; affs.anorexia = true
+  it("does not try while paralysed; anorexia no longer matters (no eat)", function()
+    reset(); mnemHealingMetabolism = true; affs.paralysis = true; vitals("1", 5000, 5000, 5000)
     expect(ataxia_satiationTick()).toBeFalse()
-    reset(); mnemHealingMetabolism = true; affs.paralysis = true
-    expect(ataxia_satiationTick()).toBeFalse()
+    reset(); mnemHealingMetabolism = true; affs.anorexia = true; vitals("1", 5000, 5000, 5000)
+    expect(ataxia_satiationTick()).toBeTrue()
   end)
 
   it("sends one attempt at a time", function()
-    reset(); mnemHealingMetabolism = true
+    reset(); mnemHealingMetabolism = true; vitals("1", 5000, 5000, 5000)
     expect(ataxia_satiationTick()).toBeTrue()
-    NOW = NOW + 5
+    NOW = NOW + 4
     expect(ataxia_satiationTick()).toBeFalse()
-    expect(sentCount("probe horn")).toBe(1)
+    expect(sentCount("satiation")).toBe(1)
   end)
 end)
 
 describe("Healing Metabolism -- GMCP confirms, failures back off", function()
   it("Defences.Add satiation clears the attempt and the fail count", function()
-    reset(); mnemHealingMetabolism = true
+    reset(); mnemHealingMetabolism = true; vitals("1", 5000, 5000, 5000)
     ataxia_satiationTick()
     ataxiaTemp.satiationFails = 2
     gmcp.Char.Defences.Add = { name = "satiation", desc = "x" }
@@ -185,7 +187,7 @@ describe("Healing Metabolism -- GMCP confirms, failures back off", function()
   end)
 
   it("ignores every other defence on Add", function()
-    reset(); mnemHealingMetabolism = true
+    reset(); mnemHealingMetabolism = true; vitals("1", 5000, 5000, 5000)
     ataxia_satiationTick()
     gmcp.Char.Defences.Add = { name = "speed" }
     raiseEvent("gmcp.Char.Defences.Add")
@@ -193,30 +195,30 @@ describe("Healing Metabolism -- GMCP confirms, failures back off", function()
   end)
 
   it("an unconfirmed attempt releases the next one; three in a row back off", function()
-    reset(); mnemHealingMetabolism = true
+    reset(); mnemHealingMetabolism = true; vitals("1", 5000, 5000, 5000)
     for _ = 1, 3 do
       expect(ataxia_satiationTick()).toBeTrue()
-      fireTimers(12)                             -- the confirm window closes, no Add
+      fireTimers(5)                              -- the confirm window closes, no Add
       NOW = NOW + 1
     end
-    expect(sentCount("probe horn")).toBe(3)
+    expect(sentCount("satiation")).toBe(3)
     expect(ataxia_satiationTick()).toBeFalse()  -- backing off
     NOW = NOW + 301
     expect(ataxia_satiationTick()).toBeTrue()
   end)
 
-  it("the back-off echo says which half failed, from the activation line", function()
+  it("the back-off echo says whether the skill fired, from the activation line", function()
     local echoes = {}
     local oldEcho = ataxiaEcho
     ataxiaEcho = function(m) echoes[#echoes + 1] = m end
-    reset(); mnemHealingMetabolism = true
-    for _ = 1, 3 do ataxia_satiationTick(); fireTimers(12); NOW = NOW + 1 end
+    reset(); mnemHealingMetabolism = true; vitals("1", 5000, 5000, 5000)
+    for _ = 1, 3 do ataxia_satiationTick(); fireTimers(5); NOW = NOW + 1 end
     expect(echoes[#echoes]:find("never activated", 1, true) ~= nil).toBeTrue()
-    reset(); mnemHealingMetabolism = true; echoes = {}
+    reset(); mnemHealingMetabolism = true; vitals("1", 5000, 5000, 5000); echoes = {}
     for _ = 1, 3 do
-      ataxia_satiationTick(); ataxia_satiationActivated(); fireTimers(12); NOW = NOW + 1
+      ataxia_satiationTick(); ataxia_satiationActivated(); fireTimers(5); NOW = NOW + 1
     end
-    expect(echoes[#echoes]:find("the meal failed", 1, true) ~= nil).toBeTrue()
+    expect(echoes[#echoes]:find("GMCP did not report", 1, true) ~= nil).toBeTrue()
     ataxiaEcho = oldEcho
   end)
 
@@ -226,21 +228,21 @@ describe("Healing Metabolism -- GMCP confirms, failures back off", function()
   end)
 
   it("Defences.Remove satiation starts a new attempt at once", function()
-    reset(); mnemHealingMetabolism = true; ataxia.defences.satiation = true
+    reset(); mnemHealingMetabolism = true; ataxia.defences.satiation = true; vitals("1", 5000, 5000, 5000)
     gmcp.Char.Defences.Remove = { "satiation" }
     raiseEvent("gmcp.Char.Defences.Remove")
-    expect(sentCount("probe horn")).toBe(1)
+    expect(sentCount("satiation")).toBe(1)
     expect(ataxia.defences.satiation).toBeNil()
   end)
 
   it("ignores every other defence on Remove", function()
-    reset(); mnemHealingMetabolism = true; ataxia.defences.satiation = true
+    reset(); mnemHealingMetabolism = true; ataxia.defences.satiation = true; vitals("1", 5000, 5000, 5000)
     gmcp.Char.Defences.Remove = { "speed" }
     raiseEvent("gmcp.Char.Defences.Remove")
     expect(#sent).toBe(0)
   end)
 
-  it("the hunger row no longer feeds for Healing Metabolism", function()
+  it("the hunger row does not feed for Healing Metabolism", function()
     reset(); mnemHealingMetabolism = true; vitals("0")
     expect(ataxia_hungerSeen("hungry")).toBeFalse()
     expect(#sent).toBe(0)

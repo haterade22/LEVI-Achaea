@@ -2,6 +2,22 @@
 
 ---
 
+## 2026-10-26 - v4.7.454: SATIATION alone, below 75% health -- no food
+
+- **The satiation defence needs no food, and it lasts about 11 s.** The user's screen: GMCP
+  `+ ( def satiation ) +` came with "You begin concentrating on efficient digestion.", before any
+  eat, and `- ( def satiation ) -` / "Your digestive efficiency returns to normal." followed 11.3 s
+  later with no food eaten. v4.7.452-453 ate a corpse or a horn item with every cast, and re-cast on
+  every lapse: about one horn item every 11 s, so the horn was empty in a minute.
+- **`ataxia_satiationTick` now sends `satiation` alone, only below `satiationHpAt`% health**
+  (default 75, new `horn hp <n>`; user's choice). Kept up all the time it would cost ~9 mana/s and a
+  third of equilibrium. Anorexia no longer blocks it (no eat). The confirm window is 5 s. The
+  per-cast "defence up" echo is gone (it would print every 11 s in a fight).
+- **The boon advisor's Healing Metabolism <-> Obligate Carnivore pairing (v4.7.368) is removed.**
+  Corpses add nothing to a defence that needs no food, so `M.BOON_SYNERGY` is empty.
+- The `pre`/`onEmpty` arguments added to `ataxia_hornFeed`/`ataxia_carnivoreEat` in v4.7.452 are
+  removed. Tests: `test_satiation.lua` rewritten (34), the v4.7.368 advisor test updated. 3565 pass.
+
 ## 2026-10-26 - v4.7.453: the SATIATION activation line
 
 - **Trigger 791 captures "You begin concentrating on efficient digestion."** (user paste). It stamps
