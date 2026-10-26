@@ -128,12 +128,13 @@ M.BOON_TOP_TIER = {
 }
 
 -- Pairs that make each other better (v4.7.368). Healing Metabolism pays only "while you possess the
--- satiation defence", and Obligate Carnivore ("You can EAT corpses, restoring hunger") makes that
--- defence free off every kill (ataxia_carnivoreEat, misc_scripts/022) -- without it, satiation costs
--- horn charges. Scored on the offered boon when we already hold its partner.
+-- satiation defence" -- the SATIATION skill plus a meal in its window (v4.7.452) -- and Obligate
+-- Carnivore ("You can EAT corpses, restoring hunger") makes that meal a free corpse
+-- (ataxia_satiationTick, misc_scripts/022) -- without it, each satiation costs a horn charge.
+-- Scored on the offered boon when we already hold its partner.
 M.BOON_SYNERGY = {
-  ["Healing Metabolism"] = { with = "Obligate Carnivore", why = "you eat corpses: satiation is free" },
-  ["Obligate Carnivore"] = { with = "Healing Metabolism", why = "keeps Healing Metabolism's satiation up" },
+  ["Healing Metabolism"] = { with = "Obligate Carnivore", why = "corpses feed the satiation window for free" },
+  ["Obligate Carnivore"] = { with = "Healing Metabolism", why = "corpses feed the satiation window for free" },
 }
 
 M.BOON_STAT_DAMAGE = {

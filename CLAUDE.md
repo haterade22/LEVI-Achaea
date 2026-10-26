@@ -655,6 +655,14 @@ shielding.
 - **PvP auto-flee**: On `"attacker class detected"` event, disables basher and navigates to Mhaldor (`genrunning/001_Bashing_API.lua`)
 - **PvE target switching**: `switchTarget()` skips all PvP state resets when basher is enabled
 
+**Two Handed shield break follows the wielded weapon (v4.7.452, `basher/015_Two_Hand_Raze.lua`,
+user: "if I am wielding a bastard sword it should carve, warhammer splinter").** CARVE needs a bastard
+sword and SPLINTER a warhammer, for all four knights (Weaponmastery). The Infernal basher always sent
+SPLINTER and the other three always CARVE. `ataxiaBasher_twoHandRaze(target, fallback)` reads the
+wielded item from GMCP `Char.Items` (inventory, `l`/`L` in `attrib`; one `Char.Items.Inv` request if
+nothing is known) and falls back to the class's old verb. Trigger 790 ("You must be wielding a
+warhammer to splinter an opponent's defences.") learns "bastard sword" and re-sends the round.
+
 **Glass lilies (v4.7.367, `misc_scripts/024_Glass_Lily`, user: "We need to DROP LILY every hour").** `ataxia_lilyTick` on every `gmcp.Char.Vitals` sends `drop lily` x `ataxia.settings.lilyCount` (default 3) DIRECTLY (never queued -- `addclearfull` would delete it) once an hour. The hour is stamped by the game's drop line (trigger `785_Glass_Lily_Dropped`), not the attempt; an unconfirmed attempt retries after 5 min. `basher_engaged` used to drop three unconditionally; it now calls `ataxia_lilyDrop("bashing")`, which asks the same clock. Alias `lily [on|off|now|count <n>]`.
 
 **Defence tables: three of them, different meanings (v4.7.209).** `ataxiaTables.classDefences` is class MEMBERSHIP (only its keys are read; values are raising commands). `ataxiaTables.defenceWords` is what `ashow defs` DISPLAYS beside a defence, via `ataxia_defenceWord()` -- list a defence here only when its command differs from its name (bard: `acrobatics on`, `blade tune`, `dance harrying`). `ataxiaTables.defences` (inline in `_groups.yaml`) maps client-side name -> server-side name and is read as `csd, ssd` by `supportedDefence()`. **It is MIXED (checked against the live DEF list, 2026-10-10):** four values are raising COMMANDS (`blade tune`, `acrobatics on`, `dance harrying`, `avoid <type>`), which is harmless only because every reader tries the KEY first (`ataxia.defences[defence] or ataxia.defences[actual]`) and `systemDefup` sends profile KEYS. Never send a value to SSC; `kb/defences/README.md` has the game's 279 names. Defences are raised by SSC (`curing priority defence <def> 25`), never by sending the ability command, so these tables are membership and documentation. **Before changing any table's values, find who reads them.**
@@ -1391,6 +1399,22 @@ stamps.
 
 **Pacing affixes (v4.7.196).** Two affixes make the instant a room goes quiet the worst instant to walk, so the auto-explorer carries two post-clear holds, both gated on 90% HP and both re-checking at 1.5s: **Haemophiliac** (`M._haemoHold`, also waits for the bleed to be CLOTTED, since SSC's `curing clotat` is doing real work while we stand still) and **Last Word** -- "Denizens explode on death!" (`M._lastWordHold`, HP only: an explosion is instantaneous, so there is nothing to clot and waiting on a bleed reading would just idle the sweep). Either holding is sufficient. Affix flags are now three (`mnemHaemophiliac`, `mnemDeluge`, `mnemLastWord`) plus the damage-suppression family on `ataxiaTemp.mnemNulled`, so the run-start reset block is **30 boons + 3 affixes = 33 lines** -- never read a boon count off that block. Captured in the same screenshot but deliberately UNHANDLED pending observation: **Necromantic** ("Denizens may revive as mindless thralls" -- potentially significant, since a room that clears then repopulates from its own corpses is exactly what `_roomHasDenizens` is trusted for) and **Iceblood** ("Taking damage causes your blood to freeze").
 
+**HEALING METABOLISM IS A SKILL PLUS A MEAL (v4.7.452) -- this supersedes the Healing Metabolism parts
+of the v4.7.294 and v4.7.303 notes below.** "The satiation defence" is not a full stomach. It comes
+from the Survival ability SATIATION (AB 1390: 4.00 s of equilibrium, 100 mana; "After activating it,
+you'll have a short period during which to eat some food"), and `satiation` is a DEF name, so GMCP
+reports it. User: "We actually need to use the skill and eat food." `ataxia_satiationTick`
+(`misc_scripts/022`) runs on every `gmcp.Char.Vitals` and, with the boon held, the defence absent,
+equilibrium free, mana >= 100 + `satiationManaFloor`% (default 30, `horn floor <n>`) and no
+anorexia/paralysis/stun/unconsciousness/asleep, sends ONE direct chain: `satiation;eat <corpse id>`
+(Obligate Carnivore; an empty corpse probe falls back to the horn) or `satiation;get <id> from
+horn;eat <id>`. Eating works on a full stomach (user). GMCP `Defences.Add satiation` confirms; no Add
+in 12 s is a failure, and 3 failures in a row stop it for 300 s, so a wrong command cannot spend all
+six horn charges. A `Defences.Remove` starts a new attempt at once. The SCORE hunger upkeep, the
+kill-driven SCORE poll and the kill corpse top-up now serve FAMINE only; `satiatePoll` and
+`ataxia_satiateKillCheck` are gone (`horn poll` was never reachable: the alias regex did not accept
+it). The activation line and the eat-in-window line are not captured yet.
+
 **OBLIGATE CARNIVORE + HEALING METABOLISM -- FOOD BECOMES UPKEEP (v4.7.294,
 `ataxia_carnivoreEat`, `misc_scripts/022_Horn_Of_Plenty.lua`).** The horn exists because starvation
 knocks you UNCONSCIOUS -- an emergency. Healing Metabolism ("health elixirs 50% more effective while
@@ -1522,7 +1546,7 @@ flay. **Open and deliberately not guessed**: whether our OWN lightwall darkshade
 sweep or the escape ladder walks through it; if it does, `SNUFF LIGHTWALLS` on room clear is the
 fix and the explorer's room-clear hook is where it goes.
 
-**HEALING METABOLISM ALONE: HOLD "UTTERLY SATIATED" OFF THE HORN (v4.7.303, user-directed:
+**HEALING METABOLISM ALONE: HOLD "UTTERLY SATIATED" OFF THE HORN (v4.7.303; WRONG MODEL, superseded by v4.7.452 above -- this upkeep is FAMINE's only now; user-directed:
 "When we have this boon we need to be full satiation. I have a horn which produces food ... If
 HUNGER is lower than utterly satiated").** Six horn charges on a refill clock is a real cost and
 the user has priced it. **Three ways to notice hunger, because none is complete alone**: (1) the

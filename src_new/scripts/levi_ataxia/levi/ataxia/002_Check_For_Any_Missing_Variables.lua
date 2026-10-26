@@ -103,10 +103,11 @@ function ataxiaCheckForMissing()
 	-- knocks you UNCONSCIOUS, which disables every other safety in the system, so this
 	-- defaults ON; `horn off` to disable.
 	if ataxia.settings.hornAuto == nil then ataxia.settings.hornAuto = true end
-	-- Healing Metabolism upkeep (v4.7.303): how stale a SCORE hunger reading may be, in
-	-- seconds, before a kill asks for a fresh one. 0 disables the kill-driven SCORE entirely
-	-- (the satiation-defence GMCP path and a manual SCORE still feed). `horn poll <n|off>`.
-	if ataxia.settings.satiatePoll == nil then ataxia.settings.satiatePoll = 300 end
+	-- Healing Metabolism (v4.7.452): % of max mana that must remain after SATIATION's 100 mana
+	-- is paid. Mana is the curing pool too. `horn floor <n>`. (`satiatePoll`, the v4.7.303
+	-- SCORE poll for the wrong model, is gone.)
+	if ataxia.settings.satiationManaFloor == nil then ataxia.settings.satiationManaFloor = 30 end
+	ataxia.settings.satiatePoll = nil
 
 	-- Depthswalker PvE options (v4.7.142). Boinad spends 32 rage AND the shared word
 	-- balance for a 5s charm, so it is opt-in; cull-vs-reap is unmeasured (see the class

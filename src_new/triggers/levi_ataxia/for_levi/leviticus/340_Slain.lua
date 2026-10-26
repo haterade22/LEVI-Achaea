@@ -63,18 +63,11 @@ if type(target) == "number" and ataxiaBasher.enabled then
 		end
 	end
 
-	-- OBLIGATE CARNIVORE + HEALING METABOLISM: top the satiation defence up off the corpse we
-	-- have just been handed. A kill is the right moment twice over -- a corpse exists, and the
-	-- fight is ending rather than peaking, which matters because eating contends with cure-herbs
-	-- for the eating balance. Throttled inside `ataxia_carnivoreEat`, and a no-op unless BOTH
-	-- boons are held: without Healing Metabolism a corpse is just food and the horn's emergency
-	-- path is enough.
+	-- OBLIGATE CARNIVORE + FAMINE: eat the corpse we have just been handed. A kill is the right
+	-- moment twice over -- a corpse exists, and the fight is ending rather than peaking.
+	-- Throttled inside `ataxia_carnivoreEat`. Healing Metabolism does not use the kill since
+	-- v4.7.452: its SATIATION skill + meal runs off gmcp.Char.Vitals (misc_scripts/022).
 	if ataxia_carnivoreTopUp then ataxia_carnivoreTopUp() end
-	-- HEALING METABOLISM ALONE (v4.7.303): no corpse to eat, so ask SCORE for the hunger row when
-	-- the last reading is stale (`ataxia.settings.satiatePoll`); the row's trigger feeds off the
-	-- horn if it reads below "utterly satiated". A kill is the moment the fight is ending, and it
-	-- is the only clock this needs.
-	if ataxia_satiateKillCheck then ataxia_satiateKillCheck() end
 	-- FAMINE (v4.7.333): the affix feeds hunger off damage taken, so the upkeep runs on the room's
 	-- own clock rather than on a boon being held. No-op unless the affix is up.
 	if ataxia_famineTopUp then ataxia_famineTopUp() end

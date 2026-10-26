@@ -378,7 +378,7 @@ raze_path: "rebounding/shield → falcon track;falcon slay;fracture <target>"
 attack_skill: Weaponmastery
 spec_branches:
   Dual Cutting: { raze: "razeslash <target>",                    bash: "dsl <target>" }
-  Two Handed:   { raze: "battlefury focus speed;carve <target>", bash: "battlefury focus speed;slaughter <target>" }
+  Two Handed:   { raze: "battlefury focus speed;carve <target>" (splinter when a warhammer is wielded, v4.7.452, basher/015), bash: "battlefury focus speed;slaughter <target>" }
   Dual Blunt:   { raze: "fracture <target>",                     bash: "doublewhirl <target>" }
   else (SnB):   { raze: "combination <target> raze smash",       bash: "combination <target> slice smash" }
   # `razeslash` is spelled out (v4.7.151, 002:1535) -- `rsl` is a personal server-side

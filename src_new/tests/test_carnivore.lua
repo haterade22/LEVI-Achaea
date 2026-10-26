@@ -35,7 +35,7 @@ dofile("src_new/scripts/levi_ataxia/levi/ataxia/misc_scripts/022_Horn_Of_Plenty.
 local function reset()
   sent, NOW, armed = {}, 1000, nil
   ataxiaTemp = {}
-  mnemObligateCarnivore, mnemHealingMetabolism = false, false
+  mnemObligateCarnivore, mnemHealingMetabolism, mnemFamine = false, false, false
 end
 
 local function sentAny(needle)
@@ -210,24 +210,23 @@ describe("the horn defers to a corpse", function()
   end)
 end)
 
-describe("satiation upkeep needs BOTH boons", function()
-  -- Alone, Obligate Carnivore is just food and the horn's emergency path already covers hunger.
-  -- It is Healing Metabolism -- 50% on every health elixir while satiated -- that makes holding
-  -- the defence worth a command.
+describe("the kill top-up eats a corpse only under Famine (v4.7.452)", function()
+  -- Healing Metabolism's defence is the SATIATION skill plus a meal (ataxia_satiationTick), so the
+  -- kill top-up is Famine's alone: Obligate Carnivore + Famine.
   it("does not top up with only Obligate Carnivore", function()
     reset(); mnemObligateCarnivore = true
     expect(ataxia_carnivoreTopUp()).toBeFalse()
     expect(#sent).toBe(0)
   end)
 
-  it("does not top up with only Healing Metabolism -- there is no food source", function()
-    reset(); mnemHealingMetabolism = true
+  it("does not top up with Carnivore + Healing Metabolism -- the skill path owns that pair", function()
+    reset(); mnemObligateCarnivore, mnemHealingMetabolism = true, true
     expect(ataxia_carnivoreTopUp()).toBeFalse()
     expect(#sent).toBe(0)
   end)
 
-  it("tops up when both are held", function()
-    reset(); mnemObligateCarnivore, mnemHealingMetabolism = true, true
+  it("tops up under Carnivore + Famine", function()
+    reset(); mnemObligateCarnivore, mnemFamine = true, true
     expect(ataxia_carnivoreTopUp()).toBeTrue()
     expect(sentAny("ii corpse")).toBeTrue()
   end)
@@ -235,7 +234,7 @@ describe("satiation upkeep needs BOTH boons", function()
   -- The top-up is upkeep, not an emergency: it must respect the throttle so a fast clearing pace
   -- does not probe on every kill.
   it("respects the throttle, unlike the starvation path", function()
-    reset(); mnemObligateCarnivore, mnemHealingMetabolism = true, true
+    reset(); mnemObligateCarnivore, mnemFamine = true, true
     expect(ataxia_carnivoreTopUp()).toBeTrue()
     expect(ataxia_carnivoreTopUp()).toBeFalse()
   end)
@@ -244,5 +243,5 @@ end)
 send, getEpoch, ataxiaEcho = _saved.send, _saved.getEpoch, _saved.ataxiaEcho
 tempRegexTrigger, tempTimer = _saved.tempRegexTrigger, _saved.tempTimer
 killTrigger, killTimer, matches = _saved.killTrigger, _saved.killTimer, _saved.matches
-mnemObligateCarnivore, mnemHealingMetabolism = nil, nil
+mnemObligateCarnivore, mnemHealingMetabolism, mnemFamine = nil, nil, nil
 ataxiaTemp = {}

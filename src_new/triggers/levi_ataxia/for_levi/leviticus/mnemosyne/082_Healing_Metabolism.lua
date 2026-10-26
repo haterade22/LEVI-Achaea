@@ -35,10 +35,9 @@ patterns:
 ]]--
 
 -- A row in the BOONS list confirms Healing Metabolism: "Your health elixirs are 50% more effective
--- while you possess the satiation defence." That makes satiation an UPKEEP rather than a hunger
--- floor: with Obligate Carnivore also held the kill trigger tops it up off the fresh corpse
--- (`ataxia_carnivoreTopUp`); ALONE (v4.7.303) the horn of plenty is the food source -- the SCORE
--- hunger row, the satiation defence leaving GMCP, or a kill with a stale reading all feed off it
--- whenever hunger reads below "utterly satiated" (`ataxia_hornSatiate`, misc_scripts/022).
+-- while you possess the satiation defence." The defence comes from the Survival skill SATIATION
+-- (4s equilibrium, 100 mana) followed by a meal inside its short window, so while the flag is up
+-- `ataxia_satiationTick` (misc_scripts/022, v4.7.452) sends `satiation;eat <food>` whenever the
+-- defence is absent and equilibrium is free -- a corpse under Obligate Carnivore, else the horn.
 -- Cleared on run start/end. Type BOONS to re-sync.
 mnemHealingMetabolism = true

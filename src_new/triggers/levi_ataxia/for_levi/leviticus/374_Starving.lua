@@ -52,7 +52,8 @@ patterns:
 -- three emergency states; it now captures WHATEVER the row says -- the text up to the column
 -- gap before "Sobriety" -- and hands it to `ataxia_hungerSeen`, which owns the decision:
 -- emergency states feed at once (corpse first with Obligate Carnivore, else the horn), any
--- other state below "utterly satiated" is Healing Metabolism upkeep, and "utterly satiated"
+-- other state below "utterly satiated" is Famine upkeep (Healing Metabolism used it until
+-- v4.7.452; its defence is the SATIATION skill, not hunger), and "utterly satiated"
 -- closes an upkeep episode. The classification lives in the SCRIPT, not here, because a guard
 -- inside a trigger is a guard the test suite cannot see (v4.7.260).
 --

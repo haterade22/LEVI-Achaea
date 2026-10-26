@@ -2,6 +2,34 @@
 
 ---
 
+## 2026-10-26 - v4.7.452: Healing Metabolism uses the SATIATION skill; Two Handed carve or splinter by weapon
+
+- **Healing Metabolism now uses the SATIATION skill, then eats (`misc_scripts/022_Horn_Of_Plenty.lua`).**
+  User, with AB 1390: *"We actually need to use the skill and eat food."* "The satiation defence" is
+  the Survival ability SATIATION (4 s of equilibrium, 100 mana) followed by a meal in its short
+  window, not a full stomach. Since v4.7.294/303 the package held "utterly satiated" with SCORE polls
+  and horn feeds, which never raised the defence. `ataxia_satiationTick` runs on every
+  `gmcp.Char.Vitals`. When the boon is held, the defence is absent, equilibrium is free and mana is at
+  least 100 + `satiationManaFloor`% of max (default 30, `horn floor <n>`), it sends one direct chain:
+  `satiation;eat <corpse id>` (Obligate Carnivore; an empty corpse probe falls back to the horn) or
+  `satiation;get <id> from horn;eat <id>`. Anorexia, paralysis, stun, unconsciousness and sleep
+  block it. GMCP `Defences.Add satiation` confirms. 3 unconfirmed attempts in a row stop it for 300 s,
+  so the horn's six charges are safe. A `Defences.Remove` starts a new attempt at once.
+- **The hunger upkeep is Famine's only.** The SCORE row upkeep, its verify chain and the kill corpse
+  top-up now run only under the Famine affix. `ataxia_satiateKillCheck` and `satiatePoll` are gone
+  (`horn poll` was never reachable: the alias regex did not accept it). The boon advisor's
+  Healing Metabolism / Obligate Carnivore synergy stays.
+- **Two Handed knights carve with a bastard sword and splinter with a warhammer
+  (`basher/015_Two_Hand_Raze.lua`, trigger 790).** User: *"if I am wielding a bastard sword it
+  should carve, warhammer splinter"*, with the game's refusal *"You must be wielding a warhammer to
+  splinter an opponent's defences."* The Infernal basher always sent SPLINTER; the Paladin,
+  Runewarden and Unnamable bashers always sent CARVE. The verb now follows the wielded item from
+  GMCP `Char.Items` (one `Char.Items.Inv` request if nothing is known), and each class keeps its old
+  verb when the weapon is unknown. The refusal line teaches "bastard sword" and re-sends the round.
+- Tests: `test_satiation.lua` rewritten (31), `test_carnivore.lua` updated, new
+  `test_two_hand_raze.lua` (10). 3562 pass. Docs: `CLAUDE.md`, `kb/defences/README.md`,
+  `kb/raw/ab/survival_satiation_1390.txt`, `.claude/classes/infernal.md` + `runewarden.md`, memory.
+
 ## 2026-10-23 - v4.7.451: and-or precedence bugs, the corruption clotat, TEMPLE on a broken head
 
 Found while filing the 2026-10-23 class-lead changes (`kb/changes/2026-10-23_classleads.md`).

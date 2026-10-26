@@ -1,0 +1,9 @@
+Satiation (Survival)  ABADMIN ID: 1390        Known: Yes
+-------------------------------------------------------------------------------
+Syntax:            SATIATION
+Cooldown:          4.00 seconds of equilibrium
+Resource:          100 mana
+Details:
+By using this ability, you will begin to concentrate on processing your food more efficiently. After activating it, 
+you'll have a short period during which to eat some food.
+-------------------------------------------------------------------------------

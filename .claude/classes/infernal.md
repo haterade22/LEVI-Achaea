@@ -1207,7 +1207,7 @@ spec_bash_strings:
                                  # alone deliberately, but verify they actually fire.
     bash: "dsl <target>"          # prepend "hyena maul <target>" when hyenaMaulReady
   Two Handed:
-    raze: "battlefury focus speed;splinter <target>"
+    raze: "battlefury focus speed;splinter <target>"   # v4.7.452: carve when a bastard sword is wielded (basher/015)
     bash: "battlefury focus speed;slaughter <target>"  # hyena maul inserted before slaughter when ready
   Dual Blunt:
     raze: "fracture <target>"

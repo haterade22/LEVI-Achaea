@@ -9,7 +9,7 @@ hierarchy:
 attributes:
   isActive: 'yes'
   isFolder: 'no'
-regex: ^horn(?: (auto|on|off))?$
+regex: ^horn(?: (auto|on|off|floor(?: \S+)?))?$
 command: ''
 packageName: ''
 ]]--
@@ -17,25 +17,21 @@ packageName: ''
 -- `horn`          -- probe the horn of plenty, take the first item, eat it (now).
 -- `horn on|off`   -- toggle the automatic feed on starvation lines (default on).
 -- `horn auto`     -- show the current settings.
--- `horn poll <n|off>` -- Healing Metabolism upkeep: seconds a SCORE hunger reading may be stale
---                        before a kill asks for a fresh one (default 300; off = never ask).
+-- `horn floor <n>` -- Healing Metabolism: % of max mana that must remain after SATIATION's 100
+--                     mana (default 30, v4.7.452).
 local arg = matches[2]
-local pollArg = arg and arg:match("^poll%s*(%S*)$")
-if pollArg then
-	if pollArg == "off" or pollArg == "0" then
-		ataxia.settings.satiatePoll = 0
-	elseif tonumber(pollArg) then
-		ataxia.settings.satiatePoll = math.max(30, math.floor(tonumber(pollArg)))
-	else
-		ataxiaEcho("Usage: horn poll <seconds|off>  (currently "
-			.. tostring(ataxia.settings.satiatePoll or 300) .. ").")
+local floorArg = arg and arg:match("^floor%s*(%S*)$")
+if floorArg then
+	local n = tonumber(floorArg)
+	if not n then
+		ataxiaEcho("Usage: horn floor <percent>  (currently "
+			.. tostring(ataxia.settings.satiationManaFloor or 30) .. "%).")
 		return
 	end
+	ataxia.settings.satiationManaFloor = math.max(0, math.min(95, math.floor(n)))
 	ataxia_saveSettings(false)
-	ataxiaEcho("Healing Metabolism SCORE check on a kill: "
-		.. ((ataxia.settings.satiatePoll or 0) > 0
-			and ("every <green>" .. ataxia.settings.satiatePoll .. "s<reset> of stale reading")
-			or "<red>off<reset>") .. ".")
+	ataxiaEcho("Healing Metabolism: SATIATION keeps <green>" .. ataxia.settings.satiationManaFloor
+		.. "%<reset> of max mana in reserve.")
 elseif arg == "on" or arg == "off" then
 	ataxia.settings.hornAuto = (arg == "on")
 	ataxia_saveSettings(false)
@@ -44,10 +40,8 @@ elseif arg == "on" or arg == "off" then
 elseif arg == "auto" then
 	ataxiaEcho("Auto-feed from the horn of plenty: "
 		.. ((ataxia.settings.hornAuto ~= false) and "<green>on" or "<red>off") .. "<reset>."
-		.. "  Healing Metabolism SCORE check: "
-		.. (((ataxia.settings.satiatePoll or 300) > 0)
-			and ("every " .. (ataxia.settings.satiatePoll or 300) .. "s of stale reading")
-			or "off") .. ".")
+		.. "  Healing Metabolism SATIATION mana floor: "
+		.. tostring(ataxia.settings.satiationManaFloor or 30) .. "%.")
 else
 	ataxia_hornFeed("manual", true)
 end

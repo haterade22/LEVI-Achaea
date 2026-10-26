@@ -2086,7 +2086,7 @@ function ataxiaBasher_infernalBashing()
 		raze = "razeslash "..target
 		bash = "dsl "..target..sp
 	elseif spec == "Two Handed" then
-		raze = "battlefury focus speed"..sp.."splinter "..target
+		raze = "battlefury focus speed"..sp..(ataxiaBasher_twoHandRaze and ataxiaBasher_twoHandRaze(target, "splinter") or "splinter "..target)
 		bash = "battlefury focus speed"..sp.."slaughter "..target..sp
 	elseif spec == "Dual Blunt" then
 		raze = "fracture "..target
@@ -2935,7 +2935,7 @@ function ataxiaBasher_paladinBashing()
 		raze = "razeslash "..target
 		bash = "dsl "..target
 	elseif spec == "Two Handed" then
-		raze = "battlefury focus speed"..sp.."carve "..target
+		raze = "battlefury focus speed"..sp..(ataxiaBasher_twoHandRaze and ataxiaBasher_twoHandRaze(target, "carve") or "carve "..target)
 		bash = "battlefury focus speed"..sp.."slaughter "..target
 	elseif spec == "Dual Blunt" then
 		raze = "fracture "..target
@@ -3415,7 +3415,7 @@ function ataxiaBasher_knightBashing()
 		raze = "razeslash "..target
 		bash = "dsl "..target
 	elseif spec == "Two Handed" then
-		raze = "battlefury focus speed"..sp.."carve "..target
+		raze = "battlefury focus speed"..sp..(ataxiaBasher_twoHandRaze and ataxiaBasher_twoHandRaze(target, "carve") or "carve "..target)
 		bash = "battlefury focus speed"..sp.."slaughter "..target
 	elseif spec == "Dual Blunt" then
 		raze = "fracture "..target
@@ -3735,7 +3735,7 @@ function ataxiaBasher_runewardenBashing()
 		raze = "razeslash "..target
 		bash = falcon.."dsl "..target
 	elseif spec == "Two Handed" then
-		raze = "battlefury focus speed"..sp.."carve "..target
+		raze = "battlefury focus speed"..sp..(ataxiaBasher_twoHandRaze and ataxiaBasher_twoHandRaze(target, "carve") or "carve "..target)
 		bash = "battlefury focus speed"..sp..falcon.."slaughter "..target
 	elseif spec == "Dual Blunt" then
 		raze = "fracture "..target
