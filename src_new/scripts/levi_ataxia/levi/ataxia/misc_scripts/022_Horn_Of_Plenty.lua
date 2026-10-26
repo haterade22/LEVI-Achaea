@@ -388,7 +388,9 @@ end
 -- GMCP IS THE PROOF. A Defences.Add of `satiation` confirms; no Add within SATIATION_CONFIRM
 -- seconds counts a failure, and SATIATION_MAX_FAILS failures in a row stop the attempts for
 -- SATIATION_BACKOFF seconds -- a wrong command or a closed window must not spend all six horn
--- charges. The activation and eat-in-window lines are not captured yet; nothing depends on them.
+-- charges. The activation line "You begin concentrating on efficient digestion." (user, 2026-10-26;
+-- trigger 791) only tells a failed attempt WHICH half failed: the skill, or the meal after it. The
+-- eat-in-window line is not captured yet.
 
 local SATIATION_CMD = "satiation"
 local SATIATION_MANA = 100
@@ -426,6 +428,12 @@ local function satiationManaOk(v)
   return (mp - SATIATION_MANA) >= maxmp * floor / 100
 end
 
+-- Trigger 791: "You begin concentrating on efficient digestion." The skill fired; the window is open.
+function ataxia_satiationActivated()
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.satiationActivatedAt = getEpoch()
+end
+
 -- No Defences.Add arrived for the attempt stamped at `attemptAt`.
 function ataxia_satiationUnconfirmed(attemptAt)
   ataxiaTemp = ataxiaTemp or {}
@@ -437,9 +445,11 @@ function ataxia_satiationUnconfirmed(attemptAt)
     ataxiaTemp.satiationFails = 0
     ataxiaTemp.satiationBackoffUntil = getEpoch() + SATIATION_BACKOFF
     if ataxiaEcho then
+      local activated = (tonumber(ataxiaTemp.satiationActivatedAt) or 0) >= attemptAt
       ataxiaEcho("<red>Healing Metabolism: SATIATION did not raise the defence "
-        .. SATIATION_MAX_FAILS .. " times<reset> -- stopping for " .. SATIATION_BACKOFF .. "s."
-        .. " Check mana, food and the horn.")
+        .. SATIATION_MAX_FAILS .. " times<reset> -- stopping for " .. SATIATION_BACKOFF .. "s. "
+        .. (activated and "The skill activated, so the meal failed: check the horn and corpses."
+          or "The skill never activated: check mana and equilibrium."))
     end
   end
   return true

@@ -2,6 +2,14 @@
 
 ---
 
+## 2026-10-26 - v4.7.453: the SATIATION activation line
+
+- **Trigger 791 captures "You begin concentrating on efficient digestion."** (user paste). It stamps
+  `ataxiaTemp.satiationActivatedAt` (`ataxia_satiationActivated`, `misc_scripts/022`). After 3
+  unconfirmed attempts, the back-off echo now says which half failed: "the skill never activated"
+  (mana, equilibrium) or "the skill activated, so the meal failed" (horn, corpses). GMCP
+  `Defences.Add` stays the proof of the defence. Tests: 2 new in `test_satiation.lua` (3564 pass).
+
 ## 2026-10-26 - v4.7.452: Healing Metabolism uses the SATIATION skill; Two Handed carve or splinter by weapon
 
 - **Healing Metabolism now uses the SATIATION skill, then eats (`misc_scripts/022_Horn_Of_Plenty.lua`).**

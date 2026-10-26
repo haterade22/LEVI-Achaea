@@ -31,7 +31,8 @@ accursedresolve, acrobatics, affinity, agithtailegend, aiming, airpocket, alertn
 eaten inside its short window. It is NOT a full stomach. Source: AB 1390,
 [../raw/ab/survival_satiation_1390.txt](../raw/ab/survival_satiation_1390.txt) (CONFIRMED: 4.00 s of
 equilibrium, 100 mana). Eating works on a full stomach (user, 2026-10-26, CONFIRMED by play). The
-duration of the defence and the activation line are UNKNOWN. The Mnemosyne boon Healing Metabolism
+activation line is "You begin concentrating on efficient digestion." (user paste, 2026-10-26,
+CONFIRMED; trigger 791). The eat-in-window line and the duration of the defence are UNKNOWN. The Mnemosyne boon Healing Metabolism
 ("health elixirs 50% more effective while you possess the satiation defence") is what makes it worth
 holding; `ataxia_satiationTick` (`misc_scripts/022_Horn_Of_Plenty.lua`) keeps it up (v4.7.452).
 

@@ -1413,7 +1413,9 @@ in 12 s is a failure, and 3 failures in a row stop it for 300 s, so a wrong comm
 six horn charges. A `Defences.Remove` starts a new attempt at once. The SCORE hunger upkeep, the
 kill-driven SCORE poll and the kill corpse top-up now serve FAMINE only; `satiatePoll` and
 `ataxia_satiateKillCheck` are gone (`horn poll` was never reachable: the alias regex did not accept
-it). The activation line and the eat-in-window line are not captured yet.
+it). The activation line "You begin concentrating on efficient digestion." is captured (v4.7.453, trigger
+791): after 3 failures the echo says whether the skill or the meal failed. The eat-in-window line is
+not captured yet.
 
 **OBLIGATE CARNIVORE + HEALING METABOLISM -- FOOD BECOMES UPKEEP (v4.7.294,
 `ataxia_carnivoreEat`, `misc_scripts/022_Horn_Of_Plenty.lua`).** The horn exists because starvation

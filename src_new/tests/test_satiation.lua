@@ -205,6 +205,26 @@ describe("Healing Metabolism -- GMCP confirms, failures back off", function()
     expect(ataxia_satiationTick()).toBeTrue()
   end)
 
+  it("the back-off echo says which half failed, from the activation line", function()
+    local echoes = {}
+    local oldEcho = ataxiaEcho
+    ataxiaEcho = function(m) echoes[#echoes + 1] = m end
+    reset(); mnemHealingMetabolism = true
+    for _ = 1, 3 do ataxia_satiationTick(); fireTimers(12); NOW = NOW + 1 end
+    expect(echoes[#echoes]:find("never activated", 1, true) ~= nil).toBeTrue()
+    reset(); mnemHealingMetabolism = true; echoes = {}
+    for _ = 1, 3 do
+      ataxia_satiationTick(); ataxia_satiationActivated(); fireTimers(12); NOW = NOW + 1
+    end
+    expect(echoes[#echoes]:find("the meal failed", 1, true) ~= nil).toBeTrue()
+    ataxiaEcho = oldEcho
+  end)
+
+  it("trigger 791 matches the activation line", function()
+    local src = io.open("src_new/triggers/levi_ataxia/for_levi/leviticus/791_Satiation_Activated.lua"):read("*a")
+    expect(src:find("pattern: ^You begin concentrating on efficient digestion\\.$", 1, true) ~= nil).toBeTrue()
+  end)
+
   it("Defences.Remove satiation starts a new attempt at once", function()
     reset(); mnemHealingMetabolism = true; ataxia.defences.satiation = true
     gmcp.Char.Defences.Remove = { "satiation" }
