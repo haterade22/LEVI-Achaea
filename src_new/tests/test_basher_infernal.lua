@@ -616,6 +616,35 @@ describe("Army of the Dead -- the room latch must not burn on a discarded round"
   end)
 end)
 
+-- v4.7.455 (user: "we need to use bastard for bisect and arc and not hammer").
+describe("Two Handed -- arc wields the bastard sword", function()
+  dofile("src_new/scripts/levi_ataxia/levi/ataxia/basher/015_Two_Hand_Raze.lua")
+  local function hammer() ataxiaTemp.wieldedItems = { ["1"] = "a steel warhammer" } end
+
+  it("an arc round wields the bastard first", function()
+    reset(); ataxia.vitals.knight = "Two Handed"; hammer()
+    infIndiscriminate = true; denizens = 3
+    local cmd = ataxiaBasher_infernalBashing()
+    expect(has(cmd, "wield bastard;arc")).toBeTrue()
+    expect(has(cmd, "slaughter")).toBeFalse()
+    expect(ataxiaTemp.twoHandRound).toBe("other")
+  end)
+
+  it("a normal round uses the pick and is marked for the ledger", function()
+    reset(); ataxia.vitals.knight = "Two Handed"; hammer()
+    ataxiaBasher.twoHandMode = "bastard"
+    local cmd = ataxiaBasher_infernalBashing()
+    expect(has(cmd, "battlefury focus speed;wield bastard;slaughter 42")).toBeTrue()
+    expect(ataxiaTemp.twoHandRound).toBe("single")
+    ataxiaBasher.twoHandMode = nil
+  end)
+
+  it("Dual Cutting never wields", function()
+    reset(); hammer(); infIndiscriminate = true; denizens = 3
+    expect(has(ataxiaBasher_infernalBashing(), "wield")).toBeFalse()
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
 getEpoch = _epoch
 infArmyOfDead, infDaemonJaws, infIndiscriminate = false, false, false

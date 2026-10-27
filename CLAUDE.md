@@ -662,6 +662,13 @@ SPLINTER and the other three always CARVE. `ataxiaBasher_twoHandRaze(target, fal
 wielded item from GMCP `Char.Items` (inventory, `l`/`L` in `attrib`; one `Char.Items.Inv` request if
 nothing is known) and falls back to the class's old verb. Trigger 790 ("You must be wielding a
 warhammer to splinter an opponent's defences.") learns "bastard sword" and re-sends the round.
+**Arc and bisect wield the bastard sword; normal rounds pick the weapon by DPS (v4.7.455,
+Runewarden and Infernal).** Arc needs a sword and bisect an edged runeblade, so their swing starts
+with `wield bastard` (`ataxiaBasher_twoHandWield`) unless GMCP shows it in hand. Normal slaughter
+rounds wield `ataxiaBasher_twoHandPick()`: a saved per-weapon DPS ledger (`ataxiaBasher.twoHandDps`,
+fed from `bashStats_recordDamage`, only rounds marked `ataxiaTemp.twoHandRound = "single"`) samples
+each weapon for 120 s of fighting, then takes the higher DPS with a 3 % margin. `bash twohand
+[status|auto|hammer|bastard|reset]`.
 
 **Glass lilies (v4.7.367, `misc_scripts/024_Glass_Lily`, user: "We need to DROP LILY every hour").** `ataxia_lilyTick` on every `gmcp.Char.Vitals` sends `drop lily` x `ataxia.settings.lilyCount` (default 3) DIRECTLY (never queued -- `addclearfull` would delete it) once an hour. The hour is stamped by the game's drop line (trigger `785_Glass_Lily_Dropped`), not the attempt; an unconfirmed attempt retries after 5 min. `basher_engaged` used to drop three unconditionally; it now calls `ataxia_lilyDrop("bashing")`, which asks the same clock. Alias `lily [on|off|now|count <n>]`.
 

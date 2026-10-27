@@ -378,7 +378,10 @@ raze_path: "rebounding/shield → falcon track;falcon slay;fracture <target>"
 attack_skill: Weaponmastery
 spec_branches:
   Dual Cutting: { raze: "razeslash <target>",                    bash: "dsl <target>" }
-  Two Handed:   { raze: "battlefury focus speed;carve <target>" (splinter when a warhammer is wielded, v4.7.452, basher/015), bash: "battlefury focus speed;slaughter <target>" }
+  Two Handed:   { raze: "battlefury focus speed;carve <target>" (splinter when a warhammer is wielded, v4.7.452, basher/015), bash: "battlefury focus speed;[wield <weapon>;]slaughter <target>" }
+  # v4.7.455: bisect/arc rounds send "wield bastard;" first (bisect needs an edged runeblade,
+  # arc a sword) unless GMCP shows the bastard in hand. Normal rounds wield the weapon with the
+  # higher measured DPS (ataxiaBasher_twoHandPick, basher/015; `bash twohand`).
   Dual Blunt:   { raze: "fracture <target>",                     bash: "doublewhirl <target>" }
   else (SnB):   { raze: "combination <target> raze smash",       bash: "combination <target> slice smash" }
   # `razeslash` is spelled out (v4.7.151, 002:1535) -- `rsl` is a personal server-side

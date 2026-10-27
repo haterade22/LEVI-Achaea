@@ -2087,7 +2087,9 @@ function ataxiaBasher_infernalBashing()
 		bash = "dsl "..target..sp
 	elseif spec == "Two Handed" then
 		raze = "battlefury focus speed"..sp..(ataxiaBasher_twoHandRaze and ataxiaBasher_twoHandRaze(target, "splinter") or "splinter "..target)
-		bash = "battlefury focus speed"..sp.."slaughter "..target..sp
+		-- The weapon with the higher measured DPS (basher/015, v4.7.455).
+		local wield = ataxiaBasher_twoHandPick and ataxiaBasher_twoHandWield(ataxiaBasher_twoHandPick(), sp) or ""
+		bash = "battlefury focus speed"..sp..wield.."slaughter "..target..sp
 	elseif spec == "Dual Blunt" then
 		raze = "fracture "..target
 		bash = "doublewhirl "..target
@@ -2096,6 +2098,8 @@ function ataxiaBasher_infernalBashing()
 		bash = "combination "..target.." slice smash"
 	end
 	
+	-- Which kind of round this is, for the Two Handed DPS ledger: only "single" is recorded.
+	ataxiaTemp.twoHandRound = "other"
 	if ataxiaBasher.shielded then
 		-- QUASH rides the equilibrium here (strips the shield + damages, works on
 		-- denizens) while the balance razer does its own job -- see ataxiaBasher_infQuash.
@@ -2116,6 +2120,11 @@ function ataxiaBasher_infernalBashing()
 		-- one 4.75s room-wide hit instead of several single-target ones. The maul still
 		-- rides: it is a pet order, not one of OUR balances.
 		local arc = ataxiaBasher_knightArc()
+		if arc ~= "" and spec == "Two Handed" and ataxiaBasher_twoHandWield then
+			-- Arc swings a sword: a warhammer in hand gets it refused (user, v4.7.455).
+			arc = ataxiaBasher_twoHandWield("bastard", sp)..arc
+		end
+		if arc == "" and spec == "Two Handed" then ataxiaTemp.twoHandRound = "single" end
 		command = aura..maul..brage..sp..((arc ~= "") and arc or bash)
 	end
 
@@ -3736,7 +3745,9 @@ function ataxiaBasher_runewardenBashing()
 		bash = falcon.."dsl "..target
 	elseif spec == "Two Handed" then
 		raze = "battlefury focus speed"..sp..(ataxiaBasher_twoHandRaze and ataxiaBasher_twoHandRaze(target, "carve") or "carve "..target)
-		bash = "battlefury focus speed"..sp..falcon.."slaughter "..target
+		-- The weapon with the higher measured DPS (basher/015, v4.7.455).
+		local wield = ataxiaBasher_twoHandPick and ataxiaBasher_twoHandWield(ataxiaBasher_twoHandPick(), sp) or ""
+		bash = "battlefury focus speed"..sp..falcon..wield.."slaughter "..target
 	elseif spec == "Dual Blunt" then
 		raze = "fracture "..target
 		bash = falcon.."doublewhirl "..target
@@ -3745,6 +3756,8 @@ function ataxiaBasher_runewardenBashing()
 		bash = falcon.."combination "..target.." slice smash"
 	end
 
+	-- Which kind of round this is, for the Two Handed DPS ledger: only "single" is recorded.
+	ataxiaTemp.twoHandRound = "other"
 	if ataxiaBasher.shielded then
 		-- uruz rides the shielded round too: it heals US, so the target's shield is irrelevant
 		-- to it, and a crowded room whose opener is a raze is exactly when we want it down.
@@ -3769,11 +3782,19 @@ function ataxiaBasher_runewardenBashing()
 		-- sibling helpers they return a bare verb. Anything appended must add its own.
 		local bisect = ataxiaBasher_rwBisect()
 		local arc = ataxiaBasher_knightArc()
+		-- Bisect needs an edged runeblade and arc a sword: in Two Handed both go out with the
+		-- bastard sword in hand, never the warhammer (user, v4.7.455).
+		local sword = ""
+		if spec == "Two Handed" and ataxiaBasher_twoHandWield then
+			sword = ataxiaBasher_twoHandWield("bastard", sp)
+		end
 		local swing = bash
 		if bisect then
-			swing = falcon..bisect
+			swing = falcon..sword..bisect
 		elseif arc ~= "" then
-			swing = falcon..arc
+			swing = falcon..sword..arc
+		elseif spec == "Two Handed" then
+			ataxiaTemp.twoHandRound = "single"
 		end
 		command = fury..uruz..sowulu..brage..sp..swing
 	end

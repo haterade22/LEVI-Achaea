@@ -114,6 +114,91 @@ describe("the splinter refusal teaches 'bastard sword'", function()
   end)
 end)
 
+-- v4.7.455: arc/bisect wield the bastard sword; normal rounds pick the weapon by measured DPS.
+local function hold(kind)
+  ataxiaTemp.wieldedItems = { ["1"] = (kind == "bastard") and "a steel bastard sword" or "a steel warhammer" }
+end
+
+describe("the wield prefix", function()
+  it("wields the bastard when the warhammer is in hand, and nothing when it is already held", function()
+    reset(); hold("warhammer")
+    expect(ataxiaBasher_twoHandWield("bastard", ";")).toBe("wield bastard;")
+    hold("bastard")
+    expect(ataxiaBasher_twoHandWield("bastard", ";")).toBe("")
+    expect(ataxiaBasher_twoHandWield("warhammer", ";")).toBe("wield warhammer;")
+  end)
+
+  it("wields when the hand is unknown, and uses the configured keyword", function()
+    reset()
+    expect(ataxiaBasher_twoHandWield("bastard", ";")).toBe("wield bastard;")
+    ataxiaBasher.twoHandSwordWord = "sword123"
+    expect(ataxiaBasher_twoHandWield("bastard", ";")).toBe("wield sword123;")
+  end)
+end)
+
+describe("the DPS ledger", function()
+  local function hit(kind, amount, dt)
+    hold(kind); NOW = NOW + dt
+    ataxiaBasher_twoHandRecord(amount)
+  end
+
+  it("records only normal rounds, in PvE, with a known weapon", function()
+    reset(); hold("warhammer")
+    ataxiaTemp.twoHandRound = "crowd"
+    ataxiaBasher_twoHandRecord(500)
+    expect(ataxiaBasher.twoHandDps).toBe(nil)
+    ataxiaTemp.twoHandRound = "single"; target = "Somebody"
+    ataxiaBasher_twoHandRecord(500)
+    expect(ataxiaBasher.twoHandDps).toBe(nil)
+    target = 12345; ataxiaTemp.wieldedItems = {}
+    ataxiaBasher_twoHandRecord(500)
+    expect(ataxiaBasher.twoHandDps).toBe(nil)
+    hold("warhammer")
+    ataxiaBasher_twoHandRecord(500)
+    expect(ataxiaBasher.twoHandDps.warhammer.dmg).toBe(500)
+  end)
+
+  it("counts a short gap as fighting time, but not a gap across a weapon swap", function()
+    reset(); ataxiaTemp.twoHandRound = "single"
+    hit("warhammer", 100, 0); hit("warhammer", 100, 2)
+    expect(ataxiaBasher.twoHandDps.warhammer.secs).toBe(2)
+    hit("bastard", 100, 3)
+    expect(ataxiaBasher.twoHandDps.bastard.secs).toBe(0)
+    hit("bastard", 100, 20)                     -- longer than the combat gap
+    expect(ataxiaBasher.twoHandDps.bastard.secs).toBe(0)
+  end)
+end)
+
+describe("the normal-round pick", function()
+  local function set(h, b)
+    ataxiaBasher.twoHandDps = { warhammer = h, bastard = b }
+  end
+
+  it("samples the weapon with less fighting time first", function()
+    reset(); hold("warhammer")
+    expect(ataxiaBasher_twoHandPick()).toBe("warhammer")      -- nothing yet: keep the one in hand
+    set({ dmg = 1000, secs = 30, hits = 5 }, { dmg = 0, secs = 0, hits = 0 })
+    expect(ataxiaBasher_twoHandPick()).toBe("bastard")
+  end)
+
+  it("then picks the higher DPS, with a margin before it leaves the weapon in hand", function()
+    reset(); hold("warhammer")
+    set({ dmg = 120000, secs = 120, hits = 60 }, { dmg = 150000, secs = 120, hits = 40 })
+    expect(ataxiaBasher_twoHandPick()).toBe("bastard")
+    set({ dmg = 120000, secs = 120, hits = 60 }, { dmg = 122000, secs = 120, hits = 40 })
+    expect(ataxiaBasher_twoHandPick()).toBe("warhammer")      -- 1.7% better is noise
+    hold("bastard")
+    expect(ataxiaBasher_twoHandPick()).toBe("bastard")
+  end)
+
+  it("a pinned mode wins", function()
+    reset(); hold("warhammer")
+    set({ dmg = 999999, secs = 200, hits = 1 }, { dmg = 1, secs = 200, hits = 1 })
+    ataxiaBasher.twoHandMode = "bastard"
+    expect(ataxiaBasher_twoHandPick()).toBe("bastard")
+  end)
+end)
+
 gmcp, target, ataxiaTemp, ataxiaBasher = _saved.gmcp, _saved.target, _saved.ataxiaTemp or {}, _saved.ataxiaBasher
 ataxiaBasher_attack, getEpoch = _saved.ataxiaBasher_attack, _saved.getEpoch
 mock.reset()

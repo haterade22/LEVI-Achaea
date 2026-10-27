@@ -80,6 +80,8 @@ bashStats_COMBAT_GAP = bashStats_COMBAT_GAP or 10 -- a longer pause is not comba
 function bashStats_recordDamage(amount)
   amount = tonumber(amount) or 0
   if not bashStats or amount <= 0 then return end
+  -- Two Handed: the per-weapon DPS ledger that picks hammer or bastard (basher/015).
+  if ataxiaBasher_twoHandRecord then ataxiaBasher_twoHandRecord(amount) end
   local now = getEpoch()
   bashStats.dmgSamples = bashStats.dmgSamples or {}
   bashStats.combatTime = bashStats.combatTime or 0

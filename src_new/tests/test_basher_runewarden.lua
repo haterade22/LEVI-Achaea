@@ -613,6 +613,53 @@ describe("Runewarden -- Fury of Ages", function()
   end)
 end)
 
+-- v4.7.455 (user: "we need to use bastard for bisect and arc and not hammer").
+describe("Two Handed -- bisect and arc wield the bastard sword", function()
+  dofile("src_new/scripts/levi_ataxia/levi/ataxia/basher/015_Two_Hand_Raze.lua")
+  local function hammer() ataxiaTemp.wieldedItems = { ["1"] = "a steel warhammer" } end
+
+  it("a Thunderclap bisect wields the bastard first, after the falcon", function()
+    reset(); ataxia.vitals.knight = "Two Handed"; hammer()
+    mnemThunderclap = true; denizens = 3
+    local cmd = ataxiaBasher_runewardenBashing()
+    expect(has(cmd, "falcon rake 7;wield bastard;bisect 7")).toBeTrue()
+    expect(ataxiaTemp.twoHandRound).toBe("other")
+  end)
+
+  it("a Stormcleaver execute and an arc do the same", function()
+    reset(); ataxia.vitals.knight = "Two Handed"; hammer()
+    mnemStormcleaver = true; denizens = 1; gmcp.IRE.Target.Info = { hpperc = "10" }
+    expect(has(ataxiaBasher_runewardenBashing(), "wield bastard;bisect 7")).toBeTrue()
+    reset(); ataxia.vitals.knight = "Two Handed"; hammer()
+    infIndiscriminate = true; denizens = 3
+    expect(has(ataxiaBasher_runewardenBashing(), "wield bastard;arc")).toBeTrue()
+  end)
+
+  it("sends no wield with the bastard already in hand", function()
+    reset(); ataxia.vitals.knight = "Two Handed"
+    ataxiaTemp.wieldedItems = { ["2"] = "a steel bastard sword" }
+    mnemThunderclap = true; denizens = 3
+    expect(has(ataxiaBasher_runewardenBashing(), "wield")).toBeFalse()
+  end)
+
+  it("a normal round keeps the DPS pick and is marked for the ledger", function()
+    reset(); ataxia.vitals.knight = "Two Handed"; hammer()
+    ataxiaBasher.twoHandMode = "warhammer"
+    local cmd = ataxiaBasher_runewardenBashing()
+    expect(has(cmd, "wield")).toBeFalse()
+    expect(has(cmd, "slaughter 7")).toBeTrue()
+    expect(ataxiaTemp.twoHandRound).toBe("single")
+    ataxiaBasher.twoHandMode = "bastard"
+    expect(has(ataxiaBasher_runewardenBashing(), "wield bastard;slaughter 7")).toBeTrue()
+    ataxiaBasher.twoHandMode = nil
+  end)
+
+  it("other specs never wield", function()
+    reset(); hammer(); mnemThunderclap = true; denizens = 3
+    expect(has(ataxiaBasher_runewardenBashing(), "wield")).toBeFalse()
+  end)
+end)
+
 target = nil
 ataxiaBasher.uruzAt = nil
 

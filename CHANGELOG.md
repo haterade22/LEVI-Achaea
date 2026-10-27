@@ -2,6 +2,29 @@
 
 ---
 
+## 2026-10-27 - v4.7.455: Two Handed arc and bisect wield the bastard sword; normal rounds pick the weapon by DPS
+
+- **Arc and bisect go out with the bastard sword in hand** (user: "we need to use bastard for
+  bisect and arc and not hammer"). Arc swings a sword and bisect needs an edged runeblade, so a
+  warhammer in hand gets both refused. Runewarden and Infernal, Two Handed only: the swing starts
+  with `wield bastard` (`ataxiaBasher_twoHandWield`, `basher/015`) unless GMCP shows the bastard
+  in hand. This covers the Thunderclap bisect, the Stormcleaver execute and the Indiscriminate arc.
+  The Runewarden PvP doc already used `wield bastard;bisect <target>`.
+- **Normal rounds use the weapon with the higher measured DPS** (user: "Hammer is faster but I
+  think sword does more damage. Maybe code something in to check the dps of each"). Every damage
+  line of a normal slaughter round goes into a ledger under the weapon in hand
+  (`ataxiaBasher_twoHandRecord`, fed by `bashStats_recordDamage`), timed with the same 10 s gap
+  rule as the session DPS. A gap across a weapon swap does not count. Until each weapon has 120 s
+  of fighting, the round wields the one with less time. Then it wields the higher DPS, and changes
+  only for a lead above 3 %. Arc, bisect, raze and Tyranny rounds are not recorded.
+- **`bash twohand [status|auto|hammer|bastard|reset]`** (new alias `configs/030`) shows the ledger,
+  pins a weapon or clears the ledger. The ledger is saved (`ataxiaBasher.twoHandDps`) and is one
+  figure for all denizens; reset it after a gear change. Keywords: `ataxiaBasher.twoHandSwordWord`
+  (default `bastard`), `ataxiaBasher.twoHandHammerWord` (default `warhammer`).
+- The shield break already follows the weapon in hand (v4.7.452), so it carves after a swap.
+- Tests: 7 in `test_two_hand_raze.lua`, 5 in `test_basher_runewarden.lua`, 3 in
+  `test_basher_infernal.lua`. 3580 pass.
+
 ## 2026-10-26 - v4.7.454: SATIATION alone, below 75% health -- no food
 
 - **The satiation defence needs no food, and it lasts about 11 s.** The user's screen: GMCP

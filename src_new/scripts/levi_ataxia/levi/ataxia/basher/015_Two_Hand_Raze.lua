@@ -35,6 +35,20 @@ packageName: ''
 
     Unknown weapon: each class keeps its old default (`fallback`), so nothing changes for a
     character the package cannot read.
+
+    ARC AND BISECT NEED THE SWORD (v4.7.455, user: "we need to use bastard for bisect and arc and
+    not hammer"). ARC swings a sword and BISECT needs an edged runeblade, so a warhammer in hand
+    gets both refused. `ataxiaBasher_twoHandWield("bastard", sp)` puts `wield bastard` in front of
+    them (Runewarden and Infernal, Two Handed only); nothing is sent when GMCP shows it in hand.
+
+    NORMAL ROUNDS USE THE WEAPON WITH THE HIGHER MEASURED DPS (user: "Hammer is faster but I think
+    sword does more damage. Maybe code something in to check the dps of each"). Every damage line
+    of a normal round (slaughter, plus the battlerage and pet hits that ride it) goes into a ledger
+    under the weapon in hand, timed with the same gap rule as `bashStats_recordDamage`. Until each
+    weapon has TWOHAND_MIN_SECS of fighting, the round wields the one with less time; then the one
+    with more damage per second, and it changes only for a lead above TWOHAND_MARGIN.
+    `bash twohand` shows it, pins a weapon or resets the ledger. The ledger is SAVED (it lives on
+    `ataxiaBasher`) and is one figure for all denizens.
 ]]--
 
 ataxiaTemp = ataxiaTemp or {}
@@ -74,6 +88,90 @@ function ataxiaBasher_twoHandRaze(tgt, fallback)
   end
   local verb = (kind == "warhammer" and "splinter") or (kind == "bastard" and "carve") or fallback
   return verb .. " " .. tostring(tgt)
+end
+
+-- `wield <word><sp>` when `want` ("bastard" / "warhammer") is not the weapon GMCP shows in hand
+-- (an unknown hand counts as not), else "". A repeat wield of the held weapon is harmless.
+function ataxiaBasher_twoHandWield(want, sp)
+  if ataxiaBasher_twoHandWeapon() == want then return "" end
+  local ab = ataxiaBasher or {}
+  local word = (want == "bastard" and (ab.twoHandSwordWord or "bastard"))
+    or (ab.twoHandHammerWord or "warhammer")
+  return "wield " .. word .. (sp or "")
+end
+
+TWOHAND_MIN_SECS = TWOHAND_MIN_SECS or 120 -- fighting seconds per weapon before DPS decides
+TWOHAND_MARGIN = TWOHAND_MARGIN or 0.03    -- the other weapon must lead by more than this
+
+local function ledger(kind)
+  ataxiaBasher.twoHandDps = ataxiaBasher.twoHandDps or {}
+  local l = ataxiaBasher.twoHandDps[kind]
+  if type(l) ~= "table" then
+    l = { dmg = 0, secs = 0, hits = 0 }
+    ataxiaBasher.twoHandDps[kind] = l
+  end
+  return l
+end
+
+local function dps(l)
+  local s = tonumber(l.secs) or 0
+  return (s > 0) and ((tonumber(l.dmg) or 0) / s) or 0
+end
+
+-- The weapon for a NORMAL (single-target) round.
+function ataxiaBasher_twoHandPick()
+  local mode = ataxiaBasher and ataxiaBasher.twoHandMode
+  if mode == "warhammer" or mode == "bastard" then return mode end
+  local h, b = ledger("warhammer"), ledger("bastard")
+  if h.secs < TWOHAND_MIN_SECS or b.secs < TWOHAND_MIN_SECS then
+    if h.secs == b.secs then return ataxiaBasher_twoHandWeapon() or "warhammer" end
+    return (h.secs < b.secs) and "warhammer" or "bastard"
+  end
+  local held = ataxiaBasher_twoHandWeapon()
+  local hd, bd = dps(h), dps(b)
+  if held == "warhammer" and bd <= hd * (1 + TWOHAND_MARGIN) then return "warhammer" end
+  if held == "bastard" and hd <= bd * (1 + TWOHAND_MARGIN) then return "bastard" end
+  return (bd > hd) and "bastard" or "warhammer"
+end
+
+-- Called from bashStats_recordDamage for every hit we deal. Counts only normal rounds
+-- (`ataxiaTemp.twoHandRound == "single"`, set by the class round builders), in PvE, with a known
+-- weapon. A gap is fighting time only when it is short AND the weapon did not change across it.
+function ataxiaBasher_twoHandRecord(amount)
+  amount = tonumber(amount) or 0
+  if amount <= 0 or ataxiaTemp.twoHandRound ~= "single" then return end
+  if type(target) ~= "number" or not (ataxiaBasher and ataxiaBasher.enabled) then return end
+  local kind = ataxiaBasher_twoHandWeapon()
+  if not kind then return end
+  local nowT = (getEpoch and getEpoch()) or 0
+  local l = ledger(kind)
+  local prevAt, prevKind = ataxiaTemp.twoHandLastAt, ataxiaTemp.twoHandLastKind
+  if prevAt and prevKind == kind then
+    local gap = nowT - prevAt
+    if gap > 0 and gap <= (bashStats_COMBAT_GAP or 10) then l.secs = l.secs + gap end
+  end
+  ataxiaTemp.twoHandLastAt, ataxiaTemp.twoHandLastKind = nowT, kind
+  l.dmg = l.dmg + amount
+  l.hits = l.hits + 1
+end
+
+function ataxiaBasher_twoHandReset()
+  ataxiaBasher.twoHandDps = {}
+  ataxiaTemp.twoHandLastAt, ataxiaTemp.twoHandLastKind = nil, nil
+end
+
+-- Lines for `bash twohand`.
+function ataxiaBasher_twoHandReport()
+  local out = {}
+  for _, k in ipairs({ "warhammer", "bastard" }) do
+    local l = ledger(k)
+    out[#out + 1] = string.format("%-9s %8.0f dps  %6.0fs  %5d hits%s", k, dps(l), l.secs, l.hits,
+      (l.secs < TWOHAND_MIN_SECS) and "  (sampling)" or "")
+  end
+  out[#out + 1] = string.format("mode %s, in hand %s, normal rounds use %s",
+    tostring((ataxiaBasher and ataxiaBasher.twoHandMode) or "auto"),
+    tostring(ataxiaBasher_twoHandWeapon() or "unknown"), ataxiaBasher_twoHandPick())
+  return out
 end
 
 -- GMCP inventory feed: keep id -> name for wielded items only.

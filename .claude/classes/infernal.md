@@ -1208,7 +1208,10 @@ spec_bash_strings:
     bash: "dsl <target>"          # prepend "hyena maul <target>" when hyenaMaulReady
   Two Handed:
     raze: "battlefury focus speed;splinter <target>"   # v4.7.452: carve when a bastard sword is wielded (basher/015)
-    bash: "battlefury focus speed;slaughter <target>"  # hyena maul inserted before slaughter when ready
+    bash: "battlefury focus speed;[wield <weapon>;]slaughter <target>"  # hyena maul rides ahead when ready
+    # v4.7.455: an Indiscriminate arc round sends "wield bastard;arc" (arc needs a sword) unless
+    # GMCP shows the bastard in hand. Normal rounds wield the weapon with the higher measured DPS
+    # (ataxiaBasher_twoHandPick, basher/015; `bash twohand`).
   Dual Blunt:
     raze: "fracture <target>"
     bash: "doublewhirl <target>"
