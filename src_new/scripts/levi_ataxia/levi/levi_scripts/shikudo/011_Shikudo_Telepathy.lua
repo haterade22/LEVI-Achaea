@@ -335,6 +335,9 @@ function shikudo.dispatchMind()
     return
   end
   if reboundHold and reboundHold.gate(shikudo.dispatchMind) then return end
+  -- A dead target gets nothing; a MIND round reaches out of the room, so only the death is checked
+  -- here, and 006's dispatch checks the room for a combo (v4.7.456).
+  if not shikudo.guardTarget(target, true) then return end
   local st = teleRun()
 
   if shikudo.checkDispatchReady() then
@@ -367,9 +370,8 @@ function shikudo.dispatchMind()
   local cfg, sep = shikudo.tele, ataxia.settings.separator
   local wield = (type(cfg.shield) == "string" and cfg.shield ~= "") and ("wield " .. cfg.shield .. sep) or ""
   local body = prefix .. wield .. cmd
-  if not (shikudo.config and shikudo.config.assessEachRound == false) then
-    body = body .. sep .. "assess " .. target
-  end
+  -- Only with the Health Inspector trait (shikudo.assessSuffix, 006).
+  body = body .. shikudo.assessSuffix(not (shikudo.config and shikudo.config.assessEachRound == false), sep)
   local p = { key = runKey(body), blackout = cmd == "mind blackout" }
   st.at, st.cmd, st.form, st.pending = getEpoch(), cmd, s.form, p
   if not st.runLine then commit(st, p) end

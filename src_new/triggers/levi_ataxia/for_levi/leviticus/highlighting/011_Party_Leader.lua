@@ -41,7 +41,8 @@ patterns:
   type: 1
 ]]--
 
-if partyleader and partyleader == matches[2] then
-expandAlias("t "..matches[3])
---send("pt targetting "..matches[3].." following the lead of "..partyleader)
-end
+-- v4.7.456: this trigger has the same four patterns as party_targetting/002, and both ran `t NAME`.
+-- Every leader call ran the whole target switch twice (two "Target acquired" lines, six "[V3]
+-- States reset", four "Your target is now", the defence priorities reset), and because this copy
+-- never cleared `partyrelay`, the second run said "Target: NAME" back to the party (2026-10-27
+-- group log). 002 owns the call now; this one does nothing.

@@ -67,6 +67,9 @@ tempTimer(12, [[send("queue add inr all")]])
 tempTimer(30, [[setafflictionstackslevi()]])
 tempTimer(30, [[targetresetafflictionslevi()]])
 tempTimer(15, [[send("queue add freestand avoid physical")]])
+-- Our traits decide whether ASSESS and CONTEMPLATE may be sent (misc_scripts/031, v4.7.456): read
+-- once, while none are saved.
+if ataxia_traitLogin then ataxia_traitLogin() end
 -- For classes with no defup at login; the 10s throttle drops it after a defup.
 tempTimer(16, [[if ataxia_metabolise then ataxia_metabolise("login") end]])
 -- Alchemist robes, for the same reason; summon is once per session (class_things/004).
@@ -133,7 +136,9 @@ expandAlias("defup tek")
 else
 expandAlias("defswitch shi")
 expandAlias("defup shi")
-send("wield "..ataxia.getWeapon("staff2"))
+-- v4.7.456: the staff's item id, not the bare keyword "staff", which can wield an illusion staff
+-- (shikudo.staffRef, shikudo/006). With no id known yet it is still "staff".
+send("wield "..((shikudo and shikudo.staffRef) and shikudo.staffRef() or ataxia.getWeapon("staff2")))
 send("curingset switch normal")
 end
 end

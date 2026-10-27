@@ -46,3 +46,5 @@ katachain = tonumber(matches[2])
 ataxia.vitals.kata = katachain
 ataxiaTemp.kataLast = katachain
 ataxiaTemp.kataAt = getEpoch()
+-- The combo is over: the [SK] summary line (shikudo/012).
+if shikudoEcho and shikudoEcho.close then shikudoEcho.close(katachain) end

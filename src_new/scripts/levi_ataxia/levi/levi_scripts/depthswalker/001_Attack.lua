@@ -39,7 +39,7 @@ local atk = combatQueue()
 --Set Health and Mana, based on Assess
 if not php then php = 100 end
 if not pm then pm = 100 end
-partyrelay = partyrelay or true
+if partyrelay == nil then partyrelay = true end -- `or true` could never keep false (v4.7.456)
 
 --get Age
 dep_age = tonumber(string.sub(gmcp.Char.Vitals.charstats[4], 6))
@@ -243,7 +243,7 @@ local atk = combatQueue()
 --Set Health and Mana, based on Assess
 if not php then php = 100 end
 if not pm then pm = 100 end
-partyrelay = partyrelay or true
+if partyrelay == nil then partyrelay = true end -- `or true` could never keep false (v4.7.456)
 
 --get Age
 dep_age = tonumber(string.sub(gmcp.Char.Vitals.charstats[4], 6))

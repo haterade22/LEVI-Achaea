@@ -2,6 +2,76 @@
 
 ---
 
+## 2026-10-27 - v4.7.456: Shikudo in group combat -- the right staff, a [SK] combo line, a group damage route, ASSESS only with Health Inspector
+
+From the user's group fight log of 2026-10-27 (`kb/raw/logs/2026-10-27_shikudo-group-mhaldor.txt`).
+About half our balances were lost, and our own strikes were hard to find on screen.
+
+- **Every Shikudo round wields the staff's item id, never the bare keyword** (user: "This should
+  never happen. We should always be wielding the correct staff"). `wield staff` also matched the
+  user's Shar'ilian lightspire, an illusion STAFF, so on about half the rounds the game wielded it
+  and refused the combo: "You may not carry out a combination utilising Shikudo strikes without the
+  required staff." `shikudo.staffRef()` (`shikudo/006`) now resolves: the `skstaff` setting, then
+  the id of an inventory item named "... staff" (from GMCP `Char.Items`; a willow or oak staff
+  first, then the `staff2` weapon slot, then a wielded staff), then the keyword with a one-time
+  warning. A name that does not end in "staff" is never taken. The lock offense (007, `sr`) sent
+  the bare keyword in two places and now uses `staffRef()`; so does the Monk login wield. New
+  trigger 794 on the refusal drops the id it sent and prints `[SK] FAILED`.
+- **ASSESS only with the Health Inspector trait** (user: "We shouldn't be using assess or
+  contemplate unless we have the trait Health Inspector or Mind Warden"). Without it ASSESS costs
+  balance; the log has an ASSESS where a combo should have been. New `misc_scripts/031_Traits.lua`
+  reads TRAIT LIST KNOWN (triggers 792 `Racial:` and 793 `Level N:`, inside a 3 s window), saves
+  it, and answers `ataxia_assessFree()` / `ataxia_contemplateFree()`. An unread list answers no.
+  Login reads the list once while none is saved; the `traits` alias reads it again, `traits show`
+  reports it. **Every class** (user: "We should implement all classes for the assess and
+  contemplate trait gate"): about 70 files write ASSESS or CONTEMPLATE into their rounds as literal
+  text, so the gate wraps `send` once (`ataxia_traitFilter`): it removes each whole `assess <word>`
+  or `contemplate <word>` command whose trait we lack, on our separator and on `;`, and keeps a
+  `queue ...` prefix. A command left empty is not sent. "boon contemplate <name>" (Mnemosyne) and
+  longer commands are untouched; the `assess` alias sends with `ataxia_rawSend`; typed commands
+  never pass through `send`. The Shikudo rounds also ask `shikudo.assessSuffix()` themselves.
+- **No round at a dead or absent target.** The log sent ~25 rounds after kills: "Your mental
+  abilities have no power over the dead." ten times, "Nothing can be seen here by that name." and
+  four more refusals. `shikudo.guardTarget()` (006) refuses a target that died in the last 6 s
+  (trigger 401, and new trigger 795 on the "no power over the dead" line) unless the room shows it
+  again, and a combo at a target not in `ataxia.playersHere`. A MIND round checks only the death.
+  One `[SK] <name>: dead/not here -- not sent` line per target and reason.
+- **The [SK] combo line** (user: "I would love to highlight or echo our attacks so I can actually
+  see if we are hitting someone"). New `shikudo/012_Shikudo_Combo_Echo.lua` reads each combo through
+  the strike ledger (010) and prints one line when the kata line (164) or the prompt (318) ends it:
+  `[SK] Sadey  HIT 3/3  LA+9.2 LL+9.2 H+9.4  prone dizziness confusion  Rain:3`. Chartreuse when
+  every strike hit, yellow for some, red for none; misses give their reason (parry, fumble, shield,
+  reflection). New triggers 797/798 read the two reflection lines, which no trigger matched.
+  While a combo is read, the inline `[AFF]` tags are left out (they landed a row off). Our strike
+  lines are no longer gagged in PvP while the line is on (`gags/001`). A landed KAI CHOKE prints
+  `[SK] KAI CHOKE landed -> NAME`. `skecho on|off` (alias `shikudo/008`).
+- **The Shikudo group damage route** (user: "We would also need to add a pure damage route for
+  group combat"). New `shikudo/013_Shikudo_Group_Damage.lua`, alias `srd` (user: "sr should be
+  lock, srd should be damage"); `sr` stays the lock (007). Dispatch when ready, a shield shattered first, then the form's
+  damage combo: Oak `risingkick torso livestrike ruku torso`; Gaital `sweep spinkick`, or `needle
+  spinkick ruku torso` on a prone target; Maelstrom the Oak combo, or CRESCENT alone on a prone
+  target at half health or less; Rain `frontkick kuro ruku torso` with the EQ rider. The rider is
+  the user's rule, Rain only: KAI CHOKE when kai affords it and the target does not seem to hold
+  its breath, else MIND CRUSH. The form loop: Oak -> Gaital -> Maelstrom (target at 60% or less)
+  or Rain -> Oak. Held breath has no captured line: a choke cast with no landing line within
+  1.2 s means MIND CRUSH for 10 s, with an echo that asks to keep the lines.
+- **Party noise.** `highlighting/011_Party_Leader` duplicated `party_targetting/002` and ran every
+  leader call a second time (two "Target acquired", six "[V3] States reset", the defence
+  priorities reset, and "Target: NAME" said back to the party); it does nothing now. The per-hit
+  "Hit X limb for N%" call (`limb/004`) is off for a Monk unless set (`relaylimbs on|off`); other
+  classes keep it. `partyrelay = partyrelay or true` could never keep `false` (8 copies) and now
+  sets only an unset value.
+- **`[LOCK]` lines print only when they change** (007): one press per prompt printed two status
+  lines a prompt, about 400 in the log. `shikudoLock.config.verbose` prints them all.
+- **Smaller fixes.** `res` (`016_RESET`) sent "pdo" to the game three times a kill; no such alias
+  exists. Trigger 796 on "How are you wanting to use the Kai power?" (eight in the log, no known
+  sender) echoes the last command that carried KAI, so the next log names it.
+- **Outside the package (user):** the live profile still runs the switched-off
+  `008_CC_Shikudo_Offense_ALL` (it printed `[Shikudo:DISPATCH]`); reimport the package. A profile
+  trigger "Arena" sends `battlecry` on any class; delete it or gate it.
+- Tests: 39 in the new `test_shikudo_group_damage.lua`; the 006/007/011 tests now load with
+  Health Inspector. 3619 pass.
+
 ## 2026-10-27 - v4.7.455: Two Handed arc and bisect wield the bastard sword; normal rounds pick the weapon by DPS
 
 - **Arc and bisect go out with the bastard sword in hand** (user: "we need to use bastard for

@@ -53,6 +53,8 @@ if type(target) == "string" then
 		cecho("\n<green>        \\\\<DimGrey>| <purple>* <violet>* <orchid>* <NavajoWhite>* <orchid>* <violet>* <purple>* <DimGrey>|<green>//")
 		cecho("\n<green>        ^^^^^^^^^^^^^^^^^^^^^")
 		send("cq all")
+		-- The Shikudo offenses send nothing more at a corpse (006, shikudo.targetUsable; v4.7.456).
+		if shikudo and shikudo.markDead then shikudo.markDead(name) end
 
 		tAffs = {blindness = false, deafness = false, shield = false, rebounding = false, curseward = false}
 		if resetStatesV3 then resetStatesV3() end

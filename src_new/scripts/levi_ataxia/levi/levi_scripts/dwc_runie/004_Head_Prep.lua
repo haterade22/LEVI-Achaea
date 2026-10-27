@@ -23,7 +23,7 @@ local atk = combatQueue()
 
 add_dedication = false
 need_raze = false
-partyrelay = partyrelay or true
+if partyrelay == nil then partyrelay = true end -- `or true` could never keep false (v4.7.456)
 scimdamage = ataxiaTables.limbData.dwcSlash + ataxiaTables.limbData.dwcSlash
 axedamage = scimdamage - 3
 

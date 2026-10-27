@@ -1,0 +1,2789 @@
+  Mudlet, main console extract from Leviticus Dom Profile profile
+  You have the following enemies:
+Penwize
+You have currently used 1 enemy slot of your 25 maximum.
+11:25:54:364 [13357] [100] |(659477)|[]  
+Mhaldor Road.
+A noxious, red-hued fog overwhelms the area with a thick, palpable vapour. The sun sets, its dimming rays lancing across
+the sky and lighting the dim edges of cloud that hang there. Twisting sharply as it ascends the mountainside, the 
+desolate road moves along the edge of a steep ravine carved into the rocky terrain. Vicious stalagmites surge up from 
+both sides of the path, upon which errant slaves are impaled. The wicked barbs of the rocks glisten menacingly with the 
+blood of slaves which drips steadily to the ground below, gathering in a shallow puddle by the roadside. Iron poles are 
+thrust into the side of the mountain, from which Mhaldor's heraldic pennons proudly fly. A runic totem is planted 
+solidly in the ground. There are 2 baleful apostates here. A ladder of long, soft leaves comprises a wispy Weaver's Fern
+along the ground. There are 3 flail-wielding knights here. A wooden vat rests on a five-legged platform in the centre of
+the floor. There are 3 logosmas stockings here. A sigil in the shape of a small, rectangular monolith is on the ground. 
+A phantom spider lurks in the shadows, the outline of its hulking frame scarcely discernible. Twinned albino orbs gleam 
+upon the hilt of a crimson-hued daegger as it exudes its malevolent presence across the surroundings. A marketplace is a
+hive of activity as workmen labour to repair it. Tyndran Tabethys Aristata, Tyrannical Butcher of Baelgrim is riding on 
+a hulking phantom spider. She wields a wicked blade of shattered chains in her left hand and a Shield of Absorption in 
+her right. Eradicator Maldrantus is here, hidden. His features are obscured by a mask of lifevision. He wields a Shield 
+of Absorption in his left hand and Agith'maal's ire in his right. He is surrounded by one reflection of himself. Warden 
+Sinit d'Ivoire is here. Proselyte Makaeyla is here. Valkyri, Seeker of Elocution is here. She wields a flail in each 
+hand.
+You see exits leading up and down.
+(5) people here: Makaeyla, Maldrantus, Sinit, Tabethys, Valkyri.
+11:25:55:309 [13357] [100] |(659477)|[]  
+You are dismayed as the corpse of a buckawn royal guard turns to dust in your hands.
+11:25:55:578 [13357] [100] |(659477)|[]  
+I don't recognise that name as one of an existing adventurer.
+11:25:57:366 [13357] [99] |(659477)|[]  
+I don't recognise that name as one of an existing adventurer.
+11:25:57:452 [13357] [99] |(659477)|[]  
+(((((((((((((((((((( EQUILIBRIUM:4.305 ))))))))))))))))))))
+(LEVI): Defences currently active:
+You are benefitting from a 27% bonus to experience gain.
+You are benefitting from a 13% bonus to critical hits.
+You have a critical hit bonus lasting 6 hours and 48 minutes.
+You have a critical hit penalty lasting 5 hours and 43 minutes.
+(LEVI): Shi defences:
+[x] Blindness                [x] Boartattoo               [x] Boostedregeneration
+[x] Caloric                  [x] Cloak                    [x] Coldresist
+[x] Constitution             [x] Deafness                 [x] Deathsight
+[x] Electricresist           [x] Fangbarrier              [x] Fireresist
+[x] Frost                    [x] Gripping                 [x] Insomnia
+[x] Kaitrance                [x] Kola                     [x] Levitation
+[x] Lifevision               [x] Magicresist              [x] Megalithtattoo
+[x] Mindseye                 [x] Moontattoo               [x] Mosstattoo
+[x] Nightsight               [x] Regeneration             [x] Resistance
+[x] Selfishness              [x] Shroud                   [x] Speed
+[x] Thirdeye                 [x] Toughness                [x] Venom
+[x] Vitality                 [x] Weathering               [-] Avoid
+(LEVI): Other defences:
+[x] Parrying (right leg)     
+(LEVI): 36 total defences.11:26:00:932 [13357] [99] |(659477)|[]  
+11:26:00:993 [13357] [99] |(659477)|[]  
+11:26:01:077 [13357] [99] |(659477)|[]  
+11:26:01:084 [13357] [99] |(659477)|[]  
+11:26:01:090 [13357] [99] |(659477)|[]  
+11:26:01:094 [13357] [99] |(659477)|[]  
+(((((((((((((((((((( EQUILIBRIUM:0.412 ))))))))))))))))))))
+Dusk steals silently over the horizon and crimson and ochre engulf the firmament, their seductive tones beckoning the 
+sun to its nightly repose.
+11:26:02:897 [13357] [99] |(659477)|[]  
+You must be wielding your trusty staff if you wish to adopt one of the Shikudo forms.
+11:26:03:306 [13357] [99] |(659477)|[]  
+You start to wield a Shar'ilian lightspire in your left hand.
+11:26:03:394 [13357] [99] |(659477)|[]  
+Maldrantus puts his fingers in his mouth and lets out a high-pitched whistle.
+A black-crowned nycticorax trots in with head high.
+11:26:05:903 [13357] [99] |(659477)|[]  
+(Party): Tabethys says, "I will miss that demon fury."
+11:26:08:222 [13357] [99] |(659477)|[]  
+You are dismayed as the corpse of a buckawn royal guard turns to dust in your hands.
+11:26:08:656 [13357] [99] |(659477)|[]  
+--------------------------------------------------------------------------------
+You are holding:
+Wielded:
+   Left hand:  lightspire485994    a Shar'ilian lightspire
+Weapons:
+   staff489282         a twisted oaken staff
+   staff569815         a primordial staff
+You are wearing:
+--------------------------------------------------------------------------------
+3 items were shown.
+11:26:10:157 [13357] [99] |(659477)|[]  
+You start to wield a twisted oaken staff in your hands.
+11:26:13:900 [13357] [100] |(659477)|[]  
+(Party): Makaeyla says, "I do have mindnet up as well Tyrannus should they try to call in help."
+11:26:16:575 [13357] [100] |(659477)|[]  
+You are dismayed as the corpse of a buckawn swordsman turns to dust in your hands.
+11:26:17:716 [13357] [99] |(659477)|[]  
++ ( def shikudoform ) +
+[Rain]: Tykonos -- Oak
+[Levi]: RAIN FORM
+11:26:19:337 [13357] [99] |(659477)|[]  
+You may not set a priority for the 'shikudoform' defence.
+11:26:19:399 [13357] [99] |(659477)|[]  
+(Party): Tabethys says, "Delightful."
+11:26:23:646 [13357] [99] |(659477)|[]  
+You are dismayed as the corpse of a buckawn royal guard turns to dust in your hands.
+11:26:23:777 [13357] [99] |(659477)|[]  
+A great weight seems to have been lifted from Sinit.
+11:26:27:339 [13357] [99] |(659477)|[]  
+Sinit takes some salve from a vial and rubs it on her skin.
+11:26:27:435 [13357] [99] |(659477)|[]  
+(Party): Tabethys says, "They are moving. Time to hit them."
+11:26:29:975 [13357] [99] |(659477)|[]  
+(Party): Tabethys says, "On balance."
+11:26:32:325 [13357] [99] |(659477)|[]  
+You are dismayed as the corpse of a buckawn royal guard turns to dust in your hands.
+11:26:33:885 [13357] [99] |(659477)|[]  
+Maldrantus nods his head emphatically.
+11:26:36:097 [13357] [100] |(659477)|[]  
+You are dismayed as the corpse of a buckawn swordsman turns to dust in your hands.
+11:26:36:862 [13357] [100] |(659477)|[]  
+You are dismayed as the corpse of a buckawn royal guard turns to dust in your hands.
+11:26:40:853 [13357] [99] |(659477)|[]  
+You may not set a priority for the 'avoid' defence.
+11:26:44:697 [13357] [100] |(659477)|[]  
+You are dismayed as the corpse of a buckawn swordsman turns to dust in your hands.
+11:26:45:882 [13357] [99] |(659477)|[]  
+(Party): Tabethys says, "Targets: Sadey, Kutcher, Akri, Crixos."
+(LEVI): Target Priority List:
+  1. Sadey << queued
+  2. Kutcher
+  3. Akri
+  4. Crixos
+(LEVI): Received target priority from party.
+11:26:46:046 [13357] [99] |(659477)|[]  
+Valkyri nods her head emphatically.
+11:26:48:003 [13357] [99] |(659477)|[]  
+(Party): Tabethys says, "Target: Sadey."
+(LEVI): Target acquired. Focusing fire on Sadey!
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+[ClassDetect]: Switched curingset to: knights (vs Runewarden)
+(LEVI): Target acquired. Focusing fire on Sadey!
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+11:26:49:440 [13357] [99] |(Sadey)|[ [ ]]  
+Sadey is not currently an ally.
+11:26:49:518 [13357] [99] |(Sadey)|[ [ ]]  
+Sadey is now one of your enemies.
+11:26:49:607 [13357] [99] |(Sadey)|[ [ ]]  
+Your target is now: Sadey (an adventurer)
+11:26:49:615 [13357] [99] |(Sadey)|[ [ ]]  
+Your target is now: Sadey (an adventurer)
+11:26:49:622 [13357] [99] |(Sadey)|[ [ ]]  
+You will now cure using the knights set.
+11:26:49:627 [13357] [99] |(Sadey)|[ [ ]]  
+All your defence priorities have been reset to defaults.
+11:26:49:636 [13357] [99] |(Sadey)|[ [ ]]  
+You may not set a priority for the 'avoid' defence.
+Sadey is not currently an ally.
+11:26:49:707 [13357] [99] |(Sadey)|[ [ ]]  
+Sadey is already an enemy.
+11:26:49:712 [13357] [99] |(Sadey)|[ [ ]]  
+Your target is now: Sadey (an adventurer)
+11:26:49:721 [13357] [99] |(Sadey)|[ [ ]]  
+Your target is now: Sadey (an adventurer)
+11:26:49:729 [13357] [99] |(Sadey)|[ [ ]]  
+(Party): You say, "Target: Sadey."
+11:26:49:737 [13357] [99] |(Sadey)|[ [ ]]  
+(Party): Tabethys says, "Moving."
+11:26:51:263 [13357] [99] |(Sadey)|[ [ ]]  
+You are dismayed as the corpse of a buckawn swordsman turns to dust in your hands.
+11:26:51:863 [13357] [99] |(Sadey)|[ [ ]]  
+[ClassDetect]: Combat ended, curingset reset to: normal
+You follow Tabethys down to The gates of Mhaldor.
+11:26:55:374 [13357] [100] |(Sadey)|[ [ ]]  
+You follow Tabethys south to Before two towering mountains.
+11:26:55:458 [13357] [100] |(Sadey)|[ [ ]]  
+You will now cure using the normal set.
+11:26:55:532 [13357] [100] |(Sadey)|[ [ ]]  
+Seething arcs of electricity swirl about the form of Tabethys as she dons a pair of storm-grey wings cloaked in 
+lightning, their coruscating nimbus momentarily limning her with awakened intent.
+11:26:55:610 [13357] [100] |(Sadey)|[ [ ]]  
+Tyndran Tabethys Aristata, Tyrannical Butcher of Baelgrim says in a terse voice, "Duanathar."
+You follow Tabethys skywards to On the clouds.
+11:26:55:698 [13357] [100] |(Sadey)|[ [ ]]  
+Tabethys removes storm-grey wings cloaked in lightning.
+The air calms into an unnatural stillness as Tabethys removes a pair of storm-grey wings cloaked in lightning, leaving 
+behind only the faint scent of ozone and rain-touched petrichor.
+11:26:55:710 [13357] [100] |(Sadey)|[ [ ]]  
+You follow Tabethys southwest to At the foot of the Vashnar Mountains.
+11:26:55:773 [13357] [100] |(Sadey)|[ [ ]]  
+You follow Tabethys south to Desolate path.
+11:26:55:994 [13357] [100] |(Sadey)|[ [ ]]  
+(LEVI): [V3] States reset
+(Party): Tabethys says, "Do we have beckon."
+11:26:58:844 [13357] [99] |(Sadey)|[ [ ]]  
+Your sense of smell is assaulted by a pile of steaming dung.
+11:27:01:463 [13357] [99] |(Sadey)|[ [ ]]  
+(Party): Maldrantus says, "Yes."
+11:27:01:562 [13357] [99] |(Sadey)|[ [ ]]  
+(Party): Tabethys says, "Maldrantus yes."
+11:27:02:313 [13357] [99] |(Sadey)|[ [ ]]  
+(Party): Tabethys says, "Good."
+11:27:03:250 [13357] [99] |(Sadey)|[ [ ]]  
+(LEVI): Added Mount Piraeus to areas.
+You follow Tabethys west to At the foot of Mount Piraeus.
+11:27:09:648 [13357] [99] |(Sadey)|[ [ ]]  
+(LEVI): [V3] States reset
+You follow Tabethys up to A steep climb.
+11:27:11:310 [13357] [99] |(Sadey)|[ [ ]]  
+(LEVI): [V3] States reset
+(Party): Tabethys says, "Beckon."
+11:27:14:009 [13357] [100] |(Sadey)|[ [ ]]  
+(Party): Tabethys says, "Beckon."
+11:27:14:169 [13357] [100] |(Sadey)|[ [ ]]  
+(Party): Tabethys says, "Beckon."
+11:27:14:345 [13357] [99] |(Sadey)|[ [ ]]  
+(Party): Tabethys says, "Beckon."
+11:27:14:505 [13357] [99] |(Sadey)|[ [ ]]  
+A caravan rumbles into view.
+11:27:14:990 [13357] [99] |(Sadey)|[ [ ]]  
+(Party): Tabethys says, "Target: Sadey."
+(LEVI): Target acquired. Focusing fire on Sadey!
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+[ClassDetect]: Switched curingset to: knights (vs Runewarden)
+(LEVI): Target acquired. Focusing fire on Sadey!
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+11:27:15:720 [13357] [99] |(Sadey)|[ [ ]]  
+Sadey is not currently an ally.
+11:27:15:789 [13357] [100] |(Sadey)|[ [ ]]  
+Sadey is already an enemy.
+11:27:15:869 [13357] [100] |(Sadey)|[ [ ]]  
+Your target is now: Sadey (an adventurer)
+11:27:15:876 [13357] [100] |(Sadey)|[ [ ]]  
+Your target is now: Sadey (an adventurer)
+11:27:15:881 [13357] [100] |(Sadey)|[ [ ]]  
+You will now cure using the knights set.
+11:27:15:884 [13357] [100] |(Sadey)|[ [ ]]  
+All your defence priorities have been reset to defaults.
+11:27:15:887 [13357] [100] |(Sadey)|[ [ ]]  
+You may not set a priority for the 'avoid' defence.
+Sadey is not currently an ally.
+11:27:15:918 [13357] [100] |(Sadey)|[ [ ]]  
+Sadey is already an enemy.
+11:27:15:919 [13357] [100] |(Sadey)|[ [ ]]  
+Your target is now: Sadey (an adventurer)
+11:27:15:920 [13357] [100] |(Sadey)|[ [ ]]  
+Your target is now: Sadey (an adventurer)
+11:27:15:923 [13357] [100] |(Sadey)|[ [ ]]  
+(Party): You say, "Target: Sadey."
+11:27:15:925 [13357] [100] |(Sadey)|[ [ ]]  
+[ClassDetect]: Combat ended, curingset reset to: normal
+You follow Tabethys west to Alongside a perilous drop.
+11:27:16:594 [13357] [100] |(Sadey)|[ [ ]]  
+You will now cure using the normal set.
+11:27:16:655 [13357] [100] |(Sadey)|[ [ ]]  
+Kutcher's aura of weapons rebounding disappears.
+Kutcher raises his arms, bringing forth a spinning vortex of shadows.
+11:27:16:770 [13357] [100] |(Sadey)|[ [ ]]  
+Kutcher takes a long drag off an enamel bubble pipe.
+11:27:16:841 [13357] [100] |(Sadey)|[ [ ]]  
+Tabethys starts to wield a Shield of Absorption in her left hand.
+Tabethys starts to wield an exquisite Mhaldorian staff of sterling silver in her right hand.
+Tabethys weaves fire and earth in a complex pattern and bubbling magma boils into existence in a searing tide to crash 
+down upon Sadey.
+(LEVI): Fight log recording: 2026-10-27_112717_Tabethys.log
+[RL1] A loud crack emanates from the right leg of Sadey.
+Earth: Broken right leg -> Sadey
+Tabethys sends a spray of sparks to sear the flesh of Sadey.
+11:27:17:022 [13357] [100] |(Sadey)|[ [ ]]  
+Sinit's aura of weapons rebounding disappears.
+11:27:17:068 [13357] [100] |(Sadey)|[ [ ]]  
+(Party): You say, "Sadey: Resonance Earth (broken right leg)."
+11:27:17:149 [13357] [100] |(Sadey)|[ [ ]]  
+Sadey takes some salve from a vial and rubs it on her legs.
+Sinit takes a long drag off an enamel bubble pipe.
+11:27:17:237 [13357] [100] |(Sadey)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 0 | Kai: 0
+[LOCK] Affs: asthma anorexia slickness para impat weary
+You cease to wield a twisted oaken staff.
+You start to wield a Shar'ilian lightspire in your right hand.
+11:27:17:493 [13357] [100] |(Sadey)|[ [ ]]  
+You may not carry out a combination utilising Shikudo strikes without the required staff.
+11:27:17:497 [13357] [100] |(Sadey)|[ [ ]]  
+ +[Sadey] HP: [=================   ] 86% -- 5354/6163 
+11:27:17:502 [13357] [99] |(Sadey)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 0 | Kai: 0
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+Crixos takes a long drag off his pipe.
+Crixos strains to hold a tall totem pole in an upright position.
+11:27:17:575 [13357] [99] |(Sadey)|[ [ ]]  
+Valkyri lurches off balance as she misses Sadey with a wild swing of a flail.
+Valkyri raises a flail above her head, necromantic energy flickering wildly about the weapon. Then she drives it down 
+into the ground at her feet in a muted flash.
+Grisly skeletal hands thrust upwards from beneath the earth, clawing at the living.
+Crixos ceases to prop up a tall totem pole.
+11:27:17:664 [13357] [99] |(Sadey)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 0 | Kai: 0
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+Sadey stands up.
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 0 | Kai: 0
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 0 | Kai: 0
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 0 | Kai: 0
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+As Makaeyla draws Ancient Crescent from its scabbard, she drives the pommel into Sadey's chin.
+[HAM] Ducking behind her, Makaeyla strikes at Sadey's hamstring with a rigid, practised grip.
+11:27:18:419 [13357] [99] |(Sadey)|[ [ ]]  
+(Party): You say, "Sadey: Hamstring."
+11:27:18:572 [13357] [99] |(Sadey)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 0 | Kai: 0
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+Sadey takes a drink from an elegant diamond vial.
+11:27:18:663 [13357] [99] |(Sadey)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 0 | Kai: 0
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+The air thrums about Tabethys as a flurry of rocks materialise to bombard Sadey.
+[AST] Sadey clutches at her throat as she gasps for breath.
+Air: Asthma -> Sadey
+Sadey buckles under an unseen blow.
+11:27:18:860 [13357] [99] |(Sadey)|[ [ ]]  
+(Party): You say, "Sadey: Resonance Air (asthma)."
+11:27:18:987 [13357] [99] |(Sadey)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 0 | Kai: 0
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+Sadey eats a magnesium chip.
+11:27:19:225 [13357] [99] |(Sadey)|[ [ ]]  
+(((((((((((((((((((( EQUILIBRIUM:1.729 ))))))))))))))))))))
+[IMP] You fill the mind of Sadey with an impatient feeling.
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 0 | Kai: 0
+[LOCK] Affs: asthma anorexia slickness para impat weary
+(Party): You say, "Sadey: impatience."
+11:27:19:297 [13357] [98] |(Sadey)|[ [ ]]  
+Sadey touches a tree of life tattoo.
+(LEVI): [V3] Tree used - branched to 2 states
+11:27:19:363 [13357] [98] |(Sadey)|[ [ ]]  
+[TREE]: tree down on Sadey for 14 seconds...
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 0 | Kai: 0
+[LOCK] Affs: asthma anorexia slickness para impat weary
+All of Maldrantus's reflections wink out of existence!
+Maldrantus reaches past Sadey, plunging Gattan'lier's hunger into her shadow.
+Maldrantus lashes out with a swift, reaping blow at Sadey.
+[PAR] [PAR] Horror overcomes Sadey's face as her body stiffens into paralysis.
+[CLU] As the weapon strikes Sadey, the contact area begins to rot before your eyes.
+Akri stands up.
+11:27:19:662 [13357] [98] |(Sadey)|[ [ ]]  
+Akri reaches past Tabethys, plunging Gattan'lier's hunger into her shadow.
+A grey distortion coalesces about the blade of Agith'maal's ire, held by Akri.
+Akri lashes out with a swift, reaping blow at Tabethys.
+As the weapon strikes Tabethys, her face grows vacant and she begins to tremble.
+Grey fog begins to rise from the suddenly panicked-looking Tabethys.
+11:27:19:670 [13357] [98] |(Sadey)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 0 | Kai: 0
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Tabethys eats a cuprum flake.
+11:27:19:805 [13357] [98] |(Sadey)|[ [ ]]  
+(Party): Maldrantus says, "Sadey: paralysis."
+11:27:19:821 [13357] [98] |(Sadey)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 0 | Kai: 0
+[LOCK] Affs: asthma anorexia slickness para impat weary
+You are dismayed as the corpse of a buckawn swordsman turns to dust in your hands.
+11:27:19:966 [13357] [98] |(Sadey)|[ [ ]]  
+Kutcher stands up.
+11:27:19:978 [13357] [98] |(Sadey)|[ [ ]]  
+Kutcher starts to wield Anima's Thirst in his right hand.
+Kutcher reaches past Sinit, plunging a venerable bronze-hilted dagger into her shadow.
+Kutcher lashes out with a swift, reaping blow at Sinit.
+Horror overcomes Sinit's face as her body stiffens into paralysis.
+As the weapon strikes Sinit, the contact area begins to rot before your eyes.
+11:27:19:989 [13357] [98] |(Sadey)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 0 | Kai: 0
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Sinit eats a magnesium chip.
+Sinit takes a drink from a ruby vial.
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 0 | Kai: 0
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Sinit touches a tree of life tattoo.
+11:27:20:355 [13357] [98] |(Sadey)|[ [ ]]  
+(((((((((((((((((((( EQUILIBRIUM:1.151 ))))))))))))))))))))
+ +[Sadey] HP: [===============     ] 75% -- 4641/6163 
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 0 | Kai: 0
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind paralyse Sadey
+Valkyri skilfully whirls a flail toward Sadey.
+Valkyri skilfully whirls a flail toward Sadey.
+[HLEECH] Sadey lets out a groan as her life is siphoned by the might of Evil.
+11:27:20:544 [13357] [98] |(Sadey)|[ [ ]]  
+Sadey eats a potash crystal.
+11:27:20:547 [13357] [98] |(Sadey)|[ [ ]]  
+The powers of Elemental Earth conform to the will of Tabethys, and with a terrible roar boulders begin to materialise 
+from the very air to hammer at Sadey.
+11:27:20:639 [13357] [98] |(Sadey)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 0 | Kai: 0
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind paralyse Sadey
+Sadey eats a magnesium chip.
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 0 | Kai: 0
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind paralyse Sadey
+As Makaeyla draws Ancient Crescent from its scabbard, she drives the pommel into Sadey's chin.
+[HAM] Ducking behind her, Makaeyla strikes at Sadey's hamstring with a rigid, practised grip.
+11:27:21:080 [13357] [98] |(Sadey)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 0 | Kai: 0
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind paralyse Sadey
+(Party): You say, "Sadey: Hamstring."
+11:27:21:216 [13357] [98] |(Sadey)|[ [ ]]  
+Crixos stands up.
+11:27:21:241 [13357] [98] |(Sadey)|[ [ ]]  
+Crixos gives a complex series of whistles.
+Crixos ceases to wield a runic totem.
+Crixos starts to wield a Scimitar of Eagles in his left hand.
+Crixos starts to wield a Scimitar of Eagles in his right hand.
+Crixos slashes into Sinit with a Scimitar of Eagles.
+Horror overcomes Sinit's face as her body stiffens into paralysis.
+Crixos slashes into Sinit with a Scimitar of Eagles.
+Sinit pivots on her heel as she draws her blade from its scabbard and unleashes a retaliatory strike at Crixos.
+Crixos moves in to engage Sinit.
+11:27:21:256 [13357] [98] |(Sadey)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 0 | Kai: 0
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind paralyse Sadey
+Tabethys eats a plumbum flake.
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 0 | Kai: 0
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind paralyse Sadey
+Maldrantus lashes out with a swift, reaping blow at Sadey.
+[PAR] [PAR] Horror overcomes Sadey's face as her body stiffens into paralysis.
+[WEA|CLU|PAR] The face of Sadey contorts in pain.
+11:27:21:640 [13357] [98] |(Sadey)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 0 | Kai: 0
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind disrupt Sadey
+Akri lashes out with a swift, reaping blow at Tabethys.
+Horror overcomes Tabethys's face as her body stiffens into paralysis.
+As the weapon strikes Tabethys, she seems greatly diminished.
+11:27:21:692 [13357] [98] |(Sadey)|[ [ ]]  
+(Party): Maldrantus says, "Sadey: paralysis."
+11:27:21:698 [13357] [98] |(Sadey)|[ [ ]]  
+Tabethys takes a drink from an oaken vial.
+Sinit eats a magnesium chip.
+(((((((((((((((((((( EQUILIBRIUM:1.639 ))))))))))))))))))))
+Kutcher starts to wield a venerable bronze-hilted dagger in his right hand.
+Kutcher lashes out with a swift, reaping blow at Sinit.
+Horror overcomes Sinit's face as her body stiffens into paralysis.
+As the weapon strikes Sinit, the contact area begins to rot before your eyes.
+11:27:22:138 [13357] [98] |(Sadey)|[ [ ]]  
+[Shikudo:DISPATCH] Target: Sadey | Form: Rain | Kata: 0
+Sinit eats a potash crystal.
+11:27:22:187 [13357] [98] |(Sadey)|[ [ ]]  
+You start to wield a twisted oaken staff in your hands.
+11:27:22:291 [13357] [98] |(Sadey)|[ [ ]]  
+You lash out with a straight kick at the left shoulder of Sadey.
+As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Sadey's left arm. (9.2%)[PRONE] 
+Falling back into a low crouch, you lash out with a swift strike at the left thigh of Sadey.
+As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Sadey's left leg. (9.2%)
+As your blow lands with a crunch, you perceive that you have dealt 9.4% damage to Sadey's head. (9.4%)
+[DIZ] [CON] Sadey [Hiru: Dizziness | Confusion]
+You are now maintaining a kata chain of 3 actions.
+11:27:22:313 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+[Shikudo:DISPATCH] Target: Sadey | Form: Rain | Kata: 3
+Sadey eats a magnesium chip.
+Sadey stands up.
+11:27:22:362 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+(Party): You say, "Hit Sadey left arm for 9.2%."
+11:27:22:395 [13357] [97] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+(Party): You say, "Sadey: prone."
+11:27:22:403 [13357] [97] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+(Party): You say, "Hit Sadey left leg for 9.2%."
+11:27:22:410 [13357] [97] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+(Party): You say, "Hit Sadey head for 9.4%."
+11:27:22:416 [13357] [97] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+(Party): You say, "Sadey: dizziness confusion."
+11:27:22:422 [13357] [97] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+[Shikudo:DISPATCH] Target: Sadey | Form: Rain | Kata: 3
+You suddenly perceive the vague outline of an aura of rebounding around Akri.
+[SLI] 11:27:22:602 [13357] [97] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+(LEVI): Backtracked paralysis being cured.
+As Makaeyla draws Ancient Crescent from its scabbard, she drives the pommel into Sadey's chin.
+[HAM] Ducking behind her, Makaeyla strikes at Sadey's hamstring with a rigid, practised grip.
+11:27:22:700 [13357] [97] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+(Party): You say, "Sadey: Hamstring."
+11:27:22:773 [13357] [97] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+Crixos slashes into Sinit with a Scimitar of Eagles.
+Cold blue flames wreathe Crixos's runeblade, emanating an icy, penetrating chill.
+Crixos slashes into Sinit with a Scimitar of Eagles.
+11:27:23:063 [13357] [97] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+Tabethys eats a magnesium chip.
+Sadey takes a drink from an elegant diamond vial.
+Sinit takes some salve from a vial and rubs it on her skin.
+Tabethys weaves earth into a pebble and sends it hurtling into the left leg of Sadey with bone-breaking force.
+Sadey hacks and coughs as a series of unpleasant cracks sound in grim staccato from her chest.
+11:27:23:151 [13357] [97] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+Sadey takes some salve from a vial and rubs it on her legs.
+Sinit eats a magnesium chip.
+11:27:23:322 [13357] [97] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 3 | Kai: 0
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[TREE]: tree down on Sadey for 10 seconds...
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 3 | Kai: 0
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 3 | Kai: 0
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Maldrantus lashes out with a swift, reaping blow at Sadey.
+[PAR] [PAR] Horror overcomes Sadey's face as her body stiffens into paralysis.
+[WEA|CLU|PAR] The face of Sadey contorts in pain.
+Valkyri skilfully whirls a flail toward Sadey.
+Valkyri skilfully whirls a flail toward Sadey.
+The final blow proves too much for Sadey, who falls to the floor a broken, bloody mess.
+Sadey has been slain by Valkyri.
+            .-'~~~~~~~`-.
+          .'             `.
+          |   R . I . P   |
+          |               |
+          |     Sadey     |
+        \\| * * * * * * * |//
+        ^^^^^^^^^^^^^^^^^^^^^
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): Reset target afflictions.
+A starburst tattoo flares and bathes Sadey in red light.
+            .-'~~~~~~~`-.
+          .'             `.
+          |   R . I . P   |
+          |               |
+          |     Sadey     |
+        \\| * * * * * * * |//
+        ^^^^^^^^^^^^^^^^^^^^^
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): Reset target afflictions.
+The corpse of a shade of might falls from Sadey's person.
+The corpse of a shade of nature falls from Sadey's person.
+The corpse of a shade of nature falls from Sadey's person.
+The corpse of a shade of might falls from Sadey's person.
+The corpse of a shade of might falls from Sadey's person.
+The corpse of a shade of nature falls from Sadey's person.
+The corpse of a shade of nature falls from Sadey's person.
+The corpse of a shade of might falls from Sadey's person.
+The corpse of a shade of magic falls from Sadey's person.
+The corpse of a shade of magic falls from Sadey's person.
+The corpse of a shade of might falls from Sadey's person.
+The corpse of a shade of might falls from Sadey's person.
+The corpse of a shade of magic falls from Sadey's person.
+The corpse of a shade of might falls from Sadey's person.
+The corpse of a shade of magic falls from Sadey's person.
+The corpse of a shade of nature falls from Sadey's person.
+The corpse of a shade of nature falls from Sadey's person.
+The corpse of Icosse, Mirrored Ire falls from Sadey's person.
+11:27:23:809 [13357] [97] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+Lightning follows the path of a mithril broadsword as Sadey sweeps her weapon at Sinit, a clap of thunder heralding the 
+bite of the blade.
+Sinit pivots on her heel as she draws her blade from its scabbard and unleashes a retaliatory strike at Sadey.
+11:27:23:813 [13357] [97] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+Akri's aura of weapons rebounding disappears.
+Akri lashes out with a swift, reaping blow at Tabethys.
+Horror overcomes Tabethys's face as her body stiffens into paralysis.
+As the weapon strikes Tabethys, she seems greatly diminished.
+11:27:23:848 [13357] [97] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+(Party): Maldrantus says, "Sadey: paralysis."
+11:27:23:885 [13357] [97] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+Sadey calls aloud abruptly.
+Sadey applies a quicksilver droplet to herself.
+Sadey takes a drink from a black-walnut vial.
+Sadey eats a quartz grain.
+Akri takes a long drag off her pipe.
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 3 | Kai: 4
+[LOCK] Affs: asthma anorexia slickness para impat weary
+I'm sorry, I don't know what "pdo" does.
+11:27:23:979 [13357] [97] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+I cannot fathom the meaning of "pdo".
+11:27:23:991 [13357] [97] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+Sadey eats a calamine crystal.
+11:27:24:131 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 3 | Kai: 4
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 3 | Kai: 4
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Sinit takes some salve from a vial and rubs it on her skin.
+11:27:24:382 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+You have recovered balance on your legs.
+(((((((((((((((((((( BALANCE: 2.091 ))))))))))))))))))))
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+You cease to wield a twisted oaken staff.
+You start to wield a Shar'ilian lightspire in your right hand.
+You may not carry out a combination utilising Shikudo strikes without the required staff.
+ +[Sadey] HP: [==================  ] 92% -- 5720/6163 
+Kutcher starts to wield Anima's Thirst in his right hand.
+Kutcher lashes out with a swift, reaping blow at Sinit.
+Horror overcomes Sinit's face as her body stiffens into paralysis.
+As the weapon strikes Sinit, she seems greatly diminished.
+11:27:24:420 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+Valkyri lurches off balance as she misses Sadey with a wild swing of a flail.
+11:27:24:423 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+Kutcher takes a drink from an oaken vial.
+11:27:24:511 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 3 | Kai: 4
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+Sinit takes a drink from a ruby vial.
+11:27:24:770 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+I'm sorry, I don't know what "battlecry" does.
+11:27:24:777 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 3 | Kai: 4
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+Tabethys eats a magnesium chip.
+Sadey takes some salve from a vial and rubs it on her skin.
+11:27:24:957 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 3 | Kai: 4
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+As Makaeyla draws Ancient Crescent from its scabbard, she drives the pommel into Sadey's chin.
+[HAM] Ducking behind her, Makaeyla strikes at Sadey's hamstring with a rigid, practised grip.
+11:27:25:067 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+Huge boulders hammer at Sadey as they materialise from the very air.
+[RA1] One of the boulders smashes into the right arm of Sadey with a sickening crack.
+Crixos swings a Scimitar of Eagles at Sinit with all his might.
+Sinit pivots on her heel as she draws her blade from its scabbard and unleashes a retaliatory strike at Crixos.
+Crixos swings a Scimitar of Eagles at Sinit with all his might.
+11:27:25:083 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+Sinit eats a magnesium chip.
+11:27:25:153 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 3 | Kai: 4
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+(Party): You say, "Sadey: Hamstring."
+11:27:25:223 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+(Party): You say, "Sadey: Shalestorm (broken right arm)."
+11:27:25:230 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+You suddenly perceive the vague outline of an aura of rebounding around Kutcher.
+11:27:25:379 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+Naz is devoured by living flame at the behest of a greater fire elemental.
+11:27:25:385 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 3 | Kai: 4
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 3 | Kai: 4
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+[BLI] Sadey eats an arsenic pellet.
+11:27:25:663 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+You suddenly perceive the vague outline of an aura of rebounding around Sinit.
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 3 | Kai: 4
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+Maldrantus reaches past Kutcher, plunging Gattan'lier's hunger into his shadow.
+Maldrantus lashes out with a swift, reaping blow at Kutcher.
+Horror overcomes Kutcher's face as his body stiffens into paralysis.
+As the weapon strikes Kutcher, the contact area begins to rot before your eyes.
+11:27:25:867 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+Sadey takes some salve from a vial and rubs it on her arms.
+Kutcher eats a magnesium chip.
+Kutcher eats a potash crystal.
+11:27:25:945 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 3 | Kai: 4
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+Akri lashes out with a swift, reaping blow at Sinit.
+Sinit has been slain by Akri.
+Sinit has left the group.
+A starburst tattoo flares and bathes Sinit in red light.
+11:27:26:044 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+Horror overcomes Sinit's face as her body stiffens into paralysis.
+As the weapon strikes Sinit, she seems greatly diminished.
+11:27:26:050 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+(Party): Maldrantus says, "Kutcher: paralysis."
+11:27:26:056 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+You suddenly perceive the vague outline of an aura of rebounding around Crixos.
+11:27:26:082 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+Valkyri skilfully whirls a flail toward Sadey.
+Valkyri skilfully whirls a flail toward Sadey.
+[HLEECH] Sadey lets out a groan as her life is siphoned by the might of Evil.
+11:27:26:093 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+Sinit takes a drink from an onyx vial.
+Sinit takes a drink from a sapphire crystal vial.
+Sinit takes some salve from a vial and rubs it on her skin.
+Sinit takes a long drag off an enamel bubble pipe.
+Kutcher touches a tree of life tattoo.
+11:27:26:177 [13357] [100] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+The runic configuration upon a Scimitar of Eagles in the grasp of Crixos flashes bright!
+11:27:26:181 [13357] [100] |(Sadey)|[ [ ]]  [9.4|0|9.2|0|9.2|0]
+(((((((((((((((((((( EQUILIBRIUM:1.799 ))))))))))))))))))))
+You start to wield a twisted oaken staff in your hands.
+[PRONE] You lash out with a straight kick at the right shoulder of Sadey.
+As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Sadey's right arm. (9.2%)[PRONE] 
+[WEA] Falling back into a low crouch, you lash out with a swift strike at the right thigh of Sadey.
+As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Sadey's right leg. (9.2%)
+[CLU] As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Sadey's right arm. (18.4%)
+You are now maintaining a kata chain of 6 actions.
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 6 | Kai: 4
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Tabethys takes a drink from an oaken vial.
+11:27:26:276 [13357] [100] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+(Party): You say, "Sadey: prone."
+11:27:26:312 [13357] [100] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+(Party): You say, "Hit Sadey right arm for 9.2%."
+11:27:26:318 [13357] [100] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+(Party): You say, "Sadey: prone."
+11:27:26:325 [13357] [100] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+(Party): You say, "Sadey: weariness."
+11:27:26:329 [13357] [100] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+(Party): You say, "Hit Sadey right leg for 9.2%."
+11:27:26:387 [13357] [100] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+(Party): You say, "Sadey: clumsiness."
+11:27:26:394 [13357] [100] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+(Party): You say, "Hit Sadey right arm for 9.2%."
+11:27:26:400 [13357] [100] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 6 | Kai: 4
+[LOCK] Affs: asthma anorexia slickness para impat weary
+As Makaeyla draws Ancient Crescent from its scabbard, she drives the pommel into Sadey's chin.
+[HAM] Ducking behind her, Makaeyla strikes at Sadey's hamstring with a rigid, practised grip.
+11:27:26:493 [13357] [100] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+[DEA] 
+(Party): You say, "Sadey: Hamstring."
+11:27:26:639 [13357] [99] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 6 | Kai: 4
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Tabethys eats an aurum flake.
+Sadey eats a potash crystal.
+11:27:26:725 [13357] [99] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+Tabethys moves with the grace of the wind, her stance the epitome of perfection beneath the flurry of blows.
+ ------------------------------------------------------------------------------------------------- 
+|     EPITOMISE - TABETHYS - SWITCH TARGETS (6S) | EPITOMISE - TABETHYS - SWITCH TARGETS (6S)     |
+ ------------------------------------------------------------------------------------------------- 
+11:27:26:731 [13357] [99] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 6 | Kai: 4
+[LOCK] Affs: asthma anorexia slickness para impat weary
+(Party): You say, "Tabethys used EPITOMISE - switch targets for 6 seconds!"
+11:27:26:891 [13357] [99] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+Sinit eats a magnesium chip.
+Sinit applies a quicksilver droplet to herself.
+11:27:26:900 [13357] [99] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+Crixos's aura of weapons rebounding disappears.
+Crixos whips a Scimitar of Eagles through the air in front of Sinit, to no effect.
+Crixos swings a Scimitar of Eagles at Sinit with all his might.
+Crixos moves in to engage Sinit.
+11:27:26:992 [13357] [99] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+Sinit takes some salve from a vial and rubs it on her skin.
+Crixos takes a long drag off his pipe.
+11:27:27:069 [13357] [99] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 6 | Kai: 4
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Tabethys attempts to do a standing backflip, but merely stumbles over her own feet.
+A look of extreme focus crosses the face of Tabethys.
+A look of extreme focus crosses the face of Sadey.
+11:27:27:261 [13357] [99] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 6 | Kai: 4
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 6 | Kai: 4
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Sadey eats an aurum flake.
+(LEVI): [V3] kelp eaten - branched into 3 states
+(LEVI): [V3] kelp cured: weariness, healthleech, clumsiness
+(LEVI): [V3] Neg-confirm started: weariness, healthleech, clumsiness (1.3s)
+Sadey stands up.
+11:27:27:532 [13357] [99] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+Lightning follows the path of a mithril broadsword as Sadey sweeps her weapon at Sinit, a clap of thunder heralding the 
+bite of the blade.
+11:27:27:538 [13357] [99] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+Tabethys starts to wield an exquisite Mhaldorian staff of sterling silver in her left hand.
+Tabethys starts to wield a Shield of Absorption in her right hand.
+The sky grows dark as Tabethys calls upon powerful magics. Raising her hands balefully, she causes lightning bolts, the 
+hammer of the storm, to shoot from her hands and slam into Sadey. The bolts ricochet off and slam into Kutcher.
+The bolts ricochet off and slam into Akri.
+11:27:27:669 [13357] [99] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+Akri takes a drink from an elegant diamond vial.
+11:27:27:713 [13357] [99] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 6 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Sadey takes a drink from an elegant diamond vial.
+11:27:27:811 [13357] [99] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+Sinit whips Baleful Destiny through the air in front of Sadey, to no effect.
+[HAM] Ducking behind her, Sinit strikes at Sadey's hamstring with a rigid, practised grip.
+Sinit moves in to engage Sadey.
+11:27:27:931 [13357] [99] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 6 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Maldrantus lashes out with a swift, reaping blow at Kutcher.
+Horror overcomes Kutcher's face as his body stiffens into paralysis.
+As the weapon strikes Kutcher, the contact area begins to rot before your eyes.
+11:27:27:986 [13357] [99] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+(Party): You say, "Sadey: Hamstring."
+11:27:28:065 [13357] [99] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+Kutcher eats a magnesium chip.
+11:27:28:073 [13357] [99] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+Akri lashes out with a swift, reaping blow at Sinit.
+Horror overcomes Sinit's face as her body stiffens into paralysis.
+As the weapon strikes Sinit, she seems greatly diminished.
+11:27:28:086 [13357] [99] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+(Party): Maldrantus says, "Kutcher: paralysis."
+11:27:28:091 [13357] [99] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+Kutcher starts to wield a venerable bronze-hilted dagger in his right hand.
+Kutcher's aura of weapons rebounding disappears.
+Kutcher reaches past Makaeyla, plunging a venerable bronze-hilted dagger into her shadow.
+Kutcher lashes out with a swift, reaping blow at Makaeyla.
+Horror overcomes Makaeyla's face as her body stiffens into paralysis.
+As the weapon strikes Makaeyla, she seems greatly diminished.
+11:27:28:164 [13357] [99] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 6 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+You have recovered balance on your legs.
+(((((((((((((((((((( BALANCE: 2.051 ))))))))))))))))))))
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+[IMP] You fill the mind of Sadey with an impatient feeling.
+Tabethys eats an aurum flake.
+Sinit eats a potash crystal.
+Kutcher takes a long drag off an enamel bubble pipe.
+Makaeyla eats a magnesium chip.
+11:27:28:264 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+[TREE]: tree down on Sadey for 5 seconds...
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 6 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind paralyse Sadey
+(Party): You say, "Sadey: impatience."
+11:27:28:395 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+Makaeyla touches a tree of life tattoo.
+11:27:28:400 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 6 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind paralyse Sadey
+Sinit eats a magnesium chip.
+11:27:28:594 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 6 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind paralyse Sadey
+(LEVI): [V3] Neg-confirm timeout -- unfolding branch for: weariness, healthleech, clumsiness
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 6 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind paralyse Sadey
+Sadey eats a plumbum flake.
+(LEVI): [V3] goldenseal cured: impatience
+Kutcher takes a drink from an oaken vial.
+11:27:29:030 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+Lightning-quick, Crixos jabs Sinit with a Scimitar of Eagles.
+Horror overcomes Sinit's face as her body stiffens into paralysis.
+Crixos slashes into Sinit with a Scimitar of Eagles.
+11:27:29:132 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+Sinit takes a drink from a ruby vial.
+11:27:29:213 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+Crixos moves with the grace of the wind, his stance the epitome of perfection beneath the flurry of blows.
+ --------------------------------------------------------------------------------------------- 
+|     EPITOMISE - CRIXOS - SWITCH TARGETS (6S) | EPITOMISE - CRIXOS - SWITCH TARGETS (6S)     |
+ --------------------------------------------------------------------------------------------- 
+11:27:29:215 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 6 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+(((((((((((((((((((( EQUILIBRIUM:1.02 ))))))))))))))))))))
+ +[Sadey] HP: [=======             ] 38% -- 2348/6163 
+ --------------------------------------------------------------------- 
+|     TARGET IS IN INSTAKILL RANGE | TARGET IS IN INSTAKILL RANGE     |
+ --------------------------------------------------------------------- 
+(Party): Tabethys says, "Crixos EPITOMISED!"
+(Party): Tabethys says, "Crixos EPITOMISED!"
+(Party): Tabethys says, "Crixos EPITOMISED!"
+11:27:29:306 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+(Party): You say, "Crixos used EPITOMISE - switch targets for 6 seconds!"
+11:27:29:310 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 6 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Valkyri skilfully whirls a flail toward Sadey.
+Valkyri skilfully whirls a flail toward Sadey.
+[HLEECH] [CON] Sadey stares about herself vacantly.
+11:27:29:434 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+Kutcher eats an aurum flake.
+11:27:29:594 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 6 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 6 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+A look of extreme focus crosses the face of Sadey.
+(LEVI): [V3] Focus used - branched to 1 states
+Sinit's knuckles grow momentarily white as she strengthens her grip.
+Sinit rubs her hands together greedily.
+11:27:29:844 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+As Makaeyla draws Ancient Crescent from its scabbard, she drives the pommel into Sadey's chin.
+[HAM] Ducking behind her, Makaeyla strikes at Sadey's hamstring with a rigid, practised grip.
+11:27:29:849 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+(Party): You say, "Sadey: Hamstring."
+11:27:30:023 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 6 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Maldrantus lashes out with a swift, reaping blow at Kutcher.
+Horror overcomes Kutcher's face as his body stiffens into paralysis.
+As the weapon strikes Kutcher, the contact area begins to rot before your eyes.
+11:27:30:093 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+Huge boulders hammer at Sadey as they materialise from the very air.
+[RA1] One of the boulders smashes into the right arm of Sadey with a sickening crack.
+(Party): Maldrantus says, "Kutcher: paralysis."
+11:27:30:205 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+A nearly invisible magical shield forms around Sinit.
+11:27:30:207 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+Sadey takes some salve from a vial and rubs it on her arms.
+Sinit eats a magnesium chip.
+11:27:30:212 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+(Party): You say, "Sadey: Shalestorm (broken right arm)."
+11:27:30:258 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 6 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 6 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Sadey eats an aurum flake.
+(LEVI): [V3] kelp eaten - branched into 3 states
+(LEVI): [V3] kelp cured: weariness, healthleech, clumsiness
+(LEVI): [V3] Neg-confirm started: weariness, healthleech, clumsiness (1.3s)
+11:27:30:581 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 6 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 6 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+(((((((((((((((((((( EQUILIBRIUM:1.694 ))))))))))))))))))))
+You cease to wield a twisted oaken staff.
+You start to wield a Shar'ilian lightspire in your right hand.
+Crixos razes Sinit's magical shield with a Scimitar of Eagles.
+Crixos swings a Scimitar of Eagles at Sinit with all his might.
+Horror overcomes Sinit's face as her body stiffens into paralysis.
+11:27:31:025 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+You start to wield a twisted oaken staff in your hands.
+11:27:31:134 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|9.2|18.4|9.2|9.2]
+You lash out with a straight kick at the left shoulder of Sadey.
+As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Sadey's left arm. (18.4%)[PRONE] 
+You have slain Sadey.
+            .-'~~~~~~~`-.
+          .'             `.
+          |   R . I . P   |
+          |               |
+          |     Sadey     |
+        \\| * * * * * * * |//
+        ^^^^^^^^^^^^^^^^^^^^^
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): Reset target afflictions.
+You have gained 2012 experience.
+With the completion of your adventure, you feel your renown grow to new heights! (You gain 200 Renown.)
+You are now maintaining a kata chain of 7 actions.
+11:27:31:144 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+Sinit's eyes close briefly, reopening to reveal a bright and focused gaze.
+11:27:31:190 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+Kutcher eats a magnesium chip.
+Kutcher starts to wield Anima's Thirst in his right hand.
+Kutcher lashes out with a swift, reaping blow at Makaeyla.
+Horror overcomes Makaeyla's face as her body stiffens into paralysis.
+As the weapon strikes Makaeyla, she seems greatly diminished.
+11:27:31:197 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 7 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+(Party): You say, "Hit Sadey left arm for 9.2%."
+11:27:31:295 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+(Party): You say, "Sadey: prone."
+11:27:31:298 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+I cannot fathom the meaning of "pdo".
+11:27:31:305 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+Your mental abilities have no power over the dead.
+11:27:31:390 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+Makaeyla eats a magnesium chip.
+Makaeyla takes a drink from an oaken vial.
+11:27:31:455 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 7 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+Your mental abilities have no power over the dead.
+11:27:31:641 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+Sinit eats a magnesium chip.
+11:27:31:753 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 7 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+Akri lashes out with a swift, reaping blow at Sinit.
+As the weapon strikes Sinit, she seems greatly diminished.
+11:27:31:825 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+Your mental abilities have no power over the dead.
+11:27:31:921 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+Kutcher eats a potash crystal.
+11:27:32:005 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 7 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+You are dismayed as the corpse of a buckawn royal guard turns to dust in your hands.
+11:27:32:088 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+Your mental abilities have no power over the dead.
+11:27:32:186 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+Maldrantus lashes out with a swift, reaping blow at Kutcher.
+Horror overcomes Kutcher's face as his body stiffens into paralysis.
+As the weapon strikes Kutcher, the contact area begins to rot before your eyes.
+11:27:32:192 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+Maldrantus takes a drink from an elegant diamond vial.
+11:27:32:195 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+(Party): Maldrantus says, "Kutcher: paralysis."
+11:27:32:197 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+Tabethys starts to wield a Shield of Absorption in her left hand.
+Tabethys starts to wield an exquisite Mhaldorian staff of sterling silver in her right hand.
+Tabethys starts to wield an exquisite Mhaldorian staff of sterling silver in her left hand.
+Tabethys starts to wield a Shield of Absorption in her right hand.
+11:27:32:275 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 7 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+(Party): Tabethys says, "Sadey not here!"
+11:27:32:355 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+Your mental abilities have no power over the dead.
+11:27:32:454 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+You suddenly perceive the vague outline of an aura of rebounding around Akri.
+11:27:32:460 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 7 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+Your mental abilities have no power over the dead.
+11:27:32:708 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 7 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+Your mental abilities have no power over the dead.
+11:27:32:937 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+Kutcher eats a magnesium chip.
+Makaeyla eats an aurum flake.
+11:27:32:944 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 7 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+You are dismayed as the corpse of a buckawn royal guard turns to dust in your hands.
+11:27:33:151 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+(((((((((((((((((((( BALANCE: 2.019 ))))))))))))))))))))
+You cannot see that being here.
+Crixos starts to wield a vorpal longsword in his left hand.
+Crixos starts to wield a blackened cavalry shield with ivory accents in his right hand.
+Lightning follows the path of a vorpal longsword as Crixos sweeps his weapon at Sinit, a clap of thunder heralding the 
+bite of the blade.
+The fulminous assault has left Sinit a smoking corpse.
+Sinit has been slain by Crixos.
+11:27:33:188 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+You pick up the corpse of Sinit.
+11:27:33:251 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+Kutcher stumbles and pokes himself in the eye.
+11:27:33:256 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+Your mental abilities have no power over the dead.
+11:27:33:264 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+Ahh, I am truly sorry, but I do not see anyone by that name here.
+11:27:33:266 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 7 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+A look of extreme focus crosses the face of Kutcher.
+Kutcher starts to wield a venerable bronze-hilted dagger in his right hand.
+Kutcher lashes out with a swift, reaping blow at Makaeyla.
+Horror overcomes Makaeyla's face as her body stiffens into paralysis.
+As the weapon strikes Makaeyla, she seems greatly diminished.
+11:27:33:345 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+[TREE]: Sadey can now use tree!!!
+You cease to wield a twisted oaken staff.
+You start to wield a Shar'ilian lightspire in your right hand.
+11:27:33:393 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+You cannot see that being here.
+11:27:33:395 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+Ahh, I am truly sorry, but I do not see anyone by that name here.
+11:27:33:398 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 7 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+Kutcher takes a drink from an oaken vial.
+11:27:33:506 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+Your mental abilities have no power over the dead.
+11:27:33:605 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+Nothing can be seen here by that name.
+11:27:33:608 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 7 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Akri's aura of weapons rebounding disappears.
+11:27:33:792 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+You start to wield a twisted oaken staff in your hands.
+11:27:33:904 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+You cannot see that being here.
+11:27:33:906 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+I do not recognise anything called that here.
+11:27:33:909 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+Akri takes a long drag off her pipe.
+11:27:33:914 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 7 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Sadey
+Your mental abilities have no power over the dead.
+11:27:34:093 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+Nothing can be seen here by that name.
+11:27:34:096 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Sadey | Form: Rain | Kata: 7 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Maldrantus lashes out with a swift, reaping blow at Kutcher.
+Horror overcomes Kutcher's face as his body stiffens into paralysis.
+The face of Kutcher contorts in pain.
+11:27:34:250 [13357] [98] |(Sadey)|[ [ ]]  [9.4|0|18.4|18.4|9.2|9.2]
+(Party): Tabethys says, "Target: Kutcher."[Limb]: Reset Sadey's head.
+[Limb]: Reset Sadey's left arm.
+[Limb]: Reset Sadey's right arm.
+[Limb]: Reset Sadey's left leg.
+[Limb]: Reset Sadey's right leg.
+(LEVI): Target acquired. Focusing fire on Kutcher!
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+[ClassDetect]: Switched curingset to: depthswalker (vs Depthswalker)
+(LEVI): Target acquired. Focusing fire on Kutcher!
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+11:27:34:265 [13357] [99] |(Kutcher)|[ [ ]]  
+You cease to wield a twisted oaken staff.
+You start to wield a Shar'ilian lightspire in your right hand.
+11:27:34:271 [13357] [99] |(Kutcher)|[ [ ]]  
+Ahh, I am truly sorry, but I do not see anyone by that name here.
+11:27:34:272 [13357] [99] |(Kutcher)|[ [ ]]  
+Ahh, I am truly sorry, but I do not see anyone by that name here.
+11:27:34:274 [13357] [99] |(Kutcher)|[ [ ]]  
+(Party): Maldrantus says, "Kutcher: paralysis."
+11:27:34:316 [13357] [99] |(Kutcher)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 7 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Kutcher
+Kutcher is not currently an ally.
+11:27:34:402 [13357] [99] |(Kutcher)|[ [ ]]  
+Kutcher is now one of your enemies.
+11:27:34:408 [13357] [99] |(Kutcher)|[ [ ]]  
+Your target is now: Kutcher (an adventurer)
+11:27:34:415 [13357] [99] |(Kutcher)|[ [ ]]  
+Your target is now: Kutcher (an adventurer)
+11:27:34:422 [13357] [99] |(Kutcher)|[ [ ]]  
+You will now cure using the depthswalker set.
+11:27:34:424 [13357] [99] |(Kutcher)|[ [ ]]  
+All your defence priorities have been reset to defaults.
+11:27:34:426 [13357] [99] |(Kutcher)|[ [ ]]  
+You may not set a priority for the 'avoid' defence.
+Kutcher is not currently an ally.
+11:27:34:459 [13357] [99] |(Kutcher)|[ [ ]]  
+Kutcher is already an enemy.
+11:27:34:461 [13357] [99] |(Kutcher)|[ [ ]]  
+Your target is now: Kutcher (an adventurer)
+11:27:34:463 [13357] [99] |(Kutcher)|[ [ ]]  
+Your target is now: Kutcher (an adventurer)
+11:27:34:465 [13357] [99] |(Kutcher)|[ [ ]]  
+(Party): You say, "Target: Kutcher."
+11:27:34:468 [13357] [99] |(Kutcher)|[ [ ]]  
+(Party): Tabethys says, "Target: Kutcher."
+(LEVI): Target acquired. Focusing fire on Kutcher!
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): Target acquired. Focusing fire on Kutcher!
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+11:27:34:472 [13357] [99] |(Kutcher)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 7 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Tabethys starts to wield a Shield of Absorption in her left hand.
+Tabethys starts to wield an exquisite Mhaldorian staff of sterling silver in her right hand.
+Tabethys weaves fire and earth in a complex pattern and bubbling magma boils into existence in a searing tide to crash 
+down upon Kutcher.
+[ClassDetect]: Multiple attackers detected -- staying on normal curingset
+Kutcher buckles under an unseen blow.
+The air between Tabethys and Kutcher ripples with a haze of heat.
+11:27:34:611 [13357] [99] |(Kutcher)|[ [ ]]  
+You fill the mind of Kutcher with an impatient feeling.
+11:27:34:615 [13357] [98] |(Kutcher)|[ [ ]]  
+Kutcher is not currently an ally.
+11:27:34:621 [13357] [98] |(Kutcher)|[ [ ]]  
+Kutcher is already an enemy.
+11:27:34:623 [13357] [98] |(Kutcher)|[ [ ]]  
+Your target is now: Kutcher (an adventurer)
+11:27:34:625 [13357] [98] |(Kutcher)|[ [ ]]  
+Your target is now: Kutcher (an adventurer)
+11:27:34:628 [13357] [98] |(Kutcher)|[ [ ]]  
+Kutcher is not currently an ally.
+11:27:34:630 [13357] [98] |(Kutcher)|[ [ ]]  
+Kutcher is already an enemy.
+11:27:34:632 [13357] [98] |(Kutcher)|[ [ ]]  
+Your target is now: Kutcher (an adventurer)
+11:27:34:635 [13357] [98] |(Kutcher)|[ [ ]]  
+Your target is now: Kutcher (an adventurer)
+11:27:34:637 [13357] [98] |(Kutcher)|[ [ ]]  
+(Party): You say, "Target: Kutcher."
+11:27:34:640 [13357] [98] |(Kutcher)|[ [ ]]  
+Makaeyla eats a magnesium chip.
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 7 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+You will now cure using the normal set.
+11:27:34:806 [13357] [97] |(Kutcher)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 7 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Kutcher eats a magnesium chip.
+ ----------------------------------------------------------------------------------- 
+|     EPITOMISE ENDED - RESUME ATTACKING! | EPITOMISE ENDED - RESUME ATTACKING!     |
+ ----------------------------------------------------------------------------------- 
+-= Crixos's EPITOMISE has ended! =-
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 7 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+As Makaeyla draws Ancient Crescent from its scabbard, she drives the pommel into Kutcher's chin.
+[HAM] Ducking behind him, Makaeyla strikes at Kutcher's hamstring with a rigid, practised grip.
+11:27:35:268 [13357] [97] |(Kutcher)|[ [ ]]  
+Tabethys eats an aurum flake.
+11:27:35:273 [13357] [97] |(Kutcher)|[ [ ]]  
+(Party): You say, "Kutcher: Hamstring."
+11:27:35:405 [13357] [97] |(Kutcher)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 7 | Kai: 8
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Seeing her situation to be hopeless, Sadey embraces the cold clutches of death.
+11:27:35:628 [13357] [97] |(Kutcher)|[ [ ]]  
+You suddenly perceive the vague outline of an aura of rebounding around Crixos.
+Kutcher starts to wield Anima's Thirst in his right hand.
+A grey distortion coalesces about the blade of an ancient shadowed scythe, held by Kutcher.
+Kutcher grows older before your eyes.
+Kutcher barely clips Makaeyla with an ancient shadowed scythe as he fumbles his attack.
+As the weapon strikes Makaeyla, she seems greatly diminished.
+11:27:35:639 [13357] [97] |(Kutcher)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 7 | Kai: 13 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+(((((((((((((((((((( EQUILIBRIUM:1.073 ))))))))))))))))))))
+ +[Kutcher] HP: [=========           ] 46% -- 3035/6513 
+ --------------------------------------------------------------------- 
+|     TARGET IS IN INSTAKILL RANGE | TARGET IS IN INSTAKILL RANGE     |
+ --------------------------------------------------------------------- 
+Tabethys no longer moves with such sublime alacrity.
+11:27:35:798 [13357] [97] |(Kutcher)|[ [ ]]  
+Makaeyla takes a drink from an oaken vial.
+11:27:35:912 [13357] [97] |(Kutcher)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 7 | Kai: 13 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Kutcher
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 7 | Kai: 13 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Kutcher
+Akri lashes out with a swift, reaping blow at Makaeyla.
+Horror overcomes Makaeyla's face as her body stiffens into paralysis.
+As the weapon strikes Makaeyla, she seems greatly diminished.
+11:27:36:131 [13357] [97] |(Kutcher)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 7 | Kai: 13 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Kutcher
+Makaeyla eats a magnesium chip.
+Tabethys weaves fire and water as she directs her arcane might against Kutcher.
+[WEA] [NAU] The skin of Kutcher begins to dry and crack as he grows pale.
+The air between Tabethys and Kutcher ripple with a haze of heat, and flames ignite upon the skin of Kutcher.
+A freezing wave of water materialises as if from nothing, crashing down upon Kutcher.
+Maldrantus lashes out with a swift, reaping blow at Kutcher.
+[PAR] [PAR] Horror overcomes Kutcher's face as his body stiffens into paralysis.
+[WEA|CLU|PAR] The face of Kutcher contorts in pain.
+11:27:36:350 [13357] [97] |(Kutcher)|[ [ ]]  
+(Party): Maldrantus says, "Kutcher: paralysis."
+11:27:36:427 [13357] [100] |(Kutcher)|[ [ ]]  
+(Party): You say, "Kutcher: weariness nausea."
+11:27:36:503 [13357] [100] |(Kutcher)|[ [ ]]  
+Kutcher takes some salve from a vial and rubs it on his skin.
+11:27:36:511 [13357] [100] |(Kutcher)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 7 | Kai: 13 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Kutcher
+Kutcher says, "Cast off."
+11:27:36:702 [13357] [100] |(Kutcher)|[ [ ]]  
+Kutcher eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+Makaeyla takes a long drag off her pipe.
+11:27:36:708 [13357] [100] |(Kutcher)|[ [ ]]  
+[REB] You suddenly perceive the vague outline of an aura of rebounding around Kutcher.
+11:27:36:770 [13357] [100] |(Kutcher)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 7 | Kai: 13 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Kutcher
+Crixos gives a complex series of whistles.
+Crixos's aura of weapons rebounding disappears.
+Crixos starts to wield a Scimitar of Eagles in his left hand.
+Crixos starts to wield a Scimitar of Eagles in his right hand.
+Crixos slashes into Makaeyla with a Scimitar of Eagles.
+Horror overcomes Makaeyla's face as her body stiffens into paralysis.
+Crixos slashes into Makaeyla with a Scimitar of Eagles.
+Cold blue flames wreathe Crixos's runeblade, emanating an icy, penetrating chill.
+Crixos moves in to engage Makaeyla.
+11:27:36:852 [13357] [100] |(Kutcher)|[ [ ]]  
+Crixos takes a long drag off his pipe.
+Makaeyla takes some salve from a vial and rubs it on her skin.
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 7 | Kai: 13 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Kutcher
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 7 | Kai: 13 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Kutcher
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 7 | Kai: 13 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Kutcher
+Makaeyla shivers particularly intensely.
+Makaeyla's eyes lose their focus suddenly.
+(((((((((((((((((((( EQUILIBRIUM:1.742 ))))))))))))))))))))
+You start to wield a twisted oaken staff in your hands.
+[PRONE] You lash out with a straight kick at the right shoulder of Kutcher.
+As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Kutcher's right arm. (9.2%)[PRONE] 
+[LET] Falling back into a low crouch, you lash out with a swift strike at the right thigh of Kutcher.
+As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Kutcher's right leg. (9.2%)
+[HLEECH] As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Kutcher's right arm. (18.4%)
+You have slain Kutcher.
+            .-'~~~~~~~`-.
+          .'             `.
+          |   R . I . P   |
+          |               |
+          |    Kutcher    |
+        \\| * * * * * * * |//
+        ^^^^^^^^^^^^^^^^^^^^^
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): Reset target afflictions.
+You have gained 1006 experience.
+A starburst tattoo flares and bathes Kutcher in red light.
+            .-'~~~~~~~`-.
+          .'             `.
+          |   R . I . P   |
+          |               |
+          |    Kutcher    |
+        \\| * * * * * * * |//
+        ^^^^^^^^^^^^^^^^^^^^^
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): Reset target afflictions.
+11:27:37:596 [13357] [100] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+You are now maintaining a kata chain of 10 actions.
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 10 | Kai: 13 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+A frigid stream of cerulean light emanates from a timeworn imperial signet ring, surrounding Kutcher with a frosty aura.
+A swirling stream of heliotrope light emanates from a timeworn imperial signet ring, surrounding Kutcher with a 
+shimmering aura.
+A crackling stream of argentine light emanates from a timeworn imperial signet ring, surrounding Kutcher with a 
+flickering aura.
+Kutcher takes a drink from an elegant diamond vial.
+A coruscating stream of sanguine light emanates from a timeworn imperial signet ring, surrounding Kutcher with a 
+scintillating aura.
+Kutcher eats a quartz grain.
+Kutcher applies a quicksilver droplet to himself.
+Kutcher takes a drink from an elegant diamond vial.
+Kutcher takes a long drag off an enamel bubble pipe.
+Kutcher starts to wield a venerable bronze-hilted dagger in his right hand.
+11:27:37:728 [13357] [100] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+A razor-beaked falcon wings into the room with an angry cry.
+11:27:37:731 [13357] [100] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+(Party): You say, "Kutcher: prone."
+11:27:37:797 [13357] [100] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+Valkyri lurches off balance as she misses Kutcher with a wild swing of a flail.
+11:27:37:804 [13357] [100] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+(Party): You say, "Hit Kutcher right arm for 9.2%."
+11:27:37:810 [13357] [100] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+(Party): You say, "Kutcher: prone."
+11:27:37:816 [13357] [100] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+(Party): You say, "Kutcher: lethargy weariness."
+11:27:37:822 [13357] [100] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+(Party): You say, "Hit Kutcher right leg for 9.2%."
+11:27:37:827 [13357] [100] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+(Party): You say, "Kutcher: healthleech clumsiness."
+11:27:37:835 [13357] [100] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+(Party): You say, "Hit Kutcher right arm for 9.2%."
+11:27:37:841 [13357] [100] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+I cannot fathom the meaning of "pdo".
+11:27:37:853 [13357] [100] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+I cannot fathom the meaning of "pdo".
+11:27:37:864 [13357] [100] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+Makaeyla eats a magnesium chip.
+Makaeyla takes some salve from a vial and rubs it on her skin.
+11:27:37:926 [13357] [100] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 10 | Kai: 13 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Kutcher takes some salve from a vial and rubs it on his skin.
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 10 | Kai: 13 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Tabethys weaves fire and water as she directs her arcane might against Kutcher.
+[WEA] [NAU] The skin of Kutcher begins to dry and crack as he grows pale.
+Blisters burst open across the body of Kutcher as his skin glows as if lit from within.
+A flurry of freezing icicles materialise to slash at Kutcher in a shower of freezing daggers.
+11:27:38:194 [13357] [100] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 10 | Kai: 13 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+A look of extreme focus crosses the face of Kutcher.
+(LEVI): [V3] Focus used - branched to 1 states
+Kutcher takes a drink from an oaken vial.
+Kutcher eats a potash crystal.
+Akri lashes out with a swift, reaping blow at Makaeyla.
+As the weapon strikes Makaeyla, her face grows vacant and she begins to tremble.
+11:27:38:340 [13357] [100] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+(Party): You say, "Kutcher: weariness nausea."
+11:27:38:346 [13357] [100] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+Kutcher removes a suit of scale mail.
+11:27:38:350 [13357] [100] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+Kutcher eats an aurum flake.
+(LEVI): [V3] kelp cured: weariness
+11:27:38:430 [13357] [100] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+Maldrantus reaches past Akri, plunging Gattan'lier's hunger into her shadow.
+Maldrantus lashes out with a swift, reaping blow at Akri.
+Horror overcomes Akri's face as her body stiffens into paralysis.
+As the weapon strikes Akri, the contact area begins to rot before your eyes.
+11:27:38:530 [13357] [100] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 10 | Kai: 13 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+(Party): Maldrantus says, "Akri: paralysis."
+11:27:38:586 [13357] [100] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+Akri eats a magnesium chip.
+Crixos slashes into Makaeyla with a Scimitar of Eagles.
+Horror overcomes Makaeyla's face as her body stiffens into paralysis.
+Crixos slashes into Makaeyla with a Scimitar of Eagles.
+Cold blue flames wreathe Crixos's runeblade, emanating an icy, penetrating chill.
+11:27:38:782 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 10 | Kai: 13 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Akri touches a tree of life tattoo.
+11:27:38:854 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+Kutcher puts on a suit of scale mail.
+Kutcher starts to wield Anima's Thirst in his right hand.
+Kutcher lashes out with a swift, reaping blow at Makaeyla.
+Grey fog begins to rise from the suddenly panicked-looking Makaeyla.
+As the weapon strikes Makaeyla, she seems greatly diminished.
+A grey miasma flares around Makaeyla.
+As the scythe comes away, the writhing shadow of Makaeyla clings to the weapon.
+11:27:39:038 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+Makaeyla takes some salve from a vial and rubs it on her skin.
+11:27:39:043 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 10 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+A razor-beaked falcon dives at Makaeyla, raking her face with its talons.
+Makaeyla has been slain by Crixos.
+Makaeyla has left the group.
+11:27:39:176 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 10 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 10 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+You have recovered balance on your legs.
+(((((((((((((((((((( BALANCE: 2.001 ))))))))))))))))))))
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+You cease to wield a twisted oaken staff.
+You start to wield a Shar'ilian lightspire in your right hand.
+You may not carry out a combination utilising Shikudo strikes without the required staff.
+ +[Kutcher] HP: [====================] 100% -- 6513/6513 
+Valkyri skilfully whirls a flail toward the torso of Kutcher.
+Valkyri skilfully whirls a flail toward the left arm of Kutcher.
+[HLEECH] Kutcher lets out a groan as his life is siphoned by the might of Evil.
+11:27:39:559 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 10 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Kutcher
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 10 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Kutcher
+The air thrums about Tabethys as a flurry of rocks materialise to bombard Kutcher.
+[AST] Kutcher clutches at his throat as he gasps for breath.
+Air: Asthma -> Kutcher
+Kutcher hacks and coughs as a series of unpleasant cracks sound in grim staccato from his chest.
+11:27:40:013 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+Kutcher eats a magnesium chip.
+11:27:40:015 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+(Party): You say, "Kutcher: Resonance Air (asthma)."
+11:27:40:149 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+Kutcher touches a tree of life tattoo.
+(LEVI): [V3] Tree used - branched to 3 states
+11:27:40:221 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+[TREE]: tree down on Kutcher for 14 seconds...
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 10 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Kutcher
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 10 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Kutcher
+Maldrantus lashes out with a swift, reaping blow at Akri.
+Horror overcomes Akri's face as her body stiffens into paralysis.
+As the weapon strikes Akri, the contact area begins to rot before your eyes.
+(Party): Maldrantus says, "Akri: paralysis."
+11:27:40:706 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+Akri eats a magnesium chip.
+Akri takes a drink from an elegant diamond vial.
+Akri eats a potash crystal.
+11:27:40:800 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 10 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Kutcher
+Crixos no longer moves with such sublime alacrity.
+11:27:40:878 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+[NAU] Kutcher doubles over, vomiting violently.
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 10 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Kutcher
+The runic configuration upon a Scimitar of Eagles in the grasp of Crixos flashes bright!
+11:27:41:233 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|0|18.4|0|9.2]
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 10 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Kutcher
+(((((((((((((((((((( EQUILIBRIUM:1.856 ))))))))))))))))))))
+You start to wield a twisted oaken staff in your hands.
+[PRONE] You lash out with a straight kick at the left shoulder of Kutcher.
+As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Kutcher's left arm. (9.2%)[PRONE] 
+[WEA] Falling back into a low crouch, you lash out with a swift strike at the left thigh of Kutcher.
+As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Kutcher's left leg. (9.2%)
+[CLU] As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Kutcher's left arm. (18.4%)
+You are now maintaining a kata chain of 13 actions.
+Kutcher stands up.
+(Party): You say, "Kutcher: prone."
+11:27:41:574 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+(Party): You say, "Hit Kutcher left arm for 9.2%."
+11:27:41:579 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+(Party): You say, "Kutcher: prone."
+11:27:41:585 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+(Party): You say, "Kutcher: weariness."
+11:27:41:587 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+(Party): You say, "Hit Kutcher left leg for 9.2%."
+11:27:41:591 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+(Party): You say, "Kutcher: clumsiness."
+11:27:41:597 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+(Party): You say, "Hit Kutcher left arm for 9.2%."
+11:27:41:600 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+Kutcher eats an aurum flake.
+(LEVI): [V3] kelp eaten - branched into 9 states
+(LEVI): [V3] kelp cured: asthma, weariness, healthleech, clumsiness
+(LEVI): [V3] Neg-confirm started: asthma, weariness, healthleech, clumsiness (1.3s)
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Rain | Kata: 13 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Transitioning to Oak
+[LOCK] Telepathy: mind impatience Kutcher
+[Oak]: Willow -- Gaital
+[Levi]: OAK FORM
+11:27:41:790 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+Crixos gives a complex series of whistles.
+Crixos whips a Scimitar of Eagles through the air in front of Tabethys, to no effect.
+Crixos swings a Scimitar of Eagles at Tabethys with all his might.
+Horror overcomes Tabethys's face as her body stiffens into paralysis.
+Crixos moves in to engage Tabethys.
+11:27:41:816 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Oak | Kata: 0 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Kutcher
+Akri lashes out with a swift, reaping blow at Tabethys.
+Gritting her teeth, Tabethys drives off the attempt to afflict her with paralysis.
+As the weapon strikes Tabethys, she seems greatly diminished.
+11:27:41:896 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+Tabethys eats a magnesium chip.
+Tabethys points an exquisite Mhaldorian staff of sterling silver at Kutcher, and an intangible wave of force strikes 
+forth to smite him.
+11:27:41:991 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Oak | Kata: 0 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Kutcher
+Kutcher takes some salve from a vial and rubs it on his body.
+11:27:42:195 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+A razor-beaked falcon rips out a chunk of Tabethys's flesh with its beak.
+11:27:42:198 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+A razor-beaked falcon flaps its powerful wings and departs.
+11:27:42:285 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Oak | Kata: 0 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Kutcher
+Tabethys takes a drink from an oaken vial.
+11:27:42:371 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+You suddenly perceive the vague outline of an aura of rebounding around Akri.
+11:27:42:406 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+Akri eats an aurum flake.
+11:27:42:568 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Oak | Kata: 0 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Kutcher
+Maldrantus lashes out with a swift, reaping blow at Akri.
+Horror overcomes Akri's face as her body stiffens into paralysis.
+As the weapon strikes Akri, the contact area begins to rot before your eyes.
+11:27:42:766 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+A razor-beaked falcon wings into the room with an angry cry.
+11:27:42:769 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+Kutcher takes a drink from an oaken vial.
+11:27:42:840 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+Valkyri skilfully whirls a flail toward the torso of Kutcher.
+[AST] Kutcher doubles over as the flail savagely crunches into his ribcage.
+Valkyri skilfully whirls a flail toward the left arm of Kutcher.
+[HLEECH] [CON] Kutcher stares about himself vacantly.
+The wet crunch of bone can be heard as the flail smashes into the left arm of Kutcher.
+11:27:42:852 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+(Party): Maldrantus says, "Akri: paralysis."
+11:27:42:856 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Oak | Kata: 0 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Kutcher
+(Party): You say, "Kutcher: asthma 1 crackedribs."
+11:27:42:904 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+(LEVI): [V3] Neg-confirm timeout -- unfolding branch for: asthma, weariness, healthleech, clumsiness
+A look of extreme focus crosses the face of Kutcher.
+(LEVI): [V3] Focus used - branched to 1 states
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Oak | Kata: 0 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Kutcher
+Kutcher eats a magnesium chip.
+Kutcher starts to wield a venerable bronze-hilted dagger in his right hand.
+11:27:43:161 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+You have recovered balance on your legs.
+(((((((((((((((((((( BALANCE: 1.951 ))))))))))))))))))))
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+[IMP] You fill the mind of Kutcher with an impatient feeling.
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Oak | Kata: 0 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+(Party): You say, "Kutcher: impatience."
+11:27:43:410 [13357] [98] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+Tabethys eats an aurum flake.
+11:27:43:585 [13357] [98] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Oak | Kata: 0 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Oak | Kata: 0 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+The sky grows dark as Tabethys calls upon powerful magics. Raising her hands balefully, she causes lightning bolts, the 
+hammer of the storm, to shoot from her hands and slam into Kutcher.
+Kutcher has been slain by Tabethys.
+            .-'~~~~~~~`-.
+          .'             `.
+          |   R . I . P   |
+          |               |
+          |    Kutcher    |
+        \\| * * * * * * * |//
+        ^^^^^^^^^^^^^^^^^^^^^
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): Reset target afflictions.
+11:27:43:896 [13357] [98] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+Crixos picks up the corpse of Kutcher.
+Crixos slashes into Tabethys with a Scimitar of Eagles.
+Cold blue flames wreathe Crixos's runeblade, emanating an icy, penetrating chill.
+Horror overcomes Tabethys's face as her body stiffens into paralysis.
+Crixos slashes into Tabethys with a Scimitar of Eagles.
+11:27:43:910 [13357] [98] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+Tabethys takes some salve from a vial and rubs it on her skin.
+Tabethys eats a potash crystal.
+I cannot fathom the meaning of "pdo".
+11:27:44:042 [13357] [98] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Oak | Kata: 0 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Akri eats a magnesium chip.
+Akri's aura of weapons rebounding disappears.
+Akri lashes out with a swift, reaping blow at Tabethys.
+As the weapon strikes Tabethys, she seems greatly diminished.
+11:27:44:158 [13357] [98] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+[TREE]: tree down on Kutcher for 10 seconds...
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Oak | Kata: 0 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Akri takes a long drag off her pipe.
+11:27:44:348 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Oak | Kata: 0 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+(((((((((((((((((((( EQUILIBRIUM:1.322 ))))))))))))))))))))
+You cease to wield a twisted oaken staff.
+You start to wield a Shar'ilian lightspire in your right hand.
+I do not recognise anything called that here.
+You detect nothing here by that name.
+(LEVI): Rebounding coming up in 1.2 seconds
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Oak | Kata: 0 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Maldrantus lashes out with a swift, reaping blow at Akri.
+Horror overcomes Akri's face as her body stiffens into paralysis.
+As the weapon strikes Akri, the contact area begins to rot before your eyes.
+11:27:44:778 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+You start to wield a twisted oaken staff in your hands.
+11:27:44:878 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+Nothing can be seen here by that name.
+11:27:44:883 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+You detect nothing here by that name.
+11:27:44:888 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+Tabethys takes some salve from a vial and rubs it on her skin.
+11:27:44:942 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+(Party): Maldrantus says, "Akri: paralysis."
+11:27:44:949 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Oak | Kata: 0 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+You cease to wield a twisted oaken staff.
+You start to wield a Shar'ilian lightspire in your right hand.
+11:27:45:136 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+Nothing can be seen here by that name.
+11:27:45:140 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+You detect nothing here by that name.
+11:27:45:215 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+Tabethys eats a magnesium chip.
+11:27:45:222 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Oak | Kata: 0 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Tabethys touches a tree of life tattoo.
+[AST] 11:27:45:336 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+Akri takes a drink from an elegant diamond vial.
+You suddenly perceive the vague outline of an aura of rebounding around Crixos.
+You start to wield a twisted oaken staff in your hands.
+11:27:45:446 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+You detect nothing here by that name.
+11:27:45:448 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+Ahh, I am truly sorry, but I do not see anyone by that name here.
+11:27:45:450 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Oak | Kata: 0 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Kutcher
+Your mental abilities have no power over the dead.
+11:27:45:654 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+Nothing can be seen here by that name.
+11:27:45:658 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+Crixos's aura of weapons rebounding disappears.
+Lightning-quick, Crixos jabs Tabethys with a Scimitar of Eagles.
+Lightning-quick, Crixos jabs Tabethys with a Scimitar of Eagles.
+11:27:45:748 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Oak | Kata: 0 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Kutcher
+Your mental abilities have no power over the dead.
+11:27:45:931 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+You cannot see that being here.
+11:27:45:935 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+Crixos takes a long drag off his pipe.
+Akri eats a magnesium chip.
+11:27:46:000 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+Akri moves with the grace of the wind, her stance the epitome of perfection beneath the flurry of blows.
+ ----------------------------------------------------------------------------------------- 
+|     EPITOMISE - AKRI - SWITCH TARGETS (6S) | EPITOMISE - AKRI - SWITCH TARGETS (6S)     |
+ ----------------------------------------------------------------------------------------- 
+11:27:46:006 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Oak | Kata: 0 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+(Party): Maldrantus says, "Akri EPITOMISED: most attacks miss for 9 seconds."
+11:27:46:076 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+(Party): You say, "Akri used EPITOMISE - switch targets for 6 seconds!"
+11:27:46:174 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+(Party): Tabethys says, "Akri EPITOMISED!"
+(Party): Tabethys says, "Akri EPITOMISED!"
+(Party): Tabethys says, "Akri EPITOMISED!"
+11:27:46:182 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+You cease to wield a twisted oaken staff.
+You start to wield a Shar'ilian lightspire in your right hand.
+11:27:46:196 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+You cannot see that being here.
+11:27:46:199 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+I do not recognise anything called that here.
+11:27:46:201 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+Valkyri starts to wield a Mhaldorian morning star in her left hand.
+Valkyri starts to wield a Mhaldorian morning star in her right hand.
+11:27:46:206 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+Seeing her situation to be hopeless, Makaeyla embraces the cold clutches of death.
+11:27:46:208 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+Akri lashes out with a swift, reaping blow at Tabethys.
+Horror overcomes Tabethys's face as her body stiffens into paralysis.
+As the weapon strikes Tabethys, she seems greatly diminished.
+11:27:46:271 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+A look of extreme focus crosses the face of Akri.
+11:27:46:350 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Oak | Kata: 0 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Kutcher
+Your mental abilities have no power over the dead.
+11:27:46:581 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+You cannot see that being here.
+11:27:46:586 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Oak | Kata: 0 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Kutcher
+Your mental abilities have no power over the dead.
+11:27:46:864 [13357] [100] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+Nothing can be seen here by that name.
+11:27:46:867 [13357] [100] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+[LOCK] SOFTLOCK | Target: Kutcher | Form: Oak | Kata: 0 | Kai: 18 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Tabethys eats a magnesium chip.
+Tabethys takes a drink from an oaken vial.
+11:27:46:947 [13357] [100] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+You start to wield a twisted oaken staff in your hands.
+11:27:47:041 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+You cannot see that being here.
+11:27:47:044 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+I do not recognise anything called that here.
+11:27:47:046 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+Akri eats an aurum flake.
+11:27:47:476 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+Crixos swings a Scimitar of Eagles at Tabethys with all his might.
+Gritting her teeth, Tabethys drives off the attempt to afflict her with paralysis.
+Crixos slashes into Tabethys with a Scimitar of Eagles.
+11:27:47:586 [13357] [99] |(Kutcher)|[ [ ]]  [0|0|18.4|18.4|9.2|9.2]
+(LEVI): Auto-targeting Akri (priority target in room).
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+[ClassDetect]: Switched curingset to: depthswalker (vs Depthswalker)
+(LEVI): Priority target: Akri.
+Alongside a perilous drop.
+Cerulean waters preside, fathom and depths stirred to roiling currents by the pervasive will of Neraeos Pelagia, Lord of
+the Sea. Vines have overtaken this location. The sun sets, its dimming rays lancing across the sky and lighting the dim 
+edges of cloud that hang there. A slender ledge pushes out and away from the safety of the mountain's face, the narrow 
+overhang descending gradually into wide gap several feet deep. Smaller rocks and stones skitter wildly over the 
+unfettered edge, plummeting down onto the rocks and boulders below. Jagged outcrops of rock force a wide berth around 
+the bulk of the mountain, as the pathway skirts dangerously close to the edge. There are 2 hulking phantom spiders here.
+Twinned albino orbs gleam upon the hilt of a crimson-hued daegger as it exudes its malevolent presence across the 
+surroundings. There are 7 corpses of a shade of might here. There are 6 corpses of a shade of nature here. There are 4 
+corpses of a shade of magic here. A pile of tattered black robes lies here, stained by the ectoplasm of a slain Icosse, 
+Mirrored Ire. A razor-beaked falcon looms overhead, seeking prey. Hands of rotting flesh and white bone push up from the
+ground. The surroundings are distorted, as if viewed through water. An unnatural darkness cloaks the location. Tyndran 
+Tabethys Aristata, Tyrannical Butcher of Baelgrim is riding on a hulking phantom spider. She wields a Shield of 
+Absorption in her left hand and an exquisite Mhaldorian staff of sterling silver in her right. Eradicator Maldrantus is 
+here, hidden. His features are obscured by a mask of lifevision. He wields a Shield of Absorption in his left hand and 
+Agith'maal's ire in his right. Imperial Sommelier Crixos is here. He wields a Scimitar of Eagles in each hand. Akri is 
+here, hidden. She wields a Shield of Absorption in her left hand and Agith'maal's ire in her right. Valkyri, Seeker of 
+Elocution is here. She wields a Mhaldorian morning star in each hand.
+You see exits leading east and southwest.
+(5) people here: Akri, Crixos, Maldrantus, Tabethys, Valkyri.
+11:27:48:002 [13357] [99] |(Akri)|[ [ ]]  
+Akri is not currently an ally.
+11:27:48:082 [13357] [99] |(Akri)|[ [ ]]  
+Akri is now one of your enemies.
+11:27:48:166 [13357] [99] |(Akri)|[ [ ]]  
+Your target is now: Akri (an adventurer)
+11:27:48:174 [13357] [99] |(Akri)|[ [ ]]  
+Your target is now: Akri (an adventurer)
+11:27:48:178 [13357] [99] |(Akri)|[ [ ]]  
+You will now cure using the depthswalker set.
+11:27:48:182 [13357] [99] |(Akri)|[ [ ]]  
+All your defence priorities have been reset to defaults.
+11:27:48:188 [13357] [99] |(Akri)|[ [ ]]  
+You may not set a priority for the 'avoid' defence.
+(Party): You say, "Target: Akri."
+11:27:48:264 [13357] [99] |(Akri)|[ [ ]]  
+Akri lashes out with a swift, reaping blow at Tabethys.
+Horror overcomes Tabethys's face as her body stiffens into paralysis.
+As the weapon strikes Tabethys, she seems greatly diminished.
+11:27:48:344 [13357] [99] |(Akri)|[ [ ]]  
+A nearly invisible magical shield forms around Tabethys.
+11:27:48:536 [13357] [99] |(Akri)|[ [ ]]  
+Tabethys eats an aurum flake.
+11:27:48:627 [13357] [99] |(Akri)|[ [ ]]  
+Akri eats an aurum flake.
+11:27:49:194 [13357] [99] |(Akri)|[ [ ]]  
+[TREE]: tree down on Akri for 5 seconds...
+Crixos moves to the side of his ally, Akri, ready to defend her against all foes.
+11:27:49:574 [13357] [99] |(Akri)|[ [ ]]  
+(LEVI): Target acquired. Focusing fire on Crixos!
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+[ClassDetect]: Switched curingset to: knights (vs Runewarden)
+Crixos is not currently an ally.
+11:27:49:657 [13357] [99] |(Crixos)|[ [ ]]  
+Crixos is now one of your enemies.
+11:27:49:739 [13357] [99] |(Crixos)|[ [ ]]  
+Your target is now: Crixos (an adventurer)
+11:27:49:745 [13357] [99] |(Crixos)|[ [ ]]  
+Your target is now: Crixos (an adventurer)
+11:27:49:748 [13357] [99] |(Crixos)|[ [ ]]  
+You will now cure using the knights set.
+11:27:49:752 [13357] [99] |(Crixos)|[ [ ]]  
+All your defence priorities have been reset to defaults.
+11:27:49:755 [13357] [99] |(Crixos)|[ [ ]]  
+You may not set a priority for the 'avoid' defence.
+(Party): You say, "Target: Crixos."
+11:27:49:799 [13357] [99] |(Crixos)|[ [ ]]  
+Valkyri lurches off balance as she misses Akri with a wild swing of a Mhaldorian morning star.
+11:27:49:802 [13357] [99] |(Crixos)|[ [ ]]  
+Tabethys eats a potash crystal.
+11:27:50:211 [13357] [99] |(Crixos)|[ [ ]]  
+Your face contorted in a twisted grimace, you clench your fists to crush the life out of Crixos.
+Crixos gasps and stumbles as an unseen force crushes the life breath out of him.
+11:27:50:297 [13357] [99] |(Crixos)|[ [ ]]  
+Tabethys eats a magnesium chip.
+Crixos takes a drink from a black-walnut vial.
+Crixos eats a potash crystal.
+Akri starts to wield Gattan'lier's hunger in her right hand.
+Akri raises Gattan'lier's hunger and points it at Tabethys with a sinister smile.
+The shadow of Akri suddenly comes alive, leaping forward to hammer at the magical shield surrounding Tabethys in a 
+silent frenzy of blows. Her protection lasts mere moments before exploding in a shower of prismatic shards.
+11:27:50:399 [13357] [99] |(Crixos)|[ [ ]]  
+(Party): You say, "Kai Choked Crixos."
+11:27:50:486 [13357] [99] |(Crixos)|[ [ ]]  
+Maldrantus reaches past Crixos, plunging Gattan'lier's hunger into his shadow.
+Maldrantus lashes out with a swift, reaping blow at Crixos.
+[PAR] [PAR] Horror overcomes Crixos's face as his body stiffens into paralysis.
+[CLU] As the weapon strikes Crixos, the contact area begins to rot before your eyes.
+11:27:50:502 [13357] [99] |(Crixos)|[ [ ]]  
+Maldrantus takes a drink from an elegant diamond vial.
+Crixos eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+11:27:50:576 [13357] [99] |(Crixos)|[ [ ]]  
+(Party): Maldrantus says, "Crixos: paralysis."
+11:27:50:661 [13357] [99] |(Crixos)|[ [ ]]  
+Crixos touches a tree of life tattoo.
+(LEVI): [V3] Tree used - branched to 1 states
+11:27:50:752 [13357] [99] |(Crixos)|[ [ ]]  
+The oppressive darkness lifts, light shining upon the land once more.
+11:27:51:243 [13357] [99] |(Crixos)|[ [ ]]  
+Valkyri lurches off balance as she misses Crixos with a wild swing of a Mhaldorian morning star.
+11:27:51:324 [13357] [99] |(Crixos)|[ [ ]]  
+A look of extreme focus crosses the face of Tabethys.
+Tabethys takes a drink from an oaken vial.
+11:27:51:408 [13357] [99] |(Crixos)|[ [ ]]  
+A razor-beaked falcon dives at Tabethys, raking her face with its talons.
+11:27:51:497 [13357] [99] |(Crixos)|[ [ ]]  
+As Tabethys turns away from Crixos, the isaz rune flares moments before Crixos delivers a vicious strike, throwing 
+Tabethys off balance.
+Akri starts to wield Agith'maal's ire in her right hand.
+A grey distortion coalesces about the blade of Agith'maal's ire, held by Akri.
+Akri lashes out with a swift, reaping blow at Tabethys.
+As the weapon strikes Tabethys, her face grows vacant and she begins to tremble.
+Grey fog begins to rise from the suddenly panicked-looking Tabethys.
+11:27:51:601 [13357] [99] |(Crixos)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Crixos | Form: Oak | Kata: 0 | Kai: 12 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] SOFTLOCK | Target: Crixos | Form: Oak | Kata: 0 | Kai: 12 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Tabethys eats a cuprum flake.
+11:27:51:972 [13357] [99] |(Crixos)|[ [ ]]  
+ ----------------------------------------------------------------------------------- 
+|     EPITOMISE ENDED - RESUME ATTACKING! | EPITOMISE ENDED - RESUME ATTACKING!     |
+ ----------------------------------------------------------------------------------- 
+-= Akri's EPITOMISE has ended! =-
+[LOCK] SOFTLOCK | Target: Crixos | Form: Oak | Kata: 0 | Kai: 12 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Crixos starts to wield a vorpal longsword in his left hand.
+Crixos starts to wield a blackened cavalry shield with ivory accents in his right hand.
+Lightning follows the path of a vorpal longsword as Crixos sweeps his weapon at Tabethys, a clap of thunder heralding 
+the bite of the blade.
+The blade sweeps through Tabethys, bisecting her without even slowing in its passing.
+Tabethys has been slain by Crixos.
+A starburst tattoo flares and bathes Tabethys in red light.
+11:27:52:416 [13357] [99] |(Crixos)|[ [ ]]  
+Crixos moves in to engage Tabethys.
+11:27:52:419 [13357] [99] |(Crixos)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Crixos | Form: Oak | Kata: 0 | Kai: 16 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+A swirling stream of heliotrope light emanates from a prismatic ring, surrounding Tabethys with a shimmering aura.
+Tabethys clenches her fists and grits her teeth.
+Tabethys applies a quicksilver droplet to herself.
+Tabethys takes some salve from a vial and rubs it on her skin.
+Tabethys eats a quartz grain.
+Tabethys takes a drink from a stygian vial.
+A frigid stream of cerulean light emanates from a prismatic ring, surrounding Tabethys with a frosty aura.
+A coruscating stream of sanguine light emanates from a prismatic ring, surrounding Tabethys with a scintillating aura.
+Tabethys takes a drink from a stygian vial.
+A crackling stream of argentine light emanates from a prismatic ring, surrounding Tabethys with a flickering aura.
+Tabethys takes a drink from an elegant diamond vial.
+11:27:52:499 [13357] [99] |(Crixos)|[ [ ]]  
+Maldrantus lashes out with a swift, reaping blow at Crixos.
+[PAR] [PAR] Horror overcomes Crixos's face as his body stiffens into paralysis.
+[CLU] As the weapon strikes Crixos, the contact area begins to rot before your eyes.
+11:27:52:536 [13357] [99] |(Crixos)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Crixos | Form: Oak | Kata: 0 | Kai: 16 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+(Party): Maldrantus says, "Crixos: paralysis."
+11:27:52:658 [13357] [99] |(Crixos)|[ [ ]]  
+Crixos eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+11:27:52:748 [13357] [99] |(Crixos)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Crixos | Form: Oak | Kata: 0 | Kai: 16 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+You suddenly perceive the vague outline of an aura of rebounding around Akri.
+11:27:52:853 [13357] [99] |(Crixos)|[ [ ]]  
+Tabethys easily vaults onto the back of a hulking phantom spider.
+11:27:52:964 [13357] [99] |(Crixos)|[ [ ]]  
+Crixos lashes out at Tabethys as she turns to flee.
+Tabethys, riding a hulking phantom spider, gathers the reins and jumps off to the southwest.
+11:27:52:968 [13357] [99] |(Crixos)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Crixos | Form: Oak | Kata: 0 | Kai: 16 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Valkyri whips a Mhaldorian morning star toward the torso of Crixos.
+Valkyri whips a Mhaldorian morning star toward the left arm of Crixos.
+An agonised expression contorts the face of Crixos.
+11:27:53:047 [13357] [99] |(Crixos)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Crixos | Form: Oak | Kata: 0 | Kai: 16 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+A razor-beaked falcon flaps its powerful wings and departs.
+11:27:53:315 [13357] [99] |(Crixos)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Crixos | Form: Oak | Kata: 0 | Kai: 16 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+(((((((((((((((((((( EQUILIBRIUM:3.366 ))))))))))))))))))))
+You cease to wield a twisted oaken staff.
+You start to wield a Shar'ilian lightspire in your right hand.
+You may not carry out a combination utilising Shikudo strikes without the required staff.
+ +[Crixos] HP: [=============       ] 66% -- 5709/8561 
+[LOCK] SOFTLOCK | Target: Crixos | Form: Oak | Kata: 0 | Kai: 16 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Akri's aura of weapons rebounding disappears.
+11:27:53:724 [13357] [98] |(Crixos)|[ [ ]]  
+Akri takes a long drag off her pipe.
+[LOCK] SOFTLOCK | Target: Crixos | Form: Oak | Kata: 0 | Kai: 16 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] SOFTLOCK | Target: Crixos | Form: Oak | Kata: 0 | Kai: 16 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[TREE]: Crixos can now use tree!!!
+[LOCK] SOFTLOCK | Target: Crixos | Form: Oak | Kata: 0 | Kai: 16 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Crixos eats an aurum flake.
+(LEVI): [V3] kelp cured: clumsiness
+Akri eats an aurum flake.
+11:27:54:515 [13357] [99] |(Crixos)|[ [ ]]  
+[REB] You suddenly perceive the vague outline of an aura of rebounding around Crixos.
+11:27:54:521 [13357] [99] |(Crixos)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Crixos | Form: Oak | Kata: 0 | Kai: 16 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Maldrantus lashes out with a swift, reaping blow at Crixos.
+[PAR] [PAR] Horror overcomes Crixos's face as his body stiffens into paralysis.
+[CLU] As the weapon strikes Crixos, the contact area begins to rot before your eyes.
+11:27:54:678 [13357] [99] |(Crixos)|[ [ ]]  
+(Party): Maldrantus says, "Crixos: paralysis."
+11:27:54:704 [13357] [99] |(Crixos)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Crixos | Form: Oak | Kata: 0 | Kai: 16 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] SOFTLOCK | Target: Crixos | Form: Oak | Kata: 0 | Kai: 16 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Crixos takes a drink from a black-walnut vial.
+11:27:54:997 [13357] [99] |(Crixos)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Crixos | Form: Oak | Kata: 0 | Kai: 16 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] SOFTLOCK | Target: Crixos | Form: Oak | Kata: 0 | Kai: 16 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Valkyri whips a Mhaldorian morning star toward the torso of Crixos.
+The attack rebounds back onto Valkyri!
+Valkyri whips a Mhaldorian morning star toward the left arm of Crixos.
+The attack rebounds back onto Valkyri!
+An agonised expression contorts the face of Valkyri.
+11:27:55:614 [13357] [99] |(Crixos)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Crixos | Form: Oak | Kata: 0 | Kai: 16 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Valkyri eats a ferrum flake.
+Valkyri takes a drink from a stygian vial.
+(((((((((((((((((((( EQUILIBRIUM:2.019 ))))))))))))))))))))
+You start to wield a twisted oaken staff in your hands.
+You drive your foot up in a rising kick at the torso of Crixos.
+As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Crixos's torso.? (9.2%)
+Your foot drives into the solar plexus of Crixos.
+Turning with the motion, you channel the momentum of your previous strike into a thrust at the solar plexus of Crixos 
+with a twisted oaken staff.
+As your blow lands with a crunch, you perceive that you have dealt 13.4% damage to Crixos's torso.? (22.6%)
+[AST] The breath of Crixos leaves him in an explosive gasp as the end of the staff smashes home.
+[SLI] As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Crixos's torso. (31.8%)
+Crixos staggers as the staff cracks across his ribs, sweat breaking out upon his forehead.
+[SLI] The protective coating covering the skin of Crixos sloughs off.
+You are now maintaining a kata chain of 3 actions.
+[LOCK] SOFTLOCK | Target: Crixos | Form: Oak | Kata: 3 | Kai: 16 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Crixos
+(Party): You say, "Hit Crixos torso for 9.2%."
+11:27:55:879 [13357] [99] |(Crixos)|[ [ ]]  [0|31.8|0|0|0|0]
+(Party): You say, "Hit Crixos torso for 13.4%."
+11:27:55:885 [13357] [99] |(Crixos)|[ [ ]]  [0|31.8|0|0|0|0]
+(Party): You say, "Crixos: slickness."
+11:27:55:889 [13357] [99] |(Crixos)|[ [ ]]  [0|31.8|0|0|0|0]
+(Party): You say, "Hit Crixos torso for 9.2%."
+11:27:55:892 [13357] [99] |(Crixos)|[ [ ]]  [0|31.8|0|0|0|0]
+[LOCK] SOFTLOCK | Target: Crixos | Form: Oak | Kata: 3 | Kai: 16 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Crixos
+Crixos eats a magnesium chip.
+(LEVI): [V3] bloodroot eaten - branched into 2 states
+(LEVI): [V3] bloodroot cured: paralysis, slickness
+(LEVI): [V3] Neg-confirm started: paralysis, slickness (1.3s)
+11:27:56:115 [13357] [99] |(Crixos)|[ [ ]]  [0|31.8|0|0|0|0]
+[LOCK] SOFTLOCK | Target: Crixos | Form: Oak | Kata: 3 | Kai: 16 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Crixos
+[LOCK] SOFTLOCK | Target: Crixos | Form: Oak | Kata: 3 | Kai: 16 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Crixos
+Crixos eats a potash crystal.
+11:27:56:518 [13357] [99] |(Crixos)|[ [ ]]  [0|31.8|0|0|0|0]
+(LEVI): No apply: bloodroot cured paralysis
+[LOCK] SOFTLOCK | Target: Crixos | Form: Oak | Kata: 3 | Kai: 16 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Crixos
+Maldrantus lashes out with a swift, reaping blow at Crixos.
+[WEA] As the weapon strikes Crixos, the contact area begins to rot before your eyes.
+[PAR] [PAR] Horror overcomes Crixos's face as his body stiffens into paralysis.
+11:27:56:751 [13357] [99] |(Crixos)|[ [ ]]  [0|31.8|0|0|0|0]
+Akri reaches past Maldrantus, plunging Gattan'lier's hunger into his shadow.
+A grey distortion coalesces about the blade of Agith'maal's ire, held by Akri.
+Akri lashes out with a swift, reaping blow at Maldrantus.
+As the weapon strikes Maldrantus, his face grows vacant and he begins to tremble.
+Grey fog begins to rise from the suddenly panicked-looking Maldrantus.
+11:27:56:783 [13357] [99] |(Crixos)|[ [ ]]  [0|31.8|0|0|0|0]
+(Party): Maldrantus says, "Crixos: weariness."
+11:27:56:878 [13357] [99] |(Crixos)|[ [ ]]  [0|31.8|0|0|0|0]
+Maldrantus eats a cuprum flake.
+Maldrantus touches a tree of life tattoo.
+11:27:56:955 [13357] [99] |(Crixos)|[ [ ]]  [0|31.8|0|0|0|0]
+[LOCK] SOFTLOCK | Target: Crixos | Form: Oak | Kata: 3 | Kai: 21 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Crixos
+[LOCK] SOFTLOCK | Target: Crixos | Form: Oak | Kata: 3 | Kai: 21 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Telepathy: mind impatience Crixos
+(Party): Tabethys says, "Target: Crixos."
+(LEVI): Target acquired. Focusing fire on Crixos!
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset[Limb]: Reset Crixos' torso.
+(LEVI): [V3] States reset
+(LEVI): Target acquired. Focusing fire on Crixos!
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+11:27:57:353 [13357] [100] |(Crixos)|[ [ ]]  
+Crixos is not currently an ally.
+11:27:57:408 [13357] [100] |(Crixos)|[ [ ]]  
+Crixos is already an enemy.
+11:27:57:486 [13357] [100] |(Crixos)|[ [ ]]  
+Your target is now: Crixos (an adventurer)
+11:27:57:491 [13357] [100] |(Crixos)|[ [ ]]  
+Your target is now: Crixos (an adventurer)
+11:27:57:496 [13357] [100] |(Crixos)|[ [ ]]  
+Crixos is not currently an ally.
+11:27:57:501 [13357] [100] |(Crixos)|[ [ ]]  
+Crixos is already an enemy.
+11:27:57:505 [13357] [100] |(Crixos)|[ [ ]]  
+Your target is now: Crixos (an adventurer)
+11:27:57:507 [13357] [100] |(Crixos)|[ [ ]]  
+Your target is now: Crixos (an adventurer)
+11:27:57:510 [13357] [100] |(Crixos)|[ [ ]]  
+(Party): You say, "Target: Crixos."
+11:27:57:513 [13357] [100] |(Crixos)|[ [ ]]  
+Crixos eats a magnesium chip.
+You have recovered balance on your legs.
+(((((((((((((((((((( BALANCE: 1.935 ))))))))))))))))))))
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+You cease to wield a twisted oaken staff.
+You start to wield a Shar'ilian lightspire in your right hand.
+You may not carry out a combination utilising Shikudo strikes without the required staff.
+Akri no longer moves with such sublime alacrity.
+11:27:57:937 [13357] [100] |(Crixos)|[ [ ]]  
+Valkyri starts to wield a flail in her left hand.
+Valkyri starts to wield a flail in her right hand.
+Valkyri swings a flail in a single, powerful blow at Crixos, shattering his aura of rebounding.
+11:27:58:038 [13357] [100] |(Crixos)|[ [ ]]  
+Crixos lets out a loud, long "MOOOOOOOOOOO!"
+11:27:58:215 [13357] [100] |(Crixos)|[ [ ]]  
+A look of extreme focus crosses the face of Crixos.
+(LEVI): [V3] Focus used - branched to 1 states
+11:27:58:297 [13357] [100] |(Crixos)|[ [ ]]  
+With a loud bleat, a mountain goat jumps in from the east.
+11:27:58:698 [13357] [100] |(Crixos)|[ [ ]]  
+A grey distortion coalesces about the blade of Agith'maal's ire, held by Maldrantus.
+Maldrantus lashes out with a swift, reaping blow at Crixos.
+[WEA|CLU|PAR] The face of Crixos contorts in pain.
+[TLO] Grey fog begins to rise from the suddenly panicked-looking Crixos.
+A grey distortion coalesces about the blade of Agith'maal's ire, held by Akri.
+Akri lashes out with a swift, reaping blow at Maldrantus.
+As the weapon strikes Maldrantus, his face grows vacant and he begins to tremble.
+Grey fog begins to rise from the suddenly panicked-looking Maldrantus.
+11:27:58:866 [13357] [100] |(Crixos)|[ [ ]]  
+Maldrantus eats a cuprum flake.
+Maldrantus takes a drink from an elegant diamond vial.
+11:27:59:018 [13357] [100] |(Crixos)|[ [ ]]  
+How are you wanting to use the Kai power?
+11:27:59:257 [13357] [100] |(Crixos)|[ [ ]]  
+Crixos eats a magnesium chip.
+Crixos applies a quicksilver droplet to himself.
+11:27:59:480 [13357] [99] |(Crixos)|[ [ ]]  
+Crixos raises an olive branch into the air, a bubble of uttermost serenity surrounding him.
+11:27:59:485 [13357] [99] |(Crixos)|[ [ ]]  
+Crixos takes a drink from a black-walnut vial.
+11:27:59:651 [13357] [99] |(Crixos)|[ [ ]]  
+Valkyri skilfully whirls a flail toward Crixos.
+The blow is robbed of all force as it enters the bubble of serenity surrounding Crixos.
+Valkyri skilfully whirls a flail toward Crixos.
+The blow is robbed of all force as it enters the bubble of serenity surrounding Crixos.
+[HLEECH] Crixos lets out a groan as his life is siphoned by the might of Evil.
+11:27:59:741 [13357] [99] |(Crixos)|[ [ ]]  
+An arrow shot by Tabethys flies towards Crixos.
+The arrow strikes Crixos, gouging a deep and bloody wound.
+The blow is robbed of all force as it enters the bubble of serenity surrounding Crixos.
+11:28:00:095 [13357] [99] |(Crixos)|[ [ ]]  
+(Party): Tabethys says, "Shot Crixos northeast!"
+(Party): Tabethys says, "Crixos: sensitivity."
+11:28:00:181 [13357] [99] |(Crixos)|[ [ ]]  
+Maldrantus eats a plumbum flake.
+11:28:00:594 [13357] [99] |(Crixos)|[ [ ]]  
+How are you wanting to use the Kai power?
+11:28:00:659 [13357] [99] |(Crixos)|[ [ ]]  
+Maldrantus lashes out with a swift, reaping blow at Crixos.
+The blow is robbed of all force as it enters the bubble of serenity surrounding Crixos.
+[PAR] [PAR] Horror overcomes Crixos's face as his body stiffens into paralysis.
+[WEA|CLU|PAR] The face of Crixos contorts in pain.
+The blow is robbed of all force as it enters the bubble of serenity surrounding Crixos.
+Akri lashes out with a swift, reaping blow at Maldrantus.
+Horror overcomes Maldrantus's face as his body stiffens into paralysis.
+As the weapon strikes Maldrantus, he seems greatly diminished.
+11:28:00:982 [13357] [99] |(Crixos)|[ [ ]]  
+Crixos eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+11:28:01:053 [13357] [99] |(Crixos)|[ [ ]]  
+(Party): Maldrantus says, "Crixos: paralysis."
+11:28:01:060 [13357] [99] |(Crixos)|[ [ ]]  
+The hands of the grave seize Crixos, preventing his escape.
+11:28:01:620 [13357] [99] |(Crixos)|[ [ ]]  
+How are you wanting to use the Kai power?
+11:28:01:934 [13357] [99] |(Crixos)|[ [ ]]  
+Maldrantus eats a magnesium chip.
+11:28:02:197 [13357] [99] |(Crixos)|[ [ ]]  
+You suddenly perceive the vague outline of an aura of rebounding around Akri.
+11:28:02:285 [13357] [99] |(Crixos)|[ [ ]]  
+Akri eats an aurum flake.
+11:28:02:371 [13357] [99] |(Crixos)|[ [ ]]  
+The blow is robbed of all force as it enters the bubble of serenity surrounding Crixos.
+11:28:02:459 [13357] [99] |(Crixos)|[ [ ]]  
+Crixos eats a potash crystal.
+How are you wanting to use the Kai power?
+11:28:02:543 [13357] [99] |(Crixos)|[ [ ]]  
+The hands of the grave seize Crixos, preventing his escape.
+11:28:02:664 [13357] [99] |(Crixos)|[ [ ]]  
+Crixos eats a cuprum flake.
+11:28:02:749 [13357] [99] |(Crixos)|[ [ ]]  
+An arrow shot by Tabethys flies towards Crixos.
+The arrow strikes Crixos, gouging a deep and bloody wound.
+The blow is robbed of all force as it enters the bubble of serenity surrounding Crixos.
+11:28:02:883 [13357] [99] |(Crixos)|[ [ ]]  
+A grey distortion coalesces about the blade of Agith'maal's ire, held by Maldrantus.
+Maldrantus grows older before your eyes.
+Maldrantus lashes out with a swift, reaping blow at Crixos.
+The blow is robbed of all force as it enters the bubble of serenity surrounding Crixos.
+[TLO] Grey fog begins to rise from the suddenly panicked-looking Crixos.
+[PAR] As the weapon strikes Crixos, the contact area begins to rot before your eyes.
+[PAR] [PAR] Horror overcomes Crixos's face as his body stiffens into paralysis.
+[TLO] [WEA|CLU|PAR] A grey miasma flares around Crixos.
+[WEA|CLU|PAR] The face of Crixos contorts in pain.
+The blow is robbed of all force as it enters the bubble of serenity surrounding Crixos.
+Akri's aura of weapons rebounding disappears.
+Akri lashes out with a swift, reaping blow at Maldrantus.
+Horror overcomes Maldrantus's face as his body stiffens into paralysis.
+As the weapon strikes Maldrantus, he seems greatly diminished.
+11:28:03:034 [13357] [99] |(Crixos)|[ [ ]]  
+(Party): Tabethys says, "Shot Crixos northeast!"
+(Party): Tabethys says, "Crixos: sensitivity."
+11:28:03:108 [13357] [99] |(Crixos)|[ [ ]]  
+Valkyri skilfully whirls a flail toward the torso of Crixos.
+The blow is robbed of all force as it enters the bubble of serenity surrounding Crixos.
+[AST] Crixos doubles over as the flail savagely crunches into his ribcage.
+Valkyri skilfully whirls a flail toward the left arm of Crixos.
+The blow is robbed of all force as it enters the bubble of serenity surrounding Crixos.
+A flail trembles in the hand of Valkyri as it strikes Crixos, a sanguine mist engulfing its wielder.
+[HLEECH] [CON] Crixos stares about himself vacantly.
+The wet crunch of bone can be heard as the flail smashes into the left arm of Crixos.
+11:28:03:209 [13357] [99] |(Crixos)|[ [ ]]  
+How are you wanting to use the Kai power?
+11:28:03:216 [13357] [99] |(Crixos)|[ [ ]]  
+Maldrantus eats a potash crystal.
+A look of extreme focus crosses the face of Crixos.
+(LEVI): [V3] Focus used - branched to 1 states
+Akri takes a long drag off her pipe.
+11:28:03:227 [13357] [99] |(Crixos)|[ [ ]]  
+(Party): You say, "Crixos: asthma 1 crackedribs."
+11:28:03:296 [13357] [99] |(Crixos)|[ [ ]]  
+Maldrantus takes a drink from an elegant diamond vial.
+11:28:03:559 [13357] [99] |(Crixos)|[ [ ]]  
+Maldrantus eats a magnesium chip.
+How are you wanting to use the Kai power?
+11:28:03:983 [13357] [99] |(Crixos)|[ [ ]]  
+Crixos takes a drink from a black-walnut vial.
+11:28:04:133 [13357] [99] |(Crixos)|[ [ ]]  
+Maldrantus gets down on one knee and serenades the world.
+A look of extreme focus crosses the face of Maldrantus.
+Crixos eats a magnesium chip.
+11:28:04:408 [13357] [100] |(Crixos)|[ [ ]]  
+How are you wanting to use the Kai power?
+11:28:04:503 [13357] [100] |(Crixos)|[ [ ]]  
+(LEVI): Auto-targeting Akri (priority target in room).
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+[ClassDetect]: Switched curingset to: depthswalker (vs Depthswalker)
+(LEVI): Priority target: Akri.
+Crixos picks up a monolith sigil.
+Crixos puts a monolith sigil into a dragonskin pack.
+Crixos says something unintelligible.
+You hear the distant whinny of a wild horse, and Crixos is gone.
+11:28:04:587 [13357] [100] |(Akri)|[ [ ]]  
+Akri is not currently an ally.
+11:28:04:652 [13357] [100] |(Akri)|[ [ ]]  
+Akri is already an enemy.
+11:28:04:737 [13357] [100] |(Akri)|[ [ ]]  
+Your target is now: Akri (an adventurer)
+11:28:04:745 [13357] [100] |(Akri)|[ [ ]]  
+Your target is now: Akri (an adventurer)
+11:28:04:748 [13357] [100] |(Akri)|[ [ ]]  
+You will now cure using the depthswalker set.
+11:28:04:749 [13357] [100] |(Akri)|[ [ ]]  
+All your defence priorities have been reset to defaults.
+11:28:04:753 [13357] [100] |(Akri)|[ [ ]]  
+You may not set a priority for the 'avoid' defence.
+(Party): You say, "Target: Akri."
+11:28:04:799 [13357] [100] |(Akri)|[ [ ]]  
+A great weight seems to have been lifted from Valkyri.
+11:28:05:014 [13357] [100] |(Akri)|[ [ ]]  
+Valkyri takes some salve from a vial and rubs it on her skin.
+11:28:05:020 [13357] [100] |(Akri)|[ [ ]]  
+Maldrantus moves with the grace of the wind, his stance the epitome of perfection beneath the flurry of blows.
+ ----------------------------------------------------------------------------------------------------- 
+|     EPITOMISE - MALDRANTUS - SWITCH TARGETS (6S) | EPITOMISE - MALDRANTUS - SWITCH TARGETS (6S)     |
+ ----------------------------------------------------------------------------------------------------- 
+A grey distortion coalesces about the blade of Agith'maal's ire, held by Akri.
+Akri grows older before your eyes.
+Akri lashes out with a swift, reaping blow at Maldrantus.
+Grey fog begins to rise from the suddenly panicked-looking Maldrantus.
+As the weapon strikes Maldrantus, he seems greatly diminished.
+A grey miasma flares around Maldrantus.
+As the scythe comes away, the writhing shadow of Maldrantus clings to the weapon.
+11:28:05:176 [13357] [100] |(Akri)|[ [ ]]  
+Maldrantus takes a long drag off his pipe.
+11:28:05:236 [13357] [100] |(Akri)|[ [ ]]  
+(Party): You say, "Maldrantus used EPITOMISE - switch targets for 6 seconds!"
+11:28:05:341 [13357] [100] |(Akri)|[ [ ]]  
+How are you wanting to use the Kai power?
+11:28:05:347 [13357] [100] |(Akri)|[ [ ]]  
+Maldrantus eats a cuprum flake.
+[AST] 11:28:05:587 [13357] [100] |(Akri)|[ [ ]]  
+Valkyri starts to wield a Mhaldorian morning star in her left hand.
+Valkyri starts to wield a Mhaldorian morning star in her right hand.
+Valkyri whips a Mhaldorian morning star toward Akri.
+Valkyri whips a Mhaldorian morning star toward Akri.
+An agonised expression contorts the face of Akri.
+11:28:06:472 [13357] [100] |(Akri)|[ [ ]]  
+Akri eats a ferrum flake.
+11:28:06:552 [13357] [100] |(Akri)|[ [ ]]  
+(Party): Tabethys says, "Target: Akri."
+(LEVI): Target acquired. Focusing fire on Akri!
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): Target acquired. Focusing fire on Akri!
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+11:28:06:882 [13357] [100] |(Akri)|[ [ ]]  
+Akri is not currently an ally.
+11:28:07:007 [13357] [100] |(Akri)|[ [ ]]  
+Akri is already an enemy.
+11:28:07:093 [13357] [100] |(Akri)|[ [ ]]  
+Your target is now: Akri (an adventurer)
+11:28:07:098 [13357] [100] |(Akri)|[ [ ]]  
+Your target is now: Akri (an adventurer)
+11:28:07:104 [13357] [100] |(Akri)|[ [ ]]  
+Akri is not currently an ally.
+11:28:07:109 [13357] [100] |(Akri)|[ [ ]]  
+Akri is already an enemy.
+11:28:07:113 [13357] [100] |(Akri)|[ [ ]]  
+Your target is now: Akri (an adventurer)
+11:28:07:117 [13357] [100] |(Akri)|[ [ ]]  
+Your target is now: Akri (an adventurer)
+11:28:07:120 [13357] [100] |(Akri)|[ [ ]]  
+(Party): You say, "Target: Akri."
+11:28:07:124 [13357] [100] |(Akri)|[ [ ]]  
+Maldrantus eats an aurum flake.
+Akri lashes out with a swift, reaping blow at Maldrantus.
+Horror overcomes Maldrantus's face as his body stiffens into paralysis.
+As the weapon strikes Maldrantus, the contact area begins to rot before your eyes.
+11:28:07:292 [13357] [100] |(Akri)|[ [ ]]  
+(LEVI): Target acquired. Focusing fire on Akri!
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+Akri is not currently an ally.
+11:28:07:383 [13357] [100] |(Akri)|[ [ ]]  
+Akri is already an enemy.
+11:28:07:470 [13357] [99] |(Akri)|[ [ ]]  
+Your target is now: Akri (an adventurer)
+11:28:07:476 [13357] [99] |(Akri)|[ [ ]]  
+Your target is now: Akri (an adventurer)
+11:28:07:480 [13357] [99] |(Akri)|[ [ ]]  
+(Party): You say, "Target: Akri."
+11:28:07:483 [13357] [99] |(Akri)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 3 | Kai: 46 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+You start to wield a twisted oaken staff in your hands.
+11:28:08:098 [13357] [99] |(Akri)|[ [ ]]  
+You drive your foot up in a rising kick at the torso of Akri.
+As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Akri's torso. (9.2%)
+Your foot drives into the solar plexus of Akri.
+Turning with the motion, you channel the momentum of your previous strike into a thrust at the solar plexus of Akri with
+a twisted oaken staff.
+As your blow lands with a crunch, you perceive that you have dealt 13.4% damage to Akri's torso. (22.6%)
+The breath of Akri leaves her in an explosive gasp as the end of the staff smashes home.
+As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Akri's torso. (31.8%)
+Akri staggers as the staff cracks across her ribs, sweat breaking out upon her forehead.
+[SLI] The protective coating covering the skin of Akri sloughs off.
+You are now maintaining a kata chain of 6 actions.
+11:28:08:114 [13357] [99] |(Akri)|[ [ ]]  [0|31.8|0|0|0|0]
+Maldrantus takes a drink from an elegant diamond vial.
+Akri eats an aurum flake.
+Akri takes a long drag off her pipe.
+(LEVI): [V3] smoke cured: slickness
+Akri applies a quicksilver droplet to herself.
+Akri takes a drink from an elegant diamond vial.
+11:28:08:172 [13357] [99] |(Akri)|[ [ ]]  [0|31.8|0|0|0|0]
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 6 | Kai: 46 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+(Party): You say, "Hit Akri torso for 9.2%."
+11:28:08:245 [13357] [99] |(Akri)|[ [ ]]  [0|31.8|0|0|0|0]
+(Party): You say, "Hit Akri torso for 13.4%."
+11:28:08:249 [13357] [99] |(Akri)|[ [ ]]  [0|31.8|0|0|0|0]
+(Party): You say, "Hit Akri torso for 9.2%."
+11:28:08:255 [13357] [99] |(Akri)|[ [ ]]  [0|31.8|0|0|0|0]
+An arrow shot by Tabethys flies towards Akri.
+The arrow sails harmlessly past Akri.
+11:28:08:425 [13357] [99] |(Akri)|[ [ ]]  [0|31.8|0|0|0|0]
+(Party): Tabethys says, "Missed Akri to the northeast."
+11:28:08:430 [13357] [99] |(Akri)|[ [ ]]  [0|31.8|0|0|0|0]
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 6 | Kai: 46 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 6 | Kai: 46 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 6 | Kai: 46 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Valkyri whips a Mhaldorian morning star toward the torso of Akri.
+[PAR] [PAR] Horror overcomes Akri's face as her body stiffens into paralysis.
+Valkyri whips a Mhaldorian morning star toward the left arm of Akri.
+An agonised expression contorts the face of Akri.
+11:28:08:942 [13357] [99] |(Akri)|[ [ ]]  [0|31.8|0|0|0|0]
+Maldrantus eats a magnesium chip.
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 6 | Kai: 46 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Maldrantus eats a potash crystal.
+11:28:09:156 [13357] [99] |(Akri)|[ [ ]]  [0|31.8|0|0|0|0]
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 6 | Kai: 46 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 6 | Kai: 46 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 6 | Kai: 46 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Akri eats a magnesium chip.
+Akri takes a long drag off her pipe.
+Akri lashes out with a swift, reaping blow at Maldrantus.
+Horror overcomes Maldrantus's face as his body stiffens into paralysis.
+As the weapon strikes Maldrantus, the contact area begins to rot before your eyes.
+11:28:09:827 [13357] [99] |(Akri)|[ [ ]]  [0|31.8|0|0|0|0]
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 6 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Akri touches a tree of life tattoo.
+(LEVI): [V3] Tree used - branched to 1 states
+11:28:10:006 [13357] [99] |(Akri)|[ [ ]]  [0|31.8|0|0|0|0]
+[TREE]: tree down on Akri for 14 seconds...
+You have recovered balance on your legs.
+(((((((((((((((((((( BALANCE: 1.936 ))))))))))))))))))))
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+ +[Akri] HP: [=================   ] 87% -- 6260/7171 
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 6 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 6 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 6 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Maldrantus eats a magnesium chip.
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 6 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Maldrantus touches a tree of life tattoo.
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 6 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+An arrow shot by Tabethys flies towards Akri.
+The arrow strikes Akri, gouging a deep and bloody wound.
+11:28:11:099 [13357] [99] |(Akri)|[ [ ]]  [0|31.8|0|0|0|0]
+ ----------------------------------------------------------------------------------- 
+|     EPITOMISE ENDED - RESUME ATTACKING! | EPITOMISE ENDED - RESUME ATTACKING!     |
+ ----------------------------------------------------------------------------------- 
+-= Maldrantus's EPITOMISE has ended! =-
+Akri eats a potash crystal.
+11:28:11:189 [13357] [99] |(Akri)|[ [ ]]  [0|31.8|0|0|0|0]
+(Party): Tabethys says, "Shot Akri northeast!"
+(Party): Tabethys says, "Akri: sensitivity."
+11:28:11:197 [13357] [99] |(Akri)|[ [ ]]  [0|31.8|0|0|0|0]
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 6 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Akri eats an aurum flake.
+11:28:11:311 [13357] [99] |(Akri)|[ [ ]]  [0|31.8|0|0|0|0]
+Valkyri whips a Mhaldorian morning star toward the torso of Akri.
+[PAR] [PAR] Horror overcomes Akri's face as her body stiffens into paralysis.
+Valkyri whips a Mhaldorian morning star toward the left arm of Akri.
+An agonised expression contorts the face of Akri.
+The wet crunch of bone can be heard as the morningstar smashes into the left arm of Akri.
+11:28:11:419 [13357] [99] |(Akri)|[ [ ]]  [0|31.8|0|0|0|0]
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 6 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Akri takes a long drag off her pipe.
+11:28:11:530 [13357] [99] |(Akri)|[ [ ]]  [0|31.8|0|0|0|0]
+With a powerful leap, a mountain goat leaves to the east.
+11:28:11:643 [13357] [99] |(Akri)|[ [ ]]  [0|31.8|0|0|0|0]
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 6 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 6 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Maldrantus leaves to the southwest.
+11:28:12:030 [13357] [99] |(Akri)|[ [ ]]  [0|31.8|0|0|0|0]
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 6 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+(((((((((((((((((((( EQUILIBRIUM:2.149 ))))))))))))))))))))
+You cease to wield a twisted oaken staff.
+You start to wield a Shar'ilian lightspire in your right hand.
+You may not carry out a combination utilising Shikudo strikes without the required staff.
+You start to wield a twisted oaken staff in your hands.
+11:28:12:273 [13357] [99] |(Akri)|[ [ ]]  [0|31.8|0|0|0|0]
+You drive your foot up in a rising kick at the torso of Akri.
+As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Akri's torso. (41%)
+Your foot drives into the solar plexus of Akri.
+Turning with the motion, you channel the momentum of your previous strike into a thrust at the solar plexus of Akri with
+a twisted oaken staff.
+As your blow lands with a crunch, you perceive that you have dealt 13.4% damage to Akri's torso. (54.4%)
+The breath of Akri leaves her in an explosive gasp as the end of the staff smashes home.
+As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Akri's torso. (63.6%)
+Akri staggers as the staff cracks across her ribs, sweat breaking out upon her forehead.
+You are now maintaining a kata chain of 9 actions.
+11:28:12:295 [13357] [99] |(Akri)|[ [ ]]  [0|63.6|0|0|0|0]
+(Party): You say, "Hit Akri torso for 9.2%."
+11:28:12:359 [13357] [99] |(Akri)|[ [ ]]  [0|63.6|0|0|0|0]
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 9 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+(Party): You say, "Hit Akri torso for 13.4%."
+11:28:12:441 [13357] [99] |(Akri)|[ [ ]]  [0|63.6|0|0|0|0]
+(Party): You say, "Hit Akri torso for 9.2%."
+11:28:12:448 [13357] [99] |(Akri)|[ [ ]]  [0|63.6|0|0|0|0]
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 9 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Akri takes a drink from an elegant diamond vial.
+11:28:12:700 [13357] [99] |(Akri)|[ [ ]]  [0|63.6|0|0|0|0]
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 9 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 9 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Akri eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+11:28:13:077 [13357] [99] |(Akri)|[ [ ]]  [0|63.6|0|0|0|0]
+Akri points a wand of reflection at herself.
+4 reflections of her appear!
+11:28:13:139 [13357] [99] |(Akri)|[ [ ]]  [0|63.6|0|0|0|0]
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 9 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Akri points a wand of reflection at herself.
+11:28:13:424 [13357] [99] |(Akri)|[ [ ]]  [0|63.6|0|0|0|0]
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 9 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Akri points a wand of reflection at herself.
+11:28:13:643 [13357] [99] |(Akri)|[ [ ]]  [0|63.6|0|0|0|0]
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 9 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Akri points a wand of reflection at herself.
+11:28:13:869 [13357] [99] |(Akri)|[ [ ]]  [0|63.6|0|0|0|0]
+An arrow shot by Tabethys flies towards Akri.
+The arrow strikes Akri, gouging a deep and bloody wound.
+A reflection of Akri blinks out of existence.
+11:28:13:875 [13357] [99] |(Akri)|[ [ ]]  [0|63.6|0|0|0|0]
+[ClassDetect]: Combat ended, curingset reset to: normal
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 9 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+(Party): Tabethys says, "Shot Akri northeast!"
+(Party): Tabethys says, "Akri: sensitivity."
+11:28:13:944 [13357] [99] |(Akri)|[ [ ]]  [0|63.6|0|0|0|0]
+Valkyri starts to wield a flail in her left hand.
+Valkyri starts to wield a flail in her right hand.
+Valkyri skilfully whirls a flail toward Akri.
+The attack harmlessly passes through one of Akri's reflections.
+The attack harmlessly passes through one of Akri's reflections.
+11:28:13:955 [13357] [99] |(Akri)|[ [ ]]  [0|63.6|0|0|0|0]
+You will now cure using the normal set.
+11:28:13:984 [13357] [99] |(Akri)|[ [ ]]  [0|63.6|0|0|0|0]
+[TREE]: tree down on Akri for 10 seconds...
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 9 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+You have recovered balance on your legs.
+(((((((((((((((((((( BALANCE: 2.024 ))))))))))))))))))))
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+ +[Akri] HP: [============        ] 64% -- 4617/7171 
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 9 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 9 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Akri eats an aurum flake.
+11:28:14:876 [13357] [99] |(Akri)|[ [ ]]  [0|63.6|0|0|0|0]
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 9 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 9 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+(LEVI): Rebounding coming up in 1.2 seconds
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 9 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+You are dismayed as the corpse of a Dyissan archer turns to dust in your hands.
+11:28:15:376 [13357] [99] |(Akri)|[ [ ]]  [0|63.6|0|0|0|0]
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 9 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Crixos appears, a look of love in his eyes.
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 9 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 9 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Crixos eats an aurum flake.
+11:28:16:239 [13357] [99] |(Akri)|[ [ ]]  [0|63.6|0|0|0|0]
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 9 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+(((((((((((((((((((( EQUILIBRIUM:2.196 ))))))))))))))))))))
+You cease to wield a twisted oaken staff.
+You start to wield a Shar'ilian lightspire in your right hand.
+You may not carry out a combination utilising Shikudo strikes without the required staff.
+A look of relief comes over Akri as she grows less pale.
+Akri grows older before your eyes.
+(LEVI): [V3] Passive cure (2) - no curable affs tracked
+11:28:16:518 [13357] [99] |(Akri)|[ [ ]]  [0|63.6|0|0|0|0]
+You start to wield a twisted oaken staff in your hands.
+11:28:16:524 [13357] [99] |(Akri)|[ [ ]]  [0|63.6|0|0|0|0]
+You drive your foot up in a rising kick at the torso of Akri.
+A reflection of Akri blinks out of existence.
+Turning with the motion, you channel the momentum of your previous strike into a thrust at the solar plexus of Akri with
+a twisted oaken staff.
+The attack harmlessly passes through one of Akri's reflections.
+The attack harmlessly passes through one of Akri's reflections.
+You are now maintaining a kata chain of 12 actions.
+11:28:16:532 [13357] [99] |(Akri)|[ [ ]]  [0|63.6|0|0|0|0]
+[LOCK] SOFTLOCK | Target: Akri | Form: Oak | Kata: 12 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] Transitioning to Gaital
+Tabethys, riding a hulking phantom spider, arrives from the southwest.
+Tabethys ceases to wield a Lupine bow.
+Tabethys starts to wield an exquisite Mhaldorian staff of sterling silver in her left hand.
+Tabethys starts to wield a Shield of Absorption in her right hand.
+The sky grows dark as Tabethys calls upon powerful magics. Raising her hands balefully, she causes lightning bolts, the 
+hammer of the storm, to shoot from her hands and slam into Akri.
+The attack harmlessly passes through one of Akri's reflections.
+11:28:16:589 [13357] [99] |(Akri)|[ [ ]]  [0|63.6|0|0|0|0]
+Akri eats an aurum flake.
+11:28:16:631 [13357] [99] |(Akri)|[ [ ]]  [0|63.6|0|0|0|0]
+(Party): Tabethys says, "Target: Crixos."[Limb]: Reset Akri's torso.
+(LEVI): Target acquired. Focusing fire on Crixos!
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+[ClassDetect]: Switched curingset to: knights (vs Runewarden)
+(LEVI): Target acquired. Focusing fire on Crixos!
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+11:28:16:729 [13357] [99] |(Crixos)|[ [ ]]  
+[Gaital]: Rain -- Maelstrom
+[Levi]: GAITAL FORM
+11:28:16:744 [13357] [99] |(Crixos)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Crixos | Form: Gaital | Kata: 0 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Crixos is not currently an ally.
+11:28:16:803 [13357] [99] |(Crixos)|[ [ ]]  
+(LEVI): Rebounding coming up in 1.2 seconds
+Crixos is already an enemy.
+11:28:16:904 [13357] [99] |(Crixos)|[ [ ]]  
+Your target is now: Crixos (an adventurer)
+11:28:16:906 [13357] [99] |(Crixos)|[ [ ]]  
+Your target is now: Crixos (an adventurer)
+11:28:16:908 [13357] [99] |(Crixos)|[ [ ]]  
+You will now cure using the knights set.
+11:28:16:910 [13357] [99] |(Crixos)|[ [ ]]  
+All your defence priorities have been reset to defaults.
+11:28:16:915 [13357] [99] |(Crixos)|[ [ ]]  
+You may not set a priority for the 'avoid' defence.
+Crixos is not currently an ally.
+11:28:16:953 [13357] [99] |(Crixos)|[ [ ]]  
+Crixos is already an enemy.
+11:28:16:955 [13357] [99] |(Crixos)|[ [ ]]  
+Your target is now: Crixos (an adventurer)
+11:28:16:957 [13357] [99] |(Crixos)|[ [ ]]  
+Your target is now: Crixos (an adventurer)
+11:28:16:960 [13357] [99] |(Crixos)|[ [ ]]  
+(Party): You say, "Target: Crixos."
+11:28:16:962 [13357] [99] |(Crixos)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Crixos | Form: Gaital | Kata: 0 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Akri takes a drink from an elegant diamond vial.
+Akri eats a potash crystal.
+11:28:17:030 [13357] [99] |(Crixos)|[ [ ]]  
+Crixos points a wand of reflection at Akri.
+7 reflections of her appear!
+11:28:17:115 [13357] [99] |(Crixos)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Crixos | Form: Gaital | Kata: 0 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Valkyri skilfully whirls a flail toward the torso of Crixos.
+Valkyri skilfully whirls a flail toward the left arm of Crixos.
+[HLEECH] Crixos lets out a groan as his life is siphoned by the might of Evil.
+11:28:17:212 [13357] [99] |(Crixos)|[ [ ]]  
+Crixos takes a drink from a black-walnut vial.
+Crixos eats a potash crystal.
+11:28:17:250 [13357] [99] |(Crixos)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Crixos | Form: Gaital | Kata: 0 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] SOFTLOCK | Target: Crixos | Form: Gaital | Kata: 0 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[LOCK] SOFTLOCK | Target: Crixos | Form: Gaital | Kata: 0 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Crixos eats an aurum flake.
+(LEVI): [V3] kelp cured: healthleech
+A razor-beaked falcon swoops down from the skies to land beside you.
+11:28:18:044 [13357] [100] |(Crixos)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Crixos | Form: Gaital | Kata: 0 | Kai: 51 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+A supple metallic shell of quicksilver has formed around Akri.
+[LOCK] SOFTLOCK | Target: Crixos | Form: Gaital | Kata: 0 | Kai: 41 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Akri eats a ferrum flake.
+11:28:18:354 [13357] [100] |(Crixos)|[ [ ]]  
+Maldrantus arrives from the southwest.
+11:28:18:462 [13357] [100] |(Crixos)|[ [ ]]  
+(LEVI): Rebounding coming up in 1.2 seconds
+[LOCK] SOFTLOCK | Target: Crixos | Form: Gaital | Kata: 0 | Kai: 41 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+You have recovered balance on your legs.
+(((((((((((((((((((( BALANCE: 2.026 ))))))))))))))))))))
+You have recovered balance on your right arm.
+You have recovered balance on your left arm.
+You glance over Akri and see that her health is at 7171/7171 [100%].
+[LOCK] SOFTLOCK | Target: Crixos | Form: Gaital | Kata: 0 | Kai: 41 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+A nearly invisible magical shield forms around Akri.
+[LOCK] SOFTLOCK | Target: Crixos | Form: Gaital | Kata: 0 | Kai: 41 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+[TREE]: tree down on Crixos for 5 seconds...
+Crixos touches a tree of life tattoo.
+(LEVI): [V3] Tree used - branched to 1 states
+11:28:19:038 [13357] [99] |(Crixos)|[ [ ]]  
+A razor-beaked falcon dives at Tabethys, raking her face with its talons.
+11:28:19:123 [13357] [99] |(Crixos)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Crixos | Form: Gaital | Kata: 0 | Kai: 41 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+All of Maldrantus's reflections wink out of existence!
+Maldrantus reaches past Crixos, plunging Gattan'lier's hunger into his shadow.
+Maldrantus lashes out with a swift, reaping blow at Crixos.
+[PAR] [PAR] Horror overcomes Crixos's face as his body stiffens into paralysis.
+[CLU] As the weapon strikes Crixos, the contact area begins to rot before your eyes.
+11:28:19:306 [13357] [99] |(Crixos)|[ [ ]]  
+(Party): You say, "Crixos: unknown clumsiness."
+11:28:19:446 [13357] [99] |(Crixos)|[ [ ]]  
+(Party): Maldrantus says, "Crixos: paralysis."
+11:28:19:450 [13357] [99] |(Crixos)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Crixos | Form: Gaital | Kata: 0 | Kai: 41 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Crixos eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+[REB] You suddenly perceive the vague outline of an aura of rebounding around Crixos.
+11:28:19:643 [13357] [99] |(Crixos)|[ [ ]]  
+Crixos's aura of weapons rebounding disappears.
+Crixos moves to the side of his ally, Akri, ready to defend her against all foes.
+11:28:19:711 [13357] [99] |(Crixos)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Crixos | Form: Gaital | Kata: 0 | Kai: 41 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Crixos takes a long drag off his pipe.
+11:28:19:788 [13357] [99] |(Crixos)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Crixos | Form: Gaital | Kata: 0 | Kai: 41 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Akri eats an aurum flake.
+11:28:19:956 [13357] [99] |(Crixos)|[ [ ]]  
+You suddenly perceive the vague outline of an aura of rebounding around Akri.
+11:28:20:110 [13357] [99] |(Crixos)|[ [ ]]  
+[LOCK] SOFTLOCK | Target: Crixos | Form: Gaital | Kata: 0 | Kai: 41 KAI CHOKE READY
+[LOCK] Affs: asthma anorexia slickness para impat weary
+Valkyri starts to wield a Mhaldorian morning star in her left hand.
+Valkyri starts to wield a Mhaldorian morning star in her right hand.
+Valkyri whips a Mhaldorian morning star toward Crixos.
+Valkyri whips a Mhaldorian morning star toward Crixos.
+An agonised expression contorts the face of Crixos.
+11:28:20:577 [13357] [99] |(Crixos)|[ [ ]]  
+(((((((((((((((((((( EQUILIBRIUM:2.124 ))))))))))))))))))))
+You cease to wield a twisted oaken staff.
+You start to wield a Shar'ilian lightspire in your right hand.
+You may not carry out a combination utilising Shikudo strikes without the required staff.
+Crixos eats an aurum flake.
+(LEVI): [V3] kelp cured: clumsiness
+11:28:21:136 [13357] [99] |(Crixos)|[ [ ]]  
+The sky grows dark as Tabethys calls upon powerful magics. Raising her hands balefully, she causes lightning bolts, the 
+hammer of the storm, to shoot from her hands and slam into Crixos.
+11:28:21:220 [13357] [99] |(Crixos)|[ [ ]]  
+I'm sorry, I don't know what "mhba" does.
+11:28:21:378 [13357] [99] |(Crixos)|[ [ ]]  
+Maldrantus lashes out with a swift, reaping blow at Crixos.
+[PAR] [PAR] Horror overcomes Crixos's face as his body stiffens into paralysis.
+[CLU] As the weapon strikes Crixos, the contact area begins to rot before your eyes.
+11:28:21:457 [13357] [99] |(Crixos)|[ [ ]]  
+(Party): Maldrantus says, "Crixos: paralysis."
+11:28:21:501 [13357] [99] |(Crixos)|[ [ ]]  
+Maldrantus takes a drink from an elegant diamond vial.
+Akri takes some elixir from an elegant diamond vial and rubs it into her arms.
+Akri eats a ferrum flake.
+(Party): You say, "Crixos: unknown clumsiness."
+11:28:21:598 [13357] [99] |(Crixos)|[ [ ]]  
+Crixos takes a drink from a black-walnut vial.
+11:28:21:940 [13357] [99] |(Crixos)|[ [ ]]  
+A razor-beaked falcon dives at Tabethys, raking her face with its talons.
+11:28:22:160 [13357] [99] |(Crixos)|[ [ ]]  
+(LEVI): Auto-targeting Akri (priority target in room).
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset

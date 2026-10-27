@@ -77,6 +77,9 @@ local nowT = (getEpoch and getEpoch()) or os.time()
 ataxiaTemp = ataxiaTemp or {}
 if (nowT - (tonumber(ataxiaTemp.kaiChokeSaidAt) or 0)) < 1 then return end
 ataxiaTemp.kaiChokeSaidAt = nowT
+-- v4.7.456: the group damage route waits for the landing line (highlighting/063); none means the
+-- target may be holding its breath, and the route uses MIND CRUSH for a while (shikudo/013).
+if type(target) == "string" and shikudoDmg and shikudoDmg.chokeCast then shikudoDmg.chokeCast(target) end
 
 if partyrelay and target and not ataxia.afflictions.aeon and type(target) ~= "number" then
   send("pt Kai Choked " ..target)

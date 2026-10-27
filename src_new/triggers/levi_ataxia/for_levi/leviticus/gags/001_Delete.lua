@@ -71,6 +71,10 @@ patterns:
 -- strikes while bashing too (v4.7.420 review). PvE as the basher's triggers 337/338 tell it: a
 -- numeric target, or the basher on.
 if type(target) ~= "string" or (ataxiaBasher and ataxiaBasher.enabled) then return end
+-- With the [SK] combo line on (shikudo/012, v4.7.456) our strikes stay on screen: the user wants
+-- to SEE them ("so I can actually see if we are hitting someone"), and a deleted strike row moved
+-- the affliction tags of the rows below it onto the wrong line. `skecho off` gags them again.
+if shikudoEcho and shikudoEcho.enabled and shikudoEcho.enabled() then return end
 
 deleteFull()
 -- A row that does not finish its sentence was wrapped: gag the next row too, or its tail is left
