@@ -38,7 +38,11 @@ patterns:
 ]]--
 
 lb.addHit(matches.name, matches.limb, tonumber(matches.amount))
-if partyrelay and not ataxia.afflictions.aeon then
+-- The per-hit limb call, "Hit Sadey left arm for 9.2%." One per damage line: a Shikudo combo made
+-- three of them, among eight party says a combo in the 2026-10-27 group log. `relaylimbs on|off`
+-- (ataxia_relayLimbHits, misc_scripts/031); unset, it is off for a Monk and on for every other
+-- class, as before (v4.7.456).
+if partyrelay and not ataxia.afflictions.aeon and (not ataxia_relayLimbHits or ataxia_relayLimbHits()) then
 send("pt Hit " ..matches.name.." "..matches.limb.. " for "..matches.amount.."%")
 end
 

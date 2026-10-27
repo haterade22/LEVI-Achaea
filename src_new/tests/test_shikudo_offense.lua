@@ -24,6 +24,11 @@ local targetClass = "Unknown"
 ataxiaNDB_getClass = function() return targetClass end
 combatQueue = function() return "" end
 lb = {}
+-- These rounds are written for a monk WITH the Health Inspector trait, whose ASSESS is free
+-- (v4.7.456: shikudo.assessSuffix sends ASSESS only then; misc_scripts/031). The rounds without
+-- the trait are tested in test_shikudo_group_damage.lua.
+ataxia_assessFree = function() return true end
+
 for _, f in ipairs({ KAIKATA, SH .. "006_CC_Shikudo_Dispatch.lua", SH .. "007_CC_Shikudo_Lock.lua" }) do
   local ok, err = pcall(dofile, f)
   if not ok then error("Failed to load " .. f .. ": " .. tostring(err)) end

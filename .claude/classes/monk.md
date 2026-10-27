@@ -102,6 +102,35 @@ both sides, `light` strikes (no limb damage at all), form changes (a kata of 5+;
 the Dispatch as it was done are in `kb/combat/shikudo.md`. What the offense code gets wrong, and
 the plan: `docs/plans/shikudo-offense-review-2026-10-11.md`.
 
+### Alternative Kill: Shikudo Group Damage Route (v4.7.456)
+```yaml
+type: damage
+summary: "For group fights (the user, 2026-10-27: 'a pure damage route for group combat'). 013,
+  alias `srd` ('sr should be lock, srd should be damage'). One `queue addclear free` round: combatQueue() + wield <staff id> +
+  [transition to <form> form;] + the attack + [;<EQ rider>] + [;assess, Health Inspector only]"
+order:
+  - "DISPATCH when 006's checkDispatchReady (INCAPACITATE on a Mhaldorian), no assess"
+  - "SHATTER with this form's kick when shielded"
+  - "Oak: risingkick torso livestrike ruku torso (31.8% torso a round in the 2026-10-27 log)"
+  - "Maelstrom: the same, or `combo <t> crescent` ALONE when prone and known at half health or less
+    (a fresh ASSESS, or IRE.Target hpperc naming the target); a ready Crescent is never traded for a
+    transition"
+  - "Gaital: sweep spinkick standing; needle spinkick ruku torso prone (spinkick on a prone target
+    hits the head)"
+  - "Rain: frontkick <side> kuro <side> ruku torso + the EQ rider; sides alternate each combo"
+  - "Willow: flashheel <side> hiru hiraku; Tykonos: risingkick torso thrust torso thrust torso (both
+    only on the way back to Rain)"
+eq_rider: "RAIN ONLY (the user): KAI CHOKE when ataxia_kaiAfford('choke') and no held breath, else
+  MIND CRUSH. Other forms: combos first, no rider"
+held_breath: "No captured line. A choke cast (leviatax/004) with no landing (highlighting/063) in 1.2 s
+  = MIND CRUSH for 10 s, echoed"
+form_loop: "Oak -> Gaital -> Maelstrom (target at 60% or less, config.maelstromAt) or Rain; Maelstrom
+  -> Oak; Rain -> Oak; Willow -> Rain; Tykonos -> Willow. ataxia_kataShouldLeave(form, kata, 0) (12,
+  Rain 15); Willow and Tykonos leave at 5"
+unconfirmed: "a one-attack `combo <t> crescent`; a combo and KAI CHOKE both running from one free
+  entry; the held-breath line"
+```
+
 ### Alternative Kill: Shikudo Lock Route (Affliction-Based)
 ```yaml
 type: affliction
@@ -819,6 +848,10 @@ files:
     its untargeted effect line (kb/combat/shikudo.md, 'What our triggers record')"
   011_Shikudo_Telepathy.lua: "vv's Telepathy -- LIVE (v4.7.420): shikudo.dispatchMind, MIND rounds between 006's
     combos (vv_telepathy, below)"
+  012_Shikudo_Combo_Echo.lua: "The [SK] combo line -- LIVE (v4.7.456): one line per combo from the strike ledger
+    (hits, misses and why, limb damage, afflictions, form:kata); skecho on|off"
+  013_Shikudo_Group_Damage.lua: "Group damage route -- LIVE (v4.7.456): srd
+    (Alternative Kill: Shikudo Group Damage Route, above)"
 
 # Mode selection: none live. shikudo.setMode / shikudo.mode / godmode exist only in switched-off 008
 # (008:67). vv no longer calls setMode (v4.7.419); it runs shikudo.dispatchMind (011) since v4.7.420.
@@ -833,12 +866,20 @@ dispatch_specifics:
     combatQueue() first (it can drop a Deliverance target for a new one), then sends 'queue addclear free '
     .. prefix .. round; 011 reuses buildRound for the combo hidden behind a blackout"
   staff: "Every round wields shikudo.staffRef(): the skstaff setting (ataxia.settings.shikudoStaff, saved),
-    else the bare keyword 'staff', which the user's own alias sends (attacker :53). Until v4.7.420 it was
+    else (v4.7.456) the id of an inventory item named '... staff' from GMCP Char.Items (a willow or oak staff
+    first, then the staff2 weapon slot, then a wielded staff; a name not ending in 'staff' never), else the
+    bare keyword 'staff' with a one-time warning. The bare keyword took the user's illusion staff (a
+    Shar'ilian lightspire) on about half the rounds of the 2026-10-27 group log, and the game refused the
+    combo; 007 sent it in two places. Trigger 794 on the refusal drops the id. Until v4.7.420 it was
     one player's item, staff489282, in four places (and in trigger 168). combatQueue()'s prefix ('g body;
     g gold;stand;' plus a parry or a chase step when one is due; ataxia/ataxia/003_Queueing_Related.lua)
     goes in front"
   assess: "Combo and shatter rounds end ';assess <t>' (shikudo.config.assessEachRound, default true, runtime
-    only, no alias): it keeps the ASSESS Crescent reads fresh, and trigger 698 prints an HP bar each round"
+    only, no alias) ONLY with the Health Inspector trait (v4.7.456, shikudo.assessSuffix; misc_scripts/031
+    reads TRAIT LIST KNOWN and filters every class's sends). Without it ASSESS costs balance, so the user's rounds carry none, and Crescent
+    needs a fresh manual ASSESS or the server's IRE.Target hpperc (013)"
+  target_guard: "v4.7.456: shikudo.guardTarget (006) refuses a target that died in the last 6 s (401, 795)
+    unless the room shows it again, and a combo at a target not in ataxia.playersHere; 006, 007, 011, 013"
   mhaldorian_safety: "On a Mhaldorian target (tCity), sends INCAPACITATE instead of DISPATCH (friendly-fire
     safety, 006:1338-1340)"
   shield: "If target shielded (tAffs.shield), SHATTER inside the combo (006:1345-1347)"
@@ -851,6 +892,9 @@ quick_commands:  # live functions only
   dispatch_status: ["shikudo.status() / skstatus() (006:1432, 1490)"]
   vv: ["vv alias (153)", "shikudo.dispatchMind() (011:327)"]
   lock: ["sr alias", "shikudoLock.dispatch()", "shikudolock() (007:754)"]
+  group_damage: ["srd alias", "shikudoDmg.group() -> shikudoDmg.dispatch() (013)"]
+  combo_echo: ["skecho on|off -> shikudoEcho.command() (012)"]
+  traits: ["traits / traits show -> ataxia_traitCommand() (misc_scripts/031)"]
   lock_status: ["sklstatus() / sklockstatus() (007:758, 762)"]
   kata_caps: ["skata alias -> ataxia_kataCommand() (monk/004, v4.7.419)"]
   staff: ["skstaff [ITEM|clear] alias -> shikudo.staffCommand() (006:226, v4.7.420)"]
@@ -1832,8 +1876,9 @@ BOONS row or an `(ECHO)` row. **Tower-gated as well as boon-gated** because the 
 flags on a confirmed run END but not at run START (a known registry gap), and outside the tower
 there are no crits refilling anything. `ataxia.settings.sipping.sharpmindat` tunes the threshold.
 
-## `sr` routing (v4.7.382)
-`sr` (alias `154_Group_(All_Classes)`) as a Monk calls `shikudoLock.dispatch()` (007_CC_Shikudo_Lock)
-by name. `shikudolock()` is also written in 008, but 008 is switched off, so at runtime only 007's
+## `sr` routing (v4.7.382, v4.7.456)
+`sr` as a Monk calls `shikudoLock.dispatch()` (007_CC_Shikudo_Lock) by name. The group damage
+route (013, v4.7.456) is the separate alias `srd` (user: "sr should be lock, srd should be
+damage"). `shikudolock()` is also written in 008, but 008 is switched off, so at runtime only 007's
 (007:754) exists; calling the method by name keeps `sr` right if 008 is ever switched back on.
 It requires a Shikudo `Form` charstat. With none (Tekura) it echoes and does nothing.

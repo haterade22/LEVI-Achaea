@@ -210,13 +210,195 @@ function shikudo.parriedLimb()
   return p
 end
 
--- The staff to WIELD: ataxia.settings.shikudoStaff (alias skstaff), else the bare keyword "staff",
--- which the user's own alias sends (attacker log :53). It was the literal staff489282, one
--- player's item id, in four places.
+-- The staff to WIELD: ataxia.settings.shikudoStaff (alias skstaff), else the id of a staff GMCP
+-- shows in the inventory, else the bare keyword "staff", which the user's own alias sends
+-- (attacker log :53). It was the literal staff489282, one player's item id, in four places.
+--
+-- THE BARE KEYWORD CAN PICK THE WRONG STAFF (v4.7.456, the 2026-10-27 group log ZQfua3XR). The
+-- user's Shar'ilian lightspire is an illusion STAFF (docs/my-artefacts.md:109) that answers to
+-- "staff" too. Every second round the server wielded it, dropped the oaken staff, and refused the
+-- combo: "You may not carry out a combination utilising Shikudo strikes without the required
+-- staff." So an inventory staff's id is used when no setting names one. A Shikudo staff is of
+-- willow or oak (Shikudo.wiki:9); such a name is taken first, then any item named "... staff"
+-- that is wielded, then any other. A name that does not END in "staff" (the lightspire) is never
+-- taken. `shikudo.staffRefused()` (the no-staff refusal trigger) forgets the id it sent.
+ataxiaTemp = ataxiaTemp or {}
+
+local function isStaffName(name)
+  return type(name) == "string" and name:lower():find("staff$") ~= nil
+end
+
+-- GMCP inventory feed: id -> { name, wielded } for every item named "... staff".
+function shikudo.invEvent(event)
+  local items = gmcp and gmcp.Char and gmcp.Char.Items
+  if not items then return end
+  local function wielded(it)
+    local a = type(it) == "table" and it.attrib
+    return type(a) == "string" and (a:find("l", 1, true) or a:find("L", 1, true)) ~= nil
+  end
+  if event == "gmcp.Char.Items.List" then
+    local l = items.List
+    if type(l) ~= "table" or l.location ~= "inv" then return end
+    ataxiaTemp.shikudoStaves = {}
+    for _, it in ipairs(l.items or {}) do
+      if type(it) == "table" and isStaffName(it.name) then
+        ataxiaTemp.shikudoStaves[tostring(it.id)] = { name = it.name, wielded = wielded(it) }
+      end
+    end
+    return
+  end
+  local key = (event == "gmcp.Char.Items.Update" and "Update")
+    or (event == "gmcp.Char.Items.Add" and "Add")
+    or (event == "gmcp.Char.Items.Remove" and "Remove")
+  local m = key and items[key]
+  if type(m) ~= "table" or m.location ~= "inv" or type(m.item) ~= "table" then return end
+  ataxiaTemp.shikudoStaves = ataxiaTemp.shikudoStaves or {}
+  local id = tostring(m.item.id)
+  if key ~= "Remove" and isStaffName(m.item.name) then
+    ataxiaTemp.shikudoStaves[id] = { name = m.item.name, wielded = wielded(m.item) }
+  else
+    ataxiaTemp.shikudoStaves[id] = nil
+  end
+end
+
+-- The configured Shikudo slot of `ataxia setup weapons` (023), when it holds an item id.
+local function weaponSlotStaff()
+  local w = ataxia and ataxia.settings and ataxia.settings.weapons
+  local s = w and w.staff2
+  if type(s) == "string" and s:find("^staff%d+$") then return s end
+  return nil
+end
+
+-- The inventory staff to wield, as "staff<id>" (the game's own item reference), or nil.
+-- Rank: a willow or oak staff, then the staff2 weapon slot (a scan sorts that slot by damage, so it
+-- can hold the Magi staff), then a wielded staff, then any other.
+function shikudo.inventoryStaff()
+  local staves = ataxiaTemp.shikudoStaves
+  if type(staves) ~= "table" then return nil end
+  local slot = weaponSlotStaff()
+  local best, bestRank
+  for id, s in pairs(staves) do
+    local n = s.name:lower()
+    local rank = ((n:find("oak", 1, true) or n:find("willow", 1, true)) and 1)
+      or ((slot == "staff" .. id) and 2) or (s.wielded and 3) or 4
+    -- Ties go to the lower id, so the pick does not change with pairs() order.
+    if not bestRank or rank < bestRank or (rank == bestRank and id < best) then
+      best, bestRank = id, rank
+    end
+  end
+  return best and ("staff" .. best) or nil
+end
+
 function shikudo.staffRef()
   local s = ataxia and ataxia.settings and ataxia.settings.shikudoStaff
   if type(s) == "string" and s ~= "" then return s end
+  local inv = shikudo.inventoryStaff() or weaponSlotStaff()
+  if inv then return inv end
+  -- Nothing known yet: ask GMCP for the inventory once, and say once that the keyword can miss.
+  if not ataxiaTemp.shikudoInvAsked and sendGMCP then
+    ataxiaTemp.shikudoInvAsked = true
+    pcall(sendGMCP, "Char.Items.Inv")
+  end
+  if not ataxiaTemp.shikudoKeywordWarned and ataxiaEcho then
+    ataxiaTemp.shikudoKeywordWarned = true
+    ataxiaEcho("Shikudo wields the bare keyword 'staff', which can pick another staff (an "
+      .. "illusion staff). Name yours: skstaff ITEM")
+  end
   return "staff"
+end
+
+-- ASSESS rides a round only with the HEALTH INSPECTOR trait (v4.7.456, user: "We shouldn't be
+-- using assess or contemplate unless we have the trait Health Inspector or Mind Warden"). Without
+-- it ASSESS costs balance: the 2026-10-27 log has "You glance over Akri and see that her health is
+-- at 7171/7171 [100%]." where the next combo should have been (ZQfua3XR, 11:28:18). An unknown
+-- trait list counts as no (misc_scripts/034). `on` is the offense's own assessEachRound setting.
+function shikudo.assessSuffix(on, sep)
+  if not on or type(target) ~= "string" or target == "" then return "" end
+  if not (ataxia_assessFree and ataxia_assessFree()) then return "" end
+  return (sep or ";") .. "assess " .. target
+end
+
+-- Is `t` a target a round can reach? A target we saw die (trigger 401, or "Your mental abilities
+-- have no power over the dead.") is refused for DEAD_HOLD seconds unless the room shows it again
+-- after the death (a starburst revive). A round with strikes (`anywhere` false) also needs the
+-- name in the room: ataxia.playersHere (update_stuff/001, kept by Room.Players, AddPlayer and
+-- RemovePlayer; hidden players are listed). A MIND or KAI round reaches further (MIND LOCK; KAI
+-- CHOKE needs only line of sight, Kaido.wiki:289), so it passes `anywhere`. The 2026-10-27 log
+-- sent ~25 rounds at a dead or absent target, each refused at once: "Nothing can be seen here by
+-- that name.", "Your mental abilities have no power over the dead." Returns true, or false and
+-- the reason. With no room list yet (no GMCP), it does not block.
+local DEAD_HOLD = 6
+function shikudo.targetUsable(t, anywhere)
+  if type(t) ~= "string" or t == "" then return false, "no target" end
+  local dead = ataxiaTemp.targetDead
+  local nowT = (getEpoch and getEpoch()) or 0
+  if type(dead) == "table" and type(dead.name) == "string" and dead.name:lower() == t:lower()
+     and nowT - (dead.at or 0) < DEAD_HOLD and not dead.seenAgain then
+    return false, "dead"
+  end
+  if anywhere then return true end
+  local here = ataxia and ataxia.playersHere
+  if type(here) == "table" and next(here) ~= nil then
+    for _, name in pairs(here) do
+      if type(name) == "string" and name:lower() == t:lower() then return true end
+    end
+    return false, "not here"
+  end
+  return true
+end
+
+-- Trigger 401 and the "no power over the dead" trigger: `name` is dead.
+function shikudo.markDead(name)
+  if type(name) ~= "string" or name == "" then return end
+  ataxiaTemp.targetDead = { name = name, at = (getEpoch and getEpoch()) or 0 }
+end
+
+-- gmcp.Room.AddPlayer: a revived target walks back in (or is seen again) after its death.
+function shikudo.playerAdded()
+  local dead = ataxiaTemp.targetDead
+  local p = gmcp and gmcp.Room and gmcp.Room.AddPlayer
+  if type(dead) == "table" and type(p) == "table" and type(p.name) == "string"
+     and type(dead.name) == "string" and p.name:lower() == dead.name:lower() then
+    dead.seenAgain = true
+  end
+end
+
+-- The guard every Shikudo offense runs before it sends. One echo per target and reason, so a held
+-- key does not flood the screen.
+function shikudo.guardTarget(t, anywhere)
+  local ok, why = shikudo.targetUsable(t, anywhere)
+  if ok then
+    ataxiaTemp.shikudoRefusedKey = nil
+    return true
+  end
+  local key = tostring(t) .. "|" .. tostring(why)
+  if ataxiaTemp.shikudoRefusedKey ~= key then
+    ataxiaTemp.shikudoRefusedKey = key
+    cecho("\n<red>[SK] " .. tostring(t) .. ": " .. why .. " -- not sent")
+  end
+  return false
+end
+
+-- Reload-safe registration: kill the previous ids first so a SYSUPDATE cannot stack handlers.
+ataxiaTemp.shikudoInvHandlers = ataxiaTemp.shikudoInvHandlers or {}
+for _, id in ipairs(ataxiaTemp.shikudoInvHandlers) do
+  if killAnonymousEventHandler then pcall(killAnonymousEventHandler, id) end
+end
+ataxiaTemp.shikudoInvHandlers = {}
+if registerAnonymousEventHandler then
+  for _, ev in ipairs({ "gmcp.Char.Items.List", "gmcp.Char.Items.Update",
+                        "gmcp.Char.Items.Add", "gmcp.Char.Items.Remove" }) do
+    ataxiaTemp.shikudoInvHandlers[#ataxiaTemp.shikudoInvHandlers + 1] =
+      registerAnonymousEventHandler(ev, function(event) shikudo.invEvent(event) end)
+  end
+  ataxiaTemp.shikudoInvHandlers[#ataxiaTemp.shikudoInvHandlers + 1] =
+    registerAnonymousEventHandler("gmcp.Room.AddPlayer", function() shikudo.playerAdded() end)
+end
+-- Ask for the inventory now, so the staff's id is known before the first round. With no
+-- connection the request does nothing; the first round asks again.
+if not ataxiaTemp.shikudoStaves and sendGMCP and gmcp and gmcp.Char then
+  ataxiaTemp.shikudoInvAsked = true
+  pcall(sendGMCP, "Char.Items.Inv")
 end
 
 -- shikudo.staffCommand(arg): the `skstaff` alias (aliases shikudo/007). `skstaff` shows the staff
@@ -241,6 +423,20 @@ function shikudo.staffCommand(arg)
     ataxiaEcho("Shikudo wields <cyan>" .. arg .. "<reset>.")
   end
   if ataxia_saveSettings then ataxia_saveSettings(false) end
+end
+
+-- The no-staff refusal trigger: "You may not carry out a combination utilising Shikudo strikes
+-- without the required staff." The inventory id we sent (if any) is not a Shikudo staff, so it is
+-- dropped and the next pick goes down the list. A saved skstaff setting is the user's own and is
+-- kept; the echo says to check it.
+function shikudo.staffRefused()
+  local sentRef = shikudo.staffRef()
+  local id = sentRef:match("^staff(%d+)$")
+  local set = ataxia and ataxia.settings and ataxia.settings.shikudoStaff
+  if id and not (type(set) == "string" and set ~= "") and type(ataxiaTemp.shikudoStaves) == "table" then
+    ataxiaTemp.shikudoStaves[id] = nil
+  end
+  if shikudoEcho and shikudoEcho.failed then shikudoEcho.failed("no staff (" .. sentRef .. ")") end
 end
 
 -- Get damage for a specific attack (from shikudo_limbDamage table or defaults)
@@ -1330,7 +1526,7 @@ function shikudo.buildRound()
   ensureState()
   if not target or target == "" then return nil end
   local wield = "wield " .. shikudo.staffRef() .. ";"
-  local assess = shikudo.config.assessEachRound and (";assess " .. target) or ""
+  local assess = shikudo.assessSuffix(shikudo.config.assessEachRound, ";")
 
   -- KILL CHECK: All conditions met?
   if shikudo.checkDispatchReady() then
@@ -1379,11 +1575,8 @@ function shikudo.dispatch()
   -- Rebound hold gate
   if reboundHold and reboundHold.gate(shikudo.dispatch) then return end
 
-  -- Skip player check for now during testing (can re-enable later)
-  -- if not table.contains(ataxia.playersHere, target) then
-  --   cecho("\n<red>[Shikudo] Target not in room")
-  --   return
-  -- end
+  -- Dead or not in the room: nothing is sent (v4.7.456).
+  if not shikudo.guardTarget(target) then return end
 
   local form = ataxia.vitals.form or "Rain"  -- Default to Rain if not set
   local kata = ataxia.vitals.kata or 0

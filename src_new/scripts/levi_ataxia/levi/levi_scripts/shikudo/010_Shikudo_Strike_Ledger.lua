@@ -157,6 +157,7 @@ function shikudoLedger.strike(row)
   local cur = { text = row or "", at = getEpoch(), tail = 0 }
   cur.done = finished(cur.text)
   shikudoLedger.cur = cur
+  if shikudoEcho and shikudoEcho.onStrike then shikudoEcho.onStrike() end -- the [SK] line (012)
   if not cur.done then armTail(cur) end
 end
 
@@ -179,6 +180,7 @@ function shikudoLedger.outcome(text)
   local cur = shikudoLedger.cur
   if text:find(DAMAGE) then
     settle(cur, "damage")
+    if shikudoEcho and shikudoEcho.onDamage then shikudoEcho.onDamage(text) end
     return "damage"
   end
   local who = text:match(PARRY)
@@ -250,6 +252,7 @@ function shikudoLedger.expire(why)
   local cur = shikudoLedger.cur
   if not cur then return end
   shikudoLedger.cur = nil
+  if shikudoEcho and shikudoEcho.onStrikeEnd then shikudoEcho.onStrikeEnd(cur) end -- 012
   if cur.outcome then return end
   shikudoLedger.unresolved = (shikudoLedger.unresolved or 0) + 1
   shikudoLedger.lastUnresolved = cur.text

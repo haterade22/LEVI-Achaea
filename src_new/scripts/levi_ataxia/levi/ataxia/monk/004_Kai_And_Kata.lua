@@ -318,6 +318,25 @@ function ataxia_shikFormSendSeen(cmd)
   return true
 end
 
+-- ataxia_kaiSendSeen(cmd): keep the last outgoing command that names KAI, for the refusal "How are
+-- you wanting to use the Kai power?" (trigger 796). The 2026-10-27 group log has it eight times and
+-- no sender in the package builds a bare KAI, so the next log must name the command (v4.7.456).
+function ataxia_kaiSendSeen(cmd)
+  if type(cmd) ~= "string" or not hasWord(cmd:lower(), "kai") then return false end
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.lastKaiSend, ataxiaTemp.lastKaiSendAt = cmd, getEpoch()
+  return true
+end
+
+-- Trigger 796. ASCII, no cecho tags from the command text.
+function ataxia_kaiRefused()
+  local c = ataxiaTemp and ataxiaTemp.lastKaiSend
+  local shown = c and (c:gsub("[^\32-\126]", "?"):gsub("[<>]", "")) or "(none seen)"
+  if ataxiaEcho then
+    ataxiaEcho("KAI refused. Last command with KAI: " .. shown .. " -- keep this line for the fix")
+  end
+end
+
 -- The watcher lives for the session. On a reload the old handler is killed first; its id is kept
 -- on ataxiaTemp, never saved (a saved id would name a stranger's handler after a restart).
 ataxiaTemp = ataxiaTemp or {}
@@ -327,5 +346,5 @@ end
 ataxiaTemp.shikFormSendHandler = nil
 if registerAnonymousEventHandler then
   ataxiaTemp.shikFormSendHandler = registerAnonymousEventHandler("sysDataSendRequest",
-    function(_, cmd) ataxia_shikFormSendSeen(cmd) end)
+    function(_, cmd) ataxia_kaiSendSeen(cmd); ataxia_shikFormSendSeen(cmd) end)
 end

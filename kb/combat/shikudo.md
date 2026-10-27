@@ -20,6 +20,9 @@ code:
   - src_new/scripts/levi_ataxia/levi/ataxia/monk/003_Shikudo_Extras.lua, 004_Kai_And_Kata.lua (kai, kata, ASSESS state)
   - src_new/scripts/levi_ataxia/levi/levi_scripts/shikudo/006_CC_Shikudo_Dispatch.lua, 007_CC_Shikudo_Lock.lua, 011_Shikudo_Telepathy.lua
   - src_new/triggers/levi_ataxia/for_levi/leviticus/166 (SHATTER), 168 (the staff wield), gags/001 (our strike lines), calls/008 (off)
+  - src_new/scripts/.../levi_scripts/shikudo/012_Shikudo_Combo_Echo.lua (the [SK] line), 013_Shikudo_Group_Damage.lua (sr), misc_scripts/031_Traits.lua
+  - src_new/triggers/levi_ataxia/for_levi/leviticus/792-798 (traits, no staff, the dead, the kai question, reflections)
+  - src_new/tests/test_shikudo_group_damage.lua
   - src_new/tests/test_shikudo_tracking.lua, test_shikudo_ledger.lua, test_monk_kai_kata.lua, test_telepathy_tracking.lua, test_target_tree.lua, test_shikudo_offense.lua (007), test_shikudo_dispatch.lua (006), test_shikudo_telepathy.lua (011)
 last_verified: 2026-10-12
 ---
@@ -679,6 +682,53 @@ until the next prompt (`misc_scripts/001_Queue_Scanning.lua`, `318_Prompt_Trigge
   client showed `H3` after a spinkick took the head to 100% (c.iJVmpL:3966-3981, before his scythe at
   :4227). Light and absorbed ruku to the arm is recorded since v4.7.419 (the strike ledger,
   above), which expires a pending strike at the prompt and never commits it.
+
+## Group combat: the 2026-10-27 Mhaldor fight (v4.7.456)
+
+Source: `kb/raw/logs/2026-10-27_shikudo-group-mhaldor.txt` (the user's screen, converted from the
+Mudlet HTML export, blank rows removed; line numbers below are that file's). The user fought in a
+party of six against four (Sadey, Kutcher, Akri, Crixos) with `sr`, the lock offense (007), in
+Rain and Oak.
+
+**What the log shows (CONFIRMED, live):**
+- **A bare `wield staff` can take another staff.** On most balance recoveries: "You cease to wield
+  a twisted oaken staff." / "You start to wield a Shar'ilian lightspire in your right hand." / "You
+  may not carry out a combination utilising Shikudo strikes without the required staff." (281-284,
+  595-597, 1443-1445, 1976-1978, 2124-2126, 2493-2495, 2596-2598, 2761-2763). The lightspire is an
+  illusion staff (`docs/my-artefacts.md:109`) and answers to "staff". Every round now names the
+  staff's item id (`shikudo.staffRef`, `shikudo/006`).
+- **ASSESS costs balance without HEALTH INSPECTOR.** "You glance over Akri and see that her health
+  is at 7171/7171 [100%]." (2709) printed on a balance recovery where a combo should have gone
+  (the user: ASSESS only with Health Inspector, CONTEMPLATE only with Mind Warden). The user's
+  TRAIT LIST KNOWN (2026-10-27, pasted): Racial Child of Ceylon; 20 Nimble, 30 Fully fit, 40
+  Marksman, 50 Improved physique, 60 Master contemplator, 70 Decorated, 80 Lucky, 90 In service,
+  100 Clean freak. So neither is free for this user. The list's rows are `Racial:   <trait>` and
+  `Level <n>: <trait>`, between two dashed rules (`misc_scripts/031`, triggers 792/793).
+- **A dead target keeps getting rounds.** After "You have slain Sadey." (935) the queue answered
+  "Your mental abilities have no power over the dead." about ten times in three seconds, with
+  "Nothing can be seen here by that name.", "You detect nothing here by that name.", "I do not
+  recognise anything called that here.", "Ahh, I am truly sorry, but I do not see anyone by that
+  name here." and "You cannot see that being here." (967-1121). A refused command costs no balance,
+  so each press failed at once.
+- **The reflection lines of our strikes:** "A reflection of Akri blinks out of existence." took the
+  risingkick, and "The attack harmlessly passes through one of Akri's reflections." took the two
+  strikes after it (2605-2610). No trigger matched the second line before v4.7.456 (797/798).
+- **A starburst tattoo revives a target** right after the kill line ("A starburst tattoo flares and
+  bathes Sadey in red light.", 531), so a dead target can stand in the room again within seconds.
+- **"How are you wanting to use the Kai power?"** eight times (2152-2310), at kai 41-51, with no
+  sender in the package that builds a bare KAI. Unsettled: trigger 796 now names the last command
+  that carried KAI.
+- **Kai in a group fills fast:** 0 to 51 in about 40 s with five enemies acting (the [LOCK] status
+  lines, 279-2433), against one KAI CHOKE sent (1863).
+
+**The group damage route (`shikudo/013`, alias `srd` since v4.7.456; `sr` is the lock):** the forms and attacks
+come from the wiki (Shikudo.wiki: Oak "increased damage", :230; Maelstrom's CRESCENT, :358; Gaital's
+SPINKICK to the head of a prone target, :298) and KAI CHOKE's bonus against a damaged torso or head
+(Kaido.wiki:289). The user's rule for equilibrium: KAI CHOKE or MIND CRUSH in Rain only, combos
+first everywhere else. The full round order is in `.claude/classes/monk.md` and the file's header.
+**UNCONFIRMED:** that `combo <t> crescent` (one attack) is accepted, that a Rain round carrying both
+a combo and KAI CHOKE in one `queue addclear free` entry runs both, and the line a target holding
+its breath prints. A choke with no landing line in 1.2 s is taken as held breath for 10 s.
 
 ## Conflicts and open questions
 

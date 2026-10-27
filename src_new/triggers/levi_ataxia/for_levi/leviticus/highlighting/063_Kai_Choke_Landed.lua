@@ -65,3 +65,11 @@ fg("chartreuse")
 setBold(true)
 deselect()
 resetFormat()
+
+-- v4.7.456: stamp the landing for the group damage route's held-breath guess (shikudo/013: a choke
+-- whose cast line has no landing within a second marks the target as holding its breath), and
+-- in PvP print the [SK] line (shikudo/012). A stamp, not a cleared flag: the guard above stands.
+ataxiaTemp.kaiChokeLandedAt = getEpoch()
+if type(target) == "string" and shikudoEcho and shikudoEcho.action then
+  shikudoEcho.action("KAI CHOKE landed", target)
+end

@@ -502,6 +502,16 @@ local function commitRound(p)
   for kind, side in pairs(p.alt) do st.alt[kind] = side end
 end
 
+-- An action echo ("[LOCK] Telepathy: ...", "KAI CHOKE", ...) that is not the same as the last one,
+-- or any with config.verbose: a held key re-sends the same round many times a second.
+local function lockSay(s)
+  local st = shikudoLock.state
+  if shikudoLock.config.verbose or s ~= st.lastSay then
+    cecho(s)
+    st.lastSay = s
+  end
+end
+
 -- Send one round as ONE `queue addclear free` entry (free waits for equilibrium AND balance,
 -- HELP 4.6.1). It is PENDING until the game's run line shows it ran (shikudoLock.onQueueRan); a
 -- later press replaces it, on the server and here. With config.assessEachRound it ends with
@@ -509,9 +519,8 @@ end
 -- reading fresh. `prelude` marks a KILL prelude round.
 local function sendRound(kind, line, prelude)
   local st = shikudoLock.state
-  if shikudoLock.config.assessEachRound then
-    line = line .. ataxia.settings.separator .. "assess " .. target
-  end
+  -- Only with the Health Inspector trait (shikudo.assessSuffix, 006).
+  line = line .. shikudo.assessSuffix(shikudoLock.config.assessEachRound, ataxia.settings.separator)
   local p = { kind = kind, prelude = prelude, alt = st.roundAlt, key = runKey(line) }
   if not st.runLine then
     -- No run line has matched a round yet (queue alerts off, or a wording we do not read): count
@@ -596,18 +605,23 @@ function shikudoLock.dispatch()
   local kata = ataxia.vitals.kata or 0
   local phaseLabel = shikudoLock.getPhaseLabel()
 
-  cecho("\n<cyan>[LOCK] " .. phaseLabel .. " <cyan>| Target: <white>" .. tostring(target))
-  cecho(" <cyan>| Form: <white>" .. shownForm)
-  cecho(" <cyan>| Kata: <white>" .. kata)
-  cecho(" <cyan>| Kai: " .. shikudoLock.kaiLabel())
-
-  cecho("\n<cyan>[LOCK] Affs: ")
-  cecho(has("asthma") and "<green>asthma " or "<red>asthma ")
-  cecho(has("anorexia") and "<green>anorexia " or "<red>anorexia ")
-  cecho(has("slickness") and "<green>slickness " or "<red>slickness ")
-  cecho(has("paralysis") and "<green>para " or "<red>para ")
-  cecho(has("impatience") and "<green>impat " or "<red>impat ")
-  cecho(has("weariness") and "<green>weary" or "<red>weary")
+  -- The status prints only when it CHANGES (or with config.verbose): one press per prompt printed
+  -- two lines a prompt, about 400 of them in the 2026-10-27 group log (v4.7.456).
+  local status = "\n<cyan>[LOCK] " .. phaseLabel .. " <cyan>| Target: <white>" .. tostring(target)
+    .. " <cyan>| Form: <white>" .. shownForm
+    .. " <cyan>| Kata: <white>" .. kata
+    .. " <cyan>| Kai: " .. shikudoLock.kaiLabel()
+    .. "\n<cyan>[LOCK] Affs: "
+    .. (has("asthma") and "<green>asthma " or "<red>asthma ")
+    .. (has("anorexia") and "<green>anorexia " or "<red>anorexia ")
+    .. (has("slickness") and "<green>slickness " or "<red>slickness ")
+    .. (has("paralysis") and "<green>para " or "<red>para ")
+    .. (has("impatience") and "<green>impat " or "<red>impat ")
+    .. (has("weariness") and "<green>weary" or "<red>weary")
+  if cfg.verbose or status ~= st.lastStatus then
+    cecho(status)
+    st.lastStatus = status
+  end
 
   -- Safety check. NAME, not <name>: cecho reads any <word> as a colour tag, and our palette
   -- (misc_scripts/007) has no "name".
@@ -615,6 +629,8 @@ function shikudoLock.dispatch()
     cecho("\n<red>[LOCK] No target set! Use: tar NAME")
     return
   end
+  -- Dead or not in the room: nothing is sent (shikudo.guardTarget, 006; v4.7.456).
+  if shikudo.guardTarget and not shikudo.guardTarget(target) then return end
 
   -- Handle combatQueue (it ends with the separator, as every part below does)
   local sep = ataxia.settings.separator
@@ -628,7 +644,7 @@ function shikudoLock.dispatch()
   if has("shield") or tAffs.shield then
     local kick = shikudoLock.selectKick(form)
     if kick == "crescent" then kick = "risingkick torso" end
-    sendRound("shatter", cmd .. "wield staff" .. sep .. "combo " .. target .. " shatter " .. kick)
+    sendRound("shatter", cmd .. "wield " .. shikudo.staffRef() .. sep .. "combo " .. target .. " shatter " .. kick)
     return
   end
 
@@ -638,11 +654,11 @@ function shikudoLock.dispatch()
     local prelude = cfg.chokePrelude and not st.choking and st.prelude < cfg.maxPrelude
       and shikudoLock.selectPrelude()
     if prelude then
-      cecho("\n<magenta>[LOCK] Kill prelude: " .. prelude)
+      lockSay("\n<magenta>[LOCK] Kill prelude: " .. prelude)
       sendRound("mind", cmd .. prelude, true)
       return
     end
-    cecho("\n<green>[LOCK] KAI CHOKE")
+    lockSay("\n<green>[LOCK] KAI CHOKE")
     sendRound("choke", cmd .. "kai choke " .. target)
     return
   end
@@ -652,7 +668,7 @@ function shikudoLock.dispatch()
   local trans = ""
   if nextForm then
     trans = "transition to " .. nextForm:lower() .. " form" .. sep
-    cecho("\n<yellow>[LOCK] Transitioning to " .. nextForm)
+    lockSay("\n<yellow>[LOCK] Transitioning to " .. nextForm)
   end
   local roundForm = nextForm or form
 
@@ -660,16 +676,18 @@ function shikudoLock.dispatch()
   local mind, critical = shikudoLock.selectTelepathy(roundForm)
   if mind and not cfg.chainTelepathy and (critical or COMBO_ROUNDS[st.lastRound])
     and st.mindRun < cfg.maxMindRounds and (nextForm or not ataxia_kataAtRisk(cfg.lapseGuard)) then
-    cecho("\n<magenta>[LOCK] Telepathy: " .. mind)
+    lockSay("\n<magenta>[LOCK] Telepathy: " .. mind)
     sendRound("mind", cmd .. trans .. mind)
     return
   end
 
   -- The combo. A MIND command rides after it only with config.chainTelepathy.
-  local line = cmd .. "wield staff" .. sep .. trans .. shikudoLock.buildCombo(roundForm):gsub("%$tar", target)
+  -- The staff's item id, never the bare keyword: "wield staff" also took the user's illusion
+  -- staff and the combo was refused (v4.7.456; shikudo.staffRef, 006).
+  local line = cmd .. "wield " .. shikudo.staffRef() .. sep .. trans .. shikudoLock.buildCombo(roundForm):gsub("%$tar", target)
   if mind and cfg.chainTelepathy then
     line = line .. sep .. mind
-    cecho("\n<magenta>[LOCK] Telepathy (chained): " .. mind)
+    lockSay("\n<magenta>[LOCK] Telepathy (chained): " .. mind)
   end
   sendRound("combo", line)
 end

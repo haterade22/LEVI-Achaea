@@ -23,6 +23,7 @@ if gmcp.Char.Status.class == "Monk" then
   if not (ataxia.vitals and ataxia.vitals.form) then
     ataxiaEcho("sr: no Shikudo form read -- the Shikudo lock needs Shikudo (Tekura has no group route).")
   elseif shikudoLock and shikudoLock.dispatch then
+    -- `sr` is the lock; the group damage route is `srd` (shikudo/013, v4.7.456).
     shikudoLock.dispatch()
   elseif shikudolock then
     shikudolock()

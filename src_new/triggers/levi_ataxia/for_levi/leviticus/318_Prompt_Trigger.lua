@@ -135,6 +135,8 @@ end
 -- v4.7.419: the prompt ends the Shikudo strike in flight (shikudo/010) before the window that
 -- queue_Scan opened closes. It is expired, never recorded: an outcome line proves a hit, the prompt
 -- does not. One field read when nothing is pending.
+-- A combo the kata line did not close (refused, all parried) gets its [SK] line here (shikudo/012).
+if shikudoEcho and shikudoEcho.close then shikudoEcho.close() end
 if shikudoLedger and shikudoLedger.flush then shikudoLedger.flush() end
 disableTrigger("Affs Post Queue - Gated")
 disableTrigger("3rd Person Shikudo")

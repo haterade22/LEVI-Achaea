@@ -13,7 +13,9 @@ packageName: ''
 ]]--
 
 slow = 0
-expandAlias("pdo")
+-- v4.7.456: `expandAlias("pdo")` stood here. No alias "pdo" exists (in the package or in git
+-- history), so Mudlet sent the word to the game: "I cannot fathom the meaning of "pdo"." three
+-- times a kill in the 2026-10-27 group log.
 shape = 0
 parriedlimb = "none"
 tAffs = {blindness = true, deafness = true, shield = false, rebounding = true, curseward = true}

@@ -2820,6 +2820,30 @@ every stamp and every comparison of one timer together. v4.7.419 replaced the la
 Serpent offense's `now()`); `test_serpent_notes.lua` holds `os.clock` still, so a Serpent timer that
 reads it again fails its test.
 
+### Pitfall: a bare weapon keyword can wield the wrong item (v4.7.456)
+`wield staff` matches every item that answers to "staff", and artefacts do not look like their
+keyword: the user's Shar'ilian lightspire is an illusion staff. In the 2026-10-27 group log the game
+took it on about half the Shikudo rounds and refused each combo. Wield by ITEM ID (`staff489282`),
+resolved from a setting or from GMCP `Char.Items` by the item's NAME (`shikudo.staffRef`,
+`shikudo/006`; the Two Handed basher does the same, `basher/015`). A bare keyword is a last resort,
+and it should say so once.
+
+### Pitfall: ASSESS and CONTEMPLATE cost balance without their trait (v4.7.456)
+ASSESS is free only with the HEALTH INSPECTOR trait, CONTEMPLATE only with MIND WARDEN (the user).
+`misc_scripts/031_Traits.lua` reads TRAIT LIST KNOWN and answers `ataxia_assessFree()` /
+`ataxia_contemplateFree()`; an unread trait list answers no. For EVERY class it wraps `send` once:
+`ataxia_traitFilter` removes each whole two-word `assess <x>` / `contemplate <x>` command whose
+trait we lack (split on our separator and on `;`, a `queue ...` prefix kept, an empty command not
+sent). So an offense may keep writing ASSESS into its rounds; it simply does not leave the package.
+Read the target's health some other way when it matters. To send one on purpose (the `assess`
+alias), call `ataxia_rawSend`. Mnemosyne's "boon contemplate <name>" is three words and passes.
+
+### Pitfall: two triggers on one party line run the action twice (v4.7.456)
+`highlighting/011_Party_Leader` had the same four patterns as `party_targetting/002`, and both ran
+`t NAME`, so every leader call switched target twice and, through `partyrelay`, said the target back
+to the party. Before adding a trigger, grep for one on the same line (the same rule as the cure
+triggers in memory affliction-tracking.md).
+
 ---
 
 ## GMCP Data Reference

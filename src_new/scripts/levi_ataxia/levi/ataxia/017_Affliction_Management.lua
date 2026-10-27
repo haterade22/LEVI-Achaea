@@ -114,7 +114,11 @@ function tarGained(event, affList )
     else
       cstring = cstring..": "
     end
-		cinsertText(cstring)
+		-- While a Shikudo combo is being read, its [SK] line lists these instead (shikudo/012):
+		-- the inline tag landed a row off (v4.7.456, the 2026-10-27 group log).
+		if not (shikudoEcho and shikudoEcho.recording and shikudoEcho.recording()) then
+			cinsertText(cstring)
+		end
 	end
 	
 	if ataxiaTemp.showingAffs then

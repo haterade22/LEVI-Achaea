@@ -12,4 +12,6 @@ command: ''
 packageName: ''
 ]]--
 
-send("assess " .. target)
+-- Asked for by hand, so the trait gate (misc_scripts/031) does not remove it (v4.7.456).
+local sendRaw = ataxia_rawSend or send
+sendRaw("assess " .. target)
