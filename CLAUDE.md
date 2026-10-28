@@ -672,14 +672,15 @@ each weapon for 120 s of fighting, then takes the higher DPS with a 3 % margin. 
 non-crit only (`bashStats.lastHitWasCrit`, trigger 334 before 350), and each crit counts as one average
 non-crit hit of that weapon -- not zero, because the faster hammer crits more often per second.
 
-**Int monk: MIND CRUSH is the eq rider (v4.7.457, basher/002 `ataxiaBasher_monkMindCrush`).** Every
-Shikudo and Tekura round puts `mind crush <t>` before the combo (150 mana, 3.40 s eq), last after Spirit
-Rend, the Kai Unleashed choke and the numb refresh; KAI CHOKE goes out only with the Kai Unleashed boon.
-`bash mindcrush auto|on|off` (auto = intelligence above strength from STAT AND the quick-witted trait,
-`ataxia_hasTrait`, since v4.7.458 -- quick-witted is the eq trait, nimble the balance one; unread = off). **An int monk
-always bashes in Rain (Shikudo) or Dragon stance (Tekura) (v4.7.458):** bash start adopts Rain / sends
-`drs` as crushbash does, and `SHIKUDO_INT_ROTATION` never transitions out of Rain (outside it, it moves
-toward Rain at kata 5).
+**Int monk: MIND CRUSH is the attack (v4.7.457-459, basher/002 `ataxiaBasher_monkIntRound`).** An int monk
+(intelligence above strength from STAT AND the quick-witted trait, `ataxia_hasTrait`; quick-witted is the
+equilibrium build, nimble the balance build; `bash mindcrush auto|on|off`, unread = off) sends ONE
+equilibrium attack a round and NO balance combo: Spirit Rend, else the Kai Unleashed choke (KAI CHOKE only
+with that boon), else `mind crush <t>` (150 mana, 3.40 s eq). No numb refresh (Senseless Flurry speeds
+balance). It always bashes in Rain (Shikudo) or Dragon stance (Tekura): bash start sends `adopt rain form` /
+`drs`, and the round puts either back first when GMCP shows another. A shielded round, or mana under the
+`manause` floor, swings the balance combo instead (shatter / rhk), and `SHIKUDO_INT_ROTATION` keeps that
+combo from transitioning out of Rain.
 
 **Glass lilies (v4.7.367, `misc_scripts/024_Glass_Lily`, user: "We need to DROP LILY every hour").** `ataxia_lilyTick` on every `gmcp.Char.Vitals` sends `drop lily` x `ataxia.settings.lilyCount` (default 3) DIRECTLY (never queued -- `addclearfull` would delete it) once an hour. The hour is stamped by the game's drop line (trigger `785_Glass_Lily_Dropped`), not the attempt; an unconfirmed attempt retries after 5 min. `basher_engaged` used to drop three unconditionally; it now calls `ataxia_lilyDrop("bashing")`, which asks the same clock. Alias `lily [on|off|now|count <n>]`.
 

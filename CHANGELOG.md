@@ -2,6 +2,24 @@
 
 ---
 
+## 2026-10-27 - v4.7.459: MIND CRUSH is the int monk's attack, not a rider beside the combo
+
+- **An int monk's round is one equilibrium attack and no balance combo** (user: "mind crush is the
+  combo for Int monk" / "mind crush will be the attack and take EQ"). v4.7.457 sent MIND CRUSH as a
+  rider beside the staff or unarmed combo; that was wrong. `ataxiaBasher_monkIntRound`
+  (`basher/002`) now sends Spirit Rend when it is ready, else the Kai Unleashed choke (KAI CHOKE only
+  with that boon), else `mind crush <target>`. There is no numb refresh: Senseless Flurry speeds
+  balance, which this round does not use. The equilibrium-down skip is gone: the round's
+  `queue addclearfull freestand` waits for equilibrium.
+- **Rain form and Dragon stance are put back in the round too.** When GMCP shows another form or
+  stance, the round starts with `adopt rain form` (Shikudo) or `drs` (Tekura), as well as at bash
+  start (v4.7.458).
+- **Fallback:** a shielded round, or mana under the `manause` floor, swings the balance combo
+  (shatter or rhk break the shield), so bashing goes on. That combo never transitions out of Rain.
+- Tests: the int-monk set is rewritten (10 cases).
+
+---
+
 ## 2026-10-27 - v4.7.458: An int monk bashes in Rain form (Shikudo) or Dragon stance (Tekura)
 
 - **An int monk stays in Rain form or Dragon stance** (user: "for int specced monk, they will always

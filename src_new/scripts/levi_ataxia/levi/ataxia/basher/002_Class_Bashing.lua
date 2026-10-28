@@ -2767,25 +2767,25 @@ function ataxiaBasher_senselessFlurryNumb()
   return "numb; "
 end
 
--- MIND CRUSH, THE INT MONK'S EQ RIDER (v4.7.457, user: "For monk which is bashing as an int
--- specced monk. They should use mind crush for normal bashing attacks instead of kai choke. Only
--- kai choke when they have the kai unleashed boon"). Telepathy, not Kaido: MIND CRUSH <t>, 150
--- mana, 3.40s of EQUILIBRIUM, adventurers and denizens, physical and mental damage
--- (kb/classes/monk.md:320). Like the choke it rides the idle equilibrium beside the balance combo,
--- so it is the LAST rider in the chain: Spirit Rend, the Kai Unleashed choke and the numb refresh
--- each fire rarely and win the round when they fire. Kai Choke without the boon is never sent.
--- Not Rain-only (that gate is Kaido's), but:
+-- MIND CRUSH, THE INT MONK'S ATTACK (v4.7.457-459, user: "They should use mind crush for normal
+-- bashing attacks instead of kai choke. Only kai choke when they have the kai unleashed boon";
+-- "mind crush is the combo for Int monk" / "mind crush will be the attack and take EQ").
+-- Telepathy, not Kaido: MIND CRUSH <t>, 150 mana, 3.40s of EQUILIBRIUM, adventurers and denizens,
+-- physical and mental damage (kb/classes/monk.md:320). For an int monk the round is ONE
+-- equilibrium attack and NO balance combo (ataxiaBasher_monkIntRound): Spirit Rend, the Kai
+-- Unleashed choke when one is ready, else MIND CRUSH. Kai Choke without the
+-- boon is never sent. v4.7.457 sent it as a rider BESIDE the combo; that was wrong.
 --   * int spec: `ataxiaBasher.monkMindCrush` = "on" / "off" / "auto" (nil). Auto = intelligence
 --     above strength in the last STAT read (ataxiaTemp.charStats, else ataxia.data.char) AND the
 --     QUICK-WITTED trait (v4.7.458, user: "If they have nimble they use balance, quick-witted is
 --     eq (which is mind crush and kai choke, etc)"; misc_scripts/031 ataxia_hasTrait). An unread
 --     stat or trait list is NOT int, so nothing changes until both are read or `bash mindcrush on`.
---   * equilibrium: skipped only when GMCP says eq is DOWN (3.40s against a ~2s combo, so every
---     other round would be refused). nil = unknown = allowed.
 --   * mana: never below the `manause` floor (sipping, default 30%) after the 150 -- mana is the
 --     curing pool and transmute's.
 --   * shielded round: skipped, shatter/rhk first (whether a mental attack passes a denizen shield
 --     is unconfirmed).
+--   * no eq gate: the round goes out as `queue addclearfull freestand`, which waits for balance
+--     and equilibrium.
 local MIND_CRUSH_MANA = 150
 function ataxiaBasher_monkIntSpec()
   local mode = ataxiaBasher and ataxiaBasher.monkMindCrush
@@ -2802,7 +2802,6 @@ end
 function ataxiaBasher_monkMindCrush(useShieldbreak)
   if useShieldbreak then return nil end
   if not ataxiaBasher_monkIntSpec() then return nil end
-  if ataxia.vitals.eq == false then return nil end
   local mp, maxmp = tonumber(ataxia.vitals.mp) or 0, tonumber(ataxia.vitals.maxmp) or 0
   local floor = maxmp * (((ataxia.settings.sipping or {}).manause or 30) / 100)
   if mp - MIND_CRUSH_MANA < floor then return nil end
@@ -2846,6 +2845,29 @@ local function shikudoBashCombo(tar, useShieldbreak)
     ataxia.vitals.kata = 0
   end
   return cmd.."; "
+end
+
+-- THE INT MONK'S ROUND (v4.7.459): one equilibrium attack, no balance combo. Rain form (Shikudo)
+-- or Dragon stance (Tekura) is put back first when GMCP shows another (user: "they will always be
+-- in rain form for Shikudo and Dragon (DRS) for tekura"); ADOPT needs no kata. Returns nil -- the
+-- caller then swings the normal balance combo -- on a SHIELDED round (shatter / rhk break it) and
+-- when no equilibrium attack is affordable (MIND CRUSH under the mana floor), so bashing goes on.
+function ataxiaBasher_monkIntRound(tekura, useShieldbreak)
+  if useShieldbreak then return nil end
+  local sp = ataxia.settings.separator
+  local fix = ""
+  if tekura then
+    if ataxia.vitals.stance ~= "Dragon" then fix = "drs"..sp end
+  elseif ataxia.vitals.form ~= "Rain" then
+    fix = "adopt rain form"..sp
+  end
+  -- Same order as the rider chain below: the ability whose window closes first. NO numb refresh:
+  -- Senseless Flurry speeds BALANCE, and this round spends equilibrium only.
+  local eq = ataxiaBasher_spiritRend(false)
+  eq = eq or ataxiaBasher_kaiUnleashedChoke(false)
+  eq = eq or ataxiaBasher_monkMindCrush(false)
+  if not eq then return nil end
+  return fix..eq
 end
 
 function ataxiaBasher_monkBashing2()
@@ -2916,8 +2938,14 @@ function ataxiaBasher_monkBashing2()
     command = command..brage..sp
   end
 
+  local intRound = (not ataxia.settings.crushbash) and (tekura or shikudo)
+    and ataxiaBasher_monkIntSpec() and ataxiaBasher_monkIntRound(tekura, useShieldbreak) or nil
+
   if ataxia.settings.crushbash then
     command = command.."mind crush "..target.."; "
+  elseif intRound then
+    monkWarnedNoSpec = false
+    command = command..intRound
   elseif tekura then
     monkWarnedNoSpec = false
     -- Same eq-rider chain as Shikudo below (Kaido is shared by both specs -- see
@@ -2926,8 +2954,7 @@ function ataxiaBasher_monkBashing2()
     -- it, so the riders prepend exactly as they do for Shikudo.
     local tRend = ataxiaBasher_spiritRend(useShieldbreak)
     local tChoke = (not tRend) and ataxiaBasher_kaiUnleashedChoke(useShieldbreak) or nil
-    command = command..(tRend or tChoke or ataxiaBasher_senselessFlurryNumb()
-      or ataxiaBasher_monkMindCrush(useShieldbreak) or "")
+    command = command..(tRend or tChoke or ataxiaBasher_senselessFlurryNumb() or "")
     command = command.."unwield all"..sp.."combo "..target..(useShieldbreak and " rhk ucp ucp; " or " sdk ucp ucp; ")
   elseif shikudo then
     monkWarnedNoSpec = false
@@ -2946,9 +2973,7 @@ function ataxiaBasher_monkBashing2()
     -- Thunderclap crowd gate in `ataxiaBasher_rwBisect`.
     local rend = ataxiaBasher_spiritRend(useShieldbreak)
     local choke = (not rend) and ataxiaBasher_kaiUnleashedChoke(useShieldbreak) or nil
-    -- MIND CRUSH is last: the int monk's every-round rider (ataxiaBasher_monkMindCrush).
-    command = command..(rend or choke or ataxiaBasher_senselessFlurryNumb()
-      or ataxiaBasher_monkMindCrush(useShieldbreak) or "")
+    command = command..(rend or choke or ataxiaBasher_senselessFlurryNumb() or "")
     command = command..shikudoBashCombo(target, useShieldbreak)
   elseif not monkWarnedNoSpec then
     monkWarnedNoSpec = true
