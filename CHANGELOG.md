@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-10-28 - v4.7.466: The prompt no longer throws on a target with no health reading
+
+- **Every prompt threw** `attempt to concatenate field 'hpperc' (a nil value)` (Prompt
+  Substitution, `targetinfo` tag). `IRE.Target.Info` can arrive without `hpperc`, and the guard
+  `hpperc ~= "-1"` is true for nil, so the code concatenated nil.
+- The tag now shows the health only when `hpperc` exists and is not `-1`
+  (`012_Prompt_Substitution.lua`). Triggers 337, 338 and 339 (the bash-console health after
+  our attacks) had the same guard and get the same fix.
+- New test `test_prompt_targetinfo.lua`. It fails on the old code.
+
+---
+
 ## 2026-10-28 - v4.7.465: A Two Handed Runewarden offence, and `remweap` empowers runeblades
 
 ### Two Handed offence (`rw2h`)

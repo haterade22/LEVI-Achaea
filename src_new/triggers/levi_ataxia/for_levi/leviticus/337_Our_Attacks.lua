@@ -159,7 +159,7 @@ if type(target) == "number" and ataxiaBasher.enabled then
     else 
 		  ataxiagui.bashConsole:cecho("\n<red>ATK| <NavajoWhite>We smacked "..target.."!")
     end
-		if gmcp.IRE.Target and gmcp.IRE.Target.Info and gmcp.IRE.Target.Info.hpperc ~= "-1" then
+		if gmcp.IRE.Target and gmcp.IRE.Target.Info and gmcp.IRE.Target.Info.hpperc and tostring(gmcp.IRE.Target.Info.hpperc) ~= "-1" then
 			if ataxiaTemp.mobhealth ~= 0 then
         if zgui then
           cecho("bashDisplay", " <green>(<tomato>"..gmcp.IRE.Target.Info.hpperc.."<green>)")

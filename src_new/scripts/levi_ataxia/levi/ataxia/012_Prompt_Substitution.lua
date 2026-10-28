@@ -187,9 +187,11 @@ ataxiaPromptTags = {
 			if not target or target == "Nothing" or target == "nothing" then return "" end
 			local str = ""
 			if target then str = "<DimGrey>(<white>"..target end
-			if gmcp.IRE.Target and gmcp.IRE.Target.Info and gmcp.IRE.Target.Info.hpperc ~= "-1" then
+			-- Target.Info can arrive without hpperc; nil ~= "-1" is true, so test nil first.
+			local hp = gmcp.IRE and gmcp.IRE.Target and gmcp.IRE.Target.Info and gmcp.IRE.Target.Info.hpperc
+			if hp ~= nil and tostring(hp) ~= "-1" then
 				if ataxiaTemp.mobhealth and ataxiaTemp.mobhealth ~= 0 then
-					str = str.."<DimGrey>|<white>"..gmcp.IRE.Target.Info.hpperc
+					str = str.."<DimGrey>|<white>"..tostring(hp)
 				end
 			end
 			str = str.."<DimGrey>)"
