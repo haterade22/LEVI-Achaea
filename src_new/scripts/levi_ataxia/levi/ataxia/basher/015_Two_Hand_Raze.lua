@@ -99,7 +99,25 @@ function ataxiaBasher_twoHandWield(want, sp)
   local ab = ataxiaBasher or {}
   -- The item ID from the inventory when we know it: a keyword may not fit an artefact's name
   -- ("wield warhammer" for "a Hellforge Hammer"). A word set by the user wins.
-  local ids = ataxiaTemp.twoHandIds or {}
+  ataxiaTemp.twoHandIds = ataxiaTemp.twoHandIds or {}
+  local ids = ataxiaTemp.twoHandIds
+  -- The weapon in hand now goes back in by its ID after the swap (v4.7.463: the user's ledger
+  -- held "Apocalypse" as wielded, with no ID learned, because no inventory list came after a reload).
+  for id, name in pairs(ataxiaTemp.wieldedItems or {}) do
+    local k = weaponKind(name)
+    if k and not ids[k] then
+      ids[k] = id
+      ataxiaTemp.twoHandSeen = ataxiaTemp.twoHandSeen or {}
+      ataxiaTemp.twoHandSeen[k] = id
+    end
+  end
+  -- No ID for the weapon we want: ask GMCP for the inventory, at most every 30 s. This round
+  -- uses the keyword; the next rounds use the ID.
+  local nowT = (getEpoch and getEpoch()) or 0
+  if not ids[want] and sendGMCP and nowT - (ataxiaTemp.twoHandInvAskAt or -1e9) >= 30 then
+    ataxiaTemp.twoHandInvAskAt = nowT
+    pcall(sendGMCP, "Char.Items.Inv")
+  end
   local word = (want == "bastard" and (ab.twoHandSwordWord or ids.bastard or "bastard"))
     or (ab.twoHandHammerWord or ids.warhammer or "warhammer")
   return "wield " .. word .. (sp or "")

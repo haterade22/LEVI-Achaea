@@ -144,6 +144,22 @@ describe("an artefact two-hander and the carve refusal", function()
     expect(ataxiaBasher_twoHandWield("warhammer", ";")).toBe("wield 77;")
   end)
 
+  it("with no inventory list since a reload: learns the held ID and asks GMCP once for the rest", function()
+    reset()
+    local asks, prev = 0, sendGMCP
+    sendGMCP = function(m) if m == "Char.Items.Inv" then asks = asks + 1 end end
+    ataxiaTemp.wieldedItems = { ["405364"] = "Apocalypse, a blackrock sword of black-hued steel" }
+    expect(ataxiaBasher_twoHandWield("warhammer", ";")).toBe("wield warhammer;")
+    expect(ataxiaTemp.twoHandIds.bastard).toBe("405364")
+    expect(ataxiaTemp.twoHandSeen.bastard).toBe("405364")
+    ataxiaBasher_twoHandWield("warhammer", ";")
+    expect(asks).toBe(1)                                 -- the 0.3 s rebuilds do not ask again
+    NOW = NOW + 31
+    ataxiaBasher_twoHandWield("warhammer", ";")
+    expect(asks).toBe(2)
+    sendGMCP = prev
+  end)
+
   it("finds a named artefact sword by the ID seen wielded, or as the only sword carried", function()
     reset()
     local sword = { id = "55", name = "Apocalypse, a blackrock sword of black-hued steel", attrib = "lL" }
@@ -175,7 +191,8 @@ describe("the wield prefix", function()
     expect(ataxiaBasher_twoHandWield("bastard", ";")).toBe("wield bastard;")
     hold("bastard")
     expect(ataxiaBasher_twoHandWield("bastard", ";")).toBe("")
-    expect(ataxiaBasher_twoHandWield("warhammer", ";")).toBe("wield warhammer;")
+    -- the hammer was seen in hand above (hold() gives it ID "1"), so it goes back in by ID (v4.7.463)
+    expect(ataxiaBasher_twoHandWield("warhammer", ";")).toBe("wield 1;")
   end)
 
   it("wields when the hand is unknown, and uses the configured keyword", function()

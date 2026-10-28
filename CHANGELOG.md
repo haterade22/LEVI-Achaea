@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-10-28 - v4.7.463: Two Handed learns weapon IDs without waiting for an inventory list
+
+- **The user's check after a reload** showed Apocalypse wielded and read as the bastard sword, but no
+  weapon ID learned: IDs came only from a GMCP inventory list or item change, and none had arrived.
+  So a swap to the Hellforge Hammer would send the keyword `wield warhammer`, which may not fit it.
+- **The swap now learns the held weapon's ID** from what GMCP shows wielded, so it can wield it back
+  by ID after the swap, and **asks GMCP for the inventory** (`Char.Items.Inv`, at most every 30 s)
+  when it has no ID for the weapon it wants. The first round uses the keyword; later rounds use the ID.
+- Tests: 1 new case; one test now expects the learned ID.
+
+---
+
 ## 2026-10-28 - v4.7.462: Two Handed finds a named artefact sword, and asks for the inventory
 
 - **A sword with its own name is found when it is not in hand** (user: "You start to wield
