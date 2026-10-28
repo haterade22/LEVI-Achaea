@@ -654,3 +654,65 @@ describe("ataxiaBasher_monkBashing2 -- Tekura gets the Kaido eq riders too", fun
   ataxiaTemp = {}
 end)
 
+
+-- MIND CRUSH, the int monk's eq rider (v4.7.457): every round beside the combo, any form; Kai
+-- Choke only with the Kai Unleashed boon, and it wins the round's eq when it fires.
+describe("ataxiaBasher_monkBashing2 -- MIND CRUSH for an int monk", function()
+  local function intReset()
+    reset()
+    ataxia.mnemosyne = { _denizenCount = function() return 3 end,
+                         swarm = { state = "idle", threshold = function() return 3 end } }
+    ataxiaTemp = { charStats = { intelligence = 18, strength = 12 } }
+    ataxiaBasher.monkMindCrush = nil
+    mnemKaiUnleashed, mnemSenselessFlurry, mnemSpiritRend = false, false, false
+  end
+
+  it("rides mind crush before the Shikudo combo in any form, with no kai choke", function()
+    intReset(); ataxia.vitals.form = "Willow"
+    local cmd = ataxiaBasher_monkBashing2()
+    expect(has(cmd, "mind crush " .. target)).toBeTrue()
+    expect(has(cmd, "kai choke")).toBeFalse()
+    expect(cmd:find("mind crush", 1, true) < cmd:find("combo", 1, true)).toBeTrue()
+  end)
+
+  it("rides mind crush before the Tekura combo too", function()
+    intReset(); ataxia.vitals.form = nil; ataxia.vitals.stance = "Horse"
+    local cmd = ataxiaBasher_monkBashing2()
+    expect(has(cmd, "mind crush " .. target)).toBeTrue()
+    expect(has(cmd, "combo " .. target .. " sdk ucp ucp")).toBeTrue()
+  end)
+
+  it("kai choke takes the round's eq when the Kai Unleashed boon is up", function()
+    intReset(); ataxia.vitals.form = "Rain"; mnemKaiUnleashed = true
+    local cmd = ataxiaBasher_monkBashing2()
+    expect(has(cmd, "kai choke " .. target)).toBeTrue()
+    expect(has(cmd, "mind crush")).toBeFalse()
+  end)
+
+  it("not for a strength monk, or an unknown stat, unless pinned on", function()
+    intReset(); ataxiaTemp.charStats = { intelligence = 10, strength = 18 }
+    expect(has(ataxiaBasher_monkBashing2(), "mind crush")).toBeFalse()
+    ataxiaTemp.charStats = nil
+    expect(has(ataxiaBasher_monkBashing2(), "mind crush")).toBeFalse()
+    ataxiaBasher.monkMindCrush = "on"
+    expect(has(ataxiaBasher_monkBashing2(), "mind crush")).toBeTrue()
+    ataxiaTemp.charStats = { intelligence = 18, strength = 12 }; ataxiaBasher.monkMindCrush = "off"
+    expect(has(ataxiaBasher_monkBashing2(), "mind crush")).toBeFalse()
+  end)
+
+  it("skips with eq down, below the mana floor, or on a shielded round", function()
+    intReset(); ataxia.vitals.eq = false
+    expect(has(ataxiaBasher_monkBashing2(), "mind crush")).toBeFalse()
+    ataxia.vitals.eq = nil; ataxia.vitals.mp = 1600   -- floor 30% of 5000 = 1500
+    expect(has(ataxiaBasher_monkBashing2(), "mind crush")).toBeFalse()
+    ataxia.vitals.mp = 5000; ataxiaBasher.shielded = true
+    local cmd = ataxiaBasher_monkBashing2()
+    expect(has(cmd, "mind crush")).toBeFalse()
+    expect(has(cmd, "shatter")).toBeTrue()
+  end)
+
+  mnemKaiUnleashed = false
+  ataxiaBasher.monkMindCrush, ataxiaBasher.shielded = nil, false
+  ataxia.mnemosyne, ataxia.vitals.eq = nil, nil
+  ataxiaTemp = {}
+end)

@@ -2,6 +2,31 @@
 
 ---
 
+## 2026-10-27 - v4.7.457: Int monk bashes with MIND CRUSH; the Two Handed DPS ledger takes crits out
+
+- **An int monk rides MIND CRUSH beside every combo** (user: "They should use mind crush for normal
+  bashing attacks instead of kai choke. Only kai choke when they have the kai unleashed boon").
+  `ataxiaBasher_monkMindCrush` (`basher/002`) puts `mind crush <target>` before the Shikudo combo (any
+  form) and the Tekura combo. MIND CRUSH costs 150 mana and 3.40 s of equilibrium, so it uses the
+  equilibrium the balance combo leaves idle. It is the last equilibrium rider: Spirit Rend, the Kai
+  Unleashed choke and the Senseless Flurry numb win the round when they fire. KAI CHOKE is still sent
+  only with the Kai Unleashed boon. The rider is skipped when GMCP shows equilibrium down, when the
+  150 mana would take us below the `manause` floor (default 30 %), and on a shielded round (shatter or
+  rhk first). **Int spec:** `bash mindcrush auto|on|off` (new alias `configs/031`, saved as
+  `ataxiaBasher.monkMindCrush`). Auto means intelligence above strength in the last STAT read; an
+  unread stat counts as not int, so read STAT once or use `bash mindcrush on`.
+- **The Two Handed weapon ledger takes crits out** (user: "You have to account for criticals,
+  basically removing them as it will be inconsistent"). A crit multiplies one hit by 2x to 64x, so a
+  few crits decided the comparison. The ledger (`basher/015`) now keeps only non-crit damage and hits
+  (`bashStats.lastHitWasCrit`, set by trigger 334 before trigger 350's damage line). A crit is not
+  counted as zero: the faster hammer swings, and so crits, more often per second, and a zero would
+  count against it. Each crit counts as one average non-crit hit of the same weapon:
+  DPS = (damage / hits) x (hits + crits) / seconds. `bash twohand` shows the crit count. A ledger from
+  v4.7.455 starts again, because its damage included crits.
+- Tests: 7 new (5 monk, 2 ledger).
+
+---
+
 ## 2026-10-27 - v4.7.456: Shikudo in group combat -- the right staff, a [SK] combo line, a group damage route, ASSESS only with Health Inspector
 
 From the user's group fight log of 2026-10-27 (`kb/raw/logs/2026-10-27_shikudo-group-mhaldor.txt`).

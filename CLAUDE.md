@@ -668,7 +668,14 @@ with `wield bastard` (`ataxiaBasher_twoHandWield`) unless GMCP shows it in hand.
 rounds wield `ataxiaBasher_twoHandPick()`: a saved per-weapon DPS ledger (`ataxiaBasher.twoHandDps`,
 fed from `bashStats_recordDamage`, only rounds marked `ataxiaTemp.twoHandRound = "single"`) samples
 each weapon for 120 s of fighting, then takes the higher DPS with a 3 % margin. `bash twohand
-[status|auto|hammer|bastard|reset]`.
+[status|auto|hammer|bastard|reset]`. **Crits are taken out (v4.7.457)**: the ledger's `dmg`/`hits` are
+non-crit only (`bashStats.lastHitWasCrit`, trigger 334 before 350), and each crit counts as one average
+non-crit hit of that weapon -- not zero, because the faster hammer crits more often per second.
+
+**Int monk: MIND CRUSH is the eq rider (v4.7.457, basher/002 `ataxiaBasher_monkMindCrush`).** Every
+Shikudo and Tekura round puts `mind crush <t>` before the combo (150 mana, 3.40 s eq), last after Spirit
+Rend, the Kai Unleashed choke and the numb refresh; KAI CHOKE goes out only with the Kai Unleashed boon.
+`bash mindcrush auto|on|off` (auto = intelligence above strength from STAT; unknown = off).
 
 **Glass lilies (v4.7.367, `misc_scripts/024_Glass_Lily`, user: "We need to DROP LILY every hour").** `ataxia_lilyTick` on every `gmcp.Char.Vitals` sends `drop lily` x `ataxia.settings.lilyCount` (default 3) DIRECTLY (never queued -- `addclearfull` would delete it) once an hour. The hour is stamped by the game's drop line (trigger `785_Glass_Lily_Dropped`), not the attempt; an unconfirmed attempt retries after 5 min. `basher_engaged` used to drop three unconditionally; it now calls `ataxia_lilyDrop("bashing")`, which asks the same clock. Alias `lily [on|off|now|count <n>]`.
 

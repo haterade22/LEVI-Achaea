@@ -682,6 +682,7 @@ shikudo_notes: "inline TRANSITION suffix on the combo; shatter variant for shiel
 transmute_gapfiller: "transmute to top up HP ONLY when sip balance is down and HP <= transmuteat (default 70)"
 transmute_sharp_mind: "with the Sharp Mind boon, in the tower: a plain top-up at HP <= sharpmindat (default 90), sip balance ignored; floor + transmuteto unchanged (v4.7.320)"
 crushbash: "if ataxia.settings.crushbash set, sends 'mind crush <target>' instead"
+mind_crush_rider: "v4.7.457, int monk: 'mind crush <tar>; ' rides the idle EQ before the combo every round, Shikudo (any form) and Tekura (ataxiaBasher_monkMindCrush). Last in the eq chain: Spirit Rend > Kai Unleashed choke > Senseless Flurry numb > mind crush. KAI CHOKE is never sent without the Kai Unleashed boon. Int spec = `bash mindcrush auto|on|off` (ataxiaBasher.monkMindCrush; auto = intelligence > strength from STAT, unknown = off). Skipped when GMCP eq is down (3.40s eq vs a ~2s combo), when mana - 150 would pass the manause floor (default 30%), and on shielded rounds"
 shield: "Monk never spends rage on Splinterkick (spk) to raze - both specs break denizen shields free (shatter / rhk)"
 
 # Battlerage (ataxiaBasher_monkBattlerage). Kit: SBP 14 (small dmg), MIND SCRAMBLE 22 (Clumsy),

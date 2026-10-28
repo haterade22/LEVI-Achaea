@@ -106,16 +106,24 @@ TWOHAND_MARGIN = TWOHAND_MARGIN or 0.03    -- the other weapon must lead by more
 local function ledger(kind)
   ataxiaBasher.twoHandDps = ataxiaBasher.twoHandDps or {}
   local l = ataxiaBasher.twoHandDps[kind]
-  if type(l) ~= "table" then
-    l = { dmg = 0, secs = 0, hits = 0 }
+  -- v = 2: `dmg`/`hits` are NON-CRIT only (v4.7.457). A v4.7.455 ledger counted crits in `dmg`,
+  -- so it starts again rather than mixing the two.
+  if type(l) ~= "table" or l.v ~= 2 then
+    l = { v = 2, dmg = 0, secs = 0, hits = 0, crits = 0 }
     ataxiaBasher.twoHandDps[kind] = l
   end
   return l
 end
 
+-- CRITS ARE TAKEN OUT (v4.7.457, user: "You have to account for criticals, basically removing them
+-- as it will be inconsistent"). A crit multiplies one hit by 2x to 64x, so a few of them decide
+-- the comparison. But a crit hit is not set to zero: the faster weapon swings more often and so
+-- crits more often per second, and zeroing those hits would count against it. Each crit counts
+-- as one AVERAGE NON-CRIT hit of the same weapon: DPS = (dmg / hits) * (hits + crits) / secs.
 local function dps(l)
-  local s = tonumber(l.secs) or 0
-  return (s > 0) and ((tonumber(l.dmg) or 0) / s) or 0
+  local s, h = tonumber(l.secs) or 0, tonumber(l.hits) or 0
+  if s <= 0 or h <= 0 then return 0 end
+  return ((tonumber(l.dmg) or 0) / h) * (h + (tonumber(l.crits) or 0)) / s
 end
 
 -- The weapon for a NORMAL (single-target) round.
@@ -151,6 +159,11 @@ function ataxiaBasher_twoHandRecord(amount)
     if gap > 0 and gap <= (bashStats_COMBAT_GAP or 10) then l.secs = l.secs + gap end
   end
   ataxiaTemp.twoHandLastAt, ataxiaTemp.twoHandLastKind = nowT, kind
+  -- trigger 334 sets the flag on the crit line; 350 clears it after this damage line.
+  if bashStats and bashStats.lastHitWasCrit then
+    l.crits = (tonumber(l.crits) or 0) + 1
+    return
+  end
   l.dmg = l.dmg + amount
   l.hits = l.hits + 1
 end
@@ -165,7 +178,8 @@ function ataxiaBasher_twoHandReport()
   local out = {}
   for _, k in ipairs({ "warhammer", "bastard" }) do
     local l = ledger(k)
-    out[#out + 1] = string.format("%-9s %8.0f dps  %6.0fs  %5d hits%s", k, dps(l), l.secs, l.hits,
+    out[#out + 1] = string.format("%-9s %8.0f dps  %6.0fs  %5d hits  %4d crits%s", k, dps(l), l.secs,
+      l.hits, tonumber(l.crits) or 0,
       (l.secs < TWOHAND_MIN_SECS) and "  (sampling)" or "")
   end
   out[#out + 1] = string.format("mode %s, in hand %s, normal rounds use %s",

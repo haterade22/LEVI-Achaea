@@ -1211,7 +1211,8 @@ spec_bash_strings:
     bash: "battlefury focus speed;[wield <weapon>;]slaughter <target>"  # hyena maul rides ahead when ready
     # v4.7.455: an Indiscriminate arc round sends "wield bastard;arc" (arc needs a sword) unless
     # GMCP shows the bastard in hand. Normal rounds wield the weapon with the higher measured DPS
-    # (ataxiaBasher_twoHandPick, basher/015; `bash twohand`).
+    # (ataxiaBasher_twoHandPick, basher/015; `bash twohand`). Since v4.7.457 crits
+    # are taken out: a crit hit counts as an average non-crit hit of that weapon.
   Dual Blunt:
     raze: "fracture <target>"
     bash: "doublewhirl <target>"

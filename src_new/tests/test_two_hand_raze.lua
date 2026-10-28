@@ -167,10 +167,33 @@ describe("the DPS ledger", function()
     hit("bastard", 100, 20)                     -- longer than the combat gap
     expect(ataxiaBasher.twoHandDps.bastard.secs).toBe(0)
   end)
+
+  it("takes a crit's damage out but keeps its time, and counts it as an average hit", function()
+    reset(); ataxiaTemp.twoHandRound = "single"
+    local prevStats = bashStats
+    bashStats = { lastHitWasCrit = false }
+    hit("warhammer", 100, 0); hit("warhammer", 300, 2)
+    bashStats.lastHitWasCrit = true
+    hit("warhammer", 6400, 2)                   -- a 32x crit
+    bashStats.lastHitWasCrit = false
+    local l = ataxiaBasher.twoHandDps.warhammer
+    expect(l.dmg).toBe(400); expect(l.hits).toBe(2); expect(l.crits).toBe(1); expect(l.secs).toBe(4)
+    -- (400 / 2) * 3 hits / 4 s = 150 dps; with the crit counted raw it would be 1700.
+    expect(ataxiaBasher_twoHandReport()[1]:find("150 dps", 1, true) ~= nil).toBeTrue()
+    bashStats = prevStats
+  end)
+
+  it("starts a ledger from v4.7.455 again (its damage included crits)", function()
+    reset(); ataxiaTemp.twoHandRound = "single"
+    ataxiaBasher.twoHandDps = { warhammer = { dmg = 99999, secs = 50, hits = 10 } }
+    hit("warhammer", 100, 0)
+    expect(ataxiaBasher.twoHandDps.warhammer.dmg).toBe(100)
+  end)
 end)
 
 describe("the normal-round pick", function()
   local function set(h, b)
+    h.v, b.v = 2, 2
     ataxiaBasher.twoHandDps = { warhammer = h, bastard = b }
   end
 

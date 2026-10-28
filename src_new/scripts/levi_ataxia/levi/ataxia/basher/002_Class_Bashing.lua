@@ -2754,6 +2754,45 @@ function ataxiaBasher_senselessFlurryNumb()
   return "numb; "
 end
 
+-- MIND CRUSH, THE INT MONK'S EQ RIDER (v4.7.457, user: "For monk which is bashing as an int
+-- specced monk. They should use mind crush for normal bashing attacks instead of kai choke. Only
+-- kai choke when they have the kai unleashed boon"). Telepathy, not Kaido: MIND CRUSH <t>, 150
+-- mana, 3.40s of EQUILIBRIUM, adventurers and denizens, physical and mental damage
+-- (kb/classes/monk.md:320). Like the choke it rides the idle equilibrium beside the balance combo,
+-- so it is the LAST rider in the chain: Spirit Rend, the Kai Unleashed choke and the numb refresh
+-- each fire rarely and win the round when they fire. Kai Choke without the boon is never sent.
+-- Not Rain-only (that gate is Kaido's), but:
+--   * int spec: `ataxiaBasher.monkMindCrush` = "on" / "off" / "auto" (nil). Auto = intelligence
+--     above strength in the last STAT read (ataxiaTemp.charStats, else ataxia.data.char); an
+--     unknown stat is NOT int, so nothing changes until a stat is read or `bash mindcrush on`.
+--   * equilibrium: skipped only when GMCP says eq is DOWN (3.40s against a ~2s combo, so every
+--     other round would be refused). nil = unknown = allowed.
+--   * mana: never below the `manause` floor (sipping, default 30%) after the 150 -- mana is the
+--     curing pool and transmute's.
+--   * shielded round: skipped, shatter/rhk first (whether a mental attack passes a denizen shield
+--     is unconfirmed).
+local MIND_CRUSH_MANA = 150
+function ataxiaBasher_monkIntSpec()
+  local mode = ataxiaBasher and ataxiaBasher.monkMindCrush
+  if mode == "on" or mode == true then return true end
+  if mode == "off" or mode == false then return false end
+  local cs = ataxiaTemp and ataxiaTemp.charStats
+  local ch = ataxia.data and ataxia.data.char
+  local int = tonumber(cs and cs.intelligence) or tonumber(ch and ch.int)
+  local str = tonumber(cs and cs.strength) or tonumber(ch and ch.str)
+  return (int ~= nil and str ~= nil and int > str) and true or false
+end
+
+function ataxiaBasher_monkMindCrush(useShieldbreak)
+  if useShieldbreak then return nil end
+  if not ataxiaBasher_monkIntSpec() then return nil end
+  if ataxia.vitals.eq == false then return nil end
+  local mp, maxmp = tonumber(ataxia.vitals.mp) or 0, tonumber(ataxia.vitals.maxmp) or 0
+  local floor = maxmp * (((ataxia.settings.sipping or {}).manause or 30) / 100)
+  if mp - MIND_CRUSH_MANA < floor then return nil end
+  return "mind crush "..target.."; "
+end
+
 -- These fire from the attack path, which runs on every prompt — latch them so an
 -- unrecognised form or spec warns once rather than flooding the screen.
 local shikudoWarnedForm = nil
@@ -2869,7 +2908,8 @@ function ataxiaBasher_monkBashing2()
     -- it, so the riders prepend exactly as they do for Shikudo.
     local tRend = ataxiaBasher_spiritRend(useShieldbreak)
     local tChoke = (not tRend) and ataxiaBasher_kaiUnleashedChoke(useShieldbreak) or nil
-    command = command..(tRend or tChoke or ataxiaBasher_senselessFlurryNumb() or "")
+    command = command..(tRend or tChoke or ataxiaBasher_senselessFlurryNumb()
+      or ataxiaBasher_monkMindCrush(useShieldbreak) or "")
     command = command.."unwield all"..sp.."combo "..target..(useShieldbreak and " rhk ucp ucp; " or " sdk ucp ucp; ")
   elseif shikudo then
     monkWarnedNoSpec = false
@@ -2888,7 +2928,9 @@ function ataxiaBasher_monkBashing2()
     -- Thunderclap crowd gate in `ataxiaBasher_rwBisect`.
     local rend = ataxiaBasher_spiritRend(useShieldbreak)
     local choke = (not rend) and ataxiaBasher_kaiUnleashedChoke(useShieldbreak) or nil
-    command = command..(rend or choke or ataxiaBasher_senselessFlurryNumb() or "")
+    -- MIND CRUSH is last: the int monk's every-round rider (ataxiaBasher_monkMindCrush).
+    command = command..(rend or choke or ataxiaBasher_senselessFlurryNumb()
+      or ataxiaBasher_monkMindCrush(useShieldbreak) or "")
     command = command..shikudoBashCombo(target, useShieldbreak)
   elseif not monkWarnedNoSpec then
     monkWarnedNoSpec = true
