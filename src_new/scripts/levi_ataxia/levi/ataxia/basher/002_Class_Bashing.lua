@@ -2125,6 +2125,9 @@ function ataxiaBasher_infernalBashing()
 			arc = ataxiaBasher_twoHandWield("bastard", sp)..arc
 		end
 		if arc == "" and spec == "Two Handed" then ataxiaTemp.twoHandRound = "single" end
+		if spec == "Two Handed" and ataxiaBasher_twoHandSay then
+			ataxiaBasher_twoHandSay((arc ~= "") and "arc" or "normal")
+		end
 		command = aura..maul..brage..sp..((arc ~= "") and arc or bash)
 	end
 
@@ -3880,6 +3883,9 @@ function ataxiaBasher_runewardenBashing()
 			swing = falcon..sword..arc
 		elseif spec == "Two Handed" then
 			ataxiaTemp.twoHandRound = "single"
+		end
+		if spec == "Two Handed" and ataxiaBasher_twoHandSay then
+			ataxiaBasher_twoHandSay((bisect and "bisect") or ((arc ~= "") and "arc") or "normal")
 		end
 		command = fury..uruz..sowulu..brage..sp..swing
 	end

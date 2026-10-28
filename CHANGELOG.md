@@ -2,6 +2,24 @@
 
 ---
 
+## 2026-10-28 - v4.7.460: Two Handed tells the player what it is doing
+
+- **The Two Handed weapon pick now reports in play** (user: "bash twohand auto doesnt echo or
+  anything for the player to understand it is working"). The ledger and the pick were silent. Now
+  `basher/015` prints `(2H)` lines:
+  - the weapon each kind of round uses and why (sampling, higher DPS, pinned, or "arc/bisect needs
+    the sword"). A line shows only when the weapon or the reason changes, so the 0.3 s rebuild loop
+    does not repeat it (`ataxiaBasher_twoHandSay`, called by the Infernal and Runewarden builders);
+  - sampling progress at each 30 s of a weapon's fighting time, the DPS when its 120 s sample is
+    done, and the verdict when both weapons are sampled (`ataxiaBasher_twoHandProgress`);
+  - once a minute, that GMCP shows no warhammer or bastard sword wielded, so nothing is measured
+    (`ataxiaBasher_twoHandUnseen`). Before this, a hand GMCP could not read gave no sign at all.
+- **`bash twohand auto|hammer|bastard|reset` also prints the status table** (DPS, seconds, hits,
+  crits, mode, weapon in hand, the pick), not only one line.
+- Tests: 3 new cases in `test_two_hand_raze.lua`.
+
+---
+
 ## 2026-10-27 - v4.7.459: MIND CRUSH is the int monk's attack, not a rider beside the combo
 
 - **An int monk's round is one equilibrium attack and no balance combo** (user: "mind crush is the

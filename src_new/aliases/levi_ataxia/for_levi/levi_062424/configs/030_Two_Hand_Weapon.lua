@@ -15,21 +15,25 @@ regex: ^bash twohand(?:\s+(\w+))?$
 
 -- `bash twohand [status|auto|hammer|bastard|reset]` -- the Two Handed weapon for normal rounds
 -- (basher/015, v4.7.455). Arc and bisect always use the bastard sword; normal rounds use the
--- weapon with the higher measured DPS, or the one pinned here.
+-- weapon with the higher measured DPS, or the one pinned here. Every form ends with the status
+-- table (v4.7.460: `auto` printed one line, and the player could not see the ledger or the pick).
 local arg = (matches[2] or "status"):lower()
 
 if arg == "auto" or arg == "hammer" or arg == "warhammer" or arg == "bastard" or arg == "sword" then
 	local mode = (arg == "hammer" or arg == "warhammer") and "warhammer"
 		or ((arg == "bastard" or arg == "sword") and "bastard") or "auto"
 	ataxiaBasher.twoHandMode = mode
+	ataxiaTemp.twoHandSaid = nil -- the next round says which weapon it uses
 	ataxiaEcho("<gold>Two Handed normal rounds<reset> -> <white>" .. mode .. "<reset>"
 		.. ((mode == "auto") and " (the weapon with the higher measured DPS)" or " (pinned)") .. ".")
 	if ataxia_saveSettings then ataxia_saveSettings() end
 elseif arg == "reset" then
 	if ataxiaBasher_twoHandReset then ataxiaBasher_twoHandReset() end
+	ataxiaTemp.twoHandSaid = nil
 	ataxiaEcho("<gold>Two Handed DPS ledger<reset> cleared. Both weapons sample again.")
 	if ataxia_saveSettings then ataxia_saveSettings() end
-elseif ataxiaBasher_twoHandReport then
+end
+if ataxiaBasher_twoHandReport then
 	ataxiaEcho("<gold>Two Handed weapon DPS<reset> (normal rounds only):")
 	for _, line in ipairs(ataxiaBasher_twoHandReport()) do
 		cecho("\n  <white>" .. line)

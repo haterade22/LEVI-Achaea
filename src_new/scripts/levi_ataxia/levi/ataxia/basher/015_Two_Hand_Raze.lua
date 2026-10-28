@@ -150,9 +150,13 @@ function ataxiaBasher_twoHandRecord(amount)
   if amount <= 0 or ataxiaTemp.twoHandRound ~= "single" then return end
   if type(target) ~= "number" or not (ataxiaBasher and ataxiaBasher.enabled) then return end
   local kind = ataxiaBasher_twoHandWeapon()
-  if not kind then return end
+  if not kind then
+    ataxiaBasher_twoHandUnseen()
+    return
+  end
   local nowT = (getEpoch and getEpoch()) or 0
   local l = ledger(kind)
+  local before = l.secs
   local prevAt, prevKind = ataxiaTemp.twoHandLastAt, ataxiaTemp.twoHandLastKind
   if prevAt and prevKind == kind then
     local gap = nowT - prevAt
@@ -162,10 +166,77 @@ function ataxiaBasher_twoHandRecord(amount)
   -- trigger 334 sets the flag on the crit line; 350 clears it after this damage line.
   if bashStats and bashStats.lastHitWasCrit then
     l.crits = (tonumber(l.crits) or 0) + 1
-    return
+  else
+    l.dmg = l.dmg + amount
+    l.hits = l.hits + 1
   end
-  l.dmg = l.dmg + amount
-  l.hits = l.hits + 1
+  ataxiaBasher_twoHandProgress(kind, before, l)
+end
+
+-- WHAT THE PLAYER SEES (v4.7.460, user: "bash twohand auto doesnt echo or anything for the player
+-- to understand it is working"). The ledger and the pick were silent. Three kinds of line now:
+--   * sampling progress, at each 30 s of a weapon's fighting time, and when its sample is done;
+--   * the weapon a round wields and why, only when the weapon or the reason changes
+--     (`ataxiaBasher_twoHandSay`, called by the Infernal and Runewarden round builders);
+--   * once a minute, that GMCP does not show the weapon in hand, so nothing is measured.
+local SAMPLE_STEP = 30
+
+local function say(text)
+  if ataxiaEcho then ataxiaEcho("<gold>(2H)<reset> " .. text) end
+end
+
+function ataxiaBasher_twoHandProgress(kind, before, l)
+  local min = TWOHAND_MIN_SECS
+  if before >= min then return end
+  if l.secs >= min then
+    say(string.format("<white>%s<reset> sampled: <white>%.0f<reset> dps over %.0fs (%d hits, %d crits).",
+      kind, dps(l), l.secs, l.hits, tonumber(l.crits) or 0))
+    local other = ledger(kind == "warhammer" and "bastard" or "warhammer")
+    if other.secs >= min then
+      say("Both weapons sampled. Normal rounds now use <white>" .. ataxiaBasher_twoHandPick()
+        .. "<reset>. (bash twohand)")
+    end
+  elseif math.floor(l.secs / SAMPLE_STEP) > math.floor(before / SAMPLE_STEP) then
+    say(string.format("sampling <white>%s<reset>: %.0f/%ds, %.0f dps so far.", kind, l.secs, min, dps(l)))
+  end
+end
+
+-- Why normal rounds use `pick`: "pinned", "sampling" or "dps", with the text for the echo.
+local function why(pick)
+  local mode = ataxiaBasher and ataxiaBasher.twoHandMode
+  if mode == "warhammer" or mode == "bastard" then return "pinned", "pinned by bash twohand " .. mode end
+  local h, b = ledger("warhammer"), ledger("bastard")
+  if h.secs < TWOHAND_MIN_SECS or b.secs < TWOHAND_MIN_SECS then
+    local l = ledger(pick)
+    return "sampling", string.format("sampling, %.0f/%ds", l.secs, TWOHAND_MIN_SECS)
+  end
+  return "dps", string.format("higher DPS: warhammer %.0f, bastard %.0f", dps(h), dps(b))
+end
+
+-- `round` is "normal" (the pick), "arc" or "bisect" (the bastard sword). Echoes on a change only.
+function ataxiaBasher_twoHandSay(round)
+  local want, reason, text
+  if round == "normal" then
+    want = ataxiaBasher_twoHandPick()
+    reason, text = why(want)
+  else
+    want, reason, text = "bastard", round, round .. " needs the sword"
+  end
+  local key = want .. "|" .. reason
+  if ataxiaTemp.twoHandSaid == key then return end
+  ataxiaTemp.twoHandSaid = key
+  local held = ataxiaBasher_twoHandWeapon()
+  say(string.format("%s rounds: <white>%s<reset> (%s)%s", (round == "normal") and "Normal" or round,
+    want, text, (held and held ~= want) and (", wielding it now") or ""))
+end
+
+-- Called when a normal round is recorded nothing because GMCP shows no two-hander in hand.
+function ataxiaBasher_twoHandUnseen()
+  local nowT = (getEpoch and getEpoch()) or 0
+  if nowT - (ataxiaTemp.twoHandUnseenAt or -1e9) < 60 then return end
+  ataxiaTemp.twoHandUnseenAt = nowT
+  say("No warhammer or bastard sword shows as wielded in GMCP, so DPS is not measured. "
+    .. "Wield one, or check: ii warhammer / ii bastard.")
 end
 
 function ataxiaBasher_twoHandReset()

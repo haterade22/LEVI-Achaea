@@ -671,6 +671,8 @@ each weapon for 120 s of fighting, then takes the higher DPS with a 3 % margin. 
 [status|auto|hammer|bastard|reset]`. **Crits are taken out (v4.7.457)**: the ledger's `dmg`/`hits` are
 non-crit only (`bashStats.lastHitWasCrit`, trigger 334 before 350), and each crit counts as one average
 non-crit hit of that weapon -- not zero, because the faster hammer crits more often per second.
+**It reports in play (v4.7.460)**: `(2H)` lines give the weapon each round kind uses and why (on a
+change only), sampling progress every 30 s, the verdict, and once a minute a hand GMCP cannot read.
 
 **Int monk: MIND CRUSH is the attack (v4.7.457-459, basher/002 `ataxiaBasher_monkIntRound`).** An int monk
 (intelligence above strength from STAT AND the quick-witted trait, `ataxia_hasTrait`; quick-witted is the

@@ -1212,7 +1212,8 @@ spec_bash_strings:
     # v4.7.455: an Indiscriminate arc round sends "wield bastard;arc" (arc needs a sword) unless
     # GMCP shows the bastard in hand. Normal rounds wield the weapon with the higher measured DPS
     # (ataxiaBasher_twoHandPick, basher/015; `bash twohand`). Since v4.7.457 crits
-    # are taken out: a crit hit counts as an average non-crit hit of that weapon.
+    # are taken out: a crit hit counts as an average non-crit hit of that weapon. Since v4.7.460
+    # `(2H)` echoes report the pick, its reason and the sampling (ataxiaBasher_twoHandSay).
   Dual Blunt:
     raze: "fracture <target>"
     bash: "doublewhirl <target>"

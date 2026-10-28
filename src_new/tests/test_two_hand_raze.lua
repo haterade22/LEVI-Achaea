@@ -222,6 +222,58 @@ describe("the normal-round pick", function()
   end)
 end)
 
+-- v4.7.460, user: "bash twohand auto doesnt echo or anything for the player to understand it is working"
+describe("the player sees what Two Handed does", function()
+  local said
+  local prevEcho = ataxiaEcho
+  local function capture()
+    said = {}
+    ataxiaEcho = function(t) said[#said + 1] = t end
+  end
+  local function has(text)
+    for _, t in ipairs(said) do if t:find(text, 1, true) then return true end end
+    return false
+  end
+
+  it("says the normal-round weapon and why, once, until it changes", function()
+    reset(); capture(); hold("warhammer")
+    ataxiaBasher_twoHandSay("normal")
+    expect(#said).toBe(1)
+    expect(has("Normal rounds: <white>warhammer<reset> (sampling, 0/120s)")).toBeTrue()
+    ataxiaBasher_twoHandSay("normal")                    -- the 0.3 s rebuild: no repeat
+    expect(#said).toBe(1)
+    ataxiaBasher_twoHandSay("bisect")
+    expect(has("bisect rounds: <white>bastard<reset> (bisect needs the sword), wielding it now")).toBeTrue()
+    ataxiaBasher.twoHandMode = "warhammer"
+    ataxiaBasher_twoHandSay("normal")
+    expect(has("pinned by bash twohand warhammer")).toBeTrue()
+    ataxiaEcho = prevEcho
+  end)
+
+  it("reports sampling every 30 s and the end of a sample", function()
+    reset(); capture(); hold("warhammer"); ataxiaTemp.twoHandRound = "single"
+    ataxiaBasher_twoHandRecord(100)
+    for _ = 1, 15 do NOW = NOW + 2; ataxiaBasher_twoHandRecord(100) end   -- 30 s
+    expect(#said).toBe(1)
+    expect(has("sampling <white>warhammer<reset>: 30/120s")).toBeTrue()
+    for _ = 1, 45 do NOW = NOW + 2; ataxiaBasher_twoHandRecord(100) end   -- 120 s
+    expect(has("<white>warhammer<reset> sampled: <white>51<reset> dps over 120s")).toBeTrue()
+    expect(has("Both weapons sampled")).toBeFalse()
+    ataxiaEcho = prevEcho
+  end)
+
+  it("says once a minute that GMCP shows no two-hander", function()
+    reset(); capture(); ataxiaTemp.twoHandRound = "single"
+    ataxiaBasher_twoHandRecord(100); ataxiaBasher_twoHandRecord(100)
+    expect(#said).toBe(1)
+    expect(has("DPS is not measured")).toBeTrue()
+    NOW = NOW + 61
+    ataxiaBasher_twoHandRecord(100)
+    expect(#said).toBe(2)
+    ataxiaEcho = prevEcho
+  end)
+end)
+
 gmcp, target, ataxiaTemp, ataxiaBasher = _saved.gmcp, _saved.target, _saved.ataxiaTemp or {}, _saved.ataxiaBasher
 ataxiaBasher_attack, getEpoch = _saved.ataxiaBasher_attack, _saved.getEpoch
 mock.reset()

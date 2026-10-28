@@ -382,7 +382,8 @@ spec_branches:
   # v4.7.455: bisect/arc rounds send "wield bastard;" first (bisect needs an edged runeblade,
   # arc a sword) unless GMCP shows the bastard in hand. Normal rounds wield the weapon with the
   # higher measured DPS (ataxiaBasher_twoHandPick, basher/015; `bash twohand`). Since v4.7.457 crits
-    # are taken out: a crit hit counts as an average non-crit hit of that weapon.
+    # are taken out: a crit hit counts as an average non-crit hit of that weapon. Since v4.7.460
+    # `(2H)` echoes report the pick, its reason and the sampling (ataxiaBasher_twoHandSay).
   Dual Blunt:   { raze: "fracture <target>",                     bash: "doublewhirl <target>" }
   else (SnB):   { raze: "combination <target> raze smash",       bash: "combination <target> slice smash" }
   # `razeslash` is spelled out (v4.7.151, 002:1535) -- `rsl` is a personal server-side
