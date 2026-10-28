@@ -142,8 +142,8 @@ Paths below are under `src_new/`. `...\leviticus` means `triggers\levi_ataxia\fo
 - **Notes:** a movement skill, not an attack. A Sentinel with a trap laid toward an exit can leave, or follow us, on balance, and walls or blocks at the exit are not mentioned.
 
 ### Weaponmastery, Two Handed: RETALIATE (157)
-- **Effect:** a new ability. The post gives no detail.
-- **Confidence:** CONFIRMED (announcement); no AB yet.
+- **Effect:** `DEFEND <target>` (AB id 3288, captured 2026-10-28). You take much of the damage from blows aimed at the adventurer you defend, and you strike back at anyone who threatens them, "so long as you are able".
+- **Confidence:** CONFIRMED (AB text). Its start, stop and retaliation lines are not captured.
 - **Code:** no code. If RETALIATE is a defence, check it against our existing `retaliation` defence key (`ataxia\deffing\004_Defence_Sorting_-_Cleaner.lua`:103).
 
 ## Tracking: third-party cure lines (Misc 232)

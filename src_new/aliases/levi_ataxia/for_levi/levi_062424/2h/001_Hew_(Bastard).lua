@@ -14,6 +14,9 @@ regex: ^q(ll|rl|ra|la|hh|tt)$
 command: ''
 packageName: ''
 ]]--
+-- The Runewarden twin of this alias (001_Bastard_Hew) shares the q<limb> pattern; this one is
+-- for Infernal only (v4.7.465).
+if gmcp.Char.Status.class ~= "Infernal" then return end
 
 twohandlogic()
 

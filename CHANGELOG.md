@@ -2,6 +2,52 @@
 
 ---
 
+## 2026-10-28 - v4.7.465: A Two Handed Runewarden offence, and `remweap` empowers runeblades
+
+### Two Handed offence (`rw2h`)
+
+- **There was no working 2H Runewarden offence.** The `q<limb>` and `a<limb>` aliases called five
+  functions that were never defined, so every press stopped with an error. `twohandedrunie()` built
+  a command and never sent it.
+- **New `rw2h` offence**, on the attack alias for a Two Handed Runewarden. Each round sends
+  BATTLEFURY PERCEIVE, clears the fracture counts and the parry on its header line, and decides
+  after the answer.
+- **Stacking**: head while unparried (2 skull fractures), one cracked rib, one wrist fracture, then
+  the legs. A parried limb is skipped. **Focus: SPEED** (more health damage) until the target
+  sips, because a sip means they put health over fracture cures. Then **PRECISION** (2 fractures)
+  keeps the stacks up. When they apply health to cure fractures, SPEED again until the next sip.
+- **Kill paths**: `rw2h impale` (default): 6 torn tendons, DEVASTATE LEGS + UPSET, IMPALE,
+  DISEMBOWEL. `rw2h overwhelm`: prone (tendons or a broken leg), break the head, OVERWHELM at 5
+  skull fractures, BRAIN. Shared: BISECT at 20% or less, CARVE/SPLINTER to raze.
+- **Focus-aware limb prep**: hit damage is recorded per weapon and per focus. To break a limb the
+  offence uses PRECISION when a precision hit is enough, and SPEED when it is not.
+- `q<limb>` / `a<limb>` now send a manual hit, with the same focus rule. The Infernal `q<limb>` alias returns at
+  once for other classes. New alias `rw2h`.
+- Tests: new `test_rw2h_offense.lua` (26 cases).
+
+### Runeblade empower job (`remweap`)
+
+- **`remweap` used to send three sketches on 13 fixed weapon slots with 6 s timers.** It never
+  sent EMPOWER, never checked what was already done, and never checked that a sketch had landed.
+- **It is now a job (`gear_system/003_Runeblade_Empower.lua`).** It reads WEAPONLIST, keeps the
+  flails, morningstars, scimitars, longswords, battleaxes, warhammers and bastard swords, and
+  PROBEs each one. For every weapon that is not empowered it sketches lagul, lagua and laguz, sends
+  EMPOWER, and probes again to verify. Then it sketches gebo and gebu on armour and shield.
+  Every command names the full ID, and every step moves on from a game line. A timeout stops the job.
+- **The system is paused for the work** and unpaused at the end, but only if the job paused it.
+  EMPOWER waits for 2000 mana. The job refuses to start while the basher is on.
+- `remweap list` probes and reports only. `remweap stop` ends a running job.
+- **The WEAPONLIST Months column is item decay, not empowerment** (user, 2026-10-28). Only the
+  probe line "This weapon has N months of runic empowerment left." shows empowerment.
+- The WEAPONLIST capture moved into `ataxia.weaponDetect.list(cb)` and now keeps the Months
+  column. `ataxia setup weapons scan` works as before.
+- Docs: a Runeblades section in the Runewarden dossier (weapon runes, configuration runes,
+  suggested builds per kill path, the captured lines). RETALIATE is recorded as `DEFEND <target>`
+  (AB 3288).
+- Tests: new `test_runeblade_empower.lua` (11 cases).
+
+---
+
 ## 2026-10-28 - v4.7.464: One two-hander in hand at a time
 
 - **The user's check after a swap listed BOTH weapons as wielded** ("a Hellforge Hammer" and

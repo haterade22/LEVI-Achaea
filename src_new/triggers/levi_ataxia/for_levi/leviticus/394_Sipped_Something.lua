@@ -56,4 +56,6 @@ tdeliverance = false
   if ataxiaTemp.lastAssess then ataxiaTemp.lastAssess = ataxiaTemp.lastAssess + 21 end
   
 	targetIshere = true
+  -- 2H Runewarden: a sip means health over fracture cures -> stack with PRECISION (v4.7.465).
+  if rw2h and rw2h.onTargetSipped then rw2h.onTargetSipped() end
 end

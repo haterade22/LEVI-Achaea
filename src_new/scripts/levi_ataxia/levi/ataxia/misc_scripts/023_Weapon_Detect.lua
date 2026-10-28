@@ -204,11 +204,13 @@ end
 -- Public API
 ---------------------------------------------------------------------------
 
---- Start a weapon scan by sending WEAPONLIST and parsing output.
-function ataxia.scanWeapons()
+--- Send WEAPONLIST and hand the parsed rows to cb(rows), or cb(nil) on a timeout.
+-- Each row: {id, type, dmg, tohit, speed, months}. `months` is the item's DECAY column
+-- ("n/a" = it does not decay), NOT runic empowerment -- probe the weapon for that.
+-- Shared by the setup scan and the runeblade empower job (gear_system/003).
+function ataxia.weaponDetect.list(cb)
   local det = ataxia.weaponDetect
   det.detected = {}
-  det.suggested = {}
   det.scanning = false
   det.state = "waiting"
   cleanupScan()
@@ -234,7 +236,7 @@ function ataxia.scanWeapons()
       elseif det.state == "capturing" then
         det.state = "done"
         cleanupScan()
-        presentResults()
+        cb(det.detected)
       end
     end
   )
@@ -256,6 +258,7 @@ function ataxia.scanWeapons()
           dmg = dmg,
           tohit = tohit,
           speed = speed,
+          months = matches[6],
         }
       end
     end
@@ -265,11 +268,23 @@ function ataxia.scanWeapons()
   det.timer = tempTimer(8, function()
     if det.state ~= "done" then
       cleanupScan()
-      ataxia_Echo("Weapon scan timed out. Make sure you're connected and try again.")
+      cb(nil)
     end
   end)
 
   send("WEAPONLIST", false)
+end
+
+--- Start a weapon scan by sending WEAPONLIST and parsing output.
+function ataxia.scanWeapons()
+  ataxia.weaponDetect.suggested = {}
+  ataxia.weaponDetect.list(function(rows)
+    if rows then
+      presentResults()
+    else
+      ataxia_Echo("Weapon scan timed out. Make sure you're connected and try again.")
+    end
+  end)
   ataxia_Echo("Scanning weapons...")
 end
 

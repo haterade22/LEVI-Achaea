@@ -46,6 +46,12 @@ if partyrelay and not ataxia.afflictions.aeon and (not ataxia_relayLimbHits or a
 send("pt Hit " ..matches.name.." "..matches.limb.. " for "..matches.amount.."%")
 end
 
+-- Two Handed Runewarden: remember this hit's damage per weapon AND battlefury focus (speed hits
+-- harder, precision lands 2 fractures), so limb prep predicts the focus it is about to use.
+if gmcp.Char.Status.class == "Runewarden" and ataxia.vitals.knight == "Two Handed" and rw2h then
+rw2h.recordHit(matches.amount)
+end
+
 if gmcp.Char.Status.class == "Runewarden" and ataxia.vitals.knight == "Dual Cutting" then
 ataxiaTables.limbData.dwcSlash = tonumber(matches.amount)
 end

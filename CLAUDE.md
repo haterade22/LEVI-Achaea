@@ -3158,6 +3158,23 @@ Dual-slot curse engine via DEADEYES. 6 modes: lock (default), mental, group, cor
 
 ---
 
+## Runewarden Two Handed Combat System
+
+`rw2h` (v4.7.465): BATTLEFURY PERCEIVE every round, decide after its answer (the header clears the
+fracture counts and the parry, because absent types print no line). Fracture stacking head (unparried) >
+one cracked rib > one wrist fracture > legs; focus SPEED until the target sips, PRECISION after, SPEED
+again when they apply health (triggers 394/153). Kill paths `rw2h impale` (6 tendons -> devastate +
+upset -> impale -> disembowel) and `rw2h overwhelm` (break the head, overwhelm at 5 skull, brain).
+Runeblades are empowered by `remweap` (`gear_system/003`, WEAPONLIST -> probe -> sketch -> EMPOWER).
+
+**Pitfall:** `check_orphans` does not flag a call to a global that NOTHING defines -- the old 2H
+aliases called five such functions and errored on every press.
+
+**Key file:** `rw_2h/001_RW_2H_Logic.lua`. **Namespace:** `rw2h`. **Class docs:** `.claude/classes/runewarden.md`
+(sections "Runeblades" and "Two Handed offence").
+
+---
+
 ## Tekura Monk Combat System
 
 Two Tekura systems: TK6 (6-limb backbreaker, primary) and TKD (3-limb legacy). Both use `combo target <kick> <punch1> <punch2>` format with break-guarded prep phases.

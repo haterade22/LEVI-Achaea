@@ -25,6 +25,10 @@ if gmcp.Char.Status.class == "Runewarden" and ataxia.vitals.knight == "Dual Blun
   dwbRunie.dispatch()
 end
 
+if gmcp.Char.Status.class == "Runewarden" and ataxia.vitals.knight == "Two Handed" then
+  rw2h.dispatch()
+end
+
 if gmcp.Char.Status.class == "Infernal" and ataxia.vitals.knight == "Dual Cutting" then
   infernalDWCVivisect()
 end

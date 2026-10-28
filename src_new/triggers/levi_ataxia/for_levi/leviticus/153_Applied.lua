@@ -49,6 +49,8 @@ if isTargeted(matches[2]) then
     twohanded_decreaseFracture("crackedribs")
   end
   flyu = matches[5]
+  -- 2H Runewarden: they are curing fractures -> stack focus back to SPEED until they sip (v4.7.465).
+  if rw2h and rw2h.onTargetApplied then rw2h.onTargetApplied() end
 end
 
  

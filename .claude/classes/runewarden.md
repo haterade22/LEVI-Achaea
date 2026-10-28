@@ -34,7 +34,12 @@ SnB (Sword and Board):
   weapons: [bastard sword] or [warhammer]
   style: High damage, strip defenses
   strength: Best damage, passive para cure, strips rebounding/shield
-  new_2026_10_23: "RETALIATE (Weaponmastery 157); no detail or AB yet (kb/changes/2026-10-23_classleads.md)"
+  new_2026_10_23: |
+    RETALIATE (Weaponmastery, AB id 3288, AB captured 2026-10-28). Syntax DEFEND <target>.
+    You take much of the damage from blows aimed at the adventurer you defend, and you hit back
+    at anyone who attacks them, "so long as you are able". A group ability: it does nothing in a
+    1v1. Not wired. Its start/stop lines and whether DEF shows it (the cleaner already knows a
+    `retaliation` defence key, deffing/004:103) are not captured.
 ```
 
 > **Implementation note**: Only **Dual Blunt (DWB)** has an implemented dispatch offense
@@ -43,8 +48,9 @@ SnB (Sword and Board):
 > (`aliases/.../152_First_Attack_(All_Classes).lua:23-26`). **`ataxia.vitals.knight` is the
 > canonical weapon-spec read** (parsed unprefixed by `ataxia_Vitals_Update` from `charstats`);
 > the old positional `gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt"` was replaced in v4.7.102
-> because charstats order isn't guaranteed (RW Spec at `[3]`, Infernal at `[4]`). DWC / SnB / 2H
-> specs have no RW-specific offense — they only run through the shared basher (see Bashing below).
+> because charstats order isn't guaranteed (RW Spec at `[3]`, Infernal at `[4]`). **Two Handed**
+> has its own offence since v4.7.465 (`rw2h`, `rw_2h/001_RW_2H_Logic.lua`, see "Two Handed offence"
+> below). DWC / SnB have no RW-specific offense — they only run through the shared basher.
 
 ## Kill Routes (DWB — `dwbRunie`)
 
@@ -704,3 +710,143 @@ because if it is not, the refusal tells us the state anyway.
 Runewarden branch including the shielded one -- fury costs willpower, so it never competes with the
 round. It holds fury while EP >= 60% and drops it under 25%, with a 30s anti-flap floor: **the off
 switch matters as much as the on**, because quadrupled endurance is what strands a long grind.
+
+
+## Runeblades and the `remweap` empower job (v4.7.465)
+
+A runeblade is a knight weapon with **LAGUL + LAGUA + LAGUZ** sketched on it (1 Purple Ink each),
+then **EMPOWER <weapon>** (2000 mana, about 10 s, works from the inventory, no wield needed). It lasts
+100 months. On top of that a runeblade takes ONE core rune, and a **configuration** of 2-3 runes
+around the core (`SKETCH CONFIGURATION <runeblade> <r1> <r2> [r3]`). Source: the wiki text in
+`kb/classes/runewarden.md` (WIKI confidence).
+
+```yaml
+weapon_runes:            # on the blade itself
+  lagul:     "base: more bleeding"
+  lagua:     "base: edged -> DISEMBOWEL hits harder on internal trauma; blunt -> may numb an arm"
+  laguz:     "base: more limb damage"
+  pithakhan: "core: may drain mana"
+  nairat:    "core: may FREEZE the target"
+  eihwaz:    "core: may mask the venom delivered"
+  hugalaz:   "core: may add hail damage; REQUIRED for BISECT (edged blade only)"
+configuration_runes:     # attune on a condition, then EMPOWER <rune> fires the effect
+  kena:    "target <=20% mana -> impatience"
+  fehu:    "target lacks insomnia aff, or prone -> sleep (if no insomnia defence)"
+  inguz:   "target paralysed -> 1 cracked rib"
+  wunjo:   "target shivering -> damage per cracked rib"
+  sowulu:  "hit a damaged limb -> healthleech + every fracture relapses its symptom"
+  isaz:    "engage stops an escape / ground isaz unbalances -> epilepsy"
+  mannaz:  "target off focus balance -> manaleech (then no mana regen)"
+  sleizak: "target weary or lethargic -> nausea (then voyria)"
+  tiwaz:   "target off salve balance AND no limb needs restoration -> breaks BOTH arms"
+  loshre:  "target addicted -> timed aff: ginseng/ferrum drains health and mana"
+```
+
+### Two Handed PvP: the runeblade and the kill paths (PLAYER, the user 2026-10-28)
+
+This replaces a first draft built from the ability text alone (core hugalaz with tiwaz/sowulu/inguz
+on the bastard, and core nairat with fehu/sowulu/sleizak on the hammer). The user corrected it:
+
+```yaml
+runeblade_2h:
+  core: hugalaz            # damage is needed
+  configuration: [sowulu, isaz, sleizak]
+  not_for_2h:
+    tiwaz: "too slow on balance for 2H"
+    inguz: "needs paralysis, and 2H has no way to stick curare (it does not relapse for 2H);
+            a DWC / Sword and Board rune"
+class_identity: |
+  HEALTH PRESSURE. High damage, slow attacks: stack fractures and use DEVASTATE.
+  The victim's dilemma: SIP health, or APPLY health to cure the fractures on their limbs.
+fracture_relapses:
+  torn_tendons:    clumsiness   (HEW / PULVERISE legs)
+  wrist_fractures: lethargy     (HEW / PULVERISE arms) -- also attunes SLEIZAK
+  skull_fractures: nausea       (OVERHAND)
+  cracked_ribs:    sensitivity  (UNDERHAND)
+battlefury_focus:          # applies to the NEXT attack; costs battlefury balance, not balance
+  speed:     "MORE limb damage, 1 fracture (and the attack recovers faster, per AB)"
+  precision: "LESS limb damage, 2 fractures"
+  choose: |            # ASSUMED -- derived from the two lines above, not stated by the user
+    SPEED pushes a limb toward a break (the 100% leg for upset, the head break).
+    PRECISION stacks fractures (6 torn tendons for DEVASTATE, 5 skull fractures for OVERWHELM).
+kill_paths:
+  main_impale_disembowel: |
+    6 torn tendons -> DEVASTATE LEGS -> a level-3 restoration break (three restoration applications to cure) -> BATTLEFURY UPSET (prone)
+    -> IMPALE -> DISEMBOWEL.
+  overwhelm_brain: |
+    A TWO-LIMB setup, leg + head. Get prone one of two ways:
+      a) 6 torn tendons -> DEVASTATE -> level-3 restoration break -> BATTLEFURY UPSET, or
+      b) break the leg (100% limb damage) -> BATTLEFURY UPSET.
+    Then break the head (prep it first if it is not prepped). OVERWHELM at 5 skull fractures,
+    then BRAIN.
+```
+
+**`remweap`** (`gear_system/003_Runeblade_Empower.lua`, alias `149_Empower_Weapons`):
+`remweap` / `remweap list` (probe and report only) / `remweap stop`. It reads WEAPONLIST through
+`ataxia.weaponDetect.list` (023), keeps flail, morningstar, scimitar, longsword, battleaxe, warhammer
+and bastard, PROBEs each, and for every weapon that is not empowered sends the 3 sketches, EMPOWER
+and a verify probe -- by full ID, because a type word hits the same item twice with two flails. Then
+gebo/gebu on armour and shield. It pauses the system (`ataxiaToggle("off")`) for the work and
+unpauses only if it paused. It refuses to run while the basher is on.
+
+**The WEAPONLIST Months column is item DECAY, not empowerment** (user, 2026-10-28: every row read
+`n/a`, an empowered battleaxe included). The only empowerment signal is the probe. Each step
+moves on from a game line, and a timeout stops the job (the no-ink refusal has never been
+captured):
+
+```
+probe:   This weapon has 100 months of runic empowerment left.
+         <desc> has no venoms or magical effects on it.                   <- end of probe
+         <desc> has the following venoms or magical effects on it:        <- end of probe
+         Empowered
+sketch:  You begin sketching a lagul rune on a Logosian battleaxe.
+         With a flourish, you finish sketching a lagul rune.
+         There is no need to duplicate runes.                             <- already there, go on
+empower: Using <desc>, you lightly inscribe a circle upon the ground around where you stand, ...
+         When you feel that your concentration is perfect and complete, ...
+```
+
+
+## Two Handed offence -- `rw2h` (v4.7.465)
+
+`rw_2h/001_RW_2H_Logic.lua`, dispatched by the attack alias (152) for a Runewarden whose
+`ataxia.vitals.knight` is "Two Handed". Built from the user's model above (PLAYER). Modes:
+`rw2h impale` (default) / `rw2h overwhelm`, and `rw2h tendons|break` for how overwhelm gets prone.
+
+**Every round is PERCEIVE -> decide -> attack.** `battlefury perceive <t>` goes out alone; the
+header line ("Narrowing your gaze upon X, you take stock of ...") CLEARS the fracture counts and the
+parry, because a type with no stacks prints no line; triggers 145 (fractures, chained under the
+INFERNAL header 144) and 148 (parry) fill them in; the prompt after it decides. No answer in 1 s ->
+decide on the last known state, with an echo.
+
+Decision order: DISEMBOWEL while impaled -> BISECT at <= 20% (no shield) -> raze (CARVE with the
+bastard, SPLINTER in overwhelm mode, both after FOCUS SPEED) -> the mode.
+
+- impale (all bastard): prone -> IMPALE; 6 tendons -> `devastate <t> legs;battlefury upset <t>`; a
+  broken leg -> UPSET (that round's hit has no focus: upset spent battlefury balance); else stack.
+- overwhelm (all warhammer): prone + primed -> BRAIN; prone + 5 skull -> `battlefury overwhelm`;
+  prone -> break the head, then stack skull fractures; not prone -> tendons route or break route.
+- **stack** = head while unparried and below `headMin` (2), one cracked rib, one wrist fracture,
+  then the legs; a parried limb is skipped. **Focus (the user's rule): SPEED until the target
+  SIPS** -- a sip means they are under the health they want and put health OVER fracture cures --
+  then **PRECISION** to stack and keep the fractures up; when they switch to APPLYING health
+  (curing fractures), SPEED again until the next sip. The latest event decides: trigger 394 (any
+  drink -> `rw2h.onTargetSipped`) and trigger 153 (apply -> `rw2h.onTargetApplied`). The drink
+  line does not name the elixir, so a mana sip also counts. A new target starts on SPEED.
+- **break** = `rw2h.breakFocus(limb, weapon)`: PRECISION if the recorded precision hit still
+  breaks the limb, else SPEED. `limb/004` feeds `rw2h.recordHit` with every PERCEIVE'd hit, keyed
+  by the weapon we wielded and the focus the game confirmed (`ataxiaTemp.thfocus`, trigger 695).
+- Venoms (bastard only): the first of euphorbia, kalmia, xentio, prefarar, gecko (needs asthma)
+  the target lacks -- the Infernal 2H list without curare. A default, not a user decision.
+- `empower priority set sowulu isaz sleizak` on each weapon change; ENGAGE on the first attack
+  (attunes isaz).
+- `q<limb>` / `a<limb>` = `rw2h.manual` (bastard / warhammer, precision). Until v4.7.465 they
+  called `runietwohandlogic()`, `wieldingweapons()`, `bastardweapon()` and `hammerweapon()`, which
+  were never defined: every press errored before sending. The stub `twohandedrunie()` (027) was
+  removed; nothing called it.
+
+**One wrist fracture is for LETHARGY** (user, 2026-10-28): it slows the victim's balance, and it
+also attunes SLEIZAK. Torn tendons give the clumsiness.
+
+**Open:** battlefury balance is not tracked: a focus sent off battlefury balance fails and the
+hit goes without it.
