@@ -2,6 +2,23 @@
 
 ---
 
+## 2026-10-28 - v4.7.461: Two Handed shield break with an artefact hammer, and the carve refusal
+
+- **Any HAMMER is the warhammer** (user's log: "a Hellforge Hammer" in hand, `carve` refused three
+  times in one second: "You must be wielding a two handed sword to carve through an opponent's
+  defences."). `basher/015` read a weapon only by the words "warhammer" / "bastard", so the artefact
+  hammer was unknown and the Runewarden sent its default CARVE. Now a name with "hammer" is the
+  warhammer (SPLINTER), and a wielded name with "bastard" or "sword" is the bastard sword (CARVE).
+- **The carve refusal teaches too** (new trigger 799, the twin of 790): it learns "warhammer" and
+  re-sends the round, so the refused raze is replaced by SPLINTER at once.
+- **The wield command uses the item ID** from the GMCP inventory when it knows one
+  (`ataxiaTemp.twoHandIds`), because `wield warhammer` may not fit an artefact's name. An unwielded
+  sword counts only when its name says "bastard", so a carried one-handed longsword is never wielded.
+  `ataxiaBasher.twoHandSwordWord` / `twoHandHammerWord`, when set, still win.
+- Tests: 4 new cases in `test_two_hand_raze.lua`.
+
+---
+
 ## 2026-10-28 - v4.7.460: Two Handed tells the player what it is doing
 
 - **The Two Handed weapon pick now reports in play** (user: "bash twohand auto doesnt echo or

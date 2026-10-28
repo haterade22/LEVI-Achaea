@@ -661,7 +661,9 @@ sword and SPLINTER a warhammer, for all four knights (Weaponmastery). The Infern
 SPLINTER and the other three always CARVE. `ataxiaBasher_twoHandRaze(target, fallback)` reads the
 wielded item from GMCP `Char.Items` (inventory, `l`/`L` in `attrib`; one `Char.Items.Inv` request if
 nothing is known) and falls back to the class's old verb. Trigger 790 ("You must be wielding a
-warhammer to splinter an opponent's defences.") learns "bastard sword" and re-sends the round.
+warhammer to splinter an opponent's defences.") learns "bastard sword" and re-sends the round. **Since v4.7.461** any "hammer" is the warhammer ("a Hellforge
+Hammer" was unknown, so CARVE was sent and refused), trigger 799 ("You must be wielding a two handed sword to
+carve...") learns the warhammer the same way, and the swap wields by inventory ID (`ataxiaTemp.twoHandIds`).
 **Arc and bisect wield the bastard sword; normal rounds pick the weapon by DPS (v4.7.455,
 Runewarden and Infernal).** Arc needs a sword and bisect an edged runeblade, so their swing starts
 with `wield bastard` (`ataxiaBasher_twoHandWield`) unless GMCP shows it in hand. Normal slaughter

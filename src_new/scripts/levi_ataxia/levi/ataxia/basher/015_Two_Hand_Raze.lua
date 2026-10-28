@@ -58,12 +58,14 @@ local function isWielded(item)
   return type(a) == "string" and (a:find("l", 1, true) or a:find("L", 1, true)) ~= nil
 end
 
--- "warhammer" / "bastard" / nil for one item name.
+-- "warhammer" / "bastard" / nil for one item name. Any HAMMER is the warhammer and any SWORD the
+-- bastard sword (v4.7.461): an artefact keeps its own name, and "a Hellforge Hammer" was read as
+-- unknown, so a Runewarden sent its default CARVE with it in hand and was refused every round.
 local function weaponKind(name)
   if type(name) ~= "string" then return nil end
   local n = name:lower()
-  if n:find("warhammer", 1, true) then return "warhammer" end
-  if n:find("bastard", 1, true) then return "bastard" end
+  if n:find("hammer", 1, true) then return "warhammer" end
+  if n:find("bastard", 1, true) or n:find("sword", 1, true) then return "bastard" end
   return nil
 end
 
@@ -95,8 +97,11 @@ end
 function ataxiaBasher_twoHandWield(want, sp)
   if ataxiaBasher_twoHandWeapon() == want then return "" end
   local ab = ataxiaBasher or {}
-  local word = (want == "bastard" and (ab.twoHandSwordWord or "bastard"))
-    or (ab.twoHandHammerWord or "warhammer")
+  -- The item ID from the inventory when we know it: a keyword may not fit an artefact's name
+  -- ("wield warhammer" for "a Hellforge Hammer"). A word set by the user wins.
+  local ids = ataxiaTemp.twoHandIds or {}
+  local word = (want == "bastard" and (ab.twoHandSwordWord or ids.bastard or "bastard"))
+    or (ab.twoHandHammerWord or ids.warhammer or "warhammer")
   return "wield " .. word .. (sp or "")
 end
 
@@ -259,7 +264,20 @@ function ataxiaBasher_twoHandReport()
   return out
 end
 
--- GMCP inventory feed: keep id -> name for wielded items only.
+-- GMCP inventory feed: keep id -> name for wielded items, and the id of each kind of two-hander
+-- we carry (`ataxiaTemp.twoHandIds`, for the wield command).
+local function noteId(item)
+  local k = type(item) == "table" and weaponKind(item.name)
+  if not k then return end
+  -- Any wielded sword is the two-hander, but a carried one may be a one-handed longsword: an
+  -- unwielded sword counts only when its name says "bastard".
+  if k == "bastard" and not isWielded(item) and not item.name:lower():find("bastard", 1, true) then
+    return
+  end
+  ataxiaTemp.twoHandIds = ataxiaTemp.twoHandIds or {}
+  ataxiaTemp.twoHandIds[k] = tostring(item.id)
+end
+
 function ataxiaBasher_wieldItemsEvent(event)
   local items = gmcp and gmcp.Char and gmcp.Char.Items
   if not items then return end
@@ -267,8 +285,10 @@ function ataxiaBasher_wieldItemsEvent(event)
     local l = items.List
     if type(l) ~= "table" or l.location ~= "inv" then return end
     ataxiaTemp.wieldedItems = {}
+    ataxiaTemp.twoHandIds = {}
     for _, it in ipairs(l.items or {}) do
       if isWielded(it) then ataxiaTemp.wieldedItems[tostring(it.id)] = it.name end
+      noteId(it)
     end
     ataxiaTemp.twoHandLearned = nil -- a fresh picture outranks a refusal's guess
     return
@@ -280,6 +300,7 @@ function ataxiaBasher_wieldItemsEvent(event)
   if type(m) ~= "table" or m.location ~= "inv" or type(m.item) ~= "table" then return end
   ataxiaTemp.wieldedItems = ataxiaTemp.wieldedItems or {}
   local id = tostring(m.item.id)
+  if key ~= "Remove" then noteId(m.item) end
   if key ~= "Remove" and isWielded(m.item) then
     ataxiaTemp.wieldedItems[id] = m.item.name
     ataxiaTemp.twoHandLearned = nil
@@ -288,12 +309,13 @@ function ataxiaBasher_wieldItemsEvent(event)
   end
 end
 
--- Trigger 790: "You must be wielding a warhammer to splinter an opponent's defences."
-function ataxiaBasher_splinterRefused()
-  ataxiaTemp.twoHandLearned = "bastard"
+-- A refused shield break: we do not hold `wrong`, so we hold the other two-hander. Learn that and
+-- re-send the round, so the refused raze is replaced at once.
+local function razeRefused(wrong)
+  ataxiaTemp.twoHandLearned = (wrong == "warhammer") and "bastard" or "warhammer"
   if ataxiaTemp.wieldedItems then
     for id, name in pairs(ataxiaTemp.wieldedItems) do
-      if weaponKind(name) == "warhammer" then ataxiaTemp.wieldedItems[id] = nil end
+      if weaponKind(name) == wrong then ataxiaTemp.wieldedItems[id] = nil end
     end
   end
   if type(target) ~= "number" then return end           -- PvE only
@@ -304,6 +326,14 @@ function ataxiaBasher_splinterRefused()
   ataxiaTemp.splinterRefusedAt = nowT
   if ataxiaBasher_attack then ataxiaBasher_attack() end
 end
+
+-- Trigger 790: "You must be wielding a warhammer to splinter an opponent's defences."
+function ataxiaBasher_splinterRefused() razeRefused("warhammer") end
+
+-- Trigger 799 (v4.7.461): "You must be wielding a two handed sword to carve through an opponent's
+-- defences." The user's log: a Runewarden with "a Hellforge Hammer" sent CARVE three times in a
+-- second, and nothing learned from the refusal.
+function ataxiaBasher_carveRefused() razeRefused("bastard") end
 
 -- Reload-safe registration: kill the previous ids first so a SYSUPDATE cannot stack handlers.
 ataxiaTemp.wieldHandlers = ataxiaTemp.wieldHandlers or {}

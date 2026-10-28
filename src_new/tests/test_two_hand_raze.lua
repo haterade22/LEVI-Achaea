@@ -114,6 +114,42 @@ describe("the splinter refusal teaches 'bastard sword'", function()
   end)
 end)
 
+-- v4.7.461, the user's log: "a Hellforge Hammer" in hand, CARVE refused three times in a second.
+describe("an artefact two-hander and the carve refusal", function()
+  it("a wielded Hellforge Hammer splinters", function()
+    reset()
+    invList({ { id = "77", name = "a Hellforge Hammer", attrib = "lL" } })
+    expect(ataxiaBasher_twoHandRaze(123, "carve")).toBe("splinter 123")
+  end)
+
+  it("the carve refusal teaches 'warhammer' and re-sends the round", function()
+    reset()
+    ataxiaBasher_carveRefused()
+    expect(ataxiaBasher_twoHandRaze(123, "carve")).toBe("splinter 123")
+    expect(attacks).toBe(1)
+  end)
+
+  it("wields by the inventory ID, and never a carried one-handed sword", function()
+    reset()
+    invList({ { id = "77", name = "a Hellforge Hammer", attrib = "lL" },
+              { id = "88", name = "a rune-etched longsword", attrib = "" },
+              { id = "99", name = "a steel bastard sword", attrib = "" } })
+    expect(ataxiaBasher_twoHandWield("bastard", ";")).toBe("wield 99;")
+    reset()
+    invList({ { id = "88", name = "a rune-etched longsword", attrib = "" },
+              { id = "66", name = "a bastard sword", attrib = "lL" } })
+    expect(ataxiaBasher_twoHandWield("warhammer", ";")).toBe("wield warhammer;")
+    invList({ { id = "77", name = "a Hellforge Hammer", attrib = "" },
+              { id = "66", name = "a bastard sword", attrib = "lL" } })
+    expect(ataxiaBasher_twoHandWield("warhammer", ";")).toBe("wield 77;")
+  end)
+
+  it("the trigger's pattern matches the game's line", function()
+    local src = io.open("src_new/triggers/levi_ataxia/for_levi/leviticus/799_Carve_Needs_Sword.lua"):read("*a")
+    expect(src:find("pattern: ^You must be wielding a two handed sword to carve through an opponent's defences\\.$", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
 -- v4.7.455: arc/bisect wield the bastard sword; normal rounds pick the weapon by measured DPS.
 local function hold(kind)
   ataxiaTemp.wieldedItems = { ["1"] = (kind == "bastard") and "a steel bastard sword" or "a steel warhammer" }
