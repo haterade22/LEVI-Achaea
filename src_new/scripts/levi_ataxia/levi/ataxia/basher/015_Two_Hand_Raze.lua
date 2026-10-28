@@ -249,9 +249,14 @@ function ataxiaBasher_twoHandReset()
   ataxiaTemp.twoHandLastAt, ataxiaTemp.twoHandLastKind = nil, nil
 end
 
--- Lines for `bash twohand`.
+-- Lines for `bash twohand`. With no weapon known, it asks GMCP for the inventory (the user's
+-- screenshot read "in hand unknown").
 function ataxiaBasher_twoHandReport()
   local out = {}
+  if not ataxiaBasher_twoHandWeapon() and sendGMCP then
+    pcall(sendGMCP, "Char.Items.Inv")
+    out[#out + 1] = "weapon in hand unknown: asked GMCP for the inventory -- type bash twohand again"
+  end
   for _, k in ipairs({ "warhammer", "bastard" }) do
     local l = ledger(k)
     out[#out + 1] = string.format("%-9s %8.0f dps  %6.0fs  %5d hits  %4d crits%s", k, dps(l), l.secs,
@@ -276,6 +281,30 @@ local function noteId(item)
   end
   ataxiaTemp.twoHandIds = ataxiaTemp.twoHandIds or {}
   ataxiaTemp.twoHandIds[k] = tostring(item.id)
+  -- A sword seen WIELDED is the two-hander for good (user: "Apocalypse, a blackrock sword of
+  -- black-hued steel"), so its ID outlives a new inventory list taken with the hammer in hand.
+  if isWielded(item) then
+    ataxiaTemp.twoHandSeen = ataxiaTemp.twoHandSeen or {}
+    ataxiaTemp.twoHandSeen[k] = tostring(item.id)
+  end
+end
+
+-- After a full list: a sword with no "bastard" in its name and not in hand is found by the ID we
+-- saw wielded, else it is the ONLY sword carried. Two unnamed swords stay unknown.
+local function findSword(list)
+  if ataxiaTemp.twoHandIds.bastard then return end
+  local seen = ataxiaTemp.twoHandSeen and ataxiaTemp.twoHandSeen.bastard
+  local only, count = nil, 0
+  for _, it in ipairs(list) do
+    if type(it) == "table" and weaponKind(it.name) == "bastard" then
+      if seen and tostring(it.id) == seen then
+        ataxiaTemp.twoHandIds.bastard = seen
+        return
+      end
+      only, count = tostring(it.id), count + 1
+    end
+  end
+  if count == 1 then ataxiaTemp.twoHandIds.bastard = only end
 end
 
 function ataxiaBasher_wieldItemsEvent(event)
@@ -290,6 +319,7 @@ function ataxiaBasher_wieldItemsEvent(event)
       if isWielded(it) then ataxiaTemp.wieldedItems[tostring(it.id)] = it.name end
       noteId(it)
     end
+    findSword(l.items or {})
     ataxiaTemp.twoHandLearned = nil -- a fresh picture outranks a refusal's guess
     return
   end

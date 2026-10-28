@@ -663,7 +663,8 @@ wielded item from GMCP `Char.Items` (inventory, `l`/`L` in `attrib`; one `Char.I
 nothing is known) and falls back to the class's old verb. Trigger 790 ("You must be wielding a
 warhammer to splinter an opponent's defences.") learns "bastard sword" and re-sends the round. **Since v4.7.461** any "hammer" is the warhammer ("a Hellforge
 Hammer" was unknown, so CARVE was sent and refused), trigger 799 ("You must be wielding a two handed sword to
-carve...") learns the warhammer the same way, and the swap wields by inventory ID (`ataxiaTemp.twoHandIds`).
+carve...") learns the warhammer the same way, and the swap wields by inventory ID (`ataxiaTemp.twoHandIds`). A sword with its own name ("Apocalypse, a
+blackrock sword") is found by the ID seen wielded, else as the only sword carried (v4.7.462).
 **Arc and bisect wield the bastard sword; normal rounds pick the weapon by DPS (v4.7.455,
 Runewarden and Infernal).** Arc needs a sword and bisect an edged runeblade, so their swing starts
 with `wield bastard` (`ataxiaBasher_twoHandWield`) unless GMCP shows it in hand. Normal slaughter

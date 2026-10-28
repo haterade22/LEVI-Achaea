@@ -2,6 +2,20 @@
 
 ---
 
+## 2026-10-28 - v4.7.462: Two Handed finds a named artefact sword, and asks for the inventory
+
+- **A sword with its own name is found when it is not in hand** (user: "You start to wield
+  Apocalypse, a blackrock sword of black-hued steel in your hands."). v4.7.461 counted a CARRIED
+  sword only when its name said "bastard", so the swap to the sword sent `wield bastard`, which may
+  not fit "Apocalypse". Now `basher/015` keeps the ID of a sword seen wielded
+  (`ataxiaTemp.twoHandSeen`) across new inventory lists, and otherwise takes the only sword carried.
+  Two unnamed swords stay unknown (the keyword is sent).
+- **`bash twohand` asks GMCP for the inventory when the weapon in hand is unknown** (user's
+  screenshot: "in hand unknown") and says to type the command again.
+- Tests: 1 new case in `test_two_hand_raze.lua`.
+
+---
+
 ## 2026-10-28 - v4.7.461: Two Handed shield break with an artefact hammer, and the carve refusal
 
 - **Any HAMMER is the warhammer** (user's log: "a Hellforge Hammer" in hand, `carve` refused three

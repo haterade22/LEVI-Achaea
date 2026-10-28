@@ -144,6 +144,20 @@ describe("an artefact two-hander and the carve refusal", function()
     expect(ataxiaBasher_twoHandWield("warhammer", ";")).toBe("wield 77;")
   end)
 
+  it("finds a named artefact sword by the ID seen wielded, or as the only sword carried", function()
+    reset()
+    local sword = { id = "55", name = "Apocalypse, a blackrock sword of black-hued steel", attrib = "lL" }
+    invList({ sword, { id = "77", name = "a Hellforge Hammer", attrib = "" } })
+    expect(ataxiaBasher_twoHandRaze(1, "splinter")).toBe("carve 1")
+    sword.attrib = ""
+    invList({ sword, { id = "88", name = "a rune-etched longsword", attrib = "" },
+              { id = "77", name = "a Hellforge Hammer", attrib = "lL" } })
+    expect(ataxiaBasher_twoHandWield("bastard", ";")).toBe("wield 55;")
+    reset()
+    invList({ sword, { id = "77", name = "a Hellforge Hammer", attrib = "lL" } })
+    expect(ataxiaBasher_twoHandWield("bastard", ";")).toBe("wield 55;")
+  end)
+
   it("the trigger's pattern matches the game's line", function()
     local src = io.open("src_new/triggers/levi_ataxia/for_levi/leviticus/799_Carve_Needs_Sword.lua"):read("*a")
     expect(src:find("pattern: ^You must be wielding a two handed sword to carve through an opponent's defences\\.$", 1, true) ~= nil).toBeTrue()
