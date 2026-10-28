@@ -350,6 +350,14 @@ function ataxiaBasher_wieldItemsEvent(event)
   local id = tostring(m.item.id)
   if key ~= "Remove" then noteId(m.item) end
   if key ~= "Remove" and isWielded(m.item) then
+    -- A two-hander takes both hands, so it replaces any other two-hander we thought was held
+    -- (v4.7.464: the user's check listed the Hellforge Hammer AND Apocalypse as wielded after a
+    -- swap -- no update un-wielded the sword -- and the weapon in hand came down to `pairs` order).
+    if weaponKind(m.item.name) then
+      for other, name in pairs(ataxiaTemp.wieldedItems) do
+        if other ~= id and weaponKind(name) then ataxiaTemp.wieldedItems[other] = nil end
+      end
+    end
     ataxiaTemp.wieldedItems[id] = m.item.name
     ataxiaTemp.twoHandLearned = nil
   else

@@ -2,6 +2,19 @@
 
 ---
 
+## 2026-10-28 - v4.7.464: One two-hander in hand at a time
+
+- **The user's check after a swap listed BOTH weapons as wielded** ("a Hellforge Hammer" and
+  "Apocalypse, a blackrock sword"), while the game's own list showed only the hammer. GMCP sent the
+  hammer's wield update and no un-wield update for the sword, so the sword stayed in
+  `ataxiaTemp.wieldedItems`. The weapon in hand then came down to `pairs` order: a wrong read sends
+  CARVE with the hammer in hand.
+- **A newly wielded two-hander now replaces every other two-hander** in that list (`basher/015`), as
+  it takes both hands.
+- Tests: 1 new case (run 20 times, so `pairs` order cannot hide it).
+
+---
+
 ## 2026-10-28 - v4.7.463: Two Handed learns weapon IDs without waiting for an inventory list
 
 - **The user's check after a reload** showed Apocalypse wielded and read as the bastard sword, but no

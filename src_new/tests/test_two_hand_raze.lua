@@ -63,6 +63,19 @@ describe("Two Handed raze follows the wielded weapon", function()
     expect(ataxiaBasher_twoHandRaze(123, "carve")).toBe("splinter 123")
   end)
 
+  -- v4.7.464, the user's check: both weapons listed as wielded after a swap with no un-wield update.
+  it("a newly wielded two-hander replaces the old one even with no un-wield update", function()
+    for _ = 1, 20 do                                     -- `pairs` order must not matter
+      reset()
+      invList({ { id = "405364", name = "Apocalypse, a blackrock sword of black-hued steel", attrib = "lL" },
+                { id = "109410", name = "a Hellforge Hammer", attrib = "" } })
+      gmcp.Char.Items.Update = { location = "inv", item = { id = "109410", name = "a Hellforge Hammer", attrib = "lL" } }
+      raiseEvent("gmcp.Char.Items.Update")
+      expect(ataxiaTemp.wieldedItems["405364"]).toBe(nil)
+      expect(ataxiaBasher_twoHandRaze(123, "carve")).toBe("splinter 123")
+    end
+  end)
+
   it("ignores the room's item list", function()
     reset()
     invList({ { id = "2", name = "a steel bastard sword", attrib = "lL" } })
