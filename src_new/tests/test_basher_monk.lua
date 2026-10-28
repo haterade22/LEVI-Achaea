@@ -658,11 +658,14 @@ end)
 -- MIND CRUSH, the int monk's eq rider (v4.7.457): every round beside the combo, any form; Kai
 -- Choke only with the Kai Unleashed boon, and it wins the round's eq when it fires.
 describe("ataxiaBasher_monkBashing2 -- MIND CRUSH for an int monk", function()
+  local savedHasTrait = ataxia_hasTrait
+  ataxia_hasTrait = function(n) return traits and traits[n] or false end
   local function intReset()
     reset()
     ataxia.mnemosyne = { _denizenCount = function() return 3 end,
                          swarm = { state = "idle", threshold = function() return 3 end } }
     ataxiaTemp = { charStats = { intelligence = 18, strength = 12 } }
+    traits = { ["quick-witted"] = true }
     ataxiaBasher.monkMindCrush = nil
     mnemKaiUnleashed, mnemSenselessFlurry, mnemSpiritRend = false, false, false
   end
@@ -700,6 +703,15 @@ describe("ataxiaBasher_monkBashing2 -- MIND CRUSH for an int monk", function()
     expect(has(ataxiaBasher_monkBashing2(), "mind crush")).toBeFalse()
   end)
 
+  it("needs the quick-witted trait as well as int above strength (nimble = balance)", function()
+    intReset(); traits = { nimble = true }
+    expect(has(ataxiaBasher_monkBashing2(), "mind crush")).toBeFalse()
+    traits = nil
+    expect(has(ataxiaBasher_monkBashing2(), "mind crush")).toBeFalse()
+    traits = { ["quick-witted"] = true }
+    expect(has(ataxiaBasher_monkBashing2(), "mind crush")).toBeTrue()
+  end)
+
   it("skips with eq down, below the mana floor, or on a shielded round", function()
     intReset(); ataxia.vitals.eq = false
     expect(has(ataxiaBasher_monkBashing2(), "mind crush")).toBeFalse()
@@ -711,7 +723,30 @@ describe("ataxiaBasher_monkBashing2 -- MIND CRUSH for an int monk", function()
     expect(has(cmd, "shatter")).toBeTrue()
   end)
 
+  it("an int monk stays in Rain: no transition out at any kata", function()
+    intReset(); ataxia.vitals.form = "Rain"; ataxia.vitals.kata = 30
+    local cmd = ataxiaBasher_monkBashing2()
+    expect(has(cmd, "transition")).toBeFalse()
+    expect(has(cmd, "mind crush")).toBeTrue()
+  end)
+
+  it("an int monk outside Rain moves on toward it as soon as the chain allows", function()
+    intReset(); ataxia.vitals.form = "Willow"; ataxia.vitals.kata = 5
+    expect(has(ataxiaBasher_monkBashing2(), "transition rain")).toBeTrue()
+    intReset(); ataxia.vitals.form = "Oak"; ataxia.vitals.kata = 5
+    expect(has(ataxiaBasher_monkBashing2(), "transition willow")).toBeTrue()
+    intReset(); ataxia.vitals.form = "Willow"; ataxia.vitals.kata = 4
+    expect(has(ataxiaBasher_monkBashing2(), "transition")).toBeFalse()
+  end)
+
+  it("a strength monk still leaves Rain on the normal rotation", function()
+    intReset(); ataxiaTemp.charStats = { intelligence = 10, strength = 18 }
+    ataxia.vitals.form = "Rain"; ataxia.vitals.kata = 5
+    expect(has(ataxiaBasher_monkBashing2(), "transition oak")).toBeTrue()
+  end)
+
   mnemKaiUnleashed = false
+  ataxia_hasTrait, traits = savedHasTrait, nil
   ataxiaBasher.monkMindCrush, ataxiaBasher.shielded = nil, false
   ataxia.mnemosyne, ataxia.vitals.eq = nil, nil
   ataxiaTemp = {}

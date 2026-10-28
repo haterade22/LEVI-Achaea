@@ -675,7 +675,11 @@ non-crit hit of that weapon -- not zero, because the faster hammer crits more of
 **Int monk: MIND CRUSH is the eq rider (v4.7.457, basher/002 `ataxiaBasher_monkMindCrush`).** Every
 Shikudo and Tekura round puts `mind crush <t>` before the combo (150 mana, 3.40 s eq), last after Spirit
 Rend, the Kai Unleashed choke and the numb refresh; KAI CHOKE goes out only with the Kai Unleashed boon.
-`bash mindcrush auto|on|off` (auto = intelligence above strength from STAT; unknown = off).
+`bash mindcrush auto|on|off` (auto = intelligence above strength from STAT AND the quick-witted trait,
+`ataxia_hasTrait`, since v4.7.458 -- quick-witted is the eq trait, nimble the balance one; unread = off). **An int monk
+always bashes in Rain (Shikudo) or Dragon stance (Tekura) (v4.7.458):** bash start adopts Rain / sends
+`drs` as crushbash does, and `SHIKUDO_INT_ROTATION` never transitions out of Rain (outside it, it moves
+toward Rain at kata 5).
 
 **Glass lilies (v4.7.367, `misc_scripts/024_Glass_Lily`, user: "We need to DROP LILY every hour").** `ataxia_lilyTick` on every `gmcp.Char.Vitals` sends `drop lily` x `ataxia.settings.lilyCount` (default 3) DIRECTLY (never queued -- `addclearfull` would delete it) once an hour. The hour is stamped by the game's drop line (trigger `785_Glass_Lily_Dropped`), not the attempt; an unconfirmed attempt retries after 5 min. `basher_engaged` used to drop three unconditionally; it now calls `ataxia_lilyDrop("bashing")`, which asks the same clock. Alias `lily [on|off|now|count <n>]`.
 

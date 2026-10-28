@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-10-27 - v4.7.458: An int monk bashes in Rain form (Shikudo) or Dragon stance (Tekura)
+
+- **An int monk stays in Rain form or Dragon stance** (user: "for int specced monk, they will always
+  be in rain form for Shikudo and Dragon (DRS) for tekura"). At bash start an int monk
+  (`ataxiaBasher_monkIntSpec`, the v4.7.457 test) now gets `adopt rain form` (Shikudo) or `drs`
+  (Tekura), as the `crushbash` toggle already did (`genrunning/003`). The Shikudo combo
+  (`shikudoBashCombo`, `basher/002`) never transitions out of Rain for an int monk. If the monk is in
+  another form, each combo transitions toward Rain as soon as the chain allows (kata 5): Oak and
+  Tykonos to Willow, Willow and Gaital to Rain, Maelstrom to Oak (`SHIKUDO_INT_ROTATION`). A
+  strength monk keeps the normal Willow -> Rain -> Oak rotation.
+- **Int spec now also needs the quick-witted trait** (user: "You will know if it is an int specced
+  monk by if their int is higher than strength AND if they have the trait quick-witted. If they have
+  nimble they use balance, quick-witted is eq (which is mind crush and kai choke, etc)").
+  `ataxiaBasher_monkIntSpec` asks `ataxia_hasTrait("quick-witted")` (`misc_scripts/031`) after the
+  int-above-strength test. An unread trait list counts as no trait; type `traits` to read it.
+  `bash mindcrush on|off` still overrides both tests.
+- Tests: 4 new.
+
+---
+
 ## 2026-10-27 - v4.7.457: Int monk bashes with MIND CRUSH; the Two Handed DPS ledger takes crits out
 
 - **An int monk rides MIND CRUSH beside every combo** (user: "They should use mind crush for normal

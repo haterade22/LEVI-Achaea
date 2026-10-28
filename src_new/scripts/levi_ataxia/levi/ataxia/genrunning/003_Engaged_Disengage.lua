@@ -278,7 +278,9 @@ function basher_engaged()
   elseif gmcp.Char.Status.class == "Apostate" then
     send("unwield left;unwield right;wield right shield")
   elseif gmcp.Char.Status.class == "Monk" then
-    if ataxia.settings.crushbash then
+    -- An int monk (v4.7.458, ataxiaBasher_monkIntSpec) always bashes in Rain form (Shikudo) or
+    -- Dragon stance (Tekura), as crushbash does.
+    if ataxia.settings.crushbash or (ataxiaBasher_monkIntSpec and ataxiaBasher_monkIntSpec()) then
       if gmcp.Char.Vitals.charstats[4]:find("Stance") == 1 then
         if ataxia.vitals.stance ~= "Dragon" then
           send("drs")

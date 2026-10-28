@@ -2544,6 +2544,19 @@ local SHIKUDO_BASH_ROTATION = {
   Maelstrom = {nextForm = "Oak",    leaveAt = 5},
 }
 
+-- AN INT MONK STAYS IN RAIN (v4.7.458, user: "for int specced monk, they will always be in rain
+-- form for Shikudo and Dragon (DRS) for tekura"). Rain is where the MIND CRUSH rider goes out every
+-- round and where Kaido works, so an int monk never leaves it. Bash start ADOPTs Rain
+-- (genrunning/003); if the monk is in another form anyway, each combo transitions on toward Rain as
+-- soon as the chain allows (kata 5): Oak/Tykonos -> Willow -> Rain, Gaital -> Rain, Maelstrom -> Oak.
+local SHIKUDO_INT_ROTATION = {
+  Willow    = {nextForm = "Rain",   leaveAt = 5},
+  Oak       = {nextForm = "Willow", leaveAt = 5},
+  Tykonos   = {nextForm = "Willow", leaveAt = 5},
+  Gaital    = {nextForm = "Rain",   leaveAt = 5},
+  Maelstrom = {nextForm = "Oak",    leaveAt = 5},
+}
+
 -- shieldbreak variants swap a hit for shatter. Gaital/Maelstrom combos are built from
 -- shikudo.formAttacks rather than copied from known-good code — verify in game.
 local SHIKUDO_BASH_COMBOS = {
@@ -2763,8 +2776,10 @@ end
 -- each fire rarely and win the round when they fire. Kai Choke without the boon is never sent.
 -- Not Rain-only (that gate is Kaido's), but:
 --   * int spec: `ataxiaBasher.monkMindCrush` = "on" / "off" / "auto" (nil). Auto = intelligence
---     above strength in the last STAT read (ataxiaTemp.charStats, else ataxia.data.char); an
---     unknown stat is NOT int, so nothing changes until a stat is read or `bash mindcrush on`.
+--     above strength in the last STAT read (ataxiaTemp.charStats, else ataxia.data.char) AND the
+--     QUICK-WITTED trait (v4.7.458, user: "If they have nimble they use balance, quick-witted is
+--     eq (which is mind crush and kai choke, etc)"; misc_scripts/031 ataxia_hasTrait). An unread
+--     stat or trait list is NOT int, so nothing changes until both are read or `bash mindcrush on`.
 --   * equilibrium: skipped only when GMCP says eq is DOWN (3.40s against a ~2s combo, so every
 --     other round would be refused). nil = unknown = allowed.
 --   * mana: never below the `manause` floor (sipping, default 30%) after the 150 -- mana is the
@@ -2780,7 +2795,8 @@ function ataxiaBasher_monkIntSpec()
   local ch = ataxia.data and ataxia.data.char
   local int = tonumber(cs and cs.intelligence) or tonumber(ch and ch.int)
   local str = tonumber(cs and cs.strength) or tonumber(ch and ch.str)
-  return (int ~= nil and str ~= nil and int > str) and true or false
+  if not (int ~= nil and str ~= nil and int > str) then return false end
+  return (ataxia_hasTrait and ataxia_hasTrait("quick-witted")) and true or false
 end
 
 function ataxiaBasher_monkMindCrush(useShieldbreak)
@@ -2801,6 +2817,8 @@ local monkWarnedNoSpec = false
 local function shikudoBashCombo(tar, useShieldbreak)
   local form = ataxia.vitals.form
   local combos, rot = SHIKUDO_BASH_COMBOS[form], SHIKUDO_BASH_ROTATION[form]
+  local intRain = ataxiaBasher_monkIntSpec and ataxiaBasher_monkIntSpec()
+  if intRain then rot = SHIKUDO_INT_ROTATION[form] or (form == "Rain" and {}) or nil end
   if not combos or not rot then
     if shikudoWarnedForm ~= form then
       shikudoWarnedForm = form
@@ -2816,7 +2834,7 @@ local function shikudoBashCombo(tar, useShieldbreak)
   -- Use that rather than a separate `transition to the <form> form` command: the inline form
   -- resolves inside the combo's own flow instead of racing the three attacks that build the
   -- chain it depends on. kata is absent from charstats until a chain starts, hence `or 0`.
-  if (ataxia.vitals.kata or 0) >= rot.leaveAt then
+  if rot.leaveAt and (ataxia.vitals.kata or 0) >= rot.leaveAt then
     cmd = cmd.." transition "..rot.nextForm:lower()
     -- A successful TRANSITION resets the chain to 0, but charstats keeps reporting the OLD
     -- kata for a tick. Without zeroing it here the very next prompt still reads the pre-
