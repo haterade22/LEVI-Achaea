@@ -39,8 +39,13 @@ local ROWS = {
 }
 local realList = ataxia.weaponDetect.list
 
+-- Prompt triggers armed by the job (onWpStart), fired by hand.
+local prompts = {}
+tempPromptTrigger = function(fn) prompts[#prompts + 1] = fn; return #prompts end
+local function prompt() local fn = table.remove(prompts, 1); if fn then fn() end end
+
 local function reset(rows)
-  timers, sent, regexes, toggles = {}, {}, {}, {}
+  timers, sent, regexes, toggles, prompts = {}, {}, {}, {}, {}
   ataxia.settings.paused = false
   ataxiaBasher = nil
   gmcp = { Char = { Vitals = { bal = "1", eq = "1", mp = "5000" } } }
@@ -50,19 +55,32 @@ end
 
 local function last() return sent[#sent] end
 
--- Fire the live (not killed, not yet run) timers with this delay.
+-- Fire the live (not killed, not yet run) timers with this delay. Collect them first: a timer
+-- that fires can start the next step, and that step's new timer must wait for the next fire().
 local function fire(delay)
-  local n = 0
+  local due = {}
   for _, t in ipairs(timers) do
-    if t.delay == delay and not t.killed and not t.done then t.done = true; n = n + 1; t.fn() end
+    if t.delay == delay and not t.killed and not t.done then due[#due + 1] = t end
   end
-  return n
+  for _, t in ipairs(due) do
+    if not t.killed then t.done = true; t.fn() end
+  end
+  return #due
 end
 
--- Answer a probe: months (or nil) and the end-of-probe line.
+-- Answer one probe step as the game does (v4.7.467): an empowered weapon's probe has the months
+-- line; a bare weapon's probe has NO effects line at all. Then the wp answer (its first line,
+-- "Empowered" if empowered) and the prompt after it, which ends the step.
 local function probe(months)
   if months then R.onMonths(months) end
-  R.onProbeEnd()
+  R.onWpStart()
+  if months then R.onEmpoweredLine() end
+  prompt()
+end
+
+local function sentHas(cmd)
+  for _, c in ipairs(sent) do if c == cmd then return true end end
+  return false
 end
 
 describe("runeblade: which weapons", function()
@@ -95,9 +113,9 @@ describe("runeblade: the job", function()
   it("probes each weapon, then sketches by ID, empowers and verifies a bare one", function()
     reset({ { id = "battleaxe590991", type = "battleaxe" }, { id = "bastard405364", type = "bastard" } })
     R.start()
-    expect(last()).toBe("probe battleaxe590991")
+    expect(last()).toBe("wp battleaxe590991"); expect(sentHas("probe battleaxe590991")).toBeTrue()
     probe(100)                                   -- already a runeblade
-    expect(last()).toBe("probe bastard405364")
+    expect(last()).toBe("wp bastard405364"); expect(sentHas("probe bastard405364")).toBeTrue()
     probe(nil)                                   -- bare
     expect(toggles[1]).toBe("off")
     expect(last()).toBe("sketch lagul on bastard405364")
@@ -109,7 +127,7 @@ describe("runeblade: the job", function()
     expect(last()).toBe("empower bastard405364")
     R.onEmpowerStart()
     R.onEmpowerDone()
-    expect(last()).toBe("probe bastard405364")
+    expect(last()).toBe("wp bastard405364"); expect(sentHas("probe bastard405364")).toBeTrue()
     probe(100)
     expect(R.state.weapons["bastard405364"].status).toBe("empowered (100 months)")
     expect(R.state.weapons["battleaxe590991"].status).toBe("already (100 months)")
@@ -133,7 +151,7 @@ describe("runeblade: the job", function()
     R.start()
     R.onSketchDone()
     R.onEmpowerDone()
-    expect(last()).toBe("probe flail408566")
+    expect(last()).toBe("wp flail408566"); expect(sentHas("probe flail408566")).toBeTrue()
   end)
 
   it("reports a weapon with no empowerment after EMPOWER as FAILED", function()
@@ -189,7 +207,7 @@ describe("runeblade: the job", function()
     probe(nil)
     expect(R.state.running).toBeFalse()
     expect(#toggles).toBe(0)
-    expect(last()).toBe("probe flail408566")
+    expect(last()).toBe("wp flail408566"); expect(sentHas("probe flail408566")).toBeTrue()
     expect(R.state.weapons["flail408566"].status).toBe("needs runes + empower")
   end)
 
@@ -202,7 +220,52 @@ describe("runeblade: the job", function()
   end)
 end)
 
+describe("runeblade: the probe step reads probe + wp (v4.7.467)", function()
+  -- The live failure, 2026-10-29: a bare flail's PROBE has no effects line, so a job that waited
+  -- for one timed out on the first weapon and reported every weapon "not reached".
+  it("a bare weapon: no effects line in the probe, the step ends on the prompt after wp", function()
+    reset({ { id = "flail343168", type = "flail" }, { id = "flail408566", type = "flail" } })
+    R.list()
+    expect(sentHas("probe flail343168")).toBeTrue()
+    expect(last()).toBe("wp flail343168")
+    R.onWpStart()                                 -- "It is a one-handed weapon."
+    R.onWpStart()                                 -- "Damage: ..." arms nothing twice
+    expect(#prompts).toBe(1)
+    prompt()
+    expect(R.state.weapons["flail343168"].status).toBe("needs runes + empower")
+    expect(last()).toBe("wp flail408566")
+  end)
+
+  it("an Empowered line without the months line still counts", function()
+    reset({ { id = "flail343168", type = "flail" } })
+    R.list()
+    R.onWpStart(); R.onEmpoweredLine(); prompt()
+    expect(R.state.weapons["flail343168"].status).toBe("already (empowered)")
+  end)
+
+  it("wp answered but no prompt: the timeout decides and the job goes on", function()
+    reset({ { id = "flail343168", type = "flail" }, { id = "flail408566", type = "flail" } })
+    R.list()
+    R.onWpStart()
+    fire(R.config.probeTimeout)
+    expect(R.state.running).toBeTrue()
+    expect(last()).toBe("wp flail408566")
+    -- The first step's prompt trigger is stale now and must not end the second step.
+    prompt()
+    expect(last()).toBe("wp flail408566")
+    expect(R.state.weapons["flail408566"].status).toBe("not reached")
+  end)
+
+  it("no wp answer at all: the timeout stops the job", function()
+    reset({ { id = "flail343168", type = "flail" } })
+    R.list()
+    fire(R.config.probeTimeout)
+    expect(R.state.running).toBeFalse()
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
 ataxia.weaponDetect.list = realList
+tempPromptTrigger = nil
 tempTimer, killTimer, send, tempRegexTrigger = realTempTimer, realKillTimer, realSend, realTempRegexTrigger
 ataxia, ataxiaToggle, ataxiaBasher, gmcp, matches = nil, nil, nil, nil, nil

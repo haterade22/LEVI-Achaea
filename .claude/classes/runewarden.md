@@ -784,20 +784,32 @@ kill_paths:
 **`remweap`** (`gear_system/003_Runeblade_Empower.lua`, alias `149_Empower_Weapons`):
 `remweap` / `remweap list` (probe and report only) / `remweap stop`. It reads WEAPONLIST through
 `ataxia.weaponDetect.list` (023), keeps flail, morningstar, scimitar, longsword, battleaxe, warhammer
-and bastard, PROBEs each, and for every weapon that is not empowered sends the 3 sketches, EMPOWER
-and a verify probe -- by full ID, because a type word hits the same item twice with two flails. Then
+and bastard, sends `probe <id>` + `wp <id>` for each, and for every weapon that is not empowered
+sends the 3 sketches, EMPOWER and a verify probe + wp -- by full ID, because a type word hits the
+same item twice with two flails. Then
 gebo/gebu on armour and shield. It pauses the system (`ataxiaToggle("off")`) for the work and
 unpauses only if it paused. It refuses to run while the basher is on.
 
 **The WEAPONLIST Months column is item DECAY, not empowerment** (user, 2026-10-28: every row read
-`n/a`, an empowered battleaxe included). The only empowerment signal is the probe. Each step
-moves on from a game line, and a timeout stops the job (the no-ink refusal has never been
-captured):
+`n/a`, an empowered battleaxe included). Empowered = the probe's months line OR an `Empowered` line
+in the effects list. Each step moves on from a game line, and a timeout stops the job (the no-ink
+refusal has never been captured).
+
+**A bare weapon's PROBE has no effects line** (v4.7.467, live 2026-10-29). It ends with
+"It will reset to you." The `...no venoms or magical effects on it.` line in the first screenshots
+came from WP. v4.7.465 waited for that line after a probe, timed out on the first flail and reported
+all ten weapons "not reached". The step now sends probe + wp; the wp answer's first line arms a
+prompt trigger, and that prompt ends the step. With the wp answer seen but no prompt, the timeout
+decides rather than stops the job.
 
 ```
-probe:   This weapon has 100 months of runic empowerment left.
-         <desc> has no venoms or magical effects on it.                   <- end of probe
-         <desc> has the following venoms or magical effects on it:        <- end of probe
+probe:   (empowered only) This weapon has 100 months of runic empowerment left.
+         (empowered only) <desc> has the following venoms or magical effects on it:  Empowered
+         It will reset to you.                                            <- a bare weapon ends here
+wp:      It is a one-handed weapon.                                       <- arms the prompt end
+         Damage: 174  To-hit: 172  Speed: 162                             <- (also arms it)
+         <desc> has no venoms or magical effects on it.
+         <desc> has the following venoms or magical effects on it:
          Empowered
 sketch:  You begin sketching a lagul rune on a Logosian battleaxe.
          With a flourish, you finish sketching a lagul rune.

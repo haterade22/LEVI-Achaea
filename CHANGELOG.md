@@ -2,6 +2,22 @@
 
 ---
 
+## 2026-10-29 - v4.7.467: `remweap` reads WP, because a bare weapon's probe has no effects line
+
+- **`remweap` stopped on the first weapon** (live, 2026-10-29): "no answer to probe flail343168
+  after 5 s", and all ten weapons "not reached". The job waited for the
+  "...no venoms or magical effects on it." line after a PROBE, but that line comes from WP. A
+  bare weapon's probe ends with "It will reset to you." and has no effects line.
+- **Each weapon now gets `probe <id>` and `wp <id>`.** The first line of the wp answer ("It is a
+  one-handed weapon." or the "Damage: ... To-hit: ... Speed: ..." line) arms a prompt trigger, and
+  that prompt ends the step. Empowered = the probe's months line or an "Empowered" line.
+- If the wp answer arrives but no prompt follows, the timeout decides on what it saw and the job
+  goes on. A prompt trigger left over from that step cannot end the next step.
+- Tests: 4 new cases (15 in `test_runeblade_empower.lua`). The test timer helper now collects
+  the due timers before it fires them.
+
+---
+
 ## 2026-10-28 - v4.7.466: The prompt no longer throws on a target with no health reading
 
 - **Every prompt threw** `attempt to concatenate field 'hpperc' (a nil value)` (Prompt

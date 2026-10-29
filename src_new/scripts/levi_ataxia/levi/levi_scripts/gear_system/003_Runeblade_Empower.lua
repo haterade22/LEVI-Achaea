@@ -17,8 +17,9 @@ packageName: ''
 -- A Runewarden runeblade is LAGUL + LAGUA + LAGUZ sketched on a knight weapon, then EMPOWER
 -- (2000 mana, about 10 s, the system paused). The job:
 --   1. WEAPONLIST (ataxia.weaponDetect.list) -> the knight weapons, by full ID.
---   2. PROBE each one. "This weapon has N months of runic empowerment left." = already a
---      runeblade. The WEAPONLIST Months column is item DECAY, not empowerment -- never read it.
+--   2. PROBE + WP each one. Empowered = the probe's "This weapon has N months of runic
+--      empowerment left." OR an "Empowered" line in the effects list. The WEAPONLIST Months
+--      column is item DECAY, not empowerment -- never read it.
 --   3. For each weapon that is not empowered: the three sketches, EMPOWER, and a probe to verify.
 --   4. gebo/gebu on armour and shield (the old remweap did this too).
 --
@@ -28,8 +29,13 @@ packageName: ''
 -- Commands name the full ID: a type word hits the same item twice with two flails.
 --
 -- Captured lines (2026-10-28):
---   probe end:  "<desc> has no venoms or magical effects on it."
---               "<desc> has the following venoms or magical effects on it:" (then "Empowered")
+--   probe:      a BARE weapon's probe has NO effects line -- it ends with "It will reset to you."
+--               (v4.7.467: the job waited for one and timed out on the first weapon). An
+--               empowered weapon's probe adds the months line and the effects block.
+--   wp:         "It is a one-handed weapon."  "Damage: 174  To-hit: 172  Speed: 162"
+--               "<desc> has no venoms or magical effects on it."
+--               "<desc> has the following venoms or magical effects on it:" then "Empowered"
+--               The wp answer's first line arms a prompt trigger: that prompt ends the step.
 --   sketch:     "You begin sketching a lagul rune on a Logosian battleaxe."
 --               "With a flourish, you finish sketching a lagul rune."
 --               "There is no need to duplicate runes."  (already there -- harmless, go on)
@@ -87,11 +93,13 @@ local function killStepTimers()
   if s.poll then killTimer(s.poll); s.poll = nil end
 end
 
-local function armTimeout(seconds, what)
+-- onTimeout (optional) decides instead of stopping the job when it returns true.
+local function armTimeout(seconds, what, onTimeout)
   local s = R.state
   local gen = s.gen
   s.timer = tempTimer(seconds, function()
     if R.state.running and R.state.gen == gen then
+      if onTimeout and onTimeout() then return end
       R.finish("no answer to " .. what .. " after " .. seconds .. " s")
     end
   end)
@@ -99,8 +107,9 @@ end
 
 local TRIGGERS = {
   { "^This weapon has (\\d+) months? of runic empowerment left\\.", function() R.onMonths(tonumber(matches[2])) end },
-  { "^.+ has no venoms or magical effects on it\\.$", function() R.onProbeEnd() end },
-  { "^.+ has the following venoms or magical effects on it:$", function() R.onProbeEnd() end },
+  { "^It is a (?:one|two)-handed weapon\\.$", function() R.onWpStart() end },
+  { "^Damage: \\d+\\s+To-hit: \\d+\\s+Speed: \\d+", function() R.onWpStart() end },
+  { "^Empowered$", function() R.onEmpoweredLine() end },
   { "^With a flourish, you finish sketching an? \\w+ rune\\.", function() R.onSketchDone() end },
   { "^There is no need to duplicate runes\\.", function() R.onSketchDone() end },
   { "^Using .+, you lightly inscribe a circle upon the ground", function() R.onEmpowerStart() end },
@@ -176,10 +185,14 @@ function R.runStep()
   end
   s.gen = s.gen + 1
   killStepTimers()
-  step.months = nil
+  step.months, step.empowered, step.wpSeen = nil, nil, nil
   if step.kind == "probe" then
     send("probe " .. step.id)
-    armTimeout(R.config.probeTimeout, "probe " .. step.id)
+    send("wp " .. step.id)
+    -- No prompt after the wp answer: decide on what we saw rather than stop the job.
+    armTimeout(R.config.probeTimeout, "probe/wp " .. step.id, function()
+      if step.wpSeen then R.onProbeEnd(); return true end
+    end)
   elseif step.kind == "sketch" then
     whenReady(false, function()
       send("sketch " .. step.rune .. " on " .. step.on)
@@ -201,16 +214,37 @@ end
 
 function R.onMonths(n)
   local step = R.state.running and current()
-  if step and step.kind == "probe" then step.months = n end
+  if step and step.kind == "probe" then step.months, step.empowered = n, true end
+end
+
+function R.onEmpoweredLine()
+  local step = R.state.running and current()
+  if step and step.kind == "probe" then step.empowered = true end
+end
+
+-- The wp answer started: the next prompt ends this probe step. The generation check keeps a
+-- prompt trigger left over from a timed-out step from ending the next one.
+function R.onWpStart()
+  local s = R.state
+  local step = s.running and current()
+  if not step or step.kind ~= "probe" or step.wpSeen then return end
+  step.wpSeen = true
+  local gen = s.gen
+  if tempPromptTrigger then
+    tempPromptTrigger(function()
+      if R.state.running and R.state.gen == gen then R.onProbeEnd() end
+    end, 1)
+  end
 end
 
 function R.onProbeEnd()
   local step = R.state.running and current()
   if not step or step.kind ~= "probe" then return end
   local w = R.state.weapons[step.id]
-  if step.months then
-    if step.verify then w.status = "empowered (" .. step.months .. " months)"
-    else w.status = "already (" .. step.months .. " months)"; w.done = true end
+  local how = step.months and (step.months .. " months") or "empowered"
+  if step.empowered then
+    if step.verify then w.status = "empowered (" .. how .. ")"
+    else w.status = "already (" .. how .. ")"; w.done = true end
   else
     if step.verify then w.status = "FAILED (no empowerment after EMPOWER)"
     else w.status = "needs runes + empower" end
