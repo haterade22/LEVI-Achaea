@@ -255,8 +255,12 @@ function M.scoreBoon(offerName, ctx, W)
   local r = { name = name, echo = isEcho, rec = rec, category = cat, score = 0, parts = {},
               effects = {}, flags = {} }
   local desc = descFor(name, isEcho)
+  -- WHAT TAKING IT LOCKS OUT (user: "if I choose this I wont be able to choose X, Y, Z"). Read
+  -- here, ahead of the early returns, so every option the summary prints carries its list.
+  r.conflicts = (M._conflictsFor and M._conflictsFor(name, ctx.held)) or {}
 
   if name == "Restoration" then
+    r.restore = true
     add(r, W.restoration, "restores resources")
     if ctx.hp and ctx.hp < W.restorationLowAt then
       add(r, W.restorationLowHealth, "you are at " .. math.floor(ctx.hp) .. "% health")
@@ -436,8 +440,7 @@ function M.scoreBoon(offerName, ctx, W)
     end
   end
 
-  local cw = (M._conflictsFor and M._conflictsFor(name, ctx.held)) or {}
-  for _, n in ipairs(cw) do
+  for _, n in ipairs(r.conflicts) do
     if ctx.held[n] then
       add(r, W.conflictsHeld, "conflicts with " .. n)
       r.flags[#r.flags + 1] = "CONFLICTS with " .. n .. " (you have it)"
@@ -504,11 +507,28 @@ local function reasons(r, k)
   return table.concat(out, "; ")
 end
 
+-- The lock-out line under one option: what taking it rules out, held in red, another option on
+-- this screen in yellow. A boon with no conflicts prints no `Conflicts With:` line, so an empty
+-- list means "none" only once the boon has been contemplated; before that it is unknown.
+local function lockoutLine(r, held, offered)
+  if r.restore then return nil end
+  if #r.conflicts > 0 then
+    local others = {}
+    for n in pairs(offered) do if n ~= r.name then others[n] = true end end
+    return "<grey>locks out: " .. M._fmtConflicts(r.conflicts, held, others)
+  end
+  if r.rec.contemplatedAt then return "<grey>locks out: nothing" end
+  return "<grey>locks out: unknown (not contemplated)"
+end
+
 -- The block printed once the offer's boons are contemplated (or at once, when no contemplate ran).
 function M.offerSummary(list)
   local W, class = M.boonWeights()
-  local ranked = M.rankOffer(list, M._advisorContext(), W)
+  local ctx = M._advisorContext()
+  local ranked = M.rankOffer(list, ctx, W)
   if #ranked == 0 then return nil end
+  local offered = {}
+  for _, r in ipairs(ranked) do offered[r.name] = true end
   M.echo("<gold>Boon options<reset> <grey>-- defence first" .. (class and (", " .. class) or "")
     .. (class and M.BOON_CLASS_WEIGHTS[class] and " weights" or "") .. ":")
   for i, r in ipairs(ranked) do
@@ -526,6 +546,8 @@ function M.offerSummary(list)
     local effects = table.concat(r.effects, ", ")
     if #effects > 160 then effects = effects:sub(1, 157) .. "..." end
     if effects ~= "" then cecho("\n      <grey>" .. effects .. "<reset>") end
+    local lock = lockoutLine(r, ctx.held, offered)
+    if lock then cecho("\n      " .. lock .. "<reset>") end
     if #r.flags > 0 then
       cecho("\n      <indian_red>" .. table.concat(r.flags, "; ") .. "<reset>")
     end
@@ -545,6 +567,8 @@ function M.offerSummary(list)
   local margin = second and (best.score - second.score) or best.score
   M.echo("<green>RECOMMEND<reset> <gold>" .. best.name .. "<reset> -- " .. reasons(best, 3)
     .. (best.blocked and ("<grey>, but <indian_red>" .. best.blocked) or "")
+    .. ((#best.conflicts > 0 and not best.blocked) and ("<grey>; locks out <reset>"
+      .. M._fmtConflicts(best.conflicts, ctx.held, offered)) or "")
     .. (second and ("<grey> (ahead of " .. second.name .. " by " .. margin .. ")") or "") .. "<reset>.")
   if allBlocked then
     M.echo("<yellow>Every option has a problem<reset> -- there is no clean pick on this screen.")

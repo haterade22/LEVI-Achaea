@@ -1077,9 +1077,9 @@ real count. **One contemplate chain at a time** (`M._fillBusy()`, stamped by eve
 per-offer chain does not start while one runs.
 **THE BOON ADVISOR (v4.7.327, `014_Boon_Advisor.lua`; user: "defensive boons are a priority" /
 "it depends on the boons we have" / "each class will be different").** `M.offerSummary(list)` prints
-every option (category, rarity, combo/echo, parsed effects, red flags) and a RECOMMEND line; it runs
+every option (category, rarity, combo/echo, parsed effects, a `locks out:` line, red flags) and a RECOMMEND line; it runs
 at the END of the offer's contemplate chain (`ctx.offered`, set by `_boonScreenContemplate`) -- quiet
-chain or not -- or straight from `_flushPendingOffer` when no chain starts. `M.scoreBoon` is a SUM OF
+chain or not -- or straight from `_flushPendingOffer` when no chain starts. **LOCK-OUTS (v4.7.468, user: "if I choose this I wont be able to choose X, Y, Z"):** `scoreBoon` sets `r.conflicts` from `M._conflictsFor` BEFORE its early returns, and `_conflictsFor` now reads the reverse side of a pair from the WHOLE catalogue, not only from held boons. Each option prints `locks out: <names>` (red held, yellow also offered, gold other); an empty list prints `nothing` only when `contemplatedAt` is set, else `unknown (not contemplated)`, because a boon with no conflicts prints no `Conflicts With:` line. RECOMMEND appends what the pick locks out. `M.scoreBoon` is a SUM OF
 NAMED PARTS (each part is a printed reason) built on the existing parsers (`_resistFrom`,
 `_immunitiesFrom`, `_statFrom`, `_dmgGenericFrom`, `_dmgBoostFrom`, `_procFrom` + Fae-Lapse's "chance you
 give the denizen you are attacking X", `_boonDrawbacks`, `_conflictsFor`, `_spiritGate`), relative to

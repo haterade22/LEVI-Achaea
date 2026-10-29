@@ -7896,7 +7896,9 @@ describe("conflicts are echoed and highlighted", function()
     end)
     expect(out:find("CONFLICT<reset> -- <gold>Careless Whisperer", 1, true) ~= nil).toBeTrue()
     expect(out:find("Self-Preservation<reset> (also offered)", 1, true) ~= nil).toBeTrue()
-    expect(out:find("Glass Jaw", 1, true) == nil).toBeTrue() -- Iron Throat is not held or offered
+    -- Iron Throat is neither held nor offered, but taking Glass Jaw still locks it out (v4.7.468:
+    -- the reverse side is read from the whole catalogue, not only from held boons).
+    expect(out:find("<gold>Glass Jaw<reset> -- conflicts with <gold>Iron Throat", 1, true) ~= nil).toBeTrue()
   end)
 
   it("a held boon's own list warns about an offered one the catalogue has no list for", function()
@@ -9197,6 +9199,47 @@ describe("the boon advisor", function()
     end)
     expect(ranked[2].name).toBe("Careless Whisperer")
     expect(table.concat(ranked[2].flags, " "):find("CONFLICTS with Truther", 1, true) ~= nil).toBeTrue()
+  end)
+
+  -- User: "if I choose this I wont be able to choose X, Y, Z boon".
+  it("each option says what taking it locks out, from either side of the pair", function()
+    local lib = { ["Careless Whisperer"] = { description = "d", category = "Defence", contemplatedAt = 1,
+                                             conflictsWith = { "Truther", "Glass Jaw" } },
+                  ["Truther"] = { description = "d", category = "Utility", contemplatedAt = 1 },
+                  ["Plain"] = { description = "d", category = "Utility", contemplatedAt = 1 },
+                  ["Never Read"] = { description = "d", category = "Utility" } }
+    local ranked, out = advising({ lib = lib }, function()
+      return M.offerSummary({ "Careless Whisperer", "Truther", "Plain", "Never Read" })
+    end)
+    local byName = {}
+    for _, r in ipairs(ranked) do byName[r.name] = r end
+    expect(table.concat(byName["Careless Whisperer"].conflicts, ",")).toBe("Truther,Glass Jaw")
+    expect(table.concat(byName["Truther"].conflicts, ",")).toBe("Careless Whisperer") -- the other side
+    expect(out:find("locks out: <yellow>Truther<reset> (also offered), <gold>Glass Jaw", 1, true) ~= nil).toBeTrue()
+    expect(out:find("locks out: <yellow>Careless Whisperer<reset> (also offered)", 1, true) ~= nil).toBeTrue()
+    expect(out:find("locks out: nothing", 1, true) ~= nil).toBeTrue()                -- Plain
+    expect(out:find("locks out: unknown (not contemplated)", 1, true) ~= nil).toBeTrue() -- Never Read
+  end)
+
+  it("a held conflict is red, and the RECOMMEND line names what the pick locks out", function()
+    local lib = { ["Careless Whisperer"] = { description = "d", category = "Defence", contemplatedAt = 1,
+                                             conflictsWith = { "Truther" } },
+                  ["Truther"] = { description = "d" },
+                  ["Shield Wall"] = { description = "d", category = "Defence", contemplatedAt = 1,
+                                      conflictsWith = { "Glass Jaw" } } }
+    local _, out = advising({ lib = lib, claims = { claim("Truther") } }, function()
+      return M.offerSummary({ "Careless Whisperer", "Shield Wall" })
+    end)
+    expect(out:find("locks out: <red>Truther<reset> (you have it)", 1, true) ~= nil).toBeTrue()
+    expect(out:find("RECOMMEND<reset> <gold>Shield Wall", 1, true) ~= nil).toBeTrue()
+    expect(out:find("; locks out <reset><gold>Glass Jaw", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("Restoration prints no lock-out line", function()
+    local _, out = advising({ lib = { ["Plain"] = { description = "d", contemplatedAt = 1 } } }, function()
+      return M.offerSummary({ "Restoration" })
+    end)
+    expect(out:find("locks out", 1, true)).toBeNil()
   end)
 
   it("a resistance counts for less where we already resist that type", function()

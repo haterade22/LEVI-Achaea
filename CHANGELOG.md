@@ -2,6 +2,24 @@
 
 ---
 
+## 2026-10-29 - v4.7.468: the boon advisor says what each option locks out
+
+- **User:** "we also need to see what the boon conflicts with IF they do. So if I choose this I
+  wont be able to choose X, Y, Z boon".
+- **Each option on the advisor screen now has a `locks out:` line.** A held boon is red
+  "(you have it)", another option on the same screen is yellow "(also offered)", and the rest
+  are gold.
+- An empty list prints `nothing` only when the boon was contemplated. Otherwise it prints
+  `unknown (not contemplated)`, because a boon with no conflicts prints no `Conflicts With:`
+  line. `mnem boonfill` fills the gap. Restoration prints no line.
+- **The RECOMMEND line names what the pick locks out.**
+- **`M._conflictsFor` reads the reverse side of a pair from the whole catalogue.** Before, it
+  read the reverse side only from held boons, so an offered boon named only by another boon's
+  list showed no conflict. The offer-screen call-out (`_echoBoonCallouts`) gets the same fix.
+- Tests: 3 new advisor cases; one call-out test changed, because it pinned the old rule.
+
+---
+
 ## 2026-10-29 - v4.7.467: `remweap` reads WP, because a bare weapon's probe has no effects line
 
 - **`remweap` stopped on the first weapon** (live, 2026-10-29): "no answer to probe flail343168

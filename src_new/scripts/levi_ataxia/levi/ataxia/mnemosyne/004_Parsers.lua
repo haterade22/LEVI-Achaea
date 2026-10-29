@@ -1550,16 +1550,20 @@ function M._heldBoons()
   return held
 end
 
--- What `name` conflicts with: its own list, plus any held boon whose list names it (the game
--- prints the pair from both sides, but our catalogue may have seen only one).
+-- What `name` conflicts with: its own list, plus any boon whose list names it -- held, or anywhere
+-- in the catalogue (the game prints the pair from both sides, but our catalogue may have seen only
+-- one). The whole catalogue since the advisor's lock-out line: "if I choose this I wont be able to
+-- choose X, Y, Z" needs every X, not only the held ones.
 function M._conflictsFor(name, held)
   local out, seen = {}, {}
   local rec = M.boonInfo and M.boonInfo(name)
   for _, n in ipairs((type(rec) == "table" and type(rec.conflictsWith) == "table") and rec.conflictsWith or {}) do
     if not seen[n] then seen[n] = true; out[#out + 1] = n end
   end
-  local heldNames = {}
-  for h in pairs(held or {}) do heldNames[#heldNames + 1] = h end
+  local heldNames, pool = {}, {}
+  for h in pairs(held or {}) do pool[h] = true end
+  for h in pairs((M.history and M.history.boonLibrary) or {}) do pool[h] = true end
+  for h in pairs(pool) do if h ~= name then heldNames[#heldNames + 1] = h end end
   table.sort(heldNames)
   for _, h in ipairs(heldNames) do
     local hr = M.boonInfo and M.boonInfo(h)
