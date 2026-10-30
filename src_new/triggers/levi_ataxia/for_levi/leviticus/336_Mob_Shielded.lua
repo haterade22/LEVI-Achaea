@@ -51,6 +51,7 @@ if type(target) == "number" and ataxiaBasher.enabled and not mnemHammerAnvil and
   local argFound = false
   
   if not ataxiaBasher.shieldswap or ataxiaBasher_validTargets() <= 1 or ataxiaTemp.mobshieldtimer then
+    local known = ataxiaBasher.shielded
     ataxiaBasher.shielded = true
     local shieldDur = (ataxiaBasher.shieldTimers and ataxiaBasher.shieldTimers[secondTarget])
       or ataxiaBasher.shieldTimerDefault or 3.1
@@ -58,7 +59,9 @@ if type(target) == "number" and ataxiaBasher.enabled and not mnemHammerAnvil and
     if removeShield then pcall(killTimer, removeShield) end
     removeShield = tempTimer(shieldDur, [[ ataxiaBasher.shielded = false; removeShield = nil]])
     -- v4.7.431: the swing already queued would hit the shield -- replace it with the raze round.
-    if ataxiaBasher_shieldRaised then ataxiaBasher_shieldRaised() end
+    -- v4.7.469: only for a NEW shield. Each rebound off a known shield re-sent the round, and each
+    -- re-send drew another rebound: about 200 in 3 seconds.
+    if not known and ataxiaBasher_shieldRaised then ataxiaBasher_shieldRaised() end
   elseif ataxiaBasher.shieldswap and ataxiaBasher_validTargets() > 1 and not ataxiaTemp.mobshieldtimer then
     ataxiaBasher_shieldedTarget()
   end

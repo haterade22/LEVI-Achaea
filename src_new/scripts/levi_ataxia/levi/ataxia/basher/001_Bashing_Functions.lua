@@ -310,11 +310,16 @@ function ataxiaBasher_shieldDropped()
   if ataxiaTemp.swarmHold then return end              -- a pull chain is queued; do not wipe it
 
   local nowT = (getEpoch and getEpoch()) or 0
-  if ataxiaTemp.shieldReattackAt == nowT then return end
+  if nowT - (tonumber(ataxiaTemp.shieldReattackAt) or -1e9) < SHIELD_RESEND_GAP then return end
   ataxiaTemp.shieldReattackAt = nowT
 
   if ataxiaBasher_attack then ataxiaBasher_attack() end
 end
+
+-- THE THROTTLE WAS AN EQUALITY TEST (v4.7.469). Both functions compared `getEpoch()` stamps with
+-- `==`, but Mudlet's getEpoch() has milliseconds, so two calls almost never match and nothing was
+-- throttled. A window is the only throttle a fractional clock can give.
+SHIELD_RESEND_GAP = SHIELD_RESEND_GAP or 1
 
 -- A denizen's shield just went UP (v4.7.431, user: "when bashing and this happens, it should
 -- prompt us to refresh our attack function, as currently we then hit shield"). The mirror of
@@ -322,6 +327,13 @@ end
 -- NEXT rebuild -- the plain swing already in the server queue hits the shield. Re-send now, so
 -- `queue addclearfull` replaces it with the raze round. Same gates and the same 1/sec throttle
 -- (its own stamp, so a raise and a drop in one second do not swallow each other).
+--
+-- ONLY FOR A NEW SHIELD (v4.7.469). 336 also matches every REBOUND line, and called this on each
+-- one. A Two Handed Runewarden's log: one shield, then about 200 rebounds in 3 seconds -- each
+-- rebound re-sent the round, each re-send was answered by another rebound, about one network
+-- round trip apart, and the broken throttle above stopped none of them. A rebound off a shield we
+-- already know about brings nothing new: the round already carries the raze. 336 now calls this
+-- only when `shielded` goes from false to true.
 function ataxiaBasher_shieldRaised()
   ataxiaTemp = ataxiaTemp or {}
   if type(target) ~= "number" then return end
@@ -329,7 +341,7 @@ function ataxiaBasher_shieldRaised()
   if ataxiaBasher.paused then return end
   if ataxiaTemp.swarmHold then return end
   local nowT = (getEpoch and getEpoch()) or 0
-  if ataxiaTemp.shieldRaiseAt == nowT then return end
+  if nowT - (tonumber(ataxiaTemp.shieldRaiseAt) or -1e9) < SHIELD_RESEND_GAP then return end
   ataxiaTemp.shieldRaiseAt = nowT
   if ataxiaBasher_attack then ataxiaBasher_attack() end
 end

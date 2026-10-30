@@ -2,6 +2,23 @@
 
 ---
 
+## 2026-10-30 - v4.7.469: one re-send per denizen shield, not one per rebound
+
+- **User:** a Two Handed Runewarden "spamming attacks against a shielded denizen". The log shows
+  one "A nearly invisible magical shield forms around a dwarf initiate." and then about 200
+  "A dizzying beam of energy strikes you as your attack rebounds off of a dwarf initiate's
+  shield." lines in 3 seconds, about one network round trip apart.
+- **Cause 1: trigger 336 re-sent the round on every rebound.** It matches the shield line and the
+  rebound line, and called `ataxiaBasher_shieldRaised` (v4.7.431) for both. Each re-send drew
+  another rebound. Now 336 re-sends only when `ataxiaBasher.shielded` goes from false to true.
+- **Cause 2: the 1/sec throttle did nothing.** `ataxiaBasher_shieldRaised` and
+  `ataxiaBasher_shieldDropped` compared two `getEpoch()` stamps with `==`. Mudlet's `getEpoch()`
+  has milliseconds, so the stamps almost never matched. Both now use a 1-second window
+  (`SHIELD_RESEND_GAP`).
+- Tests: `test_basher_shield_resend.lua`, 6 cases. Three of them fail on v4.7.468.
+
+---
+
 ## 2026-10-29 - v4.7.468: the boon advisor says what each option locks out
 
 - **User:** "we also need to see what the boon conflicts with IF they do. So if I choose this I
