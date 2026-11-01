@@ -1,0 +1,1860 @@
+Blonk says in a quiet, muddled voice, "I'm ready."
+H:5460|100% M:4966|100%  22:27:33:054  [ Blonk ][0|0|0|0|0|0]
+
+[Legacy]: Adjusted Blonk's class to Runewarden.
+"Ok!" you exclaim.
+H:5460|100% M:4966|100%  22:27:35:034  [ Blonk ][0|0|0|0|0|0]
+You say in a steady, measured voice, "Lett's begin."
+H:5460|100% M:4966|100%  22:27:36:609  [ Blonk ][0|0|0|0|0|0]
+Blonk starts to wield an eponymously emblazoned wooden hammer in his hands.
+Blonk's aura of weapons rebounding disappears.
+H:5460|100% M:4966|100%  22:27:40:388  [ Blonk ][0|0|0|0|0|0]
+Blonk takes a long drag off his pipe.
+H:5460|100% M:4966|100%  22:27:40:592  [ Blonk ][0|0|0|0|0|0]
+Razed: Nothing
+
+Auto on
+You have recovered balance on all limbs.
+You use a jewel-encrusted silver tinderbox to make fire.
+You light a firefly jar pipe and a firefly jar pipe.
+Envenomed: (Xentio)
+Sliced:    (Blonk)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Engage:    (Blonk)
+Equilibrium used: 2.00s..
+Afflicted: (Clumsiness Paralysis)
+[clum, para]
+Blonk eats a magnesium chip.
+Processed Cures(paralysis)
+[clum]
+
+H:5460|100% M:4916|98%  22:27:43:716  [ Blonk ][0|0|0|0|0|0]
+Blonk touches a tree of life tattoo.
+Processed Cures(clumsiness)
+H:5460|100% M:4916|98%  22:27:43:919  [ Blonk ][0|0|0|0|0|0]
+The runic configuration upon an eponymously emblazoned wooden hammer in the grasp of Blonk
+flashes bright!
+H:5460|100% M:4866|97%  22:27:45:311  [ Blonk ][0|0|0|0|0|0]
+You have recovered equilibrium.
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Blonk)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (84%/100%).
+Afflicted: (Clumsiness Paralysis)
+[clum, para]
+H:5460|100% M:4766|95%  22:27:45:754  [ Blonk ][0|0|0|0|0|0]
+A fierce mountain falcon rips out a chunk of Blonk's flesh with its beak.
+H:5460|100% M:4766|95%  22:27:45:841  [ Blonk ][0|0|0|0|0|0]
+Blonk eats a magnesium chip.
+Blonk takes a drink from an elegant diamond vial.
+Processed Cures(paralysis)
+Blonk eats a potash crystal.
+H:5460|100% M:4766|95%  22:27:45:919  [ Blonk ][0|0|0|0|0|0]
+Blonk bares his teeth in a rictus of fury, drawing himself up to his full height.
+An expression of calculated focus crosses the face of Blonk, and he shifts his feet slightly
+wider apart.
+Blonk comes around with a terrible swing of an eponymously emblazoned wooden hammer toward your
+left leg.
+As Blonk's blow crunches into you, you perceive that he has dealt 25.7% damage to your left
+leg.
+Health lost: 647 (physical blunt).
+[AFF]: Torntendons
+Your leg almost gives out as the hammer crunches brutally into your ankle.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Blonk moves in to engage you.
+H:4813|88% M:4766|95%  22:27:46:130  [ Blonk ][0|0|0|0|0|0] ( -647h 11% )[ttend(1) clum] 
+[Curing]: APPLY HEALTH TO LEGS
+You take some elixir from an oaken vial and rub it into your legs.
+The burning in your lower legs fades away.
+[AFF]: Torntendons
+[Curing]: OUTR KELP
+[OUTR]: 1 Kelp (1663)
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:4813|88% M:4766|95%  22:27:46:333  [ Blonk ][0|0|0|0|0|0]
+You fumble about drunkenly.
+H:4813|88% M:4766|95%  22:27:46:418  [ Blonk ][0|0|0|0|0|0]
+Blonk backs away and eases off.
+H:4813|88% M:4766|95%  22:27:47:667  [ Blonk ][0|0|0|0|0|0]
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Blonk)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (89%/100%).
+Afflicted: (Clumsiness Paralysis)
+[clum, para]
+You may eat another plant or mineral.
+H:4813|88% M:4666|93%  22:27:47:828  [ Blonk ][0|0|0|0|0|0]
+Blonk eats an aurum flake.
+Processed Cures(clumsiness)
+[para]
+
+H:4813|88% M:4666|93%  22:27:47:916  [ Blonk ][0|0|0|0|0|0]
+You suddenly perceive the vague outline of an aura of rebounding around Blonk.
+H:4922|90% M:4666|93%  22:27:49:105  [ Blonk ][0|0|0|0|0|0]
+You fumble about drunkenly.
+H:4922|90% M:4691|94%  22:27:49:422  [ Blonk ][0|0|0|0|0|0]
+Blonk eats a magnesium chip.
+Blonk's aura of weapons rebounding disappears.
+Processed Cures(paralysis)
+An expression of calculated focus crosses the face of Blonk, and he shifts his feet slightly
+wider apart.
+Blonk comes around with a terrible swing of an eponymously emblazoned wooden hammer toward your
+right leg.
+As Blonk's blow crunches into you, you perceive that he has dealt 25.7% damage to your right
+leg.
+Health lost: 647 (physical blunt).
+The right side of your body loses all feeling as the weapon of Blonk discharges energy into
+you.
+[AFF]: Numbedrightarm
+[AFF]: Torntendons
+Your leg almost gives out as the hammer crunches brutally into your ankle.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Blonk moves in to engage you.
+H:4275|78% M:4691|94%  22:27:49:608  [ Blonk ][0|0|0|0|0|0] ( -647h 11% )[ttend(1) clum num-ra] 
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Blonk)
+Shield:    (Clumsiness)
+Ferocity:  [####|####|####|####]
+[HP]:      (85%/100%).
+Afflicted: (Clumsiness)
+[clum]
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+[Curing]: OUTR MOSS
+[OUTR]: 1 Irid (1365)
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+Blonk takes a long drag off his pipe.
+H:4711|86% M:4966|100%  22:27:49:767  [ Blonk ][0|0|0|0|0|0] ( +436h 7% +275m 5% )[ttend(1) num-
+ra] 
+You fumble about drunkenly.
+H:4711|86% M:4966|100%  22:27:49:853  [ Blonk ][0|0|0|0|0|0][ttend(1) num-ra] 
+You fumble about drunkenly.
+H:4711|86% M:4966|100%  22:27:50:420  [ Blonk ][0|0|0|0|0|0][ttend(1) num-ra] 
+You may drink another health or mana elixir.
+H:4711|86% M:4966|100%  22:27:50:641  [ Blonk ][0|0|0|0|0|0][ttend(1) num-ra] 
+[Curing]: APPLY HEALTH TO LEGS
+You take some elixir from an oaken vial and rub it into your legs.
+The burning in your lower legs fades away.
+[AFF]: Torntendons
+H:4711|86% M:4966|100%  22:27:50:813  [ Blonk ][0|0|0|0|0|0][num-ra] 
+Blonk eats an aurum flake.
+Processed Cures(clumsiness)
+H:4711|86% M:4966|100%  22:27:51:176  [ Blonk ][0|0|0|0|0|0][num-ra] 
+You may eat another plant or mineral.
+H:4711|86% M:4966|100%  22:27:51:258  [ Blonk ][0|0|0|0|0|0][num-ra] 
+A Mhojave falcon rips out a chunk of your flesh with its beak.
+Health lost: 90 (physical cutting).
+H:4621|84% M:4966|100%  22:27:51:403  [ Blonk ][0|0|0|0|0|0][num-ra] 
+Health lost: 48 (raw).
+You bleed 48 health.
+H:4573|83% M:4966|100%  22:27:51:584  [ Blonk ][0|0|0|0|0|0][num-ra] 
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Blonk)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Sensitivity)
+[HP]:      (74%/100%).
+Afflicted: (Clumsiness Paralysis Prefarar)
+[clum, deaf, para]
+H:4573|83% M:4866|97%  22:27:51:750  [ Blonk ][0|0|0|0|0|0][num-ra] 
+Blonk takes a drink from an elegant diamond vial.
+Blonk eats a potash crystal.
+H:4573|83% M:4866|97%  22:27:51:921  [ Blonk ][0|0|0|0|0|0][num-ra] 
+A fierce mountain falcon rips out a chunk of Blonk's flesh with its beak.
+H:4573|83% M:4866|97%  22:27:51:923  [ Blonk ][0|0|0|0|0|0][num-ra] 
+Feeling returns to your right arm.
+[AFF]: Numbedrightarm
+H:4573|83% M:4866|97%  22:27:52:105  [ Blonk ][0|0|0|0|0|0]
+You fumble about drunkenly.
+H:4573|83% M:4866|97%  22:27:52:420  [ Blonk ][0|0|0|0|0|0]
+Blonk eats a magnesium chip.
+An expression of calculated focus crosses the face of Blonk, and he shifts his feet slightly
+wider apart.
+Processed Cures(paralysis)
+Blonk comes around with a terrible swing of an eponymously emblazoned wooden hammer toward your
+left leg.
+Blonk misses you with an eponymously emblazoned wooden hammer.
+Blonk moves in to engage you.
+H:4573|83% M:4866|97%  22:27:52:965  [ Blonk ][0|0|0|0|0|0]
+You fumble about drunkenly.
+H:4573|83% M:4866|97%  22:27:53:517  [ Blonk ][0|0|0|0|0|0]
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Blonk)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Your attacks lack sufficient ferocity to carry out such an attack.
+[HP]:      (87%/100%).
+Afflicted: (Paralysis)
+[clum, deaf, para]
+H:4573|83% M:4766|95%  22:27:53:762  [ Blonk ][0|0|0|0|0|0]
+A Mhojave falcon rips out a chunk of your flesh with its beak.
+Health lost: 111 (physical blunt).
+H:4462|81% M:4716|94%  22:27:54:396  [ Blonk ][0|0|0|0|0|0]
+Blonk eats a magnesium chip.
+Processed Cures(paralysis)
+[clum, deaf]
+
+H:4462|81% M:4716|94%  22:27:54:569  [ Blonk ][0|0|0|0|0|0]
+A fierce mountain falcon dives at Blonk, raking his face with its talons.
+H:4462|81% M:4716|94%  22:27:54:952  [ Blonk ][0|0|0|0|0|0]
+You fumble about drunkenly.
+H:4462|81% M:4716|94%  22:27:55:035  [ Blonk ][0|0|0|0|0|0]
+You may drink another health or mana elixir.
+H:4462|81% M:4716|94%  22:27:55:264  [ Blonk ][0|0|0|0|0|0]
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5312|97% M:4716|94%  22:27:55:357  [ Blonk ][0|0|0|0|0|0] ( +850h 15% )
+Blonk shifts into a more aggressive stance.
+Blonk brings an eponymously emblazoned wooden hammer down upon you with a brutal overhand blow.
+
+[Legacy]: Curing against 2H (Blonk).
+Blonk misses you with an eponymously emblazoned wooden hammer.
+Blonk moves in to engage you.
+H:5312|97% M:4716|94%  22:27:55:605  [ Blonk ][0|0|0|0|0|0]
+You have recovered balance on all limbs.
+Envenomed: (Vernalius)
+Sliced:    (Blonk)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (78%/100%)
+You may eat another bit of irid moss or potash..
+Afflicted: (Weariness Paralysis)
+[clum, weari, deaf, para]
+H:5312|97% M:4616|92%  22:27:55:753  [ Blonk ][0|0|0|0|0|0]
+You fumble about drunkenly.
+H:5312|97% M:4616|92%  22:27:56:007  [ Blonk ][0|0|0|0|0|0]
+Blonk eats an aurum flake.
+Processed Cures(clumsiness weariness)
+[clum[50], weari[50], deaf, para]
+
+H:5312|97% M:4616|92%  22:27:56:097  [ Blonk ][0|0|0|0|0|0]
+Blonk takes a drink from an elegant diamond vial.
+H:5312|97% M:4616|92%  22:27:56:304  [ Blonk ][0|0|0|0|0|0]
+You fumble about drunkenly.
+H:5312|97% M:4616|92%  22:27:57:505  [ Blonk ][0|0|0|0|0|0]
+A Mhojave falcon rips out a chunk of your flesh with its beak.
+Health lost: 94 (physical cutting).
+H:5218|95% M:4616|92%  22:27:57:511  [ Blonk ][0|0|0|0|0|0]
+You have recovered balance on all limbs.
+Envenomed: (Vernalius)
+Sliced:    (Blonk)
+Runeblade: (Nairat)
+Afflicted: (Frozen)
+Empower:   (Inguz)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (86%/100%).
+Afflicted: (Weariness)
+[clum[50], weari, deaf, frzn[200], para]
+Blonk eats a magnesium chip.
+Blonk takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+Processed Cures(paralysis)
+H:5218|95% M:4416|88%  22:27:57:749  [ Blonk ][0|0|0|0|0|0] ( -200m 4% )
+You fumble about drunkenly.
+H:5218|95% M:4416|88%  22:27:58:020  [ Blonk ][0|0|0|0|0|0]
+A fierce mountain falcon dives at Blonk, raking his face with its talons.
+H:5218|95% M:4416|88%  22:27:58:023  [ Blonk ][0|0|0|0|0|0]
+Blonk touches a tree of life tattoo.
+Processed Cures(clumsiness weariness frozen)
+[weari[67], deaf, frzn[67]]
+
+H:5218|95% M:4416|88%  22:27:58:109  [ Blonk ][0|0|0|0|0|0]
+Blonk shifts into a more aggressive stance.
+Blonk brings an eponymously emblazoned wooden hammer down upon you with a brutal overhand blow.
+As Blonk's blow crunches into you, you perceive that he has dealt 12.9% damage to your head.
+Health lost: 385 (physical blunt).
+A bolt of lightning explodes from the weapon as it makes contact, accompanied by a clap of
+thunder.
+With a series of hisses, small acidic hailstones pour down from above, battering your body.
+Health lost: 795 (cold).
+The right side of your body loses all feeling as the weapon of Blonk discharges energy into
+you.
+[AFF]: Numbedrightarm
+[AFF]: Skullfractures
+You feel bones grating together as the hammer catches you a savage blow to the head.
+[AFF]: Nausea
+A sense of extreme nausea washes over you.
+Blonk moves in to engage you.
+H:4038|73% M:4416|88%  22:27:58:210  [ Blonk ][0|0|0|0|0|0] ( -1180h 21% )[sfrac(2) naus num-
+ra] 
+You suddenly perceive the vague outline of an aura of rebounding around Blonk.
+H:4038|73% M:4416|88%  22:27:58:214  [ Blonk ][0|0|0|0|0|0][sfrac(2) naus num-ra] 
+[Curing]: OUTR GINSENG
+[OUTR]: 1 Ginseng (585)
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+Your stomach becalms itself.
+[AFF]: Nausea
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+H:4474|81% M:4813|96%  22:27:58:310  [ Blonk ][0|0|0|0|0|0] ( +436h 7% +397m 7% )[sfrac(2) num-
+ra] 
+[OUTR]: 1 Ginseng (584)
+Blonk takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+H:4474|81% M:4813|96%  22:27:58:715  [ Blonk ][0|0|0|0|0|0][sfrac(2) num-ra] 
+
+THEY CAN TOUCH TREE AGAIN!
+Blonk eats an aurum flake.
+Processed Cures(weariness)
+[deaf, Reb]
+
+H:4583|83% M:4763|95%  22:27:59:292  [ Blonk ][0|0|0|0|0|0][sfrac(2) num-ra] 
+You have recovered balance on all limbs.
+Razed: Rebounding
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (89%/100%).
+Afflicted: (Paralysis)
+[deaf, para]
+Blonk takes a long drag off his pipe.
+H:4583|83% M:4738|95%  22:27:59:720  [ Blonk ][0|0|0|0|0|0][sfrac(2) num-ra] 
+You may eat another plant or mineral. Eat (1.507)
+You may drink another health or mana elixir. Health (4.458)
+H:4583|83% M:4738|95%  22:27:59:815  [ Blonk ][0|0|0|0|0|0][sfrac(2) num-ra] 
+[Curing]: APPLY HEALTH TO HEAD
+You take some elixir from an oaken vial and rub it into your head.
+The pain in your head lessens somewhat.
+H:4583|83% M:4738|95%  22:27:59:907  [ Blonk ][0|0|0|0|0|0][sfrac(1) num-ra] 
+You fumble about drunkenly.
+H:4583|83% M:4738|95%  22:28:01:024  [ Blonk ][0|0|0|0|0|0][sfrac(1) num-ra] 
+Blonk eats a magnesium chip.
+Processed Cures(paralysis)
+[deaf]
+
+H:4583|83% M:4738|95%  22:28:01:113  [ Blonk ][0|0|0|0|0|0][sfrac(1) num-ra] 
+A fierce mountain falcon dives at Blonk, raking his face with its talons.
+H:4583|83% M:4738|95%  22:28:01:116  [ Blonk ][0|0|0|0|0|0][sfrac(1) num-ra] 
+Feeling returns to your right arm.
+[AFF]: Numbedrightarm
+H:4583|83% M:4738|95%  22:28:01:206  [ Blonk ][0|0|0|0|0|0][sfrac(1)] 
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+The pounding in your head disappears.
+[AFF]: Skullfractures
+H:4583|83% M:4738|95%  22:28:01:300  [ Blonk ][0|0|0|0|0|0]
+You fumble about drunkenly.
+H:4583|83% M:4738|95%  22:28:01:428  [ Blonk ][0|0|0|0|0|0]
+You fumble about drunkenly.
+H:4583|83% M:4738|95%  22:28:01:521  [ Blonk ][0|0|0|0|0|0]
+You have recovered balance on all limbs.
+H:4583|83% M:4738|95%  22:28:01:528  [ Blonk ][0|0|0|0|0|0]
+Blonk shifts into a more aggressive stance.
+Blonk comes around with a terrible swing of an eponymously emblazoned wooden hammer toward your
+left leg.
+As Blonk's blow crunches into you, you perceive that he has dealt 12.9% damage to your left
+leg.
+Health lost: 488 (physical blunt).
+[AFF]: Torntendons
+Your leg almost gives out as the hammer crunches brutally into your ankle.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Blonk moves in to engage you.
+H:4095|75% M:4738|95%  22:28:01:654  [ Blonk ][0|0|0|0|0|0] ( -488h 8% )[ttend(2) clum] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:4095|75% M:4738|95%  22:28:01:822  [ Blonk ][0|0|0|0|0|0][ttend(2)] 
+You fumble about drunkenly.
+H:4095|75% M:4738|95%  22:28:02:027  [ Blonk ][0|0|0|0|0|0][ttend(2)] 
+Envenomed: (Xentio)
+Sliced:    (Blonk)
+Proc:      (Inguz)
+Afflicted: (Sensitivity)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Sensitivity)
+[HP]:      (75%/100%).
+Afflicted: (Clumsiness Paralysis)
+[clum, sen, deaf, para]
+Blonk takes some elixir from an elegant diamond vial and rubs it into his torso.ribs: 0
+Blonk eats a potash crystal.
+H:4095|75% M:4638|93%  22:28:02:045  [ Blonk ][0|0|0|0|0|0][ttend(2)] 
+Health lost: 18 (raw).
+You bleed 18 health.
+H:4077|74% M:4638|93%  22:28:02:544  [ Blonk ][0|0|0|0|0|0][ttend(2)] 
+Blonk eats an aurum flake.
+Processed Cures(clumsiness sensitivity)
+[clum[50], sen[50], deaf, para]
+
+H:4077|74% M:4638|93%  22:28:02:633  [ Blonk ][0|0|0|0|0|0][ttend(2)] 
+You may eat another plant or mineral.
+H:4077|74% M:4638|93%  22:28:03:373  [ Blonk ][0|0|0|0|0|0][ttend(2)] 
+A Mhojave falcon dives at you, raking your face with its talons.
+Health lost: 82 (physical cutting).
+H:3995|73% M:4638|93%  22:28:03:622  [ Blonk ][0|0|0|0|0|0][ttend(2)] 
+You have recovered balance on all limbs.
+Envenomed: (Vernalius)
+Sliced:    (Blonk)
+Empower:   (Inguz)
+Shield:    (Asthma)
+Ferocity:  [####|####|####|####]
+[HP]:      (72%/100%).
+Afflicted: (Weariness Asthma)
+[ast, clum[50], sen[50], weari, deaf, para]
+You fumble about drunkenly.
+H:3995|73% M:4438|89%  22:28:04:002  [ Blonk ][0|0|0|0|0|0] ( -200m 4% )[ttend(2)] 
+A fierce mountain falcon dives at Blonk, raking his face with its talons.
+H:3995|73% M:4438|89%  22:28:04:179  [ Blonk ][0|0|0|0|0|0][ttend(2)] 
+You may eat another bit of irid moss or potash.
+H:3995|73% M:4388|88%  22:28:04:182  [ Blonk ][0|0|0|0|0|0][ttend(2)] 
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+Blonk eats a magnesium chip.
+Processed Cures(paralysis)
+[ast, clum[50], sen[50], weari, deaf]
+
+H:4431|81% M:4785|96%  22:28:04:273  [ Blonk ][0|0|0|0|0|0] ( +436h 7% +397m 7% )[ttend(2)] 
+An expression of calculated focus crosses the face of Blonk, and he shifts his feet slightly
+wider apart.
+Blonk comes around with a terrible swing of an eponymously emblazoned wooden hammer toward your
+left leg.
+As Blonk's blow crunches into you, you perceive that he has dealt 25.7% damage to your left
+leg.
+Health lost: 511 (physical blunt).
+Your leg almost gives out as the hammer crunches brutally into your ankle.
+Blonk moves in to engage you.
+H:3920|71% M:4785|96%  22:28:05:124  [ Blonk ][0|0|0|0|0|0] ( -511h 9% )[ttend(3)] 
+(Cyrenian Academy of Combat): Salisa says, "Nice!"
+H:3920|71% M:4785|96%  22:28:05:306  [ Blonk ][0|0|0|0|0|0][ttend(3)] 
+You may drink another health or mana elixir.
+H:3920|71% M:4785|96%  22:28:05:686  [ Blonk ][0|0|0|0|0|0][ttend(3)] 
+[Curing]: APPLY HEALTH TO LEGS
+You take some elixir from an oaken vial and rub it into your legs.
+The agonising pain in your lower legs recedes somewhat.
+H:3920|71% M:4785|96%  22:28:05:772  [ Blonk ][0|0|0|0|0|0][ttend(2)] 
+Blonk eats an aurum flake.
+Processed Cures(asthma clumsiness sensitivity weariness)
+[ast[75], clum[38], sen[38], weari[75], deaf]
+
+H:3920|71% M:4785|96%  22:28:05:936  [ Blonk ][0|0|0|0|0|0][ttend(2)] 
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Blonk)
+Sileris stripped.
+Proc:      (Inguz)
+Afflicted: (Sensitivity)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (63%/100%).
+Afflicted: (Slickness Paralysis)
+[ast[75], clum[38], sen, weari[75], deaf, slick, para]
+H:3920|71% M:4685|94%  22:28:06:157  [ Blonk ][0|0|0|0|0|0][ttend(2)] 
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+Blonk takes a drink from an elegant diamond vial.
+H:3920|71% M:4685|94%  22:28:06:486  [ Blonk ][0|0|0|0|0|0][ttend(2)] 
+A Mhojave falcon dives at you, raking your face with its talons.
+Your shield completely absorbs the damage.
+H:3920|71% M:4685|94%  22:28:06:653  [ Blonk ][0|0|0|0|0|0][ttend(2)] 
+A fierce mountain falcon rips out a chunk of Blonk's flesh with its beak.
+H:3920|71% M:4685|94%  22:28:07:210  [ Blonk ][0|0|0|0|0|0][ttend(2)] 
+Blonk eats a magnesium chip.
+Processed Cures(paralysis slickness)
+[ast[75], clum[38], sen, weari[75], deaf, slick[50], para[50]]
+
+H:3920|71% M:4685|94%  22:28:07:543  [ Blonk ][0|0|0|0|0|0][ttend(2)] 
+You have recovered balance on all limbs.
+Envenomed: (Curare)
+Sliced:    (Blonk)
+Empower:   (Inguz)
+Shield:    (Scrambled Brains)
+Ferocity:  [####|####|####|####]
+[HP]:      (65%/100%).
+Afflicted: (Dizziness)
+[diz, ast[75], clum[38], sen, weari[75], deaf, slick[50], para]
+Health lost: 34 (raw).
+You bleed 34 health.
+H:3886|71% M:4485|90%  22:28:08:062  [ Blonk ][0|0|0|0|0|0] ( -200m 4% )[ttend(2)] 
+You may eat another plant or mineral.
+H:3886|71% M:4485|90%  22:28:08:106  [ Blonk ][0|0|0|0|0|0][ttend(2)] 
+A look of extreme focus crosses the face of Blonk.
+Blonk eats a potash crystal.
+H:3886|71% M:4485|90%  22:28:08:202  [ Blonk ][0|0|0|0|0|0][ttend(2)] 
+You suddenly perceive the vague outline of an aura of rebounding around Blonk.
+H:3886|71% M:4485|90%  22:28:08:212  [ Blonk ][0|0|0|0|0|0][ttend(2)] 
+Blonk eats a magnesium chip.
+Blonk applies a quicksilver droplet to himself.
+Processed Cures(paralysis)
+Blonk's aura of weapons rebounding disappears.
+An expression of calculated focus crosses the face of Blonk, and he shifts his feet slightly
+wider apart.
+Blonk comes around with a terrible swing of an eponymously emblazoned wooden hammer toward your
+left leg.
+As Blonk's blow crunches into you, you perceive that he has dealt 25.7% damage to your left
+leg.
+Health lost: 647 (physical blunt).
+Your leg almost gives out as the hammer crunches brutally into your ankle.
+Blonk moves in to engage you.
+H:3239|59% M:4485|90%  22:28:09:134  [ Blonk ][0|0|0|0|0|0] ( -647h 11% )[ttend(3)] 
+A Mhojave falcon rips out a chunk of your flesh with its beak.
+Health lost: 95 (physical cutting).
+H:3253|59% M:4510|90%  22:28:09:625  [ Blonk ][0|0|0|0|0|0][ttend(3)] 
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Blonk)
+Proc:      (Inguz)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (69%/100%).
+Afflicted: (Slickness Paralysis)
+[diz, ast[75], clum[38], sen, weari[75], deaf, slick, para]
+H:3253|59% M:4410|88%  22:28:10:111  [ Blonk ][0|0|0|0|0|0][ttend(3)] 
+A fierce mountain falcon rips out a chunk of Blonk's flesh with its beak.
+H:3253|59% M:4410|88%  22:28:10:114  [ Blonk ][0|0|0|0|0|0][ttend(3)] 
+You may drink another health or mana elixir.
+You may eat another bit of irid moss or potash.
+H:3253|59% M:4410|88%  22:28:10:198  [ Blonk ][0|0|0|0|0|0][ttend(3)] 
+
+Processed Cures(dizziness)
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+H:4499|82% M:4807|96%  22:28:10:297  [ Blonk ][0|0|0|0|0|0] ( +1246h 22% +397m 7% )[ttend(3)] 
+You fumble about drunkenly.
+H:4499|82% M:4807|96%  22:28:10:440  [ Blonk ][0|0|0|0|0|0][ttend(3)] 
+Blonk eats a magnesium chip.
+You fumble about drunkenly.
+H:4499|82% M:4807|96%  22:28:11:021  [ Blonk ][0|0|0|0|0|0][ttend(3)] 
+Blonk takes a drink from an elegant diamond vial.
+H:4499|82% M:4807|96%  22:28:11:111  [ Blonk ][0|0|0|0|0|0][ttend(3)] 
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+H:4499|82% M:4807|96%  22:28:11:499  [ Blonk ][0|0|0|0|0|0][ttend(3) clum] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:4499|82% M:4807|96%  22:28:11:686  [ Blonk ][0|0|0|0|0|0][ttend(3)] 
+
+[DEF]: Deafness
+Blonk shifts into a more aggressive stance.
+Blonk explodes upward from a low crouch, driving an eponymously emblazoned wooden hammer toward
+your torso.
+As Blonk's blow crunches into you, you perceive that he has dealt 12.9% damage to your torso.
+Health lost: 488 (physical blunt).
+[AFF]: Crackedribs
+The breath is savagely driven from your lungs as the hammer crunches into your side.
+Your hearing is suddenly restored.
+Blonk moves in to engage you.
+H:4011|73% M:4807|96%  22:28:11:781  [ Blonk ][0|0|0|0|0|0] ( -488h 8% )[ttend(3) cribs(2)] 
+You have recovered balance on all limbs.
+Envenomed: (Curare)
+Sliced:    (Blonk)
+Shield:    (Scrambled Brains)
+Ferocity:  [####|####|####|####]
+[HP]:      (67%/100%).
+Afflicted: (Dizziness)
+[diz, ast[75], clum[38], sen, weari[75], deaf, slick[50], para]
+You fumble about drunkenly.
+H:4011|73% M:4707|94%  22:28:11:976  [ Blonk ][0|0|0|0|0|0][cribs(2) ttend(3)] 
+You fumble about drunkenly.
+H:4011|73% M:4707|94%  22:28:11:981  [ Blonk ][0|0|0|0|0|0][cribs(2) ttend(3)] 
+A look of extreme focus crosses the face of Blonk.
+H:4011|73% M:4707|94%  22:28:12:070  [ Blonk ][0|0|0|0|0|0][cribs(2) ttend(3)] 
+Blonk eats an aurum flake.
+Blonk takes a long drag off his pipe.
+Processed Cures(asthma clumsiness sensitivity weariness)
+H:4011|73% M:4707|94%  22:28:12:412  [ Blonk ][0|0|0|0|0|0][cribs(2) ttend(3)] 
+You fumble about drunkenly.
+H:4011|73% M:4707|94%  22:28:12:940  [ Blonk ][0|0|0|0|0|0][cribs(2) ttend(3)] 
+
+THEY CAN TOUCH TREE AGAIN!
+You may eat another plant or mineral.
+H:4011|73% M:4707|94%  22:28:13:122  [ Blonk ][0|0|0|0|0|0][cribs(2) ttend(3)] 
+A fierce mountain falcon rips out a chunk of Blonk's flesh with its beak.
+H:4011|73% M:4707|94%  22:28:13:213  [ Blonk ][0|0|0|0|0|0][cribs(2) ttend(3)] 
+[Curing]: OUTR HAWTHORN
+[OUTR]: 1 Hawthorn (316)
+[Curing]: EAT HAWTHORN
+You eat a hawthorn berry.
+H:4011|73% M:4707|94%  22:28:13:219  [ Blonk ][0|0|0|0|0|0][cribs(2) ttend(3)] 
+Health lost: 31 (raw).
+You bleed 31 health.
+H:3980|72% M:4707|94%  22:28:13:545  [ Blonk ][0|0|0|0|0|0][cribs(2) ttend(3)] 
+Blonk takes a long drag off his pipe.
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Blonk)
+Empower:   (Inguz)
+Shield:    (Scrambled Brains)
+Ferocity:  [####|####|####|####]
+[HP]:      (49%/100%).
+Afflicted: (Clumsiness Recklessness)
+[diz, clum, sen[75], weari[56], deaf, reck, para]
+
+Afflicted: (Sensitivity)
+Processed Cures(dizziness recklessness)
+Blonk eats a magnesium chip.
+Blonk eats a potash crystal.
+Processed Cures(paralysis)
+H:3980|72% M:4507|90%  22:28:14:203  [ Blonk ][0|0|0|0|0|0] ( -200m 4% )[cribs(2) ttend(3)] 
+Blonk touches a tree of life tattoo.
+Processed Cures(clumsiness dizziness recklessness weariness sensitivity)
+[diz[40], clum[80], sen[80], weari[45], deaf, reck[40]]
+
+H:3980|72% M:4457|89%  22:28:14:311  [ Blonk ][0|0|0|0|0|0][cribs(2) ttend(3)] 
+A look of extreme focus crosses the face of Blonk.
+H:3980|72% M:4457|89%  22:28:14:532  [ Blonk ][0|0|0|0|0|0][cribs(2) ttend(3)] 
+You may eat another plant or mineral.
+You may drink another health or mana elixir. Health (4.409)
+H:3980|72% M:4457|89%  22:28:14:705  [ Blonk ][0|0|0|0|0|0][cribs(2) ttend(3)] 
+[Curing]: APPLY HEALTH TO LEGS
+You take some elixir from an oaken vial and rub it into your legs.
+The agonising pain in your lower legs recedes somewhat.
+H:3980|72% M:4457|89%  22:28:14:790  [ Blonk ][0|0|0|0|0|0][cribs(2) ttend(2)] 
+Blonk shifts into a more aggressive stance.
+Blonk explodes upward from a low crouch, driving an eponymously emblazoned wooden hammer toward
+your torso.
+As Blonk's blow crunches into you, you perceive that he has dealt 12.9% damage to your torso.
+Health lost: 488 (physical blunt).
+The right side of your body loses all feeling as the weapon of Blonk discharges energy into
+you.
+[AFF]: Numbedrightarm
+The breath is savagely driven from your lungs as the hammer crunches into your side.
+Blonk moves in to engage you.
+H:3492|63% M:4457|89%  22:28:15:177  [ Blonk ][0|0|0|0|0|0] ( -488h 8% )[cribs(4) ttend(2) num-
+ra] 
+You may utilise the tree tattoo again. Tree (13.954)
+H:3492|63% M:4457|89%  22:28:15:253  [ Blonk ][0|0|0|0|0|0][cribs(4) ttend(2) num-ra] 
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+H:3492|63% M:4457|89%  22:28:15:551  [ Blonk ][0|0|0|0|0|0][cribs(4) ttend(2) clum num-ra] 
+
+[DEF]: Deafness
+[AFF]: Deafness
+The aural world fades to silence.
+H:3492|63% M:4457|89%  22:28:15:559  [ Blonk ][0|0|0|0|0|0][cribs(4) ttend(2) clum num-ra] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+Blonk takes some elixir from an elegant diamond vial and rubs it into his torso.ribs: 1
+
+H:3492|63% M:4457|89%  22:28:15:691  [ Blonk ][0|0|0|0|0|0][cribs(4) ttend(2) num-ra] 
+A Mhojave falcon dives at you, raking your face with its talons.
+Health lost: 99 (physical blunt).
+H:3393|62% M:4457|89%  22:28:15:780  [ Blonk ][0|0|0|0|0|0][cribs(4) ttend(2) num-ra] 
+Blonk eats an aurum flake.
+Processed Cures(clumsiness sensitivity weariness)
+[diz[40], clum[53], sen[53], deaf, reck[40]]
+
+H:3393|62% M:4457|89%  22:28:15:872  [ Blonk ][0|0|0|0|0|0][cribs(4) ttend(2) num-ra] 
+You fumble about drunkenly.
+H:3393|62% M:4457|89%  22:28:16:029  [ Blonk ][0|0|0|0|0|0][cribs(4) ttend(2) num-ra] 
+You have recovered balance on all limbs.
+H:3393|62% M:4457|89%  22:28:16:034  [ Blonk ][0|0|0|0|0|0][cribs(4) ttend(2) num-ra] 
+You may eat another bit of irid moss or potash.
+H:3393|62% M:4457|89%  22:28:16:198  [ Blonk ][0|0|0|0|0|0][cribs(4) ttend(2) num-ra] 
+A fierce mountain falcon dives at Blonk, raking his face with its talons.
+H:3393|62% M:4457|89%  22:28:16:337  [ Blonk ][0|0|0|0|0|0][cribs(4) ttend(2) num-ra] 
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+H:3829|70% M:4854|97%  22:28:16:341  [ Blonk ][0|0|0|0|0|0] ( +436h 7% +397m 7% )[cribs(4) 
+ttend(2) num-ra] 
+
+Processed Cures(dizziness recklessness)
+H:3829|70% M:4854|97%  22:28:16:547  [ Blonk ][0|0|0|0|0|0][cribs(4) ttend(2) num-ra] 
+
+Envenomed: (Vernalius)
+Sliced:    (Blonk)
+Proc:      (Inguz)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (45%/100%).
+Afflicted: (Weariness Paralysis)
+[clum[53], sen[53], weari, deaf, para]
+
+[DEF]: Deafness
+Your hearing is suddenly restored.
+H:3829|70% M:4754|95%  22:28:16:566  [ Blonk ][0|0|0|0|0|0][cribs(4) ttend(2) num-ra] 
+You fumble about drunkenly.
+H:3829|70% M:4754|95%  22:28:16:707  [ Blonk ][0|0|0|0|0|0][cribs(4) ttend(2) num-ra] 
+You may eat another plant or mineral.
+H:3829|70% M:4754|95%  22:28:17:148  [ Blonk ][0|0|0|0|0|0][cribs(4) ttend(2) num-ra] 
+[Curing]: EAT HAWTHORN
+You eat a hawthorn berry.
+H:3829|70% M:4754|95%  22:28:17:356  [ Blonk ][0|0|0|0|0|0][cribs(4) ttend(2) num-ra] 
+You fumble about drunkenly.
+H:3829|70% M:4754|95%  22:28:17:526  [ Blonk ][0|0|0|0|0|0][cribs(4) ttend(2) num-ra] 
+Blonk eats a magnesium chip.
+Processed Cures(paralysis)
+[clum[53], sen[53], weari, deaf]
+
+H:3829|70% M:4754|95%  22:28:17:532  [ Blonk ][0|0|0|0|0|0][cribs(4) ttend(2) num-ra] 
+
+Afflicted: (Sensitivity)
+Feeling returns to your right arm.
+[AFF]: Numbedrightarm
+H:3829|70% M:4754|95%  22:28:18:304  [ Blonk ][0|0|0|0|0|0][cribs(4) ttend(2)] 
+You have recovered balance on all limbs.
+You fumble about drunkenly.
+Envenomed: (Vernalius)
+Sliced:    (Blonk)
+Empower:   (Sleizak)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (32%/100%).
+Afflicted: (Paralysis)
+[clum[53], sen, weari, deaf, para]
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+The agonising pain in your lower legs recedes somewhat.
+H:3829|70% M:4554|91%  22:28:18:520  [ Blonk ][0|0|0|0|0|0] ( -200m 4% )[ttend(1) cribs(4)] 
+
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+H:3829|70% M:4554|91%  22:28:18:533  [ Blonk ][0|0|0|0|0|0][ttend(1) cribs(4) clum] 
+You may eat another plant or mineral.
+H:3829|70% M:4554|91%  22:28:18:826  [ Blonk ][0|0|0|0|0|0][ttend(1) cribs(4) clum] 
+A Mhojave falcon rips out a chunk of your flesh with its beak.
+Health lost: 106 (physical blunt).
+H:3723|68% M:4554|91%  22:28:19:000  [ Blonk ][0|0|0|0|0|0][ttend(1) cribs(4) clum] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+Blonk eats a magnesium chip.
+Blonk comes around with a terrible swing of an eponymously emblazoned wooden hammer toward your
+left leg.
+Processed Cures(paralysis)
+As Blonk's blow crunches into you, you perceive that he has dealt 25.7% damage to your left
+leg.
+[AFF]: Brokenleftleg
+[AFF]: Damagedleftleg
+Your left leg is greatly damaged from the beating.
+Your shield completely absorbs the damage.
+The sowulu rune flashes bright upon an eponymously emblazoned wooden hammer in the hands of
+Blonk.
+Your leg almost gives out as the hammer crunches brutally into your ankle.
+Blonk drops into a low crouch, sweeping an eponymously emblazoned wooden hammer beneath your
+guard and tangling it with your legs.
+[AFF]: Prone
+Blonk moves in to engage you.
+Health lost: 43 (raw).
+You bleed 43 health.
+H:3680|67% M:4554|91%  22:28:19:013  [ Blonk ][0|0|0|0|0|0][LL2 ttend(2) cribs(4) PR] 
+A supple metallic shell of quicksilver has formed around Blonk.
+H:3680|67% M:4554|91%  22:28:19:101  [ Blonk ][0|0|0|0|0|0][LL2 ttend(2) cribs(4) PR] 
+[Curing]: APPLY RESTORATION TO LEGS
+You take out some salve and quickly rub it on your legs.
+You may drink another health or mana elixir.
+H:3680|67% M:4504|90%  22:28:19:210  [ Blonk ][0|0|0|0|0|0][LL2 ttend(2) cribs(4) PR] 
+[Curing]: APPLY HEALTH TO LEGS
+You take some elixir from an oaken vial and rub it into your legs.
+The agonising pain in your lower legs recedes somewhat.
+H:3680|67% M:4504|90%  22:28:19:423  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) cribs(4) PR] 
+You fumble about drunkenly.
+H:3680|67% M:4579|92%  22:28:19:511  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) cribs(4) PR] 
+Blonk takes a drink from an elegant diamond vial.
+Blonk eats a potash crystal.
+H:3789|69% M:4579|92%  22:28:20:191  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) cribs(4) PR] 
+
+[DEF]: Deafness
+[AFF]: Deafness
+The aural world fades to silence.
+H:3789|69% M:4579|92%  22:28:20:383  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) cribs(4) PR] 
+You have recovered balance on all limbs.
+H:3789|69% M:4579|92%  22:28:20:448  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) cribs(4) PR] 
+
+H:3789|69% M:4579|92%  22:28:20:532  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) cribs(4) PR] 
+You cease wielding a blessed legionnaire's longsword in your left hand.
+You start to wield a mithril broadsword in your left hand.
+[HP]:      (67%/100%)
+You may eat another plant or mineral.
+H:3789|69% M:4479|90%  22:28:20:648  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) cribs(4) PR] 
+You focus on automatically empowering the isaz, sleizak, and inguz runes.
+H:3789|69% M:4479|90%  22:28:20:734  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) cribs(4) PR] 
+Blonk eats an aurum flake.
+Processed Cures(clumsiness sensitivity weariness)
+[clum[36], sen[67], weari[67], deaf]
+
+H:3789|69% M:4479|90%  22:28:20:870  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) cribs(4) PR] 
+You suddenly perceive the vague outline of an aura of rebounding around Blonk.
+H:3789|69% M:4479|90%  22:28:20:943  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) cribs(4) PR] 
+
+H:3789|69% M:4479|90%  22:28:21:031  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) cribs(4) PR] 
+You must be standing to walk anywhere.
+You cease wielding a mithril broadsword in your left hand.
+You start to wield a blessed legionnaire's longsword in your left hand.
+[HP]:      (67%/100%)
+You focus on automatically empowering the isaz, sleizak, and inguz runes.
+H:3789|69% M:4379|88%  22:28:21:101  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) cribs(4) PR] 
+You fumble about drunkenly.
+H:3789|69% M:4379|88%  22:28:21:538  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) cribs(4) PR] 
+You must be standing to walk anywhere.
+H:3789|69% M:4379|88%  22:28:21:547  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) cribs(4) PR] 
+Your ferocity decreases.
+H:3789|69% M:4379|88%  22:28:21:631  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) cribs(4) PR] 
+
+[DEF]: Deafness
+Your hearing is suddenly restored.
+H:3789|69% M:4379|88%  22:28:21:724  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) cribs(4) PR] 
+[Curing]: EAT HAWTHORN
+You eat a hawthorn berry.
+H:3789|69% M:4379|88%  22:28:21:818  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) cribs(4) PR] 
+
+Afflicted: (Sensitivity)
+H:3789|69% M:4379|88%  22:28:22:083  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) cribs(4) PR] 
+You must be standing to walk anywhere.
+[HP]:      (67%/100%)
+H:3789|69% M:4279|86%  22:28:22:093  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) cribs(4) PR] 
+A Mhojave falcon rips out a chunk of your flesh with its beak.
+Health lost: 125 (physical blunt).
+H:3664|67% M:4279|86%  22:28:22:173  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) cribs(4) PR] 
+You may eat another bit of irid moss or potash.
+H:3664|67% M:4279|86%  22:28:22:266  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) cribs(4) PR] 
+Blonk's aura of weapons rebounding disappears.
+Blonk shifts into a more aggressive stance.
+Blonk brings an eponymously emblazoned wooden hammer down upon you with a brutal overhand blow.
+As Blonk's blow crunches into you, you perceive that he has dealt 12.9% damage to your head.
+Health lost: 385 (physical blunt).
+The right side of your body loses all feeling as the weapon of Blonk discharges energy into
+you.
+[AFF]: Numbedrightarm
+A piercing shriek drives into you with physical force as Blonk withdraws an eponymously
+emblazoned wooden hammer, a rune shaped like a nail flashing upon its surface.
+[AFF]: Healthleech
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+[AFF]: Skullfractures
+You feel bones grating together as the hammer catches you a savage blow to the head.
+[AFF]: Nausea
+A sense of extreme nausea washes over you.
+Blonk moves in to engage you.
+H:3279|60% M:4279|86%  22:28:22:370  [ Blonk ][0|0|0|0|0|0] ( -385h 7% )[LL2 ttend(1) sfrac(2) 
+cribs(4) clum hlch naus num-ra PR] 
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+Blonk takes a long drag off his pipe.
+Blonk eats an aurum flake.
+Processed Cures(clumsiness sensitivity weariness)
+[sen[67], weari[44], deaf]
+
+H:3715|68% M:4676|94%  22:28:22:446  [ Blonk ][0|0|0|0|0|0] ( +436h 7% +397m 7% )[LL2 ttend(1) 
+sfrac(2) cribs(4) clum hlch naus num-ra PR] 
+H:3715|68% M:4676|94%  22:28:22:535  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) sfrac(2) cribs(4) clum 
+hlch naus num-ra PR] 
+You must be standing to walk anywhere.
+H:3715|68% M:4676|94%  22:28:22:543  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) sfrac(2) cribs(4) clum 
+hlch naus num-ra PR] 
+Health lost: 454 (unblockable).
+H:3261|59% M:4676|94%  22:28:22:621  [ Blonk ][0|0|0|0|0|0] ( -454h 8% )[LL2 ttend(1) sfrac(2) 
+cribs(4) clum hlch naus num-ra PR] 
+A fierce mountain falcon rips out a chunk of Blonk's flesh with its beak.
+H:3261|59% M:4676|94%  22:28:22:714  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) sfrac(2) cribs(4) clum 
+hlch naus num-ra PR] 
+The empowerment of the sleizak rune fades.
+H:3261|59% M:4676|94%  22:28:22:898  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) sfrac(2) cribs(4) clum 
+hlch naus num-ra PR] 
+H:3261|59% M:4676|94%  22:28:23:073  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) sfrac(2) cribs(4) clum 
+hlch naus num-ra PR] 
+You must be standing to walk anywhere.
+[HP]:      (63%/100%)
+H:3261|59% M:4576|92%  22:28:23:082  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) sfrac(2) cribs(4) clum 
+hlch naus num-ra PR] 
+(Market): Kresslack says, "Stop polishing that rusty junk and get steel worth swinging at
+Enchanted Anvil in Cyrene."
+H:3261|59% M:4576|92%  22:28:23:189  [ Blonk ][0|0|0|0|0|0][LL2 ttend(1) sfrac(2) cribs(4) clum 
+hlch naus num-ra PR] 
+
+[SLC]: Reset left leg counts.
+Your left leg feels stronger and healthier.
+[AFF]: Damagedleftleg
+You may apply another salve to yourself. Legs (3.984)
+H:3261|59% M:4576|92%  22:28:23:194  [ Blonk ][0|0|0|0|0|0][ll1 ttend(1) sfrac(2) cribs(4) clum 
+hlch naus num-ra PR] 
+You may eat another plant or mineral.
+H:3261|59% M:4576|92%  22:28:23:317  [ Blonk ][0|0|0|0|0|0][ll1 ttend(1) sfrac(2) cribs(4) clum 
+hlch naus num-ra PR] 
+[Curing]: APPLY MENDING TO LEGS
+You take out some salve and quickly rub it on your legs.
+The bones in your left leg mend.
+[AFF]: Brokenleftleg
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+[Curing]: STAND
+You stand up.
+H:3261|59% M:4576|92%  22:28:23:425  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) hlch 
+naus num-ra] 
+H:3261|59% M:4576|92%  22:28:23:510  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) hlch 
+naus num-ra] 
+Envenomed: (Xentio)
+Sliced:    (Blonk)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####].
+Afflicted: (Clumsiness Paralysis)
+[clum, sen[67], weari[44], deaf, para]
+H:3261|59% M:4576|92%  22:28:23:579  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) hlch 
+naus num-ra] 
+[AFF]: Sensitivity
+A prickly, stinging sensation spreads through your body.
+H:3261|59% M:4576|92%  22:28:23:677  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) SENS 
+hlch naus num-ra] 
+You may drink another health or mana elixir.
+H:3261|59% M:4576|92%  22:28:23:847  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) SENS 
+hlch naus num-ra] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:3759|68% M:4576|92%  22:28:23:944  [ Blonk ][0|0|0|0|0|0] ( +498h 9% )[ttend(1) sfrac(2) 
+cribs(4) SENS hlch naus num-ra] 
+You fumble about drunkenly.
+H:3759|68% M:4576|92%  22:28:24:034  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) SENS 
+hlch naus num-ra] 
+
+[DEF]: Deafness
+[AFF]: Deafness
+The aural world fades to silence.
+H:3759|68% M:4576|92%  22:28:24:044  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) SENS 
+hlch naus num-ra] 
+Blonk eats an aurum flake.
+Processed Cures(clumsiness sensitivity weariness)
+[clum[67], sen[44], deaf, para]
+
+H:3759|68% M:4526|91%  22:28:24:171  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) SENS 
+hlch naus num-ra] 
+You may apply another salve to yourself. Legs (0.963)
+H:3759|68% M:4526|91%  22:28:24:385  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) SENS 
+hlch naus num-ra] 
+Health lost: 23 (raw).
+You bleed 23 health.
+H:3736|68% M:4526|91%  22:28:24:546  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) SENS 
+hlch naus num-ra] 
+Blonk takes a drink from an elegant diamond vial.
+H:3736|68% M:4526|91%  22:28:24:758  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) SENS 
+hlch naus num-ra] 
+You may eat another plant or mineral.
+H:3736|68% M:4526|91%  22:28:24:911  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) SENS 
+hlch naus num-ra] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+Your stomach becalms itself.
+[AFF]: Nausea
+H:3736|68% M:4526|91%  22:28:24:969  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) SENS 
+hlch num-ra] 
+[OUTR]: 1 Ginseng (583)
+A Mhojave falcon dives at you, raking your face with its talons.
+Health lost: 157 (physical blunt).
+H:3579|65% M:4526|91%  22:28:25:206  [ Blonk ][0|0|0|0|0|0] ( -157h 2% )[ttend(1) sfrac(2) 
+cribs(4) SENS hlch num-ra] 
+You have recovered balance on all limbs.
+Envenomed: (Vernalius)
+Sliced:    (Blonk)
+Empower:   (Inguz)
+Shield:    (Asthma)
+Ferocity:  [####|####|####|####]
+[HP]:      (65%/100%).
+Afflicted: (Weariness Asthma)
+[ast, clum[67], sen[44], weari, deaf, para]
+A fierce mountain falcon rips out a chunk of Blonk's flesh with its beak.
+H:3579|65% M:4326|87%  22:28:25:715  [ Blonk ][0|0|0|0|0|0] ( -200m 4% )[ttend(1) sfrac(2) 
+cribs(4) SENS hlch num-ra] 
+Blonk eats a magnesium chip.
+Processed Cures(paralysis)
+[ast, clum[67], sen[44], weari, deaf]
+
+H:3579|65% M:4326|87%  22:28:25:808  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) SENS 
+hlch num-ra] 
+Blonk shifts into a more aggressive stance.
+Blonk brings an eponymously emblazoned wooden hammer down upon you with a brutal overhand blow.
+You parry the attack with a deft manoeuvre.
+Blonk moves in to engage you.
+H:3579|65% M:4326|87%  22:28:25:813  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) SENS 
+hlch num-ra] 
+
+Afflicted: (Sensitivity)
+Blonk eats a potash crystal.
+H:3579|65% M:4326|87%  22:28:26:148  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) SENS 
+hlch num-ra] 
+Feeling returns to your right arm.
+[AFF]: Numbedrightarm
+H:3579|65% M:4326|87%  22:28:26:332  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) SENS 
+hlch] 
+You may eat another plant or mineral. Eat (1.634)
+H:3579|65% M:4326|87%  22:28:26:603  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) SENS 
+hlch] 
+[AFF]: Nausea
+A sense of extreme nausea washes over you.
+H:3579|65% M:4326|87%  22:28:26:690  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) SENS 
+hlch naus] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+Your stomach becalms itself.
+[AFF]: Nausea
+H:3579|65% M:4326|87%  22:28:26:783  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) SENS 
+hlch] 
+[OUTR]: 1 Ginseng (582)
+Health lost: 596 (unblockable).
+H:2983|54% M:4326|87%  22:28:27:209  [ Blonk ][0|0|0|0|0|0] ( -596h 10% )[ttend(1) sfrac(2) 
+cribs(4) SENS hlch] 
+Blonk eats an aurum flake.
+Processed Cures(asthma clumsiness sensitivity weariness)
+[ast[75], clum[50], sen[75], weari[75], deaf]
+
+H:2983|54% M:4326|87%  22:28:27:293  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) SENS 
+hlch] 
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Blonk)
+Sileris stripped.
+Proc:      (Inguz)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Proned)
+Afflicted: (Prone)
+[HP]:      (56%/100%).
+Afflicted: (Slickness Paralysis)
+[ast[75], clum[50], sen[75], weari[75], deaf, slick, prn, para]
+Blonk takes a long drag off his pipe.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+H:2983|54% M:4226|85%  22:28:27:680  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) clum 
+SENS hlch] 
+You fumble about drunkenly.
+H:2983|54% M:4226|85%  22:28:27:960  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) clum 
+SENS hlch] 
+A Mhojave falcon dives at you, raking your face with its talons.
+Health lost: 136 (physical blunt).
+H:2847|52% M:4226|85%  22:28:28:178  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) clum 
+SENS hlch] 
+You may eat another plant or mineral. Eat (1.486)
+H:2847|52% M:4226|85%  22:28:28:269  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) clum 
+SENS hlch] 
+You may eat another bit of irid moss or potash.
+H:2847|52% M:4226|85%  22:28:28:384  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) clum 
+SENS hlch] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+Empower:   (Sleizak)
+Afflicted: (Weariness)
+A fierce mountain falcon dives at Blonk, raking his face with its talons.
+H:3283|60% M:4523|91%  22:28:28:690  [ Blonk ][0|0|0|0|0|0] ( +436h 7% +297m 5% )[ttend(1) 
+sfrac(2) cribs(4) SENS hlch] 
+You fumble about drunkenly.
+H:3283|60% M:4523|91%  22:28:29:057  [ Blonk ][0|0|0|0|0|0][ttend(1) sfrac(2) cribs(4) SENS 
+hlch] 
+Blonk eats a magnesium chip.
+Blonk stands up.
+ + + + STANDING + + +
+Blonk easily vaults onto the back of a mute mammoth apparition.
+Blonk shifts into a more aggressive stance.
+Blonk comes around with a terrible swing of an eponymously emblazoned wooden hammer toward your
+left arm.
+As Blonk's blow crunches into you, you perceive that he has dealt 12.9% damage to your left
+arm.
+Health lost: 498 (physical blunt).
+The right side of your body loses all feeling as the weapon of Blonk discharges energy into
+you.
+[AFF]: Numbedrightarm
+[AFF]: Wristfractures
+You feel something snap in your left arm as the hammer smashes home.
+[AFF]: Lethargy
+You feel your energy robbed from you as lethargy overtakes you.
+Blonk moves in to engage you.
+H:2785|51% M:4523|91%  22:28:29:070  [ Blonk ][0|0|0|0|0|0] ( -498h 9% )[ttend(1) wfrac(2) 
+sfrac(2) cribs(4) SENS hlch leth num-ra] 
+
+Afflicted: (Sensitivity)
+Blonk touches a tree of life tattoo.
+Blonk applies a quicksilver droplet to himself.
+Processed Cures(clumsiness weariness sensitivity)
+H:2785|51% M:4473|90%  22:28:29:219  [ Blonk ][0|0|0|0|0|0][ttend(1) wfrac(2) sfrac(2) cribs(4) 
+SENS hlch leth num-ra] 
+
+THEY CAN TOUCH TREE AGAIN!
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Blonk)
+Proc:      (Sleizak 1)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Your attacks lack sufficient ferocity to carry out such an attack.
+[HP]:      (41%/100%).
+Afflicted: (Slickness Paralysis)
+[sen[67], weari, naus, deaf, slick, para]
+Blonk takes a long drag off his pipe.
+Blonk takes a drink from an elegant diamond vial.
+You may drink another health or mana elixir. Health (5.799)
+H:2785|51% M:4448|89%  22:28:29:744  [ Blonk ][0|0|0|0|0|0][ttend(1) wfrac(2) sfrac(2) cribs(4) 
+SENS hlch leth num-ra] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:3261|59% M:4448|89%  22:28:29:831  [ Blonk ][0|0|0|0|0|0] ( +476h 8% )[ttend(1) wfrac(2) 
+sfrac(2) cribs(4) SENS hlch leth num-ra] 
+You may eat another plant or mineral.
+H:3261|59% M:4448|89%  22:28:29:939  [ Blonk ][0|0|0|0|0|0][ttend(1) wfrac(2) sfrac(2) cribs(4) 
+SENS hlch leth num-ra] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+The stinging feeling fades.
+[AFF]: Sensitivity
+H:3370|61% M:4448|89%  22:28:30:130  [ Blonk ][0|0|0|0|0|0][ttend(1) wfrac(2) sfrac(2) cribs(4) 
+hlch leth num-ra] 
+Blonk doubles over, vomiting violently.
+H:3370|61% M:4448|89%  22:28:30:259  [ Blonk ][0|0|0|0|0|0][ttend(1) wfrac(2) sfrac(2) cribs(4) 
+hlch leth num-ra] 
+Blonk eats an aurum flake.
+Processed Cures(sensitivity weariness)
+[weari[50], naus, deaf, para]
+
+H:3370|61% M:4448|89%  22:28:30:669  [ Blonk ][0|0|0|0|0|0][ttend(1) wfrac(2) sfrac(2) cribs(4) 
+hlch leth num-ra] 
+You suddenly perceive the vague outline of an aura of rebounding around Blonk.
+H:3370|61% M:4448|89%  22:28:30:866  [ Blonk ][0|0|0|0|0|0][ttend(1) wfrac(2) sfrac(2) cribs(4) 
+hlch leth num-ra] 
+A Mhojave falcon rips out a chunk of your flesh with its beak.
+Health lost: 102 (physical cutting).
+H:3268|59% M:4448|89%  22:28:31:252  [ Blonk ][0|0|0|0|0|0][ttend(1) wfrac(2) sfrac(2) cribs(4) 
+hlch leth num-ra] 
+Feeling returns to your right arm.
+[AFF]: Numbedrightarm
+H:3268|59% M:4448|89%  22:28:31:333  [ Blonk ][0|0|0|0|0|0][ttend(1) wfrac(2) sfrac(2) cribs(4) 
+hlch leth] 
+You have recovered balance on all limbs.
+Razed: Rebounding
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (52%/100%)
+You may eat another plant or mineral..
+[weari[50], naus, deaf, para]
+
+H:3268|59% M:4348|87%  22:28:31:641  [ Blonk ][0|0|0|0|0|0][ttend(1) wfrac(2) sfrac(2) cribs(4) 
+hlch leth] 
+
+[DEF]: Deafness
+Your hearing is suddenly restored.
+[AFF]: Nausea
+A sense of extreme nausea washes over you.
+H:3268|59% M:4348|87%  22:28:31:688  [ Blonk ][0|0|0|0|0|0][ttend(1) wfrac(2) sfrac(2) cribs(4) 
+hlch leth naus] 
+A fierce mountain falcon dives at Blonk, raking his face with its talons.
+H:3268|59% M:4348|87%  22:28:31:772  [ Blonk ][0|0|0|0|0|0][ttend(1) wfrac(2) sfrac(2) cribs(4) 
+hlch leth naus] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+Your stomach becalms itself.
+[AFF]: Nausea
+Blonk takes a long drag off his pipe.
+H:3268|59% M:4348|87%  22:28:31:862  [ Blonk ][0|0|0|0|0|0][ttend(1) wfrac(2) sfrac(2) cribs(4) 
+hlch leth] 
+Health lost: 454 (unblockable).
+H:2814|51% M:4348|87%  22:28:31:922  [ Blonk ][0|0|0|0|0|0] ( -454h 8% )[ttend(1) wfrac(2) 
+sfrac(2) cribs(4) hlch leth] 
+[OUTR]: 1 Ginseng (581)
+You fumble about drunkenly.
+H:2814|51% M:4348|87%  22:28:32:052  [ Blonk ][0|0|0|0|0|0][ttend(1) wfrac(2) sfrac(2) cribs(4) 
+hlch leth] 
+
+Afflicted: (Sensitivity)
+Blonk eats a magnesium chip.
+Blonk eats a potash crystal.
+Processed Cures(paralysis)
+H:2814|51% M:4348|87%  22:28:32:224  [ Blonk ][0|0|0|0|0|0][ttend(1) wfrac(2) sfrac(2) cribs(4) 
+hlch leth] 
+Blonk shifts into a more aggressive stance.
+Blonk comes around with a terrible swing of an eponymously emblazoned wooden hammer toward your
+left arm.
+As Blonk's blow crunches into you, you perceive that he has dealt 12.9% damage to your left
+arm.
+Health lost: 488 (physical blunt).
+The sleizak rune flashes bright upon an eponymously emblazoned wooden hammer in the hands of
+Blonk.
+You feel something snap in your left arm as the hammer smashes home.
+Blonk moves in to engage you.
+H:2326|42% M:4348|87%  22:28:32:419  [ Blonk ][0|0|0|0|0|0] ( -488h 8% )[ttend(1) cribs(4) 
+sfrac(2) wfrac(4) hlch leth] 
+You may utilise the tree tattoo again. Tree (13.956)
+H:2326|42% M:4348|87%  22:28:32:476  [ Blonk ][0|0|0|0|0|0][ttend(1) cribs(4) sfrac(2) wfrac(4) 
+hlch leth] 
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+The dull ache in your arms subsides somewhat.
+H:2326|42% M:4348|87%  22:28:32:665  [ Blonk ][0|0|0|0|0|0][wfrac(3) ttend(1) cribs(4) sfrac(2) 
+hlch leth] 
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+H:2326|42% M:4348|87%  22:28:32:758  [ Blonk ][0|0|0|0|0|0][wfrac(3) ttend(1) cribs(4) sfrac(2) 
+clum hlch leth] 
+You may eat another plant or mineral. Eat (1.339)
+H:2326|42% M:4348|87%  22:28:33:200  [ Blonk ][0|0|0|0|0|0][wfrac(3) ttend(1) cribs(4) sfrac(2) 
+clum hlch leth] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:2326|42% M:4348|87%  22:28:33:348  [ Blonk ][0|0|0|0|0|0][wfrac(3) ttend(1) cribs(4) sfrac(2) 
+hlch leth] 
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Torso) (7.1%)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (42%/100%).
+Afflicted: (Clumsiness Paralysis).*
+[clum, sen, weari[50], naus, deaf, para]
+H:2326|42% M:4248|85%  22:28:33:636  [ Blonk ][0|7.1|0|0|0|0][wfrac(3) ttend(1) cribs(4) 
+sfrac(2) hlch leth] 
+[AFF]: Sensitivity
+A prickly, stinging sensation spreads through your body.
+H:2326|42% M:4248|85%  22:28:33:720  [ Blonk ][0|7.1|0|0|0|0][wfrac(3) ttend(1) cribs(4) 
+sfrac(2) SENS hlch leth] 
+Blonk eats an aurum flake.
+Blonk takes a drink from an elegant diamond vial.
+Processed Cures(clumsiness sensitivity weariness)
+H:2326|42% M:4248|85%  22:28:33:969  [ Blonk ][0|7.1|0|0|0|0][wfrac(3) ttend(1) cribs(4) 
+sfrac(2) SENS hlch leth] 
+A Mhojave falcon dives at you, raking your face with its talons.
+Health lost: 120 (physical cutting).
+H:2206|40% M:4198|84%  22:28:34:266  [ Blonk ][0|7.1|0|0|0|0][wfrac(3) ttend(1) cribs(4) 
+sfrac(2) SENS hlch leth] 
+You may eat another bit of irid moss or potash.
+H:2206|40% M:4198|84%  22:28:34:394  [ Blonk ][0|7.1|0|0|0|0][wfrac(3) ttend(1) cribs(4) 
+sfrac(2) SENS hlch leth] 
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+H:2642|48% M:4595|92%  22:28:34:678  [ Blonk ][0|7.1|0|0|0|0] ( +436h 7% +397m 7% )[wfrac(3) 
+ttend(1) cribs(4) sfrac(2) SENS hlch leth] 
+A fierce mountain falcon dives at Blonk, raking his face with its talons.
+H:2642|48% M:4595|92%  22:28:34:769  [ Blonk ][0|7.1|0|0|0|0][wfrac(3) ttend(1) cribs(4) 
+sfrac(2) SENS hlch leth] 
+You fumble about drunkenly.
+H:2642|48% M:4595|92%  22:28:35:048  [ Blonk ][0|7.1|0|0|0|0][wfrac(3) ttend(1) cribs(4) 
+sfrac(2) SENS hlch leth] 
+
+Afflicted: (Sensitivity)
+You may eat another plant or mineral.
+H:2642|48% M:4595|92%  22:28:35:142  [ Blonk ][0|7.1|0|0|0|0][wfrac(3) ttend(1) cribs(4) 
+sfrac(2) SENS hlch leth] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+The stinging feeling fades.
+[AFF]: Sensitivity
+H:2642|48% M:4595|92%  22:28:35:146  [ Blonk ][0|7.1|0|0|0|0][wfrac(3) ttend(1) cribs(4) 
+sfrac(2) hlch leth] 
+Blonk eats a magnesium chip.
+You may drink another health or mana elixir. Health (5.85)
+H:2642|48% M:4595|92%  22:28:35:682  [ Blonk ][0|7.1|0|0|0|0][wfrac(3) ttend(1) cribs(4) 
+sfrac(2) hlch leth] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:3287|60% M:4595|92%  22:28:35:733  [ Blonk ][0|7.1|0|0|0|0] ( +645h 11% )[wfrac(3) ttend(1) 
+cribs(4) sfrac(2) hlch leth] 
+[AFF]: Sensitivity
+A prickly, stinging sensation spreads through your body.
+[AFF]: Nausea
+A sense of extreme nausea washes over you.
+H:3287|60% M:4595|92%  22:28:35:738  [ Blonk ][0|7.1|0|0|0|0][wfrac(3) ttend(1) cribs(4) 
+sfrac(2) SENS hlch leth naus] 
+
+You have recovered balance on all limbs.
+Envenomed: (Vernalius)
+Sliced:    (Torso) (14.2%)
+Shield:    (Asthma)
+Ferocity:  [####|####|####|####]
+[HP]:      (47%/100%)
+Blonk ceases to wield an eponymously emblazoned wooden hammer.
+Blonk starts to wield a bastard sword rough-hewn from a sapling in his hands.
+Blonk bares his teeth in a rictus of fury, drawing himself up to his full height.
+Blonk shifts into a more aggressive stance.
+Blonk unleashes a terrible blow at your left leg with a bastard sword rough-hewn from a
+sapling.
+As Blonk carves into you, you perceive that he has dealt 7.5% damage to your left leg.
+Health lost: 524 (physical cutting).
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+The sleizak rune flashes bright upon a bastard sword rough-hewn from a sapling in the hands of
+Blonk.
+As the blade bites into your lower left leg, it traces a line of agonising pain.
+Blonk moves in to engage you..
+Afflicted: (Weariness Asthma).*
+[ast, sen, weari, naus, deaf]
+[Legacy]: Prioed Mana
+H:2763|50% M:4495|90%  22:28:35:812  [ Blonk ][0|14.2|0|0|0|0] ( -524h 9% )[sfrac(2) ttend(3) 
+cribs(4) wfrac(3) SENS hlch PAR leth naus] 
+You fumble about drunkenly.
+H:2763|50% M:4495|90%  22:28:35:974  [ Blonk ][0|14.2|0|0|0|0][sfrac(2) ttend(3) cribs(4) 
+wfrac(3) SENS hlch PAR leth naus] 
+You fumble about drunkenly.
+H:2763|50% M:4495|90%  22:28:36:467  [ Blonk ][0|14.2|0|0|0|0][sfrac(2) ttend(3) cribs(4) 
+wfrac(3) SENS hlch PAR leth naus] 
+You may eat another plant or mineral.
+H:2763|50% M:4495|90%  22:28:36:556  [ Blonk ][0|14.2|0|0|0|0][sfrac(2) ttend(3) cribs(4) 
+wfrac(3) SENS hlch PAR leth naus] 
+[Curing]: OUTR BLOODROOT
+[OUTR]: 1 Bloodroot (850)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+Health lost: 596 (unblockable).
+H:2167|39% M:4495|90%  22:28:36:671  [ Blonk ][0|14.2|0|0|0|0] ( -596h 10% )[sfrac(2) ttend(3) 
+cribs(4) wfrac(3) SENS hlch leth naus] 
+
+Auto off
+[OUTR]: 1 Bloodroot (849)
+Blonk eats an aurum flake.
+Processed Cures(asthma sensitivity weariness)
+[ast[67], sen[67], weari[67], naus, deaf]
+
+H:2167|39% M:4495|90%  22:28:37:224  [ Blonk ][0|14.2|0|0|0|0][sfrac(2) ttend(3) cribs(4) 
+wfrac(3) SENS hlch leth naus] 
+A Mhojave falcon rips out a chunk of your flesh with its beak.
+Health lost: 128 (physical cutting).
+H:2039|37% M:4495|90%  22:28:37:307  [ Blonk ][0|14.2|0|0|0|0][sfrac(2) ttend(3) cribs(4) 
+wfrac(3) SENS hlch leth naus] 
+
+Auto on
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+H:2039|37% M:4495|90%  22:28:37:714  [ Blonk ][0|14.2|0|0|0|0][sfrac(2) ttend(3) cribs(4) 
+wfrac(3) clum SENS hlch leth naus] 
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Torso)
+You lash out at Blonk with a blessed legionnaire's longsword, but miss.
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Proned)
+Afflicted: (Prone)
+[HP]:      (45%/100%)
+Your blows lack sufficient ferocity to carry out such an attack..
+Afflicted: (Paralysis).*
+[ast[67], sen[67], weari[67], naus, deaf, prn, para]
+H:2039|37% M:4395|88%  22:28:37:909  [ Blonk ][0|14.2|0|0|0|0][sfrac(2) ttend(3) cribs(4) 
+wfrac(3) clum SENS hlch leth naus] 
+
+Afflicted: (Sensitivity)
+You may eat another plant or mineral. Eat (1.47)
+H:2039|37% M:4395|88%  22:28:38:140  [ Blonk ][0|14.2|0|0|0|0][sfrac(2) ttend(3) cribs(4) 
+wfrac(3) clum SENS hlch leth naus] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+Blonk eats a potash crystal.
+H:2039|37% M:4395|88%  22:28:38:229  [ Blonk ][0|14.2|0|0|0|0][sfrac(2) ttend(3) cribs(4) 
+wfrac(3) SENS hlch leth naus] 
+Blonk takes a drink from an elegant diamond vial.
+H:2039|37% M:4395|88%  22:28:38:453  [ Blonk ][0|14.2|0|0|0|0][sfrac(2) ttend(3) cribs(4) 
+wfrac(3) SENS hlch leth naus] 
+You fumble about drunkenly.
+H:2039|37% M:4395|88%  22:28:38:551  [ Blonk ][0|14.2|0|0|0|0][sfrac(2) ttend(3) cribs(4) 
+wfrac(3) SENS hlch leth naus] 
+Blonk eats a magnesium chip.
+Processed Cures(paralysis)
+[ast[67], sen, weari[67], naus, deaf, prn]
+
+H:2039|37% M:4395|88%  22:28:38:834  [ Blonk ][0|14.2|0|0|0|0][sfrac(2) ttend(3) cribs(4) 
+wfrac(3) SENS hlch leth naus] 
+Blonk rolls smoothly back to his feet.
+ + + + STANDING + + +
+H:2039|37% M:4395|88%  22:28:38:918  [ Blonk ][0|14.2|0|0|0|0][sfrac(2) ttend(3) cribs(4) 
+wfrac(3) SENS hlch leth naus] 
+You fumble about drunkenly.
+H:2039|37% M:4395|88%  22:28:39:008  [ Blonk ][0|14.2|0|0|0|0][sfrac(2) ttend(3) cribs(4) 
+wfrac(3) SENS hlch leth naus] 
+A supple metallic shell of quicksilver has formed around Blonk.
+H:2039|37% M:4345|87%  22:28:39:254  [ Blonk ][0|14.2|0|0|0|0][sfrac(2) ttend(3) cribs(4) 
+wfrac(3) SENS hlch leth naus] 
+
+Auto off
+Blonk easily vaults onto the back of a mute mammoth apparition.
+Blonk shifts into a more aggressive stance.
+Blonk unleashes a terrible blow at your left leg with a bastard sword rough-hewn from a
+sapling.
+As Blonk carves into you, you perceive that he has dealt 7.5% damage to your left leg.
+Health lost: 524 (physical cutting).
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+You feel your blood begin to burn as you catch sight of a rune shaped like a viper glittering
+upon a bastard sword rough-hewn from a sapling.
+[AFF]: Voyria
+As the blade bites into your lower left leg, it traces a line of agonising pain.
+Blonk moves in to engage you.
+H:1515|27% M:4345|87%  22:28:39:365  [ Blonk ][0|14.2|0|0|0|0] ( -524h 9% )[ttend(5) sfrac(2) 
+cribs(4) wfrac(3) SENS hlch PAR leth naus VOYR] 
+[Curing]: SIP IMMUNITY
+You take a drink from a pinewood vial.
+Mercifully, the voyria venom has been cleansed from your body.
+[AFF]: Voyria
+The elixir burns through your veins, destroying the deadly poisons that are killing you.
+
+H:1515|27% M:4345|87%  22:28:39:443  [ Blonk ][0|14.2|0|0|0|0][ttend(5) sfrac(2) cribs(4) 
+wfrac(3) SENS hlch PAR leth naus] 
+You may eat another plant or mineral.
+H:1515|27% M:4420|89%  22:28:39:753  [ Blonk ][0|14.2|0|0|0|0][ttend(5) sfrac(2) cribs(4) 
+wfrac(3) SENS hlch PAR leth naus] 
+[Legacy]: Prioed Health
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:1515|27% M:4420|89%  22:28:39:848  [ Blonk ][0|14.2|0|0|0|0][ttend(5) sfrac(2) cribs(4) 
+wfrac(3) SENS hlch leth naus] 
+[OUTR]: 1 Bloodroot (848)
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Torso)
+Parry:      DENIED (21.3%)
+Sileris stripped...
+Empower:   (Sleizak)
+Afflicted: (Weariness)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (56%/100%).
+Afflicted: (Slickness Paralysis).*
+[ast[67], sen, weari, naus, deaf, slick, para]
+H:1515|27% M:4220|84%  22:28:40:123  [ Blonk ][0|21.3|0|0|0|0] ( -200m 4% )[ttend(5) sfrac(2) 
+cribs(4) wfrac(3) SENS hlch leth naus] 
+You suddenly perceive the vague outline of an aura of rebounding around Blonk.
+H:1515|27% M:4220|84%  22:28:40:310  [ Blonk ][0|21.3|0|0|0|0][ttend(5) sfrac(2) cribs(4) 
+wfrac(3) SENS hlch leth naus] 
+A Mhojave falcon rips out a chunk of your flesh with its beak.
+Health lost: 125 (physical cutting).
+H:1499|27% M:4220|84%  22:28:40:403  [ Blonk ][0|21.3|0|0|0|0][ttend(5) sfrac(2) cribs(4) 
+wfrac(3) SENS hlch leth naus] 
+Blonk eats an aurum flake.
+Blonk takes a long drag off his pipe.
+Processed Cures(asthma sensitivity weariness)
+H:1499|27% M:4220|84%  22:28:40:495  [ Blonk ][0|21.3|0|0|0|0][ttend(5) sfrac(2) cribs(4) 
+wfrac(3) SENS hlch leth naus] 
+You may eat another bit of irid moss or potash.
+H:1499|27% M:4220|84%  22:28:40:498  [ Blonk ][0|21.3|0|0|0|0][ttend(5) sfrac(2) cribs(4) 
+wfrac(3) SENS hlch leth naus] 
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+H:1935|35% M:4617|92%  22:28:40:654  [ Blonk ][0|21.3|0|0|0|0] ( +436h 7% +397m 7% )[ttend(5) 
+sfrac(2) cribs(4) wfrac(3) SENS hlch leth naus] 
+A fierce mountain falcon dives at Blonk, raking his face with its talons.
+H:1935|35% M:4617|92%  22:28:40:824  [ Blonk ][0|21.3|0|0|0|0][ttend(5) sfrac(2) cribs(4) 
+wfrac(3) SENS hlch leth naus] 
+Health lost: 56 (raw).
+You bleed 56 health.
+H:1879|34% M:4617|92%  22:28:41:035  [ Blonk ][0|21.3|0|0|0|0][ttend(5) sfrac(2) cribs(4) 
+wfrac(3) SENS hlch leth naus] 
+
+Afflicted: (Sensitivity)
+You may eat another plant or mineral. Eat (1.577)
+H:1879|34% M:4617|92%  22:28:41:424  [ Blonk ][0|21.3|0|0|0|0][ttend(5) sfrac(2) cribs(4) 
+wfrac(3) SENS hlch leth naus] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+The lethargy evaporates, leaving you full of energy.
+[AFF]: Lethargy
+Health lost: 596 (unblockable).
+H:1283|23% M:4617|92%  22:28:41:429  [ Blonk ][0|21.3|0|0|0|0] ( -596h 10% )[ttend(5) sfrac(2) 
+cribs(4) wfrac(3) SENS hlch naus] 
+[OUTR]: 1 Ginseng (580)
+You may drink another health or mana elixir. Health (5.848)
+H:1283|23% M:4617|92%  22:28:41:581  [ Blonk ][0|21.3|0|0|0|0][ttend(5) sfrac(2) cribs(4) 
+wfrac(3) SENS hlch naus] 
+[AFF]: Lethargy
+You feel your energy robbed from you as lethargy overtakes you.
+H:1283|23% M:4617|92%  22:28:41:718  [ Blonk ][0|21.3|0|0|0|0][ttend(5) sfrac(2) cribs(4) 
+wfrac(3) SENS hlch leth naus] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:1793|32% M:4617|92%  22:28:41:811  [ Blonk ][0|21.3|0|0|0|0] ( +510h 9% )[ttend(5) sfrac(2) 
+cribs(4) wfrac(3) SENS hlch leth naus] 
+Blonk eats a magnesium chip.
+Blonk applies a quicksilver droplet to himself.
+Processed Cures(paralysis)
+H:1793|32% M:4617|92%  22:28:42:165  [ Blonk ][0|21.3|0|0|0|0][ttend(5) sfrac(2) cribs(4) 
+wfrac(3) SENS hlch leth naus] 
+You have recovered balance on all limbs.
+As you touch the crystal tattoo, you feel your wounds melt away.
+Equilibrium used: 6.00s.
+H:5460|100% M:4617|92%  22:28:42:266  [ Blonk ][0|21.3|0|0|0|0] ( +3667h 67% )[ttend(5) 
+sfrac(2) cribs(4) wfrac(3) SENS hlch leth naus] 
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+H:5460|100% M:4617|92%  22:28:42:738  [ Blonk ][0|21.3|0|0|0|0][ttend(5) sfrac(2) cribs(4) 
+wfrac(3) clum SENS hlch leth naus] 
+Blonk takes a drink from an elegant diamond vial.
+You may eat another plant or mineral. Eat (1.486)
+H:5460|100% M:4617|92%  22:28:42:913  [ Blonk ][0|21.3|0|0|0|0][ttend(5) sfrac(2) cribs(4) 
+wfrac(3) clum SENS hlch leth naus] 
+Blonk's aura of weapons rebounding disappears.
+Blonk whips a bastard sword rough-hewn from a sapling in a savage arc, cleaving at your legs.
+
+[AFF]: Damagedleftleg
+[AFF]: Brokenleftleg
+[AFF]: Damagedrightleg
+[AFF]: Brokenrightleg
+Health lost: 698 (physical cutting).
+[AFF]: Brokenleftarm
+You watch, in horror, as your left arm shrivels up and becomes useless.
+The sleizak rune flashes bright upon a bastard sword rough-hewn from a sapling in the hands of
+Blonk.
+You feel your blood begin to burn as you catch sight of a rune shaped like a viper glittering
+upon a bastard sword rough-hewn from a sapling.
+[AFF]: Voyria
+Blonk drops into a low crouch, sweeping a bastard sword rough-hewn from a sapling beneath your
+guard and tangling it with your legs.
+[AFF]: Prone
+Blonk moves in to engage you.
+H:4762|87% M:4617|92%  22:28:42:924  [ Blonk ][0|21.3|0|0|0|0] ( -698h 12% )[la1 RL2 LL2 
+sfrac(2) cribs(4) wfrac(3) clum SENS hlch leth naus VOYR PR] 
+[Curing]: APPLY MENDING TO ARMS
+You take out some salve and quickly rub it on your arms.
+The bones in your left arm mend.
+[AFF]: Brokenleftarm
+[Curing]: EAT KELP
+You eat a piece of kelp.
+The stinging feeling fades.
+[AFF]: Sensitivity
+Blonk takes a long drag off his pipe.
+H:4762|87% M:4617|92%  22:28:43:151  [ Blonk ][0|21.3|0|0|0|0][RL2 LL2 sfrac(2) cribs(4) 
+wfrac(3) clum hlch leth naus VOYR PR] 
+Ferocity:  [####|####|####|####]
+Blonk touches a tree of life tattoo.
+Processed Cures(weariness sensitivity nausea)
+[sen[67], naus[67], deaf]
+
+H:4762|87% M:4617|92%  22:28:43:302  [ Blonk ][0|21.3|0|0|0|0][RL2 LL2 sfrac(2) cribs(4) 
+wfrac(3) clum hlch leth naus VOYR PR] 
+[AFF]: Sensitivity
+A prickly, stinging sensation spreads through your body.
+H:4762|87% M:4617|92%  22:28:43:735  [ Blonk ][0|21.3|0|0|0|0][RL2 LL2 sfrac(2) cribs(4) 
+wfrac(3) clum SENS hlch leth naus VOYR PR] 
+Blonk eats an aurum flake.
+Processed Cures(sensitivity)
+[naus[67], deaf]
+
+H:4762|87% M:4617|92%  22:28:43:892  [ Blonk ][0|21.3|0|0|0|0][RL2 LL2 sfrac(2) cribs(4) 
+wfrac(3) clum SENS hlch leth naus VOYR PR] 
+A fierce mountain falcon dives at Blonk, raking his face with its talons.
+H:4762|87% M:4617|92%  22:28:43:895  [ Blonk ][0|21.3|0|0|0|0][RL2 LL2 sfrac(2) cribs(4) 
+wfrac(3) clum SENS hlch leth naus VOYR PR] 
+
+Afflicted: (Sensitivity)
+You may apply another salve to yourself. Arms (0.959)
+H:4762|87% M:4617|92%  22:28:44:107  [ Blonk ][0|21.3|0|0|0|0][RL2 LL2 sfrac(2) cribs(4) 
+wfrac(3) clum SENS hlch leth naus VOYR PR] 
+
+THEY CAN TOUCH TREE AGAIN!
+[Curing]: APPLY RESTORATION TO LEGS
+You take out some salve and quickly rub it on your legs.
+Blonk eats a potash crystal.
+H:4762|87% M:4567|91%  22:28:44:271  [ Blonk ][0|21.3|0|0|0|0][RL2 LL2 sfrac(2) cribs(4) 
+wfrac(3) clum SENS hlch leth naus VOYR PR] 
+The empowerment of the sleizak rune fades.
+H:4762|87% M:4567|91%  22:28:44:568  [ Blonk ][0|21.3|0|0|0|0][RL2 LL2 sfrac(2) cribs(4) 
+wfrac(3) clum SENS hlch leth naus VOYR PR] 
+You may eat another plant or mineral.
+H:4762|87% M:4567|91%  22:28:44:666  [ Blonk ][0|21.3|0|0|0|0][RL2 LL2 sfrac(2) cribs(4) 
+wfrac(3) clum SENS hlch leth naus VOYR PR] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your aching, pain-wracked body is soothed and calmed.
+[AFF]: Healthleech
+H:4762|87% M:4567|91%  22:28:44:882  [ Blonk ][0|21.3|0|0|0|0][RL2 LL2 sfrac(2) cribs(4) 
+wfrac(3) clum SENS leth naus VOYR PR] 
+Blonk eats an aurum flake.
+Processed Cures(sensitivity)
+[naus[67], deaf]
+
+H:4762|87% M:4567|91%  22:28:45:496  [ Blonk ][0|21.3|0|0|0|0][RL2 LL2 sfrac(2) cribs(4) 
+wfrac(3) clum SENS leth naus VOYR PR] 
+An expression of calculated focus crosses the face of Blonk, and he shifts his feet slightly
+wider apart.
+Blonk launches a devastating slash at your already injured arms, his blade cleaving to the
+bone.
+[AFF]: Brokenleftarm
+[AFF]: Brokenrightarm
+Health lost: 843 (physical cutting).
+[AFF]: Addiction
+You feel a terrible hunger grow within you.
+The sleizak rune flashes bright upon a bastard sword rough-hewn from a sapling in the hands of
+Blonk.
+You feel your blood begin to burn as you catch sight of a rune shaped like a viper glittering
+upon a bastard sword rough-hewn from a sapling.
+Blonk moves in to engage you.
+H:3919|71% M:4567|91%  22:28:46:155  [ Blonk ][0|21.3|0|0|0|0] ( -843h 15% ) (104B)[ra1 RL2 LL2 
+la1 sfrac(2) cribs(4) clum SENS ADD leth naus PR VOYR] 
+You may eat another plant or mineral.
+H:3919|71% M:4567|91%  22:28:46:331  [ Blonk ][0|21.3|0|0|0|0][ra1 RL2 LL2 la1 sfrac(2) 
+cribs(4) clum SENS ADD leth naus PR VOYR] 
+A Mhojave falcon rips out a chunk of your flesh with its beak.
+Health lost: 151 (physical blunt).
+H:3768|69% M:4567|91%  22:28:46:419  [ Blonk ][0|21.3|0|0|0|0] ( -151h 2% ) (109B)[ra1 RL2 LL2 
+la1 sfrac(2) cribs(4) clum SENS ADD leth naus PR VOYR] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your addiction can never be sated.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:3768|69% M:4567|91%  22:28:46:514  [ Blonk ][0|21.3|0|0|0|0][ra1 RL2 LL2 la1 sfrac(2) 
+cribs(4) SENS ADD leth naus PR VOYR] 
+You may utilise the tree tattoo again. Tree (13.94)
+Health lost: 109 (raw).
+You bleed 109 health.
+H:3659|67% M:4567|91%  22:28:46:605  [ Blonk ][0|21.3|0|0|0|0][ra1 RL2 LL2 la1 sfrac(2) 
+cribs(4) SENS ADD leth naus PR VOYR] 
+You may eat another bit of irid moss or potash.
+H:3659|67% M:4567|91%  22:28:46:608  [ Blonk ][0|21.3|0|0|0|0][ra1 RL2 LL2 la1 sfrac(2) 
+cribs(4) SENS ADD leth naus PR VOYR] 
+[Curing]: EAT MOSS
+You eat some irid moss.
+Your addiction can never be sated.
+You feel your health and mana replenished.
+H:4095|75% M:4964|99%  22:28:46:699  [ Blonk ][0|21.3|0|0|0|0] ( +436h 7% +397m 7% )[ra1 RL2 
+LL2 la1 sfrac(2) cribs(4) SENS ADD leth naus PR VOYR] 
+Your system is able to absorb antidotes once again.
+H:4095|75% M:4964|99%  22:28:46:789  [ Blonk ][0|21.3|0|0|0|0][ra1 RL2 LL2 la1 sfrac(2) 
+cribs(4) SENS ADD leth naus PR VOYR] 
+[Curing]: SIP IMMUNITY
+You take a drink from a pinewood vial.
+Mercifully, the voyria venom has been cleansed from your body.
+[AFF]: Voyria
+The elixir burns through your veins, destroying the deadly poisons that are killing you.
+
+H:4095|75% M:4964|99%  22:28:46:885  [ Blonk ][0|21.3|0|0|0|0][ra1 RL2 LL2 la1 sfrac(2) 
+cribs(4) SENS ADD leth naus PR] 
+Blonk eats a ferrum flake.
+Processed Cures(nausea)
+[deaf]
+
+H:4095|75% M:4964|99%  22:28:47:059  [ Blonk ][0|21.3|0|0|0|0][ra1 RL2 LL2 la1 sfrac(2) 
+cribs(4) SENS ADD leth naus PR] 
+
+Afflicted: (Sensitivity)
+Blonk takes some elixir from an elegant diamond vial and rubs it into his torso.ribs: 2
+
+H:4095|75% M:4964|99%  22:28:47:451  [ Blonk ][0|21.3|0|0|0|0][ra1 RL2 LL2 la1 sfrac(2) 
+cribs(4) SENS ADD leth naus PR] 
+You may drink another health or mana elixir. Health (5.8)
+H:4095|75% M:4964|99%  22:28:47:611  [ Blonk ][0|21.3|0|0|0|0][ra1 RL2 LL2 la1 sfrac(2) 
+cribs(4) SENS ADD leth naus PR] 
+[Curing]: APPLY HEALTH TO HEAD
+You take some elixir from an oaken vial and rub it into your head.
+The pain in your head lessens somewhat.
+H:4095|75% M:4964|99%  22:28:47:615  [ Blonk ][0|21.3|0|0|0|0][ra1 RL2 LL2 la1 sfrac(1) 
+cribs(4) SENS ADD leth naus PR] 
+You may eat another plant or mineral.
+H:4095|75% M:4964|99%  22:28:47:912  [ Blonk ][0|21.3|0|0|0|0][ra1 RL2 LL2 la1 sfrac(1) 
+cribs(4) SENS ADD leth naus PR] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+The lethargy evaporates, leaving you full of energy.
+[AFF]: Lethargy
+H:4095|75% M:4964|99%  22:28:47:999  [ Blonk ][0|21.3|0|0|0|0][ra1 RL2 LL2 la1 sfrac(1) 
+cribs(4) SENS ADD naus PR] 
+You cannot do that because both of your arms must be whole and unbound.
+H:4095|75% M:4964|99%  22:28:48:069  [ Blonk ][0|21.3|0|0|0|0][ra1 RL2 LL2 la1 sfrac(1) 
+cribs(4) SENS ADD naus PR] 
+You cannot contain the convulsions in your stomach any longer and double over, retching
+violently.
+Health lost: 764 (unblockable).
+You have recovered equilibrium.
+You begin to tumble agilely to the northwest.
+
+[SLC]: Reset left leg counts.
+Your left leg feels stronger and healthier.
+[AFF]: Damagedleftleg
+You may apply another salve to yourself. Legs (4.023)
+H:3331|61% M:4964|99%  22:28:48:293  [ Blonk ][0|21.3|0|0|0|0] ( -764h 13% )[ra1 RL2 la1 ll1 
+sfrac(1) cribs(4) SENS ADD naus PR] 
+[Curing]: APPLY MENDING TO LEGS
+You take out some salve and quickly rub it on your legs.
+The bones in your left leg mend.
+[AFF]: Brokenleftleg
+H:3331|61% M:4964|99%  22:28:48:411  [ Blonk ][0|21.3|0|0|0|0][ra1 RL2 la1 sfrac(1) cribs(4) 
+SENS ADD naus PR] 
+Blonk eats an aurum flake.
+Processed Cures(sensitivity)
+[deaf]
+
+H:3331|61% M:4964|99%  22:28:48:611  [ Blonk ][0|21.3|0|0|0|0][ra1 RL2 la1 sfrac(1) cribs(4) 
+SENS ADD naus PR] 
+You may apply another salve to yourself. Legs (0.905)
+An expression of calculated focus crosses the face of Blonk, and he shifts his feet slightly
+wider apart.
+Blonk lunges forward at you with a bastard sword rough-hewn from a sapling, but stumbles mid
+attack.
+Blonk moves in to engage you.
+H:3331|61% M:4914|98%  22:28:49:317  [ Blonk ][0|21.3|0|0|0|0][ra1 RL2 la1 sfrac(1) cribs(4) 
+SENS ADD naus PR] 
+[Curing]: APPLY MENDING TO ARMS
+You take out some salve and quickly rub it on your arms.
+The bones in your left arm mend.
+[AFF]: Brokenleftarm
+H:3331|61% M:4914|98%  22:28:49:450  [ Blonk ][0|21.3|0|0|0|0][ra1 RL2 sfrac(1) cribs(4) SENS 
+ADD naus PR] 
+A Mhojave falcon dives at you, raking your face with its talons.
+Health lost: 135 (physical cutting).
+H:3196|58% M:4914|98%  22:28:49:453  [ Blonk ][0|21.3|0|0|0|0][ra1 RL2 sfrac(1) cribs(4) SENS 
+ADD naus PR] 
+You may eat another plant or mineral. Eat (1.533)
+H:3196|58% M:4914|98%  22:28:49:530  [ Blonk ][0|21.3|0|0|0|0][ra1 RL2 sfrac(1) cribs(4) SENS 
+ADD naus PR] 
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Your terrible addiction seems to wane.
+[AFF]: Addiction
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+Your stomach becalms itself.
+[AFF]: Nausea
+H:3196|58% M:4914|98%  22:28:49:626  [ Blonk ][0|21.3|0|0|0|0][ra1 RL2 sfrac(1) cribs(4) SENS 
+PR] 
+[OUTR]: 5 Kelp (1659)
+[OUTR]: 5 Bloodroot (843)
+[OUTR]: 5 Ginseng (575)
+[OUTR]: 5 Goldenseal (1488)
+[OUTR]: 1 Ginseng (574)
+A fierce mountain falcon rips out a chunk of Blonk's flesh with its beak.
+H:3196|58% M:4966|100%  22:28:49:966  [ Blonk ][0|21.3|0|0|0|0][ra1 RL2 sfrac(1) cribs(4) SENS 
+PR] 
+Blonk eats a calamine crystal.
+Blonk eats a potash crystal.
+You may apply another salve to yourself. Arms (0.919)
+H:3196|58% M:4966|100%  22:28:50:368  [ Blonk ][0|21.3|0|0|0|0][ra1 RL2 sfrac(1) cribs(4) SENS 
+PR] 
+[Curing]: APPLY MENDING TO ARMS
+You take out some salve and quickly rub it on your arms.
+The bones in your right arm mend.
+[AFF]: Brokenrightarm
+H:3196|58% M:4966|100%  22:28:50:641  [ Blonk ][0|21.3|0|0|0|0][RL2 sfrac(1) cribs(4) SENS PR] 
+
+Afflicted: (Sensitivity)
+You may eat another plant or mineral. Eat (1.528)
+H:3305|60% M:4966|100%  22:28:51:154  [ Blonk ][0|21.3|0|0|0|0][RL2 sfrac(1) cribs(4) SENS PR] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+The stinging feeling fades.
+[AFF]: Sensitivity
+H:3305|60% M:4966|100%  22:28:51:301  [ Blonk ][0|21.3|0|0|0|0][RL2 sfrac(1) cribs(4) PR] 
+You may apply another salve to yourself. Arms (0.838)
+H:3305|60% M:4966|100%  22:28:51:477  [ Blonk ][0|21.3|0|0|0|0][RL2 sfrac(1) cribs(4) PR] 
+[Curing]: APPLY RESTORATION TO LEGS
+You take out some salve and quickly rub it on your legs.
+H:3305|60% M:4966|100%  22:28:51:480  [ Blonk ][0|21.3|0|0|0|0][RL2 sfrac(1) cribs(4) PR] 
+You suddenly perceive the vague outline of an aura of rebounding around Blonk.
+H:3305|60% M:4966|100%  22:28:51:587  [ Blonk ][0|21.3|0|0|0|0][RL2 sfrac(1) cribs(4) PR] 
+
+[AFF]: Sensitivity
+A prickly, stinging sensation spreads through your body.
+[AFF]: Nausea
+A sense of extreme nausea washes over you.
+H:3305|60% M:4966|100%  22:28:51:761  [ Blonk ][0|21.3|0|0|0|0][RL2 sfrac(1) cribs(4) SENS naus 
+PR] 
+Health lost: 61 (raw).
+You bleed 61 health.
+H:3244|59% M:4966|100%  22:28:52:087  [ Blonk ][0|21.3|0|0|0|0][RL2 sfrac(1) cribs(4) SENS naus 
+PR] 
+Blonk takes some elixir from an elegant diamond vial and rubs it into his torso.ribs: 1
+Blonk eats an aurum flake.
+Processed Cures(sensitivity)
+[deaf, Reb]
+
+H:3244|59% M:4966|100%  22:28:52:092  [ Blonk ][0|21.3|0|0|0|0][RL2 sfrac(1) cribs(4) SENS naus 
+PR] 
+A supple metallic shell of quicksilver has formed around Blonk.
+H:3244|59% M:4966|100%  22:28:52:179  [ Blonk ][0|21.3|0|0|0|0][RL2 sfrac(1) cribs(4) SENS naus 
+PR] 
+A Mhojave falcon rips out a chunk of your flesh with its beak.
+Your shield completely absorbs the damage.
+H:3244|59% M:4966|100%  22:28:52:482  [ Blonk ][0|21.3|0|0|0|0][RL2 sfrac(1) cribs(4) SENS naus 
+PR] 
+You may eat another bit of irid moss or potash.
+H:3244|59% M:4966|100%  22:28:52:579  [ Blonk ][0|21.3|0|0|0|0][RL2 sfrac(1) cribs(4) SENS naus 
+PR] 
+[Curing]: OUTR MOSS
+[OUTR]: 1 Irid (1365)
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+You may eat another plant or mineral.
+You may drink another health or mana elixir.
+Blonk's aura of weapons rebounding disappears.
+Blonk draws his blade back and plunges it deep into your helpless body impaling it to the hilt.
+
+[AFF]: Impaled
+Health lost: 980 (physical cutting).
+Blonk's eyes rage with fury.
+H:2700|49% M:4966|100%  22:28:53:709  [ Blonk ][0|21.3|0|0|0|0] ( -544h 9% )[RL2 sfrac(1) 
+cribs(4) SENS naus PR IMPALED] 
+A fierce mountain falcon rips out a chunk of Blonk's flesh with its beak.
+H:2700|49% M:4966|100%  22:28:53:713  [ Blonk ][0|21.3|0|0|0|0][RL2 sfrac(1) cribs(4) SENS naus 
+PR IMPALED] 
+
+[DEF]: Kola
+[DEF]: Insomnia
+[DEF]: Speed
+[DEF]: Deathsight
+[DEF]: Levitating
+[DEF]: Gripping
+[DEF]: Resistance
+[DEF]: Weathering
+[DEF]: Cloak
+[DEF]: Poisonresist
+[DEF]: Temperance
+[DEF]: Insulation
+[DEF]: Nightsight
+[DEF]: Mindseye
+[DEF]: Fangbarrier
+[DEF]: Fury
+[DEF]: Blindness
+[SLC]: Reset right leg counts.
+Searing pain tears through your midsection as you wrench away from Blonk, his weapon ripping
+unceremoniously through your innards.
+Health lost: 2700 (unblockable).
+You drop back and ease the engagement.
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+You have been slain by Blonk.
+[SLC]: Reset all limb counts.
+[INR]: 12 Ginseng (586)
+[INR]: 1 Hawthorn (317)
+[INR]: 8 Bloodroot (851)
+[INR]: 5 Kelp (1664)
+[INR]: 5 Goldenseal (1493)
+[INR]: 1 Irid (1366)
+**********************************************************
+You have been defeated and are thrown out of the Arena.
+**********************************************************
+ 

@@ -1,0 +1,1282 @@
+Talo: entered the room!
+Talo raises his hand in greeting and says "Hi!"
+H:5460|100% M:4966|100%  18:27:58:958  [ Talo ][0|0|0|0|0|0]
+A fierce mountain falcon soars in upon silver wings.
+H:5460|100% M:4966|100%  18:27:59:138  [ Talo ][0|0|0|0|0|0]
+Talo takes a drink from an elegant diamond vial.
+H:5460|100% M:4966|100%  18:27:59:553  [ Talo ][0|0|0|0|0|0]
+You raise two fingers to your brow in an informal half-salute.
+H:5460|100% M:4966|100%  18:28:00:409  [ Talo ][0|0|0|0|0|0]
+Talo (male Fayad).
+------------------
+He is 54 years old, having been born on the 18th of Aeguary, 937 years after the fall of the
+Seleucarian Empire.
+He is ranked 266th in Achaea.
+He is the 5th ranked combatant with a rating of 215.
+He is an extremely credible character.
+He is not known for acts of infamy.
+He is a member of the Quisalis Mark.
+He is a member of the Pariah class.
+He is considered to be approximately 145% of your might.
+He is a mentor and able to take on proteges.
+See HONOURS DEEDS TALO to view his 1 special honours.
+Equilibrium used: 2.00s.
+H:5460|100% M:4966|100%  18:28:01:891  [ Talo ][0|0|0|0|0|0]
+Talo says in a clear voice, "Ready!"
+H:5460|100% M:4966|100%  18:28:02:018  [ Talo ][0|0|0|0|0|0]
+You suddenly perceive the vague outline of an aura of rebounding around Talo.
+H:5460|100% M:4966|100%  18:28:03:313  [ Talo ][0|0|0|0|0|0]
+You have recovered equilibrium.
+H:5460|100% M:4966|100%  18:28:03:843  [ Talo ][0|0|0|0|0|0]
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+H:5460|100% M:4966|100%  18:28:03:983  [ Talo ][0|0|0|0|0|0]
+You say in a steady, measured voice, "I am ready."
+H:5460|100% M:4966|100%  18:28:04:519  [ Talo ][0|0|0|0|0|0]
+Talo nods his head emphatically.
+H:5460|100% M:4966|100%  18:28:05:883  [ Talo ][0|0|0|0|0|0]
+Talo urges his companions onwards.
+H:5460|100% M:4966|100%  18:28:06:695  [ Talo ][0|0|0|0|0|0]
+Razed: Rebounding
+Talo takes a long drag off his pipe.
+H:5460|100% M:4966|100%  18:28:08:865  [ Talo ][0|0|0|0|0|0]
+
+Auto on
+Talo sweeps a bone and willow handled knife in a circle above his head, the point of the blade
+coming to rest aimed at you. You feel a sharp pain, gone as swiftly as it came, and a fine 
+crimson spray falls about you and Talo.
+[Legacy]: Curing against Pariah (Talo).
+[AFF]: Ensorcelled
+Talo kneels upon the ground, placing his hands palm down. A keening sound rises at the edge of
+perception, a lamentation for the damned.
+Sand swirls into existence, scattering outward. Soon the ground is covered, and the once vital
+labours beneath the eternal.
+H:5460|100% M:4966|100%  18:28:10:285  [ Talo ][0|0|0|0|0|0][ENS] 
+You have recovered balance on all limbs.
+You use a jewel-encrusted silver tinderbox to make fire.
+You light a firefly jar pipe and a firefly jar pipe.
+Envenomed: (Xentio)
+Sliced:    (Talo)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Engage:    (Talo)
+Equilibrium used: 2.00s..
+Afflicted: (Clumsiness Paralysis)
+[clum, para]
+H:5460|100% M:4916|98%  18:28:10:647  [ Talo ][0|0|0|0|0|0][ENS] 
+Talo eats a piece of kelp.
+Processed Cures(clumsiness)
+[para]
+
+H:5460|100% M:4916|98%  18:28:10:746  [ Talo ][0|0|0|0|0|0][ENS] 
+Talo eats a bloodroot leaf.
+Processed Cures(paralysis)
+H:5460|100% M:4916|98%  18:28:12:348  [ Talo ][0|0|0|0|0|0][ENS] 
+Talo traces a logograph depicting a lunging bear in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+Even as the logograph becomes fully formed it leaps from the air to you, sinking into your
+chest just over your heart.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:5460|100% M:4916|98%  18:28:12:457  [ Talo ][0|0|0|0|0|0][ENS] 
+You have recovered equilibrium.
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Talo)
+Shield:    (Clumsiness)
+Ferocity:  [####|####|####|####]
+[HP]:      (86%/100%).
+Afflicted: (Clumsiness)
+[clum]
+A fierce mountain falcon rips out a chunk of Talo's flesh with its beak.
+H:5460|100% M:4816|96%  18:28:13:243  [ Talo ][0|0|0|0|0|0][ENS] 
+Talo takes a drink from an elegant diamond vial.
+H:5460|100% M:4816|96%  18:28:13:332  [ Talo ][0|0|0|0|0|0][ENS] 
+Talo eats a piece of kelp.
+Processed Cures(clumsiness)
+H:5460|100% M:4816|96%  18:28:13:930  [ Talo ][0|0|0|0|0|0][ENS] 
+Talo raises his right hand, and snaps his fingers.
+A tide of writhing bodies boils up from the ground, myriad mouths gnawing and biting as they
+burrow into your flesh.
+Health lost: 509 (poison).
+Talo traces a logograph depicting a leaping jackal in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it leaps for you, vanishing into your skin just below
+your throat.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4951|90% M:4816|96%  18:28:14:494  [ Talo ][0|0|0|0|0|0] ( -509h 9% )[ENS] 
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Talo)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (86%/100%).
+Afflicted: (Clumsiness Paralysis)
+[clum, para]
+H:4951|90% M:4666|93%  18:28:14:826  [ Talo ][0|0|0|0|0|0][ENS] 
+Talo eats a bloodroot leaf.
+Processed Cures(paralysis)
+[clum]
+
+H:4951|90% M:4666|93%  18:28:15:655  [ Talo ][0|0|0|0|0|0][ENS] 
+A fierce mountain falcon dives at Talo, raking his face with its talons.
+Its talons shred the electric resistance defence of Talo.
+H:4951|90% M:4666|93%  18:28:16:243  [ Talo ][0|0|0|0|0|0][ENS] 
+A crackling stream of argentine light emanates from a prismatic ring, surrounding Talo with a
+flickering aura.
+H:4951|90% M:4666|93%  18:28:16:246  [ Talo ][0|0|0|0|0|0][ENS] 
+Raising his right hand, Talo sharply snaps his fingers.
+You feel something shifting and undulating beneath your skin, before a black cloud struggles
+from within your wounds.
+Talo traces a writhing logograph in the air before you, the blood upon his knife bursting into
+arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed, it leaps from air to you, sinking into your chest and
+leaving a cold ache over your heart.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4951|90% M:4666|93%  18:28:16:336  [ Talo ][0|0|0|0|0|0][ENS] 
+You have recovered balance on all limbs.
+Envenomed: (Vernalius)
+Sliced:    (Talo)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (74%/100%).
+Afflicted: (Weariness Paralysis)
+[clum, weari, para]
+H:4951|90% M:4566|91%  18:28:16:844  [ Talo ][0|0|0|0|0|0][ENS] 
+Lines of icy fire abruptly lance through your chest, radiating outward from your heart.
+[AFF]: Haemophilia
+You sense a subtle change deep within.
+H:4951|90% M:4566|91%  18:28:17:174  [ Talo ][0|0|0|0|0|0][haem ENS] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+Your blood regains its ability to clot.
+[AFF]: Haemophilia
+Talo eats a bloodroot leaf.
+Talo touches a tree of life tattoo.
+Processed Cures(paralysis)
+Processed Cures(clumsiness weariness)
+[clum[50], weari[50]]
+
+H:4951|90% M:4566|91%  18:28:17:269  [ Talo ][0|0|0|0|0|0][ENS] 
+You suddenly perceive the vague outline of an aura of rebounding around Talo.
+H:4951|90% M:4566|91%  18:28:17:342  [ Talo ][0|0|0|0|0|0][ENS] 
+[OUTR]: 1 Ginseng (580)
+Talo takes a drink from an elegant diamond vial.
+H:4951|90% M:4566|91%  18:28:17:822  [ Talo ][0|0|0|0|0|0][ENS] 
+Talo's aura of weapons rebounding disappears.
+Talo raises his right hand, and snaps his fingers.
+A tide of writhing bodies boils up from the ground, myriad mouths gnawing and biting as they
+burrow into your flesh.
+Health lost: 509 (poison).
+Talo traces a logograph shaped like a set of scales in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it suddenly shatters, and a wave of arcane power sends
+you staggering.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4442|81% M:4566|91%  18:28:18:012  [ Talo ][0|0|0|0|0|0] ( -509h 9% )[clum ENS] 
+You feel something suddenly clamp down about your throat, almost entirely cutting off your air.
+
+[AFF]: Asthma
+H:4442|81% M:4641|93%  18:28:18:126  [ Talo ][0|0|0|0|0|0][AST clum ENS] 
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+[Curing]: OUTR MOSS
+[OUTR]: 1 Irid (1362)
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+Talo takes a long drag off his pipe.
+H:5460|100% M:4966|100%  18:28:18:232  [ Talo ][0|0|0|0|0|0] ( +1018h 18% +325m 6% )[clum ENS] 
+You have recovered balance on all limbs.
+Envenomed: (Kalmia)
+Sliced:    (Talo)
+You lash out at Talo with a blessed legionnaire's longsword, but miss.
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Sensitivity)
+[HP]:      (94%/100%).
+Afflicted: (Paralysis Prefarar)
+[clum[50], weari[50], deaf, para]
+You may eat another plant or mineral. Eat (1.589)
+H:5460|100% M:4866|97%  18:28:18:855  [ Talo ][0|0|0|0|0|0][clum ENS] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+Talo eats a bloodroot leaf.
+Processed Cures(paralysis)
+[clum[50], weari[50], deaf]
+
+H:5460|100% M:4866|97%  18:28:19:014  [ Talo ][0|0|0|0|0|0][ENS] 
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+A sudden pain lances through your chest, and a cold numbness spreads outwards from your heart.
+
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:5460|100% M:4866|97%  18:28:19:123  [ Talo ][0|0|0|0|0|0][PAR ENS] 
+A fierce mountain falcon dives at Talo, raking his face with its talons.
+H:5460|100% M:4866|97%  18:28:19:303  [ Talo ][0|0|0|0|0|0][PAR ENS] 
+Talo takes a drink from an elegant diamond vial.
+H:5460|100% M:4866|97%  18:28:19:567  [ Talo ][0|0|0|0|0|0][PAR ENS] 
+Talo raises his right hand, and snaps his fingers.
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Flushings
+Your skin begins to prickle uncomfortably.
+Health lost: 724 (poison).
+Talo traces a logograph depicting a lunging bear in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+Even as the logograph becomes fully formed it leaps from the air to you, sinking into your
+chest just over your heart.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4736|86% M:4866|97%  18:28:19:652  [ Talo ][0|0|0|0|0|0] ( -724h 13% )[PAR fls ENS] 
+You may eat another plant or mineral.
+H:4736|86% M:4816|96%  18:28:20:455  [ Talo ][0|0|0|0|0|0][PAR fls ENS] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+Talo eats a hawthorn berry.
+H:4736|86% M:4816|96%  18:28:20:542  [ Talo ][0|0|0|0|0|0][fls ENS] 
+[OUTR]: 1 Bloodroot (845)
+You have recovered balance on all limbs.
+H:4736|86% M:4816|96%  18:28:20:659  [ Talo ][0|0|0|0|0|0][fls ENS] 
+H:4736|86% M:4816|96%  18:28:20:743  [ Talo ][0|0|0|0|0|0][fls ENS] 
+Envenomed: (Kalmia)
+Sliced:    (Talo)
+Runeblade: (Nairat)
+Afflicted: (Frozen)
+Empower:   (Sleizak)
+Afflicted: (Weariness)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (77%/100%).
+Afflicted: (Asthma Paralysis)
+[ast, clum[50], weari, deaf, frzn[200], para]
+Talo takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+H:4736|86% M:4616|92%  18:28:20:767  [ Talo ][0|0|0|0|0|0] ( -200m 4% )[fls ENS] 
+Talo takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+H:4736|86% M:4616|92%  18:28:21:752  [ Talo ][0|0|0|0|0|0][fls ENS] 
+You may eat another plant or mineral. Eat (1.513)
+H:4736|86% M:4616|92%  18:28:22:053  [ Talo ][0|0|0|0|0|0][fls ENS] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+The prickling in your skin fades and you feel blessedly cool.
+[AFF]: Flushings
+Talo eats a bloodroot leaf.
+Processed Cures(paralysis)
+[ast, clum[50], weari, deaf]
+
+H:4736|86% M:4616|92%  18:28:22:167  [ Talo ][0|0|0|0|0|0][ENS] 
+Talo raises his right hand, and snaps his fingers.
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Pyramides
+Your heart skips a beat, then begins to pound.
+Health lost: 724 (poison).
+Talo traces a logograph depicting a leaping jackal in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it leaps for you, ephemeral fangs closing about your
+throat and cutting off air.
+[AFF]: Asthma
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4012|73% M:4616|92%  18:28:22:177  [ Talo ][0|0|0|0|0|0] ( -724h 13% )[AST PYR ENS] 
+A wave of light-headedness abruptly overcomes you.
+[AFF]: Sandfever
+You're tired. So very tired.
+Something pulses from within the chest of Talo, and he seems more vital.
+Processed Cures(asthma clumsiness)
+H:4121|75% M:4616|92%  18:28:22:182  [ Talo ][0|0|0|0|0|0][SAND AST PYR ENS] 
+A fierce mountain falcon rips out a chunk of Talo's flesh with its beak.
+Its talons shred the cloak defence of Talo.
+H:4121|75% M:4616|92%  18:28:22:256  [ Talo ][0|0|0|0|0|0][SAND AST PYR ENS] 
+[OUTR]: 1 Ginseng (579)
+Talo takes a drink from an elegant diamond vial.
+H:4121|75% M:4616|92%  18:28:22:335  [ Talo ][0|0|0|0|0|0][SAND AST PYR ENS] 
+You may drink another health or mana elixir. Health (4.371)
+H:4121|75% M:4616|92%  18:28:22:601  [ Talo ][0|0|0|0|0|0][SAND AST PYR ENS] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5265|96% M:4616|92%  18:28:22:681  [ Talo ][0|0|0|0|0|0] ( +1144h 20% )[SAND AST PYR ENS] 
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Talo)
+Runeblade: (Nairat)
+Afflicted: (Frozen)
+Proc:      (Sleizak 1)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (82%/100%).
+Afflicted: (Slickness Paralysis)
+[ast[50], weari, naus, deaf, slick, frzn[200], para]
+H:5265|96% M:4516|90%  18:28:22:838  [ Talo ][0|0|0|0|0|0][SAND AST PYR ENS] 
+You may eat another plant or mineral. Eat (1.574)
+H:5265|96% M:4516|90%  18:28:23:739  [ Talo ][0|0|0|0|0|0][SAND AST PYR ENS] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+The burning in your veins abruptly fades.
+[AFF]: Pyramides
+Talo eats a bloodroot leaf.
+Talo touches a cloak tattoo.
+Processed Cures(paralysis slickness)
+H:5265|96% M:4516|90%  18:28:23:834  [ Talo ][0|0|0|0|0|0][SAND AST ENS] 
+[OUTR]: 1 Bloodroot (844)
+You may eat another bit of irid moss or potash.
+H:5265|96% M:4516|90%  18:28:24:129  [ Talo ][0|0|0|0|0|0][SAND AST ENS] 
+Lines of icy fire abruptly lance through your chest, radiating outward from your heart.
+[AFF]: Haemophilia
+You sense a subtle change deep within.
+H:5265|96% M:4516|90%  18:28:24:135  [ Talo ][0|0|0|0|0|0][SAND AST haem ENS] 
+You have recovered balance on all limbs.
+Envenomed: (Slike)
+Sliced:    (Torso) (7.1%)
+Shield:    (Clumsiness)
+Ferocity:  [####|####|####|####]
+[HP]:      (68%/100%)
+Talo raises his right hand, and snaps his fingers.
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Flushings
+Your skin begins to prickle uncomfortably.
+Health lost: 724 (poison).
+Talo traces a writhing logograph in the air before you, the blood upon his knife bursting into
+arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it lashes out at you, ethereal fangs plunging into your
+throat.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you..
+Afflicted: (Anorexia Clumsiness).*
+[ast[50], clum, weari, naus, anor, slick[50], frzn[200], para[50]]
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+A look of extreme focus crosses the face of Talo.
+Processed Cures(anorexia)
+Talo eats some irid moss.
+H:4977|91% M:4763|95%  18:28:24:874  [ Talo ][0|7.1|0|0|0|0] ( -288h 5% +247m 4% )[SAND AST PAR 
+haem fls ENS] 
+A fierce mountain falcon rips out a chunk of Talo's flesh with its beak.
+Its talons shred the speed defence of Talo.
+H:4977|91% M:4763|95%  18:28:25:347  [ Talo ][0|7.1|0|0|0|0][SAND AST PAR haem fls ENS] 
+Talo takes a drink from an elegant diamond vial.
+You may eat another plant or mineral. Eat (1.611)
+H:4977|91% M:4763|95%  18:28:25:443  [ Talo ][0|7.1|0|0|0|0][SAND AST PAR haem fls ENS] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+Talo eats a piece of kelp.
+Talo takes a long drag off his pipe.
+Processed Cures(asthma clumsiness weariness)
+Talo takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+H:4977|91% M:4763|95%  18:28:25:627  [ Talo ][0|7.1|0|0|0|0][SAND AST haem fls ENS] 
+[OUTR]: 1 Bloodroot (843)
+Talo motions as if to lift his hand, then abandons the arcane gesture.
+Talo traces a logograph shaped like a set of scales in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it suddenly shatters, and a wave of arcane power sends
+you staggering.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4977|91% M:4763|95%  18:28:26:139  [ Talo ][0|7.1|0|0|0|0][SAND AST clum haem fls ENS] 
+Talo takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+H:4977|91% M:4763|95%  18:28:26:625  [ Talo ][0|7.1|0|0|0|0][SAND AST clum haem fls ENS] 
+You have recovered balance on all limbs.
+Envenomed: (Curare)
+Sliced:    (Torso) (14.2%)
+Shield:    (Asthma)
+Ferocity:  [####|####|####|####]
+[HP]:      (64%/100%).
+Afflicted: (Asthma).*
+[ast, clum[67], weari[67], naus, para]
+You suddenly perceive the vague outline of an aura of rebounding around Talo.
+H:4977|91% M:4663|93%  18:28:26:709  [ Talo ][0|14.2|0|0|0|0][SAND AST clum haem fls ENS] 
+Talo takes a drink from an elegant diamond vial.
+H:4977|91% M:4663|93%  18:28:26:857  [ Talo ][0|14.2|0|0|0|0][SAND AST clum haem fls ENS] 
+You may drink another health or mana elixir. Health (4.359)
+H:4977|91% M:4663|93%  18:28:27:041  [ Talo ][0|14.2|0|0|0|0][SAND AST clum haem fls ENS] 
+You may eat another plant or mineral. Eat (1.512)
+H:4977|91% M:4663|93%  18:28:27:136  [ Talo ][0|14.2|0|0|0|0][SAND AST clum haem fls ENS] 
+[Curing]: EAT GOLDENSEAL
+You eat a goldenseal root.
+Your fever finally breaks, the terrible burning retreating.
+[AFF]: Sandfever
+Talo eats a bloodroot leaf.
+Processed Cures(paralysis)
+[ast, clum[67], weari[67], naus, Reb]
+
+H:4977|91% M:4663|93%  18:28:27:205  [ Talo ][0|14.2|0|0|0|0][AST clum haem fls ENS] 
+[OUTR]: 1 Goldenseal (1487)
+Health lost: 50 (raw).
+You bleed 50 health.
+H:4927|90% M:4663|93%  18:28:27:887  [ Talo ][0|14.2|0|0|0|0][AST clum haem fls ENS] 
+Talo's aura of weapons rebounding disappears.
+Talo raises his right hand, and snaps his fingers.
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Pyramides
+Your heart skips a beat, then begins to pound.
+Health lost: 724 (poison).
+Talo traces a logograph depicting a lunging bear in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+Even as the logograph becomes fully formed it leaps from the air to you, ephemeral claws
+plunging into your chest and leaving lines of icy fire in their wake.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4203|76% M:4663|93%  18:28:27:896  [ Talo ][0|14.2|0|0|0|0] ( -724h 13% ) (215B)[AST clum PYR 
+haem fls ENS] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5131|93% M:4663|93%  18:28:27:981  [ Talo ][0|14.2|0|0|0|0] ( +928h 16% ) (215B)[AST clum PYR 
+haem fls ENS] 
+
+Auto off
+A wave of light-headedness abruptly overcomes you.
+[AFF]: Sandfever
+You're tired. So very tired.
+H:5131|93% M:4738|95%  18:28:28:140  [ Talo ][0|14.2|0|0|0|0][SAND AST clum PYR haem fls ENS] 
+A fierce mountain falcon rips out a chunk of Talo's flesh with its beak.
+Its talons shred the insomnia defence of Talo.
+H:5131|93% M:4738|95%  18:28:28:346  [ Talo ][0|14.2|0|0|0|0][SAND AST clum PYR haem fls ENS] 
+Talo clenches his fists and grits his teeth.
+H:5131|93% M:4738|95%  18:28:28:349  [ Talo ][0|14.2|0|0|0|0][SAND AST clum PYR haem fls ENS] 
+You have recovered balance on all limbs.
+Razed: Nothing
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (76%/100%).
+Afflicted: (Paralysis)
+[ast, clum[67], weari[67], naus, para]
+H:5131|93% M:4638|93%  18:28:28:617  [ Talo ][0|14.2|0|0|0|0][SAND AST clum PYR haem fls ENS] 
+You may eat another plant or mineral. Eat (1.542)
+H:5131|93% M:4638|93%  18:28:28:746  [ Talo ][0|14.2|0|0|0|0][SAND AST clum PYR haem fls ENS] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+The burning in your veins abruptly fades.
+[AFF]: Pyramides
+Talo eats a bloodroot leaf.
+Processed Cures(paralysis)
+[ast, clum[67], weari[67], naus]
+
+H:5131|93% M:4638|93%  18:28:28:927  [ Talo ][0|14.2|0|0|0|0][SAND AST clum haem fls ENS] 
+
+[OUTR]: 1 Bloodroot (842)
+Talo doubles over, vomiting violently.
+H:5131|93% M:4638|93%  18:28:29:367  [ Talo ][0|14.2|0|0|0|0][SAND AST clum haem fls ENS] 
+Talo raises his right hand, and snaps his fingers.
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Pyramides
+Your heart skips a beat, then begins to pound.
+Health lost: 724 (poison).
+Talo traces a logograph depicting a leaping jackal in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it leaps for you, vanishing into your skin just below
+your throat.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4407|80% M:4638|93%  18:28:29:469  [ Talo ][0|14.2|0|0|0|0] ( -724h 13% ) (215B)[SAND AST 
+clum PYR haem fls ENS] 
+A sudden flush of heat drives out a chill that you didn't realise was there until it is gone;
+your limbs tingle, and you feel unburdened.
+[AFF]: Ensorcelled
+H:4407|80% M:4588|92%  18:28:30:115  [ Talo ][0|14.2|0|0|0|0][SAND AST clum PYR haem fls] 
+You have recovered balance on all limbs.
+H:4407|80% M:4588|92%  18:28:30:364  [ Talo ][0|14.2|0|0|0|0][SAND AST clum PYR haem fls] 
+You bunch your powerful muscles and launch yourself in a majestic leap northeastwards.
+Empty training yard.
+--- Area 572: A secluded mansion - v52882 ---
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+             [ ]
+                                             
+                 [ ]-[ ]
+                / | x
+             [ ]-[^]-[ ]
+                \ | /
+                 [ ]
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+--- Empty training yard ----------- 0:0:0 ---
+The sun shines brightly overhead. A large wall of stone stands here, blocking passage to the
+southwest.
+You see exits leading southwest and northwest.
+You drop back and ease the engagement.
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+H:4407|80% M:4588|92%  18:28:30:511  [ Talo ][0|14.2|0|0|0|0][SAND AST clum PYR haem fls] 
+You may eat another plant or mineral. Eat (1.588)
+H:4407|80% M:4588|92%  18:28:30:514  [ Talo ][0|14.2|0|0|0|0][SAND AST clum PYR haem fls] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+The burning in your veins abruptly fades.
+[AFF]: Pyramides
+H:4407|80% M:4588|92%  18:28:30:519  [ Talo ][0|14.2|0|0|0|0][SAND AST clum haem fls] 
+[OUTR]: 1 Bloodroot (841)
+You may eat another bit of irid moss or potash.
+H:4407|80% M:4588|92%  18:28:30:737  [ Talo ][0|14.2|0|0|0|0][SAND AST clum haem fls] 
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+H:4843|88% M:4966|100%  18:28:30:884  [ Talo ][0|14.2|0|0|0|0] ( +436h 7% +378m 7% ) 
+(215B)[SAND AST clum haem fls] 
+You have recovered balance on all limbs.
+H:4843|88% M:4966|100%  18:28:31:446  [ Talo ][0|14.2|0|0|0|0][SAND AST clum haem fls] 
+Your ferocity decreases.
+H:4843|88% M:4966|100%  18:28:31:539  [ Talo ][0|14.2|0|0|0|0][SAND AST clum haem fls] 
+You bunch your powerful muscles and launch yourself in a majestic leap northwestwards.
+A break in the estate wall.
+--- Area 572: A secluded mansion - v51723 ---
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                 [ ]
+                                             
+                     [ ]-[ ]
+                    / | x
+                 [ ]-[^]-[ ]
+                    \ | /
+                     [ ]
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+--- A break in the estate wall --- -1:1:0 ---
+The sun shines brightly overhead.
+You see exits leading southeast, southwest, and northwest.
+H:4843|88% M:4966|100%  18:28:31:801  [ Talo ][0|14.2|0|0|0|0][SAND AST clum haem fls] 
+You may eat another plant or mineral. Eat (1.626)
+H:4843|88% M:4966|100%  18:28:32:144  [ Talo ][0|14.2|0|0|0|0][SAND AST clum haem fls] 
+You may utilise the tree tattoo again. Tree (14.001)
+H:4843|88% M:4966|100%  18:28:32:228  [ Talo ][0|14.2|0|0|0|0][SAND AST clum haem fls] 
+[Curing]: EAT GOLDENSEAL
+You eat a goldenseal root.
+Your fever finally breaks, the terrible burning retreating.
+[AFF]: Sandfever
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+The prickling in your skin fades and you feel blessedly cool.
+[AFF]: Flushings
+H:4843|88% M:4966|100%  18:28:32:234  [ Talo ][0|14.2|0|0|0|0][AST clum haem] 
+
+THEY CAN TOUCH TREE AGAIN!
+[OUTR]: 1 Goldenseal (1486)
+You may drink another health or mana elixir. Health (4.492)
+H:4843|88% M:4966|100%  18:28:32:473  [ Talo ][0|14.2|0|0|0|0][AST clum haem] 
+You have recovered balance on all limbs.
+H:4952|90% M:4966|100%  18:28:32:652  [ Talo ][0|14.2|0|0|0|0][AST clum haem] 
+Health lost: 215 (raw).
+You bleed 215 health.
+H:4737|86% M:4966|100%  18:28:33:273  [ Talo ][0|14.2|0|0|0|0] ( -215h 3% ) (215B)[AST clum 
+haem] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5460|100% M:4966|100%  18:28:33:394  [ Talo ][0|14.2|0|0|0|0] ( +723h 13% ) (215B)[AST clum 
+haem] 
+Empty training yard.
+--- Area 572: A secluded mansion - v52882 ---
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+             [ ]
+                                             
+                 [ ]-[ ]
+                / | x
+             [ ]-[^]-[ ]
+                \ | /
+                 [ ]
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+--- Empty training yard ----------- 0:0:0 ---
+The sun shines brightly overhead. A large wall of stone stands here, blocking passage to the
+southwest.
+You see exits leading southwest and northwest.
+H:5460|100% M:4966|100%  18:28:33:676  [ Talo ][0|14.2|0|0|0|0][AST clum haem] 
+You may eat another plant or mineral. Eat (1.513)
+H:5460|100% M:4966|100%  18:28:33:745  [ Talo ][0|14.2|0|0|0|0][AST clum haem] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:5460|100% M:4966|100%  18:28:33:845  [ Talo ][0|14.2|0|0|0|0][AST haem] 
+You feel something suddenly clamp down about your throat, almost entirely cutting off your air.
+
+H:5460|100% M:4966|100%  18:28:34:180  [ Talo ][0|14.2|0|0|0|0][AST haem] 
+The wave of weakness that has overcome you passes.
+H:5460|100% M:4966|100%  18:28:34:184  [ Talo ][0|14.2|0|0|0|0][AST haem] 
+Talo leaps in from the southwest.
+H:5460|100% M:4966|100%  18:28:34:564  [ Talo ][0|14.2|0|0|0|0][AST haem] 
+You bunch your powerful muscles and launch yourself in a majestic leap southwestwards.
+The Oniar estate gates.
+--- Area 572: A secluded mansion - v53525 ---
+                                             
+                                             
+                                             
+                                             
+                                             
+                 [ ]
+                                             
+                     [ ]-[ ]
+                    / | x
+                 [ ]-[^]-[ ]
+                    \ | /
+                     [+]
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+--- The Oniar estate gates ------ -1:-1:0 ---
+Sand has covered the location. The sun shines brightly overhead. A rune like a flurry of
+lightning bolts has been sketched into the ground here (Isaz: Throws off balance). A rune like 
+a rising sun has been sketched into the ground here (Dagaz: Heals affs). A large wall of stone 
+stands here, blocking passage to the northeast.
+You see exits leading north, northeast, and northwest.
+H:5460|100% M:4966|100%  18:28:34:995  [ Talo ][0|14.2|0|0|0|0][AST haem] 
+Your ferocity decreases.
+H:5460|100% M:4966|100%  18:28:35:192  [ Talo ][0|14.2|0|0|0|0][AST haem] 
+You may eat another plant or mineral.
+H:5460|100% M:4966|100%  18:28:35:355  [ Talo ][0|14.2|0|0|0|0][AST haem] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+H:5460|100% M:4966|100%  18:28:35:449  [ Talo ][0|14.2|0|0|0|0][haem] 
+You have recovered balance on all limbs.
+H:5460|100% M:4966|100%  18:28:35:862  [ Talo ][0|14.2|0|0|0|0][haem] 
+You may eat another bit of irid moss or potash.
+H:5460|100% M:4966|100%  18:28:36:737  [ Talo ][0|14.2|0|0|0|0][haem] 
+ Reset Success!
+
+You may eat another plant or mineral.
+H:5460|100% M:4966|100%  18:28:36:978  [ Talo ][0|14.2|0|0|0|0][haem] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+Your blood regains its ability to clot.
+[AFF]: Haemophilia
+H:5460|100% M:4966|100%  18:28:37:173  [ Talo ][0|14.2|0|0|0|0]
+[OUTR]: 1 Ginseng (578)
+Its talons shred the cold resistance defence of Talo.
+H:5460|100% M:4966|100%  18:28:37:487  [ Talo ][0|14.2|0|0|0|0]
+You may drink another health or mana elixir. Health (4.394)
+H:5460|100% M:4966|100%  18:28:37:788  [ Talo ][0|14.2|0|0|0|0]
+You may eat another plant or mineral. Eat (1.487)
+H:5460|100% M:4966|100%  18:28:38:659  [ Talo ][0|14.2|0|0|0|0]
+Health lost: 165 (raw).
+You bleed 165 health.
+H:5295|96% M:4966|100%  18:28:38:771  [ Talo ][0|14.2|0|0|0|0] ( -165h 3% ) (152B)
+Your ferocity decreases.
+H:5295|96% M:4966|100%  18:28:39:174  [ Talo ][0|14.2|0|0|0|0]
+Talo leaps in from the northeast.
+H:5295|96% M:4966|100%  18:28:40:631  [ Talo ][0|14.2|0|0|0|0]
+You suddenly perceive the vague outline of an aura of rebounding around Talo.
+H:5295|96% M:4966|100%  18:28:40:751  [ Talo ][0|14.2|0|0|0|0]
+Talo's aura of weapons rebounding disappears.
+Talo sweeps a bone and willow handled knife in a circle above his head, the point of the blade
+coming to rest aimed at you. You feel a sharp pain, gone as swiftly as it came, and a fine 
+crimson spray falls about you and Talo.
+[AFF]: Ensorcelled
+H:5295|96% M:4966|100%  18:28:41:576  [ Talo ][0|14.2|0|0|0|0][ENS] 
+Talo takes a long drag off his pipe.
+H:5295|96% M:4966|100%  18:28:41:694  [ Talo ][0|14.2|0|0|0|0][ENS] 
+
+Auto on
+A fierce mountain falcon soars in upon silver wings.
+H:5295|96% M:4966|100%  18:28:42:046  [ Talo ][0|14.2|0|0|0|0][ENS] 
+H:5295|96% M:4966|100%  18:28:42:612  [ Talo ][0|14.2|0|0|0|0][ENS] 
+Envenomed: (Xentio)
+Sliced:    (Talo)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Engage:    (Talo)
+Equilibrium used: 2.00s..
+Afflicted: (Clumsiness Paralysis)
+[clum, para]
+Talo eats a bloodroot leaf.
+Talo takes a drink from an elegant diamond vial.
+Processed Cures(paralysis)
+H:5295|96% M:4916|98%  18:28:42:688  [ Talo ][0|14.2|0|0|0|0][ENS] 
+A fierce mountain falcon dives at Talo, raking his face with its talons.
+H:5404|98% M:4916|98%  18:28:43:622  [ Talo ][0|14.2|0|0|0|0][ENS] 
+Talo traces a logograph depicting a lunging bear in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+Even as the logograph becomes fully formed it leaps from the air to you, sinking into your
+chest just over your heart.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:5404|98% M:4916|98%  18:28:43:927  [ Talo ][0|14.2|0|0|0|0][ENS] 
+Talo eats a piece of kelp.
+Processed Cures(clumsiness)
+H:5404|98% M:4916|98%  18:28:44:209  [ Talo ][0|14.2|0|0|0|0][ENS] 
+Health lost: 102 (raw).
+You bleed 102 health.
+H:5302|97% M:4916|98%  18:28:44:304  [ Talo ][0|14.2|0|0|0|0][ENS] 
+You have recovered equilibrium.
+You have recovered balance on all limbs.
+Envenomed: (Vernalius)
+Sliced:    (Talo)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (86%/100%).
+Afflicted: (Weariness Paralysis)
+[weari, para]
+H:5302|97% M:4816|96%  18:28:44:525  [ Talo ][0|14.2|0|0|0|0][ENS] 
+Talo eats a bloodroot leaf.
+Raising his right hand, Talo sharply snaps his fingers.
+Processed Cures(paralysis)
+You feel something shifting and undulating beneath your skin, before a black cloud struggles
+from within your wounds.
+Talo traces a logograph depicting a leaping jackal in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it leaps for you, vanishing into your skin just below
+your throat.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:5302|97% M:4766|95%  18:28:45:981  [ Talo ][0|14.2|0|0|0|0][ENS] 
+You may utilise the tree tattoo again. Tree (14.033)
+H:5302|97% M:4766|95%  18:28:46:267  [ Talo ][0|14.2|0|0|0|0][ENS] 
+Something pulses from within the chest of Talo, and he seems more vital.
+H:5302|97% M:4766|95%  18:28:46:270  [ Talo ][0|14.2|0|0|0|0][ENS] 
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Talo)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (78%/100%).
+Afflicted: (Clumsiness Paralysis)
+[clum, para]
+Talo takes a drink from an elegant diamond vial.
+H:5302|97% M:4666|93%  18:28:47:203  [ Talo ][0|14.2|0|0|0|0][ENS] 
+Talo eats a bloodroot leaf.
+Processed Cures(paralysis)
+[clum]
+
+H:5302|97% M:4666|93%  18:28:47:558  [ Talo ][0|14.2|0|0|0|0][ENS] 
+Talo raises his right hand, and snaps his fingers.
+A tide of writhing bodies boils up from the ground, myriad mouths gnawing and biting as they
+burrow into your flesh.
+Health lost: 509 (poison).
+Talo traces a writhing logograph in the air before you, the blood upon his knife bursting into
+arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed, it leaps from air to you, sinking into your chest and
+leaving a cold ache over your heart.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4793|87% M:4666|93%  18:28:47:746  [ Talo ][0|14.2|0|0|0|0] ( -509h 9% )[ENS] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5460|100% M:4666|93%  18:28:47:750  [ Talo ][0|14.2|0|0|0|0] ( +667h 12% )[ENS] 
+(Legacy Help Desk): Aheli says, "How do i turn the basher off?"
+H:5460|100% M:4666|93%  18:28:48:212  [ Talo ][0|14.2|0|0|0|0][ENS] 
+Lines of icy fire abruptly lance through your chest, radiating outward from your heart.
+[AFF]: Haemophilia
+You sense a subtle change deep within.
+H:5460|100% M:4741|95%  18:28:48:306  [ Talo ][0|14.2|0|0|0|0][haem ENS] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+Your blood regains its ability to clot.
+[AFF]: Haemophilia
+H:5460|100% M:4741|95%  18:28:48:404  [ Talo ][0|14.2|0|0|0|0][ENS] 
+(Market): Saelily says, "Wonderin' if anyone has gotten a gift wit' a critter tha' DIDN'T try
+to kill em :S."
+H:5460|100% M:4741|95%  18:28:48:407  [ Talo ][0|14.2|0|0|0|0][ENS] 
+[OUTR]: 1 Ginseng (577)
+You have recovered balance on all limbs.
+Envenomed: (Vernalius)
+Sliced:    (Talo)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Sensitivity)
+[HP]:      (85%/100%).
+Afflicted: (Weariness Paralysis Prefarar)
+[clum, weari, deaf, para]
+Talo eats a bloodroot leaf.
+Talo touches a tree of life tattoo.
+Processed Cures(paralysis)
+Processed Cures(clumsiness weariness)
+[clum[50], weari[50], deaf]
+
+H:5460|100% M:4641|93%  18:28:49:207  [ Talo ][0|14.2|0|0|0|0][ENS] 
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+You feel something suddenly clamp down about your throat, almost entirely cutting off your air.
+
+[AFF]: Asthma
+H:5460|100% M:4641|93%  18:28:49:302  [ Talo ][0|14.2|0|0|0|0][AST ENS] 
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+H:5460|100% M:4641|93%  18:28:49:306  [ Talo ][0|14.2|0|0|0|0][ENS] 
+Talo raises his right hand, and snaps his fingers.
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Flushings
+Your skin begins to prickle uncomfortably.
+Health lost: 724 (poison).
+Talo traces a logograph shaped like a set of scales in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it suddenly shatters, and a wave of arcane power sends
+you staggering.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4736|86% M:4641|93%  18:28:49:654  [ Talo ][0|14.2|0|0|0|0] ( -724h 13% )[clum fls ENS] 
+A fierce mountain falcon dives at Talo, raking his face with its talons.
+H:4736|86% M:4641|93%  18:28:49:660  [ Talo ][0|14.2|0|0|0|0][clum fls ENS] 
+Health lost: 90 (raw).
+You bleed 90 health.
+H:4646|85% M:4591|92%  18:28:49:783  [ Talo ][0|14.2|0|0|0|0][clum fls ENS] 
+You may eat another plant or mineral. Eat (1.384)
+H:4646|85% M:4591|92%  18:28:49:786  [ Talo ][0|14.2|0|0|0|0][clum fls ENS] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:4646|85% M:4591|92%  18:28:49:984  [ Talo ][0|14.2|0|0|0|0][fls ENS] 
+You suddenly perceive the vague outline of an aura of rebounding around Talo.
+H:4646|85% M:4591|92%  18:28:50:239  [ Talo ][0|14.2|0|0|0|0][fls ENS] 
+A sudden pain lances through your chest, and a cold numbness spreads outwards from your heart.
+
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:4646|85% M:4591|92%  18:28:50:243  [ Talo ][0|14.2|0|0|0|0][PAR fls ENS] 
+You have recovered balance on all limbs.
+H:4646|85% M:4591|92%  18:28:50:497  [ Talo ][0|14.2|0|0|0|0][PAR fls ENS] 
+Talo eats a hawthorn berry.
+H:4646|85% M:4591|92%  18:28:50:820  [ Talo ][0|14.2|0|0|0|0][PAR fls ENS] 
+Talo's aura of weapons rebounding disappears.
+Talo raises his right hand, and snaps his fingers.
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Pyramides
+Your heart skips a beat, then begins to pound.
+Health lost: 724 (poison).
+Talo traces a logograph depicting a lunging bear in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+Even as the logograph becomes fully formed it leaps from the air to you, sinking into your
+chest just over your heart.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:3922|71% M:4591|92%  18:28:51:214  [ Talo ][0|14.2|0|0|0|0] ( -724h 13% )[PAR PYR fls ENS] 
+A wave of light-headedness abruptly overcomes you.
+[AFF]: Sandfever
+You're tired. So very tired.
+H:3922|71% M:4591|92%  18:28:51:302  [ Talo ][0|14.2|0|0|0|0][SAND PAR PYR fls ENS] 
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+Talo takes a long drag off his pipe.
+H:4358|79% M:4966|100%  18:28:51:396  [ Talo ][0|14.2|0|0|0|0] ( +436h 7% +375m 7% )[SAND PAR 
+PYR fls ENS] 
+You may eat another plant or mineral.
+H:4358|79% M:4966|100%  18:28:51:509  [ Talo ][0|14.2|0|0|0|0][SAND PAR PYR fls ENS] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+Razed: Nothing
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (78%/100%).
+Afflicted: (Paralysis)
+[clum[50], weari[50], deaf, para]
+[OUTR]: 1 Bloodroot (840)
+Talo takes a drink from an elegant diamond vial.
+H:4358|79% M:4866|97%  18:28:51:778  [ Talo ][0|14.2|0|0|0|0][SAND PYR fls ENS] 
+You may drink another health or mana elixir. Health (4.479)
+H:4358|79% M:4866|97%  18:28:52:230  [ Talo ][0|14.2|0|0|0|0][SAND PYR fls ENS] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+Talo eats a bloodroot leaf.
+Processed Cures(paralysis)
+[clum[50], weari[50], deaf]
+
+H:5228|95% M:4866|97%  18:28:52:390  [ Talo ][0|14.2|0|0|0|0] ( +870h 15% )[SAND PYR fls ENS] 
+Talo raises his right hand, and imperiously snaps his fingers.
+A wave of unnatural nausea sweeps through you, your entire body shuddering at the pestilent
+assault.
+Talo traces a logograph depicting a striking scorpion in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+The logograph leaps from the air to you, and you feel a terrible pain in the side of your neck
+before an icy cold rushes through you.
+[AFF]: Scytherus
+You feel light headed and dizzy.
+H:5228|95% M:4866|97%  18:28:52:794  [ Talo ][0|14.2|0|0|0|0][SAND PYR SCYT fls ENS] 
+(Legacy Help Desk): Ante says, "'hunt'"
+H:5228|95% M:4866|97%  18:28:52:885  [ Talo ][0|14.2|0|0|0|0][SAND PYR SCYT fls ENS] 
+You may eat another plant or mineral. Eat (1.613)
+H:5337|97% M:4866|97%  18:28:53:215  [ Talo ][0|14.2|0|0|0|0][SAND PYR SCYT fls ENS] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+The burning in your veins abruptly fades.
+[AFF]: Pyramides
+H:5337|97% M:4866|97%  18:28:53:219  [ Talo ][0|14.2|0|0|0|0][SAND SCYT fls ENS] 
+[OUTR]: 1 Bloodroot (839)
+You have recovered balance on all limbs.
+Envenomed: (Kalmia)
+Sliced:    (Talo)
+Empower:   (Sleizak)
+Afflicted: (Weariness)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (87%/100%).
+Afflicted: (Asthma Paralysis)
+[ast, clum[50], weari, deaf, para]
+H:5337|97% M:4666|93%  18:28:53:428  [ Talo ][0|14.2|0|0|0|0] ( -200m 4% )[SAND SCYT fls ENS] 
+Talo eats a bloodroot leaf.
+Processed Cures(paralysis)
+[ast, clum[50], weari]
+
+H:5337|97% M:4666|93%  18:28:53:992  [ Talo ][0|14.2|0|0|0|0][SAND SCYT fls ENS] 
+You may eat another plant or mineral. Eat (1.563)
+H:5337|97% M:4616|92%  18:28:54:782  [ Talo ][0|14.2|0|0|0|0][SAND SCYT fls ENS] 
+[Curing]: EAT GOLDENSEAL
+You eat a goldenseal root.
+Your fever finally breaks, the terrible burning retreating.
+[AFF]: Sandfever
+H:5337|97% M:4616|92%  18:28:54:791  [ Talo ][0|14.2|0|0|0|0][SCYT fls ENS] 
+Talo traces a writhing logograph in the air before you, the blood upon his knife bursting into
+arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it lashes out at you, ethereal fangs plunging into your
+throat.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Your blood begins to burn in your veins with a slowly building pain.
+[AFF]: Voyria
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+Talo fixes his gaze to yours, raising his right hand, before sharply snapping his fingers.
+TIME TO BAIL
+TIME TO BAIL
+TIME TO BAIL
+You feel a sudden flush of heat as your heart begins to pound eratically.
+Liquid fire runs through your veins as the voyria venom floods your system.
+TIME TO BAIL
+TIME TO BAIL
+TIME TO BAIL
+Lines of icy fire abruptly lance through your chest, radiating outward from your heart.
+[AFF]: Haemophilia
+You sense a subtle change deep within.
+H:5337|97% M:4616|92%  18:28:54:866  [ Talo ][0|14.2|0|0|0|0][PAR haem SCYT fls ENS VOYR] 
+
+[OUTR]: 1 Goldenseal (1485)
+You have recovered balance on all limbs.
+H:5337|97% M:4616|92%  18:28:55:255  [ Talo ][0|14.2|0|0|0|0][PAR haem SCYT fls ENS VOYR] 
+Health lost: 82 (raw).
+You bleed 82 health.
+H:5255|96% M:4616|92%  18:28:55:346  [ Talo ][0|14.2|0|0|0|0][PAR haem SCYT fls ENS VOYR] 
+Talo eats a piece of kelp.
+Processed Cures(asthma clumsiness weariness)
+[ast[67], weari[67]]
+
+H:5255|96% M:4616|92%  18:28:55:572  [ Talo ][0|14.2|0|0|0|0][PAR haem SCYT fls ENS VOYR] 
+A fierce mountain falcon dives at Talo, raking his face with its talons.
+H:5255|96% M:4616|92%  18:28:55:736  [ Talo ][0|14.2|0|0|0|0][PAR haem SCYT fls ENS VOYR] 
+
+Auto off
+You may eat another plant or mineral. Eat (1.572)
+H:5255|96% M:4616|92%  18:28:56:361  [ Talo ][0|14.2|0|0|0|0][PAR haem SCYT fls ENS VOYR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+Envenomed: (Gecko)
+Sliced:    (Talo)
+Proc:      (Sleizak 1)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (76%/100%).
+Afflicted: (Slickness Paralysis)
+[ast[67], weari, naus, slick, para]
+[OUTR]: 1 Bloodroot (838)
+H:5255|96% M:4516|90%  18:28:56:430  [ Talo ][0|14.2|0|0|0|0][haem SCYT fls ENS VOYR] 
+Talo takes a long drag off his pipe.
+Talo takes a drink from an elegant diamond vial.
+H:5255|96% M:4516|90%  18:28:56:526  [ Talo ][0|14.2|0|0|0|0][haem SCYT fls ENS VOYR] 
+You may drink another health or mana elixir. Health (4.366)
+H:5255|96% M:4516|90%  18:28:56:755  [ Talo ][0|14.2|0|0|0|0][haem SCYT fls ENS VOYR] 
+Talo eats a bloodroot leaf.
+Processed Cures(paralysis slickness)
+[weari, naus, slick[50], para[50]]
+
+H:5255|96% M:4516|90%  18:28:57:302  [ Talo ][0|14.2|0|0|0|0][haem SCYT fls ENS VOYR] 
+A wave of light-headedness abruptly overcomes you.
+[AFF]: Sandfever
+You're tired. So very tired.
+H:5255|96% M:4516|90%  18:28:57:307  [ Talo ][0|14.2|0|0|0|0][SAND haem SCYT fls ENS VOYR] 
+You may eat another bit of irid moss or potash.
+H:5255|96% M:4516|90%  18:28:57:310  [ Talo ][0|14.2|0|0|0|0][SAND haem SCYT fls ENS VOYR] 
+Talo traces a logograph shaped like a set of scales in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it suddenly shatters, and a wave of arcane power sends
+you staggering.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+Talo fixes his gaze to yours, raising his right hand, before sharply snapping his fingers.
+TIME TO BAIL
+TIME TO BAIL
+TIME TO BAIL
+You feel a sudden flush of heat as your heart begins to pound eratically.
+Liquid fire runs through your veins as the voyria venom floods your system.
+TIME TO BAIL
+TIME TO BAIL
+TIME TO BAIL
+H:5255|96% M:4516|90%  18:28:57:318  [ Talo ][0|14.2|0|0|0|0][SAND clum haem SCYT fls ENS VOYR] 
+You may eat another plant or mineral. Eat (1.502)
+H:5255|96% M:4516|90%  18:28:57:868  [ Talo ][0|14.2|0|0|0|0][SAND clum haem SCYT fls ENS VOYR] 
+[Curing]: EAT GOLDENSEAL
+You eat a goldenseal root.
+Your fever finally breaks, the terrible burning retreating.
+[AFF]: Sandfever
+H:5255|96% M:4516|90%  18:28:57:963  [ Talo ][0|14.2|0|0|0|0][clum haem SCYT fls ENS VOYR] 
+
+[OUTR]: 1 Goldenseal (1484)
+
+[DEF]: Shield
+You have recovered balance on all limbs.
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 4.00s.
+H:5255|96% M:4516|90%  18:28:58:291  [ Talo ][0|14.2|0|0|0|0][clum haem SCYT fls ENS VOYR] 
+Something pulses from within the chest of Talo, and he seems more vital.
+Processed Cures(paralysis nausea slickness)
+H:5255|96% M:4591|92%  18:28:58:296  [ Talo ][0|14.2|0|0|0|0][clum haem SCYT fls ENS VOYR] 
+
+[Prio]: Paralysis (26)
+A fierce mountain falcon rips out a chunk of Talo's flesh with its beak.
+H:5255|96% M:4591|92%  18:28:58:749  [ Talo ][0|14.2|0|0|0|0][clum haem SCYT fls ENS VOYR] 
+Talo eats a piece of kelp.
+H:5255|96% M:4591|92%  18:28:58:836  [ Talo ][0|14.2|0|0|0|0][clum haem SCYT fls ENS VOYR] 
+
+[DEF]: Shield
+Crimson fire trails the knife of Talo as he slashes his knife through the air before you, a
+jagged logograph hanging in its passing.
+A violent cracking sound emanates from the air directly in front of you, and your magical
+shield explodes into translucent shards.
+H:5255|96% M:4591|92%  18:28:59:037  [ Talo ][0|14.2|0|0|0|0][clum haem SCYT fls ENS VOYR] 
+You may eat another plant or mineral. Eat (1.589)
+H:5255|96% M:4591|92%  18:28:59:551  [ Talo ][0|14.2|0|0|0|0][clum haem SCYT fls ENS VOYR] 
+Your ferocity decreases.
+H:5255|96% M:4591|92%  18:28:59:646  [ Talo ][0|14.2|0|0|0|0][clum haem SCYT fls ENS VOYR] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+You feel your blood thickening.
+[AFF]: Scytherus
+Blood begins to run from your pores as your skin grows painfully hot.
+Talo takes a drink from an elegant diamond vial.
+H:5255|96% M:4591|92%  18:28:59:652  [ Talo ][0|14.2|0|0|0|0][clum haem fls ENS VOYR] 
+[OUTR]: 1 Ginseng (576)
+The dark void of terror fills your mind as, horribly, blood begins to seep out of every pore on
+your body.
+H:5255|96% M:4541|91%  18:28:59:800  [ Talo ][0|14.2|0|0|0|0][clum haem fls ENS VOYR] 
+You suddenly perceive the vague outline of an aura of rebounding around Talo.
+H:5255|96% M:4541|91%  18:28:59:895  [ Talo ][0|14.2|0|0|0|0][clum haem fls ENS VOYR] 
+Talo's aura of weapons rebounding disappears.
+Talo traces a logograph depicting a lunging bear in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+Even as the logograph becomes fully formed it leaps from the air to you, ephemeral claws
+plunging into your chest and leaving lines of icy fire in their wake.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+Talo fixes his gaze to yours, raising his right hand, before sharply snapping his fingers.
+TIME TO BAIL
+TIME TO BAIL
+TIME TO BAIL
+You feel a sudden flush of heat as your heart begins to pound eratically.
+H:5255|96% M:4541|91%  18:29:00:546  [ Talo ][0|14.2|0|0|0|0][clum haem fls ENS VOYR] 
+Talo takes a long drag off his pipe.
+H:5255|96% M:4541|91%  18:29:00:630  [ Talo ][0|14.2|0|0|0|0][clum haem fls ENS VOYR] 
+Health lost: 262 (raw).
+You bleed 262 health.
+H:4993|91% M:4541|91%  18:29:00:800  [ Talo ][0|14.2|0|0|0|0] ( -262h 4% ) (262B)[clum haem fls 
+ENS VOYR] 
+You may eat another plant or mineral. Eat (1.542)
+H:4993|91% M:4541|91%  18:29:01:192  [ Talo ][0|14.2|0|0|0|0][clum haem fls ENS VOYR] 
+A sudden flush of heat drives out a chill that you didn't realise was there until it is gone;
+your limbs tingle, and you feel unburdened.
+[AFF]: Ensorcelled
+H:4993|91% M:4541|91%  18:29:01:287  [ Talo ][0|14.2|0|0|0|0][clum haem fls VOYR] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+The prickling in your skin fades and you feel blessedly cool.
+[AFF]: Flushings
+H:4993|91% M:4541|91%  18:29:01:398  [ Talo ][0|14.2|0|0|0|0][clum haem VOYR] 
+[OUTR]: 1 Ginseng (575)
+Talo traces a logograph depicting a leaping jackal in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it leaps for you, ephemeral fangs closing about your
+throat and cutting off air.
+[AFF]: Asthma
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+Talo fixes his gaze to yours, raising his right hand, before sharply snapping his fingers.
+TIME TO BAIL
+TIME TO BAIL
+TIME TO BAIL
+You feel a sudden flush of heat as your heart begins to pound eratically.
+H:4993|91% M:4541|91%  18:29:02:221  [ Talo ][0|14.2|0|0|0|0][AST clum haem VOYR] 
+You have recovered equilibrium.
+H:4993|91% M:4541|91%  18:29:02:319  [ Talo ][0|14.2|0|0|0|0][AST clum haem VOYR] 
+(Legacy Help Desk): Aheli says, "Okay thanks."
+H:4993|91% M:4541|91%  18:29:02:382  [ Talo ][0|14.2|0|0|0|0][AST clum haem VOYR] 
+[Prio]: Paralysis (1)
+You may eat another plant or mineral. Eat (1.426)
+H:4993|91% M:4541|91%  18:29:02:824  [ Talo ][0|14.2|0|0|0|0][AST clum haem VOYR] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:4993|91% M:4541|91%  18:29:02:934  [ Talo ][0|14.2|0|0|0|0][AST haem VOYR] 
+You may utilise the tree tattoo again. Tree (14.003)
+H:4993|91% M:4541|91%  18:29:03:308  [ Talo ][0|14.2|0|0|0|0][AST haem VOYR] 
+Your ferocity decreases.
+H:4993|91% M:4541|91%  18:29:03:313  [ Talo ][0|14.2|0|0|0|0][AST haem VOYR] 
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Your blood regains its ability to clot.
+[AFF]: Haemophilia
+H:4993|91% M:4541|91%  18:29:03:318  [ Talo ][0|14.2|0|0|0|0][AST VOYR] 
+Talo traces a writhing logograph in the air before you, the blood upon his knife bursting into
+arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it lashes out at you, ethereal fangs plunging into your
+throat.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+Talo fixes his gaze to yours, raising his right hand, before sharply snapping his fingers.
+TIME TO BAIL
+TIME TO BAIL
+TIME TO BAIL
+You feel a sudden flush of heat as your heart begins to pound eratically.
+H:5102|93% M:4541|91%  18:29:03:779  [ Talo ][0|14.2|0|0|0|0][AST PAR VOYR] 
+
+THEY CAN TOUCH TREE AGAIN!
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+H:5102|93% M:4541|91%  18:29:04:360  [ Talo ][0|14.2|0|0|0|0][PAR VOYR] 
+You may eat another plant or mineral.
+H:5102|93% M:4541|91%  18:29:04:469  [ Talo ][0|14.2|0|0|0|0][PAR VOYR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5102|93% M:4541|91%  18:29:04:557  [ Talo ][0|14.2|0|0|0|0][VOYR] 
+[OUTR]: 1 Bloodroot (837)
+--------------------------------------------------------------------------------
+He is a canny fayad. He stands at 6 feet 4 inches, with a lean, athletic build that gives him
+an easy, natural strength. His dark curly hair adds a bit of texture to his look, and his green 
+eyes stand out with a sharp, focused intensity. There's a quiet confidence about him, and his 
+tall frame and striking features make a lasting impression.
+
+He is wearing:
+   a black button-up shirt
+   brightly coloured trousers of variegated patches
+   a sturdy pair of explorer's boots
+
+Weapon holders:
+   an exquisite hazelwood scabbard
+
+--------------------------------------------------------------------------------
+Specialist gear:
+He prowls about in cunning black boots.
+--------------------------------------------------------------------------------
+H:5102|93% M:4491|90%  18:29:04:754  [ Talo ][0|14.2|0|0|0|0][VOYR] 
+
+[DEF]: Levitating
+[DEF]: Insomnia
+[DEF]: Gripping
+[DEF]: Resistance
+[DEF]: Weathering
+[DEF]: Cloak
+[DEF]: Poisonresist
+[DEF]: Temperance
+[DEF]: Insulation
+[DEF]: Nightsight
+[DEF]: Kola
+[DEF]: Speed
+[DEF]: Fangbarrier
+[DEF]: Deathsight
+[DEF]: Fury
+
+You drop back and ease the engagement.
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+Your body begins to convulse, and as a scream that won't come claws frantically at your throat,
+your back snaps from the sheer force of the spasms, killing you instantly.
+You have been slain by Talo.
+[SLC]: Reset all limb counts.
+[INR]: 5 Kelp (1664)
+[INR]: 14 Bloodroot (851)
+[INR]: 11 Ginseng (586)
+[INR]: 9 Goldenseal (1493)
+[INR]: 1 Irid (1363)
+**********************************************************
+You have been defeated and are thrown out of the Arena.
+**********************************************************
+ 

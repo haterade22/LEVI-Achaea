@@ -1,0 +1,558 @@
+H:24739|292% M:6930|99% E:100% W:100% [U|NW|S] R:0 09:12.18-ex- Shaping : 0[0|0|0|0|0|0] 
+u
+queue addclearfull freestand u
+Small clearing amongst the family quarter. (road)
+Cerulean waters preside, fathom and depths stirred to roiling currents by the pervasive will of Neraeos Pelagia, Lord of the Sea. Many of the stars
+are disguised behind looming clouds, tracing their slow paths across the sphere of the heavens. Bespeared and glorious, a marble statue of Haskor, 
+Patron of Heroes, dominates the surroundings. A young girl plays quietly with her doll. This spectral mule is hunched, throwing his weight forward to 
+ever pull an invisible cart. An enormous boulder rolls around here. Vothaec, Mycelial Requitor of the Wild Chorus is here, hidden. His features are 
+obscured by Revelation's Guise. He wields a driftwood shield in his right hand.
+You see exits leading northeast (open door), southeast (open door), and down.
+You spring a trap!! A dart streaks from out of nowhere and slams into you.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:24739|292% M:6960|99% E:99% W:99% [NE|D|SE] R:0 09:15.53-ex- Shaping : 0[0|0|0|0|0|0] [PAR] 
+You eat a magnesium chip.
+outr magnesium
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:24739|292% M:6960|99% E:99% W:99% [NE|D|SE] R:0 09:15.72-ex- Shaping : 0[0|0|0|0|0|0] 
+[OUTR]: 1 Magnesium (631)
+erl
+setalias pk stand/get body/ wield shield360716/TERRAN POWDERISE Vothaec right leg/ assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN POWDERISE Vothaec right leg/ assess"
+H:24739|292% M:6956|99% E:99% W:99% [NE|D|SE] R:0 09:16.17-ex- Shaping : 0[0|0|0|0|0|0] 
+A dizzying beam of energy strikes you as your attack rebounds off of Vothaec's shield.
+setalias pk stand/get body/ wield shield360716/TERRAN CRUNCH/ assess
+Equilibrium used: 1.70s.
+You glance over Vothaec and see that his health is at 11875/11875 [100%].
+[Health]: 100%
+pt Vothaec's health at 11875/11875
+H:24739|292% M:6856|98% E:99% W:99% [NE|D|SE] R:0 09:16.18-x- Shaping : 0[0|0|0|0|0|0] 
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN CRUNCH/ assess"
+H:24739|292% M:6841|98% E:99% W:99% [NE|D|SE] R:0 09:16.40-x- Shaping : 0[0|0|0|0|0|0] 
+You are not the member of any party.
+H:24739|292% M:6841|98% E:99% W:99% [NE|D|SE] R:0 09:16.40-x- Shaping : 0[0|0|0|0|0|0] 
+erl
+queue addclearfull eb!p!w!t  pk
+A grumpy badger stalks to the side of Vothaec.
+A grumpy badger sinks his claws into your lower leg, carving deep gouges into the flesh.
+[AFF]: Addiction
+You feel a terrible hunger grow within you.
+Health lost: 60 (physical cutting).
+You may eat another plant or mineral. Eat (1.574)
+H:24679|291% M:6841|98% E:99% W:99% [NE|D|SE] R:0 09:17.28-x- Shaping : 0[0|0|0|0|0|0] [ADD] 
+outr 5 kelp
+outr 5 bloodroot
+outr 5 ginseng
+outr 5 goldenseal
+outr 5 aurum
+outr 5 magnesium
+outr 5 ferrum
+outr 5 plumbum
+You eat a ferrum flake.
+outr ferrum
+Your terrible addiction seems to wane.
+[AFF]: Addiction
+H:24679|291% M:6841|98% E:99% W:99% [NE|D|SE] R:0 09:17.46-x- Shaping : 0[0|0|0|0|0|0] 
+Vothaec cocks back his arm and throws a stone axe at your left leg.
+You parry the attack with a deft manoeuvre.            ---------- WE PARRIED! GOOD JOB!
+H:24679|291% M:6841|98% E:99% W:99% [NE|D|SE] R:0 09:17.51-x- Shaping : 0[0|0|0|0|0|0] 
+You have no kelp stored in the Rift.
+H:24679|291% M:6841|98% E:99% W:99% [NE|D|SE] R:0 09:17.56-x- Shaping : 0[0|0|0|0|0|0] 
+[OUTR]: 5 Bloodroot (1567)
+[OUTR]: 5 Ginseng (1275)
+[OUTR]: 5 Goldenseal (848)
+[OUTR]: 5 Aurum (812)
+[OUTR]: 5 Magnesium (626)
+[OUTR]: 5 Ferrum (1102)
+[OUTR]: 5 Plumbum (1631)
+[OUTR]: 1 Ferrum (1101)
+erl
+queue addclearfull eb!p!w!t  pk
+You have recovered equilibrium.                                                         --- EQUILIBRIUM ---
+You launch a magma-wreathed fist at Vothaec, but he ducks aside at the last moment.
+setalias pk stand/get body/ wield shield360716/TERRAN POWDERISE Vothaec right leg/ assess
+The rock plates covering your form rapidly thicken, sharp spikes of stone sprouting from them in an instant.
+Balance used: 2.0s.
+You glance over Vothaec and see that his health is at 11875/11875 [100%].
+[Health]: 100%
+pt Vothaec's health at 11875/11875
+H:24679|291% M:6741|96% E:99% W:99% [NE|D|SE] R:0 09:17.79-e- Shaping : 1[0|0|0|0|0|0] 
+Health lost: 67 (raw).
+You bleed 67 health.
+H:24612|290% M:6741|96% E:99% W:99% [NE|D|SE] R:0 09:17.94-e- Shaping : 1[0|0|0|0|0|0] 
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN POWDERISE Vothaec right leg/ assess"
+H:24612|290% M:6741|96% E:99% W:99% [NE|D|SE] R:0 09:17.95-e- Shaping : 1[0|0|0|0|0|0] 
+You are not the member of any party.
+H:24612|290% M:6741|96% E:99% W:99% [NE|D|SE] R:0 09:17.95-e- Shaping : 1[0|0|0|0|0|0] 
+
+[DEF]: Deafness
+A huge gossamer butterfly buzzes wildly about your head.
+H:24612|290% M:6741|96% E:99% W:99% [NE|D|SE] R:0 09:18.24-ed- Shaping : 1[0|0|0|0|0|0] 
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:24612|290% M:6741|96% E:99% W:100% [NE|D|SE] R:0 09:18.53-ed- Shaping : 1[0|0|0|0|0|0] [PAR] 
+A grumpy badger stalks to the side of Vothaec.
+A grumpy badger sinks his claws into your lower leg, carving deep gouges into the flesh.
+[AFF]: Addiction
+You feel a terrible hunger grow within you.
+Health lost: 60 (physical cutting).
+Vothaec cocks back his arm and throws a stone axe at your left leg.
+As Vothaec carves into you, you perceive that he has dealt 14.7% damage to your left leg.
+ LIMB DAMAGE: left leg (14.7%)
+[0|0|0|0|14.7|0]
+Health lost: 491 (physical cutting).
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+You may eat another plant or mineral. Eat (1.574)
+H:24061|284% M:6741|96% E:99% W:100% [NE|D|SE] R:0 09:18.00-ed- Shaping : 1[0|0|0|0|0|0]  ( -551h 6% ) (144B)[PAR clum ADD] 
+You eat a magnesium chip.
+outr magnesium
+Your addiction can never be sated.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+[OUTR]: 1 Magnesium (625)
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+With a roar you swing a colossal fist at the right leg of Vothaec.
+Your attack goes wide, your clumsy attempt insufficient to land a solid blow.======================== OH I MISSED =====
+You feel the magma contained within your hallowed form begin to seethe.
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Vothaec and see that his health is at 11875/11875 [100%].
+[Health]: 100%
+pt Vothaec's health at 11875/11875
+H:24061|284% M:6221|89% E:99% W:99% [NE|D|SE] R:0 09:19.71-ed- Shaping : 2[0|0|0|0|0|0]  ( -520m 7% )[clum ADD] 
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:24061|284% M:6221|89% E:99% W:99% [NE|D|SE] R:0 09:19.83-ed- Shaping : 2[0|0|0|0|0|0] [clum ADD] 
+ell
+setalias pk stand/get body/ wield shield360716/TERRAN POWDERISE Vothaec left leg/ assess
+queue addclearfull eb!p!w!t  pk
+An ebony raven descends to circle above the head of Vothaec.
+An ebony raven dives at your face, pecking violently at your eyes.
+[AFF]: Sensitivity
+Vothaec cocks back his arm and throws a stone axe at your left leg.
+You parry the attack with a deft manoeuvre.            ---------- WE PARRIED! GOOD JOB!
+H:24061|284% M:6221|89% E:99% W:99% [NE|D|SE] R:0 09:20.49-ed- Shaping : 2[0|0|0|0|0|0] [clum SENS ADD] 
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN POWDERISE Vothaec left leg/ assess"
+H:24061|284% M:6221|89% E:99% W:99% [NE|D|SE] R:0 09:20.52-ed- Shaping : 2[0|0|0|0|0|0] [clum SENS ADD] 
+You may eat another plant or mineral. Eat (1.579)
+H:24061|284% M:6221|89% E:99% W:99% [NE|D|SE] R:0 09:20.58-ed- Shaping : 2[0|0|0|0|0|0] [clum SENS ADD] 
+[Prio]: Paralysis (2)
+You eat an aurum flake.
+outr aurum
+Your addiction can never be sated.
+The stinging feeling fades.
+[AFF]: Sensitivity
+H:24061|284% M:6221|89% E:99% W:99% [NE|D|SE] R:0 09:20.75-ed- Shaping : 2[0|0|0|0|0|0] [clum ADD] 
+[OUTR]: 1 Aurum (811)
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:24061|284% M:6206|89% E:99% W:99% [NE|D|SE] R:0 09:21.53-ed- Shaping : 2[0|0|0|0|0|0] [PAR clum ADD] 
+ell
+queue addclearfull eb!p!w!t  pk
+ell
+queue addclearfull eb!p!w!t  pk
+On silent paws, an adult vixen rushes to Vothaec's side.
+A cunning red fox leaps upon you, sinking its teeth into your exposed skin.
+[AFF]: Healthleech
+Vothaec cocks back his arm and throws a stone axe at your left leg.
+As Vothaec carves into you, you perceive that he has dealt 14.7% damage to your left leg.
+ LIMB DAMAGE: left leg (29.4%)
+[0|0|0|0|29.4|0]
+Health lost: 491 (physical cutting).
+[AFF]: Asthma
+You feel a tightening sensation grow in your lungs.
+H:23570|278% M:6206|89% E:99% W:99% [NE|D|SE] R:0 09:21.92-ed- Shaping : 2[0|0|0|0|0|0]  ( -491h 5% )[PAR AST clum hlch ADD] 
+You may eat another plant or mineral. Eat (1.457)
+H:23570|278% M:6206|89% E:99% W:99% [NE|D|SE] R:0 09:22.32-ed- Shaping : 2[0|0|0|0|0|0] [PAR AST clum hlch ADD] 
+outr 5 kelp
+outr 5 bloodroot
+outr 5 ginseng
+outr 5 goldenseal
+outr 5 aurum
+outr 5 magnesium
+outr 5 ferrum
+outr 5 plumbum
+You eat a magnesium chip.
+outr magnesium
+Your addiction can never be sated.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+You touch the tree of life tattoo.
+Your terrible addiction seems to wane.
+[AFF]: Addiction
+H:23570|278% M:6206|89% E:99% W:99% [NE|D|SE] R:0 09:22.48-ed- Shaping : 2[0|0|0|0|0|0] [AST clum hlch] 
+ell
+queue addclearfull eb!p!w!t  pk
+You have no kelp stored in the Rift.
+H:23570|278% M:6206|89% E:99% W:99% [NE|D|SE] R:0 09:22.62-ed- Shaping : 2[0|0|0|0|0|0] [AST clum hlch] 
+[OUTR]: 5 Bloodroot (1562)
+[OUTR]: 5 Ginseng (1270)
+[OUTR]: 5 Goldenseal (843)
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+With a roar you swing a colossal fist at the left leg of Vothaec.
+Magma begins to boil up from beneath your outer strata.
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Vothaec and see that his health is at 11875/11875 [100%].
+[Health]: 100%
+pt Vothaec's health at 11875/11875
+H:23570|278% M:6106|87% E:99% W:99% [NE|D|SE] R:0 09:22.64-ed- Shaping : 3[0|0|0|0|0|0] [AST clum hlch] 
+[OUTR]: 5 Aurum (806)
+[OUTR]: 5 Magnesium (620)
+[OUTR]: 5 Ferrum (1096)
+[OUTR]: 5 Plumbum (1626)
+[OUTR]: 1 Magnesium (619)
+[Prio]: Slickness (2)
+ell
+queue addclearfull eb!p!w!t  pk
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:23570|278% M:6106|87% E:99% W:99% [NE|D|SE] R:0 09:22.88-ed- Shaping : 3[0|0|0|0|0|0] [AST clum hlch] 
+A huge gossamer butterfly buzzes wildly about your head.
+H:23570|278% M:6106|87% E:99% W:99% [NE|D|SE] R:0 09:23.28-ed- Shaping : 3[0|0|0|0|0|0] [AST clum hlch] 
+A grumpy badger stalks to the side of Vothaec.
+A grumpy badger sinks his claws into your lower leg, carving deep gouges into the flesh.
+[AFF]: Addiction
+You feel a terrible hunger grow within you.
+Health lost: 60 (physical cutting).
+H:23510|277% M:6106|87% E:99% W:99% [NE|D|SE] R:0 09:23.40-ed- Shaping : 3[0|0|0|0|0|0] [AST clum hlch ADD] 
+Health lost: 92 (raw).
+You bleed 92 health.
+H:23418|276% M:6106|87% E:99% W:99% [NE|D|SE] R:0 09:23.46-ed- Shaping : 3[0|0|0|0|0|0] [AST clum hlch ADD] 
+Health lost: 650 (unblockable).
+H:22768|268% M:6106|87% E:99% W:99% [NE|D|SE] R:0 09:23.78-ed- Shaping : 3[0|0|0|0|0|0]  ( -650h 7% )[AST clum hlch ADD] 
+You may eat another plant or mineral. Eat (1.494)
+H:22768|268% M:6106|87% E:99% W:99% [NE|D|SE] R:0 09:24.01-ed- Shaping : 3[0|0|0|0|0|0] [AST clum hlch ADD] 
+You eat an aurum flake.
+outr aurum
+Your addiction can never be sated.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+H:22768|268% M:6106|87% E:99% W:99% [NE|D|SE] R:0 09:24.02-ed- Shaping : 3[0|0|0|0|0|0] [clum hlch ADD] 
+curing priority Paralysis 2
+[OUTR]: 1 Aurum (805)
+Vothaec cocks back his arm and throws a stone axe at you.
+Health lost: 614 (physical cutting).
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:22154|261% M:6106|87% E:99% W:99% [NE|D|SE] R:0 09:24.15-ed- Shaping : 3[0|0|0|0|0|0]  ( -614h 7% ) (110B)[PAR clum hlch ADD] 
+[Prio]: Slickness (10)
+[Prio]: Paralysis (2)
+You take a drink from a black-walnut vial.
+Your mind feels stronger and more alert.
+H:22154|261% M:6886|98% E:99% W:99% [NE|D|SE] R:0 09:24.22-ed- Shaping : 3[0|0|0|0|0|0]  ( +780m 11% )[PAR clum hlch ADD] 
+A prickly stinging overcomes your body, fading away into numbness.
+H:22154|261% M:6886|98% E:99% W:99% [NE|D|SE] R:0 09:24.55-ed- Shaping : 3[0|0|0|0|0|0] [PAR clum hlch ADD] 
+t Vothaec
+unally Vothaec
+enemy Vothaec
+
+ Target Changed to Vothaec
+
+st Vothaec
+setalias pk stand/get body/ wield shield360716/ terran eruption / TERRAN POWDERISE Vothaec left leg/ assess
+ Reset Success!
+
+H:22154|261% M:6886|98% E:99% W:99% [NE|D|SE] R:0 09:24.84-ed- Shaping : 3[0|0|0|0|0|0] [PAR clum hlch ADD] 
+H:22154|261% M:6886|98% E:99% W:99% [NE|D|SE] R:0 09:24.84-ed- Shaping : 3[0|0|0|0|0|0] [PAR clum hlch ADD] 
+Your target is now: Vothaec (an adventurer)
+H:22154|261% M:6886|98% E:99% W:99% [NE|D|SE] R:0 09:24.84-ed- Shaping : 3[0|0|0|0|0|0] [PAR clum hlch ADD] 
+Alias "pk" will now execute: "stand/get body/ wield shield360716/ terran eruption / TERRAN POWDERISE Vothaec left leg/ assess"
+H:22154|261% M:6886|98% E:99% W:99% [NE|D|SE] R:0 09:24.84-ed- Shaping : 3[0|0|0|0|0|0] [PAR clum hlch ADD] 
+[AFF]: Vertigo
+The lemming races around you and between your legs, making you terribly dizzy and afraid of heights.
+H:22154|261% M:6882|98% E:99% W:99% [NE|D|SE] R:0 09:25.37-ed- Shaping : 3[0|0|0|0|0|0] [vert PAR clum hlch ADD] 
+You focus your mind intently on curing your mental maladies.
+Your fear of heights subsides.
+[AFF]: Vertigo
+H:22154|261% M:6632|95% E:99% W:99% [NE|D|SE] R:0 09:25.38-ed- Shaping : 3[0|0|0|0|0|0]  ( -250m 3% )[PAR clum hlch ADD] 
+
+[DEF]: Fangbarrier
+A grumpy badger stalks to the side of Vothaec.
+A grumpy badger sinks his claws into your lower leg, carving deep gouges into the flesh.
+[AFF]: Nausea
+You feel bile rising in the back of your throat as as infection begins to set in.
+Health lost: 60 (physical cutting).
+Vothaec cocks back his arm and throws a stone axe at your left leg.
+As Vothaec carves into you, you perceive that he has dealt 14.7% damage to your left leg.
+ LIMB DAMAGE: left leg (44.1%)
+[0|0|0|0|44.1|0]
+Health lost: 491 (physical cutting).
+[AFF]: Slickness
+The protective covering coating your skin sloughs off.
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+H:21603|255% M:6771|97% E:99% W:99% [NE|D|SE] R:0 09:25.53-exd- Shaping : 3[0|0|0|0|0|0]  ( -551h 6% )[PAR SLCK clum hlch ADD naus] 
+erl
+setalias pk stand/get body/ wield shield360716/ terran eruption / TERRAN POWDERISE Vothaec right leg/ assess
+queue addclearfull eb!p!w!t  pk
+You take a long drag of realgar off your pipe.
+Your glands cease their oily secretion.
+[AFF]: Slickness
+H:21603|255% M:6771|97% E:99% W:99% [NE|D|SE] R:0 09:25.57-exd- Shaping : 3[0|0|0|0|0|0] [PAR clum hlch ADD naus] 
+You may eat another plant or mineral. Eat (1.623)
+H:21603|255% M:6771|97% E:99% W:99% [NE|D|SE] R:0 09:25.62-exd- Shaping : 3[0|0|0|0|0|0] [PAR clum hlch ADD naus] 
+Alias "pk" will now execute: "stand/get body/ wield shield360716/ terran eruption / TERRAN POWDERISE Vothaec right leg/ assess"
+H:21603|255% M:6771|97% E:99% W:99% [NE|D|SE] R:0 09:25.67-exd- Shaping : 3[0|0|0|0|0|0] [PAR clum hlch ADD naus] 
+You eat a magnesium chip.
+outr magnesium
+Your addiction can never be sated.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+[OUTR]: 1 Quicksilver (2033)
+You apply a quicksilver droplet to yourself.
+You summon up the magma that courses beneath your outer layers, sending it forth in an eruption to drive out that which taints your perfect form.
+Your aching, pain-wracked body is soothed and calmed.
+[AFF]: Healthleech
+With a roar you swing a colossal fist at the right leg of Vothaec.
+Vothaec parries the attack with a deft manoeuvre.
+
+ YOU HIT PARRY!!
+
+
+
+ YOU HIT PARRY!!
+
+setalias pk stand/get body/ wield shield360716/TERRAN POWDERISE Vothaec right leg/ assess
+Magma explodes from the cracks between the plates covering you, forming a cloak of molten stone to enshroud you.
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Vothaec and see that his health is at 11875/11875 [100%].
+[Health]: 100%
+pt Vothaec's health at 11875/11875
+H:21603|255% M:6321|90% E:99% W:99% [NE|D|SE] R:0 09:25.80-ed- Shaping : 4[0|0|0|0|0|0]  ( -450m 6% )[clum ADD naus] 
+[OUTR]: 1 Magnesium (618)
+sh
+queue prepend eb TERRAN ERUPTION
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN POWDERISE Vothaec right leg/ assess"
+H:21603|255% M:6321|90% E:99% W:99% [NE|D|SE] R:0 09:26.09-ed- Shaping : 4[0|0|0|0|0|0] [clum ADD naus] 
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:21603|255% M:6321|90% E:99% W:99% [NE|D|SE] R:0 09:26.09-ed- Shaping : 4[0|0|0|0|0|0] [clum ADD naus] 
+
+[DEF]: Blindness
+A gossamer butterfly goes into a frenzy of motion in front of your face, restoring your vision.
+H:21603|255% M:6306|90% E:99% W:99% [NE|D|SE] R:0 09:26.98-ebd- Shaping : 4[0|0|0|0|0|0] [clum ADD naus] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.485)
+H:21603|255% M:6306|90% E:99% W:99% [NE|D|SE] R:0 09:27.13-ebd- Shaping : 4[0|0|0|0|0|0] [clum ADD naus] 
+curing priority Paralysis 2
+[Prio]: Paralysis (2)
+You may eat another plant or mineral. Eat (1.53)
+H:21603|255% M:6306|90% E:99% W:99% [NE|D|SE] R:0 09:27.35-ebd- Shaping : 4[0|0|0|0|0|0] [clum ADD naus] 
+You eat an aurum flake.
+outr aurum
+Your addiction can never be sated.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:21603|255% M:6306|90% E:99% W:99% [NE|D|SE] R:0 09:27.42-ebd- Shaping : 4[0|0|0|0|0|0] [ADD naus] 
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:21603|255% M:6306|90% E:99% W:99% [NE|D|SE] R:0 09:27.53-ebd- Shaping : 4[0|0|0|0|0|0] [PAR ADD naus] 
+Vothaec cocks back his arm and throws a stone axe at your left leg.
+As Vothaec carves into you, you perceive that he has dealt 14.7% damage to your left leg.
+ LIMB DAMAGE: left leg (58.8%)
+[0|0|0|0|58.8|0]
+Health lost: 491 (physical cutting).
+[AFF]: Asthma
+You feel a tightening sensation grow in your lungs.
+H:21112|249% M:6306|90% E:99% W:99% [NE|D|SE] R:0 09:27.59-ebd- Shaping : 4[0|0|0|0|0|0]  ( -491h 5% )[PAR AST ADD naus] 
+[OUTR]: 1 Aurum (804)
+Your mind is able to focus once again. Focus (2.449)
+H:21112|249% M:6306|90% E:99% W:99% [NE|D|SE] R:0 09:27.77-ebd- Shaping : 4[0|0|0|0|0|0] [PAR AST ADD naus] 
+eh
+setalias pk stand/get body/ wield shield360716/ terran eruption / TERRAN POWDERISE Vothaec head/ assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "stand/get body/ wield shield360716/ terran eruption / TERRAN POWDERISE Vothaec head/ assess"
+H:21112|249% M:6306|90% E:99% W:99% [NE|D|SE] R:0 09:28.12-ebd- Shaping : 4[0|0|0|0|0|0] [PAR AST ADD naus] 
+A huge gossamer butterfly buzzes wildly about your head.
+H:21112|249% M:6306|90% E:99% W:99% [NE|D|SE] R:0 09:28.37-ebd- Shaping : 4[0|0|0|0|0|0] [PAR AST ADD naus] 
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You may drink another health or mana elixir. Mana (4.3)
+H:21112|249% M:6306|90% E:99% W:99% [NE|D|SE] R:0 09:28.59-exbd- Shaping : 4[0|0|0|0|0|0] [PAR AST ADD naus] 
+An ebony raven descends to circle above the head of Vothaec.
+An ebony raven dives at your face, pecking violently at your eyes.
+[AFF]: Sensitivity
+Vothaec cocks back his arm and throws a stone axe at your left leg.
+As Vothaec carves into you, you perceive that he has dealt 14.7% damage to your left leg.
+ LIMB DAMAGE: left leg (73.5%)
+[0|0|0|0|73.5|0]
+Health lost: 605 (physical cutting).
+[AFF]: Slickness
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+You may eat another plant or mineral. Eat (1.36)
+H:20507|242% M:6306|90% E:99% W:99% [NE|D|SE] R:0 09:28.89-exbd- Shaping : 4[0|0|0|0|0|0]  ( -605h 7% )[PAR SLCK AST SENS ADD naus] 
+Health lost: 90 (raw).
+You bleed 90 health.
+H:20417|241% M:6306|90% E:99% W:99% [NE|D|SE] R:0 09:28.94-exbd- Shaping : 4[0|0|0|0|0|0] [PAR SLCK AST SENS ADD naus] 
+You eat a magnesium chip.
+outr magnesium
+Your addiction can never be sated.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+You may not cleanse your form of weakness quite so soon after doing so previously.
+With a roar you swing a colossal fist at the head of Vothaec.
+As your blow lands with a crunch, you perceive that you have dealt 43.0% damage to Vothaec's head. (43%)
+Your magma-wreathed fist smashes into the head of Vothaec.
+The head of Vothaec snaps back under the impact.
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Vothaec and see that his health is at 9262/11875 [77%].
+[Health]: 78%
+pt Vothaec's health at 9262/11875
+H:20417|241% M:6206|89% E:99% W:99% [NE|D|SE] R:0 09:28.98-ebd- Shaping : 4[43|0|0|0|0|0] [SLCK AST SENS ADD naus] 
+[Prio]: Slickness (2)
+[OUTR]: 1 Magnesium (617)
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:20417|241% M:6206|89% E:99% W:99% [NE|D|SE] R:0 09:29.12-ebd- Shaping : 4[43|0|0|0|0|0] [SLCK AST SENS ADD naus] 
+[AFF]: Vertigo
+The lemming races around you and between your legs, making you terribly dizzy and afraid of heights.
+H:20417|241% M:6206|89% E:99% W:99% [NE|D|SE] R:0 09:29.37-ebd- Shaping : 4[43|0|0|0|0|0] [vert SLCK AST SENS ADD naus] 
+You focus your mind intently on curing your mental maladies.
+Your fear of heights subsides.
+[AFF]: Vertigo
+H:20417|241% M:5956|85% E:99% W:98% [NE|D|SE] R:0 09:29.59-ebd- Shaping : 4[43|0|0|0|0|0]  ( -250m 3% )[SLCK AST SENS ADD naus] 
+tit
+queue addclearfull eb!p!w!t  TERRAN TITAN
+curing priority Paralysis 2
+On silent paws, an adult vixen rushes to Vothaec's side.
+A cunning red fox leaps upon you, sinking its teeth into your exposed skin.
+[AFF]: Healthleech
+H:20417|241% M:5956|85% E:99% W:98% [NE|D|SE] R:0 09:30.35-ebd- Shaping : 4[43|0|0|0|0|0] [SLCK AST SENS hlch ADD naus] 
+[Prio]: Paralysis (2)
+You may eat another plant or mineral. Eat (1.603)
+H:20417|241% M:5956|85% E:99% W:99% [NE|D|SE] R:0 09:30.57-ebd- Shaping : 4[43|0|0|0|0|0] [SLCK AST SENS hlch ADD naus] 
+You eat a magnesium chip.
+outr magnesium
+Your addiction can never be sated.
+Your glands cease their oily secretion.
+[AFF]: Slickness
+H:20417|241% M:5956|85% E:99% W:99% [NE|D|SE] R:0 09:30.74-ebd- Shaping : 4[43|0|0|0|0|0] [AST SENS hlch ADD naus] 
+[OUTR]: 1 Magnesium (616)
+Vothaec cocks back his arm and throws a stone axe at you.
+Health lost: 756 (physical cutting).
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:19661|232% M:5952|85% E:99% W:99% [NE|D|SE] R:0 09:30.89-ebd- Shaping : 4[43|0|0|0|0|0]  ( -756h 8% )[PAR AST SENS hlch ADD naus] 
+tit
+queue addclearfull eb!p!w!t  TERRAN TITAN
+tit
+queue addclearfull eb!p!w!t  TERRAN TITAN
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+H:19661|232% M:5937|85% E:99% W:99% [NE|D|SE] R:0 09:31.81-exbd- Shaping : 4[43|0|0|0|0|0] [PAR AST SENS hlch ADD naus] 
+Your mind is able to focus once again. Focus (2.397)
+H:19661|232% M:5937|85% E:99% W:99% [NE|D|SE] R:0 09:32.01-exbd- Shaping : 4[43|0|0|0|0|0] [PAR AST SENS hlch ADD naus] 
+tit
+queue addclearfull eb!p!w!t  TERRAN TITAN
+
+[DEF]: Mindseye
+A small brown lemming rips apart your mindseye with its claws.
+Vothaec cocks back his arm and throws a stone axe at your left leg.
+As Vothaec carves into you, you perceive that he has dealt 14.7% damage to your left leg.
+ LIMB DAMAGE: left leg (88.2%)
+  ---- >10s since last parry![0|0|0|0|88.2|0]
+Health lost: 605 (physical cutting).
+[AFF]: Slickness
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+You may eat another plant or mineral. Eat (1.601)
+H:19056|224% M:5937|85% E:99% W:99% [NE|D|SE] R:0 09:32.32-exbdM- Shaping : 4[43|0|0|0|0|0]  ( -605h 7% )[PAR SLCK AST SENS hlch ADD naus] 
+
+[DEF]: Mindseye
+You eat a magnesium chip.
+outr magnesium
+Your addiction can never be sated.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+Touching the mindseye tattoo, your senses are suddenly heightened.
+Equilibrium used: 2.55s.
+curing priority Paralysis 20
+H:19056|224% M:5937|85% E:99% W:99% [NE|D|SE] R:0 09:32.52-xbd- Shaping : 4[43|0|0|0|0|0] [SLCK AST SENS hlch ADD naus] 
+curing priority defense  mindseye reset
+[OUTR]: 1 Magnesium (615)
+[Prio]: Paralysis (20)
+[Prio]: Paralysis (2)
+Health lost: 850 (unblockable).
+H:18206|214% M:5937|85% E:99% W:99% [NE|D|SE] R:0 09:33.19-xbd- Shaping : 4[43|0|0|0|0|0]  ( -850h 10% )[SLCK AST SENS hlch ADD naus] 
+A huge gossamer butterfly buzzes wildly about your head.
+[AFF]: Vertigo
+The lemming races around you and between your legs, making you terribly dizzy and afraid of heights.
+H:18206|214% M:5937|85% E:99% W:99% [NE|D|SE] R:0 09:33.38-xbd- Shaping : 4[43|0|0|0|0|0] [vert SLCK AST SENS hlch ADD naus] 
+You focus your mind intently on curing your mental maladies.
+Your fear of heights subsides.
+[AFF]: Vertigo
+You take a drink from a black-walnut vial.
+Your mind feels stronger and more alert.
+H:18206|214% M:6964|100% E:99% W:98% [NE|D|SE] R:0 09:33.46-xbd- Shaping : 4[43|0|0|0|0|0]  ( +1027m 14% )[SLCK AST SENS hlch ADD naus] 
+The shroud of magma cloaking you is no longer sustainable, and it falls away.
+H:18206|214% M:6964|100% E:99% W:98% [NE|D|SE] R:0 09:33.60-xbd- Shaping : 3[43|0|0|0|0|0] [SLCK AST SENS hlch ADD naus] 
+A grey wolf lopes to the side of Vothaec.
+The chilling howl of the wolf fills you with an irrational madness.
+[AFF]: Hallucinations
+Vothaec lays open your flesh with an expert lateral slice with an ironwood spear.
+Health lost: 798 (physical cutting).
+[AFF]: Anorexia
+The idea of eating or drinking is repulsive to you.
+Turning with the motion of his strike, Vothaec comes back around to slam the haft of his weapon into your temple.
+[AFF]: Impatience
+H:17408|205% M:6964|100% E:99% W:98% [NE|D|SE] R:0 09:33.69-xbd- Shaping : 3[43|0|0|0|0|0]  ( -798h 9% )[IMP SLCK hall ANO AST SENS hlch ADD naus 
+SOFTLOCKED] 
+You may eat another plant or mineral. Eat (1.446)
+H:17408|205% M:6964|100% E:99% W:98% [NE|D|SE] R:0 09:34.01-xbd- Shaping : 3[43|0|0|0|0|0] [IMP SLCK hall ANO AST SENS hlch ADD naus SOFTLOCKED] 
+erl
+setalias pk stand/get body/ wield shield360716/ terran eruption / TERRAN POWDERISE Vothaec right leg/ assess
+queue addclearfull eb!p!w!t  pk
+Health lost: 75 (raw).
+You bleed 75 health.
+H:17333|204% M:6964|100% E:99% W:98% [NE|D|SE] R:0 09:34.48-xbd- Shaping : 3[43|0|0|0|0|0] [IMP SLCK hall ANO AST SENS hlch ADD naus SOFTLOCKED] 
+Alias "pk" will now execute: "stand/get body/ wield shield360716/ terran eruption / TERRAN POWDERISE Vothaec right leg/ assess"
+H:17333|204% M:6964|100% E:99% W:98% [NE|D|SE] R:0 09:34.56-xbd- Shaping : 3[43|0|0|0|0|0] [IMP SLCK hall ANO AST SENS hlch ADD naus SOFTLOCKED] 
+Vothaec grows pale as the eerie shade of stolen life force dissipates from around him.
+H:17333|204% M:6964|100% E:99% W:98% [NE|D|SE] R:0 09:34.60-xbd- Shaping : 3[43|0|0|0|0|0] [IMP SLCK hall ANO AST SENS hlch ADD naus SOFTLOCKED] 
+Spiders are erupting from your mouth and nose!
+[AFF]: Fear
+H:17333|204% M:6964|100% E:99% W:98% [NE|D|SE] R:0 09:35.05-xbd- Shaping : 3[43|0|0|0|0|0] [IMP SLCK hall ANO AST SENS hlch ADD naus SOFTLOCKED fear] 
+There is nothing to fear but fear itself.
+You have recovered equilibrium.                                                         --- EQUILIBRIUM ---
+You may not cleanse your form of weakness quite so soon after doing so previously.
+With a roar you swing a colossal fist at the right leg of Vothaec.
+Vothaec parries the attack with a deft manoeuvre.
+
+ YOU HIT PARRY!!
+
+
+
+ YOU HIT PARRY!!
+
+Magma explodes from the cracks between the plates covering you, forming a cloak of molten stone to enshroud you.
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Vothaec and see that his health is at 9262/7917 [116%].
+[Health]: 117%
+pt Vothaec's health at 9262/7917
+H:17333|204% M:6864|98% E:99% W:98% [NE|D|SE] R:0 09:35.07-ebd- Shaping : 4[43|0|0|0|0|0] [IMP SLCK hall ANO AST SENS hlch ADD naus SOFTLOCKED] 
+
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:17333|204% M:6864|98% E:99% W:98% [NE|D|SE] R:0 09:35.29-ebd- Shaping : 4[43|0|0|0|0|0] [IMP SLCK hall ANO AST SENS hlch ADD naus SOFTLOCKED] 
+You may purge yourself of weakness once again.
+H:17333|204% M:6864|98% E:99% W:98% [NE|D|SE] R:0 09:35.60-ebd- Shaping : 4[43|0|0|0|0|0] [IMP SLCK hall ANO AST SENS hlch ADD naus SOFTLOCKED] 
+Your mind is able to focus once again. Focus (2.351)
+H:17333|204% M:6964|100% E:99% W:98% [NE|D|SE] R:0 09:35.83-ebd- Shaping : 4[43|0|0|0|0|0] [IMP SLCK hall ANO AST SENS hlch ADD naus SOFTLOCKED] 
+sh
+queue prepend eb TERRAN ERUPTION
+A grumpy badger stalks to the side of Vothaec.
+A grumpy badger sinks his claws into your lower leg, carving deep gouges into the flesh.
+You feel bile rising in the back of your throat as as infection begins to set in.
+Health lost: 75 (physical cutting).
+Vothaec cocks back his arm and throws a stone axe at you.
+Your shield completely absorbs the damage.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:17258|203% M:6964|100% E:99% W:98% [NE|D|SE] R:0 09:36.32-ebd- Shaping : 4[43|0|0|0|0|0] [IMP PAR SLCK hall ANO AST SENS hlch ADD naus TRUELOCKED] 
+You may utilise the tree tattoo again. Tree (13.916)
+H:17258|203% M:6949|99% E:99% W:98% [NE|D|SE] R:0 09:36.45-ebd- Shaping : 4[43|0|0|0|0|0] [IMP PAR SLCK hall ANO AST SENS hlch ADD naus TRUELOCKED
+ 

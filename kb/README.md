@@ -67,6 +67,18 @@ first time material for them arrives.
    what is new since the last ingest, files the raw text, updates or creates the curated
    pages, checks them against the code, reports conflicts, and then marks the file ingested.
 
+### Adding combat logs
+
+1. Put the Mudlet HTML export in `kb/raw/logs/`. Add as many as you like.
+2. In the repo: **`python tools/kb_log_import.py`**. It writes one `.txt` per new fight beside the
+   export and prints a manifest. It skips a copy of a fight that is already filed, and it never moves
+   or edits the export. `--check` compares each export with its text, row by row.
+3. Rename the new file when a read of the log shows the classes, and add it to the table in
+   [raw/logs/README.md](raw/logs/README.md). The tool cannot tell classes.
+
+The HTML exports are git-ignored. The text files are the evidence. Our own recordings use a separate
+tool: `python tools/fightlog_import.py` copies `<profile>/fightlogs/` into `kb/raw/logs/ours/`.
+
 ### Capturing straight from the game (`kbcapture`)
 
 For anything the game will answer on request, let the package ask and record it instead of

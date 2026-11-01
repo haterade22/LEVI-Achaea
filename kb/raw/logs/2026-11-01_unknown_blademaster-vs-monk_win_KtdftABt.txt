@@ -1,0 +1,353 @@
+Kuririn says in a deep, soothing baritone voice, "Let's fgo."
+H:7409|106% M:4932|100% W:22042|99%  22:50:11 -exckbd- Sh: 0 St: Thyr [ Kuririn ]
+Kuririn nods his head emphatically.
+H:7409|106% M:4922|99% W:22045|100%  22:50:12 -exckbd- Sh: 0 St: Thyr [ Kuririn ]
+"Okay!" you exclaim.
+H:7409|106% M:4922|99% W:22045|100%  22:50:13 -exckbd- Sh: 0 St: Thyr [ Kuririn ]
+Kuririn pumps out at you with a powerful side kick.
+[Legacy]: Curing against Tekura (Kuririn).
+As Kuririn's blow crunches into you, you perceive that he has dealt 19.4% damage to your torso.
+He connects to the torso!
+I'M FUCKIN' INVINCIBLE
+Kuririn unleashes a powerful hook towards you.
+As Kuririn's blow crunches into you, you perceive that he has dealt 13.8% damage to your torso.
+He connects to the torso!
+Health lost: 346 (physical blunt).
+Kuririn unleashes a powerful hook towards you.
+As Kuririn's blow crunches into you, you perceive that he has dealt 13.8% damage to your torso.
+He connects to the torso!
+Health lost: 346 (physical blunt).
+H:6717|96% M:4922|99% W:22045|100%  22:50:14 -exckbd- Sh: 0 St: Thyr [ Kuririn ] ( -692h 9% )
+  Parrying Right Leg!
+Your aura of weapons rebounding disappears.
+You whip Saosh's Vow through the air in front of Kuririn, to no effect.
+Balance used: 1.8s.
+[Protagonist Lite]: Struck Kuririn' Hamstring 
+Processed Affliction(Hamstring)
+H:6950|100% M:4922|99% W:22045|100%  22:50:15 -eckbd- Sh: 8 St: Thyr [ Kuririn ] ( +233h 3% )
+You have recovered balance on all limbs.
+  Parrying Right Leg!
+You tap into your reserves of Shin, channeling it into your blade.
+Your scabbard grows hot against your hip.
+Taking a half step forward, you draw Saosh's Vow and unleash a forceful slash that drives Kuririn back.
+
+Fire! Fire! Fire!
+Processed Affliction(Weariness)
+Balance used: 1.5s.
+[Protagonist Lite]: Struck Kuririn' Chest 
+Processed Affliction(Hypochondria)
+ 
+================================================================================= 
+              Kuririn --> Lobelia
+=================================================================================
+ 
+================================================================================= 
+              Kuririn --> Tree!!!
+=================================================================================
+ 
+================================================================================= 
+              Kuririn --> TORSO!! TORSO!! TORSO!!
+=================================================================================
+Kuririn is a sippy boy/girl/fae!
+Kuririn pumps out at you with a powerful side kick.
+As Kuririn's blow crunches into you, you perceive that he has dealt 19.4% damage to your torso.
+He connects to the torso!
+Health lost: 642 (physical blunt).
+With a swift turn, you draw your blade from its scabbard and unleash a retaliatory strike against
+Kuririn.
+Kuririn unleashes a powerful hook towards you.
+As Kuririn's blow crunches into you, you perceive that he has dealt 13.8% damage to your torso.
+He connects to the torso!
+Plot armor
+Kuririn unleashes a powerful hook towards you.
+As Kuririn's blow crunches into you, you perceive that he has dealt 13.8% damage to your torso.
+He connects to the torso!
+Health lost: 346 (physical blunt).
+With a swift turn, you draw your blade from its scabbard and unleash a retaliatory strike against
+Kuririn.
+H:5962|85% M:4912|99% W:22012|99%  22:50:17 -eckbd- Sh: 11 St: Thyr [ Kuririn ] ( -988h 14% )
+[OUTR]: 1 Potash (1987)
+You eat a potash crystal.
+You feel your health and mana replenished.
+H:6518|93% M:4932|100% W:22012|99%  22:50:17 -eckbd- Sh: 11 St: Thyr [ Kuririn ] ( +556h 8% )
+H:6518|93% M:4932|100% W:22012|99%  22:50:17 -eckbd- Sh: 11 St: Thyr [ Kuririn ]
+You have recovered balance on all limbs.
+  Parrying Right Leg!
+You tap into your reserves of Shin, channeling it into your blade.
+Your scabbard grows hot against your hip.
+Taking a half step forward, you draw Saosh's Vow and unleash a forceful slash that drives Kuririn back.
+
+Fire! Fire! Fire!
+Processed Affliction(Weariness)
+Balance used: 1.5s.
+[Protagonist Lite]: Struck Kuririn' Chest 
+Processed Affliction(Hypochondria)
+ 
+================================================================================= 
+              Kuririn --> Lobelia
+=================================================================================
+ 
+================================================================================= 
+              Kuririn --> TORSO!! TORSO!! TORSO!!
+=================================================================================
+Kuririn eats some irid moss.
+You have recovered balance on all limbs.
+H:6518|93% M:4932|100% W:21962|99%  22:50:19 -exckbd- Sh: 14 St: Thyr [ Kuririn ]
+H:6518|93% M:4932|100% W:21962|99%  22:50:19 -exckbd- Sh: 14 St: Thyr [ Kuririn ]
+ 
+================================================================================= 
+              Kuririn --> Kelp
+=================================================================================
+Processed Cures(weariness)
+H:6518|93% M:4932|100% W:21962|99%  22:50:19 -exckbd- Sh: 14 St: Thyr [ Kuririn ]
+Kuririn spins into the air and throws a whirlwind kick towards you.
+As Kuririn's blow crunches into you, you perceive that he has dealt 18.3% damage to your head.
+He connects to the head!
+Health lost: 547 (physical blunt).
+Kuririn launches a powerful uppercut at you.
+As Kuririn's blow crunches into you, you perceive that he has dealt 14.1% damage to your head.
+He connects to the head!
+Skill issue
+Kuririn launches a powerful uppercut at you.
+As Kuririn's blow crunches into you, you perceive that he has dealt 14.1% damage to your head.
+He connects to the head!
+Health lost: 355 (physical blunt).
+With a swift turn, you draw your blade from its scabbard and unleash a retaliatory strike against
+Kuririn.
+H:5616|80% M:4922|99% W:21960|99%  22:50:20 -exckbd- Sh: 14 St: Thyr [ Kuririn ] ( -902h 12% )
+  Parrying Left Leg!
+As you draw Saosh's Vow from its scabbard, you drive the pommel into Kuririn's chin.
+Balance used: 1.1s.
+[Protagonist Lite]: Struck Kuririn' Neck 
+Processed Affliction(Paralysis)
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+H:6950|100% M:4922|99% W:21960|99%  22:50:20 -eckbd- Sh: 22 St: Thyr [ Kuririn ] ( +1334h 19% )
+
+H:6950|100% M:4922|99% W:21978|99%  22:50:20 -eckbd- Sh: 22 St: Thyr [ Kuririn ]
+You have recovered balance on all limbs.
+As you draw Saosh's Vow from its scabbard, you drive the pommel into Kuririn's chin.
+Balance used: 1.1s.
+[Protagonist Lite]: Struck Kuririn' Chest 
+Processed Affliction(Hypochondria)
+Kuririn is a sippy boy/girl/fae!
+ 
+================================================================================= 
+              Kuririn --> Bloodroot
+=================================================================================
+Processed Cures(paralysis)
+H:6950|100% M:4932|100% W:21978|99%  22:50:21 -eckbd- Sh: 30 St: Thyr [ Kuririn ]
+H:6950|100% M:4932|100% W:21978|99%  22:50:21 -eckbd- Sh: 30 St: Thyr [ Kuririn ]
+You have recovered balance on all limbs.
+  Parrying Left Leg!
+As you draw Saosh's Vow from its scabbard, you drive the pommel into Kuririn's chin.
+Balance used: 1.1s.
+[Protagonist Lite]: Struck Kuririn' Neck 
+Processed Affliction(Paralysis)
+H:6950|100% M:4932|100% W:21978|99%  22:50:22 -eckbd- Sh: 38 St: Thyr [ Kuririn ]
+ 
+================================================================================= 
+              Kuririn --> Bloodroot
+=================================================================================
+You may eat another bit of irid moss or potash.
+Processed Cures(paralysis)
+H:6950|100% M:4932|100% W:21978|99%  22:50:23 -eckbd- Sh: 38 St: Thyr [ Kuririn ]
+You have recovered balance on all limbs.
+As you draw Saosh's Vow from its scabbard, you drive the pommel into Kuririn's chin.
+Balance used: 1.1s.
+[Protagonist Lite]: Struck Kuririn' Throat 
+Processed Affliction(Asthma)
+H:6950|100% M:4932|100% W:21978|99%  22:50:23 -eckbd- Sh: 46 St: Thyr [ Kuririn ]
+Kuririn spins into the air and throws a whirlwind kick towards you.
+As Kuririn's blow crunches into you, you perceive that he has dealt 18.3% damage to your head.
+He connects to the head!
+Health lost: 547 (physical blunt).
+Kuririn launches a powerful uppercut at you.
+As Kuririn's blow crunches into you, you perceive that he has dealt 14.1% damage to your head.
+He connects to the head!
+Health lost: 355 (physical blunt).
+Kuririn launches a powerful uppercut at you.
+As Kuririn's blow crunches into you, you perceive that he has dealt 14.1% damage to your head.
+He connects to the head!
+Health lost: 355 (physical blunt).
+With a swift turn, you draw your blade from its scabbard and unleash a retaliatory strike against
+Kuririn.
+H:5693|81% M:4932|100% W:21978|99%  22:50:23 -eckbd- Sh: 46 St: Thyr [ Kuririn ] ( -1257h 18% )
+You eat a potash crystal.
+You feel your health and mana replenished.
+H:6249|89% M:4932|100% W:21978|99%  22:50:23 -eckbd- Sh: 46 St: Thyr [ Kuririn ] ( +556h 8% )
+Kuririn No longer hamstrung!
+Lost Affliction(Hamstring)
+H:6249|89% M:4932|100% W:21978|99%  22:50:23 -eckbd- Sh: 46 St: Thyr [ Kuririn ]
+Kuririn eats some irid moss.
+You have recovered balance on all limbs.
+  Parrying Left Leg!
+As you draw Saosh's Vow from its scabbard, you drive the pommel into Kuririn's chin.
+Balance used: 1.1s.
+[Protagonist Lite]: Struck Kuririn' Neck 
+Processed Affliction(Paralysis)
+You may drink another health or mana elixir.
+H:6249|89% M:4922|99% W:21973|99%  22:50:24 -eckbd- Sh: 54 St: Thyr [ Kuririn ]
+H:6249|89% M:4922|99% W:21992|99%  22:50:24 -eckbd- Sh: 54 St: Thyr [ Kuririn ]
+ 
+================================================================================= 
+              Kuririn --> Bloodroot
+=================================================================================
+Processed Cures(paralysis)
+H:6249|89% M:4922|99% W:21992|99%  22:50:24 -eckbd- Sh: 54 St: Thyr [ Kuririn ]
+You have recovered balance on all limbs.
+  Parrying Right Leg!
+As you draw Saosh's Vow from its scabbard, you drive the pommel into Kuririn's chin.
+Balance used: 1.1s.
+[Protagonist Lite]: Struck Kuririn' Neck 
+Processed Affliction(Paralysis)
+Kuririn is a sippy boy/girl/fae!
+H:6596|94% M:4922|99% W:21992|99%  22:50:26 -eckbd- Sh: 62 St: Thyr [ Kuririn ] ( +347h 4% )
+[AFF]  blackout
+
+====================BLACKOUT====================
+====================BLACKOUT====================
+====================BLACKOUT====================
+ 
+================================================================================= 
+              Kuririn --> Bloodroot
+=================================================================================
+A devastating blast of telepathic energy strikes you and your senses black out completely...
+Processed Cures(paralysis)
+You have been afflicted with blackout.
+You have recovered balance on all limbs.
+Balance used: 1.1s.
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT W:BLACKOUT|BLACKOUT  22:50:26 -eckbd- Sh: 70 St: Thyr [ Kuririn ]
+You have recovered balance on all limbs.
+  Parrying Left Leg!
+Balance used: 1.1s.
+ 
+================================================================================= 
+              Kuririn --> Bloodroot
+=================================================================================
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT W:BLACKOUT|BLACKOUT  22:50:28 -eckbd- Sh: 78 St: Thyr [ Kuririn ]
+
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT W:BLACKOUT|BLACKOUT  22:50:28 -eckbd- Sh: 78 St: Thyr [ Kuririn ]
+You have recovered balance on all limbs.
+  Parrying Right Leg!
+Balance used: 1.1s.
+You may eat another bit of irid moss or potash.
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT W:BLACKOUT|BLACKOUT  22:50:29 -eckbd- Sh: 86 St: Thyr [ Kuririn ]
+
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT W:BLACKOUT|BLACKOUT  22:50:29 -eckbd- Sh: 86 St: Thyr [ Kuririn ]
+
+ 
+================================================================================= 
+              Kuririn --> Bloodroot
+=================================================================================
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT W:BLACKOUT|BLACKOUT  22:50:29 -eckbd- Sh: 86 St: Thyr [ Kuririn ]
+You have recovered balance on all limbs.
+Kuririn swoons for a moment then rises again, flushed but strong.
+Balance used: 1.1s.
+The protective coating covering the skin of Kuririn sloughs off.
+He connects to the torso!
+He connects to the torso!
+He connects to the torso!
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT W:BLACKOUT|BLACKOUT  22:50:29 -eckbd- Sh: 94 St: Thyr [ Kuririn ]
+The elixir heals and soothes you.
+You feel your health and mana replenished.
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT W:BLACKOUT|BLACKOUT  22:50:30 -eckbd- Sh: 94 St: Thyr [ Kuririn ]
+
+Kuririn is a sippy boy/girl/fae!
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT W:BLACKOUT|BLACKOUT  22:50:30 -eckbd- Sh: 94 St: Thyr [ Kuririn ]
+Kuririn eats some irid moss.
+ 
+================================================================================= 
+              Kuririn --> STUCK IMP!!
+=================================================================================
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT W:BLACKOUT|BLACKOUT  22:50:30 -eckbd- Sh: 94 St: Thyr [ Kuririn ]
+
+ 
+================================================================================= 
+              Kuririn --> Tree!!!
+=================================================================================
+Processed Cures(lethargy asthma impatience hypochondria nausea)
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT W:BLACKOUT|BLACKOUT  22:50:30 -eckbd- Sh: 94 St: Thyr [ Kuririn ]
+You have recovered balance on all limbs.
+Balance used: 1.1s.
+The pain of your wounds abates amid the rhythm of combat.
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT W:BLACKOUT|BLACKOUT  22:50:31 -eckbd- Sh: 100 St: Thyr [ Kuririn 
+]
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT W:BLACKOUT|BLACKOUT  22:50:31 -eckbd- Sh: 100 St: Thyr [ Kuririn 
+]
+You have recovered balance on all limbs.
+  Parrying Left Leg!
+Balance used: 1.1s.
+The pain of your wounds abates amid the rhythm of combat.
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT W:BLACKOUT|BLACKOUT  22:50:32 -eckbd- Sh: 100 St: Thyr [ Kuririn 
+]
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT W:BLACKOUT|BLACKOUT  22:50:32 -eckbd- Sh: 94 St: Thyr [ Kuririn ]
+You have recovered balance on all limbs.
+  Parrying Right Leg!
+Balance used: 1.1s.
+The pain of your wounds abates amid the rhythm of combat.
+H:BLACKOUT|BLACKOUT M:BLACKOUT|BLACKOUT W:BLACKOUT|BLACKOUT  22:50:33 -eckbd- Sh: 100 St: Thyr [ Kuririn 
+]
+[AFF]  Blackout
+You have cured the blackout affliction.
+H:6950|100% M:4922|99% W:22026|99%  22:50:33 -eckbd- Sh: 100 St: Thyr [ Kuririn ] ( +354h 5% )
+You have recovered balance on all limbs.
+H:6950|100% M:4922|99% W:22026|99%  22:50:34 -exckbd- Sh: 100 St: Thyr [ Kuririn ]
+H:6950|100% M:4922|99% W:22026|99%  22:50:34 -exckbd- Sh: 100 St: Thyr [ Kuririn ]
+You may drink another health or mana elixir.
+H:6950|100% M:4922|99% W:22026|99%  22:50:34 -exckbd- Sh: 100 St: Thyr [ Kuririn ]
+Curing disabled.
+Gathering your energy as you ready yourself for a deadly assault, you size up your Human opponent.
+Balance used: 1.8s.
+H:6950|100% M:4922|99% W:22026|99%  22:50:34 -eckbd- Sh: 100 St: Thyr [ Kuririn ] (PP)
+You clutch your head in pain, as it is crushed in an invisible vice.
+You feel the heaviness of Kuririn's psyche weigh down on your mind.
+Health lost: 1260 (psychic).
+H:5690|81% M:4183|84% W:22026|99%  22:50:35 -eckbd- Sh: 100 St: Thyr [ Kuririn ] ( -1260h 18% -739m 14% ) 
+(PP)
+You may eat another bit of irid moss or potash.
+H:6037|86% M:4183|84% W:22026|99%  22:50:36 -eckbd- Sh: 100 St: Thyr [ Kuririn ] ( +347h 4% ) (PP)
+Health lost: 36 (raw).
+You bleed 36 health.
+H:6001|86% M:4183|84% W:22026|99%  22:50:36 -eckbd- Sh: 100 St: Thyr [ Kuririn ] (PP)
+You have recovered balance on all limbs.
+H:6001|86% M:4183|84% W:22026|99%  22:50:36 -exckbd- Sh: 100 St: Thyr [ Kuririn ] (PP)
+You clutch your head in pain, as it is crushed in an invisible vice.
+You feel the heaviness of Kuririn's psyche weigh down on your mind.
+Health lost: 1260 (psychic).
+H:4741|68% M:3434|69% W:22042|99%  22:50:37 -exckbd- Sh: 100 St: Thyr [ Kuririn ] ( -1260h 18% -749m 15% 
+) (PP)
+Leaping forwards with lightning speed, you strike Kuririn in the chest with a single, precise blow.
+Skipping a beat in the wake of your attack, the rhythm of his heart begins to fluctuate erratically.
+
+H:4741|68% M:3434|69% W:22039|99%  22:50:39 -exckbd- Sh: 100 St: Thyr [ Kuririn ] (PP)
+Kuririn doubles over, vomiting violently.
+H:4741|68% M:3424|69% W:22037|99%  22:50:40 -exckbd- Sh: 100 St: Thyr [ Kuririn ] (PP)
+A Fomori of Unsidhe has infected Ante, turning him into a melting puddle of flesh.
+H:4741|68% M:3424|69% W:22045|100%  22:50:40 -exckbd- Sh: 100 St: Thyr [ Kuririn ] (PP)
+You clutch your head in pain, as it is crushed in an invisible vice.
+You feel the heaviness of Kuririn's psyche weigh down on your mind.
+Health lost: 1260 (psychic).
+H:3481|50% M:2685|54% W:22045|100%  22:50:40 -exckbd- Sh: 100 St: Thyr [ Kuririn ] ( -1260h 18% -739m 14% 
+) (PP)
+Health lost: 25 (raw).
+You bleed 25 health.
+H:3456|49% M:2685|54% W:22045|100%  22:50:41 -exckbd- Sh: 100 St: Thyr [ Kuririn ] (PP)
+You clutch your head in pain, as it is crushed in an invisible vice.
+You feel the heaviness of Kuririn's psyche weigh down on your mind.
+Health lost: 1260 (psychic).
+H:2775|39% M:2357|47% W:22045|100%  22:50:43 -exckbd- Sh: 100 St: Thyr [ Kuririn ] ( -681h 9% -328m 6% ) 
+(PP)
+[AFF]  Insomnia
+[AFF]  Blindness
+[AFF]  Deafness
+[AFF]  Mildtrauma
+
+[SLC]: Reset torso counts.
+
+Completing your fatal assault, you thrust at a vulnerable point of Kuririn's jugular with a penetrative,
+spearhand strike. Weakened by your previous blow, his artery ruptures, and blood begins to leak from his 
+nose and mouth. Muscles failing as a death rattle rolls across his lips, he falls backwards, dead before 
+he hits the ground.
+You have slain Kuririn. Reset Success!
+ 

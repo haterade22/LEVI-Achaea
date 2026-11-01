@@ -131,6 +131,7 @@ LEVI-Achaea/
 │   ├── kb_catalog.py          # KB: regenerate kb/afflictions/catalog.md from HELP + code tables
 │   ├── kb_capture_import.py   # KB: file in-game `kbcapture` output (Mudlet profile) into kb/raw/live/
 │   ├── fightlog_import.py     # copy in-game `fightlog` recordings into kb/raw/logs/ours/, summarise them
+│   ├── kb_log_import.py       # KB: convert Mudlet HTML log exports in kb/raw/logs/ to text, skip fights already filed
 │   └── legacy/                # Retired build tools
 ├── build.sh                   # Build script: ./build.sh [--dry-run] [--convert-only]
 ├── .gitignore                 # Excludes build artifacts, IDE state, caches

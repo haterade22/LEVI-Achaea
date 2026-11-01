@@ -63,9 +63,12 @@ One line per page. Kept up to date by `/kb-ingest`.
 | raw/logs/2026-10-11_shikudo-vs-runewarden-snb_attacker.txt | Combat log: a Shikudo kills a Runewarden by Dispatch (the monk's view; shared by the user) | 2026-10-11 |
 | raw/logs/2026-10-11_runewarden-snb-vs-shikudo_defender.txt | Combat log: a Runewarden kills a Shikudo by disembowel (her view; channel chat removed) | 2026-10-11 |
 | raw/logs/2026-10-11_mystor_*.txt (6) | Mystor's own arena fights as a Shikudo: against a Depthswalker, an Infernal (three times), an Apostate and a Shaman; five with MIND SAPIENCE on the opponent, so his typed commands show | 2026-10-11 |
+| raw/logs/2026-11-01_*.txt (20) | Combat logs shared by the user, all 1v1 by the party check: Claes (Runewarden) x9, Nikita (Depthswalker) x3, Elmer (Shikudo, Alchemist) x4, an Earth Lord x3, a Blademaster x1. First real Serpent logs. Listed in raw/logs/README.md; converted by `tools/kb_log_import.py` | 2026-11-01 |
+| raw/logs/ours/*.log (4) | Our own `fightlog` recordings, all with Tabethys present: Alchemist, Monk (we died), Infernal, Runewarden. Millisecond rows with our sends and tracker beliefs | 2026-11-01 |
 | raw/players/shikudo-2026-10-11.txt | Players in their own words: the user and Mystor on Shikudo, Telepathy, the mind lock and blackout | 2026-10-11 |
 | raw/players/serpent-2026-10-12.txt | Serpent notes relayed by the user: DSTAB, hypochondria's delayed impatience, IMPULSE MASOCHISM MONKSHOOD, fratricide's 2.25 s relapse | 2026-10-12 |
 | raw/players/magi-tabethys-2026-10-12.txt | Tabethys on Magi: the core rotation (magma, dehydrate, dehydrate, fulminate), CAST MUDSLIDE, the focus lock and the freeze-to-glaciate finisher | 2026-10-12 |
+| raw/players/fitness-2026-11-01.txt | The user: FITNESS needs balance and equilibrium, against the wiki's balance only (CONFLICTS #50) | 2026-11-01 |
 | raw/players/dizziness-fall-2026-10-15.txt | The dizzy fall line ("The ground seems to tilt and you fall with a thump."): it takes balance and cancels the move; dizziness can be uncurable | 2026-10-15 |
 | raw/players/mnemosyne-scaling-boons-2026-10-16.txt | Mana Powered's text (4% per WHOLE 1000 max mana), the stat boons (4% per point, user), and the STAT box row format (two stats per row) | 2026-10-16 |
 | raw/players/cures-user-2026-10-23.txt | The user on the five names the game does not list: bleeding = CLOT (amount), drowning = pear, nocaloric = apply caloric (a defence); the four tempered humours = ginger/antimony | 2026-10-23 |

@@ -4,8 +4,10 @@ confidence: mixed (see Confidence column)
 sources:
   - kb/raw/help/conditional-afflictions-for-the-achaean-forms.txt   # HELP file; uses OLD skill names (Chivalry, Harmonic)
   - kb/raw/guides/active-and-passive-cures-with-fire-lines.txt      # community guide; source of the lines
+  - kb/raw/players/fitness-2026-11-01.txt                           # the user: fitness needs balance and eq
+  - kb/raw/logs/                                                    # Fitness in detail: 11 fires
 code: src_new/triggers/levi_ataxia/for_levi/leviticus/passive_active/
-last_verified: 2026-10-10
+last_verified: 2026-11-01
 ---
 
 # Class cures: how the target fights back
@@ -50,6 +52,32 @@ blocks the cure **on its own** (see Dragonheal below).
 | Knights | Rage | varies by line | (not in sources) | "X's eyes flash with rage." | 013 | code only |
 | Monk | Continuation | 1 aff | (not in sources) | "X gives a great shout of exertion." | 018: -weariness, +1 random | code only |
 | Sylvan | Root | 1 aff | (not in sources) | "X stands suddenly upright, rooted to the earth." | 020: -haemophilia, +1 random | code only |
+
+### Fitness in detail (2026-11-01)
+
+| Fact | Value | Confidence |
+|---|---|---|
+| Needs | balance (wiki) and equilibrium (the user) | Balance CONFIRMED (live). Equilibrium: player, logs agree, no direct test (CONFLICTS #50) |
+| Spends | balance only: 2.8 s printed, against 3.00 stated on the wiki | CONFIRMED (live), n=6 |
+| Lockout | about 10 s; earliest 9.06 s | CONFIRMED (live), n=8 pairs. Our seat: 9.97, 9.81, 9.06. The other 5 have 1 s stamps and all read 10 |
+| While paralysed | works | CONFIRMED (live), 3 logs |
+| Under weariness | refused, and the lockout clock keeps running | CONFIRMED (live) |
+
+**Equilibrium evidence.** The logs hold 11 fires. 5 came with equilibrium up, 5 right after it returned, 1
+is not visible, and 0 came with it visibly down. The clearest is
+`raw/logs/2026-11-01_elmer_shikudo-vs-runewarden_win_2N1HTSWZ.txt`:4611-4618: the prompt flags read `-xd-` with
+asthma up, equilibrium returns, the flags read `-exd-`, `fitness` is typed, and it fires. Each client
+may gate this on its own, so the logs do not prove a game rule.
+
+**Lines.**
+- Fire: `You inhale deeply, purging yourself of your asthmatic condition.`
+- Lockout over: `You may purge your lungs once again.`
+- Tried during the lockout: `You may not purge your lungs again as of this time.`
+- Short of balance, with auto-queue on: `You must regain balance first.`, then
+  `fitness was added to your balance queue.` It runs on recovery (`raw/logs/ours/2026-10-27_112717_Tabethys.log`:12659-12676).
+
+"Too weary" prints during the lockout as well, so that refusal says nothing about the clock.
+`abilities.json` has no lockout: its `cooldown` field means balance spent.
 
 ## Passive cures (about every 10s, voyria first)
 

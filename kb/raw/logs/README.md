@@ -38,7 +38,7 @@ Reading them:
 
 **A name collision:** the user saved two DIFFERENT exports as `LcJC-rJ5.html`, Mystor's Apostate fight
 (`Downloads/shikudo fights/`, filed here as `..._mystor_shikudo-vs-apostate_win_LcJC-rJ5.txt`) and Claes
-vs Pharaus (`Downloads/`, not filed). Cite Mystor's as "Mystor's Apostate log".
+vs Pharaus (filed 2026-11-01 as `2026-11-01_claes_runewarden-vs-apostate_loss_LcJC-rJ5.txt`). Cite Mystor's as "Mystor's Apostate log".
 
 Mystor is a Shikudo monk; the user relayed his notes on them (`kb/raw/players/shikudo-2026-10-11.txt`).
 Converted the same way (one row per `<br>`); they carried no channel chat, so nothing was removed.
@@ -78,6 +78,58 @@ vivisect). Their system's echoes, as it prints them (not game text):
   AND "The fires consuming <T> diminish somewhat." (:412-413); and both stormhammers that hit went
   at a Kalys shown "here, hidden" (:525, :706), while both misses came after he had left (:482,
   :490, :683).
+
+### The 2026-11-01 batch (shared by the user)
+
+The user added 25 Mudlet HTML exports. `python tools/kb_log_import.py` filed 20 of them as text, and
+`--check` matched each one row by row. The other 5 are not new: two are the 2026-10-11 Runewarden logs
+(`Pk1qqH9I` is an exact match, `aJnS5zOu` is that log before the channel rows were removed), and three are
+copies (`Vr.NkCGD (1)`, `Vr.NkCGD (2)`, `s98kPGv6 (1)`). The exports stay on disk and are git-ignored.
+
+New files use LF line ends. The older files here use CRLF. Their rows are the same otherwise: the
+converter reproduces all 2,733 rows of `2026-10-11_shikudo-vs-runewarden-snb_attacker.txt`.
+
+| Id | Logger, class | Opponent, class | Result | Stamps | Notes |
+|---|---|---|---|---|---|
+| WO7tC3kL | Claes, Runewarden | Proficy, Apostate | win | ms | 1v1 hunt at Oniar, 403 s; impale, disembowel |
+| azbErKcK | Claes, Runewarden | Thato, Serpent | loss | ms | truelock, then vomit "suffocating" with recklessness hiding health |
+| 4c_SeyaA | Claes, Runewarden | Reyl, Pariah | loss | ms | SCOURGE |
+| CxxKSMq | Claes, Runewarden | Blonk, Runewarden (two handed) | loss | ms | sweep, impale, 2700 unblockable |
+| s98kPGv6 | Claes, Runewarden | Talo, Air Lord | loss | ms | pressure counter, clap at 6 |
+| WKuEakBZ | Claes, Runewarden | Talo, Pariah | loss | ms | Latency, voyria |
+| Vr.NkCGD | Claes, Runewarden | Talo, Pariah | loss | ms | Latency, voyria |
+| LcJC-rJ5 | Claes, Runewarden | Pharaus, Apostate | loss | ms | truelock, ankheg trample, VIVISECT |
+| J7Xnr_Jg | Claes, Runewarden | Sjeng, Runewarden | win | ms | BISECT |
+| X8pRorzR | Nikita, Depthswalker | Archaeon, Serpent | win | cs | truelock, death by symptoms |
+| kAQnlFAW | Nikita, Depthswalker | Anzerloi, Bard | win | cs | Degeneration capstone |
+| L8LSw7xD | Nikita, Depthswalker | Anzerloi, Bard | win | cs | SHADOW DICTATE |
+| 2N1HTSWZ | Elmer, Shikudo | Torvald, Runewarden | win | ms | DISPATCH |
+| 3ys7NuHA | Elmer, Shikudo | Astarod, Air Lord | win | ms | DISPATCH |
+| g-lD00-h | Elmer, Shikudo | Kalys, Serpent | no result | ms | Kalys left |
+| Z5cyffxx | Elmer, Alchemist | Seurimas, Serpent | loss | ms | truelock, scytherus bites |
+| KtdftABt | unnamed, Blademaster | Kuririn, Tekura monk | win | 1 s | a staged finisher |
+| OwkA-G99 | unnamed, Earth Lord | Alyzar, Blademaster | loss | cs | leg breaks, "Planting his foot" rounds; class from ability lines, no HONOURS line |
+| JDvzR7j7 | unnamed, Earth Lord | Vothaec, Sentinel; killed by Arcadian guards | loss | cs | |
+| uW_VbgR | unnamed, Earth Lord | Vothaec, Sentinel | no result | cs | truelock, log cut |
+
+All 20 are 1v1 by the party check, although people pass through some of them. Classes come from ability
+lines and echoes, so a class here is a reading of the log, not a game record. The Blonk class was first read
+as Unnamable; runes flash on the weapons (`CxxKSMq` rows 755, 1198, 1305, 1529). Nine logs share one
+player's system and several were played within 30 minutes, so do not treat them as independent samples.
+
+**Prompt stamps differ by family, and a row's time is the NEXT prompt's stamp:**
+- Claes: `HH:MM:SS:mmm`. Nikita: `HH:MM:SS.cc`; a `.00` stamp prints one second early.
+- Elmer: `SS:mmm`, which wraps at 60. Earth Lord: `MM:SS.cc`. Blademaster: `HH:MM:SS`.
+- Treat a margin under 0.5 s as unresolved: lag bursts bundle rows.
+
+**What is game text and what is not:**
+- **`Balance used: 2.1s.` and `Equilibrium used: 3.40s.` are GAME text.** They have the same colour as
+  `Health lost`, and they print before recovery, which a client cannot know. A victim also prints one for an
+  imposed loss (`Balance used: 1.4s.`, `OwkA-G99` row 3141). Mystor's `[Bal Spent: 2.1s]` is this line, renamed.
+  Claes's logs show `Equilibrium used` but never `Balance used`. No log of ours has either line.
+- **These are loggers' echoes:** `Tree (13.916)` and `(4.38)` after a recovery line, `[INR]: 13 Ginseng (586)`,
+  `Processed Cures(...)`, `aff+` / `aff-` (Nikita's tracker), and `AST44 clum44` (Elmer's chance that an
+  affliction remains). `[Prio]` rows show the logger's live cure priority.
 
 ## Our own fight logs (`ours/`)
 

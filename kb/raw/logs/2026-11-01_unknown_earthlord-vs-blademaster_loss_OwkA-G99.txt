@@ -1,0 +1,3319 @@
+[DEF]: Seasonelegend
+As you draw forth a card depicting Seasone, the Industrious from your deck, your heart begins to race.
+A card depicting Seasone, the Industrious may be used 2 more times before its potential will need to be restored.
+Balance used: 2.6s.
+curing priority Paralysis 20 Clumsiness 7
+H:8470|100% M:6964|100% E:100% W:100% [W] R:0 45:53.24-e- Shaping : 0[0|0|0|0|0|0] 
+[Prio]: Paralysis (20)
+[Prio]: Clumsiness (7)
+H:8470|100% M:6964|100% E:100% W:100% [W] R:0 45:53.34-e- Shaping : 0[0|0|0|0|0|0] 
+Alyzar tells you, "Ready!"
+H:8470|100% M:6964|100% E:100% W:100% [W] R:0 45:54.03-e- Shaping : 0[0|0|0|0|0|0] 
+curing priority Paralysis 2
+[Prio]: Paralysis (2)
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+H:8470|100% M:6949|99% E:100% W:100% [W] R:0 45:55.79-ex- Shaping : 0[0|0|0|0|0|0] 
+ldeck draw blackboar
+
+[DEF]: Blackboarlegend
+You draw forth a card depicting the Black Boar from your deck, displaying it for all to see.
+A card depicting the Black Boar may be used 1 more times before its potential will need to be restored.
+Balance used: 2.6s.
+curing priority Paralysis 20
+H:8470|100% M:6949|99% E:100% W:100% [W] R:0 45:56.00-e- Shaping : 0[0|0|0|0|0|0] 
+[Prio]: Paralysis (20)
+curing priority Paralysis 2
+Melodie dies, features contorted from the poison delivered by Kog Terias in Ainghaeal's Nest.
+H:8470|100% M:6941|99% E:100% W:99% [W] R:0 45:57.10-e- Shaping : 0[0|0|0|0|0|0] 
+[Prio]: Paralysis (2)
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+H:8470|100% M:6941|99% E:100% W:99% [W] R:0 45:58.65-ex- Shaping : 0[0|0|0|0|0|0] 
+tell Alyzar Let's do it
+You tell Alyzar, "Let's do it."
+H:8470|100% M:6960|99% E:100% W:99% [W] R:0 46:01.91-ex- Shaping : 0[0|0|0|0|0|0] 
+w
+queue addclearfull freestand w
+
+[DEF]: Shield
+A private study. (indoors)
+A portrait hangs from one wall, damaged by blade and fire alike. Caefir Alyzar Al'Jafri, Avian Adversary is here. His features are obscured by a mask
+of lifevision.
+You see exits leading east and down.
+Your movement causes your magical shield to dissipate.
+H:8470|100% M:6960|99% E:99% W:99% [E|D] R:0 46:03.02-ex- Shaping : 0[0|0|0|0|0|0] 
+nod
+You nod your head emphatically.
+H:8470|100% M:6960|99% E:99% W:100% [E|D] R:0 46:04.42-ex- Shaping : 0[0|0|0|0|0|0] 
+Alyzar whips Saosh's Vow through the air in front of you, to no effect.
+Ducking behind you, Alyzar strikes at your hamstring with a rigid grip.
+The crippling blow renders your leg insensate.
+[AFF]: Hamstrung
+H:8470|100% M:6945|99% E:100% W:100% [E|D] R:0 46:04.92-ex- Shaping : 0[0|0|0|0|0|0] [HAMS] 
+erl
+queue addclearfull eb!p!w!t  pk
+With a roar you swing a colossal fist at the right leg of Alyzar.
+As your blow lands with a crunch, you perceive that you have dealt 21.0% damage to Alyzar's right leg. (21%)
+Your fist crunches into the right leg of Alyzar.
+Alyzar pivots on his heel as he draws his blade from its scabbard and unleashes a retaliatory strike at you.
+Health lost: 235 (physical cutting).
+The rock plates covering your form rapidly thicken, sharp spikes of stone sprouting from them in an instant.
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Alyzar and see that his health is at 5197/6950 [74%].
+[Health]: 75%
+pt Alyzar's health at 5197/6950
+H:8235|97% M:6845|98% E:99% W:100% [E|D] R:0 46:05.47-e- Shaping : 1[0|0|0|0|0|21]  ( -235h 2% )[HAMS] 
+Alyzar takes a drink from an oaken vial.
+Alyzar eats a potash crystal.
+H:8235|97% M:6845|98% E:99% W:100% [E|D] R:0 46:05.54-e- Shaping : 1[0|0|0|0|0|21] [HAMS] 
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:8235|97% M:6845|98% E:99% W:100% [E|D] R:0 46:05.63-e- Shaping : 1[0|0|0|0|0|21] [HAMS] 
+"Okay!" Alyzar exclaims.
+H:8235|97% M:6845|98% E:99% W:100% [E|D] R:0 46:05.87-e- Shaping : 1[0|0|0|0|0|21] [HAMS] 
+With a smooth lunge to the right, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your right leg.
+ LIMB DAMAGE: right leg (19.8%)
+  ---- >10s since last parry! ----------- PARRYING right leg
+queue add eb parry right leg
+[0|0|0|0|0|19.8]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your left leg.
+ LIMB DAMAGE: left leg (13.2%)
+  ---- >10s since last parry! ----------- PARRYING left leg
+queue add eb parry left leg
+[0|0|0|0|13.2|19.8]
+Health lost: 761 (physical cutting).
+With fluid motions of his iron fingers, Alyzar strikes precisely at your neck.
+Your muscles lock up as the swift blows meet pressure points.
+[AFF]: Paralysis
+H:7474|88% M:6845|98% E:99% W:100% [E|D] R:0 46:06.76-e- Shaping : 1[0|0|0|0|0|21]  ( -761h 8% )[PAR HAMS] 
+curing priority Paralysis 2
+[OUTR]: 1 Magnesium (109)
+You eat a magnesium chip.
+outr magnesium
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:7474|88% M:6845|98% E:99% W:100% [E|D] R:0 46:06.90-e- Shaping : 1[0|0|0|0|0|21] [HAMS] 
+[Prio]: Paralysis (2)
+[OUTR]: 1 Magnesium (108)
+eh
+setalias pk stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar head/ assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar head/ assess"
+H:7474|88% M:6845|98% E:99% W:100% [E|D] R:0 46:08.09-e- Shaping : 1[0|0|0|0|0|21] [HAMS] 
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+With a roar you swing a colossal fist at the head of Alyzar.
+As your blow lands with a crunch, you perceive that you have dealt 21.0% damage to Alyzar's head. (21%)
+Your fist crunches into the head of Alyzar.
+The head of Alyzar snaps back under the impact.
+You feel the magma contained within your hallowed form begin to seethe.
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Alyzar and see that his health is at 5108/6950 [73%].
+[Health]: 74%
+pt Alyzar's health at 5108/6950
+You may eat another plant or mineral. Eat (1.569)
+H:7474|88% M:6745|96% E:99% W:100% [E|D] R:0 46:08.39-e- Shaping : 2[21|0|0|0|0|21] [HAMS] 
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:7474|88% M:6745|96% E:99% W:100% [E|D] R:0 46:08.58-e- Shaping : 2[21|0|0|0|0|21] [HAMS] 
+With a smooth lunge to the left, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+You parry the attack with a deft manoeuvre.            ---------- WE PARRIED! GOOD JOB!
+With fluid motions of his iron fingers, Alyzar strikes precisely at your neck.
+Your muscles lock up as the swift blows meet pressure points.
+[AFF]: Paralysis
+H:7474|88% M:6745|96% E:99% W:100% [E|D] R:0 46:08.60-e- Shaping : 2[21|0|0|0|0|21] [PAR HAMS] 
+You eat a magnesium chip.
+outr magnesium
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:7474|88% M:6745|96% E:99% W:100% [E|D] R:0 46:08.62-e- Shaping : 2[21|0|0|0|0|21] [HAMS] 
+[Prio]: Paralysis (2)
+[OUTR]: 1 Magnesium (107)
+ell
+setalias pk stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar left leg/ assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar left leg/ assess"
+H:7474|88% M:6745|96% E:99% W:100% [E|D] R:0 46:09.68-e- Shaping : 2[21|0|0|0|0|21] [HAMS] 
+Alyzar takes a drink from an oaken vial.
+H:7897|93% M:6730|96% E:99% W:100% [E|D] R:0 46:10.01-e- Shaping : 2[21|0|0|0|0|21]  ( +423h 4% )[HAMS] 
+You may eat another plant or mineral. Eat (1.473)
+H:7897|93% M:6730|96% E:99% W:100% [E|D] R:0 46:10.21-e- Shaping : 2[21|0|0|0|0|21] [HAMS] 
+With a smooth lunge to the right, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your right leg.
+ LIMB DAMAGE: right leg (39.6%)
+[0|0|0|0|13.2|39.6]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your left leg.
+ LIMB DAMAGE: left leg (26.4%)
+ ----------- PARRYING right leg
+queue add eb parry right leg
+[0|0|0|0|26.4|39.6]
+Health lost: 1434 (electricity).
+Minute bolts of lightning arc from the blade into your flesh, causing your muscles to violently spasm.
+[AFF]: Clumsiness
+With fluid motions of his iron fingers, Alyzar strikes precisely at your neck.
+Your muscles lock up as the swift blows meet pressure points.
+[AFF]: Paralysis
+H:6463|76% M:6730|96% E:99% W:100% [E|D] R:0 46:10.55-e- Shaping : 2[21|0|0|0|0|21]  ( -1434h 16% ) (179B)[PAR clum HAMS] 
+You eat a magnesium chip.
+outr magnesium
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+H:8353|98% M:6250|89% E:99% W:99% [E|D] R:0 46:10.64-e- Shaping : 2[21|0|0|0|0|21]  ( +1890h 22% -480m 6% )[clum HAMS] 
+[OUTR]: 1 Magnesium (106)
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+With a roar you swing a colossal fist at the left leg of Alyzar.
+Alyzar parries the attack with a deft manoeuvre.
+ YOU HIT PARRY!!
+
+ YOU HIT PARRY!!
+Magma begins to boil up from beneath your outer strata.
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Alyzar and see that his health is at 6827/6950 [98%].
+[Health]: 99%
+pt Alyzar's health at 6827/6950
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:8353|98% M:6150|88% E:99% W:99% [E|D] R:0 46:11.44-e- Shaping : 3[21|0|0|0|0|21] [clum HAMS] 
+Health lost: 19 (raw).
+You bleed 19 health.
+H:8334|98% M:6150|88% E:99% W:99% [E|D] R:0 46:11.53-e- Shaping : 3[21|0|0|0|0|21] [clum HAMS] 
+You may eat another plant or mineral. Eat (1.474)
+H:8470|100% M:6281|90% E:99% W:99% [E|D] R:0 46:12.14-e- Shaping : 3[21|0|0|0|0|21] [clum HAMS] 
+[OUTR]: 1 Aurum (2242)
+You eat an aurum flake.
+outr aurum
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:8470|100% M:6281|90% E:99% W:99% [E|D] R:0 46:12.25-e- Shaping : 3[21|0|0|0|0|21] [HAMS] 
+[OUTR]: 1 Aurum (2241)
+[Prio]: Paralysis (2)
+With a smooth lunge to the right, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your right leg.
+ LIMB DAMAGE: right leg (59.4%)
+ ----------- PARRYING left leg
+queue add eb parry left leg
+[0|0|0|0|26.4|59.4]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your left leg.
+ LIMB DAMAGE: left leg (39.6%)
+ ----------- PARRYING right leg
+queue add eb parry right leg
+[0|0|0|0|39.6|59.4]
+Health lost: 1075 (fire).
+The flame-wreathed blade engulfs your skin in flames as it slashes your flesh.
+[AFF]: Burning
+[AFF]: Weariness
+The heat of the flames saps your strength.
+With fluid motions of his iron fingers, Alyzar strikes precisely at your neck.
+Your muscles lock up as the swift blows meet pressure points.
+[AFF]: Paralysis
+H:7395|87% M:6281|90% E:99% W:99% [E|D] R:0 46:12.48-e- Shaping : 3[21|0|0|0|0|21]  ( -1075h 12% )[burn(1) PAR wear HAMS] 
+You take out some salve and quickly rub it on your body.
+The raging fire about your skin goes out.
+[AFF]: Burning
+H:7395|87% M:6281|90% E:99% W:99% [E|D] R:0 46:12.67-e- Shaping : 3[21|0|0|0|0|21] [PAR wear HAMS] 
+eh
+setalias pk stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar head/ assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar head/ assess"
+H:7395|87% M:6281|90% E:99% W:99% [E|D] R:0 46:12.86-e- Shaping : 3[21|0|0|0|0|21] [PAR wear HAMS] 
+You may apply another salve to yourself. Body (0.842)
+H:7395|87% M:6281|90% E:99% W:99% [E|D] R:0 46:13.53-e- Shaping : 3[21|0|0|0|0|21] [PAR wear HAMS] 
+You may eat another plant or mineral. Eat (1.498)
+H:7395|87% M:6281|90% E:99% W:99% [E|D] R:0 46:13.76-e- Shaping : 3[21|0|0|0|0|21] [PAR wear HAMS] 
+You eat a magnesium chip.
+outr magnesium
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:7395|87% M:6281|90% E:99% W:99% [E|D] R:0 46:13.83-e- Shaping : 3[21|0|0|0|0|21] [wear HAMS] 
+[OUTR]: 1 Magnesium (105)
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+With a roar you swing a colossal fist at the head of Alyzar.
+As your blow lands with a crunch, you perceive that you have dealt 21.0% damage to Alyzar's head. (42%)
+Bones crackle and pop as your fist smashes into the head of Alyzar with pulverising force.
+The head of Alyzar snaps back under the impact.
+Magma explodes from the cracks between the plates covering you, forming a cloak of molten stone to enshroud you.
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Alyzar and see that his health is at 5319/6950 [76%].
+[Health]: 77%
+pt Alyzar's health at 5319/6950
+H:7395|87% M:6181|88% E:99% W:99% [E|D] R:0 46:14.26-e- Shaping : 4[42|0|0|0|0|21] [wear HAMS] 
+With a smooth lunge to the right, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your right leg.
+ LIMB DAMAGE: right leg (79.2%)
+[0|0|0|0|39.6|79.2]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your left leg.
+ LIMB DAMAGE: left leg (52.8%)
+ ----------- PARRYING left leg
+queue add eb parry left leg
+[0|0|0|0|52.8|79.2]
+Health lost: 1434 (electricity).
+Minute bolts of lightning arc from the blade into your flesh, causing your muscles to violently spasm.
+[AFF]: Clumsiness
+With fluid motions of his iron fingers, Alyzar strikes precisely at your neck.
+Your muscles lock up as the swift blows meet pressure points.
+[AFF]: Paralysis
+Alyzar takes a drink from an oaken vial.
+setalias pk stand/get body/ wield shield360716/ terran eruption / TERRAN POWDERISE Alyzar head/ assess
+Alyzar eats a potash crystal.
+H:5961|70% M:5581|80% E:99% W:99% [E|D] R:0 46:14.40-e- Shaping : 4[42|0|0|0|0|21]  ( -1434h 16% -600m 8% )[PAR clum wear HAMS] 
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:5961|70% M:5581|80% E:99% W:99% [E|D] R:0 46:14.43-e- Shaping : 4[42|0|0|0|0|21] [PAR clum wear HAMS] 
+Alias "pk" will now execute: "stand/get body/ wield shield360716/ terran eruption / TERRAN POWDERISE Alyzar head/ assess"
+H:5961|70% M:5581|80% E:99% W:99% [E|D] R:0 46:14.62-e- Shaping : 4[42|0|0|0|0|21] [PAR clum wear HAMS] 
+You feel the tightness in your hamstring subside, allowing free movement once again.
+[AFF]: Hamstrung
+H:5961|70% M:5566|79% E:99% W:99% [E|D] R:0 46:14.87-e- Shaping : 4[42|0|0|0|0|21] [PAR clum wear] 
+You may drink another health or mana elixir. Health (4.282)
+H:5961|70% M:5566|79% E:99% W:99% [E|D] R:0 46:15.01-e- Shaping : 4[42|0|0|0|0|21] [PAR clum wear] 
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+H:7994|94% M:5566|79% E:99% W:99% [E|D] R:0 46:15.21-e- Shaping : 4[42|0|0|0|0|21]  ( +2033h 24% )[PAR clum wear] 
+You may eat another plant or mineral. Eat (1.459)
+H:7994|94% M:5566|79% E:99% W:99% [E|D] R:0 46:15.30-e- Shaping : 4[42|0|0|0|0|21] [PAR clum wear] 
+You eat an aurum flake.
+outr aurum
+Your limbs strengthen and you feel stronger.
+[AFF]: Weariness
+H:7994|94% M:5566|79% E:99% W:99% [E|D] R:0 46:15.45-e- Shaping : 4[42|0|0|0|0|21] [PAR clum] 
+[OUTR]: 1 Aurum (2240)
+erl
+setalias pk stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar right leg/ assess
+queue addclearfull eb!p!w!t  pk
+curing priority Paralysis 2
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar right leg/ assess"
+H:7994|94% M:5566|79% E:99% W:99% [E|D] R:0 46:15.71-e- Shaping : 4[42|0|0|0|0|21] [PAR clum] 
+[Prio]: Paralysis (2)
+sh
+queue prepend eb TERRAN ERUPTION
+With a smooth lunge to the right, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your right leg.
+ LIMB DAMAGE: right leg (99%)
+[0|0|0|0|52.8|99]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your left leg.
+ LIMB DAMAGE: left leg (66%)
+ ----------- PARRYING right leg
+queue add eb parry right leg
+[0|0|0|0|66|99]
+Health lost: 1434 (electricity).
+Minute bolts of lightning arc from the blade into your flesh, causing your muscles to violently spasm.
+Health lost: 391 (electricity).
+With fluid motions of his iron fingers, Alyzar strikes precisely at your neck.
+Your muscles lock up as the swift blows meet pressure points.
+H:6169|72% M:5562|79% E:99% W:99% [E|D] R:0 46:16.80-e- Shaping : 4[42|0|0|0|0|21]  ( -1825h 21% ) (121B)[PAR clum] 
+You may eat another plant or mineral. Eat (1.507)
+H:6169|72% M:5202|74% E:99% W:99% [E|D] R:0 46:16.87-e- Shaping : 4[42|0|0|0|0|21]  ( -360m 5% )[PAR clum] 
+You eat a magnesium chip.
+outr magnesium
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+Health lost: 1 (raw).
+You bleed 1 health.
+H:6168|72% M:5202|74% E:99% W:99% [E|D] R:0 46:17.04-e- Shaping : 4[42|0|0|0|0|21] [clum] 
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You summon up the magma that courses beneath your outer layers, sending it forth in an eruption to drive out that which taints your perfect form.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+With a roar you swing a colossal fist at the right leg of Alyzar.
+Alyzar parries the attack with a deft manoeuvre.
+ YOU HIT PARRY!!
+
+ YOU HIT PARRY!!
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Alyzar and see that his health is at 6950/6950 [100%].
+[Health]: 100%
+pt Alyzar's health at 6950/6950
+[OUTR]: 1 Magnesium (104)
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:6168|72% M:4752|68% E:99% W:99% [E|D] R:0 46:17.32-e- Shaping : 4[42|0|0|0|0|21]  ( -450m 6% )
+curing priority Paralysis 2
+[Prio]: Paralysis (2)
+You may eat another plant or mineral. Eat (1.669)
+H:6168|72% M:4752|68% E:99% W:99% [E|D] R:0 46:18.65-e- Shaping : 4[42|0|0|0|0|21] 
+Sweltering heat hazes the air as Alyzar lashes at you with a blazing fist.
+Crackling flames erupt and surge across your skin in a frenzy.
+[AFF]: Flamefisted
+H:6168|72% M:4752|68% E:99% W:99% [E|D] R:0 46:18.79-e- Shaping : 4[42|0|0|0|0|21] [ffst] 
+ell
+setalias pk stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar left leg/ assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar left leg/ assess"
+H:6168|72% M:4752|68% E:99% W:99% [E|D] R:0 46:18.97-e- Shaping : 4[42|0|0|0|0|21] [ffst] 
+You may drink another health or mana elixir. Health (4.407)
+H:6168|72% M:4752|68% E:99% W:99% [E|D] R:0 46:19.63-e- Shaping : 4[42|0|0|0|0|21] [ffst] 
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+H:8165|96% M:4752|68% E:99% W:99% [E|D] R:0 46:19.74-e- Shaping : 4[42|0|0|0|0|21]  ( +1997h 23% )[ffst] 
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+With a roar you swing a colossal fist at the left leg of Alyzar.
+As your blow lands with a crunch, you perceive that you have dealt 43.0% damage to Alyzar's left leg. (43%)
+Your magma-wreathed fist smashes into the left leg of Alyzar.
+Alyzar pivots on his heel as he draws his blade from its scabbard and unleashes a retaliatory strike at you.
+Health lost: 332 (physical cutting).
+The left leg of Alyzar buckles under the impact, and he goes sprawling.
+ --------------------------------------------------------------
+ --------------------GOT PRONE!!--------------------------
+ --------------------GOT PRONE!!--------------------------
+ --------------------------------------------------------------
+Processed Affliction(Prone)
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Alyzar and see that his health is at 4480/6950 [64%].
+[Health]: 65%
+pt Alyzar's health at 4480/6950
+H:8138|96% M:4637|66% E:99% W:99% [E|D] R:0 46:20.06-e- Shaping : 4[42|0|0|0|43|21] [ffst] 
+Alyzar takes a drink from an oaken vial.
+H:8138|96% M:4637|66% E:99% W:99% [E|D] R:0 46:20.16-e- Shaping : 4[42|0|0|0|43|21] [ffst] 
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:8138|96% M:4637|66% E:99% W:99% [E|D] R:0 46:20.23-e- Shaping : 4[42|0|0|0|43|21] [ffst] 
+Alyzar eats a potash crystal.
+H:8138|96% M:4637|66% E:99% W:99% [E|D] R:0 46:20.55-e- Shaping : 4[42|0|0|0|43|21] [ffst] 
+curing priority Paralysis 2
+[Prio]: Paralysis (2)
+Alyzar stands up.
+
+Alyzar IS NO LONGER PRONE.  FAE|HE|SHE IS UP!!
+
+Alyzar IS NO LONGER PRONE.  FAE|HE|SHE IS UP!!
+
+H:8138|96% M:4637|66% E:99% W:99% [E|D] R:0 46:21.55-e- Shaping : 4[42|0|0|0|43|21] [ffst] 
+Planting his foot between yours, Alyzar draws Saosh's Vow and unleashes a forceful slash that drives you back.
+Balance used: 0.5s.
+Health lost: 1326 (electricity).
+Minute bolts of lightning arc from the blade into your flesh, causing your muscles to violently spasm.
+[AFF]: Clumsiness
+With rapid precision, Alyzar aims first a punch then a spearhand blow at two points on your chest.
+[AFF]: Hypochondria
+A terrible sense of unease comes over you.
+H:6812|80% M:4637|66% E:99% W:99% [E|D] R:0 46:21.55-e- Shaping : 4[42|0|0|0|43|21]  ( -1326h 15% ) (107B)[hchon clum ffst] 
+[OUTR]: 1 Argentum (1167)
+You eat an argentum flake.
+outr argentum
+My, you feel healthier than you have in years.
+[AFF]: Hypochondria
+ellq
+setalias pk stand/get body/ wield shield360716/MANIFEST QUAKE Alyzar / TERRAN POWDERISE Alyzar left leg/ assess
+queue addclearfull eb!p!w!t  pk
+[OUTR]: 1 Argentum (1166)
+Alias "pk" will now execute: "stand/get body/ wield shield360716/MANIFEST QUAKE Alyzar / TERRAN POWDERISE Alyzar left leg/ assess"
+H:6812|80% M:4337|62% E:99% W:99% [E|D] R:0 46:21.95-e- Shaping : 4[42|0|0|0|43|21]  ( -300m 4% )[clum ffst] 
+Health lost: 7 (raw).
+You bleed 7 health.
+H:7510|88% M:4476|64% E:99% W:99% [E|D] R:0 46:22.55-e- Shaping : 4[42|0|0|0|43|21]  ( +698h 8% )[clum ffst] 
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You stomp upon the ground, a ripple of tremors radiating out from the impact.
+Processed Affliction(Prone)
+The shroud of magma cloaking you is no longer sustainable, and it falls away.
+With a roar you swing a colossal fist at the left leg of Alyzar.
+As your blow lands with a crunch, you perceive that you have dealt 21.0% damage to Alyzar's left leg. (64%)
+Bones crackle and pop as your fist smashes into the left leg of Alyzar with pulverising force.
+Magma explodes from the cracks between the plates covering you, forming a cloak of molten stone to enshroud you.
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Alyzar and see that his health is at 4840/6950 [69%].
+[Health]: 70%
+pt Alyzar's health at 4840/6950
+H:7510|88% M:4376|62% E:99% W:99% [E|D] R:0 46:22.91-e- Shaping : 4[42|0|0|0|64|21] [clum ffst] 
+Reyl tells you, "Are they not the same?"
+H:7510|88% M:4376|62% E:99% W:99% [E|D] R:0 46:22.93-e- Shaping : 4[42|0|0|0|64|21] [clum ffst] 
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:7510|88% M:4376|62% E:99% W:99% [E|D] R:0 46:23.20-e- Shaping : 4[42|0|0|0|64|21] [clum ffst] 
+You may eat another plant or mineral. Eat (1.573)
+H:7510|88% M:4376|62% E:99% W:99% [E|D] R:0 46:23.27-e- Shaping : 4[42|0|0|0|64|21] [clum ffst] 
+You eat an aurum flake.
+outr aurum
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:7510|88% M:4376|62% E:99% W:99% [E|D] R:0 46:23.36-e- Shaping : 4[42|0|0|0|64|21] [ffst] 
+[OUTR]: 1 Aurum (2239)
+[Prio]: Paralysis (2)
+Alyzar stands up.
+
+Alyzar IS NO LONGER PRONE.  FAE|HE|SHE IS UP!!
+
+Alyzar IS NO LONGER PRONE.  FAE|HE|SHE IS UP!!
+
+H:7510|88% M:4376|62% E:99% W:99% [E|D] R:0 46:24.06-e- Shaping : 4[42|0|0|0|64|21] [ffst] 
+
+====================DAMAGEDRIGHTLEG====================
+====================DAMAGEDRIGHTLEG====================
+====================DAMAGEDRIGHTLEG====================
+[DEF]: Insulation
+With a smooth lunge to the right, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your right leg.
+ LIMB DAMAGE: right leg (118.8%)
+  ---- >10s since last parry![0|0|0|0|66|118.8]
+[AFF]: Brokenrightleg
+[AFF]: Damagedrightleg
+Your right leg is greatly damaged from the beating.
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your left leg.
+ LIMB DAMAGE: left leg (79.2%)
+  ---- >10s since last parry![0|0|0|0|79.2|118.8]
+Health lost: 1434 (cold).
+The ice-covered blade strips away your protective covering.
+Sweeping out with a blade hand, Alyzar strikes at the back of your knee.
+[AFF]: Prone
+You tumble to the ground as your leg abruptly gives out.
+H:6076|71% M:4376|62% E:99% W:99% [E|D] R:0 46:24.06-e- Shaping : 4[42|0|0|0|64|21]  ( -1434h 16% ) (115B)[RL2 ffst PR] 
+You may drink another health or mana elixir. Health (4.444)
+H:6076|71% M:4376|62% E:99% W:99% [E|D] R:0 46:24.18-e- Shaping : 4[42|0|0|0|64|21] [RL2 ffst PR] 
+curing priority Paralysis 2
+You take out some salve and quickly rub it on your legs.
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+H:7543|89% M:4076|58% E:99% W:98% [E|D] R:0 46:24.28-e- Shaping : 4[42|0|0|0|64|21]  ( +1467h 17% -300m 4% )[RL2 ffst PR] 
+[Prio]: Paralysis (24)
+[Prio]: Paralysis (2)
+Alyzar takes a drink from an oaken vial.
+H:7543|89% M:4076|58% E:99% W:98% [E|D] R:0 46:24.66-e- Shaping : 4[42|0|0|0|64|21] [RL2 ffst PR] 
+You may eat another plant or mineral. Eat (1.387)
+H:7543|89% M:4076|58% E:99% W:98% [E|D] R:0 46:24.82-e- Shaping : 4[42|0|0|0|64|21] [RL2 ffst PR] 
+erlq
+setalias pk stand/get body/ wield shield360716/MANIFEST QUAKE Alyzar / TERRAN POWDERISE Alyzar right leg/ assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "stand/get body/ wield shield360716/MANIFEST QUAKE Alyzar / TERRAN POWDERISE Alyzar right leg/ assess"
+H:7543|89% M:4061|58% E:99% W:98% [E|D] R:0 46:25.34-e- Shaping : 4[42|0|0|0|64|21] [RL2 ffst PR] 
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+Both of your legs must be free and unhindered to do that.
+You must be standing first.
+You must be standing first.
+You glance over Alyzar and see that his health is at 6038/6950 [86%].
+[Health]: 87%
+pt Alyzar's health at 6038/6950
+H:7543|89% M:3961|56% E:99% W:98% [E|D] R:0 46:25.85-ex- Shaping : 4[42|0|0|0|64|21] [RL2 ffst PR] 
+With a smooth lunge to the right, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your right leg.
+ LIMB DAMAGE: right leg (138.6%)
+  ---- >10s since last parry! ----------- PARRYING left leg
+queue add eb parry left leg
+[0|0|0|0|79.2|138.6]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your left leg.
+ LIMB DAMAGE: left leg (92.4%)
+  ---- >10s since last parry! ----------- PARRYING right leg
+queue add eb parry right leg
+[0|0|0|0|92.4|138.6]
+Health lost: 1434 (cold).
+[AFF]: Shivering
+The ice-covered blade sends a wave of cold over your skin, chilling you to the bone.
+Lashing out with a clenched fist, Alyzar aims a precise strike at your sternum.
+The blow cracks bone, and a flood of pain washes through your chest.
+Health lost: 342 (physical blunt).
+H:5767|68% M:3961|56% E:99% W:98% [E|D] R:0 46:25.95-ex- Shaping : 4[42|0|0|0|64|21]  ( -1776h 20% ) (130B)[RL2 shiv ffst PR] 
+[OUTR]: 1 Potash (188)
+You eat a potash crystal.
+outr potash
+H:6444|76% M:4158|59% E:99% W:98% [E|D] R:0 46:25.97-ex- Shaping : 4[42|0|0|0|64|21]  ( +677h 7% +197m 2% )[RL2 shiv ffst PR] 
+You are not the member of any party.
+H:6444|76% M:4158|59% E:99% W:98% [E|D] R:0 46:25.98-ex- Shaping : 4[42|0|0|0|64|21] [RL2 shiv ffst PR] 
+You will now attempt to parry attacks to your left leg.
+H:6444|76% M:4158|59% E:99% W:98% [E|D] R:0 46:26.10-ex- Shaping : 4[42|0|0|0|64|21] [RL2 shiv ffst PR] 
+You will now attempt to parry attacks to your right leg.
+H:6444|76% M:4158|59% E:99% W:98% [E|D] R:0 46:26.11-ex- Shaping : 4[42|0|0|0|64|21] [RL2 shiv ffst PR] 
+[Prio]: Paralysis (24)
+[OUTR]: 1 Potash (187)
+
+====================DISRUPTED====================
+====================DISRUPTED====================
+====================DISRUPTED====================
+[AFF]: Disrupted
+You have a particularly intense shiver.
+H:6444|76% M:4158|59% E:99% W:98% [E|D] R:0 46:26.43-x- Shaping : 4[42|0|0|0|64|21] [RL2 shiv DISR ffst PR] 
+You begin intense concentration to restore your equilibrium.
+Equilibrium used: 1.70s.
+You touch the tree of life tattoo.
+Your body warms up and you stop shivering.
+[AFF]: Shivering
+Alyzar eats a potash crystal.
+H:6444|76% M:4158|59% E:99% W:98% [E|D] R:0 46:26.56-x- Shaping : 4[42|0|0|0|64|21] [RL2 ffst PR] 
+You may purge yourself of weakness once again.
+H:6444|76% M:4158|59% E:99% W:98% [E|D] R:0 46:26.79-x- Shaping : 4[42|0|0|0|64|21] [RL2 ffst PR] 
+
+====================DAMAGEDLEFTLEG====================
+====================DAMAGEDLEFTLEG====================
+====================DAMAGEDLEFTLEG====================
+With a smooth lunge to the right, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your right leg.
+ LIMB DAMAGE: right leg (158.4%)
+  ---- >10s since last parry![0|0|0|0|92.4|158.4]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your left leg.
+ LIMB DAMAGE: left leg (105.6%)
+  ---- >10s since last parry! ----------- PARRYING left leg
+queue add eb parry left leg
+[0|0|0|0|105.6|158.4]
+[AFF]: Brokenleftleg
+[AFF]: Damagedleftleg
+Your left leg is greatly damaged from the beating.
+Health lost: 1434 (cold).
+Lashing out with a clenched fist, Alyzar aims a precise strike at your sternum.
+The blow cracks bone, and a flood of pain washes through your chest.
+Your shield completely absorbs the damage.
+H:5010|59% M:4150|59% E:99% W:98% [E|D] R:0 46:27.79-x- Shaping : 4[42|0|0|0|64|21]  ( -1434h 16% ) (125B)[RL2 LL2 ffst PR] 
+The shroud of magma cloaking you is no longer sustainable, and it falls away.
+H:5010|59% M:4150|59% E:99% W:98% [E|D] R:0 46:27.81-x- Shaping : 3[42|0|0|0|64|21] [RL2 LL2 ffst PR] 
+Health lost: 5 (raw).
+You bleed 5 health.
+H:5005|59% M:3790|54% E:99% W:98% [E|D] R:0 46:28.04-x- Shaping : 3[42|0|0|0|64|21]  ( -360m 5% )[RL2 LL2 ffst PR] 
+You have recovered equilibrium.                                                         --- EQUILIBRIUM ---
+You will now attempt to parry attacks to your left leg.
+H:5005|59% M:3790|54% E:99% W:98% [E|D] R:0 46:28.22-ex- Shaping : 3[42|0|0|0|64|21] [RL2 LL2 ffst PR] 
+eaq
+setalias pk stand/get body/ wield shield360716/ terran eruption / MANIFEST QUAKE Alyzar / MANIFEST AVALANCHE Alyzar/ assess
+queue addclearfull eb!p!w!t  pk
+
+[SLC]: Reset left leg counts.
+Your left leg feels stronger and healthier.
+[AFF]: Damagedleftleg
+You may apply another salve to yourself. Legs (4.037)
+H:5005|59% M:3790|54% E:99% W:98% [E|D] R:0 46:28.27-ex- Shaping : 3[42|0|0|0|64|21] [RL2 ll1 ffst PR] 
+You take out some salve and quickly rub it on your legs.
+H:5005|59% M:3790|54% E:99% W:98% [E|D] R:0 46:28.36-ex- Shaping : 3[42|0|0|0|64|21] [RL2 ll1 ffst PR] 
+Alias "pk" will now execute: "stand/get body/ wield shield360716/ terran eruption / MANIFEST QUAKE Alyzar / MANIFEST AVALANCHE Alyzar/ assess"
+
+H:5005|59% M:3790|54% E:99% W:98% [E|D] R:0 46:28.39-ex- Shaping : 3[42|0|0|0|64|21] [RL2 ll1 ffst PR] 
+Both of your legs must be free and unhindered to do that.
+You summon up the magma that courses beneath your outer layers, sending it forth in an eruption to drive out that which taints your perfect form.
+The bones in your left leg mend.
+[AFF]: Brokenleftleg
+You must be standing first.
+You must be standing first.
+You glance over Alyzar and see that his health is at 6594/6950 [94%].
+[Health]: 95%
+pt Alyzar's health at 6594/6950
+setalias pk stand/get body/ wield shield360716/MANIFEST QUAKE Alyzar / MANIFEST AVALANCHE Alyzar/ assess
+H:5005|59% M:3340|47% E:99% W:98% [E|D] R:0 46:28.40-ex- Shaping : 3[42|0|0|0|64|21]  ( -450m 6% )[RL2 ffst PR] 
+You may drink another health or mana elixir. Health (4.399)
+H:5005|59% M:3340|47% E:99% W:98% [E|D] R:0 46:28.75-ex- Shaping : 3[42|0|0|0|64|21] [RL2 ffst PR] 
+You are not the member of any party.
+H:5005|59% M:3340|47% E:99% W:98% [E|D] R:0 46:28.76-ex- Shaping : 3[42|0|0|0|64|21] [RL2 ffst PR] 
+Alias "pk" will now execute: "stand/get body/ wield shield360716/MANIFEST QUAKE Alyzar / MANIFEST AVALANCHE Alyzar/ assess"
+H:5005|59% M:3340|47% E:99% W:98% [E|D] R:0 46:28.76-ex- Shaping : 3[42|0|0|0|64|21] [RL2 ffst PR] 
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+H:6843|80% M:3340|47% E:99% W:98% [E|D] R:0 46:28.86-ex- Shaping : 3[42|0|0|0|64|21]  ( +1838h 21% )[RL2 ffst PR] 
+eaq
+queue addclearfull eb!p!w!t  pk
+Both of your legs must be free and unhindered to do that.
+You must be standing first.
+You must be standing first.
+You glance over Alyzar and see that his health is at 6594/6950 [94%].
+[Health]: 95%
+pt Alyzar's health at 6594/6950
+H:6843|80% M:3240|46% E:99% W:98% [E|D] R:0 46:29.44-ex- Shaping : 3[42|0|0|0|64|21] [RL2 ffst PR] 
+You are not the member of any party.
+H:6843|80% M:3240|46% E:99% W:98% [E|D] R:0 46:29.58-ex- Shaping : 3[42|0|0|0|64|21] [RL2 ffst PR] 
+With a smooth lunge to the right, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your right leg.
+ LIMB DAMAGE: right leg (178.2%)
+  ---- >10s since last parry! ----------- PARRYING right leg
+queue add eb parry right leg
+[0|0|0|0|0|178.2]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your left leg.
+ LIMB DAMAGE: left leg (13.2%)
+  ---- >10s since last parry! ----------- PARRYING left leg
+queue add eb parry left leg
+[0|0|0|0|13.2|178.2]
+Health lost: 1434 (cold).
+[AFF]: Shivering
+The ice-covered blade sends a wave of cold over your skin, chilling you to the bone.
+Lashing out with a clenched fist, Alyzar aims a precise strike at your sternum.
+The blow cracks bone, and a flood of pain washes through your chest.
+Health lost: 342 (physical blunt).
+H:5067|59% M:3240|46% E:99% W:98% [E|D] R:0 46:29.70-ex- Shaping : 3[42|0|0|0|64|21]  ( -1776h 20% ) (115B)[RL2 shiv ffst PR] 
+eaq
+setalias pk stand/get body/ wield shield360716/ terran eruption / MANIFEST QUAKE Alyzar / MANIFEST AVALANCHE Alyzar/ assess
+queue addclearfull eb!p!w!t  pk
+You will now attempt to parry attacks to your right leg.
+H:5490|64% M:2940|42% E:99% W:98% [E|D] R:0 46:29.86-ex- Shaping : 3[42|0|0|0|64|21]  ( +423h 4% -300m 4% )[RL2 shiv ffst PR] 
+You will now attempt to parry attacks to your left leg.
+H:5490|64% M:2940|42% E:99% W:98% [E|D] R:0 46:29.86-ex- Shaping : 3[42|0|0|0|64|21] [RL2 shiv ffst PR] 
+Alias "pk" will now execute: "stand/get body/ wield shield360716/ terran eruption / MANIFEST QUAKE Alyzar / MANIFEST AVALANCHE Alyzar/ assess"
+
+H:5490|64% M:2925|42% E:99% W:98% [E|D] R:0 46:30.02-ex- Shaping : 3[42|0|0|0|64|21] [RL2 shiv ffst PR] 
+Both of your legs must be free and unhindered to do that.
+You may not cleanse your form of weakness quite so soon after doing so previously.
+You must be standing first.
+You must be standing first.
+You glance over Alyzar and see that his health is at 6594/6950 [94%].
+[Health]: 95%
+pt Alyzar's health at 6594/6950
+H:5490|64% M:2825|40% E:99% W:98% [E|D] R:0 46:30.02-ex- Shaping : 3[42|0|0|0|64|21] [RL2 shiv ffst PR] 
+You are not the member of any party.
+H:5490|64% M:2825|40% E:99% W:98% [E|D] R:0 46:30.19-ex- Shaping : 3[42|0|0|0|64|21] [RL2 shiv ffst PR] 
+eaq
+queue addclearfull eb!p!w!t  pk
+Both of your legs must be free and unhindered to do that.
+You may not cleanse your form of weakness quite so soon after doing so previously.
+You must be standing first.
+You must be standing first.
+You may not assess someone again so soon after doing so previously.
+H:5490|64% M:2825|40% E:99% W:98% [E|D] R:0 46:30.63-ex- Shaping : 3[42|0|0|0|64|21] [RL2 shiv ffst PR] 
+
+====================DISRUPTED====================
+====================DISRUPTED====================
+====================DISRUPTED====================
+[AFF]: Disrupted
+You have a particularly intense shiver.
+H:5490|64% M:2825|40% E:99% W:98% [E|D] R:0 46:31.06-x- Shaping : 3[42|0|0|0|64|21] [RL2 shiv DISR ffst PR] 
+You begin intense concentration to restore your equilibrium.
+Equilibrium used: 1.70s.
+H:5490|64% M:2825|40% E:99% W:98% [E|D] R:0 46:31.17-x- Shaping : 3[42|0|0|0|64|21] [RL2 shiv ffst PR] 
+With a smooth lunge to the right, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your right leg.
+ LIMB DAMAGE: right leg (198%)
+  ---- >10s since last parry! ----------- PARRYING right leg
+queue add eb parry right leg
+[0|0|0|0|13.2|198]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your left leg.
+ LIMB DAMAGE: left leg (26.4%)
+  ---- >10s since last parry! ----------- PARRYING left leg
+queue add eb parry left leg
+[0|0|0|0|26.4|198]
+Health lost: 1434 (cold).
+[AFF]: Frozen
+The ice-covered blade sends a wave of cold over your skin, freezing you to the bone.
+Health lost: 863 (cold).
+Lashing out with a clenched fist, Alyzar aims a precise strike at your sternum.
+The blow cracks bone, and a flood of pain washes through your chest.
+Health lost: 342 (physical blunt).
+H:2851|33% M:2825|40% E:99% W:98% [E|D] R:0 46:31.60-x- Shaping : 3[42|0|0|0|64|21]  ( -2639h 31% ) (130B)[RL2 froz shiv ffst PR] 
+You may eat another bit of irid moss or potash.
+H:2851|33% M:2461|35% E:99% W:98% [E|D] R:0 46:31.91-x- Shaping : 3[42|0|0|0|64|21]  ( -364m 5% )[RL2 froz shiv ffst PR] 
+You eat a potash crystal.
+outr potash
+H:3528|41% M:3018|43% E:99% W:98% [E|D] R:0 46:31.92-x- Shaping : 3[42|0|0|0|64|21]  ( +677h 7% +557m 7% )[RL2 froz shiv ffst PR] 
+[OUTR]: 1 Potash (186)
+TERRAN MAGNET RISE
+
+[SLC]: Reset right leg counts.
+Your right leg feels stronger and healthier.
+[AFF]: Damagedrightleg
+You may apply another salve to yourself. Legs (3.917)
+H:4233|49% M:3157|45% E:99% W:98% [E|D] R:0 46:32.38-x- Shaping : 3[42|0|0|0|64|21]  ( +705h 8% )[rl1 shiv froz ffst PR] 
+ec
+setalias pk stand/get body/ wield shield360716/ terran eruption / TERRAN CRUNCH Alyzar/ assess
+queue addclearfull eb!p!w!t  pk
+Both of your legs must be free and unhindered to do that.
+H:4233|49% M:3157|45% E:99% W:98% [E|D] R:0 46:32.49-x- Shaping : 3[42|0|0|0|64|21] [rl1 shiv froz ffst PR] 
+[Prio]: Paralysis (2)
+You take out some salve and quickly rub it on your skin.
+Though still shivering, you are no longer frozen solid.
+[AFF]: Frozen
+H:4233|49% M:3157|45% E:99% W:98% [E|D] R:0 46:32.57-x- Shaping : 3[42|0|0|0|64|21] [rl1 shiv ffst PR] 
+Alias "pk" will now execute: "stand/get body/ wield shield360716/ terran eruption / TERRAN CRUNCH Alyzar/ assess"
+H:4233|49% M:3157|45% E:99% W:98% [E|D] R:0 46:32.58-x- Shaping : 3[42|0|0|0|64|21] [rl1 shiv ffst PR] 
+You have recovered equilibrium.                                                         --- EQUILIBRIUM ---
+Both of your legs must be free and unhindered to do that.
+You may not cleanse your form of weakness quite so soon after doing so previously.
+You must be standing first.
+You glance over Alyzar and see that his health is at 6950/6950 [100%].
+[Health]: 100%
+pt Alyzar's health at 6950/6950
+H:4233|49% M:3057|43% E:99% W:98% [E|D] R:0 46:32.79-ex- Shaping : 3[42|0|0|0|64|21] [rl1 shiv ffst PR] 
+Magma ceases to flow from between the cracks in your plates.
+H:4233|49% M:3057|43% E:99% W:98% [E|D] R:0 46:32.81-ex- Shaping : 2[42|0|0|0|64|21] [rl1 shiv ffst PR] 
+You are not the member of any party.
+H:4233|49% M:3057|43% E:99% W:98% [E|D] R:0 46:32.94-ex- Shaping : 2[42|0|0|0|64|21] [rl1 shiv ffst PR] 
+You may drink another health or mana elixir. Health (4.294)
+H:4233|49% M:3057|43% E:99% W:98% [E|D] R:0 46:33.20-ex- Shaping : 2[42|0|0|0|64|21] [rl1 shiv ffst PR] 
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+H:5824|68% M:3057|43% E:99% W:98% [E|D] R:0 46:33.41-ex- Shaping : 2[42|0|0|0|64|21]  ( +1591h 18% )[rl1 shiv ffst PR] 
+You may apply another salve to yourself. Skin (0.836)
+With a smooth lunge to the right, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your right leg.
+ LIMB DAMAGE: right leg (19.8%)
+  ---- >10s since last parry![0|0|0|0|26.4|19.8]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your left leg.
+ LIMB DAMAGE: left leg (39.6%)
+  ---- >10s since last parry![0|0|0|0|39.6|19.8]
+Health lost: 1434 (cold).
+Lashing out with a clenched fist, Alyzar aims a precise strike at your sternum.
+The blow cracks bone, and a flood of pain washes through your chest.
+Health lost: 342 (physical blunt).
+H:4048|47% M:3057|43% E:99% W:98% [E|D] R:0 46:33.50-ex- Shaping : 2[42|0|0|0|64|21]  ( -1776h 20% ) (125B)[rl1 shiv ffst PR] 
+Health lost: 125 (raw).
+You bleed 125 health.
+H:3923|46% M:3057|43% E:99% W:98% [E|D] R:0 46:33.55-ex- Shaping : 2[42|0|0|0|64|21] [rl1 shiv ffst PR] 
+TERRAN MAGNET RISE
+You take out some salve and quickly rub it on your legs.
+The bones in your right leg mend.
+[AFF]: Brokenrightleg
+You stand up.
+You are already oriented in an upright position: you have no need to flex your powers of magnetism.
+H:3923|46% M:2757|39% E:99% W:97% [E|D] R:0 46:33.80-ex- Shaping : 2[42|0|0|0|64|21]  ( -300m 4% )[shiv ffst] 
+You may apply another salve to yourself. Legs (0.839)
+H:3923|46% M:2757|39% E:99% W:97% [E|D] R:0 46:34.50-ex- Shaping : 2[42|0|0|0|64|21] [shiv ffst] 
+You take out some salve and quickly rub it on your skin.
+Your body warms up and you stop shivering.
+[AFF]: Shivering
+H:3923|46% M:2757|39% E:99% W:97% [E|D] R:0 46:34.55-ex- Shaping : 2[42|0|0|0|64|21] [ffst] 
+ec
+setalias pk stand/get body/ wield shield360716/TERRAN CRUNCH Alyzar/ assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN CRUNCH Alyzar/ assess"
+H:3923|46% M:2742|39% E:99% W:97% [E|D] R:0 46:35.28-ex- Shaping : 2[42|0|0|0|64|21] [ffst] 
+You launch a magma-wreathed fist at Alyzar, but he ducks aside at the last moment.
+Magma begins to boil up from beneath your outer strata.
+Balance used: 2.0s.
+You glance over Alyzar and see that his health is at 6950/6950 [100%].
+[Health]: 100%
+pt Alyzar's health at 6950/6950
+H:3923|46% M:2642|37% E:99% W:97% [E|D] R:0 46:35.37-e- Shaping : 3[42|0|0|0|64|21] [ffst] 
+You may apply another salve to yourself. Skin (0.96)
+H:3923|46% M:2642|37% E:99% W:97% [E|D] R:0 46:35.48-e- Shaping : 3[42|0|0|0|64|21] [ffst] 
+With a smooth lunge to the right, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your right leg.
+ LIMB DAMAGE: right leg (39.6%)
+  ---- >10s since last parry![0|0|0|0|39.6|39.6]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your left leg.
+ LIMB DAMAGE: left leg (52.8%)
+  ---- >10s since last parry! ----------- PARRYING right leg
+queue add eb parry right leg
+[0|0|0|0|52.8|39.6]
+Health lost: 1434 (cold).
+[AFF]: Shivering
+The ice-covered blade sends a wave of cold over your skin, chilling you to the bone.
+Ducking behind you, Alyzar strikes at your hamstring with a rigid grip.
+The crippling blow renders your leg insensate.
+[AFF]: Hamstrung
+H:2489|29% M:2642|37% E:99% W:97% [E|D] R:0 46:35.49-e- Shaping : 3[42|0|0|0|64|21]  ( -1434h 16% ) (132B)[shiv ffst HAMS] 
+You take out some salve and quickly rub it on your skin.
+Your body warms up and you stop shivering.
+[AFF]: Shivering
+You are not the member of any party.
+H:2489|29% M:2282|32% E:99% W:97% [E|D] R:0 46:35.63-e- Shaping : 3[42|0|0|0|64|21]  ( -360m 5% )[ffst HAMS] 
+You may apply another salve to yourself. Skin (0.853)
+H:2489|29% M:2282|32% E:99% W:97% [E|D] R:0 46:36.50-e- Shaping : 3[42|0|0|0|64|21] [ffst HAMS] 
+
+[DEF]: Insulation
+You take out some salve and quickly rub it on your skin.
+A feeling of comfortable warmth spreads over you.
+H:2489|29% M:2282|32% E:99% W:97% [E|D] R:0 46:36.61-e- Shaping : 3[42|0|0|0|64|21] [ffst HAMS] 
+ec
+queue addclearfull eb!p!w!t  pk
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You will now attempt to parry attacks to your right leg.
+H:2489|29% M:2282|32% E:99% W:97% [E|D] R:0 46:37.24-ex- Shaping : 3[42|0|0|0|64|21] [ffst HAMS] 
+You launch a magma-wreathed fist at Alyzar, but he ducks aside at the last moment.
+Magma explodes from the cracks between the plates covering you, forming a cloak of molten stone to enshroud you.
+Balance used: 2.0s.
+You glance over Alyzar and see that his health is at 6950/6950 [100%].
+[Health]: 100%
+pt Alyzar's health at 6950/6950
+H:2489|29% M:2182|31% E:99% W:97% [E|D] R:0 46:37.30-e- Shaping : 4[42|0|0|0|64|21] [ffst HAMS] 
+TERRAN MAGNET RISE
+You may apply another salve to yourself. Skin (0.872)
+With a smooth lunge to the right, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+You parry the attack with a deft manoeuvre.            ---------- WE PARRIED! GOOD JOB!
+Sweeping out with a blade hand, Alyzar strikes at the back of your knee.
+[AFF]: Prone
+You tumble to the ground as your leg abruptly gives out.
+H:2489|29% M:2182|31% E:99% W:97% [E|D] R:0 46:37.49-e- Shaping : 4[42|0|0|0|64|21] [PR ffst HAMS] 
+You are not the member of any party.
+H:2489|29% M:2182|31% E:99% W:97% [E|D] R:0 46:37.50-e- Shaping : 4[42|0|0|0|64|21] [PR ffst HAMS] 
+You manipulate the magnetic forces surrounding you, and reorient yourself into an upright position.
+H:2489|29% M:2182|31% E:99% W:97% [E|D] R:0 46:37.61-e- Shaping : 4[42|0|0|0|64|21] [ffst HAMS] 
+You may drink another health or mana elixir. Health (4.445)
+H:2489|29% M:2182|31% E:99% W:97% [E|D] R:0 46:37.79-e- Shaping : 4[42|0|0|0|64|21] [ffst HAMS] 
+You may purge yourself of weakness once again.
+H:2489|29% M:2182|31% E:99% W:97% [E|D] R:0 46:37.85-e- Shaping : 4[42|0|0|0|64|21] [ffst HAMS] 
+You may eat another bit of irid moss or potash.
+H:2489|29% M:2182|31% E:99% W:97% [E|D] R:0 46:37.88-e- Shaping : 4[42|0|0|0|64|21] [ffst HAMS] 
+A trickle of sweat cools your scorched skin as the raging blaze abates.
+[AFF]: Flamefisted
+H:2489|29% M:2182|31% E:99% W:97% [E|D] R:0 46:37.93-e- Shaping : 4[42|0|0|0|64|21] [HAMS] 
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+You eat a potash crystal.
+outr potash
+H:4934|58% M:2739|39% E:99% W:97% [E|D] R:0 46:37.97-e- Shaping : 4[42|0|0|0|64|21]  ( +2445h 28% +557m 7% )[HAMS] 
+[OUTR]: 1 Potash (185)
+tit
+queue addclearfull eb!p!w!t  TERRAN TITAN
+tit
+queue addclearfull eb!p!w!t  TERRAN TITAN
+Health lost: 12 (raw).
+You bleed 12 health.
+H:4922|58% M:2739|39% E:99% W:97% [E|D] R:0 46:39.04-e- Shaping : 4[42|0|0|0|64|21] [HAMS] 
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+A roar builds within your stone forged form, building to a deafening bellow. As your body channels the might of the earth it bursts asunder, a
+towering column of magma rocketing into the sky. Even as you are consumed by the force of nature you become a part of it, and it a part of you. Molten 
+eyes open, and we stare down upon our enemies.
+Balance used: 2.5s.
+curing priority Paralysis 20
+H:2000000|23612% M:1739|24% E:94% W:90% [E|D] R:0 46:39.22-e- Shaping : 0[42|0|0|0|64|21]  ( +1995078h 23554% -1000m 14% )[HAMS] 
+
+[DEF]: InsulationTERRAN MAGNET RISE
+With a smooth lunge to the left, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your left leg.
+ LIMB DAMAGE: left leg (72.6%)
+[0|0|0|0|72.6|39.6]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your right leg.
+ LIMB DAMAGE: right leg (52.8%)
+[0|0|0|0|72.6|52.8]
+Health lost: 1434 (cold).
+The ice-covered blade strips away your protective covering.
+Sweeping out with a blade hand, Alyzar strikes at the back of your knee.
+[AFF]: Prone
+You tumble to the ground as your leg abruptly gives out.
+H:1998566|23595% M:1739|24% E:94% W:90% [E|D] R:0 46:39.43-e- Shaping : 0[42|0|0|0|64|21]  ( -1434h 16% ) (115B)[PR HAMS] 
+tit
+queue addclearfull eb!p!w!t  TERRAN TITAN
+[Prio]: Paralysis (20)
+
+[DEF]: Insulation
+You take out some salve and quickly rub it on your skin.
+A feeling of comfortable warmth spreads over you.
+You manipulate the magnetic forces surrounding you, and reorient yourself into an upright position.
+H:1998566|23595% M:1439|20% E:94% W:90% [E|D] R:0 46:39.60-e- Shaping : 0[42|0|0|0|64|21]  ( -300m 4% )[HAMS] 
+[Prio]: Paralysis (2)
+[Prio]: Paralysis (2)
+Alyzar moves in to engage you.
+H:1998566|23595% M:1439|20% E:94% W:90% [E|D] R:0 46:39.80-e- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+You may apply another salve to yourself. Skin (0.927)
+H:1998566|23595% M:1424|20% E:94% W:90% [E|D] R:0 46:40.45-e- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+You may utilise the tree tattoo again. Tree (14.043)
+H:1998566|23595% M:1424|20% E:94% W:90% [E|D] R:0 46:40.50-e- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+ep
+setalias pk stand/get body/ wield shield360716/TERRAN PASTE Alyzar/ assess
+queue addclearfull eb!p!w!t  pk
+
+[DEF]: Insulation
+With a smooth lunge to the left, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your left leg.
+ LIMB DAMAGE: left leg (92.4%)
+[0|0|0|0|92.4|52.8]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your right leg.
+ LIMB DAMAGE: right leg (66%)
+[0|0|0|0|92.4|66]
+Health lost: 1434 (cold).
+The ice-covered blade strips away your protective covering.
+Ducking behind you, Alyzar strikes at your hamstring with a rigid grip.
+The crippling blow renders your leg insensate.
+H:1997132|23578% M:1424|20% E:94% W:90% [E|D] R:0 46:41.42-e- Shaping : 0[42|0|0|0|64|21]  ( -1434h 16% ) (130B)[HAMS] 
+
+[DEF]: Insulation
+You take out some salve and quickly rub it on your skin.
+A feeling of comfortable warmth spreads over you.
+H:1997132|23578% M:1424|20% E:94% W:90% [E|D] R:0 46:41.49-e- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN PASTE Alyzar/ assess"
+H:1997132|23578% M:1424|20% E:94% W:90% [E|D] R:0 46:41.50-e- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+Raising a foot, you bring it crashing down upon the insolent worm that is Alyzar.
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Alyzar and see that his health is at 2649/6950 [38%].
+[Health]: 39%
+pt Alyzar's health at 2649/6950
+H:1997132|23578% M:1324|19% E:94% W:90% [E|D] R:0 46:41.72-e- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+Alyzar takes a drink from an oaken vial.
+Alyzar eats a potash crystal.
+H:1997132|23578% M:1324|19% E:94% W:90% [E|D] R:0 46:41.85-e- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:1997132|23578% M:1324|19% E:94% W:90% [E|D] R:0 46:41.87-e- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+ep
+queue addclearfull eb!p!w!t  pk
+You may drink another health or mana elixir. Health (4.442)
+You may apply another salve to yourself. Skin (0.963)
+H:1997132|23578% M:1316|18% E:94% W:90% [E|D] R:0 46:42.45-e- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+You take a drink from a black-walnut vial.
+Your mind feels stronger and more alert.
+H:1997132|23578% M:2340|33% E:94% W:90% [E|D] R:0 46:42.64-e- Shaping : 0[42|0|0|0|64|21]  ( +1024m 14% ) (130B)[HAMS] 
+ep
+queue addclearfull eb!p!w!t  pk
+curing priority Paralysis 2
+[Prio]: Paralysis (2)
+TERRAN MAGNET RISE
+With a smooth lunge to the right, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+You parry the attack with a deft manoeuvre.            ---------- WE PARRIED! GOOD JOB!
+Sweeping out with a blade hand, Alyzar strikes at the back of your knee.
+[AFF]: Prone
+You tumble to the ground as your leg abruptly gives out.
+H:1997132|23578% M:2119|30% E:94% W:90% [E|D] R:0 46:43.25-e- Shaping : 0[42|0|0|0|64|21]  ( -221m 3% )[PR HAMS] 
+You manipulate the magnetic forces surrounding you, and reorient yourself into an upright position.
+H:1997132|23578% M:2119|30% E:94% W:90% [E|D] R:0 46:43.44-e- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+You may eat another bit of irid moss or potash.
+H:1997132|23578% M:2119|30% E:94% W:90% [E|D] R:0 46:43.99-e- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+You eat a potash crystal.
+outr potash
+H:1997132|23578% M:2676|38% E:94% W:90% [E|D] R:0 46:44.19-e- Shaping : 0[42|0|0|0|64|21]  ( +557m 7% )[HAMS] 
+[OUTR]: 1 Potash (184)
+ep
+queue addclearfull eb!p!w!t  pk
+Health lost: 10 (raw).
+You bleed 10 health.
+H:1997122|23578% M:2676|38% E:94% W:90% [E|D] R:0 46:44.54-e- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+Raising a foot, you bring it crashing down upon the insolent worm that is Alyzar.
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Alyzar and see that his health is at 695/6950 [10%].
+[Health]: 10%
+pt Alyzar's health at 695/6950
+H:1997122|23578% M:2576|36% E:93% W:90% [E|D] R:0 46:44.62-e- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:1997122|23578% M:2561|36% E:93% W:90% [E|D] R:0 46:44.96-e- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+ep
+queue addclearfull eb!p!w!t  pk
+
+====================DAMAGEDLEFTLEG====================
+====================DAMAGEDLEFTLEG====================
+====================DAMAGEDLEFTLEG====================
+With a smooth lunge to the left, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your left leg.
+ LIMB DAMAGE: left leg (112.2%)
+ ----------- PARRYING left leg
+queue add eb parry left leg
+[0|0|0|0|112.2|66]
+[AFF]: Brokenleftleg
+[AFF]: Damagedleftleg
+Your left leg is greatly damaged from the beating.
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your right leg.
+ LIMB DAMAGE: right leg (79.2%)
+[0|0|0|0|112.2|79.2]
+Health lost: 1434 (cold).
+Sweeping out with a blade hand, Alyzar strikes at the back of your knee.
+[AFF]: Prone
+You tumble to the ground as your leg abruptly gives out.
+H:1995688|23561% M:2561|36% E:93% W:90% [E|D] R:0 46:45.07-e- Shaping : 0[42|0|0|0|64|21]  ( -1434h 16% ) (115B)[LL2 PR HAMS] 
+You take out some salve and quickly rub it on your legs.
+[Prio]: Paralysis (24)
+ep
+queue addclearfull eb!p!w!t  pk
+ep
+queue addclearfull eb!p!w!t  pk
+curing priority Paralysis 2
+[Prio]: Paralysis (2)
+Alyzar takes a drink from an oaken vial.
+H:1995688|23561% M:2261|32% E:93% W:90% [E|D] R:0 46:46.43-e- Shaping : 0[42|0|0|0|64|21]  ( -300m 4% )[LL2 PR HAMS] 
+ep
+queue addclearfull eb!p!w!t  pk
+ep
+queue addclearfull eb!p!w!t  pk
+
+[DEF]: Insulation
+You may drink another health or mana elixir. Mana (4.427)
+With a smooth lunge to the left, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your left leg.
+ LIMB DAMAGE: left leg (132%)
+ ----------- PARRYING right leg
+queue add eb parry right leg
+[0|0|0|0|132|79.2]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your right leg.
+ LIMB DAMAGE: right leg (92.4%)
+[0|0|0|0|132|92.4]
+Health lost: 1434 (cold).
+The ice-covered blade strips away your protective covering.
+Lashing out with a clenched fist, Alyzar aims a precise strike at your sternum.
+The blow cracks bone, and a flood of pain washes through your chest.
+Health lost: 342 (physical blunt).
+H:1993912|23540% M:2261|32% E:93% W:90% [E|D] R:0 46:47.08-e- Shaping : 0[42|0|0|0|64|21]  ( -1776h 20% ) (130B)[LL2 PR HAMS] 
+You take a drink from a black-walnut vial.
+Your mind feels stronger and more alert.
+H:1993912|23540% M:2803|40% E:93% W:90% [E|D] R:0 46:47.20-e- Shaping : 0[42|0|0|0|64|21]  ( +542m 7% )[LL2 PR HAMS] 
+ep
+queue addclearfull eb!p!w!t  pk
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+Both of your legs must be free and unhindered to do that.
+You must be standing first.
+You glance over Alyzar and see that his health is at 2299/6950 [33%].
+[Health]: 34%
+pt Alyzar's health at 2299/6950
+You will now attempt to parry attacks to your right leg.
+H:1993912|23540% M:2703|38% E:93% W:90% [E|D] R:0 46:47.52-ex- Shaping : 0[42|0|0|0|64|21] [LL2 PR HAMS] 
+Both of your legs must be free and unhindered to do that.
+You must be standing first.
+You may not assess someone again so soon after doing so previously.
+H:1993912|23540% M:2703|38% E:93% W:90% [E|D] R:0 46:47.55-ex- Shaping : 0[42|0|0|0|64|21] [LL2 PR HAMS] 
+You are not the member of any party.
+H:1993912|23540% M:2703|38% E:93% W:90% [E|D] R:0 46:47.66-ex- Shaping : 0[42|0|0|0|64|21] [LL2 PR HAMS] 
+Alyzar takes some salve from a vial and rubs it on his torso.
+
+
+OPPONENT APPLIED TO THEIR torso!!
+
+
+H:1993912|23540% M:2703|38% E:93% W:90% [E|D] R:0 46:47.78-ex- Shaping : 0[42|0|0|0|64|21] [LL2 PR HAMS] 
+Alyzar eats a potash crystal.
+H:1993912|23540% M:2703|38% E:93% W:90% [E|D] R:0 46:47.00-ex- Shaping : 0[42|0|0|0|64|21] [LL2 PR HAMS] 
+
+====================DAMAGEDRIGHTLEG====================
+====================DAMAGEDRIGHTLEG====================
+====================DAMAGEDRIGHTLEG====================
+With a smooth lunge to the left, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your left leg.
+ LIMB DAMAGE: left leg (151.8%)
+[0|0|0|0|151.8|92.4]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your right leg.
+ LIMB DAMAGE: right leg (105.6%)
+ ----------- PARRYING left leg
+queue add eb parry left leg
+[0|0|0|0|151.8|105.6]
+[AFF]: Brokenrightleg
+[AFF]: Damagedrightleg
+Your right leg is greatly damaged from the beating.
+Health lost: 1434 (cold).
+Lashing out with a clenched fist, Alyzar aims a precise strike at your sternum.
+The blow cracks bone, and a flood of pain washes through your chest.
+Health lost: 342 (physical blunt).
+H:1992136|23519% M:2703|38% E:93% W:90% [E|D] R:0 46:48.88-ex- Shaping : 0[42|0|0|0|64|21]  ( -1776h 20% ) (125B)[RL2 LL2 PR HAMS] 
+You touch the tree of life tattoo.
+You will now attempt to parry attacks to your left leg.
+H:1992136|23519% M:2343|33% E:93% W:90% [E|D] R:0 46:49.04-ex- Shaping : 0[42|0|0|0|64|21]  ( -360m 5% )[RL2 LL2 PR HAMS] 
+[Prio]: Paralysis (24)
+
+[SLC]: Reset left leg counts.
+Your left leg feels stronger and healthier.
+[AFF]: Damagedleftleg
+You may apply another salve to yourself. Legs (3.935)
+H:1992136|23519% M:2343|33% E:93% W:90% [E|D] R:0 46:49.26-ex- Shaping : 0[42|0|0|0|64|21] [ll1 RL2 PR HAMS] 
+You take out some salve and quickly rub it on your legs.
+H:1992136|23519% M:2343|33% E:93% W:90% [E|D] R:0 46:49.38-ex- Shaping : 0[42|0|0|0|64|21] [ll1 RL2 PR HAMS] 
+ep
+setalias pk stand/get body/ wield shield360716/ terran eruption / TERRAN PASTE Alyzar/ assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "stand/get body/ wield shield360716/ terran eruption / TERRAN PASTE Alyzar/ assess"
+H:1992136|23519% M:2328|33% E:93% W:90% [E|D] R:0 46:49.94-ex- Shaping : 0[42|0|0|0|64|21] [ll1 RL2 PR HAMS] 
+Both of your legs must be free and unhindered to do that.
+You summon up the magma that courses beneath your outer layers, sending it forth in an eruption to drive out that which taints your perfect form.
+The bones in your left leg mend.
+[AFF]: Brokenleftleg
+You must be standing first.
+You glance over Alyzar and see that his health is at 2855/6950 [41%].
+[Health]: 42%
+pt Alyzar's health at 2855/6950
+setalias pk stand/get body/ wield shield360716/TERRAN PASTE Alyzar/ assess
+H:1992136|23519% M:1878|26% E:93% W:89% [E|D] R:0 46:49.95-ex- Shaping : 0[42|0|0|0|64|21]  ( -450m 6% )[RL2 PR HAMS] 
+Health lost: 5 (raw).
+You bleed 5 health.
+H:1992131|23519% M:1878|26% E:93% W:89% [E|D] R:0 46:50.05-ex- Shaping : 0[42|0|0|0|64|21] [RL2 PR HAMS] 
+You may eat another bit of irid moss or potash.
+H:1992131|23519% M:1878|26% E:93% W:89% [E|D] R:0 46:50.09-ex- Shaping : 0[42|0|0|0|64|21] [RL2 PR HAMS] 
+You eat a potash crystal.
+outr potash
+H:1992131|23519% M:2435|34% E:93% W:89% [E|D] R:0 46:50.20-ex- Shaping : 0[42|0|0|0|64|21]  ( +557m 7% )[RL2 PR HAMS] 
+You are not the member of any party.
+H:1992131|23519% M:2435|34% E:93% W:89% [E|D] R:0 46:50.21-ex- Shaping : 0[42|0|0|0|64|21] [RL2 PR HAMS] 
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN PASTE Alyzar/ assess"
+H:1992131|23519% M:2435|34% E:93% W:89% [E|D] R:0 46:50.21-ex- Shaping : 0[42|0|0|0|64|21] [RL2 PR HAMS] 
+[OUTR]: 1 Potash (183)
+ep
+queue addclearfull eb!p!w!t  pk
+Both of your legs must be free and unhindered to do that.
+You must be standing first.
+You may not assess someone again so soon after doing so previously.
+H:1992131|23519% M:2435|34% E:93% W:89% [E|D] R:0 46:50.62-ex- Shaping : 0[42|0|0|0|64|21] [RL2 PR HAMS] 
+With a smooth lunge to the left, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your left leg.
+ LIMB DAMAGE: left leg (19.8%)
+ ----------- PARRYING right leg
+queue add eb parry right leg
+[0|0|0|0|19.8|105.6]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your right leg.
+ LIMB DAMAGE: right leg (118.8%)
+ ----------- PARRYING left leg
+queue add eb parry left leg
+[0|0|0|0|19.8|118.8]
+Health lost: 1434 (cold).
+[AFF]: Shivering
+The ice-covered blade sends a wave of cold over your skin, chilling you to the bone.
+Lashing out with a clenched fist, Alyzar aims a precise strike at your sternum.
+The blow cracks bone, and a flood of pain washes through your chest.
+Health lost: 342 (physical blunt).
+H:1990355|23498% M:2435|34% E:93% W:89% [E|D] R:0 46:50.85-ex- Shaping : 0[42|0|0|0|64|21]  ( -1776h 20% ) (115B)[RL2 shiv PR HAMS] 
+You feel the tightness in your hamstring subside, allowing free movement once again.
+[AFF]: Hamstrung
+H:1990355|23498% M:2435|34% E:93% W:89% [E|D] R:0 46:50.96-ex- Shaping : 0[42|0|0|0|64|21] [RL2 shiv PR] 
+Alyzar takes a drink from an oaken vial.
+H:1990355|23498% M:2435|34% E:93% W:89% [E|D] R:0 46:51.02-ex- Shaping : 0[42|0|0|0|64|21] [RL2 shiv PR] 
+You will now attempt to parry attacks to your right leg.
+H:1990355|23498% M:2435|34% E:93% W:89% [E|D] R:0 46:51.03-ex- Shaping : 0[42|0|0|0|64|21] [RL2 shiv PR] 
+You will now attempt to parry attacks to your left leg.
+H:1990355|23498% M:2435|34% E:93% W:89% [E|D] R:0 46:51.03-ex- Shaping : 0[42|0|0|0|64|21] [RL2 shiv PR] 
+ep
+queue addclearfull eb!p!w!t  pk
+Both of your legs must be free and unhindered to do that.
+You must be standing first.
+You glance over Alyzar and see that his health is at 4413/6950 [63%].
+[Health]: 64%
+pt Alyzar's health at 4413/6950
+H:1990355|23498% M:2335|33% E:93% W:89% [E|D] R:0 46:51.54-ex- Shaping : 0[42|0|0|0|64|21] [RL2 shiv PR] 
+You may drink another health or mana elixir. Mana (4.265)
+H:1990355|23498% M:2335|33% E:93% W:89% [E|D] R:0 46:51.55-ex- Shaping : 0[42|0|0|0|64|21] [RL2 shiv PR] 
+You take a drink from a black-walnut vial.
+Your mind feels stronger and more alert.
+H:1990355|23498% M:3627|52% E:93% W:89% [E|D] R:0 46:51.60-ex- Shaping : 0[42|0|0|0|64|21]  ( +1292m 18% )[RL2 shiv PR] 
+You are not the member of any party.
+H:1990355|23498% M:3627|52% E:93% W:89% [E|D] R:0 46:51.69-ex- Shaping : 0[42|0|0|0|64|21] [RL2 shiv PR] 
+Planting his foot between yours, Alyzar draws Saosh's Vow and unleashes a forceful slash that drives you back.
+Balance used: 1.4s.
+Health lost: 1326 (cold).
+[AFF]: Frozen
+The ice-covered blade sends a wave of cold over your skin, freezing you to the bone.
+Health lost: 863 (cold).
+Lashing out with a clenched fist, Alyzar aims a precise strike at your sternum.
+The blow cracks bone, and a flood of pain washes through your chest.
+Health lost: 342 (physical blunt).
+H:1987824|23468% M:3627|52% E:93% W:89% [E|D] R:0 46:52.72-e- Shaping : 0[42|0|0|0|64|21]  ( -2531h 29% ) (172B)[RL2 shiv PR froz] 
+TERRAN MAGNET RISE
+
+[SLC]: Reset right leg counts.
+Your right leg feels stronger and healthier.
+[AFF]: Damagedrightleg
+You may apply another salve to yourself. Legs (4.019)
+You take out some salve and quickly rub it on your skin.
+Though still shivering, you are no longer frozen solid.
+[AFF]: Frozen
+H:1987824|23468% M:3286|47% E:93% W:89% [E|D] R:0 46:53.39-e- Shaping : 0[42|0|0|0|64|21]  ( -341m 4% )[rl1 shiv PR] 
+Both of your legs must be free and unhindered to do that.
+H:1987824|23468% M:3286|47% E:93% W:89% [E|D] R:0 46:53.52-e- Shaping : 0[42|0|0|0|64|21] [rl1 shiv PR] 
+ep
+queue addclearfull eb!p!w!t  pk
+Alyzar eats a potash crystal.
+H:1987824|23468% M:3286|47% E:93% W:89% [E|D] R:0 46:53.94-e- Shaping : 0[42|0|0|0|64|21] [rl1 shiv PR] 
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+Both of your legs must be free and unhindered to do that.
+You must be standing first.
+You glance over Alyzar and see that his health is at 5548/6950 [79%].
+[Health]: 80%
+pt Alyzar's health at 5548/6950
+H:1987824|23468% M:3186|45% E:93% W:89% [E|D] R:0 46:54.08-ex- Shaping : 0[42|0|0|0|64|21] [rl1 shiv PR] 
+You may apply another salve to yourself. Skin (0.792)
+H:1987824|23468% M:3186|45% E:93% W:89% [E|D] R:0 46:54.19-ex- Shaping : 0[42|0|0|0|64|21] [rl1 shiv PR] 
+You are not the member of any party.
+H:1987824|23468% M:3186|45% E:93% W:89% [E|D] R:0 46:54.22-ex- Shaping : 0[42|0|0|0|64|21] [rl1 shiv PR] 
+TERRAN MAGNET RISE
+You take out some salve and quickly rub it on your legs.
+The bones in your right leg mend.
+[AFF]: Brokenrightleg
+You stand up.
+Planting his foot between yours, Alyzar draws Saosh's Vow and unleashes a forceful slash that drives you back.
+Balance used: 1.4s.
+Health lost: 1326 (cold).
+[AFF]: Frozen
+The ice-covered blade sends a wave of cold over your skin, freezing you to the bone.
+Health lost: 863 (cold).
+Lashing out with a clenched fist, Alyzar aims a precise strike at your sternum.
+The blow cracks bone, and a flood of pain washes through your chest.
+Health lost: 342 (physical blunt).
+H:1985293|23439% M:3186|45% E:93% W:89% [E|D] R:0 46:54.30-e- Shaping : 0[42|0|0|0|64|21]  ( -2531h 29% ) (119B)[shiv froz] 
+You are already oriented in an upright position: you have no need to flex your powers of magnetism.
+H:1985293|23439% M:2886|41% E:93% W:89% [E|D] R:0 46:54.57-e- Shaping : 0[42|0|0|0|64|21]  ( -300m 4% )[shiv froz] 
+You may apply another salve to yourself. Legs (0.861)
+H:1985293|23439% M:2871|41% E:93% W:89% [E|D] R:0 46:55.20-e- Shaping : 0[42|0|0|0|64|21] [shiv froz] 
+You take out some salve and quickly rub it on your skin.
+Though still shivering, you are no longer frozen solid.
+[AFF]: Frozen
+H:1985293|23439% M:2871|41% E:93% W:89% [E|D] R:0 46:55.34-e- Shaping : 0[42|0|0|0|64|21] [shiv] 
+Health lost: 19 (raw).
+You bleed 19 health.
+H:1985274|23438% M:2871|41% E:93% W:89% [E|D] R:0 46:55.54-e- Shaping : 0[42|0|0|0|64|21] [shiv] 
+Alyzar takes a drink from an oaken vial.
+H:1985274|23438% M:2871|41% E:93% W:89% [E|D] R:0 46:55.73-e- Shaping : 0[42|0|0|0|64|21] [shiv] 
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+H:1985274|23438% M:2871|41% E:93% W:89% [E|D] R:0 46:55.73-ex- Shaping : 0[42|0|0|0|64|21] [shiv] 
+Planting his foot between yours, Alyzar draws Saosh's Vow and unleashes a forceful slash that drives you back.
+Balance used: 1.4s.
+Health lost: 1326 (cold).
+[AFF]: Frozen
+The ice-covered blade sends a wave of cold over your skin, freezing you to the bone.
+Health lost: 863 (cold).
+Ducking behind you, Alyzar strikes at your hamstring with a rigid grip.
+The crippling blow renders your leg insensate.
+[AFF]: Hamstrung
+H:1983085|23413% M:2871|41% E:93% W:89% [E|D] R:0 46:55.96-e- Shaping : 0[42|0|0|0|64|21]  ( -2189h 25% ) (115B)[HAMS shiv froz] 
+You may drink another health or mana elixir. Mana (4.397)
+H:1983085|23413% M:2871|41% E:93% W:89% [E|D] R:0 46:56.06-e- Shaping : 0[42|0|0|0|64|21] [HAMS shiv froz] 
+You take a drink from a black-walnut vial.
+Your mind feels stronger and more alert.
+H:1983085|23413% M:3696|53% E:93% W:89% [E|D] R:0 46:56.14-e- Shaping : 0[42|0|0|0|64|21]  ( +825m 11% )[HAMS shiv froz] 
+You may eat another bit of irid moss or potash.
+H:1983085|23413% M:3696|53% E:93% W:89% [E|D] R:0 46:56.16-e- Shaping : 0[42|0|0|0|64|21] [HAMS shiv froz] 
+You may apply another salve to yourself. Skin (1.013)
+H:1983085|23413% M:3696|53% E:93% W:89% [E|D] R:0 46:56.36-e- Shaping : 0[42|0|0|0|64|21] [HAMS shiv froz] 
+You take out some salve and quickly rub it on your skin.
+Though still shivering, you are no longer frozen solid.
+[AFF]: Frozen
+H:1983085|23413% M:3696|53% E:93% W:89% [E|D] R:0 46:56.56-e- Shaping : 0[42|0|0|0|64|21] [HAMS shiv] 
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+H:1983085|23413% M:3688|52% E:93% W:89% [E|D] R:0 46:57.29-ex- Shaping : 0[42|0|0|0|64|21] [HAMS shiv] 
+You may apply another salve to yourself. Skin (0.87)
+H:1983085|23413% M:3688|52% E:93% W:89% [E|D] R:0 46:57.44-ex- Shaping : 0[42|0|0|0|64|21] [HAMS shiv] 
+You take out some salve and quickly rub it on your skin.
+Your body warms up and you stop shivering.
+[AFF]: Shivering
+H:1983085|23413% M:3688|52% E:93% W:89% [E|D] R:0 46:57.53-ex- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+Alyzar leaps majestically to the down.
+(RA): ===================Target likely left!===================
+pt Alyzar likely left
+[down - Alyzar (1)]
+H:1983085|23413% M:3688|52% E:93% W:89% [E|D] R:0 46:57.54-ex- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+[Prio]: Paralysis (2)
+You are not the member of any party.
+H:1983085|23413% M:3688|52% E:93% W:89% [E|D] R:0 46:57.68-ex- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+queue addclear eqbal down
+You slowly hobble down.
+H:1983085|23413% M:3688|52% E:93% W:89% [E|D] R:0 46:58.19-ex- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+You may apply another salve to yourself. Skin (0.933)
+H:1983085|23413% M:3688|52% E:93% W:89% [E|D] R:0 46:58.48-ex- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+
+[DEF]: Insulation
+You take out some salve and quickly rub it on your skin.
+A feeling of comfortable warmth spreads over you.
+H:1983085|23413% M:3688|52% E:93% W:89% [E|D] R:0 46:58.69-ex- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+A sudden sense of all-consuming weakness comes over you. Rock falls away in great sheets, magma fades, and you are left, small, insignificant besides
+what you were.
+H:6352|74% M:3688|52% E:93% W:89% [E|D] R:0 46:58.94-ex- Shaping : 0[42|0|0|0|64|21]  ( -1976733h 23338% )[HAMS] 
+You are too stunned to be able to do anything.
+H:6352|74% M:3688|52% E:93% W:89% [E|D] R:0 46:59.20-ex- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+You may apply another salve to yourself. Skin (0.959)
+H:6352|74% M:3688|52% E:93% W:89% [E|D] R:0 46:59.66-ex- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+You may purge yourself of weakness once again.
+H:6352|74% M:3673|52% E:93% W:89% [E|D] R:0 46:59.93-ex- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+e
+queue addclearfull freestand e
+You may drink another health or mana elixir. Mana (4.319)
+H:6775|79% M:3673|52% E:93% W:89% [E|D] R:0 47:00.54-ex- Shaping : 0[42|0|0|0|64|21]  ( +423h 4% )[HAMS] 
+Health lost: 15 (raw).
+You bleed 15 health.
+H:6760|79% M:3673|52% E:93% W:89% [E|D] R:0 47:01.04-ex- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+You are no longer stunned.
+H:6760|79% M:3673|52% E:93% W:89% [E|D] R:0 47:01.50-ex- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+You slowly hobble east.
+H:6760|79% M:3673|52% E:93% W:89% [E|D] R:0 47:01.52-ex- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+H:8470|100% M:3673|52% E:93% W:89% [E|D] R:0 47:01.71-ex- Shaping : 0[42|0|0|0|64|21]  ( +1710h 20% )[HAMS] 
+shield
+queue addclearfull eb touch shield
+queue prepend eb wield shield
+A luxurious bedchamber. (indoors)
+You see a single exit leading west.
+H:8470|100% M:3669|52% E:93% W:89% [W] R:0 47:02.53-ex- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+
+[DEF]: Shield
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 3.40s.
+H:8470|100% M:3669|52% E:93% W:89% [W] R:0 47:02.55-x- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+You may utilise the tree tattoo again. Tree (13.919)
+H:8470|100% M:3669|52% E:93% W:89% [W] R:0 47:02.92-x- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+[west - Alyzar (1)]
+H:8470|100% M:3808|54% E:93% W:89% [W] R:0 47:03.71-x- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+Alyzar arrives from the west.
+H:8470|100% M:3808|54% E:93% W:89% [W] R:0 47:04.46-x- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+
+[DEF]: Shield
+Alyzar razes your magical shield with Saosh's Vow.
+Ducking behind you, Alyzar strikes at your hamstring with a rigid grip.
+The crippling blow renders your leg insensate.
+H:8470|100% M:3808|54% E:93% W:89% [W] R:0 47:04.49-x- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+You have recovered equilibrium.                                                         --- EQUILIBRIUM ---
+erl
+setalias pk stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar right leg/ assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar right leg/ assess"
+H:8470|100% M:3793|54% E:93% W:89% [W] R:0 47:06.11-ex- Shaping : 0[42|0|0|0|64|21] [HAMS] 
+With a roar you swing a colossal fist at the right leg of Alyzar.
+As your blow lands with a crunch, you perceive that you have dealt 21.0% damage to Alyzar's right leg. (42%)
+Your fist crunches into the right leg of Alyzar.
+The rock plates covering your form rapidly thicken, sharp spikes of stone sprouting from them in an instant.
+Balance used: 2.9s.
+curing priority Paralysis 20 Clumsiness 7
+You glance over Alyzar and see that his health is at 5197/6950 [74%].
+[Health]: 75%
+pt Alyzar's health at 5197/6950
+H:8470|100% M:3693|53% E:93% W:89% [W] R:0 47:06.12-e- Shaping : 1[42|0|0|0|64|42] [HAMS] 
+You may drink another health or mana elixir. Health (4.543)
+H:8470|100% M:3693|53% E:93% W:89% [W] R:0 47:06.17-e- Shaping : 1[42|0|0|0|64|42] [HAMS] 
+You take a drink from a black-walnut vial.
+Your mind feels stronger and more alert.
+Alyzar takes a drink from an oaken vial.
+Alyzar eats a potash crystal.
+H:8470|100% M:4851|69% E:93% W:89% [W] R:0 47:06.21-e- Shaping : 1[42|0|0|0|64|42]  ( +1158m 16% )[HAMS] 
+
+[DEF]: Insulation
+With a smooth lunge to the right, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your right leg.
+ LIMB DAMAGE: right leg (19.8%)
+  ---- >10s since last parry![0|0|0|0|19.8|19.8]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your left leg.
+ LIMB DAMAGE: left leg (33%)
+  ---- >10s since last parry![0|0|0|0|33|19.8]
+Health lost: 1434 (cold).
+The ice-covered blade strips away your protective covering.
+With fluid motions of his iron fingers, Alyzar strikes precisely at your neck.
+Your muscles lock up as the swift blows meet pressure points.
+[AFF]: Paralysis
+H:7036|83% M:4851|69% E:93% W:89% [W] R:0 47:06.28-e- Shaping : 1[42|0|0|0|64|42]  ( -1434h 16% ) (120B)[PAR HAMS] 
+
+[DEF]: Insulation
+You eat a magnesium chip.
+outr magnesium
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+You take out some salve and quickly rub it on your skin.
+A feeling of comfortable warmth spreads over you.
+[Prio]: Paralysis (20)
+[Prio]: Clumsiness (7)
+H:7036|83% M:4491|64% E:93% W:89% [W] R:0 47:06.41-e- Shaping : 1[42|0|0|0|64|42]  ( -360m 5% )[HAMS] 
+You are not the member of any party.
+H:7036|83% M:4491|64% E:93% W:89% [W] R:0 47:06.42-e- Shaping : 1[42|0|0|0|64|42] [HAMS] 
+[OUTR]: 1 Magnesium (103)
+You may apply another salve to yourself. Skin (0.78)
+H:7036|83% M:4491|64% E:93% W:89% [W] R:0 47:07.22-e- Shaping : 1[42|0|0|0|64|42] [HAMS] 
+curing priority Paralysis 2
+[Prio]: Paralysis (2)
+eh
+setalias pk stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar head/ assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar head/ assess"
+H:7036|83% M:4491|64% E:93% W:89% [W] R:0 47:07.79-e- Shaping : 1[42|0|0|0|64|42] [HAMS] 
+You may eat another plant or mineral. Eat (1.492)
+H:7036|83% M:4491|64% E:93% W:89% [W] R:0 47:07.80-e- Shaping : 1[42|0|0|0|64|42] [HAMS] 
+
+[DEF]: Insulation
+With a smooth lunge to the right, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your right leg.
+ LIMB DAMAGE: right leg (39.6%)
+  ---- >10s since last parry! ----------- PARRYING right leg
+queue add eb parry right leg
+[0|0|0|0|33|39.6]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your left leg.
+ LIMB DAMAGE: left leg (46.2%)
+  ---- >10s since last parry![0|0|0|0|46.2|39.6]
+Health lost: 1434 (cold).
+The ice-covered blade strips away your protective covering.
+With fluid motions of his iron fingers, Alyzar strikes precisely at your neck.
+Your muscles lock up as the swift blows meet pressure points.
+[AFF]: Paralysis
+H:5602|66% M:4491|64% E:93% W:89% [W] R:0 47:08.14-e- Shaping : 1[42|0|0|0|64|42]  ( -1434h 16% ) (115B)[PAR HAMS] 
+
+[DEF]: Insulation
+You eat a magnesium chip.
+outr magnesium
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+You take out some salve and quickly rub it on your skin.
+A feeling of comfortable warmth spreads over you.
+You eat a potash crystal.
+outr potash
+H:6279|74% M:4748|68% E:93% W:89% [W] R:0 47:08.16-e- Shaping : 1[42|0|0|0|64|42]  ( +677h 7% +257m 3% )[HAMS] 
+[OUTR]: 1 Magnesium (102)
+[OUTR]: 1 Potash (182)
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+With a roar you swing a colossal fist at the head of Alyzar.
+As your blow lands with a crunch, you perceive that you have dealt 21.0% damage to Alyzar's head. (63%)
+Your fist crunches into the head of Alyzar.
+The head of Alyzar snaps back under the impact.
+You feel the magma contained within your hallowed form begin to seethe.
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Alyzar and see that his health is at 5108/6950 [73%].
+[Health]: 74%
+pt Alyzar's health at 5108/6950
+You may apply another salve to yourself. Skin (0.816)
+H:6279|74% M:4648|66% E:93% W:89% [W] R:0 47:09.08-e- Shaping : 2[63|0|0|0|64|42] [HAMS] 
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:6279|74% M:4648|66% E:93% W:89% [W] R:0 47:09.20-e- Shaping : 2[63|0|0|0|64|42] [HAMS] 
+You may eat another plant or mineral. Eat (1.381)
+H:6279|74% M:4648|66% E:93% W:89% [W] R:0 47:09.70-e- Shaping : 2[63|0|0|0|64|42] [HAMS] 
+With a smooth lunge to the right, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your right leg.
+ LIMB DAMAGE: right leg (59.4%)
+  ---- >10s since last parry![0|0|0|0|46.2|59.4]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your left leg.
+ LIMB DAMAGE: left leg (59.4%)
+  ---- >10s since last parry! ----------- PARRYING left leg
+queue add eb parry left leg
+[0|0|0|0|59.4|59.4]
+Health lost: 1434 (cold).
+With fluid motions of his iron fingers, Alyzar strikes precisely at your neck.
+Your muscles lock up as the swift blows meet pressure points.
+[AFF]: Paralysis
+H:4845|57% M:4633|66% E:93% W:89% [W] R:0 47:10.01-e- Shaping : 2[63|0|0|0|64|42]  ( -1434h 16% ) (130B)[PAR HAMS] 
+You eat a magnesium chip.
+outr magnesium
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+[Prio]: Paralysis (2)
+[OUTR]: 1 Magnesium (101)
+You may drink another health or mana elixir. Mana (4.362)
+H:5268|62% M:4273|61% E:93% W:89% [W] R:0 47:10.66-e- Shaping : 2[63|0|0|0|64|42]  ( +423h 4% -360m 5% )[HAMS] 
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+Alyzar takes a drink from an oaken vial.
+H:7070|83% M:4273|61% E:93% W:89% [W] R:0 47:10.71-e- Shaping : 2[63|0|0|0|64|42]  ( +1802h 21% )[HAMS] 
+erl
+setalias pk stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar right leg/ assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar right leg/ assess"
+H:7070|83% M:4273|61% E:93% W:89% [W] R:0 47:11.34-e- Shaping : 2[63|0|0|0|64|42] [HAMS] 
+You may eat another plant or mineral. Eat (1.564)
+H:7070|83% M:4273|61% E:93% W:89% [W] R:0 47:11.72-e- Shaping : 2[63|0|0|0|64|42] [HAMS] 
+
+[DEF]: Insulation
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+With a roar you swing a colossal fist at the right leg of Alyzar.
+As your blow lands with a crunch, you perceive that you have dealt 21.0% damage to Alyzar's right leg. (63%)
+Your fist smashes into the right leg of Alyzar.
+Magma begins to boil up from beneath your outer strata.
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Alyzar and see that his health is at 4447/6950 [63%].
+[Health]: 64%
+pt Alyzar's health at 4447/6950
+With a smooth lunge to the right, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your right leg.
+ LIMB DAMAGE: right leg (79.2%)
+  ---- >10s since last parry![0|0|0|0|59.4|79.2]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your left leg.
+ LIMB DAMAGE: left leg (72.6%)
+  ---- >10s since last parry! ----------- PARRYING right leg
+queue add eb parry right leg
+[0|0|0|0|72.6|79.2]
+Health lost: 1434 (cold).
+The ice-covered blade strips away your protective covering.
+With fluid motions of his iron fingers, Alyzar strikes precisely at your neck.
+Your muscles lock up as the swift blows meet pressure points.
+[AFF]: Paralysis
+H:5636|66% M:4165|59% E:93% W:89% [W] R:0 47:11.97-e- Shaping : 3[63|0|0|0|64|63]  ( -1434h 16% ) (125B)[PAR HAMS] 
+
+[DEF]: Insulation
+You eat a magnesium chip.
+outr magnesium
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+You take out some salve and quickly rub it on your skin.
+A feeling of comfortable warmth spreads over you.
+Health lost: 5 (raw).
+You bleed 5 health.
+H:5631|66% M:3805|54% E:93% W:88% [W] R:0 47:12.08-e- Shaping : 3[63|0|0|0|64|63]  ( -360m 5% )[HAMS] 
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:5631|66% M:3805|54% E:93% W:88% [W] R:0 47:12.25-e- Shaping : 3[63|0|0|0|64|63] [HAMS] 
+Alyzar eats a potash crystal.
+H:5631|66% M:3805|54% E:93% W:88% [W] R:0 47:12.27-e- Shaping : 3[63|0|0|0|64|63] [HAMS] 
+[OUTR]: 1 Magnesium (100)
+You may apply another salve to yourself. Skin (0.859)
+H:5631|66% M:3805|54% E:93% W:89% [W] R:0 47:12.97-e- Shaping : 3[63|0|0|0|64|63] [HAMS] 
+curing priority Paralysis 2
+[Prio]: Paralysis (2)
+You may eat another plant or mineral. Eat (1.438)
+H:5631|66% M:3805|54% E:93% W:89% [W] R:0 47:13.49-e- Shaping : 3[63|0|0|0|64|63] [HAMS] 
+
+[DEF]: Insulation
+With a smooth lunge to the right, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your right leg.
+ LIMB DAMAGE: right leg (99%)
+  ---- >10s since last parry![0|0|0|0|72.6|99]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your left leg.
+ LIMB DAMAGE: left leg (85.8%)
+  ---- >10s since last parry! ----------- PARRYING left leg
+queue add eb parry left leg
+[0|0|0|0|85.8|99]
+Health lost: 1434 (cold).
+The ice-covered blade strips away your protective covering.
+With fluid motions of his iron fingers, Alyzar strikes precisely at your neck.
+Your muscles lock up as the swift blows meet pressure points.
+[AFF]: Paralysis
+H:4902|57% M:3944|56% E:93% W:89% [W] R:0 47:13.83-e- Shaping : 3[63|0|0|0|64|63]  ( -729h 8% ) (115B)[PAR HAMS] 
+erl
+queue addclearfull eb!p!w!t  pk
+
+[DEF]: Insulation
+You eat a magnesium chip.
+outr magnesium
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+You take out some salve and quickly rub it on your skin.
+A feeling of comfortable warmth spreads over you.
+You feel the tightness in your hamstring subside, allowing free movement once again.
+[AFF]: Hamstrung
+H:4902|57% M:3644|52% E:93% W:88% [W] R:0 47:14.07-e- Shaping : 3[63|0|0|0|64|63]  ( -300m 4% )
+[OUTR]: 1 Magnesium (99)
+You may eat another bit of irid moss or potash.
+H:4902|57% M:3644|52% E:93% W:88% [W] R:0 47:14.16-e- Shaping : 3[63|0|0|0|64|63] 
+You eat a potash crystal.
+outr potash
+H:5579|65% M:4201|60% E:93% W:88% [W] R:0 47:14.25-e- Shaping : 3[63|0|0|0|64|63]  ( +677h 7% +557m 7% )
+[OUTR]: 1 Potash (181)
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+With a roar you swing a colossal fist at the right leg of Alyzar.
+Alyzar parries the attack with a deft manoeuvre.
+ YOU HIT PARRY!!
+
+ YOU HIT PARRY!!
+Magma explodes from the cracks between the plates covering you, forming a cloak of molten stone to enshroud you.
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Alyzar and see that his health is at 5582/6950 [80%].
+[Health]: 81%
+pt Alyzar's health at 5582/6950
+You may apply another salve to yourself. Skin (0.862)
+H:5579|65% M:4101|58% E:93% W:88% [W] R:0 47:14.80-e- Shaping : 4[63|0|0|0|64|63] 
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:5579|65% M:4086|58% E:93% W:88% [W] R:0 47:14.94-e- Shaping : 4[63|0|0|0|64|63] 
+You may drink another health or mana elixir. Health (4.399)
+H:5579|65% M:4086|58% E:93% W:88% [W] R:0 47:15.14-e- Shaping : 4[63|0|0|0|64|63] 
+limbs
+
+HEAD: 0
+TORSO: 0
+LEFT ARM: 0
+RIGHT ARM: 0
+LEFT LEG: 85.8
+RIGHT LEG: 99
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+Alyzar takes a drink from an oaken vial.
+H:7011|82% M:4086|58% E:93% W:88% [W] R:0 47:15.21-e- Shaping : 4[63|0|0|0|64|63]  ( +1432h 16% )
+You may eat another plant or mineral. Eat (1.085)
+H:7011|82% M:4086|58% E:93% W:88% [W] R:0 47:15.44-e- Shaping : 4[63|0|0|0|64|63] 
+
+[DEF]: Insulation
+Whispering a prayer to the southern winds, Alyzar draws Saosh's Vow and unleashes a slash towards your torso.
+As Alyzar carves into you, you perceive that he has dealt 17.6% damage to your torso.
+ LIMB DAMAGE: torso (17.6%)
+  ---- >10s since last parry![0|17.6|0|0|85.8|99]
+With a flourish of his blade, Alyzar sends a trail of blood arcing through the air.
+Health lost: 1435 (cold).
+The ice-covered blade strips away your protective covering.
+Ducking behind you, Alyzar strikes at your hamstring with a rigid grip.
+The crippling blow renders your leg insensate.
+[AFF]: Hamstrung
+H:5576|65% M:4086|58% E:93% W:88% [W] R:0 47:15.76-e- Shaping : 4[63|0|0|0|64|63]  ( -1435h 16% ) (144B)[HAMS] 
+
+[DEF]: Insulation
+You take out some salve and quickly rub it on your skin.
+A feeling of comfortable warmth spreads over you.
+[Prio]: Paralysis (2)
+You may apply another salve to yourself. Skin (0.807)
+H:5576|65% M:3666|52% E:93% W:88% [W] R:0 47:16.68-e- Shaping : 4[63|0|0|0|64|63]  ( -420m 6% )[HAMS] 
+shield
+queue addclearfull eb touch shield
+queue prepend eb wield shield
+Health lost: 4 (raw).
+You bleed 4 health.
+H:5572|65% M:3662|52% E:93% W:88% [W] R:0 47:17.58-e- Shaping : 4[63|0|0|0|64|63] [HAMS] 
+
+[DEF]: Insulation
+Whispering a prayer to the southern winds, Alyzar draws Saosh's Vow and unleashes a slash towards your torso.
+As Alyzar carves into you, you perceive that he has dealt 17.6% damage to your torso.
+ LIMB DAMAGE: torso (35.2%)
+  ---- >10s since last parry![0|35.2|0|0|85.8|99]
+With a flourish of his blade, Alyzar sends a trail of blood arcing through the air.
+Health lost: 1435 (cold).
+The ice-covered blade strips away your protective covering.
+With fluid motions of his iron fingers, Alyzar strikes precisely at your neck.
+Your muscles lock up as the swift blows meet pressure points.
+[AFF]: Paralysis
+H:4137|48% M:3662|52% E:93% W:88% [W] R:0 47:17.65-e- Shaping : 4[63|0|0|0|64|63]  ( -1435h 16% ) (129B)[PAR HAMS] 
+
+[DEF]: Insulation
+[DEF]: Shield
+You eat a magnesium chip.
+outr magnesium
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+You take out some salve and quickly rub it on your skin.
+A feeling of comfortable warmth spreads over you.
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 3.40s.
+H:4137|48% M:3302|47% E:93% W:88% [W] R:0 47:17.79-x- Shaping : 4[63|0|0|0|64|63]  ( -360m 5% )[HAMS] 
+[OUTR]: 1 Magnesium (98)
+[Prio]: Paralysis (2)
+[Prio]: Clumsiness (26)
+H:4137|48% M:3302|47% E:93% W:88% [W] R:0 47:17.00-x- Shaping : 4[63|0|0|0|64|63] [HAMS] 
+You may apply another salve to yourself. Skin (0.774)
+H:4137|48% M:3302|47% E:93% W:88% [W] R:0 47:18.61-x- Shaping : 4[63|0|0|0|64|63] [HAMS] 
+The shroud of magma cloaking you is no longer sustainable, and it falls away.
+H:4137|48% M:3302|47% E:93% W:88% [W] R:0 47:19.03-x- Shaping : 3[63|0|0|0|64|63] [HAMS] 
+You may eat another plant or mineral. Eat (1.43)
+H:4137|48% M:3302|47% E:93% W:88% [W] R:0 47:19.24-x- Shaping : 3[63|0|0|0|64|63] [HAMS] 
+eaq
+setalias pk stand/get body/ wield shield360716/MANIFEST QUAKE Alyzar / MANIFEST AVALANCHE Alyzar/ assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "stand/get body/ wield shield360716/MANIFEST QUAKE Alyzar / MANIFEST AVALANCHE Alyzar/ assess"
+H:4137|48% M:3302|47% E:93% W:88% [W] R:0 47:19.36-x- Shaping : 3[63|0|0|0|64|63] [HAMS] 
+Alyzar raises his hands dramatically and summons an icewall to the west.
+H:4137|48% M:3302|47% E:93% W:88% [W] R:0 47:19.55-x- Shaping : 3[63|0|0|0|64|63] [HAMS] 
+You may drink another health or mana elixir. Health (4.402)
+H:4137|48% M:3302|47% E:93% W:88% [W] R:0 47:19.66-x- Shaping : 3[63|0|0|0|64|63] [HAMS] 
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+H:6117|72% M:3302|47% E:93% W:88% [W] R:0 47:19.70-x- Shaping : 3[63|0|0|0|64|63]  ( +1980h 23% )[HAMS] 
+You may eat another bit of irid moss or potash.
+H:6540|77% M:3287|47% E:93% W:88% [W] R:0 47:20.09-x- Shaping : 3[63|0|0|0|64|63]  ( +423h 4% )[HAMS] 
+You eat a potash crystal.
+outr potash
+H:7217|85% M:3844|55% E:93% W:88% [W] R:0 47:20.31-x- Shaping : 3[63|0|0|0|64|63]  ( +677h 7% +557m 7% )[HAMS] 
+[OUTR]: 1 Potash (180)
+eaq
+queue addclearfull eb!p!w!t  pk
+
+[DEF]: Shield
+You have recovered equilibrium.                                                         --- EQUILIBRIUM ---
+Your action causes the nearly invisible magical shield around you to fade away.
+You stomp upon the ground, a ripple of tremors radiating out from the impact.
+Processed Affliction(Prone)
+Magma ceases to flow from between the cracks in your plates.
+Raising an imperious stone digit, you point it at Alyzar.
+The only warning granted to Alyzar is the rumble of falling stone before an avalanche of rock plunges out of the sky to crush him.
+Processed Affliction(Epseth)
+Processed Affliction(Epseth)
+Processed Affliction(Epteth)
+Processed Affliction(Epteth)
+Balance used: 3.2s.
+curing priority Paralysis 20 Clumsiness 7
+You glance over Alyzar and see that his health is at 3996/6950 [57%].
+[Health]: 58%
+pt Alyzar's health at 3996/6950
+H:7217|85% M:3744|53% E:93% W:88% [W] R:0 47:21.19-e- Shaping : 2[63|0|0|0|64|63] [HAMS] 
+Alyzar takes some salve from a vial and rubs it on his legs.
+Processed Cures(leftleg)
+
+
+OPPONENT APPLIED TO THEIR legs!!
+
+
+Alyzar takes a drink from an oaken vial.
+Alyzar eats a potash crystal.
+H:7217|85% M:3744|53% E:93% W:88% [W] R:0 47:21.30-e- Shaping : 2[63|0|0|0|64|63] [HAMS] 
+[Prio]: Paralysis (20)
+[Prio]: Clumsiness (7)
+H:7217|85% M:3744|53% E:93% W:88% [W] R:0 47:21.35-e- Shaping : 2[63|0|0|0|64|63] [HAMS] 
+You are not the member of any party.
+H:7217|85% M:3744|53% E:93% W:88% [W] R:0 47:21.35-e- Shaping : 2[63|0|0|0|64|63] [HAMS] 
+You are not the member of any party.
+H:7217|85% M:3744|53% E:93% W:88% [W] R:0 47:21.35-e- Shaping : 2[63|0|0|0|64|63] [HAMS] 
+queue addclearfull freestand s
+Alyzar takes some salve from a vial and rubs it on his legs.
+Processed Cures(rightleg)
+
+
+OPPONENT APPLIED TO THEIR legs!!
+
+
+H:7217|85% M:3744|53% E:93% W:88% [W] R:0 47:22.28-e- Shaping : 2[63|0|0|0|64|63] [HAMS] 
+queue addclearfull freestand s
+Alyzar stands up.
+
+Alyzar IS NO LONGER PRONE.  FAE|HE|SHE IS UP!!
+
+Alyzar IS NO LONGER PRONE.  FAE|HE|SHE IS UP!!
+
+H:7217|85% M:3744|53% E:93% W:88% [W] R:0 47:22.49-e- Shaping : 2[63|0|0|0|64|63] [HAMS] 
+curing priority Paralysis 2
+queue addclearfull freestand w
+[Prio]: Paralysis (2)
+queue addclearfull freestand w
+queue addclearfull freestand w
+Health lost: 9 (raw).
+You bleed 9 health.
+H:7208|85% M:3744|53% E:93% W:88% [W] R:0 47:23.16-e- Shaping : 2[63|0|0|0|64|63] [HAMS] 
+Alyzar takes some salve from a vial and rubs it on his arms.
+Processed Cures(leftarm)
+
+
+OPPONENT APPLIED TO THEIR arms!!
+
+
+H:7208|85% M:3744|53% E:93% W:88% [W] R:0 47:23.22-e- Shaping : 2[63|0|0|0|64|63] [HAMS] 
+queue addclearfull freestand w
+Alyzar touches a tree of life tattoo.
+                   --- THEY TOUCHED TREE ---
+                   --- THEY TOUCHED TREE ---Processed Cures
+Processed Cures(rightarm)
+H:7208|85% M:3744|53% E:93% W:88% [W] R:0 47:23.46-e- Shaping : 2[63|0|0|0|64|63] [HAMS] 
+queue addclearfull freestand w
+
+[DEF]: Insulation
+Whispering a prayer to the southern winds, Alyzar draws Saosh's Vow and unleashes a slash towards your torso.
+As Alyzar carves into you, you perceive that he has dealt 17.6% damage to your torso.
+ LIMB DAMAGE: torso (52.8%)
+  ---- >10s since last parry! ----------- PARRYING torso
+queue add eb parry torso
+[0|52.8|0|0|85.8|99]
+With a flourish of his blade, Alyzar sends a trail of blood arcing through the air.
+Health lost: 1435 (cold).
+The ice-covered blade strips away your protective covering.
+Ducking behind you, Alyzar strikes at your hamstring with a rigid grip.
+The crippling blow renders your leg insensate.
+H:6478|76% M:3883|55% E:93% W:88% [W] R:0 47:24.11-e- Shaping : 2[63|0|0|0|64|63]  ( -730h 8% ) (129B)[HAMS] 
+You may drink another health or mana elixir. Health (4.434)
+H:6478|76% M:3883|55% E:93% W:88% [W] R:0 47:24.11-e- Shaping : 2[63|0|0|0|64|63] [HAMS] 
+
+[DEF]: Insulation
+You take out some salve and quickly rub it on your skin.
+A feeling of comfortable warmth spreads over you.
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+H:8387|99% M:3523|50% E:93% W:88% [W] R:0 47:24.22-e- Shaping : 2[63|0|0|0|64|63]  ( +1909h 22% -360m 5% )[HAMS] 
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You slowly hobble west.
+You will now attempt to parry attacks to your torso.
+H:8387|99% M:3523|50% E:93% W:88% [W] R:0 47:24.31-ex- Shaping : 2[63|0|0|0|64|63] [HAMS] 
+You may apply another salve to yourself. Skin (0.861)
+H:8387|99% M:3508|50% E:93% W:88% [W] R:0 47:25.08-ex- Shaping : 2[63|0|0|0|64|63] [HAMS] 
+                   --- WALL BLOCKING ---
+
+                   --- WALL BLOCKING ---
+
+                   --- WALL BLOCKING ---
+H:8387|99% M:3508|50% E:93% W:88% [W] R:0 47:25.31-ex- Shaping : 2[63|0|0|0|64|63] [HAMS] 
+A look of utmost concentration crosses the face of Alyzar.
+H:8387|99% M:3508|50% E:93% W:88% [W] R:0 47:25.95-ex- Shaping : 2[63|0|0|0|64|63] [HAMS] 
+You feel the magma contained within your hallowed form cooling, your thoughts growing more sluggish.
+H:8387|99% M:3508|50% E:93% W:88% [W] R:0 47:26.03-ex- Shaping : 1[63|0|0|0|64|63] [HAMS] 
+You may eat another bit of irid moss or potash.
+H:8387|99% M:3508|50% E:93% W:88% [W] R:0 47:26.25-ex- Shaping : 1[63|0|0|0|64|63] [HAMS] 
+Whispering a prayer to the southern winds, Alyzar draws Saosh's Vow and unleashes a slash towards your torso.
+You parry the attack with a deft manoeuvre.            ---------- WE PARRIED! GOOD JOB!
+H:8387|99% M:3508|50% E:93% W:88% [W] R:0 47:26.71-ex- Shaping : 1[63|0|0|0|64|63] [HAMS] 
+j w
+queue addclearfull eb!p!w!t stand 
+queue add eb!p!w!t wear greaves
+queue add eb!p!w!t mj w
+queue add eb!p!w!t leap w
+You are already wearing this item.
+H:8387|99% M:3500|50% E:93% W:88% [W] R:0 47:27.00-ex- Shaping : 1[63|0|0|0|64|63] [HAMS] 
+                   --- DISMOUNTED ---
+
+                   --- DISMOUNTED ---
+
+                   --- DISMOUNTED ---
+H:8387|99% M:3500|50% E:93% W:88% [W] R:0 47:27.00-ex- Shaping : 1[63|0|0|0|64|63] [HAMS] 
+You can not do that with your legs in their current state.
+H:8387|99% M:3500|50% E:93% W:88% [W] R:0 47:27.00-ex- Shaping : 1[63|0|0|0|64|63] [HAMS] 
+shield
+queue addclearfull eb touch shield
+queue prepend eb wield shield
+
+[DEF]: Shield
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 3.40s.
+H:8387|99% M:3500|50% E:93% W:88% [W] R:0 47:28.02-x- Shaping : 1[63|0|0|0|64|63] [HAMS] 
+Alyzar's attack rebounds off your magical shield.
+H:8387|99% M:3500|50% E:93% W:88% [W] R:0 47:28.43-x- Shaping : 1[63|0|0|0|64|63] [HAMS] 
+You may drink another health or mana elixir. Health (4.398)
+H:8387|99% M:3500|50% E:93% W:88% [W] R:0 47:28.66-x- Shaping : 1[63|0|0|0|64|63] [HAMS] 
+Health lost: 9 (raw).
+You bleed 9 health.
+H:8378|98% M:3500|50% E:93% W:88% [W] R:0 47:28.66-x- Shaping : 1[63|0|0|0|64|63] [HAMS] 
+You take a drink from a black-walnut vial.
+Your mind feels stronger and more alert.
+H:8378|98% M:4636|66% E:93% W:88% [W] R:0 47:28.72-x- Shaping : 1[63|0|0|0|64|63]  ( +1136m 16% )[HAMS] 
+Alyzar suddenly seems to be moving with greater fluidity.
+H:8378|98% M:4636|66% E:93% W:88% [W] R:0 47:29.03-x- Shaping : 1[63|0|0|0|64|63] [HAMS] 
+
+[DEF]: Shield
+Alyzar razes your magical shield with Saosh's Vow.
+Ducking behind you, Alyzar strikes at your hamstring with a rigid grip.
+The crippling blow renders your leg insensate.
+H:8470|100% M:4621|66% E:93% W:88% [W] R:0 47:30.12-x- Shaping : 1[63|0|0|0|64|63] [HAMS] 
+The rock plates covering your form crack and fall away, leaving you diminished.
+H:8470|100% M:4621|66% E:93% W:88% [W] R:0 47:31.02-x- Shaping : 0[63|0|0|0|64|63] [HAMS] 
+You have recovered equilibrium.                                                         --- EQUILIBRIUM ---
+
+[DEF]: Insulation
+In a single motion, Alyzar draws Saosh's Vow from its scabbard and looses a vicious falling slash at your head.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your head.
+ LIMB DAMAGE: head (19.8%)
+ ----------- PARRYING right leg
+queue add eb parry right leg
+[19.8|52.8|0|0|85.8|99]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your torso.
+ LIMB DAMAGE: torso (66%)
+ ----------- PARRYING head
+queue add eb parry head
+[19.8|66|0|0|85.8|99]
+Health lost: 1434 (cold).
+The ice-covered blade strips away your protective covering.
+Ducking behind you, Alyzar strikes at your hamstring with a rigid grip.
+The crippling blow renders your leg insensate.
+H:7036|83% M:4621|66% E:93% W:88% [W] R:0 47:31.83-ex- Shaping : 0[63|0|0|0|64|63]  ( -1434h 16% ) (116B)[HAMS] 
+You will now attempt to parry attacks to your right leg.
+H:7036|83% M:4621|66% E:93% W:88% [W] R:0 47:31.97-ex- Shaping : 0[63|0|0|0|64|63] [HAMS] 
+You will now attempt to parry attacks to your head.
+H:7036|83% M:4621|66% E:93% W:88% [W] R:0 47:31.97-ex- Shaping : 0[63|0|0|0|64|63] [HAMS] 
+
+[DEF]: Insulation
+You take out some salve and quickly rub it on your skin.
+A feeling of comfortable warmth spreads over you.
+eh
+setalias pk stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar head/ assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar head/ assess"
+H:7036|83% M:4317|61% E:93% W:88% [W] R:0 47:32.64-ex- Shaping : 0[63|0|0|0|64|63]  ( -304m 4% )[HAMS] 
+With a roar you swing a colossal fist at the head of Alyzar.
+As your blow lands with a crunch, you perceive that you have dealt 21.0% damage to Alyzar's head. (84%)
+Your fist crunches into the head of Alyzar.
+The head of Alyzar snaps back under the impact.
+The rock plates covering your form rapidly thicken, sharp spikes of stone sprouting from them in an instant.
+Balance used: 2.9s.
+curing priority Paralysis 20 Clumsiness 7
+You glance over Alyzar and see that his health is at 4736/6950 [68%].
+[Health]: 69%
+pt Alyzar's health at 4736/6950
+H:7036|83% M:4217|60% E:93% W:88% [W] R:0 47:32.65-e- Shaping : 1[84|0|0|0|64|63] [HAMS] 
+Alyzar takes a drink from an oaken vial.
+Alyzar eats a potash crystal.
+H:7036|83% M:4217|60% E:93% W:88% [W] R:0 47:32.80-e- Shaping : 1[84|0|0|0|64|63] [HAMS] 
+
+                   ---CAN TREE AGAIN---
+You may apply another salve to yourself. Skin (0.883)
+H:7036|83% M:4217|60% E:93% W:88% [W] R:0 47:32.89-e- Shaping : 1[84|0|0|0|64|63] [HAMS] 
+[Prio]: Paralysis (20)
+[Prio]: Clumsiness (7)
+H:7036|83% M:4217|60% E:93% W:88% [W] R:0 47:32.92-e- Shaping : 1[84|0|0|0|64|63] [HAMS] 
+You are not the member of any party.
+H:7036|83% M:4217|60% E:93% W:88% [W] R:0 47:32.92-e- Shaping : 1[84|0|0|0|64|63] [HAMS] 
+You may drink another health or mana elixir. Mana (4.612)
+H:7036|83% M:4217|60% E:93% W:88% [W] R:0 47:33.22-e- Shaping : 1[84|0|0|0|64|63] [HAMS] 
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+H:8470|100% M:4217|60% E:93% W:88% [W] R:0 47:33.24-e- Shaping : 1[84|0|0|0|64|63]  ( +1434h 16% )[HAMS] 
+TERRAN MAGNET RISE
+In a single motion, Alyzar draws Saosh's Vow from its scabbard and looses a vicious falling slash at your head.
+You parry the attack with a deft manoeuvre.            ---------- WE PARRIED! GOOD JOB!
+Sweeping out with a blade hand, Alyzar strikes at the back of your knee.
+[AFF]: Prone
+You tumble to the ground as your leg abruptly gives out.
+H:8470|100% M:4217|60% E:93% W:88% [W] R:0 47:33.78-e- Shaping : 1[84|0|0|0|64|63] [PR HAMS] 
+You manipulate the magnetic forces surrounding you, and reorient yourself into an upright position.
+H:8470|100% M:4217|60% E:93% W:88% [W] R:0 47:33.90-e- Shaping : 1[84|0|0|0|64|63] [HAMS] 
+curing priority Paralysis 2
+Health lost: 16 (raw).
+You bleed 16 health.
+H:8454|99% M:4217|60% E:93% W:88% [W] R:0 47:34.17-e- Shaping : 1[84|0|0|0|64|63] [HAMS] 
+[Prio]: Paralysis (2)
+ell
+setalias pk stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar left leg/ assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar left leg/ assess"
+H:8470|100% M:4356|62% E:93% W:88% [W] R:0 47:34.77-e- Shaping : 1[84|0|0|0|64|63] [HAMS] 
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+With a roar you swing a colossal fist at the left leg of Alyzar.
+As your blow lands with a crunch, you perceive that you have dealt 21.0% damage to Alyzar's left leg. (85%)
+Your fist crunches into the left leg of Alyzar.
+Alyzar pivots on his heel as he draws his blade from its scabbard and unleashes a retaliatory strike at you.
+Health lost: 247 (physical cutting).
+You feel the magma contained within your hallowed form begin to seethe.
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Alyzar and see that his health is at 5108/6950 [73%].
+[Health]: 74%
+pt Alyzar's health at 5108/6950
+H:8223|97% M:4241|60% E:93% W:88% [W] R:0 47:35.56-e- Shaping : 2[84|0|0|0|85|63]  ( -247h 2% )[HAMS] 
+
+[DEF]: Insulation
+Whispering a prayer to the southern winds, Alyzar draws Saosh's Vow and unleashes a slash towards your torso.
+As Alyzar carves into you, you perceive that he has dealt 17.6% damage to your torso.
+ LIMB DAMAGE: torso (83.6%)
+ ----------- PARRYING left leg
+queue add eb parry left leg
+[19.8|83.6|0|0|85.8|99]
+With a flourish of his blade, Alyzar sends a trail of blood arcing through the air.
+Health lost: 1435 (cold).
+The ice-covered blade strips away your protective covering.
+Ducking behind you, Alyzar strikes at your hamstring with a rigid grip.
+The crippling blow renders your leg insensate.
+H:6788|80% M:4241|60% E:93% W:88% [W] R:0 47:35.66-e- Shaping : 2[84|0|0|0|85|63]  ( -1435h 16% ) (136B)[HAMS] 
+
+[DEF]: Insulation
+You take out some salve and quickly rub it on your skin.
+A feeling of comfortable warmth spreads over you.
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:6788|80% M:3881|55% E:93% W:88% [W] R:0 47:35.73-e- Shaping : 2[84|0|0|0|85|63]  ( -360m 5% )[HAMS] 
+You may apply another salve to yourself. Skin (0.819)
+H:6788|80% M:3881|55% E:93% W:88% [W] R:0 47:36.62-e- Shaping : 2[84|0|0|0|85|63] [HAMS] 
+curing priority Paralysis 2
+[Prio]: Paralysis (2)
+Alyzar takes a drink from an oaken vial.
+H:6788|80% M:3881|55% E:93% W:88% [W] R:0 47:37.44-e- Shaping : 2[84|0|0|0|85|63] [HAMS] 
+In a single motion, Alyzar draws Saosh's Vow from its scabbard and looses a vicious falling slash at your head.
+You parry the attack with a deft manoeuvre.            ---------- WE PARRIED! GOOD JOB!
+Ducking behind you, Alyzar strikes at your hamstring with a rigid grip.
+The crippling blow renders your leg insensate.
+H:6788|80% M:3881|55% E:93% W:88% [W] R:0 47:37.57-e- Shaping : 2[84|0|0|0|85|63] [HAMS] 
+You may drink another health or mana elixir. Health (4.363)
+H:6788|80% M:3881|55% E:93% W:88% [W] R:0 47:37.78-e- Shaping : 2[84|0|0|0|85|63] [HAMS] 
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+H:8470|100% M:3881|55% E:93% W:88% [W] R:0 47:37.83-e- Shaping : 2[84|0|0|0|85|63]  ( +1682h 19% )[HAMS] 
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You will now attempt to parry attacks to your left leg.
+H:8470|100% M:3881|55% E:93% W:88% [W] R:0 47:38.43-ex- Shaping : 2[84|0|0|0|85|63] [HAMS] 
+erl
+setalias pk stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar right leg/ assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar right leg/ assess"
+H:8470|100% M:3881|55% E:93% W:88% [W] R:0 47:39.18-ex- Shaping : 2[84|0|0|0|85|63] [HAMS] 
+With a roar you swing a colossal fist at the right leg of Alyzar.
+Alyzar parries the attack with a deft manoeuvre.
+ YOU HIT PARRY!!
+
+ YOU HIT PARRY!!
+Magma begins to boil up from beneath your outer strata.
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Alyzar and see that his health is at 6697/6950 [96%].
+[Health]: 97%
+pt Alyzar's health at 6697/6950
+H:8470|100% M:3781|54% E:93% W:88% [W] R:0 47:39.19-e- Shaping : 3[84|0|0|0|85|63] [HAMS] 
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:8470|100% M:3781|54% E:93% W:88% [W] R:0 47:39.45-e- Shaping : 3[84|0|0|0|85|63] [HAMS] 
+Health lost: 16 (raw).
+You bleed 16 health.
+H:8454|99% M:3781|54% E:93% W:88% [W] R:0 47:39.66-e- Shaping : 3[84|0|0|0|85|63] [HAMS] 
+
+[DEF]: Insulation
+In a single motion, Alyzar draws Saosh's Vow from its scabbard and looses a vicious falling slash at your head.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your head.
+ LIMB DAMAGE: head (39.6%)
+ ----------- PARRYING torso
+queue add eb parry torso
+[39.6|83.6|0|0|85.8|99]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your torso.
+ LIMB DAMAGE: torso (96.8%)
+ ----------- PARRYING head
+queue add eb parry head
+[39.6|96.8|0|0|85.8|99]
+Health lost: 1434 (cold).
+The ice-covered blade strips away your protective covering.
+Ducking behind you, Alyzar strikes at your hamstring with a rigid grip.
+The crippling blow renders your leg insensate.
+H:7020|82% M:3781|54% E:93% W:88% [W] R:0 47:39.78-e- Shaping : 3[84|0|0|0|85|63]  ( -1434h 16% ) (121B)[HAMS] 
+
+[DEF]: Insulation
+You take out some salve and quickly rub it on your skin.
+A feeling of comfortable warmth spreads over you.
+You eat a potash crystal.
+outr potash
+H:7697|90% M:3978|57% E:93% W:88% [W] R:0 47:39.97-e- Shaping : 3[84|0|0|0|85|63]  ( +677h 7% +197m 2% )[HAMS] 
+[OUTR]: 1 Potash (179)
+ellq
+setalias pk stand/get body/ wield shield360716/MANIFEST QUAKE Alyzar / TERRAN POWDERISE Alyzar left leg/ assess
+queue addclearfull eb!p!w!t  pk
+curing priority Paralysis 2
+Alias "pk" will now execute: "stand/get body/ wield shield360716/MANIFEST QUAKE Alyzar / TERRAN POWDERISE Alyzar left leg/ assess"
+H:8120|95% M:3963|56% E:93% W:88% [W] R:0 47:40.76-e- Shaping : 3[84|0|0|0|85|63]  ( +423h 4% )[HAMS] 
+[Prio]: Paralysis (2)
+You may apply another salve to yourself. Skin (1.002)
+H:8120|95% M:3963|56% E:93% W:88% [W] R:0 47:40.96-e- Shaping : 3[84|0|0|0|85|63] [HAMS] 
+As Alyzar draws Saosh's Vow from its scabbard, he drives the pommel into your chin.
+Health lost: 636 (physical blunt).
+Ducking behind you, Alyzar strikes at your hamstring with a rigid grip.
+The crippling blow renders your leg insensate.
+H:7484|88% M:3963|56% E:93% W:88% [W] R:0 47:41.64-e- Shaping : 3[84|0|0|0|85|63]  ( -636h 7% )[HAMS] 
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You stomp upon the ground, a ripple of tremors radiating out from the impact.
+Processed Affliction(Prone)
+Magma ceases to flow from between the cracks in your plates.
+With a roar you swing a colossal fist at the left leg of Alyzar.
+As your blow lands with a crunch, you perceive that you have dealt 21.0% damage to Alyzar's left leg.
+                   --- LEFT LEG BROKE! LEFT LEG BROKE! ---
+ (106%)
+Your fist smashes into the left leg of Alyzar.
+Magma begins to boil up from beneath your outer strata.
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Alyzar and see that his health is at 4765/6950 [68%].
+[Health]: 69%
+pt Alyzar's health at 4765/6950
+H:7484|88% M:3855|55% E:93% W:88% [W] R:0 47:42.06-e- Shaping : 3[84|0|0|0|106|63] [HAMS] 
+Alyzar takes some salve from a vial and rubs it on his legs.
+
+
+OPPONENT APPLIED TO THEIR legs!!
+
+
+Alyzar takes a drink from an oaken vial.
+Alyzar eats a potash crystal.
+H:7484|88% M:3855|55% E:93% W:88% [W] R:0 47:42.09-e- Shaping : 3[84|0|0|0|106|63] [HAMS] 
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:7484|88% M:3855|55% E:93% W:88% [W] R:0 47:42.23-e- Shaping : 3[84|0|0|0|106|63] [HAMS] 
+You may drink another health or mana elixir. Health (4.494)
+H:7484|88% M:3855|55% E:93% W:88% [W] R:0 47:42.28-e- Shaping : 3[84|0|0|0|106|63] [HAMS] 
+You take a drink from a black-walnut vial.
+Your mind feels stronger and more alert.
+H:7484|88% M:4924|70% E:93% W:88% [W] R:0 47:42.49-e- Shaping : 3[84|0|0|0|106|63]  ( +1069m 15% )[HAMS] 
+erl
+setalias pk stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar right leg/ assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar right leg/ assess"
+H:7484|88% M:4924|70% E:93% W:88% [W] R:0 47:43.32-e- Shaping : 3[84|0|0|0|106|63] [HAMS] 
+curing priority Paralysis 2
+[Prio]: Paralysis (2)
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+With a roar you swing a colossal fist at the right leg of Alyzar.
+Alyzar parries the attack with a deft manoeuvre.
+ YOU HIT PARRY!!
+
+ YOU HIT PARRY!!
+Magma explodes from the cracks between the plates covering you, forming a cloak of molten stone to enshroud you.
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Alyzar and see that his health is at 6950/6950 [100%].
+[Health]: 100%
+pt Alyzar's health at 6950/6950
+H:8189|96% M:4963|71% E:93% W:88% [W] R:0 47:44.91-e- Shaping : 4[84|0|0|0|106|63]  ( +705h 8% )[HAMS] 
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:8189|96% M:4948|71% E:93% W:88% [W] R:0 47:45.04-e- Shaping : 4[84|0|0|0|106|63] [HAMS] 
+Health lost: 1 (raw).
+You bleed 1 health.
+H:8188|96% M:4948|71% E:93% W:88% [W] R:0 47:45.17-e- Shaping : 4[84|0|0|0|106|63] [HAMS] 
+You may eat another bit of irid moss or potash.
+H:8188|96% M:4948|71% E:93% W:88% [W] R:0 47:45.97-e- Shaping : 4[84|0|0|0|106|63] [HAMS] 
+Alyzar takes some salve from a vial and rubs it on his legs.
+
+
+OPPONENT APPLIED TO THEIR legs!!
+
+
+Alyzar stands up.
+
+Alyzar IS NO LONGER PRONE.  FAE|HE|SHE IS UP!!
+
+Alyzar IS NO LONGER PRONE.  FAE|HE|SHE IS UP!!
+
+[Limb]: Reset Alyzar's left leg.
+curing priority Paralysis 2
+[Prio]: Paralysis (2)
+You may drink another health or mana elixir. Mana (4.298)
+H:8188|96% M:4948|71% E:93% W:88% [W] R:0 47:46.80-e- Shaping : 4[84|0|0|0|0|63] [HAMS] 
+Alyzar whips Saosh's Vow through the air in front of you, to no effect.
+Ducking behind you, Alyzar strikes at your hamstring with a rigid grip.
+The crippling blow renders your leg insensate.
+H:8188|96% M:4948|71% E:93% W:88% [W] R:0 47:46.85-e- Shaping : 4[84|0|0|0|0|63] [HAMS] 
+You take a drink from a black-walnut vial.
+Your mind feels stronger and more alert.
+H:8188|96% M:6251|89% E:93% W:88% [W] R:0 47:47.00-e- Shaping : 4[84|0|0|0|0|63]  ( +1303m 18% )[HAMS] 
+wow
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+H:8188|96% M:6251|89% E:93% W:88% [W] R:0 47:47.94-ex- Shaping : 4[84|0|0|0|0|63] [HAMS] 
+"Wow!" you exclaim.
+H:8188|96% M:6251|89% E:93% W:88% [W] R:0 47:47.97-ex- Shaping : 4[84|0|0|0|0|63] [HAMS] 
+j w
+queue addclearfull eb!p!w!t stand 
+queue add eb!p!w!t wear greaves
+queue add eb!p!w!t mj w
+queue add eb!p!w!t leap w
+You are already wearing this item.
+H:8188|96% M:6251|89% E:93% W:88% [W] R:0 47:48.62-ex- Shaping : 4[84|0|0|0|0|63] [HAMS] 
+                   --- DISMOUNTED ---
+
+                   --- DISMOUNTED ---
+
+                   --- DISMOUNTED ---
+H:8188|96% M:6251|89% E:93% W:88% [W] R:0 47:48.62-ex- Shaping : 4[84|0|0|0|0|63] [HAMS] 
+You can not do that with your legs in their current state.
+H:8188|96% M:6251|89% E:93% W:88% [W] R:0 47:48.62-ex- Shaping : 4[84|0|0|0|0|63] [HAMS] 
+TERRAN MAGNET RISE
+As Alyzar draws Saosh's Vow from its scabbard, he drives the pommel into your chin.
+Health lost: 636 (physical blunt).
+Sweeping out with a blade hand, Alyzar strikes at the back of your knee.
+[AFF]: Prone
+You tumble to the ground as your leg abruptly gives out.
+H:7552|89% M:6251|89% E:93% W:88% [W] R:0 47:49.05-ex- Shaping : 4[84|0|0|0|0|63]  ( -636h 7% )[PR HAMS] 
+You stand up.
+H:7552|89% M:6251|89% E:93% W:88% [W] R:0 47:49.16-ex- Shaping : 4[84|0|0|0|0|63] [HAMS] 
+You are already oriented in an upright position: you have no need to flex your powers of magnetism.
+H:7552|89% M:6251|89% E:93% W:88% [W] R:0 47:49.16-ex- Shaping : 4[84|0|0|0|0|63] [HAMS] 
+The shroud of magma cloaking you is no longer sustainable, and it falls away.
+H:7552|89% M:6251|89% E:93% W:88% [W] R:0 47:49.20-ex- Shaping : 3[84|0|0|0|0|63] [HAMS] 
+shield
+queue addclearfull eb touch shield
+queue prepend eb wield shield
+Moving with unpredictable grace, Alyzar sends a dancing blow towards you.
+A sudden phantom wind seizes your mind, blurring the world into a shifting sea.
+[AFF]: Airfisted
+H:7975|94% M:6236|89% E:93% W:88% [W] R:0 47:50.26-ex- Shaping : 3[84|0|0|0|0|63]  ( +423h 4% )[airf HAMS] 
+
+[DEF]: Shield
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 3.40s.
+H:7975|94% M:6236|89% E:93% W:88% [W] R:0 47:50.26-x- Shaping : 3[84|0|0|0|0|63] [airf HAMS] 
+limbs
+
+HEAD: 39.6
+TORSO: 96.8
+LEFT ARM: 0
+RIGHT ARM: 0
+LEFT LEG: 85.8
+RIGHT LEG: 99
+You may drink another health or mana elixir. Mana (4.401)
+H:7975|94% M:6236|89% E:93% W:88% [W] R:0 47:51.47-x- Shaping : 3[84|0|0|0|0|63] [airf HAMS] 
+
+[DEF]: Shield
+Alyzar razes your magical shield with Saosh's Vow.
+Ducking behind you, Alyzar strikes at your hamstring with a rigid grip.
+The crippling blow renders your leg insensate.
+H:7975|94% M:6236|89% E:93% W:88% [W] R:0 47:52.00-x- Shaping : 3[84|0|0|0|0|63] [airf HAMS] 
+Melodie dies, features contorted from the poison delivered by Kog Terias in Ainghaeal's Nest.
+H:7975|94% M:6236|89% E:93% W:88% [W] R:0 47:53.64-x- Shaping : 3[84|0|0|0|0|63] [airf HAMS] 
+You have recovered equilibrium.                                                         --- EQUILIBRIUM ---
+Magma ceases to flow from between the cracks in your plates.
+H:7975|94% M:6236|89% E:93% W:88% [W] R:0 47:54.23-ex- Shaping : 2[84|0|0|0|0|63] [airf HAMS] 
+TERRAN MAGNET RISE
+As Alyzar draws Saosh's Vow from its scabbard, he drives the pommel into your chin.
+Health lost: 636 (physical blunt).
+Sweeping out with a blade hand, Alyzar strikes at the back of your knee.
+[AFF]: Prone
+You tumble to the ground as your leg abruptly gives out.
+H:7834|92% M:6375|91% E:93% W:88% [W] R:0 47:54.90-ex- Shaping : 2[84|0|0|0|0|63] [airf PR HAMS] 
+erl
+queue addclearfull eb!p!w!t  pk
+You stand up.
+H:7834|92% M:6375|91% E:93% W:88% [W] R:0 47:54.96-ex- Shaping : 2[84|0|0|0|0|63] [airf HAMS] 
+You are already oriented in an upright position: you have no need to flex your powers of magnetism.
+H:7834|92% M:6360|91% E:93% W:88% [W] R:0 47:55.01-ex- Shaping : 2[84|0|0|0|0|63] [airf HAMS] 
+[Prio]: Paralysis (2)
+[Prio]: Clumsiness (7)
+H:7834|92% M:6360|91% E:93% W:88% [W] R:0 47:55.01-ex- Shaping : 2[84|0|0|0|0|63] [airf HAMS] 
+With a roar you swing a colossal fist at the right leg of Alyzar.
+Alyzar parries the attack with a deft manoeuvre.
+ YOU HIT PARRY!!
+
+ YOU HIT PARRY!!
+Magma begins to boil up from beneath your outer strata.
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Alyzar and see that his health is at 6950/6950 [100%].
+[Health]: 100%
+pt Alyzar's health at 6950/6950
+H:7834|92% M:6260|89% E:93% W:88% [W] R:0 47:55.08-e- Shaping : 3[84|0|0|0|0|63] [airf HAMS] 
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:7834|92% M:6260|89% E:93% W:88% [W] R:0 47:55.35-e- Shaping : 3[84|0|0|0|0|63] [airf HAMS] 
+curing priority Paralysis 2
+[Prio]: Paralysis (2)
+ell
+setalias pk stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar left leg/ assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar left leg/ assess"
+H:7834|92% M:6260|89% E:93% W:88% [W] R:0 47:56.75-e- Shaping : 3[84|0|0|0|0|63] [airf HAMS] 
+
+[DEF]: Insulation
+In a single motion, Alyzar draws Saosh's Vow from its scabbard and looses a vicious falling slash at your head.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your head.
+ LIMB DAMAGE: head (59.4%)
+  ---- >10s since last parry! ----------- PARRYING left leg
+queue add eb parry left leg
+[59.4|96.8|0|0|85.8|99]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your torso.
+curing predict mildtrauma
+
+[SLC]: Reset torso counts.
+ LIMB DAMAGE: torso (0%)
+  ---- >10s since last parry![59.4|0|0|0|85.8|99]
+Health lost: 1434 (cold).
+The ice-covered blade strips away your protective covering.
+Ducking behind you, Alyzar strikes at your hamstring with a rigid grip.
+The crippling blow renders your leg insensate.
+H:6400|75% M:6252|89% E:93% W:88% [W] R:0 47:56.93-e- Shaping : 3[84|0|0|0|0|63]  ( -1434h 16% ) (143B)[airf HAMS] 
+
+[DEF]: Insulation
+You take out some salve and quickly rub it on your skin.
+A feeling of comfortable warmth spreads over you.
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+H:8008|94% M:5832|83% E:93% W:88% [W] R:0 47:57.09-e- Shaping : 3[84|0|0|0|0|63]  ( +1608h 18% -420m 6% )[airf HAMS] 
+[Predicted]: MILDTRAUMA
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+With a roar you swing a colossal fist at the left leg of Alyzar.
+As your blow lands with a crunch, you perceive that you have dealt 21.0% damage to Alyzar's left leg. (21%)
+Bones crackle and pop as your fist smashes into the left leg of Alyzar with pulverising force.
+Magma explodes from the cracks between the plates covering you, forming a cloak of molten stone to enshroud you.
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Alyzar and see that his health is at 4840/6950 [69%].
+[Health]: 70%
+pt Alyzar's health at 4840/6950
+You may apply another salve to yourself. Skin (0.896)
+H:8008|94% M:5732|82% E:93% W:88% [W] R:0 47:57.93-e- Shaping : 4[84|0|0|0|21|63] [airf HAMS] 
+You take out some salve and quickly rub it on your body.
+Alyzar takes a drink from an oaken vial.
+Alyzar eats a potash crystal.
+H:8008|94% M:5732|82% E:93% W:88% [W] R:0 47:58.11-e- Shaping : 4[84|0|0|0|21|63] [airf HAMS] 
+[Prio]: Paralysis (20)
+ell
+queue addclearfull eb!p!w!t  pk
+You are not the member of any party.
+H:8008|94% M:5732|82% E:93% W:88% [W] R:0 47:58.11-e- Shaping : 4[84|0|0|0|21|63] [airf HAMS] 
+
+====================DAMAGEDRIGHTLEG====================
+====================DAMAGEDRIGHTLEG====================
+====================DAMAGEDRIGHTLEG====================
+[DEF]: Insulation
+With a smooth lunge to the right, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your right leg.
+ LIMB DAMAGE: right leg (118.8%)
+  ---- >10s since last parry![59.4|0|0|0|85.8|118.8]
+[AFF]: Brokenrightleg
+[AFF]: Damagedrightleg
+Your right leg is greatly damaged from the beating.
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your left leg.
+ LIMB DAMAGE: left leg (99%)
+  ---- >10s since last parry! ----------- PARRYING head
+queue add eb parry head
+[59.4|0|0|0|99|118.8]
+Health lost: 1434 (cold).
+The ice-covered blade strips away your protective covering.
+Sweeping out with a blade hand, Alyzar strikes at the back of your knee.
+[AFF]: Prone
+You tumble to the ground as your leg abruptly gives out.
+H:6574|77% M:5732|82% E:93% W:88% [W] R:0 47:58.73-e- Shaping : 4[84|0|0|0|21|63]  ( -1434h 16% ) (118B)[RL2 airf PR HAMS] 
+[Prio]: Paralysis (24)
+curing priority Paralysis 2
+[Prio]: Paralysis (2)
+
+====================DAMAGEDLEFTLEG====================
+====================DAMAGEDLEFTLEG====================
+====================DAMAGEDLEFTLEG====================
+With a smooth lunge to the right, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your right leg.
+ LIMB DAMAGE: right leg (138.6%)
+  ---- >10s since last parry! ----------- PARRYING right leg
+queue add eb parry right leg
+[59.4|0|0|0|99|138.6]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your left leg.
+ LIMB DAMAGE: left leg (112.2%)
+  ---- >10s since last parry! ----------- PARRYING left leg
+queue add eb parry left leg
+[59.4|0|0|0|112.2|138.6]
+[AFF]: Brokenleftleg
+[AFF]: Damagedleftleg
+Your left leg is greatly damaged from the beating.
+Health lost: 1434 (cold).
+Sweeping out with a blade hand, Alyzar strikes at the back of your knee.
+The attack does little to your already proned body.
+H:5563|65% M:5417|77% E:93% W:88% [W] R:0 48:00.59-e- Shaping : 4[84|0|0|0|21|63]  ( -1011h 11% -315m 4% ) (133B)[RL2 LL2 airf PR HAMS] 
+You touch the tree of life tattoo.
+You eat a potash crystal.
+outr potash
+H:6240|73% M:5614|80% E:93% W:88% [W] R:0 48:00.66-e- Shaping : 4[84|0|0|0|21|63]  ( +677h 7% +197m 2% )[RL2 LL2 airf PR HAMS] 
+eaq
+setalias pk stand/get body/ wield shield360716/ terran eruption / MANIFEST QUAKE Alyzar / MANIFEST AVALANCHE Alyzar/ assess
+queue addclearfull eb!p!w!t  pk
+[Prio]: Paralysis (24)
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+Both of your legs must be free and unhindered to do that.
+You must be standing first.
+You glance over Alyzar and see that his health is at 6950/6950 [100%].
+[Health]: 100%
+pt Alyzar's health at 6950/6950
+You will now attempt to parry attacks to your head.
+You will now attempt to parry attacks to your right leg.
+You will now attempt to parry attacks to your left leg.
+H:6240|73% M:5514|79% E:93% W:88% [W] R:0 48:00.79-ex- Shaping : 4[84|0|0|0|21|63] [RL2 LL2 airf PR HAMS] 
+[OUTR]: 1 Potash (178)
+Alias "pk" will now execute: "stand/get body/ wield shield360716/ terran eruption / MANIFEST QUAKE Alyzar / MANIFEST AVALANCHE Alyzar/ assess"
+
+H:6240|73% M:5514|79% E:93% W:88% [W] R:0 48:00.91-ex- Shaping : 4[84|0|0|0|21|63] [RL2 LL2 airf PR HAMS] 
+Both of your legs must be free and unhindered to do that.
+You summon up the magma that courses beneath your outer layers, sending it forth in an eruption to drive out that which taints your perfect form.
+You must be standing first.
+You must be standing first.
+You may not assess someone again so soon after doing so previously.
+H:6240|73% M:5164|74% E:93% W:87% [W] R:0 48:00.92-ex- Shaping : 4[84|0|0|0|21|63]  ( -350m 5% )[RL2 LL2 airf PR HAMS] 
+You are not the member of any party.
+H:6240|73% M:5164|74% E:93% W:87% [W] R:0 48:01.04-ex- Shaping : 4[84|0|0|0|21|63] [RL2 LL2 airf PR HAMS] 
+You may drink another health or mana elixir. Health (4.242)
+H:6240|73% M:5164|74% E:93% W:87% [W] R:0 48:01.40-ex- Shaping : 4[84|0|0|0|21|63] [RL2 LL2 airf PR HAMS] 
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+H:8290|97% M:5164|74% E:93% W:87% [W] R:0 48:01.48-ex- Shaping : 4[84|0|0|0|21|63]  ( +2050h 24% )[RL2 LL2 airf PR HAMS] 
+Health lost: 13 (raw).
+You bleed 13 health.
+H:8277|97% M:5164|74% E:93% W:87% [W] R:0 48:01.67-ex- Shaping : 4[84|0|0|0|21|63] [RL2 LL2 airf PR HAMS] 
+
+[SLC]: Reset torso counts.
+Your torso feels stronger and healthier.
+[AFF]: Mildtrauma
+You may apply another salve to yourself. Body (3.987)
+H:8277|97% M:5164|74% E:93% W:87% [W] R:0 48:02.09-ex- Shaping : 4[84|0|0|0|21|63] [RL2 LL2 airf PR HAMS] 
+You take out some salve and quickly rub it on your legs.
+H:8277|97% M:5164|74% E:93% W:87% [W] R:0 48:02.24-ex- Shaping : 4[84|0|0|0|21|63] [RL2 LL2 airf PR HAMS] 
+The shroud of magma cloaking you is no longer sustainable, and it falls away.
+H:8277|97% M:5164|74% E:93% W:87% [W] R:0 48:02.24-ex- Shaping : 3[84|0|0|0|21|63] [RL2 LL2 airf PR HAMS] 
+
+====================IMPALED====================
+====================IMPALED====================
+====================IMPALED====================
+Alyzar draws his blade back and plunges it deep into your helpless body impaling it to the hilt.
+[AFF]: Impaled
+Your shield completely absorbs the damage.
+H:8277|97% M:5160|74% E:93% W:87% [W] R:0 48:02.55-ex- Shaping : 3[84|0|0|0|21|63] [RL2 LL2 airf PR IMPALED HAMS] 
+You begin to writhe furiously to escape the blade that has impaled you.
+Balance used: 1.0s.
+H:8277|97% M:5160|74% E:93% W:87% [W] R:0 48:02.60-e- Shaping : 3[84|0|0|0|21|63] [RL2 LL2 airf PR IMPALED HAMS] 
+tm w
+queue addclearfull eb tumble w
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You begin to tumble agilely to the west.
+                   --- WE TUMBLING OUT THIS BITCH ---
+
+                   --- WE TUMBLING OUT THIS BITCH ---
+
+                   --- WE TUMBLING OUT THIS BITCH ---
+
+                   --- WE TUMBLING OUT THIS BITCH ---
+Balance used: 7.0s.
+curing priority Paralysis 20
+H:8277|97% M:5160|74% E:93% W:87% [W] R:0 48:03.61-e- Shaping : 3[84|0|0|0|21|63] [RL2 LL2 airf PR IMPALED HAMS] 
+[Prio]: Paralysis (20)
+Clarity of form returns as the wind plaguing your mind dies down.
+[AFF]: Airfisted
+H:8277|97% M:5160|74% E:93% W:87% [W] R:0 48:04.33-e- Shaping : 3[84|0|0|0|21|63] [RL2 LL2 PR IMPALED HAMS] 
+[Prio]: Paralysis (24)
+As Alyzar shifts the blade transfixing your gut, the loathsome kiss of metal ravages your insides.
+You feel weak and lightheaded.
+Health lost: 375 (physical cutting).
+[AFF]: Internalbleeding
+H:7902|93% M:5160|74% E:93% W:87% [W] R:0 48:04.71-e- Shaping : 3[84|0|0|0|21|63]  ( -375h 4% )[RL2 LL2 IBLD PR IMPALED HAMS] 
+Your health continues to drain away as your impaled body shudders on the end of the weapon.
+Health lost: 617 (physical cutting).
+H:7853|92% M:5284|75% E:93% W:87% [W] R:0 48:05.28-e- Shaping : 3[84|0|0|0|21|63] [RL2 LL2 IBLD PR IMPALED HAMS] 
+You may drink another health or mana elixir. Health (4.429)
+H:7853|92% M:5284|75% E:93% W:87% [W] R:0 48:05.95-e- Shaping : 3[84|0|0|0|21|63] [RL2 LL2 IBLD PR IMPALED HAMS] 
+You take a drink from a black-walnut vial.
+Your mind feels stronger and more alert.
+H:7853|92% M:6286|90% E:93% W:87% [W] R:0 48:06.05-e- Shaping : 3[84|0|0|0|21|63]  ( +1002m 14% )[RL2 LL2 IBLD PR IMPALED HAMS] 
+
+[SLC]: Reset left leg counts.
+Your left leg feels stronger and healthier.
+[AFF]: Damagedleftleg
+You may apply another salve to yourself. Legs (4.037)
+You take out some salve and quickly rub it on your legs.
+H:7853|92% M:6286|90% E:93% W:87% [W] R:0 48:06.25-e- Shaping : 3[84|0|0|0|21|63] [RL2 ll1 IMPALED PR IBLD HAMS] 
+You feel the tightness in your hamstring subside, allowing free movement once again.
+[AFF]: Hamstrung
+H:7853|92% M:6286|90% E:93% W:87% [W] R:0 48:06.33-e- Shaping : 3[84|0|0|0|21|63] [RL2 ll1 IMPALED PR IBLD] 
+You may eat another bit of irid moss or potash.
+H:7853|92% M:6286|90% E:93% W:87% [W] R:0 48:06.67-e- Shaping : 3[84|0|0|0|21|63] [RL2 ll1 IMPALED PR IBLD] 
+You groan in pain as Alyzar twists the blade within your gut.
+Health lost: 52 (unblockable).
+H:7801|92% M:6286|90% E:93% W:87% [W] R:0 48:06.78-e- Shaping : 3[84|0|0|0|21|63] [RL2 ll1 IMPALED PR IBLD] 
+You eat a potash crystal.
+outr potash
+H:8470|100% M:2171|31% E:93% W:86% [W] R:0 48:06.86-e- Shaping : 3[84|0|0|0|21|63]  ( +669h 7% -4115m 59% )[RL2 ll1 IMPALED PR IBLD] 
+You are impaled and must writhe off before you may do that.
+You cannot do that because both of your arms must be whole and unbound.
+H:8470|100% M:2171|31% E:93% W:86% [W] R:0 48:07.09-e- Shaping : 3[84|0|0|0|21|63] [RL2 ll1 IMPALED PR IBLD] 
+Health lost: 33 (raw).
+You bleed 33 health.
+H:8437|99% M:2171|31% E:93% W:86% [W] R:0 48:07.17-e- Shaping : 3[84|0|0|0|21|63] [RL2 ll1 IMPALED PR IBLD] 
+Magma ceases to flow from between the cracks in your plates.
+H:8437|99% M:2171|31% E:93% W:86% [W] R:0 48:07.26-e- Shaping : 2[84|0|0|0|21|63] [RL2 ll1 IMPALED PR IBLD] 
+You groan in pain as Alyzar twists the blade within your gut.
+Health lost: 52 (unblockable).
+H:8385|98% M:2171|31% E:93% W:86% [W] R:0 48:07.71-e- Shaping : 2[84|0|0|0|21|63] [RL2 ll1 IMPALED PR IBLD] 
+With an heroic effort you manage to writhe yourself free from the weapon that impaled you.
+With a sibilant 'shhhiiiinnngggt!', Alyzar smoothly sheathes Saosh's Vow.
+H:8385|98% M:1587|22% E:93% W:86% [W] R:0 48:08.09-e- Shaping : 2[84|0|0|0|21|63]  ( -584m 8% ) (256B)[RL2 ll1 PR IBLD] 
+
+[DEF]: Cloak
+You tumble out of the room.
+A private study. (indoors)
+A portrait hangs from one wall, damaged by blade and fire alike. An icewall is here, blocking passage to the east.
+You see exits leading east and down.
+H:8385|98% M:1587|22% E:93% W:86% [E|D] R:0 48:08.62-ec- Shaping : 2[84|0|0|0|21|63] [RL2 ll1 PR IBLD] 
+Alyzar leaps in from the east.
+curing priority Paralysis 2
+cp
+curing prio mana
+[Prio]: Paralysis (2)
+[Legacy]: Prioed Mana
+
+====================IMPALED====================
+====================IMPALED====================
+====================IMPALED====================
+Alyzar draws his blade back and plunges it deep into your helpless body impaling it to the hilt.
+[AFF]: Impaled
+Health lost: 693 (physical cutting).
+[here - Alyzar (1)]
+H:7692|90% M:1572|22% E:93% W:86% [E|D] R:0 48:10.07-ec- Shaping : 2[84|0|0|0|21|63]  ( -693h 8% ) (431B)[RL2 ll1 IMPALED PR IBLD] 
+[Prio]: Paralysis (24)
+d
+queue addclearfull freestand d
+
+[SLC]: Reset right leg counts.
+Your right leg feels stronger and healthier.
+[AFF]: Damagedrightleg
+You may apply another salve to yourself. Legs (4.029)
+You may purge yourself of weakness once again.
+H:7692|90% M:1572|22% E:93% W:86% [E|D] R:0 48:10.28-ec- Shaping : 2[84|0|0|0|21|63] [rl1 ll1 IMPALED PR IBLD] 
+d
+queue add freestand d
+You take out some salve and quickly rub it on your legs.
+The bones in your left leg mend.
+[AFF]: Brokenleftleg
+H:8115|95% M:1572|22% E:93% W:86% [E|D] R:0 48:10.33-ec- Shaping : 2[84|0|0|0|21|63]  ( +423h 4% ) (431B)[rl1 IMPALED PR IBLD] 
+[Prio]: Paralysis (2)
+d
+queue add freestand d
+You may drink another health or mana elixir. Mana (4.534)
+H:8115|95% M:1572|22% E:93% W:86% [E|D] R:0 48:10.48-ec- Shaping : 2[84|0|0|0|21|63] [rl1 IMPALED PR IBLD] 
+You take a drink from a black-walnut vial.
+Your mind feels stronger and more alert.
+H:8115|95% M:2585|37% E:93% W:86% [E|D] R:0 48:10.54-ec- Shaping : 2[84|0|0|0|21|63]  ( +1013m 14% ) (431B)[rl1 IMPALED PR IBLD] 
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+H:8115|95% M:2585|37% E:93% W:86% [E|D] R:0 48:10.68-exc- Shaping : 2[84|0|0|0|21|63] [rl1 IMPALED PR IBLD] 
+You begin to writhe furiously to escape the blade that has impaled you.
+Balance used: 1.0s.
+queue addclear eqbal down
+You may apply another salve to yourself. Legs (0.806)
+H:8115|95% M:1417|20% E:93% W:85% [E|D] R:0 48:11.23-ec- Shaping : 2[84|0|0|0|21|63]  ( -1168m 16% ) (351B)[rl1 IMPALED PR IBLD] 
+queue addclear eqbal down
+Your health continues to drain away as your impaled body shudders on the end of the weapon.
+Health lost: 617 (physical cutting).
+H:7498|88% M:1417|20% E:93% W:85% [E|D] R:0 48:11.28-ec- Shaping : 2[84|0|0|0|21|63]  ( -617h 7% ) (406B)[rl1 IMPALED PR IBLD] 
+TERRAN MAGNET RISE
+You take out some salve and quickly rub it on your legs.
+The bones in your right leg mend.
+[AFF]: Brokenrightleg
+H:7498|88% M:1417|20% E:93% W:85% [E|D] R:0 48:11.35-ec- Shaping : 2[84|0|0|0|21|63] [IMPALED PR IBLD] 
+queue addclear eqbal down
+You are impaled and must writhe off before you may do that.
+H:7498|88% M:1417|20% E:93% W:85% [E|D] R:0 48:11.56-ec- Shaping : 2[84|0|0|0|21|63] [IMPALED PR IBLD] 
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You must be standing first.
+H:7498|88% M:1417|20% E:93% W:85% [E|D] R:0 48:11.66-exc- Shaping : 2[84|0|0|0|21|63] [IMPALED PR IBLD] 
+queue addclear eqbal down
+You must be standing first.
+H:7498|88% M:1417|20% E:93% W:85% [E|D] R:0 48:11.66-exc- Shaping : 2[84|0|0|0|21|63] [IMPALED PR IBLD] 
+You must be standing first.
+H:7498|88% M:1417|20% E:93% W:85% [E|D] R:0 48:11.88-exc- Shaping : 2[84|0|0|0|21|63] [IMPALED PR IBLD] 
+queue addclear eqbal down
+You must be standing first.
+H:7498|88% M:1409|20% E:93% W:85% [E|D] R:0 48:12.03-exc- Shaping : 2[84|0|0|0|21|63] [IMPALED PR IBLD] 
+queue addclear eqbal down
+You must be standing first.
+H:7498|88% M:1409|20% E:93% W:85% [E|D] R:0 48:12.18-exc- Shaping : 2[84|0|0|0|21|63] [IMPALED PR IBLD] 
+queue addclear eqbal down
+You may apply another salve to yourself. Legs (0.864)
+You groan in pain as Alyzar twists the blade within your gut.
+Health lost: 52 (unblockable).
+H:7446|87% M:1409|20% E:93% W:85% [E|D] R:0 48:12.21-exc- Shaping : 2[84|0|0|0|21|63] [IMPALED PR IBLD] 
+You take out some salve and quickly rub it on your body.
+H:7446|87% M:1409|20% E:93% W:85% [E|D] R:0 48:12.30-exc- Shaping : 2[84|0|0|0|21|63] [IMPALED PR IBLD] 
+You feel the magma contained within your hallowed form cooling, your thoughts growing more sluggish.
+H:7446|87% M:1409|20% E:93% W:85% [E|D] R:0 48:12.31-exc- Shaping : 1[84|0|0|0|21|63] [IMPALED PR IBLD] 
+You must be standing first.
+H:7446|87% M:1409|20% E:93% W:85% [E|D] R:0 48:12.33-exc- Shaping : 1[84|0|0|0|21|63] [IMPALED PR IBLD] 
+queue addclear eqbal down
+You must be standing first.
+H:7446|87% M:1409|20% E:93% W:85% [E|D] R:0 48:12.55-exc- Shaping : 1[84|0|0|0|21|63] [IMPALED PR IBLD] 
+queue addclear eqbal down
+Health lost: 661 (raw).
+You bleed 661 health.
+H:6785|80% M:1409|20% E:93% W:85% [E|D] R:0 48:12.67-exc- Shaping : 1[84|0|0|0|21|63]  ( -661h 7% ) (647B)[IMPALED PR IBLD] 
+queue addclear eqbal down
+You must be standing first.
+H:6785|80% M:1409|20% E:93% W:85% [E|D] R:0 48:12.68-exc- Shaping : 1[84|0|0|0|21|63] [IMPALED PR IBLD] 
+You may eat another bit of irid moss or potash.
+H:6785|80% M:1409|20% E:93% W:85% [E|D] R:0 48:12.73-exc- Shaping : 1[84|0|0|0|21|63] [IMPALED PR IBLD] 
+You eat a potash crystal.
+outr potash
+H:7462|88% M:1966|28% E:93% W:85% [E|D] R:0 48:12.87-exc- Shaping : 1[84|0|0|0|21|63]  ( +677h 7% +557m 7% ) (647B)[IMPALED PR IBLD] 
+You must be standing first.
+H:7462|88% M:1966|28% E:93% W:85% [E|D] R:0 48:12.87-exc- Shaping : 1[84|0|0|0|21|63] [IMPALED PR IBLD] 
+queue addclear eqbal down
+You are impaled and must writhe off before you may do that.
+You cannot do that because both of your arms must be whole and unbound.
+H:7462|88% M:1966|28% E:93% W:85% [E|D] R:0 48:13.02-exc- Shaping : 1[84|0|0|0|21|63] [IMPALED PR IBLD] 
+You must be standing first.
+H:7462|88% M:1674|24% E:93% W:85% [E|D] R:0 48:13.16-exc- Shaping : 1[84|0|0|0|21|63]  ( -292m 4% ) (627B)[IMPALED PR IBLD] 
+queue addclear eqbal down
+TERRAN MAGNET RISE
+With an heroic effort you manage to writhe yourself free from the weapon that impaled you.
+With a sibilant 'shhhiiiinnngggt!', Alyzar smoothly sheathes Saosh's Vow.
+H:7462|88% M:1674|24% E:93% W:85% [E|D] R:0 48:13.24-exc- Shaping : 1[84|0|0|0|21|63] [PR IBLD] 
+You stand up.
+H:7462|88% M:1674|24% E:93% W:85% [E|D] R:0 48:13.24-exc- Shaping : 1[84|0|0|0|21|63] [IBLD] 
+A grand foyer in the Oniar estate. (indoors)
+You see exits leading north, northeast, east, south, west, and up.
+There is no exit in that direction.
+There is no exit in that direction.
+H:7462|88% M:1674|24% E:93% W:85% [NE|S|E|U|W|N] R:0 48:13.27-exc- Shaping : 1[84|0|0|0|21|63] [IBLD] 
+There is no exit in that direction.
+H:7462|88% M:1674|24% E:93% W:85% [NE|S|E|U|W|N] R:0 48:13.43-exc- Shaping : 1[84|0|0|0|21|63] [IBLD] 
+queue addclear eqbal down
+You are already oriented in an upright position: you have no need to flex your powers of magnetism.
+H:7462|88% M:1674|24% E:93% W:85% [NE|S|E|U|W|N] R:0 48:13.57-exc- Shaping : 1[84|0|0|0|21|63] [IBLD] 
+There is no exit in that direction.
+H:7462|88% M:1674|24% E:93% W:85% [NE|S|E|U|W|N] R:0 48:13.66-exc- Shaping : 1[84|0|0|0|21|63] [IBLD] 
+queue addclear eqbal down
+There is no exit in that direction.
+H:7462|88% M:1674|24% E:93% W:85% [NE|S|E|U|W|N] R:0 48:13.93-exc- Shaping : 1[84|0|0|0|21|63] [IBLD] 
+queue addclear eqbal down
+There is no exit in that direction.
+H:7462|88% M:1674|24% E:93% W:85% [NE|S|E|U|W|N] R:0 48:14.07-exc- Shaping : 1[84|0|0|0|21|63] [IBLD] 
+queue addclearfull freestand s
+Alyzar arrives from the up.
+[here - Alyzar (1)]
+H:7462|88% M:1674|24% E:93% W:85% [NE|S|E|U|W|N] R:0 48:14.34-exc- Shaping : 1[84|0|0|0|21|63] [IBLD] 
+queue addclearfull freestand s
+The Oniar estate gates.
+The sun shines brightly overhead.
+You see exits leading north, northeast, and northwest.
+H:7462|88% M:1674|24% E:93% W:85% [NE|NW|N] R:0 48:14.34-exc- Shaping : 1[84|0|0|0|21|63] [IBLD] 
+There is no exit in that direction.
+H:7462|88% M:1674|24% E:93% W:85% [NE|NW|N] R:0 48:14.53-exc- Shaping : 1[84|0|0|0|21|63] [IBLD] 
+You may utilise the tree tattoo again. Tree (13.975)
+H:7462|88% M:1674|24% E:93% W:85% [NE|NW|N] R:0 48:14.62-exc- Shaping : 1[84|0|0|0|21|63] [IBLD] 
+queue addclearfull freestand ne
+queue addclearfull freestand ne
+Empty training yard.
+The sun shines brightly overhead.
+You see exits leading southwest and northwest.
+H:7462|88% M:1674|24% E:93% W:85% [NW|SW] R:0 48:14.95-exc- Shaping : 1[84|0|0|0|21|63] [IBLD] 
+You may drink another health or mana elixir. Mana (4.39)
+H:7462|88% M:1674|24% E:93% W:85% [NW|SW] R:0 48:14.95-exc- Shaping : 1[84|0|0|0|21|63] [IBLD] 
+You take a drink from a black-walnut vial.
+Your mind feels stronger and more alert.
+H:7462|88% M:2977|42% E:93% W:85% [NW|SW] R:0 48:14.00-exc- Shaping : 1[84|0|0|0|21|63]  ( +1303m 18% ) (627B)[IBLD] 
+queue addclearfull freestand nw
+There is no exit in that direction.
+H:7462|88% M:2977|42% E:93% W:85% [NW|SW] R:0 48:15.02-exc- Shaping : 1[84|0|0|0|21|63] [IBLD] 
+queue addclearfull freestand nw
+A break in the estate wall.
+The sun shines brightly overhead.
+You see exits leading southeast, southwest, and northwest.
+Secluded copse.
+The sun shines brightly overhead. A large beehive hangs down from the trees above.
+There are no obvious exits.
+queue addclearfull freestand nw
+queue addclearfull freestand nw
+There is no exit in that direction.
+H:8167|96% M:1641|23% E:93% W:85% [] R:0 48:15.51-exc- Shaping : 1[84|0|0|0|21|63]  ( +705h 8% -1336m 19% ) (527B)[IBLD] 
+There is no exit in that direction.
+H:8167|96% M:1641|23% E:93% W:85% [] R:0 48:15.59-exc- Shaping : 1[84|0|0|0|21|63] [IBLD] 
+[AFF]: Internalbleeding
+You may apply another salve to yourself. Body (3.914)
+H:8167|96% M:1641|23% E:93% W:85% [] R:0 48:16.30-exc- Shaping : 1[84|0|0|0|21|63] 
+
+[DEF]: Insulation
+You take out some salve and quickly rub it on your skin.
+A feeling of comfortable warmth spreads over you.
+fly
+The ring of shining metal carries you up into the skies.
+Flying above Secluded copse.
+The sun shines brightly overhead.
+There are no obvious exits.
+Balance used: 2.0s.
+H:8167|96% M:1401|20% E:93% W:85% [] R:0 48:16.94-ec- Shaping : 1[84|0|0|0|21|63]  ( -240m 3% ) (397B)
+You may apply another salve to yourself. Skin (0.773)
+H:8167|96% M:1401|20% E:93% W:85% [] R:0 48:17.20-ec- Shaping : 1[84|0|0|0|21|63] 
+The rock plates covering your form crack and fall away, leaving you diminished.
+H:8167|96% M:1401|20% E:93% W:85% [] R:0 48:17.38-ec- Shaping : 0[84|0|0|0|21|63] 
+Alyzar wanders into view directly below.
+H:8167|96% M:1397|20% E:93% W:85% [] R:0 48:18.15-ec- Shaping : 0[84|0|0|0|21|63] 
+Health lost: 397 (raw).
+You bleed 397 health.
+H:7770|91% M:1397|20% E:93% W:85% [] R:0 48:18.17-ec- Shaping : 0[84|0|0|0|21|63]  ( -397h 4% ) (383B)
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You may eat another bit of irid moss or potash.
+H:7770|91% M:1397|20% E:93% W:85% [] R:0 48:18.78-exc- Shaping : 0[84|0|0|0|21|63] 
+diag
+You eat a potash crystal.
+outr potash
+H:8447|99% M:1954|28% E:93% W:85% [] R:0 48:18.92-exc- Shaping : 0[84|0|0|0|21|63]  ( +677h 7% +557m 7% ) (383B)
+Alyzar leaps deftly into the skies from below.
+Alyzar wanders out of sight from below you.
+H:8447|99% M:1954|28% E:93% W:85% [] R:0 48:18.92-exc- Shaping : 0[84|0|0|0|21|63] 
+You are:
+blind.
+deaf.
+bleeding for 383 health.
+Equilibrium used: 0.85s.
+H:8447|99% M:1954|28% E:93% W:85% [] R:0 48:18.99-xc- Shaping : 0[84|0|0|0|21|63] 
+[OUTR]: 1 Potash (177)
+You may drink another health or mana elixir. Mana (4.414)
+H:8447|99% M:1414|20% E:93% W:84% [] R:0 48:19.45-xc- Shaping : 0[84|0|0|0|21|63]  ( -540m 7% ) (203B)
+You take a drink from a black-walnut vial.
+Your mind feels stronger and more alert.
+H:8447|99% M:2695|38% E:93% W:84% [] R:0 48:19.55-xc- Shaping : 0[84|0|0|0|21|63]  ( +1281m 18% ) (203B)
+queue addclearfull freestand se
+You have recovered equilibrium.                                                         --- EQUILIBRIUM ---
+H:8447|99% M:2095|30% E:93% W:84% [] R:0 48:19.75-exc- Shaping : 0[84|0|0|0|21|63]  ( -600m 8% )
+Flying above A break in the estate wall.
+The sun shines brightly overhead.
+You see exits leading southeast, southwest, and northwest.
+H:8447|99% M:2095|30% E:93% W:84% [SW|NW|SE] R:0 48:19.94-exc- Shaping : 0[84|0|0|0|21|63] 
+queue addclearfull freestand se
+Flying above Empty training yard.
+The sun shines brightly overhead.
+You see exits leading southwest and northwest.
+queue addclearfull freestand se
+There is no exit in that direction.
+H:8447|99% M:2080|29% E:93% W:84% [NW|SW] R:0 48:20.24-exc- Shaping : 0[84|0|0|0|21|63] 
+queue addclearfull freestand se
+There is no exit in that direction.
+H:8470|100% M:2080|29% E:93% W:84% [NW|SW] R:0 48:20.39-exc- Shaping : 0[84|0|0|0|21|63] 
+queue addclearfull freestand se
+There is no exit in that direction.
+H:8470|100% M:2080|29% E:93% W:84% [NW|SW] R:0 48:20.52-exc- Shaping : 0[84|0|0|0|21|63] 
+queue addclearfull freestand sw
+Flying above The Oniar estate gates.
+The sun shines brightly overhead.
+You see exits leading north, northeast, and northwest.
+queue addclearfull freestand nw
+Flying above Walking down the garden path.
+The sun shines brightly overhead.
+You see exits leading northeast and southeast.
+touch shield
+
+[DEF]: Shield
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 3.40s.
+H:8470|100% M:2080|29% E:93% W:84% [NE|SE] R:0 48:21.97-xc- Shaping : 0[84|0|0|0|21|63] 
+Health lost: 3 (raw).
+You bleed 3 health.
+H:8467|99% M:2080|29% E:93% W:84% [NE|SE] R:0 48:23.67-xc- Shaping : 0[84|0|0|0|21|63] 
+You may drink another health or mana elixir. Mana (4.386)
+H:8467|99% M:2080|29% E:93% W:84% [NE|SE] R:0 48:23.97-xc- Shaping : 0[84|0|0|0|21|63] 
+You take a drink from a black-walnut vial.
+Your mind feels stronger and more alert.
+H:8467|99% M:3026|43% E:93% W:84% [NE|SE] R:0 48:24.01-xc- Shaping : 0[84|0|0|0|21|63]  ( +946m 13% )
+You may eat another bit of irid moss or potash.
+H:8467|99% M:3026|43% E:93% W:84% [NE|SE] R:0 48:24.82-xc- Shaping : 0[84|0|0|0|21|63] 
+You eat a potash crystal.
+outr potash
+H:8470|100% M:3583|51% E:93% W:84% [NE|SE] R:0 48:24.99-xc- Shaping : 0[84|0|0|0|21|63]  ( +557m 7% )
+[OUTR]: 1 Potash (176)
+You have recovered equilibrium.                                                         --- EQUILIBRIUM ---
+H:8470|100% M:3568|51% E:93% W:84% [NE|SE] R:0 48:25.36-exc- Shaping : 0[84|0|0|0|21|63] 
+land
+
+[DEF]: Shield
+You begin to descend, the wind whistling past you as the earth draws ever closer. You land easily, back on the ground again.
+Walking down the garden path.
+The sun shines brightly overhead.
+You see exits leading northeast and southeast.
+Your movement causes your magical shield to dissipate.
+H:8470|100% M:3699|53% E:93% W:84% [NE|SE] R:0 48:28.40-exc- Shaping : 0[84|0|0|0|21|63] 
+You may drink another health or mana elixir. Mana (4.35)
+H:8470|100% M:3699|53% E:93% W:84% [NE|SE] R:0 48:28.40-exc- Shaping : 0[84|0|0|0|21|63] 
+[Prio]: Paralysis (2)
+[Prio]: Clumsiness (7)
+H:8470|100% M:3699|53% E:93% W:84% [NE|SE] R:0 48:28.53-exc- Shaping : 0[84|0|0|0|21|63] 
+You take a drink from a black-walnut vial.
+Your mind feels stronger and more alert.
+H:8470|100% M:4813|69% E:93% W:84% [NE|SE] R:0 48:28.57-exc- Shaping : 0[84|0|0|0|21|63]  ( +1114m 15% )
+Alyzar arrives from the southeast.
+[here - Alyzar (1)]
+H:8470|100% M:4798|68% E:93% W:84% [NE|SE] R:0 48:30.82-exc- Shaping : 0[84|0|0|0|21|63] 
+You may eat another bit of irid moss or potash.
+H:8470|100% M:4798|68% E:93% W:84% [NE|SE] R:0 48:30.95-exc- Shaping : 0[84|0|0|0|21|63] 
+Alyzar whips Saosh's Vow through the air in front of you, to no effect.
+Ducking behind you, Alyzar strikes at your hamstring with a rigid grip.
+The crippling blow renders your leg insensate.
+[AFF]: Hamstrung
+H:8470|100% M:4798|68% E:93% W:84% [NE|SE] R:0 48:30.97-exc- Shaping : 0[84|0|0|0|21|63] [HAMS] 
+Alias "pk" will now execute: "stand/get body/ wield shield360716/MANIFEST QUAKE Alyzar / MANIFEST AVALANCHE Alyzar/ assess"
+H:8470|100% M:4798|68% E:93% W:84% [NE|SE] R:0 48:31.06-exc- Shaping : 0[84|0|0|0|21|63] [HAMS] 
+
+[DEF]: Insulation
+With a smooth lunge to the right, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your right leg.
+ LIMB DAMAGE: right leg (19.8%)
+  ---- >10s since last parry! ----------- PARRYING head
+queue add eb parry head
+[59.4|0|0|0|0|19.8]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your left leg.
+ LIMB DAMAGE: left leg (13.2%)
+  ---- >10s since last parry! ----------- PARRYING right leg
+queue add eb parry right leg
+[59.4|0|0|0|13.2|19.8]
+Health lost: 1434 (cold).
+The ice-covered blade strips away your protective covering.
+Ducking behind you, Alyzar strikes at your hamstring with a rigid grip.
+The crippling blow renders your leg insensate.
+H:7036|83% M:4798|68% E:93% W:84% [NE|SE] R:0 48:32.75-exc- Shaping : 0[84|0|0|0|21|63]  ( -1434h 16% ) (115B)[HAMS] 
+
+[DEF]: Insulation
+You take out some salve and quickly rub it on your skin.
+A feeling of comfortable warmth spreads over you.
+You will now attempt to parry attacks to your head.
+H:7036|83% M:4494|64% E:93% W:84% [NE|SE] R:0 48:32.87-exc- Shaping : 0[84|0|0|0|21|63]  ( -304m 4% )[HAMS] 
+You will now attempt to parry attacks to your right leg.
+H:7036|83% M:4494|64% E:93% W:84% [NE|SE] R:0 48:32.87-exc- Shaping : 0[84|0|0|0|21|63] [HAMS] 
+You may drink another health or mana elixir. Mana (4.442)
+H:7036|83% M:4494|64% E:93% W:84% [NE|SE] R:0 48:33.05-exc- Shaping : 0[84|0|0|0|21|63] [HAMS] 
+You take a drink from a black-walnut vial.
+Your mind feels stronger and more alert.
+H:7036|83% M:5775|82% E:93% W:84% [NE|SE] R:0 48:33.18-exc- Shaping : 0[84|0|0|0|21|63]  ( +1281m 18% )[HAMS] 
+You may apply another salve to yourself. Skin (0.838)
+H:7036|83% M:5775|82% E:94% W:84% [NE|SE] R:0 48:33.70-exc- Shaping : 0[84|0|0|0|21|63] [HAMS] 
+ell
+setalias pk stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar left leg/ assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar left leg/ assess"
+H:7036|83% M:5775|82% E:94% W:84% [NE|SE] R:0 48:34.21-exc- Shaping : 0[84|0|0|0|21|63] [HAMS] 
+With a roar you swing a colossal fist at the left leg of Alyzar.
+As your blow lands with a crunch, you perceive that you have dealt 21.0% damage to Alyzar's left leg. (42%)
+Your fist crunches into the left leg of Alyzar.
+Alyzar pivots on his heel as he draws his blade from its scabbard and unleashes a retaliatory strike at you.
+Health lost: 235 (physical cutting).
+The rock plates covering your form rapidly thicken, sharp spikes of stone sprouting from them in an instant.
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Alyzar and see that his health is at 5197/6950 [74%].
+[Health]: 75%
+pt Alyzar's health at 5197/6950
+H:6801|80% M:5675|81% E:93% W:84% [NE|SE] R:0 48:34.21-ec- Shaping : 1[84|0|0|0|42|63]  ( -235h 2% )[HAMS] 
+Alyzar takes a drink from an oaken vial.
+Alyzar eats a potash crystal.
+H:6801|80% M:5675|81% E:93% W:84% [NE|SE] R:0 48:34.37-ec- Shaping : 1[84|0|0|0|42|63] [HAMS] 
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:6801|80% M:5675|81% E:93% W:84% [NE|SE] R:0 48:34.50-ec- Shaping : 1[84|0|0|0|42|63] [HAMS] 
+
+[DEF]: Insulation
+With a smooth lunge to the left, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your left leg.
+ LIMB DAMAGE: left leg (33%)
+  ---- >10s since last parry! ----------- PARRYING left leg
+queue add eb parry left leg
+[59.4|0|0|0|33|19.8]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your right leg.
+ LIMB DAMAGE: right leg (33%)
+  ---- >10s since last parry! ----------- PARRYING right leg
+queue add eb parry right leg
+[59.4|0|0|0|33|33]
+Health lost: 1434 (cold).
+The ice-covered blade strips away your protective covering.
+With fluid motions of his iron fingers, Alyzar strikes precisely at your neck.
+Your muscles lock up as the swift blows meet pressure points.
+[AFF]: Paralysis
+H:5367|63% M:5675|81% E:93% W:84% [NE|SE] R:0 48:34.77-ec- Shaping : 1[84|0|0|0|42|63]  ( -1434h 16% ) (130B)[PAR HAMS] 
+Health lost: 130 (raw).
+You bleed 130 health.
+H:5237|61% M:5675|81% E:93% W:84% [NE|SE] R:0 48:34.77-ec- Shaping : 1[84|0|0|0|42|63] [PAR HAMS] 
+
+[DEF]: Insulation
+You eat a magnesium chip.
+outr magnesium
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+You take out some salve and quickly rub it on your skin.
+A feeling of comfortable warmth spreads over you.
+You eat a potash crystal.
+outr potash
+H:5914|69% M:5872|84% E:93% W:84% [NE|SE] R:0 48:34.79-ec- Shaping : 1[84|0|0|0|42|63]  ( +677h 7% +197m 2% )[HAMS] 
+[OUTR]: 1 Magnesium (97)
+[OUTR]: 1 Potash (175)
+curing priority Paralysis 2
+You may apply another salve to yourself. Skin (0.845)
+H:5914|69% M:5857|84% E:93% W:84% [NE|SE] R:0 48:35.72-ec- Shaping : 1[84|0|0|0|42|63] [HAMS] 
+[Prio]: Paralysis (2)
+et
+setalias pk stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar torso/ assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar torso/ assess"
+H:6619|78% M:5996|86% E:93% W:84% [NE|SE] R:0 48:36.30-ec- Shaping : 1[84|0|0|0|42|63]  ( +705h 8% )[HAMS] 
+You may eat another plant or mineral. Eat (1.53)
+H:6619|78% M:5996|86% E:93% W:84% [NE|SE] R:0 48:36.40-ec- Shaping : 1[84|0|0|0|42|63] [HAMS] 
+With a smooth lunge to the right, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+You parry the attack with a deft manoeuvre.            ---------- WE PARRIED! GOOD JOB!
+With fluid motions of his iron fingers, Alyzar strikes precisely at your neck.
+Your muscles lock up as the swift blows meet pressure points.
+[AFF]: Paralysis
+H:6619|78% M:5996|86% E:93% W:84% [NE|SE] R:0 48:36.59-ec- Shaping : 1[84|0|0|0|42|63] [PAR HAMS] 
+You eat a magnesium chip.
+outr magnesium
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:6619|78% M:5996|86% E:93% W:84% [NE|SE] R:0 48:36.80-ec- Shaping : 1[84|0|0|0|42|63] [HAMS] 
+[OUTR]: 1 Magnesium (96)
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+With a roar you swing a colossal fist at the torso of Alyzar.
+As your blow lands with a crunch, you perceive that you have dealt 21.0% damage to Alyzar's torso. (21%)
+Your fist crunches into the torso of Alyzar.
+Alyzar pivots on his heel as he draws his blade from its scabbard and unleashes a retaliatory strike at you.
+Health lost: 247 (physical cutting).
+The breath of Alyzar is expelled in a violent exhalation under the force of the blow.
+You feel the magma contained within your hallowed form begin to seethe.
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Alyzar and see that his health is at 5108/6950 [73%].
+[Health]: 74%
+pt Alyzar's health at 5108/6950
+H:6372|75% M:5896|84% E:93% W:84% [NE|SE] R:0 48:36.00-ec- Shaping : 2[84|21|0|0|42|63]  ( -247h 2% )[HAMS] 
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:6372|75% M:5896|84% E:93% W:84% [NE|SE] R:0 48:37.22-ec- Shaping : 2[84|21|0|0|42|63] [HAMS] 
+You may drink another health or mana elixir. Mana (4.439)
+H:6372|75% M:5896|84% E:93% W:84% [NE|SE] R:0 48:37.64-ec- Shaping : 2[84|21|0|0|42|63] [HAMS] 
+You take a drink from a black-walnut vial.
+Your mind feels stronger and more alert.
+H:6372|75% M:6964|100% E:93% W:84% [NE|SE] R:0 48:37.78-ec- Shaping : 2[84|21|0|0|42|63]  ( +1068m 15% )[HAMS] 
+You may eat another plant or mineral. Eat (1.601)
+H:6372|75% M:6964|100% E:93% W:84% [NE|SE] R:0 48:38.40-ec- Shaping : 2[84|21|0|0|42|63] [HAMS] 
+curing priority Paralysis 2
+
+[DEF]: Insulation
+With a smooth lunge to the left, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your left leg.
+ LIMB DAMAGE: left leg (52.8%)
+ ----------- PARRYING head
+queue add eb parry head
+[59.4|0|0|0|52.8|33]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your right leg.
+ LIMB DAMAGE: right leg (46.2%)
+ ----------- PARRYING left leg
+queue add eb parry left leg
+[59.4|0|0|0|52.8|46.2]
+Health lost: 1434 (cold).
+The ice-covered blade strips away your protective covering.
+Ducking behind you, Alyzar strikes at your hamstring with a rigid grip.
+The crippling blow renders your leg insensate.
+H:4938|58% M:6964|100% E:93% W:84% [NE|SE] R:0 48:38.49-ec- Shaping : 2[84|21|0|0|42|63]  ( -1434h 16% ) (115B)[HAMS] 
+[Prio]: Paralysis (2)
+
+[DEF]: Insulation
+You take out some salve and quickly rub it on your skin.
+A feeling of comfortable warmth spreads over you.
+Alyzar takes a drink from an oaken vial.
+H:4938|58% M:6664|95% E:93% W:84% [NE|SE] R:0 48:38.95-ec- Shaping : 2[84|21|0|0|42|63]  ( -300m 4% )[HAMS] 
+ell
+setalias pk stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar left leg/ assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar left leg/ assess"
+H:4938|58% M:6664|95% E:93% W:84% [NE|SE] R:0 48:39.10-ec- Shaping : 2[84|21|0|0|42|63] [HAMS] 
+You may apply another salve to yourself. Skin (0.915)
+H:4938|58% M:6664|95% E:93% W:84% [NE|SE] R:0 48:39.58-ec- Shaping : 2[84|21|0|0|42|63] [HAMS] 
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+With a roar you swing a colossal fist at the left leg of Alyzar.
+As your blow lands with a crunch, you perceive that you have dealt 21.0% damage to Alyzar's left leg. (63%)
+Your fist smashes into the left leg of Alyzar.
+Magma begins to boil up from beneath your outer strata.
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Alyzar and see that his health is at 4895/6950 [70%].
+[Health]: 71%
+pt Alyzar's health at 4895/6950
+H:4938|58% M:6564|94% E:93% W:84% [NE|SE] R:0 48:39.99-ec- Shaping : 3[84|21|0|0|63|63] [HAMS] 
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:4938|58% M:6549|94% E:93% W:84% [NE|SE] R:0 48:40.14-ec- Shaping : 3[84|21|0|0|63|63] [HAMS] 
+Health lost: 15 (raw).
+You bleed 15 health.
+H:4923|58% M:6549|94% E:93% W:84% [NE|SE] R:0 48:40.26-ec- Shaping : 3[84|21|0|0|63|63] [HAMS] 
+
+[DEF]: Insulation
+With a smooth lunge to the left, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your left leg.
+ LIMB DAMAGE: left leg (72.6%)
+ ----------- PARRYING right leg
+queue add eb parry right leg
+[59.4|0|0|0|72.6|46.2]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your right leg.
+ LIMB DAMAGE: right leg (59.4%)
+ ----------- PARRYING head
+queue add eb parry head
+[59.4|0|0|0|72.6|59.4]
+Health lost: 1434 (cold).
+The ice-covered blade strips away your protective covering.
+With fluid motions of his iron fingers, Alyzar strikes precisely at your neck.
+Your muscles lock up as the swift blows meet pressure points.
+[AFF]: Paralysis
+H:3489|41% M:6549|94% E:93% W:84% [NE|SE] R:0 48:40.41-ec- Shaping : 3[84|21|0|0|63|63]  ( -1434h 16% ) (119B)[PAR HAMS] 
+
+[DEF]: Insulation
+You eat a magnesium chip.
+outr magnesium
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+You take out some salve and quickly rub it on your skin.
+A feeling of comfortable warmth spreads over you.
+Alyzar eats a potash crystal.
+H:3912|46% M:6249|89% E:93% W:84% [NE|SE] R:0 48:40.55-ec- Shaping : 3[84|21|0|0|63|63]  ( +423h 4% -300m 4% )[HAMS] 
+[Prio]: Paralysis (2)
+[OUTR]: 1 Magnesium (95)
+You may eat another bit of irid moss or potash.
+H:3912|46% M:6249|89% E:93% W:84% [NE|SE] R:0 48:40.75-ec- Shaping : 3[84|21|0|0|63|63] [HAMS] 
+You eat a potash crystal.
+outr potash
+H:4589|54% M:6806|97% E:93% W:84% [NE|SE] R:0 48:40.92-ec- Shaping : 3[84|21|0|0|63|63]  ( +677h 7% +557m 7% )[HAMS] 
+[OUTR]: 1 Potash (174)
+et
+setalias pk stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar torso/ assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar torso/ assess"
+H:4589|54% M:6806|97% E:93% W:84% [NE|SE] R:0 48:41.21-ec- Shaping : 3[84|21|0|0|63|63] [HAMS] 
+You may apply another salve to yourself. Skin (0.934)
+H:4589|54% M:6806|97% E:93% W:84% [NE|SE] R:0 48:41.49-ec- Shaping : 3[84|21|0|0|63|63] [HAMS] 
+You may eat another plant or mineral. Eat (1.096)
+H:4589|54% M:6798|97% E:93% W:84% [NE|SE] R:0 48:42.02-ec- Shaping : 3[84|21|0|0|63|63] [HAMS] 
+You may drink another health or mana elixir. Mana (4.37)
+H:4589|54% M:6798|97% E:93% W:84% [NE|SE] R:0 48:42.15-ec- Shaping : 3[84|21|0|0|63|63] [HAMS] 
+
+[DEF]: Insulation
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+With a smooth lunge to the left, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your left leg.
+ LIMB DAMAGE: left leg (92.4%)
+ ----------- PARRYING right leg
+queue add eb parry right leg
+[59.4|0|0|0|92.4|59.4]
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your right leg.
+ LIMB DAMAGE: right leg (72.6%)
+[59.4|0|0|0|92.4|72.6]
+Health lost: 1434 (cold).
+The ice-covered blade strips away your protective covering.
+With fluid motions of his iron fingers, Alyzar strikes precisely at your neck.
+Your muscles lock up as the swift blows meet pressure points.
+[AFF]: Paralysis
+H:5276|62% M:6798|97% E:93% W:84% [NE|SE] R:0 48:42.30-ec- Shaping : 3[84|21|0|0|63|63]  ( +687h 8% ) (134B)[PAR HAMS] 
+
+[DEF]: Insulation
+You eat a magnesium chip.
+outr magnesium
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+You take out some salve and quickly rub it on your skin.
+A feeling of comfortable warmth spreads over you.
+[OUTR]: 1 Magnesium (94)
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+With a roar you swing a colossal fist at the torso of Alyzar.
+As your blow lands with a crunch, you perceive that you have dealt 21.0% damage to Alyzar's torso. (42%)
+Bones crackle and pop as your fist smashes into the torso of Alyzar with pulverising force.
+The breath of Alyzar is expelled in a violent exhalation under the force of the blow.
+Magma explodes from the cracks between the plates covering you, forming a cloak of molten stone to enshroud you.
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Alyzar and see that his health is at 3341/6950 [48%].
+[Health]: 49%
+pt Alyzar's health at 3341/6950
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:5276|62% M:6338|91% E:93% W:84% [NE|SE] R:0 48:43.03-ec- Shaping : 4[84|42|0|0|63|63]  ( -460m 6% )[HAMS] 
+Alyzar takes a drink from an oaken vial.
+H:5276|62% M:6338|91% E:93% W:84% [NE|SE] R:0 48:43.46-ec- Shaping : 4[84|42|0|0|63|63] [HAMS] 
+You may apply another salve to yourself. Skin (0.905)
+H:5276|62% M:6338|91% E:93% W:84% [NE|SE] R:0 48:43.46-ec- Shaping : 4[84|42|0|0|63|63] [HAMS] 
+You may eat another plant or mineral. Eat (1.508)
+H:5276|62% M:6338|91% E:93% W:84% [NE|SE] R:0 48:44.06-ec- Shaping : 4[84|42|0|0|63|63] [HAMS] 
+curing priority Paralysis 2
+[Prio]: Paralysis (2)
+Sweltering heat hazes the air as Alyzar lashes at you with a blazing fist.
+Crackling flames erupt and surge across your skin in a frenzy.
+[AFF]: Flamefisted
+H:5276|62% M:6338|91% E:93% W:84% [NE|SE] R:0 48:44.41-ec- Shaping : 4[84|42|0|0|63|63] [ffst HAMS] 
+erl
+setalias pk stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar right leg/ assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar right leg/ assess"
+H:5276|62% M:6338|91% E:93% W:84% [NE|SE] R:0 48:44.84-ec- Shaping : 4[84|42|0|0|63|63] [ffst HAMS] 
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+With a roar you swing a colossal fist at the right leg of Alyzar.
+Alyzar parries the attack with a deft manoeuvre.
+ YOU HIT PARRY!!
+
+ YOU HIT PARRY!!
+Balance used: 2.9s.
+curing priority Paralysis 20
+You glance over Alyzar and see that his health is at 4728/6950 [68%].
+[Health]: 69%
+pt Alyzar's health at 4728/6950
+H:5276|62% M:6223|89% E:93% W:84% [NE|SE] R:0 48:45.71-ec- Shaping : 4[84|42|0|0|63|63] [ffst HAMS] 
+[Prio]: Paralysis (20)
+You are not the member of any party.
+H:5276|62% M:6223|89% E:93% W:84% [NE|SE] R:0 48:45.85-ec- Shaping : 4[84|42|0|0|63|63] [ffst HAMS] 
+Alyzar eats a potash crystal.
+H:5981|70% M:6362|91% E:93% W:84% [NE|SE] R:0 48:46.56-ec- Shaping : 4[84|42|0|0|63|63]  ( +705h 8% )[ffst HAMS] 
+You may drink another health or mana elixir. Health (4.376)
+H:5981|70% M:6362|91% E:93% W:84% [NE|SE] R:0 48:46.67-ec- Shaping : 4[84|42|0|0|63|63] [ffst HAMS] 
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+H:7678|90% M:6362|91% E:93% W:84% [NE|SE] R:0 48:46.76-ec- Shaping : 4[84|42|0|0|63|63]  ( +1697h 20% )[ffst HAMS] 
+You may eat another bit of irid moss or potash.
+H:7678|90% M:6362|91% E:93% W:84% [NE|SE] R:0 48:46.87-ec- Shaping : 4[84|42|0|0|63|63] [ffst HAMS] 
+ell
+setalias pk stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar left leg/ assess
+queue addclearfull eb!p!w!t  pk
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar left leg/ assess"
+H:7678|90% M:6362|91% E:93% W:84% [NE|SE] R:0 48:47.01-ec- Shaping : 4[84|42|0|0|63|63] [ffst HAMS] 
+curing priority Paralysis 2
+[Prio]: Paralysis (2)
+
+====================DAMAGEDLEFTLEG====================
+====================DAMAGEDLEFTLEG====================
+====================DAMAGEDLEFTLEG====================
+[DEF]: Insulation
+With a smooth lunge to the left, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your left leg.
+ LIMB DAMAGE: left leg (112.2%)
+  ---- >10s since last parry! ----------- PARRYING left leg
+queue add eb parry left leg
+[59.4|0|0|0|112.2|72.6]
+[AFF]: Brokenleftleg
+[AFF]: Damagedleftleg
+Your left leg is greatly damaged from the beating.
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your right leg.
+ LIMB DAMAGE: right leg (85.8%)
+  ---- >10s since last parry! ----------- PARRYING head
+queue add eb parry head
+[59.4|0|0|0|112.2|85.8]
+Health lost: 1434 (cold).
+The ice-covered blade strips away your protective covering.
+Sweeping out with a blade hand, Alyzar strikes at the back of your knee.
+[AFF]: Prone
+You tumble to the ground as your leg abruptly gives out.
+H:6244|73% M:6362|91% E:93% W:84% [NE|SE] R:0 48:47.29-ec- Shaping : 4[84|42|0|0|63|63]  ( -1434h 16% ) (115B)[LL2 PR ffst HAMS] 
+You take out some salve and quickly rub it on your legs.
+[Prio]: Paralysis (24)
+Alyzar takes a drink from an oaken vial.
+setalias pk stand/get body/ wield shield360716/ terran eruption / TERRAN POWDERISE Alyzar left leg/ assess
+H:6244|73% M:6062|87% E:93% W:84% [NE|SE] R:0 48:47.96-ec- Shaping : 4[84|42|0|0|63|63]  ( -300m 4% )[LL2 PR ffst HAMS] 
+Alias "pk" will now execute: "stand/get body/ wield shield360716/ terran eruption / TERRAN POWDERISE Alyzar left leg/ assess"
+H:6244|73% M:6062|87% E:93% W:84% [NE|SE] R:0 48:48.06-ec- Shaping : 4[84|42|0|0|63|63] [LL2 PR ffst HAMS] 
+You feel the tightness in your hamstring subside, allowing free movement once again.
+[AFF]: Hamstrung
+H:6244|73% M:6062|87% E:93% W:84% [NE|SE] R:0 48:48.53-ec- Shaping : 4[84|42|0|0|63|63] [LL2 PR ffst] 
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+Both of your legs must be free and unhindered to do that.
+You summon up the magma that courses beneath your outer layers, sending it forth in an eruption to drive out that which taints your perfect form.
+You must be standing first.
+You glance over Alyzar and see that his health is at 6950/6950 [100%].
+[Health]: 100%
+pt Alyzar's health at 6950/6950
+setalias pk stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar left leg/ assess
+You will now attempt to parry attacks to your left leg.
+You will now attempt to parry attacks to your head.
+H:6244|73% M:5612|80% E:93% W:83% [NE|SE] R:0 48:48.60-exc- Shaping : 4[84|42|0|0|63|63]  ( -450m 6% )[LL2 PR ffst] 
+You are not the member of any party.
+H:6244|73% M:5612|80% E:93% W:83% [NE|SE] R:0 48:48.86-exc- Shaping : 4[84|42|0|0|63|63] [LL2 PR ffst] 
+Alias "pk" will now execute: "stand/get body/ wield shield360716/TERRAN POWDERISE Alyzar left leg/ assess"
+H:6244|73% M:5612|80% E:93% W:83% [NE|SE] R:0 48:48.86-exc- Shaping : 4[84|42|0|0|63|63] [LL2 PR ffst] 
+
+====================DAMAGEDRIGHTLEG====================
+====================DAMAGEDRIGHTLEG====================
+====================DAMAGEDRIGHTLEG====================
+With a smooth lunge to the right, Alyzar draws Saosh's Vow from its scabbard and delivers a powerful slash across your legs.
+As Alyzar carves into you, you perceive that he has dealt 19.8% damage to your right leg.
+ LIMB DAMAGE: right leg (105.6%)
+  ---- >10s since last parry![59.4|0|0|0|112.2|105.6]
+[AFF]: Brokenrightleg
+[AFF]: Damagedrightleg
+Your right leg is greatly damaged from the beating.
+As Alyzar carves into you, you perceive that he has dealt 13.2% damage to your left leg.
+ LIMB DAMAGE: left leg (125.4%)
+  ---- >10s since last parry![59.4|0|0|0|125.4|105.6]
+Health lost: 1434 (cold).
+[AFF]: Shivering
+The ice-covered blade sends a wave of cold over your skin, chilling you to the bone.
+Lashing out with a clenched fist, Alyzar aims a precise strike at your sternum.
+The blow cracks bone, and a flood of pain washes through your chest.
+Health lost: 342 (physical blunt).
+H:4468|52% M:5612|80% E:93% W:83% [NE|SE] R:0 48:49.16-exc- Shaping : 4[84|42|0|0|63|63]  ( -1776h 20% ) (130B)[RL2 LL2 shiv PR ffst] 
+You touch the tree of life tattoo.
+Your body warms up and you stop shivering.
+[AFF]: Shivering
+You eat a potash crystal.
+outr potash
+H:5145|60% M:5809|83% E:93% W:83% [NE|SE] R:0 48:49.28-exc- Shaping : 4[84|42|0|0|63|63]  ( +677h 7% +197m 2% )[RL2 LL2 PR ffst] 
+[OUTR]: 1 Potash (173)
+The shroud of magma cloaking you is no longer sustainable, and it falls away.
+H:5568|65% M:5794|83% E:93% W:83% [NE|SE] R:0 48:50.59-exc- Shaping : 3[84|42|0|0|63|63]  ( +423h 4% )[RL2 LL2 PR ffst] 
+Planting his foot between yours, Alyzar draws Saosh's Vow and unleashes a forceful slash that drives you back.
+Balance used: 1.4s.
+Health lost: 1326 (cold).
+[AFF]: Shivering
+The ice-covered blade sends a wave of cold over your skin, chilling you to the bone.
+Lashing out with a clenched fist, Alyzar aims a precise strike at your sternum.
+The blow cracks bone, and a flood of pain washes through your chest.
+Health lost: 342 (physical blunt).
+H:3900|46% M:5794|83% E:93% W:83% [NE|SE] R:0 48:51.07-ec- Shaping : 3[84|42|0|0|63|63]  ( -1668h 19% ) (117B)[RL2 LL2 shiv PR ffst] 
+You may drink another health or mana elixir. Health (4.394)
+H:3900|46% M:5794|83% E:93% W:83% [NE|SE] R:0 48:51.17-ec- Shaping : 3[84|42|0|0|63|63] [RL2 LL2 shiv PR ffst] 
+You take a drink from a black-walnut vial.
+Your mind feels stronger and more alert.
+Health lost: 17 (raw).
+You bleed 17 health.
+H:3883|45% M:6652|95% E:93% W:83% [NE|SE] R:0 48:51.29-ec- Shaping : 3[84|42|0|0|63|63]  ( +858m 12% )[RL2 LL2 shiv PR ffst] 
+
+[SLC]: Reset left leg counts.
+Your left leg feels stronger and healthier.
+[AFF]: Damagedleftleg
+You may apply another salve to yourself. Legs (3.931)
+H:3883|45% M:6652|95% E:93% W:83% [NE|SE] R:0 48:51.30-ec- Shaping : 3[84|42|0|0|63|63] [RL2 ll1 shiv PR ffst] 
+You take out some salve and quickly rub it on your legs.
+H:3883|45% M:6652|95% E:93% W:83% [NE|SE] R:0 48:51.49-ec- Shaping : 3[84|42|0|0|63|63] [RL2 ll1 shiv PR ffst] 
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+H:3883|45% M:6652|95% E:93% W:83% [NE|SE] R:0 48:52.41-exc- Shaping : 3[84|42|0|0|63|63] [RL2 ll1 shiv PR ffst] 
+Planting his foot between yours, Alyzar draws Saosh's Vow and unleashes a forceful slash that drives you back.
+Balance used: 1.4s.
+Health lost: 1326 (cold).
+Lashing out with a clenched fist, Alyzar aims a precise strike at your sternum.
+The blow cracks bone, and a flood of pain washes through your chest.
+Health lost: 342 (physical blunt).
+H:2215|26% M:6652|95% E:93% W:83% [NE|SE] R:0 48:52.63-ec- Shaping : 3[84|42|0|0|63|63]  ( -1668h 19% ) (111B)[RL2 ll1 shiv PR ffst] 
+queue addclearfull freestand ne
+queue addclearfull freestand ne
+queue addclearfull freestand ne
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+H:2215|26% M:6352|91% E:93% W:83% [NE|SE] R:0 48:54.03-exc- Shaping : 3[84|42|0|0|63|63]  ( -300m 4% )[RL2 ll1 shiv PR ffst] 
+
+[DEF]: Extrusion
+Planting his foot between yours, Alyzar draws Saosh's Vow and unleashes a forceful slash that drives you back.
+Balance used: 1.4s.
+Health lost: 1326 (cold).
+Magma explodes from beneath your outer strata, hardening in an instant to form a restored external coating.
+[AFF]: Frozen
+The ice-covered blade sends a wave of cold over your skin, freezing you to the bone.
+Health lost: 863 (cold).
+Lashing out with a clenched fist, Alyzar aims a precise strike at your sternum.
+The blow cracks bone, and a flood of pain washes through your chest.
+Your shield completely absorbs the damage.
+H:3414|40% M:6352|91% E:93% W:83% [NE|SE] R:0 48:54.24-ec- Shaping : 3[84|42|0|0|63|63]  ( +1199h 14% ) (118B)[RL2 ll1 shiv PR froz ffst] 
+h
+queue addclearfull eb!p!w!t  TERRAN REFORM
+
+====================DISRUPTED====================
+====================DISRUPTED====================
+====================DISRUPTED====================
+[AFF]: Disrupted
+You have a particularly intense shiver.
+H:3414|40% M:6052|86% E:93% W:83% [NE|SE] R:0 48:54.71-c- Shaping : 3[84|42|0|0|63|63]  ( -300m 4% )[RL2 ll1 shiv froz DISR ffst PR] 
+You begin intense concentration to restore your equilibrium.
+Equilibrium used: 1.70s.
+H:3414|40% M:6052|86% E:93% W:83% [NE|SE] R:0 48:54.86-c- Shaping : 3[84|42|0|0|63|63] [RL2 ll1 shiv PR froz ffst] 
+h
+queue addclearfull eb!p!w!t  TERRAN REFORM
+h
+queue addclearfull eb!p!w!t  TERRAN REFORM
+You may eat another bit of irid moss or potash.
+H:3414|40% M:6037|86% E:93% W:83% [NE|SE] R:0 48:55.16-c- Shaping : 3[84|42|0|0|63|63] [RL2 ll1 shiv PR froz ffst] 
+You eat a potash crystal.
+outr potash
+H:4091|48% M:6594|94% E:93% W:83% [NE|SE] R:0 48:55.24-c- Shaping : 3[84|42|0|0|63|63]  ( +677h 7% +557m 7% )[RL2 ll1 shiv PR froz ffst] 
+[OUTR]: 1 Potash (172)
+
+[SLC]: Reset right leg counts.
+Your right leg feels stronger and healthier.
+[AFF]: Damagedrightleg
+You may apply another salve to yourself. Legs (4.126)
+H:4091|48% M:6594|94% E:93% W:83% [NE|SE] R:0 48:55.49-c- Shaping : 3[84|42|0|0|63|63] [rl1 ll1 froz shiv PR ffst] 
+Magma ceases to flow from between the cracks in your plates.
+H:4091|48% M:6594|94% E:93% W:83% [NE|SE] R:0 48:55.58-c- Shaping : 2[84|42|0|0|63|63] [rl1 ll1 froz shiv PR ffst] 
+You take out some salve and quickly rub it on your skin.
+Though still shivering, you are no longer frozen solid.
+[AFF]: Frozen
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You may drink another health or mana elixir. Mana (4.319)
+H:4091|48% M:6594|94% E:93% W:83% [NE|SE] R:0 48:55.60-xc- Shaping : 2[84|42|0|0|63|63] [rl1 ll1 shiv PR ffst] 
+[Prio]: Paralysis (2)
+You take a drink from an elegant diamond vial.
+The elixir heals and soothes you.
+Planting his foot between yours, Alyzar draws Saosh's Vow and unleashes a forceful slash that drives you back.
+Balance used: 1.4s.
+Health lost: 1326 (cold).
+[AFF]: Frozen
+The ice-covered blade sends a wave of cold over your skin, freezing you to the bone.
+Health lost: 863 (cold).
+Lashing out with a clenched fist, Alyzar aims a precise strike at your sternum.
+The blow cracks bone, and a flood of pain washes through your chest.
+Health lost: 342 (physical blunt).
+H:3062|36% M:6594|94% E:93% W:83% [NE|SE] R:0 48:55.81-c- Shaping : 2[84|42|0|0|63|63]  ( -1029h 12% ) (125B)[rl1 ll1 froz shiv PR ffst] 
+h
+queue addclearfull eb!p!w!t  TERRAN REFORM
+You have recovered equilibrium.                                                         --- EQUILIBRIUM ---
+H:3062|36% M:6234|89% E:93% W:83% [NE|SE] R:0 48:56.39-ec- Shaping : 2[84|42|0|0|63|63]  ( -360m 5% )[rl1 ll1 froz shiv PR ffst] 
+You may apply another salve to yourself. Skin (0.886)
+H:3062|36% M:6234|89% E:93% W:83% [NE|SE] R:0 48:56.49-ec- Shaping : 2[84|42|0|0|63|63] [rl1 ll1 froz shiv PR ffst] 
+You take out some salve and quickly rub it on your skin.
+Though still shivering, you are no longer frozen solid.
+[AFF]: Frozen
+H:3062|36% M:6234|89% E:93% W:83% [NE|SE] R:0 48:56.58-ec- Shaping : 2[84|42|0|0|63|63] [rl1 ll1 shiv PR ffst] 
+h
+queue addclearfull eb!p!w!t  TERRAN REFORM
+Health lost: 5 (raw).
+You bleed 5 health.
+H:3762|44% M:6373|91% E:93% W:83% [NE|SE] R:0 48:56.82-ec- Shaping : 2[84|42|0|0|63|63]  ( +700h 8% )[rl1 ll1 shiv PR ffst] 
+h
+queue addclearfull eb!p!w!t  TERRAN REFORM
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You must be standing first.
+H:3762|44% M:6365|91% E:93% W:83% [NE|SE] R:0 48:57.24-exc- Shaping : 2[84|42|0|0|63|63] [rl1 ll1 shiv PR ffst] 
+Planting his foot between yours, Alyzar draws Saosh's Vow and unleashes a forceful slash that drives you back.
+Balance used: 1.4s.
+Health lost: 1326 (cold).
+[AFF]: Frozen
+The ice-covered blade sends a wave of cold over your skin, freezing you to the bone.
+Health lost: 863 (cold).
+Lashing out with a clenched fist, Alyzar aims a precise strike at your sternum.
+The blow cracks bone, and a flood of pain washes through your chest.
+Health lost: 342 (physical blunt).
+H:1231|14% M:6365|91% E:93% W:83% [NE|SE] R:0 48:57.45-ec- Shaping : 2[84|42|0|0|63|63]  ( -2531h 29% ) (107B)[rl1 ll1 froz shiv PR ffst] 
+You may apply another salve to yourself. Skin (0.934)
+H:1231|14% M:6365|91% E:93% W:83% [NE|SE] R:0 48:57.54-ec- Shaping : 2[84|42|0|0|63|63] [rl1 ll1 froz shiv PR ffst] 
+You take out some salve and quickly rub it on your skin.
+Though still shivering, you are no longer frozen solid.
+[AFF]: Frozen
+h
+queue addclearfull eb!p!w!t  TERRAN REFORM
+You may apply another salve to yourself. Skin (0.806)
+H:1231|14% M:6065|87% E:93% W:83% [NE|SE] R:0 48:58.50-ec- Shaping : 2[84|42|0|0|63|63]  ( -300m 4% )[rl1 ll1 shiv PR ffst] 
+You take out some salve and quickly rub it on your legs.
+The bones in your left leg mend.
+[AFF]: Brokenleftleg
+You may purge yourself of weakness once again.
+H:1231|14% M:6065|87% E:93% W:83% [NE|SE] R:0 48:58.58-ec- Shaping : 2[84|42|0|0|63|63] [rl1 shiv PR ffst] 
+h
+queue addclearfull eb!p!w!t  TERRAN REFORM
+You have recovered balance on all limbs.                                                       --- BALANCE ---
+You must be standing first.
+H:1231|14% M:6065|87% E:93% W:83% [NE|SE] R:0 48:58.82-exc- Shaping : 2[84|42|0|0|63|63] [rl1 shiv PR ffst] 
+h
+queue addclearfull eb!p!w!t  TERRAN REFORM
+
+[DEF]: Mindseye
+[DEF]: Nightsight
+[DEF]: Kola
+[DEF]: Levitating
+[DEF]: Treewatch
+[DEF]: Skywatch
+[DEF]: Insomnia
+[DEF]: Groundwatch
+[DEF]: Temperance
+[DEF]: Deathsight
+[DEF]: Endure
+[DEF]: Speed
+[DEF]: Alertness
+[DEF]: Fangbarrier
+[DEF]: Strata
+[DEF]: Tremorsense
+[DEF]: Lifevision
+[DEF]: Seasonelegend
+[DEF]: Blackboarlegend
+[DEF]: Blindness
+[DEF]: Deafness
+Planting his foot between yours, Alyzar draws Saosh's Vow and unleashes a forceful slash that drives you back.
+Balance used: 1.4s.
+Health lost: 1231 (cold).
+As the razor-sharp blade slices through your flesh, you feel the last vestiges of strength leave your body.
+You have been slain by Alyzar.
+ 

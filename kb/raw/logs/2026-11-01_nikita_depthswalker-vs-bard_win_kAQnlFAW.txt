@@ -1,0 +1,3753 @@
+You accept Anzerloi's challenge, and enter the portal, ready to do battle.
+Eastern edge of Damballah Lake.
+The sky darkens with the onset of night.
+You see exits leading north, south, and west.
+6113(100%|100%) 100e 100w exT ckdb 0 03:59:53.76  0 -- ()
+Tapping into the timelines, you trace them to locate Anzerloi.
+You determine that he is at Under an oak tree.  (9413)
+From your knowledge, that room is in Stadia Coronae.
+Equilibrium used: 1.53s.
+6113(100%|99%) 100e 99w xT ckdb 0 03:59:55.41  0 -- ()
+(mapper): Starting speedwalk from 9399 to 9413: (when we get balance back / 
+aren't hindered)
+You have recovered equilibrium. (1.12)
+6113(100%|99%) 100e 99w exT ckdb 0 03:59:56.88  0 -- ()
+(10 - w)
+Centre of Damballah Lake.
+The sky darkens with the onset of night.
+You see exits leading north, northeast, east, southeast, south, southwest, west,
+and northwest.
+6113(100%|100%) 99e 99w exT ckdb 0 03:59:57.49  0 -- ()(9 - nw)
+Northwestern edge of Damballah Lake.
+The sky darkens with the onset of night.
+You see exits leading east, southeast, south, and northwest.
+6113(100%|100%) 99e 99w exT ckdb 0 03:59:57.93  0 -- ()(8 - nw)
+On the shore of Damballah Lake.
+The sky darkens with the onset of night.
+You see exits leading southeast and northwest.
+6113(100%|99%) 99e 99w exT ckdb 0 03:59:58.43  0 -- ()(7 - nw)
+Southern end of a dusty road. (road)
+The sky darkens with the onset of night.
+You see exits leading north, southeast, and south.
+6113(100%|99%) 99e 99w exT ckdb 0 03:59:58.92  0 -- ()(6 - n)
+Centre of a dusty road. (road)
+The sky darkens with the onset of night.
+You see exits leading north and south.
+6113(100%|99%) 99e 100w exT ckdb 0 03:59:59.35  0 -- ()(5 - n)
+Northern end of a dusty road. (road)
+The sky darkens with the onset of night.
+You see exits leading north and south.
+6113(100%|99%) 99e 100w exT ckdb 0 03:59:59.84  0 -- ()(4 - n)
+In the Northern Lisigian Wealds.
+The sky darkens with the onset of night. Arduous Anzerloi Ar'kena is here. He
+wields a Shield of Absorption in his left hand and a Soulpiercer in his right.
+You see exits leading northeast, south, and northwest.
+6113(100%|99%) 99e 100w exT ckdb 0 04:00:00.31  0 -- ()(3 - nw)
+A nearly invisible magical shield forms around Anzerloi.
+[nikita]: ((( ANZERLOI USED SHIELD! )))
+[nikita]: ((( ANZERLOI USED SHIELD! )))
+[nikita]: ((( ANZERLOI USED SHIELD! )))
+6113(100%|99%) 99e 100w exT ckdb 0 04:00:00.65  0 -- ()
+Under a canopy of trees.
+The sky darkens with the onset of night.
+You see exits leading north, east, southeast, and northwest.
+6113(100%|99%) 99e 100w exT ckdb 0 04:00:00.78  0 -- ()(2 - nw)
+Clearing in the Northern Wealds.
+The sky darkens with the onset of night.
+You see exits leading north, northeast, southeast, and southwest.
+6113(100%|99%) 99e 100w exT ckdb 0 04:00:01.55  0 -- ()(1 - sw)
+(mapper): We've arrived! Took us 5.5s.
+
+Under an oak tree.
+The sky darkens with the onset of night.
+You see a single exit leading northeast.
+6113(100%|99%) 99e 100w exT ckdb 0 04:00:01.98  0 -- ()
+Tapping into the timelines, you trace them to locate Anzerloi.
+You determine that he is at In the Northern Lisigian Wealds.  (9408, 9415)
+From your knowledge, that room might be in Stadia Coronae.
+Equilibrium used: 1.53s.
+6113(100%|99%) 99e 99w xT ckdb 0 04:00:02.73  0 -- ()
+(mapper): Starting speedwalk from 9413 to 9408: (when we get balance back / 
+aren't hindered)
+You have recovered equilibrium. (1.14)
+6113(100%|99%) 100e 100w exT ckdb 0 04:00:04.21  0 -- ()
+(3 - ne)
+Clearing in the Northern Wealds.
+The sky darkens with the onset of night.
+You see exits leading north, northeast, southeast, and southwest.
+6113(100%|99%) 99e 100w exT ckdb 0 04:00:04.70  0 -- ()(2 - se)
+Under a canopy of trees.
+The sky darkens with the onset of night. Arduous Anzerloi Ar'kena is here. He
+wields a Shield of Absorption in his left hand and a Soulpiercer in his right.
+You see exits leading north, east, southeast, and northwest.
+6113(100%|99%) 99e 100w exT ckdb 0 04:00:05.18  0 -- ()(1 - se)
+Anzerloi leaves to the southeast.
+[nikita]: Anzerloi LEAVES TO THE SOUTHEAST
+[nikita]: Anzerloi LEAVES TO THE SOUTHEAST
+[nikita]: Anzerloi LEAVES TO THE SOUTHEAST
+[southeast - Anzerloi (1)]
+6113(100%|99%) 99e 100w exT ckdb 0 04:00:05.50  0 -- ()
+(mapper): We've arrived! Took us 2.7s.
+
+In the Northern Lisigian Wealds.
+The sky darkens with the onset of night. Arduous Anzerloi Ar'kena is here. He
+wields a Shield of Absorption in his left hand and a Soulpiercer in his right.
+You see exits leading northeast, south, and northwest.
+6113(100%|98%) 99e 100w exT ckdb 0 04:00:05.76  0 -- ()
+Anzerloi leaves to the northwest.
+[nikita]: Anzerloi LEAVES TO THE NORTHWEST
+[nikita]: Anzerloi LEAVES TO THE NORTHWEST
+[nikita]: Anzerloi LEAVES TO THE NORTHWEST
+[northwest - Anzerloi (1)]
+6113(100%|98%) 99e 100w exT ckdb 0 04:00:06.23  0 -- ()
+[nikita]: Defense lost: rebounding
+Your aura of weapons rebounding disappears.
+DISTORTION. Bending your considerable will upon the temporal flow, you distort
+its nature within this location.
+Equilibrium used: 2.55s.
+6113(100%|95%) 99e 99w xT ckdb 0 04:00:06.58  0 -- ()
+Anzerloi arrives from the northwest.
+[nikita]: Anzerloi ARRIVED FROM THE NORTHWEST
+[nikita]: Anzerloi ARRIVED FROM THE NORTHWEST
+[nikita]: Anzerloi ARRIVED FROM THE NORTHWEST
+[here - Anzerloi (1)]
+6113(100%|95%) 99e 99w xT ckdb 0 04:00:07.16  0 -- ()
+Anzerloi nods his head emphatically.
+6113(100%|97%) 100e 99w xT ckdb 0 04:00:08.97  0 -- ()
+You have recovered equilibrium. (2.63)
+6113(100%|97%) 100e 99w exT ckdb 0 04:00:09.05  0 -- ()
+"Ok!" you exclaim.
+6113(100%|97%) 100e 99w exT ckdb 0 04:00:09.19  0 -- ()
+
+[nikita]: auto mode on
+You cease wielding deSangre's spite in your right hand.
+You cease wielding a subtle forearm shield in your left hand.
+You start to wield deSangre's spite in your left hand.
+You start to wield Gattan'lier's hunger in your right hand.
+Reaching out to the shadow of Anzerloi, you plunge Gattan'lier's hunger into it
+and attune it to the directive of Degeneration.
+Anzerloi is not surrounded by a magical shield.
+[nikita]: >><< Anzerloi SHIELD DOWN!  >><<
+Balance used: 1.2s.
+HP: [====================] 6647/6647 100%
+MP: [====================] 5285/5405 97%
+Equilibrium used: 0.85s.
+You are recovering equilibrium and cannot move yet.
+6113(100%|94%) 100e 99w T ckdb 0 04:00:10.58  0 -- ()
+Anzerloi flips a Shield of Absorption over his head with practised ease, lashing
+it to the hooks on a wyrmskin pack.
+Anzerloi removes a court bard's lute.
+Anzerloi begins to wield a court bard's lute in his left hand.
+Anzerloi's aura of weapons rebounding disappears.
+With a deadly grace Anzerloi begins to circle you, rapier poised and ready to
+strike.
+The nomos of Anzerloi wails discordantly as it finds nothing surrounding you to
+destroy.
+Anzerloi weaves a Soulpiercer through the air in a dazzling display, and in the
+moment of your distraction he is no longer where he was.
+Anzerloi continues to circle you, slipping in and out of your blindspot as he
+dances behind you.
+With hooded eyes, Anzerloi takes up a court bard's lute and breathes the spirit
+of love into the world around him.
+A beautiful symphony rises to underpin Anzerloi's song.
+6113(100%|94%) 100e 99w T ckdb 0 04:00:11.09  0 -- ()
+Anzerloi takes a long drag off his pipe.
+6113(100%|94%) 100e 99w T ckdb 0 04:00:11.10  0 -- ()
+You have recovered equilibrium. (0.72)
+6113(100%|94%) 100e 99w eT ckdb 0 04:00:11.31  0 -- ()
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (1.06)
+You will now attempt to parry attacks to your torso.
+You cease wielding deSangre's spite in your left hand.
+You start to wield a subtle forearm shield in your left hand.
+You cease wielding Gattan'lier's hunger in your right hand.
+You start to wield deSangre's spite in your right hand.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Anzerloi grits his teeth and rallies himself against the mental assault.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Balance used: 2.1s.
+HP: [====================] 5942/6647 89%
+MP: [====================] 5270/5405 97%
+Equilibrium used: 0.85s.
+As you attempt to escape the lethal encirclement of Anzerloi, the point of his
+blade lashes out and drives you back into the centre.
+Balance used: 1.2s.
+6113(100%|92%) 99e 99w T ckdb 0 04:00:11.76  0 -- ()
+aff+ clumsiness
+Anzerloi eats a magnesium chip.
+aff- paralysis
+6113(100%|92%) 99e 99w T ckdb 0 04:00:11.88  0 -- ()
+Anzerloi touches a tree of life tattoo.
+6113(100%|92%) 100e 99w T ckdb 0 04:00:12.10  0 -- ()
+aff- clumsiness
+You have recovered equilibrium. (0.83)
+6113(100%|92%) 100e 99w eT ckdb 0 04:00:12.58  0 -- ()
+Anzerloi ceases to wield a court bard's lute in his left hand.
+Anzerloi puts on a court bard's lute.
+Anzerloi quickly unlashes a Shield of Absorption free from a wyrmskin pack,
+shifting it over his head and into his left hand.
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+Anzerloi flicks out with a Soulpiercer towards you, a keening note raising from
+the blade's lunge.
+A grim note knells from the blade of Anzerloi as it finds your flesh.
+You have been afflicted with crescendo.
+You have been afflicted with earworm.
+Health lost: 784 (physical cutting).
+Anzerloi's rapier sings out with a high, piercing note.
+Health lost: 199 (magical).
+Anzerloi circles back to your front, rapier languidly swaying with the hypnotic
+grace of his dance.
+5130(83%|92%) 100e 99w eT ckdb 0 04:00:13.05  0 -- (cresc1|earworm|PAR|bld17)
+
+[Curing]: OUTR BLOODROOT
+You remove 1 bloodroot, bringing the total in the rift to 808. (808)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+Song swells about you as you begin to move inevitably towards a grand crescendo.
+[Curing]: SMOKE CINNABAR
+You take a long drag of cinnabar off your pipe.
+The endlessly playing song in your mind falls silent.
+You have cured the earworm affliction.
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+6113(100%|92%) 100e 99w eT ckdb 0 04:00:13.08  0 -- (cresc2|bld17)
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (1.99)
+You will now attempt to parry attacks to your torso.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Balance used: 2.1s.
+HP: [====================] 5060/6647 76%
+MP: [====================] 5126/5405 94%
+Equilibrium used: 0.85s.
+6113(100%|89%) 99e 99w T ckdb 0 04:00:13.87  0 -- (cresc2|bld17)
+aff+ clumsiness
+Anzerloi eats a magnesium chip.
+aff- paralysis
+Anzerloi takes a drink from an elegant diamond vial.
+6113(100%|89%) 99e 99w T ckdb 0 04:00:14.04  0 -- (cresc2|bld17)
+Your lungs have recovered enough to smoke another mineral or plant. (1.88)
+6113(100%|89%) 99e 99w T ckdb 0 04:00:14.59  0 -- (cresc2|bld17)
+You may eat another plant or mineral. (1.89)
+6113(100%|89%) 99e 99w T ckdb 0 04:00:14.64  0 -- (cresc2|bld17)
+You have recovered equilibrium. (1.08)
+6113(100%|89%) 99e 99w eT ckdb 0 04:00:14.74  0 -- (cresc2|bld17)
+[Curing]: OUTR STANNUM
+You remove 1 stannum, bringing the total in the rift to 2107. (2107)
+[Curing]: EAT STANNUM
+You eat a stannum flake.
+The building crescendo about you is greatly diminished.
+6113(100%|89%) 99e 99w eT ckdb 0 04:00:14.84  0 -- (cresc1|bld17)
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+With a flourish of a Soulpiercer Anzerloi steps in close, his blade slicing at
+your left arm.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+left arm.
+(SLC) H: 0.0% T: 0.0%    LA: 21.0% RA: 0.0%    LL: 0.0% RL: 0.0%
+The song of a Soulpiercer rings out as the point slashes through your flesh to
+cut into the tendons beneath.
+You have been afflicted with clumsiness.
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Health lost: 784 (physical cutting).
+5329(87%|89%) 99e 99w eT ckdb 0 04:00:14.85  0 -- (cresc1|PAR|clu|bld34)
+Health lost: 34 (raw).
+You bleed 34 health.
+5295(86%|89%) 99e 99w eT ckdb 0 04:00:14.95  0 -- (cresc1|PAR|clu|bld25)
+Anzerloi eats an aurum flake.false
+
+aff- clumsiness
+5295(86%|89%) 99e 99w eT ckdb 0 04:00:15.82  0 -- (cresc1|PAR|clu)
+You have recovered balance on all limbs. (2.18)
+5295(86%|89%) 99e 99w exT ckdb 0 04:00:15.89  0 -- (cresc1|PAR|clu)
+You may eat another plant or mineral. (1.5)
+5295(86%|89%) 100e 99w exT ckdb 0 04:00:16.32  0 -- (cresc1|PAR|clu)
+[nikita]: Defense gained: parrying (torso)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+Song swells about you as you begin to move inevitably towards a grand crescendo.
+You will now attempt to parry attacks to your torso.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Balance used: 2.1s.
+HP: [====================] 5765/6647 86%
+MP: [====================] 4989/5405 92%
+Equilibrium used: 0.85s.
+5295(86%|87%) 99e 99w T ckdb 0 04:00:16.43  0 -- (cresc2|clu)
+aff+ clumsiness
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+You have cured the clumsiness affliction.
+5295(86%|87%) 99e 99w T ckdb 0 04:00:16.62  0 -- (cresc2)
+You have recovered equilibrium. (0.79)
+5295(86%|87%) 99e 99w eT ckdb 0 04:00:17.15  0 -- (cresc2)
+Anzerloi eats a magnesium chip.
+aff- paralysis
+5295(86%|87%) 99e 99w eT ckdb 0 04:00:17.36  0 -- (cresc2)
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+With a flourish of a Soulpiercer Anzerloi steps in close, his blade slicing at
+your left arm.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+left arm.
+(SLC) H: 0.0% T: 0.0%    LA: 42.0% RA: 0.0%    LL: 0.0% RL: 0.0%
+The song of a Soulpiercer rings out as the point slashes through your flesh to
+cut into the tendons beneath.
+You have been afflicted with clumsiness.
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Health lost: 784 (physical cutting).
+Anzerloi continues to circle you, his deadly dance carrying him poised and ready
+around to your flank.
+4511(73%|87%) 99e 99w eT ckdb 0 04:00:17.40  0 -- (PAR|clu|cresc2|bld17)
+You may drink another health or mana elixir. (4.59)
+4511(73%|87%) 99e 99w eT ckdb 0 04:00:17.59  0 -- (PAR|clu|cresc2|bld17)
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+5972(97%|87%) 99e 99w eT ckdb 0 04:00:17.87  0 -- (PAR|clu|cresc2|bld17)
+You may eat another plant or mineral. (1.52)
+5972(97%|87%) 99e 99w eT ckdb 0 04:00:17.96  0 -- (PAR|clu|cresc2|bld17)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+Song swells about you as a grand crescendo draws ever closer to actualisation.
+5972(97%|87%) 99e 99w eT ckdb 0 04:00:18.05  0 -- (cresc3|clu|bld17)
+You determine that Anzerloi is suffering from dizziness.
+aff+ dizziness
+6113(100%|89%) 99e 99w eT ckdb 0 04:00:18.13  0 -- (cresc3|clu|bld17)
+A look of extreme focus crosses the face of Anzerloi.
+aff- dizziness
+MP: [====================] 4448.5/5405 82%
+6113(100%|89%) 99e 99w eT ckdb 0 04:00:18.27  0 -- (cresc3|clu|bld17)
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (2.16)
+You will now attempt to parry attacks to your torso.
+Bending your will upon deSangre's spite, you corrupt the weapon's timestream.
+As you push your aeonic might beyond its limits, you feel yourself grow older.
+
+TIMELOOPBOOST!
+You have now aged yourself by 350 years.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Grey fog begins to rise from the suddenly panicked-looking Anzerloi.
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+A grey miasma flares around Anzerloi.
+[nikita]: TIMELOOP NUM: 4
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+Balance used: 2.1s.
+HP: [====================] 5015/6647 75%
+MP: [====================] 5009/5405 92%
+Equilibrium used: 0.85s.
+6113(100%|85%) 99e 99w T ckdb 350 04:00:18.42  0 -- (cresc3|clu|bld17)
+aff+ timeloop
+aff+ weariness
+Anzerloi takes a drink from an elegant diamond vial.
+6113(100%|85%) 99e 99w T ckdb 350 04:00:18.43  0 -- (cresc3|clu|bld17)
+Anzerloi eats a magnesium chip.
+aff- paralysis
+6113(100%|85%) 99e 99w T ckdb 350 04:00:19.04  0 -- (cresc3|clu|bld17)
+You have recovered equilibrium. (0.73)
+6113(100%|85%) 99e 99w eT ckdb 350 04:00:19.29  0 -- (cresc3|clu|bld17)
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+With a flourish of a Soulpiercer Anzerloi steps in close, his blade slicing at
+your head.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+head.
+(SLC) H: 21.0% T: 0.0%    LA: 42.0% RA: 0.0%    LL: 0.0% RL: 0.0%
+Your ears are filled with harsh reverberation as the edge of a Soulpiercer
+scrapes against your skull.
+You have been afflicted with addiction.
+You feel a terrible hunger grow within you.
+Health lost: 599 (physical cutting).
+Anzerloi continues to circle you, slipping in and out of your blindspot as he
+dances behind you.
+5514(90%|85%) 99e 99w eT ckdb 350 04:00:19.39  0 -- (PAR|cresc3|add|clu|bld34)
+You may eat another plant or mineral. (1.38)
+5514(90%|85%) 99e 99w eT ckdb 350 04:00:19.61  0 -- (PAR|cresc3|add|clu|bld34)
+You suddenly perceive the vague outline of an aura of rebounding around
+Anzerloi.
+@@@ TARGET REBOUNDING @@@
+@@@ TARGET REBOUNDING @@@
+@@@ TARGET REBOUNDING @@@
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your addiction can never be sated.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+Song swells about you as a grand crescendo draws ever closer to actualisation.
+5514(90%|85%) 99e 99w eT ckdb 350 04:00:19.66  0 -- (cresc4|add|clu|bld34)
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (1.92)
+You will now attempt to parry attacks to your torso.
+You rub some prefarar on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Anzerloi grits his teeth and rallies himself against the mental assault.
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+A grey miasma flares around Anzerloi.
+[nikita]: TIMELOOP NUM: 3
+The face of Anzerloi contorts in pain.
+Balance used: 2.1s.
+HP: [====================] 4560/6647 68%
+MP: [====================] 4916/5405 90%
+Equilibrium used: 0.85s.
+5514(90%|83%) 99e 99w T ckdb 350 04:00:20.53  0 -- (cresc4|add|clu)
+aff+ undeaf
+Anzerloi eats a magnesium chip.
+aff- paralysis
+Anzerloi eats a potash crystal.
+5514(90%|83%) 99e 99w T ckdb 350 04:00:20.63  0 -- (cresc4|add|clu)
+You may eat another plant or mineral. (1.31)
+5514(90%|83%) 99e 99w T ckdb 350 04:00:21.16  0 -- (cresc4|add|clu)
+[Curing]: EAT STANNUM
+You eat a stannum flake.
+Your addiction can never be sated.
+The building crescendo about you is greatly diminished.
+5514(90%|83%) 99e 99w T ckdb 350 04:00:21.19  0 -- (cresc1|add|clu)
+The love Anzerloi's ghazal inspires in you stays your hand against even the
+greatest foe.
+You have been afflicted with lovestruck.
+Song swells about you as you begin to move inevitably towards a grand crescendo.
+Anzerloi's aura of weapons rebounding disappears.
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+With a flourish of a Soulpiercer Anzerloi steps in close, his blade slicing at
+your head.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+head.
+(SLC) H: 42.0% T: 0.0%    LA: 42.0% RA: 0.0%    LL: 0.0% RL: 0.0%
+Your legs almost give out from under you as the blade of Anzerloi slashes into
+the back of your head, a line of keening ice.
+You have been afflicted with generosity.
+Why, you ask yourself, are you so privileged when others are so needy.
+Health lost: 599 (physical cutting).
+Anzerloi circles back to your front, rapier languidly swaying with the hypnotic
+grace of his dance.
+4915(80%|83%) 99e 99w T ckdb 350 04:00:21.39  0 --
+ (gen|clu|PAR|lovestuck|add|cresc2|bld17)
+You have recovered equilibrium. (1.18)
+4915(80%|83%) 99e 99w eT ckdb 350 04:00:21.54  0 --
+ (gen|clu|PAR|lovestuck|add|cresc2|bld17)
+Anzerloi takes a long drag off his pipe.
+4915(80%|83%) 99e 99w eT ckdb 350 04:00:21.57  0 --
+ (gen|clu|PAR|lovestuck|add|cresc2|bld17)
+You may drink another health or mana elixir. (4.11)
+4915(80%|83%) 99e 99w eT ckdb 350 04:00:22.12  0 --
+ (gen|clu|PAR|lovestuck|add|cresc2|bld17)
+Anzerloi eats a cuprum flake.
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+6113(100%|83%) 99e 99w eT ckdb 350 04:00:22.16  0 --
+ (gen|clu|PAR|lovestuck|add|cresc2|bld17)
+aff- timeloop
+You have recovered balance on all limbs. (2.25)
+6113(100%|83%) 99e 99w exT ckdb 350 04:00:22.63  0 --
+ (gen|clu|PAR|lovestuck|add|cresc2|bld17)
+You may eat another plant or mineral. (1.39)
+6113(100%|83%) 99e 99w exT ckdb 350 04:00:22.73  0 --
+ (gen|clu|PAR|lovestuck|add|cresc2|bld17)
+[nikita]: Defense gained: parrying (torso)
+[Curing]: OUTR BLOODROOT
+You remove 1 bloodroot, bringing the total in the rift to 808. (808)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your addiction can never be sated.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+Song swells about you as a grand crescendo draws ever closer to actualisation.
+You will now attempt to parry attacks to your torso.
+You rub some prefarar on deSangre's spite.
+Your blow with deSangre's spite barely clips Anzerloi as you fumble your attack.
+You seize upon the temporal flow of Anzerloi, ensuring that mistakes shall not
+be replicated.
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+Balance used: 2.1s.
+HP: [====================] 5091/6647 76%
+MP: [====================] 5239/5405 96%
+Equilibrium used: 0.85s.
+6113(100%|81%) 99e 99w T ckdb 350 04:00:22.95  0 --
+ (cresc3|gen|clu|lovestuck|add|bld17)
+Anzerloi takes a drink from an elegant diamond vial.
+6113(100%|81%) 99e 99w T ckdb 350 04:00:23.10  0 --
+ (cresc3|gen|clu|lovestuck|add|bld17)
+The effects of your time manipulation fade somewhat, leaving you only aged by
+275 years.
+6113(100%|81%) 99e 99w T ckdb 275 04:00:23.21  0 --
+ (cresc3|gen|clu|lovestuck|add|bld17)
+You have recovered equilibrium. (0.43)
+6113(100%|81%) 99e 99w eT ckdb 275 04:00:23.72  0 --
+ (cresc3|gen|clu|lovestuck|add|bld17)
+Anzerloi eats a magnesium chip.
+aff- paralysis
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+Anzerloi darts out with a Soulpiercer in a lightning-fast jab towards your
+torso.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+torso.
+(SLC) H: 42.0% T: 21.0%    LA: 42.0% RA: 0.0%    LL: 0.0% RL: 0.0%
+The sensation of cold steel makes you feel queasy as it slides into your
+vulnerable organs.
+You have been afflicted with nausea.
+Health lost: 599 (physical cutting).
+You may eat another plant or mineral. (1.12)
+5514(90%|81%) 100e 99w eT ckdb 275 04:00:24.44  0 --
+ (cresc3|gen|clu|PAR|lovestuck|add|nau|bld34)
+[Curing]: OUTR BLOODROOT
+You remove 1 bloodroot, bringing the total in the rift to 808. (808)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your addiction can never be sated.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+Song swells about you as a grand crescendo draws ever closer to actualisation.
+5514(90%|81%) 100e 99w eT ckdb 275 04:00:24.49  0 --
+ (cresc4|gen|clu|lovestuck|add|nau|bld34)
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (1.84)
+You will now attempt to parry attacks to your torso.
+Being careful not to poison yourself, you wipe off all the venoms from
+deSangre's spite.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+The face of Anzerloi contorts in pain.
+Balance used: 2.1s.
+HP: [====================] 4666/6647 70%
+MP: [====================] 5139/5405 95%
+Equilibrium used: 0.85s.
+5514(90%|78%) 99e 99w T ckdb 275 04:00:24.96  0 --
+ (cresc4|gen|clu|lovestuck|add|nau|bld34)
+Anzerloi eats a magnesium chip.
+aff- paralysis
+5514(90%|78%) 99e 99w T ckdb 275 04:00:25.64  0 --
+ (cresc4|gen|clu|lovestuck|add|nau)
+A keening whine emanates from the rapier of Anzerloi.
+With a flourish of a Soulpiercer Anzerloi steps in close, his blade slicing at
+your left arm.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+left arm.
+(SLC) H: 42.0% T: 21.0%    LA: 63.0% RA: 0.0%    LL: 0.0% RL: 0.0%
+The song of a Soulpiercer rings out as the point slashes through your flesh to
+cut into the tendons beneath.
+You have been afflicted with weariness.
+Your limbs grow heavy and you groan feebly.
+Your shield completely absorbs the damage.
+Anzerloi continues to circle you, his deadly dance carrying him poised and ready
+around to your flank.
+You have recovered equilibrium. (0.76)
+5514(90%|78%) 99e 99w eT ckdb 275 04:00:25.75  0 --
+ (w|cresc4|clu|gen|lovestuck|add|nau)
+You may eat another plant or mineral. (1.39)
+5514(90%|78%) 99e 99w eT ckdb 275 04:00:26.06  0 --
+ (w|cresc4|clu|gen|lovestuck|add|nau)
+Your strange fixation on all those that surround you abruptly lifts.
+You have cured the lovestruck affliction.
+5514(90%|78%) 99e 99w eT ckdb 275 04:00:26.19  0 -- (w|cresc4|clu|gen|add|nau)
+A song can be heard on the edge of hearing as the air distorts about Anzerloi.
+You determine that Anzerloi is suffering from stupidity.
+aff- clumsiness
+aff+ stupidity
+5514(90%|78%) 99e 99w eT ckdb 275 04:00:26.19  0 -- (w|cresc4|clu|gen|add|nau)
+Anzerloi touches a tree of life tattoo.
+[Curing]: OUTR STANNUM
+aff- weariness
+You remove 1 stannum, bringing the total in the rift to 2107. (2107)
+[Curing]: EAT STANNUM
+You eat a stannum flake.
+Your addiction can never be sated.
+The building crescendo about you is greatly diminished.
+5514(90%|78%) 99e 99w eT ckdb 275 04:00:26.27  0 -- (cresc1|w|clu|gen|add|nau)
+You may drink another health or mana elixir. (4.38)
+5514(90%|78%) 99e 99w eT ckdb 275 04:00:26.68  0 -- (cresc1|w|clu|gen|add|nau)
+[Curing]: SIP MANA
+You take a drink from a moonstone vial.
+Your mind feels stronger and more alert.
+5514(90%|96%) 99e 99w eT ckdb 275 04:00:26.84  0 -- (cresc1|w|clu|gen|add|nau)
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (2.19)
+You will now attempt to parry attacks to your torso.
+You rub some curare on deSangre's spite.
+You manipulate the temporal flow to ensure your errors will be mitigated.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Balance used: 2.1s.
+HP: [====================] 4822/6647 72%
+MP: [====================] 5111/5405 94%
+Equilibrium used: 0.85s.
+5514(90%|93%) 99e 99w T ckdb 275 04:00:27.08  0 -- (cresc1|w|clu|gen|add|nau)
+
+aff+ clumsiness
+Anzerloi eats a magnesium chip.
+aff- paralysis
+Anzerloi eats a potash crystal.
+5514(90%|93%) 99e 99w T ckdb 275 04:00:27.23  0 -- (cresc1|w|clu|gen|add|nau)
+The wet smack of mysterious meat upon a butcher's block echoes briefly before
+coming to a sudden halt.
+A suspicious gourmand shouts, "Hey Valkael and Lyrin, would you mind sending me
+the leftovers once you're finished?"
+5514(90%|93%) 99e 99w T ckdb 275 04:00:27.26  0 -- (cresc1|w|clu|gen|add|nau)
+Anzerloi takes a drink from an elegant diamond vial.
+5514(90%|93%) 99e 99w T ckdb 275 04:00:27.65  0 -- (cresc1|w|clu|gen|add|nau)
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+Anzerloi darts out with a Soulpiercer in a lightning-fast jab towards your
+torso.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+torso.
+(SLC) H: 42.0% T: 42.0%    LA: 63.0% RA: 0.0%    LL: 0.0% RL: 0.0%
+You feel the brief bite of cold steel between your ribs as your breath becomes
+laboured.
+You have been afflicted with asthma.
+Health lost: 599 (physical cutting).
+Anzerloi continues to circle you, slipping in and out of your blindspot as he
+dances behind you.
+You may eat another plant or mineral. (1.49)
+4915(80%|93%) 99e 99w T ckdb 275 04:00:27.75  0 --
+ (cresc1|w|AST|clu|PAR|gen|add|nau|bld17)
+[Curing]: OUTR BLOODROOT
+You remove 1 bloodroot, bringing the total in the rift to 808. (808)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your addiction can never be sated.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+Song swells about you as you begin to move inevitably towards a grand crescendo.
+You have recovered equilibrium. (0.79)
+4915(80%|93%) 99e 99w eT ckdb 275 04:00:27.85  0 --
+ (w|cresc2|clu|AST|gen|add|nau|bld17)
+The effects of your time manipulation fade somewhat, leaving you only aged by
+200 years.
+4915(80%|93%) 100e 99w eT ckdb 200 04:00:28.23  0 --
+ (w|cresc2|clu|AST|gen|add|nau|bld17)
+Anzerloi eats an aurum flake.false
+
+aff- clumsiness
+5220(85%|95%) 100e 99w eT ckdb 200 04:00:29.05  0 --
+ (w|cresc2|clu|AST|gen|add|nau|bld17)
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (2.11)
+You will now attempt to parry attacks to your torso.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Anzerloi grits his teeth and rallies himself against the mental assault.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Balance used: 2.1s.
+HP: [====================] 5800/6647 87%
+MP: [====================] 5380/5405 99%
+Equilibrium used: 0.85s.
+5220(85%|93%) 99e 99w T ckdb 200 04:00:29.16  0 --
+ (w|cresc2|clu|AST|gen|add|nau|bld17)
+aff+ clumsiness
+You may eat another plant or mineral. (1.38)
+5220(85%|93%) 99e 99w T ckdb 200 04:00:29.37  0 --
+ (w|cresc2|clu|AST|gen|add|nau|bld17)
+[Curing]: OUTR CUPRUM
+You remove 1 cuprum, bringing the total in the rift to 1827. (1827)
+[Curing]: EAT CUPRUM
+You eat a cuprum flake.
+Your addiction can never be sated.
+Ahhhh. The freedom to be stingy again!
+You have cured the generosity affliction.
+Song swells about you as a grand crescendo draws ever closer to actualisation.
+5220(85%|93%) 99e 99w T ckdb 200 04:00:29.41  0 --
+ (cresc3|w|clu|AST|add|nau|bld17)
+You have recovered equilibrium. (0.72)
+5220(85%|93%) 99e 99w eT ckdb 200 04:00:30.00  0 --
+ (cresc3|w|clu|AST|add|nau|bld17)
+You suddenly perceive the vague outline of an aura of rebounding around
+Anzerloi.
+@@@ TARGET REBOUNDING @@@
+@@@ TARGET REBOUNDING @@@
+@@@ TARGET REBOUNDING @@@
+5220(85%|93%) 99e 99w eT ckdb 200 04:00:30.06  0 --
+ (cresc3|w|clu|AST|add|nau|bld17)
+You may utilise the tree tattoo again. (13.95)
+5220(85%|93%) 99e 99w eT ckdb 200 04:00:30.59  0 --
+ (cresc3|w|clu|AST|add|nau|bld17)
+Anzerloi eats a magnesium chip.
+aff- paralysis
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Your stomach becalms itself.
+You have cured the nausea affliction.
+Anzerloi's aura of weapons rebounding disappears.
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+Anzerloi flicks out with a Soulpiercer towards you, a keening note raising from
+the blade's lunge.
+A grim note knells from the blade of Anzerloi as it finds your flesh.
+You have been afflicted with earworm.
+Health lost: 599 (physical cutting).
+Anzerloi's rapier sings out with a high, piercing note.
+Health lost: 199 (magical).
+Anzerloi circles back to your front, rapier languidly swaying with the hypnotic
+grace of his dance.
+4422(72%|93%) 99e 99w eT ckdb 200 04:00:30.63  0 --
+ (cresc3|w|clu|PAR|AST|add|earworm|bld34)
+Anzerloi takes a long drag off his pipe.
+4422(72%|92%) 99e 99w eT ckdb 200 04:00:30.82  0 --
+ (cresc3|w|clu|PAR|AST|add|earworm|bld34)
+You may eat another plant or mineral. (1.39)
+4422(72%|92%) 99e 99w eT ckdb 200 04:00:30.99  0 --
+ (cresc3|w|clu|PAR|AST|add|earworm|bld34)
+[Curing]: OUTR BLOODROOT
+You remove 1 bloodroot, bringing the total in the rift to 808. (808)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your addiction can never be sated.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+Song swells about you as a grand crescendo draws ever closer to actualisation.
+4422(72%|92%) 99e 99w eT ckdb 200 04:00:30.00  0 --
+ (w|cresc4|clu|AST|add|earworm|bld34)
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (2.08)
+You will now attempt to parry attacks to your torso.
+You rub some curare on deSangre's spite.
+Your blow with deSangre's spite barely clips Anzerloi as you fumble your attack.
+You seize upon the temporal flow of Anzerloi, ensuring that mistakes shall not
+be replicated.
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+Balance used: 2.1s.
+HP: [====================] 5800/6647 87%
+MP: [====================] 5273/5405 97%
+Equilibrium used: 0.85s.
+You may drink another health or mana elixir. (4.59)
+4422(72%|90%) 99e 99w T ckdb 200 04:00:31.23  0 --
+ (w|cresc4|clu|AST|add|earworm|bld34)
+aff+ weariness
+The love Anzerloi's ghazal inspires in you stays your hand against even the
+greatest foe.
+You have been afflicted with lovestruck.
+Song swells about you as a grand crescendo draws ever closer to actualisation.
+4422(72%|90%) 99e 99w T ckdb 200 04:00:31.24  0 --
+ (cresc5|w|lovestuck|clu|earworm|add|AST|bld34)
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+5844(95%|90%) 99e 99w T ckdb 200 04:00:31.38  0 --
+ (cresc5|w|lovestuck|clu|earworm|add|AST|bld34)
+Health lost: 34 (raw).
+You bleed 34 health.
+5810(95%|90%) 99e 99w T ckdb 200 04:00:31.45  0 --
+ (cresc5|w|lovestuck|clu|earworm|add|AST|bld24)
+You have recovered equilibrium. (0.52)
+5810(95%|90%) 99e 99w eT ckdb 200 04:00:32.02  0 --
+ (cresc5|w|lovestuck|clu|earworm|add|AST|bld24)
+Anzerloi eats a magnesium chip.
+aff- paralysis
+5810(95%|90%) 100e 99w eT ckdb 200 04:00:32.16  0 --
+ (cresc5|w|lovestuck|clu|earworm|add|AST|bld24)
+Anzerloi flips a Shield of Absorption over his head with practised ease, lashing
+it to the hooks on a wyrmskin pack.
+Anzerloi removes a bard's harp.
+Anzerloi begins to wield a bard's harp in his left hand.
+Anzerloi brings his grand performance to a close, the notes of his song fading
+away into silence.
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+With a flourish of a Soulpiercer Anzerloi steps in close, his blade slicing at
+your right arm.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+right arm.
+(SLC) H: 42.0% T: 42.0%    LA: 63.0% RA: 21.0%    LL: 0.0% RL: 0.0%
+The song of a Soulpiercer rings out as the point slashes through your flesh to
+cut into the tendons beneath.
+You have been afflicted with haemophilia.
+You sense a subtle change deep within.
+Health lost: 599 (physical cutting).
+Anzerloi's rapier sings out with a high, piercing note.
+Health lost: 199 (magical).
+Anzerloi plays his a bard's harp to dutifully offer his music for the glory of
+the Gods.
+A beautiful symphony rises to underpin Anzerloi's song.
+5012(81%|90%) 100e 99w eT ckdb 200 04:00:32.45  0 --
+ (haem|w|earworm|cresc5|clu|PAR|AST|add|lovestuck|bld41)
+You may eat another plant or mineral. (1.53)
+5012(81%|90%) 100e 99w eT ckdb 200 04:00:32.57  0 --
+ (haem|w|earworm|cresc5|clu|PAR|AST|add|lovestuck|bld41)
+[Curing]: OUTR BLOODROOT
+You remove 1 bloodroot, bringing the total in the rift to 808. (808)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your addiction can never be sated.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+The music swells about you in grand crescendo, and your heart begins to pound
+with the knowing of what must surely come.
+5012(81%|90%) 100e 99w eT ckdb 200 04:00:32.73  0 --
+ (haem|w|earworm|cresc6|clu|AST|add|lovestuck|bld41)
+The effects of your time manipulation fade somewhat, leaving you only aged by
+125 years.
+5012(81%|90%) 100e 99w eT ckdb 125 04:00:33.24  0 --
+ (haem|w|earworm|cresc6|clu|AST|add|lovestuck|bld41)
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (1.82)
+You will now attempt to parry attacks to your torso.
+Being careful not to poison yourself, you wipe off all the venoms from
+deSangre's spite.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+The face of Anzerloi contorts in pain.
+Balance used: 2.1s.
+HP: [====================] 3819/6647 57%
+MP: [====================] 5273/5405 97%
+Equilibrium used: 0.85s.
+5012(81%|88%) 99e 99w T ckdb 125 04:00:33.33  0 --
+ (haem|w|earworm|cresc6|clu|AST|add|lovestuck|bld41)
+Anzerloi takes a drink from an elegant diamond vial.
+Anzerloi eats a potash crystal.
+5012(81%|88%) 99e 99w T ckdb 125 04:00:33.46  0 --
+ (haem|w|earworm|cresc6|clu|AST|add|lovestuck|bld41)
+Anzerloi eats a magnesium chip.
+aff- paralysis
+5012(81%|88%) 99e 99w T ckdb 125 04:00:33.95  0 --
+ (haem|w|earworm|cresc6|clu|AST|add|lovestuck|bld41)
+The song playing endlessly inside your mind drones ever on.
+You determine that Anzerloi is suffering from stupidity.
+5012(81%|88%) 99e 99w T ckdb 125 04:00:34.24  0 --
+ (haem|w|earworm|cresc6|clu|AST|add|lovestuck|bld41)
+You have recovered equilibrium. (1.04)
+You may eat another plant or mineral. (1.35)
+5012(81%|88%) 99e 99w eT ckdb 125 04:00:34.31  0 --
+ (haem|w|earworm|cresc6|clu|AST|add|lovestuck|bld41)
+Anzerloi stumbles and pokes himself in the eye.
+A look of extreme focus crosses the face of Anzerloi.
+aff- stupidity
+MP: [====================] 5296.9/5405 98%
+[Curing]: OUTR STANNUM
+You remove 1 stannum, bringing the total in the rift to 2107. (2107)
+[Curing]: EAT STANNUM
+You eat a stannum flake.
+Your addiction can never be sated.
+The building crescendo about you is greatly diminished.
+5012(81%|88%) 99e 99w eT ckdb 125 04:00:34.40  0 --
+ (haem|w|earworm|cresc1|clu|AST|add|lovestuck|bld41)
+Anzerloi ceases to wield a bard's harp in his left hand.
+Anzerloi puts on a bard's harp.
+Anzerloi quickly unlashes a Shield of Absorption free from a wyrmskin pack,
+shifting it over his head and into his left hand.
+The grand finale of Anzerloi stutters and dies, a disappointing climax to a show
+most grand.
+Anzerloi flicks out with a Soulpiercer towards you, a keening note raising from
+the blade's lunge.
+A rich, vibrant hum rises from the blade of Anzerloi as it finds your flesh.
+Health lost: 599 (physical cutting).
+Anzerloi's rapier sings out with a high, piercing note.
+Health lost: 300 (magical).
+Anzerloi continues to circle you, his deadly dance carrying him poised and ready
+around to your flank.
+4113(67%|88%) 99e 99w eT ckdb 125 04:00:34.50  0 --
+ (haem|w|earworm|cresc1|clu|AST|add|lovestuck|bld58)
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (2.04)
+You will now attempt to parry attacks to your torso.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Anzerloi grits his teeth and rallies himself against the mental assault.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+The face of Anzerloi contorts in pain.
+Balance used: 2.1s.
+HP: [====================] 3742/6647 56%
+MP: [====================] 5054/5405 93%
+Equilibrium used: 0.85s.
+4113(67%|86%) 99e 99w T ckdb 125 04:00:35.41  0 --
+ (haem|w|earworm|cresc1|clu|AST|add|lovestuck|bld58)
+Anzerloi eats a magnesium chip.
+aff- paralysis
+4113(67%|86%) 99e 99w T ckdb 125 04:00:35.55  0 --
+ (haem|w|earworm|cresc1|clu|AST|add|lovestuck|bld58)
+You may drink another health or mana elixir. (4.48)
+4113(67%|85%) 99e 99w T ckdb 125 04:00:35.85  0 --
+ (haem|w|earworm|cresc1|clu|AST|add|lovestuck|bld58)
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+You may eat another plant or mineral. (1.4)
+5432(88%|85%) 99e 99w T ckdb 125 04:00:35.97  0 --
+ (haem|w|earworm|cresc1|clu|AST|add|lovestuck|bld58)
+[Curing]: OUTR KELP
+You remove 1 kelp, bringing the total in the rift to 1516. (1516)
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your addiction can never be sated.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+You have cured the clumsiness affliction.
+Song swells about you as you begin to move inevitably towards a grand crescendo.
+5432(88%|85%) 100e 99w T ckdb 125 04:00:36.15  0 --
+ (haem|w|cresc2|earworm|AST|add|lovestuck|bld58)
+Your grasp on the temporal reality surrounding Anzerloi has been lost.
+Your strange fixation on all those that surround you abruptly lifts.
+You have cured the lovestruck affliction.
+5432(88%|85%) 100e 99w T ckdb 125 04:00:36.23  0 --
+ (haem|w|cresc2|earworm|AST|add|bld58)
+You have recovered equilibrium. (1.05)
+5432(88%|85%) 100e 99w eT ckdb 125 04:00:36.28  0 --
+ (haem|w|cresc2|earworm|AST|add|bld58)
+Anzerloi flips a Shield of Absorption over his head with practised ease, lashing
+it to the hooks on a wyrmskin pack.
+Anzerloi removes a bard's harp.
+Anzerloi begins to wield a bard's harp in his left hand.
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+With a flourish of a Soulpiercer Anzerloi steps in close, his blade slicing at
+your head.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+head.
+(SLC) H: 63.0% T: 42.0%    LA: 63.0% RA: 21.0%    LL: 0.0% RL: 0.0%
+Your ears are filled with harsh reverberation as the edge of a Soulpiercer
+scrapes against your skull.
+You have been afflicted with generosity.
+Why, you ask yourself, are you so privileged when others are so needy.
+Health lost: 599 (physical cutting).
+Anzerloi's rapier sings out with a high, piercing note.
+Health lost: 300 (magical).
+Anzerloi continues to circle you, slipping in and out of your blindspot as he
+dances behind you.
+Anzerloi plays his a bard's harp to dutifully offer his music for the glory of
+the Gods.
+A beautiful symphony rises to underpin Anzerloi's song.
+4533(74%|85%) 100e 99w eT ckdb 125 04:00:36.38  0 --
+ (haem|w|cresc2|earworm|gen|PAR|AST|add|bld75)
+Health lost: 75 (raw).
+You bleed 75 health.
+4458(72%|85%) 100e 99w eT ckdb 125 04:00:37.00  0 --
+ (haem|w|cresc2|earworm|gen|PAR|AST|add|bld75)
+Anzerloi eats an aurum flake.false
+
+aff- clumsiness
+4458(72%|85%) 100e 99w eT ckdb 125 04:00:37.28  0 --
+ (haem|w|cresc2|earworm|gen|PAR|AST|add|bld75)
+You have recovered balance on all limbs. (2.29)
+4458(72%|85%) 100e 99w exT ckdb 125 04:00:37.53  0 --
+ (haem|w|cresc2|earworm|gen|PAR|AST|add|bld75)
+You may eat another plant or mineral. (1.27)
+4458(72%|85%) 100e 99w exT ckdb 125 04:00:37.64  0 --
+ (haem|w|cresc2|earworm|gen|PAR|AST|add|bld75)
+[nikita]: Defense gained: parrying (torso)
+[Curing]: OUTR BLOODROOT
+You remove 1 bloodroot, bringing the total in the rift to 808. (808)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your addiction can never be sated.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+Song swells about you as a grand crescendo draws ever closer to actualisation.
+You will now attempt to parry attacks to your torso.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Balance used: 2.1s.
+HP: [====================] 3192/6647 48%
+MP: [====================] 5010/5405 92%
+Equilibrium used: 0.85s.
+4458(72%|83%) 99e 99w T ckdb 125 04:00:37.67  0 --
+ (haem|w|earworm|cresc3|gen|AST|add|bld75)
+aff+ clumsiness
+Anzerloi takes a drink from an elegant diamond vial.
+4458(72%|83%) 99e 99w T ckdb 125 04:00:37.87  0 --
+ (haem|w|earworm|cresc3|gen|AST|add|bld75)
+(Market): Serahfyna says, "Take your kawhe as strong as a black dragon! Try our
+black dragon brew, sure to put scales on ya! AD 32!"
+4458(72%|83%) 99e 99w T ckdb 125 04:00:38.19  0 --
+ (haem|w|earworm|cresc3|gen|AST|add|bld75)
+The effects of your time manipulation fade somewhat, leaving you only aged by 50
+years.
+The song playing endlessly inside your mind drones ever on.
+4458(72%|83%) 99e 99w T ckdb 50 04:00:38.26  0 --
+ (haem|w|earworm|cresc3|gen|AST|add|bld75)
+You have recovered equilibrium. (0.46)
+4458(72%|83%) 99e 99w eT ckdb 50 04:00:38.46  0 --
+ (haem|w|earworm|cresc3|gen|AST|add|bld75)
+Anzerloi eats a magnesium chip.
+aff- paralysis
+Anzerloi ceases to wield a bard's harp in his left hand.
+Anzerloi puts on a bard's harp.
+Anzerloi quickly unlashes a Shield of Absorption free from a wyrmskin pack,
+shifting it over his head and into his left hand.
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+With a flourish of a Soulpiercer Anzerloi steps in close, his blade slicing at
+your head.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+head.
+(SLC) H: 84.0% T: 42.0%    LA: 63.0% RA: 21.0%    LL: 0.0% RL: 0.0%
+Your legs almost give out from under you as the blade of Anzerloi slashes into
+the back of your head, a line of keening ice.
+You have been afflicted with diminished.
+Health lost: 599 (physical cutting).
+Anzerloi's rapier sings out with a high, piercing note.
+Health lost: 399 (magical).
+Anzerloi circles back to your front, rapier languidly swaying with the hypnotic
+grace of his dance.
+3765(61%|85%) 99e 99w eT ckdb 50 04:00:39.05  0 --
+ (haem|w|earworm|cresc3|gen|PAR|AST|add|dim|bld92)
+[Warning] Your HEAD is prepped!
+You may eat another plant or mineral. (1.45)
+3765(61%|85%) 99e 99w eT ckdb 50 04:00:39.26  0 --
+ (haem|w|earworm|cresc3|gen|PAR|AST|add|dim|bld92)
+You suddenly perceive the vague outline of an aura of rebounding around
+Anzerloi.
+@@@ TARGET REBOUNDING @@@
+@@@ TARGET REBOUNDING @@@
+@@@ TARGET REBOUNDING @@@
+3765(61%|85%) 99e 99w eT ckdb 50 04:00:39.30  0 --
+ (haem|w|earworm|cresc3|gen|PAR|AST|add|dim|bld92)
+Anzerloi eats a potash crystal.
+[Curing]: OUTR BLOODROOT
+You remove 1 bloodroot, bringing the total in the rift to 808. (808)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your addiction can never be sated.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+Song swells about you as a grand crescendo draws ever closer to actualisation.
+3765(61%|85%) 99e 99w eT ckdb 50 04:00:39.40  0 --
+ (haem|w|cresc4|earworm|gen|AST|add|dim|bld92)
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (1.82)
+You will now attempt to parry attacks to your torso.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Anzerloi grits his teeth and rallies himself against the mental assault.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+The face of Anzerloi contorts in pain.
+Balance used: 2.1s.
+HP: [====================] 3047/6647 45%
+MP: [====================] 5405/5405 100%
+Equilibrium used: 0.85s.
+3765(61%|83%) 99e 99w T ckdb 50 04:00:39.76  0 --
+ (haem|w|cresc4|earworm|gen|AST|add|dim|bld92)
+You may drink another health or mana elixir. (4.53)
+3765(61%|83%) 100e 99w T ckdb 50 04:00:40.38  0 --
+ (haem|w|cresc4|earworm|gen|AST|add|dim|bld92)
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+5046(82%|83%) 100e 99w T ckdb 50 04:00:40.57  0 --
+ (haem|w|cresc4|earworm|gen|AST|add|dim|bld92)
+You have recovered equilibrium. (1.11)
+5046(82%|83%) 100e 99w eT ckdb 50 04:00:40.58  0 --
+ (haem|w|cresc4|earworm|gen|AST|add|dim|bld92)
+Anzerloi eats a magnesium chip.
+aff- paralysis
+5046(82%|83%) 100e 99w eT ckdb 50 04:00:40.78  0 --
+ (haem|w|cresc4|earworm|gen|AST|add|dim|bld92)
+Anzerloi touches a tree of life tattoo.
+5046(82%|83%) 100e 99w eT ckdb 50 04:00:40.96  0 --
+ (haem|w|cresc4|earworm|gen|AST|add|dim|bld92)
+aff- clumsiness
+Anzerloi's aura of weapons rebounding disappears.
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+With a flourish of a Soulpiercer Anzerloi steps in close, his blade slicing at
+your left arm.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+left arm.
+(SLC) H: 84.0% T: 42.0%    LA: 84.0% RA: 21.0%    LL: 0.0% RL: 0.0%
+The song of a Soulpiercer rings out as the point slashes through your flesh to
+cut into the tendons beneath.
+You have been afflicted with clumsiness.
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Health lost: 599 (physical cutting).
+Anzerloi's rapier sings out with a high, piercing note.
+Health lost: 399 (magical).
+You may eat another plant or mineral. (1.83)
+4048(66%|83%) 100e 99w eT ckdb 50 04:00:40.00  0 --
+ (haem|w|cresc4|earworm|gen|clu|PAR|AST|add|dim|bld109)
+[Warning] Your HEAD is prepped!
+[Warning] Your LEFT ARM is prepped!
+Anzerloi takes a long drag off his pipe.
+[Curing]: OUTR BLOODROOT
+You remove 1 bloodroot, bringing the total in the rift to 808. (808)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your addiction can never be sated.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+Song swells about you as a grand crescendo draws ever closer to actualisation.
+4048(66%|83%) 100e 99w eT ckdb 50 04:00:41.11  0 --
+ (haem|w|earworm|gen|cresc5|clu|AST|add|dim|bld109)
+A song can be heard on the edge of hearing as the air distorts about Anzerloi.
+4048(66%|83%) 100e 99w eT ckdb 50 04:00:41.28  0 --
+ (haem|w|earworm|gen|cresc5|clu|AST|add|dim|bld109)
+aff- weariness
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (1.95)
+You will now attempt to parry attacks to your torso.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Balance used: 2.1s.
+HP: [====================] 2165/6647 32%
+MP: [====================] 5390/5405 99%
+Equilibrium used: 0.85s.
+4048(66%|80%) 99e 99w T ckdb 50 04:00:41.83  0 --
+ (haem|w|earworm|gen|cresc5|clu|AST|add|dim|bld109)
+aff+ clumsiness
+Anzerloi eats a magnesium chip.
+aff- paralysis
+4048(66%|80%) 99e 99w T ckdb 50 04:00:42.27  0 --
+ (haem|w|earworm|gen|cresc5|clu|AST|add|dim|bld109)
+The song playing endlessly inside your mind drones ever on.
+You determine that Anzerloi is suffering from stupidity.
+aff+ stupidity
+4048(66%|80%) 99e 99w T ckdb 50 04:00:42.28  0 --
+ (haem|w|earworm|gen|cresc5|clu|AST|add|dim|bld109)
+A look of extreme focus crosses the face of Anzerloi.
+aff- stupidity
+MP: [====================] 4849.5/5405 89%
+Anzerloi takes a drink from an elegant diamond vial.
+4048(66%|80%) 99e 99w T ckdb 50 04:00:42.50  0 --
+ (haem|w|earworm|gen|cresc5|clu|AST|add|dim|bld109)
+Health lost: 109 (raw).
+You bleed 109 health.
+3939(64%|80%) 99e 99w T ckdb 50 04:00:42.51  0 --
+ (haem|w|earworm|gen|cresc5|clu|AST|add|dim|bld109)
+You have recovered equilibrium. (1.14)
+You may eat another plant or mineral. (1.58)
+3939(64%|80%) 99e 99w eT ckdb 50 04:00:42.68  0 --
+ (haem|w|earworm|gen|cresc5|clu|AST|add|dim|bld109)
+[Curing]: OUTR STANNUM
+You remove 1 stannum, bringing the total in the rift to 2107. (2107)
+[Curing]: EAT STANNUM
+You eat a stannum flake.
+Your addiction can never be sated.
+The building crescendo about you is greatly diminished.
+3939(64%|80%) 99e 99w eT ckdb 50 04:00:42.88  0 --
+ (haem|w|earworm|gen|cresc1|clu|AST|add|dim|bld109)
+[nikita]: Defense lost: fangbarrier
+Anzerloi flips a Shield of Absorption over his head with practised ease, lashing
+it to the hooks on a wyrmskin pack.
+Anzerloi removes a finely whittled wooden flute.
+Anzerloi begins to wield a finely whittled wooden flute in his left hand.
+Anzerloi brings his grand performance to a close, the notes of his song fading
+away into silence.
+Anzerloi's refrain leaves you gasping for breath.
+Like a setting sun does the blade of Anzerloi move from high to low, cutting
+across your left shoulder.
+You have been afflicted with brokenleftarm.
+You have been afflicted with damagedleftarm.
+Your left arm is greatly damaged from the beating.
+Blood sprays in a crimson fountain from arteries as they rupture in your left
+arm, the liquid drenching your skin in its sanguine slipperiness.
+You have been afflicted with slickness.
+The protective covering coating your skin sloughs off.
+You have been afflicted with damagedhead.
+You have been afflicted with stupidity.
+Your mind feels suddenly dulled and slow.
+You have been afflicted with impatience.
+Health lost: 784 (physical cutting).
+Anzerloi's rapier sings out with a high, piercing note.
+Health lost: 499 (magical).
+Anzerloi continues to circle you, his deadly dance carrying him poised and ready
+around to your flank.
+With frantic motions, Anzerloi brings forth the dark, foreboding curse of a
+bhajan.
+A beautiful symphony rises to underpin Anzerloi's song.
+2656(43%|80%) 99e 99w eT ckdb 50 04:00:43.00  0 --
+ (cresc1|w|STU|gen|IMP|head1|haem|LEFTARM2|earworm|clu|SLI|AST|add|dim|bld126)
+You are no longer artificially aged due to having manipulated time.
+2656(43%|80%) 99e 99w eT ckdb 0 04:00:43.27  0 --
+ (cresc1|w|STU|gen|IMP|head1|haem|LEFTARM2|earworm|clu|SLI|AST|add|dim|bld126)
+[nikita]: asthma set to priority 3
+[nikita]: diminished set to priority 1
+2656(43%|80%) 99e 99w eT ckdb 0 04:00:43.74  0 --
+ (cresc1|w|STU|gen|IMP|head1|haem|LEFTARM2|earworm|clu|SLI|AST|add|dim|bld126)
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (2.19)
+You will now attempt to parry attacks to your torso.
+You stumble and poke yourself in the eye.
+My friend, clearly you know little of the sultry tango, if you think that you
+can perform it without a partner.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Anzerloi grits his teeth and rallies himself against the mental assault.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Balance used: 2.1s.
+You wail like an old woman.
+2656(43%|79%) 99e 99w eT ckdb 0 04:00:43.95  0 --
+ (cresc1|w|STU|gen|IMP|head1|haem|LEFTARM2|earworm|clu|SLI|AST|add|dim|bld126)
+aff+ weariness
+Anzerloi eats a magnesium chip.
+aff- paralysis
+2656(43%|79%) 99e 99w eT ckdb 0 04:00:44.00  0 --
+ (cresc1|w|STU|gen|IMP|head1|haem|LEFTARM2|earworm|clu|SLI|AST|add|dim|bld126)
+You may eat another plant or mineral. (1.68)
+2656(43%|79%) 100e 99w eT ckdb 0 04:00:44.38  0 --
+ (cresc1|w|STU|gen|IMP|head1|haem|LEFTARM2|earworm|clu|SLI|AST|add|dim|bld126)
+[Curing]: OUTR CUPRUM
+You make a strangled meowing noise and quickly shut up in embarrassment.
+[Curing]: EAT CUPRUM
+What do you want to eat?
+[Curing]: OUTR CUPRUM
+You remove 1 cuprum, bringing the total in the rift to 1827. (1827)
+[Curing]: EAT CUPRUM
+You pull down your pants and moon the world.
+[Curing]: EAT CUPRUM
+You pick your nose absently.
+[Curing]: EAT CUPRUM
+You eat a cuprum flake.
+Your addiction can never be sated.
+Ahhhh. The freedom to be stingy again!
+You have cured the generosity affliction.
+Song swells about you as you begin to move inevitably towards a grand crescendo.
+2656(43%|79%) 100e 99w eT ckdb 0 04:00:44.45  0 --
+ (w|cresc2|STU|IMP|head1|haem|LEFTARM2|earworm|clu|SLI|AST|add|dim|bld126)
+You may utilise the tree tattoo again. (13.93)
+2656(43%|79%) 100e 99w eT ckdb 0 04:00:44.61  0 --TR/Hardlock(touch tree)
+ (w|cresc2|STU|IMP|head1|haem|LEFTARM2|earworm|clu|SLI|AST|add|dim|bld126)
+[Curing]: TOUCH TREE
+You drop to one knee.
+[Curing]: TOUCH TREE
+You fondle yourself absently.
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+The enfeeblement of your spirit lifts.
+You have cured the diminished affliction.
+2656(43%|79%) 100e 99w eT ckdb 0 04:00:44.80  0 --
+ (w|cresc2|STU|IMP|head1|haem|LEFTARM2|earworm|clu|SLI|AST|add|bld126)
+You may drink another health or mana elixir. (4.37)
+2656(43%|79%) 100e 99w eT ckdb 0 04:00:44.00  0 --
+ (w|cresc2|STU|IMP|head1|haem|LEFTARM2|earworm|clu|SLI|AST|add|bld126)
+Anzerloi ceases to wield a finely whittled wooden flute in his left hand.
+Anzerloi puts on a finely whittled wooden flute.
+Anzerloi quickly unlashes a Shield of Absorption free from a wyrmskin pack,
+shifting it over his head and into his left hand.
+The sinister implications of Anzerloi's refrain plague you.
+You have been afflicted with dizziness.
+Anzerloi darts out with a Soulpiercer in a lightning-fast jab towards your
+torso.
+You parry the attack with a deft manoeuvre.
+2656(43%|79%) 100e 99w eT ckdb 0 04:00:45.10  0 --
+ (w|diz|cresc2|STU|IMP|head1|haem|LEFTARM2|earworm|clu|SLI|AST|add|bld126)
+[Curing]: SIP HEALTH
+You blink.
+2656(43%|79%) 100e 99w eT ckdb 0 04:00:45.20  0 --
+ (w|diz|cresc2|STU|IMP|head1|haem|LEFTARM2|earworm|clu|SLI|AST|add|bld126)
+Your tree of life tattoo glows faintly for a moment then fades, leaving you
+unchanged.
+2656(43%|79%) 100e 99w eT ckdb 0 04:00:45.22  0 --
+ (w|diz|cresc2|STU|IMP|head1|haem|LEFTARM2|earworm|clu|SLI|AST|add|bld126)
+Anzerloi eats a potash crystal.
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+3949(64%|79%) 100e 99w eT ckdb 0 04:00:45.42  0 --
+ (w|diz|cresc2|STU|IMP|head1|haem|LEFTARM2|earworm|clu|SLI|AST|add|bld126)
+Anzerloi eats an aurum flake.false
+
+aff- clumsiness
+3949(64%|79%) 100e 99w eT ckdb 0 04:00:45.60  0 --
+ (w|diz|cresc2|STU|IMP|head1|haem|LEFTARM2|earworm|clu|SLI|AST|add|bld126)
+You may eat another plant or mineral. (1.43)
+3949(64%|79%) 100e 99w eT ckdb 0 04:00:45.96  0 --
+ (w|diz|cresc2|STU|IMP|head1|haem|LEFTARM2|earworm|clu|SLI|AST|add|bld126)
+[Curing]: OUTR PLUMBUM
+You remove 1 plumbum, bringing the total in the rift to 999. (999)
+[Curing]: EAT PLUMBUM
+You give up a round of applause.
+[Curing]: EAT PLUMBUM
+You eat a plumbum flake.
+Your addiction can never be sated.
+You are patient once again.
+You have cured the impatience affliction.
+Song swells about you as a grand crescendo draws ever closer to actualisation.
+[Curing]: FOCUS MIND
+You focus your mind intently on curing your mental maladies.
+You aren't such a complete idiot anymore.
+You have cured the stupidity affliction.
+3949(64%|76%) 100e 99w eT ckdb 0 04:00:46.01  0 --
+ (cresc3|w|diz|head1|haem|LEFTARM2|earworm|clu|SLI|AST|add|bld126)
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (2.46)
+You will now attempt to parry attacks to your torso.
+You rub some curare on deSangre's spite.
+Your blow with deSangre's spite barely clips Anzerloi as you fumble your attack.
+You seize upon the temporal flow of Anzerloi, ensuring that mistakes shall not
+be replicated.
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Balance used: 2.1s.
+HP: [====================] 3235/6647 48%
+3949(64%|75%) 99e 99w eT ckdb 0 04:00:46.08  0 --
+ (cresc3|w|diz|head1|haem|LEFTARM2|earworm|clu|SLI|AST|add|bld126)
+aff+ clumsiness
+The song playing endlessly inside your mind drones ever on.
+3949(64%|75%) 99e 99w eT ckdb 0 04:00:46.26  0 --
+ (cresc3|w|diz|head1|haem|LEFTARM2|earworm|clu|SLI|AST|add|bld126)
+You make a strangled meowing noise and quickly shut up in embarrassment.
+You giggle happily.
+3949(64%|75%) 99e 99w eT ckdb 0 04:00:46.58  0 --
+ (cresc3|w|diz|head1|haem|LEFTARM2|earworm|clu|SLI|AST|add|bld126)
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+Anzerloi darts out with a Soulpiercer in a lightning-fast jab towards your
+torso.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+torso.
+(SLC) H: 84.0% T: 63.0%    LA: 100.0% RA: 21.0%    LL: 0.0% RL: 0.0%
+You feel the brief bite of cold steel between your ribs as your breath becomes
+laboured.
+Health lost: 599 (physical cutting).
+Anzerloi's rapier sings out with a high, piercing note.
+Health lost: 600 (magical).
+Anzerloi continues to circle you, slipping in and out of your blindspot as he
+dances behind you.
+2750(44%|75%) 99e 99w eT ckdb 0 04:00:46.89  0 --
+ (haem|w|earworm|PAR|cresc3|diz|LEFTARM2|clu|SLI|AST|add|head1|bld143)
+[Warning] Your HEAD is prepped!
+Anzerloi takes a drink from an elegant diamond vial.
+2750(44%|75%) 99e 99w eT ckdb 0 04:00:47.15  0 --
+ (haem|w|earworm|PAR|cresc3|diz|LEFTARM2|clu|SLI|AST|add|head1|bld143)
+Anzerloi eats an aurum flake.false
+
+aff- clumsiness
+2750(44%|75%) 99e 99w eT ckdb 0 04:00:47.35  0 --
+ (haem|w|earworm|PAR|cresc3|diz|LEFTARM2|clu|SLI|AST|add|head1|bld143)
+You may eat another plant or mineral. (1.66)
+2750(44%|75%) 99e 99w eT ckdb 0 04:00:47.58  0 --
+ (haem|w|earworm|PAR|cresc3|diz|LEFTARM2|clu|SLI|AST|add|head1|bld143)
+[Curing]: OUTR BLOODROOT
+You remove 1 bloodroot, bringing the total in the rift to 808. (808)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your addiction can never be sated.
+Your glands cease their oily secretion.
+You have cured the slickness affliction.
+Song swells about you as a grand crescendo draws ever closer to actualisation.
+[Curing]: APPLY RESTORATION TO ARMS
+You take out some salve and quickly rub it on your arms.
+2750(44%|75%) 99e 99w eT ckdb 0 04:00:47.77  0 --
+ (haem|w|earworm|cresc4|PAR|diz|LEFTARM2|clu|AST|add|head1|bld143)
+Health lost: 143 (raw).
+You bleed 143 health.
+2607(42%|75%) 99e 99w eT ckdb 0 04:00:48.00  0 --
+ (haem|w|earworm|cresc4|PAR|diz|LEFTARM2|clu|AST|add|head1|bld143)
+You have recovered balance on all limbs. (2.08)
+2607(42%|75%) 100e 99w exT ckdb 0 04:00:48.20  0 --
+ (haem|w|earworm|cresc4|PAR|diz|LEFTARM2|clu|AST|add|head1|bld143)
+Your mind is able to focus once again. (2.39)
+2607(42%|75%) 100e 99w exT ckdb 0 04:00:48.40  0 --
+ (haem|w|earworm|cresc4|PAR|diz|LEFTARM2|clu|AST|add|head1|bld143)
+[Curing]: FOCUS MIND
+You focus your mind intently on curing your mental maladies.
+You are no longer dizzy.
+You have cured the dizziness affliction.
+2607(42%|72%) 100e 98w exT ckdb 0 04:00:48.50  0 --
+ (haem|w|earworm|cresc4|PAR|LEFTARM2|clu|AST|add|head1|bld143)
+[nikita]: Defense lost: deafness
+Anzerloi flips a Shield of Absorption over his head with practised ease, lashing
+it to the hooks on a wyrmskin pack.
+Anzerloi removes a court bard's lute.
+Anzerloi begins to wield a court bard's lute in his left hand.
+Anzerloi brings his grand performance to a close, the notes of his song fading
+away into silence.
+The nobility of Anzerloi's prosodion brings misfortune unto you.
+Your hearing is suddenly restored.
+With a flourish of a Soulpiercer Anzerloi steps in close, his blade slicing at
+your head.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+head.
+(SLC) H: 105.0% T: 63.0%    LA: 100.0% RA: 21.0%    LL: 0.0% RL: 0.0%
+Your legs almost give out from under you as the blade of Anzerloi slashes into
+the back of your head, a line of keening ice.
+You have been afflicted with generosity.
+Why, you ask yourself, are you so privileged when others are so needy.
+Health lost: 599 (physical cutting).
+Anzerloi's rapier sings out with a high, piercing note.
+Health lost: 600 (magical).
+Anzerloi circles back to your front, rapier languidly swaying with the hypnotic
+grace of his dance.
+With hooded eyes, Anzerloi takes up a court bard's lute and breathes the spirit
+of love into the world around him.
+A beautiful symphony rises to underpin Anzerloi's song.
+1408(23%|72%) 100e 98w exT ckb 0 04:00:48.73  0 --
+ (haem|w|gen|earworm|cresc4|PAR|LEFTARM2|clu|AST|add|head1|bld160)
+Anzerloi eats an aurum flake.false
+
+aff- weariness
+1408(23%|72%) 100e 98w exT ckb 0 04:00:48.90  0 --
+ (haem|w|gen|earworm|cresc4|PAR|LEFTARM2|clu|AST|add|head1|bld160)
+You may eat another plant or mineral. (1.5)
+1713(28%|74%) 100e 98w exT ckb 0 04:00:49.32  0 --
+ (haem|w|gen|earworm|cresc4|PAR|LEFTARM2|clu|AST|add|head1|bld160)
+You take out some salve and quickly rub it on your arms.
+The salve dissolves and quickly disappears after you apply it.
+1713(28%|74%) 100e 98w exT ckb 0 04:00:49.34  0 --
+ (haem|w|gen|earworm|cresc4|PAR|LEFTARM2|clu|AST|add|head1|bld160)
+[nikita]: Defense gained: parrying (torso)
+[Curing]: OUTR BLOODROOT
+You remove 1 bloodroot, bringing the total in the rift to 808. (808)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your addiction can never be sated.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+Song swells about you as a grand crescendo draws ever closer to actualisation.
+[Curing]: OUTR QUICKSILVER
+You remove 1 quicksilver, bringing the total in the rift to 718. (718)
+[Curing]: APPLY QUICKSILVER
+You apply a quicksilver droplet to yourself.
+You will now attempt to parry attacks to your torso.
+Being careful not to poison yourself, you wipe off all the venoms from
+deSangre's spite.
+Bending your will upon deSangre's spite, you corrupt the weapon's timestream.
+As you push your aeonic might beyond its limits, you feel yourself grow older.
+
+TIMELOOPBOOST!
+You have now aged yourself by 350 years.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Grey fog begins to rise from the suddenly panicked-looking Anzerloi.
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+A grey miasma flares around Anzerloi.
+[nikita]: TIMELOOP NUM: 4
+Balance used: 2.1s.
+HP: [====================] 4743/6647 71%
+MP: [====================] 5405/5405 100%
+Equilibrium used: 0.85s.
+1713(28%|70%) 99e 98w T ckb 350 04:00:49.52  0 --
+ (haem|w|cresc5|gen|earworm|LEFTARM2|clu|AST|add|head1|bld160)
+aff+ timeloop
+aff+ clumsiness
+aff+ weariness
+You suddenly perceive the vague outline of an aura of rebounding around
+Anzerloi.
+@@@ TARGET REBOUNDING @@@
+@@@ TARGET REBOUNDING @@@
+@@@ TARGET REBOUNDING @@@
+1713(28%|70%) 99e 98w T ckb 350 04:00:49.65  0 --
+ (haem|w|cresc5|gen|earworm|LEFTARM2|clu|AST|add|head1|bld160)
+[nikita]: haemophilia set to priority 1
+1713(28%|70%) 99e 98w T ckb 350 04:00:49.66  0 --
+ (haem|w|cresc5|gen|earworm|LEFTARM2|clu|AST|add|head1|bld160)
+You may drink another health or mana elixir. (4.26)
+1713(28%|70%) 99e 98w T ckb 350 04:00:49.85  0 --
+ (haem|w|cresc5|gen|earworm|LEFTARM2|clu|AST|add|head1|bld160)
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+3096(50%|70%) 99e 98w T ckb 350 04:00:49.89  0 --
+ (haem|w|cresc5|gen|earworm|LEFTARM2|clu|AST|add|head1|bld160)
+The song playing endlessly inside your mind drones ever on.
+3096(50%|70%) 99e 98w T ckb 350 04:00:50.28  0 --
+ (haem|w|cresc5|gen|earworm|LEFTARM2|clu|AST|add|head1|bld160)
+You determine that Anzerloi is suffering from dizziness.
+aff+ dizziness
+3096(50%|70%) 99e 98w T ckb 350 04:00:50.28  0 --
+ (haem|w|cresc5|gen|earworm|LEFTARM2|clu|AST|add|head1|bld160)
+You have recovered equilibrium. (1.11)
+3096(50%|70%) 99e 98w eT ckb 350 04:00:50.38  0 --
+ (haem|w|cresc5|gen|earworm|LEFTARM2|clu|AST|add|head1|bld160)
+A look of extreme focus crosses the face of Anzerloi.
+aff- dizziness
+MP: [====================] 4864.5/5405 90%
+3096(50%|70%) 99e 98w eT ckb 350 04:00:50.44  0 --
+ (haem|w|cresc5|gen|earworm|LEFTARM2|clu|AST|add|head1|bld160)
+You take out some salve and quickly rub it on your arms.
+The salve dissolves and quickly disappears after you apply it.
+3096(50%|70%) 99e 98w eT ckb 350 04:00:50.48  0 --
+ (haem|w|cresc5|gen|earworm|LEFTARM2|clu|AST|add|head1|bld160)
+Anzerloi eats a cuprum flake.
+3096(50%|70%) 99e 98w eT ckb 350 04:00:50.68  0 --
+ (haem|w|cresc5|gen|earworm|LEFTARM2|clu|AST|add|head1|bld160)
+aff- timeloop
+You have cleared the curing queue.
+3096(50%|70%) 99e 98w eT ckb 350 04:00:50.80  0 --
+ (haem|w|cresc5|gen|earworm|LEFTARM2|clu|AST|add|head1|bld160)
+Anzerloi ceases to wield a court bard's lute in his left hand.
+Anzerloi puts on a court bard's lute.
+Anzerloi quickly unlashes a Shield of Absorption free from a wyrmskin pack,
+shifting it over his head and into his left hand.
+Anzerloi's aura of weapons rebounding disappears.
+A keening whine emanates from the rapier of Anzerloi.
+Anzerloi darts out with a Soulpiercer in a lightning-fast jab towards your right
+arm.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+right arm.
+(SLC) H: 105.0% T: 63.0%    LA: 100.0% RA: 42.0%    LL: 0.0% RL: 0.0%
+You feel something in your right arm give way under the questing point of
+Anzerloi's blade.
+You have been afflicted with brokenrightarm.
+Health lost: 599 (physical cutting).
+Anzerloi's rapier sings out with a high, piercing note.
+Health lost: 700 (magical).
+1797(29%|70%) 99e 98w eT ckb 350 04:00:50.92  0 --
+ (haem|w|ra1|cresc5|gen|earworm|LEFTARM2|clu|AST|add|head1|bld177)
+Your mind is able to focus once again. (2.79)
+1797(29%|70%) 99e 98w eT ckb 350 04:00:50.98  0 --
+ (haem|w|ra1|cresc5|gen|earworm|LEFTARM2|clu|AST|add|head1|bld177)
+Anzerloi takes a long drag off his pipe.
+You cannot do that because both of your arms must be whole and unbound.
+1797(29%|70%) 99e 98w eT ckb 350 04:00:51.01  0 --
+ (haem|w|ra1|cresc5|gen|earworm|LEFTARM2|clu|AST|add|head1|bld177)
+You may eat another plant or mineral. (1.69)
+1797(29%|70%) 99e 98w eT ckb 350 04:00:51.08  0 --
+ (haem|w|ra1|cresc5|gen|earworm|LEFTARM2|clu|AST|add|head1|bld177)
+Your grasp on the temporal reality surrounding Anzerloi has been lost.
+1797(29%|70%) 99e 98w eT ckb 350 04:00:51.28  0 --
+ (haem|w|ra1|cresc5|gen|earworm|LEFTARM2|clu|AST|add|head1|bld177)
+Anzerloi eats a potash crystal.
+1797(29%|70%) 99e 98w eT ckb 350 04:00:51.41  0 --
+ (haem|w|ra1|cresc5|gen|earworm|LEFTARM2|clu|AST|add|head1|bld177)
+You have recovered balance on all limbs. (2.05)
+1797(29%|70%) 99e 98w exT ckb 350 04:00:51.56  0 --
+ (haem|w|ra1|cresc5|gen|earworm|LEFTARM2|clu|AST|add|head1|bld177)
+Anzerloi takes a drink from an elegant diamond vial.
+1797(29%|70%) 99e 98w exT ckb 350 04:00:51.62  0 --
+ (haem|w|ra1|cresc5|gen|earworm|LEFTARM2|clu|AST|add|head1|bld177)
+Your left arm feels stronger and healthier.
+You have cured the damagedleftarm affliction.
+You may apply another salve to yourself. (4.18)
+1797(29%|70%) 99e 98w exT ckb 350 04:00:51.75  0 --
+ (haem|w|ra1|cresc5|gen|earworm|la1|clu|AST|add|head1|bld177)
+You cannot do that because both of your arms must be whole and unbound.
+You cannot do that because both of your arms must be whole and unbound.
+1797(29%|70%) 99e 98w exT ckb 350 04:00:51.76  0 --
+ (haem|w|ra1|cresc5|gen|earworm|la1|clu|AST|add|head1|bld177)
+[Curing]: APPLY MENDING TO ARMS
+You take out some salve and quickly rub it on your arms.
+The bones in your left arm mend.
+You have cured the brokenleftarm affliction.
+[Curing]: OUTR GINSENG
+You remove 1 ginseng, bringing the total in the rift to 92. (92)
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+Your blood regains its ability to clot.
+You have cured the haemophilia affliction.
+The music swells about you in grand crescendo, and your heart begins to pound
+with the knowing of what must surely come.
+[Curing]: CLOT 177
+You clot your wounds 9 times.
+1797(29%|64%) 99e 98w exT ckb 350 04:00:51.82  0 --
+ (w|ra1|gen|earworm|cresc6|clu|AST|add|head1)
+ACCELERATED. You accelerate your body's ability to purge afflictions a
+thousandfold.
+Your bronchial tubes open up and your asthma is cured.
+You have cured the asthma affliction.
+The bones in your right arm mend.
+You have cured the brokenrightarm affliction.
+As you push your aeonic might beyond its limits, you feel yourself grow older.
+You have now aged yourself by 690 years.
+Equilibrium used: 2.12s.
+You have not recovered enough to accelerate time in that way again so soon.
+1797(29%|64%) 99e 98w xT ckb 690 04:00:52.01  0 --
+ (w|gen|earworm|cresc6|clu|add|head1)
+[Curing]: SMOKE CINNABAR
+You take a long drag of cinnabar off your pipe.
+The endlessly playing song in your mind falls silent.
+You have cured the earworm affliction.
+1797(29%|64%) 99e 98w xT ckb 690 04:00:52.20  0 -- (w|gen|cresc6|clu|add|head1)
+Anzerloi eats an aurum flake.false
+
+aff- clumsiness
+1797(29%|64%) 100e 98w xT ckb 690 04:00:52.38  0 -- (w|gen|cresc6|clu|add|head1)
+Anzerloi's ghazal brings sweat to your skin and tears to your eyes.
+You have been afflicted with slickness.
+Anzerloi darts out with a Soulpiercer in a lightning-fast jab towards your right
+arm.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+right arm.
+(SLC) H: 105.0% T: 63.0%    LA: 0.0% RA: 63.0%    LL: 0.0% RL: 0.0%
+You feel something in your right arm give way under the questing point of
+Anzerloi's blade.
+You have been afflicted with brokenrightarm.
+Your shield completely absorbs the damage.
+Anzerloi continues to circle you, his deadly dance carrying him poised and ready
+around to your flank.
+1797(29%|64%) 100e 98w xT ckb 690 04:00:52.70  0 --
+ (w|ra1|gen|cresc6|clu|SLI|add|head1)
+[nikita]: asthma set to priority 5
+[nikita]: diminished set to priority 3
+1797(29%|64%) 100e 98w xT ckb 690 04:00:52.72  0 --
+ (w|ra1|gen|cresc6|clu|SLI|add|head1)
+[nikita]: haemophilia set to priority 11
+1797(29%|64%) 100e 98w xT ckb 690 04:00:52.72  0 --
+ (w|ra1|gen|cresc6|clu|SLI|add|head1)
+You may apply another salve to yourself. (1.03)
+1797(29%|64%) 100e 98w xT ckb 690 04:00:52.80  0 --
+ (w|ra1|gen|cresc6|clu|SLI|add|head1)
+You may eat another plant or mineral. (1.64)
+1797(29%|64%) 100e 98w xT ckb 690 04:00:53.39  0 --
+ (w|ra1|gen|cresc6|clu|SLI|add|head1)
+[Curing]: OUTR STANNUM
+You remove 1 stannum, bringing the total in the rift to 2107. (2107)
+[Curing]: EAT STANNUM
+You eat a stannum flake.
+Your addiction can never be sated.
+The building crescendo about you is greatly diminished.
+1797(29%|64%) 100e 98w xT ckb 690 04:00:53.57  0 --
+ (cresc1|w|ra1|gen|clu|SLI|add|head1)
+Your lungs have recovered enough to smoke another mineral or plant. (1.57)
+1797(29%|64%) 100e 98w xT ckb 690 04:00:53.70  0 --
+ (cresc1|w|ra1|gen|clu|SLI|add|head1)
+[Curing]: SMOKE REALGAR
+You take a long drag of realgar off your pipe.
+Your glands cease their oily secretion.
+You have cured the slickness affliction.
+[Curing]: APPLY MENDING TO ARMS
+You take out some salve and quickly rub it on your arms.
+The bones in your right arm mend.
+You have cured the brokenrightarm affliction.
+1797(29%|64%) 100e 98w xT ckb 690 04:00:53.76  0 -- (cresc1|w|gen|clu|add|head1)
+Anzerloi eats an aurum flake.false
+
+aff- weariness
+1797(29%|64%) 100e 98w xT ckb 690 04:00:53.95  0 -- (cresc1|w|gen|clu|add|head1)
+[nikita]: Defense gained: parrying (torso)
+[nikita]: Defense gained: shield
+You have recovered equilibrium. (1.94)
+A wyrmskin pack doesn't contain that.
+You will now attempt to parry attacks to your torso.
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 3.40s.
+1797(29%|64%) 100e 98w xT ckb 690 04:00:54.10  0 -- (cresc1|w|gen|clu|add|head1)
+You may drink another health or mana elixir. (4.63)
+1797(29%|64%) 100e 98w xT ckb 690 04:00:54.43  0 -- (cresc1|w|gen|clu|add|head1)
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+3168(51%|64%) 100e 98w xT ckb 690 04:00:54.52  0 -- (cresc1|w|gen|clu|add|head1)
+Anzerloi's attack rebounds off your magical shield.
+3168(51%|64%) 100e 98w xT ckb 690 04:00:54.52  0 -- (cresc1|w|gen|clu|add|head1)
+You may apply another salve to yourself. (0.65)
+3168(51%|64%) 100e 98w xT ckb 690 04:00:54.63  0 -- (cresc1|w|gen|clu|add|head1)
+[Curing]: APPLY RESTORATION TO HEAD
+You take out some salve and quickly rub it on your head.
+3168(51%|64%) 100e 98w xT ckb 690 04:00:54.72  0 -- (cresc1|w|gen|clu|add|head1)
+You may eat another plant or mineral. (1.58)
+3168(51%|64%) 100e 98w xT ckb 690 04:00:55.04  0 -- (cresc1|w|gen|clu|add|head1)
+[Curing]: OUTR CUPRUM
+You remove 1 cuprum, bringing the total in the rift to 1827. (1827)
+[Curing]: EAT CUPRUM
+You eat a cuprum flake.
+Your addiction can never be sated.
+Ahhhh. The freedom to be stingy again!
+You have cured the generosity affliction.
+Song swells about you as you begin to move inevitably towards a grand crescendo.
+3168(51%|64%) 100e 98w xT ckb 690 04:00:55.14  0 -- (w|cresc2|clu|add|head1)
+Your lungs have recovered enough to smoke another mineral or plant. (1.37)
+3168(51%|64%) 100e 98w xT ckb 690 04:00:55.24  0 -- (w|cresc2|clu|add|head1)
+Anzerloi eats a calamine crystal.
+3168(51%|64%) 100e 98w xT ckb 690 04:00:55.51  0 -- (w|cresc2|clu|add|head1)
+Anzerloi's attack rebounds off your magical shield.
+3168(51%|63%) 100e 98w xT ckb 690 04:00:56.28  0 -- (w|cresc2|clu|add|head1)
+The effects of your time manipulation fade somewhat, leaving you only aged by
+615 years.
+3168(51%|63%) 100e 98w xT ckb 615 04:00:56.43  0 -- (w|cresc2|clu|add|head1)
+You take out some salve and quickly rub it on your head.
+The salve dissolves and quickly disappears after you apply it.
+3168(51%|63%) 100e 98w xT ckb 615 04:00:56.44  0 -- (w|cresc2|clu|add|head1)
+You may eat another plant or mineral. (1.59)
+3168(51%|63%) 100e 98w xT ckb 615 04:00:56.61  0 -- (w|cresc2|clu|add|head1)
+[Curing]: OUTR STANNUM
+You remove 1 stannum, bringing the total in the rift to 2107. (2107)
+[Curing]: EAT STANNUM
+You eat a stannum flake.
+Your addiction can never be sated.
+The building crescendo about you is greatly diminished.
+3168(51%|63%) 100e 98w xT ckb 615 04:00:56.82  0 -- (cresc1|w|clu|add|head1)
+[nikita]: Defense gained: reflections
+You have recovered equilibrium. (3.11)
+Taking hold of the strands of causality, you attempt to mislead your foes with
+false images from alternative timelines.
+Equilibrium used: 2.12s.
+As you push your aeonic might beyond its limits, you feel yourself grow older.
+You have now aged yourself by 1115 years.
+3168(51%|63%) 100e 98w xT ckb 1115 04:00:57.45  0 -- (cresc1|w|clu|add|head1)
+You take out some salve and quickly rub it on your head.
+The salve dissolves and quickly disappears after you apply it.
+3168(51%|63%) 100e 98w xT ckb 1115 04:00:57.46  0 -- (cresc1|w|clu|add|head1)
+Anzerloi's attack rebounds off your magical shield.
+3168(51%|63%) 100e 98w xT ckb 1115 04:00:58.19  0 -- (cresc1|w|clu|add|head1)
+You may eat another plant or mineral. (1.58)
+3168(51%|63%) 100e 98w xT ckb 1115 04:00:58.37  0 -- (cresc1|w|clu|add|head1)
+[Curing]: OUTR STANNUM
+You remove 1 stannum, bringing the total in the rift to 2107. (2107)
+[Curing]: EAT STANNUM
+You eat a stannum flake.
+Your addiction can never be sated.
+The building crescendo about you abruptly falls silent.
+You have cured the crescendo affliction.
+3168(51%|63%) 100e 98w xT ckb 1115 04:00:58.41  0 -- (w|clu|add|head1)
+The love Anzerloi's ghazal inspires in you stays your hand against even the
+greatest foe.
+You have been afflicted with lovestruck.
+You determine that Anzerloi is suffering from weariness.
+aff+ weariness
+3168(51%|63%) 100e 98w xT ckb 1115 04:00:58.41  0 -- (w|lovestuck|clu|add|head1)
+Anzerloi eats an aurum flake.false
+
+aff- weariness
+3168(51%|63%) 100e 98w xT ckb 1115 04:00:58.59  0 -- (w|lovestuck|clu|add|head1)
+Your head feels stronger and healthier.
+You have cured the damagedhead affliction.
+You may apply another salve to yourself. (3.99)
+3168(51%|63%) 100e 98w xT ckb 1115 04:00:58.72  0 -- (w|lovestuck|clu|add)
+You may utilise the tree tattoo again. (13.94)
+3168(51%|63%) 100e 98w xT ckb 1115 04:00:58.81  0 -- (w|lovestuck|clu|add)
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Your limbs strengthen and you feel stronger.
+You have cured the weariness affliction.
+3168(51%|63%) 100e 98w xT ckb 1115 04:00:59.00  0 -- (lovestuck|clu|add)
+You may drink another health or mana elixir. (4.64)
+3168(51%|63%) 100e 98w xT ckb 1115 04:00:59.03  0 -- (lovestuck|clu|add)
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+4384(71%|63%) 100e 98w xT ckb 1115 04:00:59.20  0 -- (lovestuck|clu|add)
+
+aff- undeaf
+[nikita]: Defense gained: fangbarrier
+The quicksilver hardens into a supple metallic shell.
+You suddenly perceive the vague outline of an aura of rebounding around
+Anzerloi.
+@@@ TARGET REBOUNDING @@@
+@@@ TARGET REBOUNDING @@@
+@@@ TARGET REBOUNDING @@@
+4689(76%|65%) 100e 98w xT ckb 1115 04:00:59.50  0 -- (lovestuck|clu|add)
+[nikita]: Defense lost: shield
+You have recovered equilibrium. (2.28)
+Northern end of a dusty road. (road)
+The sky darkens with the onset of night.
+You see exits leading north and south.
+Your movement causes your magical shield to dissipate.
+Centre of a dusty road. (road)
+The sky darkens with the onset of night.
+You see exits leading north and south.
+4689(76%|65%) 99e 98w exT ckb 1115 04:00:59.52  0 -- (lovestuck|clu|add)
+You may eat another plant or mineral. (1.45)
+4689(76%|65%) 99e 98w exT ckb 1115 04:00:59.96  0 -- (lovestuck|clu|add)
+[Curing]: OUTR KELP
+You remove 1 kelp, bringing the total in the rift to 1516. (1516)
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your addiction can never be sated.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+You have cured the clumsiness affliction.
+4689(76%|65%) 99e 98w exT ckb 1115 04:01:00.17  0 -- (lovestuck|add)
+The ring of shining metal carries you up into the skies.
+Flying above Centre of a dusty road. (road)
+The sky darkens with the onset of night.
+You see exits leading north and south.
+Balance used: 2.0s.
+4689(76%|65%) 100e 98w eT ckb 1115 04:01:00.87  0 -- (lovestuck|add)
+You may eat another plant or mineral. (1.29)
+4689(76%|65%) 100e 98w eT ckb 1115 04:01:01.69  0 -- (lovestuck|add)
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+Your terrible addiction seems to wane.
+You have cured the addiction affliction.
+4689(76%|65%) 100e 98w eT ckb 1115 04:01:01.87  0 -- (lovestuck)
+The effects of your time manipulation fade somewhat, leaving you only aged by
+1040 years.
+4689(76%|65%) 100e 98w eT ckb 1040 04:01:02.40  0 -- (lovestuck)
+[nikita]: Defense lost: reflections
+You have recovered balance on all limbs. (2.02)
+Curing disabled.
+[nikita]: Curing set to: false
+All your reflections wink out of existence!
+Growing very still, you begin to manipulate the flow of time around you,
+drastically speeding up your rate of regression.
+Equilibrium used: 2.38s.
+4689(76%|62%) 100e 98w xT ckb 1040 04:01:02.88  0 -- (lovestuck)
+You may eat another plant or mineral. (1.51)
+4689(76%|62%) 100e 98w xT ckb 1040 04:01:03.39  0 -- (lovestuck)
+Your strange fixation on all those that surround you abruptly lifts.
+You have cured the lovestruck affliction.
+4689(76%|62%) 100e 98w xT ckb 1040 04:01:03.42  0 -- ()
+You may drink another health or mana elixir. (4.67)
+4689(76%|62%) 100e 98w xT ckb 1040 04:01:03.66  0 -- ()
+You have recovered equilibrium. (2)
+4689(76%|62%) 100e 98w exT ckb 1040 04:01:05.25  0 -- ()
+You feel yourself rapidly becoming younger.
+You are now unnaturally aged by 960 years.
+The effects of your time manipulation fade somewhat, leaving you only aged by
+885 years.
+4689(76%|62%) 100e 98w exT ckb 885 04:01:07.40  0 -- ()
+Anzerloi wanders into view directly below.
+4994(81%|63%) 100e 98w exT ckb 885 04:01:10.87  0 -- ()
+ACCELERATE BACK. You may accelerate time to cleanse your afflictions once again.
+4994(81%|63%) 100e 98w exT ckb 885 04:01:11.41  0 -- ()
+The effects of your time manipulation fade somewhat, leaving you only aged by
+810 years.
+You feel yourself rapidly becoming younger.
+You are now unnaturally aged by 730 years.
+4994(81%|63%) 100e 98w exT ckb 730 04:01:12.44  0 -- ()
+You may utilise the tree tattoo again. (13.67)
+4994(81%|63%) 100e 98w exT ckb 730 04:01:13.02  0 -- ()
+Anzerloi wanders out of sight from below you.
+An ululating cry rings out from below, but you have nary a moment to even react
+as like a living missile Anzerloi launches himself upward, his blade piercing 
+your flesh while he shouts, "SHALALALALALLAM!!"
+Anzerloi wanders into view directly below.
+You have been afflicted with prone.
+You have been afflicted with blackout.
+-TR/Blackout(touch tree::touch tree) (|PR|bld174)
+- (|PR|bld174)
+You have cured the blackout affliction.
+3721(60%|63%) 100e 98w exT ckb 730 04:01:13.86  0 -- (PR|bld174)
+3721(60%|63%) 100e 98w exT ckb 730 04:01:14.68  0 -- (PR|bld174)
+Health lost: 124 (raw).
+You bleed 124 health.
+3597(58%|63%) 100e 98w exT ckb 730 04:01:15.54  0 -- (PR|bld111)
+With a deadly grace Anzerloi begins to circle you, rapier poised and ready to
+strike.
+The nomos of Anzerloi wails discordantly as it finds nothing surrounding you to
+destroy.
+With a flourish of a Soulpiercer Anzerloi steps in close, his blade slicing at
+your left arm.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+left arm.
+(SLC) H: 0.0% T: 63.0%    LA: 21.0% RA: 63.0%    LL: 0.0% RL: 0.0%
+The song of a Soulpiercer rings out as the point slashes through your flesh to
+cut into the tendons beneath.
+You have been afflicted with clumsiness.
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Health lost: 784 (physical cutting).
+2813(46%|63%) 100e 98w exT ckb 730 04:01:15.94  0 -- (PR|clu|bld128)
+Curing activated.
+[nikita]: Curing set to: true
+2813(46%|63%) 100e 98w exT ckb 730 04:01:15.97  0 -- (PR|clu|bld128)
+[Curing]: OUTR KELP
+You remove 1 kelp, bringing the total in the rift to 1516. (1516)
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+You have cured the clumsiness affliction.
+[Curing]: STAND
+You stand up.
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+3914(64%|63%) 100e 98w exT ckb 730 04:01:15.98  0 -- (bld128)
+The effects of your time manipulation fade somewhat, leaving you only aged by
+655 years.
+3914(64%|63%) 100e 98w exT ckb 655 04:01:17.43  0 -- (bld128)
+You may eat another plant or mineral. (1.51)
+3914(64%|63%) 100e 98w exT ckb 655 04:01:17.58  0 -- (bld128)
+You displace yourself through time.
+Northern end of a dusty road. (road)
+The sky darkens with the onset of night.
+You see exits leading north and south.
+Equilibrium used: 2.12s.
+3914(64%|62%) 99e 98w xT ckb 655 04:01:17.69  0 -- (bld128)
+[Curing]: OUTR CALAMINE
+You remove 1 calamine, bringing the total in the rift to 14. (14)
+[Curing]: EAT CALAMINE
+You eat a calamine crystal.
+3914(64%|62%) 99e 98w xT ckb 655 04:01:17.73  0 -- (bld128)
+Anzerloi arrives from the south.
+[nikita]: Anzerloi ARRIVED FROM THE SOUTH
+[nikita]: Anzerloi ARRIVED FROM THE SOUTH
+[nikita]: Anzerloi ARRIVED FROM THE SOUTH
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+Anzerloi flicks out with a Soulpiercer towards you, a keening note raising from
+the blade's lunge.
+A rich, vibrant hum rises from the blade of Anzerloi as it finds your flesh.
+You have been afflicted with crescendo.
+Health lost: 784 (physical cutting).
+Anzerloi continues to circle you, his deadly dance carrying him poised and ready
+around to your flank.
+[here - Anzerloi (1)]
+3130(51%|62%) 99e 98w xT ckb 655 04:01:18.98  0 -- (cresc1|PAR|bld145)
+You may eat another plant or mineral. (1.42)
+3130(51%|62%) 99e 98w xT ckb 655 04:01:19.27  0 -- (cresc1|PAR|bld145)
+[Curing]: OUTR BLOODROOT
+You remove 1 bloodroot, bringing the total in the rift to 808. (808)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+Song swells about you as you begin to move inevitably towards a grand crescendo.
+You suddenly perceive the vague outline of an aura of rebounding around
+Anzerloi.
+@@@ TARGET REBOUNDING @@@
+@@@ TARGET REBOUNDING @@@
+@@@ TARGET REBOUNDING @@@
+3130(51%|62%) 99e 98w xT ckb 655 04:01:19.74  0 -- (cresc2|bld145)
+[nikita]: Defense gained: reflections
+You have recovered equilibrium. (2.27)
+Taking hold of the strands of causality, you attempt to mislead your foes with
+false images from alternative timelines.
+Equilibrium used: 2.12s.
+3130(51%|61%) 99e 98w xT ckb 655 04:01:19.78  0 -- (cresc2|bld145)
+You may drink another health or mana elixir. (4.12)
+3435(56%|63%) 100e 98w xT ckb 655 04:01:20.42  0 -- (cresc2|bld145)
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+4870(79%|63%) 100e 98w xT ckb 655 04:01:20.57  0 -- (cresc2|bld95)
+[nikita]: Defense lost: reflections
+Anzerloi's aura of weapons rebounding disappears.
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+With a flourish of a Soulpiercer Anzerloi steps in close, his blade slicing at
+your head.
+One of your reflections has been destroyed! You have 0 left.
+4870(79%|63%) 100e 98w xT ckb 655 04:01:20.77  0 -- (cresc2|PAR|bld95)
+Anzerloi takes a long drag off his pipe.
+4870(79%|63%) 100e 98w xT ckb 655 04:01:20.95  0 -- (cresc2|PAR|bld95)
+You may eat another plant or mineral. (1.42)
+4870(79%|63%) 100e 98w xT ckb 655 04:01:20.96  0 -- (cresc2|PAR|bld95)
+Health lost: 95 (raw).
+You bleed 95 health.
+4775(78%|63%) 100e 98w xT ckb 655 04:01:21.05  0 -- (cresc2|PAR|bld86)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+Song swells about you as a grand crescendo draws ever closer to actualisation.
+4775(78%|63%) 100e 98w xT ckb 655 04:01:21.16  0 -- (cresc3|bld86)
+[nikita]: Defense gained: deafness
+You have been afflicted with deafness.
+The aural world fades to silence.
+4775(78%|63%) 100e 98w xT ckdb 655 04:01:21.19  0 -- (cresc3|bld86)
+You have recovered equilibrium. (2.11)
+Centre of a dusty road. (road)
+The sky darkens with the onset of night.
+You see exits leading north and south.
+Southern end of a dusty road. (road)
+The sky darkens with the onset of night.
+You see exits leading north, southeast, and south.
+4775(78%|63%) 99e 98w exT ckdb 655 04:01:21.83  0 -- (cresc3|bld86)
+The effects of your time manipulation fade somewhat, leaving you only aged by
+580 years.
+4775(78%|63%) 99e 98w exT ckdb 580 04:01:22.44  0 -- (cresc3|bld86)
+You may eat another plant or mineral. (1.49)
+4775(78%|63%) 99e 98w exT ckdb 580 04:01:22.65  0 -- (cresc3|bld86)
+[Curing]: OUTR STANNUM
+You remove 1 stannum, bringing the total in the rift to 2107. (2107)
+[Curing]: EAT STANNUM
+You eat a stannum flake.
+The building crescendo about you is greatly diminished.
+4775(78%|63%) 99e 98w exT ckdb 580 04:01:22.78  0 -- (cresc1|bld86)
+[nikita]: Defense gained: parrying (torso)
+[nikita]: Defense gained: shield
+A wyrmskin pack doesn't contain that.
+You will now attempt to parry attacks to your torso.
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 3.40s.
+4775(78%|63%) 99e 98w xT ckdb 580 04:01:23.34  0 -- (cresc1|bld86)
+[north - Anzerloi (1)]
+4775(78%|63%) 99e 98w xT ckdb 580 04:01:23.63  0 -- (cresc1|bld86)
+You may eat another plant or mineral. (1.36)
+4775(78%|63%) 100e 98w xT ckdb 580 04:01:24.32  0 -- (cresc1|bld86)
+[Curing]: EAT STANNUM
+You eat a stannum flake.
+The building crescendo about you abruptly falls silent.
+You have cured the crescendo affliction.
+4775(78%|63%) 100e 98w xT ckdb 580 04:01:24.45  0 -- (bld86)
+You may drink another health or mana elixir. (4.31)
+4775(78%|63%) 100e 98w xT ckdb 580 04:01:25.07  0 -- (bld86)
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+6113(100%|63%) 100e 98w xT ckdb 580 04:01:25.23  0 -- (bld86)
+You may eat another plant or mineral. (1.38)
+6113(100%|63%) 100e 98w xT ckdb 580 04:01:26.09  0 -- (bld36)
+Health lost: 36 (raw).
+You bleed 36 health.
+6077(99%|63%) 100e 98w xT ckdb 580 04:01:26.54  0 -- (bld23)
+You have recovered equilibrium. (3.23)
+6077(99%|63%) 100e 98w exT ckdb 580 04:01:26.72  0 -- (bld23)
+The effects of your time manipulation fade somewhat, leaving you only aged by
+505 years.
+6077(99%|63%) 100e 98w exT ckdb 505 04:01:27.45  0 -- (bld23)
+You may utilise the tree tattoo again. (13.69)
+6077(99%|63%) 100e 99w exT ckdb 505 04:01:27.88  0 -- (bld23)
+[nikita]: Defense lost: shield
+Curing disabled.
+[nikita]: Curing set to: false
+Your action causes the nearly invisible magical shield around you to fade away.
+Growing very still, you begin to manipulate the flow of time around you,
+drastically speeding up your rate of regression.
+Equilibrium used: 2.38s.
+6077(99%|60%) 100e 98w xT ckdb 505 04:01:29.42  0 -- (bld23)
+You may drink another health or mana elixir. (4.33)
+6077(99%|60%) 100e 98w xT ckdb 505 04:01:29.63  0 -- (bld23)
+Anzerloi sails in from the north, flipping lithely through the air.
+[here - Anzerloi (1)]
+6113(100%|62%) 100e 98w xT ckdb 505 04:01:30.68  0 -- ()
+Lasyll bleeds her last through a slit throat, her death meted out by an elite
+Quisalis assassin.
+6113(100%|61%) 100e 98w xT ckdb 505 04:01:31.27  0 -- ()
+You have recovered equilibrium. (2.02)
+6113(100%|61%) 100e 98w exT ckdb 505 04:01:31.80  0 -- ()
+With a deadly grace Anzerloi begins to circle you, rapier poised and ready to
+strike.
+The nomos of Anzerloi wails discordantly as it finds nothing surrounding you to
+destroy.
+Anzerloi weaves a Soulpiercer through the air in a dazzling display, and in the
+moment of your distraction he is no longer where he was.
+Anzerloi continues to circle you, slipping in and out of your blindspot as he
+dances behind you.
+6113(100%|61%) 100e 98w exT ckdb 505 04:01:32.10  0 -- ()
+Curing activated.
+[nikita]: Curing set to: true
+6113(100%|61%) 100e 98w exT ckdb 505 04:01:32.36  0 -- ()
+[Curing]: SIP MANA
+Your concentration broken, you cease dilating time.
+You take a drink from a moonstone vial.
+Your mind feels stronger and more alert.
+6113(100%|78%) 100e 98w exT ckdb 505 04:01:32.48  0 -- ()
+The effects of your time manipulation fade somewhat, leaving you only aged by
+430 years.
+6113(100%|78%) 100e 98w exT ckdb 430 04:01:32.48  0 -- ()
+Curing activated.
+[nikita]: Curing set to: true
+6113(100%|78%) 100e 98w exT ckdb 430 04:01:33.10  0 -- ()
+As you attempt to escape the lethal encirclement of Anzerloi, the point of his
+blade lashes out and drives you back into the centre.
+Balance used: 1.2s.
+6113(100%|77%) 100e 98w eT ckdb 430 04:01:33.39  0 -- ()
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+Anzerloi flicks out with a Soulpiercer towards you, a keening note raising from
+the blade's lunge.
+A grim note knells from the blade of Anzerloi as it finds your flesh.
+You have been afflicted with crescendo.
+You have been afflicted with earworm.
+Health lost: 784 (physical cutting).
+Anzerloi's rapier sings out with a high, piercing note.
+Health lost: 199 (magical).
+Anzerloi circles back to your front, rapier languidly swaying with the hypnotic
+grace of his dance.
+5130(83%|77%) 100e 98w eT ckdb 430 04:01:33.91  0 -- (cresc1|earworm|PAR|bld17)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+Song swells about you as you begin to move inevitably towards a grand crescendo.
+[Curing]: SMOKE CINNABAR
+The endlessly playing song in your mind falls silent.
+You have cured the earworm affliction.
+5130(83%|77%) 100e 98w eT ckdb 430 04:01:34.05  0 -- (cresc2|bld17)
+You have recovered balance on all limbs. (0.68)
+5130(83%|77%) 100e 98w exT ckdb 430 04:01:34.40  0 -- (cresc2|bld17)
+As you attempt to escape the lethal encirclement of Anzerloi, the point of his
+blade lashes out and drives you back into the centre.
+Balance used: 1.2s.
+5130(83%|75%) 100e 98w eT ckdb 430 04:01:35.14  0 -- (cresc2|bld17)
+Your lungs have recovered enough to smoke another mineral or plant. (1.59)
+5130(83%|75%) 100e 98w eT ckdb 430 04:01:35.59  0 -- (cresc2|bld17)
+You may eat another plant or mineral. (1.61)
+5130(83%|75%) 100e 98w eT ckdb 430 04:01:35.67  0 -- (cresc2|bld17)
+[Curing]: EAT STANNUM
+You eat a stannum flake.
+The building crescendo about you is greatly diminished.
+5130(83%|75%) 100e 98w eT ckdb 430 04:01:35.77  0 -- (cresc1|bld17)
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+With a flourish of a Soulpiercer Anzerloi steps in close, his blade slicing at
+your right arm.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+right arm.
+(SLC) H: 0.0% T: 63.0%    LA: 21.0% RA: 84.0%    LL: 0.0% RL: 0.0%
+The song of a Soulpiercer rings out as the point slashes through your flesh to
+cut into the tendons beneath.
+You have been afflicted with clumsiness.
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Health lost: 784 (physical cutting).
+4346(71%|75%) 100e 98w eT ckdb 430 04:01:35.87  0 -- (cresc1|clu|PAR|bld34)
+
+[Warning] Your RIGHT ARM is prepped!
+You have recovered balance on all limbs. (1.02)
+4346(71%|75%) 100e 98w exT ckdb 430 04:01:36.40  0 -- (cresc1|clu|PAR|bld34)
+You may drink another health or mana elixir. (4.28)
+4346(71%|75%) 100e 98w exT ckdb 430 04:01:36.83  0 -- (cresc1|clu|PAR|bld34)
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+5562(90%|75%) 100e 98w exT ckdb 430 04:01:36.99  0 -- (cresc1|clu|PAR|bld34)
+You may eat another plant or mineral. (1.81)
+5562(90%|75%) 100e 98w exT ckdb 430 04:01:37.26  0 -- (cresc1|clu|PAR|bld34)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+Song swells about you as you begin to move inevitably towards a grand crescendo.
+5562(90%|75%) 100e 98w exT ckdb 430 04:01:37.38  0 -- (cresc2|clu|bld34)
+As you attempt to escape the lethal encirclement of Anzerloi, the point of his
+blade lashes out and drives you back into the centre.
+Balance used: 1.2s.
+You must regain balance first.
+5562(90%|75%) 100e 98w eT ckdb 430 04:01:37.38  0 -- (cresc2|clu|bld34)
+The effects of your time manipulation fade somewhat, leaving you only aged by
+355 years.
+5562(90%|75%) 100e 98w eT ckdb 355 04:01:37.47  0 -- (cresc2|clu|bld34)
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+You have cured the clumsiness affliction.
+Health lost: 34 (raw).
+You bleed 34 health.
+5528(90%|75%) 100e 98w eT ckdb 355 04:01:37.57  0 -- (cresc2|bld25)
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+Anzerloi darts out with a Soulpiercer in a lightning-fast jab towards your
+torso.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+torso.
+(SLC) H: 0.0% T: 84.0%    LA: 21.0% RA: 84.0%    LL: 0.0% RL: 0.0%
+The sensation of cold steel makes you feel queasy as it slides into your
+vulnerable organs.
+You have been afflicted with nausea.
+Your shield completely absorbs the damage.
+Anzerloi continues to circle you, his deadly dance carrying him poised and ready
+around to your flank.
+5528(90%|75%) 100e 98w eT ckdb 355 04:01:37.82  0 -- (cresc2|nau|PAR|bld25)
+
+[Warning] Your TORSO is prepped!
+[Warning] Your RIGHT ARM is prepped!
+You suddenly perceive the vague outline of an aura of rebounding around
+Anzerloi.
+@@@ TARGET REBOUNDING @@@
+@@@ TARGET REBOUNDING @@@
+@@@ TARGET REBOUNDING @@@
+5528(90%|75%) 100e 98w eT ckdb 355 04:01:38.29  0 -- (cresc2|nau|PAR|bld25)
+The love Anzerloi's ghazal inspires in you stays your hand against even the
+greatest foe.
+You have been afflicted with lovestruck.
+Song swells about you as a grand crescendo draws ever closer to actualisation.
+5528(90%|75%) 100e 98w eT ckdb 355 04:01:38.48  0 --
+ (cresc3|lovestuck|nau|PAR|bld25)
+You have recovered balance on all limbs. (1.04)
+5528(90%|75%) 100e 98w exT ckdb 355 04:01:38.54  0 --
+ (cresc3|lovestuck|nau|PAR|bld25)
+You may eat another plant or mineral. (1.32)
+5528(90%|75%) 100e 98w exT ckdb 355 04:01:38.84  0 --
+ (cresc3|lovestuck|nau|PAR|bld25)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+Song swells about you as a grand crescendo draws ever closer to actualisation.
+5528(90%|75%) 100e 98w exT ckdb 355 04:01:38.98  0 --
+ (lovestuck|nau|cresc4|bld25)
+Centre of a dusty road. (road)
+The sky darkens with the onset of night.
+You see exits leading north and south.
+Northern end of a dusty road. (road)
+The sky darkens with the onset of night.
+You see exits leading north and south.
+5528(90%|75%) 99e 98w exT ckdb 355 04:01:38.00  0 --
+ (lovestuck|nau|cresc4|bld25)
+In the Northern Lisigian Wealds.
+The sky darkens with the onset of night. The surroundings are distorted, as if
+viewed through water.
+(distortion): here
+You see exits leading northeast, south, and northwest.
+There is no exit in that direction.
+5528(90%|75%) 99e 98w exT ckdb 355 04:01:40.14  0 --
+ (lovestuck|nau|cresc4|bld25)
+You may eat another plant or mineral. (1.18)
+5528(90%|75%) 100e 98w exT ckdb 355 04:01:40.43  0 --
+ (lovestuck|nau|cresc4|bld25)
+The ring of shining metal carries you up into the skies.
+Flying above In the Northern Lisigian Wealds.
+The sky darkens with the onset of night.
+You see exits leading northeast, south, and northwest.
+Balance used: 2.0s.
+5528(90%|75%) 100e 98w eT ckdb 355 04:01:40.46  0 --
+ (lovestuck|nau|cresc4|bld25)
+[Curing]: EAT STANNUM
+You eat a stannum flake.
+The building crescendo about you is greatly diminished.
+5833(95%|77%) 100e 98w eT ckdb 355 04:01:40.61  0 -- (cresc1|lovestuck|nau)
+You may drink another health or mana elixir. (4.2)
+5833(95%|77%) 100e 98w eT ckdb 355 04:01:41.44  0 -- (cresc1|lovestuck|nau)
+[Curing]: SIP MANA
+You take a drink from a moonstone vial.
+Your mind feels stronger and more alert.
+5833(95%|91%) 100e 98w eT ckdb 355 04:01:41.60  0 -- (cresc1|lovestuck|nau)
+You may eat another plant or mineral. (1.21)
+5833(95%|91%) 100e 98w eT ckdb 355 04:01:42.17  0 -- (cresc1|lovestuck|nau)
+[Curing]: EAT STANNUM
+You eat a stannum flake.
+The building crescendo about you abruptly falls silent.
+You have cured the crescendo affliction.
+5833(95%|91%) 100e 98w eT ckdb 355 04:01:42.36  0 -- (lovestuck|nau)
+You have recovered balance on all limbs. (1.6)
+5833(95%|91%) 100e 98w exT ckdb 355 04:01:42.46  0 -- (lovestuck|nau)
+The effects of your time manipulation fade somewhat, leaving you only aged by
+280 years.
+5833(95%|91%) 100e 98w exT ckdb 280 04:01:42.51  0 -- (lovestuck|nau)
+Curing disabled.
+[nikita]: Curing set to: false
+Growing very still, you begin to manipulate the flow of time around you,
+drastically speeding up your rate of regression.
+Equilibrium used: 2.38s.
+5833(95%|88%) 100e 98w xT ckdb 280 04:01:43.08  0 -- (lovestuck|nau)
+Your strange fixation on all those that surround you abruptly lifts.
+You have cured the lovestruck affliction.
+5833(95%|88%) 100e 98w xT ckdb 280 04:01:43.55  0 -- (nau)
+You may eat another plant or mineral. (1.41)
+5833(95%|88%) 100e 98w xT ckdb 280 04:01:43.82  0 -- (nau)
+You have recovered equilibrium. (2.19)
+5833(95%|88%) 100e 98w exT ckdb 280 04:01:45.42  0 -- (nau)
+You may drink another health or mana elixir. (4.32)
+5833(95%|87%) 100e 98w exT ckdb 280 04:01:46.14  0 -- (nau)
+The effects of your time manipulation fade somewhat, leaving you only aged by
+205 years.
+You feel yourself rapidly becoming younger.
+You are now unnaturally aged by 125 years.
+5833(95%|87%) 100e 98w exT ckdb 125 04:01:47.50  0 -- (nau)
+Curing activated.
+[nikita]: Curing set to: true
+5833(95%|87%) 100e 98w exT ckdb 125 04:01:50.75  0 -- (nau)
+[Curing]: EAT GINSENG
+Your concentration broken, you cease dilating time.
+You eat a ginseng root.
+Your stomach becalms itself.
+You have cured the nausea affliction.
+6113(100%|89%) 100e 98w exT ckdb 125 04:01:50.93  0 -- ()
+Curing activated.
+[nikita]: Curing set to: true
+6113(100%|89%) 100e 98w exT ckdb 125 04:01:51.52  0 -- ()
+You may utilise the tree tattoo again. (14.16)
+6113(100%|89%) 100e 98w exT ckdb 125 04:01:51.60  0 -- ()
+You begin to descend, the wind whistling past you as the earth draws ever
+closer. You land easily, back on the ground again.
+In the Northern Lisigian Wealds.
+The sky darkens with the onset of night. The surroundings are distorted, as if
+viewed through water.
+(distortion): here
+You see exits leading northeast, south, and northwest.
+6113(100%|89%) 100e 99w exT ckdb 125 04:01:52.12  0 -- ()
+Anzerloi sprints in from the south.
+[here - Anzerloi (1)]
+6113(100%|89%) 100e 99w exT ckdb 125 04:01:52.39  0 -- ()
+You may eat another plant or mineral. (1.54)
+6113(100%|89%) 100e 99w exT ckdb 125 04:01:52.51  0 -- ()
+The effects of your time manipulation fade somewhat, leaving you only aged by 50
+years.
+6113(100%|89%) 100e 99w exT ckdb 50 04:01:52.52  0 -- ()
+Tapping into the timelines, you trace them to locate Anzerloi.
+You determine that he is at In the Northern Lisigian Wealds.  (9408, 9415)
+From your knowledge, that room might be in Stadia Coronae.
+Equilibrium used: 1.53s.
+6113(100%|89%) 100e 99w xT ckdb 50 04:01:52.84  0 -- ()
+Anzerloi leaves, but somehow reappears back where he started, looking confused.
+6113(100%|89%) 100e 99w xT ckdb 50 04:01:54.08  0 -- ()
+
+[nikita]: auto mode on
+You have recovered equilibrium. (1.09)
+6113(100%|89%) 100e 99w exT ckdb 50 04:01:54.35  0 -- ()
+Reaching out to the shadow of Anzerloi, you plunge Gattan'lier's hunger into it
+and attune it to the directive of Degeneration.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Anzerloi grits his teeth and rallies himself against the mental assault.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Balance used: 2.1s.
+HP: [====================] 5942/6647 89%
+MP: [====================] 4982/5405 92%
+Equilibrium used: 0.85s.
+6113(100%|87%) 99e 98w T ckdb 50 04:01:54.71  0 -- ()
+aff+ clumsiness
+Anzerloi eats a magnesium chip.
+aff- paralysis
+6113(100%|87%) 99e 98w T ckdb 50 04:01:54.89  0 -- ()
+Anzerloi leaves to the northwest.
+[nikita]: Anzerloi LEAVES TO THE NORTHWEST
+[nikita]: Anzerloi LEAVES TO THE NORTHWEST
+[nikita]: Anzerloi LEAVES TO THE NORTHWEST
+[northwest - Anzerloi (1)]
+6113(100%|87%) 99e 98w T ckdb 50 04:01:54.00  0 -- ()
+You have recovered equilibrium. (0.39)
+6113(100%|87%) 99e 98w eT ckdb 50 04:01:55.50  0 -- ()
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (1.86)
+You will now attempt to parry attacks to your torso.
+I do not recognise anything called that here.
+Under a canopy of trees.
+The sky darkens with the onset of night.
+You see exits leading north, east, southeast, and northwest.
+6113(100%|86%) 99e 99w exT ckdb 50 04:01:56.82  0 -- ()
+The singing song of a Soulpiercer precedes the emergence of Anzerloi.
+With a step, sweep, and flourishing stab Anzerloi buries a Soulpiercer into you,
+your cowardly flight no escape from the dance of blades.
+Health lost: 1140 (physical cutting).
+Health lost: 784 (physical cutting).
+[here - Anzerloi (1)]
+4189(68%|86%) 99e 99w exT ckdb 50 04:01:57.26  0 -- (bld86)
+You are no longer artificially aged due to having manipulated time.
+4189(68%|86%) 99e 99w exT ckdb 0 04:01:57.52  0 -- (bld86)
+The love Anzerloi's ghazal inspires in you stays your hand against even the
+greatest foe.
+You have been afflicted with lovestruck.
+4189(68%|86%) 99e 99w exT ckdb 0 04:01:58.52  0 -- (lovestuck|bld86)
+You are no longer stunned.
+4189(68%|86%) 99e 99w exT ckdb 0 04:01:58.62  0 -- (lovestuck|bld86)
+[nikita]: Defense gained: parrying (torso)
+You will now attempt to parry attacks to your torso.
+Bending your will upon deSangre's spite, you corrupt the weapon's timestream.
+As you push your aeonic might beyond its limits, you feel yourself grow older.
+
+TIMELOOPBOOST!
+You have now aged yourself by 350 years.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Grey fog begins to rise from the suddenly panicked-looking Anzerloi.
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+A grey miasma flares around Anzerloi.
+[nikita]: TIMELOOP NUM: 4
+Balance used: 2.1s.
+HP: [====================] 5392/6647 81%
+MP: [====================] 4917/5405 90%
+Equilibrium used: 0.85s.
+You are recovering equilibrium and cannot move yet.
+4189(68%|83%) 99e 98w T ckdb 350 04:01:58.65  0 -- (lovestuck|bld86)
+aff+ timeloop
+aff+ weariness
+Anzerloi eats a cuprum flake.
+Anzerloi takes a drink from an elegant diamond vial.
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+5650(92%|83%) 99e 98w T ckdb 350 04:01:58.80  0 -- (lovestuck|bld86)
+aff- timeloop
+You have recovered equilibrium. (1.08)
+5650(92%|83%) 99e 98w eT ckdb 350 04:01:59.49  0 -- (lovestuck|bld86)
+Health lost: 86 (raw).
+You bleed 86 health.
+5564(91%|83%) 99e 98w eT ckdb 350 04:01:59.58  0 -- (lovestuck|bld76)
+With a deadly grace Anzerloi begins to circle you, rapier poised and ready to
+strike.
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+With a flourish of a Soulpiercer Anzerloi steps in close, his blade slicing at
+your head.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+head.
+(SLC) H: 21.0% T: 84.0%    LA: 21.0% RA: 84.0%    LL: 0.0% RL: 0.0%
+The song of a Soulpiercer rings in your ears as the point cuts deep into your
+flesh.
+You have been afflicted with clumsiness.
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Health lost: 599 (physical cutting).
+4965(81%|83%) 99e 98w eT ckdb 350 04:01:59.92  0 -- (lovestuck|clu|PAR|bld93)
+
+[Warning] Your TORSO is prepped!
+[Warning] Your RIGHT ARM is prepped!
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+4965(81%|83%) 99e 98w eT ckdb 350 04:01:59.98  0 -- (lovestuck|clu|bld93)
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+You have cured the clumsiness affliction.
+4965(81%|83%) 99e 98w eT ckdb 350 04:02:00.21  0 -- (lovestuck|bld93)
+Anzerloi eats an aurum flake.false
+
+aff- clumsiness
+4965(81%|83%) 100e 98w eT ckdb 350 04:02:00.43  0 -- (lovestuck|bld93)
+You have recovered balance on all limbs. (2.05)
+DISTORTION. Bending your considerable will upon the temporal flow, you distort
+its nature within this location.
+Equilibrium used: 2.55s.
+4965(81%|79%) 100e 98w xT ckdb 350 04:02:00.73  0 -- (lovestuck|bld43)
+You may eat another plant or mineral. (1.55)
+5270(86%|81%) 100e 98w xT ckdb 350 04:02:01.57  0 -- (lovestuck|bld43)
+
+[nikita]: auto mode on
+[nikita]: auto mode on
+[nikita]: auto mode on
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+With a flourish of a Soulpiercer Anzerloi steps in close, his blade slicing at
+your left arm.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+left arm.
+(SLC) H: 21.0% T: 84.0%    LA: 42.0% RA: 84.0%    LL: 0.0% RL: 0.0%
+The song of a Soulpiercer rings out as the point slashes through your flesh to
+cut into the tendons beneath.
+You have been afflicted with clumsiness.
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Health lost: 784 (physical cutting).
+Anzerloi continues to circle you, his deadly dance carrying him poised and ready
+around to your flank.
+4486(73%|81%) 100e 98w xT ckdb 350 04:02:02.01  0 -- (lovestuck|clu|PAR|bld60)
+
+[Warning] Your TORSO is prepped!
+[Warning] Your RIGHT ARM is prepped!
+Anzerloi eats an aurum flake.false
+
+aff- weariness
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+4486(73%|81%) 100e 98w xT ckdb 350 04:02:02.10  0 -- (lovestuck|clu|bld60)
+You determine that Anzerloi is suffering from weariness.
+aff+ weariness
+4486(73%|81%) 100e 98w xT ckdb 350 04:02:02.53  0 -- (lovestuck|clu|bld60)
+[nikita]: Defense gained: parrying (torso)
+You have recovered equilibrium. (2.6)
+You will now attempt to parry attacks to your torso.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Anzerloi grits his teeth and rallies himself against the mental assault.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Balance used: 2.1s.
+HP: [====================] 5942/6647 89%
+MP: [====================] 4945/5405 91%
+Equilibrium used: 0.85s.
+You may drink another health or mana elixir. (4.4)
+4486(73%|79%) 99e 98w T ckdb 350 04:02:03.30  0 -- (lovestuck|clu|bld60)
+aff+ clumsiness
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+5934(97%|79%) 99e 98w T ckdb 350 04:02:03.44  0 -- (lovestuck|clu|bld60)
+The effects of your time manipulation fade somewhat, leaving you only aged by
+275 years.
+5934(97%|79%) 99e 98w T ckdb 275 04:02:03.52  0 -- (lovestuck|clu|bld60)
+You suddenly perceive the vague outline of an aura of rebounding around
+Anzerloi.
+@@@ TARGET REBOUNDING @@@
+@@@ TARGET REBOUNDING @@@
+@@@ TARGET REBOUNDING @@@
+You may eat another plant or mineral. (1.34)
+5934(97%|79%) 99e 98w T ckdb 275 04:02:03.53  0 -- (lovestuck|clu|bld60)
+Your strange fixation on all those that surround you abruptly lifts.
+You have cured the lovestruck affliction.
+5934(97%|79%) 99e 98w T ckdb 275 04:02:03.61  0 -- (clu|bld60)
+Anzerloi eats a magnesium chip.
+aff- paralysis
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+You have cured the clumsiness affliction.
+5934(97%|79%) 99e 98w T ckdb 275 04:02:03.67  0 -- (bld60)
+Anzerloi flips a Shield of Absorption over his head with practised ease, lashing
+it to the hooks on a wyrmskin pack.
+Anzerloi removes a bard's harp.
+Anzerloi begins to wield a bard's harp in his left hand.
+Anzerloi brings his grand performance to a close, the notes of his song fading
+away into silence.
+Anzerloi's aura of weapons rebounding disappears.
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+With a flourish of a Soulpiercer Anzerloi steps in close, his blade slicing at
+your head.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+head.
+(SLC) H: 42.0% T: 84.0%    LA: 42.0% RA: 84.0%    LL: 0.0% RL: 0.0%
+Your ears are filled with harsh reverberation as the edge of a Soulpiercer
+scrapes against your skull.
+You have been afflicted with addiction.
+You feel a terrible hunger grow within you.
+Health lost: 599 (physical cutting).
+Anzerloi continues to circle you, slipping in and out of your blindspot as he
+dances behind you.
+Anzerloi plays his a bard's harp to dutifully offer his music for the glory of
+the Gods.
+A beautiful symphony rises to underpin Anzerloi's song.
+5335(87%|79%) 99e 98w T ckdb 275 04:02:03.97  0 -- (PAR|add|bld77)
+[Warning] Your TORSO is prepped!
+[Warning] Your RIGHT ARM is prepped!
+Anzerloi takes a long drag off his pipe.
+You have recovered equilibrium. (0.98)
+5335(87%|79%) 99e 98w eT ckdb 275 04:02:04.07  0 -- (PAR|add|bld77)
+Health lost: 77 (raw).
+You bleed 77 health.
+5258(86%|79%) 100e 98w eT ckdb 275 04:02:05.08  0 -- (PAR|add|bld69)
+You may eat another plant or mineral. (1.63)
+5258(86%|79%) 100e 98w eT ckdb 275 04:02:05.11  0 -- (PAR|add|bld69)
+You have recovered balance on all limbs. (1.97)
+5258(86%|79%) 100e 98w exT ckdb 275 04:02:05.21  0 -- (PAR|add|bld69)
+Anzerloi eats an aurum flake.false
+
+aff- clumsiness
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your addiction can never be sated.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+5258(86%|79%) 100e 98w exT ckdb 275 04:02:05.27  0 -- (add|bld69)
+[nikita]: Defense gained: parrying (torso)
+You will now attempt to parry attacks to your torso.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Balance used: 2.1s.
+HP: [====================] 5060/6647 76%
+MP: [====================] 4754/5405 87%
+Equilibrium used: 0.85s.
+5258(86%|77%) 99e 98w T ckdb 275 04:02:05.29  0 -- (add|bld69)
+aff+ clumsiness
+Anzerloi takes a drink from an elegant diamond vial.
+5258(86%|77%) 99e 98w T ckdb 275 04:02:05.44  0 -- (add|bld69)
+You have recovered equilibrium. (1.03)
+5258(86%|76%) 99e 98w eT ckdb 275 04:02:06.07  0 -- (add|bld19)
+You may eat another plant or mineral. (1.39)
+5258(86%|76%) 99e 98w eT ckdb 275 04:02:06.82  0 -- (add|bld19)
+Anzerloi eats a magnesium chip.
+aff- paralysis
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+Your terrible addiction seems to wane.
+You have cured the addiction affliction.
+Anzerloi ceases to wield a bard's harp in his left hand.
+Anzerloi puts on a bard's harp.
+Anzerloi removes a court bard's lute.
+Anzerloi begins to wield a court bard's lute in his left hand.
+Anzerloi brings his grand performance to a close, the notes of his song fading
+away into silence.
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+With a flourish of a Soulpiercer Anzerloi steps in close, his blade slicing at
+your head.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+head.
+(SLC) H: 63.0% T: 84.0%    LA: 42.0% RA: 84.0%    LL: 0.0% RL: 0.0%
+Your legs almost give out from under you as the blade of Anzerloi slashes into
+the back of your head, a line of keening ice.
+You have been afflicted with generosity.
+Why, you ask yourself, are you so privileged when others are so needy.
+Health lost: 599 (physical cutting).
+Anzerloi circles back to your front, rapier languidly swaying with the hypnotic
+grace of his dance.
+With hooded eyes, Anzerloi takes up a court bard's lute and breathes the spirit
+of love into the world around him.
+A beautiful symphony rises to underpin Anzerloi's song.
+4659(76%|76%) 99e 98w eT ckdb 275 04:02:06.87  0 -- (gen|PAR|bld36)
+[Warning] Your TORSO is prepped!
+[Warning] Your RIGHT ARM is prepped!
+You have recovered balance on all limbs. (2.08)
+4659(76%|76%) 99e 98w exT ckdb 275 04:02:07.36  0 -- (gen|PAR|bld36)
+You may drink another health or mana elixir. (4.13)
+4659(76%|76%) 99e 98w exT ckdb 275 04:02:07.79  0 -- (gen|PAR|bld36)
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+5901(96%|76%) 99e 98w exT ckdb 275 04:02:07.84  0 -- (gen|PAR|bld36)
+You may eat another plant or mineral. (1.42)
+5901(96%|76%) 100e 98w exT ckdb 275 04:02:08.45  0 -- (gen|PAR|bld36)
+The effects of your time manipulation fade somewhat, leaving you only aged by
+200 years.
+5901(96%|76%) 100e 98w exT ckdb 200 04:02:08.52  0 -- (gen|PAR|bld36)
+[nikita]: Defense gained: parrying (torso)
+Anzerloi eats an aurum flake.false
+
+aff- clumsiness
+[Curing]: OUTR BLOODROOT
+You remove 1 bloodroot, bringing the total in the rift to 808. (808)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+You will now attempt to parry attacks to your torso.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Balance used: 2.1s.
+HP: [====================] 5765/6647 86%
+MP: [====================] 4710/5405 87%
+Equilibrium used: 0.85s.
+5901(96%|74%) 99e 98w T ckdb 200 04:02:08.60  0 -- (gen|bld36)
+aff+ clumsiness
+You have recovered equilibrium. (0.35)
+5901(96%|74%) 99e 98w eT ckdb 200 04:02:09.31  0 -- (gen|bld36)
+You may eat another plant or mineral. (1.16)
+5901(96%|74%) 99e 98w eT ckdb 200 04:02:10.15  0 -- (gen|bld36)
+Anzerloi eats a magnesium chip.
+aff- paralysis
+[Curing]: OUTR CUPRUM
+You remove 1 cuprum, bringing the total in the rift to 1827. (1827)
+[Curing]: EAT CUPRUM
+You eat a cuprum flake.
+Ahhhh. The freedom to be stingy again!
+You have cured the generosity affliction.
+Anzerloi ceases to wield a court bard's lute in his left hand.
+Anzerloi puts on a court bard's lute.
+Anzerloi quickly unlashes a Shield of Absorption free from a wyrmskin pack,
+shifting it over his head and into his left hand.
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+With a flourish of a Soulpiercer Anzerloi steps in close, his blade slicing at
+your left arm.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+left arm.
+(SLC) H: 63.0% T: 84.0%    LA: 63.0% RA: 84.0%    LL: 0.0% RL: 0.0%
+The song of a Soulpiercer rings out as the point slashes through your flesh to
+cut into the tendons beneath.
+You have been afflicted with clumsiness.
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Health lost: 599 (physical cutting).
+5302(86%|74%) 99e 98w eT ckdb 200 04:02:10.18  0 -- (clu|PAR|bld53)
+[Warning] Your TORSO is prepped!
+[Warning] Your RIGHT ARM is prepped!
+Anzerloi touches a tree of life tattoo.
+5302(86%|74%) 99e 98w eT ckdb 200 04:02:10.40  0 -- (clu|PAR|bld53)
+aff- clumsiness
+You determine that Anzerloi is suffering from clumsiness.
+aff+ clumsiness
+5302(86%|74%) 99e 98w eT ckdb 200 04:02:10.53  0 -- (clu|PAR)
+Health lost: 3 (raw).
+You bleed 3 health.
+5299(86%|74%) 99e 98w eT ckdb 200 04:02:10.58  0 -- (clu|PAR)
+You have recovered balance on all limbs. (2.07)
+5299(86%|74%) 99e 98w exT ckdb 200 04:02:10.71  0 -- (clu|PAR)
+A song can be heard on the edge of hearing as the air distorts about Anzerloi.
+5604(91%|76%) 99e 98w exT ckdb 200 04:02:11.52  0 -- (clu|PAR)
+aff- clumsiness
+You may eat another plant or mineral. (1.4)
+5604(91%|76%) 99e 98w exT ckdb 200 04:02:11.76  0 -- (clu|PAR)
+[nikita]: Defense gained: parrying (torso)
+Anzerloi eats an aurum flake.false
+
+aff- weariness
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+You will now attempt to parry attacks to your torso.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Anzerloi grits his teeth and rallies himself against the mental assault.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Balance used: 2.1s.
+HP: [====================] 5192/6647 78%
+MP: [====================] 4776/5405 88%
+Equilibrium used: 0.85s.
+5604(91%|74%) 99e 98w T ckdb 200 04:02:11.93  0 -- (clu)
+aff+ clumsiness
+Anzerloi takes a drink from an elegant diamond vial.
+5604(91%|74%) 99e 98w T ckdb 200 04:02:12.11  0 -- (clu)
+You may drink another health or mana elixir. (4.13)
+5604(91%|74%) 99e 98w T ckdb 200 04:02:12.32  0 -- (clu)
+[Curing]: SIP MANA
+You take a drink from a moonstone vial.
+Your mind feels stronger and more alert.
+5604(91%|91%) 100e 98w T ckdb 200 04:02:12.52  0 -- (clu)
+You suddenly perceive the vague outline of an aura of rebounding around
+Anzerloi.
+@@@ TARGET REBOUNDING @@@
+@@@ TARGET REBOUNDING @@@
+@@@ TARGET REBOUNDING @@@
+5604(91%|91%) 100e 98w T ckdb 200 04:02:12.55  0 -- (clu)
+You have recovered equilibrium. (0.83)
+5604(91%|91%) 100e 98w eT ckdb 200 04:02:12.62  0 -- (clu)
+You may eat another plant or mineral. (1.44)
+5604(91%|91%) 100e 98w eT ckdb 200 04:02:13.48  0 -- (clu)
+Anzerloi eats a magnesium chip.
+aff- paralysis
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+You have cured the clumsiness affliction.
+Anzerloi flips a Shield of Absorption over his head with practised ease, lashing
+it to the hooks on a wyrmskin pack.
+Anzerloi removes a bard's harp.
+Anzerloi begins to wield a bard's harp in his left hand.
+Anzerloi brings his grand performance to a close, the notes of his song fading
+away into silence.
+Anzerloi's aura of weapons rebounding disappears.
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+With a flourish of a Soulpiercer Anzerloi steps in close, his blade slicing at
+your left arm.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+left arm.
+(SLC) H: 63.0% T: 84.0%    LA: 84.0% RA: 84.0%    LL: 0.0% RL: 0.0%
+The song of a Soulpiercer rings out as the point slashes through your flesh to
+cut into the tendons beneath.
+You have been afflicted with clumsiness.
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Health lost: 784 (physical cutting).
+Anzerloi continues to circle you, his deadly dance carrying him poised and ready
+around to your flank.
+Anzerloi plays his a bard's harp to dutifully offer his music for the glory of
+the Gods.
+A beautiful symphony rises to underpin Anzerloi's song.
+4820(78%|91%) 100e 98w eT ckdb 200 04:02:13.54  0 -- (clu|PAR|bld17)
+[Warning] Your TORSO is prepped!
+[Warning] Your LEFT ARM is prepped!
+[Warning] Your RIGHT ARM is prepped!
+The effects of your time manipulation fade somewhat, leaving you only aged by
+125 years.
+4820(78%|91%) 100e 98w eT ckdb 125 04:02:13.54  0 -- (clu|PAR|bld17)
+Anzerloi takes a long drag off his pipe.
+4820(78%|90%) 100e 98w eT ckdb 125 04:02:13.74  0 -- (clu|PAR|bld17)
+You have recovered balance on all limbs. (2.14)
+4820(78%|90%) 100e 98w exT ckdb 125 04:02:14.00  0 -- (clu|PAR|bld17)
+You may utilise the tree tattoo again. (13.7)
+4820(78%|90%) 100e 98w exT ckdb 125 04:02:14.16  0 -- (clu|PAR|bld17)
+You may eat another plant or mineral. (1.18)
+4820(78%|90%) 100e 98w exT ckdb 125 04:02:15.03  0 -- (clu|PAR|bld17)
+[nikita]: Defense gained: parrying (torso)
+Anzerloi eats an aurum flake.false
+
+aff- clumsiness
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+You will now attempt to parry attacks to your torso.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Balance used: 2.1s.
+HP: [====================] 5765/6647 86%
+MP: [====================] 4643/5405 85%
+Equilibrium used: 0.85s.
+4820(78%|88%) 99e 98w T ckdb 125 04:02:15.08  0 -- (clu|bld17)
+aff+ clumsiness
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+You have cured the clumsiness affliction.
+4820(78%|88%) 99e 98w T ckdb 125 04:02:15.25  0 -- (bld17)
+You have recovered equilibrium. (0.43)
+4820(78%|88%) 99e 98w eT ckdb 125 04:02:15.81  0 -- (bld17)
+Health lost: 17 (raw).
+You bleed 17 health.
+4803(78%|88%) 99e 98w eT ckdb 125 04:02:16.09  0 -- (bld8)
+You may eat another plant or mineral. (1.41)
+4803(78%|88%) 100e 98w eT ckdb 125 04:02:16.69  0 -- (bld8)
+Anzerloi eats a magnesium chip.
+aff- paralysis
+Anzerloi ceases to wield a bard's harp in his left hand.
+Anzerloi puts on a bard's harp.
+Anzerloi quickly unlashes a Shield of Absorption free from a wyrmskin pack,
+shifting it over his head and into his left hand.
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+With a flourish of a Soulpiercer Anzerloi steps in close, his blade slicing at
+your head.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+head.
+(SLC) H: 84.0% T: 84.0%    LA: 84.0% RA: 84.0%    LL: 0.0% RL: 0.0%
+Your ears are filled with harsh reverberation as the edge of a Soulpiercer
+scrapes against your skull.
+You have been afflicted with addiction.
+You feel a terrible hunger grow within you.
+Health lost: 784 (physical cutting).
+Anzerloi continues to circle you, slipping in and out of your blindspot as he
+dances behind you.
+4019(65%|88%) 100e 98w eT ckdb 125 04:02:16.79  0 -- (PAR|add|bld25)
+[Warning] Your HEAD is prepped!
+[Warning] Your TORSO is prepped!
+[Warning] Your LEFT ARM is prepped!
+[Warning] Your RIGHT ARM is prepped!
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your addiction can never be sated.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+4019(65%|88%) 100e 98w eT ckdb 125 04:02:16.98  0 -- (add|bld25)
+You may drink another health or mana elixir. (4.39)
+4019(65%|88%) 100e 98w eT ckdb 125 04:02:16.99  0 -- (add|bld25)
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+5467(89%|88%) 100e 98w eT ckdb 125 04:02:17.19  0 -- (add|bld25)
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (2.1)
+You will now attempt to parry attacks to your torso.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Anzerloi grits his teeth and rallies himself against the mental assault.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Balance used: 2.1s.
+HP: [====================] 5392/6647 81%
+MP: [====================] 4603/5405 85%
+Equilibrium used: 0.85s.
+5467(89%|86%) 99e 98w T ckdb 125 04:02:17.20  0 -- (add|bld25)
+aff+ weariness
+The pain plaguing your right leg subsides.
+Anzerloi takes a drink from an elegant diamond vial.
+5467(89%|86%) 99e 98w T ckdb 125 04:02:17.36  0 -- (add|bld25)
+You have recovered equilibrium. (0.72)
+5467(89%|86%) 99e 98w eT ckdb 125 04:02:17.96  0 -- (add|bld25)
+Anzerloi eats a magnesium chip.
+aff- paralysis
+5467(89%|86%) 99e 98w eT ckdb 125 04:02:18.33  0 -- (add|bld25)
+You may eat another plant or mineral. (1.38)
+5467(89%|86%) 99e 98w eT ckdb 125 04:02:18.47  0 -- (add|bld25)
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+Your terrible addiction seems to wane.
+You have cured the addiction affliction.
+5467(89%|86%) 99e 98w eT ckdb 125 04:02:18.53  0 -- (bld25)
+You determine that Anzerloi is suffering from dizziness.
+aff+ dizziness
+The effects of your time manipulation fade somewhat, leaving you only aged by 50
+years.
+5467(89%|86%) 99e 98w eT ckdb 50 04:02:18.54  0 -- (bld25)
+[nikita]: Defense lost: deafness
+Anzerloi flips a Shield of Absorption over his head with practised ease, lashing
+it to the hooks on a wyrmskin pack.
+Anzerloi removes a court bard's lute.
+Anzerloi begins to wield a court bard's lute in his left hand.
+Anzerloi brings his grand performance to a close, the notes of his song fading
+away into silence.
+The nobility of Anzerloi's prosodion brings misfortune unto you.
+Your hearing is suddenly restored.
+Anzerloi's blade sings with a metallic song as he directs a deep cut towards
+your right leg.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+right leg.
+(SLC) H: 84.0% T: 84.0%    LA: 84.0% RA: 84.0%    LL: 0.0% RL: 21.0%
+You have been afflicted with hamstrung.
+Your shield completely absorbs the damage.
+Anzerloi circles back to your front, rapier languidly swaying with the hypnotic
+grace of his dance.
+With frantic motions, Anzerloi brings forth the dark, foreboding curse of a
+bhajan.
+A beautiful symphony rises to underpin Anzerloi's song.
+5467(89%|86%) 99e 98w eT ckb 50 04:02:18.69  0 -- (ham|bld25)
+[Warning] Your HEAD is prepped!
+[Warning] Your TORSO is prepped!
+[Warning] Your LEFT ARM is prepped!
+[Warning] Your RIGHT ARM is prepped!
+A look of extreme focus crosses the face of Anzerloi.
+aff- dizziness
+MP: [====================] 4864.5/5405 90%
+5467(89%|86%) 99e 98w eT ckb 50 04:02:18.70  0 -- (ham|bld25)
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (1.77)
+You will now attempt to parry attacks to your torso.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+The face of Anzerloi contorts in pain.
+Balance used: 2.1s.
+HP: [====================] 4666/6647 70%
+MP: [====================] 4261/5405 78%
+Equilibrium used: 0.85s.
+5467(89%|83%) 99e 98w T ckb 50 04:02:19.22  0 -- (ham|bld25)
+Anzerloi eats a potash crystal.
+5467(89%|83%) 99e 98w T ckb 50 04:02:19.44  0 -- (ham|bld25)
+The pain plaguing your left leg subsides.
+5467(89%|83%) 99e 98w T ckb 50 04:02:19.75  0 -- (ham|bld25)
+Anzerloi eats a magnesium chip.
+aff- paralysis
+5467(89%|83%) 99e 98w T ckb 50 04:02:20.00  0 -- (ham|bld25)
+You have recovered equilibrium. (1.1)
+You may eat another plant or mineral. (1.43)
+5467(89%|83%) 99e 98w eT ckb 50 04:02:20.09  0 -- (ham|bld25)
+[Curing]: EAT CALAMINE
+You eat a calamine crystal.
+5467(89%|83%) 99e 98w eT ckb 50 04:02:20.20  0 -- (ham|bld25)
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (2.15)
+You will now attempt to parry attacks to your torso.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Anzerloi grits his teeth and rallies himself against the mental assault.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+The face of Anzerloi contorts in pain.
+Balance used: 2.1s.
+HP: [====================] 3393/6647 51%
+MP: [====================] 4482/5405 82%
+Equilibrium used: 0.85s.
+5467(89%|81%) 99e 98w T ckb 50 04:02:21.41  0 -- (ham)
+Anzerloi eats a magnesium chip.
+aff- paralysis
+5467(89%|81%) 99e 98w T ckb 50 04:02:21.53  0 -- (ham)
+You may eat another plant or mineral. (1.37)
+You may drink another health or mana elixir. (4.28)
+5467(89%|81%) 99e 98w T ckb 50 04:02:21.63  0 -- (ham)
+Anzerloi ceases to wield a court bard's lute in his left hand.
+Anzerloi puts on a court bard's lute.
+Anzerloi quickly unlashes a Shield of Absorption free from a wyrmskin pack,
+shifting it over his head and into his left hand.
+A keening whine emanates from the rapier of Anzerloi.
+Anzerloi's blade sings with a metallic song as he directs a deep cut towards
+your right leg.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+right leg.
+(SLC) H: 84.0% T: 84.0%    LA: 84.0% RA: 84.0%    LL: 0.0% RL: 42.0%
+You have been afflicted with brokenrightleg.
+Your shield completely absorbs the damage.
+5467(89%|81%) 99e 98w T ckb 50 04:02:21.77  0 -- (rl1|ham)
+[Warning] Your HEAD is prepped!
+[Warning] Your TORSO is prepped!
+[Warning] Your LEFT ARM is prepped!
+[Warning] Your RIGHT ARM is prepped!
+Anzerloi takes a drink from an elegant diamond vial.
+[Curing]: APPLY MENDING TO LEGS
+You take out some salve and quickly rub it on your legs.
+The bones in your right leg mend.
+You have cured the brokenrightleg affliction.
+5772(94%|83%) 99e 98w T ckb 50 04:02:21.90  0 -- (ham)
+You suddenly perceive the vague outline of an aura of rebounding around
+Anzerloi.
+@@@ TARGET REBOUNDING @@@
+@@@ TARGET REBOUNDING @@@
+@@@ TARGET REBOUNDING @@@
+5772(94%|83%) 99e 98w T ckb 50 04:02:22.23  0 -- (ham)
+You have recovered equilibrium. (1.1)
+5772(94%|83%) 99e 98w eT ckb 50 04:02:22.26  0 -- (ham)
+You may apply another salve to yourself. (0.65)
+5772(94%|83%) 99e 98w eT ckb 50 04:02:22.81  0 -- (ham)
+Anzerloi eats an aurum flake.false
+
+aff- clumsiness
+5772(94%|83%) 99e 98w eT ckb 50 04:02:23.05  0 -- (ham)
+[nikita]: Defense gained: deafness
+You have been afflicted with deafness.
+The aural world fades to silence.
+5772(94%|83%) 99e 98w eT ckdb 50 04:02:23.44  0 -- (ham)
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (2.14)
+You will now attempt to parry attacks to your torso.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Balance used: 2.1s.
+HP: [====================] 3945/6647 59%
+MP: [====================] 4748/5405 87%
+Equilibrium used: 0.85s.
+5772(94%|81%) 99e 98w T ckdb 50 04:02:23.47  0 -- (ham)
+aff+ clumsiness
+You are no longer artificially aged due to having manipulated time.
+5772(94%|81%) 99e 98w T ckdb 0 04:02:23.58  0 -- (ham)
+You have recovered equilibrium. (1.05)
+5772(94%|81%) 99e 98w eT ckdb 0 04:02:24.31  0 -- (ham)
+Anzerloi eats a magnesium chip.
+aff- paralysis
+Anzerloi's aura of weapons rebounding disappears.
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+Anzerloi darts out with a Soulpiercer in a lightning-fast jab towards your
+torso.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+torso.
+(SLC) H: 84.0% T: 105.0%    LA: 84.0% RA: 84.0%    LL: 0.0% RL: 42.0%
+[WARNING] TORSO BROKEN! [WARNING] TORSO BROKEN!
+The sensation of cold steel makes you feel queasy as it slides into your
+vulnerable organs.
+You have been afflicted with nausea.
+Health lost: 599 (physical cutting).
+Anzerloi continues to circle you, his deadly dance carrying him poised and ready
+around to your flank.
+5173(84%|81%) 100e 98w eT ckdb 0 04:02:24.83  0 -- (PAR|nau|ham|bld60)
+[Warning] Your HEAD is prepped!
+[Warning] Your LEFT ARM is prepped!
+[Warning] Your RIGHT ARM is prepped!
+Anzerloi touches a tree of life tattoo.
+Anzerloi takes a long drag off his pipe.
+aff- clumsiness
+[Curing]: OUTR BLOODROOT
+You remove 1 bloodroot, bringing the total in the rift to 808. (808)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+6113(100%|81%) 100e 98w eT ckdb 0 04:02:25.01  0 -- (nau|ham|bld60)
+Anzerloi eats a potash crystal.
+6113(100%|81%) 100e 98w eT ckdb 0 04:02:25.39  0 -- (nau|ham|bld60)
+You have added the MILDTRAUMA affliction to your predicted afflictions list.
+6113(100%|81%) 100e 98w eT ckdb 0 04:02:25.50  0 -- (nau|ham|bld60)
+[Curing]: APPLY RESTORATION TO BODY
+You take out some salve and quickly rub it on your body.
+6113(100%|81%) 100e 98w eT ckdb 0 04:02:25.57  0 -- (nau|ham|bld60)
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (2.37)
+You will now attempt to parry attacks to your torso.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Anzerloi grits his teeth and rallies himself against the mental assault.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Balance used: 2.1s.
+HP: [====================] 4302/6647 64%
+MP: [====================] 5090/5405 94%
+Equilibrium used: 0.85s.
+6113(100%|78%) 99e 98w T ckdb 0 04:02:25.59  0 -- (nau|ham|bld10)
+aff+ clumsiness
+You have recovered equilibrium. (0.68)
+6113(100%|78%) 99e 98w eT ckdb 0 04:02:26.39  0 -- (nau|ham|bld10)
+You are predicting that you have the mildtrauma afflictions.
+6113(100%|78%) 99e 98w eT ckdb 0 04:02:26.44  0 -- (nau|ham|bld10)
+Anzerloi eats a magnesium chip.
+aff- paralysis
+Anzerloi takes a drink from an elegant diamond vial.
+6113(100%|78%) 99e 98w eT ckdb 0 04:02:26.55  0 -- (nau|ham|bld10)
+You determine that Anzerloi is suffering from dizziness.
+aff+ dizziness
+A song can be heard on the edge of hearing as the air distorts about Anzerloi.
+You may eat another plant or mineral. (1.33)
+aff- clumsiness
+6113(100%|78%) 99e 98w eT ckdb 0 04:02:26.59  0 -- (nau|ham|bld10)
+[nikita]: Defense lost: deafness
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+Anzerloi's blade sings with a metallic song as he directs a deep cut towards
+your right leg.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+right leg.
+(SLC) H: 84.0% T: 105.0%    LA: 84.0% RA: 84.0%    LL: 0.0% RL: 63.0%
+[WARNING] TORSO BROKEN! [WARNING] TORSO BROKEN!
+Your hearing is suddenly restored.
+Health lost: 599 (physical cutting).
+Anzerloi continues to circle you, slipping in and out of your blindspot as he
+dances behind you.
+5514(90%|78%) 99e 98w eT ckb 0 04:02:26.70  0 -- (PAR|nau|ham|bld27)
+[Warning] Your HEAD is prepped!
+[Warning] Your LEFT ARM is prepped!
+[Warning] Your RIGHT ARM is prepped!
+A look of extreme focus crosses the face of Anzerloi.
+aff- dizziness
+MP: [====================] 4864.5/5405 90%
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+5514(90%|78%) 99e 98w eT ckb 0 04:02:26.73  0 -- (nau|ham|bld27)
+Health lost: 27 (raw).
+You bleed 27 health.
+5487(89%|78%) 99e 98w eT ckb 0 04:02:27.08  0 -- (nau|ham|bld18)
+You take out some salve and quickly rub it on your torso.
+The salve dissolves and quickly disappears after you apply it.
+5487(89%|78%) 99e 98w eT ckb 0 04:02:27.42  0 -- (nau|ham|bld18)
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (1.97)
+You will now attempt to parry attacks to your torso.
+Bending your will upon deSangre's spite, you corrupt the weapon's timestream.
+As you push your aeonic might beyond its limits, you feel yourself grow older.
+
+TIMELOOPBOOST!
+You have now aged yourself by 350 years.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Grey fog begins to rise from the suddenly panicked-looking Anzerloi.
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+A grey miasma flares around Anzerloi.
+[nikita]: TIMELOOP NUM: 4
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+Balance used: 2.1s.
+HP: [====================] 4913/6647 73%
+MP: [====================] 4900/5405 90%
+Equilibrium used: 0.85s.
+5487(89%|75%) 99e 98w T ckb 350 04:02:27.61  0 -- (nau|ham|bld18)
+aff+ timeloop
+aff+ clumsiness
+You have already predicted that you have that affliction.
+5487(89%|75%) 99e 98w T ckb 350 04:02:27.74  0 -- (nau|ham|bld18)
+You are predicting that you have the mildtrauma afflictions.
+5487(89%|75%) 99e 98w T ckb 350 04:02:27.75  0 -- (nau|ham|bld18)
+You are predicting that you have the mildtrauma afflictions.
+5487(89%|75%) 99e 98w T ckb 350 04:02:28.02  0 -- (nau|ham|bld18)
+Anzerloi eats a magnesium chip.
+aff- paralysis
+5487(89%|75%) 99e 98w T ckb 350 04:02:28.13  0 -- (nau|ham|bld18)
+You may eat another plant or mineral. (1.22)
+5487(89%|75%) 99e 98w T ckb 350 04:02:28.24  0 -- (nau|ham|bld18)
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+Your stomach becalms itself.
+You have cured the nausea affliction.
+5487(89%|75%) 99e 98w T ckb 350 04:02:28.32  0 -- (ham|bld18)
+You have recovered equilibrium. (0.7)
+5487(89%|75%) 100e 98w eT ckb 350 04:02:28.54  0 -- (ham|bld18)
+Anzerloi's bhajan of trouble and toil conjures up dark worries.
+You have been afflicted with fear.
+5487(89%|75%) 100e 98w eT ckb 350 04:02:28.58  0 -- (fear|ham|bld18)
+The nobility of Anzerloi's prosodion brings misfortune unto you.
+You have been afflicted with sensitivity.
+Anzerloi's blade sings with a metallic song as he directs a deep cut towards
+your right leg.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+right leg.
+(SLC) H: 84.0% T: 105.0%    LA: 84.0% RA: 84.0%    LL: 0.0% RL: 84.0%
+[WARNING] TORSO BROKEN! [WARNING] TORSO BROKEN!
+Health lost: 803 (physical cutting).
+Anzerloi circles back to your front, rapier languidly swaying with the hypnotic
+grace of his dance.
+4684(76%|75%) 100e 98w eT ckb 350 04:02:28.63  0 -- (s|fear|ham|bld35)
+[Warning] Your HEAD is prepped!
+[Warning] Your LEFT ARM is prepped!
+[Warning] Your RIGHT ARM is prepped!
+[Warning] Your RIGHT LEG is prepped!
+[Curing]: COMPOSE
+There is nothing to fear but fear itself.
+4684(76%|75%) 100e 98w eT ckb 350 04:02:28.70  0 -- (s|ham|bld35)
+You take out some salve and quickly rub it on your torso.
+The salve dissolves and quickly disappears after you apply it.
+4684(76%|75%) 100e 98w eT ckb 350 04:02:28.76  0 -- (s|ham|bld35)
+You are predicting that you have the mildtrauma afflictions.
+4684(76%|75%) 100e 98w eT ckb 350 04:02:29.09  0 -- (s|ham|bld35)
+You may utilise the tree tattoo again. (13.92)
+4684(76%|75%) 100e 98w eT ckb 350 04:02:29.25  0 -- (s|ham|bld35)
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+The stinging feeling fades.
+You have cured the sensitivity affliction.
+4684(76%|74%) 100e 98w eT ckb 350 04:02:29.31  0 -- (ham|bld35)
+You may drink another health or mana elixir. (4.3)
+4684(76%|74%) 100e 98w eT ckb 350 04:02:29.50  0 -- (ham|bld35)
+Your torso feels stronger and healthier.
+You have cured the mildtrauma affliction.
+You may apply another salve to yourself. (3.78)
+4684(76%|74%) 100e 98w eT ckb 350 04:02:29.56  0 -- (ham|bld35)
+You have added the MILDTRAUMA affliction to your predicted afflictions list.
+4684(76%|74%) 100e 98w eT ckb 350 04:02:29.60  0 -- (ham|bld35)
+You are predicting that you have the mildtrauma afflictions.
+4684(76%|74%) 100e 98w eT ckb 350 04:02:29.60  0 -- (ham|bld35)
+[Curing]: APPLY RESTORATION TO BODY
+You take out some salve and quickly rub it on your body.
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+6113(100%|74%) 100e 98w eT ckb 350 04:02:29.70  0 -- (ham|bld35)
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (2.14)
+You will now attempt to parry attacks to your torso.
+You rub some prefarar on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+A grey miasma flares around Anzerloi.
+[nikita]: TIMELOOP NUM: 3
+The face of Anzerloi contorts in pain.
+Balance used: 2.1s.
+HP: [====================] 2932/6647 44%
+MP: [====================] 4765/5405 88%
+Equilibrium used: 0.85s.
+6113(100%|72%) 99e 98w T ckb 350 04:02:29.82  0 -- (ham|bld35)
+aff+ undeaf
+Anzerloi eats a magnesium chip.
+aff- paralysis
+6113(100%|72%) 99e 98w T ckb 350 04:02:29.89  0 -- (ham|bld35)
+You may eat another plant or mineral. (1.51)
+6113(100%|72%) 99e 98w T ckb 350 04:02:29.90  0 -- (ham|bld35)
+[Curing]: EAT CALAMINE
+You eat a calamine crystal.
+6113(100%|72%) 99e 98w T ckb 350 04:02:30.09  0 -- (ham|bld35)
+You are predicting that you have the mildtrauma afflictions.
+6113(100%|72%) 99e 98w T ckb 350 04:02:30.17  0 -- (ham|bld35)
+You are predicting that you have the mildtrauma afflictions.
+6113(100%|72%) 99e 98w T ckb 350 04:02:30.52  0 -- (ham|bld35)
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+Anzerloi darts out with a Soulpiercer in a lightning-fast jab towards your
+torso.
+As Anzerloi carves into you, you perceive that he has dealt 21.0% damage to your
+torso.
+(SLC) H: 84.0% T: 21.0%    LA: 84.0% RA: 84.0%    LL: 0.0% RL: 84.0%
+The sensation of cold steel makes you feel queasy as it slides into your
+vulnerable organs.
+You have been afflicted with nausea.
+Health lost: 599 (physical cutting).
+You have recovered equilibrium. (1)
+5514(90%|72%) 99e 98w eT ckb 350 04:02:30.63  0 -- (PAR|nau|ham|bld17)
+[Warning] Your HEAD is prepped!
+[Warning] Your LEFT ARM is prepped!
+[Warning] Your RIGHT ARM is prepped!
+[Warning] Your RIGHT LEG is prepped!
+You are predicting that you have the mildtrauma afflictions.
+5514(90%|72%) 99e 98w eT ckb 350 04:02:30.85  0 -- (PAR|nau|ham|bld17)
+Anzerloi takes a drink from an elegant diamond vial.
+5514(90%|72%) 99e 98w eT ckb 350 04:02:31.08  0 -- (PAR|nau|ham|bld17)
+Anzerloi eats a cuprum flake.
+Anzerloi eats a potash crystal.
+5514(90%|72%) 99e 98w eT ckb 350 04:02:31.45  0 -- (PAR|nau|ham|bld17)
+aff- timeloop
+You take out some salve and quickly rub it on your torso.
+The salve dissolves and quickly disappears after you apply it.
+5514(90%|72%) 99e 98w eT ckb 350 04:02:31.50  0 -- (PAR|nau|ham|bld17)
+You may eat another plant or mineral. (1.42)
+5514(90%|72%) 99e 98w eT ckb 350 04:02:31.57  0 -- (PAR|nau|ham|bld17)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+5514(90%|72%) 99e 98w eT ckb 350 04:02:31.62  0 -- (nau|ham|bld17)
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (2.02)
+You will now attempt to parry attacks to your torso.
+You rub some prefarar on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+Balance used: 2.1s.
+HP: [====================] 3612/6647 54%
+MP: [====================] 5182/5405 95%
+Equilibrium used: 0.85s.
+5514(90%|70%) 99e 98w T ckb 350 04:02:31.89  0 -- (nau|ham|bld17)
+aff+ sensitivity
+You are predicting that you have the mildtrauma afflictions.
+5819(95%|72%) 99e 98w T ckb 350 04:02:32.26  0 -- (nau|ham|bld17)
+You are predicting that you have the mildtrauma afflictions.
+5819(95%|72%) 99e 98w T ckb 350 04:02:32.27  0 -- (nau|ham|bld17)
+[nikita]: Defense gained: deafness
+You have been afflicted with deafness.
+The aural world fades to silence.
+5819(95%|72%) 99e 98w T ckdb 350 04:02:32.44  0 -- (nau|ham|bld17)
+You take out some salve and quickly rub it on your torso.
+The salve dissolves and quickly disappears after you apply it.
+5819(95%|72%) 100e 98w T ckdb 350 04:02:32.51  0 -- (nau|ham|bld17)
+Health lost: 17 (raw).
+You bleed 17 health.
+5802(94%|72%) 100e 98w T ckdb 350 04:02:32.59  0 -- (nau|ham|bld5)
+The effects of your time manipulation fade somewhat, leaving you only aged by
+275 years.
+5802(94%|72%) 100e 98w T ckdb 275 04:02:32.61  0 -- (nau|ham|bld5)
+You have recovered equilibrium. (0.99)
+5802(94%|72%) 100e 98w eT ckdb 275 04:02:32.80  0 -- (nau|ham|bld5)
+You are predicting that you have the mildtrauma afflictions.
+5802(94%|72%) 100e 98w eT ckdb 275 04:02:33.15  0 -- (nau|ham|bld5)
+Anzerloi eats a magnesium chip.
+aff- paralysis
+A nearly invisible magical shield forms around Anzerloi.
+[nikita]: ((( ANZERLOI USED SHIELD! )))
+[nikita]: ((( ANZERLOI USED SHIELD! )))
+[nikita]: ((( ANZERLOI USED SHIELD! )))
+5802(94%|72%) 100e 98w eT ckdb 275 04:02:33.18  0 -- (nau|ham|bld5)
+You may eat another plant or mineral. (1.62)
+5802(94%|72%) 100e 98w eT ckdb 275 04:02:33.22  0 -- (nau|ham|bld5)
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+Your stomach becalms itself.
+You have cured the nausea affliction.
+5802(94%|72%) 100e 98w eT ckdb 275 04:02:33.36  0 -- (ham|bld5)
+You suddenly perceive the vague outline of an aura of rebounding around
+Anzerloi.
+@@@ TARGET REBOUNDING @@@
+@@@ TARGET REBOUNDING @@@
+@@@ TARGET REBOUNDING @@@
+5802(94%|72%) 100e 98w eT ckdb 275 04:02:33.48  0 -- (ham|bld5)
+The topical remedy dissolves into your skin with no effect.
+You may apply another salve to yourself. (3.98)
+5802(94%|72%) 100e 98w eT ckdb 275 04:02:33.71  0 -- (ham|bld5)
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (2.3)
+You will now attempt to parry attacks to your torso.
+You cease wielding deSangre's spite in your right hand.
+You cease wielding a subtle forearm shield in your left hand.
+You start to wield deSangre's spite in your left hand.
+You start to wield Gattan'lier's hunger in your right hand.
+Raising Gattan'lier's hunger, you point it at Anzerloi.
+Your shadow leaps for Anzerloi, hammering his shield in a silent frenzy that
+causes it to explode in a shower of prismatic shards.
+[nikita]: >><< Anzerloi SHIELD DOWN!  >><<
+Balance used: 1.2s.
+HP: [====================] 3744/6647 56%
+MP: [====================] 5312/5405 98%
+Equilibrium used: 0.85s.
+5802(94%|69%) 100e 98w T ckdb 275 04:02:33.97  0 -- (ham|bld5)
+You may drink another health or mana elixir. (4.38)
+5802(94%|69%) 100e 98w T ckdb 275 04:02:34.06  0 -- (ham|bld5)
+[Curing]: SIP MANA
+You take a drink from a moonstone vial.
+Your mind feels stronger and more alert.
+5802(94%|85%) 100e 98w T ckdb 275 04:02:34.12  0 -- (ham|bld5)
+You are not predicting that you have any afflictions at present.
+5802(94%|85%) 100e 98w T ckdb 275 04:02:34.14  0 -- (ham|bld5)
+You determine that Anzerloi is suffering from dizziness.
+aff+ dizziness
+5802(94%|85%) 100e 98w T ckdb 275 04:02:34.62  0 -- (ham|bld5)
+A look of extreme focus crosses the face of Anzerloi.
+aff- dizziness
+MP: [====================] 4771.5/5405 88%
+5802(94%|85%) 100e 98w T ckdb 275 04:02:34.71  0 -- (ham|bld5)
+You have recovered equilibrium. (0.9)
+5802(94%|85%) 100e 98w eT ckdb 275 04:02:34.81  0 -- (ham|bld5)
+Anzerloi eats an aurum flake.false
+
+aff- clumsiness
+5802(94%|85%) 100e 98w eT ckdb 275 04:02:34.92  0 -- (ham|bld5)
+You may eat another plant or mineral. (1.59)
+5802(94%|85%) 100e 98w eT ckdb 275 04:02:34.92  0 -- (ham|bld5)
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (0.96)
+You will now attempt to parry attacks to your torso.
+You cease wielding deSangre's spite in your left hand.
+You start to wield a subtle forearm shield in your left hand.
+You cease wielding Gattan'lier's hunger in your right hand.
+You start to wield deSangre's spite in your right hand.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Balance used: 2.1s.
+HP: [====================] 2606/6647 39%
+MP: [====================] 5062/5405 93%
+Equilibrium used: 0.85s.
+5802(94%|82%) 99e 98w T ckdb 275 04:02:35.15  0 -- (ham|bld5)
+aff+ clumsiness
+Anzerloi takes a drink from an elegant diamond vial.
+5802(94%|82%) 99e 98w T ckdb 275 04:02:35.68  0 -- (ham|bld5)
+You have recovered equilibrium. (0.75)
+5802(94%|82%) 99e 98w eT ckdb 275 04:02:35.96  0 -- (ham|bld5)
+Anzerloi eats a magnesium chip.
+A nearly invisible magical shield forms around Anzerloi.
+[nikita]: ((( ANZERLOI USED SHIELD! )))
+[nikita]: ((( ANZERLOI USED SHIELD! )))
+[nikita]: ((( ANZERLOI USED SHIELD! )))
+5802(94%|82%) 100e 98w eT ckdb 275 04:02:36.58  0 -- (ham|bld5)
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (2.06)
+You will now attempt to parry attacks to your torso.
+You cease wielding deSangre's spite in your right hand.
+You cease wielding a subtle forearm shield in your left hand.
+You start to wield deSangre's spite in your left hand.
+You start to wield Gattan'lier's hunger in your right hand.
+Raising Gattan'lier's hunger, you point it at Anzerloi.
+Your shadow leaps for Anzerloi, hammering his shield in a silent frenzy that
+causes it to explode in a shower of prismatic shards.
+[nikita]: >><< Anzerloi SHIELD DOWN!  >><<
+Balance used: 1.2s.
+HP: [====================] 4653/6647 70%
+MP: [====================] 5122/5405 94%
+Equilibrium used: 0.85s.
+5802(94%|80%) 100e 98w T ckdb 275 04:02:37.23  0 -- (ham|bld5)
+Anzerloi eats a potash crystal.
+5802(94%|80%) 100e 98w T ckdb 275 04:02:37.58  0 -- (ham|bld5)
+The effects of your time manipulation fade somewhat, leaving you only aged by
+200 years.
+5802(94%|80%) 100e 98w T ckdb 200 04:02:37.61  0 -- (ham|bld5)
+You feel the tightness in your hamstring subside, allowing free movement once
+again.
+You have cured the hamstrung affliction.
+5802(94%|80%) 100e 98w T ckdb 200 04:02:37.69  0 -- (bld5)
+You have recovered equilibrium. (0.71)
+5802(94%|80%) 100e 98w eT ckdb 200 04:02:38.00  0 -- (bld5)
+Health lost: 5 (raw).
+You bleed 5 health.
+5797(94%|80%) 100e 98w eT ckdb 200 04:02:38.08  0 -- ()
+Anzerloi eats an aurum flake.false
+
+aff- clumsiness
+5797(94%|80%) 100e 98w eT ckdb 200 04:02:38.18  0 -- ()
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (1.04)
+You will now attempt to parry attacks to your torso.
+You cease wielding deSangre's spite in your left hand.
+You start to wield a subtle forearm shield in your left hand.
+You cease wielding Gattan'lier's hunger in your right hand.
+You start to wield deSangre's spite in your right hand.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Balance used: 2.1s.
+HP: [====================] 4046/6647 60%
+MP: [====================] 5308/5405 98%
+Equilibrium used: 0.85s.
+5797(94%|77%) 99e 98w T ckdb 200 04:02:38.41  0 -- ()
+aff+ clumsiness
+You may drink another health or mana elixir. (4.46)
+5797(94%|77%) 99e 98w T ckdb 200 04:02:38.51  0 -- ()
+[Curing]: SIP MANA
+You take a drink from a moonstone vial.
+Your mind feels stronger and more alert.
+5797(94%|95%) 99e 98w T ckdb 200 04:02:38.58  0 -- ()
+Anzerloi's bhajan of trouble and toil conjures up dark worries.
+You have been afflicted with fear.
+5797(94%|95%) 99e 98w T ckdb 200 04:02:38.62  0 -- (fear)
+[Curing]: COMPOSE
+There is nothing to fear but fear itself.
+5797(94%|95%) 99e 98w T ckdb 200 04:02:38.74  0 -- ()
+You have recovered equilibrium. (1.16)
+5797(94%|95%) 99e 98w eT ckdb 200 04:02:39.25  0 -- ()
+You determine that Anzerloi is suffering from stupidity.
+aff+ stupidity
+A look of extreme focus crosses the face of Anzerloi.
+aff- stupidity
+MP: [====================] 4767.5/5405 88%
+5797(94%|95%) 99e 98w eT ckdb 200 04:02:39.66  0 -- ()
+Anzerloi eats a magnesium chip.
+aff- paralysis
+5797(94%|95%) 99e 98w eT ckdb 200 04:02:39.84  0 -- ()
+A nearly invisible magical shield forms around Anzerloi.
+[nikita]: ((( ANZERLOI USED SHIELD! )))
+[nikita]: ((( ANZERLOI USED SHIELD! )))
+[nikita]: ((( ANZERLOI USED SHIELD! )))
+5797(94%|95%) 99e 98w eT ckdb 200 04:02:39.87  0 -- ()
+Anzerloi touches a tree of life tattoo.
+5797(94%|95%) 99e 98w eT ckdb 200 04:02:40.02  0 -- ()
+aff- clumsiness
+Anzerloi takes a drink from an elegant diamond vial.
+5797(94%|95%) 99e 98w eT ckdb 200 04:02:40.24  0 -- ()
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (2.33)
+You will now attempt to parry attacks to your torso.
+A dizzying beam of energy strikes you as your attack rebounds off of Anzerloi's
+shield.
+[nikita]: ((( ANZERLOI USED SHIELD! )))
+[nikita]: ((( ANZERLOI USED SHIELD! )))
+[nikita]: ((( ANZERLOI USED SHIELD! )))
+Equilibrium used: 1.70s.
+HP: [====================] 5207/6647 78%
+You must regain equilibrium first.
+5797(94%|93%) 99e 98w xT ckdb 200 04:02:40.51  0 -- ()
+Anzerloi eats an aurum flake.false
+
+aff- weariness
+5797(94%|93%) 100e 98w xT ckdb 200 04:02:41.37  0 -- ()
+A song can be heard on the edge of hearing as the air distorts about Anzerloi.
+5797(94%|93%) 100e 98w xT ckdb 200 04:02:41.61  0 -- ()
+aff- sensitivity
+[nikita]: Defense gained: parrying (torso)
+You have recovered equilibrium. (1.75)
+You will now attempt to parry attacks to your torso.
+You cease wielding deSangre's spite in your right hand.
+You cease wielding a subtle forearm shield in your left hand.
+You start to wield deSangre's spite in your left hand.
+You start to wield Gattan'lier's hunger in your right hand.
+Raising Gattan'lier's hunger, you point it at Anzerloi.
+Your shadow leaps for Anzerloi, hammering his shield in a silent frenzy that
+causes it to explode in a shower of prismatic shards.
+[nikita]: >><< Anzerloi SHIELD DOWN!  >><<
+Balance used: 1.2s.
+HP: [====================] 5207/6647 78%
+MP: [====================] 4946/5405 91%
+Equilibrium used: 0.85s.
+5797(94%|90%) 100e 98w T ckdb 200 04:02:42.21  0 -- ()
+The effects of your time manipulation fade somewhat, leaving you only aged by
+125 years.
+6102(99%|92%) 100e 98w T ckdb 125 04:02:42.61  0 -- ()
+You have recovered equilibrium. (0.71)
+You may drink another health or mana elixir. (4.34)
+6102(99%|92%) 100e 98w eT ckdb 125 04:02:43.08  0 -- ()
+Anzerloi eats a calamine crystal.
+6102(99%|92%) 100e 98w eT ckdb 125 04:02:43.14  0 -- ()
+[nikita]: Defense lost: fangbarrier
+Anzerloi's aura of weapons rebounding disappears.
+Anzerloi's ghazal brings sweat to your skin and tears to your eyes.
+You have been afflicted with slickness.
+The protective covering coating your skin sloughs off.
+Like a rising sun does the blade of Anzerloi move from low to high, cutting
+across your right hip.
+You twist aside, the rising slash going wide.
+6102(99%|92%) 100e 98w eT ckdb 125 04:02:43.27  0 -- (SLI)
+You may utilise the tree tattoo again. (13.88)
+6102(99%|92%) 100e 98w eT ckdb 125 04:02:43.27  0 -- (SLI)
+Anzerloi takes a long drag off his pipe.
+[Curing]: SMOKE REALGAR
+You take a long drag of realgar off your pipe.
+Your glands cease their oily secretion.
+You have cured the slickness affliction.
+[Curing]: APPLY QUICKSILVER
+You apply a quicksilver droplet to yourself.
+6102(99%|92%) 100e 98w eT ckdb 125 04:02:43.35  0 -- ()
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (1.07)
+You will now attempt to parry attacks to your torso.
+You cease wielding deSangre's spite in your left hand.
+You start to wield a subtle forearm shield in your left hand.
+You cease wielding Gattan'lier's hunger in your right hand.
+You start to wield deSangre's spite in your right hand.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Balance used: 2.1s.
+HP: [====================] 4457/6647 67%
+MP: [====================] 5112/5405 94%
+Equilibrium used: 0.85s.
+6102(99%|90%) 99e 98w T ckdb 125 04:02:43.37  0 -- ()
+aff+ clumsiness
+Anzerloi eats a potash crystal.
+6102(99%|90%) 99e 98w T ckdb 125 04:02:43.53  0 -- ()
+You have recovered equilibrium. (0.51)
+6102(99%|89%) 99e 98w eT ckdb 125 04:02:44.10  0 -- ()
+You determine that Anzerloi is suffering from weariness.
+aff+ weariness
+6102(99%|89%) 100e 98w eT ckdb 125 04:02:44.61  0 -- ()
+Anzerloi eats a magnesium chip.
+aff- paralysis
+Anzerloi takes a drink from an elegant diamond vial.
+6102(99%|89%) 100e 98w eT ckdb 125 04:02:44.67  0 -- ()
+Your lungs have recovered enough to smoke another mineral or plant. (1.55)
+6102(99%|89%) 100e 98w eT ckdb 125 04:02:44.84  0 -- ()
+Anzerloi stares thoughtfully at your right leg.
+6102(99%|89%) 100e 98w eT ckdb 125 04:02:45.12  0 -- ()
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (1.94)
+You will now attempt to parry attacks to your torso.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+The face of Anzerloi contorts in pain.
+Balance used: 2.1s.
+HP: [====================] 4274/6647 64%
+MP: [====================] 5365/5405 99%
+Equilibrium used: 0.85s.
+6102(99%|87%) 99e 98w T ckdb 125 04:02:45.43  0 -- ()
+You have recovered equilibrium. (0.85)
+6102(99%|87%) 99e 98w eT ckdb 125 04:02:46.26  0 -- ()
+Anzerloi eats a magnesium chip.
+aff- paralysis
+6102(99%|87%) 99e 98w eT ckdb 125 04:02:46.42  0 -- ()
+
+aff- undeaf
+Anzerloi's ghazal brings sweat to your skin and tears to your eyes.
+You have been afflicted with slickness.
+Like a rising sun does the blade of Anzerloi move from low to high, cutting
+across your right hip.
+You twist aside, the rising slash going wide.
+6102(99%|87%) 99e 98w eT ckdb 125 04:02:47.41  0 -- (SLI)
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (2.24)
+You will now attempt to parry attacks to your torso.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Anzerloi grits his teeth and rallies himself against the mental assault.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+The face of Anzerloi contorts in pain.
+Balance used: 2.1s.
+HP: [====================] 2802/6647 42%
+MP: [====================] 5224/5405 96%
+Equilibrium used: 0.85s.
+6102(99%|85%) 99e 98w T ckdb 125 04:02:47.52  0 -- (SLI)
+[Curing]: SMOKE REALGAR
+You take a long drag of realgar off your pipe.
+Your glands cease their oily secretion.
+You have cured the slickness affliction.
+6102(99%|85%) 99e 98w T ckdb 125 04:02:47.56  0 -- ()
+The effects of your time manipulation fade somewhat, leaving you only aged by 50
+years.
+6102(99%|85%) 99e 98w T ckdb 50 04:02:47.63  0 -- ()
+Anzerloi eats a magnesium chip.
+aff- paralysis
+6102(99%|85%) 99e 98w T ckdb 50 04:02:48.16  0 -- ()
+You have recovered equilibrium. (0.73)
+6102(99%|85%) 99e 98w eT ckdb 50 04:02:48.33  0 -- ()
+Anzerloi's bhajan of trouble and toil conjures up dark worries.
+You have been afflicted with fear.
+6102(99%|85%) 100e 98w eT ckdb 50 04:02:48.63  0 -- (fear)
+[Curing]: COMPOSE
+There is nothing to fear but fear itself.
+6102(99%|85%) 100e 98w eT ckdb 50 04:02:48.76  0 -- ()
+Your lungs have recovered enough to smoke another mineral or plant. (1.4)
+6102(99%|85%) 100e 98w eT ckdb 50 04:02:49.07  0 -- ()
+Anzerloi takes a drink from an elegant diamond vial.
+6102(99%|85%) 100e 98w eT ckdb 50 04:02:49.46  0 -- ()
+Anzerloi eats a potash crystal.
+6102(99%|85%) 100e 98w eT ckdb 50 04:02:49.63  0 -- ()
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (2.12)
+You will now attempt to parry attacks to your torso.
+You cease wielding deSangre's spite in your right hand.
+You cease wielding a subtle forearm shield in your left hand.
+You start to wield deSangre's spite in your left hand.
+You start to wield Gattan'lier's hunger in your right hand.
+Imbuing your voice with power, you intone, "Tooros".
+Anzerloi clutches at his head, face contorted in pain.
+The piercing sound sends a spike of agony into your brain, threatening to rob
+you of conscious thought.
+Health lost: 460 (psychic).
+You rub some delphinium on Gattan'lier's hunger.
+Drawing the shadow of Anzerloi from Terrin'ukia's Vice, you plunge Gattan'lier's
+hunger savagely into the ephemeral mass.
+Anzerloi's back arches and he lets out a wail of torment as blood begins to run
+from his mouth and nose.
+@@@@@@@@@@   @@@  @@@  @@@@@@@  @@@  @@@        @@@@@@   @@@@@@@  @@@@@@@@  @@@
+@@@@@@@@@@@  @@@  @@@  @@@@@@@  @@@  @@@       @@@@@@@@  @@@@@@@  @@@@@@@@  @@@
+@@! @@! @@!  @@!  @@@    @@!    @@!  @@!       @@!  @@@    @@!    @@!       @@!
+!@! !@! !@!  !@!  @!@    !@!    !@!  !@!       !@!  @!@    !@!    !@!       !@ 
+@!! !!@ @!@  @!@  !@!    @!!    !!@  @!!       @!@!@!@!    @!!    @!!!:!    @!@
+!@!   ! !@!  !@!  !!!    !!!    !!!  !!!       !!!@!!!!    !!!    !!!!!:    !!!
+!!:     !!:  !!:  !!!    !!:    !!:  !!:       !!:  !!!    !!:    !!:          
+:!:     :!:  :!:  !:!    :!:    :!:   :!:      :!:  !:!    :!:    :!:       :!:
+:::     ::   ::::: ::     ::     ::   :: ::::  ::   :::     ::     :: ::::   ::
+ :      :     : :  :      :     :    : :: : :   :   : :     :     : :: ::   :::
+Balance used: 2.1s.
+HP: [====================] 1740/6647 26%
+MP: [====================] 3784/5405 70%
+Equilibrium used: 0.85s.
+5642(92%|78%) 99e 97w - ckdb 50 04:02:49.69  0 -- ()
+Anzerloi clenches his fists and grits his teeth.
+Anzerloi eats an aurum flake.false
+
+aff- clumsiness
+[Curing]: SIP MANA
+You take a drink from a moonstone vial.
+Your mind feels stronger and more alert.
+5642(92%|96%) 99e 97w - ckdb 50 04:02:49.80  0 -- ()
+You have recovered equilibrium. (0.73)
+5642(92%|96%) 99e 97w e- ckdb 50 04:02:50.42  0 -- ()
+Anzerloi stares thoughtfully at your right leg.
+5642(92%|96%) 99e 97w e- ckdb 50 04:02:50.54  0 -- ()
+Anzerloi eats an aurum flake.false
+
+aff- weariness
+5642(92%|95%) 99e 97w e- ckdb 50 04:02:51.54  0 -- ()
+[nikita]: Defense gained: parrying (torso)
+You have recovered balance on all limbs. (1.94)
+You will now attempt to parry attacks to your torso.
+You cease wielding deSangre's spite in your left hand.
+You start to wield a subtle forearm shield in your left hand.
+You cease wielding Gattan'lier's hunger in your right hand.
+You start to wield deSangre's spite in your right hand.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Anzerloi grits his teeth and rallies himself against the mental assault.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+As the weapon strikes Anzerloi, the contact area begins to rot before your eyes.
+Balance used: 2.1s.
+HP: [====================] 1035/6647 15%
+MP: [====================] 3573/5405 66%
+Equilibrium used: 0.85s.
+5642(92%|93%) 99e 97w - ckdb 50 04:02:51.73  0 -- ()
+aff+ clumsiness
+You suddenly perceive the vague outline of an aura of rebounding around
+Anzerloi.
+@@@ TARGET REBOUNDING @@@
+@@@ TARGET REBOUNDING @@@
+@@@ TARGET REBOUNDING @@@
+5642(92%|93%) 99e 97w - ckdb 50 04:02:51.86  0 -- ()
+You determine that Anzerloi is suffering from weariness.
+aff+ weariness
+5642(92%|93%) 100e 97w - ckdb 50 04:02:52.63  0 -- ()
+You are no longer artificially aged due to having manipulated time.
+5642(92%|93%) 100e 97w - ckdb 0 04:02:52.64  0 -- ()
+You have recovered equilibrium. (1.08)
+5642(92%|93%) 100e 97w e- ckdb 0 04:02:52.67  0 -- ()
+Anzerloi eats a magnesium chip.
+aff- paralysis
+Anzerloi's aura of weapons rebounding disappears.
+Anzerloi's paean slams into you with all the weight of history's greatest
+triumphs.
+You have been afflicted with paralysis.
+Anzerloi flicks out with a Soulpiercer towards you, a keening note raising from
+the blade's lunge.
+A rich, vibrant hum rises from the blade of Anzerloi as it finds your flesh.
+You have been afflicted with crescendo.
+Health lost: 599 (physical cutting).
+Anzerloi continues to circle you, his deadly dance carrying him poised and ready
+around to your flank.
+5348(87%|95%) 100e 97w e- ckdb 0 04:02:53.25  0 -- (PAR|cresc1|bld17)
+[nikita]: Defense gained: fangbarrier
+The quicksilver hardens into a supple metallic shell.
+5348(87%|95%) 100e 97w e- ckdb 0 04:02:53.32  0 -- (PAR|cresc1|bld17)
+Anzerloi takes a long drag off his pipe.
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+You have cured the paralysis affliction.
+Song swells about you as you begin to move inevitably towards a grand crescendo.
+5348(87%|95%) 100e 97w e- ckdb 0 04:02:53.42  0 -- (cresc2|bld17)
+[nikita]: Defense gained: parrying (torso)
+(mapper): Set the z character on 9409 (Under a canopy of trees)
+[nikita]: Defense lost: insomnia
+(mapper): Set the z character on 9409 (Under a canopy of trees)
+[nikita]: Defense lost: blindness
+[nikita]: Defense lost: deafness
+
+You have recovered balance on all limbs. (2.21)
+You will now attempt to parry attacks to your torso.
+You rub some curare on deSangre's spite.
+You unleash a vicious reaping blow at Anzerloi with deSangre's spite.
+Anzerloi grits his teeth and rallies himself against the mental assault.
+Horror overcomes Anzerloi's face as his body stiffens into paralysis.
+aff+ paralysis
+The face of Anzerloi contorts in pain.
+You have slain Anzerloi.
+++++++++++++ TARGET DEAD! ++++++++++++
+++++++++++++ TARGET DEAD! ++++++++++++
+Defeated, Anzerloi is cast out of the Arena.
+**********************************************************
+You have been victorious and leave the Arena in triumph!
+(SLC) Limb damage reset.
+
+(SLC) H: 0.0% T: 0.0%    LA: 0.0% RA: 0.0%    LL: 0.0% RL: 0.0%
+**********************************************************
+ 
