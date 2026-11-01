@@ -1,0 +1,1219 @@
+# LEVI fight log | version 4.7.462 | started 2026-10-28 07:35:47 | opponent Tabethys | our class Runewarden | our attack
+# rows: <time> <kind> <text>. kinds: | line, P prompt, > we sent, +aff/-aff ours (GMCP), +def/-def ours (GMCP), +tar/-tar our tracker on the target, # note
+07:35:47.376 > queue addclear free sketch jera on Tabethys
+07:35:47.376 > queue add free sketch algiz on Tabethys
+07:35:47.376 > queue add free sketch berkana on Tabethys
+07:35:47.443 | [System]: Queued free commands cleared.
+07:35:47.445 | [System]: Added SKETCH JERA ON TABETHYS to your free queue.
+07:35:47.447 | [System]: Running queued free command: SKETCH JERA ON TABETHYS
+07:35:47.449 | You begin sketching a jera rune on Tabethys.
+07:35:47.450 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:35:47.540 | [System]: Added SKETCH ALGIZ ON TABETHYS to your free queue.
+07:35:47.543 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:35:47.545 | [System]: Added SKETCH BERKANA ON TABETHYS to your free queue.
+07:35:47.546 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:35:49.189 | With a flourish, you finish sketching a jera rune.
+07:35:49.191 | You have recovered balance on all limbs.
+07:35:49.194 | [System]: Running queued free command: SKETCH ALGIZ ON TABETHYS
+07:35:49.195 | You begin sketching an algiz rune on Tabethys.
+07:35:49.197 | [System]: Running queued free command: SKETCH BERKANA ON TABETHYS
+07:35:49.197 | You must regain balance first.
+07:35:49.199 | sketch berkana on tabethys was added to your balance queue.
+07:35:49.199 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:35:49.278 | (Party): Tabethys says, "You are in 2h?"
+07:35:49.281 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:35:50.053 | With a flourish, you finish sketching an algiz rune.
+07:35:50.055 | You have recovered balance on all limbs.
+07:35:50.056 | [System]: Running queued balance command: SKETCH BERKANA ON TABETHYS
+07:35:50.058 | You begin sketching a berkana rune on Tabethys.
+07:35:50.060 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:35:51.063 | With a flourish, you finish sketching a berkana rune.
+07:35:51.064 | You have recovered balance on all limbs.
+07:35:51.068 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:35:51.553 | (Party): Tabethys says, "Or you are not in 2h?"
+07:35:51.555 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:35:54.430 > queue addclear free sketch jera on Aegoth
+07:35:54.430 > queue add free sketch algiz on Aegoth
+07:35:54.430 > queue add free sketch berkana on Aegoth
+07:35:54.497 | [System]: Queued free commands cleared.
+07:35:54.500 | [System]: Added SKETCH JERA ON AEGOTH to your free queue.
+07:35:54.502 | [System]: Running queued free command: SKETCH JERA ON AEGOTH
+07:35:54.503 | You begin sketching a jera rune on Aegoth.
+07:35:54.505 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:35:54.592 | [System]: Added SKETCH ALGIZ ON AEGOTH to your free queue.
+07:35:54.595 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:35:54.597 | [System]: Added SKETCH BERKANA ON AEGOTH to your free queue.
+07:35:54.598 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:35:56.228 | With a flourish, you finish sketching a jera rune.
+07:35:56.232 | You have recovered balance on all limbs.
+07:35:56.234 | [System]: Running queued free command: SKETCH ALGIZ ON AEGOTH
+07:35:56.235 | You begin sketching an algiz rune on Aegoth.
+07:35:56.237 | [System]: Running queued free command: SKETCH BERKANA ON AEGOTH
+07:35:56.238 | You must regain balance first.
+07:35:56.239 | sketch berkana on aegoth was added to your balance queue.
+07:35:56.241 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:35:57.171 | With a flourish, you finish sketching an algiz rune.
+07:35:57.174 | You have recovered balance on all limbs.
+07:35:57.176 | [System]: Running queued balance command: SKETCH BERKANA ON AEGOTH
+07:35:57.178 | You begin sketching a berkana rune on Aegoth.
+07:35:57.179 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:35:58.044 | With a flourish, you finish sketching a berkana rune.
+07:35:58.047 | You have recovered balance on all limbs.
+07:35:58.049 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:36:01.132 > pt I am in 2H
+07:36:01.187 | (Party): You say, "I am in 2H."
+07:36:01.190 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:36:01.287 | (The Council of Mhaldor): Sinit says, "Transparency is good, most times."
+07:36:01.289 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:36:03.842 | Tabethys begins heaving against the caravan, pushing it off its course to the up.
+07:36:03.845 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:36:06.402 | (Party): Tabethys says, "That is fine."
+07:36:06.405 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:36:06.487 > pt was testing wades
+07:36:06.549 | (Party): You say, "Was testing wades."
+07:36:06.551 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:36:08.345 | The caravan rumbles off to the up.
+07:36:08.346 | Aegoth and Sinit leave, following Tabethys to the up.
+07:36:08.349 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:36:08.443 | (The Council of Mhaldor): Tabethys says, "I agree."
+07:36:08.446 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:36:13.622 > pt but I have zero attack for 2H
+07:36:13.684 | (Party): You say, "But I have zero attack for 2H."
+07:36:13.687 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:36:14.245 > queue addclear free u
+07:36:14.334 | [System]: Queued free commands cleared.
+07:36:14.336 | [System]: Added U to your free queue.
+07:36:14.337 | [System]: Running queued free command: U
+07:36:14.338 | A gap within the peaks of the Vashnar Mountains.
+07:36:14.340 | Cerulean waters preside, fathom and depths stirred to roiling currents by the pervasive will of Neraeos Pelagia, Lord of the Sea. Only the occasional, fleeting star is visible past the dark clouds blanketing the sky above. A large cart rests here, stacked high with assorted containers secured with thick rope. Warden Sinit d'Ivoire is here. The Golden Dragon Aegoth's imposing form looms. Tyndran Tabethys Aristata, Tyrannical Butcher of Baelgrim is here. She wields an exquisite Mhaldorian staff of sterling silver in her left hand and a Shield of Absorption in her right.
+07:36:14.342 | You see exits leading northwest and down.
+07:36:14.343 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:36:15.149 | (The Council of Mhaldor): Sinit says, "I look forward to reading it."
+07:36:15.152 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:36:16.296 | The caravan rumbles off to the northwest.
+07:36:16.298 | Aegoth and Sinit leave, following Tabethys to the northwest.
+07:36:16.300 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:36:16.645 > follow Tabethys
+07:36:16.774 | You cannot see that being here.
+07:36:16.778 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:36:18.015 > queue addclear free nw
+07:36:18.099 | [System]: Queued free commands cleared.
+07:36:18.100 | [System]: Added NW to your free queue.
+07:36:18.101 | [System]: Running queued free command: NW
+07:36:18.102 | Before a deep valley.
+07:36:18.105 | Cerulean waters preside, fathom and depths stirred to roiling currents by the pervasive will of Neraeos Pelagia, Lord of the Sea. Only the occasional, fleeting star is visible past the dark clouds blanketing the sky above. A large cart rests here, stacked high with assorted containers secured with thick rope. Warden Sinit d'Ivoire is here. The Golden Dragon Aegoth's imposing form looms. Tyndran Tabethys Aristata, Tyrannical Butcher of Baelgrim is here. She wields an exquisite Mhaldorian staff of sterling silver in her left hand and a Shield of Absorption in her right.
+07:36:18.106 | You see exits leading southeast and southwest.
+07:36:18.107 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:36:18.921 > follow Tabethys
+07:36:18.978 | You begin to follow Tabethys.
+07:36:18.981 P H: Full, M: Full, E: High, W: Full cekdb-
+07:36:19.434 | You have recovered balance on all limbs.
+07:36:19.436 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:36:19.784 | (Party): Tabethys says, "UNDERHAND, then BATTLECRY, and we are fine."
+07:36:19.787 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:36:20.816 | Tabethys begins heaving against the caravan, pushing it off its course to the southwest.
+07:36:20.819 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:36:23.055 > pt ok
+07:36:23.170 | (Party): You say, "Ok."
+07:36:23.173 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:36:25.327 | The caravan rumbles off to the southwest.
+07:36:25.329 | You follow Tabethys northwest to Steep mountain path.
+07:36:25.331 | A caravan rumbles into view.
+07:36:25.333 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:36:29.367 | (Party): Tabethys says, "Or if you can swap specs, go dsl and ept ept them for me, either one."
+07:36:29.370 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:36:30.300 | Tabethys begins heaving against the caravan, pushing it off its course to the west.
+07:36:30.302 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:36:35.396 | The caravan rumbles off to the west.
+07:36:35.399 | You follow Tabethys up to Mountain path.
+07:36:35.400 | A caravan rumbles into view.
+07:36:35.401 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:36:36.152 | Tabethys begins heaving against the caravan, pushing it off its course to the west.
+07:36:36.154 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:36:38.879 | (The Council of Mhaldor): Aegoth says, "So long as it does not cross the line of insolence."
+07:36:38.882 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:36:40.380 | The caravan rumbles off to the west.
+07:36:40.382 | You follow Tabethys north to Mountain pass.
+07:36:40.382 | A caravan rumbles into view.
+07:36:40.386 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:36:41.078 | Tabethys begins heaving against the caravan, pushing it off its course to the south.
+07:36:41.080 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:36:41.334 > probe totem
+07:36:41.416 | Expertly formed from carefully carved wood and thick leather, this runic totem stands at almost five feet high, although it is not particularly thick in diameter. Largely unadorned, its smooth surface is interrupted only by the delicate silver inlay that defines spaces for six runes.
+07:36:41.418 | 
+07:36:41.419 | A rune like an open eye is sketched in slot 1.
+07:36:41.421 | A rune resembling a bell is sketched in slot 2.
+07:36:41.421 | A rune that looks like a nail is sketched in slot 3.
+07:36:41.422 | A rune that looks like a nail is sketched in slot 4.
+07:36:41.423 | A rune that looks like a nail is sketched in slot 5.
+07:36:41.424 | A rune that looks like something out of your nightmares is sketched in slot 6.
+07:36:41.426 | It has 125 months of usefulness left.
+07:36:41.427 | It weighs about 30 pounds.
+07:36:41.428 | It bears the distinctive mark of Leviticus.
+07:36:41.428 | You may use this item to parry with.
+07:36:41.430 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:36:45.461 | The caravan rumbles off to the south.
+07:36:45.462 | You follow Tabethys northeast to Deep in the Vashnar Mountains.
+07:36:45.464 | A caravan rumbles into view.
+07:36:45.466 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:36:45.604 | A muscular mountain lion bares his teeth a moment before sinking them into Sinit's torso.
+07:36:45.607 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:36:46.082 | Tabethys begins heaving against the caravan, pushing it off its course to the southwest.
+07:36:46.085 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:36:48.383 > smudge totem slot 3
+07:36:48.444 | You smudge the sowulu rune off a totem.
+07:36:48.447 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:36:48.698 | Pacing back and forth to size Sinit up, a muscular mountain lion lunges forward and lands a savage bite on her leg.
+07:36:48.701 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:36:50.161 | You have recovered balance on all limbs.
+07:36:50.163 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:36:50.478 | The caravan rumbles off to the southwest.
+07:36:50.480 | You follow Tabethys through the ether to Morland Falls.
+07:36:50.481 | A caravan rumbles into view.
+07:36:50.483 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:36:51.281 | Tabethys begins heaving against the caravan, pushing it off its course to the south.
+07:36:51.283 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:36:51.519 > smudge totem slot 4
+07:36:51.615 | You smudge the sowulu rune off a totem.
+07:36:51.617 P H: Full, M: Full, E: High, W: Full cekdb-
+07:36:53.238 | You have recovered balance on all limbs.
+07:36:53.240 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:36:53.546 | A scruffy cliff gerbil scurries in from the south.
+07:36:53.549 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:36:55.495 | The caravan rumbles off to the south.
+07:36:55.497 | Sinit has left the group.
+07:36:55.497 | You follow Tabethys northwest to Deep in the Vashnar Mountains.
+07:36:55.498 | A caravan rumbles into view.
+07:36:55.499 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:36:55.580 | A muscular mountain lion roars fiercely as he rakes his claws across your chest.
+07:36:55.584 | Health lost: 291 (physical cutting).
+07:36:55.585 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:36:56.015 | Tabethys begins heaving against the caravan, pushing it off its course to the southwest.
+07:36:56.018 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:36:56.915 > smudge totem slot 5
+07:36:56.978 | You smudge the sowulu rune off a totem.
+07:36:56.980 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:36:57.809 | Health lost: 21 (raw).
+07:36:57.810 | You bleed 21 health.
+07:36:57.812 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:36:58.322 | A muscular mountain lion roars fiercely as he rakes his claws across your chest.
+07:36:58.323 | Health lost: 351 (physical cutting).
+07:36:58.326 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:36:58.796 | You have recovered balance on all limbs.
+07:36:58.799 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:37:00.531 | The caravan rumbles off to the southwest.
+07:37:00.533 | You follow Tabethys through the ether to Surrounded by peaks.
+07:37:00.534 | A caravan rumbles into view.
+07:37:00.535 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:37:01.033 | Tabethys begins heaving against the caravan, pushing it off its course to the west.
+07:37:01.034 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:37:01.788 > smudge totem slot 6
+07:37:01.868 | You smudge the kena rune off a totem.
+07:37:01.869 P H: Full, M: Full, E: High, W: Full cekdb-
+07:37:02.394 | Sinit arrives from the northeast.
+07:37:02.397 P H: Full, M: Full, E: High, W: Full cekdb-
+07:37:03.671 | You have recovered balance on all limbs.
+07:37:03.673 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:37:05.553 | The caravan rumbles off to the west.
+07:37:05.554 | You follow Tabethys east to Alpine meadow in the Vashnar Mountains.
+07:37:05.556 | A caravan rumbles into view.
+07:37:05.557 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:37:06.385 | Tabethys begins heaving against the caravan, pushing it off its course to the north.
+07:37:06.388 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:37:10.607 | The caravan rumbles off to the north.
+07:37:10.609 | You follow Tabethys north to Above the treeline in the Vashnar range.
+07:37:10.609 | A caravan rumbles into view.
+07:37:10.611 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:37:11.178 | Tabethys begins heaving against the caravan, pushing it off its course to the northwest.
+07:37:11.180 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:37:11.937 > sketch fehu on totem slot 3
+07:37:12.006 | Syntax: SKETCH <rune> ON <ground/player>
+07:37:12.009 |         SKETCH <rune> ON TOTEM [ON SLOT 1-6]
+07:37:12.011 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:37:15.667 | The caravan rumbles off to the northwest.
+07:37:15.670 | You follow Tabethys northeast to Steep mountain slope covered with chaparral.
+07:37:15.670 | A caravan rumbles into view.
+07:37:15.672 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:37:15.673 | A muscular mountain lion bares his teeth a moment before sinking them into Sinit's torso.
+07:37:15.675 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:37:16.239 | Tabethys begins heaving against the caravan, pushing it off its course to the down.
+07:37:16.242 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:37:18.675 | A muscular mountain lion bares his teeth a moment before sinking them into Sinit's torso.
+07:37:18.679 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:37:18.762 > sketch fehu on totem on slot 3
+07:37:18.883 | You begin sketching a fehu rune on a runic totem.
+07:37:18.886 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:37:20.663 | The caravan rumbles off to the down.
+07:37:20.665 | You try and fail to follow Tyndran Tabethys Aristata, Tyrannical Butcher of Baelgrim.
+07:37:20.666 | Aegoth and Sinit leave, following Tabethys to the down.
+07:37:20.668 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:37:20.759 | With a flourish, you finish sketching a fehu rune.
+07:37:20.762 | You have recovered balance on all limbs.
+07:37:20.763 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:37:21.663 | A muscular mountain lion roars fiercely as he rakes his claws across your chest.
+07:37:21.666 | Health lost: 352 (physical cutting).
+07:37:21.667 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:37:21.850 | A muscular mountain lion roars fiercely as he rakes his claws across your chest.
+07:37:21.854 | Health lost: 268 (physical cutting).
+07:37:21.855 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:37:23.370 > sketch fehu on totem on slot 4
+07:37:23.430 | You begin sketching a fehu rune on a runic totem.
+07:37:23.433 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:37:24.837 | A muscular mountain lion roars fiercely as he rakes his claws across your chest.
+07:37:24.840 | Health lost: 313 (physical cutting).
+07:37:24.842 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:37:25.135 | With a flourish, you finish sketching a fehu rune.
+07:37:25.136 | You have recovered balance on all limbs.
+07:37:25.139 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:37:25.335 | Health lost: 23 (raw).
+07:37:25.337 | You bleed 23 health.
+07:37:25.340 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:37:27.797 | Pacing back and forth to size you up, a muscular mountain lion lunges forward and lands a savage bite on your leg.
+07:37:27.799 | Health lost: 288 (physical cutting).
+07:37:27.800 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:37:28.235 > sketch fehu on totem on slot 6
+07:37:28.294 | You begin sketching a fehu rune on a runic totem.
+07:37:28.297 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:37:30.085 | With a flourish, you finish sketching a fehu rune.
+07:37:30.087 | You have recovered balance on all limbs.
+07:37:30.089 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:37:30.817 | A muscular mountain lion bares his teeth a moment before sinking them into your torso.
+07:37:30.819 | Your paragon completely absorbs the damage.
+07:37:30.821 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:37:31.422 > probe totem
+07:37:31.508 | Expertly formed from carefully carved wood and thick leather, this runic totem stands at almost five feet high, although it is not particularly thick in diameter. Largely unadorned, its smooth surface is interrupted only by the delicate silver inlay that defines spaces for six runes.
+07:37:31.510 | 
+07:37:31.511 | A rune like an open eye is sketched in slot 1.
+07:37:31.512 | A rune resembling a bell is sketched in slot 2.
+07:37:31.512 | A rune like a closed eye is sketched in slot 3.
+07:37:31.514 | A rune like a closed eye is sketched in slot 4.
+07:37:31.514 | A rune like a closed eye is sketched in slot 6.
+07:37:31.515 | It has 125 months of usefulness left.
+07:37:31.515 | It weighs about 30 pounds.
+07:37:31.516 | It bears the distinctive mark of Leviticus.
+07:37:31.516 | You may use this item to parry with.
+07:37:31.517 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:37:33.914 | Pacing back and forth to size you up, a muscular mountain lion lunges forward and lands a savage bite on your leg.
+07:37:33.915 | Health lost: 288 (physical cutting).
+07:37:33.917 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:37:36.921 | A muscular mountain lion bares his teeth a moment before sinking them into your torso.
+07:37:36.923 | Health lost: 281 (physical cutting).
+07:37:36.926 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:37:39.908 | A muscular mountain lion bares his teeth a moment before sinking them into your torso.
+07:37:39.909 | Health lost: 300 (physical cutting).
+07:37:39.911 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:37:41.833 | Health lost: 22 (raw).
+07:37:41.835 | You bleed 22 health.
+07:37:41.837 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:37:43.031 | A muscular mountain lion roars fiercely as he rakes his claws across your chest.
+07:37:43.033 | Health lost: 272 (physical cutting).
+07:37:43.034 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:37:43.980 > smudge totem slot 2
+07:37:44.064 | You smudge the mannaz rune off a totem.
+07:37:44.067 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:37:44.672 > l
+07:37:44.733 | Steep mountain slope covered with chaparral.
+07:37:44.738 | Cerulean waters preside, fathom and depths stirred to roiling currents by the pervasive will of Neraeos Pelagia, Lord of the Sea. Vines have overtaken this location. Only the occasional, fleeting star is visible past the dark clouds blanketing the sky above. This stretch of the mountain is amazingly steep, being not far from vertical with its acute angle. Though many rocks and other free-falling debris are absent due to the simple gravity, small evergreen trees grow here in dense clusters, dwarfed by both the altitude and climate on the mountainside, and growing at the same strange slant. Scraggly bushes are interspersed among the clusters of these little trees, also keeping low to the rocky ground and both adding touches of dark green to the cold grey of stone. The Aalen awaits below, looking like an emerald blanket before fading to a white shore and crashing blue waves. A muscular mountain lion prowls here, searching for prey. A razor-beaked falcon looms overhead, seeking prey.
+07:37:44.741 | You see exits leading southeast and down.
+07:37:44.744 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:37:45.606 > queue addclear free d
+07:37:45.661 | [System]: Queued free commands cleared.
+07:37:45.662 | [System]: Added D to your free queue.
+07:37:45.664 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:37:45.879 | You have recovered balance on all limbs.
+07:37:45.880 | [System]: Running queued free command: D
+07:37:45.882 | Steep mountain slope covered with chaparral.
+07:37:45.884 | Cerulean waters preside, fathom and depths stirred to roiling currents by the pervasive will of Neraeos Pelagia, Lord of the Sea. Vines have overtaken this location. Only the occasional, fleeting star is visible past the dark clouds blanketing the sky above.
+07:37:45.886 | You see exits leading up and down.
+07:37:45.887 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:37:48.308 > walk to Tabethys
+07:37:48.386 | Focusing on the innate bond with your citymate, you set off down toward your goal.
+07:37:48.387 | You look off to the down and dash speedily away.
+07:37:48.389 | Steep mountain slope covered with chaparral.
+07:37:48.389 | Lower Vashnar mountain range.
+07:37:48.391 | At the western foot of the Vashnar Mountains.
+07:37:48.392 | At the western foot of the Vashnar Mountains.
+07:37:48.394 | Cerulean waters preside, fathom and depths stirred to roiling currents by the pervasive will of Neraeos Pelagia, Lord of the Sea. Vines have overtaken this location. Only the occasional, fleeting star is visible past the dark clouds blanketing the sky above.
+07:37:48.395 | You see exits leading southwest, northwest, and up.
+07:37:48.396 | You are 2 rooms distant from your destination. (STOP to abort walking.)
+07:37:48.397 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:37:48.505 | Focusing on the innate bond with your citymate, you set off northwest toward your goal.
+07:37:48.507 | Grassy foothills.
+07:37:48.510 | A noxious, red-hued fog overwhelms the area with a thick, palpable vapour. Vines have overtaken this location. The stars glimmer down, broken only upon occasion by thin wisps of clouds. A sigil in the shape of a small, rectangular monolith is on the ground.
+07:37:48.511 | You see exits leading southeast and west.
+07:37:48.513 | You are breathing lightly.
+07:37:48.514 | You are 1 room distant from your destination. (STOP to abort walking.)
+07:37:48.516 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:37:48.783 | You have recovered your wind and are breathing normally once again.
+07:37:48.785 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:37:49.155 | Focusing on the innate bond with your citymate, you set off west toward your goal.
+07:37:49.156 | A sheltered hollow.
+07:37:49.160 | A noxious, red-hued fog overwhelms the area with a thick, palpable vapour. Vines have overtaken this location. The stars glimmer down, broken only upon occasion by thin wisps of clouds. A large cart rests here, stacked high with assorted containers secured with thick rope. Warden Sinit d'Ivoire is here. The Golden Dragon Aegoth's imposing form looms. Tyndran Tabethys Aristata, Tyrannical Butcher of Baelgrim is here. She wields an exquisite Mhaldorian staff of sterling silver in her left hand and a Shield of Absorption in her right.
+07:37:49.161 | You see exits leading east and northwest.
+07:37:49.162 | You have arrived at your destination!
+07:37:49.163 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:37:50.439 > follow Tabethys
+07:37:50.524 | You begin to follow Tabethys.
+07:37:50.527 P H: Full, M: Full, E: High, W: Full cekdb-
+07:37:50.938 | The caravan rumbles off to the northwest.
+07:37:50.939 | You try and fail to follow Tyndran Tabethys Aristata, Tyrannical Butcher of Baelgrim.
+07:37:50.941 | Aegoth and Sinit leave, following Tabethys to the northwest.
+07:37:50.942 P H: Full, M: Full, E: High, W: Full cekdb-
+07:37:50.943 | You have recovered balance on all limbs.
+07:37:50.944 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:37:52.637 > queue addclear free nw
+07:37:52.716 | [System]: Queued free commands cleared.
+07:37:52.717 | [System]: Added NW to your free queue.
+07:37:52.718 | [System]: Running queued free command: NW
+07:37:52.720 | In the shadow of the mountains.
+07:37:52.721 | A noxious, red-hued fog overwhelms the area with a thick, palpable vapour. Vines have overtaken this location. The stars glimmer down, broken only upon occasion by thin wisps of clouds. A large cart rests here, stacked high with assorted containers secured with thick rope. Warden Sinit d'Ivoire is here. The Golden Dragon Aegoth's imposing form looms. Tyndran Tabethys Aristata, Tyrannical Butcher of Baelgrim is here. She wields an exquisite Mhaldorian staff of sterling silver in her left hand and a Shield of Absorption in her right.
+07:37:52.723 | You see exits leading north, southeast, and southwest.
+07:37:52.724 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:37:52.859 | Sadey futilely gasps one final time for air before dying, slain by Hwatu, of Ashtan in a duel to the death in The Theatrum Mortalis.
+07:37:52.860 | Kill breakdown for Sadey (1): Hwatu.
+07:37:52.864 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:37:53.110 | Tabethys begins heaving against the caravan, pushing it off its course to the north.
+07:37:53.112 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:37:53.727 > follow Tabethys
+07:37:53.777 | You begin to follow Tabethys.
+07:37:53.779 P H: Full, M: Full, E: High, W: Full cekdb-
+07:37:54.164 | You have recovered balance on all limbs.
+07:37:54.166 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:37:57.941 | The caravan rumbles off to the north.
+07:37:57.943 | You follow Tabethys southwest to Southern end of the Antoninan Scar.
+07:37:57.945 | A caravan rumbles into view.
+07:37:57.946 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:37:57.966 > probe totem
+07:37:58.041 | Expertly formed from carefully carved wood and thick leather, this runic totem stands at almost five feet high, although it is not particularly thick in diameter. Largely unadorned, its smooth surface is interrupted only by the delicate silver inlay that defines spaces for six runes.
+07:37:58.044 | 
+07:37:58.045 | A rune like an open eye is sketched in slot 1.
+07:37:58.046 | A rune like a closed eye is sketched in slot 3.
+07:37:58.046 | A rune like a closed eye is sketched in slot 4.
+07:37:58.047 | A rune like a closed eye is sketched in slot 6.
+07:37:58.048 | It has 125 months of usefulness left.
+07:37:58.049 | It weighs about 30 pounds.
+07:37:58.049 | It bears the distinctive mark of Leviticus.
+07:37:58.050 | You may use this item to parry with.
+07:37:58.051 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:37:59.195 | (Party): Tabethys says, "I dare think there will be noone to contest us."
+07:37:59.197 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:37:59.850 | Tabethys begins heaving against the caravan, pushing it off its course to the north.
+07:37:59.853 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:38:04.015 | The caravan rumbles off to the north.
+07:38:04.017 | You follow Tabethys west to Rough, narrow valley through the mountains.
+07:38:04.018 | A caravan rumbles into view.
+07:38:04.020 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:38:04.316 | Tabethys begins heaving against the caravan, pushing it off its course to the north.
+07:38:04.320 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:38:06.762 | Ranara's final scream is swallowed by the earth as the grave devours her whole.
+07:38:06.764 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:38:06.765 | Ranara's final scream is swallowed by the earth as the grave devours her whole.
+07:38:06.766 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:38:09.089 | The caravan rumbles off to the north.
+07:38:09.090 | You follow Tabethys southeast to Rough, narrow valley through the mountains.
+07:38:09.091 | A caravan rumbles into view.
+07:38:09.092 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:38:09.401 | Tabethys begins heaving against the caravan, pushing it off its course to the north.
+07:38:09.403 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:38:14.060 | The caravan rumbles off to the north.
+07:38:14.062 | You follow Tabethys east to Rough, narrow valley through the mountains.
+07:38:14.065 | A caravan rumbles into view.
+07:38:14.069 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:38:14.605 | Tabethys begins heaving against the caravan, pushing it off its course to the north.
+07:38:14.609 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:38:15.128 > sketch wunjo on totem slot 2
+07:38:15.190 | Syntax: SKETCH <rune> ON <ground/player>
+07:38:15.191 |         SKETCH <rune> ON TOTEM [ON SLOT 1-6]
+07:38:15.194 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:38:19.064 | The caravan rumbles off to the north.
+07:38:19.067 | You follow Tabethys southwest to Rough, narrow valley through the mountains.
+07:38:19.069 | A caravan rumbles into view.
+07:38:19.071 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:38:19.534 | Tabethys begins heaving against the caravan, pushing it off its course to the north.
+07:38:19.537 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:38:19.993 > sketch wunjo on totem on slot 2
+07:38:20.048 | You begin sketching a wunjo rune on a runic totem.
+07:38:20.050 P H: Full, M: Full, E: High, W: Full cekdb-
+07:38:21.777 | With a flourish, you finish sketching a wunjo rune.
+07:38:21.780 | You have recovered balance on all limbs.
+07:38:21.781 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:38:24.088 | The caravan rumbles off to the north.
+07:38:24.091 | You follow Tabethys through the ether to Rough, narrow valley through the mountains.
+07:38:24.092 | A caravan rumbles into view.
+07:38:24.093 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:38:25.391 | Tabethys begins heaving against the caravan, pushing it off its course to the north.
+07:38:25.394 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:38:30.086 | The caravan rumbles off to the north.
+07:38:30.089 | You follow Tabethys southwest to Rough, narrow valley through the mountains.
+07:38:30.090 | A caravan rumbles into view.
+07:38:30.091 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:38:30.486 | Tabethys begins heaving against the caravan, pushing it off its course to the north.
+07:38:30.489 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:38:35.099 | The caravan rumbles off to the north.
+07:38:35.102 | You follow Tabethys southeast to Funnel-shaped valley.
+07:38:35.103 | A caravan rumbles into view.
+07:38:35.104 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:38:35.646 > smudge totem slot 3
+07:38:35.741 | You smudge the fehu rune off a totem.
+07:38:35.743 P H: Full, M: Full, E: High, W: Full cekdb-
+07:38:37.563 | You have recovered balance on all limbs.
+07:38:37.564 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:38:37.692 | (Party): Tabethys says, "That memory there- the last thing the Kahtak remembers is me."
+07:38:37.694 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:38:38.425 | Tabethys begins heaving against the caravan, pushing it off its course to the north.
+07:38:38.429 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:38:40.986 | (Party): Tabethys says, "And that is amusing to me."
+07:38:40.990 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:38:43.142 | The caravan rumbles off to the north.
+07:38:43.143 | You follow Tabethys west to Edge of the Antoninan Scar.
+07:38:43.145 | A caravan rumbles into view.
+07:38:43.147 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:38:43.595 | Tabethys begins heaving against the caravan, pushing it off its course to the north.
+07:38:43.597 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:38:44.007 > sketch nairat on totem slot 3
+07:38:44.069 | Syntax: SKETCH <rune> ON <ground/player>
+07:38:44.070 |         SKETCH <rune> ON TOTEM [ON SLOT 1-6]
+07:38:44.072 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:38:48.177 | The caravan rumbles off to the north.
+07:38:48.178 | You follow Tabethys southwest to Foot of the Northern Vashnar Mountains.
+07:38:48.179 | A caravan rumbles into view.
+07:38:48.182 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:38:49.220 > sketch nairat on totem on slot 3
+07:38:49.295 | You begin sketching a nairat rune on a runic totem.
+07:38:49.297 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:38:50.646 | Tabethys begins heaving against the caravan, pushing it off its course to the west.
+07:38:50.650 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:38:50.935 | With a flourish, you finish sketching a nairat rune.
+07:38:50.938 | You have recovered balance on all limbs.
+07:38:50.940 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:38:55.241 | The caravan rumbles off to the west.
+07:38:55.243 | You follow Tabethys west to Foothills of the mountains.
+07:38:55.246 | A caravan rumbles into view.
+07:38:55.248 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:38:56.273 | Tabethys begins heaving against the caravan, pushing it off its course to the west.
+07:38:56.277 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:39:01.320 | The caravan rumbles off to the west.
+07:39:01.321 | You follow Tabethys southwest to Foothills nearing the western sea.
+07:39:01.324 | A caravan rumbles into view.
+07:39:01.326 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:39:01.671 | Tabethys begins heaving against the caravan, pushing it off its course to the west.
+07:39:01.674 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:39:06.269 | The caravan rumbles off to the west.
+07:39:06.272 | You follow Tabethys through the ether to Pathway through barren isthmus.
+07:39:06.273 | A caravan rumbles into view.
+07:39:06.275 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:39:06.825 | Tabethys raises her hands dramatically and summons an icewall to the east.
+07:39:06.828 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:39:12.492 | (Party): Tabethys says, "Finish your totem."
+07:39:12.496 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:39:13.636 | A great weight seems to have been lifted from Sinit.
+07:39:13.639 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:39:13.730 | Sinit takes some salve from a vial and rubs it on her skin.
+07:39:13.734 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:39:15.328 | Pummeled to death by an onslaught of hail, the broken corpse of Euria lies as testament to the dangers of the weather.
+07:39:15.331 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:39:39.768 > pt totem done
+07:39:39.829 | (Party): You say, "Totem done."
+07:39:39.830 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:39:40.721 > l
+07:39:40.800 | Pathway through barren isthmus. (road)
+07:39:40.806 | A noxious, red-hued fog overwhelms the area with a thick, palpable vapour. Many of the stars are disguised behind looming clouds, tracing their slow paths across the sphere of the heavens. A narrow pathway stretches out across a raging sea, nearly disappearing under the violent waters as they threaten to swallow it up. The wet rocks of the isthmus are slippery with seaweed and slimy rust-coloured algae. Giant waves crash against the stone walls of the precarious pass, the boiling brine churning into a grimy foam against the jagged rocks just under the surface. The waves fling salty spray high into the air, where vicious gusts of wind turn the droplets into stinging needles. An occupied iron gibbet, suspended from a wooden gallows, creaks ominously in the breeze. A large cart rests here, stacked high with assorted containers secured with thick rope. A razor-beaked falcon looms overhead, seeking prey. An icewall is here, blocking passage to the east. Warden Sinit d'Ivoire is here. The Golden Dragon Aegoth's imposing form looms. Tyndran Tabethys Aristata, Tyrannical Butcher of Baelgrim is here. She wields an exquisite Mhaldorian staff of sterling silver in her left hand and a Shield of Absorption in her right.
+07:39:40.809 | You see exits leading east and west.
+07:39:40.811 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:39:42.152 | Tabethys begins heaving against the caravan, pushing it off its course to the west.
+07:39:42.155 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:39:46.447 | The caravan rumbles off to the west.
+07:39:46.448 | You follow Tabethys through the ether to Pathway through barren isthmus.
+07:39:46.450 | A caravan rumbles into view.
+07:39:46.452 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:39:46.948 | Tabethys begins heaving against the caravan, pushing it off its course to the northwest.
+07:39:46.952 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:39:46.966 > probe totem
+07:39:47.079 | Expertly formed from carefully carved wood and thick leather, this runic totem stands at almost five feet high, although it is not particularly thick in diameter. Largely unadorned, its smooth surface is interrupted only by the delicate silver inlay that defines spaces for six runes.
+07:39:47.081 | 
+07:39:47.082 | A rune like an open eye is sketched in slot 1.
+07:39:47.085 | A rune like an open eye is sketched in slot 2.
+07:39:47.086 | A rune shaped like a butterfly is sketched in slot 3.
+07:39:47.087 | A rune like a closed eye is sketched in slot 4.
+07:39:47.088 | A rune like a closed eye is sketched in slot 6.
+07:39:47.090 | It has 125 months of usefulness left.
+07:39:47.091 | It weighs about 30 pounds.
+07:39:47.092 | It bears the distinctive mark of Leviticus.
+07:39:47.093 | You may use this item to parry with.
+07:39:47.095 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:39:51.501 | The caravan rumbles off to the northwest.
+07:39:51.503 | You follow Tabethys north to Pathway through barren isthmus.
+07:39:51.504 | A caravan rumbles into view.
+07:39:51.506 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:39:55.948 | Tabethys begins heaving against the caravan, pushing it off its course to the west.
+07:39:55.952 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:40:00.496 | The caravan rumbles off to the west.
+07:40:00.497 | You follow Tabethys south to Pathway through barren isthmus.
+07:40:00.499 | A caravan rumbles into view.
+07:40:00.501 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:40:02.103 | Belaziel has become fertiliser for a shade of nature's cloak of many flowers.
+07:40:02.107 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:40:10.781 > sketch fehu on totem on slot 5
+07:40:10.849 | You begin sketching a fehu rune on a runic totem.
+07:40:10.852 P H: Full, M: Full, E: Full, W: Full cekdb-
+07:40:12.558 | With a flourish, you finish sketching a fehu rune.
+07:40:12.561 | You have recovered balance on all limbs.
+07:40:12.562 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:40:15.362 > l
+07:40:15.432 | Pathway through barren isthmus. (road)
+07:40:15.436 | A noxious, red-hued fog overwhelms the area with a thick, palpable vapour. Many of the stars are disguised behind looming clouds, tracing their slow paths across the sphere of the heavens. The isthmus dips precariously close to the tumultuous sea here, and giant waves engulf the path at regular intervals. The stones of the narrow neck of land are rounded off and scoured smooth by the constant assault of crashing water, making safe passage by foot challenging under the best of conditions. The waves occasionally toss crustaceans and debris onto the rocks, only to sweep the area clear again moments later, washing everything back out to the briny deep. A salty mist limits visibility to a few feet, and nothing can be heard over the roar of the sea. An occupied iron gibbet, suspended from a wooden gallows, creaks ominously in the breeze. A decaying corpse has been impaled here upon a fifteen foot stake. A large cart rests here, stacked high with assorted containers secured with thick rope. A razor-beaked falcon looms overhead, seeking prey. Warden Sinit d'Ivoire is here. The Golden Dragon Aegoth's imposing form looms. Tyndran Tabethys Aristata, Tyrannical Butcher of Baelgrim is here. She wields an exquisite Mhaldorian staff of sterling silver in her left hand and a Shield of Absorption in her right.
+07:40:15.440 | You see exits leading east and southwest.
+07:40:15.442 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:40:18.078 > wield totem
+07:40:18.139 | You cease to wield a Hellforge Hammer.
+07:40:18.141 | You start to wield a runic totem in your hands.
+07:40:18.143 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:40:20.819 > enemies
+07:40:20.877 | You have the following enemies:
+07:40:20.878 | Ada
+07:40:20.879 | Akri
+07:40:20.880 | Armali
+07:40:20.881 | Belaziel
+07:40:20.881 | Chikoo
+07:40:20.882 | Chris
+07:40:20.882 | Fendo
+07:40:20.883 | Ficus
+07:40:20.883 | Ildiko
+07:40:20.884 | Jakiro
+07:40:20.884 | Kushy
+07:40:20.885 | Kutcher
+07:40:20.885 | Minkai
+07:40:20.885 | Murray
+07:40:20.886 | Penwize
+07:40:20.886 | Sadey
+07:40:20.886 > queue addclear free north
+07:40:20.886 | Tabethys
+07:40:20.887 | You have currently used 17 enemy slots of your 25 maximum.
+07:40:20.888 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:40:20.970 | [System]: Queued free commands cleared.
+07:40:20.972 | [System]: Added NORTH to your free queue.
+07:40:20.974 | [System]: Running queued free command: NORTH
+07:40:20.975 | There is no exit in that direction.
+07:40:20.976 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:40:24.044 > unenemy Tabethys
+07:40:24.113 | You declare that Tabethys will no longer be one of your enemies.
+07:40:24.116 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:40:26.050 | Tabethys begins heaving against the caravan, pushing it off its course to the southwest.
+07:40:26.054 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:40:29.427 | (Holocaust Inc): Aegoth says, "What memory?"
+07:40:29.430 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:40:30.718 | You are dismayed as the corpse of a black-tongued lizard turns to dust in your hands.
+07:40:30.720 | You are dismayed as the corpse of an ochre-necked oryx turns to dust in your hands.
+07:40:30.722 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:40:30.817 | The caravan rumbles off to the southwest.
+07:40:30.820 | You follow Tabethys through the ether to Pathway through barren isthmus.
+07:40:30.823 | A caravan rumbles into view.
+07:40:30.826 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:40:31.433 > falcon recall
+07:40:31.479 > drop falcon
+07:40:31.479 > order falcon follow me
+07:40:31.480 | You put your fingers to your lips and utter a shrill whistle.
+07:40:31.482 | Your falcon alights on your wrist.
+07:40:31.485 P H: Full, M: Full, E: High, W: Full cxkdb-
+07:40:31.542 | You must regain equilibrium first.
+07:40:31.545 | drop falcon was added to your equilibrium queue.
+07:40:31.547 P H: Full, M: Full, E: High, W: Full cxkdb-
+07:40:31.624 | You must regain equilibrium first.
+07:40:31.626 | order falcon follow me was added to your equilibrium queue.
+07:40:31.629 P H: Full, M: Full, E: High, W: Full cxkdb-
+07:40:31.882 | A shade of might has destroyed Belaziel in a deadly display of brute force.
+07:40:31.885 P H: Full, M: Full, E: High, W: Full cxkdb-
+07:40:34.429 > l
+07:40:34.522 | Pathway through barren isthmus. (road)
+07:40:34.528 | A noxious, red-hued fog overwhelms the area with a thick, palpable vapour. Many of the stars are disguised behind looming clouds, tracing their slow paths across the sphere of the heavens. Weeds in hues of emerald, teal, and blood-red adorn the glistening rocks of this otherwise dreary landscape. Snails cling to the vegetation, scattered among the wet leaves like spilled jewels, their ivory and gold shells shimmering in the light. Hollow spaces in the stone form large, shining pools filled with small blue crabs, spiky purple sea urchins, and even a few tiny starfish. Periodically, a loud crash disrupts the peaceful scene as a vast wave washes violently over the strip of land, forcing the crabs to scramble for shelter to avoid being swept away. Moments later the water recedes, and the creatures resume their activity. A decaying corpse has been impaled here upon a fifteen foot stake. An occupied iron gibbet, suspended from a wooden gallows, creaks ominously in the breeze. A large cart rests here, stacked high with assorted containers secured with thick rope. Warden Sinit d'Ivoire is here. The Golden Dragon Aegoth's imposing form looms. Tyndran Tabethys Aristata, Tyrannical Butcher of Baelgrim is here. She wields an exquisite Mhaldorian staff of sterling silver in her left hand and a Shield of Absorption in her right.
+07:40:34.530 | You see exits leading northeast and northwest.
+07:40:34.532 P H: Full, M: Full, E: Full, W: Full cxkdb-
+07:40:34.534 | You have recovered equilibrium.
+07:40:34.536 | [System]: Running queued equilibrium command: DROP FALCON
+07:40:34.537 | You drop a razor-beaked falcon.
+07:40:34.537 | [System]: Running queued equilibrium command: ORDER FALCON FOLLOW ME
+07:40:34.539 | Your order is obeyed.
+07:40:34.539 | A razor-beaked falcon obediently falls into line behind you.
+07:40:34.540 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:40:35.651 | (Holocaust Inc): Tabethys says, "The one on the Scar."
+07:40:35.654 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:40:38.140 | Tabethys begins heaving against the caravan, pushing it off its course to the northwest.
+07:40:38.143 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:40:42.846 | The caravan rumbles off to the northwest.
+07:40:42.847 | You follow Tabethys northeast to Pathway through barren isthmus.
+07:40:42.850 | A caravan rumbles into view.
+07:40:42.852 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:40:44.171 | (Holocaust Inc): Tabethys says, "The last line is about me grabbing him with the net."
+07:40:44.173 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:40:44.909 | Tabethys begins heaving against the caravan, pushing it off its course to the west.
+07:40:44.913 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:40:49.053 | (Holocaust Inc): Tabethys laughingly says, "Well, grabbing fae, I guess."
+07:40:49.056 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:40:49.904 | The caravan rumbles off to the west.
+07:40:49.906 | You follow Tabethys through the ether to Bridge over the Gruu'n chasm.
+07:40:49.907 | A caravan rumbles into view.
+07:40:49.909 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:40:50.741 | Tabethys begins heaving against the caravan, pushing it off its course to the west.
+07:40:50.745 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:40:54.939 | The caravan rumbles off to the west.
+07:40:54.941 | You follow Tabethys west to Upon the shattered rocks.
+07:40:54.942 | A caravan rumbles into view.
+07:40:54.944 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:40:56.244 | Tabethys begins heaving against the caravan, pushing it off its course to the northwest.
+07:40:56.246 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:40:56.922 | You are dismayed as the corpse of a black-tongued lizard turns to dust in your hands.
+07:40:56.924 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:40:59.200 | (Holocaust Inc): Aegoth says, "Ohh, where do you see the menory."
+07:40:59.204 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:41:01.027 | The caravan rumbles off to the northwest.
+07:41:01.028 | You follow Tabethys down to Rocky shoreline.
+07:41:01.031 | A caravan rumbles into view.
+07:41:01.033 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:41:03.340 | (Holocaust Inc): Tabethys says, "On the Scar!"
+07:41:03.344 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:41:04.443 | Tabethys begins heaving against the caravan, pushing it off its course to the northwest.
+07:41:04.446 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:41:09.068 | The caravan rumbles off to the northwest.
+07:41:09.070 | You follow Tabethys southwest to Northern rocky shoreline.
+07:41:09.071 | A caravan rumbles into view.
+07:41:09.074 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:41:09.574 | Tabethys begins heaving against the caravan, pushing it off its course to the west.
+07:41:09.577 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:41:12.412 | (Holocaust Inc): Aegoth says, "Really?"
+07:41:12.415 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:41:14.920 | Deepest Stygian night steals over the land as the symbolic hourglass empties and turns, ready to begin a new day.
+07:41:14.924 | It is now the 24th of Sarapin, 1018 years after the fall of the Seleucarian Empire.
+07:41:14.927 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:41:14.935 | The caravan rumbles off to the west.
+07:41:14.938 | You follow Tabethys west to Northern rocky shoreline.
+07:41:14.941 | A caravan rumbles into view.
+07:41:14.945 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:41:16.301 | (Holocaust Inc): Tabethys says, "I will take you after this."
+07:41:16.305 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:41:16.777 | Tabethys begins heaving against the caravan, pushing it off its course to the southwest.
+07:41:16.780 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:41:21.844 | The caravan rumbles off to the southwest.
+07:41:21.847 | You follow Tabethys north to Rocky scrubland.
+07:41:21.849 | A caravan rumbles into view.
+07:41:21.851 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:41:22.306 | Tabethys begins heaving against the caravan, pushing it off its course to the southwest.
+07:41:22.309 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:41:22.847 | A carnivorous lycopod swipes a long corded vine at Tabethys, knocking her down easily.
+07:41:22.849 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:41:23.248 | Wailing in despair and torment, a hideous abomination limps to the southwest.
+07:41:23.253 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:41:25.883 | A carnivorous lycopod lashes out at Tabethys with a long corded vine, battering her bodily.
+07:41:25.886 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:41:26.299 -tar prone
+07:41:26.299 -tar paralysis
+07:41:26.299 -tar brokenleftleg
+07:41:26.299 -tar damagedleftleg
+07:41:26.299 -tar brokenrightleg
+07:41:26.299 -tar damagedrightleg
+07:41:26.299 -tar prone
+07:41:26.300 -tar paralysis
+07:41:26.302 | Tabethys stands up.
+07:41:26.305 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:41:29.082 | A carnivorous lycopod flicks razor sharp leaves suddenly at Tabethys, cutting her deeply.
+07:41:29.086 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:41:32.287 | A carnivorous lycopod lashes out at Tabethys with a long corded vine, battering her bodily.
+07:41:32.289 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:41:35.351 | A carnivorous lycopod swipes a long corded vine at Tabethys, knocking her down easily.
+07:41:35.353 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:41:35.438 | (Holocaust Inc): Tabethys says, "It's nice to have that ABSOLUTE FUCKING NIGHTMARE memorialized in such a cool way though."
+07:41:35.441 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:41:35.527 -tar prone
+07:41:35.527 -tar paralysis
+07:41:35.527 -tar brokenleftleg
+07:41:35.527 -tar damagedleftleg
+07:41:35.527 -tar brokenrightleg
+07:41:35.527 -tar damagedrightleg
+07:41:35.527 -tar prone
+07:41:35.528 -tar paralysis
+07:41:35.529 | Tabethys stands up.
+07:41:35.531 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:41:38.364 | A carnivorous lycopod swipes a long corded vine at Tabethys, knocking her down easily.
+07:41:38.367 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:41:38.460 -tar prone
+07:41:38.460 -tar paralysis
+07:41:38.460 -tar brokenleftleg
+07:41:38.460 -tar damagedleftleg
+07:41:38.460 -tar brokenrightleg
+07:41:38.460 -tar damagedrightleg
+07:41:38.460 -tar prone
+07:41:38.460 -tar paralysis
+07:41:38.461 | Tabethys stands up.
+07:41:38.464 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:41:39.476 | (Holocaust Inc): Tabethys says, "That fuckin net was so buggy lmfao."
+07:41:39.478 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:41:41.363 | A carnivorous lycopod swipes a long corded vine at Tabethys, knocking her down easily.
+07:41:41.366 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:41:41.554 -tar prone
+07:41:41.554 -tar paralysis
+07:41:41.554 -tar brokenleftleg
+07:41:41.554 -tar damagedleftleg
+07:41:41.554 -tar brokenrightleg
+07:41:41.554 -tar damagedrightleg
+07:41:41.554 -tar prone
+07:41:41.554 -tar paralysis
+07:41:41.557 | Tabethys stands up.
+07:41:41.559 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:41:41.760 | Tabethys points an exquisite Mhaldorian staff of sterling silver at a carnivorous lycopod, and he screams in pain as his skin begins to freeze and crack.
+07:41:41.762 | [Rage]: +0.2. Total: 0.2
+07:41:41.764 P H: Full, M: Full, E: Full, W: Full, 0R cexkdb-
+07:41:41.931 | A great weight seems to have been lifted from Sinit.
+07:41:41.935 P H: Full, M: Full, E: Full, W: Full, 0R cexkdb-
+07:41:42.173 | Sinit takes some salve from a vial and rubs it on her skin.
+07:41:42.176 P H: Full, M: Full, E: Full, W: Full, 0R cexkdb-
+07:41:43.261 | Tabethys points an exquisite Mhaldorian staff of sterling silver at a carnivorous lycopod, and he screams in pain as his skin begins to freeze and crack.
+07:41:43.263 | [Rage]: +0.2. Total: 0.4
+07:41:43.266 P H: Full, M: Full, E: Full, W: Full, 0R cexkdb-
+07:41:44.423 | A carnivorous lycopod reaches out with a long corded vine and quickly entangles Tabethys.
+07:41:44.426 P H: Full, M: Full, E: Full, W: Full, 0R cexkdb-
+07:41:46.380 | Tabethys has writhed free of her entanglement by webs.
+07:41:46.382 P H: Full, M: Full, E: Full, W: Full, 0R cexkdb-
+07:41:46.470 | Tabethys points an exquisite Mhaldorian staff of sterling silver at a carnivorous lycopod, and he screams in pain as his skin begins to freeze and crack.
+07:41:46.473 | Tabethys has scored an ANNIHILATINGLY POWERFUL CRITICAL hit!
+07:41:46.476 | Horror overcomes a carnivorous lycopod's face as his body freezes solidly and collapses into a hundred brittle pieces.
+07:41:46.478 | A carnivorous lycopod has been slain by Tabethys.
+07:41:46.481 | You have gained 21 experience.
+07:41:46.483 | [Rage]: +0.2. Total: 0.6
+07:41:46.485 P H: Full, M: Full, E: Full, W: Full, 0R cexkdb-
+07:41:47.994 | Tabethys puts some gold sovereigns in a wyrmskin pack.
+07:41:47.996 P H: Full, M: Full, E: Full, W: Full, 0R cexkdb-
+07:41:50.597 | Tabethys begins heaving against the caravan, pushing it off its course to the southwest.
+07:41:50.600 P H: Full, M: Full, E: Full, W: Full, 0R cexkdb-
+07:41:52.077 | A hideous abomination wails in torment as it limps in from the southwest.
+07:41:52.080 P H: Full, M: Full, E: Full, W: Full, 0R cexkdb-
+07:41:54.210 | A hideous abomination wails in torment as it limps in from the southwest.
+07:41:54.214 P H: Full, M: Full, E: Full, W: Full, 0R cexkdb-
+07:41:55.094 | The caravan rumbles off to the southwest.
+07:41:55.096 | You follow Tabethys east to Rocky scrubland.
+07:41:55.097 | A caravan rumbles into view.
+07:41:55.099 P H: Full, M: Full, E: High, W: Full, 0R cexkdb-
+07:41:55.485 | Tabethys begins heaving against the caravan, pushing it off its course to the west.
+07:41:55.488 P H: Full, M: Full, E: High, W: Full, 0R cexkdb-
+07:41:58.443 | A hideous abomination wails in torment as it limps in from the northeast.
+07:41:58.447 P H: Full, M: Full, E: Full, W: Full, 0R cexkdb-
+07:42:00.119 | The caravan rumbles off to the west.
+07:42:00.120 | You follow Tabethys through the ether to Wasteland.
+07:42:00.122 | A caravan rumbles into view.
+07:42:00.125 P H: Full, M: Full, E: High, W: Full, 0R cexkdb-
+07:42:00.511 | Tabethys begins heaving against the caravan, pushing it off its course to the northwest.
+07:42:00.515 P H: Full, M: Full, E: High, W: Full, 0R cexkdb-
+07:42:01.116 | Your rage fades away.
+07:42:01.120 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:42:01.632 | A hideous abomination wails in torment as it limps in from the east.
+07:42:01.634 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:42:05.133 | The caravan rumbles off to the northwest.
+07:42:05.134 | You follow Tabethys north to Wasteland.
+07:42:05.136 | A caravan rumbles into view.
+07:42:05.137 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:42:05.482 | Tabethys begins heaving against the caravan, pushing it off its course to the west.
+07:42:05.487 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:42:10.213 | The caravan rumbles off to the west.
+07:42:10.216 | You follow Tabethys through the ether to Wasteland.
+07:42:10.218 | A caravan rumbles into view.
+07:42:10.220 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:42:13.283 | Tabethys begins heaving against the caravan, pushing it off its course to the northwest.
+07:42:13.287 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:42:18.281 | The caravan rumbles off to the northwest.
+07:42:18.284 | You follow Tabethys north to Rock-strewn wasteland.
+07:42:18.286 | A caravan rumbles into view.
+07:42:18.289 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:42:19.135 | Tabethys begins heaving against the caravan, pushing it off its course to the north.
+07:42:19.138 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:42:19.990 | Sinit's aura of weapons rebounding disappears.
+07:42:19.993 | Sinit unleashes a vicious slash towards a wild lycopod before resheathing her blade, Baleful Destiny.
+07:42:19.996 | [Rage]: +0.2. Total: 0.2
+07:42:19.999 P H: Full, M: Full, E: High, W: Full, 0R cexkdb-
+07:42:20.087 | A wild lycopod swipes a long corded vine at Tabethys, knocking her down easily.
+07:42:20.090 P H: Full, M: Full, E: High, W: Full, 0R cexkdb-
+07:42:20.093 | A great gurgling sound is heard as Sinit takes a long drag from an enamel bubble pipe. A series of shining bubbles erupt from the bowl of her pipe.
+07:42:20.097 P H: Full, M: Full, E: High, W: Full, 0R cexkdb-
+07:42:21.009 | A wild lycopod swipes a long corded vine at Sinit, knocking her down easily.
+07:42:21.011 P H: Full, M: Full, E: High, W: Full, 0R cexkdb-
+07:42:21.835 | Sinit stands up.
+07:42:21.838 P H: Full, M: Full, E: Full, W: Full, 0R cexkdb-
+07:42:22.069 | Sinit unleashes a vicious slash towards a wild lycopod before resheathing her blade, Baleful Destiny.
+07:42:22.071 | [Rage]: +0.2. Total: 0.5
+07:42:22.073 P H: Full, M: Full, E: Full, W: Full, 0R cexkdb-
+07:42:23.015 | A wild lycopod swipes a long corded vine at Tabethys, knocking her down easily.
+07:42:23.019 P H: Full, M: Full, E: Full, W: Full, 0R cexkdb-
+07:42:23.108 | The bubbles spewn from an enamel bubble pipe burst. *POP*  *POP*   *POP*
+07:42:23.116 P H: Full, M: Full, E: Full, W: Full, 0R cexkdb-
+07:42:23.119 -tar prone
+07:42:23.119 -tar paralysis
+07:42:23.119 -tar brokenleftleg
+07:42:23.119 -tar damagedleftleg
+07:42:23.119 -tar brokenrightleg
+07:42:23.119 -tar damagedrightleg
+07:42:23.119 -tar prone
+07:42:23.120 -tar paralysis
+07:42:23.123 | Tabethys stands up.
+07:42:23.130 P H: Full, M: Full, E: Full, W: Full, 0R cexkdb-
+07:42:23.136 | Tabethys points an exquisite Mhaldorian staff of sterling silver at a wild lycopod, and he screams in pain as his skin begins to freeze and crack.
+07:42:23.143 | [Rage]: +0.2. Total: 0.7
+07:42:23.150 P H: Full, M: Full, E: Full, W: Full, 0R cexkdb-
+07:42:24.080 | A wild lycopod flicks razor sharp leaves suddenly at Sinit, cutting her deeply.
+07:42:24.083 P H: Full, M: Full, E: Full, W: Full, 0R cexkdb-
+07:42:24.379 | Sinit unleashes a vicious slash towards a wild lycopod before resheathing her blade, Baleful Destiny.
+07:42:24.383 | Sinit has scored a CRITICAL hit!
+07:42:24.386 | [Rage]: +0.2. Total: 1.0
+07:42:24.390 P H: Full, M: Full, E: Full, W: Full, 1R cexkdb-
+07:42:24.727 | Tabethys points an exquisite Mhaldorian staff of sterling silver at a wild lycopod, and he screams in pain as his skin begins to freeze and crack.
+07:42:24.730 | [Rage]: +0.2. Total: 1.2
+07:42:24.733 P H: Full, M: Full, E: Full, W: Full, 1R cexkdb-
+07:42:26.138 | A wild lycopod flicks razor sharp leaves suddenly at Tabethys, cutting her deeply.
+07:42:26.142 P H: Full, M: Full, E: Full, W: Full, 1R cexkdb-
+07:42:26.398 | Sinit unleashes a vicious slash towards a wild lycopod before resheathing her blade, Baleful Destiny.
+07:42:26.400 | [Rage]: +0.3. Total: 1.5
+07:42:26.401 P H: Full, M: Full, E: Full, W: Full, 1R cexkdb-
+07:42:27.125 | A wild lycopod flicks razor sharp leaves suddenly at Sinit, cutting her deeply.
+07:42:27.130 P H: Full, M: Full, E: Full, W: Full, 1R cexkdb-
+07:42:28.423 | Sinit unleashes a vicious slash towards a wild lycopod before resheathing her blade, Baleful Destiny.
+07:42:28.426 | Sinit has scored a CRITICAL hit!
+07:42:28.427 | [Rage]: +0.2. Total: 1.8
+07:42:28.431 P H: Full, M: Full, E: Full, W: Full, 1R cexkdb-
+07:42:28.550 | You suddenly perceive the vague outline of an aura of rebounding around Sinit.
+07:42:28.554 P H: Full, M: Full, E: Full, W: Full, 1R cexkdb-
+07:42:29.119 | A wild lycopod swipes a long corded vine at Tabethys, knocking her down easily.
+07:42:29.123 P H: Full, M: Full, E: Full, W: Full, 1R cexkdb-
+07:42:29.204 -tar prone
+07:42:29.204 -tar paralysis
+07:42:29.204 -tar brokenleftleg
+07:42:29.204 -tar damagedleftleg
+07:42:29.204 -tar brokenrightleg
+07:42:29.204 -tar damagedrightleg
+07:42:29.204 -tar prone
+07:42:29.205 -tar paralysis
+07:42:29.206 | Tabethys stands up.
+07:42:29.209 P H: Full, M: Full, E: Full, W: Full, 1R cexkdb-
+07:42:30.145 | A wild lycopod swipes a long corded vine at Sinit, knocking her down easily.
+07:42:30.147 P H: Full, M: Full, E: Full, W: Full, 1R cexkdb-
+07:42:30.381 | Sinit stands up.
+07:42:30.384 P H: Full, M: Full, E: Full, W: Full, 1R cexkdb-
+07:42:30.629 | Sinit's aura of weapons rebounding disappears.
+07:42:30.631 | Sinit unleashes a vicious slash towards a wild lycopod before resheathing her blade, Baleful Destiny.
+07:42:30.634 | [Rage]: +0.2. Total: 2.0
+07:42:30.636 P H: Full, M: Full, E: Full, W: Full, 2R cexkdb-
+07:42:30.744 | Sinit takes a long drag off an enamel bubble pipe.
+07:42:30.748 P H: Full, M: Full, E: Full, W: Full, 2R cexkdb-
+07:42:32.144 | A wild lycopod swipes a long corded vine at Tabethys, knocking her down easily.
+07:42:32.147 P H: Full, M: Full, E: Full, W: Full, 2R cexkdb-
+07:42:32.376 -tar prone
+07:42:32.376 -tar paralysis
+07:42:32.376 -tar brokenleftleg
+07:42:32.376 -tar damagedleftleg
+07:42:32.376 -tar brokenrightleg
+07:42:32.376 -tar damagedrightleg
+07:42:32.376 -tar prone
+07:42:32.376 -tar paralysis
+07:42:32.377 | Tabethys stands up.
+07:42:32.381 P H: Full, M: Full, E: Full, W: Full, 2R cexkdb-
+07:42:32.602 | Sinit unleashes a vicious slash towards a wild lycopod before resheathing her blade, Baleful Destiny.
+07:42:32.604 | Sinit has scored a CRITICAL hit!
+07:42:32.606 | A wild lycopod has been slain by Sinit.
+07:42:32.607 | You have gained 11 experience.
+07:42:32.609 | [Rage]: +0.2. Total: 2.3
+07:42:32.612 P H: Full, M: Full, E: Full, W: Full, 2R cexkdb-
+07:42:33.867 | Tabethys points an exquisite Mhaldorian staff of sterling silver at a wild lycopod, and he screams in pain as his skin begins to freeze and crack.
+07:42:33.870 | [Rage]: +0.2. Total: 2.6
+07:42:33.872 P H: Full, M: Full, E: Full, W: Full, 2R cexkdb-
+07:42:34.638 | Sinit unleashes a vicious slash towards a wild lycopod before resheathing her blade, Baleful Destiny.
+07:42:34.640 | [Rage]: +0.2. Total: 2.8
+07:42:34.642 P H: Full, M: Full, E: Full, W: Full, 2R cexkdb-
+07:42:35.309 | A wild lycopod flicks razor sharp leaves suddenly at Tabethys, cutting her deeply.
+07:42:35.312 P H: Full, M: Full, E: Full, W: Full, 2R cexkdb-
+07:42:35.407 | Tabethys points an exquisite Mhaldorian staff of sterling silver at a wild lycopod, and he screams in pain as his skin begins to freeze and crack.
+07:42:35.409 | Tabethys has scored a CRUSHING CRITICAL hit!
+07:42:35.411 | [Rage]: +0.2. Total: 3.0
+07:42:35.413 P H: Full, M: Full, E: Full, W: Full, 3R cexkdb-
+07:42:35.582 | (Holocaust Inc): Aegoth says, "That whole event was both amazing and fucking infuriating."
+07:42:35.585 P H: Full, M: Full, E: Full, W: Full, 3R cexkdb-
+07:42:36.881 | Sinit unleashes a vicious slash towards a wild lycopod before resheathing her blade, Baleful Destiny.
+07:42:36.884 | [Rage]: +0.2. Total: 3.3
+07:42:36.888 P H: Full, M: Full, E: Full, W: Full, 3R cexkdb-
+07:42:36.988 | Tabethys points an exquisite Mhaldorian staff of sterling silver at a wild lycopod, and he screams in pain as his skin begins to freeze and crack.
+07:42:36.992 | [Rage]: +0.2. Total: 3.5
+07:42:36.995 P H: Full, M: Full, E: Full, W: Full, 3R cexkdb-
+07:42:38.370 | A wild lycopod reaches out with a long corded vine and quickly entangles Tabethys.
+07:42:38.373 P H: Full, M: Full, E: Full, W: Full, 3R cexkdb-
+07:42:38.513 | A hideous abomination wails in torment as it limps in from the north.
+07:42:38.517 P H: Full, M: Full, E: Full, W: Full, 3R cexkdb-
+07:42:38.855 | Sinit unleashes a vicious slash towards a wild lycopod before resheathing her blade, Baleful Destiny.
+07:42:38.857 | A wild lycopod has been slain by Sinit.
+07:42:38.859 | You have gained 12 experience.
+07:42:38.860 | [Rage]: +0.2. Total: 3.8
+07:42:38.862 P H: Full, M: Full, E: Full, W: Full, 3R cexkdb-
+07:42:39.250 | You suddenly perceive the vague outline of an aura of rebounding around Sinit.
+07:42:39.252 P H: Full, M: Full, E: Full, W: Full, 3R cexkdb-
+07:42:40.379 | Tabethys has writhed free of her entanglement by webs.
+07:42:40.381 P H: Full, M: Full, E: Full, W: Full, 3R cexkdb-
+07:42:42.498 | Tabethys begins heaving against the caravan, pushing it off its course to the north.
+07:42:42.502 P H: Full, M: Full, E: Full, W: Full, 3R cexkdb-
+07:42:47.552 | The caravan rumbles off to the north.
+07:42:47.555 | You follow Tabethys northwest to An impact crater surrounded by meteor fragments.
+07:42:47.557 | A caravan rumbles into view.
+07:42:47.559 P H: Full, M: Full, E: High, W: Full, 3R cexkdb-
+07:42:47.962 | Tabethys begins heaving against the caravan, pushing it off its course to the northwest.
+07:42:47.965 P H: Full, M: Full, E: High, W: Full, 3R cexkdb-
+07:42:52.586 | The caravan rumbles off to the northwest.
+07:42:52.588 | You follow Tabethys east to Rocky fields.
+07:42:52.589 | A caravan rumbles into view.
+07:42:52.590 P H: Full, M: Full, E: High, W: Full, 3R cexkdb-
+07:42:52.986 | Tabethys begins heaving against the caravan, pushing it off its course to the northeast.
+07:42:52.988 P H: Full, M: Full, E: High, W: Full, 3R cexkdb-
+07:42:53.562 | Your rage fades away.
+07:42:53.565 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:42:57.352 | Tabethys begins heaving against the caravan, pushing it off its course to the northeast.
+07:42:57.355 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:43:01.608 | The caravan rumbles off to the northeast.
+07:43:01.610 | You follow Tabethys through the ether to Before two towering mountains.
+07:43:01.612 | A caravan rumbles into view.
+07:43:01.614 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:43:04.619 | (Party): Tabethys says, "Good job, everyone. Hard-fought victory."
+07:43:04.622 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:43:05.200 | Tabethys begins heaving against the caravan, pushing it off its course to the north.
+07:43:05.204 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:43:09.400 > l
+07:43:09.494 | Before two towering mountains. (road)
+07:43:09.504 | A noxious, red-hued fog overwhelms the area with a thick, palpable vapour. Many of the stars are disguised behind looming clouds, tracing their slow paths across the sphere of the heavens. Two towering mountains, their twisted peaks a dark penumbra against the miasmic sky, dominate this bleak terrain. Amidst boulders and crevasses filled with mist, a treacherous pathway winds between their twisted forms. The silhouette of Baelgrim Fortress looms upon the tallest precipice, its spires crowning the mountain isle like a diadem of ominous thorns. An occupied iron gibbet, suspended from a wooden gallows, creaks ominously in the breeze. A runic totem is planted solidly in the ground. A decaying corpse has been impaled here upon a fifteen foot stake. A gilded pike with the decapitated head of Morduck has been erected here. A large cart rests here, stacked high with assorted containers secured with thick rope. A razor-beaked falcon looms overhead, seeking prey. Warden Sinit d'Ivoire is here. The Golden Dragon Aegoth's imposing form looms. Tyndran Tabethys Aristata, Tyrannical Butcher of Baelgrim is here. She wields an exquisite Mhaldorian staff of sterling silver in her left hand and a Shield of Absorption in her right.
+07:43:09.509 | You see exits leading north, southwest, and up.
+07:43:09.512 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:43:09.615 | The caravan rumbles off to the north.
+07:43:09.618 | You follow Tabethys through the ether to The gates of Mhaldor.
+07:43:09.620 | A caravan rumbles into view.
+07:43:09.623 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:43:10.028 | Tabethys begins heaving against the caravan, pushing it off its course to the up.
+07:43:10.031 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:43:13.441 | (Party): Sinit says, "Took the last of me, it did."
+07:43:13.444 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:43:14.700 | The caravan rumbles off to the up.
+07:43:14.703 | You follow Tabethys east to Mhaldor Road.
+07:43:14.705 | A caravan rumbles into view.
+07:43:14.706 | Workers begin dismantling the caravan, carrying armfuls of various commodities quickly away.
+07:43:14.708 | (Army): Tabethys has escorted a caravan to us, delivering 104 silverore, 11 goldore, 66 rawbone, and 67 obsidian.
+07:43:14.710 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:43:15.795 | Sinit snickers softly to herself.
+07:43:15.798 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:43:17.080 | Tabethys nods her head in agreement.
+07:43:17.083 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:43:19.689 > l
+07:43:19.746 | (Party): Tabethys says, "104 silver."
+07:43:19.748 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:43:19.852 | Mhaldor Road.
+07:43:19.858 | A noxious, red-hued fog overwhelms the area with a thick, palpable vapour. Many of the stars are disguised behind looming clouds, tracing their slow paths across the sphere of the heavens. Twisting sharply as it ascends the mountainside, the desolate road moves along the edge of a steep ravine carved into the rocky terrain. Vicious stalagmites surge up from both sides of the path, upon which errant slaves are impaled. The wicked barbs of the rocks glisten menacingly with the blood of slaves which drips steadily to the ground below, gathering in a shallow puddle by the roadside. Iron poles are thrust into the side of the mountain, from which Mhaldor's heraldic pennons proudly fly. A runic totem is planted solidly in the ground. There are 2 baleful apostates here. A ladder of long, soft leaves comprises a wispy Weaver's Fern along the ground. There are 3 flail-wielding knights here. A wooden vat rests on a five-legged platform in the centre of the floor. There are 3 logosmas stockings here. A sigil in the shape of a small, rectangular monolith is on the ground. A noble hippogriff flaps its wings in agitation here. A razor-beaked falcon looms overhead, seeking prey. A bustling marketplace fills the area, its merchants haggling with villagers over goods bound for the city. Warden Sinit d'Ivoire is here. The Golden Dragon Aegoth's imposing form looms. Tyndran Tabethys Aristata, Tyrannical Butcher of Baelgrim is here. She wields an exquisite Mhaldorian staff of sterling silver in her left hand and a Shield of Absorption in her right.
+07:43:19.861 | You see exits leading up and down.
+07:43:19.862 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:43:21.388 | (Party): Tabethys says, "Hot."
+07:43:21.390 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:43:22.597 > queue addclear free u
+07:43:22.770 | [System]: Queued free commands cleared.
+07:43:22.772 | [System]: Added U to your free queue.
+07:43:22.773 | [System]: Running queued free command: U
+07:43:22.775 | Stygian Crossroads.
+07:43:22.779 | A noxious, red-hued fog overwhelms the area with a thick, palpable vapour. Many of the stars are disguised behind looming clouds, tracing their slow paths across the sphere of the heavens. Some graffiti has been scrawled here. It reads, "Through Brutality are the feeble destroyed." A runic totem is planted solidly in the ground. A small mhun miner has been nailed upon a ridged, blood stained cross and left to perish. The cadaverous figure here atop the Idol of Corruption seethes with hatred. A large school of piranha swims here inside a deep, murky pool. A sewer grate looms darkly beneath your feet. There are 2 baleful apostates here. There are 2 logosmas stockings here. A ladder of long, soft leaves comprises a wispy Weaver's Fern along the ground. There are 2 flail-wielding knights here. A look of disgust plastered across his face, Mhaldorus intently surveys his surroundings. A great snowdrift blankets the area in a mantle of wintry white. A sigil in the shape of a small, rectangular monolith is on the ground. Lying flat on the ground is a key-shaped sigil. An obsidian eye sigil is here. A razor-beaked falcon looms overhead, seeking prey. The corpse of Vrixon is here, impaled by a narrow bone. A note on it reads, 'This is the end of those who would trifle with Ysindrolir.'
+07:43:22.781 |  An elegant bloodstone bench is here. You may ENTER SUBDIVISION from here.
+07:43:22.782 | You see exits leading northeast, east (closed door), west (closed door), northwest, up, and down.
+07:43:22.784 P H: Full, M: Full, E: High, W: Full cexkdb-
+07:43:30.215 | (Army): Tabethys says, "Worthwhile."
+07:43:30.218 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:43:38.603 > wield hammer
+07:43:38.689 > curing on
+07:43:38.689 > curing on
+07:43:38.690 | You cease to wield a runic totem.
+07:43:38.694 | You start to wield a Hellforge Hammer in your hands.
+07:43:38.696 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:43:38.763 | Curing activated.
+07:43:38.768 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:43:38.849 | Curing activated.
+07:43:38.852 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:43:40.264 | Sinit arrives from the down.
+07:43:40.266 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:43:41.587 | Sinit opens the door to the west.
+07:43:41.589 | Sinit leaves to the west.
+07:43:41.590 | The door to the west slams shut.
+07:43:41.591 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:43:46.417 | The door leading west is opened from the other side.
+07:43:46.418 | Sinit arrives from the west.
+07:43:46.418 | The door to the west slams shut.
+07:43:46.421 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:43:46.644 | Sinit opens the door to the east.
+07:43:46.646 | Sinit leaves to the east.
+07:43:46.647 | The door to the east slams shut.
+07:43:46.649 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:43:48.143 | Grumbling quietly, an emaciated slave trudges past with his chains clanking behind him.
+07:43:48.145 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:44:00.251 > ii
+07:44:00.361 | --------------------------------------------------------------------------------
+07:44:00.363 | You are holding:
+07:44:00.365 | Wielded:
+07:44:00.365 |    Left hand:  warhammer109410     a Hellforge Hammer
+07:44:00.366 | Talismans:
+07:44:00.368 |    lodestone25402      a dwarven lodestone
+07:44:00.370 |    carving46715        an obsidian hound carving
+07:44:00.370 |    lodestone127959     a dwarven lodestone
+07:44:00.372 |    figurine134080      a figurine of the suffering Maya
+07:44:00.373 |    mirror270451        a mirror of fae perception
+07:44:00.374 |    lodestone324148     a dwarven lodestone
+07:44:00.375 |    cloth332853         a tattered swatch of ashen cloth
+07:44:00.375 |    tear344471          a tear of Ethian
+07:44:00.375 |    blade398949         the culling blade
+07:44:00.377 |    sachet432176        a sachet of soothing herbs
+07:44:00.377 |    panpipes521134      crystalline panpipes
+07:44:00.379 |    bottle527390        a bottled siren's song
+07:44:00.379 |    lodestone532443     a dwarven lodestone
+07:44:00.380 |    hourglass569116     an unusual hourglass
+07:44:00.380 |    hourglass592690     an unusual hourglass
+07:44:00.381 |    hourglass592875     an unusual hourglass
+07:44:00.382 |    hourglass593470     an unusual hourglass
+07:44:00.382 |    skein599728         a skein of sanity
+07:44:00.383 |    hammer633670        a dwarven finishing hammer
+07:44:00.383 |    figurine639122      a battle figurine resembling Antoninus
+07:44:00.384 |    lookingglass640850  the Grandmaster's looking glass
+07:44:00.384 |    barb651114          a comet-etched barb
+07:44:00.385 |    declaration652807   a declaration of hostility
+07:44:00.385 |    glass664774         a bronze-handled magnifying glass
+07:44:00.386 | Readables:
+07:44:00.386 |    notebook616281      a sorcerer's notebook
+07:44:00.386 | Sigils:
+07:44:00.387 |    sigil409800         a fist-shaped sigil
+07:44:00.388 |    sigil509075         a fist-shaped sigil
+07:44:00.388 |    sigil509378         a fist-shaped sigil
+07:44:00.390 |    sigil509554         a fist-shaped sigil
+07:44:00.390 |    sigil509642         a fist-shaped sigil
+07:44:00.391 |    sigil509702         a fist-shaped sigil
+07:44:00.392 |    incandescent581973  an incandescent sigil
+07:44:00.392 | Curing aids:
+07:44:00.393 |    vial23374           an obfuscated crystal vial
+07:44:00.393 |    vial32234           a stygian vial
+07:44:00.394 |    vial105928          an obfuscated crystal vial
+07:44:00.396 |    vial123360          a stygian vial
+07:44:00.398 |    vial133315          an obfuscated crystal vial
+07:44:00.398 |    vial140335          a stygian vial
+07:44:00.398 |    pipe149939          an ornately carved ivory pipe
+07:44:00.399 |    vial158007          a stone vial
+07:44:00.400 |    vial164128          a stone vial
+07:44:00.400 |    vial175600          an obfuscated crystal vial
+07:44:00.401 |    vial177437          a stone vial
+07:44:00.401 |    vial179643          an obfuscated crystal vial
+07:44:00.402 |    vial199097          an elegant diamond vial
+07:44:00.402 |    pipe201492          a long, elegant ebony pipe
+07:44:00.403 |    pipe205372          a scavenged beak pipe
+07:44:00.403 |    vial222721          an obfuscated crystal vial
+07:44:00.404 |    vial236073          an obfuscated crystal vial
+07:44:00.404 |    vial242924          a stygian vial
+07:44:00.405 |    vial272702          an elegant diamond vial
+07:44:00.405 |    vial281993          an obfuscated crystal vial
+07:44:00.405 | [Type MORE if you wish to continue reading. (5% shown)]
+07:44:00.406 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:44:14.275 > def
+07:44:14.364 | You have the following defences:
+07:44:14.366 | Your vision is heightened to see in the dark.
+07:44:14.367 | Mentally bolstered by the power of the megalith.
+07:44:14.367 | You are enchanted against magic damage.
+07:44:14.368 | You are walking on a small cushion of air.
+07:44:14.368 | You are resisting magical damage.
+07:44:14.370 | You are tempered against fire damage.
+07:44:14.370 | You are blind.
+07:44:14.371 | Your body is weathering the storm of life a little better.
+07:44:14.371 | You are enchanted against cold damage.
+07:44:14.373 | You are enchanted against electric damage.
+07:44:14.373 | You are feeling extremely energetic.
+07:44:14.374 | You are coated in an insulating unguent.
+07:44:14.374 | You possess the sight of the third eye.
+07:44:14.374 | You are enchanted against fire damage.
+07:44:14.375 | Your resistance to damage by poison has been increased.
+07:44:14.375 | You have insomnia, and cannot easily go to sleep.
+07:44:14.375 | You are extremely heavy and difficult to move.
+07:44:14.377 | Your sense of time is heightened, and your reactions are speeded.
+07:44:14.377 | You are deaf.
+07:44:14.377 | Your senses are magically heightened.
+07:44:14.378 | Your wounds are being staunched by the moss tattoo.
+07:44:14.379 | You are protected from the fangs of serpents.
+07:44:14.379 | Illuminated by the light of the moon.
+07:44:14.380 | You are surrounded by a cloak of protection.
+07:44:14.380 | Your hands are gripping your wielded items tightly.
+07:44:14.380 | Your mind has been attuned to the realm of Death.
+07:44:14.381 | You have enhanced your vision to be able to see traces of lifeforce.
+07:44:14.381 | Your actions are cloaked in secrecy.
+07:44:14.381 | The vitality of the boar is energising you.
+07:44:14.382 | You will attempt to parry attacks to your right leg.
+07:44:14.383 | You are benefitting from a 27% bonus to experience gain.
+07:44:14.383 | You are benefitting from a 13% bonus to critical hits.
+07:44:14.383 | You have a critical hit bonus lasting 4 hours and 20 minutes.
+07:44:14.385 | You have a critical hit penalty lasting 1 hour and 20 minutes.
+07:44:14.385 > show str
+07:44:14.385 > show dex
+07:44:14.385 > show int
+07:44:14.385 > show con
+07:44:14.385 | You are protected by 32 defences.
+07:44:14.386 | Currently, we have invested our glorious wealth to obtain the following boons:
+07:44:14.386 | Draconic fury
+07:44:14.387 | Draconic intellect
+07:44:14.388 >  
+07:44:14.389 P H: Full, M: Full, E: Full, W: Full cxkdb-
+07:44:14.445 | Your strength is 16.
+07:44:14.447 P H: Full, M: Full, E: Full, W: Full cxkdb-
+07:44:14.538 | Your dexterity is 14.
+07:44:14.541 P H: Full, M: Full, E: Full, W: Full cxkdb-
+07:44:14.543 | Your intelligence is 15.
+07:44:14.544 P H: Full, M: Full, E: Full, W: Full cxkdb-
+07:44:14.545 | Your constitution is 20.
+07:44:14.546 P H: Full, M: Full, E: Full, W: Full cxkdb-
+07:44:14.549 P H: Full, M: Full, E: Full, W: Full cxkdb-
+07:44:14.953 | You have recovered equilibrium.
+07:44:14.955 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:44:15.345 >  
+07:44:15.444 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:44:16.018 >  
+07:44:16.145 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:44:16.165 >  
+07:44:16.224 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:44:16.668 > l
+07:44:16.733 | Stygian Crossroads.
+07:44:16.741 | A noxious, red-hued fog overwhelms the area with a thick, palpable vapour. Many of the stars are disguised behind looming clouds, tracing their slow paths across the sphere of the heavens. Mhaldor's major thoroughfares converge here to form a public square of freshly laid cobblestones. A great obsidian monolith dominates the centre of the crossroads, upon which the seven truths of Evil are inscribed in a spidery script. Open roadways extend to the northwest and northeast, travelling deeper into the mountain city. Continuing higher up is Mhaldor Road, no end to its climb in sight. Far below lie the imposing gates to the city, and to the east and west walkways are outlined by irregular patterns in the ground. Some graffiti has been scrawled here. It reads, "Through Brutality are the feeble destroyed." A runic totem is planted solidly in the ground. A small mhun miner has been nailed upon a ridged, blood stained cross and left to perish. The cadaverous figure here atop the Idol of Corruption seethes with hatred. A large school of piranha swims here inside a deep, murky pool. A sewer grate looms darkly beneath your feet. There are 2 baleful apostates here. There are 2 logosmas stockings here. A ladder of long, soft leaves comprises a wispy Weaver's Fern along the ground. There are 2 flail-wielding knights here. A look of disgust plastered across his face, Mhaldorus intently surveys his surroundings. A great snowdrift blankets the area in a mantle of wintry white. A sigil in the shape of a small, rectangular monolith is on the ground. Lying flat on the ground is a key-shaped sigil. An obsidian eye sigil is here. There are 2 razor-beaked falcons here. The corpse of Vrixon is here, impaled by a narrow bone. A note on it reads, 'This is the end of those who would trifle with Ysindrolir.'
+07:44:16.744 |  An elegant bloodstone bench is here. You may ENTER SUBDIVISION from here.
+07:44:16.747 | You see exits leading northeast, east (closed door), west (closed door), northwest, up, and down.
+07:44:16.749 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:44:25.478 > ab weaponmastery
+07:44:25.554 | Abilities in Weaponmastery:
+07:44:25.557 | -------------------------------------------------------------------------------
+07:44:25.558 | General Abilities:
+07:44:25.559 | Swordplay            Increased mastery of the shortsword.
+07:44:25.560 | Specialise           Gain proficiency in one of the schools of weaponry.
+07:44:25.561 | Envenom              Coat a weapon in venoms.
+07:44:25.563 | Arc                  Swing your blade in a controlled arc.
+07:44:25.563 | 
+07:44:25.564 | Two-handed Specialisation: 
+07:44:25.565 | Continuation         Shrug off afflictions like the trivialities they are.
+07:44:25.565 | Slaughter            Dispense with your opposition.
+07:44:25.566 | Overhand             Split their skulls with a mighty blow.
+07:44:25.567 | Carve                Carve through your victim's defences.
+07:44:25.568 | Splinter             Splinter the defences protecting your opponent.
+07:44:25.568 | Perceive             Perceive the state of your opponent.
+07:44:25.569 | Underhand            Deliver a devastating rising stroke.
+07:44:25.570 | Upset                Bring them down in a tangle of limbs.
+07:44:25.570 | Hew                  Deliver precision strikes against your opponent's limbs.
+07:44:25.571 | Pulverise            Pulp your opponent's limbs with crushing blows.
+07:44:25.572 | Distract             Distract them with a deafening shout.
+07:44:25.572 | Focus                Alter your technique.
+07:44:25.573 | Discipline           Your technique is flawless.
+07:44:25.573 | Retaliate            Strike back in defence.
+07:44:25.574 | Deflect              Redirect incoming projectiles.
+07:44:25.575 | Cleave               Rend your opponent's body in two.
+07:44:25.577 | Skullcrush           Crush their skulls.
+07:44:25.579 | Recover              A true warrior will die on his feet.
+07:44:25.579 | Devastate            Destroy their limbs utterly.
+07:44:25.580 | Brain                Put him out of his misery.
+07:44:25.580 | Overwhelm            Dispatch them with a single catastrophic blow.
+07:44:25.581 | Impale               Sink your blade into an opponent.
+07:44:25.582 | Disembowel           Tear the entrails from a target.
+07:44:25.582 | -------------------------------------------------------------------------------
+07:44:25.583 | To gain further information on an ability, AB <ability>.
+07:44:25.583 | 
+07:44:25.585 P H: Full, M: Full, E: Full, W: Full cexkdb-
+07:44:27.201 | Cold death pierces through Style's defences, summoned by the pummelling winds of a huge, ferocious manticore's wings.
+07:44:27.204 P H: Full, M: Full, E: Full, W: Full cexkdb-
+# stopped: nothing naming Tabethys for 60 s | 1216 rows | 524.2 s

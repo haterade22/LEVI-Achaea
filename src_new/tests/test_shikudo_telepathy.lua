@@ -591,6 +591,42 @@ local function readingRunLines(form, kata, affs)
   return line
 end
 
+-- `ran` above prints the whole chain, which is what the older docs expected. On the raw path Mudlet
+-- splits the `;`, so the game queues only the first command, and that is all the row shows:
+-- 0 of 650 `Running queued` rows hold `;` (kb/mechanics/balance-and-queueing.md). These pin that row.
+describe("the raw path's real run line: the chain's first command only (011)", function()
+  local function rawFight()
+    fight("Rain", 9, {})
+    combatQueue = function() return "g body;g gold;stand;" end
+  end
+
+  it("the pattern reads G BODY, and that row commits a MIND round that starts with g body", function()
+    expect(TL.matches(shikudo.TELE_RAN_PATTERN, 1, "[System]: Running queued free command: G BODY")).toBeTrue()
+    rawFight()
+    local line = press()[1]
+    expect(line:find("^queue addclear free g body;") ~= nil).toBeTrue()
+    expect(shikudo.onTeleQueueRan("G BODY")).toBeTrue()
+    expect(ataxiaTemp.shikTele.pending).toBeNil()
+    expect(ataxiaTemp.shikTele.runLine).toBeTrue()
+    expect(burst()).toBe(1)
+  end)
+
+  -- A KNOWN FAULT, pinned and not fixed here. This row holds no "combo", so a combo that ran does not
+  -- end the burst. Once runLine is set, comboQueued does not end it either, so at the cap Rain's burst
+  -- stays over. The alias path reads the whole chain, so it does not have this fault.
+  it("a combo round's G BODY row does not end the burst", function()
+    rawFight()
+    press()
+    expect(shikudo.onTeleQueueRan("G BODY")).toBeTrue()
+    ataxiaTemp.shikTele.burst = shikudo.tele.burstMax
+    local combo = press()[1]
+    expect(combo:find("combo Agathon", 1, true) ~= nil).toBeTrue()
+    expect(shikudo.onTeleQueueRan("G BODY")).toBeFalse()
+    expect(burst()).toBe(shikudo.tele.burstMax)
+    expect(press()[1]).toBe(combo)
+  end)
+end)
+
 describe("vv's burst moves when the game RUNS a round, not when vv is pressed (011)", function()
   it("pressing again before a MIND round runs queues the same round and counts nothing", function()
     local line = readingRunLines("Rain", 9, {})

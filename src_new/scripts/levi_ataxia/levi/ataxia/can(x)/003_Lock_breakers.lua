@@ -46,7 +46,8 @@ end
 -- hardest to use. Fire instead when the lock is ONE component away.
 --
 -- Deliberately NOT on a bare asthma: the active cure has a ~10s cooldown (measured twice in
--- that log -- 9.8s and 8.7s) and asthma alone is not a lock. A SECOND component is the trigger.
+-- that log: 9.81 s, rows 1130-1306, and 9.06 s, rows 2105-2328) and asthma alone is not a lock.
+-- A SECOND component is the trigger.
 --------------------------------------------------------------------------------
 
 local PRE_LOCK_PARTNERS = {"slickness", "bloodfire", "anorexia", "impatience", "sandfever"}
@@ -69,6 +70,46 @@ function ataxia_activeCureBlocker()
 	return nil
 end
 
+local LOCK_BREAKERS = {
+	Alchemist = "educe salt",
+	Blademaster = "fitness",
+	Depthswalker = "chrono accelerate boost",
+	Druid = "fitness",
+	Infernal = "fitness",
+	Jester = "fling fool at me",
+	Magi = "cast bloodboil",
+	Monk = "fitness",
+	Occultist = "fling fool at me",
+	Paladin = "fitness",
+	Psion = "psi expunge",
+	Runewarden = "fitness",
+	Sentinel = "fitness",
+	Serpent = "shrugging",
+	Shaman = "invoke purification",
+	Unnamable = "fitness",
+}
+
+--------------------------------------------------------------------------------
+-- FITNESS WAITS FOR EQUILIBRIUM (2026-11-01).
+--
+-- User: "fitness needs balance and eq", "It shouldnt fitness without EQ". The wiki lists balance
+-- only. Live probe (kb/raw/live/probes_2026-11-01.txt): `touch shield;fitness` ran FITNESS 3.3 s
+-- later, when equilibrium returned. So a send with equilibrium down does not fail; the game's
+-- auto-queue holds it. That is the danger: a held FITNESS still fires after the asthma has gone,
+-- and "You are already quite fit." costs 2.8 s of balance.
+--
+-- Unknown is not down: only an explicit false holds it, because a lock-breaker fails open. Only
+-- FITNESS is held. No probe has tested the other classes' cures.
+--
+-- Callers test this BEFORE they arm attemptedLockBreak. Otherwise the 1.5 s throttle could delay
+-- the cure after equilibrium returns. The prompt heartbeat retries it on the recovery prompt.
+--------------------------------------------------------------------------------
+function ataxia_fitnessHeldForEq()
+	local v = ataxia.vitals
+	if not v or v.eq ~= false then return false end
+	return LOCK_BREAKERS[ataxiaTemp.class] == "fitness"
+end
+
 -- Debounced: the per-prompt heartbeat would otherwise spam this every 0.5s.
 function ataxia_lockBreakBlockedEcho()
 	local now = (getEpoch and getEpoch()) or os.time()
@@ -79,6 +120,8 @@ function ataxia_lockBreakBlockedEcho()
 		cecho("\n<red>[LOCK]<reset> Active cure BLOCKED by <yellow>" .. blocker .. "<reset> -- cure it or run.")
 	elseif ataxiaTemp.activeCureUsed then
 		cecho("\n<red>[LOCK]<reset> Active cure on COOLDOWN.")
+	elseif ataxia_fitnessHeldForEq() then
+		cecho("\n<yellow>[LOCK]<reset> FITNESS waits for <yellow>equilibrium<reset>.")
 	else
 		cecho("\n<red>[LOCK]<reset> Active cure unavailable (no lock-breaker for this class).")
 	end
@@ -101,6 +144,7 @@ function ataxia_tryActiveCure()
 	if ataxiaTemp.activeCureUsed then return end
 	if attemptedLockBreak then return end
 	if not ataxia_canActive() then return end
+	if ataxia_fitnessHeldForEq() then return end
 	attemptedLockBreak = tempTimer(1.5, [[ attemptedLockBreak = nil ]])
 	ataxia_breakLock()
 end
@@ -120,16 +164,23 @@ function ataxia_lockBreak()
 		return
 	end
 
+	if ataxia_fitnessHeldForEq() then
+		ataxia_lockBreakBlockedEcho()
+		return
+	end
+
 	attemptedLockBreak = tempTimer(1.5, [[ attemptedLockBreak = nil ]])
 	ataxia_breakLock()
 end
 
 -- Per-prompt heartbeat (v4.7.275). ataxia_lockBreak previously ran ONLY as a side effect of an
--- affliction changing (004_Aff_gains_losses) or of an attack dispatch. In the Grulk log the
--- prompt was byte-identical for four seconds while we sat locked -- no gains, no losses, no
--- dispatch -- so nothing called it. The cure only went out at 09:59:40 because two unrelated
--- afflictions happened to land and re-trigger the hook. Hold someone locked without applying
--- anything new and the old wiring never fires at all.
+-- affliction changing (004_Aff_gains_losses) or of an attack dispatch. Hold someone locked without
+-- applying anything new and that wiring never fires at all.
+--
+-- The Grulk log does not show this gap. FITNESS fired at 09:59:40.576 because equilibrium returned
+-- then: the shield spent it at 09:59:37 (rows 2040-2041), and it came back at row 2097, just before
+-- the fire at row 2105. FITNESS needs equilibrium (kb/raw/live/probes_2026-11-01.txt). The
+-- heartbeat is still the retry that sends a held FITNESS on the prompt where equilibrium returns.
 --
 -- Cheap by construction: the needs-checks are a handful of table lookups and `attemptedLockBreak`
 -- already throttles the send to one per 1.5s.
@@ -207,24 +258,6 @@ end
 -- been sent, when in fact it fired twice and the server's replies were the only evidence. The
 -- explicit [LOCK] echo added in v4.7.275 exists so a log can answer that question directly.
 function ataxia_breakLock()
-	local lockBreaker = {
-		Alchemist = "educe salt",
-		Blademaster = "fitness",
-		Depthswalker = "chrono accelerate boost",
-		Druid = "fitness",
-		Infernal = "fitness",
-		Jester = "fling fool at me",
-		Magi = "cast bloodboil",
-		Monk = "fitness",
-		Occultist = "fling fool at me",
-		Paladin = "fitness",
-    Psion = "psi expunge",
-		Runewarden = "fitness",
-		Sentinel = "fitness",
-		Serpent = "shrugging",
-		Shaman = "invoke purification",
-    Unnamable = "fitness",
-	}
 	local class = ataxiaTemp.class
 	if type(class) ~= "string" then return end
 
@@ -238,7 +271,7 @@ function ataxia_breakLock()
 	elseif string.find(class, "Earth") then
 		cmd = "terran eruption"
 	else
-		cmd = lockBreaker[class]
+		cmd = LOCK_BREAKERS[class]
 	end
 
 	-- v4.7.275: was `send(lockBreaker[ataxiaTemp.class], false)` unguarded -- an unmapped class

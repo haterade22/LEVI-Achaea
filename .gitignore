@@ -20,3 +20,7 @@ old_structure_backup/
 
 # Generated Dementia Mapper muddler project (built from dmap_src/ by dmap_build.sh)
 dmap_project/
+
+# Mudlet HTML log exports, about 38 MB. tools/kb_log_import.py converts them, and the .txt files are
+# the evidence. The originals stay on disk.
+kb/raw/logs/*.html

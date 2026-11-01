@@ -31,12 +31,26 @@ def find_logs(profiles):
 
 
 QUEUE = re.compile(r"^queue (?:add\S*|insert|prepend) \S+ (.*)$", re.I)
+# The round aliases: the names in ataxia_ROUND_TYPES (ataxia/003), so a test alias still counts as sent.
+ROUND_ALIAS = r"lv(?:eq|bal|eqbal|class|free|freestand|full)"
+SETALIAS = re.compile(r"^setalias " + ROUND_ALIAS + r" (.*)$", re.I)
+QUEUED_ALIAS = re.compile(r"^" + ROUND_ALIAS + r"$", re.I)
 
 
 def commands(text):
     """The first word of each command in what we sent, seen through a server queue entry:
-    "queue addclearfull freestand stand;combo agathon sweep" -> stand, combo."""
-    m = QUEUE.match(text.strip())
+    "queue addclearfull freestand stand;combo agathon sweep" -> stand, combo.
+
+    In an `aconfig rounds alias` fight, "setalias lvfree stand/combo agathon sweep" -> stand, combo,
+    and the queue line that names the alias counts nothing. So the alias rows count REWRITES, and the
+    raw rows count presses: compare the two kinds of fight with that in mind."""
+    text = text.strip()
+    m = SETALIAS.match(text)
+    if m:
+        return [part.split()[0].lower() for part in m.group(1).split("/") if part.split()]
+    m = QUEUE.match(text)
+    if m and QUEUED_ALIAS.match(m.group(1).strip()):
+        return []
     payload = m.group(1) if m else text
     return [part.split()[0].lower() for part in payload.split(";") if part.split()]
 

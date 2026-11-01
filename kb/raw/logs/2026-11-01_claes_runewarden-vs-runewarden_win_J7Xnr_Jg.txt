@@ -1,0 +1,438 @@
+You say in a steady, measured voice, "You are prepared?"
+H:5460|100% M:4966|100%  14:25:53:362  [ Sjeng ][0|0|0|0|0|0]
+Sjeng says something unintelligible.
+H:5460|100% M:4966|100%  14:26:15:145  [ Sjeng ][0|0|0|0|0|0]
+You say in a steady, measured voice, "Eleusian."
+H:5460|100% M:4966|100%  14:26:19:370  [ Sjeng ][0|0|0|0|0|0]
+Sjeng says, "As prepared as I will be, and I look forward to the lesson."
+H:5460|100% M:4966|100%  14:26:25:096  [ Sjeng ][0|0|0|0|0|0]
+You nod your head affirmatively.
+H:5460|100% M:4966|100%  14:26:32:096  [ Sjeng ][0|0|0|0|0|0]
+You say in a steady, measured voice, "Go when ready."
+H:5460|100% M:4966|100%  14:26:33:433  [ Sjeng ][0|0|0|0|0|0]
+Sjeng gives you a respectful salute.
+H:5460|100% M:4966|100%  14:26:38:078  [ Sjeng ][0|0|0|0|0|0]
+
+-----------------------------------------------------------------------------------------------
+       Target set to: Sjeng (Level 100 Runewarden)       
+-----------------------------------------------------------------------------------------------
+ Reset Success!
+
+Your target is now: Sjeng (an adventurer)
+H:5460|100% M:4966|100%  14:26:40:957  [ Sjeng ][0|0|0|0|0|0]
+Sjeng is not currently an ally.
+H:5460|100% M:4966|100%  14:26:41:045  [ Sjeng ][0|0|0|0|0|0]
+Sjeng is already an enemy.
+H:5460|100% M:4966|100%  14:26:41:048  [ Sjeng ][0|0|0|0|0|0]
+Sjeng's aura of weapons rebounding disappears.
+Sjeng whips a gleaming scimitar through the air in front of you, to no effect.
+Lightning-quick, Sjeng jabs you with a gleaming scimitar.
+Health lost: 349 (physical cutting).
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:5111|93% M:4966|100%  14:26:41:726  [ Sjeng ][0|0|0|0|0|0] ( -349h 6% )[PAR] 
+Sjeng moves in to engage you.
+H:5111|93% M:4966|100%  14:26:41:804  [ Sjeng ][0|0|0|0|0|0][PAR] 
+Sjeng takes a long drag off his pipe.
+[Curing]: OUTR BLOODROOT
+[OUTR]: 1 Bloodroot (918)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5111|93% M:4966|100%  14:26:41:901  [ Sjeng ][0|0|0|0|0|0]
+[OUTR]: 1 Bloodroot (917)
+
+Auto on
+H:5111|93% M:4966|100%  14:26:43:293  [ Sjeng ][0|0|0|0|0|0]
+You use a jewel-encrusted silver tinderbox to make fire.
+You light a firefly jar pipe.
+Envenomed: (Xentio)
+Sliced:    (Sjeng)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Engage:    (Sjeng)
+Equilibrium used: 2.00s..
+Afflicted: (Clumsiness Paralysis)
+[clum, para]
+You may eat another plant or mineral. Eat (1.409)
+H:5111|93% M:4916|98%  14:26:43:309  [ Sjeng ][0|0|0|0|0|0]
+Sjeng eats a bloodroot leaf.
+Processed Cures(paralysis)
+[clum]
+
+H:5111|93% M:4916|98%  14:26:43:430  [ Sjeng ][0|0|0|0|0|0]
+A fierce mountain falcon rips out a chunk of Sjeng's flesh with its beak.
+H:5111|93% M:4916|98%  14:26:43:811  [ Sjeng ][0|0|0|0|0|0]
+Sjeng swings a gleaming scimitar at you with all his might.
+Your shield completely absorbs the damage.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Sjeng swings a gleaming scimitar at you with all his might.
+Health lost: 349 (physical cutting).
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+H:4762|87% M:4866|97%  14:26:44:297  [ Sjeng ][0|0|0|0|0|0] ( -349h 6% )[clum PAR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5460|100% M:4866|97%  14:26:44:380  [ Sjeng ][0|0|0|0|0|0] ( +698h 12% )[clum] 
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+[OUTR]: 1 Bloodroot (916)
+Sjeng eats a piece of kelp.
+Processed Cures(clumsiness)
+H:5460|100% M:4941|99%  14:26:45:031  [ Sjeng ][0|0|0|0|0|0]
+You have recovered equilibrium.
+You have recovered balance on all limbs.
+Envenomed: (Vernalius)
+Sliced:    (Sjeng)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (73%/100%).
+Afflicted: (Weariness Paralysis)
+[weari, para]
+Sjeng takes a drink from an oaken vial.
+H:5460|100% M:4841|97%  14:26:45:229  [ Sjeng ][0|0|0|0|0|0]
+You may eat another plant or mineral. Eat (1.461)
+H:5460|100% M:4841|97%  14:26:45:836  [ Sjeng ][0|0|0|0|0|0]
+Health lost: 12 (raw).
+You bleed 12 health.
+H:5448|99% M:4841|97%  14:26:46:743  [ Sjeng ][0|0|0|0|0|0]
+Sjeng eats a bloodroot leaf.
+Processed Cures(paralysis)
+[weari]
+
+H:5448|99% M:4841|97%  14:26:46:849  [ Sjeng ][0|0|0|0|0|0]
+A fierce mountain falcon dives at Sjeng, raking his face with its talons.
+Its talons shred the magic resistance defence of Sjeng.
+H:5448|99% M:4841|97%  14:26:46:852  [ Sjeng ][0|0|0|0|0|0]
+A swirling stream of heliotrope light emanates from a plain steel ring, surrounding Sjeng with
+a shimmering aura.
+H:5448|99% M:4841|97%  14:26:46:976  [ Sjeng ][0|0|0|0|0|0]
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Sjeng)
+Empower:   (Sleizak)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (80%/100%).
+Afflicted: (Clumsiness Paralysis)
+[clum, weari, para]
+Sjeng eats a bloodroot leaf.
+Processed Cures(paralysis)
+[clum, weari]
+
+H:5448|99% M:4641|93%  14:26:48:380  [ Sjeng ][0|0|0|0|0|0] ( -200m 4% )
+You may drink another health or mana elixir. Health (4.315)
+H:5448|99% M:4641|93%  14:26:48:694  [ Sjeng ][0|0|0|0|0|0]
+
+[DEF]: Fangbarrier
+Sjeng swings a gleaming scimitar at you with all his might.
+Your shield completely absorbs the damage.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Sjeng slashes into you with a gleaming scimitar!
+Health lost: 273 (physical cutting).
+[AFF]: Slickness
+The protective covering coating your skin sloughs off.
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+
+H:5175|94% M:4591|92%  14:26:49:017  [ Sjeng ][0|0|0|0|0|0] ( -273h 5% )[PAR SLCK] 
+You have recovered balance on all limbs.
+H:5175|94% M:4591|92%  14:26:49:092  [ Sjeng ][0|0|0|0|0|0][PAR SLCK] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your glands cease their oily secretion.
+[AFF]: Slickness
+[Curing]: OUTR SILERIS
+[OUTR]: 1 Sileris (865)
+[Curing]: APPLY SILERIS
+You apply a sileris berry to yourself.
+H:5175|94% M:4591|92%  14:26:49:224  [ Sjeng ][0|0|0|0|0|0]
+Envenomed: (Kalmia)
+Sliced:    (Sjeng)
+Proc:      (Sleizak 1)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (74%/100%).
+Afflicted: (Asthma Paralysis)
+[ast, clum, weari, naus, para]
+[OUTR]: 1 Bloodroot (915)
+Sjeng takes a drink from an oaken vial.
+H:5284|96% M:4491|90%  14:26:49:811  [ Sjeng ][0|0|0|0|0|0]
+Sjeng eats a bloodroot leaf.
+Processed Cures(paralysis)
+[ast, clum, weari, naus]
+
+H:5284|96% M:4491|90%  14:26:50:199  [ Sjeng ][0|0|0|0|0|0]
+You suddenly perceive the vague outline of an aura of rebounding around Sjeng.
+H:5284|96% M:4491|90%  14:26:50:378  [ Sjeng ][0|0|0|0|0|0]
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.522)
+H:5284|96% M:4491|90%  14:26:50:744  [ Sjeng ][0|0|0|0|0|0]
+You may eat another plant or mineral. Eat (1.53)
+H:5284|96% M:4491|90%  14:26:50:749  [ Sjeng ][0|0|0|0|0|0]
+Sjeng's aura of weapons rebounding disappears.
+Sjeng misses you with a gleaming scimitar.
+Sjeng slashes into you with a gleaming scimitar!
+Health lost: 273 (physical cutting).
+[AFF]: Anorexia
+The idea of eating or drinking is repulsive to you.
+H:5011|91% M:4491|90%  14:26:50:947  [ Sjeng ][0|0|0|0|0|0] ( -273h 5% )[ANO] 
+[Curing]: APPLY EPIDERMAL TO BODY
+You take out some salve and quickly rub it on your body.
+Food is no longer repulsive to you.
+[AFF]: Anorexia
+H:5011|91% M:4491|90%  14:26:51:138  [ Sjeng ][0|0|0|0|0|0]
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Torso) (7.1%)
+Empower:   (Sleizak)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Proned)
+Afflicted: (Prone)
+[HP]:      (89%/100%).
+Afflicted: (Slickness Paralysis).*
+[ast, clum, weari, naus, slick, prn, para]
+H:5011|91% M:4291|86%  14:26:51:393  [ Sjeng ][0|7.1|0|0|0|0] ( -200m 4% )
+Sjeng eats a bloodroot leaf.
+Processed Cures(paralysis slickness)
+[ast, clum, weari, naus, prn, para]
+
+H:5011|91% M:4291|86%  14:26:51:919  [ Sjeng ][0|7.1|0|0|0|0]
+You may apply another salve to yourself. Body (0.877)
+H:5011|91% M:4291|86%  14:26:52:013  [ Sjeng ][0|7.1|0|0|0|0]
+Health lost: 31 (raw).
+You bleed 31 health.
+H:4980|91% M:4291|86%  14:26:52:180  [ Sjeng ][0|7.1|0|0|0|0]
+Sjeng doubles over, vomiting violently.
+H:4980|91% M:4291|86%  14:26:52:353  [ Sjeng ][0|7.1|0|0|0|0]
+A fierce mountain falcon dives at Sjeng, raking his face with its talons.
+H:4980|91% M:4291|86%  14:26:52:895  [ Sjeng ][0|7.1|0|0|0|0]
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Torso) (14.2%)
+Runeblade: (Nairat)
+Afflicted: (Frozen)
+Proc:      (Sleizak 2)
+Shield:    (Scrambled Brains)
+Ferocity:  [####|####|####|####]
+[HP]:      (68%/100%).
+Afflicted: (Slickness Dizziness).*
+[voyria, diz, ast, clum, weari, naus, slick, frzn[200], prn, para]
+H:4980|91% M:4191|84%  14:26:53:369  [ Sjeng ][0|14.2|0|0|0|0]
+A look of extreme focus crosses the face of Sjeng.
+Sjeng takes a drink from an oaken vial.
+[Curing]: SIP MANA
+You take a drink from an oaken vial.
+Your mind feels stronger and more alert.
+H:4980|91% M:4964|99%  14:26:53:452  [ Sjeng ][0|14.2|0|0|0|0] ( +773m 15% )
+Sjeng eats a bloodroot leaf.
+Sjeng takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+Processed Cures(paralysis)
+H:4980|91% M:4964|99%  14:26:53:661  [ Sjeng ][0|14.2|0|0|0|0]
+Empower:   (Inguz)
+Sjeng takes a drink from an oaken vial.
+H:4980|91% M:4814|96%  14:26:54:435  [ Sjeng ][0|14.2|0|0|0|0]
+Sjeng takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+H:4980|91% M:4814|96%  14:26:54:700  [ Sjeng ][0|14.2|0|0|0|0]
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Torso) (21.3%)
+Runeblade: (Nairat)
+Afflicted: (Frozen)
+Proc:      (Inguz)
+Afflicted: (Prefarar)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (55%/100%).
+Afflicted: (Slickness Paralysis).*
+[diz, ast, clum, weari, naus, deaf, slick, frzn[200], prn, para]
+Sjeng eats a bloodroot leaf.
+Sjeng eats some irid moss.
+Processed Cures(paralysis slickness)
+H:4980|91% M:4789|96%  14:26:55:384  [ Sjeng ][0|21.3|0|0|0|0]
+
+Processed Cures(dizziness)
+Sjeng takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+H:4980|91% M:4789|96%  14:26:55:669  [ Sjeng ][0|21.3|0|0|0|0]
+Sjeng eats a bloodroot leaf.
+Sjeng stands up.
+ + + + STANDING + + +
+Processed Cures(slickness)
+Sjeng takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+H:4980|91% M:4789|96%  14:26:56:929  [ Sjeng ][0|21.3|0|0|0|0]
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Torso) (28.4%)
+Runeblade: (Nairat)
+Afflicted: (Frozen)
+Shield:    (Scrambled Brains)
+Ferocity:  [####|####|####|####]
+[HP]:      (50%/100%).
+Afflicted: (Slickness Dizziness).*
+[diz, ast, clum, weari, naus, deaf, slick, frzn[200]]
+A look of extreme focus crosses the face of Sjeng.
+Empower:   (Sleizak)
+Health lost: 18 (raw).
+You bleed 18 health.
+H:4962|90% M:4589|92%  14:26:57:677  [ Sjeng ][0|28.4|0|0|0|0] ( -200m 4% )
+You may drink another health or mana elixir. Mana (4.396)
+H:4962|90% M:4589|92%  14:26:57:849  [ Sjeng ][0|28.4|0|0|0|0]
+You may utilise the tree tattoo again. Tree (14.055)
+H:4962|90% M:4589|92%  14:26:58:510  [ Sjeng ][0|28.4|0|0|0|0]
+Sjeng eats a piece of kelp.
+Sjeng shivers particularly intensely.
+Processed Cures(asthma clumsiness weariness)
+H:4962|90% M:4589|92%  14:26:58:516  [ Sjeng ][0|28.4|0|0|0|0]
+Sjeng's eyes lose their focus suddenly.
+H:4962|90% M:4589|92%  14:26:58:745  [ Sjeng ][0|28.4|0|0|0|0]
+Sjeng takes a drink from an oaken vial.
+H:4962|90% M:4589|92%  14:26:58:922  [ Sjeng ][0|28.4|0|0|0|0]
+
+[DEF]: Fangbarrier
+The sileris berry juice hardens into a supple purple shell.
+H:4962|90% M:4539|91%  14:26:59:236  [ Sjeng ][0|28.4|0|0|0|0]
+You have recovered balance on all limbs.
+Envenomed: (Slike)
+Sliced:    (Torso) (35.5%)
+Proc:      (Sleizak 2)
+Shield:    (Scrambled Brains)
+Ferocity:  [####|####|####|####]
+[HP]:      (57%/100%).
+Afflicted: (Anorexia Recklessness).*
+[VLOCK, voyria, diz, clum[50], weari, naus, deaf, reck, frzn[200]]
+Sjeng touches a tree of life tattoo.
+Processed Cures(clumsiness dizziness recklessness slickness voyria weariness asthma anorexia 
+frozen nausea)
+[VLOCK, voyria[89], diz[89], clum[44], weari[89], naus[89], deaf, reck[89], frzn[189]]
+
+H:4962|90% M:4439|89%  14:26:59:349  [ Sjeng ][0|35.5|0|0|0|0]
+
+Processed Cures(anorexia dizziness recklessness)
+A look of extreme focus crosses the face of Sjeng.
+H:4962|90% M:4439|89%  14:26:59:929  [ Sjeng ][0|35.5|0|0|0|0]
+
+Afflicted: (Sensitivity)
+Sjeng: has shielded!
+Sjeng: has shielded!
+Sjeng: has shielded!
+You have recovered balance on all limbs.
+Razed: Shield
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (63%/100%).
+Afflicted: (Paralysis)
+[HLOCK, voyria[89], diz[59], clum[44], sen, weari[89], naus[89], deaf, reck[59], frzn[189]]
+
+H:5071|92% M:4339|87%  14:27:01:464  [ Sjeng ][0|35.5|0|0|0|0]
+A fierce mountain falcon rips out a chunk of Sjeng's flesh with its beak.
+H:5071|92% M:4339|87%  14:27:01:886  [ Sjeng ][0|35.5|0|0|0|0]
+
+Processed Cures(anorexia dizziness recklessness)
+Sjeng eats a bloodroot leaf.
+Sjeng takes some salve from a vial and rubs it on his skin.
+Processed Cures(anorexia frozen)
+Processed Cures(paralysis)
+Sjeng eats some irid moss.
+H:5071|92% M:4339|87%  14:27:02:261  [ Sjeng ][0|35.5|0|0|0|0]
+A look of extreme focus crosses the face of Sjeng.
+Processed Cures(dizziness recklessness)
+H:5071|92% M:4339|87%  14:27:02:432  [ Sjeng ][0|35.5|0|0|0|0]
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Torso) (42.6%)
+Empower:   (Inguz)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Proned)
+Afflicted: (Prone)
+[HP]:      (55%/100%).
+Afflicted: (Slickness Paralysis).*
+[voyria[89], ast, clum[44], sen, weari[89], naus[89], deaf, slick, frzn[144], prn, para]
+[Curing]: SIP MANA
+You take a drink from an oaken vial.
+Your mind feels stronger and more alert.
+H:5071|92% M:4966|100%  14:27:03:033  [ Sjeng ][0|42.6|0|0|0|0] ( +627m 12% )
+Health lost: 8 (raw).
+You bleed 8 health.
+H:5063|92% M:4966|100%  14:27:03:264  [ Sjeng ][0|42.6|0|0|0|0]
+Sjeng takes a drink from an oaken vial.
+H:5063|92% M:4966|100%  14:27:03:437  [ Sjeng ][0|42.6|0|0|0|0]
+Sjeng eats a bloodroot leaf.
+Processed Cures(paralysis slickness)
+[ast, clum[44], sen, weari[89], naus[89], deaf, frzn[144], prn, para]
+
+H:5063|92% M:4966|100%  14:27:03:947  [ Sjeng ][0|42.6|0|0|0|0]
+Sjeng stands up.
+ + + + STANDING + + +
+H:5063|92% M:4916|98%  14:27:04:641  [ Sjeng ][0|42.6|0|0|0|0]
+With a pointed stick, Sjeng begins sketching a rune on the ground.
+H:5063|92% M:4916|98%  14:27:04:646  [ Sjeng ][0|42.6|0|0|0|0]
+A fierce mountain falcon dives at Sjeng, raking his face with its talons.
+H:5063|92% M:4916|98%  14:27:04:936  [ Sjeng ][0|42.6|0|0|0|0]
+You have recovered balance on all limbs.
+Envenomed: (Slike)
+Sliced:    (Torso) (49.7%)
+Proc:      (Inguz)
+Shield:    (Scrambled Brains)
+Ferocity:  [####|####|####|####]
+[HP]:      (31%/100%).
+Afflicted: (Anorexia Dizziness).*
+[VLOCK, diz, clum[44], sen, weari[89], naus[89], deaf, frzn[144]]
+A look of extreme focus crosses the face of Sjeng.
+H:5063|92% M:4866|97%  14:27:05:104  [ Sjeng ][0|49.7|0|0|0|0]
+Sjeng finishes sketching a dagaz rune with a flourish.
+Sjeng draws a deep, measured breath.Processed Cures
+H:5063|92% M:4866|97%  14:27:06:863  [ Sjeng ][0|49.7|0|0|0|0]
+Sjeng takes a long drag off his pipe.
+Sjeng takes some salve from a vial and rubs it on his body.
+Processed Cures(anorexia frozen)
+Sjeng eats a piece of kelp.
+Processed Cures(clumsiness sensitivity)
+[diz, sen[50], naus[89], deaf, frzn]
+
+H:5063|92% M:4866|97%  14:27:06:949  [ Sjeng ][0|49.7|0|0|0|0]
+
+[DEF]: Insomnia
+[DEF]: Blindness
+[DEF]: Deafness
+
+You have recovered balance on all limbs.
+You cease wielding a blessed legionnaire's longsword in your left hand.
+You start to wield a mithril broadsword in your left hand.
+Lightning follows the path of a mithril broadsword as you attempt to bisect Sjeng, a clap of
+thunder heralding your strike.
+KACHOW
+The blade sweeps through Sjeng, bisecting him without even slowing in its passing.
+Sjeng backs away and eases off.
+You have slain Sjeng. Reset Success!
+
+
+[SLAIN] Sjeng
+With the completion of your adventure, you feel your renown grow to new heights! (You gain 400
+Renown.)
+With the completion of your adventure, you feel your renown grow to new heights! (You gain 150
+Renown.)
+Defeated, Sjeng is cast out of the Arena.
+Your combat rating increases by 50.
+You have been awarded 2 Delosian Eagles for your feat within the Oniar Estate.
+**********************************************************
+You have been victorious and leave the Arena in triumph!
+**********************************************************
+ 

@@ -104,7 +104,7 @@ describe("ataxia_needPreLockCure -- fire one component early, not after the lock
     expect(ataxia_needPreLockCure()).toBe(false)
   end)
 
-  -- Deliberate: the cure has a ~10s cooldown (measured 9.8s and 8.7s in that log) and a bare
+  -- Deliberate: the cure has a ~10s cooldown (measured 9.81 s and 9.06 s in that log) and a bare
   -- asthma is not a lock. Spending it here is how you have none left when the lock lands.
   it("is quiet on a BARE asthma", function()
     reset({ asthma = true })
@@ -356,6 +356,70 @@ describe("ataxia_tryActiveCure -- FITNESS as free value, not only as a lock-brea
     local n = #mock.sent_commands
     ataxia_tryActiveCure()
     expect(#mock.sent_commands).toBe(n)
+  end)
+end)
+
+describe("FITNESS waits for equilibrium", function()
+  -- Live probe, kb/raw/live/probes_2026-11-01.txt: with equilibrium down the game's auto-queue
+  -- holds FITNESS, and a held one that fires with no asthma still costs 2.8 s of balance.
+  local function sentFitness()
+    return table.concat(mock.sent_commands, "|"):find("fitness") ~= nil
+  end
+
+  it("does not send from the lock-breaker with equilibrium down", function()
+    reset({ asthma = true, slickness = true, anorexia = true })
+    ataxia.vitals.eq = false
+    mock.reset(); ataxia_lockBreak()
+    expect(sentFitness()).toBe(false)
+  end)
+
+  it("does not send from the free-value path with equilibrium down", function()
+    reset({ asthma = true })
+    ataxia.vitals.eq = false
+    mock.reset(); ataxia_tryActiveCure()
+    expect(sentFitness()).toBe(false)
+  end)
+
+  -- The throttle is 1.5 s. Arming it while held would delay the cure after equilibrium returns.
+  it("does not arm the throttle while held, so it fires as soon as equilibrium returns", function()
+    reset({ asthma = true, slickness = true, anorexia = true })
+    ataxia.vitals.eq = false
+    mock.reset(); ataxia_lockBreak()
+    expect(attemptedLockBreak).toBe(nil)
+    ataxia.vitals.eq = true
+    ataxia_lockBreak()
+    expect(sentFitness()).toBe(true)
+  end)
+
+  it("says why it is holding", function()
+    reset({ asthma = true, slickness = true, anorexia = true })
+    ataxia.vitals.eq = false
+    mock.reset(); ataxia_lockBreak()
+    expect(ataxiaTemp.lockBreakEchoAt ~= nil).toBe(true)
+  end)
+
+  -- Still an exit: the prompt must not read as if our lock-breaker has gone.
+  it("does not count as blocked in the escape report", function()
+    reset({ asthma = true })
+    ataxia.vitals.eq = false
+    expect(ataxia_canActive()).toBe(true)
+    expect(ataxia_lockEscapes().fitness).toBe(true)
+  end)
+
+  it("fails open when equilibrium is unknown", function()
+    reset({ asthma = true, slickness = true, anorexia = true })
+    ataxia.vitals.eq = nil
+    mock.reset(); ataxia_lockBreak()
+    expect(sentFitness()).toBe(true)
+  end)
+
+  it("holds only FITNESS: no probe has tested another class's cure", function()
+    reset({ asthma = true, slickness = true, anorexia = true })
+    ataxiaTemp.class = "Serpent"
+    ataxia.vitals.eq = false
+    expect(ataxia_fitnessHeldForEq()).toBe(false)
+    mock.reset(); ataxia_lockBreak()
+    expect(table.concat(mock.sent_commands, "|"):find("shrugging") ~= nil).toBe(true)
   end)
 end)
 

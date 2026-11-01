@@ -520,6 +520,116 @@ describe("S6: the defence against a Serpent", function()
       for _, c in ipairs(sends) do expect(has(c, "curing priority")).toBeFalse() end
     end
   end)
+
+  -- The tree branch needs OUR tree. tBals.tree is the TARGET's (trigger 389).
+  local CURING_BALS = "src_new/triggers/levi_ataxia/for_levi/leviticus/curing_bals/"
+  local TREE_TOUCHED = body(CURING_BALS .. "003_Tree_Touched.lua")
+  local TREE_READY = body(CURING_BALS .. "004_Got_Tree_Bal.lua")
+
+  local function approachingLock(setup)
+    world()
+    ataxia.afflictions = { asthma = true, slickness = true, anorexia = true }
+    setup()
+    Algedonic.Prioritize()
+  end
+
+  it("his tree down, ours up: it trees", function()
+    approachingLock(function() tBals.tree = false end)
+    expect(sentAny("touch tree")).toBeTrue()
+  end)
+
+  it("his tree up, ours down: no tree", function()
+    approachingLock(function() tBals.tree = true; ataxiaTemp.usedTree = true end)
+    expect(sentAny("touch tree")).toBeFalse()
+  end)
+
+  it("our own lines drive it: the touch line holds the tree, the ready line frees it", function()
+    approachingLock(TREE_TOUCHED)
+    expect(sentAny("touch tree")).toBeFalse()
+    local savedMnem = ataxia.mnemosyne
+    ataxia.mnemosyne = nil                       -- 004 also calls Mnemosyne's hook; not this test's
+    TREE_READY()
+    ataxia.mnemosyne = savedMnem
+    Algedonic.Prioritize()
+    expect(sentAny("touch tree")).toBeTrue()
+  end)
+
+  -- The touch line is ours on every touch. It hung under trigger 002 (`[Curing]: TOUCH TREE`), so
+  -- it could run only on the line after that one. Our own `touch tree` is not curing's report.
+  it("the touch line stands alone, under no chain parent", function()
+    local fh = assert(io.open(CURING_BALS .. "003_Tree_Touched.lua", "r"))
+    local src = fh:read("*a"):gsub("\r", "")
+    fh:close()
+    local hierarchy = assert(src:match("hierarchy:\n(.-)attributes:"))
+    expect(hierarchy:find("Tree Touch", 1, true)).toBeNil()
+    expect(hierarchy:match("%- ([^\n]+)\n$")).toBe("Curing Bals")
+  end)
+
+  -- A dropped link can miss the ready line, and ataxiaTemp outlives the login.
+  it("a login frees our tree: nil is the safe side, as the game refuses a touch at no real cost", function()
+    local fh = assert(io.open("src_new/scripts/levi_ataxia/levi/ataxia/login/001_Login_Function.lua", "r"))
+    local src = fh:read("*a")
+    fh:close()
+    local block = assert(src:match('\n(ataxia_resetTargetBals%(%).-)\nexpandAlias%("t Penwize"%)'))
+    local savedReset = ataxia_resetTargetBals
+    ataxia_resetTargetBals = function() end
+    approachingLock(function()
+      ataxiaTemp.usedTree = true
+      assert((loadstring or load)(block))()
+    end)
+    ataxia_resetTargetBals = savedReset
+    expect(sentAny("touch tree")).toBeTrue()
+  end)
+
+  -- `cq all` clears our own queue, and this function runs on every affliction gain and loss.
+  local function shields()
+    local n = 0
+    for _, c in ipairs(sends) do if c == "cq all;touch shield" then n = n + 1 end end
+    return n
+  end
+
+  it("impatience: one shield per 4 s, however often the afflictions change", function()
+    defend({ impatience = true })
+    expect(shields()).toBe(1)
+    Algedonic.Prioritize()
+    Algedonic.Prioritize()
+    expect(shields()).toBe(1)
+    expect(#prioaffs()).toBe(3)                  -- the free prioaff still goes out each time
+    local delay
+    for _, t in pairs(mock.active_timers) do delay = t.delay end
+    expect(delay).toBe(4)
+    mock.fire_timers()                           -- the 4 s are up
+    Algedonic.Prioritize()
+    expect(shields()).toBe(2)
+  end)
+
+  it("the warning goes with the shield, not with each throttled call", function()
+    local warned = 0
+    defend({ impatience = true })
+    cecho = function(s) if has(s, "TOUCH SHIELD") then warned = warned + 1 end end
+    Algedonic.Prioritize()
+    expect(warned).toBe(0)
+    mock.fire_timers()
+    Algedonic.Prioritize()
+    expect(warned).toBe(1)
+  end)
+
+  it("the throttle changes no decision: paralysis still blocks it, the tree still comes first", function()
+    defend({ impatience = true, paralysis = true })
+    expect(shields()).toBe(0)
+    defend({ impatience = true, asthma = true, slickness = true })
+    expect(sentAny("touch tree")).toBeTrue()
+    expect(shields()).toBe(0)
+  end)
+
+  it("approaching lock with our tree down falls through to the impatience branch", function()
+    world()
+    ataxia.afflictions = { impatience = true, asthma = true, slickness = true }
+    ataxiaTemp.usedTree = true
+    Algedonic.Prioritize()
+    expect(sentAny("touch tree")).toBeFalse()
+    expect(shields()).toBe(1)
+  end)
 end)
 
 describe("B1: scytherus mode's impulse respects sileris/fangbarrier too", function()

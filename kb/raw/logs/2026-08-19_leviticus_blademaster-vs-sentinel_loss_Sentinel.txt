@@ -1,0 +1,2820 @@
+Your aura of weapons rebounding disappears.
+With a smooth lunge to the left, you draw Blazing Flames from its scabbard and deliver a powerful slash across Grulk's
+legs.
+As you carve into Grulk, you perceive that you have dealt 18.1% damage to his left leg. (18.1%)
+As you carve into Grulk, you perceive that you have dealt 12.1% damage to his right leg. (12.1%)
+[CLU] Minute bolts of lightning arc across Grulk's skin.
+[HAM] Ducking behind him, you strike at Grulk's hamstring with a rigid, practised grip.
+The pain of your wounds abates amid the rhythm of combat.
+09:58:03:940 [13004] [100] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+You move in to engage Grulk.
+09:58:03:943 [13749] [99] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+Grulk eats an aurum flake.
+(LEVI): [V3] kelp cured: clumsiness
+09:58:04:080 [13749] [99] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+[REB] You suddenly perceive the vague outline of an aura of rebounding around Grulk.
+09:58:04:183 [13749] [99] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+Grulk's aura of weapons rebounding disappears.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at a massive jade spider.
+09:58:04:185 [13749] [99] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+Grulk takes a long drag off his pipe.
+09:58:04:276 [13749] [99] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at a massive jade spider.
+Blades of force rake across a massive jade spider, tearing relentlessly through his form.
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+The crackle of electrical energy emanates from your scabbard.
+09:58:05:539 [13749] [99] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+Grulk takes a drink from a quartz crystal vial.
+09:58:05:653 [13749] [99] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+(((((((((((((((((((( BALANCE: 0.000 ))))))))))))))))))))
+ +[Grulk] HP: [============        ] 64% -- 3422/5287 
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 96
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 96
+A massive jade spider leaps through the air towards Grulk, crushing him beneath its body.
+A massive jade spider leaps through the air towards Grulk, crushing him beneath its body.
+09:58:06:263 [13749] [98] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 96
+Grulk stands up.
+09:58:06:935 [13749] [98] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+[SHI] [SHI] A nearly invisible magical shield forms around Grulk.
+09:58:07:005 [13749] [98] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 96
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 96
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 96
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+[SHI] [SHI] [SHI] [SHI] A dizzying beam of energy strikes you as your attack rebounds off of Grulk's shield.
+Grulk eats some irid moss.
+09:58:08:150 [13749] [98] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 96
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 96
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 96
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 96
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+ +[Grulk] HP: [=======             ] 36% -- 1924/5287 
+09:58:09:680 [13749] [97] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+Grulk takes a drink from a quartz crystal vial.
+09:58:10:074 [13749] [97] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+
+(LEVI): Rebounding coming up in 1.2 seconds
+You lash out at Grulk as he turns to flee.
+Grulk slowly hobbles east.
+ ----------------------------------------------------------------- 
+|     GRULK HAS LEFT TO THE EAST | GRULK HAS LEFT TO THE EAST     |
+ ----------------------------------------------------------------- 
+
+ ----------------------------------------------------------------- 
+|     GRULK HAS LEFT TO THE EAST | GRULK HAS LEFT TO THE EAST     |
+ ----------------------------------------------------------------- 
+           -= Target chasing is currently disabled =-
+09:58:11:331 [13749] [97] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+Ahh, I am truly sorry, but I do not see anyone by that name here.
+You detect nothing here by that name.
+09:58:11:758 [13749] [97] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+I do not recognise anything called that here.
+09:58:11:868 [13749] [97] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+A massive jade spider leaps through the air and descends upon you, crushing you beneath the weight of its body.
+Health lost: 847 (physical blunt).
+A massive jade spider leaps through the air and descends upon you, crushing you beneath the weight of its body.
+Health lost: 912 (physical blunt).
+09:58:12:211 [11990] [97] |(Grulk)|[ [ prone ]]  [0|0|0|0|18.1|12.1]
+A massive jade spider leaps through the air and descends upon you, crushing you beneath the weight of its body.
+Health lost: 969 (physical blunt).
+A massive jade spider leaps through the air and descends upon you, crushing you beneath the weight of its body.
+Health lost: 781 (physical blunt).
+09:58:12:380 [10240] [97] |(Grulk)|[ [ prone ]]  [0|0|0|0|18.1|12.1]
+Health lost: 57 (raw).
+[[ BLEED 57 ]]
+Your lungs have not yet recovered enough to allow you to smoke.
+09:58:12:433 [10183] [97] |(Grulk)|[ [ prone ]]  [0|0|0|0|18.1|12.1]
+[RIFT]: -1 Potash. Remaining: 6120.
+You eat a potash crystal.
+You feel your health and mana replenished.
+09:58:12:527 [14849] [100] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+A descending tunnel. (indoors)
+Grulk Stormwing is here, hidden. He wields a claw-etched handaxe of steel and ash in his left hand and a crudely-banded
+ironwood shield in his right.
+You see exits leading southeast and west.
+(1) person here: Grulk.
+09:58:12:778 [14849] [100] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+Your lungs have recovered enough to smoke another mineral or plant.
+Grulk seems able to move more freely all of a sudden.
+09:58:13:875 [14906] [100] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+Grulk eats some irid moss.
+09:58:14:250 [14906] [100] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+Grulk takes a drink from a quartz crystal vial.
+09:58:14:727 [14906] [100] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 96
+Grulk's aura of weapons rebounding disappears.
+09:58:15:677 [14906] [100] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+You whip Blazing Flames through the air in front of Grulk, to no effect.
+[HAM] Ducking behind him, you strike at Grulk's hamstring with a rigid, practised grip.
+The pain of your wounds abates amid the rhythm of combat.
+09:58:15:727 [14906] [100] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+You move in to engage Grulk.
+09:58:15:730 [14906] [99] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+Grulk takes a long drag off his pipe.
+09:58:15:906 [14906] [99] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+(((((((((((((((((((( BALANCE: 0.000 ))))))))))))))))))))
+ +[Grulk] HP: [=============       ] 69% -- 3651/5287 
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 100
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 100
+On silent paws, an adult vixen rushes to Grulk's side.
+A cunning red fox leaps upon you, sinking its teeth into your exposed skin.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your right leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your right leg.
+Health lost: 745 (physical cutting).
+With a swift turn, you draw your blade from its scabbard and unleash a retaliatory strike against Grulk.
+A prickly stinging overcomes your body, fading away into numbness.
+09:58:18:184 [14161] [98] |(Grulk)|[ [ hleech PAR ]]  [0|0|0|0|18.1|12.1]
+[RIFT]: -1 Magnesium. Remaining: 6491.
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+09:58:18:333 [14161] [98] |(Grulk)|[ [ hleech ]]  [0|0|0|0|18.1|12.1]
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 100
+You may eat another bit of irid moss or potash.
+09:58:18:483 [14161] [98] |(Grulk)|[ [ hleech ]]  [0|0|0|0|18.1|12.1]
+You touch the tree of life tattoo.
+Your aching, pain-wracked body is soothed and calmed.
+09:58:18:485 [14161] [98] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+09:58:18:576 [14161] [98] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+09:58:18:673 [14161] [98] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+
+- ( def deafness ) -
+You are dismayed as the corpse of a priestess of Life turns to dust in your hands.
+A huge gossamer butterfly buzzes wildly about your head.
+09:58:18:967 [14161] [98] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+
+[BMQ Arm Prep] Target: Grulk | HP: 100% | Track: V3
+[BMQ Arm Prep] Arms: LA=0.0% RA=0.0%
+[BMQ Arm Prep] Legs: LL=18.1% RL=12.1%
+7 hits to arm double-break (sequence: LRLRRLL)
+[BMQ Arm Prep] Parried: none | Shin: 100
+09:58:19:235 [14161] [98] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+Grulk takes a drink from a quartz crystal vial.
+09:58:19:325 [14161] [98] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+09:58:19:467 [14161] [98] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your right leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your right leg.
+Health lost: 745 (physical cutting).
+With a swift turn, you draw your blade from its scabbard and unleash a retaliatory strike against Grulk.
+A prickly stinging overcomes your body, fading away into numbness.
+09:58:19:471 [13416] [98] |(Grulk)|[ [ PAR ]]  [0|0|0|0|18.1|12.1]
+With a guttural growl, a wolf leaps forward and sinks his teeth into you.
+Health lost: 1113 (physical cutting).
+09:58:19:476 [12303] [98] |(Grulk)|[ [ bld(291) PAR ]]  [0|0|0|0|18.1|12.1]
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+
+[BMQ Arm Prep] Target: Grulk | HP: 100% | Track: V3
+[BMQ Arm Prep] Arms: LA=0.0% RA=0.0%
+[BMQ Arm Prep] Legs: LL=18.1% RL=12.1%
+7 hits to arm double-break (sequence: LRLRRLL)
+[BMQ Arm Prep] Parried: none | Shin: 100
++ ( def endure ) +
+You begin focusing on driving off attempts to paralyse you.
+09:58:19:605 [12303] [98] |(Grulk)|[ [ bld(291) PAR ]]  [0|0|0|0|18.1|12.1]
+09:58:19:661 [12303] [98] |(Grulk)|[ [ bld(291) PAR ]]  [0|0|0|0|18.1|12.1]
+09:58:19:664 [12303] [98] |(Grulk)|[ [ bld(291) PAR ]]  [0|0|0|0|18.1|12.1]
+ +[Grulk] HP: [=================   ] 85% -- 4545/5287 
+09:58:19:665 [12303] [98] |(Grulk)|[ [ bld(291) PAR ]]  [0|0|0|0|18.1|12.1]
+You may eat another plant or mineral.
+09:58:19:754 [12303] [90] |(Grulk)|[ [ PAR ]]  [0|0|0|0|18.1|12.1]
+[RIFT]: -1 Magnesium. Remaining: 6490.
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+
+[BMQ Arm Prep] Target: Grulk | HP: 100% | Track: V3
+[BMQ Arm Prep] Arms: LA=0.0% RA=0.0%
+[BMQ Arm Prep] Legs: LL=18.1% RL=12.1%
+7 hits to arm double-break (sequence: LRLRRLL)
+[BMQ Arm Prep] Parried: none | Shin: 100
+
+[BMQ Arm Prep] Target: Grulk | HP: 100% | Track: V3
+[BMQ Arm Prep] Arms: LA=0.0% RA=0.0%
+[BMQ Arm Prep] Legs: LL=18.1% RL=12.1%
+7 hits to arm double-break (sequence: LRLRRLL)
+[BMQ Arm Prep] Parried: none | Shin: 100
+
+[BMQ Arm Prep] Target: Grulk | HP: 100% | Track: V3
+[BMQ Arm Prep] Arms: LA=0.0% RA=0.0%
+[BMQ Arm Prep] Legs: LL=18.1% RL=12.1%
+7 hits to arm double-break (sequence: LRLRRLL)
+[BMQ Arm Prep] Parried: none | Shin: 100
++ ( def rebounding ) +
+On silent paws, an adult vixen rushes to Grulk's side.
+A cunning red fox leaps upon you, sinking its teeth into your exposed skin.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your right leg.
+You parry the attack with a deft manoeuvre.
+09:58:20:876 [12303] [90] |(Grulk)|[ [ hleech ]]  [0|0|0|0|18.1|12.1]
+
+[BMQ Arm Prep] Target: Grulk | HP: 100% | Track: V3
+[BMQ Arm Prep] Arms: LA=0.0% RA=0.0%
+[BMQ Arm Prep] Legs: LL=18.1% RL=12.1%
+7 hits to arm double-break (sequence: LRLRRLL)
+[BMQ Arm Prep] Parried: none | Shin: 100
+You may eat another plant or mineral.
+09:58:21:475 [12303] [90] |(Grulk)|[ [ hleech ]]  [0|0|0|0|18.1|12.1]
+
+[BMQ Arm Prep] Target: Grulk | HP: 100% | Track: V3
+[BMQ Arm Prep] Arms: LA=0.0% RA=0.0%
+[BMQ Arm Prep] Legs: LL=18.1% RL=12.1%
+7 hits to arm double-break (sequence: LRLRRLL)
+[BMQ Arm Prep] Parried: none | Shin: 100
+[RIFT]: -1 Aurum. Remaining: 6993.
+You eat an aurum flake.
+Your aching, pain-wracked body is soothed and calmed.
+09:58:21:725 [12303] [90] |(Grulk)|[ [ ]]  [0|0|0|0|18.1|12.1]
+
+- ( def rebounding ) -
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+Your aura of weapons rebounding disappears.
+Spinning to the left as you draw Blazing Flames from its sheath, you unleash a precise slash across Grulk's arms.
+As you carve into Grulk, you perceive that you have dealt 18.1% damage to his left arm. (18.1%)
+As you carve into Grulk, you perceive that you have dealt 12.1% damage to his right arm.
+ --> CompassSlash is not needed for this health. (12.1%)
+[CLU] Minute bolts of lightning arc across Grulk's skin.
+[PAR] With fluid motions of your iron fingers, you strike precisely at pressure points on Grulk's neck.
+The pain of your wounds abates amid the rhythm of combat.
+The crackle of electrical energy emanates from your scabbard.
+09:58:22:037 [12663] [90] |(Grulk)|[ [ ]]  [0|0|18.1|12.1|18.1|12.1]
+Grulk eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+09:58:22:125 [12663] [90] |(Grulk)|[ [ ]]  [0|0|18.1|12.1|18.1|12.1]
+On silent paws, an adult vixen rushes to Grulk's side.
+A cunning red fox leaps upon you, sinking its teeth into your exposed skin.
+Grulk starts to wield a Stormspear in his left hand.
+Grulk savagely gouges into you with a Stormspear.
+Your paragon completely absorbs the damage.
+A prickly stinging overcomes your body, fading away into numbness.
+A savage light enters the eyes of Grulk.
+The blade of the weapon rakes lines of fire across your skin.
+The barbs on a Stormspear viciously tear into you.
+09:58:22:275 [12663] [90] |(Grulk)|[ [ WEA hleech PAR ]]  [0|0|18.1|12.1|18.1|12.1]
+
+(LEVI): Rebounding coming up in 1.2 seconds
+You may eat another plant or mineral.
+09:58:23:177 [12663] [91] |(Grulk)|[ [ WEA hleech PAR ]]  [0|0|18.1|12.1|18.1|12.1]
+(Colloquium Iniquus): An enslaved mhun crier says, "Discipline is the cornerstone of Mhaldorian culture. Knowing the
+contents of CHELP LAW may be what keeps you from a fatal appearance in the Red Square!"
+[RIFT]: -1 Magnesium. Remaining: 6489.
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+09:58:23:405 [12663] [91] |(Grulk)|[ [ WEA hleech ]]  [0|0|18.1|12.1|18.1|12.1]
+Health lost: 78 (raw).
+[[ BLEED 78 ]]
+Grulk eats some irid moss.
+09:58:23:581 [12585] [91] |(Grulk)|[ [ WEA hleech ]]  [0|0|18.1|12.1|18.1|12.1]
+(((((((((((((((((((( BALANCE: 0.000 ))))))))))))))))))))
+ +[Grulk] HP: [=================   ] 87% -- 4650/5287 
+
+[BMQ Arm Prep] Target: Grulk | HP: 100% | Track: V3
+[BMQ Arm Prep] Arms: LA=18.1% RA=12.1%
+[BMQ Arm Prep] Legs: LL=18.1% RL=12.1%
+5 hits to arm double-break (sequence: RLRLR)
+[BMQ Arm Prep] Parried: none | Shin: 96
+Grulk eats an aurum flake.
+(LEVI): [V3] kelp cured: clumsiness
+09:58:23:773 [13827] [99] |(Grulk)|[ [ WEA hleech ]]  [0|0|18.1|12.1|18.1|12.1]
+A huge gossamer butterfly buzzes wildly about your head.
+09:58:23:975 [13827] [98] |(Grulk)|[ [ WEA hleech ]]  [0|0|18.1|12.1|18.1|12.1]
+
+[BMQ Arm Prep] Target: Grulk | HP: 100% | Track: V3
+[BMQ Arm Prep] Arms: LA=18.1% RA=12.1%
+[BMQ Arm Prep] Legs: LL=18.1% RL=12.1%
+5 hits to arm double-break (sequence: RLRLR)
+[BMQ Arm Prep] Parried: none | Shin: 96
+[REB] You suddenly perceive the vague outline of an aura of rebounding around Grulk.
+09:58:24:384 [14572] [98] |(Grulk)|[ [ WEA hleech ]]  [0|0|18.1|12.1|18.1|12.1]
+
+[BMQ Arm Prep] Target: Grulk | HP: 100% | Track: V3
+[BMQ Arm Prep] Arms: LA=18.1% RA=12.1%
+[BMQ Arm Prep] Legs: LL=18.1% RL=12.1%
+5 hits to arm double-break (sequence: RLRLR)
+[BMQ Arm Prep] Parried: none | Shin: 96
+Health lost: 1062 (unblockable).
+Grulk's aura of weapons rebounding disappears.
+An ebony raven descends to circle above the head of Grulk.
+An ebony raven dives at your face, pecking violently at your eyes.
+Grulk starts to wield a claw-etched handaxe of steel and ash in his left hand.
+Grulk carefully wipes all the venoms off of a claw-etched handaxe of steel and ash.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your left leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your left leg.
+Health lost: 930 (physical cutting).
+A prickly stinging overcomes your body, fading away into numbness.
+You may eat another plant or mineral.
+09:58:24:807 [12580] [98] |(Grulk)|[ [ bld(112) sen WEA hleech PAR ]]  [0|0|18.1|12.1|18.1|12.1]
+Grulk seems able to move more freely all of a sudden.
+09:58:24:858 [12580] [98] |(Grulk)|[ [ bld(112) sen WEA hleech PAR ]]  [0|0|18.1|12.1|18.1|12.1]
+Grulk takes a long drag off his pipe.
+[RIFT]: -1 Magnesium. Remaining: 6488.
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You are dismayed as the corpse of an acolyte of Life turns to dust in your hands.
+09:58:24:999 [12580] [90] |(Grulk)|[ [ sen WEA hleech ]]  [0|0|18.1|12.1|18.1|12.1]
+
+[BMQ Arm Prep] Target: Grulk | HP: 100% | Track: V3
+[BMQ Arm Prep] Arms: LA=18.1% RA=12.1%
+[BMQ Arm Prep] Legs: LL=18.1% RL=12.1%
+5 hits to arm double-break (sequence: RLRLR)
+[BMQ Arm Prep] Parried: none | Shin: 96
+
+[BMQ Arm Prep] Target: Grulk | HP: 100% | Track: V3
+[BMQ Arm Prep] Arms: LA=18.1% RA=12.1%
+[BMQ Arm Prep] Legs: LL=18.1% RL=12.1%
+5 hits to arm double-break (sequence: RLRLR)
+[BMQ Arm Prep] Parried: none | Shin: 93
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+Spinning to the right as you draw Blazing Flames from its sheath, you unleash a precise slash across Grulk's arms.
+As you carve into Grulk, you perceive that you have dealt 18.1% damage to his right arm. (30.2%)
+As you carve into Grulk, you perceive that you have dealt 12.1% damage to his left arm. (30.2%)
+[CLU] Minute bolts of lightning arc across Grulk's skin.
+[HYP] With rapid precision, you aim first a punch then a spearhand blow at two points on Grulk's chest.
+The pain of your wounds abates amid the rhythm of combat.
+The crackle of electrical energy emanates from your scabbard.
+09:58:25:802 [12835] [90] |(Grulk)|[ [ sen WEA hleech ]]  [0|0|30.2|30.2|18.1|12.1]
+Grulk eats an argentum flake.
+Grulk takes a drink from a quartz crystal vial.
+(LEVI): [V3] lobelia cured: hypochondria
+09:58:25:896 [12835] [90] |(Grulk)|[ [ sen WEA hleech ]]  [0|0|30.2|30.2|18.1|12.1]
+Grulk touches a tree of life tattoo.
+(LEVI): [V3] Tree used - branched to 1 states -hypochondria
+09:58:25:899 [12835] [90] |(Grulk)|[ [ sen WEA hleech ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[TREE]: tree down on Grulk for 14 seconds...
+Blood ceases running quite so freely from the rents in your flesh.
+09:58:25:989 [12835] [90] |(Grulk)|[ [ sen WEA hleech ]]  [0|0|30.2|30.2|18.1|12.1]
+A grumpy badger stalks to the side of Grulk.
+A grumpy badger sinks his claws into your lower leg, carving deep gouges into the flesh.
+You feel a terrible hunger grow within you.
+Health lost: 85 (physical cutting).
+With a swift turn, you draw your blade from its scabbard and unleash a retaliatory strike against Grulk.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your left leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your left leg.
+Your paragon completely absorbs the damage.
+A prickly stinging overcomes your body, fading away into numbness.
+09:58:26:107 [12750] [90] |(Grulk)|[ [ sen WEA hleech PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another plant or mineral.
+09:58:26:423 [12750] [90] |(Grulk)|[ [ sen WEA hleech PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Magnesium. Remaining: 6487.
+You eat a magnesium chip.
+Your addiction can never be sated.
+Your muscles unlock; you are no longer paralysed.
+09:58:26:523 [12750] [90] |(Grulk)|[ [ sen WEA hleech add ]]  [0|0|30.2|30.2|18.1|12.1]
+With a guttural growl, a wolf leaps forward and sinks his teeth into you.
+Health lost: 1480 (physical cutting).
+09:58:26:525 [11270] [90] |(Grulk)|[ [ bld(304) sen WEA hleech add ]]  [0|0|30.2|30.2|18.1|12.1]
+09:58:26:719 [14416] [82] |(Grulk)|[ [ sen WEA hleech add ]]  [0|0|30.2|30.2|18.1|12.1]
+A grumpy badger stalks to the side of Grulk.
+A grumpy badger sinks his claws into your lower leg, carving deep gouges into the flesh.
+You feel bile rising in the back of your throat as as infection begins to set in.
+Health lost: 85 (physical cutting).
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your left leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your left leg.
+Health lost: 930 (physical cutting).
+A prickly stinging overcomes your body, fading away into numbness.
+09:58:27:529 [13401] [82] |(Grulk)|[ [ bld(146) sen WEA hleech nau PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+
+(((((((((((((((((((( BALANCE: 0.000 ))))))))))))))))))))
+ +[Grulk] HP: [==================  ] 91% -- 4841/5287 
+09:58:27:630 [13401] [81] |(Grulk)|[ [ bld(146) sen WEA hleech nau PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BMQ Arm Prep] Target: Grulk | HP: 100% | Track: V3
+[BMQ Arm Prep] Arms: LA=30.2% RA=30.2%
+[BMQ Arm Prep] Legs: LL=18.1% RL=12.1%
+4 hits to arm double-break (sequence: LRLR)
+[BMQ Arm Prep] Parried: none | Shin: 96
+
+[BMQ Arm Prep] Target: Grulk | HP: 100% | Track: V3
+[BMQ Arm Prep] Arms: LA=30.2% RA=30.2%
+[BMQ Arm Prep] Legs: LL=18.1% RL=12.1%
+4 hits to arm double-break (sequence: LRLR)
+[BMQ Arm Prep] Parried: none | Shin: 96
+You may eat another plant or mineral.
+09:58:28:137 [13401] [77] |(Grulk)|[ [ sen WEA hleech nau PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Magnesium. Remaining: 6486.
+You eat a magnesium chip.
+Your addiction can never be sated.
+Your muscles unlock; you are no longer paralysed.
+09:58:28:324 [13401] [77] |(Grulk)|[ [ sen WEA hleech nau add ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BMQ Arm Prep] Target: Grulk | HP: 100% | Track: V3
+[BMQ Arm Prep] Arms: LA=30.2% RA=30.2%
+[BMQ Arm Prep] Legs: LL=18.1% RL=12.1%
+4 hits to arm double-break (sequence: LRLR)
+[BMQ Arm Prep] Parried: none | Shin: 96
+Health lost: 6 (raw).
+[[ BLEED 6 ]]
+
+[BMQ Arm Prep] Target: Grulk | HP: 100% | Track: V3
+[BMQ Arm Prep] Arms: LA=30.2% RA=30.2%
+[BMQ Arm Prep] Legs: LL=18.1% RL=12.1%
+4 hits to arm double-break (sequence: LRLR)
+[BMQ Arm Prep] Parried: none | Shin: 96
+- ( def blindness ) -
+A gossamer butterfly goes into a frenzy of motion in front of your face, restoring your vision.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your left leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your left leg.
+Health lost: 930 (physical cutting).
+With a swift turn, you draw your blade from its scabbard and unleash a retaliatory strike against Grulk.
+A prickly stinging overcomes your body, fading away into numbness.
+09:58:29:069 [12465] [77] |(Grulk)|[ [ sen WEA hleech nau PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+09:58:29:431 [12465] [77] |(Grulk)|[ [ sen WEA hleech nau PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BMQ Arm Prep] Target: Grulk | HP: 100% | Track: V3
+[BMQ Arm Prep] Arms: LA=30.2% RA=30.2%
+[BMQ Arm Prep] Legs: LL=18.1% RL=12.1%
+4 hits to arm double-break (sequence: LRLR)
+[BMQ Arm Prep] Parried: none | Shin: 96
+Health lost: 1390 (unblockable).
+09:58:29:524 [11075] [77] |(Grulk)|[ [ sen WEA hleech nau PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+09:58:29:662 [11075] [77] |(Grulk)|[ [ sen WEA hleech nau PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+ +[Grulk] HP: [=================   ] 88% -- 4693/5287 
+You may eat another plant or mineral.
+09:58:29:758 [11075] [76] |(Grulk)|[ [ sen WEA hleech nau PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Magnesium. Remaining: 6485.
+You eat a magnesium chip.
+Your addiction can never be sated.
+Your muscles unlock; you are no longer paralysed.
+09:58:29:895 [11075] [76] |(Grulk)|[ [ sen WEA hleech nau add ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[TREE]: tree down on Grulk for 10 seconds...
+09:58:29:941 [11075] [76] |(Grulk)|[ [ sen WEA hleech nau add ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BMQ Arm Prep] Target: Grulk | HP: 100% | Track: V3
+[BMQ Arm Prep] Arms: LA=30.2% RA=30.2%
+[BMQ Arm Prep] Legs: LL=18.1% RL=12.1%
+4 hits to arm double-break (sequence: LRLR)
+[BMQ Arm Prep] Parried: none | Shin: 96
+09:58:30:133 [11075] [76] |(Grulk)|[ [ sen WEA hleech nau add ]]  [0|0|30.2|30.2|18.1|12.1]
+09:58:30:384 [11075] [76] |(Grulk)|[ [ sen WEA hleech nau add ]]  [0|0|30.2|30.2|18.1|12.1]
+
+- ( def thirdeye ) -
+A fuzzy brown lemming races into the location.
+A small brown lemming rips apart your third eye with its claws.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your left leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your left leg.
+ ------------------------------------------------------------------------- 
+|     LEFT LEG IS 2 HITS FROM BREAK! | LEFT LEG IS 2 HITS FROM BREAK!     |
+ ------------------------------------------------------------------------- 
+Health lost: 930 (physical cutting).
+A prickly stinging overcomes your body, fading away into numbness.
+09:58:30:392 [10145] [76] |(Grulk)|[ [ sen WEA hleech nau PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BMQ Arm Prep] Target: Grulk | HP: 100% | Track: V3
+[BMQ Arm Prep] Arms: LA=30.2% RA=30.2%
+[BMQ Arm Prep] Legs: LL=18.1% RL=12.1%
+4 hits to arm double-break (sequence: LRLR)
+[BMQ Arm Prep] Parried: none | Shin: 96
+Now prioritising the damagedleftleg affliction.
+09:58:30:512 [10145] [76] |(Grulk)|[ [ sen WEA hleech nau PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+
++ ( def thirdeye ) +
+Grulk takes a drink from a quartz crystal vial.
+Grulk eats some irid moss.
+[RIFT]: -1 Potash. Remaining: 6119.
+You eat a potash crystal.
+Your addiction can never be sated.
+You feel your health and mana replenished.
+09:58:30:519 [11337] [84] |(Grulk)|[ [ sen WEA hleech nau PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+09:58:30:612 [11337] [84] |(Grulk)|[ [ sen WEA hleech nau PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+09:58:30:851 [11337] [84] |(Grulk)|[ [ sen WEA hleech nau PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BMQ Arm Prep] Target: Grulk | HP: 100% | Track: V3
+[BMQ Arm Prep] Arms: LA=30.2% RA=30.2%
+[BMQ Arm Prep] Legs: LL=18.1% RL=12.1%
+4 hits to arm double-break (sequence: LRLR)
+[BMQ Arm Prep] Parried: none | Shin: 96
+09:58:31:156 [11337] [84] |(Grulk)|[ [ sen WEA hleech nau PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+09:58:31:244 [13943] [84] |(Grulk)|[ [ sen WEA hleech nau PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+09:58:31:333 [13943] [84] |(Grulk)|[ [ sen WEA hleech nau PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another plant or mineral.
+09:58:31:416 [13943] [84] |(Grulk)|[ [ sen WEA hleech nau PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BMQ Arm Prep] Target: Grulk | HP: 100% | Track: V3
+[BMQ Arm Prep] Arms: LA=30.2% RA=30.2%
+[BMQ Arm Prep] Legs: LL=18.1% RL=12.1%
+4 hits to arm double-break (sequence: LRLR)
+[BMQ Arm Prep] Parried: none | Shin: 96
+09:58:31:613 [13943] [84] |(Grulk)|[ [ sen WEA hleech nau PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Magnesium. Remaining: 6484.
+You eat a magnesium chip.
+Your addiction can never be sated.
+Your muscles unlock; you are no longer paralysed.
+09:58:31:620 [13943] [84] |(Grulk)|[ [ sen WEA hleech nau add ]]  [0|0|30.2|30.2|18.1|12.1]
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your left leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your left leg.
+ --------------------------------------------------------------------- 
+|     LEFT LEG IS PREPPED! (1 HIT) | LEFT LEG IS PREPPED! (1 HIT)     |
+ --------------------------------------------------------------------- 
+Health lost: 930 (physical cutting).
+With a swift turn, you draw your blade from its scabbard and unleash a retaliatory strike against Grulk.
+A prickly stinging overcomes your body, fading away into numbness.
+09:58:31:764 [13013] [84] |(Grulk)|[ [ bld(129) sen WEA hleech nau PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+09:58:31:811 [13013] [84] |(Grulk)|[ [ bld(129) sen WEA hleech nau PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+09:58:31:904 [13013] [84] |(Grulk)|[ [ bld(129) sen WEA hleech nau PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BMQ Arm Prep] Target: Grulk | HP: 100% | Track: V3
+[BMQ Arm Prep] Arms: LA=30.2% RA=30.2%
+[BMQ Arm Prep] Legs: LL=18.1% RL=12.1%
+4 hits to arm double-break (sequence: LRLR)
+[BMQ Arm Prep] Parried: none | Shin: 96
+(LEVI): Rebounding coming up in 1.2 seconds
+09:58:32:060 [13013] [81] |(Grulk)|[ [ sen WEA hleech nau PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+ +[Grulk] HP: [====================] 100% -- 5287/5287 
+09:58:32:061 [13013] [80] |(Grulk)|[ [ sen WEA hleech nau PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BMQ Arm Prep] Target: Grulk | HP: 100% | Track: V3
+[BMQ Arm Prep] Arms: LA=30.2% RA=30.2%
+[BMQ Arm Prep] Legs: LL=18.1% RL=12.1%
+4 hits to arm double-break (sequence: LRLR)
+[BMQ Arm Prep] Parried: none | Shin: 96
+You may utilise the tree tattoo again.
+09:58:32:563 [13013] [80] |(Grulk)|[ [ sen WEA hleech nau PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+
+- ( def mindnet ) -
+A fuzzy brown lemming races into the location.
+A small brown lemming rips apart your mind net with its claws.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your left arm.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your left arm.
+Your paragon completely absorbs the damage.
+You feel a tightening sensation grow in your lungs.
+You may eat another plant or mineral.
+09:58:33:122 [13013] [81] |(Grulk)|[ [ sen WEA hleech nau PAR AST add ]]  [0|0|30.2|30.2|18.1|12.1]
+
++ ( def mindnet ) +
+[RIFT]: -1 Magnesium. Remaining: 6483.
+You eat a magnesium chip.
+Your addiction can never be sated.
+Your muscles unlock; you are no longer paralysed.
+Extending your well-trained senses, you focus upon the movements of others nearby.
+09:58:33:281 [13013] [81] |(Grulk)|[ [ sen WEA hleech nau AST add ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 96
+[REB] You suddenly perceive the vague outline of an aura of rebounding around Grulk.
+You touch the tree of life tattoo.
+Your terrible addiction seems to wane.
+09:58:33:512 [13013] [81] |(Grulk)|[ [ sen WEA hleech nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+With a guttural growl, a wolf leaps forward and sinks his teeth into you.
+Health lost: 1480 (physical cutting).
+09:58:33:608 [11533] [81] |(Grulk)|[ [ bld(214) sen WEA hleech nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 96
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+Spinning to the left as you draw Blazing Flames from its sheath, you unleash a precise slash across Grulk's arms.
+[REB] The attack rebounds back onto you!
+As you carve into yourself, you perceive that you have dealt 18.1% damage to your left arm. (18.1%)
+Health lost: 615 (electricity).
+Minute bolts of lightning arc across Leviticus's skin.
+Minute bolts of lightning arc from the blade into your flesh, causing your muscles to violently spasm.
+[HAM] Ducking behind him, you strike at Grulk's hamstring with a rigid, practised grip.
+The pain of your wounds abates amid the rhythm of combat.
+The crackle of electrical energy emanates from your scabbard.
+09:58:34:114 [13205] [84] |(Grulk)|[ [ clu sen WEA hleech nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+Health lost: 1390 (unblockable).
+09:58:34:197 [11815] [84] |(Grulk)|[ [ clu sen WEA hleech nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+Health lost: 68 (raw).
+[[ BLEED 68 ]]
+Grulk's aura of weapons rebounding disappears.
+A fuzzy brown lemming races into the location.
+A small brown lemming rips apart your shin energy with its claws.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your left arm.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your left arm.
+Your paragon completely absorbs the damage.
+A prickly stinging overcomes your body, fading away into numbness.
+09:58:34:547 [11747] [84] |(Grulk)|[ [ clu sen WEA hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+Grulk takes a long drag off his pipe.
+09:58:34:682 [11747] [84] |(Grulk)|[ [ clu sen WEA hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another plant or mineral.
+09:58:34:824 [11747] [84] |(Grulk)|[ [ clu sen WEA hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[TREE]: tree down on Grulk for 5 seconds...
+[RIFT]: -1 Magnesium. Remaining: 6482.
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+09:58:35:055 [11747] [84] |(Grulk)|[ [ clu sen WEA hleech nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+09:58:35:831 [14323] [84] |(Grulk)|[ [ clu sen WEA hleech nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+(((((((((((((((((((( BALANCE: 0.000 ))))))))))))))))))))
+ +[Grulk] HP: [====================] 100% -- 5287/5287 
+
+- ( def toughness ) -
+A fuzzy brown lemming races into the location.
+A small brown lemming rips apart your toughness with its claws.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your left arm.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your left arm.
+Health lost: 1021 (physical cutting).
+With a swift turn, you draw your blade from its scabbard and unleash a retaliatory strike against Grulk.
+A prickly stinging overcomes your body, fading away into numbness.
+09:58:36:029 [13302] [83] |(Grulk)|[ [ bld(106) clu sen WEA hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 71
++ ( def toughness ) +
+Flexing your muscles, you concentrate on forcing unnatural toughness over the surface of your skin.
+You may eat another bit of irid moss or potash.
+09:58:36:295 [13302] [80] |(Grulk)|[ [ clu sen WEA hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another plant or mineral.
+09:58:36:500 [13302] [80] |(Grulk)|[ [ clu sen WEA hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 71
+[RIFT]: -1 Magnesium. Remaining: 6481.
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+09:58:36:661 [13302] [80] |(Grulk)|[ [ clu sen WEA hleech nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 71
+
+- ( def temperance ) -
+A fuzzy brown lemming races into the location.
+A small brown lemming rips apart your temperance with its claws.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your left arm.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your left arm.
+ ------------------------------------------------------------------------- 
+|     LEFT ARM IS 2 HITS FROM BREAK! | LEFT ARM IS 2 HITS FROM BREAK!     |
+ ------------------------------------------------------------------------- 
+Your paragon completely absorbs the damage.
+A prickly stinging overcomes your body, fading away into numbness.
+09:58:37:380 [13302] [80] |(Grulk)|[ [ clu sen WEA hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 71
+
++ ( def frost ) +
+Grulk takes a drink from a quartz crystal vial.
+Now prioritising the damagedleftarm affliction.
+09:58:37:477 [13302] [80] |(Grulk)|[ [ clu sen WEA hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 71
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+You are already enduring attempts to paralyse you.
+09:58:38:027 [13302] [80] |(Grulk)|[ [ clu sen WEA hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+09:58:38:244 [13302] [80] |(Grulk)|[ [ clu sen WEA hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+ +[Grulk] HP: [=================== ] 97% -- 5152/5287 
+09:58:38:246 [13302] [80] |(Grulk)|[ [ clu sen WEA hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another plant or mineral.
+09:58:38:329 [13302] [80] |(Grulk)|[ [ clu sen WEA hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 71
+[RIFT]: -1 Magnesium. Remaining: 6480.
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+09:58:38:460 [13302] [80] |(Grulk)|[ [ clu sen WEA hleech nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
+- ( def coldresist ) -
+- ( def fangbarrier ) -
+A fuzzy brown lemming races into the location.
+A small brown lemming rips apart your cold resistance with its claws.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your left arm.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your left arm.
+ --------------------------------------------------------------------- 
+|     LEFT ARM IS PREPPED! (1 HIT) | LEFT ARM IS PREPPED! (1 HIT)     |
+ --------------------------------------------------------------------- 
+Health lost: 930 (physical cutting).
+The protective covering coating your skin sloughs off.
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+09:58:38:760 [12372] [80] |(Grulk)|[ [ clu SLI WEA hleech nau sen AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'slickness' affliction to the 1 priority.
+09:58:38:809 [12372] [80] |(Grulk)|[ [ clu SLI WEA hleech nau sen AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 71
+
++ ( def coldresist ) +
+A frigid stream of cerulean light emanates from a prismatic ring, surrounding you with a frosty aura.
+Health lost: 1390 (unblockable).
+A huge gossamer butterfly buzzes wildly about your head.
+09:58:39:105 [10982] [79] |(Grulk)|[ [ clu SLI WEA hleech nau sen AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 71
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 71
+
+[TREE]: Grulk can now use tree!!!
+Health lost: 49 (raw).
+[[ BLEED 49 ]]
+
+- ( def mindnet ) -
+ ------------------------------------------------------------- 
+|     LEFT ARM HAS BEEN BROKEN | LEFT ARM HAS BEEN BROKEN     |
+ ------------------------------------------------------------- 
+(mapper): Don't know how to get there (11090) from here :(
+
+ ------------------------------------------------------------------------------------------------------------------- 
+|     TOUCH SHIELD TOUCH SHIELD - RIFT LOCK - RIFT LOCK - | TOUCH SHIELD TOUCH SHIELD - RIFT LOCK - RIFT LOCK -     |
+ ------------------------------------------------------------------------------------------------------------------- 
+(mapper): Don't know how to get there (11090) from here :(
+
+ ------------------------------------------------------------------------------------------------------------------- 
+|     TOUCH SHIELD TOUCH SHIELD - RIFT LOCK - RIFT LOCK - | TOUCH SHIELD TOUCH SHIELD - RIFT LOCK - RIFT LOCK -     |
+ ------------------------------------------------------------------------------------------------------------------- 
+(mapper): Don't know how to get there (11090) from here :(
+
+ ------------------------------------------------------------------------------------------------------------------- 
+|     TOUCH SHIELD TOUCH SHIELD - RIFT LOCK - RIFT LOCK - | TOUCH SHIELD TOUCH SHIELD - RIFT LOCK - RIFT LOCK -     |
+ ------------------------------------------------------------------------------------------------------------------- 
+A fuzzy brown lemming races into the location.
+A small brown lemming rips apart your mind net with its claws.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your left arm.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your left arm.
+Your left arm is greatly damaged from the beating.
+Health lost: 930 (physical cutting).
+The idea of eating or drinking is repulsive to you.
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+With a smooth lunge to the right, you draw Blazing Flames from its scabbard and deliver a powerful slash across Grulk's
+legs.
+Grulk parries the attack with a deft manoeuvre.
+(LEVI): Parry HIT!!!
+[PAR] With fluid motions of your iron fingers, you strike precisely at pressure points on Grulk's neck.
+You may eat another plant or mineral.
+09:58:40:136 [10003] [79] |(Grulk)|[ [ ANO clu SLI La2 WEA hleech nau sen AST (Locks: soft) ]] 
+ [0|0|30.2|30.2|18.1|12.1]
+(mapper): Don't know how to get there (11090) from here :(
+
+ ------------------------------------------------------------------------------------------------------------------- 
+|     TOUCH SHIELD TOUCH SHIELD - RIFT LOCK - RIFT LOCK - | TOUCH SHIELD TOUCH SHIELD - RIFT LOCK - RIFT LOCK -     |
+ ------------------------------------------------------------------------------------------------------------------- 
+(mapper): Don't know how to get there (11090) from here :(
+
+ ------------------------------------------------------------------------------------------------------------------- 
+|     TOUCH SHIELD TOUCH SHIELD - RIFT LOCK - RIFT LOCK - | TOUCH SHIELD TOUCH SHIELD - RIFT LOCK - RIFT LOCK -     |
+ ------------------------------------------------------------------------------------------------------------------- 
+
++ ( def mindnet ) +
+Grulk eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+You focus your mind intently on curing your mental maladies.
+Food is no longer repulsive to you.
+[RIFT]: -1 Magnesium. Remaining: 6479.
+You eat a magnesium chip.
+Your glands cease their oily secretion.
+Extending your well-trained senses, you focus upon the movements of others nearby.
+[RIFT]: -1 Quicksilver. Remaining: 8500.
+You apply a quicksilver droplet to yourself.
+[RIFT]: -1 Potash. Remaining: 6118.
+You eat a potash crystal.
+You feel your health and mana replenished.
+09:58:40:428 [14100] [85] |(Grulk)|[ [ clu La2 WEA hleech nau sen AST ]]  [0|0|30.2|30.2|18.1|12.1]
+With a guttural growl, a wolf leaps forward and sinks his teeth into you.
+Health lost: 1480 (physical cutting).
+09:58:40:650 [12620] [85] |(Grulk)|[ [ bld(288) clu La2 WEA hleech nau sen AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You are dismayed as the corpse of an haruspex of Life turns to dust in your hands.
+09:58:41:119 [12620] [77] |(Grulk)|[ [ clu La2 WEA hleech nau sen AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
+- ( def coldresist ) -
+A fuzzy brown lemming races into the location.
+A small brown lemming rips apart your cold resistance with its claws.
+Grulk starts to wield a Stormspear in his left hand.
+Grulk swiftly sweeps your feet out from beneath you with a Stormspear before driving the point of the weapon into your
+left leg.
+You parry the attack with a deft manoeuvre.
+09:58:41:571 [12620] [77] |(Grulk)|[ [ clu La2 WEA hleech nau sen AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
+(LEVI): Rebounding coming up in 1.2 seconds
+You may eat another plant or mineral.
+09:58:41:694 [12620] [77] |(Grulk)|[ [ clu La2 WEA hleech nau sen AST ]]  [0|0|30.2|30.2|18.1|12.1]
+(mapper): Don't know how to get there (11090) from here :(
+
+ ------------------------------------------------------------------------------------------------------------------- 
+|     TOUCH SHIELD TOUCH SHIELD - RIFT LOCK - RIFT LOCK - | TOUCH SHIELD TOUCH SHIELD - RIFT LOCK - RIFT LOCK -     |
+ ------------------------------------------------------------------------------------------------------------------- 
+
++ ( def coldresist ) +
+[RIFT]: -1 Aurum. Remaining: 6992.
+You eat an aurum flake.
+Your aching, pain-wracked body is soothed and calmed.
+A frigid stream of cerulean light emanates from a prismatic ring, surrounding you with a frosty aura.
+09:58:41:785 [12620] [77] |(Grulk)|[ [ clu La2 WEA nau sen AST ]]  [0|0|30.2|30.2|18.1|12.1]
+(((((((((((((((((((( BALANCE: 0.000 ))))))))))))))))))))
+ +[Grulk] HP: [====================] 100% -- 5287/5287 
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: right leg | Shin: 95 | AIRFIST!
+(LEVI): CLASS CHEESE INCOMMING
+
+(LEVI): CLASS CHEESE INCOMMING
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: right leg | Shin: 95 | AIRFIST!
+(LEVI): CLASS CHEESE INCOMMING
+Your mind is able to focus once again.
+09:58:42:637 [12620] [77] |(Grulk)|[ [ clu La2 WEA nau sen AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
+(LEVI): CLASS CHEESE INCOMMING
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: right leg | Shin: 95 | AIRFIST!
+(LEVI): CLASS CHEESE INCOMMING
+
+(LEVI): CLASS CHEESE INCOMMING
+[REB] You suddenly perceive the vague outline of an aura of rebounding around Grulk.
+09:58:43:128 [12620] [77] |(Grulk)|[ [ clu La2 WEA nau sen AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: right leg | Shin: 95
+(LEVI): CLASS CHEESE INCOMMING
+You may eat another plant or mineral.
+09:58:43:376 [12620] [78] |(Grulk)|[ [ clu La2 WEA nau sen AST ]]  [0|0|30.2|30.2|18.1|12.1]
+(mapper): Don't know how to get there (11090) from here :(
+
+ ------------------------------------------------------------------------------------------------------------------- 
+|     TOUCH SHIELD TOUCH SHIELD - RIFT LOCK - RIFT LOCK - | TOUCH SHIELD TOUCH SHIELD - RIFT LOCK - RIFT LOCK -     |
+ ------------------------------------------------------------------------------------------------------------------- 
+
+[RIFT]: -1 Aurum. Remaining: 6991.
+You eat an aurum flake.
+The stinging feeling fades.
+09:58:43:553 [12620] [78] |(Grulk)|[ [ clu La2 WEA nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
+(LEVI): CLASS CHEESE INCOMMING
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: right leg | Shin: 95
+(LEVI): CLASS CHEESE INCOMMING
+(mapper): Don't know how to get there (11090) from here :(
+
+ ------------------------------------------------------------------------------------------------------------------- 
+|     TOUCH SHIELD TOUCH SHIELD - RIFT LOCK - RIFT LOCK - | TOUCH SHIELD TOUCH SHIELD - RIFT LOCK - RIFT LOCK -     |
+ ------------------------------------------------------------------------------------------------------------------- 
+(mapper): Don't know how to get there (11090) from here :(
+
+ ------------------------------------------------------------------------------------------------------------------- 
+|     TOUCH SHIELD TOUCH SHIELD - RIFT LOCK - RIFT LOCK - | TOUCH SHIELD TOUCH SHIELD - RIFT LOCK - RIFT LOCK -     |
+ ------------------------------------------------------------------------------------------------------------------- 
+Grulk's aura of weapons rebounding disappears.
+On silent paws, an adult vixen rushes to Grulk's side.
+A cunning red fox leaps upon you, sinking its teeth into your exposed skin.
+Grulk starts to wield a claw-etched handaxe of steel and ash in his left hand.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your right leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your right leg.
+Health lost: 745 (physical cutting).
+With a swift turn, you draw your blade from its scabbard and unleash a retaliatory strike against Grulk.
+A prickly stinging overcomes your body, fading away into numbness.
+09:58:43:858 [11875] [78] |(Grulk)|[ [ clu La2 WEA hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+Grulk takes a long drag off his pipe.
+
+(LEVI): CLASS CHEESE INCOMMING
+Grulk seems able to move more freely all of a sudden.
+09:58:44:117 [11875] [77] |(Grulk)|[ [ clu La2 WEA hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
++ ( def shield ) +
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+You touch the tattoo and a nearly invisible magical shield forms around you.
+A gossamer butterfly hurls itself against your shield in a futile attempt to harm you.
+09:58:44:266 [12620] [77] |(Grulk)|[ [ clu La2 WEA hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+Your left arm feels stronger and healthier.
+You have set the 'slickness' affliction to the 25 priority.
+09:58:44:272 [12620] [77] |(Grulk)|[ [ la1 clu WEA hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'paralysis' affliction to the 25 priority.
+09:58:44:274 [12620] [77] |(Grulk)|[ [ la1 clu WEA hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: right leg | Shin: 95 | AIRFIST!
+You may eat another plant or mineral.
+09:58:44:895 [13862] [86] |(Grulk)|[ [ clu WEA hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Aurum. Remaining: 6990.
+You eat an aurum flake.
+Your limbs strengthen and you feel stronger.
+09:58:45:084 [13862] [85] |(Grulk)|[ [ clu hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
+- ( def shield ) -
+A fuzzy brown lemming races into the location.
+A small brown lemming rips apart your magical shield defence with its claws.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your right arm.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your right arm.
+Health lost: 745 (physical cutting).
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+09:58:45:272 [13117] [85] |(Grulk)|[ [ clu SLI hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+Grulk takes a drink from a quartz crystal vial.
+09:58:45:322 [13117] [85] |(Grulk)|[ [ clu SLI hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'slickness' affliction to the 1 priority.
+09:58:45:416 [13117] [85] |(Grulk)|[ [ clu SLI hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'paralysis' affliction to the 1 priority.
+09:58:45:418 [13117] [85] |(Grulk)|[ [ clu SLI hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+Health lost: 94 (raw).
+[[ BLEED 94 ]]
+You have set the 'paralysis' affliction to the 3 priority.
+09:58:45:574 [13023] [85] |(Grulk)|[ [ clu SLI hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'slickness' affliction to the 3 priority.
+09:58:45:664 [13023] [85] |(Grulk)|[ [ clu SLI hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another bit of irid moss or potash.
+09:58:46:177 [13023] [85] |(Grulk)|[ [ clu SLI hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+On silent paws, an adult vixen rushes to Grulk's side.
+A cunning red fox leaps upon you, sinking its teeth into your exposed skin.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your right leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your right leg.
+Health lost: 745 (physical cutting).
+With a swift turn, you draw your blade from its scabbard and unleash a retaliatory strike against Grulk.
+You feel a tightening sensation grow in your lungs.
+You may eat another plant or mineral.
+09:58:46:639 [12278] [85] |(Grulk)|[ [ bld(129) clu SLI hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+A descending tunnel. (indoors)
+The mirrored walls and floor of this tunnel slope steeply. Although the rock is slippery, it is also uneven, providing
+potential hand and footholds along the way. Some of the outcroppings are dangerously sharp, and their jagged edges match 
+the shards of crystal that litter the ground. In other areas, the passage is made even more hazardous by the 
+bioluminescent moss that provides this descent with the same eerie lighting as the rest of the caverns. Grulk Stormwing 
+is here, hidden. He wields a claw-etched handaxe of steel and ash in his left hand and a crudely-banded ironwood shield 
+in his right.
+You see exits leading southeast and west.
+(1) person here: Grulk.
+09:58:46:729 [12278] [85] |(Grulk)|[ [ bld(129) clu SLI hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Magnesium. Remaining: 6478.
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You may utilise the tree tattoo again.
+09:58:47:426 [12278] [82] |(Grulk)|[ [ clu SLI hleech nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
++ ( def shield ) +
+You touch the tree of life tattoo.
+Your glands cease their oily secretion.
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+You touch the tattoo and a nearly invisible magical shield forms around you.
+You have set the 'slickness' affliction to the 25 priority.
+09:58:47:668 [12278] [82] |(Grulk)|[ [ clu hleech nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'paralysis' affliction to the 25 priority.
+09:58:47:669 [12278] [82] |(Grulk)|[ [ clu hleech nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+A grey wolf hurls itself against your shield in a futile attempt to harm you.
+09:58:47:764 [12278] [82] |(Grulk)|[ [ clu hleech nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
+- ( def shield ) -
+A fuzzy brown lemming races into the location.
+A small brown lemming rips apart your magical shield defence with its claws.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your right leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your right leg.
+ --------------------------------------------------------------------------- 
+|     RIGHT LEG IS 2 HITS FROM BREAK! | RIGHT LEG IS 2 HITS FROM BREAK!     |
+ --------------------------------------------------------------------------- 
+Health lost: 745 (physical cutting).
+With a swift turn, you draw your blade from its scabbard and unleash a retaliatory strike against Grulk.
+A prickly stinging overcomes your body, fading away into numbness.
+09:58:48:173 [11533] [82] |(Grulk)|[ [ clu hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+09:58:48:176 [14708] [82] |(Grulk)|[ [ clu hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+Now prioritising the damagedrightleg affliction.
+09:58:48:330 [14708] [82] |(Grulk)|[ [ clu hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another plant or mineral.
+09:58:48:331 [14708] [82] |(Grulk)|[ [ clu hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+Health lost: 1062 (unblockable).
+[RIFT]: -1 Aurum. Remaining: 6989.
+You eat an aurum flake.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+09:58:48:424 [13646] [82] |(Grulk)|[ [ hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'paralysis' affliction to the 3 priority.
+09:58:48:952 [13646] [82] |(Grulk)|[ [ hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'slickness' affliction to the 3 priority.
+09:58:49:039 [13646] [82] |(Grulk)|[ [ hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+The chilling howl of the wolf fills you with an irrational madness.
+Grulk starts to wield a Stormspear in his left hand.
+Grulk carefully wipes all the venoms off of a Stormspear.
+Grulk lays open your flesh with an expert lateral slice with a Stormspear.
+[ClassDetect]: Switched curingset to: sentinel (vs Sentinel)
+Health lost: 1147 (physical cutting).
+You look about yourself nervously.
+A savage light enters the eyes of Grulk.
+Turning with the motion of his strike, Grulk comes back around to slam the haft of his weapon into your temple.
+A gossamer butterfly disappears back into the wild.
+A fuzzy brown lemming dashes into the room.
+09:58:49:440 [12499] [82] |(Grulk)|[ [ shy hleech nau hal IMP PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You will now cure using the sentinel set.
+09:58:49:499 [12499] [82] |(Grulk)|[ [ shy hleech nau hal IMP PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+All your defence priorities have been reset to defaults.
+09:58:49:533 [12499] [82] |(Grulk)|[ [ shy hleech nau hal IMP PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You may not set a priority for the 'avoid' defence.
+You may eat another plant or mineral.
+09:58:49:834 [12499] [82] |(Grulk)|[ [ shy hleech nau hal IMP PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Magnesium. Remaining: 6477.
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+09:58:49:929 [12499] [82] |(Grulk)|[ [ shy hleech nau hal IMP AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
++ ( def fangbarrier ) +
+The quicksilver hardens into a supple metallic shell.
+09:58:50:204 [12499] [82] |(Grulk)|[ [ shy hleech nau hal IMP AST ]]  [0|0|30.2|30.2|18.1|12.1]
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+
+(LEVI): Rebounding coming up in 1.2 seconds
+Health lost: 52 (raw).
+[[ BLEED 52 ]]
+You may eat another plant or mineral.
+09:58:51:440 [12447] [82] |(Grulk)|[ [ shy hleech nau hal IMP AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You inhale deeply, purging yourself of your asthmatic condition.
+09:58:51:502 [12447] [82] |(Grulk)|[ [ shy hleech nau hal IMP ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Plumbum. Remaining: 6550.
+You eat a plumbum flake.
+You are patient once again.
+You focus your mind intently on curing your mental maladies.
+Your shyness has been cured. You can now face the world boldly.
+09:58:51:635 [12447] [79] |(Grulk)|[ [ hleech nau hal ]]  [0|0|30.2|30.2|18.1|12.1]
+On silent paws, an adult vixen rushes to Grulk's side.
+A cunning red fox leaps upon you, sinking its teeth into your exposed skin.
+Grulk viciously lacerates you with a Stormspear.
+The sweep of your foe cleaves your body only to meet muscle and sinew flexing in defiance against the deeper cuts.
+Health lost: 917 (physical cutting).
+You feel a tightening sensation grow in your lungs.
+Blood flows freely from your ravaged skin.
+A grey wolf disappears back into the wild.
+With a shrill squawk, an ebony raven flies into the room.
+09:58:51:971 [11530] [79] |(Grulk)|[ [ bld(122) hae hleech nau hal AST ]]  [0|0|30.2|30.2|18.1|12.1]
+[REB] You suddenly perceive the vague outline of an aura of rebounding around Grulk.
+09:58:52:414 [11530] [79] |(Grulk)|[ [ bld(122) hae hleech nau hal AST ]]  [0|0|30.2|30.2|18.1|12.1]
+09:58:52:628 [14906] [79] |(Grulk)|[ [ bld(122) hae hleech nau hal AST ]]  [0|0|30.2|30.2|18.1|12.1]
+Health lost: 1062 (unblockable).
+09:58:53:071 [13844] [79] |(Grulk)|[ [ bld(122) hae hleech nau hal AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another plant or mineral.
+09:58:53:201 [13844] [79] |(Grulk)|[ [ bld(122) hae hleech nau hal AST ]]  [0|0|30.2|30.2|18.1|12.1]
+Ooh look! A lovely lake. Perhaps you'll dive in!
+[RIFT]: -1 Ferrum. Remaining: 5519.
+You eat a ferrum flake.
+Your blood regains its ability to clot.
+Your mind is able to focus once again.
+09:58:54:110 [13844] [77] |(Grulk)|[ [ hleech nau hal AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You focus your mind intently on curing your mental maladies.
+Your hallucinations cease to plague you.
+09:58:54:248 [13844] [74] |(Grulk)|[ [ hleech nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+(((((((((((((((((((( BALANCE: 0.000 ))))))))))))))))))))
+You may not purge your lungs again as of this time.
+You may not purge your lungs again as of this time.
+You may not purge your lungs again as of this time.
+You may not purge your lungs again as of this time.
+09:58:54:253 [13844] [74] |(Grulk)|[ [ hleech nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+Grulk's aura of weapons rebounding disappears.
+A grumpy badger stalks to the side of Grulk.
+A grumpy badger sinks his claws into your lower leg, carving deep gouges into the flesh.
+You feel a terrible hunger grow within you.
+Health lost: 68 (physical cutting).
+Grulk thrusts his blade angrily towards you, but you dodge easily out of the way.
+09:58:54:406 [14521] [74] |(Grulk)|[ [ bld(101) hleech nau AST add ]]  [0|0|30.2|30.2|18.1|12.1]
+You may not purge your lungs again as of this time.
+09:58:54:487 [14521] [74] |(Grulk)|[ [ bld(101) hleech nau AST add ]]  [0|0|30.2|30.2|18.1|12.1]
+Grulk takes a long drag off his pipe.
+You may not purge your lungs again as of this time.
+09:58:54:644 [14906] [80] |(Grulk)|[ [ hleech nau AST add ]]  [0|0|30.2|30.2|18.1|12.1]
+The raven darts in and out of your line of vision, making you uneasy.
+09:58:54:760 [14906] [80] |(Grulk)|[ [ par hleech nau AST add ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another plant or mineral.
+09:58:54:927 [14906] [80] |(Grulk)|[ [ par hleech nau AST add ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Aurum. Remaining: 6988.
+You eat an aurum flake.
+Your addiction can never be sated.
+Your bronchial tubes open up and your asthma is cured.
+09:58:55:070 [14906] [80] |(Grulk)|[ [ par hleech nau add ]]  [0|0|30.2|30.2|18.1|12.1]
+You may not purge your lungs again as of this time.
+09:58:55:160 [14906] [80] |(Grulk)|[ [ par hleech nau add ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: right leg | Shin: 92 | AIRFIST!
+[AIR] Freeing your mind to the unpredictable dance of the wind, you hurl a blow towards Grulk.
+09:58:56:365 [14906] [80] |(Grulk)|[ [ par hleech nau add ]]  [0|0|30.2|30.2|18.1|12.1]
+Health lost: 1 (raw).
+[[ BLEED 1 ]]
+You may eat another plant or mineral.
+09:58:56:640 [14905] [80] |(Grulk)|[ [ par hleech nau add ]]  [0|0|30.2|30.2|18.1|12.1]
+A grumpy badger stalks to the side of Grulk.
+A grumpy badger sinks his claws into your lower leg, carving deep gouges into the flesh.
+You feel bile rising in the back of your throat as as infection begins to set in.
+Health lost: 68 (physical cutting).
+With a swift turn, you draw your blade from its scabbard and unleash a retaliatory strike against Grulk.
+Grulk starts to wield a claw-etched handaxe of steel and ash in his left hand.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your right leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your right leg.
+ ----------------------------------------------------------------------- 
+|     RIGHT LEG IS PREPPED! (1 HIT) | RIGHT LEG IS PREPPED! (1 HIT)     |
+ ----------------------------------------------------------------------- 
+Health lost: 745 (physical cutting).
+With a swift turn, you draw your blade from its scabbard and unleash a retaliatory strike against Grulk.
+A prickly stinging overcomes your body, fading away into numbness.
+Your mind is able to focus once again.
+09:58:56:741 [14092] [80] |(Grulk)|[ [ bld(142) par hleech nau PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+Grulk takes a drink from a quartz crystal vial.
+[RIFT]: -1 Magnesium. Remaining: 6476.
+You eat a magnesium chip.
+Your addiction can never be sated.
+Your muscles unlock; you are no longer paralysed.
+You focus your mind intently on curing your mental maladies.
+Aaaahhh. No one is out to get you after all.
+09:58:57:115 [14092] [97] |(Grulk)|[ [ hleech nau add ]]  [0|0|30.2|30.2|18.1|12.1]
+Health lost: 1062 (unblockable).
+09:58:57:731 [13030] [97] |(Grulk)|[ [ hleech nau add ]]  [0|0|30.2|30.2|18.1|12.1]
+Grulk starts to wield a Stormspear in his left hand.
+Grulk thrusts his blade angrily towards you, but you dodge easily out of the way.
+09:58:58:127 [13030] [97] |(Grulk)|[ [ hleech nau add ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another plant or mineral.
+09:58:58:293 [13030] [97] |(Grulk)|[ [ hleech nau add ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Aurum. Remaining: 6987.
+You eat an aurum flake.
+Your addiction can never be sated.
+Your aching, pain-wracked body is soothed and calmed.
+09:58:58:517 [13030] [97] |(Grulk)|[ [ nau add ]]  [0|0|30.2|30.2|18.1|12.1]
+(((((((((((((((((((( BALANCE: 0.000 ))))))))))))))))))))
+ +[Grulk] HP: [=================== ] 97% -- 5134/5287 
+Your mind is able to focus once again.
+09:58:59:159 [13030] [96] |(Grulk)|[ [ nau add ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 74
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 74
+You may eat another plant or mineral.
+09:59:00:153 [13030] [96] |(Grulk)|[ [ nau add ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 74
+[RIFT]: -1 Ferrum. Remaining: 5518.
+You eat a ferrum flake.
+Your terrible addiction seems to wane.
+09:59:00:219 [13030] [96] |(Grulk)|[ [ nau ]]  [0|0|30.2|30.2|18.1|12.1]
+
+ --------------------------------------------------------------- 
+|     RIGHT LEG HAS BEEN BROKEN | RIGHT LEG HAS BEEN BROKEN     |
+ --------------------------------------------------------------- 
+On silent paws, an adult vixen rushes to Grulk's side.
+A cunning red fox leaps upon you, sinking its teeth into your exposed skin.
+Grulk swiftly sweeps your feet out from beneath you with a Stormspear before driving the point of the weapon into your
+right leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your right leg.
+Your right leg is greatly damaged from the beating.
+Health lost: 483 (physical cutting).
+You look about yourself nervously.
+A savage light enters the eyes of Grulk.
+09:59:00:326 [12547] [96] |(Grulk)|[ [ Rl2 shy hleech nau prone ]]  [0|0|30.2|30.2|18.1|12.1]
+You focus your mind intently on curing your mental maladies.
+Your shyness has been cured. You can now face the world boldly.
+09:59:00:431 [12547] [94] |(Grulk)|[ [ Rl2 hleech nau prone ]]  [0|0|30.2|30.2|18.1|12.1]
+You have smoked the last traces of malachite in a long, elegant ebony pipe.
+09:59:00:468 [12547] [94] |(Grulk)|[ [ Rl2 hleech nau prone ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 74
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 74
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+[RIFT]: -1 Malachite. Remaining: 8113.
+09:59:01:219 [12547] [94] |(Grulk)|[ [ Rl2 hleech nau prone ]]  [0|0|30.2|30.2|18.1|12.1]
+You fill your pipe with a pinch of ground malachite.
+09:59:01:221 [12547] [94] |(Grulk)|[ [ Rl2 hleech nau prone ]]  [0|0|30.2|30.2|18.1|12.1]
+ +[Grulk] HP: [====================] 100% -- 5287/5287 
+You may purge your lungs once again.
+09:59:01:309 [12547] [94] |(Grulk)|[ [ Rl2 hleech nau prone ]]  [0|0|30.2|30.2|18.1|12.1]
+You may utilise the tree tattoo again.
+09:59:01:464 [12547] [94] |(Grulk)|[ [ Rl2 hleech nau prone ]]  [0|0|30.2|30.2|18.1|12.1]
+
+(LEVI): Rebounding coming up in 1.2 seconds
+You touch the tree of life tattoo.
+Your stomach becalms itself.
+You may eat another plant or mineral.
+09:59:01:700 [12547] [94] |(Grulk)|[ [ Rl2 hleech prone ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Aurum. Remaining: 6986.
+You eat an aurum flake.
+Your aching, pain-wracked body is soothed and calmed.
+09:59:01:812 [12547] [94] |(Grulk)|[ [ Rl2 prone ]]  [0|0|30.2|30.2|18.1|12.1]
+Health lost: 50 (raw).
+[[ BLEED 50 ]]
+Your lungs have recovered enough to smoke another mineral or plant.
+09:59:02:014 [12497] [94] |(Grulk)|[ [ Rl2 prone ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 74
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 74
+On silent paws, an adult vixen rushes to Grulk's side.
+A cunning red fox leaps upon you, sinking its teeth into your exposed skin.
+Grulk starts to wield a claw-etched handaxe of steel and ash in his left hand.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your left arm.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your left arm.
+Health lost: 745 (physical cutting).
+You feel a tightening sensation grow in your lungs.
+09:59:02:550 [11752] [94] |(Grulk)|[ [ Rl2 prone hleech AST ]]  [0|0|30.2|30.2|18.1|12.1]
+09:59:02:634 [14906] [94] |(Grulk)|[ [ Rl2 prone hleech AST ]]  [0|0|30.2|30.2|18.1|12.1]
+Your mind is able to focus once again.
+09:59:02:982 [14906] [94] |(Grulk)|[ [ Rl2 prone hleech AST ]]  [0|0|30.2|30.2|18.1|12.1]
+[REB] You suddenly perceive the vague outline of an aura of rebounding around Grulk.
+09:59:03:066 [14906] [94] |(Grulk)|[ [ Rl2 prone hleech AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You are dismayed as the corpse of a priestess of Life turns to dust in your hands.
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+Both of your legs must be free and unhindered to do that.
+You must be standing first.
+A descending tunnel. (indoors)
+The mirrored walls and floor of this tunnel slope steeply. Although the rock is slippery, it is also uneven, providing
+potential hand and footholds along the way. Some of the outcroppings are dangerously sharp, and their jagged edges match 
+the shards of crystal that litter the ground. In other areas, the passage is made even more hazardous by the 
+bioluminescent moss that provides this descent with the same eerie lighting as the rest of the caverns. Grulk Stormwing 
+is here, hidden. He wields a claw-etched handaxe of steel and ash in his left hand and a crudely-banded ironwood shield 
+in his right.
+You see exits leading southeast and west.
+(1) person here: Grulk.
+09:59:03:391 [14906] [95] |(Grulk)|[ [ Rl2 prone hleech AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another plant or mineral.
+09:59:03:392 [14906] [95] |(Grulk)|[ [ Rl2 prone hleech AST ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Aurum. Remaining: 6985.
+You eat an aurum flake.
+Your aching, pain-wracked body is soothed and calmed.
+09:59:03:577 [14906] [95] |(Grulk)|[ [ Rl2 prone AST ]]  [0|0|30.2|30.2|18.1|12.1]
+The raven darts in and out of your line of vision, making you uneasy.
+The lemming races around you and between your legs, making you terribly dizzy and afraid of heights.
+09:59:03:815 [14906] [95] |(Grulk)|[ [ Rl2 prone ver AST par ]]  [0|0|30.2|30.2|18.1|12.1]
+You focus your mind intently on curing your mental maladies.
+Your fear of heights subsides.
+09:59:03:964 [14906] [92] |(Grulk)|[ [ Rl2 prone AST par ]]  [0|0|30.2|30.2|18.1|12.1]
+
+- ( def fangbarrier ) -
+Grulk's aura of weapons rebounding disappears.
+An ebony raven dives at your face, pecking violently at your eyes.
+Grulk starts to wield a Stormspear in his left hand.
+Grulk viciously lacerates you with a Stormspear.
+Health lost: 1432 (physical cutting).
+The protective covering coating your skin sloughs off.
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+Blood flows freely from your ravaged skin.
+The barbs on a Stormspear viciously tear into you.
+09:59:04:064 [13474] [92] |(Grulk)|[ [ bld(123) prone Rl2 SLI hae sen AST par ]]  [0|0|30.2|30.2|18.1|12.1]
+Grulk takes a long drag off his pipe.
+Grulk takes a drink from a quartz crystal vial.
+09:59:04:153 [13474] [92] |(Grulk)|[ [ bld(123) prone Rl2 SLI hae sen AST par ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'slickness' affliction to the 1 priority.
+09:59:04:154 [13474] [92] |(Grulk)|[ [ bld(123) prone Rl2 SLI hae sen AST par ]]  [0|0|30.2|30.2|18.1|12.1]
+Your right leg feels stronger and healthier.
+
+[ClassDetect]: Combat ended, curingset reset to: normal
+You will now cure using the normal set.
+09:59:04:493 [14219] [92] |(Grulk)|[ [ bld(123) prone SLI rl1 hae sen AST par ]]  [0|0|30.2|30.2|18.1|12.1]
+You must be standing first.
+09:59:04:562 [14219] [92] |(Grulk)|[ [ bld(123) prone SLI rl1 hae sen AST par ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another plant or mineral.
+09:59:05:047 [14906] [100] |(Grulk)|[ [ bld(123) prone SLI rl1 hae sen AST par ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Magnesium. Remaining: 6475.
+You eat a magnesium chip.
+Your glands cease their oily secretion.
+[RIFT]: -1 Quicksilver. Remaining: 8499.
+You apply a quicksilver droplet to yourself.
+The lemming races around you and between your legs, making you terribly dizzy and afraid of heights.
+09:59:05:853 [14906] [99] |(Grulk)|[ [ bld(123) ver hae sen AST par ]]  [0|0|30.2|30.2|18.1|12.1]
+You bunch your powerful muscles and launch yourself in a majestic leap southeastwards.
+A damp, musty tunnel. (indoors)
+You see exits leading north and northwest.
+You drop back and ease the engagement.
+09:59:06:105 [14906] [99] |(Grulk)|[ [ bld(123) ver hae sen AST par ]]  [0|0|30.2|30.2|18.1|12.1]
+Your mind is able to focus once again.
+09:59:06:350 [14906] [99] |(Grulk)|[ [ bld(123) ver hae sen AST par ]]  [0|0|30.2|30.2|18.1|12.1]
+You focus your mind intently on curing your mental maladies.
+Aaaahhh. No one is out to get you after all.
+09:59:06:476 [14906] [97] |(Grulk)|[ [ bld(123) ver hae sen AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another plant or mineral.
+09:59:06:670 [14906] [97] |(Grulk)|[ [ bld(123) ver hae sen AST ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Aurum. Remaining: 6984.
+You eat an aurum flake.
+Your bronchial tubes open up and your asthma is cured.
+09:59:06:848 [14906] [97] |(Grulk)|[ [ bld(123) ver hae sen ]]  [0|0|30.2|30.2|18.1|12.1]
+(((((((((((((((((((( BALANCE: 0.000 ))))))))))))))))))))
+Blood ceases running quite so freely from the rents in your flesh.
+09:59:07:329 [14906] [97] |(Grulk)|[ [ bld(123) ver hae sen ]]  [0|0|30.2|30.2|18.1|12.1]
+Health lost: 123 (raw).
+[[ BLEED 123 ]]
+
+(LEVI): [V3] States reset
+Prowling like a jaguar, Grulk enters from the northwest.
+09:59:07:811 [14783] [97] |(Grulk)|[ [ bld(123) ver hae sen ]]  [0|0|30.2|30.2|18.1|12.1]
+On silent paws, an adult vixen rushes to Grulk's side.
+A cunning red fox leaps upon you, sinking its teeth into your exposed skin.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your right leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your right leg.
+Health lost: 930 (physical cutting).
+With a swift turn, you draw your blade from its scabbard and unleash a retaliatory strike against Grulk.
+A prickly stinging overcomes your body, fading away into numbness.
+09:59:07:892 [13853] [97] |(Grulk)|[ [ bld(166) ver hae hleech sen PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+You are already enduring attempts to paralyse you.
+09:59:07:946 [13853] [97] |(Grulk)|[ [ bld(166) ver hae hleech sen PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another plant or mineral.
+09:59:08:507 [13853] [97] |(Grulk)|[ [ bld(166) ver hae hleech sen PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Magnesium. Remaining: 6474.
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+09:59:08:685 [13853] [97] |(Grulk)|[ [ bld(166) ver hae hleech sen ]]  [0|0|30.2|30.2|18.1|12.1]
+
+- ( def endure ) -
+You cease focusing on driving off attempts to paralyse you.
+09:59:08:753 [13853] [97] |(Grulk)|[ [ bld(166) ver hae hleech sen ]]  [0|0|30.2|30.2|18.1|12.1]
+Now prioritising the haemophilia affliction.
+09:59:08:848 [13853] [97] |(Grulk)|[ [ bld(166) ver hae hleech sen ]]  [0|0|30.2|30.2|18.1|12.1]
+Your mind is able to focus once again.
+09:59:08:938 [13853] [97] |(Grulk)|[ [ bld(166) ver hae hleech sen ]]  [0|0|30.2|30.2|18.1|12.1]
+
++ ( def rebounding ) +
+
++ ( def shield ) +
+You touch the tattoo and a nearly invisible magical shield forms around you.
+09:59:09:064 [13853] [97] |(Grulk)|[ [ bld(166) ver hae hleech sen ]]  [0|0|30.2|30.2|18.1|12.1]
+You focus your mind intently on curing your mental maladies.
+Your fear of heights subsides.
+09:59:09:065 [13853] [95] |(Grulk)|[ [ bld(166) hae hleech sen ]]  [0|0|30.2|30.2|18.1|12.1]
+Grulk starts to wield a Stormspear in his left hand.
+Grulk's attack rebounds off your magical shield.
+09:59:09:207 [13853] [95] |(Grulk)|[ [ bld(166) hae hleech sen ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'slickness' affliction to the 25 priority.
+09:59:09:209 [13853] [95] |(Grulk)|[ [ bld(166) hae hleech sen ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'paralysis' affliction to the 25 priority.
+09:59:09:210 [13853] [95] |(Grulk)|[ [ bld(166) hae hleech sen ]]  [0|0|30.2|30.2|18.1|12.1]
+Now prioritising the haemophilia affliction.
+09:59:09:212 [13853] [95] |(Grulk)|[ [ bld(166) hae hleech sen ]]  [0|0|30.2|30.2|18.1|12.1]
+A small brown lemming hurls itself against your shield in a futile attempt to harm you.
+09:59:09:983 [13853] [95] |(Grulk)|[ [ bld(166) hae hleech sen ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another plant or mineral.
+09:59:10:173 [13853] [95] |(Grulk)|[ [ bld(166) hae hleech sen ]]  [0|0|30.2|30.2|18.1|12.1]
+You eat a ferrum flake.
+Your blood regains its ability to clot.
+Now prioritising the haemophilia affliction.
+09:59:10:337 [13853] [90] |(Grulk)|[ [ hleech sen ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'paralysis' affliction to the 3 priority.
+09:59:10:502 [13853] [90] |(Grulk)|[ [ hleech sen ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'slickness' affliction to the 3 priority.
+09:59:10:591 [13853] [90] |(Grulk)|[ [ hleech sen ]]  [0|0|30.2|30.2|18.1|12.1]
+
+- ( def shield ) -
+A small brown lemming rips apart your magical shield defence with its claws.
+Grulk starts to wield a claw-etched handaxe of steel and ash in his left hand.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your right leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your right leg.
+Health lost: 930 (physical cutting).
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+09:59:10:808 [12923] [90] |(Grulk)|[ [ SLI hleech sen ]]  [0|0|30.2|30.2|18.1|12.1]
+Your glands cease their oily secretion.
+09:59:11:059 [12923] [90] |(Grulk)|[ [ hleech sen ]]  [0|0|30.2|30.2|18.1|12.1]
+
+(LEVI): Rebounding coming up in 1.2 seconds
+You are dismayed as the corpse of an acolyte of Life turns to dust in your hands.
+09:59:11:214 [12923] [90] |(Grulk)|[ [ hleech sen ]]  [0|0|30.2|30.2|18.1|12.1]
+Your mind is able to focus once again.
+09:59:11:576 [12923] [90] |(Grulk)|[ [ hleech sen ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another plant or mineral.
+09:59:11:805 [12923] [90] |(Grulk)|[ [ hleech sen ]]  [0|0|30.2|30.2|18.1|12.1]
+Health lost: 1390 (unblockable).
+09:59:11:887 [11533] [90] |(Grulk)|[ [ hleech sen ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Aurum. Remaining: 6983.
+You eat an aurum flake.
+The stinging feeling fades.
+09:59:12:009 [14498] [90] |(Grulk)|[ [ hleech ]]  [0|0|30.2|30.2|18.1|12.1]
+The lemming races around you and between your legs, making you terribly dizzy and afraid of heights.
+09:59:12:103 [14498] [90] |(Grulk)|[ [ ver hleech ]]  [0|0|30.2|30.2|18.1|12.1]
+Grulk starts to wield a Stormspear in his left hand.
+Grulk savagely gouges into you with a Stormspear.
+The attack rebounds back onto Grulk!
+Grulk moves with the blow, suffering less from the lethal stroke.
+[PAR] [PAR] Horror overcomes Grulk's face as his body stiffens into paralysis.
+A small brown lemming disappears back into the wild.
+09:59:12:107 [14498] [90] |(Grulk)|[ [ ver hleech ]]  [0|0|30.2|30.2|18.1|12.1]
+Grulk eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+You focus your mind intently on curing your mental maladies.
+Your fear of heights subsides.
+09:59:12:242 [14498] [88] |(Grulk)|[ [ hleech ]]  [0|0|30.2|30.2|18.1|12.1]
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+Your lungs have recovered enough to smoke another mineral or plant.
+09:59:12:561 [14498] [88] |(Grulk)|[ [ hleech ]]  [0|0|30.2|30.2|18.1|12.1]
+A damp, musty tunnel. (indoors)
+Flowing slowly though the dimly lit corridor, the dank air carries a fusty odour and a cold mist from the west. The
+smooth walls gradually give way to jagged crystalline formations that line the tunnel with their shining facets, casting 
+pale reflected light throughout the passageway. As the shaft curves northwards, the glassy covering again grows smoother 
+and more consistent, only slightly uneven in places with dips and lumps of crystal protruding from the walls. Glowing 
+with pale green luminescence, small clusters of moss affix themselves to the mirrored ceiling between needle-sharp 
+stalactites. Grulk Stormwing is here, hidden. He wields a Stormspear in his left hand and a crudely-banded ironwood 
+shield in his right.
+You see exits leading north and northwest.
+(1) person here: Grulk.
+09:59:12:650 [14498] [88] |(Grulk)|[ [ hleech ]]  [0|0|30.2|30.2|18.1|12.1]
+[REB] You suddenly perceive the vague outline of an aura of rebounding around Grulk.
+09:59:12:727 [14498] [88] |(Grulk)|[ [ hleech ]]  [0|0|30.2|30.2|18.1|12.1]
+The raven darts in and out of your line of vision, making you uneasy.
+09:59:13:106 [14498] [88] |(Grulk)|[ [ hleech par ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another plant or mineral.
+09:59:13:488 [14498] [89] |(Grulk)|[ [ hleech par ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Aurum. Remaining: 6982.
+You eat an aurum flake.
+Your aching, pain-wracked body is soothed and calmed.
+09:59:13:580 [14498] [89] |(Grulk)|[ [ par ]]  [0|0|30.2|30.2|18.1|12.1]
+Grulk eats an aurum flake.
+09:59:13:737 [14498] [89] |(Grulk)|[ [ par ]]  [0|0|30.2|30.2|18.1|12.1]
+Grulk takes a drink from a quartz crystal vial.
+09:59:14:159 [14498] [89] |(Grulk)|[ [ par ]]  [0|0|30.2|30.2|18.1|12.1]
+A descending tunnel. (indoors)
+You see exits leading southeast and west.
+09:59:14:250 [14498] [89] |(Grulk)|[ [ par ]]  [0|0|30.2|30.2|18.1|12.1]
+
+(LEVI): Airfist has faded from Grulk.
+Your mind is able to focus once again.
+09:59:14:665 [14906] [89] |(Grulk)|[ [ par ]]  [0|0|30.2|30.2|18.1|12.1]
+You focus your mind intently on curing your mental maladies.
+Aaaahhh. No one is out to get you after all.
+09:59:14:749 [14906] [87] |(Grulk)|[ [ ]]  [0|0|30.2|30.2|18.1|12.1]
+
++ ( def fangbarrier ) +
+The quicksilver hardens into a supple metallic shell.
+You may eat another plant or mineral.
+09:59:15:104 [14906] [87] |(Grulk)|[ [ ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Calamine. Remaining: 7106.
+You eat a calamine crystal.
+09:59:15:308 [14906] [95] |(Grulk)|[ [ ]]  [0|0|30.2|30.2|18.1|12.1]
+Prowling like a jaguar, Grulk enters from the southeast.
+09:59:15:418 [14906] [95] |(Grulk)|[ [ ]]  [0|0|30.2|30.2|18.1|12.1]
+On silent paws, an adult vixen rushes to Grulk's side.
+A cunning red fox leaps upon you, sinking its teeth into your exposed skin.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your right leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your right leg.
+Health lost: 745 (physical cutting).
+A prickly stinging overcomes your body, fading away into numbness.
+09:59:15:512 [14161] [95] |(Grulk)|[ [ hleech PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+You may utilise the tree tattoo again.
+09:59:15:564 [14161] [95] |(Grulk)|[ [ hleech PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+
++ ( def endure ) +
+You begin focusing on driving off attempts to paralyse you.
+09:59:15:655 [14161] [95] |(Grulk)|[ [ hleech PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+Health lost: 1062 (unblockable).
+09:59:16:580 [13099] [95] |(Grulk)|[ [ hleech PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your right leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your right leg.
+Health lost: 745 (physical cutting).
+With a swift turn, you draw your blade from its scabbard and unleash a retaliatory strike against Grulk.
+You feel a tightening sensation grow in your lungs.
+You may eat another plant or mineral.
+09:59:16:838 [12354] [95] |(Grulk)|[ [ hleech PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Magnesium. Remaining: 6473.
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+A descending tunnel. (indoors)
+A massive jade spider is here, tending his wounds. A massive jade spider moves fluidly on its many legs, searching for
+prey. A phantom sea turtle wafts here, his opaque fins outstretched to either side.
+You see exits leading northeast and east.
+09:59:16:928 [12354] [95] |(Grulk)|[ [ hleech AST ]]  [0|0|30.2|30.2|18.1|12.1]
+A massive jade spider lunges forward, hungrily tearing into your shoulder with its sharp teeth.
+Health lost: 716 (physical cutting).
+A massive jade spider leaps through the air and descends upon you, crushing you beneath the weight of its body.
+Health lost: 960 (physical blunt).
+09:59:17:040 [10678] [95] |(Grulk)|[ [ bld(137) prone hleech AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You touch the tree of life tattoo.
+Your bronchial tubes open up and your asthma is cured.
+09:59:17:058 [13943] [92] |(Grulk)|[ [ hleech ]]  [0|0|30.2|30.2|18.1|12.1]
+
+- ( def endure ) -
+You cease focusing on driving off attempts to paralyse you.
+09:59:17:116 [13943] [92] |(Grulk)|[ [ hleech ]]  [0|0|30.2|30.2|18.1|12.1]
+You puff on the pipe, but your existing aura of weapons rebounding negates any effect.
+09:59:17:198 [13943] [92] |(Grulk)|[ [ hleech ]]  [0|0|30.2|30.2|18.1|12.1]
+Your mind is able to focus once again.
+09:59:17:200 [13943] [92] |(Grulk)|[ [ hleech ]]  [0|0|30.2|30.2|18.1|12.1]
+You are dismayed as the corpse of an acolyte of Life turns to dust in your hands.
+09:59:17:301 [13943] [92] |(Grulk)|[ [ hleech ]]  [0|0|30.2|30.2|18.1|12.1]
+
+(LEVI): [V3] States reset
+Health lost: 17 (raw).
+[[ BLEED 17 ]]
+You may eat another plant or mineral.
+09:59:18:436 [13926] [91] |(Grulk)|[ [ hleech ]]  [0|0|30.2|30.2|18.1|12.1]
+Prowling like a jaguar, Grulk enters from the east.
+09:59:18:519 [13926] [91] |(Grulk)|[ [ hleech ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Aurum. Remaining: 6981.
+You eat an aurum flake.
+Your aching, pain-wracked body is soothed and calmed.
+Your lungs have recovered enough to smoke another mineral or plant.
+09:59:18:638 [13926] [91] |(Grulk)|[ [ ]]  [0|0|30.2|30.2|18.1|12.1]
+
++ ( def deafness ) +
+
+- ( def rebounding ) -
+- ( def fangbarrier ) -
+A fuzzy brown lemming races into the location.
+A small brown lemming rips apart your aura of rebounding defence with its claws.
+Grulk starts to wield a Stormspear in his left hand.
+Grulk savagely gouges into you with a Stormspear.
+The sweep of your foe cleaves your body only to meet muscle and sinew flexing in defiance against the deeper cuts.
+Health lost: 917 (physical cutting).
+The protective covering coating your skin sloughs off.
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+A savage light enters the eyes of Grulk.
+The blade of the weapon rakes lines of fire across your skin.
+A grey wolf lopes in from the forest.
+09:59:18:821 [13009] [91] |(Grulk)|[ [ SLI WEA ]]  [0|0|30.2|30.2|18.1|12.1]
+Your glands cease their oily secretion.
+[RIFT]: -1 Quicksilver. Remaining: 8498.
+You apply a quicksilver droplet to yourself.
+09:59:18:904 [13009] [91] |(Grulk)|[ [ WEA ]]  [0|0|30.2|30.2|18.1|12.1]
+A massive jade spider leaps through the air and descends upon you, crushing you beneath the weight of its body.
+Health lost: 1004 (physical blunt).
+A massive jade spider leaps through the air and descends upon you, crushing you beneath the weight of its body.
+Health lost: 886 (physical blunt).
+09:59:19:606 [11119] [91] |(Grulk)|[ [ bld(103) prone WEA ]]  [0|0|30.2|30.2|18.1|12.1]
+Your lungs have not yet recovered enough to allow you to smoke.
+09:59:19:675 [11119] [91] |(Grulk)|[ [ bld(103) prone WEA ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another plant or mineral.
+09:59:20:086 [11119] [89] |(Grulk)|[ [ WEA ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Aurum. Remaining: 6980.
+You eat an aurum flake.
+Your limbs strengthen and you feel stronger.
+09:59:20:233 [11119] [89] |(Grulk)|[ [ ]]  [0|0|30.2|30.2|18.1|12.1]
+Your lungs have recovered enough to smoke another mineral or plant.
+09:59:20:322 [11119] [89] |(Grulk)|[ [ ]]  [0|0|30.2|30.2|18.1|12.1]
+
+- ( def deafness ) -
+An ebony raven dives at your face, pecking violently at your eyes.
+Your hearing is suddenly restored.
+Grulk starts to wield a claw-etched handaxe of steel and ash in his left hand.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your right leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your right leg.
+ --------------------------------------------------------------------------- 
+|     RIGHT LEG IS 2 HITS FROM BREAK! | RIGHT LEG IS 2 HITS FROM BREAK!     |
+ --------------------------------------------------------------------------- 
+Your paragon completely absorbs the damage.
+A prickly stinging overcomes your body, fading away into numbness.
+09:59:21:229 [11119] [89] |(Grulk)|[ [ PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+
++ ( def endure ) +
+You begin focusing on driving off attempts to paralyse you.
+09:59:21:282 [11119] [89] |(Grulk)|[ [ PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+Now prioritising the damagedrightleg affliction.
+09:59:21:337 [11119] [89] |(Grulk)|[ [ PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+09:59:21:619 [13576] [89] |(Grulk)|[ [ PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another plant or mineral.
+09:59:21:728 [13576] [89] |(Grulk)|[ [ PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Magnesium. Remaining: 6472.
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+09:59:21:820 [13576] [89] |(Grulk)|[ [ ]]  [0|0|30.2|30.2|18.1|12.1]
+
+- ( def endure ) -
+You cease focusing on driving off attempts to paralyse you.
+09:59:21:875 [13576] [89] |(Grulk)|[ [ ]]  [0|0|30.2|30.2|18.1|12.1]
+The raven darts in and out of your line of vision, making you uneasy.
+09:59:22:122 [13576] [89] |(Grulk)|[ [ par ]]  [0|0|30.2|30.2|18.1|12.1]
+You focus your mind intently on curing your mental maladies.
+Aaaahhh. No one is out to get you after all.
+09:59:22:233 [13576] [86] |(Grulk)|[ [ ]]  [0|0|30.2|30.2|18.1|12.1]
+With a guttural growl, a wolf leaps forward and sinks his teeth into you.
+Health lost: 1113 (physical cutting).
+A massive jade spider lunges forward, hungrily tearing into your shoulder with its sharp teeth.
+Health lost: 695 (physical cutting).
+A massive jade spider lunges forward, hungrily tearing into your shoulder with its sharp teeth.
+Health lost: 718 (physical cutting).
+09:59:22:633 [11050] [86] |(Grulk)|[ [ bld(279) ]]  [0|0|30.2|30.2|18.1|12.1]
+On silent paws, an adult vixen rushes to Grulk's side.
+A cunning red fox leaps upon you, sinking its teeth into your exposed skin.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your right leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your right leg.
+ ----------------------------------------------------------------------- 
+|     RIGHT LEG IS PREPPED! (1 HIT) | RIGHT LEG IS PREPPED! (1 HIT)     |
+ ----------------------------------------------------------------------- 
+Your paragon completely absorbs the damage.
+A prickly stinging overcomes your body, fading away into numbness.
+09:59:22:729 [11050] [86] |(Grulk)|[ [ bld(279) hleech PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+Now prioritising the haemophilia affliction.
+09:59:22:898 [11050] [79] |(Grulk)|[ [ hleech PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+
++ ( def endure ) +
+You begin focusing on driving off attempts to paralyse you.
+09:59:22:900 [11050] [79] |(Grulk)|[ [ hleech PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+Now prioritising the haemophilia affliction.
+09:59:22:901 [11050] [79] |(Grulk)|[ [ hleech PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+
+(LEVI): Parrying method switched to randomleg.
+[REB] You suddenly perceive the vague outline of an aura of rebounding around Grulk.
+09:59:23:332 [11050] [79] |(Grulk)|[ [ hleech PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another plant or mineral.
+09:59:23:333 [11050] [79] |(Grulk)|[ [ hleech PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Magnesium. Remaining: 6471.
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+09:59:23:429 [11050] [80] |(Grulk)|[ [ hleech ]]  [0|0|30.2|30.2|18.1|12.1]
+
+- ( def endure ) -
+You cease focusing on driving off attempts to paralyse you.
+09:59:23:479 [11050] [80] |(Grulk)|[ [ hleech ]]  [0|0|30.2|30.2|18.1|12.1]
+A descending tunnel. (indoors)
+The mirrored walls and floor of this tunnel slope steeply. Although the rock is slippery, it is also uneven, providing
+potential hand and footholds along the way. Some of the outcroppings are dangerously sharp, and their jagged edges match 
+the shards of crystal that litter the ground. In other areas, the passage is made even more hazardous by the 
+bioluminescent moss that provides this descent with the same eerie lighting as the rest of the caverns. There are 2 
+massive jade spiders here. A phantom sea turtle wafts here, his opaque fins outstretched to either side. Grulk Stormwing 
+is here, hidden. He wields a claw-etched handaxe of steel and ash in his left hand and a crudely-banded ironwood shield 
+in his right.
+You see exits leading northeast and east.
+(1) person here: Grulk.
+09:59:23:535 [11050] [80] |(Grulk)|[ [ hleech ]]  [0|0|30.2|30.2|18.1|12.1]
+Health lost: 19 (raw).
+[[ BLEED 19 ]]
+
+ --------------------------------------------------------------- 
+|     RIGHT LEG HAS BEEN BROKEN | RIGHT LEG HAS BEEN BROKEN     |
+ --------------------------------------------------------------- 
+Grulk's aura of weapons rebounding disappears.
+A grumpy badger stalks to the side of Grulk.
+A grumpy badger sinks his claws into your lower leg, carving deep gouges into the flesh.
+You feel a terrible hunger grow within you.
+Health lost: 68 (physical cutting).
+With a swift turn, you draw your blade from its scabbard and unleash a retaliatory strike against Grulk.
+Grulk starts to wield a Stormspear in his left hand.
+Grulk swiftly sweeps your feet out from beneath you with a Stormspear before driving the point of the weapon into your
+right leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your right leg.
+Your right leg is greatly damaged from the beating.
+Health lost: 483 (physical cutting).
+A prickly stinging overcomes your body, fading away into numbness.
+09:59:24:093 [10480] [80] |(Grulk)|[ [ bld(154) Rl2 hleech prone PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+Grulk takes a long drag off his pipe.
+Grulk takes a drink from a quartz crystal vial.
+You begin to tumble agilely to the northeast.
+ ------------------------------------------------------------------------------------- 
+|     WE HAVE STARTED TO TUMBLE NORTHEAST! | WE HAVE STARTED TO TUMBLE NORTHEAST!     |
+ ------------------------------------------------------------------------------------- 
+09:59:24:300 [10480] [76] |(Grulk)|[ [ Rl2 hleech prone PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'slickness' affliction to the 25 priority.
+09:59:24:394 [10480] [76] |(Grulk)|[ [ Rl2 hleech prone PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'paralysis' affliction to the 25 priority.
+09:59:24:482 [11225] [76] |(Grulk)|[ [ Rl2 hleech prone PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+Your mind is able to focus once again.
+09:59:24:623 [11225] [76] |(Grulk)|[ [ Rl2 hleech prone PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another plant or mineral.
+09:59:24:990 [11225] [76] |(Grulk)|[ [ Rl2 hleech prone PAR add ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Ferrum. Remaining: 5517.
+You eat a ferrum flake.
+Your terrible addiction seems to wane.
+09:59:24:993 [11225] [76] |(Grulk)|[ [ Rl2 hleech prone PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'slickness' affliction to the 3 priority.
+09:59:25:047 [11225] [76] |(Grulk)|[ [ Rl2 hleech prone PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+A massive jade spider lunges forward, hungrily tearing into your shoulder with its sharp teeth.
+Health lost: 639 (physical cutting).
+A massive jade spider leaps through the air and descends upon you, crushing you beneath the weight of its body.
+Your paragon completely absorbs the damage.
+09:59:25:634 [11828] [84] |(Grulk)|[ [ Rl2 hleech prone PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+Your lungs have recovered enough to smoke another mineral or plant.
+09:59:25:726 [11828] [84] |(Grulk)|[ [ Rl2 hleech prone PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+Health lost: 1062 (unblockable).
+09:59:26:113 [10766] [84] |(Grulk)|[ [ Rl2 hleech prone PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+09:59:26:194 [14091] [84] |(Grulk)|[ [ Rl2 hleech prone PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+A grumpy badger stalks to the side of Grulk.
+A grumpy badger sinks his claws into your lower leg, carving deep gouges into the flesh.
+You feel a terrible hunger grow within you.
+Health lost: 68 (physical cutting).
+Grulk starts to wield a claw-etched handaxe of steel and ash in his left hand.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your right arm.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your right arm.
+Health lost: 745 (physical cutting).
+You feel a tightening sensation grow in your lungs.
+09:59:26:284 [13278] [84] |(Grulk)|[ [ bld(188) Rl2 hleech prone PAR AST add ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another plant or mineral.
+09:59:26:540 [13278] [79] |(Grulk)|[ [ Rl2 hleech prone PAR AST add ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Aurum. Remaining: 6979.
+You eat an aurum flake.
+Your addiction can never be sated.
+Your aching, pain-wracked body is soothed and calmed.
+09:59:26:763 [13278] [79] |(Grulk)|[ [ Rl2 prone PAR AST add ]]  [0|0|30.2|30.2|18.1|12.1]
+A descending tunnel. (indoors)
+The mirrored walls and floor of this tunnel slope steeply. Although the rock is slippery, it is also uneven, providing
+potential hand and footholds along the way. Some of the outcroppings are dangerously sharp, and their jagged edges match 
+the shards of crystal that litter the ground. In other areas, the passage is made even more hazardous by the 
+bioluminescent moss that provides this descent with the same eerie lighting as the rest of the caverns. There are 2 
+massive jade spiders here. A phantom sea turtle wafts here, his opaque fins outstretched to either side. Grulk Stormwing 
+is here, hidden. He wields a claw-etched handaxe of steel and ash in his left hand and a crudely-banded ironwood shield 
+in his right.
+You see exits leading northeast and east.
+(1) person here: Grulk.
+09:59:27:545 [13278] [79] |(Grulk)|[ [ Rl2 prone PAR AST add ]]  [0|0|30.2|30.2|18.1|12.1]
+A grumpy badger stalks to the side of Grulk.
+A grumpy badger sinks his claws into your lower leg, carving deep gouges into the flesh.
+You feel bile rising in the back of your throat as as infection begins to set in.
+Health lost: 68 (physical cutting).
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your right arm.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your right arm.
+Health lost: 745 (physical cutting).
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+09:59:27:625 [12465] [79] |(Grulk)|[ [ bld(150) prone Rl2 SLI nau PAR AST add ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'paralysis' affliction to the 1 priority.
+09:59:27:726 [12465] [75] |(Grulk)|[ [ prone Rl2 SLI nau PAR AST add ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'paralysis' affliction to the 3 priority.
+09:59:27:860 [12465] [75] |(Grulk)|[ [ prone Rl2 SLI nau PAR AST add ]]  [0|0|30.2|30.2|18.1|12.1]
+Your right leg feels stronger and healthier.
+You may eat another plant or mineral.
+09:59:28:240 [12465] [75] |(Grulk)|[ [ prone SLI rl1 nau PAR AST add ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Magnesium. Remaining: 6470.
+You eat a magnesium chip.
+Your addiction can never be sated.
+Your glands cease their oily secretion.
+09:59:28:333 [12465] [75] |(Grulk)|[ [ prone rl1 nau PAR AST add ]]  [0|0|30.2|30.2|18.1|12.1]
+
+- ( def cloak ) -
+You tumble out of the room.
+Within a shimmering hatchery. (indoors)
+A massive jade spider moves fluidly on its many legs, searching for prey.
+You see a single exit leading southwest.
+09:59:28:708 [12465] [75] |(Grulk)|[ [ prone nau PAR AST add ]]  [0|0|30.2|30.2|18.1|12.1]
+A massive jade spider leaps through the air and descends upon you, crushing you beneath the weight of its body.
+Health lost: 843 (physical blunt).
+09:59:28:796 [11622] [75] |(Grulk)|[ [ prone nau PAR AST add ]]  [0|0|30.2|30.2|18.1|12.1]
+
++ ( def fangbarrier ) +
+The quicksilver hardens into a supple metallic shell.
+09:59:28:876 [11622] [75] |(Grulk)|[ [ prone nau PAR AST add ]]  [0|0|30.2|30.2|18.1|12.1]
+Health lost: 23 (raw).
+[[ BLEED 23 ]]
+You may eat another plant or mineral.
+09:59:29:878 [11599] [75] |(Grulk)|[ [ prone nau PAR AST add ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Magnesium. Remaining: 6469.
+You eat a magnesium chip.
+Your addiction can never be sated.
+Your muscles unlock; you are no longer paralysed.
+09:59:30:089 [11599] [75] |(Grulk)|[ [ prone nau AST add ]]  [0|0|30.2|30.2|18.1|12.1]
+
+(LEVI): [V3] States reset
+(((((((((((((((((((( BALANCE: 0.000 ))))))))))))))))))))
+
++ ( def endure ) +
++ ( def shield ) +
+You begin focusing on driving off attempts to paralyse you.
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Prowling like a jaguar, Grulk enters from the southwest.
+09:59:30:292 [11599] [75] |(Grulk)|[ [ nau AST add ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'slickness' affliction to the 25 priority.
+09:59:30:381 [11599] [75] |(Grulk)|[ [ nau AST add ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'paralysis' affliction to the 25 priority.
+09:59:30:382 [11599] [75] |(Grulk)|[ [ nau AST add ]]  [0|0|30.2|30.2|18.1|12.1]
+
+- ( def shield ) -
+A fuzzy brown lemming races into the location.
+A small brown lemming rips apart your magical shield defence with its claws.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your right leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your right leg.
+Health lost: 745 (physical cutting).
+With a swift turn, you draw your blade from its scabbard and unleash a retaliatory strike against Grulk.
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+09:59:30:466 [10854] [75] |(Grulk)|[ [ clu nau AST add ]]  [0|0|30.2|30.2|18.1|12.1]
+09:59:30:849 [14328] [75] |(Grulk)|[ [ clu nau AST add ]]  [0|0|30.2|30.2|18.1|12.1]
+You may utilise the tree tattoo again.
+
+(LEVI): Rebounding coming up in 1.2 seconds
+You touch the tree of life tattoo.
+Your terrible addiction seems to wane.
+09:59:31:272 [14328] [75] |(Grulk)|[ [ clu nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+The raven darts in and out of your line of vision, making you uneasy.
+09:59:31:275 [14328] [75] |(Grulk)|[ [ clu nau AST par ]]  [0|0|30.2|30.2|18.1|12.1]
+You are dismayed as the corpse of an astrologer turns to dust in your hands.
+You focus your mind intently on curing your mental maladies.
+Aaaahhh. No one is out to get you after all.
+09:59:31:484 [14328] [73] |(Grulk)|[ [ clu nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another plant or mineral.
+09:59:31:587 [14328] [73] |(Grulk)|[ [ clu nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Aurum. Remaining: 6978.
+You eat an aurum flake.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your right leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your right leg.
+Health lost: 745 (physical cutting).
+A prickly stinging overcomes your body, fading away into numbness.
+09:59:31:709 [13583] [73] |(Grulk)|[ [ nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'paralysis' affliction to the 3 priority.
+09:59:31:764 [13583] [73] |(Grulk)|[ [ nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'slickness' affliction to the 3 priority.
+09:59:31:765 [13583] [73] |(Grulk)|[ [ nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+A massive jade spider leaps through the air and descends upon you, crushing you beneath the weight of its body.
+Health lost: 799 (physical blunt).
+09:59:31:811 [12784] [73] |(Grulk)|[ [ bld(109) prone nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+Your lungs are much too constricted to smoke.
+09:59:31:958 [12784] [70] |(Grulk)|[ [ prone nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+Within a shimmering hatchery. (indoors)
+Suspended from the ceiling, silky cocoons sway gently back and forth from their cradle-like positions. Tiny jade
+spiderlings, visible through the partially translucent material, crawl over each other inside their nest, oblivious to 
+the outside world. Other arachnids, slightly larger than their cocooned counterparts, huddle around half-digested 
+corpses to feed. The soft glow illuminating the area creates a comforting nursery setting that belies the inhabitants' 
+true carnivorous nature. A massive jade spider moves fluidly on its many legs, searching for prey. Grulk Stormwing is 
+here, hidden. He wields a claw-etched handaxe of steel and ash in his left hand and a crudely-banded ironwood shield in 
+his right.
+You see a single exit leading southwest.
+(1) person here: Grulk.
+09:59:32:611 [12784] [70] |(Grulk)|[ [ prone nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+[REB] You suddenly perceive the vague outline of an aura of rebounding around Grulk.
+09:59:32:710 [12784] [70] |(Grulk)|[ [ prone nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
++ ( def rebounding ) +
+
+- ( def fangbarrier ) -
+Grulk's aura of weapons rebounding disappears.
+On silent paws, an adult vixen rushes to Grulk's side.
+A cunning red fox leaps upon you, sinking its teeth into your exposed skin.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your right leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your right leg.
+Health lost: 745 (physical cutting).
+The protective covering coating your skin sloughs off.
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+You may eat another plant or mineral.
+09:59:33:105 [12039] [70] |(Grulk)|[ [ prone SLI hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'paralysis' affliction to the 1 priority.
+09:59:33:158 [12039] [70] |(Grulk)|[ [ prone SLI hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+Grulk takes a long drag off his pipe.
+Grulk takes a drink from a quartz crystal vial.
+[RIFT]: -1 Magnesium. Remaining: 6468.
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+09:59:33:307 [12039] [70] |(Grulk)|[ [ prone SLI hleech nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'paralysis' affliction to the 3 priority.
+09:59:33:406 [12039] [70] |(Grulk)|[ [ prone SLI hleech nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+
++ ( def shield ) +
+You touch the tattoo and a nearly invisible magical shield forms around you.
+You are recovering equilibrium and cannot move yet.
+Your mind is able to focus once again.
+09:59:33:823 [12039] [71] |(Grulk)|[ [ SLI hleech nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'slickness' affliction to the 25 priority.
+09:59:33:912 [12039] [71] |(Grulk)|[ [ SLI hleech nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'paralysis' affliction to the 25 priority.
+09:59:33:997 [12039] [71] |(Grulk)|[ [ SLI hleech nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
+- ( def shield ) -
+A fuzzy brown lemming races into the location.
+A small brown lemming rips apart your magical shield defence with its claws.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your right leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your right leg.
+Health lost: 745 (physical cutting).
+With a swift turn, you draw your blade from its scabbard and unleash a retaliatory strike against Grulk.
+A prickly stinging overcomes your body, fading away into numbness.
+09:59:34:565 [12039] [71] |(Grulk)|[ [ SLI hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'paralysis' affliction to the 1 priority.
+09:59:34:758 [12039] [71] |(Grulk)|[ [ SLI hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+A massive jade spider lunges forward, hungrily tearing into your shoulder with its sharp teeth.
+Health lost: 691 (physical cutting).
+09:59:34:839 [11348] [71] |(Grulk)|[ [ bld(130) SLI hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Potash. Remaining: 6117.
+You eat a potash crystal.
+You feel your health and mana replenished.
+You may eat another plant or mineral.
+09:59:34:923 [12540] [76] |(Grulk)|[ [ SLI hleech nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+Health lost: 10 (raw).
+[[ BLEED 10 ]]
+[RIFT]: -1 Magnesium. Remaining: 6467.
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+09:59:35:088 [12530] [76] |(Grulk)|[ [ SLI hleech nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'paralysis' affliction to the 3 priority.
+09:59:35:135 [12530] [76] |(Grulk)|[ [ SLI hleech nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'slickness' affliction to the 3 priority.
+09:59:35:138 [12530] [76] |(Grulk)|[ [ SLI hleech nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+Health lost: 1062 (unblockable).
+09:59:35:422 [11468] [76] |(Grulk)|[ [ SLI hleech nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+09:59:35:509 [14883] [76] |(Grulk)|[ [ SLI hleech nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
+- ( def rebounding ) -
+A fuzzy brown lemming races into the location.
+A small brown lemming rips apart your aura of rebounding defence with its claws.
+Grulk starts to wield a Stormspear in his left hand.
+Grulk lays open your flesh with an expert lateral slice with a Stormspear.
+[ClassDetect]: Switched curingset to: sentinel (vs Sentinel)
+The sweep of your foe cleaves your body only to meet muscle and sinew flexing in defiance against the deeper cuts.
+Health lost: 917 (physical cutting).
+The idea of eating or drinking is repulsive to you.
+Turning with the motion of his strike, Grulk comes back around to slam the haft of his weapon into your temple.
+09:59:35:990 [13989] [84] |(Grulk)|[ [ ANO SLI hleech nau IMP AST (Locks: soft, hard) ]]  [0|0|30.2|30.2|18.1|12.1]
+You will now cure using the sentinel set.
+09:59:36:124 [13989] [84] |(Grulk)|[ [ ANO SLI hleech nau IMP AST (Locks: soft, hard) ]]  [0|0|30.2|30.2|18.1|12.1]
+All your defence priorities have been reset to defaults.
+09:59:36:126 [13989] [84] |(Grulk)|[ [ ANO SLI hleech nau IMP AST (Locks: soft, hard) ]]  [0|0|30.2|30.2|18.1|12.1]
+You may not set a priority for the 'avoid' defence.
+You may eat another plant or mineral.
+09:59:36:594 [13989] [84] |(Grulk)|[ [ ANO SLI hleech nau IMP AST (Locks: soft, hard) ]]  [0|0|30.2|30.2|18.1|12.1]
+With a guttural growl, a wolf leaps forward and sinks his teeth into you.
+Your paragon completely absorbs the damage.
+09:59:36:841 [13989] [84] |(Grulk)|[ [ ANO SLI hleech nau IMP AST (Locks: soft, hard) ]]  [0|0|30.2|30.2|18.1|12.1]
+
++ ( def shield ) +
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+You touch the tattoo and a nearly invisible magical shield forms around you.
+You are recovering equilibrium and cannot move yet.
+You have set the 'slickness' affliction to the 25 priority.
+09:59:37:132 [13989] [84] |(Grulk)|[ [ ANO SLI hleech nau IMP AST (Locks: soft, hard) ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'paralysis' affliction to the 25 priority.
+09:59:37:133 [13989] [84] |(Grulk)|[ [ ANO SLI hleech nau IMP AST (Locks: soft, hard) ]]  [0|0|30.2|30.2|18.1|12.1]
+Grulk takes a drink from a quartz crystal vial.
+09:59:37:805 [13989] [84] |(Grulk)|[ [ ANO SLI hleech nau IMP AST (Locks: soft, hard) ]]  [0|0|30.2|30.2|18.1|12.1]
+A massive jade spider hurls itself against your shield in a futile attempt to harm you.
+09:59:37:895 [13989] [84] |(Grulk)|[ [ ANO SLI hleech nau IMP AST (Locks: soft, hard) ]]  [0|0|30.2|30.2|18.1|12.1]
+
+- ( def shield ) -
+A fuzzy brown lemming races into the location.
+A small brown lemming rips apart your magical shield defence with its claws.
+Grulk starts to wield a claw-etched handaxe of steel and ash in his left hand.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your right leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your right leg.
+ --------------------------------------------------------------------------- 
+|     RIGHT LEG IS 2 HITS FROM BREAK! | RIGHT LEG IS 2 HITS FROM BREAK!     |
+ --------------------------------------------------------------------------- 
+Your paragon completely absorbs the damage.
+09:59:38:484 [13989] [84] |(Grulk)|[ [ ANO SLI hleech nau IMP AST (Locks: soft, hard) ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'paralysis' affliction to the 3 priority.
+09:59:38:522 [13989] [84] |(Grulk)|[ [ ANO SLI hleech nau IMP AST (Locks: soft, hard) ]]  [0|0|30.2|30.2|18.1|12.1]
+You have set the 'slickness' affliction to the 3 priority.
+09:59:38:526 [13989] [84] |(Grulk)|[ [ ANO SLI hleech nau IMP AST (Locks: soft, hard) ]]  [0|0|30.2|30.2|18.1|12.1]
+Now prioritising the damagedrightleg affliction.
+09:59:38:643 [13989] [84] |(Grulk)|[ [ ANO SLI hleech nau IMP AST (Locks: soft, hard) ]]  [0|0|30.2|30.2|18.1|12.1]
+You are dismayed as the corpse of an haruspex of Life turns to dust in your hands.
+09:59:39:527 [13989] [84] |(Grulk)|[ [ ANO SLI hleech nau IMP AST (Locks: soft, hard) ]]  [0|0|30.2|30.2|18.1|12.1]
+The chilling howl of the wolf fills you with an irrational madness.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your right leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your right leg.
+ ----------------------------------------------------------------------- 
+|     RIGHT LEG IS PREPPED! (1 HIT) | RIGHT LEG IS PREPPED! (1 HIT)     |
+ ----------------------------------------------------------------------- 
+Health lost: 745 (physical cutting).
+You feel your allergy to the sun going into temporary remission.
+Your vision is flooded with light, and your face suddenly reddens.
+09:59:39:916 [13244] [84] |(Grulk)|[ [ ANO SLI dar hleech nau hal IMP AST (Locks: soft, hard) ]] 
+ [0|0|30.2|30.2|18.1|12.1]
+Health lost: 1062 (unblockable).
+09:59:40:199 [12182] [84] |(Grulk)|[ [ ANO SLI dar hleech nau hal IMP AST (Locks: soft, hard) ]] 
+ [0|0|30.2|30.2|18.1|12.1]
+
+(LEVI): Rebounding coming up in 1.2 seconds
+The raven darts in and out of your line of vision, making you uneasy.
+09:59:40:377 [12182] [84] |(Grulk)|[ [ ANO SLI dar hleech nau hal IMP AST par (Locks: soft, hard) ]] 
+ [0|0|30.2|30.2|18.1|12.1]
+Health lost: 45 (raw).
+[[ BLEED 45 ]]
+
+- ( def endure ) -
++ ( def endure ) +
+- ( def endure ) -
++ ( def endure ) +
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+You cease focusing on driving off attempts to paralyse you.
+You begin focusing on driving off attempts to paralyse you.
+You cease focusing on driving off attempts to paralyse you.
+A descending tunnel. (indoors)
+There are 2 massive jade spiders here. A phantom sea turtle wafts here, his opaque fins outstretched to either side.
+You see exits leading northeast and east.
+You begin focusing on driving off attempts to paralyse you.
+You inhale deeply, purging yourself of your asthmatic condition.
+09:59:40:576 [12137] [84] |(Grulk)|[ [ ANO SLI dar hleech nau hal IMP par ]]  [0|0|30.2|30.2|18.1|12.1]
+Your glands cease their oily secretion.
+You have smoked the last traces of realgar in an ornately carved ivory pipe.
+Food is no longer repulsive to you.
+[RIFT]: -1 Plumbum. Remaining: 6549.
+You eat a plumbum flake.
+You are patient once again.
+You focus your mind intently on curing your mental maladies.
+Your hallucinations cease to plague you.
+[RIFT]: -1 Quicksilver. Remaining: 8497.
+You apply a quicksilver droplet to yourself.
+09:59:40:649 [12137] [82] |(Grulk)|[ [ dar hleech nau par ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another bit of irid moss or potash.
+09:59:40:765 [12137] [82] |(Grulk)|[ [ dar hleech nau par ]]  [0|0|30.2|30.2|18.1|12.1]
+A massive jade spider leaps through the air and descends upon you, crushing you beneath the weight of its body.
+Your paragon completely absorbs the damage.
+A massive jade spider lunges forward, hungrily tearing into your shoulder with its sharp teeth.
+Your paragon completely absorbs the damage.
+09:59:40:837 [12137] [82] |(Grulk)|[ [ prone dar hleech nau par ]]  [0|0|30.2|30.2|18.1|12.1]
+Your lungs have not yet recovered enough to allow you to smoke.
+09:59:40:901 [12137] [82] |(Grulk)|[ [ prone dar hleech nau par ]]  [0|0|30.2|30.2|18.1|12.1]
+
+(LEVI): [V3] States reset
+Your lungs have recovered enough to smoke another mineral or plant.
+09:59:42:240 [12137] [82] |(Grulk)|[ [ prone dar hleech nau par ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another plant or mineral.
+09:59:42:242 [12137] [82] |(Grulk)|[ [ prone dar hleech nau par ]]  [0|0|30.2|30.2|18.1|12.1]
+A descending tunnel. (indoors)
+The mirrored walls and floor of this tunnel slope steeply. Although the rock is slippery, it is also uneven, providing
+potential hand and footholds along the way. Some of the outcroppings are dangerously sharp, and their jagged edges match 
+the shards of crystal that litter the ground. In other areas, the passage is made even more hazardous by the 
+bioluminescent moss that provides this descent with the same eerie lighting as the rest of the caverns. There are 2 
+massive jade spiders here. A phantom sea turtle wafts here, his opaque fins outstretched to either side.
+You see exits leading northeast and east.
+09:59:42:341 [12137] [82] |(Grulk)|[ [ prone dar hleech nau par ]]  [0|0|30.2|30.2|18.1|12.1]
+[RIFT]: -1 Aurum. Remaining: 6977.
+You eat an aurum flake.
+Your aching, pain-wracked body is soothed and calmed.
+09:59:42:345 [12137] [82] |(Grulk)|[ [ prone dar nau par ]]  [0|0|30.2|30.2|18.1|12.1]
+Your mind is able to focus once again.
+09:59:43:090 [12137] [82] |(Grulk)|[ [ prone dar nau par ]]  [0|0|30.2|30.2|18.1|12.1]
+You focus your mind intently on curing your mental maladies.
+Aaaahhh. No one is out to get you after all.
+09:59:43:166 [12137] [79] |(Grulk)|[ [ prone dar nau ]]  [0|0|30.2|30.2|18.1|12.1]
+(((((((((((((((((((( BALANCE: 0.000 ))))))))))))))))))))
+[RIFT]: -1 Realgar. Remaining: 8781.
+09:59:43:251 [12137] [79] |(Grulk)|[ [ prone dar nau ]]  [0|0|30.2|30.2|18.1|12.1]
+You fill your pipe with a pinch of realgar crystals.
+09:59:43:253 [12137] [79] |(Grulk)|[ [ prone dar nau ]]  [0|0|30.2|30.2|18.1|12.1]
+You may not purge your lungs again as of this time.
+You may not purge your lungs again as of this time.
+09:59:43:262 [12137] [79] |(Grulk)|[ [ dar nau ]]  [0|0|30.2|30.2|18.1|12.1]
+
++ ( def cloak ) +
+Prowling like a jaguar, Grulk enters from the northeast.
+09:59:43:427 [12137] [79] |(Grulk)|[ [ dar nau ]]  [0|0|30.2|30.2|18.1|12.1]
+An ebony raven dives at your face, pecking violently at your eyes.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your head.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your head.
+Health lost: 930 (physical cutting).
+With a swift turn, you draw your blade from its scabbard and unleash a retaliatory strike against Grulk.
+A prickly stinging overcomes your body, fading away into numbness.
+09:59:43:585 [11207] [80] |(Grulk)|[ [ dar nau sen PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+09:59:43:731 [14052] [80] |(Grulk)|[ [ dar nau sen PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another plant or mineral.
+09:59:43:825 [14052] [80] |(Grulk)|[ [ dar nau sen PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+With a guttural growl, a wolf leaps forward and sinks his teeth into you.
+Health lost: 1480 (physical cutting).
+A massive jade spider leaps through the air towards Grulk, crushing him beneath its body.
+Lunging forward, a massive jade spider tears into Grulk's shoulder voraciously.
+09:59:43:917 [12572] [80] |(Grulk)|[ [ bld(248) dar nau sen PAR ]]  [0|0|30.2|30.2|18.1|12.1]
+Grulk takes a drink from a quartz crystal vial.
+Grulk eats some irid moss.
+[RIFT]: -1 Magnesium. Remaining: 6466.
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+Now prioritising the haemophilia affliction.
+09:59:44:087 [12572] [74] |(Grulk)|[ [ dar nau sen ]]  [0|0|30.2|30.2|18.1|12.1]
+
+- ( def endure ) -
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+You are already enduring attempts to paralyse you.
+You cease focusing on driving off attempts to paralyse you.
+09:59:44:091 [12572] [74] |(Grulk)|[ [ dar nau sen ]]  [0|0|30.2|30.2|18.1|12.1]
+A descending tunnel. (indoors)
+The mirrored walls and floor of this tunnel slope steeply. Although the rock is slippery, it is also uneven, providing
+potential hand and footholds along the way. Some of the outcroppings are dangerously sharp, and their jagged edges match 
+the shards of crystal that litter the ground. In other areas, the passage is made even more hazardous by the 
+bioluminescent moss that provides this descent with the same eerie lighting as the rest of the caverns. There are 2 
+massive jade spiders here. A phantom sea turtle wafts here, his opaque fins outstretched to either side. Grulk Stormwing 
+is here, sprawled on the floor. He wields a claw-etched handaxe of steel and ash in his left hand and a crudely-banded 
+ironwood shield in his right.
+You see exits leading northeast and east.
+(1) person here: Grulk.
+09:59:44:728 [13317] [74] |(Grulk)|[ [ dar nau sen ]]  [0|0|30.2|30.2|18.1|12.1]
+Grulk stands up.
+09:59:44:915 [13317] [74] |(Grulk)|[ [ dar nau sen ]]  [0|0|30.2|30.2|18.1|12.1]
+
+- ( def mindseye ) -
+A fuzzy brown lemming races into the location.
+A small brown lemming rips apart your mindseye with its claws.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your head.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your head.
+Health lost: 930 (physical cutting).
+You feel a tightening sensation grow in your lungs.
+09:59:44:919 [12387] [74] |(Grulk)|[ [ dar nau sen AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
++ ( def mindseye ) +
+You may utilise the tree tattoo again.
+09:59:45:266 [12387] [74] |(Grulk)|[ [ dar nau sen AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You touch the tree of life tattoo.
+No longer will the sunlight harm you.
+09:59:45:368 [12387] [74] |(Grulk)|[ [ nau sen AST ]]  [0|0|30.2|30.2|18.1|12.1]
+You may eat another plant or mineral.
+Your mind is able to focus once again.
+09:59:45:500 [12387] [74] |(Grulk)|[ [ nau sen AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 71
+[RIFT]: -1 Aurum. Remaining: 6976.
+You eat an aurum flake.
+The stinging feeling fades.
+09:59:45:783 [12387] [74] |(Grulk)|[ [ nau AST ]]  [0|0|30.2|30.2|18.1|12.1]
+Health lost: 51 (raw).
+[[ BLEED 51 ]]
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=18.1% RL=12.1%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+5 hits to leg double-break (sequence: RLRLR)
+[BM Leg Prep] Parried: none | Shin: 71
+
+- ( def selfishness ) -
+A fuzzy brown lemming races into the location.
+A small brown lemming rips apart your selfishness with its claws.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your head.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your head.
+Health lost: 745 (physical cutting).
+A prickly stinging overcomes your body, fading away into numbness.
+09:59:46:354 [12833] [82] |(Grulk)|[ [ nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+Lunging forward, a massive jade spider tears into Grulk's shoulder voraciously.
+A massive jade spider leaps through the air towards Grulk, crushing him beneath its body.
+09:59:46:932 [12833] [82] |(Grulk)|[ [ nau PAR AST ]]  [0|0|30.2|30.2|18.1|12.1]
+
+(LEVI): Target acquired. Focusing fire on Grulk!
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset[Limb]: Reset Grulk's left arm.
+[Limb]: Reset Grulk's right arm.
+[Limb]: Reset Grulk's left leg.
+[Limb]: Reset Grulk's right leg.
+
+(LEVI): [V3] States reset
+You may eat another plant or mineral.
+09:59:47:257 [12833] [82] |(Grulk)|[ [ nau PAR AST ]]  
+[RIFT]: -1 Aurum. Remaining: 6975.
+You eat an aurum flake.
+Your bronchial tubes open up and your asthma is cured.
+09:59:47:261 [12833] [82] |(Grulk)|[ [ nau PAR ]]  
+Grulk is not currently an ally.
+09:59:47:343 [12833] [82] |(Grulk)|[ [ nau PAR ]]  
+Grulk is already an enemy.
+09:59:47:345 [12833] [82] |(Grulk)|[ [ nau PAR ]]  
+Your target is now: Grulk (an adventurer)
+09:59:47:346 [12833] [82] |(Grulk)|[ [ nau PAR ]]  
+Your target is now: Grulk (an adventurer)
+09:59:47:349 [12833] [82] |(Grulk)|[ [ nau PAR ]]  
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+ +[Grulk] HP: [=============       ] 67% -- 3571/5287 
+09:59:47:544 [12833] [81] |(Grulk)|[ [ nau PAR ]]  
+Grulk stands up.
+09:59:47:765 [12833] [81] |(Grulk)|[ [ nau PAR ]]  
+On silent paws, an adult vixen rushes to Grulk's side.
+A cunning red fox leaps upon you, sinking its teeth into your exposed skin.
+Grulk starts to wield a Stormspear in his left hand.
+Grulk savagely gouges into you with a Stormspear.
+Your paragon completely absorbs the damage.
+You feel a tightening sensation grow in your lungs.
+The blade of the weapon rakes lines of fire across your skin.
+An ebony raven disappears back into the wild.
+A huge gossamer butterfly descends from the treetops.
+09:59:47:771 [12833] [81] |(Grulk)|[ [ WEA hleech nau PAR AST ]]  
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=0.0% RL=0.0%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+6 hits to leg double-break (sequence: LRLRLR)
+[BM Leg Prep] Parried: none | Shin: 71
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=0.0% RL=0.0%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+6 hits to leg double-break (sequence: LRLRLR)
+[BM Leg Prep] Parried: none | Shin: 71
+Grulk takes a drink from a quartz crystal vial.
+09:59:48:626 [12833] [81] |(Grulk)|[ [ WEA hleech nau PAR AST ]]  
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=0.0% RL=0.0%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+6 hits to leg double-break (sequence: LRLRLR)
+[BM Leg Prep] Parried: none | Shin: 71
+You may eat another plant or mineral.
+09:59:48:840 [12833] [81] |(Grulk)|[ [ WEA hleech nau PAR AST ]]  
+[RIFT]: -1 Aurum. Remaining: 6974.
+You eat an aurum flake.
+Your aching, pain-wracked body is soothed and calmed.
+09:59:49:068 [12833] [81] |(Grulk)|[ [ WEA nau PAR AST ]]  
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=0.0% RL=0.0%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+6 hits to leg double-break (sequence: LRLRLR)
+[BM Leg Prep] Parried: none | Shin: 71
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=0.0% RL=0.0%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+6 hits to leg double-break (sequence: LRLRLR)
+[BM Leg Prep] Parried: none | Shin: 71
+You may purge your lungs once again.
+09:59:49:635 [12833] [81] |(Grulk)|[ [ WEA nau PAR AST ]]  
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+ +[Grulk] HP: [=================   ] 85% -- 4513/5287 
+09:59:49:724 [12833] [81] |(Grulk)|[ [ WEA nau PAR AST ]]  
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=0.0% RL=0.0%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+6 hits to leg double-break (sequence: LRLRLR)
+[BM Leg Prep] Parried: none | Shin: 71
+Lunging forward, a massive jade spider tears into Grulk's shoulder voraciously.
+A massive jade spider leaps through the air towards Grulk, crushing him beneath its body.
+09:59:50:024 [12833] [81] |(Grulk)|[ [ WEA nau PAR AST ]]  
+Grulk eats some irid moss.
+09:59:50:026 [12833] [81] |(Grulk)|[ [ WEA nau PAR AST ]]  
+Grulk stands up.
+09:59:50:258 [12833] [81] |(Grulk)|[ [ WEA nau PAR AST ]]  
+An ebony raven descends to circle above the head of Grulk.
+An ebony raven dives at your face, pecking violently at your eyes.
+Grulk starts to wield a claw-etched handaxe of steel and ash in his left hand.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your head.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your head.
+Health lost: 930 (physical cutting).
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+09:59:50:268 [11903] [81] |(Grulk)|[ [ bld(140) WEA SLI nau sen PAR AST ]]  
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=0.0% RL=0.0%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+6 hits to leg double-break (sequence: LRLRLR)
+[BM Leg Prep] Parried: none | Shin: 71
+You have set the 'slickness' affliction to the 1 priority.
+09:59:50:430 [11903] [81] |(Grulk)|[ [ bld(140) WEA SLI nau sen PAR AST ]]  
+You have set the 'paralysis' affliction to the 1 priority.
+09:59:50:435 [11903] [81] |(Grulk)|[ [ bld(140) WEA SLI nau sen PAR AST ]]  
+09:59:50:447 [14868] [77] |(Grulk)|[ [ WEA SLI nau sen PAR AST ]]  
+You may eat another plant or mineral.
+09:59:50:634 [14868] [77] |(Grulk)|[ [ WEA SLI nau sen PAR AST ]]  
+[RIFT]: -1 Magnesium. Remaining: 6465.
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+09:59:50:638 [14868] [77] |(Grulk)|[ [ WEA SLI nau sen AST ]]  
+You have set the 'paralysis' affliction to the 3 priority.
+09:59:50:784 [14868] [77] |(Grulk)|[ [ WEA SLI nau sen AST ]]  
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=0.0% RL=0.0%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+6 hits to leg double-break (sequence: LRLRLR)
+[BM Leg Prep] Parried: none | Shin: 71
+
+[ClassDetect]: Combat ended, curingset reset to: normal
+With a guttural growl, a wolf leaps forward and sinks his teeth into you.
+Health lost: 1480 (physical cutting).
+09:59:51:043 [13388] [77] |(Grulk)|[ [ bld(205) WEA SLI nau sen AST ]]  
+You will now cure using the normal set.
+09:59:51:146 [13388] [71] |(Grulk)|[ [ WEA SLI nau sen AST ]]  
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=0.0% RL=0.0%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+6 hits to leg double-break (sequence: LRLRLR)
+[BM Leg Prep] Parried: none | Shin: 71
+Health lost: 5 (raw).
+[[ BLEED 5 ]]
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=0.0% RL=0.0%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+6 hits to leg double-break (sequence: LRLRLR)
+[BM Leg Prep] Parried: none | Shin: 71
+[REB] You suddenly perceive the vague outline of an aura of rebounding around Grulk.
+09:59:51:619 [13383] [71] |(Grulk)|[ [ WEA SLI nau sen AST ]]  
+Grulk's aura of weapons rebounding disappears.
+The chilling howl of the wolf fills you with an irrational madness.
+Grulk starts to wield a Stormspear in his left hand.
+Grulk lays open your flesh with an expert lateral slice with a Stormspear.
+[ClassDetect]: Switched curingset to: sentinel (vs Sentinel)
+The sweep of your foe cleaves your body only to meet muscle and sinew flexing in defiance against the deeper cuts.
+Health lost: 1145 (physical cutting).
+With a swift turn, you draw your blade from its scabbard and unleash a retaliatory strike against Grulk.
+The idea of eating or drinking is repulsive to you.
+The barbs on a Stormspear viciously tear into you.
+Turning with the motion of his strike, Grulk comes back around to slam the haft of his weapon into your temple.
+09:59:51:668 [12238] [71] |(Grulk)|[ [ sen ANO WEA SLI nau hal IMP AST (Locks: soft, hard) ]]  
+Grulk takes a long drag off his pipe.
+You will now cure using the sentinel set.
+09:59:51:803 [12238] [71] |(Grulk)|[ [ sen ANO WEA SLI nau hal IMP AST (Locks: soft, hard) ]]  
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+You whip Blazing Flames through the air in front of Grulk, to no effect.
+[HAM] Ducking behind him, you strike at Grulk's hamstring with a rigid, practised grip.
+All your defence priorities have been reset to defaults.
+09:59:51:819 [12238] [71] |(Grulk)|[ [ sen ANO WEA SLI nau hal IMP AST (Locks: soft, hard) ]]  
+You may not set a priority for the 'avoid' defence.
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=0.0% RL=0.0%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+6 hits to leg double-break (sequence: LRLRLR)
+[BM Leg Prep] Parried: none | Shin: 95
+You may eat another plant or mineral.
+09:59:52:145 [12238] [71] |(Grulk)|[ [ sen ANO WEA SLI nau hal IMP AST (Locks: soft, hard) ]]  
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=0.0% RL=0.0%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+6 hits to leg double-break (sequence: LRLRLR)
+[BM Leg Prep] Parried: none | Shin: 95
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=0.0% RL=0.0%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+6 hits to leg double-break (sequence: LRLRLR)
+[BM Leg Prep] Parried: none | Shin: 95
+A massive jade spider leaps through the air towards Grulk, crushing him beneath its body.
+A massive jade spider leaps through the air towards Grulk, crushing him beneath its body.
+09:59:52:952 [12238] [71] |(Grulk)|[ [ sen ANO WEA SLI nau hal IMP AST (Locks: soft, hard) ]]  
+Grulk takes a drink from a quartz crystal vial.
+09:59:53:158 [12238] [71] |(Grulk)|[ [ sen ANO WEA SLI nau hal IMP AST (Locks: soft, hard) ]]  
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=0.0% RL=0.0%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+6 hits to leg double-break (sequence: LRLRLR)
+[BM Leg Prep] Parried: none | Shin: 95
+(((((((((((((((((((( BALANCE: 0.000 ))))))))))))))))))))
+ +[Grulk] HP: [=========           ] 48% -- 2581/5287 
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=0.0% RL=0.0%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+6 hits to leg double-break (sequence: LRLRLR)
+[BM Leg Prep] Parried: none | Shin: 95
+Grulk stands up.
+09:59:54:114 [12238] [72] |(Grulk)|[ [ sen ANO WEA SLI nau hal IMP AST (Locks: soft, hard) ]]  
+An ebony raven descends to circle above the head of Grulk.
+An ebony raven dives at your face, pecking violently at your eyes.
+Grulk starts to wield a claw-etched handaxe of steel and ash in his left hand.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your head.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your head.
+ ----------------------------------------------------------------- 
+|     HEAD IS 2 HITS FROM BREAK! | HEAD IS 2 HITS FROM BREAK!     |
+ ----------------------------------------------------------------- 
+Health lost: 930 (physical cutting).
+With a swift turn, you draw your blade from its scabbard and unleash a retaliatory strike against Grulk.
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+09:59:54:121 [11308] [72] |(Grulk)|[ [ sen ANO WEA SLI nau hal IMP AST (Locks: soft, hard) ]]  
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=0.0% RL=0.0%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+6 hits to leg double-break (sequence: LRLRLR)
+[BM Leg Prep] Parried: none | Shin: 95
+Now prioritising the damagedhead affliction.
+09:59:54:168 [11308] [72] |(Grulk)|[ [ sen ANO WEA SLI nau hal IMP AST (Locks: soft, hard) ]]  
+Blood ceases running quite so freely from the rents in your flesh.
+09:59:54:558 [11308] [72] |(Grulk)|[ [ sen ANO WEA SLI nau hal IMP AST (Locks: soft, hard) ]]  
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=0.0% RL=0.0%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+6 hits to leg double-break (sequence: LRLRLR)
+[BM Leg Prep] Parried: none | Shin: 95
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=0.0% RL=0.0%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+6 hits to leg double-break (sequence: LRLRLR)
+[BM Leg Prep] Parried: none | Shin: 95
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=0.0% RL=0.0%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+6 hits to leg double-break (sequence: LRLRLR)
+[BM Leg Prep] Parried: none | Shin: 95
+A grumpy badger stalks to the side of Grulk.
+A grumpy badger sinks his claws into your lower leg, carving deep gouges into the flesh.
+You feel a terrible hunger grow within you.
+Health lost: 85 (physical cutting).
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your head.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your head.
+ ------------------------------------------------------------- 
+|     HEAD IS PREPPED! (1 HIT) | HEAD IS PREPPED! (1 HIT)     |
+ ------------------------------------------------------------- 
+Health lost: 930 (physical cutting).
+A prickly stinging overcomes your body, fading away into numbness.
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+
++ ( def selfishness ) +
+You rub your hands together greedily.
+You have set the 'paralysis' affliction to the 1 priority.
+09:59:55:789 [11038] [67] |(Grulk)|[ [ ANO SLI sen WEA nau hal IMP PAR AST add (Locks: soft, venom, hard, true) ]]  
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=0.0% RL=0.0%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+6 hits to leg double-break (sequence: LRLRLR)
+[BM Leg Prep] Parried: none | Shin: 92
++ ( def endure ) +
+(((((((((((((((((((( EQUILIBRIUM:0.000 ))))))))))))))))))))
+You begin focusing on driving off attempts to paralyse you.
+09:59:56:026 [11038] [67] |(Grulk)|[ [ ANO SLI sen WEA nau hal IMP PAR AST add (Locks: soft, venom, hard, true) ]]  
+Grulk eats some irid moss.
+09:59:56:136 [11038] [67] |(Grulk)|[ [ ANO SLI sen WEA nau hal IMP PAR AST add (Locks: soft, venom, hard, true) ]]  
+A massive jade spider leaps through the air towards Grulk, crushing him beneath its body.
+A massive jade spider reels, flinching as weakness takes hold.
+A massive jade spider grips Grulk with two of its legs, covering him in a spray of sticky, shimmering webbing.
+09:59:56:140 [11038] [67] |(Grulk)|[ [ ANO SLI sen WEA nau hal IMP PAR AST add (Locks: soft, venom, hard, true) ]]  
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=0.0% RL=0.0%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+6 hits to leg double-break (sequence: LRLRLR)
+[BM Leg Prep] Parried: none | Shin: 92
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=0.0% RL=0.0%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+6 hits to leg double-break (sequence: LRLRLR)
+[BM Leg Prep] Parried: none | Shin: 92
+Health lost: 5 (raw).
+[[ BLEED 5 ]]
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=0.0% RL=0.0%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+6 hits to leg double-break (sequence: LRLRLR)
+[BM Leg Prep] Parried: none | Shin: 92
+You are stunned by a vision of the Logos.
+09:59:57:314 [12275] [75] |(Grulk)|[ [ ANO SLI sen WEA nau hal IMP PAR AST add (Locks: soft, venom, hard, true) ]]  
+
+[BM Leg Prep] Target: Grulk | HP: 100% | Track: V3
+[BM Leg Prep] Legs: LL=0.0% RL=0.0%
+[BM Leg Prep] Dmg: P=18.1% S=12.1%
+6 hits to leg double-break (sequence: LRLRLR)
+[BM Leg Prep] Parried: none | Shin: 92
+Grulk takes a drink from a quartz crystal vial.
+09:59:57:715 [12275] [75] |(Grulk)|[ [ ANO SLI sen WEA nau hal IMP PAR AST add (Locks: soft, venom, hard, true) ]]  
+With a guttural growl, a wolf leaps forward and sinks his teeth into you.
+Health lost: 1480 (physical cutting).
+09:59:58:106 [10795] [75] |(Grulk)|[ [ bld(205) ANO SLI sen WEA nau hal IMP PAR AST add (Locks: soft, venom, hard, true)
+ ]]  
+Grulk has writhed free of his entanglement by webs.
+09:59:58:306 [10795] [75] |(Grulk)|[ [ bld(205) ANO SLI sen WEA nau hal IMP PAR AST add (Locks: soft, venom, hard, true)
+ ]]  
+You are no longer stunned.
+09:59:58:309 [10795] [75] |(Grulk)|[ [ bld(205) ANO SLI sen WEA nau hal IMP PAR AST add (Locks: soft, venom, hard, true)
+ ]]  
+
+ --------------------------------------------------------------- 
+|     RIGHT LEG HAS BEEN BROKEN | RIGHT LEG HAS BEEN BROKEN     |
+ --------------------------------------------------------------- 
+Grulk stands up.
+A grumpy badger stalks to the side of Grulk.
+A grumpy badger sinks his claws into your lower leg, carving deep gouges into the flesh.
+You feel bile rising in the back of your throat as as infection begins to set in.
+Your paragon completely absorbs the damage.
+Grulk starts to wield a Stormspear in his left hand.
+Grulk swiftly sweeps your feet out from beneath you with a Stormspear before driving the point of the weapon into your
+right leg.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your right leg.
+Your right leg is greatly damaged from the beating.
+Your paragon completely absorbs the damage.
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+A gossamer butterfly disappears back into the wild.
+A fuzzy brown lemming dashes into the room.
+09:59:58:324 [10795] [70] |(Grulk)|[ [ sen prone ANO Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom, hard,
+ true) ]]  
+You have set the 'paralysis' affliction to the 1 priority.
+09:59:58:408 [10795] [70] |(Grulk)|[ [ sen prone ANO Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom, hard,
+ true) ]]  
+Now prioritising the haemophilia affliction.
+09:59:58:491 [10795] [70] |(Grulk)|[ [ sen prone ANO Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom, hard,
+ true) ]]  
+You begin to tumble agilely to the northeast.
+ ------------------------------------------------------------------------------------- 
+|     WE HAVE STARTED TO TUMBLE NORTHEAST! | WE HAVE STARTED TO TUMBLE NORTHEAST!     |
+ ------------------------------------------------------------------------------------- 
+09:59:58:492 [10795] [70] |(Grulk)|[ [ sen prone ANO Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom, hard,
+ true) ]]  
+Now prioritising the haemophilia affliction.
+09:59:58:495 [10795] [70] |(Grulk)|[ [ sen prone ANO Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom, hard,
+ true) ]]  
+Now prioritising the haemophilia affliction.
+09:59:58:496 [10795] [70] |(Grulk)|[ [ sen prone ANO Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom, hard,
+ true) ]]  
+Your lungs are much too constricted to smoke.
+09:59:58:498 [10795] [70] |(Grulk)|[ [ sen prone ANO Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom, hard,
+ true) ]]  
+Now prioritising the haemophilia affliction.
+09:59:58:498 [10795] [70] |(Grulk)|[ [ sen prone ANO Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom, hard,
+ true) ]]  
+Now prioritising the haemophilia affliction.
+09:59:58:499 [10795] [70] |(Grulk)|[ [ sen prone ANO Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom, hard,
+ true) ]]  
+You have set the 'slickness' affliction to the 25 priority.
+09:59:58:604 [10795] [70] |(Grulk)|[ [ sen prone ANO Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom, hard,
+ true) ]]  
+A massive jade spider rallies, no longer plagued with weakness.
+09:59:58:693 [10795] [70] |(Grulk)|[ [ sen prone ANO Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom, hard,
+ true) ]]  
+You have set the 'paralysis' affliction to the 25 priority.
+09:59:58:694 [10795] [70] |(Grulk)|[ [ sen prone ANO Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom, hard,
+ true) ]]  
+
+[BMQ Arm Prep] Target: Grulk | HP: 100% | Track: V3
+[BMQ Arm Prep] Arms: LA=0.0% RA=0.0%
+[BMQ Arm Prep] Legs: LL=0.0% RL=0.0%
+6 hits to arm double-break (sequence: LRLRLR)
+[BMQ Arm Prep] Parried: none | Shin: 92
+(LEVI): Rebounding coming up in 1.2 seconds
+A massive jade spider grips Grulk with two of its legs, covering him in a spray of sticky, shimmering webbing.
+Lunging forward, a massive jade spider tears into Grulk's shoulder voraciously.
+09:59:59:106 [10795] [70] |(Grulk)|[ [ sen prone ANO Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom, hard,
+ true) ]]  
+You may utilise the tree tattoo again.
+09:59:59:319 [10795] [70] |(Grulk)|[ [ sen prone ANO Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom, hard,
+ true) ]]  
+A descending tunnel. (indoors)
+The mirrored walls and floor of this tunnel slope steeply. Although the rock is slippery, it is also uneven, providing
+potential hand and footholds along the way. Some of the outcroppings are dangerously sharp, and their jagged edges match 
+the shards of crystal that litter the ground. In other areas, the passage is made even more hazardous by the 
+bioluminescent moss that provides this descent with the same eerie lighting as the rest of the caverns. There are 2 
+massive jade spiders here. A phantom sea turtle wafts here, his opaque fins outstretched to either side. Grulk Stormwing 
+is here, sprawled on the floor. He wields a Stormspear in his left hand and a crudely-banded ironwood shield in his 
+right.
+You see exits leading northeast and east.
+(1) person here: Grulk.
+09:59:59:989 [10795] [70] |(Grulk)|[ [ sen prone ANO Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom, hard,
+ true) ]]  
+[REB] You suddenly perceive the vague outline of an aura of rebounding around Grulk.
+10:00:00:224 [10795] [70] |(Grulk)|[ [ sen prone ANO Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom, hard,
+ true) ]]  
+Grulk seems able to move more freely all of a sudden.
+10:00:01:312 [10795] [70] |(Grulk)|[ [ sen prone ANO Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom, hard,
+ true) ]]  
+Your body is too weary to perform such a feat.
+10:00:01:840 [10795] [70] |(Grulk)|[ [ sen prone ANO Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom, hard,
+ true) ]]  
+You have set the 'paralysis' affliction to the 3 priority.
+10:00:02:053 [10795] [70] |(Grulk)|[ [ sen prone ANO Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom, hard,
+ true) ]]  
+You have set the 'slickness' affliction to the 3 priority.
+10:00:02:104 [10795] [70] |(Grulk)|[ [ sen prone ANO Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom, hard,
+ true) ]]  
+Your body is too weary to perform such a feat.
+10:00:02:196 [10795] [70] |(Grulk)|[ [ sen prone ANO Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom, hard,
+ true) ]]  
+A massive jade spider leaps through the air towards Grulk, crushing him beneath its body.
+Lunging forward, a massive jade spider tears into Grulk's shoulder voraciously.
+10:00:02:200 [10795] [70] |(Grulk)|[ [ sen prone ANO Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom, hard,
+ true) ]]  
+Grulk has writhed free of his entanglement by webs.
+10:00:02:284 [10795] [70] |(Grulk)|[ [ sen prone ANO Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom, hard,
+ true) ]]  
+Grulk stands up.
+10:00:02:286 [10795] [70] |(Grulk)|[ [ sen prone ANO Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom, hard,
+ true) ]]  
+
+ ----------------------------------------------------- 
+|     HEAD HAS BEEN BROKEN | HEAD HAS BEEN BROKEN     |
+ ----------------------------------------------------- 
+Grulk's aura of weapons rebounding disappears.
+An enormous butterfly flutters into the location.
+A large butterfly flutters about your head, but you contentedly ignore it.
+Grulk starts to wield a claw-etched handaxe of steel and ash in his left hand.
+Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at your head.
+As Grulk carves into you, you perceive that he has dealt 14.7% damage to your head.
+Your mind feels suddenly dulled and slow.
+Health lost: 930 (physical cutting).
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+10:00:02:292 [9865] [70] |(Grulk)|[ [ stu H1 sen ANO prone Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom,
+ hard, true) ]]  
+Grulk takes a long drag off his pipe.
+Grulk takes a drink from a quartz crystal vial.
+Grulk eats some irid moss.
+10:00:02:295 [9865] [70] |(Grulk)|[ [ stu H1 sen ANO prone Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom,
+ hard, true) ]]  
+Your body is too weary to perform such a feat.
+10:00:02:376 [9865] [70] |(Grulk)|[ [ stu H1 sen ANO prone Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom,
+ hard, true) ]]  
+You have set the 'paralysis' affliction to the 1 priority.
+10:00:02:472 [9865] [70] |(Grulk)|[ [ stu H1 sen ANO prone Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom,
+ hard, true) ]]  
+Health lost: 48 (raw).
+[[ BLEED 48 ]]
+Your body is too weary to perform such a feat.
+10:00:02:593 [9817] [70] |(Grulk)|[ [ stu H1 sen ANO prone Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom,
+ hard, true) ]]  
+Your body is too weary to perform such a feat.
+10:00:02:739 [9817] [69] |(Grulk)|[ [ stu H1 sen ANO prone Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom,
+ hard, true) ]]  
+
+- ( def cloak ) -
+You tumble out of the room.
+Within a shimmering hatchery. (indoors)
+A massive jade spider moves fluidly on its many legs, searching for prey.
+You see a single exit leading southwest.
+10:00:02:917 [9817] [69] |(Grulk)|[ [ stu H1 sen ANO prone Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom,
+ hard, true) ]]  
+Your body is too weary to perform such a feat.
+10:00:02:974 [9817] [69] |(Grulk)|[ [ stu H1 sen ANO prone Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom,
+ hard, true) ]]  
+You waggle your eyebrows comically.
+10:00:03:277 [9817] [69] |(Grulk)|[ [ stu H1 sen ANO prone Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom,
+ hard, true) ]]  
+Your body is too weary to perform such a feat.
+10:00:03:505 [9817] [69] |(Grulk)|[ [ stu H1 sen ANO prone Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom,
+ hard, true) ]]  
+
+- ( def weathering ) -
+Prowling like a jaguar, Grulk enters from the southwest.
+A small brown lemming rips apart your weathering with its claws.
+Grulk starts to wield a Stormspear in his left hand.
+Agony radiates out from the point of impact as Grulk brings the haft of a Stormspear down upon your head with crushing
+force.
+Health lost: 8556 (unblockable).
+10:00:03:686 [1261] [70] |(Grulk)|[ [ stu H1 sen ANO prone Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom,
+ hard, true) ]]  
+Your body is too weary to perform such a feat.
+10:00:03:752 [1261] [70] |(Grulk)|[ [ stu H1 sen ANO prone Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom,
+ hard, true) ]]  
+Your body is too weary to perform such a feat.
+10:00:04:001 [1261] [70] |(Grulk)|[ [ stu H1 sen ANO prone Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom,
+ hard, true) ]]  
+Your body is too weary to perform such a feat.
+10:00:04:193 [1261] [70] |(Grulk)|[ [ stu H1 sen ANO prone Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom,
+ hard, true) ]]  
+(((((((((((((((((((( BALANCE: 0.000 ))))))))))))))))))))
+Tears fill your eyes and begin to slowly run down your face.
+10:00:04:867 [1971] [70] |(Grulk)|[ [ stu H1 sen ANO prone Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft, venom,
+ hard, true) ]]  
+With a guttural growl, a wolf leaps forward and sinks his teeth into you.
+Health lost: 1411 (physical cutting).
+A massive jade spider leaps through the air towards Grulk, crushing him beneath its body.
+10:00:05:181 [560] [70] |(Grulk)|[ [ bld(195) stu H1 sen ANO prone Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft,
+ venom, hard, true) ]]  
+You are stunned by a vision of the Logos.
+10:00:05:309 [560] [70] |(Grulk)|[ [ bld(195) stu H1 sen ANO prone Rl2 clu SLI WEA nau hal IMP PAR AST add (Locks: soft,
+ venom, hard, true) ]]  
+The lemming races around you and between your legs, making you terribly dizzy and afraid of heights.
+10:00:06:179 [560] [70] |(Grulk)|[ [ bld(195) ANO clu SLI ver WEA stu IMP PAR Rl2 H1 nau hal prone sen AST add (Locks:
+ soft, venom, hard, true) ]]  
+You are no longer stunned.
+10:00:06:229 [560] [70] |(Grulk)|[ [ bld(195) ANO clu SLI ver WEA stu IMP PAR Rl2 H1 nau hal prone sen AST add (Locks:
+ soft, venom, hard, true) ]]  
+You have set the 'paralysis' affliction to the 1 priority.
+10:00:06:313 [560] [70] |(Grulk)|[ [ bld(195) ANO clu SLI ver WEA stu IMP PAR Rl2 H1 nau hal prone sen AST add (Locks:
+ soft, venom, hard, true) ]]  
+Now prioritising the haemophilia affliction.
+10:00:06:315 [560] [70] |(Grulk)|[ [ bld(195) ANO clu SLI ver WEA stu IMP PAR Rl2 H1 nau hal prone sen AST add (Locks:
+ soft, venom, hard, true) ]]  
+You give up a round of applause.
+
+[ClassDetect]: Combat ended, curingset reset to: normal
+Grulk stands up.
+10:00:06:844 [560] [67] |(Grulk)|[ [ ANO clu SLI ver WEA stu IMP PAR Rl2 H1 nau hal prone sen AST add (Locks: soft,
+ venom, hard, true) ]]  
+
+- ( def levitating ) -
+- ( def fireresist ) -
+- ( def magicresist ) -
+- ( def electricresist ) -
+- ( def poisonresist ) -
+- ( def nightsight ) -
+- ( def shintrance ) -
+- ( def shinclarity ) -
+- ( def constitution ) -
+- ( def gripping ) -
+- ( def shinbinding ) -
+- ( def deathsight ) -
+- ( def lifevision ) -
+- ( def shroud ) -
+- ( def retaliation ) -
+- ( def avoid ) -
+- ( def twoartsstance ) -
+- ( def insulation ) -
+- ( def insomnia ) -
+- ( def thirdeye ) -
+- ( def toughness ) -
+- ( def temperance ) -
+- ( def mindnet ) -
+- ( def coldresist ) -
+- ( def mindseye ) -
+- ( def selfishness ) -
+- ( def endure ) -
+A small brown lemming rips apart your levitating with its claws.
+Agony radiates out from the point of impact as Grulk brings the haft of a Stormspear down upon your head with crushing
+force.
+Health lost: 560 (unblockable).
+The bounty on your head placed by the Verdant Wilds of Eleusis has been completed. The reason was: Exterminations
+Daedalan, 999
+You just received message #50 from Achaea.
+You have been slain by Grulk.
+You have lost 17500 experience.

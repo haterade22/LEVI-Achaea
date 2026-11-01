@@ -2,6 +2,46 @@
 
 ---
 
+## 2026-11-01 - v4.7.470: FITNESS waits for equilibrium, known clock bugs, and rounds can go out as one alias
+
+The first code from the timing study (`kb/mechanics/foundations.md`). None of this has run in a fight yet, apart from the
+live probes in `kb/raw/live/probes_2026-11-01.txt`.
+
+**Live for every class on install:**
+- **FITNESS waits for equilibrium.** User: "It shouldnt fitness without EQ". Live probe: `touch shield;fitness` ran FITNESS
+  3.3 s later, when equilibrium returned. A held FITNESS can fire after the asthma has gone, and with no asthma it still
+  costs 2.8 s of balance (`You are already quite fit.`). `ataxia_fitnessHeldForEq` tests before the 1.5 s throttle, so the
+  send goes out on the prompt where equilibrium returns. With balance down, the send still goes out and the auto-queue holds it.
+- **The escape tree reads our own tree.** `AntiSerpent` tested `tBals.tree`, the TARGET's. It now tests
+  `ataxiaTemp.usedTree`. With our tree down and impatience up, the code now reaches the shield branch; it used to send a
+  `touch tree` that the game would refuse. `levilogin()` clears a stale `usedTree`, and a manual tree touch now counts.
+- **`cq all;touch shield` goes out at most once per 4 s.** It ran on every affliction gain and loss.
+- **A bystander's focus no longer starts the target's focus clock** (trigger 398). The shadowmadness wait is 4.8 s, down from 5
+  (measured 4.82-4.99). The homunculus and water lord focus timers now use the same form.
+- **One reset for `tBals`.** `ataxia_resetTargetBals` kills running timers, so an old target's timer cannot mark the new
+  target's balance up early. Five sites used to replace the table, and two of them dropped `salve` and `passive`.
+- Comments corrected: the FITNESS lockout is 9.06-10 s, not 8.7 s, and the Sentinel log's late FITNESS was equilibrium, not a
+  missing hook.
+
+**Off by default:**
+- **`aconfig rounds alias` (Monk only, never with the basher).** A `;` chain is not one queue entry: Mudlet splits it, so only
+  the first piece is queued. The shim sends `setalias lvfree a/b/c`, and then `queue addclear free lvfree`. The game reads the
+  alias when the entry fires, so a rewrite changes the round after it is queued (live probe: "Two."). Rounds over 138
+  characters, movement chains and text with `/`, `%` or `{` stay on the old path. The fight log header records the mode.
+  `aconfig rounds raw` goes back at once. See `kb/mechanics/balance-and-queueing.md`.
+- **`aconfig seebalances on`** sends `config seebalances yes` at every login. The game then prints `Balance used: 2.1s.` Off by
+  default, because the user has not played enough to say that the extra line breaks nothing.
+
+**Tools and tests:**
+- New `tools/kb_log_import.py` files Mudlet HTML logs. `tools/fightlog_import.py` counts alias rows.
+- `mock_mudlet.lua` now splits `;` as Mudlet does, because no test could catch this before. New `test_round_send.lua`,
+  `test_seebalances.lua` and `tools/test_fightlog_import.py` (not in CI). 3,840 Lua tests pass.
+
+**Knowledge base:** 20 new fight logs and our 4 recordings, the foundations page, kill routes for 13 more entries, and
+corrections for pear (it spends the lungs), SKULLBASH, and the `;` rule. `kb/CONFLICTS.md` #50-#53.
+
+---
+
 ## 2026-10-30 - v4.7.469: one re-send per denizen shield, not one per rebound
 
 - **User:** a Two Handed Runewarden "spamming attacks against a shielded denizen". The log shows

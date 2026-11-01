@@ -5,6 +5,7 @@ shows is written up in a curated page that cites it.
 
 | File | Fight | Whose log | Curated in |
 |---|---|---|---|
+| 2026-08-19_leviticus_blademaster-vs-sentinel_loss_Sentinel.txt | Our Blademaster dies to Grulk, a Sentinel, 123 s, by SKULLBASH. Copied unchanged from the user's desktop on 2026-11-01. Millisecond prompts | Ours, before the fight recorder existed | [.claude/classes/sentinel.md](../../../.claude/classes/sentinel.md), [docs/kill-paths.md](../../../docs/kill-paths.md) |
 | 2026-10-11_shikudo-vs-runewarden-snb_attacker.txt | A Shikudo monk (staff "a twisted oaken staff") kills Claes, a Runewarden (sword and Shield of Absorption), by DISPATCH, about 86 s | The Shikudo's | [combat/shikudo.md](../../combat/shikudo.md), [combat/runewarden-snb.md](../../combat/runewarden-snb.md) |
 | 2026-10-11_runewarden-snb-vs-shikudo_defender.txt | Claes kills Dominius, a Shikudo monk ("a dark ash wood staff"), by impale and DISEMBOWEL, Oniar Estate arena | Claes's (the Runewarden) | the same two pages |
 | 2026-10-11_mystor_shikudo-vs-depthswalker_loss_EveP2TVe.txt | Mystor (Shikudo) loses to Belaziel, a Depthswalker: SHADOW DICTATE, about 49 s (Colosseum arena) | Mystor's (the Shikudo); he ran MIND SAPIENCE on the opponent in five of six | [combat/shikudo.md](../../combat/shikudo.md) |
@@ -38,7 +39,7 @@ Reading them:
 
 **A name collision:** the user saved two DIFFERENT exports as `LcJC-rJ5.html`, Mystor's Apostate fight
 (`Downloads/shikudo fights/`, filed here as `..._mystor_shikudo-vs-apostate_win_LcJC-rJ5.txt`) and Claes
-vs Pharaus (`Downloads/`, not filed). Cite Mystor's as "Mystor's Apostate log".
+vs Pharaus (filed 2026-11-01 as `2026-11-01_claes_runewarden-vs-apostate_loss_LcJC-rJ5.txt`). Cite Mystor's as "Mystor's Apostate log".
 
 Mystor is a Shikudo monk; the user relayed his notes on them (`kb/raw/players/shikudo-2026-10-11.txt`).
 Converted the same way (one row per `<br>`); they carried no channel chat, so nothing was removed.
@@ -79,6 +80,58 @@ vivisect). Their system's echoes, as it prints them (not game text):
   at a Kalys shown "here, hidden" (:525, :706), while both misses came after he had left (:482,
   :490, :683).
 
+### The 2026-11-01 batch (shared by the user)
+
+The user added 25 Mudlet HTML exports. `python tools/kb_log_import.py` filed 20 of them as text, and
+`--check` matched each one row by row. The other 5 are not new: two are the 2026-10-11 Runewarden logs
+(`Pk1qqH9I` is an exact match, `aJnS5zOu` is that log before the channel rows were removed), and three are
+copies (`Vr.NkCGD (1)`, `Vr.NkCGD (2)`, `s98kPGv6 (1)`). The exports stay on disk and are git-ignored.
+
+New files use LF line ends. The older files here use CRLF. Their rows are the same otherwise: the
+converter reproduces all 2,733 rows of `2026-10-11_shikudo-vs-runewarden-snb_attacker.txt`.
+
+| Id | Logger, class | Opponent, class | Result | Stamps | Notes |
+|---|---|---|---|---|---|
+| WO7tC3kL | Claes, Runewarden | Proficy, Apostate | win | ms | 1v1 hunt at Oniar, 403 s; impale, disembowel |
+| azbErKcK | Claes, Runewarden | Thato, Serpent | loss | ms | truelock, then vomit "suffocating" with recklessness hiding health |
+| 4c_SeyaA | Claes, Runewarden | Reyl, Pariah | loss | ms | SCOURGE |
+| CxxKSMq | Claes, Runewarden | Blonk, Runewarden (two handed) | loss | ms | sweep, impale, 2700 unblockable |
+| s98kPGv6 | Claes, Runewarden | Talo, Air Lord | loss | ms | pressure counter, clap at 6 |
+| WKuEakBZ | Claes, Runewarden | Talo, Pariah | loss | ms | Latency, voyria |
+| Vr.NkCGD | Claes, Runewarden | Talo, Pariah | loss | ms | Latency, voyria |
+| LcJC-rJ5 | Claes, Runewarden | Pharaus, Apostate | loss | ms | truelock, ankheg trample, VIVISECT |
+| J7Xnr_Jg | Claes, Runewarden | Sjeng, Runewarden | win | ms | BISECT |
+| X8pRorzR | Nikita, Depthswalker | Archaeon, Serpent | win | cs | truelock, death by symptoms |
+| kAQnlFAW | Nikita, Depthswalker | Anzerloi, Bard | win | cs | Degeneration capstone |
+| L8LSw7xD | Nikita, Depthswalker | Anzerloi, Bard | win | cs | SHADOW DICTATE |
+| 2N1HTSWZ | Elmer, Shikudo | Torvald, Runewarden | win | ms | DISPATCH |
+| 3ys7NuHA | Elmer, Shikudo | Astarod, Air Lord | win | ms | DISPATCH |
+| g-lD00-h | Elmer, Shikudo | Kalys, Serpent | no result | ms | Kalys left |
+| Z5cyffxx | Elmer, Alchemist | Seurimas, Serpent | loss | ms | truelock, scytherus bites |
+| KtdftABt | unnamed, Blademaster | Kuririn, Tekura monk | win | 1 s | a staged finisher |
+| OwkA-G99 | unnamed, Earth Lord | Alyzar, Blademaster | loss | cs | leg breaks, "Planting his foot" rounds; class from ability lines, no HONOURS line |
+| JDvzR7j7 | unnamed, Earth Lord | Vothaec, Sentinel; killed by Arcadian guards | loss | cs | |
+| uW_VbgR | unnamed, Earth Lord | Vothaec, Sentinel | no result | cs | truelock, log cut |
+
+All 20 are 1v1 by the party check, although people pass through some of them. Classes come from ability
+lines and echoes, so a class here is a reading of the log, not a game record. The Blonk class was first read
+as Unnamable; runes flash on the weapons (`CxxKSMq` rows 755, 1198, 1305, 1529). Nine logs share one
+player's system and several were played within 30 minutes, so do not treat them as independent samples.
+
+**Prompt stamps differ by family, and a row's time is the NEXT prompt's stamp:**
+- Claes: `HH:MM:SS:mmm`. Nikita: `HH:MM:SS.cc`; a `.00` stamp prints one second early.
+- Elmer: `SS:mmm`, which wraps at 60. Earth Lord: `MM:SS.cc`. Blademaster: `HH:MM:SS`.
+- Treat a margin under 0.5 s as unresolved: lag bursts bundle rows.
+
+**What is game text and what is not:**
+- **`Balance used: 2.1s.` and `Equilibrium used: 3.40s.` are GAME text.** They have the same colour as
+  `Health lost`, and they print before recovery, which a client cannot know. A victim also prints one for an
+  imposed loss (`Balance used: 1.4s.`, `OwkA-G99` row 3141). Mystor's `[Bal Spent: 2.1s]` is this line, renamed.
+  Claes's logs show `Equilibrium used` but never `Balance used`. No log of ours has either line.
+- **These are loggers' echoes:** `Tree (13.916)` and `(4.38)` after a recovery line, `[INR]: 13 Ginseng (586)`,
+  `Processed Cures(...)`, `aff+` / `aff-` (Nikita's tracker), and `AST44 clum44` (Elmer's chance that an
+  affliction remains). `[Prio]` rows show the logger's live cure priority.
+
 ## Our own fight logs (`ours/`)
 
 Since v4.7.418 the package records our own fights (`fightlog`, `misc_scripts/026_Fight_Log.lua`) to
@@ -96,9 +149,15 @@ Each row is `<HH:MM:SS.mmm> <kind> <text>`, so unlike a client log every row has
 | `+aff` / `-aff` | an affliction we gained or lost, from GMCP |
 | `+def` / `-def` | a defence we gained or lost, from GMCP |
 | `+tar` / `-tar` | an affliction our tracker gave the target or took away (its "tar afflicted" and "target cured aff" events), so what we believed can be checked against the lines |
-| `#` | a note: the header (version, opponent, our class, why it started) and the stop line (why, rows, seconds) |
+| `#` | a note: the header (version, opponent, our class, why it started, round delivery) and the stop line (why, rows, seconds) |
 
 Lines the package echoes itself (`(LEVI): ...`) are not recorded, because echoes do not reach triggers.
+
+**Round delivery.** The header ends with `rounds raw` or `rounds alias`, so a control fight can be told from a test
+fight. Logs from before that field are `raw`. With `alias` (`aconfig rounds alias`, Monk only, not yet proven in a fight),
+the `>` rows hold `setalias lvfree a/b/c` when the text changes and `queue addclear free lvfree` for each press. A
+`# alias lvfree holds: ...` row after the header gives the text at the start. We expect the game's run line to name the
+alias (`Running queued free command: LVFREE`), but no log shows it yet: the first alias fight will.
 
 When it records: on its own when a player attacks us (the class detector's event), or when we send
 a queued command naming our target while that target is a player in the room; by hand with

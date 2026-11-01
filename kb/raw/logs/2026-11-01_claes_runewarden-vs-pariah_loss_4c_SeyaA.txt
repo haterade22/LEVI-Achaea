@@ -1,0 +1,3021 @@
+You raise two fingers to your brow in an informal half-salute.
+H:5460|100% M:4966|100%  18:42:49:002  [ Talo ][0|0|0|0|0|0]
+Reyl brings his ritual knife to his other hand and blood flashes upon the blade.
+H:5460|100% M:4966|100%  18:42:50:571  [ Talo ][0|0|0|0|0|0]
+
+-----------------------------------------------------------------------------------------------
+             Target set to: Reyl (Level 104 Pariah)             
+-----------------------------------------------------------------------------------------------
+ Reset Success!
+
+Your target is now: Reyl (an adventurer)
+H:5460|100% M:4966|100%  18:42:52:527  [ Reyl ][0|0|0|0|0|0]
+Reyl is not currently an ally.
+H:5460|100% M:4966|100%  18:42:52:620  [ Reyl ][0|0|0|0|0|0]
+Reyl is now one of your enemies.
+H:5460|100% M:4966|100%  18:42:52:624  [ Reyl ][0|0|0|0|0|0]
+Reyl traces a logograph resembling a leech in the air, crimson fire hanging in the air in the
+wake of his blade.
+The logograph sinks into his chest just over his heart.
+H:5460|100% M:4966|100%  18:42:53:027  [ Reyl ][0|0|0|0|0|0]
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+H:5460|100% M:4966|100%  18:42:54:514  [ Reyl ][0|0|0|0|0|0]
+Reyl lowers his head respectfully.
+H:5460|100% M:4966|100%  18:42:54:606  [ Reyl ][0|0|0|0|0|0]
+You begin sketching a gular rune on the ground.
+H:5460|100% M:4966|100%  18:42:58:692  [ Reyl ][0|0|0|0|0|0]
+What do you wish to point?
+H:5460|100% M:4966|100%  18:42:58:784  [ Reyl ][0|0|0|0|0|0]
+Reyl says in a quiet, strained voice, "Ready."
+H:5460|100% M:4966|100%  18:42:59:503  [ Reyl ][0|0|0|0|0|0]
+You say in a steady, measured voice, "I am ready."
+H:5460|100% M:4966|100%  18:43:00:222  [ Reyl ][0|0|0|0|0|0]
+A wall of rough stone rises from the earth to block the exit to the northeast.
+You have recovered balance on all limbs.
+H:5460|100% M:4966|100%  18:43:00:516  [ Reyl ][0|0|0|0|0|0]
+Reyl nods his head emphatically.
+H:5460|100% M:4966|100%  18:43:01:874  [ Reyl ][0|0|0|0|0|0]
+Reyl says in a quiet, strained voice, "Begin."
+H:5460|100% M:4966|100%  18:43:03:651  [ Reyl ][0|0|0|0|0|0]
+Reyl sweeps a leaf-bladed ritual knife in a circle above his head, the point of the blade
+coming to rest aimed at you. You feel a sharp pain, gone as swiftly as it came, and a fine 
+crimson spray falls about you and Reyl.
+[Legacy]: Curing against Pariah (Reyl).
+[AFF]: Ensorcelled
+H:5460|100% M:4966|100%  18:43:04:494  [ Reyl ][0|0|0|0|0|0][ENS] 
+H:5460|100% M:4966|100%  18:43:04:943  [ Reyl ][0|0|0|0|0|0][ENS] 
+Envenomed: (Xentio)
+Sliced:    (Reyl)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Engage:    (Reyl)
+Equilibrium used: 2.00s..
+Afflicted: (Clumsiness Paralysis)
+[clum, para]
+Reyl eats a magnesium chip.
+Processed Cures(paralysis)
+[clum]
+
+H:5460|100% M:4916|98%  18:43:05:021  [ Reyl ][0|0|0|0|0|0][ENS] 
+A fierce mountain falcon rips out a chunk of Reyl's flesh with its beak.
+H:5460|100% M:4916|98%  18:43:05:210  [ Reyl ][0|0|0|0|0|0][ENS] 
+Reyl takes a drink from an elegant diamond vial.
+H:5460|100% M:4916|98%  18:43:05:212  [ Reyl ][0|0|0|0|0|0][ENS] 
+Reyl eats an aurum flake.
+Processed Cures(clumsiness)
+H:5460|100% M:4866|97%  18:43:06:545  [ Reyl ][0|0|0|0|0|0][ENS] 
+Reyl traces a logograph shaped like a set of scales in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed, it suddenly shatters, and your heart begins to beat
+unnaturally fast.
+You have recovered equilibrium.
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Reyl)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (87%/100%).
+Afflicted: (Clumsiness Paralysis)
+[clum, para]
+A fierce mountain falcon rips out a chunk of Reyl's flesh with its beak.
+H:5460|100% M:4766|95%  18:43:08:209  [ Reyl ][0|0|0|0|0|0][ENS] 
+Reyl eats a magnesium chip.
+Your heart feels as if it is going to beat right out of your chest, before without warning it
+slows to normal; your head spins and you stagger at the sudden change.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+H:5460|100% M:4766|95%  18:43:08:547  [ Reyl ][0|0|0|0|0|0][clum ENS] 
+[Curing]: OUTR KELP
+[OUTR]: 1 Kelp (1663)
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+Reyl traces a logograph depicting a lunging bear in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+Even as the logograph becomes fully formed it leaps from the air to you, sinking into your
+chest just over your heart.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+You have recovered balance on all limbs.
+Envenomed: (Vernalius)
+Sliced:    (Reyl)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (71%/100%).
+Afflicted: (Weariness Paralysis)
+[clum, weari, para]
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+H:5460|100% M:4666|93%  18:43:09:550  [ Reyl ][0|0|0|0|0|0][ENS] 
+Reyl takes a drink from an elegant diamond vial.
+H:5460|100% M:4666|93%  18:43:09:626  [ Reyl ][0|0|0|0|0|0][ENS] 
+Reyl eats a magnesium chip.
+Processed Cures(paralysis)
+[clum, weari]
+
+H:5460|100% M:4666|93%  18:43:09:874  [ Reyl ][0|0|0|0|0|0][ENS] 
+You may eat another plant or mineral.
+H:5460|100% M:4666|93%  18:43:10:183  [ Reyl ][0|0|0|0|0|0][ENS] 
+Reyl raises his left hand, and snaps his fingers.
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Pyramides
+Your heart skips a beat, then begins to pound.
+Health lost: 774 (poison).
+Reyl traces a logograph depicting a leaping jackal in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it leaps for you, ephemeral fangs closing about your
+throat and cutting off air.
+[AFF]: Asthma
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4686|85% M:4666|93%  18:43:10:623  [ Reyl ][0|0|0|0|0|0] ( -774h 14% )[AST PYR ENS] 
+[Curing]: OUTR BLOODROOT
+[OUTR]: 1 Bloodroot (850)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+The burning in your veins abruptly fades.
+[AFF]: Pyramides
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5460|100% M:4666|93%  18:43:10:721  [ Reyl ][0|0|0|0|0|0] ( +774h 14% )[ENS] 
+You have recovered balance on all limbs.
+Envenomed: (Kalmia)
+Sliced:    (Reyl)
+Empower:   (Sleizak)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (84%/100%).
+Afflicted: (Asthma Paralysis)
+[ast, clum, weari, para]
+[OUTR]: 1 Bloodroot (849)
+A fierce mountain falcon dives at Reyl, raking his face with its talons.
+H:5460|100% M:4416|88%  18:43:11:116  [ Reyl ][0|0|0|0|0|0] ( -250m 5% )[ENS] 
+Reyl eats a magnesium chip.
+Reyl touches a tree of life tattoo.
+Processed Cures(paralysis)
+Processed Cures(clumsiness weariness asthma)
+[ast[67], clum[67], weari[67]]
+
+H:5460|100% M:4416|88%  18:43:11:476  [ Reyl ][0|0|0|0|0|0][ENS] 
+You may eat another plant or mineral. Eat (1.536)
+H:5460|100% M:4416|88%  18:43:12:253  [ Reyl ][0|0|0|0|0|0][ENS] 
+Reyl raises his left hand, and snaps his fingers.
+A tide of writhing bodies boils up from the ground, myriad mouths gnawing and biting as they
+burrow into your flesh.
+Health lost: 544 (poison).
+Reyl traces a writhing logograph in the air before you, the blood upon his knife bursting into
+arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it lashes out at you, ethereal fangs plunging into your
+throat.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4916|90% M:4416|88%  18:43:12:365  [ Reyl ][0|0|0|0|0|0] ( -544h 9% )[PAR ENS] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:4916|90% M:4416|88%  18:43:12:472  [ Reyl ][0|0|0|0|0|0][ENS] 
+[OUTR]: 1 Bloodroot (848)
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Reyl)
+Proc:      (Sleizak 1)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Sensitivity)
+[HP]:      (68%/100%).
+Afflicted: (Slickness Paralysis Prefarar)
+[ast[67], clum[67], weari, naus, deaf, slick, para]
+Reyl eats a potash crystal.
+H:4916|90% M:4316|86%  18:43:13:004  [ Reyl ][0|0|0|0|0|0][ENS] 
+Reyl eats a magnesium chip.
+Processed Cures(paralysis slickness)
+[ast[67], clum[67], weari, naus, deaf, slick[50], para[50]]
+
+H:4916|90% M:4316|86%  18:43:13:201  [ Reyl ][0|0|0|0|0|0][ENS] 
+Lines of icy fire abruptly lance through your chest, radiating outward from your heart.
+[AFF]: Haemophilia
+You sense a subtle change deep within.
+H:4916|90% M:4391|88%  18:43:13:592  [ Reyl ][0|0|0|0|0|0][haem ENS] 
+Raising his left hand, Reyl sharply snaps his fingers.
+You feel something shifting and undulating beneath your skin, before a black cloud struggles
+from within your wounds.
+Reyl traces a logograph shaped like a set of scales in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it suddenly shatters, and a wave of arcane power sends
+you staggering.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+You may eat another plant or mineral. Eat (1.451)
+H:4916|90% M:4391|88%  18:43:13:921  [ Reyl ][0|0|0|0|0|0][clum haem ENS] 
+[Curing]: OUTR GINSENG
+[OUTR]: 1 Ginseng (585)
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+Your blood regains its ability to clot.
+[AFF]: Haemophilia
+H:4916|90% M:4391|88%  18:43:14:004  [ Reyl ][0|0|0|0|0|0][clum ENS] 
+[OUTR]: 1 Ginseng (584)
+Reyl takes a drink from an elegant diamond vial.
+H:4916|90% M:4391|88%  18:43:14:182  [ Reyl ][0|0|0|0|0|0][clum ENS] 
+Health lost: 50 (raw).
+You bleed 50 health.
+H:4866|89% M:4391|88%  18:43:14:188  [ Reyl ][0|0|0|0|0|0][clum ENS] 
+Reyl eats an aurum flake.
+Reyl takes a long drag off his pipe.
+Processed Cures(asthma clumsiness weariness)
+You have recovered balance on all limbs.
+Envenomed: (Slike)
+Sliced:    (Torso) (7.1%)
+Runeblade: (Nairat)
+Afflicted: (Frozen)
+Shield:    (Scrambled Brains)
+Ferocity:  [####|####|####|####]
+[HP]:      (86%/100%).
+Afflicted: (Anorexia Dizziness).*
+[diz, clum[44], weari[67], naus, anor, deaf, frzn[200], para[50]]
+A look of extreme focus crosses the face of Reyl.
+Reyl takes some salve from a vial and rubs it on his skin.
+Processed Cures(anorexia frozen)
+You may drink another health or mana elixir. Health (4.327)
+H:4866|89% M:4291|86%  18:43:15:048  [ Reyl ][0|7.1|0|0|0|0][clum ENS] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5460|100% M:4291|86%  18:43:15:127  [ Reyl ][0|7.1|0|0|0|0] ( +594h 10% )[clum ENS] 
+Reyl raises his left hand, and snaps his fingers.
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Flushings
+Your skin begins to prickle uncomfortably.
+Health lost: 774 (poison).
+Reyl traces a logograph depicting a lunging bear in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+Even as the logograph becomes fully formed it leaps from the air to you, sinking into your
+chest just over your heart.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+You may eat another plant or mineral. Eat (1.489)
+H:4686|85% M:4291|86%  18:43:15:491  [ Reyl ][0|7.1|0|0|0|0] ( -774h 14% )[clum fls ENS] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+Reyl takes some salve from a vial and rubs it on his body.
+Processed Cures(anorexia frozen)
+H:4686|85% M:4241|85%  18:43:15:911  [ Reyl ][0|7.1|0|0|0|0][fls ENS] 
+Reyl eats an aurum flake.
+Processed Cures(clumsiness weariness)
+[diz, naus, deaf, frzn, para[50]]
+
+H:4686|85% M:4241|85%  18:43:16:498  [ Reyl ][0|7.1|0|0|0|0][fls ENS] 
+Something pulses from within the chest of Reyl, and he seems more vital.
+Processed Cures(paralysis dizziness nausea)
+H:4686|85% M:4241|85%  18:43:16:610  [ Reyl ][0|7.1|0|0|0|0][fls ENS] 
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Torso)
+Reyl parries the attack with a deft manoeuvre.
+
+ YOU HIT PARRY(Torso)!!
+
+
+
+ YOU HIT PARRY(Torso)!!
+
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (83%/100%).
+Afflicted: (Paralysis).*
+[diz[67], deaf, frzn, para]
+
+Processed Cures(dizziness)
+You may eat another plant or mineral.
+H:4686|85% M:4141|83%  18:43:17:099  [ Reyl ][0|7.1|0|0|0|0][fls ENS] 
+A fierce mountain falcon dives at Reyl, raking his face with its talons.
+H:4686|85% M:4141|83%  18:43:17:139  [ Reyl ][0|7.1|0|0|0|0][fls ENS] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+The prickling in your skin fades and you feel blessedly cool.
+[AFF]: Flushings
+[OUTR]: 1 Ginseng (583)
+Reyl eats a magnesium chip.
+Processed Cures(paralysis)
+[deaf, frzn]
+
+H:4686|85% M:4141|83%  18:43:18:350  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Reyl raises his left hand, and snaps his fingers.
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Flushings
+Your skin begins to prickle uncomfortably.
+Health lost: 774 (poison).
+Reyl traces a logograph depicting a leaping jackal in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it leaps for you, ephemeral fangs closing about your
+throat and cutting off air.
+[AFF]: Asthma
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:3912|71% M:4141|83%  18:43:18:393  [ Reyl ][0|7.1|0|0|0|0] ( -774h 14% )[AST fls ENS] 
+[Curing]: OUTR MOSS
+[OUTR]: 1 Irid (1362)
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+H:4348|79% M:4538|91%  18:43:18:661  [ Reyl ][0|7.1|0|0|0|0] ( +436h 7% +397m 7% )[AST fls ENS]
+ 
+Reyl takes a drink from an elegant diamond vial.
+You have recovered balance on all limbs.
+Being careful not to poison yourself, you wipe off all the venoms from a blessed legionnaire's
+longsword.
+Envenomed: (Xentio)
+Sliced:    (Reyl)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (87%/100%)
+You may eat another plant or mineral. Eat (1.534).
+Afflicted: (Clumsiness Paralysis)
+[clum, deaf, frzn, para]
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+H:4348|79% M:4438|89%  18:43:19:007  [ Reyl ][0|7.1|0|0|0|0][fls ENS] 
+You may drink another health or mana elixir. Health (4.46)
+H:4457|81% M:4438|89%  18:43:19:588  [ Reyl ][0|7.1|0|0|0|0][fls ENS] 
+A wave of light-headedness abruptly overcomes you.
+[AFF]: Pyramides
+Your heart skips a beat, then begins to pound.
+Lines of icy fire abruptly lance through your chest, radiating outward from your heart.
+[AFF]: Haemophilia
+You sense a subtle change deep within.
+H:4457|81% M:4438|89%  18:43:19:636  [ Reyl ][0|7.1|0|0|0|0][PYR haem fls ENS] 
+Health lost: 55 (raw).
+You bleed 55 health.
+H:4402|80% M:4438|89%  18:43:19:693  [ Reyl ][0|7.1|0|0|0|0][PYR haem fls ENS] 
+Reyl eats a magnesium chip.
+[Curing]: SIP HEALTH
+Processed Cures(paralysis)
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5428|99% M:4438|89%  18:43:19:763  [ Reyl ][0|7.1|0|0|0|0] ( +1026h 18% )[PYR haem fls ENS] 
+Reyl raises his left hand, and snaps his fingers.
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Sandfever
+You're tired. So very tired.
+Health lost: 774 (poison).
+Reyl traces a writhing logograph in the air before you, the blood upon his knife bursting into
+arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it lashes out at you, ethereal fangs plunging into your
+throat.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4654|85% M:4438|89%  18:43:19:973  [ Reyl ][0|7.1|0|0|0|0] ( -774h 14% )[SAND PAR PYR haem 
+fls ENS] 
+A fierce mountain falcon rips out a chunk of Reyl's flesh with its beak.
+Its talons shred the magic resistance defence of Reyl.
+H:4654|85% M:4438|89%  18:43:20:167  [ Reyl ][0|7.1|0|0|0|0][SAND PAR PYR haem fls ENS] 
+You may eat another plant or mineral.
+H:4654|85% M:4438|89%  18:43:20:479  [ Reyl ][0|7.1|0|0|0|0][SAND PAR PYR haem fls ENS] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:4654|85% M:4438|89%  18:43:20:516  [ Reyl ][0|7.1|0|0|0|0][SAND PYR haem fls ENS] 
+[OUTR]: 1 Bloodroot (847)
+You have recovered balance on all limbs.
+Envenomed: (Vernalius)
+Sliced:    (Reyl)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (78%/100%).
+Afflicted: (Weariness Paralysis)
+[clum, weari, deaf, frzn, para]
+Reyl eats a magnesium chip.
+Processed Cures(paralysis)
+[clum, weari, deaf, frzn]
+
+H:4654|85% M:4288|86%  18:43:21:322  [ Reyl ][0|7.1|0|0|0|0][SAND PYR haem fls ENS] 
+Reyl raises his left hand, and snaps his fingers.
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Rebbies
+You feel... odd. So very odd.
+Health lost: 774 (poison).
+Reyl traces a logograph shaped like a set of scales in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it suddenly shatters, and a wave of arcane power sends
+you staggering.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:3880|71% M:4288|86%  18:43:21:609  [ Reyl ][0|7.1|0|0|0|0] ( -774h 14% )[SAND clum reb PYR 
+haem fls ENS] 
+You may eat another plant or mineral. Eat (1.601)
+H:3880|71% M:4288|86%  18:43:22:116  [ Reyl ][0|7.1|0|0|0|0][SAND clum reb PYR haem fls ENS] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+The burning in your veins abruptly fades.
+[AFF]: Pyramides
+H:3880|71% M:4288|86%  18:43:22:303  [ Reyl ][0|7.1|0|0|0|0][SAND clum reb haem fls ENS] 
+
+[OUTR]: 1 Bloodroot (846)
+You have recovered balance on all limbs.
+Envenomed: (Kalmia)
+Sliced:    (Reyl)
+You lash out at Reyl with a blessed legionnaire's longsword, but miss.
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Sensitivity)
+[HP]:      (76%/100%).
+Afflicted: (Paralysis Prefarar)
+[clum, sen, weari, deaf, frzn, para]
+Reyl eats a magnesium chip.
+A fierce mountain falcon rips out a chunk of Reyl's flesh with its beak.
+H:3880|71% M:4188|84%  18:43:23:164  [ Reyl ][0|7.1|0|0|0|0][SAND clum reb haem fls ENS] 
+Reyl raises his left hand, and snaps his fingers.
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Mycalium
+Your thoughts cloud as a strange sense of displacement overcomes you.
+Health lost: 774 (poison).
+Reyl traces a logograph depicting a lunging bear in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+Even as the logograph becomes fully formed it leaps from the air to you, sinking into your
+chest just over your heart.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:3106|56% M:4188|84%  18:43:23:248  [ Reyl ][0|7.1|0|0|0|0] ( -774h 14% )[myc SAND clum reb 
+haem fls ENS] 
+Reyl takes a drink from an elegant diamond vial.
+A sudden flush of heat drives out a chill that you didn't realise was there until it is gone;
+your limbs tingle, and you feel unburdened.
+[AFF]: Ensorcelled
+H:3106|56% M:4188|84%  18:43:23:651  [ Reyl ][0|7.1|0|0|0|0][myc SAND clum reb haem fls] 
+You may eat another plant or mineral. Eat (1.531)
+H:3106|56% M:4263|85%  18:43:23:833  [ Reyl ][0|7.1|0|0|0|0][myc SAND clum reb haem fls] 
+[Curing]: OUTR GOLDENSEAL
+[OUTR]: 1 Goldenseal (1492)
+[Curing]: EAT GOLDENSEAL
+You eat a goldenseal root.
+Your thoughts suddenly crystalise, the insidious whispers falling abruptly silent.
+[AFF]: Mycalium
+H:3106|56% M:4263|85%  18:43:23:933  [ Reyl ][0|7.1|0|0|0|0][SAND clum reb haem fls] 
+[OUTR]: 1 Goldenseal (1491)
+You may drink another health or mana elixir. Health (4.426)
+H:3106|56% M:4263|85%  18:43:24:189  [ Reyl ][0|7.1|0|0|0|0][SAND clum reb haem fls] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:3994|73% M:4263|85%  18:43:24:284  [ Reyl ][0|7.1|0|0|0|0] ( +888h 16% )[SAND clum reb haem 
+fls] 
+You may eat another bit of irid moss or potash.
+H:3994|73% M:4263|85%  18:43:24:464  [ Reyl ][0|7.1|0|0|0|0][SAND clum reb haem fls] 
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+H:4430|81% M:4660|93%  18:43:24:467  [ Reyl ][0|7.1|0|0|0|0] ( +436h 7% +397m 7% )[SAND clum 
+reb haem fls] 
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+Your fever finally breaks, the terrible burning retreating.
+[AFF]: Sandfever
+Lines of icy fire abruptly lance through your chest, radiating outward from your heart.
+Reyl eats an aurum flake.
+You may utilise the tree tattoo again.
+Processed Cures(clumsiness sensitivity weariness) Tree (13.932)
+H:4430|81% M:4660|93%  18:43:24:651  [ Reyl ][0|7.1|0|0|0|0][clum reb haem fls] 
+Reyl traces a logograph depicting a striking scorpion in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+The logograph leaps from the air to you, and you feel a terrible pain in the side of your neck
+before an icy cold rushes through you.
+[AFF]: Scytherus
+You feel light headed and dizzy.
+You have recovered balance on all limbs.
+Being careful not to poison yourself, you wipe off all the venoms from a blessed legionnaire's
+longsword.
+Envenomed: (Kalmia)
+Sliced:    (Reyl)
+Empower:   (Sleizak)
+Afflicted: (Weariness)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (84%/100%).
+Afflicted: (Asthma Paralysis)
+[ast, clum[67], sen[67], weari, deaf, frzn, para]
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Your skin ceases secreting slime.
+[AFF]: Rebbies
+H:4430|81% M:4460|89%  18:43:24:872  [ Reyl ][0|7.1|0|0|0|0] ( -200m 4% ) (205B)[clum haem SCYT 
+fls] 
+Health lost: 205 (raw).
+You bleed 205 health.
+H:4225|77% M:4460|89%  18:43:25:176  [ Reyl ][0|7.1|0|0|0|0] ( -205h 3% ) (205B)[clum haem SCYT 
+fls] 
+You may eat another plant or mineral. Eat (1.447)
+H:4225|77% M:4460|89%  18:43:25:378  [ Reyl ][0|7.1|0|0|0|0][clum haem SCYT fls] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+The prickling in your skin fades and you feel blessedly cool.
+[AFF]: Flushings
+H:4225|77% M:4460|89%  18:43:25:471  [ Reyl ][0|7.1|0|0|0|0][clum haem SCYT] 
+A wave of light-headedness abruptly overcomes you.
+[AFF]: Pyramides
+Your heart skips a beat, then begins to pound.
+H:4225|77% M:4460|89%  18:43:25:692  [ Reyl ][0|7.1|0|0|0|0][clum PYR haem SCYT] 
+[OUTR]: 1 Ginseng (582)
+Reyl eats a magnesium chip.
+Reyl touches a tree of life tattoo.
+Processed Cures(paralysis)
+Processed Cures(clumsiness weariness sensitivity asthma frozen)
+[ast[80], clum[53], sen[53], weari[80], deaf, frzn[80]]
+
+H:4225|77% M:4410|88%  18:43:26:261  [ Reyl ][0|7.1|0|0|0|0][clum PYR haem SCYT] 
+
+THEY CAN TOUCH TREE AGAIN!
+Reyl traces a writhing logograph in the air before you, the blood upon his knife bursting into
+arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it lashes out at you, ethereal fangs plunging into your
+throat.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Your blood begins to burn in your veins with a slowly building pain.
+[AFF]: Voyria
+You have recovered balance on all limbs.
+H:4225|77% M:4410|88%  18:43:26:832  [ Reyl ][0|7.1|0|0|0|0][clum PAR PYR haem SCYT VOYR] 
+[Curing]: SIP IMMUNITY
+You take a drink from a pinewood vial.
+Mercifully, the voyria venom has been cleansed from your body.
+[AFF]: Voyria
+The elixir burns through your veins, destroying the deadly poisons that are killing you.
+
+H:4225|77% M:4410|88%  18:43:26:922  [ Reyl ][0|7.1|0|0|0|0][clum PAR PYR haem SCYT] 
+You may eat another plant or mineral. Eat (1.579)
+H:4225|77% M:4410|88%  18:43:27:049  [ Reyl ][0|7.1|0|0|0|0][clum PAR PYR haem SCYT] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:4225|77% M:4410|88%  18:43:27:243  [ Reyl ][0|7.1|0|0|0|0][clum PYR haem SCYT] 
+[OUTR]: 1 Bloodroot (845)
+You bunch your powerful muscles and launch yourself in a majestic leap northeastwards.
+Empty training yard.
+--- Area 572: A secluded mansion - v52882 ---
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+             [ ]
+                                             
+                 [ ]-[ ]
+                / | x
+             [ ]-[^]-[ ]
+                \ | /
+                 [ ]
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+--- Empty training yard ----------- 0:0:0 ---
+The sky darkens with the onset of night. A large wall of stone stands here, blocking passage to
+the southwest.
+You see exits leading southwest and northwest.
+You drop back and ease the engagement.
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+H:4225|77% M:4410|88%  18:43:27:725  [ Reyl ][0|7.1|0|0|0|0][clum PYR haem SCYT] 
+Ferocity:  [####|####|####|####]
+The wave of weakness that has overcome you passes.
+H:4225|77% M:4410|88%  18:43:28:089  [ Reyl ][0|7.1|0|0|0|0][clum PYR haem SCYT] 
+You have recovered balance on all limbs.
+You may eat another plant or mineral. Eat (1.511)
+You may drink another health or mana elixir. Health (4.47)
+H:4225|77% M:4410|88%  18:43:28:754  [ Reyl ][0|7.1|0|0|0|0][clum PYR haem SCYT] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+The burning in your veins abruptly fades.
+[AFF]: Pyramides
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5065|92% M:4410|88%  18:43:28:840  [ Reyl ][0|7.1|0|0|0|0] ( +840h 15% ) (205B)[clum haem 
+SCYT] 
+You bunch your powerful muscles and launch yourself in a majestic leap northwestwards.
+A break in the estate wall.
+--- Area 572: A secluded mansion - v51723 ---
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                 [ ]
+                                             
+                     [ ]-[ ]
+                    / | x
+                 [ ]-[^]-[ ]
+                    \ | /
+                     [ ]
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+--- A break in the estate wall --- -1:1:0 ---
+The sky darkens with the onset of night.
+You see exits leading southeast, southwest, and northwest.
+H:5065|92% M:4410|88%  18:43:28:952  [ Reyl ][0|7.1|0|0|0|0][clum haem SCYT] 
+[OUTR]: 1 Bloodroot (844)
+The empowerment of the sleizak rune fades.
+H:5065|92% M:4410|88%  18:43:29:315  [ Reyl ][0|7.1|0|0|0|0][clum haem SCYT] 
+You have recovered balance on all limbs.
+H:5174|94% M:4410|88%  18:43:29:883  [ Reyl ][0|7.1|0|0|0|0][clum haem SCYT] 
+You may eat another plant or mineral. Eat (1.579)
+H:5174|94% M:4410|88%  18:43:30:418  [ Reyl ][0|7.1|0|0|0|0][clum haem SCYT] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+You feel your blood thickening.
+[AFF]: Scytherus
+H:5174|94% M:4410|88%  18:43:30:505  [ Reyl ][0|7.1|0|0|0|0][clum haem] 
+You may eat another bit of irid moss or potash.
+H:5174|94% M:4410|88%  18:43:30:507  [ Reyl ][0|7.1|0|0|0|0][clum haem] 
+[OUTR]: 1 Ginseng (581)
+Health lost: 205 (raw).
+You bleed 205 health.
+H:4969|91% M:4410|88%  18:43:30:755  [ Reyl ][0|7.1|0|0|0|0] ( -205h 3% ) (205B)[clum haem] 
+
+Reyl: entered the room!
+Walking down the garden path.
+--- Area 572: A secluded mansion - v51501 ---
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                     [ ]
+                                             
+                         [ ]-[ ]
+                        / | x
+                     [ ]-[^]-[ ]
+                        \ | /
+                         [ ]
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+--- Walking down the garden path - -2:0:0 ---
+The sky darkens with the onset of night.
+You see exits leading northeast and southeast.
+H:4969|91% M:4410|88%  18:43:31:527  [ Reyl ][0|7.1|0|0|0|0][clum haem] 
+You may eat another plant or mineral. Eat (1.428)
+H:4969|91% M:4410|88%  18:43:31:932  [ Reyl ][0|7.1|0|0|0|0][clum haem] 
+The Oniar estate gates.
+--- Area 572: A secluded mansion - v53525 ---
+                                             
+                                             
+                                             
+                                             
+                                             
+                 [ ]
+                                             
+                     [ ]-[ ]
+                    / | x
+                 [ ]-[^]-[ ]
+                    \ | /
+                     [+]
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+--- The Oniar estate gates ------ -1:-1:0 ---
+The sky darkens with the onset of night. A rune like a rising sun has been sketched into the
+ground here (Dagaz: Heals affs). A large wall of stone stands here, blocking passage to the 
+northeast.
+You see exits leading north, northeast, and northwest.
+H:4969|91% M:4410|88%  18:43:32:100  [ Reyl ][0|7.1|0|0|0|0][clum haem] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+Your blood regains its ability to clot.
+[AFF]: Haemophilia
+H:4969|91% M:4410|88%  18:43:32:172  [ Reyl ][0|7.1|0|0|0|0][clum] 
+[OUTR]: 1 Ginseng (580)
+You may drink another health or mana elixir. Health (4.464)
+H:4969|91% M:4410|88%  18:43:33:305  [ Reyl ][0|7.1|0|0|0|0][clum] 
+Reyl: entered the room!
+You may eat another plant or mineral. Eat (1.544)
+H:4969|91% M:4410|88%  18:43:33:716  [ Reyl ][0|7.1|0|0|0|0][clum] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:4969|91% M:4485|90%  18:43:33:858  [ Reyl ][0|7.1|0|0|0|0]
+Reyl traces a logograph shaped like a set of scales in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it suddenly shatters, and a wave of arcane power sends
+you staggering.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+H:4969|91% M:4485|90%  18:43:33:949  [ Reyl ][0|7.1|0|0|0|0][clum] 
+A fierce mountain falcon soars in upon silver wings.
+H:4969|91% M:4485|90%  18:43:34:240  [ Reyl ][0|7.1|0|0|0|0][clum] 
+H:4969|91% M:4485|90%  18:43:34:406  [ Reyl ][0|7.1|0|0|0|0][clum] 
+Envenomed: (Gecko)
+Sliced:    (Reyl)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Engage:    (Reyl)
+Equilibrium used: 2.00s..
+Afflicted: (Slickness Paralysis)
+[ast[80], clum[53], sen[53], weari[80], deaf, slick, frzn[80], para]
+Reyl eats a magnesium chip.
+Reyl takes a long drag off his pipe.
+Processed Cures(paralysis slickness)
+H:4969|91% M:4435|89%  18:43:34:487  [ Reyl ][0|7.1|0|0|0|0][clum] 
+Your system is able to absorb antidotes once again.
+H:4969|91% M:4435|89%  18:43:34:741  [ Reyl ][0|7.1|0|0|0|0][clum] 
+You may eat another plant or mineral.
+H:4969|91% M:4435|89%  18:43:35:439  [ Reyl ][0|7.1|0|0|0|0][clum] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:4969|91% M:4435|89%  18:43:35:628  [ Reyl ][0|7.1|0|0|0|0]
+Reyl traces a logograph depicting a lunging bear in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+Even as the logograph becomes fully formed it leaps from the air to you, sinking into your
+chest just over your heart.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4969|91% M:4435|89%  18:43:35:741  [ Reyl ][0|7.1|0|0|0|0]
+Reyl raises his left hand, and decisively snaps his fingers.
+H:4969|91% M:4385|88%  18:43:35:930  [ Reyl ][0|7.1|0|0|0|0]
+Health lost: 155 (raw).
+You bleed 155 health.
+H:4814|88% M:4385|88%  18:43:36:234  [ Reyl ][0|7.1|0|0|0|0] ( -155h 2% ) (145B)
+You have recovered equilibrium.
+You have recovered balance on all limbs.
+Envenomed: (Curare)
+Sliced:    (Reyl)
+Shield:    (Asthma)
+Ferocity:  [####|####|####|####]
+[HP]:      (73%/100%).
+Afflicted: (Asthma)
+[ast, clum[53], sen[53], weari[80], deaf, frzn[80], para]
+Reyl eats a magnesium chip.
+Reyl takes a drink from an elegant diamond vial.
+Processed Cures(paralysis)
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5460|100% M:4285|86%  18:43:36:400  [ Reyl ][0|7.1|0|0|0|0] ( +646h 11% ) (145B)
+You may eat another plant or mineral.
+H:5460|100% M:4285|86%  18:43:37:211  [ Reyl ][0|7.1|0|0|0|0]
+Reyl traces a logograph depicting a leaping jackal in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it leaps for you, ephemeral fangs closing about your
+throat and cutting off air.
+[AFF]: Asthma
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:5460|100% M:4285|86%  18:43:37:613  [ Reyl ][0|7.1|0|0|0|0][AST] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+H:5460|100% M:4285|86%  18:43:37:774  [ Reyl ][0|7.1|0|0|0|0]
+Reyl eats an aurum flake.
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Reyl)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (80%/100%).
+Afflicted: (Slickness Paralysis)
+[ast[75], clum[40], sen[40], weari[60], deaf, slick, frzn[80], para]
+Reyl takes a long drag off his pipe.
+H:5460|100% M:4185|84%  18:43:38:334  [ Reyl ][0|7.1|0|0|0|0]
+A fierce mountain falcon dives at Reyl, raking his face with its talons.
+H:5460|100% M:4185|84%  18:43:38:421  [ Reyl ][0|7.1|0|0|0|0]
+You may utilise the tree tattoo again. Tree (13.942)
+H:5460|100% M:4185|84%  18:43:38:813  [ Reyl ][0|7.1|0|0|0|0]
+You may eat another plant or mineral.
+H:5460|100% M:4185|84%  18:43:39:249  [ Reyl ][0|7.1|0|0|0|0]
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+Lines of icy fire abruptly lance through your chest, radiating outward from your heart.
+[AFF]: Haemophilia
+You sense a subtle change deep within.
+H:5460|100% M:4185|84%  18:43:39:784  [ Reyl ][0|7.1|0|0|0|0][haem] 
+Reyl eats a magnesium chip.
+[Curing]: EAT GINSENG
+Processed Cures(paralysis)
+You eat a ginseng root.
+Your blood regains its ability to clot.
+[AFF]: Haemophilia
+Reyl raises his left hand, and snaps his fingers.
+A tide of writhing bodies boils up from the ground, myriad mouths gnawing and biting as they
+burrow into your flesh.
+Health lost: 544 (poison).
+Reyl traces a writhing logograph in the air before you, the blood upon his knife bursting into
+arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it lashes out at you, ethereal fangs plunging into your
+throat.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4916|90% M:4185|84%  18:43:39:945  [ Reyl ][0|7.1|0|0|0|0] ( -544h 9% ) (145B)[PAR] 
+[OUTR]: 1 Ginseng (579)
+You have recovered balance on all limbs.
+H:5025|92% M:4185|84%  18:43:40:248  [ Reyl ][0|7.1|0|0|0|0][PAR] 
+You may drink another health or mana elixir. Health (4.471)
+H:5025|92% M:4135|83%  18:43:40:872  [ Reyl ][0|7.1|0|0|0|0][PAR] 
+Reyl takes a drink from an elegant diamond vial.
+[Curing]: SIP MANA
+You take a drink from an oaken vial.
+Your mind feels stronger and more alert.
+
+THEY CAN TOUCH TREE AGAIN!
+Your ferocity decreases.
+H:5025|92% M:4875|98%  18:43:41:403  [ Reyl ][0|7.1|0|0|0|0] ( +740m 14% ) (145B)[PAR] 
+A fierce mountain falcon rips out a chunk of Reyl's flesh with its beak.
+H:5025|92% M:4875|98%  18:43:41:439  [ Reyl ][0|7.1|0|0|0|0][PAR] 
+Reyl raises his left hand, and snaps his fingers.
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Pyramides
+Your heart skips a beat, then begins to pound.
+Health lost: 774 (poison).
+Reyl traces a logograph shaped like a set of scales in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it suddenly shatters, and a wave of arcane power sends
+you staggering.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+You may eat another plant or mineral. Eat (1.547)
+H:4251|77% M:4875|98%  18:43:41:486  [ Reyl ][0|7.1|0|0|0|0] ( -774h 14% ) (145B)[clum PAR PYR]
+ 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+H:4687|85% M:4966|100%  18:43:41:678  [ Reyl ][0|7.1|0|0|0|0] ( +436h 7% ) (145B)[clum PYR] 
+
+Envenomed: (Kalmia)
+Sliced:    (Reyl)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (84%/100%).
+Afflicted: (Asthma Paralysis)
+[ast, clum[40], sen[40], weari[60], deaf, frzn[80], para]
+Health lost: 145 (raw).
+You bleed 145 health.
+H:4542|83% M:4866|97%  18:43:41:728  [ Reyl ][0|7.1|0|0|0|0][clum PYR] 
+[OUTR]: 1 Bloodroot (843)
+Reyl eats a magnesium chip.
+[Curing]: TOUCH TREE
+Processed Cures(paralysis)
+You touch the tree of life tattoo.
+The burning in your veins abruptly fades.
+[AFF]: Pyramides
+H:4542|83% M:4866|97%  18:43:41:878  [ Reyl ][0|7.1|0|0|0|0][clum] 
+Reyl raises his left hand, and snaps his fingers.
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Flushings
+Your skin begins to prickle uncomfortably.
+Health lost: 774 (poison).
+Reyl traces a logograph depicting a lunging bear in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+Even as the logograph becomes fully formed it leaps from the air to you, sinking into your
+chest just over your heart.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:3768|69% M:4866|97%  18:43:43:063  [ Reyl ][0|7.1|0|0|0|0] ( -774h 14% ) (137B)[clum fls] 
+You may eat another plant or mineral. Eat (1.48)
+H:3768|69% M:4866|97%  18:43:43:156  [ Reyl ][0|7.1|0|0|0|0][clum fls] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:3768|69% M:4866|97%  18:43:43:231  [ Reyl ][0|7.1|0|0|0|0][fls] 
+Reyl eats an aurum flake.
+You have recovered balance on all limbs.
+H:3768|69% M:4866|97%  18:43:43:665  [ Reyl ][0|7.1|0|0|0|0][fls] 
+H:3768|69% M:4866|97%  18:43:43:670  [ Reyl ][0|7.1|0|0|0|0][fls] 
+Envenomed: (Gecko)
+Sliced:    (Reyl)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (70%/100%).
+Afflicted: (Slickness Paralysis)
+[ast[75], weari[45], deaf, slick, frzn[80], para]
+Reyl takes a long drag off his pipe.
+Reyl eats a potash crystal.
+H:3768|69% M:4766|95%  18:43:43:793  [ Reyl ][0|7.1|0|0|0|0][fls] 
+A fierce mountain falcon dives at Reyl, raking his face with its talons.
+H:3768|69% M:4841|97%  18:43:44:433  [ Reyl ][0|7.1|0|0|0|0][fls] 
+You may eat another plant or mineral.
+H:3768|69% M:4841|97%  18:43:44:802  [ Reyl ][0|7.1|0|0|0|0][fls] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+The prickling in your skin fades and you feel blessedly cool.
+[AFF]: Flushings
+[OUTR]: 1 Ginseng (578)
+Reyl eats a magnesium chip.
+Reyl raises his left hand, and snaps his fingers.
+Processed Cures(paralysis)
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Sandfever
+You're tired. So very tired.
+Health lost: 774 (poison).
+Reyl traces a logograph depicting a leaping jackal in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it leaps for you, ephemeral fangs closing about your
+throat and cutting off air.
+[AFF]: Asthma
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+You may drink another health or mana elixir. Mana (4.48)
+H:2994|54% M:4841|97%  18:43:45:420  [ Reyl ][0|7.1|0|0|0|0] ( -774h 14% )[SAND AST] 
+Reyl takes a drink from an elegant diamond vial.
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Reyl)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Sensitivity)
+[HP]:      (87%/100%).
+Afflicted: (Clumsiness Paralysis Prefarar)
+[clum, sen, weari[45], deaf, frzn[80], para]
+[OOC]: The big stocking prize has been claimed!
+H:3854|70% M:4691|94%  18:43:45:880  [ Reyl ][0|7.1|0|0|0|0] ( +860h 15% )[SAND AST] 
+You may eat another plant or mineral. Eat (1.457)
+H:3854|70% M:4691|94%  18:43:46:443  [ Reyl ][0|7.1|0|0|0|0][SAND AST] 
+[Curing]: EAT GOLDENSEAL
+You eat a goldenseal root.
+Your fever finally breaks, the terrible burning retreating.
+[AFF]: Sandfever
+[OUTR]: 1 Goldenseal (1490)
+Reyl eats a magnesium chip.
+Processed Cures(paralysis)
+[clum, sen, weari[45], deaf, frzn[80]]
+
+H:3854|70% M:4691|94%  18:43:46:693  [ Reyl ][0|7.1|0|0|0|0][AST] 
+Reyl motions as if to lift his hand, then abandons the arcane gesture.
+Reyl traces a writhing logograph in the air before you, the blood upon his knife bursting into
+arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it lashes out at you, ethereal fangs plunging into your
+throat.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:3854|70% M:4691|94%  18:43:46:735  [ Reyl ][0|7.1|0|0|0|0][AST PAR] 
+Health lost: 87 (raw).
+You bleed 87 health.
+H:3767|68% M:4691|94%  18:43:47:233  [ Reyl ][0|7.1|0|0|0|0][AST PAR] 
+A fierce mountain falcon dives at Reyl, raking his face with its talons.
+H:3767|68% M:4691|94%  18:43:47:518  [ Reyl ][0|7.1|0|0|0|0][AST PAR] 
+You have recovered balance on all limbs.
+You may eat another bit of irid moss or potash.
+H:3767|68% M:4691|94%  18:43:47:668  [ Reyl ][0|7.1|0|0|0|0][AST PAR] 
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+H:4203|76% M:4966|100%  18:43:47:750  [ Reyl ][0|7.1|0|0|0|0] ( +436h 7% +275m 5% )[AST PAR] 
+Lines of icy fire abruptly lance through your chest, radiating outward from your heart.
+[AFF]: Haemophilia
+You sense a subtle change deep within.
+H:4203|76% M:4966|100%  18:43:47:831  [ Reyl ][0|7.1|0|0|0|0][AST PAR haem] 
+You may eat another plant or mineral. Eat (1.53)
+H:4203|76% M:4966|100%  18:43:48:057  [ Reyl ][0|7.1|0|0|0|0][AST PAR haem] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:4203|76% M:4966|100%  18:43:48:100  [ Reyl ][0|7.1|0|0|0|0][AST haem] 
+H:4203|76% M:4966|100%  18:43:48:105  [ Reyl ][0|7.1|0|0|0|0][AST haem] 
+Envenomed: (Kalmia)
+Sliced:    (Reyl)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (66%/100%).
+Afflicted: (Asthma Paralysis)
+[ast, clum, sen, weari[45], deaf, frzn[80], para]
+[OUTR]: 1 Bloodroot (842)
+Reyl eats a magnesium chip.
+Reyl touches a tree of life tattoo.
+Processed Cures(paralysis)
+Reyl motions as if to lift his hand, then abandons the arcane gesture.
+Processed Cures(clumsiness weariness sensitivity asthma frozen)
+Reyl sweeps a leaf-bladed ritual knife in a circle above his head, the point of the blade
+coming to rest aimed at you. You feel a sharp pain, gone as swiftly as it came, and a fine 
+crimson spray falls about you and Reyl.
+[AFF]: Ensorcelled
+H:4203|76% M:4866|97%  18:43:48:519  [ Reyl ][0|7.1|0|0|0|0][AST haem ENS] 
+Reyl takes some salve from a vial and rubs it on his legs.
+H:4203|76% M:4866|97%  18:43:49:642  [ Reyl ][0|7.1|0|0|0|0][AST haem ENS] 
+You may eat another plant or mineral. Eat (1.659)
+H:4203|76% M:4866|97%  18:43:49:758  [ Reyl ][0|7.1|0|0|0|0][AST haem ENS] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+H:4203|76% M:4866|97%  18:43:49:888  [ Reyl ][0|7.1|0|0|0|0][haem ENS] 
+You may drink another health or mana elixir. Health (4.487)
+H:4203|76% M:4866|97%  18:43:50:028  [ Reyl ][0|7.1|0|0|0|0][haem ENS] 
+Reyl eats an aurum flake.
+Reyl takes a drink from an elegant diamond vial.
+Processed Cures(asthma clumsiness sensitivity weariness)
+Reyl eats a potash crystal.
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+You have recovered balance on all limbs.
+H:5033|92% M:4866|97%  18:43:50:106  [ Reyl ][0|7.1|0|0|0|0] ( +830h 15% ) (125B)[haem ENS] 
+
+H:5033|92% M:4866|97%  18:43:50:111  [ Reyl ][0|7.1|0|0|0|0][haem ENS] 
+Envenomed: (Gecko)
+Sliced:    (Reyl)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (85%/100%).
+Afflicted: (Slickness Paralysis)
+[ast[60], clum[60], sen[60], deaf, slick, frzn[64], para]
+A fierce mountain falcon dives at Reyl, raking his face with its talons.
+Its talons shred the deathsight defence of Reyl.
+H:5142|94% M:4766|95%  18:43:50:581  [ Reyl ][0|7.1|0|0|0|0][haem ENS] 
+You may eat another plant or mineral.
+H:5142|94% M:4716|94%  18:43:51:359  [ Reyl ][0|7.1|0|0|0|0][haem ENS] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+Your blood regains its ability to clot.
+[AFF]: Haemophilia
+H:5142|94% M:4716|94%  18:43:51:469  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+[OUTR]: 1 Ginseng (577)
+Reyl eats a magnesium chip.
+You have recovered balance on all limbs.
+Envenomed: (Curare)
+Sliced:    (Reyl)
+Empower:   (Inguz)
+Shield:    (Scrambled Brains)
+Ferocity:  [####|####|####|####]
+[HP]:      (75%/100%).
+Afflicted: (Dizziness)
+[diz, ast[60], clum[60], sen[60], deaf, slick[50], frzn[64], para]
+A look of extreme focus crosses the face of Reyl.
+H:5142|94% M:4516|90%  18:43:52:229  [ Reyl ][0|7.1|0|0|0|0] ( -200m 4% ) (125B)[ENS] 
+Health lost: 125 (raw).
+You bleed 125 health.
+H:5017|91% M:4516|90%  18:43:52:816  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Something pulses from within the chest of Reyl, and he seems more vital.
+Processed Cures(paralysis asthma clumsiness dizziness sensitivity slickness)
+H:5017|91% M:4516|90%  18:43:52:820  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+You may eat another plant or mineral. Eat (1.356)
+H:5017|91% M:4516|90%  18:43:52:824  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Reyl eats a magnesium chip.
+Reyl traces a logograph shaped like a set of scales in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+Processed Cures(paralysis slickness)
+As the logograph becomes fully formed it suddenly shatters, and a wave of arcane power sends
+you staggering.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+H:5017|91% M:4516|90%  18:43:53:171  [ Reyl ][0|7.1|0|0|0|0][clum ENS] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:5017|91% M:4516|90%  18:43:53:466  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+A fierce mountain falcon dives at Reyl, raking his face with its talons.
+H:5017|91% M:4516|90%  18:43:53:580  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+You may eat another bit of irid moss or potash.
+H:5017|91% M:4516|90%  18:43:53:759  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+You have recovered balance on all limbs.
+That is not a valid body part to parry. Choose from head, torso, left arm, right arm, left leg,
+right leg and nothing.
+Envenomed: (Curare)
+Sliced:    (Reyl)
+Proc:      (Inguz)
+Afflicted: (Sensitivity)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (63%/100%).
+[diz[83], ast[50], clum[50], sen, deaf, frzn[64], para]
+
+H:5017|91% M:4491|90%  18:43:54:141  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+
+Processed Cures(dizziness)
+You may drink another health or mana elixir. Health (4.432)
+H:5017|91% M:4491|90%  18:43:54:538  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Reyl takes some elixir from an elegant diamond vial and rubs it into his torso.ribs: 0
+
+H:5017|91% M:4491|90%  18:43:54:633  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+
+They are not applying salves. Forcing previous restoration cure through.
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+H:5017|91% M:4491|90%  18:43:54:811  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Reyl eats a magnesium chip.
+Processed Cures(paralysis)
+[ast[50], clum[50], sen, deaf, frzn[64]]
+
+H:5017|91% M:4491|90%  18:43:55:023  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+You may eat another plant or mineral.
+H:5017|91% M:4491|90%  18:43:55:031  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Reyl traces a logograph depicting a lunging bear in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+Even as the logograph becomes fully formed it leaps from the air to you, sinking into your
+chest just over your heart.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:5017|91% M:4491|90%  18:43:55:209  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+You may utilise the tree tattoo again. Tree (13.941)
+H:5017|91% M:4441|89%  18:43:55:818  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Reyl eats a potash crystal.
+You have recovered balance on all limbs.
+H:5017|91% M:4441|89%  18:43:56:172  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+H:5017|91% M:4441|89%  18:43:56:177  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Envenomed: (Gecko)
+Sliced:    (Reyl)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Proned)
+Afflicted: (Prone)
+[HP]:      (58%/100%).
+Afflicted: (Slickness Paralysis)
+[ast[50], clum[50], sen, deaf, slick, frzn[64], prn, para]
+A fierce mountain falcon dives at Reyl, raking his face with its talons.
+H:5017|91% M:4341|87%  18:43:56:576  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Reyl eats a magnesium chip.
+You have recovered balance on all limbs.
+H:5017|91% M:4341|87%  18:43:58:110  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+H:5017|91% M:4341|87%  18:43:58:115  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Envenomed: (Gecko)
+Sliced:    (Reyl)
+Runeblade: (Nairat)
+Afflicted: (Frozen)
+Empower:   (Inguz)
+Shield:    (Asthma)
+Ferocity:  [####|####|####|####]
+[HP]:      (41%/100%).
+Afflicted: (Slickness Asthma)
+[ast, clum[50], sen, deaf, slick, frzn[264], prn, para]
+Health lost: 63 (raw).
+You bleed 63 health.
+H:4954|90% M:4141|83%  18:43:58:196  [ Reyl ][0|7.1|0|0|0|0] ( -200m 4% )[ENS] 
+Reyl eats a magnesium chip.
+Reyl stands up.
+ + + + STANDING + + +
+Processed Cures(slickness)
+[Curing]: SIP MANA
+You take a drink from an oaken vial.
+Your mind feels stronger and more alert.
+Reyl raises his left hand, and snaps his fingers.
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Pyramides
+Your heart skips a beat, then begins to pound.
+Health lost: 774 (poison).
+Reyl traces a logograph depicting a leaping jackal in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it leaps for you, ephemeral fangs closing about your
+throat and cutting off air.
+[AFF]: Asthma
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4180|76% M:4881|98%  18:43:58:316  [ Reyl ][0|7.1|0|0|0|0] ( -774h 14% +740m 14% )[AST PYR 
+ENS] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+The burning in your veins abruptly fades.
+[AFF]: Pyramides
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+[OUTR]: 1 Bloodroot (841)
+Reyl takes a drink from an elegant diamond vial.
+H:4616|84% M:4966|100%  18:43:59:106  [ Reyl ][0|7.1|0|0|0|0] ( +436h 7% )[ENS] 
+Reyl eats an aurum flake.
+Reyl takes a long drag off his pipe.
+Processed Cures(asthma clumsiness sensitivity)
+Reyl takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+H:4616|84% M:4966|100%  18:43:59:928  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Lines of icy fire abruptly lance through your chest, radiating outward from your heart.
+[AFF]: Haemophilia
+You sense a subtle change deep within.
+H:4616|84% M:4966|100%  18:43:59:932  [ Reyl ][0|7.1|0|0|0|0][haem ENS] 
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Reyl)
+Proc:      (Inguz)
+Afflicted: (Sensitivity)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (54%/100%)
+You may eat another plant or mineral. Eat (1.583).
+Afflicted: (Slickness Paralysis)
+[sen, deaf, slick, frzn[200], para]
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+Your blood regains its ability to clot.
+[AFF]: Haemophilia
+H:4616|84% M:4866|97%  18:44:00:124  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+[OUTR]: 1 Ginseng (576)
+Reyl shivers particularly intensely.
+Reyl's eyes lose their focus suddenly.
+H:4725|86% M:4866|97%  18:44:00:713  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Reyl eats a magnesium chip.
+Reyl takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+Processed Cures(paralysis)
+You may eat another plant or mineral. Eat (1.465)
+H:4725|86% M:4816|96%  18:44:01:588  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Reyl)
+Empower:   (Inguz)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (48%/100%).
+Afflicted: (Clumsiness Paralysis)
+[clum, sen, deaf, frzn, para]
+Reyl eats a potash crystal.
+H:4725|86% M:4616|92%  18:44:02:095  [ Reyl ][0|7.1|0|0|0|0] ( -200m 4% )[ENS] 
+Reyl: has shielded!
+Reyl: has shielded!
+Reyl: has shielded!
+You may drink another health or mana elixir. Mana (4.442)
+H:4725|86% M:4616|92%  18:44:02:752  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5460|100% M:4616|92%  18:44:02:840  [ Reyl ][0|7.1|0|0|0|0] ( +735h 13% )[ENS] 
+The wave of weakness that has overcome you passes.
+H:5460|100% M:4616|92%  18:44:03:157  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Reyl eats an aurum flake.
+Processed Cures(clumsiness sensitivity)
+[clum[50], sen[50], deaf, frzn, para]
+
+H:5460|100% M:4616|92%  18:44:03:242  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+
+THEY CAN TOUCH TREE AGAIN!
+Reyl takes some elixir from an elegant diamond vial and rubs it into his torso.ribs: 0
+
+H:5460|100% M:4616|92%  18:44:03:605  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Health lost: 51 (raw).
+You bleed 51 health.
+H:5409|99% M:4616|92%  18:44:03:728  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+You have recovered balance on all limbs.
+H:5409|99% M:4691|94%  18:44:03:982  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+H:5409|99% M:4691|94%  18:44:04:021  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Razed: Shield
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (57%/100%).
+[clum[50], sen[50], deaf, frzn, para]
+
+H:5409|99% M:4591|92%  18:44:04:033  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+You may eat another bit of irid moss or potash.
+H:5409|99% M:4591|92%  18:44:04:382  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Reyl eats a magnesium chip.
+A fierce mountain falcon dives at Reyl, raking his face with its talons.
+Its talons shred the blindness defence of Reyl.
+H:5409|99% M:4591|92%  18:44:05:649  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+As Reyl turns away from you, you draw upon the power of isaz and deliver a vicious blow with
+your runeblade, sending him staggering.
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+H:5409|99% M:4591|92%  18:44:05:691  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+You have recovered balance on all limbs.
+Envenomed: (Vernalius)
+Sliced:    (Reyl)
+Runeblade: (Nairat)
+Afflicted: (Frozen)
+Proc:      (Inguz)
+Afflicted: (Sensitivity)
+Empower:    (Isaz)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (40%/100%).
+Afflicted: (Weariness Paralysis)
+[clum[50], sen, weari, deaf, frzn[300], para]
+Reyl takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+Reyl eats a magnesium chip.
+Reyl touches a tree of life tattoo.
+Processed Cures(paralysis)
+Reyl takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+H:5409|99% M:4391|88%  18:44:06:933  [ Reyl ][0|7.1|0|0|0|0] ( -200m 4% )[ENS] 
+Reyl leaps majestically to the northwest.
+H:5409|99% M:4391|88%  18:44:06:989  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+You may drink another health or mana elixir. Health (4.332)
+H:5409|99% M:4391|88%  18:44:07:173  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+With a powerful beating of wings, a fierce mountain falcon departs.
+H:5409|99% M:4391|88%  18:44:07:221  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+You have recovered balance on all limbs.
+H:5409|99% M:4391|88%  18:44:07:857  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+H:5409|99% M:4391|88%  18:44:07:893  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+H:5409|99% M:4391|88%  18:44:07:904  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+H:5409|99% M:4391|88%  18:44:07:913  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+H:5409|99% M:4391|88%  18:44:07:922  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+H:5409|99% M:4391|88%  18:44:07:930  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+H:5409|99% M:4391|88%  18:44:07:939  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+H:5409|99% M:4391|88%  18:44:07:947  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+H:5409|99% M:4391|88%  18:44:07:957  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+H:5409|99% M:4391|88%  18:44:07:964  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+H:5409|99% M:4391|88%  18:44:07:973  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+A sudden flush of heat drives out a chill that you didn't realise was there until it is gone;
+your limbs tingle, and you feel unburdened.
+[AFF]: Ensorcelled
+H:5409|99% M:4391|88%  18:44:08:023  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:08:029  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:08:040  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:08:067  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:08:078  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:08:085  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:08:096  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:08:120  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:08:130  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:08:138  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:08:191  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:08:200  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:08:211  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:08:237  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:08:247  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:08:297  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:08:308  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:08:315  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:08:325  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:08:350  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:08:365  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:08:416  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:08:427  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:08:434  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:08:445  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:08:471  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:08:480  [ Reyl ][0|7.1|0|0|0|0]
+Your ferocity decreases.
+H:5409|99% M:4391|88%  18:44:08:951  [ Reyl ][0|7.1|0|0|0|0]
+Walking down the garden path.
+--- Area 572: A secluded mansion - v51501 ---
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                     [ ]
+                                             
+                         [ ]-[ ]
+                        / | x
+                     [ ]-[^]-[ ]
+                        \ | /
+                         [ ]
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+--- Walking down the garden path - -2:0:0 ---
+The sky darkens with the onset of night. A fierce mountain falcon surveys the surroundings with
+keen eyes. Execrant Reyl Blackstone is here. His features are obscured by Revelation's Guise 
+beneath the raised hood of a casual hooded sweatshirt in robin egg blue. He wields a leaf-
+bladed ritual knife in his right hand.
+You see exits leading northeast and southeast.
+H:5409|99% M:4391|88%  18:44:09:049  [ Reyl ][0|7.1|0|0|0|0]
+H:5409|99% M:4391|88%  18:44:09:212  [ Reyl ][0|7.1|0|0|0|0]
+Reyl: has shielded!
+Reyl: has shielded!
+Reyl: has shielded!
+Equilibrium used: 2.00s.
+You are recovering equilibrium and cannot move yet.
+H:5409|99% M:4391|88%  18:44:09:406  [ Reyl ][0|7.1|0|0|0|0]
+The empowerment of the isaz rune fades.
+H:5409|99% M:4391|88%  18:44:10:259  [ Reyl ][0|7.1|0|0|0|0]
+Reyl takes a long drag off his pipe.
+H:5409|99% M:4391|88%  18:44:10:590  [ Reyl ][0|7.1|0|0|0|0]
+I cannot fathom the meaning of "ag".
+H:5409|99% M:4391|88%  18:44:10:818  [ Reyl ][0|7.1|0|0|0|0]
+
+Afflicted: (Sensitivity)
+You have recovered equilibrium.
+Razed: Shield
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (76%/100%).
+Afflicted: (Paralysis)
+[clum[38], sen, weari[75], deaf, frzn, para]
+Reyl eats a magnesium chip.
+Processed Cures(paralysis)
+[clum[38], sen, weari[75], deaf, frzn]
+
+H:5460|100% M:4291|86%  18:44:11:195  [ Reyl ][0|7.1|0|0|0|0]
+A fierce mountain falcon rips out a chunk of Reyl's flesh with its beak.
+H:5460|100% M:4291|86%  18:44:11:698  [ Reyl ][0|7.1|0|0|0|0]
+Reyl sweeps a leaf-bladed ritual knife in a circle above his head, the point of the blade
+coming to rest aimed at you. You feel a sharp pain, gone as swiftly as it came, and a fine 
+crimson spray falls about you and Reyl.
+[AFF]: Ensorcelled
+H:5460|100% M:4291|86%  18:44:11:782  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+
+Auto-follow enabled.
+You may utilise the tree tattoo again. Tree (14.081)
+H:5460|100% M:4291|86%  18:44:12:539  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Reyl takes a drink from an elegant diamond vial.
+H:5460|100% M:4291|86%  18:44:12:737  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+You have recovered balance on all limbs.
+Envenomed: (Aconite)
+Sliced:    (Reyl)
+Shield:    (Scrambled Brains)
+Ferocity:  [####|####|####|####]
+Engage:    (Reyl)
+Equilibrium used: 2.00s..
+Afflicted: (Stupidity Dizziness)
+[diz, stu, clum[38], sen, weari[75], deaf, frzn]
+A look of extreme focus crosses the face of Reyl.
+Reyl eats a plumbum flake.
+Processed Cures(dizziness stupidity)
+[diz[50], stu[50], clum[38], sen, weari[75], deaf, frzn]
+
+H:5460|100% M:4241|85%  18:44:12:971  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Reyl traces a logograph shaped like a set of scales in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed, it suddenly shatters, and your heart begins to beat
+unnaturally fast.
+H:5460|100% M:4316|86%  18:44:13:974  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Reyl eats a plumbum flake.
+A fierce mountain falcon rips out a chunk of Reyl's flesh with its beak.
+H:5460|100% M:4316|86%  18:44:14:714  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+You have recovered equilibrium.
+You have recovered balance on all limbs.
+H:5460|100% M:4316|86%  18:44:14:857  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+H:5460|100% M:4316|86%  18:44:14:897  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Envenomed: (Aconite)
+Sliced:    (Reyl)
+Shield:    (Scrambled Brains)
+Ferocity:  [####|####|####|####]
+[HP]:      (70%/100%).
+Afflicted: (Stupidity Dizziness)
+[diz, stu, clum[38], sen, weari[75], deaf, frzn]
+
+Processed Cures(dizziness stupidity)
+Reyl eats a potash crystal.
+[Curing]: SIP MANA
+You take a drink from an oaken vial.
+Your mind feels stronger and more alert.
+H:5460|100% M:4966|100%  18:44:15:077  [ Reyl ][0|7.1|0|0|0|0] ( +650m 13% )[ENS] 
+ Reset Success!
+
+A look of extreme focus crosses the face of Reyl.
+H:5460|100% M:4966|100%  18:44:15:448  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Reyl traces a logograph depicting a lunging bear in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+Even as the logograph becomes fully formed it leaps from the air to you, sinking into your
+chest just over your heart.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:5460|100% M:4916|98%  18:44:15:975  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Reyl eats a plumbum flake.
+H:5460|100% M:4916|98%  18:44:16:242  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+You have recovered balance on all limbs.
+Envenomed: (Aconite)
+Sliced:    (Reyl)
+Shield:    (Scrambled Brains)
+Ferocity:  [####|####|####|####]
+[HP]:      (63%/100%).
+Afflicted: (Stupidity Dizziness)
+[diz, stu]
+H:5460|100% M:4816|96%  18:44:16:918  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Something pulses from within the chest of Reyl, and he seems more vital.
+Processed Cures(dizziness stupidity)
+H:5460|100% M:4816|96%  18:44:16:985  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+As you turn to leave, a rush of sudden icy power rushes through your veins, your entire body
+locking in place.
+H:5460|100% M:4816|96%  18:44:17:067  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Reyl takes a drink from an elegant diamond vial.
+H:5460|100% M:4816|96%  18:44:17:173  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+A fierce mountain falcon rips out a chunk of Reyl's flesh with its beak.
+H:5460|100% M:4816|96%  18:44:17:705  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Reyl raises his left hand, and snaps his fingers.
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Pyramides
+Your heart skips a beat, then begins to pound.
+Health lost: 774 (poison).
+Reyl traces a logograph depicting a leaping jackal in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it leaps for you, ephemeral fangs closing about your
+throat and cutting off air.
+[AFF]: Asthma
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4686|85% M:4816|96%  18:44:17:804  [ Reyl ][0|7.1|0|0|0|0] ( -774h 14% )[AST PYR ENS] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+The burning in your veins abruptly fades.
+[AFF]: Pyramides
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+H:4686|85% M:4816|96%  18:44:17:988  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+[OUTR]: 1 Bloodroot (840)
+You have recovered balance on all limbs.
+H:4686|85% M:4816|96%  18:44:18:826  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Your heart feels as if it is going to beat right out of your chest, before without warning it
+slows to normal; your head spins and you stagger at the sudden change.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+H:4686|85% M:4816|96%  18:44:18:990  [ Reyl ][0|7.1|0|0|0|0][clum ENS] 
+You suddenly perceive the vague outline of an aura of rebounding around Reyl.
+H:4686|85% M:4816|96%  18:44:19:081  [ Reyl ][0|7.1|0|0|0|0][clum ENS] 
+As you turn to leave, a rush of sudden icy power rushes through your veins, your entire body
+locking in place.
+H:4686|85% M:4816|96%  18:44:19:176  [ Reyl ][0|7.1|0|0|0|0][clum ENS] 
+Reyl's aura of weapons rebounding disappears.
+Reyl raises his left hand, and snaps his fingers.
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Pyramides
+Your heart skips a beat, then begins to pound.
+Health lost: 774 (poison).
+Reyl traces a writhing logograph in the air before you, the blood upon his knife bursting into
+arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it lashes out at you, ethereal fangs plunging into your
+throat.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+You may eat another plant or mineral. Eat (1.53)
+You may drink another health or mana elixir. Mana (4.437)
+H:3912|71% M:4816|96%  18:44:19:514  [ Reyl ][0|7.1|0|0|0|0] ( -774h 14% )[clum PAR PYR ENS] 
+Reyl takes a long drag off his pipe.
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+H:5316|97% M:4966|100%  18:44:19:601  [ Reyl ][0|7.1|0|0|0|0] ( +1404h 25% )[clum PYR ENS] 
+
+[OUTR]: 1 Bloodroot (839)
+Your ferocity decreases.
+H:5316|97% M:4966|100%  18:44:20:007  [ Reyl ][0|7.1|0|0|0|0][clum PYR ENS] 
+You have recovered balance on all limbs.
+H:5316|97% M:4966|100%  18:44:20:301  [ Reyl ][0|7.1|0|0|0|0][clum PYR ENS] 
+As you turn to leave, a rush of sudden icy power rushes through your veins, your entire body
+locking in place.
+H:5316|97% M:4966|100%  18:44:20:661  [ Reyl ][0|7.1|0|0|0|0][clum PYR ENS] 
+A fierce mountain falcon rips out a chunk of Reyl's flesh with its beak.
+H:5316|97% M:4966|100%  18:44:20:748  [ Reyl ][0|7.1|0|0|0|0][clum PYR ENS] 
+Lines of icy fire abruptly lance through your chest, radiating outward from your heart.
+[AFF]: Haemophilia
+You sense a subtle change deep within.
+H:5316|97% M:4916|98%  18:44:20:990  [ Reyl ][0|7.1|0|0|0|0][clum PYR haem ENS] 
+Raising his left hand, Reyl sharply snaps his fingers.
+You feel something shifting and undulating beneath your skin, before a black cloud struggles
+from within your wounds.
+Reyl traces a logograph that is all twisted lines and angles in the air before you, the blood
+upon his knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+The scent of rot and decay invades your nose and a gentle crooning fills your ears. Everything
+seems so tiring...
+[AFF]: Weariness
+Your limbs grow heavy and you groan feebly.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+You may eat another plant or mineral. Eat (1.518)
+H:5316|97% M:4916|98%  18:44:21:113  [ Reyl ][0|7.1|0|0|0|0][clum wear PYR haem ENS] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+The burning in your veins abruptly fades.
+[AFF]: Pyramides
+H:5425|99% M:4916|98%  18:44:21:337  [ Reyl ][0|7.1|0|0|0|0][clum wear haem ENS] 
+[OUTR]: 1 Bloodroot (838)
+
+THEY CAN TOUCH TREE AGAIN!
+You have recovered balance on all limbs.
+H:5425|99% M:4916|98%  18:44:21:771  [ Reyl ][0|7.1|0|0|0|0][clum wear haem ENS] 
+Reyl takes a drink from an elegant diamond vial.
+H:5425|99% M:4916|98%  18:44:21:880  [ Reyl ][0|7.1|0|0|0|0][clum wear haem ENS] 
+As you turn to leave, a rush of sudden icy power rushes through your veins, your entire body
+locking in place.
+H:5425|99% M:4916|98%  18:44:22:032  [ Reyl ][0|7.1|0|0|0|0][clum wear haem ENS] 
+Reyl raises his left hand, and snaps his fingers.
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Flushings
+Your skin begins to prickle uncomfortably.
+Health lost: 774 (poison).
+Reyl traces a logograph shaped like a skein in the air before you, the blood upon his knife
+bursting into arcane flame as it hangs in the wake of the blade's passage.
+As he completes the logograph Reyl brings his knife slashing down, severing it in twain. You
+suddenly realise how little time you have left, so much to do, so little time!
+[AFF]: Impatience
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4651|85% M:4916|98%  18:44:22:734  [ Reyl ][0|7.1|0|0|0|0] ( -774h 14% )[IMP clum wear haem 
+fls ENS] 
+You may eat another plant or mineral. Eat (1.488)
+H:4651|85% M:4916|98%  18:44:22:824  [ Reyl ][0|7.1|0|0|0|0][IMP clum wear haem fls ENS] 
+[Curing]: EAT GOLDENSEAL
+You eat a goldenseal root.
+You are patient once again.
+[AFF]: Impatience
+H:4651|85% M:4916|98%  18:44:22:981  [ Reyl ][0|7.1|0|0|0|0][clum wear haem fls ENS] 
+[OUTR]: 1 Goldenseal (1489)
+You have recovered balance on all limbs.
+H:4651|85% M:4916|98%  18:44:23:138  [ Reyl ][0|7.1|0|0|0|0][clum wear haem fls ENS] 
+A fierce mountain falcon dives at Reyl, raking his face with its talons.
+H:4651|85% M:4916|98%  18:44:23:719  [ Reyl ][0|7.1|0|0|0|0][clum wear haem fls ENS] 
+As you turn to leave, a rush of sudden icy power rushes through your veins, your entire body
+locking in place.
+H:4651|85% M:4916|98%  18:44:23:871  [ Reyl ][0|7.1|0|0|0|0][clum wear haem fls ENS] 
+You may drink another health or mana elixir. Health (4.364)
+H:4651|85% M:4916|98%  18:44:23:963  [ Reyl ][0|7.1|0|0|0|0][clum wear haem fls ENS] 
+Your ferocity decreases.
+H:4651|85% M:4966|100%  18:44:24:054  [ Reyl ][0|7.1|0|0|0|0][clum wear haem fls ENS] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5460|100% M:4966|100%  18:44:24:151  [ Reyl ][0|7.1|0|0|0|0] ( +809h 14% )[clum wear haem fls 
+ENS] 
+Reyl raises his left hand, and snaps his fingers.
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Sandfever
+You're tired. So very tired.
+Health lost: 774 (poison).
+Reyl traces a logograph shaped like a scarab in the air before you, the blood upon his knife
+bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it leaps from the air to you, ethereal legs scrabbling
+and scraping as it sinks into your body and vanishes.
+You feel suddenly ravenous as something shifts and scuttles within your stomach, a hunger which
+only grows and grows.
+[AFF]: Addiction
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4686|85% M:4966|100%  18:44:24:272  [ Reyl ][0|7.1|0|0|0|0] ( -774h 14% )[SAND clum wear ADD 
+haem fls ENS] 
+You may eat another plant or mineral. Eat (1.374)
+H:4686|85% M:4966|100%  18:44:24:355  [ Reyl ][0|7.1|0|0|0|0][SAND clum wear ADD haem fls ENS] 
+[Curing]: EAT GOLDENSEAL
+You eat a goldenseal root.
+Your addiction can never be sated.
+Your fever finally breaks, the terrible burning retreating.
+[AFF]: Sandfever
+H:4686|85% M:4966|100%  18:44:24:468  [ Reyl ][0|7.1|0|0|0|0][clum wear ADD haem fls ENS] 
+
+[OUTR]: 1 Goldenseal (1492)
+You have recovered balance on all limbs.
+H:4686|85% M:4966|100%  18:44:25:071  [ Reyl ][0|7.1|0|0|0|0][clum wear ADD haem fls ENS] 
+As you turn to leave, a rush of sudden icy power rushes through your veins, your entire body
+locking in place.
+H:4686|85% M:4966|100%  18:44:25:338  [ Reyl ][0|7.1|0|0|0|0][clum wear ADD haem fls ENS] 
+You may eat another bit of irid moss or potash.
+H:4686|85% M:4966|100%  18:44:25:469  [ Reyl ][0|7.1|0|0|0|0][clum wear ADD haem fls ENS] 
+Health lost: 55 (raw).
+You bleed 55 health.
+H:4631|84% M:4966|100%  18:44:25:704  [ Reyl ][0|7.1|0|0|0|0][clum wear ADD haem fls ENS] 
+[Curing]: EAT MOSS
+You eat some irid moss.
+Your addiction can never be sated.
+You feel your health and mana replenished.
+Reyl raises his left hand, and snaps his fingers.
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Sandfever
+You're tired. So very tired.
+Health lost: 774 (poison).
+Reyl traces a logograph depicting a leaping jackal in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it leaps for you, ephemeral fangs closing about your
+throat and cutting off air.
+[AFF]: Asthma
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4293|78% M:4966|100%  18:44:25:872  [ Reyl ][0|7.1|0|0|0|0] ( -338h 6% )[SAND AST clum wear 
+ADD haem fls ENS] 
+You may eat another plant or mineral. Eat (1.512)
+H:4293|78% M:4966|100%  18:44:25:978  [ Reyl ][0|7.1|0|0|0|0][SAND AST clum wear ADD haem fls 
+ENS] 
+[Curing]: EAT GOLDENSEAL
+You eat a goldenseal root.
+Your addiction can never be sated.
+Your fever finally breaks, the terrible burning retreating.
+[AFF]: Sandfever
+H:4293|78% M:4966|100%  18:44:26:076  [ Reyl ][0|7.1|0|0|0|0][AST clum wear ADD haem fls ENS] 
+
+[OUTR]: 1 Goldenseal (1492)
+You have recovered balance on all limbs.
+H:4293|78% M:4966|100%  18:44:26:475  [ Reyl ][0|7.1|0|0|0|0][AST clum wear ADD haem fls ENS] 
+A fierce mountain falcon rips out a chunk of Reyl's flesh with its beak.
+Its talons shred the temperance defence of Reyl.
+H:4293|78% M:4966|100%  18:44:26:714  [ Reyl ][0|7.1|0|0|0|0][AST clum wear ADD haem fls ENS] 
+Reyl takes a drink from an oaken vial.
+H:4293|78% M:4966|100%  18:44:26:815  [ Reyl ][0|7.1|0|0|0|0][AST clum wear ADD haem fls ENS] 
+You bunch your powerful muscles and launch yourself in a majestic leap southeastwards.
+The Oniar estate gates.
+--- Area 572: A secluded mansion - v53525 ---
+                                             
+                                             
+                                             
+                                             
+                                             
+                 [ ]
+                                             
+                     [ ]-[ ]
+                    / | x
+                 [ ]-[^]-[ ]
+                    \ | /
+                     [+]
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+--- The Oniar estate gates ------ -1:-1:0 ---
+The sky darkens with the onset of night. A rune like a rising sun has been sketched into the
+ground here (Dagaz: Heals affs). A large wall of stone stands here, blocking passage to the 
+northeast.
+You see exits leading north, northeast, and northwest.
+You drop back and ease the engagement.
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+H:4293|78% M:4966|100%  18:44:26:955  [ Reyl ][0|7.1|0|0|0|0][AST clum wear ADD haem fls ENS] 
+A wave of light-headedness abruptly overcomes you.
+[AFF]: Pyramides
+Your heart skips a beat, then begins to pound.
+H:4293|78% M:4966|100%  18:44:27:026  [ Reyl ][0|7.1|0|0|0|0][AST clum wear PYR ADD haem fls 
+ENS] 
+You may eat another plant or mineral. Eat (1.487)
+H:4293|78% M:4966|100%  18:44:27:561  [ Reyl ][0|7.1|0|0|0|0][AST clum wear PYR ADD haem fls 
+ENS] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your addiction can never be sated.
+The burning in your veins abruptly fades.
+[AFF]: Pyramides
+H:4293|78% M:4966|100%  18:44:27:768  [ Reyl ][0|7.1|0|0|0|0][AST clum wear ADD haem fls ENS] 
+You have recovered balance on all limbs.
+H:4293|78% M:4966|100%  18:44:27:830  [ Reyl ][0|7.1|0|0|0|0][AST clum wear ADD haem fls ENS] 
+
+[OUTR]: 1 Bloodroot (850)
+Your ferocity decreases.
+H:4293|78% M:4966|100%  18:44:28:055  [ Reyl ][0|7.1|0|0|0|0][AST clum wear ADD haem fls ENS] 
+
+H:4293|78% M:4966|100%  18:44:28:148  [ Reyl ][0|7.1|0|0|0|0][AST clum wear ADD haem fls ENS] 
+
+[DEF]: Shield
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 4.00s.
+H:4293|78% M:4966|100%  18:44:28:154  [ Reyl ][0|7.1|0|0|0|0][AST clum wear ADD haem fls ENS] 
+
+[Prio]: Paralysis (26)
+You may drink another health or mana elixir. Health (4.417)
+H:4293|78% M:4966|100%  18:44:28:569  [ Reyl ][0|7.1|0|0|0|0][AST clum wear ADD haem fls ENS] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5417|99% M:4966|100%  18:44:28:664  [ Reyl ][0|7.1|0|0|0|0] ( +1124h 20% )[AST clum wear ADD 
+haem fls ENS] 
+You may eat another plant or mineral. Eat (1.53)
+H:5417|99% M:4966|100%  18:44:29:296  [ Reyl ][0|7.1|0|0|0|0][AST clum wear ADD haem fls ENS] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your addiction can never be sated.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+H:5417|99% M:4966|100%  18:44:29:383  [ Reyl ][0|7.1|0|0|0|0][clum wear ADD haem fls ENS] 
+The wave of weakness that has overcome you passes.
+H:5417|99% M:4966|100%  18:44:30:655  [ Reyl ][0|7.1|0|0|0|0][clum wear ADD haem fls ENS] 
+
+Reyl: entered the room!
+You may eat another plant or mineral.
+H:5417|99% M:4966|100%  18:44:30:840  [ Reyl ][0|7.1|0|0|0|0][clum wear ADD haem fls ENS] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+Your blood regains its ability to clot.
+[AFF]: Haemophilia
+Blood begins to run from your pores as your skin grows painfully hot.
+H:5417|99% M:4966|100%  18:44:30:994  [ Reyl ][0|7.1|0|0|0|0][clum wear ADD fls ENS] 
+A sudden flush of heat drives out a chill that you didn't realise was there until it is gone;
+your limbs tingle, and you feel unburdened.
+[AFF]: Ensorcelled
+H:5417|99% M:4966|100%  18:44:31:066  [ Reyl ][0|7.1|0|0|0|0][clum wear ADD fls] 
+[OUTR]: 1 Ginseng (575)
+Reyl's attack rebounds off your magical shield.
+H:5417|99% M:4966|100%  18:44:31:243  [ Reyl ][0|7.1|0|0|0|0][clum wear ADD fls] 
+Health lost: 85 (raw).
+You bleed 85 health.
+H:5332|97% M:4966|100%  18:44:31:247  [ Reyl ][0|7.1|0|0|0|0][clum wear ADD fls] 
+A fierce mountain falcon soars in upon silver wings.
+H:5332|97% M:4966|100%  18:44:31:446  [ Reyl ][0|7.1|0|0|0|0][clum wear ADD fls] 
+You may eat another bit of irid moss or potash.
+H:5441|99% M:4966|100%  18:44:31:646  [ Reyl ][0|7.1|0|0|0|0][clum wear ADD fls] 
+You may utilise the tree tattoo again. Tree (13.955)
+H:5441|99% M:4966|100%  18:44:31:942  [ Reyl ][0|7.1|0|0|0|0][clum wear ADD fls] 
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Your limbs strengthen and you feel stronger.
+[AFF]: Weariness
+H:5441|99% M:4966|100%  18:44:32:027  [ Reyl ][0|7.1|0|0|0|0][clum ADD fls] 
+Ferocity:  [####|####|####|####]
+You have recovered equilibrium.
+H:5441|99% M:4966|100%  18:44:32:121  [ Reyl ][0|7.1|0|0|0|0][clum ADD fls] 
+
+-----------------------------------------------------------------------------------------------
+             Target set to: Reyl (Level 104 Pariah)             
+-----------------------------------------------------------------------------------------------
+ Reset Success!
+
+Your target is now: Reyl (an adventurer)
+H:5441|99% M:4966|100%  18:44:32:475  [ Reyl ][0|7.1|0|0|0|0][clum ADD fls] 
+Reyl is not currently an ally.
+H:5441|99% M:4966|100%  18:44:32:540  [ Reyl ][0|7.1|0|0|0|0][clum ADD fls] 
+Reyl is already an enemy.
+H:5441|99% M:4966|100%  18:44:32:543  [ Reyl ][0|7.1|0|0|0|0][clum ADD fls] 
+[Prio]: Paralysis (1)
+You may eat another plant or mineral. Eat (1.641)
+H:5441|99% M:4966|100%  18:44:32:633  [ Reyl ][0|7.1|0|0|0|0][clum ADD fls] 
+A fierce mountain falcon dives at Reyl, raking his face with its talons.
+H:5441|99% M:4966|100%  18:44:32:788  [ Reyl ][0|7.1|0|0|0|0][clum ADD fls] 
+[Curing]: OUTR KELP
+[OUTR]: 1 Kelp (1663)
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your addiction can never be sated.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:5441|99% M:4966|100%  18:44:32:800  [ Reyl ][0|7.1|0|0|0|0][ADD fls] 
+A wave of light-headedness abruptly overcomes you.
+[AFF]: Pyramides
+Your heart skips a beat, then begins to pound.
+You may drink another health or mana elixir. Health (4.445)
+H:5441|99% M:4966|100%  18:44:33:108  [ Reyl ][0|7.1|0|0|0|0][PYR ADD fls] 
+H:5441|99% M:4966|100%  18:44:33:197  [ Reyl ][0|7.1|0|0|0|0][PYR ADD fls] 
+
+[DEF]: Shield
+Your action causes the nearly invisible magical shield around you to fade away.
+Envenomed: (Xentio)
+Sliced:    (Reyl)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Engage:    (Reyl)
+Equilibrium used: 2.00s..
+Afflicted: (Clumsiness Paralysis)
+[clum, para]
+H:5441|99% M:4916|98%  18:44:33:275  [ Reyl ][0|7.1|0|0|0|0][PYR ADD fls] 
+Reyl eats a magnesium chip.
+Reyl takes a drink from an elegant diamond vial.
+Processed Cures(paralysis)
+H:5441|99% M:4916|98%  18:44:33:367  [ Reyl ][0|7.1|0|0|0|0][PYR ADD fls] 
+Reyl sweeps a leaf-bladed ritual knife in a circle above his head, the point of the blade
+coming to rest aimed at you. You feel a sharp pain, gone as swiftly as it came, and a fine 
+crimson spray falls about you and Reyl.
+[AFF]: Ensorcelled
+H:5441|99% M:4916|98%  18:44:33:646  [ Reyl ][0|7.1|0|0|0|0][PYR ADD fls ENS] 
+You may eat another plant or mineral.
+H:5441|99% M:4966|100%  18:44:34:279  [ Reyl ][0|7.1|0|0|0|0][PYR ADD fls ENS] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your addiction can never be sated.
+The burning in your veins abruptly fades.
+[AFF]: Pyramides
+H:5441|99% M:4966|100%  18:44:34:344  [ Reyl ][0|7.1|0|0|0|0][ADD fls ENS] 
+[OUTR]: 1 Bloodroot (850)
+Reyl eats an aurum flake.
+Processed Cures(clumsiness)
+H:5441|99% M:4966|100%  18:44:34:942  [ Reyl ][0|7.1|0|0|0|0][ADD fls ENS] 
+You have recovered equilibrium.
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Reyl)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (87%/100%).
+Afflicted: (Clumsiness Paralysis)
+[clum, para]
+You may eat another plant or mineral. Eat (1.487)
+H:5441|99% M:4816|96%  18:44:35:829  [ Reyl ][0|7.1|0|0|0|0][ADD fls ENS] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+Your terrible addiction seems to wane.
+[AFF]: Addiction
+Blood begins to run from your pores as your skin grows painfully hot.
+H:5441|99% M:4816|96%  18:44:35:890  [ Reyl ][0|7.1|0|0|0|0][fls ENS] 
+[OUTR]: 5 Kelp (1659)
+[OUTR]: 5 Bloodroot (845)
+[OUTR]: 5 Ginseng (570)
+[OUTR]: 5 Goldenseal (1487)
+[OUTR]: 1 Ginseng (569)
+Reyl eats a magnesium chip.
+Reyl traces a logograph shaped like a set of scales in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+Processed Cures(paralysis)
+As the logograph becomes fully formed it suddenly shatters, and a wave of arcane power sends
+you staggering.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+You suddenly perceive the vague outline of an aura of rebounding around Reyl.
+H:5441|99% M:4816|96%  18:44:36:687  [ Reyl ][0|7.1|0|0|0|0][clum fls ENS] 
+Health lost: 56 (raw).
+You bleed 56 health.
+H:5385|98% M:4816|96%  18:44:36:722  [ Reyl ][0|7.1|0|0|0|0][clum fls ENS] 
+You have recovered balance on all limbs.
+Envenomed: (Vernalius)
+Sliced:    (Reyl)
+The attack rebounds back onto you!
+Health lost: 436 (physical cutting).
+Shield:    (Paralysis)
+The attack rebounds back onto you!
+[AFF]: Paralysis
+Your muscles lock in painful contractions in reaction to the blow.
+Your shield completely absorbs the damage.
+[HP]:      (87%/100%).
+[clum, Reb]
+There is no need to predict that affliction - you know you have it already.
+H:4949|90% M:4716|94%  18:44:37:190  [ Reyl ][0|7.1|0|0|0|0] ( -436h 7% )[clum PAR fls ENS] 
+You may eat another plant or mineral. Eat (1.616)
+H:4949|90% M:4716|94%  18:44:37:505  [ Reyl ][0|7.1|0|0|0|0][clum PAR fls ENS] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:4949|90% M:4716|94%  18:44:37:628  [ Reyl ][0|7.1|0|0|0|0][clum fls ENS] 
+[OUTR]: 1 Bloodroot (844)
+Your ferocity decreases.
+Reyl eats an aurum flake.
+Processed Cures(clumsiness)
+[Reb]
+
+H:4949|90% M:4716|94%  18:44:38:417  [ Reyl ][0|7.1|0|0|0|0][clum fls ENS] 
+Reyl takes some salve from a vial and rubs it on his legs.
+H:4949|90% M:4716|94%  18:44:38:592  [ Reyl ][0|7.1|0|0|0|0][clum fls ENS] 
+Reyl's aura of weapons rebounding disappears.
+Reyl traces a logograph depicting a lunging bear in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+Even as the logograph becomes fully formed it leaps from the air to you, sinking into your
+chest just over your heart.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4949|90% M:4716|94%  18:44:38:656  [ Reyl ][0|7.1|0|0|0|0][clum fls ENS] 
+A fierce mountain falcon dives at Reyl, raking his face with its talons.
+H:4949|90% M:4716|94%  18:44:38:754  [ Reyl ][0|7.1|0|0|0|0][clum fls ENS] 
+Reyl takes a long drag off his pipe.
+Reyl takes a drink from an elegant diamond vial.
+H:4949|90% M:4716|94%  18:44:38:783  [ Reyl ][0|7.1|0|0|0|0][clum fls ENS] 
+You have recovered balance on all limbs.
+Being careful not to poison yourself, you wipe off all the venoms from a blessed legionnaire's
+longsword.
+Envenomed: (Xentio)
+Sliced:    (Reyl)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (87%/100%)
+You may eat another plant or mineral. Eat (1.478).
+Afflicted: (Clumsiness Paralysis)
+[clum, slick2, para]
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+Reyl eats a magnesium chip.
+A gold ring studded with a sapphire pulses with the rhythm of a heartbeat, its familiar cadence
+heralding Darona's love eternal.
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+The prickling in your skin fades and you feel blessedly cool.
+[AFF]: Flushings
+H:4949|90% M:4616|92%  18:44:40:143  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Reyl raises his left hand, and snaps his fingers.
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Pyramides
+Your heart skips a beat, then begins to pound.
+Health lost: 774 (poison).
+Reyl traces a logograph depicting a leaping jackal in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it leaps for you, ephemeral fangs closing about your
+throat and cutting off air.
+[AFF]: Asthma
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4175|76% M:4616|92%  18:44:40:358  [ Reyl ][0|7.1|0|0|0|0] ( -774h 14% )[AST PYR ENS] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+[Curing]: OUTR MOSS
+[OUTR]: 1 Irid (1362)
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+H:5441|99% M:4966|100%  18:44:40:558  [ Reyl ][0|7.1|0|0|0|0] ( +1266h 23% +350m 7% )[AST PYR 
+ENS] 
+You may eat another plant or mineral.
+H:5441|99% M:4966|100%  18:44:40:662  [ Reyl ][0|7.1|0|0|0|0][AST PYR ENS] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+The burning in your veins abruptly fades.
+[AFF]: Pyramides
+H:5441|99% M:4966|100%  18:44:40:728  [ Reyl ][0|7.1|0|0|0|0][AST ENS] 
+[OUTR]: 1 Bloodroot (843)
+You have recovered balance on all limbs.
+H:5441|99% M:4916|98%  18:44:41:047  [ Reyl ][0|7.1|0|0|0|0][AST ENS] 
+H:5441|99% M:4916|98%  18:44:41:052  [ Reyl ][0|7.1|0|0|0|0][AST ENS] 
+Envenomed: (Vernalius)
+Sliced:    (Reyl)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (74%/100%).
+Afflicted: (Weariness Paralysis)
+[clum, weari, slick2, para]
+Something pulses from within the chest of Reyl, and he seems more vital.
+Processed Cures(paralysis clumsiness)
+H:5441|99% M:4816|96%  18:44:41:133  [ Reyl ][0|7.1|0|0|0|0][AST ENS] 
+Reyl eats an aurum flake.
+Processed Cures(clumsiness)
+[slick2, para[50]]
+
+H:5441|99% M:4816|96%  18:44:41:662  [ Reyl ][0|7.1|0|0|0|0][AST ENS] 
+A fierce mountain falcon dives at Reyl, raking his face with its talons.
+H:5441|99% M:4816|96%  18:44:41:830  [ Reyl ][0|7.1|0|0|0|0][AST ENS] 
+Reyl eats a potash crystal.
+H:5441|99% M:4816|96%  18:44:41:858  [ Reyl ][0|7.1|0|0|0|0][AST ENS] 
+Reyl raises his left hand, and snaps his fingers.
+A tide of writhing bodies boils up from the ground, myriad mouths gnawing and biting as they
+burrow into your flesh.
+Health lost: 544 (poison).
+Reyl traces a writhing logograph in the air before you, the blood upon his knife bursting into
+arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it lashes out at you, ethereal fangs plunging into your
+throat.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4916|90% M:4816|96%  18:44:42:104  [ Reyl ][0|7.1|0|0|0|0] ( -525h 9% )[AST PAR ENS] 
+Health lost: 34 (raw).
+You bleed 34 health.
+H:4882|89% M:4816|96%  18:44:42:221  [ Reyl ][0|7.1|0|0|0|0][AST PAR ENS] 
+You may eat another plant or mineral. Eat (1.569)
+H:4882|89% M:4816|96%  18:44:42:296  [ Reyl ][0|7.1|0|0|0|0][AST PAR ENS] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:4882|89% M:4816|96%  18:44:42:415  [ Reyl ][0|7.1|0|0|0|0][AST ENS] 
+[OUTR]: 1 Bloodroot (842)
+You have recovered balance on all limbs.
+H:4882|89% M:4816|96%  18:44:43:075  [ Reyl ][0|7.1|0|0|0|0][AST ENS] 
+H:4882|89% M:4816|96%  18:44:43:080  [ Reyl ][0|7.1|0|0|0|0][AST ENS] 
+Envenomed: (Curare)
+Sliced:    (Reyl)
+Shield:    (Clumsiness)
+Ferocity:  [####|####|####|####]
+[HP]:      (71%/100%).
+Afflicted: (Clumsiness)
+[clum, para]
+Lines of icy fire abruptly lance through your chest, radiating outward from your heart.
+[AFF]: Haemophilia
+You sense a subtle change deep within.
+H:4882|89% M:4716|94%  18:44:43:130  [ Reyl ][0|7.1|0|0|0|0][AST haem ENS] 
+Reyl takes some salve from a vial and rubs it on his torso.
+H:4882|89% M:4716|94%  18:44:43:191  [ Reyl ][0|7.1|0|0|0|0][AST haem ENS] 
+Reyl eats a magnesium chip.
+Reyl takes a drink from an elegant diamond vial.
+Processed Cures(paralysis)
+H:4882|89% M:4716|94%  18:44:43:393  [ Reyl ][0|7.1|0|0|0|0][AST haem ENS] 
+You drop back and ease the engagement.
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+H:4882|89% M:4716|94%  18:44:43:591  [ Reyl ][0|7.1|0|0|0|0][AST haem ENS] 
+Raising his left hand, Reyl sharply snaps his fingers.
+You feel something shifting and undulating beneath your skin, before a black cloud struggles
+from within your wounds.
+Reyl traces a logograph shaped like a set of scales in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it suddenly shatters, and a wave of arcane power sends
+you staggering.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4882|89% M:4716|94%  18:44:43:735  [ Reyl ][0|7.1|0|0|0|0][AST clum haem ENS] 
+You may eat another plant or mineral. Eat (1.59)
+H:4882|89% M:4716|94%  18:44:44:004  [ Reyl ][0|7.1|0|0|0|0][AST clum haem ENS] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+H:4882|89% M:4791|96%  18:44:44:167  [ Reyl ][0|7.1|0|0|0|0][clum haem ENS] 
+A fierce mountain falcon rips out a chunk of Reyl's flesh with its beak.
+H:4882|89% M:4791|96%  18:44:44:848  [ Reyl ][0|7.1|0|0|0|0][clum haem ENS] 
+Reyl eats an aurum flake.
+Processed Cures(clumsiness)
+[slick2]
+
+H:4882|89% M:4791|96%  18:44:44:933  [ Reyl ][0|7.1|0|0|0|0][clum haem ENS] 
+You may drink another health or mana elixir. Health (4.416)
+H:4882|89% M:4791|96%  18:44:44:973  [ Reyl ][0|7.1|0|0|0|0][clum haem ENS] 
+You have recovered balance on all limbs.
+Envenomed: (Vernalius)
+Sliced:    (Reyl)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Engage:    (Reyl)
+Equilibrium used: 2.00s.
+Strike:    (Sensitivity).
+Afflicted: (Weariness Paralysis Prefarar)
+[weari, slick2, deaf, para]
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5460|100% M:4741|95%  18:44:45:158  [ Reyl ][0|7.1|0|0|0|0] ( +578h 10% )[clum haem ENS] 
+You may eat another plant or mineral.
+H:5460|100% M:4741|95%  18:44:45:723  [ Reyl ][0|7.1|0|0|0|0][clum haem ENS] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+Your blood regains its ability to clot.
+[AFF]: Haemophilia
+H:5460|100% M:4741|95%  18:44:45:732  [ Reyl ][0|7.1|0|0|0|0][clum ENS] 
+[OUTR]: 1 Ginseng (568)
+You may utilise the tree tattoo again. Tree (13.976)
+H:5460|100% M:4691|94%  18:44:46:001  [ Reyl ][0|7.1|0|0|0|0][clum ENS] 
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:5460|100% M:4691|94%  18:44:46:142  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+You may eat another bit of irid moss or potash.
+H:5460|100% M:4691|94%  18:44:46:472  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Reyl eats a magnesium chip.
+Reyl raises his left hand, and snaps his fingers.
+Processed Cures(paralysis)
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Flushings
+Your skin begins to prickle uncomfortably.
+Health lost: 774 (poison).
+Reyl traces a logograph depicting a lunging bear in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+Even as the logograph becomes fully formed it leaps from the air to you, sinking into your
+chest just over your heart.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4686|85% M:4691|94%  18:44:46:559  [ Reyl ][0|7.1|0|0|0|0] ( -774h 14% )[fls ENS] 
+You have recovered equilibrium.
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Reyl)
+Empower:   (Sleizak)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (61%/100%).
+Afflicted: (Clumsiness Paralysis)
+[clum, weari, deaf, para]
+You suddenly perceive the vague outline of an aura of rebounding around Reyl.
+H:4686|85% M:4491|90%  18:44:47:303  [ Reyl ][0|7.1|0|0|0|0] ( -200m 4% )[fls ENS] 
+You may eat another plant or mineral. Eat (1.577)
+H:4686|85% M:4491|90%  18:44:47:309  [ Reyl ][0|7.1|0|0|0|0][fls ENS] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+The prickling in your skin fades and you feel blessedly cool.
+[AFF]: Flushings
+H:4686|85% M:4491|90%  18:44:47:504  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+[OUTR]: 1 Ginseng (567)
+Health lost: 72 (raw).
+You bleed 72 health.
+H:4614|84% M:4491|90%  18:44:47:710  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Reyl takes a drink from an elegant diamond vial.
+Reyl eats a potash crystal.
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+H:5050|92% M:4888|98%  18:44:47:864  [ Reyl ][0|7.1|0|0|0|0] ( +436h 7% +397m 7% )[ENS] 
+A fierce mountain falcon rips out a chunk of Reyl's flesh with its beak.
+H:5050|92% M:4888|98%  18:44:47:867  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Reyl eats a magnesium chip.
+Reyl touches a tree of life tattoo.
+Processed Cures(paralysis)
+Processed Cures(clumsiness weariness)
+[clum[50], weari[50], deaf, Reb]
+
+H:5050|92% M:4888|98%  18:44:48:247  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+Reyl's aura of weapons rebounding disappears.
+Reyl motions as if to lift his hand, then abandons the arcane gesture.
+Reyl traces a logograph depicting a leaping jackal in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it leaps for you, ephemeral fangs closing about your
+throat and cutting off air.
+[AFF]: Asthma
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:5050|92% M:4888|98%  18:44:48:291  [ Reyl ][0|7.1|0|0|0|0][AST ENS] 
+Reyl takes a long drag off his pipe.
+H:5050|92% M:4888|98%  18:44:48:462  [ Reyl ][0|7.1|0|0|0|0][AST ENS] 
+You may eat another plant or mineral. Eat (1.488)
+H:5050|92% M:4888|98%  18:44:48:991  [ Reyl ][0|7.1|0|0|0|0][AST ENS] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+H:5050|92% M:4888|98%  18:44:49:065  [ Reyl ][0|7.1|0|0|0|0][ENS] 
+You have recovered balance on all limbs.
+Envenomed: (Kalmia)
+Sliced:    (Reyl)
+Proc:      (Sleizak 1)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (69%/100%).
+Afflicted: (Asthma Paralysis)
+[ast, clum[50], weari, naus, deaf, para]
+A wave of light-headedness abruptly overcomes you.
+[AFF]: Pyramides
+Your heart skips a beat, then begins to pound.
+H:5050|92% M:4788|96%  18:44:49:129  [ Reyl ][0|7.1|0|0|0|0][PYR ENS] 
+You may drink another health or mana elixir. Health (4.474)
+H:5050|92% M:4788|96%  18:44:49:632  [ Reyl ][0|7.1|0|0|0|0][PYR ENS] 
+Reyl eats a magnesium chip.
+Reyl motions as if to lift his hand, then abandons the arcane gesture.
+Processed Cures(paralysis)
+Reyl traces a writhing logograph in the air before you, the blood upon his knife bursting into
+arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it lashes out at you, ethereal fangs plunging into your
+throat.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:5050|92% M:4788|96%  18:44:49:995  [ Reyl ][0|7.1|0|0|0|0][PAR PYR ENS] 
+You may eat another plant or mineral.
+H:5050|92% M:4788|96%  18:44:50:618  [ Reyl ][0|7.1|0|0|0|0][PAR PYR ENS] 
+Reyl doubles over, vomiting violently.
+H:5050|92% M:4788|96%  18:44:50:678  [ Reyl ][0|7.1|0|0|0|0][PAR PYR ENS] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+[OUTR]: 1 Bloodroot (841)
+A fierce mountain falcon rips out a chunk of Reyl's flesh with its beak.
+Its talons shred the electric resistance defence of Reyl.
+H:5050|92% M:4738|95%  18:44:50:940  [ Reyl ][0|7.1|0|0|0|0][PYR ENS] 
+You have recovered balance on all limbs.
+You cease wielding a blessed legionnaire's longsword in your left hand.
+You start to wield a mithril broadsword in your left hand.
+Envenomed: (Gecko)
+Sliced:    (Torso)
+Parry:      DENIED (18.9%)
+A mithril broadsword grows warm in your hand as you feel yourself become attuned to the sleizak
+rune sketched upon it.
+Empower:   (Sleizak)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (40%/100%).
+Afflicted: (Slickness Paralysis).*
+[ast, clum[50], weari, naus, deaf, slick, para]
+Lines of icy fire abruptly lance through your chest, radiating outward from your heart.
+[AFF]: Haemophilia
+You sense a subtle change deep within.
+H:5050|92% M:4538|91%  18:44:51:209  [ Reyl ][0|18.9|0|0|0|0] ( -200m 4% )[PYR haem ENS] 
+You focus on automatically empowering the isaz, sleizak, and inguz runes.
+H:5050|92% M:4538|91%  18:44:51:253  [ Reyl ][0|18.9|0|0|0|0][PYR haem ENS] 
+Reyl eats a magnesium chip.
+Reyl raises his left hand, and snaps his fingers.
+Processed Cures(paralysis slickness)
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Flushings
+Your skin begins to prickle uncomfortably.
+Health lost: 774 (poison).
+Reyl traces a logograph shaped like a set of scales in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it suddenly shatters, and a wave of arcane power sends
+you staggering.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4276|78% M:4538|91%  18:44:51:623  [ Reyl ][0|18.9|0|0|0|0] ( -774h 14% )[clum PYR haem fls 
+ENS] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5321|97% M:4538|91%  18:44:51:850  [ Reyl ][0|18.9|0|0|0|0] ( +1045h 19% )[clum PYR haem fls 
+ENS] 
+You may eat another plant or mineral. Eat (1.449)
+H:5430|99% M:4538|91%  18:44:52:260  [ Reyl ][0|18.9|0|0|0|0][clum PYR haem fls ENS] 
+Reyl takes a drink from an elegant diamond vial.
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+The burning in your veins abruptly fades.
+[AFF]: Pyramides
+[OUTR]: 1 Bloodroot (840)
+A sudden flush of heat drives out a chill that you didn't realise was there until it is gone;
+your limbs tingle, and you feel unburdened.
+[AFF]: Ensorcelled
+H:5430|99% M:4538|91%  18:44:53:211  [ Reyl ][0|18.9|0|0|0|0][clum haem fls] 
+Something pulses from within the chest of Reyl, and he seems more vital.
+Processed Cures(paralysis asthma clumsiness nausea slickness)
+H:5430|99% M:4538|91%  18:44:53:213  [ Reyl ][0|18.9|0|0|0|0][clum haem fls] 
+Health lost: 67 (raw).
+You bleed 67 health.
+H:5363|98% M:4538|91%  18:44:53:221  [ Reyl ][0|18.9|0|0|0|0][clum haem fls] 
+Reyl: has shielded!
+Reyl: has shielded!
+Reyl: has shielded!
+Reyl eats an aurum flake.
+Reyl takes a long drag off his pipe.
+Processed Cures(asthma clumsiness)
+H:5363|98% M:4538|91%  18:44:53:371  [ Reyl ][0|18.9|0|0|0|0][clum haem fls] 
+You have recovered balance on all limbs.
+Razed: Shield
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (65%/100%).
+Afflicted: (Paralysis)
+[naus[80], deaf, para]
+You may eat another bit of irid moss or potash.
+H:5363|98% M:4438|89%  18:44:53:781  [ Reyl ][0|18.9|0|0|0|0][clum haem fls] 
+You may eat another plant or mineral. Eat (1.505)
+H:5363|98% M:4438|89%  18:44:53:883  [ Reyl ][0|18.9|0|0|0|0][clum haem fls] 
+Reyl eats a potash crystal.
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+Your blood regains its ability to clot.
+[AFF]: Haemophilia
+Blood begins to run from your pores as your skin grows painfully hot.
+A fierce mountain falcon dives at Reyl, raking his face with its talons.
+Its talons shred the nightsight defence of Reyl.
+H:5363|98% M:4438|89%  18:44:53:933  [ Reyl ][0|18.9|0|0|0|0][clum fls] 
+[OUTR]: 1 Ginseng (566)
+Reyl eats a magnesium chip.
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Torso)
+You lash out at Reyl with a mithril broadsword, but miss.
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Sensitivity)
+[HP]:      (71%/100%).
+Afflicted: (Paralysis Prefarar).*
+[sen, naus[80], deaf, para]
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+The prickling in your skin fades and you feel blessedly cool.
+[AFF]: Flushings
+A wave of light-headedness abruptly overcomes you.
+[AFF]: Pyramides
+Your heart skips a beat, then begins to pound.
+H:5363|98% M:4413|88%  18:44:55:270  [ Reyl ][0|18.9|0|0|0|0][clum PYR] 
+You may eat another plant or mineral. Eat (1.657)
+H:5363|98% M:4413|88%  18:44:55:586  [ Reyl ][0|18.9|0|0|0|0][clum PYR] 
+The empowerment of the sleizak rune fades.
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+The burning in your veins abruptly fades.
+[AFF]: Pyramides
+[OUTR]: 1 Bloodroot (839)
+You may drink another health or mana elixir. Health (4.433)
+H:5363|98% M:4363|87%  18:44:56:283  [ Reyl ][0|18.9|0|0|0|0][clum] 
+The wave of weakness that has overcome you passes.
+H:5363|98% M:4363|87%  18:44:56:400  [ Reyl ][0|18.9|0|0|0|0][clum] 
+Reyl eats a magnesium chip.
+Processed Cures(paralysis)
+[sen, naus[80], deaf]
+
+H:5363|98% M:4363|87%  18:44:56:586  [ Reyl ][0|18.9|0|0|0|0][clum] 
+You lash out at Reyl as he turns to flee.
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+Reyl leaps majestically to the northwest.
+H:5363|98% M:4363|87%  18:44:56:633  [ Reyl ][0|18.9|0|0|0|0][clum] 
+With a powerful beating of wings, a fierce mountain falcon departs.
+H:5363|98% M:4363|87%  18:44:56:676  [ Reyl ][0|18.9|0|0|0|0][clum] 
+You see exits leading north, northeast, and northwest.
+H:5363|98% M:4363|87%  18:44:56:747  [ Reyl ][0|18.9|0|0|0|0][clum] 
+You may eat another plant or mineral. Eat (1.483)
+H:5363|98% M:4363|87%  18:44:57:290  [ Reyl ][0|18.9|0|0|0|0][clum] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:5363|98% M:4363|87%  18:44:57:370  [ Reyl ][0|18.9|0|0|0|0]
+You have recovered balance on all limbs.
+You cease wielding a mithril broadsword in your left hand.
+You start to wield a blessed legionnaire's longsword in your left hand.
+You focus on automatically empowering the isaz, sleizak, and inguz runes.
+H:5363|98% M:4363|87%  18:44:57:571  [ Reyl ][0|18.9|0|0|0|0]
+ Reset Success!
+
+Health lost: 47 (raw).
+You bleed 47 health.
+H:5316|97% M:4363|87%  18:44:58:704  [ Reyl ][0|18.9|0|0|0|0]
+You may eat another plant or mineral.
+H:5316|97% M:4363|87%  18:44:58:917  [ Reyl ][0|18.9|0|0|0|0]
+You may utilise the tree tattoo again. Tree (13.969)
+H:5316|97% M:4363|87%  18:45:00:110  [ Reyl ][0|18.9|0|0|0|0]
+
+THEY CAN TOUCH TREE AGAIN!
+(Legacy Help Desk): Aheli says, "How would i set up an aliases to make an attack?"
+H:5425|99% M:4363|87%  18:45:03:635  [ Reyl ][0|18.9|0|0|0|0]
+You begin sketching an isaz rune on the ground.
+H:5425|99% M:4438|89%  18:45:04:499  [ Reyl ][0|18.9|0|0|0|0]
+With a flourish, you finish sketching an isaz rune.
+You have recovered balance on all limbs.
+H:5425|99% M:4438|89%  18:45:08:032  [ Reyl ][0|18.9|0|0|0|0]
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+H:5425|99% M:4438|89%  18:45:10:248  [ Reyl ][0|18.9|0|0|0|0]
+Reyl: entered the room!
+Reyl's aura of weapons rebounding disappears.
+Reyl traces a logograph shaped like a set of scales in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed, it suddenly shatters, and your heart begins to beat
+unnaturally fast.
+H:5425|99% M:4438|89%  18:45:12:060  [ Reyl ][0|18.9|0|0|0|0]
+Reyl takes a long drag off his pipe.
+H:5425|99% M:4438|89%  18:45:12:208  [ Reyl ][0|18.9|0|0|0|0]
+A fierce mountain falcon soars in upon silver wings.
+H:5425|99% M:4438|89%  18:45:12:334  [ Reyl ][0|18.9|0|0|0|0]
+(Legacy Help Desk): Aheli says, "Not aliase keybind."
+H:5460|100% M:4438|89%  18:45:13:312  [ Reyl ][0|18.9|0|0|0|0]
+H:5460|100% M:4438|89%  18:45:13:479  [ Reyl ][0|18.9|0|0|0|0]
+Envenomed: (Xentio)
+Sliced:    (Reyl)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Engage:    (Reyl)
+Equilibrium used: 2.00s..
+Afflicted: (Clumsiness Paralysis)
+[clum, para]
+Reyl eats a magnesium chip.
+Processed Cures(paralysis)
+[clum]
+
+H:5460|100% M:4388|88%  18:45:13:503  [ Reyl ][0|18.9|0|0|0|0]
+Reyl traces a logograph depicting a lunging bear in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+Even as the logograph becomes fully formed it leaps from the air to you, sinking into your
+chest just over your heart.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:5460|100% M:4388|88%  18:45:13:972  [ Reyl ][0|18.9|0|0|0|0]
+Reyl eats an aurum flake.
+Processed Cures(clumsiness)
+H:5460|100% M:4463|89%  18:45:15:034  [ Reyl ][0|18.9|0|0|0|0]
+You have recovered equilibrium.
+You have recovered balance on all limbs.
+H:5460|100% M:4463|89%  18:45:15:330  [ Reyl ][0|18.9|0|0|0|0]
+Envenomed: (Xentio)
+Sliced:    (Reyl)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (79%/100%).
+Afflicted: (Clumsiness Paralysis)
+[clum, para]
+Reyl takes a drink from an elegant diamond vial.
+Your heart feels as if it is going to beat right out of your chest, before without warning it
+slows to normal; your head spins and you stagger at the sudden change.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+H:5460|100% M:4313|86%  18:45:16:246  [ Reyl ][0|18.9|0|0|0|0][clum] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:5460|100% M:4313|86%  18:45:16:357  [ Reyl ][0|18.9|0|0|0|0]
+Reyl eats a magnesium chip.
+Reyl raises his left hand, and snaps his fingers.
+Processed Cures(paralysis)
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Pyramides
+Your heart skips a beat, then begins to pound.
+Health lost: 774 (poison).
+Reyl traces a logograph depicting a leaping jackal in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it leaps for you, ephemeral fangs closing about your
+throat and cutting off air.
+[AFF]: Asthma
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4686|85% M:4313|86%  18:45:16:754  [ Reyl ][0|18.9|0|0|0|0] ( -774h 14% )[AST PYR] 
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+The burning in your veins abruptly fades.
+[AFF]: Pyramides
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5460|100% M:4313|86%  18:45:16:950  [ Reyl ][0|18.9|0|0|0|0] ( +774h 14% )[AST] 
+Something pulses from within the chest of Reyl, and he seems more vital.
+Processed Cures(clumsiness)
+H:5460|100% M:4313|86%  18:45:17:251  [ Reyl ][0|18.9|0|0|0|0][AST] 
+You have recovered balance on all limbs.
+Envenomed: (Vernalius)
+Sliced:    (Reyl)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (87%/100%).
+Afflicted: (Weariness Paralysis)
+[weari, para]
+You may eat another plant or mineral.
+H:5460|100% M:4213|84%  18:45:17:776  [ Reyl ][0|18.9|0|0|0|0][AST] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+H:5460|100% M:4213|84%  18:45:17:890  [ Reyl ][0|18.9|0|0|0|0]
+Lines of icy fire abruptly lance through your chest, radiating outward from your heart.
+[AFF]: Haemophilia
+You sense a subtle change deep within.
+H:5460|100% M:4213|84%  18:45:18:275  [ Reyl ][0|18.9|0|0|0|0][haem] 
+A fierce mountain falcon rips out a chunk of Reyl's flesh with its beak.
+Its talons shred the temperance defence of Reyl.
+H:5460|100% M:4213|84%  18:45:18:317  [ Reyl ][0|18.9|0|0|0|0][haem] 
+Reyl eats a magnesium chip.
+Reyl takes a drink from an oaken vial.
+Processed Cures(paralysis)
+Reyl raises his left hand, and snaps his fingers.
+A tide of writhing bodies boils up from the ground, myriad mouths gnawing and biting as they
+burrow into your flesh.
+Health lost: 544 (poison).
+Reyl traces a writhing logograph in the air before you, the blood upon his knife bursting into
+arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it lashes out at you, ethereal fangs plunging into your
+throat.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+You have recovered balance on all limbs.
+H:4916|90% M:4213|84%  18:45:19:349  [ Reyl ][0|18.9|0|0|0|0] ( -544h 9% )[PAR haem] 
+You may eat another plant or mineral.
+H:4916|90% M:4213|84%  18:45:19:463  [ Reyl ][0|18.9|0|0|0|0][PAR haem] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+Envenomed: (Xentio)
+Sliced:    (Reyl)
+Empower:   (Sleizak)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (70%/100%).
+Afflicted: (Clumsiness Paralysis)
+[clum, weari, para]
+[OUTR]: 1 Bloodroot (838)
+Reyl eats a potash crystal.
+H:4916|90% M:4013|80%  18:45:19:960  [ Reyl ][0|18.9|0|0|0|0] ( -200m 4% )[haem] 
+Reyl eats a magnesium chip.
+Reyl takes a drink from an elegant diamond vial.
+Processed Cures(paralysis)
+Raising his left hand, Reyl sharply snaps his fingers.
+You feel something shifting and undulating beneath your skin, before a black cloud struggles
+from within your wounds.
+Reyl traces a logograph shaped like a set of scales in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it suddenly shatters, and a wave of arcane power sends
+you staggering.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4916|90% M:4013|80%  18:45:20:149  [ Reyl ][0|18.9|0|0|0|0][clum haem] 
+You suddenly perceive the vague outline of an aura of rebounding around Reyl.
+H:4916|90% M:4013|80%  18:45:20:747  [ Reyl ][0|18.9|0|0|0|0][clum haem] 
+Health lost: 50 (raw).
+You bleed 50 health.
+H:4866|89% M:4013|80%  18:45:20:749  [ Reyl ][0|18.9|0|0|0|0][clum haem] 
+You may eat another plant or mineral. Eat (1.406)
+H:4866|89% M:3963|79%  18:45:21:033  [ Reyl ][0|18.9|0|0|0|0][clum haem] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+Your blood regains its ability to clot.
+[AFF]: Haemophilia
+H:4866|89% M:3963|79%  18:45:21:080  [ Reyl ][0|18.9|0|0|0|0][clum] 
+[OUTR]: 1 Ginseng (565)
+You may drink another health or mana elixir. Health (4.427)
+H:4866|89% M:3963|79%  18:45:21:377  [ Reyl ][0|18.9|0|0|0|0][clum] 
+A fierce mountain falcon dives at Reyl, raking his face with its talons.
+H:4866|89% M:3963|79%  18:45:21:441  [ Reyl ][0|18.9|0|0|0|0][clum] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+You have recovered balance on all limbs.
+Razed: Rebounding
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (94%/100%).
+Afflicted: (Paralysis)
+[clum, weari, para]
+Reyl takes a long drag off his pipe.
+H:5460|100% M:3863|77%  18:45:21:664  [ Reyl ][0|18.9|0|0|0|0] ( +594h 10% )[clum] 
+(Legacy Help Desk): Aheli says, "I don't know how to code in lua."
+H:5460|100% M:3863|77%  18:45:21:846  [ Reyl ][0|18.9|0|0|0|0][clum] 
+Reyl eats a magnesium chip.
+Reyl motions as if to lift his hand, then abandons the arcane gesture.
+Processed Cures(paralysis)
+Reyl traces a logograph depicting a lunging bear in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+Even as the logograph becomes fully formed it leaps from the air to you, sinking into your
+chest just over your heart.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+You may eat another plant or mineral. Eat (1.648)
+H:5460|100% M:3863|77%  18:45:22:726  [ Reyl ][0|18.9|0|0|0|0][clum] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:5460|100% M:3863|77%  18:45:22:837  [ Reyl ][0|18.9|0|0|0|0]
+You have recovered balance on all limbs.
+H:5460|100% M:3863|77%  18:45:23:274  [ Reyl ][0|18.9|0|0|0|0]
+Envenomed: (Kalmia)
+Sliced:    (Reyl)
+Proc:      (Sleizak 1)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Sensitivity)
+[HP]:      (87%/100%).
+Afflicted: (Asthma Paralysis Prefarar)
+[ast, clum, weari, naus, deaf, para]
+Reyl eats a magnesium chip.
+Reyl touches a tree of life tattoo.
+Processed Cures(paralysis)
+Reyl raises his left hand, and snaps his fingers.
+Processed Cures(clumsiness weariness asthma nausea)
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Flushings
+Your skin begins to prickle uncomfortably.
+Health lost: 774 (poison).
+Reyl traces a logograph depicting a leaping jackal in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it leaps for you, ephemeral fangs closing about your
+throat and cutting off air.
+[AFF]: Asthma
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4686|85% M:3763|75%  18:45:23:415  [ Reyl ][0|18.9|0|0|0|0] ( -774h 14% )[AST fls] 
+You may eat another plant or mineral.
+H:4686|85% M:3838|77%  18:45:24:368  [ Reyl ][0|18.9|0|0|0|0][AST fls] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+H:4686|85% M:3838|77%  18:45:24:372  [ Reyl ][0|18.9|0|0|0|0][fls] 
+A fierce mountain falcon dives at Reyl, raking his face with its talons.
+H:4686|85% M:3838|77%  18:45:24:470  [ Reyl ][0|18.9|0|0|0|0][fls] 
+Reyl raises his left hand, and snaps his fingers.
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Sandfever
+You're tired. So very tired.
+Health lost: 774 (poison).
+Reyl traces a writhing logograph in the air before you, the blood upon his knife bursting into
+arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it lashes out at you, ethereal fangs plunging into your
+throat.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:3912|71% M:3838|77%  18:45:25:059  [ Reyl ][0|18.9|0|0|0|0] ( -774h 14% )[SAND PAR fls] 
+Reyl eats an aurum flake.
+[Curing]: EAT MOSS
+Processed Cures(asthma clumsiness weariness)
+You eat some irid moss.
+You feel your health and mana replenished.
+You have recovered balance on all limbs.
+H:4348|79% M:4235|85%  18:45:25:302  [ Reyl ][0|18.9|0|0|0|0] ( +436h 7% +397m 7% )[SAND PAR 
+fls] 
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+The prickling in your skin fades and you feel blessedly cool.
+[AFF]: Flushings
+A wave of light-headedness abruptly overcomes you.
+[AFF]: Pyramides
+Your heart skips a beat, then begins to pound.
+H:4348|79% M:4235|85%  18:45:25:343  [ Reyl ][0|18.9|0|0|0|0][SAND PAR PYR] 
+You may eat another plant or mineral.
+You may drink another health or mana elixir. Health (4.452)
+H:4348|79% M:4185|84%  18:45:25:935  [ Reyl ][0|18.9|0|0|0|0][SAND PAR PYR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+Envenomed: (Gecko)
+Sliced:    (Torso)
+Parry:      DENIED (26%)
+Empower:   (Sleizak)
+Afflicted: (Weariness)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (72%/100%).
+Afflicted: (Slickness Paralysis).*
+[ast[50], clum[50], weari, naus[75], deaf, slick, para]
+[OUTR]: 1 Bloodroot (837)
+Reyl takes a long drag off his pipe.
+Reyl takes a drink from an elegant diamond vial.
+H:5460|100% M:3985|80%  18:45:26:349  [ Reyl ][0|26|0|0|0|0] ( +1112h 20% -200m 4% )[SAND PYR] 
+Lines of icy fire abruptly lance through your chest, radiating outward from your heart.
+[AFF]: Haemophilia
+You sense a subtle change deep within.
+H:5460|100% M:3985|80%  18:45:26:354  [ Reyl ][0|26|0|0|0|0][SAND PYR haem] 
+Reyl doubles over, vomiting violently.
+H:5460|100% M:3985|80%  18:45:26:689  [ Reyl ][0|26|0|0|0|0][SAND PYR haem] 
+Reyl eats a magnesium chip.
+Reyl raises his left hand, and snaps his fingers.
+Processed Cures(paralysis)
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Rebbies
+You feel... odd. So very odd.
+Health lost: 774 (poison).
+Reyl traces a logograph shaped like a set of scales in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it suddenly shatters, and a wave of arcane power sends
+you staggering.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:4686|85% M:3985|80%  18:45:26:779  [ Reyl ][0|26|0|0|0|0] ( -774h 14% )[SAND clum reb PYR 
+haem] 
+A fierce mountain falcon rips out a chunk of Reyl's flesh with its beak.
+H:4686|85% M:3985|80%  18:45:27:440  [ Reyl ][0|26|0|0|0|0][SAND clum reb PYR haem] 
+You may eat another plant or mineral. Eat (1.474)
+H:4686|85% M:3985|80%  18:45:27:580  [ Reyl ][0|26|0|0|0|0][SAND clum reb PYR haem] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+The burning in your veins abruptly fades.
+[AFF]: Pyramides
+[OUTR]: 1 Bloodroot (836)
+You have recovered balance on all limbs.
+Envenomed: (Kalmia)
+Sliced:    (Torso)
+You lash out at Reyl with a blessed legionnaire's longsword, but miss.
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (69%/100%).
+Afflicted: (Paralysis).*
+[clum[50], weari, naus, deaf, para]
+Reyl eats a potash crystal.
+Reyl eats a magnesium chip.
+Processed Cures(paralysis)
+[clum[50], weari, naus, deaf]
+
+H:4686|85% M:3885|78%  18:45:28:485  [ Reyl ][0|26|0|0|0|0][SAND clum reb haem] 
+Reyl raises his left hand, and snaps his fingers.
+A great black cloud of buzzing humming bodies descends upon you, lances of agony driving into
+your body as their myriad number plunge stingers into your flesh.
+[AFF]: Mycalium
+Your thoughts cloud as a strange sense of displacement overcomes you.
+Health lost: 774 (poison).
+Reyl traces a logograph depicting a lunging bear in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+Even as the logograph becomes fully formed it leaps from the air to you, sinking into your
+chest just over your heart.
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+H:3912|71% M:3885|78%  18:45:28:498  [ Reyl ][0|26|0|0|0|0] ( -774h 14% )[myc SAND clum reb 
+haem] 
+You may eat another plant or mineral. Eat (1.476)
+H:3912|71% M:3885|78%  18:45:29:164  [ Reyl ][0|26|0|0|0|0][myc SAND clum reb haem] 
+[Curing]: EAT GOLDENSEAL
+You eat a goldenseal root.
+Your fever finally breaks, the terrible burning retreating.
+[AFF]: Sandfever
+H:3912|71% M:3885|78%  18:45:29:241  [ Reyl ][0|26|0|0|0|0][myc clum reb haem] 
+Something pulses from within the chest of Reyl, and he seems more vital.
+Processed Cures(clumsiness nausea)
+H:3912|71% M:3885|78%  18:45:29:323  [ Reyl ][0|26|0|0|0|0][myc clum reb haem] 
+[OUTR]: 1 Goldenseal (1486)
+Reyl traces a logograph depicting a striking scorpion in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+The logograph leaps from the air to you, and you feel a terrible pain in the side of your neck
+before an icy cold rushes through you.
+[AFF]: Scytherus
+You feel light headed and dizzy.
+You have recovered balance on all limbs.
+Being careful not to poison yourself, you wipe off all the venoms from a blessed legionnaire's
+longsword.
+Envenomed: (Xentio)
+Sliced:    (Torso)
+Parry:      DENIED (33.1%)
+Proc:      (Sleizak 2)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (64%/100%).
+Afflicted: (Clumsiness Paralysis).*
+[voyria, clum, weari, naus, deaf, para]
+You suddenly perceive the vague outline of an aura of rebounding around Reyl.
+Reyl eats a magnesium chip.
+Reyl takes a drink from an oaken vial.
+Processed Cures(paralysis)
+Lines of icy fire abruptly lance through your chest, radiating outward from your heart.
+
+H:3912|71% M:3785|76%  18:45:30:336  [ Reyl ][0|33.1|0|0|0|0][myc clum reb haem SCYT] 
+You may drink another health or mana elixir. Health (4.378)
+H:3912|71% M:3785|76%  18:45:30:487  [ Reyl ][0|33.1|0|0|0|0][myc clum reb haem SCYT] 
+The falcon dives at Reyl, ripping apart his aura of rebounding with its talons.
+H:3912|71% M:3785|76%  18:45:30:566  [ Reyl ][0|33.1|0|0|0|0][myc clum reb haem SCYT] 
+Reyl takes a long drag off his pipe.
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:4908|89% M:3785|76%  18:45:30:607  [ Reyl ][0|33.1|0|0|0|0] ( +996h 18% ) (205B)[myc clum reb 
+haem SCYT] 
+You may eat another plant or mineral. Eat (1.531)
+H:4908|89% M:3785|76%  18:45:30:771  [ Reyl ][0|33.1|0|0|0|0][myc clum reb haem SCYT] 
+You may utilise the tree tattoo again. Tree (13.982)
+Reyl takes a drink from an elegant diamond vial.
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+Your blood regains its ability to clot.
+[AFF]: Haemophilia
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:4908|89% M:3735|75%  18:45:30:974  [ Reyl ][0|33.1|0|0|0|0][myc reb SCYT] 
+You may eat another bit of irid moss or potash.
+H:4908|89% M:3735|75%  18:45:30:980  [ Reyl ][0|33.1|0|0|0|0][myc reb SCYT] 
+[OUTR]: 1 Ginseng (564)
+A wave of light-headedness abruptly overcomes you.
+[AFF]: Pyramides
+Your heart skips a beat, then begins to pound.
+H:4908|89% M:3735|75%  18:45:31:372  [ Reyl ][0|33.1|0|0|0|0][myc reb PYR SCYT] 
+Reyl raises his left hand, and decisively snaps his fingers.
+H:4908|89% M:3735|75%  18:45:31:495  [ Reyl ][0|33.1|0|0|0|0][myc reb PYR SCYT] 
+Reyl eats an aurum flake.
+Health lost: 205 (raw).
+Processed Cures(clumsiness weariness)
+You bleed 205 health.
+H:4703|86% M:3735|75%  18:45:31:738  [ Reyl ][0|33.1|0|0|0|0] ( -205h 3% ) (191B)[myc reb PYR 
+SCYT] 
+Reyl traces a writhing logograph in the air before you, the blood upon his knife bursting into
+arcane flame as it hangs in the wake of the blade's passage.
+As the logograph becomes fully formed it lashes out at you, ethereal fangs plunging into your
+throat.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Your blood begins to burn in your veins with a slowly building pain.
+[AFF]: Voyria
+Your heart gives a shuddering stutter in your chest, a wave of nausea and weakness flooding
+through you.
+You have recovered balance on all limbs.
+H:4703|86% M:3735|75%  18:45:32:029  [ Reyl ][0|33.1|0|0|0|0][myc reb PAR PYR SCYT VOYR] 
+[Curing]: SIP IMMUNITY
+You take a drink from a pinewood vial.
+Mercifully, the voyria venom has been cleansed from your body.
+[AFF]: Voyria
+The elixir burns through your veins, destroying the deadly poisons that are killing you.
+
+H:4703|86% M:3735|75%  18:45:32:133  [ Reyl ][0|33.1|0|0|0|0][myc reb PAR PYR SCYT] 
+You may eat another plant or mineral. Eat (1.486)
+H:4703|86% M:3735|75%  18:45:32:458  [ Reyl ][0|33.1|0|0|0|0][myc reb PAR PYR SCYT] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:4703|86% M:3735|75%  18:45:32:539  [ Reyl ][0|33.1|0|0|0|0][myc reb PYR SCYT] 
+Envenomed: (Kalmia)
+Sliced:    (Torso)
+Parry:      DENIED (40.2%)
+Empower:   (Sleizak)
+Afflicted: (Weariness)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (71%/100%).
+Afflicted: (Asthma Paralysis).*
+[ast, clum[50], weari, naus, deaf, para]
+[OUTR]: 1 Bloodroot (835)
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+H:5139|94% M:3932|79%  18:45:32:738  [ Reyl ][0|40.2|0|0|0|0] ( +436h 7% +197m 3% ) (191B)[myc 
+reb PYR SCYT] 
+Reyl eats a magnesium chip.
+Processed Cures(paralysis)
+[ast, clum[50], weari, naus, deaf]
+
+H:5248|96% M:3932|79%  18:45:33:556  [ Reyl ][0|40.2|0|0|0|0][myc reb PYR SCYT] 
+A fierce mountain falcon rips out a chunk of Reyl's flesh with its beak.
+H:5248|96% M:3932|79%  18:45:33:559  [ Reyl ][0|40.2|0|0|0|0][myc reb PYR SCYT] 
+
+[DEF]: Levitating
+[DEF]: Insomnia
+[DEF]: Gripping
+[DEF]: Resistance
+[DEF]: Weathering
+[DEF]: Cloak
+[DEF]: Poisonresist
+[DEF]: Temperance
+[DEF]: Insulation
+[DEF]: Nightsight
+[DEF]: Kola
+[DEF]: Mindseye
+[DEF]: Speed
+[DEF]: Fangbarrier
+[DEF]: Fury
+[DEF]: Blindness
+[DEF]: Deafness
+
+Reyl traces a logograph depicting a lunging bear in the air before you, the blood upon his
+knife bursting into arcane flame as it hangs in the wake of the blade's passage.
+Even as the logograph becomes fully formed it leaps from the air to you, ephemeral claws
+plunging into your chest and leaving lines of icy fire in their wake.
+[AFF]: Haemophilia
+You sense a subtle change deep within.
+Reyl raises his left hand, and decisively snaps his fingers.
+Darkness swallows you in a writhing tide of chittering buzzing bodies. The insects swarm over
+your face, stinging at your eyes, scuttling into your mouth. You struggle to breathe but only 
+draw in more of the myriad enemy and you asphyxiate on the corpses of your killers.
+You drop back and ease the engagement.
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+You have been slain by Reyl.
+[SLC]: Reset all limb counts.
+[INR]: 22 Ginseng (586)
+[INR]: 7 Goldenseal (1493)
+[INR]: 16 Bloodroot (851)
+[INR]: 5 Kelp (1664)
+[INR]: 1 Irid (1363)
+**********************************************************
+You have been defeated and are thrown out of the Arena.
+**********************************************************
+ 

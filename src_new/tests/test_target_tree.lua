@@ -31,6 +31,7 @@ end
 ataxiaTemp, tAffs, affTimers = {}, {}, {}
 
 for _, f in ipairs({
+  "src_new/scripts/levi_ataxia/levi/ataxia/016_Targeting_Functions.lua",
   "src_new/scripts/levi_ataxia/levi/ataxia/017_Affliction_Management.lua",
   "src_new/scripts/levi_ataxia/levi/ataxia/curing/002_Wide_Groups.lua",
   "src_new/scripts/levi_ataxia/levi/ataxia/affliction_tracking_core/007_Branching_State_Tracker.lua",
@@ -294,6 +295,245 @@ describe("tSingleRandom(opts) (curing/002)", function()
     expect(P("asthma")).toBe(1)
     expect(passiveFailsafe).toBe("slickness")
     expect(echoed[#echoed]).toBe("<red> -slickness")
+  end)
+end)
+
+describe("the target's focus clock (triggers 398, 399)", function()
+  local TRG = "src_new/triggers/levi_ataxia/for_levi/leviticus/"
+  local UNK, KNOWN = TRG .. "398_Focus_(UNK).lua", TRG .. "399_Focus_(known).lua"
+  local UNK_BODY, KNOWN_BODY = body(UNK), body(KNOWN)
+  local function focusLine(who) return "A look of extreme focus crosses the face of " .. who .. "." end
+
+  local function focus(who)
+    line = focusLine(who)
+    matches = { line, who }
+    UNK_BODY()
+  end
+  -- The clock's length: 398 and 399 name the timer, so read its delay.
+  local function clock() return mock.active_timers[tBals.timers.focus].delay end
+
+  it("the trigger's own pattern matches the line", function()
+    expect(TL.anyMatches(TL.patterns(UNK), focusLine("Agathon"))).toBeTrue()
+  end)
+
+  it("a bystander's focus leaves the target's clock alone", function()
+    world()
+    targetIshere = false
+    focus("Bystander")
+    expect(tBals.focus).toBeTrue()
+    expect(tBals.focusUsedAt).toBeNil()
+    expect(tBals.timers.focus).toBeNil()
+    expect(targetIshere).toBeFalse()             -- and it does not say the target is here
+  end)
+
+  it("so the target's real cure right after a bystander's focus still counts", function()
+    world()
+    tarAffed("anorexia")
+    focus("Bystander")
+    focus("Agathon")
+    expect(P("anorexia")).toBe(0)
+    expect(tBals.focus).toBeFalse()
+  end)
+
+  it("the target's focus starts the 2 s clock and says he is here", function()
+    world()
+    targetIshere = false
+    now = 1234.5
+    focus("Agathon")
+    expect(tBals.focus).toBeFalse()
+    expect(tBals.focusUsedAt).toBe(1234.5)
+    expect(clock()).toBe(2)
+    expect(targetIshere).toBeTrue()
+    mock.fire_timers()
+    expect(tBals.focus).toBeTrue()
+    expect(tBals.timers.focus).toBeNil()
+  end)
+
+  it("a focus line while the clock runs moves nothing (an illusion), as in 399", function()
+    world()
+    tBals.focus = false
+    focus("Agathon")
+    expect(tBals.timers.focus).toBeNil()
+    expect(tBals.focusUsedAt).toBeNil()
+  end)
+
+  it("398 under shadowmadness: 4.8 s, below the measured floor of 4.82", function()
+    world()
+    tarAffed("shadowmadness")
+    focus("Agathon")
+    expect(clock()).toBe(4.8)
+  end)
+
+  it("399 under shadowmadness: the same 4.8 s", function()
+    world()
+    serpent = nil
+    tarAffed("shadowmadness")
+    multimatches = { { focusLine("Agathon"), "Agathon" }, {}, { "The next line." } }
+    KNOWN_BODY()
+    expect(clock()).toBe(4.8)
+  end)
+end)
+
+describe("one reset for the target's balances (ataxia_resetTargetBals, 016)", function()
+  local TRG = "src_new/triggers/levi_ataxia/for_levi/leviticus/"
+  local SITES = {
+    "src_new/scripts/levi_ataxia/levi/ataxia/login/001_Login_Function.lua",
+    "src_new/scripts/levi_ataxia/levi/levi_scripts/mage/006_Target_Priority.lua",
+    TRG .. "401_Target_Has_Died.lua",
+    TRG .. "405_Starburst!.lua",
+  }
+  local function read(path)
+    local fh = assert(io.open(path, "r"))
+    local src = fh:read("*a"); fh:close()
+    return src
+  end
+  -- How many running timers write this field of tBals.
+  local function timersWriting(field)
+    local n = 0
+    for _, t in pairs(mock.active_timers) do
+      if type(t.callback) == "string" and t.callback:find("tBals." .. field .. " = true", 1, true) then n = n + 1 end
+    end
+    return n
+  end
+  local function isFullShape()
+    for _, k in ipairs({ "tree", "focus", "plant", "salve", "passive" }) do
+      if tBals[k] ~= true then error("tBals." .. k .. " should be true but is " .. tostring(tBals[k]), 2) end
+    end
+    expect(next(tBals.timers)).toBeNil()
+  end
+  -- The old target's tree and focus are down, with both timers running.
+  local function oldTargetDown()
+    world()
+    tree()
+    line = "A look of extreme focus crosses the face of Agathon."
+    matches = { line, "Agathon" }
+    body(TRG .. "398_Focus_(UNK).lua")()
+    expect(timersWriting("tree")).toBe(1)
+    expect(timersWriting("focus")).toBe(1)
+  end
+
+  it("kills every running timer and restores the whole shape", function()
+    oldTargetDown()
+    ataxia_resetTargetBals()
+    expect(timersWriting("tree")).toBe(0)
+    expect(timersWriting("focus")).toBe(0)
+    isFullShape()
+  end)
+
+  it("the old target's 13 s tree timer cannot mark the new target's tree up early", function()
+    oldTargetDown()
+    ataxia_resetTargetBals()
+    target = "Brunhild"
+    isTargeted = function(n) return n == "Brunhild" end
+    line = "Brunhild touches a tree of life tattoo."
+    matches = { line, "Brunhild" }
+    TREE_BODY()
+    expect(tBals.tree).toBeFalse()
+    expect(timersWriting("tree")).toBe(1)        -- his, alone
+  end)
+
+  -- The focus knocks start the same kind of timer, so an old target's knock must not free the new
+  -- target's focus clock.
+  describe("the focus knocks name their timer", function()
+    local KNOCKS = {
+      { "homunculus", TRG .. "homunculus/001_Focus_Knock.lua", 2.3 },
+      { "water lord", TRG .. "water_lord/011_++_Focus_Knock_++.lua", 2 },
+    }
+    local function knock(path)
+      local saved = deselect
+      deselect = function() end
+      matches = { "the knock line", "Agathon" }
+      body(path)()
+      deselect = saved
+    end
+    for _, k in ipairs(KNOCKS) do
+      it(k[1] .. ": the reset kills it", function()
+        world()
+        knock(k[2])
+        expect(tBals.focus).toBeFalse()
+        expect(timersWriting("focus")).toBe(1)
+        expect(mock.active_timers[tBals.timers.focus].delay).toBe(k[3])
+        ataxia_resetTargetBals()
+        expect(timersWriting("focus")).toBe(0)
+      end)
+
+      it(k[1] .. ": when it runs it marks the focus up and drops its id", function()
+        world()
+        knock(k[2])
+        expect(tBals.timers.focus ~= nil).toBeTrue()
+        mock.fire_timers()
+        expect(tBals.focus).toBeTrue()
+        expect(tBals.timers.focus).toBeNil()
+      end)
+    end
+
+    it("homunculus: a knock replaces a running focus clock, so one timer stays", function()
+      world()
+      line = "A look of extreme focus crosses the face of Agathon."
+      matches = { line, "Agathon" }
+      body(TRG .. "398_Focus_(UNK).lua")()
+      knock(TRG .. "homunculus/001_Focus_Knock.lua")
+      expect(timersWriting("focus")).toBe(1)
+    end)
+
+    it("homunculus under shadowmadness keeps its 5 s", function()
+      world()
+      tarAffed("shadowmadness")
+      knock(TRG .. "homunculus/001_Focus_Knock.lua")
+      expect(mock.active_timers[tBals.timers.focus].delay).toBe(5)
+    end)
+  end)
+
+  it("is safe with no table and with no timers", function()
+    world()
+    tBals = nil
+    ataxia_resetTargetBals()
+    isFullShape()
+    tBals = {}                                   -- 016's own load-order case (test_tekura6_kai)
+    ataxia_resetTargetBals()
+    isFullShape()
+  end)
+
+  -- Both triggers dropped salve and passive, so "not tBals.salve" read true (dwc_runie, 033).
+  local function deathLineResets(path, text)
+    oldTargetDown()
+    ataxia_paused = function() return false end
+    ataxia_isClass = function() return false end
+    twohanded_resetFractures, expandAlias = function() end, function() end
+    shikudo = nil
+    line = text
+    matches = { text, "Agathon" }
+    body(path)()
+    isFullShape()
+    expect(timersWriting("tree")).toBe(0)
+    expect(timersWriting("focus")).toBe(0)
+  end
+
+  it("trigger 401 (the target died) keeps salve and passive, and kills the timers", function()
+    deathLineResets(TRG .. "401_Target_Has_Died.lua", "You have slain Agathon.")
+  end)
+
+  it("trigger 405 (starburst) keeps salve and passive, and kills the timers", function()
+    deathLineResets(TRG .. "405_Starburst!.lua", "A starburst tattoo flares and bathes Agathon in red light.")
+  end)
+
+  it("no site replaces tBals by hand: 016 holds the only literal", function()
+    for _, path in ipairs(SITES) do
+      local src = read(path)
+      if src:find("tBals = {", 1, true) then error(path .. " replaces tBals by hand") end
+      if not src:find("ataxia_resetTargetBals()", 1, true) then error(path .. " does not call the helper") end
+    end
+    local _, literals = read("src_new/scripts/levi_ataxia/levi/ataxia/016_Targeting_Functions.lua"):gsub("tBals = {", "")
+    expect(literals).toBe(1)
+  end)
+
+  it("the basher's load-time seed has the same shape", function()
+    local src = read("src_new/scripts/levi_ataxia/levi/ataxia/basher/001_Bashing_Functions.lua")
+    local seed = assert((loadstring or load)("return " .. src:match("tBals = tBals or (%b{})")))()
+    world()
+    ataxia_resetTargetBals()
+    for k in pairs(seed) do if tBals[k] == nil then error("the helper has no " .. k) end end
+    for k in pairs(tBals) do if seed[k] == nil then error("the seed has no " .. k) end end
   end)
 end)
 end)

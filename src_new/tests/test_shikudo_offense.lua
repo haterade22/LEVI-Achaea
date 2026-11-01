@@ -412,6 +412,39 @@ local function ran(sent, width)
   return had ~= nil and shikudoLock.state.pending == nil
 end
 
+-- `ran` above prints the whole chain, which is what the older docs expected. On the raw path Mudlet
+-- splits the `;`, so the game queues only the first command, and that is all the row shows:
+-- 0 of 650 `Running queued` rows hold `;` (kb/mechanics/balance-and-queueing.md). These pin that row.
+describe("the raw path's real run line: the chain's first command only (007)", function()
+  local ROW = "[System]: Running queued free command: G BODY"
+
+  local function rawRound(prefix)
+    fight("Oak", 3, {})
+    local saved = combatQueue
+    combatQueue = function() return prefix end
+    local line = dispatchLine()
+    combatQueue = saved
+    return line
+  end
+
+  it("the pattern reads G BODY, and that row commits a round that starts with g body", function()
+    expect(TL.matches(shikudoLock.RAN_PATTERN, 1, ROW)).toBeTrue()
+    local line = rawRound("g body;g gold;stand;")
+    expect(line:find("^queue addclear free g body;") ~= nil).toBeTrue()
+    expect(line:find("combo Agathon", 1, true) ~= nil).toBeTrue()
+    expect(shikudoLock.onQueueRan("G BODY")).toBeTrue()
+    expect(shikudoLock.state.pending).toBeNil()
+    expect(shikudoLock.state.runLine).toBeTrue()
+  end)
+
+  it("it commits nothing when the round starts with another command", function()
+    rawRound("")
+    expect(shikudoLock.onQueueRan("G BODY")).toBeFalse()
+    expect(shikudoLock.state.pending ~= nil).toBeTrue()
+    expect(shikudoLock.state.runLine).toBeFalse()
+  end)
+end)
+
 -- One round the game runs: a press of `sr`, then the run line of what it queued.
 local function round(width)
   local line = dispatchLine()

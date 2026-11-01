@@ -28,6 +28,17 @@ attributes:
 packageName: ''
 ]]--
 
+-- Puts the target's cure balances back to "all up". Five sites replaced tBals by hand. The old
+-- timers kept running, and their code writes to the global tBals, so the old target's 13 s tree
+-- timer (trigger 389) marked the NEW target's tree up early and cleared its timer id. Two sites
+-- also dropped salve and passive, so "not tBals.salve" read true. One helper, one shape.
+function ataxia_resetTargetBals()
+	if tBals and tBals.timers then
+		for _, id in pairs(tBals.timers) do killTimer(id) end
+	end
+	tBals = {tree = true, focus = true, plant = true, salve = true, timers = {}, passive = true}
+end
+
 function switchTarget(who)
 	local tName = who
 	possible_targets = ataxiaTemp.enemies or {}
@@ -108,7 +119,7 @@ function switchTarget(who)
     if target_calling then send("pt Target: "..target) end
 
     targetresetafflictionslevi()
-    tBals = {tree = true, focus = true, plant = true, salve = true, timers = {}, passive = true}
+    ataxia_resetTargetBals()
     ataxiaTemp.bleeding = 0
     if lb and lb.resetAll then lb.resetAll(target) end
     readAuraAffs = { count = 0, list = {} }

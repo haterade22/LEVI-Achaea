@@ -79,9 +79,11 @@
   player-flee) live in the former, and a swarm pull chain is one queue entry that any
   `addclearfull` would wipe.
 
-- **One queued line is ONE queue entry.** `queue addclearfull stand;<a>;<b>` executes `<a>` and
-  `<b>` back to back the instant it fires, so `<b>` gating on "do I have equilibrium / word
-  balance / shin *right now*?" is reading a moment before `<a>` ran. Both pass, only the first
+- **A `;` chain is NOT one queue entry (corrected 2026-11-01).** Mudlet splits `;` before sending, so
+  `queue addclearfull stand;<a>;<b>` queues only `stand`; `<a>` and `<b>` go raw and the game's
+  auto-queue re-adds refusals (`kb/mechanics/balance-and-queueing.md`, CONFLICTS #53). One spender per
+  round is still the rule: `<b>` gating on "do I have equilibrium / word balance / shin *right now*?"
+  is reading a moment before `<a>` ran. Both pass, only the first
   pays, the second is REJECTED -- after stamping its cooldown. Three live instances (Blademaster
   shin, Depthswalker word, and the shin arithmetic that fails even when the eq would not). When
   you add an ability to a rotation: name its resource, then grep the same function for anything

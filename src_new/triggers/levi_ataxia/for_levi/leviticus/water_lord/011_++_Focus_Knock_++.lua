@@ -43,6 +43,9 @@ local name = matches[2]
 if isTargeted(matches[2]) and tBals.focus then
 	tarAffed("nausea")
 	tBals.focus = false
-	tempTimer(2, [[tBals.focus = true]])
+	-- A named timer, as in 398: ataxia_resetTargetBals can kill it, so an old target's knock cannot
+	-- mark the new target's focus up early.
+	if tBals.timers.focus then killTimer(tBals.timers.focus) end
+	tBals.timers.focus = tempTimer(2, [[tBals.focus = true; tBals.timers.focus = nil]])
 	targetIshere = true
 end

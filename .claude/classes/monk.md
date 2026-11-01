@@ -211,8 +211,9 @@ staff:  # shikudoLock.STAFF + pickStaff(form, arm, leg), 007:347-390: the strike
   fixed: "v4.7.417's 'hiraku hiraku' in Willow, 'ruku torso ruku torso' / 'jinzuku jinzuku' in Maelstrom, and
     Rain's lone ruku torso"
 
-round_planner:  # shikudoLock.dispatch(), 007:575-675. Every round is ONE 'queue addclear free' entry (free waits
-                # for equilibrium AND balance) and ends ';assess <t>' (config.assessEachRound)
+round_planner:  # shikudoLock.dispatch(), 007:575-675. Every round is ONE 'queue addclear free' line. Mudlet splits its
+                # `;` on the raw path, so only the first command waits (see "round_delivery" in Shikudo
+                # Implementation). It ends ';assess <t>' (config.assessEachRound) only with Health Inspector
   1_shield: "a shield on the target: 'wield staff;combo <t> shatter <kick>' (a crescent pick becomes risingkick
     torso)"
   2_kill: "truelocked and KAI CHOKE affordable (10 kai through ataxia_kaiAfford('choke'); unknown kai is not):
@@ -826,6 +827,27 @@ transition_map:
 
 ## Shikudo Implementation (LEVI System)
 ```yaml
+round_delivery:  # 2026-11-01, kb/mechanics/balance-and-queueing.md. OFF by default and NOT yet proven in a fight.
+  flag: "`aconfig rounds alias|raw`, saved per class in ataxia.settings.roundDelivery. Monk only, never while the
+    basher is on. It reaches every Monk round, Tekura's too"
+  raw_path: "the default. Mudlet splits `;`: only `g body` is queued, the rest go at once, and the auto-queue catches
+    what is refused. Measured for Monk: setup ran before the attack in 8 of 71 flushes, a superseded attack fired in 15%.
+    The run line shows `G BODY` only, so 011 sees no combo in it, and at the cap Rain's burst stays over (pinned, not fixed)"
+  alias_path: "`setalias lvfree stand/g body/g gold/wield staff/combo T ...`, then `queue addclear free lvfree`. We expect
+    a run line naming LVFREE, until the first alias fight confirms it. ataxia_roundRan reads it as the chain, so 007's and
+    011's pending rounds still commit. `aconfig rounds alias` puts both back on the press-time count until one matches"
+  stays_raw: "`ts`, `cwd`, tarot lust's `reject` and MIND BLACKOUT's press send what they send with the flag off"
+  chains:  # with combatQueue()'s `g body;g gold;stand;` first, as the shim sends them: stand first
+    006_dispatch: "wield; dispatch|incapacitate|combo. The spender is last. ASSESS follows only with Health Inspector"
+    007_lock: "wield; [transition;] combo, or [transition;] mind, or kai choke. The spender is last. A separate
+      transition costs no balance (kb/combat/shikudo.md:80). config.chainTelepathy (default off) adds mind after the combo"
+    011_vv: "[wield shield;] mind. The spender is last. MIND BLACKOUT's press stays raw, with the combo it hides"
+    013_group_damage: "wield; [transition;] combo; in Rain the EQ rider (kai choke | mind crush) comes AFTER the combo.
+      The spender is NOT last there, and the shim does not move it. Whether the rider is refused off balance is open"
+    tekura: "unwield all; dismount; combo. The spender is last"
+    no_caller: "004 levishikudodispatch and 005 levishikudoneedleattack have no alias or trigger calling them. 005 puts
+      `transition to the <form> form` after the combo"
+    switched_off: "008, 009, and the aliases `sr` (001_Group_Flow_Attack), `sc` and the combo grid"
 # LIVE: 006_CC_Shikudo_Dispatch.lua (dispatch), 007_CC_Shikudo_Lock.lua (lock) and 011_Shikudo_Telepathy.lua
 # (vv: the dispatch with Telepathy, v4.7.420), with the strike ledger (010) and the shared monk state in
 # ataxia/monk/004. 008 (the old "unified" file with setMode, riftlock and godmode) is SWITCHED OFF, so none

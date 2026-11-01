@@ -1,0 +1,1541 @@
+Talo clenches a hand into a fist, a sudden force locking closed about your throat and
+constricting your airflow.
+[AFF]: Deadening
+Health lost: 755 (asphyxiation).
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+[Legacy]: Curing against Airlord (Talo).
+H:5020|86% M:5313|100%  18:57:40:105  [ Talo ][0|0|0|0|0|0] ( -755h 13% )[ddn] 
+[Curing]: SMOKE ELM
+You take a long drag of slippery elm off your pipe.
+You are no longer deadened.
+[AFF]: Deadening
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5775|100% M:5313|100%  18:57:40:206  [ Talo ][0|0|0|0|0|0] ( +755h 13% )
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Talo)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Engage:    (Talo)
+Equilibrium used: 2.00s..
+Afflicted: (Clumsiness Paralysis)
+[clum, para]
+H:5775|100% M:5263|99%  18:57:41:226  [ Talo ][0|0|0|0|0|0]
+Talo eats a bloodroot leaf.
+Processed Cures(paralysis)
+[clum]
+
+H:5775|100% M:5263|99%  18:57:41:387  [ Talo ][0|0|0|0|0|0]
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.521)
+H:5775|100% M:5263|99%  18:57:41:726  [ Talo ][0|0|0|0|0|0]
+Talo casts a hand out in your direction, an icy zephyr descending upon you to tear your
+fortitude away.
+[AFF]: Manaleech
+Health lost: 654 (asphyxiation).
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:5121|88% M:5263|99%  18:57:42:274  [ Talo ][0|0|0|0|0|0] ( -654h 11% )[mleech] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+H:5121|88% M:5263|99%  18:57:42:366  [ Talo ][0|0|0|0|0|0]
+Talo eats a piece of kelp.
+Processed Cures(clumsiness)
+H:5121|88% M:5263|99%  18:57:42:923  [ Talo ][0|0|0|0|0|0]
+You feel a sudden pressure close about your throat, cutting off your ability to breathe and
+making your mind grow foggy.
+[AFF]: Deadening
+H:5121|88% M:5263|99%  18:57:43:109  [ Talo ][0|0|0|0|0|0][ddn] 
+You have recovered equilibrium.
+You have recovered balance on all limbs.
+Envenomed: (Vernalius)
+Sliced:    (Talo)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (78%/100%).
+Afflicted: (Weariness Paralysis)
+[weari, para]
+H:5236|90% M:5163|97%  18:57:43:258  [ Talo ][0|0|0|0|0|0][ddn] 
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+You are no longer deadened.
+[AFF]: Deadening
+Talo takes a drink from an elegant diamond vial.
+H:5236|90% M:5163|97%  18:57:43:345  [ Talo ][0|0|0|0|0|0]
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.451)
+H:5236|90% M:5163|97%  18:57:43:816  [ Talo ][0|0|0|0|0|0]
+Talo eats a bloodroot leaf.
+A howling wind sweeps over you, its terrible power scouring flesh from bone and leaving your
+face a bloody ruin by the will of Talo.
+Processed Cures(paralysis)
+[AFF]: Disloyalty
+Health lost: 841 (asphyxiation).
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:4395|76% M:5163|97%  18:57:44:583  [ Talo ][0|0|0|0|0|0] ( -841h 14% )[disl] 
+The tempestuous form of Talo is cleansed by a purifying breeze.
+Processed Cures(weariness)
+H:4395|76% M:5163|97%  18:57:44:586  [ Talo ][0|0|0|0|0|0][disl] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+You no longer will inspire disloyalty among friends.
+[AFF]: Disloyalty
+[Curing]: OUTR MOSS
+[OUTR]: 1 Irid (1378)
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+You may drink another health or mana elixir. Health (4.485)
+H:4857|84% M:5313|100%  18:57:44:691  [ Talo ][0|0|0|0|0|0] ( +462h 8% )
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5752|99% M:5313|100%  18:57:44:866  [ Talo ][0|0|0|0|0|0] ( +895h 15% )
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Talo)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (88%/100%).
+Afflicted: (Clumsiness Paralysis)
+[clum, para]
+A second rush of icy wind sweeps over you, leeching away your strength.
+[AFF]: Manaleech
+H:5752|99% M:5213|98%  18:57:45:261  [ Talo ][0|0|0|0|0|0][mleech] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.493)
+H:5752|99% M:5163|97%  18:57:46:181  [ Talo ][0|0|0|0|0|0][mleech] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+Talo eats a bloodroot leaf.
+Processed Cures(paralysis)
+[clum]
+
+H:5752|99% M:5163|97%  18:57:46:272  [ Talo ][0|0|0|0|0|0]
+As the dark intent of Talo falls upon you, you feel the air surrounding you begin to thrum with
+tension.
+[AFF]: Pressure
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:5752|99% M:5163|97%  18:57:46:527  [ Talo ][0|0|0|0|0|0][pressure(1)] 
+You have recovered balance on all limbs.
+Envenomed: (Vernalius)
+Sliced:    (Talo)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (76%/100%).
+Afflicted: (Weariness Paralysis)
+[clum, weari, para]
+H:5752|99% M:5063|95%  18:57:47:378  [ Talo ][0|0|0|0|0|0][pressure(1)] 
+A howling wind sweeps over you, its terrible power scouring flesh from bone and leaving your
+face a bloody ruin.
+[AFF]: Disloyalty
+H:5752|99% M:5063|95%  18:57:47:518  [ Talo ][0|0|0|0|0|0][pressure(1) disl] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.436)
+H:5752|99% M:5063|95%  18:57:47:707  [ Talo ][0|0|0|0|0|0][pressure(1) disl] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+You no longer will inspire disloyalty among friends.
+[AFF]: Disloyalty
+Talo eats a bloodroot leaf.
+Talo touches a tree of life tattoo.
+Processed Cures(paralysis)
+Talo takes a drink from an elegant diamond vial.
+Processed Cures(clumsiness weariness)
+H:5752|99% M:5063|95%  18:57:47:792  [ Talo ][0|0|0|0|0|0][pressure(1)] 
+You suddenly perceive the vague outline of an aura of rebounding around Talo.
+H:5752|99% M:5063|95%  18:57:48:068  [ Talo ][0|0|0|0|0|0][pressure(1)] 
+Talo's aura of weapons rebounding disappears.
+Talo casts a hand out in your direction, an icy zephyr descending upon you to tear your
+fortitude away.
+[AFF]: Manaleech
+Health lost: 654 (asphyxiation).
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:5098|88% M:5063|95%  18:57:48:495  [ Talo ][0|0|0|0|0|0] ( -654h 11% )[pressure(1) mleech] 
+Talo takes a long drag off his pipe.
+H:5098|88% M:5063|95%  18:57:48:578  [ Talo ][0|0|0|0|0|0][pressure(1) mleech] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.438)
+H:5098|88% M:5138|96%  18:57:49:228  [ Talo ][0|0|0|0|0|0][pressure(1) mleech] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+You may drink another health or mana elixir. Health (4.457)
+H:5098|88% M:5138|96%  18:57:49:323  [ Talo ][0|0|0|0|0|0][pressure(1)] 
+You have recovered balance on all limbs.
+Envenomed: (Kalmia)
+Sliced:    (Talo)
+Runeblade: (Nairat)
+Afflicted: (Frozen)
+Empower:   (Sleizak)
+Afflicted: (Weariness)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Sensitivity)
+[HP]:      (86%/100%).
+Afflicted: (Asthma Paralysis Prefarar)
+[ast, clum[50], weari, deaf, frzn[200], para]
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+Talo eats a bloodroot leaf.
+Talo takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+Processed Cures(paralysis)
+H:5775|100% M:4938|92%  18:57:49:483  [ Talo ][0|0|0|0|0|0] ( +677h 11% -200m 3% )[pressure(1)]
+ 
+A howling wind sweeps over you, its terrible power scouring flesh from bone and leaving your
+face a bloody ruin by the will of Talo.
+[AFF]: Disloyalty
+Health lost: 841 (asphyxiation).
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:4934|85% M:4938|92%  18:57:50:404  [ Talo ][0|0|0|0|0|0] ( -841h 14% )[pressure(1) disl] 
+Talo takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+H:4934|85% M:4888|92%  18:57:50:577  [ Talo ][0|0|0|0|0|0][pressure(1) disl] 
+You may eat another bit of irid moss or potash.
+H:4934|85% M:4888|92%  18:57:50:580  [ Talo ][0|0|0|0|0|0][pressure(1) disl] 
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+You no longer will inspire disloyalty among friends.
+[AFF]: Disloyalty
+H:4934|85% M:4888|92%  18:57:50:585  [ Talo ][0|0|0|0|0|0][pressure(1)] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.433)
+H:4934|85% M:4888|92%  18:57:50:755  [ Talo ][0|0|0|0|0|0][pressure(1)] 
+[Curing]: OUTR PEAR
+[OUTR]: 1 Pear (1593)
+[Curing]: EAT PEAR
+You eat a prickly pear.
+The oppressive pressure weighing down on you lifts.
+[AFF]: Pressure
+H:4934|85% M:4888|92%  18:57:50:871  [ Talo ][0|0|0|0|0|0]
+Talo eats a hawthorn berry.
+H:4934|85% M:4888|92%  18:57:51:083  [ Talo ][0|0|0|0|0|0]
+A second rush of icy wind sweeps over you, leeching away your strength.
+[AFF]: Manaleech
+H:4934|85% M:4888|92%  18:57:51:353  [ Talo ][0|0|0|0|0|0][mleech] 
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Talo)
+Proc:      (Sleizak 1)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (73%/100%).
+Afflicted: (Slickness Paralysis)
+[ast, clum[50], weari, naus, deaf, slick, para]
+Your lungs have recovered enough to smoke another mineral or plant.
+H:4934|85% M:4788|90%  18:57:52:360  [ Talo ][0|0|0|0|0|0][mleech] 
+[Curing]: SMOKE VALERIAN
+Fireflies dance around the jar-shaped bowl of your pipe as smoke gently rises.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+Talo takes a drink from an elegant diamond vial.
+H:4934|85% M:4788|90%  18:57:52:548  [ Talo ][0|0|0|0|0|0]
+Talo eats a bloodroot leaf.
+Processed Cures(paralysis slickness)
+[ast, clum[50], weari, naus, deaf, slick[50], para[50]]
+
+H:4934|85% M:4788|90%  18:57:52:697  [ Talo ][0|0|0|0|0|0]
+A fierce mountain falcon rips out a chunk of Talo's flesh with its beak.
+H:4934|85% M:4788|90%  18:57:52:799  [ Talo ][0|0|0|0|0|0]
+A howling wind sweeps over you, its terrible power scouring flesh from bone and leaving your
+face a bloody ruin.
+[AFF]: Disloyalty
+H:4934|85% M:4788|90%  18:57:53:256  [ Talo ][0|0|0|0|0|0][disl] 
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Torso) (7.1%)
+Empower:   (Sleizak)
+Shield:    (Scrambled Brains)
+Ferocity:  [####|####|####|####]
+[HP]:      (83%/100%).
+Afflicted: (Slickness Dizziness).*
+[diz, ast, clum[50], weari, naus, deaf, slick, para[50]]
+A look of extreme focus crosses the face of Talo.
+H:4934|85% M:4588|86%  18:57:53:426  [ Talo ][0|7.1|0|0|0|0] ( -200m 3% )[disl] 
+You may drink another health or mana elixir. Health (4.429)
+H:5049|87% M:4588|86%  18:57:53:911  [ Talo ][0|7.1|0|0|0|0][disl] 
+Your lungs have recovered enough to smoke another mineral or plant.
+H:5049|87% M:4588|86%  18:57:54:004  [ Talo ][0|7.1|0|0|0|0][disl] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+You no longer will inspire disloyalty among friends.
+[AFF]: Disloyalty
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5775|100% M:4588|86%  18:57:54:097  [ Talo ][0|7.1|0|0|0|0] ( +726h 12% )
+Talo eats a bloodroot leaf.
+Talo clenches a hand into a fist, a sudden force locking closed about your throat and
+constricting your airflow.
+Processed Cures(paralysis slickness)
+[AFF]: Deadening
+Health lost: 755 (asphyxiation).
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:5020|86% M:4588|86%  18:57:54:228  [ Talo ][0|7.1|0|0|0|0] ( -755h 13% )[ddn] 
+The tempestuous form of Talo is cleansed by a purifying breeze.
+Processed Cures(asthma clumsiness dizziness nausea slickness weariness)
+[diz[83], ast[83], clum[42], weari[83], naus[83], slick[42]]
+
+H:5020|86% M:4588|86%  18:57:54:591  [ Talo ][0|7.1|0|0|0|0][ddn] 
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Torso)
+Talo parries the attack with a deft manoeuvre.
+
+ YOU HIT PARRY(Torso)!!
+
+
+
+ YOU HIT PARRY(Torso)!!
+
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (85%/100%).
+Afflicted: (Paralysis).*
+[diz[83], ast[83], clum[42], weari[83], slick[42], para]
+
+Processed Cures(dizziness)
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.565)
+[Curing]: SMOKE ELM
+You take a long drag of slippery elm off your pipe.
+You are no longer deadened.
+[AFF]: Deadening
+H:5020|86% M:4438|83%  18:57:55:662  [ Talo ][0|7.1|0|0|0|0]
+A fierce mountain falcon rips out a chunk of Talo's flesh with its beak.
+H:5020|86% M:4438|83%  18:57:55:884  [ Talo ][0|7.1|0|0|0|0]
+Talo eats a bloodroot leaf.
+Processed Cures(paralysis slickness)
+[ast[83], clum[42], weari[83], para[50]]
+
+H:5020|86% M:4438|83%  18:57:56:063  [ Talo ][0|7.1|0|0|0|0]
+Talo casts a hand out in your direction, an icy zephyr descending upon you to tear your
+fortitude away.
+[AFF]: Manaleech
+Health lost: 654 (asphyxiation).
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:4366|75% M:4438|83%  18:57:56:324  [ Talo ][0|7.1|0|0|0|0] ( -654h 11% )[mleech] 
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+Empower:   (Inguz)
+Talo takes a drink from an elegant diamond vial.
+H:4828|83% M:4763|89%  18:57:56:953  [ Talo ][0|7.1|0|0|0|0] ( +462h 8% +325m 6% )[mleech] 
+You suddenly perceive the vague outline of an aura of rebounding around Talo.
+H:4828|83% M:4763|89%  18:57:57:050  [ Talo ][0|7.1|0|0|0|0][mleech] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.47)
+H:4828|83% M:4763|89%  18:57:57:133  [ Talo ][0|7.1|0|0|0|0][mleech] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+H:4828|83% M:4763|89%  18:57:57:138  [ Talo ][0|7.1|0|0|0|0]
+You may utilise the tree tattoo again. Tree (13.926)
+You feel a sudden pressure close about your throat, cutting off your ability to breathe and
+making your mind grow foggy.
+[AFF]: Deadening
+H:4828|83% M:4763|89%  18:57:57:271  [ Talo ][0|7.1|0|0|0|0][ddn] 
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+You are no longer deadened.
+[AFF]: Deadening
+H:4828|83% M:4763|89%  18:57:57:351  [ Talo ][0|7.1|0|0|0|0]
+
+[DEF]: Insulation
+[DEF]: Fangbarrier
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Talo)
+The attack rebounds back onto you!
+Health lost: 379 (physical cutting).
+Runeblade: (Nairat)
+Afflicted: (Frozen)
+[AFF]: Shivering
+[AFF]: Slickness
+The protective covering coating your skin sloughs off.
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+Shield:    (Paralysis)
+The attack rebounds back onto you!
+[AFF]: Paralysis
+Your muscles lock in painful contractions in reaction to the blow.
+Health lost: 106 (physical blunt).
+[HP]:      (100%/100%).
+[ast[83], clum[42], weari[83], frzn[200], para[50], Reb]
+[Curing]: OUTR BLOODROOT
+[OUTR]: 1 Bloodroot (850)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+Talo eats a piece of kelp.
+Talo takes a long drag off his pipe.
+Processed Cures(asthma clumsiness weariness)
+H:4343|75% M:4663|87%  18:57:57:574  [ Talo ][0|7.1|0|0|0|0] ( -485h 8% )[SLCK shiv] 
+
+[Predicted]: PARALYSIS
+[OUTR]: 1 Bloodroot (849)
+The empowerment of the sleizak rune fades.
+H:4343|75% M:4663|87%  18:57:57:840  [ Talo ][0|7.1|0|0|0|0][SLCK shiv] 
+Talo's aura of weapons rebounding disappears.
+A howling wind sweeps over you, its terrible power scouring flesh from bone and leaving your
+face a bloody ruin by the will of Talo.
+[AFF]: Disloyalty
+Health lost: 841 (asphyxiation).
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:3502|60% M:4663|87%  18:57:58:332  [ Talo ][0|7.1|0|0|0|0] ( -841h 14% )[SLCK shiv disl] 
+Your ferocity decreases.
+H:3502|60% M:4663|87%  18:57:58:590  [ Talo ][0|7.1|0|0|0|0][SLCK shiv disl] 
+You may drink another health or mana elixir. Health (4.495)
+H:3502|60% M:4738|89%  18:57:58:594  [ Talo ][0|7.1|0|0|0|0][SLCK shiv disl] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.545)
+H:3502|60% M:4738|89%  18:57:58:682  [ Talo ][0|7.1|0|0|0|0][SLCK shiv disl] 
+[Curing]: SMOKE VALERIAN
+Fireflies dance around the jar-shaped bowl of your pipe as smoke gently rises.
+Your glands cease their oily secretion.
+[AFF]: Slickness
+[Curing]: APPLY CALORIC
+You take out some salve and quickly rub it on your skin.
+Your body warms up and you stop shivering.
+[AFF]: Shivering
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:4459|77% M:4738|89%  18:57:58:690  [ Talo ][0|7.1|0|0|0|0] ( +957h 16% )[disl] 
+A fierce mountain falcon rips out a chunk of Talo's flesh with its beak.
+H:4459|77% M:4738|89%  18:57:59:016  [ Talo ][0|7.1|0|0|0|0][disl] 
+Talo takes a long drag off his pipe.
+H:4459|77% M:4738|89%  18:57:59:132  [ Talo ][0|7.1|0|0|0|0][disl] 
+You may eat another plant or mineral. Eat (1.565)
+H:4459|77% M:4738|89%  18:57:59:135  [ Talo ][0|7.1|0|0|0|0][disl] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+[Curing]: OUTR SILERIS
+[OUTR]: 1 Sileris (853)
+[Curing]: APPLY SILERIS
+You apply a sileris berry to yourself.
+Talo eats a piece of kelp.
+Processed Cures(weariness)
+[frzn[200], para[50]]
+
+H:4459|77% M:4738|89%  18:57:59:270  [ Talo ][0|7.1|0|0|0|0][disl] 
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Talo)
+Runeblade: (Nairat)
+Afflicted: (Frozen)
+Proc:      (Inguz)
+Afflicted: (Prefarar)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (84%/100%).
+Afflicted: (Clumsiness Paralysis)
+[clum, deaf, frzn[300], para]
+A second rush of icy wind sweeps over you, leeching away your strength.
+[AFF]: Manaleech
+[OUTR]: 1 Bloodroot (848)
+Talo takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+H:4459|77% M:4638|87%  18:57:59:535  [ Talo ][0|7.1|0|0|0|0][mleech disl] 
+You may apply another salve to yourself. Skin (0.94)
+H:4459|77% M:4638|87%  18:57:59:628  [ Talo ][0|7.1|0|0|0|0][mleech disl] 
+
+[DEF]: Insulation
+[Curing]: APPLY CALORIC
+You take out some salve and quickly rub it on your skin.
+A feeling of comfortable warmth spreads over you.
+H:4459|77% M:4638|87%  18:57:59:792  [ Talo ][0|7.1|0|0|0|0][mleech disl] 
+Your lungs have recovered enough to smoke another mineral or plant.
+H:4459|77% M:4638|87%  18:58:00:182  [ Talo ][0|7.1|0|0|0|0][mleech disl] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+H:4459|77% M:4638|87%  18:58:00:266  [ Talo ][0|7.1|0|0|0|0][disl] 
+Talo takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+H:4459|77% M:4588|86%  18:58:00:536  [ Talo ][0|7.1|0|0|0|0][disl] 
+You may apply another salve to yourself. Skin (0.747)
+H:4459|77% M:4588|86%  18:58:00:539  [ Talo ][0|7.1|0|0|0|0][disl] 
+You may eat another plant or mineral. Eat (1.55)
+H:4459|77% M:4588|86%  18:58:00:818  [ Talo ][0|7.1|0|0|0|0][disl] 
+Talo eats a bloodroot leaf.
+Talo clenches a hand into a fist, a sudden force locking closed about your throat and
+constricting your airflow.
+Processed Cures(paralysis)
+[AFF]: Deadening
+Health lost: 755 (asphyxiation).
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:3704|64% M:4588|86%  18:58:00:903  [ Talo ][0|7.1|0|0|0|0] ( -755h 13% )[ddn disl] 
+The pain radiating from your face becomes too much to bear.
+Talo takes some elixir from an elegant diamond vial and rubs it into his torso.ribs: 0
+
+H:3704|64% M:4588|86%  18:58:01:510  [ Talo ][0|7.1|0|0|0|0][ddn disl] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.518)
+H:3704|64% M:4588|86%  18:58:01:783  [ Talo ][0|7.1|0|0|0|0][ddn disl] 
+You are no longer stunned.
+H:3704|64% M:4588|86%  18:58:01:787  [ Talo ][0|7.1|0|0|0|0][ddn disl] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+You no longer will inspire disloyalty among friends.
+[AFF]: Disloyalty
+H:3704|64% M:4588|86%  18:58:01:877  [ Talo ][0|7.1|0|0|0|0][ddn] 
+A fierce mountain falcon dives at Talo, raking his face with its talons.
+H:3704|64% M:4588|86%  18:58:02:037  [ Talo ][0|7.1|0|0|0|0][ddn] 
+You have recovered balance on all limbs.
+Envenomed: (Vernalius)
+Sliced:    (Talo)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (68%/100%).
+Afflicted: (Weariness Paralysis)
+[clum, weari, deaf, frzn, para]
+H:3704|64% M:4488|84%  18:58:02:182  [ Talo ][0|7.1|0|0|0|0][ddn] 
+Talo eats some irid moss.
+H:3704|64% M:4488|84%  18:58:02:281  [ Talo ][0|7.1|0|0|0|0][ddn] 
+You may eat another bit of irid moss or potash.
+H:3704|64% M:4488|84%  18:58:02:370  [ Talo ][0|7.1|0|0|0|0][ddn] 
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+H:4166|72% M:4913|92%  18:58:02:453  [ Talo ][0|7.1|0|0|0|0] ( +462h 8% +425m 7% )[ddn] 
+Talo eats a bloodroot leaf.
+Talo touches a tree of life tattoo.
+Processed Cures(paralysis)
+Processed Cures(clumsiness weariness frozen)
+[clum[67], weari[67], deaf, frzn[67]]
+
+H:4166|72% M:4913|92%  18:58:02:644  [ Talo ][0|7.1|0|0|0|0][ddn] 
+
+THEY CAN TOUCH TREE AGAIN!
+Talo casts a hand out in your direction, an icy zephyr descending upon you to tear your
+fortitude away.
+[AFF]: Manaleech
+Health lost: 654 (asphyxiation).
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:3512|60% M:4913|92%  18:58:02:904  [ Talo ][0|7.1|0|0|0|0] ( -654h 11% )[mleech ddn] 
+You may drink another health or mana elixir. Health (4.306)
+H:3512|60% M:4913|92%  18:58:02:997  [ Talo ][0|7.1|0|0|0|0][mleech ddn] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:4386|75% M:4913|92%  18:58:03:084  [ Talo ][0|7.1|0|0|0|0] ( +874h 15% )[mleech ddn] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.458)
+H:4386|75% M:4913|92%  18:58:03:333  [ Talo ][0|7.1|0|0|0|0][mleech ddn] 
+[Curing]: SMOKE ELM
+You take a long drag of slippery elm off your pipe.
+You are no longer deadened.
+[AFF]: Deadening
+H:4386|75% M:4913|92%  18:58:03:429  [ Talo ][0|7.1|0|0|0|0][mleech] 
+You feel a sudden pressure close about your throat, cutting off your ability to breathe and
+making your mind grow foggy.
+[AFF]: Deadening
+H:4501|77% M:4913|92%  18:58:03:903  [ Talo ][0|7.1|0|0|0|0][mleech ddn] 
+You have recovered balance on all limbs.
+Envenomed: (Kalmia)
+Sliced:    (Talo)
+Runeblade: (Nairat)
+Afflicted: (Frozen)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Sensitivity)
+[HP]:      (69%/100%).
+Afflicted: (Asthma Paralysis Prefarar)
+[ast, clum[67], sen, weari[67], deaf, frzn[267], para]
+Talo eats a bloodroot leaf.
+Talo takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+Processed Cures(paralysis)
+H:4501|77% M:4813|90%  18:58:04:263  [ Talo ][0|7.1|0|0|0|0][ddn mleech] 
+A howling wind sweeps over you, its terrible power scouring flesh from bone and leaving your
+face a bloody ruin.
+[AFF]: Disloyalty
+H:4501|77% M:4813|90%  18:58:04:363  [ Talo ][0|7.1|0|0|0|0][mleech ddn disl] 
+The tempestuous form of Talo is cleansed by a purifying breeze.
+Processed Cures(asthma clumsiness sensitivity weariness)
+[ast[75], clum[50], sen[75], weari[50], deaf, frzn[200]]
+
+H:4501|77% M:4813|90%  18:58:04:618  [ Talo ][0|7.1|0|0|0|0][mleech ddn disl] 
+As the dark intent of Talo falls upon you, you feel the air surrounding you begin to thrum with
+tension.
+[AFF]: Pressure
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:4501|77% M:4813|90%  18:58:04:905  [ Talo ][0|7.1|0|0|0|0][pressure(3) ddn disl mleech] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.561)
+H:4501|77% M:4813|90%  18:58:04:989  [ Talo ][0|7.1|0|0|0|0][pressure(3) ddn disl mleech] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+H:4501|77% M:4813|90%  18:58:05:084  [ Talo ][0|7.1|0|0|0|0][pressure(3) ddn disl] 
+A fierce mountain falcon rips out a chunk of Talo's flesh with its beak.
+H:4501|77% M:4813|90%  18:58:05:087  [ Talo ][0|7.1|0|0|0|0][pressure(3) ddn disl] 
+Talo takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+H:4501|77% M:4813|90%  18:58:05:228  [ Talo ][0|7.1|0|0|0|0][pressure(3) ddn disl] 
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+You are no longer deadened.
+[AFF]: Deadening
+H:4501|77% M:4763|89%  18:58:05:611  [ Talo ][0|7.1|0|0|0|0][pressure(3) disl] 
+Talo eats a hawthorn berry.
+H:4501|77% M:4763|89%  18:58:05:798  [ Talo ][0|7.1|0|0|0|0][pressure(3) disl] 
+A second rush of icy wind sweeps over you, leeching away your strength.
+[AFF]: Manaleech
+H:4501|77% M:4763|89%  18:58:05:926  [ Talo ][0|7.1|0|0|0|0][pressure(3) disl mleech] 
+Health lost: 30 (raw).
+You bleed 30 health.
+H:4471|77% M:4763|89%  18:58:06:022  [ Talo ][0|7.1|0|0|0|0][pressure(3) disl mleech] 
+Talo takes a drink from an elegant diamond vial.
+H:4471|77% M:4763|89%  18:58:06:025  [ Talo ][0|7.1|0|0|0|0][pressure(3) disl mleech] 
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Talo)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (72%/100%).
+Afflicted: (Slickness Paralysis)
+[ast[75], clum[50], sen[75], weari[50], deaf, slick, frzn, para]
+H:4471|77% M:4663|87%  18:58:06:187  [ Talo ][0|7.1|0|0|0|0][pressure(3) mleech disl] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.518)
+H:4471|77% M:4663|87%  18:58:06:601  [ Talo ][0|7.1|0|0|0|0][pressure(3) mleech disl] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+H:4471|77% M:4663|87%  18:58:06:696  [ Talo ][0|7.1|0|0|0|0][pressure(3) disl] 
+Talo eats a bloodroot leaf.
+Talo casts a hand out in your direction, an icy zephyr descending upon you to tear your
+fortitude away.
+Processed Cures(paralysis slickness)
+[AFF]: Manaleech
+Health lost: 654 (asphyxiation).
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:3817|66% M:4663|87%  18:58:07:403  [ Talo ][0|7.1|0|0|0|0] ( -654h 11% )[pressure(3) mleech 
+disl] 
+You may drink another health or mana elixir. Health (4.492)
+H:3817|66% M:4663|87%  18:58:07:577  [ Talo ][0|7.1|0|0|0|0][pressure(3) mleech disl] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+You suddenly perceive the vague outline of an aura of rebounding around Talo.
+H:4660|80% M:4663|87%  18:58:07:582  [ Talo ][0|7.1|0|0|0|0] ( +843h 14% )[pressure(3) mleech 
+disl] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.42)
+H:4660|80% M:4663|87%  18:58:08:115  [ Talo ][0|7.1|0|0|0|0][pressure(3) mleech disl] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+You have recovered balance on all limbs.
+Razed: Rebounding
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (70%/100%).
+Afflicted: (Paralysis)
+[ast[75], clum[50], sen[75], weari[50], deaf, slick[50], frzn, para]
+A fierce mountain falcon dives at Talo, raking his face with its talons.
+Its talons shred the nightsight defence of Talo.
+H:4660|80% M:4563|85%  18:58:08:216  [ Talo ][0|7.1|0|0|0|0][pressure(3) disl] 
+Talo eats some irid moss.
+You may eat another bit of irid moss or potash.
+H:4660|80% M:4563|85%  18:58:08:369  [ Talo ][0|7.1|0|0|0|0][pressure(3) disl] 
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+H:5122|88% M:4988|93%  18:58:08:617  [ Talo ][0|7.1|0|0|0|0] ( +462h 8% +425m 7% )[pressure(3) 
+disl] 
+Talo eats a bloodroot leaf.
+Processed Cures(paralysis slickness)
+[ast[75], clum[50], sen[75], weari[50], frzn, para[50]]
+
+H:5122|88% M:5063|95%  18:58:09:159  [ Talo ][0|7.1|0|0|0|0][pressure(3) disl] 
+
+[DEF]: Fangbarrier
+The sileris berry juice hardens into a supple purple shell.
+H:5122|88% M:5063|95%  18:58:09:267  [ Talo ][0|7.1|0|0|0|0][pressure(3) disl] 
+A howling wind sweeps over you, its terrible power scouring flesh from bone and leaving your
+face a bloody ruin by the will of Talo.
+Health lost: 841 (asphyxiation).
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:4281|74% M:5063|95%  18:58:09:371  [ Talo ][0|7.1|0|0|0|0] ( -841h 14% )[pressure(3) disl] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.436)
+H:4281|74% M:5063|95%  18:58:09:635  [ Talo ][0|7.1|0|0|0|0][pressure(3) disl] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+You no longer will inspire disloyalty among friends.
+[AFF]: Disloyalty
+H:4281|74% M:5063|95%  18:58:09:832  [ Talo ][0|7.1|0|0|0|0][pressure(3)] 
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Talo)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (67%/100%).
+Afflicted: (Slickness Paralysis)
+[ast[75], clum[50], sen[75], weari[50], slick, frzn, para]
+A second rush of icy wind sweeps over you, leeching away your strength.
+[AFF]: Manaleech
+H:4281|74% M:4963|93%  18:58:10:109  [ Talo ][0|7.1|0|0|0|0][pressure(3) mleech] 
+Talo takes a drink from an elegant diamond vial.
+H:4281|74% M:4913|92%  18:58:10:615  [ Talo ][0|7.1|0|0|0|0][pressure(3) mleech] 
+Talo eats a bloodroot leaf.
+Processed Cures(paralysis slickness)
+[ast[75], clum[50], sen[75], weari[50], slick[50], frzn, para[50]]
+
+H:4281|74% M:4913|92%  18:58:10:756  [ Talo ][0|7.1|0|0|0|0][pressure(3) mleech] 
+A fierce mountain falcon rips out a chunk of Talo's flesh with its beak.
+Its talons shred the lifevision defence of Talo.
+H:4281|74% M:4913|92%  18:58:11:193  [ Talo ][0|7.1|0|0|0|0][pressure(3) mleech] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.465)
+You may utilise the tree tattoo again. Tree (13.948)
+H:4281|74% M:4913|92%  18:58:11:298  [ Talo ][0|7.1|0|0|0|0][pressure(3) mleech] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+H:4281|74% M:4913|92%  18:58:11:392  [ Talo ][0|7.1|0|0|0|0][pressure(3)] 
+As the dark intent of Talo falls upon you, you feel the air surrounding you begin to thrum with
+tension.
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:4281|74% M:4913|92%  18:58:11:397  [ Talo ][0|7.1|0|0|0|0][pressure(4)] 
+Health lost: 16 (raw).
+You bleed 16 health.
+H:4265|73% M:4913|92%  18:58:11:472  [ Talo ][0|7.1|0|0|0|0][pressure(4)] 
+You have recovered balance on all limbs.
+Envenomed: (Curare)
+Sliced:    (Talo)
+Shield:    (Scrambled Brains)
+Ferocity:  [####|####|####|####]
+[HP]:      (77%/100%).
+Afflicted: (Dizziness)
+[diz, ast[75], clum[50], sen[75], weari[50], slick[50], frzn, para]
+You may drink another health or mana elixir. Health (4.578)
+H:4265|73% M:4813|90%  18:58:12:160  [ Talo ][0|7.1|0|0|0|0][pressure(4)] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+A look of extreme focus crosses the face of Talo.
+H:5283|91% M:4813|90%  18:58:12:165  [ Talo ][0|7.1|0|0|0|0] ( +1018h 17% )[pressure(4)] 
+A howling wind sweeps over you, its terrible power scouring flesh from bone and leaving your
+face a bloody ruin.
+[AFF]: Disloyalty
+H:5283|91% M:4813|90%  18:58:12:169  [ Talo ][0|7.1|0|0|0|0][pressure(4) disl] 
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+You no longer will inspire disloyalty among friends.
+[AFF]: Disloyalty
+H:5283|91% M:4813|90%  18:58:12:345  [ Talo ][0|7.1|0|0|0|0][pressure(4)] 
+Talo eats a bloodroot leaf.
+Processed Cures(paralysis slickness)
+[diz, ast[75], clum[50], sen[75], weari[50], frzn, para[50]]
+
+H:5283|91% M:4813|90%  18:58:12:560  [ Talo ][0|7.1|0|0|0|0][pressure(4)] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.451)
+H:5283|91% M:4813|90%  18:58:12:842  [ Talo ][0|7.1|0|0|0|0][pressure(4)] 
+[Curing]: EAT PEAR
+You eat a prickly pear.
+As the pressure around you normalises somewhat, your breath is torn from your lungs.
+H:5283|91% M:4813|90%  18:58:12:937  [ Talo ][0|7.1|0|0|0|0][pressure(3)] 
+Talo casts a hand out in your direction, an icy zephyr descending upon you to tear your
+fortitude away.
+[AFF]: Manaleech
+Health lost: 654 (asphyxiation).
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:4629|80% M:4813|90%  18:58:13:367  [ Talo ][0|7.1|0|0|0|0] ( -654h 11% )[pressure(3) mleech] 
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Talo)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Proned)
+Afflicted: (Prone)
+[HP]:      (65%/100%).
+Afflicted: (Slickness Paralysis)
+[diz, ast[75], clum[50], sen[75], weari[50], slick, frzn, prn, para]
+
+Processed Cures(dizziness)
+H:4744|82% M:4713|88%  18:58:14:176  [ Talo ][0|7.1|0|0|0|0][pressure(3) mleech] 
+A fierce mountain falcon dives at Talo, raking his face with its talons.
+H:4744|82% M:4713|88%  18:58:14:259  [ Talo ][0|7.1|0|0|0|0][pressure(3) mleech] 
+Talo eats a bloodroot leaf.
+Talo eats some irid moss.
+Processed Cures(paralysis slickness)
+H:4744|82% M:4713|88%  18:58:14:350  [ Talo ][0|7.1|0|0|0|0][pressure(3) mleech] 
+Your lungs have recovered enough to smoke another mineral or plant.
+H:4744|82% M:4713|88%  18:58:14:442  [ Talo ][0|7.1|0|0|0|0][pressure(3) mleech] 
+You may eat another bit of irid moss or potash.
+H:4744|82% M:4713|88%  18:58:14:445  [ Talo ][0|7.1|0|0|0|0][pressure(3) mleech] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+H:5206|90% M:5138|96%  18:58:14:538  [ Talo ][0|7.1|0|0|0|0] ( +462h 8% +425m 7% )[pressure(3)]
+ 
+The tempestuous form of Talo is cleansed by a purifying breeze.
+Processed Cures(asthma clumsiness sensitivity weariness)
+[ast[56], clum[37], sen[56], weari[37], frzn, prn, para]
+
+H:5206|90% M:5138|96%  18:58:14:628  [ Talo ][0|7.1|0|0|0|0][pressure(3)] 
+Talo takes a long drag off his pipe.
+H:5206|90% M:5138|96%  18:58:14:721  [ Talo ][0|7.1|0|0|0|0][pressure(3)] 
+Talo takes a drink from an elegant diamond vial.
+H:5206|90% M:5138|96%  18:58:15:085  [ Talo ][0|7.1|0|0|0|0][pressure(3)] 
+Talo stands up.
+ + + + STANDING + + +
+H:5206|90% M:5138|96%  18:58:15:293  [ Talo ][0|7.1|0|0|0|0][pressure(3)] 
+A howling wind sweeps over you, its terrible power scouring flesh from bone and leaving your
+face a bloody ruin by the will of Talo.
+[AFF]: Disloyalty
+Health lost: 841 (asphyxiation).
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:4365|75% M:5138|96%  18:58:15:298  [ Talo ][0|7.1|0|0|0|0] ( -841h 14% )[pressure(3) disl] 
+You have recovered balance on all limbs.
+Envenomed: (Curare)
+Sliced:    (Talo)
+Shield:    (Scrambled Brains)
+Ferocity:  [####|####|####|####]
+[HP]:      (82%/100%).
+Afflicted: (Dizziness)
+[diz, clum[37], sen[56], weari[37], slick, frzn, para]
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.484)
+H:4365|75% M:4988|93%  18:58:16:020  [ Talo ][0|7.1|0|0|0|0][pressure(3) disl] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+You no longer will inspire disloyalty among friends.
+[AFF]: Disloyalty
+Talo eats a bloodroot leaf.
+A look of extreme focus crosses the face of Talo.
+Processed Cures(paralysis slickness)
+H:4365|75% M:4988|93%  18:58:16:030  [ Talo ][0|7.1|0|0|0|0][pressure(3)] 
+A second rush of icy wind sweeps over you, leeching away your strength.
+[AFF]: Manaleech
+H:4365|75% M:4988|93%  18:58:16:105  [ Talo ][0|7.1|0|0|0|0][pressure(3) mleech] 
+Talo takes a long drag off his pipe.
+H:4365|75% M:4988|93%  18:58:16:194  [ Talo ][0|7.1|0|0|0|0][pressure(3) mleech] 
+You may drink another health or mana elixir. Health (4.496)
+H:4365|75% M:4988|93%  18:58:16:660  [ Talo ][0|7.1|0|0|0|0][pressure(3) mleech] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5414|93% M:4570|86%  18:58:16:858  [ Talo ][0|7.1|0|0|0|0] ( +1049h 18% -418m 7% 
+)[pressure(3) mleech] 
+Health lost: 3 (raw).
+You bleed 3 health.
+H:5411|93% M:4570|86%  18:58:17:037  [ Talo ][0|7.1|0|0|0|0][pressure(3) mleech] 
+A fierce mountain falcon dives at Talo, raking his face with its talons.
+H:5411|93% M:4570|86%  18:58:17:244  [ Talo ][0|7.1|0|0|0|0][pressure(3) mleech] 
+As the dark intent of Talo falls upon you, you feel the air surrounding you begin to thrum with
+tension.
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:5411|93% M:4570|86%  18:58:17:369  [ Talo ][0|7.1|0|0|0|0][pressure(5) mleech] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.506)
+H:5411|93% M:4570|86%  18:58:17:534  [ Talo ][0|7.1|0|0|0|0][pressure(5) mleech] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+Talo eats a goldenseal root.
+Processed Cures(dizziness)
+[clum[37], sen[56], weari[37], frzn, para[50]]
+
+H:5411|93% M:4570|86%  18:58:17:622  [ Talo ][0|7.1|0|0|0|0][pressure(5)] 
+
+THEY CAN TOUCH TREE AGAIN!
+You have recovered balance on all limbs.
+Envenomed: (Kalmia)
+Sliced:    (Talo)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (66%/100%).
+Afflicted: (Asthma Paralysis)
+[ast, clum[37], sen[56], weari[37], frzn, para]
+A howling wind sweeps over you, its terrible power scouring flesh from bone and leaving your
+face a bloody ruin.
+[AFF]: Disloyalty
+H:5411|93% M:4470|84%  18:58:18:064  [ Talo ][0|7.1|0|0|0|0][pressure(5) disl] 
+
+Auto off
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.484)
+H:5411|93% M:4545|85%  18:58:19:105  [ Talo ][0|7.1|0|0|0|0][pressure(5) disl] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+You no longer will inspire disloyalty among friends.
+[AFF]: Disloyalty
+Talo eats a bloodroot leaf.
+Processed Cures(paralysis)
+[ast, clum[37], sen[56], weari[37], frzn]
+
+H:5411|93% M:4545|85%  18:58:19:226  [ Talo ][0|7.1|0|0|0|0][pressure(5)] 
+Talo casts a hand out in your direction, an icy zephyr descending upon you to tear your
+fortitude away.
+[AFF]: Manaleech
+Health lost: 654 (asphyxiation).
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:4757|82% M:4545|85%  18:58:19:355  [ Talo ][0|7.1|0|0|0|0] ( -654h 11% )[pressure(5) mleech] 
+Talo takes a drink from an elegant diamond vial.
+H:4757|82% M:4545|85%  18:58:19:652  [ Talo ][0|7.1|0|0|0|0][pressure(5) mleech] 
+
+[DEF]: Shield
+You have recovered balance on all limbs.
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 4.00s.
+H:4757|82% M:4545|85%  18:58:20:020  [ Talo ][0|7.1|0|0|0|0][pressure(5) mleech] 
+[Prio]: Paralysis (26)
+Talo eats some irid moss.
+H:4757|82% M:4545|85%  18:58:20:379  [ Talo ][0|7.1|0|0|0|0][pressure(5) mleech] 
+You may eat another bit of irid moss or potash.
+H:4757|82% M:4545|85%  18:58:20:471  [ Talo ][0|7.1|0|0|0|0][pressure(5) mleech] 
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+H:5219|90% M:4920|92%  18:58:20:574  [ Talo ][0|7.1|0|0|0|0] ( +462h 8% +375m 7% )[pressure(5) 
+mleech] 
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+H:5219|90% M:4920|92%  18:58:20:658  [ Talo ][0|7.1|0|0|0|0][pressure(5)] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.525)
+H:5219|90% M:4920|92%  18:58:20:750  [ Talo ][0|7.1|0|0|0|0][pressure(5)] 
+[Curing]: EAT PEAR
+You eat a prickly pear.
+As the pressure around you normalises somewhat, your breath is torn from your lungs.
+Talo eats a piece of kelp.
+Processed Cures(asthma clumsiness sensitivity weariness)
+[ast[75], sen[42], frzn]
+
+H:5219|90% M:4920|92%  18:58:20:845  [ Talo ][0|7.1|0|0|0|0][pressure(4)] 
+Your ferocity decreases.
+H:5219|90% M:4920|92%  18:58:21:179  [ Talo ][0|7.1|0|0|0|0][pressure(4)] 
+You may drink another health or mana elixir. Health (4.422)
+H:5219|90% M:4920|92%  18:58:21:280  [ Talo ][0|7.1|0|0|0|0][pressure(4)] 
+
+[DEF]: Shield
+Talo summons up a gale, sending it towards you.
+[AFF]: Manaleech
+Your mana begins to drain away.
+Your protective shield is blown away by the gale-force winds.
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:5219|90% M:4920|92%  18:58:21:379  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech] 
+[Curing]: SIP MANA
+You take a drink from an oaken vial.
+Your mind feels stronger and more alert.
+H:5219|90% M:5313|100%  18:58:21:596  [ Talo ][0|7.1|0|0|0|0] ( +393m 7% )[pressure(4) mleech] 
+As your mental fortitude continues to slip away, your mind seems to become sluggish and
+unresponsive.
+[AFF]: Deadening
+Your lungs have recovered enough to smoke another mineral or plant.
+H:5219|90% M:5313|100%  18:58:22:286  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech ddn] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+H:5219|90% M:5313|100%  18:58:22:380  [ Talo ][0|7.1|0|0|0|0][pressure(4) ddn] 
+A howling wind sweeps over you, its terrible power scouring flesh from bone and leaving your
+face a bloody ruin by the will of Talo.
+[AFF]: Disloyalty
+Health lost: 841 (asphyxiation).
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:4378|75% M:5313|100%  18:58:22:853  [ Talo ][0|7.1|0|0|0|0] ( -841h 14% )[pressure(4) disl 
+ddn] 
+A fierce mountain falcon dives at Talo, raking his face with its talons.
+H:4378|75% M:5313|100%  18:58:23:280  [ Talo ][0|7.1|0|0|0|0][pressure(4) disl ddn] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.449)
+H:4378|75% M:5313|100%  18:58:23:828  [ Talo ][0|7.1|0|0|0|0][pressure(4) disl ddn] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+You no longer will inspire disloyalty among friends.
+[AFF]: Disloyalty
+H:4378|75% M:5313|100%  18:58:23:915  [ Talo ][0|7.1|0|0|0|0][pressure(4) ddn] 
+
+[DEF]: Shield
+You have recovered equilibrium.
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 4.00s.
+H:4378|75% M:5313|100%  18:58:24:045  [ Talo ][0|7.1|0|0|0|0][pressure(4) ddn] 
+Talo takes a drink from an elegant diamond vial.
+H:4378|75% M:5313|100%  18:58:24:102  [ Talo ][0|7.1|0|0|0|0][pressure(4) ddn] 
+[Prio]: Paralysis (1)
+[Prio]: Paralysis (26)
+H:4378|75% M:5313|100%  18:58:24:192  [ Talo ][0|7.1|0|0|0|0][pressure(4) ddn] 
+A second rush of icy wind sweeps over you, leeching away your strength.
+[AFF]: Manaleech
+H:4493|77% M:5313|100%  18:58:24:545  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech ddn] 
+
+Ferocity:  [####|####|####|####]
+You suddenly perceive the vague outline of an aura of rebounding around Talo.
+H:4493|77% M:5313|100%  18:58:24:761  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech ddn] 
+
+[DEF]: Shield
+Talo's aura of weapons rebounding disappears.
+Talo summons up a gale, sending it towards you.
+Your mana begins to drain away.
+Your protective shield is blown away by the gale-force winds.
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:4493|77% M:5313|100%  18:58:24:845  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech ddn] 
+Talo takes a long drag off his pipe.
+H:4493|77% M:5313|100%  18:58:24:942  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech ddn] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.491)
+H:4493|77% M:5313|100%  18:58:25:405  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech ddn] 
+A howling wind sweeps over you, its terrible power scouring flesh from bone and leaving your
+face a bloody ruin.
+[AFF]: Disloyalty
+H:4493|77% M:5313|100%  18:58:25:494  [ Talo ][0|7.1|0|0|0|0][pressure(4) disl mleech ddn] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+You no longer will inspire disloyalty among friends.
+[AFF]: Disloyalty
+H:4493|77% M:5263|99%  18:58:25:588  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech ddn] 
+You may drink another health or mana elixir. Mana (4.448)
+H:4493|77% M:5263|99%  18:58:26:045  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech ddn] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5326|92% M:5263|99%  18:58:26:138  [ Talo ][0|7.1|0|0|0|0] ( +833h 14% )[pressure(4) mleech 
+ddn] 
+A fierce mountain falcon dives at Talo, raking his face with its talons.
+H:5326|92% M:4845|91%  18:58:26:345  [ Talo ][0|7.1|0|0|0|0] ( -418m 7% )[pressure(4) mleech 
+ddn] 
+You may utilise the tree tattoo again. Tree (14.095)
+H:5326|92% M:4845|91%  18:58:26:438  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech ddn] 
+Talo clenches a hand into a fist, a sudden force locking closed about your throat and
+constricting your airflow.
+Health lost: 755 (asphyxiation).
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:4571|79% M:4845|91%  18:58:26:444  [ Talo ][0|7.1|0|0|0|0] ( -755h 13% )[pressure(4) mleech 
+ddn] 
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+H:4571|79% M:4845|91%  18:58:26:533  [ Talo ][0|7.1|0|0|0|0][pressure(4) ddn] 
+You may eat another bit of irid moss or potash.
+H:4571|79% M:4845|91%  18:58:26:624  [ Talo ][0|7.1|0|0|0|0][pressure(4) ddn] 
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+H:5033|87% M:5270|99%  18:58:26:754  [ Talo ][0|7.1|0|0|0|0] ( +462h 8% +425m 7% )[pressure(4) 
+ddn] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.438)
+H:5033|87% M:5270|99%  18:58:27:025  [ Talo ][0|7.1|0|0|0|0][pressure(4) ddn] 
+[Curing]: SMOKE ELM
+You take a long drag of slippery elm off your pipe.
+You are no longer deadened.
+[AFF]: Deadening
+H:5033|87% M:5270|99%  18:58:27:122  [ Talo ][0|7.1|0|0|0|0][pressure(4)] 
+You have recovered equilibrium.
+H:5033|87% M:5270|99%  18:58:28:027  [ Talo ][0|7.1|0|0|0|0][pressure(4)] 
+Talo casts a hand out in your direction, an icy zephyr descending upon you to tear your
+fortitude away.
+[AFF]: Manaleech
+Health lost: 654 (asphyxiation).
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:4379|75% M:5270|99%  18:58:28:494  [ Talo ][0|7.1|0|0|0|0] ( -654h 11% )[pressure(4) mleech] 
+The air weighs down on you too heavily, making it impossible to become airborn.
+H:4379|75% M:5270|99%  18:58:28:549  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech] 
+[Prio]: Paralysis (1)
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.611)
+H:4379|75% M:5270|99%  18:58:28:733  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+H:4379|75% M:5270|99%  18:58:28:738  [ Talo ][0|7.1|0|0|0|0][pressure(4)] 
+You feel a sudden pressure close about your throat, cutting off your ability to breathe and
+making your mind grow foggy.
+[AFF]: Deadening
+H:4379|75% M:5313|100%  18:58:29:058  [ Talo ][0|7.1|0|0|0|0][pressure(4) ddn] 
+H:4379|75% M:5313|100%  18:58:29:943  [ Talo ][0|7.1|0|0|0|0][pressure(4) ddn] 
+
+[DEF]: Shield
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 4.00s.
+H:4379|75% M:5313|100%  18:58:29:949  [ Talo ][0|7.1|0|0|0|0][pressure(4) ddn] 
+[Prio]: Paralysis (26)
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.423)
+H:4379|75% M:5313|100%  18:58:30:160  [ Talo ][0|7.1|0|0|0|0][pressure(4) ddn] 
+[Curing]: SMOKE ELM
+You take a long drag of slippery elm off your pipe.
+You are no longer deadened.
+[AFF]: Deadening
+H:4379|75% M:5313|100%  18:58:30:253  [ Talo ][0|7.1|0|0|0|0][pressure(4)] 
+
+[DEF]: Shield
+Talo summons up a gale, sending it towards you.
+[AFF]: Manaleech
+Your mana begins to drain away.
+Your protective shield is blown away by the gale-force winds.
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:4379|75% M:5313|100%  18:58:30:424  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech] 
+You may drink another health or mana elixir. Health (4.383)
+H:4379|75% M:5263|99%  18:58:30:522  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+Talo takes a drink from an elegant diamond vial.
+H:5418|93% M:5263|99%  18:58:30:609  [ Talo ][0|7.1|0|0|0|0] ( +1039h 17% )[pressure(4) mleech] 
+As your mental fortitude continues to slip away, your mind seems to become sluggish and
+unresponsive.
+[AFF]: Deadening
+H:5418|93% M:4845|91%  18:58:31:022  [ Talo ][0|7.1|0|0|0|0] ( -418m 7% )[pressure(4) mleech 
+ddn] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.442)
+H:5418|93% M:4845|91%  18:58:31:694  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech ddn] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+H:5418|93% M:4845|91%  18:58:31:786  [ Talo ][0|7.1|0|0|0|0][pressure(4) ddn] 
+A howling wind sweeps over you, its terrible power scouring flesh from bone and leaving your
+face a bloody ruin by the will of Talo.
+[AFF]: Disloyalty
+Health lost: 841 (asphyxiation).
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:4577|79% M:4845|91%  18:58:31:994  [ Talo ][0|7.1|0|0|0|0] ( -841h 14% )[pressure(4) disl 
+ddn] 
+You may eat another bit of irid moss or potash.
+H:4577|79% M:4845|91%  18:58:32:683  [ Talo ][0|7.1|0|0|0|0][pressure(4) disl ddn] 
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+H:5039|87% M:5270|99%  18:58:32:686  [ Talo ][0|7.1|0|0|0|0] ( +462h 8% +425m 7% )[pressure(4) 
+disl ddn] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.434)
+H:5039|87% M:5270|99%  18:58:33:219  [ Talo ][0|7.1|0|0|0|0][pressure(4) disl ddn] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+You no longer will inspire disloyalty among friends.
+[AFF]: Disloyalty
+H:5039|87% M:5270|99%  18:58:33:304  [ Talo ][0|7.1|0|0|0|0][pressure(4) ddn] 
+You suddenly perceive the vague outline of an aura of rebounding around Talo.
+H:5039|87% M:5270|99%  18:58:33:426  [ Talo ][0|7.1|0|0|0|0][pressure(4) ddn] 
+A second rush of icy wind sweeps over you, leeching away your strength.
+[AFF]: Manaleech
+H:5039|87% M:5270|99%  18:58:33:643  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech ddn] 
+
+[DEF]: Shield
+You have recovered equilibrium.
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 4.00s.
+H:5039|87% M:5270|99%  18:58:33:866  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech ddn] 
+Talo's aura of weapons rebounding disappears.
+Talo's attack rebounds off your magical shield.
+H:5039|87% M:5270|99%  18:58:33:957  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech ddn] 
+[Prio]: Paralysis (1)
+Talo takes a long drag off his pipe.
+H:5039|87% M:5270|99%  18:58:34:108  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech ddn] 
+A howling wind sweeps over you, its terrible power scouring flesh from bone and leaving your
+face a bloody ruin.
+[AFF]: Disloyalty
+H:5039|87% M:5270|99%  18:58:34:596  [ Talo ][0|7.1|0|0|0|0][pressure(4) disl mleech ddn] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.568)
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+H:5154|89% M:5270|99%  18:58:34:874  [ Talo ][0|7.1|0|0|0|0][pressure(4) disl ddn] 
+You may drink another health or mana elixir. Health (4.417)
+H:5154|89% M:5270|99%  18:58:35:025  [ Talo ][0|7.1|0|0|0|0][pressure(4) disl ddn] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5775|100% M:5270|99%  18:58:35:212  [ Talo ][0|7.1|0|0|0|0] ( +621h 10% )[pressure(4) disl 
+ddn] 
+
+[DEF]: Shield
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+Talo summons up a gale, sending it towards you.
+[AFF]: Manaleech
+Your mana begins to drain away.
+Your protective shield is blown away by the gale-force winds.
+H:5775|100% M:5220|98%  18:58:35:660  [ Talo ][0|7.1|0|0|0|0][pressure(4) disl mleech ddn] 
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+You no longer will inspire disloyalty among friends.
+[AFF]: Disloyalty
+H:5775|100% M:5220|98%  18:58:35:737  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech ddn] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.491)
+H:5775|100% M:5220|98%  18:58:36:364  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech ddn] 
+[Curing]: SMOKE ELM
+You take a long drag of slippery elm off your pipe.
+You are no longer deadened.
+[AFF]: Deadening
+H:5775|100% M:5220|98%  18:58:36:452  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech] 
+Talo casts a hand out in your direction, an icy zephyr descending upon you to tear your
+fortitude away.
+Health lost: 654 (asphyxiation).
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:5121|88% M:5220|98%  18:58:37:038  [ Talo ][0|7.1|0|0|0|0] ( -654h 11% )[pressure(4) mleech] 
+
+[DEF]: Shield
+You have recovered equilibrium.
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 4.00s.
+H:5121|88% M:5220|98%  18:58:37:821  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech] 
+[Prio]: Paralysis (26)
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.483)
+H:5121|88% M:5220|98%  18:58:37:934  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech] 
+[Prio]: Paralysis (1)
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+H:5121|88% M:5220|98%  18:58:38:037  [ Talo ][0|7.1|0|0|0|0][pressure(4)] 
+A fierce mountain falcon rips out a chunk of Talo's flesh with its beak.
+H:5121|88% M:5220|98%  18:58:38:405  [ Talo ][0|7.1|0|0|0|0][pressure(4)] 
+You may eat another bit of irid moss or potash.
+H:5121|88% M:5220|98%  18:58:38:624  [ Talo ][0|7.1|0|0|0|0][pressure(4)] 
+
+[DEF]: Shield
+Talo summons up a gale, sending it towards you.
+[AFF]: Manaleech
+Your mana begins to drain away.
+Your protective shield is blown away by the gale-force winds.
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:5121|88% M:5295|99%  18:58:39:020  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.491)
+H:5121|88% M:5295|99%  18:58:39:525  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+H:5121|88% M:5295|99%  18:58:39:612  [ Talo ][0|7.1|0|0|0|0][pressure(4)] 
+A second rush of icy wind sweeps over you, leeching away your strength.
+[AFF]: Manaleech
+H:5121|88% M:5295|99%  18:58:39:615  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech] 
+You may drink another health or mana elixir. Health (4.491)
+H:5121|88% M:5295|99%  18:58:39:703  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5775|100% M:5295|99%  18:58:39:874  [ Talo ][0|7.1|0|0|0|0] ( +654h 11% )[pressure(4) mleech] 
+You may utilise the tree tattoo again. Tree (13.963)
+H:5775|100% M:4877|91%  18:58:40:496  [ Talo ][0|7.1|0|0|0|0] ( -418m 7% )[pressure(4) mleech] 
+A howling wind sweeps over you, its terrible power scouring flesh from bone and leaving your
+face a bloody ruin by the will of Talo.
+[AFF]: Disloyalty
+Health lost: 841 (asphyxiation).
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:4934|85% M:4827|90%  18:58:40:589  [ Talo ][0|7.1|0|0|0|0] ( -841h 14% )[pressure(4) disl 
+mleech] 
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+You no longer will inspire disloyalty among friends.
+[AFF]: Disloyalty
+H:4934|85% M:4827|90%  18:58:40:681  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.448)
+H:4934|85% M:4827|90%  18:58:41:059  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+H:4934|85% M:4827|90%  18:58:41:237  [ Talo ][0|7.1|0|0|0|0][pressure(4)] 
+A fierce mountain falcon rips out a chunk of Talo's flesh with its beak.
+H:4934|85% M:4827|90%  18:58:41:393  [ Talo ][0|7.1|0|0|0|0][pressure(4)] 
+You have recovered equilibrium.
+H:4934|85% M:4827|90%  18:58:41:829  [ Talo ][0|7.1|0|0|0|0][pressure(4)] 
+The air weighs down on you too heavily, making it impossible to become airborn.
+H:4934|85% M:4827|90%  18:58:42:147  [ Talo ][0|7.1|0|0|0|0][pressure(4)] 
+You suddenly perceive the vague outline of an aura of rebounding around Talo.
+H:4934|85% M:4827|90%  18:58:42:598  [ Talo ][0|7.1|0|0|0|0][pressure(4)] 
+Talo's aura of weapons rebounding disappears.
+Talo casts a hand out in your direction, an icy zephyr descending upon you to tear your
+fortitude away.
+[AFF]: Manaleech
+Health lost: 654 (asphyxiation).
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:4280|74% M:4827|90%  18:58:42:604  [ Talo ][0|7.1|0|0|0|0] ( -654h 11% )[pressure(4) mleech] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.443)
+H:4280|74% M:4827|90%  18:58:42:679  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+Talo takes a long drag off his pipe.
+H:4742|82% M:5252|98%  18:58:42:775  [ Talo ][0|7.1|0|0|0|0] ( +462h 8% +425m 7% )[pressure(4)] 
+A howling wind sweeps over you, its terrible power scouring flesh from bone and leaving your
+face a bloody ruin.
+[AFF]: Disloyalty
+H:4742|82% M:5252|98%  18:58:43:178  [ Talo ][0|7.1|0|0|0|0][pressure(4) disl] 
+The air weighs down on you too heavily, making it impossible to become airborn.
+H:4742|82% M:5252|98%  18:58:43:267  [ Talo ][0|7.1|0|0|0|0][pressure(4) disl] 
+You may drink another health or mana elixir. Health (4.243)
+H:4742|82% M:5252|98%  18:58:44:118  [ Talo ][0|7.1|0|0|0|0][pressure(4) disl] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.582)
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+You no longer will inspire disloyalty among friends.
+[AFF]: Disloyalty
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5775|100% M:5252|98%  18:58:44:358  [ Talo ][0|7.1|0|0|0|0] ( +1033h 17% )[pressure(4)] 
+As the dark intent of Talo falls upon you, you feel the air surrounding you begin to thrum with
+tension.
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:5775|100% M:5252|98%  18:58:44:551  [ Talo ][0|7.1|0|0|0|0][pressure(5)] 
+The air weighs down on you too heavily, making it impossible to become airborn.
+H:5775|100% M:5252|98%  18:58:45:012  [ Talo ][0|7.1|0|0|0|0][pressure(5)] 
+A second rush of icy wind sweeps over you, leeching away your strength.
+[AFF]: Manaleech
+H:5775|100% M:5252|98%  18:58:45:144  [ Talo ][0|7.1|0|0|0|0][pressure(5) mleech] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.461)
+H:5775|100% M:5202|97%  18:58:45:817  [ Talo ][0|7.1|0|0|0|0][pressure(5) mleech] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+H:5775|100% M:5202|97%  18:58:45:915  [ Talo ][0|7.1|0|0|0|0][pressure(5)] 
+H:5775|100% M:5202|97%  18:58:46:322  [ Talo ][0|7.1|0|0|0|0][pressure(5)] 
+
+[DEF]: Shield
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 4.00s.
+H:5775|100% M:5202|97%  18:58:46:328  [ Talo ][0|7.1|0|0|0|0][pressure(5)] 
+[Prio]: Paralysis (26)
+
+[DEF]: Shield
+Talo summons up a gale, sending it towards you.
+[AFF]: Manaleech
+Your mana begins to drain away.
+Your protective shield is blown away by the gale-force winds.
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:5775|100% M:5202|97%  18:58:46:548  [ Talo ][0|7.1|0|0|0|0][pressure(5) mleech] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.539)
+H:5775|100% M:5202|97%  18:58:47:453  [ Talo ][0|7.1|0|0|0|0][pressure(5) mleech] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+H:5775|100% M:5202|97%  18:58:47:548  [ Talo ][0|7.1|0|0|0|0][pressure(5)] 
+Talo casts a hand out in your direction, an icy zephyr descending upon you to tear your
+fortitude away.
+[AFF]: Manaleech
+Health lost: 654 (asphyxiation).
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:5121|88% M:5202|97%  18:58:48:083  [ Talo ][0|7.1|0|0|0|0] ( -654h 11% )[pressure(5) mleech] 
+You may eat another bit of irid moss or potash.
+H:5121|88% M:5202|97%  18:58:48:687  [ Talo ][0|7.1|0|0|0|0][pressure(5) mleech] 
+You may drink another health or mana elixir. Health (4.425)
+H:5121|88% M:5202|97%  18:58:48:783  [ Talo ][0|7.1|0|0|0|0][pressure(5) mleech] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.404)
+H:5121|88% M:5277|99%  18:58:48:950  [ Talo ][0|7.1|0|0|0|0][pressure(5) mleech] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5775|100% M:5277|99%  18:58:49:035  [ Talo ][0|7.1|0|0|0|0] ( +654h 11% )[pressure(5)] 
+A howling wind sweeps over you, its terrible power scouring flesh from bone and leaving your
+face a bloody ruin by the will of Talo.
+[AFF]: Disloyalty
+Health lost: 841 (asphyxiation).
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:4934|85% M:5277|99%  18:58:50:130  [ Talo ][0|7.1|0|0|0|0] ( -841h 14% )[pressure(5) disl] 
+Talo takes a drink from an elegant diamond vial.
+H:4934|85% M:5277|99%  18:58:50:211  [ Talo ][0|7.1|0|0|0|0][pressure(5) disl] 
+
+[DEF]: Shield
+You have recovered equilibrium.
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 4.00s.
+H:4934|85% M:5277|99%  18:58:50:307  [ Talo ][0|7.1|0|0|0|0][pressure(5) disl] 
+A fierce mountain falcon rips out a chunk of Talo's flesh with its beak.
+H:4934|85% M:5277|99%  18:58:50:469  [ Talo ][0|7.1|0|0|0|0][pressure(5) disl] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.496)
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+You no longer will inspire disloyalty among friends.
+[AFF]: Disloyalty
+H:4934|85% M:5277|99%  18:58:50:531  [ Talo ][0|7.1|0|0|0|0][pressure(5)] 
+[Prio]: Paralysis (1)
+A second rush of icy wind sweeps over you, leeching away your strength.
+[AFF]: Manaleech
+H:4934|85% M:5227|98%  18:58:50:619  [ Talo ][0|7.1|0|0|0|0][pressure(5) mleech] 
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+H:4934|85% M:5227|98%  18:58:50:965  [ Talo ][0|7.1|0|0|0|0][pressure(5)] 
+You suddenly perceive the vague outline of an aura of rebounding around Talo.
+H:4934|85% M:5227|98%  18:58:51:233  [ Talo ][0|7.1|0|0|0|0][pressure(5)] 
+
+[DEF]: Shield
+Talo's aura of weapons rebounding disappears.
+Talo summons up a gale, sending it towards you.
+[AFF]: Manaleech
+Your mana begins to drain away.
+Your protective shield is blown away by the gale-force winds.
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:4934|85% M:5227|98%  18:58:51:996  [ Talo ][0|7.1|0|0|0|0][pressure(5) mleech] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.556)
+H:4934|85% M:5227|98%  18:58:52:086  [ Talo ][0|7.1|0|0|0|0][pressure(5) mleech] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+Talo takes a long drag off his pipe.
+H:4934|85% M:5227|98%  18:58:52:181  [ Talo ][0|7.1|0|0|0|0][pressure(5)] 
+A howling wind sweeps over you, its terrible power scouring flesh from bone and leaving your
+face a bloody ruin.
+[AFF]: Disloyalty
+H:4934|85% M:5227|98%  18:58:52:531  [ Talo ][0|7.1|0|0|0|0][pressure(5) disl] 
+You may drink another health or mana elixir. Health (4.28)
+H:4934|85% M:5227|98%  18:58:53:316  [ Talo ][0|7.1|0|0|0|0][pressure(5) disl] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5775|100% M:5227|98%  18:58:53:498  [ Talo ][0|7.1|0|0|0|0] ( +841h 14% )[pressure(5) disl] 
+Talo casts a hand out in your direction, an icy zephyr descending upon you to tear your
+fortitude away.
+[AFF]: Manaleech
+Health lost: 654 (asphyxiation).
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:5121|88% M:5227|98%  18:58:53:593  [ Talo ][0|7.1|0|0|0|0] ( -654h 11% )[pressure(5) mleech 
+disl] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.503)
+H:5121|88% M:5227|98%  18:58:53:683  [ Talo ][0|7.1|0|0|0|0][pressure(5) mleech disl] 
+[Curing]: SMOKE VALERIAN
+Fireflies dance around the jar-shaped bowl of your pipe as smoke gently rises.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+H:5121|88% M:5227|98%  18:58:53:688  [ Talo ][0|7.1|0|0|0|0][pressure(5) disl] 
+
+[DEF]: Shield
+You have recovered equilibrium.
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 4.00s.
+H:5121|88% M:5227|98%  18:58:54:288  [ Talo ][0|7.1|0|0|0|0][pressure(5) disl] 
+[Prio]: Paralysis (26)
+[Prio]: Paralysis (1)
+You may utilise the tree tattoo again. Tree (13.885)
+H:5121|88% M:5227|98%  18:58:54:565  [ Talo ][0|7.1|0|0|0|0][pressure(5) disl] 
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+You no longer will inspire disloyalty among friends.
+[AFF]: Disloyalty
+H:5121|88% M:5227|98%  18:58:54:665  [ Talo ][0|7.1|0|0|0|0][pressure(5)] 
+Your lungs have recovered enough to smoke another mineral or plant.
+H:5121|88% M:5227|98%  18:58:55:200  [ Talo ][0|7.1|0|0|0|0][pressure(5)] 
+[Curing]: EAT PEAR
+You eat a prickly pear.
+As the pressure around you normalises somewhat, your breath is torn from your lungs.
+H:5121|88% M:5227|98%  18:58:55:364  [ Talo ][0|7.1|0|0|0|0][pressure(4)] 
+
+[DEF]: Shield
+Talo summons up a gale, sending it towards you.
+[AFF]: Manaleech
+Your mana begins to drain away.
+Your protective shield is blown away by the gale-force winds.
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:5236|90% M:5177|97%  18:58:55:580  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech] 
+As your mental fortitude continues to slip away, your mind seems to become sluggish and
+unresponsive.
+[AFF]: Deadening
+H:5236|90% M:5177|97%  18:58:56:030  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech ddn] 
+Your lungs have recovered enough to smoke another mineral or plant.
+H:5236|90% M:5177|97%  18:58:56:874  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech ddn] 
+[Curing]: SMOKE ELM
+You take a long drag of slippery elm off your pipe.
+You are no longer deadened.
+[AFF]: Deadening
+H:5236|90% M:5177|97%  18:58:57:010  [ Talo ][0|7.1|0|0|0|0][pressure(4) mleech] 
+As the dark intent of Talo falls upon you, you feel the air surrounding you begin to thrum with
+tension.
+Talo studies you intently, the howling winds that surround him stilling for a moment.
+
+H:5236|90% M:5177|97%  18:58:57:014  [ Talo ][0|7.1|0|0|0|0][pressure(6) mleech] 
+You struggle to move, the very air rebelling against your passage.
+H:5236|90% M:5177|97%  18:58:57:092  [ Talo ][0|7.1|0|0|0|0][pressure(6) mleech] 
+You may drink another health or mana elixir. Health (4.425)
+H:5236|90% M:5177|97%  18:58:57:924  [ Talo ][0|7.1|0|0|0|0][pressure(6) mleech] 
+You are recovering equilibrium and cannot move yet.
+H:5236|90% M:5177|97%  18:58:58:064  [ Talo ][0|7.1|0|0|0|0][pressure(6) mleech] 
+You have recovered equilibrium.
+H:5236|90% M:5177|97%  18:58:58:265  [ Talo ][0|7.1|0|0|0|0][pressure(6) mleech] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.43)
+H:5236|90% M:5177|97%  18:58:58:439  [ Talo ][0|7.1|0|0|0|0][pressure(6) mleech] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+H:5236|90% M:5177|97%  18:58:58:536  [ Talo ][0|7.1|0|0|0|0][pressure(6)] 
+A second rush of icy wind sweeps over you, leeching away your strength.
+[AFF]: Manaleech
+H:5236|90% M:5177|97%  18:58:58:703  [ Talo ][0|7.1|0|0|0|0][pressure(6) mleech] 
+
+[DEF]: Levitating
+[DEF]: Insomnia
+[DEF]: Resistance
+[DEF]: Weathering
+[DEF]: Poisonresist
+[DEF]: Temperance
+[DEF]: Nightsight
+[DEF]: Kola
+[DEF]: Gripping
+[DEF]: Cloak
+[DEF]: Mindseye
+[DEF]: Speed
+[DEF]: Insulation
+[DEF]: Fangbarrier
+[DEF]: Blindness
+[DEF]: Deafness
+Talo brings his hands together in a single, resounding clap.
+A great force like the hand of an angered god closes about your skull. A single moment of
+perfect, terrifying clarity is afforded you as the pressure grows and grows, your bones 
+deforming under the vice-like grip. Darkness swallows your consciousness yet the pain does not 
+abate, and in the moment before your skull crumples inward you realise that your eyes have 
+burst from their sockets under the implacable will of Talo.
+You drop back and ease the engagement.
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+You have been slain by Talo.
+[SLC]: Reset all limb counts.
+[INR]: 1 Irid (1379)
+[INR]: 1 Pear (1594)
+[INR]: 3 Bloodroot (851)
+[INR]: 1 Sileris (854)
+**********************************************************
+You have been defeated and are thrown out of the Arena.
+**********************************************************
+ 

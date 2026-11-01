@@ -8,7 +8,6 @@ hierarchy:
 - Ataxia
 - Curing Stuff
 - Curing Bals
-- Tree Touch
 attributes:
   isActive: 'yes'
   isFolder: 'no'
@@ -36,4 +35,7 @@ patterns:
   type: 3
 ]]--
 
+-- This line prints on every touch of ours. It hung under trigger 002 (`[Curing]: TOUCH TREE`), so it
+-- ran only on the line after that report. We expect no such report for a `touch tree` we send
+-- ourselves, so AntiSerpent's and Mnemosyne's own touches did not mark the tree down.
 ataxiaTemp.usedTree = true

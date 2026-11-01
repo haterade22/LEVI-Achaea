@@ -1,0 +1,3928 @@
+You say in a steady, measured voice, "Go ahead."
+H:5775|100% M:5313|100%  19:14:34:410  [ Thato ][0|0|0|0|0|0]
+With a flourish, you finish sketching an isaz rune.
+You have recovered balance on all limbs.
+H:5775|100% M:5313|100%  19:14:35:580  [ Thato ][0|0|0|0|0|0]
+An emerald tree snake begins to follow you.
+Thato's aura of weapons rebounding disappears.
+H:5775|100% M:5313|100%  19:14:36:281  [ Thato ][0|0|0|0|0|0]
+
+[DEF]: Fangbarrier
+Thato ceases to wield a vine-wreathed sylvanic quarterstaff.
+Thato starts to wield a Lupine bow in her hands.
+Your left foot explodes in white hot pain as an arrow slams into it.
+[AFF]: Pinshot
+Health lost: 362 (physical cutting).
+An emerald tree snake lunges for your throat, its fangs sinking into the waxy coating that
+protects you.
+The protective barrier coating your skin dissolves.
+Thato forms a ball of light in her palm and hurls it northeastwards.
+H:5413|93% M:5313|100%  19:14:36:369  [ Thato ][0|0|0|0|0|0] ( -362h 6% )[PSHOT] 
+[Curing]: OUTR SILERIS
+[OUTR]: 1 Sileris (852)
+[Curing]: APPLY SILERIS
+You apply a sileris berry to yourself.
+H:5413|93% M:5313|100%  19:14:36:502  [ Thato ][0|0|0|0|0|0][PSHOT] 
+Health lost: 7 (raw).
+You bleed 7 health.
+H:5406|93% M:5313|100%  19:14:36:890  [ Thato ][0|0|0|0|0|0][PSHOT] 
+
+Auto on
+H:5406|93% M:5313|100%  19:14:38:163  [ Thato ][0|0|0|0|0|0][PSHOT] 
+You use a jewel-encrusted silver tinderbox to make fire.
+You light a firefly jar pipe.
+Envenomed: (Xentio)
+Sliced:    (Thato)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Engage:    (Thato)
+Equilibrium used: 2.00s..
+Afflicted: (Clumsiness Paralysis)
+[clum, para]
+Thato eats a bloodroot leaf.
+A fierce mountain falcon rips out a chunk of Thato's flesh with its beak.
+H:5406|93% M:5263|99%  19:14:38:879  [ Thato ][0|0|0|0|0|0][PSHOT] 
+Thato eats some irid moss.
+H:5406|93% M:5263|99%  19:14:39:044  [ Thato ][0|0|0|0|0|0][PSHOT] 
+Thato ceases to wield a Lupine bow.
+Thato starts to wield a Razor Whip in her left hand.
+Thato starts to wield a woven shield of twigs in her right hand.
+With fluid grace, Thato snaps her wrist, bringing a Razor Whip back to crack viciously into
+you.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:5406|93% M:5263|99%  19:14:39:714  [ Thato ][0|0|0|0|0|0][PAR PSHOT] 
+[Curing]: OUTR BLOODROOT
+[OUTR]: 1 Bloodroot (850)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5406|93% M:5263|99%  19:14:39:807  [ Thato ][0|0|0|0|0|0][PSHOT] 
+[OUTR]: 1 Bloodroot (849)
+Thato eats a piece of kelp.
+Processed Cures(clumsiness)
+H:5406|93% M:5263|99%  19:14:39:974  [ Thato ][0|0|0|0|0|0][PSHOT] 
+You have recovered equilibrium.
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Thato)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (84%/100%).
+Afflicted: (Clumsiness Paralysis)
+[clum, para]
+H:5406|93% M:5163|97%  19:14:40:240  [ Thato ][0|0|0|0|0|0][PSHOT] 
+
+[DEF]: Rebounding
+You feel an aura of rebounding surround you.
+H:5406|93% M:5163|97%  19:14:40:507  [ Thato ][0|0|0|0|0|0][PSHOT] 
+Thato takes a long drag off her pipe.
+H:5406|93% M:5163|97%  19:14:40:603  [ Thato ][0|0|0|0|0|0][PSHOT] 
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+H:5406|93% M:5163|97%  19:14:41:213  [ Thato ][0|0|0|0|0|0][PSHOT] 
+You may eat another plant or mineral. Eat (1.499)
+H:5406|93% M:5163|97%  19:14:41:306  [ Thato ][0|0|0|0|0|0][PSHOT] 
+
+[DEF]: Rebounding
+Thato eats a bloodroot leaf.
+Thato flays away your aura of rebounding defence.
+Processed Cures(paralysis)
+[Legacy]: Curing against Serpent (Thato).
+With fluid grace, Thato snaps her wrist, bringing a Razor Whip back to crack viciously into
+you.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:5406|93% M:5163|97%  19:14:41:521  [ Thato ][0|0|0|0|0|0][PAR PSHOT] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+[Curing]: SMOKE SKULLCAP
+You take a long drag of skullcap off your pipe.
+H:5406|93% M:5113|96%  19:14:41:697  [ Thato ][0|0|0|0|0|0][PSHOT] 
+[OUTR]: 1 Bloodroot (848)
+A fierce mountain falcon rips out a chunk of Thato's flesh with its beak.
+H:5406|93% M:5113|96%  19:14:41:905  [ Thato ][0|0|0|0|0|0][PSHOT] 
+You have recovered balance on all limbs.
+Envenomed: (Vernalius)
+Sliced:    (Thato)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (78%/100%).
+Afflicted: (Weariness Paralysis)
+[clum, weari, para]
+Thato takes a drink from an elegant diamond vial.
+H:5406|93% M:5013|94%  19:14:42:120  [ Thato ][0|0|0|0|0|0][PSHOT] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.516)
+You may eat another plant or mineral. Eat (1.52)
+H:5406|93% M:5013|94%  19:14:43:214  [ Thato ][0|0|0|0|0|0][PSHOT] 
+Thato eats a bloodroot leaf.
+Thato ceases to wield a woven shield of twigs in her right hand.
+Processed Cures(paralysis)
+Thato ceases to wield a Razor Whip in her left hand.
+Thato starts to wield a woven shield of twigs in her left hand.
+Thato starts to wield Thoth's fang in her right hand.
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+H:5406|93% M:5013|94%  19:14:43:312  [ Thato ][0|0|0|0|0|0][clum PAR PSHOT] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5406|93% M:5013|94%  19:14:43:443  [ Thato ][0|0|0|0|0|0][clum PSHOT] 
+[OUTR]: 1 Bloodroot (847)
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:5406|93% M:5013|94%  19:14:43:654  [ Thato ][0|0|0|0|0|0][PSHOT] 
+An emerald tree snake sinks its fangs into your neck and injects a potent dose of toxin.
+[AFF]: Fratricide
+Something subtle and yet insidious overcomes you.
+H:5406|93% M:5013|94%  19:14:43:936  [ Thato ][0|0|0|0|0|0][PSHOT frat] 
+You have recovered balance on all limbs.
+Envenomed: (Kalmia)
+Sliced:    (Thato)
+Empower:   (Sleizak)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (87%/100%).
+Afflicted: (Asthma Paralysis)
+[ast, clum, weari, para]
+You may eat another plant or mineral. Eat (1.458)
+H:5521|95% M:4888|92%  19:14:44:900  [ Thato ][0|0|0|0|0|0][PSHOT frat] 
+Thato eats a bloodroot leaf.
+[Curing]: OUTR LOBELIA
+Processed Cures(paralysis)
+[OUTR]: 1 Lobelia (1263)
+[Curing]: EAT LOBELIA
+You eat a lobelia seed.
+You rid yourself of the insidious venom plaguing you.
+[AFF]: Fratricide
+H:5521|95% M:4888|92%  19:14:45:041  [ Thato ][0|0|0|0|0|0][PSHOT] 
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+H:5521|95% M:4888|92%  19:14:45:101  [ Thato ][0|0|0|0|0|0][clum PAR PSHOT] 
+[OUTR]: 1 Lobelia (1262)
+Thato touches a tree of life tattoo.
+Processed Cures(clumsiness weariness asthma)
+[ast[67], clum[67], weari[67]]
+
+H:5521|95% M:4888|92%  19:14:45:184  [ Thato ][0|0|0|0|0|0][clum PAR PSHOT] 
+You have recovered balance on all limbs.
+H:5521|95% M:4888|92%  19:14:46:236  [ Thato ][0|0|0|0|0|0][clum PAR PSHOT] 
+
+[DEF]: Fangbarrier
+The sileris berry juice hardens into a supple purple shell.
+H:5521|95% M:4888|92%  19:14:46:466  [ Thato ][0|0|0|0|0|0][clum PAR PSHOT] 
+You may eat another plant or mineral. Eat (1.498)
+H:5521|95% M:4888|92%  19:14:46:538  [ Thato ][0|0|0|0|0|0][clum PAR PSHOT] 
+Thato eats a piece of kelp.
+[Curing]: EAT BLOODROOT
+Processed Cures(asthma clumsiness weariness)
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+Envenomed: (Kalmia)
+Sliced:    (Thato)
+Proc:      (Sleizak 1)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Sensitivity)
+[HP]:      (83%/100%).
+Afflicted: (Asthma Paralysis Prefarar)
+[ast, clum[44], weari, naus, deaf, para]
+Thato eats some irid moss.
+H:5521|95% M:4738|89%  19:14:46:803  [ Thato ][0|0|0|0|0|0][clum PSHOT] 
+[OUTR]: 1 Bloodroot (846)
+A fierce mountain falcon rips out a chunk of Thato's flesh with its beak.
+H:5521|95% M:4738|89%  19:14:47:966  [ Thato ][0|0|0|0|0|0][clum PSHOT] 
+You may eat another plant or mineral. Eat (1.5)
+H:5521|95% M:4738|89%  19:14:48:215  [ Thato ][0|0|0|0|0|0][clum PSHOT] 
+Thato eats a bloodroot leaf.
+[Curing]: OUTR KELP
+Processed Cures(paralysis)
+[OUTR]: 1 Kelp (1663)
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+Thato misses you with her dirk by a hair.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Thato hunches her shoulders and lets out a soft hiss.
+Processed Cures(asthma clumsiness nausea)
+H:5521|95% M:4738|89%  19:14:48:318  [ Thato ][0|0|0|0|0|0][PAR PSHOT] 
+You have recovered balance on all limbs.
+H:5521|95% M:4738|89%  19:14:48:726  [ Thato ][0|0|0|0|0|0][PAR PSHOT] 
+You suddenly perceive the vague outline of an aura of rebounding around Thato.
+H:5521|95% M:4738|89%  19:14:49:082  [ Thato ][0|0|0|0|0|0][PAR PSHOT] 
+You may eat another plant or mineral.
+H:5521|95% M:4738|89%  19:14:49:717  [ Thato ][0|0|0|0|0|0][PAR PSHOT] 
+Thato eats a ginseng root.
+[Curing]: EAT BLOODROOT
+Processed Cures(nausea)
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+Razed: Rebounding
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (89%/100%).
+Afflicted: (Paralysis)
+[ast[67], clum[67], deaf, para]
+[OUTR]: 1 Bloodroot (845)
+H:5521|95% M:4638|87%  19:14:49:952  [ Thato ][0|0|0|0|0|0][PSHOT] 
+You drop back and ease the engagement.
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+H:5521|95% M:4638|87%  19:14:50:120  [ Thato ][0|0|0|0|0|0][PSHOT] 
+Thato takes a long drag off her pipe.
+H:5521|95% M:4638|87%  19:14:50:123  [ Thato ][0|0|0|0|0|0][PSHOT] 
+
+[DEF]: Rebounding
+You feel an aura of rebounding surround you.
+H:5521|95% M:4638|87%  19:14:50:213  [ Thato ][0|0|0|0|0|0][PSHOT] 
+A fierce mountain falcon rips out a chunk of Thato's flesh with its beak.
+H:5521|95% M:4638|87%  19:14:51:513  [ Thato ][0|0|0|0|0|0][PSHOT] 
+You may eat another plant or mineral. Eat (1.663)
+H:5521|95% M:4638|87%  19:14:51:553  [ Thato ][0|0|0|0|0|0][PSHOT] 
+
+[DEF]: Rebounding
+[DEF]: Fangbarrier
+Thato eats a bloodroot leaf.
+Thato ceases to wield a woven shield of twigs in her left hand.
+Processed Cures(paralysis)
+Thato starts to wield a Razor Whip in her left hand.
+Thato ceases to wield Thoth's fang in her right hand.
+Thato starts to wield a woven shield of twigs in her right hand.
+Thato flays away your aura of rebounding defence.
+The protective coating covering your skin is ripped away along with your protections.
+With fluid grace, Thato snaps her wrist, bringing a Razor Whip back to crack viciously into
+you.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Thato snaps her fingers in front of you.
+H:5521|95% M:4638|87%  19:14:51:564  [ Thato ][0|0|0|0|0|0][PAR PSHOT] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+[Curing]: APPLY SILERIS
+You apply a sileris berry to yourself.
+[Curing]: SMOKE SKULLCAP
+You take a long drag of skullcap off your pipe.
+You have recovered balance on all limbs.
+Envenomed: (Vernalius)
+Sliced:    (Thato)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Engage:    (Thato)
+Equilibrium used: 2.00s..
+Afflicted: (Weariness Paralysis)
+[clum[67], weari, deaf, para]
+[OUTR]: 1 Bloodroot (844)
+H:5521|95% M:4588|86%  19:14:51:808  [ Thato ][0|0|0|0|0|0][PSHOT] 
+Thato takes a drink from an elegant diamond vial.
+H:5521|95% M:4588|86%  19:14:51:980  [ Thato ][0|0|0|0|0|0][PSHOT] 
+An emerald tree snake sinks its fangs into your neck and injects a potent dose of toxin.
+[AFF]: Fratricide
+Something subtle and yet insidious overcomes you.
+H:5521|95% M:4588|86%  19:14:52:213  [ Thato ][0|0|0|0|0|0][PSHOT frat] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.779)
+You may eat another plant or mineral. Eat (1.783)
+H:5521|95% M:4588|86%  19:14:53:514  [ Thato ][0|0|0|0|0|0][PSHOT frat] 
+Thato eats a bloodroot leaf.
+[Curing]: EAT LOBELIA
+Processed Cures(paralysis)
+You eat a lobelia seed.
+You rid yourself of the insidious venom plaguing you.
+[AFF]: Fratricide
+Thato ceases to wield a woven shield of twigs in her right hand.
+Thato ceases to wield a Razor Whip in her left hand.
+Thato starts to wield a woven shield of twigs in her left hand.
+Thato starts to wield Thoth's fang in her right hand.
+Thato carefully wipes all the venoms off of Thoth's fang.
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+H:5521|95% M:4588|86%  19:14:53:526  [ Thato ][0|0|0|0|0|0][clum PAR PSHOT] 
+You have recovered equilibrium.
+You have recovered balance on all limbs.
+H:5521|95% M:4588|86%  19:14:53:700  [ Thato ][0|0|0|0|0|0][clum PAR PSHOT] 
+[OUTR]: 1 Lobelia (1261)
+
+====================DISRUPTED====================
+====================DISRUPTED====================
+====================DISRUPTED====================
+Your mental equilibrium scatters suddenly, upset by some unknown source.
+[AFF]: Disrupted
+H:5521|95% M:4663|87%  19:14:54:506  [ Thato ][0|0|0|0|0|0][clum PAR PSHOT DISR] 
+[Curing]: CONCENTRATE
+You begin intense concentration to restore your equilibrium.
+Equilibrium used: 2.00s.
+H:5636|97% M:4663|87%  19:14:54:623  [ Thato ][0|0|0|0|0|0][clum PAR PSHOT] 
+You may eat another plant or mineral. Eat (1.28)
+H:5636|97% M:4663|87%  19:14:54:798  [ Thato ][0|0|0|0|0|0][clum PAR PSHOT] 
+Thato eats a piece of kelp.
+[Curing]: EAT BLOODROOT
+Processed Cures(clumsiness weariness)
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5636|97% M:4663|87%  19:14:54:896  [ Thato ][0|0|0|0|0|0][clum PSHOT] 
+
+Auto off
+Your ferocity decreases.
+H:5636|97% M:4663|87%  19:14:55:065  [ Thato ][0|0|0|0|0|0][clum PSHOT] 
+Thato quickly pricks you with her dirk.
+[AFF]: Weariness
+Your limbs grow heavy and you groan feebly.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Darkshade
+Your vision is flooded with light, and your face suddenly reddens.
+H:5636|97% M:4663|87%  19:14:55:071  [ Thato ][0|0|0|0|0|0][clum wear DARK PSHOT] 
+[OUTR]: 1 Bloodroot (843)
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+Your limbs strengthen and you feel stronger.
+[AFF]: Weariness
+H:5636|97% M:4663|87%  19:14:56:299  [ Thato ][0|0|0|0|0|0][clum DARK PSHOT] 
+You may eat another plant or mineral. Eat (1.463)
+H:5636|97% M:4663|87%  19:14:56:358  [ Thato ][0|0|0|0|0|0][clum DARK PSHOT] 
+Thato eats a piece of kelp.
+[Curing]: EAT KELP
+Processed Cures(weariness)
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:5636|97% M:4663|87%  19:14:56:816  [ Thato ][0|0|0|0|0|0][DARK PSHOT] 
+You have recovered equilibrium.
+Envenomed: (Xentio)
+Sliced:    (Thato)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (89%/100%).
+Afflicted: (Clumsiness Paralysis)
+[clum, deaf, para]
+Thato eats some irid moss.
+[Curing]: SIP MANA
+You take a drink from an oaken vial.
+Your mind feels stronger and more alert.
+H:5636|97% M:5283|99%  19:14:56:841  [ Thato ][0|0|0|0|0|0] ( +620m 11% )[DARK PSHOT] 
+Sunlight shines down upon you mercilessly, rippling across your skin like fire.
+Health lost: 351 (magical).
+The arrow through your foot finally comes free, allowing you to move normally once again.
+
+[AFF]: Pinshot
+H:5285|91% M:5283|99%  19:14:57:120  [ Thato ][0|0|0|0|0|0] ( -351h 6% )[DARK] 
+A fierce mountain falcon dives at Thato, raking her face with its talons.
+H:5285|91% M:5283|99%  19:14:57:270  [ Thato ][0|0|0|0|0|0][DARK] 
+You may utilise the tree tattoo again. Tree (13.986)
+H:5285|91% M:5283|99%  19:14:57:639  [ Thato ][0|0|0|0|0|0][DARK] 
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+No longer will the sunlight harm you.
+[AFF]: Darkshade
+H:5285|91% M:5283|99%  19:14:57:730  [ Thato ][0|0|0|0|0|0]
+You may eat another plant or mineral.
+H:5285|91% M:5283|99%  19:14:58:053  [ Thato ][0|0|0|0|0|0]
+Thato eats a bloodroot leaf.
+Thato quickly pricks you with her dirk.
+Processed Cures(paralysis)
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+H:5285|91% M:5283|99%  19:14:58:160  [ Thato ][0|0|0|0|0|0][clum PAR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5285|91% M:5283|99%  19:14:58:334  [ Thato ][0|0|0|0|0|0][clum] 
+[OUTR]: 1 Bloodroot (842)
+You have recovered balance on all limbs.
+H:5285|91% M:5283|99%  19:14:58:425  [ Thato ][0|0|0|0|0|0][clum] 
+You bunch your powerful muscles and launch yourself in a majestic leap northwestwards.
+Walking down the garden path.
+--- Area 572: A secluded mansion - v51501 ---
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                     [ ]
+                                             
+                         [ ]-[ ]
+                        / | x
+                     [ ]-[^]-[ ]
+                        \ | /
+                         [ ]
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+--- Walking down the garden path - -2:0:0 ---
+The sky lightens with the onset of dawn. A sigil in the shape of a small, rectangular monolith
+is on the ground.
+You see exits leading northeast and southeast.
+You drop back and ease the engagement.
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+H:5285|91% M:5283|99%  19:14:58:535  [ Thato ][0|0|0|0|0|0][clum] 
+[AFF]: Hypochondria
+A terrible sense of unease comes over you.
+H:5285|91% M:5283|99%  19:14:58:539  [ Thato ][0|0|0|0|0|0][clum hchon] 
+@@ Darona has entered the realms. @@
+H:5285|91% M:5283|99%  19:14:59:243  [ Thato ][0|0|0|0|0|0][clum hchon] 
+You have recovered balance on all limbs.
+H:5285|91% M:5283|99%  19:14:59:438  [ Thato ][0|0|0|0|0|0][clum hchon] 
+You may eat another plant or mineral. Eat (1.417)
+H:5285|91% M:5283|99%  19:14:59:751  [ Thato ][0|0|0|0|0|0][clum hchon] 
+Your ferocity decreases.
+H:5285|91% M:5283|99%  19:14:59:835  [ Thato ][0|0|0|0|0|0][clum hchon] 
+[Curing]: EAT LOBELIA
+You eat a lobelia seed.
+My, you feel healthier than you have in years.
+[AFF]: Hypochondria
+H:5285|91% M:5283|99%  19:14:59:930  [ Thato ][0|0|0|0|0|0][clum] 
+You bunch your powerful muscles and launch yourself in a majestic leap northeastwards.
+A break in the estate wall.
+--- Area 572: A secluded mansion - v51723 ---
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                 [ ]
+                                             
+                     [ ]-[ ]
+                    / | x
+                 [ ]-[^]-[ ]
+                    \ | /
+                     [ ]
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+--- A break in the estate wall --- -1:1:0 ---
+The sky lightens with the onset of dawn. A sigil in the shape of a small, rectangular monolith
+is on the ground.
+You see exits leading southeast, southwest, and northwest.
+H:5285|91% M:5283|99%  19:15:00:003  [ Thato ][0|0|0|0|0|0][clum] 
+[OUTR]: 1 Lobelia (1260)
+
+THEY CAN TOUCH TREE AGAIN!
+
+[DEF]: Rebounding
+You feel an aura of rebounding surround you.
+H:5285|91% M:5283|99%  19:15:00:210  [ Thato ][0|0|0|0|0|0][clum] 
+You have recovered balance on all limbs.
+H:5285|91% M:5283|99%  19:15:00:874  [ Thato ][0|0|0|0|0|0][clum] 
+You may drink another health or mana elixir. Mana (4.238)
+H:5285|91% M:5283|99%  19:15:01:079  [ Thato ][0|0|0|0|0|0][clum] 
+You may eat another plant or mineral. Eat (1.696)
+H:5285|91% M:5283|99%  19:15:01:626  [ Thato ][0|0|0|0|0|0][clum] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:5285|91% M:5283|99%  19:15:01:632  [ Thato ][0|0|0|0|0|0]
+
+[DEF]: Fangbarrier
+The sileris berry juice hardens into a supple purple shell.
+H:5285|91% M:5283|99%  19:15:01:770  [ Thato ][0|0|0|0|0|0]
+Thato quickly pricks you with her dirk.
+The attack rebounds back onto Thato!
+Striking like a snake, Thato follows the first attack with another.
+The attack rebounds off your aura of protection!
+H:5285|91% M:5283|99%  19:15:01:865  [ Thato ][0|0|0|0|0|0]
+There is no exit in that direction.
+H:5285|91% M:5283|99%  19:15:02:040  [ Thato ][0|0|0|0|0|0]
+[AFF]: Anorexia
+The thought of food revolts you all of a sudden.
+There is no exit in that direction.
+H:5285|91% M:5283|99%  19:15:02:509  [ Thato ][0|0|0|0|0|0][ANO] 
+[Curing]: APPLY EPIDERMAL TO BODY
+You take out some salve and quickly rub it on your body.
+Food is no longer repulsive to you.
+[AFF]: Anorexia
+H:5285|91% M:5283|99%  19:15:02:592  [ Thato ][0|0|0|0|0|0]
+Your thoughts cease racing.
+H:5285|91% M:5283|99%  19:15:02:596  [ Thato ][0|0|0|0|0|0]
+There is no exit in that direction.
+H:5285|91% M:5283|99%  19:15:02:952  [ Thato ][0|0|0|0|0|0]
+You may eat another plant or mineral.
+H:5285|91% M:5283|99%  19:15:03:229  [ Thato ][0|0|0|0|0|0]
+Thato eats a bloodroot leaf.
+Processed Cures(paralysis)
+[clum, deaf]
+
+H:5285|91% M:5283|99%  19:15:03:319  [ Thato ][0|0|0|0|0|0]
+You may apply another salve to yourself. Body (0.827)
+H:5285|91% M:5283|99%  19:15:03:418  [ Thato ][0|0|0|0|0|0]
+
+[DEF]: Rebounding
+[DEF]: Fangbarrier
+Thato ceases to wield a woven shield of twigs in her left hand.
+Thato starts to wield a Razor Whip in her left hand.
+Thato ceases to wield Thoth's fang in her right hand.
+Thato starts to wield a woven shield of twigs in her right hand.
+Thato flays away your aura of rebounding defence.
+The protective coating covering your skin is ripped away along with your protections.
+With fluid grace, Thato snaps her wrist, bringing a Razor Whip back to crack viciously into
+you.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:5285|91% M:5283|99%  19:15:03:550  [ Thato ][0|0|0|0|0|0][PAR] 
+Ferocity:  [####|####|####|####]
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+[Curing]: APPLY SILERIS
+You apply a sileris berry to yourself.
+[Curing]: SMOKE SKULLCAP
+Fireflies dance around the jar-shaped bowl of your pipe as smoke gently rises.
+H:5285|91% M:5283|99%  19:15:03:725  [ Thato ][0|0|0|0|0|0]
+[OUTR]: 1 Bloodroot (841)
+Empty training yard.
+--- Area 572: A secluded mansion - v52882 ---
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+             [ ]
+                                             
+                 [ ]-[ ]
+                / | x
+             [ ]-[^]-[ ]
+                \ | /
+                 [ ]
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+--- Empty training yard ----------- 0:0:0 ---
+The sky lightens with the onset of dawn.
+You see exits leading southwest and northwest.
+H:5285|91% M:5283|99%  19:15:03:993  [ Thato ][0|0|0|0|0|0]
+[AFF]: Darkshade
+Your skin prickles and burns.
+The Oniar estate gates.
+--- Area 572: A secluded mansion - v53525 ---
+                                             
+                                             
+                                             
+                                             
+                                             
+                 [ ]
+                                             
+                     [ ]-[ ]
+                    / | x
+                 [ ]-[^]-[ ]
+                    \ | /
+                     [+]
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+--- The Oniar estate gates ------ -1:-1:0 ---
+The sky lightens with the onset of dawn. A rune like a flurry of lightning bolts has been
+sketched into the ground here (Isaz: Throws off balance). A rune like a rising sun has been 
+sketched into the ground here (Dagaz: Heals affs). A fierce mountain falcon surveys the 
+surroundings with keen eyes. Coiled upon the ground, an emerald tree snake silently tastes the 
+air. A lightwall stands here, shining with such intensity that you fear should your vision 
+stray too close you might lose all sight.
+You see exits leading north, northeast, and northwest.
+H:5285|91% M:5283|99%  19:15:04:505  [ Thato ][0|0|0|0|0|0][DARK] 
+Your lungs have recovered enough to smoke another mineral or plant.
+H:5400|93% M:5313|100%  19:15:05:230  [ Thato ][0|0|0|0|0|0][DARK] 
+You may eat another plant or mineral. Eat (1.596)
+H:5400|93% M:5313|100%  19:15:05:318  [ Thato ][0|0|0|0|0|0][DARK] 
+[Curing]: OUTR GINSENG
+[OUTR]: 1 Ginseng (585)
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+No longer will the sunlight harm you.
+[AFF]: Darkshade
+H:5400|93% M:5313|100%  19:15:05:466  [ Thato ][0|0|0|0|0|0]
+[OUTR]: 1 Ginseng (584)
+You may eat another plant or mineral. Eat (1.414)
+H:5400|93% M:5313|100%  19:15:06:879  [ Thato ][0|0|0|0|0|0]
+Thato takes a drink from an elegant diamond vial.
+H:5400|93% M:5313|100%  19:15:07:417  [ Thato ][0|0|0|0|0|0]
+You suddenly perceive the vague outline of an aura of rebounding around Thato.
+H:5400|93% M:5313|100%  19:15:08:354  [ Thato ][0|0|0|0|0|0]
+Thato's aura of weapons rebounding disappears.
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Darkshade
+Your vision is flooded with light, and your face suddenly reddens.
+H:5400|93% M:5313|100%  19:15:08:496  [ Thato ][0|0|0|0|0|0][PAR DARK] 
+Thato takes a long drag off her pipe.
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5400|93% M:5313|100%  19:15:08:591  [ Thato ][0|0|0|0|0|0][DARK] 
+An emerald tree snake sinks its fangs into your neck and injects a potent dose of toxin.
+[AFF]: Fratricide
+Something subtle and yet insidious overcomes you.
+H:5400|93% M:5313|100%  19:15:08:648  [ Thato ][0|0|0|0|0|0][DARK frat] 
+[OUTR]: 1 Bloodroot (840)
+H:5400|93% M:5313|100%  19:15:09:381  [ Thato ][0|0|0|0|0|0][DARK frat] 
+Envenomed: (Vernalius)
+Sliced:    (Thato)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Engage:    (Thato)
+Equilibrium used: 2.00s..
+Afflicted: (Weariness Paralysis)
+[clum, weari, deaf, para]
+Thato eats a bloodroot leaf.
+Processed Cures(paralysis)
+[clum, weari, deaf]
+
+H:5400|93% M:5263|99%  19:15:09:399  [ Thato ][0|0|0|0|0|0][DARK frat] 
+A fierce mountain falcon dives at Thato, raking her face with its talons.
+H:5400|93% M:5263|99%  19:15:09:662  [ Thato ][0|0|0|0|0|0][DARK frat] 
+You may eat another plant or mineral. Eat (1.521)
+H:5400|93% M:5263|99%  19:15:10:111  [ Thato ][0|0|0|0|0|0][DARK frat] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+No longer will the sunlight harm you.
+[AFF]: Darkshade
+H:5400|93% M:5263|99%  19:15:10:200  [ Thato ][0|0|0|0|0|0][frat] 
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Weariness
+Your limbs grow heavy and you groan feebly.
+H:5400|93% M:5263|99%  19:15:10:206  [ Thato ][0|0|0|0|0|0][wear PAR frat] 
+[OUTR]: 1 Ginseng (583)
+Thato eats a piece of kelp.
+Processed Cures(clumsiness weariness)
+[clum[50], weari[50], deaf]
+
+H:5400|93% M:5263|99%  19:15:10:953  [ Thato ][0|0|0|0|0|0][wear PAR frat] 
+You have recovered equilibrium.
+You have recovered balance on all limbs.
+H:5400|93% M:5263|99%  19:15:11:287  [ Thato ][0|0|0|0|0|0][wear PAR frat] 
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+Your limbs strengthen and you feel stronger.
+[AFF]: Weariness
+H:5400|93% M:5263|99%  19:15:11:616  [ Thato ][0|0|0|0|0|0][PAR frat] 
+You may utilise the tree tattoo again. Tree (13.917)
+You may eat another plant or mineral. Eat (1.503)
+H:5400|93% M:5213|98%  19:15:11:702  [ Thato ][0|0|0|0|0|0][PAR frat] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+Envenomed: (Kalmia)
+Sliced:    (Thato)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (84%/100%).
+Afflicted: (Asthma Paralysis)
+[ast, clum[50], weari[50], deaf, para]
+[OUTR]: 1 Bloodroot (839)
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+You rid yourself of the insidious venom plaguing you.
+[AFF]: Fratricide
+H:5400|93% M:5113|96%  19:15:11:934  [ Thato ][0|0|0|0|0|0]
+
+[DEF]: Rebounding
+You feel an aura of rebounding surround you.
+H:5400|93% M:5113|96%  19:15:12:200  [ Thato ][0|0|0|0|0|0]
+Thato eats a bloodroot leaf.
+Thato quickly pricks you with her dirk.
+Processed Cures(paralysis)
+The attack rebounds back onto Thato!
+Striking like a snake, Thato follows the first attack with another.
+The attack rebounds off your aura of protection!
+H:5400|93% M:5113|96%  19:15:12:568  [ Thato ][0|0|0|0|0|0]
+A fierce mountain falcon dives at Thato, raking her face with its talons.
+Its talons shred the deathsight defence of Thato.
+H:5400|93% M:5113|96%  19:15:12:726  [ Thato ][0|0|0|0|0|0]
+Thato eats some irid moss.
+H:5400|93% M:5113|96%  19:15:12:730  [ Thato ][0|0|0|0|0|0]
+You may eat another plant or mineral. Eat (1.51)
+H:5400|93% M:5113|96%  19:15:13:235  [ Thato ][0|0|0|0|0|0]
+You have recovered balance on all limbs.
+H:5400|93% M:5113|96%  19:15:13:656  [ Thato ][0|0|0|0|0|0]
+H:5400|93% M:5113|96%  19:15:13:663  [ Thato ][0|0|0|0|0|0]
+
+[DEF]: Rebounding
+Your aura of weapons rebounding disappears.
+Envenomed: (Gecko)
+Sliced:    (Thato)
+Runeblade: (Nairat)
+Afflicted: (Frozen)
+Sileris stripped.
+Empower:   (Inguz)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (76%/100%).
+Afflicted: (Slickness)
+[ast, clum[50], weari[50], deaf, slick, frzn[200], para]
+
+[DEF]: Fangbarrier
+Thato takes a drink from an elegant diamond vial.
+[Curing]: SMOKE SKULLCAP
+You take a long drag of skullcap off your pipe.
+The sileris berry juice hardens into a supple purple shell.
+H:5400|93% M:4913|92%  19:15:13:707  [ Thato ][0|0|0|0|0|0] ( -200m 3% )
+Thato eats a bloodroot leaf.
+Thato takes some salve from a vial and rubs it on her skin.
+Processed Cures(frozen)
+Processed Cures(paralysis)
+H:5400|93% M:4913|92%  19:15:14:104  [ Thato ][0|0|0|0|0|0]
+Thato lets out a piercing scream, as if wounded by the very sunlight.
+Thato takes some salve from a vial and rubs it on her skin.
+Processed Cures(frozen)
+H:5400|93% M:4988|93%  19:15:15:057  [ Thato ][0|0|0|0|0|0]
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.511)
+H:5515|95% M:4988|93%  19:15:15:217  [ Thato ][0|0|0|0|0|0]
+You have recovered balance on all limbs.
+H:5515|95% M:4988|93%  19:15:15:672  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4988|93%  19:15:15:680  [ Thato ][0|0|0|0|0|0]
+Envenomed: (Gecko)
+Sliced:    (Thato)
+Runeblade: (Nairat)
+Afflicted: (Frozen)
+Proc:      (Inguz)
+Afflicted: (Sensitivity)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (87%/100%).
+Afflicted: (Slickness Paralysis)
+[ast, clum[50], sen, weari[50], dark, deaf, slick, frzn[200], para]
+A fierce mountain falcon dives at Thato, raking her face with its talons.
+H:5515|95% M:4888|92%  19:15:15:724  [ Thato ][0|0|0|0|0|0]
+Thato eats a bloodroot leaf.
+Processed Cures(paralysis slickness)
+[ast, clum[50], sen, weari[50], dark, deaf, slick[50], frzn[200], para[50]]
+
+H:5515|95% M:4888|92%  19:15:15:830  [ Thato ][0|0|0|0|0|0]
+Thato takes some salve from a vial and rubs it on her skin.
+Processed Cures(frozen)
+H:5515|95% M:4888|92%  19:15:16:199  [ Thato ][0|0|0|0|0|0]
+Thato lets out a piercing scream, as if wounded by the very sunlight.
+
+[DEF]: Fangbarrier
+An emerald tree snake lunges for your throat, its fangs sinking into the waxy coating that
+protects you.
+The protective barrier coating your skin dissolves.
+H:5515|95% M:4838|91%  19:15:16:731  [ Thato ][0|0|0|0|0|0]
+[Curing]: APPLY SILERIS
+You apply a sileris berry to yourself.
+H:5515|95% M:4838|91%  19:15:16:814  [ Thato ][0|0|0|0|0|0]
+You suddenly perceive the vague outline of an aura of rebounding around Thato.
+H:5515|95% M:4838|91%  19:15:17:083  [ Thato ][0|0|0|0|0|0]
+Thato takes some salve from a vial and rubs it on her skin.
+Processed Cures(frozen)
+H:5515|95% M:4838|91%  19:15:17:224  [ Thato ][0|0|0|0|0|0]
+Thato eats a bloodroot leaf.
+Thato applies a sileris berry to herself.
+Processed Cures(paralysis)
+H:5515|95% M:4838|91%  19:15:17:415  [ Thato ][0|0|0|0|0|0]
+You have recovered balance on all limbs.
+Razed: Rebounding
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (80%/100%).
+Afflicted: (Paralysis)
+[ast, clum[50], sen, weari[50], dark, deaf, para]
+Thato takes some elixir from an elegant diamond vial and rubs it into her torso.ribs: 0
+Thato lets out a piercing scream, as if wounded by the very sunlight.
+Thato eats some irid moss.
+H:5515|95% M:4738|89%  19:15:18:803  [ Thato ][0|0|0|0|0|0]
+Thato eats a bloodroot leaf.
+Processed Cures(paralysis)
+[ast, clum[50], sen, weari[50], dark, deaf]
+
+H:5515|95% M:4738|89%  19:15:19:180  [ Thato ][0|0|0|0|0|0]
+You drop back and ease the engagement.
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+H:5515|95% M:4738|89%  19:15:19:326  [ Thato ][0|0|0|0|0|0]
+You have recovered balance on all limbs.
+H:5515|95% M:4738|89%  19:15:19:499  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:19:524  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:19:538  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:19:610  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:19:621  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:19:631  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:19:643  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:19:652  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:19:664  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:19:672  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:19:683  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:19:692  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:19:704  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:19:736  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:19:748  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:19:778  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:19:791  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:19:801  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:19:813  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:20:050  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:20:061  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:20:074  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:20:088  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:20:099  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:20:109  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:20:118  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:20:131  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:20:139  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:20:150  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:20:159  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:20:170  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:20:179  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:20:190  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:20:200  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:20:210  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:20:219  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:20:230  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:20:400  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:20:410  [ Thato ][0|0|0|0|0|0]
+Your ferocity decreases.
+H:5515|95% M:4738|89%  19:15:20:614  [ Thato ][0|0|0|0|0|0]
+Walking down the garden path.
+--- Area 572: A secluded mansion - v51501 ---
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                     [ ]
+                                             
+                         [ ]-[ ]
+                        / | x
+                     [ ]-[^]-[ ]
+                        \ | /
+                         [ ]
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+--- Walking down the garden path - -2:0:0 ---
+The sky lightens with the onset of dawn. A sigil in the shape of a small, rectangular monolith
+is on the ground.
+You see exits leading northeast and southeast.
+H:5515|95% M:4738|89%  19:15:20:721  [ Thato ][0|0|0|0|0|0]
+Thato eats a ginseng root.
+Processed Cures(darkshade)
+[ast, clum[50], sen, weari[50], deaf]
+
+H:5515|95% M:4738|89%  19:15:20:748  [ Thato ][0|0|0|0|0|0]
+H:5515|95% M:4738|89%  19:15:20:756  [ Thato ][0|0|0|0|0|0]
+Envenomed: (Gecko)
+Sliced:    (Thato)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Engage:    (Thato)
+Equilibrium used: 2.00s..
+Afflicted: (Slickness Paralysis)
+[ast, clum[50], sen, weari[50], deaf, slick, para]
+H:5515|95% M:4688|88%  19:15:20:860  [ Thato ][0|0|0|0|0|0]
+You are recovering equilibrium and cannot move yet.
+H:5515|95% M:4688|88%  19:15:20:982  [ Thato ][0|0|0|0|0|0]
+
+[DEF]: Rebounding
+You feel an aura of rebounding surround you.
+H:5515|95% M:4638|87%  19:15:22:202  [ Thato ][0|0|0|0|0|0]
+Thato eats a bloodroot leaf.
+Processed Cures(paralysis slickness)
+[ast, clum[50], sen, weari[50], deaf, slick[50], para[50]]
+
+H:5515|95% M:4638|87%  19:15:22:479  [ Thato ][0|0|0|0|0|0]
+Thato takes a drink from an elegant diamond vial.
+H:5515|95% M:4638|87%  19:15:22:729  [ Thato ][0|0|0|0|0|0]
+
+[DEF]: Rebounding
+You have recovered equilibrium.
+You have recovered balance on all limbs.
+Your aura of weapons rebounding disappears.
+Envenomed: (Curare)
+Sliced:    (Thato)
+Empower:   (Inguz)
+Shield:    (Scrambled Brains)
+Ferocity:  [####|####|####|####]
+[HP]:      (83%/100%).
+Afflicted: (Dizziness)
+[diz, ast, clum[50], sen, weari[50], deaf, slick[50], para]
+A look of extreme focus crosses the face of Thato.
+[Curing]: SMOKE SKULLCAP
+You take a long drag of skullcap off your pipe.
+[Curing]: SIP MANA
+You take a drink from an oaken vial.
+Your mind feels stronger and more alert.
+H:5515|95% M:5304|99%  19:15:22:917  [ Thato ][0|0|0|0|0|0] ( +666m 12% )
+Thato eats a bloodroot leaf.
+Processed Cures(paralysis slickness)
+[diz, ast, clum[50], sen, weari[50], deaf, para[50]]
+
+H:5515|95% M:5304|99%  19:15:24:248  [ Thato ][0|0|0|0|0|0]
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Darkshade
+Your vision is flooded with light, and your face suddenly reddens.
+H:5515|95% M:5304|99%  19:15:24:336  [ Thato ][0|0|0|0|0|0][PAR DARK] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.519)
+H:5515|95% M:5304|99%  19:15:24:436  [ Thato ][0|0|0|0|0|0][PAR DARK] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5515|95% M:5304|99%  19:15:24:440  [ Thato ][0|0|0|0|0|0][DARK] 
+[OUTR]: 1 Bloodroot (838)
+Thato eats some irid moss.
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Thato)
+Proc:      (Inguz)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Proned)
+Afflicted: (Prone)
+[HP]:      (79%/100%).
+Afflicted: (Slickness Paralysis)
+[diz, ast, clum[50], sen, weari[50], deaf, slick, prn, para]
+
+Processed Cures(dizziness)
+Thato eats a bloodroot leaf.
+Processed Cures(paralysis slickness)
+[ast, clum[50], sen, weari[50], deaf, prn, para]
+
+H:5630|97% M:5213|98%  19:15:25:862  [ Thato ][0|0|0|0|0|0][DARK] 
+You may utilise the tree tattoo again. Tree (14.012)
+H:5630|97% M:5213|98%  19:15:25:945  [ Thato ][0|0|0|0|0|0][DARK] 
+You may eat another plant or mineral. Eat (1.602)
+H:5630|97% M:5213|98%  19:15:26:042  [ Thato ][0|0|0|0|0|0][DARK] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+No longer will the sunlight harm you.
+[AFF]: Darkshade
+H:5630|97% M:5213|98%  19:15:26:054  [ Thato ][0|0|0|0|0|0]
+[OUTR]: 1 Ginseng (582)
+
+[DEF]: Fangbarrier
+The sileris berry juice hardens into a supple purple shell.
+H:5630|97% M:5163|97%  19:15:26:853  [ Thato ][0|0|0|0|0|0]
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Thato)
+Runeblade: (Nairat)
+Afflicted: (Frozen)
+Empower:   (Inguz)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (74%/100%).
+Afflicted: (Slickness)
+[ast, clum[50], sen, weari[50], deaf, slick, frzn[200], prn, para]
+You may drink another health or mana elixir. Mana (4.415)
+H:5630|97% M:4963|93%  19:15:27:333  [ Thato ][0|0|0|0|0|0] ( -200m 3% )
+Thato eats a bloodroot leaf.
+Thato takes some elixir from an elegant diamond vial and rubs it into her torso.ribs: 0
+
+Processed Cures(paralysis slickness)
+Thato stands up.
+ + + + STANDING + + +
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Darkshade
+Your vision is flooded with light, and your face suddenly reddens.
+H:5630|97% M:4963|93%  19:15:27:439  [ Thato ][0|0|0|0|0|0][PAR DARK] 
+You may eat another plant or mineral. Eat (1.483)
+H:5630|97% M:4963|93%  19:15:27:535  [ Thato ][0|0|0|0|0|0][PAR DARK] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5630|97% M:4963|93%  19:15:27:626  [ Thato ][0|0|0|0|0|0][DARK] 
+Thato touches a tree of life tattoo.
+Processed Cures(clumsiness slickness weariness sensitivity asthma frozen)
+[ast, clum[40], sen[80], weari[40], deaf, slick[80], frzn[180]]
+
+H:5630|97% M:4963|93%  19:15:27:630  [ Thato ][0|0|0|0|0|0][DARK] 
+[OUTR]: 1 Bloodroot (837)
+Thato takes some salve from a vial and rubs it on her skin.
+Processed Cures(frozen)
+Thato applies a sileris berry to herself.
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+No longer will the sunlight harm you.
+[AFF]: Darkshade
+H:5630|97% M:4963|93%  19:15:27:870  [ Thato ][0|0|0|0|0|0]
+You have recovered balance on all limbs.
+You cease wielding a blessed legionnaire's longsword in your left hand.
+You start to wield a mithril broadsword in your left hand.
+Envenomed: (Gecko)
+Sliced:    (Torso) (11.8%)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (61%/100%).
+Afflicted: (Slickness Paralysis).*
+[ast, clum[40], sen[80], weari[40], deaf, slick, frzn, para]
+You focus on automatically empowering the isaz, sleizak, and inguz runes.
+H:5630|97% M:4863|91%  19:15:28:970  [ Thato ][0|11.8|0|0|0|0]
+You may eat another plant or mineral. Eat (1.538)
+H:5630|97% M:4863|91%  19:15:29:163  [ Thato ][0|11.8|0|0|0|0]
+Thato eats a bloodroot leaf.
+Thato quickly pricks you with her dirk.
+Processed Cures(paralysis slickness)
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+H:5630|97% M:4863|91%  19:15:29:170  [ Thato ][0|11.8|0|0|0|0][clum PAR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5630|97% M:4863|91%  19:15:29:359  [ Thato ][0|11.8|0|0|0|0][clum] 
+[OUTR]: 1 Bloodroot (836)
+Thato eats some irid moss.
+H:5630|97% M:4863|91%  19:15:30:760  [ Thato ][0|11.8|0|0|0|0][clum] 
+Thato eats a bloodroot leaf.
+Thato takes some salve from a vial and rubs it on her skin.
+Processed Cures(frozen)
+Processed Cures(paralysis)
+H:5630|97% M:4863|91%  19:15:30:950  [ Thato ][0|11.8|0|0|0|0][clum] 
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Weariness
+Your limbs grow heavy and you groan feebly.
+Thato hunches her shoulders and lets out a soft hiss.
+Processed Cures(asthma clumsiness sensitivity)
+You may eat another plant or mineral. Eat (1.6)
+H:5630|97% M:4863|91%  19:15:30:957  [ Thato ][0|11.8|0|0|0|0][clum wear PAR] 
+Thato takes a long drag off her pipe.
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5630|97% M:4863|91%  19:15:31:114  [ Thato ][0|11.8|0|0|0|0][clum wear] 
+You have recovered balance on all limbs.
+H:5630|97% M:4863|91%  19:15:31:173  [ Thato ][0|11.8|0|0|0|0][clum wear] 
+H:5630|97% M:4863|91%  19:15:31:180  [ Thato ][0|11.8|0|0|0|0][clum wear] 
+Envenomed: (Gecko)
+Sliced:    (Torso) (23.6%)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (63%/100%).
+Afflicted: (Slickness Paralysis).*
+[sen[53], deaf, slick, para]
+[OUTR]: 1 Bloodroot (835)
+H:5630|97% M:4763|89%  19:15:31:252  [ Thato ][0|23.6|0|0|0|0][clum wear] 
+The empowerment of the inguz rune fades.
+H:5630|97% M:4763|89%  19:15:31:385  [ Thato ][0|23.6|0|0|0|0][clum wear] 
+
+[DEF]: Rebounding
+You feel an aura of rebounding surround you.
+H:5630|97% M:4763|89%  19:15:31:398  [ Thato ][0|23.6|0|0|0|0][clum wear] 
+Thato takes a drink from an elegant diamond vial.
+H:5630|97% M:4713|88%  19:15:32:105  [ Thato ][0|23.6|0|0|0|0][clum wear] 
+Thato eats a bloodroot leaf.
+Processed Cures(paralysis slickness)
+[sen[53], deaf, slick[50], para[50]]
+
+H:5630|97% M:4713|88%  19:15:32:563  [ Thato ][0|23.6|0|0|0|0][clum wear] 
+You may eat another plant or mineral. Eat (1.55)
+H:5630|97% M:4713|88%  19:15:32:663  [ Thato ][0|23.6|0|0|0|0][clum wear] 
+Thato takes a long drag off her pipe.
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:5630|97% M:4713|88%  19:15:32:671  [ Thato ][0|23.6|0|0|0|0][wear] 
+
+[DEF]: Rebounding
+[DEF]: Fangbarrier
+Thato ceases to wield a woven shield of twigs in her left hand.
+Thato starts to wield a Razor Whip in her left hand.
+Thato ceases to wield Thoth's fang in her right hand.
+Thato starts to wield a woven shield of twigs in her right hand.
+Thato flays away your aura of rebounding defence.
+The protective coating covering your skin is ripped away along with your protections.
+With fluid grace, Thato snaps her wrist, bringing a Razor Whip back to crack viciously into
+you.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Thato snaps her fingers in front of you.
+H:5630|97% M:4713|88%  19:15:32:754  [ Thato ][0|23.6|0|0|0|0][wear PAR] 
+[Curing]: SMOKE SKULLCAP
+You take a long drag of skullcap off your pipe.
+H:5630|97% M:4713|88%  19:15:32:851  [ Thato ][0|23.6|0|0|0|0][wear PAR] 
+You have recovered balance on all limbs.
+H:5630|97% M:4713|88%  19:15:33:523  [ Thato ][0|23.6|0|0|0|0][wear PAR] 
+You may eat another plant or mineral.
+H:5630|97% M:4713|88%  19:15:34:335  [ Thato ][0|23.6|0|0|0|0][wear PAR] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.571)
+H:5630|97% M:4713|88%  19:15:34:422  [ Thato ][0|23.6|0|0|0|0][wear PAR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+[Curing]: APPLY SILERIS
+You apply a sileris berry to yourself.
+Envenomed: (Curare)
+Sliced:    (Torso) (35.4%)
+Shield:    (Asthma)
+Ferocity:  [####|####|####|####]
+[HP]:      (77%/100%).
+Afflicted: (Asthma).*
+[ast, sen[53], deaf, para]
+Thato eats a bloodroot leaf.
+Thato ceases to wield a woven shield of twigs in her right hand.
+Processed Cures(paralysis)
+Thato ceases to wield a Razor Whip in her left hand.
+Thato starts to wield a woven shield of twigs in her left hand.
+Thato starts to wield Thoth's fang in her right hand.
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Asthma
+You feel a tightening sensation grow in your lungs.
+H:5630|97% M:4613|86%  19:15:34:692  [ Thato ][0|35.4|0|0|0|0][AST wear PAR] 
+An emerald tree snake slithers into the room and curls affectionately around Thato's leg.
+
+H:5630|97% M:4613|86%  19:15:34:699  [ Thato ][0|35.4|0|0|0|0][AST wear PAR] 
+[OUTR]: 1 Bloodroot (834)
+[Prio]: Impatience (1)
+[Prio]: Asthma (2)
+H:5630|97% M:4688|88%  19:15:34:894  [ Thato ][0|35.4|0|0|0|0][AST wear PAR] 
+
+====================DISRUPTED====================
+====================DISRUPTED====================
+====================DISRUPTED====================
+Your mental equilibrium scatters suddenly, upset by some unknown source.
+[AFF]: Disrupted
+[Curing]: CONCENTRATE
+You begin intense concentration to restore your equilibrium.
+Equilibrium used: 2.00s.
+H:5630|97% M:4688|88%  19:15:35:780  [ Thato ][0|35.4|0|0|0|0][AST wear PAR] 
+You may eat another plant or mineral. Eat (1.501)
+H:5745|99% M:4688|88%  19:15:36:016  [ Thato ][0|35.4|0|0|0|0][AST wear PAR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5745|99% M:4688|88%  19:15:36:205  [ Thato ][0|35.4|0|0|0|0][AST wear] 
+[OUTR]: 1 Bloodroot (833)
+Thato eats a piece of kelp.
+Thato fixes her gaze to yours and hisses a sharp command.
+Processed Cures(asthma sensitivity)
+[AFF]: Masochism
+An odd sensation descends upon you.
+Thato sinks her fangs into your body and you wince in pain.
+[AFF]: Disloyalty
+You feel ugliness radiating from you.
+[AFF]: Impatience
+You shuffle your feet noisily, suddenly bored.
+H:5745|99% M:4688|88%  19:15:36:389  [ Thato ][0|35.4|0|0|0|0][maso IMP AST wear disl] 
+You have recovered balance on all limbs.
+H:5745|99% M:4688|88%  19:15:36:565  [ Thato ][0|35.4|0|0|0|0][maso IMP AST wear disl] 
+Thato eats some irid moss.
+H:5745|99% M:4638|87%  19:15:36:749  [ Thato ][0|35.4|0|0|0|0][maso IMP AST wear disl] 
+With the heel of your palm, you smack yourself upside the head.
+Your shield completely absorbs the damage.
+H:5745|99% M:4638|87%  19:15:37:474  [ Thato ][0|35.4|0|0|0|0][maso IMP AST wear disl] 
+
+[DEF]: Shield
+You have recovered equilibrium.
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 4.00s.
+You may eat another plant or mineral. Eat (1.406)
+H:5745|99% M:4638|87%  19:15:37:610  [ Thato ][0|35.4|0|0|0|0][maso IMP AST wear disl] 
+[Curing]: OUTR GOLDENSEAL
+[OUTR]: 1 Goldenseal (1492)
+[Curing]: EAT GOLDENSEAL
+You eat a goldenseal root.
+You are patient once again.
+[AFF]: Impatience
+[Curing]: FOCUS MIND
+You focus your mind intently on curing your mental maladies.
+You no longer enjoy pain.
+[AFF]: Masochism
+[Curing]: SIP MANA
+You take a drink from an oaken vial.
+Your mind feels stronger and more alert.
+H:5745|99% M:5228|98%  19:15:37:792  [ Thato ][0|35.4|0|0|0|0] ( +590m 11% )[AST wear disl] 
+
+[Prio]: Paralysis (26)
+Your ferocity decreases.
+H:5745|99% M:5228|98%  19:15:37:800  [ Thato ][0|35.4|0|0|0|0][AST wear disl] 
+[OUTR]: 1 Goldenseal (1491)
+
+[DEF]: Shield
+Thato ceases to wield a woven shield of twigs in her left hand.
+Thato starts to wield a Razor Whip in her left hand.
+Thato ceases to wield Thoth's fang in her right hand.
+Thato starts to wield a woven shield of twigs in her right hand.
+Thato flays away your shield defence.
+With fluid grace, Thato snaps her wrist, bringing a Razor Whip back to crack viciously into
+you.
+[AFF]: Slickness
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+
+H:5745|99% M:5228|98%  19:15:38:099  [ Thato ][0|35.4|0|0|0|0][AST wear SLCK disl] 
+(Market): Bainz says, "Selling a complete blackcirclet, guise, and jewel talismans."
+H:5745|99% M:5228|98%  19:15:38:887  [ Thato ][0|35.4|0|0|0|0][AST wear SLCK disl] 
+You may eat another plant or mineral. Eat (1.452)
+H:5745|99% M:5228|98%  19:15:39:240  [ Thato ][0|35.4|0|0|0|0][AST wear SLCK disl] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your limbs strengthen and you feel stronger.
+[AFF]: Weariness
+H:5745|99% M:5228|98%  19:15:39:333  [ Thato ][0|35.4|0|0|0|0][AST SLCK disl] 
+You suddenly perceive the vague outline of an aura of rebounding around Thato.
+H:5745|99% M:5228|98%  19:15:39:658  [ Thato ][0|35.4|0|0|0|0][AST SLCK disl] 
+Thato's aura of weapons rebounding disappears.
+With fluid grace, Thato snaps her wrist, bringing a Razor Whip back to crack viciously into
+you.
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+
+H:5745|99% M:5228|98%  19:15:39:664  [ Thato ][0|35.4|0|0|0|0][AST SLCK disl] 
+Thato takes a long drag off her pipe.
+H:5745|99% M:5228|98%  19:15:39:667  [ Thato ][0|35.4|0|0|0|0][AST SLCK disl] 
+[AFF]: Hypochondria
+A terrible sense of unease comes over you.
+H:5745|99% M:5228|98%  19:15:39:746  [ Thato ][0|35.4|0|0|0|0][AST hchon SLCK disl] 
+Your mind is able to focus once again. Focus (2.389)
+H:5745|99% M:5228|98%  19:15:40:179  [ Thato ][0|35.4|0|0|0|0][AST hchon SLCK disl] 
+You may eat another plant or mineral.
+H:5745|99% M:5228|98%  19:15:40:814  [ Thato ][0|35.4|0|0|0|0][AST hchon SLCK disl] 
+An emerald tree snake sinks its fangs into your neck and injects a potent dose of toxin.
+[AFF]: Fratricide
+Something subtle and yet insidious overcomes you.
+H:5745|99% M:5228|98%  19:15:40:819  [ Thato ][0|35.4|0|0|0|0][AST hchon SLCK frat disl] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+You no longer will inspire disloyalty among friends.
+[AFF]: Disloyalty
+H:5745|99% M:5228|98%  19:15:40:969  [ Thato ][0|35.4|0|0|0|0][hchon SLCK frat] 
+[Prio]: Impatience (2)
+[Prio]: Asthma (3)
+[Prio]: Paralysis (1)
+H:5745|99% M:5228|98%  19:15:41:030  [ Thato ][0|35.4|0|0|0|0][hchon SLCK frat] 
+With fluid grace, Thato snaps her wrist, bringing a Razor Whip back to crack viciously into
+you.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:5745|99% M:5228|98%  19:15:41:358  [ Thato ][0|35.4|0|0|0|0][hchon PAR SLCK frat] 
+
+[DEF]: Rebounding
+You feel an aura of rebounding surround you.
+H:5745|99% M:5228|98%  19:15:41:440  [ Thato ][0|35.4|0|0|0|0][hchon PAR SLCK frat] 
+Your ferocity decreases.
+H:5745|99% M:5228|98%  19:15:41:652  [ Thato ][0|35.4|0|0|0|0][hchon PAR SLCK frat] 
+You have recovered equilibrium.
+H:5745|99% M:5178|97%  19:15:41:655  [ Thato ][0|35.4|0|0|0|0][hchon PAR SLCK frat] 
+You may utilise the tree tattoo again. Tree (13.891)
+H:5745|99% M:5178|97%  19:15:41:760  [ Thato ][0|35.4|0|0|0|0][hchon PAR SLCK frat] 
+You are paralysed and unable to do that.
+H:5745|99% M:5178|97%  19:15:41:842  [ Thato ][0|35.4|0|0|0|0][hchon PAR SLCK frat] 
+You are paralysed and unable to do that.
+H:5745|99% M:5178|97%  19:15:41:943  [ Thato ][0|35.4|0|0|0|0][hchon PAR SLCK frat] 
+You may drink another health or mana elixir. Mana (4.381)
+H:5745|99% M:5178|97%  19:15:42:174  [ Thato ][0|35.4|0|0|0|0][hchon PAR SLCK frat] 
+You are paralysed and unable to do that.
+H:5745|99% M:5178|97%  19:15:42:261  [ Thato ][0|35.4|0|0|0|0][hchon PAR SLCK frat] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.521)
+H:5745|99% M:5178|97%  19:15:42:490  [ Thato ][0|35.4|0|0|0|0][hchon PAR SLCK frat] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your glands cease their oily secretion.
+[AFF]: Slickness
+H:5745|99% M:5178|97%  19:15:42:572  [ Thato ][0|35.4|0|0|0|0][hchon PAR frat] 
+
+THEY CAN TOUCH TREE AGAIN!
+You may eat another plant or mineral.
+H:5745|99% M:5178|97%  19:15:42:664  [ Thato ][0|35.4|0|0|0|0][hchon PAR frat] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+[AFF]: Anorexia
+The thought of food revolts you all of a sudden.
+You bunch your powerful muscles and launch yourself in a majestic leap northeastwards.
+A break in the estate wall.
+--- Area 572: A secluded mansion - v51723 ---
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                 [ ]
+                                             
+                     [ ]-[ ]
+                    / | x
+                 [ ]-[^]-[ ]
+                    \ | /
+                     [ ]
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+--- A break in the estate wall --- -1:1:0 ---
+The sky lightens with the onset of dawn. A sigil in the shape of a small, rectangular monolith
+is on the ground.
+You see exits leading southeast, southwest, and northwest.
+You drop back and ease the engagement.
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+H:5745|99% M:5178|97%  19:15:42:747  [ Thato ][0|35.4|0|0|0|0][hchon ANO frat] 
+[OUTR]: 1 Bloodroot (832)
+[AFF]: Nausea
+A sense of extreme nausea washes over you.
+H:5745|99% M:5178|97%  19:15:42:897  [ Thato ][0|35.4|0|0|0|0][hchon naus frat ANO] 
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Food is no longer repulsive to you.
+[AFF]: Anorexia
+H:5745|99% M:5178|97%  19:15:42:972  [ Thato ][0|35.4|0|0|0|0][hchon naus frat] 
+Your thoughts cease racing.
+H:5745|99% M:5178|97%  19:15:43:678  [ Thato ][0|35.4|0|0|0|0][hchon naus frat] 
+You have recovered balance on all limbs.
+H:5745|99% M:5178|97%  19:15:43:681  [ Thato ][0|35.4|0|0|0|0][hchon naus frat] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.469)
+H:5745|99% M:5178|97%  19:15:44:040  [ Thato ][0|35.4|0|0|0|0][hchon naus frat] 
+You bunch your powerful muscles and launch yourself in a majestic leap southeastwards.
+Empty training yard.
+--- Area 572: A secluded mansion - v52882 ---
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+             [ ]
+                                             
+                 [ ]-[ ]
+                / | x
+             [ ]-[^]-[ ]
+                \ | /
+                 [ ]
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+--- Empty training yard ----------- 0:0:0 ---
+The sky lightens with the onset of dawn.
+You see exits leading southwest and northwest.
+H:5745|99% M:5178|97%  19:15:44:057  [ Thato ][0|35.4|0|0|0|0][hchon naus frat] 
+You may eat another plant or mineral. Eat (1.477)
+H:5745|99% M:5178|97%  19:15:44:209  [ Thato ][0|35.4|0|0|0|0][hchon naus frat] 
+[Curing]: EAT LOBELIA
+You eat a lobelia seed.
+You rid yourself of the insidious venom plaguing you.
+[AFF]: Fratricide
+H:5745|99% M:5178|97%  19:15:44:292  [ Thato ][0|35.4|0|0|0|0][hchon naus] 
+[OUTR]: 1 Lobelia (1259)
+
+[DEF]: Fangbarrier
+The sileris berry juice hardens into a supple purple shell.
+H:5745|99% M:5178|97%  19:15:44:445  [ Thato ][0|35.4|0|0|0|0][hchon naus] 
+You have recovered balance on all limbs.
+H:5745|99% M:5253|98%  19:15:45:061  [ Thato ][0|35.4|0|0|0|0][hchon naus] 
+[AFF]: Darkshade
+Your skin prickles and burns.
+The Oniar estate gates.
+--- Area 572: A secluded mansion - v53525 ---
+                                             
+                                             
+                                             
+                                             
+                                             
+                 [ ]
+                                             
+                     [ ]-[ ]
+                    / | x
+                 [ ]-[^]-[ ]
+                    \ | /
+                     [+]
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+--- The Oniar estate gates ------ -1:-1:0 ---
+The sky lightens with the onset of dawn. A rune like a flurry of lightning bolts has been
+sketched into the ground here (Isaz: Throws off balance). A rune like a rising sun has been 
+sketched into the ground here (Dagaz: Heals affs). A fierce mountain falcon surveys the 
+surroundings with keen eyes. A lightwall stands here, shining with such intensity that you fear 
+should your vision stray too close you might lose all sight.
+You see exits leading north, northeast, and northwest.
+H:5745|99% M:5253|98%  19:15:45:456  [ Thato ][0|35.4|0|0|0|0][hchon DARK naus] 
+Your ferocity decreases.
+H:5745|99% M:5253|98%  19:15:45:664  [ Thato ][0|35.4|0|0|0|0][hchon DARK naus] 
+You may eat another plant or mineral. Eat (1.52)
+H:5745|99% M:5253|98%  19:15:45:811  [ Thato ][0|35.4|0|0|0|0][hchon DARK naus] 
+[AFF]: Lethargy
+You feel your energy robbed from you as lethargy overtakes you.
+H:5745|99% M:5253|98%  19:15:45:939  [ Thato ][0|35.4|0|0|0|0][hchon DARK leth naus] 
+[Curing]: EAT LOBELIA
+You eat a lobelia seed.
+My, you feel healthier than you have in years.
+[AFF]: Hypochondria
+H:5745|99% M:5253|98%  19:15:46:028  [ Thato ][0|35.4|0|0|0|0][DARK leth naus] 
+[OUTR]: 1 Lobelia (1258)
+H:5775|100% M:5253|98%  19:15:46:926  [ Thato ][0|35.4|0|0|0|0][DARK leth naus] 
+
+[DEF]: Shield
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 4.00s.
+H:5775|100% M:5253|98%  19:15:46:931  [ Thato ][0|35.4|0|0|0|0][DARK leth naus] 
+You cannot contain the convulsions in your stomach any longer and double over, retching
+violently.
+Health lost: 617 (unblockable).
+H:5158|89% M:5253|98%  19:15:46:992  [ Thato ][0|35.4|0|0|0|0] ( -617h 10% )[DARK leth naus] 
+
+[Prio]: Paralysis (26)
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5775|100% M:5253|98%  19:15:47:230  [ Thato ][0|35.4|0|0|0|0] ( +617h 10% )[DARK leth naus] 
+Sunlight shines down upon you mercilessly, rippling across your skin like fire.
+Health lost: 351 (magical).
+H:5424|93% M:5253|98%  19:15:47:430  [ Thato ][0|35.4|0|0|0|0] ( -351h 6% )[DARK leth naus] 
+You may eat another plant or mineral. Eat (1.489)
+H:5424|93% M:5253|98%  19:15:47:516  [ Thato ][0|35.4|0|0|0|0][DARK leth naus] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+No longer will the sunlight harm you.
+[AFF]: Darkshade
+H:5424|93% M:5253|98%  19:15:47:662  [ Thato ][0|35.4|0|0|0|0][leth naus] 
+[OUTR]: 1 Ginseng (581)
+[Prio]: Paralysis (1)
+You may eat another plant or mineral. Eat (1.539)
+H:5424|93% M:5253|98%  19:15:49:200  [ Thato ][0|35.4|0|0|0|0][leth naus] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+Your stomach becalms itself.
+[AFF]: Nausea
+H:5424|93% M:5253|98%  19:15:49:468  [ Thato ][0|35.4|0|0|0|0][leth] 
+[OUTR]: 1 Ginseng (580)
+Ferocity:  [####|####|####|####]
+You have recovered equilibrium.
+H:5424|93% M:5253|98%  19:15:50:757  [ Thato ][0|35.4|0|0|0|0][leth] 
+You may eat another plant or mineral. Eat (1.487)
+H:5424|93% M:5253|98%  19:15:50:954  [ Thato ][0|35.4|0|0|0|0][leth] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+The lethargy evaporates, leaving you full of energy.
+[AFF]: Lethargy
+H:5424|93% M:5253|98%  19:15:51:149  [ Thato ][0|35.4|0|0|0|0]
+[OUTR]: 1 Ginseng (579)
+You may drink another health or mana elixir. Health (4.357)
+H:5424|93% M:5253|98%  19:15:51:587  [ Thato ][0|35.4|0|0|0|0]
+You may eat another plant or mineral. Eat (1.514)
+H:5424|93% M:5253|98%  19:15:52:662  [ Thato ][0|35.4|0|0|0|0]
+ Reset Success!
+
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+H:5539|95% M:5313|100%  19:15:56:732  [ Thato ][0|35.4|0|0|0|0]
+You may utilise the tree tattoo again. Tree (13.868)
+H:5539|95% M:5313|100%  19:15:56:839  [ Thato ][0|35.4|0|0|0|0]
+
+[DEF]: Shield
+Walking down the garden path.
+--- Area 572: A secluded mansion - v51501 ---
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                     [ ]
+                                             
+                         [ ]-[ ]
+                        / | x
+                     [ ]-[^]-[ ]
+                        \ | /
+                         [ ]
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+--- Walking down the garden path - -2:0:0 ---
+The sky lightens with the onset of dawn. A sigil in the shape of a small, rectangular monolith
+is on the ground. Coiled upon the ground, an emerald tree snake silently tastes the air.
+You see exits leading northeast and southeast.
+Your movement causes your magical shield to dissipate.
+H:5539|95% M:5313|100%  19:16:02:092  [ Thato ][0|35.4|0|0|0|0]
+You begin sketching a dagaz rune on the ground.
+H:5539|95% M:5313|100%  19:16:02:195  [ Thato ][0|35.4|0|0|0|0]
+An emerald tree snake begins to follow you.
+Thato's aura of weapons rebounding disappears.
+H:5539|95% M:5313|100%  19:16:04:026  [ Thato ][0|35.4|0|0|0|0]
+Thato takes a long drag off her pipe.
+H:5539|95% M:5313|100%  19:16:04:106  [ Thato ][0|35.4|0|0|0|0]
+
+[DEF]: Fangbarrier
+Thato ceases to wield a Razor Whip in her left hand.
+Thato ceases to wield a woven shield of twigs in her right hand.
+Thato starts to wield a Lupine bow in her hands.
+Your left foot explodes in white hot pain as an arrow slams into it.
+[AFF]: Pinshot
+Your shield completely absorbs the damage.
+An emerald tree snake lunges for your throat, its fangs sinking into the waxy coating that
+protects you.
+The protective barrier coating your skin dissolves.
+Thato forms a ball of light in her palm and hurls it southeastwards.
+H:5539|95% M:5313|100%  19:16:05:056  [ Thato ][0|35.4|0|0|0|0][PSHOT] 
+[Curing]: APPLY SILERIS
+You apply a sileris berry to yourself.
+H:5539|95% M:5313|100%  19:16:05:204  [ Thato ][0|35.4|0|0|0|0][PSHOT] 
+An emerald tree snake sinks its fangs into your neck and injects a potent dose of toxin.
+[AFF]: Fratricide
+Something subtle and yet insidious overcomes you.
+H:5539|95% M:5313|100%  19:16:05:571  [ Thato ][0|35.4|0|0|0|0][PSHOT frat] 
+[Curing]: EAT LOBELIA
+You eat a lobelia seed.
+You rid yourself of the insidious venom plaguing you.
+[AFF]: Fratricide
+H:5539|95% M:5313|100%  19:16:05:657  [ Thato ][0|35.4|0|0|0|0][PSHOT] 
+[OUTR]: 1 Lobelia (1257)
+
+[DEF]: Rebounding
+With a flourish, you finish sketching a dagaz rune.
+You have recovered balance on all limbs.
+Your aura of weapons rebounding disappears.
+Envenomed: (Xentio)
+Sliced:    (Torso) (47.2%)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (86%/100%).
+Afflicted: (Clumsiness Paralysis).*
+[clum, para]
+Thato eats a bloodroot leaf.
+[Curing]: SMOKE SKULLCAP
+Processed Cures(paralysis)
+You take a long drag of skullcap off your pipe.
+H:5654|97% M:5213|98%  19:16:06:995  [ Thato ][0|47.2|0|0|0|0][PSHOT] 
+You may eat another plant or mineral. Eat (1.518)
+H:5654|97% M:5213|98%  19:16:07:174  [ Thato ][0|47.2|0|0|0|0][PSHOT] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.457)
+H:5654|97% M:5213|98%  19:16:08:451  [ Thato ][0|47.2|0|0|0|0][PSHOT] 
+Thato ceases to wield a Lupine bow.
+Thato starts to wield a woven shield of twigs in her left hand.
+Thato starts to wield Thoth's fang in her right hand.
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+H:5654|97% M:5213|98%  19:16:08:540  [ Thato ][0|47.2|0|0|0|0][clum PAR PSHOT] 
+Thato eats a piece of kelp.
+[Curing]: EAT BLOODROOT
+Processed Cures(clumsiness)
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5654|97% M:5213|98%  19:16:08:546  [ Thato ][0|47.2|0|0|0|0][clum PSHOT] 
+[OUTR]: 1 Bloodroot (831)
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:5654|97% M:5213|98%  19:16:08:721  [ Thato ][0|47.2|0|0|0|0][PSHOT] 
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Torso) (59%)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (73%/100%).
+Afflicted: (Clumsiness Paralysis).*
+[clum, para]
+Thato takes a drink from an elegant diamond vial.
+Thato eats some irid moss.
+H:5654|97% M:5113|96%  19:16:09:288  [ Thato ][0|59|0|0|0|0][PSHOT] 
+You may eat another plant or mineral. Eat (1.481)
+H:5654|97% M:5113|96%  19:16:10:026  [ Thato ][0|59|0|0|0|0][PSHOT] 
+Thato eats a bloodroot leaf.
+Thato quickly pricks you with her dirk.
+Processed Cures(paralysis)
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Weariness
+Your limbs grow heavy and you groan feebly.
+H:5654|97% M:5113|96%  19:16:10:095  [ Thato ][0|59|0|0|0|0][wear PAR PSHOT] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5654|97% M:5113|96%  19:16:10:277  [ Thato ][0|59|0|0|0|0][wear PSHOT] 
+[OUTR]: 1 Bloodroot (830)
+You have recovered balance on all limbs.
+Envenomed: (Euphorbia)
+Sliced:    (Torso) (70.8%)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (90%/100%).
+Afflicted: (Nausea Paralysis).*
+[clum, naus, para]
+Thato eats a bloodroot leaf.
+Processed Cures(paralysis)
+[clum, naus]
+
+H:5654|97% M:5013|94%  19:16:11:894  [ Thato ][0|70.8|0|0|0|0][wear PSHOT] 
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+Your limbs strengthen and you feel stronger.
+[AFF]: Weariness
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Asthma
+You feel a tightening sensation grow in your lungs.
+You may eat another plant or mineral. Eat (1.717)
+H:5654|97% M:5013|94%  19:16:11:992  [ Thato ][0|70.8|0|0|0|0][AST PAR PSHOT] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5654|97% M:5013|94%  19:16:12:097  [ Thato ][0|70.8|0|0|0|0][AST PSHOT] 
+[OUTR]: 1 Bloodroot (829)
+You suddenly perceive the vague outline of an aura of rebounding around Thato.
+H:5654|97% M:5013|94%  19:16:12:587  [ Thato ][0|70.8|0|0|0|0][AST PSHOT] 
+Thato's aura of weapons rebounding disappears.
+H:5654|97% M:5013|94%  19:16:12:876  [ Thato ][0|70.8|0|0|0|0][AST PSHOT] 
+Thato takes a long drag off her pipe.
+H:5654|97% M:5013|94%  19:16:12:915  [ Thato ][0|70.8|0|0|0|0][AST PSHOT] 
+An emerald tree snake sinks its fangs into your neck and injects a potent dose of toxin.
+[AFF]: Fratricide
+Something subtle and yet insidious overcomes you.
+H:5654|97% M:5013|94%  19:16:13:597  [ Thato ][0|70.8|0|0|0|0][AST PSHOT frat] 
+Thato eats a ginseng root.
+You may eat another plant or mineral.
+Processed Cures(nausea) Eat (1.586)
+H:5654|97% M:5013|94%  19:16:13:682  [ Thato ][0|70.8|0|0|0|0][AST PSHOT frat] 
+Thato fixes her gaze to yours and hisses a sharp command.
+[AFF]: Deadening
+A strange fog descends upon your mind.
+Thato sinks her fangs into your body and you wince in pain.
+You feel a tightening sensation grow in your lungs.
+You have recovered balance on all limbs.
+Envenomed: (Kalmia)
+Sliced:    (Torso) (82.6%)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (77%/100%).
+Afflicted: (Asthma Paralysis).*
+[ast, clum, para]
+Thato takes a drink from an elegant diamond vial.
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+[Curing]: SMOKE ELM
+You take a long drag of slippery elm off your pipe.
+You are no longer deadened.
+[AFF]: Deadening
+H:5654|97% M:4913|92%  19:16:13:886  [ Thato ][0|82.6|0|0|0|0][frat PSHOT] 
+
+[DEF]: Fangbarrier
+The sileris berry juice hardens into a supple purple shell.
+Thato eats a bloodroot leaf.
+Processed Cures(paralysis)
+[ast, clum]
+
+H:5654|97% M:4988|93%  19:16:15:282  [ Thato ][0|82.6|0|0|0|0][frat PSHOT] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.494)
+H:5654|97% M:4988|93%  19:16:15:380  [ Thato ][0|82.6|0|0|0|0][frat PSHOT] 
+You may eat another plant or mineral.
+H:5654|97% M:4988|93%  19:16:15:382  [ Thato ][0|82.6|0|0|0|0][frat PSHOT] 
+Thato touches a tree of life tattoo.
+Processed Cures(clumsiness asthma)
+[ast[50], clum[50]]
+
+H:5654|97% M:4988|93%  19:16:15:385  [ Thato ][0|82.6|0|0|0|0][frat PSHOT] 
+
+[DEF]: Rebounding
+You feel an aura of rebounding surround you.
+[Curing]: EAT LOBELIA
+You eat a lobelia seed.
+You rid yourself of the insidious venom plaguing you.
+[AFF]: Fratricide
+H:5654|97% M:4988|93%  19:16:15:465  [ Thato ][0|82.6|0|0|0|0][PSHOT] 
+Thato quickly pricks you with her dirk.
+The attack rebounds back onto Thato!
+Striking like a snake, Thato follows the first attack with another.
+The attack rebounds off your aura of protection!
+H:5654|97% M:4988|93%  19:16:15:471  [ Thato ][0|82.6|0|0|0|0][PSHOT] 
+[OUTR]: 1 Lobelia (1256)
+
+[DEF]: Rebounding
+You have recovered balance on all limbs.
+Your aura of weapons rebounding disappears.
+Envenomed: (Gecko)
+Sliced:    (Torso) (94.4%)
+A mithril broadsword grows warm in your hand as you feel yourself become attuned to the inguz
+rune sketched upon it.
+A bolt of lightning hurls from the tip of the runeblade skywards, accompanied by a crack of
+thunder.
+Accompanied by hissing sounds, small acidic hailstones pour down from above, battering Thato's
+body.
+Sileris stripped...
+Empower:   (Inguz)
+Shield:    (Scrambled Brains)
+Ferocity:  [####|####|####|####]
+Strike:    (Sensitivity)
+[HP]:      (69%/100%).
+Afflicted: (Slickness Dizziness Prefarar).*
+[diz, ast[50], clum[50], deaf, slick, para]
+H:5654|97% M:4788|90%  19:16:16:151  [ Thato ][0|94.4|0|0|0|0] ( -200m 3% )[PSHOT] 
+Thato takes a long drag off her pipe.
+A look of extreme focus crosses the face of Thato.
+Thato eats some irid moss.
+[Curing]: SMOKE SKULLCAP
+You take a long drag of skullcap off your pipe.
+H:5654|97% M:4788|90%  19:16:16:294  [ Thato ][0|94.4|0|0|0|0][PSHOT] 
+Thato eats a bloodroot leaf.
+Thato applies a sileris berry to herself.
+Processed Cures(paralysis)
+H:5654|97% M:4788|90%  19:16:16:856  [ Thato ][0|94.4|0|0|0|0][PSHOT] 
+You may eat another plant or mineral. Eat (1.47)
+H:5654|97% M:4788|90%  19:16:16:935  [ Thato ][0|94.4|0|0|0|0][PSHOT] 
+Thato misses you with her dirk by a hair.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Thato hunches her shoulders and lets out a soft hiss.
+Processed Cures(clumsiness dizziness)
+H:5769|99% M:4788|90%  19:16:17:265  [ Thato ][0|94.4|0|0|0|0][PAR PSHOT] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5769|99% M:4788|90%  19:16:17:526  [ Thato ][0|94.4|0|0|0|0][PSHOT] 
+[OUTR]: 1 Bloodroot (828)
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.586)
+H:5769|99% M:4788|90%  19:16:17:880  [ Thato ][0|94.4|0|0|0|0][PSHOT] 
+
+Processed Cures(dizziness)
+You have recovered balance on all limbs.
+Envenomed: (Euphorbia)
+Sliced:    (Left leg) (11.8%)
+Proc:      (Inguz)
+Afflicted: (Sensitivity)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (72%/100%).
+Afflicted: (Nausea Paralysis).*
+[clum[50], sen, naus, deaf, para]
+Thato eats a bloodroot leaf.
+Thato takes some elixir from an elegant diamond vial and rubs it into her torso.ribs: 0
+
+Processed Cures(paralysis)
+H:5769|99% M:4688|88%  19:16:18:614  [ Thato ][0|94.4|0|0|11.8|0][PSHOT] 
+You may eat another plant or mineral. Eat (1.487)
+H:5769|99% M:4688|88%  19:16:19:012  [ Thato ][0|94.4|0|0|11.8|0][PSHOT] 
+Thato carefully wipes all the venoms off of Thoth's fang.
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+H:5769|99% M:4688|88%  19:16:19:120  [ Thato ][0|94.4|0|0|11.8|0][clum PAR PSHOT] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5769|99% M:4688|88%  19:16:19:200  [ Thato ][0|94.4|0|0|11.8|0][clum PSHOT] 
+[OUTR]: 1 Bloodroot (827)
+Thato eats a ginseng root.
+Processed Cures(nausea)
+[clum[50], sen, deaf]
+
+H:5769|99% M:4688|88%  19:16:20:365  [ Thato ][0|94.4|0|0|11.8|0][clum PSHOT] 
+You have recovered balance on all limbs.
+Envenomed: (Euphorbia)
+Sliced:    (Left leg)
+You lash out at Thato with a mithril broadsword, but miss.
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (74%/100%)
+You may eat another plant or mineral. Eat (1.463).
+Afflicted: (Paralysis).*
+[clum[50], sen, deaf, para]
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:5769|99% M:4588|86%  19:16:20:724  [ Thato ][0|94.4|0|0|11.8|0][PSHOT] 
+You suddenly perceive the vague outline of an aura of rebounding around Thato.
+H:5769|99% M:4588|86%  19:16:21:392  [ Thato ][0|94.4|0|0|11.8|0][PSHOT] 
+
+[DEF]: Fangbarrier
+An emerald tree snake lunges for your throat, its fangs sinking into the waxy coating that
+protects you.
+The protective barrier coating your skin dissolves.
+H:5769|99% M:4588|86%  19:16:21:700  [ Thato ][0|94.4|0|0|11.8|0][PSHOT] 
+[Curing]: APPLY SILERIS
+You apply a sileris berry to yourself.
+H:5769|99% M:4588|86%  19:16:21:797  [ Thato ][0|94.4|0|0|11.8|0][PSHOT] 
+Thato eats a bloodroot leaf.
+Processed Cures(paralysis)
+[clum[50], sen, deaf, Reb]
+
+H:5769|99% M:4588|86%  19:16:21:951  [ Thato ][0|94.4|0|0|11.8|0][PSHOT] 
+Thato's aura of weapons rebounding disappears.
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Darkshade
+Your vision is flooded with light, and your face suddenly reddens.
+Thato snaps her fingers in front of you.
+H:5769|99% M:4588|86%  19:16:22:038  [ Thato ][0|94.4|0|0|11.8|0][PAR DARK PSHOT] 
+Thato takes a long drag off her pipe.
+H:5769|99% M:4588|86%  19:16:22:163  [ Thato ][0|94.4|0|0|11.8|0][PAR DARK PSHOT] 
+You may eat another plant or mineral.
+H:5769|99% M:4588|86%  19:16:22:314  [ Thato ][0|94.4|0|0|11.8|0][PAR DARK PSHOT] 
+Thato eats some irid moss.
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5769|99% M:4588|86%  19:16:22:416  [ Thato ][0|94.4|0|0|11.8|0][DARK PSHOT] 
+[OUTR]: 1 Bloodroot (826)
+You may utilise the tree tattoo again. Tree (13.996)
+H:5769|99% M:4588|86%  19:16:22:716  [ Thato ][0|94.4|0|0|11.8|0][DARK PSHOT] 
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+No longer will the sunlight harm you.
+[AFF]: Darkshade
+H:5769|99% M:4588|86%  19:16:22:811  [ Thato ][0|94.4|0|0|11.8|0][PSHOT] 
+You have recovered balance on all limbs.
+Envenomed: (Euphorbia)
+Sliced:    (Left leg) (23.6%)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (69%/100%).
+Afflicted: (Nausea Paralysis).*
+[clum[50], sen, naus, deaf, para]
+H:5769|99% M:4488|84%  19:16:23:082  [ Thato ][0|94.4|0|0|23.6|0][PSHOT] 
+Thato takes a drink from an elegant diamond vial.
+[Curing]: SIP MANA
+You take a drink from an oaken vial.
+Your mind feels stronger and more alert.
+H:5769|99% M:5313|100%  19:16:23:177  [ Thato ][0|94.4|0|0|23.6|0] ( +825m 15% )[PSHOT] 
+Thato eats a bloodroot leaf.
+Processed Cures(paralysis)
+[clum[50], sen, naus, deaf]
+
+H:5769|99% M:5313|100%  19:16:23:532  [ Thato ][0|94.4|0|0|23.6|0][PSHOT] 
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+H:5769|99% M:5313|100%  19:16:23:753  [ Thato ][0|94.4|0|0|23.6|0][clum PAR PSHOT] 
+You may eat another plant or mineral. Eat (1.427)
+H:5769|99% M:5313|100%  19:16:23:842  [ Thato ][0|94.4|0|0|23.6|0][clum PAR PSHOT] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5769|99% M:5313|100%  19:16:23:927  [ Thato ][0|94.4|0|0|23.6|0][clum PSHOT] 
+[OUTR]: 1 Bloodroot (825)
+
+[DEF]: Rebounding
+You feel an aura of rebounding surround you.
+H:5769|99% M:5313|100%  19:16:24:824  [ Thato ][0|94.4|0|0|23.6|0][clum PSHOT] 
+
+====================DISRUPTED====================
+====================DISRUPTED====================
+====================DISRUPTED====================
+Your mental equilibrium scatters suddenly, upset by some unknown source.
+[AFF]: Disrupted
+H:5769|99% M:5313|100%  19:16:25:059  [ Thato ][0|94.4|0|0|23.6|0][clum PSHOT DISR] 
+Thato eats a ginseng root.
+[Curing]: CONCENTRATE
+Processed Cures(nausea)
+You begin intense concentration to restore your equilibrium.
+Equilibrium used: 2.00s.
+H:5769|99% M:5313|100%  19:16:25:151  [ Thato ][0|94.4|0|0|23.6|0][clum PSHOT] 
+You have recovered balance on all limbs.
+H:5769|99% M:5313|100%  19:16:25:245  [ Thato ][0|94.4|0|0|23.6|0][clum PSHOT] 
+The arrow through your foot finally comes free, allowing you to move normally once again.
+
+[AFF]: Pinshot
+H:5769|99% M:5313|100%  19:16:25:336  [ Thato ][0|94.4|0|0|23.6|0][clum] 
+You may eat another plant or mineral. Eat (1.532)
+H:5769|99% M:5313|100%  19:16:25:458  [ Thato ][0|94.4|0|0|23.6|0][clum] 
+
+[DEF]: Rebounding
+Thato ceases to wield a woven shield of twigs in her left hand.
+Thato starts to wield a Razor Whip in her left hand.
+Thato ceases to wield Thoth's fang in her right hand.
+Thato starts to wield a woven shield of twigs in her right hand.
+Thato flays away your aura of rebounding defence.
+With fluid grace, Thato snaps her wrist, bringing a Razor Whip back to crack viciously into
+you.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:5769|99% M:5313|100%  19:16:25:568  [ Thato ][0|94.4|0|0|23.6|0][clum PAR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+[Curing]: SMOKE SKULLCAP
+You take a long drag of skullcap off your pipe.
+H:5769|99% M:5313|100%  19:16:25:652  [ Thato ][0|94.4|0|0|23.6|0][clum] 
+[OUTR]: 1 Bloodroot (824)
+Your ferocity decreases.
+H:5769|99% M:5313|100%  19:16:26:476  [ Thato ][0|94.4|0|0|23.6|0][clum] 
+Thato eats a hawthorn berry.
+H:5769|99% M:5313|100%  19:16:26:802  [ Thato ][0|94.4|0|0|23.6|0][clum] 
+
+[DEF]: Shield
+You have recovered equilibrium.
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 4.00s.
+H:5769|99% M:5313|100%  19:16:27:033  [ Thato ][0|94.4|0|0|23.6|0][clum] 
+[Prio]: Paralysis (26)
+You may eat another plant or mineral. Eat (1.543)
+H:5769|99% M:5313|100%  19:16:27:195  [ Thato ][0|94.4|0|0|23.6|0][clum] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.546)
+H:5769|99% M:5313|100%  19:16:27:199  [ Thato ][0|94.4|0|0|23.6|0][clum] 
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:5769|99% M:5313|100%  19:16:27:203  [ Thato ][0|94.4|0|0|23.6|0]
+
+[DEF]: Shield
+Thato flays away your shield defence.
+With fluid grace, Thato snaps her wrist, bringing a Razor Whip back to crack viciously into
+you.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:5769|99% M:5313|100%  19:16:27:262  [ Thato ][0|94.4|0|0|23.6|0][PAR] 
+[Prio]: Paralysis (1)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5769|99% M:5313|100%  19:16:27:476  [ Thato ][0|94.4|0|0|23.6|0]
+[OUTR]: 1 Bloodroot (823)
+You may drink another health or mana elixir. Mana (4.483)
+H:5775|100% M:5313|100%  19:16:27:661  [ Thato ][0|94.4|0|0|23.6|0]
+[AFF]: Hypochondria
+A terrible sense of unease comes over you.
+H:5775|100% M:5313|100%  19:16:28:013  [ Thato ][0|94.4|0|0|23.6|0][hchon] 
+Thato ceases to wield a woven shield of twigs in her right hand.
+Thato ceases to wield a Razor Whip in her left hand.
+Thato starts to wield a woven shield of twigs in her left hand.
+Thato starts to wield Thoth's fang in her right hand.
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Darkshade
+Your vision is flooded with light, and your face suddenly reddens.
+H:5775|100% M:5313|100%  19:16:28:943  [ Thato ][0|94.4|0|0|23.6|0][hchon PAR DARK] 
+You may eat another plant or mineral. Eat (1.548)
+H:5775|100% M:5313|100%  19:16:29:023  [ Thato ][0|94.4|0|0|23.6|0][hchon PAR DARK] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5775|100% M:5313|100%  19:16:29:206  [ Thato ][0|94.4|0|0|23.6|0][hchon DARK] 
+[OUTR]: 1 Bloodroot (822)
+An emerald tree snake sinks its fangs into your neck and injects a potent dose of toxin.
+[AFF]: Fratricide
+Something subtle and yet insidious overcomes you.
+H:5775|100% M:5313|100%  19:16:29:758  [ Thato ][0|94.4|0|0|23.6|0][hchon DARK frat] 
+Your ferocity decreases.
+
+THEY CAN TOUCH TREE AGAIN!
+You suddenly perceive the vague outline of an aura of rebounding around Thato.
+H:5775|100% M:5313|100%  19:16:30:716  [ Thato ][0|94.4|0|0|23.6|0][hchon DARK frat] 
+Thato's aura of weapons rebounding disappears.
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Weariness
+Your limbs grow heavy and you groan feebly.
+You may eat another plant or mineral. Eat (1.519)
+H:5775|100% M:5313|100%  19:16:30:723  [ Thato ][0|94.4|0|0|23.6|0][hchon wear PAR DARK frat] 
+Thato takes a long drag off her pipe.
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5775|100% M:5313|100%  19:16:30:808  [ Thato ][0|94.4|0|0|23.6|0][hchon wear DARK frat] 
+
+[OUTR]: 1 Bloodroot (821)
+Sunlight shines down upon you mercilessly, rippling across your skin like fire.
+Health lost: 351 (magical).
+H:5424|93% M:5313|100%  19:16:30:919  [ Thato ][0|94.4|0|0|23.6|0] ( -351h 6% )[hchon wear DARK 
+frat] 
+[AFF]: Anorexia
+The thought of food revolts you all of a sudden.
+[AFF]: Nausea
+A sense of extreme nausea washes over you.
+H:5424|93% M:5313|100%  19:16:31:101  [ Thato ][0|94.4|0|0|23.6|0][hchon wear DARK naus frat 
+ANO] 
+You have recovered equilibrium.
+You cease wielding a mithril broadsword in your left hand.
+You start to wield a blessed legionnaire's longsword in your left hand.
+Envenomed: (Vernalius)
+Sliced:    (Thato)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Engage:    (Thato)
+Equilibrium used: 2.00s..
+Afflicted: (Weariness Paralysis)
+[clum[50], sen, weari, para]
+Thato eats a bloodroot leaf.
+[Curing]: APPLY EPIDERMAL TO BODY
+Processed Cures(paralysis)
+You take out some salve and quickly rub it on your body.
+Food is no longer repulsive to you.
+[AFF]: Anorexia
+H:5424|93% M:5263|99%  19:16:31:146  [ Thato ][0|94.4|0|0|23.6|0][hchon wear DARK naus frat] 
+You focus on automatically empowering the isaz, sleizak, and inguz runes.
+H:5424|93% M:5263|99%  19:16:31:194  [ Thato ][0|94.4|0|0|23.6|0][hchon wear DARK naus frat] 
+
+[DEF]: Fangbarrier
+The sileris berry juice hardens into a supple purple shell.
+H:5424|93% M:5213|98%  19:16:31:728  [ Thato ][0|94.4|0|0|23.6|0][hchon wear DARK naus frat] 
+You may apply another salve to yourself. Body (0.93)
+H:5424|93% M:5213|98%  19:16:32:075  [ Thato ][0|94.4|0|0|23.6|0][hchon wear DARK naus frat] 
+Your thoughts cease racing.
+H:5424|93% M:5213|98%  19:16:32:154  [ Thato ][0|94.4|0|0|23.6|0][hchon wear DARK naus frat] 
+You may eat another plant or mineral. Eat (1.541)
+H:5424|93% M:5213|98%  19:16:32:349  [ Thato ][0|94.4|0|0|23.6|0][hchon wear DARK naus frat] 
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Asthma
+You feel a tightening sensation grow in your lungs.
+H:5424|93% M:5213|98%  19:16:32:437  [ Thato ][0|94.4|0|0|23.6|0][AST hchon wear PAR DARK naus 
+frat] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5424|93% M:5213|98%  19:16:32:517  [ Thato ][0|94.4|0|0|23.6|0][AST hchon wear DARK naus 
+frat] 
+[Prio]: Impatience (1)
+[Prio]: Asthma (2)
+H:5424|93% M:5213|98%  19:16:32:613  [ Thato ][0|94.4|0|0|23.6|0][AST hchon wear DARK naus 
+frat] 
+I cannot fathom the meaning of "lleap".
+H:5424|93% M:5213|98%  19:16:32:616  [ Thato ][0|94.4|0|0|23.6|0][AST hchon wear DARK naus 
+frat] 
+[OUTR]: 1 Bloodroot (820)
+Thato eats a piece of kelp.
+Processed Cures(clumsiness sensitivity weariness)
+[sen[67], weari[67]]
+
+H:5424|93% M:5213|98%  19:16:32:700  [ Thato ][0|94.4|0|0|23.6|0][AST hchon wear DARK naus 
+frat] 
+Sunlight shines down upon you mercilessly, rippling across your skin like fire.
+Health lost: 351 (magical).
+H:5073|87% M:5213|98%  19:16:32:904  [ Thato ][0|94.4|0|0|23.6|0] ( -351h 6% )[AST hchon wear 
+DARK naus frat] 
+You have recovered balance on all limbs.
+H:5073|87% M:5213|98%  19:16:32:991  [ Thato ][0|94.4|0|0|23.6|0][AST hchon wear DARK naus 
+frat] 
+
+[DEF]: Shield
+You have recovered equilibrium.
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 4.00s.
+H:5073|87% M:5213|98%  19:16:33:088  [ Thato ][0|94.4|0|0|23.6|0][AST hchon wear DARK naus 
+frat] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5775|100% M:5213|98%  19:16:33:133  [ Thato ][0|94.4|0|0|23.6|0] ( +702h 12% )[AST hchon wear 
+DARK naus frat] 
+[Prio]: Paralysis (26)
+You may eat another plant or mineral. Eat (1.574)
+H:5775|100% M:5213|98%  19:16:34:091  [ Thato ][0|94.4|0|0|23.6|0][AST hchon wear DARK naus 
+frat] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+H:5775|100% M:5213|98%  19:16:34:096  [ Thato ][0|94.4|0|0|23.6|0][hchon wear DARK naus frat] 
+
+[DEF]: Rebounding
+You feel an aura of rebounding surround you.
+H:5775|100% M:5213|98%  19:16:34:151  [ Thato ][0|94.4|0|0|23.6|0][hchon wear DARK naus frat] 
+
+[AFF]: Lethargy
+You feel your energy robbed from you as lethargy overtakes you.
+H:5775|100% M:5213|98%  19:16:34:211  [ Thato ][0|94.4|0|0|23.6|0][hchon wear DARK leth naus 
+frat] 
+[Prio]: Impatience (2)
+[Prio]: Asthma (3)
+[Prio]: Paralysis (1)
+H:5775|100% M:5213|98%  19:16:34:217  [ Thato ][0|94.4|0|0|23.6|0][hchon wear DARK leth naus 
+frat] 
+
+[DEF]: Shield
+[DEF]: Fangbarrier
+Thato ceases to wield a woven shield of twigs in her left hand.
+Thato starts to wield a Razor Whip in her left hand.
+Thato ceases to wield Thoth's fang in her right hand.
+Thato starts to wield a woven shield of twigs in her right hand.
+Thato flays away your shield defence.
+The protective coating covering your skin is ripped away along with your protections.
+
+H:5775|100% M:5213|98%  19:16:34:299  [ Thato ][0|94.4|0|0|23.6|0][hchon wear DARK leth naus 
+frat] 
+[Curing]: APPLY SILERIS
+You apply a sileris berry to yourself.
+H:5775|100% M:5213|98%  19:16:34:301  [ Thato ][0|94.4|0|0|23.6|0][hchon wear DARK leth naus 
+frat] 
+Your ferocity decreases.
+H:5775|100% M:5213|98%  19:16:34:384  [ Thato ][0|94.4|0|0|23.6|0][hchon wear DARK leth naus 
+frat] 
+Sunlight shines down upon you mercilessly, rippling across your skin like fire.
+Health lost: 351 (magical).
+H:5424|93% M:5213|98%  19:16:34:913  [ Thato ][0|94.4|0|0|23.6|0] ( -351h 6% )[hchon wear DARK 
+leth naus frat] 
+You may eat another plant or mineral.
+H:5424|93% M:5288|99%  19:16:35:659  [ Thato ][0|94.4|0|0|23.6|0][hchon wear DARK leth naus 
+frat] 
+[Curing]: EAT LOBELIA
+You eat a lobelia seed.
+You rid yourself of the insidious venom plaguing you.
+[AFF]: Fratricide
+H:5424|93% M:5288|99%  19:16:35:843  [ Thato ][0|94.4|0|0|23.6|0][hchon wear DARK leth naus] 
+
+[OUTR]: 1 Lobelia (1255)
+
+[DEF]: Rebounding
+Thato carefully wipes all the venoms off of a Razor Whip.
+Thato flays away your aura of rebounding defence.
+With fluid grace, Thato snaps her wrist, bringing a Razor Whip back to crack viciously into
+you.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:5424|93% M:5288|99%  19:16:36:062  [ Thato ][0|94.4|0|0|23.6|0][hchon wear PAR DARK leth 
+naus] 
+[Curing]: SMOKE SKULLCAP
+You take a long drag of skullcap off your pipe.
+H:5424|93% M:5288|99%  19:16:36:067  [ Thato ][0|94.4|0|0|23.6|0][hchon wear PAR DARK leth 
+naus] 
+You may utilise the tree tattoo again. Tree (13.902)
+H:5424|93% M:5238|98%  19:16:36:712  [ Thato ][0|94.4|0|0|23.6|0][hchon wear PAR DARK leth 
+naus] 
+Sunlight shines down upon you mercilessly, rippling across your skin like fire.
+Health lost: 351 (magical).
+H:5073|87% M:5238|98%  19:16:36:943  [ Thato ][0|94.4|0|0|23.6|0] ( -351h 6% )[hchon wear PAR 
+DARK leth naus] 
+You have recovered equilibrium.
+H:5073|87% M:5238|98%  19:16:37:034  [ Thato ][0|94.4|0|0|23.6|0][hchon wear PAR DARK leth 
+naus] 
+You are paralysed and unable to do that.
+H:5073|87% M:5238|98%  19:16:37:129  [ Thato ][0|94.4|0|0|23.6|0][hchon wear PAR DARK leth 
+naus] 
+[AFF]: Impatience
+You shuffle your feet noisily, suddenly bored.
+You are paralysed and unable to do that.
+H:5073|87% M:5238|98%  19:16:37:247  [ Thato ][0|94.4|0|0|23.6|0][IMP hchon wear PAR DARK leth 
+naus] 
+You may eat another plant or mineral. Eat (1.487)
+H:5073|87% M:5238|98%  19:16:37:329  [ Thato ][0|94.4|0|0|23.6|0][IMP hchon wear PAR DARK leth 
+naus] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5073|87% M:5238|98%  19:16:37:423  [ Thato ][0|94.4|0|0|23.6|0][IMP hchon wear DARK leth 
+naus] 
+You bunch your powerful muscles and launch yourself in a majestic leap southeastwards.
+The Oniar estate gates.
+--- Area 572: A secluded mansion - v53525 ---
+                                             
+                                             
+                                             
+                                             
+                                             
+                 [ ]
+                                             
+                     [ ]-[ ]
+                    / | x
+                 [ ]-[^]-[ ]
+                    \ | /
+                     [+]
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+--- The Oniar estate gates ------ -1:-1:0 ---
+The sky lightens with the onset of dawn. A rune like a flurry of lightning bolts has been
+sketched into the ground here (Isaz: Throws off balance). A rune like a rising sun has been 
+sketched into the ground here (Dagaz: Heals affs). A fierce mountain falcon surveys the 
+surroundings with keen eyes. A lightwall stands here, shining with such intensity that you fear 
+should your vision stray too close you might lose all sight.
+You see exits leading north, northeast, and northwest.
+You drop back and ease the engagement.
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+H:5073|87% M:5238|98%  19:16:37:478  [ Thato ][0|94.4|0|0|23.6|0][IMP hchon wear DARK leth 
+naus] 
+[OUTR]: 1 Bloodroot (819)
+You may drink another health or mana elixir. Health (4.415)
+H:5073|87% M:5238|98%  19:16:37:548  [ Thato ][0|94.4|0|0|23.6|0][IMP hchon wear DARK leth 
+naus] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.557)
+H:5073|87% M:5238|98%  19:16:37:624  [ Thato ][0|94.4|0|0|23.6|0][IMP hchon wear DARK leth 
+naus] 
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+You are patient once again.
+[AFF]: Impatience
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5775|100% M:5238|98%  19:16:37:631  [ Thato ][0|94.4|0|0|23.6|0] ( +702h 12% )[hchon wear 
+DARK leth naus] 
+Ferocity:  [####|####|####|####]
+
+[DEF]: Shield
+You have recovered balance on all limbs.
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 4.00s.
+H:5775|100% M:5238|98%  19:16:38:483  [ Thato ][0|94.4|0|0|23.6|0][hchon wear DARK leth naus] 
+
+[Prio]: Paralysis (26)
+Sunlight shines down upon you mercilessly, rippling across your skin like fire.
+Health lost: 351 (magical).
+H:5424|93% M:5238|98%  19:16:38:909  [ Thato ][0|94.4|0|0|23.6|0] ( -351h 6% )[hchon wear DARK 
+leth naus] 
+You may eat another plant or mineral. Eat (1.583)
+H:5424|93% M:5238|98%  19:16:39:005  [ Thato ][0|94.4|0|0|23.6|0][hchon wear DARK leth naus] 
+[Curing]: EAT LOBELIA
+You eat a lobelia seed.
+My, you feel healthier than you have in years.
+[AFF]: Hypochondria
+H:5424|93% M:5238|98%  19:16:39:107  [ Thato ][0|94.4|0|0|23.6|0][wear DARK leth naus] 
+[OUTR]: 1 Lobelia (1254)
+[Prio]: Paralysis (1)
+Thato's aura of weapons rebounding disappears.
+Thato's attack rebounds off your magical shield.
+H:5424|93% M:5238|98%  19:16:39:697  [ Thato ][0|94.4|0|0|23.6|0][wear DARK leth naus] 
+Thato takes a long drag off her pipe.
+H:5424|93% M:5238|98%  19:16:39:916  [ Thato ][0|94.4|0|0|23.6|0][wear DARK leth naus] 
+You may eat another plant or mineral. Eat (1.419)
+H:5424|93% M:5238|98%  19:16:40:525  [ Thato ][0|94.4|0|0|23.6|0][wear DARK leth naus] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+The lethargy evaporates, leaving you full of energy.
+[AFF]: Lethargy
+H:5424|93% M:5238|98%  19:16:40:531  [ Thato ][0|94.4|0|0|23.6|0][wear DARK naus] 
+[OUTR]: 1 Ginseng (578)
+Sunlight shines down upon you mercilessly, rippling across your skin like fire.
+Health lost: 351 (magical).
+H:5073|87% M:5238|98%  19:16:40:908  [ Thato ][0|94.4|0|0|23.6|0] ( -351h 6% )[wear DARK naus] 
+
+[DEF]: Shield
+Thato ceases to wield a woven shield of twigs in her left hand.
+Thato starts to wield a Razor Whip in her left hand.
+Thato ceases to wield Thoth's fang in her right hand.
+Thato starts to wield a woven shield of twigs in her right hand.
+Thato flays away your shield defence.
+With fluid grace, Thato snaps her wrist, bringing a Razor Whip back to crack viciously into
+you.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:5073|87% M:5238|98%  19:16:41:330  [ Thato ][0|94.4|0|0|23.6|0][wear PAR DARK naus] 
+You may drink another health or mana elixir. Health (4.396)
+H:5073|87% M:5238|98%  19:16:42:027  [ Thato ][0|94.4|0|0|23.6|0][wear PAR DARK naus] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5775|100% M:5238|98%  19:16:42:119  [ Thato ][0|94.4|0|0|23.6|0] ( +702h 12% )[wear PAR DARK 
+naus] 
+You may eat another plant or mineral. Eat (1.681)
+H:5775|100% M:5238|98%  19:16:42:212  [ Thato ][0|94.4|0|0|23.6|0][wear PAR DARK naus] 
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+Your stomach becalms itself.
+[AFF]: Nausea
+[Prio]: Darkshade (1)
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+No longer will the sunlight harm you.
+[AFF]: Darkshade
+H:5775|100% M:5238|98%  19:16:42:310  [ Thato ][0|94.4|0|0|23.6|0][wear PAR] 
+[OUTR]: 1 Ginseng (577)
+You have recovered equilibrium.
+H:5775|100% M:5238|98%  19:16:42:486  [ Thato ][0|94.4|0|0|23.6|0][wear PAR] 
+With fluid grace, Thato snaps her wrist, bringing a Razor Whip back to crack viciously into
+you.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+H:5775|100% M:5238|98%  19:16:43:030  [ Thato ][0|94.4|0|0|23.6|0][clum wear PAR] 
+You may eat another plant or mineral. Eat (1.516)
+H:5775|100% M:5238|98%  19:16:43:826  [ Thato ][0|94.4|0|0|23.6|0][clum wear PAR] 
+
+[DEF]: Shield
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 4.00s.
+H:5775|100% M:5238|98%  19:16:43:920  [ Thato ][0|94.4|0|0|23.6|0][clum wear] 
+[OUTR]: 1 Bloodroot (818)
+[Prio]: Paralysis (26)
+[Prio]: Paralysis (1)
+H:5775|100% M:5238|98%  19:16:44:133  [ Thato ][0|94.4|0|0|23.6|0][clum wear] 
+
+[DEF]: Fangbarrier
+The sileris berry juice hardens into a supple purple shell.
+H:5775|100% M:5238|98%  19:16:44:273  [ Thato ][0|94.4|0|0|23.6|0][clum wear] 
+
+[DEF]: Rebounding
+You feel an aura of rebounding surround you.
+H:5775|100% M:5238|98%  19:16:44:578  [ Thato ][0|94.4|0|0|23.6|0][clum wear] 
+You may eat another plant or mineral. Eat (1.565)
+H:5775|100% M:5313|100%  19:16:45:481  [ Thato ][0|94.4|0|0|23.6|0][clum wear] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your limbs strengthen and you feel stronger.
+[AFF]: Weariness
+H:5775|100% M:5313|100%  19:16:45:612  [ Thato ][0|94.4|0|0|23.6|0][clum] 
+
+[DEF]: Shield
+[DEF]: Fangbarrier
+Thato flays away your shield defence.
+The protective coating covering your skin is ripped away along with your protections.
+Thato snaps her fingers in front of you.
+H:5775|100% M:5313|100%  19:16:45:617  [ Thato ][0|94.4|0|0|23.6|0][clum] 
+[Curing]: APPLY SILERIS
+You apply a sileris berry to yourself.
+H:5775|100% M:5313|100%  19:16:45:781  [ Thato ][0|94.4|0|0|23.6|0][clum] 
+You may drink another health or mana elixir. Health (4.422)
+H:5775|100% M:5313|100%  19:16:46:541  [ Thato ][0|94.4|0|0|23.6|0][clum] 
+[Prio]: Darkshade (3)
+You may eat another plant or mineral.
+H:5775|100% M:5313|100%  19:16:47:053  [ Thato ][0|94.4|0|0|23.6|0][clum] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:5775|100% M:5313|100%  19:16:47:140  [ Thato ][0|94.4|0|0|23.6|0]
+A fierce mountain falcon dives at Thato, raking her face with its talons.
+H:5775|100% M:5313|100%  19:16:47:143  [ Thato ][0|94.4|0|0|23.6|0]
+
+[DEF]: Rebounding
+Thato carefully wipes all the venoms off of a Razor Whip.
+Thato flays away your aura of rebounding defence.
+With fluid grace, Thato snaps her wrist, bringing a Razor Whip back to crack viciously into
+you.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:5775|100% M:5313|100%  19:16:47:234  [ Thato ][0|94.4|0|0|23.6|0][PAR] 
+[Curing]: SMOKE SKULLCAP
+You take a long drag of skullcap off your pipe.
+H:5775|100% M:5313|100%  19:16:47:325  [ Thato ][0|94.4|0|0|23.6|0][PAR] 
+Thato takes a drink from an elegant diamond vial.
+H:5775|100% M:5313|100%  19:16:47:510  [ Thato ][0|94.4|0|0|23.6|0][PAR] 
+You have recovered equilibrium.
+H:5775|100% M:5313|100%  19:16:47:890  [ Thato ][0|94.4|0|0|23.6|0][PAR] 
+You suddenly perceive the vague outline of an aura of rebounding around Thato.
+H:5775|100% M:5313|100%  19:16:48:454  [ Thato ][0|94.4|0|0|23.6|0][PAR] 
+
+====================DISRUPTED====================
+====================DISRUPTED====================
+====================DISRUPTED====================
+Your mental equilibrium scatters suddenly, upset by some unknown source.
+[AFF]: Disrupted
+H:5775|100% M:5313|100%  19:16:48:642  [ Thato ][0|94.4|0|0|23.6|0][PAR DISR] 
+You may eat another plant or mineral.
+H:5775|100% M:5313|100%  19:16:48:646  [ Thato ][0|94.4|0|0|23.6|0][PAR DISR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+[Curing]: CONCENTRATE
+You begin intense concentration to restore your equilibrium.
+Equilibrium used: 2.00s.
+H:5775|100% M:5313|100%  19:16:48:738  [ Thato ][0|94.4|0|0|23.6|0]
+Thato ceases to wield a woven shield of twigs in her right hand.
+Thato ceases to wield a Razor Whip in her left hand.
+Thato starts to wield a woven shield of twigs in her left hand.
+Thato starts to wield Thoth's fang in her right hand.
+Thato's aura of weapons rebounding disappears.
+Thato quickly pricks you with her dirk.
+[AFF]: Darkshade
+Your vision is flooded with light, and your face suddenly reddens.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+H:5775|100% M:5313|100%  19:16:48:757  [ Thato ][0|94.4|0|0|23.6|0][clum DARK] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.487)
+H:5775|100% M:5313|100%  19:16:48:813  [ Thato ][0|94.4|0|0|23.6|0][clum DARK] 
+[OUTR]: 1 Bloodroot (817)
+Thato takes a long drag off her pipe.
+H:5775|100% M:5313|100%  19:16:48:872  [ Thato ][0|94.4|0|0|23.6|0][clum DARK] 
+You may eat another plant or mineral. Eat (1.54)
+H:5775|100% M:5313|100%  19:16:50:274  [ Thato ][0|94.4|0|0|23.6|0][clum DARK] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+No longer will the sunlight harm you.
+[AFF]: Darkshade
+H:5775|100% M:5313|100%  19:16:50:693  [ Thato ][0|94.4|0|0|23.6|0][clum] 
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Weariness
+Your limbs grow heavy and you groan feebly.
+H:5775|100% M:5313|100%  19:16:50:701  [ Thato ][0|94.4|0|0|23.6|0][clum wear PAR] 
+You have recovered equilibrium.
+H:5775|100% M:5313|100%  19:16:50:704  [ Thato ][0|94.4|0|0|23.6|0][clum wear PAR] 
+[OUTR]: 1 Ginseng (576)
+You may utilise the tree tattoo again. Tree (13.978)
+H:5775|100% M:5313|100%  19:16:51:605  [ Thato ][0|94.4|0|0|23.6|0][clum wear PAR] 
+You may eat another plant or mineral. Eat (1.232)
+H:5775|100% M:5313|100%  19:16:51:923  [ Thato ][0|94.4|0|0|23.6|0][clum wear PAR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+You cease wielding a blessed legionnaire's longsword in your left hand.
+You start to wield a mithril broadsword in your left hand.
+Envenomed: (Xentio)
+Sliced:    (Left leg) (35.4%)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (90%/100%).
+Afflicted: (Clumsiness Paralysis).*
+[clum, sen[67], weari[67], para]
+[OUTR]: 1 Bloodroot (816)
+H:5775|100% M:5213|98%  19:16:52:203  [ Thato ][0|94.4|0|0|35.4|0][clum wear] 
+Thato eats a bloodroot leaf.
+[Curing]: TOUCH TREE
+Processed Cures(paralysis)
+You touch the tree of life tattoo.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:5775|100% M:5213|98%  19:16:52:298  [ Thato ][0|94.4|0|0|35.4|0][wear] 
+You focus on automatically empowering the isaz, sleizak, and inguz runes.
+H:5775|100% M:5213|98%  19:16:52:301  [ Thato ][0|94.4|0|0|35.4|0][wear] 
+Thato misses you with her dirk by a hair.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:5775|100% M:5213|98%  19:16:52:389  [ Thato ][0|94.4|0|0|35.4|0][wear PAR] 
+[AFF]: Hypochondria
+A terrible sense of unease comes over you.
+H:5775|100% M:5213|98%  19:16:52:628  [ Thato ][0|94.4|0|0|35.4|0][hchon wear PAR] 
+A fierce mountain falcon rips out a chunk of Thato's flesh with its beak.
+H:5775|100% M:5213|98%  19:16:53:252  [ Thato ][0|94.4|0|0|35.4|0][hchon wear PAR] 
+You may eat another plant or mineral. Eat (1.456)
+H:5775|100% M:5213|98%  19:16:53:565  [ Thato ][0|94.4|0|0|35.4|0][hchon wear PAR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5775|100% M:5213|98%  19:16:53:757  [ Thato ][0|94.4|0|0|35.4|0][hchon wear] 
+[OUTR]: 1 Bloodroot (815)
+Thato eats a piece of kelp.
+Processed Cures(clumsiness sensitivity weariness)
+[clum[67], sen[44], weari[44]]
+
+H:5775|100% M:5213|98%  19:16:53:999  [ Thato ][0|94.4|0|0|35.4|0][hchon wear] 
+Thato carefully wipes all the venoms off of Thoth's fang.
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Darkshade
+Your vision is flooded with light, and your face suddenly reddens.
+H:5775|100% M:5213|98%  19:16:54:164  [ Thato ][0|94.4|0|0|35.4|0][hchon wear PAR DARK] 
+You have recovered balance on all limbs.
+H:5775|100% M:5213|98%  19:16:54:325  [ Thato ][0|94.4|0|0|35.4|0][hchon wear PAR DARK] 
+You may eat another plant or mineral. Eat (1.454)
+H:5775|100% M:5213|98%  19:16:55:210  [ Thato ][0|94.4|0|0|35.4|0][hchon wear PAR DARK] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5775|100% M:5213|98%  19:16:55:412  [ Thato ][0|94.4|0|0|35.4|0][hchon wear DARK] 
+Envenomed: (Euphorbia)
+Sliced:    (Left leg) (47.2%)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (75%/100%).
+Afflicted: (Nausea Paralysis).*
+[clum[67], sen[44], weari[44], naus, para]
+[OUTR]: 1 Bloodroot (814)
+Thato eats a bloodroot leaf.
+Thato takes a drink from an elegant diamond vial.
+Processed Cures(paralysis)
+Thato eats some irid moss.
+H:5775|100% M:5188|97%  19:16:55:592  [ Thato ][0|94.4|0|0|47.2|0][hchon wear DARK] 
+[AFF]: Anorexia
+The thought of food revolts you all of a sudden.
+H:5775|100% M:5188|97%  19:16:55:674  [ Thato ][0|94.4|0|0|47.2|0][hchon wear DARK ANO] 
+[AFF]: Nausea
+A sense of extreme nausea washes over you.
+H:5775|100% M:5188|97%  19:16:55:767  [ Thato ][0|94.4|0|0|47.2|0][hchon wear DARK naus ANO] 
+
+[DEF]: Fangbarrier
+The sileris berry juice hardens into a supple purple shell.
+[Curing]: APPLY EPIDERMAL TO BODY
+You take out some salve and quickly rub it on your body.
+Food is no longer repulsive to you.
+[AFF]: Anorexia
+H:5775|100% M:5188|97%  19:16:55:772  [ Thato ][0|94.4|0|0|47.2|0][hchon wear DARK naus] 
+
+[DEF]: Rebounding
+You feel an aura of rebounding surround you.
+H:5775|100% M:5188|97%  19:16:55:859  [ Thato ][0|94.4|0|0|47.2|0][hchon wear DARK naus] 
+
+[DEF]: Rebounding
+[DEF]: Fangbarrier
+Thato ceases to wield a woven shield of twigs in her left hand.
+Thato starts to wield a Razor Whip in her left hand.
+Thato ceases to wield Thoth's fang in her right hand.
+Thato starts to wield a woven shield of twigs in her right hand.
+Thato flays away your aura of rebounding defence.
+The protective coating covering your skin is ripped away along with your protections.
+With fluid grace, Thato snaps her wrist, bringing a Razor Whip back to crack viciously into
+you.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:5775|100% M:5188|97%  19:16:55:958  [ Thato ][0|94.4|0|0|47.2|0][hchon wear PAR DARK naus] 
+[Curing]: SMOKE SKULLCAP
+You take a long drag of skullcap off your pipe.
+H:5775|100% M:5188|97%  19:16:55:962  [ Thato ][0|94.4|0|0|47.2|0][hchon wear PAR DARK naus] 
+Sunlight shines down upon you mercilessly, rippling across your skin like fire.
+Health lost: 351 (magical).
+H:5424|93% M:5188|97%  19:16:56:175  [ Thato ][0|94.4|0|0|47.2|0] ( -351h 6% )[hchon wear PAR 
+DARK naus] 
+A fierce mountain falcon dives at Thato, raking her face with its talons.
+H:5424|93% M:5188|97%  19:16:56:262  [ Thato ][0|94.4|0|0|47.2|0][hchon wear PAR DARK naus] 
+Your thoughts cease racing.
+H:5424|93% M:5188|97%  19:16:56:370  [ Thato ][0|94.4|0|0|47.2|0][hchon wear PAR DARK naus] 
+You may apply another salve to yourself. Body (0.999)
+H:5424|93% M:5188|97%  19:16:56:771  [ Thato ][0|94.4|0|0|47.2|0][hchon wear PAR DARK naus] 
+You may eat another plant or mineral. Eat (1.461)
+H:5424|93% M:5188|97%  19:16:56:871  [ Thato ][0|94.4|0|0|47.2|0][hchon wear PAR DARK naus] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+[Curing]: APPLY SILERIS
+You apply a sileris berry to yourself.
+H:5424|93% M:5188|97%  19:16:56:962  [ Thato ][0|94.4|0|0|47.2|0][hchon wear DARK naus] 
+
+[OUTR]: 1 Bloodroot (813)
+Thato eats a ginseng root.
+Processed Cures(nausea)
+[clum[67], sen[44], weari[44]]
+
+H:5424|93% M:5188|97%  19:16:57:099  [ Thato ][0|94.4|0|0|47.2|0][hchon wear DARK naus] 
+You suddenly perceive the vague outline of an aura of rebounding around Thato.
+H:5424|93% M:5188|97%  19:16:57:339  [ Thato ][0|94.4|0|0|47.2|0][hchon wear DARK naus] 
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+Your stomach becalms itself.
+[AFF]: Nausea
+H:5424|93% M:5188|97%  19:16:57:426  [ Thato ][0|94.4|0|0|47.2|0][hchon wear DARK] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.565)
+H:5424|93% M:5188|97%  19:16:57:527  [ Thato ][0|94.4|0|0|47.2|0][hchon wear DARK] 
+Thato ceases to wield a woven shield of twigs in her right hand.
+Thato ceases to wield a Razor Whip in her left hand.
+Thato starts to wield a woven shield of twigs in her left hand.
+Thato starts to wield Thoth's fang in her right hand.
+Thato's aura of weapons rebounding disappears.
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Asthma
+You feel a tightening sensation grow in your lungs.
+H:5424|93% M:5188|97%  19:16:57:536  [ Thato ][0|94.4|0|0|47.2|0][AST hchon wear PAR DARK] 
+
+[Prio]: Impatience (1)
+[Prio]: Asthma (2)
+H:5424|93% M:5188|97%  19:16:57:694  [ Thato ][0|94.4|0|0|47.2|0][AST hchon wear PAR DARK] 
+You have recovered balance on all limbs.
+H:5424|93% M:5188|97%  19:16:57:698  [ Thato ][0|94.4|0|0|47.2|0][AST hchon wear PAR DARK] 
+Thato takes a long drag off her pipe.
+H:5424|93% M:5188|97%  19:16:57:701  [ Thato ][0|94.4|0|0|47.2|0][AST hchon wear PAR DARK] 
+Sunlight shines down upon you mercilessly, rippling across your skin like fire.
+Health lost: 351 (magical).
+H:5073|87% M:5188|97%  19:16:58:166  [ Thato ][0|94.4|0|0|47.2|0] ( -351h 6% )[AST hchon wear 
+PAR DARK] 
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5775|100% M:5188|97%  19:16:58:378  [ Thato ][0|94.4|0|0|47.2|0] ( +702h 12% )[AST hchon wear 
+PAR DARK] 
+You may eat another plant or mineral. Eat (1.504)
+H:5775|100% M:5188|97%  19:16:58:464  [ Thato ][0|94.4|0|0|47.2|0][AST hchon wear PAR DARK] 
+
+[DEF]: Shield
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 4.00s.
+H:5775|100% M:5188|97%  19:16:58:559  [ Thato ][0|94.4|0|0|47.2|0][AST hchon wear DARK] 
+
+[OUTR]: 1 Bloodroot (812)
+[Prio]: Paralysis (26)
+[AFF]: Nausea
+A sense of extreme nausea washes over you.
+Your ferocity decreases.
+H:5775|100% M:5188|97%  19:16:58:913  [ Thato ][0|94.4|0|0|47.2|0][AST hchon wear DARK naus] 
+You cannot contain the convulsions in your stomach any longer and double over, retching
+violently.
+Health lost: 617 (unblockable).
+H:5158|89% M:5188|97%  19:16:59:005  [ Thato ][0|94.4|0|0|47.2|0] ( -617h 10% )[AST hchon wear 
+DARK naus] 
+A fierce mountain falcon dives at Thato, raking her face with its talons.
+Its talons shred the kola defence of Thato.
+H:5158|89% M:5188|97%  19:16:59:238  [ Thato ][0|94.4|0|0|47.2|0][AST hchon wear DARK naus] 
+Thato eats a kola nut.
+H:5158|89% M:5188|97%  19:16:59:329  [ Thato ][0|94.4|0|0|47.2|0][AST hchon wear DARK naus] 
+
+[DEF]: Shield
+Thato ceases to wield a woven shield of twigs in her left hand.
+Thato starts to wield a Razor Whip in her left hand.
+Thato ceases to wield Thoth's fang in her right hand.
+Thato starts to wield a woven shield of twigs in her right hand.
+Thato flays away your shield defence.
+With fluid grace, Thato snaps her wrist, bringing a Razor Whip back to crack viciously into
+you.
+[AFF]: Slickness
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+
+H:5158|89% M:5188|97%  19:16:59:337  [ Thato ][0|94.4|0|0|47.2|0][AST hchon wear SLCK DARK 
+naus] 
+You may eat another plant or mineral. Eat (1.467)
+H:5158|89% M:5188|97%  19:17:00:023  [ Thato ][0|94.4|0|0|47.2|0][AST hchon wear SLCK DARK 
+naus] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your glands cease their oily secretion.
+[AFF]: Slickness
+H:5158|89% M:5188|97%  19:17:00:107  [ Thato ][0|94.4|0|0|47.2|0][hchon wear DARK naus] 
+Sunlight shines down upon you mercilessly, rippling across your skin like fire.
+Health lost: 351 (magical).
+[Prio]: Impatience (2)
+[Prio]: Asthma (3)
+[Prio]: Paralysis (1)
+H:4807|83% M:5188|97%  19:17:00:173  [ Thato ][0|94.4|0|0|47.2|0] ( -351h 6% )[hchon wear DARK 
+naus] 
+[Curing]: OUTR MOSS
+[OUTR]: 1 Irid (1378)
+[Curing]: EAT MOSS
+You eat some irid moss.
+You feel your health and mana replenished.
+H:5269|91% M:5313|100%  19:17:00:263  [ Thato ][0|94.4|0|0|47.2|0] ( +462h 8% )[hchon wear DARK 
+naus] 
+Thato ceases to wield a woven shield of twigs in her right hand.
+Thato ceases to wield a Razor Whip in her left hand.
+Thato starts to wield a woven shield of twigs in her left hand.
+Thato starts to wield Thoth's fang in her right hand.
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+Your limbs grow heavy and you groan feebly.
+H:5269|91% M:5313|100%  19:17:00:964  [ Thato ][0|94.4|0|0|47.2|0][hchon wear PAR DARK naus] 
+
+[Prio]: Darkshade (1)
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.446)
+H:5269|91% M:5313|100%  19:17:01:553  [ Thato ][0|94.4|0|0|47.2|0][hchon wear PAR DARK naus] 
+You may eat another plant or mineral.
+H:5269|91% M:5313|100%  19:17:01:639  [ Thato ][0|94.4|0|0|47.2|0][hchon wear PAR DARK naus] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+No longer will the sunlight harm you.
+[AFF]: Darkshade
+H:5269|91% M:5313|100%  19:17:01:733  [ Thato ][0|94.4|0|0|47.2|0][hchon wear PAR naus] 
+
+[OUTR]: 1 Ginseng (575)
+[AFF]: Lethargy
+You feel your energy robbed from you as lethargy overtakes you.
+H:5269|91% M:5313|100%  19:17:01:933  [ Thato ][0|94.4|0|0|47.2|0][hchon wear PAR leth naus] 
+A fierce mountain falcon rips out a chunk of Thato's flesh with its beak.
+H:5269|91% M:5313|100%  19:17:02:352  [ Thato ][0|94.4|0|0|47.2|0][hchon wear PAR leth naus] 
+
+Ferocity:  [####|####|####|####]
+You have recovered equilibrium.
+H:5269|91% M:5313|100%  19:17:02:538  [ Thato ][0|94.4|0|0|47.2|0][hchon wear PAR leth naus] 
+You are paralysed and unable to do that.
+H:5269|91% M:5313|100%  19:17:02:632  [ Thato ][0|94.4|0|0|47.2|0][hchon wear PAR leth naus] 
+Thato quickly pricks you with her dirk.
+[AFF]: Slickness
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Asthma
+You feel a tightening sensation grow in your lungs.
+You may drink another health or mana elixir. Health (4.351)
+H:5269|91% M:5313|100%  19:17:02:728  [ Thato ][0|94.4|0|0|47.2|0][AST hchon wear PAR SLCK leth 
+naus] 
+[Prio]: Impatience (1)
+[Prio]: Asthma (2)
+H:5269|91% M:5313|100%  19:17:02:885  [ Thato ][0|94.4|0|0|47.2|0][AST hchon wear PAR SLCK leth 
+naus] 
+You may eat another plant or mineral. Eat (1.501)
+H:5269|91% M:5313|100%  19:17:03:234  [ Thato ][0|94.4|0|0|47.2|0][AST hchon wear PAR SLCK leth 
+naus] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5269|91% M:5313|100%  19:17:03:434  [ Thato ][0|94.4|0|0|47.2|0][AST hchon wear SLCK leth 
+naus] 
+
+[DEF]: Shield
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 4.00s.
+H:5269|91% M:5313|100%  19:17:03:494  [ Thato ][0|94.4|0|0|47.2|0][AST hchon wear SLCK leth 
+naus] 
+[OUTR]: 1 Bloodroot (811)
+[Prio]: Paralysis (26)
+[Prio]: Darkshade (3)
+
+[DEF]: Rebounding
+You feel an aura of rebounding surround you.
+H:5269|91% M:5313|100%  19:17:04:477  [ Thato ][0|94.4|0|0|47.2|0][AST hchon wear SLCK leth 
+naus] 
+
+[DEF]: Shield
+Thato ceases to wield a woven shield of twigs in her left hand.
+Thato starts to wield a Razor Whip in her left hand.
+Thato ceases to wield Thoth's fang in her right hand.
+Thato starts to wield a woven shield of twigs in her right hand.
+Thato flays away your shield defence.
+H:5269|91% M:5313|100%  19:17:04:570  [ Thato ][0|94.4|0|0|47.2|0][AST hchon wear SLCK leth 
+naus] 
+You may eat another plant or mineral. Eat (1.527)
+H:5269|91% M:5313|100%  19:17:04:960  [ Thato ][0|94.4|0|0|47.2|0][AST hchon wear SLCK leth 
+naus] 
+[AFF]: Impatience
+You shuffle your feet noisily, suddenly bored.
+H:5269|91% M:5313|100%  19:17:05:049  [ Thato ][0|94.4|0|0|47.2|0][IMP AST hchon wear SLCK leth 
+naus] 
+[Curing]: EAT GOLDENSEAL
+You eat a goldenseal root.
+You are patient once again.
+[AFF]: Impatience
+H:5269|91% M:5313|100%  19:17:05:143  [ Thato ][0|94.4|0|0|47.2|0][AST hchon wear SLCK leth 
+naus] 
+[OUTR]: 1 Goldenseal (1490)
+You may utilise the tree tattoo again. Tree (13.848)
+H:5269|91% M:5313|100%  19:17:06:145  [ Thato ][0|94.4|0|0|47.2|0][AST hchon wear SLCK leth 
+naus] 
+You suddenly perceive the vague outline of an aura of rebounding around Thato.
+H:5269|91% M:5313|100%  19:17:06:241  [ Thato ][0|94.4|0|0|47.2|0][AST hchon wear SLCK leth 
+naus] 
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your glands cease their oily secretion.
+[AFF]: Slickness
+You may eat another bit of irid moss or potash.
+H:5269|91% M:5313|100%  19:17:06:338  [ Thato ][0|94.4|0|0|47.2|0][hchon wear leth naus] 
+
+[Prio]: Impatience (2)
+[Prio]: Asthma (3)
+[Prio]: Paralysis (1)
+H:5269|91% M:5313|100%  19:17:06:414  [ Thato ][0|94.4|0|0|47.2|0][hchon wear leth naus] 
+You may eat another plant or mineral. Eat (1.489)
+H:5269|91% M:5313|100%  19:17:06:631  [ Thato ][0|94.4|0|0|47.2|0][hchon wear leth naus] 
+[Curing]: EAT LOBELIA
+You eat a lobelia seed.
+My, you feel healthier than you have in years.
+[AFF]: Hypochondria
+H:5269|91% M:5313|100%  19:17:06:723  [ Thato ][0|94.4|0|0|47.2|0][wear leth naus] 
+[OUTR]: 1 Lobelia (1253)
+
+[DEF]: Fangbarrier
+The sileris berry juice hardens into a supple purple shell.
+H:5269|91% M:5313|100%  19:17:06:913  [ Thato ][0|94.4|0|0|47.2|0][wear leth naus] 
+
+[DEF]: Rebounding
+[DEF]: Fangbarrier
+Thato carefully wipes all the venoms off of a Razor Whip.
+Thato's aura of weapons rebounding disappears.
+Thato flays away your aura of rebounding defence.
+The protective coating covering your skin is ripped away along with your protections.
+With fluid grace, Thato snaps her wrist, bringing a Razor Whip back to crack viciously into
+you.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Thato snaps her fingers in front of you.
+H:5269|91% M:5313|100%  19:17:07:105  [ Thato ][0|94.4|0|0|47.2|0][wear PAR leth naus] 
+Thato takes a long drag off her pipe.
+H:5269|91% M:5313|100%  19:17:07:187  [ Thato ][0|94.4|0|0|47.2|0][wear PAR leth naus] 
+Thato takes a drink from an elegant diamond vial.
+You have recovered equilibrium.
+H:5269|91% M:5313|100%  19:17:07:458  [ Thato ][0|94.4|0|0|47.2|0][wear PAR leth naus] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.454)
+H:5269|91% M:5313|100%  19:17:07:791  [ Thato ][0|94.4|0|0|47.2|0][wear PAR leth naus] 
+[Curing]: SMOKE SKULLCAP
+You take a long drag of skullcap off your pipe.
+H:5269|91% M:5313|100%  19:17:07:884  [ Thato ][0|94.4|0|0|47.2|0][wear PAR leth naus] 
+You may eat another plant or mineral. Eat (1.545)
+H:5269|91% M:5313|100%  19:17:08:267  [ Thato ][0|94.4|0|0|47.2|0][wear PAR leth naus] 
+
+[DEF]: Shield
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+[Curing]: APPLY SILERIS
+You apply a sileris berry to yourself.
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 4.00s.
+H:5269|91% M:5313|100%  19:17:08:355  [ Thato ][0|94.4|0|0|47.2|0][wear leth naus] 
+A fierce mountain falcon rips out a chunk of Thato's flesh with its beak.
+H:5269|91% M:5313|100%  19:17:08:409  [ Thato ][0|94.4|0|0|47.2|0][wear leth naus] 
+[OUTR]: 1 Bloodroot (810)
+[Prio]: Paralysis (26)
+[Prio]: Paralysis (1)
+H:5269|91% M:5313|100%  19:17:08:511  [ Thato ][0|94.4|0|0|47.2|0][wear leth naus] 
+
+[DEF]: Shield
+Thato flays away your shield defence.
+With fluid grace, Thato snaps her wrist, bringing a Razor Whip back to crack viciously into
+you.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:5384|93% M:5313|100%  19:17:08:681  [ Thato ][0|94.4|0|0|47.2|0][wear PAR leth naus] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.475)
+H:5384|93% M:5313|100%  19:17:09:360  [ Thato ][0|94.4|0|0|47.2|0][wear PAR leth naus] 
+You may eat another plant or mineral. Eat (1.479)
+H:5384|93% M:5313|100%  19:17:09:828  [ Thato ][0|94.4|0|0|47.2|0][wear PAR leth naus] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5384|93% M:5313|100%  19:17:09:915  [ Thato ][0|94.4|0|0|47.2|0][wear leth naus] 
+[OUTR]: 1 Bloodroot (809)
+
+====================DISRUPTED====================
+====================DISRUPTED====================
+====================DISRUPTED====================
+Your mental equilibrium scatters suddenly, upset by some unknown source.
+[AFF]: Disrupted
+H:5384|93% M:5313|100%  19:17:10:069  [ Thato ][0|94.4|0|0|47.2|0][wear leth naus DISR] 
+[Curing]: CONCENTRATE
+You begin intense concentration to restore your equilibrium.
+Equilibrium used: 2.00s.
+H:5384|93% M:5313|100%  19:17:10:211  [ Thato ][0|94.4|0|0|47.2|0][wear leth naus] 
+Thato ceases to wield a woven shield of twigs in her right hand.
+Thato ceases to wield a Razor Whip in her left hand.
+Thato starts to wield a woven shield of twigs in her left hand.
+Thato starts to wield Thoth's fang in her right hand.
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Asthma
+You feel a tightening sensation grow in your lungs.
+H:5384|93% M:5313|100%  19:17:10:305  [ Thato ][0|94.4|0|0|47.2|0][AST wear PAR leth naus] 
+
+[Prio]: Impatience (1)
+[Prio]: Asthma (2)
+H:5384|93% M:5313|100%  19:17:10:599  [ Thato ][0|94.4|0|0|47.2|0][AST wear PAR leth naus] 
+A fierce mountain falcon rips out a chunk of Thato's flesh with its beak.
+H:5384|93% M:5313|100%  19:17:11:441  [ Thato ][0|94.4|0|0|47.2|0][AST wear PAR leth naus] 
+You may eat another plant or mineral. Eat (1.531)
+H:5384|93% M:5313|100%  19:17:11:445  [ Thato ][0|94.4|0|0|47.2|0][AST wear PAR leth naus] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5384|93% M:5313|100%  19:17:11:618  [ Thato ][0|94.4|0|0|47.2|0][AST wear leth naus] 
+[OUTR]: 1 Bloodroot (808)
+Thato fixes her gaze to yours and hisses a sharp command.
+[AFF]: Masochism
+An odd sensation descends upon you.
+Thato sinks her fangs into your body and you wince in pain.
+[AFF]: Disloyalty
+You feel ugliness radiating from you.
+[AFF]: Impatience
+You shuffle your feet noisily, suddenly bored.
+H:5384|93% M:5313|100%  19:17:12:083  [ Thato ][0|94.4|0|0|47.2|0][maso IMP AST wear leth naus 
+disl] 
+
+[DEF]: Shield
+You have recovered equilibrium.
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 4.00s.
+H:5384|93% M:5313|100%  19:17:12:240  [ Thato ][0|94.4|0|0|47.2|0][maso IMP AST wear leth naus 
+disl] 
+[Prio]: Paralysis (26)
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+H:5384|93% M:5313|100%  19:17:12:436  [ Thato ][0|94.4|0|0|47.2|0][maso IMP wear leth naus 
+disl] 
+[Prio]: Paralysis (1)
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+You no longer will inspire disloyalty among friends.
+[AFF]: Disloyalty
+H:5384|93% M:5313|100%  19:17:12:580  [ Thato ][0|94.4|0|0|47.2|0][maso IMP wear leth naus] 
+You may eat another plant or mineral. Eat (1.508)
+H:5384|93% M:5313|100%  19:17:13:126  [ Thato ][0|94.4|0|0|47.2|0][maso IMP wear leth naus] 
+[Curing]: EAT GOLDENSEAL
+You eat a goldenseal root.
+You are patient once again.
+[AFF]: Impatience
+[Curing]: FOCUS MIND
+You focus your mind intently on curing your mental maladies.
+You no longer enjoy pain.
+[AFF]: Masochism
+H:5384|93% M:5063|95%  19:17:13:216  [ Thato ][0|94.4|0|0|47.2|0] ( -250m 4% )[wear leth naus] 
+
+[OUTR]: 1 Goldenseal (1489)
+[Prio]: Impatience (2)
+[Prio]: Asthma (3)
+H:5384|93% M:5063|95%  19:17:13:384  [ Thato ][0|94.4|0|0|47.2|0][wear leth naus] 
+
+[DEF]: Shield
+Thato ceases to wield a woven shield of twigs in her left hand.
+Thato starts to wield a Razor Whip in her left hand.
+Thato ceases to wield Thoth's fang in her right hand.
+Thato starts to wield a woven shield of twigs in her right hand.
+Thato flays away your shield defence.
+With fluid grace, Thato snaps her wrist, bringing a Razor Whip back to crack viciously into
+you.
+[AFF]: Slickness
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+
+H:5384|93% M:5063|95%  19:17:13:839  [ Thato ][0|94.4|0|0|47.2|0][wear SLCK leth naus] 
+[AFF]: Hypochondria
+A terrible sense of unease comes over you.
+H:5384|93% M:5063|95%  19:17:14:096  [ Thato ][0|94.4|0|0|47.2|0][hchon wear SLCK leth naus] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.52)
+H:5384|93% M:5063|95%  19:17:14:099  [ Thato ][0|94.4|0|0|47.2|0][hchon wear SLCK leth naus] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your glands cease their oily secretion.
+[AFF]: Slickness
+H:5384|93% M:5063|95%  19:17:14:103  [ Thato ][0|94.4|0|0|47.2|0][hchon wear leth naus] 
+A fierce mountain falcon dives at Thato, raking her face with its talons.
+Its talons shred the magic resistance defence of Thato.
+H:5384|93% M:5063|95%  19:17:14:747  [ Thato ][0|94.4|0|0|47.2|0][hchon wear leth naus] 
+You may eat another plant or mineral. Eat (1.625)
+H:5384|93% M:5063|95%  19:17:14:839  [ Thato ][0|94.4|0|0|47.2|0][hchon wear leth naus] 
+[Curing]: EAT LOBELIA
+You eat a lobelia seed.
+My, you feel healthier than you have in years.
+[AFF]: Hypochondria
+H:5384|93% M:5063|95%  19:17:14:925  [ Thato ][0|94.4|0|0|47.2|0][wear leth naus] 
+[OUTR]: 1 Lobelia (1252)
+Thato ceases to wield a woven shield of twigs in her right hand.
+Thato ceases to wield a Razor Whip in her left hand.
+Thato starts to wield a woven shield of twigs in her left hand.
+Thato starts to wield Thoth's fang in her right hand.
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Darkshade
+Your vision is flooded with light, and your face suddenly reddens.
+H:5384|93% M:5063|95%  19:17:15:422  [ Thato ][0|94.4|0|0|47.2|0][wear PAR DARK leth naus] 
+You suddenly perceive the vague outline of an aura of rebounding around Thato.
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.474)
+H:5384|93% M:5063|95%  19:17:15:576  [ Thato ][0|94.4|0|0|47.2|0][wear PAR DARK leth naus] 
+Your mind is able to focus once again. Focus (2.444)
+H:5384|93% M:5063|95%  19:17:15:660  [ Thato ][0|94.4|0|0|47.2|0][wear PAR DARK leth naus] 
+You have recovered equilibrium.
+H:5384|93% M:5138|96%  19:17:16:306  [ Thato ][0|94.4|0|0|47.2|0][wear PAR DARK leth naus] 
+
+[DEF]: Rebounding
+You feel an aura of rebounding surround you.
+H:5384|93% M:5138|96%  19:17:16:415  [ Thato ][0|94.4|0|0|47.2|0][wear PAR DARK leth naus] 
+You may eat another plant or mineral. Eat (1.494)
+H:5384|93% M:5138|96%  19:17:16:417  [ Thato ][0|94.4|0|0|47.2|0][wear PAR DARK leth naus] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5384|93% M:5138|96%  19:17:16:498  [ Thato ][0|94.4|0|0|47.2|0][wear DARK leth naus] 
+You bunch your powerful muscles and launch yourself in a majestic leap northeastwards.
+Empty training yard.
+--- Area 572: A secluded mansion - v52882 ---
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+             [ ]
+                                             
+                 [ ]-[ ]
+                / | x
+             [ ]-[^]-[ ]
+                \ | /
+                 [ ]
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+--- Empty training yard ----------- 0:0:0 ---
+The sun shines brightly overhead.
+You see exits leading southwest and northwest.
+H:5384|93% M:5138|96%  19:17:16:605  [ Thato ][0|94.4|0|0|47.2|0][wear DARK leth naus] 
+[OUTR]: 1 Bloodroot (807)
+You have recovered balance on all limbs.
+H:5384|93% M:5138|96%  19:17:17:551  [ Thato ][0|94.4|0|0|47.2|0][wear DARK leth naus] 
+Your thoughts cease racing.
+H:5384|93% M:5138|96%  19:17:17:675  [ Thato ][0|94.4|0|0|47.2|0][wear DARK leth naus] 
+A break in the estate wall.
+--- Area 572: A secluded mansion - v51723 ---
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                 [ ]
+                                             
+                     [ ]-[ ]
+                    / | x
+                 [ ]-[^]-[ ]
+                    \ | /
+                     [ ]
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+--- A break in the estate wall --- -1:1:0 ---
+The sun shines brightly overhead. A sigil in the shape of a small, rectangular monolith is on
+the ground.
+You see exits leading southeast, southwest, and northwest.
+H:5384|93% M:5138|96%  19:17:18:020  [ Thato ][0|94.4|0|0|47.2|0][wear DARK leth naus] 
+[AFF]: Anorexia
+The thought of food revolts you all of a sudden.
+H:5384|93% M:5138|96%  19:17:18:094  [ Thato ][0|94.4|0|0|47.2|0][wear DARK leth naus ANO] 
+You may eat another plant or mineral. Eat (1.6)
+H:5384|93% M:5138|96%  19:17:18:098  [ Thato ][0|94.4|0|0|47.2|0][wear DARK leth naus ANO] 
+[Curing]: APPLY EPIDERMAL TO BODY
+You take out some salve and quickly rub it on your body.
+Food is no longer repulsive to you.
+[AFF]: Anorexia
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+No longer will the sunlight harm you.
+[AFF]: Darkshade
+H:5384|93% M:5138|96%  19:17:18:240  [ Thato ][0|94.4|0|0|47.2|0][wear leth naus] 
+
+[DEF]: Fangbarrier
+The sileris berry juice hardens into a supple purple shell.
+H:5384|93% M:5138|96%  19:17:18:318  [ Thato ][0|94.4|0|0|47.2|0][wear leth naus] 
+[OUTR]: 1 Ginseng (574)
+
+[DEF]: Rebounding
+[DEF]: Fangbarrier
+Thato flays away your aura of rebounding defence.
+The protective coating covering your skin is ripped away along with your protections.
+With fluid grace, Thato snaps her wrist, bringing a Razor Whip back to crack viciously into
+you.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:5384|93% M:5138|96%  19:17:18:869  [ Thato ][0|94.4|0|0|47.2|0][wear PAR leth naus] 
+[Curing]: SMOKE SKULLCAP
+You take a long drag of skullcap off your pipe.
+H:5499|95% M:5138|96%  19:17:18:994  [ Thato ][0|94.4|0|0|47.2|0][wear PAR leth naus] 
+You may apply another salve to yourself. Body (0.928)
+H:5499|95% M:5138|96%  19:17:19:165  [ Thato ][0|94.4|0|0|47.2|0][wear PAR leth naus] 
+[Prio]: Darkshade (3)
+You may eat another plant or mineral. Eat (1.481)
+H:5499|95% M:5138|96%  19:17:19:721  [ Thato ][0|94.4|0|0|47.2|0][wear PAR leth naus] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+[Curing]: APPLY SILERIS
+You apply a sileris berry to yourself.
+H:5499|95% M:5138|96%  19:17:19:843  [ Thato ][0|94.4|0|0|47.2|0][wear leth naus] 
+[OUTR]: 1 Bloodroot (806)
+You may utilise the tree tattoo again. Tree (13.93)
+H:5499|95% M:5138|96%  19:17:20:264  [ Thato ][0|94.4|0|0|47.2|0][wear leth naus] 
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Your stomach becalms itself.
+[AFF]: Nausea
+H:5499|95% M:5138|96%  19:17:20:408  [ Thato ][0|94.4|0|0|47.2|0][wear leth] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.555)
+H:5499|95% M:5138|96%  19:17:20:549  [ Thato ][0|94.4|0|0|47.2|0][wear leth] 
+Thato ceases to wield a woven shield of twigs in her right hand.
+Thato ceases to wield a Razor Whip in her left hand.
+Thato starts to wield a woven shield of twigs in her left hand.
+Thato starts to wield Thoth's fang in her right hand.
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Asthma
+You feel a tightening sensation grow in your lungs.
+H:5499|95% M:5138|96%  19:17:20:641  [ Thato ][0|94.4|0|0|47.2|0][AST wear PAR leth] 
+[Prio]: Impatience (1)
+[Prio]: Asthma (2)
+H:5499|95% M:5138|96%  19:17:20:782  [ Thato ][0|94.4|0|0|47.2|0][AST wear PAR leth] 
+You may eat another plant or mineral. Eat (1.522)
+H:5499|95% M:5138|96%  19:17:21:363  [ Thato ][0|94.4|0|0|47.2|0][AST wear PAR leth] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5499|95% M:5138|96%  19:17:21:583  [ Thato ][0|94.4|0|0|47.2|0][AST wear leth] 
+
+[DEF]: Shield
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 4.00s.
+H:5499|95% M:5138|96%  19:17:21:589  [ Thato ][0|94.4|0|0|47.2|0][AST wear leth] 
+[OUTR]: 1 Bloodroot (805)
+[Prio]: Paralysis (26)
+You are recovering equilibrium and cannot move yet.
+H:5499|95% M:5138|96%  19:17:21:980  [ Thato ][0|94.4|0|0|47.2|0][AST wear leth] 
+
+[DEF]: Shield
+Thato ceases to wield a woven shield of twigs in her left hand.
+Thato starts to wield a Razor Whip in her left hand.
+Thato ceases to wield Thoth's fang in her right hand.
+Thato starts to wield a woven shield of twigs in her right hand.
+Thato flays away your shield defence.
+With fluid grace, Thato snaps her wrist, bringing a Razor Whip back to crack viciously into
+you.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:5499|95% M:5138|96%  19:17:22:399  [ Thato ][0|94.4|0|0|47.2|0][AST wear PAR leth] 
+You are paralysed and cannot do that.
+H:5499|95% M:5138|96%  19:17:22:727  [ Thato ][0|94.4|0|0|47.2|0][AST wear PAR leth] 
+You may eat another plant or mineral. Eat (1.45)
+H:5499|95% M:5138|96%  19:17:23:033  [ Thato ][0|94.4|0|0|47.2|0][AST wear PAR leth] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+H:5499|95% M:5138|96%  19:17:23:130  [ Thato ][0|94.4|0|0|47.2|0][wear PAR leth] 
+[Prio]: Impatience (2)
+[Prio]: Asthma (3)
+[Prio]: Paralysis (1)
+H:5499|95% M:5138|96%  19:17:23:187  [ Thato ][0|94.4|0|0|47.2|0][wear PAR leth] 
+You are paralysed and cannot do that.
+H:5499|95% M:5138|96%  19:17:23:413  [ Thato ][0|94.4|0|0|47.2|0][wear PAR leth] 
+Thato ceases to wield a woven shield of twigs in her right hand.
+Thato ceases to wield a Razor Whip in her left hand.
+Thato starts to wield a woven shield of twigs in her left hand.
+Thato starts to wield Thoth's fang in her right hand.
+Thato quickly pricks you with her dirk.
+[AFF]: Slickness
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+Striking like a snake, Thato follows the first attack with another.
+Your limbs grow heavy and you groan feebly.
+H:5499|95% M:5138|96%  19:17:24:043  [ Thato ][0|94.4|0|0|47.2|0][wear PAR SLCK leth] 
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your glands cease their oily secretion.
+[AFF]: Slickness
+H:5499|95% M:5138|96%  19:17:24:122  [ Thato ][0|94.4|0|0|47.2|0][wear PAR leth] 
+You are paralysed and cannot do that.
+H:5499|95% M:5138|96%  19:17:24:315  [ Thato ][0|94.4|0|0|47.2|0][wear PAR leth] 
+You may eat another plant or mineral.
+H:5499|95% M:5138|96%  19:17:24:703  [ Thato ][0|94.4|0|0|47.2|0][wear PAR leth] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5499|95% M:5138|96%  19:17:24:852  [ Thato ][0|94.4|0|0|47.2|0][wear leth] 
+[OUTR]: 1 Bloodroot (804)
+You are recovering equilibrium and cannot move yet.
+H:5499|95% M:5138|96%  19:17:25:253  [ Thato ][0|94.4|0|0|47.2|0][wear leth] 
+
+[DEF]: Shield
+You have recovered equilibrium.
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 4.00s.
+H:5499|95% M:5138|96%  19:17:25:429  [ Thato ][0|94.4|0|0|47.2|0][wear leth] 
+[Prio]: Paralysis (26)
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.455)
+H:5499|95% M:5138|96%  19:17:25:577  [ Thato ][0|94.4|0|0|47.2|0][wear leth] 
+You are recovering equilibrium and cannot move yet.
+H:5499|95% M:5213|98%  19:17:25:670  [ Thato ][0|94.4|0|0|47.2|0][wear leth] 
+[Prio]: Paralysis (1)
+You suddenly perceive the vague outline of an aura of rebounding around Thato.
+H:5499|95% M:5213|98%  19:17:25:839  [ Thato ][0|94.4|0|0|47.2|0][wear leth] 
+
+[DEF]: Shield
+Thato ceases to wield a woven shield of twigs in her left hand.
+Thato starts to wield a Razor Whip in her left hand.
+Thato ceases to wield Thoth's fang in her right hand.
+Thato starts to wield a woven shield of twigs in her right hand.
+Thato's aura of weapons rebounding disappears.
+Thato flays away your shield defence.
+With fluid grace, Thato snaps her wrist, bringing a Razor Whip back to crack viciously into
+you.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:5499|95% M:5213|98%  19:17:25:938  [ Thato ][0|94.4|0|0|47.2|0][wear PAR leth] 
+Thato takes a long drag off her pipe.
+H:5499|95% M:5213|98%  19:17:26:064  [ Thato ][0|94.4|0|0|47.2|0][wear PAR leth] 
+You may eat another plant or mineral. Eat (1.548)
+H:5499|95% M:5213|98%  19:17:26:399  [ Thato ][0|94.4|0|0|47.2|0][wear PAR leth] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5499|95% M:5213|98%  19:17:26:491  [ Thato ][0|94.4|0|0|47.2|0][wear leth] 
+[OUTR]: 1 Bloodroot (803)
+
+[DEF]: Rebounding
+You feel an aura of rebounding surround you.
+H:5499|95% M:5213|98%  19:17:27:496  [ Thato ][0|94.4|0|0|47.2|0][wear leth] 
+You may eat another plant or mineral. Eat (1.439)
+H:5499|95% M:5213|98%  19:17:27:929  [ Thato ][0|94.4|0|0|47.2|0][wear leth] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your limbs strengthen and you feel stronger.
+[AFF]: Weariness
+H:5499|95% M:5213|98%  19:17:28:023  [ Thato ][0|94.4|0|0|47.2|0][leth] 
+You are recovering equilibrium and cannot move yet.
+H:5499|95% M:5213|98%  19:17:28:115  [ Thato ][0|94.4|0|0|47.2|0][leth] 
+
+[DEF]: Rebounding
+Thato flays away your aura of rebounding defence.
+With fluid grace, Thato snaps her wrist, bringing a Razor Whip back to crack viciously into
+you.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Thato snaps her fingers in front of you.
+H:5499|95% M:5213|98%  19:17:28:336  [ Thato ][0|94.4|0|0|47.2|0][PAR leth] 
+[Curing]: SMOKE SKULLCAP
+You take a long drag of skullcap off your pipe.
+H:5499|95% M:5213|98%  19:17:28:427  [ Thato ][0|94.4|0|0|47.2|0][PAR leth] 
+You are paralysed and cannot do that.
+H:5499|95% M:5213|98%  19:17:28:662  [ Thato ][0|94.4|0|0|47.2|0][PAR leth] 
+You are paralysed and cannot do that.
+H:5614|97% M:5213|98%  19:17:29:476  [ Thato ][0|94.4|0|0|47.2|0][PAR leth] 
+You have recovered equilibrium.
+H:5614|97% M:5213|98%  19:17:29:556  [ Thato ][0|94.4|0|0|47.2|0][PAR leth] 
+You may eat another plant or mineral.
+H:5614|97% M:5213|98%  19:17:29:650  [ Thato ][0|94.4|0|0|47.2|0][PAR leth] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5614|97% M:5213|98%  19:17:29:731  [ Thato ][0|94.4|0|0|47.2|0][leth] 
+Empty training yard.
+--- Area 572: A secluded mansion - v52882 ---
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+             [ ]
+                                             
+                 [ ]-[ ]
+                / | x
+             [ ]-[^]-[ ]
+                \ | /
+                 [ ]
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+--- Empty training yard ----------- 0:0:0 ---
+The sun shines brightly overhead.
+You see exits leading southwest and northwest.
+H:5614|97% M:5213|98%  19:17:29:799  [ Thato ][0|94.4|0|0|47.2|0][leth] 
+[OUTR]: 1 Bloodroot (802)
+
+[DEF]: Fangbarrier
+The sileris berry juice hardens into a supple purple shell.
+H:5614|97% M:5213|98%  19:17:29:872  [ Thato ][0|94.4|0|0|47.2|0][leth] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.448)
+H:5614|97% M:5213|98%  19:17:29:875  [ Thato ][0|94.4|0|0|47.2|0][leth] 
+You begin sketching a dagaz rune on the ground.
+H:5614|97% M:5213|98%  19:17:30:172  [ Thato ][0|94.4|0|0|47.2|0][leth] 
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Weariness
+Your limbs grow heavy and you groan feebly.
+H:5614|97% M:5213|98%  19:17:31:282  [ Thato ][0|94.4|0|0|47.2|0][wear PAR leth] 
+You may eat another plant or mineral. Eat (1.639)
+H:5614|97% M:5213|98%  19:17:31:369  [ Thato ][0|94.4|0|0|47.2|0][wear PAR leth] 
+
+====================DISRUPTED====================
+====================DISRUPTED====================
+====================DISRUPTED====================
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+Your mental equilibrium scatters suddenly, upset by some unknown source.
+[AFF]: Disrupted
+H:5614|97% M:5213|98%  19:17:31:375  [ Thato ][0|94.4|0|0|47.2|0][wear leth DISR] 
+[OUTR]: 1 Bloodroot (801)
+[Curing]: CONCENTRATE
+You begin intense concentration to restore your equilibrium.
+Equilibrium used: 2.00s.
+H:5614|97% M:5213|98%  19:17:31:539  [ Thato ][0|94.4|0|0|47.2|0][wear leth] 
+An emerald tree snake slithers into the room and curls affectionately around Thato's leg.
+
+H:5614|97% M:5213|98%  19:17:31:634  [ Thato ][0|94.4|0|0|47.2|0][wear leth] 
+You may eat another plant or mineral. Eat (1.515)
+H:5614|97% M:5213|98%  19:17:32:888  [ Thato ][0|94.4|0|0|47.2|0][wear leth] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your limbs strengthen and you feel stronger.
+[AFF]: Weariness
+H:5614|97% M:5213|98%  19:17:32:892  [ Thato ][0|94.4|0|0|47.2|0][leth] 
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Weariness
+Your limbs grow heavy and you groan feebly.
+H:5614|97% M:5213|98%  19:17:33:177  [ Thato ][0|94.4|0|0|47.2|0][wear PAR leth] 
+You have recovered equilibrium.
+H:5614|97% M:5213|98%  19:17:33:480  [ Thato ][0|94.4|0|0|47.2|0][wear PAR leth] 
+[AFF]: Hypochondria
+A terrible sense of unease comes over you.
+H:5614|97% M:5213|98%  19:17:34:422  [ Thato ][0|94.4|0|0|47.2|0][hchon wear PAR leth] 
+You may eat another plant or mineral.
+H:5614|97% M:5213|98%  19:17:34:514  [ Thato ][0|94.4|0|0|47.2|0][hchon wear PAR leth] 
+You may utilise the tree tattoo again. Tree (14.11)
+H:5614|97% M:5213|98%  19:17:34:517  [ Thato ][0|94.4|0|0|47.2|0][hchon wear PAR leth] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5614|97% M:5213|98%  19:17:34:521  [ Thato ][0|94.4|0|0|47.2|0][hchon wear leth] 
+You suddenly perceive the vague outline of an aura of rebounding around Thato.
+H:5614|97% M:5213|98%  19:17:34:576  [ Thato ][0|94.4|0|0|47.2|0][hchon wear leth] 
+[OUTR]: 1 Bloodroot (800)
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+The lethargy evaporates, leaving you full of energy.
+[AFF]: Lethargy
+H:5614|97% M:5213|98%  19:17:34:733  [ Thato ][0|94.4|0|0|47.2|0][hchon wear] 
+Thato's aura of weapons rebounding disappears.
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Darkshade
+Your vision is flooded with light, and your face suddenly reddens.
+H:5614|97% M:5213|98%  19:17:34:881  [ Thato ][0|94.4|0|0|47.2|0][hchon wear PAR DARK] 
+Thato takes a long drag off her pipe.
+H:5614|97% M:5213|98%  19:17:35:077  [ Thato ][0|94.4|0|0|47.2|0][hchon wear PAR DARK] 
+With a flourish, you finish sketching a dagaz rune.
+You have recovered balance on all limbs.
+H:5614|97% M:5213|98%  19:17:35:260  [ Thato ][0|94.4|0|0|47.2|0][hchon wear PAR DARK] 
+You may eat another plant or mineral. Eat (1.573)
+H:5614|97% M:5288|99%  19:17:36:094  [ Thato ][0|94.4|0|0|47.2|0][hchon wear PAR DARK] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+Envenomed: (Euphorbia)
+Sliced:    (Left leg) (59%)
+A bolt of lightning hurls from the tip of the runeblade skywards, accompanied by a crack of
+thunder.
+Accompanied by hissing sounds, small acidic hailstones pour down from above, battering Thato's
+body.
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (78%/100%).
+Afflicted: (Nausea Paralysis).*
+[clum[67], sen[44], weari[44], naus, para]
+[OUTR]: 1 Bloodroot (799)
+H:5614|97% M:5188|97%  19:17:36:330  [ Thato ][0|94.4|0|0|59|0][hchon wear DARK] 
+Thato eats a bloodroot leaf.
+Thato takes a drink from an elegant diamond vial.
+Processed Cures(paralysis)
+Thato eats some irid moss.
+H:5614|97% M:5188|97%  19:17:36:515  [ Thato ][0|94.4|0|0|59|0][hchon wear DARK] 
+Thato quickly pricks you with her dirk.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Asthma
+You feel a tightening sensation grow in your lungs.
+H:5614|97% M:5188|97%  19:17:36:694  [ Thato ][0|94.4|0|0|59|0][AST hchon wear PAR DARK] 
+
+[Prio]: Impatience (1)
+[Prio]: Asthma (2)
+H:5614|97% M:5188|97%  19:17:36:845  [ Thato ][0|94.4|0|0|59|0][AST hchon wear PAR DARK] 
+
+[DEF]: Rebounding
+You feel an aura of rebounding surround you.
+H:5614|97% M:5188|97%  19:17:36:933  [ Thato ][0|94.4|0|0|59|0][AST hchon wear PAR DARK] 
+
+[AFF]: Anorexia
+The thought of food revolts you all of a sudden.
+H:5614|97% M:5188|97%  19:17:37:351  [ Thato ][0|94.4|0|0|59|0][AST hchon wear PAR DARK ANO] 
+[Curing]: APPLY EPIDERMAL TO BODY
+You take out some salve and quickly rub it on your body.
+Food is no longer repulsive to you.
+[AFF]: Anorexia
+H:5614|97% M:5188|97%  19:17:37:410  [ Thato ][0|94.4|0|0|59|0][AST hchon wear PAR DARK] 
+
+[AFF]: Nausea
+A sense of extreme nausea washes over you.
+H:5614|97% M:5188|97%  19:17:37:553  [ Thato ][0|94.4|0|0|59|0][AST hchon wear PAR DARK naus] 
+You may eat another plant or mineral. Eat (1.627)
+H:5614|97% M:5188|97%  19:17:37:889  [ Thato ][0|94.4|0|0|59|0][AST hchon wear PAR DARK naus] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5614|97% M:5188|97%  19:17:37:972  [ Thato ][0|94.4|0|0|59|0][AST hchon wear DARK naus] 
+
+[OUTR]: 1 Bloodroot (798)
+Thato eats a ginseng root.
+Processed Cures(nausea)
+[clum[67], sen[44], weari[44]]
+
+H:5614|97% M:5188|97%  19:17:38:184  [ Thato ][0|94.4|0|0|59|0][AST hchon wear DARK naus] 
+You may apply another salve to yourself. Body (0.978)
+H:5614|97% M:5188|97%  19:17:38:387  [ Thato ][0|94.4|0|0|59|0][AST hchon wear DARK naus] 
+
+[DEF]: Rebounding
+[DEF]: Fangbarrier
+Thato ceases to wield a woven shield of twigs in her left hand.
+Thato starts to wield a Razor Whip in her left hand.
+Thato ceases to wield Thoth's fang in her right hand.
+Thato starts to wield a woven shield of twigs in her right hand.
+Thato flays away your aura of rebounding defence.
+The protective coating covering your skin is ripped away along with your protections.
+With fluid grace, Thato snaps her wrist, bringing a Razor Whip back to crack viciously into
+you.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:5614|97% M:5188|97%  19:17:38:494  [ Thato ][0|94.4|0|0|59|0][AST hchon wear PAR DARK naus] 
+You have recovered balance on all limbs.
+H:5614|97% M:5188|97%  19:17:38:593  [ Thato ][0|94.4|0|0|59|0][AST hchon wear PAR DARK naus] 
+Your thoughts cease racing.
+H:5614|97% M:5188|97%  19:17:38:777  [ Thato ][0|94.4|0|0|59|0][AST hchon wear PAR DARK naus] 
+You may eat another plant or mineral. Eat (1.519)
+H:5614|97% M:5188|97%  19:17:39:490  [ Thato ][0|94.4|0|0|59|0][AST hchon wear PAR DARK naus] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+[Curing]: APPLY SILERIS
+You apply a sileris berry to yourself.
+H:5729|99% M:5188|97%  19:17:39:638  [ Thato ][0|94.4|0|0|59|0][AST hchon wear DARK naus] 
+
+[DEF]: Shield
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 4.00s.
+H:5729|99% M:5188|97%  19:17:39:643  [ Thato ][0|94.4|0|0|59|0][AST hchon wear DARK naus] 
+
+[OUTR]: 1 Bloodroot (797)
+[Prio]: Paralysis (26)
+Ferocity:  [####|####|####|####]
+
+[DEF]: Shield
+Thato flays away your shield defence.
+With fluid grace, Thato snaps her wrist, bringing a Razor Whip back to crack viciously into
+you.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:5729|99% M:5188|97%  19:17:40:040  [ Thato ][0|94.4|0|0|59|0][AST hchon wear PAR DARK naus] 
+
+[AFF]: Lethargy
+You feel your energy robbed from you as lethargy overtakes you.
+H:5729|99% M:5188|97%  19:17:40:545  [ Thato ][0|94.4|0|0|59|0][AST hchon wear PAR DARK leth 
+naus] 
+Sunlight shines down upon you mercilessly, rippling across your skin like fire.
+Health lost: 351 (magical).
+H:5378|93% M:5188|97%  19:17:40:889  [ Thato ][0|94.4|0|0|59|0] ( -351h 6% )[AST hchon wear PAR 
+DARK leth naus] 
+You may eat another plant or mineral. Eat (1.367)
+H:5378|93% M:5188|97%  19:17:41:003  [ Thato ][0|94.4|0|0|59|0][AST hchon wear PAR DARK leth 
+naus] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Your bronchial tubes open up and your asthma is cured.
+[AFF]: Asthma
+[Curing]: SMOKE SKULLCAP
+You take a long drag of skullcap off your pipe.
+H:5378|93% M:5188|97%  19:17:41:124  [ Thato ][0|94.4|0|0|59|0][hchon wear PAR DARK leth naus] 
+
+[Prio]: Impatience (2)
+[Prio]: Asthma (3)
+[Prio]: Paralysis (1)
+H:5378|93% M:5188|97%  19:17:41:190  [ Thato ][0|94.4|0|0|59|0][hchon wear PAR DARK leth naus] 
+
+[Prio]: Darkshade (1)
+Thato ceases to wield a woven shield of twigs in her right hand.
+Thato ceases to wield a Razor Whip in her left hand.
+Thato starts to wield a woven shield of twigs in her left hand.
+Thato starts to wield Thoth's fang in her right hand.
+Thato quickly pricks you with her dirk.
+[AFF]: Asthma
+You feel a tightening sensation grow in your lungs.
+Striking like a snake, Thato follows the first attack with another.
+Your limbs grow heavy and you groan feebly.
+H:5378|93% M:5188|97%  19:17:41:732  [ Thato ][0|94.4|0|0|59|0][AST hchon wear PAR DARK leth 
+naus] 
+[Prio]: Impatience (1)
+[Prio]: Asthma (2)
+H:5378|93% M:5188|97%  19:17:41:883  [ Thato ][0|94.4|0|0|59|0][AST hchon wear PAR DARK leth 
+naus] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.469)
+H:5378|93% M:5188|97%  19:17:42:594  [ Thato ][0|94.4|0|0|59|0][AST hchon wear PAR DARK leth 
+naus] 
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+Your stomach becalms itself.
+[AFF]: Nausea
+You may eat another plant or mineral.
+H:5378|93% M:5188|97%  19:17:42:718  [ Thato ][0|94.4|0|0|59|0][AST hchon wear PAR DARK leth] 
+[Curing]: EAT GINSENG
+You eat a ginseng root.
+The lethargy evaporates, leaving you full of energy.
+[AFF]: Lethargy
+H:5378|93% M:5188|97%  19:17:42:947  [ Thato ][0|94.4|0|0|59|0][AST hchon wear PAR DARK] 
+
+[OUTR]: 1 Ginseng (573)
+You have recovered equilibrium.
+H:5378|93% M:5188|97%  19:17:43:419  [ Thato ][0|94.4|0|0|59|0][AST hchon wear PAR DARK] 
+Thato fixes her gaze to yours and hisses a sharp command.
+[AFF]: Masochism
+An odd sensation descends upon you.
+Thato sinks her fangs into your body and you wince in pain.
+[AFF]: Disloyalty
+You feel ugliness radiating from you.
+[AFF]: Impatience
+You shuffle your feet noisily, suddenly bored.
+H:5378|93% M:5188|97%  19:17:43:532  [ Thato ][0|94.4|0|0|59|0][maso IMP AST hchon wear PAR 
+DARK disl] 
+You suddenly perceive the vague outline of an aura of rebounding around Thato.
+H:5378|93% M:5188|97%  19:17:43:590  [ Thato ][0|94.4|0|0|59|0][maso IMP AST hchon wear PAR 
+DARK disl] 
+[AFF]: Nausea
+A sense of extreme nausea washes over you.
+H:5378|93% M:5188|97%  19:17:43:683  [ Thato ][0|94.4|0|0|59|0][maso IMP AST hchon wear PAR 
+DARK naus disl] 
+[Prio]: Darkshade (3)
+You are paralysed and cannot do that.
+H:5378|93% M:5188|97%  19:17:44:371  [ Thato ][0|94.4|0|0|59|0][maso IMP AST hchon wear PAR 
+DARK naus disl] 
+You may eat another plant or mineral. Eat (1.54)
+H:5378|93% M:5188|97%  19:17:44:485  [ Thato ][0|94.4|0|0|59|0][maso IMP AST hchon wear PAR 
+DARK naus disl] 
+[Curing]: EAT GOLDENSEAL
+You eat a goldenseal root.
+You are patient once again.
+[AFF]: Impatience
+[Curing]: FOCUS MIND
+You focus your mind intently on curing your mental maladies.
+You no longer enjoy pain.
+[AFF]: Masochism
+H:5378|93% M:4938|92%  19:17:44:770  [ Thato ][0|94.4|0|0|59|0] ( -250m 4% )[AST hchon wear PAR 
+DARK naus disl] 
+[OUTR]: 1 Goldenseal (1488)
+Thato's aura of weapons rebounding disappears.
+Thato quickly pricks you with her dirk.
+[AFF]: Anorexia
+The idea of eating or drinking is repulsive to you.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Slickness
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+
+H:5378|93% M:4938|92%  19:17:45:272  [ Thato ][0|94.4|0|0|59|0][AST hchon wear PAR SLCK DARK 
+naus ANO disl] 
+[Prio]: Darkshade (1)
+Thato takes a long drag off her pipe.
+H:5378|93% M:4938|92%  19:17:45:641  [ Thato ][0|94.4|0|0|59|0][AST hchon wear PAR SLCK DARK 
+naus ANO disl] 
+You may eat another plant or mineral. Eat (1.641)
+H:5378|93% M:5013|94%  19:17:46:407  [ Thato ][0|94.4|0|0|59|0][AST hchon wear PAR SLCK DARK 
+naus ANO disl] 
+[AFF]: Lethargy
+You feel your energy robbed from you as lethargy overtakes you.
+H:5378|93% M:5013|94%  19:17:46:756  [ Thato ][0|94.4|0|0|59|0][AST hchon wear PAR SLCK DARK 
+leth naus ANO disl] 
+Sunlight shines down upon you mercilessly, rippling across your skin like fire.
+Health lost: 351 (magical).
+H:5027|87% M:5013|94%  19:17:46:989  [ Thato ][0|94.4|0|0|59|0] ( -351h 6% )[AST hchon wear PAR 
+SLCK DARK leth naus ANO disl] 
+Thato fixes her gaze to yours and hisses a sharp command.
+[AFF]: Masochism
+An odd sensation descends upon you.
+Thato sinks her fangs into your body and you wince in pain.
+You feel ugliness radiating from you.
+[AFF]: Impatience
+You shuffle your feet noisily, suddenly bored.
+Your mind is able to focus once again. Focus (2.36)
+H:5027|87% M:5013|94%  19:17:47:129  [ Thato ][0|94.4|0|0|59|0][maso IMP AST hchon wear PAR 
+SLCK DARK leth naus ANO disl] 
+Your body is too weary to perform such a feat.
+H:5027|87% M:5013|94%  19:17:48:589  [ Thato ][0|94.4|0|0|59|0][maso IMP AST hchon wear PAR 
+SLCK DARK leth naus ANO disl] 
+You may utilise the tree tattoo again. Tree (13.945)
+H:5027|87% M:5013|94%  19:17:48:677  [ Thato ][0|94.4|0|0|59|0][maso IMP AST hchon wear PAR 
+SLCK DARK leth naus ANO disl] 
+Thato quickly pricks you with her dirk.
+[AFF]: Stupidity
+Hmmmm. Why must everything be so difficult to figure out?
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Recklessness
+You realise that your heroic actions can no longer continue unnoticed, and you take it upon
+yourself to rectify the situation.
+H:5775|100% M:5313|100%  19:17:48:782  [ Thato ][0|94.4|0|0|59|0] ( +748h 12% +300m 5% )[maso 
+rek IMP STUP AST hchon wear PAR SLCK DARK leth naus ANO disl] 
+Your body is too weary to perform such a feat.
+H:5775|100% M:5313|100%  19:17:49:419  [ Thato ][0|94.4|0|0|59|0][maso rek IMP STUP AST hchon 
+wear PAR SLCK DARK leth naus ANO disl] 
+
+[DEF]: Rebounding
+You feel an aura of rebounding surround you.
+H:5775|100% M:5313|100%  19:17:49:633  [ Thato ][0|94.4|0|0|59|0][maso rek IMP STUP AST hchon 
+wear PAR SLCK DARK leth naus ANO disl] 
+Your body is too weary to perform such a feat.
+H:5775|100% M:5313|100%  19:17:50:022  [ Thato ][0|94.4|0|0|59|0][maso rek IMP STUP AST hchon 
+wear PAR SLCK DARK leth naus ANO disl] 
+You use your right foot to stomp on your left as hard as possible.
+H:5775|100% M:5313|100%  19:17:50:416  [ Thato ][0|94.4|0|0|59|0][maso rek IMP STUP AST hchon 
+wear PAR SLCK DARK leth naus ANO disl] 
+
+====================DISRUPTED====================
+====================DISRUPTED====================
+====================DISRUPTED====================
+Thato fixes her gaze to yours and hisses a sharp command.
+[AFF]: Vertigo
+You are gripped with fear - you cannot leave the ground.
+Thato sinks her fangs into your body and you wince in pain.
+[AFF]: Confusion
+Your head spins as your mind is drowned in chaos and confusion.
+[AFF]: Disrupted
+H:5775|100% M:5313|100%  19:17:51:308  [ Thato ][0|94.4|0|0|59|0][maso rek vert conf IMP STUP 
+AST hchon wear PAR SLCK DARK leth naus ANO DISR disl] 
+
+[DEF]: Rebounding
+[DEF]: Deafness
+Sunlight shines down upon you mercilessly, rippling across your skin like fire.
+Thato ceases to wield a woven shield of twigs in her left hand.
+Thato starts to wield a Razor Whip in her left hand.
+Thato ceases to wield Thoth's fang in her right hand.
+Thato starts to wield a woven shield of twigs in her right hand.
+Thato flays away your aura of rebounding defence.
+With fluid grace, Thato snaps her wrist, bringing a Razor Whip back to crack viciously into
+you.
+Your hearing is suddenly restored.
+Thato snaps her fingers in front of you.
+H:5775|100% M:5313|100%  19:17:52:889  [ Thato ][0|94.4|0|0|59|0][maso rek vert conf IMP STUP 
+AST hchon wear PAR SLCK DARK leth naus ANO DISR disl] 
+You suddenly perceive the vague outline of an aura of rebounding around Thato.
+H:5775|100% M:5313|100%  19:17:53:997  [ Thato ][0|94.4|0|0|59|0][maso rek vert conf IMP STUP 
+AST hchon wear PAR SLCK DARK leth naus ANO DISR disl] 
+Thato ceases to wield a woven shield of twigs in her right hand.
+Thato ceases to wield a Razor Whip in her left hand.
+Thato starts to wield a woven shield of twigs in her left hand.
+Thato starts to wield Thoth's fang in her right hand.
+Thato's aura of weapons rebounding disappears.
+Thato quickly pricks you with her dirk.
+A sense of extreme nausea washes over you.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Sensitivity
+A prickly, stinging sensation spreads through your body.
+H:5775|100% M:5313|100%  19:17:54:491  [ Thato ][0|94.4|0|0|59|0][maso rek vert conf IMP STUP 
+AST hchon SENS wear PAR SLCK DARK leth naus ANO DISR disl] 
+Thato takes a long drag off her pipe.
+You bleed 7 health.
+H:5775|100% M:5313|100%  19:17:55:121  [ Thato ][0|94.4|0|0|59|0][maso rek vert conf IMP STUP 
+AST hchon SENS wear PAR SLCK DARK leth naus ANO DISR disl] 
+You drive a clenched fist into your gut.
+H:5775|100% M:5313|100%  19:17:55:455  [ Thato ][0|94.4|0|0|59|0][maso rek vert conf IMP STUP 
+AST hchon SENS wear PAR SLCK DARK leth naus ANO DISR disl] 
+Your mental equilibrium scatters suddenly, upset by some unknown source.
+H:5775|100% M:5313|100%  19:17:55:888  [ Thato ][0|94.4|0|0|59|0][maso rek vert conf IMP STUP 
+AST hchon SENS wear PAR SLCK DARK leth naus ANO DISR disl] 
+Thato quickly pricks you with her dirk.
+[AFF]: Dizziness
+Your mind swims as dizziness overtakes you.
+Striking like a snake, Thato follows the first attack with another.
+[AFF]: Addiction
+You feel a terrible hunger grow within you.
+H:5775|100% M:5313|100%  19:17:56:266  [ Thato ][0|94.4|0|0|59|0][maso rek vert conf dizz IMP 
+STUP AST hchon SENS wear PAR SLCK ADD DARK leth naus ANO DISR disl] 
+You begin feeling slightly flushed.
+H:5775|100% M:5313|100%  19:17:56:321  [ Thato ][0|94.4|0|0|59|0][maso rek vert conf dizz IMP 
+STUP AST hchon SENS wear PAR SLCK ADD DARK leth naus ANO DISR VOYR disl] 
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+Mercifully, the voyria venom has been cleansed from your body.
+[AFF]: Voyria
+H:5775|100% M:5313|100%  19:17:57:857  [ Thato ][0|94.4|0|0|59|0][maso rek vert conf dizz IMP 
+STUP AST hchon SENS wear PAR SLCK ADD DARK leth naus ANO DISR disl] 
+Thato quickly pricks you with her dirk.
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+
+H:5775|100% M:5313|100%  19:17:58:098  [ Thato ][0|94.4|0|0|59|0][maso rek vert conf dizz IMP 
+STUP AST hchon SENS wear PAR SLCK ADD DARK leth naus ANO DISR disl] 
+Sunlight shines down upon you mercilessly, rippling across your skin like fire.
+A terrible sense of unease comes over you.
+H:5775|100% M:5313|100%  19:17:58:901  [ Thato ][0|94.4|0|0|59|0][maso rek vert conf dizz IMP 
+STUP AST hchon SENS wear PAR SLCK ADD DARK leth naus ANO DISR disl] 
+Thato fixes her gaze to yours and hisses a sharp command.
+You grit your teeth, resolving to battle on through the mightiest blows.
+Thato sinks her fangs into your body and you wince in pain.
+[AFF]: Scytherus
+You feel light headed and dizzy.
+You scream out in agony as a vicious venom tears through your body.
+H:5775|100% M:5313|100%  19:17:59:917  [ Thato ][0|94.4|0|0|59|0][maso rek vert conf dizz IMP 
+STUP AST hchon SENS wear PAR SLCK ADD DARK leth naus SCYT ANO DISR disl] 
+You smile with pleasure as you ram your fist into your jaw.
+H:5775|100% M:5313|100%  19:18:00:571  [ Thato ][0|94.4|0|0|59|0][maso rek vert conf dizz IMP 
+STUP AST hchon SENS wear PAR SLCK ADD DARK leth naus SCYT ANO DISR disl] 
+You bleed 14 health.
+H:5775|100% M:5313|100%  19:18:00:653  [ Thato ][0|94.4|0|0|59|0][maso rek vert conf dizz IMP 
+STUP AST hchon SENS wear PAR SLCK ADD DARK leth naus SCYT ANO DISR disl] 
+Thato quickly pricks you with her dirk.
+A prickly stinging overcomes your body, fading away into numbness.
+Striking like a snake, Thato follows the first attack with another.
+A prickly, stinging sensation spreads through your body.
+H:5775|100% M:5313|100%  19:18:01:623  [ Thato ][0|94.4|0|0|59|0][maso rek vert conf dizz IMP 
+STUP AST hchon SENS wear PAR SLCK ADD DARK leth naus SCYT ANO DISR disl] 
+The thought of food revolts you all of a sudden.
+You swoon as you suffer a toxic relapse.
+You scream out in agony as a vicious venom tears through your body.
+H:5775|100% M:5313|100%  19:18:01:913  [ Thato ][0|94.4|0|0|59|0][maso rek vert conf dizz IMP 
+STUP AST hchon SENS wear PAR SLCK ADD DARK leth naus SCYT ANO DISR disl] 
+
+[DEF]: Levitating
+[DEF]: Insomnia
+[DEF]: Gripping
+[DEF]: Resistance
+[DEF]: Weathering
+[DEF]: Cloak
+[DEF]: Poisonresist
+[DEF]: Temperance
+[DEF]: Insulation
+[DEF]: Nightsight
+[DEF]: Kola
+[DEF]: Mindseye
+[DEF]: Speed
+[DEF]: Blindness
+
+You cannot contain the convulsions in your stomach any longer and double over, retching
+violently.
+You retch violently, bile clogging your throat and filling your lungs and suffocating you.
+You have been slain by Thato.
+[SLC]: Reset all limb counts.
+[INR]: 1 Sileris (853)
+[INR]: 54 Bloodroot (851)
+[INR]: 12 Lobelia (1264)
+[INR]: 1 Kelp (1664)
+[INR]: 13 Ginseng (586)
+[INR]: 5 Goldenseal (1493)
+[INR]: 1 Irid (1379)
+**********************************************************
+You have been defeated and are thrown out of the Arena.
+**********************************************************
+ 

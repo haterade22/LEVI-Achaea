@@ -23,7 +23,8 @@ One line per page. Kept up to date by `/kb-ingest`.
 - [defences/README.md](defences/README.md): the game's 279 defence names, and our names that do not match
 
 ## Mechanics
-- [mechanics/balance-and-queueing.md](mechanics/balance-and-queueing.md): balance vs equilibrium, server queue commands, types and the 10-command limit
+- [mechanics/foundations.md](mechanics/foundations.md): START HERE for fights. How a fight works, from all logs: clocks, stated against observed costs, kill routes as conditions true together, timed effects, and the claims that were refuted
+- [mechanics/balance-and-queueing.md](mechanics/balance-and-queueing.md): balance vs equilibrium, server queue commands, types and the 10-command limit; a `;` chain is not one queue entry
 - [mechanics/elementals-and-glance.md](mechanics/elementals-and-glance.md): elemental denizen names and attacks, the "There are N <plural> here." room prose, GLANCE, a denizen shield going up
 
 ## Changes (game announcements)
@@ -63,9 +64,16 @@ One line per page. Kept up to date by `/kb-ingest`.
 | raw/logs/2026-10-11_shikudo-vs-runewarden-snb_attacker.txt | Combat log: a Shikudo kills a Runewarden by Dispatch (the monk's view; shared by the user) | 2026-10-11 |
 | raw/logs/2026-10-11_runewarden-snb-vs-shikudo_defender.txt | Combat log: a Runewarden kills a Shikudo by disembowel (her view; channel chat removed) | 2026-10-11 |
 | raw/logs/2026-10-11_mystor_*.txt (6) | Mystor's own arena fights as a Shikudo: against a Depthswalker, an Infernal (three times), an Apostate and a Shaman; five with MIND SAPIENCE on the opponent, so his typed commands show | 2026-10-11 |
+| raw/live/config_2026-11-01.txt | The user's `CONFIG` list before the change: `SeeBalances` No, `UniversalAfflictionMessages` No, `CommandSeparator` `;`, `UseQueueing` YES | 2026-11-01 |
+| raw/live/probes_2026-11-01.txt | Live probes: a queued alias reads its text at fire time ("Two."), and FITNESS waits for equilibrium and costs 2.8 s of balance even with no asthma | 2026-11-01 |
+| raw/live/seebalances_2026-11-01.txt | First capture with `CONFIG SEEBALANCES` on: FITNESS prints `Balance used: 2.8s.`, and our stopwatch reads 2.785 s | 2026-11-01 |
+| raw/logs/2026-08-19_leviticus_blademaster-vs-sentinel_loss_Sentinel.txt | Our own death to Grulk, a Sentinel, 123 s, by SKULLBASH: the log behind `.claude/classes/sentinel.md`. Filed 2026-11-01 from the user's desktop | 2026-11-01 |
+| raw/logs/2026-11-01_*.txt (20) | Combat logs shared by the user, all 1v1 by the party check: Claes (Runewarden) x9, Nikita (Depthswalker) x3, Elmer (Shikudo, Alchemist) x4, an Earth Lord x3, a Blademaster x1. First real Serpent logs. Listed in raw/logs/README.md; converted by `tools/kb_log_import.py` | 2026-11-01 |
+| raw/logs/ours/*.log (4) | Our own `fightlog` recordings, all with Tabethys present: Alchemist, Monk (we died), Infernal, Runewarden. Millisecond rows with our sends and tracker beliefs | 2026-11-01 |
 | raw/players/shikudo-2026-10-11.txt | Players in their own words: the user and Mystor on Shikudo, Telepathy, the mind lock and blackout | 2026-10-11 |
 | raw/players/serpent-2026-10-12.txt | Serpent notes relayed by the user: DSTAB, hypochondria's delayed impatience, IMPULSE MASOCHISM MONKSHOOD, fratricide's 2.25 s relapse | 2026-10-12 |
 | raw/players/magi-tabethys-2026-10-12.txt | Tabethys on Magi: the core rotation (magma, dehydrate, dehydrate, fulminate), CAST MUDSLIDE, the focus lock and the freeze-to-glaciate finisher | 2026-10-12 |
+| raw/players/fitness-2026-11-01.txt | The user: FITNESS needs balance and equilibrium, against the wiki's balance only (CONFLICTS #50) | 2026-11-01 |
 | raw/players/dizziness-fall-2026-10-15.txt | The dizzy fall line ("The ground seems to tilt and you fall with a thump."): it takes balance and cancels the move; dizziness can be uncurable | 2026-10-15 |
 | raw/players/mnemosyne-scaling-boons-2026-10-16.txt | Mana Powered's text (4% per WHOLE 1000 max mana), the stat boons (4% per point, user), and the STAT box row format (two stats per row) | 2026-10-16 |
 | raw/players/cures-user-2026-10-23.txt | The user on the five names the game does not list: bleeding = CLOT (amount), drowning = pear, nocaloric = apply caloric (a defence); the four tempered humours = ginger/antimony | 2026-10-23 |

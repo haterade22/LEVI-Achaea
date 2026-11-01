@@ -228,13 +228,17 @@ function ataxia_traitFilter(cmd)
   return prefix .. body
 end
 
--- The wrapper. `ataxia_rawSend` keeps Mudlet's own send across reloads (a SYSUPDATE re-runs this
--- file; wrapping the wrapper would only filter twice, but the original must never be lost).
-if type(send) == "function" and not ataxia_sendWrapped then
-  ataxia_rawSend = send
+-- The wrapper. `ataxia_rawSend` keeps Mudlet's own send across reloads, because a SYSUPDATE re-runs
+-- this file and the original must never be lost. A reload installs a new wrapper around that
+-- original, not around the old wrapper. Before, the guard kept the old wrapper, so a change to this
+-- function reached the game only after a restart.
+if type(send) == "function" then
+  if not ataxia_sendWrapped then ataxia_rawSend = send end
   send = function(cmd, ...)
     local out = ataxia_traitFilter(cmd)
     if out == "" then return true end
+    -- Round delivery (ataxia/003). With the flag off, this returns `out` unchanged.
+    if ataxia_roundDeliver then out = ataxia_roundDeliver(out) end
     return ataxia_rawSend(out, ...)
   end
   ataxia_sendWrapped = true

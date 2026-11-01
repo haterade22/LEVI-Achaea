@@ -1,0 +1,8 @@
+# FITNESS: what it needs, as relayed by the user (2026-11-01)
+
+Verbatim. Curated in kb/afflictions/class-cures.md, "Fitness in detail". The wiki lists balance only
+(kb/raw/wiki/Discipline.wiki:69), so kb/CONFLICTS.md #50 holds the disagreement until a live test.
+
+## The user's words (2026-11-01)
+
+fitness needs balance and eq I believe.

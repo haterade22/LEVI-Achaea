@@ -1,0 +1,9 @@
+# CONFIG SEEBALANCES on, first capture, pasted by the user (2026-11-01). Verbatim below this header.
+# "Balance used" is game text. "BALANCE: 2.785" is our package's stopwatch echo (ataxia/014_Balance_Timers.lua).
+
+You inhale deeply, purging yourself of your asthmatic condition.
+Balance used: 2.8s.
+13:23:24:173 [15440] [98] |(Penwize)|[ [ ]] (paused)
+You suddenly perceive the vague outline of an aura of rebounding around Mystor.
+13:23:26:011 [15440] [98] |(Penwize)|[ [ ]] (paused)
+(((((((((((((((((((( BALANCE: 2.785 ))))))))))))))))))))

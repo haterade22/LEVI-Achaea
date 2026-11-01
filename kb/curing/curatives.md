@@ -26,7 +26,7 @@ groups vaguely ("cure for body or mind in disharmony"). The exact affliction lis
 | Bloodroot | Magnesium | eat | Paralysis, slickness |
 | Slippery Elm ("elm") | Cinnabar | **smoke** | Aeon, deadening ("a variety of curses and afflictions") |
 | Valerian | Realgar | **smoke** | Slickness, disloyalty (HELP's older name: disfigurement), hellsight, mana leech |
-| Prickly Pear ("pear") | Calcite | eat | Underwater breathing (cures drowning). **Cannot be used pre-emptively.** |
+| Prickly Pear ("pear") | Calcite | eat, but spends the LUNGS ([cure-channels](../afflictions/cure-channels.md)) | Underwater breathing (cures drowning). Also removes one air lord pressure (`s98kPGv6`). **Cannot be used pre-emptively.** |
 | Ginger | Antimony | eat | Reduces artificially raised body fluid (tempered humours) |
 | Irid Moss ("moss") | Potash | eat | Heals some health and mana. **Uses the eating balance**, so it competes with every herb cure. |
 | Cohosh | Gypsum | eat | Gives the **insomnia** defence (cannot be put to sleep) |

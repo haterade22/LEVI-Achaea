@@ -143,7 +143,7 @@ Several combat globals were created **only** inside `levilogin()` (login/001). A
 | Global | Seeded in | Crashing sink |
 |--------|-----------|---------------|
 | `battleRage_Timers` | top of `basher/001` | every battlerage rotation reads `.small`/`.large`/`.special` |
-| `tBals` (full shape: `tree`/`focus`/`plant`/`salve`/`timers`/`passive`) | top of `basher/001` | prompt `@tarbals` tag (012), focus-knock, Anti_Priorities, Magi bloodboil gate — `tBals.timers` is indexed |
+| `tBals` (full shape: `tree`/`focus`/`plant`/`salve`/`timers`/`passive`) | top of `basher/001`; `ataxia_resetTargetBals` (`016`) is the one reset | prompt `@tarbals` tag (012), focus-knock — `tBals.timers` is indexed. It is the TARGET's balances: AntiSerpent and Magi's Bloodboil read `ataxiaTemp.usedTree` for our own tree |
 | `shape` | top of `basher/001` | Earth Lord `121_SHAPE_PLUS` does `shape = shape + 1` unguarded |
 | `bashStats` (full shape incl. DPS/damage fields) | bottom of `basher/003` | combat/DPS triggers increment `totalDamage`/`slain`/… on the first hit |
 

@@ -63,7 +63,8 @@ if isTargeted(multimatches[1][2]) and tBals.focus then
 
   if tBals.timers.focus then killTimer(tBals.timers.focus) end
 	if haveAff("shadowmadness") then
-		tBals.timers.focus = tempTimer(5, [[tBals.focus = true; tBals.timers.focus = nil]])
+		-- Measured 4.82-4.99 s, n=6 (kb/mechanics/foundations.md). A 5 s wait refused real cures.
+		tBals.timers.focus = tempTimer(4.8, [[tBals.focus = true; tBals.timers.focus = nil]])
 	else
 		tBals.timers.focus = tempTimer(2, [[tBals.focus = true; tBals.timers.focus = nil]])
 	end  

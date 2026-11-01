@@ -1,0 +1,1069 @@
+Pharaus says in a low, razored voice, "Begin."
+H:5460|100% M:4966|100%  22:06:01:036  [ Thato ][0|0|0|0|0|0]
+You incline your head politely.
+H:5460|100% M:4966|100%  22:06:01:535  [ Thato ][0|0|0|0|0|0]
+Pharaus's eyes close and his lips move silently as a Baalzadeen rushes in.
+H:5460|100% M:4966|100%  22:06:01:700  [ Thato ][0|0|0|0|0|0]
+
+-----------------------------------------------------------------------------------------------
+             Target set to: Pharaus (Level 131 Monk)             
+-----------------------------------------------------------------------------------------------
+ Reset Success!
+
+Your target is now: Pharaus (an adventurer)
+H:5460|100% M:4966|100%  22:06:03:028  [ Pharaus ][0|0|0|0|0|0]
+Pharaus is not currently an ally.
+H:5460|100% M:4966|100%  22:06:03:117  [ Pharaus ][0|0|0|0|0|0]
+Pharaus is now one of your enemies.
+H:5460|100% M:4966|100%  22:06:03:120  [ Pharaus ][0|0|0|0|0|0]
+H:5460|100% M:4966|100%  22:06:03:218  [ Pharaus ][0|0|0|0|0|0]
+
+[DEF]: Rebounding
+You use a jewel-encrusted silver tinderbox to make fire.
+You light a firefly jar pipe.
+Your aura of weapons rebounding disappears.
+Envenomed: (Xentio)
+Sliced:    (Pharaus)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Engage:    (Pharaus)
+Equilibrium used: 2.00s..
+Afflicted: (Clumsiness Paralysis)
+[clum, para]
+[Curing]: SMOKE SKULLCAP
+You take a long drag of skullcap off your pipe.
+Pharaus eats a magnesium chip.
+Processed Cures(paralysis)
+[clum]
+
+H:5460|100% M:4916|98%  22:06:03:238  [ Pharaus ][0|0|0|0|0|0]
+Pharaus touches a tree of life tattoo.
+Pharaus stares at you, giving you the evil eye.
+Processed Cures(clumsiness)
+[Legacy]: Adjusted Pharaus from   to Apostate
+[Legacy]: Curing against Apostate (Pharaus).
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Pharaus orders his daegger to levitate free of his grasp.
+"Hunt!" Pharaus orders his daegger.
+H:5460|100% M:4916|98%  22:06:03:461  [ Pharaus ][0|0|0|0|0|0][clum PAR] 
+A fierce mountain falcon dives at Pharaus, raking his face with its talons.
+H:5460|100% M:4916|98%  22:06:03:466  [ Pharaus ][0|0|0|0|0|0][clum PAR] 
+[Prio]: Paralysis (1)
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5460|100% M:4916|98%  22:06:03:923  [ Pharaus ][0|0|0|0|0|0][clum] 
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:5460|100% M:4916|98%  22:06:03:927  [ Pharaus ][0|0|0|0|0|0]
+[OUTR]: 1 Bloodroot (845)
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.461)
+
+[Legacy]: Adjusted Pharaus's class to Apostate.
+You have recovered equilibrium.
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Pharaus)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (85%/100%).
+Afflicted: (Clumsiness Paralysis)
+[clum, para]
+Pharaus eats a magnesium chip.
+Pharaus eats a potash crystal.
+Processed Cures(paralysis)
+H:5460|100% M:4816|96%  22:06:09:137  [ Pharaus ][0|0|0|0|0|0]
+You may eat another plant or mineral. Eat (5.24)
+H:5460|100% M:4816|96%  22:06:09:162  [ Pharaus ][0|0|0|0|0|0]
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+H:5460|100% M:4816|96%  22:06:09:214  [ Pharaus ][0|0|0|0|0|0]
+
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Clumsiness
+You gasp as your fine-tuned reflexes disappear into a haze of confusion.
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:5460|100% M:4816|96%  22:06:09:227  [ Pharaus ][0|0|0|0|0|0][clum PAR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5460|100% M:4816|96%  22:06:09:285  [ Pharaus ][0|0|0|0|0|0][clum] 
+(Cyrene Group Therapy): Aerek says, "If u switch I'll disown u."
+H:5460|100% M:4816|96%  22:06:09:330  [ Pharaus ][0|0|0|0|0|0][clum] 
+The daegger wings past you, narrowly missing.
+H:5460|100% M:4816|96%  22:06:09:414  [ Pharaus ][0|0|0|0|0|0][clum] 
+A fierce mountain falcon rips out a chunk of Pharaus's flesh with its beak.
+H:5460|100% M:4816|96%  22:06:09:463  [ Pharaus ][0|0|0|0|0|0][clum] 
+You suddenly perceive the vague outline of an aura of rebounding around Pharaus.
+H:5460|100% M:4816|96%  22:06:09:501  [ Pharaus ][0|0|0|0|0|0][clum] 
+Pharaus eats an aurum flake.
+H:5460|100% M:4816|96%  22:06:09:547  [ Pharaus ][0|0|0|0|0|0][clum] 
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Pharaus)
+The attack rebounds back onto you!
+Health lost: 436 (physical cutting).
+Shield:    (Paralysis)
+The attack rebounds back onto you!
+[AFF]: Paralysis
+Your muscles lock in painful contractions in reaction to the blow.
+Health lost: 126 (physical blunt).
+[HP]:      (89%/100%).
+[clum, Reb]
+[Curing]: SIP HEALTH
+You take a drink from an oaken vial.
+The elixir heals and soothes you.
+H:5460|100% M:4716|94%  22:06:09:669  [ Pharaus ][0|0|0|0|0|0][clum PAR] 
+You may eat another plant or mineral. Eat (0.395)
+H:5460|100% M:4716|94%  22:06:09:679  [ Pharaus ][0|0|0|0|0|0][clum PAR] 
+Pharaus's aura of weapons rebounding disappears.
+Pharaus stares at you, giving you the evil eye.
+A prickly stinging overcomes your body, fading away into numbness.
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Impatience
+You shuffle your feet noisily, suddenly bored.
+H:5460|100% M:4666|93%  22:06:09:683  [ Pharaus ][0|0|0|0|0|0][IMP clum PAR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+Pharaus takes a long drag off his pipe.
+H:5460|100% M:4741|95%  22:06:09:689  [ Pharaus ][0|0|0|0|0|0][IMP clum] 
+Your ferocity decreases.
+H:5460|100% M:4741|95%  22:06:09:805  [ Pharaus ][0|0|0|0|0|0][IMP clum] 
+You may eat another plant or mineral. Eat (0.145)
+H:5460|100% M:4741|95%  22:06:09:832  [ Pharaus ][0|0|0|0|0|0][IMP clum] 
+[Curing]: EAT GOLDENSEAL
+You eat a goldenseal root.
+You are patient once again.
+[AFF]: Impatience
+H:5460|100% M:4741|95%  22:06:09:838  [ Pharaus ][0|0|0|0|0|0][clum] 
+You have recovered balance on all limbs.
+Being careful not to poison yourself, you wipe off all the venoms from a blessed legionnaire's
+longsword.
+Envenomed: (Xentio)
+Sliced:    (Pharaus)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (89%/100%).
+Afflicted: (Paralysis)
+[clum, para]
+Pharaus eats a magnesium chip.
+H:5460|100% M:4641|93%  22:06:09:858  [ Pharaus ][0|0|0|0|0|0][clum] 
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Impatience
+You shuffle your feet noisily, suddenly bored.
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+H:5460|100% M:4641|93%  22:06:09:864  [ Pharaus ][0|0|0|0|0|0][IMP clum PAR] 
+The whirling daegger plunges into your flesh.
+Health lost: 364 (physical cutting).
+H:5096|93% M:4641|93%  22:06:09:867  [ Pharaus ][0|0|0|0|0|0] ( -364h 6% )[IMP clum PAR] 
+
+[OUTR]: 1 Bloodroot (844)
+A fierce mountain falcon rips out a chunk of Pharaus's flesh with its beak.
+H:5096|93% M:4641|93%  22:06:09:881  [ Pharaus ][0|0|0|0|0|0][IMP clum PAR] 
+There is no need to predict that affliction - you know you have it already.
+H:5096|93% M:4641|93%  22:06:09:989  [ Pharaus ][0|0|0|0|0|0][IMP clum PAR] 
+[OUTR]: 1 Bloodroot (843)
+[OUTR]: 1 Goldenseal (1487)
+The Oniar estate gates.
+--- Area 572: A secluded mansion - v53525 ---
+                                             
+                                             
+                                             
+                                             
+                                             
+                 [ ]
+                                             
+                     [ ]-[ ]
+                    / | x
+                 [ ]-[^]-[ ]
+                    \ | /
+                     [+]
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+--- The Oniar estate gates ------ -1:-1:0 ---
+The sky lightens with the onset of dawn. A rune like a rising sun has been sketched into the
+ground here (Dagaz: Heals affs). With her back leg locked in the resting position, Bramble, a 
+phantom donkey dozes here. Bloated with blood and flesh, a frenzied bloodworm sets its beady 
+eyes on you. A fierce mountain falcon surveys the surroundings with keen eyes. A phantom ankheg 
+fades in and out of sight. Twinned albino orbs gleam upon the hilt of a crimson-hued daegger as 
+it exudes its malevolent presence across the surroundings. Hands of rotting flesh and white 
+bone push up from the ground. Lord Marshal Pharaus Lichlord, Paragon of Brutality is riding on 
+a phantom ankheg. His features are obscured by a mask of lifevision. He wields a chained 
+buckler of volcanic glass bearing the arms of the The House of Lichlord clan in his right hand.
+You see exits leading north, northeast, and northwest.
+H:5096|93% M:4641|93%  22:06:10:105  [ Pharaus ][0|0|0|0|0|0][IMP clum PAR] 
+You may eat another plant or mineral. Eat (0.998)
+H:5096|93% M:4641|93%  22:06:10:836  [ Pharaus ][0|0|0|0|0|0][IMP clum PAR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5096|93% M:4641|93%  22:06:10:938  [ Pharaus ][0|0|0|0|0|0][IMP clum] 
+Pharaus eats an aurum flake.
+Processed Cures(clumsiness)
+[para]
+
+H:5096|93% M:4641|93%  22:06:10:951  [ Pharaus ][0|0|0|0|0|0][IMP clum] 
+[OUTR]: 1 Bloodroot (842)
+You have recovered balance on all limbs.
+Envenomed: (Vernalius)
+Sliced:    (Pharaus)
+Shield:    (Asthma)
+Ferocity:  [####|####|####|####]
+[HP]:      (78%/100%).
+Afflicted: (Weariness Asthma)
+[ast, weari, para]
+A demonic crimson glow emanates from Pharaus.
+Processed Cures(asthma weariness)
+Working
+H:5096|93% M:4541|91%  22:06:11:172  [ Pharaus ][0|0|0|0|0|0][IMP clum] 
+Pharaus takes a drink from a fractured steel vial.
+Pharaus eats a potash crystal.
+H:5096|93% M:4541|91%  22:06:11:279  [ Pharaus ][0|0|0|0|0|0][IMP clum] 
+Health lost: 39 (raw).
+You bleed 39 health.
+H:5057|92% M:4541|91%  22:06:11:798  [ Pharaus ][0|0|0|0|0|0][IMP clum] 
+
+[DEF]: Deafness
+A living daegger comes racing in towards Pharaus, stopping unnaturally quickly to land in his
+grasp.
+Pharaus starts to wield a crimson-hued daegger in his left hand.
+Pharaus points his blood slicked daegger at you, before slashing a pentagram in the air, which
+bursts into crimson flame.
+From the bloody glow emerges a fiendish nightmare, hellish flames licking at its frame.
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Pharaus stares at you, giving you the evil eye.
+Your hearing is suddenly restored.
+H:5057|92% M:4541|91%  22:06:11:814  [ Pharaus ][0|0|0|0|0|0][IMP clum PAR] 
+
+[DEF]: Rebounding
+You feel an aura of rebounding surround you.
+H:5057|92% M:4541|91%  22:06:11:863  [ Pharaus ][0|0|0|0|0|0][IMP clum PAR] 
+You may drink another health or mana elixir. Health (2.197)
+H:5057|92% M:4541|91%  22:06:11:865  [ Pharaus ][0|0|0|0|0|0][IMP clum PAR] 
+You may eat another plant or mineral. Eat (1.174)
+H:5057|92% M:4541|91%  22:06:12:111  [ Pharaus ][0|0|0|0|0|0][IMP clum PAR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5057|92% M:4541|91%  22:06:12:212  [ Pharaus ][0|0|0|0|0|0][IMP clum] 
+[OUTR]: 1 Bloodroot (841)
+Pharaus eats an aurum flake.
+Processed Cures(asthma weariness)
+[para]
+
+H:5057|92% M:4491|90%  22:06:12:397  [ Pharaus ][0|0|0|0|0|0][IMP clum] 
+A fierce mountain falcon dives at Pharaus, raking his face with its talons.
+Its talons shred the alertness defence of Pharaus.
+H:5057|92% M:4491|90%  22:06:12:594  [ Pharaus ][0|0|0|0|0|0][IMP clum] 
+
+[DEF]: Rebounding
+You have recovered balance on all limbs.
+Your aura of weapons rebounding disappears.
+Envenomed: (Xentio)
+Sliced:    (Pharaus)
+Runeblade: (Nairat)
+Afflicted: (Frozen)
+Shield:    (Clumsiness)
+Ferocity:  [####|####|####|####]
+[HP]:      (89%/100%).
+Afflicted: (Clumsiness)
+[clum, frzn[200], para]
+[Curing]: SMOKE SKULLCAP
+You take a long drag of skullcap off your pipe.
+Pharaus takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+H:5057|92% M:4391|88%  22:06:13:459  [ Pharaus ][0|0|0|0|0|0][IMP clum] 
+Pharaus stares at you, giving you the evil eye.
+A frustrated frown crosses the face of Pharaus.
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Weariness
+Your limbs grow heavy and you groan feebly.
+Pharaus orders his daegger to levitate free of his grasp.
+"Hunt!" Pharaus orders his daegger.
+H:5057|92% M:4391|88%  22:06:13:517  [ Pharaus ][0|0|0|0|0|0][IMP clum wear] 
+You may eat another plant or mineral. Eat (2.306)
+H:5057|92% M:4391|88%  22:06:14:517  [ Pharaus ][0|0|0|0|0|0][IMP clum wear] 
+[Curing]: EAT GOLDENSEAL
+You eat a goldenseal root.
+You are patient once again.
+[AFF]: Impatience
+H:5057|92% M:4391|88%  22:06:14:522  [ Pharaus ][0|0|0|0|0|0][clum wear] 
+Pharaus eats an aurum flake.
+Processed Cures(clumsiness)
+[frzn, para]
+
+H:5057|92% M:4391|88%  22:06:14:579  [ Pharaus ][0|0|0|0|0|0][clum wear] 
+Pharaus takes some salve from a vial and rubs it on his skin.
+Processed Cures(frozen)
+H:5057|92% M:4391|88%  22:06:14:626  [ Pharaus ][0|0|0|0|0|0][clum wear] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.288)
+H:5057|92% M:4391|88%  22:06:14:746  [ Pharaus ][0|0|0|0|0|0][clum wear] 
+[OUTR]: 1 Goldenseal (1486)
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Pharaus)
+Shield:    (Clumsiness)
+Ferocity:  [####|####|####|####]
+Strike:    (Sensitivity)
+[HP]:      (81%/100%).
+Afflicted: (Clumsiness Prefarar)
+[clum, deaf, para]
+You may eat another plant or mineral. Eat (0.849)
+H:5057|92% M:4291|86%  22:06:15:369  [ Pharaus ][0|0|0|0|0|0][clum wear] 
+[Curing]: EAT KELP
+You eat a piece of kelp.
+Thank Maya, the Great Mother! Your clumsiness has been cured.
+[AFF]: Clumsiness
+H:5057|92% M:4291|86%  22:06:15:406  [ Pharaus ][0|0|0|0|0|0][wear] 
+A fierce mountain falcon rips out a chunk of Pharaus's flesh with its beak.
+H:5057|92% M:4291|86%  22:06:15:568  [ Pharaus ][0|0|0|0|0|0][wear] 
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Pharaus stares at you, giving you the evil eye.
+Your limbs grow heavy and you groan feebly.
+H:5057|92% M:4291|86%  22:06:15:603  [ Pharaus ][0|0|0|0|0|0][wear PAR] 
+Pharaus eats an aurum flake.
+Pharaus takes a drink from a fractured steel vial.
+Processed Cures(clumsiness)
+H:5057|92% M:4291|86%  22:06:15:986  [ Pharaus ][0|0|0|0|0|0][wear PAR] 
+You suddenly perceive the vague outline of an aura of rebounding around Pharaus.
+H:5057|92% M:4291|86%  22:06:16:059  [ Pharaus ][0|0|0|0|0|0][wear PAR] 
+[AFF]: Masochism
+The screeching of the bloodworms is so horrifying that you feel the urge to claw at your ears
+to bring an end to the pain.
+H:5057|92% M:4291|86%  22:06:16:141  [ Pharaus ][0|0|0|0|0|0][maso wear PAR] 
+[Curing]: FOCUS MIND
+You focus your mind intently on curing your mental maladies.
+You no longer enjoy pain.
+[AFF]: Masochism
+[Curing]: SIP MANA
+You take a drink from an oaken vial.
+Your mind feels stronger and more alert.
+H:5057|92% M:4814|96%  22:06:16:148  [ Pharaus ][0|0|0|0|0|0] ( +523m 10% )[wear PAR] 
+The daegger wings past you, narrowly missing.
+H:5057|92% M:4814|96%  22:06:16:499  [ Pharaus ][0|0|0|0|0|0][wear PAR] 
+[AFF]: Hypersomnia
+An urge to visit the Goddess of Dreams overcomes you.
+H:5057|92% M:4814|96%  22:06:16:641  [ Pharaus ][0|0|0|0|0|0][hsomn wear PAR] 
+You may eat another plant or mineral.
+H:5057|92% M:4814|96%  22:06:17:635  [ Pharaus ][0|0|0|0|0|0][hsomn wear PAR] 
+You have recovered balance on all limbs.
+H:5057|92% M:4814|96%  22:06:17:642  [ Pharaus ][0|0|0|0|0|0][hsomn wear PAR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+Razed: Rebounding
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (94%/100%).
+[deaf, para]
+
+H:5057|92% M:4714|94%  22:06:17:721  [ Pharaus ][0|0|0|0|0|0][hsomn wear] 
+Pharaus eats a magnesium chip.
+Pharaus takes a long drag off his pipe.
+Processed Cures(paralysis)
+H:5057|92% M:4714|94%  22:06:17:737  [ Pharaus ][0|0|0|0|0|0][hsomn wear] 
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Impatience
+You shuffle your feet noisily, suddenly bored.
+H:5057|92% M:4739|95%  22:06:18:039  [ Pharaus ][0|0|0|0|0|0][hsomn IMP wear PAR] 
+You may utilise the tree tattoo again. Tree (14.116)
+H:5057|92% M:4739|95%  22:06:18:043  [ Pharaus ][0|0|0|0|0|0][hsomn IMP wear PAR] 
+
+THEY CAN TOUCH TREE AGAIN!
+[OUTR]: 1 Bloodroot (840)
+Your mind is able to focus once again. Focus (2.694)
+H:5057|92% M:4739|95%  22:06:18:839  [ Pharaus ][0|0|0|0|0|0][hsomn IMP wear PAR] 
+You may eat another plant or mineral. Eat (1.152)
+H:5057|92% M:4739|95%  22:06:18:862  [ Pharaus ][0|0|0|0|0|0][hsomn IMP wear PAR] 
+
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5057|92% M:4739|95%  22:06:19:797  [ Pharaus ][0|0|0|0|0|0][hsomn IMP wear] 
+A fierce mountain falcon dives at Pharaus, raking his face with its talons.
+Its talons shred the magic resistance defence of Pharaus.
+H:5057|92% M:4739|95%  22:06:19:800  [ Pharaus ][0|0|0|0|0|0][hsomn IMP wear] 
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Pharaus)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (85%/100%).
+Afflicted: (Clumsiness Paralysis)
+[clum, deaf, para]
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+Your limbs strengthen and you feel stronger.
+[AFF]: Weariness
+Pharaus eats a magnesium chip.
+A swirling stream of heliotrope light emanates from a prismatic ring, surrounding Pharaus with
+a shimmering aura.
+Processed Cures(paralysis)
+Pharaus eats a potash crystal.
+H:5057|92% M:4639|93%  22:06:19:820  [ Pharaus ][0|0|0|0|0|0][hsomn IMP] 
+Pharaus touches a tree of life tattoo.
+Processed Cures(clumsiness)
+[deaf]
+
+H:5057|92% M:4639|93%  22:06:19:861  [ Pharaus ][0|0|0|0|0|0][hsomn IMP] 
+The daegger wings past you, narrowly missing.
+H:5166|94% M:4639|93%  22:06:19:942  [ Pharaus ][0|0|0|0|0|0][hsomn IMP] 
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Pharaus stares at you, giving you the evil eye.
+You shuffle your feet noisily, suddenly bored.
+H:5166|94% M:4639|93%  22:06:19:984  [ Pharaus ][0|0|0|0|0|0][hsomn IMP PAR] 
+[OUTR]: 1 Bloodroot (839)
+You may eat another plant or mineral. Eat (0.456)
+H:5166|94% M:4639|93%  22:06:20:252  [ Pharaus ][0|0|0|0|0|0][hsomn IMP PAR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5166|94% M:4639|93%  22:06:20:255  [ Pharaus ][0|0|0|0|0|0][hsomn IMP] 
+[OUTR]: 1 Bloodroot (838)
+Pharaus eats a calamine crystal.
+H:5166|94% M:4639|93%  22:06:20:494  [ Pharaus ][0|0|0|0|0|0][hsomn IMP] 
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+You feel a bit more alert and awake.
+[AFF]: Hypersomnia
+H:5166|94% M:4639|93%  22:06:20:546  [ Pharaus ][0|0|0|0|0|0][IMP] 
+You may drink another health or mana elixir. Mana (4.492)
+H:5166|94% M:4639|93%  22:06:20:641  [ Pharaus ][0|0|0|0|0|0][IMP] 
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Pharaus)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (92%/100%).
+Afflicted: (Clumsiness Paralysis)
+[clum, deaf, para]
+
+[DEF]: Rebounding
+You feel an aura of rebounding surround you.
+H:5166|94% M:4539|91%  22:06:21:700  [ Pharaus ][0|0|0|0|0|0][IMP] 
+You may eat another plant or mineral. Eat (1.541)
+H:5166|94% M:4539|91%  22:06:21:796  [ Pharaus ][0|0|0|0|0|0][IMP] 
+A fierce mountain falcon dives at Pharaus, raking his face with its talons.
+H:5166|94% M:4539|91%  22:06:21:849  [ Pharaus ][0|0|0|0|0|0][IMP] 
+[Curing]: EAT GOLDENSEAL
+You eat a goldenseal root.
+You are patient once again.
+[AFF]: Impatience
+H:5166|94% M:4539|91%  22:06:21:899  [ Pharaus ][0|0|0|0|0|0]
+Pharaus eats a magnesium chip.
+Pharaus stares at you, giving you the evil eye.
+Processed Cures(paralysis)
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Impatience
+You shuffle your feet noisily, suddenly bored.
+H:5166|94% M:4539|91%  22:06:22:289  [ Pharaus ][0|0|0|0|0|0][IMP PAR] 
+[OUTR]: 1 Goldenseal (1485)
+
+[DEF]: Rebounding
+The daegger cuts through your skullcap-formed aura.
+H:5166|94% M:4489|90%  22:06:22:790  [ Pharaus ][0|0|0|0|0|0][IMP PAR] 
+[Curing]: SMOKE SKULLCAP
+You take a long drag of skullcap off your pipe.
+H:5166|94% M:4489|90%  22:06:22:808  [ Pharaus ][0|0|0|0|0|0][IMP PAR] 
+You have recovered balance on all limbs.
+H:5166|94% M:4489|90%  22:06:22:945  [ Pharaus ][0|0|0|0|0|0][IMP PAR] 
+A demonic crimson glow emanates from Pharaus.
+Processed Cures(clumsiness)
+Working
+H:5166|94% M:4489|90%  22:06:23:325  [ Pharaus ][0|0|0|0|0|0][IMP PAR] 
+[AFF]: Masochism
+The screeching of the bloodworms is so horrifying that you feel the urge to claw at your ears
+to bring an end to the pain.
+H:5166|94% M:4489|90%  22:06:23:641  [ Pharaus ][0|0|0|0|0|0][maso IMP PAR] 
+You may eat another plant or mineral. Eat (1.796)
+H:5166|94% M:4489|90%  22:06:23:693  [ Pharaus ][0|0|0|0|0|0][maso IMP PAR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5166|94% M:4489|90%  22:06:23:697  [ Pharaus ][0|0|0|0|0|0][maso IMP] 
+Envenomed: (Vernalius)
+Sliced:    (Pharaus)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (92%/100%).
+Afflicted: (Weariness Paralysis)
+[weari, deaf, para]
+Pharaus eats a magnesium chip.
+Processed Cures(paralysis)
+[weari, deaf]
+
+H:5166|94% M:4389|88%  22:06:23:843  [ Pharaus ][0|0|0|0|0|0][maso IMP] 
+[OUTR]: 1 Bloodroot (837)
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Asthma
+You feel a tightening sensation grow in your lungs.
+H:5166|94% M:4389|88%  22:06:24:033  [ Pharaus ][0|0|0|0|0|0][maso IMP AST PAR] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.311)
+H:5166|94% M:4389|88%  22:06:24:119  [ Pharaus ][0|0|0|0|0|0][maso IMP AST PAR] 
+A fierce mountain falcon dives at Pharaus, raking his face with its talons.
+[AFF]: Hypersomnia
+An urge to visit the Goddess of Dreams overcomes you.
+H:5166|94% M:4389|88%  22:06:24:813  [ Pharaus ][0|0|0|0|0|0][maso hsomn IMP AST PAR] 
+You may eat another plant or mineral. Eat (1.401)
+H:5166|94% M:4389|88%  22:06:25:097  [ Pharaus ][0|0|0|0|0|0][maso hsomn IMP AST PAR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5166|94% M:4389|88%  22:06:25:182  [ Pharaus ][0|0|0|0|0|0][maso hsomn IMP AST] 
+[OUTR]: 1 Bloodroot (836)
+The daegger wings past you, narrowly missing.
+H:5166|94% M:4389|88%  22:06:25:545  [ Pharaus ][0|0|0|0|0|0][maso hsomn IMP AST] 
+Pharaus eats an aurum flake.
+Processed Cures(weariness)
+[deaf]
+
+H:5166|94% M:4389|88%  22:06:25:644  [ Pharaus ][0|0|0|0|0|0][maso hsomn IMP AST] 
+You have recovered balance on all limbs.
+Envenomed: (Xentio)
+Sliced:    (Pharaus)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+Strike:    (Sensitivity)
+[HP]:      (83%/100%).
+Afflicted: (Clumsiness Paralysis Prefarar)
+[clum, sen, deaf, para]
+Pharaus eats a potash crystal.
+H:5166|94% M:4289|86%  22:06:25:740  [ Pharaus ][0|0|0|0|0|0][maso hsomn IMP AST] 
+You suddenly perceive the vague outline of an aura of rebounding around Pharaus.
+H:5166|94% M:4289|86%  22:06:25:909  [ Pharaus ][0|0|0|0|0|0][maso hsomn IMP AST] 
+You may eat another plant or mineral. Eat (2.416)
+H:5166|94% M:4289|86%  22:06:27:597  [ Pharaus ][0|0|0|0|0|0][maso hsomn IMP AST] 
+[Curing]: EAT GOLDENSEAL
+You eat a goldenseal root.
+You are patient once again.
+[AFF]: Impatience
+[Curing]: FOCUS MIND
+You focus your mind intently on curing your mental maladies.
+You no longer enjoy pain.
+[AFF]: Masochism
+[Curing]: SIP MANA
+You take a drink from an oaken vial.
+Your mind feels stronger and more alert.
+H:5166|94% M:4828|97%  22:06:27:645  [ Pharaus ][0|0|0|0|0|0] ( +539m 10% )[hsomn AST] 
+Pharaus eats a magnesium chip.
+Pharaus's aura of weapons rebounding disappears.
+Processed Cures(paralysis)
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Impatience
+You shuffle your feet noisily, suddenly bored.
+H:5166|94% M:4828|97%  22:06:27:671  [ Pharaus ][0|0|0|0|0|0][hsomn IMP AST PAR] 
+Pharaus takes a long drag off his pipe.
+H:5166|94% M:4828|97%  22:06:27:683  [ Pharaus ][0|0|0|0|0|0][hsomn IMP AST PAR] 
+You have recovered balance on all limbs.
+H:5166|94% M:4853|97%  22:06:27:737  [ Pharaus ][0|0|0|0|0|0][hsomn IMP AST PAR] 
+[OUTR]: 1 Goldenseal (1484)
+A fierce mountain falcon dives at Pharaus, raking his face with its talons.
+H:5166|94% M:4853|97%  22:06:28:230  [ Pharaus ][0|0|0|0|0|0][hsomn IMP AST PAR] 
+You may eat another plant or mineral. Eat (0.681)
+H:5166|94% M:4853|97%  22:06:28:321  [ Pharaus ][0|0|0|0|0|0][hsomn IMP AST PAR] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+Envenomed: (Vernalius)
+Sliced:    (Pharaus)
+Pharaus moves with the blow, suffering less from the lethal stroke.
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (80%/100%).
+Afflicted: (Weariness Paralysis)
+[clum, sen, weari, deaf, para]
+Pharaus takes a drink from a fractured steel vial.
+H:5166|94% M:4753|95%  22:06:28:477  [ Pharaus ][0|0|0|0|0|0][hsomn IMP AST] 
+The daegger wings past you, narrowly missing.
+H:5166|94% M:4753|95%  22:06:28:548  [ Pharaus ][0|0|0|0|0|0][hsomn IMP AST] 
+[OUTR]: 1 Bloodroot (835)
+Pharaus eats a magnesium chip.
+Processed Cures(paralysis)
+[clum, sen, weari, deaf]
+
+H:5166|94% M:4753|95%  22:06:29:631  [ Pharaus ][0|0|0|0|0|0][hsomn IMP AST] 
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Manaleech
+Your mana begins to drain away.
+H:5166|94% M:4753|95%  22:06:29:706  [ Pharaus ][0|0|0|0|0|0][hsomn IMP AST PAR mleech] 
+Your mind is able to focus once again. Focus (2.07)
+H:5166|94% M:4753|95%  22:06:29:711  [ Pharaus ][0|0|0|0|0|0][hsomn IMP AST PAR mleech] 
+You may eat another plant or mineral. Eat (1.876)
+H:5275|96% M:4356|87%  22:06:30:202  [ Pharaus ][0|0|0|0|0|0] ( -397m 7% )[hsomn IMP AST PAR 
+mleech] 
+[Curing]: EAT BLOODROOT
+You eat a bloodroot leaf.
+Your muscles unlock; you are no longer paralysed.
+[AFF]: Paralysis
+H:5275|96% M:4356|87%  22:06:30:266  [ Pharaus ][0|0|0|0|0|0][hsomn IMP AST mleech] 
+
+You have recovered balance on all limbs.
+Envenomed: (Kalmia)
+Sliced:    (Pharaus)
+Empower:   (Sleizak)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (92%/100%).
+Afflicted: (Asthma Paralysis)
+[ast, clum, sen, weari, deaf, para]
+Pharaus eats a magnesium chip.
+Processed Cures(paralysis)
+[ast, clum, sen, weari, deaf]
+
+H:5275|96% M:4156|83%  22:06:30:658  [ Pharaus ][0|0|0|0|0|0] ( -200m 4% )[hsomn IMP AST 
+mleech] 
+[OUTR]: 1 Bloodroot (834)
+[AFF]: Masochism
+The screeching of the bloodworms is so horrifying that you feel the urge to claw at your ears
+to bring an end to the pain.
+H:5275|96% M:4156|83%  22:06:31:074  [ Pharaus ][0|0|0|0|0|0][maso hsomn IMP AST mleech] 
+
+[DEF]: Fangbarrier
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Anorexia
+The idea of eating or drinking is repulsive to you.
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Slickness
+The protective covering coating your skin sloughs off.
+You notice that your sweat glands have begun to rapidly secrete a foul, oily substance.
+
+H:5275|96% M:4156|83%  22:06:31:130  [ Pharaus ][0|0|0|0|0|0][maso hsomn IMP AST SLCK mleech 
+ANO] 
+
+[DEF]: Rebounding
+You feel an aura of rebounding surround you.
+You may drink another health or mana elixir. Mana (3.537)
+H:5275|96% M:4156|83%  22:06:31:181  [ Pharaus ][0|0|0|0|0|0][maso hsomn IMP AST SLCK mleech 
+ANO] 
+
+[DEF]: Rebounding
+The daegger cuts through your skullcap-formed aura.
+H:5275|96% M:4156|83%  22:06:32:193  [ Pharaus ][0|0|0|0|0|0][maso hsomn IMP AST SLCK mleech 
+ANO] 
+You may eat another plant or mineral. Eat (1.93)
+H:5275|96% M:4156|83%  22:06:32:195  [ Pharaus ][0|0|0|0|0|0][maso hsomn IMP AST SLCK mleech 
+ANO] 
+You drive a clenched fist into your gut.
+Health lost: 360 (physical blunt).
+H:4915|90% M:4156|83%  22:06:32:278  [ Pharaus ][0|0|0|0|0|0] ( -360h 6% )[maso hsomn IMP AST 
+SLCK mleech ANO] 
+Pharaus eats an aurum flake.
+Processed Cures(asthma clumsiness sensitivity weariness)
+[ast[75], clum[75], sen[75], weari[75], deaf]
+
+H:4915|90% M:4156|83%  22:06:32:310  [ Pharaus ][0|0|0|0|0|0][maso hsomn IMP AST SLCK mleech 
+ANO] 
+You have recovered balance on all limbs.
+Envenomed: (Gecko)
+Sliced:    (Pharaus)
+Sileris stripped.
+Proc:      (Sleizak 1)
+Shield:    (Paralysis)
+Ferocity:  [####|####|####|####]
+[HP]:      (85%/100%).
+Afflicted: (Slickness Paralysis)
+[ast[75], clum[75], sen[75], weari, naus, deaf, slick, para]
+Pharaus eats a potash crystal.
+H:4915|90% M:4006|80%  22:06:32:725  [ Pharaus ][0|0|0|0|0|0][maso hsomn IMP AST SLCK mleech 
+ANO] 
+You may utilise the tree tattoo again. Tree (13.321)
+H:4915|90% M:4006|80%  22:06:33:139  [ Pharaus ][0|0|0|0|0|0][maso hsomn IMP AST SLCK mleech 
+ANO] 
+[Curing]: TOUCH TREE
+You touch the tree of life tattoo.
+You no longer enjoy pain.
+[AFF]: Masochism
+H:4915|90% M:4006|80%  22:06:33:238  [ Pharaus ][0|0|0|0|0|0][hsomn IMP AST SLCK mleech ANO] 
+
+[AFF]: Dementia
+You look about yourself, frenzied and wild-eyed.
+H:4915|90% M:4006|80%  22:06:33:241  [ Pharaus ][0|0|0|0|0|0][dem hsomn IMP AST SLCK mleech 
+ANO] 
+Health lost: 9 (raw).
+You bleed 9 health.
+H:4906|89% M:4006|80%  22:06:33:692  [ Pharaus ][0|0|0|0|0|0][dem hsomn IMP AST SLCK mleech 
+ANO] 
+Pharaus eats a magnesium chip.
+Pharaus touches a tree of life tattoo.
+Processed Cures(paralysis slickness)
+Processed Cures(clumsiness slickness weariness sensitivity asthma nausea)
+[ast[63], clum[63], sen[63], weari[83], naus[83], deaf, slick[42]]
+
+H:4906|89% M:4006|80%  22:06:33:695  [ Pharaus ][0|0|0|0|0|0][dem hsomn IMP AST SLCK mleech 
+ANO] 
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Paralysis
+A prickly stinging overcomes your body, fading away into numbness.
+Pharaus stares at you, giving you the evil eye.
+A prickly stinging overcomes your body, fading away into numbness.
+H:4906|89% M:4006|80%  22:06:33:699  [ Pharaus ][0|0|0|0|0|0][dem hsomn IMP AST PAR SLCK mleech 
+ANO] 
+Pharaus doubles over, vomiting violently.
+H:4906|89% M:4006|80%  22:06:34:574  [ Pharaus ][0|0|0|0|0|0][dem hsomn IMP AST PAR SLCK mleech 
+ANO] 
+You have recovered balance on all limbs.
+H:4906|89% M:3609|72%  22:06:34:661  [ Pharaus ][0|0|0|0|0|0] ( -397m 7% )[dem hsomn IMP AST 
+PAR SLCK mleech ANO] 
+The whirling daegger plunges into your flesh.
+Health lost: 364 (physical cutting).
+H:4542|83% M:3609|72%  22:06:34:664  [ Pharaus ][0|0|0|0|0|0] ( -364h 6% )[dem hsomn IMP AST 
+PAR SLCK mleech ANO] 
+You inhale deeply, purging yourself of your asthmatic condition.
+[Curing]: SMOKE VALERIAN
+You take a long drag of valerian off your pipe.
+Your rapidly weakening mind is stabilized.
+[AFF]: Manaleech
+H:4542|83% M:3609|72%  22:06:34:670  [ Pharaus ][0|0|0|0|0|0][dem hsomn IMP PAR SLCK ANO] 
+
+THEY CAN TOUCH TREE AGAIN!
+A demonic crimson glow emanates from Pharaus.
+Processed Cures(asthma clumsiness nausea sensitivity slickness weariness)
+Working
+H:4542|83% M:3609|72%  22:06:35:182  [ Pharaus ][0|0|0|0|0|0][dem hsomn IMP PAR SLCK ANO] 
+Pharaus takes a long drag off his pipe.
+Pharaus eats a ferrum flake.
+Pharaus applies a quicksilver droplet to himself.
+Processed Cures(nausea)
+H:4542|83% M:3609|72%  22:06:35:374  [ Pharaus ][0|0|0|0|0|0][dem hsomn IMP PAR SLCK ANO] 
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+You are patient once again.
+[AFF]: Impatience
+Your ferocity decreases.
+H:4542|83% M:3609|72%  22:06:35:510  [ Pharaus ][0|0|0|0|0|0][dem hsomn PAR SLCK ANO] 
+[Curing]: FOCUS MIND
+You focus your mind intently on curing your mental maladies.
+Sanity returns to you and you are no longer demented.
+[AFF]: Dementia
+H:4542|83% M:3359|67%  22:06:35:607  [ Pharaus ][0|0|0|0|0|0] ( -250m 5% )[hsomn PAR SLCK ANO] 
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Weariness
+Your limbs grow heavy and you groan feebly.
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Asthma
+You feel a tightening sensation grow in your lungs.
+H:4542|83% M:3359|67%  22:06:35:612  [ Pharaus ][0|0|0|0|0|0][hsomn AST wear PAR SLCK ANO] 
+You suddenly perceive the vague outline of an aura of rebounding around Pharaus.
+H:4542|83% M:3359|67%  22:06:35:768  [ Pharaus ][0|0|0|0|0|0][hsomn AST wear PAR SLCK ANO] 
+Your lungs have recovered enough to smoke another mineral or plant. Smoke (1.393)
+The Oniar estate gates.
+--- Area 572: A secluded mansion - v53525 ---
+                                             
+                                             
+                                             
+                                             
+                                             
+                 [ ]
+                                             
+                     [ ]-[ ]
+                    / | x
+                 [ ]-[^]-[ ]
+                    \ | /
+                     [+]
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+                                             
+--- The Oniar estate gates ------ -1:-1:0 ---
+The sky lightens with the onset of dawn. A rune like a rising sun has been sketched into the
+ground here (Dagaz: Heals affs). With her back leg locked in the resting position, Bramble, a 
+phantom donkey dozes here. Bloated with blood and flesh, a frenzied bloodworm sets its beady 
+eyes on you. A fierce mountain falcon surveys the surroundings with keen eyes. A phantom ankheg 
+fades in and out of sight. Dripping with blood, an inverted pentagram floats in mid-air. The 
+shadows bend and contort to the form of this nightmare, red eyes glaring from out of the 
+darkness. Twinned albino orbs gleam upon the hilt of a crimson-hued daegger as it exudes its 
+malevolent presence across the surroundings. Hands of rotting flesh and white bone push up from 
+the ground. Lord Marshal Pharaus Lichlord, Paragon of Brutality is riding on a phantom ankheg. 
+His features are obscured by a mask of lifevision. He wields a chained buckler of volcanic 
+glass bearing the arms of the The House of Lichlord clan in his right hand.
+You see exits leading north, northeast, and northwest.
+H:4542|83% M:3359|67%  22:06:36:075  [ Pharaus ][0|0|0|0|0|0][hsomn AST wear PAR SLCK ANO] 
+Pharaus eats a calamine crystal.
+H:4542|83% M:3359|67%  22:06:36:967  [ Pharaus ][0|0|0|0|0|0][hsomn AST wear PAR SLCK ANO] 
+The falcon dives at Pharaus, ripping apart his aura of rebounding with its talons.
+H:4542|83% M:3359|67%  22:06:37:111  [ Pharaus ][0|0|0|0|0|0][hsomn AST wear PAR SLCK ANO] 
+Pharaus takes a long drag off his pipe.
+H:4542|83% M:3359|67%  22:06:37:207  [ Pharaus ][0|0|0|0|0|0][hsomn AST wear PAR SLCK ANO] 
+You have recovered balance on all limbs.
+H:4542|83% M:3359|67%  22:06:37:300  [ Pharaus ][0|0|0|0|0|0][hsomn AST wear PAR SLCK ANO] 
+
+[DEF]: Curseward
+You bring a curseward into being to protect you from harm.
+Equilibrium used: 4.00s.
+H:4542|83% M:3059|61%  22:06:37:405  [ Pharaus ][0|0|0|0|0|0] ( -300m 6% )[hsomn AST wear PAR 
+SLCK ANO] 
+[Prio]: Paralysis (26)
+The daegger wings past you, narrowly missing.
+H:4542|83% M:3134|63%  22:06:37:884  [ Pharaus ][0|0|0|0|0|0][hsomn AST wear PAR SLCK ANO] 
+
+[DEF]: Curseward
+Pharaus stares at you, giving you the evil eye.
+Your curseward has been breached!
+H:4542|83% M:3134|63%  22:06:37:887  [ Pharaus ][0|0|0|0|0|0][hsomn AST wear PAR SLCK ANO] 
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Impatience
+You shuffle your feet noisily, suddenly bored.
+A living daegger comes racing in towards Pharaus, stopping unnaturally quickly to land in his
+grasp.
+Pharaus orders his daegger to levitate free of his grasp.
+"Hunt!" Pharaus orders his daegger.
+H:4542|83% M:3134|63%  22:06:37:895  [ Pharaus ][0|0|0|0|0|0][hsomn IMP AST wear PAR SLCK ANO] 
+Your mind is able to focus once again. Focus (2.451)
+H:4542|83% M:3134|63%  22:06:38:056  [ Pharaus ][0|0|0|0|0|0][hsomn IMP AST wear PAR SLCK ANO] 
+
+[Prio]: Asthma (1)
+[AFF]: Masochism
+The screeching of the bloodworms is so horrifying that you feel the urge to claw at your ears
+to bring an end to the pain.
+H:4542|83% M:3134|63%  22:06:38:147  [ Pharaus ][0|0|0|0|0|0][maso hsomn IMP AST wear PAR SLCK 
+ANO] 
+Pharaus eats a potash crystal.
+H:4542|83% M:3134|63%  22:06:38:808  [ Pharaus ][0|0|0|0|0|0][maso hsomn IMP AST wear PAR SLCK 
+ANO] 
+Your ferocity decreases.
+H:4542|83% M:3134|63%  22:06:39:554  [ Pharaus ][0|0|0|0|0|0][maso hsomn IMP AST wear PAR SLCK 
+ANO] 
+Pharaus stares at you, giving you the evil eye.
+The idea of eating or drinking is repulsive to you.
+Pharaus stares at you, giving you the evil eye.
+A prickly stinging overcomes your body, fading away into numbness.
+H:4542|83% M:3134|63%  22:06:39:832  [ Pharaus ][0|0|0|0|0|0][maso hsomn IMP AST wear PAR SLCK 
+ANO] 
+The daegger wings past you, narrowly missing.
+H:4651|85% M:3134|63%  22:06:40:948  [ Pharaus ][0|0|0|0|0|0][maso hsomn IMP AST wear PAR SLCK 
+ANO] 
+[AFF]: Dementia
+You look about yourself, frenzied and wild-eyed.
+H:4651|85% M:3134|63%  22:06:41:716  [ Pharaus ][0|0|0|0|0|0][maso dem hsomn IMP AST wear PAR 
+SLCK ANO] 
+You have recovered equilibrium.
+H:4651|85% M:3134|63%  22:06:41:721  [ Pharaus ][0|0|0|0|0|0][maso dem hsomn IMP AST wear PAR 
+SLCK ANO] 
+You are paralysed and unable to do that.
+H:4651|85% M:3134|63%  22:06:41:723  [ Pharaus ][0|0|0|0|0|0][maso dem hsomn IMP AST wear PAR 
+SLCK ANO] 
+Pharaus stares at you, giving you the evil eye.
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Recklessness
+None may stand in your way! You are invincible!
+H:5460|100% M:4966|100%  22:06:41:727  [ Pharaus ][0|0|0|0|0|0] ( +809h 14% +1832m 36% )[maso 
+rek dem hsomn IMP AST wear PAR SLCK ANO] 
+[Prio]: Paralysis (1)
+You are paralysed and unable to do that.
+H:5460|100% M:4966|100%  22:06:42:209  [ Pharaus ][0|0|0|0|0|0][maso rek dem hsomn IMP AST wear 
+PAR SLCK ANO] 
+You drive a clenched fist into your gut.
+H:5460|100% M:4966|100%  22:06:42:212  [ Pharaus ][0|0|0|0|0|0][maso rek dem hsomn IMP AST wear 
+PAR SLCK ANO] 
+You are paralysed and unable to do that.
+H:5460|100% M:4966|100%  22:06:42:214  [ Pharaus ][0|0|0|0|0|0][maso rek dem hsomn IMP AST wear 
+PAR SLCK ANO] 
+You are paralysed and unable to do that.
+H:5460|100% M:4966|100%  22:06:42:355  [ Pharaus ][0|0|0|0|0|0][maso rek dem hsomn IMP AST wear 
+PAR SLCK ANO] 
+You are paralysed and unable to do that.
+H:5460|100% M:4966|100%  22:06:42:790  [ Pharaus ][0|0|0|0|0|0][maso rek dem hsomn IMP AST wear 
+PAR SLCK ANO] 
+Ferocity:  [####|####|####|####]
+The daegger wings past you, narrowly missing.
+H:5460|100% M:4966|100%  22:06:43:955  [ Pharaus ][0|0|0|0|0|0][maso rek dem hsomn IMP AST wear 
+PAR SLCK ANO] 
+
+[DEF]: Insomnia
+A living daegger comes racing in towards Pharaus, stopping unnaturally quickly to land in his
+grasp.
+Pharaus starts to wield a crimson-hued daegger in his left hand.
+Pharaus stares at you, giving you the evil eye.
+Your insomnia has cleared up.
+Pharaus stares at you, giving you the evil eye.
+[AFF]: Sleeping
+[AFF]: Prone
+You feel incredibly tired, and fall asleep immediately.
+H:5460|100% M:4966|100%  22:06:44:038  [ Pharaus ][0|0|0|0|0|0][maso rek dem hsomn IMP AST wear 
+PAR SLCK ANO PR asleep] 
+[Curing]: WAKE
+You open your eyes and yawn mightily.
+[AFF]: Sleeping
+H:5460|100% M:4966|100%  22:06:44:042  [ Pharaus ][0|0|0|0|0|0][maso rek dem hsomn IMP AST wear 
+PAR SLCK ANO PR] 
+You bleed 9 health.
+H:5460|100% M:4966|100%  22:06:44:439  [ Pharaus ][0|0|0|0|0|0][maso rek dem hsomn IMP AST wear 
+PAR SLCK ANO PR] 
+Pharaus eats a potash crystal.
+H:5460|100% M:4966|100%  22:06:44:534  [ Pharaus ][0|0|0|0|0|0][maso rek dem hsomn IMP AST wear 
+PAR SLCK ANO PR] 
+You may purge your lungs once again.
+H:5460|100% M:4966|100%  22:06:44:639  [ Pharaus ][0|0|0|0|0|0][maso rek dem hsomn IMP AST wear 
+PAR SLCK ANO PR] 
+[AFF]: Dizziness
+The screeching of the bloodworms makes you feel week and dizzy.
+H:5460|100% M:4966|100%  22:06:45:187  [ Pharaus ][0|0|0|0|0|0][maso rek dem hsomn dizz IMP AST 
+wear PAR SLCK ANO PR] 
+A supple metallic shell of quicksilver has formed around Pharaus.
+H:5460|100% M:4966|100%  22:06:45:451  [ Pharaus ][0|0|0|0|0|0][maso rek dem hsomn dizz IMP AST 
+wear PAR SLCK ANO PR] 
+Pharaus whips a phantom ankheg into a fury, bucking and racing dangerously in a circle,
+trampling the ground in a frenzy.
+A phantom ankheg crushes your right leg.
+[AFF]: Brokenrightleg
+A phantom ankheg pulverises your left arm.
+[AFF]: Brokenleftarm
+A phantom ankheg smashes your right arm.
+[AFF]: Brokenrightarm
+H:5460|100% M:4966|100%  22:06:45:658  [ Pharaus ][0|0|0|0|0|0][rl1 ra1 la1 maso rek dem hsomn 
+dizz IMP AST wear PAR SLCK ANO PR] 
+You suddenly perceive the vague outline of an aura of rebounding around Pharaus.
+H:5460|100% M:4966|100%  22:06:45:717  [ Pharaus ][0|0|0|0|0|0][rl1 ra1 la1 maso rek dem hsomn 
+dizz IMP AST wear PAR SLCK ANO PR] 
+A fierce mountain falcon dives at Pharaus, raking his face with its talons.
+H:5460|100% M:4966|100%  22:06:46:191  [ Pharaus ][0|0|0|0|0|0][rl1 ra1 la1 maso rek dem hsomn 
+dizz IMP AST wear PAR SLCK ANO PR] 
+You begin feeling slightly flushed.
+H:5460|100% M:4966|100%  22:06:46:682  [ Pharaus ][0|0|0|0|0|0][rl1 ra1 la1 maso rek dem hsomn 
+dizz IMP AST wear PAR SLCK ANO PR VOYR] 
+You may utilise the tree tattoo again. Tree (13.757)
+H:5460|100% M:4966|100%  22:06:46:995  [ Pharaus ][0|0|0|0|0|0][rl1 ra1 la1 maso rek dem hsomn 
+dizz IMP AST wear PAR SLCK ANO PR VOYR] 
+With the heel of your palm, you smack yourself upside the head.
+H:5460|100% M:4966|100%  22:06:47:194  [ Pharaus ][0|0|0|0|0|0][rl1 ra1 la1 maso rek dem hsomn 
+dizz IMP AST wear PAR SLCK ANO PR VOYR] 
+
+THEY CAN TOUCH TREE AGAIN!
+A fierce mountain falcon rips out a chunk of Pharaus's flesh with its beak.
+Its talons shred the vengeance defence of Pharaus.
+Your mind is filled with horrifying images of hell.
+[AFF]: Hellsight
+H:5460|100% M:4966|100%  22:06:49:192  [ Pharaus ][0|0|0|0|0|0][rl1 ra1 la1 maso rek dem hsomn 
+dizz IMP AST wear PAR SLCK ANO PR HELL VOYR] 
+Pharaus's aura of weapons rebounding disappears.
+Pharaus whips a phantom ankheg into a fury, bucking and racing dangerously in a circle,
+trampling the ground in a frenzy.
+A phantom ankheg breaks your left leg.
+[AFF]: Brokenleftleg
+A phantom ankheg crushes your right leg.
+A phantom ankheg pulverises your left arm.
+A phantom ankheg smashes your right arm.
+H:5460|100% M:4966|100%  22:06:49:443  [ Pharaus ][0|0|0|0|0|0][rl1 ra1 la1 ll1 maso rek dem 
+hsomn dizz IMP AST wear PAR SLCK ANO PR HELL VOYR] 
+Pharaus takes a long drag off his pipe.
+H:5460|100% M:4966|100%  22:06:49:506  [ Pharaus ][0|0|0|0|0|0][rl1 ra1 la1 ll1 maso rek dem 
+hsomn dizz IMP AST wear PAR SLCK ANO PR HELL VOYR] 
+You bleed 36 health.
+H:5460|100% M:4966|100%  22:06:49:931  [ Pharaus ][0|0|0|0|0|0][rl1 ra1 la1 ll1 maso rek dem 
+hsomn dizz IMP AST wear PAR SLCK ANO PR HELL VOYR] 
+A rune like a rising sun upon the ground flares, bathing you with healing magic.
+Mercifully, the voyria venom has been cleansed from your body.
+[AFF]: Voyria
+H:5460|100% M:4966|100%  22:06:50:657  [ Pharaus ][0|0|0|0|0|0][rl1 ra1 la1 ll1 maso rek dem 
+hsomn dizz IMP AST wear PAR SLCK ANO PR HELL] 
+An unspeakable, horrific image rises from the bowels of hell to plague you.
+[AFF]: Stupidity
+Your mind feels somewhat slower and more plodding.
+H:5460|100% M:4966|100%  22:06:51:479  [ Pharaus ][0|0|0|0|0|0][rl1 ra1 la1 ll1 maso rek dem 
+hsomn dizz IMP STUP AST wear PAR SLCK ANO PR HELL] 
+The unearthly screeching of the bloodworms sends a spike of agony into your brain.
+H:5460|100% M:4966|100%  22:06:52:015  [ Pharaus ][0|0|0|0|0|0][rl1 ra1 la1 ll1 maso rek dem 
+hsomn dizz IMP STUP AST wear PAR SLCK ANO PR HELL] 
+An unspeakable, horrific image rises from the bowels of hell to plague you.
+[AFF]: Epilepsy
+Your nerves feel suddenly jangled.
+H:5460|100% M:4966|100%  22:06:52:186  [ Pharaus ][0|0|0|0|0|0][rl1 ra1 la1 ll1 maso rek dem 
+hsomn dizz epi IMP STUP AST wear PAR SLCK ANO PR HELL] 
+A fierce mountain falcon dives at Pharaus, raking his face with its talons.
+H:5460|100% M:4966|100%  22:06:52:363  [ Pharaus ][0|0|0|0|0|0][rl1 ra1 la1 ll1 maso rek dem 
+hsomn dizz epi IMP STUP AST wear PAR SLCK ANO PR HELL] 
+You drive a clenched fist into your gut.
+H:5460|100% M:4966|100%  22:06:52:365  [ Pharaus ][0|0|0|0|0|0][rl1 ra1 la1 ll1 maso rek dem 
+hsomn dizz epi IMP STUP AST wear PAR SLCK ANO PR HELL] 
+
+[DEF]: Levitating
+[DEF]: Resistance
+[DEF]: Weathering
+[DEF]: Poisonresist
+[DEF]: Temperance
+[DEF]: Insulation
+[DEF]: Nightsight
+[DEF]: Kola
+[DEF]: Speed
+[DEF]: Gripping
+[DEF]: Cloak
+[DEF]: Mindseye
+[DEF]: Deathsight
+[DEF]: Fury
+[DEF]: Blindness
+
+Pharaus steps down off of a phantom ankheg.
+You watch in horror, helpless, as Pharaus's fist is wreathed in crackling black energy. With a
+diabolical laugh, he stiffens his hand and slowly runs it down your chest, splitting it open as 
+he does so. Though you scream in pain and beg to die, Pharaus proceeds to rip apart your 
+organs, magnifying the pain until you are driven nearly mad. With a detached smile upon his 
+face, he proceeds to rip out your sternum and drive it through your already splayed-out body, 
+pinning it to the ground and finally killing you.
+You drop back and ease the engagement.
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! ENGAGE BROKEN! 
+You have been slain by Pharaus.
+[SLC]: Reset all limb counts.
+[INR]: 5 Kelp (1664)
+[INR]: 17 Bloodroot (851)
+[INR]: 5 Ginseng (586)
+[INR]: 9 Goldenseal (1493)
+**********************************************************
+You have been defeated and are thrown out of the Arena.
+**********************************************************
+ 
