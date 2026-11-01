@@ -16,7 +16,7 @@ cured through it. See [README.md](README.md) for the overall model.
 
 | Channel | Command | Curatives | Blocked by | What it cures (HELP 13.7.2) |
 |---|---|---|---|---|
-| **Eat** | `EAT <herb>` | kelp/aurum, ginseng/ferrum, goldenseal/plumbum, lobelia/argentum, prickly ash/stannum, bellwort/cuprum, bloodroot/magnesium, pear/calcite, ginger/antimony | **anorexia** | Most afflictions: one per eat, from that herb's group ([catalog](catalog.md)) |
+| **Eat** | `EAT <herb>` | kelp/aurum, ginseng/ferrum, goldenseal/plumbum, lobelia/argentum, prickly ash/stannum, bellwort/cuprum, bloodroot/magnesium, ginger/antimony. **Pear/calcite is eaten but spends the LUNGS** (below) | **anorexia** | Most afflictions: one per eat, from that herb's group ([catalog](catalog.md)) |
 | **Apply** | `APPLY <salve> [to <part>]` | epidermal, mending, restoration, caloric | **slickness** | anorexia, blindness, deafness, stuttering (epidermal); crippled limbs, ablaze (mending); damaged/mangled limbs, concussion, internal trauma (restoration); freezing (caloric) |
 | **Smoke** | `SMOKE <pipe>` | elm/cinnabar, valerian/realgar | **asthma** | aeon, deadening (elm); disloyalty (old name disfigurement), hellsight, mana leech, slickness (valerian) |
 | **Sip** | `SIP <elixir>` | health, mana, immunity, ... | (none listed) | voyria (immunity) |
@@ -30,6 +30,13 @@ cured through it. See [README.md](README.md) for the overall model.
 
 ## Shared balances (CONFIRMED in code, not in HELP)
 
+- **Pear and calcite spend the lungs, not the eat balance (CONFIRMED live, 2026-11-01, n=29).** The command is `EAT`, and
+  the recovery is the smoke line. In 29 of 29 pear or calcite eats, a `Your lungs have recovered enough...` line
+  followed with NO smoke in between, and the lungs recover only after being spent (`s98kPGv6` rows 207-215,
+  `3ys7NuHA`). `3ys7NuHA` holds 25 calcite eats and 0 `You may eat another plant or mineral.` lines. So against an Air
+  Lord, the pressure cure competes with valerian and elm for the same 1.48 s clock.
+- **Anorexia may also block sips (INFERRED).** Its line reads "The idea of eating or drinking is repulsive to you."
+  (`2026-11-01_..._LcJC-rJ5`:673). No sip was sent under anorexia in the fights checked. The table above lists no blocker.
 - **Eating is shared with moss/potash.** Healing by moss and curing by herb compete for the
   same eat. This is the reason the PvE bash curing profile exists
   (`ataxia/008_Bash_Curing_Profile.lua`).

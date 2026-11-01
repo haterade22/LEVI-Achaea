@@ -5,6 +5,7 @@ shows is written up in a curated page that cites it.
 
 | File | Fight | Whose log | Curated in |
 |---|---|---|---|
+| 2026-08-19_leviticus_blademaster-vs-sentinel_loss_Sentinel.txt | Our Blademaster dies to Grulk, a Sentinel, 123 s, by SKULLBASH. Copied unchanged from the user's desktop on 2026-11-01. Millisecond prompts | Ours, before the fight recorder existed | [.claude/classes/sentinel.md](../../../.claude/classes/sentinel.md), [docs/kill-paths.md](../../../docs/kill-paths.md) |
 | 2026-10-11_shikudo-vs-runewarden-snb_attacker.txt | A Shikudo monk (staff "a twisted oaken staff") kills Claes, a Runewarden (sword and Shield of Absorption), by DISPATCH, about 86 s | The Shikudo's | [combat/shikudo.md](../../combat/shikudo.md), [combat/runewarden-snb.md](../../combat/runewarden-snb.md) |
 | 2026-10-11_runewarden-snb-vs-shikudo_defender.txt | Claes kills Dominius, a Shikudo monk ("a dark ash wood staff"), by impale and DISEMBOWEL, Oniar Estate arena | Claes's (the Runewarden) | the same two pages |
 | 2026-10-11_mystor_shikudo-vs-depthswalker_loss_EveP2TVe.txt | Mystor (Shikudo) loses to Belaziel, a Depthswalker: SHADOW DICTATE, about 49 s (Colosseum arena) | Mystor's (the Shikudo); he ran MIND SAPIENCE on the opponent in five of six | [combat/shikudo.md](../../combat/shikudo.md) |

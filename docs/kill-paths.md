@@ -47,7 +47,7 @@ Full dossier: `.claude/classes/sentinel.md`
 
 | Path | Status | Requirement | Tell |
 |---|---|---|---|
-| **SKULLBASH** | **CONFIRMED KILL** -- 8,556 unblockable | **PRONE *and* BROKEN HEAD, simultaneously** | he stops hitting a limb he has clearly prepped |
+| **SKULLBASH** | **CONFIRMED KILL** -- 8,556 unblockable | **PRONE** (AB: `kb/classes/sentinel.md`:349; head damage raises its damage, and the wording does not make a broken head a gate). In this log he had both, so it cannot separate them (`kb/CONFLICTS.md` #51) | he stops hitting a limb he has clearly prepped |
 | ENSNARE -> RATTLE -> TRUSS | WIKI | prone -> transfixed -> unconscious | ENSNARE on a prone target |
 | IMPALE -> WRENCH | WIKI | prone | IMPALE |
 | EXTIRPATE | WIKI | petrified (basilisk form) | morph to basilisk |
@@ -57,9 +57,10 @@ Full dossier: `.claude/classes/sentinel.md`
 **Everything except the lock is gated on PRONE**, and TRIP is how he gets it -- one action that
 prones you *and* breaks the leg you would need to stand back up with.
 
-**The lock's job is to make the two SKULLBASH conditions simultaneous and permanent.** Prone
-cannot be stood out of (broken leg + weariness), the head cannot be restored (anorexia/slickness
-block the salve). **Counter: break either leg of the conjunction -- restore the head, or stand.**
+**The lock's job is to keep the target prone with a damaged head.** Prone cannot be stood out of
+(broken leg + weariness), the head cannot be restored (anorexia/slickness block the salve).
+**Counter: stand first; restoring the head cuts the damage.** If AB's wording is complete, a restored
+head alone does not stop the bash (`kb/CONFLICTS.md` #51).
 **Counter priority: weariness** (it blocks FITNESS, our lock-breaker) > sensitivity (+33% damage
 taken) > the prepped limb. **Do not shield** -- RIVE shatters it and `ENRAGE LEMMING` strips it
 for free.
@@ -118,22 +119,45 @@ six had MIND SAPIENCE on the opponent, so his own commands are known, not guesse
 | **Shaman** | truelock, then **BEHEAD** with a scimitar | **CONFIRMED KILL** | asthma, anorexia, slickness, impatience and paralysis (weariness first, which blocks FITNESS). The victim was NOT prone | the scimitar is drawn only for the kill; about 10 s from the swing to death. A probable TZANTZA at four afflictions did not kill (six are needed) |
 | **Depthswalker** | **SHADOW DICTATE** | **CONFIRMED KILL** | mana below 40%, plus 5% per amplifier (depression, madness, retribution, parasite) | the depression capstone line, the leach capstone ("shadow claimed"), then one packet that wields the dagger and sends INTONE TOOROS before DICTATE. Recklessness made the prompt read full health and mana while it was lethal. One uncured timeloop doubled 8 instills |
 | Infernal (two scimitars, DSL) | VIVISECT | CONFIRMED (tried 5 times, never landed) | all four limbs broken | "<T> reaches out for your chest but his hand stops short of it." is the refused attempt. Epteth/epseth break the LEFT limb first; DEATHAURA 547 every 7 s; TORMENT's healthleech 506 |
-| Apostate | DEADEYES pressure | CONFIRMED (pressure, no kill) | paralysis about every 2.3 s from DEADEYES affliction pairs, with loyals and the daegger | `touch mercy / order loyals / truestare / deadeyes <t> <aff> <aff>` every round; Syphon every 12 s |
+| Apostate | DEADEYES pressure | CONFIRMED (pressure; no kill in these logs, a VIVISECT kill is below) | paralysis about every 2.3 s from DEADEYES affliction pairs, with loyals and the daegger | `touch mercy / order loyals / truestare / deadeyes <t> <aff> <aff>` every round; Syphon every 12 s |
+
+### Twenty fights filed 2026-11-01 (SHARED logs, all 1v1)
+
+Logs: `kb/raw/logs/2026-11-01_*` (ids below). The model behind these: `kb/mechanics/foundations.md`.
+Warnings are seconds from the first sign to the kill. All are MEASURED from prompt stamps unless marked, and
+a margin under 0.5 s is unresolved. Classes are readings of the logs, not game records.
+
+| Class | Path | Status | Conditions, in order | Earliest tell, warning |
+|---|---|---|---|---|
+| **Serpent** | truelock, then poison | **CONFIRMED KILL** x2 (`azbErKcK`, `Z5cyffxx`), plus a win against one (`X8pRorzR`) | paralysis, asthma + weariness (DSTAB), slickness + anorexia, impatience (monkshood reaction or hypochondria chain), then IMPULSE + BITE scytherus; "You scream out in agony" costs 994-1362 a tick (X, Z5). **No EXECUTE or BEHEAD in 4 Serpent logs** | "A terrible sense of unease": 18.7 s to truelock (Z5, n=1). Asthma + weariness: 24.5 s to death (az) |
+| **Pariah** (Talo) | LATENCY, then voyria | **CONFIRMED KILL** x2 (`Vr.NkCGD`, `WKuEakBZ`), same order | 3 of 5 plagues (Sting, or an Infest relapse with no attacker line), burrowed swarm, "imperiously snaps" (READ: Latency, immunity blocked 13 s), Scorpion, Serpent (voyria + paralysis), 5 ACCELERATE. No immunity sip was tried, so the block is untested | "undulating" Infest: about 20 s (precision 3 of 8). Third plague: 13.4 s. Latency: at least 11.7 s |
+| **Pariah** (Reyl) | SCOURGE | **CONFIRMED KILL** (`4c_SeyaA`) | thinned blood, haemophilia, pyramides, 200 bleeding; "decisively snaps" | Scorpion: 4.24 s. Failed snaps show the fishing (rows 791, 2921) |
+| **Air Lord** (Talo) | pressure counter, CLAP at 6 | **CONFIRMED KILL** n=1 (`s98kPGv6`) at 90% health | gain = 1 + manaleech and deadening held (fit 6 of 6); pear removes one and spends the LUNGS, which the wind afflictions also need | pressure(3): 53.8 s. pressure(6): 1.69 s |
+| **Runewarden, two handed** (Blonk) | sweep, IMPALE, 2700 unblockable | **CONFIRMED KILL** (`CxxKSMq`) | prone, right leg level 2, impale. INFERRED, n=1: tumbling while impaled caused the 2700; no writhe was sent | bastard sword drawn: 18 s. Sweep: 10.8 s |
+| **Apostate** (Pharaus) | truelock, sleep, ankheg trample, VIVISECT | **CONFIRMED KILL** (`2026-11-01_..._LcJC-rJ5`) | truelock, sleep, two tramples, four limbs | softlock: 21.2 s. Asthma + weariness: 16.8 s |
+| **Blademaster** (Alyzar) | leg breaks, then "Planting his foot" rounds | **CONFIRMED KILL** (`OwkA-G99`). Class from ability lines; INFERRED BALANCESLASH, which `.claude/classes/blademaster.md`:814 says is never used | legslash breaks a leg, knees prone, right leg breaks, six rounds at 1.37-1.64 s, 1326 cold each | left leg 72.6% with right 59.4%: 6.9 s to first break. "Planting" with legs broken: 7.75 s |
+| **Sentinel** (Vothaec) | truelock at any health; TRIP + impale | CONFIRMED pieces (`JDvzR7j7`, `uW_VbgR`); the JD kill was guards | asthma + slickness by axe, anorexia + impatience by one doublestrike, paralysis, in 19 s, at 203% health (uW) | doublestrike: 2.63 s to truelock |
+| **Depthswalker** (Nikita) | DICTATE; Degeneration capstone; truelock + symptoms | **CONFIRMED KILL** x3 (`L8LSw7xD`, `kAQnlFAW`, `X8pRorzR`) | Tooros + Mutilate drains mana (2868 to 1004 in one packet), shadow, shield down. L had no depression line, swapped away from the dagger, and Tooros was refused, yet DICTATE landed, so the tell above is not required | leach: 31.9 s. Mutilate: 2.9-3.8 s |
+| **Monk (Shikudo)** (Elmer) | DISPATCH | **CONFIRMED KILL** x2 more (`2N1HTSWZ`, `3ys7NuHA`) | head parked one hit short, ADOPT GAITAL, sweep, flashheel, kick, needle. All conditions true for about 2.6 s. Restoration takes 4 s, so reacting to the last hit is too late | head parked and idle: 41-82 s. ADOPT: 14-20 s. Sweep: 9-13 s |
+| Runewarden (Claes) | IMPALE, DISEMBOWEL; BISECT | **CONFIRMED KILL** (`WO7tC3kL`, `J7Xnr_Jg`) | torso parked at 94.6% for 108 s, leg built, then right leg, torso, impale, disembowel in 8.3 s. BISECT at 20% or less | torso parked: 8+ s |
+| Blademaster (unnamed) | a staged finisher, INFERRED DEATHSTRIKE | seen once (`KtdftABt`, 1 s stamps) against a Tekura | Shin 100; no other prerequisite is visible; about 9 s of stages | not visible from the victim's side |
+| Bard (Anzerloi) | crescendo | pressure only, lost twice (`kAQnlFAW`, `L8LSw7xD`) | 30 of 33 stage lines follow an EAT, and one stannum resets stages 2-6 to 1 (13 observations). `.claude/classes/bard.md`:66 says attacks build it | stage 6 |
+
+**Blackout.** One Blademaster log shows about 7 s (`KtdftABt`, 1 s stamps), against the game's 4 s above. It may be
+two applications.
 
 ### Every other class -- **ASSUMED**
 
-`.claude/classes/*.md` carry kill routes for all classes, but none has been verified against one
-of our own logs. They are inherited documentation. When you fight one and survive with a log,
-run the method above and promote the entry here.
+`.claude/classes/*.md` carry kill routes for all classes, and most have not been verified against a
+log. They are inherited documentation. When you fight one and survive with a log, run the method above
+and promote the entry here.
 
 Highest value to confirm next, by how often they kill us and how little we know:
 
 | Class | Documented primary | Why it matters |
 |---|---|---|
-| Serpent | Truelock: DSTAB venoms plus the monkshood reaction's impatience (`IMPULSE <t> MASOCHISM MONKSHOOD`, PLAYER, relayed 2026-10-12), finished by EXECUTE (WIKI: a prone target and a whip) or a scimitar BEHEAD; darkshade/scytherus damage | Impatience comes two ways: the monkshood reaction (asthma + weariness up; the impulse brings the masochism) and hypochondria on its own seconds later (one log; relayed: 10 s). Fratricide makes each impulse relapse shortly after it lands (game: "a short time"; relayed: 2.25 s). No Serpent log yet; what is checked and what is not: `.claude/classes/serpent.md`, "Notes relayed 2026-10-12" |
 | Shaman | Tzantza | instant, and goldenseal-stack gated. Seen instead (above): a truelock, then BEHEAD |
 | Occultist | Wheel cheese | `combatQueue()` already has a hardcoded response to it |
-| Pariah | Voyria kill | ditto |
 | Monk/Tekura | Limb prep (backbreaker) | shares the limb machinery we just fixed for Sentinel (Shikudo is confirmed above) |
 
 ## What this file is not

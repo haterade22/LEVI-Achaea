@@ -28,6 +28,17 @@ cannot cure any of them. Each lock below adds one more channel to the shut list 
 | **Sleeplock** | sleep x3 in rapid succession | everything while asleep | 1st sleep strips **insomnia**, 2nd strips the **instant-wake** defence, 3rd sleeps them. |
 | **Aeonlock** | aeon + asthma (+ more kelp afflictions) | one action at a time; cannot smoke elm/cinnabar for aeon | Cure asthma (eat kelp/aurum) -> smoke elm. A kelp stack (clumsiness, sensitivity, weariness, healthleech) keeps asthma stuck. |
 
+## What the logs add (2026-11-01, MEASURED; model in [foundations](../mechanics/foundations.md))
+
+- **FITNESS is a softlock escape the table omits.** Asthma out re-opens smoke, then valerian or realgar takes slickness,
+  and then the salve takes anorexia. Four focuses missed anorexia across 7 s in `2N1HTSWZ`; FITNESS solved it in 0.3 s.
+  FITNESS works while paralysed and needs balance (and equilibrium, CONFLICTS #50).
+- **Focus can miss.** It takes mentals before anorexia (`LcJC-rJ5` 2026-11-01 row 782, `X8pRorzR` rows 1588-1631).
+- **Equilibrium may also be a piece.** Disrupted landed 1.79 s after equilibrium returned in `Z5cyffxx`, rows 5460-5466,
+  and 12 later Salts drew no reply. That it was a deliberate denial is INFERRED.
+- **Passive timing.** A Dagaz rune measured 15.03 s, 59 ticks, against "about 10 s" below. It took voyria 2 of 2 without
+  Latency and 0 of 2 under it (INFERRED, n=4).
+
 ## Corrections to the source text
 
 - **Sleeplock defences.** The guide says the second sleep strips "the Gypsum/Kola defence".

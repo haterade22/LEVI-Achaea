@@ -62,6 +62,29 @@ and runs on recovery. `CONFIG SHOWQUEUEALERTS ON|OFF` toggles the queue messages
 **`freestand` needs you STANDING** (CLAUDE.md, Blademaster): an entry that cannot fire while you
 are prone waits until the next `addclear` replaces it.
 
+## A `;` chain is not one queue entry (2026-11-01, CONFLICTS #53)
+
+**Older docs said `queue addclear free a;b;c` stores one entry that runs back to back. The logs say otherwise.** Mudlet's
+own command separator is `;`, so the client splits the line before it sends it. Only `queue addclear free a` reaches
+the queue. `b` and `c` go out as plain commands, and the game's auto-queue (`config usequeueing yes`) catches them if
+they are refused. CONFIRMED (live): 615 `Added` and 650 `Running queued` rows hold no `;`. Sample: `G BODY` is added,
+and then four refusals (`ours/2026-10-27_112717_Tabethys.log`:111-125).
+
+**What this costs.** MEASURED, in logs up to v4.7.450:
+- Setup ran before the attack in only 8 of 71 flushes.
+- The auto-queue stops accepting at about 5 held, so the FIRST press after a flush wins. The attack that fired had been
+  added a median 2.19 s earlier (Monk) and 1.52 s earlier (Infernal).
+- A superseded attack fired in 15% (Monk) and 33% (Infernal) of queue-run attacks.
+
+**Decisions that read state in a chain are still stale,** so "one resource spender per round" remains a good rule.
+
+**The lead fix: one alias, rewritten until it fires.** Eight logs from one player's system use it:
+`setalias pk stand/wield staff/combo T ...`, then `queue addclearfull eb!p!w!t pk` (`2N1HTSWZ` rows 87, 152-154). The
+queue stores the NAME, and the game reads the alias body when the entry fires, so a rewrite can change the round after
+it is queued (strict proof n=2; one rewrite lost a race, `3ys7NuHA` rows 2666, 2677). 309 rewrites drew 0 complaints,
+at up to 9 per second. HELP ALIASES: `/` separates commands, names are up to 12 characters, and it states no limit on
+count or length. Not proven yet: the method at our higher send rate. Step 3 of the plan tests it behind a flag.
+
 ## Moves that fail without leaving the room
 
 Some lines say a move failed although the exit is real. Code that moves us must re-send the move
