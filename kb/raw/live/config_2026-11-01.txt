@@ -1,0 +1,43 @@
++-Configuration---------------------------------------------------------------+
+| Display Options                                                             |
+|   Ansi                             ON   ScreenWidth                       0 |
+|   ClothesLine                     OFF   SeeAssists                      YES |
+|   Colour                CONFIG COLOUR   SeeIgnoredDeaths                 NO |
+|   FollowLook                      OFF   SeeItemInteractions              NO |
+|   JournalDate                      ON   SeeWeather                      YES |
+|   MapShow                        NONE   ShipPrompt                      YES |
+|   MXP                              ON   ShipRace                         NO |
+|   Pagelength                       60   ShowOrgNumeric                  YES |
+|   Plants                          OFF   ShowSelfInWho                    NO |
+|   Prompt                          All   TitleWithAccent                 YES |
+|   QuestHints                       ON   TitleWithDragonVoice            YES |
+|   RageMsg              CONFIG RAGEMSG   Voting                          OFF |
+|   ScreenReader                     NO   WatchForAllow                   OFF |
+|   RoomDesc                      BRIEF   Xterm256                         ON |
+|   ScoreShow          CONFIG SCORESHOW                                       |
+| Communication Options                                                       |
+|   AllowTells                       ON   MsgEcho                          ON |
+|   Channels            CONFIG CHANNELS   NameTells                        ON |
+|   Emoting              CONFIG EMOTING   NewsIgnore                     None |
+|   LoyalSlainMsg                    ON   DepositMsg                      OFF |
+|                                                                             |
+|   TellsOffMsg                                                          None |
+|   ReturnMessage          What is called evil is simply the drive for adv... |
+| Personalisation Options                                                     |
+|   AdvancedCuring                  YES   NoTimeoutWarn                    NO |
+|   AllowEnemyFollow                 No   OrderMessages                    ON |
+|   AuctionHouseAlerts               NO   RiftShowZeros                    No |
+|   AutoOpenDoors                   YES   RoomDeathsights                  NO |
+|   Classleads                       ON   SeeBalances                      No |
+|   CommandSeparator                  ;   SeeDamageMessages               Yes |
+|   CreditProceeds                 Home   ShowSelfClasswho                 NO |
+|   DragonVoice                     YES   ShowXpDrops                     YES |
+|   GossipNotification               NO   TimeZone                      +0500 |
+|   Ideas                            ON   Timeout                 180 minutes |
+|   IgnoreScrappers                 YES   UniversalAfflictionMessages      No |
+|   KillWarning                     OFF   UseDash                         YES |
+|   NewsInWindow                    OFF   WaitForEntourage                YES |
+| Queueing Options                                                            |
+|   UseQueueing                     YES   ShowQueueAlerts                 YES |
++-----------------------------------------------------------------------------+
+Type CONFIG <option> for more information on that particular option.

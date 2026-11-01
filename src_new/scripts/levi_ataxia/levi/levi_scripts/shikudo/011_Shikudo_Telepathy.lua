@@ -85,8 +85,10 @@ local TREE_COOLDOWN = 13
 
 -- shikudo.teleState() -> a snapshot of everything the picker reads, so the picker is pure.
 --   form, kata     ours (charstats); form as charstats names it ("Rain"), nil when unknown
---   eq             our equilibrium at the press. Read for the echo only: the `free` queue waits
---                  for it whatever the round is, so it changes WHEN a round runs, never WHICH
+--   eq             our equilibrium at the press. Read for the echo only, so it never changes WHICH
+--                  round goes. On the raw path only the chain's first command waits in `free`, and the
+--                  rest go at once (kb/mechanics/balance-and-queueing.md). `aconfig rounds alias`
+--                  makes the whole round wait
 --   mpp            our mana, % of max
 --   has(aff)       the target's afflictions through 006's read (haveAff, else tAffs)
 --   prone          has("prone")
@@ -273,14 +275,19 @@ local function comboQueued(st)
   if not st.runLine then st.burst = 0 end
 end
 
--- The game ran a queued command. `ran` is what follows "command: " on the run line -- only its
--- FIRST row when the server wraps it, as 007's shikudoLock.onQueueRan reads it.
+-- The game ran a queued command. `ran` is what follows "command: " on the run line. On the raw path
+-- Mudlet splits the `;`, so the server holds only the chain's first command, and the row shows only
+-- that: `G BODY` with combatQueue()'s prefix (0 of 650 rows hold `;`,
+-- kb/mechanics/balance-and-queueing.md). On the alias path we expect the alias name, and
+-- ataxia_roundRan gives back the chain.
 --   * Our pending MIND round, which the run line STARTS with: it ran.
---   * Any round with a combo in it (006's, 007's, the combo behind a blackout): a combo ran, and
---     the burst is over. A combo round's first row always reaches its "combo": column 76 with
---     combatQueue()'s "g body;g gold;stand;" and "wield staff;", against a wrap of 119-124.
+--   * A run line with a combo in it: a combo ran, and the burst is over. Only the alias path shows
+--     the combo. A raw `G BODY` row does not, so on the raw path the burst does not end here
+--     (test_shikudo_telepathy.lua pins this).
 -- True when it was our pending MIND round. Any other run line moves nothing.
 function shikudo.onTeleQueueRan(ran)
+  -- The key is the chain as it was built (ataxia/003).
+  if ataxia_roundRan then ran = ataxia_roundRan(ran) end
   local st = teleRun()
   local key = runKey(ran)
   if key == "" then return false end

@@ -81,9 +81,85 @@ and then four refusals (`ours/2026-10-27_112717_Tabethys.log`:111-125).
 **The lead fix: one alias, rewritten until it fires.** Eight logs from one player's system use it:
 `setalias pk stand/wield staff/combo T ...`, then `queue addclearfull eb!p!w!t pk` (`2N1HTSWZ` rows 87, 152-154). The
 queue stores the NAME, and the game reads the alias body when the entry fires, so a rewrite can change the round after
-it is queued (strict proof n=2; one rewrite lost a race, `3ys7NuHA` rows 2666, 2677). 309 rewrites drew 0 complaints,
-at up to 9 per second. HELP ALIASES: `/` separates commands, names are up to 12 characters, and it states no limit on
-count or length. Not proven yet: the method at our higher send rate. Step 3 of the plan tests it behind a flag.
+it is queued. **CONFIRMED live on our seat:** queued while the alias said "one", rewritten to "two" 6 ms later, and "Two."
+fired when equilibrium returned (`raw/live/probes_2026-11-01.txt`). With three commands in one alias, the first ran first,
+and all three replies came before one prompt. The second and third gave the same say-like refusal, so their order cannot be
+seen. What an off-balance spender inside an alias does (refused or auto-queued) is open, and the first alias fight answers it.
+The logs add two more strict cases, and one rewrite
+that lost a race (`3ys7NuHA` rows 2666, 2677). 309 rewrites drew 0 complaints, at up to 9 per second. HELP ALIASES: `/`
+separates commands, names are up to 12 characters, and it states no limit on count or length. The game echoes
+each rewrite (`Alias "x" will now execute: ...`), so a live use needs a gag; `006_GAG` and `011_GAG2` already gag such
+lines for other names. Not proven yet: the method at our higher send rate. Step 3 of the plan tests it behind a flag.
+
+## Our shim: `aconfig rounds` (2026-11-01)
+
+**Shipped in v4.7.470: off by default, Monk only, and not yet proven in a fight.** `aconfig rounds alias` turns it on for the class, and the
+setting is saved per class. With the flag off, every send is byte-identical to before. It never applies while the basher
+is on. Bashing is a later step.
+
+`ataxia_roundDeliver` (`ataxia/ataxia/003_Queueing_Related.lua`) sits in the send wrapper (`misc_scripts/031`), after the
+trait filter, so ASSESS never reaches an alias without its trait:
+
+    send("queue addclear free g body;stand;combo T a b c")
+      -> setalias lvfree stand/g body/combo T a b c      (only if the text changed)
+      -> queue addclear free lvfree
+
+| Rule | Why |
+|---|---|
+| `stand` goes first and once; nothing else moves | A `free` entry has no upright condition, so it can fire while prone. The offence still owns the spender's place |
+| `queue addclear freestand stand;x;y` becomes `queue addclear free lvfree` | A `freestand` entry cannot fire while prone, so that chain would wait for ever |
+| `full` with a `stand` stays raw | `free` would lose the class balance condition |
+| Passes through unchanged: `/`, `%`, `{`; a command ending in a direction (`stand;n`, `stand;tumble sw`); `queue add`, `insert`, `prepend`; a custom type such as `eb!p!w!t`; one command; text over 138 characters | 138 is a cautious cap. The longest alias text in our logs is 142 (`2026-10-11_shikudo-vs-runewarden-snb_attacker.txt` rows 1319, 1364, 1400). The 250-character probe is still open |
+| A chain with `touch shield`, `curseward` or `reject <name>` stays raw | The next attack press rewrites the alias, and the game reads it when it fires, so a defensive key in that slot would run only if recovery came before that press. Raw, it goes at once or the auto-queue holds it. So `ts` and `cwd` send what they send with the flag off |
+| A chain with `mind blackout` stays raw | It must run before the combo it hides, and that combo goes by `queue add`, raw. In an alias, the two would wait in different queues |
+| A line that replaces the round clears an alias waiting in ANOTHER queue (`clearqueue <type>`) | ADDCLEAR clears only its own queue, so that alias would still fire. A run line does not mark the queue empty, because it cannot say which press it answers: a newer round may wait there. The cost is one extra `clearqueue` when the queue type changes |
+
+**Names:** `lv<type>` for `eq`, `bal`, `eqbal`, `class`, `free`, `freestand`, `full`. The longest, `lvfreestand`, is 11 of the
+game's 12 characters. Trigger 800 gags exactly these, so a test alias such as `lvprobe` still shows.
+
+**The gag is `deleteLine()`, not `deleteFull()`.** All 371 echoes of `pk` in our logs have a prompt right after them, but that
+prompt can close other output too: `Your lungs have recovered enough...`, then the echo, then one prompt
+(`3ys7NuHA` rows 1975-1977). `deleteFull` would eat it. The cost is one more prompt on screen per rewrite, and those logs
+draw 12.5 prompts per rewrite anyway (4,643 prompts, 371 echoes).
+
+**A hazard to watch in the first alias fight.** A flush has one prompt: three commands in one alias drew one
+(`raw/live/probes_2026-11-01.txt`, part 3). `006_GAG` and `011_GAG2` use `deleteFull`, so if the LAST reply of a flush is one of
+their refusals (`You must regain balance first.`), that round's prompt goes too. `001_QUEUE_COLOR_BALANCE` and
+`007_QUEQUE_COLOR_EQUILIBRIUM` also use `deleteFull`, on `was added to your ... queue`, so an auto-queued rider would eat the
+prompt in the same way. A round that ends with its spender does not do this. A round with a rider after the spender (`013` in
+Rain) can.
+
+**Readers.** We expect the run line to name the alias, until the first alias fight confirms it. `ataxia_roundRan` gives
+`queue_Scan`, `shikudoLock.onQueueRan` and `shikudo.onTeleQueueRan` the chain the offence built. `aconfig rounds alias` clears
+007's and 011's `runLine`, so they count a round at the press until a run line matches on this path. If the wording differs,
+the MIND cap and the prelude count still move. `ataxia_roundSentText` gives the fight log and monk/004's send watcher
+the alias text. The fight log header ends with `rounds raw|alias`, and a `# alias lvfree holds: ...` row gives the text at the start.
+
+**Reload and login.** The text lives on `ataxiaTemp`, so a restart sets the alias again. So does a login: `levilogin()` clears
+`ataxiaTemp.roundSend`, because a press during a dropped link records text the server never got. `misc_scripts/031` now
+installs a new wrapper on a reload, around Mudlet's own `send`. The old guard kept the old wrapper until a restart.
+
+**Not known yet (the first alias fight answers these):**
+- The run line's wording. We expect `Running queued free command: LVFREE`, from the `Added G BODY` rows. No log shows it,
+  because the probes gag queue lines.
+- Whether a rewrite beats recovery at our send rate. The evidence stops at 9 per second, and our sends peak at 51.
+- What an off-balance spender inside an alias does: refused, or auto-queued. An auto-queued one fires on a later recovery, and
+  ADDCLEAR free does not clear it. That is the superseded attack the plan measures.
+- Where the alias's entry falls in a flush against commands the auto-queue holds. In 35 multi-entry flushes of
+  `ours/2026-10-27_112717`, the queue entry `G BODY` ran first in 9, last in 14. That row is a raw entry, so LVFREE's place is
+  inferred, not shown.
+- A refused `setalias`: we would record text the server never took, and only a login or a changed round would set it again.
+- The reply to `clearqueue free` on an empty queue. Its wording is in no log, and `006_GAG` does not list it, so it may show
+  on screen.
+- The pass bars in the plan: refusals per recovery, `was added` rows, setup before spender, superseded attacks.
+
+**Still raw on purpose:** `queue add free <chain>`, and MIND BLACKOUT's whole press with the combo it hides (`011`, off by
+default). The plan's shim covers ADDCLEAR only.
+
+**A raw-path fault, pinned and not fixed.** The raw run line shows only the chain's first command (`G BODY`), so `011` sees no
+`combo` in it, and a combo that ran does not end vv's burst. Once a run line has matched, `comboQueued` does not end it either,
+so at the cap (4) Rain's burst stays over. The alias path reads the whole chain and does not have this fault
+(`test_shikudo_telepathy.lua`).
 
 ## Moves that fail without leaving the room
 

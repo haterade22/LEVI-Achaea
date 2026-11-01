@@ -32,7 +32,7 @@ cannot cure any of them. Each lock below adds one more channel to the shut list 
 
 - **FITNESS is a softlock escape the table omits.** Asthma out re-opens smoke, then valerian or realgar takes slickness,
   and then the salve takes anorexia. Four focuses missed anorexia across 7 s in `2N1HTSWZ`; FITNESS solved it in 0.3 s.
-  FITNESS works while paralysed and needs balance (and equilibrium, CONFLICTS #50).
+  FITNESS works while paralysed and needs balance and equilibrium (CONFIRMED live, 2026-11-01).
 - **Focus can miss.** It takes mentals before anorexia (`LcJC-rJ5` 2026-11-01 row 782, `X8pRorzR` rows 1588-1631).
 - **Equilibrium may also be a piece.** Disrupted landed 1.79 s after equilibrium returned in `Z5cyffxx`, rows 5460-5466,
   and 12 later Salts drew no reply. That it was a deliberate denial is INFERRED.

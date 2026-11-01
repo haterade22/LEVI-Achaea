@@ -196,7 +196,7 @@ describe("ataxia.prioThrottle", function()
     ataxia_sendCuringPriority("curing priority a 1;curing priority b 2", false)
     ataxia_sendCuringPriority("curing priority c 3;curing priority d 4", false)
     ataxia_sendCuringPriority("curing priority e 5", false)
-    expect(#mock.sent_commands).toBe(2)
+    expect(#mock.sent_commands).toBe(4) -- Mudlet splits each batch: 4 commands went, 1 waits
     expect(#ataxia.prioThrottle.commands).toBe(1)
   end)
 
@@ -206,7 +206,7 @@ describe("ataxia.prioThrottle", function()
     ataxia_sendCuringPriority(
       "curing priority a 1;curing priority b 2;curing priority c 3;" ..
       "curing priority d 4;curing priority e 5;curing priority f 6", false)
-    expect(#mock.sent_commands).toBe(1)
+    expect(#mock.sent_commands).toBe(6) -- all of it went at once, split by Mudlet
   end)
 end)
 

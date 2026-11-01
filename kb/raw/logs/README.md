@@ -149,9 +149,15 @@ Each row is `<HH:MM:SS.mmm> <kind> <text>`, so unlike a client log every row has
 | `+aff` / `-aff` | an affliction we gained or lost, from GMCP |
 | `+def` / `-def` | a defence we gained or lost, from GMCP |
 | `+tar` / `-tar` | an affliction our tracker gave the target or took away (its "tar afflicted" and "target cured aff" events), so what we believed can be checked against the lines |
-| `#` | a note: the header (version, opponent, our class, why it started) and the stop line (why, rows, seconds) |
+| `#` | a note: the header (version, opponent, our class, why it started, round delivery) and the stop line (why, rows, seconds) |
 
 Lines the package echoes itself (`(LEVI): ...`) are not recorded, because echoes do not reach triggers.
+
+**Round delivery.** The header ends with `rounds raw` or `rounds alias`, so a control fight can be told from a test
+fight. Logs from before that field are `raw`. With `alias` (`aconfig rounds alias`, Monk only, not yet proven in a fight),
+the `>` rows hold `setalias lvfree a/b/c` when the text changes and `queue addclear free lvfree` for each press. A
+`# alias lvfree holds: ...` row after the header gives the text at the start. We expect the game's run line to name the
+alias (`Running queued free command: LVFREE`), but no log shows it yet: the first alias fight will.
 
 When it records: on its own when a player attacks us (the class detector's event), or when we send
 a queued command naming our target while that target is a player in the room; by hand with

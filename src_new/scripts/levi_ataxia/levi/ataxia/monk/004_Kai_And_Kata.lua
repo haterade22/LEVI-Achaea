@@ -345,6 +345,12 @@ if ataxiaTemp.shikFormSendHandler and killAnonymousEventHandler then
 end
 ataxiaTemp.shikFormSendHandler = nil
 if registerAnonymousEventHandler then
+  -- A round sent by alias names the alias, and a press with unchanged text sends no `setalias`, so
+  -- these read the alias text (ataxia/003). Without it a waiting CRESCENT would lose its stamp after
+  -- FORM_SEND_WINDOW, and the move into Tykonos would read as a stumble.
   ataxiaTemp.shikFormSendHandler = registerAnonymousEventHandler("sysDataSendRequest",
-    function(_, cmd) ataxia_kaiSendSeen(cmd); ataxia_shikFormSendSeen(cmd) end)
+    function(_, cmd)
+      if ataxia_roundSentText then cmd = ataxia_roundSentText(cmd) end
+      ataxia_kaiSendSeen(cmd); ataxia_shikFormSendSeen(cmd)
+    end)
 end

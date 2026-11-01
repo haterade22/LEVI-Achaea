@@ -77,7 +77,8 @@ first time material for them arrives.
    [raw/logs/README.md](raw/logs/README.md). The tool cannot tell classes.
 
 The HTML exports are git-ignored. The text files are the evidence. Our own recordings use a separate
-tool: `python tools/fightlog_import.py` copies `<profile>/fightlogs/` into `kb/raw/logs/ours/`.
+tool: `python tools/fightlog_import.py` copies `<profile>/fightlogs/` into `kb/raw/logs/ours/`. In an `aconfig rounds alias` fight its
+"commands we sent" row counts alias rewrites, and in a raw fight it counts presses.
 
 ### Capturing straight from the game (`kbcapture`)
 

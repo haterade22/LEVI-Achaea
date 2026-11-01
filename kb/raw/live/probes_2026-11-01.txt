@@ -1,0 +1,70 @@
+# In-game probes run by the user (2026-11-01), pasted verbatim. Checklist: docs/plans/timing-probes-2026-11.md.
+# "((( BALANCE/EQUILIBRIUM ... )))", "[[ BLEED 7 ]]" and "+ ( def shield ) +" are our package's echoes, not game text.
+# The package gags the queue's own "Added" and auto-queue lines, so they do not show here.
+
+===== TEST C: does a queued alias read its text when it fires? =====
+Sent: setalias lvprobe say one
+Sent: touch shield;queue addclear free lvprobe;setalias lvprobe say two
+
+(((((((((((((((((((( BALANCE: 2.263 ))))))))))))))))))))
+Alias "lvprobe" will now execute: "say one"
+13:25:40:347 [15440] [100] |(Penwize)|[ [ ]]
+
++ ( def shield ) +
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 3.40s.
+13:25:40:443 [15440] [100] |(Penwize)|[ [ ]]
+Alias "lvprobe" will now execute: "say two"
+13:25:40:449 [15440] [100] |(Penwize)|[ [ ]]
+You have set the 'slickness' affliction to the 25 priority.
+13:25:40:604 [15440] [100] |(Penwize)|[ [ ]]
+You have set the 'paralysis' affliction to the 25 priority.
+13:25:40:608 [15440] [100] |(Penwize)|[ [ ]]
+You have set the 'paralysis' affliction to the 3 priority.
+13:25:41:919 [15440] [100] |(Penwize)|[ [ ]]
+You have set the 'slickness' affliction to the 3 priority.
+13:25:42:010 [15440] [100] |(Penwize)|[ [ ]]
+(((((((((((((((((((( EQUILIBRIUM:3.239 ))))))))))))))))))))
+You say in a strong, calm voice, "Two."
+13:25:43:683 [15440] [100] |(Penwize)|[ [ ]]
+
+===== TEST B: does FITNESS need equilibrium? =====
+Sent: touch shield;fitness   (no asthma up)
+
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 3.40s.
+13:26:16:532 [14987] [100] |(Penwize)|[ [ ]]
+Health lost: 7 (raw).
+[[ BLEED 7 ]]
+(((((((((((((((((((( EQUILIBRIUM:3.298 ))))))))))))))))))))
+You are already quite fit.
+Balance used: 2.8s.
+13:26:19:831 [14980] [100] |(Penwize)|[ [ ]]
+(((((((((((((((((((( BALANCE: 2.777 ))))))))))))))))))))
+
+===== TEST C, PART 3: several commands in one alias =====
+Sent: setalias lvprobe say one/say two/say three
+Sent: touch shield;queue addclear free lvprobe
+The two refusals are the game's limit on say-like commands. All three commands ran, in order, in one flush.
+
+Alias "lvprobe" will now execute: "say one/say two/say three"
+13:50:46:974 [13913] [100] |(Penwize)|[ [ ]]  
+
++ ( def shield ) +
+You touch the tattoo and a nearly invisible magical shield forms around you.
+Equilibrium used: 3.40s.
+13:50:47:069 [13913] [100] |(Penwize)|[ [ ]]  
+You have set the 'slickness' affliction to the 25 priority.
+13:50:47:244 [13913] [100] |(Penwize)|[ [ ]]  
+You have set the 'paralysis' affliction to the 25 priority.
+13:50:47:249 [13913] [100] |(Penwize)|[ [ ]]  
+You have set the 'paralysis' affliction to the 3 priority.
+13:50:48:514 [13913] [100] |(Penwize)|[ [ ]]  
+You have set the 'slickness' affliction to the 3 priority.
+13:50:48:617 [13913] [100] |(Penwize)|[ [ ]]  
+(((((((((((((((((((( EQUILIBRIUM:3.169 ))))))))))))))))))))
+You say in a strong, calm voice, "One."
+You must wait a short while to use a say-like command again.
+You must wait a short while to use a say-like command again.
+13:50:50:240 [13913] [100] |(Penwize)|[ [ ]]  
+You have cleared alias "lvprobe".

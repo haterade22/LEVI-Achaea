@@ -18,6 +18,8 @@ function queue_Scan(stuff)
   ataxiaTemp.hitCount = 0
 	moonAff = false
   lastLimbAttack = nil
+	-- We expect a round sent by alias to show the alias name here; the checks below read the chain (ataxia/003).
+	if ataxia_roundRan then stuff = ataxia_roundRan(stuff) end
 	local queueStuff = stuff
 	local smallStuff = stuff:lower()
 	deleteFull()

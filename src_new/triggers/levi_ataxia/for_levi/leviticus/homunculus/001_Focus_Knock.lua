@@ -42,10 +42,13 @@ patterns:
 ataxiaTemp.hombal = true
 
 tBals.focus = false
+-- A named timer, as in 398: ataxia_resetTargetBals can kill it, so an old target's knock cannot mark
+-- the new target's focus up early.
+if tBals.timers.focus then killTimer(tBals.timers.focus) end
 if haveAff("shadowmadness") then
-  tempTimer(5, [[tBals.focus = true]])
+  tBals.timers.focus = tempTimer(5, [[tBals.focus = true; tBals.timers.focus = nil]])
 else
-  tempTimer(2.3, [[tBals.focus = true]])
+  tBals.timers.focus = tempTimer(2.3, [[tBals.focus = true; tBals.timers.focus = nil]])
 end
 targetIshere = true
 

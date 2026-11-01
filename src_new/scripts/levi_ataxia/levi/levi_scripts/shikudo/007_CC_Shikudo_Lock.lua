@@ -532,12 +532,15 @@ local function sendRound(kind, line, prelude)
   send("queue addclear free " .. line)
 end
 
--- The game ran a queued command. `ran` is what follows "command: " on the run line -- only its
--- FIRST row when the server wraps it, as it does every combo: 39 columns of prefix, then about 95
--- of round with combatQueue()'s "g body;g gold;stand;", against this user's 119-124 (CLAUDE.md,
--- v4.7.351). So the pending round is ours when it STARTS with `ran`. A press that crosses a run
--- line in flight can lose one round's count; the caps bound what that costs.
+-- The game ran a queued command. `ran` is what follows "command: " on the run line. On the raw path
+-- Mudlet splits the `;`, so the server holds only the chain's first command, and the row shows only
+-- that: `G BODY` with combatQueue()'s prefix (0 of 650 rows hold `;`,
+-- kb/mechanics/balance-and-queueing.md). On the alias path we expect the alias name, and
+-- ataxia_roundRan gives back the chain. So the pending round is ours when it STARTS with `ran`. A
+-- press that crosses a run line in flight can lose one round's count; the caps bound what that costs.
 function shikudoLock.onQueueRan(ran)
+  -- The key is the chain as sendRound built it (ataxia/003).
+  if ataxia_roundRan then ran = ataxia_roundRan(ran) end
   local st = shikudoLock.state
   local p = st.pending
   if not p then return false end

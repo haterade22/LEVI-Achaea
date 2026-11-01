@@ -57,8 +57,9 @@ blocks the cure **on its own** (see Dragonheal below).
 
 | Fact | Value | Confidence |
 |---|---|---|
-| Needs | balance (wiki) and equilibrium (the user) | Balance CONFIRMED (live). Equilibrium: player, logs agree, no direct test (CONFLICTS #50) |
-| Spends | balance only: 2.8 s printed, against 3.00 stated on the wiki | CONFIRMED (live), n=6 |
+| Needs | balance and equilibrium, as the user said. The wiki lists balance only | CONFIRMED (live), n=1 on our seat: with equilibrium down, `fitness` ran only when equilibrium returned, 3.3 s later (`raw/live/probes_2026-11-01.txt`). 11 logged fires agree |
+| With no asthma | it still runs and spends balance: `You are already quite fit.`, then `Balance used: 2.8s.` | CONFIRMED (live), n=1. A stray FITNESS costs 2.8 s of balance. Whether it starts the lockout is not known |
+| Spends | balance only: 2.8 s printed, against 3.00 stated on the wiki. Our seat: printed 2.8, our stopwatch 2.785 (`raw/live/seebalances_2026-11-01.txt`) | CONFIRMED (live), n=7 |
 | Lockout | about 10 s; earliest 9.06 s | CONFIRMED (live), n=8 pairs. Our seat: 9.97, 9.81, 9.06. The other 5 have 1 s stamps and all read 10 |
 | While paralysed | works | CONFIRMED (live), 3 logs |
 | Under weariness | refused, and the lockout clock keeps running | CONFIRMED (live) |
@@ -67,14 +68,21 @@ blocks the cure **on its own** (see Dragonheal below).
 is not visible, and 0 came with it visibly down. The clearest is
 `raw/logs/2026-11-01_elmer_shikudo-vs-runewarden_win_2N1HTSWZ.txt`:4611-4618: the prompt flags read `-xd-` with
 asthma up, equilibrium returns, the flags read `-exd-`, `fitness` is typed, and it fires. Each client
-may gate this on its own, so the logs do not prove a game rule.
+may gate this on its own, so the logs alone do not prove a game rule. The live probe does, because our send went out
+with equilibrium down and the game held it.
 
 **Lines.**
 - Fire: `You inhale deeply, purging yourself of your asthmatic condition.`
 - Lockout over: `You may purge your lungs once again.`
 - Tried during the lockout: `You may not purge your lungs again as of this time.`
+- Used with no asthma: `You are already quite fit.`
 - Short of balance, with auto-queue on: `You must regain balance first.`, then
   `fitness was added to your balance queue.` It runs on recovery (`raw/logs/ours/2026-10-27_112717_Tabethys.log`:12659-12676).
+
+**Code.** `ataxia_fitnessHeldForEq` (`can(x)/003_Lock_breakers.lua`) holds our send while equilibrium is down, because the
+game's auto-queue would otherwise fire it later, even with the asthma gone. It tests before the 1.5 s throttle, so the
+send goes out on the prompt where equilibrium returns. With balance down, the send still goes out and the auto-queue
+holds it (`raw/logs/ours/2026-10-27_112717_Tabethys.log`:12659-12676).
 
 "Too weary" prints during the lockout as well, so that refusal says nothing about the clock.
 `abilities.json` has no lockout: its `cooldown` field means balance spent.

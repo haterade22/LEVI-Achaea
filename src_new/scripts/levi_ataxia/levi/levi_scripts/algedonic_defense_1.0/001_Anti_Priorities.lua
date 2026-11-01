@@ -704,10 +704,13 @@ function Algedonic.AntiSerpent()
     local hasAnorexia = ataxia.afflictions.anorexia
     local hasImpatience = ataxia.afflictions.impatience
 
-    -- Can we tree? (not paralyzed, arms not both broken, tree off cooldown)
+    -- Can we tree? (not paralyzed, arms not both broken, OUR tree off cooldown)
+    -- ataxiaTemp.usedTree is OUR tree: the touch lines set it (curing_bals/001, 003), and "You may
+    -- utilise the tree tattoo again." clears it (004). tBals.tree is the TARGET's tree (trigger 389).
+    -- Reading that one held our tree for 13 s after HE treed, and sent it while ours was down.
     local canTree = not hasParalysis
         and not (ataxia.afflictions.brokenleftarm and ataxia.afflictions.brokenrightarm)
-        and tBals.tree
+        and not ataxiaTemp.usedTree
 
     -- APPROACHING LOCK: asthma + slickness + (impatience OR anorexia)
     -- Tree NOW before paralysis locks us out
@@ -722,8 +725,16 @@ function Algedonic.AntiSerpent()
     -- IMPATIENCE: Cure immediately and shield to block next serpent attack
     if hasImpatience and not hasParalysis then
         send("curing prioaff impatience")
-        send("cq all;touch shield")
-        Algedonic.Echo("<red>TOUCH SHIELD - IMPATIENCE!<white>")
+        -- Prioritize() runs on every affliction gain and loss, and `cq all` clears our own queue
+        -- each time. One shield per 4 s: the tattoo spends 3.40 s of equilibrium on our seat
+        -- (kb/raw/live/probes_2026-11-01.txt:55), and at most 4.00 s (kb/mechanics/foundations.md),
+        -- so a sooner send finds equilibrium still down. The prioaff is free, so it is not throttled.
+        if not ataxiaTemp.serpentShieldThrottle then
+            ataxiaTemp.serpentShieldThrottle = true
+            tempTimer(4, function() ataxiaTemp.serpentShieldThrottle = nil end)
+            send("cq all;touch shield")
+            Algedonic.Echo("<red>TOUCH SHIELD - IMPATIENCE!<white>")
+        end
         return
     end
 

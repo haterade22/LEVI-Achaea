@@ -102,7 +102,10 @@ the opponent's balance.
 1,196 clean rows and real holes: Shikudo 0 of 31, Kaido 13 of 33. It has no recharge lockouts. READ and MEASURED.
 
 The game prints the true cost to the player who spends it: `Balance used: 2.1s.` and `Equilibrium used: 3.40s.` These
-are game text. Our logs do not show them, and the option that enables them is not yet known. Printed cost against
+are game text, enabled by `CONFIG SEEBALANCES` (CONFIRMED live, `raw/live/seebalances_2026-11-01.txt`). It was off for us
+until 2026-11-01, so our earlier logs do not show them. Since v4.7.470, `aconfig seebalances on` sends it at every login (off by default, until the
+extra line is shown to break nothing). On our seat FITNESS printed 2.8 s, and our own stopwatch read
+2.785 s (n=1). Printed cost against
 the measured time to recovery: median -0.02 s, 89% within +-0.15 s (balance, n=264). MEASURED.
 
 | Own cost | Stated | Printed | Ratio |
@@ -146,8 +149,9 @@ The user's rule: with asthma and weariness up on a fitness class, go defensive a
 of those gained slickness or anorexia (a median 3.0 s later), and 4 died. 11 began with a partner, and 3 died.
 MEASURED. Four of the 7 fatal windows began alone, so the alarm belongs at the first prompt.
 
-**What FITNESS needs.** Balance and, per the user, equilibrium (CONFLICTS #50). It works while paralysed, and weariness
-refuses it ([class-cures](../afflictions/class-cures.md)).
+**What FITNESS needs.** Balance and equilibrium: a live probe held it 3.3 s until equilibrium returned (CONFIRMED live).
+So any equilibrium spend with asthma up delays our lock breaker. It works while paralysed, and weariness refuses it
+([class-cures](../afflictions/class-cures.md)).
 
 **The two hand-written answers look like one rule that lacks a clock.** Against a Sentinel the code cures weariness
 first. Against a Serpent it boosts asthma (`001_Anti_Priorities.lua:190`, `:579`). INFERRED: when FITNESS is ready, an
@@ -190,3 +194,8 @@ Holding offence stays a hypothesis.
 - `ataxia_lockEscapes` (`003_Lock_breakers.lua:285-291`) knows smoke, focus and FITNESS by blocker. It omits eat, salve
   and tree, and it never asks how long until a channel returns.
 - The clock constants disagree between files: tree 13 and 14, restoration five values, focus four values.
+- Trigger 398 starts the target's focus clock only for the target's own focus line, and under shadowmadness it waits
+  4.8 s, just under the measured 4.82. A wait of 5 s refused real cures. Both changes shipped in v4.7.470.
+- `tBals` is the TARGET's cure balances. Our own tree is `ataxiaTemp.usedTree`: the touch line sets it on every touch of ours,
+  and `levilogin()` clears it. `ataxia_resetTargetBals` (`016`) is the one reset. It kills running timers, because they write
+  to the global table and could mark a new target's balance up early. The focus knocks name their timer, so it can kill them.

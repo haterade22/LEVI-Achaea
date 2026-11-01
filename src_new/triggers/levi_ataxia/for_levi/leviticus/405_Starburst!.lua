@@ -52,7 +52,7 @@ if type(target) == "string" then
 
 		tAffs = {blindness = false, deafness = false, shield = false, rebounding = false, curseward = false}
 		if resetStatesV3 then resetStatesV3() end
-		tBals = {tree = true, focus = true, plant = true, timers = {}}
+		ataxia_resetTargetBals()
     if ataxiaTemp.lastAssess then ataxiaTemp.lastAssess = 100 end
     twohanded_resetFractures()
     expandAlias("res")

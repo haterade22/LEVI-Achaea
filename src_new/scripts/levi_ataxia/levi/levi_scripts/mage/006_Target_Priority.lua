@@ -270,7 +270,7 @@ function tprio.switchTo(name)
       tAffs.curseward = false
     end
     if magi and magi.offense and magi.offense.state then magi.offense.state.burns = 0 end
-    tBals = {tree = true, focus = true, plant = true, salve = true, timers = {}, passive = true}
+    ataxia_resetTargetBals()
     if ataxiaTemp then ataxiaTemp.bleeding = 0 end
     if lb and lb.resetAll then lb.resetAll(normalized) end
     raiseEvent("changed target")

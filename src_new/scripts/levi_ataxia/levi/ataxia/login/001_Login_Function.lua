@@ -115,7 +115,13 @@ haveshadow = false
 mypreapply = false
 bardperformance = false
 bardtempo = false
-tBals = {tree = true, focus = true, plant = true, salve = true, timers = {}, passive = true}
+ataxia_resetTargetBals()
+-- ataxiaTemp outlives a login. A dropped link can miss "You may utilise the tree tattoo again.", and
+-- that would hold our tree shut. Nil is the safe side: the game refuses a touch at no real cost.
+ataxiaTemp.usedTree = nil
+-- A round sent while the link was down recorded alias text the server never got (ataxia/003). The
+-- next round sets the alias again.
+ataxiaTemp.roundSend = nil
 expandAlias("t Penwize")
 tempTimer(14, [[send("queue add freestand wear armour")]])
 
@@ -277,6 +283,12 @@ end
 -- `aconfig screenwidth off` leaves the game's setting alone.
 if tonumber(ataxia.settings.screenwidth) then
 	send("config screenwidth " .. ataxia.settings.screenwidth, false)
+end
+
+-- The game prints each cost (`Balance used: 2.8s.`), so every fight log holds the true costs.
+-- Off by default; `aconfig seebalances on` sends it here. Off leaves the game's setting alone.
+if ataxia.settings.seebalances then
+	send("config seebalances yes", false)
 end
 
 

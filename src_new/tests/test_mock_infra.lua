@@ -14,6 +14,27 @@
 
 local mock = require("mock_mudlet")
 
+describe("mock send splits ; as Mudlet's Host::send does (2026-11-01)", function()
+  it("records each piece and skips empty ones", function()
+    mock.reset()
+    mock.send("queue addclear free a;b;;c;")
+    expect(table.concat(mock.sent_commands, " | ")).toBe("queue addclear free a | b | c")
+  end)
+
+  it("was_sent asks a chain as its pieces in a row, so a negative can still fail", function()
+    mock.reset()
+    mock.send("cq all;goto 11090")
+    expect(mock.was_sent("cq all;goto 11090")).toBeTrue()
+    expect(mock.was_sent("cq all")).toBeTrue()
+    expect(mock.was_sent("goto 11090;cq all")).toBeFalse()
+    mock.reset()
+    mock.send("cq all")
+    mock.send("touch tree")
+    mock.send("goto 11090")
+    expect(mock.was_sent("cq all;goto 11090")).toBeFalse()
+  end)
+end)
+
 describe("mock.fire_timers() survives a callback arming a new timer", function()
   it("does not corrupt iteration when a callback self-rearms", function()
     mock.reset()

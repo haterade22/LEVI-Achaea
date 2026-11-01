@@ -286,6 +286,14 @@ function ataxiaCheckForMissing()
 		ataxia.settings.screenwidth = 0
 	end
 
+	-- CONFIG SEEBALANCES: the game prints each cost (`Balance used: 2.8s.`). It was off for us until
+	-- 2026-11-01, so older logs hold no printed costs (kb/mechanics/foundations.md). Off by default: it
+	-- adds a line after each spend, and 12 files act on "the next line". The user has not played enough
+	-- with it to say that nothing breaks (2026-11-01). `aconfig seebalances on` sends it at every login.
+	if ataxia.settings.seebalances == nil then
+		ataxia.settings.seebalances = false
+	end
+
 	if ataxia.settings.autogallop == nil then
 		ataxia.settings.autogallop = false
 		ataxiaEcho("Auto Gallop Setting not found: Reverting to default; won't toggle gallop when mounted.")

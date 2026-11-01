@@ -28,14 +28,27 @@ function M.reset()
   _trigger_id = 0
 end
 
+-- Mudlet splits every sent line on its own command separator (`;`, skipping empty parts, Host::send)
+-- before anything reaches the game. This mock stored the line whole, so no test could see that
+-- `send("queue addclear free a;b;c")` queues only `a` (kb/mechanics/balance-and-queueing.md).
+-- Adding this failed 5 of 3728 tests (2026-11-01), and those now state the split. A test file that
+-- replaces `send` with its own does not get it.
+
 -- Core send functions
 function send(cmd, echo)
-  table.insert(M.sent_commands, cmd)
+  if type(cmd) ~= "string" then
+    table.insert(M.sent_commands, cmd)
+    return
+  end
+  for piece in cmd:gmatch("[^;]+") do
+    table.insert(M.sent_commands, piece)
+  end
 end
+M.send = send
 
 function sendAll(...)
   for _, cmd in ipairs({...}) do
-    table.insert(M.sent_commands, cmd)
+    send(cmd)
   end
 end
 
@@ -328,9 +341,17 @@ function M.last_commands(n)
 end
 
 --- Check if a specific command was sent
+-- A `;` in the question is asked as the pieces in a row, so "was this chain sent?" keeps its meaning.
+-- Without that, a was_sent(...).toBeFalse() on a chain could never fail.
 function M.was_sent(cmd)
-  for _, c in ipairs(M.sent_commands) do
-    if c == cmd then return true end
+  local want = {}
+  for piece in tostring(cmd):gmatch("[^;]+") do want[#want + 1] = piece end
+  for i = 1, #M.sent_commands - #want + 1 do
+    local all = true
+    for j, piece in ipairs(want) do
+      if M.sent_commands[i + j - 1] ~= piece then all = false; break end
+    end
+    if all then return true end
   end
   return false
 end

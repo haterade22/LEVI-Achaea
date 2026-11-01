@@ -10,7 +10,7 @@ Measured from the Grulk death log (`Sentinel.txt`, 123 seconds):
 
 | Fact | Value |
 |---|---|
-| Cooldown | **~9.8s** and **~8.7s** (two clean measurements) |
+| Cooldown | **9.81 s** and **9.06 s** (rows 1130-1306 and 2105-2328; this table said 8.7 s, which no pair reproduces) |
 | Success line | `You inhale deeply, purging yourself of your asthmatic condition.` |
 | Cooldown refusal | `You may not purge your lungs again as of this time.` |
 | Ready line | `You may purge your lungs once again.` |

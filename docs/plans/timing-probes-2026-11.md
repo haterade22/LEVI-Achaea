@@ -17,53 +17,28 @@ fightlog on probe
 
 ## A. Find the option that prints the true cost
 
-1. Type `CONFIG`.
-2. Look for an option that shows balance or equilibrium used. Other players' logs print `Balance used: 2.1s.`
-3. If you find it, turn it on.
+**DONE (2026-11-01).** `CONFIG SEEBALANCES` prints the line (`kb/raw/live/seebalances_2026-11-01.txt`).
+
+Keep it on. Tell me if a highlight or an attack echo looks wrong: 12 files act on "the next line", and this adds a line.
+**To undo:** `config seebalances no`. Since v4.7.470, `aconfig seebalances on` sends it at every login. That setting is off by
+default, so the game keeps what you set here.
+
+**Still wanted:** the reply to `config universalafflictionmessages`. Its help text may say whether it shows a target's cures.
 
 ## B. Does FITNESS need equilibrium?
 
-The shield tattoo spends equilibrium and not balance, so FITNESS is tried with balance up and equilibrium down.
-
-```
-touch shield;fitness
-```
-
-If the reply says you do not have asthma, this test is void. Repeat it in test E with asthma up.
-
-Then spend both, and try again:
-
-1. Spend balance with any attack on a denizen.
-2. In the same second, run the line above.
-
-**What to keep:** the reply, for example `You must regain equilibrium first.` or `fitness was added to your ... queue.`
-
-**This decides:** whether a shield with asthma up delays our lock breaker (CONFLICTS #50).
+**DONE (2026-11-01). Yes.** With equilibrium down, FITNESS ran only when equilibrium returned, 3.3 s later. With no asthma, it
+still spent 2.8 s of balance (`kb/raw/live/probes_2026-11-01.txt`).
 
 ## C. Does a queued alias read its text when it fires?
 
-1. Set the alias, then wait a second:
+**Parts 1 and 3 DONE (2026-11-01). Yes.** You said "Two." In one alias, "One." came first, and all three replies came before
+one prompt. Say-like commands have their own limit, so the second and third gave the same refusal, and their order cannot be
+seen. What an off-balance attack inside an alias does is open, and the first alias fight answers it
+(`kb/raw/live/probes_2026-11-01.txt`).
 
-```
-setalias lvprobe say one
-```
-
-2. Queue it, and rewrite it before equilibrium returns:
-
-```
-touch shield;queue addclear free lvprobe;setalias lvprobe say two
-```
-
-**Expected:** when equilibrium returns, you say "two". If you say "one", the alias method fails.
-
-3. Test several commands in one alias:
-
-```
-setalias lvprobe say one/say two/say three
-touch shield;queue addclear free lvprobe
-```
-
-**Expected:** you say all three, in order.
+**Optional:** the long alias below. The longest alias seen in a log is 142 characters, and step 3 caps at 138 to be cautious.
+Without this test, step 3 will not use a longer one.
 
 4. Test a long alias:
 
@@ -122,7 +97,8 @@ A Serpent, a Sentinel or a Shaman can give both. Ask the partner to keep the pre
 fightlog on <partner>
 ```
 
-1. **FITNESS.** With asthma up and no weariness, run `touch shield;fitness`. Keep the reply. Do this only if test B was void.
+1. **FITNESS lockout.** With no asthma, send `fitness`. Then, within 5 s, send it again with asthma up. Keep both replies.
+   This shows whether a stray FITNESS starts the 10 s lockout. Skip it if the fight does not allow it.
 2. **Contested aurum.** With asthma, weariness and clumsiness or sensitivity all up, send `curing prioaff asthma`. Note
    which affliction the next aurum cures. Repeat at least 5 times.
 3. **Two prioaffs.** With asthma and weariness up, send `curing prioaff asthma` and then `curing prioaff weariness`.

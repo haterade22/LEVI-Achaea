@@ -1308,16 +1308,20 @@ recommended_strategy: |
      and you have asthma + weariness, you're in serious danger.
 
 anti_serpent_function: |
-  Algedonic.AntiSerpent (src_new/scripts/levi_ataxia/levi/levi_scripts/algedonic_defense_1.0/001_Anti_Priorities.lua:700-753).
+  Algedonic.AntiSerpent (src_new/scripts/levi_ataxia/levi/levi_scripts/algedonic_defense_1.0/001_Anti_Priorities.lua:700-764).
   Algedonic.Prioritize() calls it on every GMCP affliction gain and loss
   (004_Aff_gains_losses.lua:367, :444) when OUR TARGET is a Serpent in the NDB
   (ataxiaNDB_getClass(target), :108-109) - not when an unknown Serpent attacks us.
   In order, first match wins:
   1. Approaching lock (asthma + slickness + impatience or anorexia) and we can tree (not
-     paralysed, not both arms broken, tree balance) -> `touch tree` (:707-720)
-  2. impatience, no paralysis -> `curing prioaff impatience` + `cq all;touch shield` (:722-728)
-  3. hypochondria, no paralysis -> `curing prioaff hypochondria` (:741-744, v4.7.419)
-  4. fratricide + scytherus, no paralysis -> `curing prioaff fratricide` (:746-752, v4.7.419)
+     paralysed, not both arms broken, OUR tree off cooldown: ataxiaTemp.usedTree; it read
+     tBals.tree, the TARGET's, until 2026-11-01) -> `touch tree` (:707-723). The touch line
+     (curing_bals/003) sets the flag on this send too: it no longer needs a `[Curing]` line first
+  2. impatience, no paralysis -> `curing prioaff impatience` each time, + `cq all;touch shield`
+     at most once per 4 s (:725-739). The shield still spends equilibrium with asthma up, which
+     holds FITNESS about 3.4 s (kb/CONFLICTS.md #50, open).
+  3. hypochondria, no paralysis -> `curing prioaff hypochondria` (:752-755, v4.7.419)
+  4. fratricide + scytherus, no paralysis -> `curing prioaff fratricide` (:757-763, v4.7.419)
   PRIOAFF writes no stored priority, so 3 and 4 are right in whichever curingset is active.
   This page used to list eight "key triggers". Two are real: approaching lock -> tree (branch 1,
   older than v4.7.419; the old list said "asthma + slickness + mental", the code checks

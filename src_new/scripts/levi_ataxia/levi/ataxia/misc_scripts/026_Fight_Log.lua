@@ -29,6 +29,9 @@ packageName: ''
 --   +def  -def   a defence we gained / lost (GMCP Char.Defences)
 --   +tar  -tar   our tracker gives the target an affliction / takes one away
 --   #     a note (header, start, stop)
+-- The header ends with "rounds raw" or "rounds alias", the delivery in force when the recording began
+-- (`aconfig rounds`). With alias, the `>` rows hold `setalias lvfree a/b/c` and `queue addclear free
+-- lvfree`, and we expect the game's run line to name the alias, until the first alias fight confirms it.
 --
 -- When it records:
 --   * Automatically (`fightlog auto on`, the default) when a player attacks us (the class detector's
@@ -154,11 +157,16 @@ function F.playerHere(name)
   return false
 end
 
+-- A round sent by alias names the alias in its queue line. The alias text names the target (ataxia/003).
+local function sentText(cmd)
+  return ataxia_roundSentText and ataxia_roundSentText(cmd) or cmd
+end
+
 -- Should a command we send start a recording? A queued command naming our target, a player here.
 function F.isAttack(cmd)
   if type(cmd) ~= "string" or type(target) ~= "string" or target == "" or tonumber(target) then return false end
   if not cmd:lower():find("^%s*queue add") then return false end
-  if not cmd:lower():find(target:lower(), 1, true) then return false end
+  if not sentText(cmd):lower():find(target:lower(), 1, true) then return false end
   return F.playerHere(target)
 end
 
@@ -178,7 +186,7 @@ function F.onSent(_, cmd)
     if not s then return end
   end
   F.write(">", cmd)
-  if s.opp and cmd:lower():find(s.opp:lower(), 1, true) then s.lastAt = F.now() end
+  if s.opp and sentText(cmd):lower():find(s.opp:lower(), 1, true) then s.lastAt = F.now() end
 end
 
 function F.onAttacker(_, who, class)
@@ -252,8 +260,19 @@ function F.start(opp, reason, auto)
   s.buf[1] = "# LEVI fight log | version " .. tostring(ataxiaVersion) .. " | started "
     .. os.date("%Y-%m-%d %H:%M:%S", math.floor(t)) .. " | opponent " .. tostring(opp)
     .. " | our class " .. tostring(ours) .. " | " .. tostring(reason)
+    -- Last field: tools/fightlog_import.py reads "our class X | why" and keeps the rest with the why.
+    -- The word tells a control fight (raw) from a test fight (alias).
+    .. " | rounds " .. (ataxia_roundMode and ataxia_roundMode() or "raw")
   s.buf[2] = "# rows: <time> <kind> <text>. kinds: | line, P prompt, > we sent, +aff/-aff ours (GMCP),"
     .. " +def/-def ours (GMCP), +tar/-tar our tracker on the target, # note"
+  -- A queue row names the alias, and a `>` row shows its text only when the text changes, so a
+  -- recording that starts on a queue line would otherwise never show what the first round was.
+  local rounds = ataxiaTemp.roundSend
+  if rounds then
+    for name, a in pairs(rounds.aliases) do
+      s.buf[#s.buf + 1] = "# alias " .. name .. " holds: " .. tostring(a.text)
+    end
+  end
   if tempRegexTrigger then
     s.trig = tempRegexTrigger("^", function() F.onLine(line, isPrompt and isPrompt() or false) end)
   end

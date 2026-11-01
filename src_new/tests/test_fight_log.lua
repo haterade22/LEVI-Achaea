@@ -113,6 +113,32 @@ describe("fight log: when it starts", function()
   end)
 end)
 
+describe("fight log: the round delivery in the header (control fight against test fight)", function()
+  it("says raw when the shim is not loaded or the flag is off", function()
+    fresh()
+    F.start("Agathon", "test", false)
+    local text = read(F.stop("test"))
+    expect(text:find("| our class Monk | test | rounds raw\n", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("says alias when the shim is on, as the last field, so the importer's class stays clean", function()
+    fresh()
+    ataxia_roundMode = function() return "alias" end
+    F.start("Agathon", "test", false)
+    ataxia_roundMode = nil
+    local text = read(F.stop("test"))
+    expect(text:find("| opponent Agathon | our class Monk | test | rounds alias\n", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("notes what each alias holds, because the first queue row names only the alias", function()
+    fresh()
+    ataxiaTemp.roundSend = { aliases = { lvfree = { text = "stand/combo Agathon a" } }, queued = {} }
+    F.start("Agathon", "test", false)
+    local text = read(F.stop("test"))
+    expect(text:find("\n# alias lvfree holds: stand/combo Agathon a\n", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
 describe("fight log: what it records", function()
   it("writes the header, then lines, prompts, our commands, our afflictions and defences, and the tracker", function()
     fresh()
