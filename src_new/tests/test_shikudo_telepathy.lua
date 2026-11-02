@@ -49,6 +49,8 @@ local function snap(fields, affs)
   local s = { target = "Agathon", form = "Rain", kata = 0, eq = true, mpp = 100, prone = false,
     treeUp = true, burst = 0, atRisk = false }
   s.has = function(a) return affs[a] == true end
+  s.stuck = shikudo.stuckCount(affs)
+  s.canBatter = true
   for k, v in pairs(fields or {}) do s[k] = v end
   if affs.prone then s.prone = true end
   return s
@@ -86,7 +88,7 @@ describe("vv's picker: the kill afflictions and its gates (011)", function()
 
   -- The scythe may need a mind lock, as blackout may (the wiki gives neither a (*)), and a refused
   -- one changes nothing vv reads, so it would be picked again on every press. Off until tested live.
-  it("scythe and batter are off by default, and a mangled head falls through to the other rules", function()
+  it("the scythe route is off by default, and a mangled head falls through to the other rules", function()
     expect(shikudo.tele.scythe).toBeFalse()
     expect(pick(snap({ form = "Oak" }, set("mangledhead", "stupidity", "impatience")))).toBeNil()
     -- The lock-closing impatience is not pushed aside by a batter that sets up no scythe.
@@ -100,8 +102,12 @@ describe("vv's picker: the kill afflictions and its gates (011)", function()
           if math.floor(mask / 2 ^ (i - 1)) % 2 == 1 then affs[a] = true end
         end
         local c = pick(snap({ form = form, kata = 10 }, affs))
-        expect(c == nil or (c:find("scythe", 1, true) == nil and c:find("batter", 1, true) == nil))
-          .toBeTrue()
+        expect(c == nil or c:find("scythe", 1, true) == nil).toBeTrue()
+        -- A batter here is the Rain burst's own, under two afflictions, never the scythe's set-up.
+        if c and c:find("batter", 1, true) then
+          expect(form).toBe("Rain")
+          expect(shikudo.stuckCount(affs) < 2).toBeTrue()
+        end
       end
     end
   end)
@@ -110,7 +116,7 @@ describe("vv's picker: the kill afflictions and its gates (011)", function()
     local soft = set("asthma", "slickness", "anorexia")
     expect(pick(snap({ eq = true }, soft))).toBe("mind impatience Agathon")
     expect(pick(snap({ eq = false }, soft))).toBe("mind impatience Agathon")
-    expect(pick(snap({ eq = false, kata = 9 }, {}))).toBe("mind impatience Agathon")
+    expect(pick(snap({ eq = false, kata = 9 }, {}))).toBe("mind batter Agathon")
   end)
 
   it("nothing under the mana floor", function()
@@ -163,25 +169,32 @@ end)
 describe("vv's picker: the Rain burst (011)", function()
   local pick = shikudo.telepathyPick
 
-  it("from kata 9 in Rain: impatience first, then paralyse once impatience is on", function()
-    expect(pick(snap({ kata = 9 }, {}))).toBe("mind impatience Agathon")
-    expect(pick(snap({ kata = 9 }, set("impatience")))).toBe("mind paralyse Agathon")
-    expect(pick(snap({ kata = 12 }, set("impatience")))).toBe("mind paralyse Agathon")
+  -- The user, 2026-11-02: "Usually a mind batter to stick something and use tree and herb balance".
+  it("from kata 9 in Rain: batter under two afflictions, then impatience, then paralyse", function()
+    expect(pick(snap({ kata = 9 }, {}))).toBe("mind batter Agathon")
+    expect(pick(snap({ kata = 9 }, set("impatience")))).toBe("mind batter Agathon")
+    expect(pick(snap({ kata = 9 }, set("stupidity", "dizziness")))).toBe("mind impatience Agathon")
+    local two = set("stupidity", "dizziness", "impatience")
+    expect(pick(snap({ kata = 9 }, two))).toBe("mind paralyse Agathon")
+    expect(pick(snap({ kata = 12 }, two))).toBe("mind paralyse Agathon")
+    -- Too little mana for a batter: never impatience on a clean target, so paralyse.
+    expect(pick(snap({ kata = 9, canBatter = false }, {}))).toBe("mind paralyse Agathon")
     -- She is paralysed already: nothing left to burst with.
-    expect(pick(snap({ kata = 9 }, set("impatience", "paralysis")))).toBeNil()
+    expect(pick(snap({ kata = 9 }, set("stupidity", "dizziness", "impatience", "paralysis")))).toBeNil()
     -- Under kata 9, or outside Rain, no burst.
     expect(pick(snap({ kata = 8 }, {}))).toBeNil()
     expect(pick(snap({ form = "Oak", kata = 9 }, {}))).toBeNil()
   end)
 
   it("an Apostate never gets MIND PARALYSE", function()
-    expect(pick(snap({ kata = 9, class = "apostate" }, set("impatience")))).toBeNil()
-    expect(pick(snap({ kata = 9, class = "apostate" }, {}))).toBe("mind impatience Agathon")
-    expect(pick(snap({ kata = 9, class = "runewarden" }, set("impatience")))).toBe("mind paralyse Agathon")
+    local two = set("stupidity", "dizziness", "impatience")
+    expect(pick(snap({ kata = 9, class = "apostate" }, two))).toBeNil()
+    expect(pick(snap({ kata = 9, class = "apostate" }, {}))).toBe("mind batter Agathon")
+    expect(pick(snap({ kata = 9, class = "runewarden" }, two))).toBe("mind paralyse Agathon")
   end)
 
   it("stops once burstMax MIND rounds have run since the last combo", function()
-    expect(pick(snap({ kata = 9, burst = 3 }, {}))).toBe("mind impatience Agathon")
+    expect(pick(snap({ kata = 9, burst = 3 }, {}))).toBe("mind batter Agathon")
     expect(pick(snap({ kata = 9, burst = 4 }, {}))).toBeNil()
     -- The cap is the burst's own: a lock-closing impatience still goes out.
     expect(pick(snap({ kata = 9, burst = 4 }, set("asthma", "slickness", "anorexia"))))
@@ -464,12 +477,12 @@ describe("vv's rounds: a MIND command goes out alone (011)", function()
   it("until a run line is read, each press counts toward the burst cap", function()
     fight("Rain", 9, {})
     for i = 1, 4 do
-      expect(press()[1]).toBe("queue addclear free mind impatience Agathon;assess Agathon")
+      expect(press()[1]).toBe("queue addclear free mind batter Agathon;assess Agathon")
       expect(ataxiaTemp.shikTele.burst).toBe(i)
     end
     expect(press()[1]:find("combo Agathon", 1, true) ~= nil).toBeTrue()
     expect(ataxiaTemp.shikTele.burst).toBe(0)
-    expect(press()[1]).toBe("queue addclear free mind impatience Agathon;assess Agathon")
+    expect(press()[1]).toBe("queue addclear free mind batter Agathon;assess Agathon")
   end)
 
   it("a live chain 13 s past its last strike gets the combo; a chain that reads 0 blocks nothing", function()
@@ -487,7 +500,7 @@ describe("vv's rounds: a MIND command goes out alone (011)", function()
     press()
     local st = ataxiaTemp.shikTele
     expect(st.at).toBe(now)
-    expect(st.cmd).toBe("mind impatience Agathon")
+    expect(st.cmd).toBe("mind batter Agathon")
     expect(st.form).toBe("Rain")
     expect(st.blackoutAt).toBeNil()
   end)
@@ -657,7 +670,7 @@ describe("vv's burst moves when the game RUNS a round, not when vv is pressed (0
       fight("Rain", 9, {})
       combatQueue = function() return "g body;g gold;stand;" end
       local line = press()[1]
-      expect(line).toBe("queue addclear free g body;g gold;stand;mind impatience Agathon;assess Agathon")
+      expect(line).toBe("queue addclear free g body;g gold;stand;mind batter Agathon;assess Agathon")
       expect(ran(line, width)).toBeTrue()
       ataxiaTemp.shikTele.burst = 3
       local combo = "queue addclear free g body;g gold;stand;wield staff;combo Agathon frontkick left"
@@ -680,9 +693,9 @@ describe("vv's burst moves when the game RUNS a round, not when vv is pressed (0
         combatQueue = function() return "g body;g gold;stand; ; parry right leg;" end
         local line = press()[1]
         expect(line).toBe("queue addclear free g body;g gold;stand; ; parry right leg;"
-          .. "mind impatience Xenophontes;assess Xenophontes")
+          .. "mind batter Xenophontes;assess Xenophontes")
         local runLine = "[System]: Running queued free command: " .. line:sub(#"queue addclear free " + 1)
-        expect(#runLine).toBe(124)
+        expect(#runLine).toBe(120)
         expect(#TL.wrap(runLine, width) > 1).toBeTrue()     -- it really wraps
         expect(burst()).toBe(1)
         expect(ran(line, width)).toBeTrue()
@@ -712,7 +725,7 @@ describe("vv's burst moves when the game RUNS a round, not when vv is pressed (0
   it("a combo press drops the MIND round it replaced: the same line run by sr later is not vv's", function()
     local line = readingRunLines("Rain", 9, {})
     expect(press()[1]).toBe(line)                       -- queued, then replaced by a combo:
-    tAffs = set("impatience", "paralysis")
+    tAffs = set("stupidity", "impatience", "paralysis")
     expect(press()[1]:find("combo Agathon", 1, true) ~= nil).toBeTrue()
     expect(ran(line)).toBeFalse()                       -- 007 queued the identical MIND round
     expect(burst()).toBe(1)

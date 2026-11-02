@@ -1,0 +1,533 @@
+# LEVI fight log | version 4.7.470 | started 2026-11-02 13:19:34 | opponent Titonus | our class Monk | our attack | rounds alias
+# rows: <time> <kind> <text>. kinds: | line, P prompt, > we sent, +aff/-aff ours (GMCP), +def/-def ours (GMCP), +tar/-tar our tracker on the target, # note
+# alias lvfree holds: stand/g body/g gold/mind impatience Titonus
+13:19:34.606 > queue addclear free lvfree
+13:19:34.655 | Alias "lvfree" will now execute: "stand/g body/g gold/mind impatience Titonus"
+13:19:34.657 P H: Full, M: High, E: Full, W: Full cexkdb-
+13:19:34.744 | [System]: Queued free commands cleared.
+13:19:34.744 | [System]: Added LVFREE to your free queue.
+13:19:34.744 | [System]: Running queued free command: LVFREE
+13:19:34.744 | You are not fallen or kneeling.
+13:19:34.745 | I see no "body" to take.
+13:19:34.745 | I see no "gold" to take.
+13:19:34.745 | Equilibrium used: 1.07s.
+13:19:34.745 +tar impatience
+13:19:34.745 > pt Titonus: impatience
+13:19:34.745 | You fill the mind of Titonus with an impatient feeling.
+13:19:34.747 P H: Full, M: High, E: Full, W: High cxkdb-
+13:19:34.747 -tar anorexia
+13:19:34.747 | Titonus eats a plumbum flake.
+13:19:34.749 P H: Full, M: High, E: Full, W: High cxkdb-
+13:19:34.795 | You are not the member of any party.
+13:19:34.797 P H: Full, M: High, E: Full, W: High cxkdb-
+13:19:35.749 | You have recovered equilibrium.
+13:19:35.750 P H: Full, M: High, E: Full, W: High cexkdb-
+13:19:36.044 > setalias lvfree stand/g body/g gold/wield staff489282/combo Titonus frontkick left kuro left hiru
+13:19:36.044 > queue addclear free lvfree
+13:19:36.093 | Alias "lvfree" will now execute: "stand/g body/g gold/wield staff489282/combo Titonus frontkick left kuro left hiru"
+13:19:36.094 P H: Full, M: High, E: Full, W: High cexkdb-
+13:19:36.175 | [System]: Queued free commands cleared.
+13:19:36.176 | [System]: Added LVFREE to your free queue.
+13:19:36.176 | [System]: Running queued free command: LVFREE
+13:19:36.176 | You are not fallen or kneeling.
+13:19:36.176 | I see no "body" to take.
+13:19:36.176 | I see no "gold" to take.
+13:19:36.177 | You are already wielding that.
+13:19:36.177 | You lash out with a straight kick at the left shoulder of Titonus.
+13:19:36.177 -tar shield
+13:19:36.177 +tar prone
+13:19:36.177 > pt Titonus: prone
+13:19:36.177 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Titonus's left arm.
+13:19:36.177 +tar prone
+13:19:36.177 > pt Titonus: prone
+13:19:36.177 | The instep of your foot smashes into the left underarm of Titonus, throwing him from his feet and sending him spinning to the ground.
+13:19:36.177 | Balance used: 2.1s.
+13:19:36.177 | Falling back into a low crouch, you lash out with a swift strike at the left thigh of Titonus.
+13:19:36.177 -tar shield
+13:19:36.177 > pt Titonus: weariness
+13:19:36.177 +tar weariness
+13:19:36.177 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Titonus's left leg.
+13:19:36.178 | The staff cracks across the left thigh of Titonus.
+13:19:36.178 | Snapping back into a ready stance, you whirl a twisted oaken staff in a long sweep at the head of Titonus.
+13:19:36.178 | As your blow lands with a crunch, you perceive that you have dealt 9.4% damage to Titonus's head.
+13:19:36.178 +tar dizziness
+13:19:36.178 +tar confusion
+13:19:36.178 +tar dizziness
+13:19:36.178 +tar confusion
+13:19:36.178 > pt Titonus: dizziness confusion
+13:19:36.178 | The staff connects to the side of Titonus's head with a resounding crack.
+13:19:36.178 | You are now maintaining a kata chain of 3 actions.
+13:19:36.179 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:36.179 -tar asthma
+13:19:36.179 -tar asthma
+13:19:36.179 | Titonus takes a long drag off his pipe.
+13:19:36.181 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:36.222 -tar prone
+13:19:36.223 -tar paralysis
+13:19:36.223 -tar brokenleftleg
+13:19:36.223 -tar damagedleftleg
+13:19:36.223 -tar brokenrightleg
+13:19:36.223 -tar damagedrightleg
+13:19:36.223 -tar prone
+13:19:36.223 -tar paralysis
+13:19:36.223 | Titonus stands up.
+13:19:36.224 | Titonus touches a tree of life tattoo.
+13:19:36.224 | A look of extreme focus crosses the face of Titonus.
+13:19:36.224 | You are not the member of any party.
+13:19:36.224 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:36.317 | You are not the member of any party.
+13:19:36.318 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:36.318 | You are not the member of any party.
+13:19:36.319 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:36.319 | You are not the member of any party.
+13:19:36.319 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:38.102 | You have recovered balance on your legs.
+13:19:38.102 | You have recovered balance on your right arm.
+13:19:38.102 | You have recovered balance on your left arm.
+13:19:38.103 P H: Full, M: Full, E: Full, W: Full cexkdb-
+13:19:39.153 > setalias lvfree stand/g body/g gold/wield staff489282/combo Titonus frontkick right ruku right kuro right
+13:19:39.153 > queue addclear free lvfree
+13:19:39.153 > setalias lvfree stand/g body/g gold/wield staff489282/combo Titonus frontkick right kuro right kuro left
+13:19:39.153 > queue addclear free lvfree
+13:19:39.211 | Alias "lvfree" will now execute: "stand/g body/g gold/wield staff489282/combo Titonus frontkick right ruku right kuro right"
+13:19:39.211 P H: Full, M: High, E: Full, W: High cexkdb-
+13:19:39.301 | [System]: Queued free commands cleared.
+13:19:39.301 | [System]: Added LVFREE to your free queue.
+13:19:39.302 | [System]: Running queued free command: LVFREE
+13:19:39.302 | You are not fallen or kneeling.
+13:19:39.302 | I see no "body" to take.
+13:19:39.302 | I see no "gold" to take.
+13:19:39.302 | You are already wielding that.
+13:19:39.302 | You lash out with a straight kick at the right shoulder of Titonus.
+13:19:39.302 -tar shield
+13:19:39.303 +tar prone
+13:19:39.303 > pt Titonus: prone
+13:19:39.303 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Titonus's right arm.
+13:19:39.303 +tar prone
+13:19:39.303 > pt Titonus: prone
+13:19:39.303 | The instep of your foot smashes into the right underarm of Titonus, throwing him from his feet and sending him spinning to the ground.
+13:19:39.303 | Balance used: 2.1s.
+13:19:39.303 | You spin a full rotation, bringing a twisted oaken staff around in a blur of motion to smash into the right arm of Titonus.
+13:19:39.303 -tar shield
+13:19:39.303 > pt Titonus: clumsiness
+13:19:39.303 +tar clumsiness
+13:19:39.303 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Titonus's right arm.
+13:19:39.304 | The staff connects to the right arm with a resounding crack, the limb flopping uselessly.
+13:19:39.304 | Falling back into a low crouch, you lash out with a swift strike at the right thigh of Titonus.
+13:19:39.304 -tar shield
+13:19:39.304 > pt Titonus: lethargy weariness
+13:19:39.304 +tar lethargy
+13:19:39.304 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Titonus's right leg.
+13:19:39.304 | The staff cracks across the right thigh of Titonus.
+13:19:39.304 | You are now maintaining a kata chain of 6 actions.
+13:19:39.305 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:39.305 | Alias "lvfree" will now execute: "stand/g body/g gold/wield staff489282/combo Titonus frontkick right kuro right kuro left"
+13:19:39.306 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:39.306 | [System]: Queued free commands cleared.
+13:19:39.306 | [System]: Added LVFREE to your free queue.
+13:19:39.306 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:39.306 -tar prone
+13:19:39.306 -tar paralysis
+13:19:39.306 -tar brokenleftleg
+13:19:39.306 -tar damagedleftleg
+13:19:39.306 -tar brokenrightleg
+13:19:39.306 -tar damagedrightleg
+13:19:39.306 -tar prone
+13:19:39.306 -tar paralysis
+13:19:39.306 | Titonus stands up.
+13:19:39.306 -tar anorexia
+13:19:39.306 | Titonus eats an aurum flake.
+13:19:39.308 -tar anorexia
+13:19:39.308 | Titonus takes a drink from a ruby vial.
+13:19:39.308 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:39.308 -tar asthma
+13:19:39.308 -tar asthma
+13:19:39.308 | Titonus takes a long drag off his pipe.
+13:19:39.309 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:39.353 | You are not the member of any party.
+13:19:39.354 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:39.452 | You are not the member of any party.
+13:19:39.453 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:39.453 | You are not the member of any party.
+13:19:39.453 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:39.454 | You are not the member of any party.
+13:19:39.454 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:40.983 -tar anorexia
+13:19:40.983 | Titonus eats an aurum flake.
+13:19:40.984 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:41.292 | You have recovered balance on your legs.
+13:19:41.292 | You have recovered balance on your right arm.
+13:19:41.292 | You have recovered balance on your left arm.
+13:19:41.293 | [System]: Running queued free command: LVFREE
+13:19:41.293 | You are not fallen or kneeling.
+13:19:41.293 | I see no "body" to take.
+13:19:41.293 | I see no "gold" to take.
+13:19:41.293 | You are already wielding that.
+13:19:41.293 | You lash out with a straight kick at the right shoulder of Titonus.
+13:19:41.293 -tar shield
+13:19:41.293 +tar prone
+13:19:41.293 > pt Titonus: prone
+13:19:41.293 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Titonus's right arm.
+13:19:41.294 +tar prone
+13:19:41.294 > pt Titonus: prone
+13:19:41.294 | The instep of your foot smashes into the right underarm of Titonus, throwing him from his feet and sending him spinning to the ground.
+13:19:41.294 | Balance used: 2.1s.
+13:19:41.294 | Falling back into a low crouch, you lash out with a swift strike at the right thigh of Titonus.
+13:19:41.294 -tar shield
+13:19:41.294 > pt Titonus: weariness
+13:19:41.294 +tar weariness
+13:19:41.294 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Titonus's right leg.
+13:19:41.294 | The staff cracks across the right thigh of Titonus.
+13:19:41.294 | Falling back into a low crouch, you lash out with a swift strike at the left thigh of Titonus.
+13:19:41.294 -tar shield
+13:19:41.294 > pt Titonus: lethargy weariness
+13:19:41.294 +tar lethargy
+13:19:41.295 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Titonus's left leg.
+13:19:41.295 | The staff cracks across the left thigh of Titonus.
+13:19:41.295 | You are now maintaining a kata chain of 9 actions.
+13:19:41.296 P H: Full, M: High, E: Full, W: Full cekdb-
+13:19:41.342 -tar asthma
+13:19:41.343 -tar asthma
+13:19:41.343 | Titonus takes a long drag off his pipe.
+13:19:41.344 P H: Full, M: High, E: Full, W: Full cekdb-
+13:19:41.425 | You are not the member of any party.
+13:19:41.425 P H: Full, M: High, E: Full, W: Full cekdb-
+13:19:41.427 | You are not the member of any party.
+13:19:41.427 P H: Full, M: High, E: Full, W: Full cekdb-
+13:19:41.427 | You are not the member of any party.
+13:19:41.428 P H: Full, M: High, E: Full, W: Full cekdb-
+13:19:41.428 | You are not the member of any party.
+13:19:41.428 P H: Full, M: High, E: Full, W: Full cekdb-
+13:19:41.509 -tar prone
+13:19:41.509 -tar paralysis
+13:19:41.509 -tar brokenleftleg
+13:19:41.510 -tar damagedleftleg
+13:19:41.510 -tar brokenrightleg
+13:19:41.510 -tar damagedrightleg
+13:19:41.510 -tar prone
+13:19:41.510 -tar paralysis
+13:19:41.510 | Titonus stands up.
+13:19:41.511 P H: Full, M: High, E: Full, W: Full cekdb-
+13:19:42.562 -tar anorexia
+13:19:42.563 | Titonus eats an aurum flake.
+13:19:42.564 P H: Full, M: High, E: Full, W: Full cekdb-
+13:19:43.246 > setalias lvfree stand/g body/g gold/mind impatience Titonus
+13:19:43.246 > queue addclear free lvfree
+13:19:43.246 > setalias lvfree stand/g body/g gold/wield staff489282/combo Titonus frontkick left kuro left hiru
+13:19:43.246 > queue addclear free lvfree
+13:19:43.321 | Alias "lvfree" will now execute: "stand/g body/g gold/mind impatience Titonus"
+13:19:43.322 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:43.402 | [System]: Queued free commands cleared.
+13:19:43.402 | [System]: Added LVFREE to your free queue.
+13:19:43.403 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:43.403 | Alias "lvfree" will now execute: "stand/g body/g gold/wield staff489282/combo Titonus frontkick left kuro left hiru"
+13:19:43.404 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:43.404 | [System]: Queued free commands cleared.
+13:19:43.404 | [System]: Added LVFREE to your free queue.
+13:19:43.404 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:43.493 | You have recovered balance on your legs.
+13:19:43.493 | You have recovered balance on your right arm.
+13:19:43.494 | You have recovered balance on your left arm.
+13:19:43.494 | [System]: Running queued free command: LVFREE
+13:19:43.494 | You are not fallen or kneeling.
+13:19:43.494 | I see no "body" to take.
+13:19:43.494 | I see no "gold" to take.
+13:19:43.494 | You are already wielding that.
+13:19:43.494 | You lash out with a straight kick at the left shoulder of Titonus.
+13:19:43.494 -tar shield
+13:19:43.494 +tar prone
+13:19:43.494 > pt Titonus: prone
+13:19:43.495 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Titonus's left arm.
+13:19:43.496 +tar prone
+13:19:43.496 > pt Titonus: prone
+13:19:43.496 | The instep of your foot smashes into the left underarm of Titonus, throwing him from his feet and sending him spinning to the ground.
+13:19:43.496 | Balance used: 2.1s.
+13:19:43.496 | Falling back into a low crouch, you lash out with a swift strike at the left thigh of Titonus.
+13:19:43.496 -tar shield
+13:19:43.496 > pt Titonus: lethargy weariness
+13:19:43.496 +tar lethargy
+13:19:43.496 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Titonus's left leg.
+13:19:43.496 | The staff cracks across the left thigh of Titonus.
+13:19:43.497 | Snapping back into a ready stance, you whirl a twisted oaken staff in a long sweep at the head of Titonus.
+13:19:43.497 | As your blow lands with a crunch, you perceive that you have dealt 9.4% damage to Titonus's head.
+13:19:43.497 +tar dizziness
+13:19:43.497 +tar confusion
+13:19:43.497 +tar dizziness
+13:19:43.497 +tar confusion
+13:19:43.497 > pt Titonus: dizziness confusion
+13:19:43.497 | The staff connects to the side of Titonus's head with a resounding crack.
+13:19:43.497 | You are now maintaining a kata chain of 12 actions.
+13:19:43.498 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:43.613 -tar prone
+13:19:43.613 -tar paralysis
+13:19:43.613 -tar brokenleftleg
+13:19:43.613 -tar damagedleftleg
+13:19:43.613 -tar brokenrightleg
+13:19:43.613 -tar damagedrightleg
+13:19:43.613 -tar prone
+13:19:43.613 -tar paralysis
+13:19:43.613 | Titonus stands up.
+13:19:43.613 | A look of extreme focus crosses the face of Titonus.
+13:19:43.613 | Titonus eats a potash crystal.
+13:19:43.614 | You are not the member of any party.
+13:19:43.614 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:43.701 | You are not the member of any party.
+13:19:43.702 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:43.703 | You are not the member of any party.
+13:19:43.703 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:43.703 | You are not the member of any party.
+13:19:43.704 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:43.704 -tar asthma
+13:19:43.704 -tar asthma
+13:19:43.704 | Titonus takes a long drag off his pipe.
+13:19:43.705 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:43.792 -tar anorexia
+13:19:43.792 | Titonus takes a drink from a ruby vial.
+13:19:43.793 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:44.344 -tar anorexia
+13:19:44.344 | Titonus eats an aurum flake.
+13:19:44.346 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:45.497 | You have recovered balance on your legs.
+13:19:45.497 | You have recovered balance on your right arm.
+13:19:45.497 | You have recovered balance on your left arm.
+13:19:45.498 P H: Full, M: Full, E: Full, W: Full cexkdb-
+13:19:45.875 -tar anorexia
+13:19:45.876 | Titonus eats a ferrum flake.
+13:19:45.876 P H: Full, M: Full, E: Full, W: Full cexkdb-
+13:19:46.023 > setalias lvfree stand/g body/g gold/wield staff489282/combo Titonus frontkick left kuro right ruku left
+13:19:46.023 > queue addclear free lvfree
+13:19:46.070 | Alias "lvfree" will now execute: "stand/g body/g gold/wield staff489282/combo Titonus frontkick left kuro right ruku left"
+13:19:46.071 P H: Full, M: Full, E: Full, W: Full cexkdb-
+13:19:46.161 | [System]: Queued free commands cleared.
+13:19:46.161 | [System]: Added LVFREE to your free queue.
+13:19:46.161 | [System]: Running queued free command: LVFREE
+13:19:46.161 | You are not fallen or kneeling.
+13:19:46.161 | I see no "body" to take.
+13:19:46.161 | I see no "gold" to take.
+13:19:46.162 | You are already wielding that.
+13:19:46.162 | You lash out with a straight kick at the left shoulder of Titonus.
+13:19:46.162 -tar shield
+13:19:46.162 +tar prone
+13:19:46.162 > pt Titonus: prone
+13:19:46.162 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Titonus's left arm.
+13:19:46.162 +tar prone
+13:19:46.162 > pt Titonus: prone
+13:19:46.162 | The instep of your foot smashes into the left underarm of Titonus, throwing him from his feet and sending him spinning to the ground.
+13:19:46.162 | Balance used: 2.1s.
+13:19:46.163 | Falling back into a low crouch, you lash out with a swift strike at the right thigh of Titonus.
+13:19:46.163 -tar shield
+13:19:46.163 > pt Titonus: weariness
+13:19:46.163 +tar weariness
+13:19:46.163 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Titonus's right leg.
+13:19:46.163 | The staff cracks across the right thigh of Titonus.
+13:19:46.163 | You spin a full rotation, bringing a twisted oaken staff around in a blur of motion to smash into the left arm of Titonus.
+13:19:46.163 -tar shield
+13:19:46.163 > pt Titonus: clumsiness
+13:19:46.163 +tar clumsiness
+13:19:46.163 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Titonus's left arm.
+13:19:46.163 | The staff connects to the left arm with a resounding crack, the limb flopping uselessly.
+13:19:46.163 | You are now maintaining a kata chain of 15 actions.
+13:19:46.165 P H: Full, M: Full, E: Full, W: Full cekdb-
+13:19:46.206 -tar asthma
+13:19:46.206 -tar asthma
+13:19:46.206 | Titonus takes a long drag off his pipe.
+13:19:46.206 P H: Full, M: Full, E: Full, W: Full cekdb-
+13:19:46.291 | You are not the member of any party.
+13:19:46.291 P H: Full, M: Full, E: Full, W: Full cekdb-
+13:19:46.292 -tar prone
+13:19:46.292 -tar paralysis
+13:19:46.292 -tar brokenleftleg
+13:19:46.292 -tar damagedleftleg
+13:19:46.292 -tar brokenrightleg
+13:19:46.292 -tar damagedrightleg
+13:19:46.292 -tar prone
+13:19:46.292 -tar paralysis
+13:19:46.292 | Titonus stands up.
+13:19:46.293 P H: Full, M: Full, E: Full, W: Full cekdb-
+13:19:46.293 | You are not the member of any party.
+13:19:46.295 P H: Full, M: Full, E: Full, W: Full cekdb-
+13:19:46.295 | You are not the member of any party.
+13:19:46.296 P H: Full, M: Full, E: Full, W: Full cekdb-
+13:19:46.296 | You are not the member of any party.
+13:19:46.296 P H: Full, M: Full, E: Full, W: Full cekdb-
+13:19:47.346 > setalias lvfree stand/g body/g gold/wield staff489282/combo Titonus frontkick right kuro left hiru
+13:19:47.346 > queue addclear free lvfree
+13:19:47.390 | Alias "lvfree" will now execute: "stand/g body/g gold/wield staff489282/combo Titonus frontkick right kuro left hiru"
+13:19:47.391 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:47.479 | [System]: Queued free commands cleared.
+13:19:47.480 | [System]: Added LVFREE to your free queue.
+13:19:47.481 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:47.481 -tar anorexia
+13:19:47.481 | Titonus eats an aurum flake.
+13:19:47.482 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:48.126 | You have recovered balance on your legs.
+13:19:48.126 | You have recovered balance on your right arm.
+13:19:48.126 | You have recovered balance on your left arm.
+13:19:48.127 | [System]: Running queued free command: LVFREE
+13:19:48.127 | You are not fallen or kneeling.
+13:19:48.127 | I see no "body" to take.
+13:19:48.127 | I see no "gold" to take.
+13:19:48.127 | You are already wielding that.
+13:19:48.128 | You lash out with a straight kick at the right shoulder of Titonus.
+13:19:48.128 -tar shield
+13:19:48.128 +tar prone
+13:19:48.128 > pt Titonus: prone
+13:19:48.128 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Titonus's right arm.
+13:19:48.128 +tar prone
+13:19:48.128 > pt Titonus: prone
+13:19:48.128 | The instep of your foot smashes into the right underarm of Titonus, throwing him from his feet and sending him spinning to the ground.
+13:19:48.128 | Balance used: 2.1s.
+13:19:48.128 | Falling back into a low crouch, you lash out with a swift strike at the left thigh of Titonus.
+13:19:48.128 -tar shield
+13:19:48.128 > pt Titonus: lethargy weariness
+13:19:48.128 +tar lethargy
+13:19:48.128 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Titonus's left leg.
+13:19:48.128 | The staff cracks across the left thigh of Titonus.
+13:19:48.128 | Snapping back into a ready stance, you whirl a twisted oaken staff in a long sweep at the head of Titonus.
+13:19:48.128 | As your blow lands with a crunch, you perceive that you have dealt 9.4% damage to Titonus's head.
+13:19:48.129 +tar dizziness
+13:19:48.129 +tar confusion
+13:19:48.129 +tar dizziness
+13:19:48.129 +tar confusion
+13:19:48.129 > pt Titonus: dizziness confusion
+13:19:48.129 | The staff connects to the side of Titonus's head with a resounding crack.
+13:19:48.129 +tar confusion
+13:19:48.129 | Titonus looks about bemusedly.
+13:19:48.129 | You are now maintaining a kata chain of 18 actions.
+13:19:48.130 P H: Full, M: Full, E: Full, W: High cekdb-
+13:19:48.175 | You are not the member of any party.
+13:19:48.176 P H: Full, M: Full, E: Full, W: High cekdb-
+13:19:48.258 | You are not the member of any party.
+13:19:48.259 P H: Full, M: Full, E: Full, W: High cekdb-
+13:19:48.260 | You are not the member of any party.
+13:19:48.260 P H: Full, M: Full, E: Full, W: High cekdb-
+13:19:48.260 | You are not the member of any party.
+13:19:48.261 P H: Full, M: Full, E: Full, W: High cekdb-
+13:19:48.261 -tar asthma
+13:19:48.261 -tar asthma
+13:19:48.261 | Titonus takes a long drag off his pipe.
+13:19:48.262 P H: Full, M: Full, E: Full, W: High cekdb-
+13:19:48.357 -tar prone
+13:19:48.357 -tar paralysis
+13:19:48.357 -tar brokenleftleg
+13:19:48.357 -tar damagedleftleg
+13:19:48.357 -tar brokenrightleg
+13:19:48.357 -tar damagedrightleg
+13:19:48.357 -tar prone
+13:19:48.357 -tar paralysis
+13:19:48.357 | Titonus stands up.
+13:19:48.357 | A look of extreme focus crosses the face of Titonus.
+13:19:48.358 -tar anorexia
+13:19:48.358 | Titonus takes a drink from a ruby vial.
+13:19:48.359 P H: Full, M: Full, E: Full, W: High cekdb-
+13:19:49.578 -tar anorexia
+13:19:49.578 | Titonus eats an aurum flake.
+13:19:49.579 P H: Full, M: Full, E: Full, W: Full cekdb-
+13:19:50.242 | You have recovered balance on your legs.
+13:19:50.242 | You have recovered balance on your right arm.
+13:19:50.242 | You have recovered balance on your left arm.
+13:19:50.242 P H: Full, M: Full, E: Full, W: Full cexkdb-
+13:19:50.340 -tar dizziness
+13:19:50.340 -tar confusion
+13:19:50.340 | Titonus touches a tree of life tattoo.
+13:19:50.341 P H: Full, M: Full, E: Full, W: Full cexkdb-
+13:19:50.875 | A look of extreme focus crosses the face of Titonus.
+13:19:50.876 P H: Full, M: Full, E: Full, W: Full cexkdb-
+13:19:51.122 > setalias lvfree stand/g body/g gold/wield staff489282/transition to oak form/combo Titonus risingkick torso livestrike ruku torso
+13:19:51.122 > queue addclear free lvfree
+13:19:51.174 | Alias "lvfree" will now execute: "stand/g body/g gold/wield staff489282/transition to oak form/combo Titonus risingkick torso livestrike ruku torso"
+13:19:51.175 P H: Full, M: High, E: Full, W: High cexkdb-
+13:19:51.252 | [System]: Queued free commands cleared.
+13:19:51.252 | [System]: Added LVFREE to your free queue.
+13:19:51.252 | [System]: Running queued free command: LVFREE
+13:19:51.252 | You are not fallen or kneeling.
+13:19:51.252 | I see no "body" to take.
+13:19:51.252 | I see no "gold" to take.
+13:19:51.252 | You are already wielding that.
+13:19:51.253 | Rising onto the balls of your feet, you prepare to begin the deadly form of the Live Oak.
+13:19:51.253 | You drive your foot up in a rising kick at the torso of Titonus.
+13:19:51.253 -tar shield
+13:19:51.253 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Titonus's torso.
+13:19:51.253 | Your foot drives into the solar plexus of Titonus.
+13:19:51.253 | Balance used: 2.1s.
+13:19:51.253 | Turning with the motion, you channel the momentum of your previous strike into a thrust at the solar plexus of Titonus with a twisted oaken staff.
+13:19:51.253 | As your blow lands with a crunch, you perceive that you have dealt 13.4% damage to Titonus's torso.
+13:19:51.253 +tar asthma
+13:19:51.254 | The breath of Titonus leaves him in an explosive gasp as the end of the staff smashes home.
+13:19:51.254 | You spin a full rotation, bringing a twisted oaken staff around in a blur of motion to smash into the torso of Titonus.
+13:19:51.254 -tar shield
+13:19:51.254 +tar slickness
+13:19:51.254 > pt Titonus: slickness
+13:19:51.254 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Titonus's torso.
+13:19:51.254 | Titonus staggers as the staff cracks across his ribs, sweat breaking out upon his forehead.
+13:19:51.254 | You are now maintaining a kata chain of 3 actions.
+13:19:51.255 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:51.303 -tar anorexia
+13:19:51.303 -tar slickness
+13:19:51.303 | Titonus eats a magnesium chip.
+13:19:51.303 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:51.304 -tar asthma
+13:19:51.304 -tar weariness
+13:19:51.304 | Titonus draws a deep, measured breath.
+13:19:51.304 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:51.387 | You are not the member of any party.
+13:19:51.388 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:52.325 > setalias lvfree stand/g body/g gold/wield staff489282/combo Titonus nervestrike livestrike risingkick head
+13:19:52.325 > queue addclear free lvfree
+13:19:52.371 | Alias "lvfree" will now execute: "stand/g body/g gold/wield staff489282/combo Titonus nervestrike livestrike risingkick head"
+13:19:52.372 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:52.454 | [System]: Queued free commands cleared.
+13:19:52.454 | [System]: Added LVFREE to your free queue.
+13:19:52.456 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:52.844 -tar anorexia
+13:19:52.844 | Titonus eats an aurum flake.
+13:19:52.844 -tar anorexia
+13:19:52.844 | Titonus takes a drink from a ruby vial.
+13:19:52.845 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:53.304 | You have recovered balance on your legs.
+13:19:53.304 | You have recovered balance on your right arm.
+13:19:53.304 | You have recovered balance on your left arm.
+13:19:53.304 | [System]: Running queued free command: LVFREE
+13:19:53.304 | You are not fallen or kneeling.
+13:19:53.304 | I see no "body" to take.
+13:19:53.304 | I see no "gold" to take.
+13:19:53.304 | You are already wielding that.
+13:19:53.306 | You whip a twisted oaken staff at the side of Titonus's neck.
+13:19:53.306 -tar shield
+13:19:53.306 +tar paralysis
+13:19:53.306 > pt Titonus: paralysis
+13:19:53.306 | As your blow lands with a crunch, you perceive that you have dealt 13.4% damage to Titonus's head.
+13:19:53.306 | Horror overcomes the face of Titonus as his body locks in paralysis.
+13:19:53.306 | Turning with the motion, you channel the momentum of your previous strike into a thrust at the solar plexus of Titonus with a twisted oaken staff.
+13:19:53.306 | As your blow lands with a crunch, you perceive that you have dealt 13.4% damage to Titonus's torso.
+13:19:53.307 +tar asthma
+13:19:53.307 | The breath of Titonus leaves him in an explosive gasp as the end of the staff smashes home.
+13:19:53.307 | You drive your foot up in a rising kick at the head of Titonus.
+13:19:53.307 -tar shield
+13:19:53.307 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Titonus's head.
+13:19:53.307 | Your foot catches Titonus under the chin, snapping his head back.
+13:19:53.307 | Balance used: 2.1s.
+13:19:53.307 | You are now maintaining a kata chain of 6 actions.
+13:19:53.308 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:53.353 | You are not the member of any party.
+13:19:53.353 P H: Full, M: High, E: Full, W: High cekdb-
+13:19:54.461 -tar anorexia
+13:19:54.461 | Titonus eats an aurum flake.
+13:19:54.462 P H: Full, M: High, E: Full, W: Full cekdb-
+13:19:55.431 | You have recovered balance on your legs.
+13:19:55.432 | You have recovered balance on your right arm.
+13:19:55.432 | You have recovered balance on your left arm.
+13:19:55.433 P H: Full, M: High, E: Full, W: High cexkdb-
+13:19:56.056 -tar anorexia
+13:19:56.056 -tar slickness
+13:19:56.056 | Titonus eats a magnesium chip.
+13:19:56.057 P H: Full, M: High, E: Full, W: High cexkdb-
+13:19:57.381 -tar anorexia
+13:19:57.381 | Titonus takes a drink from a ruby vial.
+13:19:57.382 P H: Full, M: High, E: Full, W: High cexkdb-
+13:19:57.585 -tar anorexia
+13:19:57.585 | Titonus eats a ferrum flake.
+13:19:57.586 P H: Full, M: High, E: Full, W: Full cexkdb-
+13:20:12.907 | You can no longer maintain your deadly kata.
+13:20:12.908 P H: Full, M: High, E: Full, W: High cexkdb-
+# stopped: nothing naming Titonus for 60 s | 529 rows | 84.0 s

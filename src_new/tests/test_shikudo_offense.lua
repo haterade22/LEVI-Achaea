@@ -48,13 +48,14 @@ describe("the lock offense's Telepathy (007)", function()
     expect(pick(true, { asthma = true, anorexia = true, slickness = true, impatience = true }))
       .toBe("mind paralyse Agathon")
     expect(pick(true, {})).toBeNil()
-    expect(pick(true, {}, "Rain")).toBe("mind impatience Agathon")
+    expect(pick(true, {}, "Rain")).toBe("mind batter Agathon")
     expect(pick(true, { paralysis = true })).toBeNil()
     -- The `free` queue waits for equilibrium whatever the round is (HELP 4.6.1).
     expect(pick(false, soft)).toBe("mind impatience Agathon")
   end)
 
-  it("never sends the old bare words, and never MIND BATTER", function()
+  -- The user, 2026-11-02: batter sticks something and spends her tree and herb balance.
+  it("never sends the old bare words; MIND BATTER only in Rain, and only under two afflictions", function()
     local pool = { "asthma", "anorexia", "slickness", "impatience", "paralysis", "disrupted" }
     for _, form in ipairs({ "Rain", "Oak", "Willow" }) do
       for mask = 0, 2 ^ #pool - 1 do
@@ -66,7 +67,10 @@ describe("the lock offense's Telepathy (007)", function()
         if c then
           expect(c:find("^mind ") ~= nil).toBeTrue()
           expect(c:find("mindlock", 1, true)).toBeNil()
-          expect(c:find("batter", 1, true)).toBeNil()
+          if c:find("batter", 1, true) then
+            expect(form).toBe("Rain")
+            expect(shikudo.stuckCount(affs) < 2).toBeTrue()
+          end
         end
       end
     end
@@ -318,28 +322,48 @@ describe("Telepathy: impatience before anorexia, paralyse to close it, filler in
     return shikudoLock.selectTelepathy()
   end
 
-  it("impatience is critical as soon as the lock is forming, so FOCUS cannot cure the anorexia", function()
-    local cmd, critical = pick(set("asthma"), "Oak")
+  -- The user, 2026-11-02: "using impatience without having other afflictions stuck isn't ideal."
+  it("impatience is critical once two afflictions are on, so FOCUS cannot cure the anorexia", function()
+    expect(pick(set("asthma"), "Oak")).toBeNil()
+    local cmd, critical = pick(set("asthma", "slickness"), "Oak")
     expect(cmd).toBe("mind impatience Agathon")
     expect(critical).toBeTrue()
+    -- Batter's own afflictions count toward the two.
+    cmd, critical = pick(set("asthma", "stupidity"), "Oak")
+    expect(cmd).toBe("mind impatience Agathon")
+    expect(critical).toBeTrue()
+    -- Two on, but no softlock piece and not in Rain: no reason to send it yet.
+    expect(pick(set("stupidity", "dizziness"), "Oak")).toBeNil()
+    -- Prone goes every Rain round and STAND clears it, so it does not count.
+    expect(pick(set("asthma", "prone"), "Oak")).toBeNil()
     cmd, critical = pick(set("asthma", "anorexia", "slickness", "impatience"), "Willow")
     expect(cmd).toBe("mind paralyse Agathon")
     expect(critical).toBeTrue()
   end)
 
-  it("the Rain filler is impatience, then paralyse, then disrupt, and is not critical", function()
+  it("the Rain filler is batter under two afflictions, then impatience, paralyse, disrupt, not critical", function()
     local cmd, critical = pick({}, "Rain")
+    expect(cmd).toBe("mind batter Agathon")
+    expect(critical).toBeFalse()
+    expect(pick(set("stupidity"), "Rain")).toBe("mind batter Agathon")
+    cmd, critical = pick(set("stupidity", "dizziness"), "Rain")
     expect(cmd).toBe("mind impatience Agathon")
     expect(critical).toBeFalse()
-    expect(pick(set("impatience"), "Rain")).toBe("mind paralyse Agathon")
-    expect(pick(set("impatience", "paralysis"), "Rain")).toBe("mind disrupt Agathon")
-    expect(pick(set("impatience", "paralysis", "disrupted"), "Rain")).toBeNil()
+    expect(pick(set("stupidity", "dizziness", "impatience"), "Rain")).toBe("mind paralyse Agathon")
+    expect(pick(set("stupidity", "dizziness", "impatience", "paralysis"), "Rain")).toBe("mind disrupt Agathon")
+    expect(pick(set("stupidity", "dizziness", "impatience", "paralysis", "disrupted"), "Rain")).toBeNil()
+  end)
+
+  it("with mana at its floor there is no batter, and still no impatience on a clean target", function()
+    ataxia.vitals = { eq = true, form = "Rain", mp = 1000, maxmp = 3000 }
+    tAffs = {}
+    expect(shikudoLock.selectTelepathy()).toBe("mind paralyse Agathon")
   end)
 
   it("an Apostate gets no filler paralyse, but still the one that closes the lock", function()
     targetClass = "Apostate"
     local ok, err = pcall(function()
-      expect(pick(set("impatience"), "Rain")).toBe("mind disrupt Agathon")
+      expect(pick(set("stupidity", "dizziness", "impatience"), "Rain")).toBe("mind disrupt Agathon")
       expect(pick(set("asthma", "anorexia", "slickness", "impatience"), "Rain")).toBe("mind paralyse Agathon")
     end)
     targetClass = "Unknown"
@@ -502,7 +526,7 @@ describe("Telepathy is its own round; impatience before anorexia (007)", functio
   it("the Rain filler goes out only after a combo", function()
     fight("Rain", 3, {})
     expect(round()).toContain("combo Agathon frontkick left")
-    expect(round()).toBe("queue addclear free mind impatience Agathon;assess Agathon")
+    expect(round()).toBe("queue addclear free mind batter Agathon;assess Agathon")
     expect(round()).toContain("combo Agathon")
   end)
 
@@ -535,7 +559,7 @@ describe("Telepathy is its own round; impatience before anorexia (007)", functio
     shikudoLock.config.chainTelepathy = true
     local ok, err = pcall(function()
       expect(dispatchLine()).toBe("queue addclear free wield staff;combo Agathon frontkick left kuro left ruku left;"
-        .. "mind impatience Agathon;assess Agathon")
+        .. "mind batter Agathon;assess Agathon")
     end)
     shikudoLock.config.chainTelepathy = false
     if not ok then error(err, 0) end
@@ -592,7 +616,7 @@ describe("the round history moves when the game RUNS a round, not when sr is pre
     fight("Rain", 3, {})
     expect(round()).toContain("combo Agathon")
     local filler = dispatchLine()
-    expect(filler).toBe("queue addclear free mind impatience Agathon;assess Agathon")
+    expect(filler).toBe("queue addclear free mind batter Agathon;assess Agathon")
     expect(dispatchLine()).toBe(filler)
     expect(dispatchLine()).toBe(filler)
     expect(ran(filler)).toBeTrue()
@@ -633,7 +657,7 @@ describe("the round history moves when the game RUNS a round, not when sr is pre
         fight("Rain", 3, {})
         round(width)
         local filler = dispatchLine()
-        expect(filler).toBe("queue addclear free g body;g gold;stand;mind impatience Agathon;assess Agathon")
+        expect(filler).toBe("queue addclear free g body;g gold;stand;mind batter Agathon;assess Agathon")
         expect(ran(filler, width)).toBeTrue()
         expect(shikudoLock.state.lastRound).toBe("mind")
         local combo = dispatchLine()

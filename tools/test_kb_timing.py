@@ -650,6 +650,54 @@ class Scoreboard(unittest.TestCase):
         p = self.parts(rows)[0]
         self.assertEqual((p["superseded"], p["fired"]), (0, 1))
 
+    def alias_part(self, rows):
+        """Score rows in the recorder's own format, as one alias part."""
+        head = HEADER.replace("rounds raw", "rounds alias")
+        return kb.score_log(kb.parse_rows("2026-11-02_131934_Titonus.log", [head] + rows))[-1]
+
+    def test_a_round_that_runs_as_it_is_added_never_waited_so_nothing_replaced_it(self):
+        # `sr;zz` with balance up: sr's round runs at once, and zz's rewrite arrives after it.
+        p = self.alias_part([
+            "13:19:39.153 > setalias lvfree combo Titonus frontkick right ruku right kuro right",
+            "13:19:39.153 > queue addclear free lvfree",
+            "13:19:39.153 > setalias lvfree combo Titonus frontkick right kuro right kuro left",
+            "13:19:39.153 > queue addclear free lvfree",
+            '13:19:39.211 | Alias "lvfree" will now execute: "combo Titonus frontkick right ruku right kuro right"',
+            "13:19:39.301 | [System]: Queued free commands cleared.",
+            "13:19:39.301 | [System]: Added LVFREE to your free queue.",
+            "13:19:39.302 | [System]: Running queued free command: LVFREE",
+            "13:19:39.310 P H: Full, M: High, E: Full, W: Full ekdb-",
+        ])
+        self.assertEqual((p["superseded"], p["fired"]), (0, 1))
+
+    def test_a_recordings_first_round_has_nothing_to_compare_with(self):
+        # The setalias went out before the recording began, so only its echo shows.
+        p = self.alias_part([
+            "13:19:34.606 > queue addclear free lvfree",
+            '13:19:34.655 | Alias "lvfree" will now execute: "mind impatience Titonus"',
+            "13:19:34.744 | [System]: Added LVFREE to your free queue.",
+            "13:19:35.001 P H: Full, M: High, E: Full, W: Full ekdb-",
+            "13:19:36.000 | You have recovered equilibrium.",
+            "13:19:36.001 | [System]: Running queued free command: LVFREE",
+            "13:19:36.010 P H: Full, M: High, E: Full, W: Full kdb-",
+        ])
+        self.assertEqual((p["superseded"], p["fired"]), (0, 1))
+
+    def test_a_round_that_waited_and_then_fired_old_text_still_counts(self):
+        p = self.alias_part([
+            "13:19:40.000 > setalias lvfree combo Titonus frontkick right ruku right kuro right",
+            "13:19:40.000 > queue addclear free lvfree",
+            '13:19:40.050 | Alias "lvfree" will now execute: "combo Titonus frontkick right ruku right kuro right"',
+            "13:19:40.060 | [System]: Added LVFREE to your free queue.",
+            "13:19:40.070 P H: Full, M: High, E: Full, W: Full kdb-",
+            "13:19:41.000 > setalias lvfree mind impatience Titonus",
+            "13:19:41.000 > queue addclear free lvfree",
+            "13:19:41.010 | You have recovered balance on all limbs.",
+            "13:19:41.011 | [System]: Running queued free command: LVFREE",
+            "13:19:41.020 P H: Full, M: High, E: Full, W: Full kdb-",
+        ])
+        self.assertEqual((p["superseded"], p["fired"]), (1, 1))
+
     def test_a_rewrite_that_lost_the_race_is_superseded_on_the_alias_path(self):
         # The shape of 3ys7NuHA rows 2666-2677: the rewrite was sent, no echo came, and the old text fired.
         rows = [HEADER, "15:00:00.000 > setalias lvfree stand/combo Sadey right", "15:00:00.000 > queue addclear free lvfree",

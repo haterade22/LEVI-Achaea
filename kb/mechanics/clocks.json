@@ -3620,27 +3620,30 @@
     },
     {
      "filed": [
-      "2026-10-27"
+      "2026-10-27",
+      "2026-11-02"
      ],
      "logger": "Ours, recorder (Monk)",
      "logs": {
-      "ours/112717_Tabethys": 3
+      "ours/112717_Tabethys": 3,
+      "ours/122916_Antoninus": 1
      },
      "method": "line",
      "stats": {
       "max": 14.012,
-      "median": 13.959,
+      "median": 13.983,
       "min": 13.901,
-      "n": 3,
-      "p10": 13.913,
-      "p90": 14.001,
-      "spread": 0.089
+      "n": 4,
+      "p10": 13.918,
+      "p90": 14.011,
+      "spread": 0.092
      },
      "usable": false,
      "versions": [
-      "4.7.450"
+      "4.7.450",
+      "4.7.470"
      ],
-     "why_not": "n=3 is under 10"
+     "why_not": "n=4 is under 10"
     },
     {
      "filed": [
@@ -3692,25 +3695,25 @@
     }
    ],
    "methods": {
-    "line": 12,
+    "line": 13,
     "printed": 179
    },
    "spread_without": {
     "Claes": 0.163,
-    "Earth Lord (unnamed)": 0.166,
-    "Elmer": 0.173,
-    "Leviticus": 0.16,
-    "Mystor": 0.195,
+    "Earth Lord (unnamed)": 0.165,
+    "Elmer": 0.172,
+    "Leviticus": 0.159,
+    "Mystor": 0.193,
     "Nikita": 0.143,
-    "Ours, recorder (Infernal)": 0.166,
+    "Ours, recorder (Infernal)": 0.165,
     "Ours, recorder (Monk)": 0.167,
-    "Shikudo attacker (unnamed)": 0.167
+    "Shikudo attacker (unnamed)": 0.166
    },
    "stats": {
     "max": 14.214,
-    "median": 13.957,
+    "median": 13.958,
     "min": 13.321,
-    "n": 191,
+    "n": 192,
     "p10": 13.885,
     "p90": 14.05,
     "spread": 0.165
@@ -3767,8 +3770,8 @@
   "ours": {
    "fixed": 0,
    "held": 0,
-   "logs": 4,
-   "prompts": 7655,
+   "logs": 6,
+   "prompts": 8396,
    "wrapped": 0
   },
   "sentinel": {
@@ -3780,7 +3783,7 @@
   }
  },
  "generated_by": "tools/kb_timing.py",
- "latest_filed": "2026-11-01",
+ "latest_filed": "2026-11-02",
  "logs": [
   {
    "family": "sentinel",
@@ -4270,6 +4273,34 @@
    "prompts": 324,
    "unstamped_prompts": 0,
    "version": "4.7.462",
+   "wrapped": 0
+  },
+  {
+   "family": "ours",
+   "file": "2026-11-02_122916_Antoninus.log",
+   "filed": "2026-11-02",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "ours/122916_Antoninus",
+   "in_pools": true,
+   "logger": "Ours, recorder (Monk)",
+   "prompts": 657,
+   "unstamped_prompts": 0,
+   "version": "4.7.470",
+   "wrapped": 0
+  },
+  {
+   "family": "ours",
+   "file": "2026-11-02_131934_Titonus.log",
+   "filed": "2026-11-02",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "ours/131934_Titonus",
+   "in_pools": true,
+   "logger": "Ours, recorder (Monk)",
+   "prompts": 84,
+   "unstamped_prompts": 0,
+   "version": "4.7.470",
    "wrapped": 0
   }
  ],
@@ -5491,6 +5522,28 @@
        "p90": 3.4,
        "spread": 0.0
       }
+     },
+     {
+      "filed": [
+       "2026-11-02"
+      ],
+      "logger": "Ours, recorder (Monk)",
+      "logs": {
+       "ours/122916_Antoninus": 1
+      },
+      "printed": {
+       "2.89": 1
+      },
+      "ratio": null,
+      "stats": {
+       "max": 2.89,
+       "median": 2.89,
+       "min": 2.89,
+       "n": 1,
+       "p10": 2.89,
+       "p90": 2.89,
+       "spread": 0.0
+      }
      }
     ],
     "channel": "equilibrium",
@@ -5739,6 +5792,6 @@
    }
   ],
   "own_ambiguous_packets": {},
-  "own_printed_rows": 1074
+  "own_printed_rows": 1142
  }
 }

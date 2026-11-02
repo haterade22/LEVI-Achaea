@@ -25,12 +25,15 @@ A log splits at its first sent `setalias lv...` row, because `aconfig rounds ali
 | ours/112717_Tabethys | raw | Monk | 4.7.450 | 230.0 | 22.21 | 294 | 6 of 39 | 15.8% | 0 | 0 | 5 | 21.6 |
 | ours/135412_Tabethys | raw | Infernal | 4.7.450 | 1108.9 | 12.72 | 271 | 2 of 29 | 33.3% | 0 | 0 | 4 | 29.0 |
 | ours/073547_Tabethys | raw | Runewarden | 4.7.462 | 519.8 | 0.17 | 4 | 0 of 6 | 0.0% | 0 | 0 | - | 11.7 |
+| ours/122916_Antoninus | raw | Monk | 4.7.470 | 2298.7 | 0.77 | 23 | 5 of 6 | 16.7% | 0 | 0 | 0 | 20.1 |
+| ours/122916_Antoninus | alias | Monk | 4.7.470 | 602.5 | 0.03 | 1 | 25 of 25 | 3.8% | 0 | 0 | 0 | 23.7 |
+| ours/131934_Titonus | alias | Monk | 4.7.470 | 38.3 | 0.00 | 0 | 9 of 9 | 0.0% | 1 | 0 | - | 22.8 |
 
 ## How each number is counted
 
 - **Refusals per recovery.** `You must regain balance|equilibrium first` rows, over recoveries. A Monk combo prints three limb lines and no `all limbs`, and those count as one recovery.
 - **Setup before spender.** A flush is the run lines before one prompt. On a raw round: did the queue entry, the first piece of the press, run ahead of the attack? On an alias round: is every setup piece of the text ahead of the spender, with none of them auto-queued in that flush? `assess` is not setup. An alias part judges only its alias rounds. A raw attack there (held by the auto-queue across the toggle, or a one-piece finisher, which the shim leaves raw) is listed in a note and does not count toward the bar.
-- **Superseded.** A `Running queued` attack that differs from the newest attack we had sent. On the alias path the fired text is the last one the game echoed, so a rewrite that lost the race counts here. All the spenders in the text are compared, so a rewrite of only the rider in `srd` counts too.
+- **Superseded.** A `Running queued` attack that differs from the newest attack we had sent. On the alias path the fired text is the last one the game echoed, so a rewrite that lost the race counts here. All the spenders in the text are compared. An entry that ran the moment it was added never waited, so it does not count, nor does a recording's first round, whose send came before the recording.
 - **Echoed rewrites whose new text fired.** The alias text changed while an entry waited, and the run line fired. The words only the new text holds, or only the old, are looked for in the first-person rows of that flush. `not shown` means those rows could not tell the two apart, and it is not a pass.
 - **Alias complaints.** Any line that names an alias or a round alias and is not one of its normal replies. No log shows the wording of a refused `setalias`, so this is a catch-all.
 - **Wrong target.** A fired attack that names someone other than the last `st` or `settarget` we sent. The target carries from the raw part into the alias part. An attack with no target known is not compared, and a part with none compared prints `-` and no verdict.
@@ -107,3 +110,59 @@ Runewarden, v4.7.462, 2026-10-28. Rows 0-1218, 519.8 s.
 | Rounds per minute in attack bursts | 11.7 (12 recoveries, 61.6 s active) | - | - |
 
 - Setup rows: 7, 16, 26, 39, 48, 56.
+
+### 2026-11-02_122916_Antoninus.log, raw rounds
+
+Monk, v4.7.470, 2026-11-02. Rows 0-1947, 2298.7 s.
+
+| Measure | Value | Bar | Verdict |
+|---|---|---|---|
+| Refusals per recovery | 0.77 (24 / 31) | <= 0.1 per recovery | - |
+| `was added to your` rows | 23 | <= 2 | - |
+| Setup before spender, per flush | 5 of 6 | every round | - |
+| Superseded attacks that ran | 16.7% (1 / 6) | <= 5% | - |
+| Echoed rewrites whose new text fired | 0 new, 0 old, 0 not shown (0 sent, 0 echoed) | >= 5 fire new text | - |
+| Alias complaints | 0 | none | - |
+| Attacks naming a target other than the last set | 0 of 4 checked | none | - |
+| Rounds per minute in attack bursts | 20.1 (29 recoveries, 86.5 s active) | - | - |
+
+- Setup rows: 274.
+- Superseded rows: 274.
+
+### 2026-11-02_122916_Antoninus.log, alias rounds
+
+Monk, v4.7.470, 2026-11-02. Rows 1948-3386, 602.5 s.
+
+| Measure | Value | Bar | Verdict |
+|---|---|---|---|
+| Refusals per recovery | 0.03 (1 / 30) | <= 0.1 per recovery | PASS |
+| `was added to your` rows | 1 | <= 2 | PASS |
+| Setup before spender, per flush | 25 of 25 | every round | PASS |
+| Superseded attacks that ran | 3.8% (1 / 26) | <= 5% | PASS |
+| Echoed rewrites whose new text fired | 0 new, 0 old, 0 not shown (22 sent, 22 echoed) | >= 5 fire new text | FAIL |
+| Alias complaints | 0 | none | PASS |
+| Attacks naming a target other than the last set | 0 of 26 checked | none | PASS |
+| Rounds per minute in attack bursts | 23.7 (28 recoveries, 70.9 s active) | - | - |
+
+- The run line reads `Running queued <type> command: LVFREE`, the form we expected but have not proved (plan, step 3 question 1). Check these rows by eye before trusting the alias numbers. 25 rows here; the first: `[System]: Running queued free command: LVFREE`.
+- 1 queue lines in this part did not name an alias. The shim passes some through on purpose, and `aconfig rounds raw` looks the same.
+- Raw attack rows in this alias part, which do not count toward the setup bar: 2714.
+- Superseded rows: 2714.
+
+### 2026-11-02_131934_Titonus.log, alias rounds
+
+Monk, v4.7.470, 2026-11-02. Rows 0-532, 38.3 s.
+
+| Measure | Value | Bar | Verdict |
+|---|---|---|---|
+| Refusals per recovery | 0.00 (0 / 9) | <= 0.1 per recovery | PASS |
+| `was added to your` rows | 0 | <= 2 | PASS |
+| Setup before spender, per flush | 9 of 9 | every round | PASS |
+| Superseded attacks that ran | 0.0% (0 / 9) | <= 5% | PASS |
+| Echoed rewrites whose new text fired | 1 new, 0 old, 0 not shown (9 sent, 10 echoed) | >= 5 fire new text | FAIL |
+| Alias complaints | 0 | none | PASS |
+| Attacks naming a target other than the last set | not measured: no `st` or `settarget` known when an attack ran | none | - |
+| Rounds per minute in attack bursts | 22.8 (9 recoveries, 23.7 s active) | - | - |
+
+- The run line reads `Running queued <type> command: LVFREE`, the form we expected but have not proved (plan, step 3 question 1). Check these rows by eye before trusting the alias numbers. 9 rows here; the first: `[System]: Running queued free command: LVFREE`.
+- Rewrite rows: 230.

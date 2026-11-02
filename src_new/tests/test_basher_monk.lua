@@ -680,11 +680,26 @@ describe("ataxiaBasher_monkBashing2 -- MIND CRUSH for an int monk", function()
     expect(has(cmd, "adopt")).toBeFalse()
   end)
 
-  it("Shikudo outside Rain adopts Rain first, then mind crush", function()
+  -- The user, 2026-11-02: "adopt rain form, then when we get balance back mind crush". ADOPT spends
+  -- balance, so a crush in the same round would be refused and held in the balance queue.
+  it("Shikudo outside Rain adopts Rain alone, and the next round is mind crush", function()
     intReset(); ataxia.vitals.form = "Oak"
     local cmd = ataxiaBasher_monkBashing2()
-    expect(has(cmd, "adopt rain form;mind crush " .. target)).toBeTrue()
+    expect(has(cmd, "adopt rain form")).toBeTrue()
+    expect(has(cmd, "mind crush")).toBeFalse()
     expect(has(cmd, "combo")).toBeFalse()
+    ataxia.vitals.form = "Rain"
+    cmd = ataxiaBasher_monkBashing2()
+    expect(has(cmd, "adopt")).toBeFalse()
+    expect(has(cmd, "mind crush " .. target)).toBeTrue()
+  end)
+
+  it("Shikudo outside Rain under the mana floor does not adopt: the balance combo swings", function()
+    intReset(); ataxia.vitals.form = "Oak"
+    ataxia.vitals.mp, ataxia.vitals.maxmp = 100, 3000
+    local cmd = ataxiaBasher_monkBashing2()
+    expect(has(cmd, "adopt")).toBeFalse()
+    expect(has(cmd, "mind crush")).toBeFalse()
   end)
 
   it("Tekura: drs outside Dragon stance, then mind crush; no unarmed combo", function()

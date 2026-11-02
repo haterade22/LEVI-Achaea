@@ -887,15 +887,15 @@ describe("a real Shikudo round goes through it", function()
     expect(shikudoLock.state.pending ~= nil).toBeTrue()
   end)
 
-  it("013 (srd) in Rain: the combo, then its rider. The shim does not reorder them", function()
+  it("013 (srd) in Rain: MIND CRUSH is the spender and it comes last, with no combo", function()
     fresh("alias")
     ataxia.vitals = { form = "Rain", kata = 0, eq = true, mpp = 90 }
-    shikudoDmg.state = { side = "left", breathHeld = {} }
+    shikudoDmg.state = { breathHeld = {} }
     shikudoDmg.dispatch()
     expect(sent()[2]).toBe("queue addclear free lvfree")
     local c = chainOf(sent()[1])
-    expect(c[#c - 1]:find("^combo Sadey ") ~= nil).toBeTrue()
-    expect(c[#c]:find("^mind crush ") ~= nil or c[#c]:find("^kai choke ") ~= nil).toBeTrue()
+    expect(c[#c]:find("^mind crush Sadey") ~= nil).toBeTrue()
+    for _, piece in ipairs(c) do expect(piece:find("^combo ")).toBeNil() end
   end)
 
   it("011 (vv): a MIND round goes through, and the run line commits it", function()
@@ -933,7 +933,7 @@ describe("a real Shikudo round goes through it", function()
     noSemicolon(shikudo.dispatchMind)
     fresh("alias")
     ataxia.vitals = { form = "Rain", kata = 0, eq = true, mpp = 90 }
-    shikudoDmg.state = { side = "left", breathHeld = {} }
+    shikudoDmg.state = { breathHeld = {} }
     noSemicolon(shikudoDmg.dispatch)
   end)
 

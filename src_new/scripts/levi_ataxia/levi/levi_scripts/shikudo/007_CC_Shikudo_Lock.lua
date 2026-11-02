@@ -409,19 +409,23 @@ end
 --  * MIND commands, never the bare words sent before v4.7.417, and no lock first: the affliction
 --    MIND abilities need only the target in the room; a lock is for a target outside it and for a
 --    few skills such as Sapience (the user and Mystor, 2026-10-11; players file:16-18).
---  * CRITICAL, as soon as the lock is forming: IMPATIENCE, so FOCUS cannot cure the anorexia hiraku
---    is about to give. Mystor sends it before hiraku (FceAmb0o:5937 in Maelstrom, vNTjvghY:8444 on
---    his way into Willow).
+--  * CRITICAL, once two afflictions are on (shikudo.STUCK_NEEDED, 006) and one of them is a softlock
+--    piece: IMPATIENCE, so FOCUS cannot cure the anorexia hiraku is about to give. Mystor sends it
+--    before hiraku (FceAmb0o:5937 in Maelstrom, vNTjvghY:8444 on his way into Willow). Oak goes to
+--    Willow only with asthma and slickness on, so this still lands before hiraku.
 --  * CRITICAL, with the softlock and impatience on: PARALYSE, the venomlock piece. With anorexia on
 --    it cannot be eaten off, and paralysis blocks the tree.
---  * Rain filler (config.rainTelepathy): impatience, paralyse, disrupt. 58 of Mystor's 79 MIND
---    affliction rounds were in Rain, where equilibrium is quickest (0.72 of the wiki's time against
---    0.85 elsewhere, kb/combat/shikudo.md).
--- MIND BATTER is gone: Mystor sent it once, just before a MIND SCYTHE, never in a lock.
+--  * Rain filler (config.rainTelepathy): BATTER while under two afflictions, because it sticks
+--    something and spends her tree and herb balance. Then impatience, paralyse, disrupt. 58 of
+--    Mystor's 79 MIND affliction rounds were in Rain, where equilibrium is quickest (0.72 of the wiki's
+--    time against 0.85 elsewhere, kb/combat/shikudo.md). Mystor sent batter only once, but the user's
+--    own play outranks that log (2026-11-02).
 function shikudoLock.selectTelepathy(form)
   form = form or formNow()
+  local stuck = shikudo.stuckCount()
+  local enough = stuck >= shikudo.STUCK_NEEDED
 
-  if not has("impatience") and (has("asthma") or has("slickness") or has("anorexia")) then
+  if enough and not has("impatience") and (has("asthma") or has("slickness") or has("anorexia")) then
     return "mind impatience " .. target, true
   end
   if shikudoLock.checkSoftlock() and has("impatience") and not has("paralysis") then
@@ -429,7 +433,10 @@ function shikudoLock.selectTelepathy(form)
   end
 
   if shikudoLock.config.rainTelepathy and form == "Rain" then
-    if not has("impatience") then
+    if not enough and shikudo.canBatter() then
+      return "mind batter " .. target, false
+    end
+    if enough and not has("impatience") then
       return "mind impatience " .. target, false
     end
     if not has("paralysis") and not classSkips("paralyse") then

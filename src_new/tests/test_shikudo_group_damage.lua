@@ -61,7 +61,7 @@ local function setup(form, affs, opts)
   tAffs = affs or {}
   haveAff = function(a) return tAffs[a] and true or false end
   combatQueue, reboundHold, tCity = nil, nil, nil
-  shikudoDmg.state = { side = "left", breathHeld = {} }
+  shikudoDmg.state = { breathHeld = {} }
   shikudoEcho.rec = nil
   shikudoLedger.cur = nil
   lb = { Sadey = { hits = { head = opts.head or 0, torso = 0, ["left arm"] = 0, ["right arm"] = 0,
@@ -253,42 +253,73 @@ end)
 describe("the group damage route (shikudo/013)", function()
   local function round() return sent[#sent] end
 
-  it("Oak: the torso combo, no EQ rider", function()
-    setup("Oak", {}, { kata = 3 })
+  -- The user, 2026-11-02: "It should do mind crush in rain when doing srd for damage. If we cannot
+  -- mind crush then kai choke. No combos in srd as, once again it is for damage."
+  it("Rain: MIND CRUSH alone, with no combo and no staff to wield", function()
+    setup("Rain", {}, { kata = 3 })
     shikudoDmg.dispatch()
-    expect(round()).toBe("queue addclear free wield staff489282;combo Sadey risingkick torso livestrike ruku torso")
+    expect(round()).toBe("queue addclear free mind crush Sadey")
   end)
 
-  it("Rain: KAI CHOKE rides the combo when kai affords it", function()
+  it("Rain: MIND CRUSH comes first even when kai could pay for a choke", function()
     setup("Rain", {}, { kata = 3 })
     ataxiaTemp.kaiAt = now
     ataxia.vitals.kai = 40
     shikudoDmg.dispatch()
-    expect(round()).toBe("queue addclear free wield staff489282;combo Sadey frontkick left kuro left ruku torso;kai choke Sadey")
+    expect(round()).toBe("queue addclear free mind crush Sadey")
   end)
 
-  it("Rain: MIND CRUSH when kai is short or unknown", function()
+  it("Rain: KAI CHOKE when the crush would take mana below the floor", function()
     setup("Rain", {}, { kata = 3 })
+    ataxiaTemp.kaiAt = now
+    ataxia.vitals.kai = 40
+    ataxia.vitals.mp, ataxia.vitals.maxmp = 1000, 3000 -- the floor is 30% of 3000
     shikudoDmg.dispatch()
-    expect(round():find(";mind crush Sadey$") ~= nil).toBeTrue()
+    expect(round()).toBe("queue addclear free kai choke Sadey")
+  end)
+
+  it("the mana floor is the sipping setting, and exactly the floor still crushes", function()
+    setup("Rain", {}, { kata = 3 })
+    ataxia.vitals.mp, ataxia.vitals.maxmp = 1050, 3000
+    expect(shikudoDmg.canCrush()).toBeTrue()
+    ataxia.vitals.mp = 1049
+    expect(shikudoDmg.canCrush()).toBeFalse()
+    ataxia.settings.sipping = { manause = 10 }
+    expect(shikudoDmg.canCrush()).toBeTrue()
+  end)
+
+  it("an unknown mana does not block the crush", function()
+    setup("Rain", {}, { kata = 3 })
+    ataxia.vitals.mp, ataxia.vitals.maxmp = nil, nil
+    expect(shikudoDmg.canCrush()).toBeTrue()
+  end)
+
+  it("Rain: neither one payable sends nothing, and one line says why", function()
+    setup("Rain", {}, { kata = 3 })
+    ataxia.vitals.mp, ataxia.vitals.maxmp = 100, 3000
     ataxiaTemp.kaiAt = now
     ataxia.vitals.kai = 5
     shikudoDmg.dispatch()
-    expect(round():find(";mind crush Sadey$") ~= nil).toBeTrue()
+    shikudoDmg.dispatch()
+    expect(#sent).toBe(0)
+    local n = 0
+    for _, p in ipairs(printed) do if p:find("No attack", 1, true) then n = n + 1 end end
+    expect(n).toBe(1)
   end)
 
-  it("Rain: a choke that did not land means MIND CRUSH for a while", function()
+  it("a choke that did not land means no choke for a while", function()
     setup("Rain", {}, { kata = 3 })
     ataxiaTemp.kaiAt = now
     ataxia.vitals.kai = 40
+    ataxia.vitals.mp, ataxia.vitals.maxmp = 100, 3000
     shikudoDmg.chokeCast("Sadey")
     timers[#timers]() -- no landing line came
     shikudoDmg.dispatch()
-    expect(round():find(";mind crush Sadey$") ~= nil).toBeTrue()
+    expect(#sent).toBe(0)
     now = now + 11
     ataxiaTemp.kaiAt = now
     shikudoDmg.dispatch()
-    expect(round():find(";kai choke Sadey$") ~= nil).toBeTrue()
+    expect(round()).toBe("queue addclear free kai choke Sadey")
   end)
 
   it("a choke that landed (063) keeps the choke", function()
@@ -299,39 +330,24 @@ describe("the group damage route (shikudo/013)", function()
     expect(shikudoDmg.breathHeld("Sadey")).toBeFalse()
   end)
 
-  it("the sides alternate each combo", function()
-    setup("Rain", {}, { kata = 3 })
-    shikudoDmg.dispatch()
-    expect(round():find("frontkick left kuro left", 1, true) ~= nil).toBeTrue()
-    shikudoDmg.dispatch()
-    expect(round():find("frontkick right kuro right", 1, true) ~= nil).toBeTrue()
+  it("out of Rain: adopt Rain alone, whatever the kata, and no crush in the same round", function()
+    for _, form in ipairs({ "Oak", "Gaital", "Willow", "Tykonos", "Maelstrom" }) do
+      setup(form, {}, { kata = 12 })
+      shikudoDmg.dispatch()
+      expect(round()).toBe("queue addclear free wield staff489282;adopt rain form")
+    end
   end)
 
-  it("the loop: Oak at its cap goes to Gaital, transition first", function()
-    setup("Oak", {}, { kata = 12 })
-    shikudoDmg.dispatch()
-    expect(round()).toBe("queue addclear free wield staff489282;transition to gaital form;combo Sadey sweep spinkick")
+  it("no ordinary round in any form holds a combo", function()
+    for _, form in ipairs({ "Rain", "Oak", "Gaital", "Willow", "Tykonos", "Maelstrom" }) do
+      setup(form, {}, { kata = 15 })
+      shikudoDmg.dispatch()
+      expect(round():find("combo", 1, true)).toBeNil()
+      expect(round():find("transition", 1, true)).toBeNil()
+    end
   end)
 
-  it("Gaital leads to Rain with health unknown, to Maelstrom at 60% or less", function()
-    setup("Gaital", {}, { kata = 12 })
-    expect(shikudoDmg.nextForm("Gaital", 12)).toBe("Rain")
-    ataxiaTemp.lastAssessAt, ataxiaTemp.lastAssessWho = now, "Sadey"
-    ataxiaTemp.lastAssessHp, ataxiaTemp.lastAssessMax = 3000, 6000
-    expect(shikudoDmg.nextForm("Gaital", 12)).toBe("Maelstrom")
-    expect(shikudoDmg.nextForm("Rain", 15)).toBe("Oak")
-    expect(shikudoDmg.nextForm("Maelstrom", 12)).toBe("Oak")
-    expect(shikudoDmg.nextForm("Willow", 5)).toBe("Rain")
-    expect(shikudoDmg.nextForm("Tykonos", 4)).toBeNil()
-  end)
-
-  it("Gaital on a prone target: needle and spinkick to the head", function()
-    setup("Gaital", { prone = true }, { kata = 3 })
-    shikudoDmg.dispatch()
-    expect(round()).toBe("queue addclear free wield staff489282;combo Sadey needle spinkick ruku torso")
-  end)
-
-  it("Maelstrom: CRESCENT alone at half health, prone, and no transition in front of it", function()
+  it("Maelstrom: CRESCENT alone at half health and prone; above half, adopt Rain", function()
     setup("Maelstrom", { prone = true }, { kata = 12 })
     ataxiaTemp.lastAssessAt, ataxiaTemp.lastAssessWho = now, "Sadey"
     ataxiaTemp.lastAssessHp, ataxiaTemp.lastAssessMax = 3000, 6000
@@ -339,7 +355,7 @@ describe("the group damage route (shikudo/013)", function()
     expect(round()).toBe("queue addclear free wield staff489282;combo Sadey crescent")
     ataxiaTemp.lastAssessHp = 3100
     shikudoDmg.dispatch()
-    expect(round()).toBe("queue addclear free wield staff489282;transition to oak form;combo Sadey risingkick torso livestrike ruku torso")
+    expect(round()).toBe("queue addclear free wield staff489282;adopt rain form")
   end)
 
   it("DISPATCH when prone with a damaged head and a crushed throat", function()
@@ -348,10 +364,14 @@ describe("the group damage route (shikudo/013)", function()
     expect(round()).toBe("queue addclear free wield staff489282;dispatch Sadey")
   end)
 
-  it("a shield is shattered first", function()
+  -- The user, 2026-11-02: MIND CRUSH passes a shield, so srd has no shatter and no combo for it.
+  it("a shield changes nothing: the crush still goes", function()
+    setup("Rain", { shield = true })
+    shikudoDmg.dispatch()
+    expect(round()).toBe("queue addclear free mind crush Sadey")
     setup("Oak", { shield = true })
     shikudoDmg.dispatch()
-    expect(round()).toBe("queue addclear free wield staff489282;combo Sadey shatter risingkick torso")
+    expect(round()).toBe("queue addclear free wield staff489282;adopt rain form")
   end)
 
   it("sr is the lock, srd the damage route", function()
@@ -365,7 +385,15 @@ describe("the group damage route (shikudo/013)", function()
     printed = {}
     body(ALIAS .. "shikudo/009_Group_Damage.lua")()
     for _, p in ipairs(printed) do expect(p:find("[LOCK]", 1, true)).toBeNil() end
-    expect(round()).toBe("queue addclear free wield staff489282;combo Sadey risingkick torso livestrike ruku torso")
+    expect(round()).toBe("queue addclear free wield staff489282;adopt rain form")
+  end)
+
+  it("the crush callout is a party line the game understands", function()
+    local f = io.open(TRIG .. "monk/001_Crush.lua", "r")
+    local src = f:read("*a")
+    f:close()
+    expect(src:find('send("pt " ..matches[2]', 1, true) ~= nil).toBeTrue()
+    expect(src:find('send("pt: ', 1, true)).toBeNil()
   end)
 
   it("srd with no Shikudo form sends nothing", function()

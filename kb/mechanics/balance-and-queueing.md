@@ -140,12 +140,29 @@ the alias text. The fight log header ends with `rounds raw|alias`, and a `# alia
 `ataxiaTemp.roundSend`, because a press during a dropped link records text the server never got. `misc_scripts/031` now
 installs a new wrapper on a reload, around Mudlet's own `send`. The old guard kept the old wrapper until a restart.
 
-**Not known yet (the first alias fight answers these):**
-- The run line's wording. We expect `Running queued free command: LVFREE`, from the `Added G BODY` rows. No log shows it,
-  because the probes gag queue lines.
-- Whether a rewrite beats recovery at our send rate. The evidence stops at 9 per second, and our sends peak at 51.
-- What an off-balance spender inside an alias does: refused, or auto-queued. An auto-queued one fires on a later recovery, and
-  ADDCLEAR free does not clear it. That is the superseded attack the plan measures.
+**Answered by the first alias fight (2026-11-02, `fightlogs/2026-11-02_122916_Antoninus.log`, rows 1949-3190, v4.7.470).** The
+target, Titonus, did not fight back: 0 afflictions gained and full health throughout. It tested delivery, not pressure.
+- **The run line:** `[System]: Added LVFREE to your free queue.`, then `[System]: Running queued free command: LVFREE`. CONFIRMED
+  live, 25 flushes. A new press first prints `[System]: Queued free commands cleared.`
+- **`setalias` was never refused:** 22 sent, 22 echoed, 0 complaints. The rate was low, about 1 every 4 s.
+- **`clearqueue free` with nothing queued** prints `[System]: Queued free commands cleared.` (row 3148).
+- **A manual `touch tree`** prints `You touch the tree of life tattoo.` with no `[Curing]` row. Ready 14.07 s later.
+- **An off-balance spender inside an alias is refused and then HELD** (row 2685). A combo spends balance, so the `srd` rider `mind
+  crush` drew `You must regain balance first.` and `mind crush Titonus was added to your balance queue.` It ran 2.06 s later, at the
+  next recovery (row 2715), and spent 2.45 s of equilibrium. `free` needs equilibrium, so the next combo waited: 4.46 s from combo
+  to combo, against about 2.1 s. The balance queue is not cleared by `queue addclear free`, so a held rider can fire after a
+  target switch.
+- **The other order fails too (live test, 2026-11-02).** With both up, `mind crush <t>;combo <t> ...` spent equilibrium, and the combo
+  ran only when equilibrium returned, 2.43 s later. **A Shikudo combo needs equilibrium up, and MIND CRUSH needs balance up**, so a
+  balance attack and an equilibrium attack cannot share a flush in either order. A pair takes about 4.5 s (2.1 + 2.45, in Rain).
+  Evidence: one sample in each order. `vv` already sends mind attacks as separate rounds. The user says KAI CHOKE behaves the same way
+  (`raw/players/kai-choke-2026-11-02.txt`); 2 logged rows show it held for equilibrium. So `srd` no longer chains them.
+
+**Not known yet:**
+- Whether a rewrite beats recovery reliably. **One strict case on our seat so far** (`fightlogs/2026-11-02_131934_Titonus.log`, rows 216-231):
+  `sr;zz` while balance was down queued `mind impatience`, the rewrite arrived 91 ms before recovery, and `zz`'s combo fired. A press
+  with balance UP fires at once, so `sr;zz` then runs `sr` now and `zz` at the next recovery (rows 88-161). That is correct, and the
+  scoreboard counts it as superseded (row 95), as it does a recording's first round (row 8). The bar of 5 needs presses with balance down.
 - Where the alias's entry falls in a flush against commands the auto-queue holds. In 35 multi-entry flushes of
   `ours/2026-10-27_112717`, the queue entry `G BODY` ran first in 9, last in 14. That row is a raw entry, so LVFREE's place is
   inferred, not shown.

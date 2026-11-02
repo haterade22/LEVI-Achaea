@@ -721,14 +721,15 @@ Rain and Oak.
 - **Kai in a group fills fast:** 0 to 51 in about 40 s with five enemies acting (the [LOCK] status
   lines, 279-2433), against one KAI CHOKE sent (1863).
 
-**The group damage route (`shikudo/013`, alias `srd` since v4.7.456; `sr` is the lock):** the forms and attacks
-come from the wiki (Shikudo.wiki: Oak "increased damage", :230; Maelstrom's CRESCENT, :358; Gaital's
-SPINKICK to the head of a prone target, :298) and KAI CHOKE's bonus against a damaged torso or head
-(Kaido.wiki:289). The user's rule for equilibrium: KAI CHOKE or MIND CRUSH in Rain only, combos
-first everywhere else. The full round order is in `.claude/classes/monk.md` and the file's header.
-**UNCONFIRMED:** that `combo <t> crescent` (one attack) is accepted, that a Rain round carrying both
-a combo and KAI CHOKE in one `queue addclear free` entry runs both, and the line a target holding
-its breath prints. A choke with no landing line in 1.2 s is taken as held breath for 10 s.
+**The group damage route (`shikudo/013`, alias `srd`; `sr` is the lock):** since 2026-11-02 it sends MIND CRUSH in Rain, and KAI
+CHOKE if a crush cannot go, with no combos (the user, `kb/raw/players/shikudo-2026-11-02.txt`). Out of Rain it sends `adopt rain form`
+alone. **A combo needs equilibrium up, and MIND CRUSH and KAI CHOKE need balance up, so they cannot share a flush in either
+order** (CONFIRMED live for the crush, player for the choke; `kb/raw/live/probes_2026-11-01.txt`). MIND CRUSH passes a shield (player).
+The full order is in `.claude/classes/monk.md`. **UNCONFIRMED:** that `combo <t> crescent` (one attack) is accepted, and the line a
+target holding its breath prints. A choke with no landing line in 1.2 s is taken as held breath for 10 s.
+
+**Impatience and batter (`sr`, `vv`, 2026-11-02):** impatience goes only with 2 or more afflictions on the target, and batter goes while
+under that, in Rain. Batter sticks something and spends the target's tree and herb balance (player). Not yet tested in a fight.
 
 ## Conflicts and open questions
 

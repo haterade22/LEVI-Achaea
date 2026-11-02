@@ -2,6 +2,34 @@
 
 ---
 
+## 2026-11-02 - v4.7.471: `srd` is mind crush with no combos, impatience waits for something stuck, batter comes back
+
+Live tests on 2026-11-02 found that a Shikudo combo needs equilibrium up, and that MIND CRUSH needs balance up. The user says KAI
+CHOKE needs both too. So a balance attack and an equilibrium attack cannot share a flush, in either order
+(`kb/raw/live/probes_2026-11-01.txt`). None of these changes has run in a fight yet.
+
+- **`srd` has no combos.** User: "It should do mind crush in rain when doing srd for damage. If we cannot mind crush then kai
+  choke. No combos in srd as, once again it is for damage." Out of Rain it sends `adopt rain form` alone, because ADOPT spends balance.
+  "Cannot" means the crush would take mana below the `manause` floor. If neither can go, it sends nothing and says why. The old `combo;
+  rider` round was refused and held in the BALANCE queue, which `queue addclear free` does not clear, so it could fire after a
+  target switch. `dispatch` and a `crescent` already in Maelstrom stay, as kills. MIND CRUSH passes a shield (user), so there is no shatter.
+- **`sr` and `vv` send impatience only with 2 or more afflictions on the target.** User: "using impatience without having other
+  afflictions stuck isn't ideal. Usually a mind batter to stick something and use tree and herb balance is nice." Below 2, in Rain, they
+  send MIND BATTER, within the mana floor. Batter's own afflictions count, and prone does not. WATCH: 500 mana per batter on a
+  target who cures everything. This reverses v4.7.420, which removed batter from `sr` because one log had one.
+- **The int monk basher adopts Rain as its own round.** User: "adopt rain form, then when we get balance back mind crush." Tekura's
+  `drs` still goes in front of the attack, because no test shows what it costs.
+- **The crush callout sent `pt: <name>`,** and the game answered that it does not know `pt:`. It now sends `pt <name>`.
+
+**The first alias fight (v4.7.470, `kb/mechanics/scoreboard.md`).** The target did not fight back, so it tested delivery only. Alias rounds:
+refusals 0.03 per recovery against 0.77 normal, setup first 25 of 25, outdated attack 1 of 26, and the run line reads `Running queued
+free command: LVFREE`, as expected. One strict rewrite fired the new text, against the bar of 5. Alias rounds stay off by default.
+
+**Tools:** the scoreboard no longer counts two false "superseded" shapes: a recording's first round, and a round that ran the moment it
+was added. A real lost race still counts. Two more recordings are filed, and the replay gate result does not change: FAIL.
+
+---
+
 ## 2026-11-01 - v4.7.470: FITNESS waits for equilibrium, known clock bugs, and rounds can go out as one alias
 
 The first code from the timing study (`kb/mechanics/foundations.md`). None of this has run in a fight yet, apart from the
