@@ -1,6 +1,6 @@
 ---
 topic: <kebab-case-topic>
-confidence: <CONFIRMED (live) | CONFIRMED (HELP) | CONFIRMED-in-code | guide | ASSUMED>   # or "mixed (tagged per claim)"
+confidence: <CONFIRMED (live) | CONFIRMED (HELP) | CONFIRMED-in-code | guide | ASSUMED | MEASURED | READ | INFERRED>   # or "mixed (tagged per claim)"
 sources:
   - kb/raw/<folder>/<file>.txt
 code:                       # files that depend on these facts (omit if none)

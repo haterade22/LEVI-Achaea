@@ -40,6 +40,18 @@ jobs:
       - name: Check trigger patterns fit on one wrapped line
         run: python3 tools/check_wrap.py
 
+      - name: Check the clocks page and the scoreboard match the logs
+        run: python3 -B tools/kb_timing.py --check
+
+      - name: Test the log parser and the clocks
+        run: python3 -B tools/test_kb_timing.py
+
+      - name: Check the replay page matches the logs
+        run: python3 -B tools/kb_replay.py --check
+
+      - name: Test the replay of the deaths
+        run: python3 -B tools/test_kb_replay.py
+
       - name: Check version consistency
         run: |
           echo "=== Checking version sync ==="

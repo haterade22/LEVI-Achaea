@@ -53,9 +53,11 @@ Nothing here was run as a live test unless it says so. Every "last exit" below i
    won aurum 4 of 7. With asthma and weariness both up, aurum took asthma 16, weariness 8, clumsiness 3 (n=27).
    MEASURED. The cure's choice inside a herb is unknown.
 7. **Our costs follow the stated cost, times a multiplier for our character.** Error about +-0.15 s. See
-   [Stated against observed](#stated-against-observed). MEASURED.
+   [Stated against observed](#stated-against-observed). MEASURED. This has one known exception, Engage (CONFLICTS #55), and few
+   real tests, because a character with one stated ability fits its multiplier by construction.
 8. **An opponent's stated cost does not predict their next attack. Measure it per ability.** A clock gives the
-   EARLIEST action and never says when. 31-48% of attack gaps fall outside +-0.25 s of the median. MEASURED.
+   EARLIEST action and never says when. Outside +-0.25 s of the median, by the gap rule in [clocks.md](clocks.md): DSTAB 23%,
+   BITE 10%, FLAY 19%, Stare 36% (its `Within 0.25 of median` column holds the current figures). MEASURED.
 9. **Attackers run a rhythm and choose inside it.** Most strikes land in the same packet as the balance line:
    reaps 83 of 115, slices 66 of 133. So predict WHEN from the last line and WHAT from the board. MEASURED.
 10. **Defenders answer the last hit, not the plan, and pre-emption works.** Two defenders salved legs while a parked
@@ -71,6 +73,10 @@ Nothing here was run as a live test unless it says so. Every "last exit" below i
 
 ## Clocks
 
+**The current numbers are in [clocks.md](clocks.md):** GENERATED from every log by `tools/kb_timing.py`, by logger, with n, method, filed date and
+version, and a usable or not verdict. This table is the study's summary. The generated medians agree with it to within 0.1 s, except
+FITNESS: 9.81 on stamps of 0.01 s or better (n=5) and 10 on 1 s stamps (n=5).
+
 Printed timers start at the action line, so latency does not change these lengths on average. Noise is additive:
 p90-p10 is 0.18-0.27 s whether the clock is 1.5 s or 14 s. MEASURED across four players' systems.
 
@@ -84,7 +90,7 @@ p90-p10 is 0.18-0.27 s whether the clock is 1.5 s or 14 s. MEASURED across four 
 | Sip | 4.40 | 281 | Skull fractures add about 1.35 s (n=4 against 2) |
 | Moss, potash | 5.9 | 104 | A clock of its own (CONFLICTS #11) |
 | Tree | 13.95 | 124 | |
-| FITNESS lockout | about 10 | 8 pairs | Earliest 9.06. It keeps running under weariness |
+| FITNESS lockout | about 10 | 10 pairs | 9.06-10 on 10 pairs, unresolved under 0.5 s. It keeps running under weariness |
 | Immunity sip | 7.3-7.7 | 2 | Separate from the health sip |
 | Dagaz rune (passive) | 15.03 | 59 ticks | One rune. `locks.md` says "about 10 s" |
 | Humour | 1.55 | 41 | |
@@ -98,8 +104,9 @@ the opponent's balance.
 
 ## Stated against observed
 
-`kb/classes/abilities.json` holds stated values in a field named `cooldown`, which mostly means balance spent. It has
-1,196 clean rows and real holes: Shikudo 0 of 31, Kaido 13 of 33. It has no recharge lockouts. READ and MEASURED.
+`kb/classes/abilities.json` holds stated values in a field named `cooldown`, which mostly means balance spent. By the rule in
+[clocks.md](clocks.md), 1,237 rows read as one number on one balance: 1,052 plain balance or equilibrium, 145 another named balance, and 40 with
+a symbol, channels or unique suffix. It has real holes: Shikudo 0 of 31, Kaido 13 of 33. It has no recharge lockouts. READ and MEASURED.
 
 The game prints the true cost to the player who spends it: `Balance used: 2.1s.` and `Equilibrium used: 3.40s.` These
 are game text, enabled by `CONFIG SEEBALANCES` (CONFIRMED live, `raw/live/seebalances_2026-11-01.txt`). It was off for us
@@ -115,9 +122,12 @@ the measured time to recovery: median -0.02 s, 89% within +-0.15 s (balance, n=2
 | Shield tattoo (equilibrium) | none listed | 4.00, 3.40, 2.89 | 1, 0.85, 0.72 by character and form |
 | Homunculus attack | 3.00 | 2.55 | 0.85 |
 | Pommelstrike, 1 s stamps | 1.50 | 1.1 | about 0.73 |
+| Engage (Claes) | 2.50 | 2.00, 29 of 29 | 0.80, **not his k** (CONFLICTS #55) |
 
 So **a cost = stated x k**, where k depends on the character, the channel and sometimes the form. Rain form adds
-x0.85 on equilibrium. Weariness, asthma, clumsiness and paralysis did not change a reap's cost. MEASURED.
+x0.85 on equilibrium. Weariness, asthma, clumsiness and paralysis did not change a reap's cost. MEASURED. **Engage is an exception:** Claes prints
+the shield at 4.00 and Concentrate at 2.00, which Elmer's k of 0.85 puts at their base, so Claes's k is 1.00 and Engage should read 2.50. This table
+is a small part of the printed costs: [clocks.md](clocks.md) says how much it covers, and the Shikudo combos are not in it.
 
 | Opponent's ability | Stated | Gap to next attack, median | n |
 |---|---|---|---|
@@ -127,6 +137,9 @@ x0.85 on equilibrium. Weariness, asthma, clumsiness and paralysis did not change
 | Apostate STARE | 1.90 | 2.04 | 129 |
 
 The cause of the Serpent gap is not visible from our seat. A speed effect or a stale wiki value could both explain it.
+[clocks.md](clocks.md) regenerates this table with one written rule for what a gap is, so its n differ from these. It adds p10 and min. **p10 is
+not a floor:** about 10% of gaps come sooner. DSTAB reads p10 1.73 and min 1.54, and that min is a real gap: the prompts on both sides of az:315 and
+az:350 put it at 1.539-1.557 s.
 
 ## Timed effects
 
@@ -175,7 +188,7 @@ Holding offence stays a hypothesis.
 | "Paralysis beats haemophilia inside magnesium" | Haemophilia is a ferrum cure, 20 of 20 |
 | "Both balances up 25-34% of the time is wasted" | Inside attack bursts it is 7-8%. The rest was roaming or chasing |
 | "FITNESS fired 4.59 s late for lack of a hook" | Equilibrium was down until that moment (S:2040, 2097) |
-| "FITNESS lockout 8.7 s" | No pair reproduces it. 9.06-10 on 8 pairs |
+| "FITNESS lockout 8.7 s" | **Not refuted, only unsupported.** 8.7 was not seen as a stamped value, but the S:2105-2328 bracket of 8.49-9.26 s cannot exclude it. The pairs do not fit one fixed lockout: that bracket and T:4616-4929 (9.12-9.65 s) lie under Lc:759-949 (9.86-9.97 s) |
 | "`Balance used` and `[Bal Spent]` are loggers' echoes" | Game text. It prints before recovery, and in the same colour as `Health lost` |
 
 ## Limits
@@ -185,7 +198,14 @@ Holding offence stays a hypothesis.
 - **These are mostly 1v1 logs.** Our own recorded fights are group fights. One death there was 10,400 damage in the last
   5 s with no route (MK:12842). This page does not explain group kills.
 - **No log at all:** Occultist, Jester, Priest, Psion, Druid, Paladin, Sylvan, Unnamable, the dragons, and some lords.
-- **Loggers' boards are beliefs,** and each client adds or gags lines. See [raw/logs/README.md](../raw/logs/README.md).
+- **Loggers' boards are beliefs,** and each client adds or gags lines. See [raw/logs/README.md](../raw/logs/README.md). [replay.md](replay.md)
+  checks them: every client with enough to compare agrees 98.6% or better with the game's gain and cure lines and with its own lock echoes.
+- **The hand-written route rules failed the stricter bars of their offline gate** ([replay.md](replay.md), 2026-11-01): G1 2 where 4 are needed, G2 2
+  attackers where 3 are needed, G3 1 of 2, G4 Air Lord 0.75 against softlock 0.647. If those bars stand, the plan keeps hand-written rules and builds no
+  general evaluator. **The plan's own gate sentence has no UNTESTED, G3 or G4 term. Read alone it gives 6 of 6 from 4 attackers. This FAIL comes from the
+  stricter bars. The user decided on 2026-11-01 that these bars stand, so step 5, the general evaluator, is on hold.** That 6 is generous: it is 5 if the rule must match the kill, and 3 if its chain must
+  still be on within 5 s of death. An alarm at the fight's first hit would also clear it. No Pariah or Blademaster fight exists that its logger survived,
+  so those rules cannot be tested for false alarms. MEASURED, in-sample.
 
 ## Joined to the code
 

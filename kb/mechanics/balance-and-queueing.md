@@ -71,7 +71,8 @@ they are refused. CONFIRMED (live): 615 `Added` and 650 `Running queued` rows ho
 and then four refusals (`ours/2026-10-27_112717_Tabethys.log`:111-125).
 
 **What this costs.** MEASURED, in logs up to v4.7.450:
-- Setup ran before the attack in only 8 of 71 flushes.
+- Setup ran before the attack in only 8 of 71 flushes. ([scoreboard.md](scoreboard.md) counts 8 of 68 on the same two logs: a
+  flush there ends at a prompt, and KAI CHOKE counts as an attack. The study's grouping is not recorded.)
 - The auto-queue stops accepting at about 5 held, so the FIRST press after a flush wins. The attack that fired had been
   added a median 2.19 s earlier (Monk) and 1.52 s earlier (Infernal).
 - A superseded attack fired in 15% (Monk) and 33% (Infernal) of queue-run attacks.
@@ -151,7 +152,9 @@ installs a new wrapper on a reload, around Mudlet's own `send`. The old guard ke
 - A refused `setalias`: we would record text the server never took, and only a login or a changed round would set it again.
 - The reply to `clearqueue free` on an empty queue. Its wording is in no log, and `006_GAG` does not list it, so it may show
   on screen.
-- The pass bars in the plan: refusals per recovery, `was added` rows, setup before spender, superseded attacks.
+- The pass bars in the plan: refusals per recovery, `was added` rows, setup before spender, superseded attacks. After the
+  fight, `python tools/fightlog_import.py --score` prints them beside the numbers, and [scoreboard.md](scoreboard.md) holds
+  every log. It splits a log at its first `setalias lv...` row or queue line naming a round alias, so one recording scores as a raw part and an alias part.
 
 **Still raw on purpose:** `queue add free <chain>`, and MIND BLACKOUT's whole press with the combo it hides (`011`, off by
 default). The plan's shim covers ADDCLEAR only.
