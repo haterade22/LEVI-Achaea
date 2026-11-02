@@ -1135,6 +1135,7 @@ def score_part(rows, mode="raw", carry=None):
     limbs = set()
     window_end, last_own = None, None
     flush, pending = [], []
+    just_added = None     # the entry the previous row added, if nothing was sent since (a rewrite in between is a lost race)
     for row in rows:
         own = row.own if row.own is not None else last_own
         last_own = own
@@ -1150,8 +1151,10 @@ def score_part(rows, mode="raw", carry=None):
                 s["rewrites_" + which_text_fired(new_body, old_body, later["lines"])] += 1
                 s["rewrite_rows"].append(row_n)
             flush, pending = [], []
+            just_added = None
             continue
         if row.kind == "sent":
+            just_added = None
             text = row.text.strip()
             m = SET_TARGET.match(text)
             if m:
@@ -1190,6 +1193,7 @@ def score_part(rows, mode="raw", carry=None):
         text = row.text
         for item in flush:
             item[4]["lines"].append(text)
+        added_before, just_added = just_added, None
         recovered = False
         if REFUSAL.match(text):
             s["refusals"] += 1
@@ -1226,6 +1230,7 @@ def score_part(rows, mode="raw", carry=None):
         m = ADDED_LINE.match(text)
         if m:
             name = m.group(1).strip()
+            just_added = name.lower()
             if ALIAS_NAME.match(name):
                 waiting.setdefault(name.lower(), bodies.get(name.lower()) or sent_bodies.get(name.lower()))
             else:
@@ -1252,7 +1257,12 @@ def score_part(rows, mode="raw", carry=None):
             spenders = [cmd] if SPENDER.match(cmd) else []
         if spenders:
             s["fired"] += 1
-            if spender_key(spenders) not in newest:
+            # Two shapes cannot be superseded. With no spender sent yet, there is nothing to compare: the round's send came
+            # before the recording began. An entry that runs on the row after its `Added` line never waited: balance was up,
+            # so a newer send cannot have replaced it (`sr;zz` with balance up runs `sr` now and `zz` at the next recovery,
+            # ours/2026-11-02_131934_Titonus rows 88-161). A real lost race has a send or other rows between the two.
+            on_arrival = added_before == cmd.lower()
+            if newest and not on_arrival and spender_key(spenders) not in newest:
                 s["superseded"] += 1
                 s["superseded_rows"].append(row.n)
             named = [t for t in (fired_target(piece) for piece in spenders) if t]
@@ -1643,7 +1653,8 @@ def render_scoreboard(logs):
             "which the shim leaves raw) is listed in a note and does not count toward the bar.",
             "- **Superseded.** A `Running queued` attack that differs from the newest attack we had sent. On the alias path "
             "the fired text is the last one the game echoed, so a rewrite that lost the race counts here. All the spenders "
-            "in the text are compared, so a rewrite of only the rider in `srd` counts too.",
+            "in the text are compared. An entry that ran the moment it was added never waited, so it does not count, nor does "
+            "a recording's first round, whose send came before the recording.",
             "- **Echoed rewrites whose new text fired.** The alias text changed while an entry waited, and the run line "
             "fired. The words only the new text holds, or only the old, are looked for in the first-person rows of that "
             "flush. `not shown` means those rows could not tell the two apart, and it is not a pass.",

@@ -1,0 +1,8 @@
+# KAI CHOKE and balance, as relayed by the user (2026-11-02)
+
+Verbatim. Curated in kb/mechanics/balance-and-queueing.md and kb/CONFLICTS.md #56. The wiki lists 4.00 seconds of
+equilibrium only (kb/classes/monk.md).
+
+## The user's words (2026-11-02)
+
+Kai choke behaves the same way, it takes eq/balance and requires eq to be there

@@ -37,6 +37,47 @@ packageName: ''
 -- 8.4%, attacker log :2654, :2664).
 
 shikudo = shikudo or {}
+
+-- WHEN IMPATIENCE IS WORTH SENDING (the user, 2026-11-02): "in regular 1 on 1 combat, using impatience
+-- without having other afflictions stuck isn't ideal. Usually a mind batter to stick something and use
+-- tree and herb balance is nice." Impatience shuts FOCUS, and that only matters once something needs it.
+-- The rule, for `sr` (007) and `vv` (011): under STUCK_NEEDED afflictions, MIND BATTER; at it or above,
+-- impatience may go. Batter's own stupidity, epilepsy and dizziness count, by the user's choice.
+shikudo.STUCK_NEEDED = 2
+
+-- Entries in tAffs that are not something a cure must clear. Prone goes because a Rain frontkick gives
+-- it every round and STAND clears it. Impatience goes because it is the one being decided.
+local NOT_STUCK = {
+  impatience = true, prone = true, shield = true, rebounding = true, curseward = true, blindness = true,
+  deafness = true, mounted = true, bleed = true, impaled = true, snapped = true, crescendo = true,
+  hypnotising = true, hypnoseal = true, hypnotised = true, sanguine = true, phlegmatic = true,
+}
+
+-- How many afflictions the target holds, by our tracker's mirror. A belief, not a fact.
+function shikudo.stuckCount(affs)
+  local n = 0
+  for aff, on in pairs(affs or tAffs or {}) do
+    if on and on ~= 0 and not NOT_STUCK[aff] and not tostring(aff):find("^numbed") then n = n + 1 end
+  end
+  return n
+end
+
+-- After paying `cost` mana, do we still hold the `manause` floor (sipping, default 30%)? Mana is the
+-- curing pool. This is the basher's gate for MIND CRUSH. Unknown mana answers yes.
+function shikudo.manaAllows(cost)
+  local v = ataxia and ataxia.vitals or {}
+  local mp, maxmp = tonumber(v.mp), tonumber(v.maxmp)
+  if not mp or not maxmp then return true end
+  local sipping = ataxia.settings and ataxia.settings.sipping or {}
+  return mp - cost >= maxmp * ((sipping.manause or 30) / 100)
+end
+
+-- MIND BATTER: 500 mana, 4.00 s of equilibrium stated (2.70 s measured in Rain, n=1, kb/combat/shikudo.md).
+-- It gives stupidity, epilepsy and dizziness at once (kb/classes/monk.md).
+local BATTER_MANA = 500
+function shikudo.canBatter()
+  return shikudo.manaAllows(BATTER_MANA)
+end
 shikudo.state = {
   phase = "PREP",  -- PREP, PRONE, KILL
   -- The hyperfocused limb is not kept here: shikudo.hyperLimb() reads ataxiaTemp.hyperLimb (v4.7.420).

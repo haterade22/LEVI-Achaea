@@ -528,7 +528,8 @@ read `mmp.settings.mapsource`). `service` is an experimental live Crowdmap; `cro
     there). **Blackout is critical**: 4 s, they usually tree it off, we give it again, and it hides the
     combo behind it. Since v4.7.420 every MIND command goes out as a round of its own (Mystor: none of
     his 274 combos carried a MIND affliction), with no lock first and no equilibrium gate (the `free`
-    queue waits for it): 007 sends MIND IMPATIENCE as soon as asthma, slickness or anorexia is on and
+    queue waits for it): since 2026-11-02, 007 sends MIND IMPATIENCE only with 2 or more afflictions on the target, MIND BATTER
+    in Rain while under that (`shikudo.stuckCount`, 006; `kb/raw/players/shikudo-2026-11-02.txt`), and
     MIND PARALYSE to close the lock or as a Rain filler, and kills with MIND CONFUSE, MIND DISRUPT, then
     KAI CHOKE every round; `vv` (011) puts MIND rounds between 006's combos. MIND BLACKOUT and MIND
     SCYTHE are wired in 011 and switched off (`shikudo.tele.blackout`, `shikudo.tele.scythe`) until the
@@ -556,8 +557,10 @@ read `mmp.settings.mapsource`). `service` is an experimental live Crowdmap; `cro
     picks the flashheel leg; one needle, a second only while the head is short; spinkick on a prone head;
     Gaital holds while she is prone and on the sweep round (`shikudo.gaitalSweeps`); combo and shatter
     rounds ASSESS; `skstaff` sets the staff (`shikudo.staffRef()`, default the bare keyword `staff`).
+  - **`srd` (013) has no combos since 2026-11-02:** MIND CRUSH in Rain, KAI CHOKE if it cannot go, `adopt rain form` alone outside
+    Rain. A combo needs equilibrium, and crush and choke need balance, so they cannot share a flush (CONFLICTS #56).
   - **`vv` (011, v4.7.420):** MIND rounds between 006's combos (impatience to close a softlock, disrupt
-    on a confused target, a Rain burst from kata 9, at most 4), none in a kill window (prone in Gaital,
+    on a confused target, a Rain burst from kata 9, at most 4, batter under 2 afflictions), none in a kill window (prone in Gaital,
     or prone at half health in Maelstrom); kill and shield rounds go to 006.
   - **007 and 011 move their round history on the queue's run line, not on the press** (Lessons
     Learned, "Counter Incrementing"; `.claude/AGENTS.md`). Until a run line has matched, a round counts
@@ -706,7 +709,7 @@ equilibrium build, nimble the balance build; `bash mindcrush auto|on|off`, unrea
 equilibrium attack a round and NO balance combo: Spirit Rend, else the Kai Unleashed choke (KAI CHOKE only
 with that boon), else `mind crush <t>` (150 mana, 3.40 s eq). No numb refresh (Senseless Flurry speeds
 balance). It always bashes in Rain (Shikudo) or Dragon stance (Tekura): bash start sends `adopt rain form` /
-`drs`, and the round puts either back first when GMCP shows another. A shielded round, or mana under the
+`drs`, and when GMCP shows another the round puts it back: `drs` in front of the attack, `adopt rain form` as a round of its own, because ADOPT spends balance and MIND CRUSH needs balance up (2026-11-02). A shielded round, or mana under the
 `manause` floor, swings the balance combo instead (shatter / rhk), and `SHIKUDO_INT_ROTATION` keeps that
 combo from transitioning out of Rain.
 

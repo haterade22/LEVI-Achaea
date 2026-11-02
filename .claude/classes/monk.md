@@ -102,33 +102,31 @@ both sides, `light` strikes (no limb damage at all), form changes (a kata of 5+;
 the Dispatch as it was done are in `kb/combat/shikudo.md`. What the offense code gets wrong, and
 the plan: `docs/plans/shikudo-offense-review-2026-10-11.md`.
 
-### Alternative Kill: Shikudo Group Damage Route (v4.7.456)
+### Alternative Kill: Shikudo Group Damage Route (v4.7.456; no combos since 2026-11-02)
 ```yaml
 type: damage
-summary: "For group fights (the user, 2026-10-27: 'a pure damage route for group combat'). 013,
-  alias `srd` ('sr should be lock, srd should be damage'). One `queue addclear free` round: combatQueue() + wield <staff id> +
-  [transition to <form> form;] + the attack + [;<EQ rider>] + [;assess, Health Inspector only]"
+summary: "For group fights (the user, 2026-10-27: 'a pure damage route for group combat'). 013, alias `srd`
+  ('sr should be lock, srd should be damage'). The user, 2026-11-02: 'It should do mind crush in rain when doing srd
+  for damage. If we cannot mind crush then kai choke. No combos in srd as, once again it is for damage.'
+  One `queue addclear free` round: combatQueue() + the attack + [;assess, Health Inspector only]"
 order:
-  - "DISPATCH when 006's checkDispatchReady (INCAPACITATE on a Mhaldorian), no assess"
-  - "SHATTER with this form's kick when shielded"
-  - "Oak: risingkick torso livestrike ruku torso (31.8% torso a round in the 2026-10-27 log)"
-  - "Maelstrom: the same, or `combo <t> crescent` ALONE when prone and known at half health or less
-    (a fresh ASSESS, or IRE.Target hpperc naming the target); a ready Crescent is never traded for a
-    transition"
-  - "Gaital: sweep spinkick standing; needle spinkick ruku torso prone (spinkick on a prone target
-    hits the head)"
-  - "Rain: frontkick <side> kuro <side> ruku torso + the EQ rider; sides alternate each combo"
-  - "Willow: flashheel <side> hiru hiraku; Tykonos: risingkick torso thrust torso thrust torso (both
-    only on the way back to Rain)"
-eq_rider: "RAIN ONLY (the user): KAI CHOKE when ataxia_kaiAfford('choke') and no held breath, else
-  MIND CRUSH. Other forms: combos first, no rider"
+  - "DISPATCH when 006's checkDispatchReady (INCAPACITATE on a Mhaldorian), any form, no assess"
+  - "`combo <t> crescent` ALONE, only if already in Maelstrom, with her prone and known at half health or less
+    (a kill the user said yes to). The route never moves to Maelstrom"
+  - "Not in Rain: `wield <staff id>;adopt rain form`, alone. It needs no kata and spends about 4.1 s of balance,
+    so a crush in the same round would be refused and held"
+  - "MIND CRUSH, in Rain (2.45 s of equilibrium; 2.89 s outside Rain)"
+  - "KAI CHOKE if the crush cannot go. If neither can go, nothing is sent, and one line says why"
+cannot: "A crush cannot go when it would take mana below the `manause` floor (sipping, default 30%; 150 mana;
+  shikudo.manaAllows, 006). Unknown mana does not block it. A choke cannot go when kai is short
+  (ataxia_kaiAfford) or the target is thought to hold its breath"
+shield: "A shield changes nothing: MIND CRUSH passes it (the user, 2026-11-02). No shatter"
+why_no_rider: "A combo needs equilibrium up. MIND CRUSH and KAI CHOKE need balance up. They cannot share a flush in
+  either order (kb/raw/live/probes_2026-11-01.txt, CONFLICTS #56). The old `combo; rider` round was refused
+  and held in the BALANCE queue, which `queue addclear free` does not clear"
 held_breath: "No captured line. A choke cast (leviatax/004) with no landing (highlighting/063) in 1.2 s
-  = MIND CRUSH for 10 s, echoed"
-form_loop: "Oak -> Gaital -> Maelstrom (target at 60% or less, config.maelstromAt) or Rain; Maelstrom
-  -> Oak; Rain -> Oak; Willow -> Rain; Tykonos -> Willow. ataxia_kataShouldLeave(form, kata, 0) (12,
-  Rain 15); Willow and Tykonos leave at 5"
-unconfirmed: "a one-attack `combo <t> crescent`; a combo and KAI CHOKE both running from one free
-  entry; the held-breath line"
+  = no choke for 10 s, echoed"
+unconfirmed: "a one-attack `combo <t> crescent`; the held-breath line; total damage against a combo route"
 ```
 
 ### Alternative Kill: Shikudo Lock Route (Affliction-Based)
@@ -159,13 +157,18 @@ telepathy_afflictions:
     115) locks and lock-based abilities treat an ADJACENT room as the same area: one room across an area border no
     longer breaks the lock or cancels Radiance. Our lock-loss handling reads the game's lines (`allies_enemies/011`),
     so it needs no change"
-  impatience: "Required for hardlock. 007 sends it as soon as asthma, slickness or anorexia is on, so FOCUS
-    cannot cure the anorexia hiraku is about to give (Mystor: FceAmb0o:5937, vNTjvghY:8444)"
+  impatience: "Required for hardlock. 007 and 011 send it only with 2 or more afflictions on the target, of any kind
+    (shikudo.STUCK_NEEDED and shikudo.stuckCount, 006). The user, 2026-11-02: 'using impatience without having other
+    afflictions stuck isn't ideal.' Prone does not count. Oak goes to Willow only with asthma and slickness on, so it
+    still lands before hiraku (Mystor: FceAmb0o:5937, vNTjvghY:8444)"
   paralyse: "The venomlock piece when nervestrike's has been cured: 007 sends it to close softlock + impatience"
   confuse_disrupt: "007's kill prelude: a disrupted target has no equilibrium, and only CONCENTRATE brings it
     back, which confusion makes fail"
-  batter: "stupidity + epilepsy + dizziness. 007 no longer sends it (v4.7.420: Mystor sent it once, just
-    before his MIND SCYTHE, never in a lock); vv (011) keeps it behind shikudo.tele.scythe, off"
+  batter: "stupidity + epilepsy + dizziness, 500 mana. Since 2026-11-02, 007's Rain filler and 011's Rain burst send it
+    while under 2 afflictions, within the mana floor. The user: 'Usually a mind batter to stick something and use tree
+    and herb balance is nice.' v4.7.420 had removed it from 007, because Mystor sent it once; the user's play outranks
+    that log. 011's other batter, for the scythe, stays behind shikudo.tele.scythe, off. WATCH: on a target who cures
+    everything it costs 500 mana every second round, until the floor stops it"
 
 # Mystor's counted route (56 transitions over his six logs, never Tykonos), as 007 plays it since v4.7.420
 # (shikudoLock.shouldTransition, 007:262-297). The transition goes FIRST in the round, so it is judged on the
@@ -235,9 +238,10 @@ round_planner:  # shikudoLock.dispatch(), 007:575-675. Every round is ONE 'queue
 
 telepathy:  # shikudoLock.selectTelepathy(form) -> cmd, critical (007:421-443);
             # shikudoLock.selectPrelude() (007:450-458)
-  critical: "MIND IMPATIENCE when impatience is missing and asthma, slickness or anorexia is on; MIND PARALYSE
+  critical: "MIND IMPATIENCE when impatience is missing, 2 or more afflictions are on, and one is asthma, slickness or
+    anorexia; MIND PARALYSE
     when the softlock and impatience are on and paralysis is missing"
-  rain_filler: "config.rainTelepathy, in a Rain round: impatience, then paralyse (none against an Apostate,
+  rain_filler: "config.rainTelepathy, in a Rain round: batter under 2 afflictions, then impatience, then paralyse (none against an Apostate,
     config.classSkip, read through ataxiaNDB_getClass: an Apostate ate magnesium right after it,
     LcJC-rJ5:3124-3141), then disrupt. A filler goes out only right after a combo, so in Rain it alternates
     1:1 with combos, where Mystor's bursts ran to eight MIND rounds at kata 9-12 (FceAmb0o:2600-2944,
@@ -684,7 +688,7 @@ transmute_gapfiller: "transmute to top up HP ONLY when sip balance is down and H
 transmute_sharp_mind: "with the Sharp Mind boon, in the tower: a plain top-up at HP <= sharpmindat (default 90), sip balance ignored; floor + transmuteto unchanged (v4.7.320)"
 crushbash: "if ataxia.settings.crushbash set, sends 'mind crush <target>' instead"
 int_monk_round: "v4.7.457-459 (ataxiaBasher_monkIntRound): an int monk sends ONE eq attack a round and NO balance combo -- Spirit Rend > Kai Unleashed choke (KAI CHOKE only with that boon) > 'mind crush <tar>' (150 mana, 3.40s eq). No numb refresh (Senseless Flurry speeds balance). Int spec = `bash mindcrush auto|on|off` (ataxiaBasher.monkMindCrush; auto = intelligence > strength from STAT AND the QUICK-WITTED trait -- user: quick-witted is the eq build, NIMBLE the balance build; either unread = off). No eq gate: the freestand queue waits for equilibrium"
-int_monk_form: "an int monk always bashes in RAIN (Shikudo) or DRAGON stance (Tekura): bash start sends 'adopt rain form' / 'drs' (genrunning/003), and the round prefixes the same when GMCP shows another. A shielded round or mana under the manause floor swings the balance combo (shatter / rhk); SHIKUDO_INT_ROTATION keeps it from leaving Rain (outside Rain it moves toward it at kata 5)"
+int_monk_form: "an int monk always bashes in RAIN (Shikudo) or DRAGON stance (Tekura): bash start sends 'adopt rain form' / 'drs' (genrunning/003), and when GMCP shows another the round puts it back: 'drs' in front of the attack, 'adopt rain form' as a round of its own, because ADOPT spends balance and MIND CRUSH needs balance up (the user, 2026-11-02). A shielded round or mana under the manause floor swings the balance combo (shatter / rhk); SHIKUDO_INT_ROTATION keeps it from leaving Rain (outside Rain it moves toward it at kata 5)"
 shield: "Monk never spends rage on Splinterkick (spk) to raze - both specs break denizen shields free (shatter / rhk)"
 
 # Battlerage (ataxiaBasher_monkBattlerage). Kit: SBP 14 (small dmg), MIND SCRAMBLE 22 (Clumsy),
@@ -842,8 +846,7 @@ round_delivery:  # 2026-11-01, kb/mechanics/balance-and-queueing.md. OFF by defa
     007_lock: "wield; [transition;] combo, or [transition;] mind, or kai choke. The spender is last. A separate
       transition costs no balance (kb/combat/shikudo.md:80). config.chainTelepathy (default off) adds mind after the combo"
     011_vv: "[wield shield;] mind. The spender is last. MIND BLACKOUT's press stays raw, with the combo it hides"
-    013_group_damage: "wield; [transition;] combo; in Rain the EQ rider (kai choke | mind crush) comes AFTER the combo.
-      The spender is NOT last there, and the shim does not move it. Whether the rider is refused off balance is open"
+    013_group_damage: "mind crush | kai choke alone, or `wield; adopt rain form` alone. No combo and no rider since 2026-11-02"
     tekura: "unwield all; dismount; combo. The spender is last"
     no_caller: "004 levishikudodispatch and 005 levishikudoneedleattack have no alias or trigger calling them. 005 puts
       `transition to the <form> form` after the combo"
@@ -1118,7 +1121,7 @@ vv_telepathy:
     to STICK (she is paralysed, or her tree is down for 4+ more s) or as BAIT (her tree is up and two lock
     pieces are on, so the tree takes the blackout); (6) MIND DISRUPT on a confused target not yet
     disrupted; (7) a Rain burst from kata burstKata (9) while fewer than burstMax (4) MIND rounds have run
-    since the last combo: impatience, else paralyse (not once she is paralysed; never on an Apostate,
+    since the last combo: batter under 2 afflictions, else impatience, else paralyse (not once she is paralysed; never on an Apostate,
     classSkip)"
   blackout: "wired and OFF (shikudo.tele.blackout = false) until our success line, the lock question
     (kb/CONFLICTS.md #7) and 'mind blackout' vs 'mind blackout <t>' are settled live. Turned on, it queues

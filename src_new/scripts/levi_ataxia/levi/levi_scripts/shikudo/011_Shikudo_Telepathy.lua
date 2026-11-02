@@ -122,6 +122,8 @@ function shikudo.teleState()
     eq = v.eq == true,
     mpp = tonumber(v.mpp),
     has = shikudo.has,
+    stuck = shikudo.stuckCount(),
+    canBatter = shikudo.canBatter(),
     prone = shikudo.has("prone"),
     treeUp = not (tBals and tBals.tree == false),
     treeLeft = treeLeft,
@@ -181,8 +183,8 @@ end
 --   6. MIND DISRUPT when confused and not disrupted: only CONCENTRATE gives equilibrium back, and
 --      confusion makes it fail (Mystor, confuse then disrupt: FceAmb0o:6309, :6361).
 --   7. A Rain burst at kata burstKata+, while fewer than burstMax MIND rounds have run since the
---      last combo: impatience, else paralyse -- not once she is paralysed, nor where classSkip
---      says so.
+--      last combo: BATTER while under two afflictions (shikudo.STUCK_NEEDED, 006), else impatience,
+--      else paralyse -- not once she is paralysed, nor where classSkip says so.
 function shikudo.telepathyPick(s, cfg)
   cfg = cfg or shikudo.tele
   local has, t = s.has, s.target
@@ -224,7 +226,9 @@ function shikudo.telepathyPick(s, cfg)
 
   if s.form == "Rain" and (s.kata or 0) >= cfg.burstKata and (s.burst or 0) < cfg.burstMax then
     local burst = "Rain burst " .. ((s.burst or 0) + 1) .. "/" .. cfg.burstMax
-    if not has("impatience") then return "mind impatience " .. t, burst end
+    local enough = (s.stuck or 0) >= shikudo.STUCK_NEEDED
+    if not enough and s.canBatter ~= false then return "mind batter " .. t, burst end
+    if enough and not has("impatience") then return "mind impatience " .. t, burst end
     local skip = s.class and cfg.classSkip and cfg.classSkip[s.class]
     if not has("paralysis") and not (skip and skip.paralyse) then
       return "mind paralyse " .. t, burst

@@ -1,0 +1,17 @@
+# Shikudo: srd, impatience and batter, as relayed by the user (2026-11-02)
+
+Verbatim. Curated in .claude/classes/monk.md, kb/combat/shikudo.md and kb/CONFLICTS.md #56.
+
+## The srd route
+
+It should do mind crush in rain when doing srd for damage. If we cannot mind crush then kai choke. No combos in srd as, once again it is for damage.
+
+## Impatience and batter in 1 on 1
+
+Yeah in regular 1 on 1 combat, using impatience  without having other afflictions stuck isn't ideal. Usually a mind batter to stick something and use tree and herb balance is nice
+
+## Answers to questions (2026-11-02)
+
+- What counts as stuck for impatience: 2 or more afflictions of any kind on the target, including stupidity, epilepsy and dizziness from batter.
+- Does mind crush get through a target's shield: it passes, so no shatter.
+- Which routes take the batter rule: both sr and vv.

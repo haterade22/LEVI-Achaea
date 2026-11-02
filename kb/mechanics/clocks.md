@@ -8,7 +8,7 @@ sources:
   - kb/classes/abilities.json
 code:
   - tools/kb_timing.py
-latest_filed: 2026-11-01
+latest_filed: 2026-11-02
 ---
 
 # Clocks: stated against observed
@@ -35,7 +35,7 @@ latest_filed: 2026-11-01
 | Focus | 156 | 2.04 | 2.33 | 2.43 | 2.53 | 4.99 | 0.20 | no | p90-p10 is 0.203, over 0.2 | line 19, printed 137 |
 | Sip | 407 | 1.94 | 4.31 | 4.40 | 4.50 | 5.85 | 0.20 | yes | - | line 13, line_1s 1, printed 394 |
 | Moss, potash | 137 | 5.28 | 5.79 | 5.91 | 6.00 | 6.11 | 0.21 | no | p90-p10 is 0.210, over 0.2 | line 120, line_1s 2, printed 17 |
-| Tree | 191 | 13.32 | 13.88 | 13.96 | 14.05 | 14.21 | 0.17 | yes | - | line 12, printed 179 |
+| Tree | 192 | 13.32 | 13.88 | 13.96 | 14.05 | 14.21 | 0.17 | yes | - | line 13, printed 179 |
 | FITNESS lockout | 5 | 9.06 | 9.13 | 9.81 | 9.97 | 9.97 | 0.84 | no | n=5 is under 10 | line 5, line_1s 5 |
 | Immunity sip | 3 | 7.35 | 7.37 | 7.47 | 7.75 | 7.82 | 0.38 | no | n=3 is under 10 | line 2, printed 1 |
 | Humour | 41 | 0.01 | 1.44 | 1.55 | 1.62 | 1.79 | 0.19 | yes | - | line 41 |
@@ -199,7 +199,7 @@ Recovery lines with no printed value and no start row, so no sample: Eat 1, Immu
 | Nikita | printed | 33 | 13.67 | 13.81 | 13.94 | 14.16 | 14.20 | no | 2026-11-01 | - | L8LSw7xD 2, X8pRorzR 22, kAQnlFAW 9 |
 | Nikita | line | 31 | 13.92 | 13.95 | 14.00 | 14.03 | 14.13 | yes | 2026-11-01 | - | L8LSw7xD 2, X8pRorzR 22, kAQnlFAW 9 |
 | Ours, recorder (Infernal) | line | 1 | 13.91 | 13.91 | 13.91 | 13.91 | 13.91 | no | 2026-10-27 | 4.7.450 | ours/135412_Tabethys 1 |
-| Ours, recorder (Monk) | line | 3 | 13.90 | 13.91 | 13.96 | 14.00 | 14.01 | no | 2026-10-27 | 4.7.450 | ours/112717_Tabethys 3 |
+| Ours, recorder (Monk) | line | 4 | 13.90 | 13.92 | 13.98 | 14.01 | 14.01 | no | 2026-10-27, 2026-11-02 | 4.7.450, 4.7.470 | ours/112717_Tabethys 3, ours/122916_Antoninus 1 |
 | Shikudo attacker (unnamed) | printed | 3 | 13.90 | 13.91 | 13.97 | 13.97 | 13.97 | no | 2026-10-11 | - | attacker 3 |
 | Shikudo attacker (unnamed) | line | 3 | 13.78 | 13.81 | 13.92 | 13.97 | 13.98 | no | 2026-10-11 | - | attacker 3 |
 
@@ -266,7 +266,7 @@ A sample counts as "with" when any prompt during that clock shows the affliction
 
 **Own costs** are the game's own `Balance used` and `Equilibrium used` lines (Mystor's `[Bal Spent]` is the same line renamed). The ratio is the printed median over the value in `kb/classes/abilities.json`. A packet with two candidate abilities on one channel is left out: none.
 
-300 of 1074 printed cost rows match a curated ability. The rest, including the Shikudo kick combos, are not in this table.
+301 of 1142 printed cost rows match a curated ability. The rest, including the Shikudo kick combos, are not in this table.
 
 | Ability | Channel | Stated | Field | Logger | n | Printed | Median | Ratio | Filed | Logs |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -278,6 +278,7 @@ A sample counts as "with" when any prompt during that clock shows the affliction
 | Shield tattoo | equilibrium | - | no row in abilities.json | Earth Lord (unnamed) | 6 | 3.4 x6 | 3.40 | - | 2026-11-01 | JDvzR7j7 1, OwkA-G99 5 |
 | Shield tattoo | equilibrium | - | no row in abilities.json | Elmer | 17 | 2.89 x3, 3.4 x14 | 3.40 | - | 2026-11-01 | 2N1HTSWZ 2, 3ys7NuHA 3, Z5cyffxx 7, g-lD00-h 5 |
 | Shield tattoo | equilibrium | - | no row in abilities.json | Nikita | 12 | 3.4 x12 | 3.40 | - | 2026-11-01 | X8pRorzR 10, kAQnlFAW 2 |
+| Shield tattoo | equilibrium | - | no row in abilities.json | Ours, recorder (Monk) | 1 | 2.89 x1 | 2.89 | - | 2026-11-02 | ours/122916_Antoninus 1 |
 | Pommelstrike | balance | 1.50 | TwoArts/Pommelstrike: 1.50 seconds of balance | Blademaster (unnamed) | 6 | 1.1 x6 | 1.10 | 0.73 | 2026-11-01 | KtdftABt 6 |
 | Homunculus attack | equilibrium | 3.00 | Physiology/Arms: 3.00 seconds of equilibrium | Elmer | 4 | 2.55 x4 | 2.55 | 0.85 | 2026-11-01 | Z5cyffxx 4 |
 | Engage | equilibrium | 2.50 | Discipline/Engage: 2.50 seconds of equilibrium | Claes | 29 | 2 x29 | 2.00 | 0.80 | 2026-10-11, 2026-11-01 | 4c_SeyaA 6, CxxKSMq 1, J7Xnr_Jg 1, Vr.NkCGD 1, WKuEakBZ 2, WO7tC3kL 7, azbErKcK 5, claes/LcJC-rJ5 1, defender 4, s98kPGv6 1 |
@@ -389,7 +390,7 @@ A sample counts as "with" when any prompt during that clock shows the affliction
 | elmer | 4 | 3036 | 677 | 0 | 0 |
 | mystor | 6 | 4836 | 5 | 0 | 0 |
 | nikita | 3 | 2077 | 542 | 8 | 0 |
-| ours | 4 | 7655 | 0 | 0 | 0 |
+| ours | 6 | 8396 | 0 | 0 | 0 |
 | sentinel | 2 | 1154 | 49 | 0 | 0 |
 
 A wrapped prompt ran onto a second row. Mystor's stamp row is not a wrap. `o6UKnyyy` has prompts with no time in them, so it is skipped.
@@ -431,3 +432,5 @@ A wrapped prompt ran onto a second row. Mystor's stamp row is not a wrap. `o6UKn
 | ours/112717_Tabethys | 2026-10-27_112717_Tabethys.log | ours | Ours, recorder (Monk) | 2026-10-27 | 4.7.450 | 3311 | 0 | 0 |  |
 | ours/135412_Tabethys | 2026-10-27_135412_Tabethys.log | ours | Ours, recorder (Infernal) | 2026-10-27 | 4.7.450 | 3930 | 0 | 0 |  |
 | ours/073547_Tabethys | 2026-10-28_073547_Tabethys.log | ours | Ours, recorder (Runewarden) | 2026-10-28 | 4.7.462 | 324 | 0 | 0 |  |
+| ours/122916_Antoninus | 2026-11-02_122916_Antoninus.log | ours | Ours, recorder (Monk) | 2026-11-02 | 4.7.470 | 657 | 0 | 0 |  |
+| ours/131934_Titonus | 2026-11-02_131934_Titonus.log | ours | Ours, recorder (Monk) | 2026-11-02 | 4.7.470 | 84 | 0 | 0 |  |

@@ -2852,24 +2852,26 @@ end
 
 -- THE INT MONK'S ROUND (v4.7.459): one equilibrium attack, no balance combo. Rain form (Shikudo)
 -- or Dragon stance (Tekura) is put back first when GMCP shows another (user: "they will always be
--- in rain form for Shikudo and Dragon (DRS) for tekura"); ADOPT needs no kata. Returns nil -- the
+-- in rain form for Shikudo and Dragon (DRS) for tekura"); ADOPT needs no kata.
+-- ADOPT IS ITS OWN ROUND (user, 2026-11-02: "adopt rain form, then when we get balance back mind
+-- crush"). ADOPT spends balance (about 4.1 s), and MIND CRUSH needs balance up, so a crush in the same
+-- round is refused and held (kb/raw/live/probes_2026-11-01.txt). The next round crushes, because the
+-- freestand queue waits for balance. DRS still goes in front of the attack: no test has shown what
+-- it costs. Returns nil -- the
 -- caller then swings the normal balance combo -- on a SHIELDED round (shatter / rhk break it) and
 -- when no equilibrium attack is affordable (MIND CRUSH under the mana floor), so bashing goes on.
 function ataxiaBasher_monkIntRound(tekura, useShieldbreak)
   if useShieldbreak then return nil end
   local sp = ataxia.settings.separator
   local fix = ""
-  if tekura then
-    if ataxia.vitals.stance ~= "Dragon" then fix = "drs"..sp end
-  elseif ataxia.vitals.form ~= "Rain" then
-    fix = "adopt rain form"..sp
-  end
+  if tekura and ataxia.vitals.stance ~= "Dragon" then fix = "drs"..sp end
   -- Same order as the rider chain below: the ability whose window closes first. NO numb refresh:
   -- Senseless Flurry speeds BALANCE, and this round spends equilibrium only.
   local eq = ataxiaBasher_spiritRend(false)
   eq = eq or ataxiaBasher_kaiUnleashedChoke(false)
   eq = eq or ataxiaBasher_monkMindCrush(false)
   if not eq then return nil end
+  if not tekura and ataxia.vitals.form ~= "Rain" then return "adopt rain form"..sp end
   return fix..eq
 end
 

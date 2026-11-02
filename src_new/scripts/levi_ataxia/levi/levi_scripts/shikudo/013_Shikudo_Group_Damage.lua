@@ -14,57 +14,55 @@ attributes:
 packageName: ''
 ]]--
 
--- SHIKUDO GROUP DAMAGE ROUTE (v4.7.456). The user, after the 2026-10-27 group fight: "We would also
--- need to add a pure damage route for group combat for shikudo." In a group the lock (007) rarely
--- holds -- five players cure through it and the target changes every few seconds -- so this route
--- hits as hard as it can every round, and takes a kill when one is open.
+-- SHIKUDO GROUP DAMAGE ROUTE (v4.7.456; no combos since 2026-11-02). The user, after the 2026-10-27
+-- group fight: "We would also need to add a pure damage route for group combat for shikudo." In a
+-- group the lock (007) rarely holds, so this route hits as hard as it can every round, and takes a kill
+-- when one is open.
 --
--- The user's rules for equilibrium: "If in rain form we can kai choke (if they are not holding
--- breath) or mind crush. We should prioritize combos elsewise as they do damage and give
--- afflictions." And yes to both instant kills, Crescent and Dispatch.
+-- THE RULE (the user, 2026-11-02): "It should do mind crush in rain when doing srd for damage. If we
+-- cannot mind crush then kai choke. No combos in srd as, once again it is for damage."
 --
--- ONE ROUND = ONE `queue addclear free` entry (as 006 and 007 send):
---   combatQueue() .. wield <staff id> ; [transition to <form> form ;] <attack> [; <eq rider>] [; assess]
+-- WHY THE OLD RIDER WENT. This route used to send `combo <t> ...; <rider>` as one round. A combo needs
+-- equilibrium up, and MIND CRUSH and KAI CHOKE need balance up, so the two cannot share a flush in either
+-- order (kb/raw/live/probes_2026-11-01.txt, kb/CONFLICTS.md #56). The game held the rider in its BALANCE
+-- queue, which `queue addclear free` does not clear, so a held rider could fire after a target switch.
+-- The basher learned the same thing at v4.7.459 (basher/002, MIND CRUSH, THE INT MONK'S ATTACK).
 --
--- THE ATTACK, first that applies:
---   1. DISPATCH when 006 says it is ready (prone, damaged head, crushed throat; Shikudo.wiki:369).
---      Any form, outside a combo, no assess. A Mhaldorian gets INCAPACITATE, as in 006.
---   2. SHATTER first when the target has a shield, with this form's kick.
---   3. The form's damage combo (every attack legal in its form, Shikudo.wiki):
---        Oak        risingkick torso livestrike ruku torso   (31.8% torso a round in the log, with
---                   asthma and slickness; a damaged torso makes KAI CHOKE hit harder, Kaido.wiki:289)
---        Maelstrom  the same, or CRESCENT alone once she is prone at half health or less
---        Gaital     standing: sweep spinkick; prone: needle spinkick ruku torso (spinkick on a prone
---                   target strikes the head, "significantly more damage"; needle crushes the throat
---                   Dispatch needs)
---        Rain       frontkick <side> kuro <side> ruku torso, plus the EQ rider
---        Willow     flashheel <side> hiru hiraku           (only on the way to Rain)
---        Tykonos    risingkick torso thrust torso thrust torso (only on the way to Willow)
--- THE EQ RIDER, RAIN ONLY: KAI CHOKE when kai affords it (ataxia_kaiAfford) and the target is not
--- thought to hold its breath; MIND CRUSH otherwise.
--- THE FORM LOOP (each step a legal transition, Shikudo.wiki): Oak -> Gaital -> Maelstrom (when the
--- target is known at 60% or less) or Rain; Maelstrom -> Oak; Rain -> Oak; Willow -> Rain;
--- Tykonos -> Willow. When to leave is monk/004's policy (ataxia_kataShouldLeave; `skata`), except
--- Willow and Tykonos, which leave as soon as a transition is legal. The transition goes FIRST in
--- the command, so it is judged on the chain before the combo (strikes 0), as 007 does.
+-- ONE ROUND = ONE `queue addclear free` entry. `free` waits for balance and equilibrium, which is
+-- what each of these attacks needs. The first that applies:
+--   1. DISPATCH when 006 says it is ready (prone, damaged head, crushed throat; Shikudo.wiki:369). Any
+--      form. A Mhaldorian gets INCAPACITATE, as in 006.
+--   2. CRESCENT alone, only if we are already in Maelstrom and she is prone at half health or less.
+--      The user said yes to this kill on 2026-10-27. This route never moves to Maelstrom.
+--   3. Not in Rain: `adopt rain form`, alone. It needs no kata, and it spends balance (about 4.1 s), so a
+--      crush in the same round would be refused and held. Rain is the point: it makes equilibrium about 15%
+--      cheaper (MIND CRUSH 2.45 s against 2.89 s), and the form stays at kata 0.
+--   4. MIND CRUSH. If we cannot, KAI CHOKE. If we can do neither, nothing goes out, and one line says why.
+--
+-- A SHIELD CHANGES NOTHING: MIND CRUSH passes a target's shield (the user, 2026-11-02), so this route has
+-- no shatter and no combo other than the Crescent kill.
+--
+-- "CANNOT" FOR A CRUSH: it costs 150 mana, and we keep the `manause` floor (sipping, default 30%) after it,
+-- because mana is the curing pool (shikudo.manaAllows, 006). An unknown mana does not block a crush.
+-- "CANNOT" FOR A CHOKE: kai is short (ataxia_kaiAfford), or the target is thought to hold its breath.
 --
 -- HELD BREATH: no captured line says a target holds its breath. Until one is, a KAI CHOKE cast line
--- (leviatax/004 -> shikudoDmg.chokeCast) with no landing line (highlighting/063) within
--- BREATH_WAIT seconds marks the target for BREATH_HOLD seconds, and the rider is MIND CRUSH. The
--- echo asks to keep the lines, so the real one can be captured.
+-- (leviatax/004 -> shikudoDmg.chokeCast) with no landing line (highlighting/063) within BREATH_WAIT
+-- seconds marks the target for BREATH_HOLD seconds. The echo asks to keep the lines, so the real one
+-- can be captured.
 --
 -- `srd` runs this route (alias shikudo/009); `sr` stays the lock (007). The user: "sr should be
 -- lock, srd should be damage".
 
 shikudoDmg = shikudoDmg or {}
-shikudoDmg.state = shikudoDmg.state or { side = "left", breathHeld = {} }
+shikudoDmg.state = shikudoDmg.state or { breathHeld = {} }
 shikudoDmg.config = shikudoDmg.config or {
   assessEachRound = true, -- with the Health Inspector trait only (shikudo.assessSuffix, 006)
-  maelstromAt = 60,       -- Gaital leads to Maelstrom (and its Crescent) at or below this health %
 }
 
 local BREATH_WAIT = 1.2
 local BREATH_HOLD = 10
+local MIND_CRUSH_MANA = 150
 
 ataxiaTemp = ataxiaTemp or {}
 
@@ -77,15 +75,6 @@ local function now() return (getEpoch and getEpoch()) or 0 end
 
 local function formNow()
   return ataxia_shikudoForm(ataxia.vitals and ataxia.vitals.form) or "Oak"
-end
-
--- The side this round's frontkick, kuro and flashheel use. It alternates each combo, so both arms
--- and both legs take the prone and weariness hits.
-local function side()
-  return shikudoDmg.state.side
-end
-local function flipSide()
-  shikudoDmg.state.side = (shikudoDmg.state.side == "left") and "right" or "left"
 end
 
 -- The target's health, as a percentage, when we know it: a fresh ASSESS of this target (698), else
@@ -116,61 +105,21 @@ function shikudoDmg.crescentReady()
   return hp ~= nil and hp <= 50
 end
 
--- The next form of the loop, or nil to stay.
-function shikudoDmg.nextForm(form, kata)
-  kata = tonumber(kata) or 0
-  if form == "Willow" or form == "Tykonos" then
-    if kata < ataxia_KATA.min then return nil end
-    return (form == "Willow") and "Rain" or "Willow"
-  end
-  if not ataxia_kataShouldLeave(form, kata, 0) then return nil end
-  if form == "Oak" then return "Gaital" end
-  if form == "Gaital" then
-    local hp = shikudoDmg.targetHealth()
-    return (hp and hp <= shikudoDmg.config.maelstromAt) and "Maelstrom" or "Rain"
-  end
-  if form == "Maelstrom" or form == "Rain" then return "Oak" end
-  return nil
-end
-
--- The combo for `form` (the form this round strikes in), without the "combo <target>" prefix.
-function shikudoDmg.comboFor(form)
-  local s = side()
-  if form == "Oak" then
-    return "risingkick torso livestrike ruku torso"
-  elseif form == "Maelstrom" then
-    -- Alone: the kick drops us into Tykonos at once (Shikudo.wiki:358), where livestrike and ruku
-    -- are not attacks. A one-attack combo is legal (006 sends "combo <t> sweep").
-    if shikudoDmg.crescentReady() then return "crescent", "crescent" end
-    return "risingkick torso livestrike ruku torso"
-  elseif form == "Gaital" then
-    if has("prone") then return "needle spinkick ruku torso" end
-    return "sweep spinkick"
-  elseif form == "Rain" then
-    return "frontkick " .. s .. " kuro " .. s .. " ruku torso"
-  elseif form == "Willow" then
-    return "flashheel " .. s .. " hiru hiraku"
-  end
-  return "risingkick torso thrust torso thrust torso" -- Tykonos
-end
-
--- The kick SHATTER goes with in `form`.
-local SHATTER_KICK = {
-  Oak = "risingkick torso", Maelstrom = "risingkick torso", Tykonos = "risingkick torso",
-  Gaital = "spinkick", Rain = "frontkick left", Willow = "flashheel left",
-}
-
 -- Is the target thought to hold its breath? (the KAI CHOKE fallback above)
 function shikudoDmg.breathHeld(t)
   local until_ = type(t) == "string" and shikudoDmg.state.breathHeld[t:lower()]
   return until_ ~= nil and until_ ~= false and now() < until_
 end
 
--- The Rain rider: "kai choke <t>" or "mind crush <t>".
-function shikudoDmg.eqRider(t)
+-- Can we pay for a MIND CRUSH and still hold the mana floor? Unknown mana answers yes.
+function shikudoDmg.canCrush()
+  return shikudo.manaAllows(MIND_CRUSH_MANA)
+end
+
+-- Can we KAI CHOKE this target?
+function shikudoDmg.canChoke(t)
   local afford = ataxia_kaiAfford and ataxia_kaiAfford("choke", 0, t)
-  if afford and not shikudoDmg.breathHeld(t) then return "kai choke " .. t, "choke" end
-  return "mind crush " .. t, "crush"
+  return (afford and not shikudoDmg.breathHeld(t)) and true or false
 end
 
 -- leviatax/004: our KAI CHOKE cast line. With no landing line (highlighting/063) within BREATH_WAIT
@@ -184,14 +133,14 @@ function shikudoDmg.chokeCast(t)
     local landed = tonumber(ataxiaTemp.kaiChokeLandedAt) or 0
     if landed >= castAt then return end
     shikudoDmg.state.breathHeld[t:lower()] = now() + BREATH_HOLD
-    cecho("\n<yellow>[SK] KAI CHOKE did not land on " .. t .. " -- breath held? MIND CRUSH for "
+    cecho("\n<yellow>[SK] KAI CHOKE did not land on " .. t .. " -- breath held? No choke for "
       .. BREATH_HOLD .. "s (keep these lines)")
   end)
 end
 
--- Build the round. Returns the line (without "queue addclear free " and combatQueue's prefix), its
--- kind ("dispatch", "incapacitate", "shatter", "crescent", "combo"), the transition (or nil) and
--- the rider kind (or nil). Sends nothing.
+-- Build the round. Returns the line (without "queue addclear free " and combatQueue's prefix) and its
+-- kind: "dispatch", "incapacitate", "crescent", "adopt", "crush" or "choke". With a target
+-- but nothing we can pay for, it returns nil and "none". Sends nothing.
 function shikudoDmg.buildRound()
   if type(target) ~= "string" or target == "" then return nil end
   local sep = ";"
@@ -206,25 +155,17 @@ function shikudoDmg.buildRound()
   end
 
   local assess = shikudo.assessSuffix(shikudoDmg.config.assessEachRound, sep)
-  if has("shield") or (tAffs and tAffs.shield) then
-    return wield .. "combo " .. target .. " shatter " .. (SHATTER_KICK[form] or "risingkick torso")
-      .. assess, "shatter"
+
+  -- Alone: the kick drops us into Tykonos at once (Shikudo.wiki:358). A one-attack combo is legal.
+  if form == "Maelstrom" and shikudoDmg.crescentReady() then
+    return wield .. "combo " .. target .. " crescent", "crescent"
   end
 
-  -- A Crescent that is ready is never traded for a transition out of Maelstrom.
-  local nextForm = not (form == "Maelstrom" and shikudoDmg.crescentReady())
-    and shikudoDmg.nextForm(form, ataxia.vitals and ataxia.vitals.kata) or nil
-  local trans = nextForm and ("transition to " .. nextForm:lower() .. " form" .. sep) or ""
-  local roundForm = nextForm or form
-  local combo, special = shikudoDmg.comboFor(roundForm)
-  local line = wield .. trans .. "combo " .. target .. " " .. combo
-  local rider
-  if roundForm == "Rain" then
-    local cmd
-    cmd, rider = shikudoDmg.eqRider(target)
-    line = line .. sep .. cmd
-  end
-  return line .. assess, special or "combo", nextForm, rider
+  if form ~= "Rain" then return wield .. "adopt rain form", "adopt" end
+
+  if shikudoDmg.canCrush() then return "mind crush " .. target .. assess, "crush" end
+  if shikudoDmg.canChoke(target) then return "kai choke " .. target .. assess, "choke" end
+  return nil, "none"
 end
 
 -- One echo per changed round, so a held key does not flood the screen.
@@ -247,16 +188,16 @@ function shikudoDmg.dispatch()
   if reboundHold and reboundHold.gate(shikudoDmg.dispatch) then return end
   if not shikudo.guardTarget(target) then return end
   local cmd = combatQueue and combatQueue() or ""
-  local line, kind, nextForm, rider = shikudoDmg.buildRound()
-  if not line then return end
+  local line, kind = shikudoDmg.buildRound()
+  if not line then
+    if kind == "none" then say("\n<yellow>[SKD] No attack: mana at its floor, and no kai choke") end
+    return
+  end
   send("queue addclear free " .. cmd .. line)
-  if kind == "combo" or kind == "crescent" then flipSide() end
   local note = (kind == "dispatch" and "<red>DISPATCH") or (kind == "incapacitate" and "<yellow>INCAPACITATE")
-    or (kind == "crescent" and "<red>CRESCENT") or (kind == "shatter" and "<cyan>shatter")
-    or "<cyan>combo"
-  say("\n<cyan>[SKD] " .. note .. "<cyan>"
-    .. (nextForm and (" | to " .. nextForm) or "")
-    .. (rider and (" | " .. (rider == "choke" and "kai choke" or "mind crush")) or ""))
+    or (kind == "crescent" and "<red>CRESCENT")
+    or (kind == "adopt" and "<cyan>adopt Rain") or (kind == "choke" and "<cyan>kai choke") or "<cyan>mind crush"
+  say("\n<cyan>[SKD] " .. note)
 end
 
 -- The `srd` alias. Like `sr`, it needs a Shikudo Form charstat: a Tekura monk has none.

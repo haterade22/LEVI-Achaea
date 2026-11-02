@@ -72,10 +72,12 @@ One line per page. Kept up to date by `/kb-ingest`.
 | raw/live/seebalances_2026-11-01.txt | First capture with `CONFIG SEEBALANCES` on: FITNESS prints `Balance used: 2.8s.`, and our stopwatch reads 2.785 s | 2026-11-01 |
 | raw/logs/2026-08-19_leviticus_blademaster-vs-sentinel_loss_Sentinel.txt | Our own death to Grulk, a Sentinel, 123 s, by SKULLBASH: the log behind `.claude/classes/sentinel.md`. Filed 2026-11-01 from the user's desktop | 2026-11-01 |
 | raw/logs/2026-11-01_*.txt (20) | Combat logs shared by the user, all 1v1 by the party check: Claes (Runewarden) x9, Nikita (Depthswalker) x3, Elmer (Shikudo, Alchemist) x4, an Earth Lord x3, a Blademaster x1. First real Serpent logs. Listed in raw/logs/README.md; converted by `tools/kb_log_import.py` | 2026-11-01 |
-| raw/logs/ours/*.log (4) | Our own `fightlog` recordings, all with Tabethys present: Alchemist, Monk (we died), Infernal, Runewarden. Millisecond rows with our sends and tracker beliefs | 2026-11-01 |
+| raw/logs/ours/*.log (6) | Our own `fightlog` recordings: Alchemist, Monk (we died), Infernal and Runewarden with Tabethys present, and the first two alias-round recordings (2026-11-02). Millisecond rows with our sends and tracker beliefs | 2026-11-01 |
 | raw/players/shikudo-2026-10-11.txt | Players in their own words: the user and Mystor on Shikudo, Telepathy, the mind lock and blackout | 2026-10-11 |
 | raw/players/serpent-2026-10-12.txt | Serpent notes relayed by the user: DSTAB, hypochondria's delayed impatience, IMPULSE MASOCHISM MONKSHOOD, fratricide's 2.25 s relapse | 2026-10-12 |
 | raw/players/magi-tabethys-2026-10-12.txt | Tabethys on Magi: the core rotation (magma, dehydrate, dehydrate, fulminate), CAST MUDSLIDE, the focus lock and the freeze-to-glaciate finisher | 2026-10-12 |
+| raw/players/shikudo-2026-11-02.txt | The user on Shikudo: `srd` is mind crush then kai choke with no combos, impatience needs afflictions stuck, batter sticks something, and mind crush passes a shield | 2026-11-02 |
+| raw/players/kai-choke-2026-11-02.txt | The user: KAI CHOKE needs balance and equilibrium, as MIND CRUSH does, so neither can share a flush with a combo (CONFLICTS #56) | 2026-11-02 |
 | raw/players/fitness-2026-11-01.txt | The user: FITNESS needs balance and equilibrium, against the wiki's balance only (CONFLICTS #50) | 2026-11-01 |
 | raw/players/dizziness-fall-2026-10-15.txt | The dizzy fall line ("The ground seems to tilt and you fall with a thump."): it takes balance and cancels the move; dizziness can be uncurable | 2026-10-15 |
 | raw/players/mnemosyne-scaling-boons-2026-10-16.txt | Mana Powered's text (4% per WHOLE 1000 max mana), the stat boons (4% per point, user), and the STAT box row format (two stats per row) | 2026-10-16 |

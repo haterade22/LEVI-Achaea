@@ -68,3 +68,30 @@ You must wait a short while to use a say-like command again.
 You must wait a short while to use a say-like command again.
 13:50:50:240 [13913] [100] |(Penwize)|[ [ ]]  
 You have cleared alias "lvprobe".
+
+===== RIDER ORDER TEST (2026-11-02): mind crush first, then the combo =====
+Sent, with balance and equilibrium both up: mind crush Titonus;combo Titonus frontkick left kuro left ruku torso
+Transcribed from the user's screenshot. The combo did NOT fire with the crush. It ran when equilibrium returned.
+"((( EQUILIBRIUM )))", "- ( def shield ) -", "[SK] ..." and the "(9.2%)" tails are our package's echoes, not game text.
+
+- ( def shield ) -
+Your action causes the nearly invisible magical shield around you to fade away.
+Equilibrium used: 2.45s.
+You reach out with your mind, tightening its grip around Titonus to crush the life out of him.
+pt: Titonus: Crushed
+Titonus clutches his sides and howls in pain.
+13:19:02:384 [13913] [98] |(Tsurrok)|[ [ ]]
+I'm sorry, I don't know what "pt:" does.
+13:19:02:532 [13913] [98] |(Tsurrok)|[ [ ]]
+(((((((((((((((((((( EQUILIBRIUM:2.426 ))))))))))))))))))))
+You lash out with a straight kick at the left shoulder of Titonus.
+As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Titonus's left arm.? (9.2%)
+Balance used: 2.1s.
+Falling back into a low crouch, you lash out with a swift strike at the left thigh of Titonus.
+As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Titonus's left leg.? (9.2%)
+You spin a full rotation, bringing a twisted oaken staff around in a blur of motion to smash into the torso of Titonus.
+As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Titonus's torso. (9.2%)
+Titonus staggers as the staff cracks across his ribs, sweat breaking out upon his forehead.
+You are now maintaining a kata chain of 3 actions.
+[SK] Tsurrok  HIT 3/3  LA+9.2 LL+9.2 T+9.2  Rain:3
+13:19:04:813 [13913] [99] |(Tsurrok)|[ [ ]]
