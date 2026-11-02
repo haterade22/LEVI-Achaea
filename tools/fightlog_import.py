@@ -7,6 +7,7 @@ per fight to <mudlet profile>/fightlogs/<date>_<time>_<Opponent>.log. Each row i
     python tools/fightlog_import.py              # copy new logs, print a summary of each
     python tools/fightlog_import.py --dry-run    # summary only, copy nothing
     python tools/fightlog_import.py some.log     # file and summarise these logs only
+    python tools/fightlog_import.py --score      # also print the round delivery scoreboard (tools/kb_timing.py)
 
 Logs are copied, never moved or edited: the Mudlet folder keeps its copy, and a log already filed
 with the same content is skipped.
@@ -118,6 +119,7 @@ def main():
     ap.add_argument("logs", nargs="*", help="log files (default: every <profile>/fightlogs/*.log)")
     ap.add_argument("--profiles", default=PROFILES, help="Mudlet profiles folder")
     ap.add_argument("--dry-run", action="store_true", help="summarise only, copy nothing")
+    ap.add_argument("--score", action="store_true", help="also print each log's round delivery scoreboard")
     args = ap.parse_args()
 
     logs = args.logs or find_logs(args.profiles)
@@ -133,9 +135,16 @@ def main():
             shutil.copyfile(src, dst)
             copied += 1
         report(src)
+        if args.score:
+            import kb_timing  # only here: the plain import needs nothing from it
+            print(kb_timing.score_text(src))
     verb = "would copy" if args.dry_run else "copied"
     print(f"\n{len(logs)} log(s): {verb} {len(logs) - skipped if args.dry_run else copied}, "
           f"{skipped} already filed. Folder: {os.path.relpath(DEST, ROOT)}")
+    if copied:
+        # CI's `--check` steps compare the generated pages with every filed log, so a new log needs both of these.
+        print("Logs changed: run python tools/kb_timing.py and python tools/kb_replay.py to update kb/mechanics/clocks.md, "
+              "scoreboard.md and replay.md.")
 
 
 if __name__ == "__main__":

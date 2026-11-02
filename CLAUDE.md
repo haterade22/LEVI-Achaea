@@ -130,9 +130,13 @@ LEVI-Achaea/
 │   ├── kb_inbox.py            # KB: what is new in the inbox file since the last /kb-ingest
 │   ├── kb_catalog.py          # KB: regenerate kb/afflictions/catalog.md from HELP + code tables
 │   ├── kb_capture_import.py   # KB: file in-game `kbcapture` output (Mudlet profile) into kb/raw/live/
-│   ├── fightlog_import.py     # copy in-game `fightlog` recordings into kb/raw/logs/ours/, summarise them
+│   ├── fightlog_import.py     # copy in-game `fightlog` recordings into kb/raw/logs/ours/, summarise them; `--score` prints the round delivery pass bars
 │   ├── test_fightlog_import.py # its tests: `python -B tools/test_fightlog_import.py` (not in CI)
 │   ├── kb_log_import.py       # KB: convert Mudlet HTML log exports in kb/raw/logs/ to text, skip fights already filed
+│   ├── kb_timing.py           # KB: parse every log (one stamp rule, importable), generate kb/mechanics/clocks.md, clocks.json, scoreboard.md; `--check` in CI, so re-run it after filing a log
+│   ├── test_kb_timing.py      # its tests: `python -B tools/test_kb_timing.py` (in CI)
+│   ├── kb_replay.py           # KB: replay every log through what the victim could see, test lock labels and route rules against the deaths, generate kb/mechanics/replay.md; `--check` in CI, `--gate` prints the bars
+│   ├── test_kb_replay.py      # its tests: `python -B tools/test_kb_replay.py` (in CI)
 │   └── legacy/                # Retired build tools
 ├── build.sh                   # Build script: ./build.sh [--dry-run] [--convert-only]
 ├── .gitignore                 # Excludes build artifacts, IDE state, caches

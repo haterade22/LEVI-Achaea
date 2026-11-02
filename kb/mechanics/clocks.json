@@ -1,0 +1,5744 @@
+{
+ "clocks": {
+  "dagaz": {
+   "by_logger": [
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Claes",
+     "logs": {
+      "4c_SeyaA": 7,
+      "Vr.NkCGD": 2,
+      "WKuEakBZ": 2,
+      "WO7tC3kL": 20,
+      "azbErKcK": 8,
+      "claes/LcJC-rJ5": 3,
+      "s98kPGv6": 4
+     },
+     "method": "line",
+     "stats": {
+      "max": 15.343,
+      "median": 15.095,
+      "min": 11.332,
+      "n": 46,
+      "p10": 15.002,
+      "p90": 15.272,
+      "spread": 0.27
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "p90-p10 is 0.270, over 0.2"
+    }
+   ],
+   "methods": {
+    "line": 46
+   },
+   "spread_without": {
+    "Claes": null
+   },
+   "stats": {
+    "max": 15.343,
+    "median": 15.095,
+    "min": 11.332,
+    "n": 46,
+    "p10": 15.002,
+    "p90": 15.272,
+    "spread": 0.27
+   },
+   "title": "Dagaz rune tick",
+   "unpaired": 0,
+   "usable": false,
+   "why_not": "p90-p10 is 0.270, over 0.2"
+  },
+  "eat": {
+   "by_logger": [
+    {
+     "filed": [
+      "2026-10-11",
+      "2026-11-01"
+     ],
+     "logger": "Claes",
+     "logs": {
+      "4c_SeyaA": 64,
+      "CxxKSMq": 29,
+      "J7Xnr_Jg": 3,
+      "Vr.NkCGD": 16,
+      "WKuEakBZ": 23,
+      "WO7tC3kL": 196,
+      "azbErKcK": 96,
+      "claes/LcJC-rJ5": 17,
+      "defender": 26,
+      "s98kPGv6": 2
+     },
+     "method": "printed",
+     "stats": {
+      "max": 5.24,
+      "median": 1.53,
+      "min": 0.145,
+      "n": 338,
+      "p10": 1.432,
+      "p90": 1.62,
+      "spread": 0.188
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-10-11",
+      "2026-11-01"
+     ],
+     "logger": "Claes",
+     "logs": {
+      "4c_SeyaA": 64,
+      "CxxKSMq": 29,
+      "J7Xnr_Jg": 3,
+      "Vr.NkCGD": 16,
+      "WKuEakBZ": 23,
+      "WO7tC3kL": 196,
+      "azbErKcK": 96,
+      "claes/LcJC-rJ5": 17,
+      "defender": 26,
+      "s98kPGv6": 2
+     },
+     "method": "line",
+     "stats": {
+      "max": 5.239,
+      "median": 1.513,
+      "min": 0.04,
+      "n": 471,
+      "p10": 1.237,
+      "p90": 1.613,
+      "spread": 0.376
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "p90-p10 is 0.376, over 0.2"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Earth Lord (unnamed)",
+     "logs": {
+      "JDvzR7j7": 65,
+      "OwkA-G99": 19,
+      "uW_VbgR": 11
+     },
+     "method": "printed",
+     "stats": {
+      "max": 1.669,
+      "median": 1.494,
+      "min": 0.097,
+      "n": 95,
+      "p10": 1.185,
+      "p90": 1.597,
+      "spread": 0.412
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "p90-p10 is 0.412, over 0.2"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Earth Lord (unnamed)",
+     "logs": {
+      "JDvzR7j7": 65,
+      "OwkA-G99": 19,
+      "uW_VbgR": 11
+     },
+     "method": "line",
+     "stats": {
+      "max": 1.65,
+      "median": 1.52,
+      "min": 0.42,
+      "n": 95,
+      "p10": 1.378,
+      "p90": 1.606,
+      "spread": 0.228
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "p90-p10 is 0.228, over 0.2"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Elmer",
+     "logs": {
+      "2N1HTSWZ": 98,
+      "Z5cyffxx": 85,
+      "g-lD00-h": 49
+     },
+     "method": "printed",
+     "stats": {
+      "max": 2.312,
+      "median": 1.498,
+      "min": 0.014,
+      "n": 232,
+      "p10": 1.373,
+      "p90": 1.601,
+      "spread": 0.228
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "p90-p10 is 0.228, over 0.2"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Elmer",
+     "logs": {
+      "2N1HTSWZ": 98,
+      "Z5cyffxx": 85,
+      "g-lD00-h": 49
+     },
+     "method": "line",
+     "stats": {
+      "max": 2.303,
+      "median": 1.492,
+      "min": 0.873,
+      "n": 232,
+      "p10": 1.401,
+      "p90": 1.593,
+      "spread": 0.192
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-08-19"
+     ],
+     "logger": "Leviticus",
+     "logs": {
+      "Sentinel": 54
+     },
+     "method": "line",
+     "stats": {
+      "max": 1.676,
+      "median": 1.5,
+      "min": 0.599,
+      "n": 54,
+      "p10": 1.289,
+      "p90": 1.608,
+      "spread": 0.319
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "p90-p10 is 0.319, over 0.2"
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Mystor",
+     "logs": {
+      "EveP2TVe": 8,
+      "FceAmb0o": 28,
+      "c.iJVmpL": 39,
+      "mystor/LcJC-rJ5": 74,
+      "t54WWU6b": 84,
+      "vNTjvghY": 57
+     },
+     "method": "printed",
+     "stats": {
+      "max": 1.69,
+      "median": 1.51,
+      "min": 1.38,
+      "n": 290,
+      "p10": 1.44,
+      "p90": 1.6,
+      "spread": 0.16
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Mystor",
+     "logs": {
+      "EveP2TVe": 8,
+      "FceAmb0o": 28,
+      "c.iJVmpL": 39,
+      "mystor/LcJC-rJ5": 74,
+      "t54WWU6b": 84,
+      "vNTjvghY": 57
+     },
+     "method": "line_1s",
+     "stats": {
+      "max": 2.0,
+      "median": 2.0,
+      "min": 1.0,
+      "n": 290,
+      "p10": 1.0,
+      "p90": 2.0,
+      "spread": 1.0
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "1 s stamps cannot resolve this clock"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Nikita",
+     "logs": {
+      "L8LSw7xD": 14,
+      "X8pRorzR": 174,
+      "kAQnlFAW": 62
+     },
+     "method": "printed",
+     "stats": {
+      "max": 1.89,
+      "median": 1.45,
+      "min": 1.12,
+      "n": 250,
+      "p10": 1.319,
+      "p90": 1.65,
+      "spread": 0.331
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "p90-p10 is 0.331, over 0.2"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Nikita",
+     "logs": {
+      "L8LSw7xD": 14,
+      "X8pRorzR": 174,
+      "kAQnlFAW": 62
+     },
+     "method": "line",
+     "stats": {
+      "max": 1.67,
+      "median": 1.54,
+      "min": 1.22,
+      "n": 249,
+      "p10": 1.46,
+      "p90": 1.6,
+      "spread": 0.14
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-10-27"
+     ],
+     "logger": "Ours, recorder (Infernal)",
+     "logs": {
+      "ours/135412_Tabethys": 9
+     },
+     "method": "line",
+     "stats": {
+      "max": 1.57,
+      "median": 1.527,
+      "min": 1.416,
+      "n": 9,
+      "p10": 1.445,
+      "p90": 1.56,
+      "spread": 0.115
+     },
+     "usable": false,
+     "versions": [
+      "4.7.450"
+     ],
+     "why_not": "n=9 is under 10"
+    },
+    {
+     "filed": [
+      "2026-10-27"
+     ],
+     "logger": "Ours, recorder (Monk)",
+     "logs": {
+      "ours/112717_Tabethys": 29
+     },
+     "method": "line",
+     "stats": {
+      "max": 1.738,
+      "median": 1.519,
+      "min": 1.406,
+      "n": 29,
+      "p10": 1.443,
+      "p90": 1.59,
+      "spread": 0.146
+     },
+     "usable": true,
+     "versions": [
+      "4.7.450"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Shikudo attacker (unnamed)",
+     "logs": {
+      "attacker": 37
+     },
+     "method": "printed",
+     "stats": {
+      "max": 1.617,
+      "median": 1.501,
+      "min": 1.414,
+      "n": 37,
+      "p10": 1.439,
+      "p90": 1.584,
+      "spread": 0.144
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Shikudo attacker (unnamed)",
+     "logs": {
+      "attacker": 37
+     },
+     "method": "line",
+     "stats": {
+      "max": 1.65,
+      "median": 1.52,
+      "min": 0.94,
+      "n": 37,
+      "p10": 1.438,
+      "p90": 1.584,
+      "spread": 0.146
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    }
+   ],
+   "methods": {
+    "line": 226,
+    "printed": 1242
+   },
+   "spread_without": {
+    "Claes": 0.239,
+    "Earth Lord (unnamed)": 0.223,
+    "Elmer": 0.23,
+    "Leviticus": 0.23,
+    "Mystor": 0.254,
+    "Nikita": 0.189,
+    "Ours, recorder (Infernal)": 0.23,
+    "Ours, recorder (Monk)": 0.23,
+    "Shikudo attacker (unnamed)": 0.23
+   },
+   "stats": {
+    "max": 5.24,
+    "median": 1.504,
+    "min": 0.014,
+    "n": 1468,
+    "p10": 1.38,
+    "p90": 1.61,
+    "spread": 0.23
+   },
+   "title": "Eat",
+   "unpaired": 1,
+   "usable": false,
+   "why_not": "p90-p10 is 0.230, over 0.2"
+  },
+  "fitness": {
+   "by_logger": [
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Claes",
+     "logs": {
+      "claes/LcJC-rJ5": 1
+     },
+     "method": "line",
+     "stats": {
+      "max": 9.969,
+      "median": 9.969,
+      "min": 9.969,
+      "n": 1,
+      "p10": 9.969,
+      "p90": 9.969,
+      "spread": 0.0
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=1 is under 10"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Elmer",
+     "logs": {
+      "2N1HTSWZ": 1
+     },
+     "method": "line",
+     "stats": {
+      "max": 9.24,
+      "median": 9.24,
+      "min": 9.24,
+      "n": 1,
+      "p10": 9.24,
+      "p90": 9.24,
+      "spread": 0.0
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=1 is under 10"
+    },
+    {
+     "filed": [
+      "2026-08-19"
+     ],
+     "logger": "Leviticus",
+     "logs": {
+      "Sentinel": 2
+     },
+     "method": "line",
+     "stats": {
+      "max": 9.807,
+      "median": 9.433,
+      "min": 9.059,
+      "n": 2,
+      "p10": 9.134,
+      "p90": 9.732,
+      "spread": 0.598
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=2 is under 10"
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Mystor",
+     "logs": {
+      "mystor/LcJC-rJ5": 1,
+      "t54WWU6b": 4
+     },
+     "method": "line_1s",
+     "stats": {
+      "max": 10.0,
+      "median": 10.0,
+      "min": 10.0,
+      "n": 5,
+      "p10": 10.0,
+      "p90": 10.0,
+      "spread": 0.0
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "1 s stamps cannot resolve this clock"
+    },
+    {
+     "filed": [
+      "2026-10-27"
+     ],
+     "logger": "Ours, recorder (Monk)",
+     "logs": {
+      "ours/112717_Tabethys": 1
+     },
+     "method": "line",
+     "stats": {
+      "max": 9.964,
+      "median": 9.964,
+      "min": 9.964,
+      "n": 1,
+      "p10": 9.964,
+      "p90": 9.964,
+      "spread": 0.0
+     },
+     "usable": false,
+     "versions": [
+      "4.7.450"
+     ],
+     "why_not": "n=1 is under 10"
+    }
+   ],
+   "methods": {
+    "line": 5,
+    "line_1s": 5
+   },
+   "spread_without": {
+    "Claes": 0.804,
+    "Elmer": 0.684,
+    "Leviticus": 0.583,
+    "Ours, recorder (Monk)": 0.807
+   },
+   "stats": {
+    "max": 9.969,
+    "median": 9.807,
+    "min": 9.059,
+    "n": 5,
+    "p10": 9.131,
+    "p90": 9.967,
+    "spread": 0.836
+   },
+   "title": "FITNESS lockout",
+   "unpaired": 0,
+   "usable": false,
+   "why_not": "n=5 is under 10"
+  },
+  "focus": {
+   "by_logger": [
+    {
+     "filed": [
+      "2026-10-11",
+      "2026-11-01"
+     ],
+     "logger": "Claes",
+     "logs": {
+      "WO7tC3kL": 30,
+      "azbErKcK": 3,
+      "claes/LcJC-rJ5": 3,
+      "defender": 4
+     },
+     "method": "printed",
+     "stats": {
+      "max": 2.694,
+      "median": 2.446,
+      "min": 2.07,
+      "n": 40,
+      "p10": 2.358,
+      "p90": 2.509,
+      "spread": 0.152
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-10-11",
+      "2026-11-01"
+     ],
+     "logger": "Claes",
+     "logs": {
+      "WO7tC3kL": 30,
+      "azbErKcK": 3,
+      "claes/LcJC-rJ5": 3,
+      "defender": 4
+     },
+     "method": "line",
+     "stats": {
+      "max": 2.691,
+      "median": 2.406,
+      "min": 1.165,
+      "n": 39,
+      "p10": 2.107,
+      "p90": 2.497,
+      "spread": 0.391
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "p90-p10 is 0.391, over 0.2"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Earth Lord (unnamed)",
+     "logs": {
+      "JDvzR7j7": 10,
+      "uW_VbgR": 3
+     },
+     "method": "printed",
+     "stats": {
+      "max": 2.519,
+      "median": 2.419,
+      "min": 2.232,
+      "n": 13,
+      "p10": 2.355,
+      "p90": 2.477,
+      "spread": 0.122
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Earth Lord (unnamed)",
+     "logs": {
+      "JDvzR7j7": 10,
+      "uW_VbgR": 3
+     },
+     "method": "line",
+     "stats": {
+      "max": 2.51,
+      "median": 2.42,
+      "min": 1.61,
+      "n": 13,
+      "p10": 2.33,
+      "p90": 2.498,
+      "spread": 0.168
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Elmer",
+     "logs": {
+      "2N1HTSWZ": 9,
+      "Z5cyffxx": 11
+     },
+     "method": "printed",
+     "stats": {
+      "max": 2.509,
+      "median": 2.405,
+      "min": 2.308,
+      "n": 20,
+      "p10": 2.329,
+      "p90": 2.505,
+      "spread": 0.176
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Elmer",
+     "logs": {
+      "2N1HTSWZ": 9,
+      "Z5cyffxx": 11
+     },
+     "method": "line",
+     "stats": {
+      "max": 2.507,
+      "median": 2.393,
+      "min": 2.299,
+      "n": 20,
+      "p10": 2.322,
+      "p90": 2.49,
+      "spread": 0.168
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-08-19"
+     ],
+     "logger": "Leviticus",
+     "logs": {
+      "Sentinel": 14
+     },
+     "method": "line",
+     "stats": {
+      "max": 2.551,
+      "median": 2.432,
+      "min": 2.044,
+      "n": 14,
+      "p10": 2.247,
+      "p90": 2.506,
+      "spread": 0.259
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "p90-p10 is 0.259, over 0.2"
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Mystor",
+     "logs": {
+      "EveP2TVe": 4,
+      "c.iJVmpL": 4,
+      "mystor/LcJC-rJ5": 18,
+      "t54WWU6b": 5,
+      "vNTjvghY": 4
+     },
+     "method": "printed",
+     "stats": {
+      "max": 4.99,
+      "median": 2.45,
+      "min": 2.32,
+      "n": 35,
+      "p10": 2.348,
+      "p90": 2.512,
+      "spread": 0.164
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Mystor",
+     "logs": {
+      "EveP2TVe": 4,
+      "c.iJVmpL": 4,
+      "mystor/LcJC-rJ5": 18,
+      "t54WWU6b": 5,
+      "vNTjvghY": 4
+     },
+     "method": "line_1s",
+     "stats": {
+      "max": 5.0,
+      "median": 2.0,
+      "min": 2.0,
+      "n": 35,
+      "p10": 2.0,
+      "p90": 3.0,
+      "spread": 1.0
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "1 s stamps cannot resolve this clock"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Nikita",
+     "logs": {
+      "X8pRorzR": 26,
+      "kAQnlFAW": 2
+     },
+     "method": "printed",
+     "stats": {
+      "max": 2.79,
+      "median": 2.425,
+      "min": 2.26,
+      "n": 28,
+      "p10": 2.308,
+      "p90": 2.623,
+      "spread": 0.315
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "p90-p10 is 0.315, over 0.2"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Nikita",
+     "logs": {
+      "X8pRorzR": 26,
+      "kAQnlFAW": 2
+     },
+     "method": "line",
+     "stats": {
+      "max": 2.54,
+      "median": 2.44,
+      "min": 2.35,
+      "n": 27,
+      "p10": 2.372,
+      "p90": 2.51,
+      "spread": 0.138
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-10-27"
+     ],
+     "logger": "Ours, recorder (Monk)",
+     "logs": {
+      "ours/112717_Tabethys": 5
+     },
+     "method": "line",
+     "stats": {
+      "max": 4.992,
+      "median": 4.938,
+      "min": 2.32,
+      "n": 5,
+      "p10": 3.362,
+      "p90": 4.974,
+      "spread": 1.612
+     },
+     "usable": false,
+     "versions": [
+      "4.7.450"
+     ],
+     "why_not": "n=5 is under 10"
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Shikudo attacker (unnamed)",
+     "logs": {
+      "attacker": 1
+     },
+     "method": "printed",
+     "stats": {
+      "max": 2.46,
+      "median": 2.46,
+      "min": 2.46,
+      "n": 1,
+      "p10": 2.46,
+      "p90": 2.46,
+      "spread": 0.0
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=1 is under 10"
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Shikudo attacker (unnamed)",
+     "logs": {
+      "attacker": 1
+     },
+     "method": "line",
+     "stats": {
+      "max": 2.12,
+      "median": 2.12,
+      "min": 2.12,
+      "n": 1,
+      "p10": 2.12,
+      "p90": 2.12,
+      "spread": 0.0
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=1 is under 10"
+    }
+   ],
+   "methods": {
+    "line": 19,
+    "printed": 137
+   },
+   "spread_without": {
+    "Claes": 0.232,
+    "Earth Lord (unnamed)": 0.219,
+    "Elmer": 0.219,
+    "Leviticus": 0.208,
+    "Mystor": 0.221,
+    "Nikita": 0.18,
+    "Ours, recorder (Monk)": 0.185,
+    "Shikudo attacker (unnamed)": 0.205
+   },
+   "stats": {
+    "max": 4.992,
+    "median": 2.43,
+    "min": 2.044,
+    "n": 156,
+    "p10": 2.33,
+    "p90": 2.532,
+    "spread": 0.203
+   },
+   "title": "Focus",
+   "unpaired": 0,
+   "usable": false,
+   "why_not": "p90-p10 is 0.203, over 0.2"
+  },
+  "humour": {
+   "by_logger": [
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Elmer",
+     "logs": {
+      "Z5cyffxx": 41
+     },
+     "method": "line",
+     "stats": {
+      "max": 1.795,
+      "median": 1.546,
+      "min": 0.006,
+      "n": 41,
+      "p10": 1.435,
+      "p90": 1.622,
+      "spread": 0.187
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    }
+   ],
+   "methods": {
+    "line": 41
+   },
+   "spread_without": {
+    "Elmer": null
+   },
+   "stats": {
+    "max": 1.795,
+    "median": 1.546,
+    "min": 0.006,
+    "n": 41,
+    "p10": 1.435,
+    "p90": 1.622,
+    "spread": 0.187
+   },
+   "title": "Humour",
+   "unpaired": 0,
+   "usable": true,
+   "why_not": ""
+  },
+  "immunity": {
+   "by_logger": [
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Claes",
+     "logs": {
+      "4c_SeyaA": 1,
+      "CxxKSMq": 1
+     },
+     "method": "line",
+     "stats": {
+      "max": 7.819,
+      "median": 7.582,
+      "min": 7.346,
+      "n": 2,
+      "p10": 7.393,
+      "p90": 7.772,
+      "spread": 0.378
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=2 is under 10"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Nikita",
+     "logs": {
+      "X8pRorzR": 1
+     },
+     "method": "printed",
+     "stats": {
+      "max": 7.47,
+      "median": 7.47,
+      "min": 7.47,
+      "n": 1,
+      "p10": 7.47,
+      "p90": 7.47,
+      "spread": 0.0
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=1 is under 10"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Nikita",
+     "logs": {
+      "X8pRorzR": 1
+     },
+     "method": "line",
+     "stats": {
+      "max": 7.48,
+      "median": 7.48,
+      "min": 7.48,
+      "n": 1,
+      "p10": 7.48,
+      "p90": 7.48,
+      "spread": 0.0
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=1 is under 10"
+    }
+   ],
+   "methods": {
+    "line": 2,
+    "printed": 1
+   },
+   "spread_without": {
+    "Claes": 0.0,
+    "Nikita": 0.378
+   },
+   "stats": {
+    "max": 7.819,
+    "median": 7.47,
+    "min": 7.346,
+    "n": 3,
+    "p10": 7.371,
+    "p90": 7.749,
+    "spread": 0.378
+   },
+   "title": "Immunity sip",
+   "unpaired": 1,
+   "usable": false,
+   "why_not": "n=3 is under 10"
+  },
+  "moss": {
+   "by_logger": [
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Blademaster (unnamed)",
+     "logs": {
+      "KtdftABt": 2
+     },
+     "method": "line_1s",
+     "stats": {
+      "max": 6.0,
+      "median": 6.0,
+      "min": 6.0,
+      "n": 2,
+      "p10": 6.0,
+      "p90": 6.0,
+      "spread": 0.0
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "1 s stamps cannot resolve this clock"
+    },
+    {
+     "filed": [
+      "2026-10-11",
+      "2026-11-01"
+     ],
+     "logger": "Claes",
+     "logs": {
+      "4c_SeyaA": 10,
+      "CxxKSMq": 10,
+      "Vr.NkCGD": 2,
+      "WKuEakBZ": 4,
+      "WO7tC3kL": 2,
+      "azbErKcK": 1,
+      "defender": 8,
+      "s98kPGv6": 9
+     },
+     "method": "line",
+     "stats": {
+      "max": 6.075,
+      "median": 5.913,
+      "min": 5.276,
+      "n": 46,
+      "p10": 5.691,
+      "p90": 5.988,
+      "spread": 0.297
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "p90-p10 is 0.297, over 0.2"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Earth Lord (unnamed)",
+     "logs": {
+      "JDvzR7j7": 12,
+      "OwkA-G99": 17
+     },
+     "method": "line",
+     "stats": {
+      "max": 6.07,
+      "median": 5.94,
+      "min": 5.8,
+      "n": 29,
+      "p10": 5.87,
+      "p90": 6.002,
+      "spread": 0.132
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Elmer",
+     "logs": {
+      "2N1HTSWZ": 24,
+      "3ys7NuHA": 9
+     },
+     "method": "line",
+     "stats": {
+      "max": 6.021,
+      "median": 5.906,
+      "min": 5.74,
+      "n": 33,
+      "p10": 5.778,
+      "p90": 5.997,
+      "spread": 0.219
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "p90-p10 is 0.219, over 0.2"
+    },
+    {
+     "filed": [
+      "2026-08-19"
+     ],
+     "logger": "Leviticus",
+     "logs": {
+      "Sentinel": 4
+     },
+     "method": "line",
+     "stats": {
+      "max": 5.956,
+      "median": 5.809,
+      "min": 5.749,
+      "n": 4,
+      "p10": 5.757,
+      "p90": 5.922,
+      "spread": 0.165
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=4 is under 10"
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Mystor",
+     "logs": {
+      "EveP2TVe": 1,
+      "FceAmb0o": 4,
+      "c.iJVmpL": 3,
+      "vNTjvghY": 5
+     },
+     "method": "printed",
+     "stats": {
+      "max": 6.11,
+      "median": 5.91,
+      "min": 5.82,
+      "n": 13,
+      "p10": 5.872,
+      "p90": 6.0,
+      "spread": 0.128
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Mystor",
+     "logs": {
+      "EveP2TVe": 1,
+      "FceAmb0o": 4,
+      "c.iJVmpL": 3,
+      "vNTjvghY": 5
+     },
+     "method": "line_1s",
+     "stats": {
+      "max": 6.0,
+      "median": 6.0,
+      "min": 5.0,
+      "n": 13,
+      "p10": 6.0,
+      "p90": 6.0,
+      "spread": 0.0
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "1 s stamps cannot resolve this clock"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Nikita",
+     "logs": {
+      "X8pRorzR": 4
+     },
+     "method": "printed",
+     "stats": {
+      "max": 6.03,
+      "median": 5.85,
+      "min": 5.8,
+      "n": 4,
+      "p10": 5.803,
+      "p90": 5.988,
+      "spread": 0.185
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=4 is under 10"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Nikita",
+     "logs": {
+      "X8pRorzR": 4
+     },
+     "method": "line",
+     "stats": {
+      "max": 5.98,
+      "median": 5.925,
+      "min": 5.87,
+      "n": 4,
+      "p10": 5.879,
+      "p90": 5.971,
+      "spread": 0.092
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=4 is under 10"
+    },
+    {
+     "filed": [
+      "2026-10-27"
+     ],
+     "logger": "Ours, recorder (Monk)",
+     "logs": {
+      "ours/112717_Tabethys": 5
+     },
+     "method": "line",
+     "stats": {
+      "max": 5.938,
+      "median": 5.912,
+      "min": 5.839,
+      "n": 5,
+      "p10": 5.854,
+      "p90": 5.935,
+      "spread": 0.081
+     },
+     "usable": false,
+     "versions": [
+      "4.7.450"
+     ],
+     "why_not": "n=5 is under 10"
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Shikudo attacker (unnamed)",
+     "logs": {
+      "attacker": 3
+     },
+     "method": "line",
+     "stats": {
+      "max": 5.96,
+      "median": 5.93,
+      "min": 5.88,
+      "n": 3,
+      "p10": 5.89,
+      "p90": 5.954,
+      "spread": 0.064
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=3 is under 10"
+    }
+   ],
+   "methods": {
+    "line": 120,
+    "line_1s": 2,
+    "printed": 17
+   },
+   "spread_without": {
+    "Claes": 0.191,
+    "Earth Lord (unnamed)": 0.224,
+    "Elmer": 0.2,
+    "Leviticus": 0.2,
+    "Mystor": 0.225,
+    "Nikita": 0.219,
+    "Ours, recorder (Monk)": 0.223,
+    "Shikudo attacker (unnamed)": 0.218
+   },
+   "stats": {
+    "max": 6.11,
+    "median": 5.91,
+    "min": 5.276,
+    "n": 137,
+    "p10": 5.79,
+    "p90": 6.0,
+    "spread": 0.21
+   },
+   "title": "Moss, potash",
+   "unpaired": 2,
+   "usable": false,
+   "why_not": "p90-p10 is 0.210, over 0.2"
+  },
+  "rebounding": {
+   "by_logger": [
+    {
+     "filed": [
+      "2026-10-11",
+      "2026-11-01"
+     ],
+     "logger": "Claes",
+     "logs": {
+      "4c_SeyaA": 5,
+      "CxxKSMq": 7,
+      "J7Xnr_Jg": 1,
+      "Vr.NkCGD": 2,
+      "WKuEakBZ": 4,
+      "WO7tC3kL": 29,
+      "azbErKcK": 14,
+      "claes/LcJC-rJ5": 4,
+      "defender": 10,
+      "s98kPGv6": 6
+     },
+     "method": "line",
+     "stats": {
+      "max": 32.743,
+      "median": 8.48,
+      "min": 0.105,
+      "n": 82,
+      "p10": 5.225,
+      "p90": 8.918,
+      "spread": 3.693
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "p90-p10 is 3.693, over 0.2"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Elmer",
+     "logs": {
+      "2N1HTSWZ": 16,
+      "3ys7NuHA": 3,
+      "Z5cyffxx": 7
+     },
+     "method": "line",
+     "stats": {
+      "max": 17.155,
+      "median": 8.478,
+      "min": 5.616,
+      "n": 26,
+      "p10": 8.409,
+      "p90": 8.707,
+      "spread": 0.299
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "p90-p10 is 0.299, over 0.2"
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Mystor",
+     "logs": {
+      "FceAmb0o": 8,
+      "t54WWU6b": 17,
+      "vNTjvghY": 14
+     },
+     "method": "line_1s",
+     "stats": {
+      "max": 10.0,
+      "median": 9.0,
+      "min": 7.0,
+      "n": 39,
+      "p10": 8.0,
+      "p90": 9.0,
+      "spread": 1.0
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "1 s stamps cannot resolve this clock"
+    },
+    {
+     "filed": [
+      "2026-10-12"
+     ],
+     "logger": "Ours, recorder (Alchemist)",
+     "logs": {
+      "ours/201153_Tabethys": 4
+     },
+     "method": "line",
+     "stats": {
+      "max": 9.702,
+      "median": 8.446,
+      "min": 0.026,
+      "n": 4,
+      "p10": 2.534,
+      "p90": 9.344,
+      "spread": 6.81
+     },
+     "usable": false,
+     "versions": [
+      "4.7.418"
+     ],
+     "why_not": "n=4 is under 10"
+    },
+    {
+     "filed": [
+      "2026-10-27"
+     ],
+     "logger": "Ours, recorder (Infernal)",
+     "logs": {
+      "ours/135412_Tabethys": 34
+     },
+     "method": "line",
+     "stats": {
+      "max": 36.986,
+      "median": 8.496,
+      "min": 8.397,
+      "n": 34,
+      "p10": 8.436,
+      "p90": 8.567,
+      "spread": 0.131
+     },
+     "usable": true,
+     "versions": [
+      "4.7.450"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-10-27"
+     ],
+     "logger": "Ours, recorder (Monk)",
+     "logs": {
+      "ours/112717_Tabethys": 29
+     },
+     "method": "line",
+     "stats": {
+      "max": 49.493,
+      "median": 8.515,
+      "min": 8.42,
+      "n": 29,
+      "p10": 8.466,
+      "p90": 13.113,
+      "spread": 4.648
+     },
+     "usable": false,
+     "versions": [
+      "4.7.450"
+     ],
+     "why_not": "p90-p10 is 4.648, over 0.2"
+    },
+    {
+     "filed": [
+      "2026-10-28"
+     ],
+     "logger": "Ours, recorder (Runewarden)",
+     "logs": {
+      "ours/073547_Tabethys": 1
+     },
+     "method": "line",
+     "stats": {
+      "max": 8.504,
+      "median": 8.504,
+      "min": 8.504,
+      "n": 1,
+      "p10": 8.504,
+      "p90": 8.504,
+      "spread": 0.0
+     },
+     "usable": false,
+     "versions": [
+      "4.7.462"
+     ],
+     "why_not": "n=1 is under 10"
+    }
+   ],
+   "methods": {
+    "line": 176,
+    "line_1s": 39
+   },
+   "spread_without": {
+    "Claes": 0.156,
+    "Elmer": 1.628,
+    "Ours, recorder (Alchemist)": 0.597,
+    "Ours, recorder (Infernal)": 1.942,
+    "Ours, recorder (Monk)": 1.761,
+    "Ours, recorder (Runewarden)": 1.236
+   },
+   "stats": {
+    "max": 49.493,
+    "median": 8.492,
+    "min": 0.026,
+    "n": 176,
+    "p10": 7.548,
+    "p90": 8.68,
+    "spread": 1.132
+   },
+   "title": "Rebounding after a smoke, third person",
+   "unpaired": 0,
+   "usable": false,
+   "why_not": "p90-p10 is 1.132, over 0.2"
+  },
+  "restoration": {
+   "by_logger": [
+    {
+     "filed": [
+      "2026-10-11",
+      "2026-11-01"
+     ],
+     "logger": "Claes",
+     "logs": {
+      "CxxKSMq": 2,
+      "defender": 2
+     },
+     "method": "printed",
+     "stats": {
+      "max": 4.038,
+      "median": 4.017,
+      "min": 3.984,
+      "n": 4,
+      "p10": 3.992,
+      "p90": 4.034,
+      "spread": 0.041
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=4 is under 10"
+    },
+    {
+     "filed": [
+      "2026-10-11",
+      "2026-11-01"
+     ],
+     "logger": "Claes",
+     "logs": {
+      "CxxKSMq": 2,
+      "defender": 2
+     },
+     "method": "line",
+     "stats": {
+      "max": 4.618,
+      "median": 4.014,
+      "min": 3.984,
+      "n": 4,
+      "p10": 3.99,
+      "p90": 4.439,
+      "spread": 0.449
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=4 is under 10"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Earth Lord (unnamed)",
+     "logs": {
+      "JDvzR7j7": 5,
+      "OwkA-G99": 9
+     },
+     "method": "printed",
+     "stats": {
+      "max": 4.126,
+      "median": 4.024,
+      "min": 3.917,
+      "n": 14,
+      "p10": 3.932,
+      "p90": 4.05,
+      "spread": 0.117
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Earth Lord (unnamed)",
+     "logs": {
+      "JDvzR7j7": 5,
+      "OwkA-G99": 9
+     },
+     "method": "line",
+     "stats": {
+      "max": 4.03,
+      "median": 3.99,
+      "min": 2.83,
+      "n": 14,
+      "p10": 3.529,
+      "p90": 4.017,
+      "spread": 0.488
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "p90-p10 is 0.488, over 0.2"
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Mystor",
+     "logs": {
+      "FceAmb0o": 2,
+      "c.iJVmpL": 2,
+      "vNTjvghY": 5
+     },
+     "method": "printed",
+     "stats": {
+      "max": 4.04,
+      "median": 4.02,
+      "min": 3.95,
+      "n": 9,
+      "p10": 3.966,
+      "p90": 4.024,
+      "spread": 0.058
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=9 is under 10"
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Mystor",
+     "logs": {
+      "FceAmb0o": 2,
+      "c.iJVmpL": 2,
+      "vNTjvghY": 5
+     },
+     "method": "line_1s",
+     "stats": {
+      "max": 5.0,
+      "median": 4.0,
+      "min": 4.0,
+      "n": 9,
+      "p10": 4.0,
+      "p90": 4.2,
+      "spread": 0.2
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "1 s stamps cannot resolve this clock"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Nikita",
+     "logs": {
+      "kAQnlFAW": 3
+     },
+     "method": "printed",
+     "stats": {
+      "max": 4.18,
+      "median": 3.99,
+      "min": 3.78,
+      "n": 3,
+      "p10": 3.822,
+      "p90": 4.142,
+      "spread": 0.32
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=3 is under 10"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Nikita",
+     "logs": {
+      "kAQnlFAW": 3
+     },
+     "method": "line",
+     "stats": {
+      "max": 1.27,
+      "median": 1.26,
+      "min": 0.8,
+      "n": 3,
+      "p10": 0.892,
+      "p90": 1.268,
+      "spread": 0.376
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=3 is under 10"
+    }
+   ],
+   "methods": {
+    "printed": 30
+   },
+   "spread_without": {
+    "Claes": 0.114,
+    "Earth Lord (unnamed)": 0.079,
+    "Mystor": 0.124,
+    "Nikita": 0.101
+   },
+   "stats": {
+    "max": 4.18,
+    "median": 4.019,
+    "min": 3.78,
+    "n": 30,
+    "p10": 3.935,
+    "p90": 4.042,
+    "spread": 0.107
+   },
+   "title": "Salve, restoration",
+   "unpaired": 0,
+   "usable": true,
+   "why_not": ""
+  },
+  "salt": {
+   "by_logger": [
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Elmer",
+     "logs": {
+      "Z5cyffxx": 7
+     },
+     "method": "line",
+     "stats": {
+      "max": 9.999,
+      "median": 9.313,
+      "min": 9.117,
+      "n": 7,
+      "p10": 9.165,
+      "p90": 9.903,
+      "spread": 0.738
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=7 is under 10"
+    }
+   ],
+   "methods": {
+    "line": 7
+   },
+   "spread_without": {
+    "Elmer": null
+   },
+   "stats": {
+    "max": 9.999,
+    "median": 9.313,
+    "min": 9.117,
+    "n": 7,
+    "p10": 9.165,
+    "p90": 9.903,
+    "spread": 0.738
+   },
+   "title": "Alchemist salt lockout",
+   "unpaired": 0,
+   "usable": false,
+   "why_not": "n=7 is under 10"
+  },
+  "salve_short": {
+   "by_logger": [
+    {
+     "filed": [
+      "2026-10-11",
+      "2026-11-01"
+     ],
+     "logger": "Claes",
+     "logs": {
+      "CxxKSMq": 5,
+      "J7Xnr_Jg": 1,
+      "azbErKcK": 5,
+      "defender": 12,
+      "s98kPGv6": 2
+     },
+     "method": "printed",
+     "stats": {
+      "max": 1.012,
+      "median": 0.93,
+      "min": 0.747,
+      "n": 25,
+      "p10": 0.831,
+      "p90": 0.979,
+      "spread": 0.147
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-10-11",
+      "2026-11-01"
+     ],
+     "logger": "Claes",
+     "logs": {
+      "CxxKSMq": 5,
+      "J7Xnr_Jg": 1,
+      "azbErKcK": 5,
+      "defender": 12,
+      "s98kPGv6": 2
+     },
+     "method": "line",
+     "stats": {
+      "max": 1.01,
+      "median": 0.929,
+      "min": 0.0,
+      "n": 25,
+      "p10": 0.506,
+      "p90": 0.977,
+      "spread": 0.471
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "p90-p10 is 0.471, over 0.2"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Earth Lord (unnamed)",
+     "logs": {
+      "OwkA-G99": 31
+     },
+     "method": "printed",
+     "stats": {
+      "max": 1.013,
+      "median": 0.87,
+      "min": 0.773,
+      "n": 31,
+      "p10": 0.792,
+      "p90": 0.96,
+      "spread": 0.168
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Earth Lord (unnamed)",
+     "logs": {
+      "OwkA-G99": 31
+     },
+     "method": "line",
+     "stats": {
+      "max": 1.02,
+      "median": 0.88,
+      "min": 0.0,
+      "n": 31,
+      "p10": 0.26,
+      "p90": 0.96,
+      "spread": 0.7
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "p90-p10 is 0.700, over 0.2"
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Mystor",
+     "logs": {
+      "FceAmb0o": 33,
+      "c.iJVmpL": 3,
+      "mystor/LcJC-rJ5": 1,
+      "t54WWU6b": 4,
+      "vNTjvghY": 48
+     },
+     "method": "printed",
+     "stats": {
+      "max": 1.06,
+      "median": 0.91,
+      "min": 0.8,
+      "n": 89,
+      "p10": 0.84,
+      "p90": 0.992,
+      "spread": 0.152
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Mystor",
+     "logs": {
+      "FceAmb0o": 33,
+      "c.iJVmpL": 3,
+      "mystor/LcJC-rJ5": 1,
+      "t54WWU6b": 4,
+      "vNTjvghY": 48
+     },
+     "method": "line_1s",
+     "stats": {
+      "max": 1.0,
+      "median": 1.0,
+      "min": 0.0,
+      "n": 89,
+      "p10": 1.0,
+      "p90": 1.0,
+      "spread": 0.0
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "1 s stamps cannot resolve this clock"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Nikita",
+     "logs": {
+      "X8pRorzR": 2,
+      "kAQnlFAW": 3
+     },
+     "method": "printed",
+     "stats": {
+      "max": 1.03,
+      "median": 0.87,
+      "min": 0.65,
+      "n": 5,
+      "p10": 0.65,
+      "p90": 1.006,
+      "spread": 0.356
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=5 is under 10"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Nikita",
+     "logs": {
+      "X8pRorzR": 2,
+      "kAQnlFAW": 3
+     },
+     "method": "line",
+     "stats": {
+      "max": 1.0,
+      "median": 0.94,
+      "min": 0.87,
+      "n": 5,
+      "p10": 0.886,
+      "p90": 0.992,
+      "spread": 0.106
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=5 is under 10"
+    },
+    {
+     "filed": [
+      "2026-10-27"
+     ],
+     "logger": "Ours, recorder (Monk)",
+     "logs": {
+      "ours/112717_Tabethys": 6
+     },
+     "method": "line",
+     "stats": {
+      "max": 1.057,
+      "median": 0.921,
+      "min": 0.89,
+      "n": 6,
+      "p10": 0.901,
+      "p90": 1.026,
+      "spread": 0.125
+     },
+     "usable": false,
+     "versions": [
+      "4.7.450"
+     ],
+     "why_not": "n=6 is under 10"
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Shikudo attacker (unnamed)",
+     "logs": {
+      "attacker": 4
+     },
+     "method": "printed",
+     "stats": {
+      "max": 0.963,
+      "median": 0.9,
+      "min": 0.845,
+      "n": 4,
+      "p10": 0.857,
+      "p90": 0.948,
+      "spread": 0.091
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=4 is under 10"
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Shikudo attacker (unnamed)",
+     "logs": {
+      "attacker": 4
+     },
+     "method": "line",
+     "stats": {
+      "max": 0.94,
+      "median": 0.9,
+      "min": 0.32,
+      "n": 4,
+      "p10": 0.485,
+      "p90": 0.937,
+      "spread": 0.452
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=4 is under 10"
+    }
+   ],
+   "methods": {
+    "line": 6,
+    "printed": 154
+   },
+   "spread_without": {
+    "Claes": 0.174,
+    "Earth Lord (unnamed)": 0.161,
+    "Mystor": 0.173,
+    "Nikita": 0.17,
+    "Ours, recorder (Monk)": 0.17,
+    "Shikudo attacker (unnamed)": 0.173
+   },
+   "stats": {
+    "max": 1.06,
+    "median": 0.911,
+    "min": 0.65,
+    "n": 160,
+    "p10": 0.82,
+    "p90": 0.991,
+    "spread": 0.171
+   },
+   "title": "Salve, short",
+   "unpaired": 0,
+   "usable": true,
+   "why_not": ""
+  },
+  "salve_unknown": {
+   "by_logger": [
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Claes",
+     "logs": {
+      "defender": 1
+     },
+     "method": "printed",
+     "stats": {
+      "max": 0.965,
+      "median": 0.965,
+      "min": 0.965,
+      "n": 1,
+      "p10": 0.965,
+      "p90": 0.965,
+      "spread": 0.0
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=1 is under 10"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Earth Lord (unnamed)",
+     "logs": {
+      "JDvzR7j7": 3,
+      "OwkA-G99": 6
+     },
+     "method": "printed",
+     "stats": {
+      "max": 3.914,
+      "median": 0.861,
+      "min": 0.806,
+      "n": 9,
+      "p10": 0.832,
+      "p90": 1.48,
+      "spread": 0.647
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=9 is under 10"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Earth Lord (unnamed)",
+     "logs": {
+      "JDvzR7j7": 3,
+      "OwkA-G99": 6
+     },
+     "method": "line",
+     "stats": {
+      "max": 4.0,
+      "median": 0.87,
+      "min": 0.7,
+      "n": 9,
+      "p10": 0.828,
+      "p90": 1.552,
+      "spread": 0.724
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=9 is under 10"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Elmer",
+     "logs": {
+      "2N1HTSWZ": 2,
+      "Z5cyffxx": 1
+     },
+     "method": "printed",
+     "stats": {
+      "max": 0.926,
+      "median": 0.768,
+      "min": 0.724,
+      "n": 3,
+      "p10": 0.733,
+      "p90": 0.894,
+      "spread": 0.162
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=3 is under 10"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Elmer",
+     "logs": {
+      "2N1HTSWZ": 2,
+      "Z5cyffxx": 1
+     },
+     "method": "line",
+     "stats": {
+      "max": 0.898,
+      "median": 0.734,
+      "min": 0.71,
+      "n": 3,
+      "p10": 0.715,
+      "p90": 0.865,
+      "spread": 0.15
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=3 is under 10"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Nikita",
+     "logs": {
+      "kAQnlFAW": 1
+     },
+     "method": "printed",
+     "stats": {
+      "max": 3.98,
+      "median": 3.98,
+      "min": 3.98,
+      "n": 1,
+      "p10": 3.98,
+      "p90": 3.98,
+      "spread": 0.0
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=1 is under 10"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Nikita",
+     "logs": {
+      "kAQnlFAW": 1
+     },
+     "method": "line",
+     "stats": {
+      "max": 1.2,
+      "median": 1.2,
+      "min": 1.2,
+      "n": 1,
+      "p10": 1.2,
+      "p90": 1.2,
+      "spread": 0.0
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=1 is under 10"
+    }
+   ],
+   "methods": {
+    "printed": 14
+   },
+   "spread_without": {
+    "Claes": 2.541,
+    "Earth Lord (unnamed)": 2.032,
+    "Elmer": 3.075,
+    "Nikita": 0.182
+   },
+   "stats": {
+    "max": 3.98,
+    "median": 0.863,
+    "min": 0.724,
+    "n": 14,
+    "p10": 0.779,
+    "p90": 3.029,
+    "spread": 2.25
+   },
+   "title": "Salve, type not shown",
+   "unpaired": 0,
+   "usable": false,
+   "why_not": "p90-p10 is 2.250, over 0.2"
+  },
+  "sip": {
+   "by_logger": [
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Blademaster (unnamed)",
+     "logs": {
+      "KtdftABt": 1
+     },
+     "method": "line_1s",
+     "stats": {
+      "max": 4.0,
+      "median": 4.0,
+      "min": 4.0,
+      "n": 1,
+      "p10": 4.0,
+      "p90": 4.0,
+      "spread": 0.0
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "1 s stamps cannot resolve this clock"
+    },
+    {
+     "filed": [
+      "2026-10-11",
+      "2026-11-01"
+     ],
+     "logger": "Claes",
+     "logs": {
+      "4c_SeyaA": 21,
+      "CxxKSMq": 6,
+      "J7Xnr_Jg": 2,
+      "Vr.NkCGD": 5,
+      "WKuEakBZ": 6,
+      "WO7tC3kL": 34,
+      "azbErKcK": 9,
+      "claes/LcJC-rJ5": 3,
+      "defender": 20,
+      "s98kPGv6": 17
+     },
+     "method": "printed",
+     "stats": {
+      "max": 5.85,
+      "median": 4.429,
+      "min": 2.197,
+      "n": 123,
+      "p10": 4.325,
+      "p90": 4.508,
+      "spread": 0.183
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-10-11",
+      "2026-11-01"
+     ],
+     "logger": "Claes",
+     "logs": {
+      "4c_SeyaA": 21,
+      "CxxKSMq": 6,
+      "J7Xnr_Jg": 2,
+      "Vr.NkCGD": 5,
+      "WKuEakBZ": 6,
+      "WO7tC3kL": 34,
+      "azbErKcK": 9,
+      "claes/LcJC-rJ5": 3,
+      "defender": 20,
+      "s98kPGv6": 17
+     },
+     "method": "line",
+     "stats": {
+      "max": 5.851,
+      "median": 4.418,
+      "min": 2.196,
+      "n": 121,
+      "p10": 4.148,
+      "p90": 4.51,
+      "spread": 0.362
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "p90-p10 is 0.362, over 0.2"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Earth Lord (unnamed)",
+     "logs": {
+      "JDvzR7j7": 23,
+      "OwkA-G99": 35,
+      "uW_VbgR": 1
+     },
+     "method": "printed",
+     "stats": {
+      "max": 5.144,
+      "median": 4.398,
+      "min": 4.242,
+      "n": 59,
+      "p10": 4.315,
+      "p90": 4.502,
+      "spread": 0.187
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Earth Lord (unnamed)",
+     "logs": {
+      "JDvzR7j7": 23,
+      "OwkA-G99": 35,
+      "uW_VbgR": 1
+     },
+     "method": "line",
+     "stats": {
+      "max": 5.16,
+      "median": 4.43,
+      "min": 0.7,
+      "n": 59,
+      "p10": 4.35,
+      "p90": 4.502,
+      "spread": 0.152
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Elmer",
+     "logs": {
+      "2N1HTSWZ": 35,
+      "3ys7NuHA": 22,
+      "Z5cyffxx": 10,
+      "g-lD00-h": 2
+     },
+     "method": "printed",
+     "stats": {
+      "max": 4.571,
+      "median": 4.388,
+      "min": 4.263,
+      "n": 68,
+      "p10": 4.307,
+      "p90": 4.506,
+      "spread": 0.199
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Elmer",
+     "logs": {
+      "2N1HTSWZ": 35,
+      "3ys7NuHA": 22,
+      "Z5cyffxx": 10,
+      "g-lD00-h": 2
+     },
+     "method": "line",
+     "stats": {
+      "max": 4.572,
+      "median": 4.391,
+      "min": 4.259,
+      "n": 68,
+      "p10": 4.308,
+      "p90": 4.512,
+      "spread": 0.204
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "p90-p10 is 0.204, over 0.2"
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Mystor",
+     "logs": {
+      "EveP2TVe": 3,
+      "FceAmb0o": 24,
+      "c.iJVmpL": 12,
+      "mystor/LcJC-rJ5": 6,
+      "t54WWU6b": 6,
+      "vNTjvghY": 28
+     },
+     "method": "printed",
+     "stats": {
+      "max": 4.52,
+      "median": 4.39,
+      "min": 4.28,
+      "n": 79,
+      "p10": 4.33,
+      "p90": 4.472,
+      "spread": 0.142
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Mystor",
+     "logs": {
+      "EveP2TVe": 3,
+      "FceAmb0o": 24,
+      "c.iJVmpL": 12,
+      "mystor/LcJC-rJ5": 6,
+      "t54WWU6b": 6,
+      "vNTjvghY": 28
+     },
+     "method": "line_1s",
+     "stats": {
+      "max": 5.0,
+      "median": 4.0,
+      "min": 4.0,
+      "n": 79,
+      "p10": 4.0,
+      "p90": 5.0,
+      "spread": 1.0
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "1 s stamps cannot resolve this clock"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Nikita",
+     "logs": {
+      "L8LSw7xD": 6,
+      "X8pRorzR": 19,
+      "kAQnlFAW": 26
+     },
+     "method": "printed",
+     "stats": {
+      "max": 4.67,
+      "median": 4.38,
+      "min": 4.11,
+      "n": 51,
+      "p10": 4.2,
+      "p90": 4.58,
+      "spread": 0.38
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "p90-p10 is 0.380, over 0.2"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Nikita",
+     "logs": {
+      "L8LSw7xD": 6,
+      "X8pRorzR": 19,
+      "kAQnlFAW": 26
+     },
+     "method": "line",
+     "stats": {
+      "max": 4.55,
+      "median": 4.44,
+      "min": 4.25,
+      "n": 50,
+      "p10": 4.359,
+      "p90": 4.51,
+      "spread": 0.151
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-10-27"
+     ],
+     "logger": "Ours, recorder (Infernal)",
+     "logs": {
+      "ours/135412_Tabethys": 3
+     },
+     "method": "line",
+     "stats": {
+      "max": 4.459,
+      "median": 4.445,
+      "min": 4.383,
+      "n": 3,
+      "p10": 4.395,
+      "p90": 4.456,
+      "spread": 0.061
+     },
+     "usable": false,
+     "versions": [
+      "4.7.450"
+     ],
+     "why_not": "n=3 is under 10"
+    },
+    {
+     "filed": [
+      "2026-10-27"
+     ],
+     "logger": "Ours, recorder (Monk)",
+     "logs": {
+      "ours/112717_Tabethys": 9
+     },
+     "method": "line",
+     "stats": {
+      "max": 4.504,
+      "median": 4.396,
+      "min": 1.937,
+      "n": 9,
+      "p10": 3.871,
+      "p90": 4.458,
+      "spread": 0.586
+     },
+     "usable": false,
+     "versions": [
+      "4.7.450"
+     ],
+     "why_not": "n=9 is under 10"
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Shikudo attacker (unnamed)",
+     "logs": {
+      "attacker": 14
+     },
+     "method": "printed",
+     "stats": {
+      "max": 4.913,
+      "median": 4.403,
+      "min": 4.318,
+      "n": 14,
+      "p10": 4.335,
+      "p90": 4.518,
+      "spread": 0.183
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Shikudo attacker (unnamed)",
+     "logs": {
+      "attacker": 14
+     },
+     "method": "line",
+     "stats": {
+      "max": 4.79,
+      "median": 4.415,
+      "min": 0.72,
+      "n": 14,
+      "p10": 1.819,
+      "p90": 4.504,
+      "spread": 2.685
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "p90-p10 is 2.685, over 0.2"
+    }
+   ],
+   "methods": {
+    "line": 13,
+    "line_1s": 1,
+    "printed": 394
+   },
+   "spread_without": {
+    "Claes": 0.205,
+    "Earth Lord (unnamed)": 0.198,
+    "Elmer": 0.197,
+    "Mystor": 0.219,
+    "Nikita": 0.18,
+    "Ours, recorder (Infernal)": 0.198,
+    "Ours, recorder (Monk)": 0.198,
+    "Shikudo attacker (unnamed)": 0.203
+   },
+   "stats": {
+    "max": 5.85,
+    "median": 4.401,
+    "min": 1.937,
+    "n": 407,
+    "p10": 4.307,
+    "p90": 4.505,
+    "spread": 0.198
+   },
+   "title": "Sip",
+   "unpaired": 8,
+   "usable": true,
+   "why_not": ""
+  },
+  "smoke": {
+   "by_logger": [
+    {
+     "filed": [
+      "2026-10-11",
+      "2026-11-01"
+     ],
+     "logger": "Claes",
+     "logs": {
+      "J7Xnr_Jg": 1,
+      "WO7tC3kL": 7,
+      "azbErKcK": 23,
+      "claes/LcJC-rJ5": 4,
+      "defender": 1,
+      "s98kPGv6": 46
+     },
+     "method": "printed",
+     "stats": {
+      "max": 1.779,
+      "median": 1.486,
+      "min": 1.288,
+      "n": 78,
+      "p10": 1.434,
+      "p90": 1.562,
+      "spread": 0.129
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-10-11",
+      "2026-11-01"
+     ],
+     "logger": "Claes",
+     "logs": {
+      "J7Xnr_Jg": 1,
+      "WO7tC3kL": 7,
+      "azbErKcK": 23,
+      "claes/LcJC-rJ5": 4,
+      "defender": 1,
+      "s98kPGv6": 46
+     },
+     "method": "line",
+     "stats": {
+      "max": 5.899,
+      "median": 1.488,
+      "min": 1.287,
+      "n": 82,
+      "p10": 1.432,
+      "p90": 1.569,
+      "spread": 0.137
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Earth Lord (unnamed)",
+     "logs": {
+      "JDvzR7j7": 10,
+      "uW_VbgR": 1
+     },
+     "method": "printed",
+     "stats": {
+      "max": 1.581,
+      "median": 1.499,
+      "min": 1.375,
+      "n": 11,
+      "p10": 1.388,
+      "p90": 1.528,
+      "spread": 0.14
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Earth Lord (unnamed)",
+     "logs": {
+      "JDvzR7j7": 10,
+      "uW_VbgR": 1
+     },
+     "method": "line",
+     "stats": {
+      "max": 1.56,
+      "median": 1.49,
+      "min": 1.37,
+      "n": 11,
+      "p10": 1.46,
+      "p90": 1.52,
+      "spread": 0.06
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Elmer",
+     "logs": {
+      "2N1HTSWZ": 20,
+      "3ys7NuHA": 86,
+      "Z5cyffxx": 14,
+      "g-lD00-h": 10
+     },
+     "method": "printed",
+     "stats": {
+      "max": 3.002,
+      "median": 1.481,
+      "min": 1.352,
+      "n": 105,
+      "p10": 1.403,
+      "p90": 1.607,
+      "spread": 0.204
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "p90-p10 is 0.204, over 0.2"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Elmer",
+     "logs": {
+      "2N1HTSWZ": 20,
+      "3ys7NuHA": 86,
+      "Z5cyffxx": 14,
+      "g-lD00-h": 10
+     },
+     "method": "line",
+     "stats": {
+      "max": 2.989,
+      "median": 1.472,
+      "min": 0.277,
+      "n": 130,
+      "p10": 1.378,
+      "p90": 1.6,
+      "spread": 0.222
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "p90-p10 is 0.222, over 0.2"
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Mystor",
+     "logs": {
+      "c.iJVmpL": 1,
+      "mystor/LcJC-rJ5": 5,
+      "t54WWU6b": 2
+     },
+     "method": "printed",
+     "stats": {
+      "max": 1.52,
+      "median": 1.455,
+      "min": 1.39,
+      "n": 8,
+      "p10": 1.418,
+      "p90": 1.492,
+      "spread": 0.074
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=8 is under 10"
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Mystor",
+     "logs": {
+      "c.iJVmpL": 1,
+      "mystor/LcJC-rJ5": 5,
+      "t54WWU6b": 2
+     },
+     "method": "line_1s",
+     "stats": {
+      "max": 2.0,
+      "median": 1.5,
+      "min": 1.0,
+      "n": 8,
+      "p10": 1.0,
+      "p90": 2.0,
+      "spread": 1.0
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "1 s stamps cannot resolve this clock"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Nikita",
+     "logs": {
+      "L8LSw7xD": 7,
+      "X8pRorzR": 27,
+      "kAQnlFAW": 6
+     },
+     "method": "printed",
+     "stats": {
+      "max": 1.88,
+      "median": 1.455,
+      "min": 0.98,
+      "n": 40,
+      "p10": 1.34,
+      "p90": 1.661,
+      "spread": 0.321
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "p90-p10 is 0.321, over 0.2"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Nikita",
+     "logs": {
+      "L8LSw7xD": 7,
+      "X8pRorzR": 27,
+      "kAQnlFAW": 6
+     },
+     "method": "line",
+     "stats": {
+      "max": 2.0,
+      "median": 1.495,
+      "min": 1.44,
+      "n": 38,
+      "p10": 1.474,
+      "p90": 1.533,
+      "spread": 0.059
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-10-27"
+     ],
+     "logger": "Ours, recorder (Monk)",
+     "logs": {
+      "ours/112717_Tabethys": 3
+     },
+     "method": "line",
+     "stats": {
+      "max": 1.543,
+      "median": 1.487,
+      "min": 1.486,
+      "n": 3,
+      "p10": 1.486,
+      "p90": 1.532,
+      "spread": 0.046
+     },
+     "usable": false,
+     "versions": [
+      "4.7.450"
+     ],
+     "why_not": "n=3 is under 10"
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Shikudo attacker (unnamed)",
+     "logs": {
+      "attacker": 2
+     },
+     "method": "printed",
+     "stats": {
+      "max": 1.502,
+      "median": 1.486,
+      "min": 1.47,
+      "n": 2,
+      "p10": 1.473,
+      "p90": 1.499,
+      "spread": 0.026
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=2 is under 10"
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Shikudo attacker (unnamed)",
+     "logs": {
+      "attacker": 2
+     },
+     "method": "line",
+     "stats": {
+      "max": 1.54,
+      "median": 1.35,
+      "min": 1.16,
+      "n": 2,
+      "p10": 1.198,
+      "p90": 1.502,
+      "spread": 0.304
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=2 is under 10"
+    }
+   ],
+   "methods": {
+    "line": 32,
+    "printed": 244
+   },
+   "spread_without": {
+    "Claes": 0.219,
+    "Earth Lord (unnamed)": 0.188,
+    "Elmer": 0.174,
+    "Mystor": 0.188,
+    "Nikita": 0.165,
+    "Ours, recorder (Monk)": 0.188,
+    "Shikudo attacker (unnamed)": 0.187
+   },
+   "stats": {
+    "max": 3.002,
+    "median": 1.481,
+    "min": 0.277,
+    "n": 276,
+    "p10": 1.398,
+    "p90": 1.584,
+    "spread": 0.186
+   },
+   "title": "Smoke (lungs)",
+   "unpaired": 13,
+   "usable": true,
+   "why_not": ""
+  },
+  "tree": {
+   "by_logger": [
+    {
+     "filed": [
+      "2026-10-11",
+      "2026-11-01"
+     ],
+     "logger": "Claes",
+     "logs": {
+      "4c_SeyaA": 8,
+      "CxxKSMq": 3,
+      "J7Xnr_Jg": 1,
+      "Vr.NkCGD": 2,
+      "WKuEakBZ": 3,
+      "WO7tC3kL": 23,
+      "azbErKcK": 12,
+      "claes/LcJC-rJ5": 3,
+      "defender": 4,
+      "s98kPGv6": 5
+     },
+     "method": "printed",
+     "stats": {
+      "max": 14.177,
+      "median": 13.968,
+      "min": 13.321,
+      "n": 63,
+      "p10": 13.899,
+      "p90": 14.077,
+      "spread": 0.178
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-10-11",
+      "2026-11-01"
+     ],
+     "logger": "Claes",
+     "logs": {
+      "4c_SeyaA": 8,
+      "CxxKSMq": 3,
+      "J7Xnr_Jg": 1,
+      "Vr.NkCGD": 2,
+      "WKuEakBZ": 3,
+      "WO7tC3kL": 23,
+      "azbErKcK": 12,
+      "claes/LcJC-rJ5": 3,
+      "defender": 4,
+      "s98kPGv6": 5
+     },
+     "method": "line",
+     "stats": {
+      "max": 14.916,
+      "median": 13.963,
+      "min": 13.319,
+      "n": 63,
+      "p10": 13.87,
+      "p90": 14.115,
+      "spread": 0.244
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "p90-p10 is 0.244, over 0.2"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Earth Lord (unnamed)",
+     "logs": {
+      "JDvzR7j7": 6,
+      "OwkA-G99": 3,
+      "uW_VbgR": 1
+     },
+     "method": "printed",
+     "stats": {
+      "max": 14.056,
+      "median": 13.999,
+      "min": 13.903,
+      "n": 10,
+      "p10": 13.915,
+      "p90": 14.049,
+      "spread": 0.134
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Earth Lord (unnamed)",
+     "logs": {
+      "JDvzR7j7": 6,
+      "OwkA-G99": 3,
+      "uW_VbgR": 1
+     },
+     "method": "line",
+     "stats": {
+      "max": 14.01,
+      "median": 13.965,
+      "min": 13.88,
+      "n": 10,
+      "p10": 13.934,
+      "p90": 13.983,
+      "spread": 0.049
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Elmer",
+     "logs": {
+      "2N1HTSWZ": 5,
+      "3ys7NuHA": 8,
+      "Z5cyffxx": 7,
+      "g-lD00-h": 2
+     },
+     "method": "printed",
+     "stats": {
+      "max": 14.042,
+      "median": 13.956,
+      "min": 13.829,
+      "n": 22,
+      "p10": 13.887,
+      "p90": 14.036,
+      "spread": 0.148
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Elmer",
+     "logs": {
+      "2N1HTSWZ": 5,
+      "3ys7NuHA": 8,
+      "Z5cyffxx": 7,
+      "g-lD00-h": 2
+     },
+     "method": "line",
+     "stats": {
+      "max": 14.035,
+      "median": 13.948,
+      "min": 13.815,
+      "n": 22,
+      "p10": 13.885,
+      "p90": 14.029,
+      "spread": 0.144
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-08-19"
+     ],
+     "logger": "Leviticus",
+     "logs": {
+      "Sentinel": 7
+     },
+     "method": "line",
+     "stats": {
+      "max": 14.214,
+      "median": 13.951,
+      "min": 13.796,
+      "n": 7,
+      "p10": 13.837,
+      "p90": 14.132,
+      "spread": 0.296
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=7 is under 10"
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Mystor",
+     "logs": {
+      "EveP2TVe": 1,
+      "FceAmb0o": 9,
+      "c.iJVmpL": 7,
+      "mystor/LcJC-rJ5": 9,
+      "t54WWU6b": 11,
+      "vNTjvghY": 11
+     },
+     "method": "printed",
+     "stats": {
+      "max": 14.14,
+      "median": 13.96,
+      "min": 13.87,
+      "n": 48,
+      "p10": 13.9,
+      "p90": 14.023,
+      "spread": 0.123
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Mystor",
+     "logs": {
+      "EveP2TVe": 1,
+      "FceAmb0o": 9,
+      "c.iJVmpL": 7,
+      "mystor/LcJC-rJ5": 9,
+      "t54WWU6b": 11,
+      "vNTjvghY": 11
+     },
+     "method": "line_1s",
+     "stats": {
+      "max": 15.0,
+      "median": 14.0,
+      "min": 13.0,
+      "n": 48,
+      "p10": 13.0,
+      "p90": 14.0,
+      "spread": 1.0
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "1 s stamps cannot resolve this clock"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Nikita",
+     "logs": {
+      "L8LSw7xD": 2,
+      "X8pRorzR": 22,
+      "kAQnlFAW": 9
+     },
+     "method": "printed",
+     "stats": {
+      "max": 14.2,
+      "median": 13.94,
+      "min": 13.67,
+      "n": 33,
+      "p10": 13.81,
+      "p90": 14.156,
+      "spread": 0.346
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "p90-p10 is 0.346, over 0.2"
+    },
+    {
+     "filed": [
+      "2026-11-01"
+     ],
+     "logger": "Nikita",
+     "logs": {
+      "L8LSw7xD": 2,
+      "X8pRorzR": 22,
+      "kAQnlFAW": 9
+     },
+     "method": "line",
+     "stats": {
+      "max": 14.13,
+      "median": 14.0,
+      "min": 13.92,
+      "n": 31,
+      "p10": 13.95,
+      "p90": 14.03,
+      "spread": 0.08
+     },
+     "usable": true,
+     "versions": [
+      "-"
+     ],
+     "why_not": ""
+    },
+    {
+     "filed": [
+      "2026-10-27"
+     ],
+     "logger": "Ours, recorder (Infernal)",
+     "logs": {
+      "ours/135412_Tabethys": 1
+     },
+     "method": "line",
+     "stats": {
+      "max": 13.915,
+      "median": 13.915,
+      "min": 13.915,
+      "n": 1,
+      "p10": 13.915,
+      "p90": 13.915,
+      "spread": 0.0
+     },
+     "usable": false,
+     "versions": [
+      "4.7.450"
+     ],
+     "why_not": "n=1 is under 10"
+    },
+    {
+     "filed": [
+      "2026-10-27"
+     ],
+     "logger": "Ours, recorder (Monk)",
+     "logs": {
+      "ours/112717_Tabethys": 3
+     },
+     "method": "line",
+     "stats": {
+      "max": 14.012,
+      "median": 13.959,
+      "min": 13.901,
+      "n": 3,
+      "p10": 13.913,
+      "p90": 14.001,
+      "spread": 0.089
+     },
+     "usable": false,
+     "versions": [
+      "4.7.450"
+     ],
+     "why_not": "n=3 is under 10"
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Shikudo attacker (unnamed)",
+     "logs": {
+      "attacker": 3
+     },
+     "method": "printed",
+     "stats": {
+      "max": 13.973,
+      "median": 13.967,
+      "min": 13.899,
+      "n": 3,
+      "p10": 13.913,
+      "p90": 13.972,
+      "spread": 0.059
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=3 is under 10"
+    },
+    {
+     "filed": [
+      "2026-10-11"
+     ],
+     "logger": "Shikudo attacker (unnamed)",
+     "logs": {
+      "attacker": 3
+     },
+     "method": "line",
+     "stats": {
+      "max": 13.98,
+      "median": 13.92,
+      "min": 13.78,
+      "n": 3,
+      "p10": 13.808,
+      "p90": 13.968,
+      "spread": 0.16
+     },
+     "usable": false,
+     "versions": [
+      "-"
+     ],
+     "why_not": "n=3 is under 10"
+    }
+   ],
+   "methods": {
+    "line": 12,
+    "printed": 179
+   },
+   "spread_without": {
+    "Claes": 0.163,
+    "Earth Lord (unnamed)": 0.166,
+    "Elmer": 0.173,
+    "Leviticus": 0.16,
+    "Mystor": 0.195,
+    "Nikita": 0.143,
+    "Ours, recorder (Infernal)": 0.166,
+    "Ours, recorder (Monk)": 0.167,
+    "Shikudo attacker (unnamed)": 0.167
+   },
+   "stats": {
+    "max": 14.214,
+    "median": 13.957,
+    "min": 13.321,
+    "n": 191,
+    "p10": 13.885,
+    "p90": 14.05,
+    "spread": 0.165
+   },
+   "title": "Tree",
+   "unpaired": 1,
+   "usable": true,
+   "why_not": ""
+  }
+ },
+ "families": {
+  "blademaster": {
+   "fixed": 0,
+   "held": 0,
+   "logs": 1,
+   "prompts": 58,
+   "wrapped": 6
+  },
+  "claes": {
+   "fixed": 0,
+   "held": 0,
+   "logs": 10,
+   "prompts": 4187,
+   "wrapped": 468
+  },
+  "earth": {
+   "fixed": 8,
+   "held": 0,
+   "logs": 4,
+   "prompts": 1607,
+   "wrapped": 17
+  },
+  "elmer": {
+   "fixed": 0,
+   "held": 0,
+   "logs": 4,
+   "prompts": 3036,
+   "wrapped": 677
+  },
+  "mystor": {
+   "fixed": 0,
+   "held": 0,
+   "logs": 6,
+   "prompts": 4836,
+   "wrapped": 5
+  },
+  "nikita": {
+   "fixed": 8,
+   "held": 0,
+   "logs": 3,
+   "prompts": 2077,
+   "wrapped": 542
+  },
+  "ours": {
+   "fixed": 0,
+   "held": 0,
+   "logs": 4,
+   "prompts": 7655,
+   "wrapped": 0
+  },
+  "sentinel": {
+   "fixed": 0,
+   "held": 0,
+   "logs": 2,
+   "prompts": 1154,
+   "wrapped": 49
+  }
+ },
+ "generated_by": "tools/kb_timing.py",
+ "latest_filed": "2026-11-01",
+ "logs": [
+  {
+   "family": "sentinel",
+   "file": "2026-08-19_leviticus_blademaster-vs-sentinel_loss_Sentinel.txt",
+   "filed": "2026-08-19",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "Sentinel",
+   "in_pools": true,
+   "logger": "Leviticus",
+   "prompts": 511,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 49
+  },
+  {
+   "family": "mystor",
+   "file": "2026-10-11_mystor_shikudo-vs-apostate_win_LcJC-rJ5.txt",
+   "filed": "2026-10-11",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "mystor/LcJC-rJ5",
+   "in_pools": true,
+   "logger": "Mystor",
+   "prompts": 901,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 0
+  },
+  {
+   "family": "mystor",
+   "file": "2026-10-11_mystor_shikudo-vs-depthswalker_loss_EveP2TVe.txt",
+   "filed": "2026-10-11",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "EveP2TVe",
+   "in_pools": true,
+   "logger": "Mystor",
+   "prompts": 131,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 5
+  },
+  {
+   "family": "mystor",
+   "file": "2026-10-11_mystor_shikudo-vs-infernal-dwc_win_FceAmb0o.txt",
+   "filed": "2026-10-11",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "FceAmb0o",
+   "in_pools": true,
+   "logger": "Mystor",
+   "prompts": 969,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 0
+  },
+  {
+   "family": "mystor",
+   "file": "2026-10-11_mystor_shikudo-vs-infernal-dwc_win_c.iJVmpL.txt",
+   "filed": "2026-10-11",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "c.iJVmpL",
+   "in_pools": true,
+   "logger": "Mystor",
+   "prompts": 699,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 0
+  },
+  {
+   "family": "mystor",
+   "file": "2026-10-11_mystor_shikudo-vs-infernal-dwc_win_vNTjvghY.txt",
+   "filed": "2026-10-11",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "vNTjvghY",
+   "in_pools": true,
+   "logger": "Mystor",
+   "prompts": 1355,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 0
+  },
+  {
+   "family": "mystor",
+   "file": "2026-10-11_mystor_shikudo-vs-shaman_loss_t54WWU6b.txt",
+   "filed": "2026-10-11",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "t54WWU6b",
+   "in_pools": true,
+   "logger": "Mystor",
+   "prompts": 781,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 0
+  },
+  {
+   "family": "claes",
+   "file": "2026-10-11_runewarden-snb-vs-shikudo_defender.txt",
+   "filed": "2026-10-11",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "defender",
+   "in_pools": true,
+   "logger": "Claes",
+   "prompts": 327,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 11
+  },
+  {
+   "family": "earth",
+   "file": "2026-10-11_shikudo-vs-runewarden-snb_attacker.txt",
+   "filed": "2026-10-11",
+   "fixed_stamps": 1,
+   "held_stamps": 0,
+   "id": "attacker",
+   "in_pools": true,
+   "logger": "Shikudo attacker (unnamed)",
+   "prompts": 376,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 0
+  },
+  {
+   "family": null,
+   "file": "2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt",
+   "filed": "2026-10-19",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "o6UKnyyy",
+   "in_pools": false,
+   "logger": null,
+   "prompts": 0,
+   "unstamped_prompts": 222,
+   "version": null,
+   "wrapped": 0
+  },
+  {
+   "family": "sentinel",
+   "file": "2026-10-27_shikudo-group-mhaldor.txt",
+   "filed": "2026-10-27",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "shikudo-group-mhaldor",
+   "in_pools": false,
+   "logger": "Ours, client log",
+   "prompts": 643,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 0
+  },
+  {
+   "family": "claes",
+   "file": "2026-11-01_claes_runewarden-vs-airlord_loss_s98kPGv6.txt",
+   "filed": "2026-11-01",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "s98kPGv6",
+   "in_pools": true,
+   "logger": "Claes",
+   "prompts": 314,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 16
+  },
+  {
+   "family": "claes",
+   "file": "2026-11-01_claes_runewarden-vs-apostate_loss_LcJC-rJ5.txt",
+   "filed": "2026-11-01",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "claes/LcJC-rJ5",
+   "in_pools": true,
+   "logger": "Claes",
+   "prompts": 193,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 56
+  },
+  {
+   "family": "claes",
+   "file": "2026-11-01_claes_runewarden-vs-apostate_win_WO7tC3kL.txt",
+   "filed": "2026-11-01",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "WO7tC3kL",
+   "in_pools": true,
+   "logger": "Claes",
+   "prompts": 1334,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 76
+  },
+  {
+   "family": "claes",
+   "file": "2026-11-01_claes_runewarden-vs-pariah_loss_4c_SeyaA.txt",
+   "filed": "2026-11-01",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "4c_SeyaA",
+   "in_pools": true,
+   "logger": "Claes",
+   "prompts": 511,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 26
+  },
+  {
+   "family": "claes",
+   "file": "2026-11-01_claes_runewarden-vs-pariah_loss_Vr.NkCGD.txt",
+   "filed": "2026-11-01",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "Vr.NkCGD",
+   "in_pools": true,
+   "logger": "Claes",
+   "prompts": 153,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 6
+  },
+  {
+   "family": "claes",
+   "file": "2026-11-01_claes_runewarden-vs-pariah_loss_WKuEakBZ.txt",
+   "filed": "2026-11-01",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "WKuEakBZ",
+   "in_pools": true,
+   "logger": "Claes",
+   "prompts": 212,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 8
+  },
+  {
+   "family": "claes",
+   "file": "2026-11-01_claes_runewarden-vs-runewarden_loss_CxxKSMq.txt",
+   "filed": "2026-11-01",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "CxxKSMq",
+   "in_pools": true,
+   "logger": "Claes",
+   "prompts": 341,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 170
+  },
+  {
+   "family": "claes",
+   "file": "2026-11-01_claes_runewarden-vs-runewarden_win_J7Xnr_Jg.txt",
+   "filed": "2026-11-01",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "J7Xnr_Jg",
+   "in_pools": true,
+   "logger": "Claes",
+   "prompts": 75,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 0
+  },
+  {
+   "family": "claes",
+   "file": "2026-11-01_claes_runewarden-vs-serpent_loss_azbErKcK.txt",
+   "filed": "2026-11-01",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "azbErKcK",
+   "in_pools": true,
+   "logger": "Claes",
+   "prompts": 727,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 99
+  },
+  {
+   "family": "elmer",
+   "file": "2026-11-01_elmer_alchemist-vs-serpent_loss_Z5cyffxx.txt",
+   "filed": "2026-11-01",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "Z5cyffxx",
+   "in_pools": true,
+   "logger": "Elmer",
+   "prompts": 942,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 18
+  },
+  {
+   "family": "elmer",
+   "file": "2026-11-01_elmer_shikudo-vs-airlord_win_3ys7NuHA.txt",
+   "filed": "2026-11-01",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "3ys7NuHA",
+   "in_pools": true,
+   "logger": "Elmer",
+   "prompts": 773,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 332
+  },
+  {
+   "family": "elmer",
+   "file": "2026-11-01_elmer_shikudo-vs-runewarden_win_2N1HTSWZ.txt",
+   "filed": "2026-11-01",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "2N1HTSWZ",
+   "in_pools": true,
+   "logger": "Elmer",
+   "prompts": 854,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 130
+  },
+  {
+   "family": "elmer",
+   "file": "2026-11-01_elmer_shikudo-vs-serpent_noresult_g-lD00-h.txt",
+   "filed": "2026-11-01",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "g-lD00-h",
+   "in_pools": true,
+   "logger": "Elmer",
+   "prompts": 467,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 197
+  },
+  {
+   "family": "nikita",
+   "file": "2026-11-01_nikita_depthswalker-vs-bard_win_L8LSw7xD.txt",
+   "filed": "2026-11-01",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "L8LSw7xD",
+   "in_pools": true,
+   "logger": "Nikita",
+   "prompts": 184,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 0
+  },
+  {
+   "family": "nikita",
+   "file": "2026-11-01_nikita_depthswalker-vs-bard_win_kAQnlFAW.txt",
+   "filed": "2026-11-01",
+   "fixed_stamps": 5,
+   "held_stamps": 0,
+   "id": "kAQnlFAW",
+   "in_pools": true,
+   "logger": "Nikita",
+   "prompts": 614,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 157
+  },
+  {
+   "family": "nikita",
+   "file": "2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt",
+   "filed": "2026-11-01",
+   "fixed_stamps": 3,
+   "held_stamps": 0,
+   "id": "X8pRorzR",
+   "in_pools": true,
+   "logger": "Nikita",
+   "prompts": 1279,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 385
+  },
+  {
+   "family": "blademaster",
+   "file": "2026-11-01_unknown_blademaster-vs-monk_win_KtdftABt.txt",
+   "filed": "2026-11-01",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "KtdftABt",
+   "in_pools": true,
+   "logger": "Blademaster (unnamed)",
+   "prompts": 58,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 6
+  },
+  {
+   "family": "earth",
+   "file": "2026-11-01_unknown_earthlord-vs-blademaster_loss_OwkA-G99.txt",
+   "filed": "2026-11-01",
+   "fixed_stamps": 4,
+   "held_stamps": 0,
+   "id": "OwkA-G99",
+   "in_pools": true,
+   "logger": "Earth Lord (unnamed)",
+   "prompts": 589,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 0
+  },
+  {
+   "family": "earth",
+   "file": "2026-11-01_unknown_earthlord-vs-sentinel_loss_JDvzR7j7.txt",
+   "filed": "2026-11-01",
+   "fixed_stamps": 2,
+   "held_stamps": 0,
+   "id": "JDvzR7j7",
+   "in_pools": true,
+   "logger": "Earth Lord (unnamed)",
+   "prompts": 549,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 16
+  },
+  {
+   "family": "earth",
+   "file": "2026-11-01_unknown_earthlord-vs-sentinel_noresult_uW_VbgR.txt",
+   "filed": "2026-11-01",
+   "fixed_stamps": 1,
+   "held_stamps": 0,
+   "id": "uW_VbgR",
+   "in_pools": true,
+   "logger": "Earth Lord (unnamed)",
+   "prompts": 93,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 1
+  },
+  {
+   "family": "ours",
+   "file": "2026-10-12_201153_Tabethys.log",
+   "filed": "2026-10-12",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "ours/201153_Tabethys",
+   "in_pools": true,
+   "logger": "Ours, recorder (Alchemist)",
+   "prompts": 90,
+   "unstamped_prompts": 0,
+   "version": "4.7.418",
+   "wrapped": 0
+  },
+  {
+   "family": "ours",
+   "file": "2026-10-27_112717_Tabethys.log",
+   "filed": "2026-10-27",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "ours/112717_Tabethys",
+   "in_pools": true,
+   "logger": "Ours, recorder (Monk)",
+   "prompts": 3311,
+   "unstamped_prompts": 0,
+   "version": "4.7.450",
+   "wrapped": 0
+  },
+  {
+   "family": "ours",
+   "file": "2026-10-27_135412_Tabethys.log",
+   "filed": "2026-10-27",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "ours/135412_Tabethys",
+   "in_pools": true,
+   "logger": "Ours, recorder (Infernal)",
+   "prompts": 3930,
+   "unstamped_prompts": 0,
+   "version": "4.7.450",
+   "wrapped": 0
+  },
+  {
+   "family": "ours",
+   "file": "2026-10-28_073547_Tabethys.log",
+   "filed": "2026-10-28",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "ours/073547_Tabethys",
+   "in_pools": true,
+   "logger": "Ours, recorder (Runewarden)",
+   "prompts": 324,
+   "unstamped_prompts": 0,
+   "version": "4.7.462",
+   "wrapped": 0
+  }
+ ],
+ "modifiers": [
+  {
+   "channel": "focus",
+   "label": "Shadowmadness on focus",
+   "sources": {
+    "EveP2TVe": 3,
+    "ours/112717_Tabethys": 4
+   },
+   "with": {
+    "max": 4.992,
+    "median": 4.938,
+    "min": 2.4,
+    "n": 7,
+    "p10": 3.852,
+    "p90": 4.991,
+    "spread": 1.139
+   },
+   "without": {
+    "max": 2.79,
+    "median": 2.428,
+    "min": 2.044,
+    "n": 149,
+    "p10": 2.329,
+    "p90": 2.511,
+    "spread": 0.182
+   }
+  },
+  {
+   "channel": "sip",
+   "label": "Skull fractures on sip",
+   "sources": {
+    "CxxKSMq": 5,
+    "JDvzR7j7": 2
+   },
+   "with": {
+    "max": 5.85,
+    "median": 5.799,
+    "min": 4.427,
+    "n": 7,
+    "p10": 4.446,
+    "p90": 5.849,
+    "spread": 1.403
+   },
+   "without": {
+    "max": 4.913,
+    "median": 4.4,
+    "min": 1.937,
+    "n": 400,
+    "p10": 4.306,
+    "p90": 4.5,
+    "spread": 0.194
+   }
+  }
+ ],
+ "stated": {
+  "cooldown_field": {
+   "blank": 563,
+   "clean": 1237,
+   "rows": 1929,
+   "unreadable": [
+    {
+     "ability": "Symbology",
+     "cooldown": "Equilibrium",
+     "skill": "Alchemy"
+    },
+    {
+     "ability": "Robes",
+     "cooldown": "Equilibrium",
+     "skill": "Alchemy"
+    },
+    {
+     "ability": "Daegger",
+     "cooldown": "Equilibrium",
+     "skill": "Apostasy"
+    },
+    {
+     "ability": "Destabilise",
+     "cooldown": "Equilibrium",
+     "skill": "Crystalism"
+    },
+    {
+     "ability": "Pilgrimage",
+     "cooldown": "Rite: 5.00 seconds of equilibrium Travel: 3.50 seconds of equilibrium",
+     "skill": "Devotion"
+    },
+    {
+     "ability": "Convocation",
+     "cooldown": "Rite: 4.00 seconds of equilibrium Summon: 6.00 seconds of equilibrium",
+     "skill": "Devotion"
+    },
+    {
+     "ability": "Illuminate",
+     "cooldown": "Illuminate: 1000 mana, and 1500 devotion Extinguish: 1000 mana, and 500 devotion",
+     "skill": "Devotion"
+    },
+    {
+     "ability": "Bloodsworn",
+     "cooldown": "Bloodswear on: 6.00 seconds of equilibrium",
+     "skill": "Devotion"
+    },
+    {
+     "ability": "Firelash",
+     "cooldown": "Equilibrium",
+     "skill": "Elementalism"
+    },
+    {
+     "ability": "Freeze",
+     "cooldown": "Ground: 4.00 seconds of equilibrium Targetted: 3.00 seconds of equilibrium",
+     "skill": "Elementalism"
+    },
+    {
+     "ability": "Look",
+     "cooldown": "1 sunlight",
+     "skill": "Groves"
+    },
+    {
+     "ability": "Track",
+     "cooldown": "20 sunlight",
+     "skill": "Groves"
+    },
+    {
+     "ability": "Imbue",
+     "cooldown": "Equilibrium",
+     "skill": "Groves"
+    },
+    {
+     "ability": "Hive",
+     "cooldown": "GROVE HIVE: 6.00 seconds of equilibrium TAP HIVE: 4.8 seconds of balance CALL BEES: 4.00 seconds of equilibrium CALL NEW SWARM: 5.00 seconds of equilibrium",
+     "skill": "Groves"
+    },
+    {
+     "ability": "Hydra",
+     "cooldown": "unique=Yes",
+     "skill": "Metamorphosis"
+    },
+    {
+     "ability": "Basilisk",
+     "cooldown": "unique=Yes",
+     "skill": "Metamorphosis"
+    },
+    {
+     "ability": "Flame",
+     "cooldown": "Equilibrium",
+     "skill": "Metamorphosis"
+    },
+    {
+     "ability": "Hoist",
+     "cooldown": "4.00 seconds of balance. (Deposit and Release)",
+     "skill": "Metamorphosis"
+    },
+    {
+     "ability": "Icebreath",
+     "cooldown": "GROUND: 3.00 seconds of equilibrium Target: 2.00 seconds of equilibrium",
+     "skill": "Metamorphosis"
+    },
+    {
+     "ability": "Track",
+     "cooldown": "TRACK: 4.50 seconds of equilibrium PURSUE: 1.00 seconds of equilibrium",
+     "skill": "Metamorphosis"
+    },
+    {
+     "ability": "Exterminate",
+     "cooldown": "6.00 seconds of equilibrium and 12.00 upon completion",
+     "skill": "Necromancy"
+    },
+    {
+     "ability": "Transmogrify",
+     "cooldown": "Activate: 12.00 seconds of equilibrium Deactivate: 5.00 seconds of equilibrium",
+     "skill": "Occultism"
+    },
+    {
+     "ability": "Devour",
+     "cooldown": "40.00 seconds",
+     "skill": "Pestilence"
+    },
+    {
+     "ability": "Cultivation",
+     "cooldown": "Homunculus balance",
+     "skill": "Physiology"
+    },
+    {
+     "ability": "Graffiti",
+     "cooldown": "Write: 6.00 seconds of equilibrium Identify: 3.00 seconds of balance",
+     "skill": "Pranks"
+    },
+    {
+     "ability": "Jackinthebox",
+     "cooldown": "Construct: 4.00 seconds of balance Wind: 2.00 seconds of balance",
+     "skill": "Pranks"
+    },
+    {
+     "ability": "Suicidemice",
+     "cooldown": "Educate: 5.00 seconds of balance Strap: 4.00 seconds of balance",
+     "skill": "Pranks"
+    },
+    {
+     "ability": "Propagate",
+     "cooldown": "2.50 seconds",
+     "skill": "Propagation"
+    },
+    {
+     "ability": "Fashion",
+     "cooldown": "Initial fashion: 2.00 seconds of balance Standard fashion: 2.00 seconds of balance Unravel: 10.00 seconds of balance",
+     "skill": "Puppetry"
+    },
+    {
+     "ability": "Status",
+     "cooldown": "Balance",
+     "skill": "Puppetry"
+    },
+    {
+     "ability": "Sketch",
+     "cooldown": "Balance",
+     "skill": "Runelore"
+    },
+    {
+     "ability": "Totems",
+     "cooldown": "Carve cooldown: 2.00 seconds of balance Stand cooldown: 4.00 seconds of balance Smudge cooldown: 4.00 seconds of balance upon initiation and completion",
+     "skill": "Runelore"
+    },
+    {
+     "ability": "Countermand",
+     "cooldown": "3.00 seconds of equilibrium and 8.00 seconds of voice balance",
+     "skill": "Sagas"
+    },
+    {
+     "ability": "Ethian",
+     "cooldown": "20.00 seconds of voice balance and 3.00 seconds of equilibrium",
+     "skill": "Sagas"
+    },
+    {
+     "ability": "Reckoning",
+     "cooldown": "2.50 seconds of equilibrium and 20.00 seconds of voice balance",
+     "skill": "Sagas"
+    },
+    {
+     "ability": "Jadeicon",
+     "cooldown": "2.30 seconds of balance and 16.00 seconds of voice balance",
+     "skill": "Sagas"
+    },
+    {
+     "ability": "Divinechild",
+     "cooldown": "16.00 seconds of voice balance and 3.00 seconds of equilibrium",
+     "skill": "Sagas"
+    },
+    {
+     "ability": "Eternalnight",
+     "cooldown": "1.50 seconds of balance and 16.00 seconds of voice balance",
+     "skill": "Sagas"
+    },
+    {
+     "ability": "Vertani",
+     "cooldown": "2.30 seconds of balance and 16.00 seconds of voice balance",
+     "skill": "Sagas"
+    },
+    {
+     "ability": "Genesis",
+     "cooldown": "2.50 seconds of equilibrium and 18.00 seconds of voice balance",
+     "skill": "Sagas"
+    },
+    {
+     "ability": "Accord",
+     "cooldown": "15.00 seconds of voice balance and 3.00 seconds of equilibrium",
+     "skill": "Sagas"
+    },
+    {
+     "ability": "Descent",
+     "cooldown": "25.00 seconds of voice balance and 2.80 seconds of equilibrium",
+     "skill": "Sagas"
+    },
+    {
+     "ability": "Haskor",
+     "cooldown": "20.00 seconds of voice balance and 3.00 seconds of equilibrium",
+     "skill": "Sagas"
+    },
+    {
+     "ability": "Returning",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Skirmishing"
+    },
+    {
+     "ability": "Thrust",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Skirmishing"
+    },
+    {
+     "ability": "Rivestrike",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Skirmishing"
+    },
+    {
+     "ability": "Lacerate",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Skirmishing"
+    },
+    {
+     "ability": "Gouge",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Skirmishing"
+    },
+    {
+     "ability": "Doublestrike",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Skirmishing"
+    },
+    {
+     "ability": "Commune",
+     "cooldown": "Attune: 4.00 seconds of balance Unattune: 2.00 seconds of balance Unbind: 2.00 seconds of balance Unbind all: 2.20 seconds of balance",
+     "skill": "Spiritlore"
+    },
+    {
+     "ability": "Jhulian",
+     "cooldown": "5.00 seconds of balance attune=An increased capability to dodge attacks.",
+     "skill": "Spiritlore"
+    },
+    {
+     "ability": "Arius",
+     "cooldown": "3.00 seconds of balance attune=Increased mana regeneration.",
+     "skill": "Spiritlore"
+    },
+    {
+     "ability": "Silvanix",
+     "cooldown": "2.00 seconds of balance attune=The tumble ability will have a reduced balance.",
+     "skill": "Spiritlore"
+    },
+    {
+     "ability": "Ri'shen",
+     "cooldown": "3.50 seconds of balance attune=Increased health regeneration.",
+     "skill": "Spiritlore"
+    },
+    {
+     "ability": "Maligus",
+     "cooldown": "2.00 seconds of balance attune=Curses will drain a small amount of health and mana from the target.",
+     "skill": "Spiritlore"
+    },
+    {
+     "ability": "Aspar",
+     "cooldown": "2.00 seconds of balance attune=Increased resistance to asphyxiation damage.",
+     "skill": "Spiritlore"
+    },
+    {
+     "ability": "Aelkesh",
+     "cooldown": "2.50 seconds of balance attune=A chance for swiftcurse charges not to be consumed when hunting denizens. It shall also reduce the willpower cost of the bleed curse against denizens.",
+     "skill": "Spiritlore"
+    },
+    {
+     "ability": "Teraile",
+     "cooldown": "2.00 seconds of balance attune=Curses will inflict bleeding.",
+     "skill": "Spiritlore"
+    },
+    {
+     "ability": "Arcanor",
+     "cooldown": "5.00 seconds of balance attune=Increased elemental damage resistance.",
+     "skill": "Spiritlore"
+    },
+    {
+     "ability": "Syvis",
+     "cooldown": "2.20 seconds of balance attune=Resistance to poison damage.",
+     "skill": "Spiritlore"
+    },
+    {
+     "ability": "Marak",
+     "cooldown": "3.00 seconds of balance attune=Increased constitution.",
+     "skill": "Spiritlore"
+    },
+    {
+     "ability": "Anthius",
+     "cooldown": "3.50 seconds of balance attune=Immunity to the fear affliction.",
+     "skill": "Spiritlore"
+    },
+    {
+     "ability": "Garon",
+     "cooldown": "Carve: 2.00 seconds of balance Smudge: 4.00 seconds of balance upon initiation and completion attune=Increased physical damage resistance",
+     "skill": "Spiritlore"
+    },
+    {
+     "ability": "Tarnel",
+     "cooldown": "2.00 seconds of balance attune=You may move more rooms at once.",
+     "skill": "Spiritlore"
+    },
+    {
+     "ability": "Kosuira",
+     "cooldown": "attune=Increased resistance against psychic damage.",
+     "skill": "Spiritlore"
+    },
+    {
+     "ability": "Arayan",
+     "cooldown": "4.00 seconds of balance attune=Curses shall restore a small amount of health and mana.",
+     "skill": "Spiritlore"
+    },
+    {
+     "ability": "Spiritwalk",
+     "cooldown": "Spiritwalk: 4.50 seconds of equilibrium Return: 5.00 seconds of equilibrium",
+     "skill": "Spiritlore"
+    },
+    {
+     "ability": "Adchachel",
+     "cooldown": "attune=Halves the willpower drain while spiritwalking.",
+     "skill": "Spiritlore"
+    },
+    {
+     "ability": "Shine",
+     "cooldown": "Roomwide: 2.00 seconds of equilibrium Target: 1.50 seconds of equilibrium",
+     "skill": "Spirituality"
+    },
+    {
+     "ability": "Beckon",
+     "cooldown": "Roomwide: 4.00 seconds of equilibrium Target: 1.50 seconds of equilibrium",
+     "skill": "Spirituality"
+    },
+    {
+     "ability": "Field",
+     "cooldown": "24 hours",
+     "skill": "Sublimation"
+    },
+    {
+     "ability": "Sympathy",
+     "cooldown": "3.00 seconds of damage",
+     "skill": "Sublimation"
+    },
+    {
+     "ability": "Hide",
+     "cooldown": "Hide: 4.00 seconds of balance Emerge: 1.00 seconds of balance.",
+     "skill": "Subterfuge"
+    },
+    {
+     "ability": "Garrote",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Subterfuge"
+    },
+    {
+     "ability": "Pacing",
+     "cooldown": "Pacing: 3.50 seconds of balance Relax: 3.00 seconds of balance.",
+     "skill": "Subterfuge"
+    },
+    {
+     "ability": "Noose",
+     "cooldown": "Craft: 3.50 seconds of balance Noose: 4.00 seconds of balance",
+     "skill": "Subterfuge"
+    },
+    {
+     "ability": "Backstab",
+     "cooldown": "Initiation: 2.00 seconds Backstab: 2.00 seconds of balance",
+     "skill": "Subterfuge"
+    },
+    {
+     "ability": "Bind",
+     "cooldown": "Success: 3.50 seconds of balance Failure: 0.50 seconds",
+     "skill": "Subterfuge"
+    },
+    {
+     "ability": "Snipe",
+     "cooldown": "Success: 3.50 seconds of balance Failure: 0.50 seconds of balance.",
+     "skill": "Subterfuge"
+    },
+    {
+     "ability": "Hermit",
+     "cooldown": "Activation: 2.00 seconds of equilibrium Fling: 3.00 seconds of balance",
+     "skill": "Tarot"
+    },
+    {
+     "ability": "Moon",
+     "cooldown": "3.00 seconds of balance Specified Affliction: 2.10 seconds of balance (at transcendent)",
+     "skill": "Tarot"
+    },
+    {
+     "ability": "Death",
+     "cooldown": "Fling: 3.00 seconds of balance Rub: 3.20 seconds of equilibrium",
+     "skill": "Tarot"
+    },
+    {
+     "ability": "Empathy",
+     "cooldown": "MIND EMPATHY: 4.00 seconds of equilibrium. MIND UNEMPATHY: 3.00 seconds of equilibrium.",
+     "skill": "Telepathy"
+    },
+    {
+     "ability": "Clamp",
+     "cooldown": "MIND CLAMP: 4.00 seconds of equilibrium MIND UNCLAMP: 2.50 seconds of equilibrium.",
+     "skill": "Telepathy"
+    },
+    {
+     "ability": "Shrugging",
+     "cooldown": "1.60 seconds of equilibrium, 10.0 second cooldown",
+     "skill": "Venom"
+    },
+    {
+     "ability": "Fashion",
+     "cooldown": "Fashion: 2.00 seconds of balance Unravel: 10.00 seconds of balance",
+     "skill": "Vodun"
+    },
+    {
+     "ability": "Status",
+     "cooldown": "Balance",
+     "skill": "Vodun"
+    },
+    {
+     "ability": "Duality",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Weaponmastery"
+    },
+    {
+     "ability": "Whirl",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Weaponmastery"
+    },
+    {
+     "ability": "Fracture",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Weaponmastery"
+    },
+    {
+     "ability": "Doublewhirl",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Weaponmastery"
+    },
+    {
+     "ability": "Sizeup",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Weaponmastery"
+    },
+    {
+     "ability": "Expend",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Weaponmastery"
+    },
+    {
+     "ability": "Slaughter",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Weaponmastery"
+    },
+    {
+     "ability": "Overhand",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Weaponmastery"
+    },
+    {
+     "ability": "Carve",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Weaponmastery"
+    },
+    {
+     "ability": "Splinter",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Weaponmastery"
+    },
+    {
+     "ability": "Underhand",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Weaponmastery"
+    },
+    {
+     "ability": "Hew",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Weaponmastery"
+    },
+    {
+     "ability": "Pulverise",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Weaponmastery"
+    },
+    {
+     "ability": "Devastate",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Weaponmastery"
+    },
+    {
+     "ability": "Rend",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Weaponmastery"
+    },
+    {
+     "ability": "Smash",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Weaponmastery"
+    },
+    {
+     "ability": "Combination",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Weaponmastery"
+    },
+    {
+     "ability": "Drive",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Weaponmastery"
+    },
+    {
+     "ability": "Slice",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Weaponmastery"
+    },
+    {
+     "ability": "Concuss",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Weaponmastery"
+    },
+    {
+     "ability": "Trip",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Weaponmastery"
+    },
+    {
+     "ability": "Club",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Weaponmastery"
+    },
+    {
+     "ability": "Guardbreak",
+     "cooldown": "Balance cost varies based on weapon speed",
+     "skill": "Weaponmastery"
+    },
+    {
+     "ability": "Synchronisity",
+     "cooldown": "Equilibrium",
+     "skill": "Weatherweaving"
+    },
+    {
+     "ability": "Overcharge",
+     "cooldown": "Equilibrium",
+     "skill": "Weatherweaving"
+    },
+    {
+     "ability": "Condemned",
+     "cooldown": "16.00 seconds of voice balance and 2.00 seconds of equilibrium",
+     "skill": "Woe"
+    },
+    {
+     "ability": "Inferno",
+     "cooldown": "16.00 seconds of voice balance and 2.00 seconds of equilibrium",
+     "skill": "Woe"
+    },
+    {
+     "ability": "Chaoswars",
+     "cooldown": "16.00 seconds of voice balance and 2.00 seconds of equilibrium",
+     "skill": "Woe"
+    },
+    {
+     "ability": "Nishnatoba",
+     "cooldown": "17.00 seconds of voice balance and 2.50 seconds of equilibrium",
+     "skill": "Woe"
+    },
+    {
+     "ability": "Tribunal",
+     "cooldown": "16.00 seconds of voice balance and 3.50 seconds of equilibrium",
+     "skill": "Woe"
+    },
+    {
+     "ability": "Seleucar",
+     "cooldown": "16.00 seconds of voice balance and 2.00 seconds of equilibrium",
+     "skill": "Woe"
+    },
+    {
+     "ability": "Taug",
+     "cooldown": "19.00 seconds of voice balance and 3.00 seconds of equilibrium",
+     "skill": "Woe"
+    },
+    {
+     "ability": "Savant",
+     "cooldown": "18.00 seconds of voice balance and 3.00 seconds of equilibrium",
+     "skill": "Woe"
+    },
+    {
+     "ability": "Chaoslords",
+     "cooldown": "16.00 seconds of voice balance and 3.00 seconds of equilibrium",
+     "skill": "Woe"
+    },
+    {
+     "ability": "Tiamenjiara",
+     "cooldown": "16.00 seconds of voice balance and 2.50 seconds of equilibrium",
+     "skill": "Woe"
+    },
+    {
+     "ability": "Sh'fah",
+     "cooldown": "16.00 seconds of voice balance and 2.50 seconds of equilibrium",
+     "skill": "Woe"
+    },
+    {
+     "ability": "Khalas",
+     "cooldown": "20.00 seconds of voice balance and 4.00 seconds of equilibrium",
+     "skill": "Woe"
+    },
+    {
+     "ability": "Memory",
+     "cooldown": "16.00 seconds of voice balance and 2.50 seconds of equilibrium",
+     "skill": "Woe"
+    },
+    {
+     "ability": "Mortals",
+     "cooldown": "20.00 seconds of voice balance and 3.00 seconds of equilibrium",
+     "skill": "Woe"
+    },
+    {
+     "ability": "Siege",
+     "cooldown": "20.00 seconds of voice balance and 4.00 seconds of equilibrium",
+     "skill": "Woe"
+    },
+    {
+     "ability": "Pantheon",
+     "cooldown": "19.00 seconds of voice balance and 3.00 seconds of equilibrium",
+     "skill": "Woe"
+    },
+    {
+     "ability": "Traps",
+     "cooldown": "Traps: 3.00 seconds of balance Traps List: 5.00 seconds of balance",
+     "skill": "Woodlore"
+    }
+   ]
+  },
+  "opponents": [
+   {
+    "ability": "DSTAB",
+    "by_person": [
+     {
+      "logs": {
+       "X8pRorzR": 82
+      },
+      "person": "Archaeon",
+      "stats": {
+       "max": 9.63,
+       "median": 1.82,
+       "min": 1.7,
+       "n": 82,
+       "p10": 1.741,
+       "p90": 3.016,
+       "spread": 1.275
+      }
+     },
+     {
+      "logs": {
+       "g-lD00-h": 23
+      },
+      "person": "Kalys",
+      "stats": {
+       "max": 7.094,
+       "median": 1.905,
+       "min": 1.603,
+       "n": 23,
+       "p10": 1.74,
+       "p90": 3.642,
+       "spread": 1.902
+      }
+     },
+     {
+      "logs": {
+       "Z5cyffxx": 47
+      },
+      "person": "Seurimas",
+      "stats": {
+       "max": 5.981,
+       "median": 1.84,
+       "min": 1.62,
+       "n": 47,
+       "p10": 1.753,
+       "p90": 3.289,
+       "spread": 1.536
+      }
+     },
+     {
+      "logs": {
+       "azbErKcK": 43
+      },
+      "person": "Thato",
+      "stats": {
+       "max": 3.705,
+       "median": 1.8,
+       "min": 1.545,
+       "n": 43,
+       "p10": 1.698,
+       "p90": 3.055,
+       "spread": 1.356
+      }
+     }
+    ],
+    "dropped": {
+     "10 s or more": 6,
+     "no next attack": 3
+    },
+    "ratio_to_stated": 0.654,
+    "stated": 2.8,
+    "stated_note": "Subterfuge/Doublestab: 2.80 seconds of balance",
+    "stats": {
+     "max": 9.63,
+     "median": 1.83,
+     "min": 1.545,
+     "n": 195,
+     "p10": 1.73,
+     "p90": 3.097,
+     "spread": 1.367
+    },
+    "within_025_pct": 77.4
+   },
+   {
+    "ability": "BITE",
+    "by_person": [
+     {
+      "logs": {
+       "X8pRorzR": 7
+      },
+      "person": "Archaeon",
+      "stats": {
+       "max": 3.41,
+       "median": 1.71,
+       "min": 1.65,
+       "n": 7,
+       "p10": 1.674,
+       "p90": 2.942,
+       "spread": 1.268
+      }
+     },
+     {
+      "logs": {
+       "Z5cyffxx": 7
+      },
+      "person": "Seurimas",
+      "stats": {
+       "max": 1.729,
+       "median": 1.646,
+       "min": 1.54,
+       "n": 7,
+       "p10": 1.572,
+       "p90": 1.706,
+       "spread": 0.133
+      }
+     },
+     {
+      "logs": {
+       "azbErKcK": 7
+      },
+      "person": "Thato",
+      "stats": {
+       "max": 1.756,
+       "median": 1.706,
+       "min": 1.581,
+       "n": 7,
+       "p10": 1.583,
+       "p90": 1.746,
+       "spread": 0.163
+      }
+     }
+    ],
+    "dropped": {
+     "no next attack": 1
+    },
+    "ratio_to_stated": 0.422,
+    "stated": 4.0,
+    "stated_note": "Venom/Bite: 4.00 seconds of balance",
+    "stats": {
+     "max": 3.41,
+     "median": 1.69,
+     "min": 1.54,
+     "n": 21,
+     "p10": 1.585,
+     "p90": 1.79,
+     "spread": 0.205
+    },
+    "within_025_pct": 90.5
+   },
+   {
+    "ability": "FLAY",
+    "by_person": [
+     {
+      "logs": {
+       "X8pRorzR": 21
+      },
+      "person": "Archaeon",
+      "stats": {
+       "max": 2.57,
+       "median": 1.65,
+       "min": 1.48,
+       "n": 21,
+       "p10": 1.53,
+       "p90": 2.44,
+       "spread": 0.91
+      }
+     },
+     {
+      "logs": {
+       "g-lD00-h": 9
+      },
+      "person": "Kalys",
+      "stats": {
+       "max": 2.097,
+       "median": 1.627,
+       "min": 1.483,
+       "n": 9,
+       "p10": 1.489,
+       "p90": 1.835,
+       "spread": 0.347
+      }
+     },
+     {
+      "logs": {
+       "Z5cyffxx": 6
+      },
+      "person": "Seurimas",
+      "stats": {
+       "max": 1.62,
+       "median": 1.553,
+       "min": 1.495,
+       "n": 6,
+       "p10": 1.507,
+       "p90": 1.604,
+       "spread": 0.097
+      }
+     },
+     {
+      "logs": {
+       "azbErKcK": 28
+      },
+      "person": "Thato",
+      "stats": {
+       "max": 4.946,
+       "median": 1.694,
+       "min": 1.523,
+       "n": 28,
+       "p10": 1.573,
+       "p90": 2.695,
+       "spread": 1.122
+      }
+     }
+    ],
+    "dropped": {
+     "10 s or more": 1
+    },
+    "ratio_to_stated": 0.821,
+    "stated": 2.0,
+    "stated_note": "Subterfuge/Flay: 2.00 seconds of balance",
+    "stats": {
+     "max": 4.946,
+     "median": 1.642,
+     "min": 1.48,
+     "n": 64,
+     "p10": 1.53,
+     "p90": 2.503,
+     "spread": 0.973
+    },
+    "within_025_pct": 81.2
+   },
+   {
+    "ability": "Stare",
+    "by_person": [
+     {
+      "logs": {
+       "claes/LcJC-rJ5": 18
+      },
+      "person": "Pharaus",
+      "stats": {
+       "max": 5.766,
+       "median": 2.06,
+       "min": 0.456,
+       "n": 18,
+       "p10": 1.619,
+       "p90": 2.89,
+       "spread": 1.27
+      }
+     },
+     {
+      "logs": {
+       "WO7tC3kL": 125
+      },
+      "person": "Proficy",
+      "stats": {
+       "max": 6.535,
+       "median": 2.037,
+       "min": 1.098,
+       "n": 125,
+       "p10": 1.913,
+       "p90": 3.067,
+       "spread": 1.154
+      }
+     }
+    ],
+    "dropped": {
+     "10 s or more": 4,
+     "no next attack": 2
+    },
+    "ratio_to_stated": 1.072,
+    "stated": 1.9,
+    "stated_note": "Evileye/Asthma: 1.90 seconds of balance",
+    "stats": {
+     "max": 6.535,
+     "median": 2.037,
+     "min": 0.456,
+     "n": 143,
+     "p10": 1.874,
+     "p90": 3.074,
+     "spread": 1.2
+    },
+    "within_025_pct": 64.3
+   },
+   {
+    "ability": "Reap",
+    "by_person": [],
+    "dropped": {},
+    "ratio_to_stated": null,
+    "stated": null,
+    "stated_note": "Shadowmancy/Reap: field is blank",
+    "stats": {
+     "n": 0
+    },
+    "within_025_pct": null
+   }
+  ],
+  "own": [
+   {
+    "ability": "FITNESS",
+    "by_logger": [
+     {
+      "filed": [
+       "2026-11-01"
+      ],
+      "logger": "Elmer",
+      "logs": {
+       "2N1HTSWZ": 1
+      },
+      "printed": {
+       "2.8": 1
+      },
+      "ratio": 0.933,
+      "stats": {
+       "max": 2.8,
+       "median": 2.8,
+       "min": 2.8,
+       "n": 1,
+       "p10": 2.8,
+       "p90": 2.8,
+       "spread": 0.0
+      }
+     },
+     {
+      "filed": [
+       "2026-10-11"
+      ],
+      "logger": "Mystor",
+      "logs": {
+       "mystor/LcJC-rJ5": 1,
+       "t54WWU6b": 4
+      },
+      "printed": {
+       "2.8": 5
+      },
+      "ratio": 0.933,
+      "stats": {
+       "max": 2.8,
+       "median": 2.8,
+       "min": 2.8,
+       "n": 5,
+       "p10": 2.8,
+       "p90": 2.8,
+       "spread": 0.0
+      }
+     }
+    ],
+    "channel": "balance",
+    "stated": 3.0,
+    "stated_note": "Kaido/Fitness: 3.00 seconds of balance"
+   },
+   {
+    "ability": "Truewrack",
+    "by_logger": [
+     {
+      "filed": [
+       "2026-11-01"
+      ],
+      "logger": "Elmer",
+      "logs": {
+       "Z5cyffxx": 5
+      },
+      "printed": {
+       "2.6": 5
+      },
+      "ratio": 0.929,
+      "stats": {
+       "max": 2.6,
+       "median": 2.6,
+       "min": 2.6,
+       "n": 5,
+       "p10": 2.6,
+       "p90": 2.6,
+       "spread": 0.0
+      }
+     }
+    ],
+    "channel": "balance",
+    "stated": 2.8,
+    "stated_note": "Physiology/Truewrack: 2.80 seconds of balance"
+   },
+   {
+    "ability": "Reap",
+    "by_logger": [
+     {
+      "filed": [
+       "2026-11-01"
+      ],
+      "logger": "Nikita",
+      "logs": {
+       "L8LSw7xD": 17,
+       "X8pRorzR": 61,
+       "kAQnlFAW": 37
+      },
+      "printed": {
+       "1.2": 1,
+       "2.1": 114
+      },
+      "ratio": null,
+      "stats": {
+       "max": 2.1,
+       "median": 2.1,
+       "min": 1.2,
+       "n": 115,
+       "p10": 2.1,
+       "p90": 2.1,
+       "spread": 0.0
+      }
+     }
+    ],
+    "channel": "balance",
+    "stated": null,
+    "stated_note": "Shadowmancy/Reap: field is blank"
+   },
+   {
+    "ability": "Shield tattoo",
+    "by_logger": [
+     {
+      "filed": [
+       "2026-11-01"
+      ],
+      "logger": "Claes",
+      "logs": {
+       "4c_SeyaA": 1,
+       "WKuEakBZ": 1,
+       "azbErKcK": 13,
+       "s98kPGv6": 8
+      },
+      "printed": {
+       "4": 23
+      },
+      "ratio": null,
+      "stats": {
+       "max": 4.0,
+       "median": 4.0,
+       "min": 4.0,
+       "n": 23,
+       "p10": 4.0,
+       "p90": 4.0,
+       "spread": 0.0
+      }
+     },
+     {
+      "filed": [
+       "2026-11-01"
+      ],
+      "logger": "Earth Lord (unnamed)",
+      "logs": {
+       "JDvzR7j7": 1,
+       "OwkA-G99": 5
+      },
+      "printed": {
+       "3.4": 6
+      },
+      "ratio": null,
+      "stats": {
+       "max": 3.4,
+       "median": 3.4,
+       "min": 3.4,
+       "n": 6,
+       "p10": 3.4,
+       "p90": 3.4,
+       "spread": 0.0
+      }
+     },
+     {
+      "filed": [
+       "2026-11-01"
+      ],
+      "logger": "Elmer",
+      "logs": {
+       "2N1HTSWZ": 2,
+       "3ys7NuHA": 3,
+       "Z5cyffxx": 7,
+       "g-lD00-h": 5
+      },
+      "printed": {
+       "2.89": 3,
+       "3.4": 14
+      },
+      "ratio": null,
+      "stats": {
+       "max": 3.4,
+       "median": 3.4,
+       "min": 2.89,
+       "n": 17,
+       "p10": 2.89,
+       "p90": 3.4,
+       "spread": 0.51
+      }
+     },
+     {
+      "filed": [
+       "2026-11-01"
+      ],
+      "logger": "Nikita",
+      "logs": {
+       "X8pRorzR": 10,
+       "kAQnlFAW": 2
+      },
+      "printed": {
+       "3.4": 12
+      },
+      "ratio": null,
+      "stats": {
+       "max": 3.4,
+       "median": 3.4,
+       "min": 3.4,
+       "n": 12,
+       "p10": 3.4,
+       "p90": 3.4,
+       "spread": 0.0
+      }
+     }
+    ],
+    "channel": "equilibrium",
+    "stated": null,
+    "stated_note": "no row in abilities.json"
+   },
+   {
+    "ability": "Pommelstrike",
+    "by_logger": [
+     {
+      "filed": [
+       "2026-11-01"
+      ],
+      "logger": "Blademaster (unnamed)",
+      "logs": {
+       "KtdftABt": 6
+      },
+      "printed": {
+       "1.1": 6
+      },
+      "ratio": 0.733,
+      "stats": {
+       "max": 1.1,
+       "median": 1.1,
+       "min": 1.1,
+       "n": 6,
+       "p10": 1.1,
+       "p90": 1.1,
+       "spread": 0.0
+      }
+     }
+    ],
+    "channel": "balance",
+    "stated": 1.5,
+    "stated_note": "TwoArts/Pommelstrike: 1.50 seconds of balance"
+   },
+   {
+    "ability": "Homunculus attack",
+    "by_logger": [
+     {
+      "filed": [
+       "2026-11-01"
+      ],
+      "logger": "Elmer",
+      "logs": {
+       "Z5cyffxx": 4
+      },
+      "printed": {
+       "2.55": 4
+      },
+      "ratio": 0.85,
+      "stats": {
+       "max": 2.55,
+       "median": 2.55,
+       "min": 2.55,
+       "n": 4,
+       "p10": 2.55,
+       "p90": 2.55,
+       "spread": 0.0
+      }
+     }
+    ],
+    "channel": "equilibrium",
+    "stated": 3.0,
+    "stated_note": "Physiology/Arms: 3.00 seconds of equilibrium"
+   },
+   {
+    "ability": "Engage",
+    "by_logger": [
+     {
+      "filed": [
+       "2026-10-11",
+       "2026-11-01"
+      ],
+      "logger": "Claes",
+      "logs": {
+       "4c_SeyaA": 6,
+       "CxxKSMq": 1,
+       "J7Xnr_Jg": 1,
+       "Vr.NkCGD": 1,
+       "WKuEakBZ": 2,
+       "WO7tC3kL": 7,
+       "azbErKcK": 5,
+       "claes/LcJC-rJ5": 1,
+       "defender": 4,
+       "s98kPGv6": 1
+      },
+      "printed": {
+       "2": 29
+      },
+      "ratio": 0.8,
+      "stats": {
+       "max": 2.0,
+       "median": 2.0,
+       "min": 2.0,
+       "n": 29,
+       "p10": 2.0,
+       "p90": 2.0,
+       "spread": 0.0
+      }
+     }
+    ],
+    "channel": "equilibrium",
+    "stated": 2.5,
+    "stated_note": "Discipline/Engage: 2.50 seconds of equilibrium"
+   },
+   {
+    "ability": "Concentrate",
+    "by_logger": [
+     {
+      "filed": [
+       "2026-11-01"
+      ],
+      "logger": "Claes",
+      "logs": {
+       "azbErKcK": 6
+      },
+      "printed": {
+       "2": 6
+      },
+      "ratio": null,
+      "stats": {
+       "max": 2.0,
+       "median": 2.0,
+       "min": 2.0,
+       "n": 6,
+       "p10": 2.0,
+       "p90": 2.0,
+       "spread": 0.0
+      }
+     },
+     {
+      "filed": [
+       "2026-11-01"
+      ],
+      "logger": "Earth Lord (unnamed)",
+      "logs": {
+       "OwkA-G99": 3
+      },
+      "printed": {
+       "1.7": 3
+      },
+      "ratio": null,
+      "stats": {
+       "max": 1.7,
+       "median": 1.7,
+       "min": 1.7,
+       "n": 3,
+       "p10": 1.7,
+       "p90": 1.7,
+       "spread": 0.0
+      }
+     },
+     {
+      "filed": [
+       "2026-11-01"
+      ],
+      "logger": "Elmer",
+      "logs": {
+       "3ys7NuHA": 6,
+       "Z5cyffxx": 1,
+       "g-lD00-h": 2
+      },
+      "printed": {
+       "1.44": 1,
+       "1.7": 8
+      },
+      "ratio": null,
+      "stats": {
+       "max": 1.7,
+       "median": 1.7,
+       "min": 1.44,
+       "n": 9,
+       "p10": 1.648,
+       "p90": 1.7,
+       "spread": 0.052
+      }
+     }
+    ],
+    "channel": "equilibrium",
+    "stated": null,
+    "stated_note": "no row in abilities.json"
+   },
+   {
+    "ability": "Curseward",
+    "by_logger": [
+     {
+      "filed": [
+       "2026-11-01"
+      ],
+      "logger": "Claes",
+      "logs": {
+       "WO7tC3kL": 5,
+       "claes/LcJC-rJ5": 1
+      },
+      "printed": {
+       "4": 6
+      },
+      "ratio": null,
+      "stats": {
+       "max": 4.0,
+       "median": 4.0,
+       "min": 4.0,
+       "n": 6,
+       "p10": 4.0,
+       "p90": 4.0,
+       "spread": 0.0
+      }
+     }
+    ],
+    "channel": "equilibrium",
+    "stated": null,
+    "stated_note": "no row in abilities.json"
+   },
+   {
+    "ability": "Colossal fist",
+    "by_logger": [
+     {
+      "filed": [
+       "2026-11-01"
+      ],
+      "logger": "Earth Lord (unnamed)",
+      "logs": {
+       "JDvzR7j7": 25,
+       "OwkA-G99": 23,
+       "uW_VbgR": 5
+      },
+      "printed": {
+       "2.9": 53
+      },
+      "ratio": null,
+      "stats": {
+       "max": 2.9,
+       "median": 2.9,
+       "min": 2.9,
+       "n": 53,
+       "p10": 2.9,
+       "p90": 2.9,
+       "spread": 0.0
+      }
+     }
+    ],
+    "channel": "balance",
+    "stated": null,
+    "stated_note": "no row in abilities.json"
+   }
+  ],
+  "own_ambiguous_packets": {},
+  "own_printed_rows": 1074
+ }
+}

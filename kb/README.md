@@ -47,6 +47,11 @@ first time material for them arrives.
    - **CONFIRMED-in-code**: the code does it and a test or changelog shows why
    - **guide**: a community write-up
    - **ASSUMED**: inferred and not checked. Never promote it silently.
+
+   Pages built from the logs ([mechanics/foundations.md](mechanics/foundations.md) and the generated pages beside it) use three more:
+   - **MEASURED**: counted from log rows. Boards are the loggers' beliefs, so this is a count and not a proof.
+   - **READ**: stated in a file, and not tested here.
+   - **INFERRED**: a reasoned reading of the rows, not proven.
 3. **Join to the code.** If a fact is something the code depends on (a cure, a priority, a
    fire line, a cooldown), name the file and say whether the code agrees. A disagreement goes
    into [CONFLICTS.md](CONFLICTS.md).
@@ -75,10 +80,17 @@ first time material for them arrives.
    or edits the export. `--check` compares each export with its text, row by row.
 3. Rename the new file when a read of the log shows the classes, and add it to the table in
    [raw/logs/README.md](raw/logs/README.md). The tool cannot tell classes.
+4. Run **`python tools/kb_timing.py`**. It regenerates [mechanics/clocks.md](mechanics/clocks.md) and
+   [mechanics/scoreboard.md](mechanics/scoreboard.md) from every filed log. CI runs it with `--check`, so a new log
+   without this step fails the build. A log with a new prompt shape shows up as no family in `--counts`.
+5. Run **`python tools/kb_replay.py`**. It regenerates [mechanics/replay.md](mechanics/replay.md), the test of the lock labels and
+   the route rules against every death. CI runs it with `--check` too. Never change a rule in `RULES` to pass it: a rule
+   changed after its result is POST-HOC and counts toward no bar. The next kill in a new log is the real test, so read this page after filing one.
 
 The HTML exports are git-ignored. The text files are the evidence. Our own recordings use a separate
 tool: `python tools/fightlog_import.py` copies `<profile>/fightlogs/` into `kb/raw/logs/ours/`. In an `aconfig rounds alias` fight its
-"commands we sent" row counts alias rewrites, and in a raw fight it counts presses.
+"commands we sent" row counts alias rewrites, and in a raw fight it counts presses. Add `--score` to print the round
+delivery pass bars beside each log's numbers. Run steps 4 and 5 after this too.
 
 ### Capturing straight from the game (`kbcapture`)
 
