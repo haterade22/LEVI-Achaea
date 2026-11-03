@@ -252,7 +252,7 @@ Defaults: health, mana, and cape enabled; willpower and endurance off. Drag bars
 | Feature | Description |
 |---------|-------------|
 | **Version Check** | Automatic check on login — compares local version against GitHub `version.txt` |
-| **One-Command Update** | Type `sysupdate` to download, uninstall old, install new, and clean up |
+| **One-Command Update** | Type `sysupdate` to download, back up your profile, uninstall old, install new, and clean up. Edits inside `Levi_Ataxia` are replaced |
 | **Async Downloads** | Uses Mudlet's `sysDownloadDone` event pattern (no fragile timer delays) |
 | **Error Handling** | Reports download failures via `sysDownloadError` |
 
@@ -677,7 +677,9 @@ The system includes a built-in auto-updater. On every login, it checks for new v
 | **New version available** | Shows notification with the new version number |
 | **To update** | Type `sysupdate` in-game |
 
-The `sysupdate` command downloads the latest `.mpackage` from [GitHub Releases](https://github.com/haterade22/LEVI-Achaea/releases/latest), uninstalls the old package, installs the new one, and cleans up automatically.
+The `sysupdate` command downloads the latest `.mpackage` from [GitHub Releases](https://github.com/haterade22/LEVI-Achaea/releases/latest), saves your settings and a backup of your profile (`<profile>/sysupdate_backups/`, the last 3), uninstalls the old package, installs the new one, and cleans up automatically.
+
+**An update replaces every edit inside `Levi_Ataxia`.** Keep your own items in your own top-level folder, outside the package: they stay. See [Keeping Your Own Changes](GETTING_STARTED.md#keeping-your-own-changes).
 
 ---
 

@@ -94,6 +94,8 @@ sysupdate
 
 This downloads the latest package from GitHub, replaces the old installation, and cleans up automatically. No manual download or reinstall needed.
 
+**An update replaces every edit you made inside `Levi_Ataxia`.** It uninstalls the whole package and installs the new one, so it cannot keep a changed trigger, alias or script. See [Keeping Your Own Changes](#keeping-your-own-changes).
+
 ### 5. Test Basic Functionality
 
 ```lua
@@ -255,7 +257,7 @@ Each item type has a `_groups.yaml` defining the folder tree in Mudlet. The conv
 
 ### Updating the Package
 
-**For users**: Just type `sysupdate` in-game. The system handles everything automatically.
+**For users**: Just type `sysupdate` in-game. It replaces edits inside `Levi_Ataxia`: see [Keeping Your Own Changes](#keeping-your-own-changes).
 
 **For developers releasing a new version**:
 1. Bump version: `/version-bump <new_version>` in Claude Code, or manually update `version.txt`, `muddler_project/mfile`, and `ataxiaVersion` in `_groups.yaml`
@@ -321,6 +323,26 @@ Load order within each group is controlled by the numbered file prefixes.
 ---
 
 ## Extending the System
+
+### Keeping Your Own Changes
+
+`sysupdate` uninstalls `Levi_Ataxia` and installs the new version.
+
+| What you changed | After `sysupdate` |
+|---|---|
+| A trigger, alias, script, timer or key inside `Levi_Ataxia` | Replaced |
+| A new item that you put in a `Levi_Ataxia` folder | Removed |
+| Items in your own top-level folder, outside `Levi_Ataxia` | Kept |
+| Settings in the saved files (`ataxia`, `basher`, `basherpaths`, `andb`, `slcconfig` in your profile folder) | Kept |
+
+**Put your own items in your own top-level folder.** To change how a package trigger behaves, turn nothing off inside the package: add your own trigger or alias in your folder. If you must edit a package item, keep a copy of the edit in your folder too, because the update replaces it.
+
+**Backups (since v4.7.477).** Before it uninstalls the package, `sysupdate` saves your settings and your whole profile to `<profile>/sysupdate_backups/`. `backup_1.xml` is the newest, and the last 3 stay. The update prints the path when it finishes, or a red line if the backup failed. The update continues if the backup fails.
+
+To get an edit back:
+1. Open `backup_1.xml` in a text editor. Do not import it: it holds the whole profile, and importing it would add a second copy of everything.
+2. Search for the name of your item.
+3. Copy your code into a new item in your own folder.
 
 ### Custom Aliases
 

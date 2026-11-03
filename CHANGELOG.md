@@ -2,6 +2,16 @@
 
 ---
 
+## 2026-11-03 - v4.7.477: SYSUPDATE warns about edits and saves a backup first
+
+A player reported: "when I edited some things... the changes were gone after an update, since then I have [not] pushed one in fear of loss." The report is correct. An update uninstalls the whole package and installs the new one, so it removes every edit inside `Levi_Ataxia`. Items in the player's own top-level folder stay.
+
+- **Warnings.** The "New version available" notice and SYSUPDATE itself now say that an update replaces edits inside the package.
+- **A backup before the uninstall.** SYSUPDATE saves the settings (it did not before) and the whole profile to `<profile>/sysupdate_backups/`. `backup_1.xml` is the newest, and the last 3 stay. The update prints the path after the install, or a red line if the backup failed. A failed backup does not stop the update.
+- **The uninstall waits for the save.** Mudlet refuses `uninstallPackage` while a profile save runs, and that save runs on a background thread. The uninstall starts 1 s later and retries once a second. After 30 tries the update stops, and the old version stays installed.
+- **Docs.** `GETTING_STARTED.md` has a new section, "Keeping Your Own Changes", and `README.md` no longer implies that nothing is lost. An update does not merge edits, and this version does not change that.
+- **The protection starts with the update AFTER this one**, because the old updater runs the install of this version.
+- **Not yet run in Mudlet.** Tests: `test_auto_update.lua` (13). The Mudlet facts come from its `development` source and wiki, and the user's client may differ.
 ## 2026-11-03 - v4.7.476: a display-only alert for a Depthswalker's shadow, and two more refused priorities
 
 The user's second group log (v4.7.471, before the v4.7.474 fixes) holds our first death on alias rounds. Alias rounds did not cause it: the last combo landed 0.88 s before death.
