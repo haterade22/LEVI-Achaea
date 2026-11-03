@@ -2,7 +2,7 @@
 
 ---
 
-## 2026-11-03 - v4.7.477: SYSUPDATE warns about edits and saves a backup first
+## 2026-11-03 - v4.7.478: SYSUPDATE warns about edits and saves a backup first
 
 A player reported: "when I edited some things... the changes were gone after an update, since then I have [not] pushed one in fear of loss." The report is correct. An update uninstalls the whole package and installs the new one, so it removes every edit inside `Levi_Ataxia`. Items in the player's own top-level folder stay.
 
@@ -12,6 +12,10 @@ A player reported: "when I edited some things... the changes were gone after an 
 - **Docs.** `GETTING_STARTED.md` has a new section, "Keeping Your Own Changes", and `README.md` no longer implies that nothing is lost. An update does not merge edits, and this version does not change that.
 - **The protection starts with the update AFTER this one**, because the old updater runs the install of this version.
 - **Not yet run in Mudlet.** Tests: `test_auto_update.lua` (13). The Mudlet facts come from its `development` source and wiki, and the user's client may differ.
+- **v4.7.477 has a tag and no release.** Its new test made a folder in a way that works only on Windows, so CI failed on Linux and published nothing. The updater code did not change.
+
+---
+
 ## 2026-11-03 - v4.7.476: a display-only alert for a Depthswalker's shadow, and two more refused priorities
 
 The user's second group log (v4.7.471, before the v4.7.474 fixes) holds our first death on alias rounds. Alias rounds did not cause it: the last combo landed 0.88 s before death.

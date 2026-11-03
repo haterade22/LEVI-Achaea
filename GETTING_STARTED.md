@@ -337,7 +337,7 @@ Load order within each group is controlled by the numbered file prefixes.
 
 **Put your own items in your own top-level folder.** To change how a package trigger behaves, turn nothing off inside the package: add your own trigger or alias in your folder. If you must edit a package item, keep a copy of the edit in your folder too, because the update replaces it.
 
-**Backups (since v4.7.477).** Before it uninstalls the package, `sysupdate` saves your settings and your whole profile to `<profile>/sysupdate_backups/`. `backup_1.xml` is the newest, and the last 3 stay. The update prints the path when it finishes, or a red line if the backup failed. The update continues if the backup fails.
+**Backups (since v4.7.478).** Before it uninstalls the package, `sysupdate` saves your settings and your whole profile to `<profile>/sysupdate_backups/`. `backup_1.xml` is the newest, and the last 3 stay. The update prints the path when it finishes, or a red line if the backup failed. The update continues if the backup fails.
 
 To get an edit back:
 1. Open `backup_1.xml` in a text editor. Do not import it: it holds the whole profile, and importing it would add a second copy of everything.

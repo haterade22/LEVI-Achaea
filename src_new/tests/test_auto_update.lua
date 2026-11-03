@@ -8,7 +8,12 @@ local mock = require("mock_mudlet")
 
 local TMP = (os.getenv("TEMP") or os.getenv("TMP") or ".") .. "/levi_test_update_" .. os.time()
 local DIR = TMP .. "/sysupdate_backups"
-os.execute('mkdir "' .. DIR:gsub("/", package.config:sub(1, 1)) .. '"')
+-- Windows' mkdir makes the parents, and has no -p. Everywhere else needs -p.
+if package.config:sub(1, 1) == "\\" then
+  os.execute('mkdir "' .. DIR:gsub("/", "\\") .. '"')
+else
+  os.execute('mkdir -p "' .. DIR .. '"')
+end
 
 local realHome = getMudletHomeDir
 getMudletHomeDir = function() return TMP end
