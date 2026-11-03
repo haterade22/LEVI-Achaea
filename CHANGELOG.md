@@ -2,6 +2,27 @@
 
 ---
 
+## 2026-11-03 - v4.7.474: group fight fixes for alias rounds, curing stays on normal in a party, and the defence list prints in rows
+
+User: "great log of your changes, please review. Group combat Shikudo." The first alias fight with people attacking us held up: no death and no Lua error. One recording passed
+every bar, one missed only the rewrite count (2 fired in 24 s, bar 5), and the third failed four bars from the causes below, and the rewrite count too (3). **None of these fixes has run in a fight yet.** Reimport to get them.
+
+- **`touch tentacle` ends an alias round.** It spends equilibrium, even at a target who has gone, and the game then HOLDS what follows it in the alias. `queue addclear` does not remove a held
+  command, so `combo Froedine` ran at the next recovery, after a switch to Lauryyn. The next press now sends the attack.
+- **A new target clears the queue (alias path).** The alias keeps the old name until the next press, and it fired at the old target 52 ms and 1.35 s after a switch. `clearqueue all` goes only
+  if a held command named the target in the last 6 s, so a held `touch shield` survives a target call. The clear can still lose a race with a recovery already in flight.
+- **In retardation, an alias round is one command** (`stand` if prone, the staff if not in hand, the transition, the attack), and a press inside 1.2 s sends nothing. Only the last command of the
+  last run happens, about 1.05 s later, and a new run restarts the delay. That is an inference from 8 runs. `transition to oak form` was lost, so the combo behind it was refused, 3 of 3.
+- **A leader's repeat call does nothing.** 18 of 49 calls named the target we held, and each ran the whole switch: it wiped the tracker for that target, shield and rebounding too. A typed `t NAME` still resets.
+- **The curing set stays on `normal` while in a party** (the user's choice). It switched 77 times in 19 minutes, following whoever the leader called. Each switch also reset the defence list. The cost: no class set in a small party fight.
+- **The defence list prints in rows again.** On Mudlet 5.1.0, `deleteLine()` + echo + `send()` in one trigger pass printed it as one long row. It now prints on `tempTimer(0, ...)`.
+- **Small:** `avoid`, `shikudoform` and `starburst` no longer go in a curing priority (the game refused `avoid` 47 times). The login's `queue add inr all` now names its queue (`Unknown queue specified.`).
+- **Logs filed:** the three recordings and the screen log, `kb/raw/logs/`. They hold other players' tells; the user chose to file them. Clocks, scoreboard and replay are rebuilt.
+- **A replay correction, disclosed on the page.** Those logs took `pariah.latency` and `pariah.scourge` out of UNTESTED and turned G1 and G2 to PASS. The Pariah was Harkon, a member of our party. A recording of ours now
+  tests no rule, as a death in one already had no route. The bars read as they did before, and the result is still FAIL, so step 5 stays on hold.
+
+---
+
 ## 2026-11-03 - v4.7.473: no `[SK]` combo line at a denizen
 
 User, about a bashing screen: "this is when I am bashing which is weird." Three strikes hit an Arcadian sentry, and under them was a red

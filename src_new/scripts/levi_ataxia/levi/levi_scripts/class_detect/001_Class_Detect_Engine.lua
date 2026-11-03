@@ -15,7 +15,7 @@ packageName: ''
 
 -- Enemy Class Detection + Curingset Auto-Switching
 -- Identifies the class of the player attacking us and switches curingset accordingly.
--- 1v1 only: if multiple attackers detected, stays on "normal" curingset.
+-- 1v1 only: if multiple attackers detected, or while in a party, stays on "normal" curingset.
 
 classDetect = classDetect or {}
 
@@ -177,7 +177,7 @@ function classDetect.reapplyDefencePriorities()
   ataxia_sendCuringPriority("curing priority defence list reset", false)
   local command = "curing priority defence "
   for def in pairs(defup[cur]) do
-    if isDefenceForCurrentClass(def) then
+    if isDefenceForCurrentClass(def) and ataxia_defenceTakesPriority(def) then
       command = command .. def .. " 25 "
     end
   end
@@ -199,12 +199,22 @@ function classDetect.bashProfileOwnsCuringset()
   return (ataxia_bashProfileActive and ataxia_bashProfileActive()) == true
 end
 
+-- In a party the class that matters is not one person's: the target is who the leader calls, and many
+-- people attack us. The 2026-11-03 group fight switched sets 77 times in 19 minutes, each with a defence
+-- list reset, and an ally's attack on our target set "vs Magi". ataxia.channels is GMCP Comm.Channel.List,
+-- the same reader as ataxia_mindnetTellParty. We have not seen `party` leave that list when a party ends:
+-- if class sets do not come back after a party, look there first.
+function classDetect.inParty()
+  local channels = ataxia and ataxia.channels
+  return type(channels) == "table" and channels.party ~= nil
+end
+
 function classDetect.switchCuringset(className)
   if not classDetect.state.enabled then return end
   if classDetect.bashProfileOwnsCuringset() then return end
 
   local setName = classDetect.curingsetMap[className] or "normal"
-  if not classDetect.validCuringsets[setName] then setName = "normal" end
+  if not classDetect.validCuringsets[setName] or classDetect.inParty() then setName = "normal" end
   if setName == classDetect.state.currentCuringset then return end
 
   local now = getEpoch()
@@ -486,6 +496,7 @@ function classDetect.status()
   cecho("\n<cyan>| <white>Timeout:     <grey>" .. classDetect.config.combatTimeoutSeconds .. "s")
   local n = countAttackers()
   cecho("\n<cyan>| <white>Attackers:   " .. (n > 1 and "<red>" or "<green>") .. n .. (n > 1 and " (multi -- normal)" or ""))
+  cecho("\n<cyan>| <white>In party:    " .. (classDetect.inParty() and "<red>YES (normal only)" or "<green>NO"))
   cecho("\n<cyan>+==========================================+\n")
 end
 

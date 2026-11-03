@@ -1160,7 +1160,7 @@ def rule_results(reps, rules=RULES, excluded=()):
     for rule in rules:
         rid = rule["id"]
         r = {"warned": [], "false_survived": [], "false_lost": [], "open": [], "fought_survived": [], "fought_lost": [],
-             "not_evaluable": []}
+             "not_evaluable": [], "tested_on": []}
         for rep in reps:
             if rep.same_fight or rep.log.family is None or rep.client in excluded:
                 continue
@@ -1174,6 +1174,8 @@ def rule_results(reps, rules=RULES, excluded=()):
                     r["not_evaluable"].append((rep.log.id, rule["clauses"][i]["text"]))
             if fought:
                 (r["fought_lost"] if rep.death_t is not None else r["fought_survived"]).append(rep.log.id)
+                if rep.death_t is None and rep.log.family != "ours":
+                    r["tested_on"].append(rep.log.id)
             fatal = []
             for chain in rep.rules.get(rid, ()):
                 verdict = judge(chain, rep.death_t, rep.last_prompt)
@@ -1188,7 +1190,9 @@ def rule_results(reps, rules=RULES, excluded=()):
             if fatal:
                 r["warned"].append({"log": rep.log.id, "seconds": rep.death_t - fatal[0]["start"], "chain": fatal[0],
                                     "killer": rep.killer, "off_before": min(rep.death_t - c["end"] for c in fatal)})
-        r["untested"] = not r["fought_survived"]
+        # A recording of ours is a group fight (death_scope): a class in the room may be on our side. Harkon, a Pariah, is in our
+        # party in ours/081532_Tabethys. So it tests no 1v1 rule. Its false alarms still count, so this only moves a bar toward FAIL.
+        r["untested"] = not r["tested_on"]
         n_false, n_warned = len(r["false_survived"]), len(r["warned"])
         r["fraction"] = n_false / float(n_false + n_warned) if n_false + n_warned else None
         out[rid] = r
@@ -1803,6 +1807,10 @@ def render_context(a):
     out = ["## Not counted: what the bars left out", "",
            "**None of this counts toward a bar.** It is here because it shows what a later log could change.", "",
            "- **The plan's sentence, read alone.** " + plan_sentence(reading),
+           "- **One change after the first run (2026-11-03), and it moves no bar toward a pass.** Filing the group fight of that day took `pariah.latency` and "
+           "`pariah.scourge` out of UNTESTED and turned G1 and G2 to PASS: 5 counted, attackers Blonk, Reyl, Talo. The only survived fight was "
+           "`ours/081532_Tabethys`, where the Pariah is Harkon, a member of OUR party (`(Party): Tabethys says, \"Harkon you need to WALK AHEAD and break walls.\"`). "
+           "A recording of ours now tests no rule, as a death in one already had no route. Its false alarms still count.",
            "- **Rules with no survived fight.** With the UNTESTED rules included, rules warned 5 s or more on %d of the %d in-scope no-lock-alert deaths, from "
            "%d attackers (%s). No fight its logger survived exists for %s, so nothing says how often they cry wolf. The false alarms they did raise before a "
            "later death are in the per-rule table." % (len(any_warn), len(in_scope), len(attackers), ", ".join(attackers),
@@ -1915,7 +1923,7 @@ def render_page(a, logs):
     out += render_first_run(a)
     out += ["## Logs read", "",
             "%d logs. Skipped: %s (prompts with no time in them, so no warning can be measured). `2026-10-27_shikudo-group-mhaldor` is the same fight as "
-            "`ours/112717_Tabethys` (`kb_timing.SAME_FIGHT`), so it stays out of every count. The ids are the ones [clocks.md](clocks.md) uses." % (
+            "`ours/112717_Tabethys`, and `2026-11-03_shikudo-group-alias` holds the three recordings of 2026-11-03 (`kb_timing.SAME_FIGHT`), so they stay out of every count. The ids are the ones [clocks.md](clocks.md) uses." % (
                 len(logs), ", ".join("`%s`" % log.name for log in skipped) or "none"), ""]
     rows = []
     for rep in a["reps"]:

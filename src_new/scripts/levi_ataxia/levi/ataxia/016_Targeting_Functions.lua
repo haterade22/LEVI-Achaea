@@ -45,6 +45,8 @@ function switchTarget(who)
 
 	local found_target = false
   if who ~= target and lb and lb.resetAll then lb.resetAll(target) end
+  -- A round in the queue still names the old target (ataxia/003).
+  if who ~= target and ataxia_roundTargetChanged then ataxia_roundTargetChanged() end
 	if ataxia.playersHere and type(ataxia.playersHere) == "table" then
 		for i,v in pairs(ataxia.playersHere) do
 			if string.find(v, tName) then

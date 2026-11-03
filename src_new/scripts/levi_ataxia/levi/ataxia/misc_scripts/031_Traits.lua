@@ -239,6 +239,7 @@ if type(send) == "function" then
     if out == "" then return true end
     -- Round delivery (ataxia/003). With the flag off, this returns `out` unchanged.
     if ataxia_roundDeliver then out = ataxia_roundDeliver(out) end
+    if out == "" then return true end
     return ataxia_rawSend(out, ...)
   end
   ataxia_sendWrapped = true

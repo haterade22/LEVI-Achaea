@@ -739,6 +739,25 @@ target holding its breath prints. A choke with no landing line in 1.2 s is taken
 **Impatience and batter (`sr`, `vv`, 2026-11-02):** impatience goes only with 2 or more afflictions on the target, and batter goes while
 under that, in Rain. Batter sticks something and spends the target's tree and herb balance (player). Not yet tested in a fight.
 
+## Group combat: the 2026-11-03 alias fight (fixes in v4.7.474)
+
+Sources: `kb/raw/logs/ours/2026-11-03_080944_Lauryyn.log`, `081009_Froedine.log`, `081532_Tabethys.log` (row numbers below are `081009_Froedine`'s unless named), and
+`kb/raw/logs/2026-11-03_shikudo-group-alias.txt`, the screen. A party led by Tabethys, 19 minutes, `sr` and `srd`, on v4.7.471 with `aconfig rounds alias`.
+
+**What worked (CONFIRMED, live):** no death for us, no Lua error, 0 alias echoes on screen. `srd` sent no combos. MIND CRUSH landed 3 of 3 (rows 2222, 2418; `Tabethys` 3552), 2.45 s of
+equilibrium. KAI CHOKE landed 4, and 1 did not. Impatience: 18 rounds and 1 batter. Of 6 recasts on one target, 4 had a cure seen first.
+
+**What broke, and what changed:**
+- **`touch tentacle` left stale attacks** (rows 428-433, 546-550). It now ends the round ([balance-and-queueing.md](../mechanics/balance-and-queueing.md)).
+- **An alias keeps its target until the next press** (rows 550, 3838). A new target now clears the queue.
+- **Retardation lost the transition,** and the combo behind it was refused from the old form, 3 of 3 (runs at rows 2152, 2736, 2765). A slowed round is now one command.
+- **A leader's repeat call wiped the tracker.** 18 of 49 calls named the target we held, and each ran the whole switch, `tAffs.shield` and `tAffs.rebounding` included. Example: two
+  impatience rounds at Mizik with no cure seen between them (screen rows 13195, 13320). The repeat now does nothing. 6 more repeats had no party line near them, so they are likely our own `t`,
+  and a typed `t` still resets.
+- **The curing set followed the called target:** 77 `curingset switch` sends in 19 minutes, each with a defence list reset. In a party it now stays on `normal` (`classDetect.inParty`).
+
+**Not tested by this fight:** no asthma + weariness window on us and no `fitness` send, so the FITNESS hold has not run. **None of the fixes above has run in a fight yet.**
+
 ## Conflicts and open questions
 
 - **Blackout, MIND SCYTHE and the mind lock:** the wiki marks the abilities that need no lock with

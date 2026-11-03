@@ -1405,27 +1405,31 @@
     },
     {
      "filed": [
-      "2026-10-27"
+      "2026-10-27",
+      "2026-11-03"
      ],
      "logger": "Ours, recorder (Monk)",
      "logs": {
+      "ours/081009_Froedine": 3,
+      "ours/081532_Tabethys": 1,
       "ours/112717_Tabethys": 5
      },
      "method": "line",
      "stats": {
-      "max": 5.938,
-      "median": 5.912,
+      "max": 6.052,
+      "median": 5.937,
       "min": 5.839,
-      "n": 5,
-      "p10": 5.854,
-      "p90": 5.935,
-      "spread": 0.081
+      "n": 9,
+      "p10": 5.869,
+      "p90": 5.995,
+      "spread": 0.127
      },
      "usable": false,
      "versions": [
-      "4.7.450"
+      "4.7.450",
+      "4.7.471"
      ],
-     "why_not": "n=5 is under 10"
+     "why_not": "n=9 is under 10"
     },
     {
      "filed": [
@@ -1453,33 +1457,33 @@
     }
    ],
    "methods": {
-    "line": 120,
+    "line": 124,
     "line_1s": 2,
     "printed": 17
    },
    "spread_without": {
-    "Claes": 0.191,
-    "Earth Lord (unnamed)": 0.224,
-    "Elmer": 0.2,
-    "Leviticus": 0.2,
+    "Claes": 0.189,
+    "Earth Lord (unnamed)": 0.229,
+    "Elmer": 0.203,
+    "Leviticus": 0.201,
     "Mystor": 0.225,
-    "Nikita": 0.219,
+    "Nikita": 0.21,
     "Ours, recorder (Monk)": 0.223,
-    "Shikudo attacker (unnamed)": 0.218
+    "Shikudo attacker (unnamed)": 0.209
    },
    "stats": {
     "max": 6.11,
-    "median": 5.91,
+    "median": 5.912,
     "min": 5.276,
-    "n": 137,
-    "p10": 5.79,
-    "p90": 6.0,
-    "spread": 0.21
+    "n": 141,
+    "p10": 5.8,
+    "p90": 6.001,
+    "spread": 0.201
    },
    "title": "Moss, potash",
    "unpaired": 2,
    "usable": false,
-   "why_not": "p90-p10 is 0.210, over 0.2"
+   "why_not": "p90-p10 is 0.201, over 0.2"
   },
   "rebounding": {
    "by_logger": [
@@ -1619,27 +1623,32 @@
     },
     {
      "filed": [
-      "2026-10-27"
+      "2026-10-27",
+      "2026-11-03"
      ],
      "logger": "Ours, recorder (Monk)",
      "logs": {
+      "ours/080944_Lauryyn": 15,
+      "ours/081009_Froedine": 48,
+      "ours/081532_Tabethys": 121,
       "ours/112717_Tabethys": 29
      },
      "method": "line",
      "stats": {
-      "max": 49.493,
-      "median": 8.515,
-      "min": 8.42,
-      "n": 29,
-      "p10": 8.466,
-      "p90": 13.113,
-      "spread": 4.648
+      "max": 250.253,
+      "median": 8.498,
+      "min": 0.274,
+      "n": 213,
+      "p10": 8.418,
+      "p90": 8.577,
+      "spread": 0.159
      },
-     "usable": false,
+     "usable": true,
      "versions": [
-      "4.7.450"
+      "4.7.450",
+      "4.7.471"
      ],
-     "why_not": "p90-p10 is 4.648, over 0.2"
+     "why_not": ""
     },
     {
      "filed": [
@@ -1667,30 +1676,30 @@
     }
    ],
    "methods": {
-    "line": 176,
+    "line": 360,
     "line_1s": 39
    },
    "spread_without": {
-    "Claes": 0.156,
-    "Elmer": 1.628,
-    "Ours, recorder (Alchemist)": 0.597,
-    "Ours, recorder (Infernal)": 1.942,
+    "Claes": 0.161,
+    "Elmer": 0.195,
+    "Ours, recorder (Alchemist)": 0.193,
+    "Ours, recorder (Infernal)": 0.221,
     "Ours, recorder (Monk)": 1.761,
-    "Ours, recorder (Runewarden)": 1.236
+    "Ours, recorder (Runewarden)": 0.196
    },
    "stats": {
-    "max": 49.493,
+    "max": 250.253,
     "median": 8.492,
     "min": 0.026,
-    "n": 176,
-    "p10": 7.548,
-    "p90": 8.68,
-    "spread": 1.132
+    "n": 360,
+    "p10": 8.387,
+    "p90": 8.583,
+    "spread": 0.196
    },
    "title": "Rebounding after a smoke, third person",
    "unpaired": 0,
-   "usable": false,
-   "why_not": "p90-p10 is 1.132, over 0.2"
+   "usable": true,
+   "why_not": ""
   },
   "restoration": {
    "by_logger": [
@@ -2183,27 +2192,31 @@
     },
     {
      "filed": [
-      "2026-10-27"
+      "2026-10-27",
+      "2026-11-03"
      ],
      "logger": "Ours, recorder (Monk)",
      "logs": {
+      "ours/081009_Froedine": 5,
+      "ours/081532_Tabethys": 8,
       "ours/112717_Tabethys": 6
      },
      "method": "line",
      "stats": {
-      "max": 1.057,
-      "median": 0.921,
-      "min": 0.89,
-      "n": 6,
-      "p10": 0.901,
-      "p90": 1.026,
-      "spread": 0.125
+      "max": 1.082,
+      "median": 0.922,
+      "min": 0.804,
+      "n": 19,
+      "p10": 0.842,
+      "p90": 1.025,
+      "spread": 0.183
      },
-     "usable": false,
+     "usable": true,
      "versions": [
-      "4.7.450"
+      "4.7.450",
+      "4.7.471"
      ],
-     "why_not": "n=6 is under 10"
+     "why_not": ""
     },
     {
      "filed": [
@@ -2255,25 +2268,25 @@
     }
    ],
    "methods": {
-    "line": 6,
+    "line": 19,
     "printed": 154
    },
    "spread_without": {
-    "Claes": 0.174,
+    "Claes": 0.178,
     "Earth Lord (unnamed)": 0.161,
-    "Mystor": 0.173,
-    "Nikita": 0.17,
+    "Mystor": 0.19,
+    "Nikita": 0.176,
     "Ours, recorder (Monk)": 0.17,
-    "Shikudo attacker (unnamed)": 0.173
+    "Shikudo attacker (unnamed)": 0.177
    },
    "stats": {
-    "max": 1.06,
-    "median": 0.911,
+    "max": 1.082,
+    "median": 0.915,
     "min": 0.65,
-    "n": 160,
+    "n": 173,
     "p10": 0.82,
-    "p90": 0.991,
-    "spread": 0.171
+    "p90": 0.997,
+    "spread": 0.177
    },
    "title": "Salve, short",
    "unpaired": 0,
@@ -2814,27 +2827,31 @@
     },
     {
      "filed": [
-      "2026-10-27"
+      "2026-10-27",
+      "2026-11-03"
      ],
      "logger": "Ours, recorder (Monk)",
      "logs": {
+      "ours/081009_Froedine": 4,
+      "ours/081532_Tabethys": 3,
       "ours/112717_Tabethys": 9
      },
      "method": "line",
      "stats": {
       "max": 4.504,
-      "median": 4.396,
+      "median": 4.412,
       "min": 1.937,
-      "n": 9,
-      "p10": 3.871,
-      "p90": 4.458,
-      "spread": 0.586
+      "n": 16,
+      "p10": 4.31,
+      "p90": 4.449,
+      "spread": 0.138
      },
-     "usable": false,
+     "usable": true,
      "versions": [
-      "4.7.450"
+      "4.7.450",
+      "4.7.471"
      ],
-     "why_not": "n=9 is under 10"
+     "why_not": ""
     },
     {
      "filed": [
@@ -2886,25 +2903,25 @@
     }
    ],
    "methods": {
-    "line": 13,
+    "line": 20,
     "line_1s": 1,
     "printed": 394
    },
    "spread_without": {
-    "Claes": 0.205,
+    "Claes": 0.204,
     "Earth Lord (unnamed)": 0.198,
-    "Elmer": 0.197,
-    "Mystor": 0.219,
+    "Elmer": 0.196,
+    "Mystor": 0.216,
     "Nikita": 0.18,
-    "Ours, recorder (Infernal)": 0.198,
+    "Ours, recorder (Infernal)": 0.199,
     "Ours, recorder (Monk)": 0.198,
     "Shikudo attacker (unnamed)": 0.203
    },
    "stats": {
     "max": 5.85,
-    "median": 4.401,
+    "median": 4.402,
     "min": 1.937,
-    "n": 407,
+    "n": 414,
     "p10": 4.307,
     "p90": 4.505,
     "spread": 0.198
@@ -3186,27 +3203,30 @@
     },
     {
      "filed": [
-      "2026-10-27"
+      "2026-10-27",
+      "2026-11-03"
      ],
      "logger": "Ours, recorder (Monk)",
      "logs": {
+      "ours/081532_Tabethys": 1,
       "ours/112717_Tabethys": 3
      },
      "method": "line",
      "stats": {
-      "max": 1.543,
-      "median": 1.487,
+      "max": 1.555,
+      "median": 1.515,
       "min": 1.486,
-      "n": 3,
+      "n": 4,
       "p10": 1.486,
-      "p90": 1.532,
-      "spread": 0.046
+      "p90": 1.551,
+      "spread": 0.065
      },
      "usable": false,
      "versions": [
-      "4.7.450"
+      "4.7.450",
+      "4.7.471"
      ],
-     "why_not": "n=3 is under 10"
+     "why_not": "n=4 is under 10"
     },
     {
      "filed": [
@@ -3258,26 +3278,26 @@
     }
    ],
    "methods": {
-    "line": 32,
+    "line": 33,
     "printed": 244
    },
    "spread_without": {
-    "Claes": 0.219,
+    "Claes": 0.218,
     "Earth Lord (unnamed)": 0.188,
-    "Elmer": 0.174,
-    "Mystor": 0.188,
-    "Nikita": 0.165,
+    "Elmer": 0.173,
+    "Mystor": 0.187,
+    "Nikita": 0.164,
     "Ours, recorder (Monk)": 0.188,
-    "Shikudo attacker (unnamed)": 0.187
+    "Shikudo attacker (unnamed)": 0.186
    },
    "stats": {
     "max": 3.002,
     "median": 1.481,
     "min": 0.277,
-    "n": 276,
-    "p10": 1.398,
+    "n": 277,
+    "p10": 1.399,
     "p90": 1.584,
-    "spread": 0.186
+    "spread": 0.185
    },
    "title": "Smoke (lungs)",
    "unpaired": 13,
@@ -3621,29 +3641,32 @@
     {
      "filed": [
       "2026-10-27",
-      "2026-11-02"
+      "2026-11-02",
+      "2026-11-03"
      ],
      "logger": "Ours, recorder (Monk)",
      "logs": {
+      "ours/081009_Froedine": 1,
       "ours/112717_Tabethys": 3,
       "ours/122916_Antoninus": 1
      },
      "method": "line",
      "stats": {
       "max": 14.012,
-      "median": 13.983,
+      "median": 13.959,
       "min": 13.901,
-      "n": 4,
-      "p10": 13.918,
-      "p90": 14.011,
-      "spread": 0.092
+      "n": 5,
+      "p10": 13.912,
+      "p90": 14.01,
+      "spread": 0.098
      },
      "usable": false,
      "versions": [
       "4.7.450",
-      "4.7.470"
+      "4.7.470",
+      "4.7.471"
      ],
-     "why_not": "n=4 is under 10"
+     "why_not": "n=5 is under 10"
     },
     {
      "filed": [
@@ -3695,15 +3718,15 @@
     }
    ],
    "methods": {
-    "line": 13,
+    "line": 14,
     "printed": 179
    },
    "spread_without": {
     "Claes": 0.163,
-    "Earth Lord (unnamed)": 0.165,
-    "Elmer": 0.172,
-    "Leviticus": 0.159,
-    "Mystor": 0.193,
+    "Earth Lord (unnamed)": 0.164,
+    "Elmer": 0.171,
+    "Leviticus": 0.158,
+    "Mystor": 0.191,
     "Nikita": 0.143,
     "Ours, recorder (Infernal)": 0.165,
     "Ours, recorder (Monk)": 0.167,
@@ -3711,9 +3734,9 @@
    },
    "stats": {
     "max": 14.214,
-    "median": 13.958,
+    "median": 13.957,
     "min": 13.321,
-    "n": 192,
+    "n": 193,
     "p10": 13.885,
     "p90": 14.05,
     "spread": 0.165
@@ -3770,20 +3793,20 @@
   "ours": {
    "fixed": 0,
    "held": 0,
-   "logs": 6,
-   "prompts": 8396,
+   "logs": 9,
+   "prompts": 13213,
    "wrapped": 0
   },
   "sentinel": {
    "fixed": 0,
    "held": 0,
-   "logs": 2,
-   "prompts": 1154,
+   "logs": 3,
+   "prompts": 4893,
    "wrapped": 49
   }
  },
  "generated_by": "tools/kb_timing.py",
- "latest_filed": "2026-11-02",
+ "latest_filed": "2026-11-03",
  "logs": [
   {
    "family": "sentinel",
@@ -4220,6 +4243,20 @@
    "wrapped": 1
   },
   {
+   "family": "sentinel",
+   "file": "2026-11-03_shikudo-group-alias.txt",
+   "filed": "2026-11-03",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "shikudo-group-alias",
+   "in_pools": false,
+   "logger": "Ours, client log",
+   "prompts": 3739,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 0
+  },
+  {
    "family": "ours",
    "file": "2026-10-12_201153_Tabethys.log",
    "filed": "2026-10-12",
@@ -4302,6 +4339,48 @@
    "unstamped_prompts": 0,
    "version": "4.7.470",
    "wrapped": 0
+  },
+  {
+   "family": "ours",
+   "file": "2026-11-03_080944_Lauryyn.log",
+   "filed": "2026-11-03",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "ours/080944_Lauryyn",
+   "in_pools": true,
+   "logger": "Ours, recorder (Monk)",
+   "prompts": 349,
+   "unstamped_prompts": 0,
+   "version": "4.7.471",
+   "wrapped": 0
+  },
+  {
+   "family": "ours",
+   "file": "2026-11-03_081009_Froedine.log",
+   "filed": "2026-11-03",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "ours/081009_Froedine",
+   "in_pools": true,
+   "logger": "Ours, recorder (Monk)",
+   "prompts": 1369,
+   "unstamped_prompts": 0,
+   "version": "4.7.471",
+   "wrapped": 0
+  },
+  {
+   "family": "ours",
+   "file": "2026-11-03_081532_Tabethys.log",
+   "filed": "2026-11-03",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "ours/081532_Tabethys",
+   "in_pools": true,
+   "logger": "Ours, recorder (Monk)",
+   "prompts": 3099,
+   "unstamped_prompts": 0,
+   "version": "4.7.471",
+   "wrapped": 0
   }
  ],
  "modifiers": [
@@ -4351,10 +4430,10 @@
     "max": 4.913,
     "median": 4.4,
     "min": 1.937,
-    "n": 400,
-    "p10": 4.306,
+    "n": 407,
+    "p10": 4.304,
     "p90": 4.5,
-    "spread": 0.194
+    "spread": 0.196
    }
   }
  ],
@@ -5525,24 +5604,27 @@
      },
      {
       "filed": [
-       "2026-11-02"
+       "2026-11-02",
+       "2026-11-03"
       ],
       "logger": "Ours, recorder (Monk)",
       "logs": {
+       "ours/081009_Froedine": 1,
        "ours/122916_Antoninus": 1
       },
       "printed": {
-       "2.89": 1
+       "2.89": 1,
+       "3.4": 1
       },
       "ratio": null,
       "stats": {
-       "max": 2.89,
-       "median": 2.89,
+       "max": 3.4,
+       "median": 3.145,
        "min": 2.89,
-       "n": 1,
-       "p10": 2.89,
-       "p90": 2.89,
-       "spread": 0.0
+       "n": 2,
+       "p10": 2.941,
+       "p90": 3.349,
+       "spread": 0.408
       }
      }
     ],
@@ -5792,6 +5874,6 @@
    }
   ],
   "own_ambiguous_packets": {},
-  "own_printed_rows": 1142
+  "own_printed_rows": 1219
  }
 }

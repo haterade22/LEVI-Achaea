@@ -836,7 +836,7 @@ transition_map:
 
 ## Shikudo Implementation (LEVI System)
 ```yaml
-round_delivery:  # 2026-11-01, kb/mechanics/balance-and-queueing.md. OFF by default and NOT yet proven in a fight.
+round_delivery:  # 2026-11-01, kb/mechanics/balance-and-queueing.md. OFF by default. One group fight so far (2026-11-03).
   flag: "`aconfig rounds alias|raw`, saved per class in ataxia.settings.roundDelivery. Monk only, never while the
     basher is on. It reaches every Monk round, Tekura's too"
   raw_path: "the default. Mudlet splits `;`: only `g body` is queued, the rest go at once, and the auto-queue catches
@@ -846,6 +846,9 @@ round_delivery:  # 2026-11-01, kb/mechanics/balance-and-queueing.md. OFF by defa
     a run line naming LVFREE, until the first alias fight confirms it. ataxia_roundRan reads it as the chain, so 007's and
     011's pending rounds still commit. `aconfig rounds alias` puts both back on the press-time count until one matches"
   stays_raw: "`ts`, `cwd`, tarot lust's `reject` and MIND BLACKOUT's press send what they send with the flag off"
+  ends_the_round: "`touch tentacle`: it spends equilibrium, and the game would hold what follows past `queue addclear` (v4.7.474)"
+  target_switch: "a new name clears the queue: `clearqueue all` only if a held command named the target (v4.7.474)"
+  retardation: "one command per round (stand if prone, staff if not in hand, transition, attack), and a press inside 1.2 s sends nothing (v4.7.474)"
   chains:  # with combatQueue()'s `g body;g gold;stand;` first, as the shim sends them: stand first
     006_dispatch: "wield; dispatch|incapacitate|combo. The spender is last. ASSESS follows only with Health Inspector"
     007_lock: "wield; [transition;] combo, or [transition;] mind, or kai choke. The spender is last. A separate

@@ -1,0 +1,1627 @@
+# LEVI fight log | version 4.7.471 | started 2026-11-03 08:09:44 | opponent Lauryyn | our class Monk | our attack | rounds alias
+# rows: <time> <kind> <text>. kinds: | line, P prompt, > we sent, +aff/-aff ours (GMCP), +def/-def ours (GMCP), +tar/-tar our tracker on the target, # note
+# alias lvfree holds: stand/g body/g gold/wield staff489282/combo Lauryyn frontkick left kuro left ruku left
+08:09:44.128 > queue addclear free lvfree
+08:09:44.196 | Alias "lvfree" will now execute: "stand/g body/g gold/wield staff489282/combo Lauryyn frontkick left kuro left ruku left"
+08:09:44.197 P H: Healthy, M: Full, E: Full, W: Full cexkdb-
+08:09:44.291 | [System]: Queued free commands cleared.
+08:09:44.291 | [System]: Added LVFREE to your free queue.
+08:09:44.292 | [System]: Running queued free command: LVFREE
+08:09:44.292 | You are not fallen or kneeling.
+08:09:44.292 | I see no "body" to take.
+08:09:44.293 | I see no "gold" to take.
+08:09:44.293 | You are already wielding that.
+08:09:44.294 | You lash out with a straight kick at the left shoulder of Lauryyn.
+08:09:44.294 -tar shield
+08:09:44.294 +tar prone
+08:09:44.294 > pt Lauryyn: prone
+08:09:44.294 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Lauryyn's left arm.
+08:09:44.294 +tar prone
+08:09:44.294 > pt Lauryyn: prone
+08:09:44.294 | The instep of your foot smashes into the left underarm of Lauryyn, throwing her from her feet and sending her spinning to the ground.
+08:09:44.294 | Balance used: 2.1s.
+08:09:44.294 | Falling back into a low crouch, you lash out with a swift strike at the left thigh of Lauryyn.
+08:09:44.294 -tar shield
+08:09:44.294 > pt Lauryyn: weariness
+08:09:44.294 +tar weariness
+08:09:44.295 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Lauryyn's left leg.
+08:09:44.296 | The staff cracks across the left thigh of Lauryyn.
+08:09:44.296 | You spin a full rotation, bringing a twisted oaken staff around in a blur of motion to smash into the left arm of Lauryyn.
+08:09:44.296 -tar shield
+08:09:44.296 > pt Lauryyn: clumsiness
+08:09:44.296 +tar clumsiness
+08:09:44.296 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Lauryyn's left arm.
+08:09:44.296 | The staff connects to the left arm with a resounding crack, the limb flopping uselessly.
+08:09:44.297 | You are now maintaining a kata chain of 3 actions.
+08:09:44.299 P H: Healthy, M: Full, E: Full, W: Full cekdb-
+08:09:44.386 -tar anorexia
+08:09:44.386 | Lauryyn eats an aurum flake.
+08:09:44.387 -tar prone
+08:09:44.387 -tar paralysis
+08:09:44.387 -tar brokenleftleg
+08:09:44.387 -tar damagedleftleg
+08:09:44.387 -tar brokenrightleg
+08:09:44.387 -tar damagedrightleg
+08:09:44.387 -tar prone
+08:09:44.387 -tar paralysis
+08:09:44.387 | Lauryyn stands up.
+08:09:44.387 -tar anorexia
+08:09:44.387 | Lauryyn takes a drink from an elegant diamond vial.
+08:09:44.387 | Lauryyn eats some irid moss.
+08:09:44.387 | (Party): You say, "Lauryyn: prone."
+08:09:44.389 P H: Healthy, M: Full, E: Full, W: Full cekdb-
+08:09:44.477 | (Party): You say, "Lauryyn: prone."
+08:09:44.478 P H: Full, M: Full, E: Full, W: Full cekdb-
+08:09:44.479 | (Party): You say, "Lauryyn: weariness."
+08:09:44.480 P H: Full, M: Full, E: Full, W: Full cekdb-
+08:09:44.481 | (Party): You say, "Lauryyn: clumsiness."
+08:09:44.482 P H: Full, M: Full, E: Full, W: Full cekdb-
+08:09:44.572 -tar clumsiness
+08:09:44.573 -tar weariness
+08:09:44.573 | Lauryyn touches a tree of life tattoo.
+08:09:44.574 P H: Full, M: Full, E: Full, W: Full cekdb-
+08:09:44.672 | In a furor of gnashing teeth and toxic bile, Lauryyn tears at the left arm of Tabethys with two of her serpentine heads.
+08:09:44.672 | A reflection of Tabethys blinks out of existence.
+08:09:44.674 | Lauryyn's many serpentine heads lunge towards Tabethys's left arm.
+08:09:44.674 | They seize her left arm with a bonecrunching grip!
+08:09:44.675 P H: Full, M: Full, E: Full, W: Full cekdb-4-
+08:09:44.755 > pt Tabethys used EPITOMISE - switch targets for 6 seconds!
+08:09:44.756 | Tabethys moves with the grace of the wind, her stance the epitome of perfection beneath the flurry of blows.
+08:09:44.757 P H: Full, M: Full, E: Full, W: Full cekdb-4-
+08:09:44.758 | Gavai appears from out of nowhere.
+08:09:44.758 | Gavai points an accusatory finger at Grulk.
+08:09:44.758 | Grulk seems to jolt to a halt suddenly as Gavai flays him.
+08:09:44.758 | The protective coating covering the skin of Grulk is ripped away along with his protections.
+08:09:44.759 P H: Full, M: Full, E: Full, W: Full cekdb-4-
+08:09:44.810 | (Party): You say, "Tabethys used EPITOMISE - switch targets for 6 seconds!"
+08:09:44.811 P H: Full, M: Full, E: Full, W: Full cekdb-4-
+08:09:44.837 > setalias lvfree stand/g body/g gold/mind impatience Lauryyn
+08:09:44.837 > queue addclear free lvfree
+08:09:44.978 | Grulk takes a long drag off his pipe.
+08:09:44.978 | Grulk applies a sileris berry to himself.
+08:09:44.981 P H: Full, M: Full, E: Full, W: Full cekdb-4-
+08:09:45.066 | Alias "lvfree" will now execute: "stand/g body/g gold/mind impatience Lauryyn"
+08:09:45.067 P H: Full, M: Full, E: Full, W: Full cekdb-4-
+08:09:45.067 | Xylarys's aura of weapons rebounding disappears.
+08:09:45.069 | A sudden deluge of water soaks Tabethys, the slightest ripple disturbing the amorphous tranquility of Xylarys.
+08:09:45.069 | The skin of Tabethys dries and cracks as Xylarys seems somehow more than he was a moment ago.
+08:09:45.069 P H: Full, M: Full, E: Full, W: Full cekdb-4-
+08:09:45.070 | Grulk steadies himself in preparation to avoid physical attacks.
+08:09:45.071 P H: Full, M: Full, E: Full, W: Full cekdb-4-
+08:09:45.072 | [System]: Queued free commands cleared.
+08:09:45.072 | [System]: Added LVFREE to your free queue.
+08:09:45.072 P H: Full, M: Full, E: Full, W: Full cekdb-4-
+08:09:45.074 > curing priority defence lament reset
+08:09:45.074 +def lament
+08:09:45.074 | The eyes of Maldrantus grow unfocused as he speaks a soft, reverent lamentation:
+08:09:45.074 | "Your heart is made of iron; let it repel all arrows. Your soul is formed of diamond; let it cast light to all four corners. Your eyes are bolts of lightning; let them see the mark."
+08:09:45.074 | A nimbus of grey coalesces about the form of Morasla, growing brighter by the moment.
+08:09:45.074 | A nimbus of grey coalesces about the form of Maldrantus, growing brighter by the moment.
+08:09:45.074 | A nimbus of grey coalesces about the form of Tabethys, growing brighter by the moment.
+08:09:45.074 | A nimbus of grey coalesces about the form of Valkyri, growing brighter by the moment.
+08:09:45.074 | The softly spoken words thunder inside your skull, a feverish whisper that builds to an exultant battlecry.
+08:09:45.075 P H: Full, M: Full, E: Full, W: Full cekdb-4-
+08:09:45.075 | Maldrantus's aura of weapons rebounding disappears.
+08:09:45.075 | All of Maldrantus's reflections wink out of existence!
+08:09:45.075 | As the gaze of Maldrantus falls upon Lauryyn, she stumbles but seems to recover without visible issue.
+08:09:45.077 P H: Full, M: Full, E: Full, W: Full cekdb-4-
+08:09:45.117 | You have set the 'lament' defence to the 0 priority.
+08:09:45.118 P H: Full, M: Full, E: Full, W: Full cekdb-4-
+08:09:45.208 | Maldrantus takes a long drag off his pipe.
+08:09:45.209 | Maldrantus takes a drink from an elegant diamond vial.
+08:09:45.209 | Tabethys eats a ferrum flake.
+08:09:45.209 | Xylarys takes a long drag off an enamel bubble pipe.
+08:09:45.209 P H: Full, M: Full, E: Full, W: Full cekdb-4-
+08:09:45.211 | Valkyri lurches off balance as she misses Lauryyn with a wild swing of a Braincrusher flail.
+08:09:45.211 P H: Full, M: Full, E: Full, W: Full cekdb-4-
+08:09:45.212 | Morasla exhales loudly.
+08:09:45.212 P H: Full, M: Full, E: Full, W: Full cekdb-4-
+08:09:45.401 | Grulk ceases to spin a Stormspear.
+08:09:45.402 | Tabethys moves with preternatural grace, confounding Grulk with her perfect footwork.
+08:09:45.403 P H: Full, M: Full, E: Full, W: Full cekdb-4-
+08:09:45.513 | Grulk takes a drink from a quartz crystal vial.
+08:09:45.514 P H: Full, M: High, E: Full, W: High cekdb-4-
+08:09:45.622 | Froedine's aura of weapons rebounding disappears.
+08:09:45.622 | Froedine exhales loudly.
+08:09:45.622 | Tabethys moves with preternatural grace, confounding Froedine with her perfect footwork.
+08:09:45.624 P H: Full, M: High, E: Full, W: High cekdb-4-
+08:09:45.711 | Froedine takes a long drag off her pipe.
+08:09:45.712 P H: Full, M: High, E: Full, W: High cekdb-4-
+08:09:45.740 > queue addclear free lvfree
+08:09:45.788 | A whip of flame coalesces in the hand of Agathon, which he brings around in a savage lashing motion to scourge the flesh of Lauryyn.
+08:09:45.788 | The very air warps about Agathon as his flames burn ever brighter.
+08:09:45.789 P H: Full, M: High, E: Full, W: High cekdb-4-
+08:09:45.789 | Kushy exhales loudly.
+08:09:45.789 | Leaping towards Tabethys, Kushy sinks his vicious fangs deep into her body, ravaging her flesh.
+08:09:45.791 | Tabethys moves with preternatural grace, confounding Kushy with her perfect footwork.
+08:09:45.791 | With a synchronous, guttural rasp, Kushy's many serpentine heads breathe forth wisps of rapidly condensing smoke that entangle Tabethys in a tangible web.
+08:09:45.791 P H: Full, M: High, E: Full, W: High cekdb-12-
+08:09:45.872 | [System]: Queued free commands cleared.
+08:09:45.872 | [System]: Added LVFREE to your free queue.
+08:09:45.874 P H: Full, M: High, E: Full, W: High cekdb-12-
+08:09:45.963 -tar slickness
+08:09:45.963 -tar bloodfire
+08:09:45.963 -tar slickness
+08:09:45.963 -tar bloodfire
+08:09:45.964 -tar slickness
+08:09:45.964 | Lauryyn takes some salve from a vial and rubs it on her body.
+08:09:45.967 P H: Full, M: High, E: Full, W: High cekdb-12-
+08:09:46.356 | You have recovered balance on your legs.
+08:09:46.356 | You have recovered balance on your right arm.
+08:09:46.356 | You have recovered balance on your left arm.
+08:09:46.356 | [System]: Running queued free command: LVFREE
+08:09:46.356 | You are not fallen or kneeling.
+08:09:46.356 | I see no "body" to take.
+08:09:46.357 | I see no "gold" to take.
+08:09:46.357 | Equilibrium used: 1.07s.
+08:09:46.357 +tar impatience
+08:09:46.357 > pt Lauryyn: impatience
+08:09:46.358 | You fill the mind of Lauryyn with an impatient feeling.
+08:09:46.359 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:46.404 | (Party): You say, "Lauryyn: impatience."
+08:09:46.406 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:46.490 | A death adder begins to follow Gavai obediently.
+08:09:46.490 | Gavai points an accusatory finger at Grulk.
+08:09:46.490 | Gavai ceases to wield Elentari's Scourge in his left hand.
+08:09:46.490 | Gavai starts to wield a timeworn serpent's dirk in his left hand.
+08:09:46.490 | Gavai quickly pricks Grulk with his dirk.
+08:09:46.490 | Horror overcomes Grulk's face as his body stiffens into paralysis.
+08:09:46.490 | Gavai follows up the first attack with another, his dirk piercing the flesh of Grulk.
+08:09:46.492 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:46.492 -tar slickness
+08:09:46.493 | Grulk eats a bloodroot leaf.
+08:09:46.493 -tar anorexia
+08:09:46.493 | Lauryyn eats a goldenseal root.
+08:09:46.494 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:46.518 > setalias lvfree stand/g body/g gold/wield staff489282/combo Lauryyn frontkick right kuro right ruku right
+08:09:46.518 > queue addclear free lvfree
+08:09:46.568 | Alias "lvfree" will now execute: "stand/g body/g gold/wield staff489282/combo Lauryyn frontkick right kuro right ruku right"
+08:09:46.569 P H: Full, M: High, E: Full, W: Full cxkdb-12-
+08:09:46.659 | [System]: Queued free commands cleared.
+08:09:46.659 | [System]: Added LVFREE to your free queue.
+08:09:46.661 P H: Full, M: High, E: Full, W: Full cxkdb-12-
+08:09:46.661 | Boulden's aura of weapons rebounding disappears.
+08:09:46.661 | Tabethys moves with preternatural grace, confounding Boulden with her perfect footwork.
+08:09:46.662 P H: Full, M: High, E: Full, W: Full cxkdb-12-
+08:09:46.662 | Boulden takes a long drag off his pipe.
+08:09:46.662 | Tabethys eats an aurum flake.
+08:09:46.663 P H: Full, M: High, E: Full, W: Full cxkdb-12-
+08:09:46.831 > queue addclear free lvfree
+08:09:46.842 | Valkyri skilfully whirls a Braincrusher flail toward the head of Lauryyn.
+08:09:46.842 -tar nausea
+08:09:46.842 | Lauryyn parries the attack with a deft manoeuvre.
+08:09:46.842 | Valkyri skilfully whirls a Braincrusher flail toward the head of Lauryyn.
+08:09:46.842 -tar nausea
+08:09:46.842 | Lauryyn parries the attack with a deft manoeuvre.
+08:09:46.844 P H: Full, M: High, E: Full, W: Full cxkdb-12-
+08:09:46.936 | Tabethys moves with preternatural grace, confounding Lauryyn with her perfect footwork.
+08:09:46.936 | Tabethys moves with preternatural grace, confounding Lauryyn with her perfect footwork.
+08:09:46.937 P H: Full, M: High, E: Full, W: Full cxkdb-12-
+08:09:46.937 | (Party): Gavai says, "Grulk: addiction."
+08:09:46.938 P H: Full, M: High, E: Full, W: Full cxkdb-12-
+08:09:46.938 | [System]: Queued free commands cleared.
+08:09:46.939 | [System]: Added LVFREE to your free queue.
+08:09:46.939 P H: Full, M: High, E: Full, W: Full cxkdb-12-
+08:09:47.017 | A sudden deluge of water soaks Tabethys, the slightest ripple disturbing the amorphous tranquility of Xylarys.
+08:09:47.017 | The skin of Tabethys dries and cracks as Xylarys seems somehow more than he was a moment ago.
+08:09:47.018 P H: Full, M: High, E: Full, W: Full cxkdb-12-
+08:09:47.129 | Tabethys takes a drink from an oaken vial.
+08:09:47.130 P H: Full, M: High, E: Full, W: Full cxkdb-12-
+08:09:47.195 > queue addclear free lvfree
+08:09:47.250 | [System]: Queued free commands cleared.
+08:09:47.250 | [System]: Added LVFREE to your free queue.
+08:09:47.251 P H: Full, M: High, E: Full, W: Full cxkdb-12-
+08:09:47.367 | Tabethys moves with preternatural grace, confounding Grulk with her perfect footwork.
+08:09:47.368 P H: Full, M: High, E: Full, W: Full cxkdb-12-
+08:09:47.469 | You have recovered equilibrium.
+08:09:47.470 | [System]: Running queued free command: LVFREE
+08:09:47.470 | You are not fallen or kneeling.
+08:09:47.470 | I see no "body" to take.
+08:09:47.470 | I see no "gold" to take.
+08:09:47.470 | You are already wielding that.
+08:09:47.470 | You lash out with a straight kick at the right shoulder of Lauryyn.
+08:09:47.471 -tar shield
+08:09:47.471 +tar prone
+08:09:47.471 > pt Lauryyn: prone
+08:09:47.471 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Lauryyn's right arm.
+08:09:47.471 +tar prone
+08:09:47.471 > pt Lauryyn: prone
+08:09:47.471 | The instep of your foot smashes into the right underarm of Lauryyn, throwing her from her feet and sending her spinning to the ground.
+08:09:47.471 | Balance used: 2.1s.
+08:09:47.471 | Falling back into a low crouch, you lash out with a swift strike at the right thigh of Lauryyn.
+08:09:47.471 -tar shield
+08:09:47.471 > pt Lauryyn: weariness
+08:09:47.471 +tar weariness
+08:09:47.472 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Lauryyn's right leg.
+08:09:47.472 | The staff cracks across the right thigh of Lauryyn.
+08:09:47.472 | You spin a full rotation, bringing a twisted oaken staff around in a blur of motion to smash into the right arm of Lauryyn.
+08:09:47.472 -tar shield
+08:09:47.472 > pt Lauryyn: clumsiness
+08:09:47.472 +tar clumsiness
+08:09:47.472 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Lauryyn's right arm.
+08:09:47.472 | The staff connects to the right arm with a resounding crack, the limb flopping uselessly.
+08:09:47.472 | You are now maintaining a kata chain of 6 actions.
+08:09:47.473 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:47.530 | (Party): You say, "Lauryyn: prone."
+08:09:47.531 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:47.532 +tar nospeed
+08:09:47.532 | Lauryyn suddenly seems less dexterous, her reactions becoming noticeably slower.
+08:09:47.532 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:47.533 -tar anorexia
+08:09:47.533 | Lauryyn takes a drink from a purple heartwood vial.
+08:09:47.533 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:47.628 | (Party): You say, "Lauryyn: prone."
+08:09:47.629 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:47.629 | (Party): You say, "Lauryyn: weariness."
+08:09:47.630 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:47.630 | (Party): You say, "Lauryyn: clumsiness."
+08:09:47.631 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:47.631 | Tabethys moves with preternatural grace, confounding Froedine with her perfect footwork.
+08:09:47.632 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:47.691 > setalias lvfree stand/g body/g gold/mind impatience Lauryyn
+08:09:47.691 > queue addclear free lvfree
+08:09:47.740 | Alias "lvfree" will now execute: "stand/g body/g gold/mind impatience Lauryyn"
+08:09:47.741 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:47.838 | [System]: Queued free commands cleared.
+08:09:47.839 | [System]: Added LVFREE to your free queue.
+08:09:47.840 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:47.920 | Tabethys has writhed free of her entanglement by ropes.
+08:09:47.921 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:48.023 | Tabethys's aura of weapons rebounding disappears.
+08:09:48.023 > curingset switch normal
+08:09:48.023 > curing priority defence list reset
+08:09:48.023 > curing priority defence nightsight 25 megalithtattoo 25 frost 25 vitality 25 regeneration 25 speed 25 toughness 25 resistance 25 lifevision 25 mindseye 25 constitution 25 kaitrance 25 caloric 25 thirdeye 25 deathsight 25 deafness 25 magicresist 25 insomnia 25 levitation 25 boostedregeneration 25 gripping 25 shroud 25 weathering 25 coldresist 25 cloak 25 electricresist 25 mindnet 25 fireresist 25 mosstattoo 25 boartattoo 25 moontattoo 25 kola 25 selfishness 25 blindness 25 fangbarrier 25 avoid 25 venom 25 
+08:09:48.023 | Tabethys weaves fire and earth in a complex pattern and bubbling magma boils into existence in a searing tide to crash down upon Lauryyn.
+08:09:48.023 +tar brokenrightleg
+08:09:48.023 > pt Lauryyn: Resonance Earth (broken right leg)
+08:09:48.023 | A loud crack emanates from the right leg of Lauryyn.
+08:09:48.023 | The air between Tabethys and Lauryyn ripples with a haze of heat.
+08:09:48.024 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:48.025 | Morasla takes a drink from a carved bone vial.
+08:09:48.025 | Morasla takes a drink from a carved bone vial, a miniature carved dragon biting at her lips.
+08:09:48.025 -tar slickness
+08:09:48.025 -tar brokenrightleg
+08:09:48.025 -tar bloodfire
+08:09:48.025 -tar slickness
+08:09:48.025 | Lauryyn takes some salve from a vial and rubs it on her legs.
+08:09:48.025 | Tabethys takes a long drag off her pipe.
+08:09:48.026 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:48.026 | The hand of Agathon lashes out like a striking snake, striking Lauryyn upon the brow with a single finger. As his hand comes away, it leaves a twisting mark, charred meat writhing and twisting under some invisible guiding hand.
+08:09:48.026 | The flames that are Agathon turn from blue to an eye-searing white.
+08:09:48.026 | The searing white flames that compose Agathon fade to orange.
+08:09:48.027 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:48.031 > queue addclear free lvfree
+08:09:48.076 | You will now cure using the normal set.
+08:09:48.077 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:48.176 | All your defence priorities have been reset to defaults.
+08:09:48.177 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:48.178 | You have set the 'nightsight' defence to the 25 priority.
+08:09:48.178 | You have set the 'megalithtattoo' defence to the 25 priority.
+08:09:48.178 | You have set the 'frost' defence to the 25 priority.
+08:09:48.178 | You have set the 'vitality' defence to the 25 priority.
+08:09:48.178 | You have set the 'regeneration' defence to the 25 priority.
+08:09:48.178 | You have set the 'speed' defence to the 25 priority.
+08:09:48.178 | You have set the 'toughness' defence to the 25 priority.
+08:09:48.178 | You have set the 'resistance' defence to the 25 priority.
+08:09:48.178 | You have set the 'lifevision' defence to the 25 priority.
+08:09:48.179 | You have set the 'mindseye' defence to the 25 priority.
+08:09:48.179 | You have set the 'constitution' defence to the 25 priority.
+08:09:48.179 | You have set the 'kaitrance' defence to the 25 priority.
+08:09:48.179 | You have set the 'caloric' defence to the 25 priority.
+08:09:48.179 | You have set the 'thirdeye' defence to the 25 priority.
+08:09:48.179 | You have set the 'deathsight' defence to the 25 priority.
+08:09:48.179 | You have set the 'deafness' defence to the 25 priority.
+08:09:48.179 | You have set the 'magicresist' defence to the 25 priority.
+08:09:48.179 | You have set the 'insomnia' defence to the 25 priority.
+08:09:48.179 | You have set the 'levitation' defence to the 25 priority.
+08:09:48.179 | You have set the 'boostedregeneration' defence to the 25 priority.
+08:09:48.179 | You have set the 'gripping' defence to the 25 priority.
+08:09:48.180 | You have set the 'shroud' defence to the 25 priority.
+08:09:48.180 | You have set the 'weathering' defence to the 25 priority.
+08:09:48.180 | You have set the 'coldresist' defence to the 25 priority.
+08:09:48.180 | You have set the 'cloak' defence to the 25 priority.
+08:09:48.180 | You have set the 'electricresist' defence to the 25 priority.
+08:09:48.180 | You have set the 'mindnet' defence to the 25 priority.
+08:09:48.180 | You have set the 'fireresist' defence to the 25 priority.
+08:09:48.180 | You have set the 'mosstattoo' defence to the 25 priority.
+08:09:48.180 | You have set the 'boartattoo' defence to the 25 priority.
+08:09:48.180 | You have set the 'moontattoo' defence to the 25 priority.
+08:09:48.180 | You have set the 'kola' defence to the 25 priority.
+08:09:48.180 | You have set the 'selfishness' defence to the 25 priority.
+08:09:48.181 | You have set the 'blindness' defence to the 25 priority.
+08:09:48.181 | You have set the 'fangbarrier' defence to the 25 priority.
+08:09:48.181 | You may not set a priority for the 'avoid' defence.
+08:09:48.181 | You have set the 'venom' defence to the 25 priority.
+08:09:48.182 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:48.182 | (Party): You say, "Lauryyn: Resonance Earth (broken right leg)."
+08:09:48.183 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:48.183 | [System]: Queued free commands cleared.
+08:09:48.183 | [System]: Added LVFREE to your free queue.
+08:09:48.184 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:48.184 | Morasla's aura of weapons rebounding disappears.
+08:09:48.184 | A grey distortion coalesces about the blade of Adchachel's lament, held by Morasla.
+08:09:48.184 | Morasla grows older before your eyes.
+08:09:48.184 | Morasla lashes out with a swift, reaping blow at Lauryyn.
+08:09:48.184 +tar timeloop
+08:09:48.184 -tar haemophilia
+08:09:48.184 -tar paralysis
+08:09:48.184 | Grey fog begins to rise from the suddenly panicked-looking Lauryyn.
+08:09:48.185 +tar paralysis
+08:09:48.185 | As the weapon strikes Lauryyn, the contact area begins to rot before your eyes.
+08:09:48.185 +tar paralysis
+08:09:48.185 +tar paralysis
+08:09:48.185 | Horror overcomes Lauryyn's face as her body stiffens into paralysis.
+08:09:48.185 +tar timeloop
+08:09:48.185 +tar weariness clumsiness paralysis
+08:09:48.185 | A grey miasma flares around Lauryyn.
+08:09:48.185 +tar weariness clumsiness paralysis
+08:09:48.185 | The face of Lauryyn contorts in pain.
+08:09:48.185 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:48.272 | Grulk eats a ferrum flake.
+08:09:48.272 | Morasla takes a long drag off her pipe.
+08:09:48.272 -tar anorexia
+08:09:48.272 | Lauryyn eats a bloodroot leaf.
+08:09:48.272 | Kushy inhales and begins holding his breath.
+08:09:48.273 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:48.273 | Gavai points an accusatory finger at Grulk.
+08:09:48.273 | Gavai quickly pricks Grulk with his dirk.
+08:09:48.274 | Horror overcomes Grulk's face as his body stiffens into paralysis.
+08:09:48.274 | Gavai follows up the first attack with another, his dirk piercing the flesh of Grulk.
+08:09:48.274 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:48.389 | Tabethys eats a ferrum flake.
+08:09:48.390 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:48.481 | Kushy exhales loudly.
+08:09:48.481 | Tabethys moves with preternatural grace, confounding Kushy with her perfect footwork.
+08:09:48.482 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:48.552 > queue addclear free lvfree
+08:09:48.573 -tar slickness
+08:09:48.573 +tar paralysis
+08:09:48.595 | Tabethys moves with preternatural grace, confounding Boulden with her perfect footwork.
+08:09:48.596 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:48.596 | Averine's aura of weapons rebounding disappears.
+08:09:48.597 | Averine stands an Aeon tarot on her palm and blows it at Tabethys.
+08:09:48.597 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:48.686 | [System]: Queued free commands cleared.
+08:09:48.686 | [System]: Added LVFREE to your free queue.
+08:09:48.687 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:48.687 | Maldrantus slashes his hand at Lauryyn, who suddenly appears to be moving in slow motion.
+08:09:48.688 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:48.779 | (Party): Gavai says, "Grulk: nausea."
+08:09:48.780 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:48.780 | The twisting flesh upon the brow of Lauryyn suddenly bursts into flame, the skin charring beneath the ravenous fires.
+08:09:48.781 | Averine takes a long drag off her pipe.
+08:09:48.781 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:48.928 > queue addclear free lvfree
+08:09:49.006 | Tabethys doubles over and hacks up water as Xylarys impassively observes.
+08:09:49.006 | Tabethys looks suddenly nauseous as Xylarys waves a hand in her direction.
+08:09:49.007 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:49.007 | A look of extreme focus crosses the face of Tabethys.
+08:09:49.007 | Tabethys touches a tree of life tattoo.
+08:09:49.007 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:49.092 | [System]: Queued free commands cleared.
+08:09:49.093 | [System]: Added LVFREE to your free queue.
+08:09:49.094 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:49.271 > queue addclear free lvfree
+08:09:49.321 | [System]: Queued free commands cleared.
+08:09:49.321 | [System]: Added LVFREE to your free queue.
+08:09:49.322 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:49.506 | Tabethys moves with preternatural grace, confounding Froedine with her perfect footwork.
+08:09:49.507 | You have recovered balance on your legs.
+08:09:49.507 | You have recovered balance on your right arm.
+08:09:49.507 | You have recovered balance on your left arm.
+08:09:49.508 | [System]: Running queued free command: LVFREE
+08:09:49.508 | You are not fallen or kneeling.
+08:09:49.508 | I see no "body" to take.
+08:09:49.508 | I see no "gold" to take.
+08:09:49.508 | Equilibrium used: 1.07s.
+08:09:49.508 +tar impatience
+08:09:49.508 > pt Lauryyn: impatience
+08:09:49.508 | You fill the mind of Lauryyn with an impatient feeling.
+08:09:49.508 | A whip of flame coalesces in the hand of Agathon, which he brings around in a savage lashing motion to scourge the flesh of Lauryyn.
+08:09:49.509 +tar paralysis
+08:09:49.509 | Lauryyn convulses, face locked in a rictus of agony.
+08:09:49.509 +tar nodeaf
+08:09:49.509 | The skin of Lauryyn is left sensitive and raw.
+08:09:49.509 | The burning brand that marks the brow of Lauryyn burns ever brighter.
+08:09:49.509 | Lauryyn swoons for a moment then rises again, flushed but strong.
+08:09:49.509 | The flames that are Agathon turn from blue to an eye-searing white.
+08:09:49.510 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:49.554 | (Party): You say, "Lauryyn: impatience."
+08:09:49.555 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:49.651 > setalias lvfree stand/g body/g gold/wield staff489282/combo Lauryyn frontkick right kuro right ruku right
+08:09:49.651 > queue addclear free lvfree
+08:09:49.694 | Alias "lvfree" will now execute: "stand/g body/g gold/wield staff489282/combo Lauryyn frontkick right kuro right ruku right"
+08:09:49.696 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:49.773 | [System]: Queued free commands cleared.
+08:09:49.774 | [System]: Added LVFREE to your free queue.
+08:09:49.774 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:49.775 -tar paralysis
+08:09:49.775 | Grulk eats a bloodroot leaf.
+08:09:49.775 | Valkyri takes a drink from a stygian vial.
+08:09:49.775 | An ebony raven dives down upon Tabethys, pecking at her face and eyes.
+08:09:49.775 | Grulk carefully wipes all the venoms off of a Stormspear.
+08:09:49.775 | Tabethys moves with preternatural grace, confounding Grulk with her perfect footwork.
+08:09:49.776 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:49.854 | Tabethys weaves fire and water as she directs her arcane might against Lauryyn.
+08:09:49.855 +tar nausea
+08:09:49.855 > pt Lauryyn: weariness nausea
+08:09:49.855 | The skin of Lauryyn begins to dry and crack as she grows pale.
+08:09:49.855 | The air between Tabethys and Lauryyn ripple with a haze of heat, and flames ignite upon the skin of Lauryyn.
+08:09:49.855 | A freezing wave of water materialises as if from nothing, crashing down upon Lauryyn.
+08:09:49.856 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:49.895 -tar asthma
+08:09:49.895 -tar asthma
+08:09:49.895 | Lauryyn takes a long drag off her pipe.
+08:09:49.896 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:49.977 > queue addclear free lvfree
+08:09:49.986 | (Party): You say, "Lauryyn: weariness nausea."
+08:09:49.987 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:49.987 | Valkyri skilfully whirls a Braincrusher flail toward the head of Lauryyn.
+08:09:49.988 +tar healthleech
+08:09:49.988 | Lauryyn lets out a groan as her life is siphoned by the might of Evil.
+08:09:49.988 | Valkyri skilfully whirls a Braincrusher flail toward the head of Lauryyn.
+08:09:49.988 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:49.988 | Lauryyn eats a bellwort flower.
+08:09:49.988 -tar anorexia
+08:09:49.989 -tar anorexia
+08:09:49.989 | Lauryyn takes a drink from an elegant diamond vial.
+08:09:49.989 | The blazing brand that marks the brow of Lauryyn dims somewhat.
+08:09:49.989 | Tabethys eats a ferrum flake.
+08:09:49.990 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:50.077 | Gavai points an accusatory finger at Grulk.
+08:09:50.077 | Gavai quickly pricks Grulk with his dirk.
+08:09:50.077 | Horror overcomes Grulk's face as his body stiffens into paralysis.
+08:09:50.077 | Gavai follows up the first attack with another, his dirk piercing the flesh of Grulk.
+08:09:50.078 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:50.079 | [System]: Queued free commands cleared.
+08:09:50.079 | [System]: Added LVFREE to your free queue.
+08:09:50.080 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:50.215 | Morasla flips a heron-marked shield bristling with spinel over her head with practised ease, lashing it to the hooks on a leather backstrap.
+08:09:50.215 | In a display of power, Morasla draws Gattan'lier's hunger, the air whooshing past the weapon.
+08:09:50.215 | Morasla reaches past Lauryyn, plunging Gattan'lier's hunger into her shadow.
+08:09:50.215 | Morasla lashes out with a swift, reaping blow at Lauryyn.
+08:09:50.216 +tar weariness clumsiness paralysis
+08:09:50.216 | The face of Lauryyn contorts in pain.
+08:09:50.216 | The grey nimbus surrounding Morasla grows ever brighter.
+08:09:50.216 > cq all
+08:09:50.216 | Lauryyn has been slain by Morasla.
+08:09:50.216 > cq all
+08:09:50.217 | A starburst tattoo flares and bathes Lauryyn in red light.
+08:09:50.217 | A cluster of snow blossoms falls from Lauryyn's person.
+08:09:50.218 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:50.251 -tar slickness
+08:09:50.251 -tar bloodfire
+08:09:50.251 -tar slickness
+08:09:50.251 | Lauryyn takes some salve from a vial and rubs it on her skin.
+08:09:50.251 | Grulk doubles over, vomiting violently.
+08:09:50.252 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:50.253 -tar anorexia
+08:09:50.253 | Lauryyn takes a drink from an elegant diamond vial.
+08:09:50.253 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:50.253 -tar anorexia
+08:09:50.253 | Lauryyn takes a drink from an elegant diamond vial.
+08:09:50.254 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:50.335 | [System]: All queued commands cleared.
+08:09:50.336 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:50.336 | [System]: All queued commands cleared.
+08:09:50.337 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:50.425 | Lauryyn clenches her fists and grits her teeth.
+08:09:50.425 -tar anorexia
+08:09:50.425 | Lauryyn takes a drink from a purple heartwood vial.
+08:09:50.425 | Lauryyn rubs her hands together greedily.
+08:09:50.425 -tar anorexia
+08:09:50.425 | Lauryyn takes a drink from a purple heartwood vial.
+08:09:50.425 | Lauryyn eats a kola nut.
+08:09:50.426 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:50.515 | (Party): Gavai says, "Grulk: addiction."
+08:09:50.516 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:50.516 | Tabethys moves with preternatural grace, confounding Kushy with her perfect footwork.
+08:09:50.517 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:50.528 -tar nospeed
+08:09:50.615 | Tabethys suddenly seems less dexterous, her reactions becoming noticeably slower.
+08:09:50.616 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:50.618 | Tabethys takes a drink from an oaken vial.
+08:09:50.619 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:50.707 | You have recovered equilibrium.
+08:09:50.708 P H: Full, M: High, E: Full, W: Full cexkdb-12-
+08:09:50.792 | Froedine takes a drink from a purple heartwood vial.
+08:09:50.793 P H: Full, M: High, E: Full, W: Full cexkdb-12-
+08:09:50.878 | A layer of sweat abruptly breaks out upon the skin of Tabethys.
+08:09:50.878 -tar fangbarrier
+08:09:50.878 -tar sileris
+08:09:50.878 | The protective coating covering the skin of Tabethys sloughs off.
+08:09:50.878 | Tabethys slips on a thin layer of fluid, her feet flying out from under her.
+08:09:50.878 | Tabethys sways unsteadily as ripples race across the amorphous surface of Xylarys.
+08:09:50.879 P H: Full, M: High, E: Full, W: Full cexkdb-12-
+08:09:50.968 > unally Kushy
+08:09:50.968 > enemy Kushy
+08:09:50.968 > st Kushy
+08:09:50.968 > settarget Kushy
+08:09:50.968 > curingset switch druid
+08:09:50.968 > curing priority defence list reset
+08:09:50.968 > curing priority defence nightsight 25 megalithtattoo 25 frost 25 vitality 25 regeneration 25 speed 25 toughness 25 resistance 25 lifevision 25 mindseye 25 constitution 25 kaitrance 25 caloric 25 thirdeye 25 deathsight 25 deafness 25 magicresist 25 insomnia 25 levitation 25 boostedregeneration 25 gripping 25 shroud 25 weathering 25 coldresist 25 cloak 25 electricresist 25 mindnet 25 fireresist 25 mosstattoo 25 boartattoo 25 moontattoo 25 kola 25 selfishness 25 blindness 25 fangbarrier 25 avoid 25 venom 25 
+08:09:50.968 > pt Target: Kushy
+08:09:50.969 | Lauryyn leaves to the northeast.
+08:09:50.970 P H: Full, M: High, E: Full, W: Full cexkdb-12-
+08:09:50.970 | Tabethys takes a long drag off her pipe.
+08:09:50.971 P H: Full, M: High, E: Full, W: Full cexkdb-12-
+08:09:51.013 > unally Kushy
+08:09:51.013 > enemy Kushy
+08:09:51.013 > st Kushy
+08:09:51.013 > settarget Kushy
+08:09:51.015 | (Party): Tabethys says, "Target: Kushy."
+08:09:51.016 P H: Full, M: High, E: Full, W: Full cexkdb-12-
+08:09:51.037 > setalias lvfree stand/g body/g gold/wield staff489282/combo Kushy frontkick right kuro right ruku right
+08:09:51.037 > queue addclear free lvfree
+08:09:51.059 | Kushy is not currently an ally.
+08:09:51.060 P H: Full, M: High, E: Full, W: Full cexkdb-12-
+08:09:51.060 | Kushy is already an enemy.
+08:09:51.061 P H: Full, M: High, E: Full, W: Full cexkdb-12-
+08:09:51.061 | Your target is now: Kushy (an adventurer)
+08:09:51.062 P H: Full, M: High, E: Full, W: Full cexkdb-12-
+08:09:51.062 | Your target is now: Kushy (an adventurer)
+08:09:51.063 P H: Full, M: High, E: Full, W: Full cexkdb-12-
+08:09:51.063 | You will now cure using the druid set.
+08:09:51.063 P H: Full, M: High, E: Full, W: Full cexkdb-12-
+08:09:51.064 | All your defence priorities have been reset to defaults.
+08:09:51.064 P H: Full, M: High, E: Full, W: Full cexkdb-12-
+08:09:51.064 | You have set the 'nightsight' defence to the 25 priority.
+08:09:51.065 | You have set the 'megalithtattoo' defence to the 25 priority.
+08:09:51.065 | You have set the 'frost' defence to the 25 priority.
+08:09:51.065 | You have set the 'vitality' defence to the 25 priority.
+08:09:51.065 | You have set the 'regeneration' defence to the 25 priority.
+08:09:51.065 | You have set the 'speed' defence to the 25 priority.
+08:09:51.065 | You have set the 'toughness' defence to the 25 priority.
+08:09:51.065 | You have set the 'resistance' defence to the 25 priority.
+08:09:51.065 | You have set the 'lifevision' defence to the 25 priority.
+08:09:51.065 | You have set the 'mindseye' defence to the 25 priority.
+08:09:51.065 | You have set the 'constitution' defence to the 25 priority.
+08:09:51.065 | You have set the 'kaitrance' defence to the 25 priority.
+08:09:51.065 | You have set the 'caloric' defence to the 25 priority.
+08:09:51.065 | You have set the 'thirdeye' defence to the 25 priority.
+08:09:51.065 | You have set the 'deathsight' defence to the 25 priority.
+08:09:51.065 | You have set the 'deafness' defence to the 25 priority.
+08:09:51.065 | You have set the 'magicresist' defence to the 25 priority.
+08:09:51.065 | You have set the 'insomnia' defence to the 25 priority.
+08:09:51.067 | You have set the 'levitation' defence to the 25 priority.
+08:09:51.067 | You have set the 'boostedregeneration' defence to the 25 priority.
+08:09:51.067 | You have set the 'gripping' defence to the 25 priority.
+08:09:51.067 | You have set the 'shroud' defence to the 25 priority.
+08:09:51.067 | You have set the 'weathering' defence to the 25 priority.
+08:09:51.067 | You have set the 'coldresist' defence to the 25 priority.
+08:09:51.067 | You have set the 'cloak' defence to the 25 priority.
+08:09:51.067 | You have set the 'electricresist' defence to the 25 priority.
+08:09:51.067 | You have set the 'mindnet' defence to the 25 priority.
+08:09:51.067 | You have set the 'fireresist' defence to the 25 priority.
+08:09:51.067 | You have set the 'mosstattoo' defence to the 25 priority.
+08:09:51.067 | You have set the 'boartattoo' defence to the 25 priority.
+08:09:51.068 | You have set the 'moontattoo' defence to the 25 priority.
+08:09:51.068 | You have set the 'kola' defence to the 25 priority.
+08:09:51.068 | You have set the 'selfishness' defence to the 25 priority.
+08:09:51.068 | You have set the 'blindness' defence to the 25 priority.
+08:09:51.068 | You have set the 'fangbarrier' defence to the 25 priority.
+08:09:51.068 | You may not set a priority for the 'avoid' defence.
+08:09:51.068 | You have set the 'venom' defence to the 25 priority.
+08:09:51.069 P H: Full, M: High, E: Full, W: Full cexkdb-12-
+08:09:51.069 | (Party): You say, "Target: Kushy."
+08:09:51.070 P H: Full, M: High, E: Full, W: Full cexkdb-12-
+08:09:51.099 | Kushy is not currently an ally.
+08:09:51.100 P H: Full, M: High, E: Full, W: Full cexkdb-12-
+08:09:51.100 | Kushy is already an enemy.
+08:09:51.101 P H: Full, M: High, E: Full, W: Full cexkdb-12-
+08:09:51.101 | Your target is now: Kushy (an adventurer)
+08:09:51.102 P H: Full, M: High, E: Full, W: Full cexkdb-12-
+08:09:51.103 | Your target is now: Kushy (an adventurer)
+08:09:51.103 P H: Full, M: High, E: Full, W: Full cexkdb-12-
+08:09:51.103 | Alias "lvfree" will now execute: "stand/g body/g gold/wield staff489282/combo Kushy frontkick right kuro right ruku right"
+08:09:51.104 P H: Full, M: High, E: Full, W: Full cexkdb-12-
+08:09:51.141 | [System]: Queued free commands cleared.
+08:09:51.141 | [System]: Added LVFREE to your free queue.
+08:09:51.141 | [System]: Running queued free command: LVFREE
+08:09:51.141 | You are not fallen or kneeling.
+08:09:51.141 | I see no "body" to take.
+08:09:51.141 | I see no "gold" to take.
+08:09:51.141 | You are already wielding that.
+08:09:51.141 | You lash out with a straight kick at the right shoulder of Kushy.
+08:09:51.142 -tar shield
+08:09:51.142 +tar prone
+08:09:51.142 > pt Kushy: prone
+08:09:51.142 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Kushy's right arm.
+08:09:51.142 +tar prone
+08:09:51.142 > pt Kushy: prone
+08:09:51.142 | The instep of your foot smashes into the right underarm of Kushy, throwing him from his feet and sending him spinning to the ground.
+08:09:51.142 | Balance used: 2.1s.
+08:09:51.142 | Falling back into a low crouch, you lash out with a swift strike at the right thigh of Kushy.
+08:09:51.142 -tar shield
+08:09:51.142 > pt Kushy: weariness
+08:09:51.142 +tar weariness
+08:09:51.142 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Kushy's right leg.
+08:09:51.143 | The staff cracks across the right thigh of Kushy.
+08:09:51.143 | You spin a full rotation, bringing a twisted oaken staff around in a blur of motion to smash into the right arm of Kushy.
+08:09:51.143 -tar shield
+08:09:51.143 > pt Kushy: clumsiness
+08:09:51.143 +tar clumsiness
+08:09:51.143 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Kushy's right arm.
+08:09:51.143 | The staff connects to the right arm with a resounding crack, the limb flopping uselessly.
+08:09:51.143 | You are now maintaining a kata chain of 9 actions.
+08:09:51.144 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:51.190 -tar anorexia
+08:09:51.190 | Kushy eats a piece of kelp.
+08:09:51.190 -tar anorexia
+08:09:51.190 | Kushy takes a drink from a cherrywood vial.
+08:09:51.191 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:51.192 | Vasyly's aura of weapons rebounding disappears.
+08:09:51.192 | Vasyly whips Reaver, a dark brass morningstar toward the left leg of Kushy.
+08:09:51.192 > curingset switch normal
+08:09:51.192 | Cold blue flames wreathe Vasyly's runeblade, emanating an icy, penetrating chill.
+08:09:51.192 | The runes upon the weapon of Vasyly flash as they discharge energy into Kushy.
+08:09:51.192 | Vasyly whips Sentinel, a darkened-silver morningstar toward the right leg of Kushy.
+08:09:51.192 | Cold blue flames wreathe Vasyly's runeblade, emanating an icy, penetrating chill.
+08:09:51.192 | Vasyly moves in to engage Kushy.
+08:09:51.193 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:51.246 | (Party): You say, "Kushy: prone."
+08:09:51.247 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:51.247 | (Party): You say, "Kushy: prone."
+08:09:51.248 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:51.248 | (Party): You say, "Kushy: weariness."
+08:09:51.248 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:51.249 | (Party): You say, "Kushy: clumsiness."
+08:09:51.249 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:51.332 | You will now cure using the normal set.
+08:09:51.334 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:51.396 > setalias lvfree stand/g body/g gold/mind impatience Kushy
+08:09:51.396 > queue addclear free lvfree
+08:09:51.427 -tar slickness
+08:09:51.428 | Grulk eats a bloodroot leaf.
+08:09:51.428 | Vasyly takes a long drag off his pipe.
+08:09:51.428 -tar slickness
+08:09:51.428 -tar bloodfire
+08:09:51.428 -tar slickness
+08:09:51.428 | Kushy takes some salve from a vial and rubs it on his skin.
+08:09:51.429 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:51.429 > pt Grulk used EPITOMISE - switch targets for 6 seconds!
+08:09:51.429 | Grulk moves with the grace of the wind, his stance the epitome of perfection beneath the flurry of blows.
+08:09:51.430 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:51.430 | (Party): Tabethys says, "Grulk EPITOMISED!"
+08:09:51.431 | (Party): Tabethys says, "Grulk EPITOMISED!"
+08:09:51.431 | (Party): Tabethys says, "Grulk EPITOMISED!"
+08:09:51.431 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:51.465 | Grulk touches a tree of life tattoo.
+08:09:51.467 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:51.468 | Toscus has entered the area.
+08:09:51.469 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:51.469 | Alias "lvfree" will now execute: "stand/g body/g gold/mind impatience Kushy"
+08:09:51.470 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:51.470 | [System]: Queued free commands cleared.
+08:09:51.470 | [System]: Added LVFREE to your free queue.
+08:09:51.471 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:51.553 | (Party): You say, "Grulk used EPITOMISE - switch targets for 6 seconds!"
+08:09:51.554 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:51.554 | Tabethys moves with preternatural grace, confounding Froedine with her perfect footwork.
+08:09:51.555 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:51.555 | Tabethys eats a ferrum flake.
+08:09:51.556 | Tabethys takes a drink from an oaken vial.
+08:09:51.557 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:51.644 | Tabethys stands up.
+08:09:51.645 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:51.645 | Tabethys easily vaults onto the back of a silvery spectral gorilla.
+08:09:51.646 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:51.646 | Tabethys weaves fire and earth in a complex pattern and bubbling magma boils into existence in a searing tide to crash down upon Kushy.
+08:09:51.646 | Kushy buckles under an unseen blow.
+08:09:51.646 | Blisters burst open across the body of Kushy as his skin glows as if lit from within.
+08:09:51.647 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:51.736 | Tabethys moves with preternatural grace, confounding Grulk with her perfect footwork.
+08:09:51.737 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:51.737 | Grulk takes a drink from a quartz crystal vial.
+08:09:51.737 | Tabethys applies a quicksilver droplet to herself.
+08:09:51.738 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:51.745 > queue addclear free lvfree
+08:09:51.785 | The hand of Agathon lashes out like a striking snake, striking Kushy upon the brow with a single finger. As his hand comes away, it leaves a twisting mark, charred meat writhing and twisting under some invisible guiding hand.
+08:09:51.785 | A crown of burning white fire comes into being about the head of Agathon, its tendrils reaching out to consume.
+08:09:51.785 | The burning crown upon the head of Agathon flickers out of existence.
+08:09:51.787 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:51.876 | [System]: Queued free commands cleared.
+08:09:51.877 | [System]: Added LVFREE to your free queue.
+08:09:51.878 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:51.957 | Boulden gives Tabethys the once over.
+08:09:51.958 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:52.113 | You suddenly perceive the vague outline of an aura of rebounding around Agathon.
+08:09:52.113 | Morasla inhales and begins holding her breath.
+08:09:52.113 | Gavai points an accusatory finger at Grulk.
+08:09:52.113 | Gavai quickly pricks Grulk with his dirk.
+08:09:52.113 | Horror overcomes Grulk's face as his body stiffens into paralysis.
+08:09:52.113 | Gavai follows up the first attack with another, his dirk piercing the flesh of Grulk.
+08:09:52.115 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:52.124 > queue addclear free lvfree
+08:09:52.165 | [System]: Queued free commands cleared.
+08:09:52.165 | [System]: Added LVFREE to your free queue.
+08:09:52.166 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:52.254 | Averine stands an Aeon tarot on her open palm, and blows it lightly at Tabethys.
+08:09:52.255 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:52.350 | Kushy eats some irid moss.
+08:09:52.351 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:52.351 | As the gaze of Maldrantus falls upon Kushy, he stumbles but seems to recover without visible issue.
+08:09:52.352 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:52.459 > queue addclear free lvfree
+08:09:52.496 -tar slickness
+08:09:52.496 -tar bloodfire
+08:09:52.496 -tar slickness
+08:09:52.497 | Kushy takes some salve from a vial and rubs it on his skin.
+08:09:52.497 | (Party): Gavai says, "Grulk: asthma."
+08:09:52.498 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:52.577 | [System]: Queued free commands cleared.
+08:09:52.577 | [System]: Added LVFREE to your free queue.
+08:09:52.578 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:52.578 | The twisting flesh upon the brow of Kushy suddenly bursts into flame, the skin charring beneath the ravenous fires.
+08:09:52.579 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:52.673 | A layer of sweat abruptly breaks out upon the skin of Tabethys.
+08:09:52.673 | Tabethys slips on a thin layer of fluid, her feet flying out from under her.
+08:09:52.673 | Tabethys doubles over and hacks up water as Xylarys impassively observes.
+08:09:52.674 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:52.788 > queue addclear free lvfree
+08:09:52.829 | [System]: Queued free commands cleared.
+08:09:52.829 | [System]: Added LVFREE to your free queue.
+08:09:52.830 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:52.921 -tar anorexia
+08:09:52.921 | Kushy eats a bloodroot leaf.
+08:09:52.921 -tar prone
+08:09:52.921 -tar paralysis
+08:09:52.921 -tar brokenleftleg
+08:09:52.921 -tar damagedleftleg
+08:09:52.921 -tar brokenrightleg
+08:09:52.921 -tar damagedrightleg
+08:09:52.921 -tar prone
+08:09:52.922 -tar paralysis
+08:09:52.922 | Kushy stands up.
+08:09:52.922 | Kushy inhales and begins holding his breath.
+08:09:52.923 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:52.988 -tar nospeed
+08:09:53.015 | Tabethys no longer moves with such sublime alacrity.
+08:09:53.016 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:53.017 | Valkyri lurches off balance as she misses Kushy with a wild swing of a Braincrusher flail.
+08:09:53.018 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:53.111 -tar slickness
+08:09:53.111 | Grulk eats a bloodroot leaf.
+08:09:53.112 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:53.120 > queue addclear free lvfree
+08:09:53.178 | [System]: Queued free commands cleared.
+08:09:53.178 | [System]: Added LVFREE to your free queue.
+08:09:53.179 P H: Full, M: High, E: Full, W: Full cekdb-12-
+08:09:53.221 -tar paralysis
+08:09:53.221 +tar slickness
+08:09:53.262 | You have recovered balance on your legs.
+08:09:53.263 | You have recovered balance on your right arm.
+08:09:53.263 | You have recovered balance on your left arm.
+08:09:53.263 | [System]: Running queued free command: LVFREE
+08:09:53.263 | You are not fallen or kneeling.
+08:09:53.263 | I see no "body" to take.
+08:09:53.263 | I see no "gold" to take.
+08:09:53.263 | Equilibrium used: 1.07s.
+08:09:53.264 +tar impatience
+08:09:53.264 > pt Kushy: impatience
+08:09:53.264 | You fill the mind of Kushy with an impatient feeling.
+08:09:53.264 | Agathon's aura of weapons rebounding disappears.
+08:09:53.264 | A whip of flame coalesces in the hand of Agathon, which he brings around in a savage lashing motion to scourge the flesh of Kushy.
+08:09:53.264 +tar nodeaf
+08:09:53.264 | The skin of Kushy is left sensitive and raw.
+08:09:53.264 | The burning brand that marks the brow of Kushy burns ever brighter.
+08:09:53.264 | A crown of burning white fire comes into being about the head of Agathon, its tendrils reaching out to consume.
+08:09:53.265 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:53.317 | Morasla takes a drink from a carved bone vial.
+08:09:53.317 | Morasla twitches violently as she raises a small carved bone dragon to her mouth, a trickle of blood dribbling from her lips.
+08:09:53.317 | Agathon takes a long drag off an enamel bubble pipe.
+08:09:53.318 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:53.318 | Vasyly whips Reaver, a dark brass morningstar toward the left leg of Kushy.
+08:09:53.318 | Vasyly whips Sentinel, a darkened-silver morningstar toward the right leg of Kushy.
+08:09:53.319 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:53.408 | (Party): You say, "Kushy: impatience."
+08:09:53.410 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:53.410 | A death adder sinks its fangs into the neck of Grulk, injecting a potent dose of toxin.
+08:09:53.410 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:53.436 > setalias lvfree stand/g body/g gold/wield staff489282/combo Kushy frontkick left kuro left ruku left
+08:09:53.436 > queue addclear free lvfree
+08:09:53.487 | You suddenly perceive the vague outline of an aura of rebounding around Grulk.
+08:09:53.489 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:53.590 | Alias "lvfree" will now execute: "stand/g body/g gold/wield staff489282/combo Kushy frontkick left kuro left ruku left"
+08:09:53.591 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:53.591 | [System]: Queued free commands cleared.
+08:09:53.592 | [System]: Added LVFREE to your free queue.
+08:09:53.592 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:53.592 | Froedine closes her hand over a valerian leaf, forming a fist.
+08:09:53.592 | The vines that serve as the arms of Froedine flail madly for a moment as they develop broad, deep green leaves.
+08:09:53.592 | The thorny vines of the Viridian Froedine lash out and rip into Tabethys's flesh.
+08:09:53.594 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:53.594 | (Party): Gavai says, "Grulk: fratricide."
+08:09:53.595 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:53.675 | You suddenly perceive the vague outline of an aura of rebounding around Maldrantus.
+08:09:53.675 | You suddenly perceive the vague outline of an aura of rebounding around Xylarys.
+08:09:53.676 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:53.736 > queue addclear free lvfree
+08:09:53.767 | Grulk's aura of weapons rebounding disappears.
+08:09:53.767 | An ebony raven dives down upon Tabethys, pecking at her face and eyes.
+08:09:53.767 | Grulk lays open the flesh of Tabethys with an expert lateral slice with a Stormspear.
+08:09:53.767 | Grulk turns with the motion of his swing, coming back around to slam the haft of a Stormspear into the temple of Tabethys.
+08:09:53.768 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:53.862 | [System]: Queued free commands cleared.
+08:09:53.862 | [System]: Added LVFREE to your free queue.
+08:09:53.863 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:53.863 | Boulden takes a drink from an oaken vial.
+08:09:53.863 | Maldrantus takes a drink from an elegant diamond vial.
+08:09:53.864 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:53.864 | Gavai points an accusatory finger at Grulk.
+08:09:53.864 | Gavai fixes his eyes to those of Grulk and utters a low hiss.
+08:09:53.864 | Grulk looks about bemusedly.
+08:09:53.864 | Gavai sinks his fangs into Grulk's body.
+08:09:53.865 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:54.031 | A look of extreme focus crosses the face of Grulk.
+08:09:54.031 -tar slickness
+08:09:54.031 -tar bloodfire
+08:09:54.032 -tar slickness
+08:09:54.032 -tar bloodfire
+08:09:54.032 -tar slickness
+08:09:54.032 | Kushy takes some salve from a vial and rubs it on his body.
+08:09:54.033 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:54.096 > queue addclear free lvfree
+08:09:54.142 | [System]: Queued free commands cleared.
+08:09:54.142 | [System]: Added LVFREE to your free queue.
+08:09:54.143 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:54.235 | You suddenly perceive the vague outline of an aura of rebounding around Froedine.
+08:09:54.236 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:54.336 | Toscus has left the area.
+08:09:54.337 | (Party): Gavai says, "Grulk: confusion scytherus."
+08:09:54.337 P H: Full, M: High, E: Full, W: High cxkdb-12-
+08:09:54.338 | Xylarys's aura of weapons rebounding disappears.
+08:09:54.338 | Xylarys summons forth a spinning cyclone of water, picking up Tabethys within and repeatedly dashing her against the unforgiving ground.
+08:09:54.338 | Tabethys doubles over and hacks up water as Xylarys impassively observes.
+08:09:54.339 | You have recovered equilibrium.
+08:09:54.339 | [System]: Running queued free command: LVFREE
+08:09:54.339 | You are not fallen or kneeling.
+08:09:54.339 | I see no "body" to take.
+08:09:54.339 | I see no "gold" to take.
+08:09:54.339 | You are already wielding that.
+08:09:54.340 | You lash out with a straight kick at the left shoulder of Kushy.
+08:09:54.340 -tar shield
+08:09:54.340 +tar prone
+08:09:54.340 > pt Kushy: prone
+08:09:54.340 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Kushy's left arm.
+08:09:54.340 +tar prone
+08:09:54.340 > pt Kushy: prone
+08:09:54.340 | The instep of your foot smashes into the left underarm of Kushy, throwing him from his feet and sending him spinning to the ground.
+08:09:54.340 | Kushy swoons for a moment then rises again, flushed but strong.
+08:09:54.340 | Balance used: 2.1s.
+08:09:54.340 | Falling back into a low crouch, you lash out with a swift strike at the left thigh of Kushy.
+08:09:54.340 -tar shield
+08:09:54.340 > pt Kushy: lethargy weariness
+08:09:54.341 +tar lethargy
+08:09:54.341 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Kushy's left leg.
+08:09:54.341 | The staff cracks across the left thigh of Kushy.
+08:09:54.341 | You spin a full rotation, bringing a twisted oaken staff around in a blur of motion to smash into the left arm of Kushy.
+08:09:54.341 -tar shield
+08:09:54.341 > pt Kushy: healthleech clumsiness
+08:09:54.341 +tar healthleech
+08:09:54.341 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Kushy's left arm.
+08:09:54.342 | The staff connects to the left arm with a resounding crack, the limb flopping uselessly.
+08:09:54.342 | You are now maintaining a kata chain of 12 actions.
+08:09:54.342 P H: Full, M: High, E: Full, W: High cekdb-12-
+08:09:54.393 | (Party): You say, "Kushy: prone."
+08:09:54.395 P H: Full, M: High, E: Full, W: High cekdb-12-
+08:09:54.395 | Boulden draws back his blade and impales Tabethys to the hilt.
+08:09:54.396 P H: Full, M: High, E: Full, W: High cekdb-12-
+08:09:54.408 > setalias lvfree stand/g body/g gold/wield staff489282/transition to oak form/combo Kushy risingkick torso livestrike ruku torso
+08:09:54.408 > queue addclear free lvfree
+08:09:54.472 | (Party): You say, "Kushy: prone."
+08:09:54.473 P H: Full, M: High, E: Full, W: High cekdb-12-
+08:09:54.473 -tar prone
+08:09:54.473 -tar paralysis
+08:09:54.473 -tar brokenleftleg
+08:09:54.473 -tar damagedleftleg
+08:09:54.473 -tar brokenrightleg
+08:09:54.473 -tar damagedrightleg
+08:09:54.473 -tar prone
+08:09:54.473 -tar paralysis
+08:09:54.473 | Kushy stands up.
+08:09:54.473 -tar anorexia
+08:09:54.474 | Kushy eats a goldenseal root.
+08:09:54.474 | Xylarys takes a long drag off an enamel bubble pipe.
+08:09:54.474 | Xylarys takes a drink from an oaken vial.
+08:09:54.474 | (Party): You say, "Kushy: lethargy weariness."
+08:09:54.475 P H: Full, M: High, E: Full, W: High cekdb-12-
+08:09:54.475 | (Party): You say, "Kushy: healthleech clumsiness."
+08:09:54.476 P H: Full, M: High, E: Full, W: High cekdb-12-
+08:09:54.563 | Alias "lvfree" will now execute: "stand/g body/g gold/wield staff489282/transition to oak form/combo Kushy risingkick torso livestrike ruku torso"
+08:09:54.564 P H: Full, M: High, E: Full, W: High cekdb-12-
+08:09:54.564 | [System]: Queued free commands cleared.
+08:09:54.564 | [System]: Added LVFREE to your free queue.
+08:09:54.565 P H: Full, M: High, E: Full, W: High cekdb-12-
+08:09:54.725 > queue addclear free lvfree
+08:09:54.860 | Valkyri skilfully whirls a Braincrusher flail toward the torso of Kushy.
+08:09:54.860 +tar healthleech
+08:09:54.860 +tar confusion
+08:09:54.860 | Kushy stares about himself vacantly.
+08:09:54.860 | Valkyri skilfully whirls a Braincrusher flail toward the torso of Kushy.
+08:09:54.861 P H: Full, M: Full, E: Full, W: Full cekdb-12-
+08:09:54.861 +tar nospeed
+08:09:54.862 | Kushy suddenly seems less dexterous, his reactions becoming noticeably slower.
+08:09:54.862 P H: Full, M: Full, E: Full, W: Full cekdb-12-
+08:09:54.862 -tar anorexia
+08:09:54.862 | Kushy takes a drink from a purple heartwood vial.
+08:09:54.863 P H: Full, M: Full, E: Full, W: Full cekdb-12-
+08:09:54.863 | Grulk eats a ferrum flake.
+08:09:54.863 | A look of extreme focus crosses the face of Kushy.
+08:09:54.864 P H: Full, M: Full, E: Full, W: Full cekdb-12-
+08:09:54.956 | [System]: Queued free commands cleared.
+08:09:54.956 | [System]: Added LVFREE to your free queue.
+08:09:54.957 P H: Full, M: Full, E: Full, W: Full cekdb-12-
+08:09:55.046 | A supple purple shell of sileris berry juice has formed around Grulk.
+08:09:55.047 P H: Full, M: Full, E: Full, W: Full cekdb-12-
+08:09:55.068 > queue addclear free lvfree
+08:09:55.113 | [System]: Queued free commands cleared.
+08:09:55.113 | [System]: Added LVFREE to your free queue.
+08:09:55.114 P H: Full, M: Full, E: Full, W: Full cekdb-12-
+08:09:55.197 | You suddenly perceive the vague outline of an aura of rebounding around Boulden.
+08:09:55.199 P H: Full, M: Full, E: Full, W: Full cekdb-12-
+08:09:55.408 > queue addclear free lvfree
+08:09:55.456 | [System]: Queued free commands cleared.
+08:09:55.456 | [System]: Added LVFREE to your free queue.
+08:09:55.457 P H: Full, M: Full, E: Full, W: Full cekdb-12-
+08:09:55.647 | Gavai points an accusatory finger at Grulk.
+08:09:55.647 | Gavai quickly pricks Grulk with his dirk.
+08:09:55.647 -tar fangbarrier
+08:09:55.647 -tar sileris
+08:09:55.647 | The protective coating covering the skin of Grulk sloughs off.
+08:09:55.647 | Gavai follows up the first attack with another, his dirk piercing the flesh of Grulk.
+08:09:55.647 | Gavai snaps his fingers in front of Grulk.
+08:09:55.647 | A whip of flame coalesces in the hand of Agathon, which he brings around in a savage lashing motion to scourge the flesh of Kushy.
+08:09:55.647 +tar paralysis
+08:09:55.648 | Kushy convulses, face locked in a rictus of agony.
+08:09:55.648 +tar sensitivity
+08:09:55.648 | The skin of Kushy is left sensitive and raw.
+08:09:55.648 | The burning brand that marks the brow of Kushy burns ever brighter.
+08:09:55.648 | Kushy's charred corpse drops to the ground, blackened skin still smoking.
+08:09:55.648 > cq all
+08:09:55.648 | Kushy has been slain by Agathon.
+08:09:55.649 > cq all
+08:09:55.649 | A starburst tattoo flares and bathes Kushy in red light.
+08:09:55.649 | A cluster of snow blossoms falls from Kushy's person.
+08:09:55.650 P H: Full, M: Full, E: Full, W: Full cekdb-12-
+08:09:55.650 | Kushy touches a mindseye tattoo.
+08:09:55.650 | Kushy eats a kola nut.
+08:09:55.650 -tar anorexia
+08:09:55.650 | Kushy takes a drink from a purple heartwood vial.
+08:09:55.650 -tar slickness
+08:09:55.650 -tar bloodfire
+08:09:55.650 -tar slickness
+08:09:55.650 | Kushy takes some salve from a vial and rubs it on his skin.
+08:09:55.650 -tar slickness
+08:09:55.650 -tar paralysis
+08:09:55.650 | Kushy applies a sileris berry to himself.
+08:09:55.650 -tar anorexia
+08:09:55.650 | Kushy takes a drink from a purple heartwood vial.
+08:09:55.650 -tar anorexia
+08:09:55.650 | Kushy takes a drink from a purple heartwood vial.
+08:09:55.651 P H: Full, M: Full, E: Full, W: Full cekdb-12-
+08:09:55.692 | Vasyly whips Reaver, a dark brass morningstar toward the left leg of Kushy.
+08:09:55.692 | Vasyly whips Sentinel, a darkened-silver morningstar toward the right leg of Kushy.
+08:09:55.694 P H: Full, M: Full, E: Full, W: Full cekdb-12-
+08:09:55.771 | [System]: All queued commands cleared.
+08:09:55.772 P H: Full, M: Full, E: Full, W: Full cekdb-12-
+08:09:55.772 | [System]: All queued commands cleared.
+08:09:55.773 P H: Full, M: Full, E: Full, W: Full cekdb-12-
+08:09:55.858 | Lauryyn arrives from the northeast.
+08:09:55.859 P H: Full, M: Full, E: Full, W: Full cekdb-12-
+08:09:55.860 -tar anorexia
+08:09:55.860 | Kushy takes a drink from a cherrywood vial.
+08:09:55.860 P H: Full, M: Full, E: Full, W: Full cekdb-12-
+08:09:56.039 | Maldrantus's aura of weapons rebounding disappears.
+08:09:56.040 | As the gaze of Maldrantus falls upon Averine, she stumbles but seems to recover without visible issue.
+08:09:56.041 P H: Full, M: Full, E: Full, W: Full cekdb-12-
+08:09:56.125 | Averine stands an Aeon tarot on her palm and blows it at Tabethys.
+08:09:56.126 P H: Full, M: Full, E: Full, W: Full cekdb-12-
+08:09:56.126 | The eyes of Morasla grow unfocused as she speaks a soft, reverent lamentation:
+08:09:56.126 | "Your heart is made of iron; let it repel all arrows. Your soul is formed of diamond; let it cast light to all four corners. Your eyes are bolts of lightning; let them see the mark."
+08:09:56.126 | A nimbus of grey coalesces about the form of Morasla, growing brighter by the moment.
+08:09:56.126 | A nimbus of grey coalesces about the form of Maldrantus, growing brighter by the moment.
+08:09:56.126 | A nimbus of grey coalesces about the form of Tabethys, growing brighter by the moment.
+08:09:56.127 P H: Full, M: Full, E: Full, W: Full cekdb-12-
+08:09:56.127 | Morasla slides Gattan'lier's hunger into a small iron sheath with a quiet 'swish'.
+08:09:56.127 | Morasla quickly unlashes a heron-marked shield bristling with spinel free from a leather backstrap, shifting it over her head and into her left hand.
+08:09:56.127 | Morasla exhales loudly.
+08:09:56.128 | As the gaze of Morasla falls upon Averine, she stumbles but seems to recover without visible issue.
+08:09:56.128 P H: Full, M: Full, E: Full, W: Full cekdb-12-
+08:09:56.129 | (Party): Gavai says, "Grulk: slickness anorexia."
+08:09:56.129 P H: Full, M: Full, E: Full, W: Full cekdb-12-
+08:09:56.216 | Froedine's aura of weapons rebounding disappears.
+08:09:56.216 | Froedine closes her hand over a hawthorn berry, forming a fist.
+08:09:56.216 | The vines that serve as the arms of Froedine flail madly for a moment as they develop bright red leaves.
+08:09:56.216 | The thorny vines of the Viridian Froedine lash out and rip into Tabethys's flesh.
+08:09:56.216 | Horror overcomes Tabethys's face as her body stiffens into paralysis.
+08:09:56.218 P H: Full, M: Full, E: Full, W: Full cekdb-12-
+08:09:56.316 | Froedine takes a long drag off her pipe.
+08:09:56.316 -tar anorexia
+08:09:56.316 +tar blindness
+08:09:56.316 | Kushy eats some bayberry bark.
+08:09:56.316 | Maldrantus takes a long drag off his pipe.
+08:09:56.317 P H: Full, M: Full, E: Full, W: Full cekdb-12-
+08:09:56.317 | An enormous butterfly flutters into the location.
+08:09:56.317 | A gossamer butterfly goes into a frenzy of motion in front of the eyes of Tabethys, and she blinks rapidly.
+08:09:56.317 | Grulk draws a deep, measured breath.
+08:09:56.319 P H: Full, M: Full, E: Full, W: Full cekdb-12-
+08:09:56.319 | Lauryyn is surrounded by a shining corona of blinding light and the shimmering image of the Gorilla momentarily overlaps her.
+08:09:56.319 | Tabethys shrieks in pain as Lauryyn crashes her muscled arms onto her.
+08:09:56.320 P H: Full, M: Full, E: Full, W: Full cekdb-16-
+08:09:56.407 | You have recovered balance on your legs.
+08:09:56.407 | You have recovered balance on your right arm.
+08:09:56.407 | You have recovered balance on your left arm.
+08:09:56.409 P H: Full, M: Full, E: Full, W: Full cexkdb-16-
+08:09:56.518 | Grulk takes a long drag off his pipe.
+08:09:56.518 | Grulk takes some salve from a vial and rubs it on his body.
+08:09:56.518 | Grulk eats a ferrum flake.
+08:09:56.518 | Grulk applies a sileris berry to himself.
+08:09:56.519 P H: Full, M: Full, E: Full, W: Full cexkdb-16-
+08:09:56.520 | You suddenly perceive the vague outline of an aura of rebounding around Tabethys.
+08:09:56.520 P H: Full, M: Full, E: Full, W: Full cexkdb-16-
+08:09:56.653 | The amorphous form of Xylarys begins to ripple as he raises his hands skyward, intent locked upon Tabethys.
+08:09:56.653 | Water thunders down upon Tabethys, leaving her shivering beneath its chill.
+08:09:56.653 | Tabethys has been slain by Xylarys.
+08:09:56.653 | A starburst tattoo flares and bathes Tabethys in red light.
+08:09:56.654 P H: Full, M: Full, E: Full, W: Full cexkdb-16-
+08:09:56.654 | Xylarys sends a concentrated torrent of water at Tabethys, but she twists aside at the last moment.
+08:09:56.656 P H: Full, M: Full, E: Full, W: Full cexkdb-16-
+08:09:56.656 | Tabethys easily vaults onto the back of a silvery spectral gorilla.
+08:09:56.656 P H: Full, M: Full, E: Full, W: Full cexkdb-16-
+08:09:56.735 | You suddenly perceive the vague outline of an aura of rebounding around Morasla.
+08:09:56.736 P H: Full, M: Full, E: Full, W: Full cexkdb-16-
+08:09:56.840 | Grulk looks about bemusedly.
+08:09:56.841 P H: Full, M: Full, E: Full, W: Full cexkdb-16-
+08:09:56.842 | A look of extreme focus crosses the face of Grulk.
+08:09:56.842 | Grulk takes a drink from a quartz crystal vial.
+08:09:56.842 | Grulk eats some irid moss.
+08:09:56.842 | Tabethys eats an arsenic pellet.
+08:09:56.842 | A swirling stream of heliotrope light emanates from a prismatic ring, surrounding Tabethys with a shimmering aura.
+08:09:56.842 | Tabethys clenches her fists and grits her teeth.
+08:09:56.842 | Tabethys touches a cloak tattoo.
+08:09:56.842 | Tabethys applies a quicksilver droplet to herself.
+08:09:56.842 | Tabethys takes some salve from a vial and rubs it on her skin.
+08:09:56.842 | Tabethys eats a quartz grain.
+08:09:56.842 | Tabethys takes a drink from a stygian vial.
+08:09:56.842 | A frigid stream of cerulean light emanates from a prismatic ring, surrounding Tabethys with a frosty aura.
+08:09:56.842 | A coruscating stream of sanguine light emanates from a prismatic ring, surrounding Tabethys with a scintillating aura.
+08:09:56.842 | Tabethys takes a drink from a stygian vial.
+08:09:56.843 | A crackling stream of argentine light emanates from a prismatic ring, surrounding Tabethys with a flickering aura.
+08:09:56.843 | Tabethys takes a long drag off her pipe.
+08:09:56.843 | Tabethys takes a drink from an elegant diamond vial.
+08:09:56.843 P H: Full, M: Full, E: Full, W: Full cexkdb-16-
+08:09:56.976 | (Party): Gavai says, "Grulk: confusion."
+08:09:56.977 P H: Full, M: Full, E: Full, W: Full cexkdb-16-
+08:09:57.255 | You suddenly perceive the vague outline of an aura of rebounding around Averine.
+08:09:57.256 P H: Full, M: Full, E: Full, W: Full cexkdb-16-
+08:09:57.401 | Gavai points an accusatory finger at Grulk.
+08:09:57.401 | Gavai quickly pricks Grulk with his dirk.
+08:09:57.401 | Horror overcomes Grulk's face as his body stiffens into paralysis.
+08:09:57.401 | Gavai follows up the first attack with another, his dirk piercing the flesh of Grulk.
+08:09:57.402 P H: Full, M: Full, E: Full, W: Full cexkdb-16-
+08:09:57.619 | Tabethys touches a mindseye tattoo.
+08:09:57.620 P H: Full, M: Full, E: Full, W: Full cexkdb-16-
+08:09:57.793 | Lauryyn eats an aurum flake.
+08:09:57.793 -tar anorexia
+08:09:57.793 -tar deafness
+08:09:57.793 | Kushy eats a hawthorn berry.
+08:09:57.794 P H: Full, M: High, E: Full, W: High cexkdb-16-
+08:09:57.863 -tar nospeed
+08:09:57.884 | (Party): Gavai says, "Grulk: addiction."
+08:09:57.885 P H: Full, M: High, E: Full, W: High cexkdb-16-
+08:09:57.886 | Vasyly whips Reaver, a dark brass morningstar toward the left leg of Kushy.
+08:09:57.886 | Cold blue flames wreathe Vasyly's runeblade, emanating an icy, penetrating chill.
+08:09:57.886 | The runes upon the weapon of Vasyly flash as they discharge energy into Kushy.
+08:09:57.886 | Vasyly whips Sentinel, a darkened-silver morningstar toward the right leg of Kushy.
+08:09:57.886 | Valkyri skilfully whirls a Braincrusher flail toward the torso of Kushy.
+08:09:57.886 +tar healthleech
+08:09:57.886 | Kushy lets out a groan as his life is siphoned by the might of Evil.
+08:09:57.886 | Valkyri skilfully whirls a Braincrusher flail toward the torso of Kushy.
+08:09:57.886 | The hand of Agathon lashes out like a striking snake, striking Kushy upon the brow with a single finger. As his hand comes away, it leaves a twisting mark, charred meat writhing and twisting under some invisible guiding hand.
+08:09:57.886 | The burning crown upon the head of Agathon flickers out of existence.
+08:09:57.887 P H: Full, M: High, E: Full, W: High cexkdb-16-
+08:09:58.046 | Boulden leaps majestically to the northeast.
+08:09:58.047 P H: Full, M: High, E: Full, W: High cexkdb-16-
+08:09:58.047 -tar slickness
+08:09:58.047 | Grulk eats a bloodroot leaf.
+08:09:58.048 | Grulk takes a long drag off his pipe.
+08:09:58.048 -tar slickness
+08:09:58.048 -tar bloodfire
+08:09:58.048 -tar slickness
+08:09:58.048 | Kushy takes some salve from a vial and rubs it on his skin.
+08:09:58.048 | A look of extreme focus crosses the face of Tabethys.
+08:09:58.048 P H: Full, M: High, E: Full, W: High cexkdb-16-
+08:09:58.049 | Tabethys suddenly seems less dexterous, her reactions becoming noticeably slower.
+08:09:58.049 P H: Full, M: High, E: Full, W: High cexkdb-16-
+08:09:58.049 | Tabethys takes a drink from an oaken vial.
+08:09:58.050 P H: Full, M: High, E: Full, W: High cexkdb-16-
+08:09:58.331 | The twisting flesh upon the brow of Kushy suddenly bursts into flame, the skin charring beneath the ravenous fires.
+08:09:58.332 P H: Full, M: High, E: Full, W: High cexkdb-16-
+08:09:58.421 | Averine suddenly seems less dexterous, her reactions becoming noticeably slower.
+08:09:58.423 P H: Full, M: High, E: Full, W: High cexkdb-16-
+08:09:58.423 | Averine takes a drink from an oaken vial.
+08:09:58.424 P H: Full, M: High, E: Full, W: High cexkdb-16-
+08:09:58.424 | Kushy eats some irid moss.
+08:09:58.424 | Tabethys eats a calamine crystal.
+08:09:58.424 P H: Full, M: High, E: Full, W: High cexkdb-16-
+08:09:58.577 | Kushy is surrounded by a shining corona of blinding light and the shimmering image of the Hydra momentarily overlaps him.
+08:09:58.578 P H: Full, M: High, E: Full, W: High cexkdb-16-
+08:09:58.670 | After a few deep, slow breaths, Kushy closes his eyes as a look of serenity crosses his face.
+08:09:58.671 P H: Full, M: High, E: Full, W: High cexkdb-16-
+08:09:58.764 | (Party): Gavai says, "Grulk: hypochondria."
+08:09:58.765 P H: Full, M: High, E: Full, W: Full cexkdb-16-
+08:09:58.857 | Froedine closes her hand over a valerian leaf, forming a fist.
+08:09:58.857 | The vines that serve as the arms of Froedine flail madly for a moment as they develop broad, deep green leaves.
+08:09:58.857 | The thorny vines of the Viridian Froedine lash out and rip into Tabethys's flesh.
+08:09:58.857 | A sudden deluge of water soaks Tabethys, the slightest ripple disturbing the amorphous tranquility of Xylarys.
+08:09:58.857 | The skin of Tabethys dries and cracks as Xylarys seems somehow more than he was a moment ago.
+08:09:58.858 P H: Full, M: High, E: Full, W: Full cexkdb-16-
+08:09:58.859 | Froedine takes a drink from a purple heartwood vial.
+08:09:58.859 | Tabethys takes a long drag off her pipe.
+08:09:58.859 | Tabethys takes some salve from a vial and rubs it on her body.
+08:09:58.859 P H: Full, M: High, E: Full, W: Full cexkdb-16-
+08:09:59.155 | A fuzzy brown lemming races into the location.
+08:09:59.155 | A small brown lemming rips apart the skywatch of Tabethys.
+08:09:59.155 | Grulk lays open the flesh of Tabethys with an expert lateral slice with a Stormspear.
+08:09:59.155 | Grulk turns with the motion of his swing, coming back around to slam the haft of a Stormspear into the temple of Tabethys.
+08:09:59.156 P H: Full, M: High, E: Full, W: Full cexkdb-16-
+08:09:59.156 -tar slickness
+08:09:59.156 -tar bloodfire
+08:09:59.156 -tar slickness
+08:09:59.157 | Kushy takes some salve from a vial and rubs it on his skin.
+08:09:59.157 | Tabethys takes a drink from an oaken vial.
+08:09:59.157 | Tabethys eats a potash crystal.
+08:09:59.158 P H: Full, M: High, E: Full, W: Full cexkdb-16-
+08:09:59.158 | Gavai points an accusatory finger at Grulk.
+08:09:59.158 | Gavai quickly pricks Grulk with his dirk.
+08:09:59.158 | Horror overcomes Grulk's face as his body stiffens into paralysis.
+08:09:59.158 | Gavai follows up the first attack with another, his dirk piercing the flesh of Grulk.
+08:09:59.159 P H: Full, M: High, E: Full, W: Full cexkdb-16-
+08:09:59.302 | Eyes alight with dark intent, Agathon throws back his head and bellows a single contempt-laden name: 'Kushy'.
+08:09:59.302 | A brilliant point of light begins to shine from within Kushy, his skin growing translucent before the effulgent glare. The radiant point blazes ever brighter until with an explosive roar it expands outwards, a titanic sphere of torrid devastation that immolates Kushy so utterly that not even ash remains.
+08:09:59.302 > cq all
+08:09:59.303 | Kushy has been slain by Agathon.
+08:09:59.304 P H: Full, M: High, E: Full, W: Full cexkdb-16-
+08:09:59.304 | The searing white flames that compose Agathon fade to orange.
+08:09:59.304 | The warping of the air surrounding Agathon calms, as he ceases to burn with such intensity.
+08:09:59.305 P H: Full, M: High, E: Full, W: Full cexkdb-16-
+08:09:59.354 | [System]: All queued commands cleared.
+08:09:59.354 P H: Full, M: High, E: Full, W: Full cexkdb-16-
+08:09:59.481 | Morasla's aura of weapons rebounding disappears.
+08:09:59.481 | Morasla slashes her hand at Averine, who suddenly appears to be moving in slow motion.
+08:09:59.483 P H: Full, M: High, E: Full, W: Full cexkdb-16-
+08:09:59.575 | (Party): Gavai says, "Grulk: nausea."
+08:09:59.576 P H: Full, M: High, E: Full, W: Full cexkdb-16-
+08:09:59.716 | Morasla takes a long drag off her pipe.
+08:09:59.716 | Lauryyn is surrounded by a shining corona of blinding light and the shimmering image of the Hydra momentarily overlaps her.
+08:09:59.716 | In a furor of gnashing teeth and toxic bile, Lauryyn tears at the left leg of Tabethys with two of her serpentine heads.
+08:09:59.716 | Lauryyn's many serpentine heads lunge towards Tabethys's left leg.
+08:09:59.716 | They seize her left leg with a bonecrunching grip!
+08:09:59.716 | Maldrantus slashes his hand at Averine, who suddenly appears to be moving in slow motion.
+08:09:59.717 P H: Full, M: High, E: Full, W: Full cexkdb-24-
+08:09:59.816 > unally Lauryyn
+08:09:59.816 > enemy Lauryyn
+08:09:59.816 > st Lauryyn
+08:09:59.816 > settarget Lauryyn
+08:09:59.816 > curingset switch depthswalker
+08:09:59.816 > curing priority defence list reset
+08:09:59.816 > curing priority defence nightsight 25 megalithtattoo 25 frost 25 vitality 25 regeneration 25 speed 25 toughness 25 resistance 25 lifevision 25 mindseye 25 constitution 25 kaitrance 25 caloric 25 thirdeye 25 deathsight 25 deafness 25 magicresist 25 insomnia 25 levitation 25 boostedregeneration 25 gripping 25 shroud 25 weathering 25 coldresist 25 cloak 25 electricresist 25 mindnet 25 fireresist 25 mosstattoo 25 boartattoo 25 moontattoo 25 kola 25 selfishness 25 blindness 25 fangbarrier 25 avoid 25 venom 25 
+08:09:59.817 | (Party): Tabethys says, "Target: Lauryyn."
+08:09:59.818 P H: Full, M: High, E: Full, W: Full cexkdb-24-
+08:09:59.818 | Tabethys begins to tumble towards the west.
+08:09:59.819 P H: Full, M: High, E: Full, W: Full cexkdb-24-
+08:09:59.897 | You suddenly perceive the vague outline of an aura of rebounding around Vasyly.
+08:09:59.898 -tar slickness
+08:09:59.898 | Grulk eats a bloodroot leaf.
+08:09:59.899 P H: Full, M: High, E: Full, W: Full cexkdb-24-
+08:09:59.942 > setalias lvfree stand/g body/g gold/mind impatience Lauryyn
+08:09:59.942 > queue addclear free lvfree
+08:09:59.985 | Lauryyn is not currently an ally.
+08:09:59.986 P H: Full, M: High, E: Full, W: Full cexkdb-24-
+08:09:59.987 | Lauryyn is already an enemy.
+08:09:59.987 P H: Full, M: High, E: Full, W: Full cexkdb-24-
+08:09:59.988 | Your target is now: Lauryyn (an adventurer)
+08:09:59.988 P H: Full, M: High, E: Full, W: Full cexkdb-24-
+08:09:59.989 | Your target is now: Lauryyn (an adventurer)
+08:09:59.990 P H: Full, M: High, E: Full, W: Full cexkdb-24-
+08:09:59.990 | You will now cure using the depthswalker set.
+08:09:59.990 P H: Full, M: High, E: Full, W: Full cexkdb-24-
+08:09:59.990 | All your defence priorities have been reset to defaults.
+08:09:59.991 P H: Full, M: High, E: Full, W: Full cexkdb-24-
+08:09:59.991 | You have set the 'nightsight' defence to the 25 priority.
+08:09:59.991 | You have set the 'megalithtattoo' defence to the 25 priority.
+08:09:59.991 | You have set the 'frost' defence to the 25 priority.
+08:09:59.992 | You have set the 'vitality' defence to the 25 priority.
+08:09:59.992 | You have set the 'regeneration' defence to the 25 priority.
+08:09:59.992 | You have set the 'speed' defence to the 25 priority.
+08:09:59.992 | You have set the 'toughness' defence to the 25 priority.
+08:09:59.992 | You have set the 'resistance' defence to the 25 priority.
+08:09:59.992 | You have set the 'lifevision' defence to the 25 priority.
+08:09:59.992 | You have set the 'mindseye' defence to the 25 priority.
+08:09:59.992 | You have set the 'constitution' defence to the 25 priority.
+08:09:59.992 | You have set the 'kaitrance' defence to the 25 priority.
+08:09:59.992 | You have set the 'caloric' defence to the 25 priority.
+08:09:59.992 | You have set the 'thirdeye' defence to the 25 priority.
+08:09:59.992 | You have set the 'deathsight' defence to the 25 priority.
+08:09:59.992 | You have set the 'deafness' defence to the 25 priority.
+08:09:59.993 | You have set the 'magicresist' defence to the 25 priority.
+08:09:59.993 | You have set the 'insomnia' defence to the 25 priority.
+08:09:59.993 | You have set the 'levitation' defence to the 25 priority.
+08:09:59.993 | You have set the 'boostedregeneration' defence to the 25 priority.
+08:09:59.993 | You have set the 'gripping' defence to the 25 priority.
+08:09:59.993 | You have set the 'shroud' defence to the 25 priority.
+08:09:59.994 | You have set the 'weathering' defence to the 25 priority.
+08:09:59.994 | You have set the 'coldresist' defence to the 25 priority.
+08:09:59.994 | You have set the 'cloak' defence to the 25 priority.
+08:09:59.994 | You have set the 'electricresist' defence to the 25 priority.
+08:09:59.994 | You have set the 'mindnet' defence to the 25 priority.
+08:09:59.994 | You have set the 'fireresist' defence to the 25 priority.
+08:09:59.994 | You have set the 'mosstattoo' defence to the 25 priority.
+08:09:59.994 | You have set the 'boartattoo' defence to the 25 priority.
+08:09:59.994 | You have set the 'moontattoo' defence to the 25 priority.
+08:09:59.994 | You have set the 'kola' defence to the 25 priority.
+08:09:59.994 | You have set the 'selfishness' defence to the 25 priority.
+08:09:59.994 | You have set the 'blindness' defence to the 25 priority.
+08:09:59.995 | You have set the 'fangbarrier' defence to the 25 priority.
+08:09:59.995 | You may not set a priority for the 'avoid' defence.
+08:09:59.995 | You have set the 'venom' defence to the 25 priority.
+08:09:59.995 P H: Full, M: High, E: Full, W: Full cexkdb-24-
+08:10:00.071 | Alias "lvfree" will now execute: "stand/g body/g gold/mind impatience Lauryyn"
+08:10:00.072 P H: Full, M: High, E: Full, W: Full cexkdb-24-
+08:10:00.072 | Vasyly's aura of weapons rebounding disappears.
+08:10:00.072 | Vasyly whips Reaver, a dark brass morningstar toward the left leg of Lauryyn.
+08:10:00.072 | Vasyly whips Sentinel, a darkened-silver morningstar toward the right leg of Lauryyn.
+08:10:00.073 P H: Full, M: High, E: Full, W: Full cexkdb-24-
+08:10:00.074 | [System]: Queued free commands cleared.
+08:10:00.074 | [System]: Added LVFREE to your free queue.
+08:10:00.074 | [System]: Running queued free command: LVFREE
+08:10:00.074 | You are not fallen or kneeling.
+08:10:00.074 | You pick up the corpse of Kushy.
+08:10:00.074 | I see no "gold" to take.
+08:10:00.074 | Equilibrium used: 1.07s.
+08:10:00.075 +tar impatience
+08:10:00.075 > pt Lauryyn: impatience
+08:10:00.075 | You fill the mind of Lauryyn with an impatient feeling.
+08:10:00.075 P H: Full, M: High, E: Full, W: High cxkdb-24-
+08:10:00.076 +tar rebounding
+08:10:00.076 | You suddenly perceive the vague outline of an aura of rebounding around Lauryyn.
+08:10:00.076 P H: Full, M: High, E: Full, W: High cxkdb-24-
+08:10:00.077 | Vasyly takes a long drag off his pipe.
+08:10:00.077 -tar anorexia
+08:10:00.077 | Lauryyn eats a goldenseal root.
+08:10:00.077 | Tabethys eats an aurum flake.
+08:10:00.078 P H: Full, M: High, E: Full, W: High cxkdb-24-
+08:10:00.219 > setalias lvfree stand/g body/g gold/wield staff489282/combo Lauryyn frontkick left kuro left ruku left
+08:10:00.219 > queue addclear free lvfree
+08:10:00.289 | (Party): You say, "Lauryyn: impatience."
+08:10:00.290 P H: Full, M: High, E: Full, W: High cxkdb-24-
+08:10:00.294 +tar deafness
+08:10:00.394 | Alias "lvfree" will now execute: "stand/g body/g gold/wield staff489282/combo Lauryyn frontkick left kuro left ruku left"
+08:10:00.395 P H: Full, M: High, E: Full, W: High cxkdb-24-
+08:10:00.395 | [System]: Queued free commands cleared.
+08:10:00.395 | [System]: Added LVFREE to your free queue.
+08:10:00.396 P H: Full, M: High, E: Full, W: High cxkdb-24-
+08:10:00.592 > queue addclear free lvfree
+08:10:00.654 | [System]: Queued free commands cleared.
+08:10:00.654 | [System]: Added LVFREE to your free queue.
+08:10:00.655 P H: Full, M: High, E: Full, W: High cxkdb-24-
+08:10:00.772 | Averine takes a long drag off her pipe.
+08:10:00.774 P H: Full, M: High, E: Full, W: High cxkdb-24-
+08:10:00.874 | Tabethys doubles over and hacks up water as Xylarys impassively observes.
+08:10:00.874 | Tabethys looks suddenly nauseous as Xylarys waves a hand in her direction.
+08:10:00.875 P H: Full, M: High, E: Full, W: High cxkdb-24-
+08:10:00.968 | Gavai points an accusatory finger at Grulk.
+08:10:00.968 | Gavai fixes his eyes to those of Grulk and utters a low hiss.
+08:10:00.968 | Grulk looks about bemusedly.
+08:10:00.968 | Gavai sinks his fangs into Grulk's body.
+08:10:00.968 | Grulk screams out in agony, struck by the effects of a vicious venom.
+08:10:00.968 | Valkyri swings a Braincrusher flail in a single, powerful blow at Lauryyn, shattering her aura of rebounding.
+08:10:00.969 P H: Full, M: High, E: Full, W: High cxkdb-24-
+08:10:01.067 | A look of extreme focus crosses the face of Grulk.
+08:10:01.067 -tar asthma
+08:10:01.067 -tar asthma
+08:10:01.067 | Lauryyn takes a long drag off her pipe.
+08:10:01.068 P H: Full, M: High, E: Full, W: High cxkdb-24-
+08:10:01.077 > queue addclear free lvfree
+08:10:01.134 | You have recovered equilibrium.
+08:10:01.134 | [System]: Running queued free command: LVFREE
+08:10:01.134 | You are not fallen or kneeling.
+08:10:01.134 | I see no "body" to take.
+08:10:01.134 | I see no "gold" to take.
+08:10:01.134 | You are already wielding that.
+08:10:01.134 | You lash out with a straight kick at the left shoulder of Lauryyn.
+08:10:01.134 -tar shield
+08:10:01.134 +tar prone
+08:10:01.134 > pt Lauryyn: prone
+08:10:01.135 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Lauryyn's left arm.
+08:10:01.135 +tar prone
+08:10:01.135 > pt Lauryyn: prone
+08:10:01.135 | The instep of your foot smashes into the left underarm of Lauryyn, throwing her from her feet and sending her spinning to the ground.
+08:10:01.135 | Balance used: 2.1s.
+08:10:01.135 | Falling back into a low crouch, you lash out with a swift strike at the left thigh of Lauryyn.
+08:10:01.135 -tar shield
+08:10:01.135 > pt Lauryyn: weariness
+08:10:01.135 +tar weariness
+08:10:01.135 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Lauryyn's left leg.
+08:10:01.135 | The staff cracks across the left thigh of Lauryyn.
+08:10:01.136 | You spin a full rotation, bringing a twisted oaken staff around in a blur of motion to smash into the left arm of Lauryyn.
+08:10:01.136 -tar shield
+08:10:01.136 > pt Lauryyn: clumsiness
+08:10:01.136 +tar clumsiness
+08:10:01.136 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Lauryyn's left arm.
+08:10:01.136 | The staff connects to the left arm with a resounding crack, the limb flopping uselessly.
+08:10:01.136 | You are now maintaining a kata chain of 15 actions.
+08:10:01.137 P H: Full, M: High, E: Full, W: High cekdb-24-
+08:10:01.186 | [System]: Queued free commands cleared.
+08:10:01.186 | [System]: Added LVFREE to your free queue.
+08:10:01.187 P H: Full, M: High, E: Full, W: High cekdb-24-
+08:10:01.271 | (Party): You say, "Lauryyn: prone."
+08:10:01.272 P H: Full, M: High, E: Full, W: High cekdb-24-
+08:10:01.272 | (Party): You say, "Lauryyn: prone."
+08:10:01.273 P H: Full, M: High, E: Full, W: High cekdb-24-
+08:10:01.273 | (Party): You say, "Lauryyn: weariness."
+08:10:01.274 P H: Full, M: High, E: Full, W: High cekdb-24-
+08:10:01.274 | (Party): You say, "Lauryyn: clumsiness."
+08:10:01.275 P H: Full, M: High, E: Full, W: High cekdb-24-
+08:10:01.363 | Grulk takes a drink from a quartz crystal vial.
+08:10:01.363 | Lauryyn touches a tree of life tattoo.
+08:10:01.363 -tar anorexia
+08:10:01.363 | Lauryyn takes a drink from an elegant diamond vial.
+08:10:01.363 | Lauryyn eats some irid moss.
+08:10:01.363 P H: Full, M: High, E: Full, W: High cekdb-24-
+08:10:01.365 | (Party): Gavai says, "Grulk: confusion scytherus."
+08:10:01.365 P H: Full, M: High, E: Full, W: High cekdb-24-
+08:10:01.409 > setalias lvfree stand/g body/g gold/wield staff489282/transition to oak form/combo Lauryyn risingkick torso livestrike ruku torso
+08:10:01.409 > queue addclear free lvfree
+08:10:01.453 | The thorny vines of the Viridian Froedine lash out and rip into Tabethys's flesh.
+08:10:01.454 P H: Full, M: High, E: Full, W: High cekdb-24-
+08:10:01.454 | A death adder sinks its fangs into the neck of Grulk, injecting a potent dose of toxin.
+08:10:01.455 P H: Full, M: High, E: Full, W: High cekdb-24-
+08:10:01.543 | Grulk eats a ferrum flake.
+08:10:01.543 | An ebony raven dives down upon Tabethys, pecking at her face and eyes.
+08:10:01.543 | Grulk ceases to wield a Stormspear in his left hand.
+08:10:01.543 | Grulk starts to wield a claw-etched handaxe of steel and ash in his left hand.
+08:10:01.543 | Grulk cocks back his arm and throws a claw-etched handaxe of steel and ash at Tabethys.
+08:10:01.544 -tar prone
+08:10:01.544 -tar paralysis
+08:10:01.544 -tar brokenleftleg
+08:10:01.544 -tar damagedleftleg
+08:10:01.544 -tar brokenrightleg
+08:10:01.544 -tar damagedrightleg
+08:10:01.544 -tar prone
+08:10:01.544 -tar paralysis
+08:10:01.544 | Lauryyn stands up.
+08:10:01.545 P H: Full, M: High, E: Full, W: High cekdb-24-
+08:10:01.545 | Boulden has left the area.
+08:10:01.546 P H: Full, M: High, E: Full, W: High cekdb-24-
+08:10:01.546 | Alias "lvfree" will now execute: "stand/g body/g gold/wield staff489282/transition to oak form/combo Lauryyn risingkick torso livestrike ruku torso"
+08:10:01.547 P H: Full, M: High, E: Full, W: High cekdb-24-
+08:10:01.547 | [System]: Queued free commands cleared.
+08:10:01.547 | [System]: Added LVFREE to your free queue.
+08:10:01.548 P H: Full, M: High, E: Full, W: High cekdb-24-
+08:10:01.638 | Averine's aura of weapons rebounding disappears.
+08:10:01.638 | Averine tosses a tarot card at Tabethys and as it reaches her, a huge mass of rope bursts out of it, entrapping and hindering her.
+08:10:01.639 P H: Full, M: High, E: Full, W: High cekdb-24-
+08:10:01.725 | Morasla takes a drink from a carved bone vial.
+08:10:01.725 | Morasla takes a drink from a carved bone vial, a miniature carved dragon biting at her lips.
+08:10:01.725 -tar anorexia
+08:10:01.725 | Lauryyn eats a ferrum flake.
+08:10:01.727 P H: Full, M: High, E: Full, W: High cekdb-24-
+08:10:01.777 > queue addclear free lvfree
+08:10:01.827 | You suddenly perceive the vague outline of an aura of rebounding around Agathon.
+08:10:01.828 P H: Full, M: High, E: Full, W: High cekdb-24-
+08:10:02.016 | [System]: Queued free commands cleared.
+08:10:02.016 | [System]: Added LVFREE to your free queue.
+08:10:02.018 P H: Full, M: High, E: Full, W: High cekdb-24-
+08:10:02.018 | In a furor of gnashing teeth and toxic bile, Lauryyn tears at the right leg of Tabethys with two of her serpentine heads.
+08:10:02.018 | Lauryyn's many serpentine heads lunge towards Tabethys's right leg.
+08:10:02.018 | They seize her right leg with a bonecrunching grip!
+08:10:02.019 P H: Full, M: High, E: Full, W: High cekdb-32-
+08:10:02.139 > queue addclear free lvfree
+08:10:02.185 | [System]: Queued free commands cleared.
+08:10:02.185 | [System]: Added LVFREE to your free queue.
+08:10:02.186 P H: Full, M: High, E: Full, W: High cekdb-32-
+08:10:02.279 | Vasyly whips Reaver, a dark brass morningstar toward the left leg of Lauryyn.
+08:10:02.279 | Vasyly whips Sentinel, a darkened-silver morningstar toward the right leg of Lauryyn.
+08:10:02.279 | The runes upon the weapon of Vasyly flash as they discharge energy into Lauryyn.
+08:10:02.280 P H: Full, M: High, E: Full, W: High cekdb-32-
+08:10:02.396 | Averine takes a long drag off her pipe.
+08:10:02.397 P H: Full, M: High, E: Full, W: High cekdb-32-
+08:10:02.519 > queue addclear free lvfree
+08:10:02.568 | [System]: Queued free commands cleared.
+08:10:02.568 | [System]: Added LVFREE to your free queue.
+08:10:02.570 P H: Full, M: High, E: Full, W: High cekdb-32-
+08:10:02.689 | Gavai points an accusatory finger at Grulk.
+08:10:02.689 | Gavai quickly pricks Grulk with his dirk.
+08:10:02.689 | Horror overcomes Grulk's face as his body stiffens into paralysis.
+08:10:02.689 | Gavai follows up the first attack with another, his dirk piercing the flesh of Grulk.
+08:10:02.690 P H: Full, M: High, E: Full, W: Full cekdb-32-
+08:10:02.775 | Tabethys doubles over and hacks up water as Xylarys impassively observes.
+08:10:02.775 | A serpentine head erupts from the amorphous chest of Xylarys, gleaming fangs sinking into the throat of Tabethys before the head snaps back within the churning depths from which it sprung.
+08:10:02.775 | Horror overcomes Tabethys's face as her body stiffens into paralysis.
+08:10:02.775 | A layer of sweat abruptly breaks out upon the skin of Tabethys.
+08:10:02.775 | Tabethys slips on a thin layer of fluid, her feet flying out from under her.
+08:10:02.775 | Agathon's aura of weapons rebounding disappears.
+08:10:02.776 | A whip of flame coalesces in the hand of Agathon, which he brings around in a savage lashing motion to scourge the flesh of Lauryyn.
+08:10:02.776 +tar paralysis
+08:10:02.776 | Lauryyn convulses, face locked in a rictus of agony.
+08:10:02.776 +tar nodeaf
+08:10:02.776 | The skin of Lauryyn is left sensitive and raw.
+08:10:02.776 | The very air warps about Agathon as his flames burn ever brighter.
+08:10:02.777 P H: Full, M: High, E: Full, W: Full cekdb-32-
+08:10:02.879 | As the gaze of Morasla falls upon Lauryyn, she stumbles but seems to recover without visible issue.
+08:10:02.880 P H: Full, M: High, E: Full, W: Full cekdb-32-
+08:10:02.889 > queue addclear free lvfree
+08:10:02.936 -tar slickness
+08:10:02.936 -tar bloodfire
+08:10:02.936 -tar slickness
+08:10:02.936 -tar bloodfire
+08:10:02.936 -tar slickness
+08:10:02.936 | Lauryyn takes some salve from a vial and rubs it on her body.
+08:10:02.936 | Agathon takes a long drag off an enamel bubble pipe.
+08:10:02.937 P H: Full, M: High, E: Full, W: Full cekdb-32-
+08:10:02.937 | You suddenly perceive the vague outline of an aura of rebounding around Xylarys.
+08:10:02.938 P H: Full, M: High, E: Full, W: Full cekdb-32-
+08:10:03.035 | [System]: Queued free commands cleared.
+08:10:03.035 | [System]: Added LVFREE to your free queue.
+08:10:03.036 P H: Full, M: High, E: Full, W: Full cekdb-32-
+08:10:03.037 | Valkyri skilfully whirls a Braincrusher flail toward the torso of Lauryyn.
+08:10:03.037 +tar healthleech
+08:10:03.037 +tar confusion
+08:10:03.037 | Lauryyn stares about herself vacantly.
+08:10:03.037 | Valkyri skilfully whirls a Braincrusher flail toward the torso of Lauryyn.
+08:10:03.037 P H: Full, M: High, E: Full, W: Full cekdb-32-
+08:10:03.037 | Grulk no longer moves with such sublime alacrity.
+08:10:03.039 P H: Full, M: High, E: Full, W: Full cekdb-32-
+08:10:03.116 -tar paralysis
+08:10:03.117 | Grulk eats a bloodroot leaf.
+08:10:03.117 | A look of extreme focus crosses the face of Lauryyn.
+08:10:03.117 | An ebony raven dives down upon Tabethys, pecking at her face and eyes.
+08:10:03.117 | Grulk is surrounded by a shining corona of blinding light and the shimmering image of the Gorilla momentarily overlaps him.
+08:10:03.117 | Tabethys shrieks in pain as Grulk crashes his muscled arms onto her.
+08:10:03.117 | Tabethys's screams are quickly cut off as her body is rent apart by the violent pounding.
+08:10:03.117 | Tabethys has been slain by Grulk.
+08:10:03.118 P H: Full, M: High, E: Full, W: Full cekdb-32-
+08:10:03.206 | (Party): Gavai says, "Grulk: asthma."
+08:10:03.207 P H: Full, M: High, E: Full, W: Full cekdb-32-
+08:10:03.229 > queue addclear free lvfree
+08:10:03.283 | You have recovered balance on your legs.
+08:10:03.284 | You have recovered balance on your right arm.
+08:10:03.284 | You have recovered balance on your left arm.
+08:10:03.284 | [System]: Running queued free command: LVFREE
+08:10:03.284 | You are not fallen or kneeling.
+08:10:03.284 | You pick up the corpse of Tabethys.
+08:10:03.284 | I see no "gold" to take.
+08:10:03.284 | You are already wielding that.
+08:10:03.284 | Rising onto the balls of your feet, you prepare to begin the deadly form of the Live Oak.
+08:10:03.284 | You drive your foot up in a rising kick at the torso of Lauryyn.
+08:10:03.285 -tar shield
+08:10:03.285 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Lauryyn's torso.
+08:10:03.285 | Your foot drives into the solar plexus of Lauryyn.
+08:10:03.285 | Balance used: 2.1s.
+08:10:03.285 | Turning with the motion, you channel the momentum of your previous strike into a thrust at the solar plexus of Lauryyn with a twisted oaken staff.
+08:10:03.285 | As your blow lands with a crunch, you perceive that you have dealt 13.4% damage to Lauryyn's torso.
+08:10:03.285 +tar asthma
+08:10:03.285 | The breath of Lauryyn leaves her in an explosive gasp as the end of the staff smashes home.
+08:10:03.285 | You spin a full rotation, bringing a twisted oaken staff around in a blur of motion to smash into the torso of Lauryyn.
+08:10:03.285 -tar shield
+08:10:03.285 +tar slickness
+08:10:03.285 > pt Lauryyn: slickness
+08:10:03.285 | As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Lauryyn's torso.
+08:10:03.286 | Lauryyn staggers as the staff cracks across her ribs, sweat breaking out upon her forehead.
+08:10:03.286 | You feel stronger. Faster. Dominant.
+08:10:03.286 > cq all
+08:10:03.286 | You have slain Lauryyn.
+08:10:03.286 | You have gained 1837 experience.
+08:10:03.287 P H: Healthy, M: High, E: High, W: High cekdb-32-
+08:10:03.287 | With the completion of your adventure, you feel your renown grow to new heights! (You gain 100 Renown.)
+08:10:03.287 | You are now maintaining a kata chain of 3 actions.
+08:10:03.288 P H: Healthy, M: High, E: High, W: High cekdb-32-
+08:10:03.338 | [System]: Queued free commands cleared.
+08:10:03.338 | [System]: Added LVFREE to your free queue.
+08:10:03.339 P H: Healthy, M: High, E: High, W: High cekdb-32-
+08:10:03.428 | (Party): You say, "Lauryyn: slickness."
+08:10:03.429 P H: Healthy, M: High, E: High, W: High cekdb-32-
+08:10:03.429 | [System]: All queued commands cleared.
+08:10:03.430 P H: Healthy, M: High, E: High, W: High cekdb-32-
+08:10:03.430 | As the gaze of Maldrantus falls upon Averine, she stumbles but seems to recover without visible issue.
+08:10:03.430 P H: Healthy, M: High, E: High, W: High cekdb-32-
+08:10:03.837 | Grulk looks about bemusedly.
+08:10:03.838 P H: Healthy, M: High, E: High, W: High cekdb-32-
+08:10:03.921 | A look of extreme focus crosses the face of Grulk.
+08:10:03.922 | Grulk eats some irid moss.
+08:10:03.922 P H: Healthy, M: High, E: High, W: High cekdb-32-
+08:10:04.023 | Froedine inhales and begins holding her breath.
+08:10:04.025 | (Party): Gavai says, "Grulk: confusion."
+08:10:04.026 P H: Healthy, M: High, E: High, W: High cekdb-22-
+08:10:04.109 | Froedine exhales loudly.
+08:10:04.110 P H: Healthy, M: High, E: High, W: High cekdb-22-
+08:10:04.231 | Froedine inhales and begins holding her breath.
+08:10:04.232 P H: Healthy, M: High, E: High, W: High cekdb-22-
+08:10:04.502 | Gavai points an accusatory finger at Grulk.
+08:10:04.502 | Gavai quickly pricks Grulk with his dirk.
+08:10:04.502 | Horror overcomes Grulk's face as his body stiffens into paralysis.
+08:10:04.502 | Gavai follows up the first attack with another, his dirk piercing the flesh of Grulk.
+08:10:04.502 | Xylarys picks up the corpse of Lauryyn.
+08:10:04.503 | Xylarys's aura of weapons rebounding disappears.
+08:10:04.503 | A sudden deluge of water soaks Gavai, the slightest ripple disturbing the amorphous tranquility of Xylarys.
+08:10:04.503 | The skin of Gavai dries and cracks as Xylarys seems somehow more than he was a moment ago.
+08:10:04.504 P H: Healthy, M: High, E: High, W: High cekdb-22-
+08:10:04.651 | Gavai eats an aurum flake.
+08:10:04.651 | Gavai touches a tree of life tattoo.
+08:10:04.651 | Grulk eats an aurum flake.
+08:10:04.651 | Grulk takes a long drag off his pipe.
+08:10:04.651 | Xylarys takes a long drag off an enamel bubble pipe.
+08:10:04.652 P H: Healthy, M: High, E: High, W: High cekdb-22-
+08:10:04.746 | You suddenly perceive the vague outline of an aura of rebounding around Froedine.
+08:10:04.746 | You suddenly perceive the vague outline of an aura of rebounding around Maldrantus.
+08:10:04.747 P H: Healthy, M: High, E: High, W: High cekdb-22-
+08:10:04.747 | Grulk shuffles his feet in boredom.
+08:10:04.748 P H: Healthy, M: High, E: High, W: High cekdb-22-
+08:10:04.865 | (Party): Gavai says, "Grulk: slickness."
+08:10:04.866 P H: Healthy, M: High, E: High, W: High cekdb-22-
+08:10:05.191 | Gavai moves with preternatural grace, confounding Averine with his perfect footwork.
+08:10:05.192 P H: Full, M: Full, E: High, W: High cekdb-22-
+08:10:05.289 | You have recovered balance on your legs.
+08:10:05.289 | You have recovered balance on your right arm.
+08:10:05.289 | You have recovered balance on your left arm.
+08:10:05.290 P H: Full, M: Full, E: High, W: High cexkdb-22-
+08:10:05.854 | Averine suddenly seems less dexterous, her reactions becoming noticeably slower.
+08:10:05.856 P H: Full, M: Full, E: High, W: High cexkdb-22-
+08:10:05.856 | Averine takes a drink from an oaken vial.
+08:10:05.857 P H: Full, M: Full, E: High, W: High cexkdb-22-
+08:10:05.954 | Boulden has entered the area.
+08:10:05.955 P H: Full, M: Full, E: High, W: High cexkdb-22-
+08:10:06.087 | Grulk takes a drink from a quartz crystal vial.
+08:10:06.088 P H: Full, M: Full, E: High, W: High cexkdb-22-
+08:10:06.183 | Maldrantus takes a drink from an elegant diamond vial.
+08:10:06.183 | Morasla slashes her hand at Averine, who suddenly appears to be moving in slow motion.
+08:10:06.185 P H: Full, M: High, E: High, W: High cexkdb-22-
+08:10:06.282 | Boulden arrives from the northeast.
+08:10:06.282 P H: Full, M: High, E: High, W: High cexkdb-22-
+08:10:06.366 | Gavai is attempting to hypnotise Grulk!
+08:10:06.366 | Gavai points an accusatory finger at Grulk.
+08:10:06.366 | Gavai quickly pricks Grulk with his dirk.
+08:10:06.366 | Gavai follows up the first attack with another, his dirk piercing the flesh of Grulk.
+08:10:06.366 | Gavai hunches his shoulders and lets out a soft hiss.
+08:10:06.368 P H: Full, M: High, E: High, W: High cexkdb-22-
+08:10:06.451 -tar slickness
+08:10:06.453 | Grulk eats a bloodroot leaf.
+08:10:06.453 P H: Full, M: High, E: High, W: High cexkdb-22-
+08:10:06.544 | A supple purple shell of sileris berry juice has formed around Grulk.
+08:10:06.545 P H: Full, M: High, E: High, W: High cexkdb-22-
+08:10:06.545 | A sudden deluge of water soaks Gavai, the slightest ripple disturbing the amorphous tranquility of Xylarys.
+08:10:06.545 | The skin of Gavai dries and cracks as Xylarys seems somehow more than he was a moment ago.
+08:10:06.546 P H: Full, M: High, E: High, W: High cexkdb-22-
+08:10:06.546 | You suddenly perceive the vague outline of an aura of rebounding around Grulk.
+08:10:06.547 P H: Full, M: High, E: High, W: High cexkdb-22-
+08:10:06.638 | Gavai eats an aurum flake.
+08:10:06.638 | Grulk touches a tree of life tattoo.
+08:10:06.639 P H: Full, M: High, E: High, W: High cexkdb-22-
+08:10:06.758 | (Party): Gavai says, "Grulk: asthma dizziness."
+08:10:06.759 P H: Full, M: High, E: High, W: High cexkdb-22-
+08:10:06.857 | Kushy has left the area.
+08:10:06.858 P H: Full, M: High, E: High, W: High cexkdb-22-
+08:10:06.858 | Grulk's aura of weapons rebounding disappears.
+08:10:06.858 | Gavai moves with preternatural grace, confounding Grulk with his perfect footwork.
+08:10:06.859 P H: Full, M: High, E: High, W: High cexkdb-22-
+08:10:07.138 | A look of extreme focus crosses the face of Gavai.
+08:10:07.139 P H: Full, M: High, E: High, W: High cexkdb-22-
+08:10:07.140 | Maldrantus's aura of weapons rebounding disappears.
+08:10:07.140 | Maldrantus slashes his hand at Averine, who suddenly appears to be moving in slow motion.
+08:10:07.140 P H: Full, M: High, E: High, W: High cexkdb-22-
+08:10:07.231 | Boulden gives Gavai the once over.
+08:10:07.232 P H: Full, M: High, E: High, W: High cexkdb-22-
+08:10:07.333 | Boulden takes a drink from an oaken vial.
+08:10:07.333 | Maldrantus takes a long drag off his pipe.
+08:10:07.334 P H: Full, M: High, E: High, W: High cexkdb-22-
+08:10:07.487 | Froedine's aura of weapons rebounding disappears.
+08:10:07.487 | Froedine exhales loudly.
+08:10:07.487 | Gavai moves with preternatural grace, confounding Froedine with his perfect footwork.
+08:10:07.488 P H: Full, M: High, E: High, W: High cexkdb-22-
+08:10:07.574 | Froedine takes a long drag off her pipe.
+08:10:07.575 P H: Full, M: High, E: High, W: High cexkdb-22-
+08:10:07.925 | Grulk eats a ferrum flake.
+08:10:07.927 P H: Full, M: High, E: High, W: High cexkdb-22-
+# stopped: we killed Lauryyn | 1623 rows | 24.0 s

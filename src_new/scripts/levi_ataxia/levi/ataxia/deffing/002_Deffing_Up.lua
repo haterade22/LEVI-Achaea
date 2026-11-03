@@ -14,6 +14,13 @@ attributes:
 packageName: ''
 ]]--
 
+-- The game refuses a curing priority for these: "You may not set a priority for the 'avoid' defence."
+-- (47 times in the 2026-11-03 group fight, 1 each for the other two). SSC does not keep them.
+local NO_PRIORITY = { avoid = true, shikudoform = true, starburst = true }
+function ataxia_defenceTakesPriority(def)
+	return not NO_PRIORITY[def]
+end
+
 function systemDefup(profile)
 	if not ataxia.settings or not ataxia.settings.defences then return end
 	local cur = ataxia.settings.defences.current
@@ -31,7 +38,7 @@ function systemDefup(profile)
 			ataxiaEcho("Deffing up in the "..profile.." profile.")
       command = "curing priority defence "
 			for def, val in pairs(ataxia.settings.defences.defup[cur]) do
-				if isDefenceForCurrentClass(def) then
+				if isDefenceForCurrentClass(def) and ataxia_defenceTakesPriority(def) then
 					command = command..def.." 25 "
 				end
 			end
@@ -58,7 +65,7 @@ function defupFailsafe()
 	if deffingFailsafe then killTimer(deffingFailsafe) end
 
 	for def, val in pairs(ataxia.settings.defences.defup[cur]) do
-		if not ataxia.settings.defences.keepup[cur][def] and isDefenceForCurrentClass(def) then
+		if not ataxia.settings.defences.keepup[cur][def] and isDefenceForCurrentClass(def) and ataxia_defenceTakesPriority(def) then
 			command = command..def.." reset "
 		end
 	end

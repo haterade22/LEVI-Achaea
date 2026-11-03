@@ -130,6 +130,7 @@ LOGGERS = (
     ("_mystor_", "Mystor"),
     ("_leviticus_", "Leviticus"),
     ("shikudo-group-mhaldor", "Ours, client log"),
+    ("shikudo-group-alias", "Ours, client log"),
 )
 
 # Mystor's system prints the lock it believes in front of the board. These are not afflictions, and a naive
@@ -497,7 +498,9 @@ DAGAZ_MAX_GAP = 30.0
 CURING_REACH = 3
 SHORT_SALVES = ("APPLY MENDING", "APPLY EPIDERMAL", "APPLY CALORIC")
 # The same fight as ours/2026-10-27_112717 up to 11:28:22, so its samples would count twice. It stays parsed and listed.
-SAME_FIGHT = {"2026-10-27_shikudo-group-mhaldor.txt": "2026-10-27_112717_Tabethys.log"}
+# The 2026-11-03 client log holds all three of that morning's recordings; the value names the first with a target switch.
+SAME_FIGHT = {"2026-10-27_shikudo-group-mhaldor.txt": "2026-10-27_112717_Tabethys.log",
+              "2026-11-03_shikudo-group-alias.txt": "2026-11-03_081009_Froedine.log"}
 
 
 def clock_samples(log):
@@ -1596,7 +1599,7 @@ def render_clocks(data):
                  [[r["id"], r["file"], r["family"] or "none", r["logger"] or "-", r["filed"] or "-", r["version"] or "-",
                    r["prompts"], r["wrapped"], r["fixed_stamps"],
                    ("skipped: %d prompts with no time in them" % r["unstamped_prompts"]) if not r["family"]
-                   else ("" if r["in_pools"] else "same fight as ours/2026-10-27_112717, out of the pools")]
+                   else ("" if r["in_pools"] else "same fight as ours/%s, out of the pools" % SAME_FIGHT[r["file"]][:-len(".log")])]
                   for r in data["logs"]])
     out += [""]
     return "\n".join(out)

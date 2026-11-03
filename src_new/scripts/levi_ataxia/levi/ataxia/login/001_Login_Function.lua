@@ -62,7 +62,7 @@ ataxia.settings.use.parry = true
 ataxia.parry = "auto"
 if ataxiaTemp.parriedLimb == nil then ataxiaTemp.parriedLimb = "none" end
 tempTimer(10, [[send("queue add free get 50 ink from palette")]])
-tempTimer(12, [[send("queue add inr all")]])
+tempTimer(12, [[send("queue add free inr all")]])
 
 tempTimer(30, [[setafflictionstackslevi()]])
 tempTimer(30, [[targetresetafflictionslevi()]])

@@ -569,6 +569,18 @@ class Gate(unittest.TestCase):
             for ex in rule["exits"]:
                 self.assertTrue(ex["channel"] in R.CHANNEL_MAX or ex["channel"] in ("balance", "move"), ex["name"])
 
+    def test_a_recording_of_ours_tests_no_rule(self):
+        # ours/081532_Tabethys: the Pariah is Harkon, a member of our party, and that took G1 and G2 to PASS.
+        rows = [OURS_HEADER, "08:15:32.100 | " + LOGOGRAPH, "08:15:32.200 P H: Full, M: Full cexkdb-"]
+        rep = replay("2026-11-03_081532_Tabethys.log", rows)
+        res = R.rule_results([rep])
+        self.assertEqual(res["pariah.latency"]["fought_survived"], [rep.log.id])
+        self.assertTrue(res["pariah.latency"]["untested"])
+
+    def test_a_client_log_still_tests_a_rule(self):
+        res = R.rule_results([replay(CLAES, THIRD_PLAGUE)])
+        self.assertFalse(res["pariah.latency"]["untested"])
+
     def test_an_untested_rule_does_not_count_toward_g1(self):
         rep = replay(CLAES, THIRD_PLAGUE + [claes("20:000", "myc AST reb haem fls"), "You have been slain by Talo."])
         res = R.rule_results([rep])

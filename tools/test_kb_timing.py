@@ -247,6 +247,13 @@ class Boards(unittest.TestCase):
         self.assertEqual(p.lock, "soft, venom, hard, true")
         self.assertEqual(log.wrapped, 1)
 
+    def test_a_client_log_of_a_recorded_fight_stays_out_of_the_pools(self):
+        rows = ["08:09:44:001 [13357] [99] |(Lauryyn)|[]  "]
+        log = kb.parse_rows("2026-11-03_shikudo-group-alias.txt", rows)
+        self.assertEqual(log.logger, "Ours, client log")
+        self.assertEqual(log.family, "sentinel")
+        self.assertIn(log.name, kb.SAME_FIGHT)
+
     def test_group_log_empty_boards(self):
         rows = ["11:26:23:777 [13357] [99] |(659477)|[]  ", "11:26:49:440 [13357] [99] |(Sadey)|[ [ ]]  "]
         log = kb.parse_rows("2026-10-27_shikudo-group-mhaldor.txt", rows)
