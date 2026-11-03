@@ -175,6 +175,10 @@ treat this as settled. A live probe and step 6 of the plan come first.
 **What is safe to do.** From the first such prompt: raise aurum above magnesium and plumbum, and spend no equilibrium.
 Holding offence stays a hypothesis.
 
+**What the simulator adds.** [sim/forward.md](../sim/forward.md) supports the aurum half: ROBUST on the closure rate, also against the rules the
+package runs today. It does not support "spend no equilibrium": a shield whenever equilibrium is up lowered the closure rate, and was
+worse in no comparison ([CONFLICTS](../CONFLICTS.md) #57). This is a model on 10 boards, not a live result, and no live code changed.
+
 ## Refuted: do not rebuild on these
 
 | Claim | What the check found |
