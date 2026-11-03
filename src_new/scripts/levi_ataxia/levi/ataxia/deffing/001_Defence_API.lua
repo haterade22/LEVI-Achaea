@@ -109,7 +109,8 @@ function gotDef()
 	end
 
 	if cur ~= "" and not def:find("parrying") and not def:find("blocking") then
-		if not ataxia.settings.defences.keepup[cur][def] and not ataxiaBasher.enabled then
+		if not ataxia.settings.defences.keepup[cur][def] and not ataxiaBasher.enabled
+		   and (not ataxia_defenceTakesPriority or ataxia_defenceTakesPriority(def:lower())) then
 			ataxia_sendCuringPriority("curing priority defence "..def:lower().." reset", false)
 		end
     

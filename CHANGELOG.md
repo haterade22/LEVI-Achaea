@@ -2,7 +2,7 @@
 
 ---
 
-## 2026-11-03 - v4.7.476: SYSUPDATE warns about edits and saves a backup first
+## 2026-11-03 - v4.7.477: SYSUPDATE warns about edits and saves a backup first
 
 A player reported: "when I edited some things... the changes were gone after an update, since then I have [not] pushed one in fear of loss." The report is correct. An update uninstalls the whole package and installs the new one, so it removes every edit inside `Levi_Ataxia`. Items in the player's own top-level folder stay.
 
@@ -12,6 +12,19 @@ A player reported: "when I edited some things... the changes were gone after an 
 - **Docs.** `GETTING_STARTED.md` has a new section, "Keeping Your Own Changes", and `README.md` no longer implies that nothing is lost. An update does not merge edits, and this version does not change that.
 - **The protection starts with the update AFTER this one**, because the old updater runs the install of this version.
 - **Not yet run in Mudlet.** Tests: `test_auto_update.lua` (13). The Mudlet facts come from its `development` source and wiki, and the user's client may differ.
+## 2026-11-03 - v4.7.476: a display-only alert for a Depthswalker's shadow, and two more refused priorities
+
+The user's second group log (v4.7.471, before the v4.7.474 fixes) holds our first death on alias rounds. Alias rounds did not cause it: the last combo landed 0.88 s before death.
+
+- **The Depthswalker watch (display only, it sends nothing).** Two Depthswalkers killed us: attune 8.5 s before death, `your shadow clings to the blade` 3.9 s and 2.2 s before, then a word of power and `Drawing a shadow from a
+  bone phylactery` for all we had left, about 33% health. There is now a box at the attune, a box when the shadow is taken, and `SHADOW(name)` beside the locks on the prompt, with the health number under 50%. The shadow stays on the
+  prompt for 60 s, which is a guess: no log shows how long a phylactery keeps one. A prompt with no afflictions shows no label, so the box is the sure signal. **It rests on one kill and has not run in a fight.** The 40% is an inference (`docs/kill-paths.md`).
+- **`curing priority defence <def> reset` no longer goes for a defence the game refuses.** v4.7.474 guarded three sends, and this fourth one, at a defence coming up, printed `You may not set a priority for the 'epitomise' defence.`
+  `epitomise` and `compoundmask` join the list.
+- **The `endure` pair is unchanged, against what I first proposed.** I reported that it does nothing. Across all logs it stayed up in 5 of 19 cycles, it costs no balance, and no log shows it helping or hurting (`kb/mechanics/balance-and-queueing.md`).
+- **Retardation's cause is corrected:** a vibration in the room, not Kaden's deepfreeze.
+- **Logs filed:** `ours/2026-11-03_102138_Tabethys`, `102828_Harkon` and the screen log. They hold other players' tells; the user chose to file them. Clocks, scoreboard, replay and the simulator are rebuilt. The gate is still FAIL: our death is out of scope, as a group recording.
+- **New live probe:** test G in `docs/plans/timing-probes-2026-11.md` settles the `astWear` tie. It needs you and a partner in the game. Nothing about asthma's priority changes live.
 
 ---
 

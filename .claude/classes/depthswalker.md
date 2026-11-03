@@ -489,7 +489,7 @@ dangerous_abilities:
 
 watch_for:
   - "A full stack of one Instill = that capstone is next"
-  - "Shadow claimed = Mutilate possible"
+  - "Shadow claimed = Mutilate possible. Since v4.7.476 the package shows it: a box at the attune, a box at `your shadow clings to the blade`, and SHADOW(name) on the prompt (display only, levi_scripts/class_detect/002). Our death on 2026-11-03: attune 8.5 s before, shadow 3.9 s and 2.2 s before"
   - "Depression/madness/retribution/parasite up = Dictate kills at higher mana (cure these to push it back to 40%)"
   - "Bellwort stack (timeloop+justice+retribution) = sustained pressure"
 ```
