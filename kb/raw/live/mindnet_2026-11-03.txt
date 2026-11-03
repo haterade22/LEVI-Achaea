@@ -1,0 +1,32 @@
+Mindnet lines and the channel list, 2026-11-03. Three sources, each verbatim. The notes marked # are ours.
+
+# 1. The user's paste, a group fight. "Xylarys has entered the area." produced no party call.
+Valkyri takes a drink from a stygian vial.
+08:08:15:580 [7502] [99] |(Penwize)|[ [ ]]
+Xylarys has entered the area.
+08:08:17:168 [7502] [99] |(Penwize)|[ [ ]]
+A great weight seems to have been lifted from Maldrantus.
+08:08:18:477 [7502] [99] |(Penwize)|[ [ ]]
+Maldrantus takes some salve from a vial and rubs it on his skin.
+08:08:18:666 [7502] [99] |(Penwize)|[ [ ]]
+A rune like a rising sun upon the ground flares, bathing Vasyly with healing magic.
+08:08:23:477 [7502] [100] |(Penwize)|[ [ ]]
+(Party): Tabethys says, "They are incoming."
+08:08:26:491 [7502] [99] |(Penwize)|[ [ ]]
+A low, hollow rasp slips from a black-crowned nycticorax's throat as it stretches its wings and begins to preen.
+A low, hollow rasp slips from a black-crowned nycticorax's throat
+
+# 2. Our fight logs (<profile>/fightlogs/, v4.7.471). Both lines print with no `> pt` after them.
+#    2026-11-03_080944_Lauryyn.log, line 691
+08:09:51.468 | Toscus has entered the area.
+08:09:51.469 P H: Full, M: High, E: Full, W: Full cekdb-12-
+#    2026-11-03_081009_Froedine.log, lines 642-644. Nahaj was on our city enemy list.
+08:10:21.592 | Nahaj has entered the area.
+08:10:21.592 P H: Full, M: High, E: High, W: High cexkdb-22-
+08:10:22.095 > unally Grulk
+
+# 3. The keys of ataxia.channels (GMCP Comm.Channel.List) in two saves, written 2026-11-03 08:03.
+#    `ataxia` is the newer save and `ataxia.bak` is the save before it. The only difference is `party`.
+ataxia.bak: clt1 clt2 clt3 clt4 clt5 clt6 clt7 clt8 clt9 clt10 clt11 clt12 clt13 clt14 ct hnt ht hts market newbie
+ataxia:     clt1 clt2 clt3 clt4 clt5 clt6 clt7 clt8 clt9 clt10 clt11 clt12 clt13 clt14 ct hnt ht hts market newbie party
+#    Both saves: ["ct"] = "Mhaldor"

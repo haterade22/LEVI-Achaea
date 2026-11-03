@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-11-03 - v4.7.472: mindnet tells the party about non-citizens, in any area
+
+User: "mindnet doesnt report?" A group fight printed `Xylarys has entered the area.` and sent nothing. The trigger sent `pt` only
+with raid on, in Annwyn, or for a city enemy in the area named exactly `Mhaldor`, and the fight was outside that area. Raid was off.
+
+- **The new rule:** in any area, while in a party, `pt <name> IN!` / `OUT!` for each player who is not us, is not an ally, and whose
+  NDB city differs from ours. An unknown city and a rogue both differ. The call has no alert sound, because the lines print many times
+  in a fight. Raid on, Annwyn and Mhaldor's city enemies keep their calls, alerts, box echoes and clan line.
+- **Not the city enemy list:** in this fight it held Xylarys, Nahaj and Akri, and not Grulk, Lauryyn, Froedine, Kushy, Toscus, Boulden or
+  Tienau.
+- **`raid mindnet` is now a real off switch.** Its help promised "Announce mindnet for enemies", and no code read the setting. It works
+  without `raid on`, stops every mindnet `pt`, and leaves the clan line and the alerts alone. It is seeded on, because the toggle flips
+  nil to true and a first `raid mindnet` would have said "Enabled" and changed nothing.
+- **`ataxia.channels` (GMCP `Comm.Channel.List`) gives party and city:** the `party` key is listed while in a party, and the caption of `ct`
+  is the city's name. We have not seen `party` leave the list when a party ends, so that case is the one to test in play
+  (`kb/mechanics/mindnet.md`).
+- **Known limit:** no code holds a party member list, so a rogue or foreign party member who is not an ally gets a call.
+
+---
+
 ## 2026-11-02 - v4.7.471: `srd` is mind crush with no combos, impatience waits for something stuck, batter comes back
 
 Live tests on 2026-11-02 found that a Shikudo combo needs equilibrium up, and that MIND CRUSH needs balance up. The user says KAI

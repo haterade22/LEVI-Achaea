@@ -652,6 +652,11 @@ kai_heal:
   syntax: "KAI HEAL"
   notes: "21 kai and 3.00s of equilibrium (Kaido.wiki:308-310)"
 
+mindnet:
+  skill: Telepathy
+  effect: "Prints <Name> has entered/left the area for each player who crosses the net"
+  notes: "Called to the party for non-citizens in any area (v4.7.472, kb/mechanics/mindnet.md); `raid mindnet` switches the call off"
+
 # KAI CRIPPLE is not defensive: it crushes the TARGET's limbs (Offensive Abilities, Kaido, above).
 ```
 

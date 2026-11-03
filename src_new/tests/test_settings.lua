@@ -176,6 +176,20 @@ describe("ataxia_loadSettings()", function()
     expect(ataxia.loaded).toBeTrue()
   end)
 
+  -- `raid mindnet` (v4.7.472): the toggle flips nil to true, so an unseeded save's first toggle would
+  -- say "Enabled" and change nothing. Every save before this has `raid = {}`.
+  it("seeds raid.mindnet on an old save and keeps a saved off", function()
+    freshLoadState()
+    _saved[ATAXIA] = { settings = { class = "Monk", raid = {} } }
+    ataxia_loadSettings()
+    expect(ataxia.settings.raid.mindnet).toBeTrue()
+
+    freshLoadState()
+    _saved[ATAXIA] = { settings = { class = "Monk", raid = { mindnet = false } } }
+    ataxia_loadSettings()
+    expect(ataxia.settings.raid.mindnet).toBeFalse()
+  end)
+
   -- MNEMOSYNE RUN STATE MUST NOT SURVIVE A RELOAD (v4.7.299).
   --
   -- This is the SEAM test, and it is the point of the fix: `_clearStaleRun` having its own unit
