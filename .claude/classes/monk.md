@@ -885,7 +885,8 @@ files:
     combos (vv_telepathy, below)"
   012_Shikudo_Combo_Echo.lua: "The [SK] combo line -- LIVE (v4.7.456): one line per combo from the strike ledger
     (hits, misses and why, limb damage, afflictions, form:kata); skecho on|off. PvP only since v4.7.473: no line at a
-    numeric target or with the basher on"
+    numeric target or with the basher on. Since v4.7.475: MISS needs a miss line for every strike, else UNSEEN; a dodge
+    counts as a miss; the form is the one the strikes were in, not what GMCP reads at the kata line"
   013_Shikudo_Group_Damage.lua: "Group damage route -- LIVE (v4.7.456): srd
     (Alternative Kill: Shikudo Group Damage Route, above)"
 

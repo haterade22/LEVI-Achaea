@@ -37,6 +37,7 @@ ataxia_saveSettings = function() end
 isTargeted = function(n) return type(n) == "string" and type(target) == "string" and n:lower() == target:lower() end
 ataxia_isClass = function(c) return c == "monk" end
 selectCurrentLine, fg, resetFormat = function() end, function() end, function() end
+bg, replace = function() end, function() end
 
 ataxia = { vitals = {}, settings = {}, afflictions = {} }
 ataxiaTemp = {}
@@ -64,6 +65,7 @@ local function setup(form, affs, opts)
   ataxiaBasher = { enabled = false } -- a shared Lua state: another test file can leave the basher on
   shikudoDmg.state = { breathHeld = {} }
   shikudoEcho.rec = nil
+  shikudoEcho.formAtPrompt, shikudoEcho.stanceAtPrompt, shikudostance = nil, nil, nil
   shikudoLedger.cur = nil
   lb = { Sadey = { hits = { head = opts.head or 0, torso = 0, ["left arm"] = 0, ["right arm"] = 0,
     ["left leg"] = 0, ["right leg"] = 0 } } }
@@ -491,6 +493,148 @@ describe("the [SK] combo line (shikudo/012)", function()
     bashCombo()
     expect(#printed).toBe(0)
     expect(shikudoEcho.recording()).toBeFalse()
+  end)
+
+  -- MISS needs proof (v4.7.475): a strike with no outcome line may have hit.
+  local KICK = "You drive your foot up in a rising kick at the torso of Sadey."
+  local THRUST = "Turning with the motion, you channel the momentum of your previous strike into a thrust at the solar plexus of Sadey with a twisted oaken staff."
+  local PARRIED = "Sadey parries the attack with a deft manoeuvre."
+
+  it("zero hits with no strike settled is a yellow UNSEEN, not a red MISS", function()
+    setup("Oak", {}, { kata = 3 })
+    strike(KICK)
+    strike(THRUST)
+    shikudoEcho.close(3)
+    expect(printed[#printed]).toBe("\n<yellow>[SK] Sadey  UNSEEN 0/2  (2 unseen)  Oak:3")
+  end)
+
+  it("a parry and a quiet strike is UNSEEN: nothing proves the second one missed", function()
+    setup("Oak", {}, { kata = 3 })
+    strike(KICK, PARRIED)
+    strike(THRUST)
+    shikudoEcho.close(3)
+    expect(printed[#printed]).toBe("\n<yellow>[SK] Sadey  UNSEEN 0/2  (parry 1)  (1 unseen)  Oak:3")
+  end)
+
+  it("every strike proven to fail is still a red MISS", function()
+    setup("Oak", {}, { kata = 3 })
+    strike(KICK, PARRIED)
+    strike(THRUST, "You fumble your strike, the attack going wide.")
+    shikudoEcho.close(3)
+    expect(printed[#printed]).toBe("\n<red>[SK] Sadey  MISS 0/2  (fumble 1, parry 1)  Oak:3")
+  end)
+
+  it("a dodge is a miss with its reason (kb/raw/logs/2026-11-03_shikudo-group-alias.txt:11214-11219)", function()
+    setup("Rain", {}, { kata = 12 })
+    target = "Averine"
+    strike("You lash out with a straight kick at the right shoulder of Averine.",
+      "Averine dexterously dances aside, evading your blow.")
+    strike("Falling back into a low crouch, you lash out with a swift strike at the right thigh of Averine.",
+      "As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Averine's right leg.")
+    strike("You spin a full rotation, bringing a twisted oaken staff around in a blur of motion to smash into the right arm of Averine.",
+      "As your blow lands with a crunch, you perceive that you have dealt 9.2% damage to Averine's right arm.")
+    shikudoEcho.close(15)
+    expect(printed[#printed]).toBe("\n<yellow>[SK] Averine  HIT 2/3  (dodge 1)  RL+9.2 RA+9.2  Rain:15")
+  end)
+
+  it("KAI HEAL opens like a strike and is not one (kb/raw/logs/2026-11-01_elmer_shikudo-vs-runewarden_win_2N1HTSWZ.txt:1099)", function()
+    setup("Oak", {}, { kata = 3 })
+    local unresolved = shikudoLedger.unresolved
+    local p587 = TL.patterns(TRIG .. "587_Shikudo_Strike_Start.lua")[1]
+    local row = "You whip your hands through the air, and a red haze formed of your Kai energy forms about you. It disperses suddenly, refreshing you and healing your"
+    expect(TL.matches(p587.pat, p587.type, row)).toBeTrue()
+    shikudoLedger.strike(row)
+    expect(shikudoEcho.recording()).toBeFalse()
+    expect(shikudoLedger.cur == nil).toBeTrue()
+    shikudoEcho.prompt()
+    shikudoLedger.flush()
+    expect(#printed).toBe(0)
+    expect(shikudoLedger.unresolved).toBe(unresolved)
+  end)
+
+  it("a kai heal between two strikes leaves the strike in flight alone", function()
+    setup("Oak", {}, { kata = 3 })
+    strike(KICK)
+    shikudoLedger.strike("You whip your hands through the air, and a red haze formed of your Kai energy forms about you.")
+    shikudoLedger.outcome(DMG)
+    shikudoEcho.close(3)
+    expect(printed[#printed]).toBe("\n<chartreuse>[SK] Sadey  HIT 1/1  LA+9.2  Oak:3")
+  end)
+
+  it("789 hands over the dodge line", function()
+    local matched = false
+    for _, p in ipairs(TL.patterns(TRIG .. "789_Shikudo_Strike_Outcome.lua")) do
+      if TL.matches(p.pat, p.type, "Averine dexterously dances aside, evading your blow.") then matched = true end
+    end
+    expect(matched).toBeTrue()
+  end)
+
+  -- The form label (v4.7.475). The user's screen, 2026-11-03: "Willow:12" for an Oak combo, one row
+  -- above the Willow form line. GMCP named the next form before the lines of its block were read.
+  local OAK_LINE, WILLOW_LINE = TRIG .. "stances/003_Oak_Form.lua", TRIG .. "stances/004_Willow_Form.lua"
+  local HIT = "\n<chartreuse>[SK] Sadey  HIT 1/1  LA+9.2  "
+
+  it("an inline transition: the combo keeps its form, and the next combo has the new one", function()
+    setup("Oak", {}, { kata = 9 })
+    body(OAK_LINE)()
+    shikudoEcho.prompt()
+    ataxia.vitals.form = "Willow"
+    strike(KICK, DMG)
+    shikudoEcho.close(12)
+    expect(printed[#printed]).toBe(HIT .. "Oak:12")
+    body(WILLOW_LINE)()
+    shikudoEcho.prompt()
+    strike(KICK, DMG)
+    shikudoEcho.close(3)
+    expect(printed[#printed]).toBe(HIT .. "Willow:3")
+  end)
+
+  it("a combo that only the prompt closes keeps its form too", function()
+    setup("Oak", {}, { kata = 9 })
+    body(OAK_LINE)()
+    shikudoEcho.prompt()
+    ataxia.vitals.form = "Willow"
+    strike(KICK, DMG)
+    body(WILLOW_LINE)()
+    shikudoEcho.prompt()
+    expect(printed[#printed]).toBe(HIT .. "Oak:9")
+  end)
+
+  it("a transition sent first: the strikes are in the new form, with GMCP behind or ahead", function()
+    setup("Oak", {}, { kata = 9 })
+    body(OAK_LINE)()
+    shikudoEcho.prompt()
+    body(WILLOW_LINE)()
+    strike(KICK, DMG)
+    shikudoEcho.close(3)
+    expect(printed[#printed]).toBe(HIT .. "Willow:3")
+
+    ataxia.vitals.form = "Willow"
+    shikudoEcho.prompt()
+    ataxia.vitals.form = "Oak"
+    body(OAK_LINE)()
+    strike(KICK, DMG)
+    shikudoEcho.close(3)
+    expect(printed[#printed]).toBe(HIT .. "Oak:3")
+  end)
+
+  it("a form change with no form line (a stumble): GMCP wins from the next prompt", function()
+    setup("Oak", {}, { kata = 12 })
+    body(OAK_LINE)()
+    shikudoEcho.prompt()
+    ataxia.vitals.form = "Tykonos"
+    strike(KICK, DMG)
+    shikudoEcho.close(12)
+    expect(printed[#printed]).toBe(HIT .. "Oak:12")
+    shikudoEcho.prompt()
+    strike(KICK, DMG)
+    shikudoEcho.close(3)
+    expect(shikudostance).toBe("oak")
+    expect(printed[#printed]).toBe(HIT .. "Tykonos:3")
+  end)
+
+  it("318 ends the combo and takes the form at every prompt", function()
+    expect(read(TRIG .. "318_Prompt_Trigger.lua"):find("shikudoEcho.prompt()", 1, true) ~= nil).toBeTrue()
   end)
 
   it("796 names the last command that carried KAI", function()

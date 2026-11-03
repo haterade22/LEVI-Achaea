@@ -510,6 +510,13 @@ read `mmp.settings.mapsource`). `service` is an experimental live Crowdmap; `cro
     groups. It records only on a line, never at the boundary; misses are counted (`.unresolved`,
     `.refused`/`.lastRefused`) and echoed under `shikudoLedger.debug`. The duplicate recorder 586 is
     gone, and livestrike (`3rd_person_shikudo/001`) skips once after 576, like its siblings.
+  - **GMCP shows the new form before the lines of its block (v4.7.475, one sample,
+    `kb/raw/live/shikudo-bash_2026-11-03.txt`).** After an inline transition, `ataxia.vitals.form` read the next form one row
+    above the form line, so the `[SK]` line printed `Willow:12` for an Oak combo. A trigger that reads `ataxia.vitals` in the middle of a
+    block can see the state at the END of that block. `shikudostance` is the form lines' own value, but a stumble changes the form with no
+    line we know, so it can go stale. `shikudoEcho` (012) therefore uses a form line since the last prompt, else GMCP's form at the last
+    prompt. **The `[SK]` line says `MISS` only with a miss line for every strike**; zero hits with a strike that has no outcome line is
+    `UNSEEN`.
   - **A strike line is not a hit:** it prints even when parried. `light` strikes and blows a
     Shield of Absorption swallows print no damage line but still land.
   - **Facts the offense must respect** (logs, 2026-10-11): at most three attacks, one a kick; SWEEP

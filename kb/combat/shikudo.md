@@ -182,6 +182,9 @@ Runewarden applied salve to her legs after every flashheel.
 - **Parried:** the strike line prints, then "<T> parries the attack with a deft manoeuvre." No
   damage line, no effect line. **A strike line on its own does not prove a hit.**
 - **Fumbled** (the monk is clumsy): the strike line, then "You fumble your strike, the attack going wide."
+- **Dodged:** the strike line, then "Averine dexterously dances aside, evading your blow." No damage line, no effect line
+  (CONFIRMED, one sample: `kb/raw/logs/2026-11-03_shikudo-group-alias.txt:11215`). Other dodge wordings may exist. The ledger reads
+  this one since v4.7.475.
 - **Absorbed:** against a Shield of Absorption the damage line can be missing while the effect
   line and the affliction still land. The victim sees "Your shield completely absorbs the damage."
 - **Light** strikes print no damage line by design (above).
@@ -191,6 +194,13 @@ Runewarden applied salve to her legs after every flashheel.
   FceAmb0o:2411-2415, c.iJVmpL:218-222 and :1821-1827, vNTjvghY:4420-4424 and :5990-5996).
   **Whether a MIND command rebounds off a shield has never been seen.** Both offenses, and vv,
   shatter a shield first either way.
+
+**What the `[SK]` line says about this (`shikudo/012`, v4.7.475).** `HIT` needs a damage, effect or arm line for at least one strike.
+`MISS` needs a miss line for every strike. Zero hits with a strike that has no outcome line prints a yellow `UNSEEN`, because that strike
+may have landed. In the 32 combo lines of the 2026-11-03 group log, one strike had no line we read, and that was the dodge above.
+**KAI HEAL is not a strike:** "You whip your hands through the air, and a red haze formed of your Kai energy forms about you."
+(`kb/raw/logs/2026-11-01_elmer_shikudo-vs-runewarden_win_2N1HTSWZ.txt:1099`, five times in that log) opens with the same words as nervestrike and
+ruku, so trigger 587 fires on it. Until v4.7.475 each kai heal printed a `MISS 0/1` and ended the strike in flight. The ledger now skips it.
 
 ### A strike at a denizen (CONFIRMED, live: `kb/raw/live/shikudo-bash_2026-11-03.txt`)
 
@@ -227,6 +237,12 @@ line fits on one row (log 2's 96-column wrap split it; this user's 119-124 does 
 | Oak | Rising onto the balls of your feet, you prepare to begin the deadly form of the Live Oak. | <M> rises onto the balls of his feet, a look of grim certainty overcoming his face. |
 | Willow | Twirling your staff, you sink into the calm required for the form of Willows Shaken by the Wind. | <M> twirls his staff, a look of serene calm overcoming him. |
 | Gaital | You let your eyes fall closed and instinct guide you as you flow into the form of Gaital. | The eyes of <M> fall closed, a look of tranquility coming over him. |
+
+**GMCP shows the new form before the block's lines (CONFIRMED, one sample: `kb/raw/live/shikudo-bash_2026-11-03.txt`).** After an inline
+transition, `ataxia.vitals.form` read Willow at the kata line of an Oak combo, one row above the Willow form line. So a trigger that reads
+the form in the middle of a block can see the form at the END of that block. The `[SK]` label keeps its own value for this reason: a form
+line since the last prompt, else the form GMCP gave at the last prompt. It does not use `shikudostance` alone, because a stumble changes the
+form with no line we know.
 
 **What each form gives** (wiki, Shikudo): **Tykonos** diverts damage more easily, and a chain there
 never stumbles. **Willow**: faster strikes and kicks (confirmed above). **Rain**: chains twice as
