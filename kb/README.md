@@ -86,6 +86,9 @@ first time material for them arrives.
 5. Run **`python tools/kb_replay.py`**. It regenerates [mechanics/replay.md](mechanics/replay.md), the test of the lock labels and
    the route rules against every death. CI runs it with `--check` too. Never change a rule in `RULES` to pass it: a rule
    changed after its result is POST-HOC and counts toward no bar. The next kill in a new log is the real test, so read this page after filing one.
+6. Run **`python tools/kb_sim.py --check`**. If it prints STALE, run `python tools/kb_sim.py` (about 12 minutes). It regenerates
+   [sim/forward.md](sim/forward.md). It goes stale when a Serpent log adds a board, or when a clock median moves by 0.01 s. CI runs the check. It
+   needs `lupa`, and it runs on the Lua 5.1 inside it. If `test_kb_sim.py` fails on the gap inputs, copy the new DSTAB numbers from `clocks.md` into `kb_sim.py` and run it again.
 
 The HTML exports are git-ignored. The text files are the evidence. Our own recordings use a separate
 tool: `python tools/fightlog_import.py` copies `<profile>/fightlogs/` into `kb/raw/logs/ours/`. In an `aconfig rounds alias` fight its

@@ -137,6 +137,9 @@ LEVI-Achaea/
 │   ├── test_kb_timing.py      # its tests: `python -B tools/test_kb_timing.py` (in CI)
 │   ├── kb_replay.py           # KB: replay every log through what the victim could see, test lock labels and route rules against the deaths, generate kb/mechanics/replay.md; `--check` in CI, `--gate` prints the bars
 │   ├── test_kb_replay.py      # its tests: `python -B tools/test_kb_replay.py` (in CI)
+│   ├── kb_sim.py              # KB: simulator, first stage. Run logged boards 20 s forward under a strong attacker, write kb/sim/forward.md + .json; `--check` in CI
+│   ├── test_kb_sim.py         # its tests: `python -B tools/test_kb_sim.py` (in CI)
+│   ├── sim/forward.lua        # the simulator engine: pure Lua 5.1, no Mudlet calls; rule tests in src_new/tests/test_sim_forward.lua
 │   └── legacy/                # Retired build tools
 ├── build.sh                   # Build script: ./build.sh [--dry-run] [--convert-only]
 ├── .gitignore                 # Excludes build artifacts, IDE state, caches
