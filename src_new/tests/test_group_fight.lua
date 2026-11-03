@@ -194,6 +194,24 @@ describe("the curing set in a party", function()
       expect(line():find("avoid", 1, true)).toBeNil()
     end)
 
+    it("a defence coming up does not reset what the game refuses", function()
+      fresh({ ct = "Mhaldor" })
+      dofile(LEVI .. "ataxia/deffing/001_Defence_API.lua")
+      ataxiaBasher = { enabled = false }
+      trueDef = function(d) return d end
+      ataxia.defences = {}
+      ataxia.settings.defences.keepup.shi = {}
+      gmcp = { Char = { Defences = { Add = { name = "epitomise" } } } }
+      gotDef()
+      expect(has(sent, "curing priority defence epitomise reset")).toBe(false)
+      gmcp.Char.Defences.Add = { name = "shikudoform" }
+      gotDef()
+      expect(has(sent, "curing priority defence shikudoform reset")).toBe(false)
+      gmcp.Char.Defences.Add = { name = "vitality" }
+      gotDef()
+      expect(has(sent, "curing priority defence vitality reset")).toBeTrue()
+    end)
+
     it("other defences still take a priority", function()
       fresh({})
       expect(ataxia_defenceTakesPriority("vitality")).toBeTrue()

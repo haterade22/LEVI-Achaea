@@ -14,12 +14,12 @@ This page compares the victim's decisions on real boards, 20 s forward, against 
 ## Result
 
 **Sanity: PASS.**
-- **One shield now, against holding equilibrium: CONDITIONAL.** Closure rate: the first choice is better in 27 of 60 and worse in 1 (-0.236 to +0.030 of the rate). Worse with: shield allowed while paralysed. Softlock seconds, UNSETTLED: no clear result: better in 0 of 64, worse in 5 (-0.494 to +1.441 s).
-- **A shield whenever equilibrium is up, against holding equilibrium: ROBUST.** Closure rate: the first choice is better in 37 of 61 comparisons, and worse in none (-0.379 to +0.000 of the rate). Softlock seconds, CONDITIONAL: the first choice is better in 49 of 64 and worse in 2 (-4.527 to +0.609 s). Worse with: strongest: gap 1.545, impatience at +2 and every 9.31.
-- **Tree held for a softlock, against tree at once: ROBUST.** Closure rate: the second choice is better in 46 of 91 comparisons, and worse in none (-0.011 to +0.124 of the rate). Softlock seconds, UNSETTLED: no clear result: better in 0 of 96, worse in 0 (-0.269 to +0.069 s).
-- **Asthma at the top of the eat order, against the default order: ROBUST.** Closure rate: the first choice is better in 90 of 96 comparisons, and worse in none (-0.401 to +0.012 of the rate). Softlock seconds, CONDITIONAL: the first choice is better in 63 of 96 and worse in 2 (-3.045 to +0.980 s). Worse with: no timed impatience.
-- **Asthma at the top, against the package's Serpent rules, asthma wins the tie: ROBUST.** Closure rate: the first choice is better in 89 of 96 comparisons, and worse in none (-0.337 to -0.008 of the rate). Softlock seconds, CONDITIONAL: the first choice is better in 64 of 96 and worse in 2 (-2.019 to +0.637 s). Worse with: no timed impatience.
-- **Asthma at the top, against the package's Serpent rules, paralysis wins the tie: ROBUST.** Closure rate: the first choice is better in 89 of 96 comparisons, and worse in none (-0.380 to +0.013 of the rate). Softlock seconds, CONDITIONAL: the first choice is better in 65 of 96 and worse in 2 (-2.871 to +0.887 s). Worse with: no timed impatience.
+- **One shield now, against holding equilibrium: CONDITIONAL.** Closure rate: the first choice is better in 27 of 60 and worse in 1 (-0.236 to +0.030 of the rate). Worse with: shield allowed while paralysed. Softlock seconds, UNSETTLED: no clear result: better in 0 of 64, worse in 4 (-0.491 to +1.445 s).
+- **A shield whenever equilibrium is up, against holding equilibrium: ROBUST.** Closure rate: the first choice is better in 37 of 61 comparisons, and worse in none (-0.379 to +0.000 of the rate). Softlock seconds, CONDITIONAL: the first choice is better in 49 of 64 and worse in 2 (-4.531 to +0.609 s). Worse with: strongest: gap 1.545, impatience at +2 and every 9.31.
+- **Tree held for a softlock, against tree at once: ROBUST.** Closure rate: the second choice is better in 46 of 91 comparisons, and worse in none (-0.011 to +0.124 of the rate). Softlock seconds, UNSETTLED: no clear result: better in 0 of 96, worse in 0 (-0.274 to +0.070 s).
+- **Asthma at the top of the eat order, against the default order: ROBUST.** Closure rate: the first choice is better in 90 of 96 comparisons, and worse in none (-0.401 to +0.012 of the rate). Softlock seconds, CONDITIONAL: the first choice is better in 63 of 96 and worse in 2 (-3.049 to +0.980 s). Worse with: no timed impatience.
+- **Asthma at the top, against the package's Serpent rules, asthma wins the tie: ROBUST.** Closure rate: the first choice is better in 89 of 96 comparisons, and worse in none (-0.337 to -0.008 of the rate). Softlock seconds, CONDITIONAL: the first choice is better in 64 of 96 and worse in 2 (-2.031 to +0.637 s). Worse with: no timed impatience.
+- **Asthma at the top, against the package's Serpent rules, paralysis wins the tie: ROBUST.** Closure rate: the first choice is better in 89 of 96 comparisons, and worse in none (-0.380 to +0.013 of the rate). Softlock seconds, CONDITIONAL: the first choice is better in 65 of 96 and worse in 2 (-2.876 to +0.887 s). Worse with: no timed impatience.
 
 A negative number means the first choice is safer. Each comparison uses the same seeds for both choices.
 
@@ -54,13 +54,13 @@ A negative number means the first choice is safer. Each comparison uses the same
 
 | Row | `true`, summed over fitness boards | Softlock, summed over all boards | Asthma off in 5 s, our default order | Asthma off in 5 s, asthma first |
 |---|---|---|---|---|
-| base | 6.93 | 34.92 | 0.16 | 9.71 |
+| base | 6.93 | 34.92 | 0.17 | 9.71 |
 | gap 1.545 (min), no noise | 7.00 | 35.00 | 0.16 | 9.65 |
 | gap 1.73 (p10) | 6.97 | 34.99 | 0.17 | 9.69 |
-| gap 2.33 (median + 0.5) | 6.72 | 24.87 | 0.46 | 9.77 |
+| gap 2.33 (median + 0.5) | 6.72 | 24.89 | 0.46 | 9.77 |
 | gap 3.10 (p90) | 3.31 | 7.26 | 0.93 | 9.84 |
 | no timed impatience | 4.84 | 34.93 | 0.17 | 9.71 |
-| impatience every 9.31 | 9.97 | 35.00 | 0.19 | 9.71 |
+| impatience every 9.31 | 9.96 | 35.00 | 0.19 | 9.71 |
 | strongest: gap 1.545, impatience at +2 and every 9.31 | 10.00 | 35.00 | 0.01 | 9.52 |
 | phi 0.33 (random inside the herb) | 6.95 | 34.96 | 0.10 | 9.69 |
 | phi 1.0 (priority always wins) | 6.89 | 34.92 | 0.28 | 9.71 |
@@ -81,10 +81,10 @@ A sim number above the log is expected: this attacker never misses and never sto
 
 | Equilibrium | Tree | Eat order | Closure rate | Softlock s | Asthma off in 5 s |
 |---|---|---|---|---|---|
-| always | now | asthma | 47% | 1.56 | 97% |
+| always | now | asthma | 47% | 1.55 | 97% |
 | always | hold | asthma | 51% | 1.53 | 97% |
 | once | now | asthma | 52% | 1.74 | 97% |
-| hold | now | asthma | 60% | 2.08 | 97% |
+| hold | now | asthma | 60% | 2.07 | 97% |
 | once | hold | asthma | 61% | 1.69 | 97% |
 | always | now | package | 64% | 1.62 | 60% |
 | always | now | packageLate | 66% | 1.42 | 5% |
@@ -102,9 +102,9 @@ A sim number above the log is expected: this attacker never misses and never sto
 | once | hold | package | 70% | 2.78 | 60% |
 | always | hold | default | 70% | 1.41 | 0% |
 | hold | hold | package | 70% | 2.95 | 60% |
-| hold | hold | packageLate | 70% | 3.89 | 2% |
-| hold | hold | default | 70% | 3.93 | 0% |
-| once | hold | default | 70% | 3.95 | 0% |
+| hold | hold | packageLate | 70% | 3.88 | 2% |
+| hold | hold | default | 70% | 3.92 | 0% |
+| once | hold | default | 70% | 3.96 | 0% |
 
 **At `gap 3.10 (p90)`, the gap row nearest to the logs,** over the 10 fitness boards:
 
@@ -149,21 +149,21 @@ The mean difference over the 10 fitness boards, first choice minus second. The r
 | Input | One shield now, against holding equilibrium | A shield whenever equilibrium is up, against holding equilibrium | Tree held for a softlock, against tree at once | Asthma at the top of the eat order, against the default order | Asthma at the top, against the package's Serpent rules, asthma wins the tie | Asthma at the top, against the package's Serpent rules, paralysis wins the tie |
 |---|---|---|---|---|---|---|
 | base | -0.076 to -0.000 | -0.148 to -0.001 | +0.007 to +0.090 | -0.203 to -0.039 | -0.175 to -0.039 | -0.189 to -0.039 |
-| gap 1.545 (min), no noise | -0.022 to -0.000 | -0.030 to +0.000 | +0.000 to +0.042 | -0.114 to -0.050 | -0.116 to -0.050 | -0.116 to -0.050 |
+| gap 1.545 (min), no noise | -0.022 to -0.000 | -0.030 to +0.000 | +0.000 to +0.042 | -0.115 to -0.051 | -0.117 to -0.051 | -0.117 to -0.051 |
 | gap 1.73 (p10) | -0.061 to +0.000 | -0.101 to +0.000 | +0.003 to +0.087 | -0.173 to -0.026 | -0.166 to -0.026 | -0.171 to -0.026 |
 | gap 2.33 (median + 0.5) | -0.134 to -0.087 | -0.379 to -0.145 | -0.011 to +0.065 | -0.401 to -0.131 | -0.337 to -0.162 | -0.380 to -0.093 |
 | gap 3.10 (p90) | -0.236 to -0.007 | -0.273 to -0.008 | -0.006 to +0.000 | -0.254 to +0.012 | -0.185 to -0.013 | -0.249 to +0.013 |
-| no timed impatience | -0.056 to -0.002 | -0.101 to -0.003 | +0.016 to +0.063 | -0.135 to -0.037 | -0.105 to -0.037 | -0.117 to -0.037 |
-| impatience every 9.31 | -0.052 to +0.000 | -0.189 to -0.008 | +0.003 to +0.100 | -0.317 to -0.136 | -0.228 to -0.136 | -0.303 to -0.136 |
+| no timed impatience | -0.056 to -0.002 | -0.101 to -0.003 | +0.016 to +0.064 | -0.135 to -0.036 | -0.105 to -0.036 | -0.117 to -0.036 |
+| impatience every 9.31 | -0.053 to +0.000 | -0.190 to -0.008 | +0.004 to +0.099 | -0.317 to -0.135 | -0.228 to -0.135 | -0.303 to -0.135 |
 | strongest: gap 1.545, impatience at +2 and every 9.31 | -0.031 to +0.000 | -0.047 to +0.000 | +0.000 to +0.039 | -0.127 to -0.054 | -0.125 to -0.054 | -0.127 to -0.054 |
-| phi 0.33 (random inside the herb) | -0.079 to -0.000 | -0.194 to -0.000 | +0.005 to +0.079 | -0.244 to -0.044 | -0.225 to -0.044 | -0.225 to -0.044 |
+| phi 0.33 (random inside the herb) | -0.078 to -0.000 | -0.193 to -0.000 | +0.005 to +0.078 | -0.244 to -0.044 | -0.224 to -0.044 | -0.225 to -0.044 |
 | phi 1.0 (priority always wins) | -0.067 to -0.000 | -0.114 to -0.001 | +0.011 to +0.124 | -0.112 to -0.008 | -0.112 to -0.008 | -0.127 to -0.008 |
-| shield cost 2.89 (ours) | -0.072 to +0.000 | -0.137 to -0.019 | +0.008 to +0.095 | -0.164 to -0.039 | -0.166 to -0.039 | -0.170 to -0.039 |
-| shield cost 4.00 (Claes) | -0.082 to -0.000 | -0.150 to -0.001 | +0.006 to +0.089 | -0.207 to -0.038 | -0.176 to -0.038 | -0.191 to -0.038 |
-| lockout 9.06 | -0.077 to -0.000 | -0.149 to -0.001 | +0.007 to +0.091 | -0.199 to -0.038 | -0.176 to -0.038 | -0.184 to -0.038 |
+| shield cost 2.89 (ours) | -0.072 to +0.000 | -0.138 to -0.019 | +0.008 to +0.095 | -0.163 to -0.038 | -0.165 to -0.038 | -0.169 to -0.038 |
+| shield cost 4.00 (Claes) | -0.082 to -0.000 | -0.151 to -0.001 | +0.006 to +0.089 | -0.207 to -0.038 | -0.176 to -0.038 | -0.191 to -0.038 |
+| lockout 9.06 | -0.076 to -0.000 | -0.149 to -0.001 | +0.007 to +0.091 | -0.199 to -0.038 | -0.176 to -0.038 | -0.184 to -0.038 |
 | lockout 9.97 | -0.073 to +0.000 | -0.141 to -0.000 | +0.006 to +0.081 | -0.196 to -0.042 | -0.162 to -0.042 | -0.180 to -0.042 |
-| shield allowed while paralysed | -0.006 to +0.030 | -0.292 to -0.000 | -0.003 to +0.061 | -0.335 to -0.040 | -0.152 to -0.028 | -0.307 to -0.037 |
-| FLAY gap 1.64 (median) | -0.051 to +0.000 | -0.097 to +0.000 | +0.008 to +0.083 | -0.176 to -0.043 | -0.157 to -0.043 | -0.173 to -0.043 |
+| shield allowed while paralysed | -0.006 to +0.030 | -0.292 to -0.000 | -0.003 to +0.060 | -0.335 to -0.040 | -0.152 to -0.029 | -0.307 to -0.037 |
+| FLAY gap 1.64 (median) | -0.050 to +0.000 | -0.097 to +0.000 | +0.008 to +0.083 | -0.176 to -0.043 | -0.157 to -0.043 | -0.173 to -0.043 |
 
 ## The boards
 

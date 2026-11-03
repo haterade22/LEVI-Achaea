@@ -15,8 +15,8 @@ packageName: ''
 ]]--
 
 -- The game refuses a curing priority for these: "You may not set a priority for the 'avoid' defence."
--- (47 times in the 2026-11-03 group fight, 1 each for the other two). SSC does not keep them.
-local NO_PRIORITY = { avoid = true, shikudoform = true, starburst = true }
+-- In our logs: avoid 191, shikudoform 4, epitomise 2, compoundmask 1, starburst 1. SSC does not keep them.
+local NO_PRIORITY = { avoid = true, shikudoform = true, epitomise = true, compoundmask = true, starburst = true }
 function ataxia_defenceTakesPriority(def)
 	return not NO_PRIORITY[def]
 end

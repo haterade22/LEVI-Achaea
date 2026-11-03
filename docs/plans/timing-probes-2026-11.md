@@ -113,6 +113,37 @@ No log of ours is newer than v4.7.462.
 1. **Control fight.** One normal fight as Shikudo, at least 2 minutes, with `fightlog on <partner>`.
 2. **Bash log.** Run `fightlog on`, bash for about 5 minutes, and then run `fightlog off`.
 
+## G. The tie in `astWear` (`kb/CONFLICTS.md` #58)
+
+Against a Serpent, with asthma and weariness up, `astWear` sets asthma to priority 3. Paralysis is also 3, so the server's tie order decides. This needs you and a partner in the game: the package cannot test it alone.
+In the simulator, at the attack gap nearest the logs, closure is 26% if asthma wins the tie, 32% if paralysis wins, and 8% with asthma at the top. **Nothing changes live until you have this result and say so.**
+
+**Caution:** do this in a spar only. `curing priority` writes into your active curing set. Do step 6 before you fight for real.
+
+1. Find a partner who can give asthma and paralysis together. A Serpent is best (`dstab` with kalmia and curare).
+2. Start a recording:
+
+```
+fightlog on <partner>
+```
+
+3. Set the tie, the same way the rule does it:
+
+```
+lua ataxia_setAffPrio("asthma", 3)
+```
+
+4. Ask the partner to give asthma and paralysis in one hit, with your eat balance up.
+5. Note which you eat first: kelp or aurum for asthma, bloodroot or magnesium for paralysis. Repeat at least 5 times.
+6. Put the priority back, and stop the recording:
+
+```
+lua ataxia_restorePrio("asthma")
+fightlog off
+```
+
+**This decides:** #58, and whether asthma at the top is worth a live change.
+
 ## When you finish
 
 1. Run this command:

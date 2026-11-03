@@ -37,7 +37,7 @@ These bars are copied here word for word. They were written before this tool's f
 
 | Bar | Numbers | Verdict |
 |---|---|---|
-| G1 | 2 counted, bar 4. Denominator: 8 no-lock-alert deaths, of which 2 are out of scope. Counted: `s98kPGv6` airlord.pressure 53.80 s; `CxxKSMq` runewarden.2h 10.79 s | FAIL |
+| G1 | 2 counted, bar 4. Denominator: 9 no-lock-alert deaths, of which 3 are out of scope. Counted: `s98kPGv6` airlord.pressure 53.80 s; `CxxKSMq` runewarden.2h 10.79 s | FAIL |
 | G2 | 2 attackers, bar 3: Blonk, Talo | FAIL |
 | G3 | 1 of 2 counted warnings had a named exit open at the first prompt: `s98kPGv6`: none; `CxxKSMq`: apply restoration to a leg | FAIL |
 | G4 | Softlock baseline 0.647 (11 false, 6 warned). pariah.latency UNTESTED; pariah.scourge UNTESTED; airlord.pressure FAIL 0.75 (3 false, 1 warned); runewarden.2h PASS 0.00 (0 false, 1 warned); blademaster.legs UNTESTED; sentinel.tripimpale PASS 0.00 (0 false, 1 warned); generic.limb PASS no alarm (0 false, 0 warned) | FAIL |
@@ -55,7 +55,7 @@ These bars are copied here word for word. They were written before this tool's f
 - **That count overstates what the rules saw.** If the rule that warned must match the kill: 5 of 6, attackers Alyzar, Blonk, Talo. On `4c_SeyaA` the warning is pariah.latency, but the kill was pariah.scourge, whose own rule warned 2.95 s. If its chain must also still be on within 5 s of death: 3 of 6 (`s98kPGv6`, `CxxKSMq`, `OwkA-G99`). A chain that went off earlier counts only because the metric's 15 s window reaches back to it.
 - **The first prompt is a hard moment for G3.** Soonest an exit was open or back, per death, in seconds after the chain's first prompt: `s98kPGv6` 0.08, `4c_SeyaA` 0.80, `Vr.NkCGD` 0.36, `WKuEakBZ` 0.21, `CxxKSMq` 0.00, `OwkA-G99` 0.00. foundations.md calls a margin under 0.5 s unresolved. The bar reads the first prompt as written.
 - **G4 compares unlike counts.** A rule's fraction leaves out false alarms in logs where the logger died, and the softlock baseline keeps them: 5 of its 11 are in fatal logs (`Sentinel` 842, `Sentinel` 2026, `t54WWU6b` 353, `t54WWU6b` 2101, `ours/112717_Tabethys` 9778). That favours the rules. The bar allows it, so the verdict above stands. With both sides on the same count, the baseline over survived logs is 6 / (6 + 6) = 0.50, and the rules with those false alarms added are: pariah.latency 2/5 = 0.40; pariah.scourge 2/4 = 0.50; airlord.pressure 3/4 = 0.75; runewarden.2h 1/2 = 0.50; blademaster.legs 3/4 = 0.75; sentinel.tripimpale 3/4 = 0.75.
-- **A rule with no skill.** An alarm at the fight's first `Health lost` row warns on every death and has one false alarm per survived log: 24 / 38 = 0.632 over all 38 logs (16 / 29 = 0.552 on client logs), against the softlock baseline 0.647. So it would clear G1, G2 and G4. Read a later PASS on those bars beside the table below.
+- **A rule with no skill.** An alarm at the fight's first `Health lost` row warns on every death and has one false alarm per survived log: 25 / 40 = 0.625 over all 40 logs (16 / 29 = 0.552 on client logs), against the softlock baseline 0.647. So it would clear G1, G2 and G4. Read a later PASS on those bars beside the table below.
 - **5 s is easy to clear by chance.** The last column places each of a log's chains uniformly in its fight and reads them with this page's metric. That expects 2.5 of 6 deaths warned, and 0.97 of the 2 counted. Fights escalate toward the end, so uniform placement is only a rough floor.
 
 | Log | Attacker | Fight started, lead s | Longest rule warning s | Share of the fight | Chance of 5 s or more |
@@ -80,8 +80,8 @@ A board is a logger's belief. A client's figure is its LOWEST measure with n >= 
 | Leviticus | Sentinel | 511 | 45 of 45 | 43 of 43 | 83 of 83 | 55 of 55 | 100.0% | in the gate |
 | Mystor | EveP2TVe, FceAmb0o, c.iJVmpL, mystor/LcJC-rJ5, t54WWU6b, vNTjvghY | 4836 | 282 of 282 | 243 of 243 | 286 of 286 | 108 of 108 | 100.0% | in the gate |
 | Nikita | L8LSw7xD, X8pRorzR, kAQnlFAW | 2077 | 193 of 193 | 185 of 185 | - | - | 100.0% | in the gate |
-| Ours, client log | shikudo-group-alias, shikudo-group-mhaldor | 4382 | - | - | - | - | - | too few to judge |
-| Ours, recorder | ours/073547_Tabethys, ours/080944_Lauryyn, ours/081009_Froedine, ours/081532_Tabethys, ours/112717_Tabethys, ours/122916_Antoninus, ours/131934_Titonus, ours/135412_Tabethys, ours/201153_Tabethys | 13213 | 28 of 28 | 26 of 26 | - | - | 100.0% | in the gate |
+| Ours, client log | shikudo-group-alias, shikudo-group-alias-2, shikudo-group-mhaldor | 6262 | 5 of 5 | 5 of 5 | - | - | - | too few to judge |
+| Ours, recorder | ours/073547_Tabethys, ours/080944_Lauryyn, ours/081009_Froedine, ours/081532_Tabethys, ours/102138_Tabethys, ours/102828_Harkon, ours/112717_Tabethys, ours/122916_Antoninus, ours/131934_Titonus, ours/135412_Tabethys, ours/201153_Tabethys | 17138 | 33 of 33 | 33 of 33 | - | - | 100.0% | in the gate |
 | Shikudo attacker (unnamed) | attacker | 376 | 5 of 5 | 27 of 27 | - | - | 100.0% | in the gate |
 
 **No echo of their own lock:** Claes, Nikita and our recorder. Nikita's client prints a label on only 2 prompts, `TR/Hardlock(touch tree)` (`kAQnlFAW` row 1249, `X8pRorzR` row 363), too few to compare. Claes's `[VLOCK, ...]` rows are his tracker of the TARGET: 5 rows, and his own board is softlocked at 0 of them (`Vr.NkCGD` row 654 prints `[VLOCK, diz, clum[75], ...]` above his own board `[myc AST haem SCYT fls]`). So they test nothing here.
@@ -96,7 +96,7 @@ Disagreeing rows: Claes: WO7tC3kL:2826 paralysis; Earth Lord (unnamed): JDvzR7j7
 
 Found by the game's own line, `You have been slain by`. A death has a lock alert if the softlock test (asthma + anorexia + slickness or bloodfire, `ataxia_promptLocks` in `003_Lock_breakers.lua`) held at any time in the last 60 s. Every client log ends in its death packet with no prompt after it, so the death's time is the LAST prompt before the death row, and every warning here is a floor.
 
-**14 deaths: 6 with a lock alert, 8 with none.** 2 are out of scope and stay in the counts. On the logs of 2026-11-01 the earlier work said 13, 6 and 7. The difference is one death: our own recording `ours/112717_Tabethys`, which that count did not read. Its last softlock was 70.7 s before death, outside the 60 s window.
+**15 deaths: 6 with a lock alert, 9 with none.** 3 are out of scope and stay in the counts. On the logs of 2026-11-01 the earlier work said 13, 6 and 7. The difference is one death: our own recording `ours/112717_Tabethys`, which that count did not read. Its last softlock was 70.7 s before death, outside the 60 s window.
 
 | Log | Death row | Attacker | Class shown, first row | Alert | Last softlock, s before death | Scope |
 |---|---|---|---|---|---|---|
@@ -114,6 +114,7 @@ Found by the game's own line, `You have been slain by`. A death has a lock alert
 | OwkA-G99 | 3317 | Alyzar | Blademaster (row 47) | none | - | in scope |
 | JDvzR7j7 | 3201 | a patrolling Arcadian royal guard | Vothaec: Sentinel | none | - | killed by a denizen (guards), so no player's route |
 | ours/112717_Tabethys | 12842 | Crixos | Runewarden (row 741) | none | 70.7 | our own recording of a group fight, with no route (foundations.md, Limits) |
+| ours/102138_Tabethys | 9312 | Akri | Depthswalker (row 8748) | none | - | our own recording of a group fight, with no route (foundations.md, Limits) |
 
 ## Step 3: the baselines
 
@@ -159,10 +160,10 @@ These are data in `tools/kb_replay.py` (`RULES`), written from the tells in `doc
 
 | Rule | Deaths warned | Warning s | False, survived fights | False / (false + warned) | G4 | Tested on (class fought, logger lived) | False, before a later death (not in the bar) | Open |
 |---|---|---|---|---|---|---|---|---|
-| pariah.latency | 3 | `4c_SeyaA` 6.78, `Vr.NkCGD` 13.38, `WKuEakBZ` 13.45 | 0 | 0.00 | UNTESTED | `ours/081532_Tabethys` | 2 | 0 |
-| pariah.scourge | 2 | `4c_SeyaA` 2.95, `WKuEakBZ` 3.95 | 0 | 0.00 | UNTESTED | `ours/081532_Tabethys` | 2 | 0 |
+| pariah.latency | 3 | `4c_SeyaA` 6.78, `Vr.NkCGD` 13.38, `WKuEakBZ` 13.45 | 0 | 0.00 | UNTESTED | `ours/081532_Tabethys`, `ours/102828_Harkon` | 2 | 0 |
+| pariah.scourge | 2 | `4c_SeyaA` 2.95, `WKuEakBZ` 3.95 | 0 | 0.00 | UNTESTED | `ours/081532_Tabethys`, `ours/102828_Harkon` | 2 | 0 |
 | airlord.pressure | 1 | `s98kPGv6` 53.80 | 3 | 0.75 | FAIL | `3ys7NuHA` | 0 | 0 |
-| runewarden.2h | 1 | `CxxKSMq` 10.79 | 0 | 0.00 | PASS | `attacker`, `J7Xnr_Jg`, `2N1HTSWZ`, `ours/080944_Lauryyn`, `ours/081009_Froedine`, `ours/081532_Tabethys` | 1 | 0 |
+| runewarden.2h | 1 | `CxxKSMq` 10.79 | 0 | 0.00 | PASS | `attacker`, `J7Xnr_Jg`, `2N1HTSWZ`, `ours/080944_Lauryyn`, `ours/081009_Froedine`, `ours/081532_Tabethys`, `ours/102828_Harkon` | 1 | 0 |
 | blademaster.legs | 1 | `OwkA-G99` 18.41 | 0 | 0.00 | UNTESTED | none | 3 | 0 |
 | sentinel.tripimpale | 1 | `Sentinel` 8.52 | 0 | 0.00 | PASS | `uW_VbgR` | 3 | 0 |
 | generic.limb | 0 | - | 0 | no alarm | PASS | `FceAmb0o`, `c.iJVmpL`, `vNTjvghY`, `attacker`, `WO7tC3kL`, `KtdftABt`, `uW_VbgR` | 0 | 0 |
@@ -252,6 +253,7 @@ One row per rule that warned. The exits are as they stood at the chain's first p
 | OwkA-G99 | Alyzar | Blademaster (row 47) | none | in scope | blademaster.legs (UNTESTED): one leg at 60% or more and the other at 50% or more | 18.41 | apply restoration to a leg (salve): open; stand (balance): n/a; leave the room (move): shut by paralysis | apply restoration to a leg | 2940 |
 | JDvzR7j7 | a patrolling Arcadian royal guard | Vothaec: Sentinel | none | killed by a denizen (guards), so no player's route | no rule warned | - | - | - | 3201 |
 | ours/112717_Tabethys | Crixos | Runewarden (row 741) | none | our own recording of a group fight, with no route (foundations.md, Limits) | no rule warned | - | - | - | 12842 |
+| ours/102138_Tabethys | Akri | Depthswalker (row 8748) | none | our own recording of a group fight, with no route (foundations.md, Limits) | no rule warned | - | - | - | 9312 |
 
 ## G5: named exits on the lock deaths
 
@@ -318,7 +320,7 @@ The first run put Elmer out on a literal reading of his echo. If the literal rea
 
 ## Logs read
 
-41 logs. Skipped: `2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt` (prompts with no time in them, so no warning can be measured). `2026-10-27_shikudo-group-mhaldor` is the same fight as `ours/112717_Tabethys`, and `2026-11-03_shikudo-group-alias` holds the three recordings of 2026-11-03 (`kb_timing.SAME_FIGHT`), so they stay out of every count. The ids are the ones [clocks.md](clocks.md) uses.
+44 logs. Skipped: `2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt` (prompts with no time in them, so no warning can be measured). `2026-10-27_shikudo-group-mhaldor` is the same fight as `ours/112717_Tabethys`, and the two `2026-11-03_shikudo-group-alias` logs hold the recordings of 2026-11-03 (`kb_timing.SAME_FIGHT`), so they stay out of every count. The ids are the ones [clocks.md](clocks.md) uses.
 
 | Id | File | Family | Client | Prompts | Result |
 |---|---|---|---|---|---|
@@ -353,6 +355,7 @@ The first run put Elmer out on a literal reading of his echo. If the literal rea
 | OwkA-G99 | 2026-11-01_unknown_earthlord-vs-blademaster_loss_OwkA-G99.txt | earth | Earth Lord (unnamed) | 589 | died |
 | JDvzR7j7 | 2026-11-01_unknown_earthlord-vs-sentinel_loss_JDvzR7j7.txt | earth | Earth Lord (unnamed) | 549 | died |
 | uW_VbgR | 2026-11-01_unknown_earthlord-vs-sentinel_noresult_uW_VbgR.txt | earth | Earth Lord (unnamed) | 93 | no death shown |
+| shikudo-group-alias-2 | 2026-11-03_shikudo-group-alias-2.txt | sentinel | Ours, client log | 1880 | same fight |
 | shikudo-group-alias | 2026-11-03_shikudo-group-alias.txt | sentinel | Ours, client log | 3739 | same fight |
 | ours/201153_Tabethys | 2026-10-12_201153_Tabethys.log | ours | Ours, recorder | 90 | no death shown |
 | ours/112717_Tabethys | 2026-10-27_112717_Tabethys.log | ours | Ours, recorder | 3311 | died |
@@ -363,3 +366,5 @@ The first run put Elmer out on a literal reading of his echo. If the literal rea
 | ours/080944_Lauryyn | 2026-11-03_080944_Lauryyn.log | ours | Ours, recorder | 349 | no death shown |
 | ours/081009_Froedine | 2026-11-03_081009_Froedine.log | ours | Ours, recorder | 1369 | no death shown |
 | ours/081532_Tabethys | 2026-11-03_081532_Tabethys.log | ours | Ours, recorder | 3099 | no death shown |
+| ours/102138_Tabethys | 2026-11-03_102138_Tabethys.log | ours | Ours, recorder | 2051 | died |
+| ours/102828_Harkon | 2026-11-03_102828_Harkon.log | ours | Ours, recorder | 1874 | no death shown |
