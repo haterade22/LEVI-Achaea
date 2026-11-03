@@ -25,6 +25,8 @@ packageName: ''
 --   [SK] FAILED: no staff (staff489282)
 --   [SK] KAI CHOKE -> Crixos
 --
+-- The combo line is PvP only: no record opens at a denizen (onStrike, v4.7.473).
+--
 -- HOW A COMBO IS READ. The strike ledger (010) already follows each strike from its strike line to
 -- the line that settles it, and this file listens to it:
 --   * shikudoLedger.strike (587) opens a record if none is open, and counts the strike.
@@ -77,9 +79,13 @@ function shikudoEcho.recording()
   return shikudoEcho.enabled() and shikudoEcho.rec ~= nil
 end
 
--- shikudoLedger.strike: a strike line (row 1).
+-- shikudoLedger.strike: a strike line (row 1). PvP only (v4.7.473). A denizen hit prints "Damage
+-- dealt: 5988 (physical blunt).", which the ledger does not read, so every strike at a denizen ended
+-- unseen: a red "[SK] 651916  MISS 0/3  (3 unseen)" under three strikes that hit (the user's screen,
+-- 2026-11-03). PvE as gags/001 tells it: a numeric target, or the basher on.
 function shikudoEcho.onStrike()
   if not shikudoEcho.enabled() then return end
+  if type(target) ~= "string" or (ataxiaBasher and ataxiaBasher.enabled) then return end
   local r = open()
   r.strikes = r.strikes + 1
 end

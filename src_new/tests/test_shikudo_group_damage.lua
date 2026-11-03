@@ -61,6 +61,7 @@ local function setup(form, affs, opts)
   tAffs = affs or {}
   haveAff = function(a) return tAffs[a] and true or false end
   combatQueue, reboundHold, tCity = nil, nil, nil
+  ataxiaBasher = { enabled = false } -- a shared Lua state: another test file can leave the basher on
   shikudoDmg.state = { breathHeld = {} }
   shikudoEcho.rec = nil
   shikudoLedger.cur = nil
@@ -460,6 +461,35 @@ describe("the [SK] combo line (shikudo/012)", function()
     strike("You drive your foot up in a rising kick at the torso of Sadey.")
     expect(shikudoEcho.recording()).toBeTrue()
     ataxia.settings.shikudoEcho = false
+    expect(shikudoEcho.recording()).toBeFalse()
+  end)
+
+  -- The user's screen, 2026-11-03: three strikes that hit an Arcadian sentry, then a red
+  -- "[SK] 651916  MISS 0/3  (3 unseen)  Willow:12". The ledger does not read "Damage dealt".
+  local function bashCombo()
+    strike("Lunging forward, you drive the end of a twisted oaken staff viciously into the solar plexus of an Arcadian sentry.",
+      "Damage dealt: 5988 (physical blunt).")
+    expect(shikudoEcho.recording()).toBeFalse()
+    strike("You whip a twisted oaken staff at the side of an Arcadian sentry's neck.",
+      "Damage dealt: 713 (physical blunt).")
+    strike("You drive your foot up in a rising kick at the head of an Arcadian sentry.",
+      "Damage dealt: 748 (physical blunt).")
+    shikudoEcho.close(12)
+  end
+
+  it("prints nothing for a combo at a denizen: a numeric target", function()
+    setup("Oak", {}, { kata = 9 })
+    target = 651916
+    bashCombo()
+    expect(#printed).toBe(0)
+    expect(shikudoEcho.recording()).toBeFalse()
+  end)
+
+  it("prints nothing with the basher on, even at a target with a name", function()
+    setup("Oak", {}, { kata = 9 })
+    ataxiaBasher.enabled = true
+    bashCombo()
+    expect(#printed).toBe(0)
     expect(shikudoEcho.recording()).toBeFalse()
   end)
 

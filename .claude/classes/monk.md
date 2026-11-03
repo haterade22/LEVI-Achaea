@@ -881,7 +881,8 @@ files:
   011_Shikudo_Telepathy.lua: "vv's Telepathy -- LIVE (v4.7.420): shikudo.dispatchMind, MIND rounds between 006's
     combos (vv_telepathy, below)"
   012_Shikudo_Combo_Echo.lua: "The [SK] combo line -- LIVE (v4.7.456): one line per combo from the strike ledger
-    (hits, misses and why, limb damage, afflictions, form:kata); skecho on|off"
+    (hits, misses and why, limb damage, afflictions, form:kata); skecho on|off. PvP only since v4.7.473: no line at a
+    numeric target or with the basher on"
   013_Shikudo_Group_Damage.lua: "Group damage route -- LIVE (v4.7.456): srd
     (Alternative Kill: Shikudo Group Damage Route, above)"
 

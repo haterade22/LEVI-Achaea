@@ -1,0 +1,17 @@
+One Shikudo combo at a denizen, 2026-11-03. The user's screenshot, typed out verbatim. The notes marked # are ours.
+
+# Above these rows: our balance echo, left out. "[SK] ..." is our echo (shikudo/012). "[Levi]: WILLOW FORM" is our trigger
+# stances/004, which replaces the game's "Twirling your staff, you sink into the calm required for the form of Willows Shaken by
+# the Wind." The strikes are the bash rotation's Oak combo: livestrike, nervestrike, risingkick head, transition willow.
+Lunging forward, you drive the end of a twisted oaken staff viciously into the solar plexus of an Arcadian sentry.
+An Arcadian sentry's form begins to atrophy as your attack kindles ethereal mist to consign him to only memory.
+Damage dealt: 5988 (physical blunt).
+You whip a twisted oaken staff at the side of an Arcadian sentry's neck.
+Damage dealt: 713 (physical blunt).
+You drive your foot up in a rising kick at the head of an Arcadian sentry.
+Damage dealt: 748 (physical blunt).
+Balance used: 1.8s.
+You are now maintaining a kata chain of 12 actions.
+[SK] 651916  MISS 0/3  (3 unseen)  Willow:12
+[Levi]: WILLOW FORM
+10:03:13:877 [17449] [98] |/(651916|28%)|[]
