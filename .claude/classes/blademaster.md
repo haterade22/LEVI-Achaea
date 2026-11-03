@@ -462,6 +462,10 @@ dodge:
   skill: TwoArts
   effect: "Dexterity-based dodging"
   removed_by: [paralysis, prone, web]
+
+mindnet:
+  effect: "Prints <Name> has entered/left the area for each player who crosses the net"
+  notes: "Called to the party for non-citizens in any area (v4.7.472, kb/mechanics/mindnet.md); `raid mindnet` switches the call off"
 ```
 
 ## Passive Cures

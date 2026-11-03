@@ -308,6 +308,7 @@ function ataxia_loadSettings()
 	ataxia.settings.highlighting = ataxia.settings.highlighting or {}
 	ataxia.settings.prompt = ataxia.settings.prompt or {}
 	ataxia.settings.raid = ataxia.settings.raid or {}
+	if ataxia.settings.raid.mindnet == nil then ataxia.settings.raid.mindnet = true end
 	ataxia.settings.fishing = ataxia.settings.fishing or {}
 	ataxia.settings.weapons = ataxia.settings.weapons or {}
 	ataxia.settings.user = ataxia.settings.user or {}

@@ -936,6 +936,8 @@ Catalogs artefacts, talismans, promo items, and special equipment. Cross-referen
 - Threat queries: `an marks`, `an army`, `an dauntless`, `an threats` (all support optional city filter)
 - Player notes: `an noteadd/noteshow/noteremove`
 
+**Mindnet party calls (v4.7.472, `telepathy/001_Mindnet.lua`).** `ataxia_mindnetTellParty(name, area)` (`013_Raid_Mode_Things`) decides the `pt <name> IN!` line. `raid mindnet` off stops it. Raid on and Annwyn call everyone, and Mhaldor calls its city enemies, as before. Otherwise, in any area and only in a party, it calls a player who is not us, is not on `ataxiaTemp.allies`, and whose `ataxiaNDB_getCitizenship` differs from our city (`Unknown` and `Rogues` differ). The city enemy list is not the filter, because in the fight that prompted this it missed most of the other side. **`ataxia.channels` (GMCP `Comm.Channel.List`) gives both inputs: `party` is listed while in a party, and the caption of `ct` is our city's name.** `ataxia_raidMode` is the wrong reader for this setting, because it returns false with raid off. `raid.mindnet` is seeded true at load, because `ataxia_raidToggle` flips nil to true. Rules and sources: `kb/mechanics/mindnet.md`. Test: `test_mindnet_report.lua`.
+
 ### Setup Wizard (leviSetup)
 In-game configuration wizard accessed via `ataxia setup`.
 
