@@ -14,6 +14,7 @@ shows is written up in a curated page that cites it.
 | 2026-10-11_mystor_shikudo-vs-infernal-dwc_win_c.iJVmpL.txt | Mystor (Shikudo) beats Agathon, Infernal DSL; finished with MIND SCYTHE | Mystor's (the Shikudo); he ran MIND SAPIENCE on the opponent in five of six | [combat/shikudo.md](../../combat/shikudo.md) |
 | 2026-10-11_mystor_shikudo-vs-shaman_loss_t54WWU6b.txt | Mystor (Shikudo) loses to Agathon as a Shaman (curse, jinx, invoke), truelocked; no Sapience in this log | Mystor's (the Shikudo); he ran MIND SAPIENCE on the opponent in five of six | [combat/shikudo.md](../../combat/shikudo.md) |
 | 2026-10-11_mystor_shikudo-vs-infernal-dwc_win_vNTjvghY.txt | Mystor (Shikudo) beats Agathon, Infernal DSL; finished with KAI CHOKE | Mystor's (the Shikudo); he ran MIND SAPIENCE on the opponent in five of six | [combat/shikudo.md](../../combat/shikudo.md) |
+| 2026-11-03_shikudo-group-alias.txt | Our first alias-round fight with people attacking: a party led by Tabethys, 07:56-08:22, with no death for us. It holds the three recordings `ours/2026-11-03_080944_Lauryyn`, `081009_Froedine` and `081532_Tabethys`, so `kb_timing.SAME_FIGHT` keeps it out of every count. It holds other players' tells; the user chose to file it | Ours, screen log, with the echoes that a recording leaves out | [mechanics/balance-and-queueing.md](../../mechanics/balance-and-queueing.md), [combat/shikudo.md](../../combat/shikudo.md) |
 | 2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt | Tabethys (Magi) leads a group (Agathon, Ryzant, Valkael, Naxx) on the World Tree and kills Kalys, a Serpent, with STORMHAMMER at about 50% health: magma, dehydrate, dehydrate, then two stormhammers | Tabethys's (the Magi) | [.claude/classes/magi.md](../../../.claude/classes/magi.md) ("In play"), `kb/CONFLICTS.md` Resolved 2026-10-19, #37 and #38 |
 
 ## How they were made
@@ -154,10 +155,10 @@ Each row is `<HH:MM:SS.mmm> <kind> <text>`, so unlike a client log every row has
 Lines the package echoes itself (`(LEVI): ...`) are not recorded, because echoes do not reach triggers.
 
 **Round delivery.** The header ends with `rounds raw` or `rounds alias`, so a control fight can be told from a test
-fight. Logs from before that field are `raw`. With `alias` (`aconfig rounds alias`, Monk only, not yet proven in a fight),
+fight. Logs from before that field are `raw`. With `alias` (`aconfig rounds alias`, Monk only),
 the `>` rows hold `setalias lvfree a/b/c` when the text changes and `queue addclear free lvfree` for each press. A
 `# alias lvfree holds: ...` row after the header gives the text at the start. We expect the game's run line to name the
-alias (`Running queued free command: LVFREE`), but no log shows it yet: the first alias fight will.
+alias: `Running queued free command: LVFREE` (first seen 2026-11-02).
 
 When it records: on its own when a player attacks us (the class detector's event), or when we send
 a queued command naming our target while that target is a player in the room; by hand with

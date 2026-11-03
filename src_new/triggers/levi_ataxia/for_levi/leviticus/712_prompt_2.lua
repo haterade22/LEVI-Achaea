@@ -39,4 +39,6 @@ setTriggerStayOpen("Defence List", 0)
 if not capturing_defences then return end
 deleteLine()
 capturing_defences = nil
-ataxia_reportDefences()
+-- Print after this trigger pass. Inside a pass, echo holds its line feeds in the line above the
+-- deleted prompt until the pass ends, and on Mudlet 5.1.0 the list came out as one long row.
+tempTimer(0, function() ataxia_reportDefences() end)

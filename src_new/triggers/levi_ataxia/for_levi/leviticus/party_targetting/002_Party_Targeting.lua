@@ -41,7 +41,11 @@ patterns:
   type: 1
 ]]--
 
+-- A leader repeats a call often. In the 2026-11-03 group fight, 18 of 49 calls named the target we
+-- already held, and each one ran the whole switch: it wiped the tracker for that target, and also
+-- shield and rebounding. A typed `t NAME` still resets, because that is a choice.
 if partyleader and partyleader == matches[2] then
+if type(target) == "string" and target:lower() == matches[3]:lower() then return end
 partyrelay = false
 expandAlias("t "..matches[3])
 end

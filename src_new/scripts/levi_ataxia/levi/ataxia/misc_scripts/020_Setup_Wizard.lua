@@ -1049,7 +1049,7 @@ function leviSetup.guideAtaxia()
 
   cecho("\n\n  " .. W .. "15. Round Delivery")
   cecho("\n  " .. D .. "    Mudlet splits ; so a queued chain queues only its first command. Alias sends")
-  cecho("\n  " .. D .. "    one server alias instead. Off by default, Monk only, not yet proven in a fight.")
+  cecho("\n  " .. D .. "    one server alias instead. Off by default, Monk only, one group fight so far.")
   cecho("\n  " .. V .. "    Command:  " .. G .. "aconfig rounds <alias|raw>")
 
   cecho("\n\n  " .. D .. "See all current values: " .. HL .. "ataxia setup status")

@@ -146,7 +146,7 @@ function getPredictBal(bal)
 end
 
 -- ---------------------------------------------------------------------------------------------
--- ROUND DELIVERY BY SERVER ALIAS. Off by default, Monk only, and not yet proven in a fight.
+-- ROUND DELIVERY BY SERVER ALIAS. Off by default and Monk only. One group fight so far (2026-11-03).
 -- `aconfig rounds alias|raw` sets it. Plan: step 3 of the 2026-11-01 timing plan.
 --
 -- THE PROBLEM. Mudlet's command separator is `;`, so send("queue addclear free a;b;c") is split on
@@ -197,10 +197,57 @@ end
 --     could run first, unhidden.
 local ROUND_RAW = { ["touch shield"] = true, curseward = true, reject = true, ["mind blackout"] = true }
 
+-- RETARDATION. "You move sluggishly into action." prints once per command, and only the LAST command
+-- of the LAST run happens, about 1.05 s later. A new run replaces the waiting one and starts the delay
+-- again (group fight 2026-11-03, 081009_Froedine: runs at rows 2059, 2087, 2099 gave one combo at 2113,
+-- 1.03 s after the last). That is 7 of 8 runs, an inference from rows and no HELP file. So a slowed
+-- round is ONE command, and a press inside this gap sends nothing. It is 1.05 s plus a send's 0.13 s.
+local ROUND_SLOW_GAP = 1.2
+
+-- The commands of a chain that a slowed round skips: they prepare nothing the attack needs.
+local ROUND_SLOW_SKIP = { g = true, get = true, parry = true, assess = true, contemplate = true }
+
+-- A held attack that names the target has run by now, because recovery is generally 2-5 s (HELP 4.6).
+local ROUND_HELD_SECS = 6
+
+-- Is a slowed round in force? ataxia is saved, so a restart can bring ataxia.retardation back with no
+-- timer left to clear it. retardationOn (misc_scripts/004) always starts that timer.
+local function roundSlowed()
+  return ataxia.retardation and retardDropDetectionTimer ~= nil
+end
+
+-- The one command a slowed round sends, in the order the round needs them: stand if prone, the staff
+-- if GMCP says it is not in hand, the transition, and then the attack. A combo that goes before its
+-- transition is refused: the runs at rows 2152, 2736 and 2765 of that log. The second value is true when the
+-- command is the round's attack, so the run line may count the round as run.
+local function roundSlowPick(pieces)
+  local prone = ataxia.afflictions and ataxia.afflictions.prone
+  local inHand = ataxiaTemp.wieldedItems
+  local form, attack
+  for _, piece in ipairs(pieces) do
+    local low = piece:lower()
+    local word = low:match("^%S+")
+    if low == "stand" then
+      if prone then return piece, false end
+    elseif word == "wield" then
+      local id = low:match("(%d+)$")
+      if id and inHand and not inHand[id] then return piece, false end
+    elseif word == "transition" then
+      form = form or piece
+    elseif not ROUND_SLOW_SKIP[word] then
+      attack = attack or piece
+    end
+  end
+  if form then return form, false end
+  return attack or pieces[#pieces], true
+end
+
 -- Transient, on ataxiaTemp. A restart or a login empties it, so the next round sets the alias again.
---   aliases[name] = { text = the alias body we last sent, raw = the chain as the offence built it,
---                     queue = the queue type it went to }
+--   aliases[name] = { text = the alias body we last sent, raw = the chain as the offence built it, or
+--                     nil when the alias holds less than that chain, queue = the queue type it went to }
 --   queued[type]  = true while an alias of ours may still wait in that queue
+--   slowAt        = when the last slowed round went out
+--   heldAt        = when the game last held a command that names the target (ataxia_roundHeld)
 local function roundState()
   ataxiaTemp = ataxiaTemp or {}
   local rs = ataxiaTemp.roundSend
@@ -232,13 +279,22 @@ end
 -- FREESTAND. A `freestand` entry cannot fire while we are prone, so a chain that stands us up would
 -- wait for ever (HELP 4.6.1). That chain moves to `free`, the same conditions without the upright one.
 -- `full` also needs class balance, and `free` would lose that, so its chain stays raw.
+--
+-- TOUCH TENTACLE ends the round. It spends equilibrium (2.14 s; 1.53 s even when the target is gone),
+-- so the game refuses and HOLDS each command after it in the alias, and `queue addclear` cannot remove
+-- those. They ran at the next recovery, after a target switch (081009_Froedine rows 428-433, 546-550).
+-- The next press sends the attack. The chase lasts about 2.3 s (trigger 640), so a round cannot stay
+-- on the tentacle for long.
+--
+-- The third value is true when the alias holds the whole round, or its attack alone. The run line then
+-- counts the round as run. A tentacle or a transition is not the attack the offence planned.
 local function roundPlan(qtype, payload)
   if not ataxia_ROUND_TYPES[qtype] or payload:find("[/%%{]") then return nil end
   local sep = ataxia.settings.separator
   if type(sep) == "string" and sep ~= "" and sep ~= ";" then
     payload = payload:gsub((sep:gsub("%p", "%%%0")), ";")
   end
-  local pieces, stands = {}, false
+  local pieces, stands, tentacleAt = {}, false, nil
   for piece in payload:gmatch("[^;]+") do
     piece = piece:match("^%s*(.-)%s*$")
     local low = piece:lower()
@@ -247,15 +303,24 @@ local function roundPlan(qtype, payload)
     elseif low ~= "" then
       if ROUND_MOVES[low:match("(%S+)$")] or ROUND_RAW[low] or ROUND_RAW[low:match("^%S+")] then return nil end
       pieces[#pieces + 1] = piece
+      if not tentacleAt and low:find("^touch tentacle") then tentacleAt = #pieces end
     end
   end
+  for i = #pieces, (tentacleAt or #pieces) + 1, -1 do pieces[i] = nil end
   if stands then table.insert(pieces, 1, "stand") end
-  if #pieces < 2 then return nil end
+  local slowed = roundSlowed()
+  if #pieces < 2 and not tentacleAt and not slowed then return nil end
   if stands and qtype == "full" then return nil end
   local into = (stands and qtype == "freestand") and "free" or qtype
+  local whole = not tentacleAt
+  if slowed then
+    local one, attack = roundSlowPick(pieces)
+    pieces = { one }
+    whole = whole and attack
+  end
   local text = table.concat(pieces, "/")
   if #text > ROUND_MAX_TEXT then return nil end
-  return text, into
+  return text, into, whole
 end
 
 -- The send wrapper's hook. Returns the line to send. Anything it adds goes out first, so the alias
@@ -268,7 +333,14 @@ function ataxia_roundDeliver(cmd)
   if verb ~= "addclear" and verb ~= "addclearfull" then return cmd end
   qtype = qtype:lower()
   local rs = roundState()
-  local text, into = roundPlan(qtype, payload)
+  local text, into, whole = roundPlan(qtype, payload)
+
+  -- A slowed round went out inside the gap: one more run would replace it and restart its delay.
+  if text and roundSlowed() then
+    local now = getEpoch()
+    if rs.slowAt and now - rs.slowAt < ROUND_SLOW_GAP then return "" end
+    rs.slowAt = now
+  end
 
   -- This line replaces the round. ADDCLEAR clears only its own queue, so an alias waiting in another
   -- queue would still fire: clear it. ADDCLEARFULL wipes every queue itself.
@@ -298,9 +370,34 @@ function ataxia_roundDeliver(cmd)
     ataxia_rawSend("setalias " .. name .. " " .. text, false)
     a.text = text
   end
-  a.raw, a.queue = payload, into
+  a.raw, a.queue = whole and payload or nil, into
   rs.queued[into] = true
   return "queue " .. verb .. " " .. into .. " " .. name
+end
+
+-- Triggers 001 and 007: the game held `text` for a recovery ("... was added to your balance queue.").
+-- Only a command that names the target counts, so a held `touch shield` does not cost a clear below.
+function ataxia_roundHeld(text)
+  if ataxia_roundMode() ~= "alias" or type(text) ~= "string" then return end
+  if type(target) == "string" and target ~= "" and text:lower():find(target:lower(), 1, true) then
+    roundState().heldAt = getEpoch()
+  end
+end
+
+-- switchTarget, for a new name. Our alias keeps the old name until the next press, and it fired at the
+-- old target 52 ms and 1.35 s after a switch (081009_Froedine rows 550, 3838). `queue addclear` leaves
+-- a held command alone, so only CLEARQUEUE ALL reaches one: 0 of 82 held commands in our logs ran after
+-- `All queued commands cleared.` unless sent again. It also takes any other queued command, so it goes
+-- only when a held command names the target. The clear can lose a race with a recovery already in flight.
+function ataxia_roundTargetChanged()
+  local rs = ataxiaTemp and ataxiaTemp.roundSend
+  if not rs or ataxia_roundMode() ~= "alias" then return end
+  if rs.heldAt and getEpoch() - rs.heldAt < ROUND_HELD_SECS then
+    ataxia_rawSend("clearqueue all", false)
+  else
+    for q in pairs(rs.queued) do ataxia_rawSend("clearqueue " .. q, false) end
+  end
+  rs.queued, rs.heldAt, rs.slowAt = {}, nil, nil
 end
 
 -- We expect the game's run line to name the alias ("Running queued free command: LVFREE"), until the
@@ -357,5 +454,5 @@ function ataxia_roundCommand(arg)
   local chosen = type(flags) == "table" and flags[class] or "raw"
   ataxiaEcho("Round delivery: " .. (chosen == "alias" and "<green>alias" or "<white>raw") .. "<NavajoWhite>"
     .. (chosen == "alias" and ataxia_roundMode() == "raw" and " (raw while the basher is on)" or "")
-    .. ". Change it: <white>aconfig rounds alias|raw<NavajoWhite>. Alias is not yet proven in a fight.")
+    .. ". Change it: <white>aconfig rounds alias|raw<NavajoWhite>. Alias has one group fight behind it so far.")
 end

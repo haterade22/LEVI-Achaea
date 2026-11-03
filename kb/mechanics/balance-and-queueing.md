@@ -4,7 +4,7 @@ confidence: CONFIRMED (HELP 4.6 / 4.6.1)
 sources:
   - kb/raw/help/4.6_equilibrium-and-balance.txt
   - kb/raw/help/4.6.1_queueing.txt
-last_verified: 2026-10-10
+last_verified: 2026-11-03
 ---
 
 # Balance, equilibrium and the server queue
@@ -85,7 +85,7 @@ queue stores the NAME, and the game reads the alias body when the entry fires, s
 it is queued. **CONFIRMED live on our seat:** queued while the alias said "one", rewritten to "two" 6 ms later, and "Two."
 fired when equilibrium returned (`raw/live/probes_2026-11-01.txt`). With three commands in one alias, the first ran first,
 and all three replies came before one prompt. The second and third gave the same say-like refusal, so their order cannot be
-seen. What an off-balance spender inside an alias does (refused or auto-queued) is open, and the first alias fight answers it.
+seen. The first alias fights answered what an off-balance spender inside an alias does: the game holds it (below).
 The logs add two more strict cases, and one rewrite
 that lost a race (`3ys7NuHA` rows 2666, 2677). 309 rewrites drew 0 complaints, at up to 9 per second. HELP ALIASES: `/`
 separates commands, names are up to 12 characters, and it states no limit on count or length. The game echoes
@@ -94,8 +94,8 @@ lines for other names. Not proven yet: the method at our higher send rate. Step 
 
 ## Our shim: `aconfig rounds` (2026-11-01)
 
-**Shipped in v4.7.470: off by default, Monk only, and not yet proven in a fight.** `aconfig rounds alias` turns it on for the class, and the
-setting is saved per class. With the flag off, every send is byte-identical to before. It never applies while the basher
+**Shipped in v4.7.470: off by default and Monk only. Its first fight with people attacking us was on 2026-11-03.** `aconfig rounds alias` turns it on for
+the class, and the setting is saved per class. With the flag off, every send is byte-identical to before. It never applies while the basher
 is on. Bashing is a later step.
 
 `ataxia_roundDeliver` (`ataxia/ataxia/003_Queueing_Related.lua`) sits in the send wrapper (`misc_scripts/031`), after the
@@ -113,6 +113,9 @@ trait filter, so ASSESS never reaches an alias without its trait:
 | Passes through unchanged: `/`, `%`, `{`; a command ending in a direction (`stand;n`, `stand;tumble sw`); `queue add`, `insert`, `prepend`; a custom type such as `eb!p!w!t`; one command; text over 138 characters | 138 is a cautious cap. The longest alias text in our logs is 142 (`2026-10-11_shikudo-vs-runewarden-snb_attacker.txt` rows 1319, 1364, 1400). The 250-character probe is still open |
 | A chain with `touch shield`, `curseward` or `reject <name>` stays raw | The next attack press rewrites the alias, and the game reads it when it fires, so a defensive key in that slot would run only if recovery came before that press. Raw, it goes at once or the auto-queue holds it. So `ts` and `cwd` send what they send with the flag off |
 | A chain with `mind blackout` stays raw | It must run before the combo it hides, and that combo goes by `queue add`, raw. In an alias, the two would wait in different queues |
+| `touch tentacle` ends the round; the next press sends the attack | It spends equilibrium, so the game holds each later command in the alias, past `queue addclear`. The chase lasts about 2.3 s (trigger 640) |
+| A new target clears the queue: `clearqueue <type>`, or `clearqueue all` if a held command named the target in the last 6 s | The alias keeps the old name until the next press, and only ALL reaches a held command. A held `touch shield` names no target, so it does not cost a full clear. A repeat of the same name clears nothing |
+| In retardation (v4.7.474): one command per round, and a press inside 1.2 s sends nothing | See [Retardation](#retardation-only-the-last-command-happens) |
 | A line that replaces the round clears an alias waiting in ANOTHER queue (`clearqueue <type>`) | ADDCLEAR clears only its own queue, so that alias would still fire. A run line does not mark the queue empty, because it cannot say which press it answers: a newer round may wait there. The cost is one extra `clearqueue` when the queue type changes |
 
 **Names:** `lv<type>` for `eq`, `bal`, `eqbal`, `class`, `free`, `freestand`, `full`. The longest, `lvfreestand`, is 11 of the
@@ -158,20 +161,45 @@ target, Titonus, did not fight back: 0 afflictions gained and full health throug
   Evidence: one sample in each order. `vv` already sends mind attacks as separate rounds. The user says KAI CHOKE behaves the same way
   (`raw/players/kai-choke-2026-11-02.txt`); 2 logged rows show it held for equilibrium. So `srd` no longer chains them.
 
+**Answered by the group fight (2026-11-03, `ours/2026-11-03_081009_Froedine.log`, v4.7.471).** People attacked us, and the screen log has 22 `has been slain` rows. All three recordings
+are on [scoreboard.md](scoreboard.md). Together: refusals 7 of 76 recoveries (0.09, against 0.77 on the raw path), `was added` 7, setup first 99 of 102, superseded 1 of 110,
+no complaint. `setalias` was refused 0 of 98. The 24 s recording reaches only 2 fired rewrites and the 271 s only 3, under that bar's 5; together they make 16.
+- **The game holds a command that is off balance inside an alias.** `touch tentacle` spent equilibrium, so `wield` and `combo` drew `You must regain equilibrium first.` and
+  `... was added to your equilibrium queue.` (rows 428-433). The tentacle costs equilibrium even at a target that is gone: `Nothing can be seen here by that name.`,
+  `Equilibrium used: 1.53s.` (rows 3239-3244).
+- **`queue addclear` does not remove a held command.** Six presses cleared the free queue after that hold, and the held commands still ran (rows 434-548).
+- **Held commands run BEFORE the alias, and their run line says `free`** although the game added them to the equilibrium queue: `Running queued free command: WIELD
+  STAFF489282`, `...: COMBO FROEDINE ...`, `...: LVFREE` (rows 546-550). A balance hold does the same (rows 3136, 3180).
+- **`CLEARQUEUE ALL` removes a held command.** The reply is `[System]: All queued commands cleared.` In `ours/`, 82 held commands came before one such row, and 0 ran after it
+  unless sent again: 28 never ran, 54 were sent again.
+- **An alias keeps its target until the next press.** It fired at the old target 52 ms after a switch (row 550) and 1.35 s after one (row 3838). All 4 wrong-target rows failed
+  only because that person had left the room.
+
+## Retardation: only the last command happens
+
+MEASURED, 8 runs, 24.2 s, an inference from rows, and no HELP file states it (`ours/2026-11-03_081009_Froedine.log`, after "Kaden gestures grandly, and causes a deepfreeze",
+which may or may not be the cause).
+- `You move sluggishly into action.` prints once per command, when the run fires.
+- **Only the last command of the last run happens,** about 1.05 s later (1.02 to 1.09): 7 of 8 runs.
+- **A new run replaces the waiting one and starts the delay again.** Runs at rows 2059, 2087 and 2099 gave one combo at row 2113, 1.03 s after the last. Balance and equilibrium
+  are still up while a command waits, so each press fires at once. A held key could keep an attack from ever happening.
+- **`transition to oak form` was lost,** so the Oak combo behind it was refused from the old form, 3 of 3 (runs at rows 2152, 2736, 2765). Outside retardation, the
+  transition worked each time a reply showed.
+- `setalias` and `queue addclear` print no sluggish line.
+
+**Our rule (v4.7.474, alias path only).** The shim sends ONE command: `stand` if prone, the staff if GMCP says it is not in hand (with no item id or no GMCP list, it assumes
+the staff is in hand), the transition, and then the attack. `g body`, `g gold`, `parry` and `assess` do not take the slot. A press inside 1.2 s (1.05 s plus a send's 0.13 s) sends nothing. A target switch
+lifts the gap, and shield keys and movement never wait. `ataxia.retardation` is saved, so the shim also asks for the 5 s timer of `retardationOn`: a restart cannot leave the
+rounds slowed. The first slowed run of each spell still goes out whole, because the flag rises on its sluggish lines. The raw path has no such rule. **None of this has run in a fight yet.**
+
 **Not known yet:**
-- Whether a rewrite beats recovery reliably. **One strict case on our seat so far** (`fightlogs/2026-11-02_131934_Titonus.log`, rows 216-231):
+- Whether a rewrite beats recovery reliably. **Group fight: 16 fired the new text, 1 the old, and 12 did not show (2026-11-03).** The first strict case on our seat (`fightlogs/2026-11-02_131934_Titonus.log`, rows 216-231):
   `sr;zz` while balance was down queued `mind impatience`, the rewrite arrived 91 ms before recovery, and `zz`'s combo fired. A press
   with balance UP fires at once, so `sr;zz` then runs `sr` now and `zz` at the next recovery (rows 88-161). That is correct, and the
   scoreboard counts it as superseded (row 95), as it does a recording's first round (row 8). The bar of 5 needs presses with balance down.
-- Where the alias's entry falls in a flush against commands the auto-queue holds. In 35 multi-entry flushes of
-  `ours/2026-10-27_112717`, the queue entry `G BODY` ran first in 9, last in 14. That row is a raw entry, so LVFREE's place is
-  inferred, not shown.
-- A refused `setalias`: we would record text the server never took, and only a login or a changed round would set it again.
-- The reply to `clearqueue free` on an empty queue. Its wording is in no log, and `006_GAG` does not list it, so it may show
-  on screen.
-- The pass bars in the plan: refusals per recovery, `was added` rows, setup before spender, superseded attacks. After the
-  fight, `python tools/fightlog_import.py --score` prints them beside the numbers, and [scoreboard.md](scoreboard.md) holds
-  every log. It splits a log at its first `setalias lv...` row or queue line naming a round alias, so one recording scores as a raw part and an alias part.
+- A refused `setalias`: we would record text the server never took, and only a login or a changed round would set it again. None in 120 sends so far.
+- Whether the v4.7.474 fixes hold the pass bars in a fight. `python tools/fightlog_import.py --score` prints the bars beside the
+  numbers, and [scoreboard.md](scoreboard.md) holds every log. It splits a log at its first `setalias lv...` row or queue line naming a round alias, so one recording scores as a raw part and an alias part.
 
 **Still raw on purpose:** `queue add free <chain>`, and MIND BLACKOUT's whole press with the combo it hides (`011`, off by
 default). The plan's shim covers ADDCLEAR only.

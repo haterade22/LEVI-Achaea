@@ -28,6 +28,9 @@ A log splits at its first sent `setalias lv...` row, because `aconfig rounds ali
 | ours/122916_Antoninus | raw | Monk | 4.7.470 | 2298.7 | 0.77 | 23 | 5 of 6 | 16.7% | 0 | 0 | 0 | 20.1 |
 | ours/122916_Antoninus | alias | Monk | 4.7.470 | 602.5 | 0.03 | 1 | 25 of 25 | 3.8% | 0 | 0 | 0 | 23.7 |
 | ours/131934_Titonus | alias | Monk | 4.7.470 | 38.3 | 0.00 | 0 | 9 of 9 | 0.0% | 1 | 0 | - | 22.8 |
+| ours/080944_Lauryyn | alias | Monk | 4.7.471 | 23.8 | 0.00 | 0 | 10 of 10 | 0.0% | 2 | 0 | 0 | 23.9 |
+| ours/081009_Froedine | alias | Monk | 4.7.471 | 270.7 | 0.23 | 7 | 46 of 49 | 1.9% | 3 | 0 | 4 | 16.2 |
+| ours/081532_Tabethys | alias | Monk | 4.7.471 | 847.2 | 0.00 | 0 | 43 of 43 | 0.0% | 11 | 0 | 0 | 19.8 |
 
 ## How each number is counted
 
@@ -166,3 +169,64 @@ Monk, v4.7.470, 2026-11-02. Rows 0-532, 38.3 s.
 
 - The run line reads `Running queued <type> command: LVFREE`, the form we expected but have not proved (plan, step 3 question 1). Check these rows by eye before trusting the alias numbers. 9 rows here; the first: `[System]: Running queued free command: LVFREE`.
 - Rewrite rows: 230.
+
+### 2026-11-03_080944_Lauryyn.log, alias rounds
+
+Monk, v4.7.471, 2026-11-03. Rows 0-1626, 23.8 s.
+
+| Measure | Value | Bar | Verdict |
+|---|---|---|---|
+| Refusals per recovery | 0.00 (0 / 10) | <= 0.1 per recovery | PASS |
+| `was added to your` rows | 0 | <= 2 | PASS |
+| Setup before spender, per flush | 10 of 10 | every round | PASS |
+| Superseded attacks that ran | 0.0% (0 / 10) | <= 5% | PASS |
+| Echoed rewrites whose new text fired | 2 new, 0 old, 1 not shown (11 sent, 12 echoed) | >= 5 fire new text | FAIL |
+| Alias complaints | 0 | none | PASS |
+| Attacks naming a target other than the last set | 0 of 6 checked | none | PASS |
+| Rounds per minute in attack bursts | 23.9 (10 recoveries, 25.1 s active) | - | - |
+
+- The run line reads `Running queued <type> command: LVFREE`, the form we expected but have not proved (plan, step 3 question 1). Check these rows by eye before trusting the alias numbers. 10 rows here; the first: `[System]: Running queued free command: LVFREE`.
+- Rewrite rows: 619, 1277, 1491.
+
+### 2026-11-03_081009_Froedine.log, alias rounds
+
+Monk, v4.7.471, 2026-11-03. Rows 0-5721, 270.7 s.
+
+| Measure | Value | Bar | Verdict |
+|---|---|---|---|
+| Refusals per recovery | 0.23 (7 / 30) | <= 0.1 per recovery | FAIL |
+| `was added to your` rows | 7 | <= 2 | FAIL |
+| Setup before spender, per flush | 46 of 49 | every round | FAIL |
+| Superseded attacks that ran | 1.9% (1 / 53) | <= 5% | PASS |
+| Echoed rewrites whose new text fired | 3 new, 0 old, 9 not shown (51 sent, 52 echoed) | >= 5 fire new text | FAIL |
+| Alias complaints | 0 | none | PASS |
+| Attacks naming a target other than the last set | 4 of 50 checked | none | FAIL |
+| Rounds per minute in attack bursts | 16.2 (28 recoveries, 103.8 s active) | - | - |
+
+- The run line reads `Running queued <type> command: LVFREE`, the form we expected but have not proved (plan, step 3 question 1). Check these rows by eye before trusting the alias numbers. 49 rows here; the first: `[System]: Running queued free command: LVFREE`.
+- 1 queue lines in this part did not name an alias. The shim passes some through on purpose, and `aconfig rounds raw` looks the same.
+- Raw attack rows in this alias part, which do not count toward the setup bar: 547, 3179, 3270, 3310.
+- Setup rows: 423, 3234, 3272.
+- Superseded rows: 3179.
+- Wrong target rows: 547, 549, 3179, 3837.
+- Rewrite rows: 133, 251, 423, 549, 831, 1999, 2058, 3312, 4188, 4465, 4726, 5229.
+
+### 2026-11-03_081532_Tabethys.log, alias rounds
+
+Monk, v4.7.471, 2026-11-03. Rows 0-11583, 847.2 s.
+
+| Measure | Value | Bar | Verdict |
+|---|---|---|---|
+| Refusals per recovery | 0.00 (0 / 36) | <= 0.1 per recovery | PASS |
+| `was added to your` rows | 0 | <= 2 | PASS |
+| Setup before spender, per flush | 43 of 43 | every round | PASS |
+| Superseded attacks that ran | 0.0% (0 / 47) | <= 5% | PASS |
+| Echoed rewrites whose new text fired | 11 new, 1 old, 2 not shown (36 sent, 36 echoed) | >= 5 fire new text | PASS |
+| Alias complaints | 0 | none | PASS |
+| Attacks naming a target other than the last set | 0 of 47 checked | none | PASS |
+| Rounds per minute in attack bursts | 19.8 (26 recoveries, 78.9 s active) | - | - |
+
+- The run line reads `Running queued <type> command: LVFREE`, the form we expected but have not proved (plan, step 3 question 1). Check these rows by eye before trusting the alias numbers. 43 rows here; the first: `[System]: Running queued free command: LVFREE`.
+- 22 queue lines in this part did not name an alias. The shim passes some through on purpose, and `aconfig rounds raw` looks the same.
+- Raw attack rows in this alias part, which do not count toward the setup bar: 2950, 3064, 3189, 3270.
+- Rewrite rows: 4321, 4464, 4686, 4757, 4911, 4986, 5145, 5313, 5865, 7624, 7698, 7867, 7988, 8174.

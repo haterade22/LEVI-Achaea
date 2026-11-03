@@ -2458,6 +2458,8 @@ to VERIFY the set appeared before writing, `bashProfileOn` refuses a set proven 
 slots (`classDetect.planCuringsets`, pure + sorted so drops are deterministic) and reports what
 it could not create. Command: `curingsets`.
 
+**`classDetect` stays on `normal` while in a party (v4.7.474).** `classDetect.inParty` reads `ataxia.channels.party` (GMCP `Comm.Channel.List`). The target is who the leader calls and many people attack us, so one class says little: the 2026-11-03 group fight switched sets 77 times in 19 minutes.
+
 **CRITICAL: `CURING PRIORITY <aff> <n>` writes a STORED priority into whichever curingset is
 ACTIVE.** Any code path that writes priorities while a non-default set is selected mutates
 that set permanently — and `ataxia_restorePrio()` will then write the *default* table's value
@@ -2939,7 +2941,7 @@ gmcp.Room.Info = {
 - Combat logs can be several hundred lines per second
 - System must handle disconnections/reconnections gracefully
 - Blackout hides all vitals and afflictions (special handling required)
-- Aeon/retardation slow down actions (disable batching)
+- Aeon/retardation slow down actions (disable batching). Only the last command of the last run happens, so a slowed alias round is one command (`kb/mechanics/balance-and-queueing.md`)
 - Some afflictions prevent certain actions (paralysis, stun, etc.)
 
 ### Things to Avoid

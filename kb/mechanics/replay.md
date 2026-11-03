@@ -13,7 +13,7 @@ code:
   - tools/kb_timing.py
   - src_new/triggers/levi_ataxia/for_levi/leviticus/determine_class/
   - src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua
-latest_filed: 2026-11-02
+latest_filed: 2026-11-03
 ---
 
 # Replay: do route rules warn before a death?
@@ -50,11 +50,12 @@ These bars are copied here word for word. They were written before this tool's f
 **None of this counts toward a bar.** It is here because it shows what a later log could change.
 
 - **The plan's sentence, read alone.** The plan's own gate sentence (step 4: non-lock routes warn at least 5 s on at least 4 of the no-lock-alert deaths, report by attacker) has no UNTESTED, G3 or G4 term. Read alone it gives 6 of 6 from 4 attackers (Alyzar, Blonk, Reyl, Talo). This FAIL comes from the stricter bars. The user decided on 2026-11-01 that these bars stand, so step 5 is on hold.
+- **One change after the first run (2026-11-03), and it moves no bar toward a pass.** Filing the group fight of that day took `pariah.latency` and `pariah.scourge` out of UNTESTED and turned G1 and G2 to PASS: 5 counted, attackers Blonk, Reyl, Talo. The only survived fight was `ours/081532_Tabethys`, where the Pariah is Harkon, a member of OUR party (`(Party): Tabethys says, "Harkon you need to WALK AHEAD and break walls."`). A recording of ours now tests no rule, as a death in one already had no route. Its false alarms still count.
 - **Rules with no survived fight.** With the UNTESTED rules included, rules warned 5 s or more on 6 of the 6 in-scope no-lock-alert deaths, from 4 attackers (Alyzar, Blonk, Reyl, Talo). No fight its logger survived exists for pariah.latency, pariah.scourge, blademaster.legs, so nothing says how often they cry wolf. The false alarms they did raise before a later death are in the per-rule table.
 - **That count overstates what the rules saw.** If the rule that warned must match the kill: 5 of 6, attackers Alyzar, Blonk, Talo. On `4c_SeyaA` the warning is pariah.latency, but the kill was pariah.scourge, whose own rule warned 2.95 s. If its chain must also still be on within 5 s of death: 3 of 6 (`s98kPGv6`, `CxxKSMq`, `OwkA-G99`). A chain that went off earlier counts only because the metric's 15 s window reaches back to it.
 - **The first prompt is a hard moment for G3.** Soonest an exit was open or back, per death, in seconds after the chain's first prompt: `s98kPGv6` 0.08, `4c_SeyaA` 0.80, `Vr.NkCGD` 0.36, `WKuEakBZ` 0.21, `CxxKSMq` 0.00, `OwkA-G99` 0.00. foundations.md calls a margin under 0.5 s unresolved. The bar reads the first prompt as written.
 - **G4 compares unlike counts.** A rule's fraction leaves out false alarms in logs where the logger died, and the softlock baseline keeps them: 5 of its 11 are in fatal logs (`Sentinel` 842, `Sentinel` 2026, `t54WWU6b` 353, `t54WWU6b` 2101, `ours/112717_Tabethys` 9778). That favours the rules. The bar allows it, so the verdict above stands. With both sides on the same count, the baseline over survived logs is 6 / (6 + 6) = 0.50, and the rules with those false alarms added are: pariah.latency 2/5 = 0.40; pariah.scourge 2/4 = 0.50; airlord.pressure 3/4 = 0.75; runewarden.2h 1/2 = 0.50; blademaster.legs 3/4 = 0.75; sentinel.tripimpale 3/4 = 0.75.
-- **A rule with no skill.** An alarm at the fight's first `Health lost` row warns on every death and has one false alarm per survived log: 21 / 35 = 0.600 over all 35 logs (16 / 29 = 0.552 on client logs), against the softlock baseline 0.647. So it would clear G1, G2 and G4. Read a later PASS on those bars beside the table below.
+- **A rule with no skill.** An alarm at the fight's first `Health lost` row warns on every death and has one false alarm per survived log: 24 / 38 = 0.632 over all 38 logs (16 / 29 = 0.552 on client logs), against the softlock baseline 0.647. So it would clear G1, G2 and G4. Read a later PASS on those bars beside the table below.
 - **5 s is easy to clear by chance.** The last column places each of a log's chains uniformly in its fight and reads them with this page's metric. That expects 2.5 of 6 deaths warned, and 0.97 of the 2 counted. Fights escalate toward the end, so uniform placement is only a rough floor.
 
 | Log | Attacker | Fight started, lead s | Longest rule warning s | Share of the fight | Chance of 5 s or more |
@@ -79,8 +80,8 @@ A board is a logger's belief. A client's figure is its LOWEST measure with n >= 
 | Leviticus | Sentinel | 511 | 45 of 45 | 43 of 43 | 83 of 83 | 55 of 55 | 100.0% | in the gate |
 | Mystor | EveP2TVe, FceAmb0o, c.iJVmpL, mystor/LcJC-rJ5, t54WWU6b, vNTjvghY | 4836 | 282 of 282 | 243 of 243 | 286 of 286 | 108 of 108 | 100.0% | in the gate |
 | Nikita | L8LSw7xD, X8pRorzR, kAQnlFAW | 2077 | 193 of 193 | 185 of 185 | - | - | 100.0% | in the gate |
-| Ours, client log | shikudo-group-mhaldor | 643 | - | - | - | - | - | too few to judge |
-| Ours, recorder | ours/073547_Tabethys, ours/112717_Tabethys, ours/122916_Antoninus, ours/131934_Titonus, ours/135412_Tabethys, ours/201153_Tabethys | 8396 | 28 of 28 | 26 of 26 | - | - | 100.0% | in the gate |
+| Ours, client log | shikudo-group-alias, shikudo-group-mhaldor | 4382 | - | - | - | - | - | too few to judge |
+| Ours, recorder | ours/073547_Tabethys, ours/080944_Lauryyn, ours/081009_Froedine, ours/081532_Tabethys, ours/112717_Tabethys, ours/122916_Antoninus, ours/131934_Titonus, ours/135412_Tabethys, ours/201153_Tabethys | 13213 | 28 of 28 | 26 of 26 | - | - | 100.0% | in the gate |
 | Shikudo attacker (unnamed) | attacker | 376 | 5 of 5 | 27 of 27 | - | - | 100.0% | in the gate |
 
 **No echo of their own lock:** Claes, Nikita and our recorder. Nikita's client prints a label on only 2 prompts, `TR/Hardlock(touch tree)` (`kAQnlFAW` row 1249, `X8pRorzR` row 363), too few to compare. Claes's `[VLOCK, ...]` rows are his tracker of the TARGET: 5 rows, and his own board is softlocked at 0 of them (`Vr.NkCGD` row 654 prints `[VLOCK, diz, clum[75], ...]` above his own board `[myc AST haem SCYT fls]`). So they test nothing here.
@@ -158,17 +159,15 @@ These are data in `tools/kb_replay.py` (`RULES`), written from the tells in `doc
 
 | Rule | Deaths warned | Warning s | False, survived fights | False / (false + warned) | G4 | Tested on (class fought, logger lived) | False, before a later death (not in the bar) | Open |
 |---|---|---|---|---|---|---|---|---|
-| pariah.latency | 3 | `4c_SeyaA` 6.78, `Vr.NkCGD` 13.38, `WKuEakBZ` 13.45 | 0 | 0.00 | UNTESTED | none | 2 | 0 |
-| pariah.scourge | 2 | `4c_SeyaA` 2.95, `WKuEakBZ` 3.95 | 0 | 0.00 | UNTESTED | none | 2 | 0 |
+| pariah.latency | 3 | `4c_SeyaA` 6.78, `Vr.NkCGD` 13.38, `WKuEakBZ` 13.45 | 0 | 0.00 | UNTESTED | `ours/081532_Tabethys` | 2 | 0 |
+| pariah.scourge | 2 | `4c_SeyaA` 2.95, `WKuEakBZ` 3.95 | 0 | 0.00 | UNTESTED | `ours/081532_Tabethys` | 2 | 0 |
 | airlord.pressure | 1 | `s98kPGv6` 53.80 | 3 | 0.75 | FAIL | `3ys7NuHA` | 0 | 0 |
-| runewarden.2h | 1 | `CxxKSMq` 10.79 | 0 | 0.00 | PASS | `attacker`, `J7Xnr_Jg`, `2N1HTSWZ` | 1 | 0 |
+| runewarden.2h | 1 | `CxxKSMq` 10.79 | 0 | 0.00 | PASS | `attacker`, `J7Xnr_Jg`, `2N1HTSWZ`, `ours/080944_Lauryyn`, `ours/081009_Froedine`, `ours/081532_Tabethys` | 1 | 0 |
 | blademaster.legs | 1 | `OwkA-G99` 18.41 | 0 | 0.00 | UNTESTED | none | 3 | 0 |
 | sentinel.tripimpale | 1 | `Sentinel` 8.52 | 0 | 0.00 | PASS | `uW_VbgR` | 3 | 0 |
 | generic.limb | 0 | - | 0 | no alarm | PASS | `FceAmb0o`, `c.iJVmpL`, `vNTjvghY`, `attacker`, `WO7tC3kL`, `KtdftABt`, `uW_VbgR` | 0 | 0 |
 
 `sentinel.tripimpale` was tested only on `uW_VbgR`, a 24 s fragment that stops with the logger truelocked, so its survival is not shown, and no TRIP lands in it. Its PASS means little.
-
-`runewarden.2h`: its 3 survived fights show 0 prompts with prone or a level 2 leg and no two-handed weapon, so its PASS means little. It could not have raised an alarm there. Seconds its class was known: `attacker` 81.3 of 86.2 s, `J7Xnr_Jg` 26.0 of 73.6 s, `2N1HTSWZ` 185.3 of 229.0 s. The other counted rules (airlord.pressure) fail G4, so no rule both warned on a no-lock death and passed a real false-alarm test.
 
 **A survived fight counts a chain even when the logger won by killing first:** `3ys7NuHA` is a win, so its three pressure chains are false alarms by the definition. The softlock baseline counts its wins the same way (`2N1HTSWZ`, `X8pRorzR`).
 
@@ -226,6 +225,8 @@ Where the rule's class fought and the format cannot show a term. Nothing is gues
 | generic.limb | ours/073547_Tabethys | all clauses: needs limb_pct |
 | generic.limb | ours/122916_Antoninus | all clauses: needs limb_pct |
 | generic.limb | ours/131934_Titonus | all clauses: needs limb_pct |
+| generic.limb | ours/080944_Lauryyn | all clauses: needs limb_pct |
+| generic.limb | ours/081009_Froedine | all clauses: needs limb_pct |
 
 Limb percent comes from the game's `you perceive that ... dealt` lines and the clients' own readouts. Logs with any: `Sentinel` 45, `FceAmb0o` 68, `c.iJVmpL` 41, `vNTjvghY` 96, `defender` 16, `attacker` 12, `WO7tC3kL` 1, `CxxKSMq` 6, `KtdftABt` 12, `OwkA-G99` 148, `JDvzR7j7` 76, `uW_VbgR` 12. Claes's logs print only some of the hits (`CxxKSMq` has 6), so his ledger runs low.
 
@@ -317,7 +318,7 @@ The first run put Elmer out on a literal reading of his echo. If the literal rea
 
 ## Logs read
 
-37 logs. Skipped: `2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt` (prompts with no time in them, so no warning can be measured). `2026-10-27_shikudo-group-mhaldor` is the same fight as `ours/112717_Tabethys` (`kb_timing.SAME_FIGHT`), so it stays out of every count. The ids are the ones [clocks.md](clocks.md) uses.
+41 logs. Skipped: `2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt` (prompts with no time in them, so no warning can be measured). `2026-10-27_shikudo-group-mhaldor` is the same fight as `ours/112717_Tabethys`, and `2026-11-03_shikudo-group-alias` holds the three recordings of 2026-11-03 (`kb_timing.SAME_FIGHT`), so they stay out of every count. The ids are the ones [clocks.md](clocks.md) uses.
 
 | Id | File | Family | Client | Prompts | Result |
 |---|---|---|---|---|---|
@@ -352,9 +353,13 @@ The first run put Elmer out on a literal reading of his echo. If the literal rea
 | OwkA-G99 | 2026-11-01_unknown_earthlord-vs-blademaster_loss_OwkA-G99.txt | earth | Earth Lord (unnamed) | 589 | died |
 | JDvzR7j7 | 2026-11-01_unknown_earthlord-vs-sentinel_loss_JDvzR7j7.txt | earth | Earth Lord (unnamed) | 549 | died |
 | uW_VbgR | 2026-11-01_unknown_earthlord-vs-sentinel_noresult_uW_VbgR.txt | earth | Earth Lord (unnamed) | 93 | no death shown |
+| shikudo-group-alias | 2026-11-03_shikudo-group-alias.txt | sentinel | Ours, client log | 3739 | same fight |
 | ours/201153_Tabethys | 2026-10-12_201153_Tabethys.log | ours | Ours, recorder | 90 | no death shown |
 | ours/112717_Tabethys | 2026-10-27_112717_Tabethys.log | ours | Ours, recorder | 3311 | died |
 | ours/135412_Tabethys | 2026-10-27_135412_Tabethys.log | ours | Ours, recorder | 3930 | no death shown |
 | ours/073547_Tabethys | 2026-10-28_073547_Tabethys.log | ours | Ours, recorder | 324 | no death shown |
 | ours/122916_Antoninus | 2026-11-02_122916_Antoninus.log | ours | Ours, recorder | 657 | no death shown |
 | ours/131934_Titonus | 2026-11-02_131934_Titonus.log | ours | Ours, recorder | 84 | no death shown |
+| ours/080944_Lauryyn | 2026-11-03_080944_Lauryyn.log | ours | Ours, recorder | 349 | no death shown |
+| ours/081009_Froedine | 2026-11-03_081009_Froedine.log | ours | Ours, recorder | 1369 | no death shown |
+| ours/081532_Tabethys | 2026-11-03_081532_Tabethys.log | ours | Ours, recorder | 3099 | no death shown |

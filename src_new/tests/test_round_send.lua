@@ -24,6 +24,9 @@ local KAIKATA = LEVI .. "ataxia/monk/004_Kai_And_Kata.lua"
 local SCAN = LEVI .. "ataxia/misc_scripts/001_Queue_Scanning.lua"
 local FIGHTLOG = LEVI .. "ataxia/misc_scripts/026_Fight_Log.lua"
 local TRIG = ROOT .. "triggers/levi_ataxia/for_levi/leviticus/800_Gag_Round_Alias.lua"
+local HELD_BAL = ROOT .. "triggers/levi_ataxia/for_levi/leviticus/001_QUEUE_COLOR_BALANCE.lua"
+local HELD_EQ = ROOT .. "triggers/levi_ataxia/for_levi/leviticus/007_QUEQUE_COLOR_EQUILIBRIUM.lua"
+local TARGETING = LEVI .. "ataxia/016_Targeting_Functions.lua"
 local ALIAS = ROOT .. "aliases/levi_ataxia/for_levi/levi_062424/configs/033_Rounds.lua"
 local SHIELD_KEY = ROOT .. "aliases/levi_ataxia/for_levi/levi_062424/combat_aliases/004_shielding_cward.lua"
 local TAROT_LUST = ROOT .. "triggers/levi_ataxia/for_levi/leviticus/lust/001_Tarot_Lust.lua"
@@ -83,6 +86,8 @@ local function fresh(flag)
   ataxia.settings = { separator = ";", roundDelivery = flag and { monk = flag } or nil }
   ataxia.vitals = { form = "Oak", kata = 0, eq = true, mpp = 90 }
   ataxia.playersHere = { "Sadey", "Akri" }
+  ataxia.retardation, retardDropDetectionTimer = nil, nil
+  ataxia.afflictions = {}
   ataxiaBasher = { enabled = false }
   ataxiaTemp = {}
   gmcp.Char.Status.class = "Monk"
@@ -92,6 +97,7 @@ local function fresh(flag)
   haveAff = function(a) return tAffs[a] and true or false end
   combatQueue, reboundHold, tCity = realCombatQueue, nil, nil
   tChaseTimer, jestercheese, myaeon, preventriftlock, stoplatency = nil, nil, nil, nil, nil
+  dir_left, targetIshere = nil, nil
   havebomb, tdeliverance = nil, nil
   lb = { Sadey = { hits = { head = 0, torso = 0, ["left arm"] = 0, ["right arm"] = 0,
     ["left leg"] = 0, ["right leg"] = 0 } } }
@@ -508,7 +514,7 @@ describe("aconfig rounds", function()
     press(nil)
     expect(saves).toBe(0)
     expect(ataxia.settings.roundDelivery).toBeNil()
-    expect(table.concat(echoed):find("not yet proven", 1, true) ~= nil).toBeTrue()
+    expect(table.concat(echoed):find("one group fight", 1, true) ~= nil).toBeTrue()
   end)
 
   it("refuses alias on another class and stores nothing", function()
@@ -941,6 +947,302 @@ describe("a real Shikudo round goes through it", function()
     fresh(nil)
     local calls = rawCalls(shikudo.dispatch)
     expect(calls[1].cmd:find(";", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
+-- ---------------------------------------------------------------------------------------------
+-- The 2026-11-03 group fight (fightlogs 081009_Froedine), the first alias fight with people attacking.
+-- ---------------------------------------------------------------------------------------------
+
+describe("group fight: TOUCH TENTACLE ends the round", function()
+  local CHAIN = "queue addclear free g body;g gold;stand;touch tentacle Sadey;wield staff489282;combo Sadey a b c"
+
+  it("nothing follows it in the alias, so nothing goes to the equilibrium queue", function()
+    fresh("alias")
+    send(CHAIN)
+    same(sent(), { "setalias lvfree stand/g body/g gold/touch tentacle Sadey", "queue addclear free lvfree" })
+  end)
+
+  it("the real combatQueue and the real lock send that round while the target flies", function()
+    fresh("alias")
+    tChaseTimer, targetIshere, dir_left = 1, false, "fly"
+    shikudoLock.state.pending, shikudoLock.state.runLine, shikudoLock.state.lastRound = nil, nil, nil
+    shikudoLock.state.lastSay, shikudoLock.state.mindRun, shikudoLock.state.prelude = nil, 0, 0
+    shikudoLock.dispatch()
+    same(sent(), { "setalias lvfree stand/g body/g gold/touch tentacle Sadey", "queue addclear free lvfree" })
+  end)
+
+  it("the press after the chase sends the attack", function()
+    fresh("alias")
+    send(CHAIN)
+    mock.reset()
+    send("queue addclear free g body;g gold;stand;wield staff489282;combo Sadey a b c")
+    same(sent(), { "setalias lvfree stand/g body/g gold/wield staff489282/combo Sadey a b c", "queue addclear free lvfree" })
+  end)
+
+  it("its run line does not count the attack the alias no longer holds", function()
+    fresh("alias")
+    send(CHAIN)
+    expect(ataxia_roundRan("LVFREE")).toBe("LVFREE")
+    send("queue addclear free g body;combo Sadey a")
+    expect(ataxia_roundRan("LVFREE")).toBe("g body;combo Sadey a")
+  end)
+
+  it("a shield key in the chain still keeps the whole chain raw", function()
+    fresh("alias")
+    send("queue addclear free stand;touch tentacle Sadey;touch shield")
+    same(sent(), { "queue addclear free stand", "touch tentacle Sadey", "touch shield" })
+  end)
+
+  it("the flag off leaves the chain as it was", function()
+    fresh(nil)
+    send(CHAIN)
+    same(sent(), { "queue addclear free g body", "g gold", "stand", "touch tentacle Sadey",
+      "wield staff489282", "combo Sadey a b c" })
+  end)
+end)
+
+describe("group fight: a target switch clears what still names the old target", function()
+  -- The real trigger bodies, as the game's line reaches them.
+  local function heldLine(path, command, kind)
+    local line = command .. " was added to your " .. kind .. " queue."
+    assert(TL.anyMatches(TL.patterns(path), line), "the trigger no longer takes its line")
+    matches = { line, command }
+    body(path)()
+  end
+
+  it("clears our alias, once", function()
+    fresh("alias")
+    send("queue addclear free g body;combo Sadey a")
+    mock.reset()
+    ataxia_roundTargetChanged()
+    same(sent(), { "clearqueue free" })
+    mock.reset()
+    ataxia_roundTargetChanged()
+    same(sent(), {})
+  end)
+
+  it("a held attack on the target clears everything: 'queue addclear' cannot reach it", function()
+    fresh("alias")
+    send("queue addclear free g body;combo Sadey a")
+    heldLine(HELD_EQ, "combo Sadey risingkick torso livestrike ruku torso", "equilibrium")
+    mock.reset()
+    ataxia_roundTargetChanged()
+    same(sent(), { "clearqueue all" })
+  end)
+
+  it("the balance trigger notes a held attack too", function()
+    fresh("alias")
+    heldLine(HELD_BAL, "combo Sadey risingkick torso", "balance")
+    mock.reset()
+    ataxia_roundTargetChanged()
+    same(sent(), { "clearqueue all" })
+  end)
+
+  it("a held defence survives: `touch shield` names no target", function()
+    fresh("alias")
+    send("queue addclear free g body;combo Sadey a")
+    heldLine(HELD_EQ, "touch shield", "equilibrium")
+    heldLine(HELD_EQ, "wield staff489282", "equilibrium")
+    mock.reset()
+    ataxia_roundTargetChanged()
+    same(sent(), { "clearqueue free" })
+  end)
+
+  it("a held attack that has had its recovery no longer costs a full clear", function()
+    fresh("alias")
+    send("queue addclear free g body;combo Sadey a")
+    heldLine(HELD_EQ, "combo Sadey a", "equilibrium")
+    now = now + 7
+    mock.reset()
+    ataxia_roundTargetChanged()
+    same(sent(), { "clearqueue free" })
+  end)
+
+  it("the flag off sends nothing and notes nothing", function()
+    fresh(nil)
+    send("queue addclear free g body;combo Sadey a")
+    heldLine(HELD_EQ, "combo Sadey a", "equilibrium")
+    mock.reset()
+    ataxia_roundTargetChanged()
+    same(sent(), {})
+    expect(ataxiaTemp.roundSend).toBeNil()
+  end)
+
+  describe("through the real switchTarget", function()
+    local loadErr
+    local ok, err = pcall(dofile, TARGETING)
+    if not ok then loadErr = tostring(err) end
+
+    local STUBBED = { "matches", "pariah", "raiseEvent", "resetStatesV3", "setafflictionstackslevi",
+      "twohanded_resetFractures", "disableTimer", "targetresetafflictionslevi" }
+    local function retarget(who)
+      if loadErr then error(loadErr, 0) end
+      local saved = {}
+      for i, k in ipairs(STUBBED) do saved[i] = _G[k] end
+      matches = { "t " .. who:lower(), who:lower() }
+      pariah = nil
+      raiseEvent, resetStatesV3, setafflictionstackslevi = function() end, function() end, function() end
+      twohanded_resetFractures, disableTimer, targetresetafflictionslevi = function() end, function() end, function() end
+      tBals = {}
+      ataxiaTemp.class = "Monk"
+      local fine, e = pcall(switchTarget, who)
+      for i, k in ipairs(STUBBED) do _G[k] = saved[i] end
+      if not fine then error(e, 0) end
+    end
+
+    it("a new name clears before it says anything to the game", function()
+      fresh("alias")
+      send("queue addclear free g body;combo Sadey a")
+      mock.reset()
+      retarget("Akri")
+      expect(sent()[1]).toBe("clearqueue free")
+      expect(target).toBe("Akri")
+    end)
+
+    it("the same name, typed, clears nothing", function()
+      fresh("alias")
+      send("queue addclear free g body;combo Sadey a")
+      mock.reset()
+      retarget("Sadey")
+      for _, c in ipairs(sent()) do
+        if c:find("clearqueue", 1, true) then error("cleared on the same name: " .. c, 0) end
+      end
+    end)
+  end)
+end)
+
+describe("group fight: a slowed round is one command", function()
+  local function slow() ataxia.retardation, retardDropDetectionTimer = true, 1 end
+  local ROUND = "queue addclear free g body;g gold;stand;wield staff489282;transition to oak form;combo Sadey a b c"
+  local PLAIN = "queue addclear free g body;g gold;stand;wield staff489282;combo Sadey a b c"
+
+  it("the transition goes alone: a combo before it is refused from the old form", function()
+    fresh("alias")
+    slow()
+    send(ROUND)
+    same(sent(), { "setalias lvfree transition to oak form", "queue addclear free lvfree" })
+  end)
+
+  it("with no transition, the attack goes alone", function()
+    fresh("alias")
+    slow()
+    send(PLAIN)
+    same(sent(), { "setalias lvfree combo Sadey a b c", "queue addclear free lvfree" })
+  end)
+
+  it("a prone body stands first", function()
+    fresh("alias")
+    slow()
+    ataxia.afflictions.prone = true
+    send(ROUND)
+    same(sent(), { "setalias lvfree stand", "queue addclear free lvfree" })
+  end)
+
+  it("the staff goes first only if GMCP says it is not in hand", function()
+    fresh("alias")
+    slow()
+    ataxiaTemp.wieldedItems = { ["1"] = "a shield" }
+    send(ROUND)
+    same(sent(), { "setalias lvfree wield staff489282", "queue addclear free lvfree" })
+    now = now + 2
+    mock.reset()
+    ataxiaTemp.wieldedItems = { ["489282"] = "a twisted oaken staff" }
+    send(ROUND)
+    same(sent(), { "setalias lvfree transition to oak form", "queue addclear free lvfree" })
+  end)
+
+  it("a parry and an assess do not take the slot", function()
+    fresh("alias")
+    slow()
+    send("queue addclear free parry head;g body;combo Sadey a;assess Sadey")
+    same(sent(), { "setalias lvfree combo Sadey a", "queue addclear free lvfree" })
+  end)
+
+  it("a press inside the gap sends nothing: a new run would restart the delay", function()
+    fresh("alias")
+    slow()
+    send(PLAIN)
+    mock.reset()
+    now = now + 0.3
+    send(PLAIN)
+    same(sent(), {})
+    now = now + 0.8
+    send(PLAIN)
+    same(sent(), {})
+    now = now + 0.2
+    send(PLAIN)
+    same(sent(), { "queue addclear free lvfree" })
+  end)
+
+  it("the gap holds back no shield key and no movement", function()
+    fresh("alias")
+    slow()
+    send(PLAIN)
+    mock.reset()
+    send("queue addclear free stand;touch shield")
+    same(sent(), { "queue addclear free stand", "touch shield" })
+    mock.reset()
+    send("queue addclear free stand;n")
+    same(sent(), { "queue addclear free stand", "n" })
+  end)
+
+  it("a target switch lifts the gap", function()
+    fresh("alias")
+    slow()
+    send(PLAIN)
+    ataxia_roundTargetChanged()
+    mock.reset()
+    target = "Akri"
+    send("queue addclear free g body;combo Akri a")
+    same(sent(), { "setalias lvfree combo Akri a", "queue addclear free lvfree" })
+  end)
+
+  it("the run line counts the attack, but not a transition", function()
+    fresh("alias")
+    slow()
+    send(PLAIN)
+    expect(ataxia_roundRan("LVFREE")).toBe(PLAIN:sub(#"queue addclear free " + 1))
+    now = now + 2
+    send(ROUND)
+    expect(ataxia_roundRan("LVFREE")).toBe("LVFREE")
+  end)
+
+  it("a one-command line in the gap waits too, and a chain out of retardation is whole", function()
+    fresh("alias")
+    slow()
+    send("queue addclear free combo Sadey a")
+    same(sent(), { "setalias lvfree combo Sadey a", "queue addclear free lvfree" })
+    ataxia.retardation = false
+    mock.reset()
+    send(PLAIN)
+    same(sent(), { "setalias lvfree stand/g body/g gold/wield staff489282/combo Sadey a b c", "queue addclear free lvfree" })
+  end)
+
+  it("a saved flag with no timer behind it does not slow the round", function()
+    fresh("alias")
+    ataxia.retardation = true
+    send(PLAIN)
+    same(sent(), { "setalias lvfree stand/g body/g gold/wield staff489282/combo Sadey a b c", "queue addclear free lvfree" })
+  end)
+
+  it("the flag off is not slowed", function()
+    fresh(nil)
+    slow()
+    send(PLAIN)
+    same(sent(), { "queue addclear free g body", "g gold", "stand", "wield staff489282", "combo Sadey a b c" })
+  end)
+
+  it("the real lock holds its round's count until the attack runs", function()
+    fresh("alias")
+    slow()
+    ataxia.vitals = { form = "Oak", kata = 0, eq = true, mpp = 90 }
+    local st = shikudoLock.state
+    st.pending, st.runLine, st.lastRound, st.lastSay = nil, true, nil, nil
+    st.mindRun, st.prelude, st.choking = 0, 0, false
+    shikudoLock.dispatch()
+    expect(#sent()).toBe(2)
+    expect(sent()[1]:find("/", 1, true)).toBeNil()
   end)
 end)
 
