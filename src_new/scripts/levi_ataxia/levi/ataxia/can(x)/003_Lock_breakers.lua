@@ -408,6 +408,10 @@ function ataxia_promptLocks()
     table.insert(lockTable, "SKULLBASH")
   end
 
+  -- A Depthswalker holds our shadow (levi_scripts/class_detect/002). Display only.
+  local shadow = dwWatch and dwWatch.promptLabel and dwWatch.promptLabel()
+  if shadow then table.insert(lockTable, shadow) end
+
   if #lockTable > 0 then
     return "<NavajoWhite> (<orange>Locks: <DimGrey>"..table.concat(lockTable, ", ").."<NavajoWhite>)"
   else

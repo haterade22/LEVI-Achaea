@@ -387,25 +387,29 @@
     },
     {
      "filed": [
-      "2026-10-27"
+      "2026-10-27",
+      "2026-11-03"
      ],
      "logger": "Ours, recorder (Monk)",
      "logs": {
+      "ours/102138_Tabethys": 8,
+      "ours/102828_Harkon": 2,
       "ours/112717_Tabethys": 29
      },
      "method": "line",
      "stats": {
       "max": 1.738,
-      "median": 1.519,
+      "median": 1.525,
       "min": 1.406,
-      "n": 29,
-      "p10": 1.443,
-      "p90": 1.59,
-      "spread": 0.146
+      "n": 39,
+      "p10": 1.454,
+      "p90": 1.595,
+      "spread": 0.141
      },
      "usable": true,
      "versions": [
-      "4.7.450"
+      "4.7.450",
+      "4.7.471"
      ],
      "why_not": ""
     },
@@ -459,12 +463,12 @@
     }
    ],
    "methods": {
-    "line": 226,
+    "line": 236,
     "printed": 1242
    },
    "spread_without": {
-    "Claes": 0.239,
-    "Earth Lord (unnamed)": 0.223,
+    "Claes": 0.234,
+    "Earth Lord (unnamed)": 0.221,
     "Elmer": 0.23,
     "Leviticus": 0.23,
     "Mystor": 0.254,
@@ -477,7 +481,7 @@
     "max": 5.24,
     "median": 1.504,
     "min": 0.014,
-    "n": 1468,
+    "n": 1478,
     "p10": 1.38,
     "p90": 1.61,
     "spread": 0.23
@@ -925,27 +929,31 @@
     },
     {
      "filed": [
-      "2026-10-27"
+      "2026-10-27",
+      "2026-11-03"
      ],
      "logger": "Ours, recorder (Monk)",
      "logs": {
+      "ours/102138_Tabethys": 2,
+      "ours/102828_Harkon": 1,
       "ours/112717_Tabethys": 5
      },
      "method": "line",
      "stats": {
       "max": 4.992,
-      "median": 4.938,
+      "median": 4.866,
       "min": 2.32,
-      "n": 5,
-      "p10": 3.362,
-      "p90": 4.974,
-      "spread": 1.612
+      "n": 8,
+      "p10": 2.413,
+      "p90": 4.961,
+      "spread": 2.548
      },
      "usable": false,
      "versions": [
-      "4.7.450"
+      "4.7.450",
+      "4.7.471"
      ],
-     "why_not": "n=5 is under 10"
+     "why_not": "n=8 is under 10"
     },
     {
      "filed": [
@@ -997,32 +1005,32 @@
     }
    ],
    "methods": {
-    "line": 19,
+    "line": 22,
     "printed": 137
    },
    "spread_without": {
-    "Claes": 0.232,
-    "Earth Lord (unnamed)": 0.219,
-    "Elmer": 0.219,
-    "Leviticus": 0.208,
-    "Mystor": 0.221,
-    "Nikita": 0.18,
+    "Claes": 0.249,
+    "Earth Lord (unnamed)": 0.221,
+    "Elmer": 0.222,
+    "Leviticus": 0.213,
+    "Mystor": 0.222,
+    "Nikita": 0.183,
     "Ours, recorder (Monk)": 0.185,
-    "Shikudo attacker (unnamed)": 0.205
+    "Shikudo attacker (unnamed)": 0.213
    },
    "stats": {
     "max": 4.992,
     "median": 2.43,
     "min": 2.044,
-    "n": 156,
+    "n": 159,
     "p10": 2.33,
-    "p90": 2.532,
-    "spread": 0.203
+    "p90": 2.542,
+    "spread": 0.212
    },
    "title": "Focus",
    "unpaired": 0,
    "usable": false,
-   "why_not": "p90-p10 is 0.203, over 0.2"
+   "why_not": "p90-p10 is 0.212, over 0.2"
   },
   "humour": {
    "by_logger": [
@@ -1412,24 +1420,26 @@
      "logs": {
       "ours/081009_Froedine": 3,
       "ours/081532_Tabethys": 1,
+      "ours/102138_Tabethys": 1,
+      "ours/102828_Harkon": 1,
       "ours/112717_Tabethys": 5
      },
      "method": "line",
      "stats": {
       "max": 6.052,
       "median": 5.937,
-      "min": 5.839,
-      "n": 9,
-      "p10": 5.869,
-      "p90": 5.995,
-      "spread": 0.127
+      "min": 5.838,
+      "n": 11,
+      "p10": 5.839,
+      "p90": 5.981,
+      "spread": 0.142
      },
-     "usable": false,
+     "usable": true,
      "versions": [
       "4.7.450",
       "4.7.471"
      ],
-     "why_not": "n=9 is under 10"
+     "why_not": ""
     },
     {
      "filed": [
@@ -1457,25 +1467,25 @@
     }
    ],
    "methods": {
-    "line": 124,
+    "line": 126,
     "line_1s": 2,
     "printed": 17
    },
    "spread_without": {
-    "Claes": 0.189,
-    "Earth Lord (unnamed)": 0.229,
-    "Elmer": 0.203,
-    "Leviticus": 0.201,
-    "Mystor": 0.225,
-    "Nikita": 0.21,
+    "Claes": 0.187,
+    "Earth Lord (unnamed)": 0.226,
+    "Elmer": 0.201,
+    "Leviticus": 0.199,
+    "Mystor": 0.224,
+    "Nikita": 0.205,
     "Ours, recorder (Monk)": 0.223,
-    "Shikudo attacker (unnamed)": 0.209
+    "Shikudo attacker (unnamed)": 0.204
    },
    "stats": {
     "max": 6.11,
     "median": 5.912,
     "min": 5.276,
-    "n": 141,
+    "n": 143,
     "p10": 5.8,
     "p90": 6.001,
     "spread": 0.201
@@ -1631,17 +1641,19 @@
       "ours/080944_Lauryyn": 15,
       "ours/081009_Froedine": 48,
       "ours/081532_Tabethys": 121,
+      "ours/102138_Tabethys": 42,
+      "ours/102828_Harkon": 58,
       "ours/112717_Tabethys": 29
      },
      "method": "line",
      "stats": {
       "max": 250.253,
-      "median": 8.498,
-      "min": 0.274,
-      "n": 213,
-      "p10": 8.418,
-      "p90": 8.577,
-      "spread": 0.159
+      "median": 8.493,
+      "min": 0.054,
+      "n": 313,
+      "p10": 8.423,
+      "p90": 8.568,
+      "spread": 0.145
      },
      "usable": true,
      "versions": [
@@ -1676,25 +1688,25 @@
     }
    ],
    "methods": {
-    "line": 360,
+    "line": 460,
     "line_1s": 39
    },
    "spread_without": {
-    "Claes": 0.161,
-    "Elmer": 0.195,
-    "Ours, recorder (Alchemist)": 0.193,
-    "Ours, recorder (Infernal)": 0.221,
+    "Claes": 0.15,
+    "Elmer": 0.177,
+    "Ours, recorder (Alchemist)": 0.172,
+    "Ours, recorder (Infernal)": 0.187,
     "Ours, recorder (Monk)": 1.761,
-    "Ours, recorder (Runewarden)": 0.196
+    "Ours, recorder (Runewarden)": 0.179
    },
    "stats": {
     "max": 250.253,
-    "median": 8.492,
+    "median": 8.49,
     "min": 0.026,
-    "n": 360,
-    "p10": 8.387,
-    "p90": 8.583,
-    "spread": 0.196
+    "n": 460,
+    "p10": 8.397,
+    "p90": 8.575,
+    "spread": 0.178
    },
    "title": "Rebounding after a smoke, third person",
    "unpaired": 0,
@@ -2834,17 +2846,19 @@
      "logs": {
       "ours/081009_Froedine": 4,
       "ours/081532_Tabethys": 3,
+      "ours/102138_Tabethys": 2,
+      "ours/102828_Harkon": 1,
       "ours/112717_Tabethys": 9
      },
      "method": "line",
      "stats": {
       "max": 4.504,
-      "median": 4.412,
+      "median": 4.41,
       "min": 1.937,
-      "n": 16,
-      "p10": 4.31,
-      "p90": 4.449,
-      "spread": 0.138
+      "n": 19,
+      "p10": 4.327,
+      "p90": 4.447,
+      "spread": 0.12
      },
      "usable": true,
      "versions": [
@@ -2903,28 +2917,28 @@
     }
    ],
    "methods": {
-    "line": 20,
+    "line": 23,
     "line_1s": 1,
     "printed": 394
    },
    "spread_without": {
-    "Claes": 0.204,
-    "Earth Lord (unnamed)": 0.198,
-    "Elmer": 0.196,
-    "Mystor": 0.216,
+    "Claes": 0.203,
+    "Earth Lord (unnamed)": 0.197,
+    "Elmer": 0.194,
+    "Mystor": 0.213,
     "Nikita": 0.18,
-    "Ours, recorder (Infernal)": 0.199,
+    "Ours, recorder (Infernal)": 0.198,
     "Ours, recorder (Monk)": 0.198,
-    "Shikudo attacker (unnamed)": 0.203
+    "Shikudo attacker (unnamed)": 0.202
    },
    "stats": {
     "max": 5.85,
-    "median": 4.402,
+    "median": 4.401,
     "min": 1.937,
-    "n": 414,
+    "n": 417,
     "p10": 4.307,
-    "p90": 4.505,
-    "spread": 0.198
+    "p90": 4.504,
+    "spread": 0.197
    },
    "title": "Sip",
    "unpaired": 8,
@@ -3209,24 +3223,25 @@
      "logger": "Ours, recorder (Monk)",
      "logs": {
       "ours/081532_Tabethys": 1,
+      "ours/102828_Harkon": 2,
       "ours/112717_Tabethys": 3
      },
      "method": "line",
      "stats": {
       "max": 1.555,
-      "median": 1.515,
-      "min": 1.486,
-      "n": 4,
-      "p10": 1.486,
-      "p90": 1.551,
-      "spread": 0.065
+      "median": 1.495,
+      "min": 1.452,
+      "n": 6,
+      "p10": 1.469,
+      "p90": 1.549,
+      "spread": 0.08
      },
      "usable": false,
      "versions": [
       "4.7.450",
       "4.7.471"
      ],
-     "why_not": "n=4 is under 10"
+     "why_not": "n=6 is under 10"
     },
     {
      "filed": [
@@ -3278,26 +3293,26 @@
     }
    ],
    "methods": {
-    "line": 33,
+    "line": 35,
     "printed": 244
    },
    "spread_without": {
-    "Claes": 0.218,
-    "Earth Lord (unnamed)": 0.188,
-    "Elmer": 0.173,
-    "Mystor": 0.187,
+    "Claes": 0.216,
+    "Earth Lord (unnamed)": 0.187,
+    "Elmer": 0.172,
+    "Mystor": 0.186,
     "Nikita": 0.164,
     "Ours, recorder (Monk)": 0.188,
-    "Shikudo attacker (unnamed)": 0.186
+    "Shikudo attacker (unnamed)": 0.185
    },
    "stats": {
     "max": 3.002,
     "median": 1.481,
     "min": 0.277,
-    "n": 277,
+    "n": 279,
     "p10": 1.399,
-    "p90": 1.584,
-    "spread": 0.185
+    "p90": 1.583,
+    "spread": 0.183
    },
    "title": "Smoke (lungs)",
    "unpaired": 13,
@@ -3793,15 +3808,15 @@
   "ours": {
    "fixed": 0,
    "held": 0,
-   "logs": 9,
-   "prompts": 13213,
+   "logs": 11,
+   "prompts": 17138,
    "wrapped": 0
   },
   "sentinel": {
    "fixed": 0,
    "held": 0,
-   "logs": 3,
-   "prompts": 4893,
+   "logs": 4,
+   "prompts": 6773,
    "wrapped": 49
   }
  },
@@ -4244,6 +4259,20 @@
   },
   {
    "family": "sentinel",
+   "file": "2026-11-03_shikudo-group-alias-2.txt",
+   "filed": "2026-11-03",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "shikudo-group-alias-2",
+   "in_pools": false,
+   "logger": "Ours, client log",
+   "prompts": 1880,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 0
+  },
+  {
+   "family": "sentinel",
    "file": "2026-11-03_shikudo-group-alias.txt",
    "filed": "2026-11-03",
    "fixed_stamps": 0,
@@ -4381,6 +4410,34 @@
    "unstamped_prompts": 0,
    "version": "4.7.471",
    "wrapped": 0
+  },
+  {
+   "family": "ours",
+   "file": "2026-11-03_102138_Tabethys.log",
+   "filed": "2026-11-03",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "ours/102138_Tabethys",
+   "in_pools": true,
+   "logger": "Ours, recorder (Monk)",
+   "prompts": 2051,
+   "unstamped_prompts": 0,
+   "version": "4.7.471",
+   "wrapped": 0
+  },
+  {
+   "family": "ours",
+   "file": "2026-11-03_102828_Harkon.log",
+   "filed": "2026-11-03",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "ours/102828_Harkon",
+   "in_pools": true,
+   "logger": "Ours, recorder (Monk)",
+   "prompts": 1874,
+   "unstamped_prompts": 0,
+   "version": "4.7.471",
+   "wrapped": 0
   }
  ],
  "modifiers": [
@@ -4389,25 +4446,26 @@
    "label": "Shadowmadness on focus",
    "sources": {
     "EveP2TVe": 3,
+    "ours/102138_Tabethys": 1,
     "ours/112717_Tabethys": 4
    },
    "with": {
     "max": 4.992,
-    "median": 4.938,
+    "median": 4.931,
     "min": 2.4,
-    "n": 7,
-    "p10": 3.852,
+    "n": 8,
+    "p10": 4.085,
     "p90": 4.991,
-    "spread": 1.139
+    "spread": 0.906
    },
    "without": {
     "max": 2.79,
-    "median": 2.428,
+    "median": 2.43,
     "min": 2.044,
-    "n": 149,
+    "n": 151,
     "p10": 2.329,
-    "p90": 2.511,
-    "spread": 0.182
+    "p90": 2.512,
+    "spread": 0.183
    }
   },
   {
@@ -4430,10 +4488,10 @@
     "max": 4.913,
     "median": 4.4,
     "min": 1.937,
-    "n": 407,
-    "p10": 4.304,
+    "n": 410,
+    "p10": 4.306,
     "p90": 4.5,
-    "spread": 0.196
+    "spread": 0.194
    }
   }
  ],
@@ -5610,20 +5668,21 @@
       "logger": "Ours, recorder (Monk)",
       "logs": {
        "ours/081009_Froedine": 1,
+       "ours/102828_Harkon": 1,
        "ours/122916_Antoninus": 1
       },
       "printed": {
-       "2.89": 1,
+       "2.89": 2,
        "3.4": 1
       },
       "ratio": null,
       "stats": {
        "max": 3.4,
-       "median": 3.145,
+       "median": 2.89,
        "min": 2.89,
-       "n": 2,
-       "p10": 2.941,
-       "p90": 3.349,
+       "n": 3,
+       "p10": 2.89,
+       "p90": 3.298,
        "spread": 0.408
       }
      }
@@ -5874,6 +5933,6 @@
    }
   ],
   "own_ambiguous_packets": {},
-  "own_printed_rows": 1219
+  "own_printed_rows": 1304
  }
 }

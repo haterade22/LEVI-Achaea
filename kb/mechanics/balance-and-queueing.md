@@ -175,10 +175,18 @@ no complaint. `setalias` was refused 0 of 98. The 24 s recording reaches only 2 
 - **An alias keeps its target until the next press.** It fired at the old target 52 ms after a switch (row 550) and 1.35 s after one (row 3838). All 4 wrong-target rows failed
   only because that person had left the room.
 
+**A held `endure` pair costs nothing, and we left it alone (2026-11-03).** `+aff paralysis` sends `endure` and `-aff paralysis` sends `endure stop` (`ataxia/004`). Off balance, the game holds
+both and runs them first at the next recovery, in the same millisecond, and the round still fires (`102138_Tabethys` rows 8838-8841). 9 of 19 cycles ended like that, and endure stayed
+up for 1.08 to 2.58 s in 5 (all in `ours/2026-10-27_112717_Tabethys.log`). `You drive out the invasive attempt to afflict you with paralysis.` does not prove what endure does: 4 of its 6 rows came with
+endure down. So no log shows that endure helps, or that the pair hurts. The pairs make up all 10 `was added` rows of `102138_Tabethys` on [scoreboard.md](scoreboard.md), so read that bar with this in mind.
+
 ## Retardation: only the last command happens
 
-MEASURED, 8 runs, 24.2 s, an inference from rows, and no HELP file states it (`ours/2026-11-03_081009_Froedine.log`, after "Kaden gestures grandly, and causes a deepfreeze",
-which may or may not be the cause).
+MEASURED, 8 runs, 24.2 s, an inference from rows, and no HELP file states it (`ours/2026-11-03_081009_Froedine.log`).
+
+**The cause is a vibration in the room.** `As the retardation vibration embeds itself, time itself appears to slow.` starts it, and `Tabethys claps her hands and the retardation
+vibration is dampened.` ends it. In `081009_Froedine`, the sluggish rows stop before each clap (rows 2288, 2993) and start again after the embed (row 2689, then row 2736). In
+`102828_Harkon`, the embed at row 6773 comes just before the first sluggish row, 6781. An earlier version of this page pointed at Kaden's deepfreeze: that was a guess, and these rows replace it.
 - `You move sluggishly into action.` prints once per command, when the run fires.
 - **Only the last command of the last run happens,** about 1.05 s later (1.02 to 1.09): 7 of 8 runs.
 - **A new run replaces the waiting one and starts the delay again.** Runs at rows 2059, 2087 and 2099 gave one combo at row 2113, 1.03 s after the last. Balance and equilibrium
@@ -186,6 +194,7 @@ which may or may not be the cause).
 - **`transition to oak form` was lost,** so the Oak combo behind it was refused from the old form, 3 of 3 (runs at rows 2152, 2736, 2765). Outside retardation, the
   transition worked each time a reply showed.
 - `setalias` and `queue addclear` print no sluggish line.
+- A second sample, `102828_Harkon` row 7017: a run of 5 commands, and no attack followed in 1.7 s. The fight had other interrupts at that moment, so this does not settle anything.
 
 **Our rule (v4.7.474, alias path only).** The shim sends ONE command: `stand` if prone, the staff if GMCP says it is not in hand (with no item id or no GMCP list, it assumes
 the staff is in hand), the transition, and then the attack. `g body`, `g gold`, `parry` and `assess` do not take the slot. A press inside 1.2 s (1.05 s plus a send's 0.13 s) sends nothing. A target switch

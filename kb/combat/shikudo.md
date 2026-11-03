@@ -774,6 +774,14 @@ equilibrium. KAI CHOKE landed 4, and 1 did not. Impatience: 18 rounds and 1 batt
 
 **Not tested by this fight:** no asthma + weariness window on us and no `fitness` send, so the FITNESS hold has not run. **None of the fixes above has run in a fight yet.**
 
+## Group combat: the second 2026-11-03 fight, and our death (v4.7.471)
+
+Sources: `kb/raw/logs/ours/2026-11-03_102138_Tabethys.log`, `2026-11-03_102828_Harkon.log`, and `kb/raw/logs/2026-11-03_shikudo-group-alias-2.txt`, the screen. These ran before v4.7.474 was published (10:33 CST), so **they do not test the
+v4.7.474 fixes.** They are the baseline: 21 set switches in under 5 minutes, 18 of 33 repeat calls, 21 `avoid` refusals, 2 of 45 attacks at an old target. Alias rewrites: 39 fired new text, 0 old, 7 did not show.
+
+**We died to two Depthswalkers (`102138_Tabethys`, rows 8749-9313). Alias rounds did not cause it:** the last combo landed 0.88 s before death. The route is in [docs/kill-paths.md](../../docs/kill-paths.md). v4.7.476 adds a
+display-only alert (`class_detect/002`): a box at the attune, a box when the shadow is taken, and `SHADOW(name)` beside the locks on the prompt.
+
 ## Conflicts and open questions
 
 - **Blackout, MIND SCYTHE and the mind lock:** the wiki marks the abilities that need no lock with

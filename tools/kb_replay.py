@@ -1923,7 +1923,7 @@ def render_page(a, logs):
     out += render_first_run(a)
     out += ["## Logs read", "",
             "%d logs. Skipped: %s (prompts with no time in them, so no warning can be measured). `2026-10-27_shikudo-group-mhaldor` is the same fight as "
-            "`ours/112717_Tabethys`, and `2026-11-03_shikudo-group-alias` holds the three recordings of 2026-11-03 (`kb_timing.SAME_FIGHT`), so they stay out of every count. The ids are the ones [clocks.md](clocks.md) uses." % (
+            "`ours/112717_Tabethys`, and the two `2026-11-03_shikudo-group-alias` logs hold the recordings of 2026-11-03 (`kb_timing.SAME_FIGHT`), so they stay out of every count. The ids are the ones [clocks.md](clocks.md) uses." % (
                 len(logs), ", ".join("`%s`" % log.name for log in skipped) or "none"), ""]
     rows = []
     for rep in a["reps"]:

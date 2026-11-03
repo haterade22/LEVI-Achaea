@@ -498,9 +498,10 @@ DAGAZ_MAX_GAP = 30.0
 CURING_REACH = 3
 SHORT_SALVES = ("APPLY MENDING", "APPLY EPIDERMAL", "APPLY CALORIC")
 # The same fight as ours/2026-10-27_112717 up to 11:28:22, so its samples would count twice. It stays parsed and listed.
-# The 2026-11-03 client log holds all three of that morning's recordings; the value names the first with a target switch.
+# The 2026-11-03 client logs hold that day's recordings; each value names the recording with the most of the fight.
 SAME_FIGHT = {"2026-10-27_shikudo-group-mhaldor.txt": "2026-10-27_112717_Tabethys.log",
-              "2026-11-03_shikudo-group-alias.txt": "2026-11-03_081009_Froedine.log"}
+              "2026-11-03_shikudo-group-alias.txt": "2026-11-03_081009_Froedine.log",
+              "2026-11-03_shikudo-group-alias-2.txt": "2026-11-03_102138_Tabethys.log"}
 
 
 def clock_samples(log):
