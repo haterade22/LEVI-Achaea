@@ -192,6 +192,14 @@ Runewarden applied salve to her legs after every flashheel.
   **Whether a MIND command rebounds off a shield has never been seen.** Both offenses, and vv,
   shatter a shield first either way.
 
+### A strike at a denizen (CONFIRMED, live: `kb/raw/live/shikudo-bash_2026-11-03.txt`)
+
+The strike lines are the same as in PvP, but each hit prints `Damage dealt: 5988 (physical blunt).` Our one sample has no
+"you have dealt 9.2% damage to ..." line and no effect line ("Horror overcomes the face of ..."), so nothing that trigger 789 reads
+printed. That is why the strike ledger cannot tell a hit from a miss at a denizen, and why the `[SK]` combo line is PvP only (v4.7.473).
+The inline `transition willow` prints its form line after the kata line. This transition out of Oak came at a chain of 12, and the
+comment on `SHIKUDO_BASH_ROTATION` expects 9. A charstats lag is the likely reason (UNCONFIRMED, one sample).
+
 ### What the victim sees (log 2)
 
 | Attack | Line | Then |

@@ -2,6 +2,22 @@
 
 ---
 
+## 2026-11-03 - v4.7.473: no `[SK]` combo line at a denizen
+
+User, about a bashing screen: "this is when I am bashing which is weird." Three strikes hit an Arcadian sentry, and under them was a red
+`[SK] 651916  MISS 0/3  (3 unseen)  Willow:12` (`kb/raw/live/shikudo-bash_2026-11-03.txt`).
+
+- **Why it said MISS:** v4.7.456 added the line for PvP group fights, with no PvE gate. The strike ledger reads the PvP outcome lines
+  (trigger 789), and a denizen hit prints `Damage dealt: N (physical blunt).` So each strike ended as unseen, and zero hits prints `MISS`.
+- **The fix:** `shikudoEcho.onStrike` (`shikudo/012`) opens no record at a numeric target or with the basher on, the same test as
+  `gags/001`. PvP output does not change. With no record open, `tarGained` prints its inline tag in PvE again, as before v4.7.456.
+  `[SK] FAILED` is not gated.
+- **`[Levi]: WILLOW FORM` was correct:** the combo was Oak, and the bash rotation sends Oak on to Willow with an inline transition.
+- **Seen and not changed, both in PvP:** `render` prints `MISS` when hits are zero even if nothing was dropped, so a combo that a Shield
+  of Absorption swallows can read as a miss. The form label reads the form after an inline transition, as `Willow:12` did for this Oak combo.
+
+---
+
 ## 2026-11-03 - v4.7.472: mindnet tells the party about non-citizens, in any area
 
 User: "mindnet doesnt report?" A group fight printed `Xylarys has entered the area.` and sent nothing. The trigger sent `pt` only
