@@ -37,6 +37,8 @@ colorTriggerBgColor: '#000000'
 patterns:
 - pattern: ^(\w+) parries the attack with a deft manoeuvre\.
   type: 1
+- pattern: ^\w+ dexterously dances aside, evading your blow\.
+  type: 1
 - pattern: ^The staff connects to the (left|right) arm with a resounding crack
   type: 1
 - pattern: '^\w+ staggers as the staff cracks across '
@@ -76,7 +78,7 @@ patterns:
 -- A one-line adapter, so the deciding stays in the script, where the tests can see it.
 --
 -- The lines, from kb/raw/logs/2026-10-11_shikudo-vs-runewarden-snb_attacker.txt and Mystor's logs:
--- a parry, a fumble and a shield's rebound mean the strike did not land; the damage line and the
+-- a parry, a dodge, a fumble and a shield's rebound mean the strike did not land; the damage line and the
 -- effect lines mean it did. Only ruku to the arm's effect line ("The staff connects to the right arm
 -- with a resounding crack, the limb flopping uselessly.") is recorded here, because it alone names no
 -- target; the others have their own recorders, and here they only mark the strike resolved.

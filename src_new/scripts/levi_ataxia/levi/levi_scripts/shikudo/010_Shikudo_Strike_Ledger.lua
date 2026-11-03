@@ -60,6 +60,7 @@ shikudoLedger.SILENT_COMMIT = {}
 -- anchor. attacker = kb/raw/logs/2026-10-11_shikudo-vs-runewarden-snb_attacker.txt.
 local DAMAGE = "^As your blow lands with a crunch, you perceive that you have dealt "  -- attacker:376
 local PARRY = "^(%a+) parries the attack with a deft manoeuvre"            -- attacker:444, after :440
+local DODGE = "^%a+ dexterously dances aside, evading your blow"     -- 2026-11-03_shikudo-group-alias:11215
 local FUMBLE = "^You fumble your strike"                                      -- attacker:434, after :433
 local SHIELD = "^A dizzying beam of energy strikes you as your attack rebounds off of " -- LcJC-rJ5:207
 local ARM = "^The staff connects to the (%a+) arm with a resounding crack"     -- attacker:377, :2575
@@ -150,8 +151,13 @@ local function silentCommit(cur)
   end
 end
 
+-- KAI HEAL opens with the words of nervestrike and ruku, so 587 fires on it (v4.7.475). It is no
+-- strike: each one printed a [SK] MISS 0/1 and ended the strike in flight.
+local KAI_HEAL = "^You whip your hands through the air"   -- 2026-11-01_elmer_shikudo-vs-runewarden_win_2N1HTSWZ:1099
+
 -- 587, on row 1 of every strike line. The previous strike's lines are over by now.
 function shikudoLedger.strike(row)
+  if (row or ""):find(KAI_HEAL) then return end
   shikudoLedger.expire("strike")
   if not (ataxia_isClass and ataxia_isClass("monk")) then return end
   local cur = { text = row or "", at = getEpoch(), tail = 0 }
@@ -173,8 +179,9 @@ function shikudoLedger.more(row, entry)
 end
 
 -- 789, on every line that can end a strike. Returns what the line was (for the tests). A parry, a
--- fumble and a shield's rebound DROP the strike (attacker:440-444 is a parried ruku the logger's own
--- tracker recorded anyway); a damage or effect line resolves it; the arm line goes to rukuArm.
+-- dodge, a fumble and a shield's rebound DROP the strike (attacker:440-444 is a parried ruku the
+-- logger's own tracker recorded anyway); a damage or effect line resolves it; the arm line goes to
+-- rukuArm. "your blow" makes the dodge ours, so it needs no target check, unlike the parry.
 function shikudoLedger.outcome(text)
   text = text or ""
   local cur = shikudoLedger.cur
@@ -187,6 +194,10 @@ function shikudoLedger.outcome(text)
   if who then
     if isTargeted(who) then drop(cur, "parry") end
     return "parry"
+  end
+  if text:find(DODGE) then
+    drop(cur, "dodge")
+    return "dodge"
   end
   if text:find(FUMBLE) then
     drop(cur, "fumble")

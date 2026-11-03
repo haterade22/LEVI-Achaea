@@ -2,6 +2,28 @@
 
 ---
 
+## 2026-11-03 - v4.7.475: the `[SK]` line says MISS only with proof, reads a dodge, and names the form the strikes were in
+
+The user asked for both after v4.7.473 listed them as seen and not changed: "Yes fix the mix and fix the form label please."
+
+- **`MISS` needs a miss line for every strike.** It printed when hits were zero, even if nothing was dropped, and a strike with no outcome
+  line may have landed. Zero hits with such a strike now prints a yellow `UNSEEN 0/3  (3 unseen)`. Red `MISS` stays for a combo where every
+  strike has a miss line.
+- **KAI HEAL is not a strike.** `You whip your hands through the air...` opens with the same words as nervestrike and ruku, so trigger 587
+  fired on it, and each kai heal printed a `MISS 0/1` and ended the strike in flight. The ledger now skips it (`shikudo/010`). A search of
+  all logs found no other monk line that passes for a strike.
+- **The ledger reads the dodge line.** `Averine dexterously dances aside, evading your blow.` was the one strike with no line we read in the 32
+  combo lines of the 2026-11-03 group log, so it showed as `(1 unseen)`. It now shows as `(dodge 1)` (trigger 789, `shikudo/010`).
+- **The form label is the form the strikes were in.** `Willow:12` printed for an Oak combo, one row above the Willow form line, because GMCP
+  shows the new form before the lines of its block. `shikudo/012` now sets the form at the first strike: a form line since the last prompt,
+  else the form GMCP gave at the last prompt (`shikudoEcho.prompt`, called by 318). It does not use `shikudostance` alone, because a
+  stumble changes the form with no line we know. In the first combo after a load, an inline transition can still show the new form.
+- **Not changed, and not confirmed by a log:** the kata line (164) writes the old chain into `ataxia.vitals.kata` after the GMCP form change
+  zeroed it, so the next combo may read the old chain and send a refused transition. A refused transition costs only the form change.
+- **None of this has run in a fight yet.** Reimport to get it. `[SK]` still prints nothing while bashing (v4.7.473).
+
+---
+
 ## 2026-11-03 - v4.7.474: group fight fixes for alias rounds, curing stays on normal in a party, and the defence list prints in rows
 
 User: "great log of your changes, please review. Group combat Shikudo." The first alias fight with people attacking us held up: no death and no Lua error. One recording passed

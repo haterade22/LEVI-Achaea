@@ -55,6 +55,7 @@ end
 -- Every line 789 is written for, with what the ledger must read it as.
 local OUTCOMES = {
   { PARRY, "parry" },
+  { "Averine dexterously dances aside, evading your blow.", "dodge" }, -- 2026-11-03_shikudo-group-alias:11215
   { ARM_R, "arm" },
   { ARM_L, "arm" },
   { TORSO_FX, "effect" },

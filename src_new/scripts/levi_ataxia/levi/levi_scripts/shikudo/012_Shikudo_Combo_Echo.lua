@@ -22,6 +22,7 @@ packageName: ''
 --
 --   [SK] Sadey  HIT 3/3  LA+9.2 LL+9.2 H+9.4  prone dizziness confusion  Rain:3
 --   [SK] Akri  MISS 0/3 (reflection 3)  Oak:12
+--   [SK] Akri  UNSEEN 0/3 (3 unseen)  Oak:12
 --   [SK] FAILED: no staff (staff489282)
 --   [SK] KAI CHOKE -> Crixos
 --
@@ -31,8 +32,8 @@ packageName: ''
 -- the line that settles it, and this file listens to it:
 --   * shikudoLedger.strike (587) opens a record if none is open, and counts the strike.
 --   * shikudoLedger.expire hands over each strike as it ends: settled by a damage, effect or arm
---     line = a HIT; dropped by a parry, fumble, shield rebound or reflection = a MISS with its
---     reason; neither = unknown ("?"), which the line shows, as the ledger counts it.
+--     line = a HIT; dropped by a parry, dodge, fumble, shield rebound or reflection = a miss with its
+--     reason; neither = unseen, which the line shows, as the ledger counts it.
 --   * The damage line (789 -> shikudoLedger.outcome) gives the limb and the percentage.
 --   * The "tar afflicted" event gives what landed on our target while the record is open.
 --   * Our reflection lines (triggers 797, 798) drop the strike in flight as "reflection".
@@ -65,10 +66,28 @@ end
 
 local function now() return (getEpoch and getEpoch()) or 0 end
 
+-- The form the strikes are in (v4.7.475). NOT ataxia.vitals.form as it reads now: the GMCP of a block
+-- is handled before the block's lines, so after an inline transition it names the next form while
+-- the strikes are still being read ("Willow:12" for an Oak combo, one row above the Willow form line;
+-- the user's screen, 2026-11-03). So:
+--   * a form line since the last prompt (the stance triggers write shikudostance): the strikes after
+--     it are in that form, a round that sends its transition first;
+--   * otherwise the form GMCP gave at the last prompt, when it had caught up with its block.
+-- Not shikudostance alone: a stumble moves the form with no line we know, and it would stay stale.
+-- With no prompt seen since a load, the form GMCP gives now, which an inline transition can still fool.
+local function strikeForm()
+  local stance = shikudostance
+  if type(stance) == "string" and stance ~= "" and stance ~= shikudoEcho.stanceAtPrompt then
+    return stance:sub(1, 1):upper() .. stance:sub(2):lower()
+  end
+  return shikudoEcho.formAtPrompt or (ataxia and ataxia.vitals and ataxia.vitals.form)
+end
+
 local function open()
   if shikudoEcho.rec then return shikudoEcho.rec end
   shikudoEcho.rec = {
     at = now(), target = type(target) == "string" and target or tostring(target),
+    form = strikeForm(),
     strikes = 0, hits = 0, misses = {}, unknown = 0, damage = {}, affs = {}, affSeen = {},
   }
   return shikudoEcho.rec
@@ -157,7 +176,10 @@ function shikudoEcho.action(what, who, landed)
     .. " -> " .. ascii(who or target))
 end
 
--- The line itself: chartreuse when every strike hit, yellow for some, red for none.
+-- The line itself: chartreuse when every strike hit, yellow for some, red when every strike missed.
+-- MISS needs proof for each strike (v4.7.475). A strike with no outcome line may have landed (a blow
+-- a Shield of Absorption swallows, a line we do not read yet), so zero hits with one of those is a
+-- yellow UNSEEN.
 function shikudoEcho.render(r, kata)
   local missN, missWhy = 0, {}
   for why, n in pairs(r.misses) do
@@ -167,15 +189,19 @@ function shikudoEcho.render(r, kata)
   table.sort(missWhy)
   local total = r.hits + missN + r.unknown
   if total < r.strikes then total = r.strikes end
-  local colour = (r.hits > 0 and r.hits >= total and "<chartreuse>")
-    or (r.hits > 0 and "<yellow>") or "<red>"
-  local word = (r.hits == 0) and "MISS" or "HIT"
+  local unseen = total - r.hits - missN
+  local word, colour = "MISS", "<red>"
+  if r.hits > 0 then
+    word, colour = "HIT", (r.hits >= total) and "<chartreuse>" or "<yellow>"
+  elseif unseen > 0 then
+    word, colour = "UNSEEN", "<yellow>"
+  end
   local parts = { "[SK] " .. ascii(r.target), word .. " " .. r.hits .. "/" .. total }
   if #missWhy > 0 then parts[#parts + 1] = "(" .. table.concat(missWhy, ", ") .. ")" end
-  if r.unknown > 0 then parts[#parts + 1] = "(" .. r.unknown .. " unseen)" end
+  if unseen > 0 then parts[#parts + 1] = "(" .. unseen .. " unseen)" end
   if #r.damage > 0 then parts[#parts + 1] = table.concat(r.damage, " ") end
   if #r.affs > 0 then parts[#parts + 1] = table.concat(r.affs, " ") end
-  local form = ataxia and ataxia.vitals and ataxia.vitals.form
+  local form = r.form or (ataxia and ataxia.vitals and ataxia.vitals.form)
   if form or kata then
     parts[#parts + 1] = tostring(form or "?") .. ":" .. tostring(kata or (ataxia.vitals.kata or "?"))
   end
@@ -191,6 +217,14 @@ function shikudoEcho.close(kata)
   shikudoEcho.rec = nil
   if r.strikes == 0 and r.hits == 0 then return end
   cecho("\n" .. shikudoEcho.render(r, kata))
+end
+
+-- 318, at every prompt: end a combo no kata line closed, and keep what strikeForm reads for the next
+-- one. GMCP has caught up with its block by now.
+function shikudoEcho.prompt()
+  shikudoEcho.close()
+  shikudoEcho.formAtPrompt = ataxia and ataxia.vitals and ataxia.vitals.form
+  shikudoEcho.stanceAtPrompt = shikudostance
 end
 
 -- `skecho on|off`.
