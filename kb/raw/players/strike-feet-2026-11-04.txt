@@ -1,0 +1,12 @@
+# STRIKE FEET: removed, as relayed by the user (2026-11-04)
+
+Verbatim. Curated in kb/changes/2026-11-04_strike-feet-removed.md. No game post or AB capture is on
+file for this change.
+
+## The user's words (2026-11-04)
+
+For blademaster - SKill change
+
+Strike feet is removed, this functionality is now just a part of strike knees.
+
+Therefore anything that was strike feet should be strike knees

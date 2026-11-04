@@ -40,12 +40,8 @@ function bmstriking()
 if not tAffs.hamstring then
 tstrike = "hamstring"
   end
-if tmounted == true then
-tstrike = "feet"
-  end
-if tmounted == false then
-  tstrike = "knees"
-  end  
+-- The game removed STRIKE FEET (user, 2026-11-04). KNEES now also pulls a mounted target down.
+tstrike = "knees"
 if not tAffs.paralysis then
 tstrike = "neck"
   end
@@ -57,12 +53,7 @@ function bmstriking2()
 if not tAffs.hamstring then
 tstrike = "hamstring"
   end
-if tmounted == true then
-tstrike = "feet"
-  end
-if tmounted == false then
-  tstrike = "knees"
-  end  
+tstrike = "knees"
 if not tAffs.paralysis then
 tstrike = "neck"
   end
@@ -79,7 +70,7 @@ elseif not tAffs.airfist and ataxia.vitals.class >= 20 then
 tstrike = "airfist" 
 
 elseif tmounted == true then
-tstrike = "feet"
+tstrike = "knees"
 
 elseif tAffs.paralysis and tAffs.hypochondria and not tAffs.asthma then
 tstrike = "throat"
