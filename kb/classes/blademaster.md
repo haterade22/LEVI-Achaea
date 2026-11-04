@@ -84,7 +84,7 @@ Source: [https://wiki.achaea.com/TwoArts](https://wiki.achaea.com/TwoArts) (raw:
 
 ## Striking (25 abilities)
 
-*Changed 2026-10-23: on a broken head, STRIKE EYES also gives hallucinations and TEMPLE also dizziness (kb/changes/2026-10-23_classleads.md).*
+*Changed 2026-10-23: on a broken head, STRIKE EYES also gives hallucinations and TEMPLE also dizziness (kb/changes/2026-10-23_classleads.md). Reported by the user on 2026-11-04: STRIKE FEET is removed, and STRIKE KNEES does its job (kb/changes/2026-11-04_strike-feet-removed.md).*
 
 With trained knowledge of the anatomies of many of the sentient races that walk Sapience comes the ability to exploit their physical vulnerabilities. Precise, unarmed strikes to pressure points and sensitive locations allow a master of Striking to leave a foe collapsed upon the ground, unable to breathe, or rigid with paralysis. Wielding the closed fist, spear hand, and open palm, a Blademaster may strike in tandem with many sword attacks.
 

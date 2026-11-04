@@ -362,6 +362,16 @@ A deep review of the Serpent system followed on 2026-11-08: the offence, the tar
 
 ---
 
+## 2026-11-04 - Blademaster: STRIKE FEET is removed, and KNEES does its job (switched-off code and docs only, no version bump)
+
+The user reported a skill change: "Strike feet is removed, this functionality is now just a part of strike knees." The live offense needs no change. `blademaster/005_CC_BM_Ice` already sends `knees` for the dismount and does not send `feet`.
+
+- **`blademaster/001_Logic`.** The three `tstrike = "feet"` sites now say `knees`. In `bmstriking()` and `bmstriking2()` the mounted and unmounted branches then set the same word, so one assignment replaces both. This script and its readers `002_Attack` and `003_BrokenStar` are switched off, so nothing changes in play.
+- **Docs.** The two `feet: prone` rows in `.claude/classes/blademaster.md` are gone, and the `knees` rows state the dismount. New: `kb/changes/2026-11-04_strike-feet-removed.md` and `kb/raw/players/strike-feet-2026-11-04.txt`. The generated Blademaster page carries a note, through `NOTES` in `tools/kb_wiki_skills.py`.
+- **Open: `kb/CONFLICTS.md` #59.** No log holds the lines that set and clear `tmounted` (triggers 264 and 265), so we do not know what KNEES prints on a mounted target today. The triggers are unchanged. One line from a fight with a mounted target settles it.
+
+---
+
 ## 2026-11-03 - v4.7.478: SYSUPDATE warns about edits and saves a backup first
 
 A player reported: "when I edited some things... the changes were gone after an update, since then I have [not] pushed one in fear of loss." The report is correct. An update uninstalls the whole package and installs the new one, so it removes every edit inside `Levi_Ataxia`. Items in the player's own top-level folder stay.

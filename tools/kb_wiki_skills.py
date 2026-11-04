@@ -124,6 +124,8 @@ for _key, _text in {
 }.items():
     _note = f"Changed 2026-10-23: {_text} ({CHANGES_2026_10_23})"
     NOTES[_key] = f"{NOTES[_key]}. {_note}" if _key in NOTES else _note
+NOTES[("Blademaster", "Striking")] += (". Reported by the user on 2026-11-04: STRIKE FEET is removed, and STRIKE KNEES "
+                                       "does its job (kb/changes/2026-11-04_strike-feet-removed.md)")
 FIELDS = ("skill", "description", "lessons", "syntax", "required", "target", "cooldown", "detail")
 
 

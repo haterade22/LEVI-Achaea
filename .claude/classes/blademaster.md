@@ -306,8 +306,7 @@ affliction_targets:
   underarm: slickness
   throat: asthma
   neck: paralysis
-  knees: prone
-  feet: prone
+  knees: "prone; a mounted target is pulled from the mount instead (STRIKE FEET is removed, user 2026-11-04)"
 
 lock_strategy: |
   Hypochondria is the ONLY way Blademaster gives impatience.
@@ -421,8 +420,9 @@ pommelstrike:
     underarm: slickness
     throat: asthma
     neck: paralysis
-    knees: prone
-    feet: prone
+    knees: "prone; a mounted target is pulled from the mount instead"
+  feet_removed: "The game removed STRIKE FEET, and KNEES does its job (user, 2026-11-04;
+    kb/changes/2026-11-04_strike-feet-removed.md). What KNEES prints on a mounted target is uncaptured (kb/CONFLICTS.md #59)"
   broken_head: "Since 2026-10-23 (Striking 270): on a target with a BROKEN head, STRIKE EYES also gives
     hallucinations and STRIKE TEMPLE also gives dizziness. `striking/008` (temple) adds the dizziness since
     v4.7.451; `striking/009` (eyes) still adds hallucinations on every eyes strike (kb/CONFLICTS.md #41)"
