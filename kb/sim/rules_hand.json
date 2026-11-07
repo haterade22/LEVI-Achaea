@@ -1,0 +1,558 @@
+{
+  "about": "The rules of the whole-fight engine that live only in prose. tools/kb_rules.py joins them with the rules it reads from clocks.json, afflictions.json, venoms.yaml, the curing priorities and ACTIVE_CURE_BLOCKERS, and writes kb/sim/rules.json and rules.md. Tags: MEASURED (counted from log rows), READ (stated in a file or the code), WIKI (the wiki only), PLAYER (a player said so), ASSUMED (nothing supports it yet). Every ASSUMED, PLAYER and WIKI rule has alternatives, so a sweep can run each one. Sources are 1-based editor lines.",
+  "rules": [
+    {
+      "id": "channel.eat.blocked_by",
+      "value": [
+        "anorexia"
+      ],
+      "tag": "READ",
+      "source": "kb/afflictions/cure-channels.md:19"
+    },
+    {
+      "id": "channel.salve.blocked_by",
+      "value": [
+        "slickness"
+      ],
+      "tag": "READ",
+      "source": "kb/afflictions/cure-channels.md:20"
+    },
+    {
+      "id": "channel.smoke.blocked_by",
+      "value": [
+        "asthma"
+      ],
+      "tag": "READ",
+      "source": "kb/afflictions/cure-channels.md:21"
+    },
+    {
+      "id": "channel.focus.blocked_by",
+      "value": [
+        "impatience"
+      ],
+      "tag": "READ",
+      "source": "kb/afflictions/cure-channels.md:23"
+    },
+    {
+      "id": "channel.tree.blocked_by",
+      "value": [
+        "paralysis"
+      ],
+      "tag": "READ",
+      "source": "kb/afflictions/cure-channels.md:24"
+    },
+    {
+      "id": "channel.eat.lungs_items",
+      "value": [
+        "pear",
+        "calcite"
+      ],
+      "tag": "MEASURED",
+      "n": 29,
+      "source": "kb/afflictions/cure-channels.md:33",
+      "note": "eaten, but they spend the lungs clock (29 of 29)"
+    },
+    {
+      "id": "cure.options_join",
+      "value": "or",
+      "tag": "READ",
+      "source": "kb/afflictions/cure-channels.md:23",
+      "note": "the groups of cure_options are alternatives: focus alone cures anorexia. kb_affliction_db.py joins them with 'and' (kb/CONFLICTS.md #60)"
+    },
+    {
+      "id": "focus.order",
+      "value": "mental first, anorexia last",
+      "alt": [
+        "anorexia first"
+      ],
+      "tag": "READ",
+      "source": "tools/kb_replay.py:431",
+      "note": "LOCK_EXITS: focus cures anorexia, or a mental first"
+    },
+    {
+      "id": "tree.cures",
+      "value": "one random affliction",
+      "tag": "READ",
+      "source": "kb/afflictions/cure-channels.md:24"
+    },
+    {
+      "id": "tree.pick",
+      "value": "random",
+      "alt": [
+        "priority"
+      ],
+      "tag": "ASSUMED",
+      "source": "kb/afflictions/cure-channels.md:24",
+      "note": "uniform over the curable afflictions up. A run with --median takes the top priority instead, so it has no draw"
+    },
+    {
+      "id": "tree.policy",
+      "value": "now",
+      "alt": [
+        "hold"
+      ],
+      "tag": "ASSUMED",
+      "source": "tools/sim/forward.lua:155-167",
+      "note": "the victim touches the tree whenever it is up and an affliction is up; hold keeps it for a softlock"
+    },
+    {
+      "id": "ssc.delay",
+      "value": {
+        "min": 0.1,
+        "median": 0.14,
+        "max": 0.18
+      },
+      "alt": [
+        0.1,
+        0.18
+      ],
+      "tag": "MEASURED",
+      "n": 2,
+      "source": "kb/mechanics/foundations.md:192",
+      "note": "'may eat' to eat: medians 0.18 and 0.10 s in two logs. The draw between them is uniform (ASSUMED shape)"
+    },
+    {
+      "id": "draw.shape",
+      "value": "quantiles: linear between lo, p10, median, p90 and hi, 10% of the draws in each tail; lo and hi are one p10-p90 width past p10 and p90, held inside min and max",
+      "alt": [
+        "normal: the median +/- 3 sd (three uniform draws), held inside min and max"
+      ],
+      "tag": "ASSUMED",
+      "source": "tools/sim/victim.lua (V.clock, V.tails)",
+      "note": "the shape of a drawn clock; --median takes the median and draws nothing, except in a fork: there a clock already running (a channel down at the row, a FLAY of the shield, a smoke for rebounding, an apply of the coating) takes the median of the part of its spread above the time already run, and that part rests on this shape (review R3-engine-2). The --seeds runs of a --median page draw too. A log's min and max are often a lost line or a slowing affliction (clock.rebounding: 0.026 and 250.253 around a median of 8.49; clock.focus max 4.992 against p90 2.542), so a tail never reaches them unless they lie within one width. --clock-draw normal runs the alternative"
+    },
+    {
+      "id": "ssc.phi",
+      "value": 0.6,
+      "alt": [
+        0.33,
+        1.0
+      ],
+      "tag": "MEASURED",
+      "n": 27,
+      "source": "kb/mechanics/foundations.md:53",
+      "note": "inside one herb the top affliction wins with this chance: aurum took asthma 16 of 27 with weariness up"
+    },
+    {
+      "id": "ssc.order",
+      "value": "package default priorities",
+      "alt": [
+        "asthma first",
+        "the logger's own table"
+      ],
+      "tag": "ASSUMED",
+      "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua",
+      "note": "the loggers ran their own tables (kb/sim/forward.md). The priority numbers are READ from the code; using them for a victim is ASSUMED"
+    },
+    {
+      "id": "class.fitness",
+      "tag": "READ",
+      "source": "kb/afflictions/class-cures.md:41,60-65",
+      "value": {
+        "classes": [
+          "Infernal",
+          "Paladin",
+          "Runewarden",
+          "Monk",
+          "Blademaster",
+          "Druid",
+          "Sentinel"
+        ],
+        "cures": [
+          "asthma"
+        ],
+        "blocked_by": [
+          "weariness"
+        ],
+        "needs": [
+          "bal",
+          "eq"
+        ],
+        "spends": {
+          "bal": 2.8
+        },
+        "lockout": "clock.fitness",
+        "while_paralysed": true
+      }
+    },
+    {
+      "id": "class.salt",
+      "tag": "READ",
+      "source": "kb/afflictions/class-cures.md:36",
+      "value": {
+        "classes": [
+          "Alchemist"
+        ],
+        "cures": "one",
+        "blocked_by": [
+          "stupidity"
+        ],
+        "needs": [
+          "eq"
+        ],
+        "spends": {
+          "eq": "class.salt.eq"
+        },
+        "lockout": "clock.salt"
+      },
+      "note": "which affliction salt takes is not known: random, as the tree. It needs and spends equilibrium (class.salt.eq)"
+    },
+    {
+      "id": "class.salt.eq",
+      "value": 2.55,
+      "alt": [
+        3.0
+      ],
+      "tag": "MEASURED",
+      "n": 7,
+      "source": "kb/raw/logs/2026-11-01_elmer_alchemist-vs-serpent_loss_Z5cyffxx.txt:497,824,1783,2232,4033,4497,4920",
+      "note": "'Equilibrium used: 2.55s.' three rows before each of the 7 'Directing the energy of salt' lines (two before 'Drawing upon the latent alchemical energies'). The wiki says 3.00 (kb/raw/wiki/Alchemy.wiki:92); Elmer's shield shows the same 0.85 ratio (3.40 of 4.00)"
+    },
+    {
+      "id": "class.accelerate",
+      "tag": "READ",
+      "source": "kb/afflictions/class-cures.md:39",
+      "value": {
+        "classes": [
+          "Depthswalker"
+        ],
+        "cures": "class.accelerate.cures",
+        "blocked_by": [
+          "recklessness"
+        ],
+        "needs": [
+          "eq"
+        ],
+        "spends": {
+          "eq": "class.accelerate.eq"
+        },
+        "lockout": "class.accelerate.lockout"
+      },
+      "note": "it needs and spends equilibrium: the prompt went from exT to xT (2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt rows 2086-2098)"
+    },
+    {
+      "id": "class.accelerate.cures",
+      "value": 1,
+      "alt": [
+        2
+      ],
+      "tag": "ASSUMED",
+      "source": "kb/raw/logs/2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt:2088-2092",
+      "note": "one affliction, or two when boosted. The only fire in the four logs was boosted and took two (fratricide, asthma)"
+    },
+    {
+      "id": "class.accelerate.eq",
+      "value": 2.12,
+      "alt": [
+        1.5,
+        3.0
+      ],
+      "tag": "MEASURED",
+      "n": 1,
+      "usable": false,
+      "source": "kb/raw/logs/2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt:2096",
+      "note": "'Equilibrium used: 2.12s.' after the one (boosted) fire. n=1, so it is swept"
+    },
+    {
+      "id": "class.accelerate.lockout",
+      "value": 19.45,
+      "alt": [
+        15.0,
+        19.45,
+        25.0
+      ],
+      "tag": "MEASURED",
+      "n": 1,
+      "usable": false,
+      "source": "kb/raw/logs/2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt:2088,2097,2409",
+      "note": "the fire at 2088 (stamp 53743.36), a refusal at 2097, 'ACCELERATE BACK. You may accelerate time ...' at 2409 (53762.81). One fire, so it is swept"
+    },
+    {
+      "id": "class.dagaz",
+      "tag": "READ",
+      "source": "kb/afflictions/class-cures.md:103",
+      "value": {
+        "classes": [
+          "Runewarden"
+        ],
+        "passive": true,
+        "period": "clock.dagaz",
+        "cures": "one",
+        "first": [
+          "voyria"
+        ]
+      },
+      "note": "voyria first: azbErKcK rows 3856-3857"
+    },
+    {
+      "id": "class.dagaz.phase",
+      "value": "random",
+      "alt": [
+        "half a period"
+      ],
+      "tag": "ASSUMED",
+      "source": "kb/afflictions/class-cures.md:103",
+      "note": "when the rune ticks relative to the fight. --median puts the first tick at half a period"
+    },
+    {
+      "id": "class.cure.policy",
+      "value": "at once",
+      "alt": [
+        "hold"
+      ],
+      "tag": "ASSUMED",
+      "source": "kb/afflictions/class-cures.md:34-54",
+      "note": "the victim fires its class cure as soon as it is open and useful"
+    },
+    {
+      "id": "attack.dstab.venoms",
+      "value": 2,
+      "alt": [
+        1
+      ],
+      "tag": "WIKI",
+      "source": "kb/raw/wiki/Subterfuge.wiki:312",
+      "note": "the census on kb/sim/events.md counts the second-venom line ('Striking like a snake ...') against the pricks"
+    },
+    {
+      "id": "attack.shield",
+      "value": "blocks the attack",
+      "tag": "READ",
+      "source": "kb/raw/logs/2026-11-01_elmer_shikudo-vs-serpent_noresult_g-lD00-h.txt:24",
+      "note": "'<name>'s attack rebounds off your magical shield.'"
+    },
+    {
+      "id": "attack.rebounding",
+      "value": "the venoms rebound onto the attacker",
+      "tag": "READ",
+      "source": "kb/raw/logs/2026-11-01_claes_runewarden-vs-serpent_loss_azbErKcK.txt:523",
+      "note": "'The attack rebounds back onto <name>!'"
+    },
+    {
+      "id": "attack.flay",
+      "tag": "WIKI",
+      "source": "kb/raw/wiki/Subterfuge.wiki:76,80",
+      "value": "the attacker names what to strip: FLAY <target> SHIELD or REBOUNDING strips that one, a bare FLAY strips the sileris coating; the venom lands if neither shield nor rebounding is left",
+      "alt": [
+        "attack.flay.order"
+      ],
+      "note": ".claude/classes/serpent.md:569 reads the same. A bare FLAY in the logs (no 'flays away' line): g 945-948 and X 3189-3194 (the coating ripped, then the whip and paralysis). A named FLAY also takes the coating: rule attack.flay.coating"
+    },
+    {
+      "id": "attack.flay.coating",
+      "value": "a FLAY that strips the shield or rebounding also strips the sileris coating",
+      "tag": "MEASURED",
+      "n": 23,
+      "source": "kb/raw/logs/2026-11-01_claes_runewarden-vs-serpent_loss_azbErKcK.txt:269-270,558,1169,2235,2465,2659,2931,3217,3598; kb/raw/logs/2026-11-01_elmer_shikudo-vs-serpent_noresult_g-lD00-h.txt:1244,2100; kb/raw/logs/2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt:545,817,2190,2363,2509,2799,3461,3816,4105,4654,5162,5857",
+      "note": "23 of 23 FLAYs of the shield or rebounding made with the coating up ripped it in the same packet (az 9, g 2, X 12): 'The protective coating covering your skin is ripped away along with your protections.' None of the 33 made with it down printed that line. X 5328: a whip with no strip line left the coating up (snake bites met it at 5385, 5565 and 5776); read as a named FLAY whose defence was already gone (ASSUMED). tools/test_kb_rules.py re-counts it"
+    },
+    {
+      "id": "attack.flay.order",
+      "value": "named",
+      "alt": [
+        "auto: shield, else rebounding, else sileris"
+      ],
+      "tag": "ASSUMED",
+      "source": "tools/sim/attackers.lua (A.apply, flay)",
+      "note": "named follows the wiki's syntax. auto is the engine's own order for a FLAY that names nothing (--flay-order auto): forward.lua has no FLAY of a defence (its strike() turns a shielded DSTAB into a one-venom FLAY)"
+    },
+    {
+      "id": "attack.bite",
+      "value": "one venom; sileris or fangbarrier blocks it",
+      "alt": [
+        "sileris does not block"
+      ],
+      "tag": "WIKI",
+      "source": "kb/raw/wiki/Venom.wiki:23; kb/raw/wiki/Subterfuge.wiki:80",
+      "note": "'BITE <target> [<venom>]' (Venom.wiki:23). Flaying the sileris coating is what lets the fangs sink in again (Subterfuge.wiki:80). The pet's bite meets 'the waxy coating' in all four logs (rule snake lines, kb/sim/events.md)"
+    },
+    {
+      "id": "attack.gap.own",
+      "value": null,
+      "alt": [
+        1.545,
+        1.73,
+        1.83,
+        2.33,
+        2.8,
+        3.1
+      ],
+      "tag": "ASSUMED",
+      "source": "kb/mechanics/clocks.json stated.opponents",
+      "note": "our own DSTAB, FLAY and BITE costs are not measured (no log of our Serpent). The CLI needs --gap until the spar lands"
+    },
+    {
+      "id": "attack.gap.own.sd",
+      "value": 0.09,
+      "alt": [
+        0.0,
+        0.2
+      ],
+      "tag": "MEASURED",
+      "n": 264,
+      "source": "kb/mechanics/foundations.md:116",
+      "note": "our printed cost against the measured time to recovery: 89% within +-0.15 s, about 0.09 s as a standard deviation"
+    },
+    {
+      "id": "attack.give",
+      "value": "adds the named afflictions at once",
+      "alt": [
+        "off"
+      ],
+      "tag": "ASSUMED",
+      "source": "kb/mechanics/foundations.md:150-154",
+      "note": "a scripted supply with no attacker line: a hypnosis snap, a relapse, a timed impatience"
+    },
+    {
+      "id": "timed.hypochondria",
+      "value": {
+        "nausea": 3.12,
+        "lethargy": 6.2,
+        "impatience": 9.31
+      },
+      "alt": [
+        "off"
+      ],
+      "tag": "MEASURED",
+      "n": 5,
+      "usable": false,
+      "source": "kb/sim/events.json, census.<log>.suppliers.hypochondria.* (kb/sim/events.md, Suppliers)",
+      "note": "the pooled median of every sample in three logs (az, Z5, X; g has no step): nausea 3.124 (n=8, 3.09-3.15), lethargy 6.198 (n=7, 3.08-9.31), impatience 9.311 (n=5, 9.11-12.42). n is the smallest step's. Curing the hypochondria ends the chain. tools/test_kb_rules.py re-derives the medians from kb/sim/events.json"
+    },
+    {
+      "id": "timed.fratricide",
+      "value": {
+        "min": 2.0,
+        "max": 2.9
+      },
+      "tag": "MEASURED",
+      "n": 12,
+      "source": "kb/mechanics/foundations.md:152",
+      "note": "not yet used by the engine"
+    },
+    {
+      "id": "defence.shield.cost.Claes",
+      "value": 4.0,
+      "tag": "MEASURED",
+      "n": 13,
+      "source": "kb/raw/logs/2026-11-01_claes_runewarden-vs-serpent_loss_azbErKcK.txt:1258,1521,2041",
+      "note": "'Equilibrium used: 4.00s.' after all 13 of Claes's shields"
+    },
+    {
+      "id": "defence.shield.cost.Elmer",
+      "value": 3.4,
+      "tag": "MEASURED",
+      "n": 12,
+      "source": "kb/raw/logs/2026-11-01_elmer_alchemist-vs-serpent_loss_Z5cyffxx.txt:36,663,1386; kb/raw/logs/2026-11-01_elmer_shikudo-vs-serpent_noresult_g-lD00-h.txt:445,2285",
+      "note": "3.40 s after 11 of Elmer's 12 shields (Z5 7, g 4); 2.89 s once (g row 2285)"
+    },
+    {
+      "id": "defence.shield.cost.Nikita",
+      "value": 3.4,
+      "tag": "MEASURED",
+      "n": 10,
+      "source": "kb/raw/logs/2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt:528,729,2146",
+      "note": "'Equilibrium used: 3.40s.' after all 10 of Nikita's shields"
+    },
+    {
+      "id": "defence.shield.cost",
+      "value": 3.4,
+      "alt": [
+        2.89,
+        4.0
+      ],
+      "tag": "ASSUMED",
+      "source": "kb/sim/rules.json defence.shield.cost.*",
+      "note": "a victim with no logger: the cost two of the three loggers show"
+    },
+    {
+      "id": "defence.shield.reraise",
+      "tag": "MEASURED",
+      "n": 19,
+      "usable": false,
+      "value": {
+        "median": 5.826,
+        "sd": 4.129,
+        "min": 2.59,
+        "p10": 3.238,
+        "p90": 13.821,
+        "max": 15.277
+      },
+      "alt": [
+        3.238,
+        5.826,
+        13.821
+      ],
+      "source": "kb/sim/events.json: a FLAY of the shield (flay.shield) to the next shield.up within 20 s",
+      "note": "19 of the 26 FLAYs of the shield in the four logs saw the shield again within 20 s; 7 did not, and the engine raises it again after every FLAY. Only a FLAY starts the re-raise: a shield down with no FLAY (the logger's own movement or action dropped it) stays down (review R3-fork-1, R3-fork-2). The next attack came first every time (1.48-2.53 s later). The engine draws from these quantiles (min, p10, median, p90, max). tools/test_kb_rules.py re-measures it"
+    },
+    {
+      "id": "defence.shield.while_paralysed",
+      "value": false,
+      "alt": [
+        true
+      ],
+      "tag": "MEASURED",
+      "n": 4,
+      "source": "tools/kb_sim.py:59",
+      "note": "3 of 4 shield rows show paralysis cured first"
+    },
+    {
+      "id": "defence.rebounding.delay",
+      "value": "clock.rebounding",
+      "tag": "MEASURED",
+      "source": "kb/mechanics/clocks.json, clocks.rebounding (n=460; kb/mechanics/foundations.md:148 gives the older n=67)",
+      "note": "the aura comes up this long after the smoke, and the smoke spends the lungs clock. n is the clock's"
+    },
+    {
+      "id": "defence.rebounding.smoke",
+      "value": [
+        "skullcap",
+        "malachite"
+      ],
+      "tag": "MEASURED",
+      "n": 49,
+      "source": "kb/sim/events.json streams: kb/raw/logs/2026-11-01_claes_runewarden-vs-serpent_loss_azbErKcK.txt (skullcap, 16), kb/raw/logs/2026-11-01_elmer_shikudo-vs-serpent_noresult_g-lD00-h.txt (malachite, 9), kb/raw/logs/2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt (malachite, 24); first pair az 102 -> rebounding.up 8.52 s later",
+      "note": "the smoke items that raise rebounding. 48 of the 49 smokes of these items saw 'You feel an aura of rebounding surround you' 7.59-8.59 s later, before the next such smoke (g 2887 did not: the log ends). One of az's 16 is its firefly pipe's own line (az 573, after '[Curing]: SMOKE SKULLCAP'; the aura came at 743, 8.475 s later), which kb_events reads since review R3-docs-2. No smoke of another item (valerian, slippery elm, realgar) comes before a rebounding line without one of these first. A fork reads a logged smoke of these items as rebounding on its way (tools/theorycraft.py). tools/test_kb_rules.py re-counts it"
+    },
+    {
+      "id": "defence.sileris.harden",
+      "tag": "MEASURED",
+      "n": 43,
+      "usable": true,
+      "value": {
+        "median": 10.0,
+        "sd": 0.035,
+        "min": 9.753,
+        "p10": 9.947,
+        "p90": 10.037,
+        "max": 10.119
+      },
+      "source": "kb/sim/events.json streams: sileris.apply to the next sileris.up, before the next apply, in the four logs (az 12, Z5 9, g 7, X 15); first pair az 24 -> 10 s later",
+      "note": "the coating hardens this long after the apply line ('You apply a sileris berry' or 'a quicksilver droplet to yourself'). 6 of the 49 applies printed no hardening line before the next apply or the log's end (az 3616; Z5 1891, 4096, 4712, 4951, 5284). A hit before the 10 s mark does not explain it: 36 of the 43 that hardened took a bite or a FLAY in that time too. Slickness at the mark does: rule defence.sileris.slickness_harden. The engine does not re-apply the coating; a fork reads an apply with no hardening line yet as the coating on its way (tools/theorycraft.py, review R3-fork-8). tools/test_kb_rules.py re-measures it"
+    },
+    {
+      "id": "defence.sileris.slickness",
+      "value": "slickness that lands strips the sileris coating",
+      "tag": "MEASURED",
+      "n": 8,
+      "source": "kb/raw/logs/2026-11-01_elmer_alchemist-vs-serpent_loss_Z5cyffxx.txt:451,869,1262,1487,1861,4075; kb/raw/logs/2026-11-01_elmer_shikudo-vs-serpent_noresult_g-lD00-h.txt:1649; kb/raw/logs/2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt:146",
+      "note": "8 of 8 slickness gains in a packet that starts with the coating up printed 'The protective covering coating your skin sloughs off.' in the same packet (X 144-146: the second venom, 'You have been afflicted with slickness.', then the slough line). No slickness with the coating up left it on. All 8 are DSTABs. The engine strips it on a DSTAB, a give or a FLAY's venom and prints sileris.down (tools/sim/attackers.lua); the give and the FLAY are by analogy, no log shows them. A BITE lands only with the coating down. Review R4-engine-1. tools/test_kb_rules.py re-counts it"
+    },
+    {
+      "id": "defence.sileris.slickness_harden",
+      "value": "an apply does not harden while slickness is on at its hardening time",
+      "tag": "MEASURED",
+      "n": 49,
+      "source": "kb/sim/events.json streams: each sileris.apply, and slickness on or off at the apply + 10 s; kb/raw/logs/2026-11-01_claes_runewarden-vs-serpent_loss_azbErKcK.txt:3616,3734; kb/raw/logs/2026-11-01_elmer_alchemist-vs-serpent_loss_Z5cyffxx.txt:1891,2308,2310,4096,4454,4712,4881,4951,5218,5284,5402",
+      "note": "0 of the 43 applies that hardened had slickness on at the apply + 10 s (10 of them took slickness in the wait, and it was cured before the mark). 5 of the 6 applies that never hardened had it on (az 3616; Z5 4096, 4712, 4951, 5284). The sixth, Z5 1891, had slickness cured at +9.90 (row 2308) and a new apply in that packet (row 2310). The engine raises no coating at the mark when slickness is on (tools/sim/fight.lua timed). tools/test_kb_rules.py re-counts it"
+    },
+    {
+      "id": "label.true",
+      "value": "kb_replay.is_true",
+      "tag": "READ",
+      "source": "tools/kb_replay.py:645-679",
+      "note": "softlock (asthma, slickness or bloodfire, anorexia), impatience or sandfever, paralysis, and the class cure shut"
+    }
+  ]
+}

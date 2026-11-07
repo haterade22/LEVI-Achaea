@@ -170,7 +170,7 @@ venoms:
     affliction: "selarnia"
     cure: "apply mending to body"
     weapon: true
-    source: "wiki"
+    source: "venom_to_aff"
     wiki: "Forcing your victim back into mortal form. This venom will force the spirit animals out of those pesky forestals."
 
   slike:
