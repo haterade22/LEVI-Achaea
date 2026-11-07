@@ -64,6 +64,21 @@ jobs:
       - name: Test the simulator tool
         run: python3 -B tools/test_kb_sim.py
 
+      - name: Check the whole-fight rules match their sources
+        run: python3 -B tools/kb_rules.py --check
+
+      - name: Test the whole-fight rules
+        run: python3 -B tools/test_kb_rules.py
+
+      - name: Check the Serpent census and race table match the logs
+        run: python3 -B tools/kb_events.py --check
+
+      - name: Test the census and the race table
+        run: python3 -B tools/test_kb_events.py
+
+      - name: Test the theorycraft CLI and the whole-fight engine
+        run: python3 -B tools/test_theorycraft.py
+
       - name: Check version consistency
         run: |
           echo "=== Checking version sync ==="

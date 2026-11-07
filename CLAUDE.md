@@ -139,7 +139,13 @@ LEVI-Achaea/
 │   ├── test_kb_replay.py      # its tests: `python -B tools/test_kb_replay.py` (in CI)
 │   ├── kb_sim.py              # KB: simulator, first stage. Run logged boards 20 s forward under a strong attacker, write kb/sim/forward.md + .json; `--check` in CI
 │   ├── test_kb_sim.py         # its tests: `python -B tools/test_kb_sim.py` (in CI)
-│   ├── sim/forward.lua        # the simulator engine: pure Lua 5.1, no Mudlet calls; rule tests in src_new/tests/test_sim_forward.lua
+│   ├── sim/forward.lua        # the simulator engine: pure Lua 5.1, no Mudlet calls; rule tests in src_new/tests/test_sim_forward.lua. NEVER edit it: its bytes feed kb_sim.py's input hash
+│   ├── kb_rules.py            # KB: the whole-fight engine's rules (clocks.json, afflictions.json, venoms.yaml, curing prios, kb/sim/rules_hand.json) -> kb/sim/rules.json + rules.md, each rule tagged MEASURED/READ/WIKI/PLAYER/ASSUMED; `--check` in CI, so re-run it when clocks.json moves
+│   ├── kb_events.py           # KB: the four Serpent logs as one event stream (JSON Lines v1), the census, the DSTAB-vs-eat race table with its frozen golden row -> kb/sim/events.md + .json; `--check` and `--dump KEY`
+│   ├── theorycraft.py         # CLI: a scripted Serpent vs a victim (--victim --gap --script [--median] [--seeds N] [--clock-draw normal]), a log in the engine's columns (--log Z5 --from ROW), a fork (--log Z5 --at ROW --then ...) that starts from the row's board, clocks, balance/equilibrium, kept defences and the ones on their way (a FLAY of the shield, a rebounding smoke, a coating apply; the logger's own shield drop is not a FLAY). A gap under the floor (a fork's default 1.83 too) and a row after the last prompt are refused. A second cost line ends the open one (an impulse's adds); slickness strips the sileris coating and, if still on at the 10 s mark, stops a pending one from hardening. Output is MODEL, not a log; an ALT line names each rule whose alternative ran, GAP says what the gap draw is, SEEDS says the P lines of a --median page are drawn
+│   ├── sim/fight.lua          # the whole-fight engine (event loop, labels, race); sim/victim.lua (cure channels, class cures, defences); sim/attackers.lua (script parser, attack effects). Pure Lua 5.1; wired with forward.lua's RNG; tests in src_new/tests/test_sim_fight.lua
+│   ├── sim/gates_whole.json   # FROZEN 2026-11-07: the bars of the whole-fight plan (stages 1-4). A change after a gate ran is a failed round and needs the user's word
+│   ├── test_kb_rules.py, test_kb_events.py, test_theorycraft.py  # their tests (in CI); test_theorycraft pins the golden text of the user's example and the label parity with kb_replay.is_true
 │   └── legacy/                # Retired build tools
 ├── build.sh                   # Build script: ./build.sh [--dry-run] [--convert-only]
 ├── .gitignore                 # Excludes build artifacts, IDE state, caches

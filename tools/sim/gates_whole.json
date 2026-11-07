@@ -1,0 +1,103 @@
+{
+  "about": "FROZEN 2026-11-07, before any model output of the whole-fight engine. The bars of plan C:/Users/mikew/.claude/plans/if-we-understand-achaea-s-idempotent-sprout.md, copied as data. A change after any gate has run counts as a failed round, needs the user's written word, and may never relax a bar. Every page of this engine prints this file's sha256.",
+  "frozen": "2026-11-07",
+  "plan": "C:/Users/mikew/.claude/plans/if-we-understand-achaea-s-idempotent-sprout.md",
+  "seen_before_freeze": [
+    "kb/sim/forward.md: every verdict and the sanity table of step 7, stage 1 (PR #159)",
+    "kb/mechanics/clocks.md: every clock, and the opponent gaps (DSTAB median 1.83, n=195)",
+    "kb/mechanics/foundations.md: the model and the refuted claims",
+    "Z5cyffxx rows 150-263: the race read by hand on 2026-11-07 (strike first by 0.567, phase +0.602)",
+    "the census counts of the four Serpent logs, by grep: pricks 45/49/24/86, fangs 7/8/0/7, tree 12/7/2/22, eats 97/85/49/178",
+    "404 eats by the four loggers (the count the plan names; not re-derived before the freeze)"
+  ],
+  "inputs": {
+    "serpent_logs": {
+      "az": "2026-11-01_claes_runewarden-vs-serpent_loss_azbErKcK.txt",
+      "Z5": "2026-11-01_elmer_alchemist-vs-serpent_loss_Z5cyffxx.txt",
+      "g": "2026-11-01_elmer_shikudo-vs-serpent_noresult_g-lD00-h.txt",
+      "X": "2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt"
+    },
+    "note": "A log filed later is not an input. The next Serpent log, the spar included, is scored once against these bars before any refit."
+  },
+  "stage1": {
+    "golden_race_row": {"log": "Z5", "strike_row": 196, "next_strike_row": 248, "phase_at_strike": 0.602, "strike_first_by": 0.567, "tolerance": 0.002},
+    "measured_rule_tolerance_s": 0.01,
+    "same_seed_same_stream": true,
+    "true_label_parity": "the engine's true label equals kb_replay.is_true at every prompt of the four logs"
+  },
+  "stage2": {
+    "fidelity": {
+      "reproduce": "src_new/tests/test_serpent_notes.lua S1 (rows 178-191) through the adapter",
+      "timers_fire_at": [13.0, 0.5],
+      "lua_errors_in_1000_fights": 0,
+      "fight_k_alone_equals_fight_k_after_k_minus_1": true,
+      "user_reviews_stub_ledger": true,
+      "pattern_derived_lines_excluded_until_spar": true
+    }
+  },
+  "stage3": {
+    "round": "A, B and C together. One run is one round. Two failed rounds mean forward-only: free runs and sim belief turn off.",
+    "gate_A": {
+      "illegal_share_max": 0.02,
+      "refusal_lines_matched_min": 0.90,
+      "null_rulebook_must_fail": true,
+      "fitness_subgate": "the 11 FITNESS fires in other logs (kb/afflictions/class-cures.md:67) show 0 illegal",
+      "below_training_min_gap": "reported as novel, not illegal (az:315, az:350)",
+      "rule_fix_source": "a rule fix after a failure must cite a source that is not a Gate A row"
+    },
+    "gate_B": {
+      "features": "the last prompt strictly before the eat, plus the clocks",
+      "excluded_lines": ["[OUTR]", "[Prio]", "curing priority", "[Curing]"],
+      "shuffle_test": "shuffling all non-prompt lines gives the same prediction",
+      "baseline": "always the bloodroot class (HERB_WORDS)",
+      "mcnemar_one_sided_p_max": 0.05,
+      "no_fold_below_baseline": true,
+      "report_only_baseline": "cure the last hit",
+      "gap_ks_pooled_max": 0.15,
+      "per_logger_ks": "reported next to its simulated null p95, not a bar",
+      "unfitted": "a logger with a key affliction and no out-of-fold eats is marked UNFITTED"
+    },
+    "gate_C": {
+      "seeds_per_segment": 400,
+      "segment_split_gap_s": 10.0,
+      "cells": ["time share of the 6 key afflictions (gain and cure lines)", "eats by herb class", "cures per minute per channel",
+                "new afflictions per packet", "flays", "rebounding", "sileris", "snake hits and blocks", "class-cure fires",
+                "T_soft", "T_true (censored)"],
+      "one_frozen_configuration": true,
+      "coverage_90_pooled": [0.80, 0.97],
+      "coverage_90_per_fold_min": 0.70,
+      "coverage_50_pooled": [0.35, 0.65],
+      "crps_below_placebo": true,
+      "placebo": {"coverage_90_below": 0.80, "points_under_model_min": 20}
+    },
+    "folds": {
+      "hold_out": "one Serpent at a time",
+      "refit_per_fold": "clocks and phi, unless they move less than 0.01 s and 0.05",
+      "mimic_gaps": "per (ability, next ability), training persons only",
+      "mimic_affs": "training persons' gain counts, keyed by which lock pieces are up",
+      "single_source_suppliers": "swept"
+    }
+  },
+  "stage4": {
+    "only_after": "a passed round of stage 3",
+    "effect_close": 0.03,
+    "effect_soft_s": 0.5,
+    "saturated": 0.03,
+    "min_live_comparisons": 10,
+    "placebo_must_lose_share": 0.80,
+    "placebo_wins_allowed": 0,
+    "winner_confirmed_on": ["a fresh RNG stream", "held-out segments", "a one-sentence mechanism citing a log row"],
+    "lock_held_H_s": {"base": 7.1, "sweep": [4, 12], "source": "Z5 row 5487 (12.003) to the death after row 5590"},
+    "kill_bite_possible": "a lock, fangbarrier down, equilibrium up, scytherus landed (Z5 rows 5550-5560)",
+    "metrics": "paired differences only; an absolute rate is labelled 'model rate, not a win rate'",
+    "shadow_qualifier": "ROBUST, or CONDITIONAL with every flip value outside the measured min..max. A verdict that flips on an ASSUMED or PLAYER rule never qualifies. A qualifying verdict goes to the user as its own proposal.",
+    "knobs": [
+      "tree-aware lock rule: patch the curare-first rule of pickVenom (S:835)",
+      "venom pair by open channels: the curare fallback of pickVenom (S:862)",
+      "class lock venom: CLASS_LOCK_VENOM (S:785-792)",
+      "when to IMPULSE (S:678-688, S:1855)",
+      "gecko strip timing (S:1982-1990)"
+    ],
+    "knob_patch_text": "frozen with its sha256 when written, before any stage 4 run"
+  }
+}

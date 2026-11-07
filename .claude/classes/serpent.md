@@ -22,9 +22,10 @@ Hypnosis: Mental manipulation through suggestions (including Impulse)
 - **PLAYER**: the notes relayed on 2026-10-12 (`kb/raw/players/serpent-2026-10-12.txt`).
 - **UNVERIFIED**: nothing in `kb/raw` supports it yet.
 
-There is no Serpent fight log in `kb/raw/logs/` yet. So how a Serpent's own commands behave is
-WIKI, PLAYER or UNVERIFIED, and the lines our offense triggers read (dstab, bite, reaction,
-impulse, relapse, snap) are code only: none of them is captured in `kb/raw` (grepped 2026-10-12).
+`kb/raw/logs/` holds four fights against other Serpents (2026-11-01), logged from the victim's seat, and no log
+of our own Serpent. So the victim's side of a Serpent's commands is MEASURED there (see the theorycraft section),
+but our own attacker lines and costs are WIKI, PLAYER or UNVERIFIED. The lines our offense triggers read (dstab,
+bite, reaction, impulse, relapse, snap) are code only: none of them is captured from the attacker's seat.
 One fight recorded with `fightlog` (v4.7.418, millisecond stamps) would settle most of the open
 items on this page.
 
@@ -223,6 +224,9 @@ v4.7.419.
   `..._vNTjvghY.md`). Hydra FUROR (2.00 s) and Sentinel DOUBLESTRIKE carry one venom each. Within
   the Serpent kit the claim holds: BITE is 4.00 s for one venom.
 - **Unverified.** The 2.80 s is wiki only (no `AB DOUBLESTAB`), and the wiki may predate a rebalance.
+- **Measured (other Serpents, 2026-11-07).** DSTAB to the next attack: median 1.83 s, p10 1.73, min 1.545 (n=195,
+  `kb/mechanics/clocks.md`; rule `attack.gap.others.dstab`, not usable: p90-p10 is over 0.2). Far below the wiki's 2.80.
+  Our own cadence is unmeasured until a spar as Serpent with `aconfig seebalances on` and `fightlog on`.
 - **Our code.** DSTAB is the default attack (`attackMode = "dstab"`, :85; header :21-24). The normal
   round is `wield shield dirk;dstab <target> <v1> <v2>` (:2029-2035).
 - **Settle.** `AB DOUBLESTAB` in game, and a Serpent's DSTAB cadence timed in a `fightlog` recording.
@@ -347,7 +351,7 @@ v4.7.419.
 | Source | Game data | Serpent's? |
 |---|---|---|
 | Scytherus ("Thin blood") | "Scytherus causes any venoms you get affected by to relapse after a short delay." Cure: Eat Ginseng / Eat Ferrum (`kb/raw/live/affliction_show/scytherus.txt`) | Yes: SECRETE SCYTHERUS / BITE (WIKI) |
-| Fratricide | "causes hypnotic impulses to relapse a short time after being first introduced" | Yes by its effect; how it is given is unknown (Fratricide Mechanics) |
+| Fratricide | "causes hypnotic impulses to relapse a short time after being first introduced" | Yes by its effect. The pet snake's bite gives it: all 46 fratricide gains in the four Serpent logs come within three rows after the bite line (Z5 900-901) |
 | (third) | Not found in the game data. Candidates: hypochondria's delayed symptoms (one log; the game never calls them a relapse); our reaction table's scytherus -> camus (code only); the Toxicologist boon (PvE, Mnemosyne only) | -- |
 
 Not Serpent, listed so they are not confused with these: Shaman SYVIS, "causing diseases that your
@@ -553,23 +557,23 @@ bloodroot_stack:
 ```yaml
 type: affliction
 summary: DSTAB lock venoms, the monkshood reaction for impatience, then a finisher
-status: "ASSUMED: no Serpent fight log in kb/raw/logs; the pieces are WIKI, PLAYER and our code"
+status: "ASSUMED for our offence: the four Serpent logs in kb/raw/logs are from the victim's seat (other Serpents); the pieces are WIKI, PLAYER, our code and those logs"
 
 prerequisites:
   - "Asthma + weariness on the target: with the impulse's own masochism they fire the monkshood reaction (impatience)"
-  - "No sileris/fangbarrier for the impulse or bite (HELP 13.7: the coating stops Serpent bites). DSTAB's weapon venoms are probably not stopped (inferred from a DSL, below)"
+  - "No sileris/fangbarrier for the impulse or bite (HELP 13.7: the coating stops Serpent bites). DSTAB's weapon venoms are not stopped: 8 of 8 slickness DSTABs into a hardened coating landed, and the slickness then stripped it (rule defence.sileris.slickness; Z5 438-452, X 141-147)"
   - "Fratricide (optional): each impulse relapses shortly after it lands"
 
-attack_sequence:   # inherited; this page called it "from combat log", but no Serpent log is in kb/raw
+attack_sequence:   # inherited; this page called it "from combat log", but no log of OUR Serpent is in kb/raw
   phase_1_kelp_setup:
     - "DSTAB target kalmia vernalius"   # asthma + weariness (BOTH kelp cures)
     - "FLAY <target> SHIELD|REBOUNDING strips those; a bare FLAY <target> strips the sileris coating (HELP 13.7, WIKI). Our offense never sends a bare flay: it strips the coating with slickness (gecko), which works (CONFIRMED in two logs)"
-    - "Weapon venoms land through a formed fangbarrier: an Infernal's DSL gave anorexia, then slickness stripped the coating (c.iJVmpL log, 863-873). Not seen for DSTAB itself"
+    - "Weapon venoms land through a formed fangbarrier: an Infernal's DSL gave anorexia, then slickness stripped the coating (c.iJVmpL log, 863-873). DSTAB too: 8 of 8 in the four Serpent logs, for example Z5 438 (hardened), 446-451 (paralysis, then slickness, then 'The protective covering coating your skin sloughs off.')"
 
   phase_2_impulse_delivery:
     - "impulse target masochism monkshood"  # masochism (impulse) + disloyalty (monkshood) + impatience (reaction)
     - "DSTAB slike once impatience is up (slikeGateMet, :799-804), or relapse_lock's gecko + slike pre-load"  # anorexia
-    - "Fratricide, if up, makes each impulse relapse shortly after it lands (how it is given: unknown)"
+    - "Fratricide, if up, makes each impulse relapse shortly after it lands (the pet snake's bite gives it: 46 of 46 in the four Serpent logs)"
 
   phase_3_lock_completion:
     - "DSTAB target curare gecko"       # paralysis + slickness (BOTH bloodroot)
@@ -1264,10 +1268,10 @@ dangerous_abilities:
   - doublestab: "Two venoms per attack (2.80 s, WIKI) - can apply asthma+weariness in one hit"
   - bite_ekanelia: "Single bite delivers 2-3 affs when conditionals met"
   - impulse: "A trivial suggestion on 1.70 s of equilibrium; with a venom (relayed) it also bites: masochism + monkshood gives impatience when asthma + weariness are up"
-  - fratricide: "Each impulse relapses shortly after it lands (how it is given: unknown)"
+  - fratricide: "Each impulse relapses shortly after it lands (the pet snake's bite gives it: 46 of 46 in the four Serpent logs, Z5 900-901)"
   - hypnosis: "Complex suggestions (anorexia, hypochondria, disrupt, ...) via HYPNOTISE/SUGGEST/SEAL/SNAP"
   - phase: "Makes them untargetable; attacking you unphases them"
-  - flay: "Strips shield, rebounding, or the sileris coating (bare FLAY). DSTAB's weapon venoms probably land through a fangbarrier anyway (a DSL's did, c.iJVmpL log 863-873; not seen for DSTAB)"
+  - flay: "Strips shield, rebounding, or the sileris coating (bare FLAY). DSTAB's weapon venoms land through a fangbarrier anyway: 8 of 8 in the four Serpent logs (rule defence.sileris.slickness), and a DSL's did too (c.iJVmpL log 863-873)"
   - execute/behead: "PvP finisher. EXECUTE needs a prone target and a whip (WIKI)"
 
 avoid:
@@ -1299,8 +1303,9 @@ recommended_strategy: |
      cure both para and slick. Prioritize paralysis.
 
   5. MAINTAIN FANGBARRIER: it stops bites (HELP 13.7), and by our code's reading the
-     impulse's venom, but probably not DSTAB's weapon venoms (a DSL's landed through one in
-     a log; not seen for DSTAB). Slickness strips it (two logs) and so does a bare FLAY -
+     impulse's venom, but not DSTAB's weapon venoms (8 of 8 landed through a hardened one in
+     the four Serpent logs; a DSL's did too). Slickness strips it (8 of 8 in those logs, rule
+     defence.sileris.slickness) and so does a bare FLAY -
      re-apply quicksilver at once; the shell forms about 10 s after the application
      (CONFIRMED, Infernal logs).
 
@@ -1342,6 +1347,94 @@ anti_serpent_function: |
   whichever curingset is active, and against a detected Serpent class detection switches to the
   in-game `serpent` set, whose priority list has never been captured.
 ```
+
+## Theorycraft: the DSTAB against the eat (2026-11-07)
+
+Plan: `~/.claude/plans/if-we-understand-achaea-s-idempotent-sprout.md` (master plan step 7.2, stage 1). Tools only: no
+package code changed, and nothing here is a verdict for live code.
+
+**The race, from the four Serpent logs** (`kb/sim/events.md`, `tools/kb_events.py`). A DSTAB and the next attack form a
+pair. The strike "wins" when the victim's eat is still down at the next attack. PHASE is the eat's return time minus the
+strike's time: a positive PHASE means the eat was down when the strike landed.
+- The strike came first in 165 of 194 paired DSTABs (85%). These are the LOGGERS' curing, not ours.
+- Golden row, Z5 row 196: PHASE +0.602 at the strike, strike first by 0.567 s. The eat clock (1.613 s) is shorter than the
+  gap (1.807 s), so the PHASE decided the race, not the clock lengths. `kb_events.py --check` fails if this row moves.
+- The victim's SSC reacts 0.10-0.18 s after a channel opens (median 0.14).
+- A window is not a cause: "winners strike just after a key is spent" is refuted (`kb/mechanics/foundations.md`).
+
+**The CLI** (`tools/theorycraft.py`; every output is MODEL, not a log):
+```
+# The user's example: two curare/kalmia DSTABs, then gecko/slike, against a Runewarden, medians only
+python tools/theorycraft.py --victim runewarden --gap 1.83 --median --script "dstab curare kalmia" "dstab curare kalmia" "dstab gecko slike"
+# The same with noise: P(strike first) per race over 400 seeds
+python tools/theorycraft.py --victim runewarden --gap 1.83 --seeds 400 --script "dstab curare kalmia" "dstab curare kalmia"
+# A real log in the engine's columns, rows 196-260
+python tools/theorycraft.py --log Z5 --from 196 --to 260
+# A fork: start from Z5 row 204's board and clocks, then send our own actions
+python tools/theorycraft.py --log Z5 --at 204 --then "dstab curare vernalius" --median --seeds 40
+```
+- Actions: `dstab V1 V2`, `bite V`, `flay [shield|rebounding] [V]`, `give AFF`, `wait SECONDS`.
+- Victims: `runewarden` (FITNESS and Dagaz, Claes's clocks), `alchemist` (Salt, Elmer's), `depthswalker` (Accelerate,
+  Nikita's), `monk` and `shikudo` (Elmer's clocks). A fork takes the log's victim (az, Z5, g, X).
+- With noise, the example's first race gives P(strike first) = 0.12 (47 of 399 paired seeds, seed 1 on); over 4,000
+  seeds it is 0.11 (446 of 3,990). A seed with no eat spent before the next attack is unpaired and not counted. Each
+  race's odds are counted by its label (`1->2`), not by its place in the list, and the line says in how many seeds that
+  race exists at all.
+- The draw shape is a choice (rule `draw.shape`, ASSUMED): a clock is drawn from its quantiles, each tail held to one
+  p10-p90 width past p10 or p90, because a log's min and max are often a lost line (`clock.rebounding` max 250.253).
+  `--clock-draw normal` runs the alternative. It moves the P above to 0.10 (394 of 3,990). Read the second decimal of a
+  model P as noise: at 400 seeds one standard error is about 0.016, so two runs can differ by about 0.03, and the shape
+  alone moved this P by 0.013. A `--median` fork rests on the shape too: a clock already running at the row takes the
+  median of the part of its spread above the time already run, and the shape sets that part. The `--seeds` runs of a
+  `--median` page draw. A SEEDS line says how: the tree's pick and the gap as `--tree-pick` and `--gap-sd` set them, and
+  the first Dagaz tick when the log prints none. An ALT value marked `--median` is the median run's only.
+- Each run lists the ASSUMED, WIKI and PLAYER rules it used, the MEASURED clocks it could only sweep, and an ALT line for
+  each rule whose alternative ran. `--median` runs `ssc.phi` 1.0 and `tree.pick` priority, and for a Runewarden with no
+  printed Dagaz tick also `class.dagaz.phase` half a period. Another Serpent's gap prints a GAP line: its median 1.83 only;
+  a draw adds the gap's own noise (`--gap-sd`, rule `attack.gap.own.sd`), not that rule's p10-p90 spread. A run that the
+  horizon cuts prints a HORIZON line: the script stops at the horizon. If the eat that was down at the last action that
+  ran is still down at the horizon, the run holds until it comes back, and the line gives that time; else the run stops
+  at the horizon. If no action ran, the line says so. A race is unpaired
+  "because the horizon cut the script" only when the cut actions hold an attack. A negative `--gap-sd` is refused, and
+  with `--gap-sd 0` no line says the gap is drawn. An affliction that only the lungs or the elixir cures prints NO CHANNEL (the
+  engine runs neither), and says when no random cure can take it either (pressure).
+- A gap under the floor is refused: 0.3 s (BUNDLED, two lines within 0.3 s are one attack), or `--gap-floor`. A fork
+  with no `--gap` runs 1.83, so a `--gap-floor` above 1.83 needs a `--gap` too.
+- A fork starts from the row's own state:
+  - the board and the channel clocks (drawn past the time already run);
+  - the victim's balance and equilibrium, from "Equilibrium used: 3.40s." and the prompt's flags (az prints no flags).
+    A second cost line that lands while one is open ends it, and only its own cost counts: a CONCENTRATE after
+    disrupted (az 2995: back at 3034, 0.03 s from its own 2.00 s), and g's kata costs, whose per-limb return lines the
+    stream does not read. The impulse's cost line is the exception: it adds (X 529 and 575 came back together at 638).
+    A prompt that shows a flag down with no line for its return (Z5 5468-5590: disrupted, then death) keeps it down;
+  - the defences the logger keeps. A FLAY of the shield in the log brings the shield back one re-raise delay later. The
+    logger's own movement or action dropping its shield (Z5 78) is not a FLAY, and a shield down with no FLAY stays
+    down. A skullcap or malachite smoke brings rebounding (rule `defence.rebounding.smoke`: 48 of 49 smokes, 7.59-8.59 s
+    later). An apply of the coating with no hardening line yet brings the coating 10.0 s after it (rule
+    `defence.sileris.harden`: 43 of 49 applies, 9.75-10.12 s). A pet's bite that meets the coating proves it up (X 38).
+    Slickness strips the coating as it lands (rule `defence.sileris.slickness`: 8 of 8 in the logs, all DSTABs, X
+    144-146; the engine does the same for a give and a FLAY's venom), and an apply does not harden while slickness is on
+    at its 10 s mark (rule `defence.sileris.slickness_harden`: none of the 43 that hardened, 5 of the 6 that did not; the
+    sixth, Z5 1891, had slickness cured 0.1 s before the mark). The START line says a pending coating hardens only if
+    slickness is off by then (az 3779), and the timeline prints `W sileris.unhardened` when slickness stops it.
+  - The first forked action comes one gap after the log's last attack, drawn like every other gap.
+  - A row after the log's last prompt (the death line, or a row with no event after it, X 6614-6631) cannot be forked.
+    A later physical row of a wrapped prompt is that prompt's own row (X 590 is the board row of prompt 589).
+- `--random-pool package` runs the package's tree pool instead of the NoRandomCure reading; `--flay-order auto` runs the
+  engine's own order for a FLAY that names nothing (shield, else rebounding, else sileris) instead of the named target.
+- A FLAY of the shield or rebounding also rips the sileris coating when it is up: 23 of 23 such packets in the four logs,
+  none of the 33 made with it down (rule `attack.flay.coating`; the quicksilver shell of Z5, g and X counts too).
+- The fork example above (Z5 row 204, `--median`): the eat spent at row 154 comes back at +0.61, Salt cures the paralysis
+  at +0.14, and the forked DSTAB at +1.83 lands with the eat down again (strike first by 0.41; the log's own DSTAB at row
+  248 came at +1.81). Over 40 seeds the log's race `row 196->#1` is strike first in 40 of 40.
+
+**What it cannot say.** It has no win rates and no "best" offence. It describes the four loggers' curing and never predicts
+a live opponent's herb. Our own DSTAB, FLAY and BITE costs are unmeasured, so `--gap` is required in a scripted run.
+The stream reads every gain line as a gain: 67 of the 662 gain lines in the four logs (10%) name an affliction that is
+already on the board a fork reads there (the prompt, plus the gain and cure lines after it), and no logger tag is next to
+them. 17 are fratricide from the pet's bite while fratricide is on (Z5 900-901: the viper's bite, then "Something subtle
+and yet insidious overcomes you."); g 320 and 1479 are darkshade under DARK. The gain counts of `kb/sim/events.md`
+include them. A fork's board does not change, because it holds them already.
 
 ## Implementation Notes
 ```

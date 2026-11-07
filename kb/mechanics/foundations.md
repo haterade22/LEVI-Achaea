@@ -145,12 +145,13 @@ az:350 put it at 1.539-1.557 s.
 
 | Effect | Delay | Evidence |
 |---|---|---|
-| Rebounding after the smoke | 8.51 s median, p10 8.44, p90 8.58 | MEASURED, n=67 |
+| Rebounding after the smoke | 8.51 s median, p10 8.44, p90 8.58 | MEASURED, n=67 (`clocks.json` now: 8.49, n=460). The smoke is skullcap or malachite: 48 of 49 such smokes in the four Serpent logs brought the aura 7.59-8.59 s later (az 573 is the firefly pipe's own smoke line, [CONFLICTS](../CONFLICTS.md) #66); no other item came first (rule `defence.rebounding.smoke`, [sim/rules.md](../sim/rules.md)) |
 | Infest relapses, no attacker line | 5.34-6.69 s, then 11.02-12.78 s | MEASURED, n=5, n=4. Supplied a plague in Vr, WK, 4c |
-| Hypochondria chain | nausea +3.12, lethargy +6.24, impatience +9.31 s | MEASURED, one fight (Z5) |
+| Hypochondria chain | nausea +3.10-3.13, lethargy +4.66-6.23, impatience +9.23-9.32 s (medians per log; Z5's lethargy 4.66 is the median of +3.08 and +6.24); pooled 3.12, 6.20, 9.31 (rule `timed.hypochondria`) | MEASURED in three logs: az (n=4, 4, 3), Z5 (2, 2, 1), X (2, 1, 1). g has 2 gains and no chain step. One Z5 lethargy came at +3.08, and az has a late step at +9.30 and +12.42 ([sim/events.md](../sim/events.md), Suppliers) |
+| Sileris or quicksilver hardens after the apply | 10.00 s median, p10 9.95, p90 10.04 (9.75-10.12) | MEASURED, n=43 in the four Serpent logs (rule `defence.sileris.harden`). 6 of 49 applies printed no hardening line; a bite or FLAY before the 10 s mark does not explain it (36 of the 43 that hardened took one too). Slickness at the mark does: none of the 43 had it on, 5 of the 6 did (rule `defence.sileris.slickness_harden`). Slickness that lands also strips a hardened coating: 8 of 8 (rule `defence.sileris.slickness`) |
 | Fratricide relapse | 2.0-2.9 s | MEASURED, n=7 in X, 5 in Z5 |
-| Anorexia after SNAP | 9.0-11.0 s | MEASURED, 7 of 7, one player (az), not independently checked |
-| Serpent's snake bite | about every 8.1 s | MEASURED, one fight (g) |
+| Anorexia after SNAP | 9.0-11.0 s | MEASURED, 7 of 7, one player (az). The suggested-anorexia line comes after no SNAP in the other three logs (11 SNAPs). It is what that Serpent suggested, not a property of SNAP ([CONFLICTS](../CONFLICTS.md) #61) |
+| Serpent's snake bite | about every 8.1 s | MEASURED in all four logs: medians 8.07, 8.09, 8.09, 8.19 s (n=8, 20, 8, 24; az, Z5, g, X). Z5's pet is a saw-scaled viper, X's a rattlesnake ([sim/events.md](../sim/events.md)) |
 | Air Lord pressure gain | 1 + manaleech and deadening held | Fit 6 of 6 MEASURED, cause INFERRED (s98) |
 | Kata lapse | 19.53-19.73 s | MEASURED, n=3 |
 

@@ -1,0 +1,5304 @@
+{
+ "freeze_sha256": "1de3efb56ed6f8f7de1ab27e3f767688b1c2f433f5d28d118f718b723f41217b",
+ "generated_by": "tools/kb_rules.py",
+ "inputs": {
+  ".claude/databases/venoms.yaml": "ef137a5cd8214ad7",
+  "kb/afflictions/afflictions.json": "1fe2c0394ca42b4b",
+  "kb/mechanics/clocks.json": "ba2f7943f4e490c0",
+  "kb/sim/rules_hand.json": "e66acfb4890f2c95",
+  "src_new/scripts/levi_ataxia/levi/ataxia/affliction_tracking_core/008_V3_Integration.lua": "0a4b93e9fa221aa8",
+  "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua": "5fa60d4229dfd770",
+  "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua": "4f3cccaf6c09db12",
+  "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua": "837e6b4465b22614",
+  "tools/sim/gates_whole.json": "1de3efb56ed6f8f7"
+ },
+ "rules": {
+  "attack.bite": {
+   "alt": [
+    "sileris does not block"
+   ],
+   "note": "'BITE <target> [<venom>]' (Venom.wiki:23). Flaying the sileris coating is what lets the fangs sink in again (Subterfuge.wiki:80). The pet's bite meets 'the waxy coating' in all four logs (rule snake lines, kb/sim/events.md)",
+   "source": "kb/raw/wiki/Venom.wiki:23; kb/raw/wiki/Subterfuge.wiki:80",
+   "tag": "WIKI",
+   "value": "one venom; sileris or fangbarrier blocks it"
+  },
+  "attack.dstab.venoms": {
+   "alt": [
+    1
+   ],
+   "note": "the census on kb/sim/events.md counts the second-venom line ('Striking like a snake ...') against the pricks",
+   "source": "kb/raw/wiki/Subterfuge.wiki:312",
+   "tag": "WIKI",
+   "value": 2
+  },
+  "attack.flay": {
+   "alt": [
+    "attack.flay.order"
+   ],
+   "note": ".claude/classes/serpent.md:569 reads the same. A bare FLAY in the logs (no 'flays away' line): g 945-948 and X 3189-3194 (the coating ripped, then the whip and paralysis). A named FLAY also takes the coating: rule attack.flay.coating",
+   "source": "kb/raw/wiki/Subterfuge.wiki:76,80",
+   "tag": "WIKI",
+   "value": "the attacker names what to strip: FLAY <target> SHIELD or REBOUNDING strips that one, a bare FLAY strips the sileris coating; the venom lands if neither shield nor rebounding is left"
+  },
+  "attack.flay.coating": {
+   "n": 23,
+   "note": "23 of 23 FLAYs of the shield or rebounding made with the coating up ripped it in the same packet (az 9, g 2, X 12): 'The protective coating covering your skin is ripped away along with your protections.' None of the 33 made with it down printed that line. X 5328: a whip with no strip line left the coating up (snake bites met it at 5385, 5565 and 5776); read as a named FLAY whose defence was already gone (ASSUMED). tools/test_kb_rules.py re-counts it",
+   "source": "kb/raw/logs/2026-11-01_claes_runewarden-vs-serpent_loss_azbErKcK.txt:269-270,558,1169,2235,2465,2659,2931,3217,3598; kb/raw/logs/2026-11-01_elmer_shikudo-vs-serpent_noresult_g-lD00-h.txt:1244,2100; kb/raw/logs/2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt:545,817,2190,2363,2509,2799,3461,3816,4105,4654,5162,5857",
+   "tag": "MEASURED",
+   "value": "a FLAY that strips the shield or rebounding also strips the sileris coating"
+  },
+  "attack.flay.order": {
+   "alt": [
+    "auto: shield, else rebounding, else sileris"
+   ],
+   "note": "named follows the wiki's syntax. auto is the engine's own order for a FLAY that names nothing (--flay-order auto): forward.lua has no FLAY of a defence (its strike() turns a shielded DSTAB into a one-venom FLAY)",
+   "source": "tools/sim/attackers.lua (A.apply, flay)",
+   "tag": "ASSUMED",
+   "value": "named"
+  },
+  "attack.gap.others.bite": {
+   "alt": [
+    1.585,
+    1.69,
+    1.79
+   ],
+   "n": 21,
+   "note": "another Serpent's gap to its next attack: the earliest action, never when. Stated 4.0 s; not usable (p90-p10 is 0.205, over 0.2): swept p10..p90",
+   "source": "kb/mechanics/clocks.json stated.opponents BITE",
+   "tag": "MEASURED",
+   "usable": false,
+   "value": {
+    "median": 1.69,
+    "min": 1.54,
+    "p10": 1.585,
+    "p90": 1.79,
+    "sd": 0.08
+   }
+  },
+  "attack.gap.others.dstab": {
+   "alt": [
+    1.73,
+    1.83,
+    3.097
+   ],
+   "n": 195,
+   "note": "another Serpent's gap to its next attack: the earliest action, never when. Stated 2.8 s; not usable (p90-p10 is 1.367, over 0.2): swept p10..p90",
+   "source": "kb/mechanics/clocks.json stated.opponents DSTAB",
+   "tag": "MEASURED",
+   "usable": false,
+   "value": {
+    "median": 1.83,
+    "min": 1.545,
+    "p10": 1.73,
+    "p90": 3.097,
+    "sd": 0.533
+   }
+  },
+  "attack.gap.others.flay": {
+   "alt": [
+    1.53,
+    1.642,
+    2.503
+   ],
+   "n": 64,
+   "note": "another Serpent's gap to its next attack: the earliest action, never when. Stated 2.0 s; not usable (p90-p10 is 0.973, over 0.2): swept p10..p90",
+   "source": "kb/mechanics/clocks.json stated.opponents FLAY",
+   "tag": "MEASURED",
+   "usable": false,
+   "value": {
+    "median": 1.642,
+    "min": 1.48,
+    "p10": 1.53,
+    "p90": 2.503,
+    "sd": 0.38
+   }
+  },
+  "attack.gap.others.stare": {
+   "alt": [
+    1.874,
+    2.037,
+    3.074
+   ],
+   "n": 143,
+   "note": "another Serpent's gap to its next attack: the earliest action, never when. Stated 1.9 s; not usable (p90-p10 is 1.200, over 0.2): swept p10..p90",
+   "source": "kb/mechanics/clocks.json stated.opponents Stare",
+   "tag": "MEASURED",
+   "usable": false,
+   "value": {
+    "median": 2.037,
+    "min": 0.456,
+    "p10": 1.874,
+    "p90": 3.074,
+    "sd": 0.468
+   }
+  },
+  "attack.gap.own": {
+   "alt": [
+    1.545,
+    1.73,
+    1.83,
+    2.33,
+    2.8,
+    3.1
+   ],
+   "note": "our own DSTAB, FLAY and BITE costs are not measured (no log of our Serpent). The CLI needs --gap until the spar lands",
+   "source": "kb/mechanics/clocks.json stated.opponents",
+   "tag": "ASSUMED",
+   "value": null
+  },
+  "attack.gap.own.sd": {
+   "alt": [
+    0.0,
+    0.2
+   ],
+   "n": 264,
+   "note": "our printed cost against the measured time to recovery: 89% within +-0.15 s, about 0.09 s as a standard deviation",
+   "source": "kb/mechanics/foundations.md:116",
+   "tag": "MEASURED",
+   "value": 0.09
+  },
+  "attack.give": {
+   "alt": [
+    "off"
+   ],
+   "note": "a scripted supply with no attacker line: a hypnosis snap, a relapse, a timed impatience",
+   "source": "kb/mechanics/foundations.md:150-154",
+   "tag": "ASSUMED",
+   "value": "adds the named afflictions at once"
+  },
+  "attack.rebounding": {
+   "note": "'The attack rebounds back onto <name>!'",
+   "source": "kb/raw/logs/2026-11-01_claes_runewarden-vs-serpent_loss_azbErKcK.txt:523",
+   "tag": "READ",
+   "value": "the venoms rebound onto the attacker"
+  },
+  "attack.shield": {
+   "note": "'<name>'s attack rebounds off your magical shield.'",
+   "source": "kb/raw/logs/2026-11-01_elmer_shikudo-vs-serpent_noresult_g-lD00-h.txt:24",
+   "tag": "READ",
+   "value": "blocks the attack"
+  },
+  "channel.eat.blocked_by": {
+   "source": "kb/afflictions/cure-channels.md:19",
+   "tag": "READ",
+   "value": [
+    "anorexia"
+   ]
+  },
+  "channel.eat.lungs_items": {
+   "n": 29,
+   "note": "eaten, but they spend the lungs clock (29 of 29)",
+   "source": "kb/afflictions/cure-channels.md:33",
+   "tag": "MEASURED",
+   "value": [
+    "pear",
+    "calcite"
+   ]
+  },
+  "channel.focus.blocked_by": {
+   "source": "kb/afflictions/cure-channels.md:23",
+   "tag": "READ",
+   "value": [
+    "impatience"
+   ]
+  },
+  "channel.salve.blocked_by": {
+   "source": "kb/afflictions/cure-channels.md:20",
+   "tag": "READ",
+   "value": [
+    "slickness"
+   ]
+  },
+  "channel.smoke.blocked_by": {
+   "source": "kb/afflictions/cure-channels.md:21",
+   "tag": "READ",
+   "value": [
+    "asthma"
+   ]
+  },
+  "channel.tree.blocked_by": {
+   "source": "kb/afflictions/cure-channels.md:24",
+   "tag": "READ",
+   "value": [
+    "paralysis"
+   ]
+  },
+  "class.accelerate": {
+   "note": "it needs and spends equilibrium: the prompt went from exT to xT (2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt rows 2086-2098)",
+   "source": "kb/afflictions/class-cures.md:39",
+   "tag": "READ",
+   "value": {
+    "blocked_by": [
+     "recklessness"
+    ],
+    "classes": [
+     "Depthswalker"
+    ],
+    "cures": "class.accelerate.cures",
+    "lockout": "class.accelerate.lockout",
+    "needs": [
+     "eq"
+    ],
+    "spends": {
+     "eq": "class.accelerate.eq"
+    }
+   }
+  },
+  "class.accelerate.cures": {
+   "alt": [
+    2
+   ],
+   "note": "one affliction, or two when boosted. The only fire in the four logs was boosted and took two (fratricide, asthma)",
+   "source": "kb/raw/logs/2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt:2088-2092",
+   "tag": "ASSUMED",
+   "value": 1
+  },
+  "class.accelerate.eq": {
+   "alt": [
+    1.5,
+    3.0
+   ],
+   "n": 1,
+   "note": "'Equilibrium used: 2.12s.' after the one (boosted) fire. n=1, so it is swept",
+   "source": "kb/raw/logs/2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt:2096",
+   "tag": "MEASURED",
+   "usable": false,
+   "value": 2.12
+  },
+  "class.accelerate.lockout": {
+   "alt": [
+    15.0,
+    19.45,
+    25.0
+   ],
+   "n": 1,
+   "note": "the fire at 2088 (stamp 53743.36), a refusal at 2097, 'ACCELERATE BACK. You may accelerate time ...' at 2409 (53762.81). One fire, so it is swept",
+   "source": "kb/raw/logs/2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt:2088,2097,2409",
+   "tag": "MEASURED",
+   "usable": false,
+   "value": 19.45
+  },
+  "class.cure.policy": {
+   "alt": [
+    "hold"
+   ],
+   "note": "the victim fires its class cure as soon as it is open and useful",
+   "source": "kb/afflictions/class-cures.md:34-54",
+   "tag": "ASSUMED",
+   "value": "at once"
+  },
+  "class.dagaz": {
+   "note": "voyria first: azbErKcK rows 3856-3857",
+   "source": "kb/afflictions/class-cures.md:103",
+   "tag": "READ",
+   "value": {
+    "classes": [
+     "Runewarden"
+    ],
+    "cures": "one",
+    "first": [
+     "voyria"
+    ],
+    "passive": true,
+    "period": "clock.dagaz"
+   }
+  },
+  "class.dagaz.phase": {
+   "alt": [
+    "half a period"
+   ],
+   "note": "when the rune ticks relative to the fight. --median puts the first tick at half a period",
+   "source": "kb/afflictions/class-cures.md:103",
+   "tag": "ASSUMED",
+   "value": "random"
+  },
+  "class.fitness": {
+   "source": "kb/afflictions/class-cures.md:41,60-65",
+   "tag": "READ",
+   "value": {
+    "blocked_by": [
+     "weariness"
+    ],
+    "classes": [
+     "Infernal",
+     "Paladin",
+     "Runewarden",
+     "Monk",
+     "Blademaster",
+     "Druid",
+     "Sentinel"
+    ],
+    "cures": [
+     "asthma"
+    ],
+    "lockout": "clock.fitness",
+    "needs": [
+     "bal",
+     "eq"
+    ],
+    "spends": {
+     "bal": 2.8
+    },
+    "while_paralysed": true
+   }
+  },
+  "class.salt": {
+   "note": "which affliction salt takes is not known: random, as the tree. It needs and spends equilibrium (class.salt.eq)",
+   "source": "kb/afflictions/class-cures.md:36",
+   "tag": "READ",
+   "value": {
+    "blocked_by": [
+     "stupidity"
+    ],
+    "classes": [
+     "Alchemist"
+    ],
+    "cures": "one",
+    "lockout": "clock.salt",
+    "needs": [
+     "eq"
+    ],
+    "spends": {
+     "eq": "class.salt.eq"
+    }
+   }
+  },
+  "class.salt.eq": {
+   "alt": [
+    3.0
+   ],
+   "n": 7,
+   "note": "'Equilibrium used: 2.55s.' three rows before each of the 7 'Directing the energy of salt' lines (two before 'Drawing upon the latent alchemical energies'). The wiki says 3.00 (kb/raw/wiki/Alchemy.wiki:92); Elmer's shield shows the same 0.85 ratio (3.40 of 4.00)",
+   "source": "kb/raw/logs/2026-11-01_elmer_alchemist-vs-serpent_loss_Z5cyffxx.txt:497,824,1783,2232,4033,4497,4920",
+   "tag": "MEASURED",
+   "value": 2.55
+  },
+  "classcure.blocker.Alchemist": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "tag": "READ",
+   "value": "stupidity"
+  },
+  "classcure.blocker.Blademaster": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "tag": "READ",
+   "value": "weariness"
+  },
+  "classcure.blocker.Depthswalker": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "tag": "READ",
+   "value": "recklessness"
+  },
+  "classcure.blocker.Druid": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "tag": "READ",
+   "value": "weariness"
+  },
+  "classcure.blocker.Infernal": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "tag": "READ",
+   "value": "weariness"
+  },
+  "classcure.blocker.Jester": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "tag": "READ",
+   "value": "paralysis"
+  },
+  "classcure.blocker.Magi": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "tag": "READ",
+   "value": "haemophilia"
+  },
+  "classcure.blocker.Monk": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "tag": "READ",
+   "value": "weariness"
+  },
+  "classcure.blocker.Occultist": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "tag": "READ",
+   "value": "paralysis"
+  },
+  "classcure.blocker.Paladin": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "tag": "READ",
+   "value": "weariness"
+  },
+  "classcure.blocker.Runewarden": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "tag": "READ",
+   "value": "weariness"
+  },
+  "classcure.blocker.Sentinel": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "tag": "READ",
+   "value": "weariness"
+  },
+  "classcure.blocker.Serpent": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "tag": "READ",
+   "value": "weariness"
+  },
+  "classcure.blocker.Shaman": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "tag": "READ",
+   "value": "selarnia"
+  },
+  "clock.dagaz": {
+   "alt": [
+    15.002,
+    15.095,
+    15.272
+   ],
+   "n": 46,
+   "note": "not usable (p90-p10 is 0.270, over 0.2): swept p10..p90",
+   "source": "kb/mechanics/clocks.json clocks.dagaz",
+   "tag": "MEASURED",
+   "usable": false,
+   "value": {
+    "max": 15.343,
+    "median": 15.095,
+    "min": 11.332,
+    "p10": 15.002,
+    "p90": 15.272,
+    "sd": 0.105
+   }
+  },
+  "clock.eat": {
+   "alt": [
+    1.38,
+    1.504,
+    1.61
+   ],
+   "n": 1478,
+   "note": "not usable (p90-p10 is 0.230, over 0.2): swept p10..p90",
+   "source": "kb/mechanics/clocks.json clocks.eat",
+   "tag": "MEASURED",
+   "usable": false,
+   "value": {
+    "max": 5.24,
+    "median": 1.504,
+    "min": 0.014,
+    "p10": 1.38,
+    "p90": 1.61,
+    "sd": 0.09
+   }
+  },
+  "clock.eat.Claes": {
+   "n": 338,
+   "source": "kb/mechanics/clocks.json clocks.eat.by_logger (Claes, printed)",
+   "tag": "MEASURED",
+   "usable": true,
+   "value": {
+    "max": 5.24,
+    "median": 1.53,
+    "min": 0.145,
+    "p10": 1.432,
+    "p90": 1.62,
+    "sd": 0.073
+   }
+  },
+  "clock.eat.Elmer": {
+   "n": 232,
+   "source": "kb/mechanics/clocks.json clocks.eat.by_logger (Elmer, line)",
+   "tag": "MEASURED",
+   "usable": true,
+   "value": {
+    "max": 2.303,
+    "median": 1.492,
+    "min": 0.873,
+    "p10": 1.401,
+    "p90": 1.593,
+    "sd": 0.075
+   }
+  },
+  "clock.eat.Nikita": {
+   "n": 249,
+   "source": "kb/mechanics/clocks.json clocks.eat.by_logger (Nikita, line)",
+   "tag": "MEASURED",
+   "usable": true,
+   "value": {
+    "max": 1.67,
+    "median": 1.54,
+    "min": 1.22,
+    "p10": 1.46,
+    "p90": 1.6,
+    "sd": 0.055
+   }
+  },
+  "clock.fitness": {
+   "alt": [
+    9.059,
+    9.807,
+    9.969
+   ],
+   "n": 5,
+   "note": "not usable (n=5 is under 10): swept min..max",
+   "source": "kb/mechanics/clocks.json clocks.fitness",
+   "tag": "MEASURED",
+   "usable": false,
+   "value": {
+    "max": 9.969,
+    "median": 9.807,
+    "min": 9.059,
+    "p10": 9.131,
+    "p90": 9.967,
+    "sd": 0.326
+   }
+  },
+  "clock.focus": {
+   "alt": [
+    2.33,
+    2.43,
+    2.542
+   ],
+   "n": 159,
+   "note": "not usable (p90-p10 is 0.212, over 0.2): swept p10..p90",
+   "source": "kb/mechanics/clocks.json clocks.focus",
+   "tag": "MEASURED",
+   "usable": false,
+   "value": {
+    "max": 4.992,
+    "median": 2.43,
+    "min": 2.044,
+    "p10": 2.33,
+    "p90": 2.542,
+    "sd": 0.083
+   }
+  },
+  "clock.humour": {
+   "n": 41,
+   "source": "kb/mechanics/clocks.json clocks.humour",
+   "tag": "MEASURED",
+   "usable": true,
+   "value": {
+    "max": 1.795,
+    "median": 1.546,
+    "min": 0.006,
+    "p10": 1.435,
+    "p90": 1.622,
+    "sd": 0.073
+   }
+  },
+  "clock.immunity": {
+   "alt": [
+    7.346,
+    7.47,
+    7.819
+   ],
+   "n": 3,
+   "note": "not usable (n=3 is under 10): swept min..max",
+   "source": "kb/mechanics/clocks.json clocks.immunity",
+   "tag": "MEASURED",
+   "usable": false,
+   "value": {
+    "max": 7.819,
+    "median": 7.47,
+    "min": 7.346,
+    "p10": 7.371,
+    "p90": 7.749,
+    "sd": 0.147
+   }
+  },
+  "clock.moss": {
+   "alt": [
+    5.8,
+    5.912,
+    6.001
+   ],
+   "n": 143,
+   "note": "not usable (p90-p10 is 0.201, over 0.2): swept p10..p90",
+   "source": "kb/mechanics/clocks.json clocks.moss",
+   "tag": "MEASURED",
+   "usable": false,
+   "value": {
+    "max": 6.11,
+    "median": 5.912,
+    "min": 5.276,
+    "p10": 5.8,
+    "p90": 6.001,
+    "sd": 0.078
+   }
+  },
+  "clock.rebounding": {
+   "n": 460,
+   "source": "kb/mechanics/clocks.json clocks.rebounding",
+   "tag": "MEASURED",
+   "usable": true,
+   "value": {
+    "max": 250.253,
+    "median": 8.49,
+    "min": 0.026,
+    "p10": 8.397,
+    "p90": 8.575,
+    "sd": 0.069
+   }
+  },
+  "clock.restoration": {
+   "n": 30,
+   "source": "kb/mechanics/clocks.json clocks.restoration",
+   "tag": "MEASURED",
+   "usable": true,
+   "value": {
+    "max": 4.18,
+    "median": 4.019,
+    "min": 3.78,
+    "p10": 3.935,
+    "p90": 4.042,
+    "sd": 0.042
+   }
+  },
+  "clock.salt": {
+   "alt": [
+    9.117,
+    9.313,
+    9.999
+   ],
+   "n": 7,
+   "note": "not usable (n=7 is under 10): swept min..max",
+   "source": "kb/mechanics/clocks.json clocks.salt",
+   "tag": "MEASURED",
+   "usable": false,
+   "value": {
+    "max": 9.999,
+    "median": 9.313,
+    "min": 9.117,
+    "p10": 9.165,
+    "p90": 9.903,
+    "sd": 0.288
+   }
+  },
+  "clock.salve_short": {
+   "n": 173,
+   "source": "kb/mechanics/clocks.json clocks.salve_short",
+   "tag": "MEASURED",
+   "usable": true,
+   "value": {
+    "max": 1.082,
+    "median": 0.915,
+    "min": 0.65,
+    "p10": 0.82,
+    "p90": 0.997,
+    "sd": 0.069
+   }
+  },
+  "clock.salve_unknown": {
+   "alt": [
+    0.779,
+    0.863,
+    3.029
+   ],
+   "n": 14,
+   "note": "not usable (p90-p10 is 2.250, over 0.2): swept p10..p90",
+   "source": "kb/mechanics/clocks.json clocks.salve_unknown",
+   "tag": "MEASURED",
+   "usable": false,
+   "value": {
+    "max": 3.98,
+    "median": 0.863,
+    "min": 0.724,
+    "p10": 0.779,
+    "p90": 3.029,
+    "sd": 0.878
+   }
+  },
+  "clock.sip": {
+   "n": 417,
+   "source": "kb/mechanics/clocks.json clocks.sip",
+   "tag": "MEASURED",
+   "usable": true,
+   "value": {
+    "max": 5.85,
+    "median": 4.401,
+    "min": 1.937,
+    "p10": 4.307,
+    "p90": 4.504,
+    "sd": 0.077
+   }
+  },
+  "clock.smoke": {
+   "n": 279,
+   "source": "kb/mechanics/clocks.json clocks.smoke",
+   "tag": "MEASURED",
+   "usable": true,
+   "value": {
+    "max": 3.002,
+    "median": 1.481,
+    "min": 0.277,
+    "p10": 1.399,
+    "p90": 1.583,
+    "sd": 0.071
+   }
+  },
+  "clock.tree": {
+   "n": 193,
+   "source": "kb/mechanics/clocks.json clocks.tree",
+   "tag": "MEASURED",
+   "usable": true,
+   "value": {
+    "max": 14.214,
+    "median": 13.957,
+    "min": 13.321,
+    "p10": 13.885,
+    "p90": 14.05,
+    "sd": 0.064
+   }
+  },
+  "cure.ablaze": {
+   "source": "kb/raw/live/affliction_show/ablaze.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "salve",
+      "item": "mending to body"
+     }
+    ]
+   }
+  },
+  "cure.accentato": {
+   "source": "kb/raw/live/affliction_show/accentato.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.addiction": {
+   "source": "kb/raw/live/affliction_show/addiction.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "ginseng",
+    "mineral": "ferrum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "ginseng"
+     },
+     {
+      "channel": "eat",
+      "item": "ferrum"
+     }
+    ]
+   }
+  },
+  "cure.aeon": {
+   "source": "kb/raw/live/affliction_show/aeon.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "smoke",
+      "item": "elm"
+     },
+     {
+      "channel": "smoke",
+      "item": "cinnabar"
+     },
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.agoraphobia": {
+   "source": "kb/raw/live/affliction_show/agoraphobia.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "lobelia",
+    "mineral": "argentum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "lobelia"
+     },
+     {
+      "channel": "eat",
+      "item": "argentum"
+     },
+     {
+      "channel": "focus",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.airfisted": {
+   "source": "kb/raw/live/affliction_show/airfisted.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.amnesia": {
+   "source": "kb/raw/live/affliction_show/amnesia.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": []
+   }
+  },
+  "cure.anorexia": {
+   "source": "kb/raw/live/affliction_show/anorexia.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "salve",
+      "item": "epidermal to body"
+     },
+     {
+      "channel": "focus",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.asphyxiating": {
+   "source": "kb/raw/live/affliction_show/asphyxiating.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.asthma": {
+   "source": "kb/raw/live/affliction_show/asthma.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "kelp",
+    "mineral": "aurum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "kelp"
+     },
+     {
+      "channel": "eat",
+      "item": "aurum"
+     }
+    ]
+   }
+  },
+  "cure.betrayal": {
+   "source": "kb/raw/live/affliction_show/betrayal.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.blackout": {
+   "source": "kb/raw/live/affliction_show/blackout.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.blindness": {
+   "source": "kb/raw/live/affliction_show/blindness.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "salve",
+      "item": "epidermal to head"
+     }
+    ]
+   }
+  },
+  "cure.blistered": {
+   "source": "kb/raw/live/affliction_show/blistered.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.bloodfire": {
+   "source": "kb/raw/live/affliction_show/bloodfire.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": []
+   }
+  },
+  "cure.bound": {
+   "source": "kb/raw/live/affliction_show/bound.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "writhe",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.breathless": {
+   "source": "kb/raw/live/affliction_show/breathless.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.brokenleftarm": {
+   "source": "kb/raw/live/affliction_show/brokenleftarm.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "salve",
+      "item": "mending to arms"
+     }
+    ]
+   }
+  },
+  "cure.brokenleftleg": {
+   "source": "kb/raw/live/affliction_show/brokenleftleg.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "salve",
+      "item": "mending to legs"
+     }
+    ]
+   }
+  },
+  "cure.brokenrightarm": {
+   "source": "kb/raw/live/affliction_show/brokenrightarm.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "salve",
+      "item": "mending to arms"
+     }
+    ]
+   }
+  },
+  "cure.brokenrightleg": {
+   "source": "kb/raw/live/affliction_show/brokenrightleg.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "salve",
+      "item": "mending to legs"
+     }
+    ]
+   }
+  },
+  "cure.bruisedribs": {
+   "source": "kb/raw/live/affliction_show/bruisedribs.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.burning": {
+   "source": "kb/raw/live/affliction_show/burning.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "salve",
+      "item": "mending to body"
+     }
+    ]
+   }
+  },
+  "cure.calcifiedskull": {
+   "source": "kb/raw/live/affliction_show/calcifiedskull.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "restoration",
+      "item": "restoration to head"
+     }
+    ]
+   }
+  },
+  "cure.calcifiedtorso": {
+   "source": "kb/raw/live/affliction_show/calcifiedtorso.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "restoration",
+      "item": "restoration to body"
+     }
+    ]
+   }
+  },
+  "cure.claustrophobia": {
+   "source": "kb/raw/live/affliction_show/claustrophobia.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "lobelia",
+    "mineral": "argentum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "lobelia"
+     },
+     {
+      "channel": "eat",
+      "item": "argentum"
+     },
+     {
+      "channel": "focus",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.clumsiness": {
+   "source": "kb/raw/live/affliction_show/clumsiness.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "kelp",
+    "mineral": "aurum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "kelp"
+     },
+     {
+      "channel": "eat",
+      "item": "aurum"
+     }
+    ]
+   }
+  },
+  "cure.coldfate": {
+   "source": "kb/raw/live/affliction_show/coldfate.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.concussion": {
+   "source": "kb/raw/live/affliction_show/concussion.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "restoration",
+      "item": "restoration to head"
+     }
+    ]
+   }
+  },
+  "cure.condemned": {
+   "source": "kb/raw/live/affliction_show/condemned.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.conflagration": {
+   "source": "kb/raw/live/affliction_show/conflagration.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": []
+   }
+  },
+  "cure.confusion": {
+   "source": "kb/raw/live/affliction_show/confusion.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "ash",
+    "mineral": "stannum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "ash"
+     },
+     {
+      "channel": "eat",
+      "item": "stannum"
+     },
+     {
+      "channel": "focus",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.constricted": {
+   "source": "kb/raw/live/affliction_show/constricted.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.convergence": {
+   "source": "kb/raw/live/affliction_show/convergence.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": []
+   }
+  },
+  "cure.corruption": {
+   "source": "kb/raw/live/affliction_show/corruption.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.crackedribs": {
+   "source": "kb/raw/live/affliction_show/crackedribs.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "elixir",
+      "item": "health to torso"
+     }
+    ]
+   }
+  },
+  "cure.cremated": {
+   "source": "kb/raw/live/affliction_show/cremated.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.crescendo": {
+   "source": "kb/raw/live/affliction_show/crescendo.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "ash",
+    "mineral": "stannum",
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "ash"
+     },
+     {
+      "channel": "eat",
+      "item": "stannum"
+     }
+    ]
+   }
+  },
+  "cure.crushedthroat": {
+   "source": "kb/raw/live/affliction_show/crushedthroat.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "salve",
+      "item": "mending to head"
+     }
+    ]
+   }
+  },
+  "cure.daeggerimpale": {
+   "source": "kb/raw/live/affliction_show/daeggerimpale.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "writhe",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.damagedhead": {
+   "source": "kb/raw/live/affliction_show/damagedhead.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "restoration",
+      "item": "restoration to head"
+     }
+    ]
+   }
+  },
+  "cure.damagedleftarm": {
+   "source": "kb/raw/live/affliction_show/damagedleftarm.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "restoration",
+      "item": "restoration to arms"
+     }
+    ]
+   }
+  },
+  "cure.damagedleftleg": {
+   "source": "kb/raw/live/affliction_show/damagedleftleg.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "restoration",
+      "item": "restoration to legs"
+     }
+    ]
+   }
+  },
+  "cure.damagedrightarm": {
+   "source": "kb/raw/live/affliction_show/damagedrightarm.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "restoration",
+      "item": "restoration to arms"
+     }
+    ]
+   }
+  },
+  "cure.damagedrightleg": {
+   "source": "kb/raw/live/affliction_show/damagedrightleg.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "restoration",
+      "item": "restoration to legs"
+     }
+    ]
+   }
+  },
+  "cure.darkshade": {
+   "source": "kb/raw/live/affliction_show/darkshade.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "ginseng",
+    "mineral": "ferrum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "ginseng"
+     },
+     {
+      "channel": "eat",
+      "item": "ferrum"
+     }
+    ]
+   }
+  },
+  "cure.dazed": {
+   "source": "kb/raw/live/affliction_show/dazed.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "smoke",
+      "item": "elm"
+     },
+     {
+      "channel": "smoke",
+      "item": "cinnabar"
+     }
+    ]
+   }
+  },
+  "cure.dazzled": {
+   "source": "kb/raw/live/affliction_show/dazzled.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "salve",
+      "item": "mending to head"
+     },
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.deadening": {
+   "source": "kb/raw/live/affliction_show/deadening.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "smoke",
+      "item": "elm"
+     },
+     {
+      "channel": "smoke",
+      "item": "cinnabar"
+     }
+    ]
+   }
+  },
+  "cure.deafness": {
+   "source": "kb/raw/live/affliction_show/deafness.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "salve",
+      "item": "epidermal to head"
+     }
+    ]
+   }
+  },
+  "cure.deathsickness": {
+   "source": "kb/raw/live/affliction_show/deathsickness.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.deepsleep": {
+   "source": "kb/raw/live/affliction_show/deepsleep.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": []
+   }
+  },
+  "cure.degenerate": {
+   "source": "kb/raw/live/affliction_show/degenerate.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.dehydrated": {
+   "source": "kb/raw/live/affliction_show/dehydrated.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.dementia": {
+   "source": "kb/raw/live/affliction_show/dementia.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "ash",
+    "mineral": "stannum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "ash"
+     },
+     {
+      "channel": "eat",
+      "item": "stannum"
+     },
+     {
+      "channel": "focus",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.demonstain": {
+   "source": "kb/raw/live/affliction_show/demonstain.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.depression": {
+   "source": "kb/raw/live/affliction_show/depression.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "goldenseal",
+    "mineral": "plumbum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "goldenseal"
+     },
+     {
+      "channel": "eat",
+      "item": "plumbum"
+     }
+    ]
+   }
+  },
+  "cure.deteriorate": {
+   "source": "kb/raw/live/affliction_show/deteriorate.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.diminished": {
+   "source": "kb/raw/live/affliction_show/diminished.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "bellwort",
+    "mineral": "cuprum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "bellwort"
+     },
+     {
+      "channel": "eat",
+      "item": "cuprum"
+     }
+    ]
+   }
+  },
+  "cure.disfigurement": {
+   "source": "kb/raw/live/affliction_show/disfigurement.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "smoke",
+      "item": "valerian"
+     },
+     {
+      "channel": "smoke",
+      "item": "realgar"
+     }
+    ]
+   }
+  },
+  "cure.disloyalty": {
+   "source": "kb/raw/live/affliction_show/disloyalty.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "smoke",
+      "item": "valerian"
+     },
+     {
+      "channel": "smoke",
+      "item": "realgar"
+     }
+    ]
+   }
+  },
+  "cure.disrupted": {
+   "source": "kb/raw/live/affliction_show/disrupted.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "concentrate",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.dissonance": {
+   "source": "kb/raw/live/affliction_show/dissonance.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "goldenseal",
+    "mineral": "plumbum",
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "goldenseal"
+     },
+     {
+      "channel": "eat",
+      "item": "plumbum"
+     }
+    ]
+   }
+  },
+  "cure.dizziness": {
+   "source": "kb/raw/live/affliction_show/dizziness.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "goldenseal",
+    "mineral": "plumbum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "goldenseal"
+     },
+     {
+      "channel": "eat",
+      "item": "plumbum"
+     },
+     {
+      "channel": "focus",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.earworm": {
+   "source": "kb/raw/live/affliction_show/earworm.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "smoke",
+      "item": "elm"
+     },
+     {
+      "channel": "smoke",
+      "item": "cinnabar"
+     }
+    ]
+   }
+  },
+  "cure.empoweredloshre": {
+   "source": "kb/raw/live/affliction_show/empoweredloshre.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.empoweredmannaz": {
+   "source": "kb/raw/live/affliction_show/empoweredmannaz.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.enlightenment": {
+   "source": "kb/raw/live/affliction_show/enlightenment.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": []
+   }
+  },
+  "cure.enmesh": {
+   "source": "kb/raw/live/affliction_show/enmesh.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.ensorcelled": {
+   "source": "kb/raw/live/affliction_show/ensorcelled.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.entangled": {
+   "source": "kb/raw/live/affliction_show/entangled.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "writhe",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.epilepsy": {
+   "source": "kb/raw/live/affliction_show/epilepsy.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "goldenseal",
+    "mineral": "plumbum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "goldenseal"
+     },
+     {
+      "channel": "eat",
+      "item": "plumbum"
+     },
+     {
+      "channel": "focus",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.fear": {
+   "source": "kb/raw/live/affliction_show/fear.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "compose",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.flamefisted": {
+   "source": "kb/raw/live/affliction_show/flamefisted.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.flushings": {
+   "source": "kb/raw/live/affliction_show/flushings.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "ginseng",
+    "mineral": "ferrum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "ginseng"
+     },
+     {
+      "channel": "eat",
+      "item": "ferrum"
+     }
+    ]
+   }
+  },
+  "cure.fratricide": {
+   "source": "kb/raw/live/affliction_show/fratricide.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "lobelia",
+    "mineral": "argentum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "lobelia"
+     },
+     {
+      "channel": "eat",
+      "item": "argentum"
+     }
+    ]
+   }
+  },
+  "cure.freezing": {
+   "source": "kb/raw/live/affliction_show/freezing.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "salve",
+      "item": "caloric"
+     }
+    ]
+   }
+  },
+  "cure.frostbite": {
+   "source": "kb/raw/live/affliction_show/frostbite.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "salve",
+      "item": "caloric"
+     }
+    ]
+   }
+  },
+  "cure.frozen": {
+   "source": "kb/raw/live/affliction_show/frozen.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "salve",
+      "item": "caloric"
+     }
+    ]
+   }
+  },
+  "cure.fulminated": {
+   "source": "kb/raw/live/affliction_show/fulminated.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "goldenseal",
+    "mineral": "plumbum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "goldenseal"
+     },
+     {
+      "channel": "eat",
+      "item": "plumbum"
+     }
+    ]
+   }
+  },
+  "cure.generosity": {
+   "source": "kb/raw/live/affliction_show/generosity.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "bellwort",
+    "mineral": "cuprum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "bellwort"
+     },
+     {
+      "channel": "eat",
+      "item": "cuprum"
+     }
+    ]
+   }
+  },
+  "cure.grievouswounds": {
+   "source": "kb/raw/live/affliction_show/grievouswounds.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "elixir",
+      "item": "health to torso"
+     }
+    ]
+   }
+  },
+  "cure.guilt": {
+   "source": "kb/raw/live/affliction_show/guilt.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "lobelia",
+    "mineral": "argentum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "lobelia"
+     },
+     {
+      "channel": "eat",
+      "item": "argentum"
+     }
+    ]
+   }
+  },
+  "cure.haemophilia": {
+   "source": "kb/raw/live/affliction_show/haemophilia.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "ginseng",
+    "mineral": "ferrum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "ginseng"
+     },
+     {
+      "channel": "eat",
+      "item": "ferrum"
+     }
+    ]
+   }
+  },
+  "cure.hallucinations": {
+   "source": "kb/raw/live/affliction_show/hallucinations.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "ash",
+    "mineral": "stannum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "ash"
+     },
+     {
+      "channel": "eat",
+      "item": "stannum"
+     },
+     {
+      "channel": "focus",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.hamstrung": {
+   "source": "kb/raw/live/affliction_show/hamstrung.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.hatred": {
+   "source": "kb/raw/live/affliction_show/hatred.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.healthleech": {
+   "source": "kb/raw/live/affliction_show/healthleech.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "kelp",
+    "mineral": "aurum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "kelp"
+     },
+     {
+      "channel": "eat",
+      "item": "aurum"
+     }
+    ]
+   }
+  },
+  "cure.heartseed": {
+   "source": "kb/raw/live/affliction_show/heartseed.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "restoration",
+      "item": "restoration to body"
+     }
+    ]
+   }
+  },
+  "cure.hecatecurse": {
+   "source": "kb/raw/live/affliction_show/hecatecurse.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.hellsight": {
+   "source": "kb/raw/live/affliction_show/hellsight.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "smoke",
+      "item": "valerian"
+     },
+     {
+      "channel": "smoke",
+      "item": "realgar"
+     }
+    ]
+   }
+  },
+  "cure.hindered": {
+   "source": "kb/raw/live/affliction_show/hindered.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.homunculusmercury": {
+   "source": "kb/raw/live/affliction_show/homunculusmercury.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.horror": {
+   "source": "kb/raw/live/affliction_show/horror.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "lobelia",
+    "mineral": "argentum",
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "lobelia"
+     },
+     {
+      "channel": "eat",
+      "item": "argentum"
+     }
+    ]
+   }
+  },
+  "cure.hypersomnia": {
+   "source": "kb/raw/live/affliction_show/hypersomnia.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "ash",
+    "mineral": "stannum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "ash"
+     },
+     {
+      "channel": "eat",
+      "item": "stannum"
+     }
+    ]
+   }
+  },
+  "cure.hypochondria": {
+   "source": "kb/raw/live/affliction_show/hypochondria.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "lobelia",
+    "mineral": "argentum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "lobelia"
+     },
+     {
+      "channel": "eat",
+      "item": "argentum"
+     }
+    ]
+   }
+  },
+  "cure.hypothermia": {
+   "source": "kb/raw/live/affliction_show/hypothermia.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "restoration",
+      "item": "restoration to body"
+     }
+    ]
+   }
+  },
+  "cure.icebound": {
+   "source": "kb/raw/live/affliction_show/icebound.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "writhe",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.icefisted": {
+   "source": "kb/raw/live/affliction_show/icefisted.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.impaled": {
+   "source": "kb/raw/live/affliction_show/impaled.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "writhe",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.impatience": {
+   "source": "kb/raw/live/affliction_show/impatience.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "goldenseal",
+    "mineral": "plumbum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "goldenseal"
+     },
+     {
+      "channel": "eat",
+      "item": "plumbum"
+     }
+    ]
+   }
+  },
+  "cure.indifference": {
+   "source": "kb/raw/live/affliction_show/indifference.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "bellwort",
+    "mineral": "cuprum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "bellwort"
+     },
+     {
+      "channel": "eat",
+      "item": "cuprum"
+     }
+    ]
+   }
+  },
+  "cure.inquisition": {
+   "source": "kb/raw/live/affliction_show/inquisition.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": []
+   }
+  },
+  "cure.insomnia": {
+   "source": "kb/raw/live/affliction_show/insomnia.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "goldenseal",
+    "mineral": "plumbum",
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "goldenseal"
+     },
+     {
+      "channel": "eat",
+      "item": "plumbum"
+     }
+    ]
+   }
+  },
+  "cure.internalbleeding": {
+   "source": "kb/raw/live/affliction_show/internalbleeding.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "restoration",
+      "item": "restoration to body"
+     }
+    ]
+   }
+  },
+  "cure.isolation": {
+   "source": "kb/raw/live/affliction_show/isolation.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": []
+   }
+  },
+  "cure.itching": {
+   "source": "kb/raw/live/affliction_show/itching.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "salve",
+      "item": "epidermal to body"
+     }
+    ]
+   }
+  },
+  "cure.justice": {
+   "source": "kb/raw/live/affliction_show/justice.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "bellwort",
+    "mineral": "cuprum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "bellwort"
+     },
+     {
+      "channel": "eat",
+      "item": "cuprum"
+     }
+    ]
+   }
+  },
+  "cure.kaisurge": {
+   "source": "kb/raw/live/affliction_show/kaisurge.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.kkractlebrand": {
+   "source": "kb/raw/live/affliction_show/kkractlebrand.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "sip",
+      "item": "health"
+     }
+    ]
+   }
+  },
+  "cure.laceratedthroat": {
+   "source": "kb/raw/live/affliction_show/laceratedthroat.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "restoration",
+      "item": "restoration to head"
+     }
+    ]
+   }
+  },
+  "cure.lapsingconsciousness": {
+   "source": "kb/raw/live/affliction_show/lapsingconsciousness.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.latched": {
+   "source": "kb/raw/live/affliction_show/latched.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "sip",
+      "item": "health"
+     }
+    ]
+   }
+  },
+  "cure.lethargy": {
+   "source": "kb/raw/live/affliction_show/lethargy.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "ginseng",
+    "mineral": "ferrum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "ginseng"
+     },
+     {
+      "channel": "eat",
+      "item": "ferrum"
+     }
+    ]
+   }
+  },
+  "cure.lightbind": {
+   "source": "kb/raw/live/affliction_show/lightbind.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.loneliness": {
+   "source": "kb/raw/live/affliction_show/loneliness.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "lobelia",
+    "mineral": "argentum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "lobelia"
+     },
+     {
+      "channel": "eat",
+      "item": "argentum"
+     },
+     {
+      "channel": "focus",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.lovers": {
+   "source": "kb/raw/live/affliction_show/lovers.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "bellwort",
+    "mineral": "cuprum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "bellwort"
+     },
+     {
+      "channel": "eat",
+      "item": "cuprum"
+     },
+     {
+      "channel": "focus",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.lovestruck": {
+   "source": "kb/raw/live/affliction_show/lovestruck.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.manaleech": {
+   "source": "kb/raw/live/affliction_show/manaleech.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "smoke",
+      "item": "valerian"
+     },
+     {
+      "channel": "smoke",
+      "item": "realgar"
+     }
+    ]
+   }
+  },
+  "cure.mangledhead": {
+   "source": "kb/raw/live/affliction_show/mangledhead.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "restoration",
+      "item": "restoration to head"
+     }
+    ]
+   }
+  },
+  "cure.mangledleftarm": {
+   "source": "kb/raw/live/affliction_show/mangledleftarm.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "restoration",
+      "item": "restoration to arms"
+     }
+    ]
+   }
+  },
+  "cure.mangledleftleg": {
+   "source": "kb/raw/live/affliction_show/mangledleftleg.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "restoration",
+      "item": "restoration to legs"
+     }
+    ]
+   }
+  },
+  "cure.mangledrightarm": {
+   "source": "kb/raw/live/affliction_show/mangledrightarm.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "restoration",
+      "item": "restoration to arms"
+     }
+    ]
+   }
+  },
+  "cure.mangledrightleg": {
+   "source": "kb/raw/live/affliction_show/mangledrightleg.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "restoration",
+      "item": "restoration to legs"
+     }
+    ]
+   }
+  },
+  "cure.masochism": {
+   "source": "kb/raw/live/affliction_show/masochism.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "lobelia",
+    "mineral": "argentum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "lobelia"
+     },
+     {
+      "channel": "eat",
+      "item": "argentum"
+     },
+     {
+      "channel": "focus",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.mildtrauma": {
+   "source": "kb/raw/live/affliction_show/mildtrauma.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "restoration",
+      "item": "restoration to body"
+     }
+    ]
+   }
+  },
+  "cure.mindclamp": {
+   "source": "kb/raw/live/affliction_show/mindclamp.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": []
+   }
+  },
+  "cure.mindravaged": {
+   "source": "kb/raw/live/affliction_show/mindravaged.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.muddled": {
+   "source": "kb/raw/live/affliction_show/muddled.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.mycalium": {
+   "source": "kb/raw/live/affliction_show/mycalium.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "goldenseal",
+    "mineral": "plumbum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "goldenseal"
+     },
+     {
+      "channel": "eat",
+      "item": "plumbum"
+     }
+    ]
+   }
+  },
+  "cure.nausea": {
+   "source": "kb/raw/live/affliction_show/nausea.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "ginseng",
+    "mineral": "ferrum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "ginseng"
+     },
+     {
+      "channel": "eat",
+      "item": "ferrum"
+     }
+    ]
+   }
+  },
+  "cure.numbedleftarm": {
+   "source": "kb/raw/live/affliction_show/numbedleftarm.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.numbedrightarm": {
+   "source": "kb/raw/live/affliction_show/numbedrightarm.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.options_join": {
+   "note": "the groups of cure_options are alternatives: focus alone cures anorexia. kb_affliction_db.py joins them with 'and' (kb/CONFLICTS.md #60)",
+   "source": "kb/afflictions/cure-channels.md:23",
+   "tag": "READ",
+   "value": "or"
+  },
+  "cure.pacified": {
+   "source": "kb/raw/live/affliction_show/pacified.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "bellwort",
+    "mineral": "cuprum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "bellwort"
+     },
+     {
+      "channel": "eat",
+      "item": "cuprum"
+     },
+     {
+      "channel": "focus",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.palpatarfeed": {
+   "source": "kb/raw/live/affliction_show/palpatarfeed.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.paralysis": {
+   "source": "kb/raw/live/affliction_show/paralysis.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "bloodroot",
+    "mineral": "magnesium",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "bloodroot"
+     },
+     {
+      "channel": "eat",
+      "item": "magnesium"
+     }
+    ]
+   }
+  },
+  "cure.paranoia": {
+   "source": "kb/raw/live/affliction_show/paranoia.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "ash",
+    "mineral": "stannum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "ash"
+     },
+     {
+      "channel": "eat",
+      "item": "stannum"
+     },
+     {
+      "channel": "focus",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.parasite": {
+   "source": "kb/raw/live/affliction_show/parasite.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "kelp",
+    "mineral": "aurum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "kelp"
+     },
+     {
+      "channel": "eat",
+      "item": "aurum"
+     }
+    ]
+   }
+  },
+  "cure.peace": {
+   "source": "kb/raw/live/affliction_show/peace.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "bellwort",
+    "mineral": "cuprum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "bellwort"
+     },
+     {
+      "channel": "eat",
+      "item": "cuprum"
+     },
+     {
+      "channel": "focus",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.penitence": {
+   "source": "kb/raw/live/affliction_show/penitence.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": []
+   }
+  },
+  "cure.petrified": {
+   "source": "kb/raw/live/affliction_show/petrified.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.phlogisticated": {
+   "source": "kb/raw/live/affliction_show/phlogisticated.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.pinshot": {
+   "source": "kb/raw/live/affliction_show/pinshot.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.pressure": {
+   "source": "kb/raw/live/affliction_show/pressure.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "lungs",
+      "item": "pear"
+     },
+     {
+      "channel": "lungs",
+      "item": "calcite"
+     }
+    ]
+   }
+  },
+  "cure.prone": {
+   "source": "kb/raw/live/affliction_show/prone.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "stand",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.pyramides": {
+   "source": "kb/raw/live/affliction_show/pyramides.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "bloodroot",
+    "mineral": "magnesium",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "bloodroot"
+     },
+     {
+      "channel": "eat",
+      "item": "magnesium"
+     }
+    ]
+   }
+  },
+  "cure.pyre": {
+   "source": "kb/raw/live/affliction_show/pyre.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "bellwort",
+    "mineral": "cuprum",
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "bellwort"
+     },
+     {
+      "channel": "eat",
+      "item": "cuprum"
+     }
+    ]
+   }
+  },
+  "cure.rebbies": {
+   "source": "kb/raw/live/affliction_show/rebbies.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "kelp",
+    "mineral": "aurum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "kelp"
+     },
+     {
+      "channel": "eat",
+      "item": "aurum"
+     }
+    ]
+   }
+  },
+  "cure.recklessness": {
+   "source": "kb/raw/live/affliction_show/recklessness.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "lobelia",
+    "mineral": "argentum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "lobelia"
+     },
+     {
+      "channel": "eat",
+      "item": "argentum"
+     },
+     {
+      "channel": "focus",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.reeling": {
+   "source": "kb/raw/live/affliction_show/reeling.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.retribution": {
+   "source": "kb/raw/live/affliction_show/retribution.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "bellwort",
+    "mineral": "cuprum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "bellwort"
+     },
+     {
+      "channel": "eat",
+      "item": "cuprum"
+     }
+    ]
+   }
+  },
+  "cure.revealed": {
+   "source": "kb/raw/live/affliction_show/revealed.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.sandfever": {
+   "source": "kb/raw/live/affliction_show/sandfever.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "goldenseal",
+    "mineral": "plumbum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "goldenseal"
+     },
+     {
+      "channel": "eat",
+      "item": "plumbum"
+     }
+    ]
+   }
+  },
+  "cure.scalded": {
+   "source": "kb/raw/live/affliction_show/scalded.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.scrambledbrains": {
+   "source": "kb/raw/live/affliction_show/scrambledbrains.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.scytherus": {
+   "source": "kb/raw/live/affliction_show/scytherus.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "ginseng",
+    "mineral": "ferrum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "ginseng"
+     },
+     {
+      "channel": "eat",
+      "item": "ferrum"
+     }
+    ]
+   }
+  },
+  "cure.selarnia": {
+   "source": "kb/raw/live/affliction_show/selarnia.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "salve",
+      "item": "mending to body"
+     }
+    ]
+   }
+  },
+  "cure.sensitivity": {
+   "source": "kb/raw/live/affliction_show/sensitivity.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "kelp",
+    "mineral": "aurum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "kelp"
+     },
+     {
+      "channel": "eat",
+      "item": "aurum"
+     }
+    ]
+   }
+  },
+  "cure.serioustrauma": {
+   "source": "kb/raw/live/affliction_show/serioustrauma.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "restoration",
+      "item": "restoration to body"
+     }
+    ]
+   }
+  },
+  "cure.shadowmadness": {
+   "source": "kb/raw/live/affliction_show/shadowmadness.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "goldenseal",
+    "mineral": "plumbum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "goldenseal"
+     },
+     {
+      "channel": "eat",
+      "item": "plumbum"
+     }
+    ]
+   }
+  },
+  "cure.shivering": {
+   "source": "kb/raw/live/affliction_show/shivering.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "salve",
+      "item": "caloric"
+     }
+    ]
+   }
+  },
+  "cure.shyness": {
+   "source": "kb/raw/live/affliction_show/shyness.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "goldenseal",
+    "mineral": "plumbum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "goldenseal"
+     },
+     {
+      "channel": "eat",
+      "item": "plumbum"
+     },
+     {
+      "channel": "focus",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.silenced": {
+   "source": "kb/raw/live/affliction_show/silenced.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.silver": {
+   "source": "kb/raw/live/affliction_show/silver.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.skullfractures": {
+   "source": "kb/raw/live/affliction_show/skullfractures.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "elixir",
+      "item": "health to head"
+     }
+    ]
+   }
+  },
+  "cure.slashedthroat": {
+   "source": "kb/raw/live/affliction_show/slashedthroat.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "salve",
+      "item": "epidermal to head"
+     }
+    ]
+   }
+  },
+  "cure.sleeping": {
+   "source": "kb/raw/live/affliction_show/sleeping.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "wake",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.slickness": {
+   "source": "kb/raw/live/affliction_show/slickness.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "bloodroot",
+    "mineral": "magnesium",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "smoke",
+      "item": "valerian"
+     },
+     {
+      "channel": "smoke",
+      "item": "realgar"
+     },
+     {
+      "channel": "eat",
+      "item": "bloodroot"
+     },
+     {
+      "channel": "eat",
+      "item": "magnesium"
+     }
+    ]
+   }
+  },
+  "cure.slimeobscure": {
+   "source": "kb/raw/live/affliction_show/slimeobscure.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.snared": {
+   "source": "kb/raw/live/affliction_show/snared.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.solarburn": {
+   "source": "kb/raw/live/affliction_show/solarburn.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.speechless": {
+   "source": "kb/raw/live/affliction_show/speechless.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.spiritburn": {
+   "source": "kb/raw/live/affliction_show/spiritburn.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "lobelia",
+    "mineral": "argentum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "lobelia"
+     },
+     {
+      "channel": "eat",
+      "item": "argentum"
+     }
+    ]
+   }
+  },
+  "cure.stridulating": {
+   "source": "kb/raw/live/affliction_show/stridulating.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "bellwort",
+    "mineral": "cuprum",
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "bellwort"
+     },
+     {
+      "channel": "eat",
+      "item": "cuprum"
+     }
+    ]
+   }
+  },
+  "cure.stupidity": {
+   "source": "kb/raw/live/affliction_show/stupidity.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "goldenseal",
+    "mineral": "plumbum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "goldenseal"
+     },
+     {
+      "channel": "eat",
+      "item": "plumbum"
+     },
+     {
+      "channel": "focus",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.stuttering": {
+   "source": "kb/raw/live/affliction_show/stuttering.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "salve",
+      "item": "epidermal to head"
+     },
+     {
+      "channel": "focus",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.succumbed": {
+   "source": "kb/raw/live/affliction_show/succumbed.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.temperedcholeric": {
+   "source": "kb/raw/live/affliction_show/temperedcholeric.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "ginger",
+    "mineral": "antimony",
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "ginger"
+     },
+     {
+      "channel": "eat",
+      "item": "antimony"
+     }
+    ]
+   }
+  },
+  "cure.temperedmelancholic": {
+   "source": "kb/raw/live/affliction_show/temperedmelancholic.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "ginger",
+    "mineral": "antimony",
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "ginger"
+     },
+     {
+      "channel": "eat",
+      "item": "antimony"
+     }
+    ]
+   }
+  },
+  "cure.temperedphlegmatic": {
+   "source": "kb/raw/live/affliction_show/temperedphlegmatic.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "ginger",
+    "mineral": "antimony",
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "ginger"
+     },
+     {
+      "channel": "eat",
+      "item": "antimony"
+     }
+    ]
+   }
+  },
+  "cure.temperedsanguine": {
+   "source": "kb/raw/live/affliction_show/temperedsanguine.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "ginger",
+    "mineral": "antimony",
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "ginger"
+     },
+     {
+      "channel": "eat",
+      "item": "antimony"
+     }
+    ]
+   }
+  },
+  "cure.tenderskin": {
+   "source": "kb/raw/live/affliction_show/tenderskin.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "lobelia",
+    "mineral": "argentum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "lobelia"
+     },
+     {
+      "channel": "eat",
+      "item": "argentum"
+     }
+    ]
+   }
+  },
+  "cure.tension": {
+   "source": "kb/raw/live/affliction_show/tension.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "smoke",
+      "item": "elm"
+     },
+     {
+      "channel": "smoke",
+      "item": "cinnabar"
+     }
+    ]
+   }
+  },
+  "cure.timeflux": {
+   "source": "kb/raw/live/affliction_show/timeflux.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.timeloop": {
+   "source": "kb/raw/live/affliction_show/timeloop.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "bellwort",
+    "mineral": "cuprum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "bellwort"
+     },
+     {
+      "channel": "eat",
+      "item": "cuprum"
+     }
+    ]
+   }
+  },
+  "cure.tonguetied": {
+   "source": "kb/raw/live/affliction_show/tonguetied.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "restoration",
+      "item": "restoration to head"
+     }
+    ]
+   }
+  },
+  "cure.torntendons": {
+   "source": "kb/raw/live/affliction_show/torntendons.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "elixir",
+      "item": "health to legs"
+     }
+    ]
+   }
+  },
+  "cure.transfixation": {
+   "source": "kb/raw/live/affliction_show/transfixation.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "writhe",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.trueblind": {
+   "source": "kb/raw/live/affliction_show/trueblind.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.unconsciousness": {
+   "source": "kb/raw/live/affliction_show/unconsciousness.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.unweavingbody": {
+   "source": "kb/raw/live/affliction_show/unweavingbody.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "ginseng",
+    "mineral": "ferrum",
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "ginseng"
+     },
+     {
+      "channel": "eat",
+      "item": "ferrum"
+     }
+    ]
+   }
+  },
+  "cure.unweavingmind": {
+   "source": "kb/raw/live/affliction_show/unweavingmind.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "goldenseal",
+    "mineral": "plumbum",
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "goldenseal"
+     },
+     {
+      "channel": "eat",
+      "item": "plumbum"
+     }
+    ]
+   }
+  },
+  "cure.unweavingspirit": {
+   "source": "kb/raw/live/affliction_show/unweavingspirit.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "smoke",
+      "item": "elm"
+     },
+     {
+      "channel": "smoke",
+      "item": "cinnabar"
+     }
+    ]
+   }
+  },
+  "cure.vertigo": {
+   "source": "kb/raw/live/affliction_show/vertigo.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "lobelia",
+    "mineral": "argentum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "lobelia"
+     },
+     {
+      "channel": "eat",
+      "item": "argentum"
+     },
+     {
+      "channel": "focus",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.vinewreathed": {
+   "source": "kb/raw/live/affliction_show/vinewreathed.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.vitiated": {
+   "source": "kb/raw/live/affliction_show/vitiated.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.vitrified": {
+   "source": "kb/raw/live/affliction_show/vitrified.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.voidfisted": {
+   "source": "kb/raw/live/affliction_show/voidfisted.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.voyria": {
+   "source": "kb/raw/live/affliction_show/voyria.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "sip",
+      "item": "immunity"
+     }
+    ]
+   }
+  },
+  "cure.waterbonds": {
+   "source": "kb/raw/live/affliction_show/waterbonds.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.weakenedmind": {
+   "source": "kb/raw/live/affliction_show/weakenedmind.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": []
+   }
+  },
+  "cure.weariness": {
+   "source": "kb/raw/live/affliction_show/weariness.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "kelp",
+    "mineral": "aurum",
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "kelp"
+     },
+     {
+      "channel": "eat",
+      "item": "aurum"
+     }
+    ]
+   }
+  },
+  "cure.webbed": {
+   "source": "kb/raw/live/affliction_show/webbed.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "writhe",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.whisperingmadness": {
+   "source": "kb/raw/live/affliction_show/whisperingmadness.txt",
+   "tag": "READ",
+   "value": {
+    "herb": "lobelia",
+    "mineral": "argentum",
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "eat",
+      "item": "lobelia"
+     },
+     {
+      "channel": "eat",
+      "item": "argentum"
+     }
+    ]
+   }
+  },
+  "cure.woeconstrained": {
+   "source": "kb/raw/live/affliction_show/woeconstrained.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": true,
+    "options": [
+     {
+      "channel": "time",
+      "item": ""
+     }
+    ]
+   }
+  },
+  "cure.wristfractures": {
+   "source": "kb/raw/live/affliction_show/wristfractures.txt",
+   "tag": "READ",
+   "value": {
+    "no_random_cure": false,
+    "options": [
+     {
+      "channel": "elixir",
+      "item": "health to arms"
+     }
+    ]
+   }
+  },
+  "defence.rebounding.delay": {
+   "n": 460,
+   "note": "the aura comes up this long after the smoke, and the smoke spends the lungs clock. n is the clock's",
+   "source": "kb/mechanics/clocks.json, clocks.rebounding (n=460; kb/mechanics/foundations.md:148 gives the older n=67)",
+   "tag": "MEASURED",
+   "value": "clock.rebounding"
+  },
+  "defence.rebounding.smoke": {
+   "n": 49,
+   "note": "the smoke items that raise rebounding. 48 of the 49 smokes of these items saw 'You feel an aura of rebounding surround you' 7.59-8.59 s later, before the next such smoke (g 2887 did not: the log ends). One of az's 16 is its firefly pipe's own line (az 573, after '[Curing]: SMOKE SKULLCAP'; the aura came at 743, 8.475 s later), which kb_events reads since review R3-docs-2. No smoke of another item (valerian, slippery elm, realgar) comes before a rebounding line without one of these first. A fork reads a logged smoke of these items as rebounding on its way (tools/theorycraft.py). tools/test_kb_rules.py re-counts it",
+   "source": "kb/sim/events.json streams: kb/raw/logs/2026-11-01_claes_runewarden-vs-serpent_loss_azbErKcK.txt (skullcap, 16), kb/raw/logs/2026-11-01_elmer_shikudo-vs-serpent_noresult_g-lD00-h.txt (malachite, 9), kb/raw/logs/2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt (malachite, 24); first pair az 102 -> rebounding.up 8.52 s later",
+   "tag": "MEASURED",
+   "value": [
+    "skullcap",
+    "malachite"
+   ]
+  },
+  "defence.shield.cost": {
+   "alt": [
+    2.89,
+    4.0
+   ],
+   "note": "a victim with no logger: the cost two of the three loggers show",
+   "source": "kb/sim/rules.json defence.shield.cost.*",
+   "tag": "ASSUMED",
+   "value": 3.4
+  },
+  "defence.shield.cost.Claes": {
+   "n": 13,
+   "note": "'Equilibrium used: 4.00s.' after all 13 of Claes's shields",
+   "source": "kb/raw/logs/2026-11-01_claes_runewarden-vs-serpent_loss_azbErKcK.txt:1258,1521,2041",
+   "tag": "MEASURED",
+   "value": 4.0
+  },
+  "defence.shield.cost.Elmer": {
+   "n": 12,
+   "note": "3.40 s after 11 of Elmer's 12 shields (Z5 7, g 4); 2.89 s once (g row 2285)",
+   "source": "kb/raw/logs/2026-11-01_elmer_alchemist-vs-serpent_loss_Z5cyffxx.txt:36,663,1386; kb/raw/logs/2026-11-01_elmer_shikudo-vs-serpent_noresult_g-lD00-h.txt:445,2285",
+   "tag": "MEASURED",
+   "value": 3.4
+  },
+  "defence.shield.cost.Nikita": {
+   "n": 10,
+   "note": "'Equilibrium used: 3.40s.' after all 10 of Nikita's shields",
+   "source": "kb/raw/logs/2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt:528,729,2146",
+   "tag": "MEASURED",
+   "value": 3.4
+  },
+  "defence.shield.reraise": {
+   "alt": [
+    3.238,
+    5.826,
+    13.821
+   ],
+   "n": 19,
+   "note": "19 of the 26 FLAYs of the shield in the four logs saw the shield again within 20 s; 7 did not, and the engine raises it again after every FLAY. Only a FLAY starts the re-raise: a shield down with no FLAY (the logger's own movement or action dropped it) stays down (review R3-fork-1, R3-fork-2). The next attack came first every time (1.48-2.53 s later). The engine draws from these quantiles (min, p10, median, p90, max). tools/test_kb_rules.py re-measures it",
+   "source": "kb/sim/events.json: a FLAY of the shield (flay.shield) to the next shield.up within 20 s",
+   "tag": "MEASURED",
+   "usable": false,
+   "value": {
+    "max": 15.277,
+    "median": 5.826,
+    "min": 2.59,
+    "p10": 3.238,
+    "p90": 13.821,
+    "sd": 4.129
+   }
+  },
+  "defence.shield.while_paralysed": {
+   "alt": [
+    true
+   ],
+   "n": 4,
+   "note": "3 of 4 shield rows show paralysis cured first",
+   "source": "tools/kb_sim.py:59",
+   "tag": "MEASURED",
+   "value": false
+  },
+  "defence.sileris.harden": {
+   "n": 43,
+   "note": "the coating hardens this long after the apply line ('You apply a sileris berry' or 'a quicksilver droplet to yourself'). 6 of the 49 applies printed no hardening line before the next apply or the log's end (az 3616; Z5 1891, 4096, 4712, 4951, 5284). A hit before the 10 s mark does not explain it: 36 of the 43 that hardened took a bite or a FLAY in that time too. Slickness at the mark does: rule defence.sileris.slickness_harden. The engine does not re-apply the coating; a fork reads an apply with no hardening line yet as the coating on its way (tools/theorycraft.py, review R3-fork-8). tools/test_kb_rules.py re-measures it",
+   "source": "kb/sim/events.json streams: sileris.apply to the next sileris.up, before the next apply, in the four logs (az 12, Z5 9, g 7, X 15); first pair az 24 -> 10 s later",
+   "tag": "MEASURED",
+   "usable": true,
+   "value": {
+    "max": 10.119,
+    "median": 10.0,
+    "min": 9.753,
+    "p10": 9.947,
+    "p90": 10.037,
+    "sd": 0.035
+   }
+  },
+  "defence.sileris.slickness": {
+   "n": 8,
+   "note": "8 of 8 slickness gains in a packet that starts with the coating up printed 'The protective covering coating your skin sloughs off.' in the same packet (X 144-146: the second venom, 'You have been afflicted with slickness.', then the slough line). No slickness with the coating up left it on. All 8 are DSTABs. The engine strips it on a DSTAB, a give or a FLAY's venom and prints sileris.down (tools/sim/attackers.lua); the give and the FLAY are by analogy, no log shows them. A BITE lands only with the coating down. Review R4-engine-1. tools/test_kb_rules.py re-counts it",
+   "source": "kb/raw/logs/2026-11-01_elmer_alchemist-vs-serpent_loss_Z5cyffxx.txt:451,869,1262,1487,1861,4075; kb/raw/logs/2026-11-01_elmer_shikudo-vs-serpent_noresult_g-lD00-h.txt:1649; kb/raw/logs/2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt:146",
+   "tag": "MEASURED",
+   "value": "slickness that lands strips the sileris coating"
+  },
+  "defence.sileris.slickness_harden": {
+   "n": 49,
+   "note": "0 of the 43 applies that hardened had slickness on at the apply + 10 s (10 of them took slickness in the wait, and it was cured before the mark). 5 of the 6 applies that never hardened had it on (az 3616; Z5 4096, 4712, 4951, 5284). The sixth, Z5 1891, had slickness cured at +9.90 (row 2308) and a new apply in that packet (row 2310). The engine raises no coating at the mark when slickness is on (tools/sim/fight.lua timed). tools/test_kb_rules.py re-counts it",
+   "source": "kb/sim/events.json streams: each sileris.apply, and slickness on or off at the apply + 10 s; kb/raw/logs/2026-11-01_claes_runewarden-vs-serpent_loss_azbErKcK.txt:3616,3734; kb/raw/logs/2026-11-01_elmer_alchemist-vs-serpent_loss_Z5cyffxx.txt:1891,2308,2310,4096,4454,4712,4881,4951,5218,5284,5402",
+   "tag": "MEASURED",
+   "value": "an apply does not harden while slickness is on at its hardening time"
+  },
+  "draw.shape": {
+   "alt": [
+    "normal: the median +/- 3 sd (three uniform draws), held inside min and max"
+   ],
+   "note": "the shape of a drawn clock; --median takes the median and draws nothing, except in a fork: there a clock already running (a channel down at the row, a FLAY of the shield, a smoke for rebounding, an apply of the coating) takes the median of the part of its spread above the time already run, and that part rests on this shape (review R3-engine-2). The --seeds runs of a --median page draw too. A log's min and max are often a lost line or a slowing affliction (clock.rebounding: 0.026 and 250.253 around a median of 8.49; clock.focus max 4.992 against p90 2.542), so a tail never reaches them unless they lie within one width. --clock-draw normal runs the alternative",
+   "source": "tools/sim/victim.lua (V.clock, V.tails)",
+   "tag": "ASSUMED",
+   "value": "quantiles: linear between lo, p10, median, p90 and hi, 10% of the draws in each tail; lo and hi are one p10-p90 width past p10 and p90, held inside min and max"
+  },
+  "focus.order": {
+   "alt": [
+    "anorexia first"
+   ],
+   "note": "LOCK_EXITS: focus cures anorexia, or a mental first",
+   "source": "tools/kb_replay.py:431",
+   "tag": "READ",
+   "value": "mental first, anorexia last"
+  },
+  "label.true": {
+   "note": "softlock (asthma, slickness or bloodfire, anorexia), impatience or sandfever, paralysis, and the class cure shut",
+   "source": "tools/kb_replay.py:645-679",
+   "tag": "READ",
+   "value": "kb_replay.is_true"
+  },
+  "prio.addiction": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 9
+  },
+  "prio.aeon": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.agoraphobia": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 16
+  },
+  "prio.anorexia": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 4
+  },
+  "prio.asthma": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 7
+  },
+  "prio.blindness": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 26
+  },
+  "prio.bound": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.brokenleftarm": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 10
+  },
+  "prio.brokenleftleg": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 7
+  },
+  "prio.brokenrightarm": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 10
+  },
+  "prio.brokenrightleg": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 7
+  },
+  "prio.burning": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 9
+  },
+  "prio.burning4": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 6
+  },
+  "prio.burning5": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 4
+  },
+  "prio.calcifiedskull": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.calcifiedtorso": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.claustrophobia": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 16
+  },
+  "prio.clumsiness": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 7
+  },
+  "prio.concussion": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 12
+  },
+  "prio.confusion": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 8
+  },
+  "prio.crackedribs": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 9
+  },
+  "prio.crescendo": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 9
+  },
+  "prio.crushedthroat": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 5
+  },
+  "prio.daeggerimpale": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.damagedhead": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 8
+  },
+  "prio.damagedleftarm": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 11
+  },
+  "prio.damagedleftleg": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 8
+  },
+  "prio.damagedrightarm": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 13
+  },
+  "prio.damagedrightleg": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 8
+  },
+  "prio.darkshade": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 9
+  },
+  "prio.dazed": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 5
+  },
+  "prio.dazzled": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 7
+  },
+  "prio.deadening": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 14
+  },
+  "prio.deafness": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 26
+  },
+  "prio.dementia": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 10
+  },
+  "prio.depression": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 6
+  },
+  "prio.diminished": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 12
+  },
+  "prio.disloyalty": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 15
+  },
+  "prio.disrupted": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.dissonance": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 14
+  },
+  "prio.dizziness": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 9
+  },
+  "prio.earworm": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 8
+  },
+  "prio.entangled": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.epilepsy": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 8
+  },
+  "prio.fear": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 5
+  },
+  "prio.flushings": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 5
+  },
+  "prio.fratricide": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 25
+  },
+  "prio.frostbite": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 5
+  },
+  "prio.frozen": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 15
+  },
+  "prio.fulminated": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 8
+  },
+  "prio.generosity": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 16
+  },
+  "prio.grievouswounds": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 3
+  },
+  "prio.guilt": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 8
+  },
+  "prio.haemophilia": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 11
+  },
+  "prio.hallucinations": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 9
+  },
+  "prio.healthleech": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 8
+  },
+  "prio.heartseed": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.hellsight": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 12
+  },
+  "prio.horror": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 9
+  },
+  "prio.hypersomnia": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 9
+  },
+  "prio.hypochondria": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 5
+  },
+  "prio.hypothermia": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.icebound": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.impaled": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.impatience": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 4
+  },
+  "prio.indifference": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 25
+  },
+  "prio.insomnia": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 26
+  },
+  "prio.internalbleeding": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 8
+  },
+  "prio.itching": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 5
+  },
+  "prio.justice": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 16
+  },
+  "prio.kkractlebrand": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 5
+  },
+  "prio.laceratedthroat": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 19
+  },
+  "prio.latched": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.lethargy": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 11
+  },
+  "prio.loneliness": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 16
+  },
+  "prio.lovers": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 14
+  },
+  "prio.manaleech": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 13
+  },
+  "prio.mangledhead": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 8
+  },
+  "prio.mangledleftarm": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 14
+  },
+  "prio.mangledleftleg": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 8
+  },
+  "prio.mangledrightarm": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 14
+  },
+  "prio.mangledrightleg": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 8
+  },
+  "prio.masochism": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 8
+  },
+  "prio.mildtrauma": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 17
+  },
+  "prio.mycalium": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 5
+  },
+  "prio.nausea": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 8
+  },
+  "prio.pacified": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 3
+  },
+  "prio.paralysis": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 3
+  },
+  "prio.paranoia": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 10
+  },
+  "prio.parasite": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 7
+  },
+  "prio.peace": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.pressure": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 25
+  },
+  "prio.prone": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.pyramides": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 6
+  },
+  "prio.pyre": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 9
+  },
+  "prio.pyre3": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 5
+  },
+  "prio.rebbies": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 7
+  },
+  "prio.recklessness": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 8
+  },
+  "prio.retribution": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 6
+  },
+  "prio.sandfever": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 4
+  },
+  "prio.scalded": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 16
+  },
+  "prio.scytherus": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 3
+  },
+  "prio.selarnia": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 20
+  },
+  "prio.sensitivity": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 7
+  },
+  "prio.serioustrauma": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 17
+  },
+  "prio.shadowmadness": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 6
+  },
+  "prio.shivering": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 15
+  },
+  "prio.shyness": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 12
+  },
+  "prio.skullfractures": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 8
+  },
+  "prio.slashedthroat": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 19
+  },
+  "prio.sleeping": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.slickness": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 3
+  },
+  "prio.spiritburn": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 11
+  },
+  "prio.stridulating": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 24
+  },
+  "prio.stupidity": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 8
+  },
+  "prio.stuttering": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 19
+  },
+  "prio.temperedcholeric": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 14
+  },
+  "prio.temperedmelancholic": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 14
+  },
+  "prio.temperedphlegmatic": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 14
+  },
+  "prio.temperedsanguine": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 14
+  },
+  "prio.tenderskin": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 11
+  },
+  "prio.tension": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 16
+  },
+  "prio.timeloop": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 4
+  },
+  "prio.tonguetied": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 18
+  },
+  "prio.torntendons": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 10
+  },
+  "prio.transfixation": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.unweavingbody": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 25
+  },
+  "prio.unweavingbody3": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.unweavingbody4": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.unweavingbody5": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.unweavingmind": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 25
+  },
+  "prio.unweavingmind3": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.unweavingmind4": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.unweavingmind5": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.unweavingspirit": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 25
+  },
+  "prio.unweavingspirit3": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.unweavingspirit4": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.unweavingspirit5": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.vertigo": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 9
+  },
+  "prio.voyria": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.weariness": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 6
+  },
+  "prio.webbed": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 2
+  },
+  "prio.whisperingmadness": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 11
+  },
+  "prio.wristfractures": {
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua ataxia_defaultCuringPrios()",
+   "tag": "READ",
+   "value": 11
+  },
+  "random_cure.pool": {
+   "alt": [
+    [
+     "paralysis",
+     "slickness",
+     "anorexia",
+     "asthma",
+     "sensitivity",
+     "clumsiness",
+     "weariness",
+     "epilepsy",
+     "haemophilia",
+     "nausea",
+     "dizziness",
+     "shyness",
+     "stupidity",
+     "confusion",
+     "dementia",
+     "paranoia",
+     "hallucinations",
+     "impatience",
+     "hypersomnia",
+     "addiction",
+     "darkshade",
+     "healthleech",
+     "brokenleftleg",
+     "brokenrightleg",
+     "brokenleftarm",
+     "brokenrightarm",
+     "blackout"
+    ]
+   ],
+   "note": "every affliction the game does not mark NoRandomCure. The package's tree pool holds 27 (--random-pool package)",
+   "source": "kb/afflictions/database.md:11-14; src_new/scripts/levi_ataxia/levi/ataxia/affliction_tracking_core/008_V3_Integration.lua:264 (treeCurableAffsV3, the alternative)",
+   "tag": "ASSUMED",
+   "value": "NoRandomCure off"
+  },
+  "ssc.delay": {
+   "alt": [
+    0.1,
+    0.18
+   ],
+   "n": 2,
+   "note": "'may eat' to eat: medians 0.18 and 0.10 s in two logs. The draw between them is uniform (ASSUMED shape)",
+   "source": "kb/mechanics/foundations.md:192",
+   "tag": "MEASURED",
+   "value": {
+    "max": 0.18,
+    "median": 0.14,
+    "min": 0.1
+   }
+  },
+  "ssc.order": {
+   "alt": [
+    "asthma first",
+    "the logger's own table"
+   ],
+   "note": "the loggers ran their own tables (kb/sim/forward.md). The priority numbers are READ from the code; using them for a victim is ASSUMED",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua",
+   "tag": "ASSUMED",
+   "value": "package default priorities"
+  },
+  "ssc.phi": {
+   "alt": [
+    0.33,
+    1.0
+   ],
+   "n": 27,
+   "note": "inside one herb the top affliction wins with this chance: aurum took asthma 16 of 27 with weariness up",
+   "source": "kb/mechanics/foundations.md:53",
+   "tag": "MEASURED",
+   "value": 0.6
+  },
+  "timed.fratricide": {
+   "n": 12,
+   "note": "not yet used by the engine",
+   "source": "kb/mechanics/foundations.md:152",
+   "tag": "MEASURED",
+   "value": {
+    "max": 2.9,
+    "min": 2.0
+   }
+  },
+  "timed.hypochondria": {
+   "alt": [
+    "off"
+   ],
+   "n": 5,
+   "note": "the pooled median of every sample in three logs (az, Z5, X; g has no step): nausea 3.124 (n=8, 3.09-3.15), lethargy 6.198 (n=7, 3.08-9.31), impatience 9.311 (n=5, 9.11-12.42). n is the smallest step's. Curing the hypochondria ends the chain. tools/test_kb_rules.py re-derives the medians from kb/sim/events.json",
+   "source": "kb/sim/events.json, census.<log>.suppliers.hypochondria.* (kb/sim/events.md, Suppliers)",
+   "tag": "MEASURED",
+   "usable": false,
+   "value": {
+    "impatience": 9.31,
+    "lethargy": 6.2,
+    "nausea": 3.12
+   }
+  },
+  "tree.cures": {
+   "source": "kb/afflictions/cure-channels.md:24",
+   "tag": "READ",
+   "value": "one random affliction"
+  },
+  "tree.pick": {
+   "alt": [
+    "priority"
+   ],
+   "note": "uniform over the curable afflictions up. A run with --median takes the top priority instead, so it has no draw",
+   "source": "kb/afflictions/cure-channels.md:24",
+   "tag": "ASSUMED",
+   "value": "random"
+  },
+  "tree.policy": {
+   "alt": [
+    "hold"
+   ],
+   "note": "the victim touches the tree whenever it is up and an affliction is up; hold keeps it for a softlock",
+   "source": "tools/sim/forward.lua:155-167",
+   "tag": "ASSUMED",
+   "value": "now"
+  },
+  "venom.aconite": {
+   "alt": [
+    "off"
+   ],
+   "note": "the package's own table (venom_to_aff), so truth and belief agree by construction",
+   "source": ".claude/databases/venoms.yaml:15; src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua:212 (venom_to_aff)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [
+     "stupidity"
+    ],
+    "weapon": true
+   },
+   "wiki": "Cause sheer stupidity in your opponent. Afflict your victim with sheer stupidity."
+  },
+  "venom.camus": {
+   "alt": [
+    "off"
+   ],
+   "note": "from the wiki's text only: the package's table does not hold it",
+   "source": ".claude/databases/venoms.yaml:22 (wiki)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [],
+    "weapon": false
+   },
+   "wiki": "A more powerful version of Sumac. A more powerful version of Sumac poison. This venom can not be used to envenom a weapon."
+  },
+  "venom.colocasia": {
+   "alt": [
+    "off"
+   ],
+   "note": "from the wiki's text only: the package's table does not hold it",
+   "source": ".claude/databases/venoms.yaml:29 (wiki)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [
+     "blindness",
+     "deafness"
+    ],
+    "weapon": true
+   },
+   "wiki": "Gives blindness and deafness. Cause both blindness and deafness in your victim."
+  },
+  "venom.curare": {
+   "alt": [
+    "off"
+   ],
+   "note": "the package's own table (venom_to_aff), so truth and belief agree by construction",
+   "source": ".claude/databases/venoms.yaml:36; src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua:207 (venom_to_aff)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [
+     "paralysis"
+    ],
+    "weapon": true
+   },
+   "wiki": "A venom of muscular paralysis. Cause your victim's body to freeze with paralysis."
+  },
+  "venom.darkshade": {
+   "alt": [
+    "off"
+   ],
+   "note": "the package's own table (venom_to_aff), so truth and belief agree by construction",
+   "source": ".claude/databases/venoms.yaml:43; src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua:207 (venom_to_aff)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [
+     "darkshade"
+    ],
+    "weapon": true
+   },
+   "wiki": "Makes the victim allergic to sunlight. Give your target an allergy to sunlight."
+  },
+  "venom.delphinium": {
+   "alt": [
+    "off"
+   ],
+   "note": "the package's own table (venom_to_aff), so truth and belief agree by construction. The package's word is 'sleep'; the engine uses afflictions.json's name",
+   "source": ".claude/databases/venoms.yaml:50; src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua:213 (venom_to_aff)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [
+     "sleeping"
+    ],
+    "weapon": true
+   },
+   "wiki": "Put your victim to sleep. Put your victim to sleep."
+  },
+  "venom.digitalis": {
+   "alt": [
+    "off"
+   ],
+   "note": "the package's own table (venom_to_aff), so truth and belief agree by construction",
+   "source": ".claude/databases/venoms.yaml:57; src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua:206 (venom_to_aff)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [
+     "shyness"
+    ],
+    "weapon": true
+   },
+   "wiki": "Causes unbearable shyness. Cause unbearable shyness in your victim."
+  },
+  "venom.epseth": {
+   "alt": [
+    "off"
+   ],
+   "note": "the package's own table (venom_to_aff), so truth and belief agree by construction",
+   "source": ".claude/databases/venoms.yaml:64; src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua:215 (venom_to_aff)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [
+     "brokenleftleg|brokenrightleg"
+    ],
+    "weapon": true
+   },
+   "wiki": "Cause the legs of your victim to become useless. Cause the legs of your victim to become useless."
+  },
+  "venom.epteth": {
+   "alt": [
+    "off"
+   ],
+   "note": "the package's own table (venom_to_aff), so truth and belief agree by construction",
+   "source": ".claude/databases/venoms.yaml:71; src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua:215 (venom_to_aff)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [
+     "brokenleftarm|brokenrightarm"
+    ],
+    "weapon": true
+   },
+   "wiki": "Shrivel up the arms of your unlucky victim. Cause your victim's arms to shrivel."
+  },
+  "venom.euphorbia": {
+   "alt": [
+    "off"
+   ],
+   "note": "the package's own table (venom_to_aff), so truth and belief agree by construction",
+   "source": ".claude/databases/venoms.yaml:78; src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua:209 (venom_to_aff)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [
+     "nausea"
+    ],
+    "weapon": true
+   },
+   "wiki": "Induces spasmodic vomiting. Induces spasmodic vomiting."
+  },
+  "venom.eurypteria": {
+   "alt": [
+    "off"
+   ],
+   "note": "the package's own table (venom_to_aff), so truth and belief agree by construction",
+   "source": ".claude/databases/venoms.yaml:85; src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua:205 (venom_to_aff)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [
+     "recklessness"
+    ],
+    "weapon": true
+   },
+   "wiki": "Gives the victim delusions of invulnerability. Afflict your victim with recklessness."
+  },
+  "venom.gecko": {
+   "alt": [
+    "off"
+   ],
+   "note": "the package's own table (venom_to_aff), so truth and belief agree by construction",
+   "source": ".claude/databases/venoms.yaml:92; src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua:212 (venom_to_aff)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [
+     "slickness"
+    ],
+    "weapon": true
+   },
+   "wiki": "Causes the recipient to become foully oily. Cause your victim to secrete foul oils from his skin."
+  },
+  "venom.kalmia": {
+   "alt": [
+    "off"
+   ],
+   "note": "the package's own table (venom_to_aff), so truth and belief agree by construction",
+   "source": ".claude/databases/venoms.yaml:99; src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua:206 (venom_to_aff)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [
+     "asthma"
+    ],
+    "weapon": true
+   },
+   "wiki": "Inhibits the respiratory system. Afflict your victim with severe asthma."
+  },
+  "venom.larkspur": {
+   "alt": [
+    "off"
+   ],
+   "note": "the package's own table (venom_to_aff), so truth and belief agree by construction",
+   "source": ".claude/databases/venoms.yaml:106; src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua:210 (venom_to_aff)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [
+     "dizziness"
+    ],
+    "weapon": true
+   },
+   "wiki": "Causes great dizziness. Cause great dizziness in your target."
+  },
+  "venom.loki": {
+   "alt": [
+    "off"
+   ],
+   "note": "from the wiki's text only: the package's table does not hold it",
+   "source": ".claude/databases/venoms.yaml:113 (wiki)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [
+     "random"
+    ],
+    "weapon": true
+   },
+   "wiki": "An unpredictable toxin. This unpredictable toxin will afflict your victim with a random venom."
+  },
+  "venom.monkshood": {
+   "alt": [
+    "off"
+   ],
+   "note": "the package's own table (venom_to_aff), so truth and belief agree by construction",
+   "source": ".claude/databases/venoms.yaml:120; src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua:208 (venom_to_aff)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [
+     "disloyalty"
+    ],
+    "weapon": true
+   },
+   "wiki": "Disfigure your victim, causing disloyalty in those around. Causes your victim to become disfigured making their loyal servants turn on them."
+  },
+  "venom.nechamandra": {
+   "alt": [
+    "off"
+   ],
+   "note": "the package's own table (venom_to_aff), so truth and belief agree by construction",
+   "source": ".claude/databases/venoms.yaml:127; src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua:214 (venom_to_aff)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [
+     "shivering"
+    ],
+    "weapon": true
+   },
+   "wiki": "A venom that chills the veins. A venom that chills the veins."
+  },
+  "venom.notechis": {
+   "alt": [
+    "off"
+   ],
+   "note": "the package's own table (venom_to_aff), so truth and belief agree by construction",
+   "source": ".claude/databases/venoms.yaml:134; src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua:211 (venom_to_aff)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [
+     "haemophilia"
+    ],
+    "weapon": false
+   },
+   "wiki": "Induce haemophilia in a target. Induce haemophilia in your target. This venom can not be used to envenom a weapon."
+  },
+  "venom.oculus": {
+   "alt": [
+    "off"
+   ],
+   "note": "from the wiki's text only: the package's table does not hold it",
+   "source": ".claude/databases/venoms.yaml:141 (wiki)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [],
+    "weapon": true
+   },
+   "wiki": "Forces the recipient's eyelids open. Forces your victim's eyelids open clearing his eyes of blindness."
+  },
+  "venom.oleander": {
+   "alt": [
+    "off"
+   ],
+   "note": "from the wiki's text only: the package's table does not hold it",
+   "source": ".claude/databases/venoms.yaml:148 (wiki)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [
+     "blindness"
+    ],
+    "weapon": true
+   },
+   "wiki": "Blindness. Cause blindness in your target."
+  },
+  "venom.prefarar": {
+   "alt": [
+    "off"
+   ],
+   "note": "the package's own table (venom_to_aff), so truth and belief agree by construction",
+   "source": ".claude/databases/venoms.yaml:155; src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua:208 (venom_to_aff)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [
+     "sensitivity"
+    ],
+    "weapon": true
+   },
+   "wiki": "Increase the recipient's sensitivity. Increase your victim's sensitivity to pain."
+  },
+  "venom.scytherus": {
+   "alt": [
+    "off"
+   ],
+   "note": "the package's own table (venom_to_aff), so truth and belief agree by construction",
+   "source": ".claude/databases/venoms.yaml:162; src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua:214 (venom_to_aff)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [
+     "scytherus"
+    ],
+    "weapon": true
+   },
+   "wiki": "A venom that thins the blood. A nasty venom that will thin the victim's blood allowing your toxins to be more effective."
+  },
+  "venom.selarnia": {
+   "alt": [
+    "off"
+   ],
+   "note": "the package's own table (venom_to_aff), so truth and belief agree by construction",
+   "source": ".claude/databases/venoms.yaml:169; src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua:216 (venom_to_aff)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [
+     "selarnia"
+    ],
+    "weapon": true
+   },
+   "wiki": "Forcing your victim back into mortal form. This venom will force the spirit animals out of those pesky forestals."
+  },
+  "venom.slike": {
+   "alt": [
+    "off"
+   ],
+   "note": "the package's own table (venom_to_aff), so truth and belief agree by construction",
+   "source": ".claude/databases/venoms.yaml:176; src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua:210 (venom_to_aff)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [
+     "anorexia"
+    ],
+    "weapon": true
+   },
+   "wiki": "Give the curse of anorexia to your victim. Causes your victim to fall prey to anorexia."
+  },
+  "venom.sumac": {
+   "alt": [
+    "off"
+   ],
+   "note": "from the wiki's text only: the package's table does not hold it",
+   "source": ".claude/databases/venoms.yaml:183 (wiki)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [],
+    "weapon": false
+   },
+   "wiki": "Minor damage. This venom will cause minor damage to adventurers and denizens. This venom cannot be used to envenom a weapon."
+  },
+  "venom.vardrax": {
+   "alt": [
+    "off"
+   ],
+   "note": "the package's own table (venom_to_aff), so truth and belief agree by construction",
+   "source": ".claude/databases/venoms.yaml:190; src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua:211 (venom_to_aff)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [
+     "addiction"
+    ],
+    "weapon": true
+   },
+   "wiki": "Grants an insatiable addiction. This potent venom will instill an addiction in your victim that will not be sated."
+  },
+  "venom.vernalius": {
+   "alt": [
+    "off"
+   ],
+   "note": "the package's own table (venom_to_aff), so truth and belief agree by construction",
+   "source": ".claude/databases/venoms.yaml:197; src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua:209 (venom_to_aff)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [
+     "weariness"
+    ],
+    "weapon": true
+   },
+   "wiki": "A venom that weakens the muscles. A venom that weakens the muscles."
+  },
+  "venom.voyria": {
+   "alt": [
+    "off"
+   ],
+   "note": "the package's own table (venom_to_aff), so truth and belief agree by construction",
+   "source": ".claude/databases/venoms.yaml:204; src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua:213 (venom_to_aff)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [
+     "voyria"
+    ],
+    "weapon": true
+   },
+   "wiki": "The deadliest venom known to mankind. This deadly venom will induce a quick death for its victim."
+  },
+  "venom.xentio": {
+   "alt": [
+    "off"
+   ],
+   "note": "the package's own table (venom_to_aff), so truth and belief agree by construction",
+   "source": ".claude/databases/venoms.yaml:211; src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua:205 (venom_to_aff)",
+   "tag": "ASSUMED",
+   "value": {
+    "affs": [
+     "clumsiness"
+    ],
+    "weapon": true
+   },
+   "wiki": "Loss of coordination. Cause a loss of coordination in your target."
+  }
+ }
+}

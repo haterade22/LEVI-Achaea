@@ -89,6 +89,11 @@ first time material for them arrives.
 6. Run **`python tools/kb_sim.py --check`**. If it prints STALE, run `python tools/kb_sim.py` (about 12 minutes). It regenerates
    [sim/forward.md](sim/forward.md). It goes stale when a Serpent log adds a board, or when a clock median moves by 0.01 s. CI runs the check. It
    needs `lupa`, and it runs on the Lua 5.1 inside it. If `test_kb_sim.py` fails on the gap inputs, copy the new DSTAB numbers from `clocks.md` into `kb_sim.py` and run it again.
+7. Run **`python tools/kb_rules.py --check`**. If it prints STALE, run `python tools/kb_rules.py`: a new log moved a clock in
+   `clocks.json`, so [sim/rules.md](sim/rules.md) changes. Then run `python -B tools/test_theorycraft.py`. If its golden text
+   fails because a clock moved, read the new text of the example, then paste it into the test. Never change
+   `tools/sim/gates_whole.json` to pass. `python tools/kb_events.py --check` reads only the four frozen Serpent logs, so a new
+   log does not make it STALE. The next Serpent log is scored once against the frozen bars before any refit.
 
 The HTML exports are git-ignored. The text files are the evidence. Our own recordings use a separate
 tool: `python tools/fightlog_import.py` copies `<profile>/fightlogs/` into `kb/raw/logs/ours/`. In an `aconfig rounds alias` fight its
