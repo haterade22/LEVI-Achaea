@@ -2015,6 +2015,18 @@ describe("a lock piece a branched cure left at 0.667 is sent again, at the lock'
     near(P("impatience"), 2 / 3, "impatience after the eat")
     expect(selectBiteVenom().venom).toBe("monkshood")
   end)
+
+  -- PRIORITY 1.5 sends this monkshood as an impulse, and that impulse brings its own masochism.
+  it("the rebounding pre-empt still sends monkshood on a masochism at 0.667", function()
+    board("lock", false, "stupidity", "disloyalty", "vertigo")
+    onHerbCureV3("goldenseal")
+    clock = clock + 1.6
+    onHerbCureV3("lobelia")
+    near(P("impatience"), 2 / 3, "impatience after the eats")
+    near(P("masochism"), 2 / 3, "masochism after the eats")
+    lastReboundingFlay = clock - 8.3
+    expect(has(round(), "impulse Agathon masochism monkshood")).toBeTrue()
+  end)
 end)
 
 describe("lock_reinforce never sends curare twice", function()

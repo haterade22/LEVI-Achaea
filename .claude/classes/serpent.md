@@ -33,7 +33,7 @@ NDB cache and is UNVERIFIED. The spar gives inputs about OUR seat only: no Saibe
 
 Code anchors are `src_new/scripts/levi_ataxia/levi/levi_scripts/serpent/002_Serpent_Offense.lua`
 (written `:<line>` below) unless another file is named. Every anchor was re-read against that file on 2026-11-08
-(3506 lines, with the deep review's fixes in), so a bare `:<line>` is current. "Until v4.7.419" or "v4.7.479" in the
+(3518 lines, with the deep review's fixes in), so a bare `:<line>` is current. "Until v4.7.419" or "v4.7.479" in the
 text dates a change, not a line number. Nothing from the 2026-11-08 review has run in Mudlet yet.
 
 ---
@@ -194,7 +194,7 @@ bitepayload_ladder: |
   to pickVenom). It returns nil while sileris/fangbarrier is up (:1213). Priority: scytherus
   (camus loop) -> the monkshood reaction (asthma + masochism + weariness, and since v4.7.419
   only while impatience reads under 0.70; at 0.30 or more it also needs asthma, weariness and masochism at
-  0.70, because a bite brings no suggestion, :1228-1232) -> the kalmia, curare, loki and aconite reactions ->
+  0.70, because a bite brings no suggestion; the pre-empt's impulse brings its own masochism, so it passes true and skips that bar, :1228-1232) -> the kalmia, curare, loki and aconite reactions ->
   curare / kalmia / vernalius for a missing lock piece. A BITE costs 4.00 s of balance (WIKI)
   against DSTAB's 2.80 s.
 
@@ -309,7 +309,7 @@ lines: |
   takes hold." (FL 1275-1276; loki prints the same words, FL 1411). The second DSTAB venom
   prints "Striking like a snake, you prick Saibel a second time with your dirk." (FL 363). The
   relapse (018) and snap lines are still code only.
-tests: "src_new/tests/test_serpent_notes.lua (36 tests at v4.7.419, 58 now) and test_serpent_spar_fixes.lua (52 at v4.7.479, 143 now)"
+tests: "src_new/tests/test_serpent_notes.lua (36 tests at v4.7.419, 58 now) and test_serpent_spar_fixes.lua (52 at v4.7.479, 153 now)"
 ```
 
 ### The spar fixes in the offense (v4.7.479)

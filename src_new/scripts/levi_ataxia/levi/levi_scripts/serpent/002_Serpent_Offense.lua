@@ -1209,7 +1209,7 @@ end
 
     Returns {venom = "X", label = "Y"} or nil if no useful bite.
 ]]--
-function selectBiteVenom()
+function selectBiteVenom(impulseCarriesMasochism)
     if not checkImpulseEligible() then return nil end  -- sileris/fangbarrier blocks bite
 
     -- 1. Scytherus stuck — keep biting for camus relapse damage
@@ -1224,10 +1224,10 @@ function selectBiteVenom()
 
     -- 3. Monkshood ekanelia ready → free impatience via bite (no EQ cost). Not onto impatience
     -- that is already up: the reaction's only product would be wasted. An impatience below the bar
-    -- needs the reaction able to fire, masochism too: a bite brings no suggestion to supply it.
+    -- needs the reaction able to fire. Masochism too, unless the caller's impulse brings it (1.5).
     if haveAff("asthma") and haveAff("masochism") and haveAff("weariness")
        and not haveAff_tactical("impatience")
-       and (not haveAff("impatience") or (monkshoodCanReact() and haveAff_tactical("masochism"))) then
+       and (not haveAff("impatience") or (monkshoodCanReact() and (impulseCarriesMasochism or haveAff_tactical("masochism")))) then
         return {venom = "monkshood", label = "impatience (ekanelia)"}
     end
 
@@ -1997,7 +1997,7 @@ function serp_ekanelia_attack()
         and (now() - lastReboundingFlay) >= 8.15
         and not eqAction
         and checkImpulseEligible() then
-        local bite = selectBiteVenom()
+        local bite = selectBiteVenom(true)
         local biteVenom = (bite and bite.venom) or pickVenom(nil)
         -- Chosen after the bite: a monkshood bite is the impatience reaction (MONKSHOOD_SUGGESTION).
         local impAff = (biteVenom == "monkshood") and MONKSHOOD_SUGGESTION

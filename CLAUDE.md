@@ -2700,7 +2700,7 @@ server's is open (#69), and under the second reading each cost is about 0.12 s h
 - **Re-delivery reads a lock piece at 0.70, build-on reads at 0.30** (`haveAff_tactical` vs `haveAff`, note at :108). A piece a
   branched cure left at 0.667 is sent again. `targetLocked` is unchanged, so recklessness still waits for the lock. A monkshood
   re-sent for an impatience between 0.30 and 0.70 also needs its reaction able to fire (`monkshoodCanReact`: asthma and weariness at
-  0.70). An aurum eat, then a plumbum eat, leaves those two at 0.667 and 0.333 with no branch holding both; the DSTAB takes the round.
+  0.70). An aurum eat, then a plumbum eat, leaves those two at 0.667 and 0.333 with no branch holding both; the DSTAB takes the round (under the `relapse_lock` strategy the one stupidity impulse goes first if it is unspent and stupidity is down, :1166).
 - **Truelock.** `sr` takes lock_reinforce there, as lock and darkshade do (:2886-2891): one voyria impulse, then the finish.
   The voyria impulse goes only at truelock (:2103). lock_reinforce's second venom is never curare.
 - **A refused round does not stop the press**: after 1.5 s on balance with no drop the next press sends again, except while we
