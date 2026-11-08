@@ -208,6 +208,91 @@ describe("F12: a cure that leaves every branch under 1% keeps the branches", fun
     for _, a in ipairs(NINE) do near(P(a), 6 / 9, a) end
   end)
 
+  local KEENING = "Xylarys lets out a great keening, casting the impurities from his form."
+  local function dragonheal() run(DRAGONHEAL, KEENING, "Xylarys") end
+  local function aurum() now = now + 1; run(KELP, "Xylarys eats an aurum flake.", "Xylarys", "an aurum flake") end
+  local TWELVE = { "sensitivity", "healthleech", unpack(TEN) }
+
+  -- What the board really reads: the same lines with no floor and no cap.
+  local function exact(affs, lines)
+    local floor, cap = affConfigV3.minProbability, affConfigV3.maxStates
+    affConfigV3.minProbability, affConfigV3.maxStates = 0, 1e9
+    local out = {}
+    local fine, e = pcall(function()
+      world("Xylarys")
+      tarAffed(unpack(affs))
+      lines()
+      for _, a in ipairs(affs) do out[a] = P(a) end
+    end)
+    affConfigV3.minProbability, affConfigV3.maxStates = floor, cap
+    if not fine then error(e, 0) end
+    return out
+  end
+
+  -- Dragonheal, then a weighted cure. The eat's 4/2/1 split lifts a few merged branches over the
+  -- 1% floor, so "every branch under the floor" no longer holds, and 59% of the weight sat under
+  -- it. Cutting that read asthma 0.00 (tAffs off) and weariness 0.00 where they are 0.38 and 0.24.
+  it("an aurum eat after Dragonheal over ten reads exact: the floor only trims", function()
+    local want = exact(TEN, function() dragonheal(); aurum() end)
+    world("Xylarys")
+    tarAffed(unpack(TEN))
+    dragonheal()
+    aurum()
+    for _, a in ipairs(TEN) do near(P(a), want[a], a) end
+    expect(P("asthma") > 0.3).toBeTrue()
+    expect(tAffs.asthma).toBeTrue()
+  end)
+
+  -- The same two lines over twelve left ONE branch: eight afflictions at 1.00 and four at 0.
+  it("an aurum eat after Dragonheal over twelve keeps the cap, not one branch", function()
+    local want = exact(TWELVE, function() dragonheal(); aurum() end)
+    world("Xylarys")
+    tarAffed(unpack(TWELVE))
+    dragonheal()
+    aurum()
+    expect(#afflictionStatesV3).toBe(affConfigV3.maxStates)
+    local err = 0
+    for _, a in ipairs(TWELVE) do
+      err = err + math.abs(P(a) - want[a])
+      expect(isAffCertainV3(a)).toBeFalse()
+    end
+    expect(err < 0.5).toBeTrue()         -- 0.18 measured; 4.00 with the floor cutting
+  end)
+
+  -- A passive expands every branch each round. Untrimmed, the second round expanded the first's
+  -- thousands: a second Dragonheal over 14 + 4 afflictions took about 0.5 s in plain Lua 5.1, in one trigger.
+  it("a three-cure passive on a board at the cap trims it between its cures", function()
+    world("Xylarys")
+    tarAffed("paralysis", "slickness", unpack(TWELVE))
+    dragonheal()                         -- C(14,3) = 364 branches, cut to 300
+    expect(#afflictionStatesV3).toBe(affConfigV3.maxStates)
+    tarAffed("anorexia", "impatience", "confusion", "dementia")
+    now = now + 12
+    local realDedupe, biggest = deduplicateStatesV3, 0
+    deduplicateStatesV3 = function()
+      biggest = math.max(biggest, #afflictionStatesV3)
+      return realDedupe()
+    end
+    local fine, e = pcall(dragonheal)
+    deduplicateStatesV3 = realDedupe
+    if not fine then error(e, 0) end
+    -- 300 branches of at most 15 afflictions each: no round can expand past 4500.
+    expect(biggest <= affConfigV3.maxStates * 15).toBeTrue()
+    expect(#afflictionStatesV3 <= affConfigV3.maxStates).toBeTrue()
+  end)
+
+  -- A board that fits is left alone between the cures: the floor must not run mid-expansion.
+  it("a passive on a board under the cap does not trim between its cures", function()
+    world("Xylarys")
+    tarAffed(unpack(TEN))
+    local realPrune, calls = pruneStatesV3, 0
+    pruneStatesV3 = function() calls = calls + 1; return realPrune() end
+    local fine, e = pcall(dragonheal)
+    pruneStatesV3 = realPrune
+    if not fine then error(e, 0) end
+    expect(calls).toBe(1)                -- the one after the last cure (008)
+  end)
+
   it("a package reload over a running session takes the cap", function()
     local kept = affConfigV3
     affConfigV3 = { enabled = true, minProbability = 0.01, maxStates = 50, debugEcho = true }

@@ -10,7 +10,9 @@
 --   557 powderise        earth_powderiseHit (3c312975), before `targetIshere = true`.
 --   snb slice x5         swordneed/shieldneed (3c312975) in a dead block that set paraslick.
 --   attacks/009          priest_selftLimbHit: a typo for priest_selfLimbHit.
---   twohand/005, 007     slc.* while only the switched-off slc/002 creates `slc`.
+--   twohand/005, 007     slc.* while only the switched-off slc/002 creates `slc`. These two do not
+--                        ship: a same-named folder sits beside each leaf, and Muddler's merge keeps
+--                        the folder. The guard is checked against the source only.
 --   aliases              cat (expandALias), bec (tar), top (goto), mu (osend), colours
 --                        (showColours, which Mudlet 5.1.1 does not have: showColors).
 -- And the room-items handler: `waterguards` for `waterGuards`, so the salute/grab dedupe never

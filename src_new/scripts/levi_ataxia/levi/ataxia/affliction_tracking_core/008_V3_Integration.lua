@@ -540,6 +540,10 @@ function onPassiveCureV3(numCures)
 
         if cure < numCures then
             deduplicateStatesV3()
+            -- Each round expands every branch. Past the cap, trim before the next one: a second
+            -- Dragonheal over 14 + 4 afflictions took about 0.5 s in Lua 5.1, in one trigger. Only
+            -- past the cap, so the 1% floor does not run mid-expansion on a board that fits.
+            if #afflictionStatesV3 > affConfigV3.maxStates then pruneStatesV3() end
         end
     end
 

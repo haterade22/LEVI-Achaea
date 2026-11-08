@@ -1933,6 +1933,88 @@ describe("a lock piece a branched cure left at 0.667 is sent again, at the lock'
     give("asthma")
     expect(serpent.recklessnessAllowed()).toBeTrue()
   end)
+
+  -- The reaction needs asthma, weariness and masochism together. Kelp, then goldenseal, over the
+  -- whole lock reads impatience 0.667, asthma 0.667 and weariness 0.333, and no branch holds both
+  -- pieces. The impulse repeated with no reaction possible, in place of the DSTAB (2026-11-08 review).
+  local function noReaction(mode, delivered)
+    board(mode, delivered, "stupidity", "disloyalty")
+    serpent.state.stupidityImpulseSent = delivered
+    onHerbCureV3("kelp")
+    clock = clock + 1.6
+    onHerbCureV3("goldenseal")
+    near(P("asthma"), 2 / 3, "asthma after the eats")
+    near(P("weariness"), 1 / 3, "weariness after the eats")
+    near(P("impatience"), 2 / 3, "impatience after the eats")
+    expect(getStateProbabilityV3({ "asthma", "weariness", "masochism" })).toBe(0)
+  end
+  -- Six rounds whose venoms land. A monkshood may go only with both pieces back at the bar.
+  local function closes()
+    local reacted = false
+    for _ = 1, 6 do
+      local canReact = P("asthma") >= 0.7 and P("weariness") >= 0.7
+      local r = rounds(1)[1]
+      if has(r, "monkshood") then
+        expect(canReact).toBeTrue()
+        reacted = true
+      end
+    end
+    expect(reacted).toBeTrue()
+    expect(truelock).toBeTrue()
+  end
+
+  for _, mode in ipairs({ "lock", "group" }) do
+    it("an impatience at 0.667 with no reaction possible gets the DSTAB (" .. mode .. ")", function()
+      noReaction(mode, false)
+      local r = round()
+      expect(has(r, "monkshood")).toBeFalse()
+      expect(has(r, "dstab Agathon kalmia")).toBeTrue()
+    end)
+
+    it("the pieces come back, then monkshood reacts and the lock closes (" .. mode .. ")", function()
+      noReaction(mode, false)
+      closes()
+    end)
+  end
+
+  -- She cannot eat now, so no cure line will move the branch. This one was a true stall.
+  it("the relapse phase: no monkshood either, and the lock closes", function()
+    noReaction("lock", true)
+    give("anorexia")
+    expect(has(round(), "monkshood")).toBeFalse()
+    closes()
+  end)
+
+  it("group mode sends a weariness at 0.333 again, or the reaction never can fire", function()
+    noReaction("group", false)
+    expect(has(round(), "dstab Agathon kalmia vernalius")).toBeTrue()
+  end)
+
+  it("selectBiteVenom: no monkshood bite with no reaction possible", function()
+    noReaction("lock", false)
+    local pick = selectBiteVenom()
+    expect(pick == nil or pick.venom ~= "monkshood").toBeTrue()
+  end)
+
+  -- A bite carries no suggestion, so masochism has to be there already.
+  it("selectBiteVenom: no monkshood bite on a masochism at 0.667", function()
+    board("lock", false)
+    afflictionStatesV3 = {
+      { affs = { asthma = true, weariness = true, masochism = true, impatience = true }, prob = 2 / 3 },
+      { affs = { asthma = true, weariness = true }, prob = 1 / 3 },
+    }
+    rebuildCacheV3()
+    near(P("masochism"), 2 / 3, "masochism")
+    local pick = selectBiteVenom()
+    expect(pick == nil or pick.venom ~= "monkshood").toBeTrue()
+  end)
+
+  it("selectBiteVenom: an impatience at 0.667 that can react still gets the bite", function()
+    board("lock", false, "stupidity", "disloyalty")
+    onHerbCureV3("goldenseal")
+    near(P("impatience"), 2 / 3, "impatience after the eat")
+    expect(selectBiteVenom().venom).toBe("monkshood")
+  end)
 end)
 
 describe("lock_reinforce never sends curare twice", function()

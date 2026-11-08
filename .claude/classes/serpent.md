@@ -50,7 +50,7 @@ shared_aliases:
   srr: "serp_setmode_scytherus(); serp_ekanelia_offense()  # 157_Scytherus_(All_Classes).lua:14-16"
   sn:  "the same as vv (aliases .../serpent/001_Darkshade). It called a global the offense no longer has until 2026-11-08. Like vv and ekdark it leaves the mode on darkshade"
 
-# The offense's own aliases (tempAlias, :3342-3352)
+# The offense's own aliases (tempAlias, :3354-3364)
 aliases:
   ek:          "serp_ekanelia_offense()  # fire one attack round in the current mode"
   ekauto:      "auto mode (the default: serpOffenseMode = 'auto', :83)"
@@ -67,20 +67,20 @@ aliases:
 # Eight strategy modes drive selection
 modes: [auto, lock, group, darkshade, scytherus, bitepayload, hypnosis, hypnolock]
 
-# One round: serp_ekanelia_offense (:2773) maps the mode to a strategy (auto: determineStrategy,
-# :1383; the other modes inline, :2855-2945), selectVenoms (:1513) picks the DSTAB venoms, and
-# serp_ekanelia_attack (:1849) builds the command. It dispatches only with balance (:2777), and only
-# once per balance (attackInFlight, cleared on the balance-regained edge, :2795-2803, :3317-3327).
+# One round: serp_ekanelia_offense (:2785) maps the mode to a strategy (auto: determineStrategy,
+# :1394; the other modes inline, :2867-2957), selectVenoms (:1524) picks the DSTAB venoms, and
+# serp_ekanelia_attack (:1860) builds the command. It dispatches only with balance (:2789), and only
+# once per balance (attackInFlight, cleared on the balance-regained edge, :2807-2815, :3329-3339).
 # A round the game refused spends no balance, and that used to leave the guard set for good: every
 # later press returned in silence (kb/raw/logs/ours/2026-10-27_135412_Tabethys.log:4920-4924). Since the
 # 2026-11-08 review the next press sends again once 1.5 s have passed with no balance drop
 # (ATTACK_NO_SPEND, :151), with the echo "the last round spent no balance (refused?), sending again."
 # It holds while we are slowed (aeon or retardation), where a new send would restart the delay.
-# A part name is completed before the round is built (completeTargetName, :2757-2771): `t sai` with one
+# A part name is completed before the round is built (completeTargetName, :2769-2783): `t sai` with one
 # listed name starting that way attacks that person in full. It goes through 016's isTargeted, so a full
 # name that has left the room is not renamed to a longer listed name; the press prints "Target not in room!".
 
-# Every round goes out as ONE send() (v4.7.479: serp_sendAttack :2709-2742, buildRound :2603-2701).
+# Every round goes out as ONE send() (v4.7.479: serp_sendAttack :2721-2754, buildRound :2615-2713).
 # Mudlet splits it on the separator, so the game gets one command per piece. Only the FIRST piece goes
 # into `queue addclear freestand`; the others go raw, in order. The offense sends only with balance up,
 # so the queued piece runs at once. A raw piece that needs balance and comes after the attack is refused
@@ -88,25 +88,25 @@ modes: [auto, lock, group, darkshade, scytherus, bitepayload, hypnosis, hypnoloc
 # (FL 235-259). This said "ONE queue entry" until v4.7.479. That was never what the game got
 # (kb/mechanics/balance-and-queueing.md, kb/CONFLICTS.md #53).
 purge:      "purge  # residual venom cleared. It needs no balance: in the spar it ran right after the pinshot spent balance, with no hold (the cost line FL 235, the purge FL 240)"
-adder_pet:  "order adder kill <target>, ONLY when our death adder is here (v4.7.479, adderOrder :2557-2568): a living snake in our room by GMCP Char.Items (attrib holds 'm' and no 'd', name from ataxiaBasher_CLASS_PETS.Serpent, 'death adder'; isRoomSnake :2496-2500, onRoomItems :2504-2528), or the mount we ride (ridingSnake :2531-2538). Else the round goes without it and one `ADDER:` echo per target says so (:2563-2566). With no room list since the load it asks GMCP once (`Char.Items.Room`, askRoom :2549-2555). Its bite records fratricide and its trip enables the EXECUTE (see Fratricide Mechanics and the Finisher). Why: in the spar no adder was out (user: 'we have an adder I just didnt put it out there'), the game refused all 39 orders, and trigger 641 read some of the refusals as the target leaving (see the spar fixes). Since 2026-10-23 its sileris strip is PROGRESSIVE: the coating degrades each tick and strips after a number of hits; darkshade speeds it, scytherus speeds it a lot, both strip at once (admin; kb/CONFLICTS.md #49). The wiki's Snake ability summons a different snake per city (Mhaldor: adders); the command always says adder"
+adder_pet:  "order adder kill <target>, ONLY when our death adder is here (v4.7.479, adderOrder :2569-2580): a living snake in our room by GMCP Char.Items (attrib holds 'm' and no 'd', name from ataxiaBasher_CLASS_PETS.Serpent, 'death adder'; isRoomSnake :2508-2512, onRoomItems :2516-2540), or the mount we ride (ridingSnake :2543-2550). Else the round goes without it and one `ADDER:` echo per target says so (:2575-2578). With no room list since the load it asks GMCP once (`Char.Items.Room`, askRoom :2561-2567). Its bite records fratricide and its trip enables the EXECUTE (see Fratricide Mechanics and the Finisher). Why: in the spar no adder was out (user: 'we have an adder I just didnt put it out there'), the game refused all 39 orders, and trigger 641 read some of the refusals as the target leaving (see the spar fixes). Since 2026-10-23 its sileris strip is PROGRESSIVE: the coating degrades each tick and strips after a number of hits; darkshade speeds it, scytherus speeds it a lot, both strip at once (admin; kb/CONFLICTS.md #49). The wiki's Snake ability summons a different snake per city (Mhaldor: adders); the command always says adder"
 
-# The order inside a round (v4.7.479, buildRound :2644-2677). `aconfig serpent attackfirst on|off`
+# The order inside a round (v4.7.479, buildRound :2656-2689). `aconfig serpent attackfirst on|off`
 # (configs/034_Serpent_Attack_First.lua; ataxia.settings.serpentattackfirst, default off) picks one.
 round_order:
-  off: "the default: purge, the adder order, combatQueue's commands (g body, g gold, stand), then the offense's wield and attack (:2670-2676; the sigils lead a first round that has no bow opener). The order before the spar, with the adder fix"
-  on: "the attack goes FIRST. Only these go before it: a raw `stand` when we are prone, in front of the queue command (a freestand entry cannot run while prone, HELP 4.6.1); the wield, only when GMCP shows the weapon is not in hand (wieldNeeded :2438-2462); and an equilibrium step the offense puts before the attack (suggest, seal, hypnotise), which must go on balance. Purge, the adder order, the sigils and combatQueue's commands come after it (:2658-2669). A snap, which the offense puts after the attack, stays after it"
+  off: "the default: purge, the adder order, combatQueue's commands (g body, g gold, stand), then the offense's wield and attack (:2682-2688; the sigils lead a first round that has no bow opener). The order before the spar, with the adder fix"
+  on: "the attack goes FIRST. Only these go before it: a raw `stand` when we are prone, in front of the queue command (a freestand entry cannot run while prone, HELP 4.6.1); the wield, only when GMCP shows the weapon is not in hand (wieldNeeded :2450-2474); and an equilibrium step the offense puts before the attack (suggest, seal, hypnotise), which must go on balance. Purge, the adder order, the sigils and combatQueue's commands come after it (:2670-2681). A snap, which the offense puts after the attack, stays after it"
   why_on: "in the spar the game answered the second and later commands of a send about 0.09 s after the first, so an attack sent behind six commands landed about 0.12 s later on our clock. Whether it also lands later at the server is open (the A/B question, below). The setting is the probe, so it is off by default"
-  weapon_ids: "the user's dirk and whip are artefacts (`Thoth's fang`, `Elentari's Scourge`), so a wielded item's name does not say which weapon it is. The id is learned: after a round that wielded `shield <weapon>`, the one new wielded item that is not the shield is that weapon (learnWeapon :2401-2424), kept in ataxiaTemp.serpentWeaponIds (transient). An unknown hand counts as not in hand: an extra wield costs milliseconds, a wrong weapon the round"
+  weapon_ids: "the user's dirk and whip are artefacts (`Thoth's fang`, `Elentari's Scourge`), so a wielded item's name does not say which weapon it is. The id is learned: after a round that wielded `shield <weapon>`, the one new wielded item that is not the shield is that weapon (learnWeapon :2413-2436), kept in ataxiaTemp.serpentWeaponIds (transient). An unknown hand counts as not in hand: an extra wield costs milliseconds, a wrong weapon the round"
 
-# Round-1 opener (v4.7.479: buildOpener :2308-2333, assembled at buildRound :2644-2657), once per target
+# Round-1 opener (v4.7.479: buildOpener :2320-2345, assembled at buildRound :2656-2669), once per target
 opener:
-  dispel:       "dispel <target>, the first piece of the first round on each target, in both orders (:2639-2642): a reflection would take the attack"
+  dispel:       "dispel <target>, the first piece of the first round on each target, in both orders (:2651-2654): a reflection would take the attack"
   useOpener:    "master toggle (default on, :190)"
-  useBowOpener: "default on (:191). The bow is skipped only for the person a pinshot is already in: tpinshot holds that NAME for 21 s, compared case-blind (:2318-2320, serpent/002_Pinshot). It was a boolean, so a new target within 21 s of a pinshot in the old one got none. The countdown echoes still name the current target. The round is: dispel, purge, a stand only when prone, `remove bow`, `wield bow`, `pinshot <target> foot`, then the round's own wield and attack STRAIGHT AFTER the pinshot (`wield shield dirk` when the attack brings no wield), then the adder order, the sigils, and combatQueue's commands without its three idle ones (g body, g gold, stand: IDLE_PRE :2348, which did nothing in 39 of 39 rounds). Why: the pinshot spends balance, so the game held six commands in its balance queue and refused the flay behind them without holding it ('You must regain balance first.' with no 'added' line, FL 235-257). The coating strip slipped a whole round. With the wield and the attack first in that queue, the attack runs at the recovery. Our `pinshot Saibel foot` (FL 214) landed ('Your arrow slams into the foot of Saibel.', FL 234), so the body-part form works; whether the wiki's bare `PINSHOT <target>` works is untested"
+  useBowOpener: "default on (:191). The bow is skipped only for the person a pinshot is already in: tpinshot holds that NAME for 21 s, compared case-blind (:2330-2332, serpent/002_Pinshot). It was a boolean, so a new target within 21 s of a pinshot in the old one got none. The countdown echoes still name the current target. The round is: dispel, purge, a stand only when prone, `remove bow`, `wield bow`, `pinshot <target> foot`, then the round's own wield and attack STRAIGHT AFTER the pinshot (`wield shield dirk` when the attack brings no wield), then the adder order, the sigils, and combatQueue's commands without its three idle ones (g body, g gold, stand: IDLE_PRE :2360, which did nothing in 39 of 39 rounds). Why: the pinshot spends balance, so the game held six commands in its balance queue and refused the flay behind them without holding it ('You must regain balance first.' with no 'added' line, FL 235-257). The coating strip slipped a whole round. With the wield and the attack first in that queue, the attack runs at the recovery. Our `pinshot Saibel foot` (FL 214) landed ('Your arrow slams into the foot of Saibel.', FL 234), so the body-part form works; whether the wiki's bare `PINSHOT <target>` works is untested"
   useSigils:    "drop incandescent sigil; attach monolith sigil to incandescent sigil (default off, :195)"
 
 # Per-round denial (config useExitBlock, default off, :194)
-exit_block: "`block <dir>` for an exit not blocked in the last 5 s (nextExitToBlock :2281-2294). Since v4.7.479 it goes LAST in the round, after the attack, in every order (:2723-2734, :2677). It went out raw just before the round, on the belief that the whole round was queued. No log shows what BLOCK costs: if it spends balance, a block in front would make the attack the second balance action and slip it a whole balance"
+exit_block: "`block <dir>` for an exit not blocked in the last 5 s (nextExitToBlock :2293-2306). Since v4.7.479 it goes LAST in the round, after the attack, in every order (:2735-2746, :2689). It went out raw just before the round, on the belief that the whole round was queued. No log shows what BLOCK costs: if it spends balance, a block in front would make the attack the second balance action and slip it a whole balance"
 ```
 
 ### Class-Aware Venom Routing (CLASS_LOCK_VENOM, :872-890)
@@ -145,7 +145,7 @@ stab of slickness: whether that order is wanted is open for the user.
 
 **Notechis may not ride a DSTAB.** The wiki says notechis "can not be used to envenom a weapon"
 (`kb/raw/wiki/Venom.wiki:302`), and DSTAB delivers the venoms on a dirk. Our routing sends it by
-DSTAB against Magi and Sylvan (above), in `ginseng_pressure` (:1717) and as the haemophilia piece
+DSTAB against Magi and Sylvan (above), in `ginseng_pressure` (:1728) and as the haemophilia piece
 of `lock_reinforce` (AFF_TO_VENOM, :250). UNVERIFIED in game; if the game refuses it, notechis has
 to be bitten.
 
@@ -153,78 +153,80 @@ to be bitten.
 ```yaml
 lock_reinforce_burst: |
   Lock, group, darkshade and bitepayload modes at truelock until a voyria impulse has gone out,
-  and lock/darkshade at hardlock in the relapse phase (:2858-2866, :2873-2882, :2896-2903, :2929-2933).
+  and lock/darkshade at hardlock in the relapse phase (:2870-2878, :2885-2894, :2908-2915, :2941-2945).
   Group joined on 2026-11-08: it stayed on "group" at truelock, nothing in group mode set
   voyriaSent, the finish could not be reached, and every round was curare + kalmia onto a full
-  lock (comment, :2875-2878). So group mode at truelock now sends one voyria impulse, then finishes.
-  selectVenoms (:1653-1703): curare while paralysis is under 0.90 (haveAff_locked, :1657) with a
+  lock (comment, :2887-2890). So group mode at truelock now sends one voyria impulse, then finishes.
+  selectVenoms (:1664-1714): curare while paralysis is under 0.90 (haveAff_locked, :1668) with a
   second venom, then voyria (+eurypteria for recklessness) -> vardrax + euphorbia (addiction +
   nausea). The 0.90 is new: at 0.30 a paralysis a tree may have taken (0.875) was never sent again,
   and truelock never came back.
   The second venom is the class lock venom, if it is not curare, its affliction is missing and
-  venomAllowed agrees (:1666-1668); else voyria (:1669-1670); else pickVenom("curare") (:1672). It
+  venomAllowed agrees (:1677-1679); else voyria (:1680-1681); else pickVenom("curare") (:1683). It
   went out as "curare curare" for Occultist, Shaman and Jester, whose lock affliction is
   paralysis, and whenever voyria was already up. Those three classes now get voyria while it is missing.
   Since v4.7.479 each eurypteria here (P1's class venom, P2, P4) waits for a locked target
-  (:1667, :1680, :1701); P2 then sends curare and P4 vardrax. Truelock can hold bloodfire in
+  (:1678, :1691, :1712); P2 then sends curare and P4 vardrax. Truelock can hold bloodfire in
   place of a soft-lock piece, and that does not count as locked.
-  PRIORITY 7 (:2087-2102) impulses scytherus once addiction + nausea are up and scytherus is not
+  PRIORITY 7 (:2098-2113) impulses scytherus once addiction + nausea are up and scytherus is not
   (camus, by our reaction table). The voyria impulse (with a vertigo suggestion when vertigo is
-  missing, :2095-2099) needs TRUELOCK, anorexia + impatience, and no voyria impulse sent yet
-  (:2092-2093). It marks voyriaSent, which hands over to the finish strategy. Below truelock the
+  missing, :2106-2110) needs TRUELOCK, anorexia + impatience, and no voyria impulse sent yet
+  (:2103-2104). It marks voyriaSent, which hands over to the finish strategy. Below truelock the
   round is the curare DSTAB until paralysis reads 0.90. It was the voyria impulse every round at
   hardlock, so the curare never went and truelock never came (2026-11-08 review, F8 and X5).
 
 relapse_lock: |
   Lock and darkshade modes only, from the moment serpent.state.impatienceDelivered is set
-  (trigger 016, on our monkshood reaction; it sets relapsePhase, :2849) until hardlock (:2864-2868,
-  :2902-2905). selectVenoms (:1632-1644) pre-loads gecko + slike once asthma + weariness are up and
-  neither slickness nor anorexia is. PRIORITY 7 (:2105-2114) runs selectRelapseImpulse (:1141-1175): the
+  (trigger 016, on our monkshood reaction; it sets relapsePhase, :2861) until hardlock (:2876-2880,
+  :2914-2917). selectVenoms (:1643-1655) pre-loads gecko + slike once asthma + weariness are up and
+  neither slickness nor anorexia is. PRIORITY 7 (:2116-2125) runs selectRelapseImpulse (:1149-1184): the
   monkshood pair again when slickness + anorexia are up and impatience reads under 0.70 (the impatience
-  check is v4.7.419), else ONE stupidity impulse per relapse phase. That impulse waits while stupidity is
-  up (:1157): it is not used up, and the round is the relapse DSTAB until she cures it. Nothing here is timed to
+  check is v4.7.419) and, at 0.30 or more, the reaction can fire (monkshoodCanReact, :1136-1138), else ONE
+  stupidity impulse per relapse phase. That impulse waits while stupidity is
+  up (:1166): it is not used up, and the round is the relapse DSTAB until she cures it. Nothing here is timed to
   fratricide: the only fratricide clock is the 2.25 s window inside selectImpulse (see
   Fratricide Mechanics), and the stupidity impulse does not go through selectImpulse. (This
   entry said "timed to the fratricide ~3s relapse window" until v4.7.419.)
 
 bitepayload_ladder: |
-  selectBiteVenom (:1203-1249) picks the bite in bitepayload mode (PRIORITY 6, :2063-2069) and,
-  in every mode, the venom the rebounding pre-empt's impulse carries (:1989-1990, falling back
-  to pickVenom). It returns nil while sileris/fangbarrier is up (:1204). Priority: scytherus
+  selectBiteVenom (:1212-1260) picks the bite in bitepayload mode (PRIORITY 6, :2074-2080) and,
+  in every mode, the venom the rebounding pre-empt's impulse carries (:2000-2001, falling back
+  to pickVenom). It returns nil while sileris/fangbarrier is up (:1213). Priority: scytherus
   (camus loop) -> the monkshood reaction (asthma + masochism + weariness, and since v4.7.419
-  only while impatience reads under 0.70, :1218-1221) -> the kalmia, curare, loki and aconite reactions ->
+  only while impatience reads under 0.70; at 0.30 or more it also needs asthma, weariness and masochism at
+  0.70, because a bite brings no suggestion, :1228-1232) -> the kalmia, curare, loki and aconite reactions ->
   curare / kalmia / vernalius for a missing lock piece. A BITE costs 4.00 s of balance (WIKI)
   against DSTAB's 2.80 s.
 
 rebounding_reapply_preempt: |
   Our strip line "You flay away X's aura of rebounding defence." stamps the clock
-  (onReboundingFlayed, :3251-3256). A drop only a raise or rebound line showed is stamped at the
-  next round (:1872-1875). 8.15 s later one `impulse <target> <suggestion> <bite venom>` goes out
-  if the bite can land and no hypnosis step is due (PRIORITY 1.5, :1985-1998): the impulse spends
+  (onReboundingFlayed, :3263-3268). A drop only a raise or rebound line showed is stamped at the
+  next round (:1883-1886). 8.15 s later one `impulse <target> <suggestion> <bite venom>` goes out
+  if the bite can land and no hypnosis step is due (PRIORITY 1.5, :1996-2009): the impulse spends
   equilibrium, so it waits for a due suggest, seal or snap, and the clock stays armed. When its
-  bite is monkshood the suggestion is masochism (:1992).
+  bite is monkshood the suggestion is masochism (:2003).
   The stamp came at the next ROUND until 2026-11-08, about a balance after the strip (FL 305 to
   FL 333), so the pre-empt came 9.7 s or more after the strip. The code assumes rebounding returns
-  about 8.5 s after it goes (comment, :1974). What is measured is 8.40-8.57 s (p10-p90) after
+  about 8.5 s after it goes (comment, :1985). What is measured is 8.40-8.57 s (p10-p90) after
   the target's SMOKE (kb/mechanics/clocks.md:43, n=460), and our clock counts from the strip, so a
   smoke later than the strip makes the impulse early. Timing it from the smoke is not done.
   Since v4.7.419 the clock is getEpoch (see "What the offense records").
   Since v4.7.479 only a rebounding a game line SHOWED arms the clock
-  (serpent.state.reboundingSeen, :1872-1875). The target reset only ASSUMES rebounding, and in
+  (serpent.state.reboundingSeen, :1883-1886). The target reset only ASSUMES rebounding, and in
   the spar the first flay found "a non-existent aura of rebounding" (FL 305); that drop armed
   the clock and the pre-empt fired 9.87 s later (FL 566) for a rebounding that never existed.
   reboundingSeen is set by a "tar afflicted" rebounding (a raise line, 430; a rebound line, 274,
-  serpent/001, 011; onTargetAfflicted :3223-3235). It is cleared by both of our flay's lines,
+  serpent/001, 011; onTargetAfflicted :3235-3247). It is cleared by both of our flay's lines,
   the strip and "You try to flay a non-existent aura of rebounding from X." (onReboundingFlayed
-  :3251-3256, temp triggers :3471-3483; the strip line arms the clock, the other does not), by
-  each stamp, and by a target change (:3294).
+  :3263-3268, temp triggers :3483-3495; the strip line arms the clock, the other does not), by
+  each stamp, and by a target change (:3306).
 
 gecko_strip: |
   When the target's sileris/fangbarrier blocks the bite and the monkshood pair is the impulse we
   want, the round DSTABs gecko + another venom once (geckoStripAttempted), and the round after
-  it sends curare + slike if impatience landed (postGeckoLockdown) (:2162-2176, :1522-1529).
+  it sends curare + slike if impatience landed (postGeckoLockdown) (:2174-2188, :1533-1540).
   It needs no hypnosis step due and impatience under 0.70. It never runs in scytherus mode or
-  relapse_lock (:2164-2165); scytherus mode's own block for a blocked bite only echoes (:2179-2183).
+  relapse_lock (:2176-2177); scytherus mode's own block for a blocked bite only echoes (:2191-2195).
   Since 2026-11-08 a new target has no coating assumed (016 targetresetafflictionslevi, :531-532;
   it assumed both up, and only a coating line ever cleared them). The offense can impulse or bite a
   fresh target until 442 (a shell forming, the quicksilver or purple berry form) or 707 (a bite the
@@ -244,30 +246,36 @@ gecko_strip: |
   landed and the coating stayed up; that command is not seen. Open, n=1 each way (kb/CONFLICTS.md #67).
 
 cure_tracking: |
-  serpent.trackCure (:1352-1377) counts the target's kelp, ginseng, bloodroot and focus cures in a
+  serpent.trackCure (:1363-1388) counts the target's kelp, ginseng, bloodroot and focus cures in a
   6 s window (ginseng only while a kelp affliction is up). The callers are herbs/003_Kelp_(Unknown):61
   (kelp and aurum; new on 2026-11-08, so ekstatus's Kelp Cures is no longer always 0),
   herbs/005_Bloodroot_TEST:52, herbs/007_Ginseng:64 and 398_Focus_(UNK):63.
   More than 2 ginseng cures with a ginseng stack under 3 switches auto mode to ginseng_pressure
-  (:1460-1468); darkshade mode switches on the first one (:2889-2893).
-  Every call rolls the 6 s window first (:1355-1361), so a kelp eat or a focus can clear an expired
+  (:1471-1479); darkshade mode switches on the first one (:2901-2905).
+  Every call rolls the 6 s window first (:1366-1372), so a kelp eat or a focus can clear an expired
   ginseng count and end ginseng_pressure sooner. The focus and bloodroot counts are display only.
-  The ADAPTIVE line in ekstatus (:3189-3195) reads these counts. Its "pushing DARKSHADE" text
+  The ADAPTIVE line in ekstatus (:3201-3207) reads these counts. Its "pushing DARKSHADE" text
   describes no code path.
 
 execute_safety: |
-  serp_ekanelia_offense recomputes the locks at graded confidence (:2829-2840): softlock = 3 of
+  serp_ekanelia_offense recomputes the locks at graded confidence (:2841-2852): softlock = 3 of
   anorexia/asthma/slickness/bloodfire at 0.70; hardlock = that + impatience or sandfever at
   0.70; truelock = that + paralysis at 0.90 (haveAff_locked / haveAff_tactical, :99-106).
   EXECUTE also needs prone at 0.90 and getStateProbabilityV3 of the five lock afflictions plus
-  prone >= 0.90 (PRIORITY 2, :1966-1971). See the Finisher.
+  prone >= 0.90 (PRIORITY 2, :1977-1982). See the Finisher.
 
 lock_piece_bars: |
   Since the 2026-11-08 review a decision that DELIVERS a lock piece again reads it at 0.70
   (haveAff_tactical; the comment at :108-117): asthma and slickness in pickVenom and the group and
   relapse pickers, anorexia in slikeGateMet, impatience in reactionSpent, selectBiteVenom's monkshood,
-  the normal impulse gate (:2144) and the gecko strip (:2162). So a piece one cure may have
+  the normal impulse gate (:2155) and the gecko strip (:2174). So a piece one cure may have
   taken (0.667) goes out again. A decision that BUILDS ON a piece still reads haveAff's 0.30.
+  The one exception to "goes out again" is monkshood sent for an impatience between 0.30 and 0.70
+  (selectRelapseImpulse, selectBiteVenom, the normal impulse gate). It also needs monkshoodCanReact
+  (:1136-1138): asthma and weariness at 0.70. An aurum eat, then a plumbum eat, leaves impatience 0.667,
+  asthma 0.667 and weariness 0.333, and no branch holds both pieces. The impulse repeated with no
+  reaction possible, in place of the DSTAB that lands the piece back. pickVenomGroup reads weariness at
+  0.70 for this reason (its default never sends vernalius; pickVenom and pickVenomRelapse fall through to it).
   targetLocked is unchanged.
 ```
 
@@ -322,23 +330,23 @@ recklessness_gate: |
       IMPULSE_PRIORITY goes instead;
     - the loki pair, when recklessness is its one missing conditional (selectImpulsePair,
       :1073-1074): the loop goes on to the next reaction;
-    - lock_reinforce's eurypteria at P1, P2 and P4 (:1667, :1680, :1701).
+    - lock_reinforce's eurypteria at P1, P2 and P4 (:1678, :1691, :1712).
   Why: in the spar 7 DSTABs carried eurypteria (FL 339, 384, 651, 834, 879, 928, 973), and a
   focus or tree of hers followed each within about 2 s (FL 361-372, 405-422, 994-1050); that it
   took the recklessness is INFERRED (kb/CONFLICTS.md #65). One impulse spent its suggestion on
-  recklessness for the loki reaction (FL 1388). `ekstatus` shows "Recklessness: ALLOWED (target locked)" or "HELD (target not locked)" (:3204-3205).
-adder_gate: "the death adder is ordered only when it is here (round order above, adderOrder :2557-2568). `ekstatus` shows 'Death Adder: HERE' or 'NOT HERE (no order sent)' (:3200-3201). Another Serpent's adder in our room counts as ours: open"
-attack_first: "aconfig serpent attackfirst on|off (round_order above). `ekstatus` shows it (:3202-3203); the setup wizard's combat page has a row for it (020_Setup_Wizard.lua:760) and `ataxia setup guide ataxia` entry 16 explains it (:1056-1060). A Serpent fight log's header has ` | serpent attackfirst on|off` just before ` | rounds raw|alias`, which stays the last field (026_Fight_Log.lua:274-283), so a log says which order it holds"
+  recklessness for the loki reaction (FL 1388). `ekstatus` shows "Recklessness: ALLOWED (target locked)" or "HELD (target not locked)" (:3216-3217).
+adder_gate: "the death adder is ordered only when it is here (round order above, adderOrder :2569-2580). `ekstatus` shows 'Death Adder: HERE' or 'NOT HERE (no order sent)' (:3212-3213). Another Serpent's adder in our room counts as ours: open"
+attack_first: "aconfig serpent attackfirst on|off (round_order above). `ekstatus` shows it (:3214-3215); the setup wizard's combat page has a row for it (020_Setup_Wizard.lua:760) and `ataxia setup guide ataxia` entry 16 explains it (:1056-1060). A Serpent fight log's header has ` | serpent attackfirst on|off` just before ` | rounds raw|alias`, which stays the last field (026_Fight_Log.lua:274-283), so a log says which order it holds"
 opener: "the round's wield and attack straight after the pinshot, the three idle commands left out (opener above)"
 one_balance_action: |
-  ONE BALANCE ACTION PER ROUND. PRIORITY 1 (:1892-1946) sends the flay ALONE. It used to chain
+  ONE BALANCE ACTION PER ROUND. PRIORITY 1 (:1903-1957) sends the flay ALONE. It used to chain
   an impulse behind the flay (the kalmia reaction, or the monkshood "shield-break"), on the belief
   that an impulse uses only equilibrium. Every venom impulse in the spar spent BOTH: "Equilibrium
   used: 1.44s." and "Balance used: 1.7s." (13 of 13, e.g. FL 1270 and FL 1278), and a second
   balance action after a spender is refused (after the pinshot's cost line, FL 235, the flay got
   "You must regain balance first.", FL 257).
   So the next round sends the impulse (PRIORITY 3 or 4) once the defence is down. An equilibrium
-  action (hypnosis or snap) can still ride with the flay (:1934-1942).
+  action (hypnosis or snap) can still ride with the flay (:1945-1953).
 rebounding_preempt: "arms only on a rebounding a game line showed (rebounding_reapply_preempt above)"
 weapon_ids: "learned per weapon in ataxiaTemp.serpentWeaponIds (round_order above)"
 not_changed: |
@@ -361,9 +369,9 @@ Where the review changed a section above, that section has the detail. These hav
 monkshood_masochism: |
   The monkshood impatience impulse always suggests masochism, even when masochism is believed up
   (MONKSHOOD_SUGGESTION, :628, comment :616-627). Four places: selectImpulsePair's all-met case (:1071),
-  PRIORITY 1.5 when its bite is monkshood (:1992), PRIORITY 4 (:2031) and reactionNeeds (:634-645), so a
+  PRIORITY 1.5 when its bite is monkshood (:2003), PRIORITY 4 (:2042) and reactionNeeds (:634-645), so a
   keybind suggestion cannot swap it. PRIORITY 5 keeps its own suggestion: impatience is already up
-  there, so no reaction is wanted (:2043).
+  there, so no reaction is wanted (:2054).
   Why: `impulse Saibel confusion monkshood` (FL 1344) leaned on a held masochism, she focused
   (FL 1345), the impulse and bite landed (FL 1364-1370) and no reaction came. All 7 masochism
   impulses reacted (FL 1275, 1324, 1551, 1596, 1643, 1943, 2033).
@@ -379,7 +387,7 @@ group_order: |
   impatience sends `dstab <t> gecko slike`, as lock mode does. The second venom was a second curare.
 flay_venom: |
   While the kalmia reaction waits and paralysis is up, the flay's venom adds a missing affliction
-  (kalmiaFlayVenom, :1822-1833): pickVenom("kalmia"), then slike, euphorbia, vardrax, aconite,
+  (kalmiaFlayVenom, :1833-1844): pickVenom("kalmia"), then slike, euphorbia, vardrax, aconite,
   notechis, the first missing and allowed, with vernalius as the last fallback. It was vernalius,
   onto the weariness the reaction needs. This slike skips slikeGateMet on purpose.
 class_detection: |
@@ -435,7 +443,7 @@ v4.7.419.
   `attack.cost.own.dstab`). Our round as played, land to land, was slower: median 1.977 after a DSTAB (n=24), against
   the other Serpents' 1.83 (see "Our first Serpent fight"). The cost is the game's; the gap is ours.
 - **Our code.** DSTAB is the default attack (`attackMode = "dstab"`, :85; header :21-24). The normal
-  round is `wield shield dirk;dstab <target> <v1> <v2>` (:2223-2225).
+  round is `wield shield dirk;dstab <target> <v1> <v2>` (:2235-2237).
 - **Settle.** `AB DOUBLESTAB` in game. The cadence is timed (above).
 
 ### 2. Hypochondria's delayed impatience
@@ -460,7 +468,7 @@ v4.7.419.
   it from curare (hypersomnia + masochism), which no game data confirms.
 - **Our code, offense.** The offense gives hypochondria two ways: it is the first of hypnolock's
   three complex suggestions (selectHypnoLockSuggestions, :520-530), and it is our curare reaction's
-  result (picked by selectBiteVenom :1229-1231 and selectOpportunisticEkanelia :1124-1127; trigger 016
+  result (picked by selectBiteVenom :1240-1242 and selectOpportunisticEkanelia :1124-1127; trigger 016
   records it since v4.7.419). It reads it twice: as a PRIORITY 4 "third condition" for the
   monkshood impulse (impatienceConditionsMet, :777), and as one of the four mentals the focus-lock
   push counts (MENTAL_AFFS, :810-815, for focusLockReady, :825-832). It does not wait for the free
@@ -518,17 +526,17 @@ v4.7.419.
   needs balance as well as equilibrium (all 13 were sent with both up). The relayed form leaves out
   `<target>`, which the wiki requires; our sends include it.
 - **Our code.** It sends `impulse <target> masochism monkshood`:
-  - PRIORITY 4 (:2024-2036): asthma + weariness plus one "third condition" (fratricide,
+  - PRIORITY 4 (:2035-2047): asthma + weariness plus one "third condition" (fratricide,
     hypochondria, scytherus, slickness, or anorexia with focus down; impatienceConditionsMet,
     :771-781), or asthma + weariness alone in relapse_lock (impatienceConditionsRelapse, :784-789),
     and not inside the 2.5 s impatience cooldown. The third condition is our choice, not the game's
     (comment, :767-768).
-  - PRIORITY 7's normal branch (:2144-2157) sends the same pair on asthma + weariness alone, through
+  - PRIORITY 7's normal branch (:2155-2169) sends the same pair on asthma + weariness alone, through
     selectImpulsePair (:1046-1083).
-  - PRIORITY 1.5, when its bite is monkshood (:1992).
+  - PRIORITY 1.5, when its bite is monkshood (:2003).
   - The shield-break flay chained it on equilibrium until v4.7.479. The impulse
     spends balance too, so the flay now goes alone (one balance action per round, the spar fixes).
-    relapse_lock re-sends it once slickness + anorexia are up (selectRelapseImpulse, :1147-1152).
+    relapse_lock re-sends it once slickness + anorexia are up (selectRelapseImpulse, :1155-1161).
   - Since 2026-11-08 the suggestion is masochism even when masochism is believed up
     (MONKSHOOD_SUGGESTION, :628; "The deep review of the offense"). It used to impulse another
     suggestion then, and the reaction hung on a masochism she could focus away (FL 1344-1370).
@@ -536,11 +544,11 @@ v4.7.419.
     not (the shield-break, PRIORITY 4, PRIORITY 5), so with fangbarrier up the round sent a blocked
     impulse every round and never reached the gecko strip.
   - v4.7.419: monkshood is no longer sent FOR impatience onto a target that already has it
-    (selectBiteVenom step 3, :1218-1221; selectRelapseImpulse, :1147). PRIORITY 5 (:2042-2048) still
+    (selectBiteVenom step 3, :1228-1232; selectRelapseImpulse, :1155). PRIORITY 5 (:2053-2059) still
     carries its mental impulse on monkshood and requires impatience (focusLockReady, :825-832), so
     the reaction's impatience is wasted there; that is left as it is.
   - The keybind suggestion override does not replace a suggestion the reaction needs (reactionNeeds,
-    :634-645, read at :2236). Monkshood's masochism counts since 2026-11-08 even when it is up.
+    :634-645, read at :2248). Monkshood's masochism counts since 2026-11-08 even when it is up.
 - **Defence.** Since the impulse brings the masochism, curing masochism beforehand does not stop
   this route; it still stops a plain BITE monkshood. The conditionals a victim can deny in advance
   are asthma and weariness: astWear (on by default) raises asthma to 3 against a Serpent target
@@ -604,14 +612,14 @@ impulse:
   complex_only: [clumsiness, addiction, pacifism, hypersomnia, lethargy, anorexia, disrupt, generosity, action, hypochondria]  # WIKI, Hypnosis.wiki:252 onward: full hypnosis only
   not_a_suggestion: "impatience (it comes from the monkshood REACTION), fratricide (see Fratricide Mechanics)"
   victim_line: "'<Serpent> fixes his gaze to yours and hisses a sharp command.' Printed by an IMPULSE that bites: in the four victim-seat logs all 22 BITEs have this line in their packet and all 22 lines have a BITE there, with the suggestion's affliction between them (az 1238-1242, Z5 534-537, X 293-296; census in kb/sim/events.md)"
-  venom_form: "CONFIRMED in our spar (2026-11-07): `impulse <target> <suggestion> <venom>` delivers a bite of the venom in the impulse's own packet, 13 of 13 (rule attack.impulse.venom, MEASURED). It was PLAYER, UNVERIFIED (relayed notes) until then. Our code sends that form on every impulse (:1996, :2009, :2034, :2046, :2211, :2238)"
+  venom_form: "CONFIRMED in our spar (2026-11-07): `impulse <target> <suggestion> <venom>` delivers a bite of the venom in the impulse's own packet, 13 of 13 (rule attack.impulse.venom, MEASURED). It was PLAYER, UNVERIFIED (relayed notes) until then. Our code sends that form on every impulse (:2007, :2020, :2045, :2057, :2223, :2250)"
   cost: "Wiki: 1.70 s of equilibrium. MEASURED (13 of 13): it prints 'Equilibrium used: 1.44s.' and 'Balance used: 1.7s.' (the bite). From each line to its recovery: equilibrium 1.242 s median (p10 1.201, p90 1.289), balance 1.563 s (p10 1.477, p90 1.581). Equilibrium is back first every time, so the BALANCE gates the next round, and no other balance action can go in the same round (v4.7.479: PRIORITY 1 sends the flay alone)"
 
 our_eligibility_rule: |
-  checkImpulseEligible (:1260-1274) refuses an impulse while the target has sileris or
+  checkImpulseEligible (:1271-1285) refuses an impulse while the target has sileris or
   fangbarrier. Since v4.7.420 every impulse path calls it. Before v4.7.419 the three monkshood
   sends (the shield-break, PRIORITY 4, PRIORITY 5) did not, and until v4.7.420 neither did scytherus
-  mode's (PRIORITY 7, :2127-2131). Each sent a blocked impulse every round. A new target has no
+  mode's (PRIORITY 7, :2138-2142). Each sent a blocked impulse every round. A new target has no
   coating assumed since 2026-11-08 (gecko_strip, above). The rule is ours: HELP 13.7 says the coating gives "protection
   against bites from adventurers of the Serpent class" (kb/raw/help/13.7_healing-and-curing.txt:78-81),
   and a reaction "fires on the bite command", so an impulse's venom is presumably bitten. Our spar
@@ -700,7 +708,7 @@ fratricide:
     - Since 2026-11-08 the pet's bite records it too (trigger 024). That feeds PRIORITY 4's third
       condition, PRIORITY 5 and the 2.25 s window, so expect more monkshood impulses with the adder out.
     - The fratricide suggestion is recorded from the round's own text (pendingSuggestion, set at
-      :2694-2695, read by onSuggested :316-330), so a word left queued by combatQueue cannot be credited.
+      :2706-2707, read by onSuggested :316-330), so a word left queued by combatQueue cannot be credited.
       A new chain starts clean (start, :282).
     - In V3 a herb eat takes fratricide only when nothing else that herb cures is there
       (herbCureLastV3 in onHerbCureV3, affliction_tracking_core/007_Branching_State_Tracker.lua:158,
@@ -709,13 +717,13 @@ fratricide:
       left masochism believed at 0.67, and the next monkshood impulse dropped the masochism its
       reaction needs.
     - The cure line we listen for, "The look of madness fades from (\w+)'s eyes" (a temp
-      trigger registered at load, :3429-3437), is code only, does not check whose eyes, and does
+      trigger registered at load, :3441-3449), is code only, does not check whose eyes, and does
       not match the game's own cured message above. The offense still ORs
       serpent.hypnosis.fratricideActive into its checks (selectImpulse, impatienceConditionsMet,
       focusLockReady). The snap sets it; only that line or a hypnosis reset clears it
       (serpent.hypnosis.reset, :394-412: a target change, a lost or noticed hypnosis, a "too
-      perceptive" refusal, switching into a hypnosis or hypnolock mode; :3268-3299,
-      :3448-3466, :3485-3493, :3049-3062, :3070-3082).
+      perceptive" refusal, switching into a hypnosis or hypnolock mode; :3280-3311,
+      :3460-3478, :3497-3505, :3061-3074, :3082-3094).
     - It counts as a third condition for PRIORITY 4 (:775-776) and is required for the focus-lock
       push, PRIORITY 5 (focusLockReady, :825-832: fratricide + 4 mentals + focus down +
       impatience + asthma + weariness).
@@ -905,7 +913,7 @@ type: execute
 summary: PvP lock finisher — the offense file's actual kill command
 
 code:
-  1: "Truelock, the target prone at 0.90 and the joint gate below: wield shield whip; execute <target> (PRIORITY 2, :1966-1971). Any strategy: a kill that is ready wins"
+  1: "Truelock, the target prone at 0.90 and the joint gate below: wield shield whip; execute <target> (PRIORITY 2, :1977-1982). Any strategy: a kill that is ready wins"
   2: "A standing truelocked target gets no finisher. The round falls through to the lock_reinforce or finish DSTAB, which keeps the lock until the adder trips them"
 
 joint_probability_gate: |
@@ -913,7 +921,7 @@ joint_probability_gate: |
   (anorexia, asthma, slickness, impatience, paralysis, prone) >= 0.90. Prone is
   simple-tracked, so it reads 1.0. If truelock is per-aff true but jointly shaky, the
   round falls through to the DSTAB instead of gambling the kill on a bluff.
-  (002_Serpent_Offense.lua:1966-1971, 2829-2840)
+  (002_Serpent_Offense.lua:1977-1982, 2841-2852)
 
 game_data: |
   WIKI (Subterfuge, Execute): "While wielding a whip, you may attempt to execute a prone
@@ -962,7 +970,7 @@ flay:
   measured: "printed 1.7, 1.530 s (n=1, not usable: swept 1.48-2.00; first reply 1.65). It was a FLAY of a rebounding that was not there (FL 305)"
   effect: "Strips the sileris coating (bare FLAY), or rebounding, or a shield; applies the whip's venom if the target is left with neither rebounding nor shield"
   syntax: "FLAY <target> / FLAY <target> REBOUNDING [<venom>] / FLAY <target> SHIELD [<venom>]"
-  notes: "Our offense sends only the SHIELD/REBOUNDING forms (:1936-1941). A FLAY of a missing rebounding stripped the coating too (rule attack.flay.missing, n=1; gecko_strip above)"
+  notes: "Our offense sends only the SHIELD/REBOUNDING forms (:1947-1952). A FLAY of a missing rebounding stripped the coating too (rule attack.flay.missing, n=1; gecko_strip above)"
 
 pinshot:
   skill: Subterfuge
@@ -1008,12 +1016,12 @@ suggest:
   skill: Hypnosis
   effect: "Implant a suggestion (trivial or complex) in a hypnotised victim"
   syntax: "SUGGEST <target> <suggestion>"
-  off_balance: "Since 2026-10-23: used while OFF balance it takes a fixed, unmodifiable equilibrium (figure not given; admin: to slow Serpent's early game, may be reverted). Our offense sends it before dstab, on balance (:2220), so it is unaffected (kb/changes/2026-10-23_classleads.md, kb/CONFLICTS.md #45)"
+  off_balance: "Since 2026-10-23: used while OFF balance it takes a fixed, unmodifiable equilibrium (figure not given; admin: to slow Serpent's early game, may be reverted). Our offense sends it before dstab, on balance (:2232), so it is unaffected (kb/changes/2026-10-23_classleads.md, kb/CONFLICTS.md #45)"
 
 seal:
   skill: Hypnosis
   balance: "2.0 seconds of equilibrium, 200 mana"
-  off_balance: "Since 2026-10-23: used while OFF balance it takes an unmodified equilibrium. Our offense seals before dstab, on balance (:2220)"
+  off_balance: "Since 2026-10-23: used while OFF balance it takes an unmodified equilibrium. Our offense seals before dstab, on balance (:2232)"
   effect: "Primes the trance: a delay of 3 s or more (1 s if the victim has deadening), after which the suggestions tick every 4 s (3 s with deadening)"
   syntax: "SEAL <target> <delay in seconds>"
   notes: "This page said 'SEAL <target> <suggestion>: lock in a suggestion permanently'. Our hypnolock sends `seal <target> 3` (SEAL_DELAY :205, getCommand :437), the wiki's minimum on every target (Hypnosis.wiki:28). Until 2026-11-08 it sent the number of suggestions, so one or two of them put the seal under the minimum. The deadened 1 s form is left out: the tracker cannot promise deadening by the time the seal lands. The manual s2 alias is untouched. No seal from our seat is in a log"
@@ -1300,7 +1308,7 @@ ekanelia_transformations:
       impatience delivery without Impulse requirement"): `impulse <target> masochism monkshood`
       brings the masochism itself, so only asthma + weariness must already be up (relayed notes,
       PLAYER; our selectImpulsePair). A plain BITE monkshood needs masochism already present
-      (selectBiteVenom step 3, :1218-1221).
+      (selectBiteVenom step 3, :1228-1232).
 
   curare:
     conditionals: [hypersomnia, masochism]

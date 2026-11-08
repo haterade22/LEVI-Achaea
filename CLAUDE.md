@@ -686,9 +686,13 @@ exist and a second cure action still kills them (`killNegativeConfirmV3`), but e
 cured candidate back, so a branched eat had cured nothing. An eat, smoke or apply line is a fact: it cured one of the
 candidates. The herb window (1.3 s) was also shorter than the target's fastest next eat in the spar (1.506 s), and replaying
 that spar unfolded 11 times before this and never after. A later proof settles the branches instead.
-**Pruning never empties the tracker, and the cap is 300 (v4.7.479).** When every branch is under `minProbability` (0.01),
-`pruneStatesV3` keeps them all (007:931-934). It fell back to the empty state, so Dragonheal or a third tree over ten
-afflictions (C(10,3) = 120 branches at 1/120) wiped every target affliction, a certain pinshot among them, from V3 and tAffs.
+**Pruning never empties the tracker, and the cap is 300 (v4.7.479).** The 1% floor (`minProbability`) only trims: when every
+branch is under it, or more than 10% of the weight is, `pruneStatesV3` keeps them all and the cap makes room (007:931-934). It
+fell back to the empty state, so Dragonheal or a third tree over ten afflictions (C(10,3) = 120 branches at 1/120) wiped every
+target affliction, a certain pinshot among them, from V3 and tAffs. With only "every branch" as the test, an aurum eat right after
+that Dragonheal cut 59% of the weight and read asthma 0.00 where it is 0.38. A passive trims back to the cap between its cures
+(008, `onPassiveCureV3`), because every branch expands each round: a second Dragonheal over 14 + 4 afflictions took about
+0.5 s in plain Lua 5.1, in one trigger. That trim only runs past the cap, so the floor does not cut a board mid-expansion when it fits.
 `affConfigV3.maxStates = 300` (007:78) is assigned outside the `X = X or {...}` table, so a reload in a running session takes
 it. Past the cap `table.sort` orders equal branches arbitrarily, so a board over 300 branches can still read uneven.
 **A line that proves an affliction absent calls `proveAffAbsentV3(aff[, cureType])` BEFORE any erase (007:758, v4.7.479).**
@@ -2691,14 +2695,16 @@ server's is open (#69), and under the second reading each cost is about 0.12 s h
 - **The skip list runs.** `wantClumsiness` reads `ataxia_targetClass()`, so a skip-list class (magi, sylvan, occultist,
   bard, jester, blademaster, druid, sentinel; `air`, `fire`, `water` match no class name) gets asthma, then weariness, not
   xentio (:952). The class venom also follows the target (`getClassLockAff`, :897). The list is unconfirmed by the user.
-- **EXECUTE needs prone and the whip** (:1966-1969): truelock, prone at 0.90, the five lock afflictions plus prone at 0.90
+- **EXECUTE needs prone and the whip** (:1977-1980): truelock, prone at 0.90, the five lock afflictions plus prone at 0.90
   together. No behead branch. A standing truelocked target gets the DSTAB, so in a duel the kill waits for the adder's trip.
 - **Re-delivery reads a lock piece at 0.70, build-on reads at 0.30** (`haveAff_tactical` vs `haveAff`, note at :108). A piece a
-  branched cure left at 0.667 is sent again. `targetLocked` is unchanged, so recklessness still waits for the lock.
-- **Truelock.** `sr` takes lock_reinforce there, as lock and darkshade do (:2874-2879): one voyria impulse, then the finish.
-  The voyria impulse goes only at truelock (:2092). lock_reinforce's second venom is never curare.
+  branched cure left at 0.667 is sent again. `targetLocked` is unchanged, so recklessness still waits for the lock. A monkshood
+  re-sent for an impatience between 0.30 and 0.70 also needs its reaction able to fire (`monkshoodCanReact`: asthma and weariness at
+  0.70). An aurum eat, then a plumbum eat, leaves those two at 0.667 and 0.333 with no branch holding both; the DSTAB takes the round.
+- **Truelock.** `sr` takes lock_reinforce there, as lock and darkshade do (:2886-2891): one voyria impulse, then the finish.
+  The voyria impulse goes only at truelock (:2103). lock_reinforce's second venom is never curare.
 - **A refused round does not stop the press**: after 1.5 s on balance with no drop the next press sends again, except while we
-  are slowed (:2796-2802).
+  are slowed (:2808-2814).
 
 **Ekanelia** - BITE venom transformation that ADDS bonus afflictions:
 | Venom | Conditionals Required | Normal + Bonus Effect |

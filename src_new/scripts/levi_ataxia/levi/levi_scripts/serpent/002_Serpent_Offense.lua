@@ -112,9 +112,9 @@ end
 -- goldenseal eat over stupidity + impatience, a bloodroot eat over paralysis + slickness). With
 -- nothing to settle the branch, haveAff's 0.30 called the piece up and the lock's 0.70 called it
 -- down: nothing sent it, the lock never closed, and the round was "dstab <t> curare vernalius"
--- until a tree, focus or salve line moved the branch (2026-11-08 review). The venom order is
--- unchanged. A read that asks whether a piece is there to build on (gecko wants asthma, slike wants
--- impatience) stays at haveAff's 0.30, as it was.
+-- until a tree, focus or salve line moved the branch (2026-11-08 review). A monkshood sent again for
+-- an impatience at 0.667 goes only if its reaction can fire (monkshoodCanReact). A read that asks if
+-- a piece is there to build on (gecko wants asthma, slike wants impatience) stays at haveAff's 0.30.
 
 -- RECKLESSNESS ONLY ON A LOCKED TARGET (user, 2026-11-07: "We shouldnt be doing recklessness unless
 -- we have locked them. Else that is a wasted attack"). In the spar against Saibel 7 DSTABs carried
@@ -974,8 +974,8 @@ local function pickVenomGroup(exclude)
     if not haveAff_tactical("asthma") and exclude ~= "kalmia" then return "kalmia" end
     -- 3. If asthma stuck -> slickness (blocks salves)
     if haveAff("asthma") and not haveAff_tactical("slickness") and exclude ~= "gecko" then return "gecko" end
-    -- 4. Weariness (blocks fitness, enables impulse)
-    if not haveAff("weariness") and exclude ~= "vernalius" then return "vernalius" end
+    -- 4. Weariness (blocks fitness, enables impulse). Read at 0.70, as monkshoodCanReact does.
+    if not haveAff_tactical("weariness") and exclude ~= "vernalius" then return "vernalius" end
     -- 5. Anorexia when impatience + slickness + asthma (blocks eating). The slickness may be the
     -- first venom's: after a gecko v1 (step 3) the same DSTAB lands it. Without that, v2 fell to
     -- the default curare onto paralysis already up; lock mode sends gecko slike on the same board.
@@ -984,7 +984,7 @@ local function pickVenomGroup(exclude)
     -- 6. Fill remaining lock gaps
     if not haveAff("paralysis") and exclude ~= "curare" then return "curare" end
     if not haveAff_tactical("slickness") and exclude ~= "gecko" then return "gecko" end
-    if not haveAff("weariness") and exclude ~= "vernalius" then return "vernalius" end
+    if not haveAff_tactical("weariness") and exclude ~= "vernalius" then return "vernalius" end
     if not haveAff_tactical("asthma") and exclude ~= "kalmia" then return "kalmia" end
     -- Default
     if exclude ~= "curare" then return "curare" end
@@ -1129,6 +1129,14 @@ function selectOpportunisticEkanelia()
     return nil
 end
 
+-- The monkshood reaction needs asthma, weariness and masochism together. An aurum eat, then a
+-- plumbum eat, leaves impatience 0.667, asthma 0.667 and weariness 0.333: the eat took one of the
+-- two, so no branch holds both and no reaction can fire. Sending the impulse repeats it for
+-- nothing, and takes the round from the DSTAB that lands the piece back (2026-11-08 review).
+local function monkshoodCanReact()
+    return haveAff_tactical("asthma") and haveAff_tactical("weariness")
+end
+
 --[[
     Select impulse pair during relapse phase.
     Priority: stupidity first (clogs focus, relapses) > monkshood re-lock (only after pre-load)
@@ -1144,7 +1152,8 @@ function selectRelapseImpulse()
     -- Don't waste the softlock window on stupidity when herbs are already blocked
     -- Not while impatience is still up: selectImpulsePair does not check the reaction's result,
     -- so this was the one P7 path that re-sent monkshood onto impatience.
-    if haveAff("slickness") and haveAff("anorexia") and not haveAff_tactical("impatience") then
+    if haveAff("slickness") and haveAff("anorexia") and not haveAff_tactical("impatience")
+       and (not haveAff("impatience") or monkshoodCanReact()) then
         local monkshoodPair = selectImpulsePair()
         if monkshoodPair and monkshoodPair.label == "impatience" then
             return monkshoodPair
@@ -1214,9 +1223,11 @@ function selectBiteVenom()
     end
 
     -- 3. Monkshood ekanelia ready → free impatience via bite (no EQ cost). Not onto impatience
-    -- that is already up: the reaction's only product would be wasted.
+    -- that is already up: the reaction's only product would be wasted. An impatience below the bar
+    -- needs the reaction able to fire, masochism too: a bite brings no suggestion to supply it.
     if haveAff("asthma") and haveAff("masochism") and haveAff("weariness")
-       and not haveAff_tactical("impatience") then
+       and not haveAff_tactical("impatience")
+       and (not haveAff("impatience") or (monkshoodCanReact() and haveAff_tactical("masochism"))) then
         return {venom = "monkshood", label = "impatience (ekanelia)"}
     end
 
@@ -2141,7 +2152,8 @@ function serp_ekanelia_attack()
     -- Normal impulse for impatience (gated by shouldDeliverImpatience). At the lock's bar: this is
     -- also where group mode comes for an impatience a cure left at 0.667, and there only the
     -- monkshood pair (or an opportunistic reaction) goes, not the group branch's any pair.
-    elseif not eqAction and not haveAff_tactical("impatience") and checkImpulseEligible() then
+    elseif not eqAction and not haveAff_tactical("impatience") and checkImpulseEligible()
+       and (not haveAff("impatience") or monkshoodCanReact()) then
         impulsePair = selectImpulsePair()
         if impulsePair and impulsePair.label == "impatience" then
             useImpulse = true

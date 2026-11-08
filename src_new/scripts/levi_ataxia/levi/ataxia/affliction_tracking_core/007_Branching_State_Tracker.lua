@@ -71,8 +71,8 @@ affConfigV3 = affConfigV3 or {
 -- is C(10,3) = 120 branches at 1/120, and the first 50 read anorexia 0.90, asthma 0.56, slickness
 -- 0.98 where each is 0.70. Eight and nine afflictions (56 and 84) were skewed the same way, and a
 -- fourth tree over ten took 0.60 readings to 1.00 and 0.17. 300 holds those boards whole, so they
--- read exact; a tree on a board at the cap took about 10 ms in Lua 5.1. A board past 300 branches
--- (a fourth cure over thirteen) is still cut this way.
+-- read exact. At the cap a tree took about 10 ms in Lua 5.1; a passive trims to it between cures
+-- (008). A board past 300 branches (a fourth cure over thirteen) is still cut this way.
 -- Set outside the table: `X = X or {...}` keeps the old table when a package reload runs in a
 -- session that is already up, so a default inside it would wait for a restart.
 affConfigV3.maxStates = 300
@@ -923,12 +923,12 @@ function pruneStatesV3()
         end
     end
 
-    -- Every branch under the floor: keep them all. The cap below takes over if there are too many.
-    -- A three-cure passive over ten afflictions (Dragonheal, 005) leaves C(10,3) = 120 branches
-    -- at 1/120 each, under 0.01, and a third tree over ten does the same. Dropping them all fell
-    -- back to the empty state below: every target affliction, a certain pinshot among them, left
-    -- V3 and tAffs, and the offence rebuilt the lock from nothing.
-    if #kept == 0 and #afflictionStatesV3 > 0 then
+    -- The floor only trims. With every branch under it, or over 10% of the weight, keep them all;
+    -- the cap below takes over if there are too many. Dragonheal (005) over ten afflictions leaves
+    -- 120 branches at 1/120, under 0.01, and dropping them all emptied V3 and tAffs, a certain
+    -- pinshot too. An aurum eat next splits them 4/2/1: 59% of the weight sat under the floor, and
+    -- cutting it read asthma 0.00 where it is 0.38 (test_v3_core_fixes.lua).
+    if (#kept == 0 or prunedProb > 0.10) and #afflictionStatesV3 > 0 then
         kept = afflictionStatesV3
         prunedProb = 0
     end
