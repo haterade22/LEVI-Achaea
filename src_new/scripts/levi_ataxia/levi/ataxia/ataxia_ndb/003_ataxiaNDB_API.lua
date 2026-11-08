@@ -54,6 +54,9 @@ end
 
 function ataxiaNDB_Exists(name)
   if not name or type(name) ~= "string" then return false end
+  -- No database means nobody is in it. A load that throws leaves ataxiaNDB nil, on purpose, so the
+  -- file on disk survives (001_Save_Load_Settings); an empty file gives a table with no players.
+  if not ataxiaNDB or not ataxiaNDB.players then return false end
   return ataxiaNDB.players[name:title()] ~= nil
 end
 

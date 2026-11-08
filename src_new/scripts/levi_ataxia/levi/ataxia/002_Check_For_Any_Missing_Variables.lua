@@ -294,6 +294,13 @@ function ataxiaCheckForMissing()
 		ataxia.settings.seebalances = false
 	end
 
+	-- Serpent rounds: send the attack as the first command (serpent/002 buildRound). Off by default;
+	-- it is the probe for the 0.09 s step the 2026-11-07 spar showed after a send's first command.
+	-- `aconfig serpent attackfirst on` turns it on.
+	if ataxia.settings.serpentattackfirst == nil then
+		ataxia.settings.serpentattackfirst = false
+	end
+
 	if ataxia.settings.autogallop == nil then
 		ataxia.settings.autogallop = false
 		ataxiaEcho("Auto Gallop Setting not found: Reverting to default; won't toggle gallop when mounted.")

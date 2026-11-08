@@ -148,9 +148,14 @@ function Algedonic.ApplySwaps(aff)
   end
 
   -- WATER: boost nausea vs Blademaster
+  -- WATER, paraAst, astWear and fratLock had no `ataxia_getPrio(x) ~= N` test, unlike the swaps
+  -- around them: ApplySwaps runs on every affliction gain, so each gain re-sent a write the server
+  -- already held (once a second per affliction, prioWaitfor), spending one of the four writes a
+  -- second the throttle allows (002_Prio_Management) and queueing restores behind it. Trigger 719
+  -- keeps ataxia.curingprio in step with the server's confirmation line.
   if ps.WATER and ps.WATER.active and tc then
     if affed("nausea") and (affed("asthma") or affed("weariness"))
-       and tc == "Blademaster" then
+       and tc == "Blademaster" and ataxia_getPrio("nausea") ~= 1 then
       ataxia_setAffPrio("nausea", 1)
     end
   end
@@ -182,21 +187,24 @@ function Algedonic.ApplySwaps(aff)
 
   -- paraAst: prio paralysis when asthma blocks smoking
   if ps.paraAst and ps.paraAst.active then
-    if affed("asthma") and affed("paralysis") and affed("slickness") then
+    if affed("asthma") and affed("paralysis") and affed("slickness")
+       and ataxia_getPrio("paralysis") ~= 1 then
       ataxia_setAffPrio("paralysis", 1)
     end
   end
 
   -- astWear: boost asthma vs Serpent when weariness present
   if ps.astWear and ps.astWear.active and tc then
-    if affed("asthma") and affed("weariness") and tc == "Serpent" then
+    if affed("asthma") and affed("weariness") and tc == "Serpent"
+       and ataxia_getPrio("asthma") ~= 3 then
       ataxia_setAffPrio("asthma", 3)
     end
   end
 
   -- fratLock: boost fratricide when approaching softlock
   if ps.fratLock and ps.fratLock.active then
-    if affed("fratricide") and affed("asthma") and affed("slickness") then
+    if affed("fratricide") and affed("asthma") and affed("slickness")
+       and ataxia_getPrio("fratricide") ~= 4 then
       ataxia_setAffPrio("fratricide", 4)
     end
   end
@@ -729,7 +737,10 @@ function Algedonic.AntiSerpent()
         -- each time. One shield per 4 s: the tattoo spends 3.40 s of equilibrium on our seat
         -- (kb/raw/live/probes_2026-11-01.txt:55), and at most 4.00 s (kb/mechanics/foundations.md),
         -- so a sooner send finds equilibrium still down. The prioaff is free, so it is not throttled.
-        if not ataxiaTemp.serpentShieldThrottle then
+        -- Not while our shield is up (GMCP Char.Defences, deffing/001): the touch has nothing to
+        -- add, and the `cq all` in front of it still cleared our queue, a held lock-breaker with it.
+        local shielded = ataxia.defences and ataxia.defences.shield
+        if not shielded and not ataxiaTemp.serpentShieldThrottle then
             ataxiaTemp.serpentShieldThrottle = true
             tempTimer(4, function() ataxiaTemp.serpentShieldThrottle = nil end)
             send("cq all;touch shield")

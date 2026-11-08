@@ -63,9 +63,19 @@ afflictionStatesV3 = afflictionStatesV3 or {
 affConfigV3 = affConfigV3 or {
     enabled = true,
     minProbability = 0.01,  -- Prune branches below 1%
-    maxStates = 50,         -- Max branches to track
     debugEcho = true,       -- Show debug messages
 }
+-- Max branches to track. pruneStatesV3 cuts at this count with table.sort, which orders equal
+-- branches arbitrarily, so a cut through branches that tie picks arbitrary survivors. At 50 that
+-- reached boards a fight can build: ten afflictions after three cures (Dragonheal, or three trees)
+-- is C(10,3) = 120 branches at 1/120, and the first 50 read anorexia 0.90, asthma 0.56, slickness
+-- 0.98 where each is 0.70. Eight and nine afflictions (56 and 84) were skewed the same way, and a
+-- fourth tree over ten took 0.60 readings to 1.00 and 0.17. 300 holds those boards whole, so they
+-- read exact. At the cap a tree took about 10 ms in Lua 5.1; a passive trims to it between cures
+-- (008). A board past 300 branches (a fourth cure over thirteen) is still cut this way.
+-- Set outside the table: `X = X or {...}` keeps the old table when a package reload runs in a
+-- session that is already up, so a default inside it would wait for a restart.
+affConfigV3.maxStates = 300
 
 -- Simple boolean tracking for non-branching affs (limbs, prone, stun, etc.)
 simpleAffsV3 = simpleAffsV3 or {}
@@ -570,6 +580,13 @@ function onSalveCureV3(salveType)
     -- Applying salve proves slickness is absent
     collapseAffAbsentV3("slickness")
 
+    -- The application is a cure action, so it closes the guess an earlier eat, smoke or apply
+    -- left pending, as onTargetApplySalveV3 (008) means to. That one never got to: 391, 392 and
+    -- 395 match the line before 396 (Mudlet runs the Groups folder in order) and this function
+    -- starts the salve clock, so 396's call read the same application as one on salve balance
+    -- and returned. Before the branching below, so a guess this application opens survives.
+    killNegativeConfirmV3()
+
     -- Get the cure list for this salve type
     local curableAffs = salveCureTableV3[salveType]
     if not curableAffs then
@@ -679,6 +696,9 @@ function onSalveCureV3(salveType)
 
     -- Track target's salve balance (scalded check happens inside)
     startCureBalanceV3("salve")
+    -- When this application was charged: 396 runs next on the same line, and onTargetApplySalveV3
+    -- (008) must not read it as a second application on salve balance.
+    salveChargedAtV3 = getEpoch()
 end
 
 -- ============================================
@@ -723,6 +743,24 @@ function collapseAffAbsentV3(aff)
         -- stops holding) wiped them from tAffs too.
         v3Echo("WARNING: Contradiction detected for " .. aff .. " - removing it from every branch")
         removeAffV3(aff)
+    end
+end
+
+-- A line proved aff absent: an apply proves no slickness, a tree no paralysis. Call this BEFORE
+-- erasing it. erAff strips aff from each branch, so a branch that held it, which the line has
+-- ruled out, keeps its weight with aff taken out. Over asthma, paralysis and slickness, a magnesium
+-- eat (paralysis cured 2/3, slickness cured 1/3) and then a tree read slickness and asthma at 1/3
+-- each. The tree drops the "slickness cured" branch, so the truth is 1/2 each.
+-- Where every branch holds aff, no branch is ruled out and it only comes off, with no WARNING: a
+-- target curing an affliction we were sure of is ordinary.
+-- cureType, when given, is the action's cure clock (canTargetCureV3): while it runs the tracker
+-- calls the line an illusion, so the line proves nothing.
+function proveAffAbsentV3(aff, cureType)
+    if cureType and not canTargetCureV3(cureType) then return end
+    if isAffCertainV3(aff) then
+        removeAffV3(aff)
+    else
+        collapseAffAbsentV3(aff)
     end
 end
 
@@ -785,6 +823,20 @@ end
 function haveAffV3(aff, threshold)
     threshold = threshold or 0.3  -- Default: 30% probability
     return getAffProbabilityV3(aff) >= threshold
+end
+
+-- True when every branch holds the affliction (or it is simple-tracked): the target certainly
+-- has it. Ask this, not getAffProbabilityV3(aff) >= 1.0: the cache sums branch probabilities,
+-- and renormalising leaves the sum a few ulps off 1. Over impatience, weariness, asthma,
+-- clumsiness, sensitivity, healthleech, paralysis, slickness and parasite, kelp, bloodroot and
+-- kelp left impatience in all 24 branches at 0.99999999999999978 (test_v3_core_fixes.lua).
+function isAffCertainV3(aff)
+    if simpleAffsV3[aff] then return true end
+    if #afflictionStatesV3 == 0 then return false end
+    for _, state in ipairs(afflictionStatesV3) do
+        if not state.affs[aff] then return false end
+    end
+    return true
 end
 
 -- Get probability that target has ALL listed afflictions
@@ -871,6 +923,16 @@ function pruneStatesV3()
         end
     end
 
+    -- The floor only trims. With every branch under it, or over 10% of the weight, keep them all;
+    -- the cap below takes over if there are too many. Dragonheal (005) over ten afflictions leaves
+    -- 120 branches at 1/120, under 0.01, and dropping them all emptied V3 and tAffs, a certain
+    -- pinshot too. An aurum eat next splits them 4/2/1: 59% of the weight sat under the floor, and
+    -- cutting it read asthma 0.00 where it is 0.38 (test_v3_core_fixes.lua).
+    if (#kept == 0 or prunedProb > 0.10) and #afflictionStatesV3 > 0 then
+        kept = afflictionStatesV3
+        prunedProb = 0
+    end
+
     -- Redistribute pruned probability proportionally
     if prunedProb > 0 and #kept > 0 then
         local scale = 1.0 / (1.0 - prunedProb)
@@ -904,7 +966,7 @@ function pruneStatesV3()
 
     afflictionStatesV3 = kept
 
-    -- Ensure we always have at least one state
+    -- Ensure we always have at least one state (only an empty list gets here now)
     if #afflictionStatesV3 == 0 then
         afflictionStatesV3 = {{affs = {}, prob = 1.0}}
     end
@@ -1408,97 +1470,24 @@ function killNegativeConfirmV3()
     lastGuessV3 = nil
 end
 
--- Gating affliction dependencies for intelligent backtracking
--- Only backtrack a gating aff if dependent affs are still tracked in the cache
-local gatingDependenciesV3 = {
-    -- asthma blocks smoking: only backtrack if smoke-curable affs are tracked
-    asthma = {"slickness", "disloyalty", "hellsight", "aeon", "deadening", "tension", "manaleech", "unweavingspirit"},
-    -- anorexia blocks eating: only backtrack if herb-curable affs are tracked
-    anorexia = function()
-        -- Check if any herb-curable aff is tracked
-        for _, affList in pairs(curingTableV3) do
-            for _, aff in ipairs(affList) do
-                if (affCacheV3[aff] or 0) > 0 then return true end
-            end
-        end
-        return false
-    end,
-    -- slickness blocks applying salves: only backtrack if salve-curable affs are tracked
-    slickness = function()
-        for _, affList in pairs(salveCureTableV3) do
-            for _, aff in ipairs(affList) do
-                if (affCacheV3[aff] or 0) > 0 or simpleAffsV3[aff] then return true end
-            end
-        end
-        return false
-    end,
-}
-
--- Check if a gating affliction should be backtracked
--- Returns true if the aff should be backtracked, false if it should be skipped
-local function shouldBacktrackGatingAffV3(aff)
-    local dep = gatingDependenciesV3[aff]
-    if not dep then return true end  -- Not a gating aff, always backtrack
-
-    if type(dep) == "function" then
-        return dep()
-    end
-
-    -- dep is a table of dependent afflictions
-    for _, depAff in ipairs(dep) do
-        if (affCacheV3[depAff] or 0) > 0 then
-            return true  -- Dependent aff exists, backtrack is warranted
-        end
-    end
-    return false  -- No dependent affs, skip backtrack
-end
-
--- Called when negative confirmation window expires (no second cure action)
--- Unfolds the branch: re-adds all candidates with equal probability
+-- Called when the negative confirmation window expires with no second cure action. It changes
+-- nothing (2026-11-08). It used to UNFOLD the branch: in each branch the eat had split off, it put
+-- the cured candidate back, so the eat had cured nothing at all. But the eat, smoke or apply line
+-- is a fact: it cured one of the candidates, and the branch weights say which is likely. The
+-- herb window (1.3 s) is also shorter than the target's next eat can come (1.506 s at the least
+-- in the 2026-11-07 spar, kb/raw/logs/ours/2026-11-07_164635_Saibel.log, "FL"), so most branched
+-- eats had nothing to close their window. Replayed through the package, that spar unfolded 11
+-- times. After the magnesium eat at FL 1241 the unfold took paralysis from 0.15 back to 0.44.
+-- After the aurum eat and the smoke at FL 2054-2057, which proved asthma absent, it put asthma
+-- back: 0.20 at the next eat (FL 2063) where it is 0 now. With asthma, weariness, disloyalty and
+-- slickness held, as in test_v3_core_fixes.lua, it read 0 after the smoke and 1.00 after the
+-- unfold. Asthma counts toward targetLocked() (serpent/002), the gate of the no-recklessness
+-- rule, for a target who could still smoke.
+-- A later proof (a smoke, an apply, a fumble, a tree, a focus, DIAGNOSE) settles the branches
+-- instead: it drops those it rules out (proveAffAbsentV3, collapseAffPresentV3).
 function onNegativeConfirmExpiredV3(guess)
     if not guess or not guess.candidates then return end
-
-    v3Echo("Neg-confirm timeout -- unfolding branch for: " .. table.concat(guess.candidates, ", "))
-
-    -- Re-add all candidates across all branches that had them removed
-    local newStates = {}
-
-    for _, state in ipairs(afflictionStatesV3) do
-        -- Check how many candidates are MISSING from this branch
-        local missingCandidates = {}
-        for _, aff in ipairs(guess.candidates) do
-            if not state.affs[aff] and not simpleAffsV3[aff] then
-                table.insert(missingCandidates, aff)
-            end
-        end
-
-        if #missingCandidates == 0 then
-            -- All candidates present -- this branch wasn't affected
-            table.insert(newStates, state)
-        elseif #missingCandidates == 1 then
-            -- Exactly one candidate missing — this is a branch from the guess
-            -- Intelligent backtracking: only backtrack gating affs if dependent affs exist
-            if shouldBacktrackGatingAffV3(missingCandidates[1]) then
-                local unfolded = {affs = copyAffs(state.affs), prob = state.prob}
-                unfolded.affs[missingCandidates[1]] = true
-                table.insert(newStates, unfolded)
-            else
-                -- Skip backtrack for this gating aff (no dependent affs)
-                table.insert(newStates, state)
-                v3Echo("Skipped backtrack for " .. missingCandidates[1] .. " (no dependent affs)")
-            end
-        else
-            -- Multiple missing — keep as-is (not from this guess)
-            table.insert(newStates, state)
-        end
-    end
-
-    afflictionStatesV3 = newStates
-    deduplicateStatesV3()
-    pruneStatesV3()
-    rebuildCacheV3()
-    syncToOldSystemV3()
-    updateAffDisplayV3()
+    v3Echo("Neg-confirm timeout -- branch kept: " .. table.concat(guess.candidates, ", "))
 end
 
 -- ============================================

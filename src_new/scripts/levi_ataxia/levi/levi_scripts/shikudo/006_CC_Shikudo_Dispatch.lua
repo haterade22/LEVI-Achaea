@@ -145,6 +145,17 @@ function shikudo.checkDispatchReady()
     and (shikudo.has("crushedthroat") or shikudo.has("damagedwindpipe"))
 end
 
+-- The friendly-fire check buildRound makes before a kill: true when the NDB lists the target as a
+-- citizen of Mhaldor. This read the global tCity, which nothing has ever assigned (git log
+-- -S"tCity =" finds only reads), so a Mhaldorian was always DISPATCHED. ataxiaNDB_getCitizenship
+-- (ataxia_ndb/003) answers "Unknown" for a name the NDB has not gathered, and that target is
+-- dispatched, as before. With no NDB loaded the answer is false: the kill must not throw.
+function shikudo.targetIsMhaldorian()
+  if type(target) ~= "string" or target == "" then return false end
+  if type(ataxiaNDB) ~= "table" or type(ataxiaNDB.players) ~= "table" then return false end
+  return ataxiaNDB_getCitizenship ~= nil and ataxiaNDB_getCitizenship(target) == "Mhaldor"
+end
+
 function shikudo.checkReadyForProne()
   -- At least one leg prepped enough to sweep + break
   local ll = shikudo.getLimbDamage("left leg")
@@ -1572,7 +1583,7 @@ function shikudo.buildRound()
   -- KILL CHECK: All conditions met?
   if shikudo.checkDispatchReady() then
     -- SAFETY: Use INCAPACITATE for Mhaldorians (avoid friendly fire)
-    if tCity == "Mhaldor" or tCity == "(Mhaldor)" then
+    if shikudo.targetIsMhaldorian() then
       return wield .. "incapacitate " .. target, "incapacitate"
     end
     return wield .. "dispatch " .. target, "dispatch"

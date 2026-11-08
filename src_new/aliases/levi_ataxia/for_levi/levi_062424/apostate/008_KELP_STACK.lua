@@ -26,6 +26,7 @@ envenom2dwc()
 end
 
 if gmcp.Char.Status.class == "Infernal" then
-infernalpriosweariness()
+-- infernalpriosweariness() was deleted in 3c312975 with the old limb counters; guarded, because it threw.
+if infernalpriosweariness then infernalpriosweariness() end
 end
 

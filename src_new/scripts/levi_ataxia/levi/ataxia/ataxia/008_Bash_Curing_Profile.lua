@@ -25,7 +25,7 @@ packageName: ''
 -- The 2026-07-31 earth-wyrm death log made the cost measurable. Two facts drive
 -- everything below:
 --
---   1. POTASH/MOSS SHARES THE EATING BALANCE with every cure-mineral. Seven eats in the
+--   1. (REFUTED 2026-11-07, kb/CONFLICTS.md Resolved, was #11: potash/moss has its own clock.) Seven eats in the
 --      final 13 seconds; exactly ONE was potash. Cuprum for paranoia (x3), plumbum for
 --      shyness, argentum and calamine for other mental spray. "You may eat another bit
 --      of irid moss or potash." printed at 07:45:36 and the next potash went down at

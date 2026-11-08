@@ -38,5 +38,7 @@ patterns:
 deleteFull()
 
 cecho("\n<magenta> PRONED ALL THOSE LOSERS IN THIS ROOM !!!")
+-- OppGainedAff was the old AK tracker's call and no revision of this repo defines it, so each stomp
+-- threw here. Trigger 558 (Quake) records the prone on this same line; the guard only stops the error.
 local aff = "prone"
-OppGainedAff(aff)
+if OppGainedAff then OppGainedAff(aff) end

@@ -38,6 +38,8 @@ patterns:
 
 if isTargeted(matches[2]) then
     if passiveFailsafe then restorePassiveCure() end
+    -- Before the erase, which would leave the branches this proof rules out standing (007).
+    if proveAffAbsentV3 then proveAffAbsentV3("slickness", "salve") end
     erAff("slickness")
 
     -- ==== CRUSHEDTHROAT TRACKING ====
@@ -68,19 +70,23 @@ if isTargeted(matches[2]) then
     end)
 
     -- ==== HEAD BREAK HANDLING ====
+    -- The head's damage from the limb counter (lb, limb/002), read before this application
+    -- changes it: lb.salve (trigger limb/003) resets a broken head 4.0 s after the line. This read
+    -- the global tLimbs, which nothing defines since it was removed, so every head application
+    -- raised an error here and the head cure below never ran.
+    local L = lb and lb[target] and lb[target].hits
+    local head = (L and L.head) or 0
     local salvetimer = false
-    if tLimbs.H >= 100 and tLimbs.H < 200 then
+    if head >= 100 and head < 200 then
         -- lvl 2 break
         tempTimer(4, function()
-            target_resetLimb("head")
             erAff("mangledhead")
             ataxia_boxEcho("they cured Head Damage (lvl 2)", "DodgerBlue")
         end)
         salvetimer = 4
-    elseif tLimbs.H >= 200 then
+    elseif head >= 200 then
         -- lvl 3 break
         tempTimer(4, function()
-            tLimbs.H = 100
             erAff("mangledhead")
             ataxia_boxEcho("they cured Head Damage (lvl 3 -> lvl 2)", "DodgerBlue")
         end)

@@ -107,5 +107,5 @@ Stack multiple afflictions that share the same cure herb to overwhelm curing:
 - Lock types reference: See [lock_types.md](lock_types.md)
 - **Serpent lock strategy (2024)**: See [lock_types.md](lock_types.md#serpent-specific-lock-strategy-updated-2024)
 - Complete venom list: See [serpent.md](serpent.md) - Complete Venom Reference section
-- **Impulse mechanics**: See [serpent.md](serpent.md#critical-impulse-mechanics-updated-2024)
+- **Impulse mechanics**: See [serpent.md](serpent.md#critical-impulse-mechanics-checked-2026-10-12)
 - **Fratricide mechanics**: See [serpent.md](serpent.md#fratricide-mechanics)

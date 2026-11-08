@@ -41,6 +41,8 @@ tdeliverance = false
   if passiveFailsafe then restorePassiveCure() end
 	-- V2 tracking support: limb salve cures slickness and other affs
 	if onTargetSalveLimbsV2 then onTargetSalveLimbsV2(matches[2], matches[3]) end
+	-- Before the erase, which would leave the branches this proof rules out standing (007).
+	if proveAffAbsentV3 then proveAffAbsentV3("slickness", "salve") end
 	erAff("slickness")
 
 	-- V3 integration: limbs salve cure branching

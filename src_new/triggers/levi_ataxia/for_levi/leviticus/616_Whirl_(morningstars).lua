@@ -56,7 +56,10 @@ if isTargeted(person) then
 		or multimatches[3][1] == person .. " twists her body out of harm's way."
 	then
 		if multimatches[3][1] == person .. " parries the attack with a deft manoeuvre." then
-      if numbedLeft then killTimer(numbRight) end
+      -- A parry proves the left arm is not numb: stop its 15 s timer (210_Numbed_Arms). This
+      -- killed `numbRight`, which nothing defines, so Mudlet's killTimer(nil) threw on every
+      -- parry after the first numb and the parried limb below was never recorded.
+      if numbedLeft then killTimer(numbedLeft); numbedLeft = nil end
       tAffs.numbedleftarm = nil
       ataxiaTemp.parriedLimb = ataxiaTemp.lastLimbHit
       cecho("<green> -> "..ataxiaTemp.parriedLimb)       

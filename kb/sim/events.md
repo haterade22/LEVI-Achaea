@@ -43,7 +43,8 @@ next attack, and by **the herb** when it is back. The clock lengths alone do not
 
 ## Census
 
-Game lines only: a client's own echoes are not counted. The 'gaze' line names a line, not an ability.
+Game lines only: a client's own echoes are not counted. The 'gaze' line is an IMPULSE that bites: each of the 22 BITEs
+has it in its packet, and each of the 22 'gaze' lines a BITE (az 1238-1242, Z5 534-537, X 293-296).
 
 The second-venom line follows every DSTAB, hit or miss: second-venom lines = pricks + misses in az yes, Z5 yes, g yes, X yes.
 
@@ -61,7 +62,7 @@ The second-venom line follows every DSTAB, hit or miss: second-venom lines = pri
 | 'The attack rebounds off your aura of protection!' | 3 | 0 | 2 | 3 |
 | SNAP: 'snaps his fingers in front of you' | 7 | 5 | 2 | 4 |
 | SNAP, bare: 'snaps his fingers.' | 0 | 0 | 1 | 0 |
-| 'fixes his gaze to yours and hisses a sharp command' (HYPNOTISE or IMPULSE: not proven) | 7 | 8 | 0 | 7 |
+| IMPULSE: 'fixes his gaze to yours and hisses a sharp command' (in the packet of each BITE, 22 of 22) | 7 | 8 | 0 | 7 |
 | 'Your equilibrium is thrown off by an awakened mental impulse' | 0 | 0 | 0 | 4 |
 | 'A terrible sense of unease comes over you' (the hypochondria gain line) | 7 | 4 | 2 | 4 |
 | The Serpent's SHRUG: 'hunches his shoulders and lets out a soft hiss' | 3 | 3 | 0 | 9 |

@@ -131,6 +131,7 @@ LOGGERS = (
     ("_leviticus_", "Leviticus"),
     ("shikudo-group-mhaldor", "Ours, client log"),
     ("shikudo-group-alias", "Ours, client log"),
+    ("serpent-spar", "Ours, client log"),
 )
 
 # Mystor's system prints the lock it believes in front of the board. These are not afflictions, and a naive
@@ -325,6 +326,7 @@ def parse_client(rows, family, log):
 ID_AFTER_RESULT = re.compile(r"_(?:win|loss|noresult)_(.+)$")
 OUR_ROW = re.compile(r"^(\d\d):(\d\d):(\d\d)\.(\d{3}) (\S+) ?(.*)$")
 OUR_HEADER = re.compile(r"\| version (\S+) \| started (\S+) \S+ \| opponent (\S+) \| our class (.+?) \|")
+ROUNDS_FIELD = re.compile(r"\| rounds (raw|alias)\b")
 OUR_KINDS = {"|": "line", "P": "prompt", ">": "sent"}
 
 
@@ -337,8 +339,10 @@ def parse_ours(rows, log):
             if m:
                 log.version, log.date, _, log.our_class = m.groups()
                 log.logger = "Ours, recorder (%s)" % log.our_class
-                # Logs from before the field are raw (kb/raw/logs/README.md).
-                log.rounds = "alias" if text.rstrip().endswith("rounds alias") else "raw"
+                # Logs from before the field are raw (kb/raw/logs/README.md). The field is read wherever it sits: a
+                # Serpent header carries "| serpent attackfirst on|off" too (026_Fight_Log.lua F.start).
+                field = ROUNDS_FIELD.search(text)
+                log.rounds = field.group(1) if field else "raw"
             log.append(Row(i, "note", text))
             continue
         m = OUR_ROW.match(text)
@@ -499,9 +503,12 @@ CURING_REACH = 3
 SHORT_SALVES = ("APPLY MENDING", "APPLY EPIDERMAL", "APPLY CALORIC")
 # The same fight as ours/2026-10-27_112717 up to 11:28:22, so its samples would count twice. It stays parsed and listed.
 # The 2026-11-03 client logs hold that day's recordings; each value names the recording with the most of the fight.
+# The 2026-11-07 screen log is the Serpent spar against Saibel (16:47:12-16:48:40). ours/2026-11-07_164635 records
+# 16:46:41-16:48:40, so it holds the whole screen log.
 SAME_FIGHT = {"2026-10-27_shikudo-group-mhaldor.txt": "2026-10-27_112717_Tabethys.log",
               "2026-11-03_shikudo-group-alias.txt": "2026-11-03_081009_Froedine.log",
-              "2026-11-03_shikudo-group-alias-2.txt": "2026-11-03_102138_Tabethys.log"}
+              "2026-11-03_shikudo-group-alias-2.txt": "2026-11-03_102138_Tabethys.log",
+              "2026-11-07_serpent-spar-saibel.txt": "2026-11-07_164635_Saibel.log"}
 
 
 def clock_samples(log):
@@ -750,6 +757,18 @@ OWN_COSTS = (
     ("Concentrate", None, None, "equilibrium", r"^You begin intense concentration to restore your equilibrium"),
     ("Curseward", None, None, "equilibrium", r"^You bring a curseward into being"),
     ("Colossal fist", None, None, "balance", r"^With a roar you swing a colossal fist"),
+    # Our Serpent seat, from the 2026-11-07 spar (ours/2026-11-07_164635_Saibel; editor lines, 1-based). Each ability
+    # line and its cost line come in one packet: DSTAB lines 359 and 367, the impulse lines 1269 and 1270, its bite
+    # lines 1273 and 1278, the pinshot lines 233 and 235. An IMPULSE with a venom also bites, so its packet has one
+    # equilibrium cost (the impulse) and one balance cost (the bite). All 13 bites in that log came inside an impulse.
+    # We did not see a plain BITE, so we do not know its line or its cost. The one FLAY that landed printed two
+    # first-person lines in one packet (lines 305 and 315, cost line 319). We did not see the line of a FLAY that
+    # strips rebounding or a shield.
+    ("DSTAB", "Subterfuge", "Doublestab", "balance", r"^You quickly prick \S+ with your dirk"),
+    ("BITE", "Venom", "Bite", "balance", r"^You sink your fangs into \S+, injecting "),
+    ("IMPULSE", "Hypnosis", "Impulse", "equilibrium", r"^You craft the impulse of \w+ in the mind of "),
+    ("FLAY", "Subterfuge", "Flay", "balance", r"^(?:You try to flay |With your victim exposed, you crack )"),
+    ("PINSHOT", "Subterfuge", "Pinshot", "balance", r"^Drawing back on your bowstring, you take careful aim at "),
 )
 OWN_COSTS = [(a, b, c, d, re.compile(e)) for a, b, c, d, e in OWN_COSTS]
 USED = re.compile(r"^(Balance|Equilibrium) used: *([\d.]+)")
@@ -992,9 +1011,12 @@ ALIAS_WORD = re.compile(r"(?i)\balias(?:es)?\b|\b" + ROUND_ALIAS + r"\b")
 ALIAS_NORMAL = re.compile(r'^(?:Alias "\S+" will now execute:|You have cleared alias|\[System\]: (?:Running queued|Added|Queued))')
 # What spends a round, for the classes the plan reaches. A class's next log may add words here. mind lock and the rest are
 # setup, because Elmer's alias sends "mind lock X" ahead of its combo (3ys7NuHA row 3496).
+# The Serpent words spend balance (ours/2026-11-07_164635_Saibel). IMPULSE spends equilibrium, and with a venom it also
+# bites. No log has the offence's hypnosis words (hypnotise, suggest, seal, snap), so they stay out.
 SPENDER = re.compile(
     r"^(?:combo\b|mind (?!lock\b|blackout\b|sapience\b|print\b|sense\b|cloak\b|cease\b|net\b)\w+"
-    r"|kai (?:choke|crush|strike)\b|dsl\b|rsl\b|dispatch\b|arc\b|bisect\b|impale\b|disembowel\b|slice\b|rend\b|sketch\b)",
+    r"|kai (?:choke|crush|strike)\b|dsl\b|rsl\b|dispatch\b|arc\b|bisect\b|impale\b|disembowel\b|slice\b|rend\b|sketch\b"
+    r"|dstab\b|flay\b|bite\b|impulse\b|pinshot\b)",
     re.I)
 NOT_SETUP = re.compile(r"^assess\b", re.I)
 # The study's active time: an attack was sent in the last 6 s (w8320bdop, Q5).

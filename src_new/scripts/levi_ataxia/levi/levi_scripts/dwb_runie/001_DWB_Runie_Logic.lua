@@ -705,9 +705,15 @@ function dwbRunie.dispatch()
     return
   end
 
-  -- Anti-serpent: shield on impatience until cured
+  -- Anti-serpent: hold behind the shield on impatience until cured. An attack drops our own
+  -- shield ("Your action causes the nearly invisible magical shield around you to fade away.",
+  -- kb/raw/logs/2026-11-01_elmer_alchemist-vs-serpent_loss_Z5cyffxx.txt:78), so while impatience
+  -- lasts the round sends no attack. With our shield already up (GMCP Char.Defences, deffing/001)
+  -- the round has nothing to add: only the prioaff goes, not a second `touch shield`.
+  -- Attacking through impatience instead is an open strategy question for the user.
   if ataxia.afflictions.impatience and ataxiaNDB_getClass and ataxiaNDB_getClass(target) == "Serpent" then
     send("curing prioaff impatience", false)
+    if ataxia.defences and ataxia.defences.shield then return end
     atk = combatQueue() .. "touch shield"
     dwbRunie.sendAttack(atk)
     return

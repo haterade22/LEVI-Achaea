@@ -61,7 +61,7 @@ ataxia setup weapons         -- Weapon IDs for your class
 ataxia setup basher          -- Flee thresholds, gold pack, shield swap
 ataxia setup sipping         -- Health/mana sip percentages
 ataxia setup tracking        -- Affliction tracking settings
-ataxia setup combat          -- Party relay, auto-loot, gag clot
+ataxia setup combat          -- Party relay, auto-loot, gag clot, Serpent attack first
 ataxia setup gui             -- Toggle the GUI on/off
 ataxia setup ndb             -- City highlight colours, enemy formatting
 ```
@@ -141,7 +141,7 @@ Automated combat for 18+ classes. Each class has its own subdirectory under `src
 
 | Class | Command | Kill Route |
 |-------|---------|------------|
-| Serpent | `ek` | Ekanelia lock, darkshade, scytherus |
+| Serpent | `ek` | Ekanelia lock, darkshade, scytherus. `aconfig serpent attackfirst on\|off` sends the attack as each round's first command (off by default) |
 | Shaman | `zz` | Tzantza, affliction locks, bleed |
 | Blademaster | `bmd`/`bmbs` | Limb prep, brokenstar |
 | Infernal DWC | `zz` | Vivisect, damage kill |
@@ -295,7 +295,7 @@ Or use the "Run Tests" task in VS Code. Tests use `src_new/tests/mock_mudlet.lua
 Two lint checks run in CI beside the tests and are worth running before a push:
 
 ```bash
-python tools/check_orphans.py   # nothing active calls into a disabled script
+python tools/check_orphans.py   # nothing active calls into a disabled script, or a function no file defines
 python tools/check_wrap.py      # no trigger pattern is too wide to match a server-wrapped line
 ```
 

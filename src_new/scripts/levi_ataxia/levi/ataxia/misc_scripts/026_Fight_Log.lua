@@ -30,14 +30,15 @@ packageName: ''
 --   +tar  -tar   our tracker gives the target an affliction / takes one away
 --   #     a note (header, start, stop)
 -- The header ends with "rounds raw" or "rounds alias", the delivery in force when the recording began
--- (`aconfig rounds`). With alias, the `>` rows hold `setalias lvfree a/b/c` and `queue addclear free
--- lvfree`, and we expect the game's run line to name the alias, until the first alias fight confirms it.
+-- (`aconfig rounds`); a Serpent's has "serpent attackfirst on|off" just before it. With alias, the
+-- `>` rows hold `setalias lvfree a/b/c` and `queue addclear free lvfree`, and we expect the game's
+-- run line to name the alias, until the first alias fight confirms it.
 --
 -- When it records:
 --   * Automatically (`fightlog auto on`, the default) when a player attacks us (the class detector's
---     "attacker class detected"), or when we send a queued command ("queue add...") naming our target
---     while that target is a PLAYER in the room. PvE targets are numbers and denizens are not players,
---     so bashing is never recorded.
+--     "attacker class detected"), or when we send a queued command ("queue add...") or a raw attack
+--     (dstab, flay, impulse, bite...) naming our target while that target is a PLAYER in the room. PvE
+--     targets are numbers and denizens are not players, so bashing is never recorded.
 --   * By hand: `fightlog on [name]`.
 -- When it stops: TAIL seconds after a kill, a death or an arena verdict; after `fightlog idle`
 -- seconds (default 60) with nothing naming the opponent (automatic recordings only: one started by
@@ -162,10 +163,21 @@ local function sentText(cmd)
   return ataxia_roundSentText and ataxia_roundSentText(cmd) or cmd
 end
 
--- Should a command we send start a recording? A queued command naming our target, a player here.
+-- The verbs that spend a Serpent's balance (ATTACK_VERBS, serpent/002_Serpent_Offense.lua). A Serpent
+-- round queues only its first piece: in the default order that is `queue addclear freestand purge`,
+-- which names nobody, and the attack goes raw after it (kb/raw/logs/ours/2026-11-07_164635_Saibel.log
+-- rows 277-283: `> queue addclear freestand purge`, then `> flay Saibel rebounding curare`; its header
+-- says "started by hand"). With attack-first on, the queued piece can be `wield shield dirk`. So a raw
+-- attack piece naming the target starts one too.
+local SPENDERS = { dstab = true, doublestab = true, flay = true, impulse = true, bite = true,
+  behead = true, execute = true }
+
+-- Should a command we send start a recording? A queued command, or a raw attack (SPENDERS), naming
+-- our target, a player here. `st X`, `pt target: X`, `say ... X` and `order adder kill X` do not.
 function F.isAttack(cmd)
   if type(cmd) ~= "string" or type(target) ~= "string" or target == "" or tonumber(target) then return false end
-  if not cmd:lower():find("^%s*queue add") then return false end
+  local low = cmd:lower()
+  if not (low:find("^%s*queue add") or SPENDERS[low:match("^%s*(%a+)") or ""]) then return false end
   if not sentText(cmd):lower():find(target:lower(), 1, true) then return false end
   return F.playerHere(target)
 end
@@ -260,8 +272,15 @@ function F.start(opp, reason, auto)
   s.buf[1] = "# LEVI fight log | version " .. tostring(ataxiaVersion) .. " | started "
     .. os.date("%Y-%m-%d %H:%M:%S", math.floor(t)) .. " | opponent " .. tostring(opp)
     .. " | our class " .. tostring(ours) .. " | " .. tostring(reason)
-    -- Last field: tools/fightlog_import.py reads "our class X | why" and keeps the rest with the why.
-    -- The word tells a control fight (raw) from a test fight (alias).
+    -- Serpent only: the attack-first setting changes the order inside a round (the A/B question
+    -- in kb/sim/rules_hand.json attack.cost.own), so the log says which order it holds. It goes
+    -- before the rounds field, which stays last.
+    .. ((tostring(ours):lower() == "serpent")
+      and (" | serpent attackfirst " .. ((ataxia.settings and ataxia.settings.serpentattackfirst) and "on" or "off"))
+      or "")
+    -- Last field: tools/fightlog_import.py reads "our class X | why" and keeps the rest with the why,
+    -- and tools/kb_timing.py reads "| rounds raw|alias". The word tells a control fight (raw) from a
+    -- test fight (alias).
     .. " | rounds " .. (ataxia_roundMode and ataxia_roundMode() or "raw")
   s.buf[2] = "# rows: <time> <kind> <text>. kinds: | line, P prompt, > we sent, +aff/-aff ours (GMCP),"
     .. " +def/-def ours (GMCP), +tar/-tar our tracker on the target, # note"

@@ -46,7 +46,7 @@ patterns:
 ]]--
 
 if isTargeted(matches[3]) then
-  earth_powderiseHit(matches[2])
-  
+  -- earth_powderiseHit removed: 3c312975 deleted it and the tLimbs counter it added to, and the
+  -- call threw before targetIshere was set.
   targetIshere = true
 end

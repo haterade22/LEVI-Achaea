@@ -136,7 +136,10 @@ function ataxia_promptEcho()
 		cecho(" <orange>[<NavajoWhite>"..linelength.." ft<orange>]")
 	end
 	
-	if ataxia_isClass("magi") or ataxia_isClass("bard") then
+	-- No revision of this repo defines limbCounter_promptAddon, so as Magi or Bard this line threw
+	-- and the affliction echo below never ran. The guard lets it run; the prompt echo's one caller,
+	-- in ataxia_promptCommands above, has been commented out as defunct.
+	if limbCounter_promptAddon and (ataxia_isClass("magi") or ataxia_isClass("bard")) then
 		limbCounter_promptAddon()
 	end
 	

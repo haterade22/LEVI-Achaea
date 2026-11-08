@@ -16,6 +16,7 @@ shows is written up in a curated page that cites it.
 | 2026-10-11_mystor_shikudo-vs-infernal-dwc_win_vNTjvghY.txt | Mystor (Shikudo) beats Agathon, Infernal DSL; finished with KAI CHOKE | Mystor's (the Shikudo); he ran MIND SAPIENCE on the opponent in five of six | [combat/shikudo.md](../../combat/shikudo.md) |
 | 2026-11-03_shikudo-group-alias-2.txt | The same day, 10:21-10:26, the same party, on v4.7.471. We died to two Depthswalkers. It holds `ours/2026-11-03_102138_Tabethys` and about 100 s after it, so `kb_timing.SAME_FIGHT` keeps it out of every count. It holds other players' tells; the user chose to file it | Ours, screen log | [combat/shikudo.md](../../combat/shikudo.md), [docs/kill-paths.md](../../../docs/kill-paths.md) |
 | 2026-11-03_shikudo-group-alias.txt | Our first alias-round fight with people attacking: a party led by Tabethys, 07:56-08:22, with no death for us. It holds the three recordings `ours/2026-11-03_080944_Lauryyn`, `081009_Froedine` and `081532_Tabethys`, so `kb_timing.SAME_FIGHT` keeps it out of every count. It holds other players' tells; the user chose to file it | Ours, screen log, with the echoes that a recording leaves out | [mechanics/balance-and-queueing.md](../../mechanics/balance-and-queueing.md), [combat/shikudo.md](../../combat/shikudo.md) |
+| 2026-11-07_serpent-spar-saibel.txt | A spar on v4.7.478, 16:47:12-16:48:40: we are a Serpent, raw rounds (`zz`, then `sr` from the `say lol what` on), against Saibel, who only cured and never attacked. No death and no kill. The recording `ours/2026-11-07_164635_Saibel` holds all of it, so `kb_timing.SAME_FIGHT` keeps it out of every count. It shows the package's echoes that the recording leaves out: `(((( BALANCE: x ))))`, `[V3] States reset`, `[ClassDetect]`, and the typed `zz` and `sr`. It is from OUR seat, so it gives inputs about our seat only: Saibel's eat recovery is never printed | Ours, screen log | [.claude/classes/serpent.md](../../../.claude/classes/serpent.md), [sim/rules.md](../../sim/rules.md) (`attack.cost.own.*`, `attack.gap.own`) |
 | 2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt | Tabethys (Magi) leads a group (Agathon, Ryzant, Valkael, Naxx) on the World Tree and kills Kalys, a Serpent, with STORMHAMMER at about 50% health: magma, dehydrate, dehydrate, then two stormhammers | Tabethys's (the Magi) | [.claude/classes/magi.md](../../../.claude/classes/magi.md) ("In play"), `kb/CONFLICTS.md` Resolved 2026-10-19, #37 and #38 |
 
 ## How they were made
@@ -151,18 +152,22 @@ Each row is `<HH:MM:SS.mmm> <kind> <text>`, so unlike a client log every row has
 | `+aff` / `-aff` | an affliction we gained or lost, from GMCP |
 | `+def` / `-def` | a defence we gained or lost, from GMCP |
 | `+tar` / `-tar` | an affliction our tracker gave the target or took away (its "tar afflicted" and "target cured aff" events), so what we believed can be checked against the lines |
-| `#` | a note: the header (version, opponent, our class, why it started, round delivery) and the stop line (why, rows, seconds) |
+| `#` | a note: the header (version, opponent, our class, why it started, a Serpent's attack-first setting, round delivery) and the stop line (why, rows, seconds) |
 
 Lines the package echoes itself (`(LEVI): ...`) are not recorded, because echoes do not reach triggers.
 
 **Round delivery.** The header ends with `rounds raw` or `rounds alias`, so a control fight can be told from a test
-fight. Logs from before that field are `raw`. With `alias` (`aconfig rounds alias`, Monk only),
+fight. Logs from before that field are `raw`. A Serpent's header has ` | serpent attackfirst on` or `off` just before it
+(`aconfig serpent attackfirst`, `026_Fight_Log.lua`:276-284), and no filed log has that field yet. `rounds` stays the last
+field, and `tools/kb_timing.py` reads it wherever it sits (`ROUNDS_FIELD`, :329). With `alias` (`aconfig rounds alias`, Monk only),
 the `>` rows hold `setalias lvfree a/b/c` when the text changes and `queue addclear free lvfree` for each press. A
 `# alias lvfree holds: ...` row after the header gives the text at the start. We expect the game's run line to name the
 alias: `Running queued free command: LVFREE` (first seen 2026-11-02).
 
 When it records: on its own when a player attacks us (the class detector's event), or when we send
-a queued command naming our target while that target is a player in the room; by hand with
+a queued command or a raw attack (dstab, doublestab, flay, impulse, bite, behead, execute) naming our target while
+that target is a player in the room. A Serpent round queues only `purge`, or the wield with attack-first on, and sends the
+attack raw (`ours/2026-11-07_164635_Saibel.log`:277-283). By hand with
 `fightlog on [name]`. It stops 3 s after a kill, our death or an arena verdict, after 60 s with
 nothing naming the opponent (automatic recordings only), at 50,000 rows, on disconnect, or with
 `fightlog off`.

@@ -46,7 +46,7 @@ The GUI system (zGUI Redux) was originally created by **Zulah**. It has been enh
 
 | Class | Command | Kill Route |
 |-------|---------|------------|
-| Serpent | `ek` | Ekanelia lock, darkshade, scytherus, hypnosis |
+| Serpent | `ek` | Ekanelia lock, darkshade, scytherus, hypnosis. No recklessness before the target is locked; EXECUTE only on a prone, truelocked target, with the whip; the death adder is ordered only when it is out; `aconfig serpent attackfirst on\|off` sends the attack as each round's first command (off by default) |
 | Shaman | `zz` | Tzantza, affliction locks, bleed, relapse jinx |
 | Blademaster | `bmd`/`bmbs` | Limb prep, brokenstar, lightning/ice |
 | Infernal DWC | `zz` | Vivisect (4-limb / 2-limb), damage kill, riftlock |
@@ -393,7 +393,9 @@ Branches are resolved by **verification signals** — observable in-game events 
 | Target fumbles | Clumsiness present | `collapseAffPresentV3("clumsiness")` |
 | Target vomits | Nausea present | `collapseAffPresentV3("nausea")` |
 | Target smokes | Asthma absent | `collapseAffAbsentV3("asthma")` |
-| Target applies salve | Slickness absent | `collapseAffAbsentV3("slickness")` |
+| Target applies salve | Slickness absent | `proveAffAbsentV3("slickness", "salve")` |
+| Target uses the tree | Paralysis absent | `proveAffAbsentV3("paralysis")` |
+| Target focuses | Impatience absent | `collapseAffAbsentV3("impatience")` |
 | Target stumbles | Dizziness present | `collapseAffPresentV3("dizziness")` |
 | Target has seizure | Epilepsy present | `collapseAffPresentV3("epilepsy")` |
 | Target paralysis fires | Paralysis present | `collapseAffPresentV3("paralysis")` |
@@ -414,6 +416,8 @@ After:
 ```
 
 This is mathematically equivalent to Bayesian updating — each observation narrows the probability distribution.
+
+A cure line is a fact, so nothing puts a cured affliction back. If no later signal comes, the branches stay as they are.
 
 ### Querying Affliction State
 
@@ -442,9 +446,9 @@ Without constraints, branches would grow exponentially. Three mechanisms prevent
 
 1. **Deduplication**: After branching, identical affliction sets (same affs, different histories) are merged by summing their probabilities. This is the primary reduction — most cures produce duplicate states.
 
-2. **Pruning**: Branches below 1% probability are eliminated and their probability mass is redistributed proportionally to surviving branches.
+2. **Pruning**: Branches below 1% probability are eliminated and their probability mass is redistributed proportionally to surviving branches. When every branch is below 1%, all of them are kept: the tracker is never emptied by a prune.
 
-3. **Hard cap**: If branches exceed 50 (configurable), the lowest-probability branches are dropped and probability is redistributed.
+3. **Hard cap**: If branches exceed 300 (`affConfigV3.maxStates`), the lowest-probability branches are dropped and probability is redistributed. It holds the boards a fight can build, such as ten afflictions after three cures (120 branches), whole.
 
 All queries use a **pre-computed cache** (`affCacheV3`) rebuilt after every state change, providing O(1) lookups regardless of branch count.
 
@@ -758,7 +762,7 @@ After installing, `ataxia setup guide` shows every configurable option across al
 
 | Command | Section |
 |---------|---------|
-| `ataxia setup guide ataxia` | Separator, system toggle, custom prompt, defence profiles, curing priorities, item highlighting, sipping, room shortening, GUI, raid mode |
+| `ataxia setup guide ataxia` | Separator, system toggle, custom prompt, defence profiles, curing priorities, item highlighting, sipping, room shortening, GUI, raid mode, round delivery, Serpent attack first (`aconfig serpent attackfirst on\|off`) |
 | `ataxia setup guide basher` | Target lists, flee/shield thresholds, danger mobs, ignore lists, gold pack, shield swap/timer, rageraze, tree blackout |
 | `ataxia setup guide ndb` | City highlight colours, highlight toggle/priority, enemy formatting, player notes, whois lookup |
 
@@ -773,7 +777,7 @@ After installing, `ataxia setup guide` shows every configurable option across al
 | `ataxia setup basher` | Basher settings |
 | `ataxia setup sipping` | Health/mana sip thresholds |
 | `ataxia setup tracking` | Affliction tracking settings |
-| `ataxia setup combat` | Combat toggles (party relay, looting, etc.) |
+| `ataxia setup combat` | Combat toggles (party relay, looting, screen width, see balances, round delivery, Serpent attack first, etc.) |
 | `ataxia setup gui` | Toggle the GUI |
 | `ataxia setup ndb` | NDB highlighting colours |
 | `ataxia setup status` | Overview of all current settings |

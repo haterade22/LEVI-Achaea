@@ -156,6 +156,15 @@ if type(target) == "number" and ataxiaBasher.enabled then
 			deleteFull()
 		end
 	end
+elseif line:find("^You flay away .+'s shield defence") or line:find("^You try to flay a non%-existent shield from ") then
+	-- Our Serpent FLAY of a shield. It takes the shield, and the sileris coating with it
+	-- (kb/sim/rules.md attack.flay.coating; 706 reads that), but never the rebounding
+	-- (kb/sim/rules.md attack.flay; the victim's seat in
+	-- kb/raw/logs/2026-11-01_claes_runewarden-vs-serpent_loss_azbErKcK.txt: shield flayed at 2235,
+	-- coating ripped at 2236, rebounding still up until 2264). Erasing rebounding here sent the next
+	-- round into it.
+	-- serpent/003_Shield_Down owns these lines for a player target (target-checked); erasing the
+	-- shield here too would also erase it when the flay named someone else.
 else
 	erAff("rebounding")
 	erAff("shield")

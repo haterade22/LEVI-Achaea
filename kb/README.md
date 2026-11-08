@@ -90,15 +90,27 @@ first time material for them arrives.
    [sim/forward.md](sim/forward.md). It goes stale when a Serpent log adds a board, or when a clock median moves by 0.01 s. CI runs the check. It
    needs `lupa`, and it runs on the Lua 5.1 inside it. If `test_kb_sim.py` fails on the gap inputs, copy the new DSTAB numbers from `clocks.md` into `kb_sim.py` and run it again.
 7. Run **`python tools/kb_rules.py --check`**. If it prints STALE, run `python tools/kb_rules.py`: a new log moved a clock in
-   `clocks.json`, so [sim/rules.md](sim/rules.md) changes. Then run `python -B tools/test_theorycraft.py`. If its golden text
+   `clocks.json`, or a file the rules read changed (`rules_hand.json`, `afflictions.json`, `venoms.yaml`, the default priorities,
+   `001_Miscellaneous_Aff_Tracking_Methods.lua`, `008_V3_Integration.lua`, `003_Lock_breakers.lua`), so [sim/rules.md](sim/rules.md) changes. Then run `python -B tools/test_theorycraft.py`. If its golden text
    fails because a clock moved, read the new text of the example, then paste it into the test. Never change
    `tools/sim/gates_whole.json` to pass. `python tools/kb_events.py --check` reads only the four frozen Serpent logs, so a new
-   log does not make it STALE. The next Serpent log is scored once against the frozen bars before any refit.
+   log does not make it STALE. The next Serpent log from a VICTIM's seat is scored once against the frozen bars before any refit
+   (see "A log from our own seat" below).
 
 The HTML exports are git-ignored. The text files are the evidence. Our own recordings use a separate
 tool: `python tools/fightlog_import.py` copies `<profile>/fightlogs/` into `kb/raw/logs/ours/`. In an `aconfig rounds alias` fight its
 "commands we sent" row counts alias rewrites, and in a raw fight it counts presses. Add `--score` to print the round
 delivery pass bars beside each log's numbers. Run steps 4 and 5 after this too.
+
+**A log from our own seat is not the holdout.** The 2026-11-07 Serpent spar is one fight in two files:
+`raw/logs/ours/2026-11-07_164635_Saibel.log` (the recording) and `raw/logs/2026-11-07_serpent-spar-saibel.txt` (the screen
+log, with the echoes the recording leaves out; `kb_timing.SAME_FIGHT` keeps it out of every count). We attacked and Saibel
+only cured, so it gives inputs about OUR seat: our own costs and round ([sim/rules.md](sim/rules.md), `attack.cost.own.*`,
+`attack.gap.own`), the IMPULSE bite, and what her third-person lines show (potash on its own clock, CONFLICTS Resolved
+2026-11-07). The user decided that no Saibel number becomes a victim default (`ssc.delay.gain.Saibel` is an alternative
+only), and that the gates' holdout waits for the next log from a victim's seat. `tools/sim/gates_whole.json` is unchanged:
+its note still says "the spar included", and this decision overrides it. The gate rows G1-G5 in
+[mechanics/replay.md](mechanics/replay.md) did not change.
 
 ### Capturing straight from the game (`kbcapture`)
 

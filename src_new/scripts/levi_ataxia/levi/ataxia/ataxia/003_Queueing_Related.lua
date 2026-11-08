@@ -73,7 +73,9 @@ function combatQueue()
 		end
 	end
 
-	if tChaseTimer and not targetIshere then
+	-- A nil dir_left passes every test below and throws at the concatenation, and the round is lost.
+	-- With no direction there is no chase piece: the round goes out without one.
+	if tChaseTimer and not targetIshere and dir_left then
       if dir_left ~= "fly" and dir_left ~= "ether" and dir_left ~= "forcefly" then
 			t = t..dir_left..sp
 		elseif dir_left == "forcefly" and not affed("tension") then
@@ -103,7 +105,8 @@ function depthswalkerQueue()
 		end
 	end
 
-	if tChaseTimer and not targetIshere then
+	-- As in combatQueue: a nil dir_left has no chase piece, and the round still goes out.
+	if tChaseTimer and not targetIshere and dir_left then
 		if dir_left ~= "fly" and dir_left ~= "ether" and dir_left ~= "forcefly" then
 			t = t..dir_left..sp
 		elseif dir_left == "forcefly" and not affed("tension") then

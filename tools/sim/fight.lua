@@ -15,6 +15,12 @@
 -- and true labels, and "sileris.unhardened" (an apply that slickness stopped), so kb_events.census() of a run has the
 -- keys give, hypochondria, soft, true and sileris.unhardened (review ENG-2).
 -- One attack name is the engine's own too: "flay", a FLAY that strips nothing and cannot whip (attackers.lua A.lines).
+-- So is one part: "reaction", a reaction that fired, with the venom in its args. An IMPULSE is the attack "bite" with
+-- the part "gaze.command" (kind hypnosis) for its suggestion, kb_events' name for the line that came with each of the
+-- 22 BITEs in the four victim-seat logs (az 1238-1242, Z5 534-537, X 293-296). A cure event carries "ssc", the case of
+-- the SSC delay before it (victim.lua V.delay: "gain" or "return"). A FLAY's attack event carries "coatUp", whether
+-- the sileris coating was up as it struck (tools/theorycraft.py flay_lines: only then does rule attack.flay.missing
+-- decide anything).
 -- Every number comes from the rules table (kb/sim/rules.json); a run is a MODEL, not a log.
 
 local F = {}
@@ -35,7 +41,7 @@ end
 -- they did the same thing.
 -- A new stream goes at the end, so the others keep their seeds.
 local STREAMS = { "attacker", "eat", "smoke", "salve", "focus", "tree", "pick", "class", "ssc", "dagaz", "shield",
-                  "sileris" }
+                  "sileris", "attackerEq" }
 local MOD = 2147483647
 
 -- a * b mod MOD, exact in doubles: b is split into 16-bit halves, so no product passes 2^47.
@@ -70,7 +76,10 @@ local READY = { "eat", "smoke", "salve", "focus", "tree", "class", "bal", "eq" }
 local CLASS_NAME = { fitness = "fitness", salt = "salt", accelerate = "accelerate" }
 
 local function newState(start, model)
-  local s = { affs = {}, ready = {}, down = {}, defs = {}, pending = {}, soft = false, tru = false }
+  -- waiting: a channel that was shut at the last moment with an affliction for it (curing, the SSC delay's case).
+  -- pendingCase: the case of each pending action's delay. attEq: when the attacker's equilibrium is back (an IMPULSE).
+  local s = { affs = {}, ready = {}, down = {}, defs = {}, pending = {}, soft = false, tru = false, waiting = {},
+              pendingCase = {}, attEq = start.attackerEq or start.t0 }
   for i = 1, #(start.affs or {}) do s.affs[start.affs[i]] = true end
   for _, name in ipairs(READY) do
     local at = start.ready and start.ready[name] or start.t0
@@ -125,9 +134,10 @@ local function emit(out, s, model, env, t, side, kind, name, args, extra)
   return ev
 end
 
-local function landedEvents(out, s, model, env, t, landed, by)
+-- byOf: what brought each affliction ("impulse", "bite", "reaction"), from A.apply; by is the default.
+local function landedEvents(out, s, model, env, t, landed, by, byOf)
   for i = 1, #landed do
-    emit(out, s, model, env, t, "V", "gain", landed[i], nil, { by = by })
+    emit(out, s, model, env, t, "V", "gain", landed[i], nil, { by = (byOf and byOf[landed[i]]) or by })
     if landed[i] == "hypochondria" then s.chain = { at = t, step = 1 } end
   end
 end
@@ -192,6 +202,19 @@ local function timed(out, s, model, env, st, t)
   end
 end
 
+-- The gap after an action of this kind: env.gaps[kind] when the run gives one (tools/theorycraft.py --gap queue), else
+-- env.gap.
+local function gapOf(env, kind)
+  return (env.gaps and env.gaps[kind]) or env.gap
+end
+
+-- When the next action runs: at `at`, or later when it is an IMPULSE and the attacker's equilibrium is not back.
+local function nextAt(s, script, at)
+  local nxt = script[s.index]
+  if nxt and nxt.kind == "impulse" and s.attEq > at then return s.attEq end
+  return at
+end
+
 local function attack(out, s, model, env, st, t, script)
   if not s.nextAct or t < s.nextAct then return end
   local act = script[s.index]
@@ -204,31 +227,42 @@ local function attack(out, s, model, env, st, t, script)
   local eatPhase = s.ready.eat - t
   local eatDown = t < s.ready.eat
   if act.kind == "wait" then
-    s.nextAct = t + act.seconds
+    s.nextAct = nextAt(s, script, t + act.seconds)
   elseif act.kind == "give" then
     local result, landed, coat = A.apply(s, act, model)
     local ev = emit(out, s, model, env, t, "W", "give", "give", act.affs, { result = result, landed = landed, text = act.text })
     if coat then emit(out, s, model, env, t, "V", "defence", "sileris.down") end
     landedEvents(out, s, model, env, t, landed, "give")
-    s.nextAct = t + F.gapDraw(env.gap, env, st)
+    s.nextAct = nextAt(s, script, t + F.gapDraw(gapOf(env, "give"), env, st))
     ev.next = s.nextAct
   else
-    local result, landed, coat = A.apply(s, act, model)
-    local name, parts = A.lines(act, result, s, coat)
+    -- Read before A.apply, which can strip it.
+    local coatUp = s.defs.sileris
+    local result, landed, coat, info = A.apply(s, act, model)
+    local name, parts = A.lines(act, result, s, coat, info)
+    local extra = { action = act.kind, result = result, landed = landed, phase = eatKnown and eatPhase or nil,
+                    down = eatDown, text = act.text }
+    if act.kind == "flay" then extra.coatUp = coatUp and true or false end
+    if act.kind == "impulse" then
+      -- The impulse spends the attacker's equilibrium whatever the bite met (rule attack.cost.own.impulse_eq).
+      if not (model.attacker and model.attacker.impulseEq) then
+        error("fight.lua: an impulse needs model.attacker.impulseEq (rule attack.cost.own.impulse_eq)")
+      end
+      s.attEq = t + V.clock(model.attacker.impulseEq, env, st.attackerEq)
+      extra.eqBack = s.attEq
+      extra.suggestion = act.suggestion
+    end
     -- down: the eat is down at the strike, the sign of a PHASE of 0 (kb_events.signed; review LUA-N2-10).
-    local ev = emit(out, s, model, env, t, "A", "attack", name, act.venoms, {
-      action = act.kind, result = result, landed = landed, phase = eatKnown and eatPhase or nil, down = eatDown,
-      text = act.text })
+    local ev = emit(out, s, model, env, t, "A", "attack", name, act.venoms, extra)
     local index = #out.events
     for i = 1, #parts do
-      emit(out, s, model, env, t, parts[i].side, parts[i].kind, parts[i].name, nil, { part = true })
+      emit(out, s, model, env, t, parts[i].side, parts[i].kind, parts[i].name, parts[i].args, { part = true })
     end
     -- act: the action's number in the script (a wait and a give count too), so a race reads "RACE 1->3".
     out.strikes[#out.strikes + 1] = { t = t, name = name, kind = act.kind, phase = eatPhase, eatDown = eatDown,
                                       eatKnown = eatKnown, index = index, act = s.index - 1 }
-    landedEvents(out, s, model, env, t, landed, act.kind)
-    local gap = (env.gaps and env.gaps[act.kind]) or env.gap
-    s.nextAct = t + F.gapDraw(gap, env, st)
+    landedEvents(out, s, model, env, t, landed, act.kind, info and info.by)
+    s.nextAct = nextAt(s, script, t + F.gapDraw(gapOf(env, act.kind), env, st))
     ev.next = s.nextAct
   end
   -- The eat down at this action: if it is the last action that runs, the run holds until that eat comes back.
@@ -240,7 +274,7 @@ local function attack(out, s, model, env, st, t, script)
   end
 end
 
-local function act(out, s, model, env, st, t, ch)
+local function act(out, s, model, env, st, t, ch, case)
   local target = V.target(s, ch, model, env, st)
   if not target then return false end
   local cured, item, raised = V.act(s, ch, target, t, model, env, st)
@@ -257,26 +291,47 @@ local function act(out, s, model, env, st, t, ch)
   elseif ch == "salve" or ch == "smoke" then
     args = { item or "" }
   end
-  emit(out, s, model, env, t, "V", kind, name, args, { item = item })
+  emit(out, s, model, env, t, "V", kind, name, args, { item = item, ssc = case })
   if raised then return true end
   for i = 1, #cured do emit(out, s, model, env, t, "V", "lose", cured[i], nil, { by = name }) end
   return true
 end
 
+-- An empty draw table: V.target with it asks whether a channel has a target, and draws nothing.
+local NODRAW = {}
+
+-- Does the channel have something to act on now? Its shut state does not matter here.
+local function hasTarget(s, ch, model, env)
+  return V.target(s, ch, model, env, NODRAW) ~= nil
+end
+
 -- Server-side curing: an open channel with something to do acts after the reaction delay. The target is picked
 -- again when it acts, so an affliction that lands during the delay can take the action.
+-- The delay has two cases (victim.lua V.delay), split as kb/sim/events.json splits a log's eats by its 'down' flag.
+-- "return": the channel was shut at the last moment with an affliction for it (its clock was down, or an affliction
+-- shut it), so the affliction waited for the channel. "gain": the affliction is new at this moment. It landed on an open
+-- channel, or it landed at the moment the channel came back, as a log's return line before the strike line in one packet
+-- (kb_events.phase_at: down false). A channel that an affliction shut is a "return" when that blocker goes; no log
+-- measures that case (rule ssc.delay.return).
 local function curing(out, s, model, env, st, t)
   for _, ch in ipairs(V.CHANNELS) do
     local due = s.pending[ch]
     if due and t >= due then
-      s.pending[ch] = nil
-      if not V.shut(s, ch, model, t) then act(out, s, model, env, st, t, ch) end
+      local case = s.pendingCase[ch]
+      s.pending[ch], s.pendingCase[ch] = nil, nil
+      if not V.shut(s, ch, model, t) then act(out, s, model, env, st, t, ch, case) end
     end
   end
   for _, ch in ipairs(V.CHANNELS) do
-    if not s.pending[ch] and (ch ~= "class" or model.classcure) and not V.shut(s, ch, model, t)
-        and V.target(s, ch, model, env, st) then
-      s.pending[ch] = t + V.delay(model, env, st.ssc)
+    if ch ~= "class" or model.classcure then
+      local shut = V.shut(s, ch, model, t)
+      local has = hasTarget(s, ch, model, env)
+      if has and not shut and not s.pending[ch] then
+        local case = s.waiting[ch] and "return" or "gain"
+        s.pending[ch] = t + V.delay(model, env, st.ssc, case)
+        s.pendingCase[ch] = case
+      end
+      s.waiting[ch] = (has and shut) and true or false
     end
   end
   -- A victim that keeps a shield raises it again after a FLAY strips it: a delay drawn from the logs (rule
@@ -350,14 +405,18 @@ end
 ---                  drawn from the part of the clock above the time already run (V.clockAfter; "class" is the class
 ---                  cure's lockout). One whose longest draw has run out comes back at t0, with its line.
 ---   firstFrom      the log's last attack; the first action comes one gap after it, drawn as every other gap.
+---   firstGap       the median of that gap: the gap after the kind of the log's last attack (a FLAY's under a per-kind
+---                  --gap preset), else env.gap.
 ---   shieldFrom     the log's FLAY of the shield; the victim raises it again one re-raise delay later (review LUA-N2-5).
 ---                  A shield down at the start with no shieldFrom stays down: only a FLAY starts a re-raise.
 ---   reboundingFrom the log's smoke for rebounding; the aura comes up one clock.rebounding later.
 ---   silerisFrom    the log's apply of the coating; it hardens one defence.sileris.harden later (review R3-fork-8).
 ---                  The engine never applies the coating itself.
 --- None of them is ever before t0. out.startReady holds the clocks as the run starts, after those draws.
+---   attackerEq     when the attacker's equilibrium is back (an IMPULSE needs it); t0 when not given.
 --- env = { median, clockDraw, gap, gapSd, gapFloor, gaps, defences = { shield, rebounding }, tree, treePick, tail,
----         horizon, snap, src, rowBase }. Returns { events, strikes, races, softAt, trueAt, stopAt, firstAt, notRun,
+---         horizon, snap, src, rowBase }. gaps: the gap after each kind of action (dstab, bite, impulse, flay, give),
+---         where it is not env.gap. Returns { events, strikes, races, softAt, trueAt, stopAt, firstAt, notRun,
 ---         hold, affs }. notRun counts the script's actions the horizon cut off; hold is the time the run then holds to
 ---         (the eat down at the last action that ran), or nil.
 --- With no start.dagazNext, a Runewarden's first Dagaz tick is drawn uniformly over one period (rule
@@ -391,14 +450,21 @@ function F.run(start, script, model, env, seed)
     s.silerisAt = math.max(start.t0, start.silerisFrom + V.clockAfter(model.sileris.harden, env, st.sileris,
                                                                       start.t0 - start.silerisFrom))
   end
+  -- A channel down or shut at the start, with an affliction for it, has that affliction waiting (curing: "return").
+  for _, ch in ipairs(V.CHANNELS) do
+    if ch ~= "class" or model.classcure then
+      local shut = s.down[ch] or V.shut(s, ch, model, start.t0) ~= nil
+      s.waiting[ch] = (shut and hasTarget(s, ch, model, env)) and true or false
+    end
+  end
   local out = { events = {}, strikes = {}, startReady = {} }
   for _, name in ipairs(READY) do out.startReady[name] = s.ready[name] end
   local t = start.t0
   s.index = 1
   if start.firstFrom then
-    s.nextAct = math.max(start.t0, start.firstFrom + F.gapDraw(env.gap, env, st))
+    s.nextAct = nextAt(s, script, math.max(start.t0, start.firstFrom + F.gapDraw(start.firstGap or env.gap, env, st)))
   else
-    s.nextAct = start.firstAt or start.t0
+    s.nextAct = nextAt(s, script, start.firstAt or start.t0)
   end
   out.firstAt = s.nextAct
   local horizon = start.t0 + (env.horizon or 60)

@@ -1,0 +1,1187 @@
+blood here. Commandant Saibel Aristata is here, hidden. Her features are obscured by a red wyvern mask. She wields Agith'maal's ire in her left hand and a sable shield webbed in silver damascene in her right.  You see a sign indicating there are WARES for sale here.
+You see exits leading east (closed door) and down (closed door).
+(1) person here: Saibel.
+16:47:12:471 [8413] [98] |(Sabil)|[ [ ]]  
+
+(LEVI): [V3] States resett sabibel
+
+(LEVI): Target acquired. Focusing fire on Sabibel!unally Sabibel;enemy Sabibel;st Sabibel
+settarget Sabibel
+
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): [V3] States resetpt target: Sabibel
+I don't recognise that name as one of an existing adventurer.
+16:47:14:201 [8413] [98] |(Sabibel)|[ [ ]]  
+I don't recognise that name as one of an existing adventurer.
+16:47:14:293 [8413] [98] |(Sabibel)|[ [ ]]  
+Your target is now: Sabibel (a denizen)
+16:47:14:301 [8413] [98] |(Sabibel)|[ [ ]]  
+Your target is now: Sabibel (a denizen)
+16:47:14:304 [8413] [98] |(Sabibel)|[ [ ]]  zz
+
+[Levi]: Strategy: lock[tAffs]: SIL FNG 
+
+[Levi]: Target not in room!t saibel
+
+(LEVI): Target acquired. Focusing fire on Saibel!unally Saibel;enemy Saibel;st Saibel
+settarget Saibel
+
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): [V3] States resetcuringset switch depthswalker
+curing priority defence list reset
+curing priority defence nightsight 25 ghost 25 groundwatch 25 lipreading 25 venom 25 levitation 25 frost 25 blindness 25 selfishness 25 speed 25 coldresist 25 boartattoo 25 cloak 25 electricresist 25 weaving 25 mindseye 25 deathsight 25 kola 25 scales 25 caloric 25 lifevision 25 mass 25 thirdeye 25 fireresist 25 moontattoo 25 deafness 25 fangbarrier 25 mosstattoo 25 magicresist 25 
+
+[ClassDetect]: Switched curingset to: depthswalker (vs Depthswalker)pt target: Saibel
+Saibel is not currently an ally.
+16:47:19:050 [8413] [100] |(Saibel)|[ [ ]]  
+Saibel is already an enemy.
+16:47:19:134 [8413] [100] |(Saibel)|[ [ ]]  
+Your target is now: Saibel (an adventurer)
+16:47:19:143 [8413] [100] |(Saibel)|[ [ ]]  
+Your target is now: Saibel (an adventurer)
+16:47:19:152 [8413] [100] |(Saibel)|[ [ ]]  
+You will now cure using the depthswalker set.
+16:47:19:159 [8413] [100] |(Saibel)|[ [ ]]  
+All your defence priorities have been reset to defaults.
+16:47:19:170 [8413] [100] |(Saibel)|[ [ ]]  zz
+
+[Levi]: Strategy: lock[tAffs]: SIL FNG 
+queue addclear freestand dispel Saibel;remove bow;wield bow;pinshot Saibel foot;wield shield dirk;purge;order adder kill Saibel;g body;g gold;stand;wield shield whip;flay Saibel rebounding curare
+You point a finger at Saibel to dispel all her illusions.
+16:47:20:122 [8413] [99] |(Saibel)|[ [ ]]  
+You remove a Lupine bow.
+16:47:20:219 [8413] [99] |(Saibel)|[ [ ]]  
+You start to wield a Lupine bow in your hands.
+16:47:20:225 [8413] [99] |(Saibel)|[ [ ]]  
+
+- ( def hiding ) -
+Drawing back on your bowstring, you take careful aim at Saibel and let fly an arrow.
+Your arrow slams into the foot of Saibel.
+
+ ------------------------------------------------- 
+|     SAIBEL PINSHOT !!! | SAIBEL PINSHOT !!!     |
+ ------------------------------------------------- 
+
+Balance used: 1.8s.
+16:47:20:231 [8413] [99] |(Saibel)|[ [ ]]  
+
+[PINSHOT]: hindered movement on Saibel for 21 seconds...
+(((((((((((((((((((( BALANCE: 1.736 ))))))))))))))))))))
+You cease to wield a Lupine bow.
+You start to wield a Shield of Absorption in your left hand.
+You start to wield Thoth's fang in your right hand.
+I do not recognise anything called that here.
+You start to wield Elentari's Scourge in your right hand.
+16:47:21:985 [8413] [99] |(Saibel)|[ [ ]]  zz
+
+[Levi]: Strategy: lock[tAffs]: SIL FNG 
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield whip;flay Saibel rebounding curare
+You detect nothing here by that name.
+16:47:22:395 [8413] [99] |(Saibel)|[ [ ]]  
+You secrete curare and deftly bring Elentari's Scourge to your mouth, letting the venom drip upon it.
+You try to flay a non-existent aura of rebounding from Saibel.
+The protective coating covering the skin of Saibel is ripped away with their protections.
+[PAR] With your victim exposed, you crack Elentari's Scourge back for a second assault.
+pt Saibel: Rebounding Down
+pt Saibel: Shield Down
+pt Saibel: paralysis
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.7s.
+16:47:22:414 [8413] [99] |(Saibel)|[ [ ]]  
+Saibel eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+16:47:22:421 [8413] [99] |(Saibel)|[ [ ]]  
+
+(LEVI): [V3] States reset
+(((((((((((((((((((( BALANCE: 1.521 ))))))))))))))))))))
+zz
+
+[Levi]: Strategy: lock[tAffs]: none
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;dstab Saibel curare eurypteria
+You detect nothing here by that name.
+16:47:24:157 [8413] [99] |(Saibel)|[ [ ]]  
+You start to wield Thoth's fang in your right hand.
+16:47:24:183 [8413] [99] |(Saibel)|[ [ ]]  
+You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You secrete eurypteria and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You quickly prick Saibel with your dirk.
+[PAR] [REC] Striking like a snake, you prick Saibel a second time with your dirk.
+pt Saibel: paralysis recklessness
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.8s.
+16:47:24:188 [8413] [99] |(Saibel)|[ [ ]]  zz
+Saibel eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+A look of extreme focus crosses the face of Saibel.
+(LEVI): [V3] Focus used - branched to 1 states
+16:47:24:244 [8413] [99] |(Saibel)|[ [ ]]  zz
+zz
+(((((((((((((((((((( BALANCE: 1.669 ))))))))))))))))))))
+zz
+
+[Levi]: Strategy: lock[tAffs]: none
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;dstab Saibel curare eurypteria
+I do not recognise anything called that here.
+16:47:26:059 [8413] [98] |(Saibel)|[ [ ]]  
+You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You secrete eurypteria and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You quickly prick Saibel with your dirk.
+[PAR] [REC] Striking like a snake, you prick Saibel a second time with your dirk.
+pt Saibel: paralysis recklessness
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.8s.
+16:47:26:092 [8413] [98] |(Saibel)|[ [ ]]  
+Saibel eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+Saibel takes a drink from an elegant diamond vial.
+Saibel eats a potash crystal.
+16:47:26:102 [8413] [98] |(Saibel)|[ [ ]]  zz
+
+[PINSHOT]: hindered movement on Saibel for 15 seconds...
+Saibel touches a tree of life tattoo.
+(LEVI): [V3] Tree used - branched to 1 states
+16:47:26:297 [8413] [98] |(Saibel)|[ [ ]]  
+
+[TREE]: tree down on Saibel for 14 seconds...
+zz
+zz
+zz
+zz
+(((((((((((((((((((( BALANCE: 1.613 ))))))))))))))))))))
+zz
+
+[Levi]: Strategy: lock[tAffs]: RCK 
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;dstab Saibel curare xentio
+Nothing can be seen here by that name.
+16:47:28:104 [8413] [100] |(Saibel)|[ [ ]]  
+You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You secrete xentio and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You quickly prick Saibel with your dirk.
+[PAR] [CLU] Striking like a snake, you prick Saibel a second time with your dirk.
+pt Saibel: paralysis clumsiness
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.8s.
+16:47:28:149 [8413] [100] |(Saibel)|[ [ ]]  zz
+Saibel eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+16:47:28:212 [8413] [100] |(Saibel)|[ [ ]]  zz
+zz
+zz
+(((((((((((((((((((( BALANCE: 1.553 ))))))))))))))))))))
+zz
+
+[Levi]: Strategy: lock[tAffs]: CLU RCK 
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;dstab Saibel curare kalmia
+Nothing can be seen here by that name.
+16:47:29:885 [8413] [99] |(Saibel)|[ [ ]]  
+Saibel eats an aurum flake.
+(LEVI): [V3] kelp cured: clumsiness
+16:47:29:901 [8413] [99] |(Saibel)|[ [ ]]  
+You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You secrete kalmia and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You quickly prick Saibel with your dirk.
+[PAR] [AST] Striking like a snake, you prick Saibel a second time with your dirk.
+pt Saibel: paralysis asthma
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.8s.
+16:47:29:921 [8413] [99] |(Saibel)|[ [ ]]  zz
+zz
+
+[TREE]: tree down on Saibel for 10 seconds...
+zz
+zz
+zz
+
+[PINSHOT]: hindered movement on Saibel for 10 seconds...
+zz
+zz
+Saibel eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+16:47:31:639 [8413] [99] |(Saibel)|[ [ ]]  
+(((((((((((((((((((( BALANCE: 1.728 ))))))))))))))))))))zz
+
+[Levi]: Strategy: lock[tAffs]: AST RCK 
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;dstab Saibel curare xentio
+Ahh, I am truly sorry, but I do not see anyone by that name here.
+16:47:31:980 [8413] [99] |(Saibel)|[ [ ]]  
+You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You secrete xentio and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You quickly prick Saibel with your dirk.
+[PAR] [CLU] Striking like a snake, you prick Saibel a second time with your dirk.
+pt Saibel: paralysis clumsiness
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.8s.
+16:47:32:012 [8413] [99] |(Saibel)|[ [ ]]  zz
+zz
+zz
+zz
+zz
+Saibel eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+16:47:33:316 [8413] [98] |(Saibel)|[ [ ]]  zz
+zz
+(((((((((((((((((((( BALANCE: 1.613 ))))))))))))))))))))
+zz
+
+[Levi]: Strategy: lock[tAffs]: CLU RCK 
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;impulse Saibel confusion curare
+Ahh, I am truly sorry, but I do not see anyone by that name here.
+16:47:33:997 [8413] [98] |(Saibel)|[ [ ]]  
+[CON] You craft the impulse of confusion in the mind of Saibel.
+[CON] Saibel looks about bemusedly.
+Equilibrium used: 1.44s.
+You feel the power of the venom curare flowing through your veins.
+[PAR] You sink your fangs into Saibel, injecting just the proper amount of curare.
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.7s.
+16:47:34:037 [8413] [98] |(Saibel)|[ [ ]]  zz
+A look of extreme focus crosses the face of Saibel.
+(LEVI): [V3] Focus used - branched to 2 states
+16:47:34:096 [8413] [98] |(Saibel)|[ [ ]]  zz
+zz
+Saibel eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+16:47:34:924 [8413] [98] |(Saibel)|[ [ ]]  zz
+(((((((((((((((((((( EQUILIBRIUM:1.235 ))))))))))))))))))))
+zz
+
+[TREE]: tree down on Saibel for 5 seconds...
+(((((((((((((((((((( BALANCE: 1.457 ))))))))))))))))))))
+zz
+
+[Levi]: Strategy: lock[tAffs]: CLU CON RCK 
+
+[Levi]: IMPULSE STUPIDITY + LOKI -> nausea + paralysis (loki)queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;impulse Saibel stupidity loki
+You detect nothing here by that name.
+16:47:35:675 [8413] [98] |(Saibel)|[ [ ]]  
+[STU] You craft the impulse of stupidity in the mind of Saibel.
+A glazed look descends over the features of Saibel.
+Equilibrium used: 1.44s.
+You feel the power of the venom loki flowing through your veins.
+You sink your fangs into Saibel, injecting just the proper amount of loki.
+Balance used: 1.7s.
+16:47:35:697 [8413] [98] |(Saibel)|[ [ ]]  zz
+zz
+
+[PINSHOT]: hindered movement on Saibel for 5 seconds...
+zz
+zz
+Saibel eats an aurum flake.
+(LEVI): [V3] kelp cured: clumsiness
+A look of extreme focus crosses the face of Saibel.
+(LEVI): [V3] Focus used - branched to 3 states
+16:47:36:723 [8413] [98] |(Saibel)|[ [ ]]  zz
+(((((((((((((((((((( EQUILIBRIUM:1.233 ))))))))))))))))))))
+zz
+(((((((((((((((((((( BALANCE: 1.574 ))))))))))))))))))))
+zz
+
+[Levi]: Strategy: lock[tAffs]: STU 
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;dstab Saibel curare eurypteria
+You detect nothing here by that name.
+16:47:37:578 [8413] [98] |(Saibel)|[ [ ]]  zz
+You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You secrete eurypteria and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You quickly prick Saibel with your dirk.
+[PAR] [REC] Striking like a snake, you prick Saibel a second time with your dirk.
+pt Saibel: paralysis recklessness
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.8s.
+16:47:37:679 [8413] [98] |(Saibel)|[ [ ]]  
+Saibel takes a drink from an elegant diamond vial.
+Saibel eats a potash crystal.
+16:47:37:681 [8413] [98] |(Saibel)|[ [ ]]  zz
+zz
+Saibel eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+16:47:38:410 [8413] [100] |(Saibel)|[ [ ]]  zz
+zz
+zz
+A look of extreme focus crosses the face of Saibel.
+(LEVI): [V3] Focus used - branched to 4 states
+16:47:39:214 [8413] [100] |(Saibel)|[ [ ]]  zz
+(((((((((((((((((((( BALANCE: 1.662 ))))))))))))))))))))
+zz
+
+[Levi]: Strategy: lock[tAffs]: RCK 
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;dstab Saibel curare xentio
+You cannot see that being here.
+16:47:39:676 [8413] [100] |(Saibel)|[ [ ]]  
+You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You secrete xentio and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You quickly prick Saibel with your dirk.
+[PAR] [CLU] Striking like a snake, you prick Saibel a second time with your dirk.
+pt Saibel: paralysis clumsiness
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.8s.
+16:47:39:702 [8413] [100] |(Saibel)|[ [ ]]  zz
+Saibel eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+16:47:40:011 [8413] [100] |(Saibel)|[ [ ]]  zz
+
+[TREE]: Saibel can now use tree!!!
+zz
+Saibel touches a tree of life tattoo.
+(LEVI): [V3] Tree used - branched to 5 states
+16:47:40:396 [8413] [100] |(Saibel)|[ [ ]]  
+
+[TREE]: tree down on Saibel for 14 seconds...
+zz
+zz
+zz
+
+[PINSHOT]: Saibel no longer hindered by pinshot!!!
+(((((((((((((((((((( BALANCE: 1.589 ))))))))))))))))))))
+zz
+
+[Levi]: Strategy: lock[tAffs]: RCK 
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;dstab Saibel curare xentio
+Nothing can be seen here by that name.
+16:47:41:579 [8413] [99] |(Saibel)|[ [ ]]  
+You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You secrete xentio and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You quickly prick Saibel with your dirk.
+[PAR] [CLU] Striking like a snake, you prick Saibel a second time with your dirk.
+pt Saibel: paralysis clumsiness
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.8s.
+16:47:41:610 [8413] [99] |(Saibel)|[ [ ]]  
+Saibel eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+16:47:41:668 [8413] [99] |(Saibel)|[ [ ]]  zz
+zz
+zz
+zz
+zz
+zz
+zz
+Saibel eats an aurum flake.
+(LEVI): [V3] kelp cured: clumsiness
+16:47:43:280 [8413] [99] |(Saibel)|[ [ ]]  
+(((((((((((((((((((( BALANCE: 1.784 ))))))))))))))))))))zz
+
+[Levi]: Strategy: lock[tAffs]: RCK 
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;dstab Saibel curare xentio
+Ahh, I am truly sorry, but I do not see anyone by that name here.
+16:47:43:694 [8413] [99] |(Saibel)|[ [ ]]  
+You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You secrete xentio and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You quickly prick Saibel with your dirk.
+[PAR] [CLU] Striking like a snake, you prick Saibel a second time with your dirk.
+pt Saibel: paralysis clumsiness
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.8s.
+16:47:43:723 [8413] [99] |(Saibel)|[ [ ]]  zz
+zz
+zz
+
+[TREE]: tree down on Saibel for 10 seconds...
+zz
+zz
+zz
+Saibel eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+16:47:45:045 [8413] [98] |(Saibel)|[ [ ]]  
+
+(LEVI): [V3] States resetzz
+(((((((((((((((((((( BALANCE: 1.637 ))))))))))))))))))))
+zz
+
+[Levi]: Strategy: lock[tAffs]: none
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;dstab Saibel curare eurypteria
+Nothing can be seen here by that name.
+16:47:45:681 [8413] [98] |(Saibel)|[ [ ]]  
+You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You secrete eurypteria and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You quickly prick Saibel with your dirk.
+[PAR] [REC] Striking like a snake, you prick Saibel a second time with your dirk.
+pt Saibel: paralysis recklessness
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.8s.
+16:47:45:716 [8413] [98] |(Saibel)|[ [ ]]  zz
+A look of extreme focus crosses the face of Saibel.
+(LEVI): [V3] Focus used - branched to 1 states
+16:47:45:794 [8413] [98] |(Saibel)|[ [ ]]  zz
+zz
+zz
+Saibel eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+16:47:46:708 [8413] [98] |(Saibel)|[ [ ]]  zz
+zz
+(((((((((((((((((((( BALANCE: 1.583 ))))))))))))))))))))
+zz
+
+[Levi]: Strategy: lock[tAffs]: none
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;dstab Saibel curare eurypteria
+Ahh, I am truly sorry, but I do not see anyone by that name here.
+16:47:47:458 [8413] [98] |(Saibel)|[ [ ]]  
+You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You secrete eurypteria and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You quickly prick Saibel with your dirk.
+[PAR] [REC] Striking like a snake, you prick Saibel a second time with your dirk.
+pt Saibel: paralysis recklessness
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.8s.
+16:47:47:504 [8413] [98] |(Saibel)|[ [ ]]  
+Saibel takes a drink from an elegant diamond vial.
+Saibel eats a potash crystal.
+16:47:47:541 [8413] [98] |(Saibel)|[ [ ]]  zz
+zz
+zz
+Saibel eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+16:47:48:214 [8413] [99] |(Saibel)|[ [ ]]  zz
+A look of extreme focus crosses the face of Saibel.
+(LEVI): [V3] Focus used - branched to 1 states
+16:47:48:400 [8413] [99] |(Saibel)|[ [ ]]  zz
+zz
+zz
+(((((((((((((((((((( BALANCE: 1.734 ))))))))))))))))))))
+zz
+
+[Levi]: Strategy: lock[tAffs]: none
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;dstab Saibel curare eurypteria
+
+[TREE]: tree down on Saibel for 5 seconds...
+Nothing can be seen here by that name.
+16:47:49:524 [8413] [99] |(Saibel)|[ [ ]]  
+You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You secrete eurypteria and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You quickly prick Saibel with your dirk.
+[PAR] [REC] Striking like a snake, you prick Saibel a second time with your dirk.
+pt Saibel: paralysis recklessness
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.8s.
+16:47:49:560 [8413] [99] |(Saibel)|[ [ ]]  zz
+Saibel eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+16:47:49:885 [8413] [99] |(Saibel)|[ [ ]]  zz
+zz
+zz
+zz
+zz
+A look of extreme focus crosses the face of Saibel.
+(LEVI): [V3] Focus used - branched to 1 states
+16:47:51:005 [8413] [99] |(Saibel)|[ [ ]]  
+(((((((((((((((((((( BALANCE: 1.648 ))))))))))))))))))))zz
+
+[Levi]: Strategy: lock[tAffs]: none
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;dstab Saibel curare eurypteria
+You cannot see that being here.
+16:47:51:383 [8413] [99] |(Saibel)|[ [ ]]  
+You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You secrete eurypteria and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You quickly prick Saibel with your dirk.
+[PAR] [REC] Striking like a snake, you prick Saibel a second time with your dirk.
+pt Saibel: paralysis recklessness
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.8s.
+16:47:51:419 [8413] [99] |(Saibel)|[ [ ]]  
+Saibel eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+16:47:51:471 [8413] [99] |(Saibel)|[ [ ]]  zz
+Saibel takes a drink from an elegant diamond vial.
+16:47:52:042 [8413] [99] |(Saibel)|[ [ ]]  zz
+zz
+zz
+Saibel eats an aurum flake.
+(((((((((((((((((((( BALANCE: 1.675 ))))))))))))))))))))
+zz
+
+[Levi]: Strategy: lock[tAffs]: RCK 
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;dstab Saibel curare xentio
+You cannot see that being here.
+16:47:53:297 [8413] [98] |(Saibel)|[ [ ]]  
+You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You secrete xentio and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You quickly prick Saibel with your dirk.
+[PAR] [CLU] Striking like a snake, you prick Saibel a second time with your dirk.
+pt Saibel: paralysis clumsiness
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.8s.
+16:47:53:325 [8413] [98] |(Saibel)|[ [ ]]  
+A look of extreme focus crosses the face of Saibel.
+(LEVI): [V3] Focus used - branched to 1 states
+16:47:53:416 [8413] [98] |(Saibel)|[ [ ]]  
+
+[TREE]: Saibel can now use tree!!!
+Saibel eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+16:47:54:601 [8413] [98] |(Saibel)|[ [ ]]  
+Saibel touches a tree of life tattoo.
+(LEVI): [V3] Tree used - branched to 1 states
+16:47:54:808 [8413] [98] |(Saibel)|[ [ ]]  
+
+[TREE]: tree down on Saibel for 14 seconds...
+(((((((((((((((((((( BALANCE: 1.732 ))))))))))))))))))))
+say lol what
+You say in a strong, calm voice, "Lol what."
+16:47:55:405 [8413] [98] |(Saibel)|[ [ ]]  sr
+
+Serpent offense: GROUP mode
+  Priority: Fast lock -- paralysis > asthma > slickness > weariness > impulse impatience > anorexia
+
+[Levi]: Strategy: group[tAffs]: none
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;dstab Saibel curare kalmia
+I do not recognise anything called that here.
+16:47:56:170 [8413] [98] |(Saibel)|[ [ ]]  
+You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You secrete kalmia and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You quickly prick Saibel with your dirk.
+[PAR] [AST] Striking like a snake, you prick Saibel a second time with your dirk.
+pt Saibel: paralysis asthma
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.8s.
+16:47:56:207 [8413] [98] |(Saibel)|[ [ ]]  
+Saibel eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+16:47:56:424 [8413] [98] |(Saibel)|[ [ ]]  sr
+sr
+sr
+sr
+sr
+(((((((((((((((((((( BALANCE: 1.578 ))))))))))))))))))))
+sr
+
+[Levi]: Strategy: group[tAffs]: AST 
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;dstab Saibel curare gecko
+Ahh, I am truly sorry, but I do not see anyone by that name here.
+16:47:57:950 [8413] [99] |(Saibel)|[ [ ]]  
+You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You secrete gecko and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You quickly prick Saibel with your dirk.
+[PAR] [SLI] Striking like a snake, you prick Saibel a second time with your dirk.
+pt Saibel: paralysis slickness
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.8s.
+16:47:57:989 [8413] [99] |(Saibel)|[ [ ]]  
+Saibel eats a magnesium chip.
+(LEVI): [V3] bloodroot eaten - branched into 2 states
+(LEVI): [V3] bloodroot cured: paralysis, slickness
+(LEVI): [V3] Neg-confirm started: paralysis, slickness (1.3s)
+16:47:57:994 [8413] [99] |(Saibel)|[ [ ]]  sr
+sr
+
+(LEVI): No apply: bloodroot cured paralysissr
+sr
+
+[TREE]: tree down on Saibel for 10 seconds...
+sr
+sr
+
+(LEVI): [V3] Neg-confirm timeout -- unfolding branch for: paralysis, slicknesssr
+(((((((((((((((((((( BALANCE: 1.617 ))))))))))))))))))))
+sr
+
+[Levi]: Strategy: group[tAffs]: AST SLI 
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;dstab Saibel curare vernalius
+Saibel eats an aurum flake.
+(LEVI): [V3] kelp cured: asthma
+16:47:59:742 [8413] [100] |(Saibel)|[ [ ]]  
+Ahh, I am truly sorry, but I do not see anyone by that name here.
+16:47:59:844 [8413] [100] |(Saibel)|[ [ ]]  
+You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You secrete vernalius and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You quickly prick Saibel with your dirk.
+[PAR] [WEA] Striking like a snake, you prick Saibel a second time with your dirk.
+pt Saibel: paralysis weariness
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.8s.
+16:47:59:894 [8413] [100] |(Saibel)|[ [ ]]  sr
+sr
+sr
+sr
+sr
+sr
+sr
+Saibel eats a magnesium chip.
+16:48:01:437 [8413] [99] |(Saibel)|[ [ ]]  
+(((((((((((((((((((( BALANCE: 1.658 ))))))))))))))))))))sr
+
+[Levi]: Strategy: group[tAffs]: WEA 
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;dstab Saibel curare kalmia
+I do not recognise anything called that here.
+16:48:01:824 [8413] [99] |(Saibel)|[ [ ]]  
+You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You secrete kalmia and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You quickly prick Saibel with your dirk.
+[PAR] [AST] Striking like a snake, you prick Saibel a second time with your dirk.
+pt Saibel: paralysis asthma
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.8s.
+16:48:01:863 [8413] [99] |(Saibel)|[ [ ]]  sr
+sr
+sr
+sr
+sr
+Saibel eats a magnesium chip.
+16:48:02:987 [8413] [99] |(Saibel)|[ [ ]]  sr
+sr
+(((((((((((((((((((( BALANCE: 1.576 ))))))))))))))))))))
+sr
+
+[Levi]: Strategy: group[tAffs]: AST WEA 
+
+[Levi]: IMPULSE MASOCHISM + MONKSHOOD -> impatiencequeue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;impulse Saibel masochism monkshood
+I do not recognise anything called that here.
+16:48:03:655 [8413] [99] |(Saibel)|[ [ ]]  
+[MAS] You craft the impulse of masochism in the mind of Saibel.
+Equilibrium used: 1.44s.
+You feel the power of the venom monkshood flowing through your veins.
+[DIS] You sink your fangs into Saibel, injecting just the proper amount of monkshood.
+[IMP] You sense the weakness in Saibel as your monkshood takes hold.
+[Levi]: EKANELIA SUCCESS (monkshood)
+[IMP] Saibel shuffles her feet in boredom.
+Balance used: 1.7s.
+16:48:03:694 [8413] [99] |(Saibel)|[ [ ]]  sr
+
+[TREE]: tree down on Saibel for 5 seconds...
+sr
+sr
+sr
+sr
+Saibel eats a plumbum flake.
+A look of extreme focus crosses the face of Saibel.
+(LEVI): [V3] Focus used - branched to 1 states
+16:48:04:718 [8413] [99] |(Saibel)|[ [ ]]  sr
+(((((((((((((((((((( EQUILIBRIUM:1.285 ))))))))))))))))))))
+sr
+(((((((((((((((((((( BALANCE: 1.488 ))))))))))))))))))))
+sr
+
+[Levi]: Strategy: group[tAffs]: AST WEA 
+
+[Levi]: IMPULSE MASOCHISM + MONKSHOOD -> impatiencequeue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;impulse Saibel masochism monkshood
+I do not recognise anything called that here.
+16:48:05:519 [8413] [98] |(Saibel)|[ [ ]]  
+[MAS] You craft the impulse of masochism in the mind of Saibel.
+Equilibrium used: 1.44s.
+You feel the power of the venom monkshood flowing through your veins.
+[DIS] You sink your fangs into Saibel, injecting just the proper amount of monkshood.
+[IMP] You sense the weakness in Saibel as your monkshood takes hold.
+[Levi]: EKANELIA SUCCESS (monkshood)
+[IMP] Saibel shuffles her feet in boredom.
+Balance used: 1.7s.
+16:48:05:564 [8413] [98] |(Saibel)|[ [ ]]  
+Saibel drives a clenched fist into her gut.
+16:48:05:577 [8413] [98] |(Saibel)|[ [ ]]  sr
+sr
+sr
+sr
+Saibel eats a plumbum flake.
+(LEVI): [V3] goldenseal cured: impatience
+16:48:06:479 [8413] [98] |(Saibel)|[ [ ]]  sr
+sr
+(((((((((((((((((((( EQUILIBRIUM:1.244 ))))))))))))))))))))
+sr
+(((((((((((((((((((( BALANCE: 1.558 ))))))))))))))))))))
+sr
+
+[Levi]: Strategy: group[tAffs]: AST WEA MAS 
+
+[Levi]: IMPULSE CONFUSION + MONKSHOOD -> impatiencequeue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;impulse Saibel confusion monkshood
+A look of extreme focus crosses the face of Saibel.
+(LEVI): [V3] Focus used - branched to 1 states
+16:48:07:356 [8413] [98] |(Saibel)|[ [ ]]  
+Nothing can be seen here by that name.
+16:48:07:454 [8413] [98] |(Saibel)|[ [ ]]  
+[CON] You craft the impulse of confusion in the mind of Saibel.
+[CON] Saibel looks about bemusedly.
+Equilibrium used: 1.44s.
+You feel the power of the venom monkshood flowing through your veins.
+[DIS] You sink your fangs into Saibel, injecting just the proper amount of monkshood.
+Balance used: 1.7s.
+16:48:07:495 [8413] [98] |(Saibel)|[ [ ]]  sr
+sr
+sr
+Saibel eats an aurum flake.
+(LEVI): [V3] kelp eaten - branched into 2 states
+(LEVI): [V3] kelp cured: asthma, weariness
+(LEVI): [V3] Neg-confirm started: asthma, weariness (1.3s)
+16:48:08:142 [8413] [99] |(Saibel)|[ [ ]]  sr
+sr
+(((((((((((((((((((( EQUILIBRIUM:1.212 ))))))))))))))))))))
+sr
+Saibel touches a tree of life tattoo.
+(LEVI): [V3] Tree used - branched to 3 states
+16:48:08:794 [8413] [99] |(Saibel)|[ [ ]]  
+
+[TREE]: Saibel can now use tree!!!
+sr
+(((((((((((((((((((( BALANCE: 1.533 ))))))))))))))))))))
+sr
+
+[Levi]: Strategy: group[tAffs]: AST CON 
+
+[Levi]: IMPULSE RECKLESSNESS + LOKI -> nausea + paralysisqueue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;impulse Saibel recklessness loki
+I do not recognise anything called that here.
+16:48:09:363 [8413] [100] |(Saibel)|[ [ ]]  
+[REC] You craft the impulse of recklessness in the mind of Saibel.
+Equilibrium used: 1.44s.
+You feel the power of the venom loki flowing through your veins.
+You sink your fangs into Saibel, injecting just the proper amount of loki.
+[NAU|PAR] You sense the weakness in Saibel as your loki takes hold.
+[Levi]: EKANELIA SUCCESS (loki)
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.7s.
+16:48:09:394 [8413] [100] |(Saibel)|[ [ ]]  sr
+Saibel takes a drink from an elegant diamond vial.
+Saibel eats a potash crystal.
+16:48:09:461 [8413] [100] |(Saibel)|[ [ ]]  sr
+Saibel eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+A look of extreme focus crosses the face of Saibel.
+(LEVI): [V3] Focus used - branched to 4 states
+16:48:09:847 [8413] [99] |(Saibel)|[ [ ]]  sr
+sr
+sr
+sr
+(((((((((((((((((((( EQUILIBRIUM:1.263 ))))))))))))))))))))
+sr
+(((((((((((((((((((( BALANCE: 1.567 ))))))))))))))))))))
+sr
+
+[Levi]: Strategy: group[tAffs]: AST NAU 
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;dstab Saibel curare gecko
+Ahh, I am truly sorry, but I do not see anyone by that name here.
+16:48:11:318 [8413] [99] |(Saibel)|[ [ ]]  
+You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You secrete gecko and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You quickly prick Saibel with your dirk.
+[PAR] [SLI] Striking like a snake, you prick Saibel a second time with your dirk.
+pt Saibel: paralysis slickness
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.8s.
+16:48:11:362 [8413] [99] |(Saibel)|[ [ ]]  sr
+Saibel eats a magnesium chip.
+(LEVI): [V3] bloodroot eaten - branched into 8 states
+(LEVI): [V3] bloodroot cured: paralysis, slickness
+(LEVI): [V3] Neg-confirm started: paralysis, slickness (1.3s)
+sr
+sr
+
+(LEVI): No apply: bloodroot cured paralysissr
+A look of extreme focus crosses the face of Saibel.
+(LEVI): [V3] Focus used - branched to 6 states
+16:48:12:309 [8413] [99] |(Saibel)|[ [ ]]  sr
+sr
+sr
+(((((((((((((((((((( BALANCE: 1.628 ))))))))))))))))))))
+sr
+
+[Levi]: Strategy: group[tAffs]: AST SLI NAU 
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;dstab Saibel curare vernalius
+Saibel eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: slickness
+16:48:13:102 [8413] [99] |(Saibel)|[ [ ]]  
+Nothing can be seen here by that name.
+16:48:13:241 [8413] [99] |(Saibel)|[ [ ]]  
+You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You secrete vernalius and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You quickly prick Saibel with your dirk.
+[PAR] [WEA] Striking like a snake, you prick Saibel a second time with your dirk.
+pt Saibel: paralysis weariness
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.8s.
+16:48:13:280 [8413] [99] |(Saibel)|[ [ ]]  sr
+sr
+sr
+sr
+sr
+sr
+Saibel eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+16:48:14:660 [8413] [98] |(Saibel)|[ [ ]]  sr
+(((((((((((((((((((( BALANCE: 1.687 ))))))))))))))))))))
+sr
+
+[Levi]: Strategy: group[tAffs]: AST WEA NAU 
+
+[Levi]: IMPULSE MASOCHISM + MONKSHOOD -> impatiencequeue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;impulse Saibel masochism monkshood
+Nothing can be seen here by that name.
+16:48:15:211 [8413] [98] |(Saibel)|[ [ ]]  
+[MAS] You craft the impulse of masochism in the mind of Saibel.
+Equilibrium used: 1.44s.
+You feel the power of the venom monkshood flowing through your veins.
+[DIS] You sink your fangs into Saibel, injecting just the proper amount of monkshood.
+[IMP] You sense the weakness in Saibel as your monkshood takes hold.
+[Levi]: EKANELIA SUCCESS (monkshood)
+[IMP] Saibel shuffles her feet in boredom.
+Balance used: 1.7s.
+16:48:15:250 [8413] [98] |(Saibel)|[ [ ]]  sr
+sr
+Saibel drives a clenched fist into her gut.
+16:48:15:668 [8413] [98] |(Saibel)|[ [ ]]  sr
+sr
+Saibel eats a plumbum flake.
+(LEVI): [V3] goldenseal cured: impatience
+A look of extreme focus crosses the face of Saibel.
+(LEVI): [V3] Focus used - branched to 2 states
+16:48:16:259 [8413] [98] |(Saibel)|[ [ ]]  sr
+(((((((((((((((((((( EQUILIBRIUM:1.218 ))))))))))))))))))))
+sr
+sr
+(((((((((((((((((((( BALANCE: 1.569 ))))))))))))))))))))
+sr
+
+[Levi]: Strategy: group[tAffs]: AST WEA NAU 
+
+[Levi]: IMPULSE MASOCHISM + MONKSHOOD -> impatiencequeue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;impulse Saibel masochism monkshood
+I do not recognise anything called that here.
+16:48:17:250 [8413] [98] |(Saibel)|[ [ ]]  
+[MAS] You craft the impulse of masochism in the mind of Saibel.
+Equilibrium used: 1.44s.
+You feel the power of the venom monkshood flowing through your veins.
+[DIS] You sink your fangs into Saibel, injecting just the proper amount of monkshood.
+[IMP] You sense the weakness in Saibel as your monkshood takes hold.
+[Levi]: EKANELIA SUCCESS (monkshood)
+[IMP] Saibel shuffles her feet in boredom.
+Balance used: 1.7s.
+16:48:17:303 [8413] [98] |(Saibel)|[ [ ]]  sr
+sr
+[MAS] You sense the remnants of your masochism impulse clawing at the psyche of Saibel.
+16:48:17:820 [8413] [99] |(Saibel)|[ [ ]]  sr
+Saibel eats a plumbum flake.
+(LEVI): [V3] goldenseal cured: impatience
+16:48:17:913 [8413] [99] |(Saibel)|[ [ ]]  sr
+sr
+(((((((((((((((((((( EQUILIBRIUM:1.204 ))))))))))))))))))))
+sr
+sr
+A look of extreme focus crosses the face of Saibel.
+(LEVI): [V3] Focus used - branched to 2 states
+16:48:18:883 [8413] [99] |(Saibel)|[ [ ]]  
+(((((((((((((((((((( BALANCE: 1.603 ))))))))))))))))))))sr
+
+[Levi]: Strategy: group[tAffs]: AST WEA NAU 
+
+[Levi]: IMPULSE MASOCHISM + MONKSHOOD -> impatiencequeue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;impulse Saibel masochism monkshood
+sr
+You cannot see that being here.
+16:48:19:318 [8413] [99] |(Saibel)|[ [ ]]  
+[MAS] You craft the impulse of masochism in the mind of Saibel.
+Equilibrium used: 1.44s.
+You feel the power of the venom monkshood flowing through your veins.
+[DIS] You sink your fangs into Saibel, injecting just the proper amount of monkshood.
+[IMP] You sense the weakness in Saibel as your monkshood takes hold.
+[Levi]: EKANELIA SUCCESS (monkshood)
+[IMP] Saibel shuffles her feet in boredom.
+Balance used: 1.7s.
+16:48:19:346 [8413] [99] |(Saibel)|[ [ ]]  sr
+Saibel eats a plumbum flake.
+(LEVI): [V3] goldenseal cured: impatience
+16:48:19:646 [8413] [100] |(Saibel)|[ [ ]]  sr
+[MAS] You sense the remnants of your masochism impulse clawing at the psyche of Saibel.
+16:48:19:883 [8413] [100] |(Saibel)|[ [ ]]  sr
+sr
+sr
+(((((((((((((((((((( EQUILIBRIUM:1.327 ))))))))))))))))))))
+[MAS] Saibel smiles as she rams her fist into her jaw.
+16:48:20:774 [8413] [100] |(Saibel)|[ [ ]]  sr
+(((((((((((((((((((( BALANCE: 1.562 ))))))))))))))))))))
+sr
+
+[Levi]: Strategy: group[tAffs]: AST WEA MAS NAU 
+
+[Levi]: IMPULSE CONFUSION + MONKSHOOD -> impatiencequeue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;impulse Saibel confusion monkshood
+Nothing can be seen here by that name.
+16:48:21:231 [8413] [100] |(Saibel)|[ [ ]]  
+[CON] You craft the impulse of confusion in the mind of Saibel.
+[CON] Saibel looks about bemusedly.
+Equilibrium used: 1.44s.
+You feel the power of the venom monkshood flowing through your veins.
+[DIS] You sink your fangs into Saibel, injecting just the proper amount of monkshood.
+[IMP] You sense the weakness in Saibel as your monkshood takes hold.
+[Levi]: EKANELIA SUCCESS (monkshood)
+[IMP] Saibel shuffles her feet in boredom.
+Balance used: 1.7s.
+16:48:21:275 [8413] [100] |(Saibel)|[ [ ]]  sr
+Saibel eats a plumbum flake.
+(LEVI): [V3] goldenseal cured: impatience
+16:48:21:337 [8413] [100] |(Saibel)|[ [ ]]  
+A look of extreme focus crosses the face of Saibel.
+(LEVI): [V3] Focus used - branched to 4 states
+16:48:21:445 [8413] [100] |(Saibel)|[ [ ]]  sr
+sr
+[MAS] You sense the remnants of your masochism impulse clawing at the psyche of Saibel.
+16:48:21:894 [8413] [99] |(Saibel)|[ [ ]]  sr
+sr
+(((((((((((((((((((( EQUILIBRIUM:1.175 ))))))))))))))))))))
+sr
+(((((((((((((((((((( BALANCE: 1.475 ))))))))))))))))))))
+sr
+
+[Levi]: Strategy: group[tAffs]: AST WEA MAS CON NAU 
+
+[Levi]: IMPULSE STUPIDITY + MONKSHOOD -> impatiencequeue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;impulse Saibel stupidity monkshood
+Saibel eats an aurum flake.
+(LEVI): [V3] kelp eaten - branched into 6 states
+(LEVI): [V3] kelp cured: asthma, weariness
+(LEVI): [V3] Neg-confirm started: asthma, weariness (1.3s)
+Saibel touches a tree of life tattoo.
+(LEVI): [V3] Tree used - branched to 10 states
+Saibel takes a long drag off her pipe.
+(LEVI): [V3] Collapsed 3 branches (proved asthma absent)
+(LEVI): [V3] smoke cured: disloyalty
+16:48:22:863 [8413] [99] |(Saibel)|[ [ ]]  
+
+[TREE]: tree down on Saibel for 14 seconds...
+I do not recognise anything called that here.
+16:48:22:967 [8413] [99] |(Saibel)|[ [ ]]  
+[STU] You craft the impulse of stupidity in the mind of Saibel.
+A glazed look descends over the features of Saibel.
+Equilibrium used: 1.44s.
+You feel the power of the venom monkshood flowing through your veins.
+[DIS] You sink your fangs into Saibel, injecting just the proper amount of monkshood.
+Balance used: 1.7s.
+16:48:22:989 [8413] [99] |(Saibel)|[ [ ]]  
+[NAU] Saibel doubles over, vomiting violently.
+16:48:22:991 [8413] [99] |(Saibel)|[ [ ]]  sr
+"The voices! The voices! Get them out of my head!!" Saibel moans, holding her head.
+16:48:23:047 [8413] [99] |(Saibel)|[ [ ]]  
+Saibel takes a drink from an elegant diamond vial.
+16:48:23:224 [8413] [99] |(Saibel)|[ [ ]]  sr
+sr
+sr
+A look of extreme focus crosses the face of Saibel.
+(LEVI): [V3] Pruned 3 low-probability branches
+(LEVI): [V3] Focus used - branched to 7 states
+16:48:24:037 [8413] [99] |(Saibel)|[ [ ]]  sr
+(((((((((((((((((((( EQUILIBRIUM:1.286 ))))))))))))))))))))
+sr
+[STU] Saibel falls to her knees in worship.
+Saibel fondles herself absently.
+Saibel eats an aurum flake.
+(LEVI): [V3] kelp cured: weariness
+Saibel takes a long drag off her pipe.
+(LEVI): [V3] smoke cured: disloyalty
+16:48:24:443 [8413] [99] |(Saibel)|[ [ ]]  sr
+(((((((((((((((((((( BALANCE: 1.581 ))))))))))))))))))))
+sr
+
+[Levi]: Strategy: group[tAffs]: MAS STU NAU 
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;dstab Saibel curare kalmia
+Nothing can be seen here by that name.
+16:48:24:954 [8413] [99] |(Saibel)|[ [ ]]  
+You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You secrete kalmia and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You quickly prick Saibel with your dirk.
+[PAR] [AST] Striking like a snake, you prick Saibel a second time with your dirk.
+pt Saibel: paralysis asthma
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.8s.
+16:48:24:981 [8413] [99] |(Saibel)|[ [ ]]  sr
+sr
+sr
+sr
+[MAS] Saibel smiles as she rams her fist into her jaw.
+16:48:25:886 [8413] [98] |(Saibel)|[ [ ]]  sr
+Saibel stumbles and pokes herself in the eye.
+Saibel drops to one knee.
+Saibel eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+16:48:26:152 [8413] [98] |(Saibel)|[ [ ]]  sr
+A look of extreme focus crosses the face of Saibel.
+(LEVI): [V3] Focus used - branched to 5 states
+16:48:26:508 [8413] [98] |(Saibel)|[ [ ]]  
+(((((((((((((((((((( BALANCE: 1.619 ))))))))))))))))))))sr
+
+[Levi]: Strategy: group[tAffs]: AST MAS STU NAU 
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;dstab Saibel curare gecko
+
+[TREE]: tree down on Saibel for 10 seconds...
+sr
+You cannot see that being here.
+16:48:26:937 [8413] [98] |(Saibel)|[ [ ]]  
+You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You secrete gecko and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You quickly prick Saibel with your dirk.
+[PAR] [SLI] Striking like a snake, you prick Saibel a second time with your dirk.
+pt Saibel: paralysis slickness
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.8s.
+16:48:26:985 [8413] [98] |(Saibel)|[ [ ]]  sr
+sr
+Saibel eats a magnesium chip.
+(LEVI): [V3] bloodroot eaten - branched into 10 states
+(LEVI): [V3] bloodroot cured: paralysis, slickness
+(LEVI): [V3] Neg-confirm started: paralysis, slickness (1.3s)
+16:48:27:688 [8413] [98] |(Saibel)|[ [ ]]  sr
+Saibel takes a drink from an oaken vial.
+16:48:27:866 [8413] [98] |(Saibel)|[ [ ]]  sr
+
+(LEVI): No apply: bloodroot cured paralysissr
+sr
+(((((((((((((((((((( BALANCE: 1.595 ))))))))))))))))))))
+sr
+
+[Levi]: Strategy: group[tAffs]: AST SLI MAS STU NAU 
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;dstab Saibel curare vernalius
+You cannot see that being here.
+16:48:28:936 [8413] [99] |(Saibel)|[ [ ]]  
+You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You secrete vernalius and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You quickly prick Saibel with your dirk.
+[PAR] [WEA] Striking like a snake, you prick Saibel a second time with your dirk.
+pt Saibel: paralysis weariness
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.8s.
+16:48:28:972 [8413] [99] |(Saibel)|[ [ ]]  sr
+
+(LEVI): [V3] Neg-confirm timeout -- unfolding branch for: paralysis, slickness
+(LEVI): [V3] Skipped backtrack for slickness (no dependent affs)
+(LEVI): [V3] Skipped backtrack for slickness (no dependent affs)
+(LEVI): [V3] Skipped backtrack for slickness (no dependent affs)
+(LEVI): [V3] Skipped backtrack for slickness (no dependent affs)
+(LEVI): [V3] Skipped backtrack for slickness (no dependent affs)
+A look of extreme focus crosses the face of Saibel.
+(LEVI): [V3] Focus used - branched to 8 states
+16:48:29:097 [8413] [99] |(Saibel)|[ [ ]]  sr
+Saibel eats a magnesium chip.
+(LEVI): [V3] bloodroot eaten - branched into 12 states
+(LEVI): [V3] bloodroot cured: paralysis, slickness
+(LEVI): [V3] Neg-confirm started: paralysis, slickness (1.3s)
+16:48:29:263 [8413] [99] |(Saibel)|[ [ ]]  sr
+sr
+
+(LEVI): Rebounding coming up in 1.2 secondssr
+sr
+sr
+
+(LEVI): [V3] Neg-confirm timeout -- unfolding branch for: paralysis, slickness
+(LEVI): [V3] Skipped backtrack for slickness (no dependent affs)
+(LEVI): [V3] Skipped backtrack for slickness (no dependent affs)
+(LEVI): [V3] Skipped backtrack for slickness (no dependent affs)
+(LEVI): [V3] Skipped backtrack for slickness (no dependent affs)
+(((((((((((((((((((( BALANCE: 1.741 ))))))))))))))))))))
+sr
+
+[Levi]: Strategy: group[tAffs]: AST WEA NAU 
+
+[Levi]: IMPULSE MASOCHISM + MONKSHOOD -> impatiencequeue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;impulse Saibel masochism monkshood
+I do not recognise anything called that here.
+16:48:30:978 [8413] [99] |(Saibel)|[ [ ]]  
+[MAS] You craft the impulse of masochism in the mind of Saibel.
+Equilibrium used: 1.44s.
+You feel the power of the venom monkshood flowing through your veins.
+[DIS] You sink your fangs into Saibel, injecting just the proper amount of monkshood.
+[IMP] You sense the weakness in Saibel as your monkshood takes hold.
+[Levi]: EKANELIA SUCCESS (monkshood)
+[IMP] Saibel shuffles her feet in boredom.
+Balance used: 1.7s.
+16:48:31:011 [8413] [99] |(Saibel)|[ [ ]]  
+Saibel eats a magnesium chip.
+(LEVI): [V3] bloodroot cured: paralysis
+16:48:31:020 [8413] [99] |(Saibel)|[ [ ]]  sr
+Saibel uses her right foot to stomp on her left as hard as possible.
+16:48:31:066 [8413] [99] |(Saibel)|[ [ ]]  sr
+
+(LEVI): Rebounding coming up in 1.2 secondssr
+sr
+
+[TREE]: tree down on Saibel for 5 seconds...
+sr
+(((((((((((((((((((( EQUILIBRIUM:1.194 ))))))))))))))))))))
+sr
+(((((((((((((((((((( BALANCE: 1.521 ))))))))))))))))))))
+sr
+
+[Levi]: Strategy: group[tAffs]: AST WEA IMP MAS NAU 
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;dstab Saibel curare gecko
+Saibel eats a plumbum flake.
+(LEVI): [V3] goldenseal eaten - branched into 4 states
+(LEVI): [V3] goldenseal cured: stupidity, impatience
+(LEVI): [V3] Neg-confirm started: stupidity, impatience (1.3s)
+A look of extreme focus crosses the face of Saibel.
+(LEVI): [V3] Pruned 1 low-probability branches
+(LEVI): [V3] Focus used - branched to 3 states
+16:48:32:599 [8413] [99] |(Saibel)|[ [ ]]  
+I do not recognise anything called that here.
+16:48:32:711 [8413] [99] |(Saibel)|[ [ ]]  
+You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You secrete gecko and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+You quickly prick Saibel with your dirk.
+[PAR] [SLI] Striking like a snake, you prick Saibel a second time with your dirk.
+pt Saibel: paralysis slickness
+[PAR] [PAR] Horror overcomes Saibel's face as her body stiffens into paralysis.
+Balance used: 1.8s.
+16:48:32:740 [8413] [99] |(Saibel)|[ [ ]]  sr
+sr
+sr
+sr
+sr
+sr
+sr
+Saibel eats a magnesium chip.
+(LEVI): [V3] Pruned 1 low-probability branches
+(LEVI): [V3] bloodroot eaten - branched into 5 states
+(LEVI): [V3] bloodroot cured: paralysis, slickness
+(LEVI): [V3] Neg-confirm started: paralysis, slickness (1.3s)
+(((((((((((((((((((( BALANCE: 1.576 ))))))))))))))))))))
+sr
+
+[Levi]: Strategy: group[tAffs]: AST WEA SLI PAR NAU 
+queue addclear freestand purge;order adder kill Saibel;g body;g gold;stand;wield shield dirk;impulse Saibel masochism monkshood
+Ahh, I am truly sorry, but I do not see anyone by that name here.
+16:48:34:686 [8413] [98] |(Saibel)|[ [ ]]  
+[MAS] You craft the impulse of masochism in the mind of Saibel.
+Equilibrium used: 1.44s.
+You feel the power of the venom monkshood flowing through your veins.
+[DIS] You sink your fangs into Saibel, injecting just the proper amount of monkshood.
+[IMP] You sense the weakness in Saibel as your monkshood takes hold.
+[Levi]: EKANELIA SUCCESS (monkshood)
+[IMP] Saibel shuffles her feet in boredom.
+Balance used: 1.7s.
+16:48:34:720 [8413] [98] |(Saibel)|[ [ ]]  sr
+
+(LEVI): No apply: bloodroot cured paralysissr
+
+(LEVI): [V3] Neg-confirm timeout -- unfolding branch for: paralysis, slickness
+(((((((((((((((((((( EQUILIBRIUM:1.261 ))))))))))))))))))))
+Saibel eats a plumbum flake.
+(LEVI): [V3] goldenseal cured: impatience
+A look of extreme focus crosses the face of Saibel.
+(LEVI): [V3] Pruned 2 low-probability branches
+(LEVI): [V3] Focus used - branched to 2 states
+16:48:36:054 [8413] [98] |(Saibel)|[ [ ]]  
+(((((((((((((((((((( BALANCE: 1.553 ))))))))))))))))))))say thanks
+You say in a strong, calm voice, "Thanks."
+16:48:36:648 [8413] [98] |(Saibel)|[ [ ]]  
+
+[TREE]: Saibel can now use tree!!!
+Saibel touches a tree of life tattoo.
+(LEVI): [V3] Tree used - branched to 7 states
+16:48:37:050 [8413] [98] |(Saibel)|[ [ ]]  
+
+[TREE]: tree down on Saibel for 14 seconds...
+Saibel eats an aurum flake.
+(LEVI): [V3] kelp eaten - branched into 8 states
+(LEVI): [V3] kelp cured: asthma, weariness
+(LEVI): [V3] Neg-confirm started: asthma, weariness (1.3s)
+Saibel takes a long drag off her pipe.
+(LEVI): [V3] Collapsed 3 branches (proved asthma absent)
+(LEVI): [V3] smoked - branched into 7 states
+(LEVI): [V3] Neg-confirm started: disloyalty, slickness (2s)
+16:48:37:633 [8413] [98] |(Saibel)|[ [ ]]  cq all
+
+(LEVI): [V3] Neg-confirm timeout -- unfolding branch for: asthma, weariness
+Saibel eats an aurum flake.
+(LEVI): [V3] Pruned 1 low-probability branches
+(LEVI): [V3] kelp eaten - branched into 10 states
+(LEVI): [V3] kelp cured: asthma, weariness
+(LEVI): [V3] Neg-confirm started: asthma, weariness (1.3s)
+16:48:39:257 [8413] [99] |(Saibel)|[ [ ]]  
+
+(LEVI): [V3] Neg-confirm timeout -- unfolding branch for: disloyalty, slickness
+(LEVI): [V3] Skipped backtrack for slickness (no dependent affs)
+(LEVI): [V3] Skipped backtrack for slickness (no dependent affs)
+(LEVI): [V3] Neg-confirm timeout -- unfolding branch for: asthma, weariness
+Saibel eats a ferrum flake.
+(LEVI): [V3] ginseng cured: nausea
+16:48:40:872 [8413] [100] |(Saibel)|[ [ ]]  

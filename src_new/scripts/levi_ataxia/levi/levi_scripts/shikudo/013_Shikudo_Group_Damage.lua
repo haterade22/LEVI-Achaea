@@ -148,7 +148,7 @@ function shikudoDmg.buildRound()
   local form = formNow()
 
   if shikudo.checkDispatchReady and shikudo.checkDispatchReady() then
-    if tCity == "Mhaldor" or tCity == "(Mhaldor)" then
+    if shikudo.targetIsMhaldorian() then
       return wield .. "incapacitate " .. target, "incapacitate"
     end
     return wield .. "dispatch " .. target, "dispatch"

@@ -12,5 +12,7 @@ command: ''
 packageName: ''
 ]]--
 
-noDisplay()
-ak.nodisplay = true
+-- noDisplay and the `ak` table belonged to a tracker this repo never shipped (no revision defines
+-- either). Each is guarded, because this alias only threw.
+if noDisplay then noDisplay() end
+if ak then ak.nodisplay = true end

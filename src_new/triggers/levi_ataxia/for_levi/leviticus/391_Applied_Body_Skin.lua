@@ -53,6 +53,8 @@ if isTargeted(matches[2]) then
     if onTargetSalveSkinV2 then onTargetSalveSkinV2(matches[2]) end
   end
 
+  -- Before the erase, which would leave the branches this proof rules out standing (007).
+  if proveAffAbsentV3 then proveAffAbsentV3("slickness", "salve") end
   erAff("slickness")
   erAff("bloodfire")
 

@@ -318,14 +318,18 @@ class MuddlerConverter:
     # ------------------------------------------------------------------
 
     def _build_name_map(self, pkg_type: str, items: List[Tuple[Path, Dict, str]]) -> Dict[str, str]:
-        """Build a map from (file_path_str) -> safe Lua filename, handling collisions."""
+        """Build a map from (file_path_str) -> safe Lua filename, handling collisions.
+
+        Case-insensitive: on Windows (NTFS) DARKSHADE.lua and Darkshade.lua are one file, so the
+        later write won and alias DARKSHADE (^dar$) ran the Serpent alias Darkshade's body.
+        """
         # First pass: count occurrences of each name
         name_counts: Dict[str, int] = defaultdict(int)
         file_names: Dict[str, str] = {}  # file_path_str -> original name
 
         for file_path, metadata, _ in items:
             name = metadata.get("name", "unnamed")
-            name_counts[name] += 1
+            name_counts[name.lower()] += 1
             file_names[str(file_path)] = name
 
         # Second pass: disambiguate collisions
@@ -336,12 +340,12 @@ class MuddlerConverter:
             name = metadata.get("name", "unnamed")
             hierarchy = metadata.get("hierarchy", [])
 
-            if name_counts[name] > 1 and hierarchy:
+            if name_counts[name.lower()] > 1 and hierarchy:
                 # Disambiguate: prepend last hierarchy element
                 parent = hierarchy[-1] if hierarchy else ""
                 candidate = f"{parent}_{name}" if parent else name
                 # If still colliding, try two levels
-                if used_filenames.get(sanitize_lua_filename(candidate), 0) > 0 and len(hierarchy) >= 2:
+                if used_filenames.get(sanitize_lua_filename(candidate).lower(), 0) > 0 and len(hierarchy) >= 2:
                     candidate = f"{hierarchy[-2]}_{hierarchy[-1]}_{name}"
             else:
                 candidate = name
@@ -349,11 +353,11 @@ class MuddlerConverter:
             safe = sanitize_lua_filename(candidate)
 
             # Final collision guard: append counter
-            if used_filenames[safe] > 0:
-                counter = used_filenames[safe] + 1
+            if used_filenames[safe.lower()] > 0:
+                counter = used_filenames[safe.lower()] + 1
                 safe = f"{safe}_{counter}"
 
-            used_filenames[safe] += 1
+            used_filenames[safe.lower()] += 1
             result[str(file_path)] = safe
 
         collisions = sum(1 for c in name_counts.values() if c > 1)

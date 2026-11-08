@@ -917,9 +917,10 @@ dispatch_specifics:
     needs a fresh manual ASSESS or the server's IRE.Target hpperc (013)"
   target_guard: "v4.7.456: shikudo.guardTarget (006) refuses a target that died in the last 6 s (401, 795)
     unless the room shows it again, and a combo at a target not in ataxia.playersHere; 006, 007, 011, 013"
-  mhaldorian_safety: "On a Mhaldorian target (tCity), sends INCAPACITATE instead of DISPATCH (friendly-fire
-    safety, 006:1338-1340)"
-  shield: "If target shielded (tAffs.shield), SHATTER inside the combo (006:1345-1347)"
+  mhaldorian_safety: "On a Mhaldorian target (the NDB city, shikudo.targetIsMhaldorian, 006:153), sends INCAPACITATE
+    instead of DISPATCH (friendly-fire safety, 006:1585-1588; srd too, 013:151). It read a global tCity that nothing
+    ever set until 2026-11-08, so a Mhaldorian was always DISPATCHED. A target the NDB has not gathered is dispatched"
+  shield: "If target shielded (tAffs.shield), SHATTER inside the combo (006:1593-1594)"
   kai_surge: "006 never sends KAI SURGE. The Rain dismount and the Gaital kai window were 008-only (switched
     off). Only TK6 sends a surge automatically; 007's kai ability is KAI CHOKE, its kill (v4.7.420)"
 

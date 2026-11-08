@@ -1,0 +1,2068 @@
+# LEVI fight log | version 4.7.478 | started 2026-11-07 16:46:35 | opponent Saibel | our class Serpent | started by hand | rounds raw
+# rows: <time> <kind> <text>. kinds: | line, P prompt, > we sent, +aff/-aff ours (GMCP), +def/-def ours (GMCP), +tar/-tar our tracker on the target, # note
+16:46:41.700 > morpharmour leatherarmour into scalemail
+16:46:41.766 | This armour is incapable of being morphed, since it does not hold the correct paragon.
+16:46:41.769 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:46:43.499 > wear armour
+16:46:43.587 | You are now wearing a suit of leather armour.
+16:46:43.596 P H: Full, M: High, E: Full, W: High cexkdb-
+16:46:45.079 > trait select quick-witted confirm
+16:46:45.080 > trait select fully fit confirm
+16:46:45.080 > trait select marksman confirm
+16:46:45.080 > trait select health inspector confirm
+16:46:45.080 > trait select master contemplator confirm
+16:46:45.080 > trait select decorated confirm
+16:46:45.080 > trait select brilliance confirm
+16:46:45.080 > trait select in service confirm
+16:46:45.080 > ii paragon
+16:46:45.080 > probe armour
+16:46:45.144 | You have no free trait slots.
+16:46:45.151 P H: Full, M: High, E: Full, W: High cexkdb-
+16:46:45.237 | You have no free trait slots.
+16:46:45.238 P H: Full, M: High, E: Full, W: High cexkdb-
+16:46:45.240 | You have no free trait slots.
+16:46:45.247 P H: Full, M: High, E: Full, W: High cexkdb-
+16:46:45.249 | You have no free trait slots.
+16:46:45.251 P H: Full, M: High, E: Full, W: High cexkdb-
+16:46:45.255 | You have no free trait slots.
+16:46:45.262 P H: Full, M: High, E: Full, W: High cexkdb-
+16:46:45.263 | You have no free trait slots.
+16:46:45.265 P H: Full, M: High, E: Full, W: High cexkdb-
+16:46:45.267 | You have no free trait slots.
+16:46:45.272 P H: Full, M: High, E: Full, W: High cexkdb-
+16:46:45.274 | You have no free trait slots.
+16:46:45.283 P H: Full, M: High, E: Full, W: High cexkdb-
+16:46:45.334 | --------------------------------------------------------------------------------
+16:46:45.334 | You are holding:
+16:46:45.334 | Misc:
+16:46:45.334 |    pryall514756        a paragon u-notch pry tool
+16:46:45.341 |    paragon343178       a serendipitous paragon
+16:46:45.344 |    paragon500167       a resonate metalliferous paragon
+16:46:45.351 |    paragon424404       a nacreous deltahedral paragon
+16:46:45.351 | 
+16:46:45.351 | You are wearing:
+16:46:45.351 | --------------------------------------------------------------------------------
+16:46:45.351 | 4 items were shown.
+16:46:45.352 | 
+16:46:45.360 P H: Full, M: High, E: Full, W: High cexkdb-
+16:46:45.360 | This full suit of leather armour includes everything from leather head covering, to a breastplate hardened by boiling in oil, to gauntlets. Though the breastplate and shoulder coverings are quite stiff, the rest is more flexible, for easier movement.
+16:46:45.362 | 
+16:46:45.363 | Emanating a faint, golden glow, the symbol of a shield surrounded by a chain marks the surface of this runic armour.
+16:46:45.368 | It weighs about 80 pounds.
+16:46:45.368 | It bears the distinctive mark of Leviticus.
+16:46:45.369 | This armour has 3 embrasures.
+16:46:45.370 | The following paragons have been inserted:
+16:46:45.372 | 1: an auspicious icosagon paragon (paragon361796)     critical level increase chance
+16:46:45.376 | 2: an aeneaous paragon (paragon417591)     Absorption effect
+16:46:45.380 | 3: a crucious paragon (paragon514466)     critical level gambling
+16:46:45.381 | This armour has 30 months of runic empowerment left.
+16:46:45.381 | It will reset to you.
+16:46:45.381 | A suit of leather armour has the following venoms or magical effects on it:
+16:46:45.381 | Empowered
+16:46:45.387 P H: Full, M: High, E: Full, W: High cexkdb-
+16:46:47.082 > pry armour embrasure 1
+16:46:47.083 > pry armour embrasure 2
+16:46:47.083 > pry armour embrasure 3
+16:46:47.083 > insert paragon500167 into armour embrasure 1
+16:46:47.083 > insert paragon424404 into armour embrasure 2
+16:46:47.083 > insert paragon417591 into armour embrasure 3
+16:46:47.158 | You pry out an auspicious icosagon paragon and retrieve it from the armour.
+16:46:47.165 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:46:47.243 | You pry out an aeneaous paragon and retrieve it from the armour.
+16:46:47.251 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:46:47.251 | You pry out a crucious paragon and retrieve it from the armour.
+16:46:47.259 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:46:47.261 | You insert your paragon into the embrasure.
+16:46:47.266 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:46:47.270 | You insert your paragon into the embrasure.
+16:46:47.272 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:46:47.273 | You insert your paragon into the embrasure.
+16:46:47.280 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:46:48.688 > probe armour
+16:46:48.840 | This full suit of leather armour includes everything from leather head covering, to a breastplate hardened by boiling in oil, to gauntlets. Though the breastplate and shoulder coverings are quite stiff, the rest is more flexible, for easier movement.
+16:46:48.841 | 
+16:46:48.841 | Emanating a faint, golden glow, the symbol of a shield surrounded by a chain marks the surface of this runic armour.
+16:46:48.841 | It weighs about 80 pounds.
+16:46:48.841 | It bears the distinctive mark of Leviticus.
+16:46:48.841 | This armour has 3 embrasures.
+16:46:48.841 | The following paragons have been inserted:
+16:46:48.849 | 1: a resonate metalliferous paragon (paragon500167)     shifting damage protection (physical blunt)
+16:46:48.851 | 2: a nacreous deltahedral paragon (paragon424404)     morphing (level 3)
+16:46:48.853 | 3: an aeneaous paragon (paragon417591)     Absorption effect
+16:46:48.853 | This armour has 30 months of runic empowerment left.
+16:46:48.853 | It will reset to you.
+16:46:48.853 | A suit of leather armour has the following venoms or magical effects on it:
+16:46:48.853 | Empowered
+16:46:48.859 P H: Full, M: Full, E: Full, W: High cexkdb-
+16:46:56.017 > morpharmour leatherarmour into scalemail
+16:46:56.094 | Please remove your armour before attempting to morph it.
+16:46:56.099 P H: Full, M: High, E: Full, W: High cexkdb-
+16:46:58.914 > remove armour
+16:46:58.980 | You remove a suit of leather armour.
+16:46:58.989 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:46:59.838 > morpharmour leatherarmour into scalemail
+16:46:59.897 | Drawing upon the power of the paragon, you morph a suit of leather armour into a suit of scale mail.
+16:46:59.903 P H: Full, M: High, E: Full, W: High cexkdb-
+16:47:01.814 > wear armour
+16:47:01.888 | You are now wearing a suit of scale mail.
+16:47:01.895 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:03.682 > unally Sabi
+16:47:03.690 > enemy Sabi
+16:47:03.690 > st Sabi
+16:47:03.690 > settarget Sabi
+16:47:03.691 > pt target: Sabi
+16:47:03.773 | I don't recognise that name as one of an existing adventurer.
+16:47:03.778 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:03.870 | I don't recognise that name as one of an existing adventurer.
+16:47:03.873 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:03.877 | Your target is now: Sabi (a denizen)
+16:47:03.880 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:03.880 | Your target is now: Sabi (a denizen)
+16:47:03.881 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:03.881 | You are not the member of any party.
+16:47:03.886 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:05.805 > unally Sabil
+16:47:05.805 > enemy Sabil
+16:47:05.805 > st Sabil
+16:47:05.805 > settarget Sabil
+16:47:05.806 > pt target: Sabil
+16:47:05.869 | I don't recognise that name as one of an existing adventurer.
+16:47:05.871 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:05.963 | I don't recognise that name as one of an existing adventurer.
+16:47:05.968 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:05.971 | Your target is now: Sabil (a denizen)
+16:47:05.974 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:05.975 | Your target is now: Sabil (a denizen)
+16:47:05.977 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:05.978 | You are not the member of any party.
+16:47:05.985 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:12.397 > l
+16:47:12.467 | Drake Gloom. (indoors)
+16:47:12.469 | A noxious, red-hued fog overwhelms the area with a thick, palpable vapour. Within the confines of this extraordinary shop, Vashnarian marble walls rise with an air of regal magnificence, the very essence of opulence etched into their every contour. A sumptuous rug in rich, dark red colours adorns the polished darkwood floor. A resplendent red and gold dragon is set into the walls in crushed rubies and molten gold, weaving sinuously around the four walls, like a guardian of the treasures within. Many flickering candles of varied sizes, set into sconces high above, cast a warm glow upon the space. The insignia of Mhaldor has been triumphantly imprinted upon the walls in gleaming gold, an emblem of authority intertwined with daemonic inscriptions that invoke an ancient language tied to the city's proud history. Alongside one wall, a formidable counter hewn from solid stone cradles a captivating array of rare goods. Unusual crystal and glass jars, refracting light into a kaleidoscope of colours, find their place upon its surface, promising treasures beyond the imagination. There are 5 Blackrock clerics here. A runic totem is planted solidly in the ground. A sigil in the shape of a small, rectangular monolith is on the ground. Lying flat on the ground is a key-shaped sigil. A daemonic hyena awaits in savage readiness, golden eyes burning with a cold, cunning malevolence amidst the steady exhalation of crimson fog from slavering jaws. An obsidian eye sigil is here. Its flat surface displaying countless runes, a mirror-like servitor hovers nearby. Exuding umbral menace, a phantom jaguar is crouched here. There are 2 hearts of a mortal, still dripping blood here. Commandant Saibel Aristata is here, hidden. Her features are obscured by a red wyvern mask. She wields Agith'maal's ire in her left hand and a sable shield webbed in silver damascene in her right.  You see a sign indicating there are WARES for sale here.
+16:47:12.471 | You see exits leading east (closed door) and down (closed door).
+16:47:12.476 P H: Full, M: High, E: Full, W: High cexkdb-
+16:47:14.121 > unally Sabibel
+16:47:14.122 > enemy Sabibel
+16:47:14.122 > st Sabibel
+16:47:14.122 > settarget Sabibel
+16:47:14.123 > pt target: Sabibel
+16:47:14.200 | I don't recognise that name as one of an existing adventurer.
+16:47:14.201 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:14.293 | I don't recognise that name as one of an existing adventurer.
+16:47:14.298 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:14.299 | Your target is now: Sabibel (a denizen)
+16:47:14.301 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:14.304 | Your target is now: Sabibel (a denizen)
+16:47:14.306 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:14.309 | You are not the member of any party.
+16:47:14.316 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:18.971 > unally Saibel
+16:47:18.971 > enemy Saibel
+16:47:18.971 > st Saibel
+16:47:18.971 > settarget Saibel
+16:47:18.971 > curingset switch depthswalker
+16:47:18.971 > curing priority defence list reset
+16:47:18.971 > curing priority defence nightsight 25 ghost 25 groundwatch 25 lipreading 25 venom 25 levitation 25 frost 25 blindness 25 selfishness 25 speed 25 coldresist 25 boartattoo 25 cloak 25 electricresist 25 weaving 25 mindseye 25 deathsight 25 kola 25 scales 25 caloric 25 lifevision 25 mass 25 thirdeye 25 fireresist 25 moontattoo 25 deafness 25 fangbarrier 25 mosstattoo 25 magicresist 25 
+16:47:18.972 > pt target: Saibel
+16:47:19.050 | Saibel is not currently an ally.
+16:47:19.057 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:19.131 | Saibel is already an enemy.
+16:47:19.135 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:19.143 | Your target is now: Saibel (an adventurer)
+16:47:19.148 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:19.149 | Your target is now: Saibel (an adventurer)
+16:47:19.152 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:19.154 | You will now cure using the depthswalker set.
+16:47:19.166 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:19.170 | All your defence priorities have been reset to defaults.
+16:47:19.171 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:19.173 | You have set the 'nightsight' defence to the 25 priority.
+16:47:19.173 | You have set the 'ghost' defence to the 25 priority.
+16:47:19.173 | You have set the 'groundwatch' defence to the 25 priority.
+16:47:19.173 | You have set the 'lipreading' defence to the 25 priority.
+16:47:19.173 | You have set the 'venom' defence to the 25 priority.
+16:47:19.173 | You have set the 'levitation' defence to the 25 priority.
+16:47:19.173 | You have set the 'frost' defence to the 25 priority.
+16:47:19.174 | You have set the 'blindness' defence to the 25 priority.
+16:47:19.178 | You have set the 'selfishness' defence to the 25 priority.
+16:47:19.179 | You have set the 'speed' defence to the 25 priority.
+16:47:19.180 | You have set the 'coldresist' defence to the 25 priority.
+16:47:19.180 | You have set the 'boartattoo' defence to the 25 priority.
+16:47:19.180 | You have set the 'cloak' defence to the 25 priority.
+16:47:19.181 | You have set the 'electricresist' defence to the 25 priority.
+16:47:19.181 | You have set the 'weaving' defence to the 25 priority.
+16:47:19.181 | You have set the 'mindseye' defence to the 25 priority.
+16:47:19.181 | You have set the 'deathsight' defence to the 25 priority.
+16:47:19.181 | You have set the 'kola' defence to the 25 priority.
+16:47:19.181 | You have set the 'scales' defence to the 25 priority.
+16:47:19.181 | You have set the 'caloric' defence to the 25 priority.
+16:47:19.181 | You have set the 'lifevision' defence to the 25 priority.
+16:47:19.182 | You have set the 'mass' defence to the 25 priority.
+16:47:19.182 | You have set the 'thirdeye' defence to the 25 priority.
+16:47:19.182 | You have set the 'fireresist' defence to the 25 priority.
+16:47:19.182 | You have set the 'moontattoo' defence to the 25 priority.
+16:47:19.182 | You have set the 'deafness' defence to the 25 priority.
+16:47:19.182 | You have set the 'fangbarrier' defence to the 25 priority.
+16:47:19.182 | You have set the 'mosstattoo' defence to the 25 priority.
+16:47:19.182 | You have set the 'magicresist' defence to the 25 priority.
+16:47:19.186 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:19.190 | You are not the member of any party.
+16:47:19.191 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:20.044 > queue addclear freestand dispel Saibel
+16:47:20.044 > remove bow
+16:47:20.044 > wield bow
+16:47:20.044 > pinshot Saibel foot
+16:47:20.044 > wield shield dirk
+16:47:20.044 > purge
+16:47:20.044 > order adder kill Saibel
+16:47:20.044 > g body
+16:47:20.044 > g gold
+16:47:20.044 > stand
+16:47:20.044 > wield shield whip
+16:47:20.044 > flay Saibel rebounding curare
+16:47:20.116 | [System]: Queued freestand commands cleared.
+16:47:20.116 | [System]: Added DISPEL SAIBEL to your freestand queue.
+16:47:20.117 | [System]: Running queued freestand command: DISPEL SAIBEL
+16:47:20.122 | You point a finger at Saibel to dispel all her illusions.
+16:47:20.124 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:20.219 | You remove a Lupine bow.
+16:47:20.220 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:20.224 | You start to wield a Lupine bow in your hands.
+16:47:20.227 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:20.227 -def hiding
+16:47:20.228 | Drawing back on your bowstring, you take careful aim at Saibel and let fly an arrow.
+16:47:20.229 | Your arrow slams into the foot of Saibel.
+16:47:20.230 | Balance used: 1.8s.
+16:47:20.231 P H: Full, M: High, E: High, W: High cekdb-
+16:47:20.236 | You must regain balance first.
+16:47:20.236 | wield shield dirk was added to your balance queue.
+16:47:20.238 P H: Full, M: High, E: High, W: High cekdb-
+16:47:20.239 | You purge every drop of venom from your bloodstream.
+16:47:20.239 P H: Full, M: High, E: High, W: High cekdb-
+16:47:20.240 | You must regain balance first.
+16:47:20.240 | order adder kill Saibel was added to your balance queue.
+16:47:20.245 P H: Full, M: High, E: High, W: High cekdb-
+16:47:20.245 | You must regain balance first.
+16:47:20.247 | g body was added to your balance queue.
+16:47:20.248 P H: Full, M: High, E: High, W: High cekdb-
+16:47:20.249 | You must regain balance first.
+16:47:20.249 | g gold was added to your balance queue.
+16:47:20.256 P H: Full, M: High, E: High, W: High cekdb-
+16:47:20.257 | You must regain balance first.
+16:47:20.259 | stand was added to your balance queue.
+16:47:20.265 P H: Full, M: High, E: High, W: High cekdb-
+16:47:20.266 | You must regain balance first.
+16:47:20.267 | wield shield whip was added to your balance queue.
+16:47:20.276 P H: Full, M: High, E: High, W: High cekdb-
+16:47:20.277 | You must regain balance first.
+16:47:20.279 P H: Full, M: High, E: High, W: High cekdb-
+16:47:21.972 | You have recovered balance on all limbs.
+16:47:21.974 | [System]: Running queued balance command: WIELD SHIELD DIRK
+16:47:21.977 | You cease to wield a Lupine bow.
+16:47:21.977 | You start to wield a Shield of Absorption in your left hand.
+16:47:21.977 | You start to wield Thoth's fang in your right hand.
+16:47:21.980 | [System]: Running queued balance command: ORDER ADDER KILL SAIBEL
+16:47:21.980 | I do not recognise anything called that here.
+16:47:21.981 | [System]: Running queued balance command: G BODY
+16:47:21.981 | I see no "body" to take.
+16:47:21.981 | [System]: Running queued balance command: G GOLD
+16:47:21.981 | I see no "gold" to take.
+16:47:21.981 | [System]: Running queued balance command: STAND
+16:47:21.981 | You are not fallen or kneeling.
+16:47:21.982 | [System]: Running queued balance command: WIELD SHIELD WHIP
+16:47:21.984 | You are already wielding a Shield of Absorption.
+16:47:21.984 | You cease wielding Thoth's fang in your right hand.
+16:47:21.984 | You start to wield Elentari's Scourge in your right hand.
+16:47:21.990 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:22.230 > queue addclear freestand purge
+16:47:22.234 > order adder kill Saibel
+16:47:22.234 > g body
+16:47:22.234 > g gold
+16:47:22.234 > stand
+16:47:22.234 > wield shield whip
+16:47:22.234 > flay Saibel rebounding curare
+16:47:22.294 | [System]: Queued freestand commands cleared.
+16:47:22.297 | [System]: Added PURGE to your freestand queue.
+16:47:22.300 | [System]: Running queued freestand command: PURGE
+16:47:22.301 | You purge every drop of venom from your bloodstream.
+16:47:22.304 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:22.393 | You detect nothing here by that name.
+16:47:22.401 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:22.402 | I see no "body" to take.
+16:47:22.403 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:22.404 | I see no "gold" to take.
+16:47:22.405 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:22.409 | You are not fallen or kneeling.
+16:47:22.412 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:22.412 | You are already wielding a Shield of Absorption.
+16:47:22.412 | You are already wielding Elentari's Scourge.
+16:47:22.414 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:22.414 | You secrete curare and deftly bring Elentari's Scourge to your mouth, letting the venom drip upon it.
+16:47:22.414 -tar rebounding
+16:47:22.414 -tar shield
+16:47:22.414 -tar rebounding
+16:47:22.414 -tar shield
+16:47:22.414 | You try to flay a non-existent aura of rebounding from Saibel.
+16:47:22.414 -tar fangbarrier
+16:47:22.414 -tar sileris
+16:47:22.414 | The protective coating covering the skin of Saibel is ripped away with their protections.
+16:47:22.414 > pt Saibel: Rebounding Down
+16:47:22.414 > pt Saibel: Shield Down
+16:47:22.414 -tar rebounding
+16:47:22.414 -tar shield
+16:47:22.414 +tar paralysis
+16:47:22.414 > pt Saibel: paralysis
+16:47:22.414 | With your victim exposed, you crack Elentari's Scourge back for a second assault.
+16:47:22.414 +tar paralysis
+16:47:22.414 +tar paralysis
+16:47:22.414 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:47:22.414 | Balance used: 1.7s.
+16:47:22.419 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:22.421 -tar anorexia
+16:47:22.421 -tar slickness
+16:47:22.421 | Saibel eats a magnesium chip.
+16:47:22.426 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:22.478 | You are not the member of any party.
+16:47:22.483 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:22.569 | You are not the member of any party.
+16:47:22.572 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:22.577 | You are not the member of any party.
+16:47:22.579 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:23.944 | You have recovered balance on all limbs.
+16:47:23.947 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:23.986 > queue addclear freestand purge
+16:47:23.990 > order adder kill Saibel
+16:47:23.990 > g body
+16:47:23.990 > g gold
+16:47:23.990 > stand
+16:47:23.990 > wield shield dirk
+16:47:23.990 > dstab Saibel curare eurypteria
+16:47:24.053 | [System]: Queued freestand commands cleared.
+16:47:24.057 | [System]: Added PURGE to your freestand queue.
+16:47:24.058 | [System]: Running queued freestand command: PURGE
+16:47:24.059 | You purge every drop of venom from your bloodstream.
+16:47:24.065 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:24.156 | You detect nothing here by that name.
+16:47:24.158 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:24.161 | I see no "body" to take.
+16:47:24.165 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:24.166 | I see no "gold" to take.
+16:47:24.169 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:24.174 | You are not fallen or kneeling.
+16:47:24.175 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:24.176 | You are already wielding a Shield of Absorption.
+16:47:24.180 | You cease wielding Elentari's Scourge in your right hand.
+16:47:24.181 | You start to wield Thoth's fang in your right hand.
+16:47:24.185 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:24.187 | You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:24.187 | You secrete eurypteria and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:24.187 | You quickly prick Saibel with your dirk.
+16:47:24.187 +tar paralysis
+16:47:24.187 +tar recklessness
+16:47:24.187 > pt Saibel: paralysis recklessness
+16:47:24.187 | Striking like a snake, you prick Saibel a second time with your dirk.
+16:47:24.187 +tar paralysis
+16:47:24.187 +tar paralysis
+16:47:24.187 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:47:24.187 | Balance used: 1.8s.
+16:47:24.193 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:24.240 -tar anorexia
+16:47:24.240 -tar slickness
+16:47:24.240 | Saibel eats a magnesium chip.
+16:47:24.241 | A look of extreme focus crosses the face of Saibel.
+16:47:24.248 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:24.339 | You are not the member of any party.
+16:47:24.347 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:25.864 | You have recovered balance on all limbs.
+16:47:25.873 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:25.885 > queue addclear freestand purge
+16:47:25.890 > order adder kill Saibel
+16:47:25.890 > g body
+16:47:25.890 > g gold
+16:47:25.890 > stand
+16:47:25.890 > wield shield dirk
+16:47:25.890 > dstab Saibel curare eurypteria
+16:47:25.960 | [System]: Queued freestand commands cleared.
+16:47:25.964 | [System]: Added PURGE to your freestand queue.
+16:47:25.965 | [System]: Running queued freestand command: PURGE
+16:47:25.966 | You purge every drop of venom from your bloodstream.
+16:47:25.968 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:26.059 | I do not recognise anything called that here.
+16:47:26.064 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:26.064 | I see no "body" to take.
+16:47:26.066 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:26.067 | I see no "gold" to take.
+16:47:26.067 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:26.068 | You are not fallen or kneeling.
+16:47:26.074 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:26.075 | You are already wielding a Shield of Absorption.
+16:47:26.080 | You are already wielding Thoth's fang.
+16:47:26.084 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:26.084 | You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:26.084 | You secrete eurypteria and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:26.086 | You quickly prick Saibel with your dirk.
+16:47:26.088 +tar paralysis
+16:47:26.088 +tar recklessness
+16:47:26.088 > pt Saibel: paralysis recklessness
+16:47:26.088 | Striking like a snake, you prick Saibel a second time with your dirk.
+16:47:26.088 +tar paralysis
+16:47:26.088 +tar paralysis
+16:47:26.088 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:47:26.088 | Balance used: 1.8s.
+16:47:26.099 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:26.101 -tar anorexia
+16:47:26.101 -tar slickness
+16:47:26.101 | Saibel eats a magnesium chip.
+16:47:26.102 -tar anorexia
+16:47:26.102 | Saibel takes a drink from an elegant diamond vial.
+16:47:26.102 | Saibel eats a potash crystal.
+16:47:26.106 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:26.169 | You are not the member of any party.
+16:47:26.171 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:26.296 | Saibel touches a tree of life tattoo.
+16:47:26.302 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:27.706 | You have recovered balance on all limbs.
+16:47:27.714 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:27.911 > queue addclear freestand purge
+16:47:27.911 > order adder kill Saibel
+16:47:27.911 > g body
+16:47:27.911 > g gold
+16:47:27.911 > stand
+16:47:27.911 > wield shield dirk
+16:47:27.911 > dstab Saibel curare xentio
+16:47:28.009 | [System]: Queued freestand commands cleared.
+16:47:28.009 | [System]: Added PURGE to your freestand queue.
+16:47:28.009 | [System]: Running queued freestand command: PURGE
+16:47:28.009 | You purge every drop of venom from your bloodstream.
+16:47:28.014 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:28.104 | Nothing can be seen here by that name.
+16:47:28.111 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:28.111 | I see no "body" to take.
+16:47:28.115 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:28.119 | I see no "gold" to take.
+16:47:28.120 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:28.120 | You are not fallen or kneeling.
+16:47:28.127 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:28.128 | You are already wielding a Shield of Absorption.
+16:47:28.135 | You are already wielding Thoth's fang.
+16:47:28.139 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:28.140 | You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:28.143 | You secrete xentio and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:28.143 | You quickly prick Saibel with your dirk.
+16:47:28.144 +tar paralysis
+16:47:28.144 +tar clumsiness
+16:47:28.144 > pt Saibel: paralysis clumsiness
+16:47:28.146 | Striking like a snake, you prick Saibel a second time with your dirk.
+16:47:28.147 +tar paralysis
+16:47:28.147 +tar paralysis
+16:47:28.147 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:47:28.148 | Balance used: 1.8s.
+16:47:28.156 P H: Full, M: Full, E: High, W: Full cekdb-
+16:47:28.211 -tar anorexia
+16:47:28.211 -tar slickness
+16:47:28.211 | Saibel eats a magnesium chip.
+16:47:28.219 P H: Full, M: Full, E: High, W: Full cekdb-
+16:47:28.220 | You are not the member of any party.
+16:47:28.223 P H: Full, M: Full, E: High, W: Full cekdb-
+16:47:29.701 | You have recovered balance on all limbs.
+16:47:29.702 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:29.741 > queue addclear freestand purge
+16:47:29.742 > order adder kill Saibel
+16:47:29.742 > g body
+16:47:29.742 > g gold
+16:47:29.742 > stand
+16:47:29.742 > wield shield dirk
+16:47:29.742 > dstab Saibel curare kalmia
+16:47:29.801 | [System]: Queued freestand commands cleared.
+16:47:29.805 | [System]: Added PURGE to your freestand queue.
+16:47:29.805 | [System]: Running queued freestand command: PURGE
+16:47:29.805 | You purge every drop of venom from your bloodstream.
+16:47:29.808 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:29.885 | Nothing can be seen here by that name.
+16:47:29.891 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:29.893 | I see no "body" to take.
+16:47:29.895 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:29.898 -tar anorexia
+16:47:29.898 | Saibel eats an aurum flake.
+16:47:29.904 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:29.905 | I see no "gold" to take.
+16:47:29.906 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:29.906 | You are not fallen or kneeling.
+16:47:29.907 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:29.910 | You are already wielding a Shield of Absorption.
+16:47:29.910 | You are already wielding Thoth's fang.
+16:47:29.913 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:29.913 | You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:29.913 | You secrete kalmia and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:29.913 | You quickly prick Saibel with your dirk.
+16:47:29.914 +tar paralysis
+16:47:29.914 +tar asthma
+16:47:29.914 > pt Saibel: paralysis asthma
+16:47:29.916 | Striking like a snake, you prick Saibel a second time with your dirk.
+16:47:29.917 +tar paralysis
+16:47:29.917 +tar paralysis
+16:47:29.917 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:47:29.920 | Balance used: 1.8s.
+16:47:29.926 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:30.051 | You are not the member of any party.
+16:47:30.054 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:31.637 -tar anorexia
+16:47:31.637 -tar slickness
+16:47:31.638 | Saibel eats a magnesium chip.
+16:47:31.641 P H: Full, M: High, E: Full, W: High cekdb-
+16:47:31.649 | You have recovered balance on all limbs.
+16:47:31.649 P H: Full, M: High, E: Full, W: High cexkdb-
+16:47:31.822 > queue addclear freestand purge
+16:47:31.824 > order adder kill Saibel
+16:47:31.824 > g body
+16:47:31.824 > g gold
+16:47:31.824 > stand
+16:47:31.824 > wield shield dirk
+16:47:31.824 > dstab Saibel curare xentio
+16:47:31.881 | [System]: Queued freestand commands cleared.
+16:47:31.881 | [System]: Added PURGE to your freestand queue.
+16:47:31.882 | [System]: Running queued freestand command: PURGE
+16:47:31.882 | You purge every drop of venom from your bloodstream.
+16:47:31.885 P H: Full, M: High, E: Full, W: High cexkdb-
+16:47:31.975 | Ahh, I am truly sorry, but I do not see anyone by that name here.
+16:47:31.983 P H: Full, M: High, E: Full, W: High cexkdb-
+16:47:31.984 | I see no "body" to take.
+16:47:31.987 P H: Full, M: High, E: Full, W: High cexkdb-
+16:47:31.991 | I see no "gold" to take.
+16:47:31.995 P H: Full, M: High, E: Full, W: High cexkdb-
+16:47:31.998 | You are not fallen or kneeling.
+16:47:32.001 P H: Full, M: High, E: Full, W: High cexkdb-
+16:47:32.005 | You are already wielding a Shield of Absorption.
+16:47:32.006 | You are already wielding Thoth's fang.
+16:47:32.007 P H: Full, M: High, E: Full, W: High cexkdb-
+16:47:32.010 | You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:32.011 | You secrete xentio and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:32.011 | You quickly prick Saibel with your dirk.
+16:47:32.012 +tar paralysis
+16:47:32.012 +tar clumsiness
+16:47:32.012 > pt Saibel: paralysis clumsiness
+16:47:32.012 | Striking like a snake, you prick Saibel a second time with your dirk.
+16:47:32.012 +tar paralysis
+16:47:32.012 +tar paralysis
+16:47:32.012 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:47:32.012 | Balance used: 1.8s.
+16:47:32.015 P H: Full, M: High, E: High, W: High cekdb-
+16:47:32.087 | You are not the member of any party.
+16:47:32.091 P H: Full, M: High, E: High, W: High cekdb-
+16:47:33.316 -tar anorexia
+16:47:33.316 -tar slickness
+16:47:33.316 | Saibel eats a magnesium chip.
+16:47:33.319 P H: Full, M: High, E: High, W: High cekdb-
+16:47:33.381 -tar asthma
+16:47:33.381 -tar weariness
+16:47:33.630 | You have recovered balance on all limbs.
+16:47:33.636 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:33.854 > queue addclear freestand purge
+16:47:33.854 > order adder kill Saibel
+16:47:33.854 > g body
+16:47:33.854 > g gold
+16:47:33.854 > stand
+16:47:33.854 > wield shield dirk
+16:47:33.854 > impulse Saibel confusion curare
+16:47:33.908 | [System]: Queued freestand commands cleared.
+16:47:33.915 | [System]: Added PURGE to your freestand queue.
+16:47:33.915 | [System]: Running queued freestand command: PURGE
+16:47:33.915 | You purge every drop of venom from your bloodstream.
+16:47:33.917 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:33.996 | Ahh, I am truly sorry, but I do not see anyone by that name here.
+16:47:34.004 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:34.005 | I see no "body" to take.
+16:47:34.009 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:34.012 | I see no "gold" to take.
+16:47:34.014 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:34.017 | You are not fallen or kneeling.
+16:47:34.021 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:34.023 | You are already wielding a Shield of Absorption.
+16:47:34.025 | You are already wielding Thoth's fang.
+16:47:34.031 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:34.031 +tar confusion
+16:47:34.032 | You craft the impulse of confusion in the mind of Saibel.
+16:47:34.033 +tar confusion
+16:47:34.033 | Saibel looks about bemusedly.
+16:47:34.033 | Equilibrium used: 1.44s.
+16:47:34.033 | You feel the power of the venom curare flowing through your veins.
+16:47:34.033 +tar paralysis
+16:47:34.033 | You sink your fangs into Saibel, injecting just the proper amount of curare.
+16:47:34.033 +tar paralysis
+16:47:34.033 +tar paralysis
+16:47:34.033 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:47:34.037 | Balance used: 1.7s.
+16:47:34.038 P H: Full, M: High, E: High, W: Full ckdb-
+16:47:34.096 | A look of extreme focus crosses the face of Saibel.
+16:47:34.101 P H: Full, M: High, E: High, W: Full ckdb-
+16:47:34.920 -tar anorexia
+16:47:34.920 -tar slickness
+16:47:34.921 | Saibel eats a magnesium chip.
+16:47:34.928 P H: Full, M: High, E: High, W: Full ckdb-
+16:47:35.272 | You have recovered equilibrium.
+16:47:35.277 P H: Full, M: High, E: Full, W: Full cekdb-
+16:47:35.500 | You have recovered balance on all limbs.
+16:47:35.501 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:35.529 > queue addclear freestand purge
+16:47:35.530 > order adder kill Saibel
+16:47:35.530 > g body
+16:47:35.530 > g gold
+16:47:35.530 > stand
+16:47:35.530 > wield shield dirk
+16:47:35.530 > impulse Saibel stupidity loki
+16:47:35.581 | [System]: Queued freestand commands cleared.
+16:47:35.585 | [System]: Added PURGE to your freestand queue.
+16:47:35.586 | [System]: Running queued freestand command: PURGE
+16:47:35.587 | You purge every drop of venom from your bloodstream.
+16:47:35.589 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:35.674 | You detect nothing here by that name.
+16:47:35.676 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:35.679 | I see no "body" to take.
+16:47:35.681 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:35.681 | I see no "gold" to take.
+16:47:35.683 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:35.684 | You are not fallen or kneeling.
+16:47:35.685 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:35.688 | You are already wielding a Shield of Absorption.
+16:47:35.688 | You are already wielding Thoth's fang.
+16:47:35.692 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:35.692 +tar stupidity
+16:47:35.692 | You craft the impulse of stupidity in the mind of Saibel.
+16:47:35.692 | A glazed look descends over the features of Saibel.
+16:47:35.692 | Equilibrium used: 1.44s.
+16:47:35.692 | You feel the power of the venom loki flowing through your veins.
+16:47:35.694 | You sink your fangs into Saibel, injecting just the proper amount of loki.
+16:47:35.697 | Balance used: 1.7s.
+16:47:35.700 P H: Full, M: High, E: High, W: Full ckdb-
+16:47:36.720 -tar anorexia
+16:47:36.720 | Saibel eats an aurum flake.
+16:47:36.721 | A look of extreme focus crosses the face of Saibel.
+16:47:36.728 P H: Full, M: High, E: High, W: High ckdb-
+16:47:36.934 | You have recovered equilibrium.
+16:47:36.942 P H: Full, M: High, E: High, W: High cekdb-
+16:47:37.276 | You have recovered balance on all limbs.
+16:47:37.278 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:37.414 > queue addclear freestand purge
+16:47:37.416 > order adder kill Saibel
+16:47:37.416 > g body
+16:47:37.416 > g gold
+16:47:37.416 > stand
+16:47:37.416 > wield shield dirk
+16:47:37.416 > dstab Saibel curare eurypteria
+16:47:37.479 | [System]: Queued freestand commands cleared.
+16:47:37.479 | [System]: Added PURGE to your freestand queue.
+16:47:37.480 | [System]: Running queued freestand command: PURGE
+16:47:37.480 | You purge every drop of venom from your bloodstream.
+16:47:37.483 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:37.577 | You detect nothing here by that name.
+16:47:37.581 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:37.585 | I see no "body" to take.
+16:47:37.586 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:37.662 | I see no "gold" to take.
+16:47:37.668 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:37.670 | You are not fallen or kneeling.
+16:47:37.671 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:37.671 | You are already wielding a Shield of Absorption.
+16:47:37.671 | You are already wielding Thoth's fang.
+16:47:37.676 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:37.676 | You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:37.676 | You secrete eurypteria and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:37.677 | You quickly prick Saibel with your dirk.
+16:47:37.678 +tar paralysis
+16:47:37.678 +tar recklessness
+16:47:37.678 > pt Saibel: paralysis recklessness
+16:47:37.678 | Striking like a snake, you prick Saibel a second time with your dirk.
+16:47:37.678 +tar paralysis
+16:47:37.678 +tar paralysis
+16:47:37.678 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:47:37.679 | Balance used: 1.8s.
+16:47:37.681 P H: Full, M: High, E: High, W: High cekdb-
+16:47:37.681 -tar anorexia
+16:47:37.681 | Saibel takes a drink from an elegant diamond vial.
+16:47:37.681 | Saibel eats a potash crystal.
+16:47:37.687 P H: Full, M: High, E: High, W: High cekdb-
+16:47:37.742 | You are not the member of any party.
+16:47:37.751 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:38.408 -tar anorexia
+16:47:38.409 -tar slickness
+16:47:38.409 | Saibel eats a magnesium chip.
+16:47:38.414 P H: Full, M: Full, E: High, W: Full cekdb-
+16:47:39.212 | A look of extreme focus crosses the face of Saibel.
+16:47:39.218 P H: Full, M: Full, E: Full, W: Full cekdb-
+16:47:39.343 | You have recovered balance on all limbs.
+16:47:39.348 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:39.519 > queue addclear freestand purge
+16:47:39.522 > order adder kill Saibel
+16:47:39.522 > g body
+16:47:39.522 > g gold
+16:47:39.522 > stand
+16:47:39.522 > wield shield dirk
+16:47:39.522 > dstab Saibel curare xentio
+16:47:39.581 | [System]: Queued freestand commands cleared.
+16:47:39.581 | [System]: Added PURGE to your freestand queue.
+16:47:39.582 | [System]: Running queued freestand command: PURGE
+16:47:39.582 | You purge every drop of venom from your bloodstream.
+16:47:39.587 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:39.675 | You cannot see that being here.
+16:47:39.681 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:39.683 | I see no "body" to take.
+16:47:39.683 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:39.685 | I see no "gold" to take.
+16:47:39.686 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:39.686 | You are not fallen or kneeling.
+16:47:39.690 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:39.691 | You are already wielding a Shield of Absorption.
+16:47:39.692 | You are already wielding Thoth's fang.
+16:47:39.694 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:39.696 | You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:39.696 | You secrete xentio and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:39.696 | You quickly prick Saibel with your dirk.
+16:47:39.696 +tar paralysis
+16:47:39.696 +tar clumsiness
+16:47:39.696 > pt Saibel: paralysis clumsiness
+16:47:39.697 | Striking like a snake, you prick Saibel a second time with your dirk.
+16:47:39.701 +tar paralysis
+16:47:39.701 +tar paralysis
+16:47:39.701 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:47:39.701 | Balance used: 1.8s.
+16:47:39.708 P H: Full, M: Full, E: High, W: Full cekdb-
+16:47:39.773 | You are not the member of any party.
+16:47:39.778 P H: Full, M: Full, E: High, W: Full cekdb-
+16:47:40.010 -tar anorexia
+16:47:40.010 -tar slickness
+16:47:40.010 | Saibel eats a magnesium chip.
+16:47:40.017 P H: Full, M: Full, E: High, W: Full cekdb-
+16:47:40.392 | Saibel touches a tree of life tattoo.
+16:47:40.401 P H: Full, M: Full, E: High, W: Full cekdb-
+16:47:41.291 | You have recovered balance on all limbs.
+16:47:41.295 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:41.444 > queue addclear freestand purge
+16:47:41.446 > order adder kill Saibel
+16:47:41.446 > g body
+16:47:41.446 > g gold
+16:47:41.446 > stand
+16:47:41.446 > wield shield dirk
+16:47:41.446 > dstab Saibel curare xentio
+16:47:41.500 | [System]: Queued freestand commands cleared.
+16:47:41.500 | [System]: Added PURGE to your freestand queue.
+16:47:41.500 | [System]: Running queued freestand command: PURGE
+16:47:41.504 | You purge every drop of venom from your bloodstream.
+16:47:41.504 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:41.579 | Nothing can be seen here by that name.
+16:47:41.584 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:41.585 | I see no "body" to take.
+16:47:41.587 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:41.588 | I see no "gold" to take.
+16:47:41.589 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:41.592 | You are not fallen or kneeling.
+16:47:41.594 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:41.598 | You are already wielding a Shield of Absorption.
+16:47:41.598 | You are already wielding Thoth's fang.
+16:47:41.601 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:41.605 | You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:41.606 | You secrete xentio and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:41.609 | You quickly prick Saibel with your dirk.
+16:47:41.610 +tar paralysis
+16:47:41.610 +tar clumsiness
+16:47:41.610 > pt Saibel: paralysis clumsiness
+16:47:41.610 | Striking like a snake, you prick Saibel a second time with your dirk.
+16:47:41.610 +tar paralysis
+16:47:41.610 +tar paralysis
+16:47:41.610 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:47:41.610 | Balance used: 1.8s.
+16:47:41.616 P H: Full, M: High, E: High, W: High cekdb-
+16:47:41.667 -tar anorexia
+16:47:41.667 -tar slickness
+16:47:41.667 | Saibel eats a magnesium chip.
+16:47:41.668 P H: Full, M: High, E: High, W: High cekdb-
+16:47:41.747 | You are not the member of any party.
+16:47:41.752 P H: Full, M: High, E: High, W: High cekdb-
+16:47:43.279 -tar anorexia
+16:47:43.280 | Saibel eats an aurum flake.
+16:47:43.286 P H: Full, M: High, E: Full, W: Full cekdb-
+16:47:43.390 | You have recovered balance on all limbs.
+16:47:43.390 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:43.501 > queue addclear freestand purge
+16:47:43.503 > order adder kill Saibel
+16:47:43.504 > g body
+16:47:43.504 > g gold
+16:47:43.504 > stand
+16:47:43.504 > wield shield dirk
+16:47:43.504 > dstab Saibel curare xentio
+16:47:43.601 | [System]: Queued freestand commands cleared.
+16:47:43.603 | [System]: Added PURGE to your freestand queue.
+16:47:43.604 | [System]: Running queued freestand command: PURGE
+16:47:43.605 | You purge every drop of venom from your bloodstream.
+16:47:43.609 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:43.689 | Ahh, I am truly sorry, but I do not see anyone by that name here.
+16:47:43.697 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:43.701 | I see no "body" to take.
+16:47:43.705 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:43.705 | I see no "gold" to take.
+16:47:43.710 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:43.713 | You are not fallen or kneeling.
+16:47:43.715 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:43.716 | You are already wielding a Shield of Absorption.
+16:47:43.718 | You are already wielding Thoth's fang.
+16:47:43.721 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:43.723 | You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:43.723 | You secrete xentio and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:43.723 | You quickly prick Saibel with your dirk.
+16:47:43.723 +tar paralysis
+16:47:43.723 +tar clumsiness
+16:47:43.723 > pt Saibel: paralysis clumsiness
+16:47:43.723 | Striking like a snake, you prick Saibel a second time with your dirk.
+16:47:43.723 +tar paralysis
+16:47:43.723 +tar paralysis
+16:47:43.723 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:47:43.723 | Balance used: 1.8s.
+16:47:43.729 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:43.779 | You are not the member of any party.
+16:47:43.780 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:45.038 -tar anorexia
+16:47:45.038 -tar slickness
+16:47:45.039 | Saibel eats a magnesium chip.
+16:47:45.048 P H: Full, M: High, E: High, W: High cekdb-
+16:47:45.364 | You have recovered balance on all limbs.
+16:47:45.369 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:45.488 > queue addclear freestand purge
+16:47:45.490 > order adder kill Saibel
+16:47:45.490 > g body
+16:47:45.490 > g gold
+16:47:45.490 > stand
+16:47:45.490 > wield shield dirk
+16:47:45.490 > dstab Saibel curare eurypteria
+16:47:45.586 | [System]: Queued freestand commands cleared.
+16:47:45.587 | [System]: Added PURGE to your freestand queue.
+16:47:45.588 | [System]: Running queued freestand command: PURGE
+16:47:45.588 | You purge every drop of venom from your bloodstream.
+16:47:45.593 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:45.681 | Nothing can be seen here by that name.
+16:47:45.686 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:45.690 | I see no "body" to take.
+16:47:45.691 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:45.692 | I see no "gold" to take.
+16:47:45.700 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:45.701 | You are not fallen or kneeling.
+16:47:45.704 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:45.704 | You are already wielding a Shield of Absorption.
+16:47:45.704 | You are already wielding Thoth's fang.
+16:47:45.710 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:45.710 | You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:45.710 | You secrete eurypteria and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:45.710 | You quickly prick Saibel with your dirk.
+16:47:45.710 +tar paralysis
+16:47:45.710 +tar recklessness
+16:47:45.710 > pt Saibel: paralysis recklessness
+16:47:45.710 | Striking like a snake, you prick Saibel a second time with your dirk.
+16:47:45.710 +tar paralysis
+16:47:45.710 +tar paralysis
+16:47:45.710 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:47:45.711 | Balance used: 1.8s.
+16:47:45.718 P H: Full, M: High, E: High, W: High cekdb-
+16:47:45.794 | A look of extreme focus crosses the face of Saibel.
+16:47:45.795 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:45.879 | You are not the member of any party.
+16:47:45.881 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:46.704 -tar anorexia
+16:47:46.704 -tar slickness
+16:47:46.704 | Saibel eats a magnesium chip.
+16:47:46.712 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:47.304 | You have recovered balance on all limbs.
+16:47:47.307 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:47.323 > queue addclear freestand purge
+16:47:47.324 > order adder kill Saibel
+16:47:47.324 > g body
+16:47:47.324 > g gold
+16:47:47.324 > stand
+16:47:47.324 > wield shield dirk
+16:47:47.324 > dstab Saibel curare eurypteria
+16:47:47.383 | [System]: Queued freestand commands cleared.
+16:47:47.383 | [System]: Added PURGE to your freestand queue.
+16:47:47.383 | [System]: Running queued freestand command: PURGE
+16:47:47.383 | You purge every drop of venom from your bloodstream.
+16:47:47.390 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:47.458 | Ahh, I am truly sorry, but I do not see anyone by that name here.
+16:47:47.465 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:47.467 | I see no "body" to take.
+16:47:47.474 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:47.475 | I see no "gold" to take.
+16:47:47.482 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:47.484 | You are not fallen or kneeling.
+16:47:47.487 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:47.493 | You are already wielding a Shield of Absorption.
+16:47:47.493 | You are already wielding Thoth's fang.
+16:47:47.496 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:47.497 | You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:47.497 | You secrete eurypteria and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:47.498 | You quickly prick Saibel with your dirk.
+16:47:47.502 +tar paralysis
+16:47:47.502 +tar recklessness
+16:47:47.502 > pt Saibel: paralysis recklessness
+16:47:47.503 | Striking like a snake, you prick Saibel a second time with your dirk.
+16:47:47.503 +tar paralysis
+16:47:47.503 +tar paralysis
+16:47:47.503 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:47:47.503 | Balance used: 1.8s.
+16:47:47.505 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:47.541 -tar anorexia
+16:47:47.541 | Saibel takes a drink from an elegant diamond vial.
+16:47:47.541 | Saibel eats a potash crystal.
+16:47:47.548 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:47.639 | You are not the member of any party.
+16:47:47.646 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:48.209 -tar anorexia
+16:47:48.209 -tar slickness
+16:47:48.210 | Saibel eats a magnesium chip.
+16:47:48.219 P H: Full, M: High, E: Full, W: Full cekdb-
+16:47:48.398 | A look of extreme focus crosses the face of Saibel.
+16:47:48.406 P H: Full, M: High, E: Full, W: Full cekdb-
+16:47:49.233 | You have recovered balance on all limbs.
+16:47:49.240 P H: Full, M: High, E: Full, W: High cexkdb-
+16:47:49.375 > queue addclear freestand purge
+16:47:49.375 > order adder kill Saibel
+16:47:49.375 > g body
+16:47:49.375 > g gold
+16:47:49.375 > stand
+16:47:49.375 > wield shield dirk
+16:47:49.375 > dstab Saibel curare eurypteria
+16:47:49.431 | [System]: Queued freestand commands cleared.
+16:47:49.431 | [System]: Added PURGE to your freestand queue.
+16:47:49.431 | [System]: Running queued freestand command: PURGE
+16:47:49.431 | You purge every drop of venom from your bloodstream.
+16:47:49.439 P H: Full, M: High, E: Full, W: High cexkdb-
+16:47:49.523 | Nothing can be seen here by that name.
+16:47:49.530 P H: Full, M: High, E: Full, W: High cexkdb-
+16:47:49.532 | I see no "body" to take.
+16:47:49.535 P H: Full, M: High, E: Full, W: High cexkdb-
+16:47:49.539 | I see no "gold" to take.
+16:47:49.541 P H: Full, M: High, E: Full, W: High cexkdb-
+16:47:49.547 | You are not fallen or kneeling.
+16:47:49.548 P H: Full, M: High, E: Full, W: High cexkdb-
+16:47:49.550 | You are already wielding a Shield of Absorption.
+16:47:49.551 | You are already wielding Thoth's fang.
+16:47:49.554 P H: Full, M: High, E: Full, W: High cexkdb-
+16:47:49.558 | You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:49.558 | You secrete eurypteria and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:49.558 | You quickly prick Saibel with your dirk.
+16:47:49.559 +tar paralysis
+16:47:49.559 +tar recklessness
+16:47:49.559 > pt Saibel: paralysis recklessness
+16:47:49.559 | Striking like a snake, you prick Saibel a second time with your dirk.
+16:47:49.559 +tar paralysis
+16:47:49.559 +tar paralysis
+16:47:49.559 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:47:49.560 | Balance used: 1.8s.
+16:47:49.567 P H: Full, M: High, E: High, W: High cekdb-
+16:47:49.616 | You are not the member of any party.
+16:47:49.618 P H: Full, M: High, E: High, W: High cekdb-
+16:47:49.885 -tar anorexia
+16:47:49.885 -tar slickness
+16:47:49.885 | Saibel eats a magnesium chip.
+16:47:49.891 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:50.999 | A look of extreme focus crosses the face of Saibel.
+16:47:51.008 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:51.208 | You have recovered balance on all limbs.
+16:47:51.213 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:51.240 > queue addclear freestand purge
+16:47:51.240 > order adder kill Saibel
+16:47:51.240 > g body
+16:47:51.240 > g gold
+16:47:51.240 > stand
+16:47:51.240 > wield shield dirk
+16:47:51.240 > dstab Saibel curare eurypteria
+16:47:51.300 | [System]: Queued freestand commands cleared.
+16:47:51.301 | [System]: Added PURGE to your freestand queue.
+16:47:51.305 | [System]: Running queued freestand command: PURGE
+16:47:51.306 | You purge every drop of venom from your bloodstream.
+16:47:51.310 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:51.381 | You cannot see that being here.
+16:47:51.387 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:51.388 | I see no "body" to take.
+16:47:51.394 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:51.395 | I see no "gold" to take.
+16:47:51.398 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:51.401 | You are not fallen or kneeling.
+16:47:51.405 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:51.407 | You are already wielding a Shield of Absorption.
+16:47:51.408 | You are already wielding Thoth's fang.
+16:47:51.413 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:51.414 | You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:51.415 | You secrete eurypteria and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:51.415 | You quickly prick Saibel with your dirk.
+16:47:51.415 +tar paralysis
+16:47:51.415 +tar recklessness
+16:47:51.415 > pt Saibel: paralysis recklessness
+16:47:51.415 | Striking like a snake, you prick Saibel a second time with your dirk.
+16:47:51.415 +tar paralysis
+16:47:51.415 +tar paralysis
+16:47:51.415 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:47:51.419 | Balance used: 1.8s.
+16:47:51.421 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:51.470 -tar anorexia
+16:47:51.470 -tar slickness
+16:47:51.470 | Saibel eats a magnesium chip.
+16:47:51.476 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:51.564 | You are not the member of any party.
+16:47:51.566 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:52.042 -tar anorexia
+16:47:52.042 | Saibel takes a drink from an elegant diamond vial.
+16:47:52.048 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:53.086 -tar anorexia
+16:47:53.088 | Saibel eats an aurum flake.
+16:47:53.095 | You have recovered balance on all limbs.
+16:47:53.103 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:53.140 > queue addclear freestand purge
+16:47:53.141 > order adder kill Saibel
+16:47:53.141 > g body
+16:47:53.141 > g gold
+16:47:53.141 > stand
+16:47:53.141 > wield shield dirk
+16:47:53.141 > dstab Saibel curare xentio
+16:47:53.196 | [System]: Queued freestand commands cleared.
+16:47:53.201 | [System]: Added PURGE to your freestand queue.
+16:47:53.205 | [System]: Running queued freestand command: PURGE
+16:47:53.205 | You purge every drop of venom from your bloodstream.
+16:47:53.210 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:53.296 | You cannot see that being here.
+16:47:53.302 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:53.304 | I see no "body" to take.
+16:47:53.310 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:53.311 | I see no "gold" to take.
+16:47:53.315 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:53.315 | You are not fallen or kneeling.
+16:47:53.321 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:53.321 | You are already wielding a Shield of Absorption.
+16:47:53.321 | You are already wielding Thoth's fang.
+16:47:53.324 P H: Full, M: High, E: High, W: High cexkdb-
+16:47:53.325 | You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:53.325 | You secrete xentio and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:53.325 | You quickly prick Saibel with your dirk.
+16:47:53.325 +tar paralysis
+16:47:53.325 +tar clumsiness
+16:47:53.325 > pt Saibel: paralysis clumsiness
+16:47:53.325 | Striking like a snake, you prick Saibel a second time with your dirk.
+16:47:53.325 +tar paralysis
+16:47:53.325 +tar paralysis
+16:47:53.325 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:47:53.325 | Balance used: 1.8s.
+16:47:53.329 P H: Full, M: High, E: High, W: High cekdb-
+16:47:53.416 | A look of extreme focus crosses the face of Saibel.
+16:47:53.417 P H: Full, M: High, E: High, W: High cekdb-
+16:47:53.512 | You are not the member of any party.
+16:47:53.514 P H: Full, M: High, E: High, W: High cekdb-
+16:47:54.597 -tar anorexia
+16:47:54.597 -tar slickness
+16:47:54.597 | Saibel eats a magnesium chip.
+16:47:54.606 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:54.805 -tar clumsiness
+16:47:54.805 | Saibel touches a tree of life tattoo.
+16:47:54.812 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:55.070 | You have recovered balance on all limbs.
+16:47:55.075 P H: Full, M: High, E: High, W: Full cexkdb-
+16:47:55.339 > say lol what
+16:47:55.405 | You say in a strong, calm voice, "Lol what."
+16:47:55.411 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:56.010 > queue addclear freestand purge
+16:47:56.012 > order adder kill Saibel
+16:47:56.012 > g body
+16:47:56.012 > g gold
+16:47:56.012 > stand
+16:47:56.012 > wield shield dirk
+16:47:56.012 > dstab Saibel curare kalmia
+16:47:56.073 | [System]: Queued freestand commands cleared.
+16:47:56.074 | [System]: Added PURGE to your freestand queue.
+16:47:56.075 | [System]: Running queued freestand command: PURGE
+16:47:56.080 | You purge every drop of venom from your bloodstream.
+16:47:56.084 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:56.170 | I do not recognise anything called that here.
+16:47:56.173 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:56.173 | I see no "body" to take.
+16:47:56.178 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:56.178 | I see no "gold" to take.
+16:47:56.187 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:56.188 | You are not fallen or kneeling.
+16:47:56.195 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:56.196 | You are already wielding a Shield of Absorption.
+16:47:56.197 | You are already wielding Thoth's fang.
+16:47:56.202 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:56.205 | You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:56.205 | You secrete kalmia and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:56.205 | You quickly prick Saibel with your dirk.
+16:47:56.205 +tar paralysis
+16:47:56.205 +tar asthma
+16:47:56.205 > pt Saibel: paralysis asthma
+16:47:56.206 | Striking like a snake, you prick Saibel a second time with your dirk.
+16:47:56.207 +tar paralysis
+16:47:56.207 +tar paralysis
+16:47:56.207 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:47:56.207 | Balance used: 1.8s.
+16:47:56.208 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:56.274 | You are not the member of any party.
+16:47:56.276 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:56.423 -tar anorexia
+16:47:56.423 -tar slickness
+16:47:56.423 | Saibel eats a magnesium chip.
+16:47:56.431 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:57.783 | You have recovered balance on all limbs.
+16:47:57.785 P H: Full, M: High, E: Full, W: High cexkdb-
+16:47:57.810 > queue addclear freestand purge
+16:47:57.811 > order adder kill Saibel
+16:47:57.811 > g body
+16:47:57.811 > g gold
+16:47:57.811 > stand
+16:47:57.811 > wield shield dirk
+16:47:57.811 > dstab Saibel curare gecko
+16:47:57.867 | [System]: Queued freestand commands cleared.
+16:47:57.868 | [System]: Added PURGE to your freestand queue.
+16:47:57.868 | [System]: Running queued freestand command: PURGE
+16:47:57.868 | You purge every drop of venom from your bloodstream.
+16:47:57.874 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:57.950 | Ahh, I am truly sorry, but I do not see anyone by that name here.
+16:47:57.956 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:57.957 | I see no "body" to take.
+16:47:57.959 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:57.964 | I see no "gold" to take.
+16:47:57.969 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:57.969 | You are not fallen or kneeling.
+16:47:57.973 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:57.974 | You are already wielding a Shield of Absorption.
+16:47:57.974 | You are already wielding Thoth's fang.
+16:47:57.981 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:47:57.982 | You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:57.984 | You secrete gecko and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:57.984 | You quickly prick Saibel with your dirk.
+16:47:57.984 +tar paralysis
+16:47:57.985 +tar slickness
+16:47:57.985 > pt Saibel: paralysis slickness
+16:47:57.988 | Striking like a snake, you prick Saibel a second time with your dirk.
+16:47:57.989 +tar paralysis
+16:47:57.989 +tar paralysis
+16:47:57.989 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:47:57.989 | Balance used: 1.8s.
+16:47:57.994 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:57.994 -tar anorexia
+16:47:57.994 | Saibel eats a magnesium chip.
+16:47:57.995 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:58.067 | You are not the member of any party.
+16:47:58.069 P H: Full, M: High, E: High, W: Full cekdb-
+16:47:58.503 -tar paralysis
+16:47:59.351 -tar paralysis
+16:47:59.608 | You have recovered balance on all limbs.
+16:47:59.610 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:59.711 > queue addclear freestand purge
+16:47:59.713 > order adder kill Saibel
+16:47:59.713 > g body
+16:47:59.713 > g gold
+16:47:59.713 > stand
+16:47:59.713 > wield shield dirk
+16:47:59.713 > dstab Saibel curare vernalius
+16:47:59.740 -tar anorexia
+16:47:59.740 | Saibel eats an aurum flake.
+16:47:59.747 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:59.833 | [System]: Queued freestand commands cleared.
+16:47:59.839 | [System]: Added PURGE to your freestand queue.
+16:47:59.840 | [System]: Running queued freestand command: PURGE
+16:47:59.840 | You purge every drop of venom from your bloodstream.
+16:47:59.841 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:59.844 | Ahh, I am truly sorry, but I do not see anyone by that name here.
+16:47:59.850 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:59.852 | I see no "body" to take.
+16:47:59.859 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:59.859 | I see no "gold" to take.
+16:47:59.867 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:59.869 | You are not fallen or kneeling.
+16:47:59.872 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:59.872 | You are already wielding a Shield of Absorption.
+16:47:59.875 | You are already wielding Thoth's fang.
+16:47:59.880 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:47:59.881 | You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:59.885 | You secrete vernalius and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:47:59.886 | You quickly prick Saibel with your dirk.
+16:47:59.886 +tar paralysis
+16:47:59.887 +tar weariness
+16:47:59.887 > pt Saibel: paralysis weariness
+16:47:59.888 | Striking like a snake, you prick Saibel a second time with your dirk.
+16:47:59.888 +tar paralysis
+16:47:59.888 +tar paralysis
+16:47:59.888 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:47:59.889 | Balance used: 1.8s.
+16:47:59.896 P H: Full, M: Full, E: High, W: Full cekdb-
+16:47:59.972 | You are not the member of any party.
+16:47:59.980 P H: Full, M: Full, E: High, W: Full cekdb-
+16:48:01.250 -tar slickness
+16:48:01.250 -tar paralysis
+16:48:01.437 -tar anorexia
+16:48:01.437 -tar slickness
+16:48:01.437 | Saibel eats a magnesium chip.
+16:48:01.444 P H: Full, M: High, E: High, W: High cekdb-
+16:48:01.546 | You have recovered balance on all limbs.
+16:48:01.551 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:01.619 > queue addclear freestand purge
+16:48:01.619 > order adder kill Saibel
+16:48:01.619 > g body
+16:48:01.619 > g gold
+16:48:01.619 > stand
+16:48:01.619 > wield shield dirk
+16:48:01.619 > dstab Saibel curare kalmia
+16:48:01.721 | [System]: Queued freestand commands cleared.
+16:48:01.725 | [System]: Added PURGE to your freestand queue.
+16:48:01.727 | [System]: Running queued freestand command: PURGE
+16:48:01.727 | You purge every drop of venom from your bloodstream.
+16:48:01.734 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:01.824 | I do not recognise anything called that here.
+16:48:01.826 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:01.826 | I see no "body" to take.
+16:48:01.833 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:01.837 | I see no "gold" to take.
+16:48:01.843 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:01.844 | You are not fallen or kneeling.
+16:48:01.851 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:01.855 | You are already wielding a Shield of Absorption.
+16:48:01.855 | You are already wielding Thoth's fang.
+16:48:01.860 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:01.862 | You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:48:01.863 | You secrete kalmia and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:48:01.863 | You quickly prick Saibel with your dirk.
+16:48:01.863 +tar paralysis
+16:48:01.863 +tar asthma
+16:48:01.863 > pt Saibel: paralysis asthma
+16:48:01.863 | Striking like a snake, you prick Saibel a second time with your dirk.
+16:48:01.863 +tar paralysis
+16:48:01.863 +tar paralysis
+16:48:01.863 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:48:01.863 | Balance used: 1.8s.
+16:48:01.870 P H: Full, M: High, E: High, W: High cekdb-
+16:48:01.942 | You are not the member of any party.
+16:48:01.943 P H: Full, M: High, E: High, W: Full cekdb-
+16:48:02.650 -tar paralysis
+16:48:02.986 -tar anorexia
+16:48:02.986 -tar slickness
+16:48:02.987 | Saibel eats a magnesium chip.
+16:48:02.991 P H: Full, M: High, E: High, W: Full cekdb-
+16:48:03.441 | You have recovered balance on all limbs.
+16:48:03.443 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:03.477 > queue addclear freestand purge
+16:48:03.477 > order adder kill Saibel
+16:48:03.477 > g body
+16:48:03.477 > g gold
+16:48:03.477 > stand
+16:48:03.477 > wield shield dirk
+16:48:03.479 > impulse Saibel masochism monkshood
+16:48:03.551 | [System]: Queued freestand commands cleared.
+16:48:03.552 | [System]: Added PURGE to your freestand queue.
+16:48:03.557 | [System]: Running queued freestand command: PURGE
+16:48:03.558 | You purge every drop of venom from your bloodstream.
+16:48:03.560 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:03.655 | I do not recognise anything called that here.
+16:48:03.660 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:03.662 | I see no "body" to take.
+16:48:03.669 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:03.671 | I see no "gold" to take.
+16:48:03.673 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:03.675 | You are not fallen or kneeling.
+16:48:03.676 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:03.677 | You are already wielding a Shield of Absorption.
+16:48:03.680 | You are already wielding Thoth's fang.
+16:48:03.689 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:03.691 +tar masochism
+16:48:03.691 | You craft the impulse of masochism in the mind of Saibel.
+16:48:03.692 | Equilibrium used: 1.44s.
+16:48:03.693 | You feel the power of the venom monkshood flowing through your veins.
+16:48:03.693 +tar disloyalty
+16:48:03.693 | You sink your fangs into Saibel, injecting just the proper amount of monkshood.
+16:48:03.694 +tar impatience
+16:48:03.694 | You sense the weakness in Saibel as your monkshood takes hold.
+16:48:03.694 +tar impatience
+16:48:03.694 | Saibel shuffles her feet in boredom.
+16:48:03.694 | Balance used: 1.7s.
+16:48:03.700 P H: Full, M: High, E: High, W: Full ckdb-
+16:48:04.050 -tar impatience
+16:48:04.050 -tar confusion
+16:48:04.050 -tar epilepsy
+16:48:04.050 -tar stupidity
+16:48:04.050 -tar masochism
+16:48:04.050 -tar dizziness
+16:48:04.714 -tar anorexia
+16:48:04.714 | Saibel eats a plumbum flake.
+16:48:04.718 | A look of extreme focus crosses the face of Saibel.
+16:48:04.721 P H: Full, M: High, E: High, W: Full ckdb-
+16:48:04.975 | You have recovered equilibrium.
+16:48:04.982 P H: Full, M: High, E: High, W: Full cekdb-
+16:48:05.186 | You have recovered balance on all limbs.
+16:48:05.193 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:05.350 > queue addclear freestand purge
+16:48:05.352 > order adder kill Saibel
+16:48:05.352 > g body
+16:48:05.352 > g gold
+16:48:05.352 > stand
+16:48:05.352 > wield shield dirk
+16:48:05.352 > impulse Saibel masochism monkshood
+16:48:05.429 | [System]: Queued freestand commands cleared.
+16:48:05.430 | [System]: Added PURGE to your freestand queue.
+16:48:05.430 | [System]: Running queued freestand command: PURGE
+16:48:05.430 | You purge every drop of venom from your bloodstream.
+16:48:05.438 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:05.518 | I do not recognise anything called that here.
+16:48:05.520 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:05.521 | I see no "body" to take.
+16:48:05.528 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:05.529 | I see no "gold" to take.
+16:48:05.538 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:05.543 | You are not fallen or kneeling.
+16:48:05.547 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:05.549 | You are already wielding a Shield of Absorption.
+16:48:05.549 | You are already wielding Thoth's fang.
+16:48:05.555 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:05.556 +tar masochism
+16:48:05.556 | You craft the impulse of masochism in the mind of Saibel.
+16:48:05.556 | Equilibrium used: 1.44s.
+16:48:05.556 | You feel the power of the venom monkshood flowing through your veins.
+16:48:05.557 +tar disloyalty
+16:48:05.557 | You sink your fangs into Saibel, injecting just the proper amount of monkshood.
+16:48:05.562 +tar impatience
+16:48:05.562 | You sense the weakness in Saibel as your monkshood takes hold.
+16:48:05.562 +tar impatience
+16:48:05.563 | Saibel shuffles her feet in boredom.
+16:48:05.564 | Balance used: 1.7s.
+16:48:05.573 P H: Full, M: High, E: High, W: High ckdb-
+16:48:05.574 | Saibel drives a clenched fist into her gut.
+16:48:05.578 P H: Full, M: High, E: High, W: High ckdb-
+16:48:06.478 -tar anorexia
+16:48:06.478 | Saibel eats a plumbum flake.
+16:48:06.481 P H: Full, M: High, E: High, W: Full ckdb-
+16:48:06.807 | You have recovered equilibrium.
+16:48:06.815 P H: Full, M: High, E: High, W: Full cekdb-
+16:48:07.127 | You have recovered balance on all limbs.
+16:48:07.130 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:07.294 > queue addclear freestand purge
+16:48:07.297 > order adder kill Saibel
+16:48:07.297 > g body
+16:48:07.297 > g gold
+16:48:07.297 > stand
+16:48:07.297 > wield shield dirk
+16:48:07.297 > impulse Saibel confusion monkshood
+16:48:07.353 | A look of extreme focus crosses the face of Saibel.
+16:48:07.364 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:07.439 | [System]: Queued freestand commands cleared.
+16:48:07.439 | [System]: Added PURGE to your freestand queue.
+16:48:07.441 | [System]: Running queued freestand command: PURGE
+16:48:07.441 | You purge every drop of venom from your bloodstream.
+16:48:07.449 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:07.449 | Nothing can be seen here by that name.
+16:48:07.456 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:07.458 | I see no "body" to take.
+16:48:07.464 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:07.465 | I see no "gold" to take.
+16:48:07.470 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:07.471 | You are not fallen or kneeling.
+16:48:07.479 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:07.479 | You are already wielding a Shield of Absorption.
+16:48:07.481 | You are already wielding Thoth's fang.
+16:48:07.485 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:07.485 +tar confusion
+16:48:07.485 | You craft the impulse of confusion in the mind of Saibel.
+16:48:07.490 +tar confusion
+16:48:07.490 | Saibel looks about bemusedly.
+16:48:07.492 | Equilibrium used: 1.44s.
+16:48:07.492 | You feel the power of the venom monkshood flowing through your veins.
+16:48:07.492 +tar disloyalty
+16:48:07.492 | You sink your fangs into Saibel, injecting just the proper amount of monkshood.
+16:48:07.493 | Balance used: 1.7s.
+16:48:07.500 P H: Full, M: High, E: High, W: Full ckdb-
+16:48:08.139 -tar anorexia
+16:48:08.139 | Saibel eats an aurum flake.
+16:48:08.146 P H: Full, M: High, E: High, W: Full ckdb-
+16:48:08.706 | You have recovered equilibrium.
+16:48:08.713 P H: Full, M: High, E: High, W: Full cekdb-
+16:48:08.793 | Saibel touches a tree of life tattoo.
+16:48:08.798 P H: Full, M: High, E: High, W: Full cekdb-
+16:48:09.025 | You have recovered balance on all limbs.
+16:48:09.029 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:09.169 > queue addclear freestand purge
+16:48:09.169 > order adder kill Saibel
+16:48:09.169 > g body
+16:48:09.169 > g gold
+16:48:09.169 > stand
+16:48:09.169 > wield shield dirk
+16:48:09.169 > impulse Saibel recklessness loki
+16:48:09.276 | [System]: Queued freestand commands cleared.
+16:48:09.276 | [System]: Added PURGE to your freestand queue.
+16:48:09.276 | [System]: Running queued freestand command: PURGE
+16:48:09.276 | You purge every drop of venom from your bloodstream.
+16:48:09.284 P H: Full, M: Full, E: High, W: Full cexkdb-
+16:48:09.358 | I do not recognise anything called that here.
+16:48:09.365 P H: Full, M: Full, E: High, W: Full cexkdb-
+16:48:09.365 | I see no "body" to take.
+16:48:09.369 P H: Full, M: Full, E: High, W: Full cexkdb-
+16:48:09.369 | I see no "gold" to take.
+16:48:09.374 P H: Full, M: Full, E: High, W: Full cexkdb-
+16:48:09.374 | You are not fallen or kneeling.
+16:48:09.377 P H: Full, M: Full, E: High, W: Full cexkdb-
+16:48:09.381 | You are already wielding a Shield of Absorption.
+16:48:09.381 | You are already wielding Thoth's fang.
+16:48:09.383 P H: Full, M: Full, E: High, W: Full cexkdb-
+16:48:09.390 +tar recklessness
+16:48:09.390 | You craft the impulse of recklessness in the mind of Saibel.
+16:48:09.390 | Equilibrium used: 1.44s.
+16:48:09.390 | You feel the power of the venom loki flowing through your veins.
+16:48:09.391 | You sink your fangs into Saibel, injecting just the proper amount of loki.
+16:48:09.393 +tar nausea paralysis
+16:48:09.393 | You sense the weakness in Saibel as your loki takes hold.
+16:48:09.394 +tar paralysis
+16:48:09.394 +tar paralysis
+16:48:09.394 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:48:09.394 | Balance used: 1.7s.
+16:48:09.395 P H: Full, M: Full, E: High, W: Full ckdb-
+16:48:09.455 -tar anorexia
+16:48:09.456 | Saibel takes a drink from an elegant diamond vial.
+16:48:09.461 | Saibel eats a potash crystal.
+16:48:09.464 P H: Full, M: Full, E: High, W: Full ckdb-
+16:48:09.846 -tar anorexia
+16:48:09.846 -tar slickness
+16:48:09.846 | Saibel eats a magnesium chip.
+16:48:09.846 | A look of extreme focus crosses the face of Saibel.
+16:48:09.852 P H: Full, M: High, E: High, W: High ckdb-
+16:48:10.654 | You have recovered equilibrium.
+16:48:10.660 P H: Full, M: High, E: High, W: Full cekdb-
+16:48:10.963 | You have recovered balance on all limbs.
+16:48:10.968 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:11.129 > queue addclear freestand purge
+16:48:11.131 > order adder kill Saibel
+16:48:11.131 > g body
+16:48:11.131 > g gold
+16:48:11.131 > stand
+16:48:11.131 > wield shield dirk
+16:48:11.131 > dstab Saibel curare gecko
+16:48:11.237 | [System]: Queued freestand commands cleared.
+16:48:11.241 | [System]: Added PURGE to your freestand queue.
+16:48:11.241 | [System]: Running queued freestand command: PURGE
+16:48:11.245 | You purge every drop of venom from your bloodstream.
+16:48:11.246 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:11.318 | Ahh, I am truly sorry, but I do not see anyone by that name here.
+16:48:11.319 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:11.320 | I see no "body" to take.
+16:48:11.327 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:11.328 | I see no "gold" to take.
+16:48:11.329 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:11.335 | You are not fallen or kneeling.
+16:48:11.337 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:11.339 | You are already wielding a Shield of Absorption.
+16:48:11.339 | You are already wielding Thoth's fang.
+16:48:11.350 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:11.351 | You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:48:11.354 | You secrete gecko and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:48:11.355 | You quickly prick Saibel with your dirk.
+16:48:11.359 +tar paralysis
+16:48:11.359 +tar slickness
+16:48:11.359 > pt Saibel: paralysis slickness
+16:48:11.360 | Striking like a snake, you prick Saibel a second time with your dirk.
+16:48:11.360 +tar paralysis
+16:48:11.360 +tar paralysis
+16:48:11.360 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:48:11.361 | Balance used: 1.8s.
+16:48:11.365 P H: Full, M: High, E: High, W: Full cekdb-
+16:48:11.420 -tar anorexia
+16:48:11.421 | Saibel eats a magnesium chip.
+16:48:11.422 | You are not the member of any party.
+16:48:11.424 P H: Full, M: High, E: Full, W: Full cekdb-
+16:48:11.934 -tar paralysis
+16:48:12.304 | A look of extreme focus crosses the face of Saibel.
+16:48:12.311 P H: Full, M: High, E: Full, W: Full cekdb-
+16:48:12.987 | You have recovered balance on all limbs.
+16:48:12.994 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:13.076 > queue addclear freestand purge
+16:48:13.081 > order adder kill Saibel
+16:48:13.081 > g body
+16:48:13.081 > g gold
+16:48:13.081 > stand
+16:48:13.081 > wield shield dirk
+16:48:13.081 > dstab Saibel curare vernalius
+16:48:13.100 -tar anorexia
+16:48:13.100 -tar slickness
+16:48:13.100 | Saibel eats a magnesium chip.
+16:48:13.106 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:13.141 | [System]: Queued freestand commands cleared.
+16:48:13.145 | [System]: Added PURGE to your freestand queue.
+16:48:13.146 | [System]: Running queued freestand command: PURGE
+16:48:13.147 | You purge every drop of venom from your bloodstream.
+16:48:13.151 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:13.240 | Nothing can be seen here by that name.
+16:48:13.245 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:13.245 | I see no "body" to take.
+16:48:13.251 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:13.256 | I see no "gold" to take.
+16:48:13.261 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:13.263 | You are not fallen or kneeling.
+16:48:13.269 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:13.273 | You are already wielding a Shield of Absorption.
+16:48:13.273 | You are already wielding Thoth's fang.
+16:48:13.277 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:13.278 | You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:48:13.278 | You secrete vernalius and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:48:13.278 | You quickly prick Saibel with your dirk.
+16:48:13.278 +tar paralysis
+16:48:13.278 +tar weariness
+16:48:13.278 > pt Saibel: paralysis weariness
+16:48:13.278 | Striking like a snake, you prick Saibel a second time with your dirk.
+16:48:13.280 +tar paralysis
+16:48:13.280 +tar paralysis
+16:48:13.280 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:48:13.280 | Balance used: 1.8s.
+16:48:13.287 P H: Full, M: High, E: High, W: Full cekdb-
+16:48:13.349 | You are not the member of any party.
+16:48:13.355 P H: Full, M: High, E: High, W: Full cekdb-
+16:48:14.659 -tar anorexia
+16:48:14.659 -tar slickness
+16:48:14.660 | Saibel eats a magnesium chip.
+16:48:14.665 P H: Full, M: High, E: High, W: Full cekdb-
+16:48:14.973 | You have recovered balance on all limbs.
+16:48:14.975 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:15.068 > queue addclear freestand purge
+16:48:15.071 > order adder kill Saibel
+16:48:15.071 > g body
+16:48:15.071 > g gold
+16:48:15.071 > stand
+16:48:15.071 > wield shield dirk
+16:48:15.071 > impulse Saibel masochism monkshood
+16:48:15.125 | [System]: Queued freestand commands cleared.
+16:48:15.126 | [System]: Added PURGE to your freestand queue.
+16:48:15.126 | [System]: Running queued freestand command: PURGE
+16:48:15.127 | You purge every drop of venom from your bloodstream.
+16:48:15.133 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:15.211 | Nothing can be seen here by that name.
+16:48:15.218 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:15.219 | I see no "body" to take.
+16:48:15.223 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:15.227 | I see no "gold" to take.
+16:48:15.230 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:15.231 | You are not fallen or kneeling.
+16:48:15.237 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:15.238 | You are already wielding a Shield of Absorption.
+16:48:15.239 | You are already wielding Thoth's fang.
+16:48:15.240 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:15.243 +tar masochism
+16:48:15.243 | You craft the impulse of masochism in the mind of Saibel.
+16:48:15.248 | Equilibrium used: 1.44s.
+16:48:15.249 | You feel the power of the venom monkshood flowing through your veins.
+16:48:15.249 +tar disloyalty
+16:48:15.250 | You sink your fangs into Saibel, injecting just the proper amount of monkshood.
+16:48:15.250 +tar impatience
+16:48:15.250 | You sense the weakness in Saibel as your monkshood takes hold.
+16:48:15.250 +tar impatience
+16:48:15.250 | Saibel shuffles her feet in boredom.
+16:48:15.250 | Balance used: 1.7s.
+16:48:15.255 P H: Full, M: High, E: High, W: Full ckdb-
+16:48:15.667 | Saibel drives a clenched fist into her gut.
+16:48:15.669 P H: Full, M: High, E: Full, W: High ckdb-
+16:48:16.251 -tar anorexia
+16:48:16.251 | Saibel eats a plumbum flake.
+16:48:16.254 | A look of extreme focus crosses the face of Saibel.
+16:48:16.261 P H: Full, M: High, E: Full, W: High ckdb-
+16:48:16.463 | You have recovered equilibrium.
+16:48:16.474 P H: Full, M: High, E: Full, W: High cekdb-
+16:48:16.819 | You have recovered balance on all limbs.
+16:48:16.827 P H: Full, M: High, E: Full, W: High cexkdb-
+16:48:17.082 > queue addclear freestand purge
+16:48:17.087 > order adder kill Saibel
+16:48:17.087 > g body
+16:48:17.087 > g gold
+16:48:17.087 > stand
+16:48:17.087 > wield shield dirk
+16:48:17.087 > impulse Saibel masochism monkshood
+16:48:17.148 | [System]: Queued freestand commands cleared.
+16:48:17.148 | [System]: Added PURGE to your freestand queue.
+16:48:17.148 | [System]: Running queued freestand command: PURGE
+16:48:17.148 | You purge every drop of venom from your bloodstream.
+16:48:17.153 P H: Full, M: High, E: Full, W: High cexkdb-
+16:48:17.248 | I do not recognise anything called that here.
+16:48:17.256 P H: Full, M: High, E: Full, W: High cexkdb-
+16:48:17.257 | I see no "body" to take.
+16:48:17.264 P H: Full, M: High, E: Full, W: High cexkdb-
+16:48:17.264 | I see no "gold" to take.
+16:48:17.268 P H: Full, M: High, E: Full, W: High cexkdb-
+16:48:17.273 | You are not fallen or kneeling.
+16:48:17.276 P H: Full, M: High, E: Full, W: High cexkdb-
+16:48:17.277 | You are already wielding a Shield of Absorption.
+16:48:17.281 | You are already wielding Thoth's fang.
+16:48:17.284 P H: Full, M: High, E: Full, W: High cexkdb-
+16:48:17.287 +tar masochism
+16:48:17.287 | You craft the impulse of masochism in the mind of Saibel.
+16:48:17.287 | Equilibrium used: 1.44s.
+16:48:17.288 | You feel the power of the venom monkshood flowing through your veins.
+16:48:17.293 +tar disloyalty
+16:48:17.293 | You sink your fangs into Saibel, injecting just the proper amount of monkshood.
+16:48:17.294 +tar impatience
+16:48:17.295 | You sense the weakness in Saibel as your monkshood takes hold.
+16:48:17.298 +tar impatience
+16:48:17.298 | Saibel shuffles her feet in boredom.
+16:48:17.303 | Balance used: 1.7s.
+16:48:17.305 P H: Full, M: High, E: High, W: High ckdb-
+16:48:17.819 +tar masochism
+16:48:17.820 | You sense the remnants of your masochism impulse clawing at the psyche of Saibel.
+16:48:17.823 P H: Full, M: High, E: High, W: High ckdb-
+16:48:17.907 -tar anorexia
+16:48:17.908 | Saibel eats a plumbum flake.
+16:48:17.915 P H: Full, M: High, E: High, W: High ckdb-
+16:48:18.496 | You have recovered equilibrium.
+16:48:18.501 P H: Full, M: High, E: High, W: Full cekdb-
+16:48:18.883 | A look of extreme focus crosses the face of Saibel.
+16:48:18.888 P H: Full, M: High, E: High, W: Full cekdb-
+16:48:18.892 | You have recovered balance on all limbs.
+16:48:18.900 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:19.072 > queue addclear freestand purge
+16:48:19.074 > order adder kill Saibel
+16:48:19.074 > g body
+16:48:19.074 > g gold
+16:48:19.074 > stand
+16:48:19.074 > wield shield dirk
+16:48:19.074 > impulse Saibel masochism monkshood
+16:48:19.213 | [System]: Queued freestand commands cleared.
+16:48:19.216 | [System]: Added PURGE to your freestand queue.
+16:48:19.218 | [System]: Running queued freestand command: PURGE
+16:48:19.221 | You purge every drop of venom from your bloodstream.
+16:48:19.222 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:19.317 | You cannot see that being here.
+16:48:19.325 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:19.325 | I see no "body" to take.
+16:48:19.329 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:19.329 | I see no "gold" to take.
+16:48:19.335 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:19.336 | You are not fallen or kneeling.
+16:48:19.337 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:19.337 | You are already wielding a Shield of Absorption.
+16:48:19.337 | You are already wielding Thoth's fang.
+16:48:19.344 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:19.344 +tar masochism
+16:48:19.345 | You craft the impulse of masochism in the mind of Saibel.
+16:48:19.345 | Equilibrium used: 1.44s.
+16:48:19.345 | You feel the power of the venom monkshood flowing through your veins.
+16:48:19.345 +tar disloyalty
+16:48:19.345 | You sink your fangs into Saibel, injecting just the proper amount of monkshood.
+16:48:19.345 +tar impatience
+16:48:19.345 | You sense the weakness in Saibel as your monkshood takes hold.
+16:48:19.345 +tar impatience
+16:48:19.345 | Saibel shuffles her feet in boredom.
+16:48:19.345 | Balance used: 1.7s.
+16:48:19.349 P H: Full, M: High, E: High, W: Full ckdb-
+16:48:19.643 -tar anorexia
+16:48:19.643 | Saibel eats a plumbum flake.
+16:48:19.652 P H: Full, M: Full, E: Full, W: Full ckdb-
+16:48:19.881 +tar masochism
+16:48:19.881 | You sense the remnants of your masochism impulse clawing at the psyche of Saibel.
+16:48:19.885 P H: Full, M: Full, E: Full, W: Full ckdb-
+16:48:20.679 | You have recovered equilibrium.
+16:48:20.679 P H: Full, M: Full, E: Full, W: Full cekdb-
+16:48:20.769 +tar masochism
+16:48:20.769 | Saibel smiles as she rams her fist into her jaw.
+16:48:20.778 P H: Full, M: Full, E: Full, W: Full cekdb-
+16:48:20.914 | You have recovered balance on all limbs.
+16:48:20.917 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:48:21.081 > queue addclear freestand purge
+16:48:21.085 > order adder kill Saibel
+16:48:21.085 > g body
+16:48:21.085 > g gold
+16:48:21.085 > stand
+16:48:21.085 > wield shield dirk
+16:48:21.085 > impulse Saibel confusion monkshood
+16:48:21.140 | [System]: Queued freestand commands cleared.
+16:48:21.140 | [System]: Added PURGE to your freestand queue.
+16:48:21.143 | [System]: Running queued freestand command: PURGE
+16:48:21.144 | You purge every drop of venom from your bloodstream.
+16:48:21.149 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:48:21.230 | Nothing can be seen here by that name.
+16:48:21.234 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:48:21.239 | I see no "body" to take.
+16:48:21.240 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:48:21.245 | I see no "gold" to take.
+16:48:21.249 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:48:21.255 | You are not fallen or kneeling.
+16:48:21.257 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:48:21.261 | You are already wielding a Shield of Absorption.
+16:48:21.261 | You are already wielding Thoth's fang.
+16:48:21.265 P H: Full, M: Full, E: Full, W: Full cexkdb-
+16:48:21.266 +tar confusion
+16:48:21.266 | You craft the impulse of confusion in the mind of Saibel.
+16:48:21.266 +tar confusion
+16:48:21.266 | Saibel looks about bemusedly.
+16:48:21.266 | Equilibrium used: 1.44s.
+16:48:21.266 | You feel the power of the venom monkshood flowing through your veins.
+16:48:21.266 +tar disloyalty
+16:48:21.267 | You sink your fangs into Saibel, injecting just the proper amount of monkshood.
+16:48:21.269 +tar impatience
+16:48:21.269 | You sense the weakness in Saibel as your monkshood takes hold.
+16:48:21.273 +tar impatience
+16:48:21.273 | Saibel shuffles her feet in boredom.
+16:48:21.275 | Balance used: 1.7s.
+16:48:21.283 P H: Full, M: Full, E: High, W: Full ckdb-
+16:48:21.331 -tar anorexia
+16:48:21.331 | Saibel eats a plumbum flake.
+16:48:21.339 P H: Full, M: Full, E: High, W: Full ckdb-
+16:48:21.445 | A look of extreme focus crosses the face of Saibel.
+16:48:21.447 P H: Full, M: Full, E: High, W: Full ckdb-
+16:48:21.890 +tar masochism
+16:48:21.891 | You sense the remnants of your masochism impulse clawing at the psyche of Saibel.
+16:48:21.898 P H: Full, M: High, E: High, W: High ckdb-
+16:48:22.448 | You have recovered equilibrium.
+16:48:22.452 P H: Full, M: High, E: High, W: Full cekdb-
+16:48:22.748 | You have recovered balance on all limbs.
+16:48:22.749 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:22.803 > queue addclear freestand purge
+16:48:22.803 > order adder kill Saibel
+16:48:22.803 > g body
+16:48:22.803 > g gold
+16:48:22.803 > stand
+16:48:22.803 > wield shield dirk
+16:48:22.803 > impulse Saibel stupidity monkshood
+16:48:22.850 -tar anorexia
+16:48:22.850 | Saibel eats an aurum flake.
+16:48:22.857 | Saibel touches a tree of life tattoo.
+16:48:22.857 -tar asthma
+16:48:22.858 -tar asthma
+16:48:22.858 | Saibel takes a long drag off her pipe.
+16:48:22.865 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:22.951 | [System]: Queued freestand commands cleared.
+16:48:22.951 | [System]: Added PURGE to your freestand queue.
+16:48:22.951 | [System]: Running queued freestand command: PURGE
+16:48:22.953 | You purge every drop of venom from your bloodstream.
+16:48:22.960 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:22.963 | I do not recognise anything called that here.
+16:48:22.968 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:22.969 | I see no "body" to take.
+16:48:22.970 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:22.971 | I see no "gold" to take.
+16:48:22.978 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:22.979 | You are not fallen or kneeling.
+16:48:22.980 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:22.981 | You are already wielding a Shield of Absorption.
+16:48:22.981 | You are already wielding Thoth's fang.
+16:48:22.981 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:22.986 +tar stupidity
+16:48:22.986 | You craft the impulse of stupidity in the mind of Saibel.
+16:48:22.986 | A glazed look descends over the features of Saibel.
+16:48:22.987 | Equilibrium used: 1.44s.
+16:48:22.987 | You feel the power of the venom monkshood flowing through your veins.
+16:48:22.987 +tar disloyalty
+16:48:22.987 | You sink your fangs into Saibel, injecting just the proper amount of monkshood.
+16:48:22.988 | Balance used: 1.7s.
+16:48:22.991 P H: Full, M: High, E: High, W: Full ckdb-
+16:48:22.991 +tar nausea
+16:48:22.991 | Saibel doubles over, vomiting violently.
+16:48:22.992 P H: Full, M: High, E: High, W: Full ckdb-
+16:48:23.046 | "The voices! The voices! Get them out of my head!!" Saibel moans, holding her head.
+16:48:23.054 P H: Full, M: High, E: High, W: Full ckdb-
+16:48:23.220 -tar anorexia
+16:48:23.220 | Saibel takes a drink from an elegant diamond vial.
+16:48:23.226 P H: Full, M: High, E: High, W: Full ckdb-
+16:48:24.037 | A look of extreme focus crosses the face of Saibel.
+16:48:24.041 P H: Full, M: High, E: Full, W: Full ckdb-
+16:48:24.277 | You have recovered equilibrium.
+16:48:24.286 P H: Full, M: High, E: Full, W: Full cekdb-
+16:48:24.435 +tar stupidity
+16:48:24.435 | Saibel falls to her knees in worship.
+16:48:24.438 | Saibel fondles herself absently.
+16:48:24.439 -tar anorexia
+16:48:24.439 | Saibel eats an aurum flake.
+16:48:24.440 -tar asthma
+16:48:24.441 -tar asthma
+16:48:24.441 | Saibel takes a long drag off her pipe.
+16:48:24.444 P H: Full, M: High, E: Full, W: Full cekdb-
+16:48:24.570 | You have recovered balance on all limbs.
+16:48:24.574 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:24.811 > queue addclear freestand purge
+16:48:24.813 > order adder kill Saibel
+16:48:24.813 > g body
+16:48:24.813 > g gold
+16:48:24.813 > stand
+16:48:24.813 > wield shield dirk
+16:48:24.813 > dstab Saibel curare kalmia
+16:48:24.867 | [System]: Queued freestand commands cleared.
+16:48:24.869 | [System]: Added PURGE to your freestand queue.
+16:48:24.870 | [System]: Running queued freestand command: PURGE
+16:48:24.870 | You purge every drop of venom from your bloodstream.
+16:48:24.878 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:24.954 | Nothing can be seen here by that name.
+16:48:24.956 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:24.957 | I see no "body" to take.
+16:48:24.963 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:24.964 | I see no "gold" to take.
+16:48:24.968 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:24.968 | You are not fallen or kneeling.
+16:48:24.972 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:24.973 | You are already wielding a Shield of Absorption.
+16:48:24.975 | You are already wielding Thoth's fang.
+16:48:24.979 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:24.980 | You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:48:24.980 | You secrete kalmia and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:48:24.980 | You quickly prick Saibel with your dirk.
+16:48:24.980 +tar paralysis
+16:48:24.980 +tar asthma
+16:48:24.980 > pt Saibel: paralysis asthma
+16:48:24.981 | Striking like a snake, you prick Saibel a second time with your dirk.
+16:48:24.981 +tar paralysis
+16:48:24.981 +tar paralysis
+16:48:24.981 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:48:24.981 | Balance used: 1.8s.
+16:48:24.982 P H: Full, M: High, E: High, W: Full cekdb-
+16:48:25.033 | You are not the member of any party.
+16:48:25.039 P H: Full, M: High, E: High, W: Full cekdb-
+16:48:25.885 +tar masochism
+16:48:25.886 | Saibel smiles as she rams her fist into her jaw.
+16:48:25.893 P H: Full, M: High, E: High, W: High cekdb-
+16:48:26.151 | Saibel stumbles and pokes herself in the eye.
+16:48:26.151 | Saibel drops to one knee.
+16:48:26.151 -tar anorexia
+16:48:26.151 -tar slickness
+16:48:26.151 | Saibel eats a magnesium chip.
+16:48:26.154 P H: Full, M: High, E: High, W: Full cekdb-
+16:48:26.504 | A look of extreme focus crosses the face of Saibel.
+16:48:26.511 P H: Full, M: High, E: High, W: Full cekdb-
+16:48:26.603 | You have recovered balance on all limbs.
+16:48:26.607 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:26.677 > queue addclear freestand purge
+16:48:26.677 > order adder kill Saibel
+16:48:26.677 > g body
+16:48:26.677 > g gold
+16:48:26.677 > stand
+16:48:26.677 > wield shield dirk
+16:48:26.677 > dstab Saibel curare gecko
+16:48:26.845 | [System]: Queued freestand commands cleared.
+16:48:26.846 | [System]: Added PURGE to your freestand queue.
+16:48:26.851 | [System]: Running queued freestand command: PURGE
+16:48:26.853 | You purge every drop of venom from your bloodstream.
+16:48:26.855 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:26.934 | You cannot see that being here.
+16:48:26.942 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:26.942 | I see no "body" to take.
+16:48:26.948 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:26.954 | I see no "gold" to take.
+16:48:26.957 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:26.958 | You are not fallen or kneeling.
+16:48:26.963 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:26.967 | You are already wielding a Shield of Absorption.
+16:48:26.968 | You are already wielding Thoth's fang.
+16:48:26.976 P H: Full, M: High, E: High, W: Full cexkdb-
+16:48:26.977 | You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:48:26.977 | You secrete gecko and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:48:26.983 | You quickly prick Saibel with your dirk.
+16:48:26.983 +tar paralysis
+16:48:26.983 +tar slickness
+16:48:26.983 > pt Saibel: paralysis slickness
+16:48:26.983 | Striking like a snake, you prick Saibel a second time with your dirk.
+16:48:26.985 +tar paralysis
+16:48:26.985 +tar paralysis
+16:48:26.985 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:48:26.985 | Balance used: 1.8s.
+16:48:26.992 P H: Full, M: High, E: High, W: Full cekdb-
+16:48:27.063 | You are not the member of any party.
+16:48:27.067 P H: Full, M: High, E: High, W: Full cekdb-
+16:48:27.687 -tar anorexia
+16:48:27.687 | Saibel eats a magnesium chip.
+16:48:27.692 P H: Full, M: High, E: Full, W: Full cekdb-
+16:48:27.866 -tar anorexia
+16:48:27.866 | Saibel takes a drink from an oaken vial.
+16:48:27.869 P H: Full, M: High, E: Full, W: Full cekdb-
+16:48:28.202 -tar paralysis
+16:48:28.584 | You have recovered balance on all limbs.
+16:48:28.587 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:28.742 > queue addclear freestand purge
+16:48:28.742 > order adder kill Saibel
+16:48:28.742 > g body
+16:48:28.742 > g gold
+16:48:28.742 > stand
+16:48:28.742 > wield shield dirk
+16:48:28.742 > dstab Saibel curare vernalius
+16:48:28.841 | [System]: Queued freestand commands cleared.
+16:48:28.842 | [System]: Added PURGE to your freestand queue.
+16:48:28.843 | [System]: Running queued freestand command: PURGE
+16:48:28.843 | You purge every drop of venom from your bloodstream.
+16:48:28.851 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:28.936 | You cannot see that being here.
+16:48:28.941 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:28.944 | I see no "body" to take.
+16:48:28.946 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:28.947 | I see no "gold" to take.
+16:48:28.947 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:28.952 | You are not fallen or kneeling.
+16:48:28.954 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:28.959 | You are already wielding a Shield of Absorption.
+16:48:28.959 | You are already wielding Thoth's fang.
+16:48:28.964 P H: Full, M: High, E: Full, W: Full cexkdb-
+16:48:28.964 | You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:48:28.964 | You secrete vernalius and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:48:28.965 | You quickly prick Saibel with your dirk.
+16:48:28.968 +tar paralysis
+16:48:28.968 +tar weariness
+16:48:28.968 > pt Saibel: paralysis weariness
+16:48:28.968 | Striking like a snake, you prick Saibel a second time with your dirk.
+16:48:28.968 +tar paralysis
+16:48:28.968 +tar paralysis
+16:48:28.968 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:48:28.968 | Balance used: 1.8s.
+16:48:28.973 P H: Full, M: High, E: High, W: Full cekdb-
+16:48:29.096 | A look of extreme focus crosses the face of Saibel.
+16:48:29.103 P H: Full, M: High, E: High, W: Full cekdb-
+16:48:29.103 | You are not the member of any party.
+16:48:29.107 P H: Full, M: High, E: High, W: Full cekdb-
+16:48:29.257 -tar anorexia
+16:48:29.257 -tar slickness
+16:48:29.259 | Saibel eats a magnesium chip.
+16:48:29.265 P H: Full, M: High, E: High, W: Full cekdb-
+16:48:30.713 | You have recovered balance on all limbs.
+16:48:30.717 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:30.796 > queue addclear freestand purge
+16:48:30.797 > order adder kill Saibel
+16:48:30.797 > g body
+16:48:30.797 > g gold
+16:48:30.797 > stand
+16:48:30.797 > wield shield dirk
+16:48:30.797 > impulse Saibel masochism monkshood
+16:48:30.888 | [System]: Queued freestand commands cleared.
+16:48:30.889 | [System]: Added PURGE to your freestand queue.
+16:48:30.890 | [System]: Running queued freestand command: PURGE
+16:48:30.890 | You purge every drop of venom from your bloodstream.
+16:48:30.892 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:30.977 | I do not recognise anything called that here.
+16:48:30.985 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:30.986 | I see no "body" to take.
+16:48:30.988 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:30.989 | I see no "gold" to take.
+16:48:30.994 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:30.995 | You are not fallen or kneeling.
+16:48:30.995 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:30.995 | You are already wielding a Shield of Absorption.
+16:48:30.995 | You are already wielding Thoth's fang.
+16:48:31.000 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:31.000 +tar masochism
+16:48:31.000 | You craft the impulse of masochism in the mind of Saibel.
+16:48:31.001 | Equilibrium used: 1.44s.
+16:48:31.003 | You feel the power of the venom monkshood flowing through your veins.
+16:48:31.005 +tar disloyalty
+16:48:31.005 | You sink your fangs into Saibel, injecting just the proper amount of monkshood.
+16:48:31.007 +tar impatience
+16:48:31.007 | You sense the weakness in Saibel as your monkshood takes hold.
+16:48:31.011 +tar impatience
+16:48:31.011 | Saibel shuffles her feet in boredom.
+16:48:31.011 | Balance used: 1.7s.
+16:48:31.015 P H: Full, M: High, E: High, W: High ckdb-
+16:48:31.016 -tar anorexia
+16:48:31.016 -tar slickness
+16:48:31.016 | Saibel eats a magnesium chip.
+16:48:31.023 P H: Full, M: High, E: High, W: High ckdb-
+16:48:31.063 | Saibel uses her right foot to stomp on her left as hard as possible.
+16:48:31.069 P H: Full, M: High, E: High, W: High ckdb-
+16:48:32.200 | You have recovered equilibrium.
+16:48:32.205 P H: Full, M: High, E: Full, W: High cekdb-
+16:48:32.530 | You have recovered balance on all limbs.
+16:48:32.532 P H: Full, M: High, E: Full, W: High cexkdb-
+16:48:32.539 > queue addclear freestand purge
+16:48:32.540 > order adder kill Saibel
+16:48:32.540 > g body
+16:48:32.540 > g gold
+16:48:32.540 > stand
+16:48:32.540 > wield shield dirk
+16:48:32.540 > dstab Saibel curare gecko
+16:48:32.592 -tar anorexia
+16:48:32.593 | Saibel eats a plumbum flake.
+16:48:32.599 | A look of extreme focus crosses the face of Saibel.
+16:48:32.601 P H: Full, M: High, E: Full, W: High cexkdb-
+16:48:32.700 | [System]: Queued freestand commands cleared.
+16:48:32.700 | [System]: Added PURGE to your freestand queue.
+16:48:32.701 | [System]: Running queued freestand command: PURGE
+16:48:32.703 | You purge every drop of venom from your bloodstream.
+16:48:32.710 P H: Full, M: High, E: Full, W: High cexkdb-
+16:48:32.710 | I do not recognise anything called that here.
+16:48:32.714 P H: Full, M: High, E: Full, W: High cexkdb-
+16:48:32.718 | I see no "body" to take.
+16:48:32.720 P H: Full, M: High, E: Full, W: High cexkdb-
+16:48:32.720 | I see no "gold" to take.
+16:48:32.721 P H: Full, M: High, E: Full, W: High cexkdb-
+16:48:32.721 | You are not fallen or kneeling.
+16:48:32.728 P H: Full, M: High, E: Full, W: High cexkdb-
+16:48:32.729 | You are already wielding a Shield of Absorption.
+16:48:32.729 | You are already wielding Thoth's fang.
+16:48:32.735 P H: Full, M: High, E: Full, W: High cexkdb-
+16:48:32.737 | You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:48:32.738 | You secrete gecko and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.
+16:48:32.739 | You quickly prick Saibel with your dirk.
+16:48:32.739 +tar paralysis
+16:48:32.739 +tar slickness
+16:48:32.739 > pt Saibel: paralysis slickness
+16:48:32.740 | Striking like a snake, you prick Saibel a second time with your dirk.
+16:48:32.740 +tar paralysis
+16:48:32.740 +tar paralysis
+16:48:32.740 | Horror overcomes Saibel's face as her body stiffens into paralysis.
+16:48:32.740 | Balance used: 1.8s.
+16:48:32.747 P H: Full, M: High, E: High, W: High cekdb-
+16:48:32.853 | You are not the member of any party.
+16:48:32.854 P H: Full, M: High, E: High, W: High cekdb-
+16:48:34.311 -tar anorexia
+16:48:34.311 | Saibel eats a magnesium chip.
+16:48:34.319 | You have recovered balance on all limbs.
+16:48:34.320 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:34.537 > queue addclear freestand purge
+16:48:34.537 > order adder kill Saibel
+16:48:34.537 > g body
+16:48:34.537 > g gold
+16:48:34.537 > stand
+16:48:34.537 > wield shield dirk
+16:48:34.537 > impulse Saibel masochism monkshood
+16:48:34.601 | [System]: Queued freestand commands cleared.
+16:48:34.601 | [System]: Added PURGE to your freestand queue.
+16:48:34.603 | [System]: Running queued freestand command: PURGE
+16:48:34.607 | You purge every drop of venom from your bloodstream.
+16:48:34.611 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:34.685 | Ahh, I am truly sorry, but I do not see anyone by that name here.
+16:48:34.690 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:34.690 | I see no "body" to take.
+16:48:34.696 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:34.703 | I see no "gold" to take.
+16:48:34.704 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:34.705 | You are not fallen or kneeling.
+16:48:34.708 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:34.709 | You are already wielding a Shield of Absorption.
+16:48:34.712 | You are already wielding Thoth's fang.
+16:48:34.714 P H: Full, M: High, E: High, W: High cexkdb-
+16:48:34.715 +tar masochism
+16:48:34.715 | You craft the impulse of masochism in the mind of Saibel.
+16:48:34.715 | Equilibrium used: 1.44s.
+16:48:34.715 | You feel the power of the venom monkshood flowing through your veins.
+16:48:34.715 +tar disloyalty
+16:48:34.715 | You sink your fangs into Saibel, injecting just the proper amount of monkshood.
+16:48:34.715 +tar impatience
+16:48:34.715 | You sense the weakness in Saibel as your monkshood takes hold.
+16:48:34.715 +tar impatience
+16:48:34.715 | Saibel shuffles her feet in boredom.
+16:48:34.716 | Balance used: 1.7s.
+16:48:34.720 P H: Full, M: High, E: High, W: High ckdb-
+16:48:34.812 -tar paralysis
+16:48:35.983 | You have recovered equilibrium.
+16:48:35.991 P H: Full, M: High, E: Full, W: High cekdb-
+16:48:36.047 -tar anorexia
+16:48:36.048 | Saibel eats a plumbum flake.
+16:48:36.051 | A look of extreme focus crosses the face of Saibel.
+16:48:36.056 P H: Full, M: High, E: Full, W: High cekdb-
+16:48:36.277 | You have recovered balance on all limbs.
+16:48:36.283 P H: Full, M: High, E: Full, W: High cexkdb-
+16:48:36.573 > say thanks
+16:48:36.647 | You say in a strong, calm voice, "Thanks."
+16:48:36.650 P H: Full, M: High, E: Full, W: High cexkdb-
+16:48:37.047 -tar paralysis
+16:48:37.047 | Saibel touches a tree of life tattoo.
+16:48:37.053 P H: Full, M: High, E: Full, W: High cexkdb-
+16:48:37.627 -tar anorexia
+16:48:37.628 | Saibel eats an aurum flake.
+16:48:37.631 -tar asthma
+16:48:37.632 -tar asthma
+16:48:37.632 | Saibel takes a long drag off her pipe.
+16:48:37.638 P H: Full, M: High, E: Full, W: High cexkdb-
+16:48:38.523 > cq all
+16:48:38.595 | [System]: All queued commands cleared.
+16:48:38.597 P H: Full, M: High, E: Full, W: High cexkdb-
+16:48:39.251 -tar anorexia
+16:48:39.252 | Saibel eats an aurum flake.
+16:48:39.259 P H: Full, M: High, E: Full, W: High cexkdb-
+16:48:40.867 -tar anorexia
+16:48:40.867 | Saibel eats a ferrum flake.
+16:48:40.874 P H: Full, M: Full, E: Full, W: High cexkdb-
+# stopped: stopped by hand | 2065 rows | 125.9 s

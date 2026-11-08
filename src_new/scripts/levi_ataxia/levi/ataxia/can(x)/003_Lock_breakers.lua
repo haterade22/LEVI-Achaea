@@ -270,6 +270,11 @@ function ataxia_breakLock()
 		cmd = "dragonheal"
 	elseif string.find(class, "Earth") then
 		cmd = "terran eruption"
+	elseif class == "Depthswalker" and affed("prone") and affed("paralysis") then
+		-- "being prone will make boosting the process impossible" (kb/raw/wiki/Aeonics.wiki:106).
+		-- Prone and paralysed we cannot stand first (above), so this sent, every 1.5 s, a boost the
+		-- wiki says cannot work. The plain acceleration cures one affliction.
+		cmd = "chrono accelerate"
 	else
 		cmd = LOCK_BREAKERS[class]
 	end

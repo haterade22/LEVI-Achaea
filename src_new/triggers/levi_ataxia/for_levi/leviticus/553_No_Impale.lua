@@ -39,5 +39,11 @@ patterns:
   type: 1
 ]]--
 
+-- Only the target. Both patterns capture whose impale ended, and anyone's writhe used to erase
+-- our target's: kb/raw/logs/ours/2026-11-03_081532_Tabethys.log:1667-1668, Tabethys writhes free
+-- (1668) while the target is Grulk (1502), and the tracker logs "-tar impaled" with it (1667).
+-- 407_Writhed_Impale reads the same lines with the same check.
+if not (matches[2] and isTargeted(matches[2])) then return end
+
 erAff("impaled")
 timpale = false

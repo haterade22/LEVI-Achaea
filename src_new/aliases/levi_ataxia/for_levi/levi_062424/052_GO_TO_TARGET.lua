@@ -22,12 +22,14 @@ local function to(whom)
 send("pt going to "..target.." in "..nums[1])
 end
  
+-- These called goto(), which nothing defines (the walker above is the local `to`): the scry went
+-- out and the walk threw.
 if not matches[2] then
   if not target then
     mmp.echo("I don't know what your target is (set the 'target' variable)") return
   else
-    goto(target)
+    to(target)
   end
 else
-  goto(matches[2])
+  to(matches[2])
 end

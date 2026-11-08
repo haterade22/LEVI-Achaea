@@ -35,4 +35,6 @@ patterns:
   type: 1
 ]]--
 
-priest_selftLimbHit(matches[3])
+-- priest_selfLimbHit (self_limb_tracking/001): this called the misspelt priest_selftLimbHit,
+-- which nothing defines, so every smite threw.
+priest_selfLimbHit(matches[3])

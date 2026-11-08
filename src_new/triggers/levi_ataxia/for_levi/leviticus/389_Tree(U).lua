@@ -40,9 +40,6 @@ local name = matches[2]
 
 if isTargeted(name) and tBals.tree then
 tdeliverance = false
-	if tAffs.paralysis then
-		erAff("paralysis")
-	end
   if passiveFailsafe then restorePassiveCure() end
 
 	-- V3 integration: one tree is ONE cure. With V3 on, ataxia_targetTreeV3 (curing/002) lets
@@ -51,10 +48,16 @@ tdeliverance = false
 	-- cannot see. tSingleRandom() erasing its own pick on top charged one tree twice: asthma +
 	-- slickness + blackout read 4/3 afflictions after one tree, where the truth is 2. With V3 on
 	-- it now only computes its pick (noErase); with V3 off it erases, as before.
+	-- Paralysis blocks the tree, so the tree proves it absent. With V3 on, onTargetTreeV3 owns that
+	-- proof, and it needs the branches as they are: an erase before it stripped paralysis from every
+	-- branch, so the branches the tree rules out kept their weight. The erase after it only catches
+	-- a paralysis that tAffs alone held (ataxia_targetTreeV3 has reported the one V3 held).
 	if onTargetTreeV3 and affConfigV3 and affConfigV3.enabled then
 		ataxia_targetTreeV3()
+		if tAffs.paralysis then erAff("paralysis") end
 		tSingleRandom({ noErase = true })
 	else
+		if tAffs.paralysis then erAff("paralysis") end
 		if onTargetTreeV3 then onTargetTreeV3() end
 		tSingleRandom()
 	end
@@ -69,15 +72,22 @@ tdeliverance = false
   if tBals.timers.tree then killTimer(tBals.timers.tree) end
 	tBals.timers.tree = tempTimer(13, [[tBals.tree = true; tBals.timers.tree = nil]])
 	targetIshere = true
-	
-  magi.offense = magi.offense or {}
-  magi.offense.state = magi.offense.state or {}
-  magi.offense.state.burns = math.max((magi.offense.state.burns or 0) - 1, 0)
-  tburns = magi.offense.state.burns
-if treeTimer0 then return end
-if treeTimer4 then return end
-if treeTimer9 then return end
-if treeTimer then return end
+	-- The tree leaves the Magi burn count (magi.offense.state.burns, tburns) alone. It used to take
+	-- one burn off on every tree, whatever the tree cured; burning is not a tree cure in V3
+	-- (treeCurableAffsV3), and the game's own lines own the count: general/025 lowers it on "The
+	-- fires consuming X diminish somewhat." A tree on burning Kalys left burning at 1.00 while the
+	-- tree branched over frozen, weariness and nausea
+	-- (kb/raw/logs/2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt:359-361). Deep review F19.
+-- A new tree starts a new countdown. The old code returned while any echo was still pending, so a
+-- tree that came just before the 14 s echo got no countdown at all: in the 2026-11-07 spar,
+-- Saibel's tree came 12 ms before that echo, and that tree never got its own echoes. Now the pending
+-- echoes are killed and four new ones start. The 13 s tBals.tree re-arm above does not change.
+-- Each one is checked by itself: the 0 s echo is nil by then, and ipairs over a list would stop
+-- at that nil.
+if treeTimer0 then killTimer(treeTimer0) end
+if treeTimer4 then killTimer(treeTimer4) end
+if treeTimer9 then killTimer(treeTimer9) end
+if treeTimer then killTimer(treeTimer) end
 treeTimer0 = tempTimer(0,[[cecho("<orange>\n[TREE]: <yellow>tree down on <red>"..target.." <yellow>for <white>14 seconds...\n") treeTimer0 = nil]])
 treeTimer4 = tempTimer(4,[[cecho("<orange>\n[TREE]: <yellow>tree down on <red>"..target.." <yellow>for <white>10 seconds...\n") treeTimer4 = nil]])
 treeTimer9 = tempTimer(9,[[cecho("<orange>\n[TREE]: <yellow>tree down on <red>"..target.." <yellow>for <white>5 seconds...\n") treeTimer9 = nil]])

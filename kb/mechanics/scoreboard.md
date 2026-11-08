@@ -33,6 +33,7 @@ A log splits at its first sent `setalias lv...` row, because `aconfig rounds ali
 | ours/081532_Tabethys | alias | Monk | 4.7.471 | 847.2 | 0.00 | 0 | 43 of 43 | 0.0% | 11 | 0 | 0 | 19.8 |
 | ours/102138_Tabethys | alias | Monk | 4.7.471 | 165.6 | 0.20 | 10 | 57 of 57 | 0.0% | 31 | 0 | 0 | 22.5 |
 | ours/102828_Harkon | alias | Monk | 4.7.471 | 315.6 | 0.07 | 2 | 44 of 44 | 0.0% | 8 | 0 | 2 | 14.9 |
+| ours/164635_Saibel | raw | Serpent | 4.7.478 | 119.2 | 0.13 | 6 | 0 of 0 | - | 0 | 0 | - | 38.8 |
 
 ## How each number is counted
 
@@ -272,3 +273,18 @@ Monk, v4.7.471, 2026-11-03. Rows 0-7447, 315.6 s.
 - Raw attack rows in this alias part, which do not count toward the setup bar: 7144.
 - Wrong target rows: 5475, 6185.
 - Rewrite rows: 2033, 2592, 3203, 3506, 3860, 4282, 4673, 5006, 5343, 5862, 6185.
+
+### 2026-11-07_164635_Saibel.log, raw rounds
+
+Serpent, v4.7.478, 2026-11-07. Rows 0-2067, 119.2 s.
+
+| Measure | Value | Bar | Verdict |
+|---|---|---|---|
+| Refusals per recovery | 0.13 (7 / 52) | <= 0.1 per recovery | - |
+| `was added to your` rows | 6 | <= 2 | - |
+| Setup before spender, per flush | 0 of 0 | every round | - |
+| Superseded attacks that ran | no attack ran (0 / 0) | <= 5% | - |
+| Echoed rewrites whose new text fired | 0 new, 0 old, 0 not shown (0 sent, 0 echoed) | >= 5 fire new text | - |
+| Alias complaints | 0 | none | - |
+| Attacks naming a target other than the last set | not measured: no `st` or `settarget` known when an attack ran | none | - |
+| Rounds per minute in attack bursts | 38.8 (52 recoveries, 80.5 s active) | - | - |

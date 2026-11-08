@@ -208,6 +208,10 @@ recommended_strategy: |
 
 ## Implementation Notes
 ```
+Fixed 2026-11-08, not yet run in Mudlet: our own thornrend (sylvan/014) threw on every match. It read a capture its
+one-capture pattern does not have, and sylvan_propagateAff was deleted in 3c312975 (restored in limb_management/011;
+it returns false when nothing is propagated, so only a real affliction is passed on).
+
 Triggers to watch for:
 - "rends you with thorns" - thornrend
 - "You are entangled" - entanglement

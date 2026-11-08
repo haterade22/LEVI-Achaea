@@ -17,6 +17,7 @@ packageName: ''
 targetlimb = "right arm"
 
 
-infernalpriosprep()
+-- No revision of this repo defines infernalpriosprep(); guarded, because this alias only threw.
+if infernalpriosprep then infernalpriosprep() end
 
 

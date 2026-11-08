@@ -8,10 +8,10 @@ Global configuration table for the V3 system.
 ```lua
 affConfigV3 = {
     enabled = true,           -- Enable/disable V3 tracking
-    maxBranches = 32,         -- Maximum branch count before pruning
     minProbability = 0.01,    -- Minimum probability to keep a branch
-    debug = false             -- Enable debug echo messages
+    debugEcho = true          -- Show [V3] lines
 }
+affConfigV3.maxStates = 300   -- Maximum branch count before pruning (outside the table: a reload keeps the old one)
 ```
 
 ## Core Functions
@@ -66,6 +66,12 @@ for aff, prob in pairs(allProbs) do
 end
 ```
 
+### `haveAffV3(aff, threshold)`
+True when the probability is at or above `threshold` (default 0.3).
+
+### `isAffCertainV3(aff)`
+True when every branch holds the affliction (or it is a simple-tracked one that is up). Use this for "certain". **Never compare a V3 probability with `>= 1.0`**: the cache sums the branches, and renormalising can leave the sum a few ulps under 1 (0.99999999999999978 in `test_v3_core_fixes.lua`).
+
 ### `getStateProbabilityV3(affList)`
 Get the probability that ALL afflictions in the list are present simultaneously.
 
@@ -96,6 +102,16 @@ Removes all branches where the affliction exists.
 collapseAffAbsentV3("asthma")
 ```
 
+If every branch holds it, only that affliction is removed from every branch. The rest of the board stays.
+
+### `proveAffAbsentV3(aff, cureType)`
+An action could not have happened with this affliction: an apply proves no slickness, a tree no paralysis. Call it BEFORE erasing. With `cureType` set, nothing happens while that cure's clock runs (the line is read as an illusion). Where every branch holds the affliction, it only comes off.
+
+```lua
+if proveAffAbsentV3 then proveAffAbsentV3("slickness", "salve") end
+erAff("slickness")
+```
+
 ## Cure Handling
 
 ### `onHerbCureV3(herb)`
@@ -117,7 +133,7 @@ Handle target smoking. Proves asthma absent and branches on smoke-curable afflic
 onSmokeCureV3()
 ```
 
-**Smoke-curable afflictions**: aeon, deadening, hellsight, tension, disloyalty, manaleech, slickness
+**Smoke-curable afflictions**: aeon, deadening, hellsight, tension, disloyalty, manaleech, slickness, unweavingspirit, dazed, earworm
 
 ### `onSalveCureV3(salveType)`
 Handle target applying salve. Proves slickness absent and branches on salve-curable afflictions for the specified body part.
@@ -135,10 +151,21 @@ onSalveCureV3("limbs")   -- Limbs salve (restoration)
 
 **Behavior**:
 1. Collapses slickness absent (applying salve proves no slickness)
-2. Checks each branch for salve-curable afflictions
-3. If 1 candidate → cures it definitively
-4. If multiple candidates → branches into possibilities
-5. Consolidated echo output (one line per cure event)
+2. Closes a guess an earlier eat or smoke left open (`killNegativeConfirmV3`)
+3. Checks each branch for salve-curable afflictions
+4. If 1 candidate → cures it definitively
+5. If multiple candidates → branches into possibilities
+6. Stamps `salveChargedAtV3`, so 396's `onTargetApplySalveV3` on the same line does nothing
+7. Consolidated echo output (one line per cure event)
+
+### `onTargetTreeV3()`, `onTargetFocusV3()`, `onPassiveCureV3(numCures)` (`008`)
+A tree (`:329-380`) drops the branches that hold paralysis (`proveAffAbsentV3`; where every branch holds it, it only comes off), then branches over `treeCurableAffsV3`. A focus (`:383-438`) needs impatience absent, then branches over `focusCurableAffsV3`. A passive (`:473-581`) branches over `passiveCurableAffsV3`. One tree or passive reports only afflictions the tracker held: in `tAffs` or at 30% or more before the cure. `curing/002`'s `ataxia_targetTreeV3` (`:206-243`) is the tree's entry point.
+
+### `onTargetApplySalveV3()` (`008:141-150`)
+Generic apply (trigger 396). Slickness proof and salve clock, unless 391-395 charged this application under 0.1 s ago.
+
+### `ataxia_randomCureV3(kind, who, cure)` and `ataxia_knownCureV3(kind, who, aff)` (`ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua:384`, `:401`)
+A cure that prints a second line naming what it took. `randomCure` runs `cure()` and keeps the branches from before and after. `knownCure` puts "before" back, applies what the action itself proved (anorexia for an eat, asthma for a smoke, impatience for a focus), takes out `aff`, and drops the pending guess. It returns false, doing nothing, unless the random cure was `who`'s, of this `kind`, under `ataxia_KNOWN_CURE_WINDOW` (0.5 s) ago, and nothing else changed the branches. See [03-trigger-integration.md](03-trigger-integration.md).
 
 ## Utility Functions
 
@@ -150,13 +177,6 @@ local kelp_cures = getCurableAffs("kelp")
 -- Returns: {"asthma", "clumsiness", "healthleech", ...}
 ```
 
-### `copyAffs(affs)`
-Create a deep copy of an afflictions table.
-
-```lua
-local copy = copyAffs(state.affs)
-```
-
 ## Internal Functions
 
 ### `rebuildCacheV3()`
@@ -166,27 +186,24 @@ Rebuild the probability cache. Called automatically after state changes.
 Merge identical states (same affliction set) by summing probabilities.
 
 ### `pruneStatesV3()`
-Remove low-probability branches and enforce max branch limit.
-
-### `normalizeProbabilitiesV3()`
-Ensure all branch probabilities sum to 1.0.
+Remove low-probability branches and enforce max branch limit. When every branch is under the floor it keeps them all.
 
 ### `syncToOldSystemV3()`
-Sync V3 state to legacy `tAffs` table for backward compatibility.
+Sync V3 state to legacy `tAffs`: 30% or more is true; under 1%, or fallen under 30% since the last sync, is false.
+
+### `onNegativeConfirmExpiredV3(guess)`
+Only echoes "Neg-confirm timeout -- branch kept". It no longer unfolds a cure (see 01-architecture).
 
 ### `updateAffDisplayV3()`
 Update the Limb Counter window display.
 
 ## Debug Functions
 
-### `debugStatesV3()`
-Print all current states to the console.
+### `showBranchesV3()` and `showAffProbsV3()` (`007:1115`, `:1139`)
+Print all current states, and every affliction's probability, to the console. `v3status()` and `v3probs()` (`008:249`, `:262`) do the same as a short report. A refused cure prints `[V3] ILLUSION: ...` under `debugEcho` (`008:76-80`).
 
 ```lua
-debugStatesV3()
--- Output:
--- [V3] Branch 1 (50%): paralysis, asthma
--- [V3] Branch 2 (50%): paralysis, slickness
+showBranchesV3()
 ```
 
 ### `v3Echo(msg)`
@@ -199,50 +216,18 @@ v3Echo("kelp cured: asthma")
 
 ## Cure Tables Reference
 
-### `herbCureTableV3`
-```lua
-herbCureTableV3 = {
-    kelp = {"asthma", "clumsiness", "healthleech", "hypersomnia",
-            "hypochondria", "lethargy", "recklessness", "sensitivity", "weariness"},
-    bloodroot = {"paralysis", "slickness"},
-    goldenseal = {"stupidity", "dizziness", "epilepsy", "impatience",
-                  "dissonance", "infested"},
-    ginseng = {"clumsiness", "sensitivity", "weariness", "deafblind"},
-    ash = {"impatience", "confusion", "dementia", "recklessness",
-           "hallucinations", "paranoia"},
-    bellwort = {"pacifism", "weariness", "lethargy", "generosity",
-                "justice", "peace"},
-    lobelia = {"anorexia", "disfigurement", "haemophilia", "limp_veins",
-               "sunallergy", "vomiting"}
-}
-```
-
-### `smokeCureTableV3`
-```lua
-smokeCureTableV3 = {"aeon", "deadening", "hellsight", "tension",
-                    "disloyalty", "manaleech", "slickness"}
-```
-
-### `salveCureTableV3`
-```lua
-salveCureTableV3 = {
-    body = {"anorexia", "itching", "bloodfire", "selarnia", "frostbite"},
-    skin = {"frozen", "shivering", "nocaloric", "bloodfire", "selarnia", "frostbite"},
-    head = {"crushedthroat", "damagedhead", "mangledhead", "blindness",
-            "scalded", "epidermal", "bloodfire"},
-    torso = {"hypothermia", "bloodfire", "selarnia", "frostbite"},
-    limbs = {"bloodfire"},
-}
-```
+### Herb, smoke and salve tables
+The current lists are in the [README](README.md) ("Cure Tables"). `getCurableAffs` reads the global `curingTable` first. `herbCureTableV3` no longer exists.
 
 ## Event Handlers
 
 ### State Reset
-V3 states are reset when a new target is acquired:
+V3 states are reset when the target changes (`007:1525-1529`):
 ```lua
-registerAnonymousEventHandler("target acquired", function()
+registerAnonymousEventHandler("changed target", function()
     resetStatesV3()
-    v3Echo("States reset")
+    resetCureBalancesV3()
+    killNegativeConfirmV3()
 end)
 ```
 

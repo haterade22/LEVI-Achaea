@@ -58,10 +58,36 @@ function pariah.reset()
   send("swarms", false)
 end
 
+-- Our TARGET's class, lowercase, or "" when it is not known.
+-- First the NDB entry for the target: every class source writes it (classDetect.setAttackerClass
+-- for any player whose class line we see, onTargetChanged's cached class, and the API lookup), and
+-- it is keyed by the target's own name. "Unknown" (no entry) and a nil class count as not known.
+-- Then classDetect's attacker class, but only when that attacker IS the target: attackerClass is
+-- whoever last hit US, so in a group it can be a bystander's class.
+-- This replaced the global tarClass, which nothing assigned, so the class was always "".
+function ataxia_targetClass()
+  if type(target) ~= "string" or target == "" then return "" end
+  local class
+  if ataxiaNDB_getClass then
+    local c = ataxiaNDB_getClass(target)
+    if type(c) == "string" and c ~= "" and c ~= "Unknown" then class = c end
+  end
+  if not class then
+    local cd = classDetect and classDetect.state
+    if cd and type(cd.attackerName) == "string" and type(cd.attackerClass) == "string"
+       and cd.attackerName:lower() == target:lower() then
+      class = cd.attackerClass
+    end
+  end
+  return class and class:lower() or ""
+end
+
 -- Shared class-aware clumsiness check: returns true if target class is impacted by clumsiness.
 -- Used by both pariah (logograph routing) and serpent (ekanelia venom selection).
-function ataxia_wantClumsiness()
-  local class = tarClass or ""
+-- `class` is optional (any case); without it the target's class is read (ataxia_targetClass). An
+-- unknown class keeps clumsiness.
+function ataxia_wantClumsiness(class)
+  class = (class or ataxia_targetClass()):lower()
   return class ~= "air"
       and class ~= "fire"
       and class ~= "magi"

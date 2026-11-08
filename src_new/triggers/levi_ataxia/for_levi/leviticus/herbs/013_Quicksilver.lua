@@ -38,6 +38,12 @@ patterns:
 
 if isTargeted(matches[2]) then
 tdeliverance = false
+	-- V3: an apply proves no slickness. First, while the branches still say who held it: every erase
+	-- below strips it from each branch. Not onTargetApplySalveV3, which reads and starts the SALVE
+	-- clock: a berry or a droplet is not on salve balance, and the game prints them inside each
+	-- other's 0.8 s (kb/raw/logs/ours/2026-11-03_081532_Tabethys.log:1435/1455, legs then sileris in
+	-- 0.143 s; kb/raw/logs/ours/2026-10-27_112717_Tabethys.log:1328/1351, quicksilver then skin in 0.168 s).
+	if proveAffAbsentV3 then proveAffAbsentV3("slickness") end
 	-- V1: bloodroot disambiguation (must be before erAff clears)
 	if pendingBloodrootV1 then
 		ataxiaEcho("Apply confirms bloodroot cured slickness")
@@ -51,8 +57,6 @@ tdeliverance = false
 		removeAffV2("slickness")
 		removeAffV2("paralysis")
 	end
-	-- V3: collapse branches (proves no slickness)
-	if onTargetApplySalveV3 then onTargetApplySalveV3() end
 	-- V1: clear remaining (erAff handles V3 internally)
 	erAff("slickness")
 	erAff("paralysis")

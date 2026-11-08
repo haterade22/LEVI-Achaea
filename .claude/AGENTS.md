@@ -1031,6 +1031,8 @@ deferral elsewhere in the system.
    calling `shikudo_findCombo` on every queued monk combo, defined only by the switched-off
    `shikudo/008`, so `queue_Scan` threw and skipped its own later work for monks (the call is
    removed in v4.7.419).
+   1c. ACTIVE code calling a global that NO file defines (2026-11-08). Checks 1 and 1b need an
+   inactive definer, so this passed everything; its first run listed 41 names at 59 call sites.
 2. a trigger INDEXING a table built by a group script that may be off (v4.7.264)
 3. a namespace FIELD called but never assigned anywhere (v4.7.281)
 4. a namespace FIELD called from active code that only a SWITCHED-OFF file assigns (v4.7.419).
@@ -1040,9 +1042,10 @@ deferral elsewhere in the system.
 
 `ataxia.echo` is shape 3 and does not exist -- the helper is the global `ataxiaEcho` -- which left 17
 dead call sites, including every echoing branch of `bash shinprobe` and all nine in `ataxiabars`.
-`tools/check_orphans.py` covers shapes 1, 1b, 3 and 4 (checks 1, 1b, 2 and 2b), and all four fail CI.
-1b and 2b were built report-only and made strict (`STRICT_SCRIPT_CALLERS`, `STRICT_INACTIVE_FIELDS`)
-once their reports were clean. 1b reads a script as long code: it strips comments, reads
+`tools/check_orphans.py` covers shapes 1, 1b, 1c, 3 and 4 (checks 1, 1b, 1c, 2 and 2b), and all five
+fail CI. 1b, 2b and 1c were built report-only and made strict (`STRICT_SCRIPT_CALLERS`,
+`STRICT_INACTIVE_FIELDS`, `STRICT_UNDEFINED_GLOBALS`) once their reports were clean. 1c lists what sits
+in a switched-off group folder in `NEVER_RUN`, by file and name. 1b reads a script as long code: it strips comments, reads
 `obj.NAME(` as a field call, skips names the file binds itself, and accepts a guard on the line or
 the two above. A field check sees only the namespaces listed in `NAMESPACES`, so a new namespace
 must be added there before its calls are checked.

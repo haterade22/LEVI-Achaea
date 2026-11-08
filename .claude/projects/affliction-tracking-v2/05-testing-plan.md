@@ -170,6 +170,15 @@
   (not an illusion), it also takes ONE level-1 broken limb, the first present (left leg, right leg,
   left arm, right arm). `tSingleRandom({ noErase = true })` then erases nothing.
   With V3 off, `tSingleRandom()` still erases one affliction, as before
+- The tree pool is `treeCurableAffsV3` (`affliction_tracking_core/008_V3_Integration.lua:271-301`). Since v4.7.479 it
+  holds 77 afflictions (it held 27): every tracked affliction whose AFFLICTION SHOW reads `NoRandomCure: No`. Burning
+  and the fractures stay out, because V3 holds each as one affliction and cannot take off one level. The 2026-11-07
+  spar showed why: Saibel's tree most likely took recklessness (INFERRED, kb/CONFLICTS.md #65), her only affliction then
+  (`kb/raw/logs/ours/2026-11-07_164635_Saibel.log:422`), and the 27-entry pool kept it for 5 more rounds.
+  `src_new/tests/test_target_cure_tables.lua` checks the pool against `kb/raw/live/affliction_show/`
+- Every accepted tree restarts the `[TREE]` echoes at 0, 4, 9 and 14 s (389, since v4.7.479). Before, a tree that came
+  while an older echo was pending got none (Saibel's came 12 ms before the 14 s echo). The 13 s `tBals.tree` re-arm
+  is unchanged (`src_new/tests/test_target_tree.lua`, "every accepted tree starts its own countdown echoes")
 - V2 should sync with whatever old system does
 
 ## Regression Tests

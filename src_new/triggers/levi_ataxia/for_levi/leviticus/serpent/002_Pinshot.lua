@@ -35,8 +35,14 @@ patterns:
   type: 1
 ]]--
 
-tpinshot = true
-tempTimer(21, [[tpinshot = false]])  -- 21s, the game's duration and this trigger's own countdown (was 30)
+-- The pinshot is in THIS person for 21 s (the game's duration and this trigger's own countdown;
+-- was 30). tpinshot holds the name, so the opener (serpent/002 buildOpener) skips the bow only for
+-- that target: it was true for anyone, so a new target within 21 s got no pinshot. A new pinshot
+-- replaces the old clear timer, which would otherwise clear the new one early (2026-11-08 review,
+-- F33).
+if tpinshotTimer then killTimer(tpinshotTimer) end
+tpinshot = matches[2]
+tpinshotTimer = tempTimer(21, [[tpinshot = false; tpinshotTimer = nil]])
 
   cecho("\n")
   ataxia_boxEcho(matches[2].." PINSHOT !!!", "black:orange")

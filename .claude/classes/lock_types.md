@@ -293,11 +293,14 @@ bellwort:
 
 Serpents use **Impulse** (not SNAP) to deliver mental afflictions. Understanding this is critical for defense.
 
+Corrected on 2026-11-08 against the wiki and the logs. [serpent.md](serpent.md) is the source for what the game and our offense do.
+
 ```yaml
+# IMPULSE itself has no stated requirement (WIKI). These are what the monkshood reaction's impatience needs.
 impulse_requirements:
-  - "Victim has NO sileris/fangbarrier defense"
-  - "Victim HAS asthma affliction"
-  - "Victim HAS weariness affliction"
+  - "Victim has NO sileris/fangbarrier defense (the coating stops bites, HELP 13.7)"
+  - "Victim HAS asthma affliction (a monkshood reaction conditional)"
+  - "Victim HAS weariness affliction (a monkshood reaction conditional)"
 
 serpent_lock_progression:
   phase_1_kelp_setup:
@@ -306,13 +309,13 @@ serpent_lock_progression:
     note: "Victim can only cure ONE per eat balance"
 
   phase_2_defense_strip:
-    attack: "Flay sileris"
-    result: "Removes fangbarrier, opens victim to Impulse"
+    attack: "A bare FLAY, or slickness from gecko"
+    result: "Removes fangbarrier, opens victim to the impulse's bite"
 
   phase_3_impulse_delivery:
-    attack: "IMPULSE target SUGGEST impatience"
-    result: "Victim cannot focus"
-    note: "Instant delivery when requirements met"
+    attack: "IMPULSE target masochism monkshood"
+    result: "Impatience from the monkshood reaction: victim cannot focus"
+    note: "Impatience is no suggestion. The impulse brings the masochism, so asthma + weariness must already be up"
 
   phase_4_bloodroot_competition:
     attack: "DST target curare gecko"
@@ -320,22 +323,23 @@ serpent_lock_progression:
     note: "With asthma, victim can't smoke valerian for slickness"
 
   phase_5_lock_complete:
-    attack: "IMPULSE target SUGGEST anorexia"
-    result: "TRUE LOCK achieved"
+    attack: "DST target slike"
+    result: "Anorexia: TRUE LOCK achieved"
+    note: "Anorexia is a complex suggestion, so IMPULSE cannot give it"
 
 fratricide_mechanic:
-  description: "Fratricide causes impulse mental affs to RELAPSE"
-  delivery: "SUGGEST target fratricide via Hypnosis SNAP"
+  description: "Each impulse relapses a short time after it is first introduced (AFFLICTION SHOW)"
+  delivery: "The pet snake's bite: 46 of 46 gains in the four Serpent logs (Z5 900-901). `suggest <target> fratricide` is our code's route only, UNVERIFIED"
   effect: |
-    After victim focuses to cure impatience, fratricide
-    causes it to immediately relapse. Creates focus lock.
+    Our reading (UNVERIFIED): once per impulse, shortly after it lands.
+    It is not a loop that returns an affliction after every cure.
   scytherus_combo: |
-    When combined with scytherus (ginseng cure), each relapse
-    deals ~1200 poison damage. CRITICAL to cure fratricide early.
+    The record says "major negative poison resist". The ~1200 damage
+    per relapse is UNVERIFIED. Cure fratricide at once when scytherus is up.
 
 ekanelia_mechanic:
   description: "BITE venom transformation that ADDS bonus afflictions"
-  requirement: "Only works with BITE, not DOUBLESTAB"
+  requirement: "Fires on the bite: BITE, or IMPULSE with a venom. Not DOUBLESTAB"
   transformations:
     kalmia: "clumsiness + weariness → asthma + SLICKNESS"
     monkshood: "asthma + masochism + weariness → disloyalty + IMPATIENCE"
@@ -348,7 +352,8 @@ ekanelia_mechanic:
               masochism (enables monkshood AND curare bonuses)
               confusion + recklessness (makes loki predictable)
   defense: |
-    Cure masochism early - blocks 2 Ekanelia transformations.
+    Curing masochism blocks a plain monkshood bite and the curare reaction.
+    It does not stop `impulse masochism monkshood`, which brings its own.
     Don't let clumsiness + weariness stack together.
     Track conditional combos to predict incoming afflictions.
 ```
@@ -366,9 +371,9 @@ bloodroot_competition:
 kelp_competition:
   cures: [asthma, weariness]
   problem: |
-    Both afflictions enable Impulse.
+    Both afflictions are conditionals of the monkshood reaction.
     Only one cure per eat balance.
-  defense: "Prioritize ASTHMA - breaks Impulse requirement AND restores smoking"
+  defense: "Prioritize ASTHMA - denies the reaction AND restores smoking"
 ```
 
 ### Defense Priority vs Serpent
@@ -378,12 +383,12 @@ priority_order:
   1_prevent_impulse:
     condition: "asthma + weariness present"
     action: "Boost asthma priority (swap: astWear)"
-    reason: "Curing asthma breaks Impulse requirement"
+    reason: "Curing asthma denies the monkshood reaction"
 
   2_fratricide_early:
     condition: "fratricide + asthma + slickness"
     action: "Boost fratricide priority (swap: fratLock)"
-    reason: "Prevent impulse mental relapse loop"
+    reason: "Each impulse relapses shortly after it lands"
 
   3_tree_early:
     condition: "asthma + slickness + (impatience OR anorexia)"
@@ -419,7 +424,7 @@ priority_order:
 - Don't let slickness + anorexia stick together
 - Watch for arm breaks if they're building riftlock
 - Maintain Insomnia defence against sleep classes
-- **VS SERPENT**: Cure asthma when weariness present (breaks Impulse)
+- **VS SERPENT**: Cure asthma when weariness present (denies the monkshood reaction)
 - **VS SERPENT**: Cure fratricide early (prevents mental relapse)
 - **VS SERPENT**: Tree when approaching lock (asthma + slickness + impatience/anorexia)
 - **VS SERPENT**: Prioritize paralysis over slickness when asthma blocks smoking

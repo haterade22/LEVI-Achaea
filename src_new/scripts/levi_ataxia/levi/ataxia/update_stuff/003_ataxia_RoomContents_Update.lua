@@ -45,7 +45,10 @@ function ataxia_RoomContents_Update(event)
 	atempDenizens = atempDenizens or {}
 	waterGuards = waterGuards or {}
   if not gmcp.Char or not gmcp.Char.Items or not gmcp.Char.Items.List then return end
-  if gmcp.Char.Items.List.location ~= "inv" then
+  -- Both flags describe the room we stand in, so only a room list starts them over (the loop below
+  -- sets them again). This used to run on every item event while the last List was not the
+  -- inventory's, so a denizen walking in cleared them with the wall or sigil still standing.
+  if event == "gmcp.Char.Items.List" and gmcp.Char.Items.List.location ~= "inv" then
     ataxia.lightwall = false
     ataxiaTemp.monolith = false
   end
@@ -83,10 +86,13 @@ function ataxia_RoomContents_Update(event)
 				if (v.name == "a guarded firewall" or v.name == "an audacious guardsman" or v.name == "a Vault guardian") and not table.contains(waterGuards, v.id) and #waterGuards < 10 and beckonGuards then
 					send("beckon "..v.id)
 					table.insert(waterGuards, v.id)
-				elseif v.name == "an audacious guardsman" and not table.contains(waterguards, v.id) and #waterGuards < 10 and saluteGuards then
+				-- These two read `waterguards`, which nothing defines (the list is waterGuards, above). Mudlet
+				-- 5.1.1's table.contains answers false for a non-table, so the dedupe never saw a guard it
+				-- had already saluted or grabbed, and a Mudlet whose table.contains walks pairs() threw here.
+				elseif v.name == "an audacious guardsman" and not table.contains(waterGuards, v.id) and #waterGuards < 10 and saluteGuards then
 					send("wsalute "..v.id)
 					table.insert(waterGuards, v.id)
-				elseif v.name == "a Coterie councillor" and not table.contains(waterguards, v.id) and #waterGuards < 15 and saluteGuards then
+				elseif v.name == "a Coterie councillor" and not table.contains(waterGuards, v.id) and #waterGuards < 15 and saluteGuards then
 					sendAll("grab "..v.id,false)
 					table.insert(waterGuards, v.id)
 				elseif v.name == "a Coterie councillor" and not table.contains(waterGuards, v.id) and #waterGuards < 10 and beckonGuards then
@@ -141,12 +147,17 @@ function ataxia_RoomContents_Update(event)
 		end
 		if gmcp.Char.Items.Remove.item.icon == "coin" then
 			ataxiaTemp.goldInRoom = false
-    elseif gmcp.Char.Items.Remove.item.name == "a monolith sigil" then
+    -- Room only: a carried sigil leaving the inventory says nothing about the room we stand in.
+    elseif gmcp.Char.Items.Remove.location == "room" and gmcp.Char.Items.Remove.item.name == "a monolith sigil" then
       ataxiaTemp.monolith = false
+    elseif gmcp.Char.Items.Remove.location == "room" and gmcp.Char.Items.Remove.item.name == "a lightwall" then
+      ataxia.lightwall = false
 		end		
 		
-	--Add the denizen.
-	else
+	--Add the denizen. Only for an Add: an inventory List reaches this chain too, and it used to run
+	--this branch on the last Add received, putting a wall or denizen from a room we had left into
+	--this one (and throwing if no Add had arrived yet).
+	elseif event == "gmcp.Char.Items.Add" then
 		-- Same flag-set membership as the List loop above: require attrib (nil-guard the List loop
 		-- had but this Add path lacked), exclude x (loyal/protected) and d (dead -- the Add path
 		-- never checked d before, so a corpse Added to the room became an attackable "denizen").

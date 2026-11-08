@@ -39,6 +39,10 @@ patterns:
 
 if isTargeted(matches[2]) then
   if ataxiaTemp.randomCure and ataxiaTemp.randomCure > 0 then ataxiaTemp.randomCure = ataxiaTemp.randomCure - 1 end
+	-- After the target's goldenseal/plumbum eat this line names the cure, so it replaces the eat's
+	-- random cure (herbs/002, ataxia_knownCureV3), and the eat counts once. With no such eat just
+	-- before, it only erases.
+	if ataxia_knownCureV3 then ataxia_knownCureV3("goldenseal", matches[2], "unweavingmind") end
 	erAff("unweavingmind")
 	erAff("criticalmind")
 	targetIshere = true

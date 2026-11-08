@@ -72,7 +72,7 @@ describe("selectBiteVenom — bite payload helper", function()
     clearAffs()
     setAff("scytherus", true)
     local pick = selectBiteVenom()
-    expect(pick).toBe(pick)  -- not nil
+    expect(pick ~= nil).toBeTrue()
     expect(pick.venom).toBe("scytherus")
     expect(pick.label).toContain("camus")
   end)

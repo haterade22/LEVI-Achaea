@@ -144,7 +144,7 @@ def cure_option(text, lungs=("pear", "calcite")):
     """'eat bloodroot' -> {'channel': 'eat', 'item': 'bloodroot'}.
 
     Pear and calcite are eaten, so anorexia shuts them, but they spend the lungs clock (cure-channels.md:19, 33;
-    replay.md:149): channel "lungs". APPLY HEALTH is the health elixir, not a salve (cure-channels.md:45-47): channel
+    replay.md:149): channel "lungs". APPLY HEALTH is the health elixir, not a salve (cure-channels.md:50-52): channel
     "elixir". The engine runs neither channel yet, and no Serpent venom gives an affliction only they cure."""
     words = text.split()
     verb, item = words[0], " ".join(words[1:])

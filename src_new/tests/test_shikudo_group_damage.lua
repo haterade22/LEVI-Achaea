@@ -367,6 +367,30 @@ describe("the group damage route (shikudo/013)", function()
     expect(round()).toBe("queue addclear free wield staff489282;dispatch Sadey")
   end)
 
+  -- The city comes from the NDB, through the real ataxia_ndb/003 getter (shikudo.targetIsMhaldorian,
+  -- 006). This route read a global tCity that nothing ever assigned, so a Mhaldorian was dispatched.
+  it("INCAPACITATE for a Mhaldorian the NDB knows; anyone else is dispatched", function()
+    setup("Rain", { prone = true, crushedthroat = true }, { head = 100 })
+    dofile(ROOT .. "scripts/levi_ataxia/levi/ataxia/ataxia_ndb/003_ataxiaNDB_API.lua")
+    ataxiaNDB = { players = { Sadey = { city = "Mhaldor" } } }
+    shikudoDmg.dispatch()
+    expect(round()).toBe("queue addclear free wield staff489282;incapacitate Sadey")
+
+    -- Another city, or a name the NDB has not gathered, is dispatched: the old global decides nothing.
+    ataxiaNDB.players.Sadey.city = "Cyrene"
+    tCity = "Mhaldor"
+    shikudoDmg.dispatch()
+    expect(round()).toBe("queue addclear free wield staff489282;dispatch Sadey")
+    tCity = nil
+    ataxiaNDB.players.Sadey = nil
+    shikudoDmg.dispatch()
+    expect(round()).toBe("queue addclear free wield staff489282;dispatch Sadey")
+    -- No NDB at all: still a dispatch, and no error at the kill.
+    ataxiaNDB = nil
+    shikudoDmg.dispatch()
+    expect(round()).toBe("queue addclear free wield staff489282;dispatch Sadey")
+  end)
+
   -- The user, 2026-11-02: MIND CRUSH passes a shield, so srd has no shatter and no combo for it.
   it("a shield changes nothing: the crush still goes", function()
     setup("Rain", { shield = true })

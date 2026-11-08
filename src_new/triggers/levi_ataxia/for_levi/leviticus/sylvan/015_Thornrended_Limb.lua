@@ -50,10 +50,12 @@ if isTargeted(person) then
   targetIshere = true
   erAff("shield")
   moveCursor(0, getLineNumber()-1)
+	-- propAff is false when nothing is propagated (limb_management/011): tarAffed(false) would
+	-- record an affliction named false, so only a real one is passed on.
 	if next(envenomList) then	
-		tarAffed(envenomList[1], propAff)
+		if propAff then tarAffed(envenomList[1], propAff) else tarAffed(envenomList[1]) end
 		table.remove(envenomList, 1)
-  else
+  elseif propAff then
     tarAffed(propAff)
 	end
 	moveCursorEnd()

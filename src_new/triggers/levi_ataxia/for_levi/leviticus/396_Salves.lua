@@ -39,9 +39,12 @@ patterns:
 if isTargeted(matches[2]) then
 tdeliverance = false
   if passiveFailsafe then restorePassiveCure() end
+	-- Before the erase, which would leave the branches this proof rules out standing (007).
+	if proveAffAbsentV3 then proveAffAbsentV3("slickness", "salve") end
 	erAff("slickness")
 
-	-- V3 integration: salve proves slickness absent
+	-- V3 integration: salve proves slickness absent. Runs after 391-395 on the same line; when one
+	-- of them has charged the application (onSalveCureV3), this call does nothing (008).
 	if onTargetApplySalveV3 then onTargetApplySalveV3() end
 
 	targetIshere = true

@@ -56,7 +56,8 @@ LINES = (
     ("snap", "A", "hypnosis", r"^" + WHO + r" snaps (?:his|her) fingers in front of you"),
     # The bare form: g row 1531, after a DSTAB that rebounded. Who it fires at is not shown.
     ("snap.bare", "A", "hypnosis", r"^" + WHO + r" snaps (?:his|her) fingers\.$"),
-    # Which ability prints this is not proven: HYPNOTISE and IMPULSE are both candidates (.claude/classes/serpent.md).
+    # An IMPULSE that bites. All 22 of the four logs' BITEs had this line from the same Serpent in their packet, and all 22
+    # of these lines had a BITE there, with the suggestion's affliction between the two (az 1238-1242, Z5 534-537, X 293-296).
     ("gaze.command", "A", "hypnosis", r"^" + WHO + r" fixes (?:his|her) gaze to yours and hisses a sharp command"),
     ("shrug", "A", "classcure", r"^" + WHO + r" hunches (?:his|her) shoulders and lets out a soft hiss"),
     ("impulse.fired", "W", "hypnosis", r"^Your equilibrium is thrown off by an awakened mental impulse"),
@@ -629,7 +630,7 @@ CENSUS_ROWS = (
     ("rebounded.aura", "'The attack rebounds off your aura of protection!'"),
     ("snap", "SNAP: 'snaps his fingers in front of you'"),
     ("snap.bare", "SNAP, bare: 'snaps his fingers.'"),
-    ("gaze.command", "'fixes his gaze to yours and hisses a sharp command' (HYPNOTISE or IMPULSE: not proven)"),
+    ("gaze.command", "IMPULSE: 'fixes his gaze to yours and hisses a sharp command' (in the packet of each BITE, 22 of 22)"),
     ("impulse.fired", "'Your equilibrium is thrown off by an awakened mental impulse'"),
     ("gain:hypochondria", "'A terrible sense of unease comes over you' (the hypochondria gain line)"),
     ("shrug", "The Serpent's SHRUG: 'hunches his shoulders and lets out a soft hiss'"),
@@ -751,7 +752,8 @@ def render(data):
         "",
         "## Census",
         "",
-        "Game lines only: a client's own echoes are not counted. The 'gaze' line names a line, not an ability.",
+        "Game lines only: a client's own echoes are not counted. The 'gaze' line is an IMPULSE that bites: each of the 22 BITEs",
+        "has it in its packet, and each of the 22 'gaze' lines a BITE (az 1238-1242, Z5 534-537, X 293-296).",
         "",
         "The second-venom line follows every DSTAB, hit or miss: second-venom lines = pricks + misses in %s."
         % ", ".join("%s %s" % (k, "yes" if data["census"][k]["lines"].get("dstab.second", 0)

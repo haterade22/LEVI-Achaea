@@ -454,7 +454,7 @@ accelerate:
   skill: Aeonics
   effect: "Passive cure for DW"
   blocked_by: [recklessness]
-  notes: "Class-specific passive cure"
+  notes: "Class-specific passive cure. Our lock-breaker sends `chrono accelerate boost`, and plain `chrono accelerate` while prone and paralysed: 'being prone will make boosting the process impossible' (kb/raw/wiki/Aeonics.wiki:106; can(x)/003_Lock_breakers.lua:273-277, 2026-11-08, not yet run in Mudlet)"
 
 shift:
   skill: Shadowmancy

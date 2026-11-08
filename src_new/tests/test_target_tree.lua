@@ -171,6 +171,101 @@ describe("the target's tree is charged once (trigger 389)", function()
   it("the trigger's own pattern matches the logged line", function()
     expect(TL.anyMatches(TL.patterns(TREE), LINE)).toBeTrue()
   end)
+
+  -- 2026-11-07 Serpent spar (kb/raw/logs/ours/2026-11-07_164635_Saibel.log:422): the tree took
+  -- recklessness, her only affliction then. The pool had no recklessness, so V3 kept it.
+  it("a tree with only recklessness on takes it, from V3 and from tAffs", function()
+    world()
+    tarAffed("recklessness")
+    tree()
+    expect(P("recklessness")).toBe(0)
+    expect(tAffs.recklessness).toBeFalse()
+  end)
+
+  -- Deep review F19 (2026-11-08): 389 took one Magi burn off on every tree. Burning is no tree cure
+  -- in V3, and the game's lines own the count (general/025: "The fires consuming X diminish
+  -- somewhat."); a tree on burning Kalys left burning at 1.00
+  -- (kb/raw/logs/2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt:359-361).
+  it("a tree leaves the Magi burn count and burning alone", function()
+    world()
+    tarAffed("weariness", "nausea", "burning")
+    magi.offense.state.burns = 2
+    tburns = 2
+    tree()
+    expect(magi.offense.state.burns).toBe(2)
+    expect(tburns).toBe(2)
+    expect(P("burning")).toBe(1)
+  end)
+end)
+
+-- The [TREE] countdown echoes (389). In the 2026-11-07 spar Saibel's tree came 12 ms before the
+-- pending 14 s echo, and `if treeTimer then return end` skipped that tree's whole countdown.
+describe("every accepted tree starts its own countdown echoes (trigger 389)", function()
+  -- Run one mock timer as Mudlet would at its time, and drop it from the list.
+  local function fire(id)
+    local t = assert(mock.active_timers[id], "no such timer: " .. tostring(id))
+    mock.active_timers[id] = nil
+    local run = type(t.callback) == "string" and assert((loadstring or load)(t.callback)) or t.callback
+    run()
+  end
+  local function delays()
+    return mock.active_timers[treeTimer0].delay, mock.active_timers[treeTimer4].delay,
+      mock.active_timers[treeTimer9].delay, mock.active_timers[treeTimer].delay
+  end
+
+  it("one tree starts the 0, 4, 9 and 14 s echoes", function()
+    world()
+    tree()
+    local d0, d4, d9, d14 = delays()
+    expect(d0).toBe(0); expect(d4).toBe(4); expect(d9).toBe(9); expect(d14).toBe(14)
+  end)
+
+  it("a tree just before the pending 14 s echo kills it and starts four new echoes", function()
+    world()
+    tree()
+    local old14 = treeTimer
+    fire(treeTimer0); fire(treeTimer4); fire(treeTimer9)   -- 0, 4 and 9 s
+    expect(treeTimer0).toBeNil()
+    fire(tBals.timers.tree)                                  -- 13 s: tBals.tree is up again
+    expect(tBals.tree).toBeTrue()
+    now = now + 13.988                                       -- the 14 s echo is still pending
+    tree()
+    expect(mock.active_timers[old14]).toBeNil()
+    expect(treeTimer ~= old14).toBeTrue()
+    local d0, d4, d9, d14 = delays()
+    expect(d0).toBe(0); expect(d4).toBe(4); expect(d9).toBe(9); expect(d14).toBe(14)
+    -- One countdown runs, not two: one timer at each echo's delay. (V3's own 13 s tree balance
+    -- and 389's 13 s re-arm are timers too, so count by delay.)
+    local count = { [0] = 0, [4] = 0, [9] = 0, [14] = 0 }
+    for _, t in pairs(mock.active_timers) do
+      if count[t.delay] then count[t.delay] = count[t.delay] + 1 end
+    end
+    for d, n in pairs(count) do
+      if n ~= 1 then error(string.format("%d timers at %d s, want 1", n, d)) end
+    end
+  end)
+
+  it("the new countdown prints all four echoes", function()
+    world()
+    tree()
+    fire(treeTimer0); fire(treeTimer4); fire(treeTimer9); fire(tBals.timers.tree)
+    tree()
+    echoed = {}
+    fire(treeTimer0); fire(treeTimer4); fire(treeTimer9); fire(treeTimer)
+    expect(#echoed).toBe(4)
+    expect(echoed[4]:find("can now use tree", 1, true) ~= nil).toBeTrue()
+    expect(treeTimer).toBeNil()
+  end)
+
+  it("a tree inside the 13 s window starts nothing: 389's tBals.tree gate holds", function()
+    world()
+    tree()
+    local ids = { treeTimer0, treeTimer4, treeTimer9, treeTimer }
+    now = now + 5
+    tree()
+    expect(treeTimer0).toBe(ids[1]); expect(treeTimer4).toBe(ids[2])
+    expect(treeTimer9).toBe(ids[3]); expect(treeTimer).toBe(ids[4])
+  end)
 end)
 
 describe("with V3 disabled the old erase is unchanged", function()
@@ -204,10 +299,11 @@ describe("what V3 takes for certain leaves tAffs too (ataxia_targetTreeV3)", fun
   end)
 
   it("only the pool affliction goes; its partner outside the pool stays", function()
-    -- Hypochondria, recklessness, disloyalty and aeon are not in the tree pool (008), so each
-    -- time the tree could take only the first of the pair.
-    for _, pair in ipairs({ { "impatience", "hypochondria" }, { "anorexia", "recklessness" },
-                            { "slickness", "disloyalty" }, { "weariness", "aeon" } }) do
+    -- Dissonance, horror, unweavingmind and heartseed are not in the tree pool (008): the game
+    -- marks each NoRandomCure. So each time the tree could take only the first of the pair. (The
+    -- old partners, hypochondria, recklessness, disloyalty and aeon, joined the pool on 2026-11-07.)
+    for _, pair in ipairs({ { "impatience", "dissonance" }, { "anorexia", "horror" },
+                            { "slickness", "unweavingmind" }, { "weariness", "heartseed" } }) do
       world()
       tarAffed(pair[1], pair[2])
       tree()
@@ -364,13 +460,19 @@ describe("the target's focus clock (triggers 398, 399)", function()
     expect(clock()).toBe(4.8)
   end)
 
-  it("399 under shadowmadness: the same 4.8 s", function()
+  -- Deep review F43 (2026-11-08): 399 repeated 398's clock behind tBals.focus, which 398 had set
+  -- false a line earlier, so it never ran. 398 owns the clock now; 399 only reads the next line.
+  it("399 after 398 starts no second clock and moves nothing on a plain next line", function()
     world()
     serpent = nil
-    tarAffed("shadowmadness")
+    tarAffed("shadowmadness", "stupidity")
+    focus("Agathon")
+    local id, p = tBals.timers.focus, P("stupidity")
     multimatches = { { focusLine("Agathon"), "Agathon" }, {}, { "The next line." } }
     KNOWN_BODY()
+    expect(tBals.timers.focus).toBe(id)
     expect(clock()).toBe(4.8)
+    expect(P("stupidity")).toBe(p)
   end)
 end)
 

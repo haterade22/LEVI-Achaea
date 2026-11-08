@@ -544,10 +544,10 @@ prevention:
     - "Maintain Insomnia defence against sleep classes"
 
   vs_serpent:
-    - "Cure asthma when weariness present (breaks Impulse requirement)"
-    - "Cure fratricide early (prevents mental relapse)"
+    - "Cure asthma when weariness present (denies the monkshood reaction's impatience)"
+    - "Cure fratricide early (each impulse relapses shortly after it lands)"
     - "Tree when approaching lock (asthma + slickness + impatience/anorexia)"
     - "Prioritize paralysis over slickness when asthma blocks smoking"
-    - "Cure masochism early (blocks 2 Ekanelia transformations)"
+    - "Curing masochism blocks a plain monkshood bite and the curare reaction, not `impulse masochism monkshood`, which brings its own"
     - "Block Ekanelia kalmia by curing clumsiness OR weariness"
-    - "Cure fratricide IMMEDIATELY when scytherus present (1200 damage per relapse)"
+    - "Cure fratricide at once when scytherus is present (poison resistance drops; the 1200 per relapse this said is UNVERIFIED)"

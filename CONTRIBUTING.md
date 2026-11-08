@@ -97,10 +97,15 @@ causing the second definition to silently shadow the first.
 GitHub Actions (`.github/workflows/build.yml`) runs on every push and PR:
 
 1. Lua syntax check (all `src_new/**/*.lua`)
-2. `tools/check_orphans.py` -- no active item calls a global defined only by a disabled script
-3. `tools/check_wrap.py` -- no trigger pattern is wider than a server-wrapped row (v4.7.351)
-4. Version consistency check (version.txt / mfile / _groups.yaml)
-5. Unit tests (`lua5.1 src_new/tests/test_runner.lua`)
-6. YAML validation
+2. `tools/check_orphans.py` -- no active item calls a global defined only by a disabled script, or by nothing
+3. `tools/test_check_orphans.py` -- the orphan checker's own tests
+4. `tools/check_wrap.py` -- no trigger pattern is wider than a server-wrapped row (v4.7.351)
+5. `tools/kb_timing.py`, `kb_replay.py`, `kb_sim.py`, `kb_rules.py` and `kb_events.py`, each with `--check` -- the generated kb pages match their sources. Each has its own `tools/test_kb_*.py`, also run here, and `tools/test_theorycraft.py` tests the CLI and the whole-fight engine
+6. Version consistency check (version.txt / mfile / _groups.yaml)
+7. Unit tests (`lua5.1 src_new/tests/test_runner.lua`)
+8. YAML validation
+9. `tools/test_convert_to_muddler.py` -- the Muddler converter's own tests (after step 8: the converter imports yaml)
+
+`tools/kb_affliction_db.py` is not in CI and has no `--check`: every run rewrites `kb/afflictions/database.md` and `afflictions.json`.
 
 Tagged pushes (`v*`) additionally build the `.mpackage` and create a GitHub Release.

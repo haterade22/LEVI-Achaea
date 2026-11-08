@@ -52,6 +52,17 @@ if isTargeted(matches[2]) then
 	-- Guarded v4.7.261: callee lives in a script that is switched off, so a bare call throws.
 	if tarAffedConfirmed then tarAffedConfirmed("paralysis") end
 
-	-- V3 integration: collapse branches (proves paralysis present)
-	if onTargetParalysisBlockV3 then onTargetParalysisBlockV3() end
+	-- These lines GIVE paralysis (a curare hit, the bees, a shield into the spine, ...), so it is added
+	-- to every branch. This used to be onTargetParalysisBlockV3, a collapse meant for a line that SHOWS
+	-- paralysis already there: it kept only the branches that still had it, so after an eat that
+	-- branched paralysis/slickness, an ally's curare deleted the branch where slickness was cured and
+	-- read slickness as gone (2026-11-08 deep review; allies' curare on Xylarys,
+	-- kb/raw/logs/ours/2026-11-03_081532_Tabethys.log:25-28). When it is certain already (our own
+	-- doublestab added it on an earlier line, ours/2026-11-07_164635_Saibel.log:359-366) nothing
+	-- changes, and no extra "tar afflicted" is raised. "Certain" is every branch holding it
+	-- (isAffCertainV3, 007), not a summed probability >= 1, which a renormalised split leaves a few
+	-- ulps under 1.
+	if not (isAffCertainV3 and isAffCertainV3("paralysis")) then
+		tarAffed("paralysis")
+	end
 end

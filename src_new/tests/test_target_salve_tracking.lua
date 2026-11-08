@@ -7,6 +7,8 @@
 -- of the branching; trigger 392 never called the tracker, so head cures were never seen; and the
 -- lists held afflictions from the wrong spot. Every global the loaded files touch is restored.
 
+local mock = require("mock_mudlet")
+
 local before = {}
 for k, v in pairs(_G) do before[k] = v end
 
@@ -26,8 +28,11 @@ local function body(file)
   return assert((loadstring or load)(src:match("%]%]%-%-\r?\n(.*)$")))
 end
 local BODY_SKIN, HEAD = body("391_Applied_Body_Skin.lua"), body("392_Applied_Head.lua")
+local TORSO = body("393_Applied_Torso.lua")
 
 -- The world the triggers run in. erAff/haveAff go straight to V3 (the public API's job).
+-- The limb damage comes from the limb counter (lb, limb/002), which 392 and 393 read; the global
+-- tLimbs they used to read is defined by nothing in the package, so it is left nil here.
 local function world(limbs)
   isTargeted = function(n) return n == "Xarthus" end
   erAff = function(a) if removeAffV3 then removeAffV3(a) end end
@@ -36,7 +41,9 @@ local function world(limbs)
   magi = { offense = { state = { burns = 0 } } }
   selectCurrentLine, fg, cecho, ataxia_boxEcho, target_salveBal = function() end, function() end,
     function() end, function() end, function() end
-  tLimbs = limbs or { H = 0, T = 0 }
+  tLimbs = nil
+  target = "Xarthus"
+  lb = { Xarthus = { hits = limbs or { head = 0, torso = 0 }, t = {} } }
   ataxiaTemp = ataxiaTemp or {}
   ataxiaTemp.crushedCheck = { pending = false, timer = nil, lastApply = 0 }
   targetBurningLevelV3 = 1
@@ -129,9 +136,44 @@ describe("enemy salve tracking: one application, one cure", function()
   end)
 
   it("a head application on a damaged head is the restoration, not another cure", function()
-    world({ H = 150, T = 0 }); fresh({ "stuttering" })
+    world({ head = 150, torso = 0 }); fresh({ "stuttering" })
     apply(HEAD, "head")
     expect(P("stuttering")).toBe(1)
+  end)
+
+  -- 2026-11-08 deep review (F13): 392 and 393 read tLimbs.H / tLimbs.T, a global nothing defines,
+  -- so in the client every head application raised an error before the cure and every body or
+  -- torso application without hypothermia raised one in 393. world() leaves tLimbs nil, as the
+  -- package does.
+  it("with no tLimbs global a head application runs to the cure (F13)", function()
+    world(); fresh({ "stuttering" })
+    expect(tLimbs).toBeNil()
+    local ran, e = pcall(apply, HEAD, "head")
+    expect(ran).toBe(true)
+    expect(e).toBeNil()
+    expect(P("stuttering")).toBe(0)
+  end)
+
+  it("a body application on a calcified torso is counted down by 393 (F13)", function()
+    world(); fresh({ "calcifiedtorso" })
+    expect(P("calcifiedtorso")).toBe(1)
+    mock.reset()
+    apply(BODY_SKIN, "body")        -- 391 leaves the calcified torso to 393
+    local ran, e = pcall(apply, TORSO, "body")
+    expect(e).toBeNil()
+    expect(ran).toBe(true)
+    expect(P("calcifiedtorso")).toBe(1)   -- the restoration takes 4 s
+    mock.fire_timers()
+    expect(P("calcifiedtorso")).toBe(0)
+  end)
+
+  it("a torso application on a broken torso takes the salve balance and leaves lb to reset it", function()
+    world({ head = 0, torso = 150 }); fresh({})
+    local bal
+    target_salveBal = function(t) bal = t end
+    apply(TORSO, "torso")
+    expect(bal).toBe(3.5)
+    expect(lb.Xarthus.hits.torso).toBe(150)   -- lb.salve (limb/003) owns the reset
   end)
 
   it("with a crushed throat up, 392's own crushed-throat logic owns the application", function()

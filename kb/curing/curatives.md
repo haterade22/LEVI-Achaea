@@ -22,13 +22,13 @@ groups vaguely ("cure for body or mind in disharmony"). The exact affliction lis
 | Goldenseal | Plumbum | eat | Goldenseal group ("body or mind in disharmony"): impatience, stupidity, epilepsy, dizziness, shyness, dissonance, ... |
 | Lobelia | Argentum | eat | Lobelia group ("phobias or pathos"): recklessness, vertigo, agoraphobia, claustrophobia, loneliness, masochism, ... |
 | Prickly Ash ("ash") | Stannum | eat | Ash group ("sanity"): confusion, dementia, paranoia, hallucinations, hypersomnia |
-| Bellwort | Cuprum | eat | Bellwort group ("excessively altruistic"): peace, pacifism, generosity, justice, lover's effect, indifference |
+| Bellwort | Cuprum | eat | Bellwort group ("excessively altruistic"): peace, pacifism (HELP's word; the game's name is `pacified`), generosity, justice, lover's effect, indifference |
 | Bloodroot | Magnesium | eat | Paralysis, slickness |
 | Slippery Elm ("elm") | Cinnabar | **smoke** | Aeon, deadening ("a variety of curses and afflictions") |
 | Valerian | Realgar | **smoke** | Slickness, disloyalty (HELP's older name: disfigurement), hellsight, mana leech |
 | Prickly Pear ("pear") | Calcite | eat, but spends the LUNGS ([cure-channels](../afflictions/cure-channels.md)) | Underwater breathing (cures drowning). Also removes one air lord pressure (`s98kPGv6`). **Cannot be used pre-emptively.** |
 | Ginger | Antimony | eat | Reduces artificially raised body fluid (tempered humours) |
-| Irid Moss ("moss") | Potash | eat | Heals some health and mana. **Uses the eating balance**, so it competes with every herb cure. |
+| Irid Moss ("moss") | Potash | eat | Heals some health and mana. **Has its own clock, not the eat's** ([cure-channels](../afflictions/cure-channels.md); CONFLICTS Resolved 2026-11-07). |
 | Cohosh | Gypsum | eat | Gives the **insomnia** defence (cannot be put to sleep) |
 | Kola | Quartz | eat | Lets you **wake instantly**, at will |
 | Echinacea | Dolomite | eat | Gives **third eye** |

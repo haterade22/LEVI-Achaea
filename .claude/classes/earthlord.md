@@ -443,6 +443,11 @@ calcify_kill_check: |
 
 ## Implementation Notes
 ```
+Fixed 2026-11-08, not yet run in Mudlet: 557_Powderise called earth_powderiseHit, deleted in 3c312975 with its counter,
+and threw before targetIshere was set; the call is gone. 123_QUAKED's call of the old OppGainedAff is guarded (558_Quake
+records the prone on that line). The aliases `hea`, `ri` and `le` (earth_lord/006, 014, 015) call deleted path functions:
+they are guarded, so they used to throw and now do nothing. No attack is sent from them.
+
 Triggers to watch for:
 - "powderises your *" - limb being prepped
 - "Your * is damaged/broken" - track limb state

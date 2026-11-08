@@ -8,7 +8,7 @@ sources:
   - kb/classes/abilities.json
 code:
   - tools/kb_timing.py
-latest_filed: 2026-11-03
+latest_filed: 2026-11-07
 ---
 
 # Clocks: stated against observed
@@ -266,7 +266,7 @@ A sample counts as "with" when any prompt during that clock shows the affliction
 
 **Own costs** are the game's own `Balance used` and `Equilibrium used` lines (Mystor's `[Bal Spent]` is the same line renamed). The ratio is the printed median over the value in `kb/classes/abilities.json`. A packet with two candidate abilities on one channel is left out: none.
 
-303 of 1304 printed cost rows match a curated ability. The rest, including the Shikudo kick combos, are not in this table.
+355 of 1356 printed cost rows match a curated ability. The rest, including the Shikudo kick combos, are not in this table.
 
 | Ability | Channel | Stated | Field | Logger | n | Printed | Median | Ratio | Filed | Logs |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -287,6 +287,11 @@ A sample counts as "with" when any prompt during that clock shows the affliction
 | Concentrate | equilibrium | - | no row in abilities.json | Elmer | 9 | 1.44 x1, 1.7 x8 | 1.70 | - | 2026-11-01 | 3ys7NuHA 6, Z5cyffxx 1, g-lD00-h 2 |
 | Curseward | equilibrium | - | no row in abilities.json | Claes | 6 | 4 x6 | 4.00 | - | 2026-11-01 | WO7tC3kL 5, claes/LcJC-rJ5 1 |
 | Colossal fist | balance | - | no row in abilities.json | Earth Lord (unnamed) | 53 | 2.9 x53 | 2.90 | - | 2026-11-01 | JDvzR7j7 25, OwkA-G99 23, uW_VbgR 5 |
+| DSTAB | balance | 2.80 | Subterfuge/Doublestab: 2.80 seconds of balance | Ours, recorder (Serpent) | 24 | 1.8 x24 | 1.80 | 0.64 | 2026-11-07 | ours/164635_Saibel 24 |
+| BITE | balance | 4.00 | Venom/Bite: 4.00 seconds of balance | Ours, recorder (Serpent) | 13 | 1.7 x13 | 1.70 | 0.42 | 2026-11-07 | ours/164635_Saibel 13 |
+| IMPULSE | equilibrium | 1.70 | Hypnosis/Impulse: 1.70 seconds of equilibrium | Ours, recorder (Serpent) | 13 | 1.44 x13 | 1.44 | 0.85 | 2026-11-07 | ours/164635_Saibel 13 |
+| FLAY | balance | 2.00 | Subterfuge/Flay: 2.00 seconds of balance | Ours, recorder (Serpent) | 1 | 1.7 x1 | 1.70 | 0.85 | 2026-11-07 | ours/164635_Saibel 1 |
+| PINSHOT | balance | 3.00 | Subterfuge/Pinshot: 3.00 seconds of balance | Ours, recorder (Serpent) | 1 | 1.8 x1 | 1.80 | 0.60 | 2026-11-07 | ours/164635_Saibel 1 |
 
 **Opponents** are a gap to the same person's next attack. It is never a cost: a clock gives the earliest action, not when. **p10 is not a floor.** By definition about 10% of gaps come sooner, and min is a real gap and not a straggler: the prompts on both sides of `azbErKcK` rows 315 and 350 put that DSTAB gap at 1.539-1.557 s. Gaps under 0.3 s are one packet's bundle, so the next attack is the first past that. Gaps of 10 s or more are the attacker roaming. Only stamps of 0.01 s or better count.
 
@@ -390,8 +395,8 @@ A sample counts as "with" when any prompt during that clock shows the affliction
 | elmer | 4 | 3036 | 677 | 0 | 0 |
 | mystor | 6 | 4836 | 5 | 0 | 0 |
 | nikita | 3 | 2077 | 542 | 8 | 0 |
-| ours | 11 | 17138 | 0 | 0 | 0 |
-| sentinel | 4 | 6773 | 49 | 0 | 0 |
+| ours | 12 | 17624 | 0 | 0 | 0 |
+| sentinel | 5 | 6947 | 49 | 0 | 0 |
 
 A wrapped prompt ran onto a second row. Mystor's stamp row is not a wrap. `o6UKnyyy` has prompts with no time in them, so it is skipped.
 
@@ -430,6 +435,7 @@ A wrapped prompt ran onto a second row. Mystor's stamp row is not a wrap. `o6UKn
 | uW_VbgR | 2026-11-01_unknown_earthlord-vs-sentinel_noresult_uW_VbgR.txt | earth | Earth Lord (unnamed) | 2026-11-01 | - | 93 | 1 | 1 |  |
 | shikudo-group-alias-2 | 2026-11-03_shikudo-group-alias-2.txt | sentinel | Ours, client log | 2026-11-03 | - | 1880 | 0 | 0 | same fight as ours/2026-11-03_102138_Tabethys, out of the pools |
 | shikudo-group-alias | 2026-11-03_shikudo-group-alias.txt | sentinel | Ours, client log | 2026-11-03 | - | 3739 | 0 | 0 | same fight as ours/2026-11-03_081009_Froedine, out of the pools |
+| serpent-spar-saibel | 2026-11-07_serpent-spar-saibel.txt | sentinel | Ours, client log | 2026-11-07 | - | 174 | 0 | 0 | same fight as ours/2026-11-07_164635_Saibel, out of the pools |
 | ours/201153_Tabethys | 2026-10-12_201153_Tabethys.log | ours | Ours, recorder (Alchemist) | 2026-10-12 | 4.7.418 | 90 | 0 | 0 |  |
 | ours/112717_Tabethys | 2026-10-27_112717_Tabethys.log | ours | Ours, recorder (Monk) | 2026-10-27 | 4.7.450 | 3311 | 0 | 0 |  |
 | ours/135412_Tabethys | 2026-10-27_135412_Tabethys.log | ours | Ours, recorder (Infernal) | 2026-10-27 | 4.7.450 | 3930 | 0 | 0 |  |
@@ -441,3 +447,4 @@ A wrapped prompt ran onto a second row. Mystor's stamp row is not a wrap. `o6UKn
 | ours/081532_Tabethys | 2026-11-03_081532_Tabethys.log | ours | Ours, recorder (Monk) | 2026-11-03 | 4.7.471 | 3099 | 0 | 0 |  |
 | ours/102138_Tabethys | 2026-11-03_102138_Tabethys.log | ours | Ours, recorder (Monk) | 2026-11-03 | 4.7.471 | 2051 | 0 | 0 |  |
 | ours/102828_Harkon | 2026-11-03_102828_Harkon.log | ours | Ours, recorder (Monk) | 2026-11-03 | 4.7.471 | 1874 | 0 | 0 |  |
+| ours/164635_Saibel | 2026-11-07_164635_Saibel.log | ours | Ours, recorder (Serpent) | 2026-11-07 | 4.7.478 | 486 | 0 | 0 |  |

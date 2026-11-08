@@ -39,4 +39,5 @@ patterns:
 
 deleteFull()
 cecho("\n<magenta>[[  JABBED THAT GUY  ::: <red>" .. matches[2] .. " ]]")
-ak.prompt.scoreup()
+-- `ak` is another system's table (AK), and no file of this package creates it. The bare call threw on every jab.
+if ak and ak.prompt and ak.prompt.scoreup then ak.prompt.scoreup() end

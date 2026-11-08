@@ -590,12 +590,12 @@ afflictions:
 
   fratricide:
     cure_method: eat
-    cure_herb: ginseng
-    cure_mineral: ferrum
-    effect: "Impulse mental afflictions relapse after cure"
-    delivered_by: [serpent_hypnosis]
+    cure_herb: lobelia
+    cure_mineral: argentum
+    effect: "Major negative poison resist; hypnotic impulses relapse a short time after being first introduced (AFFLICTION SHOW)"
+    delivered_by: [serpent_pet_bite]   # 46 of 46 gains in the four Serpent logs. Our suggest route is UNVERIFIED (serpent.md)
     priority: 1
-    notes: "With scytherus = ~1200 damage per relapse"
+    notes: "With scytherus the poison damage is worse; the ~1200 per relapse this said is UNVERIFIED"
 
 # ============================================================================
 # CURE BALANCE TYPES

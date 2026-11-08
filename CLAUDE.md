@@ -25,8 +25,11 @@ This repository contains the **"For Levi" Mudlet package**, a comprehensive comb
 **`fightlog`** (v4.7.418, `misc_scripts/026_Fight_Log.lua`) records our PvP fights to `<profile>/fightlogs/`: every game
 line as the game sent it (gagged or not), prompts, every command we sent (echoed or not), our GMCP afflictions and
 defences, and our tracker's changes to the target, each with a millisecond timestamp. It starts on its own (a player
-attacks us, or we queue a command naming our target while the target is a player in the room) and stops after a kill,
-a death, an arena verdict or 60 s with nothing naming the opponent. `python tools/fightlog_import.py` copies the logs
+attacks us, or we queue a command, or send a raw attack, naming our target while the target is a player in the room:
+a Serpent round queues only its first piece and sends the attack raw, `F.isAttack`, `026_Fight_Log.lua`:172-183) and
+stops after a kill, a death, an arena verdict or 60 s with nothing naming the opponent. Its header ends with
+` | rounds raw|alias`; on a Serpent (v4.7.479) ` | serpent attackfirst on|off` comes just before it, so a log says
+which round order it holds (`026_Fight_Log.lua`:272-284). `python tools/fightlog_import.py` copies the logs
 into `kb/raw/logs/ours/` and summarises them; it reads the Mudlet profiles on this machine, so run it before
 analysing one of the user's fights. Row format: `kb/raw/logs/README.md`.
 
@@ -142,10 +145,11 @@ LEVI-Achaea/
 │   ├── sim/forward.lua        # the simulator engine: pure Lua 5.1, no Mudlet calls; rule tests in src_new/tests/test_sim_forward.lua. NEVER edit it: its bytes feed kb_sim.py's input hash
 │   ├── kb_rules.py            # KB: the whole-fight engine's rules (clocks.json, afflictions.json, venoms.yaml, curing prios, kb/sim/rules_hand.json) -> kb/sim/rules.json + rules.md, each rule tagged MEASURED/READ/WIKI/PLAYER/ASSUMED; `--check` in CI, so re-run it when clocks.json moves
 │   ├── kb_events.py           # KB: the four Serpent logs as one event stream (JSON Lines v1), the census, the DSTAB-vs-eat race table with its frozen golden row -> kb/sim/events.md + .json; `--check` and `--dump KEY`
-│   ├── theorycraft.py         # CLI: a scripted Serpent vs a victim (--victim --gap --script [--median] [--seeds N] [--clock-draw normal]), a log in the engine's columns (--log Z5 --from ROW), a fork (--log Z5 --at ROW --then ...) that starts from the row's board, clocks, balance/equilibrium, kept defences and the ones on their way (a FLAY of the shield, a rebounding smoke, a coating apply; the logger's own shield drop is not a FLAY). A gap under the floor (a fork's default 1.83 too) and a row after the last prompt are refused. A second cost line ends the open one (an impulse's adds); slickness strips the sileris coating and, if still on at the 10 s mark, stops a pending one from hardening. Output is MODEL, not a log; an ALT line names each rule whose alternative ran, GAP says what the gap draw is, SEEDS says the P lines of a --median page are drawn
+│   ├── theorycraft.py         # CLI: a scripted Serpent vs a victim (--victim --gap --script [--median] [--seeds N] [--clock-draw normal]), a log in the engine's columns (--log Z5 --from ROW), a fork (--log Z5 --at ROW --then ...) that starts from the row's board, clocks, balance/equilibrium, kept defences and the ones on their way (a FLAY of the shield, a rebounding smoke, a coating apply; the logger's own shield drop is not a FLAY). A gap under the floor (a fork's default 1.83 too) and a row after the last prompt are refused. A second cost line ends the open one (an impulse's adds); slickness strips the sileris coating and, if still on at the 10 s mark, stops a pending one from hardening. Output is MODEL, not a log; an ALT line names each rule whose alternative ran, GAP says what the gap draw is, SEEDS says the P lines of a --median page are drawn. v4.7.479: `impulse SUGGESTION VENOM` action (it bites and spends balance too), `--gap raw|queue|queue-late|others` (our measured gaps and costs from the 2026-11-07 Serpent spar, or other Serpents'; the CLI never picks one), an OURS line, `--flay-missing coating|nothing`, `--ssc-gain saibel` (one opponent's open-channel delay, an alternative only); the SSC delay is two cases, `ssc.delay.gain` and `ssc.delay.return`
 │   ├── sim/fight.lua          # the whole-fight engine (event loop, labels, race); sim/victim.lua (cure channels, class cures, defences); sim/attackers.lua (script parser, attack effects). Pure Lua 5.1; wired with forward.lua's RNG; tests in src_new/tests/test_sim_fight.lua
 │   ├── sim/gates_whole.json   # FROZEN 2026-11-07: the bars of the whole-fight plan (stages 1-4). A change after a gate ran is a failed round and needs the user's word
 │   ├── test_kb_rules.py, test_kb_events.py, test_theorycraft.py  # their tests (in CI); test_theorycraft pins the golden text of the user's example and the label parity with kb_replay.is_true
+│   ├── test_check_orphans.py, test_convert_to_muddler.py  # tests of check_orphans (the NEVER_RUN rows, strict check 1c) and of the converter's case-blind filename collisions (in CI)
 │   └── legacy/                # Retired build tools
 ├── build.sh                   # Build script: ./build.sh [--dry-run] [--convert-only]
 ├── .gitignore                 # Excludes build artifacts, IDE state, caches
@@ -203,7 +207,19 @@ aliases, timers and keys); its first run found `queue_Scan` calling `shikudo_fin
 the switched-off `shikudo/008`, on every queued monk combo. 2b reports a field called from active code
 that only switched-off files assign: check 2 counts those as defined, so `vv` shipped calling
 `shikudo.setMode`. Both were built report-only and made strict once clean (`STRICT_SCRIPT_CALLERS`,
-`STRICT_INACTIVE_FIELDS`), so all four checks fail CI; land a new check the same way.
+`STRICT_INACTIVE_FIELDS`); land a new check the same way.
+
+**CHECK 1c (2026-11-08).** Active code calling a global that NO file defines: checks 1 and 1b need an
+inactive definer, so such a call passed everything. Its first run listed 41 names at 59 call sites.
+Every call that could run is now guarded, or points at the function that replaced it (`viv` at
+`apostate_vivisect`). What sits in a switched-off group folder cannot fire, so it is listed in
+`NEVER_RUN`, by file and name, and `tools/test_check_orphans.py` pins each row to its folder flag.
+The check was then made strict (`STRICT_UNDEFINED_GLOBALS`), so all five checks fail CI. A real Mudlet
+function that shows up in its report goes in `MUDLET_API` (checked against Mudlet 5.1.1). It reads
+calls to a NAME, not an index of a nil table: `ak.defs.shield` (trigger 130, line 38) and
+`ak.prompt.scoreup()` (trigger 018, line 42) still throw, as do active aliases that read `svo.bals` or
+`wsys`. Strings and comments are blanked first, and folded `_groups.yaml` scalars are joined, so an
+inline group script is read. `tools/test_check_orphans.py` and `tools/test_convert_to_muddler.py` run in CI.
 
 **`tools/check_colours.py` -- a colour name is only valid in OUR palette (v4.7.287).**
 `007_Custom_Colour_Table.lua` WHOLESALE REPLACES Mudlet's, so a name that is perfectly good in stock
@@ -603,6 +619,9 @@ V3 is the **single source of truth** for target affliction tracking. It models m
 - `erAff(what)` — Remove affliction (clears tAffs + V3 + raises event)
 - `haveAff(what)` — Query (routes to V3 at 30% threshold, fallback tAffs during load)
 - `getAffProbabilityV3(aff)` — Exact probability 0.0–1.0
+- `isAffCertainV3(aff)` — every branch holds it (or it is simple-tracked). Ask this, **never `getAffProbabilityV3(aff) >= 1.0`**: the cache sums the branches, and a certain impatience read 0.99999999999999978 (007:833)
+- `proveAffAbsentV3(aff[, cureType])` — a line proved it absent; call it BEFORE any erase (see below)
+- `ataxia_targetClass()` — our TARGET's class, lowercase or `""`; the one source for it (see below)
 - Always use the public API — never call `applyAffV3()`/`removeAffV3()` directly
 
 **V3 never lowers a burning level above 1 (open since v4.7.420).** `applyAffV3("burning")` adds a level per
@@ -616,6 +635,15 @@ them cured the first as the only candidate: hence `enamation/001` gives V3 one b
 (`curing/002`), then `tSingleRandom({ noErase = true })`, which only returns its pick: V3 branches the
 cure, what it took for certain leaves tAffs too, and one level-1 broken limb (simple-tracked) goes only
 when nothing branch-tracked was there. Read `ataxiaTemp.targetTreeAt` only while `tBals.tree` is false.
+A tree proves paralysis absent (008:338), so paralysis takes no share of the cure, and with V3 on 389 no longer erases it
+before the tree. The tree leaves the Magi burn count alone: burning is no tree cure, and the game's lines own it (`general/025`).
+**The tree pool is every tracked affliction the game marks `NoRandomCure: No` (v4.7.479).** `treeCurableAffsV3`
+(`affliction_tracking_core/008`) grew from 27 to 77. Burning and the fractures stay out: they come in levels or stacks,
+and V3 holds each as one affliction. In the 2026-11-07 Serpent spar Saibel's tree most likely took recklessness (INFERRED, CONFLICTS #65), her only
+affliction then by our record, and the old pool kept it for 5 more rounds. `kb/afflictions/database.md` is regenerated from it.
+`passiveCurableAffsV3` (008:452) is the same 77 with voyria first; the name is `pacified`, not `pacifism`. An
+accepted tree also restarts 389's echoes at 0/4/9/14 s; it returned while one was still pending, so a tree just before
+the 14 s echo got none.
 **`tBals` is the TARGET's cure balances, and `ataxia_resetTargetBals()` (`016`) is its one reset (2026-11-01, not yet
 released).** Do not write `tBals = {...}` by hand. Running timers write to the global table, so a replaced table left
 the old target's 13 s tree timer alive, and it marked the new target's tree up early and cleared its timer id. Two of
@@ -624,15 +652,87 @@ keeps the same shape, and `test_target_tree.lua` pins both. The focus knocks (`h
 timer as 398 does, so the reset can kill it. Our OWN tree is `ataxiaTemp.usedTree`. Its touch line (`curing_bals/003`) no
 longer hangs under `[Curing]: TOUCH TREE` (002), so a touch we send ourselves also sets it. `levilogin()` clears it, because a
 dropped link can miss the ready line.
-**The target's focus clock (398, 399) starts only for the target's own focus line.** It ran for anyone's, so a
+**The target's focus clock (398) starts only for the target's own focus line.** It ran for anyone's, so a
 bystander's focus made the gate refuse the target's real cure. Under shadowmadness it waits 4.8 s (measured 4.82-4.99,
-n=6); 5 s refused real cures.
+n=6); 5 s refused real cures. 398 owns the focus: it charges V3 (through `ataxia_randomCureV3`), counts
+`serpent.trackCure("focus")` and starts the clock. 399 only reads the next line (v4.7.479): the clarity line names lovers.
+It used to repeat 398's work behind `tBals.focus`, which 398 had just set false, so it never ran.
 **The sync (v4.7.420, `affliction_tracking_core/007`):** `syncToOldSystemV3` clears from tAffs, once, every key
 V3 held at its last sync and holds nowhere now, and every key whose probability drops from 30% or more to under
 30% (tAffs agrees with haveAff). It touches V3's own keys only. `resetStatesV3` forgets the remembered set rather
 than clearing tAffs, because its callers write their own defaults first. With V3 on, trigger 318 does not erase a
 passive's cure: `onPassiveCureV3` charges it, takes a level-1 limb when no branch can pay, and reports certain
 cures through `ataxia_tarAffFaded`. A contradiction in `collapseAffAbsentV3` removes only the disproved one.
+**One eat is one cure, and V3 picks it (herbs/005 Bloodroot, v4.7.479).** With V3 on, the V1 erase chain no longer runs
+after `onHerbCureV3("bloodroot")`: it read tAffs after V3's copy, so it took a SECOND affliction per eat (the spar's
+slickness vanished this way). A cure V3 made certain is reported through `ataxia_tarAffFaded` (the fight log's `-tar`
+row), as the passive does; a cure V3 only branched over is a guess and is not reported. **A cure is reported only if the
+tracker HELD it** (in tAffs, or at 30% or more, before the cure: tree `curing/002`, passive 008:497, bloodroot 005). What it
+only guessed at leaves V3 with `removeAffV3` and no `-tar` row. 005 also had a stray `else`
+that made the TARGET's own eat skip her clocks (no `targetIshere`, plant clock or herb prediction; the cure still ran) and made ANY bystander's
+eat erase our target's paralysis or slickness. It now matches with `isTargeted`, like the other herb triggers.
+**A "not here" refusal is not the target leaving (641, v4.7.479).** The game gives the same three lines for any command
+that names someone absent, ours included. In the spar the Serpent round's `order adder kill <target>` (no adder out)
+drew them, and each one started the 1.4 s TargetOutOfRoom timer: 7 erasing ticks and 2 `resetStatesV3` while she stood
+in the room and cured. 641 now changes nothing while `ataxia.playersHere` lists the target (case-blind; a listed name may
+start with the target's, never the reverse: with target Kaiden and only Kai listed, Kaiden is gone). GMCP RemovePlayer still
+starts the timer when the target leaves. The reading is wrong for a target GMCP lists but our commands cannot see (a hidden
+player, `kb/CONFLICTS.md` #38).
+**Masochism's self-harm lines (433, v4.7.479):** "rams <his|her> fist into <his|her> jaw", "drives a clenched fist into
+<his|her> gut" and "uses <his|her> right foot to stomp on <his|her> left as hard as possible", beside the revulsion line.
+Before, 433 read the jaw line only with "her" and not the other two: 3 of the spar's 5 lines recorded nothing.
+**Nothing unfolds a cure (v4.7.479).** `onNegativeConfirmExpiredV3` (007:1488) only echoes. The 1.3/2.0/2.5 s windows still
+exist and a second cure action still kills them (`killNegativeConfirmV3`), but expiry changes no branch. It used to put the
+cured candidate back, so a branched eat had cured nothing. An eat, smoke or apply line is a fact: it cured one of the
+candidates. The herb window (1.3 s) was also shorter than the target's fastest next eat in the spar (1.506 s), and replaying
+that spar unfolded 11 times before this and never after. A later proof settles the branches instead.
+**Pruning never empties the tracker, and the cap is 300 (v4.7.479).** The 1% floor (`minProbability`) only trims: when every
+branch is under it, or more than 10% of the weight is, `pruneStatesV3` keeps them all and the cap makes room (007:931-934). It
+fell back to the empty state, so Dragonheal or a third tree over ten afflictions (C(10,3) = 120 branches at 1/120) wiped every
+target affliction, a certain pinshot among them, from V3 and tAffs. With only "every branch" as the test, an aurum eat right after
+that Dragonheal cut 59% of the weight and read asthma 0.00 where it is 0.38. A passive trims back to the cap between its cures
+(008, `onPassiveCureV3`), because every branch expands each round: a second Dragonheal over 14 + 4 afflictions took about
+0.5 s in plain Lua 5.1, in one trigger. That trim only runs past the cap, so the floor does not cut a board mid-expansion when it fits.
+`affConfigV3.maxStates = 300` (007:78) is assigned outside the `X = X or {...}` table, so a reload in a running session takes
+it. Past the cap `table.sort` orders equal branches arbitrarily, so a board over 300 branches can still read uneven.
+**A line that proves an affliction absent calls `proveAffAbsentV3(aff[, cureType])` BEFORE any erase (007:758, v4.7.479).**
+`erAff` strips it inside each branch, and a branch the line ruled out then keeps its weight. This drops those branches. Where
+every branch holds it, it only comes off, with no WARNING. With `cureType` it does nothing while that cure clock runs: the
+tracker calls such a line an illusion. Users: the tree (paralysis), the five salve triggers 391/392/393/395/396 and `herbs/013`
+(slickness); the focus collapses impatience (008:396). `herbs/013` is not on salve balance, so it neither reads nor starts the
+salve clock. `salveChargedAtV3` (007:701) stops 396 calling the application 391, 392 or 395 just charged an illusion. An eat
+still strips anorexia inside each branch (open).
+**A named cure line replaces the random one: `ataxia_randomCureV3` and `ataxia_knownCureV3` (`ataxia/001`:384, :401, v4.7.479).**
+Some cures print a second line that names what they took, and one eat then took two afflictions. Wrap the line that charges the
+random cure in `ataxia_randomCureV3(kind, name, cure)`, and call `ataxia_knownCureV3(kind, name, aff)` on the naming line before
+`erAff`. `kind` is a herb, "smoke" or "focus". It restores the branches from before the random cure, re-applies what the action
+proved (anorexia for an eat, asthma for a smoke, impatience for a focus) and takes out `aff`. It acts only for the same person
+and kind, inside `ataxia_KNOWN_CURE_WINDOW` (0.5 s), with the branches unchanged apart from `aff`, so a hit that landed between
+the two lines is never undone. A mercury erase goes BEFORE the wrap (herbs/002, 003, 007): the naming line compares against the
+copy taken after the cure. Used by herbs/002, 003, 004, 007 and 008, smoke 390, focus 398 and 399, and `third-person_removes/001-006`. `herbs/008`
+charges the eat only when 007 did not, so one flushings eat is one removal. Only the Lucidity line is in any log we hold.
+**A line that GIVES an affliction adds it; only a symptom collapses (420, v4.7.479).** 420 called the paralysis-symptom collapse on
+lines that give paralysis, so it deleted the branch where a bloodroot eat had cured slickness. Now it adds paralysis to every
+branch, with no second event when `isAffCertainV3` says it is already there. Party calls (426, 428, 436) go through `paAff`
+(`ataxia/001`:282), which maps a venom word to its affliction and calls `tarAffed`, so a cure can take them.
+**`isTargeted` (016:250) completes only a part name (v4.7.479).** An exact case-blind match is the target. A LONGER name on a line
+completes a target that is still part of a name (`t sai`). Once GMCP lists the target exactly (`listedHere`) or a line has named
+or completed it (`fullTargetName`), it is a full name and stays. A SHORTER name on a line is someone else. Before, target Kaiden
+and "Kai eats ..." charged Kaiden and made Kai the target. **Presence checks are a separate rule:** `switchTarget` (016:98),
+`tprio.switchTo` (`mage/006`), 638 and 641 ask whether a listed name starts with the target's, case-blind, never the reverse.
+`switchTarget` and `tprio.switchTo` also stop `TargetOutOfRoom`, whose ticks erased what we landed on the new target.
+**Every departure trigger gates its presence and chase state on the target, not only its echo (634, 637, 638, 640).** 640 opened
+the chase and started `TargetOutOfRoom` on anyone's flight. 638's line names no one, so it acts only when GMCP no longer lists
+the target, on the line and again after the packet (`tempTimer(0)`). 638 and 641 each hold a copy of the listed-here compare.
+**Our target's class is `ataxia_targetClass()` (`ataxia/007_Pariah_things.lua`:68, v4.7.479): the one source for Serpent and
+Pariah.** It reads the NDB entry first (`classDetect.setAttackerClass`, `onTargetChanged` and the API lookup all write it), then
+classDetect's class only when that attacker IS the target. `classDetect.state.attackerClass` alone is whoever last hit US, and
+it is nil whenever two or more attackers are tracked, in or out of a party (`class_detect/001`:339-342). `ataxia_wantClumsiness`
+(:89) defaults to it. The global `tarClass` is gone: nothing ever assigned it, so the gate always said yes and the skip list
+never ran until this version. Tests stub the class (`ataxiaNDB_getClass`), not the gate. The anti-class defences key on our
+target's NDB class too, not on who attacks us (open, `Algedonic.ApplySwaps`).
+**Also since v4.7.479:** a new target has no coating assumed (`sileris`/`fangbarrier` false at 016:531-532; 442 and 707 teach it),
+`dazzled` is the game's key (017; `priest/003` passes it), and the six `[V3] ILLUSION:` refusals print through `illusionEcho` (008:76).
 
 ### ataxiaBasher (Automated Hunting System)
 
@@ -2490,11 +2590,13 @@ stored, and is always safe.
 
 **PvE bashing curing profile** (`ataxia/ataxia/008_Bash_Curing_Profile.lua`, v4.7.172): the
 default table (`001_Default_Curing_Prios.lua`) is tuned entirely for PvP, which loses bashers.
-Two balances are contended and the PvP ordering spends both on afflictions that do nothing to
-a denizen: **potash/moss shares the EATING balance with every cure-mineral** (QUESTIONED 2026-10-11:
-Mystor's client times moss on its own `[Moss Recov]`, and an Apostate ate plumbum and potash in the same
-second; `kb/CONFLICTS.md` #11), and **mending/
-restoration shares the SALVE balance with crackedribs/fractures/traumas**. So the PvE table
+Its stated reason named two contended balances that the PvP ordering spends on afflictions that do
+nothing to a denizen. **The first is WRONG: potash/moss does NOT share the eating balance.** It has its own
+clock (settled 2026-11-07, `kb/CONFLICTS.md` #11, now Resolved): in our Serpent spar all 4 of Saibel's potash
+eats fell inside her herb eat-to-eat, one 0.001 s after a magnesium (`kb/raw/logs/ours/2026-11-07_164635_Saibel.log`
+rows 415, 418), and her herb eats stayed 1.506 s or more apart around them; Mystor's client already timed moss on its
+own `[Moss Recov]`, and an Apostate ate plumbum and potash in the same second. So moss costs the basher no cure-mineral.
+The second stands: **mending/restoration shares the SALVE balance with crackedribs/fractures/traumas**. So the PvE table
 inverts it — cure-channel blockers (anorexia/slickness/paralysis) > limbs at 4-6 (arms gate
 the attack, legs gate every escape) > damage math > salve competitors parked at 20 > junk
 mental spray parked at 25. It also **re-flattens the PvP burn escalation** (`burning4`/`burning5`
@@ -2554,9 +2656,55 @@ Modern Serpent combat revolves around two key mechanics. What is confirmed and w
   hypochondria are complex suggestions, and impatience is no suggestion at all.
 - Impatience comes from the monkshood REACTION: `impulse <target> masochism monkshood` (relayed notes;
   our code sends it) brings the masochism, so with asthma + weariness up the reaction adds impatience.
-  IMPULSE taking a venom, and what that costs, are unverified (`kb/CONFLICTS.md` #20).
+  Since v4.7.479 the monkshood impulse carries masochism even when it reads up (`MONKSHOOD_SUGGESTION`): after a
+  filler no reaction followed, most likely because her focus took the masochism first (INFERRED, `kb/CONFLICTS.md` #20; Saibel.log:1344-1370).
+- **Captured from our seat in the 2026-11-07 spar** (`kb/raw/logs/ours/2026-11-07_164635_Saibel.log`):
+  an impulse with a venom bites in the same packet and spends BOTH equilibrium (printed 1.44) and
+  balance (printed 1.7), 13 of 13; equilibrium is back first, so the bite's balance gates the round
+  (`kb/CONFLICTS.md` #20, #68). The monkshood reaction fired on 8 of 10 monkshood bites, all 7 masochism
+  impulses among them. Whether fangbarrier blocks an impulse, and the reaction's conditions, stay open.
 - The no-fangbarrier rule is our code's (`checkImpulseEligible`, after HELP 13.7: the coating stops a
   Serpent's bites). Every impulse path calls it (scytherus mode's since v4.7.420).
+
+**Our measured costs** (the same spar; `kb/sim/rules_hand.json` `attack.cost.own.*`, MEASURED, client clock,
+cost line to recovery): DSTAB 1.634 (n=24), an impulse's bite 1.563 and its equilibrium 1.242 (n=13), FLAY 1.530
+and PINSHOT 1.742 (n=1 each). Our round as played was 1.965 land to land (`attack.gap.own`, n=37), against other
+Serpents' 1.83. Every cost line came about 0.09 s after the round's first reply; whether that step is ours or the
+server's is open (#69), and under the second reading each cost is about 0.12 s higher (each rule's `first_reply`).
+
+**The offense since v4.7.479** (all in `serpent/002_Serpent_Offense.lua`; details and lines in the class doc,
+"The spar fixes in the offense"; tests `test_serpent_spar_fixes.lua`):
+- **No recklessness before a lock.** The user's rule: "We shouldnt be doing recklessness unless we have locked
+  them. Else that is a wasted attack". `recklessnessAllowed()` is anorexia + asthma + slickness, each at
+  `haveAff_tactical` 0.70. It gates eurypteria (class venom and lock_reinforce), the recklessness suggestion,
+  and the loki pair that needs recklessness.
+- **The adder only when it is here.** `order adder kill` goes only when GMCP room items show a living death
+  adder (attrib `m`, not `d`) or we ride it; else one `ADDER:` echo per target. Another Serpent's adder counts
+  as ours (open).
+- **One balance action per round.** PRIORITY 1 sends the flay alone (an impulse spends balance too).
+- **The opener** puts the round's wield and attack straight after the pinshot and leaves out combatQueue's
+  idle `g body`/`g gold`/`stand`. The rebounding pre-empt arms only on a rebounding a game line showed
+  (`serpent.state.reboundingSeen`). The exit block goes last in the round.
+- **`aconfig serpent attackfirst on|off`** (`configs/034_Serpent_Attack_First.lua`,
+  `ataxia.settings.serpentattackfirst`, default off): the attack is the round's first command, with a wield
+  only when GMCP shows the weapon is not in hand (ids learned in `ataxiaTemp.serpentWeaponIds`) and a stand
+  only when prone. It is the probe for the open 0.09 s step. `ekstatus` shows the adder, attack-first and
+  recklessness state.
+- **Every round is one `send()` that Mudlet splits**: only its first piece enters
+  `queue addclear freestand`, the rest go raw (`buildRound`).
+- **The skip list runs.** `wantClumsiness` reads `ataxia_targetClass()`, so a skip-list class (magi, sylvan, occultist,
+  bard, jester, blademaster, druid, sentinel; `air`, `fire`, `water` match no class name) gets asthma, then weariness, not
+  xentio (:952). The class venom also follows the target (`getClassLockAff`, :897). The list is unconfirmed by the user.
+- **EXECUTE needs prone and the whip** (:1977-1980): truelock, prone at 0.90, the five lock afflictions plus prone at 0.90
+  together. No behead branch. A standing truelocked target gets the DSTAB, so in a duel the kill waits for the adder's trip.
+- **Re-delivery reads a lock piece at 0.70, build-on reads at 0.30** (`haveAff_tactical` vs `haveAff`, note at :108). A piece a
+  branched cure left at 0.667 is sent again. `targetLocked` is unchanged, so recklessness still waits for the lock. A monkshood
+  re-sent for an impatience between 0.30 and 0.70 also needs its reaction able to fire (`monkshoodCanReact`: asthma and weariness at
+  0.70). An aurum eat, then a plumbum eat, leaves those two at 0.667 and 0.333 with no branch holding both; the DSTAB takes the round (under the `relapse_lock` strategy the one stupidity impulse goes first if it is unspent and stupidity is down, :1166).
+- **Truelock.** `sr` takes lock_reinforce there, as lock and darkshade do (:2886-2891): one voyria impulse, then the finish.
+  The voyria impulse goes only at truelock (:2103). lock_reinforce's second venom is never curare.
+- **A refused round does not stop the press**: after 1.5 s on balance with no drop the next press sends again, except while we
+  are slowed (:2808-2814).
 
 **Ekanelia** - BITE venom transformation that ADDS bonus afflictions:
 | Venom | Conditionals Required | Normal + Bonus Effect |
@@ -2569,7 +2717,8 @@ Modern Serpent combat revolves around two key mechanics. What is confirmed and w
 
 These are our own `EKANELIA_TABLE`: the game's list (EKANELIA / EKANELIA STUDY) was never captured,
 and the relayed notes confirm only monkshood. Since v4.7.419 the success line (`serpent/016`) records
-each reaction's result on the target (`serpent.EKANELIA_RESULTS`).
+each reaction's result on the target (`serpent.EKANELIA_RESULTS`). The 2026-11-07 spar saw that line,
+"You sense the weakness in <target> as your <venom> takes hold.", for monkshood (8 of 10) and loki (1 of 2).
 
 **Fratricide** (AFFLICTION SHOW): "Grants major negative poison resist and causes hypnotic impulses to
 relapse a short time after being first introduced." Cure: Eat Lobelia / Eat Argentum.
@@ -2578,7 +2727,9 @@ relapse a short time after being first introduced." Cure: Eat Lobelia / Eat Arge
 - Since v4.7.419 it is on the target tracker, and a lobelia eat cures it only when nothing else lobelia
   cures is there (`herbCureLastV3`, `affliction_tracking_core/007`). A herb list's order cannot say
   "cured last": with two candidates the other one keeps 0.33, above `haveAff`'s 0.3.
-- How a Serpent gives it is unconfirmed: our code SUGGESTs it and SNAPs, the record calls it a venom (#23).
+- How a Serpent gives it by hand is unconfirmed: our code SUGGESTs it and SNAPs, the record calls it a venom (#23). A pet
+  snake's bite gives it (46 of 46 in the four Serpent logs); trigger `serpent/024` records it since v4.7.479, and the offence
+  acts on that (PRIORITY 4 and 5, and the 2.25 s relapse window).
 
 **Kill Routes**:
 1. **True Lock**: asthma + slickness + paralysis + impatience + anorexia + weariness
@@ -2589,7 +2740,8 @@ it runs only while OUR TARGET is a Serpent in the NDB):
 1. Tree when approaching lock: asthma + slickness + impatience or anorexia. It reads OUR tree,
    `ataxiaTemp.usedTree`. It read `tBals.tree`, the TARGET's, until v4.7.470.
 2. Impatience: prioaff it each time, and `cq all;touch shield` at most once per 4 s, because this
-   runs on every affliction gain and loss and `cq all` clears our own queue. The shield still
+   runs on every affliction gain and loss and `cq all` clears our own queue. Not while our shield is up
+   (v4.7.479): the touch adds nothing and the `cq all` cost us the queue. The shield still
    spends equilibrium with asthma up, which holds FITNESS about 3.4 s (`kb/CONFLICTS.md` #50, open).
 3. Since v4.7.419, `curing prioaff hypochondria` (it brings impatience later) and, while scytherus is
    up, `curing prioaff fratricide`, both after paralysis. PRIOAFF writes no stored priority, so these
@@ -2598,7 +2750,8 @@ it runs only while OUR TARGET is a Serpent in the NDB):
    blocks the monkshood route (the impulse brings it); denying asthma or weariness does (astWear swap).
 
 **Key Files**: `.claude/classes/serpent.md`, `src_new/scripts/.../serpent/002_Serpent_Offense.lua`
-(the only file in `levi_scripts/serpent/`), `src_new/tests/test_serpent_notes.lua`
+(the only file in `levi_scripts/serpent/`), `configs/034_Serpent_Attack_First.lua`,
+`src_new/tests/test_serpent_notes.lua`, `src_new/tests/test_serpent_spar_fixes.lua`
 
 **Limb Damage-Based**: Break limbs to enable killing blows
 - Limbs track damage as percentage (0-200%+)
@@ -2794,9 +2947,9 @@ Module-scoped alternatives that DO exist, where a subsystem wants its own prefix
 (Shaman), `ataxia.mnemosyne.echo` / `.decho` (Mnemosyne, `M.echo` internally), and
 `ataxiaBasher_dsAlert` (basher denizen-state alerts, gated on `ataxiaBasher.brAlerts`).
 
-`ataxia.decho` is called in `affliction_tracking_core/008_V3_Integration.lua` and is likewise
-undefined -- those six sites are safe only because every one of them is guarded
-(`if ataxia and ataxia.decho then`). **Guard an optional helper or use a real one; never assume.**
+`ataxia.decho` is likewise undefined. Its six guarded calls in `affliction_tracking_core/008_V3_Integration.lua`
+therefore never printed a `[V3] ILLUSION:` line, until v4.7.479 sent them through `illusionEcho` (008:76).
+**Guard an optional helper or use a real one; never assume.**
 
 `tools/check_orphans.py` now fails CI on a namespace field that is called but assigned nowhere, so
 this class of mistake cannot ship silently again.
@@ -3152,6 +3305,17 @@ sent, and the game keeps what it has, so the user's own character already has it
 holds the true costs (`kb/raw/live/seebalances_2026-11-01.txt`). It adds a line after each spend, so a
 trigger that acts on "the next line" can see that line instead (`docs/plans/timing-probes-2026-11.md`).
 
+**A SERPENT ROUND CAN SEND ITS ATTACK FIRST: `aconfig serpent attackfirst <on|off>` (v4.7.479).** A saved setting,
+`ataxia.settings.serpentattackfirst`, **default off** (`002_Check_For_Any_Missing_Variables.lua`), set by the alias
+`configs/034_Serpent_Attack_First.lua` (no argument shows it). On, `serpent/002`'s `buildRound` sends the attack as the
+round's first command: a wield goes before it only when GMCP shows the weapon is not in hand, a raw `stand` only when
+prone, and an equilibrium step the offense puts before the attack (suggest, seal, hypnotise) stays before it. Purge, the
+adder order and combatQueue's commands go after it. Why: in the 2026-11-07 spar the game answered a send's second and
+later commands about 0.09 s after the first, so an attack behind six commands landed about 0.12 s later on our clock.
+Whether that is our side or the server pacing its output is open (`kb/CONFLICTS.md` #69); a spar with it on settles it,
+which is why it is off by default. The setup wizard's combat page shows it (`020_Setup_Wizard.lua`:760), and
+`ataxia setup guide ataxia` entry 16 explains it. A Serpent fight log's header has ` | serpent attackfirst on|off` just before its last field, ` | rounds raw|alias`.
+
 **A STATE trigger whose target NAME falls after the wrap reads it from the following rows (v4.7.419-420).**
 An early fragment drops the name, and recording on `target` instead would record a spell cast at anyone
 else. `general/022`'s `withName` and the four emanation triggers (`enamation/001-004`) read up to two more
@@ -3222,8 +3386,8 @@ again when they apply health (triggers 394/153). Kill paths `rw2h impale` (6 ten
 upset -> impale -> disembowel) and `rw2h overwhelm` (break the head, overwhelm at 5 skull, brain).
 Runeblades are empowered by `remweap` (`gear_system/003`, WEAPONLIST -> probe -> sketch -> EMPOWER).
 
-**Pitfall:** `check_orphans` does not flag a call to a global that NOTHING defines -- the old 2H
-aliases called five such functions and errored on every press.
+**Pitfall:** the old 2H aliases called five globals that NOTHING defines and errored on every press.
+`check_orphans` could not see that shape until check 1c (2026-11-08).
 
 **Key file:** `rw_2h/001_RW_2H_Logic.lua`. **Namespace:** `rw2h`. **Class docs:** `.claude/classes/runewarden.md`
 (sections "Runeblades" and "Two Handed offence").
@@ -3248,7 +3412,7 @@ variant, `shikudo.dispatchMind` (`shikudo/011`, v4.7.420).
 
 **The dismount is paid for (v4.7.419).** TK6 sends it only when `ataxia_kaiAfford` (monk/004) passes;
 unknown kai is not enough. Since v4.7.420 trigger 265 records whose mount the flag is
-(`ataxiaTemp.mountedWho`, matched as 016's `isTargeted` matches a name and completed by `updateTarget`): a
+(`ataxiaTemp.mountedWho`, matched with either name starting the other, `ownsMount`, `tekura/002`:281, and completed by `updateTarget`): a
 flag recorded for another target is no mount (no dismount, no kai, `tk6status` NO), and one recorded for this
 target counts even if it was up when they became the target. A known rider with kai short gets prep instead
 (echoed once). Only an ownerless flag still uses the seen-down-then-up inference (`tk6status`: YES?), and there
@@ -3311,7 +3475,7 @@ most-afflicted (i.e. most interesting) prompts.
 
 **Timed afflictions on the target expire through `ataxia_tarAffTimed(aff[, seconds])` (v4.7.405)**, which adds the affliction and removes it after the game's `Default time` (`ataxia_TARGET_AFF_SECONDS`, `017_Affliction_Management.lua`). A third-person fade line calls `ataxia_tarAffFaded(aff)` to remove it now and cancel the clock. **Never expire a target affliction with `tAffs.x = nil`:** V3 copies its own belief back over `tAffs` on the next sync, so it never expires (hamstring, airfist and voidfist were all broken this way). And make sure the fade line removes the SAME key the add used: `vinewreathe` vs `vinewreathed`, `bonds` vs `waterbond`, and `airfisted` vs `airfist` were all silent no-ops. Lines collected in `kb/afflictions/expiry-lines.md`. Since v4.7.419 blackout uses it (4 s: Psion LIGHTSTEAL 525, Knight CONCUSS `snb/008`), and MIND DISRUPT gives `disrupted` a 10 s BACKSTOP (`telepathy_tekura/007`; the game gives it no duration, only Concentrate cures it) that the target's CONCENTRATE line (788) cancels through `ataxia_tarAffFaded`.
 
-**Enemy salve applications are one cure each (v4.7.404).** "X takes some salve from a vial and rubs it on his <spot>" names the spot, not the salve, so `salveCureTableV3` lists everything a salve at that spot cures (from live WHATCURES) and the tracker BRANCHES to one cure. Only PROOFS are erased outright: an application is impossible while slick or under bloodfire. A trigger that owns a cure with its own timing (393's delayed restoration for hypothermia/calcified torso, 392's head damage and crushed throat) keeps it, and the branching is skipped for that application so nothing is cured twice. `test_target_salve_tracking.lua` drives the real triggers through the real tracker.
+**Enemy salve applications are one cure each (v4.7.404).** "X takes some salve from a vial and rubs it on his <spot>" names the spot, not the salve, so `salveCureTableV3` lists everything a salve at that spot cures (from live WHATCURES) and the tracker BRANCHES to one cure. Only PROOFS are erased outright: an application is impossible while slick or under bloodfire (the slickness proof goes through `proveAffAbsentV3` first since v4.7.479, so the branches it rules out go too). A trigger that owns a cure with its own timing (393's delayed restoration for hypothermia/calcified torso, 392's head damage and crushed throat) keeps it, and the branching is skipped for that application so nothing is cured twice. `test_target_salve_tracking.lua` drives the real triggers through the real tracker.
 
 **Corollary on our own afflictions:** they come from **GMCP `Char.Afflictions.Add`** (`gotAff`
 in `004_Aff_gains_losses.lua`), not from text triggers. If an affliction never appears in the
@@ -3476,7 +3640,7 @@ Claude Code agent teams enable parallel development across isolated combat subsy
 
 **Problem**: When porting logic from another player's combat system, global table names may look identical but have completely different write sources in our codebase.
 
-**Root cause (2026-04-14 Shikudo God Mode)**: Pharaus' script reads `tLimbs.LL` for limb damage. Our codebase has `tLimbs` as a table, but no trigger ever writes to it — our canonical limb data lives in `lb[target].hits["left leg"]`. The ported code silently ran on permanent zeros.
+**Root cause (2026-04-14 Shikudo God Mode)**: Pharaus' script reads `tLimbs.LL` for limb damage. Our codebase has no writer for `tLimbs` (no file defines it since 3c312975; triggers 392 and 393 threw on it until v4.7.479) — our canonical limb data lives in `lb[target].hits["left leg"]`. The ported code silently ran on permanent zeros.
 
 **Prevention checklist for ported code:**
 1. For every global table the foreign code READS, grep for WRITE sites in `src_new/triggers/`: `grep -r "tableName\s*=" src_new/triggers/`

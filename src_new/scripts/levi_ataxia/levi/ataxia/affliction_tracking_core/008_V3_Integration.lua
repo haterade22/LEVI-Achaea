@@ -70,12 +70,19 @@ end
 -- VERIFICATION SIGNAL HANDLERS
 -- ============================================
 
+-- The line for a cure the tracker refuses as an illusion: the target's clock for that cure is
+-- still running. These calls went to ataxia.decho, which nothing defines, so no ILLUSION line
+-- ever printed. Shown under the same switch as the other [V3] lines (affConfigV3.debugEcho).
+local function illusionEcho(msg)
+    if ataxiaEcho and affConfigV3 and affConfigV3.debugEcho then
+        ataxiaEcho("[V3] ILLUSION: " .. msg)
+    end
+end
+
 -- Target smoked - proves asthma is ABSENT (can't smoke with asthma)
 function onTargetSmokeV3()
     if canTargetCureV3 and not canTargetCureV3("pipe") then
-        if ataxia and ataxia.decho then
-            ataxia.decho("ILLUSION: target smoked while on pipe balance")
-        end
+        illusionEcho("target smoked while on pipe balance")
         return
     end
     collapseAffAbsentV3("asthma")
@@ -126,11 +133,15 @@ function onTargetParanoiaFleeV3()
 end
 
 -- Target applied salve successfully - proves slickness is ABSENT
+-- Trigger 396 calls this for every application line. On a body, skin, head, arms or legs line,
+-- 391, 392 or 395 ran first in the same pass and onSalveCureV3 (007) has charged it already:
+-- slickness, the pending guess, the salve clock. That clock is this application's own, so it is
+-- not one on salve balance (salveChargedAtV3, set there). Only what they leave (a torso line, a
+-- restoration under hypothermia, a calcified torso or a damaged head) is charged here.
 function onTargetApplySalveV3()
+    if salveChargedAtV3 and getEpoch() - salveChargedAtV3 < 0.1 then return end
     if canTargetCureV3 and not canTargetCureV3("salve") then
-        if ataxia and ataxia.decho then
-            ataxia.decho("ILLUSION: target applied salve while on salve balance")
-        end
+        illusionEcho("target applied salve while on salve balance")
         return
     end
     collapseAffAbsentV3("slickness")
@@ -141,9 +152,7 @@ end
 -- Target applied restoration successfully - proves slickness is ABSENT
 function onTargetApplyRestorationV3()
     if canTargetCureV3 and not canTargetCureV3("restoration") then
-        if ataxia and ataxia.decho then
-            ataxia.decho("ILLUSION: target applied restoration while on restoration balance")
-        end
+        illusionEcho("target applied restoration while on restoration balance")
         return
     end
     collapseAffAbsentV3("slickness")
@@ -155,9 +164,7 @@ end
 function onTargetAteV3()
     if canTargetCureV3 and not canTargetCureV3("herb") then
         -- Target ate while on herb balance — likely illusion
-        if ataxia and ataxia.decho then
-            ataxia.decho("ILLUSION: target ate while on herb balance")
-        end
+        illusionEcho("target ate while on herb balance")
         return
     end
     collapseAffAbsentV3("anorexia")
@@ -261,6 +268,13 @@ end
 -- ============================================
 
 -- Canonical tree-curable affliction list (was treeCurableAffsV2, now owned by V3)
+-- The pool is every affliction that the tracker can hold and that the game's AFFLICTION SHOW marks
+-- "NoRandomCure: No" (kb/raw/live/affliction_show/<aff>.txt). Order matters only for the broken
+-- limbs (ataxia_targetTreeV3, curing/002). onTargetTreeV3 gives each candidate an equal share.
+-- Out of the pool:
+--   every affliction that the game marks NoRandomCure, and the damaged (level-2) limbs among them;
+--   burning and the fractures (crackedribs, wristfractures, ...): they come in levels or stacks,
+--   and V3 holds each as one affliction, so it cannot take off one level.
 treeCurableAffsV3 = {
     "paralysis", "slickness", "anorexia", "asthma", "sensitivity",
     "clumsiness", "weariness", "epilepsy", "haemophilia", "nausea",
@@ -270,7 +284,27 @@ treeCurableAffsV3 = {
     -- v4.7.416: the tree cured these in Mystor's logs (healthleech, a level-1 broken limb) and in a
     -- Runewarden's (blackout), and the game's AFFLICTION SHOW does not mark any of them NoRandomCure.
     -- Damaged (level-2) limbs ARE NoRandomCure, so they stay out.
-    "healthleech", "brokenleftleg", "brokenrightleg", "brokenleftarm", "brokenrightarm", "blackout"
+    "healthleech", "brokenleftleg", "brokenrightleg", "brokenleftarm", "brokenrightarm", "blackout",
+    -- 2026-11-07 Serpent spar: the 50 below were missing. Saibel's tree at 16:47:26.296
+    -- (kb/raw/logs/ours/2026-11-07_164635_Saibel.log:422) most likely took recklessness (INFERRED, CONFLICTS #65), her only affliction
+    -- then: paralysis was eaten 0.2 s before, and pinshot is NoRandomCure. The tracker kept the
+    -- recklessness for 5 more rounds. Grouped by the cure the game gives.
+    -- Lobelia/argentum (several also focus):
+    "recklessness", "masochism", "hypochondria", "vertigo", "fratricide", "agoraphobia",
+    "claustrophobia", "loneliness", "guilt", "spiritburn", "tenderskin",
+    -- Goldenseal/plumbum:
+    "depression", "sandfever", "fulminated", "mycalium", "shadowmadness",
+    -- Ginseng/ferrum, kelp/aurum, bloodroot/magnesium:
+    "lethargy", "flushings", "scytherus", "parasite", "rebbies", "pyramides",
+    -- Bellwort/cuprum (lovers, pacified and peace also focus):
+    "timeloop", "justice", "retribution", "generosity", "lovers", "pacified", "peace",
+    "indifference", "diminished",
+    -- Smoke (valerian/realgar, elm/cinnabar):
+    "disloyalty", "manaleech", "hellsight", "aeon", "deadening", "tension", "dazed", "earworm",
+    "unweavingspirit",
+    -- Salves (mending, epidermal, caloric) and the immunity sip:
+    "crushedthroat", "dazzled", "slashedthroat", "stuttering", "itching", "selarnia",
+    "frozen", "shivering", "frostbite", "voyria"
 }
 -- Backward compat alias
 treeCurableAffsV2 = treeCurableAffsV3
@@ -278,7 +312,7 @@ treeCurableAffsV2 = treeCurableAffsV3
 -- Canonical focus-curable affliction list (was focusCurableAffsV2, now owned by V3)
 -- What FOCUS can cure, per the game's WHATCURES (v4.7.371). Removed:
 -- impatience (it BLOCKS focus -- a focus that happened proves it absent, which
--- onTargetFocusV3 applies to every branch instead of letting impatience soak
+-- onTargetFocusV3 settles before it branches, instead of letting impatience soak
 -- up a share of the cure), addiction (ginseng), hypersomnia (ash) and feeble
 -- (not in the game's list). Added: agoraphobia, claustrophobia, lovers,
 -- pacified, peace. The first entries keep their old order.
@@ -294,11 +328,14 @@ focusCurableAffsV2 = focusCurableAffsV3
 -- Handle target using tree tattoo (cures random physical aff)
 function onTargetTreeV3()
     if canTargetCureV3 and not canTargetCureV3("tree") then
-        if ataxia and ataxia.decho then
-            ataxia.decho("ILLUSION: target used tree while on tree balance")
-        end
+        illusionEcho("target used tree while on tree balance")
         return
     end
+    -- Paralysis blocks the tree (kb/afflictions/cure-channels.md:24), so a tree that happened
+    -- proves it absent, as a focus does impatience: the branches that hold it are ruled out, and it
+    -- is not one of the things the tree cured. Done here whatever tAffs says: the sync clears
+    -- tAffs.paralysis once V3 drops under 30%, and a 22% paralysis used to take a share of the cure.
+    proveAffAbsentV3("paralysis")
     local treeCurable = treeCurableAffsV3
 
     local newStates = {}
@@ -345,23 +382,23 @@ end
 -- Handle target using focus (cures random mental aff)
 function onTargetFocusV3()
     if canTargetCureV3 and not canTargetCureV3("focus") then
-        if ataxia and ataxia.decho then
-            ataxia.decho("ILLUSION: target focused while on focus balance")
-        end
+        illusionEcho("target focused while on focus balance")
         return
     end
-    if getAffProbabilityV3 and getAffProbabilityV3("impatience") >= 1.0 then
-        -- Focus is blocked by confirmed impatience
+    -- Focus is blocked by confirmed impatience: every branch holds it. Not a probability >= 1.0
+    -- compare, which a sum a few ulps under 1 failed (isAffCertainV3, 007), so the focus then
+    -- stripped a certain impatience and took a cure as well.
+    if isAffCertainV3 and isAffCertainV3("impatience") then
         return
     end
+    -- Impatience blocks focus, so a focus that happened proves it absent: the branches that hold it
+    -- are ruled out, and it is not one of the things the focus cured.
+    collapseAffAbsentV3("impatience")
     local focusCurable = focusCurableAffsV3
 
     local newStates = {}
 
     for _, state in ipairs(afflictionStatesV3) do
-        -- Impatience blocks focus, so a focus that happened proves it absent
-        -- in every branch -- it is not one of the things the focus cured.
-        state.affs.impatience = nil
         local candidates = {}
         for _, aff in ipairs(focusCurable) do
             if state.affs[aff] then
@@ -404,20 +441,32 @@ end
 -- PASSIVE CURE HANDLING
 -- ============================================
 
--- Pool of afflictions curable by passive abilities (from tSingleRandom/tMultipleRandom)
+-- Pool of afflictions curable by passive abilities: the tree's pool above (the game's random-
+-- curable set), voyria first. It was the old tSingleRandom/tMultipleRandom list, which missed 25
+-- random-curable afflictions the tree pool took in after the 2026-11-07 spar (masochism,
+-- fratricide, shadowmadness, dementia and more) and named "pacifism", which is no affliction
+-- (the key is "pacified"). A passive over masochism and asthma then always took the asthma. The
+-- broken limbs keep the tree's order (left leg, right leg, left arm, right arm), which
+-- onPassiveCureV3's limb fallback reads. A literal, not a copy of the tree's table:
+-- tools/kb_affliction_db.py reads both pools from this file's text.
 passiveCurableAffsV3 = {
     "voyria",  -- Highest priority: passive cures cure voyria FIRST if present
-    "aeon", "anorexia", "pyramides", "flushings", "crushedthroat",
-    "sandfever", "paralysis", "asthma", "timeloop", "lethargy",
-    "depression", "impatience", "hypersomnia", "retribution", "confusion",
-    "darkshade", "healthleech", "hypochondria", "slickness", "manaleech",
-    "nausea", "parasite", "shivering", "frozen", "spiritburn",
-    "clumsiness", "sensitivity", "scytherus", "tenderskin", "stupidity",
-    "haemophilia", "weariness", "hallucinations", "dizziness", "justice",
-    "recklessness", "epilepsy", "addiction", "loneliness", "shyness",
-    "vertigo", "paranoia", "agoraphobia", "claustrophobia", "generosity",
-    "pacifism", "disloyalty", "selarnia",
-    "brokenleftleg", "brokenrightleg", "brokenleftarm", "brokenrightarm"
+    "paralysis", "slickness", "anorexia", "asthma", "sensitivity",
+    "clumsiness", "weariness", "epilepsy", "haemophilia", "nausea",
+    "dizziness", "shyness", "stupidity", "confusion", "dementia",
+    "paranoia", "hallucinations", "impatience", "hypersomnia", "addiction",
+    "darkshade",
+    "healthleech", "brokenleftleg", "brokenrightleg", "brokenleftarm", "brokenrightarm", "blackout",
+    "recklessness", "masochism", "hypochondria", "vertigo", "fratricide", "agoraphobia",
+    "claustrophobia", "loneliness", "guilt", "spiritburn", "tenderskin",
+    "depression", "sandfever", "fulminated", "mycalium", "shadowmadness",
+    "lethargy", "flushings", "scytherus", "parasite", "rebbies", "pyramides",
+    "timeloop", "justice", "retribution", "generosity", "lovers", "pacified", "peace",
+    "indifference", "diminished",
+    "disloyalty", "manaleech", "hellsight", "aeon", "deadening", "tension", "dazed", "earworm",
+    "unweavingspirit",
+    "crushedthroat", "dazzled", "slashedthroat", "stuttering", "itching", "selarnia",
+    "frozen", "shivering", "frostbite"
 }
 
 -- Handle passive ability curing N random afflictions (branching model)
@@ -435,13 +484,17 @@ function onPassiveCureV3(numCures)
     -- limb stays, as on the tree (ataxia_targetTreeV3, curing/002), since V3 cannot branch it.
     -- (2) What the cure made certain is reported, below. With V3 off, 318 still erases and does
     -- both, so neither is done here.
-    local had, limbs, taken = {}, {}, {}
+    -- held: the tracker believed it (tAffs, or 30% or more), so its cure is one to report. One
+    -- it only guessed at, a 1-2% branch the split pushed under 1%, is dropped without a report,
+    -- as on the tree (ataxia_targetTreeV3, curing/002).
+    local had, held, limbs, taken = {}, {}, {}, {}
     if affConfigV3.enabled then
         for _, aff in ipairs(pool) do
             if simpleAffsV3[aff] then
                 limbs[#limbs + 1] = aff
             elseif getAffProbabilityV3(aff) > 0 then
                 had[#had + 1] = aff
+                held[aff] = (tAffs and tAffs[aff] == true) or getAffProbabilityV3(aff) >= 0.3
             end
         end
     end
@@ -487,6 +540,10 @@ function onPassiveCureV3(numCures)
 
         if cure < numCures then
             deduplicateStatesV3()
+            -- Each round expands every branch. Past the cap, trim before the next one: a second
+            -- Dragonheal over 14 + 4 afflictions took about 0.5 s in Lua 5.1, in one trigger. Only
+            -- past the cap, so the 1% floor does not run mid-expansion on a board that fits.
+            if #afflictionStatesV3 > affConfigV3.maxStates then pruneStatesV3() end
         end
     end
 
@@ -503,7 +560,9 @@ function onPassiveCureV3(numCures)
     -- not reported; the old erase reported its guess.
     if ataxia_tarAffFaded then
         for _, aff in ipairs(had) do
-            if getAffProbabilityV3(aff) < 0.01 then ataxia_tarAffFaded(aff) end
+            if getAffProbabilityV3(aff) < 0.01 then
+                if held[aff] then ataxia_tarAffFaded(aff) else removeAffV3(aff) end
+            end
         end
         for _, limb in ipairs(taken) do ataxia_tarAffFaded(limb) end
     end

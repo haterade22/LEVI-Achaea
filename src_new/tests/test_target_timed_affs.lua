@@ -46,13 +46,26 @@ describe("timed afflictions on the target", function()
 
   it("a repeat restarts the clock", function()
     reset()
-    ataxia_tarAffTimed("dazzle")
-    ataxia_tarAffTimed("dazzle")
+    ataxia_tarAffTimed("dazzled")
+    ataxia_tarAffTimed("dazzled")
     expect(killed[1]).toBeTrue()
     fire(1)
     expect(#erased).toBe(0)
     fire(2)
-    expect(erased[1]).toBe("dazzle")
+    expect(erased[1]).toBe("dazzled")
+  end)
+
+  -- 2026-11-08 deep review (F41): dazzle went in under the key "dazzle", a name neither the tree
+  -- pool nor the head salve list knows, so no cure could ever take it. priest/003 now passes the
+  -- game's word (test_v3_core_fixes pins that) and no shipped caller passes the old key. The
+  -- rename is kept, and pinned here.
+  it("the old key dazzle gives the game's dazzled, on the 60 s clock", function()
+    reset()
+    ataxia_tarAffTimed("dazzle")
+    expect(added[1]).toBe("dazzled")
+    expect(timers[1].d).toBe(60)
+    fire(1)
+    expect(erased[1]).toBe("dazzled")
   end)
 
   it("does not remove anything from a target we have since switched away from", function()

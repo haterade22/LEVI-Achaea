@@ -427,12 +427,24 @@ describe("the round: buildRound builds it, dispatch sends it (#4, #10)", functio
     expect(out[1]).toBe("queue addclear free wield staff;dispatch Agathon")
   end)
 
-  it("incapacitates a Mhaldorian instead, without an ASSESS", function()
+  -- The city comes from the NDB, through the real ataxia_ndb/003 getter (2026-11-08). The round
+  -- read a global tCity that nothing ever assigned, so this case never ran live.
+  it("incapacitates a Mhaldorian the NDB knows, without an ASSESS", function()
     setup("Gaital", { prone = true, crushedthroat = true }, { head = 100 })
-    tCity = "Mhaldor"
+    dofile(ROOT .. "scripts/levi_ataxia/levi/ataxia/ataxia_ndb/003_ataxiaNDB_API.lua")
+    ataxiaNDB = { players = { Agathon = { city = "Mhaldor" } } }
     local cmd, kind = shikudo.buildRound()
     expect(kind).toBe("incapacitate")
     expect(cmd).toBe("wield staff;incapacitate Agathon")
+
+    -- Another city, or a name the NDB has not gathered, is dispatched.
+    ataxiaNDB.players.Agathon.city = "Cyrene"
+    expect(select(2, shikudo.buildRound())).toBe("dispatch")
+    ataxiaNDB.players.Agathon = nil
+    expect(select(2, shikudo.buildRound())).toBe("dispatch")
+    -- No NDB at all: still a dispatch, and no error at the kill.
+    ataxiaNDB = nil
+    expect(select(2, shikudo.buildRound())).toBe("dispatch")
   end)
 
   it("buildRound() sends nothing and returns a combo ending in ';assess Agathon'", function()

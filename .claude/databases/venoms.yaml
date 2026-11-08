@@ -229,8 +229,8 @@ cure_competition:
   kelp_competition:
     venoms: [kalmia, vernalius]
     afflictions: [asthma, weariness]
-    problem: "Both enable Serpent Impulse mechanic"
-    defense_priority: "Cure asthma first - breaks Impulse AND restores smoking"
+    problem: "Both are conditionals of the Serpent's monkshood reaction"
+    defense_priority: "Cure asthma first - denies the reaction AND restores smoking"
 
 # ============================================================================
 # EKANELIA TRANSFORMATIONS (Serpent BITE mechanic)

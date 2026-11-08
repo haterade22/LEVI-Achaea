@@ -26,7 +26,7 @@ our code.
 | `CURING ON/OFF` | The whole system |
 | `CURING AFFLICTIONS / DEFENCES / SIPPING / TRANSMUTATION ON/OFF` | Each part separately |
 | `CURING SIPHEALTH / SIPMANA <pct>` | Sip thresholds |
-| `CURING MOSSHEALTH / MOSSMANA <pct>` | Moss/potash thresholds (eating balance!) |
+| `CURING MOSSHEALTH / MOSSMANA <pct>` | Moss/potash thresholds (their own clock, not the eat's: [CONFLICTS](../CONFLICTS.md), Resolved 2026-11-07) |
 | `CURING PRIORITY HEALTH / MANA` | Which pool to favour when regenerating |
 | `CURING FOCUS ON/OFF`, `CURING FOCUS FIRST/SECOND` | Use FOCUS, and whether before or after herbs |
 | `CURING TREE ON/OFF [CUSTOM]` | Use the tree; `CUSTOM` enables tree scenarios |
@@ -59,6 +59,12 @@ Rules from our code and history (CONFIRMED-in-code; details in CLAUDE.md, "Serve
   defences.
 - Nothing parses a rejected `curing priority` command. After changing names, check with
   `CURING PRIORITY LIST`.
+- **Every stored swap trusts one cache.** `ataxia.curingprio` is one table for all curingsets
+  (`719_Affliction_Set.lua`:39-40). Since 2026-11-08 `Algedonic.ApplySwaps` also tests it before
+  WATER, paraAst, astWear and fratLock (`algedonic_defense_1.0/001_Anti_Priorities.lua`:151-210),
+  so a gain no longer re-sends a write the server holds (the write throttle is the point). After a
+  curingset switch that cache can be wrong in either direction ([CONFLICTS](../CONFLICTS.md) #76).
+  The swaps key on our TARGET's class, not our attacker's (#75).
 
 ## Curingsets
 
@@ -98,7 +104,7 @@ Sources: `kb/raw/live/curing-status_2026-10-10.txt`, `curingset-list_2026-10-10.
 | Fallback Curing | Yes | Switches to the herb when out of the mineral |
 | Health/Mana Priority | Health | |
 | Sip health / mana at | 80% / 75% | |
-| Eat moss below health / mana | 70% / 70% | Moss shares the eating balance with every cure |
+| Eat moss below health / mana | 70% / 70% | Moss and potash have their own clock, not the eat's (kb/CONFLICTS.md Resolved 2026-11-07, was #11) |
 | Use focus / Focus over herbs | Yes / Yes | FOCUS is tried before herbs for mental afflictions |
 | Use tree / Use clot | Yes / Yes | |
 | Clot at / Clot to | 100 bleeding / 0 bleeding | `CLOT TO` is not in HELP 13.7.8 |

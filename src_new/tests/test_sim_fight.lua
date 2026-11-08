@@ -29,15 +29,27 @@ local function model(over)
     classcure = nil,
     dagaz = nil,
     labelBlocker = "weariness",
-    ssc = { min = 0.10, median = 0.14, max = 0.18 },
+    -- One delay for both cases here, so the older cases keep their 0.14. "the SSC delay" below gives them two.
+    ssc = { gain = { median = 0.14, sd = 0.014, min = 0.10, max = 0.18 },
+            ["return"] = { median = 0.14, sd = 0.014, min = 0.10, max = 0.18 } },
     phi = 1,
     shield = { cost = 3.4, whileParalysed = false, reraise = { median = 5.83, sd = 0, min = 2.59 } },
     chain = { { aff = "nausea", at = 3.12 }, { aff = "lethargy", at = 6.24 }, { aff = "impatience", at = 9.31 } },
     venoms = { curare = { affs = { "paralysis" } }, kalmia = { affs = { "asthma" } }, gecko = { affs = { "slickness" } },
                slike = { affs = { "anorexia" } }, vernalius = { affs = { "weariness" } },
                aconite = { affs = { "stupidity" } }, voyria = { affs = { "voyria" } },
-               epseth = { affs = { "brokenleftleg|brokenrightleg" } } },
+               epseth = { affs = { "brokenleftleg|brokenrightleg" } },
+               monkshood = { affs = { "disloyalty" } }, loki = { affs = {}, random = true } },
     dstabVenoms = 2,
+    -- reaction.monkshood and reaction.loki (ASSUMED: the package's EKANELIA_TABLE and EKANELIA_RESULTS).
+    reactions = { monkshood = { conditionals = { "asthma", "masochism", "weariness" }, gives = { "impatience" } },
+                  loki = { conditionals = { "confusion", "recklessness" }, gives = { "nausea", "paralysis" } } },
+    -- attack.cost.own.impulse_eq: the median of the spar, with no noise here.
+    attacker = { impulseEq = { median = 1.242, sd = 0 } },
+    -- attack.impulse.suggestions: the 15 trivial suggestions (Hypnosis.wiki:86-249).
+    suggestions = { "amnesia", "paranoia", "loneliness", "claustrophobia", "stuttering", "hallucinations", "dementia",
+                    "deadening", "epilepsy", "agoraphobia", "masochism", "recklessness", "vertigo", "confusion",
+                    "stupidity" },
   }
   for k, v in pairs(over or {}) do m[k] = v end
   return m
@@ -279,7 +291,7 @@ describe("the attacks and the defences (attack.*)", function()
     expect(name).toBe("flay.whip")
     expect(parts[1].name).toBe("sileris.down")
   end)
-  it("a named FLAY takes the coating with its defence; one whose defence is gone strips nothing (attack.flay.coating)", function()
+  it("a named FLAY takes the coating with its defence (attack.flay.coating)", function()
     local s = state({})
     s.defs.rebounding, s.defs.sileris = true, true
     local act = A.parse("flay rebounding curare", m)
@@ -291,14 +303,54 @@ describe("the attacks and the defences (attack.*)", function()
     local _, parts = A.lines(act, result, s, coat)
     expect(parts[1].name).toBe("sileris.down")
     expect(parts[2].name).toBe("flay.whip")
-    -- X 5328: the whip landed and the coating stayed.
+  end)
+  it("a named FLAY whose defence is not there takes the coating, as a bare FLAY does (attack.flay.missing)", function()
+    -- FL 283-318, our seat: 'flay Saibel rebounding curare' on no rebounding. 'You try to flay a non-existent aura of
+    -- rebounding', then the coating ripped, the whip and the paralysis, in one packet.
+    local s = state({})
+    s.defs.sileris = true
+    local act = A.parse("flay rebounding curare", m)
+    local result, landed, coat = A.apply(s, act, m)
+    expect(result).toBe("flay.missing")
+    expect(coat).toBeTrue()
+    expect(s.defs.sileris).toBeFalse()
+    expect(landed[1]).toBe("paralysis")
+    local name, parts = A.lines(act, result, s, coat)
+    expect(name).toBe("flay.whip")
+    expect(parts[1].name).toBe("sileris.down")
+    -- With the coating already down it strips nothing, and the whip still lands.
+    local s1 = state({})
+    local r1, landed1, c1 = A.apply(s1, A.parse("flay shield curare", m), m)
+    expect(r1).toBe("flay.missing")
+    expect(c1).toBeFalse()
+    expect(landed1[1]).toBe("paralysis")
+    -- The alternative "nothing" (the X 5328 reading): the whip lands and the coating stays.
+    local nothing = model({ flayMissing = "nothing" })
     local s2 = state({})
     s2.defs.sileris = true
-    local r2, landed2, c2 = A.apply(s2, A.parse("flay shield curare", m), m)
-    expect(r2).toBe("flay")
+    local act2 = A.parse("flay shield curare", nothing)
+    local r2, landed2, c2 = A.apply(s2, act2, nothing)
+    expect(r2).toBe("flay.missing")
     expect(c2).toBeFalse()
     expect(s2.defs.sileris).toBeTrue()
     expect(landed2[1]).toBe("paralysis")
+    local name2, parts2 = A.lines(act2, r2, s2, c2)
+    expect(name2).toBe("flay.whip")
+    expect(#parts2).toBe(0)
+  end)
+  it("the spar's opener: after the FLAY on no rebounding, the impulse's bite lands (review KE-1)", function()
+    -- FL 305-318, then the bites of FL 594 on: no coating met them.
+    local out = run({ "flay rebounding curare", "impulse masochism monkshood" }, nil, env(),
+                    start({ defs = { sileris = true } }))
+    expect(find(out, "defence", "sileris.down") ~= nil).toBeTrue()
+    expect(find(out, "attack", "bite").result).toBe("hit")
+    expect(find(out, "gain", "disloyalty") ~= nil).toBeTrue()
+    -- Under the alternative the coating stays, and the bite meets it.
+    local nothing = model({ flayMissing = "nothing" })
+    out = run({ "flay rebounding curare", "impulse masochism monkshood" }, nothing, env(),
+              start({ defs = { sileris = true } }))
+    expect(find(out, "defence", "sileris.down")).toBeNil()
+    expect(find(out, "attack", "bite").result).toBe("sileris")
   end)
   it("a bare FLAY leaves the shield, unless the order is auto (attack.flay.order)", function()
     local s = state({})
@@ -358,12 +410,14 @@ describe("the attacks and the defences (attack.*)", function()
     local _, _, c2 = A.apply(s2, A.parse("dstab curare gecko", m), m)
     expect(c2).toBeFalse()
     expect(s2.defs.sileris).toBeTrue()
-    -- A FLAY whose defence is gone strips nothing, but its whip's slickness strips the coating (review R5-engine-1).
+    -- Under attack.flay.missing's alternative a FLAY whose defence is not there strips nothing, but its whip's
+    -- slickness strips the coating (review R5-engine-1).
+    local nothing = model({ flayMissing = "nothing" })
     local s3 = state({})
     s3.defs.sileris = true
-    local act3 = A.parse("flay shield gecko", m)
-    local r3, landed3, c3 = A.apply(s3, act3, m)
-    expect(r3).toBe("flay")
+    local act3 = A.parse("flay shield gecko", nothing)
+    local r3, landed3, c3 = A.apply(s3, act3, nothing)
+    expect(r3).toBe("flay.missing")
     expect(landed3[1]).toBe("slickness")
     expect(c3).toBeTrue()
     expect(s3.defs.sileris).toBeFalse()
@@ -642,6 +696,28 @@ describe("the run's edges", function()
     for _ in pairs(seen) do n = n + 1 end
     expect(n > 1).toBeTrue()
   end)
+  it("a fork's first gap is start.firstGap when given: the gap after the kind of the log's last attack", function()
+    -- A FLAY last in the log under --gap others: its own gap (1.642), not the DSTAB's env.gap (review F49, X 545-552).
+    local lines = { "dstab curare kalmia" }
+    local e = env({ gaps = { dstab = 1.83, flay = 1.642 } })
+    local flay = run(lines, nil, e, start({ firstAt = nil, firstFrom = 0, firstGap = 1.642 }))
+    expect(close(flay.firstAt, 1.642)).toBeTrue()
+    expect(close(run(lines, nil, e, start({ firstAt = nil, firstFrom = 0 })).firstAt, 1.83)).toBeTrue()
+  end)
+  it("a FLAY's attack event says whether the coating was up as it struck (coatUp, review F50)", function()
+    local up = run({ "flay rebounding curare" }, nil, env(), start({ defs = { sileris = true } }))
+    local ev = find(up, "attack")
+    expect(ev.result).toBe("flay.missing")
+    expect(ev.coatUp).toBeTrue()
+    local down = run({ "flay rebounding curare" })
+    expect(find(down, "attack").coatUp).toBeFalse()
+    -- A bare FLAY strips the coating, so a second FLAY meets none.
+    local two = run({ "flay curare", "flay rebounding curare" }, nil, env(), start({ defs = { sileris = true } }))
+    expect(find(two, "attack").coatUp).toBeTrue()
+    expect(find(two, "attack", nil, 1).coatUp).toBeFalse()
+    -- Only a FLAY carries it.
+    expect(find(run({ "dstab curare kalmia" }), "attack").coatUp).toBeNil()
+  end)
   it("a channel whose clock ran out before t0 comes back at t0, with its line (review LUA-N2-6)", function()
     local out = run({ "wait 1" }, nil, env(), start({ ready = { eat = 0 }, downAtStart = { eat = true } }))
     local back = find(out, "recover", "eat")
@@ -793,6 +869,213 @@ describe("the run's end", function()
     expect(out.notRun).toBe(1)
     expect(#out.strikes).toBe(2)
     expect(close(find(out, "recover", "eat", 1.0).t, 1.64)).toBeTrue()
+  end)
+end)
+
+describe("the SSC delay (ssc.delay.gain, ssc.delay.return)", function()
+  -- The medians of kb/sim/events.json's race rows, split by the 'down' flag: 0.104 (n=23) and 0.145 (n=163).
+  local function split(over)
+    local m = model({ ssc = { gain = { median = 0.104, sd = 0 }, ["return"] = { median = 0.145, sd = 0 } } })
+    for k, v in pairs(over or {}) do m[k] = v end
+    return m
+  end
+  it("an affliction that lands on an open eat waits the gain delay", function()
+    local out = run({ "dstab curare kalmia" }, split())
+    local eat = find(out, "cure", "eat")
+    expect(close(eat.t, 0.104)).toBeTrue()
+    expect(eat.ssc).toBe("gain")
+  end)
+  it("an eat that comes back with an affliction waiting waits the return delay", function()
+    -- The eat is down until 0.6, so the paralysis of the DSTAB at 0 waits for it.
+    local out = run({ "dstab curare kalmia" }, split(), env(), start({ ready = { eat = 0.6 } }))
+    local eat = find(out, "cure", "eat")
+    expect(close(eat.t, 0.6 + 0.145)).toBeTrue()
+    expect(eat.ssc).toBe("return")
+  end)
+  it("an affliction that lands as the eat comes back is a gain: the return line comes first (kb_events.phase_at)", function()
+    local out = run({ "wait 0.6", "dstab curare kalmia" }, split(), env(), start({ ready = { eat = 0.6 } }))
+    local eat = find(out, "cure", "eat")
+    expect(close(eat.t, 0.6 + 0.104)).toBeTrue()
+    expect(eat.ssc).toBe("gain")
+  end)
+  it("a channel that an affliction shut is a return when that affliction goes", function()
+    -- Paralysis shuts the tree with asthma waiting. The eat takes the paralysis at 0.104, and the tree then waits the
+    -- return delay. The eat cannot take the asthma: it is down after the bloodroot.
+    local out = run({ "give paralysis asthma" }, split(), env({ tail = 3 }))
+    expect(close(find(out, "cure", "eat").t, 0.104)).toBeTrue()
+    local tree = find(out, "cure", "tree")
+    expect(close(tree.t, 0.104 + 0.145)).toBeTrue()
+    expect(tree.ssc).toBe("return")
+  end)
+  it("a channel down at the start with an affliction for it is a return", function()
+    local out = run({ "wait 1" }, split(), env(), start({ affs = { "paralysis" }, ready = { eat = 0.5 } }))
+    local eat = find(out, "cure", "eat")
+    expect(close(eat.t, 0.5 + 0.145)).toBeTrue()
+    expect(eat.ssc).toBe("return")
+  end)
+  it("V.delay takes the median with env.median and refuses an unknown case", function()
+    local m = split()
+    expect(V.delay(m, { median = true }, nil, "gain")).toBe(0.104)
+    expect(V.delay(m, { median = true }, nil, "return")).toBe(0.145)
+    expect(pcall(V.delay, m, { median = true }, nil, "later")).toBeFalse()
+  end)
+  it("a delay of 0 still acts: it is held at V.MIN_DELAY, so the pending action has a moment of its own", function()
+    local m = split({ ssc = { gain = { median = 0, sd = 0 }, ["return"] = { median = 0, sd = 0 } } })
+    local out = run({ "dstab curare kalmia" }, m, env(), start({ ready = { eat = 0.6 } }))
+    expect(close(find(out, "cure", "eat").t, 0.6 + V.MIN_DELAY)).toBeTrue()
+  end)
+  it("a drawn delay keeps the rule's shape and range (draw.shape)", function()
+    local gain = { median = 0.104, sd = 0.052, min = 0.006, p10 = 0.064, p90 = 0.198, max = 0.202 }
+    local back = { median = 0.145, sd = 0.074, min = 0.0, p10 = 0.05, p90 = 0.239, max = 0.458 }
+    local m = split({ ssc = { gain = gain, ["return"] = back } })
+    local rnd = forward.rng(2026)
+    local low = 0
+    for _ = 1, 2000 do
+      local g = V.delay(m, { median = false }, rnd, "gain")
+      expect(g >= gain.min and g <= gain.max).toBeTrue()
+      if g <= gain.p10 then low = low + 1 end
+      local r = V.delay(m, { median = false }, rnd, "return")
+      expect(r >= V.MIN_DELAY and r <= back.max).toBeTrue()
+    end
+    expect(low / 2000 > 0.08 and low / 2000 < 0.12).toBeTrue()
+  end)
+end)
+
+describe("the impulse (attack.impulse, attack.impulse.venom)", function()
+  local m = model()
+  it("gives the suggestion, then a bite of its venom, in one action", function()
+    local act = A.parse("impulse masochism monkshood", m)
+    expect(act.kind).toBe("impulse")
+    expect(act.suggestion).toBe("masochism")
+    expect(act.venoms[1]).toBe("monkshood")
+    local s = state({})
+    local result, landed, _, info = A.apply(s, act, m)
+    expect(result).toBe("hit")
+    expect(landed[1]).toBe("masochism")
+    expect(landed[2]).toBe("disloyalty")
+    expect(info.by.masochism).toBe("impulse")
+    expect(info.by.disloyalty).toBe("bite")
+  end)
+  it("refuses an impulse with no venom, two venoms, or an unknown venom", function()
+    expect(A.parse("impulse masochism", m)).toBeNil()
+    expect(A.parse("impulse masochism monkshood curare", m)).toBeNil()
+    expect(A.parse("impulse masochism nothing", m)).toBeNil()
+  end)
+  it("refuses a suggestion that is not a trivial one (attack.impulse.suggestions, review KE-5)", function()
+    -- A typo, an affliction no suggestion gives, and clumsiness, a complex suggestion (Hypnosis.wiki:252-254).
+    for _, word in ipairs({ "masochsim", "paralysis", "clumsiness", "hypochondria" }) do
+      local act, why = A.parse("impulse " .. word .. " monkshood", m)
+      expect(act).toBeNil()
+      expect(string.find(why, "unknown suggestion '" .. word .. "'", 1, true) ~= nil).toBeTrue()
+    end
+    -- A model with no list refuses every impulse.
+    expect(A.parse("impulse masochism monkshood", model({ suggestions = {} }))).toBeNil()
+    -- Each of the 15 is taken.
+    for _, word in ipairs(m.suggestions) do
+      expect(A.parse("impulse " .. word .. " curare", m).suggestion).toBe(word)
+    end
+  end)
+  it("a shield blocks all of it; sileris blocks only the bite", function()
+    local s = state({})
+    s.defs.shield = true
+    local result, landed = A.apply(s, A.parse("impulse masochism monkshood", m), m)
+    expect(result).toBe("shield")
+    expect(#landed).toBe(0)
+    local s2 = state({})
+    s2.defs.sileris = true
+    local r2, landed2 = A.apply(s2, A.parse("impulse masochism monkshood", m), m)
+    expect(r2).toBe("sileris")
+    expect(#landed2).toBe(1)
+    expect(landed2[1]).toBe("masochism")
+  end)
+  it("in a run it is the attack 'bite' with the part 'gaze.command', and it spends the attacker's eq", function()
+    local out = run({ "impulse masochism monkshood", "dstab curare kalmia" }, m, env({ gaps = { impulse = 1.563 } }))
+    local ev = find(out, "attack", "bite")
+    expect(ev.action).toBe("impulse")
+    expect(ev.suggestion).toBe("masochism")
+    expect(close(ev.eqBack, 1.242)).toBeTrue()
+    -- kb_events' name for the line each victim-seat BITE came with (az 1238-1242, Z5 534-537, X 293-296), so a sim
+    -- fight's census counts the impulse as a log's does.
+    expect(find(out, "hypnosis", "gaze.command").part).toBeTrue()
+    expect(find(out, "hypnosis", "impulse")).toBeNil()
+    expect(find(out, "gain", "masochism").by).toBe("impulse")
+    -- The bite's balance sets the next action: env.gaps.impulse, not env.gap.
+    expect(close(find(out, "attack", "dstab").t, 1.563)).toBeTrue()
+  end)
+  it("a second impulse waits for the attacker's equilibrium; a DSTAB waits only for balance", function()
+    local out = run({ "impulse masochism monkshood", "impulse confusion curare" }, m, env({ gap = 1.0 }))
+    expect(close(out.strikes[2].t, 1.242)).toBeTrue()
+    -- The first row's next action shows the wait for equilibrium, not the gap.
+    expect(close(find(out, "attack", "bite").next, 1.242)).toBeTrue()
+    out = run({ "impulse masochism monkshood", "dstab curare kalmia" }, m, env({ gap = 1.0 }))
+    expect(close(out.strikes[2].t, 1.0)).toBeTrue()
+    out = run({ "impulse masochism monkshood", "wait 0.5", "impulse confusion curare" }, m, env({ gap = 0.3 }))
+    expect(close(out.strikes[2].t, 1.242)).toBeTrue()
+  end)
+  it("a give honours env.gaps (review TC9: it took env.gap)", function()
+    local out = run({ "give asthma", "dstab curare kalmia" }, nil, env({ gaps = { give = 0.5 } }))
+    expect(close(find(out, "attack", "dstab").t, 0.5)).toBeTrue()
+  end)
+  it("the race reads the impulse's bite as the next attack", function()
+    local out = run({ "dstab curare kalmia", "impulse masochism monkshood" }, m, env(), start({ ready = { eat = 0.6 } }))
+    expect(#out.races).toBe(1)
+    expect(out.races[1].to).toBe(2)
+    expect(out.races[1].winner).toBe("strike")
+  end)
+end)
+
+describe("the reactions (reaction.monkshood, reaction.loki)", function()
+  local m = model()
+  it("monkshood gives impatience when asthma, masochism and weariness are up at the bite", function()
+    -- The impulse brings the masochism itself (the spar: 7 of 7 masochism impulses fired it).
+    local s = state({ "asthma", "weariness" })
+    local _, landed, _, info = A.apply(s, A.parse("impulse masochism monkshood", m), m)
+    expect(info.reaction).toBe("monkshood")
+    expect(info.by.impatience).toBe("reaction")
+    expect(landed[#landed]).toBe("impatience")
+    expect(s.affs.impatience).toBeTrue()
+  end)
+  it("no impatience when one condition is down: the spar's two misses had one cured 0.13 s before the bite", function()
+    -- FL 1741: the tree took asthma at 22.857 and the bite came at 22.987.
+    local s = state({ "weariness", "masochism" })
+    local _, _, _, info = A.apply(s, A.parse("impulse stupidity monkshood", m), m)
+    expect(info.reaction).toBeNil()
+    expect(s.affs.impatience).toBeNil()
+    -- FL 1364: a focus at 07.353, the confusion impulse at 07.485. Here the masochism is missing.
+    local s2 = state({ "asthma", "weariness" })
+    local _, _, _, info2 = A.apply(s2, A.parse("impulse confusion monkshood", m), m)
+    expect(info2.reaction).toBeNil()
+  end)
+  it("a plain BITE fires it too, and a DSTAB never does (Venom.wiki: 'Reactions fire on the bite command')", function()
+    local s = state({ "asthma", "weariness", "masochism" })
+    local _, _, _, info = A.apply(s, A.parse("bite monkshood", m), m)
+    expect(info.reaction).toBe("monkshood")
+    expect(s.affs.impatience).toBeTrue()
+    local s2 = state({ "asthma", "weariness", "masochism" })
+    A.apply(s2, A.parse("dstab monkshood curare", m), m)
+    expect(s2.affs.impatience).toBeNil()
+  end)
+  it("loki gives nausea and paralysis with confusion and recklessness; its random affliction is not modelled", function()
+    -- FL 1406-1414: the recklessness impulse with loki, 'takes hold', then the paralysis line.
+    local s = state({ "confusion" })
+    local _, landed, _, info = A.apply(s, A.parse("impulse recklessness loki", m), m)
+    expect(info.reaction).toBe("loki")
+    expect(landed[1]).toBe("recklessness")
+    expect(s.affs.nausea).toBeTrue()
+    expect(s.affs.paralysis).toBeTrue()
+    -- FL 630: a stupidity impulse with loki printed no reaction; the engine lands only the stupidity.
+    local s2 = state({})
+    local _, landed2 = A.apply(s2, A.parse("impulse stupidity loki", m), m)
+    expect(#landed2).toBe(1)
+    -- A DSTAB of loki is still refused, and so is a bite of loki in a model with no loki reaction.
+    expect(A.parse("dstab loki curare", m)).toBeNil()
+    expect(A.parse("bite loki", model({ reactions = {} }))).toBeNil()
+  end)
+  it("a run prints the reaction part with its venom, and its gain is by the reaction", function()
+    local out = run({ "impulse masochism monkshood" }, m, env(), start({ affs = { "asthma", "weariness" } }))
+    local part = find(out, "attack.part", "reaction")
+    expect(part.args[1]).toBe("monkshood")
+    expect(find(out, "gain", "impatience").by).toBe("reaction")
   end)
 end)
 
