@@ -40,9 +40,12 @@ function ataxia_sendDefaultPrios()
   -- Through the throttle when it is loaded, so another writer in the same second is counted
   -- against the same budget; one command a second leaves room for those writers either way.
   local sendPrio = ataxia_sendCuringPriority or function(c) send(c) end
+  local gen = ataxiaPrioGen or 0
   for i, cmd in ipairs(cmds) do
     local last = (i == #cmds)
     local function go()
+      -- A switch since the first batch: the rest would land in that set. The table stays unsent.
+      if (ataxiaPrioGen or 0) ~= gen then return end
       sendPrio(cmd)
       -- Record what the server now holds only once the LAST command is out, so a disconnect
       -- halfway leaves the table marked unsent and the next login sends it again.

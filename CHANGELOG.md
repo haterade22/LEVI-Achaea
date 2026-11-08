@@ -2,6 +2,59 @@
 
 ---
 
+## 2026-11-08 - v4.7.480: the user's Serpent decisions: a class curing set keeps its own priorities, clumsiness follows the user's list, and shrugging waits for equilibrium
+
+The user answered the decisions v4.7.479 left open. **None of this has run in Mudlet.** The tests run in the Lua harness against a fake server, so what the game does with these sends is read from captures and logs, not seen. **Merged to `main` but not released yet:** `version.txt` stays at 4.7.479 and no v4.7.480 tag exists, so a reimport does not get this until the release.
+
+**What you will see change:**
+
+- **A hidden list read at a class-set switch.** Straight after `curingset switch <name>` the package sends `curing priority list` and hides the reply. One prompt line after the hidden list still prints. A list you type prints as the game sends it.
+- **Clumsiness now goes to Occultist, Bard, Jester, Druid and Sentinel, and no longer to Blademaster, Monk or Tekura, Sylvan, Magi and the Lords.** Against the immune classes the Serpent sends no xentio. With paralysis up the class venom goes first where the class has one (Monk and Tekura vernalius, Magi and Sylvan notechis), then asthma and weariness in whichever order is left. Blademaster and the Lords have no class venom, so they get asthma, then weariness. Magi and Sylvan were already on the old list; what stops for them is the flay's xentio, which had no gate.
+
+### Clumsiness (`ataxia/ataxia/007_Pariah_things.lua`, `serpent/002_Serpent_Offense.lua`)
+
+- **The list is the user's.** "Tekura Monk, Sylvan, Magi, Blademaster, and Elemental Lords are all immune to clumsiness." `ataxia_wantClumsiness` (:110) reads `CLUMSINESS_IMMUNE` (:93-99): monk, tekura, sylvan, magi, blademaster, airlord, earthlord, firelord, waterlord. Every other class, Shikudo and an unknown class included, keeps clumsiness. The user's reason: "33 percent chance to miss your target is huge. Additionally, it starts the kelp stack needed to stick Asthma." `clumsinessClassKey` (:103) folds the spellings the code has seen: "Earth Lord", "Earth Lady", "earth Elemental Lord", "air Elemental Lady".
+- **Blademaster has no class venom now.** Its xentio row left `CLASS_LOCK_VENOM` (`serpent/002`:884-885). With paralysis up a Blademaster takes `dstab <t> kalmia vernalius`.
+- **The flay's xentio reads the same gate (:1924).** It had none, and it came before the asthma test, so a Blademaster or a Magi with paralysis and weariness up and clumsiness missing drew `flay <t> shield xentio`, with asthma up or down.
+- **Pariah** moves through the same function (`pariah/001_Pariah_Logic.lua`:54). No code change there.
+- **A Shikudo can read "Monk".** Nothing writes "Tekura", so a monk reads "Monk" until a staff line says "Shikudo" (`determine_class/006`). A Shikudo that kicks first, or one the API filled in, loses clumsiness until the staff hits us. That the API returns "Monk" for a Shikudo is READ, not tested. With two attackers a kick no longer rewrites a known Shikudo to Monk (006:85-89).
+- **Not adopted: asthma and weariness before the class venom.** The proposal was MODEL, not from a log. The user: "Depends, we usually use curare because it is usually HIGHER on the curing priority list and will be eaten before Asthma. Sending Asthma Weariness you now have to try and figure out if they have asthma or weariness when they eat kelp." Curare stays first. It went first in the proposal too, so the order behind paralysis for a class venom that is not curare got no explicit ruling. It stays as it was.
+
+### Curing sets (`ataxia/ataxia/002_Prio_Management.lua`, `class_detect/001`, triggers 716-719)
+
+The user: "The purpose of curing sets is to set priorities based on the class you are facing. Classes through skills can only give specific afflictions. So we do curing  sets for them. If Infernal can never give impatience. no need for Impatience to be curing priority impatience 2"
+
+- **A restore in a class set puts back that set's own value.** It used to write the global default table into the class set. `ataxia_restorePrio` now writes what `ataxia_defaultPrioAff` answers, and on a class set that is the value read from the game, or nothing if unknown. `normal` and the bash path behave as before.
+- **One send at each class-set switch.** `ataxia_switchCuringsetSend(name, from)` (:368) puts the swaps of the set we leave back to that set's values, then sends `curingset switch <name>`, then `curing priority list`, in that order. `classDetect`'s three switch sites call it. How often a set switches, the party rule and the debounce are unchanged. The cache empties, so `ataxia_getPrio` answers 0 until the list arrives.
+- **The hidden read fills the baseline.** Trigger 716's pattern could not match the real header (`Your affliction curing priorities for the priority set normal:`, `kb/raw/live/curing-priority-list_normal_2026-10-10.txt`), so the chain 716/717/718 could not open on it since at least that capture. It matches now. Our own read is hidden and fills `ataxiaPrioSets.baseline[set]`. A read that is cut off fills nothing.
+- **A list you type** still prints only the game's lines and changes no baseline. Its banner and the "Priorities have been updated" echo are gone. **New behaviour:** the chain opens now, so it refreshes the cache and saves the settings (718). A wrapped continuation row is not read.
+- **A swap needs a known baseline.** On a class set with no baseline `ataxia_setAffPrio` and the new `ataxia_sendPrioSwap` (:270) write nothing, and `ApplySwaps` sends again on the next gain. A read that gave way or was lost is asked again, at most 3 times, while that set is still active. Baselines and live names survive a package reload or a connection.
+- **The direct swaps come back at a switch.** The parshield park, the tumble park, scalded 26, Magi shivering and frozen 20 and 2, the Damnation legs and the burning park go through `ataxia_sendPrioSwap`. The [+]/[-] links do not: a value you type or click during a visit is adopted as that set's own (`ataxia_prioTuned`, :547, from trigger 719).
+- **The default table stops at a set change** (`ataxiaPrioGen`). The write queue is never overtaken, the drain drops stored writes while the bash set is active, and the drain's armed flag is local, so a queue that came back from a save cannot block later writes.
+- **Login.** `levilogin`'s six switches to normal go through `ataxia_loginCuringsetNormal` (`login/001_Login_Function.lua`:18), so the class-detect state moves only where the server moves.
+
+### Defence and lock-breakers
+
+- **`astImp` steps aside in the monkshood state. This is our reading of the user's words, to confirm.** The user's whole answer was "astimp can be implemented". It picks neither of the two proposals (skip `astImp` while weariness is up, or rank asthma 1 and impatience 2 there). We built the first, and dropped the second on our own reasoning: asthma at 1 would rank asthma above paralysis. Against a Serpent with asthma and weariness both up, impatience is not raised to 1, so astWear's asthma 3 stands. If impatience already reads 1 it goes back (`Algedonic.AstImpPutBack`, `algedonic_defense_1.0/001_Anti_Priorities.lua`:124-131; called from `ApplySwaps` :159-165 and from trigger 719, for a raise and a weariness that land in one packet). Against an Alchemist, and a Serpent with no weariness, it is unchanged. Which herb SSC eats first there is not measured.
+- **SHRUGGING waits for equilibrium.** The user: "shrugging yes". `ataxia_fitnessHeldForEq` is now `ataxia_activeCureHeldForEq` (`can(x)/003_Lock_breakers.lua`:113) and holds FITNESS and SHRUGGING, and the echo names the cure. Other classes' cures stay unheld. How the game treats a shrug sent with equilibrium down is not measured.
+- **Our first-person shrug line was never missing.** "Focusing inward, you purge your body of afflictions." was already in `curing_bals/006_Active_Used.lua`:42 and `serpent/008_Shruggin.lua`:34. The user's paste confirms it (`kb/raw/live/shrugging_2026-11-08.txt`). It printed `Equilibrium used: 1.36s.` (n=1), where the wiki gives 1.60 s.
+
+### Tools and kb
+
+- `kb/CONFLICTS.md`: #71, #72, #73, #74 and #76 are Resolved, #75 has the user's statement, and #81 is new (open). `kb/curing/server-side-curing.md` has "One priority list per set".
+- Line citations moved in `tools/kb_replay.py` and `tools/kb_rules.py`, so `kb/mechanics/replay.md` and `kb/sim/rules.json`/`.md` were regenerated with the new line numbers.
+- **Tests.** The whole Lua suite passes (4757), and check_wrap and check_orphans are clean. New files: `test_curingset_priorities.lua` (103, a fake server with one table per set and the real triggers), `test_monk_class_grab.lua` (6).
+
+### Open
+
+- **What "immune" means, the miss or the affliction:** a Blademaster and an Earth Lord take clumsiness and spend a cure on it, and three rows show an Earth Lord's clumsy miss (`kb/CONFLICTS.md` #81). The code follows the user.
+- **For the user to confirm:** that "astimp can be implemented" means the raise steps aside in the monkshood state, and not the other reading, that the raise stays (`kb/CONFLICTS.md` Resolved, was #74).
+- **Confirm in game:** that the hidden read hides and comes back whole; how the game treats a shrug sent with equilibrium down; which herb SSC eats first in the monkshood state.
+- **Still the user's call:** the anti-class defences follow our target, not our attacker (#75); `cq all;touch shield` against a held lock-breaker (#77); whether asthma and weariness go before a class venom that is not curare (no explicit ruling).
+- **Known limits:** a class-set restore does nothing until the first read of that set; a one-shot swap on a first visit is dropped; a read lost on a repeat visit or on normal leaves that visit's cache empty; after a login the cache can hold the set active at the last save; a typed `curingset switch` is untracked; `reset prios` while bashing still lands in the set it restores to; the client's fixed one-second window against the server's sliding one can still draw a refusal.
+
+---
+
 ## 2026-11-08 - v4.7.479: Serpent spar fixes and a deep review of the Serpent system: no recklessness before a lock, the adder only when it is out, and a target tracker and triggers that keep what they know
 
 The user sparred as a Serpent (v4.7.478, raw rounds) against Saibel, who only cured. It is our first fight log from a Serpent seat (`kb/raw/logs/ours/2026-11-07_164635_Saibel.log`, with the screen log `kb/raw/logs/2026-11-07_serpent-spar-saibel.txt`; one fight). Saibel's class (Depthswalker) comes only from the NDB cache and is unverified. The log measured our own costs, and it showed five bugs and one rule of the user's broken.

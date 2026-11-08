@@ -82,6 +82,11 @@ elseif classDetect.state.attackerName
    and classDetect.state.attackerClass == "Shikudo" then
   -- Already identified as Shikudo — kick is just part of their toolkit
   classDetect.resetCombatTimeout()
+elseif classDetect.state.attackers[attacker:lower()]
+   and ataxiaNDB_getClass and ataxiaNDB_getClass(attacker) == "Shikudo" then
+  -- With two attackers the engine clears attackerName, so the guard above cannot see him. The
+  -- attackers test keeps a saved Shikudo entry from outranking this fight's first kick.
+  classDetect.resetCombatTimeout()
 else
   classDetect.setAttackerClass(attacker, "Monk")
 end

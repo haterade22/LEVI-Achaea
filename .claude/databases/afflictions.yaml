@@ -91,9 +91,11 @@ afflictions:
     cure_herb: kelp
     cure_mineral: aurum
     effect: "Random fumbling, failed weapon strikes"
+    miss_chance: "33 percent (PLAYER, the user 2026-11-08; no log measures it)"
+    immune_classes: "Tekura Monk, Sylvan, Magi, Blademaster, Elemental Lords (PLAYER, the user 2026-11-08; the logs leave open whether immune means no miss or no affliction, kb/CONFLICTS.md #81)"
     delivered_by: [supara, class_abilities]
     priority: 4
-    serpent_note: "With weariness, enables Ekanelia kalmia transformation"
+    serpent_note: "With weariness, enables Ekanelia kalmia transformation. Starts the kelp stack needed to stick asthma (the user, 2026-11-08)"
 
   hypochondria:
     cure_method: eat

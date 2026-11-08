@@ -38,3 +38,7 @@ patterns:
 local aff, num = matches[2]:lower(), tonumber(matches[3])
 ataxia.curingprio = ataxia.curingprio or {}
 ataxia.curingprio[aff] = num
+if ataxia_prioTuned then ataxia_prioTuned(aff, num) end
+if aff == "impatience" and num == 1 and Algedonic and Algedonic.AstImpPutBack then
+  Algedonic.AstImpPutBack()
+end

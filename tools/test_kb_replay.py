@@ -193,7 +193,7 @@ class LabelsFromCode(unittest.TestCase):
         return seen
 
     def test_true_needs_the_class_cure_blocked(self):
-        # Claes is a Runewarden, so weariness blocks FITNESS (003_Lock_breakers.lua:216).
+        # Claes is a Runewarden, so weariness blocks FITNESS (003_Lock_breakers.lua:222).
         s = self.s_for("x_claes_runewarden-vs-serpent_loss.txt", [claes("00:000", "AST SLCK ANO IMP PAR")])
         self.assertFalse(R.is_true(s, "Runewarden"))
         s = self.s_for("x_claes_runewarden-vs-serpent_loss.txt", [claes("00:000", "AST SLCK ANO IMP PAR wear")])
@@ -206,7 +206,7 @@ class LabelsFromCode(unittest.TestCase):
         self.assertFalse(R.is_true(self.s_for("x_claes_x.txt", rows), "Runewarden"))
 
     def test_the_code_reads_an_earth_lords_cure_the_wrong_way_round(self):
-        # 003_Lock_breakers.lua:240-245 against class-cures.md:51 (kb/CONFLICTS.md #54). The label replays the code.
+        # 003_Lock_breakers.lua:246-251 against class-cures.md:51 (kb/CONFLICTS.md #54). The label replays the code.
         self.assertNotIn("Earth Lord", R.BLOCKERS)
         s = self.s_for(JD, [claes("00:000", "AST SLCK ANO IMP PAR")])
         self.assertTrue(R.is_true(s, "Earth Lord"))

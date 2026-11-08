@@ -82,23 +82,33 @@ function ataxia_targetClass()
   return class and class:lower() or ""
 end
 
+-- We want clumsiness on every class it affects. The user: "33 percent chance to miss your target is
+-- huge. Additionally, it starts the kelp stack needed to stick Asthma."
+-- This list is the user's, 2026-11-08: "Tekura Monk, Sylvan, Magi, Blademaster, and Elemental Lords
+-- are all immune to clumsiness." An unknown class keeps clumsiness.
+-- Nothing writes "Tekura": a monk reads "Monk" until a staff line says "Shikudo"
+-- (determine_class/006). A Shikudo that kicked first, or one the API filled in, can read "Monk"
+-- and count as immune until it hits us with the staff. Shikudo is not immune: our Shikudo seats
+-- print "You fumble your strike, the attack going wide."
+local CLUMSINESS_IMMUNE = {
+  monk = true, tekura = true,
+  sylvan = true,
+  magi = true,
+  blademaster = true,
+  airlord = true, earthlord = true, firelord = true, waterlord = true,
+}
+
+-- One spelling per class. Class detect writes "Earthlord", game text has "Earth Lord" and "Earth
+-- Lady", and GMCP has "earth Elemental Lord" and "air Elemental Lady".
+local function clumsinessClassKey(class)
+  return (class:lower():gsub("%s+", ""):gsub("elemental", ""):gsub("lady$", "lord"))
+end
+
 -- Shared class-aware clumsiness check: returns true if target class is impacted by clumsiness.
 -- Used by both pariah (logograph routing) and serpent (ekanelia venom selection).
--- `class` is optional (any case); without it the target's class is read (ataxia_targetClass). An
--- unknown class keeps clumsiness.
+-- `class` is optional (any case); without it the target's class is read (ataxia_targetClass).
 function ataxia_wantClumsiness(class)
-  class = (class or ataxia_targetClass()):lower()
-  return class ~= "air"
-      and class ~= "fire"
-      and class ~= "magi"
-      and class ~= "sylvan"
-      and class ~= "occultist"
-      and class ~= "bard"
-      and class ~= "jester"
-      and class ~= "blademaster"
-      and class ~= "water"
-      and class ~= "druid"
-      and class ~= "sentinel"
+  return not CLUMSINESS_IMMUNE[clumsinessClassKey(class or ataxia_targetClass())]
 end
 
 function pariah.canGraph(logo)

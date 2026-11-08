@@ -291,8 +291,8 @@ function Algedonic.AntiPaladin()
   if ataxia.afflictions.brokenleftleg and ataxia.afflictions.brokenrightleg then
     if ataxia.afflictions.brokenleftarm or ataxia.afflictions.brokenrightarm then
       -- Disembowel setup complete
-      ataxia_sendCuringPriority("curing priority brokenleftleg 1")
-      ataxia_sendCuringPriority("curing priority brokenrightleg 1")
+      ataxia_sendPrioSwap("curing priority brokenleftleg 1")
+      ataxia_sendPrioSwap("curing priority brokenrightleg 1")
       Algedonic.Echo("DISEMBOWEL THREAT - cure legs immediately!")
     end
   end

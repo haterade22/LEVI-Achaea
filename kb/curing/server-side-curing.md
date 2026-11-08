@@ -8,6 +8,7 @@ code:
   - src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua
   - src_new/scripts/levi_ataxia/levi/ataxia/ataxia/008_Bash_Curing_Profile.lua
   - src_new/scripts/levi_ataxia/levi/ataxia/ataxia/009_Curingset_State.lua
+  - src_new/scripts/levi_ataxia/levi/levi_scripts/class_detect/001_Class_Detect_Engine.lua   # calls ataxia_switchCuringsetSend
 last_verified: 2026-10-10
 ---
 
@@ -52,6 +53,8 @@ Rules from our code and history (CONFIRMED-in-code; details in CLAUDE.md, "Serve
 - **At most 5 `CURING PRIORITY` commands a second** (Announce #5450). Over it, the server answers "You have exceeded the spam threshold for curing priority. Please see Announce #5450 for details." and DROPS the write. Bulk changes must use the multi-set form; our table goes out as about 8 commands of 20 pairs (v4.7.403), and trigger 787 re-sends it if a refusal is ever seen.
 - **Route every write through `ataxia_sendCuringPriority()`.** It throttles to 4 commands per
   second (the server allows 5) and refuses stored writes while the PvE `bash` set is active.
+  A swap we will undo goes through `ataxia_setAffPrio` or `ataxia_sendPrioSwap`, which use it and record the swap.
+  The one exception is the batch at a class-set switch (below): it is one `send()` for the order it guarantees, charged to the same window.
 - **Base and per-stack priorities** (announced 2026-08-19, not in HELP 13.7.8):
   `CURING PRIORITY BURNING 8` sets the base, and `BURNING5 2` overrides at exactly five
   stacks. A bare write never beats an existing per-stack entry.
@@ -59,12 +62,11 @@ Rules from our code and history (CONFIRMED-in-code; details in CLAUDE.md, "Serve
   defences.
 - Nothing parses a rejected `curing priority` command. After changing names, check with
   `CURING PRIORITY LIST`.
-- **Every stored swap trusts one cache.** `ataxia.curingprio` is one table for all curingsets
-  (`719_Affliction_Set.lua`:39-40). Since 2026-11-08 `Algedonic.ApplySwaps` also tests it before
-  WATER, paraAst, astWear and fratLock (`algedonic_defense_1.0/001_Anti_Priorities.lua`:151-210),
-  so a gain no longer re-sends a write the server holds (the write throttle is the point). After a
-  curingset switch that cache can be wrong in either direction ([CONFLICTS](../CONFLICTS.md) #76).
-  The swaps key on our TARGET's class, not our attacker's (#75).
+- **Every stored swap trusts the cache of the active set.** `ataxia.curingprio` mirrors the ACTIVE set only, once a `classDetect` switch or a typed list has refreshed it
+  (`719_Affliction_Set.lua`:39-40; a class-set switch empties it, below; after a login it can hold another set's values, Limits below). Since 2026-11-08 `Algedonic.ApplySwaps` also tests it before
+  WATER, paraAst, astWear and fratLock (`algedonic_defense_1.0/001_Anti_Priorities.lua`:168-227),
+  so a gain no longer re-sends a write the server holds (the write throttle is the point).
+  The swaps key on our TARGET's class, not our attacker's ([CONFLICTS](../CONFLICTS.md) #75).
 
 ## Curingsets
 
@@ -72,6 +74,60 @@ Rules from our code and history (CONFIRMED-in-code; details in CLAUDE.md, "Serve
 (25 credits, non-refundable). Each set holds its own affliction and defence priorities.
 **There is a hard cap.** A live capture showed 22 of 22 in use, so `CURINGSET NEW` can fail
 silently. `ataxia/009_Curingset_State.lua` reads `CURINGSET LIST` before creating anything.
+
+### One priority list per set (v4.7.480)
+
+The user, 2026-11-08: "The purpose of curing sets is to set priorities based on the class you are facing. Classes through skills can only give specific afflictions. So we do curing  sets for them. If Infernal can never give impatience. no need for Impatience to be curing priority impatience 2"
+
+So each class set keeps its own values. The code is `ataxia/ataxia/002_Prio_Management.lua` (:163-192), called by
+`classDetect`. **None of this has run in Mudlet.** The tests are `src_new/tests/test_curingset_priorities.lua`, on a fake
+server with one table per set and the real triggers 716-719.
+
+- **What is tracked.** `ataxia.curingprio` mirrors the ACTIVE set, once a switch or a typed list has refreshed it (Limits). `ataxiaPrioSets.baseline[set]` holds a class set's own
+  values, read from the game, and `ataxiaPrioSets.live[set]` names the swaps we wrote and have not put back. `ataxiaPrioSets`
+  is not saved. A package reload or a connection keeps both tables (`ataxia_prioSetsReset`, :176), because a swap that is up when
+  the link drops is still up on the server. A later read treats those names as stale and keeps the old baseline for them (:322-332, :533-536).
+- **The switch is one send.** `ataxia_switchCuringsetSend(name, from)` (:368) sends `curing priority a 1 b 2` (the set we leave, back to
+  its own values, while it is still active), then `curingset switch <name>`, then `curing priority list`. The server runs a
+  send's commands in order, so the list cannot hold a later swap. The three `classDetect` sites call it through `switchSend`
+  (`class_detect/001_Class_Detect_Engine.lua`:214). Queued stored writes are dropped at the switch and defence writes kept. If the
+  throttle window has no room the read gives way. On a class set with no baseline `readAgain` (:336) asks again; on a repeat visit or on `normal` nothing does (Limits).
+- **The cache empties at the switch,** so `ataxia_getPrio` answers 0 until the list arrives. `~= N` and `< 26` guards see 0 and send, and
+  the write goes after the batch, so it lands after the list. The two `> N` guards (psionBleed, Magi dehydrated, in `001_Anti_Priorities.lua`)
+  wait for the list and act on the next affliction event. If no list comes, they stay closed for that visit (Limits).
+- **The read is hidden.** Trigger 716 now matches the real header, `Your affliction curing priorities for the priority set <name>:`
+  (`raw/live/curing-priority-list_normal_2026-10-10.txt`). Its old exact pattern could not match that header, so the chain 716/717/718 could not open on it
+  since at least that capture. That is one capture; `kb/raw` holds no banner line from 716 or 718, which fits but does not prove it. When the header names a set we asked about within 3 s (`LIST_TIMEOUT`, :194), the triggers and a temporary trigger delete
+  the lines and fill that set's baseline (`ataxia_prioListHeader`, :495). A read that is cut off fills nothing. One prompt line after the hidden list still prints.
+- **A list the user types** prints the game's own lines and changes no baseline. The chain opens now, so it refreshes the cache and saves the
+  settings (718), which it could not do since at least that capture. A wrapped continuation row is not read on that path.
+- **The restore rule.** `ataxia_restorePrio` (:281) writes what `ataxia_defaultPrioAff` answers: on a class set, that set's baseline value, and no
+  write at all if it is unknown; on `normal`, the table in `ataxia_defaultCuringPrios()`; on the `bash` set the guard drops the write as before.
+- **A swap needs a baseline.** On a class set whose list has not been read, `ataxia_setAffPrio` and `ataxia_sendPrioSwap` write nothing, and
+  `ApplySwaps` sends again on the next gain. A read that gave way or was lost is asked again, by direct send, at most 3 times, while that set is still active.
+- **New stored swaps** go through `ataxia_setAffPrio` or `ataxia_sendPrioSwap` (:270), so a switch puts them back. `ataxia_sendCuringPriority` alone
+  is for writes we never undo: the default table and the [+]/[-] links. A value the user types or clicks during a visit is adopted
+  into that set's baseline (`ataxia_prioTuned`, :547, from trigger 719), unless a read is due or the name is live.
+- **Timers across a switch.** `ataxia_sendDefaultPrios` stops at any set change (`ataxiaPrioGen`, bumped by `ataxia_switchCuringsetSend` and
+  `ataxia_bashProfileOn`), and the table stays marked unsent. A write never passes the queue, the drain drops stored writes while the bash
+  set is active, and the drain's armed flag is local, so a queue restored from a save cannot block later writes.
+- **Login.** `levilogin`'s six switches to normal go through `ataxia_loginCuringsetNormal` (`login/001_Login_Function.lua`:18), so
+  `classDetect.state.currentCuringset` moves only where the server moves.
+
+**Limits.** Not measured in game: whether the reply comes contiguous, whether `curing priority list` counts against the 5-a-second limit
+(we count it), and how the temporary and permanent triggers order on one line (a test proves the read does not depend on it). A class-set restore does nothing until the first read of
+that set since Mudlet started, so a one-shot swap on a first visit is dropped. A swap left behind before this version reads as that set's own
+value. A typed `curingset switch` is untracked. Bash profile switches stay raw: the cache and the state are left alone. The client's fixed
+one-second window against the server's sliding one can still draw a refusal.
+
+- **The cache comes back from a save.** `ataxia.curingprio` is inside `ataxia`, which is saved whole (`ataxia/001_Save_Load_Settings.lua`:79), so a save during a
+  class-set visit keeps that set's list. `ataxia_loginCuringsetNormal` moves the server to normal for six classes with no read and no reset. After a login the cache can
+  hold the values of the set active at the last save, until a `classDetect` switch or a typed list refreshes it. Until then a `~= N` guard can skip a swap, and
+  `damnationStillEscalated` (`002_Damnation_Defence.lua`:167) can read a class value as a standing escalation. Before v4.7.480 the cache held only confirmed writes, so the
+  hidden read makes this larger. Read from the code, not seen in game.
+- **A visit with no list.** `readAgain` asks only for a class set with no baseline (:338), and `giveUpReads` goes through it. On a repeat visit or on `normal`, a read that
+  gave way to the 5-a-second budget or a lost reply leaves the cache empty for that visit, filled only name by name from the confirmation line (719). `ataxia_getPrio` answers 0,
+  so a `~= N` guard sends until the game confirms that name, the two `> N` guards stay closed, and the [+]/[-] links return early (:584, :596). Read from the code, not seen in game.
 
 ## Tree scenarios
 

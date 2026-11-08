@@ -116,7 +116,7 @@ function gotDef()
     
     if def:lower() == "shield" or def:lower() == "curseward" then
       if ataxia.prioritySwaps and ataxia.prioritySwaps.parshield and ataxia.prioritySwaps.parshield.active then
-        ataxia_sendCuringPriority("curing priority slickness 25;curing priority paralysis 25", false)
+        ataxia_sendPrioSwap("curing priority slickness 25;curing priority paralysis 25", false)
         tempTimer(1.4, [[ ataxia_restorePrio("paralysis");ataxia_restorePrio("slickness") ]])
       end
     elseif def == "alertness" then

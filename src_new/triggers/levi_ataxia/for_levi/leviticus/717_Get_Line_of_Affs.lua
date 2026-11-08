@@ -36,15 +36,13 @@ patterns:
   type: 1
 ]]--
 
--- :lower() to match trigger 719, which already normalises. ataxia.curingprio has two
--- writers and every reader (ataxia_getPrio, ataxia_defaultPrioAff, the default table) is
--- lowercase-keyed, so differing casing between the two would split the key silently.
---
--- %w+ keeps a per-stack token whole (`burning5` is one word). If the server ever renders a
--- stack row as `burning (5)` this yields TWO tokens and writes a junk numeric key -- which
--- is why the CURING PRIORITY LIST readback is worth eyeballing after any change to the
--- stack table. Nothing parses a rejected priority, so this is the only place a wrong
--- assumption about the row format would surface.
-for aff in matches[3]:gmatch("%w+") do
-	ataxia.curingprio[aff:lower()] = tonumber(matches[2]) 
+-- Our own read after a switch hides the row and fills that set's baseline, in 002_Prio_Management.
+if ataxia_prioListRow(matches[2], matches[3]) then return end
+
+-- A list the user typed. Keys are lowercase like every other reader and writer of
+-- ataxia.curingprio. The game prints a per-stack row as `burning(5)`; ataxia_prioRowNames turns it
+-- into `burning5`, which is the name a write takes. A row that wraps is read only as far as its
+-- first line here.
+for _, aff in ipairs(ataxia_prioRowNames(matches[3])) do
+	ataxia.curingprio[aff] = tonumber(matches[2])
 end

@@ -90,24 +90,30 @@ local LOCK_BREAKERS = {
 }
 
 --------------------------------------------------------------------------------
--- FITNESS WAITS FOR EQUILIBRIUM (2026-11-01).
+-- FITNESS AND SHRUGGING WAIT FOR EQUILIBRIUM (2026-11-01, shrugging 2026-11-08).
 --
--- User: "fitness needs balance and eq", "It shouldnt fitness without EQ". The wiki lists balance
--- only. Live probe (kb/raw/live/probes_2026-11-01.txt): `touch shield;fitness` ran FITNESS 3.3 s
--- later, when equilibrium returned. So a send with equilibrium down does not fail; the game's
+-- FITNESS. User: "fitness needs balance and eq", "It shouldnt fitness without EQ". The wiki lists
+-- balance only. Live probe (kb/raw/live/probes_2026-11-01.txt): `touch shield;fitness` ran FITNESS
+-- 3.3 s later, when equilibrium returned. So a send with equilibrium down does not fail; the game's
 -- auto-queue holds it. That is the danger: a held FITNESS still fires after the asthma has gone,
 -- and "You are already quite fit." costs 2.8 s of balance.
 --
+-- SHRUGGING spends equilibrium. The user's paste, 2026-11-08: "Focusing inward, you purge your body
+-- of afflictions." then "Equilibrium used: 1.36s." The user approved this hold ("shrugging yes").
+-- No probe has shown how the game treats a shrug sent with equilibrium down.
+--
 -- Unknown is not down: only an explicit false holds it, because a lock-breaker fails open. Only
--- FITNESS is held. No probe has tested the other classes' cures.
+-- these two cures are held. No probe has tested the other classes' cures.
 --
 -- Callers test this BEFORE they arm attemptedLockBreak. Otherwise the 1.5 s throttle could delay
 -- the cure after equilibrium returns. The prompt heartbeat retries it on the recovery prompt.
 --------------------------------------------------------------------------------
-function ataxia_fitnessHeldForEq()
+local EQ_HELD_CURES = { fitness = true, shrugging = true }
+
+function ataxia_activeCureHeldForEq()
 	local v = ataxia.vitals
 	if not v or v.eq ~= false then return false end
-	return LOCK_BREAKERS[ataxiaTemp.class] == "fitness"
+	return EQ_HELD_CURES[LOCK_BREAKERS[ataxiaTemp.class]] == true
 end
 
 -- Debounced: the per-prompt heartbeat would otherwise spam this every 0.5s.
@@ -120,8 +126,8 @@ function ataxia_lockBreakBlockedEcho()
 		cecho("\n<red>[LOCK]<reset> Active cure BLOCKED by <yellow>" .. blocker .. "<reset> -- cure it or run.")
 	elseif ataxiaTemp.activeCureUsed then
 		cecho("\n<red>[LOCK]<reset> Active cure on COOLDOWN.")
-	elseif ataxia_fitnessHeldForEq() then
-		cecho("\n<yellow>[LOCK]<reset> FITNESS waits for <yellow>equilibrium<reset>.")
+	elseif ataxia_activeCureHeldForEq() then
+		cecho("\n<yellow>[LOCK]<reset> " .. LOCK_BREAKERS[ataxiaTemp.class]:upper() .. " waits for <yellow>equilibrium<reset>.")
 	else
 		cecho("\n<red>[LOCK]<reset> Active cure unavailable (no lock-breaker for this class).")
 	end
@@ -144,7 +150,7 @@ function ataxia_tryActiveCure()
 	if ataxiaTemp.activeCureUsed then return end
 	if attemptedLockBreak then return end
 	if not ataxia_canActive() then return end
-	if ataxia_fitnessHeldForEq() then return end
+	if ataxia_activeCureHeldForEq() then return end
 	attemptedLockBreak = tempTimer(1.5, [[ attemptedLockBreak = nil ]])
 	ataxia_breakLock()
 end
@@ -164,7 +170,7 @@ function ataxia_lockBreak()
 		return
 	end
 
-	if ataxia_fitnessHeldForEq() then
+	if ataxia_activeCureHeldForEq() then
 		ataxia_lockBreakBlockedEcho()
 		return
 	end

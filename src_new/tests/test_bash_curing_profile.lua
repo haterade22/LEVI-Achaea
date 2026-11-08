@@ -425,8 +425,8 @@ describe("bash curing profile -- stored-priority write guard", function()
 
   it("drops a STACK-SUFFIXED priority while the bash set is active", function()
     -- The headline hole: the pattern was letters-only, so `burning5` did not match and the
-    -- write sailed into whichever curingset was active. Reachable from the UI, since
-    -- trigger 717 makes `burning5` its own row in ataxia_showPrios.
+    -- write sailed into whichever curingset was active. The [+]/[-] links write any
+    -- name in ataxia.curingprio, and that cache can hold `burning5`.
     armed(true)
     ataxia_sendCuringPriority("curing priority burning5 2", false)
     expect(#mock.sent_commands).toBe(0)

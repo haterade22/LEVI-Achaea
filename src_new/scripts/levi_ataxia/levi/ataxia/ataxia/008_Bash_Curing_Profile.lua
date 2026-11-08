@@ -364,6 +364,8 @@ function ataxia_bashProfileOn()
     return
   end
   s.active = true
+  -- Stops a default-table send still on its timers (ataxia_sendDefaultPrios).
+  ataxiaPrioGen = (ataxiaPrioGen or 0) + 1
   send("curingset switch " .. s.setname)
   if ataxiaEcho then ataxiaEcho("Curing -> <green>" .. s.setname .. "<reset> (PvE: limbs first, mental spray parked).") end
 end

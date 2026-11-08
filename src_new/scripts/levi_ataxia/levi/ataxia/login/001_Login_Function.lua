@@ -13,6 +13,13 @@ attributes:
 packageName: ''
 ]]--
 
+-- Six branches of levilogin move the server to normal. The state moves here, and only here: the
+-- other classes send no switch, so the server stays on the set the state already names.
+function ataxia_loginCuringsetNormal()
+  if classDetect and classDetect.state then classDetect.state.currentCuringset = "normal" end
+  send("curingset switch normal")
+end
+
 function levilogin()
 enableV3()
 sendGMCP('Core.Supports.Add ["Comm.Channel 1"]')
@@ -145,7 +152,7 @@ expandAlias("defup shi")
 -- v4.7.456: the staff's item id, not the bare keyword "staff", which can wield an illusion staff
 -- (shikudo.staffRef, shikudo/006). With no id known yet it is still "staff".
 send("wield "..((shikudo and shikudo.staffRef) and shikudo.staffRef() or ataxia.getWeapon("staff2")))
-send("curingset switch normal")
+ataxia_loginCuringsetNormal()
 end
 end
 
@@ -153,7 +160,7 @@ if gmcp.Char.Status.class == "Psion" then
 expandAlias("defswitch psion")
 expandAlias("defup psion")
 send("wield shield")
-send("curingset switch normal")
+ataxia_loginCuringsetNormal()
 end
 
 if gmcp.Char.Status.class == "Bard" then
@@ -161,7 +168,7 @@ expandAlias("defswitch bard")
 expandAlias("defup bard")
 send("wield left rapier;wield right lyre")
 send("compose paean sonata scherzo maqam prelude")
-send("curingset switch normal")
+ataxia_loginCuringsetNormal()
 end
 
 
@@ -169,21 +176,21 @@ if gmcp.Char.Status.class == "Apostate" then
 expandAlias("defswitch apoo")
 expandAlias("defup apoo")
 send("wield right shield;summon baalzadeen;summon daegger")
-send("curingset switch normal")
+ataxia_loginCuringsetNormal()
 end
 
 if gmcp.Char.Status.class == "Blademaster" then
 expandAlias("defswitch bm")
 expandAlias("defup bm")
 send("unwield left;unwield right;sheathe blade")
-send("curingset switch normal")
+ataxia_loginCuringsetNormal()
 end
 
 if gmcp.Char.Status.class == "Serpent" then
 expandAlias("defswitch serp")
 expandAlias("defup serp")
 send("wield right dirk;wield left shield")
-send("curingset switch normal")
+ataxia_loginCuringsetNormal()
 end
 
 if gmcp.Char.Status.class == "Runewarden" then

@@ -209,6 +209,18 @@ function classDetect.inParty()
   return type(channels) == "table" and channels.party ~= nil
 end
 
+-- The one way classDetect changes set. It puts back the swaps of the set we leave and reads the
+-- new one in the same send (ataxia_switchCuringsetSend), so it must read the old name first.
+local function switchSend(setName)
+  local from = classDetect.state.currentCuringset
+  classDetect.state.currentCuringset = setName
+  if ataxia_switchCuringsetSend then
+    ataxia_switchCuringsetSend(setName, from)
+  else
+    send("curingset switch " .. setName, false)
+  end
+end
+
 function classDetect.switchCuringset(className)
   if not classDetect.state.enabled then return end
   if classDetect.bashProfileOwnsCuringset() then return end
@@ -221,8 +233,7 @@ function classDetect.switchCuringset(className)
   if (now - classDetect.state.lastSwitchTime) < (classDetect.config.debounceMs / 1000) then return end
 
   classDetect.state.lastSwitchTime = now
-  classDetect.state.currentCuringset = setName
-  send("curingset switch " .. setName, false)
+  switchSend(setName)
 
   -- Re-apply player's own defence priorities after curingset switch.
   -- Curingsets carry their own SSC defence list which may include abilities
@@ -267,7 +278,6 @@ function classDetect.resetToNormal()
     return
   end
 
-  classDetect.state.currentCuringset = "normal"
   classDetect.state.attackerClass = nil
   classDetect.state.attackerName = nil
   classDetect.state.attackerSpec = nil
@@ -277,7 +287,7 @@ function classDetect.resetToNormal()
     classDetect.state.combatTimeout = nil
   end
 
-  send("curingset switch normal", false)
+  switchSend("normal")
 
   if classDetect.config.echoSwitches then
     classDetect.echo("Combat ended, curingset reset to: <white>normal")
@@ -341,8 +351,7 @@ function classDetect.setAttackerClass(attackerName, className)
     classDetect.state.attackerName = nil
     classDetect.state.attackerSpec = nil
     if classDetect.state.currentCuringset ~= "normal" then
-      classDetect.state.currentCuringset = "normal"
-      send("curingset switch normal", false)
+      switchSend("normal")
       if classDetect.config.echoSwitches then
         classDetect.echo("<red>Multiple attackers detected -- staying on <white>normal<plum> curingset")
       end

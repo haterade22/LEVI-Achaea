@@ -36,6 +36,9 @@ patterns:
   type: 3
 ]]--
 
+-- Our own read after a switch ends here and prints nothing.
+if ataxia_prioListEnd() then return end
+
+-- A list the user typed. Its output stays exactly what the game sent.
 setTriggerStayOpen("Curing Priority List", 0)
-ataxiaEcho("Priorities have been updated and saved.")
 ataxia_saveSettings(false)
