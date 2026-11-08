@@ -61,7 +61,7 @@ ataxia setup weapons         -- Weapon IDs for your class
 ataxia setup basher          -- Flee thresholds, gold pack, shield swap
 ataxia setup sipping         -- Health/mana sip percentages
 ataxia setup tracking        -- Affliction tracking settings
-ataxia setup combat          -- Party relay, auto-loot, gag clot
+ataxia setup combat          -- Party relay, auto-loot, gag clot, Serpent attack first
 ataxia setup gui             -- Toggle the GUI on/off
 ataxia setup ndb             -- City highlight colours, enemy formatting
 ```
@@ -141,7 +141,7 @@ Automated combat for 18+ classes. Each class has its own subdirectory under `src
 
 | Class | Command | Kill Route |
 |-------|---------|------------|
-| Serpent | `ek` | Ekanelia lock, darkshade, scytherus |
+| Serpent | `ek` | Ekanelia lock, darkshade, scytherus. `aconfig serpent attackfirst on\|off` sends the attack as each round's first command (off by default) |
 | Shaman | `zz` | Tzantza, affliction locks, bleed |
 | Blademaster | `bmd`/`bmbs` | Limb prep, brokenstar |
 | Infernal DWC | `zz` | Vivisect, damage kill |

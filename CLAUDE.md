@@ -26,7 +26,9 @@ This repository contains the **"For Levi" Mudlet package**, a comprehensive comb
 line as the game sent it (gagged or not), prompts, every command we sent (echoed or not), our GMCP afflictions and
 defences, and our tracker's changes to the target, each with a millisecond timestamp. It starts on its own (a player
 attacks us, or we queue a command naming our target while the target is a player in the room) and stops after a kill,
-a death, an arena verdict or 60 s with nothing naming the opponent. `python tools/fightlog_import.py` copies the logs
+a death, an arena verdict or 60 s with nothing naming the opponent. Its header ends with ` | rounds raw|alias`, and on
+a Serpent (v4.7.479) with ` | serpent attackfirst on|off`, so a log says which round order it holds
+(`026_Fight_Log.lua`:264-270). `python tools/fightlog_import.py` copies the logs
 into `kb/raw/logs/ours/` and summarises them; it reads the Mudlet profiles on this machine, so run it before
 analysing one of the user's fights. Row format: `kb/raw/logs/README.md`.
 
@@ -142,7 +144,7 @@ LEVI-Achaea/
 │   ├── sim/forward.lua        # the simulator engine: pure Lua 5.1, no Mudlet calls; rule tests in src_new/tests/test_sim_forward.lua. NEVER edit it: its bytes feed kb_sim.py's input hash
 │   ├── kb_rules.py            # KB: the whole-fight engine's rules (clocks.json, afflictions.json, venoms.yaml, curing prios, kb/sim/rules_hand.json) -> kb/sim/rules.json + rules.md, each rule tagged MEASURED/READ/WIKI/PLAYER/ASSUMED; `--check` in CI, so re-run it when clocks.json moves
 │   ├── kb_events.py           # KB: the four Serpent logs as one event stream (JSON Lines v1), the census, the DSTAB-vs-eat race table with its frozen golden row -> kb/sim/events.md + .json; `--check` and `--dump KEY`
-│   ├── theorycraft.py         # CLI: a scripted Serpent vs a victim (--victim --gap --script [--median] [--seeds N] [--clock-draw normal]), a log in the engine's columns (--log Z5 --from ROW), a fork (--log Z5 --at ROW --then ...) that starts from the row's board, clocks, balance/equilibrium, kept defences and the ones on their way (a FLAY of the shield, a rebounding smoke, a coating apply; the logger's own shield drop is not a FLAY). A gap under the floor (a fork's default 1.83 too) and a row after the last prompt are refused. A second cost line ends the open one (an impulse's adds); slickness strips the sileris coating and, if still on at the 10 s mark, stops a pending one from hardening. Output is MODEL, not a log; an ALT line names each rule whose alternative ran, GAP says what the gap draw is, SEEDS says the P lines of a --median page are drawn
+│   ├── theorycraft.py         # CLI: a scripted Serpent vs a victim (--victim --gap --script [--median] [--seeds N] [--clock-draw normal]), a log in the engine's columns (--log Z5 --from ROW), a fork (--log Z5 --at ROW --then ...) that starts from the row's board, clocks, balance/equilibrium, kept defences and the ones on their way (a FLAY of the shield, a rebounding smoke, a coating apply; the logger's own shield drop is not a FLAY). A gap under the floor (a fork's default 1.83 too) and a row after the last prompt are refused. A second cost line ends the open one (an impulse's adds); slickness strips the sileris coating and, if still on at the 10 s mark, stops a pending one from hardening. Output is MODEL, not a log; an ALT line names each rule whose alternative ran, GAP says what the gap draw is, SEEDS says the P lines of a --median page are drawn. v4.7.479: `impulse SUGGESTION VENOM` action (it bites and spends balance too), `--gap raw|queue|queue-late|others` (our measured gaps and costs from the 2026-11-07 Serpent spar, or other Serpents'; the CLI never picks one), an OURS line, `--flay-missing coating|nothing`, `--ssc-gain saibel` (one opponent's open-channel delay, an alternative only); the SSC delay is two cases, `ssc.delay.gain` and `ssc.delay.return`
 │   ├── sim/fight.lua          # the whole-fight engine (event loop, labels, race); sim/victim.lua (cure channels, class cures, defences); sim/attackers.lua (script parser, attack effects). Pure Lua 5.1; wired with forward.lua's RNG; tests in src_new/tests/test_sim_fight.lua
 │   ├── sim/gates_whole.json   # FROZEN 2026-11-07: the bars of the whole-fight plan (stages 1-4). A change after a gate ran is a failed round and needs the user's word
 │   ├── test_kb_rules.py, test_kb_events.py, test_theorycraft.py  # their tests (in CI); test_theorycraft pins the golden text of the user's example and the label parity with kb_replay.is_true
@@ -616,6 +618,12 @@ them cured the first as the only candidate: hence `enamation/001` gives V3 one b
 (`curing/002`), then `tSingleRandom({ noErase = true })`, which only returns its pick: V3 branches the
 cure, what it took for certain leaves tAffs too, and one level-1 broken limb (simple-tracked) goes only
 when nothing branch-tracked was there. Read `ataxiaTemp.targetTreeAt` only while `tBals.tree` is false.
+**The tree pool is every tracked affliction the game marks `NoRandomCure: No` (v4.7.479).** `treeCurableAffsV3`
+(`affliction_tracking_core/008`) grew from 27 to 77. Burning and the fractures stay out: they come in levels or stacks,
+and V3 holds each as one affliction. In the 2026-11-07 Serpent spar Saibel's tree most likely took recklessness (INFERRED, CONFLICTS #65), her only
+affliction then by our record, and the old pool kept it for 5 more rounds. `kb/afflictions/database.md` is regenerated from it. An
+accepted tree also restarts 389's echoes at 0/4/9/14 s; it returned while one was still pending, so a tree just before
+the 14 s echo got none.
 **`tBals` is the TARGET's cure balances, and `ataxia_resetTargetBals()` (`016`) is its one reset (2026-11-01, not yet
 released).** Do not write `tBals = {...}` by hand. Running timers write to the global table, so a replaced table left
 the old target's 13 s tree timer alive, and it marked the new target's tree up early and cleared its timer id. Two of
@@ -633,6 +641,21 @@ V3 held at its last sync and holds nowhere now, and every key whose probability 
 than clearing tAffs, because its callers write their own defaults first. With V3 on, trigger 318 does not erase a
 passive's cure: `onPassiveCureV3` charges it, takes a level-1 limb when no branch can pay, and reports certain
 cures through `ataxia_tarAffFaded`. A contradiction in `collapseAffAbsentV3` removes only the disproved one.
+**One eat is one cure, and V3 picks it (herbs/005 Bloodroot, v4.7.479).** With V3 on, the V1 erase chain no longer runs
+after `onHerbCureV3("bloodroot")`: it read tAffs after V3's copy, so it took a SECOND affliction per eat (the spar's
+slickness vanished this way). A cure V3 made certain is reported through `ataxia_tarAffFaded` (the fight log's `-tar`
+row), as the passive does; a cure V3 only branched over is a guess and is not reported. 005 also had a stray `else`
+that made the TARGET's own eat skip her clocks (no `targetIshere`, plant clock or herb prediction; the cure still ran) and made ANY bystander's
+eat erase our target's paralysis or slickness. It now matches with `isTargeted`, like the other herb triggers.
+**A "not here" refusal is not the target leaving (641, v4.7.479).** The game gives the same three lines for any command
+that names someone absent, ours included. In the spar the Serpent round's `order adder kill <target>` (no adder out)
+drew them, and each one started the 1.4 s TargetOutOfRoom timer: 7 erasing ticks and 2 `resetStatesV3` while she stood
+in the room and cured. 641 now changes nothing while `ataxia.playersHere` lists the target (case-blind, either name may
+start the other, as `isTargeted` compares). GMCP RemovePlayer still starts the timer when the target leaves. The reading
+is wrong for a target GMCP lists but our commands cannot see (a hidden player, `kb/CONFLICTS.md` #38).
+**Masochism's self-harm lines (433, v4.7.479):** "rams <his|her> fist into <his|her> jaw", "drives a clenched fist into
+<his|her> gut" and "uses <his|her> right foot to stomp on <his|her> left as hard as possible", beside the revulsion line.
+Before, 433 read the jaw line only with "her" and not the other two: 3 of the spar's 5 lines recorded nothing.
 
 ### ataxiaBasher (Automated Hunting System)
 
@@ -2490,11 +2513,13 @@ stored, and is always safe.
 
 **PvE bashing curing profile** (`ataxia/ataxia/008_Bash_Curing_Profile.lua`, v4.7.172): the
 default table (`001_Default_Curing_Prios.lua`) is tuned entirely for PvP, which loses bashers.
-Two balances are contended and the PvP ordering spends both on afflictions that do nothing to
-a denizen: **potash/moss shares the EATING balance with every cure-mineral** (QUESTIONED 2026-10-11:
-Mystor's client times moss on its own `[Moss Recov]`, and an Apostate ate plumbum and potash in the same
-second; `kb/CONFLICTS.md` #11), and **mending/
-restoration shares the SALVE balance with crackedribs/fractures/traumas**. So the PvE table
+Its stated reason named two contended balances that the PvP ordering spends on afflictions that do
+nothing to a denizen. **The first is WRONG: potash/moss does NOT share the eating balance.** It has its own
+clock (settled 2026-11-07, `kb/CONFLICTS.md` #11, now Resolved): in our Serpent spar all 4 of Saibel's potash
+eats fell inside her herb eat-to-eat, one 0.001 s after a magnesium (`kb/raw/logs/ours/2026-11-07_164635_Saibel.log`
+rows 415, 418), and her herb eats stayed 1.506 s or more apart around them; Mystor's client already timed moss on its
+own `[Moss Recov]`, and an Apostate ate plumbum and potash in the same second. So moss costs the basher no cure-mineral.
+The second stands: **mending/restoration shares the SALVE balance with crackedribs/fractures/traumas**. So the PvE table
 inverts it — cure-channel blockers (anorexia/slickness/paralysis) > limbs at 4-6 (arms gate
 the attack, legs gate every escape) > damage math > salve competitors parked at 20 > junk
 mental spray parked at 25. It also **re-flattens the PvP burn escalation** (`burning4`/`burning5`
@@ -2554,9 +2579,40 @@ Modern Serpent combat revolves around two key mechanics. What is confirmed and w
   hypochondria are complex suggestions, and impatience is no suggestion at all.
 - Impatience comes from the monkshood REACTION: `impulse <target> masochism monkshood` (relayed notes;
   our code sends it) brings the masochism, so with asthma + weariness up the reaction adds impatience.
-  IMPULSE taking a venom, and what that costs, are unverified (`kb/CONFLICTS.md` #20).
+- **Captured from our seat in the 2026-11-07 spar** (`kb/raw/logs/ours/2026-11-07_164635_Saibel.log`):
+  an impulse with a venom bites in the same packet and spends BOTH equilibrium (printed 1.44) and
+  balance (printed 1.7), 13 of 13; equilibrium is back first, so the bite's balance gates the round
+  (`kb/CONFLICTS.md` #20, #68). The monkshood reaction fired on 8 of 10 monkshood bites, all 7 masochism
+  impulses among them. Whether fangbarrier blocks an impulse, and the reaction's conditions, stay open.
 - The no-fangbarrier rule is our code's (`checkImpulseEligible`, after HELP 13.7: the coating stops a
   Serpent's bites). Every impulse path calls it (scytherus mode's since v4.7.420).
+
+**Our measured costs** (the same spar; `kb/sim/rules_hand.json` `attack.cost.own.*`, MEASURED, client clock,
+cost line to recovery): DSTAB 1.634 (n=24), an impulse's bite 1.563 and its equilibrium 1.242 (n=13), FLAY 1.530
+and PINSHOT 1.742 (n=1 each). Our round as played was 1.965 land to land (`attack.gap.own`, n=37), against other
+Serpents' 1.83. Every cost line came about 0.09 s after the round's first reply; whether that step is ours or the
+server's is open (#69), and under the second reading each cost is about 0.12 s higher (each rule's `first_reply`).
+
+**The offense since v4.7.479** (all in `serpent/002_Serpent_Offense.lua`; details and lines in the class doc,
+"The spar fixes in the offense"; tests `test_serpent_spar_fixes.lua`):
+- **No recklessness before a lock.** The user's rule: "We shouldnt be doing recklessness unless we have locked
+  them. Else that is a wasted attack". `recklessnessAllowed()` is anorexia + asthma + slickness, each at
+  `haveAff_tactical` 0.70. It gates eurypteria (class venom and lock_reinforce), the recklessness suggestion,
+  and the loki pair that needs recklessness.
+- **The adder only when it is here.** `order adder kill` goes only when GMCP room items show a living death
+  adder (attrib `m`, not `d`) or we ride it; else one `ADDER:` echo per target. Another Serpent's adder counts
+  as ours (open).
+- **One balance action per round.** PRIORITY 1 sends the flay alone (an impulse spends balance too).
+- **The opener** puts the round's wield and attack straight after the pinshot and leaves out combatQueue's
+  idle `g body`/`g gold`/`stand`. The rebounding pre-empt arms only on a rebounding a game line showed
+  (`serpent.state.reboundingSeen`). The exit block goes last in the round.
+- **`aconfig serpent attackfirst on|off`** (`configs/034_Serpent_Attack_First.lua`,
+  `ataxia.settings.serpentattackfirst`, default off): the attack is the round's first command, with a wield
+  only when GMCP shows the weapon is not in hand (ids learned in `ataxiaTemp.serpentWeaponIds`) and a stand
+  only when prone. It is the probe for the open 0.09 s step. `ekstatus` shows the adder, attack-first and
+  recklessness state.
+- **Every round is one `send()` that Mudlet splits**: only its first piece enters
+  `queue addclear freestand`, the rest go raw (`buildRound`).
 
 **Ekanelia** - BITE venom transformation that ADDS bonus afflictions:
 | Venom | Conditionals Required | Normal + Bonus Effect |
@@ -2569,7 +2625,8 @@ Modern Serpent combat revolves around two key mechanics. What is confirmed and w
 
 These are our own `EKANELIA_TABLE`: the game's list (EKANELIA / EKANELIA STUDY) was never captured,
 and the relayed notes confirm only monkshood. Since v4.7.419 the success line (`serpent/016`) records
-each reaction's result on the target (`serpent.EKANELIA_RESULTS`).
+each reaction's result on the target (`serpent.EKANELIA_RESULTS`). The 2026-11-07 spar saw that line,
+"You sense the weakness in <target> as your <venom> takes hold.", for monkshood (8 of 10) and loki (1 of 2).
 
 **Fratricide** (AFFLICTION SHOW): "Grants major negative poison resist and causes hypnotic impulses to
 relapse a short time after being first introduced." Cure: Eat Lobelia / Eat Argentum.
@@ -2598,7 +2655,8 @@ it runs only while OUR TARGET is a Serpent in the NDB):
    blocks the monkshood route (the impulse brings it); denying asthma or weariness does (astWear swap).
 
 **Key Files**: `.claude/classes/serpent.md`, `src_new/scripts/.../serpent/002_Serpent_Offense.lua`
-(the only file in `levi_scripts/serpent/`), `src_new/tests/test_serpent_notes.lua`
+(the only file in `levi_scripts/serpent/`), `configs/034_Serpent_Attack_First.lua`,
+`src_new/tests/test_serpent_notes.lua`, `src_new/tests/test_serpent_spar_fixes.lua`
 
 **Limb Damage-Based**: Break limbs to enable killing blows
 - Limbs track damage as percentage (0-200%+)
@@ -3151,6 +3209,17 @@ on, it is sent at EVERY login (`login/001`) and by `aconfig seebalances <on|off>
 sent, and the game keeps what it has, so the user's own character already has it on). The game then prints `Balance used: 2.8s.` and `Equilibrium used: 3.40s.`, so every fight log
 holds the true costs (`kb/raw/live/seebalances_2026-11-01.txt`). It adds a line after each spend, so a
 trigger that acts on "the next line" can see that line instead (`docs/plans/timing-probes-2026-11.md`).
+
+**A SERPENT ROUND CAN SEND ITS ATTACK FIRST: `aconfig serpent attackfirst <on|off>` (v4.7.479).** A saved setting,
+`ataxia.settings.serpentattackfirst`, **default off** (`002_Check_For_Any_Missing_Variables.lua`), set by the alias
+`configs/034_Serpent_Attack_First.lua` (no argument shows it). On, `serpent/002`'s `buildRound` sends the attack as the
+round's first command: a wield goes before it only when GMCP shows the weapon is not in hand, a raw `stand` only when
+prone, and an equilibrium step the offense puts before the attack (suggest, seal, hypnotise) stays before it. Purge, the
+adder order and combatQueue's commands go after it. Why: in the 2026-11-07 spar the game answered a send's second and
+later commands about 0.09 s after the first, so an attack behind six commands landed about 0.12 s later on our clock.
+Whether that is our side or the server pacing its output is open (`kb/CONFLICTS.md` #69); a spar with it on settles it,
+which is why it is off by default. The setup wizard's combat page shows it (`020_Setup_Wizard.lua`:760), and
+`ataxia setup guide ataxia` entry 16 explains it. A Serpent fight log's header ends with ` | serpent attackfirst on|off`.
 
 **A STATE trigger whose target NAME falls after the wrap reads it from the following rows (v4.7.419-420).**
 An early fragment drops the name, and recording on `target` instead would record a spell cast at anyone

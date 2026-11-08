@@ -36,7 +36,9 @@ patterns:
   type: 1
 ]]--
 
-if matches[2] == target then
+-- isTargeted, like the other herb triggers (002, 011-014): it also accepts a part name (`t sai`)
+-- and completes the target's name. An exact compare sent a part-name target's eat to the old bystander branch.
+if isTargeted(matches[2]) then
 tdeliverance = false
     -- Eating proves no anorexia (anorexia blocks eating)
     erAff("anorexia")
@@ -52,10 +54,29 @@ tdeliverance = false
     -- V2 tracking support: bloodroot cures paralysis or slickness
     if onTargetBloodrootV2 then onTargetBloodrootV2(matches[2]) end
 
-    -- V3 tracking support: bloodroot herb cure
-    if onHerbCureV3 then onHerbCureV3("bloodroot") end
-
-    if tAffs.prone then
+    -- One eat cures ONE affliction. With V3 on, V3 decides which one (it branches on paralysis and
+    -- slickness, and a quicksilver apply collapses the branches, 013). V3 then copies its result into
+    -- tAffs. Until 2026-11-07 the V1 chain below ran after that copy as well: tAffs.paralysis was
+    -- already false, so it erased slickness too, and every eat took two afflictions (the spar's
+    -- slickness vanished this way). So the V1 chain runs only when V3 is off, like 002 Goldenseal.
+    -- The V1 erase also raised "target cured aff" (the fight log's -tar row). onHerbCureV3 raises
+    -- nothing, so a cure it made certain is reported here, as the passive cure does (008): through
+    -- ataxia_tarAffFaded, which also stops a timed clock. A cure V3 only branched over is a guess,
+    -- and it is not reported.
+    local v3 = affConfigV3 and affConfigV3.enabled and onHerbCureV3
+    if v3 then
+      local pool = (curingTable and curingTable.bloodroot) or (curingTableV3 and curingTableV3.bloodroot) or {}
+      local had = {}
+      for _, aff in ipairs(pool) do
+        if getAffProbabilityV3(aff) > 0 then had[#had + 1] = aff end
+      end
+      onHerbCureV3("bloodroot")
+      if ataxia_tarAffFaded then
+        for _, aff in ipairs(had) do
+          if getAffProbabilityV3(aff) < 0.01 then ataxia_tarAffFaded(aff) end
+        end
+      end
+    elseif tAffs.prone then
       tempTimer(0.3, [[
                 if not tAffs.prone then
                     ataxiaEcho("Backtracked paralysis being cured.")
@@ -88,21 +109,14 @@ tdeliverance = false
                 erAff("slickness")
            end
         end
-    else
-            if tAffs.paralysis then
-                erAff("paralysis")
-            elseif tAffs.pyramides then
-        erAff("pyramides")        
-            else
-                erAff("slickness")
-            end
-    
-  
 
-    selectString(line, 1)
-    fg("peru")
-    resetFormat()
-
+    -- The rest is about the TARGET's eat, so it stays in this branch. Until the spar fix
+    -- (2026-11-07), an `else` here closed `if matches[2] == target`. The code below then ran only
+    -- for SOMEONE ELSE's eat, and that branch also erased our target's paralysis, pyramides or
+    -- slickness. So the target's own eat never set targetIshere, the plant clock or the herb
+    -- prediction. Her 29 magnesium eats in that spar did not stop the TargetOutOfRoom timer.
+    -- That branch also coloured the line peru, but the red below always replaced it in the same
+    -- pass. So the peru is gone, and the line looks as it did before.
     tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end
     if tAffs.mercury then
@@ -122,8 +136,9 @@ tdeliverance = false
         ]])
     end    
     targetIshere = true
-  predictBal("herb", 1.55)	
+  predictBal("herb", 1.55)
 end
+-- Every eat line, the target's or anyone else's, is red. A bystander's eat changes nothing else.
 selectString(line, 1)
 	fg("red")
 	resetFormat()

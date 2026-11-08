@@ -37,9 +37,14 @@ cured through it. See [README.md](README.md) for the overall model.
   Lord, the pressure cure competes with valerian and elm for the same 1.48 s clock.
 - **Anorexia may also block sips (INFERRED).** Its line reads "The idea of eating or drinking is repulsive to you."
   (`2026-11-01_..._LcJC-rJ5`:673). No sip was sent under anorexia in the fights checked. The table above lists no blocker.
-- **Eating is shared with moss/potash.** Healing by moss and curing by herb compete for the
-  same eat. This is the reason the PvE bash curing profile exists
-  (`ataxia/008_Bash_Curing_Profile.lua`).
+- **Moss and potash have their own clock, not the eat's.** Potash, 4 of 4 (MEASURED, 2026-11-07): Saibel ate potash
+  0.001 s after a magnesium and 0.961 s after an aurum, and a herb 0.39-0.73 s after a potash, while her herb
+  eat-to-eat never fell under 1.506 s (n=47). The rows are in `raw/logs/ours/2026-11-07_164635_Saibel.log`
+  (415-418, 638-688, 910-916, 1419-1423), from our seat. Moss to its own recovery line is 5.91-5.94 s
+  ([foundations](../mechanics/foundations.md), Clocks). So healing by moss does not take a herb's eat
+  ([CONFLICTS](../CONFLICTS.md), Resolved 2026-11-07, was #11). The PvE bash curing profile
+  (`ataxia/ataxia/008_Bash_Curing_Profile.lua`) gave the shared eat as one of its reasons; its other reason, the
+  salve below, stands.
 - **Salves are shared between limb mending/restoration and the traumas** (concussion,
   mildtrauma, serioustrauma). The same profile parks those at 20 so limbs come first while bashing.
 - **The four fractures are NOT salve cures** (corrected 2026-10-23, v4.7.449). `crackedribs`,

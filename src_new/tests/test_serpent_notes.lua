@@ -71,9 +71,10 @@ for _, f in ipairs({
 end
 
 -- The cure line's temp trigger, as 002 registered it (the mock keeps it until mock.reset()).
-local FRAT_CURED
+local FRAT_CURED, REB_STRIPPED
 for _, t in pairs(mock.active_triggers) do
   if t.pattern:find("look of madness", 1, true) then FRAT_CURED = t.callback end
+  if t.pattern:find("You flay away", 1, true) then REB_STRIPPED = t.callback end
 end
 
 -- For B2, taken here for the same reason (world() resets the mock): the trigger 002 registered for
@@ -190,11 +191,17 @@ describe("S1: the monkshood impatience sends respect sileris/fangbarrier", funct
     expect(has(round(), "impulse")).toBeFalse()
   end)
 
-  it("the shield-break flay chains the impulse only when the bite can land", function()
+  -- The flay round chained this impulse until the 2026-11-07 spar showed that an impulse spends
+  -- balance too ("Balance used: 1.7s." on 13 of 13), so the game refuses it after the flay. The
+  -- flay now goes alone, and the impulse goes the next round (test_serpent_spar_fixes, fix 5).
+  it("a shielded target gets the flay alone; the monkshood impulse goes the next round", function()
     world(); Shielded = true; give("asthma", "weariness", "slickness")
     local r = round()
     expect(has(r, "flay Agathon shield")).toBeTrue()
-    expect(has(r, MONK)).toBeTrue()
+    expect(has(r, "impulse")).toBeFalse()
+
+    Shielded = false; erAff("shield")
+    expect(has(round(), MONK)).toBeTrue()
 
     world(); Shielded = true; give("asthma", "weariness", "slickness", "fangbarrier")
     r = round()
@@ -230,17 +237,19 @@ describe("S2: the Ekanelia success line records the reaction's result", function
   end)
 
   it("monkshood: stamps the impatience cooldown, which holds the next send for 2.5 s", function()
-    -- The shield-break branch reads canAttemptImpatience() and returns, so it shows the cooldown
-    -- without PRIORITY 7 (which never read it) sending the same impulse anyway.
-    world(); Shielded = true; give("asthma", "weariness", "slickness")
+    -- PRIORITY 4 reads canAttemptImpatience(). After the reaction, lock mode moves to relapse_lock
+    -- (impatienceDelivered), whose PRIORITY 7 sends the stupidity impulse once and then dstabs, so
+    -- no other branch sends monkshood inside the cooldown. (This test used the flay round's
+    -- shield-break impulse until that impulse left the flay round, 2026-11-07.)
+    world(); give("asthma", "weariness", "slickness")
     expect(has(round(), "impulse Agathon masochism monkshood")).toBeTrue()
     clock = 100.5
     ekanelia("Agathon", "monkshood")
     expect(lastImpatienceAttempt).toBe(100.5)
-    erAff("impatience")                          -- the target cures it at once
-    expect(has(round(), "impulse")).toBeFalse()  -- canAttemptImpatience() is false right after
+    erAff("impatience")                            -- the target cures it at once
+    expect(has(round(), "monkshood")).toBeFalse()  -- canAttemptImpatience() is false right after
     clock = 102.9
-    expect(has(round(), "impulse")).toBeFalse()
+    expect(has(round(), "monkshood")).toBeFalse()
     clock = 103.1
     expect(has(round(), "impulse Agathon masochism monkshood")).toBeTrue()
   end)
@@ -453,6 +462,11 @@ describe("the offense's timers run on getEpoch, not os.clock", function()
   it("the rebounding pre-empt fires 8.15 s of getEpoch after the drop, once", function()
     world(); Rebounding = true
     expect(has(round(), "flay Agathon rebounding")).toBeTrue()
+    -- Since 2026-11-07 only a rebounding a game line showed arms the pre-empt: here the flay's
+    -- real strip line, through the trigger 002 registered (test_serpent_spar_fixes, fix 4).
+    expect(REB_STRIPPED ~= nil).toBeTrue()
+    matches = { "You flay away Agathon's aura of rebounding defence.", "Agathon" }
+    assert((loadstring or load)(REB_STRIPPED))()
     Rebounding = false
     round()                                      -- the drop is stamped
     expect(lastReboundingFlay).toBe(100)

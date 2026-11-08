@@ -138,6 +138,72 @@ describe("the tree's random-cure pool (v4.7.416)", function()
   end)
 end)
 
+-- The 2026-11-07 Serpent spar: Saibel's tree at 26.296 most likely took recklessness (INFERRED, CONFLICTS #65), her only affliction then,
+-- and the tracker kept it for 5 more rounds because the pool had no recklessness. The pool is now
+-- built from the game's AFFLICTION SHOW records (kb/raw/live/affliction_show/<aff>.txt).
+describe("the tree's pool is the game's random-curable set (2026-11-07 spar)", function()
+  -- The game's NoRandomCure value for one affliction ("Yes" or "No"), or nil with no record.
+  local function noRandomCure(aff)
+    local fh = io.open("kb/raw/live/affliction_show/" .. aff .. ".txt", "r")
+    if not fh then return nil end
+    local txt = fh:read("*a"); fh:close()
+    return txt:match("NoRandomCure:%s+(%a+)")
+  end
+  local function poolSet()
+    local pool = {}
+    for _, a in ipairs(treeCurableAffsV3) do pool[a] = true end
+    return pool
+  end
+
+  it("every pool entry has a record, and the record says NoRandomCure: No", function()
+    for _, a in ipairs(treeCurableAffsV3) do
+      local flag = noRandomCure(a)
+      if flag ~= "No" then error(a .. " is in the tree pool, but its NoRandomCure is " .. tostring(flag)) end
+    end
+  end)
+
+  it("holds the spar's afflictions: recklessness, masochism, disloyalty, hypochondria, vertigo, fratricide", function()
+    local pool = poolSet()
+    for _, a in ipairs({ "recklessness", "masochism", "disloyalty", "hypochondria", "vertigo", "fratricide" }) do
+      if not pool[a] then error("the tree pool has no " .. a) end
+    end
+  end)
+
+  it("holds every random-curable affliction the tracker can cure, except burning", function()
+    -- Burning comes in levels, and V3 holds it as one affliction (see the note above the pool).
+    local OUT = { burning = true }
+    local tracked = {}
+    local function add(list) for _, a in ipairs(list or {}) do tracked[a] = true end end
+    for _, list in pairs(curingTableV3) do add(list) end
+    for _, list in pairs(salveCureTableV3) do add(list) end
+    add(smokeCureTableV3); add(focusCurableAffsV3); add(passiveCurableAffsV3)
+    local pool, missing = poolSet(), {}
+    for a in pairs(tracked) do
+      if noRandomCure(a) == "No" and not OUT[a] and not pool[a] then missing[#missing + 1] = a end
+    end
+    table.sort(missing)
+    if #missing > 0 then error("random-curable but not in the tree pool: " .. table.concat(missing, ", ")) end
+  end)
+
+  it("a tree with only recklessness on takes it", function()
+    resetStatesV3()
+    if resetCureBalancesV3 then resetCureBalancesV3() end
+    applyAffV3("recklessness")
+    onTargetTreeV3()
+    expect(getAffProbabilityV3("recklessness")).toBe(0)
+  end)
+
+  it("a tree splits evenly between recklessness and clumsiness", function()
+    resetStatesV3()
+    if resetCureBalancesV3 then resetCureBalancesV3() end
+    applyAffV3("recklessness")
+    applyAffV3("clumsiness")
+    onTargetTreeV3()
+    expect(math.abs(getAffProbabilityV3("recklessness") - 0.5) < 1e-9).toBeTrue()
+    expect(math.abs(getAffProbabilityV3("clumsiness") - 0.5) < 1e-9).toBeTrue()
+  end)
+end)
+
 -- Restore the shared Lua state: drop every global the loaded files created and
 -- put back every one they replaced.
 for k in pairs(_G) do

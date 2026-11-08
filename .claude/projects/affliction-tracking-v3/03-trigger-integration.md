@@ -4,6 +4,8 @@
 
 V3 integrates with existing triggers by adding function calls that update the branching state tracker. The V3 calls run alongside existing V2/legacy tracking for redundancy.
 
+**Not a V1 erase after a V3 cure.** V3 copies its result into `tAffs`. A V1 erase chain that runs after it reads that copy and takes a SECOND affliction. Since v4.7.479 the bloodroot trigger runs its V1 chain only with V3 off (see Bloodroot below).
+
 ## Herb Triggers
 
 ### Integration Pattern
@@ -53,6 +55,18 @@ end
 | `008_Ginseng_with_Flushings.lua` | ginseng | `onHerbCureV3("ginseng")` |
 | `009_Bellwort_Cuprum.lua` | bellwort | `onHerbCureV3("bellwort")` |
 | `010_Lobelia.lua` | lobelia | `onHerbCureV3("lobelia")` |
+
+The second table matches today's `herbs/` folder. Most of those triggers reach V3 through `targetAteWrapper` (`affliction_tracking_core/008_V3_Integration.lua:48`), which calls `onHerbCureV3` and nothing else.
+
+#### Bloodroot (`herbs/005_Bloodroot_TEST.lua`), since v4.7.479
+
+The 2026-11-07 Serpent spar found three faults here (`kb/raw/logs/ours/2026-11-07_164635_Saibel.log`).
+
+- **The target's own eat never set her clocks, and anyone else's eat erased our target's afflictions.** A stray `else` closed `if matches[2] == target`. The target's eat still ran the cures above it, but the code after the `else` ran only for a bystander's eat, and it erased our target's paralysis, pyramides or slickness. So the target's eat never set `tBals.plant`, `targetIshere` or `predictBal`, and her 29 magnesium eats in the spar never stopped the TargetOutOfRoom timer. Now the match is `isTargeted(matches[2])` (`005:41`), as in the other herb triggers, so a part-name target (`t sai`) works too. The target's eat sets the plant clock, `targetIshere` and `predictBal("herb", 1.55)` (`005:120-139`). A bystander's eat only turns the line red (`005:141-144`).
+- **Each eat took two afflictions.** With V3 on, the V1 erase chain still ran after `onHerbCureV3`. `tAffs.paralysis` was already false by then, so the chain erased slickness too. Now `005:66-78` runs `onHerbCureV3("bloodroot")` alone when `affConfigV3.enabled`. The V1 chain (`005:79`) runs only with V3 off.
+- **A V3 cure left no `-tar` row.** The V1 erase raised "target cured aff", and `onHerbCureV3` raises nothing. Now each bloodroot affliction (`curingTable.bloodroot`, else `curingTableV3.bloodroot`) that V3 held before the eat and holds below 0.01 after it is reported through `ataxia_tarAffFaded` (`005:68-77`). That call also stops a timed clock. A cure that V3 only branched over is a guess, so it is not reported.
+
+`onTargetBloodrootV2` still runs on every target eat (`005:55`). Tests: `src_new/tests/test_target_presence_lines.lua` (the "005:" blocks).
 
 ## Smoke Trigger
 

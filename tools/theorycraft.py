@@ -14,7 +14,15 @@ A run is a MODEL, not a log, and it never predicts a live opponent's herb.
     # a fork: the board and clocks of Z5 row 204, then a different attack, with the race over 200 seeds
     python tools/theorycraft.py --log Z5 --at 204 --then "dstab curare vernalius" --seeds 200
 
-Our own DSTAB gap is not measured (no log of our Serpent), so a scripted run needs --gap until the spar lands.
+    # our own gaps from the 2026-11-07 spar: raw rounds as played, or each round fired from the server queue
+    python tools/theorycraft.py --victim depthswalker --gap queue --median \\
+        --script "dstab curare kalmia" "impulse masochism monkshood" "dstab curare kalmia"
+
+A scripted run needs --gap: a number of seconds, or one of our measured gaps. --gap raw is our land-to-land gap as played
+(1.965, rule attack.gap.own), --gap queue the server-queue floor (our costs: DSTAB 1.634, an impulse round 1.563),
+--gap queue-late the same costs timed from each round's first reply (DSTAB 1.750, an impulse round 1.676: where the 0.09 s
+step falls is open), and --gap others other Serpents' gap after each kind of attack (DSTAB 1.83). Ours differ by 0.33 s,
+and which one a fight runs is a choice, so the CLI does not pick.
 """
 
 import argparse
@@ -104,14 +112,22 @@ def profile(name):
 
 
 def options(args):
-    return {"random_pool": getattr(args, "random_pool", "norandomcure"), "flay_order": getattr(args, "flay_order", "named")}
+    return {"random_pool": getattr(args, "random_pool", "norandomcure"), "flay_order": getattr(args, "flay_order", "named"),
+            "flay_missing": getattr(args, "flay_missing", "coating"), "ssc_gain": getattr(args, "ssc_gain", "loggers")}
+
+
+# The SSC delay of each case (victim.lua V.delay), and the per-opponent alternative of the open-channel case.
+SSC_CASES = (("gain", "ssc.delay.gain"), ("return", "ssc.delay.return"))
+SSC_GAIN_ALT = {"saibel": "ssc.delay.gain.Saibel"}
 
 
 def build_model(rules, prof, opts=None):
     """The rules table as the engine reads it. Returns (model, used): used lists each rule key the model rests on.
 
-    opts: random_pool "norandomcure" (the rule's value) or "package" (its alternative, treeCurableAffsV3), and flay_order
-    "named" (the wiki: a FLAY names what it strips) or "auto" (rule attack.flay.order's alternative)."""
+    opts: random_pool "norandomcure" (the rule's value) or "package" (its alternative, treeCurableAffsV3), flay_order
+    "named" (the wiki: a FLAY names what it strips) or "auto" (rule attack.flay.order's alternative), flay_missing
+    "coating" (rule attack.flay.missing) or "nothing" (its alternative), and ssc_gain "loggers" (rule ssc.delay.gain) or
+    "saibel" (its per-opponent alternative, ssc.delay.gain.Saibel)."""
     opts = opts or {}
     r = rules["rules"]
     used = set()
@@ -138,7 +154,7 @@ def build_model(rules, prof, opts=None):
             items["eat"][aff] = v.get(prof["items"]) or v["herb"]
         if "prio." + aff in r:
             prio[aff] = r["prio." + aff]["value"]
-    used.update(("cure.options_join", "random_cure.pool", "ssc.order", "ssc.delay", "ssc.phi", "focus.order", "tree.cures",
+    used.update(("cure.options_join", "random_cure.pool", "ssc.order", "ssc.phi", "focus.order", "tree.cures",
                  "tree.pick", "tree.policy", "label.true"))
     eat_key = "clock.eat.%s" % prof["logger"] if prof["logger"] else "clock.eat"
     clocks = {"eat": clock(rules, eat_key), "smoke": clock(rules, "clock.smoke"), "salve": clock(rules, "clock.salve_short"),
@@ -182,34 +198,55 @@ def build_model(rules, prof, opts=None):
     blocker = r.get("classcure.blocker.%s" % prof["cls"])
     if blocker:
         used.add("classcure.blocker.%s" % prof["cls"])
-    ssc = value(rules, "ssc.delay")
+    # Two cases of the SSC delay (victim.lua V.delay), each drawn as a clock (rule draw.shape).
+    ssc = {}
+    for case, key in SSC_CASES:
+        if case == "gain" and opts.get("ssc_gain", "loggers") in SSC_GAIN_ALT:
+            key = SSC_GAIN_ALT[opts["ssc_gain"]]
+            used.add("ssc.delay.gain")
+        ssc[case] = clock(rules, key)
+        used.add(key)
     chain = sorted(({"aff": a, "at": t} for a, t in value(rules, "timed.hypochondria").items()), key=lambda c: c["at"])
     venoms = {}
     for key in sorted(r):
         if key.startswith("venom."):
             affs = r[key]["value"]["affs"]
             venoms[key[6:]] = {"affs": [a for a in affs if a != "random"], "random": "random" in affs}
+    # The reactions a bite can fire (rules reaction.<venom>; attackers.lua A.reaction). reaction.<venom>.seen is evidence.
+    reactions = {}
+    for key in sorted(r):
+        v = r[key]["value"]
+        if key.startswith("reaction.") and isinstance(v, dict) and "conditionals" in v:
+            reactions[key[9:]] = {"conditionals": v["conditionals"], "gives": v["gives"]}
     cost_key = "defence.shield.cost.%s" % prof["logger"]
     if cost_key not in r:
         cost_key = "defence.shield.cost"
     reraise = clock(rules, "defence.shield.reraise")
     model = {"lists": lists, "herb": herb, "items": items, "prio": prio, "clocks": clocks, "blocked": blocked,
              "classcure": classcure, "dagaz": dagaz, "labelBlocker": blocker["value"] if blocker else None,
-             "ssc": {"min": ssc["min"], "median": ssc["median"], "max": ssc["max"]}, "phi": value(rules, "ssc.phi"),
+             "ssc": ssc, "phi": value(rules, "ssc.phi"), "reactions": reactions,
+             # Our IMPULSE's equilibrium. A fork's attacker is another Serpent, and it takes ours: no log measures theirs.
+             "attacker": {"impulseEq": clock(rules, "attack.cost.own.impulse_eq")},
              "shield": {"cost": value(rules, cost_key), "whileParalysed": value(rules, "defence.shield.while_paralysed"),
                         "reraise": reraise},
              "shieldKeys": [cost_key, "defence.shield.reraise", "defence.shield.while_paralysed"],
              "sileris": {"harden": clock(rules, "defence.sileris.harden")},
              "reboundItem": value(rules, "defence.rebounding.smoke")[1 if prof["items"] == "mineral" else 0],
              "chain": chain, "venoms": venoms, "dstabVenoms": value(rules, "attack.dstab.venoms"),
-             "flayOrder": "auto" if opts.get("flay_order") == "auto" else "named"}
+             "suggestions": value(rules, "attack.impulse.suggestions"),
+             "flayOrder": "auto" if opts.get("flay_order") == "auto" else "named",
+             "flayMissing": "nothing" if opts.get("flay_missing") == "nothing" else "coating"}
     return model, used
 
 
-def rules_for_actions(rules, lines, affs, used):
+def rules_for_actions(rules, lines, affs, used, preset=None):
     """Add the rules a script rests on (review TC-07): attack.<kind> for each kind of action, the DSTAB venom count only for a
-    DSTAB, venom.<word> only for a DSTAB, BITE or FLAY argument, attack.flay.order for a FLAY, and timed.hypochondria when
-    hypochondria is up at the start, given, or brought by a venom of the script."""
+    DSTAB, venom.<word> only for a DSTAB, BITE, IMPULSE or FLAY argument (an IMPULSE's first word is its suggestion),
+    reaction.<venom> for the venom of a BITE or an IMPULSE, attack.flay.order for a FLAY, the IMPULSE's delivery, its
+    suggestions and its equilibrium cost, the gap rule of each kind under a --gap preset (PRESET_GAPS), and
+    timed.hypochondria when hypochondria is up at the start, given, or brought by a venom or a reaction of the script. No
+    trivial suggestion is hypochondria (rule attack.impulse.suggestions). A FLAY that met a missing defence adds rule
+    attack.flay.missing from the run's result (flay_lines)."""
     r = rules["rules"]
     hypo = "hypochondria" in affs
     for line in lines:
@@ -223,15 +260,59 @@ def rules_for_actions(rules, lines, affs, used):
             used.add("attack.dstab.venoms")
         if kind == "flay":
             used.add("attack.flay.order")
-        if kind in ("dstab", "bite", "flay"):
-            for word in words[1:]:
+        if kind == "impulse":
+            used.update(("attack.impulse.venom", "attack.impulse.suggestions", "attack.cost.own.impulse_eq"))
+        if kind in ("dstab", "bite", "flay", "impulse"):
+            for word in words[2 if kind == "impulse" else 1:]:
                 if "venom." + word in r:
                     used.add("venom." + word)
                     hypo = hypo or "hypochondria" in r["venom." + word]["value"]["affs"]
+                if kind in ("bite", "impulse") and "reaction." + word in r:
+                    used.add("reaction." + word)
+                    hypo = hypo or "hypochondria" in r["reaction." + word]["value"]["gives"]
         if kind == "give" and "hypochondria" in words[1:]:
             hypo = True
+        if preset:
+            used.update(PRESET_GAPS[preset].get(kind, PRESET_GAPS[preset]["*"]))
     if hypo:
         used.add("timed.hypochondria")
+
+
+def flay_lines(result, t0, used):
+    """The FLAYs that named a defence the victim did not have (attackers.lua A.apply, result flay.missing). Each one rests
+    on rule attack.flay.missing: n=1 from our seat, with a victim-seat row against it (review KE-1)."""
+    events = result["events"]
+    hits, took = [], 0
+    for k, ev in enumerate(events):
+        if ev["kind"] != "attack" or ev.get("result") != "flay.missing":
+            continue
+        hits.append(ev)
+        # The attack's own lines follow it as parts (fight.lua attack): the coating's line is one of them when it went.
+        for part in events[k + 1:]:
+            if not part.get("part"):
+                break
+            if part["name"] == "sileris.down":
+                took += 1
+    if not hits:
+        return []
+    used.add("attack.flay.missing")
+    when = ", ".join("%+.2f" % (ev["t"] - t0) for ev in hits)
+    return ["FLAY  %d FLAY(s) at %s named a defence the victim did not have; %d took the coating (rule attack.flay.missing:"
+            " n=1 from our seat, FL 305-308; X 5328 reads the other way, --flay-missing nothing runs it)." % (
+                len(hits), when, took)]
+
+
+def random_lines(model, lines):
+    """A venom that gives a random affliction, in a bite whose reaction the engine models (attackers.lua A.parse)."""
+    seen = []
+    for line in lines:
+        words = line.lower().split()
+        if words and words[0] in ("bite", "impulse"):
+            for word in words[2 if words[0] == "impulse" else 1:]:
+                if model["venoms"].get(word, {}).get("random") and word not in seen:
+                    seen.append(word)
+    return ["RANDOM  %s gives a random affliction, which the engine does not model: only its reaction (rule reaction.%s)"
+            " can land." % (v, v) for v in seen]
 
 
 def options_used(args, used):
@@ -241,10 +322,20 @@ def options_used(args, used):
         alts["random_cure.pool"] = "the package's tree pool"
     if getattr(args, "flay_order", "named") == "auto":
         alts["attack.flay.order"] = "auto"
+    if getattr(args, "flay_missing", "coating") == "nothing":
+        alts["attack.flay.missing"] = "nothing (--flay-missing nothing)"
+    if getattr(args, "gap_preset", None) == "queue-late":
+        # The cost rules' first-reply alternative ran, not their value (review KE-3).
+        rules = load_rules()
+        for key in sorted({k for keys in QUEUE_RULES.values() for k in keys}):
+            alts[key] = "%.3f, timed from the round's first reply (--gap queue-late)" % first_reply(rules, key)
     if getattr(args, "tree", "now") == "hold":
         alts["tree.policy"] = "hold"
     if getattr(args, "tree_pick", "random") == "priority":
         alts["tree.pick"] = "priority"
+    if getattr(args, "ssc_gain", "loggers") in SSC_GAIN_ALT:
+        alts["ssc.delay.gain"] = "%s, one opponent's from our seat (--ssc-gain %s)" % (
+            SSC_GAIN_ALT[args.ssc_gain], args.ssc_gain)
     if args.median:
         # --median takes the top pick everywhere (victim.lua V.pick, V.pickRandom).
         alts["ssc.phi"] = "1.0, the top affliction always (--median)"
@@ -483,9 +574,10 @@ def timeline(result, model, t0, cls_label):
 
 
 def cut_attack(result, actions):
-    """True when the horizon cut an attack (a DSTAB, BITE or FLAY) from the script, not only a wait or a give."""
+    """True when the horizon cut an attack (a DSTAB, BITE, IMPULSE or FLAY) from the script, not only a wait or a give."""
     cut = result.get("notRun") or 0
-    return any(a.split()[0].lower() in ("dstab", "bite", "flay") for a in actions[len(actions) - cut:] if a.split())
+    return any(a.split()[0].lower() in ("dstab", "bite", "impulse", "flay") for a in actions[len(actions) - cut:]
+               if a.split())
 
 
 def lua_races(result):
@@ -494,9 +586,32 @@ def lua_races(result):
              "down": r.get("down"), "winner": r.get("winner"), "by": r.get("by")} for r in result["races"]]
 
 
-def race_lines(races, t0, probs=None, delay=(0.10, 0.18), cut=False, gap_drawn=True):
-    """probs: (counts, seeds) from race_probs. cut: the horizon cut an attack from the script (cut_attack), so the last
-    race has no next attack for that reason. gap_drawn: the drawn runs drew the gap (--gap-sd above 0)."""
+def ssc_range(model):
+    """The SSC delays the drawn runs take, as p10-p90 (rules ssc.delay.gain and ssc.delay.return, drawn by draw.shape)."""
+    gain, back = model["ssc"]["gain"], model["ssc"]["return"]
+    return "SSC delay %.2f-%.2f on a gain, %.2f-%.2f on a return" % (
+        gain.get("p10", gain["min"]), gain.get("p90", gain["median"]), back.get("p10", back["min"]),
+        back.get("p90", back["median"]))
+
+
+# The plan's small-margin rule: a race decided by less than this stays UNSETTLED for any verdict.
+MARGIN = 0.5
+
+
+def margin_lines(races):
+    """The paired races whose margin is under MARGIN (lens TC1: at the queue floor the race 'strike first' is +0.05 s)."""
+    paired = [r for r in races if r.get("winner") is not None]
+    small = [r for r in paired if r["by"] < MARGIN]
+    if not small:
+        return []
+    return ["MARGIN  %d of %d paired races are decided by under %.1f s: UNSETTLED for any verdict (the plan's small-margin"
+            " rule). A MODEL P line says how often the winner holds over drawn runs." % (len(small), len(paired), MARGIN)]
+
+
+def race_lines(races, t0, probs=None, delay="", cut=False, gap_drawn=True):
+    """probs: (counts, seeds) from race_probs. delay: the SSC delays the drawn runs take (ssc_range). cut: the horizon cut
+    an attack from the script (cut_attack), so the last race has no next attack for that reason. gap_drawn: the drawn runs
+    drew the gap (--gap-sd above 0)."""
     out = []
     for k, race in enumerate(races):
         if race.get("phase") is not None:
@@ -527,13 +642,13 @@ def race_lines(races, t0, probs=None, delay=(0.10, 0.18), cut=False, gap_drawn=T
             seen, paired, strike = counts.get(race["label"], (0, 0, 0))
             if paired:
                 out.append("           MODEL P(strike first) = %.2f (%d of %d paired seeds; the race %s is in %d of %d"
-                           " seeds; eat draw, SSC delay %.2f-%.2f, %s)." % (
-                               strike / paired, strike, paired, race["label"], seen, seeds, delay[0], delay[1],
+                           " seeds; eat draw, %s, %s)." % (
+                               strike / paired, strike, paired, race["label"], seen, seeds, delay,
                                "gap draw" if gap_drawn else "gap fixed"))
             else:
                 out.append("           MODEL: the race %s is in %d of %d seeds, paired in none." % (race["label"], seen,
                                                                                                       seeds))
-    return out
+    return out + margin_lines(races)
 
 
 def race_probs(races_of, seeds, seed0):
@@ -620,7 +735,7 @@ def assumed_lines(rules, used, median, alts, seeds=0, gap_sd=None):
         out.append("%-7s used: %s." % (tag, ", ".join(soft[tag]) or "none"))
     # Another Serpent's gap gives the median only: a draw adds the gap's own noise (rule attack.gap.own.sd), not that
     # rule's p10-p90 spread (review R3-fork-4).
-    gaps = [k for k in soft["SWEEP"] if k.startswith("attack.gap.others.")]
+    gaps = [k for k in soft["SWEEP"] if k.startswith("attack.gap.")]
     sweep = [k for k in soft["SWEEP"] if k not in gaps]
     # Review LUA-N2-8: a run without --median draws these clocks over their measured spread.
     if not median:
@@ -643,14 +758,112 @@ def assumed_lines(rules, used, median, alts, seeds=0, gap_sd=None):
 
 
 # ---------------------------------------------------------------------------------------------
+# The attacker's gap
+# ---------------------------------------------------------------------------------------------
+
+# --gap takes a number of seconds or one of these. The rules each preset rests on, by action kind ("*" for the others;
+# a wait has no gap). raw gives one gap for every action; queue, queue-late and others give each kind its own.
+QUEUE_RULES = {"*": ("attack.cost.own.dstab",), "bite": ("attack.cost.own.bite",), "impulse": ("attack.cost.own.bite",),
+               "flay": ("attack.cost.own.flay",), "wait": ()}
+PRESET_GAPS = {
+    "raw": {"*": ("attack.gap.own",), "wait": ()},
+    "queue": QUEUE_RULES,
+    "queue-late": QUEUE_RULES,
+    "others": {"*": ("attack.gap.others.dstab",), "bite": ("attack.gap.others.bite",),
+               "impulse": ("attack.gap.others.bite",), "flay": ("attack.gap.others.flay",), "wait": ()},
+}
+
+
+def gap_arg(text):
+    """--gap: a number of seconds, or raw, queue, queue-late or others (PRESET_GAPS)."""
+    if text.lower() in PRESET_GAPS:
+        return text.lower()
+    try:
+        return float(text)
+    except ValueError:
+        raise argparse.ArgumentTypeError("give a number of seconds, or one of %s" % ", ".join(sorted(PRESET_GAPS)))
+
+
+def median_of(rules, key):
+    v = value(rules, key)
+    return v["median"] if isinstance(v, dict) else v
+
+
+def first_reply(rules, key):
+    """A cost of ours timed from the round's first reply, not from its cost line (the rule's field first_reply)."""
+    return rules["rules"][key]["first_reply"]
+
+
+def per_kind(dstab, bite, flay):
+    """The gap of each action kind: an IMPULSE waits as its bite does, and a give as a DSTAB does."""
+    return {"dstab": dstab, "bite": bite, "impulse": bite, "flay": flay, "give": dstab}
+
+
+def preset_gap(rules, name):
+    """(gap, gaps by action kind) of a --gap preset. raw: our land-to-land median as played (attack.gap.own). queue: our
+    cost of each kind, as if each round fired from the server queue the moment balance came back (lens TC3): DSTAB
+    attack.cost.own.dstab, IMPULSE and BITE attack.cost.own.bite (the impulse's bite; no plain BITE is measured), FLAY
+    attack.cost.own.flay (n=1, swept), and a give at the DSTAB's. queue-late: the same costs timed from the round's first
+    reply (their first_reply), the other side of the open 0.09 s step (lens F4, F6). others: other Serpents' median gap
+    after each kind (attack.gap.others.dstab, .bite and .flay); no impulse of theirs is measured, so their BITE's gap
+    stands in for it."""
+    if name == "raw":
+        return median_of(rules, "attack.gap.own"), {}
+    if name == "others":
+        dstab = median_of(rules, "attack.gap.others.dstab")
+        return dstab, per_kind(dstab, median_of(rules, "attack.gap.others.bite"), median_of(rules, "attack.gap.others.flay"))
+    take = first_reply if name == "queue-late" else median_of
+    dstab = take(rules, "attack.cost.own.dstab")
+    return dstab, per_kind(dstab, take(rules, "attack.cost.own.bite"), take(rules, "attack.cost.own.flay"))
+
+
+def ours_line(rules):
+    """Our measured gaps (lens TC1, TC3, F4, F6): the header names them on every page."""
+    raw, dstab = rules["rules"]["attack.gap.own"], rules["rules"]["attack.cost.own.dstab"]
+    return ("OURS  from the 2026-11-07 spar: raw %.3f land to land as played (attack.gap.own, n=%d); queue floor %.3f from"
+            " the cost line or %.3f from the round's first reply (our DSTAB cost, n=%d; an impulse round %.3f or %.3f)."
+            " Where the 0.09 s step falls is open. --gap raw, queue, queue-late or others picks one." % (
+                raw["value"]["median"], raw["n"], dstab["value"]["median"], dstab["first_reply"], dstab["n"],
+                median_of(rules, "attack.cost.own.bite"), first_reply(rules, "attack.cost.own.bite")))
+
+
+def gap_line(args, rules):
+    """The gap this run takes, and what it rests on."""
+    others = rules["rules"]["attack.gap.others.dstab"]
+    preset = getattr(args, "gap_preset", None)
+    g = getattr(args, "gaps", None) or {}
+    if preset == "raw":
+        return "GAP   raw: %.3f before every action, the median of our land-to-land gap (MEASURED, not usable)." % args.gap
+    if preset == "queue":
+        return ("GAP   queue: each action at our cost from its cost line, if each round fires from the server queue as"
+                " balance comes back: DSTAB %.3f, IMPULSE or BITE %.3f, FLAY %.3f (n=1, swept). --gap queue-late times"
+                " them from the round's first reply. Not yet played as a gap: in the spar one held command ran 0.002 s"
+                " after its recovery (FL 259-260)." % (g["dstab"], g["impulse"], g["flay"]))
+    if preset == "queue-late":
+        return ("GAP   queue-late: each action at our cost from the round's first reply, if each round fires from the"
+                " server queue as balance comes back: DSTAB %.3f, IMPULSE or BITE %.3f, FLAY %.3f (n=1, swept). It is"
+                " the other side of the open 0.09 s step: --gap queue times them from the cost line." % (
+                    g["dstab"], g["impulse"], g["flay"]))
+    if preset == "others":
+        r = rules["rules"]
+        return ("GAP   others: other Serpents' median gap after each kind: DSTAB %.3f (n=%d), BITE or IMPULSE %.3f (n=%d;"
+                " no impulse of theirs is measured, so their BITE's gap stands in), FLAY %.3f (n=%d), a give at the"
+                " DSTAB's." % (g["dstab"], others["n"], g["bite"], r["attack.gap.others.bite"]["n"], g["flay"],
+                               r["attack.gap.others.flay"]["n"]))
+    if abs(args.gap - others["value"]["median"]) < 1e-9:
+        return "GAP   %.2f from --gap = other Serpents' median DSTAB gap (n=%d)." % (args.gap, others["n"])
+    return "GAP   %.3f from --gap: the run's own input, not a rule." % args.gap
+
+
+# ---------------------------------------------------------------------------------------------
 # Scripted runs
 # ---------------------------------------------------------------------------------------------
 
 
 def env_for(args, gap, median, defences, snap=True):
     return {"median": median, "clockDraw": getattr(args, "clock_draw", "quantiles"), "gap": gap,
-            "gapSd": 0 if median else args.gap_sd, "gapFloor": args.gap_floor,
-            "defences": {"shield": "shield" in defences, "rebounding": "rebounding" in defences},
+            "gaps": dict(getattr(args, "gaps", None) or {}), "gapSd": 0 if median else args.gap_sd,
+            "gapFloor": args.gap_floor, "defences": {"shield": "shield" in defences, "rebounding": "rebounding" in defences},
             "tree": args.tree, "treePick": args.tree_pick, "tail": args.tail, "horizon": args.horizon, "snap": snap}
 
 
@@ -665,12 +878,13 @@ def defence_rules(model, defences, used):
 
 def scripted(args):
     if args.gap is None:
-        raise SystemExit("theorycraft: our own DSTAB gap is not measured (rule attack.gap.own). Give --gap; other Serpents:"
-                         " median 1.83, p10 1.73, min 1.545 (kb/mechanics/clocks.json).")
+        raise SystemExit("theorycraft: give --gap: a number of seconds, raw (our land-to-land gap as played, 1.965), queue"
+                         " (the server-queue floor, our DSTAB cost 1.634), queue-late (the same from the round's first"
+                         " reply, 1.750) or others (other Serpents' 1.83). The CLI does not pick: which one a fight runs is"
+                         " a choice (rule attack.gap.own).")
     rules = load_rules()
     prof = profile(args.victim)
     model, used = build_model(rules, prof, options(args))
-    used.add("attack.gap.own")
     alts = options_used(args, used)
     defence_rules(model, args.defences, used)
     engine = Engine()
@@ -681,8 +895,10 @@ def scripted(args):
              "defs": {"shield": "shield" in args.defences, "rebounding": "rebounding" in args.defences}}
     env = env_for(args, args.gap, args.median, args.defences)
     result = engine.run(start, script, model_lua, env, args.seed)
-    # The rules of the actions that ran: an action the horizon cut rests on nothing (review LUA-N2-3).
-    rules_for_actions(rules, args.script[:len(args.script) - (result.get("notRun") or 0)], args.affs, used)
+    # The rules of the actions that ran: an action the horizon cut rests on nothing (review LUA-N2-3). A numeric --gap is
+    # the run's own input, so it rests on no gap rule; a preset rests on the rules of PRESET_GAPS.
+    ran = args.script[:len(args.script) - (result.get("notRun") or 0)]
+    rules_for_actions(rules, ran, args.affs, used, args.gap_preset)
     if model["dagaz"] and args.median:
         alts["class.dagaz.phase"] = "half a period (--median)"
     lines = header(args, rules, prof, model)
@@ -692,14 +908,16 @@ def scripted(args):
     if args.seeds:
         env_n = env_for(args, args.gap, False, args.defences, snap=False)
         probs = race_probs(lambda seed: lua_races(engine.run(start, script, model_lua, env_n, seed)), args.seeds, args.seed)
-    lines += race_lines(lua_races(result), 0.0, probs, (model["ssc"]["min"], model["ssc"]["max"]),
-                        cut=cut_attack(result, args.script), gap_drawn=args.gap_sd > 0)
+    lines += race_lines(lua_races(result), 0.0, probs, ssc_range(model), cut=cut_attack(result, args.script),
+                        gap_drawn=args.gap_sd > 0)
     lines += horizon_lines(result, len(args.script), args.horizon, 0.0)
     lines += log_race_line()
     lines += tree_lines(result, sorted({args.gap, 1.545}, reverse=True), 0.0)
     dagaz_note = "Its first tick is at half a period (--median)." if args.median else \
         "Its first tick is drawn over one period (rule class.dagaz.phase)."
     lines += class_lines(rules, model, prof, dagaz_note)
+    lines += random_lines(model, ran)
+    lines += flay_lines(result, 0.0, used)
     lines += no_channel_lines(rules, args.affs, result, model)
     lines += seeds_lines(args, bool(model["dagaz"]))
     lines += assumed_lines(rules, used, args.median, alts, args.seeds, args.gap_sd)
@@ -716,16 +934,13 @@ def header(args, rules, prof, model):
     else:
         out.append("ONE DRAW: seed %d. Clocks, SSC delays and picks are drawn; %s." % (
             args.seed, "the gap too" if args.gap_sd > 0 else "the gap is fixed at %.2f s (--gap-sd 0)" % args.gap))
-    gap = args.gap
-    if abs(gap - 1.83) < 1e-9:
-        out.append("DSTAB 1.83 = other Serpents' median (n=195). Ours is unmeasured until the spar.")
-    else:
-        out.append("DSTAB %.3f from --gap (rule attack.gap.own, ASSUMED). Other Serpents: median 1.83, p10 1.73, min 1.545"
-                   " (n=195)." % gap)
+    out += [gap_line(args, rules), ours_line(rules)]
     eat = model["clocks"]["eat"]["median"]
-    out.append("VICTIM %s: eat clock %.3f (%s), SSC delay %.2f (%.2f-%.2f)." % (
-        prof["cls"], eat, ("logger %s" % prof["logger"]) if prof["logger"] else "pooled, not usable",
-        model["ssc"]["median"], model["ssc"]["min"], model["ssc"]["max"]))
+    gain, back = model["ssc"]["gain"], model["ssc"]["return"]
+    who = " (Saibel's, --ssc-gain saibel)" if getattr(args, "ssc_gain", "loggers") == "saibel" else ""
+    out.append("VICTIM %s: eat clock %.3f (%s), SSC delay %.3f on a gain%s, %.3f on a return." % (
+        prof["cls"], eat, ("logger %s" % prof["logger"]) if prof["logger"] else "pooled, not usable", gain["median"], who,
+        back["median"]))
     return out
 
 
@@ -1082,18 +1297,23 @@ def own_clocks(log, events, end_row, board_row, t0):
 
 
 def fork(args):
-    own_gap = args.gap is not None
-    if not own_gap:
-        args.gap = FORK_GAP
-        gap_note = "DSTAB gap 1.83 = other Serpents' median (n=195): the fork's attacker is another Serpent."
-    else:
-        gap_note = "DSTAB gap %.3f from --gap." % args.gap
     key = args.log
     rules = load_rules()
+    given = args.gap is not None
+    if not given:
+        args.gap = FORK_GAP
+        gap_note = "DSTAB gap 1.83 = other Serpents' median (n=195): the fork's attacker is another Serpent."
+    elif args.gap_preset:
+        # gap_line's text without its "GAP   " head.
+        gap_note = "Gap " + gap_line(args, rules)[6:]
+    else:
+        gap_note = "Gap %.3f from --gap: the run's own input, not a rule." % args.gap
     prof = profile(LOG_VICTIM[key])
     model, used = build_model(rules, prof, options(args))
-    # The gap the fork rests on (review N2-10, RUL-7): ours, ASSUMED, or the other Serpents', MEASURED and not usable.
-    used.add("attack.gap.own" if own_gap else "attack.gap.others.dstab")
+    # The gap the fork rests on (review N2-10, RUL-7): the other Serpents' when no --gap is given (MEASURED, not usable),
+    # a preset's rules (rules_for_actions), or none for a numeric --gap, the run's own input.
+    if not given:
+        used.add("attack.gap.others.dstab")
     alts = options_used(args, used)
     log = ke.load(key)
     events = ke.stream(log)
@@ -1227,7 +1447,8 @@ def fork(args):
     env["rowBase"] = end_row
     env["src"] = key
     result = engine.run(start, script, model_lua, env, args.seed)
-    rules_for_actions(rules, args.then[:len(args.then) - (result.get("notRun") or 0)], terms, used)
+    ran = args.then[:len(args.then) - (result.get("notRun") or 0)]
+    rules_for_actions(rules, ran, terms, used, args.gap_preset)
     notes = []
     for ch in CHANNELS:
         if ch not in down_from:
@@ -1295,17 +1516,21 @@ def fork(args):
             "      The logger keeps %s (the log shows them by the row)%s." % (
                " and ".join(kept) or "no shield and no rebounding", ("; " + "; ".join(pending)) if pending else ""),
             "      " + first]
+    # Our own gaps, so a reader can pick --gap raw, queue or queue-late for the fork (review: missing OURS line).
+    out += [ours_line(rules)]
     out += ["ILLUSTRATIVE: medians, no noise." if args.median else "ONE DRAW: seed %d." % args.seed]
     out += timeline(result, model, t0, cls_label)
     probs = None
     if args.seeds:
         env_n = dict(env_for(args, args.gap, False, kept, snap=False), rowBase=end_row, src=key)
         probs = race_probs(lambda seed: races_of(engine.run(start, script, model_lua, env_n, seed)), args.seeds, args.seed)
-    out += race_lines(races_of(result), t0, probs, (model["ssc"]["min"], model["ssc"]["max"]),
-                      cut=cut_attack(result, args.then), gap_drawn=args.gap_sd > 0)
+    out += race_lines(races_of(result), t0, probs, ssc_range(model), cut=cut_attack(result, args.then),
+                      gap_drawn=args.gap_sd > 0)
     out += horizon_lines(result, len(args.then), args.horizon, t0)
     out += log_race_line()
     out += class_lines(rules, model, prof, dagaz_note)
+    out += random_lines(model, ran)
+    out += flay_lines(result, t0, used)
     out += no_channel_lines(rules, terms, result, model)
     out += seeds_lines(args, dagaz_drawn)
     out += assumed_lines(rules, used, args.median, alts, args.seeds, args.gap_sd)
@@ -1328,8 +1553,12 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--victim", help="the victim's class: %s" % ", ".join(sorted(VICTIMS)))
     ap.add_argument("--script", nargs="+", help="the attacker's actions, one per balance")
-    ap.add_argument("--gap", type=float, help="our attack gap in seconds (not measured: give it)")
-    ap.add_argument("--gap-sd", type=float, default=0.09, help="the gap's noise (rule attack.gap.own.sd)")
+    ap.add_argument("--gap", type=gap_arg,
+                    help="the attacker's gap: seconds, or raw (ours as played, 1.965: rule attack.gap.own), queue (the"
+                         " server-queue floor: our cost of each action, DSTAB 1.634), queue-late (the same costs from"
+                         " the round's first reply, DSTAB 1.750) or others (other Serpents' gap after each kind, DSTAB"
+                         " 1.83)")
+    ap.add_argument("--gap-sd", type=float, default=0.09, help="the gap's noise (rule attack.gap.own.sd, ASSUMED)")
     ap.add_argument("--gap-floor", type=float, default=None, help="no gap below this")
     ap.add_argument("--median", action="store_true", help="medians, no noise, top-priority picks")
     ap.add_argument("--seed", type=int, default=1)
@@ -1343,6 +1572,12 @@ def main(argv=None):
                     help="rule random_cure.pool: NoRandomCure off (the value), or the package's tree pool (the alternative)")
     ap.add_argument("--flay-order", default="named", choices=("named", "auto"),
                     help="rule attack.flay.order: a FLAY strips what it names (the wiki), or shield, rebounding, sileris")
+    ap.add_argument("--flay-missing", default="coating", choices=("coating", "nothing"),
+                    help="rule attack.flay.missing: a FLAY that names a defence the victim does not have strips the"
+                         " coating (the value, our seat FL 305-308), or nothing (the alternative, X 5328)")
+    ap.add_argument("--ssc-gain", default="loggers", choices=("loggers",) + tuple(sorted(SSC_GAIN_ALT)),
+                    help="rule ssc.delay.gain: the four loggers' open-channel reaction (the value), or one opponent's"
+                         " from our seat (saibel: ssc.delay.gain.Saibel, a swept alternative)")
     ap.add_argument("--tail", type=float, default=2.5, help="seconds to run after the last action")
     ap.add_argument("--horizon", type=float, default=60.0)
     ap.add_argument("--clock-draw", default="quantiles", choices=("quantiles", "normal"),
@@ -1355,6 +1590,11 @@ def main(argv=None):
     ap.add_argument("--then", nargs="+", help="the fork's actions")
     ap.add_argument("--jsonl", help="write the run's event stream (version 1, view true) to this file")
     args = ap.parse_args(argv)
+    # A preset becomes its numbers here, so every check below reads a number (PRESET_GAPS, preset_gap).
+    args.gap_preset, args.gaps = None, {}
+    if isinstance(args.gap, str):
+        args.gap_preset = args.gap
+        args.gap, args.gaps = preset_gap(load_rules(), args.gap_preset)
     # The engine floors every gap (fight.lua F.gapDraw): at --gap-floor, else at BUNDLED. A gap under the floor would run
     # at the floor while the page printed the gap asked for, and --gap 0 crashed the TREE line (reviews LUA-N2-12,
     # R3-engine-5).
@@ -1368,6 +1608,12 @@ def main(argv=None):
     gap, what = args.gap, "--gap %s" % args.gap
     if gap is None and args.log and args.at is not None and args.start is None:
         gap, what = FORK_GAP, "the fork's gap %.2f (other Serpents' median; no --gap)" % FORK_GAP
+    if args.gap_preset:
+        # Under queue, each kind of action has its own gap (an impulse round 1.563, a FLAY 1.530, under the DSTAB 1.634).
+        # The floor could cut the shortest gap of the kinds the script runs. The first gap and a give's are the DSTAB's.
+        kinds = {line.split()[0].lower() for line in (args.script or args.then or []) if line.split()}
+        gap = min([args.gap] + [args.gaps[k] for k in kinds if k in args.gaps])
+        what = "--gap %s (its shortest gap in this script, %.3f)" % (args.gap_preset, gap)
     if args.gap_floor is not None:
         if gap is not None and not gap >= args.gap_floor:
             raise SystemExit("theorycraft: %s is under --gap-floor %.2f. Give a --gap at or above the floor." % (

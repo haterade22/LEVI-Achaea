@@ -263,6 +263,11 @@ function F.start(opp, reason, auto)
     -- Last field: tools/fightlog_import.py reads "our class X | why" and keeps the rest with the why.
     -- The word tells a control fight (raw) from a test fight (alias).
     .. " | rounds " .. (ataxia_roundMode and ataxia_roundMode() or "raw")
+    -- Serpent only: the attack-first setting changes the order inside a round (the A/B question
+    -- in kb/sim/rules_hand.json attack.cost.own), so the log says which order it holds.
+    .. ((tostring(ours):lower() == "serpent")
+      and (" | serpent attackfirst " .. ((ataxia.settings and ataxia.settings.serpentattackfirst) and "on" or "off"))
+      or "")
   s.buf[2] = "# rows: <time> <kind> <text>. kinds: | line, P prompt, > we sent, +aff/-aff ours (GMCP),"
     .. " +def/-def ours (GMCP), +tar/-tar our tracker on the target, # note"
   -- A queue row names the alias, and a `>` row shows its text only when the text changes, so a

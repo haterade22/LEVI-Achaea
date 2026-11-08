@@ -74,10 +74,16 @@ tdeliverance = false
   magi.offense.state = magi.offense.state or {}
   magi.offense.state.burns = math.max((magi.offense.state.burns or 0) - 1, 0)
   tburns = magi.offense.state.burns
-if treeTimer0 then return end
-if treeTimer4 then return end
-if treeTimer9 then return end
-if treeTimer then return end
+-- A new tree starts a new countdown. The old code returned while any echo was still pending, so a
+-- tree that came just before the 14 s echo got no countdown at all: in the 2026-11-07 spar,
+-- Saibel's tree came 12 ms before that echo, and that tree never got its own echoes. Now the pending
+-- echoes are killed and four new ones start. The 13 s tBals.tree re-arm above does not change.
+-- Each one is checked by itself: the 0 s echo is nil by then, and ipairs over a list would stop
+-- at that nil.
+if treeTimer0 then killTimer(treeTimer0) end
+if treeTimer4 then killTimer(treeTimer4) end
+if treeTimer9 then killTimer(treeTimer9) end
+if treeTimer then killTimer(treeTimer) end
 treeTimer0 = tempTimer(0,[[cecho("<orange>\n[TREE]: <yellow>tree down on <red>"..target.." <yellow>for <white>14 seconds...\n") treeTimer0 = nil]])
 treeTimer4 = tempTimer(4,[[cecho("<orange>\n[TREE]: <yellow>tree down on <red>"..target.." <yellow>for <white>10 seconds...\n") treeTimer4 = nil]])
 treeTimer9 = tempTimer(9,[[cecho("<orange>\n[TREE]: <yellow>tree down on <red>"..target.." <yellow>for <white>5 seconds...\n") treeTimer9 = nil]])

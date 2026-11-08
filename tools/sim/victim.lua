@@ -108,11 +108,20 @@ function V.clockAfter(c, env, rnd, elapsed)
   return math.max(elapsed, held(c, c.median + (ihAt(pick(u0)) - 1.5) * 2 * sd))
 end
 
---- The reaction delay of SSC, from the moment a channel can act to the action (rule ssc.delay).
-function V.delay(model, env, rnd)
-  local d = model.ssc
-  if env.median or not rnd then return d.median end
-  return d.min + rnd() * (d.max - d.min)
+-- The shortest SSC delay. A pending action due at the moment that set it would never run, because the run looks only
+-- past now for its next moment (fight.lua nextTime). A log's 0.000 is a cure in the return's own packet.
+V.MIN_DELAY = 0.001
+
+--- The reaction delay of SSC, from the moment a channel can act to the action. It has two cases, as kb/sim/events.json
+--- splits a log's eats by its 'down' flag:
+---   "gain"    an affliction lands on an open channel (rule ssc.delay.gain: median 0.104, n=23)
+---   "return"  the channel comes back with an affliction waiting: its clock ran out, or the affliction that shut it was
+---             cured (rule ssc.delay.return: median 0.145, n=163)
+--- The delay is drawn as a clock (rule draw.shape), and env.median takes the median.
+function V.delay(model, env, rnd, case)
+  local d = model.ssc[case]
+  if not d then error("victim.lua: no SSC delay for the case '" .. tostring(case) .. "'") end
+  return math.max(V.MIN_DELAY, V.clock(d, env, rnd))
 end
 
 --- Why a channel cannot act now: the affliction that shuts it, "clock", or nil when it is open.
@@ -190,7 +199,8 @@ local function softlocked(s)
   return s.affs.asthma and (s.affs.slickness or s.affs.bloodfire) and s.affs.anorexia
 end
 
---- What the channel would act on now: an affliction, "rebounding" for the smoke that raises it, or nil.
+--- What the channel would act on now: an affliction, "rebounding" for the smoke that raises it, or nil. With an empty
+--- rnds the eat takes its top pick and draws nothing, so a caller can ask whether a target exists without a draw.
 function V.target(s, ch, model, env, rnds)
   if ch == "eat" then return V.pickEat(s, model, env, rnds.pick) end
   if ch == "focus" then return V.pickFocus(s, model) end

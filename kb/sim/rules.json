@@ -4,9 +4,9 @@
  "inputs": {
   ".claude/databases/venoms.yaml": "ef137a5cd8214ad7",
   "kb/afflictions/afflictions.json": "1fe2c0394ca42b4b",
-  "kb/mechanics/clocks.json": "ba2f7943f4e490c0",
-  "kb/sim/rules_hand.json": "e66acfb4890f2c95",
-  "src_new/scripts/levi_ataxia/levi/ataxia/affliction_tracking_core/008_V3_Integration.lua": "0a4b93e9fa221aa8",
+  "kb/mechanics/clocks.json": "acf3ebc1cd2c7b55",
+  "kb/sim/rules_hand.json": "eae02f7355009382",
+  "src_new/scripts/levi_ataxia/levi/ataxia/affliction_tracking_core/008_V3_Integration.lua": "9d18dc1bec646abe",
   "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua": "5fa60d4229dfd770",
   "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua": "4f3cccaf6c09db12",
   "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua": "837e6b4465b22614",
@@ -22,6 +22,90 @@
    "tag": "WIKI",
    "value": "one venom; sileris or fangbarrier blocks it"
   },
+  "attack.cost.own.bite": {
+   "alt": [
+    1.676
+   ],
+   "first_reply": 1.676,
+   "n": 13,
+   "note": "our seat: the bite of an IMPULSE with a venom. 'You sink your fangs into <target>, injecting ...' came in the impulse's packet 13 of 13. From 'Balance used: 1.7s.' to the next 'You have recovered balance on all limbs.'; printed 1.7, stated 4.00 (Venom/Bite). We did not see a plain BITE, so its line and cost are not known. The alt 1.676 (n=13) times it from the round's first reply, as attack.cost.own.dstab does. The analysis gave 1.665 with n=12: it left out the last bite (2036-2045), which has no next round. tools/test_kb_rules.py re-counts it",
+   "source": "kb/raw/logs/ours/2026-11-07_164635_Saibel.log:594-604 (the first, and min), 1599-1611 (max), 2036-2045 (the last)",
+   "tag": "MEASURED",
+   "usable": true,
+   "value": {
+    "max": 1.589,
+    "median": 1.563,
+    "min": 1.463,
+    "p10": 1.477,
+    "p90": 1.581,
+    "sd": 0.041
+   }
+  },
+  "attack.cost.own.dstab": {
+   "alt": [
+    1.75
+   ],
+   "first_reply": 1.75,
+   "n": 24,
+   "note": "our seat, the 2026-11-07 spar. From 'Balance used: 1.8s.' in the DSTAB's packet to the next 'You have recovered balance on all limbs.'; printed 1.8, stated 2.80 (Subterfuge/Doublestab). The median is 1.6335 (the middle pair 1.626 and 1.641); the sd is p90-p10 over 2.563, and the population sd is 0.061. The alt 1.75 (n=24) times the same recovery from the round's first reply ('[System]: Queued freestand commands cleared.'). Each attack.cost.own rule holds its first-reply value in the field first_reply too, and theorycraft --gap queue-late runs those values. Every cost line came in the round's second packet, about 0.09 s after the first reply, and where that step happens (our side or the server's) is open: it decides which of the two the server counts. From the cost line, 21 of the 52 cost lines in this log are within +-0.15 s of their printed value; from the first reply, 50 of 52. An input about our seat, not a refit (plan, Holdout). tools/test_kb_rules.py re-counts it",
+   "source": "kb/raw/logs/ours/2026-11-07_164635_Saibel.log:367-376 (the first), 459-467 (min), 772-783 (max), 1995-2001 (the last)",
+   "tag": "MEASURED",
+   "usable": true,
+   "value": {
+    "max": 1.78,
+    "median": 1.634,
+    "min": 1.553,
+    "p10": 1.578,
+    "p90": 1.741,
+    "sd": 0.063
+   }
+  },
+  "attack.cost.own.flay": {
+   "alt": [
+    1.48,
+    1.65,
+    2.0
+   ],
+   "first_reply": 1.65,
+   "n": 1,
+   "note": "our seat: one FLAY, at a rebounding that was not there ('You try to flay a non-existent aura of rebounding', line 305). From 'Balance used: 1.7s.' to the recovery; printed 1.7. n=1, not usable: swept 1.48-2.00, others' shortest FLAY gap to the stated cost, with 1.65 (from the round's first reply) between. tools/test_kb_rules.py re-counts it",
+   "source": "kb/raw/logs/ours/2026-11-07_164635_Saibel.log:319-331; kb/mechanics/clocks.json stated.opponents FLAY (min 1.48); kb/classes/abilities.json Subterfuge/Flay (2.00)",
+   "tag": "MEASURED",
+   "usable": false,
+   "value": 1.53
+  },
+  "attack.cost.own.impulse_eq": {
+   "alt": [
+    1.353
+   ],
+   "first_reply": 1.353,
+   "n": 13,
+   "note": "our seat: the IMPULSE's own equilibrium. From 'Equilibrium used: 1.44s.' to the next 'You have recovered equilibrium.'; printed 1.44, stated 1.70 (Hypnosis/Impulse). It runs beside the bite (attack.cost.own.bite): both cost lines come in one packet, and equilibrium came back first 13 of 13 (its max 1.334 is under the bite's min 1.463), so the bite's balance gates the next round. The alt 1.353 (n=13) times it from the round's first reply. tools/test_kb_rules.py re-counts it",
+   "source": "kb/raw/logs/ours/2026-11-07_164635_Saibel.log:587-602 (the first), 1688-1706 (min), 1638-1654 (max), 2028-2039 (the last)",
+   "tag": "MEASURED",
+   "usable": true,
+   "value": {
+    "max": 1.334,
+    "median": 1.242,
+    "min": 1.182,
+    "p10": 1.201,
+    "p90": 1.289,
+    "sd": 0.034
+   }
+  },
+  "attack.cost.own.pinshot": {
+   "alt": [
+    1.742,
+    1.856
+   ],
+   "first_reply": 1.856,
+   "n": 1,
+   "note": "our seat: the opener's PINSHOT. From 'Balance used: 1.8s.' to the recovery; printed 1.8, stated 3.00 (Subterfuge/Pinshot). n=1, not usable: swept from the cost line's 1.742 to the first reply's 1.856. tools/test_kb_rules.py re-counts it",
+   "source": "kb/raw/logs/ours/2026-11-07_164635_Saibel.log:235-259 (cost line to recovery), 223-259 (first reply to recovery)",
+   "tag": "MEASURED",
+   "usable": false,
+   "value": 1.742
+  },
   "attack.dstab.venoms": {
    "alt": [
     1
@@ -35,17 +119,27 @@
    "alt": [
     "attack.flay.order"
    ],
-   "note": ".claude/classes/serpent.md:569 reads the same. A bare FLAY in the logs (no 'flays away' line): g 945-948 and X 3189-3194 (the coating ripped, then the whip and paralysis). A named FLAY also takes the coating: rule attack.flay.coating",
+   "note": ".claude/classes/serpent.md:686 reads the same. A bare FLAY in the logs (no 'flays away' line): g 945-948 and X 3189-3194 (the coating ripped, then the whip and paralysis). A named FLAY also takes the coating: rule attack.flay.coating. One that names a defence the target does not have: rule attack.flay.missing",
    "source": "kb/raw/wiki/Subterfuge.wiki:76,80",
    "tag": "WIKI",
    "value": "the attacker names what to strip: FLAY <target> SHIELD or REBOUNDING strips that one, a bare FLAY strips the sileris coating; the venom lands if neither shield nor rebounding is left"
   },
   "attack.flay.coating": {
    "n": 23,
-   "note": "23 of 23 FLAYs of the shield or rebounding made with the coating up ripped it in the same packet (az 9, g 2, X 12): 'The protective coating covering your skin is ripped away along with your protections.' None of the 33 made with it down printed that line. X 5328: a whip with no strip line left the coating up (snake bites met it at 5385, 5565 and 5776); read as a named FLAY whose defence was already gone (ASSUMED). tools/test_kb_rules.py re-counts it",
+   "note": "23 of 23 FLAYs of the shield or rebounding made with the coating up ripped it in the same packet (az 9, g 2, X 12): 'The protective coating covering your skin is ripped away along with your protections.' None of the 33 made with it down printed that line. A FLAY that names a defence the target does not have: rule attack.flay.missing. tools/test_kb_rules.py re-counts it",
    "source": "kb/raw/logs/2026-11-01_claes_runewarden-vs-serpent_loss_azbErKcK.txt:269-270,558,1169,2235,2465,2659,2931,3217,3598; kb/raw/logs/2026-11-01_elmer_shikudo-vs-serpent_noresult_g-lD00-h.txt:1244,2100; kb/raw/logs/2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt:545,817,2190,2363,2509,2799,3461,3816,4105,4654,5162,5857",
    "tag": "MEASURED",
    "value": "a FLAY that strips the shield or rebounding also strips the sileris coating"
+  },
+  "attack.flay.missing": {
+   "alt": [
+    "nothing: it strips nothing, and its whip lands with the coating left up (the X 5328 reading)"
+   ],
+   "n": 1,
+   "note": "our seat, the 2026-11-07 spar: we sent 'flay Saibel rebounding curare' (FL 283). The game printed 'You try to flay a non-existent aura of rebounding from Saibel.' (FL 305), then 'The protective coating covering the skin of Saibel is ripped away with their protections.' (FL 308), the whip (FL 315) and the paralysis (FL 318), all in one packet. No apply line follows, and our bites met no coating after it. Against it, from a victim's seat: at X 5328 a whip landed with no strip line and the coating stayed up (the snake met it at X 5385), with the shield gone at X 5310 and rebounding at X 5313-5317. That command is not seen, so which defence it named, or whether it was a FLAY of one at all, is not known. One reading of both: a FLAY of a missing rebounding takes the coating and one of a missing shield does not. n=1 each way, so the conflict is open (kb/CONFLICTS.md). The engine runs the value; --flay-missing nothing runs the alternative, and the page prints a FLAY line when a run met the case. tools/test_kb_rules.py re-counts it",
+   "source": "kb/raw/logs/ours/2026-11-07_164635_Saibel.log:283,305-319; kb/raw/logs/2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt:5301-5317,5328-5330,5384-5386",
+   "tag": "MEASURED",
+   "value": "coating: a FLAY that names a shield or rebounding the target does not have strips the sileris coating, as a bare FLAY does, and its venom lands"
   },
   "attack.flay.order": {
    "alt": [
@@ -134,27 +228,31 @@
   },
   "attack.gap.own": {
    "alt": [
-    1.545,
-    1.73,
-    1.83,
-    2.33,
-    2.8,
-    3.1
+    1.634,
+    1.83
    ],
-   "note": "our own DSTAB, FLAY and BITE costs are not measured (no log of our Serpent). The CLI needs --gap until the spar lands",
-   "source": "kb/mechanics/clocks.json stated.opponents",
-   "tag": "ASSUMED",
-   "value": null
+   "n": 37,
+   "note": "our seat as played on 2026-11-07: raw rounds, one key press per round. Land to land: the strike line of each attack ('You quickly prick', 'You craft the impulse', 'You try to flay') to the next one, the pinshot opener left out. After a DSTAB 1.977 (n=24), after an IMPULSE 1.925 (n=12), after the FLAY 1.773. The spread is skewed (population sd 0.189), so draw.shape's quantiles fit it and a symmetric noise does not. Not usable (p90-p10 0.287, over 0.2): a gap is a choice as well as a cost. Alt 1.634 is the server-queue floor: our DSTAB cost (attack.cost.own.dstab), if a queued round fires as recovery arrives. Alt 1.83 is other Serpents' median (attack.gap.others.dstab). Our seat only: no Saibel number is a victim input. theorycraft --gap raw runs its median before every action (a drawn run adds the --gap-sd noise, not these quantiles); a numeric --gap does not read it. tools/test_kb_rules.py re-counts it",
+   "source": "kb/raw/logs/ours/2026-11-07_164635_Saibel.log:305-359 (the first), 584-630 (min, after an IMPULSE), 1040-1091 (max: the 'say lol what' at 1063), 1987-2027 (the last); 259-260 (a held command ran 0.002 s after the recovery)",
+   "tag": "MEASURED",
+   "usable": false,
+   "value": {
+    "max": 2.88,
+    "median": 1.965,
+    "min": 1.66,
+    "p10": 1.772,
+    "p90": 2.059
+   }
   },
   "attack.gap.own.sd": {
    "alt": [
+    0.061,
     0.0,
     0.2
    ],
-   "n": 264,
-   "note": "our printed cost against the measured time to recovery: 89% within +-0.15 s, about 0.09 s as a standard deviation",
-   "source": "kb/mechanics/foundations.md:116",
-   "tag": "MEASURED",
+   "note": "the symmetric noise a drawn run adds to the gap (--gap-sd, default 0.09). 0.09 comes from a printed cost against its measured recovery (foundations.md:116: 89% within +-0.15 s, n=264). It is not a measure of our gap. On our Serpent seat the DSTAB cost line to recovery has a population sd of 0.061 (n=24, attack.cost.own.dstab), the first alternative. The raw land-to-land gap is skewed (population sd 0.189, n=37), and attack.gap.own holds its quantiles",
+   "source": "kb/mechanics/foundations.md:116; kb/raw/logs/ours/2026-11-07_164635_Saibel.log (the alt 0.061)",
+   "tag": "ASSUMED",
    "value": 0.09
   },
   "attack.give": {
@@ -165,6 +263,45 @@
    "source": "kb/mechanics/foundations.md:150-154",
    "tag": "ASSUMED",
    "value": "adds the named afflictions at once"
+  },
+  "attack.impulse": {
+   "alt": [
+    "a shield blocks the bite only",
+    "it needs equilibrium only"
+   ],
+   "note": "the wiki's IMPULSE takes no venom (Hypnosis.wiki:46); our form with a venom is rule attack.impulse.venom. In the spar all 13 were sent with balance and equilibrium both up, so whether it needs both is not tested. No log shows an impulse on a shield or on the coating. The engine refuses an impulse with no venom, or with a suggestion that is not a trivial one (attack.impulse.suggestions). With --gap queue the next action waits attack.cost.own.bite; with a numeric --gap it waits that gap, and a second impulse also waits for the attacker's equilibrium",
+   "source": "kb/raw/wiki/Hypnosis.wiki:46; tools/sim/attackers.lua (A.apply, impulse)",
+   "tag": "ASSUMED",
+   "value": "IMPULSE <suggestion> <venom>: it needs the attacker's equilibrium and balance. The suggestion lands, then a bite of the venom (attack.impulse.venom). It spends equilibrium (attack.cost.own.impulse_eq) and the bite's balance. A shield blocks all of it; sileris or fangbarrier blocks the bite only"
+  },
+  "attack.impulse.suggestions": {
+   "note": "the trivial suggestions, the only ones an IMPULSE can give ('one of the trivial suggestions', Hypnosis.wiki:50). The wiki's list (rows 86-249) and the package's TRIVIAL_SUGGESTIONS hold the same 15, in the same order. Clumsiness is a complex suggestion (Hypnosis.wiki:252-254), not a trivial one. The game says 'known to you': which ones this character knows (AB HYPNOSIS) is not captured. The engine refuses an impulse of any other word (tools/sim/attackers.lua A.parse). The spar used four of them: masochism 7, confusion 3, stupidity 2, recklessness 1. tools/test_kb_rules.py checks both lists",
+   "source": "kb/raw/wiki/Hypnosis.wiki:50,86-249; src_new/scripts/levi_ataxia/levi/levi_scripts/serpent/002_Serpent_Offense.lua (TRIVIAL_SUGGESTIONS)",
+   "tag": "READ",
+   "value": [
+    "amnesia",
+    "paranoia",
+    "loneliness",
+    "claustrophobia",
+    "stuttering",
+    "hallucinations",
+    "dementia",
+    "deadening",
+    "epilepsy",
+    "agoraphobia",
+    "masochism",
+    "recklessness",
+    "vertigo",
+    "confusion",
+    "stupidity"
+   ]
+  },
+  "attack.impulse.venom": {
+   "n": 13,
+   "note": "13 of 13 impulses ('You craft the impulse of <suggestion> in the mind of <target>.') had 'You sink your fangs into <target>, injecting just the proper amount of <venom>.' 0.000-0.007 s later (median 0.001), and the costs 'Equilibrium used: 1.44s.' and 'Balance used: 1.7s.' after them. This settles the plan's impulse.venom_arg. Equilibrium came back first 13 of 13, so the bite's balance gates the next round (attack.cost.own.impulse_eq, attack.cost.own.bite). tools/test_kb_rules.py re-counts it",
+   "source": "kb/raw/logs/ours/2026-11-07_164635_Saibel.log:584-590,630-634,1269-1273,1318-1322,1364-1370,1406-1409,1545-1549,1590-1594,1637-1641,1685-1691,1741-1746,1937-1941,2027-2031",
+   "tag": "MEASURED",
+   "value": "delivers: a bite of the venom comes in the impulse's own packet"
   },
   "attack.rebounding": {
    "note": "'The attack rebounds back onto <name>!'",
@@ -4778,27 +4915,158 @@
      "brokenrightleg",
      "brokenleftarm",
      "brokenrightarm",
-     "blackout"
+     "blackout",
+     "recklessness",
+     "masochism",
+     "hypochondria",
+     "vertigo",
+     "fratricide",
+     "agoraphobia",
+     "claustrophobia",
+     "loneliness",
+     "guilt",
+     "spiritburn",
+     "tenderskin",
+     "depression",
+     "sandfever",
+     "fulminated",
+     "mycalium",
+     "shadowmadness",
+     "lethargy",
+     "flushings",
+     "scytherus",
+     "parasite",
+     "rebbies",
+     "pyramides",
+     "timeloop",
+     "justice",
+     "retribution",
+     "generosity",
+     "lovers",
+     "pacified",
+     "peace",
+     "indifference",
+     "diminished",
+     "disloyalty",
+     "manaleech",
+     "hellsight",
+     "aeon",
+     "deadening",
+     "tension",
+     "dazed",
+     "earworm",
+     "unweavingspirit",
+     "crushedthroat",
+     "dazzled",
+     "slashedthroat",
+     "stuttering",
+     "itching",
+     "selarnia",
+     "frozen",
+     "shivering",
+     "frostbite",
+     "voyria"
     ]
    ],
-   "note": "every affliction the game does not mark NoRandomCure. The package's tree pool holds 27 (--random-pool package)",
-   "source": "kb/afflictions/database.md:11-14; src_new/scripts/levi_ataxia/levi/ataxia/affliction_tracking_core/008_V3_Integration.lua:264 (treeCurableAffsV3, the alternative)",
+   "note": "every affliction the game does not mark NoRandomCure. The package's tree pool holds 77 (--random-pool package)",
+   "source": "kb/afflictions/database.md:11-14; src_new/scripts/levi_ataxia/levi/ataxia/affliction_tracking_core/008_V3_Integration.lua:271 (treeCurableAffsV3, the alternative)",
    "tag": "ASSUMED",
    "value": "NoRandomCure off"
   },
-  "ssc.delay": {
+  "reaction.loki": {
    "alt": [
-    0.1,
-    0.18
+    "off"
    ],
-   "n": 2,
-   "note": "'may eat' to eat: medians 0.18 and 0.10 s in two logs. The draw between them is uniform (ASSUMED shape)",
-   "source": "kb/mechanics/foundations.md:192",
-   "tag": "MEASURED",
+   "note": "no kb source: the game's EKANELIA STUDY LOKI text is not captured. In the spar 1 of 2 loki bites printed 'takes hold': the recklessness impulse at FL 1406 (FL 1411), then the paralysis line (FL 1414) and no nausea line. The stupidity impulse at FL 630 printed none. Loki's own random affliction is not modelled: the engine refuses loki in a DSTAB or a FLAY, and in a bite it lands only this reaction",
+   "source": "src_new/scripts/levi_ataxia/levi/levi_scripts/serpent/002_Serpent_Offense.lua (EKANELIA_TABLE, serpent.EKANELIA_RESULTS); .claude/classes/serpent.md:1194-1199",
+   "tag": "ASSUMED",
    "value": {
-    "max": 0.18,
-    "median": 0.14,
-    "min": 0.1
+    "conditionals": [
+     "confusion",
+     "recklessness"
+    ],
+    "gives": [
+     "nausea",
+     "paralysis"
+    ]
+   }
+  },
+  "reaction.monkshood": {
+   "alt": [
+    "off"
+   ],
+   "note": "the conditions are our own table's (relayed notes, PLAYER); the game's EKANELIA STUDY MONKSHOOD text is not captured. The engine fires it on a BITE, or on the bite of an impulse, when all three are up as the bite lands ('Reactions fire on the bite command', Venom.wiki:391); an impulse of masochism brings the third. The venom's own disloyalty lands too. A DSTAB fires no reaction. What the spar saw: rule reaction.monkshood.seen",
+   "source": ".claude/classes/serpent.md:1168-1178; src_new/scripts/levi_ataxia/levi/levi_scripts/serpent/002_Serpent_Offense.lua (EKANELIA_TABLE, serpent.EKANELIA_RESULTS)",
+   "tag": "ASSUMED",
+   "value": {
+    "conditionals": [
+     "asthma",
+     "masochism",
+     "weariness"
+    ],
+    "gives": [
+     "impatience"
+    ]
+   }
+  },
+  "reaction.monkshood.seen": {
+   "n": 10,
+   "note": "all 7 masochism impulses fired it (FL 1275, 1324, 1551, 1596, 1643, 1943, 2033), each with 'Saibel shuffles her feet in boredom.' after it. Of the 2 confusion impulses, FL 1693 fired it and FL 1364 did not; the stupidity impulse at FL 1741 did not. Both misses came about 0.13 s after a cure that likely took a condition: a focus at FL 1345 (07.353, before the bite at 07.492) and a tree at FL 1719 (22.857, our tracker took asthma off; the bite came at 22.987). Our seat cannot see her afflictions, so the conditions stay ASSUMED (reaction.monkshood). 'takes hold' is not monkshood's alone: loki prints it too (FL 1411). The engine does not read this rule; tools/test_kb_rules.py re-counts it",
+   "source": "kb/raw/logs/ours/2026-11-07_164635_Saibel.log:1269-1277,1318-1326,1364-1370,1545-1553,1590-1598,1637-1645,1685-1695,1741-1746,1937-1945,2027-2035; 1345, 1719 (the cures before the two misses)",
+   "tag": "MEASURED",
+   "value": "8 of 10 monkshood bites fired the reaction: 'You sense the weakness in <target> as your monkshood takes hold.', then her impatience line"
+  },
+  "ssc.delay.gain": {
+   "alt": [
+    "ssc.delay.gain.Saibel"
+   ],
+   "n": 23,
+   "note": "the SSC delay when an affliction lands on an OPEN channel: the strike to the first eat before the next attack, for a DSTAB that found the eat up (a PHASE of 0 takes its sign from the row order, kb_events.phase_at). Per log: az 0.104 (n=9), Z5 0.094 (n=5), g 0.106 (n=2), X 0.120 (n=7). It holds the logger's own reaction too, not a pure SSC delay (kb/sim/events.md). One row with no eat clock known (g 126, down null, 0.018) is in neither case. The engine draws it by rule draw.shape and holds it at 0.001 s or more (victim.lua V.delay). It replaces ssc.delay (0.10-0.18 uniform, two logs' 'may eat' to eat, foundations.md:192), which ran for both cases. The alternative is one opponent's, seen from our seat: rule ssc.delay.gain.Saibel (--ssc-gain saibel), never the default. tools/test_kb_rules.py re-derives it",
+   "source": "kb/sim/events.json race[]: the delay of each DSTAB whose 'down' is false (az 9, Z5 5, g 2, X 7)",
+   "tag": "MEASURED",
+   "usable": true,
+   "value": {
+    "max": 0.202,
+    "median": 0.104,
+    "min": 0.006,
+    "p10": 0.064,
+    "p90": 0.198,
+    "sd": 0.052
+   }
+  },
+  "ssc.delay.gain.Saibel": {
+   "alt": [
+    0.005,
+    0.055,
+    0.216
+   ],
+   "n": 9,
+   "note": "ONE opponent's open-channel reaction, seen from our seat (the 2026-11-07 spar): our paralysis line ('Horror overcomes Saibel's face') to her next magnesium eat, at each landing that came 1.506 s or more after her last herb (her shortest herb eat-to-eat; potash is moss, on its own clock) or before her first. All 9 landings that pass that cut are here, 0.005-0.216: 8 of them within 0.064 s, and FL 1098-1105 at 0.216. The cut is the only selection. Five landings came inside her forced herb eat-to-eat (1.506-1.759, n=18): FL 1462 at 1.514 s after her last herb, FL 999 at 1.530, FL 1141 at 1.566, FL 771 at 1.600 and FL 1098 at 1.610. So for each of them her eat may still have been down, and the delay a return. Which one was is not known. A per-opponent ALTERNATIVE to ssc.delay.gain, swept with --ssc-gain saibel, never a default: 'eat up' is inferred, because our seat cannot see her recovery, and the holdout waits for a victim-seat log (plan, Holdout). n=9, so it is swept min..max. tools/test_kb_rules.py re-counts it",
+   "source": "kb/raw/logs/ours/2026-11-07_164635_Saibel.log:318-323,366-371,410-415,458-463,771-776,999-1004,1098-1105,1141-1145,1462-1466",
+   "tag": "MEASURED",
+   "usable": false,
+   "value": {
+    "max": 0.216,
+    "median": 0.055,
+    "min": 0.005,
+    "p10": 0.007,
+    "p90": 0.094,
+    "sd": 0.034
+   }
+  },
+  "ssc.delay.return": {
+   "n": 163,
+   "note": "the SSC delay when a channel comes back with an affliction WAITING: the eat's return line to the first eat before the next attack, for a DSTAB that found the eat down. Per log: az 0.157, Z5 0.175, g 0.158, X 0.100. The engine also uses it when the affliction that shut a channel is cured (the tree after paralysis); no log measures that case, so there it is ASSUMED by analogy. A 0.000 is a cure in the return's own packet; the engine holds a delay at 0.001 s or more. Saibel's forced eat to eat (n=18, median 1.670, from our seat) fits a clock of about 1.50-1.54 plus a reaction of about 0.16, but our seat cannot see her recovery, so no per-opponent alternative is given (lens TC5). tools/test_kb_rules.py re-derives it",
+   "source": "kb/sim/events.json race[]: the delay of each DSTAB whose 'down' is true (az 27, Z5 38, g 20, X 78)",
+   "tag": "MEASURED",
+   "usable": true,
+   "value": {
+    "max": 0.458,
+    "median": 0.145,
+    "min": 0.0,
+    "p10": 0.05,
+    "p90": 0.239,
+    "sd": 0.074
    }
   },
   "ssc.order": {

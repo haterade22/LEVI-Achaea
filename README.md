@@ -46,7 +46,7 @@ The GUI system (zGUI Redux) was originally created by **Zulah**. It has been enh
 
 | Class | Command | Kill Route |
 |-------|---------|------------|
-| Serpent | `ek` | Ekanelia lock, darkshade, scytherus, hypnosis |
+| Serpent | `ek` | Ekanelia lock, darkshade, scytherus, hypnosis. No recklessness before the target is locked; the death adder is ordered only when it is out; `aconfig serpent attackfirst on\|off` sends the attack as each round's first command (off by default) |
 | Shaman | `zz` | Tzantza, affliction locks, bleed, relapse jinx |
 | Blademaster | `bmd`/`bmbs` | Limb prep, brokenstar, lightning/ice |
 | Infernal DWC | `zz` | Vivisect (4-limb / 2-limb), damage kill, riftlock |
@@ -758,7 +758,7 @@ After installing, `ataxia setup guide` shows every configurable option across al
 
 | Command | Section |
 |---------|---------|
-| `ataxia setup guide ataxia` | Separator, system toggle, custom prompt, defence profiles, curing priorities, item highlighting, sipping, room shortening, GUI, raid mode |
+| `ataxia setup guide ataxia` | Separator, system toggle, custom prompt, defence profiles, curing priorities, item highlighting, sipping, room shortening, GUI, raid mode, round delivery, Serpent attack first (`aconfig serpent attackfirst on\|off`) |
 | `ataxia setup guide basher` | Target lists, flee/shield thresholds, danger mobs, ignore lists, gold pack, shield swap/timer, rageraze, tree blackout |
 | `ataxia setup guide ndb` | City highlight colours, highlight toggle/priority, enemy formatting, player notes, whois lookup |
 
@@ -773,7 +773,7 @@ After installing, `ataxia setup guide` shows every configurable option across al
 | `ataxia setup basher` | Basher settings |
 | `ataxia setup sipping` | Health/mana sip thresholds |
 | `ataxia setup tracking` | Affliction tracking settings |
-| `ataxia setup combat` | Combat toggles (party relay, looting, etc.) |
+| `ataxia setup combat` | Combat toggles (party relay, looting, screen width, see balances, round delivery, Serpent attack first, etc.) |
 | `ataxia setup gui` | Toggle the GUI |
 | `ataxia setup ndb` | NDB highlighting colours |
 | `ataxia setup status` | Overview of all current settings |

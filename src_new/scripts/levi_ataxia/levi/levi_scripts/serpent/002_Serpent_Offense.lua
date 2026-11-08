@@ -105,6 +105,28 @@ local function haveAff_tactical(aff)
     return haveAff(aff)
 end
 
+-- RECKLESSNESS ONLY ON A LOCKED TARGET (user, 2026-11-07: "We shouldnt be doing recklessness unless
+-- we have locked them. Else that is a wasted attack"). In the spar against Saibel 7 DSTABs carried
+-- eurypteria, the Depthswalker class venom, and her focus or tree cured each recklessness within
+-- about 2 s (FL 361-372, FL 405-422, FL 994-1050). One impulse also used the recklessness suggestion
+-- for the loki reaction (FL 1388).
+--
+-- "Locked" is the soft lock: anorexia + asthma + slickness, so eating, smoking and salves are shut.
+-- Each piece must read at the tactical 0.70 that serp_ekanelia_offense uses for its lock pieces.
+-- A hard lock and a true lock hold the same three pieces, so they count too. The offense's own
+-- softlock flag also accepts bloodfire in place of one piece (3 of 4); bloodfire does not stop
+-- eating, so that case does not count here.
+local function targetLocked()
+    return haveAff_tactical("anorexia") and haveAff_tactical("asthma") and haveAff_tactical("slickness")
+end
+
+-- The offense chooses recklessness (the eurypteria venom, the recklessness suggestion, or
+-- recklessness as the loki conditional that an impulse brings) only when this is true.
+local function recklessnessAllowed()
+    return targetLocked() and true or false
+end
+serpent.recklessnessAllowed = recklessnessAllowed
+
 -- Attack state tracking
 serpent.state.attackInFlight = serpent.state.attackInFlight or false
 serpent.state.lastBalState = serpent.state.lastBalState or "1"
@@ -126,6 +148,14 @@ serpent.state.lastRebounding = serpent.state.lastRebounding or false
 serpent.state.postGeckoLockdown = serpent.state.postGeckoLockdown or false
 serpent.state.lockReinforceSent = serpent.state.lockReinforceSent or false
 serpent.state.camusDelivered = serpent.state.camusDelivered or false
+-- True when a game line showed this target's rebounding UP: a raise line, a rebound line (both
+-- reach us as tarAffed("rebounding")), or our flay's real strip line. The target reset only
+-- ASSUMES rebounding (016 targetresetafflictionslevi), so it does not set this.
+serpent.state.reboundingSeen = serpent.state.reboundingSeen or false
+-- Snakes in our room, {[item id] = name}, from GMCP Char.Items (location "room").
+serpent.state.snakesHere = serpent.state.snakesHere or {}
+-- True once a GMCP room list arrived, so snakesHere is a real picture of the room.
+serpent.state.roomListSeen = serpent.state.roomListSeen or false
 
 -- Suggestion queueing (keybind-driven)
 hSuggRequest = hSuggRequest or ""
@@ -197,6 +227,11 @@ local AFF_TO_VENOM = {
     stupidity = "aconite", darkshade = "darkshade",
     voyria = "voyria", haemophilia = "notechis",
 }
+
+-- False for a recklessness venom (eurypteria) while the target is not locked (recklessnessAllowed).
+local function venomAllowed(venom)
+    return VENOM_TO_AFF[venom] ~= "recklessness" or recklessnessAllowed()
+end
 
 -- =============================================================================
 -- HYPNOSIS STATE MACHINE
@@ -610,10 +645,16 @@ local FRATRICIDE_RELAPSE = 2.25
 local function selectImpulse(excludeAff)
     local hasFratricide = haveAff("fratricide")
         or (serpent.hypnosis and serpent.hypnosis.fratricideActive)
+    -- No recklessness suggestion on a target that is not locked (recklessnessAllowed): both passes
+    -- skip it, so the next suggestion in IMPULSE_PRIORITY goes instead.
+    local noReck = not recklessnessAllowed()
+    local function skip(aff)
+        return aff == excludeAff or (noReck and aff == "recklessness")
+    end
 
     -- Pass 1: respect fratricide cooldown
     for _, aff in ipairs(IMPULSE_PRIORITY) do
-        if aff ~= excludeAff and not haveAff(aff) then
+        if not skip(aff) and not haveAff(aff) then
             if hasFratricide then
                 local lastTime = lastImpulsed[aff] or 0
                 if (now() - lastTime) >= FRATRICIDE_RELAPSE then
@@ -627,7 +668,7 @@ local function selectImpulse(excludeAff)
 
     -- Pass 2: fallback — ignore fratricide cooldown rather than returning nil
     for _, aff in ipairs(IMPULSE_PRIORITY) do
-        if aff ~= excludeAff and not haveAff(aff) then
+        if not skip(aff) and not haveAff(aff) then
             return aff
         end
     end
@@ -645,7 +686,8 @@ end
 
 -- =============================================================================
 -- IMPATIENCE COOLDOWN
--- canAttemptImpatience() gates the send (the shield-break branch and PRIORITY 4).
+-- canAttemptImpatience() gates the send (PRIORITY 4). The flay round's shield-break impulse read
+-- it too until the spar fixes of 2026-11-07, which took that impulse out of the flay round.
 -- stampImpatienceCooldown() is called ONLY from the ekanelia confirm trigger
 -- (serpent/016_Ekanelia_Success, on a monkshood reaction). Until that trigger called it,
 -- nothing did, and the 2.5 s guard never closed.
@@ -837,8 +879,10 @@ local function pickVenom(exclude)
     -- Class-aware override (Track 4): once paralysis is locked, prefer the
     -- class-specific lock affliction that hits the target's weakest cure path.
     -- VENOM_TO_AFF lookup confirms the aff is missing before delivering.
+    -- venomAllowed: a Depthswalker's eurypteria waits for a locked target; until then the order
+    -- below picks the venom.
     local classVenom = getClassLockAff()
-    if classVenom and exclude ~= classVenom then
+    if classVenom and exclude ~= classVenom and venomAllowed(classVenom) then
         local classAff = VENOM_TO_AFF[classVenom]
         if classAff and not haveAff(classAff) then
             return classVenom
@@ -935,8 +979,11 @@ function selectImpulsePair()
             -- no trivial conditionals (e.g. kalmia, scytherus)
             local suggestion = selectImpulse(nil)
             return {suggestion = suggestion, venom = ek.trigger, label = ek.result}
-        elseif #missing == 1 and #missingTrivials == 1 then
-            -- Exactly one trivial conditional missing → impulse completes it
+        elseif #missing == 1 and #missingTrivials == 1
+           and (missingTrivials[1] ~= "recklessness" or recklessnessAllowed()) then
+            -- Exactly one trivial conditional missing → impulse completes it. Not when that
+            -- conditional is recklessness and the target is not locked (recklessnessAllowed): the
+            -- loop goes on to the next reaction instead.
             return {suggestion = missingTrivials[1], venom = ek.trigger, label = ek.result}
         end
     end
@@ -1524,7 +1571,7 @@ function selectVenoms()
             local v2
             local classLockAff = getLockingAffliction and getLockingAffliction("name")
             local classLockVenom = classLockAff and AFF_TO_VENOM[classLockAff]
-            if classLockVenom and not haveAff(classLockAff) then
+            if classLockVenom and not haveAff(classLockAff) and venomAllowed(classLockVenom) then
                 v2 = classLockVenom
             elseif not haveAff("voyria") then
                 v2 = "voyria"
@@ -1537,7 +1584,7 @@ function selectVenoms()
         -- Priority 2: voyria reinforcement
         if not haveAff("voyria") then
             table.insert(envenomList, "voyria")
-            if not haveAff("recklessness") then
+            if not haveAff("recklessness") and recklessnessAllowed() then
                 table.insert(envenomListTwo, "eurypteria")
             else
                 table.insert(envenomListTwo, "curare")
@@ -1557,7 +1604,8 @@ function selectVenoms()
         end
         -- Priority 4: addiction+nausea present — scytherus impulse fires via attack execution
         table.insert(envenomList, "curare")
-        table.insert(envenomListTwo, not haveAff("recklessness") and "eurypteria" or "vardrax")
+        table.insert(envenomListTwo,
+            (not haveAff("recklessness") and recklessnessAllowed()) and "eurypteria" or "vardrax")
         return
     end
 
@@ -1669,7 +1717,7 @@ end
     Execute the attack based on current strategy and venom selection.
 
     Priority order:
-    1. Flay (strip shield/rebounding) — with kalmia ekanelia impulse on eq
+    1. Flay (strip shield/rebounding), alone: an impulse spends balance too
     2. Behead (truelock + prone) or execute (finish strategy)
     3. Kalmia ekanelia impulse (asthma not present, clumsy+weary met)
     4. Impatience delivery (canAttemptImpatience + conditions gate)
@@ -1695,8 +1743,14 @@ function serp_ekanelia_attack()
     -- Rebounding-reapply prediction: when the target's rebounding drops (present->absent
     -- between ticks), stamp the clock so the PRIORITY 1.5 block below can pre-empt the
     -- ~8.5s reapply. Stamped here every tick; fired once when the reapply window opens.
-    if serpent.state.lastRebounding and not hasRebounding then
+    --
+    -- Only for a rebounding a game line SHOWED (serpent.state.reboundingSeen). A new target is
+    -- assumed to have rebounding (016 targetresetafflictionslevi), and in the 2026-11-07 spar the
+    -- first flay found "a non-existent aura of rebounding" (FL 305). That drop armed the clock,
+    -- and the pre-empt fired 9.87 s later (FL 566) for a rebounding that never existed.
+    if serpent.state.lastRebounding and not hasRebounding and serpent.state.reboundingSeen then
         lastReboundingFlay = now()
+        serpent.state.reboundingSeen = false  -- the next arm needs a new raise or strip line
     end
     serpent.state.lastRebounding = hasRebounding
 
@@ -1725,7 +1779,9 @@ function serp_ekanelia_attack()
             flayVenom = "curare"
         end
         if kalmiaEkaneliaMet() then
-            -- Ekanelia fires via impulse this round — flay just needs any useful venom
+            -- The kalmia reaction waits for the next round (the impulse spends balance too, so
+            -- it cannot ride with the flay). The flay does not give asthma, so the reaction
+            -- stays possible.
             flayVenom = not haveAff("paralysis") and "curare" or "vernalius"
         elseif not haveAff("paralysis") then
             flayVenom = "curare"
@@ -1745,27 +1801,15 @@ function serp_ekanelia_attack()
         local eqAction = getEqAction()
         local cmd
 
-        -- If kalmia ekanelia is ready, chain impulse on eq alongside flay on bal.
-        -- Flay uses lash (bal), impulse uses dirk (eq) -- they don't share a balance type.
-        --
-        -- Shield-break pressure (Track 3.3): when target shields, prefer chaining
-        -- monkshood impulse to keep impatience landing — impatience forces touch-shield
-        -- failures, which is the fastest way through a shield wall.
-        local impulsePriority = nil  -- {sug, venom, label}
-        if kalmiaEkaneliaMet() then
-            impulsePriority = {sug = selectImpulse(nil), venom = "kalmia", label = "asthma+slickness"}
-        elseif hasShield and impatienceConditionsMet() and canAttemptImpatience()
-            and checkImpulseEligible() then
-            -- Shield-break: monkshood ekanelia for impatience (forces shield touch-fail)
-            local sug = haveAff("masochism") and selectImpulse("masochism") or "masochism"
-            impulsePriority = {sug = sug, venom = "monkshood", label = "impatience (shield-break)"}
-        end
-
-        if impulsePriority and not eqAction then
-            recordImpulse(impulsePriority.sug)
-            cmd = wieldWhip .. "flay " .. target .. " " .. defense .. " " .. flayVenom
-                .. sp .. wieldDirk .. "impulse " .. target .. " " .. impulsePriority.sug .. " " .. impulsePriority.venom
-        elseif eqAction and canUseSecondary then
+        -- ONE BALANCE ACTION PER ROUND. This branch used to chain an impulse behind the flay
+        -- (the kalmia reaction, or the monkshood "shield-break"), on the belief that an impulse
+        -- uses only equilibrium. The 2026-11-07 spar shows every venom impulse spending BOTH:
+        -- "Equilibrium used: 1.44s." and "Balance used: 1.7s." (13 of 13, e.g. FL 1270 + FL 1278).
+        -- A second balance action after a spender is refused: the opener's flay after the
+        -- pinshot got "You must regain balance first." (FL 235, FL 257). So the flay goes alone,
+        -- and the next round sends the impulse (PRIORITY 3 or 4) once the defence is down. An
+        -- equilibrium action (hypnosis, snap, shrugging) can still go with it.
+        if eqAction and canUseSecondary then
             if eqAction:find("^snap") or eqAction:find("^shrugging") then
                 cmd = wieldWhip .. "flay " .. target .. " " .. defense .. " " .. flayVenom .. sp .. eqAction
             else
@@ -1775,7 +1819,7 @@ function serp_ekanelia_attack()
             cmd = wieldWhip .. "flay " .. target .. " " .. defense .. " " .. flayVenom
         end
 
-        serp_sendAttack(preAtk .. cmd)
+        serp_sendAttack(cmd, preAtk)
         return
     end
 
@@ -1789,7 +1833,7 @@ function serp_ekanelia_attack()
     if truelock then
         if haveAff("prone") then
             -- Prone: behead immediately regardless of strategy
-            serp_sendAttack(preAtk .. "wield shield scimitar" .. sp .. "behead " .. target)
+            serp_sendAttack("wield shield scimitar" .. sp .. "behead " .. target, preAtk)
             return
         elseif serpStrategy == "finish"
             and (not getStateProbabilityV3
@@ -1798,7 +1842,7 @@ function serp_ekanelia_attack()
             -- five lock affs are >=90% likely to be present together in one tracker
             -- branch. If truelock is per-aff true but jointly shaky, fall through to
             -- the lock_reinforce burst instead of gambling the kill on a bluff.
-            serp_sendAttack(preAtk .. "execute " .. target)
+            serp_sendAttack("execute " .. target, preAtk)
             return
         end
         -- Otherwise fall through to lock_reinforce burst finish sequence
@@ -1819,7 +1863,7 @@ function serp_ekanelia_attack()
         local biteVenom = (bite and bite.venom) or pickVenom(nil)
         recordImpulse(impAff)
         lastReboundingFlay = 0  -- fire once per reapply cycle
-        serp_sendAttack(preAtk .. wieldDirk .. "impulse " .. target .. " " .. impAff .. " " .. biteVenom)
+        serp_sendAttack(wieldDirk .. "impulse " .. target .. " " .. impAff .. " " .. biteVenom, preAtk)
         return
     end
 
@@ -1833,8 +1877,8 @@ function serp_ekanelia_attack()
     if kalmiaEkaneliaMet() and canUseSecondary and not eqAction then
         local impulseAff = selectImpulse(nil)
         recordImpulse(impulseAff)
-        serp_sendAttack(preAtk .. wieldDirk ..
-            "impulse " .. target .. " " .. impulseAff .. " kalmia")
+        serp_sendAttack(wieldDirk ..
+            "impulse " .. target .. " " .. impulseAff .. " kalmia", preAtk)
         return
     end
 
@@ -1861,8 +1905,8 @@ function serp_ekanelia_attack()
             impulseAff = "masochism"
         end
         recordImpulse(impulseAff)
-        serp_sendAttack(preAtk .. wieldDirk ..
-            "impulse " .. target .. " " .. impulseAff .. " monkshood")
+        serp_sendAttack(wieldDirk ..
+            "impulse " .. target .. " " .. impulseAff .. " monkshood", preAtk)
         return
     end
 
@@ -1873,8 +1917,8 @@ function serp_ekanelia_attack()
     if focusLockReady() and canUseSecondary and not eqAction and checkImpulseEligible() then
         local impulseAff = selectImpulse(nil)
         recordImpulse(impulseAff)
-        serp_sendAttack(preAtk .. wieldDirk ..
-            "impulse " .. target .. " " .. impulseAff .. " monkshood")
+        serp_sendAttack(wieldDirk ..
+            "impulse " .. target .. " " .. impulseAff .. " monkshood", preAtk)
         return
     end
 
@@ -2061,7 +2105,7 @@ function serp_ekanelia_attack()
         cmd = wieldDirk .. "impulse " .. target .. " " .. hSuggActive .. " " .. impulsePair.venom
     end
 
-    serp_sendAttack(preAtk .. cmd)
+    serp_sendAttack(cmd, preAtk)
 end
 
 --[[
@@ -2123,94 +2167,432 @@ local function nextExitToBlock()
 end
 
 --[[
-    Build the opening burst (Track 1).
-    Fired once per fight when serpent.state.firstAttack is true.
-    Includes: dispel, adder order (already added by caller), optional pinshot
-    via bow swap, optional sigil drop. Returns prefix string (with trailing sp)
-    or "" if no opener pieces are active.
+    The opening commands (Track 1), for the first attack on a target. Returns two lists:
+      bow    -- remove and wield the bow, then PINSHOT. Empty when the bow opener is off or a
+                pinshot is already in the target.
+      sigils -- the sigil drop, when useSigils is on.
+    buildRound puts the round's own wield and attack STRAIGHT AFTER the pinshot. The pinshot
+    spends balance, so the game holds each later command that needs balance in its balance queue
+    and runs them at the recovery. In the 2026-11-07 spar it held six (wield, order adder, g body,
+    g gold, stand, wield) and refused the flay behind them without holding it ("You must regain
+    balance first." with no "added" line, FL 235-257), so the coating strip slipped a whole round.
+    With the wield and the attack first in that queue, the attack runs at the recovery.
 ]]--
-local function buildOpener(sp)
-    local prefix = ""
-    if not serpent.config.useOpener then return prefix end
+local function buildOpener()
+    local bow, sigils = {}, {}
+    if not serpent.config.useOpener then return bow, sigils end
 
-    -- Pinshot: only if bow opener enabled, pinshot not already active on target,
-    -- and we have a fresh dispel slot (covers ekauto re-init via tar changed).
+    -- Pinshot: only if the bow opener is on and no pinshot is already in the target.
     -- Pinshot REQUIRES a body part; "foot" is the standard impale target
     -- (matches the inbound trigger pattern "Your arrow slams into the foot of ...").
     if serpent.config.useBowOpener and not tpinshot then
-        local bow = serpent.config.bowName or "bow"
-        prefix = prefix
-            .. "remove " .. bow .. sp
-            .. "wield " .. bow .. sp
-            .. "pinshot " .. target .. " foot" .. sp
-            .. "wield shield dirk" .. sp
+        local b = serpent.config.bowName or "bow"
+        bow = { "remove " .. b, "wield " .. b, "pinshot " .. target .. " foot" }
         serpent.state.pinshotSentAt = getEpoch()
     end
 
     -- Sigil deployment: optional, requires inventory of sigils.
     if serpent.config.useSigils and not serpent.state.sigilDeployed then
-        prefix = prefix
-            .. "drop incandescent sigil" .. sp
-            .. "attach monolith sigil to incandescent sigil" .. sp
+        sigils = { "drop incandescent sigil", "attach monolith sigil to incandescent sigil" }
         serpent.state.sigilDeployed = true
     end
 
-    return prefix
+    return bow, sigils
+end
+
+-- =============================================================================
+-- ROUND ASSEMBLY
+-- =============================================================================
+
+-- The verbs that spend our balance. The first one in the offence's command is the round's attack.
+local ATTACK_VERBS = {
+    dstab = true, doublestab = true, flay = true, impulse = true, bite = true,
+    behead = true, execute = true,
+}
+
+-- combatQueue()'s three standing commands (ataxia/003). In the 2026-11-07 spar they did nothing in
+-- 39 of 39 rounds: 'I see no "body" to take.', 'I see no "gold" to take.' and 'You are not fallen
+-- or kneeling.'.
+local IDLE_PRE = { ["g body"] = true, ["g gold"] = true, stand = true }
+
+-- `s` split on the separator `sp`. Each piece is trimmed, and empty pieces are left out.
+local function splitCommands(s, sp)
+    local out = {}
+    if type(s) ~= "string" or s == "" then return out end
+    if type(sp) ~= "string" or sp == "" then
+        local only = s:match("^%s*(.-)%s*$")
+        if only ~= "" then out[1] = only end
+        return out
+    end
+    local start = 1
+    while true do
+        local i, j = s:find(sp, start, true)
+        local piece = s:sub(start, i and (i - 1) or #s):match("^%s*(.-)%s*$")
+        if piece ~= "" then out[#out + 1] = piece end
+        if not i then break end
+        start = j + 1
+    end
+    return out
+end
+
+local function firstWord(piece)
+    return piece:lower():match("^(%S+)")
+end
+
+-- OUR WEAPONS BY ITEM ID. Attack-first sends a wield only when GMCP shows the weapon is not in
+-- hand. GMCP gives the names of the wielded items (ataxiaTemp.wieldedItems, basher/015), but the
+-- user's dirk and whip are artefacts ("Thoth's fang", "Elentari's Scourge"), so a name does not
+-- say which weapon it is. So the id is learned: at the round after one that wielded
+-- "shield <weapon>", the one wielded item that is not the shield is that weapon, if it was not in
+-- hand before that wield. Transient (ataxiaTemp), so a restart learns it again.
+local function weaponIds()
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.serpentWeaponIds = ataxiaTemp.serpentWeaponIds or {}
+    return ataxiaTemp.serpentWeaponIds
+end
+
+local function isShieldName(name)
+    return type(name) == "string" and name:lower():find("shield", 1, true) ~= nil
+end
+
+-- The ids of the wielded items that are not the shield, or nil when GMCP has not shown the hands.
+local function heldWeapons()
+    local inHand = ataxiaTemp and ataxiaTemp.wieldedItems
+    if type(inHand) ~= "table" then return nil end
+    local out = {}
+    for id, name in pairs(inHand) do
+        if not isShieldName(name) then out[tostring(id)] = true end
+    end
+    return out
+end
+
+local function learnWeapon()
+    local kw, before = serpent.state.lastWieldKw, serpent.state.lastWieldBefore
+    serpent.state.lastWieldKw, serpent.state.lastWieldBefore = nil, nil
+    local inHand = ataxiaTemp and ataxiaTemp.wieldedItems
+    if not kw or type(before) ~= "table" or type(inHand) ~= "table" then return end
+    local other, count, shield = nil, 0, false
+    for id, name in pairs(inHand) do
+        if isShieldName(name) then
+            shield = true
+        else
+            other, count = tostring(id), count + 1
+        end
+    end
+    -- The bow takes both hands, so a shield in hand also shows that the wield ran. The item must
+    -- be NEW: when the same item is still in hand, the wield failed or changed nothing, and that
+    -- item is not proven to be the weapon. A wrong id would hold back a wield that is needed.
+    if shield and count == 1 and not before[other] then
+        local ids = weaponIds()
+        for k, v in pairs(ids) do
+            if v == other then ids[k] = nil end
+        end
+        ids[kw] = other
+    end
+end
+
+-- Ask GMCP for the inventory once, so the next rounds know what is in hand.
+local function askInventory()
+    ataxiaTemp = ataxiaTemp or {}
+    if not ataxiaTemp.serpentInvAsked and sendGMCP then
+        ataxiaTemp.serpentInvAsked = true
+        pcall(sendGMCP, "Char.Items.Inv")
+    end
+end
+
+-- True when this wield ("wield shield dirk") must go before the attack: GMCP shows one of its
+-- items not in hand. An unknown hand counts as not in hand, as in basher/015: a wrong weapon costs
+-- the whole round, and an extra wield costs only a few milliseconds.
+local function wieldNeeded(piece)
+    local inHand = ataxiaTemp and ataxiaTemp.wieldedItems
+    if type(inHand) ~= "table" then
+        askInventory()
+        return true
+    end
+    for word in piece:lower():gmatch("%S+") do
+        if word ~= "wield" then
+            local id = weaponIds()[word]
+            local held = false
+            if id then
+                held = inHand[id] ~= nil
+            else
+                for _, name in pairs(inHand) do
+                    if type(name) == "string" and name:lower():find(word, 1, true) then
+                        held = true
+                        break
+                    end
+                end
+            end
+            if not held then return true end
+        end
+    end
+    return false
+end
+
+-- =============================================================================
+-- THE DEATH ADDER
+-- Every round sent "order adder kill <target>". In the 2026-11-07 spar no adder was out (user:
+-- "we have an adder I just didnt put it out there"), and the game refused all 39 orders with five
+-- different texts. Trigger 641 read three of them as "the target left the room" and started the
+-- TargetOutOfRoom timer, which erased target afflictions seven times and reset the tracker twice.
+-- So the order goes only when our adder is here: a snake in the room (GMCP Char.Items, location
+-- "room"), or the mount we ride is the adder (basher/013).
+-- =============================================================================
+
+-- The snake's name, from the basher's class-pet list (basher/001, ataxiaBasher_CLASS_PETS.Serpent).
+local function snakeWords()
+    local pets = ataxiaBasher_CLASS_PETS and ataxiaBasher_CLASS_PETS.Serpent
+    if type(pets) == "table" and #pets > 0 then return pets end
+    return { "death adder" }
+end
+
+-- True when the name is the snake's (the mount check has only a name).
+local function isSnake(name)
+    if type(name) ~= "string" then return false end
+    local low = name:lower()
+    if low:find("corpse", 1, true) then return false end
+    for _, w in ipairs(snakeWords()) do
+        if type(w) == "string" and w ~= "" and low:find(w:lower(), 1, true) then return true end
+    end
+    return false
+end
+
+-- A room item is our snake only when GMCP marks it a living monster: attrib holds "m" and no "d"
+-- (dead). An item such as "a death adder fang" or "a statue of a death adder" has no "m", and an
+-- order to it is refused like the 39 in the spar. Our own adder can carry "x" (do not attack),
+-- so "x" does not count against it (update_stuff/003 drops "x" only from the denizens).
+local function isRoomSnake(name, attrib)
+    if type(attrib) ~= "string" or not attrib:find("m", 1, true) then return false end
+    if attrib:find("d", 1, true) then return false end
+    return isSnake(name)
+end
+
+-- GMCP room contents: keep the snakes in our room, by item id. A List for the room replaces the
+-- picture (a new room sends one); Add and Remove change one item.
+function serpent.onRoomItems(event)
+    local items = gmcp and gmcp.Char and gmcp.Char.Items
+    if type(items) ~= "table" then return end
+    if event == "gmcp.Char.Items.List" then
+        local l = items.List
+        if type(l) ~= "table" or l.location ~= "room" then return end
+        local here = {}
+        for _, it in pairs(l.items or {}) do
+            if type(it) == "table" and isRoomSnake(it.name, it.attrib) then here[tostring(it.id)] = it.name end
+        end
+        serpent.state.snakesHere = here
+        serpent.state.roomListSeen = true
+        return
+    end
+    local key = (event == "gmcp.Char.Items.Add" and "Add") or (event == "gmcp.Char.Items.Remove" and "Remove")
+    local m = key and items[key]
+    if type(m) ~= "table" or m.location ~= "room" or type(m.item) ~= "table" then return end
+    serpent.state.snakesHere = serpent.state.snakesHere or {}
+    local id = tostring(m.item.id)
+    if key == "Add" and isRoomSnake(m.item.name, m.item.attrib) then
+        serpent.state.snakesHere[id] = m.item.name
+    else
+        serpent.state.snakesHere[id] = nil
+    end
+end
+
+-- We ride our adder: basher/013 keeps the mounted belief, and the name and id of the mount.
+local function ridingSnake()
+    if not (ataxiaBasher_isMounted and ataxiaBasher_isMounted()) then return false end
+    if isSnake(omount) then return true end
+    local id = ataxia.settings and ataxia.settings.user and ataxia.settings.user.mount
+    local names = ataxiaBasher and ataxiaBasher.mountIds
+    if type(names) ~= "table" or not id then return false end
+    return isSnake(names[tonumber(id)])
+end
+
+function serpent.adderHere()
+    if next(serpent.state.snakesHere or {}) ~= nil then return true end
+    return ridingSnake()
+end
+
+-- "order adder kill <target>" when the adder is here. Else nil, with one note per target: the
+-- changed-target handler clears the note, and so does an adder that comes back.
+-- No room list since the load (a login, or a reload before the first move): ask GMCP for the
+-- room's items once. The answer is a Char.Items.List for the room, which onRoomItems reads.
+local function askRoom()
+    ataxiaTemp = ataxiaTemp or {}
+    if not serpent.state.roomListSeen and not ataxiaTemp.serpentRoomAsked and sendGMCP then
+        ataxiaTemp.serpentRoomAsked = true
+        pcall(sendGMCP, "Char.Items.Room")
+    end
+end
+
+local function adderOrder()
+    if serpent.adderHere() then
+        serpent.state.adderNotedFor = nil
+        return "order adder kill " .. target
+    end
+    askRoom()
+    if serpent.state.adderNotedFor ~= target then
+        serpent.state.adderNotedFor = target
+        Algedonic.Echo("<yellow>ADDER<white>: no death adder here, so the rounds go without 'order adder kill'.")
+    end
+    return nil
 end
 
 --[[
-    Send the attack if target is present.
-    Wraps with queue and handles dispel + attackInFlight.
-    Round-1 burst (Track 1): pinshot + sigils + dispel + adder order.
+    The round, as one line for send(). `cmd` is the offence's own command (its wield, its attack,
+    and an equilibrium action if any). `pre` is combatQueue()'s prefix. `block` is the exit-block
+    command, or nil.
+
+    MUDLET SPLITS THE LINE ON THE SEPARATOR, so the game gets one command per piece. Only the FIRST
+    piece goes into "queue addclear freestand"; the other pieces go raw, one after the other. The
+    offence sends only with balance up, so that queued piece runs at once. A raw piece that needs
+    balance and comes after the attack is refused and then HELD by the game ("... was added to your
+    balance queue."), and the game runs it at the next recovery (FL 235-255).
+
+    TWO ORDERS (aconfig serpent attackfirst):
+      off (the default): purge, the adder order, combatQueue's commands, then the offence's wield
+          and attack (the order before the 2026-11-07 spar, with the adder fix).
+      on: the attack goes before purge, the adder order, the sigils and combatQueue's commands.
+          Only these go in front of it:
+            - a raw stand, only when we are prone. It goes in front of the queue command, because a
+              freestand entry cannot run while we are prone (HELP 4.6.1);
+            - the wield, only when GMCP shows the weapon is not in hand (wieldNeeded);
+            - an equilibrium step that the offence puts before the attack (suggest, seal,
+              hypnotise). Since 2026-10-23 a SUGGEST used off balance takes a fixed equilibrium
+              that nothing can modify, and a SEAL used off balance takes an unmodified equilibrium
+              (kb/changes/2026-10-23_classleads.md). Before the attack, they go on balance.
+          A step the offence puts after the attack (snap, shrugging) stays after it.
+          Why: in the 2026-11-07 spar the game answered the second and later commands of a send
+          about 0.09 s after the first, so an attack sent after six commands landed about 0.12 s
+          later on our clock. Whether it also lands later at the server is open (lens_costs F2,
+          F6). This setting is the probe.
+    THE FIRST ROUND on a target opens with DISPEL in both orders, because a reflection would take
+    the attack. With the bow opener on it then sends the PINSHOT, and the round's wield and attack go
+    straight after it (buildOpener). That round leaves out combatQueue's three idle commands.
+    THE EXIT BLOCK goes LAST in every order, after the attack (see serp_sendAttack).
+]]--
+local function buildRound(cmd, pre, block)
+    local sp = ataxia.settings.separator
+    local cmdPieces = splitCommands(cmd, sp)
+    local prePieces = splitCommands(pre, sp)
+    local prone = (ataxia.afflictions and ataxia.afflictions.prone) and true or false
+    local attackFirst = (ataxia.settings.serpentattackfirst == true)
+
+    learnWeapon()
+
+    -- The offence's command: its wield (before the attack), the other pieces before the attack,
+    -- its attack, and the pieces after the attack.
+    local wieldPiece, attackPiece, beforeAttack, afterAttack = nil, nil, {}, {}
+    for _, p in ipairs(cmdPieces) do
+        local w = firstWord(p)
+        if w == "wield" and not wieldPiece and not attackPiece then
+            wieldPiece = p
+        elseif ATTACK_VERBS[w] and not attackPiece then
+            attackPiece = p
+        elseif attackPiece then
+            afterAttack[#afterAttack + 1] = p
+        else
+            beforeAttack[#beforeAttack + 1] = p
+        end
+    end
+
+    local order = adderOrder()
+    local bow, sigils = {}, {}
+    if serpent.state.firstAttack then
+        bow, sigils = buildOpener()
+        serpent.state.firstAttack = false
+    end
+
+    local pieces, rawFirst = {}, nil
+    local function add(p) if p then pieces[#pieces + 1] = p end end
+    local function addAll(list) for _, p in ipairs(list) do add(p) end end
+
+    if not serpent.state.dispelSent then
+        add("dispel " .. target)
+        serpent.state.dispelSent = true
+    end
+
+    if #bow > 0 then
+        -- The opening round, in both orders. Purge needs no balance: in the spar it ran just after
+        -- the pinshot spent balance, with no hold (FL 235, FL 240). A stand goes while balance is
+        -- still up. So neither takes a held slot.
+        add("purge")
+        if prone then add("stand") end
+        addAll(bow)
+        if not wieldPiece then add("wield shield dirk") end  -- the bow must leave our hands
+        addAll(cmdPieces)
+        add(order)
+        addAll(sigils)
+        for _, p in ipairs(prePieces) do
+            if not IDLE_PRE[p:lower()] then add(p) end
+        end
+    elseif attackFirst and attackPiece then
+        if prone then rawFirst = "stand" end
+        if wieldPiece and wieldNeeded(wieldPiece) then add(wieldPiece) end
+        addAll(beforeAttack)   -- suggest, seal or hypnotise: they must go on balance
+        add(attackPiece)
+        addAll(afterAttack)    -- snap or shrugging
+        add("purge")
+        add(order)
+        addAll(sigils)
+        for _, p in ipairs(prePieces) do
+            if not (rawFirst and p:lower() == "stand") then add(p) end
+        end
+    else
+        addAll(sigils)
+        add("purge")
+        add(order)
+        addAll(prePieces)
+        addAll(cmdPieces)
+    end
+    add(block)
+
+    -- The weapon this round wields, and what was in hand before it, for learnWeapon at the next
+    -- round.
+    for _, p in ipairs(pieces) do
+        local kw = p:lower():match("^wield shield (%S+)$")
+        if kw then
+            serpent.state.lastWieldKw = kw
+            serpent.state.lastWieldBefore = heldWeapons()
+        end
+    end
+
+    local line = "queue addclear freestand " .. table.concat(pieces, sp)
+    if rawFirst then line = rawFirst .. sp .. line end
+    return line
+end
+
+--[[
+    Send one round if the target is in the room. buildRound puts it together, and attackInFlight
+    holds the next dispatch until balance comes back. `cmd` is the offence's own command and `pre`
+    is combatQueue()'s prefix; they come apart so that attack-first can move the prefix.
     Per-round denial (Track 3): exit-block rotated through gmcp.Room.Info.exits.
 ]]--
-function serp_sendAttack(atk)
+function serp_sendAttack(cmd, pre)
     if not table.contains(ataxia.playersHere, target) then
         Algedonic.Echo("<red>Target not in room!<white>")
         return
     end
 
-    local sp = ataxia.settings.separator
-
-    -- Exit-block: send block on a fresh direction (config-gated, throttled).
-    -- We DON'T add this to the queue prefix because `block <dir>` uses balance
-    -- in Achaea — chaining it before dstab in the same queue would error.
-    -- Instead, fire it as a standalone send when our balance is up but the
-    -- attack is queued. Currently called via prefix to keep the change local;
-    -- if it causes balance errors live, move out of the chain.
+    -- EXIT BLOCK (serpent.config.useExitBlock, off by default; one new direction each 5 s).
+    -- No log shows what BLOCK costs. If it spends balance, a block in front of the round makes the
+    -- attack the second balance action: the game refuses it and holds it to the next recovery, so
+    -- the attack slips a whole balance. It used to go out raw just before the round, for that
+    -- reason, on the belief that the whole round was queued. Only the round's first piece is
+    -- queued (buildRound), so the block now goes LAST in the round, after the attack. The attack
+    -- then never waits for it. If BLOCK needs balance, the game holds it and runs it at the next
+    -- recovery; if BLOCK also spends balance, the NEXT round's attack waits for it.
+    local block
     if serpent.config.useExitBlock then
         local epoch = getEpoch()
         if (epoch - serpent.state.lastBlockSentAt) >= 5 then
             local dir = nextExitToBlock()
             if dir then
-                -- Send block as its own (unqueued) command; if it errors, the
-                -- main attack still goes through unaffected.
-                send("block " .. dir, false)
+                block = "block " .. dir
                 serpent.state.blockedExits[dir] = epoch
                 serpent.state.lastBlockSentAt = epoch
             end
         end
     end
 
-    -- Order adder to attack target
-    atk = "order adder kill " .. target .. sp .. atk
-
-    -- Purge residual venom before new attack
-    atk = "purge" .. sp .. atk
-
-    -- Prepend round-1 opener burst (pinshot, sigils — first attack only)
-    if serpent.state.firstAttack then
-        atk = buildOpener(sp) .. atk
-        serpent.state.firstAttack = false
-    end
-
-    -- Prepend dispel if first attack
-    if not serpent.state.dispelSent then
-        atk = "dispel " .. target .. sp .. atk
-        serpent.state.dispelSent = true
-    end
-
-    send("queue addclear freestand " .. atk)
+    send(buildRound(cmd, pre or "", block))
     serpent.state.attackInFlight = true
 end
 
@@ -2620,6 +3002,12 @@ function serp_status()
     -- Attack in flight
     cecho("<white>Attack In Flight: " .. (serpent.state.attackInFlight and "<yellow>YES" or "<dim_grey>No") .. "<reset>\n")
     cecho("<white>Dispel Sent: " .. (serpent.state.dispelSent and "<green>YES" or "<dim_grey>No") .. "<reset>\n")
+    cecho("<white>Death Adder: " .. (serpent.adderHere() and "<green>HERE (ordered each round)"
+        or "<red>NOT HERE (no order sent)") .. "<reset>\n")
+    cecho("<white>Attack First: " .. ((ataxia.settings and ataxia.settings.serpentattackfirst) and "<green>ON"
+        or "<dim_grey>OFF") .. "<white> (aconfig serpent attackfirst)<reset>\n")
+    cecho("<white>Recklessness: " .. (recklessnessAllowed() and "<green>ALLOWED (target locked)"
+        or "<dim_grey>HELD (target not locked)") .. "<reset>\n")
 
     cecho("<cyan>==================================<reset>\n")
 end
@@ -2634,6 +3022,31 @@ function serpent.resetCureTracking()
     serpent.cureTracking.bloodrootCures = 0
     serpent.cureTracking.focusCures = 0
     serpent.cureTracking.lastReset = getEpoch()
+end
+
+-- "tar afflicted" (017 tarAffed): `added` is the list of afflictions just given to the target.
+function serpent.onTargetAfflicted(added)
+    if added == "rebounding" then
+        serpent.state.reboundingSeen = true
+        return
+    end
+    if type(added) ~= "table" then return end
+    for _, aff in pairs(added) do
+        if aff == "rebounding" then
+            serpent.state.reboundingSeen = true
+            return
+        end
+    end
+end
+
+-- Our flay's own line about the target's rebounding. `real` is true for the strip line ("You
+-- flay away X's aura of rebounding defence."), which shows that the rebounding was up. It is
+-- false for "You try to flay a non-existent aura of rebounding from X.", which shows that it was
+-- not. Trigger 400 takes rebounding off the tracker on both lines; these two lines only decide
+-- whether that drop arms the reapply pre-empt (PRIORITY 1.5).
+function serpent.onReboundingFlayed(who, real)
+    local ours = (isTargeted and isTargeted(who)) or (who == target)
+    if ours then serpent.state.reboundingSeen = real and true or false end
 end
 
 -- Kill existing event handlers to avoid duplicates
@@ -2672,8 +3085,25 @@ if registerAnonymousEventHandler then
         lastImpatienceAttempt = 0
         lastReboundingFlay = 0
         serpent.state.lastRebounding = false
+        serpent.state.reboundingSeen = false  -- the new target's rebounding is only assumed
+        serpent.state.adderNotedFor = nil     -- say again, once, that the adder is not out
+        serpent.state.lastWieldKw = nil
+        serpent.state.lastWieldBefore = nil
         hSuggActive = ""
     end)
+
+    -- A game line showed the target's rebounding up: a raise line (430), "The attack rebounds
+    -- back onto you!" (274, serpent/001, 011) and the other tarAffed("rebounding") callers.
+    serpent.eventHandlers.tarAfflicted = registerAnonymousEventHandler("tar afflicted", function(_, added)
+        if serpent.onTargetAfflicted then serpent.onTargetAfflicted(added) end
+    end)
+
+    -- The snakes in our room, for the adder order (serpent.onRoomItems).
+    for _, ev in ipairs({ "gmcp.Char.Items.List", "gmcp.Char.Items.Add", "gmcp.Char.Items.Remove" }) do
+        serpent.eventHandlers["roomItems " .. ev] = registerAnonymousEventHandler(ev, function(event)
+            if serpent.onRoomItems then serpent.onRoomItems(event) end
+        end)
+    end
 
     -- Balance recovery: clear attackInFlight (edge-triggered: only on 0→1 transition)
     -- Level-triggered clear caused double dispatches when keybind mashed — GMCP vitals
@@ -2823,6 +3253,22 @@ if tempRegexTrigger then
                 serpent.hypnosis.reset()
                 Algedonic.Echo("<red>HYPNOSIS: <white>Target noticed -- state reset")
             end
+        ]]
+    )
+
+    -- Our flay's two rebounding lines (serpent.onReboundingFlayed). Trigger 400 has the same two
+    -- patterns and does the tracker's removal; these only set serpent.state.reboundingSeen.
+    serpent.triggers.reboundingFlayed = tempRegexTrigger(
+        "^You flay away (\\w+)'s aura of rebounding defence\\.$",
+        [[
+            if serpent and serpent.onReboundingFlayed then serpent.onReboundingFlayed(matches[2], true) end
+        ]]
+    )
+
+    serpent.triggers.reboundingNotThere = tempRegexTrigger(
+        "^You try to flay a non-existent aura of rebounding from (\\w+)\\.$",
+        [[
+            if serpent and serpent.onReboundingFlayed then serpent.onReboundingFlayed(matches[2], false) end
         ]]
     )
 

@@ -130,6 +130,21 @@ describe("fight log: the round delivery in the header (control fight against tes
     expect(text:find("| opponent Agathon | our class Monk | test | rounds alias\n", 1, true) ~= nil).toBeTrue()
   end)
 
+  it("a Serpent log names the attack-first setting after the rounds field; other classes do not", function()
+    fresh()
+    gmcp.Char.Status.class = "Serpent"
+    ataxia.settings.serpentattackfirst = true
+    F.start("Agathon", "test", false)
+    local on = read(F.stop("test"))
+    fresh()
+    gmcp.Char.Status.class = "Serpent"
+    F.start("Agathon", "test", false)
+    local off = read(F.stop("test"))
+    gmcp.Char.Status.class = "Monk"
+    expect(has(on, "| our class Serpent | test | rounds raw | serpent attackfirst on\n")).toBeTrue()
+    expect(has(off, "| our class Serpent | test | rounds raw | serpent attackfirst off\n")).toBeTrue()
+  end)
+
   it("notes what each alias holds, because the first queue row names only the alias", function()
     fresh()
     ataxiaTemp.roundSend = { aliases = { lvfree = { text = "stand/combo Agathon a" } }, queued = {} }

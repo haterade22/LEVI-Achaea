@@ -541,6 +541,148 @@ class Stated(unittest.TestCase):
         self.assertEqual(self._gaps(rows)["FLAY"]["stats"]["n"], 1)
 
 
+SERPENT = "2026-11-07_164635_Saibel.log"
+SERPENT_HEADER = ("# LEVI fight log | version 4.7.478 | started 2026-11-07 16:46:35 | opponent Saibel | our class Serpent "
+                  "| started by hand | rounds raw")
+# ours/2026-11-07_164635_Saibel, editor lines 233-236 (the pinshot opener).
+SERPENT_PINSHOT = [
+    "16:47:20.228 | Drawing back on your bowstring, you take careful aim at Saibel and let fly an arrow.",
+    "16:47:20.229 | Your arrow slams into the foot of Saibel.",
+    "16:47:20.230 | Balance used: 1.8s.",
+    "16:47:20.231 P H: Full, M: High, E: High, W: High cekdb-",
+]
+# Lines 300-320, some rows left out: the one FLAY that landed.
+SERPENT_FLAY = [
+    "16:47:22.414 | You secrete curare and deftly bring Elentari's Scourge to your mouth, letting the venom drip upon it.",
+    "16:47:22.414 | You try to flay a non-existent aura of rebounding from Saibel.",
+    "16:47:22.414 | The protective coating covering the skin of Saibel is ripped away with their protections.",
+    "16:47:22.414 > pt Saibel: Rebounding Down",
+    "16:47:22.414 | With your victim exposed, you crack Elentari's Scourge back for a second assault.",
+    "16:47:22.414 | Horror overcomes Saibel's face as her body stiffens into paralysis.",
+    "16:47:22.414 | Balance used: 1.7s.",
+    "16:47:22.419 P H: Full, M: High, E: High, W: Full cekdb-",
+]
+# Lines 333-377, some rows left out: one raw DSTAB round, from the send to the recovery.
+SERPENT_DSTAB = [
+    "16:47:23.986 > queue addclear freestand purge",
+    "16:47:23.990 > order adder kill Saibel",
+    "16:47:23.990 > wield shield dirk",
+    "16:47:23.990 > dstab Saibel curare eurypteria",
+    "16:47:24.053 | [System]: Queued freestand commands cleared.",
+    "16:47:24.057 | [System]: Added PURGE to your freestand queue.",
+    "16:47:24.058 | [System]: Running queued freestand command: PURGE",
+    "16:47:24.059 | You purge every drop of venom from your bloodstream.",
+    "16:47:24.065 P H: Full, M: High, E: Full, W: Full cexkdb-",
+    "16:47:24.156 | You detect nothing here by that name.",
+    "16:47:24.158 P H: Full, M: High, E: Full, W: Full cexkdb-",
+    "16:47:24.187 | You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.",
+    "16:47:24.187 | You secrete eurypteria and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.",
+    "16:47:24.187 | You quickly prick Saibel with your dirk.",
+    "16:47:24.187 +tar paralysis",
+    "16:47:24.187 > pt Saibel: paralysis recklessness",
+    "16:47:24.187 | Striking like a snake, you prick Saibel a second time with your dirk.",
+    "16:47:24.187 | Horror overcomes Saibel's face as her body stiffens into paralysis.",
+    "16:47:24.187 | Balance used: 1.8s.",
+    "16:47:24.193 P H: Full, M: High, E: High, W: Full cekdb-",
+    "16:47:24.240 | Saibel eats a magnesium chip.",
+    "16:47:24.248 P H: Full, M: High, E: High, W: Full cekdb-",
+    "16:47:25.864 | You have recovered balance on all limbs.",
+    "16:47:25.873 P H: Full, M: High, E: High, W: Full cexkdb-",
+]
+# Lines 1269-1279, some rows left out: an IMPULSE with a venom. The bite comes in the same packet.
+SERPENT_IMPULSE = [
+    "16:48:03.691 | You craft the impulse of masochism in the mind of Saibel.",
+    "16:48:03.692 | Equilibrium used: 1.44s.",
+    "16:48:03.693 | You feel the power of the venom monkshood flowing through your veins.",
+    "16:48:03.693 +tar disloyalty",
+    "16:48:03.693 | You sink your fangs into Saibel, injecting just the proper amount of monkshood.",
+    "16:48:03.694 | You sense the weakness in Saibel as your monkshood takes hold.",
+    "16:48:03.694 | Saibel shuffles her feet in boredom.",
+    "16:48:03.694 | Balance used: 1.7s.",
+    "16:48:03.700 P H: Full, M: High, E: High, W: Full ckdb-",
+]
+
+
+class SerpentSeat(unittest.TestCase):
+    """Our own Serpent costs and rounds, from the 2026-11-07 spar against Saibel."""
+
+    def log(self, *packets):
+        rows = [SERPENT_HEADER]
+        for packet in packets:
+            rows.extend(packet)
+        return kb.parse_rows(SERPENT, rows)
+
+    def test_the_recorder_names_the_serpent_seat(self):
+        log = self.log(SERPENT_DSTAB)
+        self.assertEqual((log.family, log.logger, log.our_class), ("ours", "Ours, recorder (Serpent)", "Serpent"))
+
+    def test_each_printed_cost_goes_to_its_serpent_ability(self):
+        log = self.log(SERPENT_PINSHOT, SERPENT_FLAY, SERPENT_DSTAB, SERPENT_IMPULSE)
+        found, _, _, ambiguous = kb.own_costs([log])
+        who = "Ours, recorder (Serpent)"
+        self.assertEqual(found["PINSHOT"][who], [1.8])
+        self.assertEqual(found["FLAY"][who], [1.7])
+        self.assertEqual(found["DSTAB"][who], [1.8])
+        self.assertEqual(found["IMPULSE"][who], [1.44])
+        self.assertEqual(found["BITE"][who], [1.7])
+        self.assertEqual(dict(ambiguous), {})
+        self.assertEqual(kb.printed_cost_rows([log]), 5)
+
+    def test_the_impulse_packet_holds_two_costs_on_two_channels(self):
+        # The impulse spends equilibrium and its bite spends balance. One channel each, so neither is a guess.
+        found = kb.own_costs([self.log(SERPENT_IMPULSE)])[0]
+        self.assertEqual(sorted(found), ["BITE", "IMPULSE"])
+        channels = {name: channel for name, _, _, channel, _ in kb.OWN_COSTS}
+        self.assertEqual((channels["IMPULSE"], channels["BITE"]), ("equilibrium", "balance"))
+
+    def test_the_stated_rows_are_the_serpents_own_skills(self):
+        rows = {name: (skill, ability) for name, skill, ability, _, _ in kb.OWN_COSTS}
+        self.assertEqual(rows["DSTAB"], ("Subterfuge", "Doublestab"))
+        self.assertEqual(rows["BITE"], ("Venom", "Bite"))
+        self.assertEqual(rows["IMPULSE"], ("Hypnosis", "Impulse"))
+        self.assertEqual(rows["FLAY"], ("Subterfuge", "Flay"))
+        self.assertEqual(rows["PINSHOT"], ("Subterfuge", "Pinshot"))
+
+    def test_the_ratio_compares_the_printed_cost_with_abilities_json(self):
+        table = {("Subterfuge", "Doublestab"): "2.80 seconds of balance", ("Hypnosis", "Impulse"): "1.70 seconds of equilibrium",
+                 ("Venom", "Bite"): "4.00 seconds of balance"}
+        log = self.log(SERPENT_DSTAB, SERPENT_IMPULSE)
+        log.id = "ours/164635_Saibel"
+        rows = {r["ability"]: r for r in kb.build_own([log], table)[0]}
+        self.assertEqual(rows["DSTAB"]["by_logger"][0]["ratio"], round(1.8 / 2.8, 3))
+        self.assertEqual(rows["IMPULSE"]["by_logger"][0]["ratio"], round(1.44 / 1.7, 3))
+        self.assertEqual(rows["BITE"]["by_logger"][0]["ratio"], round(1.7 / 4.0, 3))
+
+    def test_the_screen_log_of_the_spar_stays_out_of_the_pools(self):
+        # kb/raw/logs/2026-11-07_serpent-spar-saibel.txt lines 111-118, some rows left out: the same DSTAB on the screen.
+        rows = ["You secrete curare and deftly bring Thoth's fang to your mouth, letting the venom drip upon it.",
+                "You quickly prick Saibel with your dirk.",
+                "[PAR] [REC] Striking like a snake, you prick Saibel a second time with your dirk.",
+                "Balance used: 1.8s.",
+                "16:47:24:188 [8413] [99] |(Saibel)|[ [ ]]  zz"]
+        log = kb.parse_rows("2026-11-07_serpent-spar-saibel.txt", rows)
+        self.assertEqual((log.family, log.logger), ("sentinel", "Ours, client log"))
+        self.assertEqual(kb.SAME_FIGHT[log.name], SERPENT)
+        self.assertEqual(dict(kb.own_costs([log])[0]), {})
+        self.assertEqual(kb.printed_cost_rows([log]), 0)
+
+    def test_serpent_attacks_spend_the_round_and_the_setup_does_not(self):
+        for sent in ("dstab Saibel curare eurypteria", "impulse Saibel masochism monkshood", "flay Saibel rebounding curare",
+                     "pinshot Saibel foot", "bite Saibel curare"):
+            self.assertTrue(kb.SPENDER.match(sent), sent)
+        for sent in ("purge", "order adder kill Saibel", "wield shield dirk", "g body", "stand", "pt Saibel: paralysis"):
+            self.assertFalse(kb.SPENDER.match(sent), sent)
+
+    def test_a_raw_serpent_round_counts_toward_rounds_per_minute(self):
+        # The attack goes out as its own send, not through the queue, so it opens the 6 s window.
+        part = kb.score_log(self.log(SERPENT_DSTAB))[0]
+        self.assertEqual(part["mode"], "raw")
+        self.assertEqual(part["active_s"], 6.0)
+        self.assertEqual((part["recoveries"], part["active_recoveries"]), (1, 1))
+        # Only PURGE ran from the queue, and it is no spender, so no flush is judged for setup.
+        self.assertEqual((part["setup_ok"], part["setup_flushes"], part["fired"]), (0, 0, 0))
+
+
 ALIAS_FIGHT = [
     HEADER,
     # Raw: rows of the shape in ours/2026-10-27_112717, rows 111-125 and 216-231.

@@ -261,6 +261,13 @@ end
 -- ============================================
 
 -- Canonical tree-curable affliction list (was treeCurableAffsV2, now owned by V3)
+-- The pool is every affliction that the tracker can hold and that the game's AFFLICTION SHOW marks
+-- "NoRandomCure: No" (kb/raw/live/affliction_show/<aff>.txt). Order matters only for the broken
+-- limbs (ataxia_targetTreeV3, curing/002). onTargetTreeV3 gives each candidate an equal share.
+-- Out of the pool:
+--   every affliction that the game marks NoRandomCure, and the damaged (level-2) limbs among them;
+--   burning and the fractures (crackedribs, wristfractures, ...): they come in levels or stacks,
+--   and V3 holds each as one affliction, so it cannot take off one level.
 treeCurableAffsV3 = {
     "paralysis", "slickness", "anorexia", "asthma", "sensitivity",
     "clumsiness", "weariness", "epilepsy", "haemophilia", "nausea",
@@ -270,7 +277,27 @@ treeCurableAffsV3 = {
     -- v4.7.416: the tree cured these in Mystor's logs (healthleech, a level-1 broken limb) and in a
     -- Runewarden's (blackout), and the game's AFFLICTION SHOW does not mark any of them NoRandomCure.
     -- Damaged (level-2) limbs ARE NoRandomCure, so they stay out.
-    "healthleech", "brokenleftleg", "brokenrightleg", "brokenleftarm", "brokenrightarm", "blackout"
+    "healthleech", "brokenleftleg", "brokenrightleg", "brokenleftarm", "brokenrightarm", "blackout",
+    -- 2026-11-07 Serpent spar: the 50 below were missing. Saibel's tree at 16:47:26.296
+    -- (kb/raw/logs/ours/2026-11-07_164635_Saibel.log:422) most likely took recklessness (INFERRED, CONFLICTS #65), her only affliction
+    -- then: paralysis was eaten 0.2 s before, and pinshot is NoRandomCure. The tracker kept the
+    -- recklessness for 5 more rounds. Grouped by the cure the game gives.
+    -- Lobelia/argentum (several also focus):
+    "recklessness", "masochism", "hypochondria", "vertigo", "fratricide", "agoraphobia",
+    "claustrophobia", "loneliness", "guilt", "spiritburn", "tenderskin",
+    -- Goldenseal/plumbum:
+    "depression", "sandfever", "fulminated", "mycalium", "shadowmadness",
+    -- Ginseng/ferrum, kelp/aurum, bloodroot/magnesium:
+    "lethargy", "flushings", "scytherus", "parasite", "rebbies", "pyramides",
+    -- Bellwort/cuprum (lovers, pacified and peace also focus):
+    "timeloop", "justice", "retribution", "generosity", "lovers", "pacified", "peace",
+    "indifference", "diminished",
+    -- Smoke (valerian/realgar, elm/cinnabar):
+    "disloyalty", "manaleech", "hellsight", "aeon", "deadening", "tension", "dazed", "earworm",
+    "unweavingspirit",
+    -- Salves (mending, epidermal, caloric) and the immunity sip:
+    "crushedthroat", "dazzled", "slashedthroat", "stuttering", "itching", "selarnia",
+    "frozen", "shivering", "frostbite", "voyria"
 }
 -- Backward compat alias
 treeCurableAffsV2 = treeCurableAffsV3

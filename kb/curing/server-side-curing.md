@@ -98,7 +98,7 @@ Sources: `kb/raw/live/curing-status_2026-10-10.txt`, `curingset-list_2026-10-10.
 | Fallback Curing | Yes | Switches to the herb when out of the mineral |
 | Health/Mana Priority | Health | |
 | Sip health / mana at | 80% / 75% | |
-| Eat moss below health / mana | 70% / 70% | Moss shares the eating balance with every cure |
+| Eat moss below health / mana | 70% / 70% | Moss and potash have their own clock, not the eat's (kb/CONFLICTS.md Resolved 2026-11-07, was #11) |
 | Use focus / Focus over herbs | Yes / Yes | FOCUS is tried before herbs for mental afflictions |
 | Use tree / Use clot | Yes / Yes | |
 | Clot at / Clot to | 100 bleeding / 0 bleeding | `CLOT TO` is not in HELP 13.7.8 |

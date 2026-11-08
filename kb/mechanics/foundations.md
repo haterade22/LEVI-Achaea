@@ -27,7 +27,7 @@ Nothing here was run as a live test unless it says so. Every "last exit" below i
 |---|---|---|
 | S | `2026-08-19_..._Sentinel.txt` | 1 |
 | T54, Eve, LcJ | Mystor against a Shaman, a Depthswalker, an Apostate (ids `t54WWU6b`, `EveP2TVe`, `LcJC-rJ5`) | 1 |
-| MK, INF | `ours/2026-10-27_112717_Tabethys.log`, `ours/2026-10-27_135412_Tabethys.log` | 1 |
+| MK, INF, FL | `ours/2026-10-27_112717_Tabethys.log`, `ours/2026-10-27_135412_Tabethys.log`; FL is `ours/2026-11-07_164635_Saibel.log`, our Serpent spar (our seat only, added 2026-11-07) | 1 |
 | az, Vr, WK, 4c, Cx, s98, Lc, WO, J7 | Claes: `azbErKcK`, `Vr.NkCGD`, `WKuEakBZ`, `4c_SeyaA`, `CxxKSMq`, `s98kPGv6`, `2026-11-01_..._LcJC-rJ5`, `WO7tC3kL`, `J7Xnr_Jg` | 0 |
 | X, K, L | Nikita: `X8pRorzR`, `kAQnlFAW`, `L8LSw7xD` | 0 |
 | T, A, g, Z5 | Elmer: `2N1HTSWZ`, `3ys7NuHA`, `g-lD00-h`, `Z5cyffxx` | 0 |
@@ -88,7 +88,7 @@ p90-p10 is 0.18-0.27 s whether the clock is 1.5 s or 14 s. MEASURED across four 
 | Salve, restoration | 4.0 | 21 | The limb cure lands at the end of this clock |
 | Focus | 2.42 | 97 | 4.82-4.99 with shadowmadness (n=6) |
 | Sip | 4.40 | 281 | Skull fractures add about 1.35 s (n=4 against 2) |
-| Moss, potash | 5.9 | 104 | A clock of its own (CONFLICTS #11) |
+| Moss, potash | 5.9 | 104 | A clock of its own: Saibel's 4 potash eats in FL ignored her eat clock (CONFLICTS, Resolved 2026-11-07, was #11) |
 | Tree | 13.95 | 124 | |
 | FITNESS lockout | about 10 | 10 pairs | 9.06-10 on 10 pairs, unresolved under 0.5 s. It keeps running under weariness |
 | Immunity sip | 7.3-7.7 | 2 | Separate from the health sip |
@@ -113,7 +113,7 @@ are game text, enabled by `CONFIG SEEBALANCES` (CONFIRMED live, `raw/live/seebal
 until 2026-11-01, so our earlier logs do not show them. Since v4.7.470, `aconfig seebalances on` sends it at every login (off by default, until the
 extra line is shown to break nothing). On our seat FITNESS printed 2.8 s, and our own stopwatch read
 2.785 s (n=1). Printed cost against
-the measured time to recovery: median -0.02 s, 89% within +-0.15 s (balance, n=264). MEASURED.
+the measured time to recovery: median -0.02 s, 89% within +-0.15 s (balance, n=264). MEASURED. **Our Serpent seat (FL, 2026-11-07) does not show this from the cost line:** 21 of 52 cost lines are within +-0.15 s timed from the cost line, and 50 of 52 timed from the round's first reply (DSTAB 1.634 and 1.75 against a printed 1.8). Each cost line came in the round's second packet, about 0.09 s after the first reply. Which time the server counts is open ([CONFLICTS](../CONFLICTS.md) #69).
 
 | Own cost | Stated | Printed | Ratio |
 |---|---|---|---|
@@ -127,7 +127,7 @@ the measured time to recovery: median -0.02 s, 89% within +-0.15 s (balance, n=2
 So **a cost = stated x k**, where k depends on the character, the channel and sometimes the form. Rain form adds
 x0.85 on equilibrium. Weariness, asthma, clumsiness and paralysis did not change a reap's cost. MEASURED. **Engage is an exception:** Claes prints
 the shield at 4.00 and Concentrate at 2.00, which Elmer's k of 0.85 puts at their base, so Claes's k is 1.00 and Engage should read 2.50. This table
-is a small part of the printed costs: [clocks.md](clocks.md) says how much it covers, and the Shikudo combos are not in it.
+is a small part of the printed costs: [clocks.md](clocks.md) says how much it covers, and the Shikudo combos are not in it. Our Serpent's own costs (FL: DSTAB 1.8, BITE 1.7, IMPULSE 1.44 of equilibrium, FLAY 1.7, PINSHOT 1.8, printed) are in clocks.md's Own costs table, and an IMPULSE with a venom spends balance as well as equilibrium (CONFLICTS #68).
 
 | Opponent's ability | Stated | Gap to next attack, median | n |
 |---|---|---|---|
@@ -189,7 +189,7 @@ worse in no comparison ([CONFLICTS](../CONFLICTS.md) #57). This is a model on 10
 | "Locks land while the victim's cures are on cooldown" | Clock-dark at closure in 1 of 5. Keys shut by clock OR blocker is the real contrast |
 | "Winners strike just after a key is spent" | Within 2 s of FOCUS: 4 of 31, with about 2.5 expected by chance |
 | "An enemy's earliest action is about 0.8x stated" | No single multiplier fits: 0.43 to 0.95 by ability |
-| "SSC acts with no delay" | "May eat" to eat: median 0.18 s and 0.10 s, in two logs |
+| "SSC acts with no delay" | "May eat" to eat: median 0.18 s and 0.10 s, in two logs. **Since 2026-11-07 the delay is split by case** ([sim/rules.md](../sim/rules.md), from the race in the four Serpent logs, `kb/sim/events.json`): onto an open eat, `ssc.delay.gain`, median 0.104 s (p10 0.064, p90 0.198, n=23: az 9, Z5 5, g 2, X 7); on an eat that comes back with an affliction waiting, `ssc.delay.return`, median 0.145 s (p10 0.050, p90 0.239, n=163). Both hold the logger's own reaction too, not SSC alone. One opponent seen from our seat, Saibel in FL, gave 0.055 s (n=9, `ssc.delay.gain.Saibel`): an alternative only, never a victim default |
 | "Paralysis beats haemophilia inside magnesium" | Haemophilia is a ferrum cure, 20 of 20 |
 | "Both balances up 25-34% of the time is wasted" | Inside attack bursts it is 7-8%. The rest was roaming or chasing |
 | "FITNESS fired 4.59 s late for lack of a hook" | Equilibrium was down until that moment (S:2040, 2097) |

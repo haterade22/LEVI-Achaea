@@ -89,6 +89,8 @@ All herb triggers now call `onHerbCureV3(herbname)`:
 | Bellwort | `onHerbCureV3("bellwort")` |
 | Lobelia | `onHerbCureV3("lobelia")` |
 
+Bloodroot (`herbs/005_Bloodroot_TEST.lua`) calls `onHerbCureV3` itself. Since v4.7.479 it skips its V1 erase chain while V3 is on, because that chain took a second affliction per eat. It reports a cure that V3 made certain through `ataxia_tarAffFaded`. See [03-trigger-integration.md](03-trigger-integration.md) ("Bloodroot").
+
 ### Smoke Trigger
 `369_Smoked.lua` calls `onSmokeCureV3()` which:
 1. Proves asthma is absent (can't smoke with asthma)

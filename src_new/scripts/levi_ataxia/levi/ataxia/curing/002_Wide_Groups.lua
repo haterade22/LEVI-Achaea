@@ -198,13 +198,14 @@ end
 --     lock's checkSoftlock among them (shikudo/007:85). tSingleRandom's erase used to hide this. So
 --     every pool affliction that was there before the tree and is gone after is erased, which also
 --     raises "target cured aff" for the cure.
---  2. The four level-1 broken limbs are in the pool (008:273) but simple-tracked (007:80), and
+--  2. The four level-1 broken limbs are in the pool (treeCurableAffsV3, 008) but simple-tracked (007:80), and
 --     onTargetTreeV3 only looks in the branches. When no branch held anything else the tree could
 --     take, the tree took a limb: the first present in the pool's order goes (left leg, right leg,
 --     left arm, right arm, the order tSingleRandom erased them in). Beside a branch candidate the
 --     limb stays, because V3 cannot branch a simple-tracked affliction.
 function ataxia_targetTreeV3()
-  -- Asked before the tree starts its balance. False: V3 calls this tree an illusion (008:296) and
+  -- Asked before the tree starts its balance. False: V3 calls this tree an illusion (the
+  -- canTargetCureV3 check at the top of onTargetTreeV3, 008) and
   -- charges nothing, so the limb is not charged either.
   local accepted = not canTargetCureV3 or canTargetCureV3("tree")
   local simple = {}

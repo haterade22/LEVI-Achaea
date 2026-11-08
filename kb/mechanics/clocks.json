@@ -3808,20 +3808,20 @@
   "ours": {
    "fixed": 0,
    "held": 0,
-   "logs": 11,
-   "prompts": 17138,
+   "logs": 12,
+   "prompts": 17624,
    "wrapped": 0
   },
   "sentinel": {
    "fixed": 0,
    "held": 0,
-   "logs": 4,
-   "prompts": 6773,
+   "logs": 5,
+   "prompts": 6947,
    "wrapped": 49
   }
  },
  "generated_by": "tools/kb_timing.py",
- "latest_filed": "2026-11-03",
+ "latest_filed": "2026-11-07",
  "logs": [
   {
    "family": "sentinel",
@@ -4286,6 +4286,20 @@
    "wrapped": 0
   },
   {
+   "family": "sentinel",
+   "file": "2026-11-07_serpent-spar-saibel.txt",
+   "filed": "2026-11-07",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "serpent-spar-saibel",
+   "in_pools": false,
+   "logger": "Ours, client log",
+   "prompts": 174,
+   "unstamped_prompts": 0,
+   "version": null,
+   "wrapped": 0
+  },
+  {
    "family": "ours",
    "file": "2026-10-12_201153_Tabethys.log",
    "filed": "2026-10-12",
@@ -4437,6 +4451,20 @@
    "prompts": 1874,
    "unstamped_prompts": 0,
    "version": "4.7.471",
+   "wrapped": 0
+  },
+  {
+   "family": "ours",
+   "file": "2026-11-07_164635_Saibel.log",
+   "filed": "2026-11-07",
+   "fixed_stamps": 0,
+   "held_stamps": 0,
+   "id": "ours/164635_Saibel",
+   "in_pools": true,
+   "logger": "Ours, recorder (Serpent)",
+   "prompts": 486,
+   "unstamped_prompts": 0,
+   "version": "4.7.478",
    "wrapped": 0
   }
  ],
@@ -5930,9 +5958,159 @@
     "channel": "balance",
     "stated": null,
     "stated_note": "no row in abilities.json"
+   },
+   {
+    "ability": "DSTAB",
+    "by_logger": [
+     {
+      "filed": [
+       "2026-11-07"
+      ],
+      "logger": "Ours, recorder (Serpent)",
+      "logs": {
+       "ours/164635_Saibel": 24
+      },
+      "printed": {
+       "1.8": 24
+      },
+      "ratio": 0.643,
+      "stats": {
+       "max": 1.8,
+       "median": 1.8,
+       "min": 1.8,
+       "n": 24,
+       "p10": 1.8,
+       "p90": 1.8,
+       "spread": 0.0
+      }
+     }
+    ],
+    "channel": "balance",
+    "stated": 2.8,
+    "stated_note": "Subterfuge/Doublestab: 2.80 seconds of balance"
+   },
+   {
+    "ability": "BITE",
+    "by_logger": [
+     {
+      "filed": [
+       "2026-11-07"
+      ],
+      "logger": "Ours, recorder (Serpent)",
+      "logs": {
+       "ours/164635_Saibel": 13
+      },
+      "printed": {
+       "1.7": 13
+      },
+      "ratio": 0.425,
+      "stats": {
+       "max": 1.7,
+       "median": 1.7,
+       "min": 1.7,
+       "n": 13,
+       "p10": 1.7,
+       "p90": 1.7,
+       "spread": 0.0
+      }
+     }
+    ],
+    "channel": "balance",
+    "stated": 4.0,
+    "stated_note": "Venom/Bite: 4.00 seconds of balance"
+   },
+   {
+    "ability": "IMPULSE",
+    "by_logger": [
+     {
+      "filed": [
+       "2026-11-07"
+      ],
+      "logger": "Ours, recorder (Serpent)",
+      "logs": {
+       "ours/164635_Saibel": 13
+      },
+      "printed": {
+       "1.44": 13
+      },
+      "ratio": 0.847,
+      "stats": {
+       "max": 1.44,
+       "median": 1.44,
+       "min": 1.44,
+       "n": 13,
+       "p10": 1.44,
+       "p90": 1.44,
+       "spread": 0.0
+      }
+     }
+    ],
+    "channel": "equilibrium",
+    "stated": 1.7,
+    "stated_note": "Hypnosis/Impulse: 1.70 seconds of equilibrium"
+   },
+   {
+    "ability": "FLAY",
+    "by_logger": [
+     {
+      "filed": [
+       "2026-11-07"
+      ],
+      "logger": "Ours, recorder (Serpent)",
+      "logs": {
+       "ours/164635_Saibel": 1
+      },
+      "printed": {
+       "1.7": 1
+      },
+      "ratio": 0.85,
+      "stats": {
+       "max": 1.7,
+       "median": 1.7,
+       "min": 1.7,
+       "n": 1,
+       "p10": 1.7,
+       "p90": 1.7,
+       "spread": 0.0
+      }
+     }
+    ],
+    "channel": "balance",
+    "stated": 2.0,
+    "stated_note": "Subterfuge/Flay: 2.00 seconds of balance"
+   },
+   {
+    "ability": "PINSHOT",
+    "by_logger": [
+     {
+      "filed": [
+       "2026-11-07"
+      ],
+      "logger": "Ours, recorder (Serpent)",
+      "logs": {
+       "ours/164635_Saibel": 1
+      },
+      "printed": {
+       "1.8": 1
+      },
+      "ratio": 0.6,
+      "stats": {
+       "max": 1.8,
+       "median": 1.8,
+       "min": 1.8,
+       "n": 1,
+       "p10": 1.8,
+       "p90": 1.8,
+       "spread": 0.0
+      }
+     }
+    ],
+    "channel": "balance",
+    "stated": 3.0,
+    "stated_note": "Subterfuge/Pinshot: 3.00 seconds of balance"
    }
   ],
   "own_ambiguous_packets": {},
-  "own_printed_rows": 1304
+  "own_printed_rows": 1356
  }
 }
