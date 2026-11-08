@@ -42,9 +42,11 @@ patterns:
   type: 1
 ]]--
 
-local propAff = sylvan_propagateAff()
-
-local person = multimatches[1][3]
+-- The pattern has ONE capture, so the name is [1][2]. This read [1][3] (nil), and isTargeted(nil)
+-- throws. sylvan_propagateAff was deleted in 3c312975 and is restored in
+-- limb_management/011_Sylvan_Propagation; it returns false when nothing is propagated, and
+-- tarAffed(false) would record an affliction named false, so only a real one is passed on.
+local person = multimatches[1][2]
 local propAff = sylvan_propagateAff()
 
 if isTargeted(person) then
@@ -52,9 +54,9 @@ if isTargeted(person) then
   erAff("shield")
   moveCursor(0, getLineNumber()-1)
 	if next(envenomList) then	
-		tarAffed(envenomList[1], propAff)
+		if propAff then tarAffed(envenomList[1], propAff) else tarAffed(envenomList[1]) end
 		table.remove(envenomList, 1)
-  else
+  elseif propAff then
     tarAffed(propAff)
 	end
 	moveCursorEnd()

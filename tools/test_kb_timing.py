@@ -744,6 +744,21 @@ class Scoreboard(unittest.TestCase):
         rows = [HEADER.replace("rounds raw", "rounds alias"), "15:00:00.100 P H: Full cxkdb-"]
         self.assertEqual([p["mode"] for p in self.parts(rows)], ["alias"])
 
+    def test_the_rounds_field_is_read_wherever_it_sits(self):
+        # A Serpent header carries "| serpent attackfirst on|off" (026_Fight_Log.lua F.start). The recorder writes it
+        # before the rounds field, and a field after "rounds alias" must not turn the log raw either.
+        serpent = HEADER.replace("our class Monk", "our class Serpent")
+        for head in (serpent.replace("| rounds raw", "| serpent attackfirst on | rounds alias"),
+                     serpent.replace("| rounds raw", "| rounds alias | serpent attackfirst off")):
+            log = kb.parse_rows("2026-11-01_150000_Sadey.log", [head, "15:00:00.100 P H: Full cxkdb-"])
+            self.assertEqual((log.rounds, log.our_class), ("alias", "Serpent"), head)
+        log = kb.parse_rows("2026-11-01_150000_Sadey.log", [serpent.replace("| rounds raw", "| serpent attackfirst off"
+                                                                           " | rounds raw"), "15:00:00.100 P H: Full -"])
+        self.assertEqual(log.rounds, "raw")
+        # A header from before the field is raw.
+        log = kb.parse_rows("2026-11-01_150000_Sadey.log", [HEADER.replace(" | rounds raw", ""), "15:00:00.100 P H: -"])
+        self.assertEqual(log.rounds, "raw")
+
     def test_refusals_per_recovery_counts_three_limb_lines_as_one(self):
         alias = self.parts()[1]
         self.assertEqual(alias["recoveries"], 1)

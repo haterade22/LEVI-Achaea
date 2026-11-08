@@ -45,6 +45,8 @@ if matches[2] == target then
         lastFocus = nil
     end
 targetAteWrapper("kelp")
+-- Track for adaptive serpent offense (ekstatus's kelp count), as 007_Ginseng does for ginseng
+if serpent and serpent.trackCure then serpent.trackCure("kelp") end
 if passiveFailsafe then restorePassiveCure() end
     tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end

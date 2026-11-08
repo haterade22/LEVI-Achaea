@@ -64,7 +64,13 @@ if isTargeted(matches[2]) then
   else
     send("queue addclear free touch tentacle " ..target)
   end
-end
+  -- The chase window, the target-gone flag and the cure-guess timer are for the TARGET's flight
+  -- only, as in 634 and 637. They ran for anyone who flew: in
+  -- kb/raw/logs/ours/2026-11-03_081009_Froedine.log, Kaden flew at row 3206 and our next round
+  -- (row 3229) had "touch tentacle Lauryyn" (dir_left was still "fly" from row 393, Froedine's
+  -- flight while she was the target), while Lauryyn stood in the room. With a walk-out direction
+  -- left in dir_left, combatQueue would walk us out of the fight, and TargetOutOfRoom erased the
+  -- afflictions of a target who never left.
   if tChaseTimer then
 		killTimer(tostring(tChaseTimer))
  	end
@@ -72,4 +78,5 @@ end
 
 	targetIshere = false
 	enableTimer("TargetOutOfRoom")
-	
+end
+

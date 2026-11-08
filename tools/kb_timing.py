@@ -326,6 +326,7 @@ def parse_client(rows, family, log):
 ID_AFTER_RESULT = re.compile(r"_(?:win|loss|noresult)_(.+)$")
 OUR_ROW = re.compile(r"^(\d\d):(\d\d):(\d\d)\.(\d{3}) (\S+) ?(.*)$")
 OUR_HEADER = re.compile(r"\| version (\S+) \| started (\S+) \S+ \| opponent (\S+) \| our class (.+?) \|")
+ROUNDS_FIELD = re.compile(r"\| rounds (raw|alias)\b")
 OUR_KINDS = {"|": "line", "P": "prompt", ">": "sent"}
 
 
@@ -338,8 +339,10 @@ def parse_ours(rows, log):
             if m:
                 log.version, log.date, _, log.our_class = m.groups()
                 log.logger = "Ours, recorder (%s)" % log.our_class
-                # Logs from before the field are raw (kb/raw/logs/README.md).
-                log.rounds = "alias" if text.rstrip().endswith("rounds alias") else "raw"
+                # Logs from before the field are raw (kb/raw/logs/README.md). The field is read wherever it sits: a
+                # Serpent header carries "| serpent attackfirst on|off" too (026_Fight_Log.lua F.start).
+                field = ROUNDS_FIELD.search(text)
+                log.rounds = field.group(1) if field else "raw"
             log.append(Row(i, "note", text))
             continue
         m = OUR_ROW.match(text)

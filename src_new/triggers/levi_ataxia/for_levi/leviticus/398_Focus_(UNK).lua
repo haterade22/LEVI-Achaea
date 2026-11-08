@@ -42,13 +42,26 @@ if isTargeted(matches[2]) and tBals.focus then
 	-- or impatience confirmed). The unconditional erAff + tFocused below used
 	-- to run as well, overriding those guards and removing a SECOND aff from
 	-- every branch (v4.7.372, deep review). They remain the non-V3 path.
+	-- This trigger owns the focus. 399 (the same line, then the next) only reads that next line:
+	-- when it names the cure (lovers), ataxia_knownCureV3 puts back the branches kept here, so the
+	-- focus counts once. 399 used to repeat all of this behind `tBals.focus`, which is false by the
+	-- time it runs (set below, a line earlier), so its Serpent count never ran (2026-11-08 deep
+	-- review, F43; 68 focus lines in the six Serpent logs, kb/raw/logs/ours/2026-11-07_164635_Saibel.log:372).
 	if onTargetFocusV3 then
-		onTargetFocusV3()
+		if ataxia_randomCureV3 then
+			ataxia_randomCureV3("focus", matches[2], onTargetFocusV3)
+		else
+			onTargetFocusV3()
+		end
 	else
 		erAff("impatience")
 		tFocused()
 	end
-	-- Inside the guard, as in 399. This block ran for anyone's focus line, so a bystander's focus
+	-- Track for adaptive serpent offense (moved here from 399, F43). The focus count itself is only
+	-- shown (ekstatus), but every trackCure call also rolls the 6 s window (serpent/002
+	-- serpent.trackCure), so a focus can now clear an expired ginseng count that determineStrategy reads.
+	if serpent and serpent.trackCure then serpent.trackCure("focus") end
+	-- Inside the guard. This block ran for anyone's focus line, so a bystander's focus
 	-- put the TARGET's clock down, and the gate above then refused the target's real cure.
 	tBals.focus = false
 	tBals.focusUsedAt = getEpoch()

@@ -15,4 +15,5 @@ packageName: ''
 ]]--
 
 sendAll("mind unlock " ..target)
-osend("pt MIND UNLOCK: " ..target)
+-- Was osend, which nothing defines: the unlock went out and the party call threw.
+send("pt MIND UNLOCK: " ..target)

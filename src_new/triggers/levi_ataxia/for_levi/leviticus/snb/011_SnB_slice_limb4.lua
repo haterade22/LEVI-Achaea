@@ -83,8 +83,6 @@ if gmcp.Char.Status.class == "Runewarden" then
   lastLimbAttack = "snbSlice"
   end
 
-if swordneed[1] == "combination "..target.." slice "..targetlimb.." gecko "..shieldneed[1]..";shieldstrike "..target.." low" or "combination "..target.." slice gecko "..shieldneed[1]..";shieldstrike "..target.." low"
-then
-paraslick = true
-else paraslick = false
-end
+-- The swordneed/shieldneed check that ended this body is gone. 3c312975 deleted both tables, so
+-- it threw on every slice, and its `x == a or "b"` was always true anyway: paraslick was set
+-- true each time, and nothing reads paraslick.

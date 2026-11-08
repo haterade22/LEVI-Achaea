@@ -41,7 +41,8 @@ tdeliverance = false
   if passiveFailsafe then restorePassiveCure() end
 	erAff("slickness")
 
-	-- V3 integration: salve proves slickness absent
+	-- V3 integration: salve proves slickness absent. Runs after 391-395 on the same line; when one
+	-- of them has charged the application (onSalveCureV3), this call does nothing (008).
 	if onTargetApplySalveV3 then onTargetApplySalveV3() end
 
 	targetIshere = true

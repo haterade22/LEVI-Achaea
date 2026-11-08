@@ -181,6 +181,21 @@ describe("the target's tree is charged once (trigger 389)", function()
     expect(P("recklessness")).toBe(0)
     expect(tAffs.recklessness).toBeFalse()
   end)
+
+  -- Deep review F19 (2026-11-08): 389 took one Magi burn off on every tree. Burning is no tree cure
+  -- in V3, and the game's lines own the count (general/025: "The fires consuming X diminish
+  -- somewhat."); a tree on burning Kalys left burning at 1.00
+  -- (kb/raw/logs/2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt:359-361).
+  it("a tree leaves the Magi burn count and burning alone", function()
+    world()
+    tarAffed("weariness", "nausea", "burning")
+    magi.offense.state.burns = 2
+    tburns = 2
+    tree()
+    expect(magi.offense.state.burns).toBe(2)
+    expect(tburns).toBe(2)
+    expect(P("burning")).toBe(1)
+  end)
 end)
 
 -- The [TREE] countdown echoes (389). In the 2026-11-07 spar Saibel's tree came 12 ms before the
@@ -445,13 +460,19 @@ describe("the target's focus clock (triggers 398, 399)", function()
     expect(clock()).toBe(4.8)
   end)
 
-  it("399 under shadowmadness: the same 4.8 s", function()
+  -- Deep review F43 (2026-11-08): 399 repeated 398's clock behind tBals.focus, which 398 had set
+  -- false a line earlier, so it never ran. 398 owns the clock now; 399 only reads the next line.
+  it("399 after 398 starts no second clock and moves nothing on a plain next line", function()
     world()
     serpent = nil
-    tarAffed("shadowmadness")
+    tarAffed("shadowmadness", "stupidity")
+    focus("Agathon")
+    local id, p = tBals.timers.focus, P("stupidity")
     multimatches = { { focusLine("Agathon"), "Agathon" }, {}, { "The next line." } }
     KNOWN_BODY()
+    expect(tBals.timers.focus).toBe(id)
     expect(clock()).toBe(4.8)
+    expect(P("stupidity")).toBe(p)
   end)
 end)
 

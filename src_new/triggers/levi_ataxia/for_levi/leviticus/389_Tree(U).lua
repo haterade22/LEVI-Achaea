@@ -69,11 +69,12 @@ tdeliverance = false
   if tBals.timers.tree then killTimer(tBals.timers.tree) end
 	tBals.timers.tree = tempTimer(13, [[tBals.tree = true; tBals.timers.tree = nil]])
 	targetIshere = true
-	
-  magi.offense = magi.offense or {}
-  magi.offense.state = magi.offense.state or {}
-  magi.offense.state.burns = math.max((magi.offense.state.burns or 0) - 1, 0)
-  tburns = magi.offense.state.burns
+	-- The tree leaves the Magi burn count (magi.offense.state.burns, tburns) alone. It used to take
+	-- one burn off on every tree, whatever the tree cured; burning is not a tree cure in V3
+	-- (treeCurableAffsV3), and the game's own lines own the count: general/025 lowers it on "The
+	-- fires consuming X diminish somewhat." A tree on burning Kalys left burning at 1.00 while the
+	-- tree branched over frozen, weariness and nausea
+	-- (kb/raw/logs/2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt:359-361). Deep review F19.
 -- A new tree starts a new countdown. The old code returned while any echo was still pending, so a
 -- tree that came just before the 14 s echo got no countdown at all: in the 2026-11-07 spar,
 -- Saibel's tree came 12 ms before that echo, and that tree never got its own echoes. Now the pending

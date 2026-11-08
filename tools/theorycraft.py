@@ -246,7 +246,7 @@ def rules_for_actions(rules, lines, affs, used, preset=None):
     suggestions and its equilibrium cost, the gap rule of each kind under a --gap preset (PRESET_GAPS), and
     timed.hypochondria when hypochondria is up at the start, given, or brought by a venom or a reaction of the script. No
     trivial suggestion is hypochondria (rule attack.impulse.suggestions). A FLAY that met a missing defence adds rule
-    attack.flay.missing from the run's result (flay_lines)."""
+    attack.flay.missing from the run's result, when the coating was up at it (flay_lines)."""
     r = rules["rules"]
     hypo = "hypochondria" in affs
     for line in lines:
@@ -279,14 +279,18 @@ def rules_for_actions(rules, lines, affs, used, preset=None):
 
 
 def flay_lines(result, t0, used):
-    """The FLAYs that named a defence the victim did not have (attackers.lua A.apply, result flay.missing). Each one rests
-    on rule attack.flay.missing: n=1 from our seat, with a victim-seat row against it (review KE-1)."""
+    """The FLAYs that named a defence the victim did not have (attackers.lua A.apply, result flay.missing). One that met
+    the coating rests on rule attack.flay.missing: n=1 from our seat, with a victim-seat row against it (review KE-1).
+    One that met no coating strips nothing under the value and its alternative alike, so it rests on neither (review
+    F50: a scripted victim never has the coating, and --flay-missing nothing changed nothing there)."""
     events = result["events"]
-    hits, took = [], 0
+    hits, took, met = [], 0, 0
     for k, ev in enumerate(events):
         if ev["kind"] != "attack" or ev.get("result") != "flay.missing":
             continue
         hits.append(ev)
+        # fight.lua attack: whether the coating was up as the FLAY struck.
+        met += 1 if ev.get("coatUp") else 0
         # The attack's own lines follow it as parts (fight.lua attack): the coating's line is one of them when it went.
         for part in events[k + 1:]:
             if not part.get("part"):
@@ -295,11 +299,14 @@ def flay_lines(result, t0, used):
                 took += 1
     if not hits:
         return []
-    used.add("attack.flay.missing")
     when = ", ".join("%+.2f" % (ev["t"] - t0) for ev in hits)
-    return ["FLAY  %d FLAY(s) at %s named a defence the victim did not have; %d took the coating (rule attack.flay.missing:"
-            " n=1 from our seat, FL 305-308; X 5328 reads the other way, --flay-missing nothing runs it)." % (
-                len(hits), when, took)]
+    head = "FLAY  %d FLAY(s) at %s named a defence the victim did not have; %d took the coating" % (len(hits), when, took)
+    if not met:
+        return [head + " (no coating was up at any of them, so rule attack.flay.missing and its alternative alike strip"
+                       " nothing)."]
+    used.add("attack.flay.missing")
+    return [head + " (rule attack.flay.missing: n=1 from our seat, FL 305-308; X 5328 reads the other way, --flay-missing"
+                   " nothing runs it)."]
 
 
 def random_lines(model, lines):
@@ -353,8 +360,24 @@ def shape_used(args, used, alts):
     used.add("draw.shape")
     if getattr(args, "clock_draw", "quantiles") == "normal":
         alts["draw.shape"] = "normal"
-    if not args.median or getattr(args, "seeds", 0):
+    # The gap's noise only when a gap is drawn with it (review F51): not at --gap-sd 0, and not for a script of waits. A
+    # fork's first gap, after the log's last attack, is drawn too: fork() adds the rule for it when that gap can reach past
+    # the row.
+    if gap_noise(args) and any(acts_kind(line) not in (None, "wait") for line in
+                               (getattr(args, "script", None) or getattr(args, "then", None) or [])):
         used.add("attack.gap.own.sd")
+
+
+def gap_noise(args):
+    """True when a run draws the attacker's gap with noise (fight.lua F.gapDraw): a drawn run, or the --seeds runs of a
+    --median page, with --gap-sd above 0."""
+    return bool((not args.median or getattr(args, "seeds", 0)) and getattr(args, "gap_sd", 0) > 0)
+
+
+def acts_kind(line):
+    """An action's kind, its first word (attackers.lua A.parse), or None for an empty line."""
+    words = line.split()
+    return words[0].lower() if words else None
 
 
 def seeds_lines(args, dagaz_drawn=False):
@@ -805,8 +828,9 @@ def preset_gap(rules, name):
     attack.cost.own.dstab, IMPULSE and BITE attack.cost.own.bite (the impulse's bite; no plain BITE is measured), FLAY
     attack.cost.own.flay (n=1, swept), and a give at the DSTAB's. queue-late: the same costs timed from the round's first
     reply (their first_reply), the other side of the open 0.09 s step (lens F4, F6). others: other Serpents' median gap
-    after each kind (attack.gap.others.dstab, .bite and .flay); no impulse of theirs is measured, so their BITE's gap
-    stands in for it."""
+    after each kind (attack.gap.others.dstab, .bite and .flay). Each of their BITEs in the four logs came in an IMPULSE's
+    packet (gaze.command first: az 1238-1242, Z5 534-537, X 293-296), so .bite is an impulse-round gap, and a plain BITE
+    takes it as a stand-in: none of theirs is measured (review F52)."""
     if name == "raw":
         return median_of(rules, "attack.gap.own"), {}
     if name == "others":
@@ -846,10 +870,13 @@ def gap_line(args, rules):
                     g["dstab"], g["impulse"], g["flay"]))
     if preset == "others":
         r = rules["rules"]
+        # Each of their 22 BITEs in the four logs came in an IMPULSE's packet: the gaze.command line, the suggestion,
+        # then the bite (az 1238-1242, Z5 534-537, X 293-296). review F52.
         return ("GAP   others: other Serpents' median gap after each kind: DSTAB %.3f (n=%d), BITE or IMPULSE %.3f (n=%d;"
-                " no impulse of theirs is measured, so their BITE's gap stands in), FLAY %.3f (n=%d), a give at the"
-                " DSTAB's." % (g["dstab"], others["n"], g["bite"], r["attack.gap.others.bite"]["n"], g["flay"],
-                               r["attack.gap.others.flay"]["n"]))
+                " each of their BITEs came with an IMPULSE, gaze.command in its packet, so this is an impulse-round gap;"
+                " no plain BITE of theirs is measured), FLAY %.3f (n=%d), a give at the DSTAB's." % (
+                    g["dstab"], others["n"], g["bite"], r["attack.gap.others.bite"]["n"], g["flay"],
+                    r["attack.gap.others.flay"]["n"]))
     if abs(args.gap - others["value"]["median"]) < 1e-9:
         return "GAP   %.2f from --gap = other Serpents' median DSTAB gap (n=%d)." % (args.gap, others["n"])
     return "GAP   %.3f from --gap: the run's own input, not a rule." % args.gap
@@ -1149,6 +1176,9 @@ SILERIS_UP, SILERIS_DOWN = ("sileris.up", "snake.blocked"), ("sileris.down", "sn
 OWN = (("bal", 0, "balance"), ("eq", 1, "equilibrium"))
 # A fork with no --gap: other Serpents' median DSTAB gap (rule attack.gap.others.dstab).
 FORK_GAP = 1.83
+# The kind of the log's last attack (kb_events.attacks' family), as a per-kind --gap preset names it; any other family
+# (dstab, dstab.miss, blocked.shield) takes the DSTAB's gap.
+FIRST_GAP_KIND = {"flay": "flay", "bite": "bite"}
 
 
 def defences_at(upto):
@@ -1390,8 +1420,32 @@ def fork(args):
     last_hit = hits[-1] if hits else None
     start = {"t0": t0, "affs": sorted(terms), "ready": ready, "defs": defs, "downAtStart": down_at_start,
              "downFrom": {ch: ev["t"] for ch, ev in down_from.items()}}
+    first_gap = args.gap
     if last_hit is not None:
-        start["firstFrom"] = last_hit["t"]
+        # The first action comes one gap after the log's last attack: the gap after THAT attack's kind under a per-kind
+        # preset (a FLAY's under --gap others: X 545's flay.shield gives 1.642, not the DSTAB's 1.83). A missed or
+        # blocked DSTAB takes the DSTAB's. A numeric --gap, raw and no --gap give one gap for every kind (review F49).
+        kind = FIRST_GAP_KIND.get(last_hit["family"], "dstab")
+        first_gap = args.gaps.get(kind, args.gap)
+        floor = args.gap_floor if args.gap_floor is not None else kb.BUNDLED
+        # The engine runs the first action at the later of t0 and the attack plus the gap drawn (fight.lua F.run), and a
+        # draw lies within the median +/- 3 sd, held at the floor (F.gapDraw, victim.lua V.clock). A gap whose longest
+        # draw still lands at or before t0 decides nothing: the page reads "at or before the row" (review: az 654, a FLAY
+        # 3.33 s back). So the floor refuses only a gap it would change, and the gap's rules are listed only when they
+        # can move the first action.
+        reach = last_hit["t"] + max(floor, first_gap + (3 * args.gap_sd if gap_noise(args) else 0))
+        if not first_gap >= floor and last_hit["t"] + floor > t0:
+            raise SystemExit("theorycraft: --gap %s's gap after the log's last attack (a %s at row %d) is %.3f, under the"
+                             " gap floor %.2f. Give a --gap-floor at or under it, or a numeric --gap." % (
+                                 args.gap_preset, kind.upper(), last_hit["row"], first_gap, floor))
+        # Set even when the gap cannot reach t0: the engine still draws it, so a seed's stream stays the same.
+        start["firstFrom"], start["firstGap"] = last_hit["t"], first_gap
+        if reach > t0:
+            if args.gap_preset:
+                used.update(PRESET_GAPS[args.gap_preset].get(kind, PRESET_GAPS[args.gap_preset]["*"]))
+            # That first gap is drawn too (fight.lua F.run), so a drawn run rests on its noise even with only waits after.
+            if gap_noise(args):
+                used.add("attack.gap.own.sd")
     else:
         start["firstAt"] = t0
     pending = []
@@ -1500,8 +1554,8 @@ def fork(args):
             last_hit["row"], last_hit["t"] - t0)
     else:
         first = "First action at %+.2f: one gap (%s) after the log's last attack (row %d, %+.2f)." % (
-            first_at - t0, ("%.2f s" % args.gap) if args.median or not args.gap_sd > 0 else ("drawn around %.2f s" %
-                                                                                               args.gap), last_hit["row"],
+            first_at - t0, ("%.2f s" % first_gap) if args.median or not args.gap_sd > 0 else ("drawn around %.2f s" %
+                                                                                                first_gap), last_hit["row"],
             last_hit["t"] - t0)
     out = ["MODEL, NOT A LOG: a fork of %s row %d (%s). Freeze %s." % (key, at, os.path.basename(ke.log_path(key)),
                                                                       rules["freeze_sha256"][:12]),
@@ -1610,7 +1664,9 @@ def main(argv=None):
         gap, what = FORK_GAP, "the fork's gap %.2f (other Serpents' median; no --gap)" % FORK_GAP
     if args.gap_preset:
         # Under queue, each kind of action has its own gap (an impulse round 1.563, a FLAY 1.530, under the DSTAB 1.634).
-        # The floor could cut the shortest gap of the kinds the script runs. The first gap and a give's are the DSTAB's.
+        # The floor could cut the shortest gap of the kinds the script runs. A give's is the DSTAB's. A fork's first gap
+        # is the gap after the log's last attack, which fork() checks once it has read the log, when the floor can move
+        # the first action.
         kinds = {line.split()[0].lower() for line in (args.script or args.then or []) if line.split()}
         gap = min([args.gap] + [args.gaps[k] for k in kinds if k in args.gaps])
         what = "--gap %s (its shortest gap in this script, %.3f)" % (args.gap_preset, gap)

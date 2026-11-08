@@ -41,11 +41,12 @@ tdeliverance = false
   if passiveFailsafe then restorePassiveCure() end
 	erAff("anorexia")
 
-	if haveAff("voyria") and (pariah and not pariah.state.latencyTimer) then
-		erAff("voyria")
-	end
-
-  if haveAff("voyria") then
+	-- A sip cures voyria, except while Latency holds the target: no immunity cure works then
+	-- (about 13 s, kb Pestilence.wiki; misc/005_Latency keeps pariah.state.latencyTimer for 12 s).
+	-- A second, unguarded erase used to follow this one, so the guard never held and the Pariah
+	-- route re-sent voyria it had already given (2026-11-08 deep review, F18). Nil-safe like the
+	-- passives' voyriaBlock: with no pariah table a sip still erases.
+	if haveAff("voyria") and not (pariah and pariah.state and pariah.state.latencyTimer) then
 		erAff("voyria")
 	end
 

@@ -83,10 +83,13 @@ function ataxia_RoomContents_Update(event)
 				if (v.name == "a guarded firewall" or v.name == "an audacious guardsman" or v.name == "a Vault guardian") and not table.contains(waterGuards, v.id) and #waterGuards < 10 and beckonGuards then
 					send("beckon "..v.id)
 					table.insert(waterGuards, v.id)
-				elseif v.name == "an audacious guardsman" and not table.contains(waterguards, v.id) and #waterGuards < 10 and saluteGuards then
+				-- These two read `waterguards`, which nothing defines (the list is waterGuards, above). Mudlet
+				-- 5.1.1's table.contains answers false for a non-table, so the dedupe never saw a guard it
+				-- had already saluted or grabbed, and a Mudlet whose table.contains walks pairs() threw here.
+				elseif v.name == "an audacious guardsman" and not table.contains(waterGuards, v.id) and #waterGuards < 10 and saluteGuards then
 					send("wsalute "..v.id)
 					table.insert(waterGuards, v.id)
-				elseif v.name == "a Coterie councillor" and not table.contains(waterguards, v.id) and #waterGuards < 15 and saluteGuards then
+				elseif v.name == "a Coterie councillor" and not table.contains(waterGuards, v.id) and #waterGuards < 15 and saluteGuards then
 					sendAll("grab "..v.id,false)
 					table.insert(waterGuards, v.id)
 				elseif v.name == "a Coterie councillor" and not table.contains(waterGuards, v.id) and #waterGuards < 10 and beckonGuards then

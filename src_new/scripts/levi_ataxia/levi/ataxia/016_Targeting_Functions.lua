@@ -89,6 +89,23 @@ function switchTarget(who)
 
   -- Skip PvP combat state resets when bashing
   if not (ataxiaBasher and ataxiaBasher.enabled) then
+    -- The new target's presence. The old target's chase stops here: while it ran, its 1.4 s
+    -- TargetOutOfRoom ticks erased what we landed on the new target (paralysis first), then reset
+    -- the tracker, the assumed rebounding with it. Nothing else sets targetIshere for a new target
+    -- until one of its cure lines. Here if GMCP lists the name, case ignored, or a name it starts
+    -- (`t sai` with Saibel listed). An absent target is re-armed by the next RemovePlayer,
+    -- Room.Players or leave line.
+    disableTimer("TargetOutOfRoom")
+    targetIshere = false
+    if type(target) == "string" and target ~= "" and type(ataxia.playersHere) == "table" then
+      local want = target:lower()
+      for _, v in pairs(ataxia.playersHere) do
+        if type(v) == "string" and v:lower():sub(1, #want) == want then
+          targetIshere = true
+          break
+        end
+      end
+    end
     resetStatesV3()
     setafflictionstackslevi()
     php = 100
@@ -193,19 +210,46 @@ function ataxia_needReject()
 end
 
 
+-- True when GMCP lists exactly this name in the room (ataxia.playersHere, update_stuff/001),
+-- case ignored.
+local function listedHere(name)
+  local list = ataxia and ataxia.playersHere
+  if type(list) ~= "table" then return false end
+  local want = name:lower()
+  for _, v in pairs(list) do
+    if type(v) == "string" and v:lower() == want then return true end
+  end
+  return false
+end
+
+-- The target name (lower case) a line has already named in full: an exact match, or a part name
+-- completed. A full name is never completed again (see isTargeted).
+local fullTargetName = nil
+
 --type(target) == "number"
+-- A line's name is our target when it is the target's name, case ignored. It is also our target
+-- when the target is still a PART of a name (`t sai`) and the line's name starts with it: then
+-- the name is completed (updateTarget). It was "either name starts the other", which renamed a
+-- full-name target to a bystander: target Kaiden, and "Kai eats a magnesium chip." charged Kai's
+-- eat to Kaiden and made Kai the target; target Kai, and Kaiden's lines did the same the other
+-- way. So no completion once the target is a full name: one GMCP lists in the room, or one a line
+-- has named or completed. A shorter name on a line is someone else (lines arrive whole since
+-- v4.7.441, and their captures are whole names), so it never matches.
 function isTargeted(who)
 if not target then return false end
 if type(target) ~= "number" then
+  if type(who) ~= "string" then return false end
   local x,y = who:lower(), target:lower()
-  if string.starts(x,y) or string.starts(y,x) or x == y then
-    if x ~= y then
-      updateTarget(x)
-    end
+  if x == y then
+    fullTargetName = y
     return true
-  else
-    return false
   end
+  if string.starts(x,y) and fullTargetName ~= y and not listedHere(target) then
+    updateTarget(x)
+    fullTargetName = x
+    return true
+  end
+  return false
 end
 
 end
@@ -467,8 +511,14 @@ skullfractures = false,
 slashedthroat = false,
 sleeping = false,
 slickness = false,
-sileris = true,
-fangbarrier = true,
+-- Not assumed up (they were true). Only a coating line ever cleared the belief, and a target with
+-- no coating prints none, so the Serpent believed a fangbarrier all fight and never impulsed. The
+-- opening FLAY of the assumed rebounding strips a coating either way, and that strip prints a
+-- line when there was one (kb/sim/rules.md attack.flay.coating 23 of 23, attack.flay.missing).
+-- A coating we have not stripped is learned from its lines: the shell forming (442) or a bite it
+-- stops (707).
+sileris = false,
+fangbarrier = false,
 slimeobscure = false,
 snared = false,
 solarburn = false,

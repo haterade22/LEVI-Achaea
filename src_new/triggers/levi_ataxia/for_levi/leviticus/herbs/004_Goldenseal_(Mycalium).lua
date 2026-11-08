@@ -44,6 +44,11 @@ patterns:
 -- the known cure. (v4.7.372, deep review: the second pattern was type 0 --
 -- SUBSTRING -- so its regex never matched; and the body re-ran the whole eat
 -- handling, a third V3 cure per eat, then erAff'd mycalium for ANY target.)
-if isTargeted(multimatches[1][2]) then
+-- 002 still charged the eat as a random goldenseal cure on its own line, so this erase made one
+-- eat take two afflictions. ataxia_knownCureV3 puts 002's branches back first, and the eat counts
+-- once, as mycalium (2026-11-08 deep review, F14). Both lines must name the same person.
+local who = multimatches[2] and multimatches[2][2]
+if who and who == multimatches[1][2] and isTargeted(who) then
+	if ataxia_knownCureV3 then ataxia_knownCureV3("goldenseal", who, "mycalium") end
 	erAff("mycalium")
 end

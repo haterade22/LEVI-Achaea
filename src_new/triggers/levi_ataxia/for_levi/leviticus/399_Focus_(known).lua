@@ -40,33 +40,19 @@ patterns:
 ]]--
 
 
+-- 398 owns the focus: on the focus line it charges V3's random focus cure, counts the cure for the
+-- Serpent offense and starts the focus clock. This trigger only reads the line AFTER it. Until the
+-- 2026-11-08 deep review (F43) it repeated all of 398's work behind `tBals.focus`, which 398 had
+-- set false a line earlier, so it never ran: 68 focus lines in the six Serpent logs (e.g.
+-- kb/raw/logs/ours/2026-11-07_164635_Saibel.log:372) and serpent.trackCure("focus") counted none.
+--
+-- When the next line says the focus took LOVERS, 398's random removal is undone
+-- (ataxia_knownCureV3, ataxia/001_Miscellaneous_Aff_Tracking_Methods), so the focus counts once.
+-- other_things_fading/002_Seduce erases lovers itself on that line, so it is not erased here as
+-- well; the two can run in either order.
 local name = multimatches[1][2]
-if isTargeted(multimatches[1][2]) and tBals.focus then
-  if passiveFailsafe then restorePassiveCure() end
-	if multimatches[3][1] == name .. " shakes his head and a look of clarity returns to his eyes."
-		or multimatches[3][1] == name .. " shakes her head and a look of clarity returns to her eyes." then
-			-- Known cure: lovers. Not a random V3 removal on top of it.
-			erAff("lovers")
-			erAff("impatience")
-	elseif onTargetFocusV3 then
-		-- V3 owns the unknown cure (see 398): one removal, impatience cleared,
-		-- illusions refused. No second removal via tFocused (v4.7.372).
-		onTargetFocusV3()
-	else
-		erAff("impatience")
-		tFocused()
-	end
-	-- Track for adaptive serpent offense
-	if serpent and serpent.trackCure then serpent.trackCure("focus") end
-	tBals.focus = false
-	tBals.focusUsedAt = getEpoch()
-
-  if tBals.timers.focus then killTimer(tBals.timers.focus) end
-	if haveAff("shadowmadness") then
-		-- Measured 4.82-4.99 s, n=6 (kb/mechanics/foundations.md). A 5 s wait refused real cures.
-		tBals.timers.focus = tempTimer(4.8, [[tBals.focus = true; tBals.timers.focus = nil]])
-	else
-		tBals.timers.focus = tempTimer(2, [[tBals.focus = true; tBals.timers.focus = nil]])
-	end  
-	targetIshere = true
+local nextLine = multimatches[3] and multimatches[3][1]
+if isTargeted(name) and (nextLine == name .. " shakes his head and a look of clarity returns to his eyes."
+	or nextLine == name .. " shakes her head and a look of clarity returns to her eyes.") then
+	if ataxia_knownCureV3 then ataxia_knownCureV3("focus", name, "lovers") end
 end

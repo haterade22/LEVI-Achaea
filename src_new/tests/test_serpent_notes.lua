@@ -338,10 +338,21 @@ describe("S3: monkshood is never sent for impatience the target already has", fu
     expect(has(r, "impulse Agathon stupidity")).toBeFalse()
   end)
 
-  it("...but still replaces a filler suggestion", function()
+  -- Monkshood's masochism goes in its impulse even when it is up (a held one can be focused away
+  -- before the bite: kb/raw/logs/ours/2026-11-07_164635_Saibel.log:1344-1370), so the keybind does
+  -- not replace it there either (test_serpent_spar_fixes, review).
+  it("...not even when masochism is up", function()
     world(); hSuggRequest = "stupidity"
-    give("asthma", "weariness", "masochism")     -- the reaction needs nothing from the impulse
-    expect(has(round(), "impulse Agathon stupidity monkshood")).toBeTrue()
+    give("asthma", "weariness", "masochism")
+    local r = round()
+    expect(has(r, "impulse Agathon masochism monkshood")).toBeTrue()
+    expect(has(r, "impulse Agathon stupidity")).toBeFalse()
+  end)
+
+  it("...but still replaces a filler suggestion", function()
+    world(); hSuggRequest = "paranoia"
+    give("confusion", "recklessness")            -- loki: the reaction needs nothing from the impulse
+    expect(has(round(), "impulse Agathon paranoia loki")).toBeTrue()
   end)
 end)
 
@@ -847,6 +858,55 @@ describe("B2: hypnolock keeps its mode across a target change", function()
       local r = round()
       expect(has(r, "impulse Claes masochism monkshood")).toBeTrue()
       expect(has(r, "snap")).toBeFalse()
+    end)
+  end)
+
+  -- 2026-11-08 review, F9: the 4 s snap timer moved the phase to "ready_snap" in lock mode too. One
+  -- suggestion goes per round, so the third was due after the 4 s mark, and from then on the lock
+  -- chain's getCommand found no step: no third suggestion, no seal, no snap.
+  it("the snap timer does not end a lock chain that still has suggestions to give", function()
+    cleanly(function()
+      world()
+      serp_setmode_hypnolock()
+      serpent.hypnosis.onHypnotised()
+      for _, sug in ipairs({ "hypochondria", "disrupt" }) do serpent.hypnosis.onSuggested(sug) end
+      elapse(SNAP_DELAY)
+      expect(serpent.hypnosis.snapTimerFired).toBeTrue()
+      expect(serpent.hypnosis.phase).toBe("suggesting")
+      expect(has(round(), "suggest Agathon generosity")).toBeTrue()
+      serpent.hypnosis.onSuggested("generosity")
+      expect(has(round(), "seal Agathon 3")).toBeTrue()
+      hypnoLine(HYPNO_SEALED,
+        "You draw Agathon out of his hypnotic daze, your suggestions indelibly printed on his mind.", "Agathon")
+      expect(has(round(), "snap Agathon")).toBeTrue()
+    end)
+  end)
+
+  it("the fratricide chain's snap timer still marks the snap ready", function()
+    cleanly(function()
+      world()
+      serp_setmode_hypnosis()
+      serpent.hypnosis.onHypnotised()
+      serpent.hypnosis.onSuggested("fratricide")
+      elapse(SNAP_DELAY)
+      expect(serpent.hypnosis.phase).toBe("ready_snap")
+      expect(has(round(), "snap Agathon")).toBeTrue()
+    end)
+  end)
+
+  -- 2026-11-08 review, F28: SEAL takes a delay in seconds, three and upwards
+  -- (kb/raw/wiki/Hypnosis.wiki:24, :28). It sent the number of suggestions, so a chain of one or two
+  -- sent "seal X 1" or "seal X 2", which the game does not take.
+  it("the seal names 3 seconds whatever the number of suggestions", function()
+    cleanly(function()
+      world(); give("hypochondria", "disrupt")      -- only generosity is left to suggest
+      serp_setmode_hypnolock()
+      expect(table.concat(serpent.hypnosis.targetSuggestions, ",")).toBe("generosity")
+      serpent.hypnosis.onHypnotised()
+      serpent.hypnosis.onSuggested("generosity")
+      local r = round()
+      expect(has(r, "seal Agathon 3")).toBeTrue()
+      expect(has(r, "seal Agathon 1")).toBeFalse()
     end)
   end)
 end)

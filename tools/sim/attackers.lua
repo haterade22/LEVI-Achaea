@@ -277,14 +277,17 @@ end
 ---   (X 146). A FLAY prints what it stripped, the coating's line sileris.down when it went too (az rows 269-270), then
 ---   the whip line (flay.whip) when the venom can land.
 ---   An IMPULSE is the attack "bite" (kb_events' name for the victim's bite line, so the race counts it), with the
----   engine's own part "impulse" (kind hypnosis) for its suggestion: which line a victim sees for an IMPULSE is not
----   proven (gaze.command is a candidate, kb_events.py). A reaction that fires adds the engine's own part "reaction",
----   whose args name the venom (our seat prints "You sense the weakness in <name> as your <venom> takes hold.").
+---   part "gaze.command" (kind hypnosis) for its suggestion: each of the 22 BITEs in the four victim-seat logs came in
+---   the packet of "<name> fixes her gaze to yours and hisses a sharp command.", with the suggestion between (az
+---   1238-1242: masochism, then the bite; Z5 534-537, X 293-296), so a sim fight's census counts it as a log's does.
+---   The part follows the bite here; race() does not read a hypnosis line. A reaction that fires adds the engine's own
+---   part "reaction", whose args name the venom (our seat prints "You sense the weakness in <name> as your <venom>
+---   takes hold.").
 function A.lines(act, result, s, coat, info)
   if act.kind == "dstab" or act.kind == "bite" or act.kind == "impulse" then
     if result == "shield" then return "blocked.shield", {} end
     local parts = {}
-    if act.kind == "impulse" then parts[#parts + 1] = { side = "A", kind = "hypnosis", name = "impulse" } end
+    if act.kind == "impulse" then parts[#parts + 1] = { side = "A", kind = "hypnosis", name = "gaze.command" } end
     if act.kind == "dstab" then parts[#parts + 1] = { side = "A", kind = "attack.part", name = "dstab.second" } end
     if result == "rebounded" then parts[#parts + 1] = { side = "A", kind = "attack.part", name = "rebounded" } end
     if coat then parts[#parts + 1] = { side = "V", kind = "defence", name = "sileris.down" } end

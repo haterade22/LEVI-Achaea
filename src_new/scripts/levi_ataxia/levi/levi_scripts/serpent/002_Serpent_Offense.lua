@@ -25,7 +25,7 @@ packageName: ''
     - IMPULSE (conditional): suggestion + bite + Ekanelia (BAL+EQ).
       Only when: no sileris/fangbarrier AND Ekanelia achievable AND eq free.
     - FLAY: strip defense + venom, BAL only.
-    - EXECUTE: truelock finish.
+    - EXECUTE: truelock finish, on a prone target, with the whip.
 
     EKANELIA TRANSFORMATIONS (BITE/IMPULSE only):
     - kalmia:    clumsiness + weariness           → slickness
@@ -130,6 +130,14 @@ serpent.recklessnessAllowed = recklessnessAllowed
 -- Attack state tracking
 serpent.state.attackInFlight = serpent.state.attackInFlight or false
 serpent.state.lastBalState = serpent.state.lastBalState or "1"
+-- The send time of the round in flight, and whether GMCP showed our balance down since then.
+serpent.state.attackSentAt = serpent.state.attackSentAt or 0
+serpent.state.balSpentSinceSend = serpent.state.balSpentSinceSend or false
+-- Seconds after a send with no balance drop, on balance, after which the round counts as refused
+-- (serp_ekanelia_offense's in-flight guard). A round that spends balance shows it down in about
+-- 0.2 s (send 16:47:23.986, prompt without the balance flag 16:47:24.193,
+-- kb/raw/logs/ours/2026-11-07_164635_Saibel.log:333, :368), so 1.5 s leaves room for lag.
+local ATTACK_NO_SPEND = 1.5
 serpent.state.dispelSent = serpent.state.dispelSent or false
 serpent.state.firstAttack = (serpent.state.firstAttack == nil) and true or serpent.state.firstAttack
 serpent.state.pinshotSentAt = serpent.state.pinshotSentAt or 0
@@ -181,6 +189,9 @@ DARKSHADE_KILL_TIME = 26
 DARKSHADE_SWITCH_TIME = 15
 SNAP_DELAY = 4
 COOLDOWN_TIME = 4
+-- The seal's delay in seconds: three is the least the game takes on every target (one only on a
+-- deadened one, which the tracker cannot promise by the time the seal lands). Hypnosis.wiki:28.
+local SEAL_DELAY = 3
 
 -- Trivial suggestions (deliverable via IMPULSE)
 local TRIVIAL_SUGGESTIONS = {
@@ -275,9 +286,15 @@ function serpent.hypnosis.onHypnotised()
         killTimer(serpent.hypnosis.snapTimer)
     end
     serpent.hypnosis.snapTimerFired = false
+    -- The timer marks the snap ready only for the fratricide chain, whose canSnap() is phase
+    -- "ready_snap". The lock chain (ekhl) snaps once SEALED, and its suggest step needs phase
+    -- "hypnotised" or "suggesting" (getCommand). One suggestion goes per round, so with three to
+    -- give the third was due after the 4 s mark: the timer moved the phase to "ready_snap", and the
+    -- chain never suggested again, never sealed and never snapped (2026-11-08 review, F9).
     serpent.hypnosis.snapTimer = tempTimer(SNAP_DELAY, function()
         serpent.hypnosis.snapTimerFired = true
-        if serpent.hypnosis.phase == "suggesting" or serpent.hypnosis.phase == "hypnotised" then
+        if serpent.hypnosis.mode ~= "lock"
+           and (serpent.hypnosis.phase == "suggesting" or serpent.hypnosis.phase == "hypnotised") then
             serpent.hypnosis.phase = "ready_snap"
             Algedonic.Echo("<yellow>HYPNOSIS: <white>SNAP READY!")
         end
@@ -286,6 +303,7 @@ end
 
 function serpent.hypnosis.onSuggested(suggestion)
     serpent.hypnosis.phase = "suggesting"
+    serpent.hypnosis.pendingSuggestion = nil   -- this success line answered it (buildRound)
 
     if suggestion and suggestion:lower():find("fratricide") then
         serpent.hypnosis.fratricideApplied = true
@@ -368,6 +386,7 @@ function serpent.hypnosis.reset()
     serpent.hypnosis.fratricideActive = false
     serpent.hypnosis.hypnoTarget = nil
     serpent.hypnosis.snapReadyTime = nil
+    serpent.hypnosis.pendingSuggestion = nil
     -- Hypno lock fields
     serpent.hypnosis.targetSuggestions = (serpent.hypnosis.mode == "lock")
         and selectHypnoLockSuggestions() or {}
@@ -398,8 +417,12 @@ function serpent.hypnosis.getCommand()
             -- Next suggestion
             return "suggest " .. tar .. " " .. serpent.hypnosis.targetSuggestions[given + 1]
         elseif given >= needed and not serpent.hypnosis.sealed then
-            -- All suggestions given, seal them
-            return "seal " .. tar .. " " .. needed
+            -- All suggestions given, seal them. SEAL takes a DELAY in seconds, not a count:
+            -- "SEAL <target> <delay in seconds>", "for three seconds and upwards", as low as one
+            -- second only on a deadened target (kb/raw/wiki/Hypnosis.wiki:24, :28). This sent the
+            -- number of suggestions, so with one or two of them the seal was under the minimum,
+            -- never answered, and sent again every round (2026-11-08 review, F28).
+            return "seal " .. tar .. " " .. SEAL_DELAY
         elseif serpent.hypnosis.sealed then
             -- Sealed, snap
             return "snap " .. tar
@@ -578,10 +601,24 @@ serpent.EKANELIA_RESULTS = {
     voyria    = {"confusion", "disrupted"},
 }
 
+-- THE MONKSHOOD IMPULSE ALWAYS CARRIES MASOCHISM, even onto a masochism the target holds. The
+-- impulse's masochism lands in the same packet as the bite, so the reaction cannot miss it; a held
+-- one can be focused away between our send and the bite. In the 2026-11-07 spar a round that
+-- swapped it for another suggestion (kb/raw/logs/ours/2026-11-07_164635_Saibel.log:1344, "impulse
+-- Saibel confusion monkshood") met her focus 56 ms later (:1345): the impulse and the bite landed
+-- (:1364-1370) and no reaction line followed. All seven "impulse Saibel masochism monkshood"
+-- rounds reacted (:1275, 1324, 1551, 1596, 1643, 1943, 2033). Not seen from our seat: an impulse
+-- of a suggestion the target holds. On the victim's seat one that added nothing still bit
+-- (kb/raw/logs/2026-11-01_claes_runewarden-vs-serpent_loss_azbErKcK.txt:3872-3876).
+-- Used by selectImpulsePair (all conditionals met), PRIORITY 4 and the keybind guard below.
+local MONKSHOOD_SUGGESTION = "masochism"
+
 -- True when `suggestion` is a conditional of `venom`'s reaction that the target lacks, i.e. the
 -- impulse's suggestion is what lets the reaction fire (selectImpulsePair's one-missing case,
 -- the lock_reinforce voyria/vertigo pair). The keybind override must not replace such a one.
+-- Monkshood's masochism counts even when it is up (MONKSHOOD_SUGGESTION).
 local function reactionNeeds(venom, suggestion)
+    if venom == "monkshood" and suggestion == MONKSHOOD_SUGGESTION then return true end
     for _, ek in ipairs(EKANELIA_TABLE) do
         if ek.trigger == venom then
             for _, cond in ipairs(ek.conditionals) do
@@ -790,8 +827,16 @@ end
 -- CLASS-AWARE CLUMSINESS
 -- =============================================================================
 
+-- Our target's class, lowercase, or "" (ataxia/ataxia/007, ataxia_targetClass: the target's NDB
+-- class, else classDetect's attacker class when that attacker is the target).
+local function targetClass()
+    return ataxia_targetClass and ataxia_targetClass() or ""
+end
+
+-- Both class gates read the same class. Until the 2026-11-07 review this helper read the global
+-- tarClass, which nothing assigned, so it was always true: the asthma-first order below never ran.
 local function wantClumsiness()
-    return ataxia_wantClumsiness()
+    return ataxia_wantClumsiness(targetClass())
 end
 
 -- =============================================================================
@@ -836,14 +881,13 @@ local CLASS_LOCK_VENOM = {
     sentinel     = "kalmia",
 }
 
+-- The TARGET's class (targetClass). This read classDetect.state.attackerClass first, the class of
+-- whoever last hit us: one class line from a bystander, or the first attacker in a party fight
+-- (the engine clears it only when it leaves a non-normal curingset), switched our target's lock
+-- venom (a Magi got vernalius for a Monk's hit instead of notechis). Its fallback, tarClass, was
+-- never assigned.
 local function getClassLockAff()
-    -- Primary source: classDetect engine (active during PvP, written when
-    -- attacker class is identified from class-specific attack messages).
-    -- Fallback: tarClass global (legacy classDetect / manual set).
-    local class = (classDetect and classDetect.state and classDetect.state.attackerClass)
-        or tarClass
-        or ""
-    return CLASS_LOCK_VENOM[class:lower()]
+    return CLASS_LOCK_VENOM[targetClass()]
 end
 
 -- =============================================================================
@@ -861,8 +905,14 @@ end
 -- LIGHTWALL CHECK
 -- =============================================================================
 
+-- A lightwall in our room (the dstab target stands in it): "It also drastically speeds up the
+-- progression of the [darkshade] affliction for anyone standing in its presence"
+-- (kb/raw/wiki/Subterfuge.wiki, Lightwall). ataxia.lightwall is the room flag: set from GMCP's room
+-- items ("a lightwall", update_stuff/003) and the room line (misc_alerts/005), cleared by the next
+-- room list. Until the 2026-11-07 review this read haveAff("lightwall") / tAffs.lightwall, which
+-- nothing writes, so the rule in pickVenom never fired; before v4.3.5 it read ataxia.lightwall.
 local function hasLightwall()
-    return haveAff("lightwall") or (tAffs and tAffs.lightwall)
+    return (ataxia and ataxia.lightwall) and true or false
 end
 
 -- =============================================================================
@@ -916,8 +966,10 @@ local function pickVenomGroup(exclude)
     if haveAff("asthma") and not haveAff("slickness") and exclude ~= "gecko" then return "gecko" end
     -- 4. Weariness (blocks fitness, enables impulse)
     if not haveAff("weariness") and exclude ~= "vernalius" then return "vernalius" end
-    -- 5. Anorexia when impatience + slickness + asthma (blocks eating)
-    if haveAff("impatience") and haveAff("slickness") and haveAff("asthma")
+    -- 5. Anorexia when impatience + slickness + asthma (blocks eating). The slickness may be the
+    -- first venom's: after a gecko v1 (step 3) the same DSTAB lands it. Without that, v2 fell to
+    -- the default curare onto paralysis already up; lock mode sends gecko slike on the same board.
+    if haveAff("impatience") and (haveAff("slickness") or exclude == "gecko") and haveAff("asthma")
        and not haveAff("anorexia") and exclude ~= "slike" then return "slike" end
     -- 6. Fill remaining lock gaps
     if not haveAff("paralysis") and exclude ~= "curare" then return "curare" end
@@ -951,10 +1003,30 @@ end
     Returns {suggestion=X, venom=Y} or nil if no Ekanelia achievable.
 
     Logic:
+    0. A reaction that would add nothing is skipped (reactionSpent)
     1. If ALL conditionals met → return {suggestion=<useful>, venom=<trigger>}
+       (monkshood: always masochism, MONKSHOOD_SUGGESTION)
     2. If exactly ONE trivial conditional missing → return {suggestion=<missing>, venom=<trigger>}
     3. Otherwise → nil
 ]]--
+
+-- True when the reaction of `venom` and the bite's own venom would give nothing new: every result
+-- in serpent.EKANELIA_RESULTS is up, and so is the venom's own affliction (VENOM_TO_AFF; loki's is
+-- random, so it is not checked). Scytherus has no results entry (camus is damage), so it is never
+-- spent. The group branch of PRIORITY 7 takes any pair, not only the impatience one (the spar's
+-- group phase sent "impulse Saibel recklessness loki", kb/raw/logs/ours/2026-11-07_164635_Saibel.log:1388),
+-- so without this it spent an impulse round on a loki reaction over nausea + paralysis already up,
+-- or an aconite one over stupidity + paranoia, where its DSTAB gives two lock venoms.
+local function reactionSpent(venom)
+    local res = serpent.EKANELIA_RESULTS and serpent.EKANELIA_RESULTS[venom]
+    if not res then return false end
+    for _, r in ipairs(res) do
+        if not haveAff(r) then return false end
+    end
+    local own = VENOM_TO_AFF[venom]
+    return own == nil or own == "random" or haveAff(own)
+end
+
 function selectImpulsePair()
     for _, ek in ipairs(EKANELIA_TABLE) do
         local missing = {}
@@ -973,11 +1045,14 @@ function selectImpulsePair()
             end
         end
 
-        if #missing == 0 then
+        if reactionSpent(ek.trigger) then
+            -- Nothing new from this reaction: try the next one.
+        elseif #missing == 0 then
             -- ALL conditionals met → use nil-safe selectImpulse()
             -- instead of ek.trivials[1] which can be nil for venoms with
-            -- no trivial conditionals (e.g. kalmia, scytherus)
-            local suggestion = selectImpulse(nil)
+            -- no trivial conditionals (e.g. kalmia, scytherus). Monkshood keeps its masochism
+            -- in the impulse (MONKSHOOD_SUGGESTION).
+            local suggestion = (ek.trigger == "monkshood") and MONKSHOOD_SUGGESTION or selectImpulse(nil)
             return {suggestion = suggestion, venom = ek.trigger, label = ek.result}
         elseif #missing == 1 and #missingTrivials == 1
            and (missingTrivials[1] ~= "recklessness" or recklessnessAllowed()) then
@@ -1060,8 +1135,10 @@ function selectRelapseImpulse()
         end
     end
 
-    -- Priority 2: Stupidity impulse (create focus pressure for when softlock isn't present)
-    if not serpent.state.stupidityImpulseSent then
+    -- Priority 2: Stupidity impulse (create focus pressure for when softlock isn't present).
+    -- Not onto stupidity already up: the one stupidity impulse would add only its venom, in place
+    -- of the relapse DSTAB's two. It waits, unspent, until the target cures the stupidity.
+    if not serpent.state.stupidityImpulseSent and not haveAff("stupidity") then
         local venom
         if not haveAff("paralysis") then
             venom = "curare"
@@ -1200,17 +1277,9 @@ end
 -- FOCUS TIMING & ADAPTIVE GATES
 -- =============================================================================
 
---[[
-    Get remaining focus cooldown in seconds.
-    Returns 0 if focus is available, >0 if on cooldown.
-    Uses epoch timestamp set by focus triggers (398/399).
-]]--
-function serpent.getFocusCooldownRemaining()
-    if tBals.focus then return 0 end
-    if not tBals.focusUsedAt then return 0 end
-    local cd = haveAff("shadowmadness") and 5 or 2
-    return math.max(0, cd - (getEpoch() - tBals.focusUsedAt))
-end
+-- serpent.getFocusCooldownRemaining REMOVED (2026-11-08 review, X6): nothing called it, and its
+-- 2 s / 5 s did not match trigger 398's focus clock (2 s, or 4.8 s under shadowmadness). The
+-- target's focus balance is tBals.focus, which 398 keeps.
 
 --[[
     Check if anorexia can stick on target.
@@ -1276,6 +1345,8 @@ function serpent.trackCure(herbType)
     end
 
     if herbType == "kelp" then
+        -- herbs/003 (kelp / aurum, the target's eat). Until the 2026-11-07 review nothing called
+        -- this with "kelp", so ekstatus showed 0 kelp cures.
         serpent.cureTracking.kelpCures = serpent.cureTracking.kelpCures + 1
     elseif herbType == "ginseng" then
         -- Only count if target has a kelp aff -- proves they're prioritizing ginseng over kelp
@@ -1564,8 +1635,10 @@ function selectVenoms()
     --   4. Scytherus delivery: impulse fires via attack execution
     --   5. Maintain pressure with curare+recklessness
     if serpStrategy == "lock_reinforce" then
-        -- Priority 1: paralysis always
-        if not haveAff("paralysis") then
+        -- Priority 1: paralysis always. At truelock's 0.90 (haveAff_locked), not haveAff's 0.30:
+        -- a paralysis a tree may have taken (0.875) is delivered again, or truelock is never
+        -- reached (2026-11-08 review, F8).
+        if not haveAff_locked("paralysis") then
             table.insert(envenomList, "curare")
             -- Second venom: class-specific lock aff or voyria to seal
             local v2
@@ -1713,12 +1786,38 @@ end
 -- ATTACK EXECUTION
 -- =============================================================================
 
+-- THE FLAY'S VENOM WHILE THE KALMIA REACTION WAITS (PRIORITY 1, paralysis up). The flay carries
+-- one venom, and since the 2026-11-07 spar fixes it is the round's only balance action, so that
+-- venom is the round's whole affliction. On clumsiness + weariness + paralysis this sent
+-- vernalius, onto the weariness already up: the round added nothing (2026-11-08 review, F31). It is
+-- now the first of these whose affliction is missing and that venomAllowed lets through:
+--   pickVenom("kalmia")  pickVenom's own pick past kalmia: the class venom, the lightwall darkshade,
+--                        slike once its gate is met;
+--   slike                anorexia: no eat, so no kelp can take the clumsiness or weariness that
+--                        the next round's reaction needs (sent here before slikeGateMet's
+--                        impatience, on purpose);
+--   euphorbia, vardrax, aconite, notechis   pressure that leaves the reaction alone.
+-- Never asthma: the next round's kalmia bite gives it, and with it up kalmiaEkaneliaMet is false.
+-- Vernalius only when every one of them is up.
+local KALMIA_FLAY_FILL = { "slike", "euphorbia", "vardrax", "aconite", "notechis" }
+local function kalmiaFlayVenom()
+    local cands = { pickVenom("kalmia") }
+    for _, v in ipairs(KALMIA_FLAY_FILL) do cands[#cands + 1] = v end
+    for _, v in ipairs(cands) do
+        local aff = VENOM_TO_AFF[v]
+        if aff and aff ~= "asthma" and aff ~= "random" and not haveAff(aff) and venomAllowed(v) then
+            return v
+        end
+    end
+    return "vernalius"
+end
+
 --[[
     Execute the attack based on current strategy and venom selection.
 
     Priority order:
     1. Flay (strip shield/rebounding), alone: an impulse spends balance too
-    2. Behead (truelock + prone) or execute (finish strategy)
+    2. Execute with the whip (truelock + prone + joint gate)
     3. Kalmia ekanelia impulse (asthma not present, clumsy+weary met)
     4. Impatience delivery (canAttemptImpatience + conditions gate)
     5. Focus lock push (fratricide + 4 mentals + focus down)
@@ -1748,6 +1847,8 @@ function serp_ekanelia_attack()
     -- assumed to have rebounding (016 targetresetafflictionslevi), and in the 2026-11-07 spar the
     -- first flay found "a non-existent aura of rebounding" (FL 305). That drop armed the clock,
     -- and the pre-empt fired 9.87 s later (FL 566) for a rebounding that never existed.
+    -- Our flay's strip line stamps the clock itself, at the strip (serpent.onReboundingFlayed);
+    -- this stamps a drop that only a raise or rebound line showed.
     if serpent.state.lastRebounding and not hasRebounding and serpent.state.reboundingSeen then
         lastReboundingFlay = now()
         serpent.state.reboundingSeen = false  -- the next arm needs a new raise or strip line
@@ -1781,8 +1882,9 @@ function serp_ekanelia_attack()
         if kalmiaEkaneliaMet() then
             -- The kalmia reaction waits for the next round (the impulse spends balance too, so
             -- it cannot ride with the flay). The flay does not give asthma, so the reaction
-            -- stays possible.
-            flayVenom = not haveAff("paralysis") and "curare" or "vernalius"
+            -- stays possible. With paralysis up the venom is one that adds an affliction
+            -- (kalmiaFlayVenom); it was vernalius, onto the weariness the reaction needs.
+            flayVenom = not haveAff("paralysis") and "curare" or kalmiaFlayVenom()
         elseif not haveAff("paralysis") then
             flayVenom = "curare"
         elseif not haveAff("weariness") then
@@ -1827,25 +1929,25 @@ function serp_ekanelia_attack()
     -- Only impulse/bite is blocked. checkImpulseEligible() handles this.
 
     -- --------------------------------------------------------
-    -- PRIORITY 2: Behead (prone) or execute (finish strategy only)
-    -- During lock_reinforce we run the burst finish sequence, not execute.
+    -- PRIORITY 2: Execute a truelocked, PRONE target, with the whip.
+    -- "While wielding a whip, you may attempt to execute a prone victim." (Subterfuge, Execute;
+    -- kb/classes/serpent.md:64 and :122, 2.00 s of balance). This sent "execute <target>" to a
+    -- STANDING target with the dirk in hand, and sent a prone one "wield shield scimitar::behead"
+    -- (BEHEAD is on none of the Serpent's skill pages) with no joint gate (2026-11-08 review, F10).
+    -- A prone target is the adder's trip (serpent/009_Prone). Any strategy, as the behead was: a
+    -- kill that is ready wins.
+    -- Joint-probability gate: the five lock affs and prone >= 90% likely together in one tracker
+    -- branch, so the kill is not gambled on a bluff (prone is simple-tracked, so it reads 1.0).
+    -- A standing truelocked target gets no finisher here: the round falls through to the
+    -- lock_reinforce/finish DSTAB, which keeps the lock until the adder trips them. Whether BEHEAD
+    -- (a paralysed, standing victim died to a Shaman's in Mystor's log) or EXECUTE on a standing
+    -- target works for us is open: settle it with AB SUBTERFUGE EXECUTE before adding a branch.
     -- --------------------------------------------------------
-    if truelock then
-        if haveAff("prone") then
-            -- Prone: behead immediately regardless of strategy
-            serp_sendAttack("wield shield scimitar" .. sp .. "behead " .. target, preAtk)
-            return
-        elseif serpStrategy == "finish"
-            and (not getStateProbabilityV3
-                or getStateProbabilityV3({"anorexia", "asthma", "slickness", "impatience", "paralysis"}) >= 0.90) then
-            -- Joint-probability gate: only commit the irreversible execute when all
-            -- five lock affs are >=90% likely to be present together in one tracker
-            -- branch. If truelock is per-aff true but jointly shaky, fall through to
-            -- the lock_reinforce burst instead of gambling the kill on a bluff.
-            serp_sendAttack("execute " .. target, preAtk)
-            return
-        end
-        -- Otherwise fall through to lock_reinforce burst finish sequence
+    if truelock and haveAff_locked("prone")
+        and (not getStateProbabilityV3
+            or getStateProbabilityV3({"anorexia", "asthma", "slickness", "impatience", "paralysis", "prone"}) >= 0.90) then
+        serp_sendAttack(wieldWhip .. "execute " .. target, preAtk)
+        return
     end
 
     -- --------------------------------------------------------
@@ -1854,9 +1956,15 @@ function serp_ekanelia_attack()
     -- instead of eating a reflected hit next round. Reaching here guarantees no
     -- shield/rebounding is up (the flay block above returns first). Placed AFTER the
     -- finisher so a ready kill always wins. Fires once per drop (disarms the timer).
+    -- Not while a hypnosis step is due (eqAction: suggest, seal, snap, hypnotise): the impulse
+    -- spends equilibrium, so the step was skipped that round (2026-11-08 review, F32), as every
+    -- other impulse below already avoids. The clock stays armed for a round with no step.
     -- --------------------------------------------------------
+    local eqAction = getEqAction()
+
     if lastReboundingFlay > 0
         and (now() - lastReboundingFlay) >= 8.15
+        and not eqAction
         and checkImpulseEligible() then
         local impAff = selectImpulse(nil) or "masochism"
         local bite = selectBiteVenom()
@@ -1866,8 +1974,6 @@ function serp_ekanelia_attack()
         serp_sendAttack(wieldDirk .. "impulse " .. target .. " " .. impAff .. " " .. biteVenom, preAtk)
         return
     end
-
-    local eqAction = getEqAction()
 
     -- --------------------------------------------------------
     -- PRIORITY 3: Kalmia ekanelia — override canUseSecondary, guarded
@@ -1898,12 +2004,9 @@ function serp_ekanelia_attack()
         or impatienceConditionsMet()
     if impatienceReady and canAttemptImpatience() and canUseSecondary and not eqAction
        and checkImpulseEligible() then
-        local impulseAff
-        if haveAff("masochism") then
-            impulseAff = selectImpulse("masochism")
-        else
-            impulseAff = "masochism"
-        end
+        -- Masochism even when it is believed up (MONKSHOOD_SUGGESTION): this swapped it for
+        -- selectImpulse("masochism"), and the reaction then hung on a masochism she could focus away.
+        local impulseAff = MONKSHOOD_SUGGESTION
         recordImpulse(impulseAff)
         serp_sendAttack(wieldDirk ..
             "impulse " .. target .. " " .. impulseAff .. " monkshood", preAtk)
@@ -1952,14 +2055,20 @@ function serp_ekanelia_attack()
 
     -- lock_reinforce burst finish: impulse priority order
     --   1. Scytherus ekanelia (addiction+nausea present) — camus damage burst
-    --   2. Voyria (anorexia+impatience present, vertigo missing) — confusion+disrupted
+    --   2. Voyria (anorexia+impatience present, vertigo missing) — confusion+disrupted, once, and
+    --      only at TRUELOCK. lock_reinforce also runs at hardlock in the relapse phase, where
+    --      paralysis is missing or doubtful (a tree leaves it at 0.875, under truelock's 0.90).
+    --      There this impulse went every round and the DSTAB's curare never did, so the lock never
+    --      reached truelock or the finish (2026-11-08 review, F8). Below truelock the round is now
+    --      that DSTAB: curare plus the class venom or voyria (selectVenoms, lock_reinforce).
     --   3. Normal impatience if somehow not yet landed
     if serpStrategy == "lock_reinforce" and not eqAction and checkImpulseEligible() then
         if haveAff("addiction") and haveAff("nausea") and not haveAff("scytherus") then
             -- Scytherus ekanelia: camus damage spike
             impulsePair = {suggestion = selectImpulse(nil), venom = "scytherus", label = "camus"}
             useImpulse = true
-        elseif haveAff("anorexia") and haveAff("impatience") then
+        elseif truelock and not serpent.state.voyriaSent
+           and haveAff("anorexia") and haveAff("impatience") then
             -- Voyria ekanelia: confusion+disrupted deepens lock
             if not haveAff("vertigo") then
                 impulsePair = {suggestion = "vertigo", venom = "voyria", label = "confusion + disrupted"}
@@ -2185,7 +2294,12 @@ local function buildOpener()
     -- Pinshot: only if the bow opener is on and no pinshot is already in the target.
     -- Pinshot REQUIRES a body part; "foot" is the standard impale target
     -- (matches the inbound trigger pattern "Your arrow slams into the foot of ...").
-    if serpent.config.useBowOpener and not tpinshot then
+    -- tpinshot is the NAME the last pinshot went into, for its 21 s (serpent/002_Pinshot). It was
+    -- true for anyone, so a new target within 21 s of a pinshot in the old one got no pinshot
+    -- (2026-11-08 review, F33).
+    local pinned = type(tpinshot) == "string" and type(target) == "string"
+        and tpinshot:lower() == target:lower()
+    if serpent.config.useBowOpener and not pinned then
         local b = serpent.config.bowName or "bow"
         bow = { "remove " .. b, "wield " .. b, "pinshot " .. target .. " foot" }
         serpent.state.pinshotSentAt = getEpoch()
@@ -2552,6 +2666,15 @@ local function buildRound(cmd, pre, block)
             serpent.state.lastWieldKw = kw
             serpent.state.lastWieldBefore = heldWeapons()
         end
+        -- The suggestion this round gives, for the success line ("You issue the suggestion, ...",
+        -- the suggestGiven trigger below). That line names no suggestion, and the trigger read
+        -- ataxiaTemp.suggestAff, which queue_Scan sets only from a QUEUED command's run line. In
+        -- the default order the queued piece is purge or dispel (kb/raw/logs/ours/
+        -- 2026-11-07_164635_Saibel.log:225, "Running queued freestand command: DISPEL SAIBEL"), so
+        -- the suggest went raw, fratricideApplied never became true, the fratricide suggest went
+        -- again every round, and the snap never recorded fratricide (2026-11-08 review, F29).
+        local sug = p:lower():match("^suggest %S+ (%S+)$")
+        if sug then serpent.hypnosis.pendingSuggestion = sug end
     end
 
     local line = "queue addclear freestand " .. table.concat(pieces, sp)
@@ -2594,11 +2717,36 @@ function serp_sendAttack(cmd, pre)
 
     send(buildRound(cmd, pre or "", block))
     serpent.state.attackInFlight = true
+    -- For the no-spend watchdog in serp_ekanelia_offense: when the round went, and whether GMCP
+    -- has shown our balance down since (the balRecovery handler below).
+    serpent.state.attackSentAt = getEpoch()
+    serpent.state.balSpentSinceSend = false
 end
 
 -- =============================================================================
 -- MAIN OFFENSE FUNCTION
 -- =============================================================================
+
+-- A PART NAME IS COMPLETED BEFORE THE ROUND IS BUILT. `t sai` keeps "Sai" as the target (016
+-- switchTarget), and serp_sendAttack sends only when ataxia.playersHere holds the target exactly,
+-- so with "Saibel" listed every press printed "Target not in room!" until a line about her went
+-- through isTargeted (2026-11-08 review, F35). When exactly one listed name starts with the target
+-- (case ignored), it becomes the target (016 updateTarget), so the round names her in full. Two
+-- such names (Saibel and Saidra for "Sai"), or none, change nothing: the refusal stays.
+local function completeTargetName()
+    if type(target) ~= "string" or target == "" then return end
+    local here = ataxia and ataxia.playersHere
+    if type(here) ~= "table" or table.contains(here, target) then return end
+    local want, hit = target:lower(), nil
+    for _, n in pairs(here) do
+        if type(n) == "string" and n:lower():sub(1, #want) == want then
+            if hit then return end      -- more than one: leave it to the user
+            hit = n
+        end
+    end
+    if not hit then return end
+    if updateTarget then updateTarget(hit) else target = hit end
+end
 
 function serp_ekanelia_offense()
     -- Only dispatch when we actually have balance — prevents computing
@@ -2608,10 +2756,26 @@ function serp_ekanelia_offense()
         return
     end
 
-    -- Guard: don't re-dispatch while off balance
+    -- Guard: don't re-dispatch while off balance. Only the balance 0 -> 1 edge (balRecovery below)
+    -- or a target change cleared it, so a round the game refused WITHOUT spending balance left it
+    -- set for good, and every later press returned here in silence: "You are paralysed and cannot
+    -- do that." with the balance flag still up (kb/raw/logs/ours/2026-10-27_135412_Tabethys.log:
+    -- 4920-4924), or "You cannot see that being here." for a hidden or departed target
+    -- (kb/raw/logs/ours/2026-11-03_081009_Froedine.log:3181) (2026-11-08 review, F0).
+    -- So the guard lets a press through once ATTACK_NO_SPEND seconds have passed since the send
+    -- with no balance drop on GMCP: we are on balance here (the check above), and a round that
+    -- spends balance shows it down within about 0.2 s. Inside that window it still holds, which
+    -- is what stops a mashed key from sending two rounds before the prompt.
     if serpent.state.attackInFlight then
-        return
+        if serpent.state.balSpentSinceSend
+           or (getEpoch() - (serpent.state.attackSentAt or 0)) < ATTACK_NO_SPEND then
+            return
+        end
+        serpent.state.attackInFlight = false
+        Algedonic.Echo("<yellow>SERPENT<white>: the last round spent no balance (refused?), sending again.")
     end
+
+    completeTargetName()
 
     -- Rebound hold gate
     if reboundHold and reboundHold.gate(serp_ekanelia_offense) then return end
@@ -3043,10 +3207,21 @@ end
 -- flay away X's aura of rebounding defence."), which shows that the rebounding was up. It is
 -- false for "You try to flay a non-existent aura of rebounding from X.", which shows that it was
 -- not. Trigger 400 takes rebounding off the tracker on both lines; these two lines only decide
--- whether that drop arms the reapply pre-empt (PRIORITY 1.5).
+-- whether that drop arms the reapply pre-empt (PRIORITY 1.5): the strip line arms it, the
+-- non-existent line does not.
+--
+-- The strip line itself starts the reapply clock (lastReboundingFlay). The drop check in
+-- serp_ekanelia_attack stamped it at the first ROUND after the drop, about a balance later (in the
+-- 2026-11-07 spar the flay's rebounding line came at 16:47:22.414 and the next round at 23.986,
+-- kb/raw/logs/ours/2026-11-07_164635_Saibel.log:305, :333), so the 8.15 s pre-empt came 9.7 s or
+-- more after the strip, later than the measured reapply (8.40-8.57 s after the smoke,
+-- kb/mechanics/clocks.md:43) (2026-11-08 review, F30). reboundingSeen is cleared with the stamp, so
+-- that drop check does not stamp the same drop again; it still stamps a drop a raise line showed.
 function serpent.onReboundingFlayed(who, real)
     local ours = (isTargeted and isTargeted(who)) or (who == target)
-    if ours then serpent.state.reboundingSeen = real and true or false end
+    if not ours then return end
+    if real then lastReboundingFlay = now() end
+    serpent.state.reboundingSeen = false
 end
 
 -- Kill existing event handlers to avoid duplicates
@@ -3116,6 +3291,7 @@ if registerAnonymousEventHandler then
             serpent.state.lastBalState = "1"
         else
             serpent.state.lastBalState = "0"
+            serpent.state.balSpentSinceSend = true   -- the round spent it: no watchdog release
         end
     end)
 end
@@ -3204,7 +3380,9 @@ if tempRegexTrigger then
         [[
             serpentsuggest = true
             if serpent and serpent.hypnosis and serpent.hypnosis.onSuggested then
-                local suggestion = ataxiaTemp.suggestAff or "unknown"
+                -- What our round sent (buildRound), else a queued suggest's run line (queue_Scan)
+                local suggestion = serpent.hypnosis.pendingSuggestion
+                    or (ataxiaTemp and ataxiaTemp.suggestAff) or "unknown"
                 serpent.hypnosis.onSuggested(suggestion)
             end
         ]]
@@ -3257,7 +3435,8 @@ if tempRegexTrigger then
     )
 
     -- Our flay's two rebounding lines (serpent.onReboundingFlayed). Trigger 400 has the same two
-    -- patterns and does the tracker's removal; these only set serpent.state.reboundingSeen.
+    -- patterns and does the tracker's removal; these set serpent.state.reboundingSeen, and the
+    -- strip line starts the reapply clock.
     serpent.triggers.reboundingFlayed = tempRegexTrigger(
         "^You flay away (\\w+)'s aura of rebounding defence\\.$",
         [[

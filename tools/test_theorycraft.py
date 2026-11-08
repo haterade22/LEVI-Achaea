@@ -1079,10 +1079,95 @@ class SparRules(unittest.TestCase):
         self.assertEqual([t for t, _ in rows_of(text, "A dstab")], [1.64, 5.16])
         self.assertEqual([t for t, _ in rows_of(text, "A impulse")], [3.47])
         line = lines_starting(text, "GAP   others:")[0]
-        self.assertIn("BITE or IMPULSE 1.690 (n=21; no impulse of theirs is measured", line)
+        # Review F52: every BITE of theirs came with an IMPULSE, so the BITE gap is an impulse-round gap.
+        self.assertIn("BITE or IMPULSE 1.690 (n=21; each of their BITEs came with an IMPULSE, gaze.command in its packet,"
+                      " so this is an impulse-round gap; no plain BITE of theirs is measured)", line)
+        self.assertNotIn("no impulse of theirs is measured", line)
         self.assertIn("FLAY 1.642 (n=64)", line)
         named = {row.split()[1] for row in lines_starting(text, "GAP     ")}
         self.assertEqual(named, {"attack.gap.others.dstab", "attack.gap.others.bite", "attack.gap.others.flay"})
+
+    def test_every_bite_of_theirs_came_with_an_impulse(self):
+        # Review F52: each of the 22 BITEs in the four victim-seat logs has the same Serpent's gaze.command line in its
+        # packet (az 1238-1242, Z5 534-537, X 293-296), so attack.gap.others.bite is an impulse-round gap.
+        total, with_gaze = 0, 0
+        for key in ke.KEYS:
+            events = ke.stream(ke.load(key))
+            for i, ev in enumerate(events):
+                if ev["name"] != "bite":
+                    continue
+                total += 1
+                packet = []
+                for back in reversed(events[:i]):
+                    if back["kind"] == "prompt":
+                        break
+                    packet.append(back)
+                with_gaze += any(b["name"] == "gaze.command" and b.get("who") == ev.get("who") for b in packet)
+        self.assertEqual((total, with_gaze), (22, 22))
+        # The engine names the impulse's part as a log names that line, so the census of a run counts it the same way.
+        counts, _, _ = ke.census(engine_run(["impulse masochism monkshood"])["events"])
+        self.assertEqual((counts["bite"], counts["gaze.command"]), (1, 1))
+        self.assertNotIn("impulse", counts)
+
+    def test_a_fork_takes_the_gap_of_the_logs_last_attack(self):
+        # Review F49: X 545 is a FLAY of the shield, the log's last attack before X 552. Under --gap others the first
+        # action comes one FLAY gap (1.642) after it, not the DSTAB's 1.83 (the log's own next attack came at +1.53).
+        text = fork_text("X", 552, ["dstab curare kalmia"], extra=["--gap", "others"])
+        self.assertIn("First action at +1.64: one gap (1.64 s) after the log's last attack (row 545, +0.00).", text)
+        self.assertEqual([t for t, _ in rows_of(text, "A dstab")], [1.64])
+        named = {row.split()[1] for row in lines_starting(text, "GAP     ")}
+        self.assertEqual(named, {"attack.gap.others.flay", "attack.gap.others.dstab"})
+        # Z5 196 is a DSTAB: a forked FLAY comes one DSTAB gap after it, and the page names that gap's rule.
+        text = fork_text("Z5", 204, ["flay"], extra=["--gap", "others"])
+        self.assertIn("First action at +1.83", text)
+        self.assertIn("attack.gap.others.dstab", {row.split()[1] for row in lines_starting(text, "GAP     ")})
+        # queue-late: the first action runs at the DSTAB's first-reply cost, and the ALT line says that value ran.
+        text = fork_text("Z5", 204, ["impulse masochism monkshood"], extra=["--gap", "queue-late"])
+        self.assertIn("First action at +1.75", text)
+        self.assertIn("attack.cost.own.dstab = 1.750, timed from the round's first reply", lines_starting(text, "ALT")[0])
+        # A numeric --gap and no --gap give one gap for every kind.
+        self.assertIn("First action at +1.60", fork_text("X", 552, ["dstab curare kalmia"], extra=["--gap", "1.6"]))
+        self.assertIn("First action at +1.83", fork_text("X", 552, ["dstab curare kalmia"]))
+        # The floor holds for that first gap too: queue's FLAY gap 1.530 is under a floor of 1.6.
+        with self.assertRaises(SystemExit) as cm:
+            fork_text("X", 552, ["dstab curare kalmia"], extra=["--gap", "queue", "--gap-floor", "1.6"])
+        self.assertIn("a FLAY at row 545) is 1.530, under the gap floor 1.60", str(cm.exception))
+
+    def test_a_first_gap_that_cannot_reach_the_row_decides_nothing(self):
+        # az 558 is a FLAY 3.33 s before az 654: one gap after it, even at its longest draw (median + 3 sd, F.gapDraw),
+        # lands at or before the row, so neither the floor nor the gap's rules decide anything (deep review, round 7).
+        first = "First action at +0.00: one gap after the log's last attack (row 558, -3.33) is at or before the row."
+        # queue's FLAY gap 1.530 is under a floor of 1.6, but the floor cannot move the first action: the fork runs.
+        text = fork_text("az", 654, ["dstab curare kalmia"], extra=["--gap", "queue", "--gap-floor", "1.6"])
+        self.assertIn(first, text)
+        # Where it can (X 552, a FLAY at +0.00), the FLAY's cost is a SWEEP rule of the page; here it decides nothing.
+        self.assertNotIn("attack.cost.own.flay", text)
+        self.assertIn("attack.cost.own.flay", lines_starting(fork_text("X", 552, ["dstab curare kalmia"],
+                                                                       extra=["--gap", "queue"]), "SWEEP")[0])
+        # A drawn run of waits under --gap others: no FLAY gap rule and no gap noise.
+        text = fork_text("az", 654, ["wait 1"], extra=["--gap", "others"], median=False)
+        self.assertIn(first, text)
+        self.assertNotIn("attack.gap.own.sd", lines_starting(text, "ASSUMED")[0])
+        self.assertEqual(lines_starting(text, "GAP     "), [])
+        # A wide enough noise can reach the row (1.642 + 3 x 0.6 > 3.33), so then the gap and its noise are listed.
+        text = fork_text("az", 654, ["wait 1"], extra=["--gap", "others", "--gap-sd", "0.6"], median=False)
+        self.assertIn("attack.gap.own.sd", lines_starting(text, "ASSUMED")[0])
+        self.assertEqual({row.split()[1] for row in lines_starting(text, "GAP     ")}, {"attack.gap.others.flay"})
+
+    def test_the_gap_noise_rule_only_when_a_gap_is_drawn_with_noise(self):
+        # Review F51: attack.gap.own.sd was listed at --gap-sd 0 and for a script with no gap at all.
+        def assumed(argv):
+            return lines_starting(run(argv)[1], "ASSUMED")[0]
+        base = ["--victim", "runewarden", "--gap", "1.83", "--script", "dstab curare kalmia"]
+        self.assertIn("attack.gap.own.sd", assumed(base))
+        self.assertNotIn("attack.gap.own.sd", assumed(base + ["--gap-sd", "0"]))
+        self.assertNotIn("attack.gap.own.sd", assumed(["--victim", "runewarden", "--gap", "others", "--script", "wait 1"]))
+        self.assertNotIn("attack.gap.own.sd", assumed(base + ["--median"]))
+        self.assertIn("attack.gap.own.sd", assumed(base + ["--median", "--seeds", "3"]))
+        # A fork draws its first gap after the log's last attack, even when only waits follow.
+        self.assertIn("attack.gap.own.sd", lines_starting(fork_text("Z5", 204, ["wait 1"], median=False), "ASSUMED")[0])
+        self.assertNotIn("attack.gap.own.sd", lines_starting(
+            fork_text("Z5", 204, ["wait 1"], extra=["--gap-sd", "0"], median=False), "ASSUMED")[0])
 
     def test_a_preset_names_its_rules(self):
         script = ["dstab curare kalmia", "impulse stupidity curare", "flay shield", "wait 2"]
@@ -1252,6 +1337,21 @@ class SparRules(unittest.TestCase):
         text = fork_text("X", 5320, ["flay curare", "dstab curare kalmia"])
         self.assertEqual(lines_starting(text, "FLAY"), [])
         self.assertNotIn("attack.flay.missing", text)
+
+    def test_a_flay_that_met_no_coating_rests_on_no_flay_rule(self):
+        # Review F50: a scripted victim never has the coating, so --flay-missing nothing changed nothing, yet the ALT line
+        # said its alternative ran.
+        def elsewhere(text):
+            return [line for line in text.splitlines() if "attack.flay.missing" in line and not line.startswith("FLAY")]
+        text = scripted_text(["flay rebounding curare", "impulse masochism monkshood"], extra=["--flay-missing", "nothing"])
+        flay = lines_starting(text, "FLAY")[0]
+        self.assertIn("0 took the coating (no coating was up at any of them", flay)
+        self.assertNotIn("--flay-missing nothing runs it", flay)
+        self.assertEqual(elsewhere(text), [])
+        # A bare FLAY strips the coating first, so the named FLAY after it meets none.
+        text = fork_text("X", 5320, ["flay curare", "flay rebounding curare", "impulse masochism monkshood"],
+                         extra=["--flay-missing", "nothing"])
+        self.assertEqual(elsewhere(text), [])
 
     def test_the_fork_names_our_gaps(self):
         # The review's missing item: the fork's page names our two measured gaps, as the scripted page does.

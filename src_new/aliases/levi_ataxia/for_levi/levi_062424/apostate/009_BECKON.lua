@@ -13,4 +13,5 @@ command: ''
 packageName: ''
 ]]--
 
-send("cq all;demon beckon " ..tar)
+-- Was `..tar`, a global nothing sets: the concatenation threw and nothing was sent.
+send("cq all;demon beckon " ..target)

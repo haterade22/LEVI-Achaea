@@ -61,6 +61,14 @@ if isTargeted(matches[2]) then
   end
 
   local salvetimer = false
+  -- The torso's damage from the limb counter (lb, limb/002), read before this application
+  -- changes it: lb.salve (trigger limb/003) resets a broken torso 4.0 s after the line, so the
+  -- branches below do not reset it themselves. This read the global tLimbs, which nothing defines
+  -- since it was removed, so every body or torso application without hypothermia raised an error
+  -- here. With a calcified torso, 391 leaves the application to this trigger, so nothing counted
+  -- the restoration down.
+  local L = lb and lb[target] and lb[target].hits
+  local torso = (L and L.torso) or 0
 
   -- Hypothermia logic
   if haveAff("hypothermia") then
@@ -79,47 +87,35 @@ if isTargeted(matches[2]) then
       end
 
   -- Scalded + Calcified Torso
-  elseif haveAff("scalded") and haveAff("calcifiedtorso") and tLimbs.T <= 199 then
+  elseif haveAff("scalded") and haveAff("calcifiedtorso") and torso <= 199 then
       tempTimer(6.5, function()
           erAff("calcifiedtorso")
-          target_resetLimb("torso")
           ataxia_boxEcho("they cured Torso Damage", "DodgerBlue")
       end)
       salvetimer = 6.5
-  elseif haveAff("scalded") and haveAff("calcifiedtorso") and tLimbs.T >= 200 then
+  elseif haveAff("scalded") and haveAff("calcifiedtorso") and torso >= 200 then
       tempTimer(6.5, function()
           erAff("calcifiedtorso")
-          tLimbs.T = 100
           ataxia_boxEcho("they cured ******* Lvl 2 Torso *****", "DodgerBlue")
       end)
       salvetimer = 6.5
 
   -- Calcified torso only (no scald)
-  elseif haveAff("calcifiedtorso") and not haveAff("scalded") and tLimbs.T <= 199 then
+  elseif haveAff("calcifiedtorso") and not haveAff("scalded") and torso <= 199 then
       tempTimer(4, function()
           erAff("calcifiedtorso")
-          target_resetLimb("torso")
           ataxia_boxEcho("they cured Torso Damage", "DodgerBlue")
       end)
       salvetimer = 3.5
-  elseif haveAff("calcifiedtorso") and not haveAff("scalded") and tLimbs.T >= 200 then
+  elseif haveAff("calcifiedtorso") and not haveAff("scalded") and torso >= 200 then
       tempTimer(4, function()
           erAff("calcifiedtorso")
-          tLimbs.T = 100
           ataxia_boxEcho("they cured ******* Lvl 2 Torso *****", "DodgerBlue")
       end)
       salvetimer = 3.5
 
-  -- Normal torso break checks
-  elseif tLimbs.T >= 98 and tLimbs.T < 200 then
-      tempTimer(4, function()
-          target_resetLimb("torso")
-      end)
-      salvetimer = 3.5
-  elseif tLimbs.T >= 200 then
-      tempTimer(4, function()
-          tLimbs.T = 100
-      end)
+  -- Normal torso break checks (lb.salve resets the counter itself)
+  elseif torso >= 98 then
       salvetimer = 3.5
   end
 

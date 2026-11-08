@@ -35,11 +35,13 @@ The checks, in the order they print
 -----------------------------------
     1   an active trigger, alias, timer or key calls a global only an inactive script defines
     1b  an active SCRIPT does the same (v4.7.419)
+    1c  active code calls a global that NO file defines (2026-11-08, report-only)
     2   NS.field(...) is called, and NS.field is assigned nowhere in the tree
     2b  active code calls NS.field(...), and only switched-off files assign it
-Every check fails CI. 1b and 2b landed report-only, behind STRICT_SCRIPT_CALLERS and
+Checks 1, 1b, 2 and 2b fail CI. 1b and 2b landed report-only, behind STRICT_SCRIPT_CALLERS and
 STRICT_INACTIVE_FIELDS; both were made strict in v4.7.419 once their reports were clean. A new
-check should start the same way, report-only until its report is clean.
+check should start the same way, report-only until its report is clean: 1c is report-only behind
+STRICT_UNDEFINED_GLOBALS.
 """
 
 import os
@@ -73,6 +75,65 @@ SCRIPT_CALLER_DIRS = ("scripts",)
 # decoration.
 STRICT_SCRIPT_CALLERS = True    # check 1b
 STRICT_INACTIVE_FIELDS = True   # check 2b
+STRICT_UNDEFINED_GLOBALS = False  # check 1c
+
+# --- CHECK 1c: a global that NO file defines (2026-11-08) -------------------------------------
+#
+# Checks 1 and 1b need an INACTIVE definer, so a callee that nothing defines at all passed every
+# check. 3c312975 (2026-03-16) deleted the old limb counters and with them sylvan_propagateAff,
+# bard_tremvib and earth_powderiseHit, while active thornrend, vibrato/tremolo and powderise
+# triggers still called them; typos passed the same way (priest_selftLimbHit, expandALias, osend,
+# a `goto` where the alias's local walker is `to`). Each threw on every line it matched.
+#
+# A NAME( call in an ACTIVE item counts when NAME is not a Lua keyword, a Lua 5.1 base function, a
+# Mudlet API function, a name the file binds itself, or guarded on that line or the two above it,
+# and when NO file assigns NAME at all -- switched off or not (a switched-off definer is check 1's
+# finding, not this one's), and in any form (`NAME = ...` counts, not only a function). Strings
+# and comments are blanked before the scan, so prose and command text cannot read as a call.
+# Activity is the file's own isActive flag, as in checks 1 and 1b: an item inside a switched-off
+# group folder is still read, so the report can list an alias that never runs.
+#
+# Report-only. Its first run (2026-11-08) listed ~40 names, most in aliases for engines that are
+# gone (infernalprios*, tekura's leftleg/sweephead, earth_lord's headpath, svo_init_system), and
+# bashConsoleEcho, which only a group inline script in _groups.yaml defines (read here unfolded).
+#
+# MUDLET_API holds every Mudlet function the tree calls without a guard, each checked against
+# Mudlet 5.1.1 (a string in Mudlet.exe, or a `function` in its mudlet-lua/lua). The `globals` of
+# .luacheckrc and the stubs in src_new/tests/mock_mudlet.lua are read as API names too. A real
+# Mudlet function that shows up in this report belongs in MUDLET_API.
+LUA_KEYWORDS = frozenset(
+    "and break do else elseif end false for function if in local nil not or repeat return then "
+    "true until while".split())  # `goto` is NOT a keyword in Lua 5.1, which Mudlet runs
+LUA_BASE = frozenset(
+    "assert collectgarbage dofile error gcinfo getfenv getmetatable ipairs load loadfile loadstring "
+    "module newproxy next pairs pcall print rawequal rawget rawset require select setfenv "
+    "setmetatable tonumber tostring type unpack xpcall".split())
+MUDLET_API = frozenset("""
+    addAreaName addRoom addSpecialExit ansi2decho appendBuffer appendCmdLine bg cecho cechoLink
+    centerview cfeedTriggers cinsertText clearCmdLine clearRoomUserDataItem clearSpecialExits
+    clearUserWindow clearWindow createRoomID createStopWatch creplace decho deleteArea deleteRoom
+    deleteLine deselect dfeedTriggers disableAlias disableTimer disableTrigger display
+    downloadFile echo echoLink
+    enableAlias enableTimer enableTrigger exists expandAlias feedTriggers fg getAreaTable
+    getBgColor getCurrentLine getEpoch getExitWeights getFgColor getHTTP getLineCount
+    getLineNumber getMainConsoleWidth getMainWindowSize getMapUserData getModulePath
+    getMudletHomeDir getNetworkLatency getPath getRoomArea getRoomAreaName getRoomChar
+    getRoomCoordinates getRoomEnv getRoomExits getRoomIDbyHash getRoomName getRoomUserData
+    getRoomWeight getRooms getSpecialExits getStopWatchTime getTime hecho hfeedTriggers
+    hideWindow highlightRoom insertText invokeFileDialog isActive isAnsiFgColor isPrompt killAlias
+    killAnonymousEventHandler killTimer killTrigger loadJsonMap loadMap lockSpecialExit
+    moveCursor moveCursorEnd postHTTP raiseEvent registerAnonymousEventHandler reloadModule
+    removeSpecialExit replace resetFormat resetStopWatch roomExists roomLocked saveJsonMap
+    saveMap searchRoom searchRoomUserData selectCaptureGroup selectCurrentLine selectString
+    send sendAll sendGMCP setAppStyleSheet setAreaName setBackgroundColor setBgColor setBold
+    setBorderBottom setBorderColor setBorderLeft setBorderRight setBorderTop
+    setConsoleBufferSize setDoor setExitWeight setFgColor setFontSize setItalics setLink
+    setMapUserData setMapZoom setRoomArea setRoomChar setRoomCoordinates setRoomEnv
+    setRoomIDbyHash setRoomName setRoomUserData setRoomWeight setTextFormat setTriggerStayOpen
+    setUnderline showColors showMultimatches showWindow startStopWatch stopStopWatch tempAlias
+    tempLineTrigger tempPromptTrigger tempRegexTrigger tempTimer tempTrigger unHighlightRoom
+    uninstallPackage
+""".split())
 
 HEADER_RE = re.compile(r"^--\[\[mudlet\s*(.*?)^\]\]--", re.S | re.M)
 ACTIVE_RE = re.compile(r"^\s*isActive:\s*'?(\w+)'?\s*$", re.M)
@@ -260,6 +321,124 @@ def script_orphan_calls(orphaned):
     return findings
 
 
+def blank_code(src):
+    """CHECK 1c's view of a Lua body: comments and string literals blanked, line breaks kept.
+
+    One pass, because each hides the other: `"-- on our own"` is a string, not a comment, and an
+    apostrophe in `-- don't` is not a string. strip_comments() alone cut that string in half, and
+    the text after it ("TAINTED (Splinterbark)") read as a call."""
+    out, i, n = [], 0, len(src)
+    while i < n:
+        c = src[i]
+        if src.startswith("--", i):
+            m = re.match(r"--\[(=*)\[", src[i:i + 64])
+            if m:
+                close = "]" + m.group(1) + "]"
+                j = src.find(close, i + len(m.group(0)))
+                j = n if j < 0 else j + len(close)
+            else:
+                j = src.find("\n", i)
+                j = n if j < 0 else j
+            out.append("\n" * src.count("\n", i, j))
+            i = j
+            continue
+        if c in "\"'":
+            j = i + 1
+            while j < n and src[j] != c and src[j] != "\n":
+                j += 2 if src[j] == "\\" else 1
+            out.append('""')
+            i = min(j + 1, n)
+            continue
+        m = re.match(r"\[(=*)\[", src[i:i + 64]) if c == "[" else None
+        if m:
+            close = "]" + m.group(1) + "]"
+            j = src.find(close, i + len(m.group(0)))
+            j = n if j < 0 else j + len(close)
+            out.append('""' + "\n" * src.count("\n", i, j))
+            i = j
+            continue
+        out.append(c)
+        i += 1
+    return "".join(out)
+
+
+def unfold_yaml(text):
+    """A _groups.yaml with its folded double-quoted scalars joined back up. YAML breaks a long
+    script line anywhere: the genRunning script in scripts/_groups.yaml ends one row with
+    `function` and an escaped line break, and starts the next with an escaped space and
+    `bashConsoleEcho(`. Joined, it reads `function bashConsoleEcho(`."""
+    text = re.sub(r"\\\r?\n[ \t]*", "", text)    # an escaped line break joins with nothing
+    text = re.sub(r"\r?\n[ \t]*", " ", text)      # a plain one folds to a space
+    return text.replace("\\ ", " ")               # `\ ` is an escaped space
+
+
+ASSIGN_ANY_RE = re.compile(r"(?<![.:\w])([A-Za-z_]\w*)\s*=(?!=)")
+ASSIGN_MULTI_RE = re.compile(r"^\s*([A-Za-z_]\w*(?:\s*,\s*[A-Za-z_]\w*)+)\s*=(?!=)", re.M)
+YAML_ASSIGN_ANY_RE = re.compile(r"(?:(?<=\\[nt])|(?<![\w.:\\]))([A-Za-z_]\w*)\s*=(?!=)")
+QUOTED_NAME_RE = re.compile(r"[\"']([A-Za-z_]\w*)[\"']")
+
+
+def read_text(path):
+    with open(path, encoding="utf-8", errors="replace") as fh:
+        return fh.read()
+
+
+def all_global_names():
+    """Every name any file in the tree assigns, switched off or not, in any form. A `local x =` is
+    read too (the regex cannot tell): that can only hide a finding, never invent one."""
+    names = set()
+    for path in walk_all():
+        text = read_text(path)
+        if path.endswith(".yaml"):
+            t = unfold_yaml(text)
+            for rx in (YAML_DEF_RE, YAML_DEF_ASSIGN_RE, YAML_ASSIGN_ANY_RE):
+                names |= set(rx.findall(t))
+            continue
+        code = blank_code(split(path)[1])
+        for rx in (DEF_RE, DEF_ASSIGN_RE, ASSIGN_ANY_RE):
+            names |= set(rx.findall(code))
+        for group in ASSIGN_MULTI_RE.findall(code):
+            names.update(n.strip() for n in group.split(","))
+    return names
+
+
+def mudlet_api_names():
+    """MUDLET_API, the globals .luacheckrc lists, and the functions the test mock stubs."""
+    names = set(MUDLET_API)
+    rc = os.path.join(ROOT, ".luacheckrc")
+    if os.path.exists(rc):
+        names |= set(QUOTED_NAME_RE.findall(read_text(rc)))
+    mock = os.path.join(SRC, "tests", "mock_mudlet.lua")
+    if os.path.exists(mock):
+        names |= set(DEF_RE.findall(read_text(mock)))
+    return names
+
+
+def undefined_global_calls():
+    """CHECK 1c: (caller, line, name) for each unguarded call, in an ACTIVE item or script, to a
+    global that no file defines."""
+    defined = all_global_names()
+    known = LUA_KEYWORDS | LUA_BASE | mudlet_api_names()
+    findings = []
+    for path in walk(*(CALLER_DIRS + SCRIPT_CALLER_DIRS)):
+        active, body = split(path)
+        if not active:
+            continue
+        text = read_text(path)
+        header_lines = text[:len(text) - len(body)].count("\n")
+        code = blank_code(body)
+        own = bound_names(code)
+        lines = code.splitlines()
+        for i, line in enumerate(lines):
+            for name in sorted(set(SCRIPT_CALL_RE.findall(line))):
+                if name in known or name in own or name in defined:
+                    continue
+                if guarded(name, lines, i):
+                    continue
+                findings.append((rel(path), header_lines + i + 1, name))
+    return findings
+
+
 def field_definitions(text):
     """(name, offset) for each NS.field the text assigns, in either form check 2 reads."""
     for m in FIELD_DEF_FN_RE.finditer(text):
@@ -343,10 +522,12 @@ def main():
     orphaned = {n: f for n, f in dead.items() if n not in live}
     if not orphaned:
         print("check_orphans: no inactive-script globals defined; nothing to check.")
-        return report_missing_fields()
+        status = report_undefined_globals()
+        return report_missing_fields() | status
 
     status = report_item_callers(orphaned)
     status |= report_script_callers(orphaned)
+    status |= report_undefined_globals()
     return report_missing_fields() | status
 
 
@@ -414,6 +595,37 @@ def report_script_callers(orphaned):
     print("(`if NAME then NAME(...) end`) if it is optional, or re-activate the definer.")
     print("\n%d call site(s)%s." % (len(findings), label))
     return 1 if STRICT_SCRIPT_CALLERS else 0
+
+
+def report_undefined_globals():
+    """CHECK 1c's report. Fails (returns 1) only once STRICT_UNDEFINED_GLOBALS is set."""
+    findings = undefined_global_calls()
+    if not findings:
+        print("check_orphans: OK -- no active code calls a global that no file defines.")
+        return 0
+    label = "" if STRICT_UNDEFINED_GLOBALS else " (report-only)"
+    by_name = {}
+    for caller, line, name in findings:
+        by_name.setdefault(name, []).append((caller, line))
+    print("\n=== UNDEFINED GLOBALS%s: active code calls a global that NO file defines ===" % label)
+    print("These throw 'attempt to call global (a nil value)' whenever the line runs, unless")
+    print("another installed package defines them.")
+    if not STRICT_UNDEFINED_GLOBALS:
+        print("Report-only until this list is clean: then set STRICT_UNDEFINED_GLOBALS and it")
+        print("fails CI like the checks above.")
+    print()
+    for name in sorted(by_name, key=str.lower):
+        sites = sorted(by_name[name])
+        print("  %s()  -- %d call site(s)" % (name, len(sites)))
+        for f, ln in sites[:4]:
+            print("      %s:%d" % (f, ln))
+        if len(sites) > 4:
+            print("      ... and %d more" % (len(sites) - 4))
+    print("\nFix a typo, restore a deleted helper, guard an optional call")
+    print("(`if NAME then NAME(...) end`), or switch the caller off if its engine is gone. A real")
+    print("Mudlet function listed here belongs in MUDLET_API.")
+    print("\n%d name(s), %d call site(s)%s." % (len(by_name), len(findings), label))
+    return 1 if STRICT_UNDEFINED_GLOBALS else 0
 
 
 def report_missing_fields():

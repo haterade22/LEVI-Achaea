@@ -39,6 +39,7 @@ patterns:
 ]]--
 
 if isTargeted(matches[2]) then
-	bard_tremvib(matches[3].." arm")
+	-- bard_tremvib removed: 3c312975 deleted it and the tLimbs counter it added to, and the call
+	-- threw before the flag below was set.
   ataxiaTemp.tvBal = true
 end

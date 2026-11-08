@@ -36,7 +36,9 @@ patterns:
   type: 1
 ]]--
 
+-- paAff turns a venom into its affliction and adds it with tarAffed (V3 and tAffs). The
+-- confirmAffV2 call that followed passed the RAW word to applyAffV3, which put a venom name
+-- ("curare") into V3 as an affliction of its own (2026-11-08 deep review, H2).
 if isTargeted(matches[4]) then
 	paAff(matches[3])
-  confirmAffV2(matches[3])
 end

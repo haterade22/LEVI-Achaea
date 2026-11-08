@@ -12,7 +12,9 @@ command: ''
 packageName: ''
 ]]--
 
-showColours(tonumber(matches[2]))
+-- Mudlet's function is showColors (mudlet-lua/lua/GUIUtils.lua, 5.1.1); there is no showColours,
+-- so this threw. A number argument is the column count.
+showColors(tonumber(matches[2]))
 
 
---lua showColours()
+--lua showColors()

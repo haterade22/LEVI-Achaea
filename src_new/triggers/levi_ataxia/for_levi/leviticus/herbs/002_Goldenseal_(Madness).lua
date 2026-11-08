@@ -45,7 +45,23 @@ tdeliverance = false
 		anorexiaFailsafe = nil
 		lastFocus = nil
 	end
-	targetAteWrapper("goldenseal")
+	-- The eat is charged now as a random cure, and the branches from before it are kept: when the
+	-- next line names the cure ("Lucidity returns to the eyes of X." -> shadowmadness, third-person
+	-- _removes/003; "X ceases his violent trembling." -> mycalium, 004), that trigger puts them back
+	-- and charges the named one alone. Until the 2026-11-08 deep review (F14) both ran, so one eat
+	-- took two afflictions (ataxia_knownCureV3, ataxia/001_Miscellaneous_Aff_Tracking_Methods).
+	-- Mercury (the homunculus, 444) goes BEFORE the random cure: the known-cure line compares the
+	-- branches with the copy taken just after it, so an erase between the two made every known line
+	-- on a target with mercury miss, and the eat took two afflictions again. Mercury is in no cure
+	-- table, so the random cure weighs the same afflictions either way; the plant timer below still
+	-- reads whether it was there.
+	local hadMercury = tAffs.mercury
+	if hadMercury then erAff("mercury") end
+	if ataxia_randomCureV3 then
+		ataxia_randomCureV3("goldenseal", matches[2], function() targetAteWrapper("goldenseal") end)
+	else
+		targetAteWrapper("goldenseal")
+	end
   if passiveFailsafe then restorePassiveCure() end
 	-- (Used to erAff("shadowmadness") on EVERY goldenseal eat, whatever was
 	-- cured. shadowmadness is now in curingTable.goldenseal, so the V3 cure
@@ -53,8 +69,7 @@ tdeliverance = false
 
 	tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end
-	if tAffs.mercury then
-		erAff("mercury")
+	if hadMercury then
 		tBals.timers.plant = tempTimer(1.9, [[tBals.plant = true; tBals.timers.plant = nil]])
 	else
 		tBals.timers.plant = tempTimer(1.3, [[tBals.plant = true; tBals.timers.plant = nil]])

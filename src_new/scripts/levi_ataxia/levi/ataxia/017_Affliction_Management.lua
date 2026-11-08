@@ -195,14 +195,17 @@ end
 --                                          and cancel the clock. A line is exact; the clock is
 --                                          the backstop for a line we miss or have not captured.
 --
--- Keys are the names OUR code uses (hamstring, airfist, dazzle), which can differ from the game's
--- (hamstrung, airfisted, dazzled). The timer only removes it if the target is still the one it was
+-- Keys are the names OUR code uses (hamstring, airfist), which can differ from the game's
+-- (hamstrung, airfisted). The timer only removes it if the target is still the one it was
 -- given to; a target change resets V3 anyway.
+-- dazzled goes by the game's name: the tree pool and the head salve list (008, 007) name it so,
+-- and under the old key "dazzle" no tree or head mending could take it, so its share of each cure
+-- went to the other afflictions. priest/003 still passes "dazzle"; ataxia_tarAffTimed renames it.
 ataxia_TARGET_AFF_SECONDS = {
   hamstring = 10,      -- game: hamstrung, 10 seconds
   airfist = 15,        -- game: airfisted, 15 (the old 18s timer never worked)
   voidfist = 15,       -- game: voidfisted, 15
-  dazzle = 60,         -- game: dazzled, 60 (also cured by mending to the head)
+  dazzled = 60,        -- 60 (also cured by mending to the head, and a random cure)
   hellsight = 120,     -- game: 120 (also cured by smoking valerian)
   muddled = 12,
   scalded = 20,
@@ -213,6 +216,7 @@ ataxia_TARGET_AFF_SECONDS = {
 }
 
 function ataxia_tarAffTimed(aff, seconds)
+  if aff == "dazzle" then aff = "dazzled" end   -- the old key (priest/003), see above
   seconds = seconds or ataxia_TARGET_AFF_SECONDS[aff]
   tarAffed(aff)
   if not seconds then return end

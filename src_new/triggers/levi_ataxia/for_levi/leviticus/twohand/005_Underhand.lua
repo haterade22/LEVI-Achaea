@@ -39,6 +39,11 @@ patterns:
   type: 5
 ]]--
 
+-- `slc` is created only by slc/002_slc_variables, which is switched off, so the weapon writes
+-- below threw "attempt to index global 'slc'" on every two-hander's blow, before slc_last_limb
+-- was set. The same line slc/002 starts with.
+slc = slc or {}
+
 local warhammers = {"warhammer", "hammer", "Warhammer","Hammer"}
 local blades = {"sword", "Sword", "blade", "Blade"}
 

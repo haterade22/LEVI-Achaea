@@ -103,6 +103,48 @@ describe("fight log: when it starts", function()
     expect(F.isRecording()).toBeFalse()
   end)
 
+  it("starts on a Serpent round whose queued piece names nobody: the raw attack names the target", function()
+    -- kb/raw/logs/ours/2026-11-07_164635_Saibel.log rows 277-283 (the 2026-11-07 spar, "started by hand"):
+    -- the default order queues `purge`, and the attack goes raw.
+    fresh({ target = "Saibel", players = { "Saibel", "Akri" } })
+    fire("sysDataSendRequest", "queue addclear freestand purge")
+    expect(F.isRecording()).toBeFalse()
+    fire("sysDataSendRequest", "order adder kill Saibel")
+    expect(F.isRecording()).toBeFalse()
+    fire("sysDataSendRequest", "g body")
+    fire("sysDataSendRequest", "wield shield whip")
+    fire("sysDataSendRequest", "flay Saibel rebounding curare")
+    expect(F.isRecording()).toBeTrue()
+    expect(ataxiaTemp.fightlog.opp).toBe("Saibel")
+    expect(has(read(F.stop("test")), " > flay Saibel rebounding curare")).toBeTrue()
+    -- Attack-first, with the wield still needed: the queued piece is the wield, the DSTAB goes raw.
+    fresh({ target = "Saibel", players = { "Saibel" } })
+    fire("sysDataSendRequest", "queue addclear freestand wield shield dirk")
+    fire("sysDataSendRequest", "dstab Saibel curare gecko")
+    expect(F.isRecording()).toBeTrue()
+    read(F.stop("test"))
+    -- An impulse and a bite count too, in any case.
+    for _, cmd in ipairs({ "impulse saibel masochism monkshood", "BITE Saibel monkshood" }) do
+      fresh({ target = "Saibel", players = { "Saibel" } })
+      fire("sysDataSendRequest", cmd)
+      expect(F.isRecording()).toBeTrue()
+      read(F.stop("test"))
+    end
+  end)
+
+  it("a raw command that is not an attack, or an attack on someone else, starts nothing", function()
+    for _, cmd in ipairs({ "pt target: Saibel", "st Saibel", "order adder kill Saibel", "say dstab Saibel",
+      "dstab Akri curare gecko" }) do
+      fresh({ target = "Saibel", players = { "Saibel", "Akri" } })
+      fire("sysDataSendRequest", cmd)
+      expect(F.isRecording()).toBeFalse()
+    end
+    -- A target who is not a player here (a denizen) starts nothing either.
+    fresh({ target = "rat", players = { "Saibel" } })
+    fire("sysDataSendRequest", "bite rat monkshood")
+    expect(F.isRecording()).toBeFalse()
+  end)
+
   it("starts when a player attacks us (the class detector's event)", function()
     fresh()
     fire("attacker class detected", "Belaziel", "Depthswalker")
@@ -130,7 +172,7 @@ describe("fight log: the round delivery in the header (control fight against tes
     expect(text:find("| opponent Agathon | our class Monk | test | rounds alias\n", 1, true) ~= nil).toBeTrue()
   end)
 
-  it("a Serpent log names the attack-first setting after the rounds field; other classes do not", function()
+  it("a Serpent log names the attack-first setting before the rounds field, which stays last", function()
     fresh()
     gmcp.Char.Status.class = "Serpent"
     ataxia.settings.serpentattackfirst = true
@@ -138,11 +180,18 @@ describe("fight log: the round delivery in the header (control fight against tes
     local on = read(F.stop("test"))
     fresh()
     gmcp.Char.Status.class = "Serpent"
+    ataxia_roundMode = function() return "alias" end
     F.start("Agathon", "test", false)
+    ataxia_roundMode = nil
     local off = read(F.stop("test"))
     gmcp.Char.Status.class = "Monk"
-    expect(has(on, "| our class Serpent | test | rounds raw | serpent attackfirst on\n")).toBeTrue()
-    expect(has(off, "| our class Serpent | test | rounds raw | serpent attackfirst off\n")).toBeTrue()
+    expect(has(on, "| our class Serpent | test | serpent attackfirst on | rounds raw\n")).toBeTrue()
+    -- tools/kb_timing.py reads the rounds field; an alias log after the Serpent field must still read as alias.
+    expect(has(off, "| our class Serpent | test | serpent attackfirst off | rounds alias\n")).toBeTrue()
+    -- Other classes have no Serpent field.
+    fresh()
+    F.start("Agathon", "test", false)
+    expect(has(read(F.stop("test")), "attackfirst")).toBeFalse()
   end)
 
   it("notes what each alias holds, because the first queue row names only the alias", function()

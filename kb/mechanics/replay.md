@@ -109,7 +109,7 @@ Found by the game's own line, `You have been slain by`. A death has a lock alert
 | Vr.NkCGD | 952 | Talo | Pariah (row 0) | none | - | in scope |
 | WKuEakBZ | 1271 | Talo | Pariah (row 43) | none | - | in scope |
 | CxxKSMq | 1848 | Blonk | Runewarden (row 756) | none | - | in scope |
-| azbErKcK | 3915 | Thato | Serpent (row 90) | lock alert | 0.0 | in scope |
+| azbErKcK | 3915 | Thato | Serpent (row 88) | lock alert | 0.0 | in scope |
 | Z5cyffxx | 5630 | Seurimas | Serpent (row 121) | lock alert | 0.0 | in scope |
 | OwkA-G99 | 3317 | Alyzar | Blademaster (row 47) | none | - | in scope |
 | JDvzR7j7 | 3201 | a patrolling Arcadian royal guard | Vothaec: Sentinel | none | - | killed by a denizen (guards), so no player's route |
@@ -249,7 +249,7 @@ One row per rule that warned. The exits are as they stood at the chain's first p
 | WKuEakBZ | Talo | Pariah (row 43) | none | in scope | pariah.latency (UNTESTED): 3 or more of the five plagues on the board | 13.45 | eat a plague cure (eat): clock down, back +0.21 s; touch tree (tree): shut by paralysis; leave the room (move): shut by paralysis | none | 925 |
 | WKuEakBZ | Talo | Pariah (row 43) | none | in scope | pariah.scourge (UNTESTED): bleeding 150 or more with haemophilia | 3.95 | eat ginseng or ferrum (eat): clock down, back +0.39 s; touch tree (tree): clock down, back +2.51 s; leave the room (move): unknown | none | 1154 |
 | CxxKSMq | Blonk | Runewarden (row 756) | none | in scope | runewarden.2h (tested): prone with a leg at level 2 | 10.79 | apply restoration to a leg (salve): open; stand (balance): shut by leftleg2; writhe off the blade (balance): n/a | apply restoration to a leg | 1538 |
-| azbErKcK | Thato | Serpent (row 90) | lock alert | in scope | no rule warned | - | - | - | 3915 |
+| azbErKcK | Thato | Serpent (row 88) | lock alert | in scope | no rule warned | - | - | - | 3915 |
 | Z5cyffxx | Seurimas | Serpent (row 121) | lock alert | in scope | no rule warned | - | - | - | 5630 |
 | OwkA-G99 | Alyzar | Blademaster (row 47) | none | in scope | blademaster.legs (UNTESTED): one leg at 60% or more and the other at 50% or more | 18.41 | apply restoration to a leg (salve): open; stand (balance): n/a; leave the room (move): shut by paralysis | apply restoration to a leg | 2940 |
 | JDvzR7j7 | a patrolling Arcadian royal guard | Vothaec: Sentinel | none | killed by a denizen (guards), so no player's route | no rule warned | - | - | - | 3201 |

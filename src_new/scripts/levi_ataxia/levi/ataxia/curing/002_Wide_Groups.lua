@@ -135,7 +135,7 @@ function tSingleRandom(opts)
     "hypersomnia", "retribution", "confusion", "darkshade", "healthleech", "hypochondria", "manaleech",  "nausea",
     "parasite", "shivering", "frozen", "spiritburn", "clumsiness", "sensitivity", "scytherus", "tenderskin", "stupidity", "haemophilia",
     "weariness", "hallucinations", "dizziness", "justice", "recklessness", "epilepsy", "addiction", "hallucinations", "loneliness", "shyness",
-    "vertigo", "paranoia", "agoraphobia", "claustrophobia", "generosity", "pacifism", "disloyalty", "selarnia", "frozen","brokenleftleg","brokenrightleg","brokenleftarm","brokenrightarm",}
+    "vertigo", "paranoia", "agoraphobia", "claustrophobia", "generosity", "pacified", "disloyalty", "selarnia", "frozen","brokenleftleg","brokenrightleg","brokenleftarm","brokenrightarm",}
 
   --[Experimental passive handling for lock affs]--
   -- late: a lock affliction was moved to the back of the list (position 35).
@@ -196,8 +196,8 @@ end
 --     take) leaves V3 but not tAffs: syncToOldSystemV3 (007:975) only visits afflictions still in
 --     some branch. A lone asthma then read 0 to haveAff and true to every tAffs reader, the Shikudo
 --     lock's checkSoftlock among them (shikudo/007:85). tSingleRandom's erase used to hide this. So
---     every pool affliction that was there before the tree and is gone after is erased, which also
---     raises "target cured aff" for the cure.
+--     every pool affliction the tracker held before the tree and is gone after is erased, which
+--     also raises "target cured aff" for the cure. One it did not hold leaves without a report.
 --  2. The four level-1 broken limbs are in the pool (treeCurableAffsV3, 008) but simple-tracked (007:80), and
 --     onTargetTreeV3 only looks in the branches. When no branch held anything else the tree could
 --     take, the tree took a limb: the first present in the pool's order goes (left leg, right leg,
@@ -210,12 +210,19 @@ function ataxia_targetTreeV3()
   local accepted = not canTargetCureV3 or canTargetCureV3("tree")
   local simple = {}
   for _, a in ipairs(simpleTrackAffsV3 or {}) do simple[a] = true end
-  local had, limb, inBranch = {}, nil, false
+  -- held: the tracker believed it before the tree (tAffs, or 30% or more), so its cure is one to
+  -- report. A 1-2% branch the tree's share only pushed under 1% was never believed: reporting it
+  -- put a second cure in the fight log for one tree. Replayed, Saibel's tree at
+  -- kb/raw/logs/ours/2026-11-07_164635_Saibel.log:1059 (asthma 0.02, not in tAffs; clumsiness
+  -- 1.00) logged "-tar asthma" beside the "-tar clumsiness" the live run logged at :1058.
+  local had, held, limb, inBranch = {}, {}, nil, false
   for _, a in ipairs(treeCurableAffsV3) do
     if getAffProbabilityV3(a) > 0 then
       had[#had + 1] = a
+      held[a] = (tAffs and tAffs[a] == true) or getAffProbabilityV3(a) >= 0.3
+      -- Paralysis is not a candidate: it blocks the tree, and onTargetTreeV3 drops it.
       if not simple[a] then
-        inBranch = true
+        if a ~= "paralysis" then inBranch = true end
       elseif not limb then
         limb = a
       end
@@ -226,8 +233,11 @@ function ataxia_targetTreeV3()
 
   -- ataxia_tarAffFaded, not erAff: it also stops a timed affliction's expiry clock (blackout,
   -- 017), which would otherwise erase it a second time. 0.01 is the sync's own floor (007:982).
+  -- What was not held leaves V3 without a report.
   for _, a in ipairs(had) do
-    if getAffProbabilityV3(a) < 0.01 then ataxia_tarAffFaded(a) end
+    if getAffProbabilityV3(a) < 0.01 then
+      if held[a] then ataxia_tarAffFaded(a) else removeAffV3(a) end
+    end
   end
   if accepted and not inBranch and limb then ataxia_tarAffFaded(limb) end
 end
@@ -238,7 +248,7 @@ function tMultipleRandom(amt)
     "hypersomnia", "retribution", "confusion", "darkshade", "healthleech", "hypochondria", "slickness", "manaleech", 
     "parasite", "shivering", "frozen", "spiritburn", "clumsiness", "sensitivity", "nausea", "scytherus", "tenderskin", "stupidity", "haemophilia", 
     "weariness", "hallucinations", "dizziness", "justice", "recklessness", "epilepsy", "addiction", "hallucinations", "loneliness", "shyness", 
-    "vertigo", "paranoia", "agoraphobia", "claustrophobia", "generosity", "pacifism", "disloyalty", "selarnia", "frozen","brokenleftleg","brokenrightleg","brokenleftarm","brokenrightarm",}
+    "vertigo", "paranoia", "agoraphobia", "claustrophobia", "generosity", "pacified", "disloyalty", "selarnia", "frozen","brokenleftleg","brokenrightleg","brokenleftarm","brokenrightarm",}
 		
 	for i=1, #gAffs do
 		if tAffs[gAffs[i]] and num > 0 then

@@ -17,10 +17,17 @@
 --      combatQueue's commands. Only a wield (when GMCP shows the weapon is not in hand), a stand
 --      (when prone) and the offence's own pre-attack equilibrium step (suggest, seal, hypnotise,
 --      which must go on balance) go before it.
+-- And the review of these fixes (2026-11-08), venom and impulse selection: the class gates read
+-- our TARGET's class (tarClass was never assigned; attackerClass is whoever hit us); group mode
+-- counts the first venom's slickness; the monkshood impulse always carries masochism; no impulse
+-- on a reaction that gives nothing new; the relapse stupidity impulse waits for stupidity to go;
+-- a lightwall in the room brings darkshade; the pet snake's bite records fratricide; the target's
+-- kelp eats reach the adaptive count.
 --
--- Loads the REAL offence (serpent/002) and the REAL tracker (017's public API over V3, 007 + 008),
--- and builds whole rounds through serp_ekanelia_offense(). Every global the loaded files create or
--- change is restored at the end (one shared Lua state for all test files).
+-- Loads the REAL offence (serpent/002), the REAL class gates (ataxia/007_Pariah_things) and the
+-- REAL tracker (017's public API over V3, 007 + 008), and builds whole rounds through
+-- serp_ekanelia_offense(). Every global the loaded files create or change is restored at the end
+-- (one shared Lua state for all test files).
 
 local mock = require("mock_mudlet")
 local before = {}
@@ -29,11 +36,12 @@ local savedClock, savedContains = os.clock, table.contains
 
 -- Initialised as `X = X or {...}` by the files below, so a table left by an earlier test file would
 -- be reused. Cleared here, so the loads build fresh ones; the restore at the end puts the old back.
+-- `pariah` too: the runner sets it to "" and 007_Pariah_things indexes it.
 for _, k in ipairs({ "serpent", "Algedonic", "lastImpulsed", "lastReboundingFlay", "lastImpatienceAttempt",
   "serpOffenseMode", "serpStrategy", "attackMode", "ekaneliaReady", "affTimers", "hSuggRequest", "hSuggActive",
   "afflictionStatesV3", "affConfigV3", "simpleAffsV3", "affCacheV3", "targetBurningLevelV3", "affLastConfirmedV3",
   "targetDefensesV3", "cureBalancesV3", "cureBalanceTimerIDsV3", "passiveCooldownsV3", "negativeConfirmTimersV3",
-  "curingTable" }) do
+  "curingTable", "pariah" }) do
   _G[k] = nil
 end
 ataxia = { settings = { separator = "::" }, playersHere = { "Agathon" }, afflictions = {} }
@@ -46,10 +54,13 @@ table.contains = table.contains or function(t, v)
 end
 
 local OFFENSE = "src_new/scripts/levi_ataxia/levi/levi_scripts/serpent/002_Serpent_Offense.lua"
+-- 007_Pariah_things holds the class gates the offence reads (ataxia_targetClass,
+-- ataxia_wantClumsiness). Loaded, not stubbed: world() sets the target's CLASS instead.
 for _, f in ipairs({
   "src_new/scripts/levi_ataxia/levi/ataxia/017_Affliction_Management.lua",
   "src_new/scripts/levi_ataxia/levi/ataxia/affliction_tracking_core/007_Branching_State_Tracker.lua",
   "src_new/scripts/levi_ataxia/levi/ataxia/affliction_tracking_core/008_V3_Integration.lua",
+  "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/007_Pariah_things.lua",
   OFFENSE,
 }) do
   local ok, err = pcall(dofile, f)
@@ -57,10 +68,11 @@ for _, f in ipairs({
 end
 
 -- What 002 registered, taken now because world() resets the mock.
-local REB_STRIPPED, REB_NONE
+local REB_STRIPPED, REB_NONE, SUGGEST_GIVEN
 for _, t in pairs(mock.active_triggers) do
   if t.pattern:find("You flay away", 1, true) then REB_STRIPPED = t end
   if t.pattern:find("non-existent aura of rebounding", 1, true) then REB_NONE = t end
+  if t.pattern:find("You issue the suggestion", 1, true) then SUGGEST_GIVEN = t end
 end
 local function handlers(event)
   local out = {}
@@ -76,6 +88,7 @@ local ROOM_HANDLERS = {
   Remove = handlers("gmcp.Char.Items.Remove"),
 }
 local CHANGED_TARGET = handlers("changed target")
+local VITALS = handlers("gmcp.Char.Vitals")        -- 002's balRecovery
 
 local TL = dofile("src_new/tests/trigger_lib.lua")
 local T400 = "src_new/triggers/levi_ataxia/for_levi/leviticus/400_Rebounding_Strip.lua"
@@ -90,9 +103,12 @@ end
 local SHIELD, DIRK, WHIP = "a Shield of Absorption", "Thoth's fang", "Elentari's Scourge"
 
 local clock, sends, events, echoes, gmcpSent = 100, {}, {}, {}, {}
+-- The NDB's classes by name: what ataxiaNDB_getClass answers ("Unknown" for no entry, as 003's does).
+local ndb = {}
 local function world()
   mock.reset()
   clock, sends, events, echoes, gmcpSent = 100, {}, {}, {}, {}
+  ndb = {}
   os.clock = function() return 0.25 end
   getEpoch = function() return clock end
   send = function(c) sends[#sends + 1] = c end
@@ -104,19 +120,24 @@ local function world()
   -- ataxia/003's combatQueue with nothing to parry or chase.
   combatQueue = function() return "g body::g gold::stand::" end
   rTabSize = function(t) local n = 0; for _ in pairs(t or {}) do n = n + 1 end; return n end
-  ataxia_wantClumsiness = function() return false end
   getLockingAffliction = function() return "paralyse" end
-  ataxiaNDB_getClass = function() return "Serpent" end
+  -- The target's class, through the real gates (007_Pariah_things). Agathon defaults to an
+  -- Occultist: in the skip list of ataxia_wantClumsiness and with no class venom, which is the
+  -- venom order these tests were written for (they stubbed the gate to false until 2026-11-08).
+  ndb.Agathon = "Occultist"
+  ataxiaNDB_getClass = function(n) return ndb[n] or "Unknown" end
+  ataxiaNDB = nil                                  -- realClasses() below sets the real one up
   ataxiaEcho, zgui, cecho = function() end, nil, function() end
   Algedonic.Echo = function(s) echoes[#echoes + 1] = s end
   ataxiaTemp, tAffs, affTimers = { tarAffTimers = {} }, {}, {}
   tBals = { tree = true, focus = true, timers = {} }
   ataxia.afflictions = {}
+  ataxia.lightwall = nil
   ataxia.playersHere = { "Agathon" }
   ataxia.settings.serpentattackfirst = nil
   ataxia.settings.user = nil
   gmcp = { Char = { Vitals = { bal = "1" } } }
-  Rebounding, Shielded, reboundHold, classDetect, tarClass = false, false, nil, nil, ""
+  Rebounding, Shielded, reboundHold, classDetect, tarClass = false, false, nil, nil, nil
   hypSeal2, snapped, canShrug, tpinshot = nil, nil, nil, nil
   ataxiaBasher_isMounted, omount, ataxiaBasher, ataxiaBasher_CLASS_PETS = nil, nil, nil, nil
   serpent.config.useExitBlock = false
@@ -221,14 +242,21 @@ describe("fix 1: recklessness only on a locked target", function()
       { "paralysis", "confusion" },
       { "paralysis", "confusion", "stupidity", "masochism" },
     }
-    for _, by in ipairs({ "tarClass", "classDetect" }) do
+    -- The target's class from the NDB, or from classDetect when the attacker it names is the
+    -- target. (This read the global tarClass, which nothing in the package assigns.)
+    for _, by in ipairs({ "ndb", "classDetect" }) do
       for _, mode in ipairs({ "lock", "group" }) do
         for _, b in ipairs(boards) do
           world()
           serpOffenseMode = mode
-          if by == "tarClass" then tarClass = "Depthswalker"
-          else classDetect = { state = { attackerClass = "depthswalker" } } end
-          give(table.unpack and table.unpack(b) or unpack(b))
+          if by == "ndb" then ndb.Agathon = "Depthswalker"
+          else
+            ndb.Agathon = nil
+            classDetect = { state = { attackerClass = "Depthswalker", attackerName = "Agathon" } }
+          end
+          expect(ataxia_targetClass()).toBe("depthswalker")
+          -- The whole board: `a and f() or g()` kept one value, so only b[1] was ever given.
+          give((table.unpack or unpack)(b))
           expect(serpent.recklessnessAllowed()).toBeFalse()
           for _ = 1, 3 do
             noReck(round())
@@ -240,7 +268,7 @@ describe("fix 1: recklessness only on a locked target", function()
   end)
 
   it("a locked Depthswalker gets eurypteria", function()
-    world(); tarClass = "Depthswalker"
+    world(); ndb.Agathon = "Depthswalker"
     give("anorexia", "asthma", "slickness", "paralysis")
     expect(serpent.recklessnessAllowed()).toBeTrue()
     expect(has(round(), "eurypteria")).toBeTrue()
@@ -278,7 +306,7 @@ describe("fix 1: recklessness only on a locked target", function()
   -- the tracker cannot see which, so each piece sits at 2/3: above haveAff's 0.30, below 0.70.
   it("each piece of the lock must read at 0.70, not at haveAff's 0.30", function()
     for _, mode in ipairs({ "lock", "group" }) do
-      world(); serpOffenseMode = mode; tarClass = "Depthswalker"
+      world(); serpOffenseMode = mode; ndb.Agathon = "Depthswalker"
       give("anorexia", "asthma", "slickness")
       onTargetTreeV3()
       for _, piece in ipairs({ "anorexia", "asthma", "slickness" }) do
@@ -296,7 +324,7 @@ describe("fix 1: recklessness only on a locked target", function()
   end)
 
   it("one piece below 0.70 holds the lock, the other two at 1.0", function()
-    world(); tarClass = "Depthswalker"
+    world(); ndb.Agathon = "Depthswalker"
     give("anorexia", "asthma", "slickness", "paralysis")
     -- Half the branches lost the slickness (an unseen cure, for example).
     local keep = afflictionStatesV3[1]
@@ -516,12 +544,16 @@ describe("fix 4: the rebounding pre-empt arms only on a rebounding a line showed
     expect(has(round(), "impulse")).toBeFalse()
   end)
 
+  -- The strip line itself starts the clock (2026-11-08 review, F30), so the round after it does not
+  -- stamp it again.
   it("the strip line arms it, once", function()
     world(); Rebounding = true
     round()
     line(REB_STRIPPED, "You flay away Agathon's aura of rebounding defence.", "Agathon")
-    expect(serpent.state.reboundingSeen).toBeTrue()
+    expect(lastReboundingFlay).toBe(100)
+    expect(serpent.state.reboundingSeen).toBeFalse()
     Rebounding = false
+    clock = 101
     round()
     expect(lastReboundingFlay).toBe(100)
     expect(serpent.state.reboundingSeen).toBeFalse()
@@ -594,7 +626,7 @@ describe("fix 5: one balance action per round", function()
           world()
           serpOffenseMode = mode
           Shielded, Rebounding = (d == "shield"), (d == "rebounding")
-          if #b > 0 then give(table.unpack and table.unpack(b) or unpack(b)) end
+          if #b > 0 then give((table.unpack or unpack)(b)) end
           local r = round()
           if r ~= "" then
             checked = checked + 1
@@ -797,7 +829,7 @@ describe("fix 6: aconfig serpent attackfirst", function()
     serpent.hypnosis.targetSuggestions = { "stupidity", "paranoia" }
     serpent.hypnosis.suggestions = { "stupidity", "paranoia" }
     serpent.hypnosis.sealed = false
-    stepThenAttack(round(), "seal Agathon 2")
+    stepThenAttack(round(), "seal Agathon 3")   -- 3 s, the wiki's minimum (F28)
 
     -- Sealed: the snap goes after the dstab.
     serpent.hypnosis.sealed = true
@@ -875,6 +907,736 @@ describe("aconfig serpent attackfirst: the alias, the default and the wizard", f
     local src = read(WIZARD)
     expect(has(src, "ataxia.settings.serpentattackfirst")).toBeTrue()
     expect(has(src, "aconfig serpent attackfirst <on|off>")).toBeTrue()
+  end)
+end)
+
+-- =================================================================================================
+-- The review of these fixes (2026-11-08): venom and impulse selection.
+-- =================================================================================================
+
+local ENGINE = "src_new/scripts/levi_ataxia/levi/levi_scripts/class_detect/001_Class_Detect_Engine.lua"
+local NDB_API = "src_new/scripts/levi_ataxia/levi/ataxia/ataxia_ndb/003_ataxiaNDB_API.lua"
+local SNAKE_BITE = "src_new/triggers/levi_ataxia/for_levi/leviticus/serpent/024_Snake_Bite_Fratricide.lua"
+local KELP = "src_new/triggers/levi_ataxia/for_levi/leviticus/herbs/003_Kelp_(Unknown).lua"
+local function body(path)
+  return assert((loadstring or load)(read(path):match("%]%]%-%-\r?\n(.*)$")), path)
+end
+
+-- The target's class as the package keeps it: the REAL NDB API over `players`, and the REAL
+-- class-detect engine (its "changed target" lookup and its class-line entry point).
+local function realClasses(players)
+  ataxiaNDB = { players = players }
+  dofile(NDB_API)
+  classDetect = nil
+  dofile(ENGINE)
+  classDetect.config.apiLookupEnabled = false   -- no download for a name the NDB lacks
+end
+
+local function dstabOf(r)
+  local p = pieces(r)
+  return p[#p]
+end
+
+describe("review: the class gates read our TARGET's class", function()
+  it("ataxia_wantClumsiness reads the target's class, in any case", function()
+    world()
+    ndb.Agathon = "Magi"
+    expect(ataxia_targetClass()).toBe("magi")
+    expect(ataxia_wantClumsiness()).toBeFalse()
+    expect(ataxia_wantClumsiness("Sylvan")).toBeFalse()
+    ndb.Agathon = "Serpent"
+    expect(ataxia_wantClumsiness()).toBeTrue()
+    ndb.Agathon = nil                              -- "Unknown": no entry keeps clumsiness
+    expect(ataxia_targetClass()).toBe("")
+    expect(ataxia_wantClumsiness()).toBeTrue()
+  end)
+
+  -- tarClass, the gate's only source until now, was never assigned, so a Magi got xentio first.
+  it("a Magi target gets the asthma order, not xentio", function()
+    world(); ndb.Agathon = "Magi"
+    give("paralysis", "haemophilia")
+    expect(dstabOf(round())).toBe("dstab Agathon kalmia vernalius")
+    -- The same through classDetect, when the attacker it names is the target.
+    world(); ndb.Agathon = nil
+    classDetect = { state = { attackerClass = "Magi", attackerName = "Agathon" } }
+    give("paralysis", "haemophilia")
+    expect(dstabOf(round())).toBe("dstab Agathon kalmia vernalius")
+  end)
+
+  it("a class outside the list keeps xentio first", function()
+    world(); ndb.Agathon = "Serpent"
+    give("paralysis", "haemophilia")
+    expect(dstabOf(round())).toBe("dstab Agathon xentio kalmia")
+  end)
+
+  it("a bystander's class line does not change our target's class venom", function()
+    world()
+    realClasses({ Agathon = { class = "Magi" } })
+    classDetect.onTargetChanged()
+    give("paralysis")
+    expect(has(round(), "notechis")).toBeTrue()
+    classDetect.setAttackerClass("Bystander", "Monk")   -- one class line from someone else
+    expect(classDetect.state.attackerClass).toBe("Monk")
+    local r = round()
+    expect(has(r, "notechis")).toBeTrue()
+    expect(has(r, "vernalius")).toBeFalse()
+    -- The target hits us too: two attackers, and the engine keeps "Monk" on the normal set.
+    classDetect.setAttackerClass("Agathon", "Magi")
+    expect(classDetect.state.attackerClass).toBe("Monk")
+    expect(has(round(), "notechis")).toBeTrue()
+  end)
+
+  it("a new target the NDB lacks does not inherit the last target's class venom", function()
+    world()
+    realClasses({ Agathon = { class = "Magi" } })
+    classDetect.onTargetChanged()
+    target, ataxia.playersHere = "Newguy", { "Newguy" }
+    classDetect.onTargetChanged()                   -- not cached: attackerClass stays "Magi"
+    expect(classDetect.state.attackerClass).toBe("Magi")
+    give("paralysis")
+    expect(has(round(), "notechis")).toBeFalse()
+  end)
+end)
+
+describe("review: group mode counts the first venom's slickness", function()
+  it("gecko then slike under impatience + asthma, not a second curare", function()
+    world(); serpOffenseMode = "group"
+    give("paralysis", "asthma", "weariness", "impatience")
+    expect(dstabOf(round())).toBe("dstab Agathon gecko slike")
+  end)
+
+  it("with slickness already up: slike, then curare, as before", function()
+    world(); serpOffenseMode = "group"
+    give("paralysis", "asthma", "weariness", "impatience", "slickness")
+    expect(dstabOf(round())).toBe("dstab Agathon slike curare")
+  end)
+end)
+
+describe("review: the monkshood impulse always carries masochism", function()
+  it("PRIORITY 4 with masochism believed up", function()
+    world(); give("asthma", "weariness", "masochism", "slickness")
+    expect(has(round(), "impulse Agathon masochism monkshood")).toBeTrue()
+  end)
+
+  it("the group pair with every condition met", function()
+    world(); serpOffenseMode = "group"
+    give("asthma", "masochism", "weariness", "paralysis")
+    expect(has(round(), "impulse Agathon masochism monkshood")).toBeTrue()
+  end)
+
+  it("selectImpulsePair gives masochism with monkshood; another reaction keeps its filler", function()
+    world(); give("asthma", "weariness", "masochism")
+    local pair = selectImpulsePair()
+    expect(pair.venom).toBe("monkshood")
+    expect(pair.suggestion).toBe("masochism")
+    world(); give("clumsiness", "weariness")
+    pair = selectImpulsePair()
+    expect(pair.venom).toBe("kalmia")
+    expect(pair.suggestion).toBe("confusion")
+  end)
+
+  it("the keybind suggestion does not replace it", function()
+    world(); hSuggRequest = "stupidity"
+    give("asthma", "weariness", "masochism")
+    local r = round()
+    expect(has(r, "impulse Agathon masochism monkshood")).toBeTrue()
+    expect(has(r, "impulse Agathon stupidity")).toBeFalse()
+  end)
+end)
+
+describe("review: no impulse on a reaction that gives nothing new", function()
+  it("group: no loki over nausea + paralysis already up; the DSTAB goes instead", function()
+    world(); serpOffenseMode = "group"
+    give("anorexia", "asthma", "slickness", "paralysis", "nausea", "confusion")
+    local r = round()
+    expect(has(r, "loki")).toBeFalse()
+    expect(dstabOf(r)).toBe("dstab Agathon vernalius curare")
+  end)
+
+  it("group: no aconite over stupidity + paranoia already up", function()
+    world(); serpOffenseMode = "group"
+    give("dementia", "stupidity", "paranoia", "paralysis")
+    local r = round()
+    expect(has(r, "aconite")).toBeFalse()
+    expect(dstabOf(r)).toBe("dstab Agathon kalmia vernalius")
+  end)
+
+  it("a reaction with something left to give still goes", function()
+    world(); serpOffenseMode = "group"; give("dementia")
+    expect(has(round(), "impulse Agathon deadening aconite")).toBeTrue()
+    -- The loki pair of fix 1, on a locked target with paralysis and nausea still to give.
+    world(); give("confusion", "anorexia", "asthma", "slickness")
+    expect(selectImpulsePair().venom).toBe("loki")
+  end)
+end)
+
+describe("review: the relapse stupidity impulse waits for stupidity to be gone", function()
+  it("stupidity up: the relapse DSTAB, and the impulse stays unspent", function()
+    world(); serpent.state.impatienceDelivered = true
+    give("paralysis", "weariness", "stupidity")
+    local r = round()
+    expect(has(r, "impulse")).toBeFalse()
+    expect(dstabOf(r)).toBe("dstab Agathon kalmia slike")
+    expect(serpent.state.stupidityImpulseSent).toBeFalse()
+    erAff("stupidity")
+    clock = 102
+    expect(has(round(), "impulse Agathon stupidity kalmia")).toBeTrue()
+    expect(serpent.state.stupidityImpulseSent).toBeTrue()
+  end)
+end)
+
+describe("review: a lightwall in the room brings darkshade", function()
+  local function venoms()
+    serpStrategy = "setup_lock"
+    selectVenoms()
+    return envenomList[1] .. " " .. envenomListTwo[1]
+  end
+
+  it("ataxia.lightwall, the room flag, is what the rule reads", function()
+    world(); give("paralysis", "asthma", "weariness")
+    expect(venoms()).toBe("gecko curare")
+    ataxia.lightwall = true
+    expect(venoms()).toBe("darkshade gecko")
+    give("darkshade")
+    expect(venoms()).toBe("gecko curare")
+  end)
+end)
+
+describe("review: the pet snake's bite records fratricide", function()
+  local ADDER = "A death adder sinks its fangs into the neck of Xylarys, injecting a potent dose of toxin."
+  -- kb/raw/logs/2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt:218-219, one line since
+  -- CONFIG SCREENWIDTH 0.
+  local RATTLER = "A small grey-brown rattlesnake sinks its fangs into the neck of Valkael, "
+    .. "injecting a potent dose of toxin."
+  local function line(text, who)
+    assert(TL.anyMatches(TL.patterns(SNAKE_BITE), text), "024's pattern does not take: " .. text)
+    matches = { text, who }
+    body(SNAKE_BITE)()
+  end
+  local function aimAt(who)
+    target, ataxia.playersHere = who, { who }
+  end
+
+  it("the death adder's line (Froedine.log:2009) on our target", function()
+    world(); aimAt("Xylarys")
+    expect(haveAff("fratricide")).toBeFalse()
+    line(ADDER, "Xylarys")
+    expect(haveAff("fratricide")).toBeTrue()
+  end)
+
+  it("another snake's name takes too", function()
+    world(); aimAt("Valkael")
+    line(RATTLER, "Valkael")
+    expect(haveAff("fratricide")).toBeTrue()
+  end)
+
+  it("a bite on someone else records nothing", function()
+    world(); aimAt("Xylarys")
+    line("A death adder sinks its fangs into the neck of Grulk, injecting a potent dose of toxin.", "Grulk")
+    expect(haveAff("fratricide")).toBeFalse()
+  end)
+
+  it("the fang-barrier refusal and the victim's own line are not the bite", function()
+    local pats = TL.patterns(SNAKE_BITE)
+    -- kb/raw/logs/ours/2026-11-03_081009_Froedine.log:897
+    expect(TL.anyMatches(pats, "A death adder lunges for the throat of Xylarys, fangs sinking into his fang"
+      .. " barrier defence.")).toBeFalse()
+    -- kb/raw/logs/2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt:235-236
+    expect(TL.anyMatches(pats, "A small grey-brown rattlesnake sinks its fangs into your neck and injects a"
+      .. " potent dose of toxin.")).toBeFalse()
+  end)
+
+  it("the offence reads it: the focus-lock push goes after the bite", function()
+    world(); aimAt("Xylarys")
+    give("impatience", "asthma", "weariness", "stupidity", "masochism", "recklessness", "vertigo")
+    tBals.focus = false
+    expect(has(round(), "impulse")).toBeFalse()
+    line(ADDER, "Xylarys")
+    clock = 102
+    expect(has(round(), "impulse Xylarys confusion monkshood")).toBeTrue()
+  end)
+end)
+
+describe("review: the target's kelp eats reach the adaptive count", function()
+  it("each kelp or aurum eat by the target counts once; someone else's does not", function()
+    world()
+    local savedFg = fg
+    fg = function() end
+    local fine, e = pcall(function()
+      -- Saibel's eat at kb/raw/logs/ours/2026-11-07_164635_Saibel.log:1373, on our target's name.
+      for i = 1, 5 do
+        clock = 100 + 0.4 * i
+        matches = { "Agathon eats an aurum flake.", "Agathon", "an aurum flake" }
+        body(KELP)()
+      end
+      matches = { "Grulk eats a piece of kelp.", "Grulk", "a piece of kelp" }
+      body(KELP)()
+    end)
+    fg = savedFg
+    if not fine then error(e, 0) end
+    expect(serpent.cureTracking.kelpCures).toBe(5)
+    local out = {}
+    cecho = function(s) out[#out + 1] = s end
+    serp_status()
+    expect(has(table.concat(out), "Kelp Cures: <yellow>5")).toBeTrue()
+  end)
+end)
+
+-- =============================================================================
+-- The second review of the offence (2026-11-08, round A2): F0, F8, F10, F29-F37, X6.
+-- =============================================================================
+
+local DSTAB = "src_new/triggers/levi_ataxia/for_levi/leviticus/serpent/001_Doublestab.lua"
+local PINSHOT = "src_new/triggers/levi_ataxia/for_levi/leviticus/serpent/002_Pinshot.lua"
+local SN = "src_new/aliases/levi_ataxia/for_levi/levi_062424/serpent/001_Darkshade.lua"
+local GRAB = "src_new/triggers/levi_ataxia/for_levi/leviticus/determine_class/002_Serpent_Class_Grab.lua"
+
+local function vitals(bal)
+  gmcp.Char.Vitals.bal = bal
+  for _, h in ipairs(VITALS) do h("gmcp.Char.Vitals") end
+end
+
+describe("F0: a round the game refused does not stop the offence", function()
+  it("002 registers one balance handler", function()
+    expect(#VITALS).toBe(1)
+  end)
+
+  -- "You are paralysed and cannot do that." with the balance flag still up
+  -- (kb/raw/logs/ours/2026-10-27_135412_Tabethys.log:4920-4924): no 0 -> 1 edge ever came, and every
+  -- later press returned at the attackInFlight guard.
+  it("a round that spent no balance is sent again after 1.5 s", function()
+    world(); serpent.state.lastBalState = "1"
+    serp_ekanelia_offense()
+    expect(#sends).toBe(1)
+    vitals("1")                                  -- the prompt after the refusal: still on balance
+    clock = clock + 2
+    sends = {}
+    serp_ekanelia_offense()
+    expect(#sends).toBe(1)
+    local said = false
+    for _, e in ipairs(echoes) do if has(e, "spent no balance") then said = true end end
+    expect(said).toBeTrue()
+  end)
+
+  it("a second press inside the window still sends nothing", function()
+    world(); serpent.state.lastBalState = "1"
+    serp_ekanelia_offense()
+    clock = clock + 0.3
+    sends = {}
+    serp_ekanelia_offense()
+    expect(#sends).toBe(0)
+  end)
+
+  it("a round that spent balance waits for the recovery, as before", function()
+    world(); serpent.state.lastBalState = "1"
+    serp_ekanelia_offense()
+    vitals("0")
+    expect(serpent.state.balSpentSinceSend).toBeTrue()
+    gmcp.Char.Vitals.bal = "1"                   -- read before the recovery's own event ran
+    clock = clock + 2
+    sends = {}
+    serp_ekanelia_offense()
+    expect(#sends).toBe(0)
+    vitals("1")
+    expect(serpent.state.attackInFlight).toBeFalse()
+    serp_ekanelia_offense()
+    expect(#sends).toBe(1)
+    expect(serpent.state.balSpentSinceSend).toBeFalse()
+  end)
+end)
+
+describe("F8/X5: below truelock lock_reinforce sends the curare DSTAB, not the voyria impulse", function()
+  -- Hardlock in the relapse phase: the second monkshood landed, paralysis is not up.
+  local function hardlock()
+    world()
+    serpent.state.impatienceDelivered = true
+    give("asthma", "slickness", "anorexia", "impatience", "weariness", "clumsiness", "masochism")
+  end
+
+  it("no paralysis: a DSTAB with curare, and no impulse", function()
+    hardlock()
+    local r = round()
+    expect(serpStrategy).toBe("lock_reinforce")
+    expect(has(r, "impulse")).toBeFalse()
+    expect(has(r, "dstab Agathon curare voyria")).toBeTrue()
+  end)
+
+  -- A paralysis at 0.75 (a quarter of the branches lost it, an unseen cure for example): haveAff's
+  -- 0.30 reads it up, truelock's 0.90 does not. The voyria impulse went every round here.
+  it("a doubtful paralysis (under 0.90) gets curare again, not the impulse", function()
+    hardlock(); give("paralysis")
+    local keep = afflictionStatesV3[1]
+    local lost = { affs = {}, prob = keep.prob / 4 }
+    for k, v in pairs(keep.affs) do lost.affs[k] = v end
+    lost.affs.paralysis = nil
+    keep.prob = keep.prob * 3 / 4
+    afflictionStatesV3[#afflictionStatesV3 + 1] = lost
+    rebuildCacheV3()
+    syncToOldSystemV3()
+    expect(getAffProbabilityV3("paralysis")).toBe(0.75)
+    expect(haveAff("paralysis")).toBeTrue()
+    local r = round()
+    expect(serpStrategy).toBe("lock_reinforce")
+    expect(has(r, "impulse")).toBeFalse()
+    expect(has(r, "dstab Agathon curare voyria")).toBeTrue()
+  end)
+
+  it("at truelock the voyria impulse goes once, then the finish", function()
+    hardlock(); give("paralysis")
+    expect(has(round(), "impulse Agathon vertigo voyria")).toBeTrue()
+    expect(serpent.state.voyriaSent).toBeTrue()
+    clock = 102
+    local r = round()
+    expect(serpStrategy).toBe("finish")
+    expect(has(r, "execute")).toBeFalse()        -- standing: no finisher (F10)
+  end)
+end)
+
+describe("F10: execute only a prone target, with the whip", function()
+  local function truelocked()
+    world()
+    serpent.state.voyriaSent = true
+    give("anorexia", "asthma", "slickness", "impatience", "paralysis")
+  end
+
+  it("a standing truelocked target gets no execute and no behead", function()
+    truelocked()
+    local r = round()
+    expect(has(r, "execute")).toBeFalse()
+    expect(has(r, "behead")).toBeFalse()
+  end)
+
+  it("prone: the whip, then execute", function()
+    for _, first in ipairs({ false, true }) do
+      truelocked(); give("prone")
+      ataxia.settings.serpentattackfirst = first
+      hands({ ["111"] = SHIELD, ["555"] = "a curved dirk" })
+      local r = round()
+      expect(has(r, "behead")).toBeFalse()
+      local p = pieces(r)
+      local at
+      for i, x in ipairs(p) do if x == "execute Agathon" then at = i end end
+      expect(at ~= nil).toBeTrue()
+      expect((p[at - 1]:gsub("^queue addclear freestand ", ""))).toBe("wield shield whip")
+    end
+  end)
+
+  it("prone but under truelock: no execute", function()
+    world(); serpent.state.voyriaSent = true
+    give("anorexia", "asthma", "slickness", "impatience", "prone")
+    expect(has(round(), "execute")).toBeFalse()
+  end)
+end)
+
+describe("F29: the suggestion success line records what our round suggested", function()
+  local LINE = "You issue the suggestion, concealing it deep within Agathon's mind."
+  local function given()
+    assert(SUGGEST_GIVEN, "002's suggest trigger was not captured at load")
+    assert(TL.matches(SUGGEST_GIVEN.pattern, 1, LINE), "002's pattern no longer takes: " .. LINE)
+    matches = { LINE, "Agathon" }
+    assert((loadstring or load)(SUGGEST_GIVEN.callback))()
+  end
+
+  -- In the default order the round's queued piece is purge (or dispel, Saibel.log:225), so the
+  -- suggest goes raw and queue_Scan never sets ataxiaTemp.suggestAff.
+  it("the fratricide suggest is recorded, and not sent again", function()
+    world()
+    serpent.hypnosis.onHypnotised()
+    expect(has(round(), "suggest Agathon fratricide")).toBeTrue()
+    ataxiaTemp.suggestAff = nil
+    given()
+    expect(serpent.hypnosis.fratricideApplied).toBeTrue()
+    expect(serpent.hypnosis.suggestions[1]).toBe("fratricide")
+    clock = 102
+    expect(has(round(), "suggest")).toBeFalse()
+  end)
+
+  it("a stale queued suggestion does not stand in for the lock chain's", function()
+    world()
+    serpent.hypnosis.mode = "lock"
+    serpent.hypnosis.targetSuggestions = { "hypochondria", "disrupt" }
+    serpent.hypnosis.onHypnotised()
+    expect(has(round(), "suggest Agathon hypochondria")).toBeTrue()
+    ataxiaTemp.suggestAff = "fratricide"
+    given()
+    expect(serpent.hypnosis.fratricideApplied).toBeFalse()
+    expect(serpent.hypnosis.suggestions[1]).toBe("hypochondria")
+    serpent.hypnosis.mode = "fratricide"
+  end)
+end)
+
+describe("F30: the strip line starts the rebounding reapply clock", function()
+  -- Saibel.log: the flay's rebounding line at 16:47:22.414 (:305), the next round at 23.986 (:333).
+  it("the pre-empt fires 8.15 s after the strip, not after the next round", function()
+    world(); Rebounding = true
+    clock = 98.8
+    round()
+    clock = 100.18
+    matches = { "You flay away Agathon's aura of rebounding defence.", "Agathon" }
+    assert((loadstring or load)(REB_STRIPPED.callback))()
+    Rebounding = false
+    clock = 101.71
+    round()
+    expect(lastReboundingFlay).toBe(100.18)
+    clock = 108.40
+    expect(has(round(), "impulse Agathon")).toBeTrue()
+  end)
+end)
+
+describe("F31: the flay's venom while the kalmia reaction waits adds an affliction", function()
+  it("shield, clumsiness + weariness + paralysis: slike, not vernalius", function()
+    for _, mode in ipairs({ "lock", "group" }) do
+      world(); serpOffenseMode = mode; Shielded = true
+      give("clumsiness", "weariness", "paralysis")
+      local r = round()
+      expect(has(r, "flay Agathon shield slike")).toBeTrue()
+      expect(has(r, "vernalius")).toBeFalse()
+    end
+  end)
+
+  it("rebounding: the same", function()
+    world(); Rebounding = true
+    give("clumsiness", "weariness", "paralysis")
+    expect(has(round(), "flay Agathon rebounding slike")).toBeTrue()
+  end)
+
+  it("never asthma, and the next missing one when anorexia is up", function()
+    world(); Shielded = true
+    give("clumsiness", "weariness", "paralysis", "anorexia")
+    local r = round()
+    expect(has(r, "flay Agathon shield euphorbia")).toBeTrue()
+    expect(has(r, "kalmia")).toBeFalse()
+  end)
+
+  it("no paralysis: curare, as before", function()
+    world(); Shielded = true
+    give("clumsiness", "weariness")
+    expect(has(round(), "flay Agathon shield curare")).toBeTrue()
+  end)
+end)
+
+describe("F32: the rebounding pre-empt waits for a hypnosis step", function()
+  it("hypnotised: the suggest goes, no impulse, and the clock stays armed", function()
+    world()
+    serpent.hypnosis.mode, serpent.hypnosis.phase = "fratricide", "hypnotised"
+    lastReboundingFlay = clock - 9
+    local r = round()
+    expect(has(r, "suggest Agathon fratricide")).toBeTrue()
+    expect(has(r, "impulse")).toBeFalse()
+    expect(lastReboundingFlay).toBe(91)
+  end)
+
+  it("sealed: the snap goes, no impulse", function()
+    world()
+    serpent.hypnosis.mode, serpent.hypnosis.phase = "lock", "suggesting"
+    serpent.hypnosis.targetSuggestions, serpent.hypnosis.suggestions = { "stupidity" }, { "stupidity" }
+    serpent.hypnosis.sealed = true
+    lastReboundingFlay = clock - 9
+    local r = round()
+    expect(has(r, "snap Agathon")).toBeTrue()
+    expect(has(r, "impulse")).toBeFalse()
+    serpent.hypnosis.mode = "fratricide"
+  end)
+
+  it("with no step due it still fires", function()
+    world()
+    lastReboundingFlay = clock - 9
+    expect(has(round(), "impulse Agathon")).toBeTrue()
+    expect(lastReboundingFlay).toBe(0)
+  end)
+end)
+
+describe("F33: the pinshot is in one person", function()
+  local function pinned(who)
+    local line = "Your arrow slams into the foot of " .. who .. "."
+    assert(TL.anyMatches(TL.patterns(PINSHOT), line), "the pinshot pattern no longer takes: " .. line)
+    matches = { line, who }
+    local savedBox = ataxia_boxEcho
+    ataxia_boxEcho = function() end
+    local fine, e = pcall(body(PINSHOT))
+    ataxia_boxEcho = savedBox
+    if not fine then error(e, 0) end
+  end
+  local function pinTimers()
+    local n = 0
+    for _, t in pairs(mock.active_timers) do
+      if t.delay == 21 and type(t.callback) == "string" and has(t.callback, "tpinshot") then n = n + 1 end
+    end
+    return n
+  end
+
+  it("a new target within 21 s gets its own pinshot", function()
+    world(); tpinshotTimer = nil
+    serpent.state.firstAttack, serpent.state.dispelSent = true, false
+    pinned("Agathon")
+    expect(tpinshot).toBe("Agathon")
+    retarget("Claes")
+    expect(has(round(), "pinshot Claes foot")).toBeTrue()
+  end)
+
+  it("the pinned target is not pinned again within its 21 s", function()
+    world(); tpinshotTimer = nil
+    serpent.state.firstAttack, serpent.state.dispelSent = true, false
+    pinned("Agathon")
+    expect(has(round(), "pinshot")).toBeFalse()
+  end)
+
+  it("two pins leave one clear timer", function()
+    world(); tpinshotTimer = nil
+    pinned("Agathon")
+    pinned("Claes")
+    expect(pinTimers()).toBe(1)
+    expect(tpinshot).toBe("Claes")
+    tpinshotTimer = nil
+  end)
+end)
+
+describe("F34: sn runs the darkshade offence", function()
+  it("the alias calls functions that exist", function()
+    world(); serpOffenseMode = "lock"
+    local savedOffense, ran = serp_ekanelia_offense, 0
+    serp_ekanelia_offense = function() ran = ran + 1 end
+    local fine, e = pcall(body(SN))
+    serp_ekanelia_offense = savedOffense
+    if not fine then error(e, 0) end
+    expect(serpOffenseMode).toBe("darkshade")
+    expect(ran).toBe(1)
+  end)
+end)
+
+describe("F35: a part name is completed before the round", function()
+  it("the one listed name that starts with it becomes the target", function()
+    world()
+    target, ataxia.playersHere = "Sai", { "Saibel" }
+    local savedUpdate = updateTarget
+    updateTarget = nil                           -- 016 not loaded: the plain assignment
+    local r = round()
+    updateTarget = savedUpdate
+    expect(target).toBe("Saibel")
+    expect(has(r, "dstab Saibel")).toBeTrue()
+  end)
+
+  it("016's updateTarget does it when it is there", function()
+    world()
+    target, ataxia.playersHere = "sai", { "Saibel" }
+    local savedUpdate, got = updateTarget, nil
+    updateTarget = function(n) got = n; target = n end
+    local r = round()
+    updateTarget = savedUpdate
+    expect(got).toBe("Saibel")
+    expect(has(r, "Saibel")).toBeTrue()
+  end)
+
+  it("two names that start with it: nothing is sent", function()
+    world()
+    target, ataxia.playersHere = "Sai", { "Saibel", "Saidra" }
+    expect(round()).toBe("")
+    expect(target).toBe("Sai")
+  end)
+end)
+
+describe("F36: a reflection on prick 1 still credits prick 2", function()
+  local PRICK = "You quickly prick Agathon with your dirk."
+  local BLINK = "A reflection of Agathon blinks out of existence."
+  local SECOND = "Striking like a snake, you prick Agathon a second time with your dirk."
+  local VTA = { curare = "paralysis", xentio = "clumsiness", kalmia = "asthma" }
+  local queued
+
+  local function stab(next1)
+    queued = {}
+    local saved = { tempLineTrigger, venom_to_aff }
+    tempLineTrigger = function(_, _, f) queued[#queued + 1] = f; return #queued end
+    venom_to_aff = function(v) return VTA[v] end
+    envenomList, envenomListTwo = { "curare" }, { "xentio" }
+    assert(TL.matches(TL.patterns(DSTAB)[1].pat, 1, PRICK), "the prick pattern no longer takes")
+    multimatches = { { PRICK, "Agathon" }, { "" }, { next1 } }
+    local fine, e = pcall(body(DSTAB))
+    tempLineTrigger, venom_to_aff = saved[1], saved[2]
+    if not fine then error(e, 0) end
+  end
+  local function nextLine(text)
+    line = text
+    local f = table.remove(queued, 1)
+    local savedTLT = tempLineTrigger
+    tempLineTrigger = function(_, _, g) queued[#queued + 1] = g; return #queued end
+    local fine, e = pcall(f)
+    tempLineTrigger = savedTLT
+    if not fine then error(e, 0) end
+  end
+
+  it("prick 2 lands the top venom (xentio here, the second named)", function()
+    world()
+    stab(BLINK)
+    expect(haveAff("clumsiness")).toBeFalse()   -- not before prick 2's own line
+    nextLine(SECOND)
+    nextLine("Balance used: 1.8s.")             -- Saibel.log:458, the line after prick 2's
+    expect(haveAff("clumsiness")).toBeTrue()
+    expect(haveAff("paralysis")).toBeFalse()
+    expect(#envenomList).toBe(0)
+  end)
+
+  it("prick 2 rebounding records the rebounding, not the venom", function()
+    world()
+    stab(BLINK)
+    nextLine(SECOND)
+    nextLine("The attack rebounds back onto you!")
+    expect(haveAff("clumsiness")).toBeFalse()
+    expect(haveAff("rebounding")).toBeTrue()
+  end)
+
+  it("a second reflection takes prick 2: nothing", function()
+    world()
+    stab(BLINK)
+    nextLine(SECOND)
+    nextLine(BLINK)
+    expect(haveAff("clumsiness")).toBeFalse()
+  end)
+
+  it("no second prick line: nothing", function()
+    world()
+    stab(BLINK)
+    nextLine("Agathon takes a drink from a vial.")
+    expect(#queued).toBe(0)
+    expect(haveAff("clumsiness")).toBeFalse()
+  end)
+end)
+
+describe("F37: the Serpent class lines are the game's", function()
+  local pats = TL.patterns(GRAB)
+  it("the real lines take", function()
+    for _, l in ipairs({
+      "Thato sinks her fangs into your body and you wince in pain.",   -- azbErKcK.txt:1242
+      "Thato fixes her gaze to yours and hisses a sharp command.",      -- azbErKcK.txt:1238
+      "Kalys flays away your shield defence.",                         -- g-lD00-h.txt:37
+      "Thato flays away your aura of rebounding defence.",              -- azbErKcK.txt:89
+      "Thato snaps her fingers in front of you.",                       -- azbErKcK.txt:275
+      "Archaeon quickly pricks you with his dirk.",                     -- X8pRorzR.txt:49
+    }) do
+      expect(TL.anyMatches(pats, l)).toBeTrue()
+    end
+  end)
+
+  it("a Pariah's gaze and a pet snake's bite do not", function()
+    expect(TL.anyMatches(pats,
+      "Talo fixes his gaze to yours, raising his right hand, before sharply snapping his fingers.")).toBeFalse()
+    expect(TL.anyMatches(pats,
+      "An emerald tree snake sinks its fangs into your neck and injects a potent dose of toxin.")).toBeFalse()
+  end)
+
+  it("the body names the Serpent", function()
+    local savedCD, got = classDetect, nil
+    classDetect = { setAttackerClass = function(n, c) got = n .. ":" .. c end }
+    matches = { "Kalys flays away your shield defence.", "Kalys" }
+    local fine, e = pcall(body(GRAB))
+    classDetect = savedCD
+    if not fine then error(e, 0) end
+    expect(got).toBe("Kalys:Serpent")
+  end)
+end)
+
+describe("X6: the unused focus clock is gone", function()
+  it("serpent.getFocusCooldownRemaining is not defined", function()
+    expect(serpent.getFocusCooldownRemaining).toBeNil()
   end)
 end)
 

@@ -15,9 +15,12 @@
 -- and true labels, and "sileris.unhardened" (an apply that slickness stopped), so kb_events.census() of a run has the
 -- keys give, hypochondria, soft, true and sileris.unhardened (review ENG-2).
 -- One attack name is the engine's own too: "flay", a FLAY that strips nothing and cannot whip (attackers.lua A.lines).
--- So are two parts: "impulse" (kind hypnosis), the suggestion of an IMPULSE, whose attack is "bite"; and "reaction",
--- a reaction that fired, with the venom in its args. A cure event carries "ssc", the case of the SSC delay before it
--- (victim.lua V.delay: "gain" or "return").
+-- So is one part: "reaction", a reaction that fired, with the venom in its args. An IMPULSE is the attack "bite" with
+-- the part "gaze.command" (kind hypnosis) for its suggestion, kb_events' name for the line that came with each of the
+-- 22 BITEs in the four victim-seat logs (az 1238-1242, Z5 534-537, X 293-296). A cure event carries "ssc", the case of
+-- the SSC delay before it (victim.lua V.delay: "gain" or "return"). A FLAY's attack event carries "coatUp", whether
+-- the sileris coating was up as it struck (tools/theorycraft.py flay_lines: only then does rule attack.flay.missing
+-- decide anything).
 -- Every number comes from the rules table (kb/sim/rules.json); a run is a MODEL, not a log.
 
 local F = {}
@@ -233,10 +236,13 @@ local function attack(out, s, model, env, st, t, script)
     s.nextAct = nextAt(s, script, t + F.gapDraw(gapOf(env, "give"), env, st))
     ev.next = s.nextAct
   else
+    -- Read before A.apply, which can strip it.
+    local coatUp = s.defs.sileris
     local result, landed, coat, info = A.apply(s, act, model)
     local name, parts = A.lines(act, result, s, coat, info)
     local extra = { action = act.kind, result = result, landed = landed, phase = eatKnown and eatPhase or nil,
                     down = eatDown, text = act.text }
+    if act.kind == "flay" then extra.coatUp = coatUp and true or false end
     if act.kind == "impulse" then
       -- The impulse spends the attacker's equilibrium whatever the bite met (rule attack.cost.own.impulse_eq).
       if not (model.attacker and model.attacker.impulseEq) then
@@ -399,6 +405,8 @@ end
 ---                  drawn from the part of the clock above the time already run (V.clockAfter; "class" is the class
 ---                  cure's lockout). One whose longest draw has run out comes back at t0, with its line.
 ---   firstFrom      the log's last attack; the first action comes one gap after it, drawn as every other gap.
+---   firstGap       the median of that gap: the gap after the kind of the log's last attack (a FLAY's under a per-kind
+---                  --gap preset), else env.gap.
 ---   shieldFrom     the log's FLAY of the shield; the victim raises it again one re-raise delay later (review LUA-N2-5).
 ---                  A shield down at the start with no shieldFrom stays down: only a FLAY starts a re-raise.
 ---   reboundingFrom the log's smoke for rebounding; the aura comes up one clock.rebounding later.
@@ -454,7 +462,7 @@ function F.run(start, script, model, env, seed)
   local t = start.t0
   s.index = 1
   if start.firstFrom then
-    s.nextAct = nextAt(s, script, math.max(start.t0, start.firstFrom + F.gapDraw(env.gap, env, st)))
+    s.nextAct = nextAt(s, script, math.max(start.t0, start.firstFrom + F.gapDraw(start.firstGap or env.gap, env, st)))
   else
     s.nextAct = nextAt(s, script, start.firstAt or start.t0)
   end
