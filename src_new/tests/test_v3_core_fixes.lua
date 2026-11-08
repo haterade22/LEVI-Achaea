@@ -167,6 +167,8 @@ describe("F12: a cure that leaves every branch under 1% keeps the branches", fun
     expect(tAffs.pinshot).toBeTrue()
     near(sum(TEN), 7, "the ten afflictions after three cures")
     expect(#afflictionStatesV3 <= affConfigV3.maxStates).toBeTrue()
+    -- Each one, not only the sum: equal branches cut at 50 read 0.90, 0.56 and 0.98 for these.
+    for _, a in ipairs(TEN) do near(P(a), 0.7, a) end
   end)
 
   it("three trees over ten afflictions do the same", function()
@@ -179,6 +181,42 @@ describe("F12: a cure that leaves every branch under 1% keeps the branches", fun
     near(P("pinshot"), 1, "pinshot")
     expect(tAffs.pinshot).toBeTrue()
     near(sum(TEN), 7, "the ten afflictions after three trees")
+    for _, a in ipairs(TEN) do near(P(a), 0.7, a) end
+  end)
+
+  it("a fourth tree over ten still reads even (210 branches at 1/210)", function()
+    world()
+    tarAffed("pinshot", unpack(TEN))
+    for i = 1, 4 do
+      now = now + 14
+      ataxia_targetTreeV3()
+    end
+    expect(#afflictionStatesV3).toBe(210)
+    for _, a in ipairs(TEN) do near(P(a), 0.6, a) end
+  end)
+
+  -- 84 branches at 0.0119, none under the floor, so the keep-all path is not what gets here: this
+  -- is the board's own count against the cap. The nine are the candidates the live client printed
+  -- at kb/raw/logs/2026-11-03_shikudo-group-alias-2.txt:1562-1563.
+  it("nine afflictions after three cures keep every branch", function()
+    local NINE = { "weariness", "stupidity", "anorexia", "impatience", "confusion", "slickness", "asthma",
+      "healthleech", "clumsiness" }
+    world("Xylarys")
+    tarAffed(unpack(NINE))
+    run(DRAGONHEAL, "Xylarys lets out a great keening, casting the impurities from his form.", "Xylarys")
+    expect(#afflictionStatesV3).toBe(84)
+    for _, a in ipairs(NINE) do near(P(a), 6 / 9, a) end
+  end)
+
+  it("a package reload over a running session takes the cap", function()
+    local kept = affConfigV3
+    affConfigV3 = { enabled = true, minProbability = 0.01, maxStates = 50, debugEcho = true }
+    local fine, e = pcall(dofile,
+      "src_new/scripts/levi_ataxia/levi/ataxia/affliction_tracking_core/007_Branching_State_Tracker.lua")
+    local cap = affConfigV3.maxStates
+    affConfigV3 = kept
+    if not fine then error(e, 0) end
+    expect(cap).toBe(300)
   end)
 end)
 
@@ -304,6 +342,17 @@ describe("F41: dazzled goes in under the game's name, so the cures can take it",
     run(DAZZLE, LINE, "Agathon")
     expect(P("dazzled")).toBe(1)
     expect(P("dazzle")).toBe(0)
+  end)
+
+  it("priest/003 names dazzled itself", function()
+    world("Agathon")
+    local given
+    local real = ataxia_tarAffTimed
+    ataxia_tarAffTimed = function(a) given = a end
+    local ok, err = pcall(run, DAZZLE, LINE, "Agathon")
+    ataxia_tarAffTimed = real
+    assert(ok, err)
+    expect(given).toBe("dazzled")
   end)
 
   it("a tree over dazzled and asthma splits evenly (dazzle was never a candidate)", function()

@@ -329,10 +329,10 @@ end
 --                                         branches from before it and after it. kind is the herb
 --                                         ("goldenseal"), "smoke" or "focus".
 --   ataxia_knownCureV3(kind, who, aff)    a line named the cure: put the "before" branches back,
---                                         take out what the action itself proved (anorexia for an
---                                         eat, asthma for a smoke, impatience for a focus) and aff,
---                                         and drop the action's pending negative confirmation.
---                                         Returns true when it did.
+--                                         apply what the action itself proved (anorexia for an
+--                                         eat, asthma for a smoke, impatience for a focus) as the
+--                                         random cure did, take out aff, and drop the action's
+--                                         pending negative confirmation. Returns true when it did.
 --
 -- It does nothing (and returns false) unless the random cure was `who`'s, of this kind, under
 -- KNOWN_CURE_WINDOW seconds ago, and nothing has changed the branches since, leaving aff aside: a
@@ -408,11 +408,17 @@ function ataxia_knownCureV3(kind, who, aff)
 	if knownCureKey(afflictionStatesV3, aff) ~= knownCureKey(r.after, aff) then return false end
 
 	local proved, negconf = knownCureKind(kind)
-	for _, s in ipairs(r.before) do
+	afflictionStatesV3 = r.before
+	-- A smoke or a focus DROPS the branches that hold what it proved (onSmokeCureV3, onTargetFocusV3),
+	-- and "before" was copied ahead of that, so this drops them again. Only stripping asthma brought
+	-- back a branch the smoke had ruled out: asthma, clumsiness and unweavingspirit, then kelp, a
+	-- smoke and the naming line, took clumsiness from 1 to 0.67. An eat strips anorexia in place
+	-- (targetAteWrapper, 008), so the loop below does the same for it.
+	if kind == "smoke" or kind == "focus" then proveAffAbsentV3(proved) end
+	for _, s in ipairs(afflictionStatesV3) do
 		s.affs[proved] = nil
 		s.affs[aff] = nil
 	end
-	afflictionStatesV3 = r.before
 	if negconf and negativeConfirmTimersV3 and negativeConfirmTimersV3[negconf] then
 		killTimer(negativeConfirmTimersV3[negconf])
 		negativeConfirmTimersV3[negconf] = nil

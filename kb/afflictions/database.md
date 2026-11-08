@@ -14,7 +14,7 @@ ASSUMED meaning: a NoRandomCure affliction cannot be removed by those random cur
 confirmed in-game, so the lists below are questions, not bugs.
 
 - **Tree pool `treeCurableAffsV3`** (77 entries): marked NoRandomCure by the game: none
-- **Passive pool `passiveCurableAffsV3`** (53 entries): marked NoRandomCure by the game: none
+- **Passive pool `passiveCurableAffsV3`** (77 entries): marked NoRandomCure by the game: none
 
 ## Afflictions
 

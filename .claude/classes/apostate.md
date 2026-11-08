@@ -522,7 +522,7 @@ No probability gates, no hinder afflictions — pure lock pieces for coordinated
 - Curseward detected → breach + secondary (all modes)
 - Truelock >= 70% → class lock aff + secondary (all modes)
 - Group mode → group curse selectors (no hinder)
-- Mental mode → mental curse selectors (goldenseal/lobelia flood, then transition to lock)
+- Mental mode → mental curse selectors (goldenseal/lobelia flood, then transition to lock: `apostate.mentalReady`, 015:425, wants impatience certain by `isAffCertainV3` and 2 of stupidity, dizziness, vertigo at 25%+)
 - Lock mode → lock curse selectors (asthma-conditional branching)
 - No `sleep` branch — sleep mode uses the default lock selectors.
 
@@ -589,7 +589,7 @@ Same routing pattern as Blademaster:
 | `MENTAL AFFS` | `^men$` | `apostate_mental()` → mental mode |
 | `Illusion Curse` | `^kee$` | `apostate_clumsyillusion()` → lock mode |
 | `Group Attack` | `^yy$` | `apostate_group()` (group mode) — **DISABLED** (`isActive: 'no'`) |
-| `VIVISECT` | `^viv$` | **BROKEN** — calls undefined `apostate_viviprio()` (the defined wrapper is `apostate_vivisect()`); alias currently no-ops |
+| `VIVISECT` | `^viv$` | `apostate_vivisect()` → vivisect mode (until 2026-11-08 it called `apostate_viviprio()`, deleted in 549c1798, and threw) |
 
 > Note: `^ll$` is the **Monk LEFT LEG** alias (sets `targetlimb` + `dwcprep()`), not an Apostate lock command. No `^slee$` or `^corr$` aliases exist — sleep mode is reachable only via `levisleepapo()`, corrupt mode only via `corruptKill()` / `cathCorrupt()`.
 
@@ -613,12 +613,12 @@ Same routing pattern as Blademaster:
 
 Legacy global wrappers kept: `corruptDmg()`, `corruptKill()`, `cathCorrupt()`
 
-### Daemon Utilities (in 015, `015:948-1045`)
-Mostly **presence-check predicates and a predictor**, not summoners (except `bloodPact`). Global functions called by dispatch, the attack builder, and triggers:
+### Daemon Utilities (in 015, `015:953-1053`)
+Mostly **presence-check predicates and a predictor**, not summoners (except `bloodPact`). Global functions called by dispatch, the attack builder, and triggers (`bloodPact` has no caller today):
 
 | Function | Purpose |
 |----------|---------|
-| `bloodPact()` | Bloodpact setup (summons daegger / manages pentagram) — the one that actually issues commands |
+| `bloodPact()` | Bloodpact setup (summons daegger / manages pentagram) — the one that issues commands, through `apo` and `addToCommand`. No revision of this repo defines either, so since 2026-11-08 it returns at once without them |
 | `bloodworm()` | Presence check: true if a bloodworm is in `ataxia.denizensHere` |
 | `baalzadeen()` | Presence check: true if Baalzadeen is in `ataxia.denizensHere` |
 | `apopentagram()` | Room-item check: true if "a floating silver pentagram" is in `zgui.roomItemList` |

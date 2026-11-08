@@ -52,8 +52,10 @@ patterns:
 -- kb/CONFLICTS.md #38), the refusal is about the target, and now no cure-guess timer starts.
 -- GMCP RemovePlayer (update_stuff/001) still starts that timer when the target leaves.
 -- When the list does not hold the target, keep the old reading: the target is gone.
--- The name compare is the one isTargeted (016) uses: case is ignored, and either name may start
--- the other (`t sai` and a listed "Saibel"). It does not call updateTarget, so it changes nothing.
+-- The name compare is switchTarget's presence check (016): case is ignored, and a listed name may
+-- start with the target's (`t sai` and a listed "Saibel"), never the reverse: with target Kaiden and
+-- only Kai listed, Kai is someone else and Kaiden is gone. It does not call updateTarget, so it
+-- changes nothing.
 local function targetListedHere()
   if type(target) ~= "string" or target == "" or type(ataxia) ~= "table"
     or type(ataxia.playersHere) ~= "table" then
@@ -63,7 +65,7 @@ local function targetListedHere()
   for _, name in ipairs(ataxia.playersHere) do
     if type(name) == "string" and name ~= "" then
       local have = name:lower()
-      if have:sub(1, #want) == want or want:sub(1, #have) == have then return true end
+      if have:sub(1, #want) == want then return true end
     end
   end
   return false

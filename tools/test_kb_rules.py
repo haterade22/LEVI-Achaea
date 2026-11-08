@@ -544,7 +544,7 @@ class Read(unittest.TestCase):
 
     def test_cure_channels_for_lungs_and_elixir(self):
         # Review RUL-5: pear and calcite spend the lungs, shut by anorexia (cure-channels.md:19, 33); APPLY HEALTH is the
-        # health elixir, not a salve (cure-channels.md:45-47).
+        # health elixir, not a salve (cure-channels.md:50-52).
         self.assertEqual({o["channel"] for o in rule("cure.pressure")["value"]["options"]}, {"lungs"})
         self.assertEqual({o["channel"] for o in rule("cure.crackedribs")["value"]["options"]}, {"elixir"})
 

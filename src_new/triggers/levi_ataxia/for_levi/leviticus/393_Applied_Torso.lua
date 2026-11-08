@@ -42,6 +42,8 @@ if isTargeted(matches[2]) then
   -- restore passive cures if needed
   if passiveFailsafe then restorePassiveCure() end
 
+  -- Before the erase, which would leave the branches this proof rules out standing (007).
+  if proveAffAbsentV3 then proveAffAbsentV3("slickness", "salve") end
   -- slickness and bloodfire always applied
   erAff("slickness")
   erAff("bloodfire")

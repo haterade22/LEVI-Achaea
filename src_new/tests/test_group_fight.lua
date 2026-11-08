@@ -137,6 +137,48 @@ describe("the curing set in a party", function()
     expect(classDetect.state.currentCuringset).toBe("normal")
   end)
 
+  it("in a party, one attacker keeps its class for the parry", function()
+    fresh(IN_PARTY)
+    classDetect.setAttackerClass("Lauryyn", "Serpent")
+    expect(classDetect.state.attackerClass).toBe("Serpent")
+    expect(classDetect.state.attackerName).toBe("Lauryyn")
+  end)
+
+  -- 003_Parrying's auto mode reads attackerClass: with two attackers the class is no one's.
+  it("in a party, a second attacker clears the first one's class, and sends nothing", function()
+    fresh(IN_PARTY)
+    classDetect.setAttackerClass("Lauryyn", "Serpent")
+    classDetect.state.attackerSpec = "2H"
+    classDetect.setAttackerClass("Froedine", "Monk")
+    expect(classDetect.state.attackerClass).toBeNil()
+    expect(classDetect.state.attackerName).toBeNil()
+    expect(classDetect.state.attackerSpec).toBeNil()
+    expect(classDetect.state.currentCuringset).toBe("normal")
+    expect(#sent).toBe(0)
+  end)
+
+  it("out of a party, a second attacker clears the class and leaves the class set, as before", function()
+    fresh({ ct = "Mhaldor" })
+    classDetect.setAttackerClass("Lauryyn", "Serpent")
+    expect(classDetect.state.currentCuringset).toBe("serpent")
+    classDetect.state.lastSwitchTime = 0
+    sent = {}
+    classDetect.setAttackerClass("Froedine", "Monk")
+    expect(classDetect.state.attackerClass).toBeNil()
+    expect(classDetect.state.currentCuringset).toBe("normal")
+    expect(sent[1]).toBe("curingset switch normal")
+  end)
+
+  it("the class of each attacker still reaches the NDB before the clear", function()
+    fresh(IN_PARTY)
+    ataxiaNDB = { players = {} }
+    classDetect.setAttackerClass("Lauryyn", "Serpent")
+    classDetect.setAttackerClass("Froedine", "Monk")
+    expect(ataxiaNDB.players.Lauryyn.class).toBe("Serpent")
+    expect(ataxiaNDB.players.Froedine.class).toBe("Monk")
+    ataxiaNDB = nil
+  end)
+
   it("joining a party on a class set goes back to normal at the next detection", function()
     fresh(IN_PARTY)
     classDetect.state.currentCuringset = "serpent"

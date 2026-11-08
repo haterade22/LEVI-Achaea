@@ -52,7 +52,16 @@ tdeliverance = false
 	if onTargetSmokeV2 then onTargetSmokeV2(matches[2]) end
 
 	-- V3 integration: handle smoke cure (proves asthma absent AND creates branches for smoke-curable affs)
-	if onSmokeCureV3 then onSmokeCureV3() end
+	-- When the next line names the cure ("X seems suddenly unburdened ..." -> unweavingspirit,
+	-- third-person_removes/005), that trigger puts the branches back and charges the named one alone
+	-- (ataxia_knownCureV3, ataxia/001), so one smoke takes one affliction.
+	if onSmokeCureV3 then
+		if ataxia_randomCureV3 then
+			ataxia_randomCureV3("smoke", matches[2], onSmokeCureV3)
+		else
+			onSmokeCureV3()
+		end
+	end
 
 	-- Kill disambiguation timer - smoke proves asthma is cured
 	if kelpDisambiguateTimer then killTimer(kelpDisambiguateTimer); kelpDisambiguateTimer = nil end

@@ -37,6 +37,9 @@ jobs:
       - name: Check for orphaned calls into disabled scripts
         run: python3 tools/check_orphans.py
 
+      - name: Test the orphan checker
+        run: python3 -B tools/test_check_orphans.py
+
       - name: Check trigger patterns fit on one wrapped line
         run: python3 tools/check_wrap.py
 
@@ -117,6 +120,10 @@ jobs:
           print(f'Checked {len(glob.glob(\"src_new/**/_groups.yaml\", recursive=True))} YAML files, {errors} errors')
           sys.exit(1 if errors else 0)
           "
+
+      # After the step above: the converter imports yaml.
+      - name: Test the Muddler converter
+        run: python3 -B tools/test_convert_to_muddler.py
 
   build:
     name: Build Package

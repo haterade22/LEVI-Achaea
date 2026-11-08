@@ -34,6 +34,10 @@ patterns:
   type: 1
 ]]--
 
+-- 420_Paralysis matches the same Horror line and gives the same paralysis. Whichever runs first
+-- gives it, and the other sees it certain (isAffCertainV3, 007), so one line is one "tar afflicted".
 if isTargeted(matches[2]) then
-  tarAffed("paralysis")
+  if not (isAffCertainV3 and isAffCertainV3("paralysis")) then
+    tarAffed("paralysis")
+  end
 end

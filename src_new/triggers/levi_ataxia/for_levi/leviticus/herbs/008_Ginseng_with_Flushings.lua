@@ -40,7 +40,13 @@ patterns:
   type: 1
 ]]--
 
-if isTargeted(multimatches[1][2]) then
+-- 007_Ginseng reads the same eat line and has charged the eat by the time this line prints, unless
+-- the target is still part of a name (it compares the exact name). Read before isTargeted, which
+-- completes the name.
+local eater = multimatches[1][2]
+local chargedBy007 = target == eater
+
+if isTargeted(eater) then
 tdeliverance = false
   predictBal("herb", 1.55)	
 	if anorexiaFailsafe then
@@ -50,8 +56,19 @@ tdeliverance = false
 		lastFocus = nil
 	end
   if passiveFailsafe then restorePassiveCure() end
-	targetAteWrapper("ginseng")
-	flushingsProc()
+	-- This line cures nothing. With flushings up the eat takes ONE other affliction and the line
+	-- follows it; flushings is still on the next prompt in all five first-person rows
+	-- (2026-11-01_claes_runewarden-vs-pariah_loss_Vr.NkCGD.txt:853-857, _4c_SeyaA.txt:1869-1873,
+	-- 1974-1978, 2415-2421, _WKuEakBZ.txt:1126-1131). No log holds this third-person form.
+	-- This body used to charge the eat a second time (targetAteWrapper, on top of 007) and then
+	-- erase a third affliction (flushingsProc), so one eat took up to three (2026-11-08 deep review).
+	if not chargedBy007 then
+		if ataxia_randomCureV3 then
+			ataxia_randomCureV3("ginseng", eater, function() targetAteWrapper("ginseng") end)
+		else
+			targetAteWrapper("ginseng")
+		end
+	end
 
 	selectString(line, 1)
 	fg("NavajoWhite")

@@ -152,18 +152,22 @@ Each row is `<HH:MM:SS.mmm> <kind> <text>`, so unlike a client log every row has
 | `+aff` / `-aff` | an affliction we gained or lost, from GMCP |
 | `+def` / `-def` | a defence we gained or lost, from GMCP |
 | `+tar` / `-tar` | an affliction our tracker gave the target or took away (its "tar afflicted" and "target cured aff" events), so what we believed can be checked against the lines |
-| `#` | a note: the header (version, opponent, our class, why it started, round delivery) and the stop line (why, rows, seconds) |
+| `#` | a note: the header (version, opponent, our class, why it started, a Serpent's attack-first setting, round delivery) and the stop line (why, rows, seconds) |
 
 Lines the package echoes itself (`(LEVI): ...`) are not recorded, because echoes do not reach triggers.
 
 **Round delivery.** The header ends with `rounds raw` or `rounds alias`, so a control fight can be told from a test
-fight. Logs from before that field are `raw`. With `alias` (`aconfig rounds alias`, Monk only),
+fight. Logs from before that field are `raw`. A Serpent's header has ` | serpent attackfirst on` or `off` just before it
+(`aconfig serpent attackfirst`, `026_Fight_Log.lua`:276-284), and no filed log has that field yet. `rounds` stays the last
+field, and `tools/kb_timing.py` reads it wherever it sits (`ROUNDS_FIELD`, :329). With `alias` (`aconfig rounds alias`, Monk only),
 the `>` rows hold `setalias lvfree a/b/c` when the text changes and `queue addclear free lvfree` for each press. A
 `# alias lvfree holds: ...` row after the header gives the text at the start. We expect the game's run line to name the
 alias: `Running queued free command: LVFREE` (first seen 2026-11-02).
 
 When it records: on its own when a player attacks us (the class detector's event), or when we send
-a queued command naming our target while that target is a player in the room; by hand with
+a queued command or a raw attack (dstab, doublestab, flay, impulse, bite, behead, execute) naming our target while
+that target is a player in the room. A Serpent round queues only `purge`, or the wield with attack-first on, and sends the
+attack raw (`ours/2026-11-07_164635_Saibel.log`:277-283). By hand with
 `fightlog on [name]`. It stops 3 s after a kill, our death or an arena verdict, after 60 s with
 nothing naming the opponent (automatic recordings only), at 50,000 rows, on disconnect, or with
 `fightlog off`.

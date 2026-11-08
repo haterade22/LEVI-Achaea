@@ -319,6 +319,9 @@ avoid:
 
 recommended_strategy: |
   Cure crescendo (ash) before finale lands.
+  (Our tracker: an ash eat with crescendo up is charged to crescendo alone. This is measured only with no
+  other ash affliction up (kAQnlFAW, L8LSw7xD). With another ash affliction up, which one the eat takes is
+  unknown (kb/mechanics/foundations.md #6), and crescendo-first is an assumption, herbs/006.)
   Cure refrain afflictions quickly.
   Prioritize curing lock afflictions.
   Apply weariness to block their Fitness.
@@ -328,6 +331,10 @@ recommended_strategy: |
 
 ## Implementation Notes
 ```
+Fixed 2026-11-08, not yet run in Mudlet: vibrato and tremolo (limb_hits_unorganised/003, 004) called a helper deleted
+in 3c312975 and threw before setting ataxiaTemp.tvBal. The parry branch of six blade_dance triggers and of the morningstar
+whirl (616) no longer throws on killTimer(numbRight) after a left-arm numb, so the parried limb is recorded.
+
 Offense entry points (bard/001_LeviBard.lua):
 - bard.dispatchOne() / levibardone()  — sunrise kill route, sunset tempo
 - bard.dispatchTwo() / levibardtwo()  — tempo-gated sunset, shorter chain

@@ -112,6 +112,14 @@ local SHIELD, DIRK, WHIP = "a Shield of Absorption", "Thoth's fang", "Elentari's
 local clock, sends, events, echoes, gmcpSent = 100, {}, {}, {}, {}
 -- The NDB's classes by name: what ataxiaNDB_getClass answers ("Unknown" for no entry, as 003's does).
 local ndb = {}
+-- getLockingAffliction's rows for the classes these tests use (scripts/_groups.yaml:324): "name"
+-- asks for the affliction, any other argument for the game's word.
+local LOCK_AFF = {
+  Occultist = { "paralysis", "paralyse" }, Shaman = { "paralysis", "paralyse" },
+  Jester = { "paralysis", "paralyse" }, Depthswalker = { "recklessness", "reckless" },
+  Magi = { "haemophilia", "haemophilia" }, Serpent = { "weariness", "weariness" },
+  Monk = { "weariness", "weariness" },
+}
 local function world()
   mock.reset()
   clock, sends, events, echoes, gmcpSent = 100, {}, {}, {}, {}
@@ -127,7 +135,14 @@ local function world()
   -- ataxia/003's combatQueue with nothing to parry or chase.
   combatQueue = function() return "g body::g gold::stand::" end
   rTabSize = function(t) local n = 0; for _ in pairs(t or {}) do n = n + 1 end; return n end
-  getLockingAffliction = function() return "paralyse" end
+  -- By the target's class, as the real function reads it. This returned "paralyse" for every
+  -- argument: no venom has that name, so the Occultist's "curare curare" could not show here. A
+  -- class with no row gets the real function's no-NDB answer.
+  getLockingAffliction = function(kind)
+    local row = LOCK_AFF[ndb[target]]
+    if not row then return "paralyse" end
+    return kind == "name" and row[1] or row[2]
+  end
   -- The target's class, through the real gates (007_Pariah_things). Agathon defaults to an
   -- Occultist: in the skip list of ataxia_wantClumsiness and with no class venom, which is the
   -- venom order these tests were written for (they stubbed the gate to false until 2026-11-08).
@@ -145,7 +160,7 @@ local function world()
   ataxia.settings.user = nil
   gmcp = { Char = { Vitals = { bal = "1" } } }
   Rebounding, Shielded, reboundHold, classDetect, tarClass = false, false, nil, nil, nil
-  hypSeal2, snapped, canShrug, tpinshot = nil, nil, nil, nil
+  hypSeal2, snapped, tpinshot = nil, nil, nil
   ataxiaBasher_isMounted, omount, ataxiaBasher, ataxiaBasher_CLASS_PETS = nil, nil, nil, nil
   serpent.config.useExitBlock = false
   resetStatesV3()
@@ -160,7 +175,7 @@ local function world()
   local s = serpent.state
   s.attackInFlight, s.firstAttack, s.dispelSent = false, false, true   -- no opener, no dispel
   s.impatienceDelivered, s.relapsePhase, s.stupidityImpulseSent, s.voyriaSent = false, false, false, false
-  s.geckoStripAttempted, s.postGeckoLockdown, s.lastRebounding, s.shouldShrug = false, false, false, nil
+  s.geckoStripAttempted, s.postGeckoLockdown, s.lastRebounding = false, false, false
   s.lockReinforceSent, s.camusDelivered, s.sigilDeployed, s.pinshotSentAt = false, false, false, 0
   s.reboundingSeen, s.snakesHere, s.adderNotedFor, s.roomListSeen = false, {}, nil, false
   s.lastWieldKw, s.lastWieldBefore = nil, nil
@@ -944,6 +959,29 @@ local function dstabOf(r)
   return p[#p]
 end
 
+describe("review: a press with no NDB to read (003's ataxiaNDB_Exists)", function()
+  -- A load that throws leaves ataxiaNDB nil on purpose (001_Save_Load_Settings, test_settings.lua);
+  -- an empty file gives a table with no players. The real API, and no class to read.
+  for _, c in ipairs({ { "nil", nil }, { "with no players", {} } }) do
+    it("ataxiaNDB " .. c[1] .. ": the round still goes out, clumsiness kept", function()
+      world()
+      dofile(NDB_API)                              -- the real ataxiaNDB_getClass, over world()'s stub
+      ataxiaNDB = c[2]
+      expect(ataxiaNDB_getClass("Agathon")).toBe("Unknown")
+      expect(ataxia_targetClass()).toBe("")
+      expect(has(round(), "dstab Agathon curare xentio")).toBeTrue()
+    end)
+  end
+
+  it("ataxiaNDB with an empty players table reads the same (the control)", function()
+    world()
+    dofile(NDB_API)
+    ataxiaNDB = { players = {} }
+    expect(ataxia_targetClass()).toBe("")
+    expect(has(round(), "dstab Agathon curare xentio")).toBeTrue()
+  end)
+end)
+
 describe("review: the class gates read our TARGET's class", function()
   it("ataxia_wantClumsiness reads the target's class, in any case", function()
     world()
@@ -987,9 +1025,10 @@ describe("review: the class gates read our TARGET's class", function()
     local r = round()
     expect(has(r, "notechis")).toBeTrue()
     expect(has(r, "vernalius")).toBeFalse()
-    -- The target hits us too: two attackers, and the engine keeps "Monk" on the normal set.
+    -- The target hits us too: two attackers, so the engine holds no one's class, and the NDB (which
+    -- each class line wrote) still gives the target's.
     classDetect.setAttackerClass("Agathon", "Magi")
-    expect(classDetect.state.attackerClass).toBe("Monk")
+    expect(classDetect.state.attackerClass).toBeNil()
     expect(has(round(), "notechis")).toBeTrue()
   end)
 
@@ -1119,6 +1158,37 @@ describe("review: a lightwall in the room brings darkshade", function()
     expect(venoms()).toBe("darkshade gecko")
     give("darkshade")
     expect(venoms()).toBe("gecko curare")
+  end)
+end)
+
+-- canShrug and serpent.state.shouldShrug were read and never assigned, so the offence's own
+-- shrug path could not run. It is gone; ataxia_lockBreak (can(x)/003) sends our SHRUGGING.
+describe("review: the offence has no shrug of its own", function()
+  it("a round never carries shrugging, even with the old flags up", function()
+    world(); give("paralysis", "asthma", "weariness")
+    ataxia.afflictions = { stupidity = true, confusion = true, dizziness = true }
+    canShrug, serpent.state.shouldShrug = true, true
+    local r = round()
+    canShrug, serpent.state.shouldShrug = nil, nil
+    expect(has(r, "shrugging")).toBeFalse()
+  end)
+end)
+
+describe("review: the focus lock push counts pacified as a mental affliction", function()
+  local function upToThreeMentals()
+    world()
+    give("fratricide", "impatience", "asthma", "weariness", "stupidity", "masochism", "vertigo")
+    tBals.focus = false
+  end
+
+  it("three mentals are not enough for the push", function()
+    upToThreeMentals()
+    expect(has(round(), "monkshood")).toBeFalse()
+  end)
+
+  it("pacified, the tracker's name, is the fourth", function()
+    upToThreeMentals(); give("pacified")
+    expect(has(round(), "impulse Agathon confusion monkshood")).toBeTrue()
   end)
 end)
 
@@ -1711,6 +1781,223 @@ describe("F37: the Serpent class lines are the game's", function()
     classDetect = savedCD
     if not fine then error(e, 0) end
     expect(got).toBe("Kalys:Serpent")
+  end)
+end)
+
+-- Integration round 1 of the deep review (2026-11-08).
+describe("a lock piece a branched cure left at 0.667 is sent again, at the lock's own bar", function()
+  local function P(a) return getAffProbabilityV3(a) end
+  local function near(got, want, what)
+    if math.abs(got - want) > 1e-9 then
+      error(string.format("%s: expected %.6f but got %.6f", what, want, got), 2)
+    end
+  end
+  -- A lock short only of anorexia, on which an eat branches.
+  local function board(mode, delivered, ...)
+    world()
+    serpOffenseMode = mode
+    serpent.state.impatienceDelivered = delivered
+    give("paralysis", "asthma", "slickness", "weariness", "masochism", "impatience", ...)
+  end
+  local LANDS = { curare = "paralysis", kalmia = "asthma", gecko = "slickness", slike = "anorexia",
+    vernalius = "weariness", voyria = "voyria" }
+  -- n rounds whose venoms land, and whose monkshood bite reacts.
+  local function rounds(n)
+    local seen = {}
+    for i = 1, n do
+      clock = clock + 2.4
+      local r = round()
+      seen[i] = r
+      local a, b = r:match("dstab Agathon (%S+) (%S+)")
+      if a then
+        if LANDS[a] then give(LANDS[a]) end
+        if LANDS[b] then give(LANDS[b]) end
+      end
+      local sug, venom = r:match("impulse Agathon (%S+) (%S+)")
+      if sug then
+        give(sug)
+        if LANDS[venom] then give(LANDS[venom]) end
+        if venom == "monkshood" then give("impatience") end
+      end
+    end
+    return seen
+  end
+  local function anyHas(seen, needle)
+    for _, r in ipairs(seen) do if has(r, needle) then return true end end
+    return false
+  end
+
+  -- "Saibel eats an aurum flake." kb/raw/logs/ours/2026-11-07_164635_Saibel.log:2054
+  it("kelp over weariness + asthma: kalmia goes again and the lock closes", function()
+    board("lock", true)
+    onHerbCureV3("kelp")
+    near(P("asthma"), 2 / 3, "asthma after the eat")
+    local seen = rounds(3)
+    expect(has(seen[1], "kalmia")).toBeTrue()
+    expect(anyHas(seen, "curare vernalius")).toBeFalse()
+    expect(truelock).toBeTrue()
+  end)
+
+  -- "Saibel eats a magnesium chip." kb/raw/logs/ours/2026-11-07_164635_Saibel.log:1241
+  it("bloodroot over paralysis + slickness: gecko goes again and the lock closes", function()
+    board("lock", true)
+    onHerbCureV3("bloodroot")
+    near(P("slickness"), 2 / 3, "slickness after the eat")
+    local seen = rounds(3)
+    expect(anyHas(seen, "gecko")).toBeTrue()
+    expect(truelock).toBeTrue()
+  end)
+
+  -- A real monkshood reaction leaves disloyalty up (Saibel.log:1272), which made the reaction read
+  -- as spent even with impatience read at the lock's bar.
+  for _, c in ipairs({ { "lock", true }, { "lock", false }, { "group", false } }) do
+    it("goldenseal over stupidity + impatience (" .. c[1] .. ", delivered " .. tostring(c[2])
+      .. "): monkshood goes again", function()
+      board(c[1], c[2], "stupidity", "disloyalty")
+      onHerbCureV3("goldenseal")
+      near(P("impatience"), 2 / 3, "impatience after the eat")
+      local seen = rounds(3)
+      expect(anyHas(seen, "impulse Agathon masochism monkshood")).toBeTrue()
+      expect(truelock).toBeTrue()
+    end)
+  end
+
+  -- A third of the branches lost the piece, with no cure of ours to name (a focus, say).
+  local function doubt(aff)
+    local keep = afflictionStatesV3[1]
+    local lost = { affs = {}, prob = keep.prob / 3 }
+    for k, v in pairs(keep.affs) do lost.affs[k] = v end
+    lost.affs[aff] = nil
+    keep.prob = keep.prob * 2 / 3
+    afflictionStatesV3[#afflictionStatesV3 + 1] = lost
+    rebuildCacheV3()
+    syncToOldSystemV3()
+  end
+
+  -- Each venom picker's own read of each piece, one round each. The stall was "curare vernalius"
+  -- (lock, relapse) or "curare kalmia" (group). stupidityImpulseSent keeps the relapse's one
+  -- stupidity impulse out of the way, so the round is its DSTAB.
+  for _, c in ipairs({
+    { "pickVenomRelapse asthma", "lock", true, "kelp", "dstab Agathon kalmia slike" },
+    { "pickVenomRelapse slickness", "lock", true, "bloodroot", "dstab Agathon gecko slike" },
+    { "pickVenomRelapse anorexia", "lock", true, "doubt", "dstab Agathon slike curare", "anorexia" },
+    { "pickVenom asthma", "lock", false, "kelp", "dstab Agathon kalmia curare", "anorexia" },
+    { "pickVenom slickness", "lock", false, "bloodroot", "dstab Agathon gecko curare", "anorexia" },
+    { "slikeGateMet anorexia", "lock", false, "doubt", "dstab Agathon slike curare", "anorexia" },
+    { "pickVenomGroup anorexia", "group", false, "doubt", "dstab Agathon slike curare", "anorexia" },
+  }) do
+    it(c[1] .. " at 0.667: " .. c[5], function()
+      if c[6] then board(c[2], c[3], c[6]) else board(c[2], c[3]) end
+      serpent.state.stupidityImpulseSent = true
+      if c[4] == "doubt" then doubt("anorexia") else onHerbCureV3(c[4]) end
+      expect(has(rounds(1)[1], c[5])).toBeTrue()
+    end)
+  end
+
+  it("pickVenomGroup: an asthma at 0.667 goes before the slickness that builds on it", function()
+    world()
+    serpOffenseMode = "group"
+    give("paralysis", "asthma", "weariness", "impatience")
+    onHerbCureV3("kelp")
+    expect(has(round(), "dstab Agathon kalmia gecko")).toBeTrue()
+  end)
+
+  it("group mode sends the piece again too", function()
+    board("group", false)
+    onHerbCureV3("kelp")
+    expect(has(rounds(1)[1], "kalmia")).toBeTrue()
+  end)
+
+  it("with sileris up the gecko strip goes for an impatience at 0.667 too", function()
+    board("lock", false, "stupidity")
+    onHerbCureV3("goldenseal")
+    tAffs.sileris = true
+    expect(has(round(), "dstab Agathon gecko")).toBeTrue()
+    expect(serpent.state.geckoStripAttempted).toBeTrue()
+  end)
+
+  it("a read of a piece to build on stays at 0.30: gecko rides on an asthma at 0.667", function()
+    world()
+    give("paralysis", "asthma", "weariness", "impatience")
+    onHerbCureV3("kelp")
+    near(P("asthma"), 2 / 3, "asthma after the eat")
+    expect(has(round(), "dstab Agathon kalmia gecko")).toBeTrue()
+  end)
+
+  it("a piece at 0.667 is not a lock: no recklessness until it is back", function()
+    world(); ndb.Agathon = "Depthswalker"
+    give("anorexia", "asthma", "slickness", "paralysis", "weariness")
+    onHerbCureV3("kelp")
+    expect(serpent.recklessnessAllowed()).toBeFalse()
+    expect(has(round(), "eurypteria")).toBeFalse()
+    give("asthma")
+    expect(serpent.recklessnessAllowed()).toBeTrue()
+  end)
+end)
+
+describe("lock_reinforce never sends curare twice", function()
+  local function hardlock(class, ...)
+    world()
+    ndb.Agathon = class
+    serpent.state.impatienceDelivered = true
+    give("asthma", "slickness", "anorexia", "impatience", "weariness", "clumsiness", "masochism", ...)
+  end
+
+  it("a paralysis-lock class gets voyria, not its own curare again", function()
+    for _, class in ipairs({ "Occultist", "Shaman", "Jester" }) do
+      hardlock(class)
+      local r = round()
+      expect(serpStrategy).toBe("lock_reinforce")
+      expect(has(r, "dstab Agathon curare voyria")).toBeTrue()
+    end
+  end)
+
+  it("with voyria up the second venom is another one", function()
+    for _, class in ipairs({ "Occultist", "Monk", "Serpent" }) do
+      hardlock(class, "voyria")
+      local r = round()
+      expect(serpStrategy).toBe("lock_reinforce")
+      expect(has(r, "dstab Agathon curare ")).toBeTrue()
+      expect(has(r, "curare curare")).toBeFalse()
+    end
+  end)
+
+  it("a class whose lock venom is missing still gets it", function()
+    world()
+    ndb.Agathon = "Magi"
+    serpent.state.impatienceDelivered = true
+    give("asthma", "slickness", "anorexia", "impatience", "weariness", "clumsiness", "masochism")
+    expect(has(round(), "dstab Agathon curare notechis")).toBeTrue()
+  end)
+end)
+
+describe("group mode reaches the finish", function()
+  local function truelocked()
+    world()
+    serpOffenseMode = "group"
+    give("anorexia", "asthma", "slickness", "impatience", "paralysis", "weariness")
+  end
+
+  it("at truelock the voyria impulse goes once, then the finish", function()
+    truelocked()
+    local r = round()
+    expect(serpStrategy).toBe("lock_reinforce")
+    expect(has(r, "impulse Agathon vertigo voyria")).toBeTrue()
+    expect(serpent.state.voyriaSent).toBeTrue()
+    clock = clock + 2.4
+    serp_setmode_group()                         -- `sr` runs this on every press: no mode change
+    expect(serpent.state.voyriaSent).toBeTrue()
+    r = round()
+    expect(serpStrategy).toBe("finish")
+    expect(has(r, "dstab Agathon voyria ")).toBeTrue()
+    expect(has(r, "impulse")).toBeFalse()
+  end)
+
+  it("below truelock it stays the group strategy", function()
+    truelocked()
+    erAff("paralysis")
+    round()
+    expect(serpStrategy).toBe("group")
   end)
 end)
 

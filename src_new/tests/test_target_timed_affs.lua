@@ -56,8 +56,9 @@ describe("timed afflictions on the target", function()
   end)
 
   -- 2026-11-08 deep review (F41): dazzle went in under the key "dazzle", a name neither the tree
-  -- pool nor the head salve list knows, so no cure could ever take it. The old key still comes
-  -- from priest/003 and is renamed to the game's word.
+  -- pool nor the head salve list knows, so no cure could ever take it. priest/003 now passes the
+  -- game's word (test_v3_core_fixes pins that) and no shipped caller passes the old key. The
+  -- rename is kept, and pinned here.
   it("the old key dazzle gives the game's dazzled, on the 60 s clock", function()
     reset()
     ataxia_tarAffTimed("dazzle")

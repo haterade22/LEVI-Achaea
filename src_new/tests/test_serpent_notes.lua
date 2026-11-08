@@ -126,7 +126,7 @@ local function world()
   ataxia.afflictions = {}
   gmcp = { Char = { Vitals = { bal = "1" } } }
   Rebounding, Shielded, reboundHold, classDetect, tarClass = false, false, nil, nil, ""
-  hypSeal2, snapped, canShrug = nil, nil, nil
+  hypSeal2, snapped = nil, nil
   resetStatesV3()
 
   serpOffenseMode, serpStrategy = "lock", "lock"
@@ -138,7 +138,7 @@ local function world()
   local s = serpent.state
   s.attackInFlight, s.firstAttack, s.dispelSent = false, false, true   -- no opener, no dispel
   s.impatienceDelivered, s.relapsePhase, s.stupidityImpulseSent, s.voyriaSent = false, false, false, false
-  s.geckoStripAttempted, s.postGeckoLockdown, s.lastRebounding, s.shouldShrug = false, false, false, nil
+  s.geckoStripAttempted, s.postGeckoLockdown, s.lastRebounding = false, false, false
 end
 
 local function give(...) tarAffed(...) end

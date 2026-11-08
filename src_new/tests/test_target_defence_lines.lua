@@ -301,7 +301,7 @@ describe("F1: the next Serpent round flays the rebounding", function()
     Algedonic.Echo = function() end
     gmcp = { Char = { Vitals = { bal = "1" }, Status = { class = "Serpent" } } }
     Rebounding, Shielded, reboundHold, classDetect, tarClass = false, false, nil, nil, ""
-    hypSeal2, snapped, canShrug, tpinshot = nil, nil, nil, nil
+    hypSeal2, snapped, tpinshot = nil, nil, nil
     ataxiaBasher_isMounted, omount, ataxiaBasher_CLASS_PETS = nil, nil, nil
     serpent.config.useExitBlock = false
     serpOffenseMode, serpStrategy = "lock", "lock"
@@ -314,7 +314,7 @@ describe("F1: the next Serpent round flays the rebounding", function()
     local s = serpent.state
     s.attackInFlight, s.firstAttack, s.dispelSent = false, false, true
     s.impatienceDelivered, s.relapsePhase, s.stupidityImpulseSent, s.voyriaSent = false, false, false, false
-    s.geckoStripAttempted, s.postGeckoLockdown, s.lastRebounding, s.shouldShrug = false, false, false, nil
+    s.geckoStripAttempted, s.postGeckoLockdown, s.lastRebounding = false, false, false
     s.lockReinforceSent, s.camusDelivered, s.sigilDeployed, s.pinshotSentAt = false, false, false, 0
     s.reboundingSeen, s.snakesHere, s.adderNotedFor, s.roomListSeen = false, {}, nil, false
     s.lastWieldKw, s.lastWieldBefore = nil, nil
@@ -402,6 +402,35 @@ describe("F3: someone else's flight (640)", function()
     expect(sentAny("queue addclear free touch tentacle Lauryyn")).toBeTrue()
     expect(P("paralysis")).toBe(0)
     expect(combatQueue()).toBe("g body;g gold;stand;touch tentacle Lauryyn;")
+  end)
+end)
+
+-- The chase window is open with no direction recorded: the round must still go out.
+describe("a chase with no direction (combatQueue, depthswalkerQueue)", function()
+  local function chase(dir)
+    world("Lauryyn")
+    tChaseTimer, targetIshere, dir_left = 1, false, dir
+    attuningPerson = nil
+  end
+
+  it("combatQueue: no direction, no chase piece, and no throw", function()
+    chase(nil)
+    expect(combatQueue()).toBe("g body;g gold;stand;")
+  end)
+
+  it("combatQueue: a direction is still walked", function()
+    chase("north")
+    expect(combatQueue()).toBe("g body;g gold;stand;north;")
+  end)
+
+  it("depthswalkerQueue: no direction, no chase piece, and no throw", function()
+    chase(nil)
+    expect(depthswalkerQueue()).toBe("stand;wield shield scythe;wipe scythe;")
+  end)
+
+  it("depthswalkerQueue: a direction is still walked", function()
+    chase("north")
+    expect(depthswalkerQueue()).toBe("stand;north;wield shield scythe;wipe scythe;")
   end)
 end)
 
@@ -658,6 +687,25 @@ describe("F24/F48: a ghost leaves (638)", function()
     ataxia.playersHere = nil
     ghost("west")
     gone()
+  end)
+
+  it("target Kaiden with only Kai listed: Kai is someone else, so she left", function()
+    fight(true)
+    target = "Kaiden"
+    ataxia.playersHere = { "Kai" }
+    ghost("west")
+    gone()
+    expect(sentAny("queue addclear free west")).toBeTrue()
+  end)
+
+  it("a part-name target ('t sai') with Saibel listed: still here, the ghost is someone else's", function()
+    fight(true)
+    target = "Sai"
+    ghost("west")
+    flushNow()
+    expect(#sent).toBe(0)
+    expect(targetIshere).toBeTrue()
+    expect(timersOn.TargetOutOfRoom).toBeNil()
   end)
 
   it("chasing off: the cleanup, and no move", function()

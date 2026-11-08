@@ -222,7 +222,8 @@ end
 
 
 
-bardlimbattack()
+-- bardlimbattack() was deleted in 3c312975, so this could only throw. Nothing calls this function today.
+if bardlimbattack then bardlimbattack() end
 end
 
 

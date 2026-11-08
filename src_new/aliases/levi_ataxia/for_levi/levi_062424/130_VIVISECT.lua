@@ -14,4 +14,5 @@ command: ''
 packageName: ''
 ]]--
 
-apostate_viviprio()
+-- apostate_viviprio() was deleted in 549c1798 and this alias threw; apostate_vivisect() sets the vivisect mode now.
+apostate_vivisect()

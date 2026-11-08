@@ -39,6 +39,9 @@ patterns:
 
 if isTargeted(matches[2]) then
   if ataxiaTemp.randomCure and ataxiaTemp.randomCure > 0 then ataxiaTemp.randomCure = ataxiaTemp.randomCure - 1 end
+	-- After the target's smoke this line names the cure, so it replaces the smoke's random cure (390,
+	-- ataxia_knownCureV3), and the smoke counts once. With no such smoke just before, it only erases.
+	if ataxia_knownCureV3 then ataxia_knownCureV3("smoke", matches[2], "unweavingspirit") end
 	erAff("unweavingspirit")
   erAff("criticalspirit")
 	targetIshere = true

@@ -36,8 +36,8 @@ patterns:
 ]]--
 
 if isTargeted(matches[2]) and tBals.focus then
-	-- V3 owns the focus cure when it is loaded: onTargetFocusV3 clears
-	-- impatience from every branch (a focus proves it absent) and removes ONE
+	-- V3 owns the focus cure when it is loaded: onTargetFocusV3 drops the
+	-- branches that hold impatience (a focus proves it absent) and removes ONE
 	-- focus-curable aff -- and it refuses an illusion focus (off focus balance,
 	-- or impatience confirmed). The unconditional erAff + tFocused below used
 	-- to run as well, overriding those guards and removing a SECOND aff from

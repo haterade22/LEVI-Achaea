@@ -15,4 +15,5 @@ packageName: ''
 ]]--
 
 targetlimb = "head"
-infernalpriostrample()
+-- No revision of this repo defines infernalpriostrample(); guarded, because this alias only threw.
+if infernalpriostrample then infernalpriostrample() end

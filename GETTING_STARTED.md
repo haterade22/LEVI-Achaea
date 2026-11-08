@@ -295,7 +295,7 @@ Or use the "Run Tests" task in VS Code. Tests use `src_new/tests/mock_mudlet.lua
 Two lint checks run in CI beside the tests and are worth running before a push:
 
 ```bash
-python tools/check_orphans.py   # nothing active calls into a disabled script
+python tools/check_orphans.py   # nothing active calls into a disabled script, or a function no file defines
 python tools/check_wrap.py      # no trigger pattern is too wide to match a server-wrapped line
 ```
 

@@ -68,10 +68,10 @@ Shield/rebounding checks use dual-check pattern for safety (hasAff + raw tAffs f
 ## Deployed Files
 
 ```
-src_new/scripts/levi_ataxia/levi/ataxia/affliction_tracking_v3/
-├── 001_Branching_State_Tracker.lua  # Core V3 system
-├── 002_V3_Integration.lua           # Integration with existing systems
-└── 999_Test_Scenario.lua            # Test scenarios
+src_new/scripts/levi_ataxia/levi/ataxia/affliction_tracking_core/
+├── 007_Branching_State_Tracker.lua  # Core V3 system
+├── 008_V3_Integration.lua           # Integration with existing systems
+└── 009_Test_Scenario.lua            # Test scenarios
 ```
 
 ## Integrated Triggers
@@ -91,56 +91,54 @@ All herb triggers now call `onHerbCureV3(herbname)`:
 
 Bloodroot (`herbs/005_Bloodroot_TEST.lua`) calls `onHerbCureV3` itself. Since v4.7.479 it skips its V1 erase chain while V3 is on, because that chain took a second affliction per eat. It reports a cure that V3 made certain through `ataxia_tarAffFaded`. See [03-trigger-integration.md](03-trigger-integration.md) ("Bloodroot").
 
+Kelp (`herbs/003`), ginseng (`herbs/007`, `008`) and goldenseal (`herbs/002`) run `onHerbCureV3` through `ataxia_randomCureV3`, so a following line that names the cure can replace the random cure. See [03-trigger-integration.md](03-trigger-integration.md) ("Known-cure lines").
+
 ### Smoke Trigger
-`369_Smoked.lua` calls `onSmokeCureV3()` which:
+`390_Smoked.lua` calls `onSmokeCureV3()` (through `ataxia_randomCureV3`) which:
 1. Proves asthma is absent (can't smoke with asthma)
 2. Branches on which smoke-curable affliction was removed
 
 ### Salve Triggers
-All salve triggers call `onSalveCureV3(salveType)` which:
+The salve triggers call `onSalveCureV3(salveType)`, which:
 1. Proves slickness is absent (can't apply salve while slick)
-2. Branches on which salve-curable affliction was removed
+2. Closes a pending guess from an earlier eat or smoke (`killNegativeConfirmV3`)
+3. Branches on which salve-curable affliction was removed
 
 | File | Salve Type | V3 Call |
 |------|------------|---------|
-| `370_Applied_Body_Skin.lua` | body/skin | `onSalveCureV3(matches[3])` |
-| `371_Applied_Head.lua` | head | `onSalveCureV3("head")` |
-| `372_Applied_Torso.lua` | torso | `onSalveCureV3("torso")` |
-| `374_Applied_Limbs.lua` | limbs | `onSalveCureV3("limbs")` |
-| `375_Salves.lua` | generic | `onTargetApplySalveV3()` (slickness only) |
+| `391_Applied_Body_Skin.lua` | body/skin | `onSalveCureV3("body")` or `("skin")` |
+| `392_Applied_Head.lua` | head | `onSalveCureV3("head")` |
+| `393_Applied_Torso.lua` | torso | no cure call: it proves slickness only, and its restoration is delayed |
+| `395_Applied_Limbs.lua` | limbs | `onSalveCureV3("limbs")` |
+| `396_Salves.lua` | generic | `onTargetApplySalveV3()` (slickness only; a no-op when 391-395 charged this line) |
 
 ## Cure Tables
 
-### Herb Cure Priority Tables
-```lua
-herbCureTableV3 = {
-    kelp = {"asthma", "clumsiness", "healthleech", "hypersomnia", ...},
-    bloodroot = {"paralysis", "slickness"},
-    goldenseal = {"stupidity", "dizziness", "epilepsy", ...},
-    ginseng = {"clumsiness", "sensitivity", "weariness", ...},
-    ash = {"impatience", "confusion", "dementia", "recklessness", ...},
-    bellwort = {"pacifism", "weariness", "lethargy", ...},
-    lobelia = {"anorexia", "disfigurement", "haemophilia", ...}
-}
-```
+### Herb Cure Tables
+`getCurableAffs` reads the global `curingTable` first (`curing/002_Wide_Groups.lua`, pinned to the game's WHATCURES) and only then `curingTableV3` (`007:139-147`). Today only that table's `bloodroot` row is read. An old `herbCureTableV3` is gone. Fratricide is a cure-last entry (`herbCureLastV3`, `007:158`): an eat takes it only when nothing else that herb cures is there.
 
 ### Smoke Cure Priority Table
+One table for both pipes, because the smoke line does not name the herb (`007:168`).
 ```lua
-smokeCureTableV3 = {"aeon", "deadening", "hellsight", "tension",
-                    "disloyalty", "manaleech", "slickness"}
+smokeCureTableV3 = {"aeon", "deadening", "hellsight", "tension", "disloyalty", "manaleech",
+                    "slickness", "unweavingspirit", "dazed", "earworm"}
 ```
 
-### Salve Cure Tables (by body part)
+### Salve Cure Tables (by body part, `007:186-191`)
+The line names the spot and not the salve, so each list is every affliction a salve at that spot cures, sorted by our curing priority. Torso has no list. Slickness and bloodfire are proofs and are not listed.
 ```lua
 salveCureTableV3 = {
-    body = {"anorexia", "itching", "bloodfire", "selarnia", "frostbite"},
-    skin = {"frozen", "shivering", "nocaloric", "bloodfire", "selarnia", "frostbite"},
-    head = {"crushedthroat", "damagedhead", "mangledhead", "blindness",
-            "scalded", "epidermal", "bloodfire"},
-    torso = {"hypothermia", "bloodfire", "selarnia", "frostbite"},
-    limbs = {"bloodfire"},
+    body = {"heartseed", "anorexia", "itching", "internalbleeding", "burning",
+            "mildtrauma", "serioustrauma", "selarnia"},
+    skin = {"frostbite", "frozen", "shivering", "nocaloric"},
+    head = {"calcifiedskull", "dazzled", "concussion", "tonguetied", "stuttering",
+            "laceratedthroat", "slashedthroat"},
+    limbs = {},
 }
 ```
+
+### Tree, focus and passive pools (`008`)
+`treeCurableAffsV3` (`:278-308`), `focusCurableAffsV3` (`:319-324`) and `passiveCurableAffsV3` (`:452-470`: voyria, then the tree pool, 77 entries). `tools/kb_affliction_db.py` parses the passive pool from the file's text, so it stays a literal.
 
 ## Quick Reference
 
@@ -160,6 +158,12 @@ collapseAffPresentV3("clumsiness")
 -- Collapse when we KNOW aff is absent
 collapseAffAbsentV3("asthma")
 
+-- An action that could not happen with it. Call this BEFORE any erase
+proveAffAbsentV3("slickness", "salve")   -- the second argument is optional, the action's cure clock
+
+-- Is it in every branch? Never compare a probability with >= 1.0: a sum can be a few ulps under 1
+isAffCertainV3("paralysis")
+
 -- Handle herb cure (called by triggers)
 onHerbCureV3("kelp")
 
@@ -169,11 +173,12 @@ onSmokeCureV3()
 -- Handle salve cure (called by salve triggers)
 onSalveCureV3("body")   -- body, skin, head, torso, or limbs
 
--- Reset all states (new target)
+-- Reset all states (new target; the "changed target" event does this, 007:1525-1529)
 resetStatesV3()
 
--- Debug: View current states
-debugStatesV3()
+-- Debug: view current states
+showBranchesV3()
+showAffProbsV3()
 ```
 
 ## Verification Commands
@@ -183,9 +188,10 @@ debugStatesV3()
 lua affConfigV3.enabled
 
 -- View all branch states
-debugStatesV3()
+lua showBranchesV3()
 
 -- View affliction probabilities
+lua showAffProbsV3()
 lua getAllAffProbabilitiesV3()
 
 -- Check specific affliction probability

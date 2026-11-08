@@ -1485,6 +1485,12 @@ recommended_strategy: |
 
 ## Implementation Notes
 ```
+Fixed 2026-11-08, not yet run in Mudlet: the five S&B slice lines (snb/001, 006, 011-013) lost a dead paraslick
+block that threw. The aliases `ila ira irl ill ito ihe isl ida ip tra bla dar` (Knight/RUNIE folder) call the retired
+infernalprios* functions, and `kel` as an Infernal calls infernalpriosweariness: they are guarded, so they used to
+throw and now send no attack. `ila` and `ihe` still set targetlimb and print the parry warning, and `ip` still runs its
+two RUNIE Impale aliases.
+
 Triggers to watch for:
 - "You have been impaled" - need to writhe
 - "Your * is damaged/broken/mangled" - track limb state

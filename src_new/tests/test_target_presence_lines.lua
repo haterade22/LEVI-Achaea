@@ -159,6 +159,15 @@ describe("641: a 'not here' refusal while GMCP lists the target (2026-11-07 spar
     expect(target).toBe("Sai")
   end)
 
+  it("target Kaiden with only Kai listed: Kai is someone else, so she is gone", function()
+    world()
+    target = "Kaiden"
+    ataxia.playersHere = { "Kai" }
+    refuse(REFUSALS[1])
+    expect(targetIshere).toBeFalse()
+    expect(timersOn.TargetOutOfRoom).toBeTrue()
+  end)
+
   it("with the target not listed, the old reading holds: gone, and the timer starts", function()
     world()
     ataxia.playersHere = { "Someone" }
@@ -251,6 +260,37 @@ describe("005: the target's own magnesium eat (2026-11-07 spar)", function()
     tarAffed("slickness")
     eat("Saibel")
     expect(P("slickness")).toBe(0)
+    expect(curedOf("slickness")).toBe(1)
+  end)
+
+  -- A reported cure needs an affliction the tracker held before the eat (in tAffs, or at 30% or
+  -- more), as for the tree (curing/002) and the passive (008). Saibel's eats and the curare that
+  -- landed between them, kb/raw/logs/ours/2026-11-07_164635_Saibel.log:1860, :1894, :1909, :1950.
+  it("one eat over separate branches reports only what was held: a 0.22 guess leaves in silence", function()
+    world()
+    tarAffed("paralysis", "slickness")
+    eat("Saibel")                        -- :1860, paralysis 1/3, slickness 2/3
+    tarAffed("paralysis")                -- :1894
+    eat("Saibel")                        -- :1909, {slickness} 4/9, {paralysis} 2/9, {} 3/9
+    expect(math.abs(P("paralysis") - 2 / 9) < 1e-6).toBeTrue()
+    expect(math.abs(P("slickness") - 4 / 9) < 1e-6).toBeTrue()
+    expect(tAffs.paralysis == true).toBeFalse()
+    expect(tAffs.slickness).toBeTrue()
+    events = {}
+    eat("Saibel")                        -- :1950
+    expect(P("paralysis")).toBe(0)
+    expect(P("slickness")).toBe(0)
+    expect(curedOf("paralysis")).toBe(0)
+    expect(curedOf("slickness")).toBe(1)
+  end)
+
+  it("two held afflictions in separate branches both report (Saibel:1483, 0.32 and 0.68)", function()
+    world()
+    tarAffed("paralysis", "slickness")
+    eat("Saibel")
+    events = {}
+    eat("Saibel")
+    expect(curedOf("paralysis")).toBe(1)
     expect(curedOf("slickness")).toBe(1)
   end)
 

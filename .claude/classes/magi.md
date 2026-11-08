@@ -281,7 +281,8 @@ pipeline:
     (024); scintilla ignition +1 (011). Whether the fan line ALSO prints for these other
     sources (each counts its own stack) is not known: kb/CONFLICTS.md #37.
     Down: 025's fires-diminish line -1 (since v4.7.430 the only count of a mending: 391, the
-    application line just before it, also took one, so one mending took two); their tree -1 (389).
+    application line just before it, also took one, so one mending took two). A tree does not lower
+    it since 2026-11-08: the game's lines own the count.
     Zeroed by a failed conflagrate (020, no target check), a target change, a reset (`mm reset`,
     the `res` alias, login), and whenever V3 shows no burning (selectSpell). Fulminate adds none
     (v4.7.419)
@@ -292,7 +293,8 @@ pipeline:
 key_spells:
   magma: "Applies scalded (20 s), builds earth+fire resonance"
   dehydrate: "Nausea + weariness; already weary → a burning stack; already nauseous → a freeze stack; both → burning only. Builds fire+water"
-  fulminate: "Builds air+fire. Chain: fulminated → epilepsy → paralysis. No burning"
+  fulminate: "Builds air+fire. Chain: fulminated → epilepsy → paralysis. No burning. One line, one add: magi_offense_tracking/007 and 420 read the same Horror line, and whichever runs second sees paralysis certain and adds nothing (2026-11-08)"
+  priority_switch: "tprio.switchTo (mage/006) bypasses switchTarget, and since 2026-11-08 does what it does: it stops the old target's TargetOutOfRoom chase and reads the new target's presence from GMCP"
   firelash: "Burns +1, builds fire. Sets the target ablaze when cast in the room"
   conflagrate: "Wiki: two or more ablaze stacks. Our gate: burns >= 2, fire >= 2. Sets conflagrated flag"
   destroy: "Execute. Wiki: conflagration + 40% health or less; we cast it at HP < 35% (configurable)"

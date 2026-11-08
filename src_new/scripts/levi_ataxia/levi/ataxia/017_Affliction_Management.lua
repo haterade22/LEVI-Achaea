@@ -200,7 +200,8 @@ end
 -- given to; a target change resets V3 anyway.
 -- dazzled goes by the game's name: the tree pool and the head salve list (008, 007) name it so,
 -- and under the old key "dazzle" no tree or head mending could take it, so its share of each cure
--- went to the other afflictions. priest/003 still passes "dazzle"; ataxia_tarAffTimed renames it.
+-- went to the other afflictions. priest/003 passes "dazzled". ataxia_tarAffTimed still renames the
+-- old key, though no shipped caller passes it now (test_target_timed_affs pins the rename).
 ataxia_TARGET_AFF_SECONDS = {
   hamstring = 10,      -- game: hamstrung, 10 seconds
   airfist = 15,        -- game: airfisted, 15 (the old 18s timer never worked)
@@ -216,7 +217,7 @@ ataxia_TARGET_AFF_SECONDS = {
 }
 
 function ataxia_tarAffTimed(aff, seconds)
-  if aff == "dazzle" then aff = "dazzled" end   -- the old key (priest/003), see above
+  if aff == "dazzle" then aff = "dazzled" end   -- the old key, no shipped caller now, see above
   seconds = seconds or ataxia_TARGET_AFF_SECONDS[aff]
   tarAffed(aff)
   if not seconds then return end

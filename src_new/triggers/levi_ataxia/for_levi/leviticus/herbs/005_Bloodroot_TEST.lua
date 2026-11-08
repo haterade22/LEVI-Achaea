@@ -62,18 +62,27 @@ tdeliverance = false
     -- The V1 erase also raised "target cured aff" (the fight log's -tar row). onHerbCureV3 raises
     -- nothing, so a cure it made certain is reported here, as the passive cure does (008): through
     -- ataxia_tarAffFaded, which also stops a timed clock. A cure V3 only branched over is a guess,
-    -- and it is not reported.
+    -- and it is not reported. Nor is one of an affliction it did not hold, the rule of the tree
+    -- (curing/002) and the passive (008): held = in tAffs, or at 30% or more, before the eat. Her
+    -- eat at kb/raw/logs/ours/2026-11-07_164635_Saibel.log:1950 met paralysis at 0.22 (not in
+    -- tAffs) and slickness at 0.44, in separate branches. Both leave V3; only the slickness is
+    -- reported. Two held afflictions in separate branches are both reported (:1483, 0.32 and 0.68).
     local v3 = affConfigV3 and affConfigV3.enabled and onHerbCureV3
     if v3 then
       local pool = (curingTable and curingTable.bloodroot) or (curingTableV3 and curingTableV3.bloodroot) or {}
-      local had = {}
+      local had, held = {}, {}
       for _, aff in ipairs(pool) do
-        if getAffProbabilityV3(aff) > 0 then had[#had + 1] = aff end
+        if getAffProbabilityV3(aff) > 0 then
+          had[#had + 1] = aff
+          held[aff] = (tAffs and tAffs[aff] == true) or getAffProbabilityV3(aff) >= 0.3
+        end
       end
       onHerbCureV3("bloodroot")
       if ataxia_tarAffFaded then
         for _, aff in ipairs(had) do
-          if getAffProbabilityV3(aff) < 0.01 then ataxia_tarAffFaded(aff) end
+          if getAffProbabilityV3(aff) < 0.01 then
+            if held[aff] then ataxia_tarAffFaded(aff) else removeAffV3(aff) end
+          end
         end
       end
     elseif tAffs.prone then

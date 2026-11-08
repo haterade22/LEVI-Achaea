@@ -272,11 +272,12 @@ local function mountOwner()
   return ataxiaTemp and ataxiaTemp.mountedWho
 end
 
--- Is the flag's owner this target? By the rule 016's isTargeted applies to a line naming our
--- target: names compared lowercased, one person when either starts the other. `t aga` targets
--- "Aga" until a line naming Agathon completes it (updateTarget, with no switchTarget), so 265 can
--- record either spelling of one rider, and an exact match read a rider 265 had just seen as
--- unmounted. A denizen's number matches only itself.
+-- Is the flag's owner this target? Names compared lowercased, one person when either starts the
+-- other. That is this function's own rule: 016's isTargeted takes only a longer name on a line, and
+-- only while the target is still part of a name. `t aga` targets "Aga" until a line naming Agathon
+-- completes it (updateTarget, with no switchTarget), so 265 can record either spelling of one
+-- rider, and an exact match read a rider 265 had just seen as unmounted. A denizen's number matches
+-- only itself.
 local function ownsMount(owner, who)
   if type(owner) ~= "string" or type(who) ~= "string" then
     return owner ~= nil and who ~= nil and tostring(owner) == tostring(who)

@@ -54,8 +54,8 @@ end
 -- at 463-465. So GMCP's RemovePlayer may come after the line in the same packet, and a target
 -- still listed is checked again on a zero-delay timer, once the packet is read. With no list the
 -- old reading holds: she is gone.
--- The name compare is 641's (and isTargeted's, 016): case is ignored, and either name may start
--- the other. It does not call updateTarget.
+-- The name compare is 641's (and switchTarget's presence check, 016): case is ignored, and a listed
+-- name may start with the target's, never the reverse. It does not call updateTarget.
 local ghostDir, ghostLine = matches[2], matches[1]
 
 local function targetListedHere()
@@ -67,7 +67,7 @@ local function targetListedHere()
   for _, name in ipairs(ataxia.playersHere) do
     if type(name) == "string" and name ~= "" then
       local have = name:lower()
-      if have:sub(1, #want) == want or want:sub(1, #have) == have then return true end
+      if have:sub(1, #want) == want then return true end
     end
   end
   return false

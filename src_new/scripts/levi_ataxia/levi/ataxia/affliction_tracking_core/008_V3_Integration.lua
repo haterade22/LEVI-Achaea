@@ -312,7 +312,7 @@ treeCurableAffsV2 = treeCurableAffsV3
 -- Canonical focus-curable affliction list (was focusCurableAffsV2, now owned by V3)
 -- What FOCUS can cure, per the game's WHATCURES (v4.7.371). Removed:
 -- impatience (it BLOCKS focus -- a focus that happened proves it absent, which
--- onTargetFocusV3 applies to every branch instead of letting impatience soak
+-- onTargetFocusV3 settles before it branches, instead of letting impatience soak
 -- up a share of the cure), addiction (ginseng), hypersomnia (ash) and feeble
 -- (not in the game's list). Added: agoraphobia, claustrophobia, lovers,
 -- pacified, peace. The first entries keep their old order.
@@ -331,16 +331,16 @@ function onTargetTreeV3()
         illusionEcho("target used tree while on tree balance")
         return
     end
+    -- Paralysis blocks the tree (kb/afflictions/cure-channels.md:24), so a tree that happened
+    -- proves it absent, as a focus does impatience: the branches that hold it are ruled out, and it
+    -- is not one of the things the tree cured. Done here whatever tAffs says: the sync clears
+    -- tAffs.paralysis once V3 drops under 30%, and a 22% paralysis used to take a share of the cure.
+    proveAffAbsentV3("paralysis")
     local treeCurable = treeCurableAffsV3
 
     local newStates = {}
 
     for _, state in ipairs(afflictionStatesV3) do
-        -- Paralysis blocks the tree (kb/afflictions/cure-channels.md:24), so a tree that happened
-        -- proves it absent in every branch, as a focus does impatience: it is not one of the things
-        -- the tree cured. Trigger 389 erases it only while tAffs says so, and the sync clears
-        -- tAffs.paralysis once V3 drops under 30%, so a 22% paralysis took a share of the cure.
-        state.affs.paralysis = nil
         local candidates = {}
         for _, aff in ipairs(treeCurable) do
             if state.affs[aff] then
@@ -391,14 +391,14 @@ function onTargetFocusV3()
     if isAffCertainV3 and isAffCertainV3("impatience") then
         return
     end
+    -- Impatience blocks focus, so a focus that happened proves it absent: the branches that hold it
+    -- are ruled out, and it is not one of the things the focus cured.
+    collapseAffAbsentV3("impatience")
     local focusCurable = focusCurableAffsV3
 
     local newStates = {}
 
     for _, state in ipairs(afflictionStatesV3) do
-        -- Impatience blocks focus, so a focus that happened proves it absent
-        -- in every branch -- it is not one of the things the focus cured.
-        state.affs.impatience = nil
         local candidates = {}
         for _, aff in ipairs(focusCurable) do
             if state.affs[aff] then

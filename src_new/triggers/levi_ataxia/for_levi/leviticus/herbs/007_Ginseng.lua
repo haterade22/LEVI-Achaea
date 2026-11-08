@@ -47,7 +47,19 @@ tdeliverance = false
 	end
   if passiveFailsafe then restorePassiveCure() end
 
-	targetAteWrapper("ginseng")
+	-- The eat is charged now as a random cure. When the next line names the cure ("X suddenly seems
+	-- much more vital." -> unweavingbody, third-person_removes/004), that trigger puts the branches
+	-- back and charges the named one alone (ataxia_knownCureV3, ataxia/001), so one eat takes one
+	-- affliction. Mercury goes BEFORE the random cure, as in 002_Goldenseal: an erase between it and
+	-- the known-cure line makes the comparison of the branches miss. Mercury is in no cure table, so
+	-- the random cure weighs the same afflictions either way.
+	local hadMercury = tAffs.mercury
+	if hadMercury then erAff("mercury") end
+	if ataxia_randomCureV3 then
+		ataxia_randomCureV3("ginseng", matches[2], function() targetAteWrapper("ginseng") end)
+	else
+		targetAteWrapper("ginseng")
+	end
 	-- Track for adaptive serpent offense
 	if serpent and serpent.trackCure then serpent.trackCure("ginseng") end
 
@@ -57,8 +69,7 @@ tdeliverance = false
 
 	tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end
-	if tAffs.mercury then
-		erAff("mercury")
+	if hadMercury then
 		tBals.timers.plant = tempTimer(1.9, [[tBals.plant = true; tBals.timers.plant = nil]])
 	else
 		tBals.timers.plant = tempTimer(1.3, [[tBals.plant = true; tBals.timers.plant = nil]])

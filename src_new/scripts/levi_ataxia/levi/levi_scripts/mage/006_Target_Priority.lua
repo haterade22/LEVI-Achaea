@@ -252,6 +252,20 @@ function tprio.switchTo(name)
     -- Looking at the code, switchTarget uses matches[2] directly, which is alias-dependent
     -- Safer to do the targeting manually and raise the event
     target = normalized
+    -- The new target's presence, as switchTarget sets it (016). The old target's chase stops here:
+    -- its 1.4 s TargetOutOfRoom ticks would erase what we land on the new target. Here if GMCP lists
+    -- the name, case ignored, or a name it starts.
+    disableTimer("TargetOutOfRoom")
+    targetIshere = false
+    if type(ataxia.playersHere) == "table" then
+      local want = normalized:lower()
+      for _, v in pairs(ataxia.playersHere) do
+        if type(v) == "string" and v:lower():sub(1, #want) == want then
+          targetIshere = true
+          break
+        end
+      end
+    end
     send("unally " .. normalized .. ataxia.settings.separator .. "enemy " .. normalized .. ataxia.settings.separator .. "st " .. normalized)
     send("settarget " .. normalized)
     -- Reset combat state (same as switchTarget does)

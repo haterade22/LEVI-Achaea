@@ -63,9 +63,19 @@ afflictionStatesV3 = afflictionStatesV3 or {
 affConfigV3 = affConfigV3 or {
     enabled = true,
     minProbability = 0.01,  -- Prune branches below 1%
-    maxStates = 50,         -- Max branches to track
     debugEcho = true,       -- Show debug messages
 }
+-- Max branches to track. pruneStatesV3 cuts at this count with table.sort, which orders equal
+-- branches arbitrarily, so a cut through branches that tie picks arbitrary survivors. At 50 that
+-- reached boards a fight can build: ten afflictions after three cures (Dragonheal, or three trees)
+-- is C(10,3) = 120 branches at 1/120, and the first 50 read anorexia 0.90, asthma 0.56, slickness
+-- 0.98 where each is 0.70. Eight and nine afflictions (56 and 84) were skewed the same way, and a
+-- fourth tree over ten took 0.60 readings to 1.00 and 0.17. 300 holds those boards whole, so they
+-- read exact; a tree on a board at the cap took about 10 ms in Lua 5.1. A board past 300 branches
+-- (a fourth cure over thirteen) is still cut this way.
+-- Set outside the table: `X = X or {...}` keeps the old table when a package reload runs in a
+-- session that is already up, so a default inside it would wait for a restart.
+affConfigV3.maxStates = 300
 
 -- Simple boolean tracking for non-branching affs (limbs, prone, stun, etc.)
 simpleAffsV3 = simpleAffsV3 or {}
@@ -736,6 +746,24 @@ function collapseAffAbsentV3(aff)
     end
 end
 
+-- A line proved aff absent: an apply proves no slickness, a tree no paralysis. Call this BEFORE
+-- erasing it. erAff strips aff from each branch, so a branch that held it, which the line has
+-- ruled out, keeps its weight with aff taken out. Over asthma, paralysis and slickness, a magnesium
+-- eat (paralysis cured 2/3, slickness cured 1/3) and then a tree read slickness and asthma at 1/3
+-- each. The tree drops the "slickness cured" branch, so the truth is 1/2 each.
+-- Where every branch holds aff, no branch is ruled out and it only comes off, with no WARNING: a
+-- target curing an affliction we were sure of is ordinary.
+-- cureType, when given, is the action's cure clock (canTargetCureV3): while it runs the tracker
+-- calls the line an illusion, so the line proves nothing.
+function proveAffAbsentV3(aff, cureType)
+    if cureType and not canTargetCureV3(cureType) then return end
+    if isAffCertainV3(aff) then
+        removeAffV3(aff)
+    else
+        collapseAffAbsentV3(aff)
+    end
+end
+
 -- Collapse branches where affliction is ABSENT (e.g., fumble proves clumsiness present)
 function collapseAffPresentV3(aff)
 
@@ -895,7 +923,7 @@ function pruneStatesV3()
         end
     end
 
-    -- Every branch under the floor: keep them all, and let the cap below keep the most likely.
+    -- Every branch under the floor: keep them all. The cap below takes over if there are too many.
     -- A three-cure passive over ten afflictions (Dragonheal, 005) leaves C(10,3) = 120 branches
     -- at 1/120 each, under 0.01, and a third tree over ten does the same. Dropping them all fell
     -- back to the empty state below: every target affliction, a certain pinshot among them, left
@@ -1455,8 +1483,8 @@ end
 -- slickness held, as in test_v3_core_fixes.lua, it read 0 after the smoke and 1.00 after the
 -- unfold. Asthma counts toward targetLocked() (serpent/002), the gate of the no-recklessness
 -- rule, for a target who could still smoke.
--- A later proof (a definite cure, a smoke, an apply, a fumble, a tree, a focus, DIAGNOSE)
--- settles the branches instead.
+-- A later proof (a smoke, an apply, a fumble, a tree, a focus, DIAGNOSE) settles the branches
+-- instead: it drops those it rules out (proveAffAbsentV3, collapseAffPresentV3).
 function onNegativeConfirmExpiredV3(guess)
     if not guess or not guess.candidates then return end
     v3Echo("Neg-confirm timeout -- branch kept: " .. table.concat(guess.candidates, ", "))

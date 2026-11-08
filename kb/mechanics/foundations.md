@@ -168,7 +168,7 @@ So any equilibrium spend with asthma up delays our lock breaker. It works while 
 ([class-cures](../afflictions/class-cures.md)).
 
 **The two hand-written answers look like one rule that lacks a clock.** Against a Sentinel the code cures weariness
-first. Against a Serpent it boosts asthma (`001_Anti_Priorities.lua:190`, `:579`). INFERRED: when FITNESS is ready, an
+first. Against a Serpent it boosts asthma (`001_Anti_Priorities.lua:196-200`, `:587`). INFERRED: when FITNESS is ready, an
 aurum that takes either affliction frees you, and when FITNESS is far from ready, only asthma helps. Weakly tested:
 only 2 real tests of the first case, and no logged win of the second (asthma re-landed at +0.51 s and +2 s). Do not
 treat this as settled. A live probe and step 6 of the plan come first.
@@ -216,11 +216,11 @@ worse in no comparison ([CONFLICTS](../CONFLICTS.md) #57). This is a model on 10
 
 - **No decision reads a measured balance time.** The stopwatches in `ataxia/014_Balance_Timers.lua` are display only.
 - **A press is the trigger,** and nothing reasons about time ahead, apart from a few small cases.
-- `ataxia_lockEscapes` (`003_Lock_breakers.lua:285-291`) knows smoke, focus and FITNESS by blocker. It omits eat, salve
+- `ataxia_lockEscapes` (`003_Lock_breakers.lua:323-329`) knows smoke, focus and FITNESS by blocker. It omits eat, salve
   and tree, and it never asks how long until a channel returns.
 - The clock constants disagree between files: tree 13 and 14, restoration five values, focus four values.
 - Trigger 398 starts the target's focus clock only for the target's own focus line, and under shadowmadness it waits
   4.8 s, just under the measured 4.82. A wait of 5 s refused real cures. Both changes shipped in v4.7.470.
 - `tBals` is the TARGET's cure balances. Our own tree is `ataxiaTemp.usedTree`: the touch line sets it on every touch of ours,
   and `levilogin()` clears it. `ataxia_resetTargetBals` (`016`) is the one reset. It kills running timers, because they write
-  to the global table and could mark a new target's balance up early. The focus knocks name their timer, so it can kill them.
+  to the global table and could mark a new target's balance up early. The focus knocks name their timer, so it can kill them. **The target tracker takes a cure line as a fact (2026-11-08, not run in Mudlet):** a branched cure stays split when its confirm window closes (`007_Branching_State_Tracker.lua`:1488), and a tree, focus, smoke or apply drops the branches it rules out. The herb window is 1.3 s and Saibel's shortest eat-to-eat is 1.506 s, so the old unfold undid most branched eats: 11 times in a replay of FL ([cure-channels](../afflictions/cure-channels.md)).

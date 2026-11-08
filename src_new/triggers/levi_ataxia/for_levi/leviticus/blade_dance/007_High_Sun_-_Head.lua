@@ -57,7 +57,7 @@ elseif multimatches[3][1] == person .. " dodges nimbly out of the way."
 		or multimatches[3][1] == person .. " twists her body out of harm's way."
 	then
 		if multimatches[3][1] == person .. " parries the attack with a deft manoeuvre." then
-      if numbedLeft then killTimer(numbRight) end
+      if numbedLeft then killTimer(numbedLeft); numbedLeft = nil end
       tAffs.numbedleftarm = nil
       ataxiaTemp.parriedLimb = ataxiaTemp.lastLimbHit
       cecho("<green> -> "..ataxiaTemp.parriedLimb)       

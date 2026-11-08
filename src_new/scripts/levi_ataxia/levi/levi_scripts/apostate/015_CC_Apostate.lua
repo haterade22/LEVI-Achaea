@@ -418,9 +418,13 @@ function apostate.mentalStackCount()
 end
 
 -- Check if mental mode should transition to lock curse selectors
--- Requires impatience CONFIRMED (100%) + 2 of {stupidity, dizziness, vertigo} at 25%+
+-- Requires impatience CONFIRMED (every branch holds it) + 2 of {stupidity, dizziness, vertigo} at 25%+
+-- Confirmed is isAffCertainV3 (007), not a probability >= 1.0: the cache sums the branches, and a
+-- renormalised split can leave a certain impatience a few ulps under 1, which held us in mental
+-- mode.
 function apostate.mentalReady()
-  return apostate.getAffProb("impatience") >= 1.0 and apostate.mentalStackCount() >= 2
+  if not (isAffCertainV3 and isAffCertainV3("impatience")) then return false end
+  return apostate.mentalStackCount() >= 2
 end
 
 function apostate.selectPrimaryCurseMental()
@@ -950,12 +954,16 @@ end
 --------------------------------------------------------------------------------
 
 function bloodPact()
+  -- apo and addToCommand came from a package this repo never shipped: no revision defines either.
+  -- Nothing calls bloodPact today. If something does, it stops here instead of throwing.
+  if not (apo and addToCommand) then return end
+  local add = addToCommand
   if not apo.pentagram() then
     if bloodTimer then
       if not dsum then
-        addToCommand("summon daegger")
+        add("summon daegger")
       end
-      addToCommand(
+      add(
         "wield daegger shield;demon bloodpact &tar for " ..
         pentagramEnt ..
         "/order loyals kill &tar"
@@ -963,9 +971,9 @@ function bloodPact()
     end
   elseif apo.demon() ~= pentagramEnt then
     if not dsum then
-      addToCommand("summon daegger")
+      add("summon daegger")
     end
-    addToCommand("wield daegger shield;dispel pentagram;summon " .. pentagramEnt)
+    add("wield daegger shield;dispel pentagram;summon " .. pentagramEnt)
   end
 end
 

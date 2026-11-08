@@ -15,7 +15,13 @@
 -- F47  419: the voices line could never match, and nine stupidity lines had no pattern.
 -- H2   paAff (party calls, 426/428/436) wrote tAffs without V3; the raw word went to V3 instead.
 -- 410  a stand line threw on a missing limb row, so prone and paralysis stayed.
--- 420  lines that GIVE paralysis collapsed the branches as if they showed it.
+-- 420  lines that GIVE paralysis collapsed the branches as if they showed it. The Magi tracker's
+--      copy of the Horror line (magi_offense_tracking/007) added it a second time.
+-- F14 siblings: the same known-cure rule for kelp, ginseng and the smoke, and 008 no longer charges
+--      a ginseng eat twice more on the flushings line.
+-- Proofs: a tree, a focus, a salve and a sileris or quicksilver apply drop the branches they rule
+--      out, before anything erases the affliction (proveAffAbsentV3, 007); a known-cure line keeps
+--      a smoke's or a focus's proof; herbs/013 no longer reads the salve clock.
 --
 -- The tests run the REAL trigger bodies through the REAL public API (017), the REAL V3 tracker
 -- (007, 008) and the REAL helpers (ataxia/001). Every global the loaded files create or change is
@@ -60,9 +66,19 @@ local LEVI = "src_new/triggers/levi_ataxia/for_levi/leviticus/"
 local PATH = {
   GOLDENSEAL = LEVI .. "herbs/002_Goldenseal_(Madness).lua",
   MYCALIUM = LEVI .. "herbs/004_Goldenseal_(Mycalium).lua",
+  KELP = LEVI .. "herbs/003_Kelp_(Unknown).lua",
+  GINSENG = LEVI .. "herbs/007_Ginseng.lua",
+  FLUSHINGS = LEVI .. "herbs/008_Ginseng_with_Flushings.lua",
+  SMOKED = LEVI .. "390_Smoked.lua",
   ASH = LEVI .. "herbs/006_Ash.lua",
   SIGH = LEVI .. "herbs/016_Cured_Earworm.lua",
   LUCIDITY = LEVI .. "third-person_removes/003_Remove_Madness.lua",
+  NERVOUS = LEVI .. "third-person_removes/001_Remove_Mycalium.lua",
+  SLIME = LEVI .. "third-person_removes/002_Remove_Rebbies.lua",
+  VITAL = LEVI .. "third-person_removes/004_Remove_Unweavingbody.lua",
+  UNBURDENED = LEVI .. "third-person_removes/005_Remove_Unweavingspirit.lua",
+  REIGNITES = LEVI .. "third-person_removes/006_Remove_Unweavingmind.lua",
+  FULMINATED = LEVI .. "magi_offense_tracking/007_Fulminated_Paralysis.lua",
   FOCUS = LEVI .. "398_Focus_(UNK).lua",
   FOCUS_NEXT = LEVI .. "399_Focus_(known).lua",
   SEDUCE = LEVI .. "other_things_fading/002_Seduce_(siren).lua",
@@ -73,6 +89,13 @@ local PATH = {
   PARTY = LEVI .. "426_Party_Afflictions.lua",
   PARTY2 = LEVI .. "428_Double_Party_Affs.lua",
   PARTY_ON = LEVI .. "436_PARTY_AFFS_DIFFERENT.lua",
+  TREE = LEVI .. "389_Tree(U).lua",
+  SALVE_BODY = LEVI .. "391_Applied_Body_Skin.lua",
+  SALVE_HEAD = LEVI .. "392_Applied_Head.lua",
+  SALVE_TORSO = LEVI .. "393_Applied_Torso.lua",
+  SALVE_LIMBS = LEVI .. "395_Applied_Limbs.lua",
+  SALVES = LEVI .. "396_Salves.lua",
+  QUICKSILVER = LEVI .. "herbs/013_Quicksilver.lua",
 }
 local BODY = {}
 for k, path in pairs(PATH) do
@@ -279,6 +302,217 @@ describe("F14: a known goldenseal cure replaces the eat's random cure", function
     BODY.MYCALIUM()
     near(P("stupidity"), 1 / 3, "stupidity")
     near(P("mycalium"), 2 / 3, "mycalium")
+  end)
+end)
+
+-- The eat and smoke rows are verbatim. The named cure lines are CONSTRUCTED from each trigger's own
+-- pattern: no log holds them in the third person (the first-person forms are in AFFLICTION SHOW,
+-- kb/raw/live/affliction_show/).
+local KELP_EAT = "Claes eats a piece of kelp."              -- 2026-10-11_shikudo-vs-runewarden-snb_attacker.txt:39
+local GINSENG_EAT = "Claes eats a ginseng root."            -- 2026-10-11_shikudo-vs-runewarden-snb_attacker.txt:352
+local SMOKE = "Dominius takes a long drag off his pipe."    -- 2026-10-11_runewarden-snb-vs-shikudo_defender.txt:53
+local function eatGinseng() fire("GINSENG", GINSENG_EAT, "Claes", "ginseng root") end
+-- The patterns trigger_lib can read: 390 has an unanchored regex (the hookah line), 008 a line spacer.
+local function anchoredPatterns(path)
+  local out = {}
+  for _, p in ipairs(TL.patterns(path)) do
+    if p.type == 1 and p.pat:sub(1, 1) == "^" then out[#out + 1] = p end
+  end
+  return out
+end
+
+describe("F14 siblings: a known cure replaces the random cure of its action", function()
+  local CASES = {
+    { what = "unweavingmind after a goldenseal eat", who = "Archaeon", act = "GOLDENSEAL", line = EAT,
+      args = { "Archaeon", "plumbum flake" }, known = "REIGNITES",
+      text = "The light behind the eyes of Archaeon reignites.", aff = "unweavingmind", other = "stupidity" },
+    { what = "mycalium after a goldenseal eat", who = "Archaeon", act = "GOLDENSEAL", line = EAT,
+      args = { "Archaeon", "plumbum flake" }, known = "NERVOUS",
+      text = "Archaeon ceases his nervous trembling.", aff = "mycalium", other = "stupidity" },
+    { what = "rebbies after a kelp eat", who = "Claes", act = "KELP", line = KELP_EAT,
+      args = { "Claes", "a piece of kelp" }, known = "SLIME",
+      text = "The skin of Claes ceases secreting slime.", aff = "rebbies", other = "weariness" },
+    { what = "unweavingbody after a ginseng eat", who = "Claes", act = "GINSENG", line = GINSENG_EAT,
+      args = { "Claes", "ginseng root" }, known = "VITAL",
+      text = "Claes suddenly seems much more vital.", aff = "unweavingbody", other = "nausea" },
+    { what = "unweavingspirit after a smoke", who = "Dominius", act = "SMOKED", line = SMOKE,
+      args = { "Dominius" }, known = "UNBURDENED",
+      text = "Dominius seems suddenly unburdened, clarity reasserting itself upon his features.",
+      aff = "unweavingspirit", other = "disloyalty" },
+  }
+  local function act(c) fire(c.act, c.line, unpack(c.args)) end
+  local function named(c) fire(c.known, c.text, c.who) end
+
+  for _, c in ipairs(CASES) do
+    describe(c.what, function()
+      it("the lines match their triggers", function()
+        expect(TL.anyMatches(anchoredPatterns(PATH[c.act]), c.line)).toBeTrue()
+        expect(TL.anyMatches(anchoredPatterns(PATH[c.known]), c.text)).toBeTrue()
+      end)
+
+      it("the action then the named line take the named affliction alone", function()
+        world(c.who)
+        tarAffed(c.other, c.aff)
+        act(c)
+        local p = P(c.other)
+        expect(p > 0 and p < 1).toBeTrue()                        -- the action alone branches
+        named(c)
+        expect(P(c.other)).toBe(1)
+        expect(P(c.aff)).toBe(0)
+        expect(tAffs[c.other]).toBeTrue()
+        -- The action's own negative confirmation is settled, and nothing unfolds later.
+        expect(negativeConfirmTimersV3.herb_negconf).toBeNil()
+        expect(negativeConfirmTimersV3.smoke_negconf).toBeNil()
+        mock.fire_timers()
+        expect(P(c.other)).toBe(1)
+        expect(P(c.aff)).toBe(0)
+        expect(count(cured(), c.other)).toBe(0)
+        expect(count(cured(), c.aff)).toBe(1)
+      end)
+
+      it("a plain action still cures: it branches over the two and takes one", function()
+        world(c.who)
+        tarAffed(c.other, c.aff)
+        act(c)
+        near(P(c.other) + P(c.aff), 1, "one of the two is gone")
+        expect(P(c.other) > 0 and P(c.aff) > 0).toBeTrue()
+      end)
+
+      it("a plain action on the one affliction it can take cures it", function()
+        world(c.who)
+        tarAffed(c.aff)
+        act(c)
+        expect(P(c.aff)).toBe(0)
+      end)
+
+      it("the named line with no action before it only erases", function()
+        world(c.who)
+        tarAffed(c.other, c.aff)
+        named(c)
+        expect(P(c.other)).toBe(1)
+        expect(P(c.aff)).toBe(0)
+      end)
+
+      it("a hit between the two lines is not undone", function()
+        world(c.who)
+        tarAffed(c.other, c.aff)
+        act(c)
+        tarAffed("paralysis")
+        named(c)
+        expect(P("paralysis")).toBe(1)
+        expect(P(c.aff)).toBe(0)
+      end)
+    end)
+  end
+
+  it("the smoke still proves asthma gone when the named line replaces its cure", function()
+    world("Dominius")
+    tarAffed("asthma", "disloyalty", "unweavingspirit")
+    fire("SMOKED", SMOKE, "Dominius")
+    fire("UNBURDENED", "Dominius seems suddenly unburdened, clarity reasserting itself upon his features.", "Dominius")
+    expect(P("asthma")).toBe(0)
+    expect(P("disloyalty")).toBe(1)
+    expect(P("unweavingspirit")).toBe(0)
+  end)
+
+  it("the named line of another kind of action does not undo this one", function()
+    world("Claes")
+    tarAffed("weariness", "unweavingbody")
+    fire("KELP", KELP_EAT, "Claes", "a piece of kelp")      -- kelp cannot take unweavingbody
+    expect(P("weariness")).toBe(0)
+    fire("VITAL", "Claes suddenly seems much more vital.", "Claes")
+    expect(P("weariness")).toBe(0)
+    expect(P("unweavingbody")).toBe(0)
+  end)
+
+  for _, c in ipairs({ CASES[3], CASES[4] }) do
+    it(c.act .. ": mercury goes first, so the named line still replaces the random cure", function()
+      world(c.who)
+      tarAffed(c.other, c.aff, "mercury")
+      act(c)
+      named(c)
+      expect(P(c.other)).toBe(1)
+      expect(P(c.aff)).toBe(0)
+      expect(P("mercury")).toBe(0)
+      expect(tAffs.mercury).toBeFalse()
+      expect(mock.active_timers[tBals.timers.plant].delay).toBe(1.9)
+    end)
+
+    it(c.act .. ": no mercury, the plain 1.3 s plant balance", function()
+      world(c.who)
+      tarAffed(c.other)
+      act(c)
+      expect(mock.active_timers[tBals.timers.plant].delay).toBe(1.3)
+    end)
+  end
+end)
+
+describe("008: the flushings line after a ginseng eat", function()
+  -- CONSTRUCTED from 008's own pattern. The first-person form is verbatim at
+  -- 2026-11-01_claes_runewarden-vs-pariah_loss_Vr.NkCGD.txt:856, after the eat and its cure line.
+  local function blood(who)
+    who = who or "Claes"
+    local l = "Blood begins to run from the pores of " .. who .. "."
+    expect(TL.anyMatches(anchoredPatterns(PATH.FLUSHINGS), l)).toBeTrue()
+    line = l
+    matches = {}
+    multimatches = { { GINSENG_EAT, who, "ginseng root" }, {}, { l, who } }
+    BODY.FLUSHINGS()
+  end
+  local function total()
+    return P("flushings") + P("nausea") + P("addiction")
+  end
+
+  it("eat and flushings line: one eat takes one affliction", function()
+    world("Claes")
+    tarAffed("flushings", "nausea", "addiction")
+    eatGinseng()
+    near(total(), 2, "after the eat")
+    local n = P("nausea")
+    blood()
+    near(total(), 2, "after the flushings line")
+    near(P("nausea"), n, "the line moves nothing")
+  end)
+
+  it("the line starts no second eat: the ledger and the anorexia proof are 007's", function()
+    world("Claes")
+    tarAffed("nausea", "addiction", "anorexia")
+    eatGinseng()
+    expect(P("anorexia")).toBe(0)
+    expect(count(tracked, "ginseng")).toBe(1)
+    blood()
+    expect(count(tracked, "ginseng")).toBe(1)
+  end)
+
+  it("a known line between the eat and the flushings line: the named one alone", function()
+    world("Claes")
+    tarAffed("nausea", "unweavingbody")
+    eatGinseng()
+    fire("VITAL", "Claes suddenly seems much more vital.", "Claes")
+    blood()
+    expect(P("nausea")).toBe(1)
+    expect(P("unweavingbody")).toBe(0)
+  end)
+
+  it("a part-name target ('t cla'): 007 did not run, so this line charges the eat once", function()
+    world("Claes")
+    isTargeted = realIsTargeted
+    updateTarget = function(n) target = n:sub(1, 1):upper() .. n:sub(2) end
+    target = "Cla"
+    tarAffed("nausea", "addiction")
+    eatGinseng()
+    expect(P("nausea") + P("addiction")).toBe(2)            -- 007 compares the exact name
+    blood()
+    expect(target).toBe("Claes")
+    near(P("nausea") + P("addiction"), 1, "one eat, one cure")
+  end)
+
+  it("a bystander's flushings line changes nothing", function()
+    world("Claes")
+    tarAffed("nausea", "addiction")
+    blood("Bystander")
+    expect(P("nausea")).toBe(1)
+    expect(P("addiction")).toBe(1)
   end)
 end)
 
@@ -618,6 +852,29 @@ describe("420: a line that gives paralysis adds it to every branch", function()
     expect(tAffs.slickness).toBeTrue()
   end)
 
+  it("420 and the Magi tracker (007) read the same line: one add, whichever runs first", function()
+    expect(TL.anyMatches(TL.patterns(PATH.FULMINATED), HORROR)).toBeTrue()
+    for _, order in ipairs({ { "PARALYSIS", "FULMINATED" }, { "FULMINATED", "PARALYSIS" } }) do
+      world("Xylarys")
+      tarAffed("asthma")
+      events = {}
+      fire(order[1], HORROR, "Xylarys")
+      fire(order[2], HORROR, "Xylarys")
+      expect(P("paralysis")).toBe(1)
+      expect(P("asthma")).toBe(1)
+      expect(afflictedEvents()).toBe(1)
+    end
+  end)
+
+  it("the Magi tracker alone gives it, and another person's line does nothing", function()
+    world("Xylarys")
+    fire("FULMINATED", HORROR, "Xylarys")
+    expect(P("paralysis")).toBe(1)
+    world("Xylarys")
+    fire("FULMINATED", "Horror overcomes Bystander's face as his body stiffens into paralysis.", "Bystander")
+    expect(P("paralysis")).toBe(0)
+  end)
+
   it("with no paralysis at all, the line gives it and says so once", function()
     world("Xylarys")
     tarAffed("asthma")
@@ -651,6 +908,226 @@ describe("420: a line that gives paralysis adds it to every branch", function()
     fire("PARALYSIS", HORROR, "Xylarys")
     expect(afflictedEvents()).toBe(0)
     near(P("slickness"), 0.2, "slickness")
+  end)
+end)
+
+-- The application rows are verbatim in kb/raw/logs/ours (cited at each); rub() builds the same row
+-- for the other spots.
+local BERRY = "Grulk applies a sileris berry to himself."              -- 2026-11-03_081532_Tabethys.log:1455
+local DROPLET = "Sinit applies a quicksilver droplet to herself."      -- 2026-10-27_112717_Tabethys.log:1328
+local TREE_LINE = "Saibel touches a tree of life tattoo."              -- FceAmb0o.txt:359, with Saibel's name
+local FOCUS_LINE = "A look of extreme focus crosses the face of Saibel." -- 2026-11-07_164635_Saibel.log:372
+local CLARITY = "Saibel shakes her head and a look of clarity returns to her eyes."
+
+-- 391-396 in Mudlet's order for each spot: the Groups folder runs them top to bottom, and each one
+-- fires only on the lines its own pattern matches.
+local RUB_ORDER = {
+  skin = { "SALVE_BODY", "SALVES" }, body = { "SALVE_BODY", "SALVE_TORSO", "SALVES" },
+  head = { "SALVE_HEAD", "SALVES" }, torso = { "SALVE_TORSO", "SALVES" },
+  arms = { "SALVE_LIMBS", "SALVES" }, legs = { "SALVE_LIMBS", "SALVES" },
+}
+local function rub(who, spot)
+  local text = who .. " takes some salve from a vial and rubs it on his " .. spot .. "."
+  for _, key in ipairs(RUB_ORDER[spot]) do
+    expect(TL.anyMatches(TL.patterns(PATH[key]), text)).toBeTrue()
+    fire(key, text, who, spot)
+  end
+end
+
+-- world() plus what the application triggers need, with the tracker's echoes recorded.
+local function proofWorld(name)
+  world(name)
+  ataxiaEcho = function(s) echoes[#echoes + 1] = s end
+  ataxiaTemp.crushedCheck = {}
+  selectCurrentLine, target_appliedTo, target_salveBal = function() end, function() end, function() end
+  treeTimer0, treeTimer4, treeTimer9, treeTimer = nil, nil, nil, nil
+  salveChargedAtV3 = nil
+end
+local function says(what)
+  local n = 0
+  for _, s in ipairs(echoes) do if s:find(what, 1, true) then n = n + 1 end end
+  return n
+end
+
+describe("a proof drops the branches it rules out (proveAffAbsentV3, 007)", function()
+  local function tree() fire("TREE", TREE_LINE, "Saibel") end
+
+  it("magnesium then a tree: the 'slickness cured' branch goes, asthma and slickness are 1/2", function()
+    proofWorld("Saibel")
+    tarAffed("asthma", "paralysis", "slickness")
+    onHerbCureV3("bloodroot")
+    near(P("paralysis"), 1 / 3, "paralysis after the eat")
+    near(P("slickness"), 2 / 3, "slickness after the eat")
+    tree()
+    expect(P("paralysis")).toBe(0)
+    near(P("slickness"), 1 / 2, "slickness")           -- 1/3 when the erase came first
+    near(P("asthma"), 1 / 2, "asthma")
+    expect(count(cured(), "paralysis")).toBe(1)
+  end)
+
+  it("the same with clumsiness: three candidates at 2/3 each", function()
+    proofWorld("Saibel")
+    tarAffed("asthma", "clumsiness", "paralysis", "slickness")
+    onHerbCureV3("bloodroot")
+    tree()
+    near(P("slickness"), 2 / 3, "slickness")           -- 0.44 when the erase came first
+    near(P("asthma"), 2 / 3, "asthma")
+    near(P("clumsiness"), 2 / 3, "clumsiness")
+  end)
+
+  it("a tree on a certain paralysis takes it off with no WARNING, and reports it once", function()
+    proofWorld("Saibel")
+    tarAffed("paralysis", "asthma")
+    tree()
+    expect(P("paralysis")).toBe(0)
+    expect(P("asthma")).toBe(0)                        -- the tree's only candidate
+    expect(says("WARNING")).toBe(0)
+    expect(count(cured(), "paralysis")).toBe(1)
+  end)
+
+  it("a paralysis that only tAffs held is still erased by the tree", function()
+    proofWorld("Saibel")
+    tAffs.paralysis = true
+    tree()
+    expect(tAffs.paralysis).toBeFalse()
+    expect(count(cured(), "paralysis")).toBe(1)
+  end)
+
+  for _, spot in ipairs({ "skin", "body", "head", "torso", "arms", "legs" }) do
+    it("magnesium then a salve on the " .. spot .. ": slickness was gone, so paralysis is certain", function()
+      proofWorld("Saibel")
+      tarAffed("paralysis", "slickness")
+      onHerbCureV3("bloodroot")
+      rub("Saibel", spot)
+      near(P("paralysis"), 1, "paralysis")             -- 1/3 when the erase came first
+      expect(P("slickness")).toBe(0)
+      expect(tAffs.paralysis).toBeTrue()
+    end)
+  end
+
+  it("a salve on a certain slickness takes it off with no WARNING", function()
+    proofWorld("Saibel")
+    tarAffed("slickness", "asthma")
+    rub("Saibel", "torso")
+    expect(P("slickness")).toBe(0)
+    expect(P("asthma")).toBe(1)
+    expect(says("WARNING")).toBe(0)
+  end)
+
+  it("a salve the clock calls an illusion proves nothing: slickness is only erased, as before", function()
+    proofWorld("Saibel")
+    tarAffed("paralysis", "slickness")
+    onHerbCureV3("bloodroot")
+    startCureBalanceV3("salve")
+    rub("Saibel", "torso")
+    near(P("paralysis"), 1 / 3, "paralysis")
+    expect(P("slickness")).toBe(0)
+    expect(says("ILLUSION")).toBe(1)
+  end)
+
+  it("goldenseal then a focus: the branches holding impatience go, the other two are 1/2", function()
+    proofWorld("Saibel")
+    tarAffed("impatience", "stupidity", "shyness")
+    onHerbCureV3("goldenseal")
+    fire("FOCUS", FOCUS_LINE, "Saibel")
+    expect(P("impatience")).toBe(0)
+    near(P("stupidity"), 1 / 2, "stupidity")           -- 0.07 when the focus only stripped it
+    near(P("shyness"), 1 / 2, "shyness")
+  end)
+
+  it("kelp, a smoke, then the line naming the smoke's cure: the smoke's proof stands", function()
+    proofWorld("Dominius")
+    tarAffed("asthma", "clumsiness", "unweavingspirit")
+    fire("KELP", "Dominius eats a piece of kelp.", "Dominius", "a piece of kelp")
+    near(P("clumsiness"), 2 / 3, "clumsiness after the kelp")
+    fire("SMOKED", SMOKE, "Dominius")
+    near(P("clumsiness"), 1, "clumsiness after the smoke")
+    fire("UNBURDENED", "Dominius seems suddenly unburdened, clarity reasserting itself upon his features.", "Dominius")
+    near(P("clumsiness"), 1, "clumsiness after the named line")      -- 0.67 when the branch came back
+    expect(P("asthma")).toBe(0)
+    expect(P("unweavingspirit")).toBe(0)
+  end)
+
+  it("the same with a second smoke candidate: the named one alone goes", function()
+    proofWorld("Dominius")
+    tarAffed("asthma", "clumsiness", "disloyalty", "unweavingspirit")
+    fire("KELP", "Dominius eats a piece of kelp.", "Dominius", "a piece of kelp")
+    fire("SMOKED", SMOKE, "Dominius")
+    fire("UNBURDENED", "Dominius seems suddenly unburdened, clarity reasserting itself upon his features.", "Dominius")
+    near(P("clumsiness"), 1, "clumsiness")
+    near(P("disloyalty"), 1, "disloyalty")
+    expect(P("unweavingspirit")).toBe(0)
+  end)
+
+  it("goldenseal, a focus, then the line naming lovers: the focus's proof stands", function()
+    proofWorld("Saibel")
+    tarAffed("impatience", "stupidity", "lovers")
+    onHerbCureV3("goldenseal")
+    fire("FOCUS", FOCUS_LINE, "Saibel")
+    line = CLARITY
+    matches = {}
+    multimatches = { { FOCUS_LINE, "Saibel" }, {}, { CLARITY } }
+    BODY.FOCUS_NEXT()
+    fire("SEDUCE", CLARITY, "Saibel")
+    near(P("stupidity"), 1, "stupidity")
+    expect(P("impatience")).toBe(0)
+    expect(P("lovers")).toBe(0)
+    expect(says("WARNING")).toBe(0)
+  end)
+end)
+
+describe("013: a sileris berry or a quicksilver droplet is not on salve balance", function()
+  it("the lines match the trigger", function()
+    expect(TL.anyMatches(TL.patterns(PATH.QUICKSILVER), BERRY)).toBeTrue()
+    expect(TL.anyMatches(TL.patterns(PATH.QUICKSILVER), DROPLET)).toBeTrue()
+  end)
+
+  it("a berry 0.143 s after a legs salve: no ILLUSION line, the salve clock left alone", function()
+    proofWorld("Grulk")
+    rub("Grulk", "legs")                               -- 2026-11-03_081532_Tabethys.log:1435
+    local clock = cureBalancesV3.salve
+    now = now + 0.143
+    fire("QUICKSILVER", BERRY, "Grulk", "sileris berry")
+    expect(says("ILLUSION")).toBe(0)
+    expect(cureBalancesV3.salve).toBe(clock)
+  end)
+
+  it("a berry starts no salve clock: a torso line 0.2 s later is accepted", function()
+    proofWorld("Grulk")
+    fire("QUICKSILVER", BERRY, "Grulk", "sileris berry")
+    expect(canTargetCureV3("salve")).toBeTrue()
+    now = now + 0.2
+    rub("Grulk", "torso")
+    expect(says("ILLUSION")).toBe(0)
+    expect(canTargetCureV3("salve")).toBeFalse()       -- the torso line started it
+  end)
+
+  it("a second salve inside the window is still called an illusion", function()
+    proofWorld("Grulk")
+    rub("Grulk", "torso")
+    now = now + 0.2
+    rub("Grulk", "torso")
+    expect(says("ILLUSION")).toBe(1)
+  end)
+
+  it("the apply proves no slickness: the smoke's branch that kept it is dropped", function()
+    proofWorld("Sinit")
+    tarAffed("slickness", "disloyalty")
+    onSmokeCureV3()
+    local d = P("disloyalty")
+    expect(d > 0 and d < 1).toBeTrue()
+    fire("QUICKSILVER", DROPLET, "Sinit", "quicksilver droplet")
+    near(P("disloyalty"), 1, "disloyalty")             -- the V2 erase stripped slickness first
+    expect(P("slickness")).toBe(0)
+  end)
+
+  it("an apply on a certain slickness takes it off with no WARNING", function()
+    proofWorld("Sinit")
+    tarAffed("slickness", "asthma")
+    fire("QUICKSILVER", DROPLET, "Sinit", "quicksilver droplet")
+    expect(P("slickness")).toBe(0)
+    expect(P("asthma")).toBe(1)
+    expect(says("WARNING")).toBe(0)
   end)
 end)
 

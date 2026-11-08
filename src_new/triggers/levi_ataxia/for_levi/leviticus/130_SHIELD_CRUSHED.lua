@@ -35,6 +35,9 @@ patterns:
   type: 1
 ]]--
 
-ak.defs.shield = false
+-- `ak` is another system's table (AK). No file of this package creates it, so the bare write threw
+-- on every crush, before the gag and the echo below ran. 335 records the shield on this line.
+if ak and ak.defs then ak.defs.shield = false end
 deleteFull()
-cecho("<magenta>\n CRUSHED THAT SHIELD !!! AND KEPT SHAPE >>>>>>>>>>>>>>> <white>"..gmcp.Char.Vitals.charstats[3])
+local stats = gmcp and gmcp.Char and gmcp.Char.Vitals and gmcp.Char.Vitals.charstats
+cecho("<magenta>\n CRUSHED THAT SHIELD !!! AND KEPT SHAPE >>>>>>>>>>>>>>> <white>"..tostring(stats and stats[3] or ""))

@@ -332,13 +332,16 @@ function classDetect.setAttackerClass(attackerName, className)
   -- Reset combat timeout on every incoming attack
   classDetect.resetCombatTimeout()
 
-  -- 1v1 guard: if multiple attackers, reset to normal
+  -- 1v1 guard: if multiple attackers, reset to normal. No one class is "the attacker's" then, so it
+  -- clears whatever set we are on: in a party we are already on normal (switchCuringset), and the
+  -- first attacker's class must not stick for 003_Parrying's auto mode. Every class line wrote the
+  -- NDB above, and the target's class reads the NDB first (ataxia_targetClass).
   if countAttackers() > 1 then
+    classDetect.state.attackerClass = nil
+    classDetect.state.attackerName = nil
+    classDetect.state.attackerSpec = nil
     if classDetect.state.currentCuringset ~= "normal" then
       classDetect.state.currentCuringset = "normal"
-      classDetect.state.attackerClass = nil
-      classDetect.state.attackerName = nil
-      classDetect.state.attackerSpec = nil
       send("curingset switch normal", false)
       if classDetect.config.echoSwitches then
         classDetect.echo("<red>Multiple attackers detected -- staying on <white>normal<plum> curingset")

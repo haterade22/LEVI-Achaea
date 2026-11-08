@@ -13,21 +13,23 @@ regex: ^ila$
 command: ''
 packageName: ''
 ]]--
+-- No revision of this repo defines infernalpriosprep() or infernalpriosbasic(); guarded, because this
+-- alias only threw (the parry warning below still runs).
 
 targetlimb = "left arm"
 if tAffs.nausea
  then
  
 
-infernalpriosprep()
+if infernalpriosprep then infernalpriosprep() end
 
 elseif ataxiaTemp.parriedLimb == "left arm" and not tAffs.nausea then
-infernalpriosbasic()
+if infernalpriosbasic then infernalpriosbasic() end
 ataxia_boxEcho("THEY ARE PARRYING THAT LIMB --- YOU IDIOT", "lightblue")
 
 else
 
-infernalpriosprep()
+if infernalpriosprep then infernalpriosprep() end
 
 
 end

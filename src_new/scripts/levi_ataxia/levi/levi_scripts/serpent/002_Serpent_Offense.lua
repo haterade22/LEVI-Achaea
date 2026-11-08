@@ -105,11 +105,22 @@ local function haveAff_tactical(aff)
     return haveAff(aff)
 end
 
+-- A LOCK PIECE IS SENT AGAIN AT THE LOCK'S OWN BAR. The soft, hard and true locks read asthma,
+-- slickness, anorexia and impatience at the tactical 0.70, so the reads that ask "is this piece
+-- missing, so send it" use haveAff_tactical too. A branched cure leaves a piece at 0.667: the cure
+-- weights over two candidates do that to the second listed (a kelp eat over weariness + asthma, a
+-- goldenseal eat over stupidity + impatience, a bloodroot eat over paralysis + slickness). With
+-- nothing to settle the branch, haveAff's 0.30 called the piece up and the lock's 0.70 called it
+-- down: nothing sent it, the lock never closed, and the round was "dstab <t> curare vernalius"
+-- until a tree, focus or salve line moved the branch (2026-11-08 review). The venom order is
+-- unchanged. A read that asks whether a piece is there to build on (gecko wants asthma, slike wants
+-- impatience) stays at haveAff's 0.30, as it was.
+
 -- RECKLESSNESS ONLY ON A LOCKED TARGET (user, 2026-11-07: "We shouldnt be doing recklessness unless
 -- we have locked them. Else that is a wasted attack"). In the spar against Saibel 7 DSTABs carried
--- eurypteria, the Depthswalker class venom, and her focus or tree cured each recklessness within
--- about 2 s (FL 361-372, FL 405-422, FL 994-1050). One impulse also used the recklessness suggestion
--- for the loki reaction (FL 1388).
+-- eurypteria, the Depthswalker class venom, and a focus or tree of hers followed each within about
+-- 2 s (FL 361-372, FL 405-422, FL 994-1050); that it took the recklessness is INFERRED, kb/CONFLICTS.md
+-- #65. One impulse also used the recklessness suggestion for the loki reaction (FL 1388).
 --
 -- "Locked" is the soft lock: anorexia + asthma + slickness, so eating, smoking and salves are shut.
 -- Each piece must read at the tactical 0.70 that serp_ekanelia_offense uses for its lock pieces.
@@ -779,21 +790,15 @@ end
 
 -- =============================================================================
 -- canUseSecondary / getPostAction
--- Prevents snap/shrug from colliding with ekanelia delivery.
+-- Prevents snap from colliding with ekanelia delivery.
 -- kalmia and impatience conditions override this -- they can't wait.
 -- =============================================================================
 
 local function getPostAction()
     local shouldSnap = hypSeal2 == true and snapped == false
-    local shouldShrug = rTabSize(ataxia.afflictions) >= 3
-        and canShrug == true
-        and not ataxia.afflictions.weariness
-        and not shouldSnap
 
     if shouldSnap then
         return "::snap " .. target, false
-    elseif shouldShrug then
-        return "::shrugging", false
     end
     return "", true
 end
@@ -806,7 +811,7 @@ local MENTAL_AFFS = {
     "confusion", "stupidity", "masochism", "recklessness",
     "vertigo", "epilepsy", "dementia", "deadening",
     "hallucinations", "paranoia", "loneliness", "hypochondria",
-    "anorexia", "pacifism", "nausea", "addiction",
+    "anorexia", "pacified", "nausea", "addiction",
 }
 
 local function mentalCount()
@@ -898,7 +903,7 @@ end
 -- =============================================================================
 
 local function slikeGateMet()
-    if haveAff("anorexia") then return false end
+    if haveAff_tactical("anorexia") then return false end
     if haveAff("impatience") then return true end
     if tBals.focus == false and haveAff("asthma") then return true end
     return false
@@ -911,10 +916,8 @@ end
 -- A lightwall in our room (the dstab target stands in it): "It also drastically speeds up the
 -- progression of the [darkshade] affliction for anyone standing in its presence"
 -- (kb/raw/wiki/Subterfuge.wiki, Lightwall). ataxia.lightwall is the room flag: set from GMCP's room
--- items ("a lightwall", update_stuff/003) and the room line (misc_alerts/005). update_stuff/003 also
--- clears it, at the top of its handler, on every item event (a List, or an Add or Remove of
--- anything) while the last List was not the inventory's. So this can read false with the lightwall
--- still standing, until the next room list or an Add of "a lightwall".
+-- items ("a lightwall", update_stuff/003) and the room line (misc_alerts/005). update_stuff/003
+-- clears it on a room list without one and on a room Remove of "a lightwall".
 -- Until the 2026-11-07 review this read haveAff("lightwall") / tAffs.lightwall, which nothing
 -- writes, so the rule in pickVenom never fired; before v4.3.5 it read ataxia.lightwall.
 local function hasLightwall()
@@ -929,6 +932,7 @@ local function pickVenom(exclude)
     local hasWea = haveAff("weariness")
     local hasClu = haveAff("clumsiness")
     local hasAst = haveAff("asthma")
+    local needAst = not haveAff_tactical("asthma")
 
     if not haveAff("paralysis") and exclude ~= "curare" then return "curare" end
 
@@ -948,16 +952,16 @@ local function pickVenom(exclude)
     if wantClumsiness() then
         -- clumsiness > asthma > weariness
         if not hasClu and exclude ~= "xentio" then return "xentio" end
-        if not hasAst and exclude ~= "kalmia" then return "kalmia" end
+        if needAst and exclude ~= "kalmia" then return "kalmia" end
         if not hasWea and exclude ~= "vernalius" then return "vernalius" end
     else
         -- asthma > weariness (clumsiness is wasted on these classes)
-        if not hasAst and exclude ~= "kalmia" then return "kalmia" end
+        if needAst and exclude ~= "kalmia" then return "kalmia" end
         if not hasWea and exclude ~= "vernalius" then return "vernalius" end
     end
 
     if not haveAff("darkshade") and hasLightwall() and exclude ~= "darkshade" then return "darkshade" end
-    if not haveAff("slickness") and hasAst and exclude ~= "gecko" then return "gecko" end
+    if not haveAff_tactical("slickness") and hasAst and exclude ~= "gecko" then return "gecko" end
     if slikeGateMet() and exclude ~= "slike" then return "slike" end
     if exclude ~= "curare" then return "curare" end
     return "vernalius"
@@ -967,21 +971,21 @@ local function pickVenomGroup(exclude)
     -- 1. Paralysis first (blocks tree)
     if not haveAff("paralysis") and exclude ~= "curare" then return "curare" end
     -- 2. Asthma (blocks smoking, enables impulse)
-    if not haveAff("asthma") and exclude ~= "kalmia" then return "kalmia" end
+    if not haveAff_tactical("asthma") and exclude ~= "kalmia" then return "kalmia" end
     -- 3. If asthma stuck -> slickness (blocks salves)
-    if haveAff("asthma") and not haveAff("slickness") and exclude ~= "gecko" then return "gecko" end
+    if haveAff("asthma") and not haveAff_tactical("slickness") and exclude ~= "gecko" then return "gecko" end
     -- 4. Weariness (blocks fitness, enables impulse)
     if not haveAff("weariness") and exclude ~= "vernalius" then return "vernalius" end
     -- 5. Anorexia when impatience + slickness + asthma (blocks eating). The slickness may be the
     -- first venom's: after a gecko v1 (step 3) the same DSTAB lands it. Without that, v2 fell to
     -- the default curare onto paralysis already up; lock mode sends gecko slike on the same board.
     if haveAff("impatience") and (haveAff("slickness") or exclude == "gecko") and haveAff("asthma")
-       and not haveAff("anorexia") and exclude ~= "slike" then return "slike" end
+       and not haveAff_tactical("anorexia") and exclude ~= "slike" then return "slike" end
     -- 6. Fill remaining lock gaps
     if not haveAff("paralysis") and exclude ~= "curare" then return "curare" end
-    if not haveAff("slickness") and exclude ~= "gecko" then return "gecko" end
+    if not haveAff_tactical("slickness") and exclude ~= "gecko" then return "gecko" end
     if not haveAff("weariness") and exclude ~= "vernalius" then return "vernalius" end
-    if not haveAff("asthma") and exclude ~= "kalmia" then return "kalmia" end
+    if not haveAff_tactical("asthma") and exclude ~= "kalmia" then return "kalmia" end
     -- Default
     if exclude ~= "curare" then return "curare" end
     return "kalmia"
@@ -992,10 +996,10 @@ local function pickVenomRelapse(exclude)
     local hasAst = haveAff("asthma")
 
     if not haveAff("paralysis") and exclude ~= "curare" then return "curare" end
-    if not hasAst and exclude ~= "kalmia" then return "kalmia" end
+    if not haveAff_tactical("asthma") and exclude ~= "kalmia" then return "kalmia" end
     if not hasWea and exclude ~= "vernalius" then return "vernalius" end
-    if not haveAff("slickness") and hasAst and exclude ~= "gecko" then return "gecko" end
-    if not haveAff("anorexia") and exclude ~= "slike" then return "slike" end
+    if not haveAff_tactical("slickness") and hasAst and exclude ~= "gecko" then return "gecko" end
+    if not haveAff_tactical("anorexia") and exclude ~= "slike" then return "slike" end
     if exclude ~= "curare" then return "curare" end
     return "vernalius"
 end
@@ -1027,7 +1031,13 @@ local function reactionSpent(venom)
     local res = serpent.EKANELIA_RESULTS and serpent.EKANELIA_RESULTS[venom]
     if not res then return false end
     for _, r in ipairs(res) do
-        if not haveAff(r) then return false end
+        -- Impatience at the lock's bar: the monkshood reaction is the only way to send it again,
+        -- and a real reaction leaves disloyalty up, so this was what still blocked it at 0.667.
+        if r == "impatience" then
+            if not haveAff_tactical(r) then return false end
+        elseif not haveAff(r) then
+            return false
+        end
     end
     local own = VENOM_TO_AFF[venom]
     return own == nil or own == "random" or haveAff(own)
@@ -1134,7 +1144,7 @@ function selectRelapseImpulse()
     -- Don't waste the softlock window on stupidity when herbs are already blocked
     -- Not while impatience is still up: selectImpulsePair does not check the reaction's result,
     -- so this was the one P7 path that re-sent monkshood onto impatience.
-    if haveAff("slickness") and haveAff("anorexia") and not haveAff("impatience") then
+    if haveAff("slickness") and haveAff("anorexia") and not haveAff_tactical("impatience") then
         local monkshoodPair = selectImpulsePair()
         if monkshoodPair and monkshoodPair.label == "impatience" then
             return monkshoodPair
@@ -1150,9 +1160,9 @@ function selectRelapseImpulse()
             venom = "curare"
         elseif not haveAff("weariness") then
             venom = "vernalius"
-        elseif not haveAff("asthma") then
+        elseif not haveAff_tactical("asthma") then
             venom = "kalmia"
-        elseif not haveAff("slickness") then
+        elseif not haveAff_tactical("slickness") then
             venom = "gecko"
         else
             venom = "curare"
@@ -1206,7 +1216,7 @@ function selectBiteVenom()
     -- 3. Monkshood ekanelia ready → free impatience via bite (no EQ cost). Not onto impatience
     -- that is already up: the reaction's only product would be wasted.
     if haveAff("asthma") and haveAff("masochism") and haveAff("weariness")
-       and not haveAff("impatience") then
+       and not haveAff_tactical("impatience") then
         return {venom = "monkshood", label = "impatience (ekanelia)"}
     end
 
@@ -1646,16 +1656,20 @@ function selectVenoms()
         -- reached (2026-11-08 review, F8).
         if not haveAff_locked("paralysis") then
             table.insert(envenomList, "curare")
-            -- Second venom: class-specific lock aff or voyria to seal
+            -- Second venom: class-specific lock aff or voyria to seal, then pickVenom's own pick.
+            -- Never curare again: this DSTAB's first venom is curare. It went out as "curare curare"
+            -- when the class lock affliction is paralysis (Occultist, Shaman, Jester) and when
+            -- voyria was already up, and the second slot gave nothing.
             local v2
             local classLockAff = getLockingAffliction and getLockingAffliction("name")
             local classLockVenom = classLockAff and AFF_TO_VENOM[classLockAff]
-            if classLockVenom and not haveAff(classLockAff) and venomAllowed(classLockVenom) then
+            if classLockVenom and classLockVenom ~= "curare" and not haveAff(classLockAff)
+               and venomAllowed(classLockVenom) then
                 v2 = classLockVenom
             elseif not haveAff("voyria") then
                 v2 = "voyria"
             else
-                v2 = "curare"
+                v2 = pickVenom("curare")
             end
             table.insert(envenomListTwo, v2)
             return
@@ -1865,7 +1879,7 @@ function serp_ekanelia_attack()
     local wieldWhip = "wield shield whip" .. sp
     local wieldDirk = "wield shield dirk" .. sp
 
-    -- canUseSecondary: prevents snap/shrug from colliding with ekanelia delivery.
+    -- canUseSecondary: prevents snap from colliding with ekanelia delivery.
     -- Kalmia and impatience conditions override this gate (they consume eq themselves).
     local postAction, canUseSecondary = getPostAction()
     if impatienceConditionsMet() or impatienceConditionsRelapse() or kalmiaEkaneliaMet() then
@@ -1916,9 +1930,9 @@ function serp_ekanelia_attack()
         -- A second balance action after a spender is refused: the opener's flay after the
         -- pinshot got "You must regain balance first." (FL 235, FL 257). So the flay goes alone,
         -- and the next round sends the impulse (PRIORITY 3 or 4) once the defence is down. An
-        -- equilibrium action (hypnosis, snap, shrugging) can still go with it.
+        -- equilibrium action (hypnosis, snap) can still go with it.
         if eqAction and canUseSecondary then
-            if eqAction:find("^snap") or eqAction:find("^shrugging") then
+            if eqAction:find("^snap") then
                 cmd = wieldWhip .. "flay " .. target .. " " .. defense .. " " .. flayVenom .. sp .. eqAction
             else
                 cmd = wieldWhip .. eqAction .. sp .. "flay " .. target .. " " .. defense .. " " .. flayVenom
@@ -2124,8 +2138,10 @@ function serp_ekanelia_attack()
             useImpulse = true
         end
 
-    -- Normal impulse for impatience (gated by shouldDeliverImpatience)
-    elseif not eqAction and not haveAff("impatience") and checkImpulseEligible() then
+    -- Normal impulse for impatience (gated by shouldDeliverImpatience). At the lock's bar: this is
+    -- also where group mode comes for an impatience a cure left at 0.667, and there only the
+    -- monkshood pair (or an opportunistic reaction) goes, not the group branch's any pair.
+    elseif not eqAction and not haveAff_tactical("impatience") and checkImpulseEligible() then
         impulsePair = selectImpulsePair()
         if impulsePair and impulsePair.label == "impatience" then
             useImpulse = true
@@ -2143,7 +2159,7 @@ function serp_ekanelia_attack()
     -- Gecko override: strip sileris to enable impulse next round.
     -- Only fires once per rotation. Don't fire if monkshood conditionals
     -- aren't actually ready yet -- no point stripping sileris prematurely.
-    if not useImpulse and not eqAction and not haveAff("impatience")
+    if not useImpulse and not eqAction and not haveAff_tactical("impatience")
        and not serpent.state.geckoStripAttempted
        and serpOffenseMode ~= "scytherus"
        and serpStrategy ~= "relapse_lock"
@@ -2181,7 +2197,7 @@ function serp_ekanelia_attack()
         envenomList = {biteVenom}
         envenomListTwo = {}
         if eqAction and canUseSecondary then
-            if eqAction:find("^snap") or eqAction:find("^shrugging") then
+            if eqAction:find("^snap") then
                 cmd = cmd .. sp .. eqAction
             else
                 cmd = wieldDirk .. eqAction .. sp .. "bite " .. target .. " " .. biteVenom
@@ -2198,7 +2214,7 @@ function serp_ekanelia_attack()
         envenomListTwo = {}
 
     elseif eqAction and canUseSecondary then
-        if eqAction:find("^snap") or eqAction:find("^shrugging") then
+        if eqAction:find("^snap") then
             cmd = wieldDirk .. "dstab " .. target .. " " .. envenomList[1] .. " " .. envenomListTwo[1] .. sp .. eqAction
         else
             cmd = wieldDirk .. eqAction .. sp .. "dstab " .. target .. " " .. envenomList[1] .. " " .. envenomListTwo[1]
@@ -2228,7 +2244,8 @@ end
 --[[
     Determine the best EQ action for this round.
     Returns the eq command string or nil.
-    Priority: snap > shrug > hypnosis step
+    Priority: snap > hypnosis step
+    Our own SHRUGGING is not an offence step: ataxia_lockBreak (can(x)/003) sends it.
 ]]--
 function getEqAction()
     -- 1. Snap: asthma on target + snap ready + not yet snapped
@@ -2236,14 +2253,7 @@ function getEqAction()
         return "snap " .. target
     end
 
-    -- 2. Shrug: we're near-locked and can self-cure
-    -- (Shrugging uses eq to cure an affliction from ourselves)
-    if serpent.state.shouldShrug then
-        serpent.state.shouldShrug = false
-        return "shrugging"
-    end
-
-    -- 3. Hypnosis step: active hypnosis chain
+    -- 2. Hypnosis step: active hypnosis chain
     if serpent.hypnosis.isActive() then
         local hypCmd = serpent.hypnosis.getCommand()
         if hypCmd then
@@ -2251,7 +2261,7 @@ function getEqAction()
         end
     end
 
-    -- 4. Hypno lock / hypnosis mode: start chain from idle
+    -- 3. Hypno lock / hypnosis mode: start chain from idle
     if (serpOffenseMode == "hypnolock" or serpOffenseMode == "hypnosis") and serpent.hypnosis.phase == "idle" then
         local hypCmd = serpent.hypnosis.getCommand()
         if hypCmd then
@@ -2580,7 +2590,7 @@ end
               hypnotise). Since 2026-10-23 a SUGGEST used off balance takes a fixed equilibrium
               that nothing can modify, and a SEAL used off balance takes an unmodified equilibrium
               (kb/changes/2026-10-23_classleads.md). Before the attack, they go on balance.
-          A step the offence puts after the attack (snap, shrugging) stays after it.
+          A step the offence puts after the attack (snap) stays after it.
           Why: in the 2026-11-07 spar the game answered the second and later commands of a send
           about 0.09 s after the first, so an attack sent after six commands landed about 0.12 s
           later on our clock. Whether it also lands later at the server is open (lens_costs F2,
@@ -2650,7 +2660,7 @@ local function buildRound(cmd, pre, block)
         if wieldPiece and wieldNeeded(wieldPiece) then add(wieldPiece) end
         addAll(beforeAttack)   -- suggest, seal or hypnotise: they must go on balance
         add(attackPiece)
-        addAll(afterAttack)    -- snap or shrugging
+        addAll(afterAttack)    -- snap
         add("purge")
         add(order)
         addAll(sigils)
@@ -2862,7 +2872,11 @@ function serp_ekanelia_offense()
     elseif serpOffenseMode == "group" then
         if truelock then
             if not serpent.state.voyriaSent then
-                serpStrategy = "group"  -- maintain pressure while waiting for voyria impulse
+                -- lock_reinforce sends the voyria impulse (PRIORITY 7), as in lock and darkshade.
+                -- Group stayed on "group" here, and since that impulse moved under lock_reinforce
+                -- (77bc6c96, 2026-03) nothing in group mode set voyriaSent: the finish could not
+                -- be reached and every round was curare + kalmia onto a full lock.
+                serpStrategy = "lock_reinforce"
             else
                 serpStrategy = "finish"
             end

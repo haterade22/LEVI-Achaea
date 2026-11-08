@@ -15,4 +15,5 @@ packageName: ''
 ]]--
 
 
-infernalpriosbasic()
+-- No revision of this repo defines infernalpriosbasic(); guarded, because this alias only threw.
+if infernalpriosbasic then infernalpriosbasic() end

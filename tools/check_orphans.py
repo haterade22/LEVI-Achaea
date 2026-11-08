@@ -35,13 +35,12 @@ The checks, in the order they print
 -----------------------------------
     1   an active trigger, alias, timer or key calls a global only an inactive script defines
     1b  an active SCRIPT does the same (v4.7.419)
-    1c  active code calls a global that NO file defines (2026-11-08, report-only)
+    1c  active code calls a global that NO file defines (2026-11-08)
     2   NS.field(...) is called, and NS.field is assigned nowhere in the tree
     2b  active code calls NS.field(...), and only switched-off files assign it
-Checks 1, 1b, 2 and 2b fail CI. 1b and 2b landed report-only, behind STRICT_SCRIPT_CALLERS and
-STRICT_INACTIVE_FIELDS; both were made strict in v4.7.419 once their reports were clean. A new
-check should start the same way, report-only until its report is clean: 1c is report-only behind
-STRICT_UNDEFINED_GLOBALS.
+All five fail CI. 1b, 2b and 1c landed report-only, behind STRICT_SCRIPT_CALLERS,
+STRICT_INACTIVE_FIELDS and STRICT_UNDEFINED_GLOBALS, and each was made strict once its report was
+clean (1b and 2b in v4.7.419, 1c on 2026-11-08). A new check should start the same way.
 """
 
 import os
@@ -75,7 +74,7 @@ SCRIPT_CALLER_DIRS = ("scripts",)
 # decoration.
 STRICT_SCRIPT_CALLERS = True    # check 1b
 STRICT_INACTIVE_FIELDS = True   # check 2b
-STRICT_UNDEFINED_GLOBALS = False  # check 1c
+STRICT_UNDEFINED_GLOBALS = True   # check 1c (2026-11-08: clean after the triage below)
 
 # --- CHECK 1c: a global that NO file defines (2026-11-08) -------------------------------------
 #
@@ -90,12 +89,15 @@ STRICT_UNDEFINED_GLOBALS = False  # check 1c
 # and when NO file assigns NAME at all -- switched off or not (a switched-off definer is check 1's
 # finding, not this one's), and in any form (`NAME = ...` counts, not only a function). Strings
 # and comments are blanked before the scan, so prose and command text cannot read as a call.
-# Activity is the file's own isActive flag, as in checks 1 and 1b: an item inside a switched-off
-# group folder is still read, so the report can list an alias that never runs.
+# Activity is the file's own isActive flag, as in checks 1 and 1b. An item inside a switched-off
+# group folder is still read, so NEVER_RUN below lists the calls that cannot fire for that reason.
 #
-# Report-only. Its first run (2026-11-08) listed ~40 names, most in aliases for engines that are
-# gone (infernalprios*, tekura's leftleg/sweephead, earth_lord's headpath, svo_init_system), and
-# bashConsoleEcho, which only a group inline script in _groups.yaml defines (read here unfolded).
+# Its first run (2026-11-08) listed 41 names at 59 call sites, most in aliases for engines that
+# are gone (infernalprios*, tekura's leftleg/sweephead, earth_lord's headpath, svo_init_system),
+# and bashConsoleEcho, which only a group inline script in _groups.yaml defines (read here
+# unfolded). The same day, every call that could run was guarded or pointed at the function that
+# replaced it (src_new/tests/test_dead_callee_lines.lua), the rest went into NEVER_RUN, and the
+# check was made strict.
 #
 # MUDLET_API holds every Mudlet function the tree calls without a guard, each checked against
 # Mudlet 5.1.1 (a string in Mudlet.exe, or a `function` in its mudlet-lua/lua). The `globals` of
@@ -134,6 +136,45 @@ MUDLET_API = frozenset("""
     tempLineTrigger tempPromptTrigger tempRegexTrigger tempTimer tempTrigger unHighlightRoom
     uninstallPackage
 """.split())
+
+# Calls check 1c reads but that cannot run: each alias sits in a group folder that is off in
+# aliases/_groups.yaml (`isActive: false`), a folder's flag outranks its items', and nothing enables
+# these folders at runtime (the tree's only enableAlias is for "mm Mapping"). Listed by file and
+# name, so a new undefined call in one of these files is still reported. test_check_orphans.py
+# pins every row to its folder and to a call that is really there.
+_NEVER_RUN_DIR = "src_new/aliases/levi_ataxia/for_levi/levi_062424/"
+NEVER_RUN = {_NEVER_RUN_DIR + rel_path: names for rel_path, names in {
+    # Classes > Knight > Infernal > 2H, SNB and Dual Blunt
+    "2h/001_Hew_(Bastard).lua": ("twohandlogic",),
+    "snb/001_Attack.lua": ("shieldlogic", "snblogic"),
+    "dual_blunt/001_Double_Whirl_Normal.lua": ("infdwblogic",),
+    "dual_blunt/003_DoubleWhirl_Expend_Expend.lua": ("infdwblogic",),
+    "dual_blunt/004_Double_Whirl_Normal_MS.lua": ("infdwblogic",),
+    # Classes > Monk > ALIASES
+    "aliases/001_LEFT_ARM.lua": ("dwcprep",),
+    "aliases/002_RIGHT_ARM.lua": ("dwcprep",),
+    "aliases/003_LEFT_LEG.lua": ("dwcprep",),
+    "aliases/004_RIGHT_LEG.lua": ("dwcprep",),
+    "aliases/005_RAMPAGE.lua": ("infernalpriosrampage",),
+    # Classes > Monk > SHIKUDO
+    "shikudo/001_DISPATCH.lua": ("dispatch_base_prios",),
+    "shikudo/002_LOCK.lua": ("lock_base_prios",),
+    # Classes > Monk > TEKURA
+    "tekura/001_RIGHT_LEG.lua": ("rightleg",),
+    "tekura/002_SWEEP_RL.lua": ("sweeprightleg",),
+    "tekura/003_LEFT_LEG.lua": ("leftleg",),
+    "tekura/004_TORSO.lua": ("monktorso", "torsopath"),
+    "tekura/005_SWEEP_LL.lua": ("sweepleftleg",),
+    "tekura/006_SWEEP_TORSO.lua": ("sweeptorso",),
+    "tekura/007_HEAD.lua": ("headpath", "monkhead"),
+    "tekura/008_SWEEP_HEAD.lua": ("sweephead",),
+    "tekura/009_RIGHT_ARM.lua": ("rightarm",),
+    "tekura/011_SWEEP_BOTH_LEGS.lua": ("sweeplegs",),
+    "tekura/012_AXE.lua": ("monkaxe",),
+    "tekura/013_BACKBREAKER.lua": ("backbreaker",),
+    "tekura/014_BBT_SOLID.lua": ("backbreakersolid",),
+    "tekura/015_LEFT_ARM.lua": ("leftarm",),
+}.items()}
 
 HEADER_RE = re.compile(r"^--\[\[mudlet\s*(.*?)^\]\]--", re.S | re.M)
 ACTIVE_RE = re.compile(r"^\s*isActive:\s*'?(\w+)'?\s*$", re.M)
@@ -416,7 +457,7 @@ def mudlet_api_names():
 
 def undefined_global_calls():
     """CHECK 1c: (caller, line, name) for each unguarded call, in an ACTIVE item or script, to a
-    global that no file defines."""
+    global that no file defines. NEVER_RUN's calls cannot fire, so they are left out."""
     defined = all_global_names()
     known = LUA_KEYWORDS | LUA_BASE | mudlet_api_names()
     findings = []
@@ -433,7 +474,7 @@ def undefined_global_calls():
             for name in sorted(set(SCRIPT_CALL_RE.findall(line))):
                 if name in known or name in own or name in defined:
                     continue
-                if guarded(name, lines, i):
+                if guarded(name, lines, i) or name in NEVER_RUN.get(rel(path), ()):
                     continue
                 findings.append((rel(path), header_lines + i + 1, name))
     return findings

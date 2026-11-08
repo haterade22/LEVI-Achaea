@@ -40,5 +40,5 @@ patterns:
 ]]--
 
 if isTargeted(matches[2]) then
-	ataxia_tarAffTimed("dazzle")
+	ataxia_tarAffTimed("dazzled")
 end

@@ -3,6 +3,7 @@
 -- Each item below called a global that nothing defines, or indexed a table nothing creates, so
 -- Mudlet raised an error on every line it matched and the rest of the body never ran:
 --   616 whirl            killTimer(numbRight): a typo for numbedLeft. The parried limb was lost.
+--   blade_dance x6       the same killTimer(numbRight) typo.
 --   sylvan/014, 015      sylvan_propagateAff, deleted with the old limb counters (3c312975).
 --                        014 also read the name from a capture its pattern does not have.
 --   vibrato, tremolo     bard_tremvib (3c312975), before `ataxiaTemp.tvBal = true`.
@@ -14,6 +15,11 @@
 --                        (showColours, which Mudlet 5.1.1 does not have: showColors).
 -- And the room-items handler: `waterguards` for `waterGuards`, so the salute/grab dedupe never
 -- saw a guard it had already handled.
+--
+-- The last block covers tools/check_orphans.py check 1c's list (2026-11-08): the aliases whose
+-- engine is gone (guarded), `viv` (re-pointed at apostate_vivisect), trigger 123 QUAKED, the prompt
+-- echo, and bloodPact. Nothing here can be restored: each deleted function read the deleted tLimbs
+-- table, and the others were never in this repo (a foreign package's: AK, Svof).
 --
 -- The REAL trigger and alias bodies run here. Every global they create or change is restored at
 -- the end (one shared Lua state for all test files).
@@ -109,6 +115,43 @@ describe("616 whirl: a parry after a left-arm numb (killTimer typo)", function()
     WHIRL()
     expect(ataxiaTemp.parriedLimb).toBe("head")
     expect(#killed).toBe(0)
+  end)
+end)
+
+describe("blade dance: a parry after a left-arm numb (the same killTimer typo)", function()
+  local FILES = { "001_Blade_Jab_-_Arms.lua", "002_Blade_Jab_-_Torso.lua", "004_Flick.lua",
+    "005_High_Sun_Arm.lua", "006_HeelSnap.lua", "007_High_Sun_-_Head.lua" }
+
+  -- The parry path reads only the third row (first row: the jab; second: the line delta). The
+  -- third-person form is kb/raw/logs/2026-08-19_leviticus_blademaster-vs-sentinel_loss_Sentinel.txt:839.
+  local function parry(file)
+    tAffs.numbedleftarm = numbedLeft and true or nil
+    ataxiaTemp.lastLimbHit = "left arm"
+    bardtemposequence = 0
+    multimatches = { { "" }, { "" }, { "Agathon parries the attack with a deft manoeuvre." } }
+    body(LEVI .. "blade_dance/" .. file)()
+  end
+
+  it("kills the numb timer, clears it, and records the parried limb, in all six", function()
+    for _, file in ipairs(FILES) do
+      world()
+      numbedLeft = 7
+      parry(file)
+      expect(killed[1]).toBe(7)
+      expect(numbedLeft).toBeNil()
+      expect(tAffs.numbedleftarm).toBeNil()
+      expect(ataxiaTemp.parriedLimb).toBe("left arm")
+    end
+  end)
+
+  it("a parry with no numb timer running kills nothing, in all six", function()
+    for _, file in ipairs(FILES) do
+      world()
+      numbedLeft = nil
+      parry(file)
+      expect(#killed).toBe(0)
+      expect(ataxiaTemp.parriedLimb).toBe("left arm")
+    end
   end)
 end)
 
@@ -349,6 +392,295 @@ describe("room items: the guard dedupe reads waterGuards (waterguards typo)", fu
     expect(mock.was_sent("wsalute 556")).toBeTrue()
     expect(#waterGuards).toBe(2)
     saluteGuards = nil
+  end)
+end)
+
+-- Files whose only statement is one call to the global, guarded because it is gone. Run with the
+-- global missing they must not throw; with a stand-in present (another package, or a restored
+-- engine) they must still call it.
+describe("aliases whose engine is gone: the guard, both ways (check 1c)", function()
+  local SINGLE = {
+    { "earth_lord/006_HEAD_PATH.lua", "headpath" },
+    { "earth_lord/014_RIGHT_SIDE.lua", "rightside" },
+    { "earth_lord/015_LEFT_SIDE.lua", "leftside" },
+    { "114_SOFTLOCK_BASIC.lua", "infernalpriosbasic" },
+    { "115_RIGHT_ARM.lua", "infernalpriosprep" },
+    { "116_RIGHT_LEG.lua", "infernalpriosprep" },
+    { "117_LEFT_LEG.lua", "infernalpriosprep" },
+    { "119_TORSO.lua", "infernalpriosprep" },
+    { "122_DAMAGE.lua", "infernalpriosdamage" },
+    { "125_IMPALE.lua", "infernalpriosimpale" },
+    { "128_TRAMPLE.lua", "infernalpriostrample" },
+    { "129_RAGEBLADE.lua", "infernalpriosblackout" },
+    { "131_DARKSHADE.lua", "infernalpriosdarkshade" },
+    { "029_INITIATE.lua", "svo_init_system" },
+  }
+
+  local function run(file, name, standIn)
+    world()
+    _G[name] = standIn
+    local ran, e = pcall(body(ALIAS .. file))
+    _G[name] = nil
+    if not ran then error(file .. ": " .. tostring(e)) end
+  end
+
+  it("does nothing, and throws nothing, with the global missing", function()
+    for _, row in ipairs(SINGLE) do run(row[1], row[2], nil) end
+  end)
+
+  it("still calls it when something defines it", function()
+    for _, row in ipairs(SINGLE) do
+      local calls = 0
+      run(row[1], row[2], function() calls = calls + 1 end)
+      expect(calls).toBe(1)
+    end
+  end)
+
+  it("ila and ihe still set the limb and run the parry warning, with both engines gone", function()
+    for _, file in ipairs({ "113_LEFT_ARM.lua", "120_HEAD.lua" }) do
+      world()
+      infernalpriosprep, infernalpriosbasic = nil, nil
+      local limb = file == "113_LEFT_ARM.lua" and "left arm" or "torso"
+      local warned
+      ataxia_boxEcho = function(s) warned = s end
+      tAffs.nausea = nil
+      ataxiaTemp.parriedLimb = limb
+      targetlimb = nil
+      body(ALIAS .. file)()
+      expect(targetlimb).toBe(file == "113_LEFT_ARM.lua" and "left arm" or "head")
+      expect(warned).toBe("THEY ARE PARRYING THAT LIMB --- YOU IDIOT")
+    end
+  end)
+
+  it("ila and ihe throw nothing in any of their three branches with both engines gone", function()
+    for _, file in ipairs({ "113_LEFT_ARM.lua", "120_HEAD.lua" }) do
+      local parried = file == "113_LEFT_ARM.lua" and "left arm" or "torso"
+      for _, state in ipairs({ { nausea = true }, { parriedLimb = parried }, {} }) do
+        world()
+        infernalpriosprep, infernalpriosbasic = nil, nil
+        ataxia_boxEcho = function() end
+        tAffs.nausea = state.nausea
+        ataxiaTemp.parriedLimb = state.parriedLimb
+        local ran, e = pcall(body(ALIAS .. file))
+        if not ran then error(file .. ": " .. tostring(e)) end
+      end
+    end
+  end)
+
+  it("ila still reaches a defined prep engine", function()
+    world()
+    local prep = 0
+    infernalpriosprep = function() prep = prep + 1 end
+    infernalpriosbasic = nil
+    body(ALIAS .. "113_LEFT_ARM.lua")()
+    expect(prep).toBe(1)
+    infernalpriosprep = nil
+  end)
+
+  it("kel as an Infernal does not throw with infernalpriosweariness gone", function()
+    world()
+    infernalpriosweariness = nil
+    gmcp = { Char = { Status = { class = "Infernal" } } }
+    ataxiaNDB_getClass = function() return "Magi" end
+    local ran, e = pcall(body(ALIAS .. "apostate/008_KELP_STACK.lua"))
+    if not ran then error(e) end
+  end)
+
+  it("aoff throws on neither line with noDisplay and ak missing, and uses them when present", function()
+    world()
+    noDisplay, ak = nil, nil
+    body(ALIAS .. "012_DISPLAY_OFF.lua")()
+    expect(ak).toBeNil()
+
+    local calls = 0
+    noDisplay = function() calls = calls + 1 end
+    ak = {}
+    body(ALIAS .. "012_DISPLAY_OFF.lua")()
+    expect(calls).toBe(1)
+    expect(ak.nodisplay).toBeTrue()
+    noDisplay, ak = nil, nil
+  end)
+end)
+
+describe("130 and 018: `ak` is another system's table, and nothing here creates it", function()
+  local gagged, echoed
+  local function lines()
+    world()
+    gagged, echoed = 0, {}
+    deleteFull = function() gagged = gagged + 1 end
+    cecho = function(s) echoed[#echoed + 1] = s end
+    matches = { "the line", "Agathon" }
+    ak = nil
+  end
+
+  it("130 still gags and echoes the crush with ak missing", function()
+    lines()
+    gmcp = { Char = { Vitals = { charstats = { "Bleed: 0", "Rage: 0", "Shape: Crag" } } } }
+    body(LEVI .. "130_SHIELD_CRUSHED.lua")()
+    expect(gagged).toBe(1)
+    expect(#echoed).toBe(1)
+    expect(echoed[1]:find("Shape: Crag", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("130 still echoes with no charstats in GMCP", function()
+    lines()
+    gmcp = { Char = { Vitals = {} } }
+    body(LEVI .. "130_SHIELD_CRUSHED.lua")()
+    expect(#echoed).toBe(1)
+  end)
+
+  it("130 writes the flag when that system is loaded", function()
+    lines()
+    gmcp = { Char = { Vitals = { charstats = {} } } }
+    ak = { defs = { shield = true } }
+    body(LEVI .. "130_SHIELD_CRUSHED.lua")()
+    expect(ak.defs.shield).toBe(false)
+    ak = nil
+  end)
+
+  it("018 does not throw with ak missing, and calls scoreup when it exists", function()
+    lines()
+    body(LEVI .. "018_RAGEBLADE_GAG.lua")()
+    expect(gagged).toBe(1)
+    local scored = 0
+    ak = { prompt = { scoreup = function() scored = scored + 1 end } }
+    body(LEVI .. "018_RAGEBLADE_GAG.lua")()
+    expect(scored).toBe(1)
+    ak = nil
+  end)
+end)
+
+describe("viv: apostate_viviprio was deleted, apostate_vivisect is the wrapper now", function()
+  it("sets the vivisect mode and dispatches", function()
+    world()
+    apostate, apostate_viviprio = nil, nil
+    dofile(ROOT .. "scripts/levi_ataxia/levi/levi_scripts/apostate/015_CC_Apostate.lua")
+    local dispatched = 0
+    apostate.dispatch = function() dispatched = dispatched + 1 end
+    apostate.state.mode = "lock"
+    body(ALIAS .. "130_VIVISECT.lua")()
+    expect(apostate.state.mode).toBe("vivisect")
+    expect(dispatched).toBe(1)
+  end)
+end)
+
+describe("123 QUAKED: OppGainedAff is a call to a tracker this repo never shipped", function()
+  -- kb/raw/logs/2026-11-01_unknown_earthlord-vs-sentinel_loss_JDvzR7j7.txt:319
+  local STOMP = "You stomp upon the ground, a ripple of tremors radiating out from the impact."
+
+  it("the stomp's gag and echo still run, and nothing throws", function()
+    world()
+    OppGainedAff = nil
+    local deleted, echoes = 0, {}
+    deleteFull = function() deleted = deleted + 1 end
+    cecho = function(s) echoes[#echoes + 1] = s end
+    matches = { STOMP }
+    body(LEVI .. "123_QUAKED.lua")()
+    expect(deleted).toBe(1)
+    expect(echoes[1]:find("PRONED ALL THOSE LOSERS", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("a defined OppGainedAff still receives the prone", function()
+    world()
+    local got
+    OppGainedAff = function(a) got = a end
+    deleteFull = function() end
+    matches = { STOMP }
+    body(LEVI .. "123_QUAKED.lua")()
+    expect(got).toBe("prone")
+    OppGainedAff = nil
+  end)
+
+  it("558 Quake is what records the prone on that line, while the target is here", function()
+    world()
+    targetIshere = true
+    ataxia = { playersHere = {} }
+    selectString, resetFormat = function() return 0 end, function() end
+    line = STOMP
+    matches = { STOMP }
+    body(LEVI .. "558_Quake.lua")()
+    expect(contains(added, "prone")).toBeTrue()
+  end)
+end)
+
+describe("ataxia_promptEcho: limbCounter_promptAddon is defined nowhere", function()
+  local function load()
+    world()
+    limbCounter_promptAddon = nil
+    ataxia_isClass = function(c) return c == "magi" end
+    ataxia_promptAffs = function() ataxiaTemp.promptAffs = (ataxiaTemp.promptAffs or 0) + 1 end
+    ataxia = { settings = { prompt = { affs = true } } }
+    gmcp = { Char = { Vitals = { nl = "1" } } }
+    dofile(ROOT .. "scripts/levi_ataxia/levi/ataxia/010_Prompt_Running.lua")
+  end
+
+  it("as a Magi the affliction echo runs and nothing throws", function()
+    load()
+    ataxia_promptEcho()
+    expect(ataxiaTemp.promptAffs).toBe(1)
+  end)
+
+  it("as a Magi a defined addon is still called, as a Serpent it is not", function()
+    load()
+    local calls = 0
+    limbCounter_promptAddon = function() calls = calls + 1 end
+    ataxia_promptEcho()
+    expect(calls).toBe(1)
+    ataxia_isClass = function() return false end
+    ataxia_promptEcho()
+    expect(calls).toBe(1)
+    limbCounter_promptAddon = nil
+  end)
+end)
+
+describe("bloodPact: apo and addToCommand were never in this repo", function()
+  local function load()
+    world()
+    apo, addToCommand, apostate = nil, nil, nil
+    bloodTimer, dsum, pentagramEnt = nil, nil, "baalzadeen"
+    dofile(ROOT .. "scripts/levi_ataxia/levi/levi_scripts/apostate/015_CC_Apostate.lua")
+  end
+
+  it("returns, without throwing, when neither exists", function()
+    load()
+    expect(bloodPact()).toBeNil()
+  end)
+
+  it("with a package providing both it still builds the commands", function()
+    load()
+    local cmds = {}
+    addToCommand = function(c) cmds[#cmds + 1] = c end
+    apo = { pentagram = function() return false end, demon = function() return "daegger" end }
+    bloodTimer = true
+    bloodPact()
+    expect(#cmds).toBe(2)
+    expect(cmds[1]).toBe("summon daegger")
+    expect(cmds[2]).toBe("wield daegger shield;demon bloodpact &tar for baalzadeen/order loyals kill &tar")
+  end)
+
+  it("with the pentagram up and the wrong demon it swaps to the pentagram's demon", function()
+    load()
+    local cmds = {}
+    addToCommand = function(c) cmds[#cmds + 1] = c end
+    apo = { pentagram = function() return true end, demon = function() return "fiend" end }
+    dsum = true
+    bloodPact()
+    expect(#cmds).toBe(1)
+    expect(cmds[1]).toBe("wield daegger shield;dispel pentagram;summon baalzadeen")
+  end)
+end)
+
+describe("bardvenomprioslimb: bardlimbattack was deleted, and nothing calls this", function()
+  it("runs to the end with bardlimbattack gone", function()
+    world()
+    bardlimbattack = nil
+    getLockingAffliction = function() return "none" end
+    checkAffList = function() return false end
+    tBals = {}
+    dofile(ROOT .. "scripts/levi_ataxia/levi/levi_scripts/037_TEST_LIMB_PRIOS.lua")
+    local ran, e = pcall(bardvenomprioslimb)
+    if not ran then error(e) end
+    expect(type(bardvenom)).toBe("table")
   end)
 end)
 

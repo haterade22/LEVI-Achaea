@@ -40,9 +40,6 @@ local name = matches[2]
 
 if isTargeted(name) and tBals.tree then
 tdeliverance = false
-	if tAffs.paralysis then
-		erAff("paralysis")
-	end
   if passiveFailsafe then restorePassiveCure() end
 
 	-- V3 integration: one tree is ONE cure. With V3 on, ataxia_targetTreeV3 (curing/002) lets
@@ -51,10 +48,16 @@ tdeliverance = false
 	-- cannot see. tSingleRandom() erasing its own pick on top charged one tree twice: asthma +
 	-- slickness + blackout read 4/3 afflictions after one tree, where the truth is 2. With V3 on
 	-- it now only computes its pick (noErase); with V3 off it erases, as before.
+	-- Paralysis blocks the tree, so the tree proves it absent. With V3 on, onTargetTreeV3 owns that
+	-- proof, and it needs the branches as they are: an erase before it stripped paralysis from every
+	-- branch, so the branches the tree rules out kept their weight. The erase after it only catches
+	-- a paralysis that tAffs alone held (ataxia_targetTreeV3 has reported the one V3 held).
 	if onTargetTreeV3 and affConfigV3 and affConfigV3.enabled then
 		ataxia_targetTreeV3()
+		if tAffs.paralysis then erAff("paralysis") end
 		tSingleRandom({ noErase = true })
 	else
+		if tAffs.paralysis then erAff("paralysis") end
 		if onTargetTreeV3 then onTargetTreeV3() end
 		tSingleRandom()
 	end

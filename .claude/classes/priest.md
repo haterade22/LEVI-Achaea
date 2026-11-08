@@ -210,6 +210,10 @@ recommended_strategy: |
 
 ## Implementation Notes
 ```
+Fixed 2026-11-08, not yet run in Mudlet: the target's dazzle is tracked as 'dazzled', the game's name, so a tree or a
+herb can take it (priest/003; 017's rename of "dazzle" stays as a tolerance). An enemy Priest's smite highlight no
+longer throws on a misspelt helper (attacks/009).
+
 Triggers to watch for:
 - "A guardian angel appears" - angel summoned
 - "angel attacks you" - angel attack

@@ -38,6 +38,8 @@ patterns:
 
 if isTargeted(matches[2]) then
     if passiveFailsafe then restorePassiveCure() end
+    -- Before the erase, which would leave the branches this proof rules out standing (007).
+    if proveAffAbsentV3 then proveAffAbsentV3("slickness", "salve") end
     erAff("slickness")
 
     -- ==== CRUSHEDTHROAT TRACKING ====
