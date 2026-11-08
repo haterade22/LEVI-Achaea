@@ -32,7 +32,7 @@
 local mock = require("mock_mudlet")
 local before = {}
 for k, v in pairs(_G) do before[k] = v end
-local savedClock, savedContains = os.clock, table.contains
+local savedClock, savedContains, savedStarts = os.clock, table.contains, string.starts
 
 -- Initialised as `X = X or {...}` by the files below, so a table left by an earlier test file would
 -- be reused. Cleared here, so the loads build fresh ones; the restore at the end puts the old back.
@@ -52,6 +52,8 @@ table.contains = table.contains or function(t, v)
   for _, x in pairs(t) do if x == v then return true end end
   return false
 end
+-- string.starts is a Mudlet extension (the real isTargeted uses it); restored at the end.
+string.starts = string.starts or function(s, p) return s:sub(1, #p) == p end
 
 local OFFENSE = "src_new/scripts/levi_ataxia/levi/levi_scripts/serpent/002_Serpent_Offense.lua"
 -- 007_Pariah_things holds the class gates the offence reads (ataxia_targetClass,
@@ -61,11 +63,16 @@ for _, f in ipairs({
   "src_new/scripts/levi_ataxia/levi/ataxia/affliction_tracking_core/007_Branching_State_Tracker.lua",
   "src_new/scripts/levi_ataxia/levi/ataxia/affliction_tracking_core/008_V3_Integration.lua",
   "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/007_Pariah_things.lua",
+  "src_new/scripts/levi_ataxia/levi/ataxia/016_Targeting_Functions.lua",
   OFFENSE,
 }) do
   local ok, err = pcall(dofile, f)
   if not ok then error("Failed to load " .. f .. ": " .. tostring(err)) end
 end
+-- The real name guard (016), for the F35 tests. world() puts in an exact-name isTargeted for the
+-- rest, and nothing else here has an updateTarget.
+local realIsTargeted, realUpdateTarget = isTargeted, updateTarget
+updateTarget = nil
 
 -- What 002 registered, taken now because world() resets the mock.
 local REB_STRIPPED, REB_NONE, SUGGEST_GIVEN
@@ -1035,6 +1042,19 @@ describe("review: the monkshood impulse always carries masochism", function()
     expect(pair.suggestion).toBe("confusion")
   end)
 
+  it("the rebounding pre-empt (PRIORITY 1.5) when its bite is the monkshood reaction", function()
+    world(); give("asthma", "weariness", "masochism", "paralysis")
+    lastReboundingFlay = clock - 9
+    expect(has(round(), "impulse Agathon masochism monkshood")).toBeTrue()
+    expect(lastReboundingFlay).toBe(0)
+  end)
+
+  it("the pre-empt with any other bite keeps its own suggestion", function()
+    world(); give("paralysis", "asthma")
+    lastReboundingFlay = clock - 9
+    expect(has(round(), "impulse Agathon confusion vernalius")).toBeTrue()
+  end)
+
   it("the keybind suggestion does not replace it", function()
     world(); hSuggRequest = "stupidity"
     give("asthma", "weariness", "masochism")
@@ -1243,6 +1263,23 @@ describe("F0: a round the game refused does not stop the offence", function()
     expect(#sends).toBe(1)
     expect(serpent.state.balSpentSinceSend).toBeFalse()
   end)
+
+  -- Slowed, a command waits with balance up and a new send replaces it and restarts its delay
+  -- (kb/mechanics/balance-and-queueing.md, "Retardation"), so the release waits for the slow to end.
+  it("while slowed the guard holds, and the press after the slow sends", function()
+    world(); serpent.state.lastBalState = "1"
+    serp_ekanelia_offense()
+    expect(#sends).toBe(1)
+    ataxia.afflictions.aeon = true
+    vitals("1")
+    clock = clock + 2
+    sends = {}
+    serp_ekanelia_offense()
+    expect(#sends).toBe(0)
+    ataxia.afflictions.aeon = nil
+    serp_ekanelia_offense()
+    expect(#sends).toBe(1)
+  end)
 end)
 
 describe("F8/X5: below truelock lock_reinforce sends the curare DSTAB, not the voyria impulse", function()
@@ -1362,6 +1399,17 @@ describe("F29: the suggestion success line records what our round suggested", fu
     expect(serpent.hypnosis.fratricideApplied).toBeFalse()
     expect(serpent.hypnosis.suggestions[1]).toBe("hypochondria")
     serpent.hypnosis.mode = "fratricide"
+  end)
+
+  -- The last chain's suggest never got its success line; a hand-typed suggest in the next chain
+  -- must not be recorded as that word (fratricideApplied would end the chain's own suggest).
+  it("a new chain starts with no word left over from the last one", function()
+    world()
+    serpent.hypnosis.pendingSuggestion = "fratricide"
+    serpent.hypnosis.start("Agathon")
+    expect(serpent.hypnosis.pendingSuggestion).toBeNil()
+    given()
+    expect(serpent.hypnosis.fratricideApplied).toBeFalse()
   end)
 end)
 
@@ -1505,26 +1553,58 @@ describe("F34: sn runs the darkshade offence", function()
 end)
 
 describe("F35: a part name is completed before the round", function()
-  it("the one listed name that starts with it becomes the target", function()
+  -- A round with 016's real isTargeted and updateTarget in place.
+  local function round016()
+    local savedIs, savedUpdate = isTargeted, updateTarget
+    isTargeted, updateTarget = realIsTargeted, realUpdateTarget
+    local fine, r = pcall(round)
+    isTargeted, updateTarget = savedIs, savedUpdate
+    if not fine then error(r, 0) end
+    return r
+  end
+  local function refused()
+    for _, e in ipairs(echoes) do if has(e, "Target not in room!") then return true end end
+    return false
+  end
+
+  it("without 016: the one listed name that starts with it becomes the target", function()
     world()
     target, ataxia.playersHere = "Sai", { "Saibel" }
-    local savedUpdate = updateTarget
-    updateTarget = nil                           -- 016 not loaded: the plain assignment
-    local r = round()
-    updateTarget = savedUpdate
+    local savedIs, savedUpdate = isTargeted, updateTarget
+    isTargeted, updateTarget = nil, nil          -- 016 not loaded: the plain assignment
+    local fine, r = pcall(round)
+    isTargeted, updateTarget = savedIs, savedUpdate
+    if not fine then error(r, 0) end
     expect(target).toBe("Saibel")
     expect(has(r, "dstab Saibel")).toBeTrue()
   end)
 
-  it("016's updateTarget does it when it is there", function()
+  it("016's isTargeted completes a part name, and the round names her in full", function()
     world()
     target, ataxia.playersHere = "sai", { "Saibel" }
-    local savedUpdate, got = updateTarget, nil
-    updateTarget = function(n) got = n; target = n end
-    local r = round()
-    updateTarget = savedUpdate
-    expect(got).toBe("Saibel")
-    expect(has(r, "Saibel")).toBeTrue()
+    local r = round016()
+    expect(target).toBe("Saibel")
+    expect(has(r, "dstab Saibel")).toBeTrue()
+  end)
+
+  it("a full name a line has named, gone from the room, is not renamed to a longer one", function()
+    world()
+    target, ataxia.playersHere = "Kai", { "Kai" }
+    expect(realIsTargeted("Kai")).toBeTrue()     -- a line about her: 016 now holds "kai" as full
+    ataxia.playersHere = { "Kaiden" }
+    expect(round016()).toBe("")
+    expect(target).toBe("Kai")
+    expect(refused()).toBeTrue()
+  end)
+
+  it("the same name in another case is respelt, and then counts as a full name", function()
+    world()
+    target, ataxia.playersHere = "saibel", { "Saibel" }
+    expect(has(round016(), "dstab Saibel")).toBeTrue()
+    expect(target).toBe("Saibel")
+    ataxia.playersHere = { "Saibeline" }         -- she leaves; a longer name is someone else
+    expect(round016()).toBe("")
+    expect(target).toBe("Saibel")
   end)
 
   it("two names that start with it: nothing is sent", function()
@@ -1643,7 +1723,7 @@ end)
 end)
 
 -- Restore the shared Lua state.
-os.clock, table.contains = savedClock, savedContains
+os.clock, table.contains, string.starts = savedClock, savedContains, savedStarts
 for k in pairs(_G) do
   if before[k] == nil then _G[k] = nil end
 end

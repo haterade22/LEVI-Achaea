@@ -268,6 +268,7 @@ function serpent.hypnosis.start(tar)
     serpent.hypnosis.suggestions = {}
     serpent.hypnosis.fratricideApplied = false
     serpent.hypnosis.hypnoTarget = tar or target
+    serpent.hypnosis.pendingSuggestion = nil   -- a word the last chain never got a success line for
 
     if serpent.config.debug then
         Algedonic.Echo("<cyan>HYPNOSIS: <white>Starting hypnotise on " .. (tar or target))
@@ -610,7 +611,9 @@ serpent.EKANELIA_RESULTS = {
 -- rounds reacted (:1275, 1324, 1551, 1596, 1643, 1943, 2033). Not seen from our seat: an impulse
 -- of a suggestion the target holds. On the victim's seat one that added nothing still bit
 -- (kb/raw/logs/2026-11-01_claes_runewarden-vs-serpent_loss_azbErKcK.txt:3872-3876).
--- Used by selectImpulsePair (all conditionals met), PRIORITY 4 and the keybind guard below.
+-- Used by selectImpulsePair (all conditionals met), PRIORITY 1.5, PRIORITY 4 and the keybind guard
+-- below. PRIORITY 5's monkshood impulse is not a reaction round: impatience is already up there,
+-- so its suggestion is free to push a mental.
 local MONKSHOOD_SUGGESTION = "masochism"
 
 -- True when `suggestion` is a conditional of `venom`'s reaction that the target lacks, i.e. the
@@ -908,9 +911,12 @@ end
 -- A lightwall in our room (the dstab target stands in it): "It also drastically speeds up the
 -- progression of the [darkshade] affliction for anyone standing in its presence"
 -- (kb/raw/wiki/Subterfuge.wiki, Lightwall). ataxia.lightwall is the room flag: set from GMCP's room
--- items ("a lightwall", update_stuff/003) and the room line (misc_alerts/005), cleared by the next
--- room list. Until the 2026-11-07 review this read haveAff("lightwall") / tAffs.lightwall, which
--- nothing writes, so the rule in pickVenom never fired; before v4.3.5 it read ataxia.lightwall.
+-- items ("a lightwall", update_stuff/003) and the room line (misc_alerts/005). update_stuff/003 also
+-- clears it, at the top of its handler, on every item event (a List, or an Add or Remove of
+-- anything) while the last List was not the inventory's. So this can read false with the lightwall
+-- still standing, until the next room list or an Add of "a lightwall".
+-- Until the 2026-11-07 review this read haveAff("lightwall") / tAffs.lightwall, which nothing
+-- writes, so the rule in pickVenom never fired; before v4.3.5 it read ataxia.lightwall.
 local function hasLightwall()
     return (ataxia and ataxia.lightwall) and true or false
 end
@@ -1966,9 +1972,11 @@ function serp_ekanelia_attack()
         and (now() - lastReboundingFlay) >= 8.15
         and not eqAction
         and checkImpulseEligible() then
-        local impAff = selectImpulse(nil) or "masochism"
         local bite = selectBiteVenom()
         local biteVenom = (bite and bite.venom) or pickVenom(nil)
+        -- Chosen after the bite: a monkshood bite is the impatience reaction (MONKSHOOD_SUGGESTION).
+        local impAff = (biteVenom == "monkshood") and MONKSHOOD_SUGGESTION
+            or selectImpulse(nil) or "masochism"
         recordImpulse(impAff)
         lastReboundingFlay = 0  -- fire once per reapply cycle
         serp_sendAttack(wieldDirk .. "impulse " .. target .. " " .. impAff .. " " .. biteVenom, preAtk)
@@ -2731,8 +2739,11 @@ end
 -- switchTarget), and serp_sendAttack sends only when ataxia.playersHere holds the target exactly,
 -- so with "Saibel" listed every press printed "Target not in room!" until a line about her went
 -- through isTargeted (2026-11-08 review, F35). When exactly one listed name starts with the target
--- (case ignored), it becomes the target (016 updateTarget), so the round names her in full. Two
--- such names (Saibel and Saidra for "Sai"), or none, change nothing: the refusal stays.
+-- (case ignored), it goes through isTargeted, which completes a part name and refuses a full one
+-- (016:243-249): target Kai, whom a line has named, has left and Kaiden is listed, and Kaiden is
+-- someone else. The same name in another case ("saibel" with Saibel listed) is only respelt
+-- (updateTarget), and isTargeted then records it as a full name. Two such names (Saibel and Saidra
+-- for "Sai"), or none, change nothing: the refusal stays.
 local function completeTargetName()
     if type(target) ~= "string" or target == "" then return end
     local here = ataxia and ataxia.playersHere
@@ -2745,7 +2756,8 @@ local function completeTargetName()
         end
     end
     if not hit then return end
-    if updateTarget then updateTarget(hit) else target = hit end
+    if hit:lower() == want and updateTarget then updateTarget(hit) end
+    if isTargeted then isTargeted(hit) else target = hit end
 end
 
 function serp_ekanelia_offense()
@@ -2766,8 +2778,13 @@ function serp_ekanelia_offense()
     -- with no balance drop on GMCP: we are on balance here (the check above), and a round that
     -- spends balance shows it down within about 0.2 s. Inside that window it still holds, which
     -- is what stops a mashed key from sending two rounds before the prompt.
+    -- It also holds while we are slowed (aeon; retardationOn sets ataxia.afflictions.aeon as well):
+    -- a command waits there with balance still up, and a new send replaces the waiting one and
+    -- starts its delay again (kb/mechanics/balance-and-queueing.md, "Retardation"), so a release
+    -- could keep the attack from ever happening. The press after the slow ends releases it.
     if serpent.state.attackInFlight then
         if serpent.state.balSpentSinceSend
+           or (ataxia.afflictions and ataxia.afflictions.aeon)
            or (getEpoch() - (serpent.state.attackSentAt or 0)) < ATTACK_NO_SPEND then
             return
         end

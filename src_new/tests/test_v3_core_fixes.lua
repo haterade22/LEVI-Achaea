@@ -22,6 +22,7 @@ ataxiaTemp, tAffs, affTimers = {}, {}, {}
 for _, f in ipairs({
   "src_new/scripts/levi_ataxia/levi/ataxia/016_Targeting_Functions.lua",
   "src_new/scripts/levi_ataxia/levi/ataxia/017_Affliction_Management.lua",
+  "src_new/scripts/levi_ataxia/levi/ataxia/update_stuff/001_ataxia_Players_Update.lua",
   "src_new/scripts/levi_ataxia/levi/ataxia/curing/002_Wide_Groups.lua",
   "src_new/scripts/levi_ataxia/levi/ataxia/affliction_tracking_core/007_Branching_State_Tracker.lua",
   "src_new/scripts/levi_ataxia/levi/ataxia/affliction_tracking_core/008_V3_Integration.lua",
@@ -358,9 +359,59 @@ end)
 describe("F42 / H3: a part name is completed, a full name is never renamed", function()
   local function real(t, here)
     world(t)
+    gmcp = {}
     isTargeted = realIsTargeted
     ataxia.playersHere = here
   end
+
+  -- A gmcp.Room.Players through the real handler (update_stuff/001). It rebuilds
+  -- ataxia.playersHere one name at a time and asks isTargeted as it goes, so a list is half built
+  -- when the first names are asked about.
+  local function enterRoom(t, names)
+    real(t, {})
+    -- isTargeted keeps the last full name in a local, and an earlier test may have left this one.
+    target = "Nobody"
+    realIsTargeted("Nobody")
+    target = t
+    ataxiaBasher, ataxiagui = { ignore = {} }, {}
+    targetIshere = false
+    timersOn.TargetOutOfRoom = true
+    local list = {}
+    for i, n in ipairs(names) do list[i] = { name = n, fullname = n } end
+    gmcp = { Char = { Status = { name = "Levi" } }, Room = { Players = list } }
+    ataxia_Players_Update("gmcp.Room.Players")
+  end
+
+  it("Room.Players lists Kaiden before Kai: target Kai stays Kai and is here", function()
+    enterRoom("Kai", { "Kaiden", "Kai" })
+    expect(target).toBe("Kai")
+    expect(targetIshere).toBeTrue()
+    expect(timersOn.TargetOutOfRoom).toBeFalse()
+  end)
+
+  it("Room.Players lists Kai before Kaiden: the same, whatever order GMCP sends", function()
+    enterRoom("Kai", { "Kai", "Kaiden" })
+    expect(target).toBe("Kai")
+    expect(targetIshere).toBeTrue()
+    expect(timersOn.TargetOutOfRoom).toBeFalse()
+  end)
+
+  it("Room.Players lists only Saibel: `t sai` is still completed", function()
+    enterRoom("sai", { "Saibel" })
+    expect(target).toBe("Saibel")
+    expect(targetIshere).toBeTrue()
+    expect(timersOn.TargetOutOfRoom).toBeFalse()
+  end)
+
+  it("a name the last Room.Players listed is a full name, even off ataxia.playersHere", function()
+    real("Kai", {})
+    target = "Nobody"
+    realIsTargeted("Nobody")
+    target = "Kai"
+    gmcp = { Room = { Players = { { name = "Kai", fullname = "Kai" } } } }
+    expect(isTargeted("Kaiden")).toBeFalse()
+    expect(target).toBe("Kai")
+  end)
 
   it("target Kaiden: Kai's line is not his, and the target stays Kaiden", function()
     real("Kaiden", { "Kaiden", "Kai" })

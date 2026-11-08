@@ -210,14 +210,26 @@ function ataxia_needReject()
 end
 
 
--- True when GMCP lists exactly this name in the room (ataxia.playersHere, update_stuff/001),
--- case ignored.
+-- True when GMCP lists exactly this name, case ignored: in ataxia.playersHere (update_stuff/001)
+-- or in gmcp.Room.Players. 001 rebuilds the first from the second one name at a time and calls
+-- isTargeted as it goes, so with Kaiden listed before Kai, Kai was not in the first yet and the
+-- target Kai was renamed Kaiden. gmcp.Room.Players is not updated when someone enters or leaves,
+-- so it can name a player who has gone. That name is still a full name, and this only stops a
+-- completion.
 local function listedHere(name)
-  local list = ataxia and ataxia.playersHere
-  if type(list) ~= "table" then return false end
   local want = name:lower()
-  for _, v in pairs(list) do
-    if type(v) == "string" and v:lower() == want then return true end
+  local list = ataxia and ataxia.playersHere
+  if type(list) == "table" then
+    for _, v in pairs(list) do
+      if type(v) == "string" and v:lower() == want then return true end
+    end
+  end
+  local room = type(gmcp) == "table" and gmcp.Room
+  local players = type(room) == "table" and room.Players
+  if type(players) == "table" then
+    for _, p in pairs(players) do
+      if type(p) == "table" and type(p.name) == "string" and p.name:lower() == want then return true end
+    end
   end
   return false
 end
@@ -258,10 +270,9 @@ function updateTarget(name)
 if type(target) ~= "number" then
   -- Trigger 265 records whose mount the flag is as `target` when its line printed
   -- (ataxiaTemp.mountedWho, v4.7.420), so after `t aga` it can hold part of a name. This is the
-  -- same person's name, completed, so the owner is completed with it. TK6 matches the owner the
-  -- way isTargeted above matches a name, either one starting the other (tekura6.isMounted), so a
-  -- part left behind would also match the next target whose name starts the same way (Agatha
-  -- after Agathon).
+  -- same person's name, completed, so the owner is completed with it. TK6 matches the owner with
+  -- either name starting the other (ownsMount, tekura6.isMounted), so a part left behind would
+  -- also match the next target whose name starts the same way (Agatha after Agathon).
   local who = ataxiaTemp and ataxiaTemp.mountedWho
   if type(who) == "string" and type(target) == "string" and who:lower() == target:lower() then
     ataxiaTemp.mountedWho = name:title()
