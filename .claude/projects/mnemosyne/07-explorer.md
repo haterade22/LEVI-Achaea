@@ -951,7 +951,7 @@ Every ground retreat now reads one latch, `S.retreatSpentAt`.
 
 | Question | Answer |
 |---|---|
-| When is it spent? | On the **landing**, in `S._checkPursuit`. A refused leap or a lost tumble spends nothing. |
+| When is it spent? | On the **landing**, in `S._noteLanding`. A refused leap or a lost tumble spends nothing. |
 | What does it refuse, at any HP? | The panic tumble (`_maybePanic`), the ground escape, the disengage (`S._retreatBlock`, which `_beginEscape`, `_escapeRouteReady`, `S.disengage` and both low-HP ladders read), and a new pull (the `onTick` pull gate). |
 | What stays allowed? | The outdoor recovery hover, the Seclusion fling, the lava escape (`M.onLava`) and a retry of the same tumble (`_tumbleRetry`). None is a walk into another room of the same fight. |
 | What happens to a denizen in the landing room? | The normal basher fights it. |
@@ -968,6 +968,8 @@ Three guards came with it:
 - **False landings.** `_noteRetreat` sits below the `MAX_PULLS` refusal in `_beginPull`, and `S._forgetUnlandedRetreat()` drops the record of a retreat that never left. Otherwise the next walk of the sweep reads as its landing.
 
 `S.reset` does not touch the latch, because the panic and the ladder both reset on their way out.
+
+**The landing is recorded by whoever asks first (v4.7.483).** "We tumble out, successfully and then tumble back IN????" — user, 2026-11-09 (`kb/raw/live/mnemosyne-tumble-back-in_2026-11-09.txt`). A landing's GMCP comes before its text. `gmcp.Room.Info` moves the map and lifts escape mode, then the basher's `gmcp.Char.Vitals` handler (registered before ours) can call `S.disengage`. When only `_checkPursuit` armed the latch, that disengage read it unarmed, its `S.reset` released the move lock, and its `_noteRetreat` wrote over the record of the tumble that had just landed. Our own `onVitals` then saw no landing and the panic tumbled back in. `S._noteLanding()` now does the recording, and `_retreatSpent`, `_noteRetreat`, `_forgetUnlandedRetreat` and `_checkPursuit` call it first. `S.disengage` also returns true while `S.moveLocked()`, and `S.onTumbleStart` restarts the record's 15 s "never left" clock.
 
 ### Boiling lava - the only unconditional "leave now" (v4.7.254, hardened v4.7.256)
 

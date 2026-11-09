@@ -1,0 +1,105 @@
+(((((((((((((((((((( BALANCE: 0.707 ))))))))))))))))))))
+You begin to tumble agilely to the south.
+ ----------------------------------------------------------------------------- 
+|     WE HAVE STARTED TO TUMBLE SOUTH! | WE HAVE STARTED TO TUMBLE SOUTH!     |
+ ----------------------------------------------------------------------------- 
+Balance used: 5.0s.
+13:21:54:034 [4456] [92] |(623331|18%)|[ [ IMPALED rl1 slashedthroat laceratedthroat prone ]]  
+13:21:55:515 [6422] [93] |(623331|18%)|[ [ IMPALED slashedthroat laceratedthroat prone ]]  
+With an heroic effort you manage to writhe yourself free from the weapon that impaled you.
+13:21:55:898 [6422] [93] |(623331|18%)|[ [ slashedthroat laceratedthroat prone ]]  
+Razor-sharp fangs and claws tear apart your flesh and bone as an earth wyrm latches onto you.
+Health lost: 2089 (physical cutting).
+Your left leg breaks with a loud crack.
+Your right leg breaks with a loud crack.
+Razor-sharp fangs and claws tear apart your flesh and bone as an earth wyrm latches onto you.
+Health lost: 2356 (physical cutting).
+Stalking upon his forelimbs, a lithic cave bat shrieks loudly and slams his crystalline bulk into you.
+Health lost: 1521 (physical blunt).
+Your left arm breaks with a loud crack.
+13:21:55:903 [456] [93] |(623331|18%)|[ [ bld(377) laceratedthroat rl1 slashedthroat ll1 la1 prone ]]  
+You touch the tree of life tattoo.
+A storm of deadly leaves descends upon the locale in a flurry of sylvan wrath, viciously shredding all who stand in opposition.
+Damage dealt: 414 (physical cutting).
+An earth wyrm's form begins to atrophy as your attack kindles ethereal mist to consign him to only memory.
+Damage dealt: 828 (physical cutting).
+Damage dealt: 3313 (physical cutting).
+You eat a calamine crystal.
+You clot your wounds 19 times.
+You eat a potash crystal.
+You feel your health and mana replenished.
+13:21:55:907 [1492] [91] |(623331|17%)|[ [ laceratedthroat slashedthroat ll1 la1 prone ]]  
+Time wreaks ruin upon an earth wyrm, deteriorating before your eyes.
+Damage dealt: 58 (psychic).
+13:21:56:415 [1492] [91] |(623331|17%)|[ [ laceratedthroat slashedthroat ll1 la1 prone ]]  
+You may eat another plant or mineral.
+13:21:57:333 [1492] [91] |(623331|17%)|[ [ laceratedthroat slashedthroat ll1 la1 prone ]]  
+Time wreaks ruin upon an earth wyrm, deteriorating before your eyes.
+Damage dealt: 58 (psychic).
+13:21:57:483 [1492] [91] |(623331|17%)|[ [ laceratedthroat slashedthroat ll1 la1 prone ]]  
+
+(MNEM): [explore] [swarm] reset (incoming damage).
+(MNEM): [explore] [swarm] ESCAPE MODE -- attacks held until we are out (DISENGAGE (incoming damage) -- breaking off).
+(MNEM): [explore] [swarm] DISENGAGE (incoming damage) -- breaking off -> n.
+(MNEM): [explore] [swarm] DISENGAGE (incoming damage) -- breaking off rather than trading.
+(MNEM): [explore] [swarm] reset (panic tumble).
+(MNEM): [explore] [swarm] ESCAPE MODE -- attacks held until we are out (panic tumble).
+(MNEM): [explore] [swarm] PANIC (12% hp) -- Roll Hide tumble n sheds all pursuers; healing to 95% before going back in.
+You tumble out of the room.
+Upon rugged slopes.
+The stars twinkle in the clear night sky.
+You see exits leading north and southeast.
+Your inelegant departure sends your pursuers reeling in confusion.
+13:21:58:076 [1492] [91] |(623331|17%)|[ [ laceratedthroat slashedthroat ll1 la1 prone ]]  
+Damage dealt: 56 (psychic).
+13:21:58:435 [1492] [91] |(623331|17%)|[ [ laceratedthroat slashedthroat ll1 la1 prone ]]  
+(((((((((((((((((((( BALANCE: 4.797 ))))))))))))))))))))
+Both of your legs must be free and unhindered to do that.
+You begin to tumble agilely to the north.
+ ----------------------------------------------------------------------------- 
+|     WE HAVE STARTED TO TUMBLE NORTH! | WE HAVE STARTED TO TUMBLE NORTH!     |
+ ----------------------------------------------------------------------------- 
+Balance used: 5.0s.
+Damage dealt: 58 (psychic).
+The flow of blood slows as the gaping wound in your throat partially mends.
+13:21:59:949 [4015] [91] |(623331|17%)|[ [ slashedthroat ll1 prone ]]  
+The bleeding gash in your throat closes up completely.
+13:22:01:750 [4015] [90] |(623331|17%)|[ [ prone ]]  
+You may eat another bit of irid moss or potash.
+13:22:01:752 [4015] [90] |(623331|17%)|[ [ prone ]]  
+You eat a potash crystal.
+You feel your health and mana replenished.
+13:22:01:963 [4969] [98] |(623331|17%)|[ [ prone ]]  
+Upon rugged slopes.
+The stars twinkle in the clear night sky. The mountain track continues to climb, growing colder with each painstaking advance toward the conduit's lofty crown. Mighty boulders flank the path, coated in a layer of thick frost that binds them in place, painting the landscape in a conflicting pallet of deep, natural browns and fresh, vibrant whites. Rolling and listing unevenly, jagged crags stretch like soldiers along the ridge line, cascading a barrage of stone chips and earthen shards with each gust of the remorseless wind.
+You see exits leading north and southeast.
+13:22:02:597 [4969] [98] |(623331|17%)|[ [ prone ]]  
+You tumble out of the room.
+Upon rugged slopes.
+The stars twinkle in the clear night sky. A lithic cave bat is here, tending his wounds. Eyeless mouth widening to reveal the mandibular joints within, an earthen wyrm flails about here. An earth wyrm is here, tending his wounds.
+You see exits leading northeast and south.
+Your inelegant departure sends your pursuers reeling in confusion.
+13:22:03:142 [4969] [98] |(623331|94%)|[ [ prone ]]  
+Razor-sharp fangs and claws tear apart your flesh and bone as an earth wyrm latches onto you.
+Health lost: 1889 (physical cutting).
+Your right leg breaks with a loud crack.
+Your left leg breaks with a loud crack.
+Chittering loudly, an earth wyrm rushes forward and slams his onyx-plated bulk into you.
+Health lost: 1537 (physical blunt).
+Your hearing is suddenly restored.
+Clawing its way forward, a lithic cave bat crashes into you, tackling you to the earth as he bites and claws at your flesh.
+Health lost: 1498 (physical blunt).
+Health lost: 45 (physical cutting).
+You have been slain by a lithic cave bat.
+(mapper): Speedwalking paused.
+
+(LEVI): Still in Mnemosyne -- holding the bash curing set through the basher stop.
+(LEVI): Bashing finished. Started at (132 (77.69%) / 1834846g) and bashed for 27.80 minutes. 
+[Armour]: Basher disabled -- swapping to 'pvp'
+(MNEM): [explore] [swarm] reset (basher disabled).
+(LEVI): DEATH DETECTED! Basher disabled. Queues cleared. Auto-rotation OFF.
+(MNEM): [explore] slain by a lithic cave bat -- stopping the sweep.
+(MNEM): [explore] off (slain).
+You have lost 1750 experience.
+The corpse of an ogre mage falls out of your inventory.
+The corpse of an ogre brute falls out of your inven

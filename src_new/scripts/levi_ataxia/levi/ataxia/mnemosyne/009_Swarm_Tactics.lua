@@ -408,9 +408,28 @@ function S._sayOnce(key, msg)
   S._echo(msg)
 end
 
+-- THE ONE RETREAT IS SPENT ON THE LANDING (v4.7.482). Not when it is sent: a refused leap or a lost
+-- tumble left us where we were, and must not cost the retreat that can still save us.
+--
+-- WHOEVER ASKS FIRST RECORDS IT (v4.7.483, from a death: "We tumble out, successfully and then
+-- tumble back IN????"). A landing's GMCP comes before its text, and gmcp.Room.Info lifts escape
+-- mode, so the basher's vitals handler ran its danger check with the map already moved and our own
+-- onVitals still to come. The disengage read a latch nobody had armed, then wrote its retreat over
+-- the record of the one that had just landed, so the landing was never seen at all. Every reader
+-- and writer of the record comes through here first, and handler order stops mattering.
+function S._noteLanding()
+  local r = S._retreat
+  if not r or r.landedAt then return end
+  local cur = M.map and M.map.current
+  if not cur or cur == r.from then return end
+  r.landedAt = now()
+  S.retreatSpentAt = now()
+end
+
 -- Record the room a retreat (or a pull) is leaving, so we can see afterwards whether it worked.
 function S._noteRetreat(from)
   if not from then return end
+  S._noteLanding() -- v4.7.483: a landing nobody has read yet must not be overwritten
   -- A RETREAT THAT HAS LANDED BUT NOT BEEN JUDGED IS NOT OVERWRITTEN (v4.7.378). From a death: an
   -- escape landed among four denizens, and a pull started in that room 1.2s later -- before the
   -- 1.5s settle had let _checkPursuit judge the escape. The pull's record replaced it, the judgement
@@ -448,12 +467,7 @@ function S._checkPursuit()
     if (now() - r.at) > 15 then S._retreat = nil end -- never left: forget it
     return
   end
-  -- THE ONE RETREAT IS SPENT HERE, ON THE LANDING (v4.7.482). Not when it is sent: a refused leap
-  -- or a lost tumble left us where we were, and must not cost the retreat that can still save us.
-  if not r.landedAt then
-    r.landedAt = now()
-    S.retreatSpentAt = now()
-  end
+  S._noteLanding()
   local since = now() - r.landedAt
   if since < (tonumber(S.PURSUIT_SETTLE) or 1.5) then return end
   local n = (M._denizenCount and M._denizenCount()) or 0
@@ -492,12 +506,16 @@ end
 -- It is given back when the fight it started is over and we are fit, when a recovery ends, when a
 -- hit-and-run re-entry starts a new engagement, and at a ripple boundary. S.reset leaves it alone:
 -- the panic and the ladder both reset on their way out.
-function S._retreatSpent() return S.retreatSpentAt ~= nil end
+function S._retreatSpent()
+  S._noteLanding() -- v4.7.483: this reader can run before _checkPursuit does
+  return S.retreatSpentAt ~= nil
+end
 
 function S._restoreRetreat() S.retreatSpentAt, S._retreat = nil, nil end
 
 -- A retreat that never left must not read as a landing if the sweep walks on later.
 function S._forgetUnlandedRetreat()
+  S._noteLanding() -- v4.7.483
   if S._retreat and not S._retreat.landedAt then S._retreat = nil end
 end
 
@@ -1528,6 +1546,10 @@ function S.onTumbleStart(dir)
   ataxiaTemp.tumbleDir = dir
   ataxiaTemp.tumbleFrom = MAP and MAP.current
   ataxiaTemp.tumbleTries = tonumber(ataxiaTemp.tumbleTries) or 0
+  -- A retreat that waited in the queue (impaled, off balance) is leaving only now: restart its
+  -- "never left, forget it" clock, or a long wait loses the landing (v4.7.483).
+  local r = S._retreat
+  if r and not r.landedAt and r.from == (MAP and MAP.current) then r.at = now() end
   if S._tumbleT then pcall(killTimer, S._tumbleT) end
   S._tumbleT = tempTimer(S.TUMBLE_CONFIRM, function()
     S._tumbleT = nil
@@ -1883,6 +1905,9 @@ function S.disengage(reason)
       .. " -- holding altitude until clean.")
     return true
   end
+  -- A TUMBLE IN THE AIR IS THE DISENGAGE (v4.7.483). This path never read the move lock: its S.reset
+  -- released the lock and its move cancelled the tumble, which is the v4.7.243 bug by another door.
+  if S.moveLocked() then return true end
   -- ASK BEFORE DESTROYING (v4.7.314). S.reset sends `cq all` and drops the running tactic; doing
   -- that and THEN discovering there is no route leaves us worse off than before, once per prompt
   -- for as long as the caller keeps reading the fight as lethal.
