@@ -2,6 +2,42 @@
 
 ---
 
+## 2026-11-09 - v4.7.484: the class active cure at 3 afflictions, while bashing
+
+The user: "we should be using our class active cures if we have 3 or more afflictions on us especially if we have miracle boon." The user then chose bashing only, and one threshold with or without Miracle. **None of this has run in Mudlet.** The Lua tests run the real rule and the real bash round.
+
+**What you will see change:**
+
+- **While bashing, 3 or more afflictions bring out the class cure.** The echo is `[CURE] 3 afflictions: shrugging`. The cures are `shrugging`, `educe salt`, `chrono accelerate boost`, `invoke purification`, `fling fool at me`, `dragonheal`, `terran eruption` and `cast bloodboil`.
+- **Only afflictions that a random cure can take count.** Prone, a lacerated throat and a damaged limb do not.
+- **The cure takes that round.** The next round attacks.
+- **During a recovery the cure goes out on the prompt**, because attacks are held there.
+- **FITNESS classes use it only with asthma.** FITNESS cures nothing else, and with no asthma it still costs 2.8 s of balance.
+- **A Magi no longer waits for the tree tattoo.** A bloodboil on cooldown also no longer costs the round.
+- **PvP does not change.** There the cure still fires only for a lock or a forming lock.
+- **An Earth Lord can use ERUPTION.** The weariness test in `ataxia_canActive` was inverted, so the cure could go out only while weariness refused it.
+
+**Why it is built this way:**
+
+- **The Miracle boon needs no code.** The game cures the extra affliction, and GMCP reports it.
+- **Two paths.** A queued attack takes equilibrium the moment it returns, so a class whose attack spends equilibrium never sees it free on a prompt. The cure must take the round (`ataxia_loadCureRound`, called from `ataxiaBasher_assembleAttack`). During a recovery no round runs, so the prompt sends it (`ataxia_loadCureHeartbeat`).
+- **The cure takes the whole round, not a place beside the attack.** A round must have one equilibrium spender (the v4.7.193 rule). The game would refuse a once-per-room rider that came second, and the rider would still stamp its guard. The swarm decorator is not called, so a pending pull waits for the next round, which has the swing it needs.
+- **A refused cure cannot stop the attacks.** With no use line for 6 s, the round attacks again and the cure waits 20 s. A silence of 3 s between two offers means that a gate held us, so the wait starts again.
+- **It obeys the older rules.** FITNESS and SHRUGGING wait for equilibrium (v4.7.480). A prompt send waits while we leave a room or a tumble is in the air or still queued.
+- **A Depthswalker boost adds 340 years.** Above `ataxiaBasher.dwAgeCap` (400) or while prone it sends plain `chrono accelerate`.
+
+**ASSUMED:** a class cure takes from the same pool as the tree, `treeCurableAffsV3`. The game's flag `NoRandomCure` supports this, but no test in the game has confirmed it (`kb/afflictions/database.md`).
+
+**Not wired, because our first-person lines are not captured:** Blademaster ALLEVIATE, Druid and Sentinel MIGHT, Druid and Sylvan GROVE CURE, Psion EXPUNGE. Without those lines we cannot see the cure go out. Psion's EXPUNGE also has no row in `ataxia_canActive`, so it does not fire for a lock either.
+
+**Files:** `can(x)/003_Lock_breakers.lua`, `basher/001_Bashing_Functions.lua`, `tests/test_bash_class_cure.lua` (new), `tests/test_basher_battlerage.lua`.
+
+**Tests:** 44 new; full suite 4983 of 4983. 37 deliberate breaks of the new guards each failed a test.
+
+**Also in this release:** the documentation audit after v4.7.483 (README, `05-commands`, `07-explorer`, `CLAUDE.md`, `AGENTS.md`, `kb/mechanics/balance-and-queueing.md`, and three comments in `009_Swarm_Tactics`). It changes no Lua statement.
+
+---
+
 ## 2026-11-09 - v4.7.483: the one-retreat rule holds at the moment of landing
 
 The user sent a second death, from before v4.7.482: "We tumble out, successfully and then tumble back IN????" The log is `kb/raw/live/mnemosyne-tumble-back-in_2026-11-09.txt`. **v4.7.482 did not stop this one**: a replay of it fails on v4.7.482. **None of this has run in Mudlet.** The Lua tests run the real swarm module.

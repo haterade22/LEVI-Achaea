@@ -33,6 +33,17 @@ local basher_file = "src_new/scripts/levi_ataxia/levi/ataxia/basher/001_Bashing_
 local ok, err = pcall(dofile, basher_file)
 if not ok then error("Failed to load basher functions file: " .. tostring(err)) end
 
+-- Magi's Bloodboil reads the shared class-cure rule (can(x)/003) and its pool.
+function affed(what)
+  local v = ataxia.afflictions[what:lower()]
+  if v == nil or v == false then return false end
+  if type(v) == "number" then return v > 0 end
+  return true
+end
+ok, err = pcall(dofile, "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua")
+if not ok then error("Failed to load can(x)/003: " .. tostring(err)) end
+treeCurableAffsV3 = { "asthma", "slickness", "clumsiness", "haemophilia" }
+
 -- Blademaster battlerage config (as get_Battlerage builds it, target already baked in)
 ataxiaBasher.battlerage = {
   Blademaster = {
@@ -367,11 +378,13 @@ end)
 
 describe("ataxiaBasher_magiShouldBloodboil", function()
   -- Bloodboil fires from magiBashing's equilibrium slot for two independent reasons:
-  --   CURE  -- 3+ real afflictions while OUR tree tattoo is on balance (ataxiaTemp.usedTree).
+  --   CURE  -- the class-cure rule (can(x)/003): 3 afflictions that a random cure can take.
   --   HEAL  -- Hot Springs boon + low HP + the boon's 30s heal off cooldown.
   local function bloodboilReset()
     gmcp.Char.Status.class = "Magi"
-    ataxiaTemp.usedTree = true                -- OUR tree tattoo is on balance (down)
+    ataxiaTemp.class = "Magi"
+    ataxiaTemp.activeCureUsed = nil
+    ataxiaTemp.loadCureSince, ataxiaTemp.loadCureLastAt, ataxiaTemp.loadCureBackoffUntil = nil, nil, nil
     magiHotSprings = false                    -- heal boon off unless a test enables it
     ataxia.vitals.mp = 1000                   -- plenty of mana
     ataxia.vitals.hpp = 100                   -- full HP unless a test lowers it
@@ -379,13 +392,15 @@ describe("ataxiaBasher_magiShouldBloodboil", function()
   end
 
   -- CURE branch --------------------------------------------------------------
-  it("cures at 3+ affs while OUR tree is on balance", function()
-    bloodboilReset()
+  it("cures at 3+ affs, with the tree up or down (the user's rule, v4.7.484)", function()
+    bloodboilReset(); ataxiaTemp.usedTree = nil
+    expect(ataxiaBasher_magiShouldBloodboil()).toBe(true)
+    bloodboilReset(); ataxiaTemp.usedTree = true
     expect(ataxiaBasher_magiShouldBloodboil()).toBe(true)
   end)
 
-  it("holds while OUR tree tattoo is up (passive cure handles it)", function()
-    bloodboilReset(); ataxiaTemp.usedTree = nil
+  it("holds while bloodboil is on cooldown: a refused cast would cost the round", function()
+    bloodboilReset(); ataxiaTemp.activeCureUsed = true
     expect(ataxiaBasher_magiShouldBloodboil()).toBe(false)
   end)
 
@@ -450,9 +465,8 @@ describe("ataxiaBasher_magiShouldBloodboil", function()
 
   it("is reload-safe: nil afflictions do not crash even past the mana guard (exercises the cure loop)", function()
     bloodboilReset()
-    ataxia.vitals = { mp = 1000, hpp = 100 }   -- mana passes the guard so we reach the cure loop
-    ataxiaTemp.usedTree = true                  -- force into the cure path
-    ataxia.afflictions = nil                    -- `affs or {}` must keep pairs() from crashing
+    ataxia.vitals = { mp = 1000, hpp = 100 }   -- mana passes the guard so we reach the cure path
+    ataxia.afflictions = nil                    -- the cure path must not index a nil table
     expect(ataxiaBasher_magiShouldBloodboil()).toBe(false)
     ataxia.vitals = { rage = 0, mp = 1000, hpp = 100 }  -- restore for later blocks
   end)

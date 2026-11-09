@@ -1124,6 +1124,28 @@ at 100/119/124/200). 006 needs none of this: the only cross-round state it reads
 `ataxiaTemp.lastFrontkickArm`, changes only when the target parries that arm; `kickTarget` and
 `slot1Target` are rebuilt every round, and `lastFlashheelLeg` is written but read by nothing live.
 
+## One event's handlers run in registration order, so a fact needs one recorder (v4.7.482-483)
+
+A latch armed by one reader is only as early as that reader. v4.7.482 armed the one-retreat latch in
+`S._checkPursuit`, and the basher's `gmcp.Char.Vitals` handler (`genrunning/004_Autobashing_Functions.lua`,
+registered first) runs before the swarm's. At the landing the basher's `S.disengage` read the latch
+unarmed, its `S.reset` released the move lock, and its `_noteRetreat` wrote over the record of the tumble
+that had just landed. Our own handler then saw no landing, and the panic tumbled back into the room we had
+left (`kb/raw/live/mnemosyne-tumble-back-in_2026-11-09.txt`, lines 41-48).
+
+- **Every reader and writer records the fact first.** `S._noteLanding()` is safe to call twice, and
+  `_retreatSpent`, `_noteRetreat`, `_forgetUnlandedRetreat` and `_checkPursuit` all call it before they
+  do anything else, so the order of the handlers stops mattering.
+- **Do not depend on the order of GMCP and text.** In that log the GMCP came first (see
+  `kb/mechanics/balance-and-queueing.md`). The swarm's ice code treats the order as open. Either way, a
+  reader must detect the fact from the state it can see, and must not wait for a line.
+- **Cap the total, not each path.** Three retreat paths with their own gates sent seven retreats in 35 s,
+  and the budget on one of them never bounded the sum. A limit on a behaviour lives where every path that
+  performs it must read it (`S._retreatBlock`).
+- **A replay test can pass for the wrong reason.** The first replay used an escape, and an escape's
+  U-turn refusal (`S._fled`) hid the hole. Replayed with a pull, all seven tests failed on the old code.
+  Before you trust a replay, run it on the old code and read which guard stopped it.
+
 ## Quality Gates (Hooks)
 
 Hooks in `.claude/hooks/` run automatically and block operations that fail validation:
