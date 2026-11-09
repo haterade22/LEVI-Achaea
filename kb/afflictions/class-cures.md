@@ -7,7 +7,7 @@ sources:
   - kb/raw/players/fitness-2026-11-01.txt                           # the user: fitness needs balance and eq
   - kb/raw/logs/                                                    # Fitness in detail: 11 fires
 code: src_new/triggers/levi_ataxia/for_levi/leviticus/passive_active/
-last_verified: 2026-11-01
+last_verified: 2026-11-09
 ---
 
 # Class cures: how the target fights back
@@ -86,6 +86,40 @@ holds it (`raw/logs/ours/2026-10-27_112717_Tabethys.log`:12659-12676). How the g
 
 "Too weary" prints during the lockout as well, so that refusal says nothing about the clock.
 `abilities.json` has no lockout: its `cooldown` field means balance spent.
+
+## Our own class cure while bashing (v4.7.484)
+
+The user, 2026-11-09: "we should be using our class active cures if we have 3 or more afflictions
+on us especially if we have miracle boon." The user chose bashing only, and 3 with or without the
+boon. PvP keeps the lock-only rule. Code: `ataxia_loadCure*` in `can(x)/003_Lock_breakers.lua`, and
+the round in `ataxiaBasher_assembleAttack` (`basher/001`).
+
+**Miracle** (uncommon): "Your class-related active curing ability now cures an additional
+affliction." (`mnemosyne/010_Boon_Seed.lua`). It needs no code. The game cures the extra affliction,
+and GMCP reports it. Whether FITNESS counts as that ability is not known.
+
+**What counts toward the 3:** our afflictions that are in `treeCurableAffsV3`. ASSUMED: a class cure
+takes from the same pool as the tree. The game's flag `NoRandomCure` supports this
+([database.md](database.md)), so prone, laceratedthroat and a damaged limb do not count. The pool
+leaves out 13 afflictions that have no such flag, among them the stacking fractures, so the count
+can read low. That leaves the cure idle. It does not waste it.
+
+| Class | Sent | Extra condition |
+|---|---|---|
+| Serpent | `shrugging` | equilibrium up (the v4.7.480 hold) |
+| Alchemist | `educe salt` | 200 mana (wiki) |
+| Depthswalker | `chrono accelerate boost` | plain `chrono accelerate` while prone or above `ataxiaBasher.dwAgeCap` (400). CONFIRMED: a boost adds 340 years (`raw/logs/2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt`:2094) |
+| Magi | `cast bloodboil` | 75 mana; `magiBashing` owns the round, so its battlerage rides |
+| Shaman | `invoke purification` | |
+| Jester, Occultist | `fling fool at me` | not prone (HELP) |
+| Dragon | `dragonheal` | |
+| Earth Lord | `terran eruption` | |
+| Knights, Monk, Blademaster, Druid, Sentinel | `fitness` | **asthma up**, equilibrium up. FITNESS cures nothing else |
+
+**Not wired.** Each needs our first-person lines captured, or we cannot see the cure go out:
+Blademaster ALLEVIATE (2.75 s equilibrium, 75 mana), Druid and Sentinel MIGHT (4.5 s equilibrium),
+Druid and Sylvan GROVE CURE (5 s equilibrium), Psion EXPUNGE (3 s equilibrium). Psion has no row in
+`ACTIVE_CURE_BLOCKERS`, so `ataxia_canActive` is false and EXPUNGE does not fire for a lock either.
 
 ## Passive cures (about every 10s, voyria first)
 

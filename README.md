@@ -68,6 +68,7 @@ The GUI system (zGUI Redux) was originally created by **Zulah**. It has been enh
 | **Safety System** | Layered danger levels (shield/flee/wait), death recovery with safe-room retreat, stuck detection |
 | **Bashing HUD** | Live combat panel — target name, mob health bar, colored HP/WP/EP read straight from GMCP, DPS and session stats (kills/crits/gold/time) |
 | **No-Flee Areas** | World Tree & Mnemosyne shield instead of fleeing (nowhere to run) and keep attacking |
+| **Class Cure at 3 Afflictions** | While bashing, 3 or more afflictions that a random cure can take bring out your class's active cure (shrugging, salt, accelerate, bloodboil and so on). FITNESS classes use it only with asthma. PvP keeps the lock-only rule |
 | **Battlerage** | Generic and crowd-control handlers with rage conservation |
 | **Stormhammer** | Dirty-flag cached AoE target list for multi-target rooms |
 | **Legend Deck** | Data-driven pre-combat card draws for dangerous rooms |

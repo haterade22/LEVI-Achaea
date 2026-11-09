@@ -198,6 +198,9 @@ function ataxia_lockBreakHeartbeat()
 	-- something to do the cheap outs are already gone -- the whole plan is to never get there.
 	local ok2, err2 = pcall(ataxia_preLockEscalate)
 	if not ok2 then cecho("\n<red>[LOCK] pre-lock error: " .. tostring(err2)) end
+	-- After the lock checks, so a lock-break owns the 1.5 s throttle on that prompt.
+	local ok3, err3 = pcall(ataxia_loadCureHeartbeat)
+	if not ok3 then cecho("\n<red>[CURE] heartbeat error: " .. tostring(err3)) end
 end
 
 
@@ -244,10 +247,12 @@ function ataxia_canActive()
 				return true
 			end
     elseif string.find(ataxiaTemp.class, "Elemental") then
+      -- Weariness BLOCKS the cure (kb/afflictions/class-cures.md). This test was inverted until
+      -- v4.7.484, so an Earth Lord could send ERUPTION only while weariness refused it.
       if affed("weariness") then
-        return true
-      else
         return false
+      else
+        return true
       end
 		else
 			return false
@@ -296,6 +301,20 @@ end
 -- FITNESS is invisible in combat logs -- the 2026-08-19 analysis initially concluded it had never
 -- been sent, when in fact it fired twice and the server's replies were the only evidence. The
 -- explicit [LOCK] echo added in v4.7.275 exists so a log can answer that question directly.
+function ataxia_activeCureCommand(class)
+	if string.find(class, "Dragon") then
+		return "dragonheal"
+	elseif string.find(class, "Earth") then
+		return "terran eruption"
+	elseif class == "Depthswalker" and affed("prone") and affed("paralysis") then
+		-- "being prone will make boosting the process impossible" (kb/raw/wiki/Aeonics.wiki:106).
+		-- Prone and paralysed we cannot stand first (ataxia_breakLock), so this sent, every 1.5 s, a
+		-- boost the wiki says cannot work. The plain acceleration cures one affliction.
+		return "chrono accelerate"
+	end
+	return LOCK_BREAKERS[class]
+end
+
 function ataxia_breakLock()
 	local class = ataxiaTemp.class
 	if type(class) ~= "string" then return end
@@ -304,19 +323,7 @@ function ataxia_breakLock()
 		send("stand",false)
 	end
 
-	local cmd
-	if string.find(class, "Dragon") then
-		cmd = "dragonheal"
-	elseif string.find(class, "Earth") then
-		cmd = "terran eruption"
-	elseif class == "Depthswalker" and affed("prone") and affed("paralysis") then
-		-- "being prone will make boosting the process impossible" (kb/raw/wiki/Aeonics.wiki:106).
-		-- Prone and paralysed we cannot stand first (above), so this sent, every 1.5 s, a boost the
-		-- wiki says cannot work. The plain acceleration cures one affliction.
-		cmd = "chrono accelerate"
-	else
-		cmd = LOCK_BREAKERS[class]
-	end
+	local cmd = ataxia_activeCureCommand(class)
 
 	-- v4.7.275: was `send(lockBreaker[ataxiaTemp.class], false)` unguarded -- an unmapped class
 	-- (or a reworded charstat) reached send(nil), which errors and takes the whole prompt handler
@@ -327,6 +334,154 @@ function ataxia_breakLock()
 	end
 
 	cecho("\n<yellow>[LOCK]<reset> Breaking lock: <white>" .. cmd)
+	send(cmd, false)
+end
+
+--------------------------------------------------------------------------------
+-- CLASS CURE AT 3 AFFLICTIONS, WHILE BASHING (v4.7.484, the user, 2026-11-09).
+--
+-- User: "we should be using our class active cures if we have 3 or more afflictions on us".
+-- The lock-breaker above fires only for a lock or a forming lock. In a crowded ripple we hold many
+-- afflictions and no lock, so the cure sat ready and unused.
+--
+-- BASHING ONLY (the user's choice). In PvP, 3 afflictions is the normal state, so the rule would
+-- spend the cure on nearly every cooldown and delay the offence. PvP keeps the lock-only rule.
+--
+-- THE MIRACLE BOON NEEDS NO CODE. The user chose one threshold with or without it. The game cures
+-- the extra affliction, and GMCP reports the removal.
+--
+-- WHAT COUNTS. A random cure cannot take a NoRandomCure affliction (prone, laceratedthroat, a
+-- damaged limb), so those do not count. treeCurableAffsV3 is the list of what a random cure takes
+-- (kb/afflictions/database.md). An affliction that is not in it does not count, which leaves the
+-- cure idle rather than spent on nothing.
+--
+-- TWO PATHS, because the game's queue decides who gets equilibrium:
+--   1. THE ROUND (ataxia_loadCureRound, called from ataxiaBasher_assembleAttack). A queued attack
+--      takes equilibrium the moment it returns, before any prompt can show it free, so a class
+--      whose attack spends equilibrium would never see it up. The cure replaces the round. It takes
+--      the whole round because a round must have one equilibrium spender (the v4.7.193 rule). A
+--      once-per-room rider that the game refused would still stamp its guard.
+--   2. THE PROMPT (ataxia_loadCureHeartbeat). Attacks are held during a recovery, so no round runs.
+--      It needs balance AND equilibrium up on the prompt, and then anything queued has already run.
+--------------------------------------------------------------------------------
+local LOAD_CURE_MIN = 3
+-- With no use line for this long, the cure was refused. It covers a full equilibrium recovery.
+local LOAD_CURE_WAIT = 6
+-- A longer silence between two offers means a gate held us, so the wait starts again.
+local LOAD_CURE_GAP = 3
+local LOAD_CURE_BACKOFF = 20
+-- From the ability pages. The other cures have no mana cost in the kb.
+local LOAD_CURE_MANA = { Alchemist = 200, Magi = 75 }
+
+-- How many of our afflictions a random cure can take.
+function ataxia_randomCurableCount()
+	local pool = treeCurableAffsV3
+	if type(pool) ~= "table" then return 0 end
+	local n = 0
+	for i = 1, #pool do
+		if affed(pool[i]) then n = n + 1 end
+	end
+	return n
+end
+
+-- The command to use for this load of afflictions, or nil.
+function ataxia_loadCureCommand()
+	local class = ataxiaTemp and ataxiaTemp.class
+	if type(class) ~= "string" then return nil end
+	if not ataxia_canActive() then return nil end
+	-- User, for FITNESS: "It shouldnt fitness without EQ". SHRUGGING is held the same way. The round
+	-- attacks meanwhile, and the next re-queue with equilibrium up carries the cure.
+	if ataxia_activeCureHeldForEq() then return nil end
+	if ataxia_randomCurableCount() < LOAD_CURE_MIN then return nil end
+
+	local cmd = ataxia_activeCureCommand(class)
+	if not cmd then return nil end
+
+	-- FITNESS cures asthma and nothing else. With no asthma it prints "You are already quite fit."
+	-- and still costs 2.8 s of balance (kb/afflictions/class-cures.md).
+	if cmd == "fitness" and not affed("asthma") then return nil end
+	-- Prone blocks the Fool (HELP). The round's stand comes first, and the next round sends it.
+	if cmd == "fling fool at me" and affed("prone") then return nil end
+
+	local mana = LOAD_CURE_MANA[class]
+	if mana and (tonumber(ataxia.vitals and ataxia.vitals.mp) or 0) < mana then return nil end
+
+	if class == "Depthswalker" then
+		-- A boost ages us by 340 years (kb/raw/logs/2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt
+		-- :2094). Bashing must not price out the chrono kit, so it obeys the cap that blur obeys.
+		local dw = ataxiaTables and ataxiaTables.depthswalker
+		local age = tonumber(dw and dw.age) or 0
+		local cap = tonumber(ataxiaBasher and ataxiaBasher.dwAgeCap) or 400
+		if affed("prone") or age > cap then return "chrono accelerate" end
+	end
+	return cmd
+end
+
+-- The command to send now, or nil. A cure with no fire line never sets activeCureUsed, so without
+-- this limit a refused cure would replace every round and stop the attacks.
+function ataxia_loadCureReady()
+	local cmd = ataxia_loadCureCommand()
+	if not cmd then
+		ataxiaTemp.loadCureSince = nil
+		return nil
+	end
+
+	local now = (getEpoch and getEpoch()) or os.time()
+	if ataxiaTemp.loadCureBackoffUntil then
+		if now < ataxiaTemp.loadCureBackoffUntil then return nil end
+		ataxiaTemp.loadCureBackoffUntil = nil
+	end
+
+	local last = ataxiaTemp.loadCureLastAt
+	ataxiaTemp.loadCureLastAt = now
+	if ataxiaTemp.loadCureSince and last and (now - last) >= LOAD_CURE_GAP then
+		ataxiaTemp.loadCureSince = nil
+	end
+
+	local since = ataxiaTemp.loadCureSince
+	if not since then
+		ataxiaTemp.loadCureSince = now
+		cecho("\n<yellow>[CURE]<reset> " .. ataxia_randomCurableCount() .. " afflictions: <white>" .. cmd)
+		return cmd
+	end
+	if (now - since) >= LOAD_CURE_WAIT then
+		ataxiaTemp.loadCureSince = nil
+		ataxiaTemp.loadCureBackoffUntil = now + LOAD_CURE_BACKOFF
+		cecho("\n<red>[CURE]<reset> No answer to <white>" .. cmd .. "<reset>: attacking, retry in " .. LOAD_CURE_BACKOFF .. " s.")
+		return nil
+	end
+	return cmd
+end
+
+-- The round's command, or "". magiBashing owns the Magi's, so that its battlerage still rides.
+function ataxia_loadCureRound()
+	if ataxiaTemp and ataxiaTemp.class == "Magi" then return "" end
+	return ataxia_loadCureReady() or ""
+end
+
+-- True while a cure now could delay a move or a command we are waiting on.
+local function loadCureWouldDelay()
+	local T = ataxiaTemp
+	if T.escapeMode or T.phialHold or T.dissectHold then return true end
+	local S = ataxia.mnemosyne and ataxia.mnemosyne.swarm
+	if S and S.moveLocked and S.moveLocked() then return true end
+	-- A panic tumble waits in the queue while the state already reads "recovering".
+	if S and S._retreatInFlight and S._retreatInFlight() then return true end
+	return T.swarmHold and not (S and S.state == "recovering") and true or false
+end
+
+function ataxia_loadCureHeartbeat()
+	if not (ataxiaBasher and ataxiaBasher.enabled) or ataxiaBasher.paused then return end
+	if ataxia_paused and ataxia_paused() then return end
+	if attemptedLockBreak then return end
+	local v = ataxia.vitals
+	if not v or not v.bal or not v.eq then return end
+	if loadCureWouldDelay() then return end
+
+	local cmd = ataxia_loadCureReady()
+	if not cmd then return end
+	attemptedLockBreak = tempTimer(1.5, [[ attemptedLockBreak = nil ]])
+	if affed("prone") and not affed("paralysis") then send("stand", false) end
 	send(cmd, false)
 end
 

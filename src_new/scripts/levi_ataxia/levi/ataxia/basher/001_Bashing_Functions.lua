@@ -1134,6 +1134,16 @@ function ataxiaBasher_assembleAttack()
   end
 
   if not ataxiaTemp.bashFlee and not ataxia.afflictions.paralysis and not ataxia.afflictions.aeon and not ataxia.afflictions.peace and not ataxia.afflictions.transfixation and not ataxia.afflictions.webbed and not ataxia.afflictions.impaled and not ataxia.afflictions.constricted and not ataxia.afflictions.deepsleep and not ataxia.afflictions.entangled and not ataxia.afflictions.unconsciousness and not ataxia.afflictions.snared then
+    -- CLASS CURE AT 3 AFFLICTIONS (v4.7.484, can(x)/003). It takes the whole round, and the command
+    -- stays the same on each re-queue until the game's use line ends it. The swarm decorator is
+    -- not called, so a pending pull stays for the next round, which has the swing it needs.
+    if ataxia_loadCureRound then
+      local okCure, cureCmd = pcall(ataxia_loadCureRound)
+      if okCure and type(cureCmd) == "string" and cureCmd ~= "" then
+        send("queue addclearfull freestand stand"..sp..command..ldeckCmd..cureCmd)
+        return
+      end
+    end
     -- Death Stare (v4.7.306): class-agnostic eq rider, FIRST in the chain so it lands on a live
     -- target. Resistance recon rides beside it as a direct send (never in the chain -- CONSIDER is
     -- balanceless and would execute on every rebuild). Both pcall-guarded like the card draw.
@@ -1988,11 +1998,8 @@ end
 --   HEAL -- with the Hot Springs boon (Mnemosyne) bloodboil ALSO heals 25% max health + 5% willpower
 --           on a 30s cooldown, making it a bashing heal like the Shaman's invoke-regeneration
 --           (shamanBashing healhealth < 60). Fire when HP is low and that 30s heal is off cooldown.
---   CURE -- 3+ afflictions while OUR OWN tree tattoo is on balance. `ataxiaTemp.usedTree` is set on
---           "You touch the tree of life tattoo." and cleared on "You may utilise the tree tattoo
---           again." (curing_bals/003,004) -- OUR tree. NOT tBals.tree: that tracks the TARGET's tree
---           and is reset to true on every denizen target-change/kill, so it never means "our tree is
---           down" while bashing (the feature was inert against it).
+--   CURE -- the class-cure rule (v4.7.484, can(x)/003): 3 afflictions that a random cure can take.
+--           Until v4.7.484 it also waited for our tree tattoo to be down.
 -- Skipped under haemophilia (the cast just fails) and when mana can't cover the 75.
 function ataxiaBasher_magiShouldBloodboil()
   if gmcp.Char.Status.class ~= "Magi" then return false end
@@ -2011,16 +2018,8 @@ function ataxiaBasher_magiShouldBloodboil()
     return true
   end
 
-  -- CURE: 3+ REAL afflictions while our tree is on balance. Skip incoming_* predictions and cured
-  -- stacks left at 0 -- both inflate a raw key count (blindness/deafness/insomnia are already never
-  -- stored in ataxia.afflictions, so bashing blind/deaf doesn't count).
-  if ataxiaTemp.usedTree then
-    local count = 0
-    for k, v in pairs(affs) do
-      if v and v ~= 0 and type(k) == "string" and not k:find("^incoming_") then count = count + 1 end
-    end
-    if count >= 3 then return true end
-  end
+  -- CURE: the shared rule. It reads activeCureUsed, so a cure on cooldown no longer costs the round.
+  if ataxia.afflictions and ataxia_loadCureReady and ataxia_loadCureReady() then return true end
 
   return false
 end

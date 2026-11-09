@@ -458,6 +458,13 @@ leapt the raw `command` string and `addclearfull`-wiped the explorer's queue.
   formulation is unconfirmed, and guessing commands is how bare `BOONS`/`PERFORMANCE` shipped
   broken. Inert until set.
 
+- **Class cure at 3 afflictions** (`ataxia_loadCure*`, `can(x)/003`, v4.7.484): the bash round
+  carries it, and during a recovery the prompt sends it, because attacks are held there and no
+  round runs. It waits while we leave a room (`escapeMode`) and while a tumble is in the air or
+  still queued (`S.moveLocked`, `S._retreatInFlight`): a `free` queue waits for equilibrium too, so
+  a cure sent then would delay the tumble. The Miracle boon needs no code. Full rule:
+  `kb/afflictions/class-cures.md`.
+
 - **Forced disengage** (`S.disengage(reason)`, v4.7.215): leave on a TACTICAL judgement rather
   than an HP reading. The ladder above is entirely reactive, which is useless against an enemy
   whose kill pattern is "apply an unsurvivable lock, then wait" — by the time HP crosses

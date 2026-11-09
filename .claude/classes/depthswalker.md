@@ -454,7 +454,7 @@ accelerate:
   skill: Aeonics
   effect: "Passive cure for DW"
   blocked_by: [recklessness]
-  notes: "Class-specific passive cure. Our lock-breaker sends `chrono accelerate boost`, and plain `chrono accelerate` while prone and paralysed: 'being prone will make boosting the process impossible' (kb/raw/wiki/Aeonics.wiki:106; can(x)/003_Lock_breakers.lua:279-283, 2026-11-08, not yet run in Mudlet)"
+  notes: "Class-specific passive cure. Our lock-breaker sends `chrono accelerate boost`, and plain `chrono accelerate` while prone and paralysed: 'being prone will make boosting the process impossible' (kb/raw/wiki/Aeonics.wiki:106; can(x)/003_Lock_breakers.lua, ataxia_activeCureCommand, 2026-11-08, not yet run in Mudlet). While bashing (v4.7.484, not yet run in Mudlet), 3 afflictions that a random cure can take send it too, plain while prone or above ataxiaBasher.dwAgeCap (400), because a boost adds 340 years (see kb/afflictions/class-cures.md)"
 
 shift:
   skill: Shadowmancy
