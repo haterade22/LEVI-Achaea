@@ -143,6 +143,35 @@ end)
 
 -- ─── gotAff() ───────────────────────────────────────────────────────────────
 
+describe("gotAff() — a blackout from a knight class arms the impale prediction", function()
+  local function blackoutFrom(class)
+    local savedFacing, savedTimer = ataxia_facingClass, tempTimer
+    local armed = false
+    ataxia_facingClass = function() return class end
+    tempTimer = function(_, code)
+      if type(code) == "string" and code:find("curing predict impaled", 1, true) then armed = true end
+      return 1
+    end
+    gmcp.Char.Afflictions.Add = { name = "blackout" }
+    local ok, err = pcall(gotAff)
+    ataxia_facingClass, tempTimer = savedFacing, savedTimer
+    ataxia.afflictions = {}
+    assert(ok, err)
+    return armed
+  end
+
+  it("Runewarden, Infernal and Paladin all arm it", function()
+    expect(blackoutFrom("Runewarden")).toBeTrue()
+    expect(blackoutFrom("Infernal")).toBeTrue()
+    expect(blackoutFrom("Paladin")).toBeTrue()
+  end)
+
+  it("another class or no class does not", function()
+    expect(blackoutFrom("Serpent")).toBeFalse()
+    expect(blackoutFrom(nil)).toBeFalse()
+  end)
+end)
+
 describe("gotAff() — basic state tracking", function()
   it("sets a plain affliction in ataxia.afflictions", function()
     ataxia.afflictions = {}

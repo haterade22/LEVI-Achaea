@@ -76,6 +76,8 @@ Rules from our code and history (CONFIRMED-in-code; details in CLAUDE.md, "Serve
 **There is a hard cap.** A live capture showed 22 of 22 in use, so `CURINGSET NEW` can fail
 silently. `ataxia/009_Curingset_State.lua` reads `CURINGSET LIST` before creating anything.
 
+**Which set is active.** `classDetect` follows whoever hits us: a class line that names us picks the set. A change of target picks a set only while no one has hit us. With two or more attackers, or in a party, the set stays on `normal`. The stored swaps and `curing prioaff` reactions answer `ataxia_facingClass()`: the newest attacker's class, else the target's (`kb/CONFLICTS.md`, Resolved, was #75).
+
 ### One priority list per set (v4.7.480)
 
 The user, 2026-11-08: "The purpose of curing sets is to set priorities based on the class you are facing. Classes through skills can only give specific afflictions. So we do curing  sets for them. If Infernal can never give impatience. no need for Impatience to be curing priority impatience 2"

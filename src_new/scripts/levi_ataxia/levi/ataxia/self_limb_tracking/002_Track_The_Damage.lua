@@ -350,7 +350,7 @@ function ataxia_brokenLimbFound(event, affliction)
 			if not affed("damagedleftarm") and not affed("damagedrightarm") and ataxiaTemp.salvelockWait then
 				killTimer(ataxiaTemp.salvelockWait)
 				ataxiaTemp.salvelockWait = nil
-				local cls = ataxiaNDB_getClass(target)
+				local cls = ataxia_facingClass()
 				if cls == "Infernal" or cls == "Apostate" then
 					send("queue addclear free restore", false)
 				end
@@ -361,7 +361,7 @@ function ataxia_brokenLimbFound(event, affliction)
 			if not affed("damagedleftarm") and not affed("damagedrightarm") and ataxiaTemp.salvelockWait then
 				killTimer(ataxiaTemp.salvelockWait)
 				ataxiaTemp.salvelockWait = nil
-				local cls = ataxiaNDB_getClass(target)
+				local cls = ataxia_facingClass()
 				if cls == "Infernal" or cls == "Apostate" then
 					send("queue addclear eqbal restore", false)
 				end

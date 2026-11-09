@@ -203,6 +203,10 @@ function afflictionList()
   if zgui then zgui.showAffs() end
 end
 
+-- Lua's `x == ("A" or "B")` compares x with "A" only, so a blackout from the other two never armed
+-- the prediction.
+local IMPALE_CLASSES = { Runewarden = true, Infernal = true, Paladin = true }
+
 function gotAff()
 	local ignore = {"blindness", "deafness", "insomnia"}
 	local aff = gmcp.Char.Afflictions.Add.name
@@ -231,13 +235,13 @@ function gotAff()
     send("smoke malachite") 
   ---AUTO TUMBLER
   --If we have the below afflictions then tumble
-    if ataxia.afflictions.damagedrightleg and ataxia.afflictions.damagedleftleg and ataxiaNDB_getClass(target) ~= "Blademaster" then
+    if ataxia.afflictions.damagedrightleg and ataxia.afflictions.damagedleftleg and ataxia_facingClass() ~= "Blademaster" then
     getdirectionn()
     send("tumble " ..random_direction)
-    elseif ataxia.afflictions.damagedrightleg and ataxia.afflictions.damagedleftleg and ataxiaNDB_getClass(target) == "Blademaster" then
+    elseif ataxia.afflictions.damagedrightleg and ataxia.afflictions.damagedleftleg and ataxia_facingClass() == "Blademaster" then
     expandAlias("hh")
     elseif ataxia.afflictions.brokenrightarm and ataxia.afflictions.brokenleftarm then
-    local cls = ataxiaNDB_getClass(target)
+    local cls = ataxia_facingClass()
     if cls == "Infernal" or cls == "Apostate" then
       send("restore")
     end
@@ -252,18 +256,18 @@ function gotAff()
   -- The two arm (and, below, leg) tests are bracketed: unbracketed, `and` bound tighter than
   -- `or`, so ANY damaged right arm or leg, against any class or denizen, ran these branches
   -- (v4.7.451). Since 2026-10-23 EMBRACE needs no vines (kb/CONFLICTS.md #46).
-  elseif (aff == "damagedrightarm" or aff == "damagedleftarm") and not ataxia.afflictions.prone and ataxiaNDB_getClass(target) == "Druid" then
+  elseif (aff == "damagedrightarm" or aff == "damagedleftarm") and not ataxia.afflictions.prone and ataxia_facingClass() == "Druid" then
     send("cq all;goto 11090")
     ataxia_boxEcho("EMBRACE DANGER NEED TO RUN", "goldenrod")
     ataxia_boxEcho("EMBRACE DANGER NEED TO RUN", "goldenrod")
 
-  elseif aff == "entangled" and ataxiaNDB_getClass(target) == "Druid" then
+  elseif aff == "entangled" and ataxia_facingClass() == "Druid" then
     getdirectionn()
     send("apply mass to arms")
     send("curing queue insert 1 restoration to legs")
     ataxia_boxEcho("WE ARE PREAPPLYING", "yellow")
     send("tumble " ..random_direction)
-   elseif (aff == "damagedrightleg" or aff == "damagedleftleg") and ataxia.afflictions.prone and ataxiaNDB_getClass(target) == "Druid" then
+   elseif (aff == "damagedrightleg" or aff == "damagedleftleg") and ataxia.afflictions.prone and ataxia_facingClass() == "Druid" then
     getdirectionn()
     send("tumble " ..random_direction)
     
@@ -278,7 +282,7 @@ function gotAff()
 		-- command; fall through to whatever else the chain offers.
 		if ataxiaBasher.enabled and ataxiaBasher.treeblackout and not mnemRimewrought then
 			send("touch tree")
-		elseif type(target) == "string" and ataxiaNDB_getClass(target) == ("Runewarden" or "Infernal" or "Paladin") then
+		elseif IMPALE_CLASSES[ataxia_facingClass() or ""] then
 			tempTimer(2.5, [[send("curing predict impaled",false)]])
 		end
 	elseif aff == "prone" then
@@ -311,7 +315,7 @@ function gotAff()
   -- Asthma gained while aeon active - prioritize asthma so we can smoke elm
   elseif aff == "asthma" and ataxia.afflictions.aeon then
     send("curing prioaff asthma")
-  elseif aff == "impatience" and ataxiaNDB_getClass(target) == "Serpent" then
+  elseif aff == "impatience" and ataxia_facingClass() == "Serpent" then
     myaeon = true
   -- Darkshade duration tracking - auto-prioritize after threshold
   elseif aff == "darkshade" then

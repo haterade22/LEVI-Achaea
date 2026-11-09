@@ -65,8 +65,8 @@ end
 -- Then classDetect's attacker class, but only when that attacker IS the target: attackerClass is
 -- whoever last hit US, so in a group it can be a bystander's class.
 -- This replaced the global tarClass, which nothing assigned, so the class was always "".
-function ataxia_targetClass()
-  if type(target) ~= "string" or target == "" then return "" end
+local function targetClassName()
+  if type(target) ~= "string" or target == "" then return nil end
   local class
   if ataxiaNDB_getClass then
     local c = ataxiaNDB_getClass(target)
@@ -79,7 +79,20 @@ function ataxia_targetClass()
       class = cd.attackerClass
     end
   end
+  return class
+end
+
+function ataxia_targetClass()
+  local class = targetClassName()
   return class and class:lower() or ""
+end
+
+-- The class our DEFENCES answer, in the NDB's own case, or nil: whoever hit us last in this fight,
+-- else our target's (kb/CONFLICTS.md #75, the user's choice 2026-11-09). The offence asks
+-- ataxia_targetClass instead, because it answers the person we attack.
+function ataxia_facingClass()
+  local cd = classDetect
+  return (cd and cd.facingClass and cd.facingClass()) or targetClassName()
 end
 
 -- We want clumsiness on every class it affects. The user: "33 percent chance to miss your target is

@@ -317,11 +317,21 @@ describe("Runewarden DWB: impatience against a Serpent", function()
     expect(lastRound()).toBeNil()
   end)
 
-  it("with the shield down the round is the shield, as before", function()
+  it("with the shield down and the lock-breaker used, the round is the shield", function()
     dwbWorld(nil)
+    ataxiaTemp.activeCureUsed = true
     dwbRunie.dispatch()
     expect(sent("curing prioaff impatience")).toBeTrue()
     expect(lastRound()).toBe("queue addclearfull free touch shield")
+  end)
+
+  it("with a lock-breaker due the round holds: lock-breaker, then shield", function()
+    dwbWorld(nil)
+    ataxiaTemp.class = "Runewarden"
+    gmcp.Char.Status = { class = "Runewarden" }
+    dwbRunie.dispatch()
+    expect(sent("curing prioaff impatience")).toBeTrue()
+    expect(lastRound()).toBeNil()
   end)
 end)
 

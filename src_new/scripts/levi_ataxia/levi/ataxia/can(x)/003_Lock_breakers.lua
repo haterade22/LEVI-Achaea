@@ -259,6 +259,39 @@ function ataxia_canActive()
 	end
 end
 
+--------------------------------------------------------------------------------
+-- LOCK-BREAKER, THEN SHIELD (the user, 2026-11-09, kb/CONFLICTS.md #77).
+--
+-- Both spend equilibrium: the shield tattoo costs 3.40 s on our seat, and the `cq all` sent in front
+-- of it clears a lock-breaker the game holds. So an automatic shield waits while ataxia_lockBreak
+-- would still act. A cure held for equilibrium counts as due. A blocked cure and one on cooldown do
+-- not, because the shield would then wait for nothing.
+--
+-- The wait ends after SHIELD_WAIT_MAX seconds. ataxia_lockBreak re-sends every 1.5 s until a line
+-- says the cure was used, so a cure the game keeps refusing would otherwise hold the shield off
+-- for the whole fight. 4 s covers one full equilibrium recovery.
+--
+-- Not gated: the instant-kill shield (myinstantcath) and the limb reaction shield. Those answer a
+-- blow that lands now.
+--------------------------------------------------------------------------------
+local SHIELD_WAIT_MAX = 4
+
+function ataxia_lockBreakDue()
+	if ataxiaTemp.activeCureUsed then return false end
+	if not (ataxia_needLockBreak() or ataxia_needPreLockCure()) then return false end
+	return ataxia_canActive()
+end
+
+function ataxia_shieldWaitsForLockBreak()
+	if not ataxia_lockBreakDue() then
+		ataxiaTemp.shieldWaitSince = nil
+		return false
+	end
+	local now = (getEpoch and getEpoch()) or os.time()
+	if not ataxiaTemp.shieldWaitSince then ataxiaTemp.shieldWaitSince = now end
+	return (now - ataxiaTemp.shieldWaitSince) < SHIELD_WAIT_MAX
+end
+
 -- NOTE the `send(cmd, false)` calls below: the `false` suppresses the client echo, which is why
 -- FITNESS is invisible in combat logs -- the 2026-08-19 analysis initially concluded it had never
 -- been sent, when in fact it fired twice and the server's replies were the only evidence. The

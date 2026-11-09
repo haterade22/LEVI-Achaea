@@ -47,7 +47,9 @@ function combatQueue()
   if jestercheese == true or myaeon == true or preventriftlock == true or stoplatency == true then
     ataxiaTemp = ataxiaTemp or {}
     local now = (getEpoch and getEpoch()) or os.time()
-    if not ataxiaTemp.cheeseAt or (now - ataxiaTemp.cheeseAt) >= 4 then
+    -- A due lock-breaker goes first (the user, 2026-11-09), and `cq all` would clear a held one.
+    -- The throttle is tested first and is not stamped, so the shield goes on a later dispatch.
+    if (not ataxiaTemp.cheeseAt or (now - ataxiaTemp.cheeseAt) >= 4) and not ataxia_shieldWaitsForLockBreak() then
       ataxiaTemp.cheeseAt = now
       ataxiaEcho("CLASS CHEESE INCOMMING")
       if gmcp.Char.Status.class == "Magi" then

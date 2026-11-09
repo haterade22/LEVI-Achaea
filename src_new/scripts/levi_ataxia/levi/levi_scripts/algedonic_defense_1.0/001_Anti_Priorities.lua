@@ -90,7 +90,7 @@ Algedonic._handlers = {
   Shaman = "AntiShaman",
   Magi = "AntiMagi",
   Sylvan = "AntiSylvan",
-  Unnameable = "AntiUnnameable",
+  Unnamable = "AntiUnnamable",
   Psion = "AntiPsion",
   Priest = "AntiPriest",
   Sentinel = "AntiSentinel",
@@ -106,8 +106,8 @@ Algedonic._handlers = {
 }
 
 function Algedonic.Prioritize()
-  local targetclass = ataxiaNDB_getClass(target)
-  local handlerName = Algedonic._handlers[targetclass]
+  local facing = ataxia_facingClass()
+  local handlerName = facing and Algedonic._handlers[facing]
   if handlerName and Algedonic[handlerName] then
     Algedonic[handlerName]()
   end
@@ -124,7 +124,7 @@ end
 function Algedonic.AstImpPutBack()
   local ps = ataxia.prioritySwaps
   if not (ps and ps.astImp and ps.astImp.active) then return false end
-  local tc = ataxiaNDB_Exists(target) and ataxiaNDB_getClass(target) or nil
+  local tc = ataxia_facingClass()
   if tc ~= "Serpent" or not (affed("asthma") and affed("weariness")) then return false end
   if ataxia_getPrio("impatience") == 1 then ataxia_restorePrio("impatience") end
   return true
@@ -133,7 +133,7 @@ end
 function Algedonic.ApplySwaps(aff)
   if not ataxia.prioritySwaps then ataxia_resetSwaps() end
   local ps = ataxia.prioritySwaps
-  local tc = ataxiaNDB_Exists(target) and ataxiaNDB_getClass(target) or nil
+  local tc = ataxia_facingClass()
 
   -- scyPara: boost scytherus if paralyzed
   if ps.scyPara and ps.scyPara.active then
@@ -151,8 +151,8 @@ function Algedonic.ApplySwaps(aff)
   end
 
   -- astImp: impatience prio vs Alchemist/Serpent when para+asthma
-  -- Not against a Serpent with asthma and weariness both up. Our reading of the user's "astimp can
-  -- be implemented", 2026-11-08, to confirm (kb/CONFLICTS.md, Resolved, was #74). Those two let a
+  -- Not against a Serpent with asthma and weariness both up. The user confirmed this reading of
+  -- "astimp can be implemented" on 2026-11-09 (kb/CONFLICTS.md, Resolved, was #74). Those two let a
   -- monkshood impulse land. With impatience at 1 its herb goes first, asthma stays, and the next
   -- impulse can give impatience again. astWear below raises asthma. AstImpPutBack undoes a raise
   -- made before the weariness. Asthma at 1 would rank asthma above paralysis, so we do not use it.
@@ -757,7 +757,8 @@ function Algedonic.AntiSerpent()
         -- Not while our shield is up (GMCP Char.Defences, deffing/001): the touch has nothing to
         -- add, and the `cq all` in front of it still cleared our queue, a held lock-breaker with it.
         local shielded = ataxia.defences and ataxia.defences.shield
-        if not shielded and not ataxiaTemp.serpentShieldThrottle then
+        -- A due lock-breaker goes first (the user, 2026-11-09: "Lock breaker and then shield").
+        if not shielded and not ataxiaTemp.serpentShieldThrottle and not ataxia_shieldWaitsForLockBreak() then
             ataxiaTemp.serpentShieldThrottle = true
             tempTimer(4, function() ataxiaTemp.serpentShieldThrottle = nil end)
             send("cq all;touch shield")
@@ -834,8 +835,8 @@ ataxiaTemp.heartseedMode = true
 end
 
 
-function Algedonic.AntiUnnameable()
-if ataxia.afflictions.damageleftleg or ataxia.afflictions.damagedrightleg or ataxia.afflictions.damagedleftarm or ataxia.afflictions.damagedrightarm or ataxia.afflictions.damagedhead then  
+function Algedonic.AntiUnnamable()
+if ataxia.afflictions.damagedleftleg or ataxia.afflictions.damagedrightleg or ataxia.afflictions.damagedleftarm or ataxia.afflictions.damagedrightarm or ataxia.afflictions.damagedhead then  
   -- `horror (5)` -- parenthesised, with a space -- is not a form the game accepts anywhere
   -- else, and a rejected curing command is completely silent. `horror5` is the token the
   -- server itself uses in CURING PRIORITY LIST, so it is a real affliction name; whether
@@ -871,7 +872,7 @@ function Algedonic.AntiPriest()
     -- EMERGENCY DEFENSIVE MODE: 2+ afflictions = approaching kill condition
     if dangerCount >= 2 then
         -- Shield if not already shielded
-        if not hasShield then
+        if not hasShield and not ataxia_shieldWaitsForLockBreak() then
             Algedonic.Echo("<red>PRIEST KILL SETUP - SHIELD!<white>")
             send("touch shield")
         end
@@ -966,7 +967,7 @@ function Algedonic.AntiWaterlord()
   -- EMERGENCY: par + ast + sli = full defensive mode
   -- Clear queue (stop attacking), endure for para, shield for safety
   if hasParalysis and hasAsthma and hasSlickness then
-    send("cq all;endure;touch shield")
+    send(ataxia_shieldWaitsForLockBreak() and "endure" or "cq all;endure;touch shield")
     send("curing prioaff paralysis")
     return
   end
