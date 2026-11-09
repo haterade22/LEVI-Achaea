@@ -536,7 +536,7 @@ disarmed:
     which would wipe a queued recovery before it ran (the same reasoning as the pet passive
     orders, triggers 372/376). The sword uses the configured `longsword` slot via
     ataxia.getWeapon, which falls back to the literal "longsword" (022_User_Config:75,81);
-    plain "shield" is the idiom already used at login (login/001:138,180).
+    plain "shield" is the idiom already used at login (login/001:147,185).
 
 both_arms_broken:
   line:    "You cannot do that because both of your arms must be whole and unbound."

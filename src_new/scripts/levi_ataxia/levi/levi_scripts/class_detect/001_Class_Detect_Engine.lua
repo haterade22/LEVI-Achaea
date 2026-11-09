@@ -212,6 +212,8 @@ end
 -- The one way classDetect changes set. It puts back the swaps of the set we leave and reads the
 -- new one in the same send (ataxia_switchCuringsetSend), so it must read the old name first.
 local function switchSend(setName)
+  -- With the link down the send would be lost, so the state must keep naming the server's set.
+  if ataxiaPrioSets and ataxiaPrioSets.offline then return end
   local from = classDetect.state.currentCuringset
   classDetect.state.currentCuringset = setName
   if ataxia_switchCuringsetSend then

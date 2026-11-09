@@ -149,7 +149,7 @@ curingTableV3 = {
 -- Afflictions a herb eat takes only when nothing else that herb cures is there (onHerbCureV3).
 -- A place in the cure list cannot say this: the 4/2/1 weights give even the LAST of two candidates
 -- a third of the eat, which leaves the other at 0.33, over haveAff's 0.3, so one eat cures neither.
---   fratricide: 25 in our priorities, the bottom (ataxia/001_Default_Curing_Prios.lua:280; the
+--   fratricide: 25 in our priorities, the bottom (ataxia/001_Default_Curing_Prios.lua:311; the
 --   live normal set agrees, kb/raw/live/curing-priority-list_normal_2026-10-10.txt:33), our best
 --   guess at the target's. It stands near the FRONT of both lobelia lists. V3 never saw it until
 --   the Serpent offense recorded it (v4.7.419, serpent/002 onSnapped), so every lobelia eat went

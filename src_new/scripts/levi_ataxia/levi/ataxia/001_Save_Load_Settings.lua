@@ -337,6 +337,10 @@ function ataxia_loadSettings()
   if ataxia.mnemosyne and ataxia.mnemosyne._resumeQueue then
     pcall(ataxia.mnemosyne._resumeQueue, "restored from disk")
   end
+  -- A save taken during a CURINGSET LIST read keeps `_csCallbacks` as an empty table, which
+  -- ataxia_curingsetRefresh (009) takes for a capture in flight, for good. After the merge, which is
+  -- what brings it back.
+  ataxia._csCallbacks, ataxia._csLines, ataxia._csCollectT, ataxia._csEndT, ataxia._csTimer = nil, nil, nil, nil, nil
 
 	ataxia_Echo("I suppose I can lend you my aid. Go and annihilate our foes.")
 

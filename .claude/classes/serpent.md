@@ -476,7 +476,7 @@ v4.7.419.
   Nothing models the delay: `017_Affliction_Management.lua` has no hypochondria clock, and the
   boredom-line trigger (`414_Impatience_1`) records impatience alone, deliberately without
   back-filling hypochondria.
-- **Our code, defence.** Hypochondria is priority 5 (`ataxia/001_Default_Curing_Prios.lua:226`;
+- **Our code, defence.** Hypochondria is priority 5 (`ataxia/001_Default_Curing_Prios.lua:254`;
   row 5 of the live normal set). hypoImp (on by default) raises it to 1 and impatience to 4 when
   lethargy, nausea or addiction is up too (`algedonic_defense_1.0/001_Anti_Priorities.lua:189-196`).
   Since v4.7.419 `Algedonic.AntiSerpent` sends `curing prioaff hypochondria` while it is up and
@@ -729,7 +729,7 @@ fratricide:
       impatience + asthma + weariness).
 
   our_defence: |
-    - Priority 25, the bottom (ataxia/001_Default_Curing_Prios.lua:283; row 25 of the live
+    - Priority 25, the bottom (ataxia/001_Default_Curing_Prios.lua:311; row 25 of the live
       normal set, kb/raw/live/curing-priority-list_normal_2026-10-10.txt:33).
     - fratLock (on by default): fratricide -> 4 when fratricide + asthma + slickness are up
       (algedonic_defense_1.0/001_Anti_Priorities.lua:221-227, restored :331-337).
@@ -737,10 +737,11 @@ fratricide:
       scytherus are up and paralysis is not (:788-790), the "cure fratricide at once when
       scytherus is up" rule. PRIOAFF writes no stored priority.
     - Against a detected Serpent, class detection switches to the in-game `serpent` curingset
-      (class_detect/001_Class_Detect_Engine.lua:62, :224). That set exists
+      (class_detect/001_Class_Detect_Engine.lua:62, :238). That set exists
       (kb/raw/live/curingset-list_2026-10-10.txt:17) but its priority list was never captured, so
       the priority actually in force against a Serpent is unknown. fratLock's write and its
-      restore land in whichever set is active, and the restore writes the normal table's 25.
+      restore land in whichever set is active. Since v4.7.480 the restore writes that set's own value,
+      read from the game (kb/curing/server-side-curing.md), and nothing if it is not known.
 ```
 
 ---

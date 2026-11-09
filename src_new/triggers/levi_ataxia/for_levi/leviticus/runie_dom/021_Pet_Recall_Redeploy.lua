@@ -47,7 +47,7 @@ patterns:
         infernal:    drop hyena  ; order hyena follow me
 
     Nothing in the package ever did that. `falcon recall` is sent from levilogin
-    (001_Login_Function:200) and the `pass` alias; `hyena recall` from the login (208, 224),
+    (001_Login_Function:231) and the `pass` alias; `hyena recall` from the login (239, 255),
     the disengage path (genrunning/003:240) and 127_HYENA_FOLLOW. Every one of those either
     stopped at the recall or went straight to `order <pet> follow me` -- an order aimed at an
     animal still sitting in our inventory. So the pet stayed on us, and for a Runewarden the

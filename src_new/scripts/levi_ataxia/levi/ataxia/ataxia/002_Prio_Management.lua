@@ -167,12 +167,70 @@ end
 -- low. ataxia.curingprio mirrors the ACTIVE set only. A restore on a class set puts back that
 -- set's own value, read from the game, and never the table in 001.
 --
--- ataxiaPrioSets is not saved. A package reload and a connection keep the baselines and the live
--- names and drop only the reads in flight. A swap that is up when the link drops is still up on the
--- server, so its name stays live and goes back at the next restore or switch.
+-- ataxiaPrioSets is not saved with `ataxia`. A package reload and a connection keep everything but
+-- the reads in flight. A swap that is up when the link drops is still up on the server, so its name
+-- stays live and goes back at the next restore or switch.
 --
--- On a class set with no baseline a swap does not go out and a restore does nothing. A swap with
--- no value to come back to would stay up, and the next read would take it for the set's own value.
+-- On a class set with no baseline a swap does not go out, and a restore has only the file's value
+-- (below) or does nothing. A swap with no value to come back to would stay up, and the next read would take it for the set's own value.
+--
+-- A Mudlet restart loses this table, so the live names and their own values also go to a small
+-- file (below). Only a Lua state with no ataxiaPrioSets reads it.
+local LIVE_FILE = "/ataxia_curingset_swaps.lua"
+
+local function liveFilePath()
+  return getMudletHomeDir() .. LIVE_FILE
+end
+
+-- Sorted, so equal content gives an equal string and an unchanged file is not written again.
+local function liveFileSig(bySet)
+  local setNames, parts = {}, {}
+  for set in pairs(bySet) do setNames[#setNames + 1] = set end
+  table.sort(setNames)
+  for _, set in ipairs(setNames) do
+    local affs = {}
+    for aff in pairs(bySet[set]) do affs[#affs + 1] = aff end
+    table.sort(affs)
+    for _, aff in ipairs(affs) do parts[#parts + 1] = set .. ":" .. aff .. "=" .. bySet[set][aff] end
+  end
+  return table.concat(parts, ",")
+end
+
+-- A missing or damaged file costs only what it would have restored, so nothing is printed.
+local function loadLiveFile(sets)
+  local ok, data = pcall(function()
+    local path = liveFilePath()
+    if not io.exists(path) then return { live = {} } end
+    local loaded = {}
+    table.load(path, loaded)
+    return loaded
+  end)
+  if not ok or type(data) ~= "table" or type(data.live) ~= "table" then return end
+  local seeded = {}
+  for set, names in pairs(data.live) do
+    if type(set) == "string" and type(names) == "table" then
+      for aff, value in pairs(names) do
+        if type(aff) == "string" and type(value) == "number" then
+          seeded[set] = seeded[set] or {}
+          seeded[set][aff] = value
+          sets.live[set] = sets.live[set] or {}
+          sets.live[set][aff] = true
+        end
+      end
+    end
+  end
+  sets.seeded = seeded
+  sets.fileSig = liveFileSig(seeded)
+end
+
+local LIST_TIMEOUT = 3      -- seconds before we stop expecting a read's reply
+
+-- Replies are overdue, so a line of the set we left can still come. Never shortens a longer window
+-- (bashInstallWrite's).
+local function holdLateLines(sets)
+  sets.quietUntil = math.max(sets.quietUntil or 0, getEpoch() + LIST_TIMEOUT)
+end
+
 function ataxia_prioSetsReset()
   local old = ataxiaPrioSets
   if old then
@@ -181,17 +239,35 @@ function ataxia_prioSetsReset()
   end
   ataxiaPrioSets = {
     baseline = old and old.baseline or {},  -- set name -> { aff = value }, filled by our own reads and the user's writes
-    live = old and old.live or {},          -- set name -> { aff = true }, swaps we wrote and have not put back
-    pending = {},   -- reads we asked for and have not seen, oldest first: { set =, at =, stale = }
+    live = old and old.live or {},          -- set name -> { aff = true }, swaps we wrote and the game has not confirmed back
+    restoring = old and old.restoring or {},-- set name -> { aff = value }, a single restore on its way
+    echoes = old and old.echoes or {},      -- aff -> list of { value =, from =, seq =, cancelled = }, lines still to come (addEcho)
+    seeded = old and old.seeded or {},      -- set name -> { aff = value }, own values from the file, until that set's first read
+    batchSeq = old and old.batchSeq or 0,   -- number of the last restore batch sent at a switch
+    fileSig = old and old.fileSig or nil,   -- what the file holds
+    offline = old and old.offline or nil,   -- the link is down, from sysDisconnectionEvent until levilogin
+    unknown = old and old.unknown or nil,   -- from levilogin until we know which set the server is on
+    quietUntil = old and old.quietUntil or nil, -- until then a line of unknown origin is not adopted
+    pending = {},   -- reads we asked for and have not seen, oldest first: { set =, at =, stale =, upTo = }
     retries = {},   -- set name -> how many times this visit asked again for a read that never came
   }
+  -- This empties the reads we were waiting for, so their window would end with them.
+  if old and #old.pending > 0 then holdLateLines(ataxiaPrioSets) end
+  if not old then loadLiveFile(ataxiaPrioSets) end
 end
 ataxia_prioSetsReset()
 
 if ataxiaPrioSetsHandler then pcall(killAnonymousEventHandler, ataxiaPrioSetsHandler) end
 ataxiaPrioSetsHandler = registerAnonymousEventHandler("sysConnectionEvent", "ataxia_prioSetsReset")
 
-local LIST_TIMEOUT = 3      -- seconds before we stop expecting a read's reply
+-- A send with no link is lost, and classDetect's combat timer keeps running. A socket connect is
+-- not enough to clear this, because we are at the login prompt then. levilogin clears it.
+function ataxia_prioLinkDown()
+  ataxiaPrioSets.offline = true
+end
+if ataxiaPrioLinkHandler then pcall(killAnonymousEventHandler, ataxiaPrioLinkHandler) end
+ataxiaPrioLinkHandler = registerAnonymousEventHandler("sysDisconnectionEvent", "ataxia_prioLinkDown")
+
 local SERVER_PER_SECOND = 5 -- Announce #5450. prioThrottle.MAX_PER_SECOND stays one below it.
 local READ_RETRIES = 3      -- how many times one visit asks again for a read that never came
 local READ_RETRY_DELAY = 1.1 -- past the throttle's one-second window
@@ -220,9 +296,14 @@ local function lookup(values, aff)
   return base and values[base] or nil
 end
 
+-- `seeded` holds only names left up at a restart. It answers until the first read of that set, and
+-- it is never a baseline, so it opens no swap and does not stop that read.
 local function restoreValue(set, aff)
   if set == "normal" then return lookup(ataxia_defaultCuringPrios(), aff) end
-  return lookup(ataxiaPrioSets.baseline[set] or {}, aff)
+  local values = ataxiaPrioSets.baseline[set]
+  if values then return lookup(values, aff) end
+  local seeded = ataxiaPrioSets.seeded[set]
+  return seeded and seeded[aff] or nil
 end
 
 -- What should this name be RESTORED to in the active set? nil means we do not know, and the caller
@@ -231,23 +312,130 @@ end
 -- there would make the equality test lie.
 function ataxia_defaultPrioAff(aff)
 	if type(aff) ~= "string" then return nil end
+	-- Until levilogin has heard from the game the server may be on any set.
+	if ataxiaPrioSets.unknown then return nil end
 	-- Lowercased because ataxia_stackAff is case-insensitive and ataxia.curingprio is lowercase-keyed.
 	return restoreValue(classSetActive() or "normal", aff:lower())
 end
 
-local function markLive(aff)
-  local live, set = ataxiaPrioSets.live, activeSet()
-  live[set] = live[set] or {}
-  live[set][aff:lower()] = true
+-- THE FILE
+--
+-- Live names and each one's own value, outside the saved `ataxia` table, the way classDetect keeps
+-- its config. The next read after a restart must not take a swap that is still up for the set's
+-- own value. A name on its way back counts until the game confirms it. The profile folder is synced
+-- by OneDrive and fights change this often, so a change arms one timer and the write happens only
+-- if the content differs.
+local LIVE_WRITE_DELAY = 1
+local liveWriteArmed = false
+
+local function liveSnapshot()
+  local sets, out = ataxiaPrioSets, {}
+  local function put(set, aff, value)
+    if type(value) ~= "number" then return end
+    out[set] = out[set] or {}
+    out[set][aff] = value
+  end
+  for set, names in pairs(sets.live) do
+    for aff in pairs(names) do put(set, aff, restoreValue(set, aff)) end
+  end
+  for aff, list in pairs(sets.echoes) do
+    for _, echo in ipairs(list) do
+      if echo.from then put(echo.from, aff, echo.value) end
+    end
+  end
+  return out
+end
+
+local function writeLiveFile()
+  liveWriteArmed = false
+  pcall(function()
+    local bySet = liveSnapshot()
+    local sig = liveFileSig(bySet)
+    if sig == ataxiaPrioSets.fileSig then return end
+    table.save(liveFilePath(), { live = bySet })
+    ataxiaPrioSets.fileSig = sig
+  end)
+end
+
+local function persistLive()
+  if liveWriteArmed then return end
+  liveWriteArmed = true
+  tempTimer(LIVE_WRITE_DELAY, writeLiveFile)
+end
+
+-- WHAT A LINE MEANS
+--
+-- One line, "You have set the 'x' affliction to the N priority.", can arrive from the set we just
+-- left, at any lag. `echoes` holds the lines we expect, per name, so none is adopted by the set we
+-- are in. There are three kinds of entry:
+--   from, seq  a name leaving that set at a switch. It is not live and not yet confirmed. Its line
+--              takes it off for good. Left when the batch's replies are over, it goes back to
+--              live[from], because the restore did not land, and stays as a plain entry.
+--   cancelled  a single restore overtaken by a newer swap. Its line is old news and must take
+--              neither a leaving name nor a newer restore's token.
+--   plain      a swap's own line, or a line we no longer wait for.
+-- A line is matched to a cancelled entry first, then a leaving one, then the oldest plain one. An
+-- entry that never gets its line (a refused write, or one dropped from the queue) costs at most one
+-- extra restore or one non-adoption of an equal value, so the oldest such entries can go.
+local ECHOES_PER_NAME = 8
+
+local function addEcho(aff, entry)
+  local echoes = ataxiaPrioSets.echoes
+  echoes[aff] = echoes[aff] or {}
+  local list = echoes[aff]
+  table.insert(list, entry)
+  local i = 1
+  while #list > ECHOES_PER_NAME and i <= #list do
+    if list[i].from then i = i + 1 else table.remove(list, i) end
+  end
+end
+
+local function takeEcho(aff, num)
+  local sets = ataxiaPrioSets
+  local list = sets.echoes[aff]
+  if not list then return false end
+  local hit, rank = nil, 0
+  for i, echo in ipairs(list) do
+    if echo.value == num then
+      local r = echo.cancelled and 3 or echo.from and 2 or 1
+      if r > rank then hit, rank = i, r end
+    end
+  end
+  if not hit then return false end
+  if list[hit].from then persistLive() end
+  table.remove(list, hit)
+  if #list == 0 then sets.echoes[aff] = nil end
+  return true
+end
+
+-- `value` is what this swap writes. Its own line can still be on its way when we switch.
+local function markLive(aff, value)
+  local sets, set = ataxiaPrioSets, activeSet()
+  aff = aff:lower()
+  sets.live[set] = sets.live[set] or {}
+  sets.live[set][aff] = true
+  -- A new swap cancels any restore of that name still on its way, so that line must not clear the
+  -- mark of this swap.
+  local token = sets.restoring[set] and sets.restoring[set][aff]
+  if token then
+    addEcho(aff, { value = token, cancelled = true })
+    sets.restoring[set][aff] = nil
+  end
+  addEcho(aff, { value = tonumber(value) })
+  persistLive()
 end
 
 local function clearLive(aff)
-  local names = ataxiaPrioSets.live[activeSet()]
+  local sets = ataxiaPrioSets
+  if sets.offline then return end
+  local names = sets.live[activeSet()]
   if names then names[aff:lower()] = nil end
+  persistLive()
 end
 
 -- ApplySwaps sends again on the next gain, so a swap held here only waits for the read.
 local function swapAllowed()
+  if ataxiaPrioSets.unknown then return false end
   local set = classSetActive()
   return not set or ataxiaPrioSets.baseline[set] ~= nil
 end
@@ -259,7 +447,7 @@ function ataxia_setAffPrio(aff, num)
 		prioWaitfor[aff] = tempTimer(1, [[ prioWaitfor["]]..aff..[["] = nil ]])
 		-- nil means the bash guard dropped the write, so the server holds no swap.
 		if ataxia_sendCuringPriority("curing priority "..aff.. " "..num, false) then
-			markLive(aff)
+			markLive(aff, num)
 		end
 	end
 end
@@ -272,8 +460,8 @@ function ataxia_sendPrioSwap(cmd, silent)
   local result = ataxia_sendCuringPriority(cmd, silent)
   if not result then return nil end
   for part in cmd:gmatch("[^;]+") do
-    local aff = part:match("^%s*curing%s+priority%s+(%a+%d*)%s+%d+%s*$")
-    if aff and writesStoredAffPrio(part) then markLive(aff) end
+    local aff, value = part:match("^%s*curing%s+priority%s+(%a+%d*)%s+(%d+)%s*$")
+    if aff and writesStoredAffPrio(part) then markLive(aff, value) end
   end
   return result
 end
@@ -281,6 +469,8 @@ end
 function ataxia_restorePrio(aff)
 	ataxia.curingprio = ataxia.curingprio or {}
 	prioWaitrestore = prioWaitrestore or {}
+	-- No link, so the send would be lost and the swap would stay up with nothing tracking it.
+	if ataxiaPrioSets.offline then return end
 
 	-- The comparison and the SEND read the same source. A name we have no value for returns here
 	-- instead of building "curing priority brokenhead nil".
@@ -289,9 +479,12 @@ function ataxia_restorePrio(aff)
 	if ataxia_getPrio(aff) == def then return end
 	if not prioWaitrestore[aff] then
 		prioWaitrestore[aff] = tempTimer(1, [[ prioWaitrestore["]]..aff..[["] = nil ]])
-		-- A queued restore stays live: a switch drops the queue, so the switch must put it back.
-		if ataxia_sendCuringPriority("curing priority "..aff.." "..def) == "sent" then
-			clearLive(aff)
+		-- The name stays live until trigger 719 confirms this value (ataxia_prioTuned). A write can be
+		-- refused or dropped at a switch, and then the swap is still up.
+		if ataxia_sendCuringPriority("curing priority "..aff.." "..def) then
+			local sets, set = ataxiaPrioSets, activeSet()
+			sets.restoring[set] = sets.restoring[set] or {}
+			sets.restoring[set][aff:lower()] = def
 		end
 	end
 end
@@ -304,38 +497,71 @@ end
 --   3. `curing priority list` reads the new set before any later swap write can land in it.
 -- Our swaps go out after this send, so the list cannot hold them.
 
+-- The replies to batches up to `upTo` are over. A send's replies come in order, so the header of
+-- the read sent after a batch proves it. With no header, LIST_TIMEOUT does. Line 787 does not: it
+-- names no write, and several can be outstanding.
+local function settleLeaving(upTo)
+  local sets = ataxiaPrioSets
+  for aff, list in pairs(sets.echoes) do
+    for _, echo in ipairs(list) do
+      if echo.from and echo.seq <= upTo then
+        sets.live[echo.from] = sets.live[echo.from] or {}
+        sets.live[echo.from][aff] = true
+        echo.from, echo.seq = nil, nil
+      end
+    end
+  end
+end
+
 -- The multi-set command for the swaps of `set`. A swap we have no value for stays where it is.
 local function restoreCommand(set)
-  local names = ataxiaPrioSets.live[set]
-  ataxiaPrioSets.live[set] = nil
+  local sets = ataxiaPrioSets
+  local names = sets.live[set]
+  sets.live[set] = nil
+  -- A single restore on its way prints in the set we move to. One dropped from the queue prints
+  -- nothing, and the switch below puts its name back.
+  for aff, value in pairs(sets.restoring[set] or {}) do addEcho(aff, { value = value }) end
+  sets.restoring[set] = nil
   if not names then return nil end
   local prios = {}
   for aff in pairs(names) do prios[aff] = restoreValue(set, aff) end
   if next(prios) == nil then return nil end
+  sets.batchSeq = sets.batchSeq + 1
+  local seq = sets.batchSeq
+  for aff, value in pairs(prios) do addEcho(aff, { value = value, from = set, seq = seq }) end
+  tempTimer(LIST_TIMEOUT, function() settleLeaving(seq) end)
   return table.concat(ataxia_prioMassCommands(prios), ";")
 end
 
 local giveUpReads
 
--- A read leaves now. Its clock starts here, or its reply could print. A name still live in this set
--- is a swap left up from before a reload or a connection, so the read must not take its value.
+-- The names of `set` a read must not take from the game. A name still live is a swap left up from
+-- before a reload, a connection or a refused restore. A name still leaving is the same if its
+-- restore is refused.
+local function swappedNames(set)
+  local sets, names = ataxiaPrioSets, {}
+  for aff in pairs(sets.live[set] or {}) do names[aff] = true end
+  for aff, list in pairs(sets.echoes) do
+    for _, echo in ipairs(list) do
+      if echo.from == set then names[aff] = true end
+    end
+  end
+  return names
+end
+
+-- A read leaves now. Its clock starts here, or its reply could print.
 local function expectRead(set, now)
   local sets = ataxiaPrioSets
-  local stale
-  if sets.live[set] then
-    stale = {}
-    for aff in pairs(sets.live[set]) do stale[aff] = true end
-  end
-  table.insert(sets.pending, { set = set, at = now, stale = stale })
+  table.insert(sets.pending, { set = set, at = now, stale = swappedNames(set), upTo = sets.batchSeq })
   if sets.timer then pcall(killTimer, sets.timer) end
   sets.timer = tempTimer(LIST_TIMEOUT, giveUpReads)
 end
 
 -- A class set with no baseline blocks its swaps, so a read that gave way or was lost asks again.
 -- A direct send: through the throttle queue the reply could outlive the read's clock.
-local function readAgain(set)
+local function readAgain(set, force)
   local sets = ataxiaPrioSets
-  if classSetActive() ~= set or sets.baseline[set] then return end
+  if classSetActive() ~= set or (sets.baseline[set] and not force) then return end
   local tries = (sets.retries[set] or 0) + 1
   if tries > READ_RETRIES then return end
   sets.retries[set] = tries
@@ -347,7 +573,7 @@ local function readAgain(set)
     throttle.windowStart = now
   end
   if throttle.sentThisSecond + 1 > SERVER_PER_SECOND then
-    tempTimer(READ_RETRY_DELAY, function() readAgain(set) end)
+    tempTimer(READ_RETRY_DELAY, function() readAgain(set, force) end)
     return
   end
   throttle.sentThisSecond = throttle.sentThisSecond + 1
@@ -358,6 +584,7 @@ end
 giveUpReads = function()
   local sets = ataxiaPrioSets
   sets.timer = nil
+  if #sets.pending > 0 then holdLateLines(sets) end
   sets.pending = {}
   if sets.read then ataxia_prioListStop() end
   readAgain(activeSet())
@@ -366,14 +593,21 @@ end
 -- classDetect's three switch sites call this, with the set we are leaving. A bash-set switch
 -- has nothing of ours to put back and must not touch its stored writes, so it goes out alone.
 function ataxia_switchCuringsetSend(name, from)
+  local sets = ataxiaPrioSets
+  if sets.offline then return end
   -- Stops a default-table send still on its timers (ataxia_sendDefaultPrios).
   ataxiaPrioGen = (ataxiaPrioGen or 0) + 1
+  -- The server's set is known after this send. The set we leave is not, so nothing goes back to it.
+  local wasUnknown = sets.unknown
+  sets.unknown = nil
   if ataxia_bashProfileActive and ataxia_bashProfileActive() then
     send("curingset switch " .. name, false)
+    -- This is where the server now is, so the way back must lead here: bash off would otherwise
+    -- return the server to a set the state no longer names.
+    ataxia.settings.bashcuring.restoreTo = name
     return
   end
 
-  local sets = ataxiaPrioSets
   local throttle = ataxia.prioThrottle
   local set = name:lower()
   sets.retries[set] = nil
@@ -387,7 +621,7 @@ function ataxia_switchCuringsetSend(name, from)
 
   local parts = {}
   local cost = 0
-  local restore = restoreCommand(from or "normal")
+  local restore = not wasUnknown and restoreCommand(from or "normal") or nil
   if restore then
     parts[#parts + 1] = restore
     cost = commandCount(restore)
@@ -400,7 +634,7 @@ function ataxia_switchCuringsetSend(name, from)
     expectRead(set, now)
   else
     -- Confirmations from the set we left can still arrive, and no pending read marks them.
-    sets.quietUntil = now + LIST_TIMEOUT
+    holdLateLines(sets)
     tempTimer(READ_RETRY_DELAY, function() readAgain(set) end)
   end
   throttle.sentThisSecond = throttle.sentThisSecond + cost
@@ -502,6 +736,7 @@ function ataxia_prioListHeader(setName)
     if want.set == setName and (now - want.at) < LIST_TIMEOUT then
       -- Older reads came back out of turn or not at all.
       for _ = 1, i do table.remove(sets.pending, 1) end
+      settleLeaving(want.upTo)
       sets.read = { set = setName, rows = {}, num = 0, comma = false, stale = want.stale }
       sets.lineTrigger = tempRegexTrigger("^(.*)$", readLine)
       deleteLine()
@@ -529,29 +764,115 @@ function ataxia_prioListEnd()
   -- The mirror takes what the server holds, so a stale swap still reads as up and a restore fires.
   local mirror = {}
   for aff, value in pairs(read.rows) do mirror[aff] = value end
-  -- The baseline keeps the set's own value for a swap left up from before a reload or a connection.
-  local was = sets.baseline[read.set]
-  if read.stale and was then
-    for aff in pairs(read.stale) do read.rows[aff] = was[aff] end
+  -- The baseline keeps the set's own value for a swap left up from before a reload, a connection,
+  -- a restart or a refused restore.
+  -- Names swapped since the ask count too: when a read was lost, a list the user typed answers it.
+  local own = sets.baseline[read.set] or sets.seeded[read.set]
+  if own then
+    for aff in pairs(read.stale) do read.rows[aff] = own[aff] end
+    for aff in pairs(swappedNames(read.set)) do read.rows[aff] = own[aff] end
   end
   sets.baseline[read.set] = read.rows
+  sets.seeded[read.set] = nil
   -- A later switch may have gone out already: the mirror holds the active set only.
   if read.set == activeSet() then ataxia.curingprio = mirror end
   ataxia_prioListStop()
   return true
 end
 
--- Trigger 719. A value set during a visit is the set's own from now on, so a later swap and restore
--- put back that value. A swap's own line is skipped, because its name is live. A line can also
--- belong to the set we just left, so nothing is taken while a read is due.
+-- Trigger 719. A line can be an echo: a swap's or a restore's, from this set or the one we left, at
+-- any lag, so it is taken by its name and number before anything else. Or it confirms a restore of
+-- this visit, which is the only thing that ends a name's live mark. Otherwise a value set during a
+-- visit is the set's own from now on, so a later swap and restore put back that value. Any other
+-- line from the set we just left waits for the read.
 function ataxia_prioTuned(aff, num)
   local sets = ataxiaPrioSets
+  -- No capture shows how the game names a stack here. The list prints it as `burning(5)`.
+  aff = aff:gsub("%((%d+)%)", "%1")
+  if takeEcho(aff, num) then return end
+  local tokens = sets.restoring[activeSet()]
+  if tokens and tokens[aff] == num then
+    tokens[aff] = nil
+    clearLive(aff)
+    return
+  end
+  if sets.unknown then return end
   local set = classSetActive()
   if not set or not sets.baseline[set] then return end
   if #sets.pending > 0 or sets.read then return end
   if sets.quietUntil and getEpoch() < sets.quietUntil then return end
   if sets.live[set] and sets.live[set][aff] then return end
   sets.baseline[set][aff] = num
+end
+
+-- LOGIN
+--
+-- A new Lua state starts with currentCuringset "normal", whatever the server is on. Six classes
+-- switch to normal in levilogin and the rest do not, so until the game answers nothing may write.
+function ataxia_prioLoginStart()
+  ataxiaPrioSets.offline = nil
+  ataxiaPrioSets.unknown = true
+end
+
+function ataxia_prioSetKnown()
+  ataxiaPrioSets.unknown = nil
+end
+
+-- Called last in levilogin, so a reply cannot predate the login's own switch. It sends no switch.
+function ataxia_prioLoginRead(tries)
+  tries = tries or 1
+  if not (classDetect and classDetect.state and ataxia_curingsetRefresh) then return end
+  local gen, state = ataxiaPrioGen or 0, classDetect.state.currentCuringset
+  ataxia_curingsetRefresh(function(cs)
+    local sets = ataxiaPrioSets
+    -- A switch since the ask has moved the server, so this answer is out of date.
+    if (ataxiaPrioGen or 0) ~= gen or classDetect.state.currentCuringset ~= state then return end
+    if ataxia_bashProfileActive and ataxia_bashProfileActive() then return end
+    local cur = cs and cs.current
+    if not cur then
+      if not sets.unknown then return end
+      if tries < 2 then return ataxia_prioLoginRead(tries + 1) end
+      if ataxiaEcho then
+        ataxiaEcho("Could not read the active curing set. Priority swaps stay off until the next class switch.")
+      end
+      return
+    end
+    -- The bash set is the profile's. Taken as a class set, our swaps would write into it.
+    local bash = ataxia.settings and ataxia.settings.bashcuring
+    if bash and bash.setname == cur then
+      if sets.unknown and ataxiaEcho then
+        ataxiaEcho("The server is on the bash curing set. Priority swaps stay off until the next class switch.")
+      end
+      return
+    end
+    sets.unknown = nil
+    classDetect.state.currentCuringset = cur
+    -- The saved cache is the list of the set that was active at the last save.
+    if cur ~= state then ataxia.curingprio = {} end
+    if cur ~= "normal" then
+      sets.retries[cur] = nil
+      readAgain(cur, true)
+    end
+  end, true)
+end
+
+-- The profile has let go of the server and named the set it went to, so that set is known now. 008
+-- calls this after its send, once the profile reads as off. It sends no switch, and a read only
+-- when that set is a class set, or its swaps would stay off for the visit.
+function ataxia_prioBashReleased(name)
+  local sets = ataxiaPrioSets
+  -- With no link the send was lost and the server did not move.
+  if not sets.unknown or sets.offline then return end
+  if not (classDetect and classDetect.state) then return end
+  local set = name:lower()
+  local state = classDetect.state.currentCuringset
+  sets.unknown = nil
+  classDetect.state.currentCuringset = set
+  if set ~= state then ataxia.curingprio = {} end
+  if set ~= "normal" then
+    sets.retries[set] = nil
+    readAgain(set, true)
+  end
 end
 
 function ataxia_showPrios(num)

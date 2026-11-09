@@ -106,6 +106,27 @@ end
 -- ---------------------------------------------------------------------------
 local CAPTURE_TIMEOUT = 4
 
+-- The login read's own ask must not print 25 lines at every login. Not in an ataxia._cs* field: those
+-- are saved with `ataxia`. `quietBlock` is set from the list's header on, so that only lines of the
+-- list go, and a game line landing inside the window still prints.
+local quietCapture, quietBlock = false, false
+
+local function hideQuietLine(text)
+  if not quietCapture then return end
+  text = text:gsub("%s+$", "")
+  if not quietBlock then
+    if text == "Your current curing sets" then
+      quietBlock = true
+      deleteLine()
+    end
+  elseif text:match("^You are using a total of %d+ of your allowed %d+ curing sets%.$") then
+    quietCapture, quietBlock = false, false
+    deleteLine()
+  elseif text:match("^%-+$") or text:match("^%a[%w_%-]*$") or text:match("^%a[%w_%-]*%s*%(current%)$") then
+    deleteLine()
+  end
+end
+
 local function teardown()
   if ataxia._csCollectT then pcall(killTrigger, ataxia._csCollectT); ataxia._csCollectT = nil end
   if ataxia._csEndT then pcall(killTrigger, ataxia._csEndT); ataxia._csEndT = nil end
@@ -131,10 +152,13 @@ end
 
 -- Ask the game and call back with the parsed state (or nil on timeout / malformed output).
 -- Concurrent callers share one request rather than racing two captures for one reply.
-function ataxia_curingsetRefresh(cb)
+-- `quiet` hides the list from the screen. Only ataxia_prioLoginRead passes it, and anyone who joins
+-- that capture without it gets the list printed.
+function ataxia_curingsetRefresh(cb, quiet)
   if type(cb) == "function" then
     if ataxia._csCallbacks then
       table.insert(ataxia._csCallbacks, cb)
+      if not quiet then quietCapture = false end
       return -- a capture is already in flight; it will call everyone
     end
     ataxia._csCallbacks = { cb }
@@ -142,9 +166,12 @@ function ataxia_curingsetRefresh(cb)
     ataxia._csCallbacks = ataxia._csCallbacks or {}
   end
   teardown()
+  quietCapture, quietBlock = quiet == true, false
   ataxia._csLines = {}
   ataxia._csCollectT = tempRegexTrigger("^(.*)$", function()
-    if ataxia._csLines then table.insert(ataxia._csLines, matches[2] or line or "") end
+    local text = matches[2] or line or ""
+    if ataxia._csLines then table.insert(ataxia._csLines, text) end
+    hideQuietLine(text)
   end)
   ataxia._csEndT = tempRegexTrigger("^You are using a total of \\d+ of your allowed \\d+ curing sets\\.$", function()
     -- The collector above already recorded this line; parse on the next tick so ordering

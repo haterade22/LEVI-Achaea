@@ -146,20 +146,27 @@ function ataxia_prioSyncDecide(changed, current)
   return "send"
 end
 
+-- A switch made while the game's answer was on its way: the answer no longer says what is active.
+local function answerName(cur, gen)
+  if (ataxiaPrioGen or 0) == gen then return cur end
+  return classDetect and classDetect.state and classDetect.state.currentCuringset
+end
+
 -- Called at login (login/001). Asks the game which set is active before writing anything.
 function ataxia_prioSyncCheck()
   if not ataxia_prioTableChanged() then return end
+  local gen = ataxiaPrioGen or 0
   local function decide(parsed)
     local cur = parsed and parsed.current
     local what = ataxia_prioSyncDecide(true, cur)
-    if what == "send" then
+    if what == "send" and (ataxiaPrioGen or 0) == gen then
       if ataxiaEcho then
         ataxiaEcho("The curing priority table changed since it was last sent -- sending it to the <green>normal<reset> set now (about 40s).")
       end
       ataxia_sendDefaultPrios()
     elseif ataxiaEcho then
       ataxiaEcho("The curing priority table changed since it was last sent, but the active curing set is <yellow>"
-        .. tostring(cur or "unknown") .. "<reset>. Switch to <green>normal<reset> and type <cyan>reset prios<reset> to apply it.")
+        .. tostring(answerName(cur, gen) or "unknown") .. "<reset>. Switch to <green>normal<reset> and type <cyan>reset prios<reset> to apply it.")
     end
   end
   if ataxia_curingsetRefresh then
@@ -174,8 +181,29 @@ function ataxia_resetOnLogin()
   ataxia_sendDefaultPrios()
 end
 
+-- The table belongs in `normal` and a write lands in whatever set is active, so this asks the game
+-- first. The tracked state cannot see a typed `curingset switch`. While bashing the game would
+-- answer `bash`: ataxia_sendDefaultPrios leaves that set by itself, as it always did.
 function ataxia_resetPrios()
-  ataxia_sendDefaultPrios()
+  if ataxia_bashProfileActive and ataxia_bashProfileActive() then
+    ataxia_sendDefaultPrios()
+    return
+  end
+  local gen = ataxiaPrioGen or 0
+  local function decide(cs)
+    local cur = cs and cs.current
+    if ataxia_prioSyncDecide(true, cur) == "send" and (ataxiaPrioGen or 0) == gen then
+      ataxia_sendDefaultPrios()
+    elseif ataxiaEcho then
+      ataxiaEcho("Priorities NOT reset: the active curing set is <yellow>" .. tostring(answerName(cur, gen) or "unknown")
+        .. "<reset>. Switch to <green>normal<reset> and type <cyan>reset prios<reset> again.")
+    end
+  end
+  if ataxia_curingsetRefresh then
+    ataxia_curingsetRefresh(decide)
+  else
+    decide(nil)
+  end
 end
 
 function ataxia_defaultCuringPrios()

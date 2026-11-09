@@ -13,14 +13,21 @@ attributes:
 packageName: ''
 ]]--
 
--- Six branches of levilogin move the server to normal. The state moves here, and only here: the
--- other classes send no switch, so the server stays on the set the state already names.
+-- Six branches of levilogin move the server to normal, and the state moves with it here. The other
+-- classes send no switch, and after a restart the state says normal whatever the server is on.
+-- ataxia_prioLoginRead, at the end of levilogin, asks the game for those.
 function ataxia_loginCuringsetNormal()
   if classDetect and classDetect.state then classDetect.state.currentCuringset = "normal" end
+  if ataxia_prioSetKnown then ataxia_prioSetKnown() end
+  -- The server is on normal after this send, so bash off must not lead to a set the state no longer names.
+  local bash = ataxia.settings and ataxia.settings.bashcuring
+  if bash and bash.active then bash.restoreTo = "normal" end
   send("curingset switch normal")
 end
 
 function levilogin()
+-- First, so nothing below can stop it: the link is back, and which set the server is on is not known.
+if ataxia_prioLoginStart then ataxia_prioLoginStart() end
 enableV3()
 sendGMCP('Core.Supports.Add ["Comm.Channel 1"]')
 sendGMCP('Core.Supports.Add ["IRE.Target 1"]')
@@ -304,5 +311,8 @@ end
 tempTimer(7, [[ sendAll("allies", "enemies") ]])
 
 raiseEvent("logged in")
+
+-- Last, after the branches above have sent their switch to normal.
+if ataxia_prioLoginRead then ataxia_prioLoginRead() end
 
 end

@@ -275,6 +275,13 @@ local function bashInstallWrite(s, from)
   local entries = 0
   for _ in pairs(prios) do entries = entries + 1 end
 
+  -- The state still names the set we came from, but these confirmations belong to the bash set.
+  -- ataxia_prioTuned must not take them for that set's own values. It lasts the whole install: the
+  -- first batch at 1.5 s, one batch a second, and a reply's worth of lag.
+  if ataxiaPrioSets then
+    ataxiaPrioSets.quietUntil = getEpoch() + 1.5 + #ataxia_prioMassCommands(prios) + 3
+  end
+
   send("curingset switch " .. s.setname)
   send("curingset clone " .. from)
 
@@ -375,6 +382,8 @@ function ataxia_bashProfileOff()
   if not s.active then return end
   s.active = false
   send("curingset switch " .. (s.restoreTo or "normal"))
+  -- A login during the hunt left the set unknown, and this send names it.
+  if ataxia_prioBashReleased then ataxia_prioBashReleased(s.restoreTo or "normal") end
   if ataxiaEcho then ataxiaEcho("Curing -> <green>" .. (s.restoreTo or "normal") .. "<reset> (PvP priorities restored).") end
 end
 
