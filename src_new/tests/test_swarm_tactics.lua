@@ -120,7 +120,7 @@ local function fixture(count)
   M.explore.lavaRooms, M.explore.lavaEdges = {}, {}
   M.explore.pausedAtBoon = false -- v4.7.263: the pause is per-test state
   S._wallsRipple = nil
-  S.tumbleResolvedAt, S._recoverTumbles = nil, nil -- fixture rewinds the clock; these must go with it
+  S.tumbleResolvedAt = nil -- fixture rewinds the clock; this must go with it
   S._rp = nil -- v4.7.389: the recovery watch is keyed to recoverStarted, which the clock rewind reuses
   S._diagAt = nil -- v4.7.390: same clock
   S._meltRoom, S._meltTries = nil, nil
@@ -671,9 +671,9 @@ describe("swarm stage 2 — Roll Hide panic", function()
 
   it("tumbles out (free-queued) at panic HP with the boon up, then resets", function()
     fixture(3)
+    -- v4.7.482: still in the swarm room, so this tumble IS the one retreat. This test used to fire
+    -- the panic from the funnel room, after the pull had landed. That is now refused.
     S.onTick(); S.decorate("attack", ";")
-    MAP.current = 100; mobs = 2; S.onTick() -- funnel, fighting followers
-    MAP.rooms[100].exits.west = 50 -- an escape exit away from the swarm room
     mnemRollHide = true
     ataxia.vitals = { hpp = 30 }
     S._lastPanicAt = nil
@@ -684,7 +684,7 @@ describe("swarm stage 2 — Roll Hide panic", function()
     -- heal there first. This is a deliberate behaviour change, not a test bent to pass.
     expect(S.state).toBe("recovering")
     expect(S.recoverGround).toBeTrue()
-    expect(findCmd(TUMBLE) ~= nil).toBeTrue()
+    expect(findCmd("queue addclear free stand;tumble s") ~= nil).toBeTrue()
     -- The hold must guard the queued tumble from the next attack's addclearfull.
     expect(ataxiaTemp.swarmHold).toBeTrue()
   end)
@@ -695,6 +695,7 @@ describe("swarm stage 2 — Roll Hide panic", function()
     MAP.current = 100; mobs = 0; S.onTick() -- funnel
     mobs = 3; S.onTick()                    -- swarm followed outdoors -> flying
     expect(S.flying).toBeTrue()
+    S._restoreRetreat() -- v4.7.482: this test is about the order of the two commands, not the latch
     MAP.rooms[100].exits.west = 50
     mnemRollHide = true
     ataxia.vitals = { hpp = 30 }
@@ -1385,9 +1386,7 @@ describe("Roll Hide -- heal where we landed, then go back in", function()
   local function panicNow()
     fixture(3); mnemRollHide = true
     S._lastPanicAt = nil
-    S.onTick(); S.decorate("attack", ";")
-    MAP.current = 100; mobs = 2; S.onTick()
-    MAP.rooms[100].exits.west = 50
+    S.onTick(); S.decorate("attack", ";") -- v4.7.482: not left yet, so the panic is the one retreat
     ataxia.vitals = { hpp = 30 }
     S._lastPanicAt = nil
     expect(S.onTick()).toBeTrue()
@@ -1428,32 +1427,18 @@ describe("Roll Hide -- heal where we landed, then go back in", function()
     for i = before + 1, #sent do expect(sent[i] ~= "land").toBeTrue() end
   end)
 
-  -- REQUIREMENT REVERSED, v4.7.233, from a death log. v4.7.218 handed straight back to the
-  -- basher here; the log shows the cost -- "company arrived mid-recovery (43%) -- handing
-  -- back", then "LOW HP (31%)" four seconds later, then dead. Handing back drops us into a
-  -- mob-filled room at half health with the recovery abandoned. With Roll Hide up the answer
-  -- is another tumble: it sheds pursuers, so the fight does not follow.
-  it("tumbles ON rather than trading, when a denizen wanders in", function()
+  -- REQUIREMENT REVERSED AGAIN, v4.7.482, from a death log. v4.7.233 tumbled on from here, and
+  -- the 2026-11-09 log shows the cost: seven retreats in 35 seconds between a room of three and a
+  -- room of one, healing nothing. User: "we should only tumble once. That is it."
+  it("hands back to the basher when a denizen wanders in, with no second tumble", function()
     panicNow()
+    MAP.current = 100                      -- the tumble landed
     mobs = 2
-    expect(S.onTick()).toBeTrue()
-    expect(S.state).toBe("recovering")     -- still recovering, just somewhere else
-    local sawTumble = false
-    for _, c in ipairs(sent) do if c:find("tumble", 1, true) then sawTumble = true end end
-    expect(sawTumble).toBeTrue()
-    expect(ataxiaTemp.swarmHold).toBeTrue()
-  end)
-
-  -- ...but standing and fighting IS right when we genuinely cannot move: being attack-gated
-  -- while something hits us is the one thing worse than trading.
-  it("hands back when there is nowhere to tumble to", function()
-    panicNow()
-    mobs = 2
-    mnemRollHide = false                   -- no boon: a tumble sheds nothing
+    local before = #sent
     expect(S.onTick()).toBeFalse()
     expect(S.state).toBe("idle")
     expect(ataxiaTemp.swarmHold).toBe(nil)
-    mnemRollHide = true
+    for i = before + 1, #sent do expect(sent[i]:find("tumble", 1, true) == nil).toBeTrue() end
   end)
 
   it("does not tumble again while recovering", function()
@@ -1631,16 +1616,14 @@ describe("Terror of the Skies -- leaving sheds the swarm", function()
 
   it("panics out with a plain step, then heals where it lands", function()
     fixture(3)
-    S.onTick(); S.decorate("attack", ";")
-    MAP.current = 100; mobs = 2; S.onTick()
-    MAP.rooms[100].exits.west = 50
+    S.onTick(); S.decorate("attack", ";") -- v4.7.482: not left yet, so this step is the one retreat
     mnemTerrorSkies = true
     ataxia.vitals = { hpp = 30 }
     S._lastPanicAt = nil
     expect(S.onTick()).toBeTrue()
     expect(S.state).toBe("recovering")
-    expect(has("queue addclear free stand;w")).toBeTrue()
-    expect(has("queue addclear free stand;tumble w")).toBeFalse()
+    expect(has("queue addclear free stand;s")).toBeTrue()
+    expect(has("queue addclear free stand;tumble s")).toBeFalse()
   end)
 
   it("lands first when flying, then steps (the recovery is on the ground)", function()
@@ -1649,6 +1632,7 @@ describe("Terror of the Skies -- leaving sheds the swarm", function()
     MAP.current = 100; mobs = 0; S.onTick()
     mobs = 3; S.onTick()
     expect(S.flying).toBeTrue()
+    S._restoreRetreat() -- v4.7.482: this test is about the order of the two commands, not the latch
     MAP.rooms[100].exits.west = 50
     mnemTerrorSkies = true
     ataxia.vitals = { hpp = 30 }
@@ -2108,8 +2092,8 @@ end)
 -- User log, 2026-08-10: "Seems like tumble is a tad bit broken." FOUR tumbles in nineteen
 -- seconds, across rooms whose descriptions named no denizens at all, while the Ablaze affix
 -- took ~1,200 per tick. HP went 31% -> 14% and stayed there: a recovery that keeps moving
--- never recovers.
-describe("the mid-recovery tumble chain (v4.7.245)", function()
+-- never recovers. v4.7.482 removed the re-tumble altogether: company is fought.
+describe("company during a ground recovery (v4.7.245, v4.7.482)", function()
   -- Put us in a ground recovery with company, the state the log was stuck in.
   local function recovering()
     fixture(3); ataxiaBasher.inMnemosyne = true
@@ -2123,6 +2107,7 @@ describe("the mid-recovery tumble chain (v4.7.245)", function()
     -- game's "You begin to tumble" line. Stand in for it, then land it.
     S.onTumbleStart("n")
     S.onTumbleDone() -- the tumble landed
+    MAP.current = 100
     sent = {}
     mobs = 2         -- ...and the stale denizen list still lists the room we fled
   end
@@ -2141,49 +2126,24 @@ describe("the mid-recovery tumble chain (v4.7.245)", function()
     expect(S.state).toBe("recovering")
   end)
 
-  it("does re-tumble once the arrival has settled and company is real", function()
+  it("hands back to the basher once the arrival has settled and company is real", function()
     recovering()
     clock = clock + 5               -- past ARRIVE_SETTLE
-    expect(S.onTick()).toBeTrue()
-    expect(tumbles()).toBe(1)
-  end)
-
-  -- Roll Hide sheds pursuers, so needing a third tumble means something is wrong with our
-  -- reading of the room. Chain-tumbling at panic HP pays the affix damage again every hop.
-  it("spends at most RECOVER_TUMBLES before standing and fighting", function()
-    recovering()
-    for _ = 1, S.RECOVER_TUMBLES + 1 do
-      S.onTumbleDone()   -- stamps the arrival...
-      clock = clock + 5  -- ...and only then does it settle
-      S.onTick()
-    end
-    expect(tumbles()).toBe(S.RECOVER_TUMBLES)
-    expect(S.state).toBe("idle")    -- handed back to the basher rather than hopping on
-  end)
-
-  it("the budget is per RECOVERY, not per session", function()
-    recovering()
-    for _ = 1, S.RECOVER_TUMBLES + 1 do
-      S.onTumbleDone()
-      clock = clock + 5
-      S.onTick()
-    end
+    expect(S.onTick()).toBeFalse()  -- the tick is the basher's now
     expect(S.state).toBe("idle")
-    recovering()                    -- a NEW panic recovery
-    expect(S._recoverTumbles).toBe(nil)
-    clock = clock + 5
-    sent = {}
-    expect(S.onTick()).toBeTrue()
-    expect(tumbles()).toBe(1)       -- the fresh budget works
+    expect(tumbles()).toBe(0)
+    expect(ataxiaTemp.swarmHold).toBe(nil)
+    expect(ataxiaTemp.escapeMode).toBe(nil)
   end)
 
-  -- A stamp that outlived its context must not hold the settle open forever, which would
-  -- silently disable the re-tumble -- the failure direction that actually hurts.
+  -- A stamp that outlived its context must not hold the settle open forever: we would stand
+  -- attack-gated while something hits us.
   it("a stale future-dated stamp cannot wedge the settle", function()
     recovering()
     S.tumbleResolvedAt = clock + 10000
-    expect(S.onTick()).toBeTrue()
-    expect(tumbles()).toBe(1)
+    expect(S.onTick()).toBeFalse()
+    expect(S.state).toBe("idle")
+    expect(tumbles()).toBe(0)
   end)
 end)
 
@@ -2265,16 +2225,15 @@ describe("recovery while a tumble is still in the air", function()
     expect(tumbles).toBe(0)
   end)
 
-  -- ...but a genuine dead end must still hand back: standing attack-gated while something
-  -- hits us is the one thing worse than trading.
-  it("still hands back when there is genuinely nowhere to go", function()
+  -- ...but a resolved tumble must still hand back: standing attack-gated while something hits us
+  -- is the one thing worse than trading.
+  it("still hands back once the tumble has resolved and landed", function()
     recovering()
     S.onTumbleDone()                  -- the tumble resolved
+    MAP.current = 100                 -- ...and we are out
     clock = clock + 5
-    mnemRollHide = false              -- no boon: a tumble sheds nothing
     expect(S.onTick()).toBeFalse()
     expect(S.state).toBe("idle")
-    mnemRollHide = true
   end)
 end)
 
@@ -4325,6 +4284,296 @@ describe("v4.7.431 -- greater elementals one at a time", function()
     end)
     done()
     if not ok then error(e, 0) end
+  end)
+end)
+
+-- =====================================================================================
+-- v4.7.482, from a death (kb/raw/live/mnemosyne-tumble-loop_2026-11-09.txt): seven retreats in 35
+-- seconds between a room of three and a room of one. User: "we should only tumble once. That is
+-- it. If there is a mob in that room. We have to kill it."
+describe("v4.7.482 -- one retreat, then we fight", function()
+  local function dyingFast(fn)
+    local rx, rt = ataxiaBasher_isDamageRateExtreme, ataxiaBasher_secondsToLive
+    ataxiaBasher_isDamageRateExtreme = function() return true end
+    ataxiaBasher_secondsToLive = function() return 4.4 end
+    local ok, err = pcall(fn)
+    ataxiaBasher_isDamageRateExtreme, ataxiaBasher_secondsToLive = rx, rt
+    if not ok then error(err, 0) end
+  end
+  local function hurt(hp)
+    lowHp(hp * 100)
+    ataxia.vitals = { hpp = hp }
+  end
+  local function indoors()
+    ataxiaBasher.inMnemosyne = true
+    gmcp.Room.Info.details = { "indoors" }
+    S._lastDisengageAt, S._lastPanicAt = nil, nil
+  end
+  -- The log's escape: indoors, no validated route, dying fast, and the best door is room 100.
+  local function escapeSent()
+    fixture(3)
+    indoors()
+    M.explore.fromRoom = 200
+    M.explore.fromDir = nil
+    hurt(72)
+    dyingFast(function() S.onVitals() end)
+    expect(S.state).toBe("pulling")
+    expect(count("leap s")).toBe(1)
+  end
+  local function land(n)
+    MAP.current = 100
+    mobs = n or 0
+    S._checkPursuit()
+    sent = {}
+  end
+  local function pullLanded(n)
+    fixture(3)
+    indoors()
+    mnemRollHide = true
+    S.onTick(); S.decorate("attack", ";")
+    MAP.current = 100; mobs = n or 0; S.onTick()
+    expect(S.state).toBe("funnel")
+    expect(S._retreatSpent()).toBeTrue()
+  end
+
+  it("replays the death: one retreat, heal, then kill what arrives", function()
+    escapeSent()
+    expect(S._retreatSpent()).toBeFalse()    -- sent is not landed
+    mnemRollHide = true
+    land(0)                                  -- 12:52:34, an empty room
+    expect(S._retreatSpent()).toBeTrue()
+    clock = clock + 3
+    hurt(32)
+    S.onVitals()                             -- 12:52:35, where the panic went back in
+    expect(count("tumble")).toBe(0)
+    expect(S.onTick()).toBeTrue()            -- heals where it landed
+    expect(S.state).toBe("recovering")
+    expect(S.recoverTarget).toBe(85)
+    clock = clock + 5
+    mobs = 1                                 -- 12:52:39, the detective walks in
+    expect(S.onTick()).toBeFalse()           -- the basher has it
+    expect(S.state).toBe("idle")
+    expect(ataxiaTemp.swarmHold).toBe(nil)
+    expect(count("tumble")).toBe(0)
+    clock = clock + 3
+    hurt(30)
+    sent = {}
+    local said = capture(function() S.onVitals() end)
+    expect(said:find("already left one room", 1, true) ~= nil).toBeTrue()
+    expect(S.disengage("incoming damage")).toBeFalse()
+    expect(count("tumble") + count("leap") + count("cq all")).toBe(0)
+    expect(S.state).toBe("idle")
+  end)
+
+  it("a retreat that never left spends nothing", function()
+    escapeSent()
+    for _ = 1, S.PULL_RETRIES + 1 do S.onMoveFailed() end
+    expect(S.state).toBe("idle")
+    expect(S._retreat).toBeNil()
+    MAP.current = 100                        -- a later walk out of the room is not a landing
+    S._checkPursuit()
+    expect(S._retreatSpent()).toBeFalse()
+  end)
+
+  it("a panic's own landing spends it, and the next panic is refused", function()
+    fixture(3)
+    indoors()
+    mnemRollHide = true
+    hurt(30)
+    expect(S._maybePanic(30)).toBeTrue()
+    expect(count("tumble s")).toBe(1)
+    land(1)
+    expect(S._retreatSpent()).toBeTrue()
+    S.state = "idle"                         -- the recovery handed back
+    clock = clock + 60
+    S._lastPanicAt = nil
+    expect(S._maybePanic(20)).toBeFalse()
+    expect(count("tumble")).toBe(0)
+  end)
+
+  it("no pull from the landing room, even a crowded one", function()
+    escapeSent()
+    land(4)
+    S.state, S._escaping = "idle", nil
+    local said = capture(function() S.onTick() end)
+    expect(S.state).toBe("idle")
+    expect(ataxiaTemp.swarmPullDir).toBeNil()
+    expect(said:find("no pull", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("a pull's landing counts: no panic out of the funnel room", function()
+    pullLanded(2)
+    MAP.rooms[100].exits.west = 50
+    hurt(30)
+    S._lastPanicAt = nil
+    sent = {}
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("funnel")
+    expect(count("tumble")).toBe(0)
+  end)
+
+  it("a fit re-entry is a new engagement: the hit-and-run keeps its next pull", function()
+    pullLanded(0)
+    clock = clock + 3
+    S.onTick()
+    expect(S.state).toBe("reenter")
+    expect(S._retreatSpent()).toBeFalse()
+    MAP.current = 200; mobs = 3
+    S.onTick()
+    expect(S.state).toBe("pulling")
+    expect(ataxiaTemp.swarmPullDir).toBe("s")
+  end)
+
+  it("an unfit re-entry keeps it spent", function()
+    pullLanded(0)
+    hurt(50)
+    clock = clock + 3
+    S.onTick()
+    expect(S.state).toBe("recovering")
+    expect(S._retreatSpent()).toBeTrue()
+  end)
+
+  it("an empty room heals an unfit character first, and the heal gives it back", function()
+    escapeSent()
+    land(0)
+    S.state, S._escaping = "idle", nil
+    hurt(30)
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("recovering")
+    expect(S.recoverTarget).toBe(85)
+    expect(S._retreatSpent()).toBeTrue()
+    hurt(90)
+    S.onTick()                               -- clean at 90: one DIAGNOSE to confirm
+    S.onTick()
+    expect(S.state).toBe("idle")
+    expect(S._retreatSpent()).toBeFalse()
+    expect(S._retreatBlock("s")).toBeNil()
+  end)
+
+  it("an empty room and a fit character give it back at once", function()
+    escapeSent()
+    land(0)
+    S.state, S._escaping = "idle", nil
+    hurt(90)
+    expect(S.onTick()).toBeFalse()
+    expect(S._retreatSpent()).toBeFalse()
+  end)
+
+  it("a recovery that hits the cap gives it back", function()
+    fixture(3)
+    ataxiaBasher.inMnemosyne = true
+    mobs = 0
+    S.state, S.recoverGround, S.recoverStarted, S.recoverTarget = "recovering", true, clock, 85
+    S.retreatSpentAt = clock
+    ataxia.vitals.hpp = 30
+    clock = clock + 61
+    S.onTick()
+    expect(S.state).toBe("idle")
+    expect(S._retreatSpent()).toBeFalse()
+  end)
+
+  it("a stalled recovery gives it back", function()
+    fixture(3)
+    ataxiaBasher.inMnemosyne = true
+    mobs = 0
+    S.state, S.recoverGround, S.recoverStarted, S.recoverTarget = "recovering", true, clock, 85
+    S.retreatSpentAt = clock
+    ataxia.vitals.hpp = 92
+    ataxia.afflictions = { weariness = true }
+    for _ = 1, 6 do clock = clock + 2; S.onTick() end
+    expect(S.state).toBe("idle")
+    expect(S._retreatSpent()).toBeFalse()
+    ataxia.afflictions = {}
+  end)
+
+  it("a new ripple gives it back", function()
+    fixture(3)
+    S.retreatSpentAt = clock
+    S.onRipple()
+    expect(S._retreatSpent()).toBeFalse()
+  end)
+
+  it("Righteous Fire gives it back and leaves", function()
+    fixture(3)
+    indoors()
+    S.retreatSpentAt = clock
+    S.onRighteousFire("test")
+    expect(count("leap s")).toBe(1)
+  end)
+
+  it("the sky is not a retreat: outdoors, the hover still flies", function()
+    fixture(4)
+    S.retreatSpentAt = clock
+    hurt(30)
+    S.onVitals()
+    expect(S.state).toBe("recovering")
+    expect(S.flying).toBeTrue()
+    expect(count("tumble")).toBe(0)
+  end)
+
+  it("...on the tick path as well", function()
+    fixture(4)
+    S.retreatSpentAt = clock
+    hurt(30)
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("recovering")
+    expect(S.flying).toBeTrue()
+  end)
+
+  it("a spent retreat mid-kite becomes the hover, never a tumble", function()
+    fixture(3)
+    S.onTick(); S.decorate("attack", ";")
+    MAP.current = 100; mobs = 0; S.onTick()
+    mobs = 3; S.onTick()
+    expect(S.flying).toBeTrue()
+    MAP.rooms[100].exits.west = 50
+    mnemRollHide = true
+    hurt(30)
+    S._lastPanicAt = nil
+    sent = {}
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("recovering")
+    expect(S.flying).toBeTrue()
+    expect(count("tumble")).toBe(0)
+  end)
+
+  -- The re-tumble this replaced hid a gap: the panic waits in the queue for balance, the move lock
+  -- only arms on "You begin to tumble", and the denizens in the list are the ones we are leaving.
+  local function panicQueued()
+    fixture(3)
+    indoors()
+    mnemRollHide = true
+    hurt(30)
+    expect(S._maybePanic(30)).toBeTrue()
+    sent = {}
+  end
+
+  it("a panic tumble still in the queue is not handed back to the basher", function()
+    panicQueued()
+    clock = clock + 2
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("recovering")
+    expect(ataxiaTemp.swarmHold).toBeTrue()
+    expect(count("tumble")).toBe(0)
+  end)
+
+  it("...and is given up on after TUMBLE_ARM, with nothing spent", function()
+    panicQueued()
+    clock = clock + S.TUMBLE_ARM + 1
+    expect(S.onTick()).toBeFalse()
+    expect(S.state).toBe("idle")
+    expect(ataxiaTemp.swarmHold).toBe(nil)
+    expect(ataxiaTemp.escapeMode).toBe(nil)
+    expect(S._retreat).toBeNil()
+    expect(S._retreatSpent()).toBeFalse()
+  end)
+
+  it("a pull refused by MAX_PULLS leaves no record", function()
+    fixture(4)
+    S.pulls[200] = 3
+    S.onTick()
+    expect(S.noTactics[200]).toBeTrue()
+    expect(S._retreat).toBeNil()
   end)
 end)
 

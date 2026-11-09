@@ -2,6 +2,51 @@
 
 ---
 
+## 2026-11-09 - v4.7.482: one retreat, then we fight
+
+The user died in a Mnemosyne ripple. The log has seven retreats in 35 seconds between a room of 3 denizens and a room of 1, and the last one started at 1% health. The user: "We kept tumbling here from a room with 3 denizens into a room of 1 denizen. At this point. we should only tumble once. That is it. If there is a mob in that room. We have to kill it." The log is `kb/raw/live/mnemosyne-tumble-loop_2026-11-09.txt`. **None of this has run in Mudlet.** The Lua tests run the real swarm module.
+
+**What you will see change:**
+
+- **One ground retreat, then the basher fights.** After we land in another room, these are refused at any HP: the panic tumble, the low-HP escape, the basher's disengage and a new pull. The tumble that a recovery sent when company arrived is gone.
+- **A denizen in the landing room is fought there.** The new lines are `company arrived mid-recovery (41%) -- no second retreat; killing it here.` and `3 denizens (>= 3), but we already left one room -- no pull, fighting in place.`
+- **An empty landing room is a place to heal.** If we are below 85% or still afflicted, the sweep waits there before it moves on.
+- **Hit-and-run pulls still work.** Going back in fit gives the retreat back.
+- **Known cost, accepted by the rule:** with no retreat left, a strong denizen or a room hazard in the landing room can kill us.
+
+### Seven retreats, three paths
+
+| Time | Path | Move |
+|---|---|---|
+| 12:52:30 | low-HP escape | 3-denizen room to 1-denizen room. This is the one retreat we keep. |
+| 12:52:35 | panic tumble | Back. The other room was empty. |
+| 12:52:42 | recovery re-tumble | Company arrived. |
+| 12:52:50 | recovery re-tumble | Company arrived. |
+| 12:52:56 | the basher's disengage (a leap) | No check for an earlier retreat. |
+| 12:52:57 | panic tumble | Its cooldown had expired. |
+| 12:53:05 | recovery re-tumble | The panic reset the budget. We died in this tumble. |
+
+Only the re-tumble had a budget (`S.RECOVER_TUMBLES`, 2), and each panic reset it.
+
+### The latch (`mnemosyne/009_Swarm_Tactics.lua`)
+
+- **`S.retreatSpentAt` is armed on the landing**, in `S._checkPursuit`, and not on the send. A refused leap or a lost tumble spends nothing.
+- **Readers:** `S._retreatBlock` (which `_beginEscape`, `_escapeRouteReady`, `S.disengage` and both low-HP ladders read), `_maybePanic` and the pull gate in `onTick`.
+- **Still allowed, because none of them is a walk into another room of the same fight:** the outdoor recovery hover, the Seclusion fling, the lava escape and a retry of the tumble already under way.
+- **Given back by `S._restoreRetreat`:** the room is empty and `_mayReturn` holds (85% and cured), a recovery ends (healed, stalled or capped), a fit re-entry starts, Righteous Fire, a reload. A new ripple or an explorer restart clears the latch too.
+- **`S.RECOVER_TUMBLES` and `S._recoverTumbles` are removed.** Company during a ground recovery always hands back to the basher.
+
+### What the rule needed
+
+- **`S._retreatInFlight`** holds a recovery while its panic tumble waits in the queue for balance, for at most `TUMBLE_ARM` (8 s). A hand-back would let the next attack's `queue addclearfull` wipe the tumble.
+- **`noLadder`** turns off the tick's low-HP branch when no hover is possible. Its early return would skip the `pulling` and `funnel` branches that heal where an escape lands.
+- **`_maybePanic` records its own retreat**, so its landing spends the latch.
+- **`S._forgetUnlandedRetreat`** and a later `_noteRetreat` in `_beginPull` stop a pull that never left from reading as a landing.
+
+Tests: `src_new/tests/test_swarm_tactics.lua`, with a new group that replays this death. 20 deliberate breaks of the new guards each failed a test.
+
+---
+
 ## 2026-11-09 - v4.7.481: the anti-class defences follow whoever hits you, and a due lock-breaker goes before the shield
 
 The user decided the two questions v4.7.480 left open (`kb/CONFLICTS.md`, Resolved, was #75 and #77). **None of this has run in Mudlet.** The Lua tests run the real engine, helpers, anti-priorities, lock-breakers and `combatQueue`.

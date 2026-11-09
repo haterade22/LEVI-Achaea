@@ -448,7 +448,12 @@ function S._checkPursuit()
     if (now() - r.at) > 15 then S._retreat = nil end -- never left: forget it
     return
   end
-  r.landedAt = r.landedAt or now()
+  -- THE ONE RETREAT IS SPENT HERE, ON THE LANDING (v4.7.482). Not when it is sent: a refused leap
+  -- or a lost tumble left us where we were, and must not cost the retreat that can still save us.
+  if not r.landedAt then
+    r.landedAt = now()
+    S.retreatSpentAt = now()
+  end
   local since = now() - r.landedAt
   if since < (tonumber(S.PURSUIT_SETTLE) or 1.5) then return end
   local n = (M._denizenCount and M._denizenCount()) or 0
@@ -466,6 +471,45 @@ end
 function S._pursued()
   local at = tonumber(S.pursuedAt)
   return at ~= nil and (now() - at) >= 0 and (now() - at) < (tonumber(S.PURSUIT_MEMORY) or 45)
+end
+
+-- ---------------------------------------------------------------------------
+-- ONE RETREAT, THEN WE FIGHT (v4.7.482)
+-- ---------------------------------------------------------------------------
+-- User, from a death: "We kept tumbling here from a room with 3 denizens into a room of 1 denizen.
+-- At this point. we should only tumble once. That is it. If there is a mob in that room. We have
+-- to kill it."
+--
+-- The log has seven retreats in 35 seconds between those two rooms, sent by three paths that did
+-- not know about each other: the panic tumble, the recovery re-tumble and the escape ladder (the
+-- basher's disengage is the ladder too). Only the re-tumble had a budget, and a panic reset it.
+-- Each hop paid both rooms' next rounds and healed nothing. So every GROUND retreat now reads one
+-- latch. The rooms it refuses to leave are the ones the basher kills its way out of, at any HP.
+--
+-- NOT covered, because none of them is a walk into another room of the same fight: the recovery
+-- hover, the Seclusion fling, the lava escape, and a retry of the tumble already under way.
+--
+-- It is given back when the fight it started is over and we are fit, when a recovery ends, when a
+-- hit-and-run re-entry starts a new engagement, and at a ripple boundary. S.reset leaves it alone:
+-- the panic and the ladder both reset on their way out.
+function S._retreatSpent() return S.retreatSpentAt ~= nil end
+
+function S._restoreRetreat() S.retreatSpentAt, S._retreat = nil, nil end
+
+-- A retreat that never left must not read as a landing if the sweep walks on later.
+function S._forgetUnlandedRetreat()
+  if S._retreat and not S._retreat.landedAt then S._retreat = nil end
+end
+
+-- Sent, not landed, and young enough to still be waiting on balance in the queue. A panic tumble
+-- can wait out most of a 5.5s tumble balance before "You begin to tumble" arms the move lock.
+function S._retreatInFlight()
+  local r = S._retreat
+  if not r or r.landedAt then return false end
+  local cur = M.map and M.map.current
+  if cur == nil or cur ~= r.from then return false end
+  local since = now() - (tonumber(r.at) or 0)
+  return since >= 0 and since < (tonumber(S.TUMBLE_ARM) or 8)
 end
 
 -- Where does this exit of the current room lead, if the map knows?
@@ -502,6 +546,7 @@ end
 function S._retreatBlock(dirShort)
   if not S._indoors() and S._canHover() then return nil end
   if S._pursued() then return "the swarm follows every retreat -- fighting here" end
+  if S._retreatSpent() then return "we already left one room -- what is in this one we kill" end -- v4.7.482
   local dir = dirShort or S._backDir() or S._escapeLastResort()
   if dir and S._isUTurn(dir) and not S._mayReturn() then
     return "the only way out is back into the room we just fled (going back needs "
@@ -749,7 +794,6 @@ function S._escapeSuffix(sep)
 end
 
 function S._beginPull(shortBack, longBack, shortFwd, count, mode)
-  S._noteRetreat(M.map and M.map.current) -- v4.7.370: did the pull shake them?
   S._escapeStartedAt = nil -- a pull is a tactic, not an escape: onVitals may still replace it
   local MAP = M.map
   local cur = MAP and MAP.current
@@ -761,6 +805,9 @@ function S._beginPull(shortBack, longBack, shortFwd, count, mode)
     S.state = "idle"
     return false
   end
+  -- v4.7.370: did the pull shake them? Below the refusal (v4.7.482): a pull that never starts must
+  -- leave no record, or the sweep walking on later reads as this pull landing.
+  S._noteRetreat(cur)
   -- Snapshot for the hit-and-run progress check on the NEXT assess of this room:
   -- pre-swing count + focused target hp (both improve when the cycle achieves anything).
   do
@@ -932,7 +979,7 @@ end
 -- The gate is the SAME one the recovery hover uses -- recoverAt% AND affliction-free -- rather
 -- than a second opinion invented here. And when we are not ready we do not merely wait: we
 -- enter `recovering`, which already knows how to heal on the ground, confirm with DIAGNOSE,
--- tumble on if company arrives, and give up after RECOVER_MAX. Reusing it means this path
+-- fight what arrives (v4.7.482), and give up after RECOVER_MAX. Reusing it means this path
 -- inherits every fix those made rather than repeating their bugs.
 function S._reenterReady()
   -- returnAt, not recoverAt (v4.7.370, user: "if we are cured and roughly 85 percent health we
@@ -941,8 +988,8 @@ function S._reenterReady()
 end
 
 -- Heal on the ground, here, to returnAt and cured (v4.7.378). The same recovery the funnel's
--- not-ready re-entry uses: attacks held while the room is quiet, company hands back to the basher
--- (or Roll Hide tumbles on), and the sweep resumes only once we are fit.
+-- not-ready re-entry uses: attacks held while the room is quiet, company hands back to the basher,
+-- and the sweep resumes only once we are fit.
 function S._recoverHere(why)
   local s = S._cfg()
   S._clearFunnelTimer()
@@ -976,6 +1023,7 @@ function S._beginReenter()
     return true
   end
   S.state = "reenter"
+  S._restoreRetreat() -- v4.7.482: going back in, fit, is a new engagement with its own retreat
   local followers = S.peakFollowers or 0
   if S.flying then send("land"); S.flying = nil end
   if S.mode == "wall" then
@@ -1201,6 +1249,9 @@ function S._maybePanic(hpNow)
   -- time) and only walks us further from the sweep. Without this the 10s cooldown was the
   -- only thing between a slow heal and a tumble every ten seconds, wandering the ripple.
   if S.state == "recovering" then return false end
+  -- ONE RETREAT (v4.7.482). The death log's first second tumble was this one: 0.5s after an escape
+  -- landed in an EMPTY room, and it went back into the room we had just fled.
+  if S._retreatSpent() then return false end
   if not S._panicHpHit(hp) then return false end
   if S._lastPanicAt and (now() - S._lastPanicAt) < PANIC_COOLDOWN then return false end
   local dir = S._panicDir()
@@ -1223,6 +1274,7 @@ function S._maybePanic(hpNow)
   -- Tear down BEFORE queueing the escape: reset() flushes the queue when a tactic was
   -- active, and that flush must never land on top of our tumble.
   S.reset("panic tumble")
+  S._noteRetreat(M.map and M.map.current) -- v4.7.482: its landing spends the one retreat too
   -- Free-queued, not raw: at panic HP the balance is usually spent mid-round, and a raw
   -- tumble would be rejected. The free queue fires it the instant we're able -- and the
   -- hold is re-armed so the next attack dispatch's `queue addclearfull` (sub-second via
@@ -1251,7 +1303,6 @@ function S._maybePanic(hpNow)
   S.state = "recovering"
   S.recoverGround = true
   S.recoverStarted = now()
-  S._recoverTumbles = nil -- v4.7.245: the chain budget is per RECOVERY, not per session
   S._armRecoverHold()
   -- Self-ticking, like the hover: a recovery must never wait on an outside event to notice
   -- it has healed.
@@ -1390,7 +1441,6 @@ end
 S.TUMBLE_CONFIRM = 5          -- seconds to allow a tumble to land before re-sending
 S.TUMBLE_RETRIES = 2          -- re-sends before giving up and letting the ladder decide
 S.PULL_RETRIES   = 2          -- re-sends of a lost tactical retreat before handing back
-S.RECOVER_TUMBLES = 2         -- consecutive mid-recovery tumbles before we stand and fight
 S.ARRIVE_SETTLE   = 1.5       -- seconds after a tumble resolves before denizensHere is trusted
 S.ESCAPE_MODE_MAX = 12        -- hard cap on escape mode, so it can never wedge the basher
 
@@ -1929,6 +1979,7 @@ function S._recoverWatch(s)
     S._rp = nil
     S.recoverDiagnosed = nil
     S.recoverTarget = nil
+    S._restoreRetreat() -- v4.7.482: a recovery that ended gives the retreat back, however it ended
     if S.flying then send("land") end
     S.flying = nil
     S.flightConfirmed, S.hoverSeenUpAt = nil, nil
@@ -1992,16 +2043,11 @@ function S.onTick()
     -- something wanders into the room with us, standing there attack-gated at panic HP is
     -- strictly worse than fighting it -- hand back and let the basher swing.
     if S.recoverGround and M._roomHasDenizens and M._roomHasDenizens() then
-      -- MOVE AGAIN, do not stand and fight (v4.7.233). The v4.7.218 rule handed straight back
-      -- to the basher here, and the death log shows what that costs: "company arrived
-      -- mid-recovery (43%) -- handing back", then "LOW HP (31%)" four seconds later, then
-      -- dead. Handing back drops us into a mob-filled room at half health with the recovery
-      -- abandoned -- the worst of both.
+      -- COMPANY IS FOUGHT, NEVER FLED (v4.7.482, user: "we should only tumble once. That is it.
+      -- If there is a mob in that room. We have to kill it."). v4.7.233 tumbled on from here, up
+      -- to two more times per recovery, and the 2026-11-09 death is what that buys: the next room
+      -- held company too, so each hop paid another full round and healed nothing.
       --
-      -- With Roll Hide up the answer is another tumble: it sheds pursuers outright, so the
-      -- fight does not follow, and we keep healing somewhere quieter. Only when we cannot move
-      -- (no boon, no route) is standing and fighting genuinely the better option -- and then
-      -- it really is better than being attack-gated while something hits us.
       -- ARRIVAL IS NOT SETTLED (v4.7.245). `_roomHasDenizens` reads `ataxia.denizensHere`,
       -- which is fed by gmcp Char.Items and lags the room change -- so for a beat after
       -- landing it still lists the mobs we just fled. This tick fires on arrival, reads the
@@ -2025,11 +2071,6 @@ function S.onTick()
         if M._scheduleTick then M._scheduleTick(RECOVER_TICK) end
         return true
       end
-      -- AND A HARD BUDGET. Roll Hide sheds pursuers, so needing a third tumble means either
-      -- the rooms really are occupied or something is wrong with our reading of them. Either
-      -- way, chain-tumbling across the ripple at panic HP is worse than standing and fighting
-      -- one room: every hop pays the affix damage again and heals nothing. Reset when a
-      -- recovery begins, so it is a per-recovery budget rather than a session one.
       -- A TUMBLE ALREADY IN FLIGHT IS NOT "NOWHERE TO GO" (v4.7.252). The v4.7.243 move lock
       -- made `dir` falsy while a tumble was mid-air, and the code below reads a falsy `dir` as
       -- "we cannot leave" -- so it abandoned the recovery, cleared the hold and handed the
@@ -2039,36 +2080,24 @@ function S.onTick()
       -- tumble out of the room."
       --
       -- The lock means "wait, we are already leaving" -- the opposite of "we are stuck".
-      if S.moveLocked() then
-        if M._scheduleTick then M._scheduleTick(RECOVER_TICK) end
-        return true
-      end
-      local spent = tonumber(S._recoverTumbles) or 0
-      local budget = tonumber(S.RECOVER_TUMBLES) or 2
-      local dir = (spent < budget) and S._shedsPursuers() and S._panicDir()
-      if dir then
-        S._recoverTumbles = spent + 1
-        local sep = (ataxia.settings and ataxia.settings.separator) or ";"
-        local cmd = S._shedCmd(dir)
-        send("queue addclear free stand" .. sep .. cmd)
-        -- confirm a TUMBLE lands; retry if not. A plain step (Terror) has no tumble to retry.
-        if cmd:sub(1, 7) == "tumble " then S.onTumbleStart(dir) end
-        S.recoverStarted = now() -- the recovery continues where we land, not from zero
+      --
+      -- STILL QUEUED COUNTS AS LEAVING (v4.7.482). The lock is armed by "You begin to tumble",
+      -- and a panic tumble can sit in the free queue for most of a balance before that line. The
+      -- denizens this tick sees are the ones we are leaving; handing back now would let the next
+      -- attack's `queue addclearfull` wipe the tumble. The re-tumble this replaced hid that gap.
+      if S.moveLocked() or S._retreatInFlight() then
         S._armRecoverHold()
         if M._scheduleTick then M._scheduleTick(RECOVER_TICK) end
-        S._echo("<indian_red>company mid-recovery (" .. hpp() .. "%)<reset> -- tumbling on <cyan>"
-          .. dir .. "<reset> rather than trading.")
         return true
       end
+      S._forgetUnlandedRetreat()
       S.recoverGround = nil
       S.recoverTarget = nil -- v4.7.370
       S._clearHold()
+      S.escapeOff() -- both holds: a lost panic tumble leaves escape mode armed for up to 12s
       S.state = "idle"
-      S._echo("<grey>company arrived mid-recovery (" .. hpp() .. "%) and "
-        .. ((tonumber(S._recoverTumbles) or 0) >= (tonumber(S.RECOVER_TUMBLES) or 2)
-            and "already tumbled " .. S._recoverTumbles .. "x" or "nowhere to go")
-        .. " -- handing back.")
-      S._recoverTumbles = nil
+      S._echo("<indian_red>company arrived mid-recovery<reset> (" .. hpp()
+        .. "%) -- no second retreat; <cyan>killing it here<reset>.")
       return false
     end
     -- THE HOVER CHECKS ITS OWN PREMISE EVERY TICK (v4.7.321).
@@ -2134,6 +2163,7 @@ function S.onTick()
     if healed or (now() - (S.recoverStarted or 0)) > RECOVER_MAX then
       S.recoverDiagnosed = nil
       S.recoverTarget = nil -- v4.7.370
+      S._restoreRetreat() -- v4.7.482: a recovery that ended gives the retreat back, however it ended
       -- Only land if we are actually up: a ground recovery sending "land" every time is
       -- noise, and noise in the escape path is how a real refusal gets missed.
       if S.flying then send("land") end
@@ -2175,7 +2205,11 @@ function S.onTick()
   -- converts in place -- no land/fly churn.
   do
     local s = S._cfg()
-    if s.escape ~= false and hpp() <= s.escapeAt then
+    -- A SPENT RETREAT HAS NO GROUND LADDER TO RUN (v4.7.482), so the states below decide. An early
+    -- return here, the way a followed retreat does it, would skip the branch that heals where an
+    -- escape lands. The hover needs no retreat, so outdoors this still runs.
+    local noLadder = S._retreatSpent() and (S._indoors() or not S._canHover())
+    if s.escape ~= false and hpp() <= s.escapeAt and not noLadder then
       -- THE SAME BOUND onVitals HAS (v4.7.314). These two paths call _beginEscape for the same
       -- reason and only onVitals was throttled, so this one ran on every tick -- and each pass
       -- reset the tactic (`cq all`) and re-entered the escape machinery. Share the stamp as well
@@ -2293,6 +2327,13 @@ function S.onTick()
   -- idle: assess the room we're standing in
   if not (M._roomHasDenizens and M._roomHasDenizens()) then
     S.pursuedAt = nil -- v4.7.370: the fight that followed us is over
+    -- THE RETREAT COMES BACK WITH OUR HEALTH (v4.7.482). The room is empty, but at low HP the sweep
+    -- must not walk on: it would meet the next room with no retreat left. Heal here first; that
+    -- recovery's end gives the retreat back.
+    if S._retreatSpent() then
+      if not S._mayReturn() then return S._recoverHere("the room is clear") end
+      S._restoreRetreat()
+    end
     -- Room done. If our icewall from the wall tactic still stands on the funnel
     -- edge, melt it before handing the tick back -- an intact wall makes every
     -- later plain walk on that edge fail (the 008 wall-leap reflex recovers, but
@@ -2332,6 +2373,11 @@ function S.onTick()
   -- A swarm that follows every retreat follows a pull too (v4.7.370): fight in place.
   if S._pursued() then
     S._sayOnce("pursued-pull", why .. ", and this swarm follows -- <grey>no pull<reset>, fighting in place.")
+    return false
+  end
+  -- A pull leaves the room too (v4.7.482): the one retreat is spent, so these get killed here.
+  if S._retreatSpent() then
+    S._sayOnce("spent-pull", why .. ", but we already left one room -- <grey>no pull<reset>, fighting in place.")
     return false
   end
   -- Hit-and-run continuation (user doctrine, Putoran-wildcat log 2026-07-26: nothing
@@ -2421,6 +2467,7 @@ function S.onRighteousFire(how)
     pcall(systemDefup, d.current)
   end
   S.pursuedAt, S._lastDisengageAt = nil, nil
+  S._restoreRetreat() -- v4.7.482: a full heal, and this exit is the boon's whole point
   return S.disengage("Righteous Fire")
 end
 
@@ -2567,6 +2614,7 @@ function S.onMoveFailed()
       return
     end
     S._pullRetries = nil
+    S._forgetUnlandedRetreat() -- v4.7.482: we never left, so nothing is spent
     S._echo("<grey>pull move lost -- reassessing.")
     S.state = "idle"
   elseif S.state == "reenter" then
@@ -2762,7 +2810,6 @@ function S.reset(reason)
   -- Same reasoning: escapeOff un-mutes the attack dispatcher, and the very next round's
   -- `queue addclearfull` would wipe the lava escape. Lava owns the hold until we are out of it.
   if not burning then S.escapeOff() end -- v4.7.243: the tactic is over either way (a NEW escape re-arms it)
-  S._recoverTumbles = nil
   S.recoverGround = nil
   S.recoverDiagnosed = nil
   S.recoverTarget = nil -- v4.7.370
@@ -2795,6 +2842,7 @@ function S.onRipple()
   -- v4.7.370: a new ripple is a new swarm and new floors
   S.icyRooms = {}
   S.pursuedAt, S._retreat, S._fled, S._said = nil, nil, nil, nil
+  S.retreatSpentAt = nil -- v4.7.482
   S.grounded = nil -- the denizen that dragged us down is left behind with its ripple
   local ripple = (M.run and tonumber(M.run.ripple)) or 0
   if S._wallsRipple ~= ripple then
@@ -2950,6 +2998,7 @@ if S._loadH then pcall(killAnonymousEventHandler, S._loadH) end
 S._loadH = registerAnonymousEventHandler("sysLoadEvent", function()
   S.state = "idle"
   S.pulls, S.noTactics = {}, {}
+  S._restoreRetreat() -- v4.7.482: `ataxia` is saved, and a stale latch would outlive the fight
   ataxiaTemp.swarmHold = nil
   ataxiaTemp.swarmPullDir = nil
   ataxiaTemp.tumbleDir, ataxiaTemp.tumbleFrom, ataxiaTemp.tumbleTries = nil, nil, nil
