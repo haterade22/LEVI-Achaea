@@ -814,7 +814,8 @@ the fighting that did happen was winning, and ice turned each retreat into sever
   then a swarm (>= threshold) within `PURSUIT_WINDOW` (4s) stamps `S.pursuedAt`. While
   `S._pursued()` (`PURSUIT_MEMORY` 45s, cleared when the room empties or on a new ripple) the
   ground retreat, last resort, disengage and pulls are refused -- `S._retreatBlock()` says why. The
-  hover (outdoors) is not a ground retreat and the Roll Hide panic tumble sheds pursuers; both stay.
+  hover (outdoors) is not a ground retreat, so it stays. The Roll Hide panic tumble stayed too until v4.7.482,
+  which made it read the one-retreat latch (see "One retreat, then we fight").
 - **The U-turn.** `S._fled = { room, at }` at every ground escape. For `FLED_MEMORY` (30s), a
   retreat whose door leads back into that room (`exitDest`: `room.edges` / `room.exits`) needs
   `S._mayReturn()` = `returnAt` (85) AND aff-free. `_reenterReady` uses the same test; when not ready
@@ -851,8 +852,8 @@ the explorer watchdog's QL. The recovery was ticking every 2s, but HP was met an
 was not curing held `_mayReturn`; only "cured" or `RECOVER_MAX` (60s) could end it.
 
 - `S._recoverWatch(s)` (009), called on every recovering tick below the company and hover-premise
-  checks. Its record `S._rp` is keyed to `S.recoverStarted`, so every entry (ground, hover, tumble,
-  re-tumble) starts fresh without each entry point resetting it; `S.reset` and the fixture clear it.
+  checks. Its record `S._rp` is keyed to `S.recoverStarted`, so every entry (ground, hover, tumble)
+  starts fresh without each entry point resetting it; `S.reset` and the fixture clear it.
 - **Progress** = an affliction from the last tick's set is gone, or HP rose while still below
   `recoverTarget`. HP above the bar is not progress.
 - **Stall** = HP >= target, afflictions remain, no progress for `S.RECOVER_STALL` (8s): ends the
@@ -907,7 +908,7 @@ end
 
 It reads state that already existed — `ataxiaTemp.tumbleDir`, armed by `S.onTumbleStart` and released by `S.onTumbleDone` (the game's own completion line via `misc_alerts/005`, or the `S.TUMBLE_CONFIRM` = 5s fallback) — so there is no second lifecycle to keep in sync.
 
-Guarded sites: `_tacticalGo`, `_beginPull`'s arm-timeout fallback, `_maybePanic`, `_beginEscape`'s hover branch, `_beginReenter`'s wall branch, the mid-recovery tumble, and in the explorer `_exploreMove`, `onIceSlip`, `onWallBlocked`.
+Guarded sites: `_tacticalGo`, `_beginPull`'s arm-timeout fallback, `_maybePanic`, `_beginEscape`'s hover branch, `_beginReenter`'s wall branch, and in the explorer `_exploreMove`, `onIceSlip`, `onWallBlocked`.
 
 **`S.onVitals` is the one that mattered.** A Roll Hide pull tumble leaves `S.state == "pulling"`, and the only early return in `onVitals` is the `recovering` one — so two seconds into a four-second tumble it fired `cq all` + `_beginEscape` → `stand;leap <dir>`, throwing away a tumble that was about to land. It is also the single path independent of every existing hold, which is what makes it valuable *and* dangerous.
 
@@ -928,10 +929,9 @@ Same class as the v4.7.125 catch (airborne `Char.Items` reflects the sky, so a m
 | Guard | Value | Why |
 |---|---|---|
 | `S.ARRIVE_SETTLE` | 1.5s from the tumble **resolving** (stamped in `onTumbleDone`) | inside it the tick is consumed and re-scheduled, not decided — the next look is at real data |
-| `S.RECOVER_TUMBLES` | 2, **per recovery** | Roll Hide sheds pursuers, so a third tumble means our reading of the room is wrong; every hop pays the affix damage again and heals nothing |
-| `since >= 0` | — | a future-dated stamp cannot hold the settle open. Impossible on a monotonic clock, but the failure direction — silently disabling the re-tumble forever — is the one that hurts |
+| `since >= 0` | — | a future-dated stamp cannot hold the settle open. Impossible on a monotonic clock, but the failure direction — a recovery tick that never decides again — is the one that hurts |
 
-Past the budget we fall through to standing and fighting, which the v4.7.233 comment already argues is better than being attack-gated while something hits us.
+v4.7.245 also capped the chain at `S.RECOVER_TUMBLES` = 2 re-tumbles per recovery. v4.7.482 removed the re-tumble and the budget: each panic reset the budget, and the chain killed us. Company during a ground recovery now always hands back to the basher (see "One retreat, then we fight", below).
 
 **Cause 2 — `You cease your tumbling.` was never wired to anything.** `misc_alerts/003` has printed a banner and sent `cq all` for a long time without ever telling the swarm. So a cancelled tumble was invisible to the only system that depends on tumbles landing: `ataxiaTemp.tumbleDir` stayed set until the `TUMBLE_CONFIRM` fallback expired — and since v4.7.243 made that state a **movement lock**, those were seconds in which nothing could move at all.
 
@@ -940,6 +940,34 @@ The log measures the cost: cancel at **11:40:41.115**, retry at **11:40:45.938**
 `S.onTumbleCanceled()` retries immediately, sharing `S._tumbleRetry()` with the timer path so both honour `TUMBLE_RETRIES`. It is ordered **after** the trigger's existing `cq all` — that flush would otherwise wipe the retry it is about to queue — and is inert outside Mnemosyne and when no tumble is tracked, so the manual/PvP uses of the line are unaffected.
 
 **A fallback timer is for when the game says NOTHING. When it names the failure, use it.**
+
+### One retreat, then we fight (v4.7.482)
+
+> "We kept tumbling here from a room with 3 denizens into a room of 1 denizen. At this point. we should only tumble once. That is it. If there is a mob in that room. We have to kill it." — user, 2026-11-09
+
+Live log (`kb/raw/live/mnemosyne-tumble-loop_2026-11-09.txt`): **seven retreats in 35 seconds** between the same two rooms, and a death. Three paths sent them, and none knew about the others: the panic tumble, the recovery re-tumble, and the escape ladder (the basher's disengage is the ladder too). Only the re-tumble had a budget, and each panic reset it.
+
+Every ground retreat now reads one latch, `S.retreatSpentAt`.
+
+| Question | Answer |
+|---|---|
+| When is it spent? | On the **landing**, in `S._checkPursuit`. A refused leap or a lost tumble spends nothing. |
+| What does it refuse, at any HP? | The panic tumble (`_maybePanic`), the ground escape, the disengage (`S._retreatBlock`, which `_beginEscape`, `_escapeRouteReady`, `S.disengage` and both low-HP ladders read), and a new pull (the `onTick` pull gate). |
+| What stays allowed? | The outdoor recovery hover, the Seclusion fling, the lava escape (`M.onLava`) and a retry of the same tumble (`_tumbleRetry`). None is a walk into another room of the same fight. |
+| What happens to a denizen in the landing room? | The normal basher fights it. |
+| What gives it back? | The room is empty and `S._mayReturn()` holds (85% and cured), a recovery ends (healed, stalled or capped), a fit re-entry starts (`_beginReenter`), Righteous Fire, a reload (`S._restoreRetreat`). `S.onRipple` clears it for a new ripple or an explorer restart. |
+
+If the landing room empties and we are not fit, `S._recoverHere` heals there before the sweep moves on. Otherwise the sweep walks into the next room hurt, with no retreat left.
+
+**Known cost, accepted by the rule:** an unkillable hazard or a strong denizen in the landing room can kill us. There is no config switch.
+
+Three guards came with it:
+
+- **`S._retreatInFlight()`.** A free-queued panic tumble can wait up to 5.5 s for balance, and we are still in the old room. Until it lands, or for at most `S.TUMBLE_ARM` (8 s), the recovery holds, because a hand-back lets the next attack's `queue addclearfull` wipe the tumble.
+- **`noLadder` in `onTick`.** With the latch spent and no hover possible, the tick skips the low-HP branch. An early return there would skip the `pulling` and `funnel` branches that heal where an escape lands.
+- **False landings.** `_noteRetreat` sits below the `MAX_PULLS` refusal in `_beginPull`, and `S._forgetUnlandedRetreat()` drops the record of a retreat that never left. Otherwise the next walk of the sweep reads as its landing.
+
+`S.reset` does not touch the latch, because the panic and the ladder both reset on their way out.
 
 ### Boiling lava - the only unconditional "leave now" (v4.7.254, hardened v4.7.256)
 
@@ -1151,6 +1179,8 @@ enumerating verbs gives a trigger that works for the boss you captured and silen
 next. Safe because it decides nothing on its own.
 
 ### A tumble in flight is not "nowhere to go" (v4.7.252)
+
+*v4.7.482 removed the re-tumble. Its lesson stays as `S._retreatInFlight`: a tumble that has not landed holds the recovery.*
 
 The mid-recovery re-tumble computed its direction as
 
