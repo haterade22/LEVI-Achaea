@@ -483,7 +483,7 @@ The weary values are 0.80 x the others in every form.
 1. **Record nervestrike from its effect line.** "Horror overcomes the face of <T> as his body locks in paralysis." followed every nervestrike, 13 of 13, the 7 light ones included.
    - No trigger matches it: 420_Paralysis matches "...'s face as \w+ body stiffens into paralysis."
    - Add it to the gated effect-line group. That closes the nervestrike half of CONFLICTS #6.
-   - Correct kb/combat/shikudo.md:85 ("none on the attacker's side") and :296.
+   - Correct kb/combat/shikudo.md:160 ("none on the attacker's side") and :296.
    - Ruku to the arm still names no target (381); only the gated window can attribute it.
 2. **The kill template that worked:**
    - livestrike for asthma, ruku torso for slickness, hiraku for anorexia, nervestrike for paralysis and MIND IMPATIENCE;

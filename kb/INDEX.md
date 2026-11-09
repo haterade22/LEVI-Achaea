@@ -59,7 +59,7 @@ One line per page. Kept up to date by `/kb-ingest`.
 | raw/help/13.7.8_server-side-curing.txt | HELP 13.7.8 SSC commands | 2026-10-10 |
 | raw/help/conditional-afflictions-for-the-achaean-forms.txt | HELP: class active/passive cures and blockers (old skill names) | 2026-10-10 |
 | raw/live/whatcures.txt | Live WHATCURES output, one line per affliction (read by `tools/kb_catalog.py`) | 2026-10-10 (hypochondria) |
-| raw/live/affliction_show/ (211), raw/live/captures/ | `kbcapture afflictions` runs: all 203 game afflictions, plus old names. Re-run 2026-10-23 (`captures/kb_capture_2026-10-23_204555.txt`): every record and the list unchanged since 2026-10-11, apart from tempered melancholic's mana-regen clause | 2026-10-23 |
+| raw/live/affliction_show/ (212), raw/live/captures/ | `kbcapture afflictions` runs: all 203 game afflictions, plus old names. Re-run 2026-10-23 (`captures/kb_capture_2026-10-23_204555.txt`): every record and the list unchanged since 2026-10-11, apart from tempered melancholic's mana-regen clause | 2026-10-23 |
 | raw/live/affliction_list.txt | AFFLICTION LIST, all 203 afflictions (4 MORE pages) | 2026-10-10 |
 | raw/live/defence-batch-test_2026-10-10.txt | Test: one bad defence name in a batch only rejects that name | 2026-10-10 |
 | raw/live/curing-priority-defence-list_bash_2026-10-10.txt | Defence priorities, bash set | 2026-10-10 |
@@ -68,6 +68,7 @@ One line per page. Kept up to date by `/kb-ingest`.
 | raw/help/13.7_healing-and-curing.txt, 13.9_body-part-damage.txt | HELP 13.7, 13.9 | 2026-10-10 |
 | raw/help/4.6_equilibrium-and-balance.txt, 4.6.1_queueing.txt | HELP 4.6, 4.6.1 | 2026-10-10 |
 | raw/ab/survival_diagnose_1380.txt | AB Diagnose | 2026-10-10 |
+| raw/ab/serpent_obliviate_2115.txt, survival_satiation_1390.txt | AB for Obliviate (Attainment) and Satiation (Survival) | 2026-10-13, 2026-10-26 |
 | raw/announcements/classleads_2026-10-23.txt | The class-lead change post of 2026-10-23 | 2026-10-23 |
 | raw/live/captures/kb_capture_2026-10-23_122952.txt | AFFLICTION SHOW temperedmelancholic, pasted: the new mana-regen clause (filed by `kb_capture_import.py`; one soft wrap joined) | 2026-10-23 |
 | raw/ab/crystalism_overload_2026-10-23.txt, elementalism_pebble_2026-10-23.txt, psionics_pulse_2026-10-23.txt, woodlore_grapple_2026-10-23.txt | AB for the four new abilities of that post | 2026-10-23 |
@@ -75,6 +76,7 @@ One line per page. Kept up to date by `/kb-ingest`.
 | raw/logs/2026-10-11_shikudo-vs-runewarden-snb_attacker.txt | Combat log: a Shikudo kills a Runewarden by Dispatch (the monk's view; shared by the user) | 2026-10-11 |
 | raw/logs/2026-10-11_runewarden-snb-vs-shikudo_defender.txt | Combat log: a Runewarden kills a Shikudo by disembowel (her view; channel chat removed) | 2026-10-11 |
 | raw/logs/2026-10-11_mystor_*.txt (6) | Mystor's own arena fights as a Shikudo: against a Depthswalker, an Infernal (three times), an Apostate and a Shaman; five with MIND SAPIENCE on the opponent, so his typed commands show | 2026-10-11 |
+| raw/live/shikudo-bash_2026-11-03.txt | One Shikudo combo at a denizen: the user's screenshot, typed out verbatim | 2026-11-03 |
 | raw/live/config_2026-11-01.txt | The user's `CONFIG` list before the change: `SeeBalances` No, `UniversalAfflictionMessages` No, `CommandSeparator` `;`, `UseQueueing` YES | 2026-11-01 |
 | raw/live/probes_2026-11-01.txt | Live probes: a queued alias reads its text at fire time ("Two."), and FITNESS waits for equilibrium and costs 2.8 s of balance even with no asthma | 2026-11-01 |
 | raw/live/seebalances_2026-11-01.txt | First capture with `CONFIG SEEBALANCES` on: FITNESS prints `Balance used: 2.8s.`, and our stopwatch reads 2.785 s | 2026-11-01 |
@@ -85,6 +87,9 @@ One line per page. Kept up to date by `/kb-ingest`.
 | raw/live/mnemosyne-tashla-prey_2026-11-10.txt | A Mnemosyne death, unedited (profile on v4.7.478): two tash'la follow our one leap under Prey into a Sanguine Restoration blood pool, the retreat back is refused, and from 28% to 15% the only action is another attack. The log behind the last stand and the Prey block (v4.7.486). Sip lines are gagged | 2026-11-10 |
 | raw/logs/2026-08-19_leviticus_blademaster-vs-sentinel_loss_Sentinel.txt | Our own death to Grulk, a Sentinel, 123 s, by SKULLBASH: the log behind `.claude/classes/sentinel.md`. Filed 2026-11-01 from the user's desktop | 2026-11-01 |
 | raw/logs/2026-11-01_*.txt (20) | Combat logs shared by the user, all 1v1 by the party check: Claes (Runewarden) x9, Nikita (Depthswalker) x3, Elmer (Shikudo, Alchemist) x4, an Earth Lord x3, a Blademaster x1. First real Serpent logs. Listed in raw/logs/README.md; converted by `tools/kb_log_import.py` | 2026-11-01 |
+| raw/logs/2026-10-19_tabethys_magi-group_kalys_o6UKnyyy.txt | Tabethys (Magi) leads a group on the World Tree and kills Kalys, a Serpent, with STORMHAMMER at about 50% health | 2026-10-19 |
+| raw/logs/2026-10-27_shikudo-group-mhaldor.txt | The user's screen: a party of six against four (Sadey, Kutcher, Akri, Crixos), fought with `sr` in Rain and Oak. Written up in [combat/shikudo.md](combat/shikudo.md) | 2026-10-27 |
+| raw/logs/2026-11-03_shikudo-group-alias.txt, 2026-11-03_shikudo-group-alias-2.txt | Our first alias-round fights with people attacking, in a party led by Tabethys: no death for us in the first, death to two Depthswalkers in the second. Both overlap `raw/logs/ours/` recordings, so `kb_timing.SAME_FIGHT` keeps them out of every count | 2026-11-03 |
 | raw/logs/ours/*.log (12) | Our own `fightlog` recordings: Alchemist, Monk (we died), Infernal and Runewarden with Tabethys present, the two group alias fights of 2026-11-03 (we died in the second), the first two alias-round recordings (2026-11-02), and our first Serpent fight (2026-11-07, below). Millisecond rows with our sends and tracker beliefs | 2026-11-01 |
 | raw/logs/ours/2026-11-07_164635_Saibel.log, raw/logs/2026-11-07_serpent-spar-saibel.txt | A spar on v4.7.478: we are a Serpent in raw rounds against Saibel, who only cured (her class, Depthswalker, is from the NDB cache, unverified). One fight: the recording and the screen log beside it (`kb_timing.SAME_FIGHT` keeps the screen log out of every count). It gives inputs about OUR seat only: our own costs and round (`attack.cost.own.*`, `attack.gap.own` in [sim/rules.md](sim/rules.md)), the IMPULSE bite and the monkshood reaction, and from Saibel's third-person lines potash on its own clock (CONFLICTS, Resolved 2026-11-07) and one tree case (#65). The user decided that no Saibel number becomes a victim default, and the gates' holdout waits for the next log from a victim's seat (`tools/sim/gates_whole.json` unchanged) | 2026-11-07 |
 | raw/players/shikudo-2026-10-11.txt | Players in their own words: the user and Mystor on Shikudo, Telepathy, the mind lock and blackout | 2026-10-11 |

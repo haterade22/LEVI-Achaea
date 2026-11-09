@@ -52,9 +52,9 @@ from every `targetList`. See safety-systems doc for the exclusion points.
 `notOwnDenizens` (v4.7.169) is the inverse list, and it is a full denizen name rather
 than a keyword. The substring match that makes one `hyena` keyword cover every pet
 variant also shields any **real** mob whose name happens to contain a pet's word;
-`ataxiaBasher_isOwnDenizen` (`basher/001_Bashing_Functions.lua:348`) therefore scans
+`ataxiaBasher_isOwnDenizen` (`basher/001_Bashing_Functions.lua:716`) therefore scans
 this list before the pet keywords and returns false on a hit. It is seeded by
-**backfill** in `002_Check_For_Any_Missing_Variables.lua:172`, not as a fresh-install
+**backfill** in `002_Check_For_Any_Missing_Variables.lua:240`, not as a fresh-install
 default — existing saves already carry the bare `hyena` keyword, so a default would
 have fixed nobody who hit the bug. Managed with `bash notmine [add|rem] <name>`
 (alias `lists/013_Not_Own_Denizens.lua`), mirroring `bash mine`. No un-purge is

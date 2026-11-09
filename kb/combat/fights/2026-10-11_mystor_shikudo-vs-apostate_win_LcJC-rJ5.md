@@ -490,7 +490,7 @@ KB column: **NEW** = on no curated kb page; **(raw)** = only in kb/raw evidence;
    - Across Mystor's six logs it appears 6 times: FceAmb0o 5485 and 5585; here 5632; c.iJVmpL 3785; vNTjvghY 8291 and 8795.
    - Every time it came right after a **risingkick → livestrike** pair: 5 times to the torso, once to the head. Each of those livestrikes printed no damage line.
    - It is not every pair: in this log only 1 of 4 such pairs produced it (none at 4286, 5545, 5686).
-   - Log 2's victim got "[AFF]: Blackout" inside an Oak round right after a livestrike (shikudo.md:248-251). So that blackout may be this effect rather than MIND BLACKOUT. Unconfirmed.
+   - Log 2's victim got "[AFF]: Blackout" inside an Oak round right after a livestrike (shikudo.md:382-385). So that blackout may be this effect rather than MIND BLACKOUT. Unconfirmed.
 3. **Kata limits and stumbles.**
    - Peaks: Rain 16, Oak, Willow and Gaital 12. There was no stumble or rhythm line.
    - "You stumble and poke yourself in the eye." is a stupidity swap: the kata was 12 before and after (3543, 3559).
@@ -518,7 +518,7 @@ KB column: **NEW** = on no curated kb page; **(raw)** = only in kb/raw evidence;
 **For our Shikudo offense**
 - **Add a nervestrike effect-line trigger.** "Horror overcomes the face of <T> as his body locks in paralysis." appeared 8 of 8 times here, light ones included. It records paralysis even from light or absorbed nervestrikes.
   - `420_Paralysis.lua:35` and `magi_offense_tracking/007` match a different line ("…'s face as \w+ body stiffens into paralysis.").
-  - `kb/combat/shikudo.md:85` ("none on the attacker's side") is wrong.
+  - `kb/combat/shikudo.md:160` ("none on the attacker's side") is wrong.
 - **Against an evileye class, nervestrike is the best strike we have.** Each paralysis silenced DEADEYES for 2-9 s: 17 failed sends at 2031-2291 and 14 at 4095-4269. Pair it with livestrike: he cured asthma first 4 times out of 5.
 - **MIND PARALYSE is cured within 1 s** (3141, 3286, 3355, 3422, 3516). It is an equilibrium filler, not a lock piece.
 - **The Dispatch route that worked:**
@@ -530,7 +530,7 @@ KB column: **NEW** = on no curated kb page; **(raw)** = only in kb/raw evidence;
 - **Lead with SHATTER whenever the target is shielded,** and recognise "…rebounds off of <T>'s shield." as "shielded".
 - **Head damage is per monk.** Mystor's head strikes do half of log 1's numbers in all of his logs: nervestrike 6.1, risingkick head 4.2, hiru and hiraku 4.3, needle 6.7. Torso and limb strikes match log 1. The limb model must read the damage line, never use a fixed table.
 - **Stupidity is the monk's weak point.** It cost whole rounds (946-950, 5163-5168, 5300-5323) and a combo whose WIELD STAFF in the same alias had been replaced (3584, 3594), and it refused MIND PARALYSE (3188). The offense should notice a lost round (no strike lines after the send) and re-send it.
-- **The "Doubleaff" claim.** Mystor's system tags every ruku to the arm at its own kata count of 10 or more, and every kuro at 12 or more: 16 of 16 in this log, with no exceptions. Mystor says "I try to achieve 9/10 kata for the double up on kuro and ruku." (`.claude/classes/monk.md:1008`). Do not credit two afflictions in our tracker until a victim-side log shows it.
+- **The "Doubleaff" claim.** Mystor's system tags every ruku to the arm at its own kata count of 10 or more, and every kuro at 12 or more: 16 of 16 in this log, with no exceptions. Mystor says "I try to achieve 9/10 kata for the double up on kuro and ruku." (`.claude/classes/monk.md:1439`). Do not credit two afflictions in our tracker until a victim-side log shows it.
 
 **For our defence against an Apostate**
 - **Fix the CLAUDE.md note on `getLockingAffliction`** ("Apostate has no PARALYSE … stare (it gives paralysis with SICKEN)"). It is contradicted here: DEADEYES has a paralysis eye, and SICKEN gave manaleech every time.
@@ -541,10 +541,10 @@ KB column: **NEW** = on no curated kb page; **(raw)** = only in kb/raw evidence;
   - `determine_class/004_Apostate_Class_Grab.lua:39` expects "The whirling daegger **of (\w+)** plunges into your flesh." The live line names no owner, so it never fires.
   - No trigger matches the miss line.
   - Each hit costs two clots (about 80 mana).
-- **The "tree glows faintly … unchanged" line.** `curing_bals/001_Treed_(fake_).lua:34,39` calls it a real tree use that consumed balance. Here it printed only while the tree was recharging, and it did not restart the cooldown (732/963 vs 347→985; 3583 vs 3507→4116). Our Mnemosyne test already treats it as the reply to touching a tree that is not ready (`test_mnemosyne.lua:2271`).
+- **The "tree glows faintly … unchanged" line.** `curing_bals/001_Treed_(fake_).lua:34,39` calls it a real tree use that consumed balance. Here it printed only while the tree was recharging, and it did not restart the cooldown (732/963 vs 347→985; 3583 vs 3507→4116). Our Mnemosyne test already treats it as the reply to touching a tree that is not ready (`test_mnemosyne.lua:2294`).
 
 **For tracking this class's cures**
-- **The Syphon is exactly 12 s.** `passive_syphon = 12.0` (`007_Branching_State_Tracker.lua:1157`) is right. Fix `.claude/classes/apostate.md` and `kb/afflictions/class-cures.md`, which say "about every 10s".
+- **The Syphon is exactly 12 s.** `passive_syphon = 12.0` (`007_Branching_State_Tracker.lua:1277`) is right. Fix `.claude/classes/apostate.md` and `kb/afflictions/class-cures.md`, which say "about every 10s".
 - **The salve line names only the spot.** "…on his arms." was both restoration and mending (2657, 2900), so keep branching on it.
 - **Vials are per player.** `394_Sipped_Something.lua:35` and `target_health/003` fire on every "takes a drink from", so his mana sips count as health.
 - **Potash has its own balance.** He ate plumbum and potash in the same second (1387/1389). This contradicts CLAUDE.md's "potash/moss shares the EATING balance".

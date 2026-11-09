@@ -25,7 +25,7 @@ I also checked the "NEW" marks against the knowledge base and ran a few code gre
   - He wields "a Scimitar of Eagles in each hand" (35), ids `scimitar388622` and `scimitar314077`, and sends `dsl Mystor <limb> <item> <item>`.
   - He uses TYRANNY (123, 208-210), SUMMON INFESTATION (254-256), DEATHAURA ticks (295), the Hellforge investments TORMENT (577) and TORTURE (6045) in a DSL venom slot, QUASH (7006) and VIVISECT (2946-2948).
   - The likely Agony passive shows at 609-610.
-  - All of these are Oppression abilities in `kb/classes/infernal.md:157-228`.
+  - All of these are Oppression abilities in `kb/classes/infernal.md:159-232`.
   - He also sends MASTERY, and draws `shield685283` for QUASH (6999-7005).
   - EPITOMISE (4113) is not in `infernal.md`, so where it comes from is unknown.
 - **Result: Mystor won with two KAI CHOKEs.**
@@ -445,7 +445,7 @@ Mana: CLOT cost 40 (e.g. 5663 to 5623) and FOCUS 166 (2337).
 ## Game lines
 
 **How the NEW mark was decided:**
-- **NEW**: a fixed-string search for a distinctive fragment found nothing in the curated KB (`kb/` outside `kb/raw` and `kb/inbox`). Markdown line-wraps can hide a match, so I also read the first-pass notes on these fights (`shikudo.md:256-343`).
+- **NEW**: a fixed-string search for a distinctive fragment found nothing in the curated KB (`kb/` outside `kb/raw` and `kb/inbox`). Markdown line-wraps can hide a match, so I also read the first-pass notes on these fights (`shikudo.md:390-477`).
 - **NEW\***: not searched by me. The chunk readers found it in none of `shikudo.md`, `infernal.md` or `database.md`.
 - **–**: already in the KB.
 
@@ -455,7 +455,7 @@ Mana: CLOT cost 40 (e.g. 5663 to 5623) and FOCUS 166 (2337).
 
 | Line | First (count) | New | Meaning |
 |---|---|---|---|
-| `Horror overcomes the face of Agathon as his body locks in paralysis.` | 185 (17) | – (shikudo.md:306; but the strike table at shikudo.md:85 still says "none on the attacker's side") | nervestrike, light ones too; paralysis landed |
+| `Horror overcomes the face of Agathon as his body locks in paralysis.` | 185 (17) | – (shikudo.md:455; but the strike table at shikudo.md:160 still says "none on the attacker's side") | nervestrike, light ones too; paralysis landed |
 | `Your foot catches Agathon under the chin, snapping his head back.` | 187 | – | risingkick head |
 | `Your foot drives into the solar plexus of Agathon.` | 1905 | – | risingkick torso |
 | `The breath of Agathon leaves him in an explosive gasp as the end of the staff smashes home.` | 1685 (8) | – | livestrike |
@@ -572,7 +572,7 @@ Mana: CLOT cost 40 (e.g. 5663 to 5623) and FOCUS 166 (2337).
 | Line | First (count) | New | Meaning |
 |---|---|---|---|
 | `Agathon eats a magnesium chip.` | 201 | NEW | paralysis or slickness |
-| `Agathon eats an aurum flake.` | 248 | – (shikudo.md:200 form) | kelp group |
+| `Agathon eats an aurum flake.` | 248 | – (shikudo.md:311 form) | kelp group |
 | `Agathon eats a plumbum flake.` | 2607 | NEW | impatience |
 | `Agathon eats a ferrum flake.` | 4646 | NEW | addiction or lethargy |
 | `Agathon eats a potash crystal.` | 288 | NEW | moss |
@@ -589,7 +589,7 @@ Mana: CLOT cost 40 (e.g. 5663 to 5623) and FOCUS 166 (2337).
 | `A look of extreme focus crosses the face of Agathon.` | 2609 | – (runewarden-snb.md:47) | FOCUS |
 | `Agathon stands up.` | 957 | NEW | stood from prone (last at 6810) |
 | `You suddenly perceive the vague outline of an aura of rebounding around Agathon.` | 60 (16) | NEW (trigger 430 matches it) | rebounding up |
-| `Agathon's aura of weapons rebounding disappears.` | 255 (17) | – (shikudo.md:316) | his own attack dropped it |
+| `Agathon's aura of weapons rebounding disappears.` | 255 (17) | – (shikudo.md:465) | his own attack dropped it |
 | `Agathon moves with the grace of the wind, his stance the epitome of perfection beneath the flurry of blows.` | 4113 (2) | NEW | EPITOMISE |
 | `Agathon no longer moves with such sublime alacrity.` | 4304 | NEW | epitomise ends |
 | `Agathon ceases to favour his head.` | 8717 | NEW | unknown |
@@ -629,7 +629,7 @@ Mana: CLOT cost 40 (e.g. 5663 to 5623) and FOCUS 166 (2337).
 
 | Line | First (count) | New | Meaning |
 |---|---|---|---|
-| `Agathon gasps and stumbles as an unseen force crushes the life breath out of him.` | 8961 (2) | – (shikudo.md:309) | KAI CHOKE |
+| `Agathon gasps and stumbles as an unseen force crushes the life breath out of him.` | 8961 (2) | – (shikudo.md:458) | KAI CHOKE |
 
 ### Arena and death
 
@@ -726,7 +726,7 @@ Mana: CLOT cost 40 (e.g. 5663 to 5623) and FOCUS 166 (2337).
 
 1. **Paralysis confirmation.** Add a trigger for `^Horror overcomes the face of (\w+) as (?:his|her) body locks in paralysis\.$`. It printed after all 17 nervestrikes, light ones included, and it is the only confirmation of a light nervestrike (CONFLICTS #6). Two things to fix alongside it:
    - `420_Paralysis.lua:35` expects "…'s face as … body stiffens into paralysis.", so nothing matches this line today;
-   - `shikudo.md:85` still says "none on the attacker's side".
+   - `shikudo.md:160` still says "none on the attacker's side".
 2. **Do not break rebounding for Shikudo strikes; break the shield.**
    - Rebounding never stopped a strike in this fight.
    - Lead with SHATTER whenever a shield may be up. Sapience showed `touch shield` 20 lines before the bounce (4404 to 4424), and a bounce costs the whole combo plus 1.4-1.7 s of equilibrium.
@@ -771,7 +771,7 @@ Mana: CLOT cost 40 (e.g. 5663 to 5623) and FOCUS 166 (2337).
 
 1. **"<T>'s eyes lose their focus suddenly." is CONCENTRATE.** It cures `disrupted` and nothing else.
    - No trigger reads it.
-   - `telepathy_tekura/007_Disrupt.lua:44` clears `disrupted` on a flat `tempTimer(10, …)`.
+   - `telepathy_tekura/007_Disrupt.lua` cleared `disrupted` on a flat `tempTimer(10, …)`. (Fixed since: `ataxia_tarAffTimed("disrupted", 10)` is a backstop, and trigger 788 reads the concentrate.)
    - Add `erAff("disrupted")` on this line, and never treat it as a full cure: Mystor's own tracker wiped its whole model on it (8527).
 2. **"<T>'s aura of weapons rebounding disappears." meant his own attack every time (17 of 17).**
    - `225_Rebounding_Down.lua:44` also calls `erAff("shield")`, which would wrongly clear a shield that is still up.

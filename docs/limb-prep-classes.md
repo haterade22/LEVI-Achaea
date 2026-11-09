@@ -176,7 +176,7 @@ Right arm → Left arm → Right leg → Left leg
 ## Shikudo Dispatch
 
 **Namespace:** `shikudo`
-**File:** `shikudo/010_Shikudo_Offense.lua` (unified)
+**File:** `shikudo/008_CC_Shikudo_Offense_ALL.lua` (unified)
 **Kill Route:** Prep legs + head → Gaital → Sweep + break → Needle (windpipe) → Dispatch
 
 ### Phase Progression
@@ -208,8 +208,10 @@ AND (tAffs.damagedwindpipe OR tAffs.crushedthroat)
 
 ## Psion (Limb Mode)
 
-**Tracking:** `tLimbs` via `psion_hitLimb()`
-**File:** `limb_management/006_Psion_Limb_Tracking.lua`
+**Tracking:** `lb` (the old `tLimbs` counter, `psion_hitLimb()`, is gone)
+**File:** `psion/001_Levi_Psion_Logic.lua`
+
+The figures below come from the removed counter and are not re-checked.
 
 - **Fixed damage:** Legs 20% per hit, others 25% per hit
 - **Break threshold:** >= 98%
@@ -220,8 +222,10 @@ AND (tAffs.damagedwindpipe OR tAffs.crushedthroat)
 
 ## Magi (Staff Strikes)
 
-**Tracking:** `tLimbs` via `magi_staffStrike()`
-**File:** `limb_management/004_Magi-Specific.lua`
+**Tracking:** none found (the old `tLimbs` counter, `magi_staffStrike()`, is gone)
+**File:** none (`limb_management/004_Magi-Specific.lua` is gone; the `magi_limb_attacks/` triggers remain)
+
+The figures below come from the removed counter and are not re-checked.
 
 - **Health-scaled damage:** 6-7 staff hits per limb, 12 airstrike hits per limb
 - **Break threshold:** >= 98%

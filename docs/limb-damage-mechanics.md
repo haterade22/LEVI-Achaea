@@ -109,22 +109,21 @@ Example: Right leg broken, target applies restoration to legs
 
 Two parallel systems track enemy (target) limb damage:
 
-#### `tLimbs` — Simulated Tracking (Per-Class Counters)
+#### `tLimbs` — Simulated Tracking (Per-Class Counters, Removed)
 
-Used by class-specific offense systems that calculate damage per hit.
+Class-specific offense systems once calculated damage per hit in this table. Those per-class counters are gone, and `lb.addHit()`, called from triggers, records limb hits now (see `lb[target].hits` below). `tLimbs` itself remains in a few triggers, for example `392_Applied_Head.lua` and `limb_management/011_Sylvan_Propagation.lua`.
 
 ```lua
 tLimbs = { H=0, T=0, LA=0, RA=0, LL=0, RL=0 }
 ```
 
-| System | File | Per-Hit Damage Source |
-|--------|------|---------------------|
-| Tekura | `monk/001_Tekura_Limb_Counter.lua` | `tekura_limbDamage[attack]` (health-based) |
-| Shikudo | `monk/002_Shikudo_Limb_Counter.lua` | `shikudo_limbDamage[attack]` (health-based, hyperfocus halves) |
-| Knight SnB | `limb_management/008_Knight_Limbcounting.lua` | `ataxiaTemp.swordHit` (health-formula) |
-| Knight DWB | `limb_management/008_Knight_Limbcounting.lua` | `ataxiaTemp.maceHit` (health-tier) |
-| Psion | `limb_management/006_Psion_Limb_Tracking.lua` | Fixed: legs 20%, others 25% |
-| Magi | `limb_management/004_Magi-Specific.lua` | `tLimbs.staff` / `tLimbs.airstrike` (health-tier) |
+| System | Removed counter | Now (checked 2026-11-09) |
+|--------|-----------------|--------------------------|
+| Tekura | `monk/001_Tekura_Limb_Counter.lua` | `lb`, read by `tekura/002_Tekura_6Limb_Offense.lua` |
+| Shikudo | `monk/002_Shikudo_Limb_Counter.lua` | `lb`, read by `shikudo/008_CC_Shikudo_Offense_ALL.lua`, which keeps `shikudo_limbDamage` |
+| Knight SnB, DWB | `limb_management/008_Knight_Limbcounting.lua` | `lb`, read by `dwb/001_Infernal_DWB_Logic_-_Levi.lua` and `dwb_runie/001_DWB_Runie_Logic.lua` |
+| Psion | `limb_management/006_Psion_Limb_Tracking.lua` | `lb`, read by `psion/001_Levi_Psion_Logic.lua` |
+| Magi | `limb_management/004_Magi-Specific.lua` | No active limb counter found. The `magi_limb_attacks/` triggers feed the old, switched-off system |
 
 #### `lb[target].hits` — Event-Based Tracking (Romaen's Limb Counter)
 

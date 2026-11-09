@@ -5,7 +5,7 @@
   ".claude/databases/venoms.yaml": "63c5da1ed963b07d",
   "kb/afflictions/afflictions.json": "1fe2c0394ca42b4b",
   "kb/mechanics/clocks.json": "acf3ebc1cd2c7b55",
-  "kb/sim/rules_hand.json": "eae02f7355009382",
+  "kb/sim/rules_hand.json": "6367a181cd420a2d",
   "src_new/scripts/levi_ataxia/levi/ataxia/affliction_tracking_core/008_V3_Integration.lua": "84500af0cf22efc1",
   "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua": "a67d445f9502d3a2",
   "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua": "0662a95087ef51bb",
@@ -119,7 +119,7 @@
    "alt": [
     "attack.flay.order"
    ],
-   "note": ".claude/classes/serpent.md:686 reads the same. A bare FLAY in the logs (no 'flays away' line): g 945-948 and X 3189-3194 (the coating ripped, then the whip and paralysis). A named FLAY also takes the coating: rule attack.flay.coating. One that names a defence the target does not have: rule attack.flay.missing",
+   "note": ".claude/classes/serpent.md:813 reads the same. A bare FLAY in the logs (no 'flays away' line): g 945-948 and X 3189-3194 (the coating ripped, then the whip and paralysis). A named FLAY also takes the coating: rule attack.flay.coating. One that names a defence the target does not have: rule attack.flay.missing",
    "source": "kb/raw/wiki/Subterfuge.wiki:76,80",
    "tag": "WIKI",
    "value": "the attacker names what to strip: FLAY <target> SHIELD or REBOUNDING strips that one, a bare FLAY strips the sileris coating; the venom lands if neither shield nor rebounding is left"
@@ -426,7 +426,7 @@
   },
   "class.dagaz": {
    "note": "voyria first: azbErKcK rows 3856-3857",
-   "source": "kb/afflictions/class-cures.md:103",
+   "source": "kb/afflictions/class-cures.md:137",
    "tag": "READ",
    "value": {
     "classes": [
@@ -445,7 +445,7 @@
     "half a period"
    ],
    "note": "when the rune ticks relative to the fight. --median puts the first tick at half a period",
-   "source": "kb/afflictions/class-cures.md:103",
+   "source": "kb/afflictions/class-cures.md:137",
    "tag": "ASSUMED",
    "value": "random"
   },
@@ -511,72 +511,72 @@
    "value": 2.55
   },
   "classcure.blocker.Alchemist": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:214",
    "tag": "READ",
    "value": "stupidity"
   },
   "classcure.blocker.Blademaster": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:214",
    "tag": "READ",
    "value": "weariness"
   },
   "classcure.blocker.Depthswalker": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:214",
    "tag": "READ",
    "value": "recklessness"
   },
   "classcure.blocker.Druid": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:214",
    "tag": "READ",
    "value": "weariness"
   },
   "classcure.blocker.Infernal": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:214",
    "tag": "READ",
    "value": "weariness"
   },
   "classcure.blocker.Jester": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:214",
    "tag": "READ",
    "value": "paralysis"
   },
   "classcure.blocker.Magi": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:214",
    "tag": "READ",
    "value": "haemophilia"
   },
   "classcure.blocker.Monk": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:214",
    "tag": "READ",
    "value": "weariness"
   },
   "classcure.blocker.Occultist": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:214",
    "tag": "READ",
    "value": "paralysis"
   },
   "classcure.blocker.Paladin": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:214",
    "tag": "READ",
    "value": "weariness"
   },
   "classcure.blocker.Runewarden": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:214",
    "tag": "READ",
    "value": "weariness"
   },
   "classcure.blocker.Sentinel": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:214",
    "tag": "READ",
    "value": "weariness"
   },
   "classcure.blocker.Serpent": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:214",
    "tag": "READ",
    "value": "weariness"
   },
   "classcure.blocker.Shaman": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:214",
    "tag": "READ",
    "value": "selarnia"
   },
@@ -4978,7 +4978,7 @@
     "off"
    ],
    "note": "no kb source: the game's EKANELIA STUDY LOKI text is not captured. In the spar 1 of 2 loki bites printed 'takes hold': the recklessness impulse at FL 1406 (FL 1411), then the paralysis line (FL 1414) and no nausea line. The stupidity impulse at FL 630 printed none. Loki's own random affliction is not modelled: the engine refuses loki in a DSTAB or a FLAY, and in a bite it lands only this reaction",
-   "source": "src_new/scripts/levi_ataxia/levi/levi_scripts/serpent/002_Serpent_Offense.lua (EKANELIA_TABLE, serpent.EKANELIA_RESULTS); .claude/classes/serpent.md:1194-1199",
+   "source": "src_new/scripts/levi_ataxia/levi/levi_scripts/serpent/002_Serpent_Offense.lua (EKANELIA_TABLE, serpent.EKANELIA_RESULTS); .claude/classes/serpent.md:1328-1333",
    "tag": "ASSUMED",
    "value": {
     "conditionals": [
@@ -4996,7 +4996,7 @@
     "off"
    ],
    "note": "the conditions are our own table's (relayed notes, PLAYER); the game's EKANELIA STUDY MONKSHOOD text is not captured. The engine fires it on a BITE, or on the bite of an impulse, when all three are up as the bite lands ('Reactions fire on the bite command', Venom.wiki:391); an impulse of masochism brings the third. The venom's own disloyalty lands too. A DSTAB fires no reaction. What the spar saw: rule reaction.monkshood.seen",
-   "source": ".claude/classes/serpent.md:1168-1178; src_new/scripts/levi_ataxia/levi/levi_scripts/serpent/002_Serpent_Offense.lua (EKANELIA_TABLE, serpent.EKANELIA_RESULTS)",
+   "source": ".claude/classes/serpent.md:1302-1312; src_new/scripts/levi_ataxia/levi/levi_scripts/serpent/002_Serpent_Offense.lua (EKANELIA_TABLE, serpent.EKANELIA_RESULTS)",
    "tag": "ASSUMED",
    "value": {
     "conditionals": [

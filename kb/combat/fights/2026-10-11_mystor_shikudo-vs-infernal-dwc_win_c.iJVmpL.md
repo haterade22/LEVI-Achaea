@@ -561,7 +561,7 @@ System lines (`You: ...`, `[Zax]`, `[Curing]`, timers, `Agathon: Dsl ...`, `My <
 - **SHATTER whenever a shield is up.** The combo needs a shield flag that puts SHATTER first. Six fresh shields came up in two minutes, and the two combos sent without SHATTER cost a whole round each (222, 1827).
 - **Transitions.** A `transition to <form> form` placed before the combo in the same alias works from kata 5, costs no balance, and the combo then counts from 1. Use this alongside the inline form already noted in CLAUDE.md.
 - **The scythe fork is a complete, proven route.** Sweep, then needle + spinkick (prone head), then Rain at kata 5, then IMPATIENCE (1.07 s of equilibrium) + BATTER (2.70 s), then SCYTHE (2.89 s). It killed from full health 13 s after the sweep (3868 to 4239). Nothing in the package implements it today, according to the chunk readers' check of docs/plans.
-- **MIND DISRUPT was wasted against this player.** He concentrated within the same second all 3 times. `telepathy_tekura/007_Disrupt.lua:43-44` records `disrupted` and clears it on a fixed `tempTimer(10, ...)`, and nothing reads "<T>'s eyes lose their focus suddenly.". Add that line as the cure.
+- **MIND DISRUPT was wasted against this player.** He concentrated within the same second all 3 times. `telepathy_tekura/007_Disrupt.lua` recorded `disrupted` and cleared it on a fixed `tempTimer(10, ...)`, and nothing read "<T>'s eyes lose their focus suddenly.". (Fixed since: `ataxia_tarAffTimed("disrupted", 10)` is a backstop, and trigger 788 reads that line.)
 - **Kai went unspent.** Kai sat at 90-100% for the last 100 s. Kai attacks would have been free to use against this opponent.
 - **"Doubleaff" is the logger's own tag.** In this log it appears on ruku to the arm from kata 10 and on kuro from kata 12, never below (671/1412/1927/2597 untagged at 9; 1499/2683 kuro untagged at 11). The game text is unchanged. Do not model a two-affliction kata effect until HELP or AB confirms it.
 
@@ -579,7 +579,7 @@ System lines (`You: ...`, `[Zax]`, `[Curing]`, timers, `Agathon: Dsl ...`, `My <
 
 **For our tracking of this class's cures**
 - **Fangbarrier timing.** `442_Got_Sileris.lua:37` sets the target's fangbarrier on the application line, but the shell formed about 10 s later each time (1117 to 1465, 2399 to 2724, 3495 to 3888). Ruku to the torso only stripped a formed shell (1078 vs 1136).
-- **The tree pool is too small.** `treeCurableAffsV3` (`affliction_tracking_core/008_V3_Integration.lua:264-270`) lacks healthleech and broken limbs, but the tree cured both (298-301, 3171-3174). The Infernal treed every ~14 s, so his tree cures are under-modelled.
+- **The tree pool is too small.** `treeCurableAffsV3` (`affliction_tracking_core/008_V3_Integration.lua:278-308`) lacks healthleech and broken limbs, but the tree cured both (298-301, 3171-3174). The Infernal treed every ~14 s, so his tree cures are under-modelled.
 - **No trigger for the mist line.** The likely Agony line "The sanguine mist surrounding <T> billows and writhes exultantly." should branch a random cure in V3.
 - **Salve applications are ambiguous.** "rubs it on his legs" is the same line for mending and restoration (4033 vs 4078), which supports the v4.7.404 branching. Flashheel breaks were mended within about 1 s, 6 of 6.
 - **FITNESS is a typed command**, not passive (54 sends, 1 success line at 1173). Only "<T> draws a deep, measured breath." proves asthma cured.

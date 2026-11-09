@@ -177,7 +177,7 @@ end
 The DWC system has integrated V3 calls in venom hit handlers:
 
 ```lua
--- In 003_Infernal_DWC_Vivisect.lua
+-- In 001_Infernal_DWC_Vivisect.lua
 function infernalDWC.onVenomHit(venom, target)
     local aff = venomToAff[venom]
     if aff and applyAffV3 then

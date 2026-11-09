@@ -170,7 +170,7 @@
   (not an illusion), it also takes ONE level-1 broken limb, the first present (left leg, right leg,
   left arm, right arm). `tSingleRandom({ noErase = true })` then erases nothing.
   With V3 off, `tSingleRandom()` still erases one affliction, as before
-- The tree pool is `treeCurableAffsV3` (`affliction_tracking_core/008_V3_Integration.lua:271-301`). Since v4.7.479 it
+- The tree pool is `treeCurableAffsV3` (`affliction_tracking_core/008_V3_Integration.lua:278-308`). Since v4.7.479 it
   holds 77 afflictions (it held 27): every tracked affliction whose AFFLICTION SHOW reads `NoRandomCure: No`. Burning
   and the fractures stay out, because V3 holds each as one affliction and cannot take off one level. The 2026-11-07
   spar showed why: Saibel's tree most likely took recklessness (INFERRED, kb/CONFLICTS.md #65), her only affliction then

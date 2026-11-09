@@ -381,7 +381,7 @@ raze_path: "rebounding/shield → falcon track;falcon slay;fracture <target>"
 ## Bashing (PvE)
 ```yaml
 # ataxiaBasher_runewardenBashing() is spec-branched on ataxia.vitals.knight
-# (basher/002_Class_Bashing.lua:1521-1559)
+# (basher/002_Class_Bashing.lua:3807-3845)
 attack_skill: Weaponmastery
 spec_branches:
   Dual Cutting: { raze: "razeslash <target>",                    bash: "dsl <target>" }
@@ -454,7 +454,7 @@ The game names the exact ability coming off cooldown, and it does so in two word
 The second is the *same event* seen through an empty rage bar — the cooldown expired, we
 simply cannot pay for it yet. Both mean READY NOW. Trigger `328_Battlerage_Ready.lua:34-37`
 captures the verb from either form and hands it to `ataxiaBasher_brReady`
-(`basher/011_Battlerage_Ready_Lines.lua:91-116`), which lower-cases it, looks it up in
+(`basher/011_Battlerage_Ready_Lines.lua:136-161`), which lower-cases it, looks it up in
 `BR_READY_MAP` (`011:60-81`) and clears the owning rotation's send-side stamp — for
 Runewarden that is `ataxiaTemp.rwBrAt`, keyed `bulwark` / `etch` / `onslaught` / `collide`
 (`011:62-65`). It also drops the in-flight replay if the pending pick is that same verb
@@ -567,8 +567,8 @@ both_legs_hindered:
   fix:     "same rotation rollback, plus M._disarmMove() (345:60-71)"
   why: |
     Also unhandled before v4.7.167. Its expensive victim is not a swing but LEAP: the
-    Mnemosyne swarm module moves with `stand;leap <dir>` (mnemosyne/009_Swarm_Tactics.lua:236
-    low-HP retreat, :258/:266 the wall-escape decorator, :385 the re-entry), and a refusal was
+    Mnemosyne swarm module moves with `stand;leap <dir>` (mnemosyne/009_Swarm_Tactics.lua:754
+    low-HP retreat, `S._escapeSuffix` the wall-escape decorator, :1064 the re-entry), and a refusal was
     SILENT to that machinery -- the move sat "in flight" until the tactical arm's timeout
     expired, stalling the low-HP escape ladder at the moment it was holding us alive.
     One broken leg does not trip this; Achaea lets you stand and walk on one. The refusal
@@ -674,7 +674,7 @@ Both are FREE (no balance, no equilibrium), like `ORDER FALCON PASSIVE`.
 
 The package sent `falcon recall` from the login and from the `pass` alias and never redeployed, so
 the falcon sat on us and the basher's free falcon rake had no bird -- fixed by trigger
-`runie_dom/021_Falcon_Recall_Redeploy.lua`, which reacts to the whistle line, is Runewarden-gated
+`runie_dom/021_Pet_Recall_Redeploy.lua`, which reacts to the whistle line, is Runewarden-gated
 (other classes whistle for other things) and debounced 10s.
 
 **The Infernal's hyena is the same** (corrected v4.7.284): `hyena recall` -> the same whistle ->

@@ -292,7 +292,7 @@ which is exactly why nobody noticed.
 **Rule:** treat the game's refusal line as ground truth and an optimistic local counter as a
 hint. A counter whose unknown state is "full" must never be the sole gate on a spend — wire
 the refusal line first and let it zero the counter (`ataxiaBasher_mnemLdeckRejected`,
-`basher/010_Mnemosyne_Legend_Deck.lua:350`, off trigger
+`basher/010_Mnemosyne_Legend_Deck.lua:379`, off trigger
 `legenddeck_cards/008_LDeck_No_Charges.lua`). Corollary: a key-resolution helper that
 silently returns nil turns every downstream guard into a no-op, so unit-test it against the
 punctuated names, not the easy ones.
@@ -315,7 +315,7 @@ Confirmation, lapse and rejection are three different facts about the world and 
 different functions; sharing one is how the fix re-introduces the bug.
 
 ### Every owned timer-free rotation needs a fire line AND a refusal line
-Runewarden Etch was the one ability in `RW_BR` (`basher/002_Class_Bashing.lua:1458`) with no
+Runewarden Etch was the one ability in `RW_BR` (`basher/002_Class_Bashing.lua:3635`) with no
 fire-line trigger, so its in-flight pick had nothing to release it: after the queued etch
 actually fired, the next two rebuilds re-queued the *same* etch and the server rejected both
 ("You must wait a short time before you can use a battlerage ability again.") — two wasted
@@ -363,8 +363,8 @@ widening silently shielded **"a slope-backed hyena"** — a real, killable deniz
 `hyena` keyword seeded for the Infernal pet, and `ataxiaBasher_purgeOwnFromTargets` deleted
 it from the learned target list across every area. `ataxiaBasher.notOwnDenizens` is the
 escape hatch, checked **first** and winning over the pet keywords
-(`basher/001_Bashing_Functions.lua:348`). Note how it was seeded: by **backfill**
-(`002_Check_For_Any_Missing_Variables.lua:172`), not a fresh-install default, because
+(`basher/001_Bashing_Functions.lua:716`). Note how it was seeded: by **backfill**
+(`002_Check_For_Any_Missing_Variables.lua:240`), not a fresh-install default, because
 existing saves already carried the bare keyword and a default would have fixed nobody who
 actually hit the bug. Narrowing the seed to `daemonic hyena` was rejected for the same
 reason — it helps only new installs, and does nothing for the next collision.
@@ -381,7 +381,7 @@ dragged us out of the air ("A tentacle shoots up from the ground, wraps itself a
 and drags you back to earth.") and the confirmation never arrived, so the hover re-sent `fly`
 every tick while the tentacle yanked us straight back down, holding us attack-**gated** at
 crash HP with the swarm still on us until `RECOVER_MAX` expired — strictly worse than never
-having flown. `S.onDraggedDown` (`mnemosyne/009_Swarm_Tactics.lua:807`, trigger
+having flown. `S.onDraggedDown` (`mnemosyne/009_Swarm_Tactics.lua:2756`, trigger
 `mnemosyne/050_Dragged_From_Sky.lua`) latches `S.grounded`, which `S._canFly` (`009:481`)
 honours alongside `mnemDeluge`, so both the escape ladder's outdoor branch and the fly-kite
 fall through to the grounded route.
@@ -393,7 +393,7 @@ denizen that dragged us lives on this ripple, and the next ripple is a different
 
 ### Prefer the game's own fire text to an affliction-name lookup
 `Your <limb> breaks with a loud crack.` had no handler anywhere — ~25 of them in 90 seconds
-of one live log. `ataxia_brokenLimbFound` (`self_limb_tracking/002_Track_The_Damage.lua:326`)
+of one live log. `ataxia_brokenLimbFound` (`self_limb_tracking/002_Track_The_Damage.lua:339`)
 only branches on the `damaged*`/`mangled*` affliction families, so a level-1 break never reset
 the accumulator: damage kept climbing past the real break, `ataxia_selfHitsToBreak` pinned at
 0, the threshold latched `critical` forever, and every one-shot reaction latch stayed set.

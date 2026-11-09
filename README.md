@@ -679,7 +679,7 @@ Download `Dementia_Mapper.mpackage` from [Releases](https://github.com/haterade2
 
 **Option B** — Build from source (see [Building from Source](#building-from-source) below)
 
-> **Note**: The `packages/` directory contains legacy XML builds. Always use a release download or build from source for the current version.
+> **Note**: A local `packages/` folder, if you have one, holds legacy XML builds. Git ignores it, so a fresh clone does not have it. Always use a release download or build from source for the current version.
 
 ## Updating
 

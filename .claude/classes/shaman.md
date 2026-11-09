@@ -152,7 +152,7 @@ notes: "Shaman offense is pure affliction/lock/bleed — no limb-damage logic ex
 
 ## Bashing (PvE)
 ```yaml
-# ataxiaBasher_shamanBashing (002_Class_Bashing.lua:727-792)
+# ataxiaBasher_shamanBashing (002_Class_Bashing.lua:4193-4258)
 bash_type: swiftcurse   # default; set via `aconfig bashtype <type>` (shaman.spiritlore.bashType)
 curse_used: bleed
 rotation:
@@ -176,7 +176,7 @@ highlight: |
   wrapped first row (no closing full stop) paints the next row too, via tempLineTrigger -- the jinx
   ends with the denizen's name, so its tail has nothing fixed to anchor a pattern on.
 battlerage:
-  - "invoke korkma <3rd target>: crowd-control on 3+ mobs (001_Bashing_Functions.lua:1013-1015)"
+  - "invoke korkma <3rd target>: crowd-control on 3+ mobs (001_Bashing_Functions.lua:2079-2081)"
 ```
 
 ## Fighting Against This Class

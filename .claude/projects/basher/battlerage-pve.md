@@ -179,7 +179,7 @@ wordings:
 The second is simply the first seen through an empty rage bar — the cooldown expired, we
 just cannot pay for it yet. **Both mean READY NOW.** Trigger `328_Battlerage_Ready.lua`
 matches both patterns (328:34-37) and calls `ataxiaBasher_brReady(verb)`
-(`basher/011_Battlerage_Ready_Lines.lua:91`), which is deliberately **class-agnostic**:
+(`basher/011_Battlerage_Ready_Lines.lua:136`), which is deliberately **class-agnostic**:
 the verb is captured from the line, lower-cased, stripped of non-letters, and looked up in
 `BR_READY_MAP` (011:60-81) to find the epoch table and key that own it. Clearing that
 stamp is what "ready" means to the rotation loops — they test `(now - stamp) >= cd`, so a

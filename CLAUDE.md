@@ -143,13 +143,15 @@ LEVI-Achaea/
 │   ├── kb_sim.py              # KB: simulator, first stage. Run logged boards 20 s forward under a strong attacker, write kb/sim/forward.md + .json; `--check` in CI
 │   ├── test_kb_sim.py         # its tests: `python -B tools/test_kb_sim.py` (in CI)
 │   ├── sim/forward.lua        # the simulator engine: pure Lua 5.1, no Mudlet calls; rule tests in src_new/tests/test_sim_forward.lua. NEVER edit it: its bytes feed kb_sim.py's input hash
-│   ├── kb_rules.py            # KB: the whole-fight engine's rules (clocks.json, afflictions.json, venoms.yaml, curing prios, kb/sim/rules_hand.json) -> kb/sim/rules.json + rules.md, each rule tagged MEASURED/READ/WIKI/PLAYER/ASSUMED; `--check` in CI, so re-run it when clocks.json moves
+│   ├── kb_rules.py            # KB: the whole-fight engine's rules (clocks.json, afflictions.json, venoms.yaml, curing prios, kb/sim/rules_hand.json, tools/sim/gates_whole.json, and the Lua files 001_Miscellaneous_Aff_Tracking_Methods, 008_V3_Integration and 003_Lock_breakers) -> kb/sim/rules.json + rules.md, each rule tagged MEASURED/READ/WIKI/PLAYER/ASSUMED; `--check` in CI compares a hash of each input, so re-run it after an edit to any of them, a Lua file included
 │   ├── kb_events.py           # KB: the four Serpent logs as one event stream (JSON Lines v1), the census, the DSTAB-vs-eat race table with its frozen golden row -> kb/sim/events.md + .json; `--check` and `--dump KEY`
 │   ├── theorycraft.py         # CLI: a scripted Serpent vs a victim (--victim --gap --script [--median] [--seeds N] [--clock-draw normal]), a log in the engine's columns (--log Z5 --from ROW), a fork (--log Z5 --at ROW --then ...) that starts from the row's board, clocks, balance/equilibrium, kept defences and the ones on their way (a FLAY of the shield, a rebounding smoke, a coating apply; the logger's own shield drop is not a FLAY). A gap under the floor (a fork's default 1.83 too) and a row after the last prompt are refused. A second cost line ends the open one (an impulse's adds); slickness strips the sileris coating and, if still on at the 10 s mark, stops a pending one from hardening. Output is MODEL, not a log; an ALT line names each rule whose alternative ran, GAP says what the gap draw is, SEEDS says the P lines of a --median page are drawn. v4.7.479: `impulse SUGGESTION VENOM` action (it bites and spends balance too), `--gap raw|queue|queue-late|others` (our measured gaps and costs from the 2026-11-07 Serpent spar, or other Serpents'; the CLI never picks one), an OURS line, `--flay-missing coating|nothing`, `--ssc-gain saibel` (one opponent's open-channel delay, an alternative only); the SSC delay is two cases, `ssc.delay.gain` and `ssc.delay.return`
 │   ├── sim/fight.lua          # the whole-fight engine (event loop, labels, race); sim/victim.lua (cure channels, class cures, defences); sim/attackers.lua (script parser, attack effects). Pure Lua 5.1; wired with forward.lua's RNG; tests in src_new/tests/test_sim_fight.lua
 │   ├── sim/gates_whole.json   # FROZEN 2026-11-07: the bars of the whole-fight plan (stages 1-4). A change after a gate ran is a failed round and needs the user's word
 │   ├── test_kb_rules.py, test_kb_events.py, test_theorycraft.py  # their tests (in CI); test_theorycraft pins the golden text of the user's example and the label parity with kb_replay.is_true
 │   ├── test_check_orphans.py, test_convert_to_muddler.py  # tests of check_orphans (the NEVER_RUN rows, strict check 1c) and of the converter's case-blind filename collisions (in CI)
+│   ├── find_dupes.py          # Find Lua files with the same name and group path in their YAML headers; `--delete` removes exact duplicates
+│   ├── flatten_alias_hierarchy.py  # Migration script: flatten the nested alias folders in _groups.yaml and the .lua headers
 │   └── legacy/                # Retired build tools
 ├── build.sh                   # Build script: ./build.sh [--dry-run] [--convert-only]
 ├── .gitignore                 # Excludes build artifacts, IDE state, caches
@@ -183,7 +185,7 @@ The project uses [Muddler](https://github.com/demonnic/muddler) to build Mudlet 
 
 **Claude Code**: Use `/build` skill or invoke the `build-and-version` subagent.
 
-**CI/CD**: GitHub Actions (`.github/workflows/build.yml`) runs Lua syntax checks, **an orphaned-call check**, version consistency checks, unit tests, and YAML validation on every push. Tagged releases (`v*`) trigger a full build and upload to GitHub Releases.
+**CI/CD**: GitHub Actions (`.github/workflows/build.yml`) runs Lua syntax checks, **an orphaned-call check**, the trigger-wrap check, the `--check` of each generated KB page (`kb_timing`, `kb_replay`, `kb_sim`, `kb_rules`, `kb_events`), the tests of those tools, version consistency checks, unit tests, and YAML validation on every push to `main`, every `v*` tag and every pull request to `main`. Tagged releases (`v*`) trigger a full build and upload to GitHub Releases.
 
 **`tools/check_orphans.py` — a script switched off must take its callers with it (v4.7.261).**
 `isActive: 'no'` on a script does NOT disable the triggers that call into it. They stay live, call
@@ -264,7 +266,9 @@ Lua syntax check" until then, so it had never linted here). A shell or editor st
 changed needs a restart, or `export PATH="/c/Tools/lua51:$PATH"`. It must stay 5.1: Mudlet runs
 5.1, and a 5.4 `luac` rejects escapes 5.1 accepts. `lupa` is installed in the main Python too, so
 `python tools/run_lua_tests.py [one_test_file.lua]` runs the same suite in an embedded Lua 5.1.
-Run one of them before pushing: otherwise CI is the first place a test runs.
+Run one of them before pushing: otherwise CI is the first place a test runs. The tests are not all of CI, so also run the
+`python3 -B tools/...` steps of `.github/workflows/build.yml` (`/verify full` lists them). A generated KB page fails CI when
+one of its inputs changes, and a Lua file can be an input (`kb_rules.py` stopped PR #169 that way).
 **Never use a bare `os.tmpname()` in a test**: under `lua5.1.exe`'s old C runtime it returns a name
 in the drive root (`\s1hk.`), which is not writable (`test_kb_capture.lua` failed 13 tests this
 way while Linux and lupa passed); move such a name into `%TEMP%`, as that test does.
@@ -601,12 +605,12 @@ read `mmp.settings.mapsource`). `service` is an experimental live Crowdmap; `cro
     `ataxiaTemp`) until a client restart. Whether the line prints for a round that runs at once is open
     (`kb/CONFLICTS.md` #35).
 - **Infernal DWC Vivisect System**: Full auto-combat for Infernal DWC spec
-  - `003_Infernal_DWC_Vivisect.lua` - Undercut + DSL vivisect strategy
+  - `dwc/001_Infernal_DWC_Vivisect.lua` - Undercut + DSL vivisect strategy
   - Commands: `infernalDWCVivisect()`, `infernalDWCStatus()`, `infernalDWCReset()`
   - Phases: DAMAGE KILL (highest) → KILL → EXECUTE → PREP
   - Kill routes: Vivisect (all 4 limbs broken) or Damage Kill (health ≤40%)
   - RIFTLOCK mode: Counter to RESTORE ability (anorexia + slickness + addiction lock)
-  - V2-compatible: Uses `infernalDWC.hasAff()` for certainty-based tracking when enabled
+  - Reads afflictions through `infernalDWC.hasAff()` (`haveAff`, the V3 tracker)
 
 ### Target Affliction Tracking System (V3 Branching Probability Engine)
 
@@ -1075,7 +1079,7 @@ In-game configuration wizard accessed via `ataxia setup`.
 | `ataxia setup weapons` | Weapon IDs |
 | `ataxia setup basher` | Basher settings (flee, gold pack, shield swap) |
 | `ataxia setup sipping` | Health/mana sip thresholds |
-| `ataxia setup tracking` | Affliction tracking mode (V1/V2) |
+| `ataxia setup tracking` | Affliction tracking status (V3 is always on) |
 | `ataxia setup combat` | Party relay, auto-loot, gag clot |
 | `ataxia setup gui` | Toggle GUI on/off |
 | `ataxia setup ndb` | NDB highlight colours |
@@ -1793,7 +1797,7 @@ the Tekura branch now prepends the same `rend or choke or numb` chain, in the sa
 choke-before-numb order, ahead of its `unwield all;combo ... rhk/sdk ucp ucp`. **No stance-NAME
 filtering, deliberately**: per the user, a Tekura Monk sits in exactly one stance during ordinary
 bashing (Horse/Bear appear only in the TK6 backbreaker's finishing sequence against an
-already-dying target, per `.claude/classes/tekura.md`), so truthy `stance` alone is the whole test
+already-dying target, per `.claude/classes/monk.md`), so truthy `stance` alone is the whole test
 -- filtering by stance NAME would invent a restriction the boon text never states, in the direction
 that costs damage rather than the direction that is safe.
 
@@ -2877,9 +2881,9 @@ send("curing priority defence list reset", false)
 | Namespace | Prefix | Example |
 |-----------|--------|---------|
 | Core system | `ataxia_` | `ataxia_saveSettings()`, `ataxia_promptAffs()` |
-| Basher | `ataxiaBasher_` | `ataxiaBasher_getTarget()` |
+| Basher | `ataxiaBasher_` | `ataxiaBasher_assembleAttack()` |
 | NDB | `ataxiaNDB_` | `ataxiaNDB_getClass()` |
-| GUI | `ataxiagui_` | `ataxiagui_buildWindow()` |
+| GUI | `ataxiagui_` | `ataxiagui_createMap()` |
 | MMP | `mmp.*` | `mmp.gotoRoom()` |
 
 **Module tables** — `camelCase` no underscore: `ataxia`, `ataxiaNDB`, `ataxiaBasher`, `ataxiaTables`, `mmp`.
@@ -3748,7 +3752,7 @@ The project uses Claude Code hooks for automated quality gates and context prese
 - **CLAUDE.md**: Update if you add new systems, change architecture, modify build processes, or add new conventions
 - **Memory files** (`~/.claude/projects/.../memory/`): Update with stable patterns, conventions, and lessons learned
 - **Class docs** (`.claude/classes/*.md`): Update if combat mechanics or class-specific logic changes
-- **Plan files** (`.claude/plans/`, `docs/plans/`): Mark completed items, update status, note deviations from plan
+- **Plan files** (`~/.claude/plans/`, `docs/plans/`): Mark completed items, update status, note deviations from plan
 - **README.md / GETTING_STARTED.md**: Update if setup steps, dependencies, or usage instructions change
 
 ### Checklist (run mentally after every task)

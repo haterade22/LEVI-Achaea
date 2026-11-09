@@ -248,7 +248,7 @@ timer added in v4.7.148 is the final backstop.
 maul:
   cooldown: "30 seconds"
   syntax: "ORDER HYENA MAUL <target>"  # manual/pet-command form
-  basher_form: "hyena maul <target>  # NO 'ORDER' prefix — prepended to the spec bash string when ataxiaBasher.hyenaMaulReady (002_Class_Bashing.lua:263-264)"
+  basher_form: "hyena maul <target>  # NO 'ORDER' prefix — prepended to the spec bash string when ataxiaBasher.hyenaMaulReady (002_Class_Bashing.lua:2078)"
   usage: "PVE ONLY - not effective in PVP combat"
   tracking: "Cooldown tracked in basher/005_Falcon_Cooldowns.lua (ataxiaBasher.hyenaMaulReady)"
   triggers:
@@ -1193,7 +1193,7 @@ standard_strategy:
 
 ## Bashing (PvE)
 ```yaml
-# Basher builds spec-specific attack strings (basher/002_Class_Bashing.lua:261-285)
+# Basher builds spec-specific attack strings (basher/002_Class_Bashing.lua:2082-2106)
 # via ataxiaBasher_infernalBashing(), keyed on ataxia.vitals.knight (spec):
 attack_skill: Weaponmastery
 spec_bash_strings:
@@ -1261,7 +1261,7 @@ pet_safety:
        a hit we never ordered."
   substring_collision: |
     THE KEYWORD IS A CASE-INSENSITIVE SUBSTRING (v4.7.169, ataxiaBasher_isOwnDenizen,
-    basher/001_Bashing_Functions.lua:348-363). That is what lets one word cover every
+    basher/001_Bashing_Functions.lua:716-731). That is what lets one word cover every
     variant of a pet's name -- and it also means a REAL denizen whose name merely contains
     that word is silently shielded.
 
@@ -1272,7 +1272,7 @@ pet_safety:
       * ataxiaBasher_purgeOwnFromTargets DELETES it from the learned target list across
         every area on the next `bash mine` add (001:368-382, called at 001:393).
     In the Mnemosyne the sweep also walks away from it: M._roomHasDenizens / M._denizenCount
-    (mnemosyne/008_Explorer.lua:97-116) both skip own denizens, so a room holding only this
+    (mnemosyne/008_Explorer.lua:142-161) both skip own denizens, so a room holding only this
     mob reads CLEAR and the explorer navigates on, leaving a live aggressive denizen behind
     us. (The v4.7.169 commit message and CHANGELOG describe the symptom instead as the
     explorer COUNTING it and waiting forever while the watchdog nudges -- those two functions
@@ -1549,7 +1549,7 @@ order hyena follow me
 Both are free (no balance, no equilibrium), like `ORDER HYENA PASSIVE`.
 
 **The four `hyena recall;order hyena follow me` pairings in the tree are INCOMPLETE** -- login 208
-and 224, `genrunning/003_Engaged_Disengage.lua:240`, and the `127_HYENA_FOLLOW` alias. Each orders
+and 224, `genrunning/003_Engaged_Disengage.lua:271`, and the `127_HYENA_FOLLOW` alias. Each orders
 an animal still sitting in inventory. Trigger `runie_dom/021_Pet_Recall_Redeploy.lua` fixes all of
 them by side effect, because every one produces the whistle; it is class-keyed and shared with the
 Runewarden's falcon.

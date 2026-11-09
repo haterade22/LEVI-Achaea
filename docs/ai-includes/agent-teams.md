@@ -79,7 +79,7 @@ These files are used by ALL combat systems and must NOT be modified by teammates
 |----------------|------------|
 | `ataxia/affliction_tracking_core/` | V1/V2/V3 tracking used by all class systems |
 | `ataxia/017_Affliction_Management.lua` | `tarAffed()`, `erAff()`, `haveAff()` -- global functions |
-| `ataxia/015_Affliction_Management.lua` | Companion affliction management file |
+| `ataxia/017_Affliction_Management.lua` | Companion affliction management file |
 | `ataxia/update_stuff/005_Balance_Tracking.lua` | Balance tracking shared by all dispatchers |
 | `ataxia/curing/` | Cure priorities affect all combat |
 | `ataxia/limb_management/` | Limb tracking shared across knight/monk systems |

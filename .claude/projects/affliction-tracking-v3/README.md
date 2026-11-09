@@ -59,7 +59,7 @@ affConfigV3.enabled = false  -- Disable V3
 
 | Class | File | Helper Function | Status |
 |-------|------|-----------------|--------|
-| **Infernal DWC** | `dwc/003_Infernal_DWC_Vivisect.lua` | `infernalDWC.hasAff()` | V3 ready |
+| **Infernal DWC** | `dwc/001_Infernal_DWC_Vivisect.lua` | `infernalDWC.hasAff()` | V3 ready |
 | **Blademaster Ice** | `blademaster/005_CC_BM_Ice.lua` | `blademaster.hasAff()` | V3 ready (2026-01-29) |
 
 Each class uses the same routing pattern: V3 (probability, 30% threshold) → V2 (certainty) → V1 (boolean tAffs).
