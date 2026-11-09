@@ -574,7 +574,15 @@ explorer fights on chosen ground:
   walls — the wall paces the fight; with it, they're impeded.
 - **Outdoors swarm-followed**: **fly-kite** — `FLY`, then every attack becomes
   `land;attack;fly`, touching ground only for the swing; lands when the pack thins.
-- **Roll Hide panic** (boon): at panic HP, tumble out — sheds all pursuers.
+- **Roll Hide panic** (boon): at panic HP, tumble out — sheds all pursuers. It counts as your one
+  retreat (next item).
+- **One retreat, then fight** (v4.7.482): a retreat counts when it lands in another room. After that
+  there is no second tumble, leap, disengage or pull, at any HP, and whatever is in the landing room
+  gets fought. You get the retreat back when the landing room is empty and you are at 85% health and
+  cured (the package heals there first), when a recovery ends, at a fit re-entry, on a new ripple, on
+  a reload, or after a Wrath and Righteousness save. The outdoor hover, the Seclusion fling and the
+  lava escape are not ground retreats and stay available. The known cost: a strong denizen or a room
+  hazard in the landing room can kill you.
 - **A swarm that follows is fought, not fled**: if a retreat lands in a swarm again, no more ground
   retreats or pulls for that fight — standing and swinging beats spending the fight attack-held in
   doorways. Going back into a room you just fled needs 85% health and no afflictions.
@@ -591,8 +599,9 @@ explorer fights on chosen ground:
   with every limb broken, unlike `touch shield` — landing only when FULLY healed (95%+ and
   affliction-free). The hover re-checks its own premise every tick: knocked out of the sky,
   a denizen in the air with you, or a fly that never took ends it at once and hands back to
-  fighting instead of holding your attacks. Indoors, retreat to the cleared room; when dying
-  fast with no known route back, any safe door beats standing still. While webbed or
+  fighting instead of holding your attacks. Indoors, retreat to the cleared room, once (see
+  **One retreat, then fight**); when dying fast with no known route back, any safe door beats
+  standing still. While webbed or
   otherwise bound it doesn't try to fly or leap at all. Shield stays as the last resort.
 - **Bloodscent recon** (boon): every ripple entry senses out all denizens — the rows are
   parsed into per-room counts with crowded rooms called out before you take a step

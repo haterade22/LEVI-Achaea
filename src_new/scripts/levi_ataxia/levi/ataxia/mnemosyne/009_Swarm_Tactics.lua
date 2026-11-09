@@ -1888,8 +1888,9 @@ end
 -- (recoverAt% AND affliction-free), which is what makes this a real disengage: we do not
 -- come back until the lock is actually gone.
 --
--- Returns true when we are (or already were) out. False means the caller must handle it:
--- disabled, on cooldown, or indoors with no route back -- and a caller that read the pattern
+-- Returns true when we are (or already were) out, or when a tumble in the air is taking us out.
+-- False means the caller must handle it: disabled, on cooldown, bound, the one retreat already
+-- spent (v4.7.482), or indoors with no route back -- and a caller that read the pattern
 -- as lethal should treat that as its last chance to spend an emergency cure.
 function S.disengage(reason)
   if not S._enabled() then return false end
@@ -1936,8 +1937,8 @@ end
 -- THE RECOVERY WATCH (v4.7.389). Called on every recovering tick (RECOVER_TICK, 2s), below the
 -- company and hover-premise checks. Returns true when it ENDED the recovery.
 --
--- Progress is keyed to `S.recoverStarted`, so every way into a recovery (ground, hover, tumble,
--- re-tumble) starts a fresh record without each entry point having to remember to.
+-- Progress is keyed to `S.recoverStarted`, so every way into a recovery (ground, hover, tumble)
+-- starts a fresh record without each entry point having to remember to.
 --
 -- What counts as progress: an affliction that was holding us is GONE (a set test, not a count --
 -- one cured while another lands is still curing), or HP rising while it is still below the bar.
@@ -2091,7 +2092,7 @@ function S.onTick()
       local since = S.tumbleResolvedAt and (now() - S.tumbleResolvedAt) or nil
       -- `since >= 0` guards a stamp from the FUTURE. It cannot happen on a monotonic clock,
       -- but a stale stamp that outlives its context would otherwise hold the settle open
-      -- forever and silently disable the re-tumble -- the failure direction that hurts.
+      -- forever and the company hand-back would never run -- the failure direction that hurts.
       if since and since >= 0 and since < (tonumber(S.ARRIVE_SETTLE) or 1.5) then
         if M._scheduleTick then M._scheduleTick(RECOVER_TICK) end
         return true

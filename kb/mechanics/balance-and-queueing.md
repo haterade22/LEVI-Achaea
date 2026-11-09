@@ -4,7 +4,8 @@ confidence: CONFIRMED (HELP 4.6 / 4.6.1)
 sources:
   - kb/raw/help/4.6_equilibrium-and-balance.txt
   - kb/raw/help/4.6.1_queueing.txt
-last_verified: 2026-11-03
+  - kb/raw/live/mnemosyne-tumble-back-in_2026-11-09.txt
+last_verified: 2026-11-09
 ---
 
 # Balance, equilibrium and the server queue
@@ -232,3 +233,19 @@ Dizziness can be uncurable (the Mnemosyne boon Poindexter gives "permanent dizzi
 can happen on any step of a run. The explorer handles it in `M.onDizzyFall()`
 (`src_new/scripts/.../mnemosyne/008_Explorer.lua`, trigger `mnemosyne/109`, v4.7.426): it re-sends
 `stand;<dir>` on the free queue, which waits for the balance, and never condemns the exit.
+
+## A tumble's landing: the GMCP came before the text (2026-11-09)
+
+Source for this section: `kb/raw/live/mnemosyne-tumble-back-in_2026-11-09.txt`, one log.
+
+| Fact | Evidence | Confidence |
+|---|---|---|
+| A tumble starts with `You begin to tumble agilely to the <dir>.` and uses 5.0 s of balance | The game's own `Balance used: 5.0s.` follows that line (lines 2-6) | CONFIRMED (the game's line, one sample) |
+| It lands about 4 s later, with `You tumble out of the room.` | Prompts at 13:21:54.034 and 13:21:58.076 (lines 7 and 53) | MEASURED (one sample) |
+| The landing's GMCP reached our handlers before its text | The echoes of code run from `gmcp.Char.Vitals` (lines 41-47) print before `You tumble out of the room.` (line 48) | MEASURED (one log) |
+| Roll Hide's effect prints after the room | `Your inelegant departure sends your pursuers reeling in confusion.` (line 52) | CONFIRMED (the game's line, one sample) |
+
+The order of GMCP and text is not proven for every line. The swarm's ice code
+(`009_Swarm_Tactics.lua`, `S.noteIce`) treats it as open, and that is the safe rule: code must
+not depend on either order. Since v4.7.483, `S._noteLanding()` records a landing from the map
+state, and every reader and writer of the retreat record calls it first.

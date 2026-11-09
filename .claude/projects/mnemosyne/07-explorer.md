@@ -448,7 +448,8 @@ leapt the raw `command` string and `addclearfull`-wiped the explorer's queue.
   it never sends `land` — it never left the ground. `_maybePanic` also refuses while
   `state == "recovering"`: Roll Hide already shed them, so a repeat tumble sheds nothing and
   only walks us off the sweep (previously only the 10s cooldown stood between a slow heal and
-  a tumble every ten seconds).
+  a tumble every ten seconds). Since v4.7.482 it also refuses, at any HP, once a retreat has
+  landed (see "One retreat, then we fight").
 
 - **Vitalising Tincture** (`S._maybeTincture`, v4.7.241, needs the boon): 33% of maximum
   health on a 20s cooldown -- the largest single heal in the system, ~6,000 at tower pools, and
@@ -473,9 +474,10 @@ leapt the raw `command` string and `addclearfull`-wiped the explorer's queue.
   Everything downstream is the proven ladder (hover outdoors / pull back indoors) including
   the recovery gate, which is what makes it a real disengage: we do not return until the lock
   is gone. Returns **false** rather than pretending — disabled, on cooldown
-  (`DISENGAGE_COOLDOWN` 10s), or indoors with no validated route — and a FAILED attempt does
-  not stamp the cooldown, so a caller that read the fight as lethal retries the moment a route
-  exists. First consumer: Seasone's second phial burst (see 03-parsing-triggers).
+  (`DISENGAGE_COOLDOWN` 10s), bound, indoors with no validated route, or with the one retreat
+  already spent (v4.7.482) — and a FAILED attempt does not stamp the cooldown, so a caller that
+  read the fight as lethal retries the moment a route exists. Returns **true** while a tumble is
+  in the air (`S.moveLocked()`, v4.7.483), because that tumble IS the disengage. First consumer: Seasone's second phial burst (see 03-parsing-triggers).
 
 **Re-entry readiness (`S._reenterReady`, v4.7.242)**: the funnel does NOT go back in just
 because the trickle stopped. `_beginReenter` used to decide on one question -- *"did anything
@@ -1039,8 +1041,8 @@ the grid satisfies it — and the bill arrived as a phantom refusal:
 There had never been lava there.
 
 `M.explore.fromRoom` / `fromDir` are a record of the move we last **ARMED**. Nothing on any arrival
-path confirms, rewrites or clears them, so after any *unarmed* room change — panic tumble, recovery
-tumble, drag, forced move, and the lava escape itself — they name a room we are not next to, and
+path confirms, rewrites or clears them, so after any *unarmed* room change — panic tumble,
+drag, forced move, and the lava escape itself — they name a room we are not next to, and
 the next lava tick condemns an edge out of *that* room permanently.
 
 The map already knew the truth and never published it. `MAP.onRoom` resolves the traversed
