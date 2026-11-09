@@ -2,6 +2,38 @@
 
 ---
 
+## 2026-11-09 - v4.7.483: the one-retreat rule holds at the moment of landing
+
+The user sent a second death, from before v4.7.482: "We tumble out, successfully and then tumble back IN????" The log is `kb/raw/live/mnemosyne-tumble-back-in_2026-11-09.txt`. **v4.7.482 did not stop this one**: a replay of it fails on v4.7.482. **None of this has run in Mudlet.** The Lua tests run the real swarm module.
+
+**What you will see change:**
+
+- **No tumble back in at the moment of landing.** The disengage and the panic now know that we landed, however the events arrive.
+- **A disengage no longer cancels a tumble that is in the air.**
+- **The rest of the rule is the same as v4.7.482.**
+
+### What happened at 13:21:58
+
+A landing's GMCP comes before its text, so the decisions were made before "You tumble out of the room." was read.
+
+| Order | Event | Effect |
+|---|---|---|
+| 1 | `gmcp.Room.Info` | The map moves to the landing room, and `S.escapeCheckRoom` lifts escape mode. |
+| 2 | the basher's `gmcp.Char.Vitals` handler | The danger check calls `S.disengage`. The latch is not armed, because only `_checkPursuit` armed it. `S.reset` releases the move lock, and `_noteRetreat` writes over the record of the tumble that just landed. |
+| 3 | our `gmcp.Char.Vitals` handler | `_checkPursuit` sees a record from the room we stand in, so it sees no landing. The panic goes: `tumble n`, back into the 3 denizens. |
+
+The paste starts after the first tumble was sent, so the log does not show which path sent it. The swarm's state was not idle.
+
+### The fix (`mnemosyne/009_Swarm_Tactics.lua`)
+
+- **`S._noteLanding()`** records the landing and arms the latch. `_retreatSpent`, `_noteRetreat`, `_forgetUnlandedRetreat` and `_checkPursuit` all call it first, so the order of the handlers no longer matters.
+- **`S.disengage` returns true while `S.moveLocked()`.** It was the one path that did not read the move lock. Its `S.reset` released the lock, and its move would cancel the tumble (the v4.7.243 bug).
+- **`S.onTumbleStart` restarts the record's 15 s "never left" clock.** A retreat that waited long in the queue (impaled, off balance) would otherwise lose its landing.
+
+Tests: `src_new/tests/test_swarm_tactics.lua`, with 7 new tests that replay this landing with the disengage first. All 7 failed before the fix. 8 deliberate breaks of the new guards each failed a test. One old test changed: its "not landed yet" record came from another room, and that state is a landing.
+
+---
+
 ## 2026-11-09 - v4.7.482: one retreat, then we fight
 
 The user died in a Mnemosyne ripple. The log has seven retreats in 35 seconds between a room of 3 denizens and a room of 1, and the last one started at 1% health. The user: "We kept tumbling here from a room with 3 denizens into a room of 1 denizen. At this point. we should only tumble once. That is it. If there is a mob in that room. We have to kill it." The log is `kb/raw/live/mnemosyne-tumble-loop_2026-11-09.txt`. **None of this has run in Mudlet.** The Lua tests run the real swarm module.

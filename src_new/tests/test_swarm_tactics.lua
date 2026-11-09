@@ -3825,9 +3825,11 @@ describe("v4.7.378 -- after an escape, and when the legs give out", function()
     S._retreat = { from = 100, at = clock, landedAt = clock }
     S._noteRetreat(200)
     expect(S._retreat.from).toBe(100)
-    S._retreat = { from = 100, at = clock }  -- not landed yet: replaced as before
+    -- Not landed yet, so replaced as before. It must leave from the room we stand in: a record
+    -- from another room IS a landing (v4.7.483).
+    S._retreat = { from = 200, at = clock - 5 }
     S._noteRetreat(200)
-    expect(S._retreat.from).toBe(200)
+    expect(S._retreat.at).toBe(clock)
   end)
 
   -- 4. both legs broken
@@ -4566,6 +4568,114 @@ describe("v4.7.482 -- one retreat, then we fight", function()
     expect(ataxiaTemp.escapeMode).toBe(nil)
     expect(S._retreat).toBeNil()
     expect(S._retreatSpent()).toBeFalse()
+  end)
+
+  -- v4.7.483, from a second death (kb/raw/live/mnemosyne-tumble-back-in_2026-11-09.txt). User: "We
+  -- tumble out, successfully and then tumble back IN????" A landing's GMCP comes BEFORE its text:
+  -- gmcp.Room.Info moves the map and lifts escape mode, and the basher's gmcp.Char.Vitals handler
+  -- (registered before ours) runs its danger check. So the disengage was the FIRST reader of the
+  -- latch after the landing, ahead of the _checkPursuit that armed it.
+  -- A PULL, not an escape: an escape also records S._fled, whose U-turn test would refuse the door
+  -- by itself and hide the hole. The log's disengage went through, so its door was not refused.
+  local function tumbleLanding()
+    fixture(3)
+    indoors()
+    mnemRollHide = true
+    S.onTick(); S.decorate("attack", ";")
+    expect(S.state).toBe("pulling")
+    expect(S._fled).toBeNil()
+    S.onTumbleStart("s")                     -- "You begin to tumble": the move lock arms
+    clock = clock + 3.5
+    MAP.current = 100                        -- gmcp.Room.Info; "You tumble out" is not read yet
+    mobs = 3                                 -- the denizen list still names the room we left
+    S.escapeCheckRoom()
+    hurt(12)
+    S._lastDisengageAt, S._lastPanicAt, S._lastEmergencyAt = nil, nil, nil
+    sent = {}
+  end
+
+  it("replays the U-turn: the basher's disengage runs before our vitals handler", function()
+    tumbleLanding()
+    dyingFast(function()
+      S.disengage("incoming damage")
+      S.onVitals()
+    end)
+    expect(count("tumble") + count("leap") + count("cq all")).toBe(0)
+    expect(S._retreatSpent()).toBeTrue()
+    expect(S._retreat.from).toBe(200)
+  end)
+
+  it("...and then heals in the landing room instead of going back in", function()
+    tumbleLanding()
+    dyingFast(function()
+      S.disengage("incoming damage")
+      S.onVitals()
+    end)
+    S.onTumbleDone()                         -- "You tumble out of the room."
+    clock = clock + 0.5
+    mobs = 0                                 -- the list catches up: the room is empty
+    S.onVitals()
+    for _ = 1, 4 do                          -- the funnel window passes; 12% is not fit to go back
+      clock = clock + 2
+      S.onTick()
+    end
+    expect(S.state).toBe("recovering")
+    expect(count("tumble") + count("leap")).toBe(0)
+  end)
+
+  it("a leap's landing is seen by a disengage that asks first (no move lock to hide behind)", function()
+    escapeSent()
+    clock = clock + 1
+    MAP.current = 100
+    mobs = 3
+    hurt(12)
+    S._lastDisengageAt = nil
+    sent = {}
+    dyingFast(function() expect(S.disengage("incoming damage")).toBeFalse() end)
+    expect(count("tumble") + count("leap") + count("cq all")).toBe(0)
+    expect(S._retreatSpent()).toBeTrue()
+    expect(S._retreat.from).toBe(200)
+    expect(S.state).toBe("pulling")          -- the disengage tore nothing down
+  end)
+
+  it("a disengage while a tumble is in the air does not cancel the tumble", function()
+    escapeSent()
+    S.onTumbleStart("s")
+    clock = clock + 2
+    S._lastDisengageAt = nil
+    hurt(12)
+    sent = {}
+    expect(S.disengage("incoming damage")).toBeTrue()
+    expect(count("tumble") + count("leap") + count("cq all")).toBe(0)
+    expect(S.moveLocked()).toBeTrue()
+    expect(S.state).toBe("pulling")
+  end)
+
+  it("a new record cannot overwrite a landing that nobody has read yet", function()
+    escapeSent()
+    MAP.current = 100
+    S._noteRetreat(100)
+    expect(S._retreat.from).toBe(200)
+    expect(S._retreatSpent()).toBeTrue()
+  end)
+
+  it("forgetting an unlanded retreat does not forget a landing that nobody has read yet", function()
+    escapeSent()
+    MAP.current = 100
+    S._forgetUnlandedRetreat()
+    expect(S._retreat ~= nil).toBeTrue()
+    expect(S.retreatSpentAt ~= nil).toBeTrue()
+  end)
+
+  it("a retreat that waited long in the queue still counts when it lands", function()
+    escapeSent()
+    clock = clock + 14
+    S.onTumbleStart("s")                     -- it finally began
+    clock = clock + 3
+    S._checkPursuit()
+    expect(S._retreat ~= nil).toBeTrue()
+    MAP.current = 100
+    expect(S._retreatSpent()).toBeTrue()
   end)
 
   it("a pull refused by MAX_PULLS leaves no record", function()
