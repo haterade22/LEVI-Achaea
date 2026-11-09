@@ -52,7 +52,7 @@ patterns:
 
     The sword uses the configured weapon id when there is one (`ataxia setup weapons`,
     slot `longsword`); ataxia.getWeapon falls back to the literal "longsword", and plain
-    "shield" is the idiom already used at login (login/001:138).
+    "shield" is the idiom already used at login (login/001:147).
 
     5s debounce so a burst of rejected rounds cannot stack a pile of wields.
 ]]--

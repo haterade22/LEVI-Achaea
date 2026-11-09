@@ -131,7 +131,7 @@ Replayed from the code as it stands: 2-of-3 is 2 or more of `ataxia_lockComponen
 **Why the columns differ.** The earlier count read client logs only, took the chain still running in `uW_VbgR` as a false alarm, and gave the Earth Lord's cure the game's blocker. The last column applies those three choices to this run, and it matches the earlier numbers. On the logs of 2026-11-01, this run differs for these reasons:
 - Our recordings are in: `ours/112717_Tabethys` adds a 1.85 s warning on 2-of-3, and one false alarm on softlock and two on 2-of-3. That moves the 2-of-3 median from 31.9 s to 24.6 s.
 - The open chain is not a false alarm here. On softlock that removes one, so softlock lands on the same 11 by coincidence.
-- `true` fires on `uW_VbgR` at row 554, because `ataxia_canActive` reads an Elemental Lord's cure as blocked unless weariness is up (`003_Lock_breakers.lua`:240-245, the reverse of the game's rule, `kb/CONFLICTS.md` #54). That is what the package does today. The chain is open, so it is not a false alarm.
+- `true` fires on `uW_VbgR` at row 554, because `ataxia_canActive` reads an Elemental Lord's cure as blocked unless weariness is up (`003_Lock_breakers.lua`:246-251, the reverse of the game's rule, `kb/CONFLICTS.md` #54). That is what the package does today. The chain is open, so it is not a false alarm.
 - The earlier note gave `true` a range of 0-98 s. This run's low is 3.0 s (`EveP2TVe` row 969, 1 s stamps). The earlier script is not kept, so the 0 cannot be traced.
 
 False alarms, softlock: `Sentinel` 842, `Sentinel` 2026, `c.iJVmpL` 875, `t54WWU6b` 353, `t54WWU6b` 2101, `2N1HTSWZ` 1130, `2N1HTSWZ` 3458, `2N1HTSWZ` 4519, `X8pRorzR` 298, `X8pRorzR` 1587, `ours/112717_Tabethys` 9778.

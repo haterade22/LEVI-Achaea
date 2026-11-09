@@ -31,10 +31,12 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: 'Your affliction curing priorities:'
-  type: 3
+- pattern: '^Your affliction curing priorities for the priority set (\S+):'
+  type: 1
 ]]--
 
+-- The game names the set in this line (kb/raw/live/curing-priority-list_normal_2026-10-10.txt).
+-- The old pattern had no set name, so this chain could not open on that line.
+-- A list the user typed prints as the game sent it. Our own read after a switch is hidden.
+if ataxia_prioListHeader(matches[2]) then return end
 ataxia.curingprio = {}
-deleteLine()
-cecho("\n<blue>          -=[ <white>Reset Curing Priorities<blue> ]=-")

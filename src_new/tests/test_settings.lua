@@ -190,6 +190,21 @@ describe("ataxia_loadSettings()", function()
     expect(ataxia.settings.raid.mindnet).toBeFalse()
   end)
 
+  -- A save taken during a CURINGSET LIST read holds `_csCallbacks` as an empty table. 009 would take
+  -- it for a capture in flight and never read the list again.
+  it("the curingset capture state in a save is dropped after the merge", function()
+    freshLoadState()
+    _saved[ATAXIA] = { settings = { class = "Monk" }, _csCallbacks = {}, _csLines = { "x" }, _csCollectT = 7,
+      _csEndT = 8, _csTimer = 9 }
+    ataxia_loadSettings()
+    expect(ataxia._csCallbacks).toBeNil()
+    expect(ataxia._csLines).toBeNil()
+    expect(ataxia._csCollectT).toBeNil()
+    expect(ataxia._csEndT).toBeNil()
+    expect(ataxia._csTimer).toBeNil()
+    expect(ataxia.settings.class).toBe("Monk")
+  end)
+
   -- MNEMOSYNE RUN STATE MUST NOT SURVIVE A RELOAD (v4.7.299).
   --
   -- This is the SEAM test, and it is the point of the fix: `_clearStaleRun` having its own unit

@@ -40,9 +40,12 @@ function ataxia_sendDefaultPrios()
   -- Through the throttle when it is loaded, so another writer in the same second is counted
   -- against the same budget; one command a second leaves room for those writers either way.
   local sendPrio = ataxia_sendCuringPriority or function(c) send(c) end
+  local gen = ataxiaPrioGen or 0
   for i, cmd in ipairs(cmds) do
     local last = (i == #cmds)
     local function go()
+      -- A switch since the first batch: the rest would land in that set. The table stays unsent.
+      if (ataxiaPrioGen or 0) ~= gen then return end
       sendPrio(cmd)
       -- Record what the server now holds only once the LAST command is out, so a disconnect
       -- halfway leaves the table marked unsent and the next login sends it again.
@@ -143,20 +146,27 @@ function ataxia_prioSyncDecide(changed, current)
   return "send"
 end
 
+-- A switch made while the game's answer was on its way: the answer no longer says what is active.
+local function answerName(cur, gen)
+  if (ataxiaPrioGen or 0) == gen then return cur end
+  return classDetect and classDetect.state and classDetect.state.currentCuringset
+end
+
 -- Called at login (login/001). Asks the game which set is active before writing anything.
 function ataxia_prioSyncCheck()
   if not ataxia_prioTableChanged() then return end
+  local gen = ataxiaPrioGen or 0
   local function decide(parsed)
     local cur = parsed and parsed.current
     local what = ataxia_prioSyncDecide(true, cur)
-    if what == "send" then
+    if what == "send" and (ataxiaPrioGen or 0) == gen then
       if ataxiaEcho then
         ataxiaEcho("The curing priority table changed since it was last sent -- sending it to the <green>normal<reset> set now (about 40s).")
       end
       ataxia_sendDefaultPrios()
     elseif ataxiaEcho then
       ataxiaEcho("The curing priority table changed since it was last sent, but the active curing set is <yellow>"
-        .. tostring(cur or "unknown") .. "<reset>. Switch to <green>normal<reset> and type <cyan>reset prios<reset> to apply it.")
+        .. tostring(answerName(cur, gen) or "unknown") .. "<reset>. Switch to <green>normal<reset> and type <cyan>reset prios<reset> to apply it.")
     end
   end
   if ataxia_curingsetRefresh then
@@ -171,8 +181,29 @@ function ataxia_resetOnLogin()
   ataxia_sendDefaultPrios()
 end
 
+-- The table belongs in `normal` and a write lands in whatever set is active, so this asks the game
+-- first. The tracked state cannot see a typed `curingset switch`. While bashing the game would
+-- answer `bash`: ataxia_sendDefaultPrios leaves that set by itself, as it always did.
 function ataxia_resetPrios()
-  ataxia_sendDefaultPrios()
+  if ataxia_bashProfileActive and ataxia_bashProfileActive() then
+    ataxia_sendDefaultPrios()
+    return
+  end
+  local gen = ataxiaPrioGen or 0
+  local function decide(cs)
+    local cur = cs and cs.current
+    if ataxia_prioSyncDecide(true, cur) == "send" and (ataxiaPrioGen or 0) == gen then
+      ataxia_sendDefaultPrios()
+    elseif ataxiaEcho then
+      ataxiaEcho("Priorities NOT reset: the active curing set is <yellow>" .. tostring(answerName(cur, gen) or "unknown")
+        .. "<reset>. Switch to <green>normal<reset> and type <cyan>reset prios<reset> again.")
+    end
+  end
+  if ataxia_curingsetRefresh then
+    ataxia_curingsetRefresh(decide)
+  else
+    decide(nil)
+  end
 end
 
 function ataxia_defaultCuringPrios()

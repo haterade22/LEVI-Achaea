@@ -87,6 +87,9 @@ describe("the curing set in a party", function()
     sent = {}
     send = function(c) sent[#sent + 1] = c end
     ataxia_sendCuringPriority = function(c) sent[#sent + 1] = c end
+    -- These tests are about the party rule. The restore and the list read after a switch have
+    -- their own file, test_curingset_priorities.lua, so the bare switch goes out here.
+    ataxia_switchCuringsetSend = function(name) send("curingset switch " .. name, false) end
     ataxia_bashProfileActive = function() return false end
     isDefenceForCurrentClass = function() return true end
     getEpoch = function() return 1000 end

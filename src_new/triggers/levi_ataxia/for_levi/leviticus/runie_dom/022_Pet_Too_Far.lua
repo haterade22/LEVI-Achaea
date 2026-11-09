@@ -54,8 +54,8 @@ patterns:
 
     THE PET IS TAKEN FROM THE LINE, NOT FROM OUR CLASS -- the game names the animal, so there
     is nothing to infer. But acting on it is gated on RECALL SYNTAX WE HAVE ACTUALLY SEEN:
-    `falcon recall` is sent from `login/001_Login_Function:200` and the `pass` alias, and
-    `hyena recall` from the login (208, 224), `genrunning/003:240` and `127_HYENA_FOLLOW`.
+    `falcon recall` is sent from `login/001_Login_Function:231` and the `pass` alias, and
+    `hyena recall` from the login (239, 255), `genrunning/003:240` and `127_HYENA_FOLLOW`.
     Both are proven. A Paladin's eagle is deliberately NOT handled -- its keyword has never
     been captured, and "the line named it" is not evidence that `eagle recall` parses. That is
     the same line trigger 021 draws, for the same reason: never guess an in-game command.

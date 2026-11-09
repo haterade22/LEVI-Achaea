@@ -44,7 +44,7 @@ blocks the cure **on its own** (see Dragonheal below).
 | Magi | Bloodboil (Elementalism) | 1 aff | **haemophilia**, or **both** arms broken | "Perspiration suddenly breaks out on X's forehead." | 004: -haemophilia, +1 random | HELP + guide |
 | Jester, Occultist | Fool (Tarot) | 3 affs; can be used on others | **paralysis** or **prone** | "X presses a tarot to his forehead, producing a wan smile." (or "to Y's forehead") | 008: -paralysis, +3 random | HELP + guide |
 | Psion | Expunge (Psionics) | impatience first, otherwise a mental | **confusion** | "A slight tightening of the eyes is the only sign X makes that he has made a great effort of will." | 006: -confusion, -impatience if tracked, else a mental from a list | HELP + guide |
-| Serpent | Shrugging (Venom) | 1 aff | **weariness** | "X hunches his shoulders and lets out a soft hiss." | 015: -weariness, +1 random | HELP + guide |
+| Serpent | Shrugging (Venom) | 1 aff | **weariness** | "X hunches his shoulders and lets out a soft hiss." Ours: "Focusing inward, you purge your body of afflictions.", then the cured affliction's own line: it took confusion in the one capture (`raw/live/shrugging_2026-11-08.txt`) | 015: -weariness, +1 random. Ours: `curing_bals/006`:42 and `serpent/008_Shruggin`:34 | HELP + guide; our own line live, the user's paste, n=1 |
 | Shaman | Daina / Purification (Spiritlore) | 1 aff | **selarnia** | "A pale mist begins to rise from the skin of X." | 011: -selarnia, +1 random | HELP + guide |
 | Fire Lord | Slough | 1 aff | **prone** | "The fiery outer layers of X fall away, turning to dust..." | 016: -prone, +1 random (fixed v4.7.395; it used to erase weariness, and its full-line pattern could not survive the wrap) | HELP |
 | Water Lord | Purify | 1 aff | **weariness** | (two lines, see trigger) | 012: -weariness, +1 random | HELP |
@@ -79,10 +79,10 @@ with equilibrium down and the game held it.
 - Short of balance, with auto-queue on: `You must regain balance first.`, then
   `fitness was added to your balance queue.` It runs on recovery (`raw/logs/ours/2026-10-27_112717_Tabethys.log`:12659-12676).
 
-**Code.** `ataxia_fitnessHeldForEq` (`can(x)/003_Lock_breakers.lua`) holds our send while equilibrium is down, because the
+**Code.** `ataxia_activeCureHeldForEq` (`can(x)/003_Lock_breakers.lua`:113) holds our send while equilibrium is down, for FITNESS and, since v4.7.480, SHRUGGING, because the
 game's auto-queue would otherwise fire it later, even with the asthma gone. It tests before the 1.5 s throttle, so the
 send goes out on the prompt where equilibrium returns. With balance down, the send still goes out and the auto-queue
-holds it (`raw/logs/ours/2026-10-27_112717_Tabethys.log`:12659-12676).
+holds it (`raw/logs/ours/2026-10-27_112717_Tabethys.log`:12659-12676). How the game treats a shrug sent with equilibrium down is not measured; the user approved the hold ("shrugging yes", 2026-11-08).
 
 "Too weary" prints during the lockout as well, so that refusal says nothing about the clock.
 `abilities.json` has no lockout: its `cooldown` field means balance spent.

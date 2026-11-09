@@ -118,7 +118,7 @@ local LOCK_AFF = {
   Occultist = { "paralysis", "paralyse" }, Shaman = { "paralysis", "paralyse" },
   Jester = { "paralysis", "paralyse" }, Depthswalker = { "recklessness", "reckless" },
   Magi = { "haemophilia", "haemophilia" }, Serpent = { "weariness", "weariness" },
-  Monk = { "weariness", "weariness" },
+  Monk = { "weariness", "weariness" }, Blademaster = { "weariness", "weariness" },
 }
 local function world()
   mock.reset()
@@ -143,10 +143,10 @@ local function world()
     if not row then return "paralyse" end
     return kind == "name" and row[1] or row[2]
   end
-  -- The target's class, through the real gates (007_Pariah_things). Agathon defaults to an
-  -- Occultist: in the skip list of ataxia_wantClumsiness and with no class venom, which is the
-  -- venom order these tests were written for (they stubbed the gate to false until 2026-11-08).
-  ndb.Agathon = "Occultist"
+  -- The target's class, through the real gates (007_Pariah_things). Agathon defaults to a
+  -- Blademaster: immune to clumsiness in ataxia_wantClumsiness and with no class venom, which is
+  -- the venom order these tests were written for (they stubbed the gate to false until 2026-11-08).
+  ndb.Agathon = "Blademaster"
   ataxiaNDB_getClass = function(n) return ndb[n] or "Unknown" end
   ataxiaNDB = nil                                  -- realClasses() below sets the real one up
   ataxiaEcho, zgui, cecho = function() end, nil, function() end
@@ -1044,6 +1044,92 @@ describe("review: the class gates read our TARGET's class", function()
   end)
 end)
 
+describe("clumsiness: the classes immune to it (the user's list, 2026-11-08)", function()
+  -- "Tekura Monk, Sylvan, Magi, Blademaster, and Elemental Lords are all immune to clumsiness."
+  for _, class in ipairs({ "Tekura", "Monk", "Sylvan", "Magi", "Blademaster",
+    "Airlord", "Earthlord", "Firelord", "Waterlord" }) do
+    it(class .. " is immune, in any case", function()
+      expect(ataxia_wantClumsiness(class)).toBeFalse()
+      expect(ataxia_wantClumsiness(class:lower())).toBeFalse()
+      expect(ataxia_wantClumsiness(class:upper())).toBeFalse()
+    end)
+  end
+
+  -- The old list had these. The user's list does not name them.
+  for _, class in ipairs({ "Occultist", "Bard", "Jester", "Druid", "Sentinel" }) do
+    it(class .. " keeps clumsiness", function()
+      expect(ataxia_wantClumsiness(class)).toBeTrue()
+    end)
+  end
+
+  -- "You fumble your strike, the attack going wide." on Shikudo seats (the 2026-10-11 Mystor logs).
+  it("Shikudo keeps clumsiness: not every monk is immune", function()
+    expect(ataxia_wantClumsiness("Shikudo")).toBeTrue()
+    expect(ataxia_wantClumsiness("shikudo")).toBeTrue()
+  end)
+
+  -- Class detect writes "Earthlord". Game text has "Earth Lord", GMCP "earth Elemental Lord".
+  for _, spelling in ipairs({ "Earth Lord", "earth lord", "Air Lord", "Fire Lord", "Water Lord",
+    "Earth Lady", "earth Elemental Lord", "air Elemental Lady" }) do
+    it("'" .. spelling .. "' reads as the same Elemental Lord", function()
+      expect(ataxia_wantClumsiness(spelling)).toBeFalse()
+    end)
+  end
+
+  it("the other spellings of the target's class reach it through the NDB", function()
+    world(); ndb.Agathon = "Earth Lord"
+    expect(ataxia_targetClass()).toBe("earth lord")
+    expect(ataxia_wantClumsiness()).toBeFalse()
+    expect(ataxia_wantClumsiness(ataxia_targetClass())).toBeFalse()
+  end)
+
+  it("an unknown class keeps clumsiness", function()
+    expect(ataxia_wantClumsiness("")).toBeTrue()
+    expect(ataxia_wantClumsiness("Unknown")).toBeTrue()
+    expect(ataxia_wantClumsiness("Newclass")).toBeTrue()
+    world(); ndb.Agathon = nil
+    expect(ataxia_wantClumsiness()).toBeTrue()
+  end)
+
+  -- The whole round, for each class venom and each branch of pickVenom.
+  local ROUNDS = {
+    -- Immune, with no class venom: asthma, then weariness. No xentio.
+    { "Blademaster", "kalmia vernalius" },
+    { "Airlord", "kalmia vernalius" },
+    { "Earthlord", "kalmia vernalius" },
+    { "Firelord", "kalmia vernalius" },
+    { "Waterlord", "kalmia vernalius" },
+    { "Earth Lord", "kalmia vernalius" },
+    -- Immune, with a class venom: it goes first, then the immune order.
+    { "Monk", "vernalius kalmia" },
+    { "Tekura", "vernalius kalmia" },
+    { "Magi", "notechis kalmia" },
+    { "Sylvan", "notechis kalmia" },
+    -- Not immune: xentio is in the round again.
+    { "Occultist", "xentio kalmia" },
+    { "Bard", "xentio kalmia" },
+    { "Jester", "xentio kalmia" },
+    { "Druid", "kalmia xentio" },
+    { "Sentinel", "kalmia xentio" },
+    { "Shikudo", "vernalius xentio" },
+  }
+  for _, c in ipairs(ROUNDS) do
+    it(c[1] .. " with paralysis up gets " .. c[2], function()
+      world(); ndb.Agathon = c[1]
+      give("paralysis")
+      expect(dstabOf(round())).toBe("dstab Agathon " .. c[2])
+    end)
+  end
+
+  it("a Blademaster with asthma up gets weariness next, and still no xentio", function()
+    world(); ndb.Agathon = "Blademaster"
+    give("paralysis", "asthma")
+    local d = dstabOf(round())
+    expect(has(d, "vernalius")).toBeTrue()
+    expect(has(d, "xentio")).toBeFalse()
+  end)
+end)
+
 describe("review: group mode counts the first venom's slickness", function()
   it("gecko then slike under impatience + asthma, not a second curare", function()
     world(); serpOffenseMode = "group"
@@ -1498,6 +1584,42 @@ describe("F30: the strip line starts the rebounding reapply clock", function()
     expect(lastReboundingFlay).toBe(100.18)
     clock = 108.40
     expect(has(round(), "impulse Agathon")).toBeTrue()
+  end)
+end)
+
+-- The user, 2026-11-08: "Tekura Monk, Sylvan, Magi, Blademaster, and Elemental Lords are all immune
+-- to clumsiness." The flay's one venom was still xentio for them.
+describe("the flay gives no xentio to a class immune to clumsiness", function()
+  for _, class in ipairs({ "Blademaster", "Magi", "Sylvan", "Monk", "Airlord", "Earthlord", "Firelord", "Waterlord" }) do
+    for _, defence in ipairs({ "shield", "rebounding" }) do
+      it(class .. ": paralysis + weariness up, the " .. defence .. " flay carries kalmia", function()
+        world(); ndb.Agathon = class
+        give("paralysis", "weariness")
+        if defence == "shield" then Shielded = true else Rebounding = true end
+        expect(has(round(), "flay Agathon " .. defence .. " kalmia")).toBeTrue()
+      end)
+    end
+  end
+
+  it("with asthma up too the flay carries gecko", function()
+    world(); ndb.Agathon = "Magi"
+    give("paralysis", "weariness", "asthma")
+    Shielded = true
+    expect(has(round(), "flay Agathon shield gecko")).toBeTrue()
+  end)
+
+  it("a class clumsiness affects still gets xentio on the flay", function()
+    world(); ndb.Agathon = "Occultist"
+    give("paralysis", "weariness")
+    Shielded = true
+    expect(has(round(), "flay Agathon shield xentio")).toBeTrue()
+  end)
+
+  it("a Shikudo monk still gets xentio on the flay", function()
+    world(); ndb.Agathon = "Shikudo"
+    give("paralysis", "weariness")
+    Shielded = true
+    expect(has(round(), "flay Agathon shield xentio")).toBeTrue()
   end)
 end)
 

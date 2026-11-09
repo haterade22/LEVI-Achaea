@@ -881,7 +881,8 @@ local CLASS_LOCK_VENOM = {
     paladin      = "xentio",
     runewarden   = "xentio",
     unnamable    = "xentio",
-    blademaster  = "xentio",
+    -- No blademaster row. xentio gives clumsiness, and the class is immune (the user, 2026-11-08;
+    -- ataxia_wantClumsiness). A Blademaster takes the order in pickVenom: asthma, then weariness.
     psion        = "aconite",
     alchemist    = "aconite",
     depthswalker = "eurypteria",
@@ -1920,7 +1921,7 @@ function serp_ekanelia_attack()
             flayVenom = "curare"
         elseif not haveAff("weariness") then
             flayVenom = "vernalius"
-        elseif not haveAff("clumsiness") then
+        elseif wantClumsiness() and not haveAff("clumsiness") then
             flayVenom = "xentio"
         elseif not haveAff("asthma") then
             -- Only direct-dstab kalmia when ekanelia conditionals aren't both present

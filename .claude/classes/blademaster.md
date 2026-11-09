@@ -1324,7 +1324,7 @@ them, and they need different answers:
 
 1. **SSC eating a herb to CURE them off** -- to *undeafen* us. Prevented by the AFFLICTION priority
    `26`, which means "ignored": `curing priority deafness 26` / `curing priority blindness 26`.
-   Already set for every class in `ataxia/001_Default_Curing_Prios.lua:337-339`, and correct there
+   Already set for every class in `ataxia/001_Default_Curing_Prios.lua:502-504`, and correct there
    -- the whole tree treats these two as kept defences (`004_Aff_gains_losses.lua` ignore lists,
    `mnemosyne/009` `AFF_IGNORE`). **Nothing to change; do not "fix" it per class.**
 2. **SSC eating a herb to put the defence back UP** after a mob or venom strips it. This is what

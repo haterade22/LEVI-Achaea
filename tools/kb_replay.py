@@ -652,10 +652,10 @@ def is_softlock(terms):
 
 
 def class_cure_blocked(s, cls, game=False):
-    """not ataxia_canActive(), as the code runs it today (003_Lock_breakers.lua:226-254).
+    """not ataxia_canActive(), as the code runs it today (003_Lock_breakers.lua:232-260).
 
     The code has no row for an Earth Lord. For a class holding "Elemental" it returns true only WITH weariness up
-    (003_Lock_breakers.lua:240-245), the reverse of class-cures.md:51. That is what the existing label does today, so the
+    (003_Lock_breakers.lua:246-251), the reverse of class-cures.md:51. That is what the existing label does today, so the
     replay does it too. game=True uses the game's blocker instead. Only the reproduction of the earlier count uses it."""
     start = s.clock.get("classcure")
     if start is not None and s.t - start < CHANNEL_MAX["classcure"]:
@@ -1636,7 +1636,7 @@ def render_baselines(a):
             "That moves the 2-of-3 median from 31.9 s to 24.6 s.",
             "- The open chain is not a false alarm here. On softlock that removes one, so softlock lands on the same 11 by coincidence.",
             "- `true` fires on `uW_VbgR` at row 554, because `ataxia_canActive` reads an Elemental Lord's cure as blocked unless weariness is up "
-            "(`003_Lock_breakers.lua`:240-245, the reverse of the game's rule, `kb/CONFLICTS.md` #54). That is what the package does today. The chain "
+            "(`003_Lock_breakers.lua`:246-251, the reverse of the game's rule, `kb/CONFLICTS.md` #54). That is what the package does today. The chain "
             "is open, so it is not a false alarm.",
             "- The earlier note gave `true` a range of 0-98 s. This run's low is %s s (`EveP2TVe` row 969, 1 s stamps). The earlier script is "
             "not kept, so the 0 cannot be traced." % fmt1(labels["true"]["min"]),

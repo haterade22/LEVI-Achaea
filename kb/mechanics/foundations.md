@@ -168,7 +168,7 @@ So any equilibrium spend with asthma up delays our lock breaker. It works while 
 ([class-cures](../afflictions/class-cures.md)).
 
 **The two hand-written answers look like one rule that lacks a clock.** Against a Sentinel the code cures weariness
-first. Against a Serpent it boosts asthma (`001_Anti_Priorities.lua:196-200`, `:587`). INFERRED: when FITNESS is ready, an
+first. Against a Serpent it boosts asthma (`001_Anti_Priorities.lua:213-217`, `:604`). INFERRED: when FITNESS is ready, an
 aurum that takes either affliction frees you, and when FITNESS is far from ready, only asthma helps. Weakly tested:
 only 2 real tests of the first case, and no logged win of the second (asthma re-landed at +0.51 s and +2 s). Do not
 treat this as settled. A live probe and step 6 of the plan come first.
@@ -196,6 +196,17 @@ worse in no comparison ([CONFLICTS](../CONFLICTS.md) #57). This is a model on 10
 | "FITNESS lockout 8.7 s" | **Not refuted, only unsupported.** 8.7 was not seen as a stamped value, but the S:2105-2328 bracket of 8.49-9.26 s cannot exclude it. The pairs do not fit one fixed lockout: that bracket and T:4616-4929 (9.12-9.65 s) lie under Lc:759-949 (9.86-9.97 s) |
 | "`Balance used` and `[Bal Spent]` are loggers' echoes" | Game text. It prints before recovery, and in the same colour as `Health lost` |
 
+## Clumsiness
+
+PLAYER (the user, 2026-11-08): "33 percent chance to miss your target is huge. Additionally, it starts the kelp stack needed to stick Asthma."
+The game's own record says only that it "makes it hard for you to physically hit your target" ([database](../afflictions/database.md)). No log
+measures the 33 percent. `.claude/classes/sentinel.md`:167 gives the same figure with no measurement behind it, and it was written from a Blademaster seat, our 2026-08-19
+death log. So it corroborates nothing, and it sits oddly beside the Blademaster on the list below.
+
+Immune, also PLAYER: "Tekura Monk, Sylvan, Magi, Blademaster, and Elemental Lords are all immune to clumsiness." The code follows the user (`ataxia_wantClumsiness`,
+`ataxia/ataxia/007_Pariah_things.lua`:93-111). The words do not say whether immune means no miss or no affliction, and the logs do not settle it: a Blademaster and an
+Earth Lord both take the affliction and spend a cure on it, and three rows show an Earth Lord's clumsy miss ([CONFLICTS](../CONFLICTS.md) #81).
+
 ## Limits
 
 - **Few players.** Six logs are Mystor against one opponent, and nine are Claes. Several were played within 30 minutes.
@@ -216,7 +227,7 @@ worse in no comparison ([CONFLICTS](../CONFLICTS.md) #57). This is a model on 10
 
 - **No decision reads a measured balance time.** The stopwatches in `ataxia/014_Balance_Timers.lua` are display only.
 - **A press is the trigger,** and nothing reasons about time ahead, apart from a few small cases.
-- `ataxia_lockEscapes` (`003_Lock_breakers.lua:323-329`) knows smoke, focus and FITNESS by blocker. It omits eat, salve
+- `ataxia_lockEscapes` (`003_Lock_breakers.lua:329-335`) knows smoke, focus and FITNESS by blocker. It omits eat, salve
   and tree, and it never asks how long until a channel returns.
 - The clock constants disagree between files: tree 13 and 14, restoration five values, focus four values.
 - Trigger 398 starts the target's focus clock only for the target's own focus line, and under shadowmadness it waits

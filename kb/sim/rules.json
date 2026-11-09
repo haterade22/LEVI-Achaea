@@ -7,9 +7,9 @@
   "kb/mechanics/clocks.json": "acf3ebc1cd2c7b55",
   "kb/sim/rules_hand.json": "eae02f7355009382",
   "src_new/scripts/levi_ataxia/levi/ataxia/affliction_tracking_core/008_V3_Integration.lua": "84500af0cf22efc1",
-  "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua": "5fa60d4229dfd770",
+  "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua": "a67d445f9502d3a2",
   "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua": "0662a95087ef51bb",
-  "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua": "0fbef14a8afb2309",
+  "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua": "93d3d06e7b34b065",
   "tools/sim/gates_whole.json": "1de3efb56ed6f8f7"
  },
  "rules": {
@@ -511,72 +511,72 @@
    "value": 2.55
   },
   "classcure.blocker.Alchemist": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
    "tag": "READ",
    "value": "stupidity"
   },
   "classcure.blocker.Blademaster": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
    "tag": "READ",
    "value": "weariness"
   },
   "classcure.blocker.Depthswalker": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
    "tag": "READ",
    "value": "recklessness"
   },
   "classcure.blocker.Druid": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
    "tag": "READ",
    "value": "weariness"
   },
   "classcure.blocker.Infernal": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
    "tag": "READ",
    "value": "weariness"
   },
   "classcure.blocker.Jester": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
    "tag": "READ",
    "value": "paralysis"
   },
   "classcure.blocker.Magi": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
    "tag": "READ",
    "value": "haemophilia"
   },
   "classcure.blocker.Monk": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
    "tag": "READ",
    "value": "weariness"
   },
   "classcure.blocker.Occultist": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
    "tag": "READ",
    "value": "paralysis"
   },
   "classcure.blocker.Paladin": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
    "tag": "READ",
    "value": "weariness"
   },
   "classcure.blocker.Runewarden": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
    "tag": "READ",
    "value": "weariness"
   },
   "classcure.blocker.Sentinel": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
    "tag": "READ",
    "value": "weariness"
   },
   "classcure.blocker.Serpent": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
    "tag": "READ",
    "value": "weariness"
   },
   "classcure.blocker.Shaman": {
-   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:205",
+   "source": "src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua:211",
    "tag": "READ",
    "value": "selarnia"
   },

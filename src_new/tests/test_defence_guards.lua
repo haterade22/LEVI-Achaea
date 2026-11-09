@@ -41,6 +41,7 @@ dwbRunie = nil                                   -- dwb_runie/001 builds its tab
 
 local ROOT = "src_new/scripts/levi_ataxia/levi/"
 for _, f in ipairs({
+  ROOT .. "ataxia/ataxia/001_Default_Curing_Prios.lua",
   ROOT .. "ataxia/ataxia/002_Prio_Management.lua",
   ROOT .. "levi_scripts/algedonic_defense_1.0/001_Anti_Priorities.lua",
   ROOT .. "levi_scripts/dwb_runie/001_DWB_Runie_Logic.lua",
@@ -160,6 +161,112 @@ describe("ApplySwaps: a stored priority the server already holds is not written 
       now = now + 1
     end
     expect(count("curing priority paralysis 1")).toBe(1)
+  end)
+end)
+
+describe("astImp in the monkshood state (the user, 2026-11-08; kb/CONFLICTS.md #74)", function()
+  local RAISE = "curing priority impatience 1"
+  local function monkshood(class, prio, affs)
+    tc = class
+    reset(affs or { paralysis = true, asthma = true, weariness = true })
+    ataxia.prioritySwaps = { astImp = { active = true }, astWear = { active = true } }
+    ataxia.curingprio.impatience = prio or ataxia_defaultPrioAff("impatience")
+    ataxia.curingprio.asthma = ataxia_defaultPrioAff("asthma")
+  end
+  local function putBack() return "curing priority impatience " .. ataxia_defaultPrioAff("impatience") end
+
+  -- The default is what a restore puts back. At 1 the tests below could not tell the two apart.
+  it("impatience's default is not 1", function()
+    expect(ataxia_defaultPrioAff("impatience") ~= 1).toBeTrue()
+  end)
+
+  it("against a Serpent with asthma and weariness up it does not raise impatience", function()
+    monkshood("Serpent")
+    Algedonic.ApplySwaps("weariness")
+    expect(sent(RAISE)).toBeFalse()
+    expect(sent(putBack())).toBeFalse()
+  end)
+
+  it("astWear still raises asthma in that state, and asthma never goes to 1", function()
+    monkshood("Serpent")
+    Algedonic.ApplySwaps("weariness")
+    expect(sent("curing priority asthma 3")).toBeTrue()
+    expect(sent("curing priority asthma 1")).toBeFalse()
+  end)
+
+  it("puts impatience back in the same pass when astImp had raised it", function()
+    monkshood("Serpent", 1)
+    Algedonic.ApplySwaps("weariness")
+    expect(sent(putBack())).toBeTrue()
+    expect(sent(RAISE)).toBeFalse()
+  end)
+
+  it("raises on paralysis + asthma, then puts back when weariness lands", function()
+    monkshood("Serpent", nil, { paralysis = true, asthma = true })
+    Algedonic.ApplySwaps("asthma")
+    expect(sent(RAISE)).toBeTrue()
+    ataxia.curingprio.impatience = 1             -- trigger 719 confirms the write
+    ataxia.afflictions.weariness = true
+    Algedonic.ApplySwaps("weariness")
+    expect(sent(putBack())).toBeTrue()
+  end)
+
+  it("touches a priority only at astImp's own value", function()
+    monkshood("Serpent", 2)
+    Algedonic.ApplySwaps("weariness")
+    expect(sent("curing priority impatience 2")).toBeFalse()
+    expect(sent(putBack())).toBeFalse()
+  end)
+
+  it("raises as before against a Serpent with no weariness", function()
+    monkshood("Serpent", nil, { paralysis = true, asthma = true })
+    Algedonic.ApplySwaps("asthma")
+    expect(sent(RAISE)).toBeTrue()
+  end)
+
+  it("raises again on the next gain once the weariness is gone", function()
+    monkshood("Serpent")
+    Algedonic.ApplySwaps("weariness")
+    expect(sent(RAISE)).toBeFalse()
+    ataxia.afflictions.weariness = nil
+    Algedonic.ApplySwaps("slickness")
+    expect(sent(RAISE)).toBeTrue()
+  end)
+
+  it("an Alchemist with all three up still gets impatience 1", function()
+    monkshood("Alchemist")
+    Algedonic.ApplySwaps("weariness")
+    expect(sent(RAISE)).toBeTrue()
+    expect(sent(putBack())).toBeFalse()
+  end)
+
+  it("an Alchemist's raised impatience stays up when weariness lands", function()
+    monkshood("Alchemist", 1)
+    Algedonic.ApplySwaps("weariness")
+    expect(#mock.sent_commands).toBe(0)
+  end)
+
+  it("with astImp toggled off it leaves impatience alone", function()
+    monkshood("Serpent", 1)
+    ataxia.prioritySwaps.astImp.active = false
+    Algedonic.ApplySwaps("weariness")
+    expect(sent(putBack())).toBeFalse()
+  end)
+
+  -- RestoreSwaps' astImp block needed no change. With the raise skipped, it has nothing to put back.
+  it("RestoreSwaps writes nothing for impatience after astImp held off", function()
+    monkshood("Serpent")
+    Algedonic.ApplySwaps("weariness")
+    ataxia.afflictions.paralysis = nil
+    Algedonic.RestoreSwaps("paralysis")
+    expect(sent(RAISE)).toBeFalse()
+    expect(sent(putBack())).toBeFalse()
+  end)
+
+  it("RestoreSwaps still puts a raised impatience back when paralysis goes", function()
+    monkshood("Serpent", 1, { asthma = true })
+    Algedonic.RestoreSwaps("paralysis")
+    expect(sent(putBack())).toBeTrue()
   end)
 end)
 

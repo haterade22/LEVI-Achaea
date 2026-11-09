@@ -13,7 +13,21 @@ attributes:
 packageName: ''
 ]]--
 
+-- Six branches of levilogin move the server to normal, and the state moves with it here. The other
+-- classes send no switch, and after a restart the state says normal whatever the server is on.
+-- ataxia_prioLoginRead, at the end of levilogin, asks the game for those.
+function ataxia_loginCuringsetNormal()
+  if classDetect and classDetect.state then classDetect.state.currentCuringset = "normal" end
+  if ataxia_prioSetKnown then ataxia_prioSetKnown() end
+  -- The server is on normal after this send, so bash off must not lead to a set the state no longer names.
+  local bash = ataxia.settings and ataxia.settings.bashcuring
+  if bash and bash.active then bash.restoreTo = "normal" end
+  send("curingset switch normal")
+end
+
 function levilogin()
+-- First, so nothing below can stop it: the link is back, and which set the server is on is not known.
+if ataxia_prioLoginStart then ataxia_prioLoginStart() end
 enableV3()
 sendGMCP('Core.Supports.Add ["Comm.Channel 1"]')
 sendGMCP('Core.Supports.Add ["IRE.Target 1"]')
@@ -145,7 +159,7 @@ expandAlias("defup shi")
 -- v4.7.456: the staff's item id, not the bare keyword "staff", which can wield an illusion staff
 -- (shikudo.staffRef, shikudo/006). With no id known yet it is still "staff".
 send("wield "..((shikudo and shikudo.staffRef) and shikudo.staffRef() or ataxia.getWeapon("staff2")))
-send("curingset switch normal")
+ataxia_loginCuringsetNormal()
 end
 end
 
@@ -153,7 +167,7 @@ if gmcp.Char.Status.class == "Psion" then
 expandAlias("defswitch psion")
 expandAlias("defup psion")
 send("wield shield")
-send("curingset switch normal")
+ataxia_loginCuringsetNormal()
 end
 
 if gmcp.Char.Status.class == "Bard" then
@@ -161,7 +175,7 @@ expandAlias("defswitch bard")
 expandAlias("defup bard")
 send("wield left rapier;wield right lyre")
 send("compose paean sonata scherzo maqam prelude")
-send("curingset switch normal")
+ataxia_loginCuringsetNormal()
 end
 
 
@@ -169,21 +183,21 @@ if gmcp.Char.Status.class == "Apostate" then
 expandAlias("defswitch apoo")
 expandAlias("defup apoo")
 send("wield right shield;summon baalzadeen;summon daegger")
-send("curingset switch normal")
+ataxia_loginCuringsetNormal()
 end
 
 if gmcp.Char.Status.class == "Blademaster" then
 expandAlias("defswitch bm")
 expandAlias("defup bm")
 send("unwield left;unwield right;sheathe blade")
-send("curingset switch normal")
+ataxia_loginCuringsetNormal()
 end
 
 if gmcp.Char.Status.class == "Serpent" then
 expandAlias("defswitch serp")
 expandAlias("defup serp")
 send("wield right dirk;wield left shield")
-send("curingset switch normal")
+ataxia_loginCuringsetNormal()
 end
 
 if gmcp.Char.Status.class == "Runewarden" then
@@ -297,5 +311,8 @@ end
 tempTimer(7, [[ sendAll("allies", "enemies") ]])
 
 raiseEvent("logged in")
+
+-- Last, after the branches above have sent their switch to normal.
+if ataxia_prioLoginRead then ataxia_prioLoginRead() end
 
 end

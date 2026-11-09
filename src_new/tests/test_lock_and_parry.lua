@@ -413,13 +413,93 @@ describe("FITNESS waits for equilibrium", function()
     expect(sentFitness()).toBe(true)
   end)
 
-  it("holds only FITNESS: no probe has tested another class's cure", function()
+  it("holds only FITNESS and SHRUGGING: no probe has tested another class's cure", function()
+    for class, cmd in pairs({ Occultist = "fling fool at me", Alchemist = "educe salt",
+      Shaman = "invoke purification", Magi = "cast bloodboil" }) do
+      reset({ asthma = true, slickness = true, anorexia = true })
+      ataxiaTemp.class = class
+      ataxia.vitals.eq = false
+      expect(ataxia_activeCureHeldForEq()).toBe(false)
+      mock.reset(); ataxia_lockBreak()
+      expect(table.concat(mock.sent_commands, "|"):find(cmd, 1, true) ~= nil).toBe(true)
+    end
+  end)
+
+  it("names FITNESS in the echo", function()
     reset({ asthma = true, slickness = true, anorexia = true })
-    ataxiaTemp.class = "Serpent"
     ataxia.vitals.eq = false
-    expect(ataxia_fitnessHeldForEq()).toBe(false)
     mock.reset(); ataxia_lockBreak()
-    expect(table.concat(mock.sent_commands, "|"):find("shrugging") ~= nil).toBe(true)
+    expect(table.concat(mock.echoed_lines, "|"):find("FITNESS waits", 1, true) ~= nil).toBe(true)
+  end)
+end)
+
+describe("SHRUGGING waits for equilibrium (the user, 2026-11-08: \"shrugging yes\")", function()
+  -- The user's paste: "Focusing inward, you purge your body of afflictions." then "Equilibrium
+  -- used: 1.36s." No probe has shown how the game treats a shrug sent with equilibrium down.
+  local function serpent(affs, eq)
+    reset(affs or { asthma = true, slickness = true, anorexia = true })
+    ataxiaTemp.class = "Serpent"
+    ataxia.vitals.eq = eq
+    mock.reset()
+  end
+  local function sentShrug()
+    return table.concat(mock.sent_commands, "|"):find("shrugging", 1, true) ~= nil
+  end
+
+  it("does not send from the lock-breaker with equilibrium down", function()
+    serpent(nil, false)
+    expect(ataxia_activeCureHeldForEq()).toBe(true)
+    ataxia_lockBreak()
+    expect(sentShrug()).toBe(false)
+  end)
+
+  it("does not send from the free-value path with equilibrium down", function()
+    serpent({ asthma = true }, false)
+    ataxia_tryActiveCure()
+    expect(sentShrug()).toBe(false)
+  end)
+
+  it("sends on the prompt where equilibrium returns: the throttle stays unarmed", function()
+    serpent(nil, false)
+    ataxia_lockBreak()
+    expect(attemptedLockBreak).toBe(nil)
+    ataxia.vitals.eq = true
+    ataxia_lockBreak()
+    expect(sentShrug()).toBe(true)
+  end)
+
+  it("sends with equilibrium up", function()
+    serpent(nil, true)
+    expect(ataxia_activeCureHeldForEq()).toBe(false)
+    ataxia_lockBreak()
+    expect(sentShrug()).toBe(true)
+  end)
+
+  it("fails open when equilibrium is unknown", function()
+    serpent(nil, nil)
+    ataxia_lockBreak()
+    expect(sentShrug()).toBe(true)
+  end)
+
+  it("names SHRUGGING in the echo, not FITNESS", function()
+    serpent(nil, false)
+    ataxia_lockBreak()
+    local said = table.concat(mock.echoed_lines, "|")
+    expect(said:find("SHRUGGING waits", 1, true) ~= nil).toBe(true)
+    expect(said:find("FITNESS", 1, true)).toBe(nil)
+  end)
+
+  it("a held shrug still counts as an open exit in the escape report", function()
+    serpent({ asthma = true }, false)
+    expect(ataxia_activeCureHeldForEq()).toBe(true)
+    expect(ataxia_canActive()).toBe(true)
+    expect(ataxia_lockEscapes().fitness).toBe(true)
+  end)
+
+  it("the pasted shrug line matches Active Used (006), the real file", function()
+    local TL = dofile("src_new/tests/trigger_lib.lua")
+    local pats = TL.patterns("src_new/triggers/levi_ataxia/for_levi/leviticus/curing_bals/006_Active_Used.lua")
+    expect(TL.anyMatches(pats, "Focusing inward, you purge your body of afflictions.")).toBe(true)
   end)
 end)
 

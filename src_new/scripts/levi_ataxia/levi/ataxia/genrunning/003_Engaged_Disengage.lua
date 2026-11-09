@@ -89,8 +89,8 @@ function basher_disengaged()
   end
   
   -- Restores the same three names the engage path parks. Was a hardcoded `burning 8`, which
-  -- has to be kept in step with the table by hand and had already drifted from it (the base
-  -- is 9); ataxia_restorePrio reads ataxia_defaultCuringPrios() and cannot drift.
+  -- drifted from the table (the base is 9). ataxia_restorePrio reads the table on normal and
+  -- that set's own value on a class set, and writes nothing if a class set has no baseline.
   if string.find(ataxiaTemp.class, "fire") and ataxia_getPrio("burning") == 26 then
     for _, b in ipairs({"burning", "burning4", "burning5"}) do ataxia_restorePrio(b) end
   end  
@@ -322,7 +322,7 @@ function basher_engaged()
   -- right home for it is a delta in 008_Bash_Curing_Profile.lua, but that table is not
   -- class-conditional -- recorded rather than half-fixed.
   if string.find(ataxiaTemp.class, "fire") and ataxia_getPrio("burning") ~= 26 then
-    ataxia_sendCuringPriority(
+    ataxia_sendPrioSwap(
       "curing priority burning 26;curing priority burning4 26;curing priority burning5 26", false)
     send("manifest torch", false)
   end  

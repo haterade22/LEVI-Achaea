@@ -118,6 +118,18 @@ end
 -- All gated by ataxia.prioritySwaps toggles (aconfig prios)
 -- ============================================================================
 
+-- True in the Serpent's monkshood state: asthma and weariness up. Puts impatience back if it reads 1.
+-- Trigger 719 calls this too. A raise and the weariness can arrive in one packet, and the weariness
+-- pass then reads the value from before the raise.
+function Algedonic.AstImpPutBack()
+  local ps = ataxia.prioritySwaps
+  if not (ps and ps.astImp and ps.astImp.active) then return false end
+  local tc = ataxiaNDB_Exists(target) and ataxiaNDB_getClass(target) or nil
+  if tc ~= "Serpent" or not (affed("asthma") and affed("weariness")) then return false end
+  if ataxia_getPrio("impatience") == 1 then ataxia_restorePrio("impatience") end
+  return true
+end
+
 function Algedonic.ApplySwaps(aff)
   if not ataxia.prioritySwaps then ataxia_resetSwaps() end
   local ps = ataxia.prioritySwaps
@@ -139,8 +151,13 @@ function Algedonic.ApplySwaps(aff)
   end
 
   -- astImp: impatience prio vs Alchemist/Serpent when para+asthma
+  -- Not against a Serpent with asthma and weariness both up. Our reading of the user's "astimp can
+  -- be implemented", 2026-11-08, to confirm (kb/CONFLICTS.md, Resolved, was #74). Those two let a
+  -- monkshood impulse land. With impatience at 1 its herb goes first, asthma stays, and the next
+  -- impulse can give impatience again. astWear below raises asthma. AstImpPutBack undoes a raise
+  -- made before the weariness. Asthma at 1 would rank asthma above paralysis, so we do not use it.
   if ps.astImp and ps.astImp.active and tc then
-    if affed("paralysis") and affed("asthma")
+    if not Algedonic.AstImpPutBack() and affed("paralysis") and affed("asthma")
        and (tc == "Alchemist" or tc == "Serpent")
        and ataxia_getPrio("impatience") ~= 1 then
       ataxia_setAffPrio("impatience", 1)
@@ -228,17 +245,17 @@ function Algedonic.ApplySwaps(aff)
       ataxia_setAffPrio("burning4", 1)
       ataxia_setAffPrio("burning5", 1)
     elseif aff == "hypothermia" then
-      ataxia_sendCuringPriority("curing priority shivering 20;curing priority frozen 20", false)
+      ataxia_sendPrioSwap("curing priority shivering 20;curing priority frozen 20", false)
     end
     if affed("frozen") or (affed("shivering") and ataxia_getPrio("frozen") ~= 2) then
-      ataxia_sendCuringPriority("curing priority frozen 2;curing priority shivering 2;curing priority defence insulation 2", false)
+      ataxia_sendPrioSwap("curing priority frozen 2;curing priority shivering 2;curing priority defence insulation 2", false)
     end
   end
 
   -- scaldTimeflux: deprioritize scalded during timeflux (always runs)
   if aff == "timeflux" then
     if ataxia_getPrio("scalded") < 26 and affed("timeflux") then
-      ataxia_sendCuringPriority("curing priority scalded 26")
+      ataxia_sendPrioSwap("curing priority scalded 26")
     end
   end
 end
@@ -330,7 +347,7 @@ function Algedonic.RestoreSwaps(aff)
   if ps.magi and ps.magi.active then
     if aff == "hypothermia" then
       if affed("frozen") or affed("shivering") then
-        ataxia_sendCuringPriority("curing priority frozen 2;curing priority shivering 2;curing priority defence insulation 2", false)
+        ataxia_sendPrioSwap("curing priority frozen 2;curing priority shivering 2;curing priority defence insulation 2", false)
       else
         if ataxia_getPrio("frozen") ~= ataxia_defaultPrioAff("frozen") then ataxia_restorePrio("frozen") end
         if ataxia_getPrio("shivering") ~= ataxia_defaultPrioAff("shivering") then

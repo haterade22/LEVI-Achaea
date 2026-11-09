@@ -727,9 +727,9 @@ the target, on the line and again after the packet (`tempTimer(0)`). 638 and 641
 **Our target's class is `ataxia_targetClass()` (`ataxia/007_Pariah_things.lua`:68, v4.7.479): the one source for Serpent and
 Pariah.** It reads the NDB entry first (`classDetect.setAttackerClass`, `onTargetChanged` and the API lookup all write it), then
 classDetect's class only when that attacker IS the target. `classDetect.state.attackerClass` alone is whoever last hit US, and
-it is nil whenever two or more attackers are tracked, in or out of a party (`class_detect/001`:339-342). `ataxia_wantClumsiness`
-(:89) defaults to it. The global `tarClass` is gone: nothing ever assigned it, so the gate always said yes and the skip list
-never ran until this version. Tests stub the class (`ataxiaNDB_getClass`), not the gate. The anti-class defences key on our
+it is nil whenever two or more attackers are tracked, in or out of a party (`class_detect/001`:351-354). `ataxia_wantClumsiness`
+(:110) defaults to it. The global `tarClass` is gone: nothing ever assigned it, so the gate always said yes and the class list
+never ran before v4.7.479. Tests stub the class (`ataxiaNDB_getClass`), not the gate. The anti-class defences key on our
 target's NDB class too, not on who attacks us (open, `Algedonic.ApplySwaps`).
 **Also since v4.7.479:** a new target has no coating assumed (`sileris`/`fangbarrier` false at 016:531-532; 442 and 707 teach it),
 `dazzled` is the game's key (017; `priest/003` passes it), and the six `[V3] ILLUSION:` refusals print through `illusionEcho` (008:76).
@@ -2519,7 +2519,8 @@ Paladin kill condition had never taken effect. Rules that follow:
 - **Never write a bare stack name to escalate** -- a bare write is the base, and the base is what the
   overrides beat. `002_Damnation_Defence.lua` and the anti-Magi/Firelord swaps all write the LEVEL.
 - **Only escalate a level that has a static entry** in `ataxia_defaultCuringPrios()`, so
-  `ataxia_restorePrio` always has an exact value to put back. `ataxia_defaultPrioAff` falls back to
+  `ataxia_restorePrio` has an exact value to put back on `normal`. On a class set the value is that set's own, and an
+  unknown one writes nothing (v4.7.480, below). `ataxia_defaultPrioAff` falls back to
   the family base for a level with no entry of its own; without it the restore concatenated nil.
 - **Escalate the STATIC table, not just the dynamic swap.** `Algedonic.AntiPaladin` only runs once
   the target is KNOWN to be a Paladin, so a missed class read used to cost the entire response.
@@ -2529,8 +2530,8 @@ Paladin kill condition had never taken effect. Rules that follow:
   exact failure the bash profile exists to fix. See `008_Bash_Curing_Profile.lua`.
 - **A stacking aff with a BARE-ONLY entry is correct** (pressure, the fracture family, `tempered*`):
   one base covers every count. Do not "complete" them.
-- Nothing parses a **rejected** `curing priority`. After adding any suffixed name: `reset prios`,
-  then `CURING PRIORITY LIST`, and confirm it came back. Silence is not success.
+- Nothing parses a **rejected** `curing priority`. After adding any suffixed name: `reset prios`
+  from `normal` (since v4.7.480 it writes nothing on any other set), then `CURING PRIORITY LIST`, and confirm it came back. Silence is not success.
 - **Deleting a key from the Lua table does NOT delete the row from the server-side curingset.**
   `ataxia_sendDefaultPrios` only writes what the table holds; it never sends
   `CURING PRIORITY RESET`. Orphaned per-stack rows persist at their old values, so a base changed
@@ -2579,14 +2580,30 @@ it could not create. Command: `curingsets`.
 
 **CRITICAL: `CURING PRIORITY <aff> <n>` writes a STORED priority into whichever curingset is
 ACTIVE.** Any code path that writes priorities while a non-default set is selected mutates
-that set permanently — and `ataxia_restorePrio()` will then write the *default* table's value
-into the *other* set, rotting it one affliction at a time. Route every priority write through
+that set permanently. Until v4.7.480 `ataxia_restorePrio()` then wrote the *default* table's value
+into the *other* set, rotting it one affliction at a time; it now writes that set's own value (below). Route every priority write through
 `ataxia_sendCuringPriority()` (`ataxia/ataxia/002_Prio_Management.lua`), which throttles to
 4/sec (server limit 5/sec, Announce #5450) **and** drops stored affliction writes while the
-PvE bash set is active. Its classifier matched **letters only** until v4.7.278, so every
+PvE bash set is active. The one exception is the batch at a `classDetect` switch, one `send()` charged to the same window.
+A swap we will undo goes through `ataxia_setAffPrio` or `ataxia_sendPrioSwap`, which call it and record the swap. Its classifier matched **letters only** until v4.7.278, so every
 stack-suffixed write (`curing priority burning5 9`) slipped the guard into whatever set was
-active -- reachable from the UI, since trigger 717 makes `burning5` its own clickable row. `CURING PRIOAFF <aff>` is a *temporary* prioritisation, writes nothing
+active. The [+]/[-] links in `ataxia_showPrios` write any name in `ataxia.curingprio`. Trigger 717 only fills that cache, and the chain it belongs to could not open on the game's header (716's pattern) since at least the 2026-10-10 capture (fixed v4.7.480), so which names reached those links before then is unproven. `CURING PRIOAFF <aff>` is a *temporary* prioritisation, writes nothing
 stored, and is always safe.
+
+**One priority list per curingset (v4.7.480, `ataxia/ataxia/002_Prio_Management.lua`:163-258, tests `src_new/tests/test_curingset_priorities.lua`, on a fake server;
+not run in Mudlet; design and limits in `kb/curing/server-side-curing.md`).** The user: "The purpose of curing sets is to set priorities based on the class you are facing. Classes through skills can only give specific afflictions. So we do curing  sets for them. If Infernal can never give impatience. no need for Impatience to be curing priority impatience 2". So a class set's values are its own:
+- `ataxia.curingprio` mirrors the ACTIVE set only, once a `classDetect` switch, a login read of a class set or a typed list has refreshed it. It is saved with `ataxia`, and a login that lands on `normal` does not refresh it, so it can then hold another set's values. `ataxiaPrioSets.baseline[set]` holds a class set's values, read from the game, and `ataxiaPrioSets.live[set]` names the swaps the game has not confirmed back.
+  `ataxiaPrioSets` is not saved with `ataxia`; a package reload or a connection keeps all but the reads in flight (`ataxia_prioSetsReset`, :234). For a Mudlet restart the names left up and their own values go to `ataxia_curingset_swaps.lua` in the profile folder (:179).
+- **The switch is one send** (`ataxia_switchCuringsetSend(name, from)`, :595; `classDetect` calls it through `switchSend`, `class_detect/001`:214): the set we leave goes back to its own values, then
+  `curingset switch <name>`, then `curing priority list`. Queued stored writes are dropped, and defence writes are kept. The cache empties, so `ataxia_getPrio` answers 0 until the list arrives. A read lost on a repeat visit or on `normal` is not asked again, so that visit's cache stays empty (Limits in the kb page).
+- **The read is hidden.** Trigger 716 now matches the real header (`Your affliction curing priorities for the priority set <name>:`). Its old exact pattern could not match that header, so 716/717/718 could not open on it since at least the 2026-10-10 capture.
+  A list the user types still prints the game's own lines and changes no baseline, and it now refreshes the cache and saves.
+- **The restore rule.** `ataxia_restorePrio` (:469) on a class set writes that set's baseline value, else the value the file kept for a name left up at a restart, and nothing when neither is known. On `normal` it writes the table in `ataxia_defaultCuringPrios()`. The name stays live until trigger 719 confirms that value, so a refused or dropped restore goes back at the next switch.
+- **A swap needs a baseline.** `ataxia_setAffPrio` and `ataxia_sendPrioSwap` (:458) write nothing on a class set whose list has not been read, or on any set while it is unknown; a read that gave way is asked again, up to 3 times.
+- **On a class set, a value the user tunes during a visit is adopted** (`ataxia_prioTuned`, :788, from trigger 719). `ataxia_sendDefaultPrios` stops at a `classDetect` switch or bash on (`ataxiaPrioGen`). No write passes the queue, except the one send at a switch, which drops the queued stored writes first.
+- **A confirmation line is never adopted by the wrong set.** The line can arrive from the set we left at any lag. `echoes` (:366-409) lists the lines we expect per name: leaving (a name going back at a switch), cancelled (a restore overtaken by a newer swap) and plain (a swap's own line). A line takes a cancelled entry first, then a leaving one, then the oldest plain one; a name's list is trimmed to 8 by dropping its oldest entries that are not leaving. A line with no entry is not adopted during the quiet window while replies are overdue (`quietUntil`).
+- **Login does not know which set the server is on.** `ataxia_prioLoginStart` (:812) marks it unknown first: no swap, no restore and no adoption until it is known. A six-class `ataxia_loginCuringsetNormal` (`login/001_Login_Function.lua`:19) makes it known and moves a bash session's `restoreTo` to `normal`. `ataxia_prioLoginRead` (:822), last in `levilogin`, asks with a hidden `CURINGSET LIST` and sends no switch; on a class set it also reads the list, hidden. With the bash profile active the set stays unknown until bash off names it (`ataxia_prioBashReleased`, :862). A link drop sets `offline` (:265): no switch, no restore, and no state change until `levilogin`.
+- **`reset prios` asks the game first** (`ataxia_resetPrios`, `001_Default_Curing_Prios.lua`:187): it writes only on `normal`, and otherwise prints one line and writes nothing. While bashing it does not ask and leaves the bash set first, as before, so the global table lands in the set it returns to.
 
 **PvE bashing curing profile** (`ataxia/ataxia/008_Bash_Curing_Profile.lua`, v4.7.172): the
 default table (`001_Default_Curing_Prios.lua`) is tuned entirely for PvP, which loses bashers.
@@ -2692,19 +2709,21 @@ server's is open (#69), and under the second reading each cost is about 0.12 s h
   recklessness state.
 - **Every round is one `send()` that Mudlet splits**: only its first piece enters
   `queue addclear freestand`, the rest go raw (`buildRound`).
-- **The skip list runs.** `wantClumsiness` reads `ataxia_targetClass()`, so a skip-list class (magi, sylvan, occultist,
-  bard, jester, blademaster, druid, sentinel; `air`, `fire`, `water` match no class name) gets asthma, then weariness, not
-  xentio (:952). The class venom also follows the target (`getClassLockAff`, :897). The list is unconfirmed by the user.
-- **EXECUTE needs prone and the whip** (:1977-1980): truelock, prone at 0.90, the five lock afflictions plus prone at 0.90
+- **The clumsiness list is the user's (v4.7.480).** `wantClumsiness` reads `ataxia_targetClass()` and `CLUMSINESS_IMMUNE` (`ataxia/007_Pariah_things.lua`:93-99, :110).
+  "Tekura Monk, Sylvan, Magi, Blademaster, and Elemental Lords are all immune to clumsiness." Those get no xentio. With paralysis up the class venom goes first where the class has one (Monk and Tekura vernalius, Magi and Sylvan notechis; :945-951), then asthma and weariness in whichever order is left (:953-962). The flay's xentio reads the same gate (:1924).
+  Every other class and an unknown one gets clumsiness: "33 percent chance to miss your target is huge. Additionally, it starts the kelp stack needed to stick Asthma."
+  Blademaster has no class venom now (:884-885). The class venom follows the target (`getClassLockAff`, :898). A Shikudo can read "Monk" until a staff line hits us.
+  The logs leave open whether immune means no miss or no affliction: a Blademaster and an Earth Lord take it and spend a cure on it (`kb/CONFLICTS.md` #81). Asthma and weariness before the class venom was proposed by the model and not adopted. The user said "Depends": usually curare, which is eaten before asthma, and asthma + weariness makes a kelp eat ambiguous. Curare goes first either way (:938), so the order behind paralysis for a class venom that is not curare got no explicit ruling (class doc, Class-Aware Venom Routing).
+- **EXECUTE needs prone and the whip** (:1978-1981): truelock, prone at 0.90, the five lock afflictions plus prone at 0.90
   together. No behead branch. A standing truelocked target gets the DSTAB, so in a duel the kill waits for the adder's trip.
 - **Re-delivery reads a lock piece at 0.70, build-on reads at 0.30** (`haveAff_tactical` vs `haveAff`, note at :108). A piece a
   branched cure left at 0.667 is sent again. `targetLocked` is unchanged, so recklessness still waits for the lock. A monkshood
   re-sent for an impatience between 0.30 and 0.70 also needs its reaction able to fire (`monkshoodCanReact`: asthma and weariness at
-  0.70). An aurum eat, then a plumbum eat, leaves those two at 0.667 and 0.333 with no branch holding both; the DSTAB takes the round (under the `relapse_lock` strategy the one stupidity impulse goes first if it is unspent and stupidity is down, :1166).
-- **Truelock.** `sr` takes lock_reinforce there, as lock and darkshade do (:2886-2891): one voyria impulse, then the finish.
-  The voyria impulse goes only at truelock (:2103). lock_reinforce's second venom is never curare.
+  0.70). An aurum eat, then a plumbum eat, leaves those two at 0.667 and 0.333 with no branch holding both; the DSTAB takes the round (under the `relapse_lock` strategy the one stupidity impulse goes first if it is unspent and stupidity is down, :1167).
+- **Truelock.** `sr` takes lock_reinforce there, as lock and darkshade do (:2887-2892): one voyria impulse, then the finish.
+  The voyria impulse goes only at truelock (:2104). lock_reinforce's second venom is never curare.
 - **A refused round does not stop the press**: after 1.5 s on balance with no drop the next press sends again, except while we
-  are slowed (:2808-2814).
+  are slowed (:2809-2815).
 
 **Ekanelia** - BITE venom transformation that ADDS bonus afflictions:
 | Venom | Conditionals Required | Normal + Bonus Effect |
@@ -3182,7 +3201,7 @@ defences we WANT UP, and they are TIMED -- they lapse on their own, and a mob or
 them. Two different wastes of the EATING balance are possible and they need different answers.
 **(1) SSC eating a herb to CURE them off** (to *undeafen* us) is prevented by the AFFLICTION
 priority **26**, which means ignored -- `curing priority deafness 26` / `curing priority blindness
-26`. Already set for EVERY class at `ataxia/001_Default_Curing_Prios.lua:337-339`, and correct
+26`. Already set for EVERY class at `ataxia/001_Default_Curing_Prios.lua:502-504`, and correct
 there: the whole tree treats these two as kept defences (`004_Aff_gains_losses.lua` ignore lists,
 `mnemosyne/009` `AFF_IGNORE`), so **do not make that per-class**. **(2) SSC eating a herb to put the
 defence back UP** after it is stripped is what the SKILL keeper prevents -- the trance costs no herb
