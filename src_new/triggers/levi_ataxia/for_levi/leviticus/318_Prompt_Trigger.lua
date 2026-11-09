@@ -79,7 +79,7 @@ profile = ataxia.settings.defences.current
 end
 
 if not ataxiaBasher.enabled then
-local targetClass = ataxiaNDB_getClass(target)
+local targetClass = ataxia_facingClass()
 if targetClass == "Apostate" or targetClass == "Pariah" or targetClass == "Occultist" or targetClass == "Sentinel" or targetClass == "Psion" or targetClass == "Shaman" or targetClass == "Depthswalker" or targetClass == "Jester" or targetClass == "Alchemist" or targetClass == "Magi" or targetClass == "Sylvan" then
   if myrebounding == true then
     profile = ataxia.settings.defences.current

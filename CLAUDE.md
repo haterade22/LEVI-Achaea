@@ -724,6 +724,8 @@ and "Kai eats ..." charged Kaiden and made Kai the target. **Presence checks are
 **Every departure trigger gates its presence and chase state on the target, not only its echo (634, 637, 638, 640).** 640 opened
 the chase and started `TargetOutOfRoom` on anyone's flight. 638's line names no one, so it acts only when GMCP no longer lists
 the target, on the line and again after the packet (`tempTimer(0)`). 638 and 641 each hold a copy of the listed-here compare.
+**The class our DEFENCES answer is `ataxia_facingClass()` (same file): whoever hit us last in this fight, else the target's class
+(`kb/CONFLICTS.md` Resolved, was #75). A new defence reads it; a new offence reads `ataxia_targetClass()`.**
 **Our target's class is `ataxia_targetClass()` (`ataxia/007_Pariah_things.lua`:68, v4.7.479): the one source for Serpent and
 Pariah.** It reads the NDB entry first (`classDetect.setAttackerClass`, `onTargetChanged` and the API lookup all write it), then
 classDetect's class only when that attacker IS the target. `classDetect.state.attackerClass` alone is whoever last hit US, and
@@ -2577,6 +2579,10 @@ slots (`classDetect.planCuringsets`, pure + sorted so drops are deterministic) a
 it could not create. Command: `curingsets`.
 
 **`classDetect` stays on `normal` while in a party (v4.7.474).** `classDetect.inParty` reads `ataxia.channels.party` (GMCP `Comm.Channel.List`). The target is who the leader calls and many people attack us, so one class says little: the 2026-11-03 group fight switched sets 77 times in 19 minutes.
+
+**A target change switches the set only while no one is hitting us** (`classDetect.facingClass`, `class_detect/001`). A hit is a class line that names us (`classDetect.noteHit`).
+
+**An automatic shield waits for a due lock-breaker, for at most 4 s** (`ataxia_shieldWaitsForLockBreak`, `can(x)/003_Lock_breakers.lua`; the user, 2026-11-09: "Lock breaker and then shield"). A new automatic `touch shield` must ask it, unless it answers a blow that lands now.
 
 **CRITICAL: `CURING PRIORITY <aff> <n>` writes a STORED priority into whichever curingset is
 ACTIVE.** Any code path that writes priorities while a non-default set is selected mutates

@@ -102,7 +102,7 @@ function reboundHold.shouldHold()
   if ataxia and ataxia.defences and ataxia.defences["rebounding"] then return false end
 
   -- Only hold against physical-attack classes
-  local targetClass = ataxiaNDB_getClass and ataxiaNDB_getClass(target)
+  local targetClass = ataxia_facingClass()
   if not targetClass or not reboundHold.PHYSICAL_CLASSES[targetClass] then return false end
 
   -- Predict when rebounding will return
@@ -270,10 +270,10 @@ function reboundHold.status()
     echo("  Rebound lost:     (not tracked)\n")
   end
   -- Target class check
-  local targetClass = ataxiaNDB_getClass and target and ataxiaNDB_getClass(target)
+  local targetClass = ataxia_facingClass()
   if targetClass then
     local physical = reboundHold.PHYSICAL_CLASSES[targetClass] and "YES" or "NO"
-    echo("  Target class:     " .. targetClass .. " (physical: " .. physical .. ")\n")
+    echo("  Facing class:     " .. targetClass .. " (physical: " .. physical .. ")\n")
   end
   echo("============================\n")
 end

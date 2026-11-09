@@ -372,4 +372,15 @@ function string.title(s) return (s:gsub("^%l", string.upper)) end
 -- has used it since long before any test loaded the file that does.
 function string.trim(s) return (s:gsub("^%s+", ""):gsub("%s+$", "")) end
 
+-- Package helpers that many files call. A test that loads the real file replaces these; the rest
+-- need only a target's class and no lock-breaker. test_facing_class.lua tests the real ones.
+function ataxia_facingClass()
+  if type(target) ~= "string" or not ataxiaNDB_getClass then return nil end
+  local class = ataxiaNDB_getClass(target)
+  if class == "Unknown" then return nil end
+  return class
+end
+
+function ataxia_shieldWaitsForLockBreak() return false end
+
 return M

@@ -350,9 +350,16 @@ describe("Algedonic ApplySwaps/RestoreSwaps -- the burn family", function()
     -- in the game accepts. Doubly dead before, since horror was never a number either.
     if not loaded then return end
     reset({ damagedhead = true, horror = 5 })
-    Algedonic.AntiUnnameable()
+    Algedonic.AntiUnnamable()
     expect(sentContains("curing prioaff horror5")).toBeTrue()
     expect(sentContains("(5)")).toBeFalse()
+  end)
+
+  it("a damaged left leg opens the branch too (the field read `damageleftleg`)", function()
+    if not loaded then return end
+    reset({ damagedleftleg = true, horror = 4 })
+    Algedonic.AntiUnnamable()
+    expect(sentContains("curing prioaff horror4")).toBeTrue()
   end)
 end)
 

@@ -16,6 +16,7 @@ packageName: ''
 -- Enemy Class Detection + Curingset Auto-Switching
 -- Identifies the class of the player attacking us and switches curingset accordingly.
 -- 1v1 only: if multiple attackers detected, or while in a party, stays on "normal" curingset.
+-- Our target's class is used only while no one has hit us (classDetect.facingClass).
 
 classDetect = classDetect or {}
 
@@ -34,6 +35,8 @@ classDetect.state = classDetect.state or {
   combatTimeout = nil,
   lastRoomNum = nil,
 }
+-- Assigned here too: a reload keeps the old state table, which has no such field.
+classDetect.state.hits = classDetect.state.hits or {}
 
 --------------------------------------------------------------------------------
 -- CONFIG (persisted via save/load)
@@ -161,6 +164,55 @@ local function countAttackers()
 end
 
 --------------------------------------------------------------------------------
+-- WHO IS HITTING US
+--
+-- The user, 2026-11-09, on kb/CONFLICTS.md #75: the anti-class defences follow whoever hits us, and
+-- our target's class only when that is unknown. In a duel the two are the same person.
+--
+-- Only a line that names us counts as a hit. Some class lines name no victim ("X forms a lash of
+-- fire"), and the 2026-11-03 group fight had an ally's attack on our target set "vs Magi".
+-- A sequence number orders the hits: two lines of one packet can read the same getEpoch().
+--------------------------------------------------------------------------------
+
+function classDetect.noteHit(attackerName, className)
+  if type(line) == "string" and not line:lower():find("%f[%a]you[rs]*%f[%A]") then return end
+  local st = classDetect.state
+  st.hitSeq = (st.hitSeq or 0) + 1
+  local key = attackerName:lower()
+  local hit = st.hits[key]
+  if not hit then
+    hit = {}
+    st.hits[key] = hit
+  end
+  hit.class, hit.seq = className, st.hitSeq
+end
+
+-- The class of whoever hit us last and is still in the fight, or nil. A hit goes when its attacker
+-- leaves the room or the combat ends. With two or more attackers
+-- the curing set stays on normal; the newest hit still names the class for the anti-class swaps.
+function classDetect.facingClass()
+  local st = classDetect.state
+  if not st.enabled or not st.hits then return nil end
+  local class, seq = nil, 0
+  for _, hit in pairs(st.hits) do
+    if hit.seq > seq then
+      class, seq = hit.class, hit.seq
+    end
+  end
+  return class
+end
+
+local function clearCombat()
+  local st = classDetect.state
+  st.attackerClass, st.attackerName, st.attackerSpec = nil, nil, nil
+  st.attackers, st.hits = {}, {}
+  if st.combatTimeout then
+    killTimer(st.combatTimeout)
+    st.combatTimeout = nil
+  end
+end
+
+--------------------------------------------------------------------------------
 -- DEFENCE PRIORITY RE-APPLICATION
 --------------------------------------------------------------------------------
 
@@ -256,38 +308,17 @@ function classDetect.resetToNormal()
   -- Combat state still clears while the bash profile owns the set (so a later PvP fight
   -- starts clean) -- only the switch itself is suppressed. See bashProfileOwnsCuringset.
   if classDetect.bashProfileOwnsCuringset() then
-    classDetect.state.attackerClass = nil
-    classDetect.state.attackerName = nil
-    classDetect.state.attackerSpec = nil
-    classDetect.state.attackers = {}
-    if classDetect.state.combatTimeout then
-      killTimer(classDetect.state.combatTimeout)
-      classDetect.state.combatTimeout = nil
-    end
+    clearCombat()
     return
   end
 
   if classDetect.state.currentCuringset == "normal" then
     -- Still clear state even if already on normal
-    classDetect.state.attackerClass = nil
-    classDetect.state.attackerName = nil
-    classDetect.state.attackerSpec = nil
-    classDetect.state.attackers = {}
-    if classDetect.state.combatTimeout then
-      killTimer(classDetect.state.combatTimeout)
-      classDetect.state.combatTimeout = nil
-    end
+    clearCombat()
     return
   end
 
-  classDetect.state.attackerClass = nil
-  classDetect.state.attackerName = nil
-  classDetect.state.attackerSpec = nil
-  classDetect.state.attackers = {}
-  if classDetect.state.combatTimeout then
-    killTimer(classDetect.state.combatTimeout)
-    classDetect.state.combatTimeout = nil
-  end
+  clearCombat()
 
   switchSend("normal")
 
@@ -322,6 +353,7 @@ function classDetect.setAttackerClass(attackerName, className)
 
   -- Track unique attackers (1v1 guard)
   classDetect.state.attackers[attackerName:lower()] = true
+  classDetect.noteHit(attackerName, className)
 
   -- If same attacker + same class already tracked, just refresh timeout
   if classDetect.state.attackerName == attackerName
@@ -383,6 +415,15 @@ function classDetect.onTargetChanged()
     cachedClass = ataxiaNDB_getClass(target)
   end
 
+  -- Someone is hitting us, so the set follows them and this target changes nothing. A class we do
+  -- not have is still looked up: the offence reads the target's class from the NDB.
+  if classDetect.facingClass() then
+    if (not cachedClass or cachedClass == "Unknown") and classDetect.config.apiLookupEnabled then
+      classDetect.apiLookup(target)
+    end
+    return
+  end
+
   if cachedClass and cachedClass ~= "Unknown" then
     classDetect.switchCuringset(cachedClass)
     classDetect.state.attackerClass = cachedClass
@@ -436,8 +477,8 @@ function classDetect.onApiResponse(_, path)
     ataxiaNDB.players[titleName].class = className
   end
 
-  -- If still our target, switch
-  if target and target:lower() == key then
+  -- If still our target and no one is hitting us, switch
+  if target and target:lower() == key and not classDetect.facingClass() then
     classDetect.switchCuringset(className)
     classDetect.state.attackerClass = className
     classDetect.state.attackerName = titleName
@@ -458,6 +499,7 @@ function classDetect.onPlayerLeft()
 
   -- Remove from attackers set
   classDetect.state.attackers[person:lower()] = nil
+  classDetect.state.hits[person:lower()] = nil
 
   -- If our tracked attacker left, reset
   if classDetect.state.attackerName and
@@ -506,6 +548,7 @@ function classDetect.status()
   cecho("\n<cyan>| <white>Enabled:     " .. (classDetect.state.enabled and "<green>YES" or "<red>NO"))
   cecho("\n<cyan>| <white>Attacker:    <yellow>" .. (classDetect.state.attackerName or "None"))
   cecho("\n<cyan>| <white>Class:       <yellow>" .. (classDetect.state.attackerClass or "Unknown"))
+  cecho("\n<cyan>| <white>Facing:      <yellow>" .. (ataxia_facingClass() or "Unknown"))
   cecho("\n<cyan>| <white>Curingset:   <green>" .. classDetect.state.currentCuringset)
   cecho("\n<cyan>| <white>Timeout:     <grey>" .. classDetect.config.combatTimeoutSeconds .. "s")
   local n = countAttackers()

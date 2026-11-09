@@ -53,9 +53,7 @@ packageName: ''
 -- This allows Damnation defense to work even if target isn't in NDB
 
 local function isPaladinTarget()
-  if not target then return false end
-  local targetClass = ataxiaNDB_getClass and ataxiaNDB_getClass(target) or nil
-  return (targetClass == "Paladin") or (ataxiaTemp and ataxiaTemp.fightingPaladin)
+  return (ataxia_facingClass() == "Paladin") or (ataxiaTemp and ataxiaTemp.fightingPaladin)
 end
 
 -- ============================================================================

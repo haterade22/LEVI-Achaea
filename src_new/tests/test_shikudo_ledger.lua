@@ -169,6 +169,7 @@ local function world(opts)
     lpreapply = function() end,
     ataxiaBasher = { enabled = false },
     ataxiaNDB_getClass = function() return nil end,
+    ataxia_facingClass = function() return nil end,
     lb = {},
     gmcp = {},
     isActive = function() return false end,

@@ -47,10 +47,10 @@ function ataxia_heartseedFake()
 	end
 end
 	
---Turn limb curing off if our target is a Sylvan
+--Turn limb curing off if a Sylvan is hitting us (or, with no attacker known, is our target)
 function ataxia_heartseedDisable(event, aff)
 	local affl = {"damagedleftleg", "damagedrightleg", "damagedleftarm", "damagedrightarm"}
-	if event == "aff gained" and ataxiaTemp.heartseedMode and ataxiaNDB_getClass(target) == "Sylvan" then
+	if event == "aff gained" and ataxiaTemp.heartseedMode and ataxia_facingClass() == "Sylvan" then
 		if table.contains(affl, aff) then
       ataxia_setAffPrio("damagedleftleg", 26)
       ataxia_setAffPrio("damagedrightleg", 26)

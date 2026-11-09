@@ -1607,7 +1607,7 @@ anti_serpent_function: |
   Persistent swaps (Algedonic.ApplySwaps / RestoreSwaps in the same file; toggles in
   swaps/002_Priority_Management.lua, `aconfig prios`):
   - astWear (on): asthma -> 3 when asthma + weariness and the target is a Serpent (:214-219)
-  - astImp (on): impatience -> 1 when paralysis + asthma and the target is an Alchemist or Serpent (:153-165).
+  - astImp (on): impatience -> 1 when paralysis + asthma and we face an Alchemist or Serpent (:153-165).
     Since v4.7.480 (our reading of the user's 'astimp can be implemented', to confirm) not against a Serpent with asthma + weariness up:
     the raise is skipped, an impatience at 1 goes back (Algedonic.AstImpPutBack :124-131; trigger 719 calls it too),
     and astWear's asthma 3 stands. Impatience goes back to 1 on the next gain after the weariness is cured
@@ -1702,10 +1702,10 @@ and cost. Whether fangbarrier blocks an impulse.
 
 **Open after the 2026-11-08 review.** For the user: the lightwall order (Class-Aware Venom Routing). In game: an impulse of a suggestion already held (deep review); EXECUTE on a prone target, on a standing
 one, and BEHEAD (the Finisher); `suggest <t> fratricide`; shrugging with equilibrium down. A FLAY of a MISSING shield taking the coating is open (`attack.flay.missing`), and 706 does not read that
-line. Left as they are on purpose: the anti-class swaps keying on our target's class (kb/CONFLICTS.md #75), EXECUTE on a standing target.
+line. Left as it is on purpose: EXECUTE on a standing target. Since 2026-11-09 our anti-class defences answer whoever hits us, not our target (kb/CONFLICTS.md Resolved, was #75), and a due lock-breaker goes before the shield (was #77).
 Decided by the user on 2026-11-08 and done in v4.7.480: the clumsiness list, the shrugging equilibrium hold, and
-the curing set priorities (kb/curing/server-side-curing.md, "One priority list per set"). Done on our reading of the user's words, to confirm: astImp beside astWear (kb/CONFLICTS.md Resolved, was #74). Open: what immune to
-clumsiness means, the miss or the affliction (#81). Asthma and weariness before the class venom: not adopted. The user said "Depends", usually curare. Curare goes first either way (:938), so the order for a class venom that is not curare got no explicit ruling (Class-Aware Venom Routing).
+the curing set priorities (kb/curing/server-side-curing.md, "One priority list per set"). The user confirmed astImp beside astWear on 2026-11-09 (kb/CONFLICTS.md Resolved, was #74). Immune to clumsiness means the affliction lands and causes no miss (the user, 2026-11-09). Open: xentio on those classes for the kelp stack alone (#81).
+Monks, the user 2026-11-09: "Tekura Monk is kick, punch, punch and Shikudo is kick, staff, staff". Trigger 006 reads this: a first kick reads Monk until the same combo's staff line. Asthma and weariness before the class venom: not adopted. The user said "Depends", usually curare. Curare goes first either way (:938), so the order for a class venom that is not curare got no explicit ruling (Class-Aware Venom Routing).
 
 ## Theorycraft: the DSTAB against the eat (2026-11-07)
 

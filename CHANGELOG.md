@@ -2,6 +2,47 @@
 
 ---
 
+## 2026-11-09 - v4.7.481: the anti-class defences follow whoever hits you, and a due lock-breaker goes before the shield
+
+The user decided the two questions v4.7.480 left open (`kb/CONFLICTS.md`, Resolved, was #75 and #77). **None of this has run in Mudlet.** The Lua tests run the real engine, helpers, anti-priorities, lock-breakers and `combatQueue`.
+
+**What you will see change:**
+
+- **In a group, the anti-class priorities and reactions answer whoever hit you last.** Your target's class is used only while no one has hit you. In a duel nothing changes, because the two are the same person.
+- **Changing target during a fight no longer switches the curing set.** Before anyone hits you, a new target still picks its set, as before. With two or more attackers, or in a party, the set stays on `normal`, as before.
+- **`class detect` status has a `Facing:` row** that names the class the defences answer.
+- **An automatic shield now waits for a due lock-breaker, for at most 4 s.** The `curing prioaff` still goes at once. If the cure is blocked or on cooldown, the shield does not wait.
+
+### Who the defences follow (`class_detect/001_Class_Detect_Engine.lua`, `ataxia/ataxia/007_Pariah_things.lua`)
+
+- **`ataxia_facingClass()`** answers the newest attacker's class, else the target's. `ataxia_targetClass()` stays the offence's reader.
+- **A hit is a class line that names us** (`classDetect.noteHit`: "you", "your" or "yours"). 34 of the 151 class patterns name no victim, and the 2026-11-03 group fight had an ally's attack on our target set "vs Magi". A sequence number orders hits, because two lines of one packet can read the same clock.
+- **The anti-class readers moved to it:** `Algedonic.Prioritize`, `ApplySwaps`, `AstImpPutBack`, Damnation, the reactions in `004_Aff_gains_losses`, `Track_The_Damage`, `Rebound_Hold`, Heartseed, Vulture Talon, the prompt's rebounding rule and the DWB Runie impatience branch.
+- **`onTargetChanged` and the API answer leave the set alone while someone is hitting us.** A class the NDB lacks is still looked up, because the offence reads it.
+- **A stale class corrects at the first hit.** The 2026-11-03 log's Aerion read Serpent in the NDB; his first Blademaster line now rewrites the NDB and the class the defences answer.
+
+### Lock-breaker, then shield (`can(x)/003_Lock_breakers.lua`)
+
+- **`ataxia_shieldWaitsForLockBreak()`** holds the shield while `ataxia_lockBreak` would still act. Both spend equilibrium, and the `cq all` clears a held lock-breaker.
+- **The wait ends after 4 s.** The lock-breaker is re-sent every 1.5 s until a line says it was used, so a cure the game keeps refusing would otherwise stop the shield for the whole fight.
+- **Gated:** `AntiSerpent`, `AntiPriest`, `AntiWaterlord`, `combatQueue`'s cheese path and the DWB Runie impatience branch. **Not gated:** the `myinstantcath` shield and the limb reaction shield.
+
+### Two old bugs (the user, 2026-11-09: "Fix the misspelling", "fix the other bug please")
+
+- **The Unnamable defence now runs.** `Algedonic._handlers` spelled the class `Unnameable`, and class detection writes `Unnamable`, so the handler could never run. The key and the function are `Unnamable` now. Mudlet item names that hold the old spelling (`005_Unnameable`, `002_Unnameable_Fire`) stay as they are.
+- **Its left leg test works.** The function read `damageleftleg`, a field that does not exist, so a damaged left leg alone did not open the branch. **What you will see:** `curing prioaff horror5` or `horror4` against an Unnamable when a limb is damaged. Whether PRIOAFF takes that form is still not captured; a form the game refuses does nothing.
+- **A blackout from an Infernal or a Paladin now arms the impale prediction.** `x == ("Runewarden" or "Infernal" or "Paladin")` compares with Runewarden only. **What you will see:** `curing predict impaled` 2.5 s after a blackout against those two classes as well.
+
+### Also confirmed by the user, 2026-11-09
+
+- **`astImp`:** "Correct, as it will be easy to re deliver". The change in v4.7.480 stands.
+- **Immune to clumsiness:** "They still get clumsiness, they are just not impacted by it." `kb/CONFLICTS.md` #81 stays open for the xentio-for-the-kelp-stack question.
+- **Monks:** "Tekura Monk is kick, punch, punch and Shikudo is kick, staff, staff". Trigger 006 already reads this: a first kick reads Monk until the same combo's staff line.
+
+Tests: `src_new/tests/test_facing_class.lua`, new; `test_defence_guards.lua`. Each new guard was removed in turn and a test failed.
+
+---
+
 ## 2026-11-08 - v4.7.480: the user's Serpent decisions: a class curing set keeps its own priorities, clumsiness follows the user's list, and shrugging waits for equilibrium
 
 The user answered the decisions v4.7.479 left open. **None of this has run in Mudlet.** The tests run in the Lua harness against a fake server, so what the game does with these sends is read from captures and logs, not seen. Reimport to get it.

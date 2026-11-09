@@ -57,7 +57,7 @@ function ataxia_tryVultureTalon()
   -- Gate 3: must have shivering or frozen
   if not affed("shivering") and not affed("frozen") then return end
   -- Gate 4: class filter — only vs Blademaster or Magi
-  local tc = ataxiaNDB_getClass(target)
+  local tc = ataxia_facingClass()
   if tc ~= "Blademaster" and tc ~= "Magi" then return end
   -- Gate 5: off salve balance
   if ataxia.bals.used.salve then return end
