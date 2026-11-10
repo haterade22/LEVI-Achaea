@@ -197,7 +197,9 @@ function ataxiaBasher_attack()
   if ataxia.defences.shield then
     -- In no-flee areas (e.g. Mnemosyne) keep attacking through the shield instead
     -- of waiting for HP recovery — the shield drops on the next attack.
-    local canAttackShielded = ataxia.vitals.hpp >= 70 or ataxiaBasher_isNoFleeArea()
+    -- v4.7.486: except during a last stand, which holds until health is back.
+    local canAttackShielded = ataxia.vitals.hpp >= 70
+      or (ataxiaBasher_isNoFleeArea() and not ataxiaBasher_lastStandHolding())
     if canAttackShielded and ataxiaBasher_bashingFuncs[class] then
       ataxiaBasher_assembleAttack()
     end
@@ -530,6 +532,8 @@ function ataxiaBasher_dangerLevel()
         if ok then return "wait" end
       end
     end
+    -- THE LAST STAND (v4.7.486): no way out and one or two rounds from death -- shield and heal.
+    if ataxiaBasher_lastStandWanted(hpp) then return "shield" end
     -- Shield as a one-cycle guard on a spike. `canShield()` used to gate the ALARM itself, which
     -- made this branch unreachable in every real tower fight: it returns false whenever a room
     -- denizen is on the area target list, i.e. the normal case. It now gates only the shielding.
@@ -562,6 +566,133 @@ function ataxiaBasher_dangerLevel()
   end
 
   return "attack"
+end
+
+-- ============================================================================
+-- THE LAST STAND (v4.7.486)
+-- ============================================================================
+-- From a death (2026-11-10, tash'la warrior + interceptor, run 223): the Prey affix made every
+-- denizen follow our one retreat, the retreat back was refused (85% and cured), and from 28% down
+-- to 15% the only action left was another attack. `ataxiaBasher_canShield()` says no whenever a
+-- target-list denizen is here and `noShieldBreak` does not name it -- in the tower, that is every
+-- fight -- so the shield never went up. Sips and moss healed about 1,000 HP/s against 2,000 in;
+-- a shield stops the 2,000. The last round was 4,592 into 4,592 health.
+--
+-- So: in a no-flee area, with no retreat the swarm can take, at critical health, shield even with
+-- denizens here, and HOLD the attacks (an attack drops the shield) until health is back at
+-- `lastStandRelease` (70%) or `LAST_STAND_MAX` seconds pass. A denizen that breaks the shield is
+-- learned by name (`ataxiaBasher_onShieldLine`, trigger "Shield Broken By Denizen") and never
+-- trusted with a last stand again; the denizen still had to spend a round to do it.
+--
+-- Critical = HP% at or below the swarm's `escapeAt` (35), or raw HP at or below its `panicHp`
+-- (3000) -- the same two lines the escape ladder uses, so the shield goes up where the retreat
+-- would have gone. `bash laststand off` turns it off.
+local LAST_STAND_MAX = 30      -- seconds a last stand may hold the attacks
+local LAST_STAND_RESEND = 3    -- seconds before a `touch shield` that did not take is sent again
+
+local function lastStandNow() return (getEpoch and getEpoch()) or os.time() end
+
+function ataxiaBasher_lastStandCritical(hpp)
+  local S = ataxia.mnemosyne and ataxia.mnemosyne.swarm
+  local cfg = (S and S._cfg and S._cfg()) or {}
+  local pct = tonumber(cfg.escapeAt) or 35
+  if (tonumber(hpp) or 100) <= pct then return true end
+  local floor = tonumber(cfg.panicHp) or 0
+  local raw = tonumber(ataxia.vitals and ataxia.vitals.hp)
+  return floor > 0 and raw ~= nil and raw > 0 and raw <= floor
+end
+
+-- A denizen in the room that has broken our shield before.
+function ataxiaBasher_shieldBreakerHere()
+  local known = ataxiaBasher.shieldBreakers
+  if type(known) ~= "table" or type(ataxia.denizensHere) ~= "table" then return nil end
+  for _, name in pairs(ataxia.denizensHere) do
+    if type(name) == "string" and known[name:lower()] then return name end
+  end
+  return nil
+end
+
+-- Can the swarm still take us out of this room? Then the retreat comes first.
+local function lastStandRetreatOpen()
+  local S = ataxia.mnemosyne and ataxia.mnemosyne.swarm
+  if not (S and S._enabled and S._enabled()) then return false end
+  if S.state == "recovering" or (S.moveLocked and S.moveLocked()) then return true end
+  local ok, ready = pcall(function() return S._escapeRouteReady and S._escapeRouteReady() end)
+  return ok and ready == true
+end
+
+-- Should the danger check answer "shield" now?
+function ataxiaBasher_lastStandWanted(hpp)
+  if ataxiaBasher.lastStand == false then return false end
+  if not ataxiaBasher_isNoFleeArea() then return false end
+  if ataxiaBasher_bravado() or ataxiaBasher_tattoosDead() then return false end
+  if ataxia.defences and ataxia.defences.shield then return false end
+  if not ataxiaBasher_lastStandCritical(hpp) then return false end
+  if ataxiaBasher_shieldBreakerHere() then return false end
+  if lastStandRetreatOpen() then return false end
+  ataxiaTemp = ataxiaTemp or {}
+  local nowT = lastStandNow()
+  local sent = tonumber(ataxiaTemp.lastStandSentAt)
+  if sent and (nowT - sent) >= 0 and (nowT - sent) < LAST_STAND_RESEND then return false end
+  ataxiaTemp.lastStandSentAt = nowT
+  if not ataxiaTemp.lastStandAt then
+    ataxiaTemp.lastStandAt = nowT
+    ataxiaEcho("LAST STAND: " .. tostring(hpp) .. "% and no way out -- shielding, attacks held until "
+      .. (tonumber(ataxiaBasher.lastStandRelease) or 70) .. "%.")
+  end
+  return true
+end
+
+-- Is a last stand holding the attacks? Ends itself at the release health, at LAST_STAND_MAX, or
+-- when the shield is gone (broken or never raised) after the resend window.
+function ataxiaBasher_lastStandHolding()
+  ataxiaTemp = ataxiaTemp or {}
+  local at = tonumber(ataxiaTemp.lastStandAt)
+  if not at then return false end
+  local nowT = lastStandNow()
+  local hpp = tonumber(ataxia.vitals and ataxia.vitals.hpp) or 0
+  local release = tonumber(ataxiaBasher.lastStandRelease) or 70
+  local why
+  if hpp >= release then
+    why = "health back to " .. hpp .. "%"
+  elseif (nowT - at) >= LAST_STAND_MAX or (nowT - at) < 0 then
+    why = "held " .. LAST_STAND_MAX .. "s"
+  elseif not (ataxia.defences and ataxia.defences.shield)
+     and (nowT - (tonumber(ataxiaTemp.lastStandSentAt) or at)) >= LAST_STAND_RESEND then
+    why = "the shield is down"
+  end
+  if why then
+    ataxiaTemp.lastStandAt, ataxiaTemp.lastStandSentAt = nil, nil
+    ataxiaEcho("LAST STAND over (" .. why .. ") -- attacking.")
+    return false
+  end
+  return true
+end
+
+-- A line that names our magical shield. If it starts with the name of a denizen in the room, that
+-- denizen broke it: remember the name. Our own actions ("Your movement causes...", "Your action
+-- causes..."), a hit that rebounds off it, and players (not in denizensHere) are ignored.
+-- Sample: "A small brown lemming rips apart your magical shield defence with its claws."
+function ataxiaBasher_onShieldLine(text)
+  if type(text) ~= "string" or text == "" then return end
+  if text:find("^You") or text:find("rebounds off", 1, true) then return end
+  if type(ataxia.denizensHere) ~= "table" then return end
+  local low = text:lower()
+  local best
+  for _, name in pairs(ataxia.denizensHere) do
+    if type(name) == "string" and name ~= "" then
+      local n = name:lower()
+      if low:sub(1, #n) == n and (not best or #n > #best) then best = n end
+    end
+  end
+  if not best then return end
+  ataxiaBasher.shieldBreakers = ataxiaBasher.shieldBreakers or {}
+  local first = ataxiaBasher.shieldBreakers[best] == nil
+  ataxiaBasher.shieldBreakers[best] = os.time()
+  if first then
+    ataxiaEcho("Learned: " .. best .. " breaks shields -- no last stand against it ('bash laststand forget "
+      .. best .. "' to undo).")
+  end
 end
 
 -- Returns the safe room config for the current area, or nil if none configured

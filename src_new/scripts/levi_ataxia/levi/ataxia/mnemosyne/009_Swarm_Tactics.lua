@@ -559,11 +559,27 @@ function S._isUTurn(dirShort)
   return dest ~= nil and dest == f.room
 end
 
+-- PREY (v4.7.486). The affix: "All denizens are trackers and will chase should you flee." From a
+-- death (2026-11-10): both tash'la followed our leap inside 0.6s, into a room whose blood pool
+-- (Sanguine Restoration) then healed them twice. A ground retreat cost a balance and two seconds of
+-- held attacks and shook no one. Roll Hide and Terror of the Skies shed pursuers, so they still go.
+-- The affix name is matched whole: `M.hasAffix` matches a substring.
+function S._preyTracks()
+  if S._shedsPursuers() then return false end
+  local h = M.history
+  local run = h and h.run
+  for _, a in ipairs((h and h.affixes) or {}) do
+    if a.run == run and type(a.name) == "string" and a.name:lower() == "prey" then return true end
+  end
+  return false
+end
+
 -- Why a GROUND retreat must not start right now, or nil. Side-effect-free, so the callers ask
 -- before they tear anything down (the v4.7.314 rule). The hover is not a ground retreat.
 function S._retreatBlock(dirShort)
   if not S._indoors() and S._canHover() then return nil end
   if S._pursued() then return "the swarm follows every retreat -- fighting here" end
+  if S._preyTracks() then return "Prey -- every denizen tracks a retreat, so we fight here" end -- v4.7.486
   if S._retreatSpent() then return "we already left one room -- what is in this one we kill" end -- v4.7.482
   local dir = dirShort or S._backDir() or S._escapeLastResort()
   if dir and S._isUTurn(dir) and not S._mayReturn() then

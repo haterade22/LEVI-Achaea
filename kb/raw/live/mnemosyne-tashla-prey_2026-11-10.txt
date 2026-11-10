@@ -1,0 +1,344 @@
+ending his arm, a tash'la warrior leaps into the air and brings his geode-encrusted elbow down upon you with a sickening crunch.
+Health lost: 2782 (physical blunt).
+Your own shadow betrays you, leaving your thoughts scattered and wan.
+You feel your strength being leeched away.
+Your left leg breaks with a loud crack.
+With a deft movement, a tash'la interceptor whips the blunt end of a spear toward your head with a sickening thud. A wet crunch alerts you to his boot landing hard on the side of your kneecap, and you yowl in pain.
+Health lost: 1157 (physical blunt).
+Your right leg breaks with a loud crack.
+12:47:12:889 [9091] [99] |(629127)|[ [ rl1 stu par ll1 ]]
+Both of your legs must be free and unhindered to do that.
+(LEVI): Both legs broken -- movement/attack refused.
+12:47:12:984 [9091] [99] |(629127|100%)|[ [ rl1 stu par ll1 ]]
+You form a ball of light in your palm and hurl it northwards.
+A bright, fiery detonation flares outwards as the lightwall takes shape, searing the location with solar force.
+A tash'la warrior's form begins to atrophy as your attack kindles ethereal mist to consign him to only memory.
+Damage dealt: 2116 (fire).
+Damage dealt: 8464 (fire).
+Equilibrium used: 3.06s.
+[RIFT]: -1 Aurum. Remaining: 4880.
+You eat an aurum flake.
+The leeching of your strength comes to an end.
+You focus your mind intently on curing your mental maladies.
+You aren't such a complete idiot anymore.
+12:47:13:099 [11592] [96] |(629127|80%)|[ [ rl1 ]]
+You touch the tree of life tattoo.
+Time wreaks ruin upon a tash'la warrior, deteriorating before your eyes.
+Damage dealt: 92 (psychic).
+
+(MNEM): [explore] clearing this room (2 denizen(s)) -- basher on it.
+Time wreaks ruin upon a tash'la warrior, deteriorating before your eyes.
+Damage dealt: 92 (psychic).
+12:47:14:489 [11592] [97] |(629127|80%)|[]
+You may eat another plant or mineral.
+12:47:14:629 [11592] [97] |(629127|80%)|[]
+Time wreaks ruin upon a tash'la warrior, deteriorating before your eyes.
+Damage dealt: 88 (psychic).
+12:47:15:468 [11592] [97] |(629127|80%)|[]
+Your mind is able to focus once again.
+12:47:15:471 [11592] [97] |(629127|80%)|[]
+
+(MNEM): [explore] [swarm] ESCAPE MODE -- attacks held until we are out (DYING FAST (70%) -- retreating to recover).
+(MNEM): [explore] [swarm] DYING FAST (70%) -- retreating to recover -> ne.
+(MNEM): [explore] [swarm] DYING FAST -- 70% and ~4.5s to live at this rate; leaving.
+With a deft movement, a tash'la warrior grabs an envenomed mace from his belt. As he swings it toward you, its spine-covered surface leaves small puncture wounds.
+Health lost: 2396 (physical blunt).
+Your own shadow betrays you, leaving your thoughts scattered and wan.
+Everything seems so pointless.
+Grabbing a long chain from his belt, a tash'la interceptor swings it over his head, launching it at your feet. As it makes contact, your legs give out and you hit the ground with a pained grunt.
+As if by reflex you tense your muscles, denying that which would bind you.
+12:47:15:477 [9196] [97] |(629127|80%)|[ [ prone dep ]]
+You eat a plumbum flake.
+Maybe things aren't so bad after all.
+12:47:15:622 [9196] [97] |(629127|80%)|[ [ prone ]]
+(((((((((((((((((((( EQUILIBRIUM:2.98 ))))))))))))))))))))
+You bunch your powerful muscles and launch yourself in a majestic leap northeastwards.
+Path through the Qerstead. (road)
+The sun shines brightly overhead. An ichorous pool of blood sprawls across the ground.
+You see exits leading north and southwest.
+Balance used: 1.0s.
+12:47:15:977 [9196] [97] |(629127|80%)|[]
+(Holocaust Inc): Pharaus laughingly says, "You ran everyone else off."
+12:47:16:247 [9196] [97] |(629127|80%)|[]
+
+(MNEM): [explore] [swarm] in the funnel room -- fighting what follows (window 2s).
+Heavy footfalls announce the arrival of a tash'la warrior from the southwest.
+Grumbling with annoyance, a tash'la interceptor appears from the southwest.
+12:47:16:541 [9196] [97] |(629127|80%)|[]
+Time wreaks ruin upon a tash'la warrior, deteriorating before your eyes.
+Damage dealt: 92 (psychic).
+12:47:16:551 [9196] [97] |(629127|80%)|[]
+Path through the Qerstead. (road)
+The sun shines brightly overhead. An ichorous pool of blood sprawls across the ground. Ready for battle, a tash'la warrior glowers menacingly. Glaring at the world, a tash'la interceptor is rooted firmly in place.
+You see exits leading north and southwest.
+12:47:16:611 [9196] [97] |(629127|80%)|[]
+You form a ball of light in your palm and hurl it northwards.
+A bright, fiery detonation flares outwards as the lightwall takes shape, searing the location with solar force.
+Damage dealt: 1058 (fire).
+Damage dealt: 1008 (fire).
+Equilibrium used: 3.06s.
+(((((((((((((((((((( BALANCE: 0.907 ))))))))))))))))))))
+Your lungs have recovered enough to smoke another mineral or plant.
+12:47:17:128 [9196] [96] |(629127|80%)|[]
+
+(MNEM): [explore] [swarm] 2 follower(s) -- basher on them.
+You may eat another plant or mineral.
+12:47:17:228 [9196] [96] |(629127|80%)|[]
+12:47:17:562 [12303] [96] |(629127|80%)|[]
+Health lost: 58 (raw).
+[[ BLEED 58 ]]
+
+(MNEM): [explore] [swarm] DYING FAST -- 63% and ~3.9s to live at this rate -- the escape already under way has it.
+With a deft movement, a tash'la warrior grabs an envenomed mace from his belt. As he swings it toward you, its spine-covered surface leaves small puncture wounds.
+Health lost: 2620 (physical blunt).
+Your own shadow betrays you, leaving your thoughts scattered and wan.
+You feel your strength being leeched away.
+With a deft movement, a tash'la interceptor whips the blunt end of a spear toward your head with a sickening thud. A wet crunch alerts you to his boot landing hard on the side of your kneecap, and you yowl in pain.
+Health lost: 1340 (physical blunt).
+Your right leg breaks with a loud crack.
+12:47:18:109 [8285] [96] |(629127|80%)|[ [ bld(115) rl1 stu par ]]
+
+(LEVI): DANGER: Extreme incoming damage in no-flee area -- no way out, fighting on.
+You get down on one knee and serenade the world.
+What do you want to eat?
+[RIFT]: -1 Aurum. Remaining: 4879.
+You eat an aurum flake.
+The leeching of your strength comes to an end.
+You focus your mind intently on curing your mental maladies.
+You aren't such a complete idiot anymore.
+You clot your wounds 6 times.
+You eat a potash crystal.
+You feel your health and mana replenished.
+12:47:18:258 [9328] [99] |(629127|80%)|[]
+A tash'la warrior is shrouded by a crimson nimbus as the bloody pool roils with profane intent.
+A tash'la interceptor is shrouded by a crimson nimbus as the bloody pool roils with profane intent.
+12:47:18:312 [9328] [99] |(629127|80%)|[]
+(((((((((((((((((((( EQUILIBRIUM:2.936 ))))))))))))))))))))
+You form a ball of light in your palm and hurl it southwestwards.
+A bright, fiery detonation flares outwards as the lightwall takes shape, searing the location with solar force.
+Damage dealt: 1008 (fire).
+A tash'la interceptor's form begins to atrophy as your attack kindles ethereal mist to consign him to only memory.
+Damage dealt: 4232 (fire).
+Equilibrium used: 3.06s.
+You may eat another plant or mineral.
+12:47:19:652 [10954] [99] |(629127|80%)|[]
+You swing the culling blade in a great arc, black energy leaping from the blade.
+The energy rips into a tash'la interceptor in a detonation of power.
+Your mind is bolstered as your enemies break.
+Damage dealt: 3756 (unblockable).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 315 (unblockable).
+The energy rips into a tash'la warrior in a detonation of power.
+Damage dealt: 1878 (unblockable).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 1320 (unblockable).
+12:47:19:811 [11055] [100] |(629127|80%)|[]
+Bending his arm, a tash'la warrior leaps into the air and brings his geode-encrusted elbow down upon you with a sickening crunch.
+Health lost: 2520 (physical blunt).
+Your own shadow betrays you, leaving your thoughts scattered and wan.
+You feel your strength being leeched away.
+Your left arm breaks with a loud crack.
+With a fierce roar, a tash'la interceptor brings his spear into range and charges toward you. As the tip sinks into your flesh, he twists it cruelly with an awful smirk.
+Health lost: 2051 (physical cutting).
+12:47:20:608 [6484] [100] |(629127|80%)|[ [ bld(215) par la1 ]]
+Time wreaks ruin upon a tash'la interceptor, deteriorating before your eyes.
+Damage dealt: 176 (psychic).
+12:47:20:622 [6484] [99] |(629127|80%)|[ [ bld(215) par la1 ]]
+Your mind is able to focus once again.
+12:47:20:702 [6484] [99] |(629127|80%)|[ [ bld(215) par la1 ]]
+You eat an aurum flake.
+The leeching of your strength comes to an end.
+You clot your wounds 11 times.
+12:47:20:784 [6484] [93] |(629127|80%)|[]
+Time wreaks ruin upon a tash'la interceptor, deteriorating before your eyes.
+Damage dealt: 176 (psychic).
+12:47:22:132 [10191] [93] |(629127|80%)|[]
+You may eat another plant or mineral.
+12:47:22:223 [10191] [93] |(629127|80%)|[]
+Time wreaks ruin upon a tash'la interceptor, deteriorating before your eyes.
+Damage dealt: 176 (psychic).
+12:47:22:659 [10191] [93] |(629127|80%)|[]
+(((((((((((((((((((( EQUILIBRIUM:3.186 ))))))))))))))))))))
+You slip behind a tash'la interceptor and garrote him with your whip.
+Your mind is bolstered as your enemies break.
+Damage dealt: 1122 (asphyxiation).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 315 (unblockable).
+With a flick of your wrist, you send the tip of your whip to scour the flesh of another.
+Damage dealt: 978 (physical cutting).
+Balance used: 1.7s.
+With a deft movement, a tash'la warrior grabs an envenomed mace from his belt. As he swings it toward you, its spine-covered surface leaves small puncture wounds.
+Health lost: 2632 (physical blunt).
+Your own shadow betrays you, leaving your thoughts scattered and wan.
+You feel your strength being leeched away.
+With a deft movement, a tash'la interceptor whips the blunt end of a spear toward your head with a sickening thud. A wet crunch alerts you to his boot landing hard on the side of your kneecap, and you yowl in pain.
+Your shield completely absorbs the damage.
+Your left leg breaks with a loud crack.
+12:47:23:143 [7600] [98] |(629127|80%)|[ [ stu par ll1 ]]
+You pick your nose absently.
+[RIFT]: -1 Aurum. Remaining: 4877.
+You eat an aurum flake.
+The leeching of your strength comes to an end.
+You focus your mind intently on curing your mental maladies.
+You aren't such a complete idiot anymore.
+12:47:23:381 [7600] [96] |(629127|80%)|[]
+Health lost: 44 (raw).
+[[ BLEED 44 ]]
+
+(LEVI): DANGER: Extreme incoming damage in no-flee area -- no way out, fighting on.
+Time wreaks ruin upon a tash'la interceptor, deteriorating before your eyes.
+Damage dealt: 184 (psychic).
+12:47:23:645 [7556] [96] |(629127|80%)|[]
+You may eat another bit of irid moss or potash.
+12:47:24:119 [7556] [96] |(629127|80%)|[]
+You eat a potash crystal.
+You feel your health and mana replenished.
+12:47:24:270 [8599] [100] |(629127|80%)|[]
+(((((((((((((((((((( BALANCE: 1.573 ))))))))))))))))))))
+Your aura of weapons rebounding disappears.
+You slip behind a tash'la interceptor and garrote him with your whip.
+Damage dealt: 561 (asphyxiation).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 1320 (unblockable).
+With a flick of your wrist, you send the tip of your whip to scour the flesh of another.
+Damage dealt: 233 (physical cutting).
+Balance used: 1.6s.
+
+(MNEM): [explore] [swarm] DYING FAST -- 66% and ~5.1s to live at this rate -- NOT leaving: the only way out is back into the room we just fled (going back needs 85% and cured).
+You may eat another plant or mineral.
+12:47:24:895 [8625] [99] |(629127|80%)|[]
+With a deft movement, a tash'la warrior grabs an envenomed mace from his belt. As he swings it toward you, its spine-covered surface leaves small puncture wounds.
+Health lost: 2508 (physical blunt).
+Your own shadow betrays you, leaving your thoughts scattered and wan.
+A terrible sense of unease comes over you.
+Crying with outrage, a tash'la interceptor whips his crystalline hair at you, its hard lengths raking across your face and drawing blood.
+Health lost: 1205 (physical blunt).
+Health lost: 1165 (physical cutting).
+12:47:25:759 [3747] [99] |(629127|80%)|[ [ bld(139) hyp ]]
+Your mind is able to focus once again.
+12:47:25:762 [3747] [99] |(629127|80%)|[ [ bld(139) hyp ]]
+You eat an argentum flake.
+My, you feel healthier than you have in years.
+You clot your wounds 7 times.
+(((((((((((((((((((( BALANCE: 1.492 ))))))))))))))))))))
+You slip behind a tash'la interceptor and garrote him with your whip.
+Damage dealt: 561 (asphyxiation).
+Your vicious attack cleaves to a nearby enemy.
+A tash'la warrior's form begins to atrophy as your attack kindles ethereal mist to consign him to only memory.
+Damage dealt: 2640 (unblockable).
+With a flick of your wrist, you send the tip of your whip to scour the flesh of another.
+Damage dealt: 7831 (physical cutting).
+Balance used: 1.6s.
+12:47:26:655 [6799] [95] |(629127|80%)|[]
+Time wreaks ruin upon a tash'la warrior, deteriorating before your eyes.
+Damage dealt: 109 (psychic).
+12:47:26:748 [6799] [95] |(629127|80%)|[]
+You may utilise the tree tattoo again.
+12:47:27:223 [6799] [95] |(629127|80%)|[]
+You may eat another plant or mineral.
+12:47:27:375 [6799] [95] |(629127|80%)|[]
+(((((((((((((((((((( BALANCE: 1.101 ))))))))))))))))))))
+You slip behind a tash'la interceptor and garrote him with your whip.
+Your mind is bolstered as your enemies break.
+Damage dealt: 2244 (asphyxiation).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 330 (unblockable).
+With a flick of your wrist, you send the tip of your whip to scour the flesh of another.
+Damage dealt: 1957 (physical cutting).
+Balance used: 1.6s.
+Time wreaks ruin upon a tash'la warrior, deteriorating before your eyes.
+Damage dealt: 109 (psychic).
+12:47:27:699 [6882] [100] |(629127|80%)|[]
+With a deft movement, a tash'la warrior grabs an envenomed mace from his belt. As he swings it toward you, its spine-covered surface leaves small puncture wounds.
+Health lost: 2508 (physical blunt).
+Your own shadow betrays you, leaving your thoughts scattered and wan.
+Your sanity begins to escape you.
+Crying with outrage, a tash'la interceptor whips his crystalline hair at you, its hard lengths raking across your face and drawing blood.
+Health lost: 1225 (physical blunt).
+Health lost: 1231 (physical cutting).
+12:47:28:244 [1918] [100] |(629127|80%)|[ [ bld(149) shm ]]
+A tash'la warrior is shrouded by a crimson nimbus as the bloody pool roils with profane intent.
+A tash'la interceptor is shrouded by a crimson nimbus as the bloody pool roils with profane intent.
+You eat a plumbum flake.
+Your sanity reestablishes itself.
+You clot your wounds 8 times.
+12:47:28:513 [1918] [95] |(629127|80%)|[]
+
+(LEVI): DANGER: Extreme incoming damage in no-flee area -- no way out, fighting on.
+Time wreaks ruin upon a tash'la warrior, deteriorating before your eyes.
+Damage dealt: 109 (psychic).
+12:47:28:715 [1918] [95] |(629127|80%)|[]
+(((((((((((((((((((( BALANCE: 1.508 ))))))))))))))))))))
+You slip behind a tash'la interceptor and garrote him with your whip.
+Your mind is bolstered as your enemies break.
+Damage dealt: 2244 (asphyxiation).
+Your vicious attack cleaves to a nearby enemy.
+Damage dealt: 1320 (unblockable).
+With a flick of your wrist, you send the tip of your whip to scour the flesh of another.
+Damage dealt: 978 (physical cutting).
+Balance used: 1.7s.
+Time wreaks ruin upon a tash'la warrior, deteriorating before your eyes.
+Damage dealt: 109 (psychic).
+12:47:29:750 [3549] [100] |(629127|80%)|[]
+
+(MNEM): [explore] clearing this room (2 denizen(s)) -- basher on it.
+You may eat another plant or mineral.
+12:47:29:965 [3549] [100] |(629127|80%)|[]
+You may eat another bit of irid moss or potash.
+12:47:30:231 [3549] [100] |(629127|80%)|[]
+You eat a potash crystal.
+You feel your health and mana replenished.
+12:47:30:480 [4592] [100] |(629127|80%)|[]
+
+Leviticus, appears strumming his lute to a tune of your greatness.
+Eager to record your recent hunt in lavish detail and song, Leviticus frantically works his quill.
+
+Leviticus says to you with a grave voice, "Quite the slaughter you had at ! -0.03 experience. 1.45 KPM!"
+
+Bending his arm, a tash'la warrior leaps into the air and brings his geode-encrusted elbow down upon you with a sickening crunch.
+Health lost: 2495 (physical blunt).
+Your own shadow betrays you, leaving your thoughts scattered and wan.
+Everything seems so pointless.
+Your right arm breaks with a loud crack.
+Crying with outrage, a tash'la interceptor whips his crystalline hair at you, its hard lengths raking across your face and drawing blood.
+Health lost: 1367 (physical blunt).
+Health lost: 730 (physical cutting).
+You have been slain by a tash'la interceptor.
+(mapper): Speedwalking paused.
+
+(LEVI): Bashing finished. Started at (132 (82.42%) / 2016812g) and bashed for 5.38 minutes.
+[Armour]: Basher disabled -- swapping to 'pvp'
+(MNEM): [explore] [swarm] reset (basher disabled).
+(LEVI): Still in Mnemosyne -- holding the bash curing set through the basher stop.
+[Armour]: Basher disabled -- swapping to 'pvp'
+[Armour]: Already swapping. Please wait.
+(LEVI): DEATH DETECTED! Basher disabled. Queues cleared. Auto-rotation OFF.
+(MNEM): [explore] slain by a tash'la interceptor -- stopping the sweep.
+(MNEM): [explore] off (slain).
+You have lost 1750 experience.
+The corpse of a tash'la warrior falls out of your inventory.
+The corpse of a tash'la interceptor falls out of your inventory.
+The corpse of a tash'la warrior falls out of your inventory.
+The corpse of a tash'la warrior falls out of your inventory.
+The corpse of a tash'la interceptor falls out of your inventory.
+The corpse of a tash'la miner falls out of your inventory.
+The corpse of a tash'la interceptor falls out of your inventory.
+The corpse of a tash'la miner falls out of your inventory.
+12:47:32:024 [0] [100] ||[]
+
+- ( def density ) -
+- ( def speed ) -
+ ---------------------------------------------------------------------------------------------
+|     BEWARE OF AEON - SPEED HAS BEEN STRIPPED | BEWARE OF AEON - SPEED HAS BEEN STRIPPED     |
+ ---------------------------------------------------------------------------------------------
+
+- ( def boartattoo ) -
+- ( def moontattoo ) -
+- ( def starburst ) -
+- ( def mosstattoo ) -
+- ( def guidedstrike ) -
+The Mnemosyne releases its hold, weaving 33 shimmering threads into your possession.
+You just received message #74 from Achaea.
+[Armour]: Borrowed Power gone -- restoring the serppve paragons.
+[Armour]: Already swapping. Please wait.
+(LEVI): Left Mnemosyne (wade ended) -- no-flee mode OFF.

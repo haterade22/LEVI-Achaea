@@ -968,7 +968,7 @@ Every ground retreat now reads one latch, `S.retreatSpentAt`.
 
 If the landing room empties and we are not fit, `S._recoverHere` heals there before the sweep moves on. Otherwise the sweep walks into the next room hurt, with no retreat left.
 
-**Known cost, accepted by the rule:** an unkillable hazard or a strong denizen in the landing room can kill us. There is no config switch.
+**Known cost, accepted by the rule:** an unkillable hazard or a strong denizen in the landing room can kill us. There is no config switch. Since v4.7.486 the basher's last stand (below) shields at critical health when no retreat is left.
 
 Three guards came with it:
 
@@ -979,6 +979,27 @@ Three guards came with it:
 `S.reset` does not touch the latch, because the panic and the ladder both reset on their way out.
 
 **The landing is recorded by whoever asks first (v4.7.483).** "We tumble out, successfully and then tumble back IN????" — user, 2026-11-09 (`kb/raw/live/mnemosyne-tumble-back-in_2026-11-09.txt`). A landing's GMCP comes before its text. `gmcp.Room.Info` moves the map and lifts escape mode, then the basher's `gmcp.Char.Vitals` handler (registered before ours) can call `S.disengage`. When only `_checkPursuit` armed the latch, that disengage read it unarmed, its `S.reset` released the move lock, and its `_noteRetreat` wrote over the record of the tumble that had just landed. Our own `onVitals` then saw no landing and the panic tumbled back in. `S._noteLanding()` now does the recording, and `_retreatSpent`, `_noteRetreat`, `_forgetUnlandedRetreat` and `_checkPursuit` call it first. `S.disengage` also returns true while `S.moveLocked()`, and `S.onTumbleStart` restarts the record's 15 s "never left" clock.
+
+### Prey blocks every ground retreat; the last stand shields (v4.7.486)
+
+From a death (`kb/raw/live/mnemosyne-tashla-prey_2026-11-10.txt`, the profile still on v4.7.478):
+the DYING FAST leap at 70% went into a room with a blood pool. Under **Prey** both tash'la arrived
+0.6 s later, and under **Sanguine Restoration** the pool healed them twice. The U-turn rule then
+refused the way back, and the only action left at 28% and 15% health was another attack. Facts and
+lines: `kb/mechanics/mnemosyne-affixes.md`.
+
+- **Prey.** `S._preyTracks()` (009:567) is true when this run's affix list holds `Prey` (the whole
+  name, case-blind) and neither Roll Hide nor Terror of the Skies is held. `S._retreatBlock` (009:582)
+  then answers "Prey -- every denizen tracks a retreat, so we fight here", so the ground escape, the
+  disengage and both low-HP ladders stay in the room, with nothing torn down (the v4.7.314 rule).
+  The outdoor hover is not a ground retreat and still flies. Pulls are not affected.
+- **The last stand** lives in the basher (`ataxiaBasher_lastStandWanted`, basher/001:625): in a
+  no-flee area, at `escapeAt` or `panicHp`, with `S._escapeRouteReady()` false, it sends
+  `touch shield` even though `canShield()` says no, and holds the attacks until 70% health. A
+  denizen that breaks the shield is learned and never trusted again. Full rules:
+  `.claude/projects/basher/05-safety-systems.md`, "The last stand".
+
+Not built (the user's choice, 2026-11-10): recording blood-pool rooms and keeping retreats out of them.
 
 ### Boiling lava - the only unconditional "leave now" (v4.7.254, hardened v4.7.256)
 
