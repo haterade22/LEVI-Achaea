@@ -52,7 +52,8 @@ packageName: ''
     - ekhyp     : Hypnosis combo mode
     - ekdark    : Darkshade DoT mode
     - ekscyth   : Scytherus camus damage mode
-    - ekauto    : Auto-switch mode
+    - srd       : Group damage: sets scytherus mode, then one attack (aliases/.../serpent/006)
+    - ekauto   : Auto-switch mode
     - ekstatus  : Status display
     ============================================================================
 ]]--

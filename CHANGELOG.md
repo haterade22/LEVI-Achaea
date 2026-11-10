@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-11-10 - v4.7.485: `srd` is the Serpent group damage key
+
+The user: "srd - for group damage", and the goal "damage route with camus and scytherus".
+
+- **`srd` on a Serpent sets scytherus mode and sends one attack.** That is the camus route: build addiction and nausea, deliver scytherus, then bite it for camus. It is the same action as `srr`, which stays. The new alias is `serpent/006_Group_Damage.lua`.
+- **Shikudo's `srd` now checks the class.** Two aliases match `srd` and Mudlet fires both. Before, a Serpent pressing `srd` would also have run the Shikudo group damage route. `shikudo/009` now acts for a Monk only.
+- **Test:** `test_srd_alias.lua` runs both alias bodies for a Serpent, a Monk and another class. It fails when the Monk check is removed.
+- **Needs a reimport.** The alias is new. Not run in Mudlet yet.
+
+---
+
 ## 2026-11-09 - v4.7.484: the class active cure at 3 afflictions, while bashing
 
 The user: "we should be using our class active cures if we have 3 or more afflictions on us especially if we have miracle boon." The user then chose bashing only, and one threshold with or without Miracle. **None of this has run in Mudlet.** The Lua tests run the real rule and the real bash round.
