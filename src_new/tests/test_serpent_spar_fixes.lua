@@ -1871,6 +1871,54 @@ describe("F36: a reflection on prick 1 still credits prick 2", function()
     expect(#queued).toBe(0)
     expect(haveAff("clumsiness")).toBeFalse()
   end)
+
+  -- The other reflection line (2026-11-10 group fight, our seat): the prick, then two "passes
+  -- through" lines and no second prick line. That DSTAB was recorded and called as a hit.
+  local PASS = "The attack harmlessly passes through one of Agathon's reflections."
+
+  it("passes through on prick 1: nothing recorded and no party call", function()
+    world()
+    partyrelay = true
+    stab(PASS)
+    partyrelay = nil
+    expect(haveAff("paralysis")).toBeFalse()
+    expect(haveAff("clumsiness")).toBeFalse()
+    expect(#envenomList).toBe(0)
+    for _, c in ipairs(sends) do expect(has(c, "pt ")).toBeFalse() end
+  end)
+
+  it("the logged form: a second passes-through line and no second prick: nothing", function()
+    world()
+    stab(PASS)
+    nextLine(PASS)
+    expect(#queued).toBe(0)
+    expect(haveAff("clumsiness")).toBeFalse()
+  end)
+
+  it("passes through on prick 1, prick 2 strikes: prick 2's venom lands", function()
+    world()
+    stab(PASS)
+    nextLine(SECOND)
+    nextLine("Balance used: 1.8s.")
+    expect(haveAff("clumsiness")).toBeTrue()
+    expect(haveAff("paralysis")).toBeFalse()
+  end)
+
+  it("prick 2 into a passes-through reflection: nothing", function()
+    world()
+    stab(BLINK)
+    nextLine(SECOND)
+    nextLine(PASS)
+    expect(haveAff("clumsiness")).toBeFalse()
+  end)
+
+  it("another person's reflection line is not ours", function()
+    world()
+    partyrelay = nil
+    affs_to_colour = affs_to_colour or {}
+    stab("The attack harmlessly passes through one of Akri's reflections.")
+    expect(haveAff("paralysis")).toBeTrue()          -- read as an ordinary hit, as before
+  end)
 end)
 
 describe("F37: the Serpent class lines are the game's", function()
@@ -2220,6 +2268,205 @@ end)
 describe("X6: the unused focus clock is gone", function()
   it("serpent.getFocusCooldownRemaining is not defined", function()
     expect(serpent.getFocusCooldownRemaining).toBeNil()
+  end)
+end)
+
+describe("group presses (sr, srd): target switch and no assumed defence (2026-11-10)", function()
+  -- The game's `t` alias: the target changes and 016 raises "changed target". 016's own reset is
+  -- not run here; what it leaves is set by hand where a test needs it (rebounding assumed).
+  local function groupWorld()
+    world()
+    ataxia.channels = { ct = "Mhaldor" }
+    ataxiaTemp.allies = { "Friendo" }
+    local cities = { Akri = "Cyrene", Ulvin = "Eleusis", Antoninus = "Mhaldor", Friendo = "Ashtan",
+      Roguey = "Rogues" }
+    ataxiaNDB_getCitizenship = function(n) return cities[n] or "Unknown" end
+    expandAlias = function(cmd)
+      local n = cmd:match("^t (.+)$")
+      if not n then return end
+      target = n
+      tAffs.rebounding = true                  -- 016 targetresetafflictionslevi assumes it
+      for _, h in ipairs(CHANGED_TARGET) do h("changed target") end
+    end
+  end
+  local function groupRound()
+    sends = {}
+    serpent.state.attackInFlight = false
+    serp_ekanelia_offense(true)
+    return table.concat(sends, "\n")
+  end
+  local function newTarget(name, group)
+    serpent.state.groupPress = group
+    target = name
+    tAffs.rebounding = true
+    for _, h in ipairs(CHANGED_TARGET) do h("changed target") end
+    serpent.state.dispelSent, serpent.state.firstAttack = true, false   -- no opener in these
+  end
+  local function notHere()
+    for _, e in ipairs(echoes) do if has(e, "Target not in room!") then return true end end
+    return false
+  end
+  -- tarAffed, and the "tar afflicted" event it raises (world() records raiseEvent instead).
+  local function told(aff)
+    give(aff)
+    for _, h in ipairs(TAR_AFFLICTED) do h("tar afflicted", { aff }) end
+  end
+
+  it("an absent target is replaced by the first player here who is not of our city", function()
+    groupWorld()
+    target = "Gone"
+    ataxia.playersHere = { "Antoninus", "Akri", "Ulvin" }
+    local r = groupRound()
+    expect(target).toBe("Akri")
+    expect(has(r, "Akri")).toBeTrue()
+    expect(notHere()).toBeFalse()
+  end)
+
+  it("passes over an ally, our city and a player the NDB has no city for; Rogues are taken", function()
+    groupWorld()
+    target = "Gone"
+    ataxia.playersHere = { "Friendo", "Antoninus", "Stranger", "Roguey" }
+    groupRound()
+    expect(target).toBe("Roguey")
+  end)
+
+  it("with no one to take, the target stays and the round is refused", function()
+    groupWorld()
+    target = "Gone"
+    ataxia.playersHere = { "Antoninus", "Stranger" }
+    local r = groupRound()
+    expect(target).toBe("Gone")
+    expect(notHere()).toBeTrue()
+    expect(has(r, "dstab")).toBeFalse()
+  end)
+
+  it("with our city unread, no switch", function()
+    groupWorld()
+    ataxia.channels = {}
+    target = "Gone"
+    ataxia.playersHere = { "Akri" }
+    groupRound()
+    expect(target).toBe("Gone")
+    expect(notHere()).toBeTrue()
+  end)
+
+  it("a present target is kept", function()
+    groupWorld()
+    target = "Ulvin"
+    ataxia.playersHere = { "Akri", "Ulvin" }
+    groupRound()
+    expect(target).toBe("Ulvin")
+  end)
+
+  it("the solo press (zz) does not switch", function()
+    groupWorld()
+    target = "Gone"
+    ataxia.playersHere = { "Akri" }
+    round()
+    expect(target).toBe("Gone")
+    expect(notHere()).toBeTrue()
+  end)
+
+  it("a group target starts with no rebounding: the first round is a dstab, not a flay", function()
+    groupWorld()
+    serp_setmode_group()
+    ataxia.playersHere = { "Akri" }
+    newTarget("Akri", true)
+    expect(tAffs.rebounding).toBeFalse()
+    local r = groupRound()
+    expect(has(r, "dstab Akri")).toBeTrue()
+    expect(has(r, "flay")).toBeFalse()
+  end)
+
+  it("the switch itself gives the new target no assumed rebounding", function()
+    groupWorld()
+    serp_setmode_group()
+    target = "Gone"
+    ataxia.playersHere = { "Akri" }
+    serpent.state.dispelSent = true
+    groupRound()
+    expect(target).toBe("Akri")
+    expect(tAffs.rebounding).toBeFalse()
+  end)
+
+  it("a solo target still assumes rebounding and flays first", function()
+    groupWorld()
+    ataxia.playersHere = { "Akri" }
+    newTarget("Akri", false)
+    expect(tAffs.rebounding).toBeTrue()
+    local r = round()
+    expect(has(r, "flay Akri rebounding")).toBeTrue()
+  end)
+
+  it("a group dstab that rebounds teaches it, and the next round flays", function()
+    groupWorld()
+    serp_setmode_group()
+    ataxia.playersHere = { "Akri" }
+    newTarget("Akri", true)
+    groupRound()
+    give("rebounding")                          -- serpent/001 on "The attack rebounds back onto you!"
+    local r = groupRound()
+    expect(has(r, "flay Akri rebounding")).toBeTrue()
+  end)
+
+  it("a group target's coating is unknown: no bite or impulse until slickness lands", function()
+    groupWorld()
+    ataxia.playersHere = { "Akri" }
+    newTarget("Akri", true)
+    expect(serpent.state.coatingUnknown).toBeTrue()
+    expect(checkImpulseEligible()).toBeFalse()
+    told("slickness")
+    expect(serpent.state.coatingUnknown).toBeFalse()
+    expect(checkImpulseEligible()).toBeTrue()
+  end)
+
+  it("a coating line tells it too: a shell forming, or our flay's strip (706)", function()
+    groupWorld()
+    ataxia.playersHere = { "Akri" }
+    newTarget("Akri", true)
+    told("sileris")
+    expect(serpent.state.coatingUnknown).toBeFalse()
+    expect(checkImpulseEligible()).toBeFalse()     -- known up: the normal gate holds
+    newTarget("Akri", true)
+    erAff("fangbarrier"); erAff("sileris")         -- what 706 does before it tells us
+    serpent.onCoatingGone()
+    expect(serpent.state.coatingUnknown).toBeFalse()
+    expect(checkImpulseEligible()).toBeTrue()
+  end)
+
+  it("srd with scytherus stuck: a gecko dstab strips the unknown coating, then it bites", function()
+    groupWorld()
+    serp_setmode_scytherus()
+    ataxia.playersHere = { "Akri" }
+    newTarget("Akri", true)
+    give("scytherus")
+    local r = groupRound()
+    expect(has(r, "bite")).toBeFalse()
+    expect(has(r, "dstab Akri") and has(r, "gecko")).toBeTrue()
+    give("slickness")
+    r = groupRound()
+    expect(has(r, "bite Akri scytherus")).toBeTrue()
+  end)
+
+  it("a solo press clears the group coating mark", function()
+    groupWorld()
+    ataxia.playersHere = { "Akri" }
+    newTarget("Akri", true)
+    expect(serpent.state.coatingUnknown).toBeTrue()
+    round()
+    expect(serpent.state.coatingUnknown).toBeFalse()
+  end)
+
+  it("sr and srd pass the group flag", function()
+    local function aliasBody(path)
+      local f = assert(io.open(path)); local s = f:read("*a"); f:close(); return s
+    end
+    local base = "src_new/aliases/levi_ataxia/for_levi/levi_062424/"
+    expect(has(aliasBody(base .. "154_Group_(All_Classes).lua"), "serp_ekanelia_offense(true)")).toBeTrue()
+    expect(has(aliasBody(base .. "serpent/006_Group_Damage.lua"), "serp_ekanelia_offense(true)")).toBeTrue()
+    -- 706's strip lines tell the offence the coating is known.
+    expect(has(aliasBody("src_new/triggers/levi_ataxia/for_levi/leviticus/706_Flayed_Sileris.lua"),
+      "serpent.onCoatingGone()")).toBeTrue()
   end)
 end)
 

@@ -46,12 +46,22 @@ patterns:
 --cecho("\n<red>[<white>Levi<red>]: DOUBLESTABBED "..string.upper(multimatches[1][2]).." <white>[<orange>"..string.title(svenom1).." <white>+ <orange>"..string.title(svenom2).."<white>]")
 
 local person = multimatches[1][2]
+-- A prick that hit one of the target's reflections delivers nothing. The game says it in two ways:
+-- "A reflection of X blinks out of existence." (the victim's seat, X8pRorzR:868-871), and "The
+-- attack harmlessly passes through one of X's reflections." (2026-11-10 group fight, our seat,
+-- fightlogs/2026-11-10_112805_Mycen.log:8426-8432: the prick, then two such lines and no second
+-- prick line). The second form was not read, so that DSTAB was recorded as paralysis + anorexia
+-- and called to the party as a hit during Akri's truelock. The user: "reflection shouldnt count".
+local function reflected(l)
+  return l == "A reflection of " .. person .. " blinks out of existence."
+      or l == "The attack harmlessly passes through one of " .. person .. "'s reflections."
+end
 if isTargeted(person) then
 	if multimatches[3][1] == "The attack rebounds back onto you!" then
   tarAffed("rebounding")
   table.remove(envenomList, 1)
 	 table.remove(envenomListTwo, 1)
-	elseif  multimatches[3][1] == "A reflection of " .. person .. " blinks out of existence." then
+	elseif reflected(multimatches[3][1]) then
 	 -- A reflection took prick 1, but prick 2 still strikes and lands the venom prick 1 would have
 	 -- carried. On the victim's seat Archaeon's prick 1 carries his paralysis
 	 -- (kb/raw/logs/2026-11-01_nikita_depthswalker-vs-serpent_win_X8pRorzR.txt:49-50, :101-102,
@@ -68,14 +78,13 @@ if isTargeted(person) then
 	 table.remove(envenomList, 1)
    table.remove(envenomListTwo, 1)
    if aff2 and tempLineTrigger then
-     local blink = "A reflection of " .. person .. " blinks out of existence."
      local second = "Striking like a snake, you prick " .. person .. " a second time with your dirk."
      tempLineTrigger(1, 1, function()
        if line ~= second then return end
        tempLineTrigger(1, 1, function()
          if line == "The attack rebounds back onto you!" then
            tarAffed("rebounding")
-         elseif line ~= blink then
+         elseif not reflected(line) then
            tarAffed(aff2)
          end
        end)

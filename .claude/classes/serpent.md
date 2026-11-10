@@ -46,9 +46,9 @@ shared_aliases:
   zz:  "serp_setmode_lock(); serp_ekanelia_offense()       # 152_First_Attack_(All_Classes).lua:49-51"
   xx:  "serp_setmode_hypnolock() only; it sends no attack  # 155_Second_Attack_(All_Classes).lua:44-46"
   vv:  "serp_setmode_darkshade(); serp_ekanelia_offense()  # 153_Fourth_Attack_(All_Classes).lua:19-21"
-  sr:  "serp_setmode_group(); serp_ekanelia_offense()      # 154_Group_(All_Classes).lua:33-35"
+  sr:  "serp_setmode_group(); serp_ekanelia_offense(true)  # 154_Group_(All_Classes).lua:33-36; true = a group press (see Group presses below)"
   srr: "serp_setmode_scytherus(); serp_ekanelia_offense()  # 157_Scytherus_(All_Classes).lua:14-16"
-  srd: "serp_setmode_scytherus(); serp_ekanelia_offense()  # serpent/006_Group_Damage.lua (group damage, camus; same action as srr; Shikudo's shikudo/009 srd is guarded to Monk, v4.7.485)"
+  srd: "serp_setmode_scytherus(); serp_ekanelia_offense(true)  # serpent/006_Group_Damage.lua (a group press; group damage, camus; same action as srr; Shikudo's shikudo/009 srd is guarded to Monk, v4.7.485)"
   sn:  "the same as vv (aliases .../serpent/001_Darkshade). It called a global the offense no longer has until 2026-11-08. Like vv and ekdark it leaves the mode on darkshade"
 
 # The offense's own aliases (tempAlias, :3355-3365)
@@ -231,7 +231,9 @@ gecko_strip: |
   Since 2026-11-08 a new target has no coating assumed (016 targetresetafflictionslevi, :531-532;
   it assumed both up, and only a coating line ever cleared them). The offense can impulse or bite a
   fresh target until 442 (a shell forming, the quicksilver or purple berry form) or 707 (a bite the
-  coating stopped) shows one. Rebounding is still assumed.
+  coating stopped) shows one. Rebounding is still assumed, except on a group press (`sr`, `srd`):
+  there neither rebounding nor a shield is assumed, and the coating is UNKNOWN until a line
+  tells it (Group presses, below).
   Slickness does strip the coating: CONFIRMED twice ("The protective covering coating your skin
   sloughs off." right after slickness lands: kb/raw/logs/2026-10-11_mystor_shikudo-vs-depthswalker_loss_EveP2TVe.txt:771,
   2026-10-11_mystor_shikudo-vs-infernal-dwc_win_c.iJVmpL.txt:873). A bare FLAY <target> strips
@@ -1707,6 +1709,73 @@ line. Left as it is on purpose: EXECUTE on a standing target. Since 2026-11-09 o
 Decided by the user on 2026-11-08 and done in v4.7.480: the clumsiness list, the shrugging equilibrium hold, and
 the curing set priorities (kb/curing/server-side-curing.md, "One priority list per set"). The user confirmed astImp beside astWear on 2026-11-09 (kb/CONFLICTS.md Resolved, was #74). Immune to clumsiness means the affliction lands and causes no miss (the user, 2026-11-09). Open: xentio on those classes for the kelp stack alone (#81).
 Monks, the user 2026-11-09: "Tekura Monk is kick, punch, punch and Shikudo is kick, staff, staff". Trigger 006 reads this: a first kick reads Monk until the same combo's staff line. Asthma and weariness before the class venom: not adopted. The user said "Depends", usually curare. Curare goes first either way (:938), so the order for a class venom that is not curare got no explicit ruling (Class-Aware Venom Routing).
+
+## Group presses (`sr`, `srd`): target switch, no assumed defence (2026-11-10, v4.7.487)
+
+**The fight.** A group fight at 11:27-11:38 on 2026-11-10, mostly with `sr`. The screen log is
+`C:\Users\mikew\OneDrive\Desktop\serp_group.txt` and the fight log is
+`<profile>/fightlogs/2026-11-10_112805_Mycen.log` (header "version 4.7.478"). Neither is filed in
+`kb/raw/logs/` yet. The client ran **4.7.478**, imported from the stale
+`LEVI-Achaea\muddler_project\build` folder, so no fix from v4.7.479-485 was in it: the 13 refused
+adder orders and the 6 impulses before a lock are fixed already (v4.7.479).
+
+**What the log showed (counts from the fight log).**
+- 52 attack rounds and 55 target changes. 100 presses printed "Target not in room!".
+- 7 opening flays met no rebounding and no shield. 4 stripped a sileris coating and 3 delivered
+  the venom. These are 7 more rows for `attack.flay.missing` (n=1 in `kb/sim/rules.md`), not yet filed.
+- DISPEL printed no cost line: each of the 18 "You point a finger at X to dispel all her
+  illusions." lines is followed at once by the next command's reply.
+
+**The user's rules (2026-11-10).**
+- "For target absent, during those situations in group mode, I'd much rather move onto the next
+  target that isn't Mhaldorian. Switch targets automatically because I set the party leader to a
+  person and follow their calls but sometimes they are slow."
+- "In group (sr, srd) we should not start out with flaying, we should just hit unless it is a bite
+  (need a flay or dstab with slickness) - This factors into rebounding in group (sr, or srd
+  aliases) we should probably state in the beginning (new target) they dont have rebounding or
+  shield."
+
+**What the code does (serpent/002).**
+- `sr` and `srd` call `serp_ekanelia_offense(true)`; every other caller passes nothing. The
+  argument sets `serpent.state.groupPress` on each press.
+- **Target switch** (`serpent.groupRetarget`). On a group press, before the balance guard: if GMCP
+  does not list the target, the new target is the first player in `ataxia.playersHere` who is not
+  on `ataxiaTemp.allies` and whose `ataxiaNDB_getCitizenship` differs from our city (the caption
+  of the `ct` channel, `ataxia.channels.ct`, as mindnet reads it). "Unknown" is passed over (a
+  city mate the NDB lacks would be attacked); "Rogues" is taken. With `ct` unread there is no
+  switch. It goes through the `t` alias (so the game target and highlights follow) and echoes
+  `GROUP: <old> is not here -- now <new> (<city>)`. No party message. The leader's next call
+  sets the target as before. With nobody to take, the round prints "Target not in room!" as before.
+- **No assumed defence** (`serpent.onGroupTarget`, last in the "changed target" handler). On a
+  group press a new target gets `tAffs.rebounding = false` and `tAffs.shield = false` (016 assumed
+  rebounding in tAffs only). So the first round is a DSTAB. A DSTAB that rebounds teaches it
+  ("The attack rebounds back onto you!", `serpent/001`), and the next round flays (PRIORITY 1).
+  A solo press still assumes rebounding.
+- **The coating before a bite** (`serpent.state.coatingUnknown`). A group target's coating is
+  unknown, and `checkImpulseEligible()` says no until a line tells it. Slickness on the target
+  clears it (rule `defence.sileris.slickness`), and so do a shell forming (442), a stopped bite
+  (707) and 706's strip lines (`serpent.onCoatingGone`). In `sr` the lock needs slickness before
+  any impulse, and the gecko strip (impatience pair) sends a gecko DSTAB. In `srd`
+  (scytherus_attack) the DSTAB's first venom is gecko while the coating is unknown. A solo press
+  clears the mark.
+
+**Open.** A target that steps out for a moment is replaced at the next press. A party member of
+another city who is not on the allies list can be taken (no party roster is read). Not run in
+Mudlet yet.
+
+**A DSTAB into a reflection (v4.7.487, the user: "reflection shouldnt count").** The game says
+a prick hit a reflection in two ways: "A reflection of X blinks out of existence." (victim's seat,
+X8pRorzR:868-871) and "The attack harmlessly passes through one of X's reflections." (our seat,
+2026-11-10 fight log :8426-8432: the prick line, then two such lines, and no "Striking like a
+snake" line, so neither prick delivered). `serpent/001` read only the first, so that DSTAB was
+recorded as paralysis + anorexia and called to the party during Akri's truelock. Its `reflected()`
+now reads both, on prick 1 (nothing recorded, no party call) and on the line after prick 2. When
+prick 2 still strikes, its venom is recorded as before (F36). Open: prick 1 lands and only prick 2
+hits a reflection; no log shows that case, and the normal branch still records both venoms.
+
+**DISPEL stays once per target** (the user: "dispel should only be once"). New reflections after
+the first round ("There suddenly appear to be three versions of Akri", 11:36:38.700) are not
+dispelled again; our DSTAB at 11:36:39.228 hit one.
 
 ## Theorycraft: the DSTAB against the eat (2026-11-07)
 
