@@ -62,3 +62,5 @@ if matches[2] and not isTargeted(matches[2]) then return end
 
 erAff("fangbarrier")
 erAff("sileris")
+-- A group target's coating is known now (serpent.state.coatingUnknown).
+if serpent and serpent.onCoatingGone then serpent.onCoatingGone() end

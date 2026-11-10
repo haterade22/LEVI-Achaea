@@ -2,6 +2,20 @@
 
 ---
 
+## 2026-11-10 - v4.7.487: Serpent group presses switch targets and assume no defence; a dstab into a reflection does not count
+
+From the user's review of a group fight (2026-11-10, mostly `sr`). That fight ran 4.7.478, so it had none of the v4.7.479-485 fixes.
+
+- **`sr` and `srd` switch to a new target when yours is not in the room.** The user: "I'd much rather move onto the next target that isn't Mhaldorian. Switch targets automatically because I set the party leader to a person and follow their calls but sometimes they are slow." The new target is the first player in the room who is not on your allies list and whose city (from the NDB) is not yours. A player with no city in the NDB is passed over. Rogues are taken. The echo is `GROUP: <old> is not here -- now <new> (<city>)`. In that fight 100 presses printed "Target not in room!".
+- **`sr` and `srd` start a new target with no rebounding and no shield.** The user: "we should not start out with flaying, we should just hit". So the first round is a dstab. If it rebounds, the next round flays. In that fight 7 opening flays met no rebounding and no shield. Solo keys (`zz` and the rest) still assume rebounding.
+- **A bite waits for the coating to be gone.** The user: "unless it is a bite (need a flay or dstab with slickness)". On a group target the coating is unknown until slickness lands, a coating line shows, or a flay strips it. `sr` lands slickness before any impulse anyway. `srd` puts gecko in its dstab first while the coating is unknown.
+- **A dstab into a reflection no longer counts as a hit.** The user: "reflection shouldnt count". In that fight a dstab at Akri printed "The attack harmlessly passes through one of Akri's reflections." twice, and the system still recorded paralysis + anorexia and told the party `Akri: paralysis anorexia` during her truelock. The dstab trigger knew only the other reflection line ("A reflection of X blinks out of existence."). Now it reads both. If the second prick still strikes, its venom counts as before.
+- **Dispel still goes once per target.** The user's choice: "dispel should only be once".
+- **Test:** 20 new cases in `test_serpent_spar_fixes.lua`. Each guard was removed in turn, and a test failed.
+- **Needs a reimport.** Not run in Mudlet yet.
+
+---
+
 ## 2026-11-10 - v4.7.486: the last stand, and no retreat under Prey
 
 From a death in the tower (`kb/raw/live/mnemosyne-tashla-prey_2026-11-10.txt`; the profile was still on v4.7.478). Two tash'la took about 2,000 health a second while sips and potash healed about 1,030. Our one retreat went into a room with a blood pool. Under the Prey affix both followed in 0.6 s, and the pool healed them twice. The way back was refused, and at 28% and then 15% health the only action left was another attack. The last round was 4,592 into 4,592 health. The user chose these two fixes.

@@ -32,7 +32,8 @@ end
 
 if gmcp.Char.Status.class == "Serpent" then
   serp_setmode_group()
-  serp_ekanelia_offense()
+  -- true: a group press (no defence assumed on a new target, an absent target is replaced).
+  serp_ekanelia_offense(true)
 end
 
 if gmcp.Char.Status.class == "Blademaster" then

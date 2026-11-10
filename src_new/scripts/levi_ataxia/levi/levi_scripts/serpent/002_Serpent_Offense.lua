@@ -172,6 +172,19 @@ serpent.state.camusDelivered = serpent.state.camusDelivered or false
 -- reach us as tarAffed("rebounding")), or our flay's real strip line. The target reset only
 -- ASSUMES rebounding (016 targetresetafflictionslevi), so it does not set this.
 serpent.state.reboundingSeen = serpent.state.reboundingSeen or false
+-- GROUP PRESSES (`sr`, `srd`; the user, 2026-11-10). True while the last press was one of them:
+-- serp_ekanelia_offense(true) sets it, every other caller clears it. On a group press a target
+-- that is not in the room is replaced (serpent.groupRetarget), and a new target starts with no
+-- rebounding and no shield assumed (serpent.onGroupTarget): "we should not start out with
+-- flaying, we should just hit". In the 2026-11-10 group fight 7 opening flays met no rebounding
+-- and no shield.
+serpent.state.groupPress = serpent.state.groupPress or false
+-- True on a group target until a line shows its sileris coating gone or up. A bite needs the
+-- coating gone ("need a flay or dstab with slickness"), so checkImpulseEligible() says no while
+-- this is set, and the round strips it first: slickness that lands strips it (rule
+-- defence.sileris.slickness, MEASURED 8), and so does a flay (attack.flay.coating, 23 of 23).
+-- In the 2026-11-10 fight 4 of the 7 opening flays stripped a coating, so it is often up.
+serpent.state.coatingUnknown = serpent.state.coatingUnknown or false
 -- Snakes in our room, {[item id] = name}, from GMCP Char.Items (location "room").
 serpent.state.snakesHere = serpent.state.snakesHere or {}
 -- True once a GMCP room list arrived, so snakesHere is a real picture of the room.
@@ -1282,7 +1295,12 @@ function checkImpulseEligible()
         serpent.state.postGeckoLockdown = false
     end
 
-    impulseReady = not hasSileris and not hasFangbarrier
+    -- A group target's coating is not known yet: strip it before the first bite. Slickness on the
+    -- target means it is gone, however that slickness was recorded.
+    if serpent.state.coatingUnknown and haveAff("slickness") then
+        serpent.state.coatingUnknown = false
+    end
+    impulseReady = not hasSileris and not hasFangbarrier and not serpent.state.coatingUnknown
     return impulseReady
 end
 
@@ -1773,7 +1791,11 @@ function selectVenoms()
     -- ===== SCYTHERUS ATTACK =====
     if serpStrategy == "scytherus_attack" then
         local v1
-        if not haveAff("slickness") and haveAff("asthma") then
+        -- `srd` on a target whose coating is not known: this strategy bites or impulses every
+        -- round it can, and a bite needs the coating gone, so the dstab strips it with slickness.
+        if serpent.state.coatingUnknown and not haveAff("slickness") then
+            v1 = "gecko"
+        elseif not haveAff("slickness") and haveAff("asthma") then
             v1 = "gecko"
         else
             v1 = pickVenom(nil)
@@ -2784,7 +2806,18 @@ local function completeTargetName()
     if isTargeted then isTargeted(hit) else target = hit end
 end
 
-function serp_ekanelia_offense()
+-- groupPress: true from `sr` and `srd` only (see serpent.state.groupPress). A group press with the
+-- target gone picks a new one first (serpent.groupRetarget); that needs no balance, so it comes
+-- before the balance guard, and the press after it attacks.
+function serp_ekanelia_offense(groupPress)
+    serpent.state.groupPress = (groupPress == true)
+    if serpent.state.groupPress then
+        completeTargetName()
+        serpent.groupRetarget()
+    else
+        serpent.state.coatingUnknown = false
+    end
+
     -- Only dispatch when we actually have balance — prevents computing
     -- attack with current state then queuing it for later execution
     -- (by which time game state has changed)
@@ -3141,6 +3174,7 @@ function serp_status()
         local missing = {}
         if hasSileris then table.insert(missing, "sileris") end
         if hasFangbarrier then table.insert(missing, "fangbarrier") end
+        if serpent.state.coatingUnknown then table.insert(missing, "coating not known (group)") end
         if #missing > 0 then
             cecho(" <dim_grey>(blocked: " .. table.concat(missing, ", ") .. ")")
         end
@@ -3234,18 +3268,79 @@ function serpent.resetCureTracking()
 end
 
 -- "tar afflicted" (017 tarAffed): `added` is the list of afflictions just given to the target.
+-- A coating line (442 a shell forms, 707 a bite it stopped) or slickness tells us the coating, so
+-- a group target's coating is known from then on (sileris up: the normal bite gate holds).
+local COATING_TOLD = { sileris = true, fangbarrier = true, slickness = true }
 function serpent.onTargetAfflicted(added)
-    if added == "rebounding" then
-        serpent.state.reboundingSeen = true
+    if type(added) ~= "table" then added = { added } end
+    for _, aff in pairs(added) do
+        if aff == "rebounding" then serpent.state.reboundingSeen = true end
+        if COATING_TOLD[aff] then serpent.state.coatingUnknown = false end
+    end
+end
+
+-- A line showed our target's coating gone (706: our flay's strip lines, a rip). Nothing to strip.
+function serpent.onCoatingGone()
+    serpent.state.coatingUnknown = false
+end
+
+--[[
+    A NEW TARGET ON A GROUP PRESS (the "changed target" handler below runs this after 016's
+    reset). The user, 2026-11-10: "In group (sr, srd) we should not start out with flaying, we
+    should just hit unless it is a bite ... we should probably state in the beginning (new target)
+    they dont have rebounding or shield." So no rebounding and no shield are assumed (016 assumes
+    rebounding), and a dstab that rebounds teaches it ("The attack rebounds back onto you!",
+    serpent/001), after which PRIORITY 1 flays. The coating is marked unknown, so a bite waits
+    for a strip (checkImpulseEligible).
+]]--
+function serpent.onGroupTarget()
+    if not serpent.state.groupPress then
+        serpent.state.coatingUnknown = false
         return
     end
-    if type(added) ~= "table" then return end
-    for _, aff in pairs(added) do
-        if aff == "rebounding" then
-            serpent.state.reboundingSeen = true
-            return
+    -- 016 assumed them in tAffs only; its resetStatesV3() left V3 with neither.
+    if tAffs then
+        tAffs.rebounding = false
+        tAffs.shield = false
+    end
+    serpent.state.lastRebounding = false
+    serpent.state.reboundingSeen = false
+    serpent.state.coatingUnknown = true
+end
+
+--[[
+    A GROUP PRESS WITH THE TARGET GONE (the user, 2026-11-10: "during those situations in group
+    mode, I'd much rather move onto the next target that isn't Mhaldorian. Switch targets
+    automatically because I set the party leader to a person and follow their calls but sometimes
+    they are slow."). In the 2026-11-10 group fight 100 presses printed "Target not in room!".
+    The new target is the first player GMCP lists in the room (the list never holds us) who is
+    not on ataxiaTemp.allies and not of our city. Our city is the caption of the `ct` channel (GMCP
+    Comm.Channel.List, ataxia.channels.ct: "Mhaldor"), as mindnet reads it
+    (ataxia_mindnetTellParty). A player whose city the NDB does not know is passed over: a city
+    mate the NDB has not gathered would be attacked. Rogues are taken. With our city unread, no
+    switch. The switch goes through the `t` alias, as switchtargetnext does, so the game's
+    target and the highlights follow. The leader's next call still sets the target as before.
+    Returns the new target's name, or nil.
+]]--
+function serpent.groupRetarget()
+    local here = ataxia and ataxia.playersHere
+    if type(here) ~= "table" then return nil end
+    if type(target) == "string" and target ~= "" and table.contains(here, target) then return nil end
+    local city = ataxia.channels and ataxia.channels.ct
+    if type(city) ~= "string" or city == "" then return nil end
+    local allies = (ataxiaTemp and ataxiaTemp.allies) or {}
+    for _, name in ipairs(here) do
+        if type(name) == "string" and name ~= "" and not table.contains(allies, name) then
+            local cit = ataxiaNDB_getCitizenship and ataxiaNDB_getCitizenship(name) or "Unknown"
+            if cit ~= "Unknown" and cit:lower() ~= city:lower() then
+                Algedonic.Echo("<yellow>GROUP<white>: " .. tostring(target) .. " is not here -- now "
+                    .. name .. " (" .. cit .. ")")
+                expandAlias("t " .. name)
+                return name
+            end
         end
     end
+    return nil
 end
 
 -- Our flay's own line about the target's rebounding. `real` is true for the strip line ("You
@@ -3310,6 +3405,8 @@ if registerAnonymousEventHandler then
         serpent.state.lastWieldKw = nil
         serpent.state.lastWieldBefore = nil
         hSuggActive = ""
+        -- Last: on a group press, no rebounding or shield assumed (it rewrites what 016 set).
+        serpent.onGroupTarget()
     end)
 
     -- A game line showed the target's rebounding up: a raise line (430), "The attack rebounds

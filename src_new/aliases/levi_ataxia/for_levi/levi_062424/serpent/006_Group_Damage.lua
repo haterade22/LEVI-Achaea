@@ -19,5 +19,6 @@ packageName: ''
 -- Shikudo has its own `srd` (shikudo/009); each alias checks the class, so only one acts.
 if gmcp.Char.Status.class == "Serpent" then
   serp_setmode_scytherus()
-  serp_ekanelia_offense()
+  -- true: a group press, as `sr` (serpent.state.groupPress).
+  serp_ekanelia_offense(true)
 end
