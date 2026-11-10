@@ -16,6 +16,8 @@ Returns one of: `"attack"`, `"shield"`, `"flee"`, `"wait"`
      ├─ hpp ≤ fleePct OR damage spike:
      │    ├─ swarm.disengage() worked → "wait"  (spend the round LEAVING THE ROOM)
      │    └─ refused (no route back)  → fall through: fighting in place is the answer
+     ├─ LAST STAND (v4.7.486): critical + no retreat + no known
+     │    shield-breaker here           → "shield", attacks held until 70%
      ├─ damage spike + can shield       → "shield" (one-cycle guard, keep attacking)
      └─ else                            → skip both flee checks below
 5. hpp ≤ fleeThresholdPct (25%)?        → "flee"
@@ -34,6 +36,41 @@ muting the basher there would be lethal.
 **`canShield()` no longer gates the alarm**, only the shielding. It returns false whenever a
 room denizen is on the area target list — i.e. every real tower fight — so gating the alarm on
 it made the whole branch unreachable.
+
+### The last stand (v4.7.486)
+
+`ataxiaBasher_lastStandWanted(hpp)` (`basher/001`:625), asked in step 4 after the disengage
+(001:536). From a death (2026-11-10, `kb/raw/live/mnemosyne-tashla-prey_2026-11-10.txt`): Prey
+made both tash'la follow our one retreat, the retreat back was refused, and `canShield()` was
+false, so from 28% to 15% health the only action was another attack. Sips and potash healed about
+1,030 HP/s against about 2,000 in; the last round was 4,592 into 4,592 health. A shield stops the
+2,000. It answers `"shield"` when all of these hold:
+
+- a no-flee area, `ataxiaBasher.lastStand ~= false` (`bash laststand on|off`), no Bravado, no Rimewrought;
+- no shield up yet, and 3 s since the last send (`LAST_STAND_RESEND`), so the 0.3 s rebuild does not repeat it;
+- critical health: HP% at or below the swarm's `escapeAt` (35), or raw HP at or below its `panicHp`
+  (3000) -- the two lines the escape ladder uses (`ataxiaBasher_lastStandCritical`, 001:595);
+- no denizen in the room on `ataxiaBasher.shieldBreakers`;
+- the swarm cannot take us out: it is off, or `S._escapeRouteReady()` is false, and no recovery or
+  tumble is under way.
+
+**It ignores `canShield()` on purpose.** That function assumes every target-list denizen breaks
+shields; the last stand finds out. Trigger "Shield Broken By Denizen"
+(`denizen_attacks_misc_lines/029`, substring `your magical shield`) calls
+`ataxiaBasher_onShieldLine` (001:676): a line that starts with the name of a denizen in the room
+adds that name, lowercased, to the saved `ataxiaBasher.shieldBreakers`. Our own lines (`You...`),
+rebounds and players are ignored. One sample line exists: "A small brown lemming rips apart your
+magical shield defence with its claws." A tash'la raze line is not yet known.
+
+**The hold.** In a no-flee area the attack loop used to swing through a shield (the HP>=70 gate was
+dropped there). `ataxiaBasher_attack` now keeps that gate while `ataxiaBasher_lastStandHolding()`
+(001:648) is true. The hold ends at `ataxiaBasher.lastStandRelease` (70%, `bash laststand release
+<pct>`), after `LAST_STAND_MAX` (30 s), or when the shield is down 3 s after the last send (broken,
+or it never went up). Each end prints `LAST STAND over (<why>) -- attacking.`. The state is
+`ataxiaTemp.lastStandAt`/`lastStandSentAt`, never saved.
+
+Open: whether tash'la raze a shield; what the hold does against a pool that heals the denizens
+while we wait (Sanguine Restoration). Tests: `test_basher_noflee.lua`, "the last stand".
 
 ### Extreme Damage Rate Detection (rewritten v4.7.243)
 
@@ -99,7 +136,8 @@ Some areas cannot be fled — there is nowhere to `goto`. In these areas the dan
 level **never returns `"flee"`**: an extreme-damage spike or low HP shields instead,
 and the attack loop keeps swinging through the shield (the HP≥70 re-attack gate in
 `ataxiaBasher_attack()` is dropped for no-flee areas, so it guards reactively rather
-than pausing).
+than pausing). **Except during a last stand (v4.7.486)**, which keeps the gate until health is
+back; see "The last stand" above.
 
 **Swarm-retreat is NOT flee.** The Mnemosyne swarm tactics (`mnemosyne/009_Swarm_Tactics.lua`)
 deliberately step one room back from a 3+-mob room to funnel followers — a TACTIC, executed

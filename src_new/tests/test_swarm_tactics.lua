@@ -4687,6 +4687,87 @@ describe("v4.7.482 -- one retreat, then we fight", function()
   end)
 end)
 
+-- v4.7.486 -- PREY: "All denizens are trackers and will chase should you flee." From a death
+-- (2026-11-10, run 223): both tash'la followed our leap inside 0.6s, into a room whose blood pool
+-- healed them. Under Prey a ground retreat shakes no one, so it does not start.
+describe("v4.7.486 -- Prey: a ground retreat cannot shake a tracker", function()
+  local savedHistory
+  local function prey(name, run)
+    savedHistory = M.history
+    M.history = { run = 7, affixes = { { run = run or 7, name = name or "Prey",
+      description = "All denizens are trackers and will chase should you flee." } } }
+  end
+  local function restore() M.history = savedHistory; mnemRollHide = false; mnemTerrorSkies = false end
+  local function dyingIndoors()
+    fixture(3)
+    ataxiaBasher.inMnemosyne = true
+    gmcp.Room.Info.details = { "indoors" }
+    S._lastDisengageAt, S._lastPanicAt, S._lastEmergencyAt = nil, nil, nil
+    lowHp(3000)
+  end
+
+  it("does not leave: no leap, no cq all, and says why", function()
+    prey()
+    local ok, err = pcall(function()
+      dyingIndoors()
+      sent = {}
+      local said = capture(function() S.onVitals() end)
+      expect(count("leap")).toBe(0)
+      expect(count("cq all")).toBe(0)
+      expect(S.state).toBe("idle")
+      expect(said:find("Prey", 1, true) ~= nil).toBeTrue()
+    end)
+    restore()
+    if not ok then error(err, 0) end
+  end)
+
+  it("the same room without Prey still retreats (the control)", function()
+    prey("Steel Skin")
+    local ok, err = pcall(function()
+      dyingIndoors()
+      S.onVitals()
+      expect(S.state).toBe("pulling")
+      expect(count("leap s")).toBe(1)
+    end)
+    restore()
+    if not ok then error(err, 0) end
+  end)
+
+  it("matches the affix name whole, and only this run's", function()
+    prey("Preyed Upon")
+    expect(S._preyTracks()).toBeFalse()
+    restore()
+    prey("Prey", 6)
+    expect(S._preyTracks()).toBeFalse()
+    restore()
+    prey("PREY")
+    expect(S._preyTracks()).toBeTrue()
+    restore()
+  end)
+
+  it("Roll Hide and Terror of the Skies shed trackers, so they still go", function()
+    prey()
+    mnemRollHide = true
+    expect(S._preyTracks()).toBeFalse()
+    mnemRollHide, mnemTerrorSkies = false, true
+    expect(S._preyTracks()).toBeFalse()
+    restore()
+  end)
+
+  it("the hover is not a ground retreat: outdoors it still flies", function()
+    prey()
+    local ok, err = pcall(function()
+      fixture(4)
+      lowHp(3000)
+      S.onVitals()
+      expect(S.state).toBe("recovering")
+      expect(S.flying).toBeTrue()
+    end)
+    restore()
+    if not ok then error(err, 0) end
+  end)
+end)
+
 -- v4.7.345: the mount module was loaded above for the mountjump tests.
 ataxiaBasher_isMounted, ataxiaBasher_mountVerb = nil, nil
 ataxiaBasher_mountedSet, ataxiaBasher_jumpSent = nil, nil

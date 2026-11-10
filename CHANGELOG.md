@@ -2,6 +2,25 @@
 
 ---
 
+## 2026-11-10 - v4.7.486: the last stand, and no retreat under Prey
+
+From a death in the tower (`kb/raw/live/mnemosyne-tashla-prey_2026-11-10.txt`; the profile was still on v4.7.478). Two tash'la took about 2,000 health a second while sips and potash healed about 1,030. Our one retreat went into a room with a blood pool. Under the Prey affix both followed in 0.6 s, and the pool healed them twice. The way back was refused, and at 28% and then 15% health the only action left was another attack. The last round was 4,592 into 4,592 health. The user chose these two fixes.
+
+**What you will see change:**
+
+- **The last stand.** In the tower, at 35% health or 3,000 health or less, with no retreat left, the basher touches the shield even with denizens in the room. It holds its attacks until 70% health, for 30 s at most, or until the shield is down. The echoes are `LAST STAND: <n>% and no way out -- shielding, attacks held until 70%.` and `LAST STAND over (<why>) -- attacking.`
+- **It learns which denizens break the shield.** A line with `your magical shield` that starts with the name of a denizen in the room puts that denizen on a saved list, with `Learned: <name> breaks shields`. No last stand runs against a denizen on the list.
+- **`bash laststand`** shows the setting and the list. `bash laststand on|off`, `release <pct>` and `forget <name>|all` change them.
+- **Under Prey, no ground retreat.** The affix says "All denizens are trackers and will chase should you flee." The escape, the disengage and the low-HP ladders now stay and fight, with `NOT leaving: Prey -- every denizen tracks a retreat, so we fight here.` Roll Hide and Terror of the Skies still go, and outdoors the hover still flies.
+
+**Not built (the user's choice):** keeping retreats out of blood-pool rooms under Sanguine Restoration. The pool's lines are in `kb/mechanics/mnemosyne-affixes.md`.
+
+**Open:** whether tash'la break a shield; how the hold does while a pool heals the denizens.
+
+**Tests:** 11 in `test_basher_noflee.lua` and 5 in `test_swarm_tactics.lua`. The key tests fail when the change is taken out. **Needs a reimport** (a new alias and a new trigger). Not run in Mudlet yet.
+
+---
+
 ## 2026-11-10 - v4.7.485: `srd` is the Serpent group damage key
 
 The user: "srd - for group damage", and the goal "damage route with camus and scytherus".

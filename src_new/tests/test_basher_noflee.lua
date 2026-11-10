@@ -593,3 +593,172 @@ describe("leaving the tower into an area whose name contains Mnemosyne", functio
     expect(ataxiaBasher_isNoFleeArea("Ruins of Seleucar West of River Mnemosyne")).toBeFalse()
   end)
 end)
+
+-- ============================================================================
+-- v4.7.486 -- THE LAST STAND. From a death (2026-11-10, tash'la, run 223): the retreat was refused,
+-- canShield() said no (a target-list denizen in the room, empty noShieldBreak), and from 28% to 15%
+-- the only action was another attack. In a no-flee area with no way out at critical health we now
+-- shield, hold the attacks until health is back, and learn the denizens that break the shield.
+-- ============================================================================
+describe("the last stand (v4.7.486)", function()
+  local clock = 1000
+  local realEpoch = getEpoch
+
+  local function fresh()
+    -- earlier describes replace dangerLevel with spies; load the real functions again
+    local okLoad, errLoad = pcall(dofile, basher_file)
+    if not okLoad then error(tostring(errLoad)) end
+    baseline()
+    clock = 1000
+    getEpoch = function() return clock end
+    ataxiaBasher_canShield = function() return false end -- the tower case: denizens on the list
+    ataxiaBasher.inMnemosyne = true
+    ataxiaBasher.lastStand, ataxiaBasher.lastStandRelease, ataxiaBasher.shieldBreakers = nil, nil, nil
+    ataxiaTemp.lastStandAt, ataxiaTemp.lastStandSentAt = nil, nil
+    ataxia.denizensHere = { [101] = "a tash'la warrior", [102] = "a tash'la interceptor" }
+    ataxia.mnemosyne = nil
+    mnemBravado, mnemRimewrought = nil, nil
+    setArea("")
+  end
+  local function done()
+    getEpoch = realEpoch
+    ataxia.mnemosyne = nil
+    ataxiaBasher_canShield = function() return true end
+  end
+
+  it("shields at critical health with no way out, though canShield says no", function()
+    fresh()
+    ataxia.vitals.hpp = 28
+    expect(ataxiaBasher_dangerLevel()).toBe("shield")
+    expect(ataxiaTemp.lastStandAt).toBe(1000)
+    done()
+  end)
+
+  it("keeps attacking above the critical line", function()
+    fresh()
+    ataxia.vitals.hpp = 50
+    expect(ataxiaBasher_dangerLevel()).toBe("attack")
+    expect(ataxiaTemp.lastStandAt).toBeNil()
+    done()
+  end)
+
+  it("reads the swarm's escapeAt and its raw panicHp floor", function()
+    fresh()
+    ataxia.mnemosyne = { swarm = {
+      _cfg = function() return { escapeAt = 35, panicHp = 3000 } end,
+      _enabled = function() return false end,
+    } }
+    ataxia.vitals.hpp, ataxia.vitals.hp = 45, 2900
+    expect(ataxiaBasher_dangerLevel()).toBe("shield")
+    done()
+  end)
+
+  it("leaves it to the swarm while a retreat is still possible", function()
+    fresh()
+    ataxia.mnemosyne = { swarm = {
+      _cfg = function() return { escapeAt = 35 } end,
+      _enabled = function() return true end,
+      _escapeRouteReady = function() return true end,
+    } }
+    ataxia.vitals.hpp = 30
+    expect(ataxiaBasher_lastStandWanted(30)).toBeFalse()
+    done()
+  end)
+
+  it("does not trust a shield against a denizen that broke one before", function()
+    fresh()
+    ataxiaBasher.shieldBreakers = { ["a tash'la warrior"] = 1 }
+    ataxia.vitals.hpp = 20
+    expect(ataxiaBasher_lastStandWanted(20)).toBeFalse()
+    done()
+  end)
+
+  it("is off with `bash laststand off`, under Bravado, and outside a no-flee area", function()
+    fresh()
+    ataxiaBasher.lastStand = false
+    expect(ataxiaBasher_lastStandWanted(20)).toBeFalse()
+    fresh()
+    mnemBravado = true
+    expect(ataxiaBasher_lastStandWanted(20)).toBeFalse()
+    fresh()
+    ataxiaBasher.inMnemosyne = false
+    setArea("Test Bashing Area")
+    expect(ataxiaBasher_lastStandWanted(20)).toBeFalse()
+    mnemBravado = nil
+    done()
+  end)
+
+  it("does not resend the shield inside the resend window", function()
+    fresh()
+    expect(ataxiaBasher_lastStandWanted(20)).toBeTrue()
+    clock = 1002
+    expect(ataxiaBasher_lastStandWanted(20)).toBeFalse()
+    clock = 1003
+    expect(ataxiaBasher_lastStandWanted(20)).toBeTrue()
+    done()
+  end)
+
+  it("holds the attacks while shielded, and lets go at the release health", function()
+    fresh()
+    ataxia.vitals.hpp = 20
+    ataxiaBasher_lastStandWanted(20)
+    ataxia.defences.shield = true
+    clock = 1005
+    ataxia.vitals.hpp = 55
+    expect(ataxiaBasher_lastStandHolding()).toBeTrue()
+    ataxia.vitals.hpp = 70
+    expect(ataxiaBasher_lastStandHolding()).toBeFalse()
+    expect(ataxiaTemp.lastStandAt).toBeNil()
+    done()
+  end)
+
+  it("lets go when the shield is broken, and after the time cap", function()
+    fresh()
+    ataxiaBasher_lastStandWanted(20)
+    ataxia.defences.shield = true
+    clock = 1004
+    ataxia.defences.shield = nil
+    expect(ataxiaBasher_lastStandHolding()).toBeFalse()
+    fresh()
+    ataxiaBasher_lastStandWanted(20)
+    ataxia.defences.shield = true
+    ataxia.vitals.hpp = 40
+    clock = 1030
+    expect(ataxiaBasher_lastStandHolding()).toBeFalse()
+    done()
+  end)
+
+  it("does not swing through the shield during a last stand", function()
+    fresh()
+    local swung = 0
+    ataxiaBasher_dangerLevel = function() return "attack" end
+    ataxiaBasher_checkPlayerFlee = function() return false end
+    ataxiaBasher_assembleAttack = function() swung = swung + 1 end
+    gmcp.Char = { Status = { class = "Serpent" } }
+    ataxiaBasher_bashingFuncs = ataxiaBasher_bashingFuncs or {}
+    ataxiaBasher_bashingFuncs.Serpent = ataxiaBasher_bashingFuncs.Serpent or "ataxiaBasher_serpentBashing"
+    ataxiaTemp.lastStandAt, ataxiaTemp.lastStandSentAt = 1000, 1000
+    ataxia.defences.shield = true
+    ataxia.vitals.hpp = 30
+    ataxiaBasher_attack()
+    expect(swung).toBe(0)
+    -- without a last stand the tower keeps swinging through the shield, as before
+    ataxiaTemp.lastStandAt, ataxiaTemp.lastStandSentAt = nil, nil
+    ataxiaBasher_attack()
+    expect(swung).toBe(1)
+    gmcp.Char = nil
+    done()
+  end)
+
+  it("learns a denizen that breaks the shield, and ignores our lines and players", function()
+    fresh()
+    ataxia.denizensHere = { [7] = "a small brown lemming" }
+    ataxiaBasher_onShieldLine("Your movement causes your magical shield to dissipate.")
+    ataxiaBasher_onShieldLine("Torvald razes your magical shield with a Scimitar of Eagles.")
+    ataxiaBasher_onShieldLine("Kalys's attack rebounds off your magical shield.")
+    expect(ataxiaBasher.shieldBreakers).toBeNil()
+    ataxiaBasher_onShieldLine("A small brown lemming rips apart your magical shield defence with its claws.")
+    expect(ataxiaBasher.shieldBreakers["a small brown lemming"] ~= nil).toBeTrue()
+    done()
+  end)
+end)
