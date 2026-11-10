@@ -48,6 +48,7 @@ shared_aliases:
   vv:  "serp_setmode_darkshade(); serp_ekanelia_offense()  # 153_Fourth_Attack_(All_Classes).lua:19-21"
   sr:  "serp_setmode_group(); serp_ekanelia_offense()      # 154_Group_(All_Classes).lua:33-35"
   srr: "serp_setmode_scytherus(); serp_ekanelia_offense()  # 157_Scytherus_(All_Classes).lua:14-16"
+  srd: "serp_setmode_scytherus(); serp_ekanelia_offense()  # serpent/006_Group_Damage.lua (group damage, camus; same action as srr; Shikudo's shikudo/009 srd is guarded to Monk, v4.7.485)"
   sn:  "the same as vv (aliases .../serpent/001_Darkshade). It called a global the offense no longer has until 2026-11-08. Like vv and ekdark it leaves the mode on darkshade"
 
 # The offense's own aliases (tempAlias, :3355-3365)
