@@ -331,7 +331,7 @@ kills it outright (`008:643`). Nothing errors and nothing warns; the run simply 
 ripple that was never cleared.
 
 `ataxiaBasher.notOwnDenizens` is the exemption list and it **wins**: it is scanned first in
-`ataxiaBasher_isOwnDenizen` (`basher/001_Bashing_Functions.lua:716-739`), so the pet
+`ataxiaBasher_isOwnDenizen` (`basher/001_Bashing_Functions.lua:847-870`), so the pet
 ("a daemonic hyena") stays protected while the mob is targetable again. Seeded by backfill
 rather than as a default (existing saves already carry the bare keyword), and managed with
 `bash notmine [add|rem] <name>`. Narrowing the seeded keyword to `daemonic hyena` was
@@ -357,7 +357,7 @@ paralysis, aeon, peace, transfixation, webbed, impaled, constricted, deepsleep, 
 - Requires: Maran card charge available
 - Command: `ldeck draw maran`
 - Cooldown: 65 seconds (the barrier lasts 60)
-- **Stands down in Mnemosyne** (v4.7.165, `basher/001_Bashing_Functions.lua:1032-1037`): when
+- **Stands down in Mnemosyne** (v4.7.165, `basher/001_Bashing_Functions.lua:1163-1168`): when
   `inMnemosyne` and `mnemLdeck.enabled`, the tower card layer owns Maran along with five
   other cards. This path `return`s and forfeits the whole attack cycle, the card layer rides
   the assembled round instead — running both would double-draw a 2-charge card.

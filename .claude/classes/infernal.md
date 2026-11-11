@@ -1261,7 +1261,7 @@ pet_safety:
        a hit we never ordered."
   substring_collision: |
     THE KEYWORD IS A CASE-INSENSITIVE SUBSTRING (v4.7.169, ataxiaBasher_isOwnDenizen,
-    basher/001_Bashing_Functions.lua:716-731). That is what lets one word cover every
+    basher/001_Bashing_Functions.lua:847-862). That is what lets one word cover every
     variant of a pet's name -- and it also means a REAL denizen whose name merely contains
     that word is silently shielded.
 

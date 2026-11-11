@@ -363,7 +363,7 @@ widening silently shielded **"a slope-backed hyena"** — a real, killable deniz
 `hyena` keyword seeded for the Infernal pet, and `ataxiaBasher_purgeOwnFromTargets` deleted
 it from the learned target list across every area. `ataxiaBasher.notOwnDenizens` is the
 escape hatch, checked **first** and winning over the pet keywords
-(`basher/001_Bashing_Functions.lua:716`). Note how it was seeded: by **backfill**
+(`basher/001_Bashing_Functions.lua:847`). Note how it was seeded: by **backfill**
 (`002_Check_For_Any_Missing_Variables.lua:240`), not a fresh-install default, because
 existing saves already carried the bare keyword and a default would have fixed nobody who
 actually hit the bug. Narrowing the seed to `daemonic hyena` was rejected for the same
@@ -381,7 +381,7 @@ dragged us out of the air ("A tentacle shoots up from the ground, wraps itself a
 and drags you back to earth.") and the confirmation never arrived, so the hover re-sent `fly`
 every tick while the tentacle yanked us straight back down, holding us attack-**gated** at
 crash HP with the swarm still on us until `RECOVER_MAX` expired — strictly worse than never
-having flown. `S.onDraggedDown` (`mnemosyne/009_Swarm_Tactics.lua:2756`, trigger
+having flown. `S.onDraggedDown` (`mnemosyne/009_Swarm_Tactics.lua:2772`, trigger
 `mnemosyne/050_Dragged_From_Sky.lua`) latches `S.grounded`, which `S._canFly` (`009:481`)
 honours alongside `mnemDeluge`, so both the escape ladder's outdoor branch and the fly-kite
 fall through to the grounded route.
