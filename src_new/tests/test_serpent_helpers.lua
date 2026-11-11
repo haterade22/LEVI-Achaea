@@ -155,13 +155,20 @@ describe("selectOpportunisticEkanelia — Track 5 underused transforms", functio
     expect(pair.venom).toBe("aconite")
   end)
 
-  it("picks curare-ek when hypersomnia+masochism present, paralysis missing", function()
+  -- The curare reaction is fratricide + nausea + scytherus and consumes them (user, 2026-11-11):
+  -- never picked, and hypersomnia + masochism is no reaction at all.
+  it("never picks the curare reaction", function()
     clearAffs()
     setAff("hypersomnia", true)
     setAff("masochism", true)
-    local pair = selectOpportunisticEkanelia()
-    expect(pair.venom).toBe("curare")
-    expect(pair.label).toContain("hypochondria")
+    expect(selectOpportunisticEkanelia()).toBeNil()
+    clearAffs()
+    setAff("fratricide", true)
+    setAff("nausea", true)
+    setAff("scytherus", true)
+    setAff("paralysis", true)
+    local pair = selectImpulsePair()
+    expect(pair == nil or pair.venom ~= "curare").toBe(true)
   end)
 
   it("returns nil when no ekanelia conditions are met", function()

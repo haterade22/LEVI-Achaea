@@ -2,6 +2,21 @@
 
 ---
 
+## 2026-11-11 - v4.7.489: no pinshot on group presses, a party call when we are being locked, Magi calls only on a Magi, the curare reaction corrected
+
+From the user's review of the 2026-11-11 Serpent group fight (`Serpent_group_2.txt`, not filed: it holds party chat).
+
+- **`sr` and `srd` send no pinshot.** The user: "Get rid of the pinshot opener in SR and SRD please. Not needed. Waste of balance." In that fight the opener ran at each target switch and each time the 21 s pin ended: 15 pinshots, about 42 s of balance, more than all our DSTABs. A group press now opens with the dispel and the round. The solo keys keep the bow opener.
+- **We tell the party when we are being locked.** One `pt` line each time our lock gets worse: `LOCKING ME (2/3)`, `SOFTLOCKED`, `HARDLOCKED`, `TRUELOCKED`, followed by our lock afflictions (for example `pt SOFTLOCKED: asthma, slickness, anorexia`). In that fight we were truelocked for 94 s and the only call was a `say`. It resets when fewer than two lock pieces remain, so the next lock is called again. It is off with the party relay off, while the basher runs, under aeon, and with `ataxia.settings.lockPartyCall = false`. Every class.
+- **Only a Magi calls or echoes a resonance.** The user: "We need to fix the callouts for Magi if we are not magi... dont need to call out there attacks." Two of the Magi lines print for anyone (the asthma gasp, "A loud crack emanates from the <limb> of <name>"), so as a Serpent we told the party "Akri: Resonance Earth (broken left leg)." for a Bard's morningstar. The afflictions are still recorded.
+- **Typed `evade <direction>` stands first when you are prone.** In that fight `evade` drew "You must be standing first." 36 times. Paralysis blocks the stand too, so a paralysed `evade` still fails.
+- **The curare reaction is fratricide + nausea + scytherus, and it consumes them** (the user's Ekanelia table). Our table had hypersomnia + masochism, from no source. The offence no longer picks it: it would eat scytherus (the camus loop) and fratricide for one hypochondria. The impulse that gave curare on hypersomnia + masochism is gone; a missing paralysis still gets curare from the fallback.
+- **"<name> moves with preternatural grace, confounding <you> with <his|her> perfect footwork." is EPITOMISE** (the user). Crixos took 9 of our 34 DSTABs this way. New page: `kb/defences/epitomise.md`.
+- **Tests:** `test_lock_party_call.lua` (6), `test_magi_relay_class.lua` (4), a group-press opener case in `test_serpent_spar_fixes.lua`, and the curare case in `test_serpent_helpers.lua`.
+- **Needs a reimport.** Not run in Mudlet yet.
+
+---
+
 ## 2026-11-11 - v4.7.488: earring auto-config saves every partner
 
 The user ran `ataxia setup earrings auto`. EARRINGS listed 11 earrings, and only 6 were saved.

@@ -21,6 +21,7 @@ One line per page. Kept up to date by `/kb-ingest`.
 
 ## Defences
 - [defences/README.md](defences/README.md): the game's 279 defence names, and our names that do not match
+- [defences/epitomise.md](defences/epitomise.md): EPITOMISE, the "preternatural grace" miss line, and its up/down lines
 
 ## Mechanics
 - [mechanics/foundations.md](mechanics/foundations.md): START HERE for fights. How a fight works, from all logs: clocks, stated against observed costs, kill routes as conditions true together, timed effects, and the claims that were refuted

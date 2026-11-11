@@ -254,9 +254,10 @@ ekanelia:
       note: "Critical - can deliver impatience without Impulse"
 
     curare:
-      conditionals: [hypersomnia, masochism]
+      conditionals: [fratricide, nausea, scytherus]   # the user's table, 2026-11-11 (PLAYER)
       normal_effect: paralysis
       bonus_effect: hypochondria
+      consumes: true   # the only reaction that consumes its conditionals; our offence never picks it
 
     loki:
       conditionals: [confusion, recklessness]

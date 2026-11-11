@@ -103,7 +103,7 @@ round_order:
 opener:
   dispel:       "dispel <target>, the first piece of the first round on each target, in both orders (:2652-2655): a reflection would take the attack"
   useOpener:    "master toggle (default on, :190)"
-  useBowOpener: "default on (:191). The bow is skipped only for the person a pinshot is already in: tpinshot holds that NAME for 21 s, compared case-blind (:2331-2333, serpent/002_Pinshot). It was a boolean, so a new target within 21 s of a pinshot in the old one got none. The countdown echoes still name the current target. The round is: dispel, purge, a stand only when prone, `remove bow`, `wield bow`, `pinshot <target> foot`, then the round's own wield and attack STRAIGHT AFTER the pinshot (`wield shield dirk` when the attack brings no wield), then the adder order, the sigils, and combatQueue's commands without its three idle ones (g body, g gold, stand: IDLE_PRE :2361, which did nothing in 39 of 39 rounds). Why: the pinshot spends balance, so the game held six commands in its balance queue and refused the flay behind them without holding it ('You must regain balance first.' with no 'added' line, FL 235-257). The coating strip slipped a whole round. With the wield and the attack first in that queue, the attack runs at the recovery. Our `pinshot Saibel foot` (FL 214) landed ('Your arrow slams into the foot of Saibel.', FL 234), so the body-part form works; whether the wiki's bare `PINSHOT <target>` works is untested"
+  useBowOpener: "default on (:191). Never on a group press (`sr`, `srd`, `serpent.state.groupPress`; the user, 2026-11-11: 'Not needed. Waste of balance.' The 2026-11-11 group log had 15 pinshots, about 42 s of balance, more than all our DSTABs); the group opener is dispel and the round. Otherwise the bow is skipped only for the person a pinshot is already in: tpinshot holds that NAME for 21 s, compared case-blind (:2331-2333, serpent/002_Pinshot). It was a boolean, so a new target within 21 s of a pinshot in the old one got none. The countdown echoes still name the current target. The round is: dispel, purge, a stand only when prone, `remove bow`, `wield bow`, `pinshot <target> foot`, then the round's own wield and attack STRAIGHT AFTER the pinshot (`wield shield dirk` when the attack brings no wield), then the adder order, the sigils, and combatQueue's commands without its three idle ones (g body, g gold, stand: IDLE_PRE :2361, which did nothing in 39 of 39 rounds). Why: the pinshot spends balance, so the game held six commands in its balance queue and refused the flay behind them without holding it ('You must regain balance first.' with no 'added' line, FL 235-257). The coating strip slipped a whole round. With the wield and the attack first in that queue, the attack runs at the recovery. Our `pinshot Saibel foot` (FL 214) landed ('Your arrow slams into the foot of Saibel.', FL 234), so the body-part form works; whether the wiki's bare `PINSHOT <target>` works is untested"
   useSigils:    "drop incandescent sigil; attach monolith sigil to incandescent sigil (default off, :195)"
 
 # Per-round denial (config useExitBlock, default off, :194)
@@ -195,7 +195,7 @@ bitepayload_ladder: |
   to pickVenom). It returns nil while sileris/fangbarrier is up (:1214). Priority: scytherus
   (camus loop) -> the monkshood reaction (asthma + masochism + weariness, and since v4.7.419
   only while impatience reads under 0.70; at 0.30 or more it also needs asthma, weariness and masochism at
-  0.70, because a bite brings no suggestion; the pre-empt's impulse brings its own masochism, so it passes true and skips that bar, :1229-1233) -> the kalmia, curare, loki and aconite reactions ->
+  0.70, because a bite brings no suggestion; the pre-empt's impulse brings its own masochism, so it passes true and skips that bar, :1229-1233) -> the kalmia, loki and aconite reactions (never curare: it consumes scytherus) ->
   curare / kalmia / vernalius for a missing lock piece. A BITE costs 4.00 s of balance (WIKI)
   against DSTAB's 2.80 s.
 
@@ -467,12 +467,12 @@ v4.7.419.
   apart. The victim also already had nausea, the first symptom, which may have shortened the chain.
 - **Also unverified:** whether curing hypochondria inside the window stops the impatience.
 - **How a Serpent gives it.** Hypochondria is a COMPLEX suggestion (`kb/raw/wiki/Hypnosis.wiki:353`),
-  so it comes through HYPNOTISE / SUGGEST / SEAL / SNAP, not IMPULSE. Our reaction table also gives
-  it from curare (hypersomnia + masochism), which no game data confirms.
+  so it comes through HYPNOTISE / SUGGEST / SEAL / SNAP, not IMPULSE. The curare reaction also gives
+  it (fratricide + nausea + scytherus, and it consumes them: the user's table, 2026-11-11), and our
+  offence never picks that reaction.
 - **Our code, offense.** The offense gives hypochondria two ways: it is the first of hypnolock's
-  three complex suggestions (selectHypnoLockSuggestions, :520-530), and it is our curare reaction's
-  result (picked by selectBiteVenom :1241-1243 and selectOpportunisticEkanelia :1125-1128; trigger 016
-  records it since v4.7.419). It reads it twice: as a PRIORITY 4 "third condition" for the
+  three complex suggestions (selectHypnoLockSuggestions, :520-530), and the curare reaction's result,
+  which the offence no longer picks (since v4.7.488; trigger 016 still records it if it fires). It reads it twice: as a PRIORITY 4 "third condition" for the
   monkshood impulse (impatienceConditionsMet, :777), and as one of the four mentals the focus-lock
   push counts (MENTAL_AFFS, :810-815, for focusLockReady, :825-832). It does not wait for the free
   impatience, as the Depthswalker offense does (`depthswalker.selectInstillLock`, `depthswalker/015_CC_Depthswalker.lua:519`).
@@ -636,7 +636,7 @@ asthma_weariness: |
   relayed 2026-10-12, item 3).
 
 impulse_afflictions:   # what IMPULSE gives directly: the trivial list above, notably (effects: AFFLICTION SHOW)
-  - masochism: "the monkshood and curare reactions' conditional"
+  - masochism: "the monkshood reaction's conditional"
   - confusion: "'extends your equilibrium recovery rates by 100%'; with recklessness, the loki reaction's conditionals (and the voyria reaction's RESULT)"
   - stupidity: "'You may fumble some actions.'"
   - amnesia: "'makes you forget one action that you try to take'"
@@ -1315,11 +1315,12 @@ ekanelia_transformations:
       (selectBiteVenom step 3, :1229-1233).
 
   curare:
-    conditionals: [hypersomnia, masochism]
+    conditionals: [fratricide, nausea, scytherus]
     normal_effect: paralysis
     bonus_effect: hypochondria
     total: "paralysis + hypochondria"
-    notes: "Lobelia + paralysis in one attack. (This page said the reaction consumes hypersomnia; neither our code nor any game data says so.)"
+    consumes: true
+    notes: "PLAYER (the user's Ekanelia table, 2026-11-11): the only reaction that CONSUMES its conditionals ('Cons? Yes'). It was hypersomnia + masochism here and in the code, from no source. Since then the offence never picks it (EKANELIA_TABLE `consumes`, skipped by selectImpulsePair; no branch in selectBiteVenom or selectOpportunisticEkanelia): it would eat scytherus (the camus loop) and fratricide for one hypochondria."
 
   voyria:
     conditionals: [anorexia, impatience, vertigo]
@@ -1511,7 +1512,7 @@ ekanelia_defense:
     monkshood_setup:
       conditionals: [asthma, masochism, weariness]
       danger: "Impatience; the impulse brings the masochism, so only asthma + weariness must be up"
-      defense: "Cure asthma OR weariness. Curing masochism blocks only a plain bite (and the curare reaction)"
+      defense: "Cure asthma OR weariness. Curing masochism blocks only a plain bite"
 
     loki_trap:
       conditionals: [confusion, recklessness]
@@ -1554,7 +1555,7 @@ avoid:
   - "Standing still when they're hidden"
   - "Low health with darkshade/scytherus active"
   - "Letting clumsiness + weariness stack (enables Ekanelia kalmia→slickness)"
-  - "Ignoring masochism (the curare reaction, and a plain monkshood bite)"
+  - "Ignoring masochism (a plain monkshood bite)"
 
 recommended_strategy: |
   MODERN SERPENT DEFENSE PRIORITY:

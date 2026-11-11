@@ -343,7 +343,7 @@ ekanelia_mechanic:
   transformations:
     kalmia: "clumsiness + weariness → asthma + SLICKNESS"
     monkshood: "asthma + masochism + weariness → disloyalty + IMPATIENCE"
-    curare: "hypersomnia + masochism → paralysis + HYPOCHONDRIA"
+    curare: "fratricide + nausea + scytherus → paralysis + HYPOCHONDRIA (consumes the three; never picked)"
     loki: "confusion + recklessness → random + NAUSEA + PARALYSIS"
     scytherus: "addiction + nausea → scytherus + CAMUS DAMAGE"
   danger: |
