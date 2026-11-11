@@ -31,7 +31,7 @@ packageName: ''
     - kalmia:    clumsiness + weariness           → slickness
     - aconite:   deadening + dementia              → paranoia
     - monkshood: asthma + masochism + weariness    → impatience
-    - curare:    hypersomnia + masochism            → hypochondria
+    - curare:    fratricide + nausea + scytherus    → hypochondria (CONSUMES the conditionals)
     - voyria:    anorexia + impatience + vertigo    → confusion + disrupted
     - loki:      confusion + recklessness           → nausea + paralysis
     - scytherus: addiction + nausea                 → camus
@@ -575,18 +575,25 @@ local EKANELIA_TABLE = {
         priority = 3, -- double aff, paralysis blocks tree
     },
     {
-        trigger = "curare",
-        conditionals = {"hypersomnia", "masochism"},
-        trivials = {"masochism"},
-        result = "hypochondria",
-        priority = 4, -- lobelia pressure
-    },
-    {
         trigger = "scytherus",
         conditionals = {"addiction", "nausea"},
         trivials = {},
         result = "camus",
         priority = 5, -- damage pressure
+    },
+    -- CURARE: fratricide + nausea + scytherus -> hypochondria, and the reaction CONSUMES its
+    -- conditionals (the user's Ekanelia table, 2026-11-11: "Cons? Yes", the only one). It was
+    -- hypersomnia + masochism here, from no source. Eating scytherus ends the camus loop and
+    -- eating fratricide ends the relapse window, for one hypochondria, so the offence never picks
+    -- it (`consumes`, selectImpulsePair). It stays in the table for checkEkaneliaOpportunities
+    -- and reactionNeeds.
+    {
+        trigger = "curare",
+        conditionals = {"fratricide", "nausea", "scytherus"},
+        trivials = {},
+        result = "hypochondria",
+        priority = 8,
+        consumes = true,
     },
     {
         trigger = "aconite",
@@ -1076,8 +1083,8 @@ function selectImpulsePair()
             end
         end
 
-        if reactionSpent(ek.trigger) then
-            -- Nothing new from this reaction: try the next one.
+        if ek.consumes or reactionSpent(ek.trigger) then
+            -- Nothing new from this reaction, or it eats what we built (curare): try the next one.
         elseif #missing == 0 then
             -- ALL conditionals met → use nil-safe selectImpulse()
             -- instead of ek.trivials[1] which can be nil for venoms with
@@ -1116,8 +1123,8 @@ end
                   → impulse <missing-trivial> loki → nausea + paralysis (2 lock pieces!)
       2. aconite — deadening + dementia present, stupidity missing
                   → impulse <something useful> aconite → stupidity + paranoia (mental stack)
-      3. curare — hypersomnia + masochism present, paralysis missing
-                  → impulse <something useful> curare → paralysis + hypochondria
+      (No curare: its reaction needs fratricide + nausea + scytherus and consumes them; see
+       EKANELIA_TABLE.)
 
     Returns {suggestion, venom, label} or nil.
 ]]--
@@ -1132,13 +1139,6 @@ function selectOpportunisticEkanelia()
     if haveAff("deadening") and haveAff("dementia") and not haveAff("stupidity") then
         local sug = selectImpulse("stupidity")
         return {suggestion = sug, venom = "aconite", label = "stupidity + paranoia (aconite)"}
-    end
-
-    -- 3. Curare ekanelia: hypersomnia + masochism → paralysis + hypochondria
-    -- (Only fire if paralysis missing — otherwise just use curare for raw paralysis via dstab)
-    if haveAff("hypersomnia") and haveAff("masochism") and not haveAff("paralysis") then
-        local sug = selectImpulse("masochism")
-        return {suggestion = sug, venom = "curare", label = "paralysis + hypochondria (curare-ek)"}
     end
 
     return nil
@@ -1215,8 +1215,7 @@ end
          (delivers impatience for free — same payload as IMPULSE but no EQ cost)
       4. clumsiness+weariness present (kalmia ekanelia) → bite kalmia
          (asthma + slickness via ekanelia)
-      5. hypersomnia+masochism present (curare ekanelia) → bite curare
-         (paralysis + hypochondria)
+      5. (none: the curare reaction consumes scytherus, see EKANELIA_TABLE)
       6. confusion+recklessness present (loki ekanelia) → bite loki
          (nausea + paralysis)
       7. Fallback: paralysis missing → bite curare; asthma missing → bite kalmia;
@@ -1249,11 +1248,6 @@ function selectBiteVenom(impulseCarriesMasochism)
     -- 4. Kalmia ekanelia ready → asthma + slickness
     if haveAff("clumsiness") and haveAff("weariness") and not haveAff("asthma") then
         return {venom = "kalmia", label = "asthma + slickness (ekanelia)"}
-    end
-
-    -- 5. Curare ekanelia ready → paralysis + hypochondria
-    if haveAff("hypersomnia") and haveAff("masochism") and not haveAff("paralysis") then
-        return {venom = "curare", label = "paralysis + hypochondria (ekanelia)"}
     end
 
     -- 6. Loki ekanelia ready → nausea + paralysis
@@ -2353,7 +2347,10 @@ local function buildOpener()
     -- (2026-11-08 review, F33).
     local pinned = type(tpinshot) == "string" and type(target) == "string"
         and tpinshot:lower() == target:lower()
-    if serpent.config.useBowOpener and not pinned then
+    -- No pinshot on a group press (`sr`, `srd`): the user's rule, 2026-11-11 ("Not needed. Waste
+    -- of balance."). In the 2026-11-11 group log it ran again at each target switch and each
+    -- 21 s pin end: 15 pinshots, about 42 s of balance, more than all our DSTABs.
+    if serpent.config.useBowOpener and not pinned and not serpent.state.groupPress then
         local b = serpent.config.bowName or "bow"
         bow = { "remove " .. b, "wield " .. b, "pinshot " .. target .. " foot" }
         serpent.state.pinshotSentAt = getEpoch()

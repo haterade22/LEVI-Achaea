@@ -119,7 +119,21 @@ function magi.offense.debugEcho(text)
   end
 end
 
+-- ONLY A MAGI CALLS OR ECHOES A RESONANCE (2026-11-11, the user: "dont need to call out there
+-- attacks"). The Magi triggers stay live for every class, and some of their lines are not ours: the
+-- asthma gasp ("clutches at ... throat") and "A loud crack emanates from the <limb> of <name>"
+-- print for any source. As a Serpent in a group fight we sent "pt Akri: Resonance Air (asthma)."
+-- and "pt Akri: Resonance Earth (broken left leg)." for a Bard's morningstar
+-- (Serpent_group_2.txt:1683-1685). The triggers still record the affliction (tarAffed): that is
+-- true whoever gave it.
+local function weAreMagi()
+  local st = gmcp and gmcp.Char and gmcp.Char.Status
+  return type(st) == "table" and type(st.class) == "string" and st.class:lower() == "magi"
+end
+magi.offense.weAreMagi = weAreMagi
+
 function magi.offense.ptRelay(msg)
+  if not weAreMagi() then return end
   if magi.offense.state.partyrelay and partyrelay and not ataxia.afflictions.aeon then
     send("pt " .. msg, false)
   end
@@ -142,7 +156,7 @@ end
 -- One landed resonance (022_Resonance_Afflictions, 014_Temperance, 022_Increase_Burning). The
 -- callers check the name first, so this only ever names our target.
 function magi.offense.resoEcho(plane, stage, tgt)
-  if not magi.offense.compactOn() then return end
+  if not weAreMagi() or not magi.offense.compactOn() then return end
   cecho("\n<" .. (PLANE_COLOUR[plane] or "white") .. ">" .. plane .. ": <white>" .. stage
     .. " <dim_grey>-> <NavajoWhite>" .. tostring(tgt or target))
 end

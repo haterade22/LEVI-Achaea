@@ -416,9 +416,9 @@ The package's default priority for a stack (`burning4`) or an affliction afflict
 | `kb/sim/rules_hand.json` | `eae02f7355009382` |
 | `kb/mechanics/clocks.json` | `acf3ebc1cd2c7b55` |
 | `kb/afflictions/afflictions.json` | `1fe2c0394ca42b4b` |
-| `.claude/databases/venoms.yaml` | `63c5da1ed963b07d` |
+| `.claude/databases/venoms.yaml` | `da9f100670a46530` |
 | `src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Default_Curing_Prios.lua` | `a67d445f9502d3a2` |
 | `src_new/scripts/levi_ataxia/levi/ataxia/ataxia/001_Miscellaneous_Aff_Tracking_Methods.lua` | `0662a95087ef51bb` |
 | `src_new/scripts/levi_ataxia/levi/ataxia/affliction_tracking_core/008_V3_Integration.lua` | `84500af0cf22efc1` |
-| `src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua` | `32192aa765112276` |
+| `src_new/scripts/levi_ataxia/levi/ataxia/can(x)/003_Lock_breakers.lua` | `324174ccedb15c71` |
 | `tools/sim/gates_whole.json` | `1de3efb56ed6f8f7` |

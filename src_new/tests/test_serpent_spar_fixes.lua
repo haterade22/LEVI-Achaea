@@ -520,6 +520,19 @@ describe("fix 3: the opener", function()
       .. "::pinshot Agathon foot::wield shield whip::flay Agathon rebounding curare")
   end)
 
+  -- `sr` and `srd` send no pinshot (user, 2026-11-11): the dispel stays, the bow does not.
+  it("a group press opens with the dispel and no pinshot", function()
+    opening(); Rebounding = true
+    sends = {}
+    serpent.state.attackInFlight = false
+    serp_ekanelia_offense(true)
+    local r = table.concat(sends, " | ")
+    expect(has(r, "dispel Agathon")).toBeTrue()
+    expect(has(r, "pinshot")).toBeFalse()
+    expect(has(r, "remove bow")).toBeFalse()
+    expect(has(r, "flay Agathon")).toBeTrue()
+  end)
+
   it("the opener runs once per target", function()
     opening(); Rebounding = true
     round()

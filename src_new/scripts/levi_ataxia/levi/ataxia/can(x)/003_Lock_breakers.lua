@@ -201,6 +201,60 @@ function ataxia_lockBreakHeartbeat()
 	-- After the lock checks, so a lock-break owns the 1.5 s throttle on that prompt.
 	local ok3, err3 = pcall(ataxia_loadCureHeartbeat)
 	if not ok3 then cecho("\n<red>[CURE] heartbeat error: " .. tostring(err3)) end
+	local ok4, err4 = pcall(ataxia_lockPartyCall)
+	if not ok4 then cecho("\n<red>[LOCK] party call error: " .. tostring(err4)) end
+end
+
+--------------------------------------------------------------------------------
+-- SELF-LOCK PARTY CALL (2026-11-11, the user: "Add in telling the party when we are being
+-- locked"). In the 2026-11-11 Serpent group log we stayed truelocked for 94 s and told no one:
+-- the only call was a `say`, which the party does not hear. One `pt` line goes out each time the
+-- lock gets WORSE, by these stages (the same tests as the prompt's Locks labels, ataxia_promptLocks):
+--   1 two of asthma / slickness (or bloodfire) / anorexia   "LOCKING ME (2/3)"
+--   2 all three                                              "SOFTLOCKED"
+--   3 and impatience (or sandfever)                          "HARDLOCKED"
+--   4 and paralysis, with our lock-breaker blocked           "TRUELOCKED"
+-- The line names our lock afflictions, so a healer knows what to take. Below stage 1 the stage
+-- resets, so the next lock is called again. A stage given back within LOCK_CALL_GAP of its last
+-- call (cured and re-applied) is not called again. Off with `ataxia.settings.lockPartyCall = false`
+-- and with the party relay off (`partyrelay`, the switch of the target calls). Never while the
+-- basher runs, and never under aeon (a command costs a whole aeon turn there).
+--------------------------------------------------------------------------------
+local LOCK_CALL_GAP = 4
+local LOCK_CALL_NAMES = { "LOCKING ME (2/3)", "SOFTLOCKED", "HARDLOCKED", "TRUELOCKED" }
+local LOCK_CALL_AFFS = { "asthma", "slickness", "bloodfire", "anorexia", "impatience", "sandfever",
+	"paralysis", "weariness", "prone" }
+
+function ataxia_lockStage()
+	local comps = ataxia_lockComponents()
+	if #comps < 2 then return 0 end
+	if #comps == 2 then return 1 end
+	if not (affed("impatience") or affed("sandfever")) then return 2 end
+	if affed("paralysis") and not ataxia_canActive() then return 4 end
+	return 3
+end
+
+function ataxia_lockPartyCall()
+	if ataxia.settings and ataxia.settings.lockPartyCall == false then return end
+	if partyrelay == false then return end
+	if ataxiaBasher and ataxiaBasher.enabled then return end
+	ataxiaTemp = ataxiaTemp or {}
+	local stage = ataxia_lockStage()
+	local last = ataxiaTemp.lockCallStage or 0
+	if stage == 0 then ataxiaTemp.lockCallStage = 0; return end
+	if stage <= last then return end
+	if affed("aeon") then return end
+	ataxiaTemp.lockCallStage = stage
+	local now = getEpoch()
+	local at = ataxiaTemp.lockCallAt or {}
+	ataxiaTemp.lockCallAt = at
+	if at[stage] and now - at[stage] < LOCK_CALL_GAP then return end
+	at[stage] = now
+	local have = {}
+	for _, a in ipairs(LOCK_CALL_AFFS) do
+		if affed(a) then have[#have + 1] = a end
+	end
+	send("pt " .. LOCK_CALL_NAMES[stage] .. ": " .. table.concat(have, ", "), false)
 end
 
 
