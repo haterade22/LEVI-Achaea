@@ -30,7 +30,8 @@ Run the full build pipeline for the Levi_Ataxia Mudlet package.
 4. **After a successful build, always complete the full release flow:**
    - Commit all pending changes (version files + any code changes)
    - Tag the commit: `git tag v<version>` (read version from `version.txt`)
-   - Push commit and tag: `git push && git push origin v<version>`
+   - Push the commit straight to `main` (no pull request): `git push origin HEAD:main`. When the
+     `Build & Validate` run for that commit on `main` passes, `git push origin v<version>`. See "Merge finished work straight into `main`" in `CLAUDE.md`
    - This ensures the auto-updater and GitHub Releases stay current
    - **Never `git push --tags`.** It pushes every stale local tag, each of which fires the
      `v*` release workflow against that tag's OLD source. GitHub picks "Latest" by publish

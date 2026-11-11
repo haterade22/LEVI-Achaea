@@ -287,7 +287,7 @@ way while Linux and lupa passed); move such a name into `%TEMP%`, as that test d
 1. Use `/version-bump <new_version>` in Claude Code, OR manually update all 3 files
 2. Build with `/build` (or `./build.sh`)
 3. Commit all changes (version files + any code changes), tag with `v<new_version>`
-4. Push commit and tag: `git push && git push origin v<new_version>` — **push the ONE tag by name; never `git push --tags`** (see below)
+4. Push the commit straight to `main` (`git push origin HEAD:main`, no pull request; see "Merge finished work straight into `main`" below). When its `Build & Validate` run passes, push the tag: `git push origin v<new_version>` — **push the ONE tag by name; never `git push --tags`** (see below)
 5. CI/CD automatically builds and creates a GitHub Release with the `.mpackage`
 
 **IMPORTANT**: When asked to rebuild the package, ALWAYS perform the full release flow: version bump → build → commit → tag → push. Do not just build locally — the user expects the new version to reach GitHub so the auto-updater can pick it up.
@@ -311,6 +311,22 @@ entry, and switched the tree to `main` under the session whose work it was. **St
 `git status` for files that are not yours before committing, branching or bumping the version;
 and never switch the shared tree's branch while another session may be working in it.**
 `ListAgents` shows the other sessions on this machine.
+
+**Merge finished work straight into `main`; do not open a pull request (the user, 2026-11-11).**
+Two pushed branches with no PR sat unmerged for days (`fix/bm-strike-knees`, `docs/audit-after-484`).
+`main` has no branch protection, and `build.yml` runs on every push to `main`. So:
+1. Work in your own worktree, on your own branch.
+2. Run EVERY step of the `validate` job in `build.yml` locally. No PR CI runs before `main` any more,
+   so this is the only check before the push. Use `/c/Python314/python`, which has `lupa` and `yaml`
+   (the `python3` on PATH has neither), and `tools/run_lua_tests.py` (bare `lua` is 5.4).
+3. `git fetch origin && git rebase origin/main`, then run the checks again if the rebase pulled in changes.
+   After a docs rebase, check `file:line` citations into files that `main` changed.
+4. `git push origin HEAD:main` from the worktree. This never switches the shared tree's branch.
+   If the push is refused because `main` moved, go back to step 3.
+5. Watch the `Build & Validate` run for that commit on `main` (select by workflow name; a push also
+   starts "Dementia Mapper"). A release tag goes on that commit only after the run passes.
+6. Remove the worktree and delete the branch (`git worktree remove`, `git branch -D`, and the remote
+   branch if it was pushed). Save a patch of any uncommitted changes first.
 
 **Auto-update system** (`ataxia.updater` namespace, `misc_scripts/021_Auto_Update.lua`):
 - On `sysLoadEvent` (5s delay): downloads `version.txt` from GitHub raw, compares against `ataxiaVersion`
