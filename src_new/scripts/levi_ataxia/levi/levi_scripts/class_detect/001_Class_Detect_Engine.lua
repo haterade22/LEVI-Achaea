@@ -184,6 +184,8 @@ function classDetect.noteHit(attackerName, className)
     hit = {}
     st.hits[key] = hit
   end
+  -- The Serpent auto-evade counts the same hits (serpent/003_Auto_Evade, 2026-11-11).
+  if serpent and serpent.evadeOnHit then pcall(serpent.evadeOnHit, attackerName) end
   hit.class, hit.seq = className, st.hitSeq
 end
 

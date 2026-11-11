@@ -49,7 +49,19 @@ shared_aliases:
   sr:  "serp_setmode_group(); serp_ekanelia_offense(true)  # 154_Group_(All_Classes).lua:33-36; true = a group press (see Group presses below)"
   srr: "serp_setmode_scytherus(); serp_ekanelia_offense()  # 157_Scytherus_(All_Classes).lua:14-16"
   srd: "serp_setmode_scytherus(); serp_ekanelia_offense(true)  # serpent/006_Group_Damage.lua (a group press; group damage, camus; same action as srr; Shikudo's shikudo/009 srd is guarded to Monk, v4.7.485)"
+  srevade: "show / set (on|off) the auto-evade  # serpent/007_Auto_Evade.lua (v4.7.488)"
+  evade: "evade <dir>, standing first when prone  # combat_aliases/018_Evade_Stand.lua (v4.7.488, every class)"
   sn:  "the same as vv (aliases .../serpent/001_Darkshade). It called a global the offense no longer has until 2026-11-08. Like vv and ekdark it leaves the mode on darkshade"
+
+auto_evade: |
+  v4.7.488, serpent/003_Auto_Evade.lua, the user's rules (2026-11-11): 2 different players hit us
+  within 3 s in this room -> EVADE. A hit is classDetect.noteHit (class_detect/001), which the
+  class-grab triggers call for a line that names us, and which now calls serpent.evadeOnHit. The
+  exit leads to the room we came from (gmcp.Room.Info exits), unless we arrived by an auto-evade
+  (that exit leads back into the fight) or none does: then a random exit. Gates: Serpent, the basher
+  off, `serpent.config.autoEvade` not false, balance up, no paralysis/webbed/entangled; a stand goes
+  first when prone; one evade per 3 s from a room. Balance coming back (gmcp.Char.Vitals) re-checks.
+  Not seen in a fight yet. Limit: an attack no class-grab trigger knows does not count.
 
 # The offense's own aliases (tempAlias, :3355-3365)
 aliases:
