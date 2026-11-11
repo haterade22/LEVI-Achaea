@@ -1083,6 +1083,18 @@ In-game configuration wizard accessed via `ataxia setup`.
 | `ataxia setup status` | One-page settings overview |
 | `ataxia setup guide` | Configuration guides (ataxia/basher/ndb) |
 | `ataxia setup reporting` | Mnemosyne run tracker (token, auto on/off, test) |
+| `ataxia setup earrings [auto]` | Travel earrings: `auto` sends EARRINGS and saves every partner |
+
+**Earrings are paired with PLAYERS, and pairings change (v4.7.488).** `ataxia setup earrings auto`
+saves every `Earring#N ... is paired with <Name>.` row (with or without `(M)`) as
+`ataxia.settings.user.artefacts.earrings[<name>] = "earringN"`, and REPLACES the table:
+`leviSetup.earringMerge` drops an entry whose earring has a new partner or whose partner is not
+listed; an empty scan changes nothing. A fixed list of 9 names dropped 5 of 11 earrings before.
+The travel aliases are temporary aliases made by `leviSetup.earringAliases()` (at
+`ataxia system loaded`, and after each scan or manual set): `h` + the first 3 letters of a
+partner, never for a prefix two partners share or one in `leviSetup.EARRING_RESERVED` (`orn`,
+the horn alias). There is no catch-all `^h...$` alias, because it would take words other
+aliases own. Test: `test_earring_auto.lua`.
 
 ### Mnemosyne Run Tracker (`ataxia.mnemosyne`)
 

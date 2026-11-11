@@ -426,8 +426,10 @@ function leviSetup.setupEarrings(rest)
     ataxia.settings.user = ataxia.settings.user or {}
     ataxia.settings.user.artefacts = ataxia.settings.user.artefacts or {}
     ataxia.settings.user.artefacts.earrings = ataxia.settings.user.artefacts.earrings or {}
+    location = location:lower()
     ataxia.settings.user.artefacts.earrings[location] = id
     save()
+    leviSetup.earringAliases()
     ataxiaEcho("Earring for " .. W .. location .. V .. " set to: " .. W .. id)
     return
   end
@@ -438,33 +440,120 @@ function leviSetup.setupEarrings(rest)
   local a = u.artefacts or {}
   local e = a.earrings or {}
 
-  local locations = {"axios", "aegoth", "proficy", "pharaus", "zylvith",
-    "antoninus", "entaro", "xarthus", "tabethys"}
-
-  cecho("\n  " .. HL .. "Current earring assignments:\n")
-  for _, loc in ipairs(locations) do
-    row(loc, e[loc] or "not set")
+  local partners = leviSetup.earringPartners(e)
+  cecho("\n  " .. HL .. "Current earring partners:\n")
+  if #partners == 0 then
+    row("(none)", "not set")
+  end
+  local aliasOf = {}
+  for k, p in pairs(leviSetup.earringAliases()) do aliasOf[p] = "h" .. k end
+  for _, p in ipairs(partners) do
+    row(p, e[p], aliasOf[p] or "no alias")
   end
 
   cecho("\n\n  " .. V .. "Auto-configure all earrings:")
   cecho("\n  " .. HL .. "ataxia setup earrings auto")
-  hint("  Sends EARRINGS command and auto-assigns all travel earrings")
+  hint("  Sends EARRINGS and saves every partner it lists, replacing the old table")
 
   cecho("\n\n  " .. V .. "Set an earring manually:")
-  cecho("\n  " .. HL .. "ataxia setup earrings <location> <earringID>")
-  hint("  e.g.: ataxia setup earrings axios earring87118")
-  hint("  e.g.: ataxia setup earrings aegoth earring244327")
-  hint("  Find IDs with: II earring")
+  cecho("\n  " .. HL .. "ataxia setup earrings <partner> <earringID>")
+  hint("  e.g.: ataxia setup earrings arador earring87118")
+  hint("  Find IDs with: EARRINGS")
+  hint("  Travel: h + the first 3 letters of the partner (hara = arador)")
   cecho("\n")
 end
 
 -- ── earring auto-config ────────────────────────────────────────────────
+-- An earring is paired with a PLAYER, and pairings change. The scan used to keep only the
+-- partners in a fixed list of 9 names, so a re-paired earring (87118: Axios -> Arador) was
+-- dropped, and the old entry stayed and sent us to the wrong partner (2026-11-11).
 
-local earringKnownLocations = {
-  axios = true, aegoth = true, proficy = true, pharaus = true,
-  zylvith = true, antoninus = true, entaro = true, xarthus = true,
-  tabethys = true,
-}
+-- The saved partner names, sorted.
+function leviSetup.earringPartners(tbl)
+  local out = {}
+  for p in pairs(tbl or {}) do out[#out + 1] = p end
+  table.sort(out)
+  return out
+end
+
+-- The partners whose name starts with `prefix` (case-blind), sorted.
+function leviSetup.earringFind(prefix)
+  local u = ataxia.settings and ataxia.settings.user
+  local e = u and u.artefacts and u.artefacts.earrings or {}
+  prefix = (prefix or ""):lower()
+  local out = {}
+  for _, p in ipairs(leviSetup.earringPartners(e)) do
+    if p:sub(1, #prefix) == prefix then out[#out + 1] = p end
+  end
+  return out
+end
+
+-- Replace the saved table with a scan. Returns the removed entries as
+-- { partner, id, now } (now = the partner that earring is paired with now, or nil).
+function leviSetup.earringMerge(saved, results)
+  local byId = {}
+  for p, id in pairs(results) do byId[id] = p end
+  local removed = {}
+  for _, p in ipairs(leviSetup.earringPartners(saved)) do
+    local id = saved[p]
+    if results[p] ~= id then
+      removed[#removed + 1] = { partner = p, id = id, now = byId[id] }
+    end
+  end
+  for p in pairs(saved) do saved[p] = nil end
+  for p, id in pairs(results) do saved[p] = id end
+  return removed
+end
+
+-- Travel aliases: h + the first 3 letters of each saved partner (hara = arador).
+-- One temporary alias per partner, so other words that start with h never match.
+-- A prefix that another alias owns is reserved: `horn` is the horn alias.
+leviSetup.EARRING_RESERVED = { orn = true }
+
+function leviSetup.earringTravel(partner)
+  local earring = ataxia.getEarring and ataxia.getEarring(partner)
+  if not earring then
+    ataxiaEcho("No earring saved for " .. partner .. ". Use: ataxia setup earrings auto")
+    return
+  end
+  send("clearqueue all;queue add free travel to " .. partner .. " with " .. earring)
+end
+
+-- (Re)make the aliases from the saved table. Returns { prefix = partner } for the aliases made.
+function leviSetup.earringAliases()
+  for _, id in ipairs(leviSetup.earringAliasIds or {}) do killAlias(id) end
+  leviSetup.earringAliasIds = {}
+  local u = ataxia.settings and ataxia.settings.user
+  local e = u and u.artefacts and u.artefacts.earrings or {}
+  local byPrefix, made = {}, {}
+  for _, p in ipairs(leviSetup.earringPartners(e)) do
+    local k = p:sub(1, 3)
+    byPrefix[k] = byPrefix[k] or {}
+    table.insert(byPrefix[k], p)
+  end
+  for k, list in pairs(byPrefix) do
+    if #list == 1 and #k == 3 and not leviSetup.EARRING_RESERVED[k] then
+      local partner = list[1]
+      local id = tempAlias("^h" .. k .. "$", function() leviSetup.earringTravel(partner) end)
+      table.insert(leviSetup.earringAliasIds, id)
+      made[k] = partner
+    end
+  end
+  return made
+end
+
+if leviSetup.earringLoadHandler then killAnonymousEventHandler(leviSetup.earringLoadHandler) end
+leviSetup.earringLoadHandler = registerAnonymousEventHandler("ataxia system loaded",
+  function() leviSetup.earringAliases() end)
+-- A reload of this script after the settings loaded raises no load event
+if ataxia and ataxia.loaded then leviSetup.earringAliases() end
+
+-- One EARRINGS row: "Earring#87118 (M) is paired with Arador."
+function leviSetup.earringRecord(num, partner)
+  local st = leviSetup.earringAuto
+  if not st then return end
+  st.results[partner:lower()] = "earring" .. num
+end
 
 function leviSetup.earringAutoCleanup()
   local st = leviSetup.earringAuto
@@ -501,16 +590,12 @@ function leviSetup.earringAutoStart()
 
   ataxiaEcho("Scanning earrings...")
 
-  -- Capture EARRINGS output: "Earring#87118 (M) is paired with Axios."
+  -- Capture EARRINGS output: "Earring#87118 (M) is paired with Arador."
   local capTrig = tempRegexTrigger(
     [[Earring#(\d+).*is paired with (\w+)\.]],
     function()
       if not leviSetup.earringAuto then return end
-      local id = "earring" .. matches[2]
-      local loc = matches[3]:lower()
-      if earringKnownLocations[loc] then
-        leviSetup.earringAuto.results[loc] = id
-      end
+      leviSetup.earringRecord(matches[2], matches[3])
       -- Reset end timer on each match
       if leviSetup.earringAuto.endTimer then killTimer(leviSetup.earringAuto.endTimer) end
       leviSetup.earringAuto.endTimer = tempTimer(2.0, function()
@@ -541,44 +626,46 @@ function leviSetup.earringAutoFinish()
   st.triggers = {}
   if st.endTimer then killTimer(st.endTimer); st.endTimer = nil end
 
-  -- Apply results
-  local count = 0
+  -- Apply results: the scan REPLACES the table (an empty scan changes nothing)
   ataxia.settings.user = ataxia.settings.user or {}
   ataxia.settings.user.artefacts = ataxia.settings.user.artefacts or {}
   ataxia.settings.user.artefacts.earrings = ataxia.settings.user.artefacts.earrings or {}
+  local saved = ataxia.settings.user.artefacts.earrings
 
-  for loc, id in pairs(st.results) do
-    ataxia.settings.user.artefacts.earrings[loc] = id
-    count = count + 1
-  end
-
+  local partners = leviSetup.earringPartners(st.results)
+  local count = #partners
+  local removed = {}
   if count > 0 then
+    removed = leviSetup.earringMerge(saved, st.results)
     save()
   end
+  local made = leviSetup.earringAliases()
+  local aliasOf = {}
+  for k, p in pairs(made) do aliasOf[p] = "h" .. k end
 
   -- Display results
   header("Earring Auto-Configuration Results")
 
-  local locations = {"axios", "aegoth", "proficy", "pharaus", "zylvith",
-    "antoninus", "entaro", "xarthus", "tabethys"}
-
   if count > 0 then
     cecho("\n  " .. HL .. "Assigned " .. W .. count .. HL .. " earrings:\n")
-    for _, loc in ipairs(locations) do
-      if st.results[loc] then
-        row(loc, st.results[loc])
+    for _, p in ipairs(partners) do
+      row(p, st.results[p], aliasOf[p] or "no alias")
+    end
+
+    if #removed > 0 then
+      cecho("\n\n  " .. D .. "Removed:")
+      for _, r in ipairs(removed) do
+        local why = r.now and (r.id .. " now " .. r.now) or (r.id .. " not listed")
+        cecho("\n  " .. D .. "  " .. r.partner .. " (" .. why .. ")")
       end
     end
 
-    -- Show any locations still unset
-    local missing = {}
-    for _, loc in ipairs(locations) do
-      if not st.results[loc] and not ataxia.settings.user.artefacts.earrings[loc] then
-        table.insert(missing, loc)
+    -- "no alias": two partners share the first 3 letters, or another alias owns the word
+    for _, p in ipairs(partners) do
+      if not aliasOf[p] then
+        cecho("\n\n  " .. D .. "No alias for some partners. Use: TRAVEL TO <partner> WITH <earring>")
+        break
       end
-    end
-    if #missing > 0 then
-      cecho("\n\n  " .. D .. "Not found: " .. table.concat(missing, ", "))
     end
   else
     cecho("\n  " .. R .. "No earring locations detected.")
