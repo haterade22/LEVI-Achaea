@@ -72,14 +72,35 @@ local okRun, err = pcall(function()
       expect(sent[1] == "evade n" or sent[1] == "evade e").toBe(true)
     end)
 
-    it("arrived by an auto-evade: not back into the fight", function()
-      reset(); room(3, { n = 1 }); room(1, { n = 2, s = 3 })
+    -- The pick is random, and one random run can pass by luck: on Windows the first math.random(n)
+    -- after a seed is always 1, so this passed locally and failed on CI (Linux). math.random is
+    -- replaced here so that every index is tried in turn.
+    it("arrived by an auto-evade: not back into the fight, for any random pick", function()
+      local realRandom = math.random
+      local okPicks, errPicks = pcall(function()
+        for pick = 1, 3 do
+          math.random = function(n) return math.min(pick, n) end
+          reset(); room(3, { n = 1 }); room(1, { n = 2, s = 3 })
+          hit("Akri"); hit("Mizik")
+          expect(sent[1]).toBe("evade s")
+          clock = clock + 1; room(3, { n = 1, w = 5, e = 6 })
+          sent = {}
+          hit("Akri"); hit("Mizik")
+          expect(sent[1] == "evade w" or sent[1] == "evade e").toBe(true)
+        end
+      end)
+      math.random = realRandom
+      if not okPicks then error(errPicks, 0) end
+    end)
+
+    it("arrived by an auto-evade, and the way back is the only exit: take it", function()
+      reset(); room(3, { n = 1 }); room(1, { s = 3 })
       hit("Akri"); hit("Mizik")
       expect(sent[1]).toBe("evade s")
-      clock = clock + 1; room(3, { n = 1, w = 5 })
+      clock = clock + 1; room(3, { n = 1 })
       sent = {}
       hit("Akri"); hit("Mizik")
-      expect(sent[1]).toBe("evade w")
+      expect(sent[1]).toBe("evade n")
     end)
 
     it("hits from the room we left do not count", function()

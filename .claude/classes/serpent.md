@@ -58,7 +58,8 @@ auto_evade: |
   within 3 s in this room -> EVADE. A hit is classDetect.noteHit (class_detect/001), which the
   class-grab triggers call for a line that names us, and which now calls serpent.evadeOnHit. The
   exit leads to the room we came from (gmcp.Room.Info exits), unless we arrived by an auto-evade
-  (that exit leads back into the fight) or none does: then a random exit. Gates: Serpent, the basher
+  (that exit leads back into the fight) or none does: then a random exit, never the way back
+  unless it is the only exit (fixed before release: CI on Linux caught the random pick going back). Gates: Serpent, the basher
   off, `serpent.config.autoEvade` not false, balance up, no paralysis/webbed/entangled; a stand goes
   first when prone; one evade per 3 s from a room. Balance coming back (gmcp.Char.Vitals) re-checks.
   Not seen in a fight yet. Limit: an attack no class-grab trigger knows does not count.

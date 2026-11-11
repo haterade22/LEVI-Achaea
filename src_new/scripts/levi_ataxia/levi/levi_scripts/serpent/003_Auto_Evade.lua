@@ -67,13 +67,17 @@ end
 function E.pickExit()
   local info = roomInfo()
   if not info or type(info.exits) ~= "table" then return nil end
-  local dirs = {}
+  local dirs, back = {}, nil
   for dir, num in pairs(info.exits) do
-    dirs[#dirs + 1] = dir
-    if E.cameFrom and not E.arrivedByEvade and tostring(num) == tostring(E.cameFrom) then
-      return dir, "the way we came"
+    if E.cameFrom and tostring(num) == tostring(E.cameFrom) then
+      if not E.arrivedByEvade then return dir, "the way we came" end
+      back = dir   -- leads back into the fight: kept out of the random pick
+    else
+      dirs[#dirs + 1] = dir
     end
   end
+  -- The way back only when it is the only exit: getting out of this room comes first.
+  if #dirs == 0 and back then return back, "the only exit" end
   if #dirs == 0 then return nil end
   table.sort(dirs)   -- pairs() has no order; sorted first, so only math.random picks
   return dirs[math.random(#dirs)], "random"
