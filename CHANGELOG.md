@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-11-11 - v4.7.488: earring auto-config saves every partner
+
+The user ran `ataxia setup earrings auto`. EARRINGS listed 11 earrings, and only 6 were saved.
+
+- **Every partner is saved now.** The scan kept a partner only if the name was in a fixed list of 9 (Axios, Aegoth, Proficy, Pharaus, Zylvith, Antoninus, Entaro, Xarthus, Tabethys). An earring is paired with a player, and pairings change. So Arador, Mystor, Cresil, Agathon and Harkon were dropped.
+- **The scan replaces the old table.** Earring 87118 was Axios's and is now Arador's. The old `axios = earring87118` stayed, so `haxi` sent us to travel to Axios with Arador's earring. Now an entry whose earring has a new partner, or whose partner EARRINGS does not list, is removed, and the result says so: `axios (earring87118 now arador)`. A scan that finds no earrings changes nothing.
+- **The travel aliases follow the table.** `h` + the first 3 letters of a partner travels to that partner: `hara` Arador, `hmys` Mystor, `hcre` Cresil, `haga` Agathon, `hhar` Harkon. They are made from the saved table at load and after each scan or manual set, so a new pairing needs no code change. The old alias with its fixed list is gone. Two partners with the same first 3 letters get no alias (use `TRAVEL TO <partner> WITH <earring>`), and `horn` stays the horn alias.
+- **Test:** `test_earring_auto.lua` (8 cases) loads the real script and feeds it the user's 11 lines.
+- **Needs a reimport, then `ataxia setup earrings auto` once.** Not run in Mudlet yet.
+
+---
+
 ## 2026-11-10 - v4.7.487: Serpent group presses switch targets and assume no defence; a dstab into a reflection does not count
 
 From the user's review of a group fight (2026-11-10, mostly `sr`). That fight ran 4.7.478, so it had none of the v4.7.479-485 fixes.
