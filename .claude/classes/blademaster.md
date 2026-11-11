@@ -1212,7 +1212,7 @@ end
 `SHIN AUGMENT` (Bladed Reflexes boon) and `SHIN THUNDERSTORM` (Divine Thunder Cataclysm boon)
 both take the equilibrium and both draw on shin, so the basher sends at most ONE of them per
 round -- augment first, storm on the following round. The storm's helper is not called at all
-on an augment round, because `ataxiaTemp.bmThunderstormAt` is stamped inside it and a
+on an augment round, because `ataxiaTemp.bmShinStormAt` is stamped inside it and a
 discarded return value would still buy a 4s lockout. See `ataxiaBasher_blademasterBashing`,
 basher/002.
 

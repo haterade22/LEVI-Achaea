@@ -301,8 +301,8 @@ your pet stands there. Matches are excluded from:
 - target selection (`search_targets()` and `shieldedTarget()` in `genrunning/002_search_targets.lua`)
 - the `bash add` manual candidate list
 
-Seeded with `{"falcon", "baalzadeen", "ashbeast", "hyena"}`
-(`002_Check_For_Any_Missing_Variables.lua:146`; `ashbeast`/`hyena` arrive by backfill so
+Seeded with `{"falcon", "baalzadeen", "ashbeast", "hyena", "homunculus"}`
+(`002_Check_For_Any_Missing_Variables.lua:159`; the backfill at :186 adds all five, so
 existing saves get them too). Managed via `bash mine` (see configuration doc); adding a
 keyword also purges already-learned matches from every target list via
 `ataxiaBasher_purgeOwnFromTargets()`.
@@ -318,7 +318,7 @@ across every area**.
 
 Outside the tower that costs xp. Inside Mnemosyne it stalls the run, because the whole tower
 stack agrees with the mistake: the explorer filters own denizens through the same predicate
-in both of its room readings (`M._roomHasDenizens`, `mnemosyne/008_Explorer.lua:97`, and
+in both of its room readings (`M._roomHasDenizens`, `mnemosyne/008_Explorer.lua:142`, and
 `M._denizenCount`, `008:108`), so a shielded mob is invisible to the sweep as well as
 unpickable by `search_targets`. The room reads *clear* while a live denizen stands in it: the
 explorer moves on, no boon screen arrives (a ripple ends only when its denizens are dead —
@@ -331,7 +331,7 @@ kills it outright (`008:643`). Nothing errors and nothing warns; the run simply 
 ripple that was never cleared.
 
 `ataxiaBasher.notOwnDenizens` is the exemption list and it **wins**: it is scanned first in
-`ataxiaBasher_isOwnDenizen` (`basher/001_Bashing_Functions.lua:348-356`), so the pet
+`ataxiaBasher_isOwnDenizen` (`basher/001_Bashing_Functions.lua:847-870`), so the pet
 ("a daemonic hyena") stays protected while the mob is targetable again. Seeded by backfill
 rather than as a default (existing saves already carry the bare keyword), and managed with
 `bash notmine [add|rem] <name>`. Narrowing the seeded keyword to `daemonic hyena` was
@@ -357,7 +357,7 @@ paralysis, aeon, peace, transfixation, webbed, impaled, constricted, deepsleep, 
 - Requires: Maran card charge available
 - Command: `ldeck draw maran`
 - Cooldown: 65 seconds (the barrier lasts 60)
-- **Stands down in Mnemosyne** (v4.7.165, `basher/001_Bashing_Functions.lua:588-606`): when
+- **Stands down in Mnemosyne** (v4.7.165, `basher/001_Bashing_Functions.lua:1163-1168`): when
   `inMnemosyne` and `mnemLdeck.enabled`, the tower card layer owns Maran along with five
   other cards. This path `return`s and forfeits the whole attack cycle, the card layer rides
   the assembled round instead — running both would double-draw a 2-charge card.

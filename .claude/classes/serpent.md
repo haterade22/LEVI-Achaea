@@ -124,7 +124,7 @@ the target class's lock venom, when its affliction is missing (:945-951):
 | depthswalker | eurypteria | recklessness → shadow cures. Held until the target is locked (v4.7.479, below) |
 | druid, sentinel | kalmia | asthma → smoke + morph |
 
-The class is our TARGET's, from `ataxia_targetClass()` (ataxia/ataxia/007_Pariah_things.lua:68; read by
+The class is our TARGET's, from `ataxia_targetClass()` (ataxia/ataxia/007_Pariah_things.lua:85; read by
 getClassLockAff :898-900 and wantClumsiness :846-848). It takes the NDB class first, ignoring Unknown, and
 otherwise classDetect's class only when its attacker is the target, case-blind. So a bystander's class line
 does not change the venom, and a target the NDB lacks does not inherit the last target's. An unknown class
@@ -133,7 +133,7 @@ gives recklessness (eurypteria) goes only on a locked target (venomAllowed, :254
 then pickVenom falls through to its standard order.
 
 **The clumsiness rule (the user, 2026-11-08; PLAYER).** Clumsiness goes on every class it affects: "When fighting a class that is impacted by clumsiness, it is important to use clumsiness to slow them down. 33 percent chance to miss your target is huge. Additionally, it starts the kelp stack needed to stick Asthma. That is why we do clumsiness."
-The immune list is the user's: "Tekura Monk, Sylvan, Magi, Blademaster, and Elemental Lords are all immune to clumsiness." CLUMSINESS_IMMUNE (007_Pariah_things.lua:93-99, read by ataxia_wantClumsiness :110) holds monk, tekura, sylvan, magi, blademaster, airlord, earthlord, firelord and waterlord; clumsinessClassKey (:103) folds "Earth Lord", "Earth Lady", "earth Elemental Lord" and "air Elemental Lady". Against these pickVenom never sends xentio. With paralysis up the class venom goes first where the class has one (monk and tekura vernalius, magi and sylvan notechis; :945-951), then asthma and weariness in whichever order is left (:953-962). Blademaster and the four Lords have no class venom, so they get asthma, then weariness. Every other class, Shikudo and an unknown class included, gets xentio first. The flay's xentio branch reads the same gate (:1924), and so does Pariah's routing (pariah/001:54).
+The immune list is the user's: "Tekura Monk, Sylvan, Magi, Blademaster, and Elemental Lords are all immune to clumsiness." CLUMSINESS_IMMUNE (007_Pariah_things.lua:106-112, read by ataxia_wantClumsiness :110) holds monk, tekura, sylvan, magi, blademaster, airlord, earthlord, firelord and waterlord; clumsinessClassKey (:103) folds "Earth Lord", "Earth Lady", "earth Elemental Lord" and "air Elemental Lady". Against these pickVenom never sends xentio. With paralysis up the class venom goes first where the class has one (monk and tekura vernalius, magi and sylvan notechis; :945-951), then asthma and weariness in whichever order is left (:953-962). Blademaster and the four Lords have no class venom, so they get asthma, then weariness. Every other class, Shikudo and an unknown class included, gets xentio first. The flay's xentio branch reads the same gate (:1924), and so does Pariah's routing (pariah/001:54).
 Compared with v4.7.479: Occultist, Bard, Jester, Druid and Sentinel get clumsiness now. Blademaster, Monk, Tekura and the Lords no longer do. Magi and Sylvan were already off the order, and only the flay still gave them xentio. Blademaster has no CLASS_LOCK_VENOM row now (:884-885), so with paralysis up it takes `dstab <t> kalmia vernalius`.
 Trap: nothing writes "Tekura", so a monk reads "Monk" until a staff line says "Shikudo" (determine_class/006). A Shikudo whose kick arrives before any staff line, or one the API filled in, can read "Monk" and lose clumsiness until the staff hits us; that the API returns "Monk" for a Shikudo is READ, not tested. With two attackers a kick no longer rewrites a known Shikudo to Monk (006:85-89). The logs leave open whether immune means no miss or no affliction: a Blademaster and an Earth Lord take it and spend a cure on it, and three rows show an Earth Lord's clumsy miss (kb/CONFLICTS.md #81, open).
 **Not adopted: asthma and weariness before the class venom (the user, 2026-11-08).** The proposal was MODEL, not from a log: impatience 1.6 to 2.0 s sooner in every case, time to lock unsettled. The user: "Depends, we usually use curare because it is usually HIGHER on the curing priority list and will be eaten before Asthma. Sending Asthma Weariness you now have to try and figure out if they have asthma or weariness when they eat kelp." So curare stays first (:938), then the class venom (:945-951): paralysis sits higher on the curing priority and is eaten before asthma, and asthma + weariness together makes a kelp eat ambiguous. Curare went first in the proposal too, so the order behind paralysis for a class venom that is not curare (vernalius, notechis, aconite and others) got no explicit ruling. It stays as it was.
@@ -355,7 +355,7 @@ weapon_ids: "learned per weapon in ataxiaTemp.serpentWeaponIds (round_order abov
 not_changed: |
   - xentio (clumsiness) still goes out against a Depthswalker in lock mode: 6 of the spar's 24
     DSTABs carried it (FL 432, 521, 700, 745, 791, 1021), from pickVenom's wantClumsiness order
-    (ataxia_wantClumsiness, ataxia/ataxia/007_Pariah_things.lua:110; a Depthswalker is not on the immune list).
+    (ataxia_wantClumsiness, ataxia/ataxia/007_Pariah_things.lua:123; a Depthswalker is not on the immune list).
   - slike went out in none of the spar's 39 rounds. slikeGateMet (:906-911) opens only on
     impatience, or on the target's focus down with asthma up. Anorexia is one of the recklessness
     gate's three pieces, so no recklessness goes out until slike has landed and stuck.
@@ -740,7 +740,7 @@ fratricide:
       scytherus are up and paralysis is not (:788-790), the "cure fratricide at once when
       scytherus is up" rule. PRIOAFF writes no stored priority.
     - Against a detected Serpent, class detection switches to the in-game `serpent` curingset
-      (class_detect/001_Class_Detect_Engine.lua:62, :238). That set exists
+      (class_detect/001_Class_Detect_Engine.lua:65, :238). That set exists
       (kb/raw/live/curingset-list_2026-10-10.txt:17) but its priority list was never captured, so
       the priority actually in force against a Serpent is unknown. fratLock's write and its
       restore land in whichever set is active. Since v4.7.480 the restore writes that set's own value,
@@ -1586,7 +1586,7 @@ recommended_strategy: |
 anti_serpent_function: |
   Algedonic.AntiSerpent (src_new/scripts/levi_ataxia/levi/levi_scripts/algedonic_defense_1.0/001_Anti_Priorities.lua:725-792).
   Algedonic.Prioritize() calls it on every GMCP affliction gain and loss
-  (004_Aff_gains_losses.lua:373, :452) when OUR TARGET is a Serpent in the NDB
+  (004_Aff_gains_losses.lua:377, :452) when OUR TARGET is a Serpent in the NDB
   (ataxiaNDB_getClass(target), :108-109) - not when an unknown Serpent attacks us.
   In order, first match wins:
   1. Approaching lock (asthma + slickness + impatience or anorexia) and we can tree (not

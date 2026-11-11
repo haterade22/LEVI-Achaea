@@ -478,7 +478,7 @@ No game line is visible. TRANSMUTE's line is gagged, and kai gain and decay prin
   - Mystor's client re-sent FITNESS up to 67 times a second (2837-3241). Our 008 cooldown flag exists to prevent exactly that loop.
 - **Code assumptions this log contradicts:**
   - Our Shaman dossier gates COAGULATION on bleed of 200 or more (.claude/classes/shaman.md:63, 124). The game accepted it at 120 (2895-2899).
-  - Our Serpent behead requires prone (serpent/002_Serpent_Offense.lua:1708-1714), which is stricter than what killed Mystor.
+  - Our Serpent behead required prone, which is stricter than what killed Mystor. (Changed since: the 2026-11-08 review removed the behead. A prone, truelocked target now gets EXECUTE with the whip, `serpent/002_Serpent_Offense.lua`:1964.)
 
 ### For our tracking of this class's cures
 

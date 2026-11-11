@@ -42,7 +42,7 @@ Any → Idle:       ataxiaBasher_onDeath() or ataxiaBasher_onAttacked()
 
 ```
 Prompt (GMCP vitals)
-  └─ ataxia_promptCommands()          [010_Prompt_Running.lua:57]
+  └─ ataxia_promptCommands()          [010_Prompt_Running.lua:85]
      ├─ ataxiaBasher_scanRoom()       [if need_roomCheck]
      ├─ search_targets()              [genrunning/002:100]
      ├─ ataxiaBasher_checkFleeRecovery() [basher/001:256]

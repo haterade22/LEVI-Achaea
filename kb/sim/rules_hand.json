@@ -310,7 +310,7 @@
     {
       "id": "class.dagaz",
       "tag": "READ",
-      "source": "kb/afflictions/class-cures.md:103",
+      "source": "kb/afflictions/class-cures.md:137",
       "value": {
         "classes": [
           "Runewarden"
@@ -331,7 +331,7 @@
         "half a period"
       ],
       "tag": "ASSUMED",
-      "source": "kb/afflictions/class-cures.md:103",
+      "source": "kb/afflictions/class-cures.md:137",
       "note": "when the rune ticks relative to the fight. --median puts the first tick at half a period"
     },
     {
@@ -376,7 +376,7 @@
       "alt": [
         "attack.flay.order"
       ],
-      "note": ".claude/classes/serpent.md:686 reads the same. A bare FLAY in the logs (no 'flays away' line): g 945-948 and X 3189-3194 (the coating ripped, then the whip and paralysis). A named FLAY also takes the coating: rule attack.flay.coating. One that names a defence the target does not have: rule attack.flay.missing"
+      "note": ".claude/classes/serpent.md:813 reads the same. A bare FLAY in the logs (no 'flays away' line): g 945-948 and X 3189-3194 (the coating ripped, then the whip and paralysis). A named FLAY also takes the coating: rule attack.flay.coating. One that names a defence the target does not have: rule attack.flay.missing"
     },
     {
       "id": "attack.flay.coating",
@@ -475,7 +475,7 @@
         "off"
       ],
       "tag": "ASSUMED",
-      "source": ".claude/classes/serpent.md:1168-1178; src_new/scripts/levi_ataxia/levi/levi_scripts/serpent/002_Serpent_Offense.lua (EKANELIA_TABLE, serpent.EKANELIA_RESULTS)",
+      "source": ".claude/classes/serpent.md:1302-1312; src_new/scripts/levi_ataxia/levi/levi_scripts/serpent/002_Serpent_Offense.lua (EKANELIA_TABLE, serpent.EKANELIA_RESULTS)",
       "note": "the conditions are our own table's (relayed notes, PLAYER); the game's EKANELIA STUDY MONKSHOOD text is not captured. The engine fires it on a BITE, or on the bite of an impulse, when all three are up as the bite lands ('Reactions fire on the bite command', Venom.wiki:391); an impulse of masochism brings the third. The venom's own disloyalty lands too. A DSTAB fires no reaction. What the spar saw: rule reaction.monkshood.seen"
     },
     {
@@ -502,7 +502,7 @@
         "off"
       ],
       "tag": "ASSUMED",
-      "source": "src_new/scripts/levi_ataxia/levi/levi_scripts/serpent/002_Serpent_Offense.lua (EKANELIA_TABLE, serpent.EKANELIA_RESULTS); .claude/classes/serpent.md:1194-1199",
+      "source": "src_new/scripts/levi_ataxia/levi/levi_scripts/serpent/002_Serpent_Offense.lua (EKANELIA_TABLE, serpent.EKANELIA_RESULTS); .claude/classes/serpent.md:1328-1333",
       "note": "no kb source: the game's EKANELIA STUDY LOKI text is not captured. In the spar 1 of 2 loki bites printed 'takes hold': the recklessness impulse at FL 1406 (FL 1411), then the paralysis line (FL 1414) and no nausea line. The stupidity impulse at FL 630 printed none. Loki's own random affliction is not modelled: the engine refuses loki in a DSTAB or a FLAY, and in a bite it lands only this reaction"
     },
     {

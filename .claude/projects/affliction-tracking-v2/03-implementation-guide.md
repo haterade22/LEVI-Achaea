@@ -1,5 +1,7 @@
 # Implementation Guide
 
+> **Status (checked 2026-11-09): historical.** V3 ([../affliction-tracking-v3/](../affliction-tracking-v3/README.md)) is the tracker in use. The setup wizard reports that V2 was removed and that its stubs route to V3. The `affliction_tracking_v2/` folder that these pages name does not exist; the V2-named functions that remain are in `affliction_tracking_core/`. The pages below are a record of the V2 build, so their paths and status table are out of date.
+
 ## Prerequisites
 
 - Mudlet with LEVI-Ataxia installed

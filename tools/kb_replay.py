@@ -302,7 +302,7 @@ def line_class(text):
 
 LOGGER_CLASS_WORDS = {"shikudo": "Monk", "runewarden-snb": "Runewarden", "runewarden": "Runewarden", "earthlord": "Earth Lord",
                       "alchemist": "Alchemist", "depthswalker": "Depthswalker", "blademaster": "Blademaster"}
-# kb/afflictions/class-cures.md:51 (HELP). The code has no row for an Earth Lord, and reads it the other way round. See
+# kb/afflictions/class-cures.md:51 (HELP). The code has no row for an Earth Lord, and read it the other way round until v4.7.484. See
 # class_cure_blocked and kb/CONFLICTS.md #54.
 CURE_BLOCKERS_EXTRA = {"Earth Lord": "weariness"}
 
@@ -652,11 +652,11 @@ def is_softlock(terms):
 
 
 def class_cure_blocked(s, cls, game=False):
-    """not ataxia_canActive(), as the code runs it today (003_Lock_breakers.lua:232-260).
+    """not ataxia_canActive(), as the code ran it for these logs, before v4.7.484.
 
-    The code has no row for an Earth Lord. For a class holding "Elemental" it returns true only WITH weariness up
-    (003_Lock_breakers.lua:246-251), the reverse of class-cures.md:51. That is what the existing label does today, so the
-    replay does it too. game=True uses the game's blocker instead. Only the reproduction of the earlier count uses it."""
+    The code has no row for an Earth Lord. For a class holding "Elemental" it returned true only WITH weariness up, the
+    reverse of class-cures.md:51, until v4.7.484 fixed the test (003_Lock_breakers.lua:249-256). The logs predate the
+    fix, so the replay keeps the old reading. game=True uses the game's blocker instead. Only the reproduction of the earlier count uses it."""
     start = s.clock.get("classcure")
     if start is not None and s.t - start < CHANNEL_MAX["classcure"]:
         return True
@@ -1428,7 +1428,7 @@ POST_HOC = (
     "onto a second (`001_Airlord_Class_Grab.lua`:43-44). Now it reads both. No result changed.",
     "**A bleed line took the stamp of the prompt before it (a parser bug).** It now takes the next prompt's, as the one stamp "
     "rule says, and a line before a log's first prompt no longer lasts for ever. No result changed.",
-    "**The `true` label's Earth Lord branch (a replay fix).** The first run read an Earth Lord's cure as always blocked. The code reads it as "
+    "**The `true` label's Earth Lord branch (a replay fix).** The first run read an Earth Lord's cure as always blocked. The code then read it as "
     "blocked unless weariness is up. `uW_VbgR` has no weariness on those prompts. No result changed.",
     "**Display and tidying.** Our four recordings are now one client in the board check, two citations and one exit note were reworded, and the "
     "pressure lines moved out of a table with the same regexes. No result changed.",
@@ -1635,8 +1635,8 @@ def render_baselines(a):
             "- Our recordings are in: `ours/112717_Tabethys` adds a 1.85 s warning on 2-of-3, and one false alarm on softlock and two on 2-of-3. "
             "That moves the 2-of-3 median from 31.9 s to 24.6 s.",
             "- The open chain is not a false alarm here. On softlock that removes one, so softlock lands on the same 11 by coincidence.",
-            "- `true` fires on `uW_VbgR` at row 554, because `ataxia_canActive` reads an Elemental Lord's cure as blocked unless weariness is up "
-            "(`003_Lock_breakers.lua`:246-251, the reverse of the game's rule, `kb/CONFLICTS.md` #54). That is what the package does today. The chain "
+            "- `true` fires on `uW_VbgR` at row 554, because `ataxia_canActive` read an Elemental Lord's cure as blocked unless weariness is up "
+            "(the reverse of the game's rule, `kb/CONFLICTS.md` #54; v4.7.484 fixed the test, and these logs predate it). The chain "
             "is open, so it is not a false alarm.",
             "- The earlier note gave `true` a range of 0-98 s. This run's low is %s s (`EveP2TVe` row 969, 1 s stamps). The earlier script is "
             "not kept, so the 0 cannot be traced." % fmt1(labels["true"]["min"]),
