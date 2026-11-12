@@ -31,6 +31,7 @@ One line per page. Kept up to date by `/kb-ingest`.
 - [mechanics/balance-and-queueing.md](mechanics/balance-and-queueing.md): balance vs equilibrium, server queue commands, types and the 10-command limit; a `;` chain is not one queue entry
 - [mechanics/elementals-and-glance.md](mechanics/elementals-and-glance.md): elemental denizen names and attacks, the "There are N <plural> here." room prose, GLANCE, a denizen shield going up
 - [mechanics/mnemosyne-affixes.md](mechanics/mnemosyne-affixes.md): tower affixes seen changing a fight: Prey (every denizen follows a retreat), Sanguine Restoration (the blood pool's lines), Meldscorned (the shadow line, stupidity eating commands), the tash'la pair's damage; the death behind the last stand (v4.7.486)
+- [mechanics/launched-into-sky.md](mechanics/launched-into-sky.md): the piercing note that launches us into the sky, its lines, and the LAND we send (v4.7.491)
 - [mechanics/mindnet.md](mechanics/mindnet.md): MINDNET's lines, who we call to the party and why, and what `Comm.Channel.List` says about party and city
 
 ## Simulator

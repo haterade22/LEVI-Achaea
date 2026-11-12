@@ -2,6 +2,27 @@
 
 ---
 
+## 2026-11-12 - v4.7.491: land when an enemy launches us into the sky
+
+The user: "We need to LAND when this happens." In the 2026-11-03 group log (`kb/raw/logs/ours/2026-11-03_102828_Harkon.log`, rows 503, 1578 and 7302) Dunn launched us three times:
+
+```
+A single, piercing note emanates from Dunn, a sound to set teeth on edge and glass to shattering.
+A violent force suddenly takes hold of you and launches you high into the sky.
+```
+
+Each time gmcp said `Flying above <room>` and we stayed up while the fight went on below. Nothing reacted to the line.
+
+- **Now we send LAND at once.** It goes out directly, not through the server queue, because the next round's `queue addclearfull` would delete it. The echo is `[LAUNCHED] into the sky -- landing.`
+- **If the game refuses it, we send it again.** Every 0.5 s for 6 s, while gmcp still says `Flying above`. That covers balance, paralysis and aeon (the third launch came under aeon).
+- **Only our own launch counts.** The trigger matches the second line, which names "you". The note goes to the whole room: at row 7127 an ally played it and no launch followed.
+- **Two cases stay in the air:** the SLC both-arms flee, which flies on purpose to heal the arms, and a Mnemosyne hover or kite.
+- **New page:** `kb/mechanics/launched-into-sky.md` (the lines, what other players' landings look like, what is still open).
+- **Tests:** `test_launch_land.lua` (9).
+- **Needs a reimport.** Not run in Mudlet yet.
+
+---
+
 ## 2026-11-12 - v4.7.490: the last stand holds every round from its first shield
 
 From a Mnemosyne death on v4.7.486 (two errant frost elementals, `kb/raw/live/mnemosyne-frost-elemental-laststand_2026-11-11.txt`). `LAST STAND: 24% and no way out` printed, and no shield went up. In the 5.4 s after it we bit twice and culled once, and a 750 cold vapour killed us at 750 HP.
