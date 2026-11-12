@@ -1,0 +1,386 @@
+You sink your fangs into an errant frost elemental, injecting just the proper amount of camus.
+Damage dealt: 1579 (unblockable).
+An errant frost elemental shudders as a dose of slike floods his system.
+An errant frost elemental shudders as a dose of vernalius floods his system.
+Balance used: 2.8s.
+You feel the power of the venom camus flowing through your veins.
+13:23:39:949 [9555] [99] |(564355|32%)|[ [ dis dep ]]  
+Time wreaks ruin upon an errant frost elemental, deteriorating before your eyes.
+Damage dealt: 245 (psychic).
+13:23:40:220 [9555] [99] |(564355|31%)|[ [ dis dep ]]  
+You feel the power of the venom camus flowing through your veins.
+13:23:40:364 [9555] [99] |(564355|31%)|[ [ dis dep ]]  
+You may eat another plant or mineral.
+13:23:40:368 [9555] [99] |(564355|31%)|[ [ dis dep ]]  
+You eat a plumbum flake.
+Maybe things aren't so bad after all.
+13:23:40:455 [9555] [99] |(564355|31%)|[ [ dis ]]  
+An errant frost elemental screams out in agony, struck by the effects of a vicious venom.
+Damage dealt: 8840 (unblockable).
+An errant frost elemental shudders as a dose of slike floods his system.
+An errant frost elemental shudders as a dose of vernalius floods his system.
+13:23:41:172 [9731] [99] |(564355|16%)|[ [ dis ]]  
+Time wreaks ruin upon an errant frost elemental, deteriorating before your eyes.
+Damage dealt: 245 (psychic).
+13:23:41:185 [9731] [99] |(564355|15%)|[ [ dis ]]  
+You feel the power of the venom camus flowing through your veins.
+13:23:41:323 [9731] [99] |(564355|15%)|[ [ dis ]]  
+
+(MNEM): [explore] [swarm] DYING FAST -- 66% and ~5.5s to live at this rate -- NOT leaving: Prey -- every denizen tracks a retreat, so we fight here.
+With a swirl of condensed mist, an errant frost elemental whips a freezing tendril across your side.
+Health lost: 1600 (cold).
+Your own shadow betrays you, leaving your thoughts scattered and wan.
+A terrible sense of unease comes over you.
+Health lost: 672 (physical blunt).
+13:23:41:415 [7459] [99] |(564355|15%)|[ [ hyp dis ]]  
+You eat a potash crystal.
+You feel your health and mana replenished.
+13:23:41:418 [10533] [100] |(564355|15%)|[ [ hyp dis ]]  
+You may eat another plant or mineral.
+13:23:41:873 [10533] [100] |(564355|15%)|[ [ hyp dis ]]  
+You feel the power of the venom camus flowing through your veins.
+13:23:42:006 [10533] [100] |(564355|15%)|[ [ hyp dis ]]  
+You eat an argentum flake.
+My, you feel healthier than you have in years.
+13:23:42:010 [10533] [100] |(564355|15%)|[ [ dis ]]  
+(((((((((((((((((((( BALANCE: 2.668 ))))))))))))))))))))
+You sink your fangs into an errant frost elemental, injecting just the proper amount of camus.
+An errant frost elemental's form begins to atrophy as your attack kindles ethereal mist to consign it to only memory.
+Damage dealt: 6628 (unblockable).
+An errant frost elemental shudders as a dose of slike floods his system.
+Balance used: 2.8s.
+You may utilise the tree tattoo again.
+You feel the power of the venom camus flowing through your veins.
+13:23:42:660 [10665] [100] |(564355|4%)|[ [ dis ]]  
+Time wreaks ruin upon an errant frost elemental, deteriorating before your eyes.
+Damage dealt: 387 (psychic).
+13:23:43:199 [10665] [99] |(564355|3%)|[ [ dis ]]  
+You feel the power of the venom camus flowing through your veins.
+13:23:43:338 [10665] [99] |(564355|3%)|[ [ dis ]]  
+You may eat another plant or mineral.
+13:23:43:483 [10665] [99] |(564355|3%)|[ [ dis ]]  
+
+(LEVI): DANGER: Extreme incoming damage in no-flee area -- no way out, fighting on.
+With a swirl of condensed mist, an errant frost elemental whips a freezing tendril across your side.
+Health lost: 1502 (cold).
+Your own shadow betrays you, leaving your thoughts scattered and wan.
+Everything seems so pointless.
+Health lost: 863 (physical blunt).
+13:23:43:990 [8300] [99] |(564355|3%)|[ [ dis dep ]]  
+You feel the power of the venom camus flowing through your veins.
+13:23:44:120 [8300] [99] |(564355|3%)|[ [ dis dep ]]  
+You eat a plumbum flake.
+Maybe things aren't so bad after all.
+13:23:44:122 [8300] [99] |(564355|3%)|[ [ dis ]]  
+Time wreaks ruin upon an errant frost elemental, deteriorating before your eyes.
+Damage dealt: 369 (psychic).
+An errant frost elemental screams out in agony, struck by the effects of a vicious venom.
+Damage dealt: 1105 (unblockable).
+13:23:44:230 [8300] [99] |(564355|0%)|[ [ dis ]]  
+Time wreaks ruin upon an errant frost elemental, deteriorating before your eyes.
+Damage dealt: 157 (psychic).
+A burst of pale brilliance surrounds an errant frost elemental before it perishes in a gusting whorl of frozen air.
+You have slain an errant frost elemental, retrieving the corpse.
+You have gained 207 experience.
+A large pile of sovereigns spills from the corpse, flying into your hands before they can reach the ground.
+13:23:45:187 [8300] [99] |(564355)|[ [ dis ]]  
+You can use Cullingblade again.
+13:23:45:189 [8300] [99] |(564355)|[ [ dis ]]  
+You feel the power of the venom camus flowing through your veins.
+13:23:45:328 [8300] [99] |(564355)|[ [ dis ]]  
+(((((((((((((((((((( BALANCE: 2.801 ))))))))))))))))))))
+You open a dragonskin pack.
+You put 242 gold sovereigns in a dragonskin pack.
+You close a dragonskin pack.
+I do not recognise anything called that here.
+13:23:45:383 [8300] [99] |(564355)|[ [ dis ]]  
+Equilibrium used: 0.42s.
+Glancing to the east, you see:
+Atop an icy slope.
+The stars twinkle in the clear night sky.
+You see exits leading south and west.
+13:23:45:437 [8300] [99] |(564355)|[ [ dis ]]  
+Cluster of glacial spires.
+The stars twinkle in the clear night sky.
+You see exits leading east, south, and west.
+13:23:45:528 [8300] [99] |(564355)|[ [ dis ]]  
+You may eat another plant or mineral.
+13:23:45:616 [8300] [99] |(564355)|[ [ dis ]]  
+(((((((((((((((((((( EQUILIBRIUM:0.299 ))))))))))))))))))))
+13:23:45:920 [10495] [99] |(564355)|[ [ dis ]]  
+
+(MNEM): [explore] room clear -> moving e.
+Atop an icy slope.
+The stars twinkle in the clear night sky.
+You see exits leading south and west.
+13:23:46:202 [10495] [99] |(564355)|[ [ dis ]]  
+Equilibrium used: 0.42s.
+Glancing to the south, you see:
+Frost-glazed incline.
+The stars twinkle in the clear night sky.
+You see exits leading north and south.
+13:23:46:755 [11058] [99] |(564355)|[ [ dis ]]  
+
+(MNEM): [explore] room clear -> moving s.
+You are recovering equilibrium and cannot move yet.
+(((((((((((((((((((( EQUILIBRIUM:0.343 ))))))))))))))))))))
+Frost-glazed incline.
+The stars twinkle in the clear night sky.
+You see exits leading north and south.
+13:23:47:102 [11273] [100] |(564355)|[ [ dis ]]  
+You may eat another bit of irid moss or potash.
+13:23:47:439 [11273] [100] |(564355)|[ [ dis ]]  
+Savaged by Marauder Desitru's fell dagger, the mutilated shadow of Titonus dissipates as its owner is ripped from life.
+Kill breakdown for Titonus (4): Mizik, Arador, Merador, and Desitru.
+13:23:47:576 [11273] [100] |(564355)|[ [ dis ]]  
+Equilibrium used: 0.42s.
+Glancing to the south, you see:
+Piled-high snowdrifts.
+The stars twinkle in the clear night sky. There are 2 errant frost elementals here.
+You see exits leading north and south.
+13:23:47:720 [11273] [100] |(564355)|[ [ dis ]]  
+
+(MNEM): [explore] room clear -> moving s.
+You are recovering equilibrium and cannot move yet.
+(((((((((((((((((((( EQUILIBRIUM:0.306 ))))))))))))))))))))
+Piled-high snowdrifts.
+The stars twinkle in the clear night sky. There are 2 errant frost elementals here.
+You see exits leading north and south.
+13:23:48:028 [11273] [100] |(564355)|[ [ dis ]] 
+(LEVI): Now targeting: 564332
+(LEVI): [V3] States reset 
+You feel the power of the venom camus flowing through your veins.
+13:23:48:214 [11273] [100] |(564332|100%)|[ [ dis ]]  
+You sink your fangs into an errant frost elemental, injecting just the proper amount of camus.
+Damage dealt: 1657 (unblockable).
+An errant frost elemental shudders as a dose of vernalius floods his system.
+Balance used: 2.8s.
+You can use Thrash again.
+13:23:48:225 [11273] [100] |(564332|97%)|[ [ dis ]]  
+Glacial vapour bursts from an errant frost elemental, enveloping you in a freezing mist and paralyzing chill.
+Health lost: 1741 (cold).
+Your own shadow betrays you, leaving your thoughts scattered and wan.
+Everything seems so pointless.
+13:23:48:289 [9532] [100] |(564332|97%)|[ [ PAR dis dep ]]  
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+You feel the power of the venom camus flowing through your veins.
+13:23:48:513 [9532] [100] |(564332|97%)|[ [ dis dep ]]  
+
+(MNEM): [explore] clearing this room (2 denizen(s)) -- basher on it.
+You touch the tree of life tattoo.
+Maybe things aren't so bad after all.
+By the grace of Life's Primordial Mother, your tree tattoo surges with empowered vitality.
+13:23:48:610 [9532] [100] |(564332|97%)|[ [ dis ]]  
+An errant frost elemental screams out in agony, struck by the effects of a vicious venom.
+An errant frost elemental's form begins to atrophy as your attack kindles ethereal mist to consign it to only memory.
+Damage dealt: 4420 (unblockable).
+An errant frost elemental shudders as a dose of slike floods his system.
+13:23:49:192 [9620] [100] |(564332|89%)|[ [ dis ]]  
+You feel the power of the venom camus flowing through your veins.
+13:23:49:345 [9620] [100] |(564332|89%)|[ [ dis ]]  
+You may eat another plant or mineral.
+13:23:49:890 [9620] [100] |(564332|89%)|[ [ dis ]]  
+You feel the power of the venom camus flowing through your veins.
+13:23:50:029 [9620] [100] |(564332|89%)|[ [ dis ]]  
+You are dismayed as the corpse of a bloated cabin boy turns to dust in your hands.
+13:23:50:140 [9620] [100] |(564332|89%)|[ [ dis ]]  
+Time wreaks ruin upon an errant frost elemental, deteriorating before your eyes.
+Damage dealt: 257 (psychic).
+13:23:50:233 [9620] [100] |(564332|89%)|[ [ dis ]]  
+You feel the power of the venom camus flowing through your veins.
+13:23:50:400 [9620] [100] |(564332|89%)|[ [ dis ]]  
+
+(MNEM): [explore] [swarm] DYING FAST -- 63% and ~5.2s to live at this rate -- NOT leaving: Prey -- every denizen tracks a retreat, so we fight here.
+With a swirl of condensed mist, an errant frost elemental whips a freezing tendril across your side.
+Health lost: 1452 (cold).
+Your own shadow betrays you, leaving your thoughts scattered and wan.
+Everything seems so pointless.
+Health lost: 982 (physical blunt).
+13:23:50:487 [7186] [100] |(564332|89%)|[ [ dis dep ]]  
+You eat a plumbum flake.
+Maybe things aren't so bad after all.
+You eat a potash crystal.
+You feel your health and mana replenished.
+13:23:50:582 [10260] [100] |(564332|89%)|[ [ dis ]]  
+You feel the power of the venom camus flowing through your veins.
+13:23:50:734 [10260] [100] |(564332|89%)|[ [ dis ]]  
+(((((((((((((((((((( BALANCE: 2.747 ))))))))))))))))))))
+You sink your fangs into an errant frost elemental, injecting just the proper amount of camus.
+Damage dealt: 1579 (unblockable).
+Balance used: 2.8s.
+Glacial vapour bursts from an errant frost elemental, enveloping you in a freezing mist and paralyzing chill.
+Health lost: 1790 (cold).
+13:23:50:978 [8470] [99] |(564332|86%)|[ [ PAR dis ]]  
+Being paralysed, you can't do that.
+13:23:51:109 [8470] [99] |(564332|86%)|[ [ PAR dis ]]  
+You must somehow purge the venom from your blood before you may secrete another.
+13:23:51:111 [8470] [99] |(564332|86%)|[ [ PAR dis ]]  
+Being paralysed, you can't do that.
+13:23:51:207 [8470] [99] |(564332|86%)|[ [ PAR dis ]]  
+Time wreaks ruin upon an errant frost elemental, deteriorating before your eyes.
+Damage dealt: 245 (psychic).
+13:23:51:220 [8470] [99] |(564332|86%)|[ [ PAR dis ]]  
+Health lost: 17 (raw).
+[[ BLEED 17 ]]
+You may eat another plant or mineral.
+13:23:52:016 [8453] [99] |(564332|86%)|[ [ PAR dis ]]  
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+13:23:52:102 [8453] [99] |(564332|86%)|[ [ dis ]]  
+
+(LEVI): DANGER: Extreme incoming damage in no-flee area -- no way out, fighting on.
+An errant frost elemental screams out in agony, struck by the effects of a vicious venom.
+Damage dealt: 4420 (unblockable).
+An errant frost elemental shudders as a dose of vernalius floods his system.
+An errant frost elemental steadies as it recovers from its weakness affliction.
+Time wreaks ruin upon an errant frost elemental, deteriorating before your eyes.
+Damage dealt: 245 (psychic).
+13:23:52:271 [8541] [99] |(564332|78%)|[ [ dis ]]  
+You feel the power of the venom camus flowing through your veins.
+13:23:52:335 [8541] [99] |(564332|78%)|[ [ dis ]]  
+With a swirl of condensed mist, an errant frost elemental whips a freezing tendril across your side.
+Health lost: 1428 (cold).
+Your own shadow betrays you, leaving your thoughts scattered and wan.
+Everything seems so pointless.
+Health lost: 1063 (physical blunt).
+13:23:53:087 [6050] [99] |(564332|78%)|[ [ dis dep ]]  
+You feel the power of the venom camus flowing through your veins.
+13:23:53:223 [6050] [99] |(564332|78%)|[ [ dis dep ]]  
+Time wreaks ruin upon an errant frost elemental, deteriorating before your eyes.
+Damage dealt: 245 (psychic).
+13:23:53:314 [6050] [99] |(564332|77%)|[ [ dis dep ]]  
+
+(LEVI): LAST STAND: 24% and no way out -- shielding, attacks held until 70%.
+An errant frost elemental exhales a freezing vapour that scorches your skin with biting cold.
+Health lost: 3334 (cold).
+Your own shadow betrays you, leaving your thoughts scattered and wan.
+Your sanity begins to escape you.
+13:23:53:646 [2716] [99] |(564332|77%)|[ [ shm dis dep ]]  
+You may eat another plant or mineral.
+13:23:53:648 [2716] [99] |(564332|77%)|[ [ shm dis dep ]]  
+(((((((((((((((((((( BALANCE: 2.813 ))))))))))))))))))))
+You sink your fangs into an errant frost elemental, injecting just the proper amount of camus.
+Damage dealt: 1579 (unblockable).
+An errant frost elemental shudders as a dose of vernalius floods his system.
+Balance used: 2.8s.
+You eat a plumbum flake.
+Your sanity reestablishes itself.
+13:23:53:881 [2716] [99] |(564332|74%)|[ [ dis dep ]]  
+An errant frost elemental steadies as it recovers from its inhibit affliction.
+13:23:54:206 [2716] [99] |(564332|74%)|[ [ dis dep ]]  
+You swing the culling blade in a great arc, black energy leaping from the blade.
+The energy rips into an errant frost elemental in a detonation of power.
+Damage dealt: 1851 (unblockable).
+The energy rips into an errant frost elemental in a detonation of power.
+An errant frost elemental's form begins to atrophy as your attack kindles ethereal mist to consign it to only memory.
+Damage dealt: 14808 (unblockable).
+13:23:54:366 [3012] [99] |(564332|71%)|[ [ dis dep ]]  
+You feel the power of the venom camus flowing through your veins.
+13:23:54:371 [3012] [99] |(564332|71%)|[ [ dis dep ]]  
+You feel the power of the venom camus flowing through your veins.
+13:23:55:036 [3012] [98] |(564332|71%)|[ [ dis dep ]]  
+13:23:55:041 [5827] [98] |(564332|71%)|[ [ dis dep ]]  
+Time wreaks ruin upon an errant frost elemental, deteriorating before your eyes.
+Damage dealt: 827 (psychic).
+13:23:55:246 [5827] [98] |(564332|71%)|[ [ dis dep ]]  
+An errant frost elemental screams out in agony, struck by the effects of a vicious venom.
+Damage dealt: 8840 (unblockable).
+An errant frost elemental shudders as a dose of slike floods his system.
+An errant frost elemental shudders as a dose of vernalius floods his system.
+13:23:55:295 [6003] [98] |(564332|56%)|[ [ dis dep ]]  
+You feel the power of the venom camus flowing through your veins.
+13:23:55:385 [6003] [98] |(564332|56%)|[ [ dis dep ]]  
+You may eat another plant or mineral.
+13:23:55:389 [6003] [98] |(564332|56%)|[ [ dis dep ]]  
+You eat a plumbum flake.
+Maybe things aren't so bad after all.
+13:23:55:472 [6003] [98] |(564332|56%)|[ [ dis ]]  
+With a swirl of condensed mist, an errant frost elemental whips a freezing tendril across your side.
+Health lost: 1600 (cold).
+Your own shadow betrays you, leaving your thoughts scattered and wan.
+Everything seems so pointless.
+Health lost: 954 (physical blunt).
+13:23:55:744 [3449] [98] |(564332|56%)|[ [ dis dep ]]  
+You feel the power of the venom camus flowing through your veins.
+13:23:55:865 [3449] [98] |(564332|56%)|[ [ dis dep ]]  
+Time wreaks ruin upon an errant frost elemental, deteriorating before your eyes.
+Damage dealt: 868 (psychic).
+13:23:56:237 [4012] [99] |(564332|56%)|[ [ dis dep ]]  
+An errant frost elemental exhales a freezing vapour that scorches your skin with biting cold.
+Health lost: 2939 (cold).
+Your own shadow betrays you, leaving your thoughts scattered and wan.
+Everything seems so pointless.
+13:23:56:287 [1073] [99] |(564332|56%)|[ [ dis dep ]]  
+You feel the power of the venom camus flowing through your veins.
+13:23:56:381 [1073] [99] |(564332|56%)|[ [ dis dep ]]  
+You may eat another bit of irid moss or potash.
+13:23:56:468 [1073] [99] |(564332|56%)|[ [ dis dep ]]  
+You eat a potash crystal.
+You feel your health and mana replenished.
+13:23:56:571 [1974] [100] |(564332|56%)|[ [ dis dep ]]  
+(((((((((((((((((((( BALANCE: 2.737 ))))))))))))))))))))
+You sink your fangs into an errant frost elemental, injecting just the proper amount of camus.
+Damage dealt: 1657 (unblockable).
+An errant frost elemental shudders as a dose of vernalius floods his system.
+Balance used: 2.8s.
+You feel the power of the venom camus flowing through your veins.
+13:23:56:720 [1974] [100] |(564332|53%)|[ [ dis dep ]]  
+You may eat another plant or mineral.
+13:23:56:999 [1974] [100] |(564332|53%)|[ [ dis dep ]]  
+You eat a plumbum flake.
+Maybe things aren't so bad after all.
+13:23:57:123 [1974] [100] |(564332|53%)|[ [ dis ]]  
+
+(MNEM): [explore] [swarm] LOW HP -- 17% -- NOT leaving: Prey -- every denizen tracks a retreat, so we fight here.
+You are dismayed as the corpse of a shambling slave turns to dust in your hands.
+13:23:57:253 [1974] [100] |(564332|53%)|[ [ dis ]]  
+
+(LEVI): DANGER: Extreme incoming damage in no-flee area -- no way out, fighting on.
+Time wreaks ruin upon an errant frost elemental, deteriorating before your eyes.
+Damage dealt: 827 (psychic).
+13:23:57:363 [1974] [100] |(564332|53%)|[ [ dis ]]  
+Dunn has been slain by the might of Havyn d'Ivoire.
+Kill breakdown for Dunn (4): Desitru, Titonus, Havyn, and Arador.
+13:23:57:433 [1974] [100] |(564332|53%)|[ [ dis ]]  
+You feel the power of the venom camus flowing through your veins.
+13:23:57:518 [3260] [100] |(564332|53%)|[ [ dis ]]  
+Time wreaks ruin upon an errant frost elemental, deteriorating before your eyes.
+Damage dealt: 827 (psychic).
+An errant frost elemental screams out in agony, struck by the effects of a vicious venom.
+Damage dealt: 17680 (unblockable).
+An errant frost elemental shudders as a dose of slike floods his system.
+13:23:58:277 [3613] [99] |(564332|22%)|[ [ dis ]]  
+With a swirl of condensed mist, an errant frost elemental whips a freezing tendril across your side.
+Health lost: 1790 (cold).
+Your own shadow betrays you, leaving your thoughts scattered and wan.
+A terrible sense of foreboding descends upon you.
+Health lost: 1073 (physical blunt).
+13:23:58:340 [750] [99] |(564332|22%)|[ [ ret dis ]]  
+You feel the power of the venom camus flowing through your veins.
+13:23:58:426 [750] [99] |(564332|22%)|[ [ ret dis ]]  
+Savaged by Marauder Desitru's fell dagger, the mutilated shadow of Havyn dissipates as its owner is ripped from life.
+Kill breakdown for Havyn (4): Mizik, Merador, Arador, and Desitru.
+13:23:58:503 [750] [99] |(564332|22%)|[ [ ret dis ]]  
+You may eat another plant or mineral.
+13:23:58:631 [750] [99] |(564332|22%)|[ [ ret dis ]]  
+You feel the power of the venom camus flowing through your veins.
+13:23:58:755 [750] [99] |(564332|22%)|[ [ ret dis ]]  
+You eat a cuprum flake.
+The terrible sense of foreboding lifts.
+13:23:58:759 [750] [99] |(564332|22%)|[ [ dis ]]  
+An errant frost elemental exhales a freezing vapour that scorches your skin with biting cold.
+Health lost: 750 (cold).
+You have been slain by an errant frost elemental.
+(mapper): Speedwalking paused.
+
+(LEVI): Still in Mnemosyne -- holding the bash curing set through the basher stop.
+(LEVI): Bashing finished. Started at (132 (87.01%) / 2175503g) and bashed for 62.61 minutes. 
+[Armour]: Basher disabled -- swapping to 'pvp'
+(LEVI): DEATH DETECTED! Basher disabled. Queues cleared. Auto-rotation OFF.
+(MNEM): [explore] slain by an errant frost elemental -- stopping the sweep.
+(LEVI): Still in Mnemosyne -- holding the bash curing set through the basher stop.
+(LEVI): Bashing finished. Started at (132 (87.01%) / 2175503g) and bashed for 0.00 minutes. 
+[Armour]: Basher disabled -- swapping to 'pvp'
+[Armour]: Already swapping. Please wait.
+(MNEM): [explore] off (slain).

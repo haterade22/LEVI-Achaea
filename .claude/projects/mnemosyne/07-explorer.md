@@ -993,9 +993,11 @@ lines: `kb/mechanics/mnemosyne-affixes.md`.
   then answers "Prey -- every denizen tracks a retreat, so we fight here", so the ground escape, the
   disengage and both low-HP ladders stay in the room, with nothing torn down (the v4.7.314 rule).
   The outdoor hover is not a ground retreat and still flies. Pulls are not affected.
-- **The last stand** lives in the basher (`ataxiaBasher_lastStandWanted`, basher/001:625): in a
+- **The last stand** lives in the basher (`ataxiaBasher_lastStand`, basher/001:687): in a
   no-flee area, at `escapeAt` or `panicHp`, with `S._escapeRouteReady()` false, it sends
-  `touch shield` even though `canShield()` says no, and holds the attacks until 70% health. A
+  `cq all` and `touch shield` even though `canShield()` says no, and holds every round from that
+  send until 70% health (v4.7.490; before it, the next attack round deleted the queued shield).
+  Two sends with no shield end it, with a 10 s cooldown. A
   denizen that breaks the shield is learned and never trusted again. Full rules:
   `.claude/projects/basher/05-safety-systems.md`, "The last stand".
 

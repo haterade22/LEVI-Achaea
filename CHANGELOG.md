@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-11-12 - v4.7.490: the last stand holds every round from its first shield
+
+From a Mnemosyne death on v4.7.486 (two errant frost elementals, `kb/raw/live/mnemosyne-frost-elemental-laststand_2026-11-11.txt`). `LAST STAND: 24% and no way out` printed, and no shield went up. In the 5.4 s after it we bit twice and culled once, and a 750 cold vapour killed us at 750 HP.
+
+- **Why the shield never went up.** After the first `touch shield`, v4.7.486 answered "no last stand" for its 3 s resend window. So the next round was an attack, and every attack round sends `queue addclearfull`, which deleted the queued shield. A bite the server already held also ran before it.
+- **Now a stand holds every round from the first send.** Until the stand ends, a round is the shield or nothing, never an attack. The send clears the queue first (`cq all`, not in lava).
+- **A shield that does not go up is sent once more.** After 2 sends with no shield, the stand ends ("the shield did not go up after 2 tries"), and the basher attacks. A stand that ends this way, or whose shield breaks, starts no new stand for 10 s.
+- **Tests:** `test_basher_noflee.lua`, "the last stand": the hold from the first send, the resend and give-up timing, and the cooldown. The new cases fail on v4.7.486.
+- **Needs a reimport.** Not run in Mudlet yet.
+
+---
+
 ## 2026-11-11 - v4.7.489: Serpent auto-evade, no pinshot on group presses, a party call when we are being locked, Magi calls only on a Magi, the curare reaction corrected
 
 From the user's review of the 2026-11-11 Serpent group fight (`Serpent_group_2.txt`, not filed: it holds party chat).

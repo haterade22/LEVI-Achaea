@@ -185,6 +185,13 @@ function ataxiaBasher_attack()
   -- worse than swinging: it costs a round AND leaves us believing we are covered. Fall
   -- through to the attack -- clearing the room is the only mitigation the affix leaves us.
   if danger == "shield" and not ataxiaBasher_bravado() and not ataxiaBasher_tattoosDead() then
+    -- v4.7.490: a last stand first clears the queue, so a bite or a swing the server already holds
+    -- cannot run before the shield and drop it (never in lava: onLava's queued escape lives there).
+    if ataxiaTemp.lastStandFlush then
+      ataxiaTemp.lastStandFlush = nil
+      local mnem = ataxia.mnemosyne
+      if not (mnem and mnem.roomLava and mnem.roomLava()) then send("cq all") end
+    end
     send("queue addclear freestand touch shield")
     return
   end
@@ -533,7 +540,8 @@ function ataxiaBasher_dangerLevel()
       end
     end
     -- THE LAST STAND (v4.7.486): no way out and one or two rounds from death -- shield and heal.
-    if ataxiaBasher_lastStandWanted(hpp) then return "shield" end
+    local stand = ataxiaBasher_lastStand(hpp) -- v4.7.490: "shield", "wait" or nil
+    if stand then return stand end
     -- Shield as a one-cycle guard on a spike. `canShield()` used to gate the ALARM itself, which
     -- made this branch unreachable in every real tower fight: it returns false whenever a room
     -- denizen is on the area target list, i.e. the normal case. It now gates only the shielding.
@@ -589,6 +597,8 @@ end
 -- would have gone. `bash laststand off` turns it off.
 local LAST_STAND_MAX = 30      -- seconds a last stand may hold the attacks
 local LAST_STAND_RESEND = 3    -- seconds before a `touch shield` that did not take is sent again
+local LAST_STAND_TRIES = 2     -- sends before a shield that never rises is given up (v4.7.490)
+local LAST_STAND_COOLDOWN = 10 -- seconds after a stand gives up, or its shield breaks, before another
 
 local function lastStandNow() return (getEpoch and getEpoch()) or os.time() end
 
@@ -621,7 +631,7 @@ local function lastStandRetreatOpen()
   return ok and ready == true
 end
 
--- Should the danger check answer "shield" now?
+-- Should a NEW last stand start? Side-effect-free.
 function ataxiaBasher_lastStandWanted(hpp)
   if ataxiaBasher.lastStand == false then return false end
   if not ataxiaBasher_isNoFleeArea() then return false end
@@ -630,21 +640,21 @@ function ataxiaBasher_lastStandWanted(hpp)
   if not ataxiaBasher_lastStandCritical(hpp) then return false end
   if ataxiaBasher_shieldBreakerHere() then return false end
   if lastStandRetreatOpen() then return false end
-  ataxiaTemp = ataxiaTemp or {}
-  local nowT = lastStandNow()
-  local sent = tonumber(ataxiaTemp.lastStandSentAt)
-  if sent and (nowT - sent) >= 0 and (nowT - sent) < LAST_STAND_RESEND then return false end
-  ataxiaTemp.lastStandSentAt = nowT
-  if not ataxiaTemp.lastStandAt then
-    ataxiaTemp.lastStandAt = nowT
-    ataxiaEcho("LAST STAND: " .. tostring(hpp) .. "% and no way out -- shielding, attacks held until "
-      .. (tonumber(ataxiaBasher.lastStandRelease) or 70) .. "%.")
-  end
+  local cool = tonumber(ataxiaTemp and ataxiaTemp.lastStandCoolUntil)
+  if cool and lastStandNow() < cool then return false end
   return true
 end
 
--- Is a last stand holding the attacks? Ends itself at the release health, at LAST_STAND_MAX, or
--- when the shield is gone (broken or never raised) after the resend window.
+local function lastStandEnd(why, cool)
+  ataxiaTemp.lastStandAt, ataxiaTemp.lastStandSentAt = nil, nil
+  ataxiaTemp.lastStandSends, ataxiaTemp.lastStandUp = nil, nil
+  ataxiaTemp.lastStandCoolUntil = cool and (lastStandNow() + LAST_STAND_COOLDOWN) or nil
+  ataxiaEcho("LAST STAND over (" .. why .. ") -- attacking.")
+end
+
+-- Is a last stand still on? Ends it at the release health, at LAST_STAND_MAX, or when a shield we
+-- SAW go up is down again (broken). A shield that never went up is the caller's business
+-- (ataxiaBasher_lastStand counts the tries), because until it rises the stand must keep holding.
 function ataxiaBasher_lastStandHolding()
   ataxiaTemp = ataxiaTemp or {}
   local at = tonumber(ataxiaTemp.lastStandAt)
@@ -652,21 +662,51 @@ function ataxiaBasher_lastStandHolding()
   local nowT = lastStandNow()
   local hpp = tonumber(ataxia.vitals and ataxia.vitals.hpp) or 0
   local release = tonumber(ataxiaBasher.lastStandRelease) or 70
-  local why
+  local shielded = ataxia.defences and ataxia.defences.shield
+  if shielded then ataxiaTemp.lastStandUp = true end
   if hpp >= release then
-    why = "health back to " .. hpp .. "%"
+    lastStandEnd("health back to " .. hpp .. "%")
   elseif (nowT - at) >= LAST_STAND_MAX or (nowT - at) < 0 then
-    why = "held " .. LAST_STAND_MAX .. "s"
-  elseif not (ataxia.defences and ataxia.defences.shield)
-     and (nowT - (tonumber(ataxiaTemp.lastStandSentAt) or at)) >= LAST_STAND_RESEND then
-    why = "the shield is down"
+    lastStandEnd("held " .. LAST_STAND_MAX .. "s")
+  elseif ataxiaTemp.lastStandUp and not shielded then
+    lastStandEnd("the shield is down", true)
+  else
+    return true
   end
-  if why then
-    ataxiaTemp.lastStandAt, ataxiaTemp.lastStandSentAt = nil, nil
-    ataxiaEcho("LAST STAND over (" .. why .. ") -- attacking.")
-    return false
+  return false
+end
+
+-- THE LAST STAND DECIDES THE ROUND (v4.7.490). Returns "shield" (send `touch shield`), "wait"
+-- (build no attack round), or nil (no last stand: carry on).
+--
+-- From a death (2026-11-11, two errant frost elementals): v4.7.486 sent the shield and then, for
+-- the 3 s resend window, answered "no last stand" -- so the danger check fell through to "attack",
+-- and every attack sends `queue addclearfull`, which deleted the queued `touch shield`. The stand
+-- printed, the shield never went up, and we bit and culled for 5 s until a 750 vapour killed us.
+-- From the first send until the stand ends, nothing else may queue a round.
+function ataxiaBasher_lastStand(hpp)
+  ataxiaTemp = ataxiaTemp or {}
+  local nowT = lastStandNow()
+  if ataxiaTemp.lastStandAt and ataxiaBasher_lastStandHolding() then
+    if ataxia.defences and ataxia.defences.shield then return "wait" end
+    local since = nowT - (tonumber(ataxiaTemp.lastStandSentAt) or 0)
+    if since >= 0 and since < LAST_STAND_RESEND then return "wait" end
+    if (ataxiaTemp.lastStandSends or 0) >= LAST_STAND_TRIES then
+      lastStandEnd("the shield did not go up after " .. LAST_STAND_TRIES .. " tries", true)
+      return nil
+    end
+    ataxiaTemp.lastStandSentAt = nowT
+    ataxiaTemp.lastStandSends = (ataxiaTemp.lastStandSends or 0) + 1
+    ataxiaTemp.lastStandFlush = true
+    return "shield"
   end
-  return true
+  if not ataxiaBasher_lastStandWanted(hpp) then return nil end
+  ataxiaTemp.lastStandAt, ataxiaTemp.lastStandSentAt = nowT, nowT
+  ataxiaTemp.lastStandSends, ataxiaTemp.lastStandUp = 1, nil
+  ataxiaTemp.lastStandFlush = true
+  ataxiaEcho("LAST STAND: " .. tostring(hpp) .. "% and no way out -- shielding, attacks held until "
+    .. (tonumber(ataxiaBasher.lastStandRelease) or 70) .. "%.")
+  return "shield"
 end
 
 -- A line that names our magical shield. If it starts with the name of a denizen in the room, that

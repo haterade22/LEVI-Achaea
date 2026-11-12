@@ -37,19 +37,22 @@ muting the basher there would be lethal.
 room denizen is on the area target list — i.e. every real tower fight — so gating the alarm on
 it made the whole branch unreachable.
 
-### The last stand (v4.7.486)
+### The last stand (v4.7.486, rebuilt v4.7.490)
 
-`ataxiaBasher_lastStandWanted(hpp)` (`basher/001`:625), asked in step 4 after the disengage
-(001:536). From a death (2026-11-10, `kb/raw/live/mnemosyne-tashla-prey_2026-11-10.txt`): Prey
+`ataxiaBasher_lastStand(hpp)` (`basher/001`:687) decides the round in step 4, after the disengage
+(001:536-543). It returns `"shield"`, `"wait"` (build no round) or nil (no last stand). A new stand
+starts when `ataxiaBasher_lastStandWanted(hpp)` (001:635, no side effects) is true.
+
+From a death (2026-11-10, `kb/raw/live/mnemosyne-tashla-prey_2026-11-10.txt`): Prey
 made both tash'la follow our one retreat, the retreat back was refused, and `canShield()` was
 false, so from 28% to 15% health the only action was another attack. Sips and potash healed about
 1,030 HP/s against about 2,000 in; the last round was 4,592 into 4,592 health. A shield stops the
-2,000. It answers `"shield"` when all of these hold:
+2,000. A new stand starts when all of these hold:
 
 - a no-flee area, `ataxiaBasher.lastStand ~= false` (`bash laststand on|off`), no Bravado, no Rimewrought;
-- no shield up yet, and 3 s since the last send (`LAST_STAND_RESEND`), so the 0.3 s rebuild does not repeat it;
+- no shield up yet, and no cooldown (`ataxiaTemp.lastStandCoolUntil`, 10 s after a stand that gave up or whose shield broke);
 - critical health: HP% at or below the swarm's `escapeAt` (35), or raw HP at or below its `panicHp`
-  (3000) -- the two lines the escape ladder uses (`ataxiaBasher_lastStandCritical`, 001:595);
+  (3000) -- the two lines the escape ladder uses (`ataxiaBasher_lastStandCritical`, 001:605);
 - no denizen in the room on `ataxiaBasher.shieldBreakers`;
 - the swarm cannot take us out: it is off, or `S._escapeRouteReady()` is false, and no recovery or
   tumble is under way.
@@ -57,17 +60,34 @@ false, so from 28% to 15% health the only action was another attack. Sips and po
 **It ignores `canShield()` on purpose.** That function assumes every target-list denizen breaks
 shields; the last stand finds out. Trigger "Shield Broken By Denizen"
 (`denizen_attacks_misc_lines/029`, substring `your magical shield`) calls
-`ataxiaBasher_onShieldLine` (001:676): a line that starts with the name of a denizen in the room
+`ataxiaBasher_onShieldLine` (001:716): a line that starts with the name of a denizen in the room
 adds that name, lowercased, to the saved `ataxiaBasher.shieldBreakers`. Our own lines (`You...`),
 rebounds and players are ignored. One sample line exists: "A small brown lemming rips apart your
 magical shield defence with its claws." A tash'la raze line is not yet known.
 
-**The hold.** In a no-flee area the attack loop used to swing through a shield (the HP>=70 gate was
-dropped there). `ataxiaBasher_attack` now keeps that gate while `ataxiaBasher_lastStandHolding()`
-(001:648) is true. The hold ends at `ataxiaBasher.lastStandRelease` (70%, `bash laststand release
-<pct>`), after `LAST_STAND_MAX` (30 s), or when the shield is down 3 s after the last send (broken,
-or it never went up). Each end prints `LAST STAND over (<why>) -- attacking.`. The state is
-`ataxiaTemp.lastStandAt`/`lastStandSentAt`, never saved.
+**The hold starts at the first send (v4.7.490).** From a death (2026-11-11, two errant frost
+elementals, `kb/raw/live/mnemosyne-frost-elemental-laststand_2026-11-11.txt`): v4.7.486 sent
+`touch shield` at 24% and then, for the 3 s resend window, answered "no last stand". The danger
+check fell through to `"attack"`, and every attack round sends `queue addclearfull`, which deleted
+the queued shield. A bite the server already held also ran first. The stand printed, no shield went
+up, and in the 5.4 s after it we bit twice and culled once; a 750 cold vapour at 750 HP killed us.
+Two elementals hit 1,400-3,334 cold plus 950-1,070 blunt (the shadow line) a round. Now:
+
+- From the first send until the stand ends, every round is `"shield"` or `"wait"`, never `"attack"`.
+- A send clears the queue first: `ataxiaTemp.lastStandFlush` makes the shield branch of
+  `ataxiaBasher_attack` (001:186-196) send `cq all` before `queue addclear freestand touch shield`.
+  Not in lava, where `onLava`'s queued escape lives in the queue.
+- While the shield is down: `"wait"` for `LAST_STAND_RESEND` (3 s) after each send, then send
+  again. After `LAST_STAND_TRIES` (2) sends with no shield, the stand ends ("the shield did not go
+  up after 2 tries") with the 10 s cooldown, and the basher attacks.
+- While the shield is up: `"wait"`. In a no-flee area the attack loop also keeps the HP>=70 gate
+  while `ataxiaBasher_lastStandHolding()` (001:658) is true (001:209).
+
+`ataxiaBasher_lastStandHolding()` ends the stand at `ataxiaBasher.lastStandRelease` (70%,
+`bash laststand release <pct>`), after `LAST_STAND_MAX` (30 s), or when a shield it SAW up is down
+(broken; 10 s cooldown). Each end prints `LAST STAND over (<why>) -- attacking.`. The state is
+`ataxiaTemp.lastStandAt`, `lastStandSentAt`, `lastStandSends`, `lastStandUp`, `lastStandCoolUntil`
+and `lastStandFlush`, never saved.
 
 Open: whether tash'la raze a shield; what the hold does against a pool that heals the denizens
 while we wait (Sanguine Restoration). Tests: `test_basher_noflee.lua`, "the last stand".

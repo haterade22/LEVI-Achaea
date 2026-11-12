@@ -444,6 +444,8 @@ describe("no-flee areas finally have an HP branch (v4.7.243)", function()
     ataxia.vitals = { hp = 1024, hpp = 5, maxhp = 18700, rage = 0 }
     ataxiaBasher_dmgSamples = {}
     ataxiaBasher_incSamples = {}
+    ataxiaTemp.lastStandAt, ataxiaTemp.lastStandSentAt, ataxiaTemp.lastStandSends = nil, nil, nil
+    ataxiaTemp.lastStandUp, ataxiaTemp.lastStandCoolUntil = nil, nil
   end
 
   it("spends the round LEAVING when the swarm can get us out", function()
@@ -463,7 +465,9 @@ describe("no-flee areas finally have an HP branch (v4.7.243)", function()
     ataxia.mnemosyne = ataxia.mnemosyne or {}
     ataxia.mnemosyne.swarm = { disengage = function() return false end }
     ataxiaBasher_canShield = function() return false end
+    ataxiaBasher.lastStand = false -- the last stand has its own describe below
     expect(ataxiaBasher_dangerLevel()).toBe("attack")
+    ataxiaBasher.lastStand = nil
     ataxiaBasher_canShield = function() return true end
     ataxia.mnemosyne.swarm = nil
   end)
@@ -615,6 +619,8 @@ describe("the last stand (v4.7.486)", function()
     ataxiaBasher.inMnemosyne = true
     ataxiaBasher.lastStand, ataxiaBasher.lastStandRelease, ataxiaBasher.shieldBreakers = nil, nil, nil
     ataxiaTemp.lastStandAt, ataxiaTemp.lastStandSentAt = nil, nil
+    ataxiaTemp.lastStandSends, ataxiaTemp.lastStandUp = nil, nil
+    ataxiaTemp.lastStandCoolUntil, ataxiaTemp.lastStandFlush = nil, nil
     ataxia.denizensHere = { [101] = "a tash'la warrior", [102] = "a tash'la interceptor" }
     ataxia.mnemosyne = nil
     mnemBravado, mnemRimewrought = nil, nil
@@ -688,20 +694,65 @@ describe("the last stand (v4.7.486)", function()
     done()
   end)
 
-  it("does not resend the shield inside the resend window", function()
+  it("waits inside the resend window, resends once, then gives up with a cooldown", function()
     fresh()
-    expect(ataxiaBasher_lastStandWanted(20)).toBeTrue()
+    ataxia.vitals.hpp = 20
+    expect(ataxiaBasher_lastStand(20)).toBe("shield")
     clock = 1002
-    expect(ataxiaBasher_lastStandWanted(20)).toBeFalse()
+    expect(ataxiaBasher_lastStand(20)).toBe("wait")
     clock = 1003
-    expect(ataxiaBasher_lastStandWanted(20)).toBeTrue()
+    expect(ataxiaBasher_lastStand(20)).toBe("shield")
+    clock = 1005
+    expect(ataxiaBasher_lastStand(20)).toBe("wait")
+    clock = 1006
+    expect(ataxiaBasher_lastStand(20)).toBeNil()   -- two tries, no shield: attack again
+    expect(ataxiaTemp.lastStandAt).toBeNil()
+    clock = 1010
+    expect(ataxiaBasher_lastStand(20)).toBeNil()   -- cooling down
+    clock = 1016
+    expect(ataxiaBasher_lastStand(20)).toBe("shield")
     done()
+  end)
+
+  -- The 2026-11-11 death: the stand printed, then for the resend window the danger check said
+  -- "attack", and the attack's `queue addclearfull` deleted the queued shield.
+  it("holds every round from the first send until the shield rises", function()
+    fresh()
+    local swung, sentCmds = 0, {}
+    local realSend = send
+    send = function(c) sentCmds[#sentCmds + 1] = c end
+    ataxiaBasher_checkPlayerFlee = function() return false end
+    ataxiaBasher_assembleAttack = function() swung = swung + 1 end
+    gmcp.Char = { Status = { class = "Serpent" } }
+    ataxiaBasher_bashingFuncs = ataxiaBasher_bashingFuncs or {}
+    ataxiaBasher_bashingFuncs.Serpent = ataxiaBasher_bashingFuncs.Serpent or "ataxiaBasher_serpentBashing"
+    ataxia.vitals.hpp = 24
+    local ok, err = pcall(function()
+      ataxiaBasher_attack()
+      expect(sentCmds[1]).toBe("cq all")
+      expect(sentCmds[2]).toBe("queue addclear freestand touch shield")
+      for t = 1000.3, 1002.7, 0.3 do  -- the 0.3 s rebuilds and the prompts of the death
+        clock = t
+        ataxiaBasher_attack()
+      end
+      expect(swung).toBe(0)
+      expect(#sentCmds).toBe(2)
+      ataxia.defences.shield = true    -- it rises
+      clock = 1004
+      ataxia.vitals.hpp = 40
+      ataxiaBasher_attack()
+      expect(swung).toBe(0)
+    end)
+    send = realSend
+    gmcp.Char = nil
+    done()
+    if not ok then error(err, 0) end
   end)
 
   it("holds the attacks while shielded, and lets go at the release health", function()
     fresh()
     ataxia.vitals.hpp = 20
-    ataxiaBasher_lastStandWanted(20)
+    ataxiaBasher_lastStand(20)
     ataxia.defences.shield = true
     clock = 1005
     ataxia.vitals.hpp = 55
@@ -714,13 +765,17 @@ describe("the last stand (v4.7.486)", function()
 
   it("lets go when the shield is broken, and after the time cap", function()
     fresh()
-    ataxiaBasher_lastStandWanted(20)
+    ataxia.vitals.hpp = 20
+    ataxiaBasher_lastStand(20)
     ataxia.defences.shield = true
+    clock = 1002
+    expect(ataxiaBasher_lastStandHolding()).toBeTrue() -- seen up
     clock = 1004
     ataxia.defences.shield = nil
     expect(ataxiaBasher_lastStandHolding()).toBeFalse()
+    expect(ataxiaBasher_lastStandWanted(20)).toBeFalse() -- broken: cooling down
     fresh()
-    ataxiaBasher_lastStandWanted(20)
+    ataxiaBasher_lastStand(20)
     ataxia.defences.shield = true
     ataxia.vitals.hpp = 40
     clock = 1030

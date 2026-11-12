@@ -68,5 +68,8 @@ The swarm's one retreat went into a Prey pursuit and a blood pool. After it, eve
 refused, and `ataxiaBasher_canShield()` (`can(x)/002`:18) is false while any target-list denizen
 is in the room and `noShieldBreak` does not name it, which in the tower is every fight. From 28%
 to 15% health the only action left was another attack. **The last stand (v4.7.486,
-basher/001:572-700)** shields in that case and holds the attacks until 70% health; see
-`.claude/projects/basher/05-safety-systems.md`.
+basher/001:580-736)** shields in that case and holds the attacks until 70% health; see
+`.claude/projects/basher/05-safety-systems.md`. **v4.7.490:** the v4.7.486 stand let the next
+attack round delete its queued shield (two errant frost elementals, 2026-11-11,
+`raw/live/mnemosyne-frost-elemental-laststand_2026-11-11.txt`). A stand now holds every round
+from its first `touch shield`, clears the queue first, and gives up after 2 tries.
