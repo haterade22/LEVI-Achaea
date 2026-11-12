@@ -2,6 +2,16 @@
 
 ---
 
+## 2026-11-12 - v4.7.492: documentation for the launch LAND
+
+No code change. The package is the same as v4.7.491, rebuilt with the new version number.
+
+- **`README.md`:** a "Launched? Land" row in the Combat System table.
+- **`kb/mechanics/balance-and-queueing.md`:** the LAND after a launch is one of the commands we send directly, because `queue addclearfull` would delete it.
+- **Memory (`slc.md`):** a new automatic LAND must read `selfLimbDamage.bothArmsFlee`, or it grounds us during the both-arms flee.
+
+---
+
 ## 2026-11-12 - v4.7.491: land when an enemy launches us into the sky
 
 The user: "We need to LAND when this happens." In the 2026-11-03 group log (`kb/raw/logs/ours/2026-11-03_102828_Harkon.log`, rows 503, 1578 and 7302) Dunn launched us three times:

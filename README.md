@@ -39,6 +39,7 @@ The GUI system (zGUI Redux) was originally created by **Zulah**. It has been enh
 | **Automated Curing** | SSC integration with custom priority management, curingset profiles |
 | **Defense Management** | Automatic defense rekeeping, parry system, anti-class priority adjustments; Monk and Blademaster keep DEAF and BLIND up with their timed skills (one send per trance) instead of spending herb balance |
 | **Limb Tracking** | Self limb counter (SLC) with percentage-based damage, auto-parry, threshold alerts, party callouts |
+| **Launched? Land** | When an enemy launches you into the sky ("A violent force suddenly takes hold of you and launches you high into the sky."), LAND goes out at once and again every 0.5 s for up to 6 s while you are still up. It stays up during the SLC both-arms flee and a Mnemosyne hover |
 | **Target Affliction Tracking** | V3 probability engine with branching cure prediction, lock detection at configurable confidence thresholds; enemy salve applications count as one cure each; timed afflictions (hamstring, dazzle, hellsight, ...) expire on the game's own duration |
 | **Curing Priority Sync** | The curing priority table re-sends itself to your `normal` curingset after it changes (at login, as about 8 multi-set commands to stay under the server's 5-a-second limit) |
 

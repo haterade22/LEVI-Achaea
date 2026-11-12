@@ -41,7 +41,8 @@ and runs on recovery. `CONFIG SHOWQUEUEALERTS ON|OFF` toggles the queue messages
   if clearing its own queue still leaves no room.
 - **ADDCLEARFULL wipes everything**, every queue type included. That is why the basher's
   `queue addclearfull` round deletes anything else we queued, and why balanceless commands
-  (lily drops, corpse eats, CONSIDER) are sent directly instead (see CLAUDE.md).
+  (lily drops, corpse eats, CONSIDER, the LAND after a launch into the sky) are sent directly
+  instead (see CLAUDE.md and [launched-into-sky.md](launched-into-sky.md)).
 
 **Queue types:**
 
