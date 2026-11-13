@@ -1600,7 +1600,7 @@ recommended_strategy: |
 anti_serpent_function: |
   Algedonic.AntiSerpent (src_new/scripts/levi_ataxia/levi/levi_scripts/algedonic_defense_1.0/001_Anti_Priorities.lua:725-792).
   Algedonic.Prioritize() calls it on every GMCP affliction gain and loss
-  (004_Aff_gains_losses.lua:377, :452) when OUR TARGET is a Serpent in the NDB
+  (004_Aff_gains_losses.lua:380, :459) when OUR TARGET is a Serpent in the NDB
   (ataxiaNDB_getClass(target), :108-109) - not when an unknown Serpent attacks us.
   In order, first match wins:
   1. Approaching lock (asthma + slickness + impatience or anorexia) and we can tree (not

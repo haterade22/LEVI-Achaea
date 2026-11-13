@@ -463,8 +463,9 @@ leapt the raw `command` string and `addclearfull`-wiped the explorer's queue.
   carries it, and during a recovery the prompt sends it, because attacks are held there and no
   round runs. It waits while we leave a room (`escapeMode`) and while a tumble is in the air or
   still queued (`S.moveLocked`, `S._retreatInFlight`): a `free` queue waits for equilibrium too, so
-  a cure sent then would delay the tumble. The Miracle boon needs no code. Full rule:
-  `kb/afflictions/class-cures.md`.
+  a cure sent then would delay the tumble. The Miracle boon needs no code. A boon's permanent
+  affliction does not count (v4.7.495, "A boon's permanent affliction must not hold a recovery"
+  below). Full rule: `kb/afflictions/class-cures.md`.
 
 - **Forced disengage** (`S.disengage(reason)`, v4.7.215): leave on a TACTICAL judgement rather
   than an HP reading. The ladder above is entirely reactive, which is useless against an enemy
@@ -988,8 +989,8 @@ the DYING FAST leap at 70% went into a room with a blood pool. Under **Prey** bo
 refused the way back, and the only action left at 28% and 15% health was another attack. Facts and
 lines: `kb/mechanics/mnemosyne-affixes.md`.
 
-- **Prey.** `S._preyTracks()` (009:567) is true when this run's affix list holds `Prey` (the whole
-  name, case-blind) and neither Roll Hide nor Terror of the Skies is held. `S._retreatBlock` (009:582)
+- **Prey.** `S._preyTracks()` (009:574) is true when this run's affix list holds `Prey` (the whole
+  name, case-blind) and neither Roll Hide nor Terror of the Skies is held. `S._retreatBlock` (009:589)
   then answers "Prey -- every denizen tracks a retreat, so we fight here", so the ground escape, the
   disengage and both low-HP ladders stay in the room, with nothing torn down (the v4.7.314 rule).
   The outdoor hover is not a ground retreat and still flies. Pulls are not affected.
@@ -1259,6 +1260,17 @@ It is now in `AFF_IGNORE` beside the kept defences, and the reasoning generalise
 the *opposite* way from every other affliction there. Blindness or a broken limb is a state that
 waiting **fixes**; a leech is a state that waiting **pays for**. Only the first belongs in a gate
 whose action is "stand still longer" — especially as mana is a kill condition for several routes.
+
+### A boon's permanent affliction must not hold a recovery (v4.7.495)
+
+Sprightly ("...but you suffer permanent clumsiness."), Meathead (confusion), Snowflake
+(sensitivity), Corrupted Cold (dehydration and tenderskin) and the other "permanent" boons put an
+affliction on us that no cure takes. `S._blockingAffs()` (`009_Swarm_Tactics.lua`) skips any
+affliction for which `ataxia_permanentAff(k)` names a boon (`004_Parsers.lua`: this run's claims,
+less our immunities, nil outside the tower). Without the skip it was the manaleech wedge again:
+`S._afflicted()` stays true and every hover burns its full cap. The same reader keeps the class cure
+and the blackout tree from spending on it (`kb/afflictions/class-cures.md`). Test:
+`test_swarm_tactics.lua`, "_blockingAffs skips a boon's permanent affliction".
 
 ### Escape mode (v4.7.243)
 

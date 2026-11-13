@@ -6,8 +6,9 @@ sources:
   - kb/raw/guides/active-and-passive-cures-with-fire-lines.txt      # community guide; source of the lines
   - kb/raw/players/fitness-2026-11-01.txt                           # the user: fitness needs balance and eq
   - kb/raw/logs/                                                    # Fitness in detail: 11 fires
+  - kb/raw/live/mnemosyne-sprightly-permanent-clumsiness_2026-11-13.txt  # a boon's permanent affliction
 code: src_new/triggers/levi_ataxia/for_levi/leviticus/passive_active/
-last_verified: 2026-11-09
+last_verified: 2026-11-13
 ---
 
 # Class cures: how the target fights back
@@ -103,6 +104,42 @@ takes from the same pool as the tree. The game's flag `NoRandomCure` supports th
 ([database.md](database.md)), so prone, laceratedthroat and a damaged limb do not count. The pool
 leaves out 13 afflictions that have no such flag, among them the stacking fractures, so the count
 can read low. That leaves the cure idle. It does not waste it.
+
+**A boon's permanent affliction does not count (v4.7.495).** The user, 2026-11-13, with Sprightly
+("Your dexterity is increased by 5, but you suffer permanent clumsiness."): "When we take boons that
+give permanent afflictions we are not immune from the system needs to account for that" and "We dont
+need to tree or use actives if we have this affliction on us". What the log shows
+([raw/live/mnemosyne-sprightly-permanent-clumsiness_2026-11-13.txt](../raw/live/mnemosyne-sprightly-permanent-clumsiness_2026-11-13.txt)):
+
+- CONFIRMED: the class cure fired at "3 afflictions" on `[ [ IMP clu PAR ]]`, with the permanent
+  clumsiness as one of the 3 (row 171). Magnesium then took the paralysis, and the shrug took the
+  impatience. The same happened on `crackedribs (1) clu PAR sen` (row 148).
+- CONFIRMED: our blackout tree (`aconfig treeblackout`) went three times with only blackout and the
+  clumsiness known, and each time printed "Your tree of life tattoo glows faintly for a moment then
+  fades, leaving you unchanged." (rows 32, 64, 79). Blackout's only cure is time
+  ([database.md](database.md)). The prompt showed `?` or `??` (afflictions we cannot see) at those
+  times, and the tree still took nothing.
+- CONFIRMED: clumsiness stayed up for the whole run after cures and eats, and the game still says
+  "Clumsiness gets the better of you and you fumble the attack, wasting your battlerage." (row 75).
+- INFERRED: the last 3,220 lines of the buffer hold no kelp eat, with the clumsiness up the whole
+  time, so SSC seems to know the affliction is permanent. The package changes no SSC priority for it.
+
+The code (`mnemosyne/004_Parsers.lua`): `M._permanentAffsFrom(desc)` reads the affliction names after
+the word "permanent" ("permanent dehydration and tenderskin" gives two). `M.runPermanentAffs()` reads
+this run's claims, less what a held boon makes us immune to (Poindexter's permanent dizziness costs
+nothing with Sure-Footed). `ataxia_permanentAff(aff)` gives the boon's name, and nil outside the
+tower. A cost clause that does not say "permanent" does not count: Sohtanate's Suffering names
+stupidity, and stupidity still cures. Its readers:
+
+- `ataxia_randomCurableCount()` (`can(x)/003`) skips a permanent affliction, so the user's board is 2.
+- FITNESS and the lock-breaker's asthma test (`ataxia_curableAffed("asthma")`) skip a permanent asthma.
+- `ataxia_treeOnlyPermanent()` (`can(x)/003`) is true when every tree-curable affliction we know of,
+  blackout aside, is permanent and at least one is up. The blackout tree (`004_Aff_gains_losses`) and
+  the fire elemental's mask trigger (`unknown_checks/005_FIRE_SCALD`) do not touch the tree then.
+  With nothing else up, the blackout tree still goes, as before: that case is not in any log.
+- A Mnemosyne recovery (`S._blockingAffs`, `009_Swarm_Tactics`) does not wait for it.
+
+The lock checks still count a permanent affliction: a channel that a boon closes stays closed.
 
 | Class | Sent | Extra condition |
 |---|---|---|

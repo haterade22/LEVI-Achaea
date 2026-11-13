@@ -567,8 +567,8 @@ both_legs_hindered:
   fix:     "same rotation rollback, plus M._disarmMove() (345:60-71)"
   why: |
     Also unhandled before v4.7.167. Its expensive victim is not a swing but LEAP: the
-    Mnemosyne swarm module moves with `stand;leap <dir>` (mnemosyne/009_Swarm_Tactics.lua:770
-    low-HP retreat, `S._escapeSuffix` the wall-escape decorator, :1064 the re-entry), and a refusal was
+    Mnemosyne swarm module moves with `stand;leap <dir>` (mnemosyne/009_Swarm_Tactics.lua:777
+    low-HP retreat, `S._escapeSuffix` the wall-escape decorator, :1071 the re-entry), and a refusal was
     SILENT to that machinery -- the move sat "in flight" until the tactical arm's timeout
     expired, stalling the low-HP escape ladder at the moment it was holding us alive.
     One broken leg does not trip this; Achaea lets you stand and walk on one. The refusal

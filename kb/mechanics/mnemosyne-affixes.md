@@ -26,8 +26,8 @@ This page holds the affixes whose effect on a fight we have seen in a log.
   the attacks while it runs.
 - **Confidence:** CONFIRMED for this one pair of denizens (one log). Roll Hide and Terror of the
   Skies shed pursuers by their boon text; under Prey this is UNTESTED.
-- **Code (v4.7.486):** `S._preyTracks()` (009:567) matches the affix name WHOLE, for this run only,
-  and returns false with Roll Hide or Terror of the Skies. `S._retreatBlock` (009:582) then refuses
+- **Code (v4.7.486):** `S._preyTracks()` (009:574) matches the affix name WHOLE, for this run only,
+  and returns false with Roll Hide or Terror of the Skies. `S._retreatBlock` (009:589) then refuses
   every ground retreat. The recovery hover is not a ground retreat and still flies.
 
 ### Sanguine Restoration: "Pools of blood shall heal nearby denizens."

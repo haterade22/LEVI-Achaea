@@ -1863,6 +1863,90 @@ function M._boonDrawbacks(desc)
   return out
 end
 
+-- ---------------------------------------------------------------------------
+-- PERMANENT AFFLICTIONS FROM BOONS (v4.7.495)
+-- ---------------------------------------------------------------------------
+-- The user, with Sprightly ("Your dexterity is increased by 5, but you suffer permanent
+-- clumsiness."): "When we take boons that give permanent afflictions we are not immune from the
+-- system needs to account for that" and "We dont need to tree or use actives if we have this
+-- affliction on us". In the live run the class cure fired at "3 afflictions" on impatience,
+-- clumsiness and paralysis, and the blackout tree cured nothing ("Your tree of life tattoo glows
+-- faintly for a moment then fades, leaving you unchanged.") with only blackout and clumsiness up.
+--
+-- Only the word "permanent" counts. `_boonDrawbacks` reads any affliction in a cost clause, and
+-- that is wrong here: Sohtanate's Suffering ("...but all stupidity you labour under shall be
+-- muddled further") names stupidity, which still cures. The words after "permanent" are read
+-- while each is a known affliction name or "and", so "permanent dehydration and tenderskin" gives
+-- two, and "a permanent balancing defense", "now permanent and grants" and "permanently" give none.
+local PERM_KNOWN = {}
+for _, a in ipairs(DRAWBACK_AFFS) do PERM_KNOWN[a] = true end
+
+function M._permanentAffsFrom(desc)
+  local out, seen = {}, {}
+  if type(desc) ~= "string" or desc == "" then return out end
+  local low = desc:lower()
+  for clause in low:gmatch("permanent%s+([^%.,;:]+)") do
+    for word in clause:gmatch("%a+") do
+      if PERM_KNOWN[word] then
+        if not seen[word] then seen[word] = true; out[#out + 1] = word end
+      elseif word ~= "and" then
+        break
+      end
+    end
+  end
+  return out
+end
+
+-- { [affliction] = <boon> } for this run's claims, less what a held boon makes us immune to (a
+-- cost we are immune to never lands). Read on every prompt by the class cure, so it is cached on
+-- the run, the claim count and the library generation (a description learned later counts).
+local permCache = { key = nil, map = {}, run = nil }
+
+function M.runPermanentAffs()
+  local h = M.history
+  if not h or type(h.claims) ~= "table" then return {} end
+  local key = tostring(h.run) .. ":" .. #h.claims .. ":" .. tostring(M._boonLibGen or 0)
+  if permCache.key == key then return permCache.map end
+  local out = {}
+  for _, c in ipairs(h.claims) do
+    if c.run == h.run and type(c.name) == "string" then
+      local boon = (M._baseBoonName and M._baseBoonName(c.name)) or c.name
+      local desc = c.description
+      -- A claim recorded before its description was known: the library (seeded from 010 at load).
+      if type(desc) ~= "string" or desc == "" then
+        local info = M.boonInfo and (M.boonInfo(boon) or M.boonInfo(c.name))
+        desc = info and info.description
+      end
+      for _, aff in ipairs(M._permanentAffsFrom(desc)) do out[aff] = out[aff] or boon end
+    end
+  end
+  for aff in pairs(M.runImmunities()) do out[aff] = nil end
+  -- Say each new one once per run, so the skipped tree and cure are not a mystery.
+  local before = (permCache.run == h.run) and permCache.map or {}
+  if not (M._quiet and M._quiet()) then
+    local names = {}
+    for aff in pairs(out) do if not before[aff] then names[#names + 1] = aff end end
+    table.sort(names)
+    for _, aff in ipairs(names) do
+      M.echo("<gold>" .. out[aff] .. "<reset>: permanent <yellow>" .. aff
+        .. "<reset> -- not counted for the class cure, the blackout tree or the recovery wait.")
+    end
+  end
+  permCache.key, permCache.map, permCache.run = key, out, h.run
+  return out
+end
+
+-- The boon that makes `aff` permanent for us, or nil. Nil outside the tower: boons end with the run.
+function ataxia_permanentAff(aff)
+  if type(aff) ~= "string" then return nil end
+  if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return nil end
+  local mnem = ataxia and ataxia.mnemosyne
+  if not (mnem and mnem.runPermanentAffs) then return nil end
+  local ok, map = pcall(mnem.runPermanentAffs)
+  if not ok or type(map) ~= "table" then return nil end
+  return map[aff:lower()]
+end
+
 -- Back-compat single-value form: the first cost, or nil.
 function M._boonDrawback(desc)
   if type(desc) ~= "string" or desc == "" then return nil end

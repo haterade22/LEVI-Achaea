@@ -265,6 +265,13 @@ local function parkedAff(k)
   return type(p) == "number" and p >= floor
 end
 
+-- A boon's permanent affliction (v4.7.495, 004 `ataxia_permanentAff`) never clears, so a
+-- recovery that waits for it waits out its whole RECOVER_MAX cap: Sprightly's clumsiness would
+-- hold every hover. Like manaleech above, waiting buys nothing.
+local function permanentAff(k)
+  return ataxia_permanentAff ~= nil and ataxia_permanentAff(k) ~= nil
+end
+
 -- The afflictions that hold a recovery, sorted (v4.7.389) -- so a recovery can SAY what it is
 -- waiting on, and count whether that list is shrinking. `S._afflicted()` is this list being
 -- non-empty: one definition, two readers.
@@ -273,7 +280,7 @@ function S._blockingAffs()
   local a = ataxia and ataxia.afflictions
   if type(a) ~= "table" then return out end
   for k, v in pairs(a) do
-    if not AFF_IGNORE[k] and not parkedAff(k) then
+    if not AFF_IGNORE[k] and not parkedAff(k) and not permanentAff(k) then
       if k == "unknown" then
         if type(v) == "number" and v > 0 then out[#out + 1] = "unknown(" .. v .. ")" end
       elseif v == true then

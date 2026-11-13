@@ -1,0 +1,187 @@
+Sprightly                      1          uncommon
+     | Your dexterity is increased by 5, but you suffer permanent clumsiness.
+-----
+You slip behind an undead nautilus and garrote him with your whip.
+Damage dealt: 633 (asphyxiation).
+With a flick of your wrist, you send the tip of your whip to scour the flesh of another.
+Balance used: 1.2s.
+You may eat another plant or mineral.
+12:00:42:210 [12619] [100] |(624128|58%)|[ [ clu ]]  
+You eat an arsenic pellet.
+An undead nautilus's attention focusses upon you, and an incredible psychic power surges through your thoughts, 
+battering your mind mercilessly.
+Health lost: 1656 (psychic).
+12:00:43:068 [10963] [99] |(624128|58%)|[ [ clu IMP epi stu ]]  
+You touch the tree of life tattoo.
+Your nerves suddenly calm down.
+12:00:43:209 [10963] [99] |(624128|58%)|[ [ clu IMP stu ]]  
+(((((((((((((((((((( BALANCE: 1.181 ))))))))))))))))))))
+-----
+You may eat another plant or mineral.
+12:01:08:346 [12619] [95] |(468674|55%)|[ [ ? clu PAR ]]  
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+[RIFT]: -1 Quicksilver. Remaining: 5915.
+You apply a quicksilver droplet to yourself.
+You cease focusing on driving off attempts to paralyse you.
+12:01:08:573 [12619] [95] |(468674|55%)|[ [ ? clu ]]  
+A soldier of Nemuritoaure looses a shrill, unpleasant cry that is promptly answered by others in the vicinity.
+Health lost: 716 (physical cutting).
+Health lost: 762 (physical blunt).
+ [BLACKOUT] 
+Your tree of life tattoo glows faintly for a moment then fades, leaving you unchanged.
+ [BLACKOUT] 
+Damage dealt: 3264 (asphyxiation).
+Balance used: 1.2s.
+You rush about in a state of utter panic.
+-----
+You begin focusing on driving off attempts to paralyse you.
+12:01:16:128 [11888] [99] |(147189|100%)|[ [ ?? clu PAR ]]  
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+12:01:16:237 [11888] [99] |(147189|100%)|[ [ ?? clu ]]  
+Both of your legs must be free and unhindered to do that.
+You are:
+afflicted with clumsiness.
+blind.
+deaf.
+afflicted by a crippled left leg.
+-----
+You flay away a soldier of Nemuritoaure's shield defence.
+Balance used: 1.6s.
+12:01:26:416 [10628] [99] |(147189|16%)|[ [ ?? clu ]]  
+You may eat another plant or mineral.
+12:01:26:736 [10628] [99] |(147189|16%)|[ [ ?? clu ]]  
+(((((((((((((((((((( BALANCE: 1.532 ))))))))))))))))))))
+You slip behind a soldier of Nemuritoaure and garrote him with your whip.
+Damage dealt: 778 (asphyxiation).
+With a flick of your wrist, you send the tip of your whip to scour the flesh of another.
+Balance used: 1.2s.
+A soldier of Nemuritoaure looses a shrill, unpleasant cry that is promptly answered by others in the vicinity.
+Health lost: 713 (physical cutting).
+Health lost: 779 (physical blunt).
+ [BLACKOUT] 
+Your tree of life tattoo glows faintly for a moment then fades, leaving you unchanged.
+ [BLACKOUT] 
+(((((((((((((((((((( BALANCE: 1.155 ))))))))))))))))))))
+-----
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset 
+A soldier of Nemuritoaure looses a shrill, unpleasant cry that is promptly answered by others in the vicinity.
+Your shield completely absorbs the damage.
+Health lost: 762 (physical blunt).
+ [BLACKOUT] 
+Clumsiness gets the better of you and you fumble the attack, wasting your battlerage.
+ [BLACKOUT] 
+Damage dealt: 778 (asphyxiation).
+Balance used: 1.2s.
+Your tree of life tattoo glows faintly for a moment then fades, leaving you unchanged.
+ [BLACKOUT] 
+-----
+Health lost: 634 (physical cutting).
+Your hearing is suddenly restored.
+12:01:39:710 [9563] [97] |(18399|89%)|[ [ ?? sen clu ]]  
+(((((((((((((((((((( BALANCE: 1.001 ))))))))))))))))))))
+You rush about in a state of utter panic.
+You are no longer stunned.
+12:01:40:079 [9563] [97] |(18399|89%)|[ [ ?? clu sen fear ]]  
+You eat an aurum flake.
+The stinging feeling fades.
+12:01:40:174 [12393] [97] |(18399|89%)|[ [ ?? clu ]]  
+You slip behind a soldier of Nemuritoaure and garrote him with your whip.
+A soldier of Nemuritoaure's form begins to atrophy as your attack kindles ethereal mist to consign him to only memory.
+Damage dealt: 1632 (asphyxiation).
+With a flick of your wrist, you send the tip of your whip to scour the flesh of another.
+Balance used: 1.2s.
+Time wreaks ruin upon a soldier of Nemuritoaure, deteriorating before your eyes.
+Damage dealt: 97 (psychic).
+12:01:41:195 [12619] [100] |(18399|84%)|[ [ ?? clu ]]  
+(((((((((((((((((((( BALANCE: 1.085 ))))))))))))))))))))
+You slip behind a soldier of Nemuritoaure and garrote him with your whip.
+Damage dealt: 778 (asphyxiation).
+With a flick of your wrist, you send the tip of your whip to scour the flesh of another.
+Balance used: 1.2s.
+You may eat another plant or mineral.
+12:01:41:725 [12619] [100] |(18399|82%)|[ [ ?? clu ]]  
+(MNEM): [explore] clearing this room (1 denizen(s)) -- basher on it.
+You eat a calamine crystal.
+12:01:41:779 [12619] [100] |(18399|82%)|[ [ ?? clu ]]  
+Time wreaks ruin upon a soldier of Nemuritoaure, deteriorating before your eyes.
+Damage dealt: 97 (psychic).
+12:01:42:205 [12619] [100] |(18399|82%)|[ [ ?? clu ]]  
+First bashing you with his splintered shield, a soldier of Nemuritoaure thrusts his weathered longsword between the 
+cracks of your armour and deep into the unguarded softness beneath.
+Health lost: 673 (physical cutting).
+12:01:42:257 [11946] [100] |(18399|82%)|[ [ ?? clu sen ]]  
+(((((((((((((((((((( BALANCE: 0.758 ))))))))))))))))))))
+You are no longer stunned.
+12:01:42:587 [11946] [100] |(18399|82%)|[ [ ?? clu sen ]]  
+Health lost: 38 (raw).
+[[ BLEED 38 ]]
+You slip behind a soldier of Nemuritoaure and garrote him with your whip.
+Damage dealt: 6528 (asphyxiation).
+With a flick of your wrist, you send the tip of your whip to scour the flesh of another.
+Balance used: 1.2s.
+Time wreaks ruin upon a soldier of Nemuritoaure, deteriorating before your eyes.
+Damage dealt: 97 (psychic).
+12:01:43:237 [12038] [100] |(18399|63%)|[ [ ?? clu sen ]]  
+You may eat another plant or mineral.
+12:01:43:419 [12038] [100] |(18399|63%)|[ [ ?? clu sen ]]  
+You eat an aurum flake.
+The stinging feeling fades.
+12:01:43:536 [12038] [100] |(18399|63%)|[ [ ?? clu ]]  
+(((((((((((((((((((( BALANCE: 1.219 ))))))))))))))))))))
+You slip behind a soldier of Nemuritoaure and garrote him with your whip.
+-----
+With a flick of your wrist, you send the tip of your whip to scour the flesh of another.
+Balance used: 1.2s.
+Noticing a momentary lapse in your guard, an undead squire puts his training to test, jamming his rusty shortsword 
+between your ribs and carving you up.
+Health lost: 650 (physical cutting).
+A prickly, stinging sensation spreads through your body.
+12:03:12:922 [10801] [99] |(623794|2%)|[ [ crackedribs (1) clu PAR sen ]]  
+(((((((((((((((((((( BALANCE: 1.092 ))))))))))))))))))))
+You are already enduring attempts to paralyse you.
+You may eat another plant or mineral.
+12:03:13:738 [10801] [99] |(623794|2%)|[ [ crackedribs (1) clu PAR sen ]] 
+[CURE] 3 afflictions: shrugging 
+Focusing inward, you purge your body of afflictions.
+You can breathe easily once again.
+Equilibrium used: 1.29s.
+12:03:13:802 [10801] [99] |(623794|2%)|[ [ clu PAR sen ]]  
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+12:03:13:948 [12240] [100] |(623794|2%)|[ [ clu sen ]]  
+You touch the tree of life tattoo.
+The stinging feeling fades.
+12:03:14:102 [12240] [100] |(623794|2%)|[ [ clu ]]  
+(((((((((((((((((((( EQUILIBRIUM:1.218 ))))))))))))))))))))
+-----
+You see a single exit leading west.
+12:05:16:431 [12619] [99] |(623794)|[ [ clu ]] 
+(LEVI): Now targeting: 652485
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset
+(LEVI): [V3] States reset 
+A shade of magic gestures imperiously at you.
+A prickly stinging overcomes your body, fading away into numbness.
+You shuffle your feet noisily, suddenly bored.
+12:05:16:489 [12619] [99] |(652485)|[ [ IMP clu PAR ]] 
+[CURE] 3 afflictions: shrugging 
+You eat a magnesium chip.
+Your muscles unlock; you are no longer paralysed.
+12:05:16:491 [12619] [99] |(652485)|[ [ IMP clu ]]  
+You slip behind a shade of magic and garrote him with your whip.
+Damage dealt: 603 (asphyxiation).
+With a flick of your wrist, you send the tip of your whip to scour the flesh of another.
+Balance used: 1.2s.
+Focusing inward, you purge your body of afflictions.
+You are patient once again.
+Equilibrium used: 1.29s.
+12:05:16:655 [12619] [99] |(652485|99%)|[ [ clu ]]  
+
+(MNEM): [explore] clearing this room (1 denizen(s)) -- basher on it.
+(((((((((((((((((((( BALANCE: 1.07 ))))))))))))))))))))
+(((((((((((((((((((( EQUILIBRIUM:1.241 ))))))))))))))))))))
+You slip behind a shade of magic and garrote him with your w

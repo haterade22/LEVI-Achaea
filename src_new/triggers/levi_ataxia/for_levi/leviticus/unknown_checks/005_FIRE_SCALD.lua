@@ -39,7 +39,10 @@ patterns:
 ]]--
 
 expandAlias("diag")
-if ataxia.afflictions.blackout then	send("cq all;touch tree") end
+-- v4.7.495: no tree when the only other afflictions are a boon's permanent ones (can(x)/003).
+if ataxia.afflictions.blackout and not (ataxia_treeOnlyPermanent and ataxia_treeOnlyPermanent()) then
+	send("cq all;touch tree")
+end
 if ataxia.afflictions.blackout then		expandAlias("diag") end
 -- Was `defense blind reset`: wrong on both halves. Every other site in the tree spells it
 -- `defence`, and the defence is named `blindness` (deffing/004_Defence_Sorting) -- `blind`

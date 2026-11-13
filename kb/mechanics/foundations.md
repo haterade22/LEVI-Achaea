@@ -227,7 +227,7 @@ Earth Lord both take the affliction and spend a cure on it, and three rows show 
 
 - **No decision reads a measured balance time.** The stopwatches in `ataxia/014_Balance_Timers.lua` are display only.
 - **A press is the trigger,** and nothing reasons about time ahead, apart from a few small cases.
-- `ataxia_lockEscapes` (`003_Lock_breakers.lua:517-523`) knows smoke, focus and FITNESS by blocker. It omits eat, salve
+- `ataxia_lockEscapes` (`003_Lock_breakers.lua:606-612`) knows smoke, focus and FITNESS by blocker. It omits eat, salve
   and tree, and it never asks how long until a channel returns.
 - The clock constants disagree between files: tree 13 and 14, restoration five values, focus four values.
 - Trigger 398 starts the target's focus clock only for the target's own focus line, and under shadowmadness it waits

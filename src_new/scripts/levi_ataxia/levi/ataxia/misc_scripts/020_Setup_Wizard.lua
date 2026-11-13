@@ -1211,7 +1211,8 @@ function leviSetup.guideBasher()
 
   cecho("\n\n  " .. W .. "10. Tree Blackout")
   cecho("\n  " .. D .. "    Use tree tattoo during blackout to cure afflictions.")
-  cecho("\n  " .. V .. "    Command:  " .. G .. "bash treeblackout <on|off>")
+  cecho("\n  " .. D .. "    Not when every other affliction is a boon's permanent one (Mnemosyne).")
+  cecho("\n  " .. V .. "    Command:  " .. G .. "aconfig treeblackout" .. D .. " (toggles)")
 
   cecho("\n\n  " .. W .. "11. Auto-Learn Denizens")
   cecho("\n  " .. D .. "    Automatically add room denizens to the area target list while bashing.")

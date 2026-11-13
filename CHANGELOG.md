@@ -2,6 +2,27 @@
 
 ---
 
+## 2026-11-13 - v4.7.495: a boon's permanent affliction is not a reason to cure
+
+The user, with Sprightly ("Your dexterity is increased by 5, but you suffer permanent clumsiness."): "When we take boons that give permanent afflictions we are not immune from the system needs to account for that" and "We dont need to tree or use actives if we have this affliction on us". In the log (`kb/raw/live/mnemosyne-sprightly-permanent-clumsiness_2026-11-13.txt`):
+
+```
+12:05:16:489 [12619] [99] |(652485)|[ [ IMP clu PAR ]]
+[CURE] 3 afflictions: shrugging
+```
+
+The clumsiness was one of the 3. Magnesium then took the paralysis, so the shrug cured only the impatience. Three blackout trees, with only blackout and the clumsiness known, each printed "Your tree of life tattoo glows faintly for a moment then fades, leaving you unchanged."
+
+- **The system now knows which afflictions this run's boons make permanent.** It reads the words after "permanent" in each claimed boon's text: Sprightly gives clumsiness, Corrupted Cold gives dehydration and tenderskin. A boon that makes us immune takes its affliction off the list, so Poindexter's dizziness costs nothing with Sure-Footed. Outside the tower the list is empty. When a run first holds one, the echo says `<boon>: permanent <affliction> -- not counted for the class cure, the blackout tree or the recovery wait.` (not under `mnem quiet`).
+- **The class cure does not count it.** `[ [ IMP clu PAR ]]` under Sprightly is 2 afflictions, so no shrug. A third curable affliction still sends the cure. FITNESS does not go for a permanent asthma.
+- **The blackout tree waits.** When blackout is up and every other affliction we know of is permanent, we do not touch the tree. The fire elemental's mask trigger follows the same rule. With another curable affliction up, the tree goes as before.
+- **A recovery does not wait for it.** The swarm's "wait for the afflictions to clear" no longer counts it, like manaleech, so a hover does not run out its cap on an affliction that never clears.
+- **Lock checks still count it.** A cure channel that a boon closes stays closed.
+- **The setup wizard's Tree Blackout entry** (`ataxia setup basher`) named `bash treeblackout <on|off>`, which no command reads. It now names `aconfig treeblackout`, which toggles the setting, and says the tree waits for a boon's permanent affliction.
+- **Docs:** `kb/afflictions/class-cures.md` (the facts, with row numbers), the swarm notes and the class-cure bullet in `.claude/projects/mnemosyne/07-explorer.md`, the README feature table, and `CLAUDE.md`. Line citations that this change moved in `009_Swarm_Tactics` and `004_Aff_gains_losses` are corrected (`.claude/AGENTS.md`, the Runewarden and Serpent docs, `kb/mechanics/mnemosyne-affixes.md`), with six that were already wrong: `S._canFly`, `S.onRipple`, `lostAff` in the Dagaz trigger, the loss handler's `Algedonic.Prioritize`, `ataxia_lockEscapes` in `foundations.md`, and the clotat line in CONFLICTS #47. New test file: `test_permanent_boon_affs.lua`.
+
+---
+
 ## 2026-11-13 - v4.7.494: our artefacts count, and `kbcapture abilities`
 
 A player's feedback: "in our documentation and logic we are not factoring in artefacts we have", with `kb/combat/shikudo.md` as the example. "A diadem artefact reduces eq balance." The user wears the Aldar Diadem (`faster_eq` level 2, 15% faster equilibrium) at all times, on every class. The Shikudo page gave a table of equilibrium costs at 0.85 of the wiki's (0.72 in Rain) and called it "this character's own speed-up (cause unknown)". That table is Mystor's. Our own logs show the same numbers, and for us the cause is the Diadem:

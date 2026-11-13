@@ -69,7 +69,7 @@ elseif name:lower() == "you" then
   -- OUR dagaz fired. Highlight only (v4.7.171): a free cure we did not spend a balance on
   -- is worth SEEING in combat spam, but there is nothing useful to record. Our own
   -- affliction state is authoritative-from-GMCP and self-correcting -- lostAff()
-  -- (004_Aff_gains_losses:243-302) already nils the entry and raises "aff cured" -- so a
+  -- (004_Aff_gains_losses:385-461) already nils the entry and raises "aff cured" -- so a
   -- "dagaz cured one" signal would add no bookkeeping. (The real gap is that nothing knows
   -- whether OUR passive is ready; passiveCooldownsV3 is entirely enemy-side. Left open.)
   --

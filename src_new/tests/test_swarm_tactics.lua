@@ -4037,6 +4037,24 @@ describe("v4.7.389 -- a recovery never sits silent", function()
     ataxia.afflictions = {}
   end)
 
+  -- v4.7.495: Sprightly's clumsiness never clears, so it must not hold a recovery.
+  it("_blockingAffs skips a boon's permanent affliction and keeps the rest", function()
+    fixture(3)
+    local saved = ataxia_permanentAff
+    ataxia_permanentAff = function(k) if k == "clumsiness" then return "Sprightly" end end
+    ataxia.afflictions = { clumsiness = true, weariness = true }
+    local list = S._blockingAffs()
+    expect(#list).toBe(1)
+    expect(list[1]).toBe("weariness")
+    ataxia.afflictions = { clumsiness = true }
+    expect(S._afflicted()).toBeFalse()
+    -- Without the boon, the same clumsiness holds the recovery as before.
+    ataxia_permanentAff = function() return nil end
+    expect(S._afflicted()).toBeTrue()
+    ataxia_permanentAff = saved
+    ataxia.afflictions = {}
+  end)
+
   it("HP met and an affliction not clearing -> names it and goes back in", function()
     groundRecovery(92, { weariness = true })
     local said = tick(6) -- record +2 (diagnose), re-diagnose +10, release +12 on the settled answer

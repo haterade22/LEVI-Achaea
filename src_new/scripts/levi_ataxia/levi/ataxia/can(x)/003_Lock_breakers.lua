@@ -146,7 +146,7 @@ end
 -- does more (Depthswalker, Magi, Shaman) simply take this path less often -- the conservative
 -- failure.
 function ataxia_tryActiveCure()
-	if not affed("asthma") then return end
+	if not ataxia_curableAffed("asthma") then return end -- v4.7.495: not a boon's permanent asthma
 	if ataxiaTemp.activeCureUsed then return end
 	if attemptedLockBreak then return end
 	if not ataxia_canActive() then return end
@@ -430,15 +430,46 @@ local LOAD_CURE_BACKOFF = 20
 -- From the ability pages. The other cures have no mana cost in the kb.
 local LOAD_CURE_MANA = { Alchemist = 200, Magi = 75 }
 
--- How many of our afflictions a random cure can take.
+-- A boon's permanent affliction (v4.7.495, mnemosyne/004 `ataxia_permanentAff`): no cure takes it,
+-- so it is never a reason to spend one. The user: "We dont need to tree or use actives if we have
+-- this affliction on us". Sprightly's clumsiness made impatience + paralysis read as 3 afflictions.
+local function permanentAff(aff)
+	return ataxia_permanentAff ~= nil and ataxia_permanentAff(aff) ~= nil
+end
+
+-- Up, and not made permanent by a boon.
+function ataxia_curableAffed(aff)
+	return affed(aff) and not permanentAff(aff)
+end
+
+-- How many of our afflictions a random cure can take. A permanent one does not count.
 function ataxia_randomCurableCount()
 	local pool = treeCurableAffsV3
 	if type(pool) ~= "table" then return 0 end
 	local n = 0
 	for i = 1, #pool do
-		if affed(pool[i]) then n = n + 1 end
+		if affed(pool[i]) and not permanentAff(pool[i]) then n = n + 1 end
 	end
 	return n
+end
+
+-- True when every affliction a tree could take is a boon's permanent one, blackout aside, and at
+-- least one is up. The blackout tree (004_Aff_gains_losses) skips then. Live, 2026-11-13: three
+-- blackout trees with only blackout and Sprightly's clumsiness up each printed "Your tree of life
+-- tattoo glows faintly for a moment then fades, leaving you unchanged." Blackout's only cure is time.
+-- With nothing else up the tree still goes, as before: that case was not seen.
+function ataxia_treeOnlyPermanent()
+	local pool = treeCurableAffsV3
+	if type(pool) ~= "table" then return false end
+	local perm = false
+	for i = 1, #pool do
+		local a = pool[i]
+		if a ~= "blackout" and affed(a) then
+			if not permanentAff(a) then return false end
+			perm = true
+		end
+	end
+	return perm
 end
 
 -- The command to use for this load of afflictions, or nil.
@@ -455,8 +486,9 @@ function ataxia_loadCureCommand()
 	if not cmd then return nil end
 
 	-- FITNESS cures asthma and nothing else. With no asthma it prints "You are already quite fit."
-	-- and still costs 2.8 s of balance (kb/afflictions/class-cures.md).
-	if cmd == "fitness" and not affed("asthma") then return nil end
+	-- and still costs 2.8 s of balance (kb/afflictions/class-cures.md). A boon's permanent asthma
+	-- would not go either (v4.7.495).
+	if cmd == "fitness" and not ataxia_curableAffed("asthma") then return nil end
 	-- Prone blocks the Fool (HELP). The round's stand comes first, and the next round sends it.
 	if cmd == "fling fool at me" and affed("prone") then return nil end
 

@@ -280,7 +280,10 @@ function gotAff()
   
 		-- v4.7.333: under Rimewrought the tree tattoo is inert, so a blackout touch is a wasted
 		-- command; fall through to whatever else the chain offers.
-		if ataxiaBasher.enabled and ataxiaBasher.treeblackout and not mnemRimewrought then
+		-- v4.7.495: so is a touch when the only other afflictions are a boon's permanent ones
+		-- (Sprightly's clumsiness: "...leaving you unchanged." three times, 2026-11-13).
+		if ataxiaBasher.enabled and ataxiaBasher.treeblackout and not mnemRimewrought
+			and not (ataxia_treeOnlyPermanent and ataxia_treeOnlyPermanent()) then
 			send("touch tree")
 		elseif IMPALE_CLASSES[ataxia_facingClass() or ""] then
 			tempTimer(2.5, [[send("curing predict impaled",false)]])

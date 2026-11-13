@@ -386,14 +386,14 @@ dragged us out of the air ("A tentacle shoots up from the ground, wraps itself a
 and drags you back to earth.") and the confirmation never arrived, so the hover re-sent `fly`
 every tick while the tentacle yanked us straight back down, holding us attack-**gated** at
 crash HP with the swarm still on us until `RECOVER_MAX` expired — strictly worse than never
-having flown. `S.onDraggedDown` (`mnemosyne/009_Swarm_Tactics.lua:2772`, trigger
-`mnemosyne/050_Dragged_From_Sky.lua`) latches `S.grounded`, which `S._canFly` (`009:481`)
+having flown. `S.onDraggedDown` (`mnemosyne/009_Swarm_Tactics.lua:2779`, trigger
+`mnemosyne/050_Dragged_From_Sky.lua`) latches `S.grounded`, which `S._canFly` (`009:1688`)
 honours alongside `mnemDeluge`, so both the escape ladder's outdoor branch and the fly-kite
 fall through to the grounded route.
 
 **Rule:** a flag cleared only by its confirmation line has two inputs (confirm, time-out) and
 needs three — the line that says the thing can *never* happen. Scope that third input to the
-right lifetime: `grounded` is per-ripple (`S.onRipple` clears it, `009:877`) because the
+right lifetime: `grounded` is per-ripple (`S.onRipple` clears it, `009:2895`) because the
 denizen that dragged us lives on this ripple, and the next ripple is a different room set.
 
 ### Prefer the game's own fire text to an affliction-name lookup
