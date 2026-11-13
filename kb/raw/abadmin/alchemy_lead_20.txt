@@ -1,0 +1,26 @@
+Ability: Lead (Record #20)
+Associated skill: Alchemy
+Skillpoints required: 0
+Blurb: Density from the lowest of the metals.
+Syntax: EDUCE LEAD
+EDUCE LEAD <target>
+Extra info: Symbol: Two concentric circles.
+Abfile:
+Calling upon the energy of lead, the lowest of the alchemical metals,
+will grant great density to your body.
+
+You may also target this at another adventurer flying in the sky above
+you, dragging them back to earth by drastically increasing their weight
+for a short time and briefly knocking them off balance.
+
+Use without a target incurs a small equilibrium loss.
+Useable on: adventurers and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 150 mana

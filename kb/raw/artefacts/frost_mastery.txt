@@ -1,0 +1,9 @@
+# artefact power show frost_mastery  (2026-11-13T22:00:25Z)
+The frost_mastery artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            Yes
+Owned:                   Bracers of Frost (417868)
+Price:                   1000
+--------------------------------------------------------------------------------

@@ -1,0 +1,12 @@
+# artefact power show fluid_expansion  (2026-11-13T22:00:24Z)
+The fluid_expansion artefact power:
+--------------------------------------------------------------------------------
+Levels:                  3
+Owner only:              Yes
+Must be worn:            No
+Owned:                   a Phaestean Faucet (72918), level 3
+Price:
+Level 1:                 300
+Level 2:                 400
+Level 3:                 500
+--------------------------------------------------------------------------------

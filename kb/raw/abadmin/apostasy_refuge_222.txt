@@ -1,0 +1,18 @@
+Ability: Refuge (Record #222)
+Associated skill: Apostasy
+Skillpoints required: 55999
+Blurb: Seek refuge in the Inferno.
+Syntax: DEMON REFUGE
+Abfile:
+With this ability, your Baalzadeen may be ordered to transport you to the Inferno (a region of safety for your kind).
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of equilibrium
+Resource: 2500 Baalzadeen health
+The ability name DEMONREFUGE is mapped to this ability.

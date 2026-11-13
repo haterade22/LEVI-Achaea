@@ -1,0 +1,16 @@
+Ability: Ears (Record #31)
+Associated skill: Physiology
+Skillpoints required: 10499
+Blurb: Listen through your homunculus's ears.
+Syntax: HOMUNCULUS LISTEN <ON|OFF>
+Abfile:
+Having mastered control of your homunculus's auditory system, you may decide to listen to anything your homunculus hears.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of homunculus balance

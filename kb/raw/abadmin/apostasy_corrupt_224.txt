@@ -1,0 +1,22 @@
+Ability: Corrupt (Record #224)
+Associated skill: Apostasy
+Skillpoints required: 57999
+Blurb: Lay low the heretics with demonic corruption.
+Syntax: DEMON CORRUPT <target> [affliction]
+Abfile:
+The skilled apostasy practitioner can command their demonic servant to
+corrupt the soul of an unfortunate heretic.
+
+This will cause all curses that have been laid upon the person through
+the application of evileye to be lifted, but at a terrible price indeed.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 200 Baalzadeen health
+The ability name DEMONCORRUPT is mapped to this ability.

@@ -1,0 +1,16 @@
+Ability: Temple (Record #271)
+Associated skill: Striking
+Skillpoints required: 14999
+Blurb: Send your foe into a stupor.
+Syntax: STRIKE <target> TEMPLE
+Abfile:
+The head has many exploitable weak points. A strike to either temple, above and behind the eye, will rock the brain and dull your victim's mind, leaving them in a stupor.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

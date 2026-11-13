@@ -1,0 +1,20 @@
+Ability: Copper (Record #7)
+Associated skill: Alchemy
+Skillpoints required: 12999
+Blurb: Shatter an enemy's defence with copper's energies.
+Syntax: EDUCE COPPER <target>
+Extra info: Symbol: Two overlapping hexagons.
+Abfile:
+The energies of copper will allow you to shatter an opponent's magical
+shield.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.30 seconds of equilibrium
+Resource: 75 mana

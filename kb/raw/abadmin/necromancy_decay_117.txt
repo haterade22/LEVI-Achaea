@@ -1,0 +1,17 @@
+Ability: Decay (Record #117)
+Associated skill: Necromancy
+Skillpoints required: 999
+Blurb: Causing your opponent's flesh to decay.
+Syntax: DECAY <target>
+Abfile:
+You have gained the standard attack of the Necromancer. Your touch is enough to cause the flesh of your victim to wither. It does magical damage.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 80 mana

@@ -16,8 +16,8 @@ Hypnosis: Mental manipulation through suggestions (including Impulse)
 ## Confidence on this page
 
 - **WIKI**: the Achaea wiki as filed in `kb/raw/wiki/` and generated into `kb/classes/serpent.md`.
-  An in-game `AB` wins where they differ. No Serpent AB is filed in `kb/raw/ab/` (it holds only
-  DIAGNOSE); the ABs cited in the PvE sections were pasted in chat.
+  An in-game `AB` wins where they differ. No AB of a Serpent class skill is filed yet (`kb/raw/ab/` and `kb/raw/abadmin/` hold
+  only OBLIVIATE, Attainment, "Skill specialisation: br_serpent"); the ABs cited in the PvE sections were pasted in chat.
 - **CONFIRMED**: game text in `kb/raw/`: AFFLICTION SHOW and WHATCURES records, HELP files, combat logs.
 - **PLAYER**: the notes relayed on 2026-10-12 (`kb/raw/players/serpent-2026-10-12.txt`).
 - **UNVERIFIED**: nothing in `kb/raw` supports it yet.

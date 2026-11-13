@@ -1,0 +1,18 @@
+Ability: Spinningbackfist (Record #139)
+Associated skill: Attainment
+Skillpoints required: 3599
+Blurb: Spin and strike your target with the back of your fist.
+Syntax: SBP <target>
+Abfile:
+Use the back of your fist to deliver a powerful blow, fueled by your rage and the uncoiling of your spinning body.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds
+Resource: 14 rage
+Skill specialisation: br_monk

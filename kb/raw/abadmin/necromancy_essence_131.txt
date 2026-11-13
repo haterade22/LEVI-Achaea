@@ -1,0 +1,15 @@
+Ability: Essence (Record #131)
+Associated skill: Necromancy
+Skillpoints required: 11999
+Blurb: Sense about how much life essence you have.
+Syntax: ESSENCE
+Abfile:
+This will tell you how much life essence you possess.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

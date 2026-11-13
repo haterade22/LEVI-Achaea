@@ -1,0 +1,18 @@
+Ability: Feed (Record #123)
+Associated skill: Necromancy
+Skillpoints required: 5999
+Blurb: Derive sustenance from another being.
+Syntax: FEED <target>
+Extra info: Essence: 1.5%
+Abfile:
+You are now able to literally drain the nourishment from another adventurer in a display of cruelty.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of equilibrium
+Resource: 150 mana

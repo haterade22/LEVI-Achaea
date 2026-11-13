@@ -1,0 +1,47 @@
+Ability: Humourism (Record #24)
+Associated skill: Physiology
+Skillpoints required: 0
+Blurb: Tinker with an enemy's vital fluids.
+Syntax: TEMPER <target> <humour>
+Abfile:
+The body is held in balance by four vital fluids, called humours.
+Humourism is the science of manipulating these humours via the ether to
+cause illness in another.
+
+To raise a target's humours, you must TEMPER that humour. Humours can be
+reduced by the target eating the ginger herb or antimony mineral. The
+maximum number of times each of a person's humours may be tempered is
+eight.
+
+Each time you TEMPER a humour it raises the level by 1. If the target is
+afflicted with afflictions related to that humour, this number may rise.
+
+Each humour will cause the victim to be disadvantaged in some form. The
+penalties and related afflictions are as follows.
+
+Choleric (yellow bile): Random curing abilities will have a chance of
+failing. (nausea, sensitivity, slickness)
+Melancholic (black bile): Irid moss and potash will have a reduced
+healing benefit. (anorexia, impatience, stupidity)
+Phlegmatic (phlegm): Smoking will have a chance of filling your lungs
+with phlegm, increasing your lungs recovery time. (asthma, clumsiness,
+weariness)
+Sanguine (blood): Bleeding will increase over time. (haemophilia,
+recklessness, paralysis)
+
+Only one humour may be tempered at once with this ability; training in
+Physiology will allow for more freedom in tempering multiple humours.
+
+Evaluation of a target's humours can be done for free.
+
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.70 seconds of humour balance
+Resource: 100 mana

@@ -1,0 +1,18 @@
+Ability: Gravehands (Record #144)
+Associated skill: Necromancy
+Skillpoints required: 35999
+Blurb: Summon the hands of the grave to hinder your opponents.
+Syntax: SUMMON HANDS OF THE GRAVE
+BANISH HANDS OF THE GRAVE
+Abfile:
+This ability will cause rotting hands to rise up from the ground to grab at the ankles of any who try to leave the location. The only ones who will not be affected are those who serve Evil in the city of Mhaldor.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 1.50% life essence and 350 mana

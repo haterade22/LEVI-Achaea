@@ -1,0 +1,18 @@
+Ability: Mir (Record #244)
+Associated skill: TwoArts
+Skillpoints required: 16999
+Blurb: The adaptive Water stance favours defence.
+Syntax: MIR
+UNSTANCE
+Extra info: Stance: Water
+Abfile:
+Patient and unchanging, yielding yet impervious, Water is supremely adaptive to its surroundings. This flowing stance is slow to attack but affords tremendous physical defence.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

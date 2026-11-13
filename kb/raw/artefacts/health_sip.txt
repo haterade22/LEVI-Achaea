@@ -1,0 +1,12 @@
+# artefact power show health_sip  (2026-11-13T22:00:29Z)
+The health_sip artefact power:
+--------------------------------------------------------------------------------
+Levels:                  3
+Owner only:              No
+Must be worn:            Yes
+Owned:                   a Logosian ring (270681), level 3
+Price:
+Level 1:                 500
+Level 2:                 1000
+Level 3:                 2000
+--------------------------------------------------------------------------------

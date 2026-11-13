@@ -1,0 +1,3 @@
+Ability: Coldresistance (Record #55)
+Associated skill: Augmentation
+Maps to record 2001 (COLD).

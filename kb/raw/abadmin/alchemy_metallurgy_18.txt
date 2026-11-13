@@ -1,0 +1,31 @@
+Ability: Metallurgy (Record #18)
+Associated skill: Alchemy
+Skillpoints required: 0
+Blurb: Reduction to the six alchemical metals.
+Syntax: REDUCE <#> <metal> FROM <mineral>
+REDUCE <metal>
+Abfile:
+Reduction of the six alchemical metals from minerals is the first step
+in understanding the alchemical composition of all things. In order to
+perform the reduction, you must be standing within a transmutation
+laboratory in which you have permission to work.
+
+The six alchemical metals are: lead, iron, tin, copper, silver, and
+gold.
+
+Each mineral is composed of certain metals, so not all alchemical metals
+can be reduced from all minerals. REDUCE <metal> will reveal the
+minerals from which a given alchemical metal can be reduced.
+
+Alchemical metals produced via metallurgy can also be manipulated by the
+name a<metal>. For example, agold or atin.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.75 seconds of balance
+Resource: 100 mana

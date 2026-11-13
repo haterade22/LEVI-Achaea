@@ -1,0 +1,16 @@
+Ability: Disfigure (Record #140)
+Associated skill: Necromancy
+Skillpoints required: 26999
+Blurb: Curse someone with the visage of a rotting corpse.
+Syntax: DISFIGURE <target>
+Abfile:
+Using this ability, you will cause your opponent's visage to become so horrific that even his closest allies will turn on him. The chaos and fickleness of emotion and sentiment is a wonderful thing, is it not?
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium

@@ -1,0 +1,18 @@
+Ability: Apathy (Record #190)
+Associated skill: Apostasy
+Skillpoints required: 14999
+Blurb: Become numb to the crushing pain of existence.
+Syntax: DEMON APATHY
+Abfile:
+Your Baalzadeen is able to imbue in you such an incredible level of apathy that for ten seconds you will take no damage from attacks. There is, of course, a caveat, which is that when that ten seconds is up, you will take all the damage you received, minus 40%, in one fell blow.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 250 Baalzadeen health
+The ability name DEMONAPATHY is mapped to this ability.

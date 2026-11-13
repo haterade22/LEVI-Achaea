@@ -1,0 +1,20 @@
+Ability: Symbology (Record #1)
+Associated skill: Alchemy
+Skillpoints required: 0
+Blurb: Draw upon the alchemical energies.
+Syntax: EDUCE <symbol> [args]
+Abfile:
+The power of symbology allows alchemists to tap into the ether and draw upon the alchemical energies of the primes and metals.
+
+Each symbol corresponds to one of the primes or metals, and each has a differing effect. The different symbols you may call upon become available with increased training in Alchemy.
+
+See AB ALCHEMY LEAD as an example.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Equilibrium

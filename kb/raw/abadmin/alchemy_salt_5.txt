@@ -1,0 +1,23 @@
+Ability: Salt (Record #5)
+Associated skill: Alchemy
+Skillpoints required: 3999
+Blurb: The first prime will cleanse your body.
+Syntax: EDUCE SALT
+Extra info: Symbol: A bisected circle.
+Abfile:
+The energy of salt, first of the primes, will purge your body of
+afflictions.
+
+This effect will be prevented if you labour under the stupidity
+affliction.
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 200 mana

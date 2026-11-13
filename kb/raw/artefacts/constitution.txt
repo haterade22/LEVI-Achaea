@@ -1,0 +1,12 @@
+# artefact power show constitution  (2026-11-13T22:00:14Z)
+The constitution artefact power:
+--------------------------------------------------------------------------------
+Levels:                  3
+Owner only:              No
+Must be worn:            Yes
+Owned:                   a Girdle of Aegis (300800), level 3
+Price:
+Level 1:                 400
+Level 2:                 1000
+Level 3:                 2000
+--------------------------------------------------------------------------------

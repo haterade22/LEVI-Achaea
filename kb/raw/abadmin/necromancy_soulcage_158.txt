@@ -1,0 +1,26 @@
+Ability: Soulcage (Record #158)
+Associated skill: Necromancy
+Skillpoints required: 60000
+Blurb: Harness your life essence to escape death itself.
+Syntax: SOULCAGE ACTIVATE
+SOULCAGE DEACTIVATE
+SOULCAGE STATUS
+Extra info: Essence: 30% - New soulcage
+3% - Reactivate soulcage
+2% - Deactivate soulcage
+Abfile:
+This is perhaps the greatest of the necromantic abilities, and carries with it the greatest life essence cost. It allows you to spin a web of life essence around your very soul, protecting it from death. Soulcage may only be used once every 6 Achaean days.
+
+The soulcage can be deactivated by raising a barrier of life essence between it and your soul, preventing it from saving you from death. It may be reactivated later for a much lower essence cost.
+
+SOULCAGE STATUS will show the current state of your soulcage, if any.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 12.00 seconds of equilibrium
+Resource: 30% life essence

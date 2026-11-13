@@ -1,0 +1,18 @@
+Ability: Sap (Record #184)
+Associated skill: Apostasy
+Skillpoints required: 7999
+Blurb: Drain away the mana of a victim with your loving demon.
+Syntax: DEMON SAP <target>
+Abfile:
+With this ability, your Baalzadeen will draw some mana from its target.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.75 seconds of equilibrium
+Resource: 50 Baalzadeen health
+The ability name DEMONSAP is mapped to this ability.

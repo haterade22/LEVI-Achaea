@@ -1,0 +1,31 @@
+Ability: Soulstorm (Record #142)
+Associated skill: Necromancy
+Skillpoints required: 29999
+Blurb: Mark their souls with profane essence.
+Syntax: SOULSTORM <target>
+Abfile:
+Unleash your necromantic essence in a deadly soulstorm, cruelly
+assaulting the soul of your foe. This ability will attempt to force a
+metamorphosised adventurer back into his mortal form.
+
+Against denizens, you will instead profane their soul with malign
+energy, causing them to take ten percent more damage from necromantic
+abilities(*), the curses of evileye(**), and the weaponmastery attacks
+of your fellow Infernals(***). In this case, the equilibrium and essence
+costs of this dark art shall be greatly reduced.
+
+* NECROMANCY DECAY and TAINT.
+** EVILEYE BLEED.
+*** All weapon-based attacks in the WEAPONMASTERY skill when performed
+by an Infernal.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 1% life essence

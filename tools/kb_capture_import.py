@@ -15,9 +15,10 @@ This tool reads that file and:
   * appends new WHATCURES lines to kb/raw/live/whatcures.txt (read by tools/kb_catalog.py),
   * writes AFFLICTION LIST to kb/raw/live/affliction_list.txt and anything else to
     kb/raw/live/other/<command>.txt,
-  * files each ABADMIN SHOW record (`kbcapture abilities`) as kb/raw/ab/<skill>_<ability>_<id>.txt,
-    by the id in the record's OWN header (a late answer lands in the next block); an id an existing
-    file already holds is not written again, so the files other pages link to keep their names,
+  * files each ABADMIN SHOW record (`kbcapture abilities`) as kb/raw/abadmin/<skill>_<ability>_<id>.txt,
+    by the id in the record's OWN first line (a late answer lands in the next block); the newest
+    capture of an id wins, and an old file of a renamed ability is removed (kb/raw/ab/ holds answers
+    of the AB command, a different layout, and this tool does not touch it),
   * writes ARTEFACT POWER LIST OWNED to kb/raw/live/artefact_power_list_owned.txt and each
     ARTEFACT POWER SHOW <p> to kb/raw/artefacts/<p>.txt (`kbcapture artefacts`),
   * renames the source file to kb_capture.imported-<time>.txt so the next run starts clean,
@@ -137,72 +138,86 @@ def slug(cmd):
     return re.sub(r"[^a-z0-9]+", "_", cmd.lower()).strip("_")[:80]
 
 
-# "Pulse (Psionics)  ABADMIN ID: 3292            Known: No (2974 lessons required)"
-AB_HEAD = re.compile(r"^(.+?) \((.+?)\)\s+ABADMIN ID:\s*(\d+)")
+# An ABADMIN SHOW record, as the game sends it (the first live run, 2026-11-13):
+#   Ability: Obliviate (Record #2115)
+#   Associated skill: Attainment
+#   Skillpoints required: 38999 ... Cooldown: 41.00 seconds / Resource: 28 rage
+# A pointer record holds only its first two lines and "Maps to record 785 (FIST).". An id with no
+# ability answers "No such record.". (v4.7.494 matched "Pulse (Psionics)  ABADMIN ID: 3292", the
+# header of the AB command: the files in kb/raw/ab/ hold AB answers and stay as they are.)
+AB_HEAD = re.compile(r"^Ability: (.+) \(Record #(\d+)\)\s*$")
+AB_SKILL = re.compile(r"^Associated skill: (.+?)\s*$")
+AB_NONE = "No such record."
 AB_CMD = re.compile(r"^abadmin show (\d+)$")
-AB_DIR = os.path.join("kb", "raw", "ab")
+AB_DIR = os.path.join("kb", "raw", "abadmin")
 
 
 def ab_ids(ab_dir):
-    """{id: file name} for every ABADMIN record already filed in kb/raw/ab/."""
+    """{id: file name} for every ABADMIN SHOW record already filed in kb/raw/abadmin/."""
     have = {}
     for p in sorted(glob.glob(os.path.join(ab_dir, "*.txt"))):
         with open(p, encoding="utf-8", errors="replace") as fh:
-            for line in fh:
-                m = AB_HEAD.match(line)
-                if m:
-                    have[int(m.group(3))] = os.path.basename(p)
-                    break
+            m = AB_HEAD.match(fh.readline())
+        if m:
+            have[int(m.group(2))] = os.path.basename(p)
     return have
 
 
 def ab_records(blocks):
-    """{id: (ability, skill, lines)} for every ABADMIN record in the `abadmin show` blocks.
+    """{id: (ability, skill, lines)} for every ABADMIN SHOW record in the `abadmin show` blocks.
 
-    A record runs from its header to the next header or the end of its block. It is keyed by the id
-    in its own header, not by the block's command: a lag spike longer than the capture timeout puts
-    an answer into the next block, and the header still names it. A later copy of an id wins.
+    A record runs from its first line to the next record or the end of its block; lines before it (a
+    room line that arrived first) are not part of it. It is keyed by the id in its own first line, not
+    by the block's command: an answer that comes after the capture's timeout lands in the next block,
+    and its first line still names it. A later copy of an id wins.
     """
     out = {}
     for b in blocks:
         if not AB_CMD.match(b["cmd"]):
             continue
-        cur = None
+        rec = None
         for line in b["lines"]:
             m = AB_HEAD.match(line)
             if m:
-                cur = [line]
-                out[int(m.group(3))] = (m.group(1).strip(), m.group(2).strip(), cur)
-            elif cur is not None:
-                cur.append(line)
-    for _, _, lines in out.values():
-        while lines and not lines[-1].strip():
-            lines.pop()
-    return out
+                rec = {"ability": m.group(1).strip(), "skill": "", "lines": [line]}
+                out[int(m.group(2))] = rec
+            elif rec is not None:
+                rec["lines"].append(line)
+                s = AB_SKILL.match(line)
+                if s and not rec["skill"]:
+                    rec["skill"] = s.group(1)
+    for rec in out.values():
+        while rec["lines"] and not rec["lines"][-1].strip():
+            rec["lines"].pop()
+    return {k: (r["ability"], r["skill"] or "unknown", r["lines"]) for k, r in out.items()}
 
 
 def route_abadmin(blocks, have):
-    """Return ({relative path: text}, refused [(cmd, first line)], kept [id]).
+    """Return ({relative path: text}, stale [relative path], free [id], unanswered [(cmd, first line)]).
 
-    `have` is ab_ids() of the files that existed before this run: their ids are kept as they are.
-    A command whose id got no record is refused (the id is free, or the game said something else).
+    Every record is written; the newest capture wins and git keeps the older text. `have` is ab_ids()
+    of the files already there: a file that holds an id under another name (the ability or its skill
+    was renamed) is stale, so one id never has two files. `free` holds the ids the game answered
+    "No such record."; `unanswered` the commands whose id got neither a record nor that line.
     """
     recs = ab_records(blocks)
-    files, kept = {}, []
+    files, stale = {}, []
     for ab_id in sorted(recs):
         ability, skill, lines = recs[ab_id]
-        if ab_id in have:
-            kept.append(ab_id)
-            continue
         name = f"{slug(skill)}_{slug(ability)}_{ab_id}.txt"
         files[os.path.join(AB_DIR, name)] = "\n".join(lines) + "\n"
-    refused = []
+        if have.get(ab_id) not in (None, name):
+            stale.append(os.path.join(AB_DIR, have[ab_id]))
+    free, unanswered = [], []
     for b in blocks:
         m = AB_CMD.match(b["cmd"])
-        if m and int(m.group(1)) not in recs:
-            first = next((l for l in b["lines"] if l.strip()), "(no output)")
-            refused.append((b["cmd"], first))
-    return files, refused, kept
+        if not m or int(m.group(1)) in recs:
+            continue
+        if any(l.strip() == AB_NONE for l in b["lines"]):
+            free.append(int(m.group(1)))
+        else:
+            unanswered.append((b["cmd"], next((l for l in b["lines"] if l.strip()), "(no output)")))
+    return files, stale, sorted(set(free)), unanswered
 
 
 def route_artefacts(blocks):
@@ -289,10 +304,13 @@ def main():
                 first = next((l for l in b["lines"] if l.strip()), "(no output)")
                 silent.append((b["cmd"], first))
 
-    ab_files, ab_refused, ab_kept = route_abadmin(blocks, ab_ids(os.path.join(ROOT, AB_DIR)))
+    ab_files, ab_stale, ab_free, ab_unanswered = route_abadmin(blocks, ab_ids(os.path.join(ROOT, AB_DIR)))
     art_files, art_silent = route_artefacts(blocks)
     for rel, body in list(ab_files.items()) + list(art_files.items()):
         write(os.path.join(ROOT, rel), body, args.dry_run)
+    for rel in ab_stale:
+        if not args.dry_run and os.path.exists(os.path.join(ROOT, rel)):
+            os.remove(os.path.join(ROOT, rel))
     silent += [(cmd, "(no output)") for cmd in art_silent]
 
     for b in blocks:
@@ -316,13 +334,14 @@ def main():
     print(f"  WHATCURES: {len(new_wc)} new line(s) -> kb/raw/live/whatcures.txt")
     print(f"  AFFLICTION SHOW: {shows} file(s) -> kb/raw/live/affliction_show/")
     print(f"  other: {others} file(s)")
-    if ab_files or ab_refused or ab_kept:
-        print(f"  ABADMIN: {len(ab_files)} new file(s) -> kb/raw/ab/; {len(ab_kept)} id(s) already filed, "
-              f"kept; {len(ab_refused)} id(s) with no record")
-        for cmd, first in ab_refused[:10]:
-            print(f"    {cmd:40} {first[:90]}")
-        if len(ab_refused) > 10:
-            print(f"    ... and {len(ab_refused) - 10} more")
+    if ab_files or ab_free or ab_unanswered:
+        print(f"  ABADMIN SHOW: {len(ab_files)} record(s) -> kb/raw/abadmin/; {len(ab_free)} id(s) the game "
+              f"has no record for; {len(ab_stale)} old file(s) of a renamed ability removed")
+        if ab_unanswered:
+            again = " | ".join(cmd for cmd, _ in ab_unanswered)
+            print(f"  {len(ab_unanswered)} id(s) got no answer. Ask again: kbcapture {again}")
+            for cmd, first in ab_unanswered[:10]:
+                print(f"    {cmd:40} {first[:90]}")
     if art_files:
         print(f"  ARTEFACT POWER: {len(art_files)} file(s) -> kb/raw/live/, kb/raw/artefacts/")
     if silent:

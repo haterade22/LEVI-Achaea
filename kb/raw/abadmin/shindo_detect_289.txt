@@ -1,0 +1,17 @@
+Ability: Detect (Record #289)
+Associated skill: Shindo
+Skillpoints required: 1999
+Blurb: Find others throughout the land.
+Syntax: DETECT <target>
+Abfile:
+A useful benefit of the intense training of body and mind inherent to the practise of Shindo is an increased sensitivity to the latent telepathic powers all mortals possess. By honing your focus, you may detect the location of other adventurers.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of equilibrium
+Resource: 20 mana

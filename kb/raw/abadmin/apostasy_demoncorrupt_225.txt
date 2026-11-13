@@ -1,0 +1,3 @@
+Ability: Demoncorrupt (Record #225)
+Associated skill: Apostasy
+Maps to record 224 (CORRUPT).

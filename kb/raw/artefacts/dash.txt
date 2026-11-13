@@ -1,0 +1,9 @@
+# artefact power show dash  (2026-11-13T22:00:15Z)
+The dash artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            Yes
+Owned:                   an Anklet of Dashing (299122)
+Price:                   500
+--------------------------------------------------------------------------------

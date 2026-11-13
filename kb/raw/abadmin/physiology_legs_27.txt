@@ -1,0 +1,16 @@
+Ability: Legs (Record #27)
+Associated skill: Physiology
+Skillpoints required: 2749
+Blurb: Control your homunculus's legs from a distance.
+Syntax: HOMUNCULUS MOVE <direction>
+Abfile:
+So long as you and your homunculus stand within the same area, you may order your homunculus to move from room to room.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of homunculus balance

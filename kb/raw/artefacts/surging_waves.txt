@@ -1,0 +1,9 @@
+# artefact power show surging_waves  (2026-11-13T22:00:48Z)
+The surging_waves artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            No
+Owned:                   a waterlogged gauntlet (442748)
+Price:                   500
+--------------------------------------------------------------------------------

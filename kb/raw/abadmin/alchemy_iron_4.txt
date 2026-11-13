@@ -1,0 +1,20 @@
+Ability: Iron (Record #4)
+Associated skill: Alchemy
+Skillpoints required: 999
+Blurb: Strike with the power of iron.
+Syntax: EDUCE IRON <target>
+Extra info: Symbol: Two isosceles triangles set base-to-base.
+Abfile:
+The energy of iron will surround your target with flames possessing the
+cold bite of a sword.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 80 mana

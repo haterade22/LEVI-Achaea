@@ -1,0 +1,9 @@
+# artefact power show jester_props  (2026-11-13T22:00:32Z)
+The jester_props artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              Yes
+Must be worn:            No
+Owned:                   a golden cube (264718)
+Price:                   350
+--------------------------------------------------------------------------------

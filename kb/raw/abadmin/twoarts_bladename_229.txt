@@ -1,0 +1,17 @@
+Ability: Bladename (Record #229)
+Associated skill: TwoArts
+Skillpoints required: 0
+Blurb: Every sword is unique.
+Syntax: None
+Abfile:
+Every sword has a name, just as every sword has an owner; the first step towards mastery of the Two Arts is to learn this.
+
+In order to gain your sword, seek out Kavaya near the Eastern Ithmia, east of the City of Delos.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

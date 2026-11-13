@@ -1,0 +1,9 @@
+# artefact power show magic_defence  (2026-11-13T22:00:35Z)
+The magic_defence artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            No
+Owned:                   a ring of the Magus (417212)
+Price:                   700
+--------------------------------------------------------------------------------

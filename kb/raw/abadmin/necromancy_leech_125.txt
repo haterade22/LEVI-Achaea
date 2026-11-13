@@ -1,0 +1,17 @@
+Ability: Leech (Record #125)
+Associated skill: Necromancy
+Skillpoints required: 6999
+Blurb: Leech away the mental energy of your target.
+Syntax: LEECH <target>
+Abfile:
+This is the skill of draining another's mental energy to add to your own.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 50 mana

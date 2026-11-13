@@ -1,0 +1,17 @@
+Ability: Sloth (Record #75)
+Associated skill: Devotion
+Skillpoints required: 28999
+Blurb: The sin of sloth is yours to condemn.
+Syntax: PERFORM SLOTH <target>
+Abfile:
+Condemn a target with the sin of sloth, giving them weariness.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of equilibrium
+Resource: 10 devotion

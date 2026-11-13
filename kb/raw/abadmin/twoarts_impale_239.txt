@@ -1,0 +1,17 @@
+Ability: Impale (Record #239)
+Associated skill: TwoArts
+Skillpoints required: 8999
+Blurb: Drive your blade straight through your target.
+Syntax: IMPALE <target>
+WITHDRAW BLADE
+Abfile:
+This wicked ability may be used when your hapless victim has fallen to the ground and lies there, helpless. With it, you will drive your sword into his body, causing regular damage as long as he is on the sword. Further, while impaled, he will find himself unable to move, though you too will be unable to move.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.40 seconds of balance

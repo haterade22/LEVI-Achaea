@@ -1,0 +1,17 @@
+Ability: Addiction (Record #104)
+Associated skill: Evileye
+Skillpoints required: 36999
+Blurb: Creates a terrible addiction.
+Syntax: STARE <target> ADDICTION
+Abfile:
+Cause your target to become addicted.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.90 seconds of balance
+Resource: 70 mana

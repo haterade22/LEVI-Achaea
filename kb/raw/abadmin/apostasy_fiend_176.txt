@@ -1,0 +1,20 @@
+Ability: Fiend (Record #176)
+Associated skill: Apostasy
+Skillpoints required: 3499
+Blurb: Summon a daemon fiend to attack an enemy.
+Syntax: SUMMON FIEND
+ORDER FIEND ATTACK <target>
+ORDER FIEND PASSIVE
+Abfile:
+The fiend is one of the minor daemons. Once summoned in your pentagram, it will flex and fire and lash out with its countless edged appendages, causing your target to sustain serious bleeding damage.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 150 mana
+The ability name SUMMONFIEND is mapped to this ability.

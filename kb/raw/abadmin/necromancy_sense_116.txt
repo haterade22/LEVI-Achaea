@@ -1,0 +1,17 @@
+Ability: Sense (Record #116)
+Associated skill: Necromancy
+Skillpoints required: 699
+Blurb: Seek out the life force of another being.
+Syntax: SENSE <target>
+Abfile:
+You will seek out the very life essence of an adventurer, gaining you the knowledge of his location.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of equilibrium
+Resource: 20 mana

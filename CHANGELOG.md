@@ -2,6 +2,30 @@
 
 ---
 
+## 2026-11-13 - v4.7.496: `kbcapture abilities` reads the real ABADMIN SHOW record
+
+The first `kbcapture abilities` run stopped after id 300: "300 ids in a row had no ability record: the end of the list. Last record: none." The capture itself worked. It wrote 287 full records in 208 s. But v4.7.494 looked for `ABADMIN ID: <n>`, which is the header of the `AB` command. `ABADMIN SHOW` prints another layout:
+
+```
+Ability: Obliviate (Record #2115)
+Associated skill: Attainment
+Skillpoints required: 38999
+...
+Cooldown: 41.00 seconds
+Resource: 28 rage
+```
+
+So no record matched, every answer counted as a miss, and the 300-miss stop ended the run.
+
+- **The record test** (`misc_scripts/025_KB_Capture.lua`, `ataxiaKB.abilityRecordId`) now matches `Ability: <name> (Record #<n>)`. An id with no ability answers `No such record.`
+- **An `abadmin show` answer now has an EXPECT shape** (those two first lines). Without one, a room line and its prompt closed id 73 before the game answered, and that answer was lost.
+- **The importer** (`tools/kb_capture_import.py`) files each record as `kb/raw/abadmin/<skill>_<ability>_<id>.txt`. `kb/raw/ab/` keeps the seven `AB` answers, which have the other layout. The newest capture of an id wins. The importer reports the ids with no record, and gives the `kbcapture` line that asks again for an id that got no answer.
+- **`tools/kb_abadmin.py`** reads the new layout: skillpoints, blurb, syntax (with its unlabelled extra lines), target, range, aggression, arms and legs, entangled and paralysed use, cost, resource, drain, specialisation, pointer records (`Maps to record 785 (FIST).`) and the other names mapped to an ability. `kb/classes/abadmin-vs-wiki.md` now also lists the skills the wiki pages do not cover. A wiki cost that runs on into other text ("4.00 seconds of equilibrium symbol=...") no longer reads as a different cost.
+- **Filed from the run:** ids 1-300 (287 records, 55 of them pointers), `kb/raw/artefacts/` (the 74 `ARTEFACT POWER SHOW` answers) and the whole capture in `kb/raw/live/captures/`. Four abilities differ from the wiki in target or cost (Truewrack, Feed, Lifevision, Contemplation).
+- **`ARTEFACT POWER SHOW` states no effect size.** It gives the levels, "Owner only", "Must be worn", the owned item and the price. So it cannot confirm the hamstring +5 s or the tuning fork's x2, and Release B needs another source (`docs/my-artefacts.md`, "The game's power records"). 30 of our powers work only while worn. `falcon_self_sufficiency` is not a valid power name: the list cuts it at 20 characters, and the real name is not known.
+
+To finish the capture, update, then type `kbcapture abilities 301` (about 43 min) and `kbcapture abadmin show 73`.
+
 ## 2026-11-13 - v4.7.495: a boon's permanent affliction is not a reason to cure
 
 The user, with Sprightly ("Your dexterity is increased by 5, but you suffer permanent clumsiness."): "When we take boons that give permanent afflictions we are not immune from the system needs to account for that" and "We dont need to tree or use actives if we have this affliction on us". In the log (`kb/raw/live/mnemosyne-sprightly-permanent-clumsiness_2026-11-13.txt`):

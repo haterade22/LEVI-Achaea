@@ -1,0 +1,12 @@
+# artefact power show reserves  (2026-11-13T22:00:42Z)
+The reserves artefact power:
+--------------------------------------------------------------------------------
+Levels:                  3
+Owner only:              No
+Must be worn:            Yes
+Owned:                   a pair of Logosian Bracelets (299421), level 3
+Price:
+Level 1:                 350
+Level 2:                 700
+Level 3:                 1400
+--------------------------------------------------------------------------------

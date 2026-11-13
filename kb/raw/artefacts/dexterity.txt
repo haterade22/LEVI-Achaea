@@ -1,0 +1,12 @@
+# artefact power show dexterity  (2026-11-13T22:00:17Z)
+The dexterity artefact power:
+--------------------------------------------------------------------------------
+Levels:                  3
+Owner only:              No
+Must be worn:            Yes
+Owned:                   Pixie's Boots (472383), level 3
+Price:
+Level 1:                 500
+Level 2:                 1250
+Level 3:                 2500
+--------------------------------------------------------------------------------

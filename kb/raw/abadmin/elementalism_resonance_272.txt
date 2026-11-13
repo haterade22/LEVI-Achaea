@@ -1,0 +1,56 @@
+Ability: Resonance (Record #272)
+Associated skill: Elementalism
+Skillpoints required: 10999
+Blurb: The Elemental Planes are at your fingertips.
+Syntax: RESONANCE
+RESONANCE VERBOSITY <NONE|LOW|HIGH>
+Abfile:
+Certain Elemental Spells cause a form of resonance with the Elemental
+Planes upon which they draw(*). As your resonance grows, the last target
+of the spell you cast to cause that increase in resonance will suffer
+various effects, listed below. Resonance is fleeting and will fade over
+time.
+
+Air:
+Minor resonance: gives asthma.
+Moderate resonance: gives sensitivity.
+Major resonance: gives healthleech.
+
+Earth:
+Minor resonance: breaks a random limb (it will always pick an unbroken
+limb).
+Moderate resonance: stuns the target for a short time and gives
+paralysis.
+Major resonance: gives cracked ribs (it does not increase the number of
+cracked ribs a target has - only ever gives the base affliction).
+
+Fire:
+Minor resonance: both strips and gives an effect which prevents the
+raising of the temperance defence.
+Moderate resonance: scalds the target. If the target is already scalded,
+sets the target ablaze and deals some damage.
+Major resonance: gives the blistered affliction. If they're already
+blistered, gives a stack of the ablaze affliction.
+
+Water:
+Minor resonance: gives the frostbite affliction. If it is already
+present, does some damage.
+Moderate resonance: gives the stuttering affliction and deals some cold
+damage.
+Major resonance: gives the anorexia affliction.
+
+* These are listed under AB ELEMENTALISM.
+** Note that resonance is only generated if your spell is targeted
+against an adventurer who is directly within your location when it
+resolves (i.e. ranged firelash will not generate resonance, but in room
+will).
+*** You can set your verbosity for seeing resonance messages to none,
+low or high. The default is low.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

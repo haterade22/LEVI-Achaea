@@ -1,0 +1,9 @@
+# artefact power show unending_avalanche  (2026-11-13T22:00:53Z)
+The unending_avalanche artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            No
+Owned:                   a cracked wheel (637022)
+Price:                   350
+--------------------------------------------------------------------------------

@@ -1,0 +1,25 @@
+Ability: Truewrack (Record #38)
+Associated skill: Physiology
+Skillpoints required: 35999
+Blurb: Wrack two humours simultaneously.
+Syntax: TRUEWRACK <target> <humour|affliction> <humour|affliction>
+Abfile:
+Your skill in physiology now allows you to wrack two humours at once. If
+you do not specify two afflictions, random ones will be picked from the
+relevant humour pools.
+
+You can find the lists of relevant afflictions under AB PHYSIOLOGY
+WRACK.
+Note: Paralysis may only be delivered once the sanguine humour has been
+sufficiently tempered (two times).
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.80 seconds of balance
+Resource: 100 mana

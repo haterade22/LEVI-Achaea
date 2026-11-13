@@ -1,0 +1,19 @@
+Ability: Taint (Record #121)
+Associated skill: Necromancy
+Skillpoints required: 4999
+Blurb: Attack those with pure souls.
+Syntax: TAINT <target>
+Abfile:
+Summon the malignity of the Lord and strike down a foe's soul with raw,
+necromantic power. This dark prayer will bypass any magical shields or
+prismatic barriers around your target.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 50 mana

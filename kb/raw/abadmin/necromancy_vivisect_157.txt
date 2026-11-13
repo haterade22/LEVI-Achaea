@@ -1,0 +1,23 @@
+Ability: Vivisect (Record #157)
+Associated skill: Necromancy
+Skillpoints required: 54999
+Blurb: Rip your victim's chest open and torture him to death.
+Syntax: VIVISECT <target>
+Abfile:
+Evil as you are, you find yourself enjoying live experimentation,
+preferably on people you know. Once your victim is splayed out and
+helpless, meaning all four of his or her limbs are withered, you may
+perform your experiments, killing your victim in horrifying agony.
+
+Successful completion of this ability will thwart the ressurective
+capability of the starburst tattoo.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 300 mana

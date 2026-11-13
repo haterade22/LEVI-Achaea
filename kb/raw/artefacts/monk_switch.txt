@@ -1,0 +1,9 @@
+# artefact power show monk_switch  (2026-11-13T22:00:38Z)
+The monk_switch artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            No
+Owned:                   a pink lotus blossom (440733)
+Price:                   350
+--------------------------------------------------------------------------------

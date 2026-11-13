@@ -1,0 +1,9 @@
+# artefact power show lifevision  (2026-11-13T22:00:33Z)
+The lifevision artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              Yes
+Must be worn:            Yes
+Owned:                   an oval mask (440716)
+Price:                   500
+--------------------------------------------------------------------------------

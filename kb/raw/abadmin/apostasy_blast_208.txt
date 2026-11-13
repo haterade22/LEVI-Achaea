@@ -1,0 +1,18 @@
+Ability: Blast (Record #208)
+Associated skill: Apostasy
+Skillpoints required: 33999
+Blurb: Order your Baalzadeen to blast your enemies from the room.
+Syntax: DEMON BLAST
+Abfile:
+At great cost to your Baalzadeen's health, this ability may be used to literally blast all those who are not on your allies list out of the room, pushing them from 1-6 rooms away, if there be room to advance in a straight line.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of equilibrium
+Resource: 1000 Baalzadeen health
+The ability name DEMONBLAST is mapped to this ability.

@@ -1,0 +1,19 @@
+Ability: Breathing (Record #285)
+Associated skill: Shindo
+Skillpoints required: 299
+Blurb: Control your breathing to resist choking attacks.
+Syntax: HOLD BREATH
+RELEASE
+Abfile:
+This ability will grant a short-term immunity from anything doing
+asphyxiation damage. However, any offensive activity or consumption of
+balance or equilibrium will cause you to begin breathing once again.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -255,20 +255,42 @@ describe("kbcapture abilities: ABADMIN SHOW for a range of ids (v4.7.494)", func
     expect(some[3]).toBe("abadmin show 2116")
   end)
 
-  it("reads the id out of a record's header", function()
-    expect(ataxiaKB.abilityRecordId({ "Obliviate (Attainment)  ABADMIN ID: 2115      Known: Yes" })).toBe(2115)
-    expect(ataxiaKB.abilityRecordId({ "Nothing here." })).toBeNil()
+  -- The game's lines, from the first live run (2026-11-13, kb/raw/live/captures/).
+  it("reads the id out of a record's first line", function()
+    expect(ataxiaKB.abilityRecordId({ "Ability: Obliviate (Record #2115)", "Associated skill: Attainment" })).toBe(2115)
+    expect(ataxiaKB.abilityRecordId({ "Ability: Symbology (Record #1)" })).toBe(1)
+    expect(ataxiaKB.abilityRecordId({ "No such record." })).toBeNil()
   end)
 
-  it("an ABADMIN answer has no fixed shape: the first prompt after a line ends it", function()
+  it("does not take the AB command's header for an ABADMIN SHOW record (the v4.7.494 bug)", function()
+    -- v4.7.494 matched only this line, which ABADMIN SHOW never prints: all 287 records of the
+    -- first run counted as misses, and the run stopped at id 300.
+    expect(ataxiaKB.abilityRecordId({ "Obliviate (Attainment)  ABADMIN ID: 2115      Known: Yes" })).toBeNil()
+  end)
+
+  it("a record ends at the first prompt after its first line", function()
     reset()
     ataxiaKB.start(ataxiaKB.abilityCommands(2115, 2116), { abilityRun = true })
-    ataxiaKB.onLine("Obliviate (Attainment)  ABADMIN ID: 2115      Known: Yes", false)
-    ataxiaKB.onLine("Syntax:            OBLIVIATE <target>", false)
+    ataxiaKB.onLine("Ability: Obliviate (Record #2115)", false)
+    ataxiaKB.onLine("Associated skill: Attainment", false)
+    ataxiaKB.onLine("Cooldown: 41.00 seconds", false)
     ataxiaKB.onLine("prompt", true)
-    expect(fileText()).toContain("| abadmin show 2115\nObliviate (Attainment)  ABADMIN ID: 2115")
+    expect(fileText()).toContain("| abadmin show 2115\nAbility: Obliviate (Record #2115)\nAssociated skill: Attainment")
     expect(ataxiaTemp.kbcap.records).toBe(1)
     expect(ataxiaTemp.kbcap.lastRecord).toBe(2115)
+  end)
+
+  it("a room line and its prompt do not close an answer before the record arrives (id 73, 2026-11-13)", function()
+    reset()
+    ataxiaKB.start(ataxiaKB.abilityCommands(73, 74), { abilityRun = true })
+    ataxiaKB.onLine("The seethe and churn of magma writes an ashen end for Kalys.", false)
+    ataxiaKB.onLine("prompt", true)
+    expect(fileText()).toBe("")
+    ataxiaKB.onLine("No such record.", false)
+    ataxiaKB.onLine("prompt", true)
+    expect(fileText()).toContain("| abadmin show 73\nThe seethe and churn")
+    expect(fileText()).toContain("No such record.\n##### END")
+    expect(ataxiaTemp.kbcap.misses).toBe(1)
   end)
 
   it("stops after MISS_STOP answers in a row with no record", function()
@@ -277,7 +299,7 @@ describe("kbcapture abilities: ABADMIN SHOW for a range of ids (v4.7.494)", func
     ataxiaKB.MISS_STOP = 2
     ataxiaKB.start(ataxiaKB.abilityCommands(1, 10), { abilityRun = true })
     for _ = 1, 2 do
-      ataxiaKB.onLine("No such ability.", false)
+      ataxiaKB.onLine("No such record.", false)
       ataxiaKB.onLine("prompt", true)
       fireTimer(ataxiaKB.GAP)
     end
@@ -286,10 +308,12 @@ describe("kbcapture abilities: ABADMIN SHOW for a range of ids (v4.7.494)", func
     expect(ataxiaTemp.kbcap.running).toBeFalse()
   end)
 
-  it("a record resets the miss count", function()
+  it("a record resets the miss count, and a pointer record counts as a record", function()
     local st = { misses = 5 }
-    expect(ataxiaKB.trackAbility(st, { "X (Y)  ABADMIN ID: 7  Known: No" })).toBeFalse()
+    expect(ataxiaKB.trackAbility(st, { "Ability: Fistsigil (Record #46)", "Associated skill: Conjuration",
+      "Maps to record 785 (FIST)." })).toBeFalse()
     expect(st.misses).toBe(0)
+    expect(st.lastRecord).toBe(46)
   end)
 end)
 

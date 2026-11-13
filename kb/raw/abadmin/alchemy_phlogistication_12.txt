@@ -1,0 +1,19 @@
+Ability: Phlogistication (Record #12)
+Associated skill: Alchemy
+Skillpoints required: 29999
+Blurb: Burn your enemy from the inside out.
+Syntax: PHLOGISTICATE <target>
+Abfile:
+This ability will cause an enemy's internal anatomy to begin a controlled form of combustion for a time. Fuelled by the use of equilibrium, this will render moss and potash temporarily inert when eaten. Note that this effect will stack if your opponent is already off balance from eating moss or potash, but only to a limited ceiling.
+
+This effect is mutually exclusive with that of vitrification.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of equilibrium
+Resource: 400 mana

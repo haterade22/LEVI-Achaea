@@ -1,0 +1,12 @@
+# artefact power show hand_to_hand  (2026-11-13T22:00:27Z)
+The hand_to_hand artefact power:
+--------------------------------------------------------------------------------
+Levels:                  3
+Owner only:              No
+Must be worn:            Yes
+Owned:                   spiked knuckles (290626), level 3
+Price:
+Level 1:                 400
+Level 2:                 800
+Level 3:                 1600
+--------------------------------------------------------------------------------

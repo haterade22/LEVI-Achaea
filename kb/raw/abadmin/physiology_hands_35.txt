@@ -1,0 +1,27 @@
+Ability: Hands (Record #35)
+Associated skill: Physiology
+Skillpoints required: 22999
+Blurb: Your homunculus possesses dextrous fingers.
+Syntax: HOMUNCULUS INV[ENTORY]
+HOMUNCULUS GIVE <item> TO <person>
+HOMUNCULUS GET <item>
+HOMUNCULUS DROP <item>
+Abfile:
+With control over your homunculus's hands, you may now manipulate items from afar. All commands require your homunculus to be in the same area as yourself, with the exception of looking in its inventory.
+
+HOMUNCULUS INV[ENTORY] will show you what your homunculus is currently holding.
+
+HOMUNCULUS GIVE <item> TO <person> allows to your homunculus to hand an item to another. The homunculus must be in the same room, on the same elevation, as the target, and the target may not be phased or similar.
+
+HOMUNCULUS GET <item> will pick up an item from the ground. This can only be done if your homunculus is holding fewer than five items already, and is subject to the same restrictions as picking up an item yourself.
+
+HOMUNCULUS DROP <item> will drop an item from your homunculus's inventory into its current room. This is subject to the same restrictions as dropping items yourself.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of homunculus balance

@@ -1,0 +1,17 @@
+Ability: Blocking (Record #296)
+Associated skill: Shindo
+Skillpoints required: 9999
+Blurb: Deny them escape.
+Syntax: BLOCK <direction>
+UNBLOCK
+Abfile:
+With the ability to block exits, you cut off the chances for your
+cowardly opponent's to flee your blade.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

@@ -1,0 +1,20 @@
+Ability: Decompound (Record #74)
+Associated skill: Alchemy
+Skillpoints required: 46999
+Blurb: A way to devolve Talisman Pieces into pure gold.
+Syntax: DECOMPOUND <number> <Talisman piece name> <piece level>
+Extra info: You must be in an equipped metallurgic lab.
+Abfile:
+This ability allows the skilled alchemist to decompose talisman pieces
+into gold. The amount of gold produced is dependent on the rarity and
+level of the piece being decomposed.
+
+* Note that only pieces sourced from bashing can be decompounded.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

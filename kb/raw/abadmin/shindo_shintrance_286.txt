@@ -1,0 +1,17 @@
+Ability: Shintrance (Record #286)
+Associated skill: Shindo
+Skillpoints required: 699
+Blurb: Sink into a reverie of battle.
+Syntax: SHIN TRANCE
+BREAK TRANCE
+Abfile:
+Swordplay and Striking are supremely graceful arts, the fury of bloodshed tempered by rhythm, control, and prowess. Entering the Shin trance, you may sensitise yourself to the cadence and flow of combat, accumulating Shin energy with every strike you land upon a foe. Successfully channelling this energy is essential in order to unleash many of the advanced Shindo, TwoArts, and Striking techniques. The more powerful your opponent, the more Shin energy you will gain from striking them. Shin energy will slowly dissipate over time.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+The ability name TRANCE is mapped to this ability.

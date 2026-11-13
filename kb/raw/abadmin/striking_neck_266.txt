@@ -1,0 +1,16 @@
+Ability: Neck (Record #266)
+Associated skill: Striking
+Skillpoints required: 6999
+Blurb: Cause your opponent's limbs to lock up.
+Syntax: STRIKE <target> NECK
+Abfile:
+Clustered nerves in the neck leave a target vulnerable to lasting paralysis if struck with precision.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

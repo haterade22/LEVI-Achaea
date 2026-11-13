@@ -1,0 +1,20 @@
+Ability: Putrefaction (Record #134)
+Associated skill: Necromancy
+Skillpoints required: 18999
+Blurb: Cause your flesh to decay and melt.
+Syntax: PUTREFACTION
+SOLIDIFY
+Abfile:
+By turning your flesh into a semi-liquid, rotting state, you gain some
+measure of immunity from both blunt and edged weapons.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of equilibrium
+Resource: 1% life essence

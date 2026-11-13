@@ -1,0 +1,17 @@
+Ability: Reckless (Record #96)
+Associated skill: Evileye
+Skillpoints required: 21999
+Blurb: A dangerous disregard for personal well-being.
+Syntax: STARE <target> RECKLESS
+Abfile:
+Give your target a dangerous disregard for their personal well-being.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.90 seconds of balance
+Resource: 50 mana

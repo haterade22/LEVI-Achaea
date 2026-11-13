@@ -1,0 +1,3 @@
+Ability: Demonsear (Record #201)
+Associated skill: Apostasy
+Maps to record 200 (SEAR).

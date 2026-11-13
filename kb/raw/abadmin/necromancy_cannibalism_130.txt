@@ -1,0 +1,28 @@
+Ability: Cannibalism (Record #130)
+Associated skill: Necromancy
+Skillpoints required: 11999
+Blurb: Rip out and consume the heart of your victims.
+Syntax: DRAW HEART
+CONSUME HEART
+Abfile:
+This is truly the joy of the Necromancer. If there is a corpse on the
+ground that has not already been victimised by a fellow Necromancer, you
+may DRAW HEART. Then, in an orgy of gastronomic pleasure, you may
+CONSUME HEART. The greater the experience of the adventurer who provided
+the heart, the greater your gain in life essence will be. Enjoy this
+pleasure, my murderous friend, for there are few greater in life or
+death.
+
+It is important to note that how much life essence you get is modified
+by the experience of your victim.
+
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

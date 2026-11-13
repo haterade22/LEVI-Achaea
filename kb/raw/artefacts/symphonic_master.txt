@@ -1,0 +1,9 @@
+# artefact power show symphonic_master  (2026-11-13T22:00:50Z)
+The symphonic_master artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            No
+Owned:                   a moon-and-star insignia (563418)
+Price:                   500
+--------------------------------------------------------------------------------

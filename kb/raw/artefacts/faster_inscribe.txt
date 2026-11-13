@@ -1,0 +1,9 @@
+# artefact power show faster_inscribe  (2026-11-13T22:00:22Z)
+The faster_inscribe artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              Yes
+Must be worn:            No
+Owned:                   a quill of inscribing (572302)
+Price:                   250
+--------------------------------------------------------------------------------

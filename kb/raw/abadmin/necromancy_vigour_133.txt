@@ -1,0 +1,17 @@
+Ability: Vigour (Record #133)
+Associated skill: Necromancy
+Skillpoints required: 14999
+Blurb: Draw upon your essence to increase your health.
+Syntax: VIGOUR
+Abfile:
+You draw on your life essence to boost your health.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of equilibrium
+Resource: 1.50% life essence

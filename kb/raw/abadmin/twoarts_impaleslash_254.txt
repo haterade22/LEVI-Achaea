@@ -1,0 +1,16 @@
+Ability: Impaleslash (Record #254)
+Associated skill: TwoArts
+Skillpoints required: 50999
+Blurb: Let their blood flow freely.
+Syntax: IMPALESLASH
+Abfile:
+When an opponent writhes impaled upon your blade, with this technique you may carve through vital organs, causing severe internal bleeding and hampering your enemy's ability to clot their wounds.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

@@ -1,0 +1,19 @@
+Ability: Mask (Record #182)
+Associated skill: Apostasy
+Skillpoints required: 6999
+Blurb: Summon dark powers to mask your demonic servitor.
+Syntax: MASK
+UNMASK
+Abfile:
+This ability will conceal the movements of your Baalzadeen. UNMASK removes the concealment.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 500 mana
+The ability name DEMONMASK is mapped to this ability.

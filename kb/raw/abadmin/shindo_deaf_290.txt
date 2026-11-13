@@ -1,0 +1,15 @@
+Ability: Deaf (Record #290)
+Associated skill: Shindo
+Skillpoints required: 2999
+Blurb: Will silence upon the world.
+Syntax: DEAF
+Abfile:
+Through force of will, you may block out all sound, rendering yourself deaf.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

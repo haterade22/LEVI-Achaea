@@ -1,0 +1,15 @@
+Ability: Hearing (Record #291)
+Associated skill: Shindo
+Skillpoints required: 3999
+Blurb: Restore aural sensation.
+Syntax: HEARING
+Abfile:
+No trauma may deprive you of your hearing should you wish otherwise. Concentrate, and the sounds of the world will return.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

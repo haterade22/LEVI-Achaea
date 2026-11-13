@@ -1,0 +1,18 @@
+Ability: Kidney (Record #267)
+Associated skill: Striking
+Skillpoints required: 8999
+Blurb: Impede your foe's ability to process elixirs.
+Syntax: STRIKE <target> KIDNEYS
+Abfile:
+A blow to the kidneys will impede your foe's ability to process elixirs,
+causing symptoms similar to addiction.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance
+The ability name KIDNEYS is mapped to this ability.

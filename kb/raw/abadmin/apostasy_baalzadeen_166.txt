@@ -1,0 +1,19 @@
+Ability: Baalzadeen (Record #166)
+Associated skill: Apostasy
+Skillpoints required: 699
+Blurb: Summon your beloved Baalzadeen to do your bidding.
+Syntax: SUMMON BAALZADEEN
+BANISH BAALZADEEN
+Abfile:
+The Baalzadeen is the primary daemon of the apostasy skill. They strike a balance between being powerful enough to be very useful to you, but not so powerful that they break your will, and consume your mind and soul. Though ethereal and either unable or unwilling to do anything to defend itself, its powers can be bent towards your ends in many ways.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 0.50% life essence
+The ability name SUMMONBAALZADEEN is mapped to this ability.

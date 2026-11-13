@@ -1,0 +1,9 @@
+# artefact power show celerity  (2026-11-13T22:00:12Z)
+The celerity artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            Yes
+Owned:                   an Armband of Celerity (582367)
+Price:                   500
+--------------------------------------------------------------------------------

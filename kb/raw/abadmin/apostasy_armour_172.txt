@@ -1,0 +1,18 @@
+Ability: Armour (Record #172)
+Associated skill: Apostasy
+Skillpoints required: 1499
+Blurb: Request that your Baalzadeen grant you protection.
+Syntax: DEMON ARMOUR
+Abfile:
+Your Baalzadeen's power may now be used to create a demonic armour around yourself. Its effect is cumulative with any other armour you may wear.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium
+Resource: 300 Baalzadeen health
+The ability name DEMONARMOUR is mapped to this ability.

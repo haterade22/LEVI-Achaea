@@ -1,0 +1,11 @@
+# artefact power show willpower_regen  (2026-11-13T22:00:57Z)
+The willpower_regen artefact power:
+--------------------------------------------------------------------------------
+Levels:                  2
+Owner only:              No
+Must be worn:            Yes
+Owned:                   a Circlet of Determination (45985), level 2
+Price:
+Level 1:                 300
+Level 2:                 850
+--------------------------------------------------------------------------------

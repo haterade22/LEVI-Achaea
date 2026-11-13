@@ -1,0 +1,15 @@
+Ability: Bladesuicide (Record #245)
+Associated skill: TwoArts
+Skillpoints required: 19999
+Blurb: If death must come, be it by your own blade.
+Syntax: BLADESUICIDE
+Abfile:
+In the direst of circumstances, so long as you still keep your blade, your life remains in your own hands. By driving your sword through your own heart, you may bring immediate death.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

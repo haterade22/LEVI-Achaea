@@ -1,0 +1,16 @@
+Ability: Retaliationstrike (Record #246)
+Associated skill: TwoArts
+Skillpoints required: 21999
+Blurb: Unleash a fierce strike against your attacker.
+Syntax: RETALIATION[STRIKE] [ON|OFF]
+Abfile:
+Prepare yourself to strike back against your foes. Any time a physical blow is struck against you, you have a chance to loose your blade upon your attacker in retaliation.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

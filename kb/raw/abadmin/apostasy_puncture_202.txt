@@ -1,0 +1,20 @@
+Ability: Puncture (Record #202)
+Associated skill: Apostasy
+Skillpoints required: 25999
+Blurb: Pierce another's flesh with your daegger.
+Syntax: DAEGGER PUNCTURE <target>
+Abfile:
+By letting your daegger guide your hand, you may pierce the skin of an
+opponent, delivering a venom from the daemon's tip. Your daegger is able
+to identify and navigate your target's defences, allowing this attack to
+bypass any aura of rebounding surrounding him.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.15 seconds of balance
+The ability name DAEGGERPUNCTURE is mapped to this ability.

@@ -1,0 +1,16 @@
+Ability: Throat (Record #280)
+Associated skill: Striking
+Skillpoints required: 41999
+Blurb: Remove your foe's ability to breathe.
+Syntax: STRIKE <target> THROAT
+Abfile:
+A blow to the vulnerable throat of an enemy will leave them gasping and unable to breathe.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

@@ -1,0 +1,9 @@
+# artefact power show tuning  (2026-11-13T22:00:53Z)
+The tuning artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            No
+Owned:                   a silver tuning fork (396580)
+Price:                   200
+--------------------------------------------------------------------------------

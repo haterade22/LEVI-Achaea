@@ -1,0 +1,18 @@
+Ability: Shrivel (Record #129)
+Associated skill: Necromancy
+Skillpoints required: 9999
+Blurb: Cause your opponent's limbs to shrivel up.
+Syntax: SHRIVEL <arms/legs> <target>
+SHRIVEL <left/right> <arm/leg> <target>
+Abfile:
+By grabbing onto the limb of an adventurer, you can destroy its marrow, rendering it useless.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.10 seconds of equilibrium
+Resource: 300 mana

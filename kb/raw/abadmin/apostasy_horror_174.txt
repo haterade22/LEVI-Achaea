@@ -1,0 +1,18 @@
+Ability: Horror (Record #174)
+Associated skill: Apostasy
+Skillpoints required: 2499
+Blurb: Instill great fear into your victim with your demon's aid.
+Syntax: DEMON HORROR <target>
+Abfile:
+Instill great fear into your victim with your demon's aid.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 125 Baalzadeen health
+The ability name DEMONHORROR is mapped to this ability.

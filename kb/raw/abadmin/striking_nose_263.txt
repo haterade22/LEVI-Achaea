@@ -1,0 +1,16 @@
+Ability: Nose (Record #263)
+Associated skill: Striking
+Skillpoints required: 3999
+Blurb: A disfiguring strike to turn even the most loyal.
+Syntax: STRIKE <target> NOSE
+Abfile:
+Comprised of delicate cartilage, the nose is a vulnerable point. By smashing the organ with a swift strike, leave your victim unrecognisable to allies, and unable to command loyal minions.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

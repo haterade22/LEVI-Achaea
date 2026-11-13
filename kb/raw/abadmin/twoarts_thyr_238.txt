@@ -1,0 +1,18 @@
+Ability: Thyr (Record #238)
+Associated skill: TwoArts
+Skillpoints required: 6999
+Blurb: The whirling Wind stance neglects power for speed.
+Syntax: THYR
+UNSTANCE
+Extra info: Stance: Air
+Abfile:
+Unceasing and all-pervasive, the Wind flows and soars invisibly and unpredictably. This graceful stance permits somewhat greater speed and accuracy of attack, but blows dealt will be significantly less powerful.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

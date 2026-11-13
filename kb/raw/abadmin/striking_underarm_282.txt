@@ -1,0 +1,16 @@
+Ability: Underarm (Record #282)
+Associated skill: Striking
+Skillpoints required: 54999
+Blurb: Force them to secrete a slick sweat.
+Syntax: STRIKE <target> UNDERARM
+Abfile:
+By assaulting the sensitive armpit of a foe, you may stimulate their sweat glands, causing an unnaturally profuse degree of perspiration.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

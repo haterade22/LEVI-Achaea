@@ -1,0 +1,16 @@
+Ability: Shadow (Record #288)
+Associated skill: Shindo
+Skillpoints required: 1499
+Blurb: Surveil from the shadows.
+Syntax: SHADOW <target>
+Abfile:
+From the ground or in the trees you may attempt to shadow an adventurer in an adjacent location. If you are not detected, you will enter their location unseen and begin to follow them.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance

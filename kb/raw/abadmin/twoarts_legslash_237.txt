@@ -1,0 +1,16 @@
+Ability: Legslash (Record #237)
+Associated skill: TwoArts
+Skillpoints required: 5999
+Blurb: Slash across the legs.
+Syntax: LEGSLASH <target> [LEFT|RIGHT]
+Abfile:
+Draw and slash your blade across the legs of your enemy from either left or right. This horizontal attack will strike both legs in immediate succession, the second less powerfully than the first.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

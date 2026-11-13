@@ -1,0 +1,16 @@
+Ability: Discernment (Record #236)
+Associated skill: TwoArts
+Skillpoints required: 4999
+Blurb: Quickly assess an opponent's wounds.
+Syntax: DISCERN <target>
+Abfile:
+With a keen and practised eye, discern the severity of any bleeding wounds your opponent may endure.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of equilibrium

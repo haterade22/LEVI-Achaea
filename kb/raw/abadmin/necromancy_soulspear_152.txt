@@ -1,0 +1,29 @@
+Ability: Soulspear (Record #152)
+Associated skill: Necromancy
+Skillpoints required: 46999
+Blurb: Meld soul-matter from the dead into a physical weapon.
+Syntax: EVOKE SOULSPEAR FROM <target corpse>
+THROW SOULSPEAR AT <target> <direction>
+Abfile:
+Soulspear allows the skilled Necromancer to form a weapon forged in the
+soul of the dead. By taking an adventurer corpse, you can form the
+soulspear. A corpse from an adventurer level 30 and under has too weak a
+soul to form such a powerful weapon out of. Beyond that, the higher the
+level of the victim, the more powerful the soulspear.
+
+Once you have it, you may throw it at someone who is outside your room,
+anywhere in your line-of-sight. It will shatter shields and prismatic
+barriers, or, if the person lacks one of those, the necromantic energy
+will be released, summoning forth hands of the grave in your victim's
+location.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of balance
+Resource: 2.50% life essence

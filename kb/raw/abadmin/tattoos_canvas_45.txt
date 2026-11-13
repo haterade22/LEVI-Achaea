@@ -1,0 +1,15 @@
+Ability: Canvas (Record #45)
+Associated skill: Tattoos
+Skillpoints required: 2500
+Blurb: Your body is your art. Wear tattoos on your back.
+Syntax: None
+Abfile:
+Through your innate understanding of inks, you are able to wear tattoos on your back.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

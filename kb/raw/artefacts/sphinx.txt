@@ -1,0 +1,9 @@
+# artefact power show sphinx  (2026-11-13T22:00:46Z)
+The sphinx artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              Yes
+Must be worn:            No
+Owned:                   a Hood of the Sphinx (503549)
+Price:                   2500
+--------------------------------------------------------------------------------

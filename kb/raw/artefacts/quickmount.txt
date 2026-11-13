@@ -1,0 +1,9 @@
+# artefact power show quickmount  (2026-11-13T22:00:40Z)
+The quickmount artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            Yes
+Owned:                   a set of mithril spurs (338075)
+Price:                   500
+--------------------------------------------------------------------------------

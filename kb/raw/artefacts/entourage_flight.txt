@@ -1,0 +1,9 @@
+# artefact power show entourage_flight  (2026-11-13T22:00:19Z)
+The entourage_flight artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            No
+Owned:                   a flying carpet (582366)
+Price:                   300
+--------------------------------------------------------------------------------

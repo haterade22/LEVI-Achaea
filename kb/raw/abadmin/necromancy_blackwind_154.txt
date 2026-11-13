@@ -1,0 +1,29 @@
+Ability: Blackwind (Record #154)
+Associated skill: Necromancy
+Skillpoints required: 50999
+Blurb: Assume the form of the deadly blackwind.
+Syntax: BLACKWIND
+HUMAN
+CHOKE <target>
+SURGE <direction>
+Abfile:
+This allows you to take the form of the deadly blackwind. While in this
+form, your freedom is severely limited, but your ability to be harmed is
+also severely restricted. After you have become the blackwind, you have
+the nefarious ability to slip down a victim's throat and CHOKE him.
+While in blackwind form, you will lose willpower very quickly as you
+strain to hold your nebulous form together. HUMAN is the command to
+return to your normal form.
+In addition, you may SURGE in a direction to bypass closed doors, though
+this is a channeled action and will not bypass doors that are locked.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 5% life essence and 500 mana
+Drain: Willpower

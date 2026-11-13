@@ -1,0 +1,28 @@
+Ability: Exterminate (Record #148)
+Associated skill: Necromancy
+Skillpoints required: 39999
+Blurb: Destroy all plant life in a location.
+Syntax: EXTERMINATE
+Extra info: Cooldown upon completion: 12.00 seconds of equilibrium.
+Abfile:
+Using your command of the energies of death, you are able to wipe a
+forest area clean of plant life, replenishing some of your essence. Be
+warned though, there is an essence cost to this ability, and unless
+there is a sufficient amount of plant life in the room, you may lose
+essence using it. It should also be noted that an exterminated room is
+no longer considered a forest room, so many Druidic abilities will not
+work in such a room.
+
+Take note: prolonged use of extermination will take a toll on your
+essence reserves, and you will find that each subsequent attempt incurs
+a greater cost in essence than the last to perform.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of equilibrium
+Resource: 5% life essence and 1000 mana

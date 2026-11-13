@@ -1,0 +1,12 @@
+# artefact power show strength  (2026-11-13T22:00:47Z)
+The strength artefact power:
+--------------------------------------------------------------------------------
+Levels:                  3
+Owner only:              No
+Must be worn:            Yes
+Owned:                   a pair of Logosian Gauntlets (286876), level 3
+Price:
+Level 1:                 500
+Level 2:                 1250
+Level 3:                 2500
+--------------------------------------------------------------------------------

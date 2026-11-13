@@ -1,0 +1,19 @@
+Ability: Flamefist (Record #275)
+Associated skill: Striking
+Skillpoints required: 22999
+Blurb: Channel Shindo into a fiery strike.
+Syntax: FLAMEFIST <target>
+Abfile:
+Through Shin mastery, channel fire to engulf a victim in a cloak of flames that will scorch away any impending anti-weapon aura of rebounding. Such conflagrating will, however, cauterise the wounds of the target, resulting in them bleeding somewhat less for the duration.
+
+** Shin energy is necessary to perform elemental strikes. Only one element may be channelled upon a foe at a time.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Resource: 20 Shin energy

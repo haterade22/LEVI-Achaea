@@ -1,0 +1,35 @@
+Ability: Arms (Record #29)
+Associated skill: Physiology
+Skillpoints required: 5999
+Blurb: Specialised attacks for your homunculus.
+Syntax: HOMUNCULUS ATTACK <target>
+HOMUNCULUS ADMINISTER <prime>
+Abfile:
+By mastering control of your homunculus's arms, you may now use your
+homunculus to more effectively attack your opponent. In addition to
+increased damage, your homunculus's damage type will change depending on
+the prime used to germinate it, and each prime will grant the attacks a
+special effect:
+
+Salt: Magic damage - Attacks will cause bleeding.
+Sulphur: Psychic damage - Attacks will drain mana.
+Mercury: Poison damage - Extend the next herb balance of the target.
+
+Note, however, that if your homunculus becomes separated from you, its
+attacks will revert to its original, weak attacks.
+
+In addition, you may administer one of the primes with which your
+homunculus was not germinated in order to temporarily grant the effects
+of that prime for a limited number of attacks. Note that attacks under
+the effects of administered primes will be less effective than those of
+its native type.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 250 mana

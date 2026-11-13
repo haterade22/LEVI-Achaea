@@ -1,0 +1,17 @@
+Ability: Sight (Record #101)
+Associated skill: Evileye
+Skillpoints required: 31999
+Blurb: Restoring your sight.
+Syntax: SIGHT
+Abfile:
+By focusing your will on your sight, you are able to clear your eyes of blindness after a brief period of concentration.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.90 seconds of balance
+Resource: 25 willpower

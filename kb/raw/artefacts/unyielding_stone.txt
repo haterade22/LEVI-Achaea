@@ -1,0 +1,9 @@
+# artefact power show unyielding_stone  (2026-11-13T22:00:54Z)
+The unyielding_stone artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            No
+Owned:                   a morsel of bonemeal (637043)
+Price:                   600
+--------------------------------------------------------------------------------

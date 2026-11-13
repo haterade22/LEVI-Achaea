@@ -1,0 +1,9 @@
+# artefact power show silent_telepathy  (2026-11-13T22:00:45Z)
+The silent_telepathy artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            No
+Owned:                   a synaptic lock (91910)
+Price:                   500
+--------------------------------------------------------------------------------

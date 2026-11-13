@@ -1,0 +1,16 @@
+Ability: Diffusion (Record #32)
+Associated skill: Physiology
+Skillpoints required: 12999
+Blurb: Manipulation of two humours at once.
+Syntax: None (passive)
+Abfile:
+You can now have up to two humours tempered on an opponent at the same
+time.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

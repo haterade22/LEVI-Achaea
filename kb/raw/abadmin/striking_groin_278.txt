@@ -1,0 +1,16 @@
+Ability: Groin (Record #278)
+Associated skill: Striking
+Skillpoints required: 31999
+Blurb: Instill a sense of heroism into your target.
+Syntax: STRIKE <target> GROIN
+Abfile:
+A vulnerable point for both males and females, the groin, when struck, may cause a foe to block out the overwhelming pain endured, wilfully ignoring any further damage to their body.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

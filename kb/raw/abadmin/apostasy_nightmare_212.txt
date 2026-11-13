@@ -1,0 +1,24 @@
+Ability: Nightmare (Record #212)
+Associated skill: Apostasy
+Skillpoints required: 40999
+Blurb: A daemonite born of the rape of the Goddess of Dreams.
+Syntax: SUMMON NIGHTMARE
+Abfile:
+Born from the darkest of acts, the nightmare is the most ethereal
+of daemons. Though it will sometimes briefly take on shape, it has no
+body, and even with the added motivation of the pentagram it will not
+exist within sunlight.
+
+The nightmare will first afflict with hypersomnia. If it is present it
+delivers dementia, then finally hellsight.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 150 mana
+The ability name SUMMONNIGHTMARE is mapped to this ability.

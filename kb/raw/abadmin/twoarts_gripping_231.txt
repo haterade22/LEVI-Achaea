@@ -1,0 +1,16 @@
+Ability: Gripping (Record #231)
+Associated skill: TwoArts
+Skillpoints required: 699
+Blurb: Clench your blade with an unshakable grip.
+Syntax: GRIP
+RELAX GRIP
+Abfile:
+While using this ability, you will prevent items from being knocked out of your grip.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

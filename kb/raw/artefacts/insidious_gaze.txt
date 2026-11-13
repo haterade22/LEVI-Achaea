@@ -1,0 +1,9 @@
+# artefact power show insidious_gaze  (2026-11-13T22:00:30Z)
+The insidious_gaze artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            No
+Owned:                   a shiny charm (370963)
+Price:                   500
+--------------------------------------------------------------------------------

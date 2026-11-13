@@ -1,0 +1,16 @@
+Ability: Shoulder (Record #259)
+Associated skill: Striking
+Skillpoints required: 699
+Blurb: Induce a state of weariness in your target.
+Syntax: STRIKE <target> SHOULDER
+Abfile:
+By harassing pressure points near an enemy's shoulder with a frontal strike, weaken important muscles and leave them weary.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

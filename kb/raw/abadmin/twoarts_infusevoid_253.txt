@@ -1,0 +1,18 @@
+Ability: Infusevoid (Record #253)
+Associated skill: TwoArts
+Skillpoints required: 45999
+Blurb: Wield the Void and your sword as one.
+Syntax: INFUSE VOID
+Abfile:
+By channelling accumulated Shin energy into your sword, you may fold the recondite power of the Void about your blade. A weapon so empowered will flow as a shadow the next time it is drawn, carving through armour and other physical protections as if a tool of magic, and may negate one of your opponent's defences.
+
+** Your blade may only be infused with one element at a time.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 5 Shin energy

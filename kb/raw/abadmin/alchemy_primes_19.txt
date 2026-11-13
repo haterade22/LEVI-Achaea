@@ -1,0 +1,31 @@
+Ability: Primes (Record #19)
+Associated skill: Alchemy
+Skillpoints required: 0
+Blurb: Isolation of alchemical primes.
+Syntax: ISOLATE <#> <prime> FROM <metal>
+ISOLATE <prime>
+Abfile:
+Isolation of alchemical primes from alchemical metals is the fundamental
+mark of a capable alchemist. In order to perform the isolation, you must
+be standing within a transmutation laboratory in which you have
+permission to work.
+
+The three alchemical primes are: salt, sulphur, and mercury.
+
+Each alchemical metal is composed of certain alchemical primes, so not
+all alchemical primes can be isolated from all alchemical metals.
+ISOLATE <prime> will reveal the alchemical metals from which a given
+alchemical prime can be isolated.
+
+Alchemical primes produced via isolation can also be manipulated by the
+name a<prime>. For example, asalt or asulphur.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.75 seconds of balance
+Resource: 100 mana

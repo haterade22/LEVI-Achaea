@@ -1,0 +1,19 @@
+Ability: Obliviate (Record #2115)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: Induce forgetfulness in your target.
+Syntax: OBLIVIATE <target>
+Extra info: Gives denizen affliction: Amnesia
+Abfile:
+Use a minor hypnosis technique to cause your target to forget what it was doing, giving it amnesia for a few seconds.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 41.00 seconds
+Resource: 28 rage
+Skill specialisation: br_serpent

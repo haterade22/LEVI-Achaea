@@ -1,0 +1,21 @@
+Ability: Drain (Record #135)
+Associated skill: Necromancy
+Skillpoints required: 20999
+Blurb: Drain your life essence into another Necromancer.
+Syntax: DRAIN <target>
+Abfile:
+With this ability you can transfer life essence from yourself to another
+necromancer. Unfortunately, it is not a perfect transfer and some life
+essence will be lost in the process. You can avoid this imperfect aspect
+if carrying out the transfer upon Mhaldor Isle (or within Mhaldor city
+proper), as these are locations so closely tied to the necromantic arts
+that the working becomes far easier.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Drain: Life Essence

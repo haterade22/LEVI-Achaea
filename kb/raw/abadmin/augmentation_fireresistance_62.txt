@@ -1,0 +1,3 @@
+Ability: Fireresistance (Record #62)
+Associated skill: Augmentation
+Maps to record 2009 (FIRE).

@@ -43,10 +43,11 @@ packageName: ''
 --                          alias runs, so `kbcapture a;b` captured only `a` and sent `b` to the game
 --                          uncaptured (2026-10-10).
 --   kbcapture abilities [from[-to]]
---                          ABADMIN SHOW <n> for every n in the range (default 1-4000, about 80 min;
---                          known ids reach 3292). Stops early after MISS_STOP answers in a row with
---                          no ability record, and says where to resume (v4.7.494, the user: "cycle
+--                          ABADMIN SHOW <n> for every n in the range (default 1-4000; known ids
+--                          reach 3292). Stops early after MISS_STOP answers in a row with no
+--                          ability record, and says where to resume (v4.7.494, the user: "cycle
 --                          all abs in game with abadmin show <x>, then output it to a file").
+--                          Ids 1-300 took 208 s on 2026-11-13 (0.7 s each), so 4000 take about 47 min.
 --   kbcapture artefacts    ARTEFACT POWER LIST OWNED, then ARTEFACT POWER SHOW for every power in it
 --                          (v4.7.494). The list also refreshes our saved powers (misc_scripts/033).
 --   kbcapture stop         stop after the current answer
@@ -146,12 +147,13 @@ function ataxiaKB.extendFromList(st, lines)
 end
 
 -- ---------------------------------------------------------------------------------------------
--- ABADMIN SHOW <n>: the game's own record of every ability (v4.7.494).
--- A record starts "Obliviate (Attainment)  ABADMIN ID: 2115      Known: Yes" (kb/raw/ab/). Ids that
--- name no ability answer with a line nobody has recorded yet, so the capture gives these commands NO
--- answer shape (EXPECT): the first prompt after a line ends the answer. A room line that closes one
--- early costs nothing, because the importer files a record by the id in its own header, not by the
--- command it came under.
+-- ABADMIN SHOW <n>: the game's own record of every ability (v4.7.494; record shape fixed v4.7.496).
+-- A record starts "Ability: Obliviate (Record #2115)", then "Associated skill: Attainment"; an id
+-- with no ability answers "No such record." (the first live run, 2026-11-13). v4.7.494 looked for
+-- "ABADMIN ID: <n>", which is the header of the AB command, not of ABADMIN SHOW: no record matched,
+-- every answer counted as a miss, and the run stopped after id 300 with all 287 records written.
+-- Both first lines are known now, so EXPECT holds the answer open until one of them arrives: with no
+-- shape, a room line and its prompt closed id 73 before the game answered, and that answer was lost.
 -- ---------------------------------------------------------------------------------------------
 ataxiaKB.ABILITY_FIRST = 1
 ataxiaKB.ABILITY_LAST = 4000
@@ -165,10 +167,13 @@ function ataxiaKB.abilityCommands(from, to)
   return cmds
 end
 
--- The ABADMIN id in an answer's lines, or nil when no record is there.
+ataxiaKB.ABILITY_RECORD = "^Ability: .-%(Record #(%d+)%)"
+ataxiaKB.ABILITY_NONE = "^No such record"
+
+-- The record id in an answer's lines ("Ability: <name> (Record #<n>)"), or nil when no record is there.
 function ataxiaKB.abilityRecordId(lines)
   for _, l in ipairs(lines or {}) do
-    local id = l:match("ABADMIN ID:%s*(%d+)")
+    local id = l:match(ataxiaKB.ABILITY_RECORD)
     if id then return tonumber(id) end
   end
   return nil
@@ -292,6 +297,7 @@ end
 ataxiaKB.EXPECT = {
   { "^affliction show ", { "^Affliction:", "^There is no such affliction" } },
   { "^whatcures ", { "^The affliction '", "^That is not a known affliction" } },
+  { "^abadmin show ", { ataxiaKB.ABILITY_RECORD, ataxiaKB.ABILITY_NONE } },
 }
 
 function ataxiaKB.expectFor(cmd)

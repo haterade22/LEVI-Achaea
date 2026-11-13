@@ -1,0 +1,11 @@
+# artefact power show rift_expand  (2026-11-13T22:00:43Z)
+The rift_expand artefact power:
+--------------------------------------------------------------------------------
+Levels:                  2
+Owner only:              Yes
+Must be worn:            No
+Owned:                   Prospero's Greater Vault (455735), level 2
+Price:
+Level 1:                 350
+Level 2:                 500
+--------------------------------------------------------------------------------

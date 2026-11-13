@@ -1,0 +1,3 @@
+Ability: Electricalresistance (Record #58)
+Associated skill: Augmentation
+Maps to record 2003 (ELECTRIC).

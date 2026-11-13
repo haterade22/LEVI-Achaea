@@ -1,0 +1,16 @@
+Ability: Sternum (Record #258)
+Associated skill: Striking
+Skillpoints required: 299
+Blurb: A painful blow to the breastbone.
+Syntax: STRIKE <target> STERNUM
+Abfile:
+Inflict significant pain with a splintering strike to your target's breastbone, located at the centre of their ribcage.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

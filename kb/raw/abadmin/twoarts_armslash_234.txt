@@ -1,0 +1,16 @@
+Ability: Armslash (Record #234)
+Associated skill: TwoArts
+Skillpoints required: 2999
+Blurb: Cut across the arms.
+Syntax: ARMSLASH <target> [LEFT|RIGHT]
+Abfile:
+Draw and slash your blade across the arms of your enemy from either left or right. Such an attack will strike both arms in immediate succession, the second with less force than the first.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

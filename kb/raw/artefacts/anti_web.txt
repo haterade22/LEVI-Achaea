@@ -1,0 +1,9 @@
+# artefact power show anti_web  (2026-11-13T22:00:09Z)
+The anti_web artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            Yes
+Owned:                   a buckawn's amulet (351860)
+Price:                   800
+--------------------------------------------------------------------------------

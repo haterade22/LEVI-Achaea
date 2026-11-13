@@ -1,0 +1,18 @@
+Ability: Pentagrams (Record #165)
+Associated skill: Apostasy
+Skillpoints required: 699
+Blurb: Sketch an infernal pentagram, in blood.
+Syntax: CARVE PENTAGRAM
+DISPEL PENTAGRAM
+Abfile:
+At a small life essence cost (if you do not have the essence skill in necromancy then telling just how much you have and how much you are using will be difficult) you can infuse your blood with a greater power. Then, taking your daegger, you make a small puncture in your hand, and carve an infernal pentagram onto the ground with your own steaming blood. There can be only one pentagram on the ground in a room at a given time, and you can only use a pentagram drawn in your own blood, infused with the life essence of others, as it may be. From here, a variety of other abilities may be used.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance
+Resource: 0.25% life essence

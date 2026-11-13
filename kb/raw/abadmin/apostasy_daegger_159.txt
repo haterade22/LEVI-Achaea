@@ -1,0 +1,19 @@
+Ability: Daegger (Record #159)
+Associated skill: Apostasy
+Skillpoints required: 0
+Blurb: Call to your side a living, daemonic daegger to aid you.
+Syntax: SUMMON DAEGGER
+STAB <target>
+Abfile:
+The daemonic daeggers are actually living creatures; small daemons with a network of small brains geared towards making them somewhat intelligent weapons. You can quickly stab your daegger at your target even if your skill in weaponry isn't very high because the creature's eye and limited levitation abilities will help to guide your hand. If the daegger is envenomed then the target has a chance to receive the relevant venom affliction. The strength, accuracy, and to a lesser degree speed of your stabs will depend on your skill in Apostasy.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Equilibrium
+Resource: 300 mana
+The ability name SUMMONDAEGGER is mapped to this ability.

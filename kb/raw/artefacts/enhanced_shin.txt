@@ -1,0 +1,9 @@
+# artefact power show enhanced_shin  (2026-11-13T22:00:19Z)
+The enhanced_shin artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            No
+Owned:                   an ethereal lightning eagle feather cuff (456282)
+Price:                   500
+--------------------------------------------------------------------------------

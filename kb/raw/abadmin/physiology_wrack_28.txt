@@ -1,0 +1,38 @@
+Ability: Wrack (Record #28)
+Associated skill: Physiology
+Skillpoints required: 3999
+Blurb: Afflict an opponent by assaulting the humours.
+Syntax: WRACK <target> <humour|affliction>
+Abfile:
+By assaulting an opponent's humours, you can cause damage or afflict
+upon them several common maladies. Each humour has several afflictions
+and a damage type associated with it, and any afflictions from wracking
+a humour will come only from this pool. When wracking, you may specify
+the affliction you wish to use, or you may allow the affliction to
+manifest at random at the cost of a slight delay in speed. It is
+possible to wrack an opponent's untempered humour, though this is done
+at a balance penalty and may be done only via specifying the affliction.
+
+When used against denizens, wracking will deal damage with the type of
+damage determined by the chosen humour.
+
+Wracking operates outside of humour balance, and may be used
+off-equilibrium immediately following a symbology ability when targeted
+against an adventurer.
+
+The humours and their affliction pools are:
+
+Choleric: Nausea, sensitivity, slickness, (poison damage).
+Melancholic: stupidity, anorexia, impatience, (cold damage).
+Phlegmatic: clumsiness, weariness, asthma, (asphyxiation damage).
+Sanguine: Haemophilia, recklessness, paralysis, (magic damage).
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance
+Resource: 60 mana

@@ -1,0 +1,9 @@
+# artefact power show gold_attractor  (2026-11-13T22:00:26Z)
+The gold_attractor artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            No
+Owned:                   a Prosperian attractor (560673)
+Price:                   200
+--------------------------------------------------------------------------------

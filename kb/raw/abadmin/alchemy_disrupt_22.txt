@@ -1,0 +1,17 @@
+Ability: Disrupt (Record #22)
+Associated skill: Alchemy
+Skillpoints required: 55665
+Blurb: Send ripples through the ether.
+Syntax: ETHER DISRUPT
+Abfile:
+By sending ripples through the ether, you may temporarily disrupt telepathic communications into and out of the surrounding area. This will require a long period during which you may not perform any actions, and comes with a very steep mana and willpower cost.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 10.00 seconds of equilibrium
+Resource: 1500 mana

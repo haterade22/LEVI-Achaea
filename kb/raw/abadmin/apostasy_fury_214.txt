@@ -1,0 +1,22 @@
+Ability: Fury (Record #214)
+Associated skill: Apostasy
+Skillpoints required: 43999
+Blurb: Cause those around you to go into an enhancing fury.
+Syntax: DEMON FURY
+Abfile:
+This extremely powerful, though extremely costly ability, will speed up
+the equilibrium and balance times of everybody in the room (except the
+casting Apostate) for 20 seconds. Please remember that your Baalzadeen
+is good to you, and if you overuse this ability, you run the risk of
+weakening it to the point of uselessness.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 10.00 seconds of equilibrium
+Resource: 2000 Baalzadeen health
+The ability name DEMONFURY is mapped to this ability.

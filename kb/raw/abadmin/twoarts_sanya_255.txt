@@ -1,0 +1,18 @@
+Ability: Sanya (Record #255)
+Associated skill: TwoArts
+Skillpoints required: 54999
+Blurb: The total focus of the Void stance amplifies inner power.
+Syntax: SANYA
+UNSTANCE
+Extra info: Stance: Void
+Abfile:
+Empty of all things, Void is absolute nothingness without boundary or end. The clarity gained by driving away thought, and by freeing your mind of distraction, in contemplation of Void, will enhance your connection with your physical form. Striking from this stance will yield more Shin energy, and less will be consumed by most abilities.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

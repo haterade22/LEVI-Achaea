@@ -1,0 +1,19 @@
+Ability: Icefist (Record #274)
+Associated skill: Striking
+Skillpoints required: 20999
+Blurb: Channel Shindo into an icy strike.
+Syntax: ICEFIST <target>
+Abfile:
+Through Shin mastery, channel the cold to encase a foe in a freezing rime of ice, rendering untouchable any magical tattoos they may bear.
+
+** Shin energy is necessary to perform elemental strikes. Only one element may be channelled upon a foe at a time.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Resource: 20 Shin energy

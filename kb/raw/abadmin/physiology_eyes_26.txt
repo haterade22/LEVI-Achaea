@@ -1,0 +1,17 @@
+Ability: Eyes (Record #26)
+Associated skill: Physiology
+Skillpoints required: 1499
+Blurb: See through the eyes of your homunculus.
+Syntax: HOMUNCULUS LOOK
+HOMUNCULUS EXITS
+Abfile:
+Having gained the ability to control your homunculus's eyes, you may look into whatever room it stands so long as it is on the same continent as you. You may also specifically check for exits from its current room.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of homunculus balance

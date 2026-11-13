@@ -1,0 +1,17 @@
+Ability: Confusion (Record #98)
+Associated skill: Evileye
+Skillpoints required: 26999
+Blurb: Befuddle the minds of your enemies.
+Syntax: STARE <target> CONFUSION
+Abfile:
+Befuddle the minds of your enemies.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.90 seconds of balance
+Resource: 33 mana

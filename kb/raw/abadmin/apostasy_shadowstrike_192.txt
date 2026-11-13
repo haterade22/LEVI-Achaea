@@ -1,0 +1,28 @@
+Ability: Shadowstrike (Record #192)
+Associated skill: Apostasy
+Skillpoints required: 16999
+Blurb: Use your daegger to strike at the shadow of a victim.
+Syntax: DAEGGER SHADOWSTRIKE <target>
+Abfile:
+Once you have levitated your daegger, you can order it to perform the
+deadly shadowstrike. Your daegger will fly towards your foe, seeming to
+miss, but instead plunging into the gut of their shadow.
+
+Against adventurers, this will have the same effect as if the daegger
+had impaled the target through his or her stomach. Your target will take
+damage for as long as he or she is impaled, and will have to writhe
+painfully off the daegger.
+
+When used against a denizen, your daegger will deal cutting damage upon
+striking the target's shadow.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of equilibrium
+The ability name DAEGGERSHADOWSTRIKE is mapped to this ability.

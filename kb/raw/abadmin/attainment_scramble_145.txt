@@ -1,0 +1,22 @@
+Ability: Scramble (Record #145)
+Associated skill: Attainment
+Skillpoints required: 5999
+Blurb: Scramble your target's mind, causing clumsiness.
+Syntax: MIND SCRAMBLE <target>
+Extra info: Gives denizen affliction: Clumsiness
+Abfile:
+Send a small tendril of psychic energy through your target's mind to
+deaden the nerves that govern fine motor control. This attack will give
+your target clumsiness for several seconds.
+
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 31.00 seconds
+Resource: 22 rage
+Skill specialisation: br_monk

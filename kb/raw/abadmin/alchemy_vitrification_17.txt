@@ -1,0 +1,19 @@
+Ability: Vitrification (Record #17)
+Associated skill: Alchemy
+Skillpoints required: 43332
+Blurb: Turn an opponent's skin into glass.
+Syntax: VITRIFY <target>
+Abfile:
+This ability will cause an enemy's skin to partially transmutate into glass for a time. Abilities that use balance will cause bleeding, with the amount scaling upward with the length of balance loss.
+
+This effect is mutually exclusive with that of phlogistication.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of equilibrium
+Resource: 400 mana

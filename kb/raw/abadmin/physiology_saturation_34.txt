@@ -1,0 +1,16 @@
+Ability: Saturation (Record #34)
+Associated skill: Physiology
+Skillpoints required: 18999
+Blurb: Concurrent control over three humours.
+Syntax: None (passive)
+Abfile:
+You can now have up to three humours tempered on an opponent at the same
+time.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

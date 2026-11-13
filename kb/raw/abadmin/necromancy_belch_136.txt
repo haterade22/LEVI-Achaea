@@ -1,0 +1,17 @@
+Ability: Belch (Record #136)
+Associated skill: Necromancy
+Skillpoints required: 23999
+Blurb: Spew forth a noxious gas.
+Syntax: BELCH
+Abfile:
+This ability will allow you to belch forth a cloud of foul, poisoning gas that will hurt anyone breathing it in, except you.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 200 mana

@@ -1,0 +1,17 @@
+Ability: Corruption (Record #41)
+Associated skill: Physiology
+Skillpoints required: 51332
+Blurb: Capitalise on your homunculus's alien physiology.
+Syntax: HOMUNCULUS CORRUPT <target>
+Abfile:
+By channeling your powers of humourism through the alien body of your homunculus, you may corrupt an opponent's melancholic and sanguine humours. This has the interesting effect of causing mana loss from bleeding, and health loss from clotting. The effect will wear off after a time.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 12.00 seconds of homunculus balance
+Resource: 500 mana

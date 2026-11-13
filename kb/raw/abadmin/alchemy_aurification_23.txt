@@ -1,0 +1,17 @@
+Ability: Aurification (Record #23)
+Associated skill: Alchemy
+Skillpoints required: 60000
+Blurb: Immortalise your enemies in gleaming gold.
+Syntax: AURIFY <target>
+Abfile:
+The pinnacle of offensive Alchemy, this ability will turn an enemy into a lovely golden statue if his or her health and mana are both at or below sixty percent of their maximums.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 250 mana

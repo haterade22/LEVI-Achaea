@@ -1,0 +1,19 @@
+Ability: Fluctuate (Record #126)
+Associated skill: Attainment
+Skillpoints required: 29999
+Blurb: Transform your opponent's body.
+Syntax: FLUCTUATE <target>
+Extra info: Uses denizen afflictions: Fear or Amnesia
+Abfile:
+Occultists are the masters of transforming their own bodies with mutations of Chaos, surviving those mutations takes intense study. Using those same principles, those chaotic mutations can be used against others in an offensive capacity. Without suitable training, anybody targeted by these forced mutations will take immense damage, particularly denizens who suffer from irrational fear or amnesia.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 25 rage
+Skill specialisation: br_occultist

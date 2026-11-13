@@ -1,0 +1,26 @@
+Ability: Astronomy (Record #16)
+Associated skill: Alchemy
+Skillpoints required: 39665
+Blurb: The power of the cosmos is yours.
+Syntax: ASTRONOMY FOCUS <celestial body>
+ASTRONOMY EMPOWER <target>/ME
+ASTRONOMY STATUS
+Abfile:
+Each city maintains, within an astronomical laboratory, an orrery specifically designed to resonate with the alchemical energies and the celestial bodies which share this affinity. It is possible to focus this orrery upon one of these celestial bodies, and once three alchemists from your city have done so, you may empower any non-forestal citizen with its power. This focus will be reset every Sarapin, when Ethian's Crossing disrupts the energies across Sapience. The focusing must be done from the appropriate laboratory, and the empowering may be done from anywhere.
+
+The celestial bodies, the energy with which they resonate, and their empowered effects are:
+
+The sun - Gold - Increased health regeneration.
+The moon - Silver - Increased mana regeneration.
+The Nebula Coronae (nebula) - Copper - Increased endurance and willpower regeneration.
+Ethian - Tin - Increased damage versus denizens.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 500 mana

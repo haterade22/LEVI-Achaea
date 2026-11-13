@@ -1,0 +1,18 @@
+Ability: Harry (Record #122)
+Associated skill: Attainment
+Skillpoints required: 3599
+Blurb: Torture your target with visions from the Plane of Chaos.
+Syntax: HARRY <target>
+Abfile:
+This ability will allow you to harry a denizen with horrific visions from the Plane of Chaos, causing it to beat itself senseless to free itself from the terrible visions and take recurring damage for several seconds.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds
+Resource: 14 rage
+Skill specialisation: br_occultist

@@ -1,0 +1,20 @@
+Ability: Knees (Record #264)
+Associated skill: Striking
+Skillpoints required: 4999
+Blurb: Send your target sprawling to the ground.
+Syntax: STRIKE <target> KNEES
+Abfile:
+Manipulating your opponent's knee joint with a well-placed blade hand
+will reliably send them falling to the ground. If they are elevated by
+sitting upon a steed or similar, you'll instead be able to get a grip
+upon them and yank them from their mount.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.25 seconds of balance

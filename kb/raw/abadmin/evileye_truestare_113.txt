@@ -1,0 +1,21 @@
+Ability: Truestare (Record #113)
+Associated skill: Evileye
+Skillpoints required: 60000
+Blurb: Cast the evileye through magical shields.
+Syntax: TRUESTARE
+Abfile:
+With the ability of truestare magical shields will no longer get in the
+way of your evileyes.
+
+In addition, you may activate a defence which will allow you to enhance
+all of your ocular techniques to such a degree that you may utilise them
+while blind.
+Useable on: adventurers and self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 100 mana

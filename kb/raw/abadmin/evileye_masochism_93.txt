@@ -1,0 +1,17 @@
+Ability: Masochism (Record #93)
+Associated skill: Evileye
+Skillpoints required: 16999
+Blurb: The love of your own pain.
+Syntax: STARE <target> MASOCHISM
+Abfile:
+Make your victim love pain so much they will inflict it upon themselves.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.90 seconds of balance
+Resource: 50 mana

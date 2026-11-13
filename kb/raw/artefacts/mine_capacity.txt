@@ -1,0 +1,11 @@
+# artefact power show mine_capacity  (2026-11-13T22:00:37Z)
+The mine_capacity artefact power:
+--------------------------------------------------------------------------------
+Levels:                  2
+Owner only:              Yes
+Must be worn:            No
+Owned:                   a prospector's almanac (279190), level 2
+Price:
+Level 1:                 200
+Level 2:                 350
+--------------------------------------------------------------------------------

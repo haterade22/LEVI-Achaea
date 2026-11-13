@@ -1,0 +1,9 @@
+# artefact power show water_sketch  (2026-11-13T22:00:55Z)
+The water_sketch artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            No
+Owned:                   a wax stick encased in mithril (421731)
+Price:                   300
+--------------------------------------------------------------------------------

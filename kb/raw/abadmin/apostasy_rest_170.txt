@@ -1,0 +1,17 @@
+Ability: Rest (Record #170)
+Associated skill: Apostasy
+Skillpoints required: 699
+Blurb: Order your Baalzadeen to rest.
+Syntax: DEMON REST
+Abfile:
+This ability is used to order your Baalzadeen to cease using any repeating abilities, such as sear or syphon.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.20 seconds of equilibrium
+The ability name DEMONREST is mapped to this ability.

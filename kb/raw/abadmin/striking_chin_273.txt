@@ -1,0 +1,16 @@
+Ability: Chin (Record #273)
+Associated skill: Striking
+Skillpoints required: 18999
+Blurb: Envelop your opponent in a restful sleep.
+Syntax: STRIKE <target> CHIN
+Abfile:
+Jolt an opponent's skull with a powerful, upwards blow to their chin, nudging them into a brief slumber.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

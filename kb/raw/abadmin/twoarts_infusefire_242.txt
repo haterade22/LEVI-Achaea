@@ -1,0 +1,21 @@
+Ability: Infusefire (Record #242)
+Associated skill: TwoArts
+Skillpoints required: 12999
+Blurb: Wreathe your blade in crackling flame.
+Syntax: INFUSE FIRE
+Abfile:
+By channelling accumulated Shin energy into your sword, you may heat
+your blade to a scorching temperature. A weapon so empowered will burn
+as fire the next time it is drawn, potentially setting your target
+ablaze while also afflicting them with weariness.
+If a target is already ablaze, extra damage may be dealt.
+** Your blade may only be infused with one element at a time.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 5 Shin energy

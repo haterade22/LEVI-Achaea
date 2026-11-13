@@ -1,0 +1,16 @@
+Ability: Bladetwist (Record #248)
+Associated skill: TwoArts
+Skillpoints required: 27999
+Blurb: Torment an impaled foe.
+Syntax: BLADETWIST
+Abfile:
+Should your enemy be impaled upon your sword, you may twist the blade, gouging through their innards and letting a torrent of blood.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of balance

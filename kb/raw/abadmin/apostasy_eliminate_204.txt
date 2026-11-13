@@ -1,0 +1,26 @@
+Ability: Eliminate (Record #204)
+Associated skill: Apostasy
+Skillpoints required: 26999
+Blurb: Use your daegger to tear the beating heart from a victim.
+Syntax: DAEGGER ELIMINATE <target>
+Abfile:
+This skill allows you to create an essentially psychic link with your
+daegger, seeing through its eyes as it sees through yours, and analysing
+your target for openings on a level most mortals can not match. You will
+then begin to close in on your target, and if the attack is successful,
+that is if you are not knocked over, paralysed, or webbed, you will
+penetrate any defences they have set up, and plunge your daegger into
+your target's heart. Your daegger's blade will open and drive its teeth
+into the flesh and bone surrounding the target's heart, neatly severing
+it and removing it when you withdraw the blade soaking up the gore it is
+covered in.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of equilibrium
+The ability name DAEGGERELIMINATE is mapped to this ability.

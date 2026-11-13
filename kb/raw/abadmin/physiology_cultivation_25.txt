@@ -1,0 +1,44 @@
+Ability: Cultivation (Record #25)
+Associated skill: Physiology
+Skillpoints required: 699
+Blurb: A homunculus will serve you faithfully.
+Syntax: CULTIVATE NUCLEUS
+GERMINATE NUCLEUS <prime>
+HOMUNCULUS FOLLOW
+HOMUNCULUS RETURN
+HOMUNCULUS ATTACK <target>
+HOMUNCULUS PACIFY
+HOMUNCULUS <command> [args]
+Abfile:
+You may CULTIVATE NUCLEUS, using a small amount of your own flesh to
+create a small mass of living tissue. This nucleus can then be
+germinated from anywhere, so long as you hold in your hands some
+alchemical salt, sulphur, or mercury, into a full-grown homunculus using
+GERMINATE NUCLEUS <prime>.
+
+This homunculus, which is a small, imperfect copy of the alchemist who
+created it, may be controlled via the ethereal bindings between the
+creator and the created. Initial control is weak, but further training
+in Physiology will allow for more proficient control of your homunculus.
+
+You may only have one homunculus alive at a time, and it will perish
+should you yourself die.
+
+HOMUNCULUS FOLLOW will order your homunculus to follow you. If it is
+unable to follow you because it is in a different location, HOMUNCULUS
+RETURN will bring the homunculus back to you. You may also HOMUNCULUS
+ATTACK <target> to have your homunculus attack another, though its
+attacks will be weak without training in Physiology. Finally, HOMUNCULUS
+PACIFY will command your homunculus to cease its attacks.
+
+Most homunculus abilities work on their own special balance, while
+requiring balance and equilibrium.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Homunculus balance

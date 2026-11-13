@@ -1,0 +1,16 @@
+Ability: Fitness (Record #261)
+Associated skill: Striking
+Skillpoints required: 1999
+Blurb: Control your breathing.
+Syntax: FITNESS
+Abfile:
+With the increased lung power you have gained from your bodily mastery, you are able to purge the effects of asthma.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

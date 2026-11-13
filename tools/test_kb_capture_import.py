@@ -1,4 +1,6 @@
-"""Tests for tools/kb_capture_import.py: the ABADMIN and ARTEFACT POWER routes (v4.7.494).
+"""Tests for tools/kb_capture_import.py: the ABADMIN SHOW and ARTEFACT POWER routes (v4.7.494, v4.7.496).
+
+The record text is the game's, from the first live run (2026-11-13, kb/raw/live/captures/).
 
     python -B tools/test_kb_capture_import.py
 """
@@ -12,30 +14,44 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import kb_capture_import as ki  # noqa: E402
 
-PULSE = """Pulse (Psionics)  ABADMIN ID: 3292            Known: No (2974 lessons required)
--------------------------------------------------------------------------------
-Syntax:            PSI PULSE <target>
-Works on/against:  Adventurers
-Cooldown:          1.00 seconds of equilibrium
-Details:
-Attune your gifts to the pulse of your target to sense exactly how
-heavily they are bleeding.
+OBLIVIATE = """Ability: Obliviate (Record #2115)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: Induce forgetfulness in your target.
+Syntax: OBLIVIATE <target>
+Extra info: Gives denizen affliction: Amnesia
+Abfile:
+Use a minor hypnosis technique to cause your target to forget what it was doing, giving it amnesia for a few seconds.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 41.00 seconds
+Resource: 28 rage
+Skill specialisation: br_serpent"""
 
--------------------------------------------------------------------------------"""
+FISTSIGIL = """Ability: Fistsigil (Record #46)
+Associated skill: Conjuration
+Maps to record 785 (FIST)."""
 
-DIAG = """Diagnose (Survival)  ABADMIN ID: 1380         Known: Yes
--------------------------------------------------------------------------------
-Syntax:            DIAGNOSE/DIAG [ME]
-Works on/against:  Self
-Cooldown:          1.00 seconds of equilibrium
-Details:
-With this ability, you may check and see a list of what ails you.
--------------------------------------------------------------------------------"""
+ROOM = "The seethe and churn of magma writes an ashen end for Kalys, Ashtan's molten embrace marking his smouldering epitaph."
 
 LIST = """Item ID       Item Name                           Power                Level
 -------------------------------------------------------------------------------
 385702        an Aldar Diadem                     faster_eq              2
 -------------------------------------------------------------------------------"""
+
+FASTER_EQ = """The faster_eq artefact power:
+--------------------------------------------------------------------------------
+Levels:                  2
+Owner only:              No
+Must be worn:            Yes
+Owned:                   an Aldar Diadem (385702), level 2
+--------------------------------------------------------------------------------"""
 
 
 def capture(*blocks):
@@ -47,53 +63,73 @@ def capture(*blocks):
     return "\n".join(out) + "\n"
 
 
+def ab_path(name):
+    return os.path.join("kb", "raw", "abadmin", name)
+
+
 class AbadminRoute(unittest.TestCase):
     def test_a_record_is_filed_by_skill_ability_and_id(self):
-        blocks = ki.parse(capture(("abadmin show 3292", PULSE)))
-        files, refused, kept = ki.route_abadmin(blocks, {})
-        path = os.path.join("kb", "raw", "ab", "psionics_pulse_3292.txt")
+        blocks = ki.parse(capture(("abadmin show 2115", OBLIVIATE)))
+        files, stale, free, unanswered = ki.route_abadmin(blocks, {})
+        path = ab_path("attainment_obliviate_2115.txt")
         self.assertEqual(list(files), [path])
-        self.assertTrue(files[path].startswith("Pulse (Psionics)  ABADMIN ID: 3292"))
-        self.assertIn("heavily they are bleeding.", files[path])
-        self.assertTrue(files[path].endswith("-" * 79 + "\n"))
-        self.assertEqual((refused, kept), ([], []))
+        self.assertEqual(files[path], OBLIVIATE + "\n")
+        self.assertEqual((stale, free, unanswered), ([], [], []))
 
-    def test_an_id_already_filed_is_kept_not_written(self):
-        blocks = ki.parse(capture(("abadmin show 1380", DIAG)))
-        files, refused, kept = ki.route_abadmin(blocks, {1380: "survival_diagnose_1380.txt"})
-        self.assertEqual((files, refused, kept), ({}, [], [1380]))
+    def test_the_ab_commands_header_is_not_a_record(self):
+        # v4.7.494 looked for this line, which ABADMIN SHOW never prints.
+        blocks = ki.parse(capture(("abadmin show 2115", "Obliviate (Attainment)  ABADMIN ID: 2115      Known: Yes")))
+        files, _, free, unanswered = ki.route_abadmin(blocks, {})
+        self.assertEqual((files, free), ({}, []))
+        self.assertEqual([c for c, _ in unanswered], ["abadmin show 2115"])
 
-    def test_a_late_answer_is_filed_by_its_own_header(self):
-        # 3292 timed out empty and its record landed in the block of 3293.
-        blocks = ki.parse(capture(("abadmin show 3292", "", True), ("abadmin show 3293", PULSE)))
-        files, refused, kept = ki.route_abadmin(blocks, {})
-        self.assertEqual(list(files), [os.path.join("kb", "raw", "ab", "psionics_pulse_3292.txt")])
-        self.assertEqual([c for c, _ in refused], ["abadmin show 3293"])
+    def test_a_pointer_record_is_a_record(self):
+        files, *_ = ki.route_abadmin(ki.parse(capture(("abadmin show 46", FISTSIGIL))), {})
+        self.assertEqual(files, {ab_path("conjuration_fistsigil_46.txt"): FISTSIGIL + "\n"})
 
-    def test_an_id_with_no_record_is_reported(self):
-        blocks = ki.parse(capture(("abadmin show 999999", "There is no such ability.")))
-        files, refused, _ = ki.route_abadmin(blocks, {})
-        self.assertEqual(files, {})
-        self.assertEqual(refused, [("abadmin show 999999", "There is no such ability.")])
+    def test_a_room_line_before_the_record_is_not_part_of_it(self):
+        files, *_ = ki.route_abadmin(ki.parse(capture(("abadmin show 46", ROOM + "\n" + FISTSIGIL))), {})
+        self.assertEqual(files[ab_path("conjuration_fistsigil_46.txt")], FISTSIGIL + "\n")
 
-    def test_ab_ids_reads_the_header_of_each_file(self):
+    def test_a_late_answer_is_filed_by_its_own_first_line(self):
+        # 2115 timed out empty and its record landed in the block of 2116.
+        blocks = ki.parse(capture(("abadmin show 2115", "", True), ("abadmin show 2116", OBLIVIATE)))
+        files, _, _, unanswered = ki.route_abadmin(blocks, {})
+        self.assertEqual(list(files), [ab_path("attainment_obliviate_2115.txt")])
+        self.assertEqual([c for c, _ in unanswered], ["abadmin show 2116"])
+
+    def test_no_such_record_is_a_free_id_and_a_room_line_alone_is_no_answer(self):
+        # Id 73 of the first run: a room line and its prompt closed the block before the game answered.
+        blocks = ki.parse(capture(("abadmin show 44", "No such record."), ("abadmin show 73", ROOM)))
+        files, _, free, unanswered = ki.route_abadmin(blocks, {})
+        self.assertEqual((files, free), ({}, [44]))
+        self.assertEqual(unanswered, [("abadmin show 73", ROOM)])
+
+    def test_a_renamed_ability_leaves_no_second_file(self):
+        blocks = ki.parse(capture(("abadmin show 2115", OBLIVIATE)))
+        _, stale, _, _ = ki.route_abadmin(blocks, {2115: "serpent_obliviate_2115.txt"})
+        self.assertEqual(stale, [ab_path("serpent_obliviate_2115.txt")])
+        _, stale, _, _ = ki.route_abadmin(blocks, {2115: "attainment_obliviate_2115.txt"})
+        self.assertEqual(stale, [])
+
+    def test_ab_ids_reads_the_first_line_of_each_file(self):
         with tempfile.TemporaryDirectory() as d:
-            with open(os.path.join(d, "serpent_obliviate_2115.txt"), "w", encoding="utf-8") as fh:
-                fh.write("Obliviate (Attainment)  ABADMIN ID: 2115      Known: Yes\n")
+            with open(os.path.join(d, "attainment_obliviate_2115.txt"), "w", encoding="utf-8") as fh:
+                fh.write(OBLIVIATE + "\n")
             with open(os.path.join(d, "notes.txt"), "w", encoding="utf-8") as fh:
-                fh.write("no header here\n")
-            self.assertEqual(ki.ab_ids(d), {2115: "serpent_obliviate_2115.txt"})
+                fh.write("Obliviate (Attainment)  ABADMIN ID: 2115      Known: Yes\n")
+            self.assertEqual(ki.ab_ids(d), {2115: "attainment_obliviate_2115.txt"})
 
-    def test_the_repo_files_keep_their_ids(self):
+    def test_every_repo_file_is_named_by_its_own_id(self):
         have = ki.ab_ids(os.path.join(ki.ROOT, ki.AB_DIR))
-        self.assertEqual(have.get(2115), "serpent_obliviate_2115.txt")
-        self.assertEqual(have.get(3292), "psionics_pulse_2026-10-23.txt")
+        for ab_id, name in have.items():
+            self.assertTrue(name.endswith(f"_{ab_id}.txt"), name)
 
 
 class ArtefactRoute(unittest.TestCase):
     def test_the_list_and_each_power(self):
         blocks = ki.parse(capture(("artefact power list owned", LIST),
-                                  ("artefact power show faster_eq", "Faster equilibrium recovery."),
+                                  ("artefact power show faster_eq", FASTER_EQ),
                                   ("artefact power show tuning", "")))
         files, silent = ki.route_artefacts(blocks)
         lst = os.path.join("kb", "raw", "live", "artefact_power_list_owned.txt")
@@ -101,6 +137,7 @@ class ArtefactRoute(unittest.TestCase):
         self.assertEqual(sorted(files), sorted([lst, show]))
         self.assertIn("385702        an Aldar Diadem", files[lst])
         self.assertTrue(files[show].startswith("# artefact power show faster_eq  (2026-11-13T12:00:00Z)\n"))
+        self.assertIn("Must be worn:            Yes", files[show])
         self.assertEqual(silent, ["artefact power show tuning"])
 
     def test_routed_commands_do_not_also_go_to_other(self):

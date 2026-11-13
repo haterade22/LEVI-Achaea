@@ -1,0 +1,18 @@
+Ability: Doya (Record #232)
+Associated skill: TwoArts
+Skillpoints required: 1499
+Blurb: Strike true with the slow might of the Earth stance.
+Syntax: DOYA
+UNSTANCE
+Extra info: Stance: Earth
+Abfile:
+Ever steady underfoot, the Earth is a fixture of steadfast might. This strong, grounded stance favours sure strikes, granting a moderate increase to damage and accuracy at the cost of speed.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

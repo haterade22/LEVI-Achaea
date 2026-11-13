@@ -1,0 +1,16 @@
+Ability: Mouth (Record #33)
+Associated skill: Physiology
+Skillpoints required: 16999
+Blurb: Speak through the mouth of your homunculus.
+Syntax: HOMUNCULUS SAY <text>
+Abfile:
+You may use your homunculus's mouth to speak from afar.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of homunculus balance

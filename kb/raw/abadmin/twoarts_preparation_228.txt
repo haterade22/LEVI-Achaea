@@ -1,0 +1,15 @@
+Ability: Preparation (Record #228)
+Associated skill: TwoArts
+Skillpoints required: 0
+Blurb: A scabbard is as important as one's blade.
+Syntax: POSITION SCABBARD
+Abfile:
+A properly positioned scabbard is integral in drawing one's sword with ease, grace, and power. Neglect your scabbard at your peril, for the First Art is useless without it.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

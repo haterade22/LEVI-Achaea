@@ -1,0 +1,3 @@
+Ability: Magicresistance (Record #61)
+Associated skill: Augmentation
+Maps to record 2007 (MAGIC).

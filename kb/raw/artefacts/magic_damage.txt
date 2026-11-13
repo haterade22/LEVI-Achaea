@@ -1,0 +1,12 @@
+# artefact power show magic_damage  (2026-11-13T22:00:34Z)
+The magic_damage artefact power:
+--------------------------------------------------------------------------------
+Levels:                  3
+Owner only:              No
+Must be worn:            Yes
+Owned:                   a Collar of Agatheis (178446), level 3
+Price:
+Level 1:                 400
+Level 2:                 800
+Level 3:                 1600
+--------------------------------------------------------------------------------

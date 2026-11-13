@@ -1,0 +1,3 @@
+Ability: Demonblast (Record #209)
+Associated skill: Apostasy
+Maps to record 208 (BLAST).

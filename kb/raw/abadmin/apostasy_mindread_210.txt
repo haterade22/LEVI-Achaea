@@ -1,0 +1,20 @@
+Ability: Mindread (Record #210)
+Associated skill: Apostasy
+Skillpoints required: 36999
+Blurb: Command your demon to listen to incoming tells.
+Syntax: DEMON MINDREAD
+DEMON MINDREAD OFF
+Abfile:
+With the activation of this ability, your Baalzadeen will attempt to
+overhear incoming tells to the room you are in.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 400 Baalzadeen health
+The ability name DEMONMINDREAD is mapped to this ability.

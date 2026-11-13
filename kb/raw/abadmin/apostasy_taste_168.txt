@@ -1,0 +1,17 @@
+Ability: Taste (Record #168)
+Associated skill: Apostasy
+Skillpoints required: 699
+Blurb: Taste the flesh of your Baalzadeen.
+Syntax: DEMON TASTE
+Abfile:
+By tasting the sweet, sweet flesh of your Baalzadeen, you will be able to determine its level of health, and any ongoing abilities it is using.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 0.10 seconds of equilibrium
+The ability name DEMONTASTE is mapped to this ability.

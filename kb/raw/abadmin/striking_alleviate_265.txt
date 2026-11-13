@@ -1,0 +1,17 @@
+Ability: Alleviate (Record #265)
+Associated skill: Striking
+Skillpoints required: 5999
+Blurb: Cure yourself of pesky afflictions.
+Syntax: ALLEVIATE
+Abfile:
+Detailed understanding of the body has therapeutic benefits. By actively stimulating relevant muscles and pressure points, you may heal yourself of an ailment.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.75 seconds of equilibrium
+Resource: 75 mana

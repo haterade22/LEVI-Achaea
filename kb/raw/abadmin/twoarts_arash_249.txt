@@ -1,0 +1,18 @@
+Ability: Arash (Record #249)
+Associated skill: TwoArts
+Skillpoints required: 29999
+Blurb: Aggressive and powerful, the Fire stance is one of attack.
+Syntax: ARASH
+UNSTANCE
+Extra info: Stance: Fire
+Abfile:
+Flickering and ephemeral, Fire manifests in the weaving, surging flame and the overwhelming force of sudden combustion. Blows struck from this reckless, offensively focused stance will deal significantly more damage, with more speed, but you will be more vulnerable to attacks.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of balance

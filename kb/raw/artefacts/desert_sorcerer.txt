@@ -1,0 +1,9 @@
+# artefact power show desert_sorcerer  (2026-11-13T22:00:16Z)
+The desert_sorcerer artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            No
+Owned:                   a funereal amphora (419287)
+Price:                   300
+--------------------------------------------------------------------------------

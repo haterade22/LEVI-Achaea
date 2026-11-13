@@ -1,0 +1,11 @@
+# artefact power show wormholes  (2026-11-13T22:00:57Z)
+The wormholes artefact power:
+--------------------------------------------------------------------------------
+Levels:                  2
+Owner only:              No
+Must be worn:            No
+Owned:                   a vibrating stick (477008), level 1
+Price:
+Level 1:                 800
+Level 2:                 1300
+--------------------------------------------------------------------------------

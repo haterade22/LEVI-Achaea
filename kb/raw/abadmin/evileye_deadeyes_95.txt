@@ -1,0 +1,18 @@
+Ability: Deadeyes (Record #95)
+Associated skill: Evileye
+Skillpoints required: 5999
+Blurb: Inflict multiple ailments simultaneously.
+Syntax: DEADEYES <target> <first evileye> <second evileye>
+Extra info: Mana cost is the combined cost of each evileye.
+Abfile:
+With this ability, you may crush an opponent with two simultaneous evileyes. This ability also becomes faster the greater your skill in evileye.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.30 seconds of balance
+Resource: Mana

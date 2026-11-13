@@ -1,0 +1,18 @@
+Ability: Infuseice (Record #250)
+Associated skill: TwoArts
+Skillpoints required: 31999
+Blurb: Suffuse your blade with ice.
+Syntax: INFUSE ICE
+Abfile:
+By channelling accumulated Shin energy into your sword, you may chill your blade to a glacial state. A weapon so empowered will strike as ice the next time it is drawn, and may freeze your target into inaction.
+
+** Your blade may only be infused with one element at a time.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 5 Shin energy

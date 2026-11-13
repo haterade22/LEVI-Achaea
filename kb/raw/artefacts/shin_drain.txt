@@ -1,0 +1,9 @@
+# artefact power show shin_drain  (2026-11-13T22:00:44Z)
+The shin_drain artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            Yes
+Owned:                   Bracers of the Phoenix (422142)
+Price:                   250
+--------------------------------------------------------------------------------

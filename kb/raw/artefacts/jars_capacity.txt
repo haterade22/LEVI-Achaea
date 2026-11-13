@@ -1,0 +1,9 @@
+# artefact power show jars_capacity  (2026-11-13T22:00:31Z)
+The jars_capacity artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            No
+Owned:                   a sand-worn bandolier (422098)
+Price:                   300
+--------------------------------------------------------------------------------

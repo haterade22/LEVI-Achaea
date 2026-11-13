@@ -1,0 +1,33 @@
+Ability: Inundate (Record #40)
+Associated skill: Physiology
+Skillpoints required: 46999
+Blurb: Attack an already imbalanced humour.
+Syntax: INUNDATE <target> <humour>
+Abfile:
+By inundating an already tempered humour with additional fluid, you may
+cause an instant reaction in your opponent. This will cause all fluid to
+be drained from that humour. The more fluid drained, the greater the
+reaction.
+
+The effects for each humour are:
+
+Choleric: Health loss.
+Melancholic: Mana loss.
+Sanguine: Bleeding.
+Phlegmatic: Afflict with afflictions from lethargy, anorexia, slickness
+and weariness. As fluid levels increase, more afflictions are delivered
+simultaneously at 2, 4, 6, and 8 tempers.
+
+* If you have selected the Sublimation field of study, Phlegmatic will
+instead afflict with lethargy, anorexia, and slickness at 2, 6, and 8
+tempers, respectively.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.70 seconds of humour balance
+Resource: 100 mana

@@ -1,0 +1,17 @@
+Ability: Breach (Record #88)
+Associated skill: Evileye
+Skillpoints required: 7999
+Blurb: Cut through an opponent's curseward.
+Syntax: STARE <target> BREACH
+Abfile:
+Rip down your opponents cursewards.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.90 seconds of balance
+Resource: 125 mana

@@ -1,0 +1,25 @@
+Ability: Voidfist (Record #277)
+Associated skill: Striking
+Skillpoints required: 27999
+Blurb: Channel Shindo into a powerful vortex.
+Syntax: VOIDFIST <target>
+Abfile:
+Through Shin mastery, channel the very emptiness of the void upon a
+target, enabling each of your future strikes to be enhanced with the
+draining power of the void. When striking a voidfisted opponent, their
+very mind shall be sapped, and they shall lose mana.
+
+* Shin energy is necessary to perform elemental strikes. Only one
+element may be channelled upon a foe at a time.
+
+Note: Shin generation is halved when striking a voidfisted opponent.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Resource: 20 Shin energy

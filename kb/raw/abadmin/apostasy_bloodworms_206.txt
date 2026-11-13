@@ -1,0 +1,29 @@
+Ability: Bloodworms (Record #206)
+Associated skill: Apostasy
+Skillpoints required: 29999
+Blurb: Summon forth a horde of these foul lesser daemons.
+Syntax: SUMMON BLOODWORMS
+Abfile:
+When the Malevolent One was sealed beneath hundreds of tons of rock, His
+strength to break free was stretched to its limit on multiple levels.
+Maggots and worms fed on what remained of the shell of a body He had
+initially constructed for Himself. Upon returning to His glory, He found
+these worms, bloated with the plunder of His flesh -- and with His
+power. When you summon the bloodworms, they will, after a moment, burst
+forth, spreading out into the surrounding rooms and attacking all with
+their poisoned psychic screams. All those who are not deaf will firstly
+suffer from masochism, then dizziness. If both afflictions are present,
+they will suffer in both mind and body.
+
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 500 mana
+The ability name SUMMONBLOODWORMS is mapped to this ability.

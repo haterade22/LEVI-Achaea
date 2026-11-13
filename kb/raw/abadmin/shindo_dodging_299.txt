@@ -1,0 +1,17 @@
+Ability: Dodging (Record #299)
+Associated skill: Shindo
+Skillpoints required: 14999
+Blurb: Elude attacks from the air.
+Syntax: DODGING [ON|OFF]
+RELAX DODGING
+Abfile:
+This ability will allow you to dodge attacks from the air.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Drain: Mana

@@ -1,0 +1,9 @@
+# artefact power show faster_mindlock  (2026-11-13T22:00:23Z)
+The faster_mindlock artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            No
+Owned:                   an Intellect Crown (170775)
+Price:                   500
+--------------------------------------------------------------------------------

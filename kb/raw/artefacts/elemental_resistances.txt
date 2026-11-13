@@ -1,0 +1,9 @@
+# artefact power show elemental_resistances  (2026-11-13T22:00:17Z)
+The elemental_resistances artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            Yes
+Owned:                   a prismatic ring (447372)
+Price:                   600
+--------------------------------------------------------------------------------

@@ -1,0 +1,20 @@
+Ability: Chaosgate (Record #124)
+Associated skill: Attainment
+Skillpoints required: 20999
+Blurb: Open gates to the Chaos Plane within your target's body.
+Syntax: CHAOSGATE <target>
+Abfile:
+Summon minuscule portals to the Plane of Chaos within the very bodies of
+denizens, causing agonising pain as their very flesh is subject to the
+unnatural energies found on that plane.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 23.00 seconds
+Resource: 36 rage
+Skill specialisation: br_occultist

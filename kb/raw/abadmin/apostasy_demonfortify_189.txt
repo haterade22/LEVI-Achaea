@@ -1,0 +1,3 @@
+Ability: Demonfortify (Record #189)
+Associated skill: Apostasy
+Maps to record 188 (FORTIFY).

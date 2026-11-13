@@ -1,0 +1,33 @@
+Ability: Sear (Record #200)
+Associated skill: Apostasy
+Skillpoints required: 24999
+Blurb: Order your Baalzadeen to sear the flesh of an enemy.
+Syntax: DEMON SEAR <target>
+DEMON SEAR OFF
+Abfile:
+At your command, your Baalzadeen will sear the flesh of a target with
+unholy fire.
+
+When used against a denizen, your Baalzadeen will scorch them with its
+breath, dealing fire damage. Your Baalzadeen does not lose health when
+this skill is used against denizens.
+
+When used against an adventurer, your Baalzadeen will begin to regularly
+ignite your target. Each time it sets the foe ablaze in this way, your
+Baalzadeen will use up some of its health.
+
+DEMON SEAR OFF or DEMON REST will cause your demon to stop searing the
+target.
+
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 50 Baalzadeen health
+Drain: Baalzadeen health
+The ability name DEMONSEAR is mapped to this ability.

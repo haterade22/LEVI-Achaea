@@ -1,0 +1,11 @@
+# artefact power show illusion  (2026-11-13T22:00:29Z)
+The illusion artefact power:
+--------------------------------------------------------------------------------
+Levels:                  2
+Owner only:              No
+Must be worn:            No
+Owned:                   a Shar'ilian lightspire (485994), level 2
+Price:
+Level 1:                 500
+Level 2:                 2000
+--------------------------------------------------------------------------------

@@ -1,0 +1,18 @@
+Ability: Drawslash (Record #230)
+Associated skill: TwoArts
+Skillpoints required: 299
+Blurb: A single, measured slash.
+Syntax: DRAWSLASH <target> [<infusion>] [<body part>]
+Abfile:
+Draw your blade and aim a single slash at your target before resheathing.
+
+With the Weaponry ability of TARGETING, this attack may optionally be targeted at a particular body part.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

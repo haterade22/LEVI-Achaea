@@ -1,0 +1,23 @@
+Ability: Infestation (Record #155)
+Associated skill: Oppression
+Skillpoints required: 53999
+Blurb: Summon vile maggots from the depths.
+Syntax: SUMMON INFESTATION
+BANISH INFESTATION
+Abfile:
+This ability will summon a horde of foul maggots from the depths of the
+earth. For a limited duration, all enemies in the room will be afflicted
+with varying ailments as the vile creatures burrow into their skin.
+
+This will not duplicate an existing affliction.
+
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 3.50% life essence and 300 mana

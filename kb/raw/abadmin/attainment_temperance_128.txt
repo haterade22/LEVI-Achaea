@@ -1,0 +1,20 @@
+Ability: Temperance (Record #128)
+Associated skill: Attainment
+Skillpoints required: 5999
+Blurb: Temper your opponent's anger.
+Syntax: TEMPER <target>
+Extra info: Gives denizen affliction: Charm
+Abfile:
+Force balance upon the targeted denizen such that it would rather not
+seek your demise. This charms the denizen for 7 seconds.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 43.00 seconds
+Resource: 32 rage
+Skill specialisation: br_occultist

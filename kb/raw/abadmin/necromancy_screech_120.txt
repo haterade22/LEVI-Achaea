@@ -1,0 +1,17 @@
+Ability: Screech (Record #120)
+Associated skill: Necromancy
+Skillpoints required: 3999
+Blurb: The shriek of the banshee.
+Syntax: SCREECH
+Abfile:
+You have gained the power of the banshee. Your very scream will drive those who can hear you out of the location.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 70 mana

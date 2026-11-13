@@ -1,0 +1,24 @@
+Ability: Displace (Record #10)
+Associated skill: Alchemy
+Skillpoints required: 22999
+Blurb: Drag another through the ether.
+Syntax: ETHER DISPLACE <target>
+Abfile:
+By funnelling a most precise amount of matter through the ether, you may
+draw another across an area to stand before you. This requires your
+target to remain within the same location until your attempt is
+completed. This will take some time, during which your concentration is
+required.
+
+This ability bypasses monolith sigils when targeted at mutual allies,
+and works faster in this case.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of equilibrium
+Resource: 500 mana

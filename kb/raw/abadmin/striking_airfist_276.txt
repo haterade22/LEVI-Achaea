@@ -1,0 +1,22 @@
+Ability: Airfist (Record #276)
+Associated skill: Striking
+Skillpoints required: 10999
+Blurb: Channel Shindo into a blustering gale.
+Syntax: AIRFIST <target>
+Abfile:
+Through Shin mastery, channel the wind itself to scourge a foe,
+hindering their attempts to parry or guard blows.
+
+
+** Shin energy is necessary to perform elemental strikes. Only one
+element may be channelled upon a foe at a time.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance
+Resource: 20 Shin energy

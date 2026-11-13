@@ -1,0 +1,16 @@
+Ability: Centreslash (Record #240)
+Associated skill: TwoArts
+Skillpoints required: 10999
+Blurb: Carve up or down across the head and chest.
+Syntax: CENTRESLASH <target> [UP|DOWN]
+Abfile:
+Draw your blade and slash your enemy with a rising or falling vertical blow. This attack will strike your foe's head and torso in succession, depending on from which direction the blow comes, dealing less damage to the second area struck.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

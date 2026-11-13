@@ -1,0 +1,9 @@
+# artefact power show primordial_fury  (2026-11-13T22:00:39Z)
+The primordial_fury artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            No
+Owned:                   a gaze of the Cacharann (637029)
+Price:                   400
+--------------------------------------------------------------------------------

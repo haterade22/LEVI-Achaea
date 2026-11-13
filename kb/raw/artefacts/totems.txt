@@ -1,0 +1,9 @@
+# artefact power show totems  (2026-11-13T22:00:51Z)
+The totems artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              Yes
+Must be worn:            Yes
+Owned:                   a Runic Gauntlet (421746)
+Price:                   350
+--------------------------------------------------------------------------------

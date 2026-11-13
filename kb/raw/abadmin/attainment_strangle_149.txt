@@ -1,0 +1,18 @@
+Ability: Strangle (Record #149)
+Associated skill: Attainment
+Skillpoints required: 3599
+Blurb: Summon vines to throttle your opponent.
+Syntax: STRANGLE <target>
+Abfile:
+Summon vines from your quarterstaff which will throttle your opponent. The vines will continue to choke the life from your target for some time, doing damage to the denizen for the duration.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 16.00 seconds
+Resource: 14 rage
+Skill specialisation: br_druid

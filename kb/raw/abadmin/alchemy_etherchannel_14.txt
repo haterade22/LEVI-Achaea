@@ -1,0 +1,27 @@
+Ability: Etherchannel (Record #14)
+Associated skill: Alchemy
+Skillpoints required: 33999
+Blurb: Part the ether for expedient travel.
+Syntax: ETHERCHANNEL <anchor>
+Extra info: Reagents: 2 metals of the same element.
+Abfile:
+This ability will allow an Alchemist to pass through the ether to any of
+the alchemical anchors across Sapience. Any action while channelling
+this ability will interrupt it.
+
+Iron:   The Granite Hills.
+Tin:    The Eastern Wilderness.
+Copper: The Northern Vashnar Mountains.
+Silver: The Southern Vashnar Mountains.
+Gold:   The Siroccian Mountains.
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 500 mana

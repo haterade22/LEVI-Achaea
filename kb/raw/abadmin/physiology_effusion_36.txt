@@ -1,0 +1,16 @@
+Ability: Effusion (Record #36)
+Associated skill: Physiology
+Skillpoints required: 26999
+Blurb: Mastery of all four humours.
+Syntax: None (passive)
+Abfile:
+You are now able to temper all four humours on an opponent at one time.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

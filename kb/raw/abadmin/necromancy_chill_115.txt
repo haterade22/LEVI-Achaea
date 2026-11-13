@@ -1,0 +1,25 @@
+Ability: Chill (Record #115)
+Associated skill: Necromancy
+Skillpoints required: 299
+Blurb: Send the cold of the grave to plague an opponent.
+Syntax: CHILL <target>
+CHILL <direction>
+Abfile:
+Use this ability to freeze an adventurer in two or three stages. If the
+target has a caloric salve applied, this will nullify the caloric salve.
+If he doesn't, then it will set him shivering, which will regularly
+cause him to lose equilibrium. If you chill a shivering adventurer, you
+will freeze him completely.
+
+Additionally, you may target this in a given direction, destroying any
+firewall that may be blocking that exit.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.20 seconds of equilibrium
+Resource: 100 mana

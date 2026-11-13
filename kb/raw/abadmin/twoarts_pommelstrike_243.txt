@@ -1,0 +1,17 @@
+Ability: Pommelstrike (Record #243)
+Associated skill: TwoArts
+Skillpoints required: 14999
+Blurb: Deliver a stunning blow with the hilt of your sword.
+Syntax: POMMELSTRIKE <target>
+Abfile:
+Drive the pommel of your blade into your opponent's skull, delivering a
+swift and accurate blow.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.50 seconds of balance

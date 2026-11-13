@@ -1,0 +1,16 @@
+Ability: Balanceslash (Record #241)
+Associated skill: TwoArts
+Skillpoints required: 11999
+Blurb: Drive your enemy back with a balanced slash.
+Syntax: BALANCESLASH <target>
+Abfile:
+This powerful, measured blow will drive your target back, knocking them off-balance.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.10 seconds of balance

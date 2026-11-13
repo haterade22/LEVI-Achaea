@@ -1,0 +1,23 @@
+Ability: Tin (Record #6)
+Associated skill: Alchemy
+Skillpoints required: 7999
+Blurb: Tin will grant you a reflective barrier.
+Syntax: EDUCE TIN
+Extra info: Symbol: Two parallel line segments connected by diagonals.
+Abfile:
+The energies of tin will raise a reflective barrier around your body,
+this will persist for the next two attacks, and will return a portion of
+the damage you would receive to your attacker.
+
+Note that this is ineffective versus unblockable damage.
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 500 mana

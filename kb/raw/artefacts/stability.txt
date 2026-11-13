@@ -1,0 +1,9 @@
+# artefact power show stability  (2026-11-13T22:00:47Z)
+The stability artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            Yes
+Owned:                   a Brooch of the Tempest (83971)
+Price:                   150
+--------------------------------------------------------------------------------

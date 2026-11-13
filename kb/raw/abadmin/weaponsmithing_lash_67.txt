@@ -1,0 +1,21 @@
+Ability: Lash (Record #67)
+Associated skill: Weaponsmithing
+Skillpoints required: 18000
+Blurb: A lighter style of whip.
+Syntax: FORGE FOR LASH
+FORGE (to continue after interruption)
+Extra info: Commodities: 5 leather
+1 wood
+1 iron
+Abfile:
+This style of whip is lighter than the standard time, and is constructed
+for speed. However, the damage it is able to do suffers for it.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of balance

@@ -1,0 +1,15 @@
+Ability: Sight (Record #293)
+Associated skill: Shindo
+Skillpoints required: 5999
+Blurb: See the world anew.
+Syntax: SIGHT
+Abfile:
+You have sufficient control over your body to instantly repair your eyes when blinded.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

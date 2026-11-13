@@ -1,0 +1,17 @@
+Ability: Manaleech (Record #107)
+Associated skill: Evileye
+Skillpoints required: 44999
+Blurb: A terrible curse of the mind.
+Syntax: STARE <target> MANALEECH
+Abfile:
+Sap away your targets mana.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.90 seconds of balance
+Resource: 75 mana

@@ -1,0 +1,17 @@
+Ability: Blind (Record #92)
+Associated skill: Evileye
+Skillpoints required: 14999
+Blurb: Curse an opponent with blindness.
+Syntax: STARE <target> BLIND
+Abfile:
+Remove your poor victim's eyesight.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.90 seconds of balance
+Resource: 33 mana

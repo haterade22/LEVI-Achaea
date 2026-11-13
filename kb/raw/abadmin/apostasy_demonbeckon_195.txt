@@ -1,0 +1,3 @@
+Ability: Demonbeckon (Record #195)
+Associated skill: Apostasy
+Maps to record 194 (BECKON).

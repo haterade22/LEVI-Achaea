@@ -1,0 +1,9 @@
+# artefact power show faster_commune  (2026-11-13T22:00:21Z)
+The faster_commune artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            No
+Owned:                   a painted lantern (616781)
+Price:                   400
+--------------------------------------------------------------------------------

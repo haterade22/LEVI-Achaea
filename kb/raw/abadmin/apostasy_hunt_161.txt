@@ -1,0 +1,30 @@
+Ability: Hunt (Record #161)
+Associated skill: Apostasy
+Skillpoints required: 299
+Blurb: Command your daegger to hunt your enemy.
+Syntax: DAEGGER LEVITATE
+DAEGGER HUNT <target>
+Abfile:
+Your daegger has become stronger. Strong enough, in fact, that it can,
+with a bit of help from you, levitate itself and even fly at potentially
+lethal speeds towards your foe. This is superior to simply throwing the
+weapon because it can hook around and come at odd angles, and if it
+misses, it will attack again. Because you are guiding the daegger
+largely with the power of your mind, your intelligence, not your
+strength, affects the power with which it will strike your opponent.
+Additionally, your weaponry skill is what affects the chance of it
+hitting, as the daegger is putting most of its energy into the act of
+levitation. The higher your skill in Apostasy is, the greater the number
+of passes your daegger will make.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+The ability name DAEGGERHUNT is mapped to this ability.
+The ability name DAEGGERLEVITATE is mapped to this ability.

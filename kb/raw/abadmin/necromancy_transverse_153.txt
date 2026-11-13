@@ -1,0 +1,24 @@
+Ability: Transverse (Record #153)
+Associated skill: Necromancy
+Skillpoints required: 48999
+Blurb: Cross vast distances in a single step.
+Syntax: TRANSVERSE <target>
+Abfile:
+This ability allows for swift travel across the land. You must initiate
+the activation from a room where hands of the grave have been summoned
+forth.
+
+If your target also stands in a room where the hands grasp at the
+living, this travel is instantaneous. If the hands are not present, the
+target is required to be a practitioner of necromancy, and the travel
+will be delayed.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 2% life essence and 500 mana

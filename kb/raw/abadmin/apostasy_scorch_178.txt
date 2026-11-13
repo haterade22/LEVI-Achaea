@@ -1,0 +1,23 @@
+Ability: Scorch (Record #178)
+Associated skill: Apostasy
+Skillpoints required: 4999
+Blurb: Order your Baalzadeen to melt icewalls.
+Syntax: DEMON SCORCH <icewall>
+Abfile:
+Use the cursed breath of your Baalzadeen to melt icewalls and wither
+Reclamation vines.
+
+Vines are destroyed with one cast if the reclaimer is not in the area,
+two if they are in the area but not in the room, three if they are in
+the room.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of equilibrium
+Resource: 150 Baalzadeen health
+The ability name DEMONSCORCH is mapped to this ability.

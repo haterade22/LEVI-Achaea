@@ -1,0 +1,19 @@
+Ability: Vengeance (Record #150)
+Associated skill: Necromancy
+Skillpoints required: 43999
+Blurb: Revenge with your dying breath.
+Syntax: VENGEANCE [ON/OFF]
+RELAX VENGEANCE
+Abfile:
+At the cost of a fair amount of life essence, you will exact revenge on
+everyone in the room when you are killed, in most circumstances.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 4% life essence

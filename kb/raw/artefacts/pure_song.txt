@@ -1,0 +1,9 @@
+# artefact power show pure_song  (2026-11-13T22:00:39Z)
+The pure_song artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            No
+Owned:                   a glass rose (75993)
+Price:                   500
+--------------------------------------------------------------------------------

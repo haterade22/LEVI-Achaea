@@ -1,0 +1,22 @@
+Ability: Revivification (Record #21)
+Associated skill: Alchemy
+Skillpoints required: 51332
+Blurb: Grant life to the deceased.
+Syntax: REVIVE <target>
+Abfile:
+Using the alchemical energies and a catalyst of five pieces of the salt
+prime, you may return a corpse to life. Ensure that the corpse is whole
+and in good condition, lest the results be less than desirable.
+
+NOTE: this ability will only work if the target is a mutual ally, or if
+they are a member of the same city as you.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of equilibrium
+Resource: 400 mana

@@ -1,0 +1,9 @@
+# artefact power show trapmaster  (2026-11-13T22:00:52Z)
+The trapmaster artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            No
+Owned:                   a miniature toolkit (580744)
+Price:                   500
+--------------------------------------------------------------------------------

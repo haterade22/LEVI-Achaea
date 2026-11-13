@@ -1,0 +1,20 @@
+Ability: Infuselightning (Record #247)
+Associated skill: TwoArts
+Skillpoints required: 24999
+Blurb: Command lightning into your sword.
+Syntax: INFUSE LIGHTNING
+Abfile:
+By channelling accumulated Shin energy into your sword, you may charge
+your blade with volatile electrical currents. A weapon so empowered will
+strike as lightning the next time it is drawn, and shall cause your
+foe's muscles to lock up in clumsiness.
+** Your blade may only be infused with one element at a time.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Resource: 5 Shin energy

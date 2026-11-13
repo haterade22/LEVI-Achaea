@@ -1,0 +1,25 @@
+Ability: Compassslash (Record #252)
+Associated skill: TwoArts
+Skillpoints required: 41999
+Blurb: Send their blood to the points of the compass.
+Syntax: COMPASSSLASH <target> <direction>
+Abfile:
+Draw and slash your target from one of the cardinal directions, causing more bleeding than a lesser slash.
+
+The points of the compass:
+
+  NORTH     - head
+  EAST      - left arm
+  SOUTHEAST - left leg
+  SOUTH     - torso
+  SOUTHWEST - right leg
+  WEST      - right arm
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

@@ -1,0 +1,9 @@
+# artefact power show anti_spying  (2026-11-13T22:00:09Z)
+The anti_spying artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            No
+Owned:                   Anake's Hood (578658)
+Price:                   400
+--------------------------------------------------------------------------------

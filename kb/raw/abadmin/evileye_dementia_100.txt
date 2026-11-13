@@ -1,0 +1,17 @@
+Ability: Dementia (Record #100)
+Associated skill: Evileye
+Skillpoints required: 30999
+Blurb: Distorts the victim's perceptions of the world.
+Syntax: STARE <target> DEMENTIA
+Abfile:
+Distorts the victim's perceptions of the world.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.90 seconds of balance
+Resource: 50 mana

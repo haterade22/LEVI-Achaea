@@ -1,0 +1,39 @@
+Ability: Robes (Record #3)
+Associated skill: Alchemy
+Skillpoints required: 699
+Blurb: The mystic garb of the Alchemist.
+Syntax: ROBES SUMMON
+ROBES CALL
+ROBES IMBUE WITH <up to four symbols>
+ROBES IMBUE SLOT <1-4> <symbol>
+ROBES CLEAR
+ROBES EXAMINE
+Abfile:
+Robes are the traditional garb of the alchemist, and alchemists may weave from the ether a set of specially crafted robes able to offer protection from damage.
+
+ROBES SUMMON will weave a new set of robes from strands of the ether. ROBES CALL will return your robes to you, should they be lost.
+
+Each pair of robes may be imbued with the symbols of up to four primes or metals, each offering protection from one type of damage. It is possible to imbue your robes from scratch using ROBES IMBUE WITH <symbols>, wiping away any previous imbuements and applying new ones. It is also possible to imbue a single "slot", using ROBES IMBUE SLOT <1-4> <symbol>. Finally, one may remove all symbols from their robes using ROBES CLEAR, and view the status of any slots using ROBES EXAMINE.
+
+Note that a symbol may only appear once on a pair of robes, and using a symbol requires knowing the appropriate ability in Alchemy.
+
+The symbols and the damage type they protect against are:
+
+Lead:    Blunt
+Iron:    Cutting
+Salt:    Magic
+Tin:     Psychic
+Copper:  Electric
+Sulphur: Asphyxiation
+Silver:  Cold
+Gold:    Fire
+Mercury: Poison
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: Equilibrium

@@ -1,0 +1,9 @@
+# artefact power show breathe_underwater  (2026-11-13T22:00:11Z)
+The breathe_underwater artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            Yes
+Owned:                   a glittering fishscale tunic (506719)
+Price:                   400
+--------------------------------------------------------------------------------

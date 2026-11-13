@@ -1,0 +1,21 @@
+Ability: Evaluate (Record #30)
+Associated skill: Physiology
+Skillpoints required: 7999
+Blurb: Discern the vitals of another.
+Syntax: EVALUATE <target>
+EVALUATE <target> HUMOURS
+Abfile:
+By evaluating your target, you may roughly discern his or her fluid
+level, humour states, health and mana.
+
+Evaluating your target's humour states alone with EVALUATE <target>
+HUMOURS will not use any equilibrium.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of equilibrium

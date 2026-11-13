@@ -1,0 +1,16 @@
+Ability: Brokenstar (Record #256)
+Associated skill: TwoArts
+Skillpoints required: 60000
+Blurb: Draw the broken star across your foe.
+Syntax: BROKENSTAR <target>
+Abfile:
+Unleash the fatal fury of a master swordsman by carving the broken star. In the sanguinary heat of battle, when your opponent's bleeding reaches a suitably profuse intensity, let your blade guide your hand as four perfect, precise strokes cut free their soul.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of balance

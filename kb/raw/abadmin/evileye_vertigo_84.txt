@@ -1,0 +1,17 @@
+Ability: Vertigo (Record #84)
+Associated skill: Evileye
+Skillpoints required: 2499
+Blurb: A devastating fear of heights.
+Syntax: STARE <target> VERTIGO
+Abfile:
+Afflict your target with a great fear of heights.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.90 seconds of balance
+Resource: 50 mana

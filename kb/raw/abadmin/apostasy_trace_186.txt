@@ -1,0 +1,18 @@
+Ability: Trace (Record #186)
+Associated skill: Apostasy
+Skillpoints required: 9999
+Blurb: Command your Baalzadeen to trace the movements of someone.
+Syntax: DEMON TRACE <target>
+DEMON TRACE OFF
+Abfile:
+Though this ability will only function within the local continent, your Baalzadeen will be able to trace the movements of nearly any adventurer.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+The ability name DEMONTRACE is mapped to this ability.

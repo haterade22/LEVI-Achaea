@@ -1,0 +1,19 @@
+Ability: Deathsight (Record #114)
+Associated skill: Necromancy
+Skillpoints required: 0
+Blurb: Attune yourself to the Underworld.
+Syntax: DEATHSIGHT
+RELAX DEATHSIGHT
+Abfile:
+Using this ability, you will attune yourself to the realm of Death.
+While doing so, you will be alerted whenever anyone dies.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 50 mana

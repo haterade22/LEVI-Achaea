@@ -1,0 +1,15 @@
+Ability: Torso (Record #37)
+Associated skill: Physiology
+Skillpoints required: 31499
+Blurb: Your homunculus will prevent an enemy from escaping.
+Syntax: None (passive)
+Abfile:
+Your homunculus will now attempt to block whoever it is currently attacking from leaving the room, so long as you stand beside it.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

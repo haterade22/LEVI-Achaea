@@ -1,0 +1,19 @@
+Ability: Stagnate (Record #137)
+Associated skill: Attainment
+Skillpoints required: 38999
+Blurb: Slow the passage of time around your target.
+Syntax: STAGNATE <target>
+Extra info: Gives denizen affliction: Aeon
+Abfile:
+Summon a small time warp around a denizen, slowing its passage through time.
+Useable on: denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 35.00 seconds
+Resource: 24 rage
+Skill specialisation: br_occultist

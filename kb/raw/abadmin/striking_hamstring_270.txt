@@ -1,0 +1,16 @@
+Ability: Hamstring (Record #270)
+Associated skill: Striking
+Skillpoints required: 12999
+Blurb: Cripple your target's movement.
+Syntax: STRIKE <target> HAMSTRING
+Abfile:
+Crippling the hamstring muscles of a target's upper leg will greatly hinder their ability to walk for a short time.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

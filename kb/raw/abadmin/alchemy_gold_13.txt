@@ -1,0 +1,18 @@
+Ability: Gold (Record #13)
+Associated skill: Alchemy
+Skillpoints required: 32999
+Blurb: The highest of the metals allows you to share your wisdom.
+Syntax: EDUCE GOLD <target> <2-5000>
+Extra info: Symbol: A circumscribed star.
+Abfile:
+Utilising the power of gold, the highest of the metals, you may transfer your willpower to another, with some restrictions. First, half of the willpower transferred will be lost. Second, if transferring willpower brings the Alchemist below half of his or her maximum, there is a chance that all willpower will be lost, and the beneficiary will gain none.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 6.00 seconds of equilibrium
+Resource: 500 mana

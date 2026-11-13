@@ -1,0 +1,9 @@
+# artefact power show swift_runes  (2026-11-13T22:00:49Z)
+The swift_runes artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            No
+Owned:                   a rough runestone (421738)
+Price:                   350
+--------------------------------------------------------------------------------

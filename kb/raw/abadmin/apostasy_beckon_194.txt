@@ -1,0 +1,18 @@
+Ability: Beckon (Record #194)
+Associated skill: Apostasy
+Skillpoints required: 18999
+Blurb: Your Baalzadeen is an attractive force indeed.
+Syntax: DEMON BECKON [<target>]
+Abfile:
+Your Baalzadeen can be a potently attractive force. With the Beckon ability, you will cause it to attempt to draw either everybody in surrounding rooms, or a specific person, into your room.
+Useable on: adventurers and room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 300 Baalzadeen health
+The ability name DEMONBECKON is mapped to this ability.

@@ -1,0 +1,26 @@
+Ability: Reave (Record #43)
+Associated skill: Physiology
+Skillpoints required: 60000
+Blurb: Kill another with catastrophic organ failure.
+Syntax: REAVE <target>
+Abfile:
+If at least one of your target's humours is tempered, you can attempt to
+shut down their internal organs, causing instant death. This process
+will take some time to complete, during which you can perform no other
+actions. Having more tempered humours simplifies the process, reducing
+the time required to induce arrest.
+
+* Reave takes approximately ten seconds to complete with a single
+tempered humour. Each additional tempered humour reduces the duration by
+two seconds, with a minimum time of four seconds when all four humours
+are tempered.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 12.00 seconds of humour balance
+Resource: 250 mana

@@ -1,0 +1,12 @@
+# artefact power show tekura_accuracy  (2026-11-13T22:00:51Z)
+The tekura_accuracy artefact power:
+--------------------------------------------------------------------------------
+Levels:                  3
+Owner only:              No
+Must be worn:            No
+Owned:                   a steel armband of the Fist (264902), level 3
+Price:
+Level 1:                 200
+Level 2:                 500
+Level 3:                 1000
+--------------------------------------------------------------------------------

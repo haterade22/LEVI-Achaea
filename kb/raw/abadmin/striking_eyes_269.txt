@@ -1,0 +1,17 @@
+Ability: Eyes (Record #269)
+Associated skill: Striking
+Skillpoints required: 10999
+Blurb: Force your enemy to witness madness.
+Syntax: STRIKE <target> EYES
+Abfile:
+By rupturing blood vessels in a target's eyes, leave them blind and
+utterly confused.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

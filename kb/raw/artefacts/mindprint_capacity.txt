@@ -1,0 +1,12 @@
+# artefact power show mindprint_capacity  (2026-11-13T22:00:37Z)
+The mindprint_capacity artefact power:
+--------------------------------------------------------------------------------
+Levels:                  3
+Owner only:              Yes
+Must be worn:            No
+Owned:                   an Ursine Band of Mind Distension (202898), level 1
+Price:
+Level 1:                 100
+Level 2:                 300
+Level 3:                 500
+--------------------------------------------------------------------------------

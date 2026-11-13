@@ -1,0 +1,17 @@
+Ability: Lifevision (Record #127)
+Associated skill: Necromancy
+Skillpoints required: 7999
+Blurb: Allows you to see many hidden beings.
+Syntax: LIFEVISION
+Abfile:
+You are attuned to the life essences of all living beings, and with this power, you will see through many illusions and hiding defences.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.50 seconds of equilibrium
+Resource: 600 mana

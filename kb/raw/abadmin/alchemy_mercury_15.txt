@@ -1,0 +1,21 @@
+Ability: Mercury (Record #15)
+Associated skill: Alchemy
+Skillpoints required: 35999
+Blurb: The third prime will bolster your mind.
+Syntax: EDUCE MERCURY
+Extra info: Symbol: A circle inscribed within a square.
+Abfile:
+This ability will allow you to metabolise mana elixirs more efficiently,
+causing an increase in mana gained. This effect will not last
+indefinitely, however.
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 350 mana

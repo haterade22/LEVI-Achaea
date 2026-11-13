@@ -1,0 +1,3 @@
+Ability: Daeggerpuncture (Record #203)
+Associated skill: Apostasy
+Maps to record 202 (PUNCTURE).

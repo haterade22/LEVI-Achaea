@@ -1,0 +1,11 @@
+# artefact power show mana_regen  (2026-11-13T22:00:35Z)
+The mana_regen artefact power:
+--------------------------------------------------------------------------------
+Levels:                  2
+Owner only:              No
+Must be worn:            Yes
+Owned:                   Suremekh'neina (281763), level 3
+Price:
+Level 1:                 300
+Level 2:                 850
+--------------------------------------------------------------------------------

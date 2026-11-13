@@ -1,0 +1,11 @@
+# artefact power show endurance_regen  (2026-11-13T22:00:18Z)
+The endurance_regen artefact power:
+--------------------------------------------------------------------------------
+Levels:                  2
+Owner only:              No
+Must be worn:            Yes
+Owned:                   a Band of Tenacity (42655), level 2
+Price:
+Level 1:                 250
+Level 2:                 850
+--------------------------------------------------------------------------------

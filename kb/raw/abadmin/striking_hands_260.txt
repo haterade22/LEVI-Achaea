@@ -1,0 +1,16 @@
+Ability: Hands (Record #260)
+Associated skill: Striking
+Skillpoints required: 1499
+Blurb: Send a numbing pain into your foe's hands.
+Syntax: STRIKE <target> HANDS LEFT/RIGHT
+Abfile:
+By directing your strikes to your opponent's hands it will cause them to go numb briefly.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

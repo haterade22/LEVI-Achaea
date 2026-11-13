@@ -1,0 +1,22 @@
+Ability: Envenom (Record #164)
+Associated skill: Apostasy
+Skillpoints required: 350
+Blurb: Envenom your daegger to poison your victims.
+Syntax: ENVENOM DAEGGER WITH <venom>
+Abfile:
+With this ability, you may layer venoms on an edged weapon. Each time
+that weapon hits somebody, one venom will poison your opponent, and
+disappear from the weapon. They work on a last-on, first-off basis, so
+if you put xentio on a weapon, and then put voyria on, the voyria would
+come off first, and the xentio second. You must have the selected venom
+in a vial in your inventory. In order to get rid of the venoms on a
+weapon, simply WIPE <weapon>.
+
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

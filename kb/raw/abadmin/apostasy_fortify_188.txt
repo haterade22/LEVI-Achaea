@@ -1,0 +1,17 @@
+Ability: Fortify (Record #188)
+Associated skill: Apostasy
+Skillpoints required: 12999
+Blurb: Fortify the health of your Baalzadeen with yours.
+Syntax: DEMON FORTIFY
+Abfile:
+Using this ability, you may replenish your Baalzadeen's power at a cost of some of your health.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+The ability name DEMONFORTIFY is mapped to this ability.

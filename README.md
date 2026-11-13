@@ -302,7 +302,7 @@ Defaults: health, mana, and cape enabled; willpower and endurance off. Drag bars
    | Command | What it does |
    |---------|-------------|
    | `kbcapture afflictions` | `AFFLICTION LIST`, then `AFFLICTION SHOW` + `WHATCURES` for every affliction (about 400 commands, ~8 min, output hidden; refuses while the basher is on) |
-   | `kbcapture abilities [from[-to]]` | `ABADMIN SHOW <n>` for every ability id (1-4000 by default, about an hour). It stops after 300 ids in a row with no record and gives the id to resume from |
+   | `kbcapture abilities [from[-to]]` | `ABADMIN SHOW <n>` for every ability id (1-4000 by default, about 47 min). It stops after 300 ids in a row with no record and gives the id to resume from |
    | `kbcapture artefacts` | `ARTEFACT POWER LIST OWNED` (saved as your artefacts, like `aconfig artefact scan`), then `ARTEFACT POWER SHOW` for each power (about 2 min) |
    | `kbcapture help cures \| help heal` | Capture any commands, separated by `\|` (not `;`, which Mudlet splits before the alias sees it) |
    | `kbcapture` / `kbcapture stop` | Progress / stop after the current answer |
@@ -314,8 +314,8 @@ Defaults: health, mana, and cape enabled; willpower and endurance off. Drag bars
 | Tool | Purpose |
 |------|---------|
 | `tools/kb_inbox.py` | What is new in the paste file since the last ingest |
-| `tools/kb_capture_import.py` | File `kbcapture` output into `kb/raw/live/`, `kb/raw/ab/` (one file per ability) and `kb/raw/artefacts/` (routes each answer by its content, so lag cannot misfile it) |
-| `tools/kb_abadmin.py` | Build `kb/classes/abadmin.json` from `kb/raw/ab/`, and a page of where the game's AB records and the wiki differ |
+| `tools/kb_capture_import.py` | File `kbcapture` output into `kb/raw/live/`, `kb/raw/abadmin/` (one file per ability) and `kb/raw/artefacts/` (routes each answer by its content, so lag cannot misfile it) |
+| `tools/kb_abadmin.py` | Build `kb/classes/abadmin.json` from `kb/raw/abadmin/`, and a page of where the game's ABADMIN SHOW records and the wiki differ |
 | `tools/kb_affliction_db.py` | Build the affliction database from the captured `AFFLICTION SHOW` answers |
 | `tools/kb_catalog.py` | Build the affliction catalog (game cures joined to our code) |
 | `tools/kb_prio_diff.py` | Compare a captured `CURING PRIORITY LIST` with the code's priority table |

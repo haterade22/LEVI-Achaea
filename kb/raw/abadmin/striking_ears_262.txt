@@ -1,0 +1,16 @@
+Ability: Ears (Record #262)
+Associated skill: Striking
+Skillpoints required: 2999
+Blurb: Turn your opponent into a clumsy fool.
+Syntax: STRIKE <target> EARS
+Abfile:
+The inner ear helps to control one's balance. Box your victim's ears with twin open-handed blows to leave them clumsy and staggering.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

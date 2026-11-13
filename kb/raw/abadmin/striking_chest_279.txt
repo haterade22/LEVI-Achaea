@@ -1,0 +1,16 @@
+Ability: Chest (Record #279)
+Associated skill: Striking
+Skillpoints required: 36999
+Blurb: Afflict your enemy with constant affliction.
+Syntax: STRIKE <target> CHEST
+Abfile:
+This combination of strikes to pressure points upon the chest of your victim will induce a variety of painful sensations upon them, mimicking the ongoing symptoms of numerous other ailments.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

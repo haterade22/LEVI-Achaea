@@ -1,0 +1,2 @@
+# artefact power show falcon_self_sufficiency  (2026-11-13T22:00:20Z)
+FALCON_SELF_SUFFICIENCY is not a valid artefact power.

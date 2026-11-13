@@ -1,0 +1,20 @@
+Ability: Syphon (Record #218)
+Associated skill: Apostasy
+Skillpoints required: 50999
+Blurb: Order your Baalzadeen to draw afflictions away from you.
+Syntax: DEMON SYPHON
+DEMON SYPHON OFF
+Abfile:
+Your Baalzadeen has a great affection for you, and will, at a cost to its health each time it works, slowly syphon off afflictions from you.
+Useable on: none
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.80 seconds of equilibrium
+Resource: 100 Baalzadeen health
+Drain: Baalzadeen health
+The ability name DEMONSYPHON is mapped to this ability.

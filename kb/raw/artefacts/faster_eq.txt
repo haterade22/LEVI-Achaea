@@ -1,0 +1,11 @@
+# artefact power show faster_eq  (2026-11-13T22:00:21Z)
+The faster_eq artefact power:
+--------------------------------------------------------------------------------
+Levels:                  2
+Owner only:              No
+Must be worn:            Yes
+Owned:                   an Aldar Diadem (385702), level 2
+Price:
+Level 1:                 500
+Level 2:                 1000
+--------------------------------------------------------------------------------

@@ -1,0 +1,17 @@
+Ability: Extispicy (Record #8)
+Associated skill: Alchemy
+Skillpoints required: 16999
+Blurb: The future is found in unexpected places.
+Syntax: DISSECT <rat corpse>
+Abfile:
+Though but simple vermin, the internal anatomy of rats is a sure indicator of future events. By dissecting and studying any rat found throughout the cities of Sapience, you may gain glimpses of what is yet to come, allowing an increased chance of critical strikes.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of balance
+Resource: 100 mana

@@ -684,7 +684,7 @@ Lightning prep → double-break both legs → Ice damage (mangle) phase
 1. **DOUBLE-PREP** - Alternate legs to keep both roughly equal until 90%+
 2. **INFUSE LIGHTNING** - During prep phase (lightning gives clumsiness automatically)
 3. **AIRFIST** - When target parries our leg (requires 25 shin: 20 + 5 for infuse, NO cooldown)
-4. **HAMSTRING** - Always keep up to prevent fleeing (10 second duration, timestamp-tracked; with the ethereal lightning eagle feather, `enhanced_shin`, which we own, docs/artefacts-reference.md:378 says +5 s, so ours is probably 15 s: unconfirmed until `kbcapture artefacts`, and the code still uses 10, v4.7.494)
+4. **HAMSTRING** - Always keep up to prevent fleeing (10 second duration, timestamp-tracked; with the ethereal lightning eagle feather, `enhanced_shin`, which we own, docs/artefacts-reference.md:378 says +5 s, so ours is probably 15 s: unconfirmed, because the game's power record states no size (`kb/raw/artefacts/enhanced_shin.txt`, 2026-11-13), and the code still uses 10, v4.7.494)
 5. **KNEES** - When ANY leg is about to break (will hit 100% on next hit), prone on same hit as break
 6. **PARRY BYPASS** - AIRFIST is the only parry bypass (needs 25 shin); no centreslash-up fallback exists
 7. **INFUSE ICE + STERNUM** - After ANY leg broken, switch to ice for damage

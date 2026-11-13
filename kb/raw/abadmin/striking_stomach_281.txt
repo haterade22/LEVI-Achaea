@@ -1,0 +1,16 @@
+Ability: Stomach (Record #281)
+Associated skill: Striking
+Skillpoints required: 49999
+Blurb: Imbue a loss of desire to eat.
+Syntax: STRIKE <target> STOMACH
+Abfile:
+A precise strike to the stomach will cause muscles to spasm, leaving your winded target unwilling to eat and unable to digest.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.50 seconds of balance

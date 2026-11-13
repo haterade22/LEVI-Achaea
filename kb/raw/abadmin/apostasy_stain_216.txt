@@ -1,0 +1,20 @@
+Ability: Stain (Record #216)
+Associated skill: Apostasy
+Skillpoints required: 46999
+Blurb: Stain the soul of someone with your Baalzadeen.
+Syntax: DEMON STAIN <target>
+Abfile:
+Your Baalzadeen may be ordered to stain the soul of your target,
+lowering his or her various attributes for a short period. There is no
+known cure for this ability, besides death.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 3.00 seconds of equilibrium
+Resource: 300 Baalzadeen health
+The ability name DEMONSTAIN is mapped to this ability.

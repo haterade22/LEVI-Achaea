@@ -1,0 +1,21 @@
+Ability: Sulphur (Record #9)
+Associated skill: Alchemy
+Skillpoints required: 18999
+Blurb: The second prime will quicken your healing.
+Syntax: EDUCE SULPHUR
+Extra info: Symbol: Two tangent semicircles.
+Abfile:
+The energy of sulphur will allow you to metabolise health elixirs more
+efficiently, causing an increase in health gained. This effect will not
+last indefinitely, however.
+
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.00 seconds of equilibrium
+Resource: 350 mana

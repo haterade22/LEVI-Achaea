@@ -1,0 +1,19 @@
+Ability: Throat (Record #39)
+Associated skill: Physiology
+Skillpoints required: 41499
+Blurb: Your homunculus's screeching will startle an enemy.
+Syntax: HOMUNCULUS SHRIEK <target>
+Abfile:
+By controlling your homunculus's throat, you may shriek loudly at an opponent, disrupting his or her concentration. This will knock your target off focus balance or increase the timer needed to regain focus balance, as appropriate.
+
+You must be in the same room as your homunculus to use this ability.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 12.00 seconds of homunculus balance
+Resource: 500 mana

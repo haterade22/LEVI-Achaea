@@ -1,0 +1,12 @@
+# artefact power show criticals  (2026-11-13T22:00:15Z)
+The criticals artefact power:
+--------------------------------------------------------------------------------
+Levels:                  3
+Owner only:              No
+Must be worn:            No
+Owned:                   a Stygian pendant (239371), level 3
+Price:
+Level 1:                 200
+Level 2:                 600
+Level 3:                 1200
+--------------------------------------------------------------------------------

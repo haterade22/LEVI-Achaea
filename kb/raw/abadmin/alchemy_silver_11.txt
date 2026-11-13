@@ -1,0 +1,27 @@
+Ability: Silver (Record #11)
+Associated skill: Alchemy
+Skillpoints required: 26999
+Blurb: The light of silver reveals all.
+Syntax: EDUCE SILVER <target>
+EDUCE SILVER
+Extra info: Symbol: A crescent tangent to a line segment.
+Abfile:
+The energy of silver will bathe another in a radiant light, negating the
+effects of shrouding for a time. This effect will last much longer if
+applied during the night.
+
+
+If you do not specify a target, this ability will attempt to draw those
+who are astralformed, blackwinded, or phased in your location back to a
+physical state.
+
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 5.00 seconds of equilibrium
+Resource: 500 mana

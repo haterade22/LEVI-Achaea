@@ -1,0 +1,25 @@
+Ability: Engage (Record #235)
+Associated skill: TwoArts
+Skillpoints required: 3999
+Blurb: Lash out at a cowardly foe.
+Syntax: ENGAGE <target>
+DISENGAGE [<target>]
+Abfile:
+There is nothing more despicable and dishonourable than a coward, and
+this ability will allow you to punish cowards, as is their due. Once you
+have engaged an adventurer, if he is otherwise unhindered and tries to
+leave the room, you will get in an extra strike, whether you have
+equilibrium and balance or not.
+
+This ability may be initiated if off balance.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 2.00 seconds of equilibrium
+Resource: 50 mana
+Drain: Mana

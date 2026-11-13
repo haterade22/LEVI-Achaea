@@ -1,0 +1,17 @@
+Ability: Plague (Record #103)
+Associated skill: Evileye
+Skillpoints required: 34999
+Blurb: Curse someone with the voyria affliction.
+Syntax: STARE <target> PLAGUE
+Abfile:
+Afflict your victim with the deadly Voyria.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.90 seconds of balance
+Resource: 75 mana

@@ -1,0 +1,17 @@
+Ability: Seek (Record #2)
+Associated skill: Alchemy
+Skillpoints required: 298
+Blurb: Find another through the ether.
+Syntax: ETHER SEEK <target>
+Abfile:
+By folding a small window into the ether, you may seek the location of another.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.00 seconds of equilibrium
+Resource: 20 mana

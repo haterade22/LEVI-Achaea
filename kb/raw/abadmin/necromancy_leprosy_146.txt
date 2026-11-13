@@ -1,0 +1,17 @@
+Ability: Leprosy (Record #146)
+Associated skill: Necromancy
+Skillpoints required: 35999
+Blurb: Spread disease to all around you.
+Syntax: LEPROSY
+Abfile:
+By filling your body with the unclean, you can infect many others in the room with you, be they friend or foe, causing random limbs to shrivel up. Useful against a group.
+Useable on: room
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of equilibrium
+Resource: 3.50% life essence and 500 mana

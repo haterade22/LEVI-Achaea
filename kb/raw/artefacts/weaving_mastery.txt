@@ -1,0 +1,12 @@
+# artefact power show weaving_mastery  (2026-11-13T22:00:56Z)
+The weaving_mastery artefact power:
+--------------------------------------------------------------------------------
+Levels:                  3
+Owner only:              No
+Must be worn:            No
+Owned:                   a platinum hand mirror (539566), level 3
+Price:
+Level 1:                 350
+Level 2:                 800
+Level 3:                 1600
+--------------------------------------------------------------------------------

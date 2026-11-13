@@ -1,0 +1,9 @@
+# artefact power show resilient_miriads  (2026-11-13T22:00:43Z)
+The resilient_miriads artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            No
+Owned:                   an ephemeral shuttle (422392)
+Price:                   500
+--------------------------------------------------------------------------------

@@ -9,16 +9,16 @@ The Aldar Diadem is worn at all times (the user, 2026-11-13).
 
 The package reads the player's OWN list (triggers 802/803, `misc_scripts/033_Artefacts.lua`; `aconfig artefact`
 shows it), never this page, because it goes to other players. Each size below is from
-`docs/artefacts-reference.md` until `kbcapture artefacts` files the game's `ARTEFACT POWER SHOW` text in
-`kb/raw/artefacts/`.
+`docs/artefacts-reference.md`. The game's `ARTEFACT POWER SHOW` text (`kb/raw/artefacts/`, 2026-11-13) states
+no size, so another source must confirm one ("The game's power records", below).
 
 | Power | Ours | Changes code at | Not yet |
 |---|---|---|---|
 | faster_eq | Aldar Diadem, 2 | `ataxia_eqFactor` / `ataxia_eqSeconds` (033): x0.85, Rain x0.85 more | -- |
 | hand_to_hand | spiked knuckles, 3 | `tekura6.classifyHit` (tekura/002) learns the punch from our hits; `tekura.punchDamage` (tekura/001) reads it | -- |
 | swiftcurse | sapphire skull pendant, 3 | the stand-in curse count, 10 + 6 (trigger shaman/011, genrunning/004); trigger 012 still gives the game's count | +3 s JINX duration |
-| enhanced_shin | eagle feather | -- | HAMSTRING +5 s (Release B, after the capture confirms it) |
-| tuning | silver tuning fork | -- | Bard symphony timer x2 (Release B) |
+| enhanced_shin | eagle feather | -- | HAMSTRING +5 s (Release B; the game's power record states no size) |
+| tuning | silver tuning fork | -- | Bard symphony timer x2 (Release B; the game's power record states no size) |
 | magic_damage, criticals, weaving_mastery | Collar 3, Stygian pendant 3, mirror 3 | -- | no damage-kill threshold counts them (below) |
 | rapid_resonation, symphonic_master, swift_runes, faster_mindlock | haematite, insignia, runestone, Intellect Crown | -- | docs only (`.claude/classes/<class>.md`) |
 | the rest | | -- | not modelled (`A.EFFECTS` in 033 names each) |
@@ -248,6 +248,38 @@ The sizes are reference values from `docs/artefacts-reference.md`, not the game'
 - The Stygian pendant gives +6% critical hit chance.
 - The Logosian Gauntlets give +3 STR.
 - The platinum hand mirror gives +20% weaving damage. No Psion threshold reads health, so it moves none.
+
+---
+
+## The game's power records (2026-11-13)
+
+`kbcapture artefacts` asked `ARTEFACT POWER SHOW <power>` for each of our powers. The answers are in
+`kb/raw/artefacts/<power>.txt`, and the list is in `kb/raw/live/artefact_power_list_owned.txt`. Each
+answer gives five facts: the number of levels, "Owner only", "Must be worn", the item we own (with its
+level) and the price of each level. Example, `kb/raw/artefacts/faster_eq.txt`:
+
+```
+Levels:                  2
+Owner only:              No
+Must be worn:            Yes
+Owned:                   an Aldar Diadem (385702), level 2
+```
+
+**No answer states an effect size.** So these records cannot confirm the hamstring +5 s, the tuning
+fork's x2 or any other size in this page. Release B needs another source for each size: the item's
+own text, a HELP file, or a measurement in our logs.
+
+30 of our powers work only while the item is worn: anti_web, battlerage_decay, breathe_underwater,
+celerity, constitution, dash, dexterity, elemental_resistances, endurance_regen, faster_eq,
+fire_mastery, flying, frost_mastery, hand_to_hand, health_regen, health_sip, intelligence, leap,
+lifevision, magic_damage, mana_regen, mana_sip, quickmount, reduced_endurance, reserves, shin_drain,
+stability, strength, totems and willpower_regen. Our code does not check what we wear: it counts an
+owned power as active (`ataxia_artefact`, `misc_scripts/033_Artefacts.lua`).
+
+**One power name is not known.** The list cuts a power name at 20 characters, so the weasel offal
+shows `falcon_self_sufficie`. Our code completed it as `falcon_self_sufficiency` (the item catalog's
+name, `item_catalog/002`:266), and the game answered "FALCON_SELF_SUFFICIENCY is not a valid
+artefact power." No code reads this power.
 
 ---
 

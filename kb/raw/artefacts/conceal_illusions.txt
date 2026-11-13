@@ -1,0 +1,9 @@
+# artefact power show conceal_illusions  (2026-11-13T22:00:13Z)
+The conceal_illusions artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            No
+Owned:                   a talisman of obfuscation (395139)
+Price:                   500
+--------------------------------------------------------------------------------

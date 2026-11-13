@@ -1,0 +1,19 @@
+Ability: Sicken (Record #102)
+Associated skill: Evileye
+Skillpoints required: 32999
+Blurb: Bring down disease upon them.
+Syntax: STARE <target> SICKEN
+Abfile:
+This potent curse shall afflict your subject with manaleech. If they
+already have manaleech it shall curse them with slickness, and if they
+have both it shall deal damage.
+Useable on: adventurers
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 1.90 seconds of balance
+Resource: 55 mana

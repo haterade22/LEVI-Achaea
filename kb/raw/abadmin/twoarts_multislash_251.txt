@@ -1,0 +1,16 @@
+Ability: Multislash (Record #251)
+Associated skill: TwoArts
+Skillpoints required: 35999
+Blurb: Spill blood with a succession of slashes.
+Syntax: MULTISLASH <target>
+Abfile:
+By compounding your focus, you may slash your target thrice in a single, continuous motion. Such an attack will deal more damage and draw more blood than a lesser slash, but not permit an accompanying strike.
+Useable on: adventurers and denizens
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No
+Cooldown: 4.50 seconds of balance

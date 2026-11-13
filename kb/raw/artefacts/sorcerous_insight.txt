@@ -1,0 +1,9 @@
+# artefact power show sorcerous_insight  (2026-11-13T22:00:45Z)
+The sorcerous_insight artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              Yes
+Must be worn:            No
+Owned:                   a sorcerer's notebook (616281)
+Price:                   350
+--------------------------------------------------------------------------------

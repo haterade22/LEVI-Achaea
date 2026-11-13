@@ -1,0 +1,17 @@
+Ability: Transfusion (Record #42)
+Associated skill: Physiology
+Skillpoints required: 55632
+Blurb: Eternal life with a brand new body.
+Syntax: INCUBATE NUCLEUS
+TRANSFUSE STATUS
+TRANSFUSE CONSCIOUSNESS
+Abfile:
+While within your home city's physiology laboratory, you may INCUBATE NUCLEUS, which will then grow over time into a perfect replica of your body. This will take several days, after which you will be able to TRANSFUSE CONSCIOUSNESS should you die, moving your soul into this new body. This must be done from the same continent and plane as the laboratory. TRANSFUSE STATUS will show you the location of your incubating body, and how much more time (if any) is needed for incubation to complete.
+Useable on: self
+Pre checks:
+Ability range: none
+Aggression type: non-aggressive
+Requires arms: 0
+Requires legs: 0
+Useable entangled: No
+Useable paralysed: No

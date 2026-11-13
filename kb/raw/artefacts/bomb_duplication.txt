@@ -1,0 +1,9 @@
+# artefact power show bomb_duplication  (2026-11-13T22:00:11Z)
+The bomb_duplication artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              Yes
+Must be worn:            No
+Owned:                   Gloves of Serendipity (451118)
+Price:                   250
+--------------------------------------------------------------------------------

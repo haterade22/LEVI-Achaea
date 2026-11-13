@@ -1,0 +1,9 @@
+# artefact power show reduced_endurance  (2026-11-13T22:00:41Z)
+The reduced_endurance artefact power:
+--------------------------------------------------------------------------------
+Levels:                  None
+Owner only:              No
+Must be worn:            Yes
+Owned:                   a Sash of Eternal Battle (608088)
+Price:                   1000
+--------------------------------------------------------------------------------
