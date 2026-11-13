@@ -170,12 +170,23 @@ function tekura6.getPrepThreshold()
   return tekura6.config.breakThreshold - tekura6.state.punchDamage
 end
 
+-- Is one hit of `amount` % a kick or a punch? The damage line (limb/004) does not name the attack,
+-- so the hit goes to the learned value it is nearer: above the midpoint of the learned kick and
+-- punch, a kick. The old fixed split (16%) took a punch through spiked knuckles for a kick: that
+-- artefact (hand_to_hand, level 3) adds 35% to Tekura punch damage (docs/artefacts-reference.md:16),
+-- and 14 x 1.35 = 18.9. Whether our measured 14% already includes the knuckles is not known, so the
+-- split follows what we measure, for any player's gear (v4.7.494).
+function tekura6.classifyHit(amount)
+  local kick = tonumber(tekura6.state.kickDamage) or 25
+  local punch = tonumber(tekura6.state.punchDamage) or 14
+  return (amount > (kick + punch) / 2) and "kick" or "punch"
+end
+
 -- Event handler: capture actual kick/punch damage from combat
 function tekura6.onLimbHitUpdated(event, name, limb, amount)
   if not target or type(target) ~= "string" or name:lower() ~= target:lower() then return end
-  if not amount or type(amount) ~= "number" then return end
-  -- Kicks do ~18-25%, punches do ~14-15%. Threshold at 16% to classify.
-  if amount > 16 then
+  if not amount or type(amount) ~= "number" or amount <= 0 then return end
+  if tekura6.classifyHit(amount) == "kick" then
     tekura6.state.kickDamage = amount
   else
     tekura6.state.punchDamage = amount

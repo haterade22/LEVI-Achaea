@@ -733,3 +733,11 @@ inhibit is for. Trigger `denizen_attacks_misc_lines/028` scorches the healer by 
 with a 25s cooldown of its own -- **not** the shared battlerage cooldown, which masked the check
 when it was first written and let the break-back test pass against reverted code. Highlighted
 `indian_red`, deliberately not the orange family (reserved).
+
+## Timings and our artefacts (v4.7.494)
+
+Every equilibrium cost in this file is a BASE cost (AB or wiki) unless a line says whose. Ours is that
+base x0.85 (the Aldar Diadem, worn at all times); the factors and our readings are in
+`kb/mechanics/balance-and-queueing.md`, "Our speed factors", and the code reads them through
+`ataxia_eqFactor` (`misc_scripts/033_Artefacts.lua`). Server-queued rounds already wait for the real
+equilibrium, so only a comment, a doc or a timer that sizes a wait needs the factor.

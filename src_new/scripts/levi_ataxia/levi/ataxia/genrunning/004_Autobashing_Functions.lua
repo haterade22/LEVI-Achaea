@@ -59,7 +59,9 @@ function ataxiaBasher_detectSwiftcurseCharge()
   if ataxiaBasher_prevEq == false and curEq and ataxiaBasher_prevBal == true and curBal then
     ataxiaBasher_eqOnlyCount = ataxiaBasher_eqOnlyCount + 1
     if ataxiaBasher_eqOnlyCount >= 2 and (curseCharge or 0) <= 1 then
-      curseCharge = 15
+      -- The game's count comes from trigger 012; this guess is ten curses (wiki) plus a skull
+      -- pendant's 2/4/6 (misc_scripts/033). It was a fixed 15 (v4.7.494).
+      curseCharge = 10 + (ataxia_artefactSize and ataxia_artefactSize("swiftcurse", "add", 0) or 0)
       ataxiaBasher_eqOnlyCount = 0
     end
   end

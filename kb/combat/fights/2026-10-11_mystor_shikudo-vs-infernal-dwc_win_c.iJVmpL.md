@@ -607,7 +607,7 @@ System lines (`You: ...`, `[Zax]`, `[Curing]`, timers, `Agathon: Dsl ...`, `My <
 - **EPITOMISE's effect** is unknown. kb/ has it only as a defence name (kb/defences/README.md). Only 1 of 4 sends printed (4040, 4129, 4166, 4172).
 - **The lock break at 11:52:03 (1631)** has no visible cause; the target was in the room, 50 s after the lock formed.
 - **Kai gain:** +10 per DSL or +5 per blow cannot be told apart. The :02/:32 decay clock is inferred.
-- **Mana attributions are guesses.** Observed: CLOT -40 (229 to 233); combo round -66; DISRUPT and IMPATIENCE rounds -132; BATTER round -399. The wiki's equilibrium ratio in Rain is about 0.72, and the 0.85 x 0.85 split is a guess. BATTER read 2.70 s against 2.89 s for the other 4.00-s abilities.
+- **Mana attributions are guesses.** Observed: CLOT -40 (229 to 233); combo round -66; DISRUPT and IMPATIENCE rounds -132; BATTER round -399. The wiki's equilibrium ratio in Rain is about 0.72, and the 0.85 x 0.85 split is a guess for Mystor; for us it is the Aldar Diadem (x0.85) and Rain (about x0.85), `kb/mechanics/balance-and-queueing.md`. BATTER read 2.70 s against 2.89 s for the other 4.00-s abilities.
 - **The one 2.3 s combo (1675)** was the only kick combo sent with WIELD STAFF in the same alias. The cause is unverified.
 - **Mystor's system switches paralysis curing priority between 25 and 5** (374, 2548, 3699, 4019); why is not shown.
 - **"You turn quickly as a twig snaps behind you." (307)** has an unknown cause.

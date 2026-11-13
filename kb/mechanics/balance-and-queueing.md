@@ -22,6 +22,47 @@ last_verified: 2026-11-09
 - Equilibrium can be lost for longer than it should be. **CONCENTRATE** regains it (see the
   confused + disrupted fix, `curing/004`).
 
+## Our speed factors (2026-11-13, v4.7.494)
+
+A player reported that our docs and code did not count the artefacts we own. **Every AB or wiki cost
+is a BASE cost.** What we spend is that base times the factors below. Every other page links here
+instead of repeating them. A timing on any page names its source: BASE (AB or wiki), ANOTHER PLAYER
+(name the logger; their artefacts are not known), or OURS (our logs).
+
+| Factor | Size | Whose | Source | Confidence |
+|---|---|---|---|---|
+| Aldar Diadem (385702, `faster_eq` level 2) | x0.85 on every equilibrium cost, in every form | ours, worn at all times (the user, 2026-11-13) | `docs/artefacts-reference.md`:106; our readings below | CONFIRMED |
+| Circlet of the Wise (`faster_eq` level 1) | x0.93 | not ours | `docs/artefacts-reference.md`:105 | WIKI |
+| Shikudo Rain form | about x0.85 more (x0.72 in all, with the Diadem) | ours | our readings below | CONFIRMED (the ratio) |
+| Nimble (trait) | balance; size not known | ours (`kb/combat/shikudo.md`:740) | no balance reading shows it yet: our combos print "Balance used: 2.1s" x115 and "1.9s" x13, as other monks' do | OPEN |
+| quick-witted (trait) | equilibrium; size not known | **not ours**: `trait select quick-witted` was refused, "You have no free trait slots" (`kb/raw/logs/ours/2026-11-07_164635_Saibel.log`:9, refused at :19) | `ataxia_eqFactor` names it but does not count it | OPEN |
+
+**Our equilibrium readings** (ours unless named):
+
+| Ability | Base | Ours, not Rain | Ours, Rain | Source |
+|---|---|---|---|---|
+| Shield tattoo | 4.00 (Claes, no diadem, 23 readings) | 3.40 | 2.89 | `clocks.md`:281 (2.89 x2, 3.40 x1) |
+| MIND IMPATIENCE | 1.50 (wiki) | 1.27 | 1.07 | the game's "Equilibrium used:" lines in `kb/raw/logs/ours/` (2026-11-02 and 11-03 Monk logs): 1.07s x46, 1.27s x11 |
+| MIND CRUSH | 3.40 (wiki) | 2.89 (predicted) | 2.45 | `balance-and-queueing.md`, the `srd` rows below |
+| IMPULSE (Serpent) | 1.70 (AB) | 1.44 (13) | -- | `clocks.md`:292 |
+| DIAGNOSE | 1.00 (AB 1380) | 0.85 | -- | `kb/raw/live/mnemosyne-tumble-loop_2026-11-09.txt`:13-16 |
+| KAI CHOKE | 4.00 (AB 896) | -- | 2.60 (x4) | `kb/raw/logs/ours/2026-11-03_081532_Tabethys.log`; fits neither 3.40 nor 2.89: OPEN |
+
+Mystor's client shows the same 0.85 / 0.72 ratios (`kb/combat/shikudo.md`, "Measured by his client"),
+but the cause for him is not known: he is quick-witted (`.claude/classes/monk.md`:1517-1519), and he may
+also wear a diadem. Do not read another player's figure as ours.
+
+**Code:** `ataxia_eqFactor(form)` and `ataxia_eqSeconds(base, form)` in
+`src_new/scripts/levi_ataxia/levi/ataxia/misc_scripts/033_Artefacts.lua` give the factor and a reason
+line, from the player's OWN artefact list (`ARTEFACT POWER LIST OWNED`, read by triggers 802/803 and
+saved; the first login with nothing saved asks for it once), never from a fixed list: the package goes
+to other players. Never scanned, the item catalog (`catalog scan`) stands in. `ataxia_artefact(power)`,
+`ataxia_artefactLevel(power)` and `ataxia_artefactSize(power, field, default)` answer for the other
+powers (`A.EFFECTS` in the same file names the source of each size). `aconfig artefact` lists what we
+own and what each one changes; `aconfig artefact <power> off|on [level]|auto` overrides one, and
+`aconfig artefact scan` reads the list again. Server-queued rounds (`free`, `eq`) already wait for the
+real equilibrium, so no queue timing needs the factor; a comment or a timer that sizes a wait does.
+
 ## The server queue (HELP 4.6.1)
 
 **Automatic queueing** (`CONFIG USEQUEUEING ON|OFF`): a command tried off balance/eq is queued
@@ -154,12 +195,13 @@ target, Titonus, did not fight back: 0 afflictions gained and full health throug
 - **A manual `touch tree`** prints `You touch the tree of life tattoo.` with no `[Curing]` row. Ready 14.07 s later.
 - **An off-balance spender inside an alias is refused and then HELD** (row 2685). A combo spends balance, so the `srd` rider `mind
   crush` drew `You must regain balance first.` and `mind crush Titonus was added to your balance queue.` It ran 2.06 s later, at the
-  next recovery (row 2715), and spent 2.45 s of equilibrium. `free` needs equilibrium, so the next combo waited: 4.46 s from combo
+  next recovery (row 2715), and spent 2.45 s of equilibrium (ours in Rain: the wiki's 3.40 x0.72, the Aldar Diadem and Rain, "Our
+  speed factors" above). `free` needs equilibrium, so the next combo waited: 4.46 s from combo
   to combo, against about 2.1 s. The balance queue is not cleared by `queue addclear free`, so a held rider can fire after a
   target switch.
 - **The other order fails too (live test, 2026-11-02).** With both up, `mind crush <t>;combo <t> ...` spent equilibrium, and the combo
   ran only when equilibrium returned, 2.43 s later. **A Shikudo combo needs equilibrium up, and MIND CRUSH needs balance up**, so a
-  balance attack and an equilibrium attack cannot share a flush in either order. A pair takes about 4.5 s (2.1 + 2.45, in Rain).
+  balance attack and an equilibrium attack cannot share a flush in either order. A pair takes about 4.5 s (2.1 + 2.45, ours in Rain).
   Evidence: one sample in each order. `vv` already sends mind attacks as separate rounds. The user says KAI CHOKE behaves the same way
   (`raw/players/kai-choke-2026-11-02.txt`); 2 logged rows show it held for equilibrium. So `srd` no longer chains them.
 

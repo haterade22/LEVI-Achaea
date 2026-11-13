@@ -417,9 +417,11 @@ end
 --    it cannot be eaten off, and paralysis blocks the tree.
 --  * Rain filler (config.rainTelepathy): BATTER while under two afflictions, because it sticks
 --    something and spends her tree and herb balance. Then impatience, paralyse, disrupt. 58 of
---    Mystor's 79 MIND affliction rounds were in Rain, where equilibrium is quickest (0.72 of the wiki's
---    time against 0.85 elsewhere, kb/combat/shikudo.md). Mystor sent batter only once, but the user's
---    own play outranks that log (2026-11-02).
+--    Mystor's 79 MIND affliction rounds were in Rain, where equilibrium is quickest. Our own logs: 0.85
+--    of the wiki's time in every form (the Aldar Diadem, faster_eq level 2) and about 0.72 in Rain, so
+--    Rain takes about 15% more off (kb/combat/shikudo.md, ataxia_eqFactor in misc_scripts/033). Mystor
+--    shows the same ratios; their cause for him is not known. Mystor sent batter only once, but the
+--    user's own play outranks that log (2026-11-02).
 function shikudoLock.selectTelepathy(form)
   form = form or formNow()
   local stuck = shikudo.stuckCount()

@@ -35,10 +35,23 @@ tekura.state = {
 }
 
 tekura.config = {
-  -- "Prepped" means one punch (HFP = 14%) away from breaking
-  prepThreshold = 86,  -- 86 + 14 = 100
+  -- "Prepped" means one punch away from breaking: tekura.prepThreshold(), 100 - tekura.punchDamage()
+  -- (86 at the default 14%). The fixed prepThreshold = 86 is gone (v4.7.494).
   breakThreshold = 100,
 }
+
+-- One HFP punch, in limb %. TK6 (tekura/002) learns it from our own hits; until it has, 14%.
+-- A fixed 14 was wrong for a player with spiked knuckles (+35% Tekura punch damage), and the learned
+-- value already holds whatever our gear adds, so it is not multiplied again (v4.7.494).
+function tekura.punchDamage()
+  local p = tekura6 and tekura6.state and tonumber(tekura6.state.punchDamage)
+  if p and p > 0 then return p end
+  return 14
+end
+
+function tekura.prepThreshold()
+  return tekura.config.breakThreshold - tekura.punchDamage()
+end
 
 tekura.PHASES = {
   TORSO_PREP = 1,      -- SDK HFP HFP to prep torso
@@ -131,11 +144,11 @@ end
 --------------------------------------------------------------------------------
 
 -- Check if next combo attack would break a limb prematurely
--- punchDamage = HFP (14%), kickDamage varies by attack (SDK=25, SNK=25)
+-- attackDamage defaults to one HFP punch (tekura.punchDamage()); kicks vary by attack (SDK=25, SNK=25)
 function tekura.wouldBreakLimb(limb, attackDamage)
   local damage = tekura.dispatch.getLimbDamage(limb)
   if damage <= 0 then return false end
-  attackDamage = attackDamage or 14  -- default to HFP punch damage
+  attackDamage = attackDamage or tekura.punchDamage()
   return (damage + attackDamage) >= tekura.config.breakThreshold
 end
 
@@ -155,11 +168,11 @@ end
 -- Check if torso is prepped (one punch away from breaking, or wouldBreak)
 function tekura.dispatch.checkTorsoPrepped()
   local torsoDmg = tekura.dispatch.getLimbDamage("torso")
-  if torsoDmg >= tekura.config.prepThreshold and torsoDmg < tekura.config.breakThreshold then
+  if torsoDmg >= tekura.prepThreshold() and torsoDmg < tekura.config.breakThreshold then
     return true
   end
   -- Treat near-break limbs as prepped to prevent accidental breaks during PREP
-  return tekura.wouldBreakLimb("torso", 14)
+  return tekura.wouldBreakLimb("torso")
 end
 
 -- Check if torso is broken
@@ -172,11 +185,11 @@ end
 function tekura.dispatch.checkLegPrepped(leg)
   local limbName = leg .. " leg"
   local legDmg = tekura.dispatch.getLimbDamage(limbName)
-  if legDmg >= tekura.config.prepThreshold and legDmg < tekura.config.breakThreshold then
+  if legDmg >= tekura.prepThreshold() and legDmg < tekura.config.breakThreshold then
     return true
   end
   -- Treat near-break limbs as prepped to prevent accidental breaks during PREP
-  return tekura.wouldBreakLimb(limbName, 14)
+  return tekura.wouldBreakLimb(limbName)
 end
 
 -- Check if both legs are prepped
@@ -351,11 +364,12 @@ end
 function tekura.dispatch.buildTorsoPrepAttack()
   local parried = tekura.dispatch.getParried()
   local breakAt = tekura.config.breakThreshold
+  local punch = tekura.punchDamage()
 
   -- If they're parrying torso or a leg, prep legs with SWK + break-guarded punches
   if parried == "torso" or parried == "left leg" or parried == "right leg" then
-    local p1 = tekura.wouldBreakLimb("left leg", 14) and "jbp" or "hfp left"
-    local p2 = tekura.wouldBreakLimb("right leg", 14) and "jbp" or "hfp right"
+    local p1 = tekura.wouldBreakLimb("left leg") and "jbp" or "hfp left"
+    local p2 = tekura.wouldBreakLimb("right leg") and "jbp" or "hfp right"
     return "combo " .. target .. " swk " .. p1 .. " " .. p2
   end
 
@@ -371,18 +385,18 @@ function tekura.dispatch.buildTorsoPrepAttack()
     kickStr = "rhk"
   end
 
-  -- HKP punch 1 (14% to torso)
+  -- HKP punch 1 (one punch, tekura.punchDamage())
   local p1Str
-  if (sim + 14) < breakAt then
+  if (sim + punch) < breakAt then
     p1Str = "hkp"
-    sim = sim + 14
+    sim = sim + punch
   else
     p1Str = "jbp"
   end
 
-  -- HKP punch 2 (14% to torso)
+  -- HKP punch 2 (one punch, tekura.punchDamage())
   local p2Str
-  if (sim + 14) < breakAt then
+  if (sim + punch) < breakAt then
     p2Str = "hkp"
   else
     p2Str = "jbp"
@@ -400,11 +414,12 @@ function tekura.dispatch.buildLegPrepAttack()
   local focusLimb = focus .. " leg"
   local otherLimb = other .. " leg"
   local breakAt = tekura.config.breakThreshold
+  local punch = tekura.punchDamage()
 
   -- If parrying a leg, use SWK with break-guarded punches
   if parried == "left leg" or parried == "right leg" then
-    local p1 = tekura.wouldBreakLimb("left leg", 14) and "jbp" or "hfp left"
-    local p2 = tekura.wouldBreakLimb("right leg", 14) and "jbp" or "hfp right"
+    local p1 = tekura.wouldBreakLimb("left leg") and "jbp" or "hfp left"
+    local p2 = tekura.wouldBreakLimb("right leg") and "jbp" or "hfp right"
     return "combo " .. target .. " swk " .. p1 .. " " .. p2
   end
 
@@ -424,23 +439,23 @@ function tekura.dispatch.buildLegPrepAttack()
     kickStr = "rhk"
   end
 
-  -- HFP punch 1 (14% damage) — prefer focus
+  -- HFP punch 1 (one punch) — prefer focus
   local p1Str
-  if (simFocus + 14) < breakAt then
+  if (simFocus + punch) < breakAt then
     p1Str = "hfp " .. focus
-    simFocus = simFocus + 14
-  elseif (simOther + 14) < breakAt then
+    simFocus = simFocus + punch
+  elseif (simOther + punch) < breakAt then
     p1Str = "hfp " .. other
-    simOther = simOther + 14
+    simOther = simOther + punch
   else
     p1Str = "jbp"
   end
 
-  -- HFP punch 2 (14% damage) — prefer other for balance
+  -- HFP punch 2 (one punch) — prefer other for balance
   local p2Str
-  if (simOther + 14) < breakAt then
+  if (simOther + punch) < breakAt then
     p2Str = "hfp " .. other
-  elseif (simFocus + 14) < breakAt then
+  elseif (simFocus + punch) < breakAt then
     p2Str = "hfp " .. focus
   else
     p2Str = "jbp"
@@ -600,7 +615,7 @@ function tekura.dispatch.status()
 
   local phase = tekura.dispatch.getPhase()
   local phaseName = tekura.dispatch.getPhaseName(phase)
-  local hfpDamage = 14
+  local hfpDamage = tekura.punchDamage()
 
   -- Get limb damage from lb[target].hits
   local torsoDmg = tekura.dispatch.getLimbDamage("torso")

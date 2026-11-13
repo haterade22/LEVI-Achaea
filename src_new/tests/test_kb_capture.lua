@@ -244,6 +244,76 @@ describe("kbcapture: recording answers", function()
     expect(#sent).toBe(1)
   end)
 end)
+
+describe("kbcapture abilities: ABADMIN SHOW for a range of ids (v4.7.494)", function()
+  it("builds one command per id, default 1-4000", function()
+    local all = ataxiaKB.abilityCommands()
+    expect(#all).toBe(4000)
+    expect(all[1]).toBe("abadmin show 1")
+    local some = ataxiaKB.abilityCommands("2114", "2116")
+    expect(#some).toBe(3)
+    expect(some[3]).toBe("abadmin show 2116")
+  end)
+
+  it("reads the id out of a record's header", function()
+    expect(ataxiaKB.abilityRecordId({ "Obliviate (Attainment)  ABADMIN ID: 2115      Known: Yes" })).toBe(2115)
+    expect(ataxiaKB.abilityRecordId({ "Nothing here." })).toBeNil()
+  end)
+
+  it("an ABADMIN answer has no fixed shape: the first prompt after a line ends it", function()
+    reset()
+    ataxiaKB.start(ataxiaKB.abilityCommands(2115, 2116), { abilityRun = true })
+    ataxiaKB.onLine("Obliviate (Attainment)  ABADMIN ID: 2115      Known: Yes", false)
+    ataxiaKB.onLine("Syntax:            OBLIVIATE <target>", false)
+    ataxiaKB.onLine("prompt", true)
+    expect(fileText()).toContain("| abadmin show 2115\nObliviate (Attainment)  ABADMIN ID: 2115")
+    expect(ataxiaTemp.kbcap.records).toBe(1)
+    expect(ataxiaTemp.kbcap.lastRecord).toBe(2115)
+  end)
+
+  it("stops after MISS_STOP answers in a row with no record", function()
+    reset()
+    local keep = ataxiaKB.MISS_STOP
+    ataxiaKB.MISS_STOP = 2
+    ataxiaKB.start(ataxiaKB.abilityCommands(1, 10), { abilityRun = true })
+    for _ = 1, 2 do
+      ataxiaKB.onLine("No such ability.", false)
+      ataxiaKB.onLine("prompt", true)
+      fireTimer(ataxiaKB.GAP)
+    end
+    ataxiaKB.MISS_STOP = keep
+    expect(#sent).toBe(2)
+    expect(ataxiaTemp.kbcap.running).toBeFalse()
+  end)
+
+  it("a record resets the miss count", function()
+    local st = { misses = 5 }
+    expect(ataxiaKB.trackAbility(st, { "X (Y)  ABADMIN ID: 7  Known: No" })).toBeFalse()
+    expect(st.misses).toBe(0)
+  end)
+end)
+
+describe("kbcapture artefacts: the power list, then ARTEFACT POWER SHOW per power (v4.7.494)", function()
+  it("queues one SHOW per power in the list answer, once each", function()
+    reset()
+    local savedFrom, savedStore = ataxia_artefactsFromLines, ataxia_artefactsStore
+    local stored
+    ataxia_artefactsFromLines = function()
+      return { faster_eq = { id = 385702 }, swiftcurse = { id = 630835 } }, 2
+    end
+    ataxia_artefactsStore = function(p, n) stored = n end
+    ataxiaKB.start(ataxiaKB.artefactCommands(), { extendFromPowers = true })
+    expect(sent[1]).toBe("artefact power list owned")
+    ataxiaKB.onLine("385702        an Aldar Diadem                     faster_eq              2", false)
+    ataxiaKB.onLine("prompt", true)
+    local q = ataxiaTemp.kbcap.queue
+    ataxia_artefactsFromLines, ataxia_artefactsStore = savedFrom, savedStore
+    expect(#q).toBe(3)
+    expect(q[2]).toBe("artefact power show faster_eq")
+    expect(q[3]).toBe("artefact power show swiftcurse")
+    expect(stored).toBe(2)
+  end)
+end)
 end)
 
 -- restore

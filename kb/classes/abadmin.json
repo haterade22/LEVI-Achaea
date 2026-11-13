@@ -1,0 +1,97 @@
+{
+ "abilities": [
+  {
+   "ability": "Diagnose",
+   "clock": "equilibrium",
+   "cooldown": "1.00 seconds of equilibrium",
+   "details": "With this ability, you may check and see a list of what ails you.",
+   "file": "survival_diagnose_1380.txt",
+   "id": 1380,
+   "known": "Yes",
+   "seconds": 1.0,
+   "skill": "Survival",
+   "syntax": "DIAGNOSE/DIAG [ME]",
+   "target": "Self"
+  },
+  {
+   "ability": "Satiation",
+   "clock": "equilibrium",
+   "cooldown": "4.00 seconds of equilibrium",
+   "details": "By using this ability, you will begin to concentrate on processing your food more efficiently. After activating it, you'll have a short period during which to eat some food.",
+   "file": "survival_satiation_1390.txt",
+   "id": 1390,
+   "known": "Yes",
+   "resource": "100 mana",
+   "seconds": 4.0,
+   "skill": "Survival",
+   "syntax": "SATIATION"
+  },
+  {
+   "ability": "Obliviate",
+   "clock": "cooldown",
+   "cooldown": "41.00 seconds",
+   "details": "Use a minor hypnosis technique to cause your target to forget what it was doing, giving it amnesia for a few seconds.",
+   "extra": "Gives denizen affliction: Amnesia",
+   "file": "serpent_obliviate_2115.txt",
+   "id": 2115,
+   "known": "Yes",
+   "resource": "28 rage",
+   "seconds": 41.0,
+   "skill": "Attainment",
+   "syntax": "OBLIVIATE <target>",
+   "target": "Denizens"
+  },
+  {
+   "ability": "Overload",
+   "clock": null,
+   "details": "Having mastered the art of destabilising crystalline vibrations, you may force the unravelling frequency beyond its limits and direct the overloaded resonance at a foe standing alongside you. As the vibration is destroyed and its unstable effects unleashed upon the location, the overloaded frequency lashes out at your chosen target, afflicting them with paralysis, asthma, slickness, anorexia or stupidity as you choose. Overloading a vibration demands the same focus as destabilising one, and requires both balance and equilibrium. The equilibrium cost will be that of the destabilised vibration or of the overload itself, whichever is greater.",
+   "file": "crystalism_overload_2026-10-23.txt",
+   "id": 3289,
+   "known": "No (3301 lessons required)",
+   "seconds": null,
+   "skill": "Crystalism",
+   "syntax": "VIBE DESTABILISE <vibe> <target> <affliction>"
+  },
+  {
+   "ability": "Pebble",
+   "clock": "equilibrium",
+   "cooldown": "2.30 seconds of equilibrium",
+   "details": "Compress a handful of earth into a single dense pebble and hurl it at a target. Should the pebble strike true, it will shatter one of your target's healthy limbs, as well as causing damage. If every limb has already been broken, the pebble will still wound your target, and your resonance will not grow.",
+   "file": "elementalism_pebble_2026-10-23.txt",
+   "id": 3290,
+   "known": "No (1336 lessons required)",
+   "resource": "90 mana",
+   "seconds": 2.3,
+   "skill": "Elementalism",
+   "syntax": "CAST PEBBLE AT <target>",
+   "target": "Adventurers"
+  },
+  {
+   "ability": "Grapple",
+   "clock": "balance",
+   "cooldown": "2.50 seconds of balance",
+   "details": "Spring a trap you have laid in the given direction to haul yourself into the adjacent room. It is destroyed if you are successfully moved.",
+   "file": "woodlore_grapple_2026-10-23.txt",
+   "id": 3291,
+   "known": "No (3006 lessons required)",
+   "seconds": 2.5,
+   "skill": "Woodlore",
+   "syntax": "GRAPPLE <direction>"
+  },
+  {
+   "ability": "Pulse",
+   "clock": "equilibrium",
+   "cooldown": "1.00 seconds of equilibrium",
+   "details": "Attune your gifts to the pulse of your target to sense exactly how heavily they are bleeding.",
+   "file": "psionics_pulse_2026-10-23.txt",
+   "id": 3292,
+   "known": "No (2974 lessons required)",
+   "seconds": 1.0,
+   "skill": "Psionics",
+   "syntax": "PSI PULSE <target>",
+   "target": "Adventurers"
+  }
+ ],
+ "count": 7,
+ "source": "kb/raw/ab/ (ABADMIN SHOW)"
+}

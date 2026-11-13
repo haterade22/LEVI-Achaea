@@ -72,7 +72,8 @@ function shikudo.manaAllows(cost)
   return mp - cost >= maxmp * ((sipping.manause or 30) / 100)
 end
 
--- MIND BATTER: 500 mana, 4.00 s of equilibrium stated (2.70 s measured in Rain, n=1, kb/combat/shikudo.md).
+-- MIND BATTER: 500 mana, 4.00 s of equilibrium stated. Mystor's client measured 2.70 s in Rain (n=1,
+-- kb/combat/shikudo.md); ours is unmeasured (about 2.89 s in Rain with the Aldar Diadem, ataxia_eqFactor).
 -- It gives stupidity, epilepsy and dizziness at once (kb/classes/monk.md).
 local BATTER_MANA = 500
 function shikudo.canBatter()
@@ -267,7 +268,7 @@ end
 -- (attacker log :53). It was the literal staff489282, one player's item id, in four places.
 --
 -- THE BARE KEYWORD CAN PICK THE WRONG STAFF (v4.7.456, the 2026-10-27 group log ZQfua3XR). The
--- user's Shar'ilian lightspire is an illusion STAFF (docs/my-artefacts.md:109) that answers to
+-- user's Shar'ilian lightspire is an illusion STAFF (docs/my-artefacts.md:130) that answers to
 -- "staff" too. Every second round the server wielded it, dropped the oaken staff, and refused the
 -- combo: "You may not carry out a combination utilising Shikudo strikes without the required
 -- staff." So an inventory staff's id is used when no setting names one. A Shikudo staff is of
@@ -497,6 +498,11 @@ end
 -- :71, :361, :76; Mystor's client shows "[+8.4%]"), needle 13.4% (attacker :2659). Spinkick stays
 -- 27: Mystor's +15% on a prone head (LcJC-rJ5:5803) was most likely halved by hyperfocus, as his
 -- needle was (6.7 = 13.4 / 2; his client logs "-Def: hyperfocus." in two other fights).
+-- THE STAFF LEVEL (v4.7.494): the defaults come from OTHER monks' logs, whose staves we do not know,
+-- and are taken as plain-staff figures. An artefact staff multiplies them by its level
+-- (`aconfig shikstaff 1|1.1|1.15|1.2|1.3`, ataxia.shikudoLevel). Until this release only the
+-- switched-off 008 read that setting, so it changed nothing. A table in shikudo_limbDamage (written
+-- only by 008 today) is our own staff's damage already and is not scaled again.
 function shikudo.getAttackDamage(attack, targetLimb)
   local defaults = {
     kuro = 8.4, thrust = 14.5, needle = 13.4, nervestrike = 13.4,
@@ -508,7 +514,8 @@ function shikudo.getAttackDamage(attack, targetLimb)
   if shikudo_limbDamage and shikudo_limbDamage[attack] then
     baseDamage = shikudo_limbDamage[attack]
   else
-    baseDamage = defaults[attack] or 10  -- Default to 10% if unknown
+    local staff = tonumber(ataxia and ataxia.shikudoLevel) or 1
+    baseDamage = (defaults[attack] or 10) * staff  -- Default to 10% if unknown
   end
 
   -- HYPERFOCUS: If attacking a hyperfocused limb, damage is HALVED (Shikudo.wiki:336)

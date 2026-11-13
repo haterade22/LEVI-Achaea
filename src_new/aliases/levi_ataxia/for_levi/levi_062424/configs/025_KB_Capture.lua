@@ -16,6 +16,8 @@ packageName: ''
 
 -- `kbcapture`              -- status
 -- `kbcapture afflictions`  -- AFFLICTION LIST, then AFFLICTION SHOW + WHATCURES for every name we know
+-- `kbcapture abilities [from[-to]]` -- ABADMIN SHOW for every id (default 1-4000; stops after 300 empty ids)
+-- `kbcapture artefacts`    -- ARTEFACT POWER LIST OWNED, then ARTEFACT POWER SHOW for each power
 -- `kbcapture stop`         -- stop after the current answer
 -- `kbcapture <cmd | cmd>` -- capture any game command(s), e.g. `kbcapture help cures | help heal`.
 --                           Separated by "|", NOT ";": Mudlet splits input on ";" before this alias
@@ -30,6 +32,14 @@ elseif arg == "stop" then
 elseif arg == "afflictions" then
   -- extendFromList: once AFFLICTION LIST answers, ask about every affliction the GAME lists too.
   ataxiaKB.start(ataxiaKB.afflictionCommands(), { extendFromList = true })
+elseif arg:match("^abilities") then
+  -- `kbcapture abilities`, `kbcapture abilities 1500`, `kbcapture abilities 100-200` (v4.7.494).
+  local from, to = arg:match("^abilities%s+(%d+)%s*%-%s*(%d+)$")
+  if not from then from = arg:match("^abilities%s+(%d+)$") end
+  ataxiaKB.start(ataxiaKB.abilityCommands(from, to), { abilityRun = true })
+elseif arg == "artefacts" or arg == "artifacts" then
+  -- extendFromPowers: once the list answers, ask ARTEFACT POWER SHOW for each power (v4.7.494).
+  ataxiaKB.start(ataxiaKB.artefactCommands(), { extendFromPowers = true })
 else
   local cmds = {}
   for c in arg:gmatch("[^|]+") do

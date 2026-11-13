@@ -82,6 +82,15 @@ jobs:
       - name: Test the theorycraft CLI and the whole-fight engine
         run: python3 -B tools/test_theorycraft.py
 
+      - name: Test the kbcapture importer (ABADMIN and artefact routes)
+        run: python3 -B tools/test_kb_capture_import.py
+
+      - name: Check the ABADMIN pages match kb/raw/ab
+        run: python3 -B tools/kb_abadmin.py --check
+
+      - name: Test the ABADMIN generator
+        run: python3 -B tools/test_kb_abadmin.py
+
       - name: Check version consistency
         run: |
           echo "=== Checking version sync ==="

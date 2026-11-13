@@ -298,12 +298,12 @@ flurry:
   effect: "Burst damage scaled by spirit unweave level"
   syntax: "weave flurry <target>"
   setup: "Preceded by `psi transcend shatter <target>`; flurry mode inverts unweaves to spirit first (weave invert <target> mind|body spirit)"
-  damage: "Level 5 UWS = ~90% max health"
+  damage: "Level 5 UWS = ~90% max health (source not recorded; our platinum hand mirror, weaving_mastery 3, adds to weaving damage and our Collar of Agatheis, magic_damage 3, to magical damage, so a figure from our fights already holds both)"
 
 # Psionics
 psi_pulse:
   skill: Psionics
-  balance: "1.00 seconds of equilibrium (AB 3292, CONFIRMED live)"
+  balance: "1.00 seconds of equilibrium (the AB 3292 text, kb/raw/ab/psionics_pulse_2026-10-23.txt; no reading in a log; ours about 0.85 s with the Aldar Diadem)"
   effect: "Sense exactly how heavily the target is bleeding; no affliction"
   syntax: "PSI PULSE <target>"
   notes: "New 2026-10-23 (kb/raw/ab/psionics_pulse_2026-10-23.txt). Adventurers only, 2974 lessons. A bleeding readout for a damage plan; the output line is uncaptured and our code does not use it"
@@ -571,11 +571,11 @@ mana top-up -- now competes with shatter for that equilibrium), WEAVE RALLY (sec
 roth), PSI SPLINTER (equilibrium shieldbreak -- test first), and the test-first list below.
 | Ability | Cost | PvE case |
 |---|---|---|
-| `ENACT ROTH` | 1.30s eq, 3-min cd, needs HP<50% | Emergency heal + free clarity/rupture defs — belongs in the danger/heal ladder before any flee |
+| `ENACT ROTH` | 1.30s eq (base; ours x0.85 with the Aldar Diadem), 3-min cd, needs HP<50% | Emergency heal + free clarity/rupture defs — belongs in the danger/heal ladder before any flee |
 | `WEAVE SECONDSKIN` | 3.00s bal, defence | Resistance to ALL damage types — belongs in defence keepup |
 | Battlerage rotation | rage | Barbedblade 14 (DoT opener) → Whirlwind 25 → Devastate 36 (nuke); **Pulverise 17 = rage-cost shieldbreak** (saves the cleave balance); Regrowth 24 vs self-healing denizens ("tending his wounds"!); skip Terror (fear scatters mobs) |
 | `WEAVE RALLY` | 2.30s bal | Self-heal that OVERHEALS — costs a swing, so: pre-pull overheal + low-HP alternative to fleeing |
-| `PSI EXPAND` | 3.00s eq | Mana top-up between pulls (big under Haemophiliac's +20% mana costs) |
+| `PSI EXPAND` | 3.00s eq (base; ours about 2.55s) | Mana top-up between pulls (big under Haemophiliac's +20% mana costs) |
 | `PSI MANIPULATE` | 3.30s eq | Act THROUGH paralysis — synergy with the basher's attack-gate (paralysing denizens) |
 
 ### Test in game before wiring

@@ -255,7 +255,7 @@
 
 ## Game lines
 
-**How NEW is marked.** NEW means the line is on no curated `kb/*.md` page. I grepped for the distinctive lines, and only `grows older before your eyes` (kb/afflictions/class-cures.md:39) and `deft manoeuvre` (kb/combat/shikudo.md:182) were found. For generic lines I did not grep again, the mark is the chunk readers'. The raw logs in kb/raw may already hold some of these lines.
+**How NEW is marked.** NEW means the line is on no curated `kb/*.md` page. I grepped for the distinctive lines, and only `grows older before your eyes` (kb/afflictions/class-cures.md:39) and `deft manoeuvre` (kb/combat/shikudo.md:184) were found. For generic lines I did not grep again, the mark is the chunk readers'. The raw logs in kb/raw may already hold some of these lines.
 
 ### Our attacks and effects
 | Line | Text | NEW | Note |

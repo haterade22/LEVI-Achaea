@@ -216,7 +216,7 @@ Peaks: Rain 16 (3692), Oak 12, Willow 12, Gaital 12. There was no kata stumble.
 | combo rebounded by the shield tattoo | Rain | no balance spent | 207-210 |
 | thrown off balance by gravehands | Rain | 1.0 s | 5254 |
 
-**Equilibrium.** Rain runs at about 0.72 of the wiki cost; Willow and Oak at about 0.85 (wiki figures as cited from kb/classes/monk.md).
+**Equilibrium.** Rain runs at about 0.72 of the wiki cost; Willow and Oak at about 0.85 (wiki figures as cited from kb/classes/monk.md) (his 0.72 holds his own x0.85 everywhere, cause not known; Rain alone is about x0.85. Ours: `kb/mechanics/balance-and-queueing.md`, "Our speed factors").
 
 | Action | Form | Time | Lines |
 |---|---|---|---|
@@ -490,7 +490,7 @@ KB column: **NEW** = on no curated kb page; **(raw)** = only in kb/raw evidence;
    - Across Mystor's six logs it appears 6 times: FceAmb0o 5485 and 5585; here 5632; c.iJVmpL 3785; vNTjvghY 8291 and 8795.
    - Every time it came right after a **risingkick → livestrike** pair: 5 times to the torso, once to the head. Each of those livestrikes printed no damage line.
    - It is not every pair: in this log only 1 of 4 such pairs produced it (none at 4286, 5545, 5686).
-   - Log 2's victim got "[AFF]: Blackout" inside an Oak round right after a livestrike (shikudo.md:382-385). So that blackout may be this effect rather than MIND BLACKOUT. Unconfirmed.
+   - Log 2's victim got "[AFF]: Blackout" inside an Oak round right after a livestrike (shikudo.md:389-392). So that blackout may be this effect rather than MIND BLACKOUT. Unconfirmed.
 3. **Kata limits and stumbles.**
    - Peaks: Rain 16, Oak, Willow and Gaital 12. There was no stumble or rhythm line.
    - "You stumble and poke yourself in the eye." is a stupidity swap: the kata was 12 before and after (3543, 3559).
@@ -518,7 +518,7 @@ KB column: **NEW** = on no curated kb page; **(raw)** = only in kb/raw evidence;
 **For our Shikudo offense**
 - **Add a nervestrike effect-line trigger.** "Horror overcomes the face of <T> as his body locks in paralysis." appeared 8 of 8 times here, light ones included. It records paralysis even from light or absorbed nervestrikes.
   - `420_Paralysis.lua:35` and `magi_offense_tracking/007` match a different line ("…'s face as \w+ body stiffens into paralysis.").
-  - `kb/combat/shikudo.md:160` ("none on the attacker's side") is wrong.
+  - `kb/combat/shikudo.md:162` ("none on the attacker's side") is wrong.
 - **Against an evileye class, nervestrike is the best strike we have.** Each paralysis silenced DEADEYES for 2-9 s: 17 failed sends at 2031-2291 and 14 at 4095-4269. Pair it with livestrike: he cured asthma first 4 times out of 5.
 - **MIND PARALYSE is cured within 1 s** (3141, 3286, 3355, 3422, 3516). It is an equilibrium filler, not a lock piece.
 - **The Dispatch route that worked:**

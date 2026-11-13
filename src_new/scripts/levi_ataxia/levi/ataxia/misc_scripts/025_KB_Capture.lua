@@ -42,6 +42,13 @@ packageName: ''
 --                          NOT ";": Mudlet splits typed input on its command separator before any
 --                          alias runs, so `kbcapture a;b` captured only `a` and sent `b` to the game
 --                          uncaptured (2026-10-10).
+--   kbcapture abilities [from[-to]]
+--                          ABADMIN SHOW <n> for every n in the range (default 1-4000, about 80 min;
+--                          known ids reach 3292). Stops early after MISS_STOP answers in a row with
+--                          no ability record, and says where to resume (v4.7.494, the user: "cycle
+--                          all abs in game with abadmin show <x>, then output it to a file").
+--   kbcapture artefacts    ARTEFACT POWER LIST OWNED, then ARTEFACT POWER SHOW for every power in it
+--                          (v4.7.494). The list also refreshes our saved powers (misc_scripts/033).
 --   kbcapture stop         stop after the current answer
 
 ataxiaKB = ataxiaKB or {}
@@ -138,6 +145,75 @@ function ataxiaKB.extendFromList(st, lines)
   return added
 end
 
+-- ---------------------------------------------------------------------------------------------
+-- ABADMIN SHOW <n>: the game's own record of every ability (v4.7.494).
+-- A record starts "Obliviate (Attainment)  ABADMIN ID: 2115      Known: Yes" (kb/raw/ab/). Ids that
+-- name no ability answer with a line nobody has recorded yet, so the capture gives these commands NO
+-- answer shape (EXPECT): the first prompt after a line ends the answer. A room line that closes one
+-- early costs nothing, because the importer files a record by the id in its own header, not by the
+-- command it came under.
+-- ---------------------------------------------------------------------------------------------
+ataxiaKB.ABILITY_FIRST = 1
+ataxiaKB.ABILITY_LAST = 4000
+ataxiaKB.MISS_STOP = 300 -- answers in a row with no record: the end of the ids
+
+function ataxiaKB.abilityCommands(from, to)
+  from = math.max(1, math.floor(tonumber(from) or ataxiaKB.ABILITY_FIRST))
+  to = math.floor(tonumber(to) or ataxiaKB.ABILITY_LAST)
+  local cmds = {}
+  for n = from, to do cmds[#cmds + 1] = "abadmin show " .. n end
+  return cmds
+end
+
+-- The ABADMIN id in an answer's lines, or nil when no record is there.
+function ataxiaKB.abilityRecordId(lines)
+  for _, l in ipairs(lines or {}) do
+    local id = l:match("ABADMIN ID:%s*(%d+)")
+    if id then return tonumber(id) end
+  end
+  return nil
+end
+
+-- After each `abadmin show` answer: count answers with no record; MISS_STOP of them in a row ends
+-- the run. Returns true when the run should stop.
+function ataxiaKB.trackAbility(st, lines)
+  local id = ataxiaKB.abilityRecordId(lines)
+  if id then
+    st.misses, st.lastRecord = 0, id
+    st.records = (st.records or 0) + 1
+    return false
+  end
+  st.misses = (st.misses or 0) + 1
+  return st.misses >= ataxiaKB.MISS_STOP
+end
+
+-- ARTEFACT POWER LIST OWNED, then (once it answers) ARTEFACT POWER SHOW for each power in it.
+function ataxiaKB.artefactCommands()
+  return { "artefact power list owned" }
+end
+
+-- After the list answers: queue SHOW for every power not queued yet, and save the list as our
+-- powers (misc_scripts/033). Returns how many powers were added.
+function ataxiaKB.extendFromPowers(st, lines)
+  if type(ataxia_artefactsFromLines) ~= "function" then return 0 end
+  local powers, n = ataxia_artefactsFromLines(lines)
+  if n > 0 and type(ataxia_artefactsStore) == "function" then ataxia_artefactsStore(powers, n) end
+  st.queued = st.queued or {}
+  local names = {}
+  for p in pairs(powers) do names[#names + 1] = p end
+  table.sort(names)
+  local added = 0
+  for _, p in ipairs(names) do
+    local show = "artefact power show " .. p
+    if not st.queued[show] then
+      st.queue[#st.queue + 1] = show
+      st.queued[show] = true
+      added = added + 1
+    end
+  end
+  return added
+end
+
 -- One answer, as written to the file. The markers are what the importer splits on.
 function ataxiaKB.formatBlock(cmd, lines, stamp, timedOut)
   local out = { "##### KBCAPTURE " .. stamp .. " | " .. cmd .. (timedOut and " | TIMEOUT" or "") }
@@ -190,6 +266,15 @@ local function finish(timedOut)
     local added = ataxiaKB.extendFromList(st, st.lines)
     if added > 0 then echo("the game lists " .. added .. " affliction(s) our code does not name; asking about those too ("
       .. #st.queue .. " commands in all).") end
+  end
+  if st.extendFromPowers and st.cmd == "artefact power list owned" then
+    local added = ataxiaKB.extendFromPowers(st, st.lines)
+    echo("the list names " .. added .. " artefact power(s); asking ARTEFACT POWER SHOW for each.")
+  end
+  if st.abilityRun and st.cmd:find("^abadmin show ") and ataxiaKB.trackAbility(st, st.lines) then
+    st.stopping = true
+    echo(ataxiaKB.MISS_STOP .. " ids in a row had no ability record: the end of the list. Last record: "
+      .. tostring(st.lastRecord or "none") .. ".")
   end
   st.done = st.done + 1
   st.cmd, st.lines = nil, nil
@@ -257,6 +342,12 @@ sendNext = function()
     st.running = false
     echo((st.stopping and "stopped" or "done") .. ": " .. st.done .. " answer(s) written to "
       .. ataxiaKB.path() .. ". In the repo, run: python tools/kb_capture_import.py")
+    if st.abilityRun then
+      local last = tonumber(tostring(st.queue[st.i] or ""):match("(%d+)$"))
+      echo((st.records or 0) .. " ability record(s). Last id asked: " .. tostring(last or "none")
+        .. (last and st.i < #st.queue and (st.misses or 0) < ataxiaKB.MISS_STOP
+          and (". Resume: kbcapture abilities " .. (last + 1)) or "") .. ".")
+    end
     st.stopping = false
     return
   end
@@ -283,6 +374,9 @@ function ataxiaKB.start(cmds, opts)
   st.running, st.stopping = true, false
   st.gag = not (opts and opts.gag == false)
   st.extendFromList = (opts and opts.extendFromList) or false
+  st.extendFromPowers = (opts and opts.extendFromPowers) or false
+  st.abilityRun = (opts and opts.abilityRun) or false
+  st.misses, st.lastRecord, st.records = 0, nil, 0
   st.queued = {}
   echo("capturing " .. #cmds .. " command(s), about " .. math.ceil(#cmds * 1.2 / 60)
     .. " min. Output is hidden until it finishes. kbcapture stop to end early.")

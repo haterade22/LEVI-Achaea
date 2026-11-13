@@ -178,8 +178,8 @@ end
 --      tree is down for the whole of it -- or as BAIT while her tree is up and two lock pieces are
 --      on, so the tree takes the blackout and not a piece ("you give it once, they usually touch
 --      tree to cure and we give it again", players file:8). Rain, because the hidden combo waits
---      for our equilibrium and Rain gives it back quickest (0.72 of the wiki's time, against 0.85
---      elsewhere: kb/combat/shikudo.md).
+--      for our equilibrium and Rain gives it back quickest (ours: 0.72 of the wiki's time in Rain,
+--      0.85 elsewhere from the Aldar Diadem; ataxia_eqFactor, kb/combat/shikudo.md).
 --   6. MIND DISRUPT when confused and not disrupted: only CONCENTRATE gives equilibrium back, and
 --      confusion makes it fail (Mystor, confuse then disrupt: FceAmb0o:6309, :6361).
 --   7. A Rain burst at kata burstKata+, while fewer than burstMax MIND rounds have run since the

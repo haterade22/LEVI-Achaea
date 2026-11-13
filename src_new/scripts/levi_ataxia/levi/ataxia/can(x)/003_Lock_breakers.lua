@@ -321,14 +321,17 @@ end
 --------------------------------------------------------------------------------
 -- LOCK-BREAKER, THEN SHIELD (the user, 2026-11-09, kb/CONFLICTS.md #77).
 --
--- Both spend equilibrium: the shield tattoo costs 3.40 s on our seat, and the `cq all` sent in front
+-- Both spend equilibrium: the shield tattoo costs 3.40 s on our seat (the base 4.00 s through the Aldar
+-- Diadem, ataxia_eqFactor in misc_scripts/033; 2.89 s in Rain), and the `cq all` sent in front
 -- of it clears a lock-breaker the game holds. So an automatic shield waits while ataxia_lockBreak
 -- would still act. A cure held for equilibrium counts as due. A blocked cure and one on cooldown do
 -- not, because the shield would then wait for nothing.
 --
 -- The wait ends after SHIELD_WAIT_MAX seconds. ataxia_lockBreak re-sends every 1.5 s until a line
 -- says the cure was used, so a cure the game keeps refusing would otherwise hold the shield off
--- for the whole fight. 4 s covers one full equilibrium recovery.
+-- for the whole fight. 4 s covers one full equilibrium recovery of up to 4.00 s, which holds for a
+-- player with no artefact. An Aldar Diadem (ataxia_eqFactor) makes the recovery shorter, never
+-- longer, so the same 4 s is kept for every player.
 --
 -- Not gated: the instant-kill shield (myinstantcath) and the limb reaction shield. Those answer a
 -- blow that lands now.

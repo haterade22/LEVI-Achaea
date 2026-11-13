@@ -2,6 +2,31 @@
 
 ---
 
+## 2026-11-13 - v4.7.494: our artefacts count, and `kbcapture abilities`
+
+A player's feedback: "in our documentation and logic we are not factoring in artefacts we have", with `kb/combat/shikudo.md` as the example. "A diadem artefact reduces eq balance." The user wears the Aldar Diadem (`faster_eq` level 2, 15% faster equilibrium) at all times, on every class. The Shikudo page gave a table of equilibrium costs at 0.85 of the wiki's (0.72 in Rain) and called it "this character's own speed-up (cause unknown)". That table is Mystor's. Our own logs show the same numbers, and for us the cause is the Diadem:
+
+```
+Equilibrium used: 1.07s.     (MIND IMPATIENCE in Rain, 46 times; the wiki says 1.50 s)
+Equilibrium used: 1.27s.     (MIND IMPATIENCE elsewhere, 11 times)
+```
+
+We are Nimble, not quick-witted: `trait select quick-witted` was refused with "You have no free trait slots."
+
+- **The package now reads your own artefacts.** At the first login with nothing saved it asks the game for `ARTEFACT POWER LIST OWNED` and saves every power and level. `aconfig artefact` shows what you own and what each one changes. `aconfig artefact scan` reads the list again. `aconfig artefact <power> off`, `on [level]` or `auto` overrides one. It never uses a fixed list, so it is right for every player who installs the package. If the list was never read, the item catalog (`catalog scan`) stands in.
+- **The equilibrium factor.** `ataxia_eqFactor` gives x0.85 with the Aldar Diadem (x0.93 with a Circlet of the Wise), and about x0.85 more in Rain, with a one-line reason. Server-queued rounds already wait for the real equilibrium, so no round changes. Comments in the Shikudo lock (`sr`), `vv`, `srd`, the dispatch, the basher and the lock-breaker shield wait said Mystor's numbers were ours. They now give the base, ours and the reason. Example: `srd`'s ADOPT to Rain pays back after about 10 MIND CRUSHes (2.45 s against 2.89 s).
+- **Tekura: a punch through spiked knuckles is no longer learned as a kick.** TK6 learned our kick and punch damage from our hits and split them at a fixed 16%. Spiked knuckles add 35% to Tekura punches (14% x 1.35 = 18.9%), so a punch read as a kick. A hit now goes to the learned value it is nearer. TKD (the 3-limb route) used a fixed 14% punch for its prep line (86%) and its break guard. It now uses the punch TK6 learned.
+- **Shaman: the stand-in swiftcurse count fits your pendant.** When the swiftcurse line arrives before the game's "empowered with another N curses" line, the count was set to 14 (the bash heuristic said 15). It is now 10 (the wiki) plus 2, 4 or 6 for a skull pendant: 16 with our sapphire one. The game's line still sets the real count.
+- **Shikudo: the staff level counts.** `aconfig shikstaff` set a level that only the switched-off 008 read. The dispatch's default limb damage now scales by it.
+- **`kbcapture abilities [from[-to]]`** asks the game `ABADMIN SHOW <n>` for every id (1 to 4000 by default; it stops after 300 ids in a row with no record and says where to resume). **`kbcapture artefacts`** asks the power list, saves it, then `ARTEFACT POWER SHOW` for each power. `tools/kb_capture_import.py` files each AB record as `kb/raw/ab/<skill>_<ability>_<id>.txt` and each power's text in `kb/raw/artefacts/`. `tools/kb_abadmin.py` turns `kb/raw/ab/` into `kb/classes/abadmin.json` and a page of where the game and the wiki differ (`abadmin-vs-wiki.md`).
+- **Not changed yet, on purpose:** a size that only our artefact reference gives (the eagle feather's +5 s hamstring, the tuning fork's double symphony, the Collar's +20% magic) waits for the game's own text from `kbcapture artefacts`. The damage-kill thresholds stay as they are: they were tuned in play with our gear on.
+- **Docs:** a new "Our speed factors" section in `kb/mechanics/balance-and-queueing.md` (every AB/wiki cost is a base; whose number is whose; our readings). The Shikudo page, Mystor's fight pages, `foundations.md`, `CONFLICTS.md`, and the Monk, Blademaster, Shaman, Magi, Psion, Depthswalker, Earthlord, Serpent, Runewarden, Alchemist, Dragon, Infernal and Jester docs now name the source of each timing. `docs/my-artefacts.md` gains the four artefacts it missed (the golden cube, the Gloves of Serendipity, the quill of inscribing and the painted lantern) and a "What our code reads" table. A new rule in `CLAUDE.md`: a timing names its source and applies our artefacts.
+- **Tests:** `test_artefacts.lua` reads the pasted 74-row list. `test_tekura_punch.lua`, the new `kbcapture` describes in `test_kb_capture.lua`, `tools/test_kb_capture_import.py` and `tools/test_kb_abadmin.py`. CI runs the two tool tests and `kb_abadmin.py --check`.
+
+**After you reimport, in a quiet room with the basher off:** `kbcapture abadmin show 2115 | abadmin show 999999` (to learn the game's line for an id with no record), then `kbcapture artefacts` (about 2 minutes), then `kbcapture abilities` (about an hour; `kbcapture stop` stops it, and `kbcapture abilities <id>` resumes).
+
+---
+
 ## 2026-11-12 - v4.7.492: documentation for the launch LAND
 
 No code change. The package is the same as v4.7.491, rebuilt with the new version number.

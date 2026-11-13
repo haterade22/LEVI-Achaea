@@ -2696,7 +2696,8 @@ end
 -- magic damage to all denizens in its location, including itself. This effect has a
 -- 30 seconds cooldown before it can trigger again." User doctrine: RAIN form only,
 -- off cooldown, priority when 2+ denizens share the room (the burst hits them all).
--- AB Kaichoke (ID 896) facts: KAI CHOKE <target>, 4.00s of EQUILIBRIUM, 10 kai +
+-- AB Kaichoke (ID 896) facts: KAI CHOKE <target>, 4.00s of EQUILIBRIUM (the base: our logs show
+-- 2.60s in Rain, x4, which fits neither the Aldar Diadem's 0.85 nor 0.72 with Rain -- open), 10 kai +
 -- 50 mana -- but **against a denizen it requires and consumes NO kai** (same-room
 -- only, which bashing always is), so there is no kai gate here, just a small mana
 -- floor. Because it rides EQ -- idle while Shikudo combos spend balance -- the choke
@@ -2773,8 +2774,9 @@ end
 -- MIND CRUSH, THE INT MONK'S ATTACK (v4.7.457-459, user: "They should use mind crush for normal
 -- bashing attacks instead of kai choke. Only kai choke when they have the kai unleashed boon";
 -- "mind crush is the combo for Int monk" / "mind crush will be the attack and take EQ").
--- Telepathy, not Kaido: MIND CRUSH <t>, 150 mana, 3.40s of EQUILIBRIUM, adventurers and denizens,
--- physical and mental damage (kb/classes/monk.md:320). For an int monk the round is ONE
+-- Telepathy, not Kaido: MIND CRUSH <t>, 150 mana, 3.40s of EQUILIBRIUM (the base; ours 2.89s, and
+-- 2.45s in Rain: the Aldar Diadem and Rain, ataxia_eqFactor in misc_scripts/033), adventurers and
+-- denizens, physical and mental damage (kb/classes/monk.md:320). For an int monk the round is ONE
 -- equilibrium attack and NO balance combo (ataxiaBasher_monkIntRound): Spirit Rend, the Kai
 -- Unleashed choke when one is ready, else MIND CRUSH. Kai Choke without the
 -- boon is never sent. v4.7.457 sent it as a rider BESIDE the combo; that was wrong.
@@ -3138,7 +3140,7 @@ end
 --                         against denizens will now deal unblockable damage and 50% increased
 --                         base damage, and you will recover balance 20% faster."
 --
--- THEY RIDE THE ROUND, because ENACT costs EQUILIBRIUM (2.30s, wiki) and every Psion weave
+-- THEY RIDE THE ROUND, because ENACT costs EQUILIBRIUM (2.30s, wiki; x0.85 with an Aldar Diadem) and every Psion weave
 -- spends BALANCE -- the idle-channel rule this file already applies to `psi transcend` and
 -- `enact wrath` directly above. A defence worth 50% damage is worth an equilibrium we were not
 -- spending.
@@ -3253,8 +3255,10 @@ end
 --
 -- WHAT IT COSTS, counted first this time (v4.7.356's lesson: a per-cast damage number is not a
 -- rotation comparison -- count what the new action delays):
---   * The round fires when equilibrium AND balance are both back. Upheaval's 2.30s against
---     deathblow's 2.20s stretches a deathblow round by 0.10s (~5%); flurry (2.60s) not at all.
+--   * The round fires when equilibrium AND balance are both back. Upheaval's 2.30s (the wiki's base)
+--     against deathblow's 2.20s stretches a deathblow round by 0.10s (~5%); flurry (2.60s) not at
+--     all. With an Aldar Diadem (faster_eq 15%, ataxia_eqFactor) upheaval is about 1.96s and
+--     stretches neither. Nothing in the code reads these figures.
 --   * RUBBLE ON OUR OWN EXITS. The PvE audit (.claude/classes/psion.md) filed upheaval under "blocks
 --     our own escape routes", and leaving over rubble is a slow clamber ("You begin to slowly
 --     clamber over the rubble that blocks your way."). So only in a CROWD (2+ denizens by default,

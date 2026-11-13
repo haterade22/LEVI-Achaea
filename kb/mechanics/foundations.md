@@ -52,7 +52,7 @@ Nothing here was run as a live test unless it says so. Every "last exit" below i
 6. **Priority steers the herb. It only partly steers the affliction inside that herb.** Asthma at priority 1
    won aurum 4 of 7. With asthma and weariness both up, aurum took asthma 16, weariness 8, clumsiness 3 (n=27).
    MEASURED. The cure's choice inside a herb is unknown.
-7. **Our costs follow the stated cost, times a multiplier for our character.** Error about +-0.15 s. See
+7. **Our costs follow the stated cost, times a multiplier for our character** (for our equilibrium, the Aldar Diadem: "Our speed factors", [balance-and-queueing.md](balance-and-queueing.md)). Error about +-0.15 s. See
    [Stated against observed](#stated-against-observed). MEASURED. This has one known exception, Engage (CONFLICTS #55), and few
    real tests, because a character with one stated ability fits its multiplier by construction.
 8. **An opponent's stated cost does not predict their next attack. Measure it per ability.** A clock gives the
@@ -119,12 +119,12 @@ the measured time to recovery: median -0.02 s, 89% within +-0.15 s (balance, n=2
 |---|---|---|---|
 | FITNESS | 3.00 | 2.8 | 0.93 |
 | Truewrack | 2.80 | 2.6 | 0.93 |
-| Shield tattoo (equilibrium) | none listed | 4.00, 3.40, 2.89 | 1, 0.85, 0.72 by character and form |
+| Shield tattoo (equilibrium) | none listed | 4.00, 3.40, 2.89 | 1 (Claes), 0.85 (Elmer, Nikita, an Earth Lord; ours: the Aldar Diadem), 0.72 (Rain, ours) |
 | Homunculus attack | 3.00 | 2.55 | 0.85 |
 | Pommelstrike, 1 s stamps | 1.50 | 1.1 | about 0.73 |
 | Engage (Claes) | 2.50 | 2.00, 29 of 29 | 0.80, **not his k** (CONFLICTS #55) |
 
-So **a cost = stated x k**, where k depends on the character, the channel and sometimes the form. Rain form adds
+So **a cost = stated x k**, where k depends on the character (its artefacts and traits; for us an equilibrium k of 0.85 is the Aldar Diadem, for another logger the cause is not known), the channel and sometimes the form. Rain form adds
 x0.85 on equilibrium. Weariness, asthma, clumsiness and paralysis did not change a reap's cost. MEASURED. **Engage is an exception:** Claes prints
 the shield at 4.00 and Concentrate at 2.00, which Elmer's k of 0.85 puts at their base, so Claes's k is 1.00 and Engage should read 2.50. This table
 is a small part of the printed costs: [clocks.md](clocks.md) says how much it covers, and the Shikudo combos are not in it. Our Serpent's own costs (FL: DSTAB 1.8, BITE 1.7, IMPULSE 1.44 of equilibrium, FLAY 1.7, PINSHOT 1.8, printed) are in clocks.md's Own costs table, and an IMPULSE with a venom spends balance as well as equilibrium (CONFLICTS #68).

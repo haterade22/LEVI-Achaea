@@ -36,7 +36,9 @@ packageName: ''
 --      The user said yes to this kill on 2026-10-27. This route never moves to Maelstrom.
 --   3. Not in Rain: `adopt rain form`, alone. It needs no kata, and it spends balance (about 4.1 s), so a
 --      crush in the same round would be refused and held. Rain is the point: it makes equilibrium about 15%
---      cheaper (MIND CRUSH 2.45 s against 2.89 s), and the form stays at kata 0.
+--      cheaper (our MIND CRUSH: 2.45 s against 2.89 s; the 2.89 is the wiki's 3.40 through the Aldar
+--      Diadem, ataxia_eqFactor), and the form stays at kata 0. A crush saves about 0.44 s in Rain, so the
+--      4.1 s ADOPT pays back after about 10 crushes.
 --   4. MIND CRUSH. If we cannot, KAI CHOKE. If we can do neither, nothing goes out, and one line says why.
 --
 -- A SHIELD CHANGES NOTHING: MIND CRUSH passes a target's shield (the user, 2026-11-02), so this route has

@@ -83,14 +83,14 @@ curse:
 
 swiftcurse:
   skill: Curses
-  balance: eq (~0.8s)
-  effect: "Fast single curse — filler between cooldowns"
+  balance: "a swiftcursed curse ~0.8s (channel unconfirmed); the bare SWIFTCURSE charge is 2.50s of EQUILIBRIUM (wiki; ours x0.85 with the Aldar Diadem)"
+  effect: "Fast single curse — filler between cooldowns. Charges: ten (wiki) + 2/4/6 from a skull pendant (swiftcurse artefact; ours sapphire, +6 = 16). Trigger 012's line gives the game's count; 011 and genrunning/004 fall back to 10 + the pendant (v4.7.494)"
   syntax: "swiftcurse <target> <curse>  (bare 'swiftcurse' recharges)"
   notes: "Gated by curseCharge > 1; does NOT charge jinx (028:740-755) -- except under the Mnemosyne boon Thrice Cursed (v4.7.386)"
 
 jinx:
   skill: Curses
-  balance: eq (~2.3s)
+  balance: "BALANCE, 2.30s (wiki: '2.30 seconds of balance'; the Aldar Diadem does not change it)"
   effect: "Deliver TWO curses in one balance (on different cure paths)"
   syntax: "jinx <curse1> <curse2> <target>"
   notes: "Gated by ataxiaTemp.canJinx, charged only by a prior regular curse (028:747, 811)"

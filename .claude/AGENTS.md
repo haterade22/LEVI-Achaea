@@ -33,6 +33,11 @@
   Gravehands' AB block says "3.00 seconds of equilibrium"; in game it takes BALANCE, so the Apostate
   summon collided with the deadeyes swing for seven releases (v4.7.354). The AB block said shatter was
   a 3.10s-equilibrium action usable any time; the package had only ever used it at full transcendence.
+- **An AB or wiki cost is a BASE cost, and another player's reading is theirs (2026-11-13).** Our
+  equilibrium is the base x `ataxia_eqFactor` (the Aldar Diadem x0.85, Rain about x0.85 more). The KB
+  cited Mystor's 0.85 table as our speed-up with the cause "unknown". Name whose number a doc gives, and
+  read an artefact size in code only through `misc_scripts/033_Artefacts.lua`, from the player's own list
+  (`kb/mechanics/balance-and-queueing.md`, "Our speed factors").
 - **A retreat must check that it worked.** The escape ladder retreated from a swarm that followed
   every time, and each retreat held the attacks while it tried to leave -- half the fight spent
   attack-held, while the fighting that did happen was winning (v4.7.370). An action whose premise

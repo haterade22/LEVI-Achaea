@@ -15,6 +15,11 @@ This tool reads that file and:
   * appends new WHATCURES lines to kb/raw/live/whatcures.txt (read by tools/kb_catalog.py),
   * writes AFFLICTION LIST to kb/raw/live/affliction_list.txt and anything else to
     kb/raw/live/other/<command>.txt,
+  * files each ABADMIN SHOW record (`kbcapture abilities`) as kb/raw/ab/<skill>_<ability>_<id>.txt,
+    by the id in the record's OWN header (a late answer lands in the next block); an id an existing
+    file already holds is not written again, so the files other pages link to keep their names,
+  * writes ARTEFACT POWER LIST OWNED to kb/raw/live/artefact_power_list_owned.txt and each
+    ARTEFACT POWER SHOW <p> to kb/raw/artefacts/<p>.txt (`kbcapture artefacts`),
   * renames the source file to kb_capture.imported-<time>.txt so the next run starts clean,
   * regenerates kb/afflictions/catalog.md,
 and reports every command that got no recognisable answer (usually a name the game does not use).
@@ -132,6 +137,98 @@ def slug(cmd):
     return re.sub(r"[^a-z0-9]+", "_", cmd.lower()).strip("_")[:80]
 
 
+# "Pulse (Psionics)  ABADMIN ID: 3292            Known: No (2974 lessons required)"
+AB_HEAD = re.compile(r"^(.+?) \((.+?)\)\s+ABADMIN ID:\s*(\d+)")
+AB_CMD = re.compile(r"^abadmin show (\d+)$")
+AB_DIR = os.path.join("kb", "raw", "ab")
+
+
+def ab_ids(ab_dir):
+    """{id: file name} for every ABADMIN record already filed in kb/raw/ab/."""
+    have = {}
+    for p in sorted(glob.glob(os.path.join(ab_dir, "*.txt"))):
+        with open(p, encoding="utf-8", errors="replace") as fh:
+            for line in fh:
+                m = AB_HEAD.match(line)
+                if m:
+                    have[int(m.group(3))] = os.path.basename(p)
+                    break
+    return have
+
+
+def ab_records(blocks):
+    """{id: (ability, skill, lines)} for every ABADMIN record in the `abadmin show` blocks.
+
+    A record runs from its header to the next header or the end of its block. It is keyed by the id
+    in its own header, not by the block's command: a lag spike longer than the capture timeout puts
+    an answer into the next block, and the header still names it. A later copy of an id wins.
+    """
+    out = {}
+    for b in blocks:
+        if not AB_CMD.match(b["cmd"]):
+            continue
+        cur = None
+        for line in b["lines"]:
+            m = AB_HEAD.match(line)
+            if m:
+                cur = [line]
+                out[int(m.group(3))] = (m.group(1).strip(), m.group(2).strip(), cur)
+            elif cur is not None:
+                cur.append(line)
+    for _, _, lines in out.values():
+        while lines and not lines[-1].strip():
+            lines.pop()
+    return out
+
+
+def route_abadmin(blocks, have):
+    """Return ({relative path: text}, refused [(cmd, first line)], kept [id]).
+
+    `have` is ab_ids() of the files that existed before this run: their ids are kept as they are.
+    A command whose id got no record is refused (the id is free, or the game said something else).
+    """
+    recs = ab_records(blocks)
+    files, kept = {}, []
+    for ab_id in sorted(recs):
+        ability, skill, lines = recs[ab_id]
+        if ab_id in have:
+            kept.append(ab_id)
+            continue
+        name = f"{slug(skill)}_{slug(ability)}_{ab_id}.txt"
+        files[os.path.join(AB_DIR, name)] = "\n".join(lines) + "\n"
+    refused = []
+    for b in blocks:
+        m = AB_CMD.match(b["cmd"])
+        if m and int(m.group(1)) not in recs:
+            first = next((l for l in b["lines"] if l.strip()), "(no output)")
+            refused.append((b["cmd"], first))
+    return files, refused, kept
+
+
+def route_artefacts(blocks):
+    """Return ({relative path: text}, silent [cmd]) for ARTEFACT POWER LIST OWNED and SHOW <p>."""
+    files, silent = {}, []
+    for b in blocks:
+        cmd, body = b["cmd"], b["lines"]
+        if cmd == "artefact power list owned":
+            path = os.path.join("kb", "raw", "live", "artefact_power_list_owned.txt")
+        elif cmd.startswith("artefact power show "):
+            path = os.path.join("kb", "raw", "artefacts", f"{slug(cmd[len('artefact power show '):])}.txt")
+        else:
+            continue
+        if not any(l.strip() for l in body):
+            silent.append(cmd)
+            continue
+        files[path] = f"# {cmd}  ({b['stamp']})\n" + "\n".join(body) + "\n"
+    return files, silent
+
+
+def is_routed(cmd):
+    """A command the AB or artefact routes file, so it does not also go to kb/raw/live/other/."""
+    return bool(AB_CMD.match(cmd)) or cmd == "artefact power list owned" \
+        or cmd.startswith("artefact power show ")
+
+
 def write(path, text, dry):
     if dry:
         return
@@ -192,9 +289,15 @@ def main():
                 first = next((l for l in b["lines"] if l.strip()), "(no output)")
                 silent.append((b["cmd"], first))
 
+    ab_files, ab_refused, ab_kept = route_abadmin(blocks, ab_ids(os.path.join(ROOT, AB_DIR)))
+    art_files, art_silent = route_artefacts(blocks)
+    for rel, body in list(ab_files.items()) + list(art_files.items()):
+        write(os.path.join(ROOT, rel), body, args.dry_run)
+    silent += [(cmd, "(no output)") for cmd in art_silent]
+
     for b in blocks:
         cmd, body = b["cmd"], b["lines"]
-        if cmd.startswith("whatcures ") or cmd.startswith("affliction show "):
+        if cmd.startswith("whatcures ") or cmd.startswith("affliction show ") or is_routed(cmd):
             continue
         elif cmd == "affliction list":
             write(os.path.join(LIVE, "affliction_list.txt"),
@@ -213,6 +316,15 @@ def main():
     print(f"  WHATCURES: {len(new_wc)} new line(s) -> kb/raw/live/whatcures.txt")
     print(f"  AFFLICTION SHOW: {shows} file(s) -> kb/raw/live/affliction_show/")
     print(f"  other: {others} file(s)")
+    if ab_files or ab_refused or ab_kept:
+        print(f"  ABADMIN: {len(ab_files)} new file(s) -> kb/raw/ab/; {len(ab_kept)} id(s) already filed, "
+              f"kept; {len(ab_refused)} id(s) with no record")
+        for cmd, first in ab_refused[:10]:
+            print(f"    {cmd:40} {first[:90]}")
+        if len(ab_refused) > 10:
+            print(f"    ... and {len(ab_refused) - 10} more")
+    if art_files:
+        print(f"  ARTEFACT POWER: {len(art_files)} file(s) -> kb/raw/live/, kb/raw/artefacts/")
     if silent:
         print(f"  {len(silent)} command(s) got no recognisable answer (often: the game uses another name):")
         for cmd, first in silent:
@@ -225,6 +337,8 @@ def main():
         os.replace(src, os.path.join(os.path.dirname(src), f"kb_capture.imported-{when}.txt"))
     subprocess.run([sys.executable, "-I", os.path.join(ROOT, "tools", "kb_affliction_db.py")], check=False)
     subprocess.run([sys.executable, "-I", os.path.join(ROOT, "tools", "kb_catalog.py")], check=False)
+    if ab_files:
+        subprocess.run([sys.executable, "-I", os.path.join(ROOT, "tools", "kb_abadmin.py")], check=False)
 
 
 if __name__ == "__main__":

@@ -75,7 +75,9 @@ logs. `<staff>` is the weapon's description ("a twisted oaken staff"), `<T>` the
   Willow** (all three Willow combos, each with flashheel: the wiki's faster strikes and kicks,
   confirmed), and 2.8 s for the one Gaital combo with dawnkick. The four combos without a kick (two
   in Oak, two in Gaital) printed no reading. ADOPT took 4.1 s and a leap 1.0 s. Rain does not change
-  balance.
+  balance. These are log 1's monk (another player). Our own logs print "Balance used: 2.1s" x115 and
+  "1.9s" x13, the same figures, so our Nimble trait shows in none of them yet; we have no dawnkick
+  (2.8 s) or ADOPT reading.
 - **Transitions:** `TRANSITION <form>` inline at the end of a combo works (the form's line prints
   right after the combo's kata line), and so does a separate `TRANSITION TO RAIN FORM`, which **cost
   no balance and went through while paralysed** (twice in log 1). **A kata of at least 5 is
@@ -189,8 +191,8 @@ Runewarden applied salve to her legs after every flashheel.
   line and the affliction still land. The victim sees "Your shield completely absorbs the damage."
 - **Light** strikes print no damage line by design (above).
 - **Rebounded off a shield tattoo:** "A dizzying beam of energy strikes you as your attack rebounds
-  off of Agathon's shield." The WHOLE combo bounces and costs equilibrium (`[Eq Spent: 1.44s]`,
-  FceAmb0o:2416). All six such lines in Mystor's logs follow a COMBO command (LcJC-rJ5:203-207,
+  off of Agathon's shield." The WHOLE combo bounces and costs equilibrium (`[Eq Spent: 1.44s]` on
+  Mystor's client, FceAmb0o:2416; ours is not measured). All six such lines in Mystor's logs follow a COMBO command (LcJC-rJ5:203-207,
   FceAmb0o:2411-2415, c.iJVmpL:218-222 and :1821-1827, vNTjvghY:4420-4424 and :5990-5996).
   **Whether a MIND command rebounds off a shield has never been seen.** Both offenses, and vv,
   shatter a shield first either way.
@@ -287,9 +289,13 @@ vv through 011).
 | MIND PARALYSE <T> | You reach out with your mind and paralyse <T>. | 1.70 s (Willow) | 2.00 s |
 | (the target died) | You have lost your telepathic lock upon <T>. | | |
 
-Outside Rain every reading was 0.85 of the wiki's figure, a speed-up this character has everywhere
-(cause unknown); the one Rain reading was 0.72. No victim-side line of any MIND ability has been
-captured yet.
+These readings are log 1's monk, another player: outside Rain every reading was 0.85 of the wiki's
+figure and the one Rain reading was 0.72. Their cause for that monk is not known. **Ours are the same
+ratios, and for us the cause is known:** the Aldar Diadem (`faster_eq` level 2, x0.85 in every form),
+and Rain about x0.85 more. Our logs print "Equilibrium used: 1.07s" x46 and "1.27s" x11 for MIND
+IMPATIENCE (wiki 1.50). The factors and every reading: `kb/mechanics/balance-and-queueing.md`, "Our
+speed factors"; the code: `ataxia_eqFactor` (`misc_scripts/033_Artefacts.lua`). No victim-side line
+of any MIND ability has been captured yet.
 
 ### Blackout
 
@@ -298,8 +304,9 @@ cure and we give it again). Under blackout they cannot see what we do to them."*
 (`.claude/classes/monk.md`): "Also if you arent using blackout at all in the rest of your attacks.
 Blackout in rain is basically a no brainer. You can blackout, and then combo 1 time. And the combo is
 hidden."
-- **MIND BLACKOUT** (wiki): 800 mana and 4.00 s of equilibrium. Rain should shorten that; by how much
-  is unmeasured.
+- **MIND BLACKOUT** (wiki): 800 mana and 4.00 s of equilibrium. Ours is predicted at 3.40 s (the Aldar
+  Diadem) and about 2.89 s in Rain, by the factors in `kb/mechanics/balance-and-queueing.md`; no reading
+  yet.
 - **The game's record** (`AFFLICTION SHOW blackout`): it lasts **4 seconds** and is cured by **time**.
   The victim gets no line when it lands, and "Your senses return to you as the blackout ends." when it
   expires. It "obscures your prompt and prevents you from seeing many things happening". It is not
@@ -412,26 +419,32 @@ session scratchpad, `timings2.py`):
   of a combo and a SHATTER inside one cost nothing extra. His commonest combos: Rain frontkick + kuro
   + ruku (29 times; also frontkick + ruku + kuro/ruku), Oak nervestrike + risingkick + ruku / livestrike /
   kuro, Gaital flashheel + kuro/ruku + ruku/jinzuku, Maelstrom risingkick + jinzuku + ruku.
-- **Equilibrium: Rain takes 0.72 of the wiki's figure and every other form 0.85.**
+- **Equilibrium: on Mystor's client Rain takes 0.72 of the wiki's figure and every other form 0.85.**
+  The "Ours" column is from our own logs (the game's "Equilibrium used:" lines, `kb/raw/logs/ours/`);
+  blank = no reading of ours.
 
-  | Ability | Rain | Other forms | Wiki |
-  |---|---|---|---|
-  | MIND IMPATIENCE | 1.07 s (20) | 1.27 s (12) | 1.50 s |
-  | MIND PARALYSE | 1.44 s (26) | 1.70 s (2) | 2.00 s |
-  | MIND CONFUSE | 1.44 s (1) | 1.70 s (2) | 2.00 s |
-  | MIND HALLUCINATE | | 1.70 s (2) | 2.00 s |
-  | MIND THROW | 2.16 s (2) | | 3.00 s |
-  | MIND DISRUPT | 2.89 s (10) | 3.40 s (3) | 4.00 s |
-  | MIND SAPIENCE | 2.89 s (13) | 3.40 s (1) | 4.00 s |
-  | MIND SCYTHE | 2.89 s (1) | | 4.00 s |
-  | MIND BATTER | 2.70 s (1) | | 4.00 s |
-  | CURSEWARD | 2.89 s (12) | | |
-  | KAI CHOKE | | 3.40 s (4) | 4.00 s |
-  | KAI CRIPPLE | 2.89 s (1) | | |
+  | Ability | Mystor, Rain | Mystor, other forms | Wiki | Ours |
+  |---|---|---|---|---|
+  | MIND IMPATIENCE | 1.07 s (20) | 1.27 s (12) | 1.50 s | 1.07 s (46), 1.27 s (11) |
+  | MIND PARALYSE | 1.44 s (26) | 1.70 s (2) | 2.00 s | |
+  | MIND CONFUSE | 1.44 s (1) | 1.70 s (2) | 2.00 s | 1.44 s (3) |
+  | MIND HALLUCINATE | | 1.70 s (2) | 2.00 s | |
+  | MIND THROW | 2.16 s (2) | | 3.00 s | |
+  | MIND DISRUPT | 2.89 s (10) | 3.40 s (3) | 4.00 s | |
+  | MIND SAPIENCE | 2.89 s (13) | 3.40 s (1) | 4.00 s | |
+  | MIND SCYTHE | 2.89 s (1) | | 4.00 s | |
+  | MIND BATTER | 2.70 s (1) | | 4.00 s | |
+  | CURSEWARD | 2.89 s (12) | | | |
+  | KAI CHOKE | | 3.40 s (4) | 4.00 s | 2.60 s (4, `ours/2026-11-03_081532_Tabethys.log`:2959-3276) |
+  | KAI CRIPPLE | 2.89 s (1) | | | |
 
-  0.85 everywhere is this character's own speed-up; Mystor says he has the quick-witted trait
-  (`.claude/classes/monk.md`). So Rain itself takes about another 15% off equilibrium (0.72 / 0.85).
-  BATTER's single 2.70 s reading fits neither ratio.
+  **Whose speed-up is it?** For Mystor the cause is NOT known: he is quick-witted
+  (`.claude/classes/monk.md`:1517-1519), and a 15% Aldar Diadem fits his 0.85 exactly
+  (`docs/artefacts-reference.md`:106); either, or both, can be the cause. For US it is known: we are
+  Nimble, not quick-witted (the user's TRAIT LIST KNOWN, below), and we wear the Aldar Diadem at all times (the
+  user, 2026-11-13), so our 0.85 is the Diadem and Rain takes about another 15% (0.72 / 0.85). Our
+  factors: `kb/mechanics/balance-and-queueing.md`, "Our speed factors". Open: BATTER's single 2.70 s
+  (Mystor's) and our KAI CHOKE 2.60 s fit neither ratio.
 - **Kata:** outside Rain no chain of his went past 12 (Oak, Gaital, Willow and Maelstrom each reached
   exactly 12 in FceAmb0o); Rain reached 16 (LcJC-rJ5). Log 1's monk reached 13 in Oak, so 12 is his
   habit or a soft limit, not a hard cap (CONFLICTS #8). Over his six logs his prompts show 19 Rain
@@ -719,7 +732,7 @@ Rain and Oak.
   a twisted oaken staff." / "You start to wield a Shar'ilian lightspire in your right hand." / "You
   may not carry out a combination utilising Shikudo strikes without the required staff." (281-284,
   595-597, 1443-1445, 1976-1978, 2124-2126, 2493-2495, 2596-2598, 2761-2763). The lightspire is an
-  illusion staff (`docs/my-artefacts.md:109`) and answers to "staff". Every round now names the
+  illusion staff (`docs/my-artefacts.md:130`) and answers to "staff". Every round now names the
   staff's item id (`shikudo.staffRef`, `shikudo/006`).
 - **ASSESS costs balance without HEALTH INSPECTOR.** "You glance over Akri and see that her health
   is at 7171/7171 [100%]." (2709) printed on a balance recovery where a combo should have gone

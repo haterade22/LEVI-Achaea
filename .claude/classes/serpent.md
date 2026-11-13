@@ -629,7 +629,7 @@ impulse:
   not_a_suggestion: "impatience (it comes from the monkshood REACTION), fratricide (see Fratricide Mechanics)"
   victim_line: "'<Serpent> fixes his gaze to yours and hisses a sharp command.' Printed by an IMPULSE that bites: in the four victim-seat logs all 22 BITEs have this line in their packet and all 22 lines have a BITE there, with the suggestion's affliction between them (az 1238-1242, Z5 534-537, X 293-296; census in kb/sim/events.md)"
   venom_form: "CONFIRMED in our spar (2026-11-07): `impulse <target> <suggestion> <venom>` delivers a bite of the venom in the impulse's own packet, 13 of 13 (rule attack.impulse.venom, MEASURED). It was PLAYER, UNVERIFIED (relayed notes) until then. Our code sends that form on every impulse (:2008, :2021, :2046, :2058, :2224, :2251)"
-  cost: "Wiki: 1.70 s of equilibrium. MEASURED (13 of 13): it prints 'Equilibrium used: 1.44s.' and 'Balance used: 1.7s.' (the bite). From each line to its recovery: equilibrium 1.242 s median (p10 1.201, p90 1.289), balance 1.563 s (p10 1.477, p90 1.581). Equilibrium is back first every time, so the BALANCE gates the next round, and no other balance action can go in the same round (v4.7.479: PRIORITY 1 sends the flay alone)"
+  cost: "Wiki: 1.70 s of equilibrium. MEASURED (13 of 13): it prints 'Equilibrium used: 1.44s.' (0.85 x 1.70: our Aldar Diadem, kb/mechanics/balance-and-queueing.md, 'Our speed factors') and 'Balance used: 1.7s.' (the bite). From each line to its recovery: equilibrium 1.242 s median (p10 1.201, p90 1.289), balance 1.563 s (p10 1.477, p90 1.581). Equilibrium is back first every time, so the BALANCE gates the next round, and no other balance action can go in the same round (v4.7.479: PRIORITY 1 sends the flay alone)"
 
 our_eligibility_rule: |
   checkImpulseEligible (:1272-1286) refuses an impulse while the target has sileris or
@@ -1058,7 +1058,7 @@ impulse:
 
 shrugging:
   skill: Venom
-  balance: "WIKI: 1.60 seconds of equilibrium, 10.0 second cooldown (kb/classes/serpent.md:148). PRINTED for the user: Equilibrium used: 1.36s (n=1, kb/raw/live/shrugging_2026-11-08.txt). INFERRED: 1.36 is 0.85 x 1.60, the ratio IMPULSE shows too (wiki 1.70, printed 1.44): a cost is stated x k (foundations.md, Stated against observed)"
+  balance: "WIKI: 1.60 seconds of equilibrium, 10.0 second cooldown (kb/classes/serpent.md:148). PRINTED for the user: Equilibrium used: 1.36s (n=1, kb/raw/live/shrugging_2026-11-08.txt). INFERRED: 1.36 is 0.85 x 1.60, the ratio IMPULSE shows too (wiki 1.70, printed 1.44): a cost is stated x k (foundations.md, Stated against observed); our equilibrium k is the Aldar Diadem (faster_eq level 2, worn at all times)"
   effect: "Cure one of your own afflictions"
   syntax: "SHRUGGING"
   notes: "The offense no longer has a shrug path (canShrug and shouldShrug had no caller; removed 2026-11-08). The lock-breaker's own shrug waits for equilibrium since v4.7.480 (ataxia_activeCureHeldForEq, can(x)/003_Lock_breakers.lua:113; the user: 'shrugging yes'). Our first-person line is captured: 'Focusing inward, you purge your body of afflictions.', then the cured affliction's own line (confusion in the one capture), then the cost (kb/raw/live/shrugging_2026-11-08.txt). curing_bals/006:42 and serpent/008_Shruggin:34 already held it, so a shrug that worked sets activeCureUsed. Shrugging with equilibrium down is not probed. While bashing (v4.7.484, not yet run in Mudlet), 3 afflictions that a random cure can take also send it; with the Miracle boon the game cures one more (see kb/afflictions/class-cures.md). PvP stays lock-only"
@@ -1995,3 +1995,11 @@ A bright, fiery detonation flares outwards as the lightwall takes shape, searing
 
 **Open question, deliberately not guessed:** whether our own lightwall darkshades us when the
 sweep or the escape ladder walks through it. If so, `SNUFF LIGHTWALLS` on room clear is the fix.
+
+## Timings and our artefacts (v4.7.494)
+
+Every equilibrium cost in this file is a BASE cost (AB or wiki) unless a line says whose. Ours is that
+base x0.85 (the Aldar Diadem, worn at all times); the factors and our readings are in
+`kb/mechanics/balance-and-queueing.md`, "Our speed factors", and the code reads them through
+`ataxia_eqFactor` (`misc_scripts/033_Artefacts.lua`). Server-queued rounds already wait for the real
+equilibrium, so only a comment, a doc or a timer that sizes a wait needs the factor.

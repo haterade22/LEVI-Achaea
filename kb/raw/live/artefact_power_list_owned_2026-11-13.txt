@@ -1,0 +1,96 @@
+# ARTEFACT POWER LIST OWNED, pasted by the user (2026-11-13), character Leviticus. Verbatim below this header.
+# The first block is the game's answer to a bare ARTEFACT POWER (its syntax); "(LEVI): SYNTAX -- ..." is our
+# package's echo, not game text. The eat lines are our own curing, interleaved in the paste.
+# Read by misc_scripts/033_Artefacts.lua (triggers 802/803); the user wears the Aldar Diadem at all times.
+
+Syntax:
+(LEVI): SYNTAX -- a command was rejected. If you did not type one, the system sent something invalid.
+   ARTEFACT POWER LIST [OWNED]
+   ARTEFACT POWER SHOW <power>
+   ARTEFACT POWER BUY <power> [FOR] <item> [LEVEL <level>]
+   ARTEFACT POWER TRANSFER <power> [FROM] <item> [TO] <item>
+12:34:32:940 [15352] [97] |(340034)|[]
+You eat a calamine crystal.
+12:34:33:038 [15352] [97] |(340034)|[]
+Your mind is able to focus once again.
+12:34:33:709 [15352] [97] |(340034)|[]
+You may eat another plant or mineral.
+12:34:34:537 [15352] [97] |(340034)|[]
+You eat an arsenic pellet.
+Item ID       Item Name                           Power                Level
+-------------------------------------------------------------------------------
+151113        Bracers of Flame                    fire_mastery           -
+170775        an Intellect Crown                  faster_mindlock        -
+178446        a Collar of Agatheis                magic_damage           3
+202898        an Ursine Band of Mind Distension   mindprint_capacity     1
+212547        a stone of the lesser lorewarden    class_switch_reducti   3
+236878        chitin greaves                      leap                   -
+239371        a Stygian pendant                   criticals              3
+264718        a golden cube                       jester_props           -
+264902        a steel armband of the Fist         tekura_accuracy        3
+270681        a Logosian ring                     health_sip             3
+279190        a prospector's almanac              mine_capacity          2
+281763        Suremekh'neina                      health_regen           3
+281763        Suremekh'neina                      mana_regen             3
+286876        a pair of Logosian Gauntlets        strength               3
+290626        spiked knuckles                     hand_to_hand           3
+299122        an Anklet of Dashing                dash                   -
+299421        a pair of Logosian Bracelets        reserves               3
+300800        a Girdle of Aegis                   constitution           3
+329803        vambraces of the Berserker          battlerage_decay       -
+332303        a preserved hand                    grasping_death         -
+338075        a set of mithril spurs              quickmount             -
+351860        a buckawn's amulet                  anti_web               -
+370963        a shiny charm                       insidious_gaze         -
+385702        an Aldar Diadem                     faster_eq              2
+395139        a talisman of obfuscation           conceal_illusions      -
+396580        a silver tuning fork                tuning                 -
+396923        a braided length of weasel offal    falcon_self_sufficie   -
+405405        a peerless insignia of finesse      weaponmastery_spec     3
+417212        a ring of the Magus                 magic_defence          -
+417868        Bracers of Frost                    frost_mastery          -
+419287        a funereal amphora                  desert_sorcerer        -
+421731        a wax stick encased in mithril      water_sketch           -
+421738        a rough runestone                   swift_runes            -
+421746        a Runic Gauntlet                    totems                 -
+422098        a sand-worn bandolier               jars_capacity          -
+422142        Bracers of the Phoenix              shin_drain             -
+422392        an ephemeral shuttle                resilient_miriads      -
+42655         a Band of Tenacity                  endurance_regen        2
+440716        an oval mask                        lifevision             -
+440733        a pink lotus blossom                monk_switch            -
+442098        a gem of haematite with elemental f rapid_resonation       -
+442748        a waterlogged gauntlet              surging_waves          -
+447372        a prismatic ring                    elemental_resistance   -
+451118        Gloves of Serendipity               bomb_duplication       -
+455735        Prospero's Greater Vault            rift_expand            2
+456282        an ethereal lightning eagle feather enhanced_shin          -
+45985         a Circlet of Determination          willpower_regen        2
+472383        Pixie's Boots                       dexterity              3
+473632        a Sash of Wisdom                    intelligence           3
+477008        a vibrating stick                   wormholes              1
+485994        a Shar'ilian lightspire             illusion               2
+503549        a Hood of the Sphinx                sphinx                 -
+506719        a glittering fishscale tunic        breathe_underwater     -
+536688        a ring of flying                    flying                 -
+539566        a platinum hand mirror              weaving_mastery        3
+560673        a Prosperian attractor              gold_attractor         -
+563418        a moon-and-star insignia            symphonic_master       -
+572302        a quill of inscribing               faster_inscribe        -
+578658        Anake's Hood                        anti_spying            -
+580744        a miniature toolkit                 trapmaster             -
+582366        a flying carpet                     entourage_flight       -
+582367        an Armband of Celerity              celerity               -
+608088        a Sash of Eternal Battle            reduced_endurance      -
+616281        a sorcerer's notebook               sorcerous_insight      -
+616781        a painted lantern                   faster_commune         -
+630835        a sapphire skull pendant            swiftcurse             3
+637022        a cracked wheel                     unending_avalanche     -
+637029        a gaze of the Cacharann             primordial_fury        -
+637043        a morsel of bonemeal                unyielding_stone       -
+72918         a Phaestean Faucet                  fluid_expansion        3
+73932         a ring of Lunastra                  mana_sip               3
+75993         a glass rose                        pure_song              -
+83971         a Brooch of the Tempest             stability              -
+91910         a synaptic lock                     silent_telepathy       -
+-------------------------------------------------------------------------------

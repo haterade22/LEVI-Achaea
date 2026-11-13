@@ -222,7 +222,7 @@ Only Rain form was used, so there is no per-form comparison. `[.. Recov]` figure
 | FITNESS | 2.8 s of balance (x4; wiki 3.00 s); balance back in 2.65-2.73 s | 385, 1722, 2682, 2749 | |
 | FITNESS cooldown | 9-10 s | 384 to 580, 1688 to 1735, 2105 to 2291, 2681 to 3293 | Weariness blocks it |
 | CURSEWARD | 2.89 s of equilibrium (x12); back in 2.71-2.95 s; 166 mana | 1185, 1232, 2615, 2680, 3306 | |
-| DIAGNOSE | 0.72 s of equilibrium (x5; AB 1380 says 1.00 s); back in 0.56-0.74 s | 259, 1091, 3581 | Rain = x0.72 for equilibrium |
+| DIAGNOSE | 0.72 s of equilibrium (x5; AB 1380 says 1.00 s); back in 0.56-0.74 s | 259, 1091, 3581 | Rain = x0.72 for equilibrium on Mystor's client (Rain alone about x0.85) |
 | Epilepsy fit | 1.8 s of balance (x6, one with no fit line at 3721); back in 1.71-1.79 s | 3537, 3541 | First fit about 28 s after the affliction (3456 then 3536) |
 | Quicksilver to fangbarrier | 8-10 s | 369 to 568, 1147 to 1282, 2124 to 2321 | |
 | Bleed tick | every 5-6 s, the whole current bleed as raw damage | 171, 280, 2638, 3283 | Does not shrink under haemophilia |
@@ -235,7 +235,7 @@ Only Rain form was used, so there is no per-form comparison. `[.. Recov]` figure
 | Opponent's seal against the eat | same packet as the aurum (1116-1127); about 1 s after it (2832, then 2888) | 1124, 2895 | |
 | Truelock to BEHEAD | 88 s; the behead itself about 5 s + 5 s | 3302, 3718, 3732, 3789 | |
 
-The Rain figures fit a 0.72 equilibrium factor: DIAGNOSE costs 0.72 s against an AB value of 1.00 s. CURSEWARD's 2.89 s would then imply a 4.00 s base. That is an inference: CURSEWARD's own base cost is not in the KB. FITNESS's 2.8 s against the wiki's 3.00 s fits neither 0.72 nor 0.85, so either the Rain reduction applies to equilibrium only or the wiki figure is off. This is unverified.
+The Rain figures fit a 0.72 equilibrium factor: DIAGNOSE costs 0.72 s against an AB value of 1.00 s (his 0.72 holds his own x0.85 everywhere, cause not known; Rain alone is about x0.85. Ours: `kb/mechanics/balance-and-queueing.md`, "Our speed factors"). CURSEWARD's 2.89 s would then imply a 4.00 s base. That is an inference: CURSEWARD's own base cost is not in the KB. FITNESS's 2.8 s against the wiki's 3.00 s fits neither 0.72 nor 0.85, so either the Rain reduction applies to equilibrium only or the wiki figure is off. This is unverified.
 
 ## Game lines
 
@@ -445,7 +445,7 @@ No game line is visible. TRANSMUTE's line is gagged, and kai gain and decay prin
 
 - **The Shaman's rebounding is down whenever he acts.** Each attack strips it, and it comes back only 8-9 s after his next smoke (24 drops, 23 cycles). Staff strikes straight after his curse or jinx land without rebounding.
 - **Kai is cheap against a Shaman.** In Kai Trance the enemy's attacks pay for kai abilities: 0 to 100 in 50 s (36 to 1016). It decays 10 per 30 s, so it is better spent than banked.
-- **Rain makes equilibrium cheap.** DIAGNOSE cost 0.72 s against an AB value of 1.00 s (259). MIND abilities and CURSEWARD are cheaper in Rain. FITNESS's balance cost did not follow the same factor (385).
+- **Rain makes equilibrium cheap.** DIAGNOSE cost 0.72 s against an AB value of 1.00 s (259) (his 0.72 holds his own x0.85 everywhere, cause not known; Rain alone is about x0.85. Ours: `kb/mechanics/balance-and-queueing.md`, "Our speed factors"). MIND abilities and CURSEWARD are cheaper in Rain. FITNESS's balance cost did not follow the same factor (385).
 - This log carries no combo, kata or Telepathy data for the Shikudo rework.
 
 ### For our defence against this opponent class

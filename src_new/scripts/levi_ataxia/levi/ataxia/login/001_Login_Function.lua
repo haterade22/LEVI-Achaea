@@ -84,6 +84,9 @@ tempTimer(15, [[send("queue add freestand avoid physical")]])
 -- Our traits decide whether ASSESS and CONTEMPLATE may be sent (misc_scripts/031, v4.7.456): read
 -- once, while none are saved.
 if ataxia_traitLogin then ataxia_traitLogin() end
+-- Our artefact powers size the equilibrium and other numbers (misc_scripts/033, v4.7.494): read
+-- once, while none are saved.
+if ataxia_artefactLogin then ataxia_artefactLogin() end
 -- For classes with no defup at login; the 10s throttle drops it after a defup.
 tempTimer(16, [[if ataxia_metabolise then ataxia_metabolise("login") end]])
 -- Alchemist robes, for the same reason; summon is once per session (class_things/004).

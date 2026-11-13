@@ -684,7 +684,7 @@ Lightning prep → double-break both legs → Ice damage (mangle) phase
 1. **DOUBLE-PREP** - Alternate legs to keep both roughly equal until 90%+
 2. **INFUSE LIGHTNING** - During prep phase (lightning gives clumsiness automatically)
 3. **AIRFIST** - When target parries our leg (requires 25 shin: 20 + 5 for infuse, NO cooldown)
-4. **HAMSTRING** - Always keep up to prevent fleeing (10 second duration, timestamp-tracked)
+4. **HAMSTRING** - Always keep up to prevent fleeing (10 second duration, timestamp-tracked; with the ethereal lightning eagle feather, `enhanced_shin`, which we own, docs/artefacts-reference.md:378 says +5 s, so ours is probably 15 s: unconfirmed until `kbcapture artefacts`, and the code still uses 10, v4.7.494)
 5. **KNEES** - When ANY leg is about to break (will hit 100% on next hit), prone on same hit as break
 6. **PARRY BYPASS** - AIRFIST is the only parry bypass (needs 25 shin); no centreslash-up fallback exists
 7. **INFUSE ICE + STERNUM** - After ANY leg broken, switch to ice for damage
@@ -801,7 +801,7 @@ MULTISLASH burst branch in the dispatch.)
 | 3 | KNEES | Dismount | Mounted + hamstrung + final prep hit (dismount before double-break) |
 | 4 | KNEES | Prone | Double-break imminent (both legs will break) |
 | 5 | KNEES | Prone | Single leg about to break |
-| 6 | HAMSTRING | Prevents flee | Always keep up (10s duration, timestamp-tracked) |
+| 6 | HAMSTRING | Prevents flee | Always keep up (10s duration, timestamp-tracked; ours probably 15 s with the eagle feather, unconfirmed) |
 | 7 | NECK | Paralysis | Lightning gives clumsy, so strike para |
 | 8 | CHEST | Hypochondria | Blocks focus curing |
 | 9 | SHOULDER | Weariness | Blocks Fitness passive cure |
@@ -929,7 +929,7 @@ Upper body check functions (Brokenstar):
 The dispatch uses timestamp-based tracking to prevent hamstring reapplication:
 - `blademaster.state.lastHamstringTime` - Timestamp of last hamstring application
 - `blademaster.onHamstringApplied()` - Callback from hamstring trigger (002_Hamstring.lua)
-- `blademaster.config.hamstringDuration` - 10 seconds
+- `blademaster.config.hamstringDuration` - 10 seconds (the base; the eagle feather's +5 s is not applied until a capture confirms it)
 
 The hamstring trigger (002_Hamstring.lua) calls `blademaster.onHamstringApplied()` to update the timestamp.
 

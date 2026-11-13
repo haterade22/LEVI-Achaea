@@ -1,6 +1,27 @@
 # My Artefacts (Personal Inventory)
 
-Quick reference of artefacts I currently own, organized by combat utility. **74 total items.**
+Quick reference of artefacts I currently own, organized by combat utility. **74 power rows** in the game's
+`ARTEFACT POWER LIST OWNED` (pasted 2026-11-13, verbatim in `kb/raw/live/artefact_power_list_owned_2026-11-13.txt`;
+Suremekh'neina holds two powers), plus the Shadowcloak and the wand of reflection, which have no power row.
+The Aldar Diadem is worn at all times (the user, 2026-11-13).
+
+## What our code reads (v4.7.494)
+
+The package reads the player's OWN list (triggers 802/803, `misc_scripts/033_Artefacts.lua`; `aconfig artefact`
+shows it), never this page, because it goes to other players. Each size below is from
+`docs/artefacts-reference.md` until `kbcapture artefacts` files the game's `ARTEFACT POWER SHOW` text in
+`kb/raw/artefacts/`.
+
+| Power | Ours | Changes code at | Not yet |
+|---|---|---|---|
+| faster_eq | Aldar Diadem, 2 | `ataxia_eqFactor` / `ataxia_eqSeconds` (033): x0.85, Rain x0.85 more | -- |
+| hand_to_hand | spiked knuckles, 3 | `tekura6.classifyHit` (tekura/002) learns the punch from our hits; `tekura.punchDamage` (tekura/001) reads it | -- |
+| swiftcurse | sapphire skull pendant, 3 | the stand-in curse count, 10 + 6 (trigger shaman/011, genrunning/004); trigger 012 still gives the game's count | +3 s JINX duration |
+| enhanced_shin | eagle feather | -- | HAMSTRING +5 s (Release B, after the capture confirms it) |
+| tuning | silver tuning fork | -- | Bard symphony timer x2 (Release B) |
+| magic_damage, criticals, weaving_mastery | Collar 3, Stygian pendant 3, mirror 3 | -- | damage-kill thresholds were tuned with them on: documented, not changed |
+| rapid_resonation, symphonic_master, swift_runes, faster_mindlock | haematite, insignia, runestone, Intellect Crown | -- | docs only (`.claude/classes/<class>.md`) |
+| the rest | | -- | not modelled (`A.EFFECTS` in 033 names each) |
 
 ---
 
@@ -135,6 +156,13 @@ Quick reference of artefacts I currently own, organized by combat utility. **74 
 | 630835 | sapphire skull pendant | swiftcurse | 3 | +6 SWIFTCURSE curses, +3s JINX duration |
 | 421746 | Runic Gauntlet | totems | - | Faster totem implant/uproot, -50% own uproot, -25% others' uproot |
 
+### Jester
+
+| ID | Name | Power | Lvl | Effect |
+|----|------|-------|-----|--------|
+| 264718 | golden cube | jester_props | - | Jester props (added 2026-11-13 from the power list; effect not yet captured) |
+| 451118 | Gloves of Serendipity | bomb_duplication | - | Bomb duplication (added 2026-11-13 from the power list; effect not yet captured) |
+
 ### Sentinel
 
 | ID | Name | Power | Lvl | Effect |
@@ -166,6 +194,8 @@ Quick reference of artefacts I currently own, organized by combat utility. **74 
 | 506719 | glittering fishscale tunic | breathe_underwater | - | Permanent underwater breathing |
 | 580744 | miniature toolkit | trapmaster | - | TRAPS and DISARM abilities (auto-success if Sentinel/Jester) |
 | 212547 | stone of lesser lorewarden | class_switch_reduction | 3 | Class switch cooldown reduced to 1 minute |
+| 572302 | quill of inscribing | faster_inscribe | - | Faster tarot inscribing (added 2026-11-13 from the power list) |
+| 616781 | painted lantern | faster_commune | - | Faster COMMUNE (added 2026-11-13 from the power list) |
 
 ---
 

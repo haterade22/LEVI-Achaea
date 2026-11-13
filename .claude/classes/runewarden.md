@@ -373,7 +373,7 @@ pulp_mode:  "head RESTOREd or target stands (tumble) → pivot to torso assault 
 ## Misc gates (dwb_runie:441,708-720,730-735)
 clumsiness: "auto-cured with 'discipline' before breaking legs"
 anti_serpent: "vs a Serpent with impatience the round holds behind the shield until impatience is cured. Any attack drops our own shield (kb/raw/logs/2026-11-01_elmer_alchemist-vs-serpent_loss_Z5cyffxx.txt:78). With the shield already up (GMCP Char.Defences) it sends only `curing prioaff impatience` and no longer re-queues a redundant `touch shield`. An attack queued before impatience landed is no longer cleared by the hold (2026-11-08, not yet run in Mudlet)"
-anti_serpent_open: "OPEN STRATEGY ITEM, the user decides: hold behind the shield or attack through impatience (Z5cyffxx.txt:78, 4c_SeyaA.txt:1931; the shield's 3.40 s of equilibrium, kb/raw/live/probes_2026-11-01.txt:55). The code holds"
+anti_serpent_open: "OPEN STRATEGY ITEM, the user decides: hold behind the shield or attack through impatience (Z5cyffxx.txt:78, 4c_SeyaA.txt:1931; the shield's 3.40 s of equilibrium, kb/raw/live/probes_2026-11-01.txt:55: ours, with the Aldar Diadem; 4.00 s without one). The code holds"
 instant_cath: "myinstantcath → touch shield"
 raze_path: "rebounding/shield → falcon track;falcon slay;fracture <target>"
 ```

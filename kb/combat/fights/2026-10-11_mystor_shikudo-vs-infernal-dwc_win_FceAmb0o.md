@@ -182,7 +182,7 @@ The lock was lost three times: shattered by the throw (2234), for no visible rea
 | MIND THROW (eq) | 2.16 s; it also needs balance | Rain; wiki 3.00 | 2230 |
 | DIAGNOSE (eq) | 0.72 s | Rain; AB 1.00 | 2354 |
 | KAI CHOKE (eq) | 3.40 s (recovered in 3.34-3.42) | Willow; wiki 4.00 | 6400, 6425, 6445 |
-| Rule that fits every reading | Rain about 0.72 x the wiki; every other form about 0.85 x | | |
+| Rule that fits every reading | Rain about 0.72 x the wiki; every other form about 0.85 x (Mystor's own 0.85, cause not known; Rain alone about x0.85) | | |
 | KAI BOOST, TRANSMUTE, MIND LOCK, PRINT, SENSE | no equilibrium spent | | 491, 554, 268, 330, 148 |
 | MIND LOCK with a held mindprint | about 2.5-3 s to finish | | 266->296, 2248->2311, 3333->3385 |
 | MIND SENSE until "You may seek out another mind." | about 4 s | | 146->150 |
@@ -483,7 +483,7 @@ The weary values are 0.80 x the others in every form.
 1. **Record nervestrike from its effect line.** "Horror overcomes the face of <T> as his body locks in paralysis." followed every nervestrike, 13 of 13, the 7 light ones included.
    - No trigger matches it: 420_Paralysis matches "...'s face as \w+ body stiffens into paralysis."
    - Add it to the gated effect-line group. That closes the nervestrike half of CONFLICTS #6.
-   - Correct kb/combat/shikudo.md:160 ("none on the attacker's side") and :296.
+   - Correct kb/combat/shikudo.md:162 ("none on the attacker's side") and :296.
    - Ruku to the arm still names no target (381); only the gated window can attribute it.
 2. **The kill template that worked:**
    - livestrike for asthma, ruku torso for slickness, hiraku for anorexia, nervestrike for paralysis and MIND IMPATIENCE;
@@ -494,7 +494,7 @@ The weary values are 0.80 x the others in every form.
 4. **MIND THROW** needs balance and a lock, breaks the lock and ends Sapience. Re-lock (about 2.5 s with a held mindprint) and recast Sapience after it.
 5. **Shield swap risk.** Swapping the staff out for the shield on Telepathy rounds is dangerous against epteth: a broken arm blocks re-wielding the two-handed staff, and three rounds were lost (3776-3808). SSC mended the leg before that arm (3752 before 3833).
    - Mend arms first when the staff is out of hand, or skip the swap.
-6. **Plan Telepathy in Rain** (0.72 x equilibrium). A queued round waits for both balance and equilibrium, so a MIND round delays the next combo by its equilibrium (4865).
+6. **Plan Telepathy in Rain** (0.72 x equilibrium on Mystor's client; ours is the same, from the Aldar Diadem and Rain). A queued round waits for both balance and equilibrium, so a MIND round delays the next combo by its equilibrium (4865).
 7. **Rebounding needs no handling for Shikudo.** A magical shield does: lead with SHATTER as soon as the shield line prints, or the round's equilibrium is lost to the beam (2415).
 8. **Parry the limb the knight is aiming at.** All 25 of Mystor's parries came when his parry matched the aimed limb; Agathon aimed at the left leg or left arm almost always.
 9. **The "Vacancy" line** is a candidate for blackout from the Oak combo. Keep it pending more evidence before recording it.

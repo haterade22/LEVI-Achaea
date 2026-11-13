@@ -17,7 +17,7 @@
 Elemental magic channelling fire, water, air, and earth. Core offensive skill. Requires opening channels to elemental planes (200 mana each, willpower maintenance cost). Channels can be attacked — protect with Fortification or Binding.
 
 ### Crystalism
-Vibrational crystal magic using refined crystal shapes embedded in rooms. Provides room control, afflictions, and utility. Requires a Master Crystal (in House/City hall) to refine shapes. Vibrations persist in rooms until dampened or destroyed.
+Vibrational crystal magic using refined crystal shapes embedded in rooms. Provides room control, afflictions, and utility. Requires a Master Crystal (in House/City hall) to refine shapes. Vibrations persist in rooms for a lifetime, or until dampened or destroyed; the silver tuning fork (`tuning`, which we own) doubles that lifetime (docs/artefacts-reference.md:350). Every equilibrium cost in this file is the BASE: ours is x0.85 with the Aldar Diadem (`kb/mechanics/balance-and-queueing.md`, "Our speed factors"; v4.7.494).
 
 ### Artificing
 Staff creation and crystal enhancement. The Magi staff is the primary combat weapon — holds up to 4 crystals that modify staffcast behavior. Also includes elemental summoning treaties.
@@ -210,7 +210,7 @@ Both are **free actions** (don't consume spell balance) and are prepended to the
 - **Refine**: Extract crystal shapes from Master Crystal (50 mana, 1s bal)
 - **Fold**: Restore Master Crystal facets using pearls
 - **Spin**: Prepare crystals for embedding
-- **Embed**: Activate vibration in room (300 mana, 3.1s EQ)
+- **Embed**: Activate vibration in room (300 mana, 3.1s EQ base; ours about 1.3 s: the gem of haematite, `rapid_resonation`, halves embedding equilibrium, docs/artefacts-reference.md:396, and the Aldar Diadem x0.85; unmeasured)
 - **Dampen**: Destroy your own vibrations (4s bal)
 - **Focus**: Consolidate all vibes to current room (100 mana, 4s EQ)
 - **Destabilise**: Destroy vibrations with potent environmental effects (400 mana). Each vibe type has unique destabilization effect. **Since 2026-10-23 it needs balance AND equilibrium** (was equilibrium only). We never send it; only our own destabilise line is tracked (`502_Destabilise.lua`)
@@ -257,7 +257,7 @@ Requires TWO transcendent Magi spinning all 11 crystal shapes. Enables Elemental
 ```
 dissonance, energise, creeps, palpitation, tremors, disorientation, plague, lullaby
 ```
-**`evibe`** does the embedding: it sends VIBES, drops wanted vibrations already listed in the room (`vibes/003_Vibe_Found`), then queues `embed <vibe>` one at a time, moving on at each embed line (`magiVibes_nextEmbed`, `ataxia/021_Magi_Vibes_Tracking.lua`). `vibe <name>` adds or removes one in the list. `vib` embeds a different fixed five (dissonance, disorientation, creeps, plague, harmony) in one queued line. EMBED costs 300 mana and equilibrium (the wiki gives 3.10 s in the generic row and 4.00 s in each vibration's row, Crystalism.wiki:37 and e.g. :117).
+**`evibe`** does the embedding: it sends VIBES, drops wanted vibrations already listed in the room (`vibes/003_Vibe_Found`), then queues `embed <vibe>` one at a time, moving on at each embed line (`magiVibes_nextEmbed`, `ataxia/021_Magi_Vibes_Tracking.lua`). `vibe <name>` adds or removes one in the list. `vib` embeds a different fixed five (dissonance, disorientation, creeps, plague, harmony) in one queued line. EMBED costs 300 mana and equilibrium (the wiki gives 3.10 s in the generic row and 4.00 s in each vibration's row, Crystalism.wiki:37 and e.g. :117; ours is about x0.43 of that: the haematite gem halves it and the Aldar Diadem takes 15%).
 
 ---
 

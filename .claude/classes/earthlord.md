@@ -175,7 +175,7 @@ powderise:
     torso: "Knocks off balance (scales with shaping)"
     arm: "Breaks arm (mending cure)"
     leg: "Prones target at MAX shaping"
-  notes: "5 hits to break any limb, doubled at max shaping"
+  notes: "5 hits to break any limb, doubled at max shaping (the base; our morsel of bonemeal, unyielding_stone, adds 10% POWDERISE limb damage, docs/artefacts-reference.md:326, so ours may break in fewer: unmeasured)"
 
 quake:
   skill: Evocation
@@ -242,7 +242,7 @@ crunch:
 rockslide:
   skill: Evocation
   balance: eq
-  effect: "Creates rubble, makes leaving room harder"
+  effect: "Creates rubble, makes leaving room harder (our cracked wheel, unending_avalanche, makes the rubble last 50% longer, docs/artefacts-reference.md:331)"
   syntax: "ROCKSLIDE"
 
 demolition:
@@ -300,7 +300,7 @@ titan:
   skill: Evocation
   effect: "Apex of Earth Form - IMPERVIOUS to damage"
   syntax: "TITAN"
-  notes: "Ultimate defensive ability"
+  notes: "Ultimate defensive ability. Our gaze of the Cacharann (primordial_fury): TITAN +5 s and -30% cooldown (docs/artefacts-reference.md:321); no code uses TITAN yet (a follow-up)"
 
 tremorsense:
   skill: Evocation

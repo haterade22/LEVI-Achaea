@@ -41,7 +41,7 @@ implementation:
   legacy: "tekura (001_Tekura_Offense.lua) - 3-limb, tekura.dispatch.run()"
 
 phases (TK6):
-  1_prep: "PREP - all 6 limbs to 86%+ (one punch, HFP ~14%, from break)"
+  1_prep: "PREP - all 6 limbs to 100 - punch (one punch from break; the punch is learned from our hits, 14% until then: spiked knuckles add 35% to it, v4.7.494)"
   2_break_upper: "BREAK_UPPER - combo <tar> mnk <arm> spp <arm> hkp; HRS (Horse stance, breaks arms+torso)"
   3_break_lower: "BREAK_LOWER - combo <tar> wrt torso hfp left hfp right; BRS (Bear stance, wrenches torso + breaks legs, prones)"
   4_kill: "KILL - BBT <tar> (Backbreaker, in Bear stance)"
@@ -115,7 +115,7 @@ order:
     (a kill the user said yes to). The route never moves to Maelstrom"
   - "Not in Rain: `wield <staff id>;adopt rain form`, alone. It needs no kata and spends about 4.1 s of balance,
     so a crush in the same round would be refused and held"
-  - "MIND CRUSH, in Rain (2.45 s of equilibrium; 2.89 s outside Rain)"
+  - "MIND CRUSH, in Rain (ours: 2.45 s of equilibrium; 2.89 s outside Rain -- the wiki's 3.40 s through the Aldar Diadem and Rain)"
   - "KAI CHOKE if the crush cannot go. If neither can go, nothing is sent, and one line says why"
 cannot: "A crush cannot go when it would take mana below the `manause` floor (sipping, default 30%; 150 mana;
   shikudo.manaAllows, 006). Unknown mana does not block it. A choke cannot go when kai is short
@@ -609,7 +609,7 @@ kai:
   syntax: "KAI <ability>"
   abilities:
     - boost: "11 kai; no cooldown listed (KW:341-343); went out in the same command as a combo (LcJC-rJ5:561)"
-    - choke: "KAI CHOKE <target>: 10 kai and 50 mana, 4.00s eq; free against a denizen (KW:286-289)"
+    - choke: "KAI CHOKE <target>: 10 kai and 50 mana, 4.00s eq (base; ours 2.60s x4, kb/raw/logs/ours/2026-11-03_081532_Tabethys.log:2959, which fits neither 0.85 nor 0.72: open); free against a denizen (KW:286-289)"
     - heal: "Heal HP: 21 kai, 3.00s eq (KW:308-310)"
     - cripple: "KAI CRIPPLE <target>: 41 kai, 4.00s eq. OFFENSIVE: 'you can crush the limbs of your target'
         (KW:297-300). Mystor's client showed all four of the target's limbs at level 1 right after one
@@ -625,7 +625,7 @@ kai:
 # Telepathy's damage ability is MIND CRUSH (corrected 2026-10-11).
 mindcrush:
   skill: Telepathy
-  balance: "eq, 3.40s (wiki)"
+  balance: "eq, 3.40s (wiki; ours 2.89s, 2.45s in Rain)"
   effect: "Physical and mental damage; works on adventurers and denizens"
   syntax: "MIND CRUSH [target]"
 
@@ -852,7 +852,7 @@ round_delivery:  # 2026-11-01, kb/mechanics/balance-and-queueing.md. OFF by defa
   chains:  # with combatQueue()'s `g body;g gold;stand;` first, as the shim sends them: stand first
     006_dispatch: "wield; dispatch|incapacitate|combo. The spender is last. ASSESS follows only with Health Inspector"
     007_lock: "wield; [transition;] combo, or [transition;] mind, or kai choke. The spender is last. A separate
-      transition costs no balance (kb/combat/shikudo.md:80). config.chainTelepathy (default off) adds mind after the combo"
+      transition costs no balance (kb/combat/shikudo.md:82). config.chainTelepathy (default off) adds mind after the combo"
     011_vv: "[wield shield;] mind. The spender is last. MIND BLACKOUT's press stays raw, with the combo it hides"
     013_group_damage: "mind crush | kai choke alone, or `wield; adopt rain form` alone. No combo and no rider since 2026-11-02"
     tekura: "unwield all; dismount; combo. The spender is last"
@@ -1349,7 +1349,7 @@ synergies:
 
 telepathy_rule:  # corrected 2026-10-11 (the user and Mystor; wiki; log 1)
   preferred: "Rain is where Telepathy is cheapest: 'your equilibrium recovery shall be significantly increased'
-    (wiki SW:173). MIND TRAVEL took 0.85s in Gaital and 0.72s in Rain (log 1). The user: 'Shikudo Monks also use
+    (wiki SW:173). MIND TRAVEL took 0.85s in Gaital and 0.72s in Rain (log 1, another player; ours has the same ratios from the Aldar Diadem and Rain). The user: 'Shikudo Monks also use
     telepathy in RAIN form do to the bonus of EQ.'"
   not_only: "Not only Rain, though: log 1 cast MIND IMPATIENCE and MIND PARALYSE in Willow"
   one_or_the_other: "In log 1 a telepathy round took the place of that round's combo (the user, below: 'you can't
@@ -1920,3 +1920,14 @@ route (013, v4.7.456) is the separate alias `srd` (user: "sr should be lock, srd
 damage"). `shikudolock()` is also written in 008, but 008 is switched off, so at runtime only 007's
 (007:754) exists; calling the method by name keeps `sr` right if 008 is ever switched back on.
 It requires a Shikudo `Form` charstat. With none (Tekura) it echoes and does nothing.
+
+## Timings and our artefacts (v4.7.494)
+
+**Timings in this file** are BASE costs (AB or wiki) unless a line says whose. Ours = base x the
+factors in `kb/mechanics/balance-and-queueing.md`, "Our speed factors": the Aldar Diadem x0.85 on
+every equilibrium cost, Rain about x0.85 more (x0.72 in all); code: `ataxia_eqFactor`
+(`misc_scripts/033_Artefacts.lua`). We are Nimble, not quick-witted. Our artefacts that change Monk
+numbers: spiked knuckles (`hand_to_hand` 3, +35% Tekura punch damage: TK6 learns the punch from our
+hits, `tekura6.classifyHit`, and TKD reads it, `tekura.punchDamage`), the Intellect Crown
+(`faster_mindlock`, MIND LOCK 40% faster; no MIND LOCK reading of ours), the steel armband of the
+Fist (`tekura_accuracy` 3) (v4.7.494).

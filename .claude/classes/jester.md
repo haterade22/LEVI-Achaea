@@ -267,3 +267,11 @@ Edge cases:
 - Pranks can set up traps
 - Puppet can be destroyed or stolen
 ```
+
+## Timings and our artefacts (v4.7.494)
+
+Every equilibrium cost in this file is a BASE cost (AB or wiki) unless a line says whose. Ours is that
+base x0.85 (the Aldar Diadem, worn at all times); the factors and our readings are in
+`kb/mechanics/balance-and-queueing.md`, "Our speed factors", and the code reads them through
+`ataxia_eqFactor` (`misc_scripts/033_Artefacts.lua`). Server-queued rounds already wait for the real
+equilibrium, so only a comment, a doc or a timer that sizes a wait needs the factor.
