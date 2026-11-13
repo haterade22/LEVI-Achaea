@@ -252,9 +252,9 @@ does not, check the tool's version against the runtime's before acting on it.
 2. **Convert** to Muddler format: `python tools/convert_to_muddler.py --src ./src_new --output ./muddler_project`
 3. **Build** with Muddler (from `muddler_project/` directory):
    ```bash
-   set JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-21.0.12.101-hotspot
+   set JAVA_HOME=C:\Program Files\Java\jre1.8.0_503
    cd muddler_project
-   C:\Tools\muddle-shadow-1.1.0\muddle-shadow-1.1.0\bin\muddle.bat
+   E:\muddle-shadow-1.1.0\muddle-shadow-1.1.0\bin\muddle.bat
    ```
 4. **Output**: `muddler_project/build/Levi_Ataxia.mpackage` and `.xml`
 
@@ -262,19 +262,24 @@ does not, check the tool's version against the runtime's before acting on it.
 from candidate lists, so neither path is pinned: a valid pre-set `JAVA_HOME` / `MUDDLE_BAT` wins,
 else Java is globbed from `E:/Java`, `C:/Program Files/Java`, `Eclipse Adoptium` and `Microsoft`
 JDK dirs, and Muddler from `C:/Tools/muddle-shadow-1.1.0/...` then `E:/muddle-shadow-1.1.0/...`.
-Current dev machine (2026-10-09, no `E:` drive): Temurin 21 JDK via
-`winget install EclipseAdoptium.Temurin.21.JDK`, Muddler unzipped to `C:\Tools` from
+Current dev machine (2026-11-13): `C:\Tools` is gone. `build.sh` takes the JRE 8 at
+`C:\Program Files\Java\jre1.8.0_503` (the `jre*` candidate; `Java/latest` holds only a `jre-1.8`
+folder, so it does not match) and Muddler at `E:\muddle-shadow-1.1.0` (the second candidate). A full
+build passed with them on 2026-11-13. To get Muddler again:
 `gh release download 1.1.0 -R demonnic/muddler -p muddle-shadow-1.1.0.zip`.
 
 **Testing**: Run `lua5.1 src_new/tests/test_runner.lua` or use the "Run Tests" VS Code task. Tests use `mock_mudlet.lua` to stub the Mudlet API.
-**Local Lua on this Windows machine (2026-10-11).** Native Lua 5.1.5 (LuaBinaries Win64) is in
-`C:\Tools\lua51`, on the user PATH: `lua5.1` / `luac5.1`, the names CI, the VS Code "Run Tests"
-task, `/verify` and the pre-commit lint hook all call (the hook printed "No luac found -- skipping
-Lua syntax check" until then, so it had never linted here). A shell or editor started before PATH
-changed needs a restart, or `export PATH="/c/Tools/lua51:$PATH"`. It must stay 5.1: Mudlet runs
-5.1, and a 5.4 `luac` rejects escapes 5.1 accepts. `lupa` is installed in the main Python too, so
-`python tools/run_lua_tests.py [one_test_file.lua]` runs the same suite in an embedded Lua 5.1.
-Run one of them before pushing: otherwise CI is the first place a test runs. The tests are not all of CI, so also run the
+**Local Lua on this Windows machine (2026-11-13).** No native Lua 5.1 is installed. `C:\Tools\lua51`
+is gone (since at least 2026-11-04), and the `luac.exe` on PATH (`AppData\Local\Programs\Lua\bin`) is
+Lua 5.4. Mudlet runs 5.1, and a 5.4 `luac` rejects escapes that 5.1 accepts. The pre-commit lint hook
+falls back to that `luac` (`.claude/hooks/lint-before-commit.sh`:15-20), and the VS Code "Run Tests"
+task falls back from `lua5.1` to the 5.4 `lua` (`.vscode/tasks.json`:42), which gives false failures
+(`global 'unpack'`). `lupa` embeds Lua 5.1, so run the suite with
+`/c/Python314/python tools/run_lua_tests.py [one_test_file.lua]`, and CI's `luac5.1 -p` step with:
+```bash
+/c/Python314/python -c "import glob,lupa.lua51 as l;c=l.LuaRuntime().eval('function(s,n) local f,e=loadstring(s,n) return e end');fs=glob.glob('src_new/**/*.lua',recursive=True);bad=[e for e in (c(open(f,'rb').read(),'@'+f) for f in fs) if e];print(len(fs),'files,',len(bad),'errors');[print(e) for e in bad]"
+```
+Run them before pushing: otherwise CI is the first place a test runs. The tests are not all of CI, so also run the
 `python3 -B tools/...` steps of `.github/workflows/build.yml` (`/verify full` lists them). A generated KB page fails CI when
 one of its inputs changes, and a Lua file can be an input (`kb_rules.py` stopped PR #169 that way).
 **Never use a bare `os.tmpname()` in a test**: under `lua5.1.exe`'s old C runtime it returns a name

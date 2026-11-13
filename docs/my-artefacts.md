@@ -19,7 +19,7 @@ shows it), never this page, because it goes to other players. Each size below is
 | swiftcurse | sapphire skull pendant, 3 | the stand-in curse count, 10 + 6 (trigger shaman/011, genrunning/004); trigger 012 still gives the game's count | +3 s JINX duration |
 | enhanced_shin | eagle feather | -- | HAMSTRING +5 s (Release B, after the capture confirms it) |
 | tuning | silver tuning fork | -- | Bard symphony timer x2 (Release B) |
-| magic_damage, criticals, weaving_mastery | Collar 3, Stygian pendant 3, mirror 3 | -- | damage-kill thresholds were tuned with them on: documented, not changed |
+| magic_damage, criticals, weaving_mastery | Collar 3, Stygian pendant 3, mirror 3 | -- | no damage-kill threshold counts them (below) |
 | rapid_resonation, symphonic_master, swift_runes, faster_mindlock | haematite, insignia, runestone, Intellect Crown | -- | docs only (`.claude/classes/<class>.md`) |
 | the rest | | -- | not modelled (`A.EFFECTS` in 033 names each) |
 
@@ -217,6 +217,37 @@ shows it), never this page, because it goes to other players. Each size below is
 |----|------|--------|
 | 408500 | scrying bowl | SCRY FOR <person> shows location AND area |
 | 11333 | diamond-tipped shovel | 50% faster DIGging |
+
+---
+
+## The damage-kill thresholds (2026-11-13)
+
+No threshold below counts our artefacts, and none was tuned for them. There are two kinds:
+- **A game execute** has a fixed limit that the game sets. No artefact moves it.
+- **A damage finisher** fires when our next hit should kill. Its number came with its first script,
+  and no commit cites a log for it. Our damage artefacts can move it.
+
+To change a finisher, first measure our own kill hits, as a percent of the target's health. Do not
+multiply the number by a reference size.
+
+| Threshold | Code | Kind | Where the number came from | Our artefacts that can move it |
+|---|---|---|---|---|
+| Magi DESTROY: conflagrated and health under 35% | `mage/004_Magi_Offense.lua`:71, :363 | game execute: a conflagration and 40% health or less (WIKI); 35 leaves a margin for an old ASSESS | the wiki | none |
+| Mizik DESTROY: an ashbeast and health 40% or less | `mage/004_Mizik_Bullshit.lua`:37 | game execute, at the wiki's 40% | the wiki | none |
+| Magi STORMHAMMER: health 25% or less (solo) | `mage/004_Magi_Offense.lua`:72, :400 | damage finisher (lightning) | commit 31595ff4 (2026-03-10), no log | Collar of Agatheis, Stygian pendant |
+| Magi STORMHAMMER: health 50% or less (group) | `mage/004_Magi_Offense.lua`:658 | damage finisher; allies hit too | Tabethys's group log (ANOTHER PLAYER, 2026-10-19): a stormhammer at 51%, then the kill (`.claude/classes/magi.md`, "In play") | the same two; the allies' damage counts for more than ours |
+| Mizik STORMHAMMER: health 25% or less | `mage/004_Mizik_Bullshit.lua`:32 | damage finisher | commit 678c1af0 (2025-12-27), no log | Collar of Agatheis, Stygian pendant |
+| Apostate CATHARSIS: mana under 50% | `apostate/015_CC_Apostate.lua`:111, :536 | game execute (mana) | `.claude/classes/apostate.md` | none |
+| Apostate CORRUPT: the estimate reaches the assessed health | `apostate/015_CC_Apostate.lua`:161-184, :541 | damage estimate: 7 per physical, 8 per mental and 9 per smoke affliction, each times its V3 probability | no source found | not known: no doc says what CORRUPT's damage scales with |
+| Infernal DWC damage kill: QUASH + ARC at health 40% or less | `dwc/001_Infernal_DWC_Vivisect.lua`:167, :259, :892; `dwc/002_Infernal_DWC_Vivisect_2L.lua`:165, :245, :851 | damage finisher | commit b1bfd12e (2026-01-20), no log | Stygian pendant; the Logosian Gauntlets if ARC scales with strength (not confirmed) |
+| Depthswalker CULL: health 35% or less | `depthswalker/015_CC_Depthswalker.lua`:72, :798 | damage attack ("deals high damage but is somewhat slow", WIKI) | commit c0568335 (2026-02-02), no log | Stygian pendant; the Logosian Gauntlets if scythe damage scales with strength (not confirmed) |
+| Depthswalker MUTILATE: health 40% and mana 30% or less | `depthswalker/015_CC_Depthswalker.lua`:73-74, :792-793 | game execute | `.claude/classes/depthswalker.md` | none |
+
+The sizes are reference values from `docs/artefacts-reference.md`, not the game's text:
+- The Collar of Agatheis gives +20% magical damage. Which damage types it counts is not confirmed.
+- The Stygian pendant gives +6% critical hit chance.
+- The Logosian Gauntlets give +3 STR.
+- The platinum hand mirror gives +20% weaving damage. No Psion threshold reads health, so it moves none.
 
 ---
 

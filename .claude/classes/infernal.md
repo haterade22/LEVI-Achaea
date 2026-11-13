@@ -497,6 +497,8 @@ knight_send_helper:
   fn: "knightSendAttack(cmd) — shared knight send; gates on target being in ataxia.playersHere, appends ';engage <target>' on first attack (engaged flag), uses 'queue addclear freestand' (001:227-236)"
 ```
 
+**Artefacts and the damage kill (2026-11-13).** `damageKillThreshold = 40` (QUASH + ARC; `dwc/001`:167, :259, :892 and `dwc/002_..._2L`:165, :245, :851) is a damage finisher, not a game execute. It came with the first script (b1bfd12e, 2026-01-20) with no log, so it counts no artefact. Our Stygian pendant (+6% critical chance, reference size) can move it, and the Logosian Gauntlets (+3 STR) can if ARC scales with strength (not confirmed). Change it only from our own measured kill hits: `docs/my-artefacts.md`, "The damage-kill thresholds".
+
 #### Understanding Break Levels
 ```yaml
 level_1_break:

@@ -615,6 +615,8 @@ magi.offense = {
 ```
 P1-P8 run before the mode branches, so they act in every mode: a change to P3, P7 or P8 changes all five modes.
 
+**Artefacts and the kill numbers (2026-11-13).** DESTROY is a game execute (a conflagration and 40% health or less, WIKI), so no artefact moves it; our 35 is a margin for an old ASSESS. STORMHAMMER's 25% (P4) and the group's 50% are damage finishers. The 25% came with the first script (31595ff4, 2026-03-10) with no log; the 50% matches Tabethys's group kill (ANOTHER PLAYER). Our Collar of Agatheis (+20% magical, reference size) and Stygian pendant can move both, but neither number counts them. Change them only from our own measured kill hits: `docs/my-artefacts.md`, "The damage-kill thresholds".
+
 ### Mode-Specific Sub-Trees
 
 **Lock Mode** (`selectLockSpell()`):

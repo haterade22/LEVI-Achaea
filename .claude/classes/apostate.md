@@ -562,6 +562,8 @@ Kill condition checks in order:
 
 **Note:** `needSap()` / `sapThreshold` (60%) are defined (`015:570-572`) but **never consumed** by `buildAttack` (`015:636-681`) — a dead gate.
 
+**Artefacts and the kill numbers (2026-11-13).** CATHARSIS at 50% mana is a game execute, so no artefact moves it. The CORRUPT estimate (`apostate.corruptDmg`, 015:161-184: 7 per physical, 8 per mental, 9 per smoke affliction, each times its V3 probability) has no source, and no doc says what CORRUPT's damage scales with. So no artefact is counted in it. Change it only from our own measured CORRUPT hits: `docs/my-artefacts.md`, "The damage-kill thresholds".
+
 ### Corrupt Damage Calculator
 ```lua
 function apostate.corruptDmg()

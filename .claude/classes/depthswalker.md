@@ -316,6 +316,8 @@ depthswalker.DW_AFFS = {
 }
 ```
 
+**Artefacts and the kill numbers (2026-11-13).** MUTILATE (40% health and 30% mana) is a game execute, so no artefact moves it. CULL (35%) is a damage attack ("deals high damage but is somewhat slow", WIKI); its 35 came with the first script (c0568335, 2026-02-02) with no log, so it counts no artefact. Our Stygian pendant can move it, and the Logosian Gauntlets (+3 STR) can if scythe damage scales with strength (not confirmed). `docs/my-artefacts.md`, "The damage-kill thresholds".
+
 ### V3 Integration
 ```lua
 -- Routes to V3 when enabled, falls back to V2/V1
